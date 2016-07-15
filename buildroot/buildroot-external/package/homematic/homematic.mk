@@ -19,24 +19,16 @@ HOMEMATIC_SITE = $(call github,eq-3,occu,$(HOMEMATIC_VERSION))
 #	RFD_DEPENDENCIES += libusb
 # endif
 
+define HOMEMATIC_PRE_PATCH
+	cp $(HOMEMATIC_PKGDIR)/Makefile $(@D)
+endef
 
-# define RFD_BUILD_CMDS
-#		$(MAKE) -C $(@D) CXX="$(TARGET_CXX)" CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
-#		CROSS="$(TARGET_CROSS)" \
-#		TOPDIR="$(TOPDIR)" \
-#		PLATFORM="$(RFD_PLATFORM)" \
-#		ROMFSDIR=$(TOPDIR)/output/target \
-#		PROJECT_DIR="$(TOPDIR)/../../../../Source" base
-# endef
+HOMEMATIC_PRE_PATCH_HOOKS += HOMEMATIC_PRE_PATCH
 
-# define RFD_INSTALL_TARGET_CMDS
-#		$(MAKE) -C $(@D) \
-#		CXX="$(TARGET_CXX)" CC="$(TARGET_CC)" \
-#		CROSS="$(TARGET_CROSS)" \
-#		STRIP="$(TARGET_STRIP)" \
-#		TOPDIR="$(TOPDIR)" \
-#		ROMFSINST="$(TOPDIR)/../../../../BuildTools/romfs-inst.sh" \
-#		ROMFSDIR=$(TOPDIR)/output/target base_install
-# endef
+
+
+define HOMEMATIC_INSTALL_TARGET_CMDS
+		$(MAKE) -C $(@D) install
+endef
 
 $(eval $(generic-package))

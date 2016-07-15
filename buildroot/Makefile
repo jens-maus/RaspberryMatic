@@ -34,3 +34,6 @@ patch_buildroot:
 
 dist: buildroot-$(BUILDROOT_VERSION) build/.config patch_buildroot
 	cd build && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
+
+xconfig: buildroot-$(BUILDROOT_VERSION) build/.config patch_buildroot
+	cd build && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external xconfig

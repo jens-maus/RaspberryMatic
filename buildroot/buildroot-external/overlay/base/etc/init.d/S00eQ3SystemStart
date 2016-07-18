@@ -1,0 +1,159 @@
+#!/bin/sh
+#
+# set System Start Led Signal
+#
+
+CFG_TEMPLATE_DIR=/etc/config_templates
+# SERIAL=$(cat /sys/module/plat_eq4ccu2/parameters/board_serial)
+
+SERIAL=`eq3configcmd update-coprocessor -p /dev/ttyAMA0 -c -se 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//'`
+echo $SERIAL>/var/board_serial
+VERSION=`eq3configcmd update-coprocessor -p /dev/ttyAMA0 -c -v 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//'`
+echo $VERSION>/var/rf_firmware_version
+
+# TODO add -a to eq3configcmd update-coprocessor
+ADDRESS=`eq3configcmd read-default-rf-address -f /dev/ttyAMA0 -h`
+echo "$ADDRESS">/var/rf_address
+
+
+init() {
+
+        # cal local init startup file
+        if [ ! -e /etc/config/safemode ] ; then
+        	if [ -x /usr/local/etc/rc.init ]; then
+                	/usr/local/etc/rc.init
+        	fi
+	fi
+
+	# ToDo GPIO / LED Ports  blink
+	echo "18" > /sys/class/gpio/export
+	echo "out" > /sys/class/gpio/gpio18/direction
+        chmod 775 /var
+        mkdir /var/log
+        chmod 775 /var/log
+        mkdir /var/tmp
+        chmod 775 /var/tmp
+        mkdir /var/rega
+        chmod 775 /var/rega
+        mkdir /var/run
+        chmod 775 /var/run
+        mkdir /var/spool
+        chmod 775 /var/spool
+        mkdir /var/lock
+        chmod 775 /var/lock
+        mkdir /var/cache
+        chmod 775 /var/cache
+        mkdir /var/lib
+        chmod 775 /var/lib
+        mkdir /var/lib/misc
+        chmod 775 /var/lib/misc
+        mkdir /var/empty
+        chmod 600 /var/empty
+        mkdir /var/etc
+        chmod 775 /var/etc
+        mkdir /var/status
+	# HMServer measurement
+        chmod 775 /var/status
+	touch /var/status/SDinitialised
+	mkdir -p /usr/local/sdcard/measurement
+	mkdir -p /media/sd-mmcblk0
+	ln -sf /usr/local/sdcard/measurement /media/sd-mmcblk0/measurement
+	#
+	# crontab dirs
+        mkdir -p /var/spool/cron
+        chmod 775 /var/spool
+        chmod 775 /var/spool/cron
+        if [ ! -d /usr/local/crontabs ] ; then
+        	mkdir -p /usr/local/crontabs
+        	chmod 775 /usr/local/crontabs
+        fi
+	ln -s /usr/local/crontabs /var/spool/cron/crontabs 
+        if [ ! -e /usr/local/crontabs/root ] ; then
+                cp $CFG_TEMPLATE_DIR/crontab.root /usr/local/crontabs/root
+        fi
+        # Bug fix
+        grep "setInterfaceClock" /usr/local/crontabs/root
+        if [ $? == 0 ] ; then
+                echo "update crontab file"
+                sed 's/setInterfaceClock/SetInterfaceClock/g' /usr/local/crontabs/root > /usr/local/crontabs/root.tmp
+                mv /usr/local/crontabs/root.tmp /usr/local/crontabs/root
+        fi
+
+        
+	if [ ! -e /usr/local/etc/config/shadow ] ; then
+		cp $CFG_TEMPLATE_DIR/shadow /usr/local/etc/config/shadow
+	fi
+
+	# disable g_multi for raspi
+        # modprobe g_multi luns=1 cdrom=1 ro=1 removable=0,0 file=/usr/share/eq3/install.iso host_addr=00:1a:22:00:05:86 dev_addr=00:1a:22:00:05:87 iManufacturer="eQ-3" iProduct="CCU2" idVendor="0x1b1f" idProduct="0xc016" iSerialNumber="$SERIAL"
+
+	
+	# Tunneling
+        modprobe tun
+       
+	# USB
+	# disable ehci-hcd for raspi
+        # modprobe ehci-hcd
+
+	if [ ! -d /usr/local/etc/config ] ; then
+                mkdir -p /usr/local/etc/config
+        	chmod 775 /usr/local/etc/config
+        fi
+
+
+        if [ ! -e /etc/config/TZ ] ; then
+                cp $CFG_TEMPLATE_DIR/TZ /etc/config
+        fi
+        if [ ! -e /etc/config/netconfig ] ; then
+                cp $CFG_TEMPLATE_DIR/netconfig /etc/config
+        fi
+        if [ ! -e /etc/config/shadow ] ; then
+                cp $CFG_TEMPLATE_DIR/shadow /etc/config
+        fi
+
+	export TZ=`cat /etc/config/TZ`
+
+	# cal local postinit file
+        if [ ! -e /etc/config/safemode ] ; then
+		if [ -x /usr/local/etc/rc.postinit ]; then
+			/usr/local/etc/rc.postinit
+		fi
+	fi
+ 
+}
+
+start() {
+	echo -n "eQ-3 System start:"
+	init
+	echo "OK"
+	echo -n "Starting crond: "
+	start-stop-daemon -S -q -p /var/run/crond.pid --exec /usr/sbin/crond	
+	echo "OK"
+}
+
+stop () {
+	start-stop-daemon -K -q -p /var/run/crond.pid
+	/bin/update_firmware_pre
+}
+
+restart() {
+	start
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart|reload)
+	restart
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+

@@ -1,0 +1,58 @@
+#!/bin/sh
+#
+# set System Start Led Signal
+#
+
+CFG_TEMPLATE_DIR=/etc/config_templates
+SERIAL=$(cat /var/board_serial)
+
+init() {
+	export TZ=`cat /etc/config/TZ`
+
+	# Todo: GPIO / LED settings
+}
+
+start() {
+	echo -n "System started"
+	init
+	if [ ! -e /etc/config/safemode ] ; then
+        	# meine-homematic.de starten
+        	/opt/mh/startup.sh
+
+        	# Zusatzsoftware starten
+        	run-parts /etc/config/rc.d
+	        # cal local rc file
+        	if [ -x /usr/local/etc/rc.local ]; then
+                	/usr/local/etc/rc.local
+        	fi
+	else
+        	rm -f /etc/config/safemode
+	fi
+	echo "OK"
+}
+
+restart() {
+	start
+}
+
+stop() {
+	/bin/run-parts -a stop /etc/config/rc.d
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart|reload)
+	restart
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+

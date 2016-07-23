@@ -23,10 +23,6 @@ build/.config: buildroot-$(BUILDROOT_VERSION)
 	mkdir -p build
 	cp Config.${board} build/.config
 
-xconfig:
-#	cd buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=`pwd`/buildroot-external xconfig
-	cd build && make BR2_EXTERNAL=`pwd`/buildroot-external O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) xconfig
-
 patch_buildroot:
 	cp cmdline.txt buildroot-${BUILDROOT_VERSION}/package/rpi-firmware
 #	cp Config.in buildroot-${BUILDROOT_VERSION}/package
@@ -34,6 +30,12 @@ patch_buildroot:
 
 dist: buildroot-$(BUILDROOT_VERSION) build/.config patch_buildroot
 	cd build && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
+
+clean:
+	rm -rf build buildroot-$(BUILDROOT_VERSION)
+
+distclean: clean
+	rm -f buildroot-$(BUILDROOT_VERSION).tar.bz2
 
 xconfig: buildroot-$(BUILDROOT_VERSION) build/.config patch_buildroot
 	cd build && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external xconfig

@@ -37,5 +37,14 @@ clean:
 distclean: clean
 	rm -f buildroot-$(BUILDROOT_VERSION).tar.bz2
 
+mount:
+	sudo kpartx -av build/images/sdcard.img
+	sudo mkdir -p /mnt/p2
+	sudo mount /dev/mapper/loop0p2 /mnt/p2
+
+umount:
+	sudo umount /mnt/p2
+	sudo kpartx -dv build/images/sdcard.img
+
 xconfig: buildroot-$(BUILDROOT_VERSION) build/.config patch_buildroot
 	cd build && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external xconfig

@@ -3,7 +3,7 @@
 # homematic by eQ-3 
 #
 #############################################################
-HOMEMATIC_VERSION = 2.19.9
+HOMEMATIC_VERSION = 2.21.10
 # HOMEMATIC_VERSION = e9b2827153428ee7e5c4fc157a025246bd7fbe9d
 HOMEMATIC_SITE = $(call github,eq-3,occu,$(HOMEMATIC_VERSION))
 

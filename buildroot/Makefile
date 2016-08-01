@@ -21,6 +21,7 @@ buildroot-$(BUILDROOT_VERSION): buildroot-$(BUILDROOT_VERSION).tar.bz2
 
 build/.config: buildroot-$(BUILDROOT_VERSION)
 	mkdir -p build
+	mkdir -p download
 	cp Config.${board} build/.config
 
 patch_buildroot:

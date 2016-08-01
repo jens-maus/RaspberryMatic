@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Buildroot 2016.05-gb2ff12e-dirty Configuration
+# Buildroot 2016.05-g9504250-dirty Configuration
 #
 BR2_HAVE_DOT_CONFIG=y
 BR2_HOST_GCC_AT_LEAST_4_6=y
@@ -105,7 +105,7 @@ BR2_BZCAT="bzcat"
 BR2_XZCAT="xzcat"
 BR2_TAR_OPTIONS=""
 BR2_DEFCONFIG="/media/sdb1/development/raspberrymatic/CustomImage/buildroot-2016.05/configs/raspberrypi3_defconfig"
-BR2_DL_DIR="$(TOPDIR)/dl"
+BR2_DL_DIR="$(TOPDIR)/../download"
 BR2_HOST_DIR="$(BASE_DIR)/host"
 
 #

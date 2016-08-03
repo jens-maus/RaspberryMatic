@@ -1,4 +1,5 @@
 board=raspberrypi3
+# board=X86_64_docker
 BUILDROOT_VERSION=2016.05
 RBE_VERSION=0.1.0
 

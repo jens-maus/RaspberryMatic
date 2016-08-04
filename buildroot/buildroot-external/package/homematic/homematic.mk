@@ -3,8 +3,8 @@
 # homematic by eQ-3 
 #
 #############################################################
-HOMEMATIC_VERSION = 2.21.10
-# HOMEMATIC_VERSION = e9b2827153428ee7e5c4fc157a025246bd7fbe9d
+# HOMEMATIC_VERSION = 2.21.10
+HOMEMATIC_VERSION = 5d1fb3d4eb1831c02b457a369096021252e0518e
 HOMEMATIC_SITE = $(call github,eq-3,occu,$(HOMEMATIC_VERSION))
 
 # HOMEMATIC_SITE = $(TOPDIR)/../../../General/Buildroot/Modules/RFD
@@ -28,7 +28,8 @@ HOMEMATIC_PRE_PATCH_HOOKS += HOMEMATIC_PRE_PATCH
 
 
 define HOMEMATIC_INSTALL_TARGET_CMDS
-		$(MAKE) -C $(@D) install
+		$(MAKE) HOMEMATIC_VERSION=$(HOMEMATIC_VERSION) \
+			-C $(@D) install 
 endef
 
 $(eval $(generic-package))

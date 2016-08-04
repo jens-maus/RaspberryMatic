@@ -6,13 +6,13 @@
 CFG_TEMPLATE_DIR=/etc/config_templates
 # SERIAL=$(cat /sys/module/plat_eq4ccu2/parameters/board_serial)
 
-SERIAL=`eq3configcmd update-coprocessor -p /dev/ttyAMA0 -c -se 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//'`
+SERIAL=`eq3configcmd update-coprocessor -p /dev/ttyS0 -c -se 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//'`
 echo $SERIAL>/var/board_serial
-VERSION=`eq3configcmd update-coprocessor -p /dev/ttyAMA0 -c -v 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//'`
+VERSION=`eq3configcmd update-coprocessor -p /dev/ttyS0 -c -v 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//'`
 echo $VERSION>/var/rf_firmware_version
 
 # TODO add -a to eq3configcmd update-coprocessor
-ADDRESS=`eq3configcmd read-default-rf-address -f /dev/ttyAMA0 -h`
+ADDRESS=`eq3configcmd read-default-rf-address -f /dev/ttyS0 -h`
 echo "$ADDRESS">/var/rf_address
 
 

@@ -6,6 +6,24 @@
 LOGLEVEL_RFD=5
 CFG_TEMPLATE_DIR=/etc/config_templates
 
+update() {        
+	echo "0" > /sys/class/gpio/gpio18/value
+	sleep 1
+	echo "1" > /sys/class/gpio/gpio18/value
+	if [ ! -e /etc/config/no-coprocessor-update ] ; then
+		echo "checking if firmware update is needed..."
+		/bin/eq3configcmd update-coprocessor -p "/dev/ttyS0" -u
+		if ! [ $? -eq 0 ] ; then
+			echo "error while updating coprocessor, force..."
+			/bin/eq3configcmd update-coprocessor -p "/dev/ttyS0" -u -f
+		else
+			echo "done"
+		fi
+	else
+		echo "firmware update disabled"
+	fi
+}
+
 init() {
 	export TZ=`cat /etc/config/TZ`
 
@@ -35,8 +53,7 @@ init() {
 start() {
 	echo -n "Starting rfd: "
 	init
-        echo "Waiting for multimacd to get ready"
-        eq3configcmd wait-for-file -f /dev/mmd_bidcos -p 1 -t 5
+	update
 	start-stop-daemon -S -q -p /var/run/rfd.pid --exec /bin/rfd -- -d -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
 	echo "OK"
 }

@@ -1,3 +1,5 @@
-menu "Homematic & Co"
+menu "eQ-3 Homematic Services"
 	source "$BR2_EXTERNAL/package/homematic/Config.in"
 endmenu
+
+source "$BR2_EXTERNAL/package/java-azul/Config.in"

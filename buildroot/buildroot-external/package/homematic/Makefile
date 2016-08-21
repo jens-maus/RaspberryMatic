@@ -29,6 +29,11 @@ install_lighttpd_arch:
 	cp -R $(OCCU_ARCH)/packages/lighttpd/lib/* $(TARGET_DIR)/usr/lib
 	cp -R $(OCCU_ARCH)/packages/lighttpd/etc/* $(TARGET_DIR)/etc
 
+install_hmserver:
+	mkdir -p $(TARGET_DIR)/opt/HMServer
+	cp -R HMserver/opt/HMServer/* $(TARGET_DIR)/opt/HMServer
+	cp -R HMserver/etc/config_templates/* $(TARGET_DIR)/etc/config_templates
+	cp -R HMserver/HMServer.jar $(TARGET_DIR)/opt/HMServer
 
 update_webui:
 	ln -sf /var/EULA.de                            $(TARGET_DIR)/www/rega/EULA.de
@@ -69,16 +74,12 @@ update_webui:
 
 
 install:
-	make install_rfd_arch OCCU_ARCH=arm-gnueabihf
-	make install_hs485d_arch OCCU_ARCH=arm-gnueabihf
-	make install_webui_arch OCCU_ARCH=arm-gnueabihf
-	make install_linuxbasis_arch OCCU_ARCH=arm-gnueabihf
-	make install_lighttpd_arch OCCU_ARCH=arm-gnueabihf
-#	make install_rfd_arch OCCU_ARCH=X86_32_Debian_Wheezy
-#	make install_hs485d_arch OCCU_ARCH=X86_32_Debian_Wheezy
-#	make install_webui_arch OCCU_ARCH=X86_32_Debian_Wheezy
-#	make install_linuxbasis_arch OCCU_ARCH=X86_32_Debian_Wheezy
-#	make install_lighttpd_arch OCCU_ARCH=X86_32_Debian_Wheezy
+	make install_rfd_arch OCCU_ARCH=$(HOMEMATIC_ARCH)
+	make install_hs485d_arch OCCU_ARCH=$(HOMEMATIC_ARCH)
+	make install_webui_arch OCCU_ARCH=$(HOMEMATIC_ARCH)
+	make install_linuxbasis_arch OCCU_ARCH=$(HOMEMATIC_ARCH)
+	make install_lighttpd_arch OCCU_ARCH=$(HOMEMATIC_ARCH)
+	make install_hmserver
 	sed -i -e 's/\/opt\/hm\//\//g' $(TARGET_DIR)/etc/lighttpd/lighttpd.conf
 	sed -i -e 's/\/opt\/hm\//\//g' $(TARGET_DIR)/etc/lighttpd/conf.d/cgi.conf
 	make update_webui

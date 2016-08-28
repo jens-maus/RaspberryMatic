@@ -72,6 +72,9 @@ update_webui:
 
 	ln -snf ${HM_ROOT}/etc/config/addons/www   $(TARGET_DIR)/www/addons
 
+cleanup_filesystem:
+	rm -rf $(TARGET_DIR)/etc/config
+	ln -snf ${HM_ROOT}/usr/local/etc/config   $(TARGET_DIR)/etc/config
 
 install:
 	make install_rfd_arch OCCU_ARCH=$(HOMEMATIC_ARCH)
@@ -85,6 +88,7 @@ install:
 	make update_webui
 	mkdir -p $(TARGET_DIR)/boot
 	echo "VERSION=$(HOMEMATIC_VERSION)" > $(TARGET_DIR)/boot/VERSION
+	make cleanup_filesystem
 
 all: 
 	@echo "do nothing"

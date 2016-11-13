@@ -1,7 +1,7 @@
 config BR2_PACKAGE_HOMEMATIC
-	bool "eQ-3 Homematic Services"
+	bool "eQ-3 HomeMatic Services"
 	help
-	  Homematic Services by eQ-3
+	  HomeMatic Services by eQ-3
 	  
 	  http://www.eq-3.de/
 
@@ -29,7 +29,7 @@ config BR2_PACKAGE_HOMEMATIC_RF_PROTOCOL_HM_ONLY
 config BR2_PACKAGE_HOMEMATAIC_RF_PROTOCOL_HMIP_ONLY
 	bool "HmIP RF Only"
         help
-          Support Homematic IP RF Protocol only
+          Support HomeMatic IP RF Protocol only
 
 config BR2_PACKAGE_HOMEMATAIC_RF_PROTOCOL_HM_HMIP
 	bool "HM and HmIP RF"

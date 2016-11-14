@@ -1,1 +1,5 @@
 .DS_Store
+/build-*/
+/buildroot-*.tar*
+/buildroot-????.??
+/download

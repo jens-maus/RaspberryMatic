@@ -1,1 +1,1 @@
-root=/dev/mmcblk0p2 rootwait console=tty1
+dwc_otg.lpm_enable=0 root=/dev/mmcblk0p2 rootfstype=ext4 rootwait console=tty1

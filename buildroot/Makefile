@@ -25,11 +25,7 @@ build-$(BOARD)/.config: buildroot-$(BUILDROOT_VERSION)
 	mkdir -p download
 	cp Config.$(BOARD) build-$(BOARD)/.config
 
-patch_buildroot:
-	cp cmdline.txt buildroot-$(BUILDROOT_VERSION)/package/rpi-firmware
-	cp config.txt buildroot-$(BUILDROOT_VERSION)/package/rpi-firmware
-
-dist: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config patch_buildroot
+dist: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config
 	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
 
 clean:
@@ -47,8 +43,8 @@ umount:
 	sudo umount /mnt/p2
 	sudo kpartx -dv build-$(BOARD)/images/sdcard.img
 
-xconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config patch_buildroot
+xconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config
 	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external xconfig
 
-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config patch_buildroot
+menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config
 	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig

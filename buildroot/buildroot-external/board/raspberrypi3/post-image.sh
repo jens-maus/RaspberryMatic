@@ -5,6 +5,10 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
 GENIMAGE_CFG="${BR2_EXTERNAL}/board/${BOARD_NAME}/genimage-${BOARD_NAME}.cfg"
 GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 
+# Use our own cmdline.txt+config.txt
+cp "${BR2_EXTERNAL}/board/${BOARD_NAME}/cmdline.txt" "${BINARIES_DIR}/rpi-firmware/"
+cp "${BR2_EXTERNAL}/board/${BOARD_NAME}/config.txt" "${BINARIES_DIR}/rpi-firmware/"
+
 # Mark the kernel as DT-enabled
 mkdir -p "${BINARIES_DIR}/kernel-marked"
 ${HOST_DIR}/usr/bin/mkknlimg "${BINARIES_DIR}/zImage" \

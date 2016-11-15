@@ -1,1 +1,1 @@
-NTPSERVERS='ntp.homematic.com'
+NTPSERVERS='pool.ntp.org'

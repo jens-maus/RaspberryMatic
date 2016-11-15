@@ -1,0 +1,107 @@
+#!/bin/sh
+
+RESOLV_CONF=/var/etc/resolv.conf
+
+opstate=$(cat /sys/class/net/eth0/operstate)
+
+if [ $opstate = "down" ] ; then
+	ifconfig eth0 up
+	echo "sleep 5s"
+	sleep 5
+fi
+
+rm -f $RESOLV_CONF
+
+mkdir -p /var/status
+
+rm -f /var/status/hasLink
+rm -f /var/status/hasIP
+rm -f /var/status/hasInternet
+
+. /etc/config/netconfig
+
+hostname $HOSTNAME
+
+route del -net 224.0.0.0 netmask 240.0.0.0 2> /dev/null
+route add -net 224.0.0.0 netmask 240.0.0.0 eth0
+
+if grep -q nfsroot /proc/cmdline ; then
+   killall -q setclock
+   daemonize /bin/setclock
+   echo Running from nfs root. Skipping network configuration.
+
+   # has IP  
+   touch /var/status/hasLink
+   touch /var/status/hasIP
+
+   # check internet connection; use fix ip because no nameserver (nfs boot) 
+   if ping -W 5 -c 1 87.230.102.12 >/dev/null; then
+	touch /var/status/hasInternet 
+   fi
+   exit 0
+fi
+
+killall -q udhcpc
+
+if [ _$MODE = _DHCP ] ; then
+  # quit after first check
+  udhcpc -x hostname:$HOSTNAME -n -q -V eQ3-CCU2 -s /bin/dhcp.script
+  # check Return code
+  if [ $? -eq 0 ] ; then
+    touch /var/status/hasLink
+    udhcpc -x hostname:$HOSTNAME -V eQ3-CCU2 -b -s /bin/dhcp.script
+    exit 0
+  else
+    killall checkDHCP
+    /bin/checkDHCP &
+  fi
+fi
+
+has_carrier=$(cat /sys/class/net/eth0/carrier)
+
+if [ $has_carrier -eq 1 ] ; then
+        echo "eth0 carrier detected"
+        touch /var/status/hasLink
+else
+        echo "eth0 no carrier detected"
+        exit 1
+fi
+
+. /etc/config/netconfig
+ifconfig eth0 $IP netmask $NETMASK
+route del default 2> /dev/null
+route add default gw $GATEWAY
+
+if [ ! -z "$NAMESERVER1" ] ; then
+	echo nameserver $NAMESERVER1 >> $RESOLV_CONF
+fi
+
+if [ ! -z "$NAMESERVER2" ] ; then
+	echo nameserver $NAMESERVER2 >> $RESOLV_CONF
+fi
+
+# update CURRENT_XYZ in /etc/config/netconfig
+
+# update /etc/config/netconfig
+eq3configcmd netconfigcmd -i $IP -g $GATEWAY -n $NETMASK
+
+if [ ! -z "$NAMESERVER1" ] ; then
+	eq3configcmd netconfigcmd -d1 $NAMESERVER1
+else
+	eq3configcmd netconfigcmd -d1 ""
+fi
+
+if [ ! -z "$NAMESERVER2" ] ; then
+	eq3configcmd netconfigcmd -d2 $NAMESERVER2
+else
+	eq3configcmd netconfigcmd -d2 ""
+fi
+
+touch /var/status/hasIP
+
+# check internet connection; use fix ip because no nameserver (nfs boot) 
+if ping -W 5 -c 1 87.230.102.12 >/dev/null; then
+	touch /var/status/hasInternet 
+fi
+
+exit 0

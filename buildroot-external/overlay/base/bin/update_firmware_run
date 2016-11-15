@@ -1,0 +1,32 @@
+#!/bin/sh
+
+mount /proc
+mount /sys
+
+if [ ! -f /update_script ]; then
+  echo "check Factory reset"
+  if [ -f /var/doFactoryReset ]; then
+	echo "do Factory reset"
+	umount /usr/local
+	mount /dev/mmcblk0p3 /mnt
+	rm -rf /mnt/*
+	mount -oremount,ro /dev/mmcblk0p3
+	sleep 5
+  fi
+  echo 1 > /proc/sys/kernel/sysrq
+  echo b > /proc/sysrq-trigger
+fi
+
+umount /oldroot/dev/pts
+umount /oldroot/dev/shm
+umount /oldroot/dev
+umount /oldroot/tmp/
+umount /oldroot/sys/kernel/debug
+umount /oldroot/sys
+umount /oldroot/proc
+umount /oldroot/usr/local
+umount /oldroot/media
+umount /oldroot
+/update_script HM-RASPBERRYMATIC
+echo 1 > /proc/sys/kernel/sysrq 
+echo b > /proc/sysrq-trigger

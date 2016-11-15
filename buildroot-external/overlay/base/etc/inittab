@@ -14,23 +14,26 @@
 # process   == program to run
 
 # Startup the system
-::sysinit:/bin/mount -t proc proc /proc
-::sysinit:/bin/mount -o remount,rw /
-::sysinit:/bin/mkdir -p /dev/pts
-::sysinit:/bin/mkdir -p /dev/shm
-::sysinit:/bin/mount -a
-::sysinit:/bin/hostname -F /etc/hostname
+null::sysinit:/bin/mount -t proc proc /proc
+#null::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
+null::sysinit:/bin/mkdir -p /dev/pts
+null::sysinit:/bin/mkdir -p /dev/shm
+null::sysinit:/bin/mount -a
+null::sysinit:/bin/hostname -F /etc/hostname
 # now run any rc scripts
 ::sysinit:/etc/init.d/rcS
 
 # Put a getty on the serial port
-# console::respawn:/sbin/getty -L  console 0 vt100 # GENERIC_SERIAL
-tty1::respawn:/sbin/getty -L  tty1 0 vt100 # HDMI console
+tty1::respawn:/sbin/getty -L  tty1 0 vt100 # GENERIC_SERIAL
 
 # Stuff to do for the 3-finger salute
-#::ctrlaltdel:/sbin/reboot
+::ctrlaltdel:/sbin/reboot
+
+# Stuff to do for SIGQUIT 
+::restart:/bin/update_firmware_run
 
 # Stuff to do before rebooting
 ::shutdown:/etc/init.d/rcK
-::shutdown:/sbin/swapoff -a
-::shutdown:/bin/umount -a -r
+null::shutdown:/bin/umount -a -r
+null::shutdown:/sbin/swapoff -a
+

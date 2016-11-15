@@ -1,0 +1,14 @@
+#!/bin/sh
+
+while true; do
+
+	sleep 60
+	udhcpc -x hostname:$HOSTNAME -n -q -V eQ3-CCU2 -s /bin/dhcp_check.script
+	# check Return code
+	if [ $? -eq 0 ] ; then
+		touch /var/status/hasLink
+		udhcpc -x hostname:$HOSTNAME -V eQ3-CCU2 -b -s /bin/dhcp.script
+		exit 0
+	fi
+done
+

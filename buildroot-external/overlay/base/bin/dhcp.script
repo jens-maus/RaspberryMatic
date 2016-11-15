@@ -1,0 +1,60 @@
+#!/bin/sh
+
+RESOLV_CONF=/var/etc/resolv.conf
+CONFIGURL=/var/configurl
+
+
+action=$1
+
+if grep -q nfsroot /proc/cmdline ; then
+    if [ _$interface = _eth0 ] ; then
+    	nfsroot=TRUE 
+    fi
+fi
+
+handle_deconfig() {
+	if [ _$nfsroot = _TRUE ] ; then
+   		exit 0
+	fi
+	ifconfig $interface 0.0.0.0
+}
+
+handle_renew() {
+	if [ _$nfsroot != _TRUE ] ; then
+		ifconfig $interface $ip netmask $subnet
+		eq3configcmd netconfigcmd -i $ip -n $subnet -g $router 
+                export j=1;
+                for i in $dns; do
+			eq3configcmd netconfigcmd -d$j $i
+                        export j=`expr $j + 1`
+                done
+	fi
+	route del default 2> /dev/null
+	[ -n "$router" ] && route add default gw $router
+	[ -n "$boot_file" ] && echo $boot_file > $CONFIGURL
+	rm $RESOLV_CONF
+	[ -n "$domain" ] && echo domain $domain >> $RESOLV_CONF
+	for i in $dns ; do
+		echo nameserver $i >> $RESOLV_CONF
+	done
+	touch /var/status/hasIP
+
+	# check internet connection
+	if ping -W 5 -c 1 homematic.com >/dev/null; then
+		touch /var/status/hasInternet
+	fi
+}
+
+handle_bound() {
+    handle_renew
+}
+
+case $action in
+'deconfig')
+        handle_deconfig ;;
+'bound')
+        handle_bound ;;
+'renew')
+        handle_renew ;;
+esac
+

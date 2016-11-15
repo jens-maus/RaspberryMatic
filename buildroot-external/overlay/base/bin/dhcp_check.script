@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# do nothing, only for dhcp available check
+
+exit 0

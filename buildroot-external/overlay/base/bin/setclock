@@ -1,0 +1,49 @@
+#!/bin/sh
+
+#try to use the gateway as ntp server
+
+GATEWAY=`route -n | awk '{if ($1 == "0.0.0.0") print $2}'`
+
+BUILD_SECS=`date -ur /bin/rfd "+%s"`
+BUILD_DAY=`expr \( $BUILD_SECS / 86400 \) + 40581"`
+
+try_ntpclient () {
+	logger -t setclock -p debug "Try to get time from $1"
+    NTP_DAY=`ntpclient -h $1 -c 1 -i 1 2>/dev/null | sed "s/ .*$//"`
+    [ -z $NTP_DAY ] && return
+#    [ $NTP_DAY -lt $BUILD_DAY ] && return
+    ntpclient -h $1 -s -i 1 >/dev/null || return
+    ntpclient -h $1 -l > /var/log/ntpclient &
+    logger -t setclock -p debug `date`
+    touch /var/status/hasNTP
+    hwclock -wu 
+    exit 0
+}
+
+if [ -e /etc/config/ntpclient ] ; then
+	. /etc/config/ntpclient
+fi
+if [ ! -z "$GATEWAY" -o ! -z "$NTPSERVERS" ] ; then
+    killall -q ntpclient
+    
+    while true; do
+    
+        if [ ! -z "$NTPSERVERS" ] ; then
+            for NTPSERVER in $NTPSERVERS ; do
+                try_ntpclient $NTPSERVER
+            done
+        fi
+		
+	if [ ! -z "$GATEWAY" ] ; then
+		try_ntpclient $GATEWAY
+	fi
+        
+	logger -t setclock -p debug `date`
+        [ "$1" = "noloop" ] && exit 1
+        sleep 60
+    done
+fi
+
+logger -t setclock -p error "Gateway and NTP-Server not set"
+
+

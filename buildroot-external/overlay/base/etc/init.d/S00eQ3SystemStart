@@ -82,6 +82,8 @@ init() {
         
 	if [ ! -e /usr/local/etc/config/shadow ] ; then
 		cp $CFG_TEMPLATE_DIR/shadow /usr/local/etc/config/shadow
+		rm -f /etc/shadow
+		ln -s /usr/local/etc/config/shadow /etc/shadow
 	fi
 
 	# disable g_multi for raspi

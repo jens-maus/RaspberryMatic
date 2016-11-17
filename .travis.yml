@@ -1,3 +1,9 @@
 dist: trusty
 language: c
+
+addons:
+  apt:
+      packages:
+          - bc
+
 script: make dist

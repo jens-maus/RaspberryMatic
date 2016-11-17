@@ -6,4 +6,4 @@ addons:
       packages:
           - bc
 
-script: make dist
+script: make dist >/dev/null

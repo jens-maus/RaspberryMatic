@@ -1,6 +1,6 @@
 #!/bin/sh
 
-RESOLV_CONF=/var/etc/resolv.conf
+RESOLV_CONF=/tmp/resolv.conf
 CONFIGURL=/var/configurl
 
 
@@ -40,7 +40,7 @@ handle_renew() {
 	touch /var/status/hasIP
 
 	# check internet connection
-	if ping -W 5 -c 1 homematic.com >/dev/null; then
+	if ping -W 5 -c 1 google.com >/dev/null 2>&1; then
 		touch /var/status/hasInternet
 	fi
 }

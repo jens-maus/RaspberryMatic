@@ -20,11 +20,8 @@ rm -rf "${GENIMAGE_TMP}"
 # Create user filesystem
 #
 echo "Create user filesystem"
-# rm -f ${BINARIES_DIR}/userfs.ext2
-# rm -f ${BINARIES_DIR}/userfs.ext4
 mkdir -p ${BUILD_DIR}/userfs
-mke2img -d ${BUILD_DIR}/userfs -G 4 -R 1 -B 10000 -I 0 -o ${BINARIES_DIR}/userfs.ext2
-ln -s userfs.ext2 ${BINARIES_DIR}/userfs.ext4
+mke2img -d ${BUILD_DIR}/userfs -G 4 -R 1 -B 10000 -I 0 -o ${BINARIES_DIR}/userfs.ext4
 
 #
 # VERSION File

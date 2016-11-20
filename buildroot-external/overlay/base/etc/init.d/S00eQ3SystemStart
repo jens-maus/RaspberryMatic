@@ -18,6 +18,10 @@ echo "$ADDRESS">/var/rf_address
 
 init() {
 
+  # resize /usr/local to the maximum size
+  # (this should only happen for the first start)
+  /usr/sbin/resize2fs -p $(mount | grep /usr/local | cut -f1 -d' ')
+
         # cal local init startup file
         if [ ! -e /etc/config/safemode ] ; then
         	if [ -x /usr/local/etc/rc.init ]; then

@@ -3,9 +3,10 @@
 # homematic by eQ-3 
 #
 #############################################################
-# HOMEMATIC_VERSION = 2.21.10
-HOMEMATIC_VERSION = 28045df83480122f90ab92f7c6e625f9bf3b61aa
-HOMEMATIC_SITE = $(call github,eq-3,occu,$(HOMEMATIC_VERSION))
+HOMEMATIC_VERSION = 2.21.10
+#HOMEMATIC_OCCU_BRANCH = $(HOMEMATIC_OCCU_BRANCH)
+HOMEMATIC_OCCU_BRANCH = 28045df83480122f90ab92f7c6e625f9bf3b61aa
+HOMEMATIC_SITE = $(call github,eq-3,occu,$(HOMEMATIC_OCCU_BRANCH))
 
 # HOMEMATIC_SITE = $(TOPDIR)/../../../General/Buildroot/Modules/RFD
 # HOMEMATIC_SITE_METHOD=local

@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Buildroot 2016.05-g122d1d0-dirty Configuration
+# Buildroot 2016.05-gc02223d Configuration
 #
 BR2_HAVE_DOT_CONFIG=y
 BR2_HOST_GCC_AT_LEAST_4_6=y
@@ -697,7 +697,7 @@ BR2_PACKAGE_E2FSPROGS_UUIDGEN=y
 # BR2_PACKAGE_LINUX_FUSION is not set
 # BR2_PACKAGE_MESA3D is not set
 # BR2_PACKAGE_OCRAD is not set
-# BR2_PACKAGE_PSPLASH is not set
+BR2_PACKAGE_PSPLASH=y
 # BR2_PACKAGE_SDL is not set
 # BR2_PACKAGE_SDL2 is not set
 

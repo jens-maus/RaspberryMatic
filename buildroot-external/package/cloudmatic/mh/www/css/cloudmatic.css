@@ -1,0 +1,108 @@
+@font-face{font-family:'Material Icons';font-style:normal;font-weight:400;src:local('Material Icons'),local('MaterialIcons-Regular'),url(../font/MDL/MaterialIcons-Regular.woff) format('woff')}
+@font-face{
+  font-family:'Open Sans';
+  font-style:normal;
+  font-weight:normal;
+  src:url(../font/OpenSans/OpenSans-Regular.woff?v=1.1.0) format('woff')
+}
+@font-face{
+  font-family:'Open Sans';
+  font-style:normal;
+  font-weight:600;
+  src:url(../font/OpenSans/OpenSans-Semibold.woff?v=1.1.0) format('woff')
+}
+@font-face{
+  font-family:'Open Sans';
+  font-style:normal;
+  font-weight:bold;
+  src:url(../font/OpenSans/OpenSans-Bold.woff?v=1.1.0) format('woff')
+}
+@font-face{
+  font-family:'Open Sans';
+  font-style:normal;
+  font-weight:800;
+  src:url(../font/OpenSans/OpenSans-ExtraBold.woff?v=1.1.0) format('woff')
+}
+
+html {
+  font-family: "Open Sans",sans-serif;
+}
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+h6 {
+  font-weight: bold;
+}
+.navbar-fixed, nav {
+  border-bottom: 4px solid #1e71ba;
+  min-height:80px;
+}
+nav a, nav ul a {
+  color: #616161;
+}
+nav ul li.active, .side-nav li.active {
+  background-color:white;
+  font-weight: bold;
+}
+nav ul a:hover, .side-nav li:hover {
+  background-color:white;
+  color: #000000 !important;
+}
+nav ul li.active a {
+  color: #1e71ba !important;
+}
+main {
+  flex: 1 0 auto;
+}
+span.badge.new::after {
+  content: "";
+}
+.blue {
+   background-color: #1e71ba !important;
+}
+form .row {
+  margin:0;
+}
+.divider {
+  margin-bottom: 20px;
+}
+main ul li {
+  list-style-type: disc !important;
+  margin-left:1em;
+}
+.select-wrapper ul li {
+  list-style-type: none !important;
+}
+input:focus:not([type]):not([readonly]), input[type="text"]:focus:not([readonly]), input[type="password"]:focus:not([readonly]), input[type="email"]:focus:not([readonly]), input[type="url"]:focus:not([readonly]), input[type="time"]:focus:not([readonly]), input[type="date"]:focus:not([readonly]), input[type="datetime-local"]:focus:not([readonly]), input[type="tel"]:focus:not([readonly]), input[type="number"]:focus:not([readonly]), input[type="search"]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+  border-bottom: 1px solid #1e71ba;
+  box-shadow: 0 1px 0 0 #1e71ba;
+}
+input:focus:not([type]):not([readonly]) + label, input[type="text"]:focus:not([readonly]) + label, input[type="password"]:focus:not([readonly]) + label, input[type="email"]:focus:not([readonly]) + label, input[type="url"]:focus:not([readonly]) + label, input[type="time"]:focus:not([readonly]) + label, input[type="date"]:focus:not([readonly]) + label, input[type="datetime-local"]:focus:not([readonly]) + label, input[type="tel"]:focus:not([readonly]) + label, input[type="number"]:focus:not([readonly]) + label, input[type="search"]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
+  color: #1e71ba;
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}    

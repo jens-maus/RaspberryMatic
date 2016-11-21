@@ -1,0 +1,42 @@
+#! /bin/sh
+DAEMON="OpenVPNkey"
+ADDONNAME=meine-homematic-key
+ADDONDIR=/etc/config/addons/mh
+WWWDIR=/etc/config/addons/www/mh
+CONFIGDIR=/usr/local/etc/config
+RCDDIR=$CONFIGDIR/rc.d
+
+openvpn=/opt/mh/openvpn
+piddir=/var/run/openvpn
+
+case "$1" in
+  ""|start)
+       logger -t homematic -p user.info "starting mh loop"
+       /bin/sh $ADDONDIR/loop.sh &
+  ;;
+
+  stop)
+	killall -KILL loop.sh  >/dev/null 2>&1 || true
+	logger -t homematic -p user.info "meine-homematic.de Hintergrund Dienst beendet"
+  ;;
+  
+
+  info)
+       echo "Info: Mehrwertdienste f&uuml;r Ihre HomeMatic"
+       echo "Info: SMS Versand, Mail Versand sowie sicherer VPN Fernzugriff per Webbrowser."
+       echo "Info: Details zum Funktionsumfang unter:"
+       echo "Info: <a target=\"_blank\" href=\"http://www.meine-homematic.de\">http://www.meine-homematic.de</a>"
+       echo "Name: VPN, SMS und Mail via www.meine-homematic.de"
+       echo "Version: 2.0"
+       echo "Operations: restart"
+	echo "Config-Url: /addons/mh/index.cgi"
+  ;;
+  
+  *)
+        echo "Usage: tools {info|start|stop}" >&2
+        exit 1
+  ;;
+esac
+
+exit 0
+

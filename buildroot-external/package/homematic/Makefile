@@ -18,6 +18,7 @@ install_hs485d_arch:
 	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/* $(TARGET_DIR)
 
 install_webui_arch:
+	rm -r $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/* $(TARGET_DIR)
 	cp -R WebUI/* $(TARGET_DIR)/
 

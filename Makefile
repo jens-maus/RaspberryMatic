@@ -44,7 +44,7 @@ umount:
 	sudo kpartx -dv build-$(BOARD)/images/sdcard.img
 
 xconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config
-	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external xconfig
+	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external xconfig && cp .config ../Config.$(BOARD)
 
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config
-	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig
+	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig && cp .config ../Config.$(BOARD)

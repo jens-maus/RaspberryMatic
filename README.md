@@ -10,11 +10,11 @@ This repository is Work-in-Progress and not yet ment to provide a productive Hom
 
 ## ChangeLog
 
-* 0.2.0 (Not yet released)
+* 2.25.14-XXXXXXXX (Not yet released)
   * HomeMatic-CCU 2.25.14 compatibility
   * working Backup / Restore / Factory-Reset
   * finalized Filesystem structure (read-only root file system)
   * working addon install/removal routines
 
-* 0.1.0 (2016-08-21)
+* 2.21.10-20160821
   * First development version. There are still broken features like filesystem structure (readonly root file system), backup, restore, install extensions..., but it's possible to teach-in and controll HomeMatic RF devices.

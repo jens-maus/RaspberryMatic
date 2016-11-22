@@ -1,0 +1,14 @@
+---
+engines:
+  duplication:
+    enabled: false
+  fixme:
+    enabled: true
+  markdownlint:
+    enabled: true
+ratings:
+  paths:
+  - "**.c"
+  - "**.h"
+  - "**.l"
+  - "**.md"

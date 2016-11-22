@@ -1,6 +1,8 @@
 <img src="https://github.com/jens-maus/RaspberryMatic/raw/master/buildroot-external/package/homematic/logo.png" align=right>
 # RaspberryMatic
 [![Build Status](https://travis-ci.org/jens-maus/RaspberryMatic.svg?branch=master)](https://travis-ci.org/jens-maus/RaspberryMatic)
+[![Code Climate](https://codeclimate.com/github/jens-maus/RaspberryMatic/badges/gpa.svg)](https://codeclimate.com/github/jens-maus/RaspberryMatic)
+[![License](http://img.shields.io/:license-gpl2-blue.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
 [![Github Issues](http://githubbadges.herokuapp.com/jens-maus/RaspberryMatic/issues.svg)](https://github.com/jens-maus/RaspberryMatic/issues)
 
 A collaborate effort to create an open sourced HomeMatic-aware distribution for the RaspberryPi platform based on buildroot.

@@ -24,3 +24,6 @@ dtparam=i2s=on
 dtparam=spi=on
 
 enable_uart=1
+
+# activating the hardware watchdog
+dtparam=watchdog=on

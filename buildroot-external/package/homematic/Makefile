@@ -27,8 +27,6 @@ install_linuxbasis_arch:
 	cp -R $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/* $(TARGET_DIR)
 
 install_lighttpd_arch:
-	cp -R $(OCCU_ARCH)/packages/lighttpd/bin/* $(TARGET_DIR)/usr/sbin
-	cp -R $(OCCU_ARCH)/packages/lighttpd/lib/* $(TARGET_DIR)/usr/lib
 	cp -R $(OCCU_ARCH)/packages/lighttpd/etc/* $(TARGET_DIR)/etc
 
 install_hmserver:
@@ -85,8 +83,6 @@ install:
 	make install_linuxbasis_arch OCCU_ARCH=$(HOMEMATIC_ARCH)
 	make install_lighttpd_arch OCCU_ARCH=$(HOMEMATIC_ARCH)
 	make install_hmserver
-	sed -i -e 's/\/opt\/hm\//\//g' $(TARGET_DIR)/etc/lighttpd/lighttpd.conf
-	sed -i -e 's/\/opt\/hm\//\//g' $(TARGET_DIR)/etc/lighttpd/conf.d/cgi.conf
 	make update_webui
 	mkdir -p $(TARGET_DIR)/boot
 	echo "VERSION=$(HOMEMATIC_VERSION)" > $(TARGET_DIR)/boot/VERSION

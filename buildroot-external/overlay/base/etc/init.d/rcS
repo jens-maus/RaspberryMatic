@@ -13,7 +13,7 @@ for i in /etc/init.d/S??* ;do
      # corresponding level
      name=$(basename $i)
      /usr/bin/psplash-write "MSG Starting ${name:3}..."
-     /usr/bin/psplash-write "PROGRESS $((${name:1:2}))"
+     /usr/bin/psplash-write "PROGRESS $((${name:1:2}+1))"
 
      case "$i" in
 	*.sh)
@@ -32,4 +32,4 @@ for i in /etc/init.d/S??* ;do
 done
 
 /usr/bin/psplash-write "MSG http://$(hostname)/"
-/usr/bin/psplash-write "PROGRESS 100"
+/usr/bin/psplash-write "PROGRESS 0"

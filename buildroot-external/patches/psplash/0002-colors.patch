@@ -1,0 +1,22 @@
+--- psplash/psplash-colors.h.orig	2016-11-22 21:20:11.487892676 +0100
++++ psplash/psplash-colors.h	2016-11-22 21:21:54.269520652 +0100
+@@ -20,15 +20,15 @@
+ #define _HAVE_PSPLASH_COLORS_H
+ 
+ /* This is the overall background color */
+-#define PSPLASH_BACKGROUND_COLOR 0xec,0xec,0xe1
++#define PSPLASH_BACKGROUND_COLOR 0x00,0x00,0x00
+ 
+ /* This is the color of any text output */
+-#define PSPLASH_TEXT_COLOR 0x6d,0x6d,0x70
++#define PSPLASH_TEXT_COLOR 0xff,0xff,0xff
+ 
+ /* This is the color of the progress bar indicator */
+-#define PSPLASH_BAR_COLOR 0x6d,0x6d,0x70
++#define PSPLASH_BAR_COLOR 0xff,0xff,0xff
+ 
+ /* This is the color of the progress bar background */
+-#define PSPLASH_BAR_BACKGROUND_COLOR 0xec,0xec,0xe1
++#define PSPLASH_BAR_BACKGROUND_COLOR 0x00,0x00,0x00
+ 
+ #endif

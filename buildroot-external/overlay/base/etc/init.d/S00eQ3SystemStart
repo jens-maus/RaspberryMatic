@@ -22,6 +22,9 @@ init() {
   # (this should only happen for the first start)
   /usr/sbin/resize2fs -p $(mount | grep /usr/local | cut -f1 -d' ')
 
+  # load watchdog kernel module
+  modprobe bcm2835_wdt nowayout=1 heartbeat=15
+
         # cal local init startup file
         if [ ! -e /etc/config/safemode ] ; then
         	if [ -x /usr/local/etc/rc.init ]; then

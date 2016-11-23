@@ -31,12 +31,12 @@ case "$1" in
       fi
     fi
     start-stop-daemon -S -q -x $DAEMON -- -g ${NTPSERVERS}
-    [ $? = 0 ] && echo "OK" || echo "FAIL"
+    [ $? = 0 ] && ( echo "OK"; touch /var/status/hasNTP ) || echo "FAIL"
     ;;
   stop)
     printf "Stopping $NAME: "
     start-stop-daemon -K -q -n $NAME
-    [ $? = 0 ] && echo "OK" || echo "FAIL"
+    [ $? = 0 ] && ( echo "OK"; rm -f /var/status/hasNTP ) || echo "FAIL"
     ;;
   restart|reload)
     echo "Restarting $NAME: "

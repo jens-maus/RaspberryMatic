@@ -1,0 +1,53 @@
+#! /bin/sh
+
+NAME=ntpd
+DAEMON=/usr/sbin/$NAME
+CFG_TEMPLATE_DIR=/etc/config_templates
+
+# Gracefully exit if the package has been removed.
+test -x $DAEMON || exit 0
+
+init() {
+	export TZ=`cat /etc/config/TZ`
+
+	if [ ! -e /etc/config/ntpclient ] ; then
+		cp $CFG_TEMPLATE_DIR/ntpclient /etc/config
+	fi
+
+	if [ -r /etc/config/ntpclient ] ; then
+		. /etc/config/ntpclient
+	fi
+}
+
+case "$1" in
+  start)
+    init
+    printf "Starting $NAME: "
+	  if [ -z "$NTPSERVERS" ] ; then
+      # try the gateway
+      NTPSERVERS=$(route -n | awk '{if ($1 == "0.0.0.0") print $2}')
+      if [ -z "${NTPSERVERS}" ]; then
+        . $CFG_TEMPLATE_DIR/ntpclient
+      fi
+    fi
+    start-stop-daemon -S -q -x $DAEMON -- -g ${NTPSERVERS}
+    [ $? = 0 ] && echo "OK" || echo "FAIL"
+    ;;
+  stop)
+    printf "Stopping $NAME: "
+    start-stop-daemon -K -q -n $NAME
+    [ $? = 0 ] && echo "OK" || echo "FAIL"
+    ;;
+  restart|reload)
+    echo "Restarting $NAME: "
+    $0 stop
+    sleep 1
+    $0 start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|reload}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0

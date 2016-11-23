@@ -18,12 +18,22 @@ echo "$ADDRESS">/var/rf_address
 
 init() {
 
+  # load watchdog kernel module
+  modprobe bcm2835_wdt nowayout=1 heartbeat=15
+
+  # initialize a potentially existing RTC clock
+  modprobe i2c_bcm2708
+  modprobe i2c-dev
+  i2cset -y 1 0x6f 0x08 0x47 2>/dev/null
+  if [ $? -eq 0 ]; then
+    modprobe i2c:mcp7941x
+    echo mcp7941x 0x6f > /sys/class/i2c-dev/i2c-1/device/new_device
+    hwclock -su
+  fi
+
   # resize /usr/local to the maximum size
   # (this should only happen for the first start)
   /usr/sbin/resize2fs -p $(mount | grep /usr/local | cut -f1 -d' ')
-
-  # load watchdog kernel module
-  modprobe bcm2835_wdt nowayout=1 heartbeat=15
 
         # cal local init startup file
         if [ ! -e /etc/config/safemode ] ; then

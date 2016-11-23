@@ -1,1 +1,2 @@
 */30 * * * * /bin/SetInterfaceClock 127.0.0.1:2001
+0 * * * * /bin/setHWClock.sh

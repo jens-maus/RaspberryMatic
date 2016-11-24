@@ -6,12 +6,10 @@ mount /sys
 if [ ! -f /update_script ]; then
   echo "check Factory reset"
   if [ -f /var/doFactoryReset ]; then
-	echo "do Factory reset"
-	umount /usr/local
-	mount /dev/mmcblk0p3 /mnt
-	rm -rf /mnt/*
-	mount -oremount,ro /dev/mmcblk0p3
-	sleep 5
+	  echo "do Factory reset"
+	  rm -rf /usr/local/*
+	  sleep 5
+	  sync
   fi
   echo 1 > /proc/sys/kernel/sysrq
   echo b > /proc/sysrq-trigger

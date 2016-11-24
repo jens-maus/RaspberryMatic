@@ -1,0 +1,65 @@
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-11-24 13:56:29.236237690 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2016-11-13 10:59:04.470349509 +0100
+@@ -5,7 +5,24 @@
+ 
+ LOGLEVEL_RFD=5
+ CFG_TEMPLATE_DIR=/etc/config_templates
+-PIDFILE=/var/run/rfd.pid
++
++update() {        
++	echo "0" > /sys/class/gpio/gpio18/value
++	sleep 1
++	echo "1" > /sys/class/gpio/gpio18/value
++	if [ ! -e /etc/config/no-coprocessor-update ] ; then
++		echo "checking if firmware update is needed..."
++		/bin/eq3configcmd update-coprocessor -p "/dev/ttyS0" -u
++		if ! [ $? -eq 0 ] ; then
++			echo "error while updating coprocessor, force..."
++			/bin/eq3configcmd update-coprocessor -p "/dev/ttyS0" -u -f
++		else
++			echo "done"
++		fi
++	else
++		echo "firmware update disabled"
++	fi
++}
+ 
+ init() {
+ 	export TZ=`cat /etc/config/TZ`
+@@ -13,16 +30,8 @@
+ 	if [ ! -d /etc/config/rfd ] ; then
+   		mkdir /etc/config/rfd
+ 	fi
+-	#Migration for existing rfd.conf in user space
+ 	if [ ! -e /etc/config/rfd.conf ] ; then
+ 		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
+-	else
+-		sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
+-		sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
+-		sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
+-                if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
+-                        sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
+-                fi
+ 	fi
+ 
+         # Bug fix
+@@ -44,16 +53,13 @@
+ start() {
+ 	echo -n "Starting rfd: "
+ 	init
+-	echo "Waiting for multimacd to get ready"
+-	eq3configcmd wait-for-file -f /dev/mmd_bidcos -p 1 -t 5
+-	echo "Starting rfd"
+-	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
++	update
++	start-stop-daemon -S -q -p /var/run/rfd.pid --exec /bin/rfd -- -d -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
+ 	echo "OK"
+ }
+ stop() {
+ 	echo -n "Stopping rfd: "
+-	start-stop-daemon -K -q -p $PIDFILE
+-	rm -f $PIDFILE
++	start-stop-daemon -K -q -p /var/run/rfd.pid
+ 	echo "OK"
+ }
+ restart() {

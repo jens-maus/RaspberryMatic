@@ -1,0 +1,49 @@
+--- homematic/WebUI/www/config/cp_security.cgi.orig	2016-11-24 13:44:21.656725883 +0100
++++ homematic/WebUI/www/config/cp_security.cgi	2016-11-24 13:44:08.345027268 +0100
+@@ -192,7 +192,7 @@
+         }
+     }
+     catch {
+-        exec run-parts /etc/config/rc.d stop
++        exec run-parts -a stop /etc/config/rc.d
+     }
+     if { [catch {
+         exec crypttool -r
+@@ -203,7 +203,7 @@
+         # exec /usr/sbin/ubimkvol /dev/ubi1 -N user -m
+         # exec mount /usr/local
+         exec touch /var/doFactoryReset
+-        exec kill -SIGQUIT 1
++        exec /bin/update_firmware_run
+     }]} {
+ 
+       # TWIST-22
+@@ -283,7 +283,7 @@
+     http_head
+     set i 0
+     if { [catch {
+-        exec tar xf new_config.tar
++        exec tar xf new_config.tar 2>/dev/null
+         file delete -force /tmp/new_config.tar
+ 		
+     set config_version [read_version "firmware_version"]
+@@ -474,12 +474,13 @@
+     }
+ 		
+ 	if { "false" == $ccu1_backup } {	# backup for version >= 2
+-		exec umount /usr/local
+-        	exec /usr/sbin/ubidetach -p /dev/mtd6
+-        	exec /usr/sbin/ubiformat /dev/mtd6 -y
+-        	exec /usr/sbin/ubiattach -p /dev/mtd6
+-        	exec /usr/sbin/ubimkvol /dev/ubi1 -N user -m
+-        	exec mount /usr/local
++		#exec umount /usr/local
++        	#exec /usr/sbin/ubidetach -p /dev/mtd6
++        	#exec /usr/sbin/ubiformat /dev/mtd6 -y
++        	#exec /usr/sbin/ubiattach -p /dev/mtd6
++        	#exec /usr/sbin/ubimkvol /dev/ubi1 -N user -m
++        	#exec mount /usr/local
++        	exec rm -rf /usr/local/*
+ 
+ 		if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
+ 			# set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "

@@ -1,0 +1,12 @@
+--- homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/config_templates/InterfacesList.xml.orig	2016-11-24 14:01:24.561537174 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/config_templates/InterfacesList.xml	2016-11-13 10:59:04.470349509 +0100
+@@ -10,9 +10,4 @@
+ 	 	<url>xmlrpc://127.0.0.1:9292/groups</url> 
+ 	 	<info>Virtual Devices</info> 
+ 	</ipc>
+-	<ipc>
+-	 	<name>HmIP-RF</name>
+-	 	<url>xmlrpc://127.0.0.1:2010</url>
+-	 	<info>HmIP-RF</info>
+-	</ipc>
+ </interfaces>

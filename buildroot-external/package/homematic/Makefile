@@ -3,6 +3,7 @@
 #
 
 HM_ROOT=
+RASPMATIC_VERSION=$(shell cat ../../../VERSION)
 
 install_rfd_arch:
 	mkdir -p $(TARGET_DIR)/bin
@@ -73,6 +74,8 @@ update_webui:
 
 	ln -snf ${HM_ROOT}/etc/config/addons/www   $(TARGET_DIR)/www/addons
 
+	sed -i 's/WEBUI_VERSION = ".*";/WEBUI_VERSION = "$(RASPMATIC_VERSION)";/g' $(TARGET_DIR)/www/rega/pages/index.htm
+
 cleanup_filesystem:
 	rm -rf $(TARGET_DIR)/etc/config
 	ln -snf ${HM_ROOT}/usr/local/etc/config   $(TARGET_DIR)/etc/config
@@ -86,7 +89,7 @@ install:
 	make install_hmserver
 	make update_webui
 	mkdir -p $(TARGET_DIR)/boot
-	echo "VERSION=`cat ../../../VERSION`" > $(TARGET_DIR)/boot/VERSION
+	echo "VERSION=$(RASPMATIC_VERSION)" > $(TARGET_DIR)/boot/VERSION
 	make cleanup_filesystem
 
 all: 

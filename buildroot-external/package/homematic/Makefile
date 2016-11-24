@@ -85,7 +85,7 @@ install:
 	make install_hmserver
 	make update_webui
 	mkdir -p $(TARGET_DIR)/boot
-	echo "VERSION=$(HOMEMATIC_VERSION)" > $(TARGET_DIR)/boot/VERSION
+	echo "VERSION=`cat ../../../VERSION`" > $(TARGET_DIR)/boot/VERSION
 	make cleanup_filesystem
 
 all: 

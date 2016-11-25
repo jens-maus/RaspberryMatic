@@ -1,0 +1,20 @@
+--- homematic/WebUI/www/webui/webui.js.orig	2016-11-25 17:46:24.480091634 +0100
++++ homematic/WebUI/www/webui/webui.js	2016-11-25 17:55:36.779435439 +0100
+@@ -16943,7 +16943,7 @@
+     var script = document.createElement("script");
+     script.id = "homematic_com_script";
+     script.type = "text/javascript";
+-    script.src = "http://update.homematic.com/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product=HM-CCU2&serial=" + serial;
++    script.src = "https://min.gitcdn.link/repo/jens-maus/RaspberryMatic/master/release/LATEST-VERSION.js"
+     $("body").appendChild(script);
+   },
+ 
+@@ -17039,7 +17039,7 @@
+    **/
+   setLatestVersion: function(latestVersion, product)
+   {
+-    if (product == "HM-CCU2") {
++    if (product == "HM-RASPBERRYMATIC") {
+       homematic.com.m_latestVersion = latestVersion;
+       homematic.com.m_isUpdateAvailable = (WEBUI_VERSION != latestVersion);
+     } else {

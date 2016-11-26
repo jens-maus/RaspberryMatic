@@ -2,7 +2,7 @@
 # RaspberryMatic
 [![Build Status](https://travis-ci.org/jens-maus/RaspberryMatic.svg?branch=master)](https://travis-ci.org/jens-maus/RaspberryMatic)
 [![Code Climate](https://codeclimate.com/github/jens-maus/RaspberryMatic/badges/gpa.svg)](https://codeclimate.com/github/jens-maus/RaspberryMatic)
-[![License](http://img.shields.io/:license-gpl2-blue.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Github Issues](http://githubbadges.herokuapp.com/jens-maus/RaspberryMatic/issues.svg)](https://github.com/jens-maus/RaspberryMatic/issues)
 
 The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded devices like the [RaspberryPi](https://www.raspberrypi.org/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full microSD card image that can be directly flashed and then used in a RaspberryPi as the main operating system for controlling all kind of HomeMatic compatible devices with full compatibility to a CCU2 device directly sold by eQ-3.
@@ -26,12 +26,7 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * HomeMatic GPIO hardware module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html))
 
 ## License
-RaspberryMatic uses different software products that are all distributed under different license models. The following list summarizes which parts of RaspberryMatic are using which license:
-
-* buildroot environment ([GPLv2+](http://www.gnu.org/licenses/gpl-2.0.html))
-* eQ-3 OCCU ([HMSL](https://github.com/eq-3/occu/blob/master/LicenseDE.txt))
-
-To summarize, the build environment found here (including buildroot itself) is licensed under the [GPLv2+](http://www.gnu.org/licenses/gpl-2.0.html) license while the eQ-3 OCCU binaries that are directly obtained from the OCCU github repository are licensed under a properitary so-called [HMSL](https://github.com/eq-3/occu/blob/master/LicenseDE.txt) license.
+The RaspberryMatic build environment itself – the files found in this git repository – as well as the RaspberryMatic sd card images are licensed under the conditions of the [/Apache License 2.0/](https://opensource.org/licenses/Apache-2.0). Please note, however, that the buildroot distribution RaspberryMatic is using is licensed under the [GPLv2](http://www.gnu.org/licenses/gpl-2.0.html) license instead. Furthermore, the [eQ-3 OCCU](https://github.com/eq-3/occu) software RaspberryMatic is using to provide HomeMatic-based services is licensed under the ([HMSL](https://github.com/eq-3/occu/blob/master/LicenseDE.txt)).
 
 ## Contributions
 As the RaspberryMatic project is an open source based project everyone is invited to contribute to this project. Please note, however, that functionality within the corresponding eQ-3 OCCU binaries can not be modified as the main HomeMatic services (rfd, ReGaHSS, HMServer, etc.) are only provided in binary format by the [OCCU](https://github.com/eq-3/occu) project.

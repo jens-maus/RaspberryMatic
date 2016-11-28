@@ -3,16 +3,13 @@
 # homematic by eQ-3 
 #
 #############################################################
+
 HOMEMATIC_VERSION = 2.21.10
 #HOMEMATIC_OCCU_BRANCH = $(HOMEMATIC_OCCU_BRANCH)
 HOMEMATIC_OCCU_BRANCH = 28045df83480122f90ab92f7c6e625f9bf3b61aa
 HOMEMATIC_SITE = $(call github,eq-3,occu,$(HOMEMATIC_OCCU_BRANCH))
 
-# HOMEMATIC_SITE = $(TOPDIR)/../../../General/Buildroot/Modules/RFD
-# HOMEMATIC_SITE_METHOD=local
-
-# HOMEMATIC_PLATFORM=$(call qstrip, $(BR2_PACKAGE_RFD_PLATFORM))
-
+HOMEMATIC_MODULE_SUBDIRS = kernel-modules/bcm2835_raw_uart kernel-modules/eq3_char_loop
 
 # HOMEMATIC_DEPENDENCIES = rpi-firmware
 
@@ -22,6 +19,7 @@ HOMEMATIC_SITE = $(call github,eq-3,occu,$(HOMEMATIC_OCCU_BRANCH))
 
 define HOMEMATIC_PRE_PATCH
 	cp $(HOMEMATIC_PKGDIR)/Makefile $(@D)
+	cp -R $(HOMEMATIC_PKGDIR)/kernel-modules $(@D)
 endef
 
 HOMEMATIC_PRE_PATCH_HOOKS += HOMEMATIC_PRE_PATCH
@@ -53,4 +51,5 @@ define HOMEMATIC_INSTALL_TARGET_CMDS
 			-C $(@D) install 
 endef
 
+$(eval $(kernel-module))
 $(eval $(generic-package))

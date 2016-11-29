@@ -31,5 +31,9 @@ for i in /etc/init.d/S??* ;do
     esac
 done
 
-/usr/bin/psplash-write "MSG http://$(hostname)/"
+if [ -f /boot/VERSION ]; then
+  . /boot/VERSION
+fi
+
 /usr/bin/psplash-write "PROGRESS 0"
+/usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- http://$(hostname)/"

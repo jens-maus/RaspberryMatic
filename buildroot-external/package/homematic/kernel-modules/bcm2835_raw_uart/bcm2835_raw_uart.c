@@ -6,6 +6,7 @@
  * Copyright (c) 2015 by eQ-3 Entwicklung GmbH
  * Author: Heiko Thole
  *         Markus Willenborg
+ *         Jens Maus <mail@jens-maus.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,6 +32,8 @@
 #include <linux/module.h>
 #include <linux/platform_device.h>
 #include <linux/device.h>
+#include <linux/clk-provider.h>
+#include <linux/clkdev.h>
 #include <linux/clk.h>
 #include <linux/slab.h>
 #include <linux/io.h>
@@ -45,6 +48,7 @@
 #include <linux/interrupt.h>
 #include <linux/sched.h>
 #include <linux/amba/serial.h>
+#include <linux/version.h>
 #include <asm/ioctls.h>
 #include <asm/termios.h>
 
@@ -1204,7 +1208,22 @@ static struct platform_device bcm2709_raw_uart_device = {
     .num_resources = ARRAY_SIZE(bcm2835_raw_uart_resources),
 };
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,3,0)
+static int __init bcm2709_init_clocks(void)
+{
+  struct clk *clk;
+  int ret;
 
+  clk = clk_register_fixed_rate(NULL, "uart0_clk", NULL, CLK_IS_ROOT, UART0_CLOCK);
+  if (IS_ERR(clk))
+    pr_err("uart0_clk not registered\n");
+  ret = clk_register_clkdev(clk, NULL, "dev:f1");
+  if (ret)
+    pr_err("uart0_clk alias not registered\n");
+
+	return ret;
+}
+#endif
 
 /*!
  ******************************************************************************
@@ -1215,6 +1234,10 @@ static struct platform_device bcm2709_raw_uart_device = {
 static int __init bcm2835_raw_uart_init(void)
 {
   int ret;
+
+  #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,3,0)
+  bcm2709_init_clocks();
+  #endif
 
     ret = platform_device_register( &bcm2709_raw_uart_device );
     if( ret )

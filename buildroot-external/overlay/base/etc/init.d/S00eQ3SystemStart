@@ -115,6 +115,10 @@ init() {
 	# disable ehci-hcd for raspi
         # modprobe ehci-hcd
 
+	# Tunneling
+        modprobe bcm2835_raw_uart
+        modprobe eq3_char_loop
+
 	if [ ! -d /usr/local/etc/config ] ; then
                 mkdir -p /usr/local/etc/config
         	chmod 775 /usr/local/etc/config

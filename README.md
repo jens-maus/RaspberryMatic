@@ -14,6 +14,7 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * Read-only root file system to minimize write operations on SD card
 * Direct support for RTC clock module ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/))
 * Hardware WatchDog support automatically rebooting the system upon hardware problems
+* Build Environment creates a dedicated cross compiler (`arm-linux-gcc`) that can be used to compile all kind of third-party applications not directly included.
 
 ## Limitations
 * No HomeMatic-IP support yet (Work in Progress!)
@@ -43,11 +44,28 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [CCU-Historian](https://github.com/jens-maus/hm-ccu-historian)
 * [Watchdog](https://github.com/jens-maus/hm-watchdog)
 
+## Contributions
+As the RaspberryMatic project is an open source based project everyone is invited to contribute to this project. Please note, however, that functionality within the corresponding eQ-3 OCCU binaries can not be modified as the main HomeMatic services (rfd, ReGaHSS, HMServer, etc.) are provided in binary format by the [OCCU](https://github.com/eq-3/occu) project and not compiled from sources.
+
+### Development
+Building your own RaspberryMatic sd card image is a very straight forward process using this build environment – given that you have sufficient Linux/Unix knowledge and you know what you are actually doing. But if you know what you are doing and which host tools are required to actually be able to run a RaspberryMatic build, it should be as simple as:
+
+```
+$ git clone https://github.com/jens-maus/RaspberryMatic
+$ cd RaspberryMatic
+$ make dist
+```
+
+### Using the generated cross compiler
+After a successfull build of RaspberryMatic a dedicated cross compiler (`arm-linux-gcc`) should be available within the `build-raspberrypi3` path. You can use this GCC-based cross compiler to compile all kind of third party applications which can then be run within RaspberryMatic:
+
+```
+$ cd HelloWorld
+$ <path-to-RaspberryMatic-build>/build-raspberrypi3/host/usr/bin/arm-linux-gcc -o HelloWorld HelloWorld.c
+```
+
 ## License
 The RaspberryMatic build environment itself – the files found in this git repository – as well as the RaspberryMatic sd card images are licensed under the conditions of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0). Please note, however, that the buildroot distribution RaspberryMatic is using is licensed under the [GPLv2](http://www.gnu.org/licenses/gpl-2.0.html) license instead. Furthermore, the [eQ-3 OCCU](https://github.com/eq-3/occu) software RaspberryMatic is using to provide HomeMatic-based services is licensed under the ([HMSL](https://github.com/eq-3/occu/blob/master/LicenseDE.txt)).
-
-## Contributions
-As the RaspberryMatic project is an open source based project everyone is invited to contribute to this project. Please note, however, that functionality within the corresponding eQ-3 OCCU binaries can not be modified as the main HomeMatic services (rfd, ReGaHSS, HMServer, etc.) are only provided in binary format by the [OCCU](https://github.com/eq-3/occu) project.
 
 ## Authors
 

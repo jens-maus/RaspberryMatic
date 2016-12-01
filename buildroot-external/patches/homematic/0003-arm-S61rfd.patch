@@ -10,10 +10,10 @@
 +	echo "1" > /sys/class/gpio/gpio18/value
 +	if [ ! -e /etc/config/no-coprocessor-update ] ; then
 +		echo "checking if firmware update is needed..."
-+		/bin/eq3configcmd update-coprocessor -p "/dev/ttyS0" -u
++		/bin/eq3configcmd update-coprocessor -p "/dev/ttyAMA0" -u
 +		if ! [ $? -eq 0 ] ; then
 +			echo "error while updating coprocessor, force..."
-+			/bin/eq3configcmd update-coprocessor -p "/dev/ttyS0" -u -f
++			/bin/eq3configcmd update-coprocessor -p "/dev/ttyAMA0" -u -f
 +		else
 +			echo "done"
 +		fi

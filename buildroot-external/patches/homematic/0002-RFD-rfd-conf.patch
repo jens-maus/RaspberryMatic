@@ -7,7 +7,7 @@
 -ComPortFile = /dev/mmd_bidcos
 -#AccessFile = /dev/null
 -#ResetFile = /dev/ccu2-ic200
-+ComPortFile = /dev/ttyS0
++ComPortFile = /dev/ttyAMA0
 +AccessFile = /dev/null
 +ResetFile = /dev/null
  

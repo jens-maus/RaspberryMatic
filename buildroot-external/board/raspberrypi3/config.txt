@@ -23,7 +23,16 @@ dtparam=i2c_arm=on
 dtparam=i2s=on
 dtparam=spi=on
 
+# enable the UART
 enable_uart=1
+
+# disable the bluetooth UART use and
+# disable the uart1 alltogether
+dtoverlay=pi3-disable-bt
+dtparam=uart1=off
+
+# disable the splash screen
+disable_splash=1
 
 # activating the hardware watchdog
 dtparam=watchdog=on

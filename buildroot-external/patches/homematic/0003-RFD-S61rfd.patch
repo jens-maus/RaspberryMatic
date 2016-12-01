@@ -1,11 +1,9 @@
---- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-11-24 13:56:29.236237690 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2016-11-13 10:59:04.470349509 +0100
-@@ -5,7 +5,24 @@
- 
- LOGLEVEL_RFD=5
+--- S61rfd.orig	2016-12-01 01:13:54.276589059 +0100
++++ S61rfd	2016-12-01 01:14:20.052011766 +0100
+@@ -7,22 +7,32 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
--PIDFILE=/var/run/rfd.pid
-+
+ PIDFILE=/var/run/rfd.pid
+ 
 +update() {        
 +	echo "0" > /sys/class/gpio/gpio18/value
 +	sleep 1
@@ -23,10 +21,10 @@
 +		echo "firmware update disabled"
 +	fi
 +}
- 
++
  init() {
  	export TZ=`cat /etc/config/TZ`
-@@ -13,16 +30,8 @@
+ 
  	if [ ! -d /etc/config/rfd ] ; then
    		mkdir /etc/config/rfd
  	fi
@@ -43,23 +41,21 @@
  	fi
  
          # Bug fix
-@@ -44,16 +53,13 @@
- start() {
- 	echo -n "Starting rfd: "
- 	init
--	echo "Waiting for multimacd to get ready"
--	eq3configcmd wait-for-file -f /dev/mmd_bidcos -p 1 -t 5
--	echo "Starting rfd"
--	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
-+	update
-+	start-stop-daemon -S -q -p /var/run/rfd.pid --exec /bin/rfd -- -d -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
- 	echo "OK"
- }
- stop() {
- 	echo -n "Stopping rfd: "
--	start-stop-daemon -K -q -p $PIDFILE
--	rm -f $PIDFILE
-+	start-stop-daemon -K -q -p /var/run/rfd.pid
- 	echo "OK"
- }
- restart() {
+@@ -43,14 +53,14 @@
+ 
+ waitStartupComplete() {
+     echo -n "Waiting for rfd to get ready"
+-	STEPS=60
++	STEPS=20
+     for i in $(seq 1 $STEPS)
+     do
+ 		sleep 2
+ 		echo -n "."
+-        RFDSTATUSPID=`cat /var/status/rfd.status 2>/dev/null`
++        RFDSTATUSPID=`cat /var/status/rfd.status 2>&1`
+         RFDPID=`pidof rfd`
+-        if [ $RFDSTATUSPID = $RFDPID ] 
++        if [ "$RFDSTATUSPID" = "$RFDPID" ] 
+ 		then
+             echo "rfd is ready now."
+             break

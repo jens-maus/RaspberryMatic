@@ -33,9 +33,11 @@ install_lighttpd_arch:
 
 install_hmserver:
 	mkdir -p $(TARGET_DIR)/opt/HMServer
-	cp -R HMserver/opt/HMServer/* $(TARGET_DIR)/opt/HMServer
 	cp -R HMserver/etc/config_templates/* $(TARGET_DIR)/etc/config_templates
-	cp -R HMserver/HMServer.jar $(TARGET_DIR)/opt/HMServer
+	cp -R HMserver/opt/HMServer/groups $(TARGET_DIR)/opt/HMServer/
+	cp -R HMserver/opt/HMServer/measurement $(TARGET_DIR)/opt/HMServer/
+	cp -R HMserver/opt/HMServer/pages $(TARGET_DIR)/opt/HMServer/
+	cp -a HMserver/opt/HMServer/HMServer.jar $(TARGET_DIR)/opt/HMServer/
 
 update_webui:
 	ln -sf /var/EULA.de                            $(TARGET_DIR)/www/rega/EULA.de

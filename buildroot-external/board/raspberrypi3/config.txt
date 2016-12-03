@@ -31,6 +31,9 @@ enable_uart=1
 dtoverlay=pi3-disable-bt
 dtparam=uart1=off
 
+# enable RTC support
+dtoverlay=i2c-rtc,mcp7941x
+
 # disable the splash screen
 disable_splash=1
 

@@ -11,6 +11,7 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * Fully HomeMatic CCU system compliant supporting latest [OCCU](https://github.com/eq-3/occu) software releases
 * Fully self-contained SD card image primarily targeted for RaspberryPi hardware
 * Up to date [Buildroot](http://buildroot.org/) environment with speed optimized hard-float support and Linux kernel v4+ versions
+* Full real-time enabled Linux kernel (`PREEMPT_RT`) to enure a low latency 
 * Read-only root file system to minimize write operations on SD card
 * Direct support for RTC clock module ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/))
 * Hardware WatchDog support automatically rebooting the system upon hardware problems

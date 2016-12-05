@@ -18,7 +18,7 @@ mkdir -p ${BACKUPDIR}
 echo 'load tclrega.so; rega system.Save()' | tclsh 2>&1 >/dev/null
 
 # create a gzipped tar of /usr/local
-tar --exclude=/usr/local/backup -czf ${BACKUPDIR}/usr_local.tar.gz /usr/local 2>/dev/null
+tar --exclude=/usr/local/backup --exclude=/usr/local/lost+found -czf ${BACKUPDIR}/usr_local.tar.gz /usr/local 2>/dev/null
 
 # sign the configuration with the current key
 crypttool -s -t 1 <${BACKUPDIR}/usr_local.tar.gz >${BACKUPDIR}/signature

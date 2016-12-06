@@ -21,9 +21,10 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * No HomeMatic-IP support yet (Work in Progress!)
 * Updates require complete Backup/Restore procedure
 * adapted HomeMatic CCU Addon packages required (CCU2 versions don't work)
+* No direct WiFi or Bluetooth support (yet) with RaspberryPi3
 
 ## Requirements
-* [RaspberryPi 3](http://www.elv.de/raspberry-pi-3-1-gb.html)
+* [RaspberryPi3](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) or [RaspberryPi2](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
 * microSD card (4GB minimum)
 * HomeMatic GPIO hardware module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html))
 

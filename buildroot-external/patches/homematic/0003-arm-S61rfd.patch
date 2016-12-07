@@ -1,6 +1,6 @@
---- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-12-01 16:45:56.689404401 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2016-12-01 16:47:33.859368573 +0100
-@@ -7,22 +7,32 @@
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-12-07 13:54:38.756191578 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2016-12-07 13:59:10.733822946 +0100
+@@ -7,6 +7,24 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/rfd.pid
  
@@ -25,23 +25,20 @@
  init() {
  	export TZ=`cat /etc/config/TZ`
  
- 	if [ ! -d /etc/config/rfd ] ; then
-   		mkdir /etc/config/rfd
- 	fi
--	#Migration for existing rfd.conf in user space
+@@ -17,9 +35,9 @@
  	if [ ! -e /etc/config/rfd.conf ] ; then
  		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
--	else
+ 	else
 -		sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
 -		sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
 -		sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
--                if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
--                        sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
--                fi
- 	fi
- 
-         # Bug fix
-@@ -43,14 +53,14 @@
++		sed -i 's/ComPortFile ?= ?\/dev\/.*$/ComPortFile = \/dev\/ttyAMA0/' /etc/config/rfd.conf || true
++		#sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
++		#sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
+                 if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
+                         sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
+                 fi
+@@ -43,14 +61,14 @@
  
  waitStartupComplete() {
      echo -n "Waiting for rfd to get ready"
@@ -59,7 +56,7 @@
  		then
              echo "rfd is ready now."
              break
-@@ -65,6 +75,7 @@
+@@ -65,6 +83,7 @@
  start() {
  	echo "Starting rfd: "
  	init

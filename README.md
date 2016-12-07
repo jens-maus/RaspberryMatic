@@ -12,6 +12,7 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * Fully self-contained SD card image primarily targeted for RaspberryPi hardware
 * Up to date [Buildroot](http://buildroot.org/) environment with speed optimized hard-float support and Linux kernel v4+ versions
 * Low-Latency Linux kernel support (`PREEMPT`) to reduce kernel latency
+* Hard-float optimized Linux kernel and buildroot environment optimized for RaspberryPi2/3 platform
 * Read-only root file system to minimize write operations on SD card
 * Direct support for RTC clock module ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/))
 * Hardware WatchDog support automatically rebooting the system upon hardware problems

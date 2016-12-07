@@ -32,7 +32,7 @@
 -		sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
 -		sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
 -		sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
-+		sed -i 's/ComPortFile ?= ?\/dev\/.*$/ComPortFile = \/dev\/ttyAMA0/' /etc/config/rfd.conf || true
++		sed -i 's/ComPortFile ?= ?\/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
 +		#sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
 +		#sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
                  if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then

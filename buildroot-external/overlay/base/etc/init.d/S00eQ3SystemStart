@@ -17,14 +17,14 @@ init() {
   # load watchdog kernel module
   modprobe bcm2835_wdt nowayout=1 heartbeat=15
 
-  # initialize a potentially existing RTC clock
+  # initialize a potentially existing PiFace Shim RTC clock (MCP7940N)
   modprobe i2c_bcm2708
   modprobe i2c-dev
   i2cset -y 1 0x6f 0x08 0x47 2>/dev/null
   if [ $? -eq 0 ]; then
     modprobe i2c:mcp7941x
-    echo mcp7941x 0x6f > /sys/class/i2c-dev/i2c-1/device/new_device
-    hwclock -su
+    echo mcp7941x 0x6f >/sys/class/i2c-dev/i2c-1/device/new_device
+    hwclock --hctosys --utc
   fi
 
 	# Tunneling

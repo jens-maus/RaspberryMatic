@@ -3,8 +3,8 @@
 # Azul java runtime
 #
 #############################################################
-JAVA_AZUL_VERSION = 1.8.0_91
-JAVA_AZUL_SOURCE=ezdk-$(JAVA_AZUL_VERSION)-8.14.0.6-linux_aarch32.tar.gz
+JAVA_AZUL_VERSION = 1.8.0_102
+JAVA_AZUL_SOURCE=ezdk-$(JAVA_AZUL_VERSION)-8.17.0.21-eval-linux_aarch32hf.tar.gz
 JAVA_AZUL_SITE = http://cdn.azul.com/zulu-embedded/bin
 
 define JAVA_AZUL_PRE_PATCH

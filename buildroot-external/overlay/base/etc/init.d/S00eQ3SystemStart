@@ -5,10 +5,44 @@
 
 CFG_TEMPLATE_DIR=/etc/config_templates
 
+# function to resize /usr/local partition to maximum SD card size
+resize_usrlocal() {
+
+  DEV=$(mount | grep /usr/local | cut -d' ' -f1 | head -c-3)
+  PARTNUM=$(mount | grep /usr/local | cut -d' ' -f1 | tail -c2)
+
+  # only continue if .fresh file exists
+  if [[ ! -r /usr/local/.fresh ]]; then
+    return
+  fi
+
+  # find out maximum SD card size (in cylinders)
+  START_CHS=$(parted ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
+  END_CHS=$(parted ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
+  MAX_CHS=$(parted ${DEV} unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
+
+  # only continue if END_CHS != MAX_CHS
+  if [[ -z "${START_CHS}" || -z "${END_CHS}" || -z "${MAX_CHS}" ||
+        "${END_CHS}" == "${MAX_CHS}" ]]; then
+    return
+  fi
+
+  # umount /usr/local to regenerate it
+  umount /usr/local
+
+  # remove the third partition (/usr/local) and recreate it with
+  # MAX_CHS
+  parted ${DEV} rm ${PARTNUM}
+  parted ${DEV} mkpart primary ${START_CHS} ${MAX_CHS}
+
+  # we create a clean ext4 partition now
+  mkfs.ext4 -F ${DEV}p${PARTNUM}
+
+  # mount /usr/local again
+  mount /usr/local
+}
+
 init() {
-  # resize /usr/local to the maximum size
-  # (this should only happen for the first start)
-  /usr/sbin/resize2fs -p $(mount | grep /usr/local | cut -f1 -d' ')
 
   # HM/HmIP Dual Protocol
   modprobe bcm2835_raw_uart
@@ -30,6 +64,10 @@ init() {
 	# Tunneling
   modprobe tun
  
+  # resize /usr/local to the maximum size of the
+  # SD card
+  resize_usrlocal
+
   SERIAL=$(eq3configcmd update-coprocessor -p /dev/bcm2835-raw-uart -c -se 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//')
   echo "$SERIAL" >/var/board_serial
   VERSION=$(eq3configcmd update-coprocessor -p /dev/bcm2835-raw-uart -c -v 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//')

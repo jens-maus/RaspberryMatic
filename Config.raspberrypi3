@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Buildroot 2016.05-ga86bda4 Configuration
+# Buildroot 2016.05-g80459d5 Configuration
 #
 BR2_HAVE_DOT_CONFIG=y
 BR2_HOST_GCC_AT_LEAST_4_6=y
@@ -827,7 +827,7 @@ BR2_PACKAGE_I2C_TOOLS=y
 #
 # owl-linux is only supported on ARM9 architecture
 #
-# BR2_PACKAGE_PARTED is not set
+BR2_PACKAGE_PARTED=y
 # BR2_PACKAGE_PCIUTILS is not set
 # BR2_PACKAGE_PICOCOM is not set
 # BR2_PACKAGE_PIFMRDS is not set

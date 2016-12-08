@@ -1,0 +1,10 @@
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/crRFD.conf.orig	2016-12-08 23:27:20.158933180 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/crRFD.conf	2016-12-08 23:28:01.318009501 +0100
+@@ -1,6 +1,6 @@
+ # USB HM/IP TRX Adapter Configuration
+ Adapter.1.Type=HMIP_CCU2
+-Adapter.1.Port=/dev/ttyS0
++Adapter.1.Port=/dev/ttyAMA0
+ 
+ Config.Dir=/etc/config/crRFD
+ Config.Include=hmip_user.conf

@@ -1,31 +1,6 @@
---- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-12-07 13:54:38.756191578 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2016-12-07 13:59:10.733822946 +0100
-@@ -7,6 +7,24 @@
- CFG_TEMPLATE_DIR=/etc/config_templates
- PIDFILE=/var/run/rfd.pid
- 
-+update() {        
-+	echo "0" > /sys/class/gpio/gpio18/value
-+	sleep 1
-+	echo "1" > /sys/class/gpio/gpio18/value
-+	if [ ! -e /etc/config/no-coprocessor-update ] ; then
-+		echo "checking if firmware update is needed..."
-+		/bin/eq3configcmd update-coprocessor -p "/dev/bcm2835-raw-uart" -u
-+		if ! [ $? -eq 0 ] ; then
-+			echo "error while updating coprocessor, force..."
-+			/bin/eq3configcmd update-coprocessor -p "/dev/bcm2835-raw-uart" -u -f
-+		else
-+			echo "done"
-+		fi
-+	else
-+		echo "firmware update disabled"
-+	fi
-+}
-+
- init() {
- 	export TZ=`cat /etc/config/TZ`
- 
-@@ -17,9 +35,9 @@
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-12-08 23:34:16.629593090 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2016-12-08 23:43:31.397106820 +0100
+@@ -17,9 +17,9 @@
  	if [ ! -e /etc/config/rfd.conf ] ; then
  		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
  	else
@@ -38,7 +13,7 @@
                  if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
                          sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
                  fi
-@@ -43,14 +61,14 @@
+@@ -43,14 +43,14 @@
  
  waitStartupComplete() {
      echo -n "Waiting for rfd to get ready"
@@ -56,11 +31,3 @@
  		then
              echo "rfd is ready now."
              break
-@@ -65,6 +83,7 @@
- start() {
- 	echo "Starting rfd: "
- 	init
-+	update
- 	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
- 	waitStartupComplete
- }

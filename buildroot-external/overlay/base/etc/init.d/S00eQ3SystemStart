@@ -17,13 +17,12 @@ resize_usrlocal() {
   fi
 
   # find out maximum SD card size (in cylinders)
-  START_CHS=$(parted ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
-  END_CHS=$(parted ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
-  MAX_CHS=$(parted ${DEV} unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
+  START_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
+  END_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
+  MAX_CHS=$(parted -s ${DEV} unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
 
   # only continue if END_CHS != MAX_CHS
-  if [[ -z "${START_CHS}" || -z "${END_CHS}" || -z "${MAX_CHS}" ||
-        "${END_CHS}" == "${MAX_CHS}" ]]; then
+  if [[ -z "${START_CHS}" || -z "${END_CHS}" || -z "${MAX_CHS}" || "${END_CHS}" == "${MAX_CHS}" ]]; then
     return
   fi
 
@@ -32,8 +31,8 @@ resize_usrlocal() {
 
   # remove the third partition (/usr/local) and recreate it with
   # MAX_CHS
-  parted ${DEV} rm ${PARTNUM}
-  parted ${DEV} mkpart primary ${START_CHS} ${MAX_CHS}
+  parted -s ${DEV} rm ${PARTNUM}
+  parted -s ${DEV} mkpart primary ${START_CHS} ${MAX_CHS}
 
   # we create a clean ext4 partition now
   mkfs.ext4 -F ${DEV}p${PARTNUM}

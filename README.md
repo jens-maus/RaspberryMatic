@@ -10,10 +10,10 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 ## Features
 * Fully HomeMatic CCU system compliant supporting latest [OCCU](https://github.com/eq-3/occu) software releases
 * Fully self-contained SD card image primarily targeted for RaspberryPi hardware
-* Up to date [Buildroot](http://buildroot.org/) environment with speed optimized hard-float support and Linux kernel v4+ versions
+* Up to date [Buildroot](http://buildroot.org/) environment with Linux kernel v4+ and speed optimized hard-float support for RaspberryPi2/3 platform 
 * Low-Latency Linux kernel support (`PREEMPT`) to reduce kernel latency
-* Hard-float optimized Linux kernel and buildroot environment optimized for RaspberryPi2/3 platform
 * Read-only root file system to minimize write operations on SD card
+* Auto-resizing `/usr/local` partition to use the full space of the SD card
 * Direct support for RTC clock module ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/))
 * Hardware WatchDog support automatically rebooting the system upon hardware problems
 * Build Environment creates a dedicated cross compiler (`arm-linux-gcc`) that can be used to compile all kind of third-party applications not directly included.

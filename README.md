@@ -10,13 +10,14 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 ## Features
 * Fully HomeMatic CCU system compliant supporting latest [OCCU](https://github.com/eq-3/occu) software releases
 * Fully self-contained SD card image primarily targeted for RaspberryPi hardware
-* Up to date [Buildroot](http://buildroot.org/) environment with Linux kernel v4+ and speed optimized hard-float support for RaspberryPi2/3 platform 
+* Up to date [Buildroot](http://buildroot.org/) 2016.XX Linux environment
+* Linux kernel v4.4.x with hard-float support for RaspberryPi2/3 platform 
 * Low-Latency Linux kernel support (`PREEMPT`) to reduce kernel latency
 * Read-only root file system to minimize write operations on SD card
 * Auto-resizing `/usr/local` partition to use the full space of the SD card
 * Direct support for RTC clock module ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/))
 * Hardware WatchDog support automatically rebooting the system upon hardware problems
-* Build Environment creates a dedicated cross compiler (`arm-linux-gcc`) that can be used to compile all kind of third-party applications not directly included.
+* Build Environment creates a dedicated cross compiler (`arm-linux-gcc`) to compile third-party applications
 
 ## Limitations
 * No HomeMatic-IP support yet (Work in Progress!)
@@ -26,7 +27,7 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 
 ## Requirements
 * [RaspberryPi3](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) or [RaspberryPi2](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
-* microSD card (4GB minimum)
+* microSD card (2GB minimum)
 * HomeMatic GPIO hardware module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html))
 
 ## Compatible Third-Party Addons
@@ -47,6 +48,19 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [CCU-Historian](https://github.com/jens-maus/hm-ccu-historian)
 * [Watchdog](https://github.com/jens-maus/hm-watchdog)
 
+## Installation
+The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:
+
+1. Download latest release archive (`RaspberryMatic-X.XX.XX-XXXXXXXX.zip`) from [here](https://github.com/jens-maus/RaspberryMatic/releases)
+2. Unarchive zip file resulting in an SD card image (`RaspberryMatic-X.XX.XX-XXXXXXXX.img`)
+3. Based on your operating system use a Flash-tool to copy the image onto your microSD card:
+  * <i>Linux</i>:<br>`sudo dd if=RaspberryMatic-X.XX.XX-XXXXXXXX.img of=/dev/sdX bs=4096`
+  * <i>macOS</i>:<br>Use [ApplePiBaker](http://www.tweaking4all.com/hardware/raspberry-pi/macosx-apple-pi-baker/)
+  * <i>Windows</i>:<br>Use [Win32DiskImager](https://sourceforge.net/projects/win32diskimager/)
+4. Make sure you have the HM-MOD-RPI-PCB radio modul installed on the GPIO of your RaspberryPi
+4. Install microSD in your RaspberryPi and start it
+5. Wait until bootup process is finished and use a web browser to connect to http://homematic-raspi/
+ 
 ## Contributions
 As the RaspberryMatic project is an open source based project everyone is invited to contribute to this project. Please note, however, that functionality within the corresponding eQ-3 OCCU binaries can not be modified as the main HomeMatic services (rfd, ReGaHSS, HMServer, etc.) are provided in binary format by the [OCCU](https://github.com/eq-3/occu) project and not compiled from sources.
 

@@ -1,5 +1,5 @@
 --- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig	2016-12-08 23:37:21.653447835 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd	2016-12-08 23:40:30.601217190 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd	2016-12-10 22:42:00.106833229 +0100
 @@ -8,13 +8,15 @@
  PIDFILE=/var/run/multimacd.pid
  
@@ -54,7 +54,7 @@
  		then
              echo "multimacd is ready now."
              break
-@@ -78,11 +64,9 @@
+@@ -78,17 +64,15 @@
  }
  
  start() {
@@ -67,3 +67,10 @@
  		update
  	else
  		echo "Skipping coprocessor update because multimacd is running."
+ 	fi
+ 	init
+-	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /etc/config/multimacd.conf -l $LOGLEVEL_RFD
++	start-stop-daemon -S -N -10 -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /etc/config/multimacd.conf -l $LOGLEVEL_RFD
+ 	waitStartupComplete
+ }
+ stop() {

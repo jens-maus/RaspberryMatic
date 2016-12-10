@@ -10,7 +10,7 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 
 ## Features
 * Fully HomeMatic CCU system compliant supporting latest [OCCU](https://github.com/eq-3/occu) software releases
-* Full BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
+* Full BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatibility
 * Self-contained SD card image primarily targeted for RaspberryPi hardware
 * Up to date [Buildroot](http://buildroot.org/) 2016.XX Linux environment
 * Linux kernel v4.4.x with hard-float support for RaspberryPi2/3 platform 
@@ -55,9 +55,9 @@ The installation of RaspberryMatic is quite straight forward as it is delivered 
 1. Download latest release archive (`RaspberryMatic-X.XX.XX-XXXXXXXX.zip`) from [here](https://github.com/jens-maus/RaspberryMatic/releases)
 2. Unarchive zip file resulting in an SD card image (`RaspberryMatic-X.XX.XX-XXXXXXXX.img`)
 3. Based on your operating system use a Flash-tool to copy the image onto your microSD card:
-  * <i>Linux</i>:<br>`sudo dd if=RaspberryMatic-X.XX.XX-XXXXXXXX.img of=/dev/sdX bs=4096`
-  * <i>macOS</i>:<br>Use [ApplePiBaker](http://www.tweaking4all.com/hardware/raspberry-pi/macosx-apple-pi-baker/)
-  * <i>Windows</i>:<br>Use [Win32DiskImager](https://sourceforge.net/projects/win32diskimager/)
+  * <i>Linux</i>: `sudo dd if=RaspberryMatic-X.XX.XX-XXXXXXXX.img of=/dev/sdX bs=4096`
+  * <i>macOS</i>: Use [ApplePiBaker](http://www.tweaking4all.com/hardware/raspberry-pi/macosx-apple-pi-baker/)
+  * <i>Windows</i>: Use [Win32DiskImager](https://sourceforge.net/projects/win32diskimager/)
 4. Make sure you have the HM-MOD-RPI-PCB radio modul installed on the GPIO of your RaspberryPi
 4. Install microSD in your RaspberryPi and start it
 5. Wait until bootup process is finished and use a web browser to connect to http://homematic-raspi/

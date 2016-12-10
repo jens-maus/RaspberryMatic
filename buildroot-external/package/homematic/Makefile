@@ -15,6 +15,11 @@ install_rfd_arch:
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S61rfd $(TARGET_DIR)/etc/init.d/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/etc/config_templates/* $(TARGET_DIR)/etc/config_templates
 	cp -R firmware/* $(TARGET_DIR)/firmware
+ifneq (,$(filter $(HOMEMATIC_RF_PROTOCOL), HM_HMIP HMIP))
+	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S60multimacd $(TARGET_DIR)/etc/init.d/
+	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/bin/multimacd $(TARGET_DIR)/bin/
+	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/crRFD.conf $(TARGET_DIR)/etc/
+endif
 
 install_hs485d_arch:
 	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/* $(TARGET_DIR)
@@ -37,7 +42,11 @@ install_hmserver:
 	cp -R HMserver/opt/HMServer/groups $(TARGET_DIR)/opt/HMServer/
 	cp -R HMserver/opt/HMServer/measurement $(TARGET_DIR)/opt/HMServer/
 	cp -R HMserver/opt/HMServer/pages $(TARGET_DIR)/opt/HMServer/
+ifneq (,$(filter $(HOMEMATIC_RF_PROTOCOL), HM_HMIP HMIP))
+	cp -a HMserver/opt/HMServer/HMIPServer.jar $(TARGET_DIR)/opt/HMServer/
+else
 	cp -a HMserver/opt/HMServer/HMServer.jar $(TARGET_DIR)/opt/HMServer/
+endif
 
 update_webui:
 	ln -sf /var/EULA.de                            $(TARGET_DIR)/www/rega/EULA.de

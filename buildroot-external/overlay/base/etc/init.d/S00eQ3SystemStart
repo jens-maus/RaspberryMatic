@@ -4,16 +4,6 @@
 #
 
 CFG_TEMPLATE_DIR=/etc/config_templates
-# SERIAL=$(cat /sys/module/plat_eq4ccu2/parameters/board_serial)
-
-SERIAL=`eq3configcmd update-coprocessor -p /dev/ttyAMA0 -c -se 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//'`
-echo $SERIAL>/var/board_serial
-VERSION=`eq3configcmd update-coprocessor -p /dev/ttyAMA0 -c -v 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//'`
-echo $VERSION>/var/rf_firmware_version
-
-# TODO add -a to eq3configcmd update-coprocessor
-ADDRESS=`eq3configcmd read-default-rf-address -f /dev/ttyAMA0 -h`
-echo "$ADDRESS">/var/rf_address
 
 # function to resize /usr/local partition to maximum SD card size
 resize_usrlocal() {
@@ -53,6 +43,10 @@ resize_usrlocal() {
 
 init() {
 
+  # HM/HmIP Dual Protocol
+  modprobe bcm2835_raw_uart
+  modprobe eq3_char_loop
+
   # load watchdog kernel module
   modprobe bcm2835_wdt nowayout=1 heartbeat=15
 
@@ -66,9 +60,19 @@ init() {
     hwclock --hctosys --utc
   fi
 
+	# Tunneling
+  modprobe tun
+ 
   # resize /usr/local to the maximum size of the
   # SD card
   resize_usrlocal
+
+  SERIAL=$(eq3configcmd update-coprocessor -p /dev/bcm2835-raw-uart -c -se 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//')
+  echo "$SERIAL" >/var/board_serial
+  VERSION=$(eq3configcmd update-coprocessor -p /dev/bcm2835-raw-uart -c -v 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//')
+  echo "$VERSION" >/var/rf_firmware_version
+  ADDRESS=$(eq3configcmd read-default-rf-address -f /dev/bcm2835-raw-uart -h)
+  echo "$ADDRESS" >/var/rf_address
 
         # cal local init startup file
         if [ ! -e /etc/config/safemode ] ; then
@@ -138,17 +142,6 @@ init() {
 		ln -s /usr/local/etc/config/shadow /etc/shadow
     mount -o ro,remount /
 	fi
-
-	# disable g_multi for raspi
-        # modprobe g_multi luns=1 cdrom=1 ro=1 removable=0,0 file=/usr/share/eq3/install.iso host_addr=00:1a:22:00:05:86 dev_addr=00:1a:22:00:05:87 iManufacturer="eQ-3" iProduct="CCU2" idVendor="0x1b1f" idProduct="0xc016" iSerialNumber="$SERIAL"
-
-	
-	# Tunneling
-        modprobe tun
-       
-	# USB
-	# disable ehci-hcd for raspi
-        # modprobe ehci-hcd
 
 	if [ ! -d /usr/local/etc/config ] ; then
                 mkdir -p /usr/local/etc/config

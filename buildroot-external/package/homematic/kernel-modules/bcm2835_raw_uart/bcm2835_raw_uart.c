@@ -53,10 +53,10 @@
 #include <asm/termios.h>
 
 #include <../arch/arm/mach-bcm2709/include/mach/platform.h>
-#define IRQ_ARMCTRL_START     0
-#define ARM_IRQ0_BASE         64
-#define INTERRUPT_UART        (ARM_IRQ0_BASE + 19)
-#define IRQ_UART              (IRQ_ARMCTRL_START + INTERRUPT_UART)
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,3,0)
+  #define IRQ_UART 87 /* TODO: is static definition correct? */
+#endif
 
 /*
  *  Definitions ---------------------------------------------------------------
@@ -1193,16 +1193,18 @@ static struct resource bcm2835_raw_uart_resources[] = {
             .start = UART0_BASE,
             .end = UART0_BASE + 0x100 - 1,  /*HT: ??*/
             .flags = IORESOURCE_MEM,
+            .name = MODNAME,
         },
         {
             .start = IRQ_UART, /*TODO: Check*/
             .end = IRQ_UART,
             .flags = IORESOURCE_IRQ,
+            .name = MODNAME,
         }
 };
 
 static struct platform_device bcm2709_raw_uart_device = {
-    .name = "bcm2835-raw-uart",
+    .name = MODNAME,
     .id = 0,
     .resource = bcm2835_raw_uart_resources,
     .num_resources = ARRAY_SIZE(bcm2835_raw_uart_resources),
@@ -1239,21 +1241,19 @@ static int __init bcm2835_raw_uart_init(void)
   bcm2709_init_clocks();
   #endif
 
-    ret = platform_device_register( &bcm2709_raw_uart_device );
-    if( ret )
-    {
-      printk(KERN_ERR "bcm2835_raw_uart: Failed to register platform driver (%i)\n", ret );
-      goto out;
-    }
+  ret = platform_device_register( &bcm2709_raw_uart_device );
+  if( ret )
+  {
+    printk(KERN_ERR "bcm2835_raw_uart: Failed to register platform device (%i)\n", ret );
+    goto out;
+  }
 
-    ret = platform_driver_register( &m_bcm2835_raw_uart_driver );
-    if( ret )
-    {
-      printk(KERN_ERR "bcm2835_raw_uart: Failed to register platform driver (%i)\n", ret );
-      goto out;
-    }
-
-    return 0;
+  ret = platform_driver_register( &m_bcm2835_raw_uart_driver );
+  if( ret )
+  {
+    printk(KERN_ERR "bcm2835_raw_uart: Failed to register platform driver (%i)\n", ret );
+    goto out;
+  }
 
 out:
   return ret;

@@ -1,0 +1,33 @@
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-12-08 23:34:16.629593090 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2016-12-08 23:43:31.397106820 +0100
+@@ -17,9 +17,9 @@
+ 	if [ ! -e /etc/config/rfd.conf ] ; then
+ 		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
+ 	else
+-		sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
+-		sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
+-		sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
++		sed -i 's/ComPortFile ?= ?\/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
++		#sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
++		#sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
+                 if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
+                         sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
+                 fi
+@@ -43,14 +43,14 @@
+ 
+ waitStartupComplete() {
+     echo -n "Waiting for rfd to get ready"
+-	STEPS=60
++	STEPS=20
+     for i in $(seq 1 $STEPS)
+     do
+ 		sleep 2
+ 		echo -n "."
+-        RFDSTATUSPID=`cat /var/status/rfd.status 2>/dev/null`
++        RFDSTATUSPID=`cat /var/status/rfd.status 2>&1`
+         RFDPID=`pidof rfd`
+-        if [ $RFDSTATUSPID = $RFDPID ] 
++        if [ "$RFDSTATUSPID" = "$RFDPID" ] 
+ 		then
+             echo "rfd is ready now."
+             break

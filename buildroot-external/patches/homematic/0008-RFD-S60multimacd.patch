@@ -1,0 +1,76 @@
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig	2016-12-08 23:37:21.653447835 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd	2016-12-10 22:42:00.106833229 +0100
+@@ -8,13 +8,15 @@
+ PIDFILE=/var/run/multimacd.pid
+ 
+ update() {        
++	echo "0" > /sys/class/gpio/gpio18/value
++	sleep 1
++	echo "1" > /sys/class/gpio/gpio18/value
+ 	if [ ! -e /etc/config/no-coprocessor-update ] ; then
+ 		echo "checking if firmware update is needed..."
+-		/bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u
++		/bin/eq3configcmd update-coprocessor -p /dev/bcm2835-raw-uart -u -d /firmware/HM-MOD-UART
+ 		if ! [ $? -eq 0 ] ; then
+ 			echo "error while updating coprocessor, recovering..."
+-			avrprog --bo
+-			/bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u -f
++			/bin/eq3configcmd update-coprocessor -p /dev/bcm2835-raw-uart -u -f -d /firmware/HM-MOD-UART
+ 			sleep 1
+ 		else
+ 			echo "done"
+@@ -24,22 +26,6 @@
+ 		echo "firmware update disabled"
+ 	fi
+ }
+-check_bo(){
+-	avrprog --devinfo | grep -q ec,fd,da,ef
+-	if ! [ 0 -eq $? ];
+-	then
+-	avrprog --bo
+-	fi
+-}
+-check_rf_address(){
+-        sed 1q /sys/module/plat_eq3ccu2/parameters/radio_mac > /var/log/rf_address
+-        /bin/eq3configcmd read-default-rf-address -l 0 -v -h -f /dev/mxs_auart_raw.0 | grep -q -F -f /var/log/rf_address
+-        if ! [ 0 -eq $? ];
+-        then
+-        avrprog --bo
+-        fi
+-        rm /var/log/rf_address
+-}
+ init() {
+ 	export TZ=`cat /etc/config/TZ`
+ 	
+@@ -63,9 +49,9 @@
+     do
+ 		sleep 2
+ 		echo -n "."
+-        MMDSTATUSPID=`cat /var/status/multimacd.status 2>/dev/null`
++        MMDSTATUSPID=`cat /var/status/multimacd.status 2>&1`
+         MMDPID=`pidof multimacd`
+-        if [ $MMDSTATUSPID = $MMDPID ] 
++        if [ "$MMDSTATUSPID" = "$MMDPID" ] 
+ 		then
+             echo "multimacd is ready now."
+             break
+@@ -78,17 +64,15 @@
+ }
+ 
+ start() {
+-	echo "Starting multimacd: "
++	echo -n "Starting multimacd: "
+ 	init
+ 	if [ ! -e $PIDFILE ] ; then
+-		check_bo
+-                check_rf_address
+ 		update
+ 	else
+ 		echo "Skipping coprocessor update because multimacd is running."
+ 	fi
+ 	init
+-	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /etc/config/multimacd.conf -l $LOGLEVEL_RFD
++	start-stop-daemon -S -N -10 -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /etc/config/multimacd.conf -l $LOGLEVEL_RFD
+ 	waitStartupComplete
+ }
+ stop() {

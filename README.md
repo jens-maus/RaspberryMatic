@@ -10,7 +10,8 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 
 ## Features
 * Fully HomeMatic CCU system compliant supporting latest [OCCU](https://github.com/eq-3/occu) software releases
-* Fully self-contained SD card image primarily targeted for RaspberryPi hardware
+* Full BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
+* Self-contained SD card image primarily targeted for RaspberryPi hardware
 * Up to date [Buildroot](http://buildroot.org/) 2016.XX Linux environment
 * Linux kernel v4.4.x with hard-float support for RaspberryPi2/3 platform 
 * Low-Latency Linux kernel support (`PREEMPT`) to reduce kernel latency
@@ -21,7 +22,6 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * Build Environment creates a dedicated cross compiler (`arm-linux-gcc`) to compile third-party applications
 
 ## Limitations
-* No HomeMatic-IP support yet (Work in Progress!)
 * Updates require complete Backup/Restore procedure
 * adapted HomeMatic CCU Addon packages required (CCU2 versions don't work)
 * No direct WiFi or Bluetooth support (yet) with RaspberryPi3
@@ -89,17 +89,3 @@ The RaspberryMatic build environment itself – the files found in this git repo
 
 * Jens Maus
 * Wolfgang Willinghöfer
-
-## ChangeLog / Roadmap
-
-* 2.25.15-XXXXXXXX (beta – Not yet released)
-  * HomeMatic-CCU 2.25.15 compatibility
-  * working Backup / Restore / Factory-Reset
-  * finalized Filesystem structure (read-only root file system)
-  * working addon install/removal routines
-  * implemented boot splash screen
-  * implemented hardware watchdog support
-  * ntpd is used as a network time protocol (NTP) daemon
-
-* 2.21.10-20160821 (alpha)
-  * First development version. There are still broken features like filesystem structure (readonly root file system), backup, restore, install extensions..., but it's possible to teach-in and controll HomeMatic RF devices.

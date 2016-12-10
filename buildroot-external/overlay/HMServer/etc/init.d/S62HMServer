@@ -23,7 +23,7 @@ init() {
 start() {
 	echo -n "Starting HMServer: "
 	init
-	start-stop-daemon -S -q -m -p $PIDFILE --exec java -- -Xmx128m -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar /opt/HMServer/HMIPServer.jar /etc/crRFD.conf &
+	start-stop-daemon -S -q -m -p $PIDFILE --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar /opt/HMServer/HMIPServer.jar /etc/crRFD.conf &
 	echo "Waiting for HMServer to get ready"
 	eq3configcmd wait-for-file -f $STARTWAITFILE -p 5 -t 135
 	echo "OK"

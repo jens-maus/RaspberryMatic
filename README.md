@@ -19,17 +19,19 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * Auto-resizing `/usr/local` partition to use the full space of the SD card
 * Direct support for RTC clock module ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/))
 * Hardware WatchDog support automatically rebooting the system upon hardware problems
+* Direct CloudMatic (meine-homematic.de) support
 * Build Environment creates a dedicated cross compiler (`arm-linux-gcc`) to compile third-party applications
 
 ## Limitations
+* No HomeMatic-IP (HmIP-RF) support for RaspberryPi3 (Work in Progress, see #30)
 * Updates require complete Backup/Restore procedure
-* adapted HomeMatic CCU Addon packages required (CCU2 versions don't work)
-* No direct WiFi or Bluetooth support (yet) with RaspberryPi3
+* Special HomeMatic CCU Addon packages required (CCU2 versions don't work)
+* No WiFi or Bluetooth support (yet) with RaspberryPi3
 
 ## Requirements
 * [RaspberryPi3](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) or [RaspberryPi2](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
 * microSD card (2GB minimum)
-* HomeMatic GPIO hardware module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html))
+* HomeMatic-RF GPIO radio module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html))
 
 ## Compatible Third-Party Addons
 The CCU platform allows to enhance the functionality of a CCU by installing so-called Addon packages. For RaspberryMatic, standard CCU-Addon packages won't work because included binaries have to be recompiled for the hard-float buildroot environment RaspberryMatic uses. Here is a list of well-known already compatible Addon packages (please note that this list might be incomplete):

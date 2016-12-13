@@ -87,10 +87,6 @@ update_webui:
 
 	sed -i 's/WEBUI_VERSION = ".*";/WEBUI_VERSION = "$(RASPMATIC_VERSION)";/g' $(TARGET_DIR)/www/rega/pages/index.htm
 
-cleanup_filesystem:
-	rm -rf $(TARGET_DIR)/etc/config
-	ln -snf ${HM_ROOT}/usr/local/etc/config   $(TARGET_DIR)/etc/config
-
 install:
 	make install_rfd_arch OCCU_ARCH=$(HOMEMATIC_ARCH)
 	make install_hs485d_arch OCCU_ARCH=$(HOMEMATIC_ARCH)
@@ -101,7 +97,6 @@ install:
 	make update_webui
 	mkdir -p $(TARGET_DIR)/boot
 	echo "VERSION=$(RASPMATIC_VERSION)" > $(TARGET_DIR)/boot/VERSION
-	make cleanup_filesystem
 
 all: 
 	@echo "do nothing"

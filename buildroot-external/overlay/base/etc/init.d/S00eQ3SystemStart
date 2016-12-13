@@ -165,14 +165,6 @@ init() {
                 mv /usr/local/crontabs/root.tmp /usr/local/crontabs/root
         fi
 
-  # make sure /etc/shadow is a link to /usr/local/etc/config/shadow
-	if [ ! -L /etc/shadow ] ; then
-    mount -o rw,remount /
-		rm -f /etc/shadow
-		ln -s /usr/local/etc/config/shadow /etc/shadow
-    mount -o ro,remount /
-	fi
-
 	if [ ! -d /usr/local/etc/config ] ; then
                 mkdir -p /usr/local/etc/config
         	chmod 775 /usr/local/etc/config
@@ -185,7 +177,7 @@ init() {
         if [ ! -e /etc/config/netconfig ] ; then
                 cp $CFG_TEMPLATE_DIR/netconfig /etc/config
         fi
-        if [ ! -e /etc/config/shadow ] ; then
+        if [ ! -s /etc/config/shadow ] ; then
                 cp $CFG_TEMPLATE_DIR/shadow /etc/config
         fi
 

@@ -16,12 +16,25 @@ HOMEMATIC_MODULE_SUBDIRS = kernel-modules/bcm2835_raw_uart kernel-modules/eq3_ch
 #	RFD_DEPENDENCIES += libusb
 # endif
 
+ifeq ($(BR2_PACKAGE_HOMEMATIC),y)
+
 define HOMEMATIC_PRE_PATCH
 	cp $(HOMEMATIC_PKGDIR)/Makefile $(@D)
 	cp -R $(HOMEMATIC_PKGDIR)/kernel-modules $(@D)
 endef
-
 HOMEMATIC_PRE_PATCH_HOOKS += HOMEMATIC_PRE_PATCH
+
+define HOMEMATIC_FINALIZE_TARGET
+	mkdir -p $(TARGET_DIR)/usr/local/etc/config
+	rm -rf $(TARGET_DIR)/etc/config
+	ln -snf ../usr/local/etc/config $(TARGET_DIR)/etc/config
+	touch $(TARGET_DIR)/usr/local/etc/config/shadow
+	rm -f $(TARGET_DIR)/etc/shadow
+	ln -snf config/shadow $(TARGET_DIR)/etc/shadow
+endef
+TARGET_FINALIZE_HOOKS += HOMEMATIC_FINALIZE_TARGET
+
+endif
 
 ifeq ($(BR2_PACKAGE_HOMEMATIC_RF_PROTOCOL_HM_ONLY),y) 
 	HOMEMATIC_RF_PROTOCOL=HM
@@ -52,3 +65,5 @@ endef
 
 $(eval $(kernel-module))
 $(eval $(generic-package))
+
+

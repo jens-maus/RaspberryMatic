@@ -44,6 +44,7 @@ install_hmserver:
 	cp -R HMserver/opt/HMServer/pages $(TARGET_DIR)/opt/HMServer/
 #ifneq (,$(filter $(HOMEMATIC_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a HMserver/opt/HMServer/HMIPServer.jar $(TARGET_DIR)/opt/HMServer/
+	cp -R HMserver/opt/HmIP $(TARGET_DIR)/opt/
 #else
 	cp -a HMserver/opt/HMServer/HMServer.jar $(TARGET_DIR)/opt/HMServer/
 #endif

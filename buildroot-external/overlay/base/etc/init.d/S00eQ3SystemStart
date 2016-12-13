@@ -5,6 +5,26 @@
 
 CFG_TEMPLATE_DIR=/etc/config_templates
 
+# function to identify the host system used
+identify_host() {
+
+  # identify the RaspberryPi version used
+  cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | grep -q 2082
+  if [[ $? -eq 0 ]]; then
+    HOST="rpi3"
+    HM_MODE="HmRF"
+    UART_DEV="/dev/ttyAMA0"
+  else
+    HOST="rpi2"
+    HM_MODE="HmIP"
+    UART_DEV="/dev/bcm2835-raw-uart"
+  fi
+
+  echo "HOST=${HOST}" >>/var/ids
+  echo "HM_MODE=${HM_MODE}" >>/var/ids
+  echo "UART_DEV=${UART_DEV}" >>/var/ids
+}
+
 # function to resize /usr/local partition to maximum SD card size
 resize_usrlocal() {
 
@@ -43,9 +63,19 @@ resize_usrlocal() {
 
 init() {
 
-  # HM/HmIP Dual Protocol
-  modprobe bcm2835_raw_uart
-  modprobe eq3_char_loop
+  # identify the host
+  identify_host
+
+  # depending on the HomeMatic mode (HmRF, HmIP) we
+  # have to load different kernel modules.
+  if [[ ${HM_MODE} == "HmIP" ]]; then
+    # HM/HmIP Dual Protocol
+    modprobe bcm2835_raw_uart
+    modprobe eq3_char_loop
+  else
+    # use standard PL011 UART
+    modprobe amba-pl011
+  fi
 
   # load watchdog kernel module
   modprobe bcm2835_wdt nowayout=1 heartbeat=15
@@ -67,12 +97,12 @@ init() {
   # SD card
   resize_usrlocal
 
-  SERIAL=$(eq3configcmd update-coprocessor -p /dev/bcm2835-raw-uart -c -se 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//')
-  echo "$SERIAL" >/var/board_serial
-  VERSION=$(eq3configcmd update-coprocessor -p /dev/bcm2835-raw-uart -c -v 2>&1 | cut -c 25- | sed 's/[^:]*:\(.*\)/\1/g' | sed 's/^[ \t]*//;s/[ \t]*$//')
-  echo "$VERSION" >/var/rf_firmware_version
-  ADDRESS=$(eq3configcmd read-default-rf-address -f /dev/bcm2835-raw-uart -h)
-  echo "$ADDRESS" >/var/rf_address
+  RF_SERIAL=$(eq3configcmd update-coprocessor -p ${UART_DEV} -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5)
+  echo "SerialNumber=${RF_SERIAL}" >>/var/ids
+  RF_VERSION=$(eq3configcmd update-coprocessor -p ${UART_DEV} -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
+  echo "Firmware=${RF_VERSION}" >>/var/ids
+  RF_ADDRESS=$(eq3configcmd read-default-rf-address -f ${UART_DEV} -h 2>&1 | grep "^0x")
+  echo "BidCoS-Address=${RF_ADDRESS}" >>/var/ids
 
         # cal local init startup file
         if [ ! -e /etc/config/safemode ] ; then

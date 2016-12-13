@@ -1,0 +1,61 @@
+#!/bin/sh
+#
+# Perform coprocessor updates
+#
+
+FW_DIRECTORY=/firmware/HM-MOD-UART
+
+start() {
+
+  source /var/ids 2>/dev/null
+
+	echo -n "Performing coprocessor updates: "
+
+	echo "0" > /sys/class/gpio/gpio18/value
+	sleep 1
+	echo "1" > /sys/class/gpio/gpio18/value
+
+	if [[ ! -e /etc/config/no-coprocessor-update ]]; then
+
+    # for non HmIP mode we copy the fw_directory to /tmp
+    if [[ ${HM_MODE} == "HmRF" ]]; then
+      cp -a ${FW_DIRECTORY} /tmp/
+      FW_DIRECTORY=/tmp/HM-MOD-UART
+
+      # change the fwmap file to use the dualcopro
+      # firmware
+      cat ${FW_DIRECTORY}/fwmap | grep "coprocessor_update.eq3" | sed "s/#CCU2/CCU2/" >${FW_DIRECTORY}/fwmap2
+      mv ${FW_DIRECTORY}/fwmap2 ${FW_DIRECTORY}/fwmap
+    fi
+
+		/bin/eq3configcmd update-coprocessor -p ${UART_DEV} -u -d ${FW_DIRECTORY}
+		if [[ $? -ne 0 ]]; then
+			echo -n "forcing, "
+			/bin/eq3configcmd update-coprocessor -p ${UART_DEV} -u -f -d ${FW_DIRECTORY}
+		fi
+
+    # for non HmIP mode we copy the fw_directory to /tmp
+    if [[ ${HM_MODE} == "HmRF" ]]; then
+      rm -rf ${FW_DIRECTORY}
+    fi
+
+		sleep 1
+	else
+		echo "disabled, "
+	fi
+
+	echo "OK"
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	;;
+  *)
+	echo "Usage: $0 {start}"
+	exit 1
+esac
+
+exit $?

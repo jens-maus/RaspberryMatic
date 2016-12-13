@@ -1,19 +1,35 @@
---- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-12-08 23:34:16.629593090 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2016-12-08 23:43:31.397106820 +0100
-@@ -17,9 +17,9 @@
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-12-12 22:04:53.864706566 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2016-12-12 22:15:43.947535829 +0100
+@@ -16,14 +16,20 @@
+ 	#Migration for existing rfd.conf in user space
  	if [ ! -e /etc/config/rfd.conf ] ; then
  		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
- 	else
+-	else
 -		sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
 -		sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
 -		sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
-+		sed -i 's/ComPortFile ?= ?\/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
-+		#sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
-+		#sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
-                 if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
-                         sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
-                 fi
-@@ -43,14 +43,14 @@
+-                if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
+-                        sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
+-                fi
+-	fi
++  fi
++
++  source /var/ids 2>/dev/null
++  if [[ ${HM_MODE} == "HmIP" ]]; then
++		sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf
++  else
++		sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/ttyAMA0/' /etc/config/rfd.conf
++  fi
++
++	sed -i 's/^#AccessFile = \/dev\/.*$/AccessFile = \/dev\/null/' /etc/config/rfd.conf
++	sed -i 's/^#ResetFile = \/dev\/.*$/ResetFile = \/dev\/null/' /etc/config/rfd.conf
++  if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
++    sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
++  fi
+ 
+         # Bug fix
+         grep "/etc/config/rfd/keys" /etc/config/rfd.conf
+@@ -43,14 +49,14 @@
  
  waitStartupComplete() {
      echo -n "Waiting for rfd to get ready"

@@ -42,11 +42,11 @@ install_hmserver:
 	cp -R HMserver/opt/HMServer/groups $(TARGET_DIR)/opt/HMServer/
 	cp -R HMserver/opt/HMServer/measurement $(TARGET_DIR)/opt/HMServer/
 	cp -R HMserver/opt/HMServer/pages $(TARGET_DIR)/opt/HMServer/
-ifneq (,$(filter $(HOMEMATIC_RF_PROTOCOL), HM_HMIP HMIP))
+#ifneq (,$(filter $(HOMEMATIC_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a HMserver/opt/HMServer/HMIPServer.jar $(TARGET_DIR)/opt/HMServer/
-else
+#else
 	cp -a HMserver/opt/HMServer/HMServer.jar $(TARGET_DIR)/opt/HMServer/
-endif
+#endif
 
 update_webui:
 	ln -sf /var/EULA.de                            $(TARGET_DIR)/www/rega/EULA.de

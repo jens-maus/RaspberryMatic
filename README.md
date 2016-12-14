@@ -54,10 +54,10 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 ## Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:
 
-1. Download latest release archive (`RaspberryMatic-X.XX.XX-XXXXXXXX.zip`) from [here](https://github.com/jens-maus/RaspberryMatic/releases)
-2. Unarchive zip file resulting in an SD card image (`RaspberryMatic-X.XX.XX-XXXXXXXX.img`)
+1. Download latest release archive (`RaspberryMatic-X.XX.XX.YYYYMMDD.zip`) from [here](https://github.com/jens-maus/RaspberryMatic/releases)
+2. Unarchive zip file resulting in an SD card image (`RaspberryMatic-X.XX.XX.YYYYMMDD.img`)
 3. Based on your operating system use a Flash-tool to copy the image onto your microSD card:
-  * <i>Linux</i>: `sudo dd if=RaspberryMatic-X.XX.XX-XXXXXXXX.img of=/dev/sdX bs=4096`
+  * <i>Linux</i>: `sudo dd if=RaspberryMatic-X.XX.XX.YYYYMMDD.img of=/dev/sdX bs=4096`
   * <i>macOS</i>: Use [ApplePiBaker](http://www.tweaking4all.com/hardware/raspberry-pi/macosx-apple-pi-baker/)
   * <i>Windows</i>: Use [Win32DiskImager](https://sourceforge.net/projects/win32diskimager/)
 4. Make sure you have the HM-MOD-RPI-PCB radio modul installed on the GPIO of your RaspberryPi

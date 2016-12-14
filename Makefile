@@ -11,14 +11,13 @@ usage:
 	@echo "	make dist: install buildroot and create default RaspberryMatic Image"
 	@echo "	make distclean: clean everything"
 
-
-
-
 buildroot-$(BUILDROOT_VERSION).tar.bz2:
 	wget http://git.buildroot.net/buildroot/snapshot/buildroot-$(BUILDROOT_VERSION).tar.bz2
 
+BUILDROOT_PATCHES=$(wildcard patches/*.patch)
+
 buildroot-$(BUILDROOT_VERSION): buildroot-$(BUILDROOT_VERSION).tar.bz2
-	tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2
+	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; patch -d buildroot-$(BUILDROOT_VERSION) -p1 < $(BUILDROOT_PATCHES); fi
 
 build-$(BOARD)/.config: buildroot-$(BUILDROOT_VERSION)
 	mkdir -p build-$(BOARD)

@@ -21,7 +21,7 @@ rm -rf "${GENIMAGE_TMP}"
 #
 echo "Create user filesystem"
 mkdir -p ${BUILD_DIR}/userfs
-touch "${BUILD_DIR}/userfs/.fresh"
+touch "${BUILD_DIR}/userfs/.doFactoryReset"
 mke2img -d ${BUILD_DIR}/userfs -G 4 -R 1 -B 300 -o ${BINARIES_DIR}/userfs.ext4
 
 #

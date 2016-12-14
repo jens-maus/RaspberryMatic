@@ -28,31 +28,29 @@ identify_host() {
 # function to resize /usr/local partition to maximum SD card size
 resize_usrlocal() {
 
-  DEV=$(mount | grep /usr/local | cut -d' ' -f1 | head -c-3)
-  PARTNUM=$(mount | grep /usr/local | cut -d' ' -f1 | tail -c2)
-
-  # only continue if .fresh file exists
-  if [[ ! -r /usr/local/.fresh ]]; then
+  # only continue if .doFactoryReset file exists
+  if [[ ! -r /usr/local/.doFactoryReset ]]; then
     return
   fi
+
+  DEV=$(mount | grep /usr/local | cut -d' ' -f1 | head -c-3)
+  PARTNUM=$(mount | grep /usr/local | cut -d' ' -f1 | tail -c2)
 
   # find out maximum SD card size (in cylinders)
   START_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
   END_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
   MAX_CHS=$(parted -s ${DEV} unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
 
-  # only continue if END_CHS != MAX_CHS
-  if [[ -z "${START_CHS}" || -z "${END_CHS}" || -z "${MAX_CHS}" || "${END_CHS}" == "${MAX_CHS}" ]]; then
-    return
-  fi
-
   # umount /usr/local to regenerate it
   umount /usr/local
 
-  # remove the third partition (/usr/local) and recreate it with
-  # MAX_CHS
-  parted -s ${DEV} rm ${PARTNUM}
-  parted -s ${DEV} mkpart primary ${START_CHS} ${MAX_CHS}
+  # only resize the partition if END_CHS != MAX_CHS
+  if [[ -n "${START_CHS}" && -n "${END_CHS}" && -n "${MAX_CHS}" && "${END_CHS}" != "${MAX_CHS}" ]]; then
+    # remove the third partition (/usr/local) and recreate it with
+    # MAX_CHS
+    parted -s ${DEV} rm ${PARTNUM}
+    parted -s ${DEV} mkpart primary ${START_CHS} ${MAX_CHS}
+  fi
 
   # we create a clean ext4 partition now
   mkfs.ext4 -F ${DEV}p${PARTNUM}

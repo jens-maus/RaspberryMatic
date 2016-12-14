@@ -1,5 +1,5 @@
---- homematic/WebUI/www/config/cp_security.cgi.orig	2016-11-30 20:35:55.000000000 +0100
-+++ homematic/WebUI/www/config/cp_security.cgi	2016-11-30 22:32:17.686829786 +0100
+--- homematic/WebUI/www/config/cp_security.cgi.orig	2016-12-14 20:34:28.446089427 +0100
++++ homematic/WebUI/www/config/cp_security.cgi	2016-12-14 20:39:12.118635269 +0100
 @@ -192,7 +192,7 @@
          }
      }
@@ -9,12 +9,14 @@
      }
      if { [catch {
          exec crypttool -r
-@@ -203,7 +203,7 @@
+@@ -202,8 +202,8 @@
+         # exec /usr/sbin/ubiattach -p /dev/mtd6
          # exec /usr/sbin/ubimkvol /dev/ubi1 -N user -m
          # exec mount /usr/local
-         exec touch /var/doFactoryReset
+-        exec touch /var/doFactoryReset
 -        exec kill -SIGQUIT 1
-+        exec /bin/update_firmware_run
++        exec touch /usr/local/.doFactoryReset
++        exec /sbin/reboot
      }]} {
  
        # TWIST-22

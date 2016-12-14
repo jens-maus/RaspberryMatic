@@ -14,7 +14,7 @@ usage:
 buildroot-$(BUILDROOT_VERSION).tar.bz2:
 	wget http://git.buildroot.net/buildroot/snapshot/buildroot-$(BUILDROOT_VERSION).tar.bz2
 
-BUILDROOT_PATCHES=$(wildcard patches/*.patch)
+BUILDROOT_PATCHES=$(wildcard buildroot-patches/*.patch)
 
 buildroot-$(BUILDROOT_VERSION): buildroot-$(BUILDROOT_VERSION).tar.bz2
 	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; patch -d buildroot-$(BUILDROOT_VERSION) -p1 < $(BUILDROOT_PATCHES); fi

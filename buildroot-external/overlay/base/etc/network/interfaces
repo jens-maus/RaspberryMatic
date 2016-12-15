@@ -1,0 +1,7 @@
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet manual
+  pre-up /etc/network/nfs_check
+  wait-delay 15

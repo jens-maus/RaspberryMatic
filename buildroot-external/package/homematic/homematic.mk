@@ -31,6 +31,8 @@ define HOMEMATIC_FINALIZE_TARGET
 	touch $(TARGET_DIR)/usr/local/etc/config/shadow
 	rm -f $(TARGET_DIR)/etc/shadow
 	ln -snf config/shadow $(TARGET_DIR)/etc/shadow
+	rm -f $(TARGET_DIR)/etc/resolv.conf
+	ln -snf ../var/etc/resolv.conf $(TARGET_DIR)/etc/resolv.conf
 endef
 TARGET_FINALIZE_HOOKS += HOMEMATIC_FINALIZE_TARGET
 

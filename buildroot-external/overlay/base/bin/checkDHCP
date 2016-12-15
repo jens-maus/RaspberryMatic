@@ -1,14 +1,12 @@
 #!/bin/sh
 
+IFACE=${1}
+
 while true; do
-
-	sleep 60
-	udhcpc -x hostname:$HOSTNAME -n -q -V eQ3-CCU2 -s /bin/dhcp_check.script
-	# check Return code
-	if [ $? -eq 0 ] ; then
-		touch /var/status/hasLink
-		udhcpc -x hostname:$HOSTNAME -V eQ3-CCU2 -b -s /bin/dhcp.script
-		exit 0
-	fi
+  sleep 10
+  killall -q udhcpc
+  udhcpc -R -b -t 100 -T 3 -S -x hostname:${HOSTNAME} -i ${IFACE} -C -F ${HOSTNAME} -V eQ3-CCU2 -s /bin/dhcp.script -p /var/run/udhcpc-${IFACE}.pid
+  if [[ -f "/var/run/udhcpc-${IFACE}.pid" ]]; then
+    exit 0
+  fi
 done
-

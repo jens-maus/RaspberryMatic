@@ -1,33 +1,36 @@
 #!/bin/sh
 
-RESOLV_CONF=/var/etc/resolv.conf
+# we only continue if if-up.d is called for "eth0"
+if [[ ${IFACE} != "eth0" ]]; then
+  exit 0
+fi
 
-opstate=$(cat /sys/class/net/eth0/operstate)
-
+# make sure iface is really up
+opstate=$(cat /sys/class/net/${IFACE}/operstate)
 if [ $opstate = "down" ] ; then
-	ifconfig eth0 up
-	echo "sleep 5s"
+	/sbin/ifconfig ${IFACE} up
 	sleep 5
 fi
 
+# cleanup first
+RESOLV_CONF=/var/etc/resolv.conf
 rm -f $RESOLV_CONF
-
 mkdir -p /var/status
-
 rm -f /var/status/hasLink
 rm -f /var/status/hasIP
 rm -f /var/status/hasInternet
 
+# source in the network config
 . /etc/config/netconfig
 
-hostname $HOSTNAME
+hostname ${HOSTNAME}
 
-route del -net 224.0.0.0 netmask 240.0.0.0 2> /dev/null
-route add -net 224.0.0.0 netmask 240.0.0.0 eth0
+# set multicast routes
+route del -net 224.0.0.0 netmask 240.0.0.0 2>/dev/null
+route add -net 224.0.0.0 netmask 240.0.0.0 dev ${IFACE}
 
+# check if we booting via nfs
 if grep -q nfsroot /proc/cmdline ; then
-   killall -q setclock
-   daemonize /bin/setclock
    echo Running from nfs root. Skipping network configuration.
 
    # has IP  
@@ -35,40 +38,39 @@ if grep -q nfsroot /proc/cmdline ; then
    touch /var/status/hasIP
 
    # check internet connection; use fix ip because no nameserver (nfs boot) 
-   if ping -W 5 -c 1 87.230.102.12 >/dev/null; then
-	touch /var/status/hasInternet 
+   if ping -W 5 -c 1 google.com >/dev/null; then
+     touch /var/status/hasInternet
    fi
    exit 0
 fi
 
+# make sure no other udhcpc is running
 killall -q udhcpc
 
-if [ _$MODE = _DHCP ] ; then
+# if DHCP is enabled we run udhcpc
+if [[ ${MODE} == "DHCP" ]]; then
   # quit after first check
-  udhcpc -x hostname:$HOSTNAME -n -q -V eQ3-CCU2 -s /bin/dhcp.script
-  # check Return code
-  if [ $? -eq 0 ] ; then
-    touch /var/status/hasLink
-    udhcpc -x hostname:$HOSTNAME -V eQ3-CCU2 -b -s /bin/dhcp.script
-    exit 0
-  else
+  udhcpc -b -t 100 -T 3 -S -x hostname:${HOSTNAME} -i ${IFACE} -C -F ${HOSTNAME} -V eQ3-CCU2 -s /bin/dhcp.script -p /var/run/udhcpc-${IFACE}.pid
+  if [[ ! -f "/var/run/udhcpc-${IFACE}.pid" ]]; then
     killall checkDHCP
-    /bin/checkDHCP &
+    /bin/checkDHCP ${IFACE} &
   fi
+
+  exit 0
 fi
 
-has_carrier=$(cat /sys/class/net/eth0/carrier)
+has_carrier=$(cat /sys/class/net/${IFACE}/carrier)
 
 if [ $has_carrier -eq 1 ] ; then
-        echo "eth0 carrier detected"
+        echo "${IFACE} carrier detected"
         touch /var/status/hasLink
 else
-        echo "eth0 no carrier detected"
+        echo "${IFACE} no carrier detected"
         exit 1
 fi
 
 . /etc/config/netconfig
-ifconfig eth0 $IP netmask $NETMASK
+ifconfig ${IFACE} $IP netmask $NETMASK
 route del default 2> /dev/null
 route add default gw $GATEWAY
 
@@ -100,7 +102,7 @@ fi
 touch /var/status/hasIP
 
 # check internet connection; use fix ip because no nameserver (nfs boot) 
-if ping -W 5 -c 1 87.230.102.12 >/dev/null; then
+if ping -W 5 -c 1 google.com >/dev/null; then
 	touch /var/status/hasInternet 
 fi
 

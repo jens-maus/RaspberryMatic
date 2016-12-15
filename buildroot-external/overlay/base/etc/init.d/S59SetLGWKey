@@ -6,7 +6,7 @@
 CFG_DIR=/etc/config
 
 start() {
-#	init
+	echo -n "Setting LAN Gateway keys: "
 	/bin/setlgwkey.sh
 	echo "OK"
 }

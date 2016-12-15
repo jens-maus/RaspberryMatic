@@ -5,7 +5,7 @@ UPDATEFILES=$(ls /etc/config/*.keychange 2>/dev/null)
 # perform key exchange for every keychange file
 for F in $UPDATEFILES
 do
-	echo "Processing update file $F"
+	echo -n "$F "
 	#parse the file
 	SERIAL=`cat $F | grep Serial | sed s/Serial=//`
 	IP=`cat $F | grep IP | sed s/IP=//`

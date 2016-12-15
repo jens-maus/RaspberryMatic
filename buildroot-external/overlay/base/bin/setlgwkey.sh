@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # list all keychange files
-UPDATEFILES=`ls /etc/config/*.keychange`
+UPDATEFILES=$(ls /etc/config/*.keychange 2>/dev/null)
 # perform key exchange for every keychange file
 for F in $UPDATEFILES
 do

@@ -5,7 +5,7 @@
      script.id = "homematic_com_script";
      script.type = "text/javascript";
 -    script.src = "http://update.homematic.com/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product=HM-CCU2&serial=" + serial;
-+    script.src = "https://min.gitcdn.link/repo/jens-maus/RaspberryMatic/master/release/LATEST-VERSION.js"
++    script.src = "https://min.gitcdn.link/cdn/jens-maus/RaspberryMatic/master/release/LATEST-VERSION.js"
      $("body").appendChild(script);
    },
  

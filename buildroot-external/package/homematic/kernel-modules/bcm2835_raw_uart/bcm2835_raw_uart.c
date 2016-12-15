@@ -384,12 +384,12 @@ static int bcm2835_raw_uart_open(struct inode *inode, struct file *filep)
 static void bcm2835_raw_uart_shutdown(void)
 {
   /*If uart is enabled, wait until it is not busy*/
-  while( (readl(m_bcm2835_raw_uart_port->membase + UART010_CR) & UART01x_CR_UARTEN) && (readl(m_bcm2835_raw_uart_port->membase + UART01x_FR) & UART01x_FR_BUSY) )
+  while( (readl(m_bcm2835_raw_uart_port->membase + UART011_CR) & UART01x_CR_UARTEN) && (readl(m_bcm2835_raw_uart_port->membase + UART01x_FR) & UART01x_FR_BUSY) )
   {
     schedule();
   }
 
-  writel( 0, m_bcm2835_raw_uart_port->membase + UART010_CR );  /*Disable UART*/
+  writel( 0, m_bcm2835_raw_uart_port->membase + UART011_CR );  /*Disable UART*/
 
   writel( 0, m_bcm2835_raw_uart_port->membase + UART011_IMSC );  /*Disable interrupts*/
 
@@ -923,17 +923,17 @@ static int bcm2835_raw_uart_startup(void)
 
   /* enable RX and TX, set RX FIFO threshold to lowest and TX FIFO threshold to mid */
   /*If uart is enabled, wait until it is not busy*/
-  while( (readl(m_bcm2835_raw_uart_port->membase + UART010_CR) & UART01x_CR_UARTEN) && (readl(m_bcm2835_raw_uart_port->membase + UART01x_FR) & UART01x_FR_BUSY) )
+  while( (readl(m_bcm2835_raw_uart_port->membase + UART011_CR) & UART01x_CR_UARTEN) && (readl(m_bcm2835_raw_uart_port->membase + UART01x_FR) & UART01x_FR_BUSY) )
   {
     schedule();
   }
 
-  uart_cr = readl( m_bcm2835_raw_uart_port->membase + UART010_CR );
+  uart_cr = readl( m_bcm2835_raw_uart_port->membase + UART011_CR );
   uart_cr &= ~(UART011_CR_OUT2 | UART011_CR_OUT1 | UART011_CR_DTR | UART01x_CR_IIRLP | UART01x_CR_SIREN); /*Set all RO bit to 0*/
 
   /*Disable UART*/
   uart_cr &= ~(UART01x_CR_UARTEN);
-  writel( uart_cr, m_bcm2835_raw_uart_port->membase + UART010_CR );
+  writel( uart_cr, m_bcm2835_raw_uart_port->membase + UART011_CR );
 
   /*Flush fifo*/
   writel( 0, m_bcm2835_raw_uart_port->membase + UART011_LCRH );
@@ -943,14 +943,14 @@ static int bcm2835_raw_uart_startup(void)
 
   /*enable RX and TX*/
   uart_cr |= UART011_CR_RXE | UART011_CR_TXE ;
-  writel( uart_cr, m_bcm2835_raw_uart_port->membase + UART010_CR );
+  writel( uart_cr, m_bcm2835_raw_uart_port->membase + UART011_CR );
 
   /*Enable fifo and set to 8N1*/
   writel( UART01x_LCRH_FEN | UART01x_LCRH_WLEN_8, m_bcm2835_raw_uart_port->membase + UART011_LCRH );
 
   /*Enable UART*/
   uart_cr |= UART01x_CR_UARTEN ;
-  writel( uart_cr, m_bcm2835_raw_uart_port->membase + UART010_CR );
+  writel( uart_cr, m_bcm2835_raw_uart_port->membase + UART011_CR );
 
   /*Configure interrupts*/
   writel( UART011_OEIM | UART011_BEIM | UART011_FEIM | UART011_RTIM | UART011_RXIM, m_bcm2835_raw_uart_port->membase + UART011_IMSC );
@@ -979,24 +979,24 @@ static void bcm2835_raw_uart_reset(void)
   unsigned long uart_cr;
 
   /*If uart is enabled, wait until it is not busy*/
-  while( (readl(m_bcm2835_raw_uart_port->membase + UART010_CR) & UART01x_CR_UARTEN) && (readl(m_bcm2835_raw_uart_port->membase + UART01x_FR) & UART01x_FR_BUSY) )
+  while( (readl(m_bcm2835_raw_uart_port->membase + UART011_CR) & UART01x_CR_UARTEN) && (readl(m_bcm2835_raw_uart_port->membase + UART01x_FR) & UART01x_FR_BUSY) )
   {
     schedule();
   }
 
-  uart_cr = readl( m_bcm2835_raw_uart_port->membase + UART010_CR );
+  uart_cr = readl( m_bcm2835_raw_uart_port->membase + UART011_CR );
   uart_cr &= ~(UART011_CR_OUT2 | UART011_CR_OUT1 | UART011_CR_DTR | UART01x_CR_IIRLP | UART01x_CR_SIREN); /*Set all RO bit to 0*/
 
   /*Disable UART*/
   uart_cr &= ~(UART01x_CR_UARTEN);
-  writel( uart_cr, m_bcm2835_raw_uart_port->membase + UART010_CR );
+  writel( uart_cr, m_bcm2835_raw_uart_port->membase + UART011_CR );
 
   /*Flush fifo and set to 8N1*/
   writel( UART01x_LCRH_WLEN_8, m_bcm2835_raw_uart_port->membase + UART011_LCRH );
 
   /*Disable RX and TX*/
   uart_cr &= ~(UART011_CR_TXE | UART011_CR_RXE);
-  writel( uart_cr, m_bcm2835_raw_uart_port->membase + UART010_CR );
+  writel( uart_cr, m_bcm2835_raw_uart_port->membase + UART011_CR );
 }
 
 
@@ -1190,8 +1190,8 @@ static int bcm2835_raw_uart_remove( struct platform_device *pdev )
 }
 static struct resource bcm2835_raw_uart_resources[] = {
         {
-            .start = UART0_BASE,
-            .end = UART0_BASE + 0x100 - 1,  /*HT: ??*/
+            .start = UART0_BASE,        // 0x3f201000
+            .end = UART0_BASE + 0xfff,  // 0x3f201fff
             .flags = IORESOURCE_MEM,
             .name = MODNAME,
         },

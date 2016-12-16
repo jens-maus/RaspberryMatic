@@ -25,8 +25,10 @@ identify_host() {
   echo "UART_DEV=${UART_DEV}" >>/var/ids
 }
 
-# function to resize /usr/local partition to maximum SD card size
-resize_usrlocal() {
+# function to check if a factory reset (clearing whole /usr/local) should be performed
+# in addition we also resize /usr/local in case it hasn't been resized to SD card
+# boundaries
+checkFactoryReset() {
 
   # only continue if .doFactoryReset file exists
   if [[ ! -r /usr/local/.doFactoryReset ]]; then
@@ -59,10 +61,61 @@ resize_usrlocal() {
   mount /usr/local
 }
 
+# initialize a potentially existing PiFace Shim RTC clock (MCP7940N)
+init_rtc() {
+  modprobe i2c_bcm2708
+  modprobe i2c-dev
+  i2cset -y 1 0x6f 0x08 0x47 2>/dev/null
+  if [ $? -eq 0 ]; then
+    modprobe i2c:mcp7941x
+    echo mcp7941x 0x6f >/sys/class/i2c-dev/i2c-1/device/new_device
+    hwclock --hctosys --utc
+  fi
+}
+
+# we have to initialize /dev/urandom way earlier than the system usually
+# does via S20urandom.
+init_urandom() {
+  if [[ ! -c /dev/urandom ]]; then
+    return
+  fi
+
+  if [[ -s /etc/config/random-seed ]]; then
+    cat /etc/config/random-seed >/dev/urandom
+  else
+    touch /etc/config/random-seed
+
+    # initialize urandom with /proc/timer_list
+    head -3 /proc/timer_list | tail -1 | cut -d' ' -f3 >/dev/urandom
+  fi
+}
+
+# we save the random-seed pool so that we can immediately reuse it
+# after a reboot
+save_urandom() {
+  if [[ ! -c /dev/urandom ]]; then
+    return
+  fi
+
+  dd if=/dev/urandom of=/etc/config/random-seed count=1 bs=512 2>/dev/null
+}
+
 init() {
 
   # identify the host
   identify_host
+
+  # init a potentially existing rtc clock
+  init_rtc
+
+  # init /dev/urandom
+  init_urandom
+
+  # load watchdog kernel module
+  modprobe bcm2835_wdt nowayout=1 heartbeat=15
+
+  # load tunneling interface support
+  modprobe tun
 
   # depending on the HomeMatic mode (HmRF, HmIP) we
   # have to load different kernel modules.
@@ -75,25 +128,11 @@ init() {
     modprobe amba-pl011
   fi
 
-  # load watchdog kernel module
-  modprobe bcm2835_wdt nowayout=1 heartbeat=15
+  # check if a factory reset should be performed
+  checkFactoryReset
 
-  # initialize a potentially existing PiFace Shim RTC clock (MCP7940N)
-  modprobe i2c_bcm2708
-  modprobe i2c-dev
-  i2cset -y 1 0x6f 0x08 0x47 2>/dev/null
-  if [ $? -eq 0 ]; then
-    modprobe i2c:mcp7941x
-    echo mcp7941x 0x6f >/sys/class/i2c-dev/i2c-1/device/new_device
-    hwclock --hctosys --utc
-  fi
-
-	# Tunneling
-  modprobe tun
- 
-  # resize /usr/local to the maximum size of the
-  # SD card
-  resize_usrlocal
+  # make sure to save the urandom pool for future reboots
+  save_urandom
 
   RF_SERIAL=$(eq3configcmd update-coprocessor -p ${UART_DEV} -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5)
   echo "SerialNumber=${RF_SERIAL}" >>/var/ids
@@ -190,8 +229,12 @@ init() {
  
 }
 
+cleanup() {
+  save_urandom
+}
+
 start() {
-	echo -n "eQ-3 System start:"
+	echo -n "eQ-3 System start: "
 	init
 	echo "OK"
 	echo -n "Starting crond: "
@@ -200,7 +243,13 @@ start() {
 }
 
 stop () {
+  echo -n "Stopping crond: "
 	start-stop-daemon -K -q -p /var/run/crond.pid
+  echo "OK"
+  echo -n "eQ-3 System stop: "
+  cleanup
+  echo "OK"
+
 	/bin/update_firmware_pre
 }
 

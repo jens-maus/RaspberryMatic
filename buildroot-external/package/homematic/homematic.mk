@@ -33,6 +33,7 @@ define HOMEMATIC_FINALIZE_TARGET
 	ln -snf config/shadow $(TARGET_DIR)/etc/shadow
 	rm -f $(TARGET_DIR)/etc/resolv.conf
 	ln -snf ../var/etc/resolv.conf $(TARGET_DIR)/etc/resolv.conf
+	rm -f $(TARGET_DIR)/etc/init.d/S20urandom
 endef
 TARGET_FINALIZE_HOOKS += HOMEMATIC_FINALIZE_TARGET
 

@@ -1,0 +1,18 @@
+--- homematic/arm-gnueabihf/packages/etc/lighttpd/conf.d/cgi.conf.orig	2016-12-16 13:46:39.807222464 +0100
++++ homematic/arm-gnueabihf/packages/etc/lighttpd/conf.d/cgi.conf	2016-12-16 13:47:05.194621196 +0100
+@@ -1,5 +1,5 @@
+ #### CGI module
+ cgi.assign = ( ".pl"  => "/usr/bin/perl",
+-                ".cgi" => "/opt/hm/bin/tclsh",
++                ".cgi" => "/bin/tclsh",
+                 ".ccc" => ""
+              )
+--- homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/lighttpd/conf.d/cgi.conf.orig	2016-12-16 13:46:39.807222464 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/lighttpd/conf.d/cgi.conf	2016-12-16 13:47:05.194621196 +0100
+@@ -1,5 +1,5 @@
+ #### CGI module
+ cgi.assign = ( ".pl"  => "/usr/bin/perl",
+-                ".cgi" => "/opt/hm/bin/tclsh",
++                ".cgi" => "/bin/tclsh",
+                 ".ccc" => ""
+              )

@@ -1,0 +1,22 @@
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd_ssl.conf.orig	2016-12-16 13:52:28.938953008 +0100
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd_ssl.conf	2016-12-16 13:52:01.883593890 +0100
+@@ -14,7 +14,7 @@
+ ## chroot example aswell.
+ ##
+ var.log_root    = "/var/log"
+-var.server_root = "/www"
++var.server_root = "/www/"
+ var.state_dir   = "/var/run"
+ var.home_dir    = "/var/lib/lighttpd"
+ var.conf_dir    = "/etc/lighttpd"
+--- homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/lighttpd/lighttpd_ssl.conf.orig	2016-12-16 13:52:28.938953008 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/lighttpd/lighttpd_ssl.conf	2016-12-16 13:52:01.883593890 +0100
+@@ -14,7 +14,7 @@
+ ## chroot example aswell.
+ ##
+ var.log_root    = "/var/log"
+-var.server_root = "/www"
++var.server_root = "/www/"
+ var.state_dir   = "/var/run"
+ var.home_dir    = "/var/lib/lighttpd"
+ var.conf_dir    = "/etc/lighttpd"

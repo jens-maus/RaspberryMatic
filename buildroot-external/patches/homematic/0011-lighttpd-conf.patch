@@ -1,0 +1,15 @@
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig	2016-12-16 13:49:23.735339891 +0100
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2016-12-16 13:48:51.924093355 +0100
+@@ -14,10 +14,10 @@
+ ## chroot example aswell.
+ ##
+ var.log_root    = "/var/log"
+-var.server_root = "/opt/hm/www"
++var.server_root = "/www/"
+ var.state_dir   = "/var/run"
+ var.home_dir    = "/var/lib/lighttpd"
+-var.conf_dir    = "/opt/hm/etc/lighttpd"
++var.conf_dir    = "/etc/lighttpd"
+ 
+ ## 
+ ## run the server chrooted.

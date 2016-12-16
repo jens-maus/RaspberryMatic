@@ -1,5 +1,5 @@
 --- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig	2016-12-12 22:00:43.139457618 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd	2016-12-12 22:41:11.351135142 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd	2016-12-16 15:22:38.269347765 +0100
 @@ -7,39 +7,8 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/multimacd.pid
@@ -42,7 +42,17 @@
  init() {
  	export TZ=`cat /etc/config/TZ`
  	
-@@ -63,9 +32,9 @@
+@@ -47,6 +16,9 @@
+ 		cp $CFG_TEMPLATE_DIR/multimacd.conf /etc/config
+ 	fi
+ 
++  # force Slave HmIP device to "ttyS0"
++	sed -i 's/^Loop Slave Device HmIP = .*$/Loop Slave Device HmIP = ttyS0/' /etc/config/multimacd.conf
++
+ 	if [ ! -e /etc/config/syslog ] ; then
+ 		cp $CFG_TEMPLATE_DIR/syslog /etc/config
+ 	fi
+@@ -63,9 +35,9 @@
      do
  		sleep 2
  		echo -n "."
@@ -54,7 +64,7 @@
  		then
              echo "multimacd is ready now."
              break
-@@ -78,23 +47,21 @@
+@@ -78,23 +50,21 @@
  }
  
  start() {

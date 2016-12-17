@@ -1,12 +1,12 @@
 --- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-12-12 22:04:53.864706566 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2016-12-16 21:51:19.362584223 +0100
-@@ -13,24 +13,16 @@
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2016-12-17 21:50:47.875289725 +0100
+@@ -13,24 +13,24 @@
  	if [ ! -d /etc/config/rfd ] ; then
    		mkdir /etc/config/rfd
  	fi
 +
  	#Migration for existing rfd.conf in user space
--	if [ ! -e /etc/config/rfd.conf ] ; then
+ 	if [ ! -e /etc/config/rfd.conf ] ; then
 -		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
 -	else
 -		sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
@@ -16,8 +16,7 @@
 -                        sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
 -                fi
 -	fi
-+	if [ ! -e /var/etc/rfd.conf ] ; then
-+		cp $CFG_TEMPLATE_DIR/rfd.conf /var/etc/
++		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config/rfd.conf
 +  fi
  
 -        # Bug fix
@@ -26,14 +25,22 @@
 -                echo "Copy rfd files"
 -		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
 -        fi
++  # patch some settings to match what this hardware expects.
 +  source /var/ids 2>/dev/null
-+  if [[ ${HM_MODE} != "HmIP" ]]; then
-+		sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/ttyAMA0/' /var/etc/rfd.conf
++  if [[ ${HM_MODE} == "HmIP" ]]; then
++    sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf
++  else
++    sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/ttyAMA0/' /etc/config/rfd.conf
++  fi
++  sed -i 's/^#*AccessFile = \/dev\/.*$/AccessFile = \/dev\/null/' /etc/config/rfd.conf
++  sed -i 's/^#*ResetFile = \/dev\/.*$/ResetFile = \/dev\/null/' /etc/config/rfd.conf
++  if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
++    sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
 +  fi
  
  	if [ ! -e /etc/config/syslog ] ; then
  		cp $CFG_TEMPLATE_DIR/syslog /etc/config
-@@ -43,14 +35,14 @@
+@@ -43,14 +43,14 @@
  
  waitStartupComplete() {
      echo -n "Waiting for rfd to get ready"
@@ -51,12 +58,3 @@
  		then
              echo "rfd is ready now."
              break
-@@ -65,7 +57,7 @@
- start() {
- 	echo "Starting rfd: "
- 	init
--	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
-+	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /var/etc/rfd.conf -l $LOGLEVEL_RFD
- 	waitStartupComplete
- }
- stop() {

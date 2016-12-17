@@ -1,0 +1,11 @@
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf.orig	2016-12-16 21:44:50.165092633 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf	2016-12-16 21:45:22.292224178 +0100
+@@ -22,6 +22,5 @@
+ [Interface 0]
+ Type = CCU2
+ ComPortFile = /dev/mmd_bidcos
+-#AccessFile = /dev/null
+-#ResetFile = /dev/ccu2-ic200
+-
++AccessFile = /dev/null
++ResetFile = /dev/null

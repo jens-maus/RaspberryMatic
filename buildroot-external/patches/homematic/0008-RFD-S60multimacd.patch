@@ -1,6 +1,6 @@
 --- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig	2016-12-12 22:00:43.139457618 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd	2016-12-16 15:22:38.269347765 +0100
-@@ -7,39 +7,8 @@
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd	2016-12-16 21:35:40.695883524 +0100
+@@ -7,44 +7,13 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/multimacd.pid
  
@@ -42,17 +42,14 @@
  init() {
  	export TZ=`cat /etc/config/TZ`
  	
-@@ -47,6 +16,9 @@
- 		cp $CFG_TEMPLATE_DIR/multimacd.conf /etc/config
+-	if [ ! -e /etc/config/multimacd.conf ] ; then
+-		cp $CFG_TEMPLATE_DIR/multimacd.conf /etc/config
++	if [ ! -e /var/etc/multimacd.conf ] ; then
++		cp $CFG_TEMPLATE_DIR/multimacd.conf /var/etc/
  	fi
  
-+  # force Slave HmIP device to "ttyS0"
-+	sed -i 's/^Loop Slave Device HmIP = .*$/Loop Slave Device HmIP = ttyS0/' /etc/config/multimacd.conf
-+
  	if [ ! -e /etc/config/syslog ] ; then
- 		cp $CFG_TEMPLATE_DIR/syslog /etc/config
- 	fi
-@@ -63,9 +35,9 @@
+@@ -63,9 +32,9 @@
      do
  		sleep 2
  		echo -n "."
@@ -64,7 +61,7 @@
  		then
              echo "multimacd is ready now."
              break
-@@ -78,23 +50,21 @@
+@@ -78,23 +47,21 @@
  }
  
  start() {
@@ -83,7 +80,7 @@
 +	echo -n "Starting multimacd: "
 +  if [[ ${HM_MODE} == "HmIP" ]]; then
 +	  init
-+	  start-stop-daemon -S -N -10 -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /etc/config/multimacd.conf -l $LOGLEVEL_RFD
++	  start-stop-daemon -S -N -10 -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l $LOGLEVEL_RFD
 +	  waitStartupComplete
 +  else
 +    echo "not required"

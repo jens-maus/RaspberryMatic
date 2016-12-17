@@ -4,10 +4,11 @@
 #
 init () {
 
-	cmp -s /var/ids /etc/config/ids
-	if [[ $? -ne 0 ]] ; then
-			cp /var/ids /etc/config/
-	fi
+  # we only extract BidCos-Address and SerialNumber to /etc/config/ids
+  # in case there isn't a 'ids' file only
+  if [[ ! -f /etc/config/ids ]] ; then
+    grep -E "BidCoS-Address|SerialNumber" /var/ids >/etc/config/ids
+  fi
 	
 	if [[ ! -e /etc/config/crypttool.cfg ]] ; then
 			touch /etc/config/crypttool.cfg

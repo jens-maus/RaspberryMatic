@@ -83,8 +83,6 @@ init_urandom() {
   if [[ -s /etc/config/random-seed ]]; then
     cat /etc/config/random-seed >/dev/urandom
   else
-    touch /etc/config/random-seed
-
     # initialize urandom with /proc/timer_list
     head -3 /proc/timer_list | tail -1 | cut -d' ' -f3 >/dev/urandom
   fi

@@ -7,7 +7,7 @@ LOGLEVEL_HMServer=5
 CFG_TEMPLATE_DIR=/etc/config_templates
 STARTWAITFILE=/var/status/HMServerStarted
 
-source /var/ids 2>/dev/null
+source /var/hm_mode 2>/dev/null
 if [[ ${HM_MODE} == "HmIP" ]]; then
   HM_SERVER=/opt/HMServer/HMIPServer.jar
   HM_SERVER_ARGS="/etc/crRFD.conf"

@@ -4,10 +4,13 @@
 #
 init () {
 
-  # we only extract BidCos-Address and SerialNumber to /etc/config/ids
-  # in case there isn't a 'ids' file only
-  if [[ ! -f /etc/config/ids ]] ; then
-    grep -E "BidCoS-Address|SerialNumber" /var/ids >/etc/config/ids
+  # we output the BidCos-Address and the
+  # SerialNumber to /var/ids
+  echo "BidCoS-Address=$(cat /var/rf_address)" >/var/ids
+  echo "SerialNumbe=$(cat /var/board_serial)" >>/var/ids
+
+  if [[ ! -e /etc/config/ids ]] ; then
+    cp /var/ids /etc/config/
   fi
 	
 	if [[ ! -e /etc/config/crypttool.cfg ]] ; then

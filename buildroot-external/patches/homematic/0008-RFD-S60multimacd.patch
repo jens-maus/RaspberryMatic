@@ -37,7 +37,7 @@
 -        fi
 -        rm /var/log/rf_address
 -}
-+source /var/ids 2>/dev/null
++source /var/hm_mode 2>/dev/null
 +
  init() {
  	export TZ=`cat /etc/config/TZ`

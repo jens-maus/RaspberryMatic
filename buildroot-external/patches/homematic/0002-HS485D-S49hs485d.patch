@@ -7,7 +7,7 @@
 +
 +  # if there is no HmIP support enabled we have to strip
 +  # the HmIP-RF part in InterfacesList.xml
-+  source /var/ids 2>/dev/null
++  source /var/hm_mode 2>/dev/null
 +  if [[ ${HM_MODE} != "HmIP" ]]; then
 +    line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | head -1)
 +    line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | tail -1)

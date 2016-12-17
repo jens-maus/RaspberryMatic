@@ -7,7 +7,7 @@ FW_DIRECTORY=/firmware/HM-MOD-UART
 
 start() {
 
-  source /var/ids 2>/dev/null
+  source /var/hm_mode 2>/dev/null
 
 	echo -n "Performing coprocessor updates: "
 

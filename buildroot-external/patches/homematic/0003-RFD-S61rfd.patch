@@ -26,7 +26,7 @@
 -		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
 -        fi
 +  # patch some settings to match what this hardware expects.
-+  source /var/ids 2>/dev/null
++  source /var/hm_mode 2>/dev/null
 +  if [[ ${HM_MODE} == "HmIP" ]]; then
 +    sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf
 +  else

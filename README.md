@@ -23,8 +23,9 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * Build Environment creates a dedicated cross compiler (`arm-linux-gcc`) to compile third-party applications
 
 ## Limitations
-* No HomeMatic-IP (HmIP-RF) support for RaspberryPi3 (Work in Progress, see #30)
-* Updates require complete Backup/Restore procedure
+* No HomeMatic-IP (HmIP-RF) support for RaspberryPi3 (Work in Progress, see [#30](https://github.com/jens-maus/RaspberryMatic/issues/30))
+* HmIP-RF devices have to be reteached after Config restore from CCU2 (Limitation of HmIP)
+* Updates require complete Backup/Reinstall/Restore procedure
 * Special HomeMatic CCU Addon packages required (CCU2 versions don't work)
 * No WiFi or Bluetooth support (yet) with RaspberryPi3
 

@@ -98,6 +98,27 @@ save_urandom() {
   dd if=/dev/urandom of=/etc/config/random-seed count=1 bs=512 2>/dev/null
 }
 
+# function to update the crontab file and
+# make sure that it is up to date
+update_crontab() {
+  NUM_TEMPLATE=$(wc -l $CFG_TEMPLATE_DIR/crontab.root | cut -d' ' -f1)
+  NUM_USR=$(grep -Ff $CFG_TEMPLATE_DIR/crontab.root /usr/local/crontabs/root 2>/dev/null | wc -l | cut -d' ' -f1)
+
+  # if NUM_USR is not equal to NUM_TEMPLATE we have to
+  # update the usr crontab file
+  if [[ ${NUM_USR} -ne ${NUM_TEMPLATE} ]]; then
+    # add the standard commands from our template
+    cat $CFG_TEMPLATE_DIR/crontab.root >/tmp/crontab.root
+
+    # put all lines not matching setHWClock and SetInterfaceClock
+    # to the temporary crontab.root file
+    grep -viE "/bin/setHWClock.sh|/bin/SetInterfaceClock" /usr/local/crontabs/root 2>/dev/null >>/tmp/crontab.root
+
+    # make the temp crontab the new usr crontab
+    mv /tmp/crontab.root /usr/local/crontabs/root
+  fi
+}
+
 init() {
 
   # identify the host
@@ -181,24 +202,15 @@ init() {
 	ln -sf /usr/local/sdcard/measurement /media/sd-mmcblk0/measurement
 	#
 	# crontab dirs
-        mkdir -p /var/spool/cron
-        chmod 775 /var/spool
-        chmod 775 /var/spool/cron
-        if [ ! -d /usr/local/crontabs ] ; then
-        	mkdir -p /usr/local/crontabs
-        	chmod 775 /usr/local/crontabs
-        fi
+  mkdir -p /var/spool/cron
+  chmod 775 /var/spool
+  chmod 775 /var/spool/cron
+  if [ ! -d /usr/local/crontabs ] ; then
+    mkdir -p /usr/local/crontabs
+    chmod 775 /usr/local/crontabs
+  fi
 	ln -s /usr/local/crontabs /var/spool/cron/crontabs 
-        if [ ! -e /usr/local/crontabs/root ] ; then
-                cp $CFG_TEMPLATE_DIR/crontab.root /usr/local/crontabs/root
-        fi
-        # Bug fix
-        grep "setInterfaceClock" /usr/local/crontabs/root
-        if [ $? == 0 ] ; then
-                echo "update crontab file"
-                sed 's/setInterfaceClock/SetInterfaceClock/g' /usr/local/crontabs/root > /usr/local/crontabs/root.tmp
-                mv /usr/local/crontabs/root.tmp /usr/local/crontabs/root
-        fi
+  update_crontab
 
 	if [ ! -d /usr/local/etc/config ] ; then
                 mkdir -p /usr/local/etc/config

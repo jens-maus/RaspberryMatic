@@ -1,0 +1,31 @@
+--- homematic/WebUI/www/config/easymodes/BLIND/VIRTUAL_KEY.tcl	2016-12-13 13:45:20.265603134 +0100
++++ homematic/WebUI/www/config/easymodes/BLIND/VIRTUAL_KEY.tcl	2016-11-22 12:56:51.000000000 +0100
+@@ -489,6 +489,28 @@
+ 
+   set chn [lindex [split $special_input_id _] 1]
+ 
++  # TWIST-441
++  array set chGrpDescr [list AES_ACTIVE 0]
++  array set senderDescr [xmlrpc $url getParamset [list string $sender_address] [list string "MASTER"]]
++  catch {array set chGrpDescr [xmlrpc $url getParamset [list string $sender_group] [list string "MASTER"]]}
++
++  set valLONG_MAX_TIME_FIRST_DIR $ps(LONG_MAX_TIME_FIRST_DIR)
++  if {(($senderDescr(AES_ACTIVE) == 1) || ($chGrpDescr(AES_ACTIVE) == 1)) && ([format "%.2f" $ps(LONG_MAX_TIME_FIRST_DIR)] < 0.8) } {
++
++    set valLONG_MAX_TIME_FIRST_DIR 0.8
++    set param  "{LONG_MAX_TIME_FIRST_DIR {$valLONG_MAX_TIME_FIRST_DIR}}"
++
++    if {$chn == 1} {
++      puts "[xmlrpc $url putParamset [list string $receiver_address] [list string $sender_address] [list struct $param]]"
++      set ps(LONG_MAX_TIME_FIRST_DIR) $valLONG_MAX_TIME_FIRST_DIR
++    } else {
++      catch {puts "[xmlrpc $url putParamset [list string $receiver_group] [list string $sender_group] [list struct $param]]"}
++      set ps(LONG_MAX_TIME_FIRST_DIR) $valLONG_MAX_TIME_FIRST_DIR
++    }
++
++
++  }
++  # END TWIST-441
+ 
+   #global SUBSETS
+   set name "x"

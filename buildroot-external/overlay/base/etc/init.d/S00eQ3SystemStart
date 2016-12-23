@@ -61,13 +61,13 @@ checkFactoryReset() {
   mount /usr/local
 }
 
-# initialize a potentially existing PiFace Shim RTC clock (MCP7940N)
+# initialize a potentially existing RTC clock
 init_rtc() {
   # load the common i2c kernel modules
   modprobe i2c_bcm2708
   modprobe i2c-dev
 
-  # check for PiFace Shim RTC at 0x6f
+  # check for PiFace Shim RTC (MCP7940N) at 0x6f
   i2cset -y 1 0x6f 0x08 0x47 2>/dev/null
   if [ $? -eq 0 ]; then
     modprobe i2c:mcp7941x
@@ -75,7 +75,7 @@ init_rtc() {
     hwclock --hctosys --utc
   else
     # check for DS3231 RTC clock at 0x6e
-    i2cget -y 1 0x6e 2>&1 >/dev/null
+    i2cget -y 1 0x68 2>&1 >/dev/null
     if [ $? -eq 0 ]; then
       modprobe i2c:ds3231
       echo ds3231 0x68 >/sys/class/i2c-dev/i2c-1/device/new_device

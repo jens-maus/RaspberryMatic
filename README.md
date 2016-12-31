@@ -17,7 +17,7 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * Low-Latency Linux kernel support (`PREEMPT`) to reduce kernel latency
 * Read-only root file system to minimize write operations on SD card
 * Auto-resizing `/usr/local` partition to use the full space of the SD card
-* Direct support for RTC clock module ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/))
+* Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi))
 * Hardware WatchDog support automatically rebooting the system upon hardware problems
 * Direct CloudMatic (meine-homematic.de) support
 * Build Environment creates a dedicated cross compiler (`arm-linux-gcc`) to compile third-party applications

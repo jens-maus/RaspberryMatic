@@ -1,6 +1,6 @@
 menu "eQ-3 HomeMatic Services"
-	source "$BR2_EXTERNAL/package/homematic/Config.in"
-	source "$BR2_EXTERNAL/package/cloudmatic/Config.in"
+	source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/homematic/Config.in"
+	source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/cloudmatic/Config.in"
 endmenu
 
-source "$BR2_EXTERNAL/package/java-azul/Config.in"
+source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/java-azul/Config.in"

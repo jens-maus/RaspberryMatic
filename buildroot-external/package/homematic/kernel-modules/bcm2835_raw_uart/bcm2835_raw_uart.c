@@ -1214,16 +1214,24 @@ static struct platform_device bcm2709_raw_uart_device = {
 static int __init bcm2709_init_clocks(void)
 {
   struct clk *clk;
-  int ret;
+  int ret = 0;
 
-  clk = clk_register_fixed_rate(NULL, "uart0_clk", NULL, CLK_IS_ROOT, UART0_CLOCK);
-  if (IS_ERR(clk))
-    pr_err("uart0_clk not registered\n");
-  ret = clk_register_clkdev(clk, NULL, "dev:f1");
-  if (ret)
-    pr_err("uart0_clk alias not registered\n");
+  clk = clk_get_sys( "dev:f1", NULL );
+  if( IS_ERR(clk) )
+  {
+    clk = clk_get_sys( "uart0_clk", NULL );
+    if( IS_ERR(clk) )
+    {
+      clk = clk_register_fixed_rate(NULL, "uart0_clk", NULL, CLK_IS_ROOT, UART0_CLOCK);
+      if (IS_ERR(clk))
+        pr_err("uart0_clk not registered\n");
+    }
+    ret = clk_register_clkdev(clk, NULL, "dev:f1");
+    if (ret)
+      pr_err("uart0_clk alias not registered\n");
+  }
 
-	return ret;
+  return ret;
 }
 #endif
 

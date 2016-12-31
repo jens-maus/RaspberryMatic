@@ -70,6 +70,7 @@
 #define IOCTL_MAGIC 'u'
 #define IOCTL_MAXNR 2
 #define MAX_CONNECTIONS 3
+#define UART0_CLK_RATE 48000000
 #define IOCTL_IOCSPRIORITY _IOW(IOCTL_MAGIC,  1, unsigned long) /* Set the priority for the current channel */
 #define IOCTL_IOCGPRIORITY _IOR(IOCTL_MAGIC,  2, unsigned long) /* Get the priority for the current channel */
 
@@ -1222,7 +1223,7 @@ static int __init bcm2709_init_clocks(void)
     clk = clk_get_sys("uart0_clk", NULL);
     if(IS_ERR(clk))
     {
-      clk = clk_register_fixed_rate(NULL, "uart0_clk", NULL, CLK_IS_ROOT, UART0_CLOCK);
+      clk = clk_register_fixed_rate(NULL, "uart0_clk", NULL, CLK_IS_ROOT, UART0_CLK_RATE);
       if(IS_ERR(clk))
         pr_err("uart0_clk not registered\n");
     }

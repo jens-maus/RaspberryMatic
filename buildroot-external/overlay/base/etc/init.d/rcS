@@ -35,5 +35,6 @@ if [ -f /boot/VERSION ]; then
   . /boot/VERSION
 fi
 
+IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
 /usr/bin/psplash-write "PROGRESS 0"
-/usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- http://$(hostname)/"
+/usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- http://${IP}/"

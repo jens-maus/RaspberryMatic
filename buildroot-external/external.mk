@@ -1,1 +1,1 @@
-include $(sort $(wildcard $(BR2_EXTERNAL)/package/*/*.mk))
+include $(sort $(wildcard $(BR2_EXTERNAL_RASPBERRYMATIC_PATH)/package/*/*.mk))

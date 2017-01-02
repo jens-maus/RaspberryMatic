@@ -12,8 +12,8 @@ identify_host() {
   cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | grep -q 2082
   if [[ $? -eq 0 ]]; then
     HOST="rpi3"
-    HM_MODE="HmRF"
-    UART_DEV="/dev/ttyAMA0"
+    HM_MODE="HmIP"
+    UART_DEV="/dev/bcm2835-raw-uart"
   else
     HOST="rpi2"
     HM_MODE="HmIP"

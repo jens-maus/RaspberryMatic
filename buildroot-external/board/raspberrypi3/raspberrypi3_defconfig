@@ -47,6 +47,7 @@ CONFIG_VMSPLIT_2G=y
 CONFIG_PREEMPT_RCU=y
 CONFIG_PREEMPT=y
 CONFIG_PREEMPT_COUNT=y
+CONFIG_PREEMPT_RT_FULL=y
 CONFIG_AEABI=y
 CONFIG_OABI_COMPAT=y
 # CONFIG_CPU_SW_DOMAIN_PAN is not set
@@ -60,7 +61,7 @@ CONFIG_SECCOMP=y
 # CONFIG_ATAGS is not set
 CONFIG_ZBOOT_ROM_TEXT=0x0
 CONFIG_ZBOOT_ROM_BSS=0x0
-CONFIG_CMDLINE="dwc_otg.lpm_enable=0 console=tty2 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait consoleblank=0 logo.nologo quiet"
+CONFIG_CMDLINE="dwc_otg.lpm_enable=0 console=tty2 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes lapic sdhci_bcm2708.enable_llm=0 rootwait consoleblank=0 logo.nologo quiet"
 CONFIG_CPU_FREQ=y
 CONFIG_CPU_FREQ_STAT=m
 CONFIG_CPU_FREQ_STAT_DETAILS=y

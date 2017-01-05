@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Buildroot 2016.11-00241-g82674a2 Configuration
+# Buildroot 2016.11.1-00242-g77e3321-dirty Configuration
 #
 BR2_HAVE_DOT_CONFIG=y
 BR2_HOST_GCC_AT_LEAST_4_5=y
@@ -2229,7 +2229,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
 # BR2_x86_i386 is not set
 # BR2_PACKAGE_QT5WEBKIT_EXAMPLES is not set
 # BR2_PACKAGE_QT5QUICK1 is not set
-# BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR is not set
+BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR=""
 # BR2_PACKAGE_XDRIVER_XF86_INPUT_VOID is not set
 # BR2_KERNEL_HEADERS_3_17 is not set
 # BR2_GDB_VERSION_7_7 is not set

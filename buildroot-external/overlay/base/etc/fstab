@@ -1,14 +1,14 @@
 # /etc/fstab: static file system information.
 #
-# <file system> <mount pt>     <type>   <options>         <dump> <pass>
-/dev/root       /              ext4     ro,noauto         0      1
-proc            /proc          proc     defaults          0      0
-devpts          /dev/pts       devpts   defaults,gid=5,mode=620   0      0
-tmpfs           /dev/shm       tmpfs    mode=0777         0      0
-tmpfs           /tmp           tmpfs    defaults          0      0
-mediafs         /media         tmpfs    defaults          0      0
-sysfs           /sys           sysfs    defaults          0      0
-varfs           /var           tmpfs    defaults,size=50% 0      0
-debugfs         /sys/kernel/debug debugfs                 0     0
-/dev/mmcblk0p3  /usr/local      ext4    defaults,noatime,rw,data=journal,       0 0
-/dev/mmcblk0p1  /boot           vfat    defaults,ro       0      0
+# <file system> <mount pt>     <type>   <options>                                <dump> <pass>
+/dev/root       /              ext4     ro,noauto                                0      1
+proc            /proc          proc     defaults                                 0      0
+devpts          /dev/pts       devpts   defaults,gid=5,mode=620                  0      0
+tmpfs           /dev/shm       tmpfs    mode=0777                                0      0
+tmpfs           /tmp           tmpfs    defaults,noatime,mode=1777               0      0
+tmpfs           /run           tmpfs    defaults,noatime,mode=0755,nosuid,nodev  0      0
+sysfs           /sys           sysfs    defaults                                 0      0
+tmpfs           /var           tmpfs    defaults,noatime,size=50%                0      0
+debugfs         /sys/kernel/debug debugfs noauto                                 0      0
+/dev/mmcblk0p3  /usr/local      ext4    defaults,noatime,rw,data=journal         0      0
+/dev/mmcblk0p1  /boot           vfat    defaults,ro                              0      0

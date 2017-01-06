@@ -4,3 +4,4 @@ menu "eQ-3 HomeMatic Services"
 endmenu
 
 source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/java-azul/Config.in"
+source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/daemonize/Config.in"

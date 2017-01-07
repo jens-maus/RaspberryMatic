@@ -1,0 +1,12 @@
+--- a/configure.orig	2017-01-06 00:50:51.072171549 +0100
++++ b/configure	2017-01-06 01:02:06.872790900 +0100
+@@ -4151,7 +4151,8 @@
+   $as_echo_n "(cached) " >&6
+ else
+   if test "$cross_compiling" = yes; then :
+-  as_fn_error $? "cannot check setpgrp when cross compiling" "$LINENO" 5
++  $as_echo_n "(cross) " >&6
++  ac_cv_func_setpgrp_void=yes
+ else
+   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */

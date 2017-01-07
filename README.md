@@ -14,7 +14,7 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * Self-contained SD card image primarily targeted for RaspberryPi hardware
 * Up to date [Buildroot](http://buildroot.org/) 2016.XX Linux environment
 * Linux kernel v4.4.x with hard-float support for RaspberryPi2/3 platform 
-* Low-Latency Linux kernel support (`PREEMPT`) to reduce kernel latency
+* Real-Time Linux kernel support (`PREEMPT_RT`) to minimize latencies and improve CCU operation properties
 * Read-only root file system to minimize write operations on SD card
 * Auto-resizing `/usr/local` partition to use the full space of the SD card
 * Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi))
@@ -26,7 +26,7 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * HmIP-RF devices have to be reteached after Config restore from CCU2 (Limitation of HmIP)
 * Updates require complete Backup/Reinstall/Restore procedure
 * Special HomeMatic CCU Addon packages required (CCU2 versions don't work)
-* No WiFi or Bluetooth support (yet) with RaspberryPi3
+* No WiFi or Bluetooth support (yet) with RaspberryPi3 or by using external USB-based hardware (WiFi-stick, etc.)
 
 ## Requirements
 * [RaspberryPi3](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) or [RaspberryPi2](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
@@ -50,6 +50,7 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [hm2mqtt](https://github.com/owagner/hm2mqtt)
 * [CCU-Historian](https://github.com/jens-maus/hm-ccu-historian)
 * [Watchdog](https://github.com/jens-maus/hm-watchdog)
+* [homeputer CL Studio](http://www.contronics.de/download/homeputer-studio-software.html)
 
 ## Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:

@@ -1,6 +1,6 @@
 BOARD=raspberrypi3
 # BOARD=X86_32_docker
-BUILDROOT_VERSION=2016.11
+BUILDROOT_VERSION=2016.11.1
 RBE_VERSION=0.1.0
 
 all: usage
@@ -17,7 +17,7 @@ buildroot-$(BUILDROOT_VERSION).tar.bz2:
 BUILDROOT_PATCHES=$(wildcard buildroot-patches/*.patch)
 
 buildroot-$(BUILDROOT_VERSION): buildroot-$(BUILDROOT_VERSION).tar.bz2
-	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; patch -d buildroot-$(BUILDROOT_VERSION) -p1 < $(BUILDROOT_PATCHES); fi
+	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; for p in `ls buildroot-patches`; do patch -d buildroot-$(BUILDROOT_VERSION) -p1 < buildroot-patches/$${p}; done; fi
 
 build-$(BOARD)/.config: buildroot-$(BUILDROOT_VERSION)
 	mkdir -p build-$(BOARD)

@@ -190,8 +190,6 @@ init() {
         chmod 775 /var/rega
         mkdir /var/run
         chmod 775 /var/run
-        mkdir /var/spool
-        chmod 775 /var/spool
         mkdir /var/lock
         chmod 775 /var/lock
         mkdir /var/cache
@@ -213,14 +211,10 @@ init() {
 	ln -sf /usr/local/sdcard/measurement /media/sd-mmcblk0/measurement
 	#
 	# crontab dirs
-  mkdir -p /var/spool/cron
-  chmod 775 /var/spool
-  chmod 775 /var/spool/cron
   if [ ! -d /usr/local/crontabs ] ; then
     mkdir -p /usr/local/crontabs
     chmod 775 /usr/local/crontabs
   fi
-	ln -s /usr/local/crontabs /var/spool/cron/crontabs 
   update_crontab
 
 	if [ ! -d /usr/local/etc/config ] ; then
@@ -259,7 +253,7 @@ start() {
 	init
 	echo "OK"
 	echo -n "Starting crond: "
-	start-stop-daemon -S -q -p /var/run/crond.pid --exec /usr/sbin/crond	
+	start-stop-daemon -S -q -b -m -p /var/run/crond.pid --exec /usr/sbin/crond -- -f -c /usr/local/crontabs
 	echo "OK"
 }
 

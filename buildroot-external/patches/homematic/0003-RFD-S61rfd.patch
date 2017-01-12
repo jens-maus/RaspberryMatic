@@ -1,5 +1,5 @@
 --- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-12-12 22:04:53.864706566 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2017-01-10 22:55:17.496445289 +0100
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2017-01-12 23:17:35.178186259 +0100
 @@ -13,24 +13,24 @@
  	if [ ! -d /etc/config/rfd ] ; then
    		mkdir /etc/config/rfd
@@ -40,7 +40,7 @@
  
  	if [ ! -e /etc/config/syslog ] ; then
  		cp $CFG_TEMPLATE_DIR/syslog /etc/config
-@@ -42,22 +42,21 @@
+@@ -42,28 +42,27 @@
  }
  
  waitStartupComplete() {
@@ -68,3 +68,10 @@
          fi
      done
  }
+ 
+ start() {
+-	echo "Starting rfd: "
++	echo -n "Starting rfd: "
+ 	init
+ 	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
+ 	waitStartupComplete

@@ -14,13 +14,14 @@ start() {
 }
 
 waitForIP() {
-	for i in $(seq 1 10)
-	do
-		if [ -f /var/status/hasIP ] ; then
-			break;
+	for i in $(seq 1 5); do
+		sleep 2
+		gw=$(ip -4 route get 1 | head -1 | cut -d' ' -f3 | tr -d '\n')
+		if [ ! $(ping -W 5 -c 1 ${gw} >/dev/null) ]; then
+			return
 		fi 
-		sleep 1
-	done	
+	done
+	echo -n "ERROR: no LAN connection. "
 }
 
 updateCopro() {

@@ -5,12 +5,14 @@
 
 start() {
 	waitForIP
-	echo -n "."
-	updateCopro
-	echo -n "."
-	updateRFFirmware
-	echo -n "."
-	updateWiredFirmware
+	if [ $? -eq 0 ]; then
+	  echo -n "."
+	  updateCopro
+	  echo -n "."
+	  updateRFFirmware
+	  echo -n "."
+	  updateWiredFirmware
+	fi
 }
 
 waitForIP() {
@@ -18,10 +20,11 @@ waitForIP() {
 		sleep 2
 		gw=$(ip -4 route get 1 | head -1 | cut -d' ' -f3 | tr -d '\n')
 		if [ ! $(ping -W 5 -c 1 ${gw} >/dev/null) ]; then
-			return
+			return 0
 		fi 
 	done
-	echo -n "ERROR: no LAN connection. "
+	echo -n "ERROR: network unreachable. "
+	return 1
 }
 
 updateCopro() {

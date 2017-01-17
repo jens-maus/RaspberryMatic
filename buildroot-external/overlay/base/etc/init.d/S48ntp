@@ -30,6 +30,10 @@ case "$1" in
         . $CFG_TEMPLATE_DIR/ntpclient
       fi
     fi
+    # call ntpdate to perform a single sync to the servers
+    /usr/bin/ntpdate -b -s ${NTPSERVERS}
+
+    # start ntpd
     start-stop-daemon -S -q -x $DAEMON -- -g ${NTPSERVERS}
     [ $? = 0 ] && ( echo "OK"; touch /var/status/hasNTP ) || echo "FAIL"
     ;;

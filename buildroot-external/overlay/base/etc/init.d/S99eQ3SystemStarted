@@ -12,14 +12,15 @@ init() {
 }
 
 start() {
-	echo -n "System started"
+	echo -n "Starting Third-Party Addons: "
 	init
 	if [ ! -e /etc/config/safemode ] ; then
         	# meine-homematic.de starten
-        	/opt/mh/startup.sh
+        	/opt/mh/startup.sh 2>/dev/null >/dev/null
 
         	# Zusatzsoftware starten
         	run-parts /etc/config/rc.d
+
 	        # cal local rc file
         	if [ -x /usr/local/etc/rc.local ]; then
                 	/usr/local/etc/rc.local

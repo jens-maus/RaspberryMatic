@@ -1,6 +1,6 @@
 --- homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d.orig	2016-12-13 09:57:04.258978176 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d	2016-12-13 10:07:01.972664917 +0100
-@@ -25,6 +25,19 @@
++++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d	2017-01-10 22:52:43.744006978 +0100
+@@ -25,17 +25,30 @@
  	else
  		cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
  	fi
@@ -20,3 +20,21 @@
  }
  
  start() {
+-	echo -n "Preparing start of hs485d"
++	echo -n "Preparing start of hs485d: "
+ 	init
+ 	/bin/hs485dLoader -l $LOGLEVEL_HS485D -ds -dd /etc/config/hs485d.conf
+ 	echo "OK"
+ }
+ 
+ stop() {
+-	echo "OK"
++	echo -n ""
+ }
+ 
+ restart() {
+@@ -59,4 +72,3 @@
+ esac
+ 
+ exit $?
+-

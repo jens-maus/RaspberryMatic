@@ -1,7 +1,0 @@
-#Type           Filename                Version
-
-#Coprozessor
-#CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
-
-CCU2					dualcopro_si1002_update_blhm.eq3				2.2.1			#Dual CoProzessor CCU2
-

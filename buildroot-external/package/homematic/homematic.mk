@@ -34,6 +34,7 @@ define HOMEMATIC_FINALIZE_TARGET
 	rm -f $(TARGET_DIR)/etc/resolv.conf
 	ln -snf ../var/etc/resolv.conf $(TARGET_DIR)/etc/resolv.conf
 	rm -f $(TARGET_DIR)/etc/init.d/S20urandom
+	rm -f $(TARGET_DIR)/etc/init.d/S49ntp
 endef
 TARGET_FINALIZE_HOOKS += HOMEMATIC_FINALIZE_TARGET
 

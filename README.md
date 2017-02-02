@@ -37,7 +37,7 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 The CCU platform allows to enhance the functionality of a CCU by installing so-called Addon packages. For RaspberryMatic, standard CCU-Addon packages won't work because included binaries have to be recompiled for the hard-float buildroot environment RaspberryMatic uses. Here is a list of well-known already compatible Addon packages (please note that this list might be incomplete):
 
 * [CUxD](https://github.com/jens-maus/cuxd)
-* [XML-API](https://github.com/jens-maus/XML-API)
+* [XML-API](https://github.com/hobbyquaker/XML-API)
 * [hm_pdetect](https://github.com/jens-maus/hm_pdetect)
 * [Email-Addon](https://github.com/jens-maus/hm_email)
 * [CUxD-Highcharts](https://github.com/hobbyquaker/CUxD-Highcharts)

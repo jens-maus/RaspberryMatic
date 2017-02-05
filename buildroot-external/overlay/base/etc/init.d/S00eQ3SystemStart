@@ -198,6 +198,8 @@ init() {
         chmod 775 /var/lib
         mkdir /var/lib/misc
         chmod 775 /var/lib/misc
+        mkdir /var/lib/dbus
+        chmod 775 /var/lib/dbus
         mkdir /var/empty
         chmod 600 /var/empty
         mkdir /var/etc

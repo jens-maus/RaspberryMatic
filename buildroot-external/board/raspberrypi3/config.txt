@@ -29,10 +29,9 @@ enable_uart=1
 # make sure the uart is running at 48MHz
 init_uart_clock=48000000
 
-# disable the bluetooth UART use and
-# disable the uart1 alltogether
-dtoverlay=pi3-disable-bt
-dtparam=uart1=off
+# switch the bluetooth UART to the
+# miniuart for basic bluetooth support
+dtoverlay=pi3-miniuart-bt
 
 # disable the splash screen
 disable_splash=1

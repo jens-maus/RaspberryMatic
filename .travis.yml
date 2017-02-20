@@ -1,6 +1,9 @@
 dist: trusty
 language: c
 
+git:
+  depth: 3
+
 addons:
   apt:
       packages:

@@ -17,8 +17,9 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * Real-Time Linux kernel support (`PREEMPT_RT`) to minimize latencies and improve CCU operation properties
 * Read-only root file system to minimize write operations on SD card
 * Support for onboard WiFi and Bluetooth of RaspberryPi3 hardware as well as third-party USB WiFi/Bluetooth sticks
+* Support for Network UPS Tools (NUT) setup including USB connection of UPS as well as NUT server use (e.g. via Synology NAS Network UPS functionality)
 * Auto-resizing `/usr/local` partition to use the full capacity of the SD card
-* Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi))
+* Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi))
 * Hardware WatchDog support automatically rebooting the system upon hardware/lockup problems
 * Direct CloudMatic (meine-homematic.de) support
 * Dedicated Build Environment using a cross compiler (`arm-linux-gcc`) to compile third-party applications

@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Buildroot 2016.11.2-00282-g2a3af0b-dirty Configuration
+# Buildroot 2016.11.2-00284-g71b048e Configuration
 #
 BR2_HAVE_DOT_CONFIG=y
 BR2_HOST_GCC_AT_LEAST_4_5=y
@@ -2026,7 +2026,8 @@ BR2_PACKAGE_KMOD_TOOLS=y
 # BR2_PACKAGE_LXC is not set
 # BR2_PACKAGE_MONIT is not set
 # BR2_PACKAGE_NCDU is not set
-# BR2_PACKAGE_NUT is not set
+BR2_PACKAGE_NUT=y
+BR2_PACKAGE_NUT_DRIVERS=""
 # BR2_PACKAGE_POLKIT is not set
 # BR2_PACKAGE_PROCPS_NG is not set
 # BR2_PACKAGE_PROCRANK_LINUX is not set

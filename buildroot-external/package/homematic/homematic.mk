@@ -25,17 +25,34 @@ endef
 HOMEMATIC_PRE_PATCH_HOOKS += HOMEMATIC_PRE_PATCH
 
 define HOMEMATIC_FINALIZE_TARGET
+
+	# setup /usr/local/etc/config
 	mkdir -p $(TARGET_DIR)/usr/local/etc/config
 	rm -rf $(TARGET_DIR)/etc/config
 	ln -snf ../usr/local/etc/config $(TARGET_DIR)/etc/config
+
+	# shadow file setup
 	touch $(TARGET_DIR)/usr/local/etc/config/shadow
 	rm -f $(TARGET_DIR)/etc/shadow
 	ln -snf config/shadow $(TARGET_DIR)/etc/shadow
+
+	# relink resolv.conf to /var/etc
 	rm -f $(TARGET_DIR)/etc/resolv.conf
 	ln -snf ../var/etc/resolv.conf $(TARGET_DIR)/etc/resolv.conf
+
+	# relink the NUT config files
+	ln -snf config/upssched.conf $(TARGET_DIR)/etc/upssched.conf
+	ln -snf config/upsmon.conf $(TARGET_DIR)/etc/upsmon.conf
+	ln -snf config/upsd.conf $(TARGET_DIR)/etc/upsd.conf
+	ln -snf config/upsd.users $(TARGET_DIR)/etc/upsd.users
+	ln -snf config/ups.conf $(TARGET_DIR)/etc/ups.conf
+	ln -snf config/nut.conf $(TARGET_DIR)/etc/nut.conf
+
+	# remove obsolete init.d jobs
 	rm -f $(TARGET_DIR)/etc/init.d/S20urandom
 	rm -f $(TARGET_DIR)/etc/init.d/S49ntp
 	rm -f $(TARGET_DIR)/etc/init.d/S60openvpn
+
 endef
 TARGET_FINALIZE_HOOKS += HOMEMATIC_FINALIZE_TARGET
 

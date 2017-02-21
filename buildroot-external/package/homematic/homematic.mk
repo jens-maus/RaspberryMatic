@@ -40,6 +40,9 @@ define HOMEMATIC_FINALIZE_TARGET
 	rm -f $(TARGET_DIR)/etc/resolv.conf
 	ln -snf ../var/etc/resolv.conf $(TARGET_DIR)/etc/resolv.conf
 
+	# remove the local wpa_supplicant config
+	rm -f $(TARGET_DIR)/etc/wpa_supplicant.conf
+
 	# relink the NUT config files
 	ln -snf config/upssched.conf $(TARGET_DIR)/etc/upssched.conf
 	ln -snf config/upsmon.conf $(TARGET_DIR)/etc/upsmon.conf

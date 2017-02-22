@@ -2,3 +2,5 @@
 /build-*/
 /buildroot-????.??*
 /download
+/*.zip
+/*.img

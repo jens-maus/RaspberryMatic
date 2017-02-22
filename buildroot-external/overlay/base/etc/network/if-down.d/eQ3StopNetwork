@@ -1,11 +1,14 @@
 #!/bin/sh
 
-
 mkdir -p /var/status
 
 rm -f /var/status/hasLink
 rm -f /var/status/hasIP
 rm -f /var/status/hasInternet
 rm -f /var/status/hasNTP
+
+if [[ ${IFACE} == "wlan0" ]]; then
+  killall -q wpa_supplicant
+fi
 
 exit 0

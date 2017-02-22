@@ -3,10 +3,6 @@ iface lo inet loopback
 
 auto eth0
 iface eth0 inet manual
-  wait-delay 15
 
 auto wlan0
-iface wlan0 inet dhcp
-  wireless-essid wrt2
-  pre-up [ -e /etc/config/wpa_supplicant.conf ] && wpa_supplicant -B w -D wext -i wlan0 -c /etc/config/wpa_supplicant.conf -dd
-  post-down killall -q wpa_supplicant
+iface wlan0 inet manual

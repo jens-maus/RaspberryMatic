@@ -1,16 +1,7 @@
-#! /bin/sh
-### BEGIN INIT INFO
-# Provides: bluetooth
-# Required-Start:    $local_fs $syslog $remote_fs dbus
-# Required-Stop:     $local_fs $syslog $remote_fs
-# Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
-# Short-Description: Start bluetooth daemons
-### END INIT INFO
+#!/bin/sh
 #
-# bluez    Bluetooth subsystem starting and stopping
+# Bluetooth subsystem starting and stopping
 #
-# originally from bluez's scripts/bluetooth.init
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 DESC=bluetooth
@@ -18,54 +9,62 @@ DESC=bluetooth
 DAEMON=/usr/libexec/bluetooth/bluetoothd
 HCIATTACH=/usr/bin/hciattach
 HCICONFIG=/usr/bin/hciconfig
-SDPTOOL=/usr/bin/sdptool
+DEVICE=/dev/ttyS1
 
 SSD_OPTIONS="--oknodo --quiet --exec $DAEMON -- --compat"
 
 test -f $DAEMON || exit 0
 
-
-hci_attach()
-{
-	$HCIATTACH /dev/ttyAMA0 bcm43xx 921600 noflow-
-	$HCICONFIG hci0 up	
-}
-
 case $1 in
   start)
+    echo -n "Starting bluetooth: "
+    if [ -e ${DEVICE} ]; then
+      # first call will flash the firmware
+	    $HCIATTACH $DEVICE bcm43xx 921600 noflow - 2>/dev/null >/dev/null
+      echo -n "."
 
-	if test "$BLUETOOTH_ENABLED" = 0; then
-		log_progress_msg "disabled. see /etc/default/bluetooth"
-		log_end_msg 0
-		exit 0
-	fi
+      # second call initializes the bluetooth device
+      if [ $? -eq 1 ]; then
+	      $HCIATTACH $DEVICE bcm43xx 921600 noflow - 2>/dev/null >/dev/null
+        echo -n "."
+      fi
 
-	hci_attach	
-	
-	start-stop-daemon --start --background $SSD_OPTIONS
-	
+      # bring hci0 up
+      hciconfig dev 2>/dev/null >/dev/null
+      if [ $? -eq 0 ]; then
+	      $HCICONFIG hci0 up
+
+	      start-stop-daemon --start --background $SSD_OPTIONS
+        echo "OK"
+
+        exit 0
+      fi
+
+      echo "WARNING: bcm43xx init failed"
+    else
+      echo "not required"
+	  fi
   ;;
+
   stop)
-	if test "$BLUETOOTH_ENABLED" = 0; then
-		log_progress_msg "disabled."
-		log_end_msg 0
-		exit 0
-	fi
+    echo -n "Stopping bluetooth: "
+	  start-stop-daemon --stop $SSD_OPTIONS
+    echo "OK"
+  ;;
 
-	start-stop-daemon --stop $SSD_OPTIONS
-  ;;
   restart|force-reload)
-	$0 stop
-	sleep 1
-	$0 start
+	  $0 stop
+	  sleep 1
+	  $0 start
   ;;
+
   status)
-	echo "$DAEMON" "$DESC" && exit 0 || exit $?
+	  echo "$DAEMON" "$DESC" && exit 0 || exit $?
   ;;
+
   *)
-	N=/etc/init.d/bluetooth
-	echo "Usage: $N {start|stop|restart|force-reload|status}" >&2
-	exit 1
+	  echo "Usage: $0 {start|stop|restart|force-reload|status}" >&2
+	  exit 1
 	;;
 esac
 

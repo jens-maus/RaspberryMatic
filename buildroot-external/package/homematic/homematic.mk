@@ -51,6 +51,9 @@ define HOMEMATIC_FINALIZE_TARGET
 	ln -snf config/ups.conf $(TARGET_DIR)/etc/ups.conf
 	ln -snf config/nut.conf $(TARGET_DIR)/etc/nut.conf
 
+	# link /etc/firmware to /lib/firmware
+	ln -snf ../lib/firmware $(TARGET_DIR)/etc/
+
 	# remove obsolete init.d jobs
 	rm -f $(TARGET_DIR)/etc/init.d/S20urandom
 	rm -f $(TARGET_DIR)/etc/init.d/S49ntp

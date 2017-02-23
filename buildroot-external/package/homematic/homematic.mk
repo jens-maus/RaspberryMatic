@@ -29,27 +29,28 @@ define HOMEMATIC_FINALIZE_TARGET
 	# setup /usr/local/etc/config
 	mkdir -p $(TARGET_DIR)/usr/local/etc/config
 	rm -rf $(TARGET_DIR)/etc/config
-	ln -snf ../usr/local/etc/config $(TARGET_DIR)/etc/config
+	ln -snf ../usr/local/etc/config $(TARGET_DIR)/etc/
 
 	# shadow file setup
 	touch $(TARGET_DIR)/usr/local/etc/config/shadow
 	rm -f $(TARGET_DIR)/etc/shadow
-	ln -snf config/shadow $(TARGET_DIR)/etc/shadow
+	ln -snf config/shadow $(TARGET_DIR)/etc/
 
 	# relink resolv.conf to /var/etc
 	rm -f $(TARGET_DIR)/etc/resolv.conf
-	ln -snf ../var/etc/resolv.conf $(TARGET_DIR)/etc/resolv.conf
+	ln -snf ../var/etc/resolv.conf $(TARGET_DIR)/etc/
 
 	# remove the local wpa_supplicant config
 	rm -f $(TARGET_DIR)/etc/wpa_supplicant.conf
 
 	# relink the NUT config files
-	ln -snf config/upssched.conf $(TARGET_DIR)/etc/upssched.conf
-	ln -snf config/upsmon.conf $(TARGET_DIR)/etc/upsmon.conf
-	ln -snf config/upsd.conf $(TARGET_DIR)/etc/upsd.conf
-	ln -snf config/upsd.users $(TARGET_DIR)/etc/upsd.users
-	ln -snf config/ups.conf $(TARGET_DIR)/etc/ups.conf
-	ln -snf config/nut.conf $(TARGET_DIR)/etc/nut.conf
+	rm -f $(TARGET_DIR)/etc/upssched.conf.sample
+	rm -f $(TARGET_DIR)/etc/upsmon.conf.sample
+	rm -f $(TARGET_DIR)/etc/upsd.conf.sample
+	rm -f $(TARGET_DIR)/etc/upsd.users.sample
+	rm -f $(TARGET_DIR)/etc/ups.conf.sample
+	rm -f $(TARGET_DIR)/etc/nut.conf.sample
+	ln -snf config/nut $(TARGET_DIR)/etc/
 
 	# link /etc/firmware to /lib/firmware
 	ln -snf ../lib/firmware $(TARGET_DIR)/etc/

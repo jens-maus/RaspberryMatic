@@ -45,12 +45,17 @@ define HOMEMATIC_FINALIZE_TARGET
 
 	# relink the NUT config files
 	rm -f $(TARGET_DIR)/etc/upssched.conf.sample
+	ln -snf config/nut/upssched.conf $(TARGET_DIR)/etc/
 	rm -f $(TARGET_DIR)/etc/upsmon.conf.sample
+	ln -snf config/nut/upsmon.conf $(TARGET_DIR)/etc/
 	rm -f $(TARGET_DIR)/etc/upsd.conf.sample
+	ln -snf config/nut/upsd.conf $(TARGET_DIR)/etc/
 	rm -f $(TARGET_DIR)/etc/upsd.users.sample
+	ln -snf config/nut/upsd.users $(TARGET_DIR)/etc/
 	rm -f $(TARGET_DIR)/etc/ups.conf.sample
+	ln -snf config/nut/ups.conf $(TARGET_DIR)/etc/
 	rm -f $(TARGET_DIR)/etc/nut.conf.sample
-	ln -snf config/nut $(TARGET_DIR)/etc/
+	ln -snf config/nut/nut.conf $(TARGET_DIR)/etc/
 
 	# link /etc/firmware to /lib/firmware
 	ln -snf ../lib/firmware $(TARGET_DIR)/etc/

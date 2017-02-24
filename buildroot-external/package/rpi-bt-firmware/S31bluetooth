@@ -18,23 +18,24 @@ test -f $DAEMON || exit 0
 case $1 in
   start)
     echo -n "Starting bluetooth: "
-    if [ -e ${DEVICE} ]; then
+    if [[ -c ${DEVICE} ]]; then
       # first call will flash the firmware
-	    $HCIATTACH $DEVICE bcm43xx 921600 noflow - 2>/dev/null >/dev/null
-      echo -n "."
+      $HCIATTACH $DEVICE bcm43xx 921600 noflow - 2>/dev/null >/dev/null
 
       # second call initializes the bluetooth device
       if [ $? -eq 1 ]; then
-	      $HCIATTACH $DEVICE bcm43xx 921600 noflow - 2>/dev/null >/dev/null
         echo -n "."
+        $HCIATTACH $DEVICE bcm43xx 921600 noflow - 2>/dev/null >/dev/null
       fi
+
+      echo -n "."
 
       # bring hci0 up
       hciconfig dev 2>/dev/null >/dev/null
       if [ $? -eq 0 ]; then
-	      $HCICONFIG hci0 up
+        $HCICONFIG hci0 up
 
-	      start-stop-daemon --start --background $SSD_OPTIONS
+        start-stop-daemon --start --background $SSD_OPTIONS
         echo "OK"
 
         exit 0
@@ -43,29 +44,29 @@ case $1 in
       echo "WARNING: bcm43xx init failed"
     else
       echo "not required"
-	  fi
+    fi
   ;;
 
   stop)
     echo -n "Stopping bluetooth: "
-	  start-stop-daemon --stop $SSD_OPTIONS
+    start-stop-daemon --stop $SSD_OPTIONS
     echo "OK"
   ;;
 
   restart|force-reload)
-	  $0 stop
-	  sleep 1
-	  $0 start
+    $0 stop
+    sleep 1
+    $0 start
   ;;
 
   status)
-	  echo "$DAEMON" "$DESC" && exit 0 || exit $?
+    echo "$DAEMON" "$DESC" && exit 0 || exit $?
   ;;
 
   *)
-	  echo "Usage: $0 {start|stop|restart|force-reload|status}" >&2
-	  exit 1
-	;;
+    echo "Usage: $0 {start|stop|restart|force-reload|status}" >&2
+    exit 1
+  ;;
 esac
 
 exit 0

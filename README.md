@@ -46,13 +46,14 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [HQ-WebUI](https://github.com/jens-maus/hq-webui)
 * [DB-Access](https://github.com/jens-maus/dbaccess)
 * [QuickAccess](https://github.com/jens-maus/quickaccess)
-* [Script-Parser](https://github.com/jens-maus/scriptparser)
+* [Script-Parser](https://github.com/litti/scriptparser)
 * [WebMatic](https://github.com/ldittmar81/webmatic)
 * [Sonos Player](https://github.com/jens-maus/hm-sonos)
 * [hm2mqtt](https://github.com/owagner/hm2mqtt)
 * [CCU-Historian](https://github.com/jens-maus/hm-ccu-historian)
 * [Watchdog](https://github.com/jens-maus/hm-watchdog)
 * [homeputer CL Studio](http://www.contronics.de/download/homeputer-studio-software.html)
+* [Print / ProgrammeDrucken](https://github.com/litti/hm-print)
 
 ## Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:

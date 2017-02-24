@@ -261,6 +261,12 @@ init() {
                 cp $CFG_TEMPLATE_DIR/shadow /etc/config
         fi
 
+  # copy the NUT config files in place in
+  # case they don't exist yet
+  if [ ! -e /etc/config/nut ] ; then
+    cp -Rp ${CFG_TEMPLATE_DIR}/nut /etc/config/
+  fi
+
 	export TZ=`cat /etc/config/TZ`
 
 	# cal local postinit file

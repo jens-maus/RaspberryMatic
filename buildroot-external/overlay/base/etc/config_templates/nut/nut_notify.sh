@@ -8,4 +8,4 @@
 #
 
 # trigger a HomeMatic alarm message to "Alarmzone 1"
-/usr/bin/triggerAlarm.tcl "${UPSNAME}: ${NOTIFYTYPE}"
+/bin/triggerAlarm.tcl "${UPSNAME}: ${NOTIFYTYPE}"

@@ -16,17 +16,19 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * Linux kernel v4.4.x with hard-float support for RaspberryPi2/3 platform 
 * Real-Time Linux kernel support (`PREEMPT_RT`) to minimize latencies and improve CCU operation properties
 * Read-only root file system to minimize write operations on SD card
-* Auto-resizing `/usr/local` partition to use the full space of the SD card
-* Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi))
-* Hardware WatchDog support automatically rebooting the system upon hardware problems
+* Support for onboard WiFi and Bluetooth of RaspberryPi3 hardware as well as third-party USB WiFi/Bluetooth sticks
+* Support for Network UPS Tools (NUT) setup including USB connection of UPS as well as NUT server use (e.g. via Synology NAS Network UPS functionality)
+* Auto-resizing `/usr/local` partition to use the full capacity of the SD card
+* Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi))
+* Hardware WatchDog support automatically rebooting the system upon hardware/lockup problems
 * Direct CloudMatic (meine-homematic.de) support
-* Build Environment creates a dedicated cross compiler (`arm-linux-gcc`) to compile third-party applications
+* Dedicated Build Environment using a cross compiler (`arm-linux-gcc`) to compile third-party applications
 
 ## Limitations
 * HmIP-RF devices have to be reteached after Config restore from CCU2 (Limitation of HmIP)
-* Updates require complete Backup/Reinstall/Restore procedure
+* Updates require complete Backup->Reinstall->Restore procedure
 * Special HomeMatic CCU Addon packages required (CCU2 versions don't work)
-* No WiFi or Bluetooth support (yet) with RaspberryPi3 or by using external USB-based hardware (WiFi-stick, etc.)
+* No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
 
 ## Requirements
 * [RaspberryPi3](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) or [RaspberryPi2](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
@@ -44,13 +46,14 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [HQ-WebUI](https://github.com/jens-maus/hq-webui)
 * [DB-Access](https://github.com/jens-maus/dbaccess)
 * [QuickAccess](https://github.com/jens-maus/quickaccess)
-* [Script-Parser](https://github.com/jens-maus/scriptparser)
+* [Script-Parser](https://github.com/litti/scriptparser)
 * [WebMatic](https://github.com/ldittmar81/webmatic)
 * [Sonos Player](https://github.com/jens-maus/hm-sonos)
 * [hm2mqtt](https://github.com/owagner/hm2mqtt)
 * [CCU-Historian](https://github.com/jens-maus/hm-ccu-historian)
 * [Watchdog](https://github.com/jens-maus/hm-watchdog)
 * [homeputer CL Studio](http://www.contronics.de/download/homeputer-studio-software.html)
+* [Print / ProgrammeDrucken](https://github.com/litti/hm-print)
 
 ## Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:

@@ -3,4 +3,6 @@ iface lo inet loopback
 
 auto eth0
 iface eth0 inet manual
-  wait-delay 15
+
+auto wlan0
+iface wlan0 inet manual

@@ -4,8 +4,8 @@
 #
 #############################################################
 
-HOMEMATIC_OCCU_VERSION = 2.25.15
-HOMEMATIC_VERSION = b6c9bbd1eac8169de1e933deec2a277895a88bfe
+HOMEMATIC_OCCU_VERSION = 2.26.x
+HOMEMATIC_VERSION = 0bb903aa96351fccdfc67d3ada01f376103f45ed
 HOMEMATIC_SITE = $(call github,eq-3,occu,$(HOMEMATIC_VERSION))
 
 HOMEMATIC_MODULE_SUBDIRS = kernel-modules/bcm2835_raw_uart kernel-modules/eq3_char_loop
@@ -25,17 +25,46 @@ endef
 HOMEMATIC_PRE_PATCH_HOOKS += HOMEMATIC_PRE_PATCH
 
 define HOMEMATIC_FINALIZE_TARGET
+
+	# setup /usr/local/etc/config
 	mkdir -p $(TARGET_DIR)/usr/local/etc/config
 	rm -rf $(TARGET_DIR)/etc/config
-	ln -snf ../usr/local/etc/config $(TARGET_DIR)/etc/config
+	ln -snf ../usr/local/etc/config $(TARGET_DIR)/etc/
+
+	# shadow file setup
 	touch $(TARGET_DIR)/usr/local/etc/config/shadow
 	rm -f $(TARGET_DIR)/etc/shadow
-	ln -snf config/shadow $(TARGET_DIR)/etc/shadow
+	ln -snf config/shadow $(TARGET_DIR)/etc/
+
+	# relink resolv.conf to /var/etc
 	rm -f $(TARGET_DIR)/etc/resolv.conf
-	ln -snf ../var/etc/resolv.conf $(TARGET_DIR)/etc/resolv.conf
+	ln -snf ../var/etc/resolv.conf $(TARGET_DIR)/etc/
+
+	# remove the local wpa_supplicant config
+	rm -f $(TARGET_DIR)/etc/wpa_supplicant.conf
+
+	# relink the NUT config files
+	rm -f $(TARGET_DIR)/etc/upssched.conf.sample
+	ln -snf config/nut/upssched.conf $(TARGET_DIR)/etc/
+	rm -f $(TARGET_DIR)/etc/upsmon.conf.sample
+	ln -snf config/nut/upsmon.conf $(TARGET_DIR)/etc/
+	rm -f $(TARGET_DIR)/etc/upsd.conf.sample
+	ln -snf config/nut/upsd.conf $(TARGET_DIR)/etc/
+	rm -f $(TARGET_DIR)/etc/upsd.users.sample
+	ln -snf config/nut/upsd.users $(TARGET_DIR)/etc/
+	rm -f $(TARGET_DIR)/etc/ups.conf.sample
+	ln -snf config/nut/ups.conf $(TARGET_DIR)/etc/
+	rm -f $(TARGET_DIR)/etc/nut.conf.sample
+	ln -snf config/nut/nut.conf $(TARGET_DIR)/etc/
+
+	# link /etc/firmware to /lib/firmware
+	ln -snf ../lib/firmware $(TARGET_DIR)/etc/
+
+	# remove obsolete init.d jobs
 	rm -f $(TARGET_DIR)/etc/init.d/S20urandom
 	rm -f $(TARGET_DIR)/etc/init.d/S49ntp
 	rm -f $(TARGET_DIR)/etc/init.d/S60openvpn
+
 endef
 TARGET_FINALIZE_HOOKS += HOMEMATIC_FINALIZE_TARGET
 

@@ -19,9 +19,8 @@ gpu_mem_256=100
 gpu_mem_512=100
 gpu_mem_1024=100
 
-dtparam=i2c_arm=on
-dtparam=i2s=on
-dtparam=spi=on
+# enable i2c,i2s and spi
+dtparam=i2c_arm=on,i2s=on,spi=on
 
 # enable the UART
 enable_uart=1
@@ -29,10 +28,15 @@ enable_uart=1
 # make sure the uart is running at 48MHz
 init_uart_clock=48000000
 
-# disable the bluetooth UART use and
-# disable the uart1 alltogether
-dtoverlay=pi3-disable-bt
-dtparam=uart1=off
+# switch the bluetooth UART to the miniuart
+# for basic bluetooth support and fix core_freq
+dtoverlay=pi3-miniuart-bt
+core_freq=250
+
+# for disabling bluetooth alltogether
+# you can uncomment the following two lines
+#dtoverlay=pi3-disable-bt
+#dtparam=uart1=off
 
 # disable the splash screen
 disable_splash=1

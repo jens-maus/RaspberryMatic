@@ -1,0 +1,113 @@
+#!/bin/sh
+#
+# init script for starting NUT (UPS) services
+#
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DESC="NUT - Network UPS Tools"
+
+UPSMON=/usr/sbin/upsmon
+UPSMON_PID=/var/run/upsmon.pid
+UPSMON_OPTIONS=
+UPSMON_CONF=/etc/config/nut/upsmon.conf
+UPSDRVCTRL=/usr/sbin/upsdrvctl
+UPSD=/usr/sbin/upsd
+UPSD_PID=/var/run/upsd.pid
+UPSD_OPTIONS=
+NUT_CONFIG=/etc/config/nut/nut.conf
+
+# exit if the package is not installed
+[ -x ${UPSMON} ] || exit 0
+
+# include nut.conf
+[ -r ${NUT_CONFIG} ] && . ${NUT_CONFIG}
+
+case $1 in
+  start)
+    echo -n "Starting NUT services: "
+    # start the server (upsdrvctl/upsd)
+    case "${MODE}" in
+      standalone|netserver)
+        # First, start UPS drivers
+        ${UPSDRVCTRL} start 2>&1 >/dev/null
+        if [ $? -ne 0 ]; then
+          echo -n "WARNING: UPS driver startup failed"
+        fi
+        # Start data server (upsd)
+        start-stop-daemon -S -q -p ${UPSD_PID} -x ${UPSD} -- ${UPSD_OPTIONS} 2>/dev/null >/dev/null
+        echo -n "."
+      ;;
+    esac
+
+    # start the client (upsmon)
+    if [[ -r ${UPSMON_CONF} ]]; then
+      case "${MODE}" in
+        standalone|netserver|netclient)
+          start-stop-daemon -S -q -p ${UPSMON_PID} -x ${UPSMON} -- ${UPSMON_OPTIONS} 2>/dev/null >/dev/null
+          echo "OK"
+          exit 0
+        ;;
+      esac
+    fi
+    echo "disabled"
+    exit 1
+  ;;
+
+  stop)
+    echo -n "Stopping NUT services: "
+    start-stop-daemon -K -o -q -p ${UPSMON_PID} -n upsmon
+    case "${MODE}" in
+      standalone|netserver)
+        echo -n "."
+        start-stop-daemon -K -o -q -p ${UPSD_PID} -n upsd
+        ${UPSDRVCTRL} stop 2>/dev/null >/dev/null
+      ;;
+    esac
+    echo "OK"
+  ;;
+
+  reload)
+    ${UPSD} -c reload 2>/dev/null >/dev/null
+    ${UPSMON} -c reload 2>/dev/null >/dev/null
+  ;;
+
+  restart|force-reload)
+    $0 stop
+    sleep 1
+    $0 start
+  ;;
+
+  status)
+    echo "nut" "$DESC" && exit 0 || exit $?
+  ;;
+
+  poweroff)
+    wait_delay=$(sed -ne 's#^ *POWEROFF_WAIT= *\(.*\)$#\1#p' ${NUT_CONFIG})
+    case "${MODE}" in
+      standalone|netserver)
+        echo -n "Shutting down UPS: "
+        ${UPSDRVCTL} shutdown 2>&1 >/dev/null
+        if [ $? -eq 0 ]; then
+          echo -n "waiting for UPS to cut power... "
+        else
+          echo -n "shutdown failed. waiting for UPS to run down... "
+        fi
+
+        if [[ -n ${wait_delay} ]]; then
+          echo "will reboot after ${wait_delay} seconds... OK"
+          sleep "${wait_delay}"
+          /sbin/reboot
+        else
+          echo "OK"
+        fi
+      ;;
+    esac
+  ;;
+
+  *)
+    echo "Usage: $0 {start|stop|reload|restart|force-reload|status|poweroff}" >&2
+    exit 1
+  ;;
+esac
+
+exit 0

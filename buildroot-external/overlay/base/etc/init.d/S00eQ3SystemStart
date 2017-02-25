@@ -62,26 +62,43 @@ checkFactoryReset() {
 }
 
 # initialize a potentially existing RTC clock
-init_rtc() {
+init_rtc_device() {
+
+  # only continue if we don't have a valid rtc yet
+  [ -e /dev/rtc0 ] && return 0
+
   # load the common i2c kernel modules
   modprobe i2c_bcm2708
   modprobe i2c-dev
 
-  # check for PiFace Shim RTC (MCP7940N) at 0x6f
-  i2cset -y 1 0x6f 0x08 0x47 2>/dev/null >/dev/null
+  # check for MCP7940N RTC clock at 0x6f (PiFace Shim RTC)
+  i2cget -y 1 0x6f 2>/dev/null >/dev/null
   if [ $? -eq 0 ]; then
+    # calibrate MCP7940N
+    i2cset -y 1 0x6f 0x08 0x47 2>/dev/null >/dev/null
     modprobe i2c:mcp7941x
     echo mcp7941x 0x6f >/sys/class/i2c-dev/i2c-1/device/new_device
-    hwclock --hctosys --utc
-  else
-    # check for DS3231 RTC clock at 0x6e
-    i2cget -y 1 0x68 2>/dev/null >/dev/null
-    if [ $? -eq 0 ]; then
-      modprobe i2c:ds3231
-      echo ds3231 0x68 >/sys/class/i2c-dev/i2c-1/device/new_device
-      hwclock --hctosys --utc
-    fi
+    [ -e /dev/rtc0 ] && return 0
+    echo 0x6f >/sys/class/i2c-dev/i2c-1/device/delete_device
   fi
+
+  # check for DS3231/DS1307 RTC clock at 0x68
+  i2cget -y 1 0x68 2>/dev/null >/dev/null
+  if [ $? -eq 0 ]; then
+    # check for DS3231
+    modprobe i2c:ds3231
+    echo ds3231 0x68 >/sys/class/i2c-dev/i2c-1/device/new_device
+    [ -e /dev/rtc0 ] && return 0
+    echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
+
+    # check for DS1307
+    modprobe i2c:ds1307
+    echo ds1307 0x68 >/sys/class/i2c-dev/i2c-1/device/new_device
+    [ -e /dev/rtc0 ] && return 0
+    echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
+  fi
+
+  return 1
 }
 
 # we have to initialize /dev/urandom way earlier than the system usually
@@ -136,7 +153,10 @@ init() {
   identify_host
 
   # init a potentially existing rtc clock
-  init_rtc
+  init_rtc_device
+  if [ -e /dev/rtc0 ]; then
+    hwclock --hctosys --utc
+  fi
 
   # init /dev/urandom
   init_urandom
@@ -146,6 +166,12 @@ init() {
 
   # load tunneling interface support
   modprobe tun
+
+  # if /dev/ttyS0 is present move it to ttyS1 for
+  # potentiall later use (e.g. bluetooth)
+  if [[ -c /dev/ttyS0 ]]; then
+    mv /dev/ttyS0 /dev/ttyS1
+  fi
 
   # depending on the HomeMatic mode (HmRF, HmIP) we
   # have to load different kernel modules.
@@ -198,6 +224,8 @@ init() {
         chmod 775 /var/lib
         mkdir /var/lib/misc
         chmod 775 /var/lib/misc
+        mkdir /var/lib/dbus
+        chmod 775 /var/lib/dbus
         mkdir /var/empty
         chmod 600 /var/empty
         mkdir /var/etc
@@ -232,6 +260,12 @@ init() {
         if [ ! -s /etc/config/shadow ] ; then
                 cp $CFG_TEMPLATE_DIR/shadow /etc/config
         fi
+
+  # copy the NUT config files in place in
+  # case they don't exist yet
+  if [ ! -e /etc/config/nut ] ; then
+    cp -Rp ${CFG_TEMPLATE_DIR}/nut /etc/config/
+  fi
 
 	export TZ=`cat /etc/config/TZ`
 

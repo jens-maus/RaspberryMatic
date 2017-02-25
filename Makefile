@@ -1,8 +1,9 @@
-BOARD=raspberrypi3
-# BOARD=X86_32_docker
+BOARD=raspmatic_rpi
+# BOARD=raspmatic_docker
 BUILDROOT_VERSION=2016.11.2
 RBE_VERSION=0.1.0
 
+.PHONY: all
 all: usage
 
 usage:
@@ -16,15 +17,19 @@ buildroot-$(BUILDROOT_VERSION).tar.bz2:
 
 BUILDROOT_PATCHES=$(wildcard buildroot-patches/*.patch)
 
-buildroot-$(BUILDROOT_VERSION): buildroot-$(BUILDROOT_VERSION).tar.bz2
+buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.bz2
 	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; for p in `ls buildroot-patches`; do patch -d buildroot-$(BUILDROOT_VERSION) -p1 < buildroot-patches/$${p}; done; fi
 
-build-$(BOARD)/.config: buildroot-$(BUILDROOT_VERSION)
+build-$(BOARD): | buildroot-$(BUILDROOT_VERSION) download
 	mkdir -p build-$(BOARD)
-	mkdir -p download
-	cp Config.$(BOARD) build-$(BOARD)/.config
 
-dist: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config
+download: buildroot-$(BUILDROOT_VERSION)
+	mkdir -p download
+
+build-$(BOARD)/.config: | build-$(BOARD) buildroot-external/configs/$(BOARD)_defconfig
+	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external $(BOARD)_defconfig
+
+dist: | buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config
 	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
 
 clean:
@@ -32,6 +37,7 @@ clean:
 
 distclean: clean
 	rm -f buildroot-$(BUILDROOT_VERSION).tar.bz2
+	rm -rf download
 
 mount:
 	sudo kpartx -av build-$(BOARD)/images/sdcard.img
@@ -42,8 +48,8 @@ umount:
 	sudo umount /mnt/p2
 	sudo kpartx -dv build-$(BOARD)/images/sdcard.img
 
-xconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config
-	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external xconfig && cp .config ../Config.$(BOARD)
+menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig
 
-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config
-	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig && cp .config ../Config.$(BOARD)
+savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external savedefconfig BR2_DEFCONFIG=../buildroot-external/configs/$(BOARD)_defconfig

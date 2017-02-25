@@ -139,6 +139,8 @@ proc Firewall_configureFirewall { } {
 	exec_cmd "/usr/sbin/iptables -F"
 	exec_cmd "/usr/sbin/iptables -P INPUT ACCEPT"
 	exec_cmd "/usr/sbin/iptables -A INPUT -i lo -j ACCEPT"
+	exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 8182 -j DROP"
+
 
 	foreach serviceName [array names Firewall_SERVICES] {
 		array set service $Firewall_SERVICES($serviceName)

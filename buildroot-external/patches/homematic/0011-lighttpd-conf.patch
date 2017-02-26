@@ -1,5 +1,5 @@
---- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig	2016-12-16 13:49:23.735339891 +0100
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2016-12-16 13:48:51.924093355 +0100
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig	2017-02-26 00:34:20.519204768 +0100
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-02-26 00:32:24.649889528 +0100
 @@ -14,10 +14,10 @@
  ## chroot example aswell.
  ##
@@ -13,3 +13,12 @@
  
  ## 
  ## run the server chrooted.
+@@ -90,7 +90,7 @@
+ ##
+ ## Use IPv6?
+ ##
+-# server.use-ipv6 = "enable"
++server.use-ipv6 = "enable"
+ 
+ ##
+ ## bind to a specific IP

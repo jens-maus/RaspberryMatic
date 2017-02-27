@@ -3,7 +3,7 @@
 RESOLV_CONF=/var/etc/resolv.conf
 CONFIGURL=/var/configurl
 
-action=$1
+action=${1}
 nfsroot=false
 
 if grep -q nfsroot /proc/cmdline ; then
@@ -16,44 +16,44 @@ handle_deconfig() {
   if [[ ${nfsroot} == true ]]; then
       exit 0
   fi
-  /sbin/ifconfig $interface up
-  /sbin/ifconfig $interface 0.0.0.0
+  /sbin/ifconfig ${interface} up
+  /sbin/ifconfig ${interface} 0.0.0.0
 }
 
 handle_renew() {
 
   # bring interface up if not nfs rooted
   if [[ ${nfsroot} == false ]]; then
-    /sbin/ifconfig $interface $ip broadcast $broadcast netmask $subnet
-    eq3configcmd netconfigcmd -i $ip -n $subnet -g $router
-    export j=1;
-    for i in $dns; do
-      eq3configcmd netconfigcmd -d$j $i
-      export j=`expr $j + 1`
+    /sbin/ifconfig ${interface} ${ip} broadcast ${broadcast} netmask ${subnet}
+    eq3configcmd netconfigcmd -i ${ip} -n ${subnet} -g ${router}
+    export j=1
+    for i in ${dns}; do
+      eq3configcmd netconfigcmd -d${j} ${i}
+      export j=$(expr ${j} + 1)
     done
   fi
 
   # add default routes
-  if [ -n "$router" ]; then
+  if [[ -n "${router}" ]]; then
     # delete all default routers
-    while route del default gw 0.0.0.0 dev $interface 2>/dev/null; do
+    while route del default gw 0.0.0.0 dev ${interface} 2>/dev/null; do
       :
     done
 
-    for i in $router; do
-      route add default gw $i dev $interface
+    for i in ${router}; do
+      route add default gw ${i} dev ${interface}
     done
   fi
 
   # check for boot file
-  [ -n "$boot_file" ] && echo $boot_file > $CONFIGURL
+  [[ -n "${boot_file}" ]] && echo ${boot_file} >${CONFIGURL}
 
   # take care of resolv.conf
-  rm -f $RESOLV_CONF 2>/dev/null
-  [ -n "$domain" ] && echo domain $domain >> $RESOLV_CONF
-  [ -n "$search" ] && echo search $search >> $RESOLV_CONF
-  for i in $dns ; do
-    echo nameserver $i >> $RESOLV_CONF
+  rm -f ${RESOLV_CONF} 2>/dev/null
+  [[ -n "$domain" ]] && echo domain ${domain} >>${RESOLV_CONF}
+  [[ -n "$search" ]] && echo search ${search} >>${RESOLV_CONF}
+  for i in ${dns}; do
+    echo nameserver ${i} >>${RESOLV_CONF}
   done
 
   # flag as having a proper ip

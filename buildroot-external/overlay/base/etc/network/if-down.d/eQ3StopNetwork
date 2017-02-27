@@ -7,8 +7,11 @@ rm -f /var/status/hasIP
 rm -f /var/status/hasInternet
 rm -f /var/status/hasNTP
 
-if [[ ${IFACE} == "wlan0" ]]; then
-  killall -q wpa_supplicant
-fi
+# stop WPA Supplicant if this is a WiFi connection
+case ${IFACE} in
+  wlan*)
+    killall -q wpa_supplicant
+  ;;
+esac
 
 exit 0

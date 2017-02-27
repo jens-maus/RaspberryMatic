@@ -3,7 +3,7 @@
 # only continue if another interface hasn't
 # setup everything correctly already
 if [[ -e /var/status/hasIP ]]; then
-  exit 1
+  exit 0
 fi
 
 # we exit if if-up.d is called for "lo"
@@ -12,24 +12,25 @@ if [[ ${IFACE} == "lo" ]]; then
 fi
 
 # make sure iface is really up
-opstate=$(cat /sys/class/net/${IFACE}/operstate)
-if [[ $opstate = "down" ]]; then
+if [[ $(cat /sys/class/net/${IFACE}/operstate) == "down" ]]; then
   /sbin/ifconfig ${IFACE} up
   sleep 5
 fi
 
 # start WPA Supplicant if this is a WiFi connection
-if [[ ${IFACE} == "wlan0" ]]; then
-  if [[ -e /etc/config/wpa_supplicant.conf ]]; then
-    /usr/sbin/wpa_supplicant -B w -D wext -i wlan0 -c /etc/config/wpa_supplicant.conf -dd
-  else
-    exit 1
-  fi
-fi
+case ${IFACE} in
+  wlan*)
+    if [[ -e /etc/config/wpa_supplicant.conf ]]; then
+      /usr/sbin/wpa_supplicant -B w -D wext -i ${IFACE} -c /etc/config/wpa_supplicant.conf -dd
+    else
+      exit 0
+    fi
+  ;;
+esac
 
 # cleanup first
 RESOLV_CONF=/var/etc/resolv.conf
-rm -f $RESOLV_CONF
+rm -f ${RESOLV_CONF}
 mkdir -p /var/status
 rm -f /var/status/hasLink
 rm -f /var/status/hasIP
@@ -63,61 +64,64 @@ fi
 killall -q udhcpc
 
 # if DHCP is enabled we run udhcpc
-if [[ ${MODE} == "DHCP" ]]; then
-  # quit after first check
-  udhcpc -b -t 100 -T 3 -S -x hostname:${HOSTNAME} -i ${IFACE} -C -F ${HOSTNAME} -V eQ3-CCU2 -s /bin/dhcp.script -p /var/run/udhcpc_${IFACE}.pid
-  if [[ ! -f "/var/run/udhcpc_${IFACE}.pid" ]]; then
-    killall checkDHCP
-    /bin/checkDHCP ${IFACE} &
-  fi
+case ${MODE} in
 
-  exit 0
-fi
+  # if DHCP is enabled we "only" run udhcpc
+  DHCP)
+    /sbin/udhcpc -b -t 100 -T 3 -S -x hostname:${HOSTNAME} -i ${IFACE} -C -F ${HOSTNAME} -V eQ3-CCU2 -s /bin/dhcp.script -p /var/run/udhcpc_${IFACE}.pid
+    if [[ ! -f "/var/run/udhcpc_${IFACE}.pid" ]]; then
+      killall checkDHCP
+      /bin/checkDHCP ${IFACE} &
+    fi
+  ;;
 
-has_carrier=$(cat /sys/class/net/${IFACE}/carrier)
+  # everything else means we are setting a static IP
+  *)
+    if [[ $(cat /sys/class/net/${IFACE}/carrier) -eq 1 ]]; then
+      echo "${IFACE}: link detected"
+      touch /var/status/hasLink
+    else
+      echo "${IFACE}: no link detected"
+      exit 1
+    fi
 
-if [ $has_carrier -eq 1 ] ; then
-  echo "${IFACE} carrier detected"
-  touch /var/status/hasLink
-else
-  echo "${IFACE} no carrier detected"
-  exit 1
-fi
+    /sbin/ifconfig ${IFACE} ${IP} netmask ${NETMASK}
+    /sbin/route del default 2>/dev/null
+    /sbin/route add default gw ${GATEWAY}
 
-ifconfig ${IFACE} $IP netmask $NETMASK
-route del default 2>/dev/null
-route add default gw $GATEWAY
+    if [[ -n ${NAMESERVER1} ]]; then
+      echo nameserver ${NAMESERVER1} >>${RESOLV_CONF}
+    fi
 
-if [ ! -z "$NAMESERVER1" ] ; then
-  echo nameserver $NAMESERVER1 >>$RESOLV_CONF
-fi
+    if [[ -n ${NAMESERVER2} ]]; then
+      echo nameserver ${NAMESERVER2} >>${RESOLV_CONF}
+    fi
 
-if [ ! -z "$NAMESERVER2" ] ; then
-  echo nameserver $NAMESERVER2 >>$RESOLV_CONF
-fi
+    # update CURRENT_XYZ in /etc/config/netconfig
 
-# update CURRENT_XYZ in /etc/config/netconfig
+    # update /etc/config/netconfig
+    eq3configcmd netconfigcmd -i ${IP} -g ${GATEWAY} -n ${NETMASK}
 
-# update /etc/config/netconfig
-eq3configcmd netconfigcmd -i $IP -g $GATEWAY -n $NETMASK
+    if [[ -n ${NAMESERVER1} ]]; then
+      eq3configcmd netconfigcmd -d1 ${NAMESERVER1}
+    else
+      eq3configcmd netconfigcmd -d1 ""
+    fi
 
-if [ ! -z "$NAMESERVER1" ] ; then
-  eq3configcmd netconfigcmd -d1 $NAMESERVER1
-else
-  eq3configcmd netconfigcmd -d1 ""
-fi
+    if [[ -n ${NAMESERVER2} ]]; then
+      eq3configcmd netconfigcmd -d2 ${NAMESERVER2}
+    else
+      eq3configcmd netconfigcmd -d2 ""
+    fi
 
-if [ ! -z "$NAMESERVER2" ] ; then
-  eq3configcmd netconfigcmd -d2 $NAMESERVER2
-else
-  eq3configcmd netconfigcmd -d2 ""
-fi
+    touch /var/status/hasIP
 
-touch /var/status/hasIP
+    # check internet connection; use fix ip because no nameserver (nfs boot)
+    if ping -W 5 -c 1 google.com >/dev/null 2>/dev/null; then
+      touch /var/status/hasInternet
+    fi
+  ;;
 
-# check internet connection; use fix ip because no nameserver (nfs boot) 
-if ping -W 5 -c 1 google.com >/dev/null; then
-  touch /var/status/hasInternet
-fi
+esac
 
 exit 0

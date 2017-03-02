@@ -16,8 +16,9 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * Linux kernel v4.4.x with hard-float support for RaspberryPi2/3 platform 
 * Real-Time Linux kernel support (`PREEMPT_RT`) to minimize latencies and improve CCU operation properties
 * Read-only root file system to minimize write operations on SD card
-* Support for onboard WiFi and Bluetooth of RaspberryPi3 hardware as well as third-party USB WiFi/Bluetooth sticks
-* Support for Network UPS Tools (NUT) setup including USB connection of UPS as well as NUT server use (e.g. via Synology NAS Network UPS functionality)
+* Supports onboard WiFi and Bluetooth of RaspberryPi3 hardware as well as third-party USB WiFi/Bluetooth sticks
+* Supports Network UPS Tools (NUT) setup including USB connection of UPS as well as NUT server use (e.g. via Synology NAS Network UPS functionality)
+* IPv6 support and default HTTPS enabled WebUI support
 * Auto-resizing `/usr/local` partition to use the full capacity of the SD card
 * Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi))
 * Hardware WatchDog support automatically rebooting the system upon hardware/lockup problems
@@ -78,6 +79,8 @@ Building your own RaspberryMatic sd card image is a very straight forward proces
 $ git clone https://github.com/jens-maus/RaspberryMatic
 $ cd RaspberryMatic
 $ make dist
+[wait up to 1h]
+$ sudo dd if=build-raspmatic_rpi/images/sdcard.img of=/dev/sdX bs=4096
 ```
 
 ### Using the generated cross compiler
@@ -85,7 +88,7 @@ After a successfull build of RaspberryMatic a dedicated cross compiler (`arm-lin
 
 ```
 $ cd HelloWorld
-$ <path-to-RaspberryMatic-build>/build-raspberrypi3/host/usr/bin/arm-linux-gcc -o HelloWorld HelloWorld.c
+$ <path-to-RaspberryMatic-build>/build-raspmatic_rpi/host/usr/bin/arm-linux-gcc -o HelloWorld HelloWorld.c
 ```
 
 ## License

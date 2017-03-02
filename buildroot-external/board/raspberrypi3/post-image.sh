@@ -9,13 +9,6 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 cp "${BR2_EXTERNAL_RASPBERRYMATIC_PATH}/board/${BOARD_NAME}/cmdline.txt" "${BINARIES_DIR}/rpi-firmware/"
 cp "${BR2_EXTERNAL_RASPBERRYMATIC_PATH}/board/${BOARD_NAME}/config.txt" "${BINARIES_DIR}/rpi-firmware/"
 
-# Mark the kernel as DT-enabled
-mkdir -p "${BINARIES_DIR}/kernel-marked"
-${HOST_DIR}/usr/bin/mkknlimg "${BINARIES_DIR}/zImage" \
-	"${BINARIES_DIR}/kernel-marked/zImage"
-
-rm -rf "${GENIMAGE_TMP}"
-
 #
 # Create user filesystem
 #
@@ -28,6 +21,8 @@ mke2img -d ${BUILD_DIR}/userfs -G 4 -R 1 -B 300 -o ${BINARIES_DIR}/userfs.ext4
 # VERSION File
 #
 cp ${TARGET_DIR}/boot/VERSION ${BINARIES_DIR}
+
+rm -rf "${GENIMAGE_TMP}"
 
 genimage                           \
 	--rootpath "${TARGET_DIR}"     \

@@ -12,7 +12,7 @@ The RaspberryMatic project is a collaborate effort to provide a [Linux/buildroot
 * Fully HomeMatic CCU system compliant supporting latest [OCCU](https://github.com/eq-3/occu) software releases
 * Full BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatibility
 * Self-contained SD card image primarily targeted for RaspberryPi hardware
-* Up to date [Buildroot](http://buildroot.org/) 2016.XX Linux environment
+* Up to date [Buildroot](http://buildroot.org/) 2017.02 Linux environment
 * Linux kernel v4.4.x with hard-float support for RaspberryPi2/3 platform 
 * Real-Time Linux kernel support (`PREEMPT_RT`) to minimize latencies and improve CCU operation properties
 * Read-only root file system to minimize write operations on SD card

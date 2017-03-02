@@ -6,24 +6,21 @@
 start() {
 	echo -n "Starting lighttpd: "
 	export TZ=`cat /etc/config/TZ`
-	start-stop-daemon -S -q -p /var/run/lighttpd.pid --exec /usr/sbin/lighttpd -- -f /etc/lighttpd/lighttpd.conf
+	if [[ ! -f /etc/config/server.pem ]]; then
+          echo -n "."
+          /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
+                                                 -out /etc/config/server.pem \
+                                                 -days 3650 \
+                                                 -subj "/C=DE/O=HomeMatic/OU=$(cat /var/board_serial)/CN=$(hostname)" 2>/dev/null >/dev/null
+        fi
 
-	echo "OK"
-	if [ -f /etc/config/server.pem ] ; then
-		echo -n "Starting lighttpd (SSL): "
-		start-stop-daemon -S -q -p /var/run/lighttpd_ssl.pid --exec /usr/sbin/lighttpd -- -f /etc/lighttpd/lighttpd_ssl.conf
-		echo "OK"
-	fi
+	start-stop-daemon -S -q -p /var/run/lighttpd.pid --exec /usr/sbin/lighttpd -- -f /etc/lighttpd/lighttpd.conf
+	[[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
 }
 stop() {
-	if [ -f /etc/config/server.pem ] ; then
-		echo -n "Stopping lighttpd (SSL): "
-		start-stop-daemon -K -q -p /var/run/lighttpd_ssl.pid
-		echo "OK"
-	fi
 	echo -n "Stopping lighttpd: "
 	start-stop-daemon -K -q -p /var/run/lighttpd.pid
-	echo "OK"
+	[[ ! -f /var/run/lighttpd.pid ]] && echo "OK" || echo "ERROR"
 }
 restart() {
 	stop

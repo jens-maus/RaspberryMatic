@@ -34,7 +34,10 @@ install_linuxbasis_arch:
 	cp -R $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/* $(TARGET_DIR)
 
 install_lighttpd_arch:
-	cp -R $(OCCU_ARCH)/packages/lighttpd/etc/* $(TARGET_DIR)/etc
+	mkdir -p $(TARGET_DIR)/etc/lighttpd
+	cp -R $(OCCU_ARCH)/packages/lighttpd/etc/lighttpd/conf.d $(TARGET_DIR)/etc/lighttpd/
+	cp -a $(OCCU_ARCH)/packages/lighttpd/etc/lighttpd/lighttpd.conf $(TARGET_DIR)/etc/lighttpd/
+	cp -a $(OCCU_ARCH)/packages/lighttpd/etc/lighttpd/modules.conf $(TARGET_DIR)/etc/lighttpd/
 
 install_hmserver:
 	mkdir -p $(TARGET_DIR)/opt/HMServer

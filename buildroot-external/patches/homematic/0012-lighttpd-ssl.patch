@@ -1,5 +1,5 @@
---- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd_ssl.conf.orig	2017-02-26 00:39:56.971410070 +0100
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd_ssl.conf	2017-02-26 00:40:14.303008584 +0100
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd_ssl.conf.orig	2017-03-02 10:52:33.454596614 +0100
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd_ssl.conf	2017-03-02 10:50:35.225073922 +0100
 @@ -14,7 +14,7 @@
  ## chroot example aswell.
  ##
@@ -9,32 +9,27 @@
  var.state_dir   = "/var/run"
  var.home_dir    = "/var/lib/lighttpd"
  var.conf_dir    = "/etc/lighttpd"
-@@ -90,7 +90,7 @@
+@@ -85,7 +85,13 @@
+ ##  Basic Configuration
+ ## ---------------------
  ##
- ## Use IPv6?
- ##
--# server.use-ipv6 = "enable"
-+server.use-ipv6 = "enable"
+-# server.port = 80
++server.port = 443
++
++$SERVER["socket"] == "[::]:443" {
++	ssl.engine = "enable"
++	ssl.pemfile = "/etc/config/server.pem"
++	server.document-root = server_root
++}
  
  ##
- ## bind to a specific IP
---- homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/lighttpd/lighttpd_ssl.conf.orig	2017-02-26 00:39:56.971410070 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/lighttpd/lighttpd_ssl.conf	2017-02-26 00:40:14.303008584 +0100
-@@ -14,7 +14,7 @@
- ## chroot example aswell.
- ##
- var.log_root    = "/var/log"
--var.server_root = "/www"
-+var.server_root = "/www/"
- var.state_dir   = "/var/run"
- var.home_dir    = "/var/lib/lighttpd"
- var.conf_dir    = "/etc/lighttpd"
-@@ -90,7 +90,7 @@
- ##
  ## Use IPv6?
+@@ -124,7 +130,7 @@
  ##
--# server.use-ipv6 = "enable"
-+server.use-ipv6 = "enable"
+ ## store a pid file
+ ##
+-server.pid-file = state_dir + "/lighttpd.pid"
++server.pid-file = state_dir + "/lighttpd_ssl.pid"
  
  ##
- ## bind to a specific IP
+ #######################################################################

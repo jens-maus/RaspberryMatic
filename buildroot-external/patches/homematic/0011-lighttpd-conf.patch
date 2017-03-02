@@ -1,5 +1,5 @@
 --- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig	2017-02-26 20:09:08.397575287 +0100
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-02-27 15:55:38.840081180 +0100
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-03-02 10:51:38.459748941 +0100
 @@ -14,10 +14,10 @@
  ## chroot example aswell.
  ##
@@ -13,23 +13,19 @@
  
  ## 
  ## run the server chrooted.
-@@ -87,8 +87,8 @@
+@@ -87,8 +87,13 @@
  ##
  server.port = 80
  
 -$SERVER["socket"]==":8181" {
 -        server.document-root="/opt/hm/www"
-+$SERVER["socket"] == "[::]:8181" {
-+        server.document-root="/www/"
++$SERVER["socket"] == "[::]:80" {
++	server.document-root = server_root
++	server.use-ipv6 = "enable"
++}
++
++$SERVER["socket"] == ":8181" {
++        server.document-root = server_root
  }
  
  ##
-@@ -99,7 +99,7 @@
- ##
- ## bind to a specific IP
- ##
--#server.bind = "localhost"
-+server.bind = "0.0.0.0"
- 
- ##
- ## Run as a different username/groupname.

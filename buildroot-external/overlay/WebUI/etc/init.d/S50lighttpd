@@ -10,15 +10,19 @@ start() {
 
 	echo "OK"
 	if [ -f /etc/config/server.pem ] ; then
-		echo -n "Starting lighttpd with SSL support: "
+		echo -n "Starting lighttpd (SSL): "
 		start-stop-daemon -S -q -p /var/run/lighttpd_ssl.pid --exec /usr/sbin/lighttpd -- -f /etc/lighttpd/lighttpd_ssl.conf
 		echo "OK"
 	fi
 }
 stop() {
+	if [ -f /etc/config/server.pem ] ; then
+		echo -n "Stopping lighttpd (SSL): "
+		start-stop-daemon -K -q -p /var/run/lighttpd_ssl.pid
+		echo "OK"
+	fi
 	echo -n "Stopping lighttpd: "
 	start-stop-daemon -K -q -p /var/run/lighttpd.pid
-	start-stop-daemon -K -q -p /var/run/lighttpd_ssl.pid
 	echo "OK"
 }
 restart() {

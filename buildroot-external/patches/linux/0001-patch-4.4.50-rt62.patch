@@ -305,7 +305,7 @@ index 000000000000..6f2aeabf7faa
 +
 +These data are also reset when the wakeup histogram is reset.
 diff --git a/Makefile b/Makefile
-index 7b233ac7f86c..4d5215c21a74 100644
+index 10993715abb8..a0ecd131c789 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -785,6 +785,9 @@ KBUILD_CFLAGS   += $(call cc-option,-Werror=strict-prototypes)
@@ -1347,7 +1347,7 @@ index c4ad6eae67fa..e830b20b212f 100644
  	return pen_release != -1 ? -ENOSYS : 0;
  }
 diff --git a/arch/arm/mm/fault.c b/arch/arm/mm/fault.c
-index daafcf121ce0..b8aa1e9ee8ee 100644
+index c095455d496e..276ac73f8650 100644
 --- a/arch/arm/mm/fault.c
 +++ b/arch/arm/mm/fault.c
 @@ -430,6 +430,9 @@ do_translation_fault(unsigned long addr, unsigned int fsr,
@@ -2808,7 +2808,7 @@ index e75907601a41..a29fc4f84fc4 100644
  /* --------------------------------------------------------------------------
                                Boot-time Configuration
 diff --git a/arch/x86/kernel/apic/io_apic.c b/arch/x86/kernel/apic/io_apic.c
-index aaacbd667212..0ea573c97084 100644
+index 8ca533b8c606..7bfb538080f7 100644
 --- a/arch/x86/kernel/apic/io_apic.c
 +++ b/arch/x86/kernel/apic/io_apic.c
 @@ -1711,7 +1711,8 @@ static bool io_apic_level_ack_pending(struct mp_chip_data *data)
@@ -3583,10 +3583,10 @@ index 1c96f09367ae..ffb6d9859122 100644
  	/*
  	 * APIC is created enabled. This will prevent kvm_lapic_set_base from
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 25a6efcfdf7f..074ec1752953 100644
+index e75095fa414e..233590bf3372 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -5809,6 +5809,13 @@ int kvm_arch_init(void *opaque)
+@@ -5810,6 +5810,13 @@ int kvm_arch_init(void *opaque)
  		goto out;
  	}
  
@@ -4267,10 +4267,10 @@ index 1cb5dd3a5da1..2f1ec8a67cbe 100644
  
  #else /* CONFIG_HIGHMEM */
 diff --git a/crypto/algapi.c b/crypto/algapi.c
-index 59bf491fe3d8..f98e79c8cd77 100644
+index 43f5bdb6b570..b54fd9187d12 100644
 --- a/crypto/algapi.c
 +++ b/crypto/algapi.c
-@@ -719,13 +719,13 @@ EXPORT_SYMBOL_GPL(crypto_spawn_tfm2);
+@@ -720,13 +720,13 @@ EXPORT_SYMBOL_GPL(crypto_spawn_tfm2);
  
  int crypto_register_notifier(struct notifier_block *nb)
  {
@@ -8746,7 +8746,7 @@ index 0f42a2782afc..80a1db09a379 100644
  	spin_unlock_irqrestore(&dev_priv->uncore.lock, irqflags);
  
 diff --git a/drivers/gpu/drm/i915/intel_display.c b/drivers/gpu/drm/i915/intel_display.c
-index 909d1d71d130..8688709b4ffa 100644
+index 4f5d07bb3511..8ecd5c016dba 100644
 --- a/drivers/gpu/drm/i915/intel_display.c
 +++ b/drivers/gpu/drm/i915/intel_display.c
 @@ -11400,7 +11400,7 @@ void intel_check_page_flip(struct drm_device *dev, int pipe)
@@ -11169,7 +11169,7 @@ index f44ce09367bc..5fc9a14721bd 100644
  	usb_anchor_resume_wakeups(anchor);
  	atomic_dec(&urb->use_count);
 diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 803c503a2e3d..8dd2720aab64 100644
+index cfda1a1c0ab6..65ccffba7e00 100644
 --- a/drivers/usb/gadget/function/f_fs.c
 +++ b/drivers/usb/gadget/function/f_fs.c
 @@ -1404,7 +1404,7 @@ static void ffs_data_put(struct ffs_data *ffs)
@@ -13272,7 +13272,7 @@ index 000000000000..c38a44b14da5
 +
 +#endif
 diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 93a6a2c66d15..b3fa55658bd2 100644
+index 4035bbe40971..81ebe70d107d 100644
 --- a/include/linux/netdevice.h
 +++ b/include/linux/netdevice.h
 @@ -390,7 +390,19 @@ typedef enum rx_handler_result rx_handler_result_t;
@@ -13295,7 +13295,7 @@ index 93a6a2c66d15..b3fa55658bd2 100644
  
  static inline bool napi_disable_pending(struct napi_struct *n)
  {
-@@ -2286,11 +2298,20 @@ void netdev_freemem(struct net_device *dev);
+@@ -2288,11 +2300,20 @@ void netdev_freemem(struct net_device *dev);
  void synchronize_net(void);
  int init_dummy_netdev(struct net_device *dev);
  
@@ -13316,7 +13316,7 @@ index 93a6a2c66d15..b3fa55658bd2 100644
  
  struct net_device *dev_get_by_index(struct net *net, int ifindex);
  struct net_device *__dev_get_by_index(struct net *net, int ifindex);
-@@ -2606,6 +2627,7 @@ struct softnet_data {
+@@ -2610,6 +2631,7 @@ struct softnet_data {
  	unsigned int		dropped;
  	struct sk_buff_head	input_pkt_queue;
  	struct napi_struct	backlog;
@@ -17155,7 +17155,7 @@ index fc1ef736253c..83c666537a7a 100644
  	return r;
  }
 diff --git a/kernel/events/core.c b/kernel/events/core.c
-index bc6371b0e4fb..388de1dc27d9 100644
+index 9bbe9ac23cf2..02a21c9f8e28 100644
 --- a/kernel/events/core.c
 +++ b/kernel/events/core.c
 @@ -802,6 +802,7 @@ static void __perf_mux_hrtimer_init(struct perf_cpu_context *cpuctx, int cpu)
@@ -29052,11 +29052,11 @@ index 1afec32de6f2..11fa431046a8 100644
  	dump_stack();
 diff --git a/localversion-rt b/localversion-rt
 new file mode 100644
-index 000000000000..8cdeb45db6e2
+index 000000000000..40d81d8e61b6
 --- /dev/null
 +++ b/localversion-rt
 @@ -0,0 +1 @@
-+-rt59
++-rt62
 diff --git a/mm/Kconfig b/mm/Kconfig
 index 97a4e06b15c0..9614351e68b8 100644
 --- a/mm/Kconfig
@@ -29106,7 +29106,7 @@ index dba02dec7195..51963f58a29b 100644
  				cc->last_migrated_pfn = 0;
  			}
 diff --git a/mm/filemap.c b/mm/filemap.c
-index c588d1222b2a..da6a5fbfadd2 100644
+index c33c31d75a2b..91dc614cb9d5 100644
 --- a/mm/filemap.c
 +++ b/mm/filemap.c
 @@ -144,9 +144,12 @@ static int page_cache_tree_insert(struct address_space *mapping,
@@ -30487,7 +30487,7 @@ index c1ea19478119..529552c3716d 100644
  }
  EXPORT_SYMBOL_GPL(zs_unmap_object);
 diff --git a/net/core/dev.c b/net/core/dev.c
-index 0798a0f1b395..d63b1f9ca08f 100644
+index 08215a85c742..aa6165e02e05 100644
 --- a/net/core/dev.c
 +++ b/net/core/dev.c
 @@ -186,6 +186,7 @@ static unsigned int napi_gen_id;
@@ -30590,7 +30590,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  }
  
  /**
-@@ -2246,6 +2252,7 @@ static inline void __netif_reschedule(struct Qdisc *q)
+@@ -2241,6 +2247,7 @@ static inline void __netif_reschedule(struct Qdisc *q)
  	sd->output_queue_tailp = &q->next_sched;
  	raise_softirq_irqoff(NET_TX_SOFTIRQ);
  	local_irq_restore(flags);
@@ -30598,7 +30598,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  }
  
  void __netif_schedule(struct Qdisc *q)
-@@ -2327,6 +2334,7 @@ void __dev_kfree_skb_irq(struct sk_buff *skb, enum skb_free_reason reason)
+@@ -2322,6 +2329,7 @@ void __dev_kfree_skb_irq(struct sk_buff *skb, enum skb_free_reason reason)
  	__this_cpu_write(softnet_data.completion_queue, skb);
  	raise_softirq_irqoff(NET_TX_SOFTIRQ);
  	local_irq_restore(flags);
@@ -30606,7 +30606,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  }
  EXPORT_SYMBOL(__dev_kfree_skb_irq);
  
-@@ -2884,7 +2892,11 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
+@@ -2879,7 +2887,11 @@ static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
  	 * This permits __QDISC___STATE_RUNNING owner to get the lock more
  	 * often and dequeue packets faster.
  	 */
@@ -30618,7 +30618,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  	if (unlikely(contended))
  		spin_lock(&q->busylock);
  
-@@ -2944,9 +2956,44 @@ static void skb_update_prio(struct sk_buff *skb)
+@@ -2939,9 +2951,44 @@ static void skb_update_prio(struct sk_buff *skb)
  #define skb_update_prio(skb)
  #endif
  
@@ -30663,7 +30663,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  #define RECURSION_LIMIT 10
  
  /**
-@@ -3139,7 +3186,7 @@ static int __dev_queue_xmit(struct sk_buff *skb, void *accel_priv)
+@@ -3134,7 +3181,7 @@ static int __dev_queue_xmit(struct sk_buff *skb, void *accel_priv)
  
  		if (txq->xmit_lock_owner != cpu) {
  
@@ -30672,7 +30672,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  				goto recursion_alert;
  
  			skb = validate_xmit_skb(skb, dev);
-@@ -3149,9 +3196,9 @@ static int __dev_queue_xmit(struct sk_buff *skb, void *accel_priv)
+@@ -3144,9 +3191,9 @@ static int __dev_queue_xmit(struct sk_buff *skb, void *accel_priv)
  			HARD_TX_LOCK(dev, txq, cpu);
  
  			if (!netif_xmit_stopped(txq)) {
@@ -30684,7 +30684,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  				if (dev_xmit_complete(rc)) {
  					HARD_TX_UNLOCK(dev, txq);
  					goto out;
-@@ -3525,6 +3572,7 @@ drop:
+@@ -3520,6 +3567,7 @@ drop:
  	rps_unlock(sd);
  
  	local_irq_restore(flags);
@@ -30692,7 +30692,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  
  	atomic_long_inc(&skb->dev->rx_dropped);
  	kfree_skb(skb);
-@@ -3543,7 +3591,7 @@ static int netif_rx_internal(struct sk_buff *skb)
+@@ -3538,7 +3586,7 @@ static int netif_rx_internal(struct sk_buff *skb)
  		struct rps_dev_flow voidflow, *rflow = &voidflow;
  		int cpu;
  
@@ -30701,7 +30701,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  		rcu_read_lock();
  
  		cpu = get_rps_cpu(skb->dev, skb, &rflow);
-@@ -3553,13 +3601,13 @@ static int netif_rx_internal(struct sk_buff *skb)
+@@ -3548,13 +3596,13 @@ static int netif_rx_internal(struct sk_buff *skb)
  		ret = enqueue_to_backlog(skb, cpu, &rflow->last_qtail);
  
  		rcu_read_unlock();
@@ -30718,7 +30718,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  	}
  	return ret;
  }
-@@ -3593,16 +3641,44 @@ int netif_rx_ni(struct sk_buff *skb)
+@@ -3588,16 +3636,44 @@ int netif_rx_ni(struct sk_buff *skb)
  
  	trace_netif_rx_ni_entry(skb);
  
@@ -30767,7 +30767,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  static void net_tx_action(struct softirq_action *h)
  {
  	struct softnet_data *sd = this_cpu_ptr(&softnet_data);
-@@ -3644,7 +3720,7 @@ static void net_tx_action(struct softirq_action *h)
+@@ -3639,7 +3715,7 @@ static void net_tx_action(struct softirq_action *h)
  			head = head->next_sched;
  
  			root_lock = qdisc_lock(q);
@@ -30776,7 +30776,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  				smp_mb__before_atomic();
  				clear_bit(__QDISC_STATE_SCHED,
  					  &q->state);
-@@ -4066,7 +4142,7 @@ static void flush_backlog(void *arg)
+@@ -4061,7 +4137,7 @@ static void flush_backlog(void *arg)
  	skb_queue_walk_safe(&sd->input_pkt_queue, skb, tmp) {
  		if (skb->dev == dev) {
  			__skb_unlink(skb, &sd->input_pkt_queue);
@@ -30785,7 +30785,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  			input_queue_head_incr(sd);
  		}
  	}
-@@ -4075,10 +4151,13 @@ static void flush_backlog(void *arg)
+@@ -4070,10 +4146,13 @@ static void flush_backlog(void *arg)
  	skb_queue_walk_safe(&sd->process_queue, skb, tmp) {
  		if (skb->dev == dev) {
  			__skb_unlink(skb, &sd->process_queue);
@@ -30800,7 +30800,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  }
  
  static int napi_gro_complete(struct sk_buff *skb)
-@@ -4535,6 +4614,7 @@ static void net_rps_action_and_irq_enable(struct softnet_data *sd)
+@@ -4530,6 +4609,7 @@ static void net_rps_action_and_irq_enable(struct softnet_data *sd)
  		sd->rps_ipi_list = NULL;
  
  		local_irq_enable();
@@ -30808,7 +30808,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  
  		/* Send pending IPI's to kick RPS processing on remote cpus. */
  		while (remsd) {
-@@ -4548,6 +4628,7 @@ static void net_rps_action_and_irq_enable(struct softnet_data *sd)
+@@ -4543,6 +4623,7 @@ static void net_rps_action_and_irq_enable(struct softnet_data *sd)
  	} else
  #endif
  		local_irq_enable();
@@ -30816,7 +30816,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  }
  
  static bool sd_has_rps_ipi_waiting(struct softnet_data *sd)
-@@ -4629,9 +4710,11 @@ void __napi_schedule(struct napi_struct *n)
+@@ -4624,9 +4705,11 @@ void __napi_schedule(struct napi_struct *n)
  	local_irq_save(flags);
  	____napi_schedule(this_cpu_ptr(&softnet_data), n);
  	local_irq_restore(flags);
@@ -30828,7 +30828,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  /**
   * __napi_schedule_irqoff - schedule for receive
   * @n: entry to schedule
-@@ -4643,6 +4726,7 @@ void __napi_schedule_irqoff(struct napi_struct *n)
+@@ -4638,6 +4721,7 @@ void __napi_schedule_irqoff(struct napi_struct *n)
  	____napi_schedule(this_cpu_ptr(&softnet_data), n);
  }
  EXPORT_SYMBOL(__napi_schedule_irqoff);
@@ -30836,7 +30836,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  
  void __napi_complete(struct napi_struct *n)
  {
-@@ -4869,13 +4953,21 @@ static void net_rx_action(struct softirq_action *h)
+@@ -4864,13 +4948,21 @@ static void net_rx_action(struct softirq_action *h)
  	struct softnet_data *sd = this_cpu_ptr(&softnet_data);
  	unsigned long time_limit = jiffies + 2;
  	int budget = netdev_budget;
@@ -30858,7 +30858,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  	for (;;) {
  		struct napi_struct *n;
  
-@@ -4905,7 +4997,7 @@ static void net_rx_action(struct softirq_action *h)
+@@ -4900,7 +4992,7 @@ static void net_rx_action(struct softirq_action *h)
  	list_splice_tail(&repoll, &list);
  	list_splice(&list, &sd->poll_list);
  	if (!list_empty(&sd->poll_list))
@@ -30867,7 +30867,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  
  	net_rps_action_and_irq_enable(sd);
  }
-@@ -7244,7 +7336,7 @@ EXPORT_SYMBOL(free_netdev);
+@@ -7239,7 +7331,7 @@ EXPORT_SYMBOL(free_netdev);
  void synchronize_net(void)
  {
  	might_sleep();
@@ -30876,7 +30876,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  		synchronize_rcu_expedited();
  	else
  		synchronize_rcu();
-@@ -7485,16 +7577,20 @@ static int dev_cpu_callback(struct notifier_block *nfb,
+@@ -7480,16 +7572,20 @@ static int dev_cpu_callback(struct notifier_block *nfb,
  
  	raise_softirq_irqoff(NET_TX_SOFTIRQ);
  	local_irq_enable();
@@ -30898,7 +30898,7 @@ index 0798a0f1b395..d63b1f9ca08f 100644
  
  	return NOTIFY_OK;
  }
-@@ -7796,8 +7892,9 @@ static int __init net_dev_init(void)
+@@ -7791,8 +7887,9 @@ static int __init net_dev_init(void)
  	for_each_possible_cpu(i) {
  		struct softnet_data *sd = &per_cpu(softnet_data, i);
  
@@ -31239,7 +31239,7 @@ index f39276d1c2d7..10880c89d62f 100644
  
  const struct nf_afinfo __rcu *nf_afinfo[NFPROTO_NUMPROTO] __read_mostly;
 diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index f223d1c80ccf..30f074a2ba65 100644
+index f2d28ed74a0a..590449d0053e 100644
 --- a/net/packet/af_packet.c
 +++ b/net/packet/af_packet.c
 @@ -63,6 +63,7 @@

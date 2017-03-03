@@ -17,9 +17,16 @@ if [ ! -e $USER_DIR ] ; then
   
   $BASE_DIR/install.tcl
 
+else
+
+  # make sure cloudmatic button is always present
+  if ! grep -q "ID mh CONFIG_NAME CloudMatic" /etc/config/hm_addons.cfg 2>/dev/null; then
+    $BASE_DIR/install.tcl
+  fi
+
 fi
 
-mkdir -p /dev/net
+#mkdir -p /dev/net
 #mknod /dev/net/tun c 10 200
 #insmod $BASE_DIR/tun.ko
 

@@ -12,18 +12,20 @@ start() {
 	  updateRFFirmware
 	  echo -n "."
 	  updateWiredFirmware
+	  return 0
 	fi
+	return 1
 }
 
 waitForIP() {
 	for i in $(seq 1 5); do
-		gw=$(ip -4 route get 1 | head -1 | cut -d' ' -f3 | tr -d '\n')
-		if [ ! $(ping -W 5 -c 1 ${gw} >/dev/null) ]; then
+		gw=$(ip -4 route get 1 2>/dev/null | head -1 | cut -d' ' -f3 | tr -d '\n')
+		if [[ ! ${gw} == "" ]] && [[ ! $(ping -W 5 -c 1 ${gw} 2>/dev/null >/dev/null) ]]; then
 			return 0
 		fi 
+		echo -n "."
 		sleep 2
 	done
-	echo -n "ERROR: network unreachable. "
 	return 1
 }
 
@@ -51,7 +53,7 @@ case "$1" in
   start)
 	echo -n "Starting LGWFirmwareUpdate: "
 	start
-	echo "OK"
+	[[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
 	;;
   stop)
 	echo -n "Stopping LGWFirmwareUpdate: "

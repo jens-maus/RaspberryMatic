@@ -2,9 +2,11 @@
 #
 # Azul java runtime
 #
+# http://www.azul.com/downloads/zulu-embedded/
+#
 #############################################################
-JAVA_AZUL_VERSION = 1.8.0_102
-JAVA_AZUL_SOURCE=ezdk-$(JAVA_AZUL_VERSION)-8.17.0.21-eval-linux_aarch32hf.tar.gz
+JAVA_AZUL_VERSION = 1.8.0_112
+JAVA_AZUL_SOURCE=ezdk-$(JAVA_AZUL_VERSION)-8.19.0.31-eval-linux_aarch32hf.tar.gz
 JAVA_AZUL_SITE = http://cdn.azul.com/zulu-embedded/bin
 JAVA_AZUL_DEPENDENCIES = fontconfig dejavu liberation
 

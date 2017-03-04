@@ -1,13 +1,19 @@
 #!/bin/sh
 
-# only continue if another interface hasn't
-# setup everything correctly already
-if [[ -e /var/status/hasIP ]]; then
+# we exit if if-up.d is called for "lo"
+if [[ ${IFACE} == "lo" ]]; then
   exit 0
 fi
 
-# we exit if if-up.d is called for "lo"
-if [[ ${IFACE} == "lo" ]]; then
+# only continue if this network interface exists
+if [[ ! -e /sys/class/net/${IFACE} ]]; then
+  exit 0
+fi
+
+# only continue if another interface hasn't
+# setup everything correctly already
+if [[ -e /var/status/hasIP ]]; then
+  /sbin/ifconfig ${IFACE} down
   exit 0
 fi
 
@@ -19,14 +25,25 @@ fi
 
 # start WPA Supplicant if this is a WiFi connection
 case ${IFACE} in
+  eth*)
+    # if eth0 doesn't have a link we don't continue
+    if [[ ${IFACE} == "eth0" && $(cat /sys/class/net/${IFACE}/carrier) -eq 0 ]]; then
+      /sbin/ifconfig ${IFACE} down
+      exit 0
+    fi
+  ;;
+
   wlan*)
     if [[ -e /etc/config/wpa_supplicant.conf ]]; then
-      /usr/sbin/wpa_supplicant -B w -D wext -i ${IFACE} -c /etc/config/wpa_supplicant.conf -dd
+      /usr/sbin/wpa_supplicant -B w -D wext -i ${IFACE} -c /etc/config/wpa_supplicant.conf -s
     else
+      /sbin/ifconfig ${IFACE} down
       exit 0
     fi
   ;;
 esac
+
+echo -n "${IFACE}, "
 
 # cleanup first
 RESOLV_CONF=/var/etc/resolv.conf
@@ -68,7 +85,9 @@ case ${MODE} in
 
   # if DHCP is enabled we "only" run udhcpc
   DHCP)
-    /sbin/udhcpc -b -t 100 -T 3 -S -x hostname:${HOSTNAME} -i ${IFACE} -C -F ${HOSTNAME} -V eQ3-CCU2 -s /bin/dhcp.script -p /var/run/udhcpc_${IFACE}.pid
+    echo -n "dhcp, "
+
+    /sbin/udhcpc -b -t 100 -T 3 -S -x hostname:${HOSTNAME} -i ${IFACE} -C -F ${HOSTNAME} -V eQ3-CCU2 -s /bin/dhcp.script -p /var/run/udhcpc_${IFACE}.pid 2>/dev/null >/dev/null
     if [[ ! -f "/var/run/udhcpc_${IFACE}.pid" ]]; then
       killall checkDHCP
       /bin/checkDHCP ${IFACE} &
@@ -77,13 +96,10 @@ case ${MODE} in
 
   # everything else means we are setting a static IP
   *)
-    if [[ $(cat /sys/class/net/${IFACE}/carrier) -eq 1 ]]; then
-      echo "${IFACE}: link detected"
-      touch /var/status/hasLink
-    else
-      echo "${IFACE}: no link detected"
-      exit 1
-    fi
+    echo -n "static, "
+
+    # we checked the link state already way earlier
+    touch /var/status/hasLink
 
     /sbin/ifconfig ${IFACE} ${IP} netmask ${NETMASK}
     /sbin/route del default 2>/dev/null
@@ -123,5 +139,8 @@ case ${MODE} in
   ;;
 
 esac
+
+IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
+echo -n "${IP}, "
 
 exit 0

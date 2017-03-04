@@ -19,9 +19,9 @@ if { $argc != 1 } {
                                                                                                                                        
 # function to return a list of alarm variables                                                                                         
 proc getAlarmZoneVariableID { } {                                                                                                      
-  set script "                                                                                                                         
-    string sSysVarId;                                                                                                                  
-    foreach (sSysVarId, dom.GetObject(ID_SYSTEM_VARIABLES).EnumUsedIDs()) {                                                            
+  set script "
+    string sSysVarId;
+    foreach (sSysVarId, dom.GetObject(ID_SYSTEM_VARIABLES).EnumUsedIDs()) {
       object oSysVar = dom.GetObject(sSysVarId);                                                                                       
       string sValueType = oSysVar.ValueType();                                                                                         
                                                                                                                                        
@@ -32,7 +32,7 @@ proc getAlarmZoneVariableID { } {
   "                                                                                                                                    
                                                                                                                                        
   if { ![catch {array set result [rega_script $script]}] } then {                                                                      
-    set variables $result(STDOUT)                                                                                                      
+    set variables [split $result(STDOUT) "\n"]
     foreach subsection $variables {                                                                                                    
       set b [split $subsection ";"]                                                                                                    
       set sysVarId [lindex $b 0]                                                                                                       
@@ -47,17 +47,18 @@ proc getAlarmZoneVariableID { } {
                                                                                                                                        
 proc triggerAlarm { msg } {                                                                                                            
   set sysVarAlarmZone1 [getAlarmZoneVariableID]                                                                                        
+  if { [string length $sysVarAlarmZone1] > 0 } then {
+    set script "
+      dom.GetObject('$sysVarAlarmZone1').State(true);
+      dom.GetObject('$sysVarAlarmZone1').DPInfo('$msg');
+    "
                                                                                                                                        
-  set script "                                                                                                                         
-    dom.GetObject('$sysVarAlarmZone1').State(true);                                                                                    
-    dom.GetObject('$sysVarAlarmZone1').DPInfo('$msg');                                                                                 
-  "                                                                                                                                    
-                                                                                                                                       
-  if { ![catch {array set result [rega_script $script]}] } then {                                                                      
-    return true                                                                                                                        
+    if { ![catch {array set result [rega_script $script]}] } then {
+      return true
+    }
   }                                                                                                                                    
                                                                                                                                        
   return false                                                                                                                         
 }                                                                                                                                      
                                                                                                                                        
-set res [triggerAlarm [lindex $argv 0]]                                                                                                
+set res [triggerAlarm [lindex $argv 0]]

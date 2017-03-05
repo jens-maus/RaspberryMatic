@@ -21,13 +21,6 @@ case $1 in
     if [[ -c ${DEVICE} ]]; then
       # first call will flash the firmware
       $HCIATTACH $DEVICE bcm43xx 921600 noflow - 2>/dev/null >/dev/null
-
-      # second call initializes the bluetooth device
-      if [ $? -eq 1 ]; then
-        echo -n "."
-        $HCIATTACH $DEVICE bcm43xx 921600 noflow - 2>/dev/null >/dev/null
-      fi
-
       echo -n "."
 
       # bring hci0 up

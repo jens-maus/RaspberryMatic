@@ -48,6 +48,9 @@ umount:
 	sudo umount /mnt/p2
 	sudo kpartx -dv build-$(BOARD)/images/sdcard.img
 
+install:
+	sudo dd if=build-$(BOARD)/images/sdcard.img of=/dev/sdc bs=4096
+
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
 	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig
 

@@ -26,7 +26,7 @@ proc getAlarmZoneVariableID { } {
       string sValueType = oSysVar.ValueType();
 
       if(oSysVar.TypeName() == 'ALARMDP') {
-        WriteLine(sSysVarId + ';' + oSysVar.Name());
+        WriteLine(sSysVarId # ';' # oSysVar.Name());
       }
     }
   "

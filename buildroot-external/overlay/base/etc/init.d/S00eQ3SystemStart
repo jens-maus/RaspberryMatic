@@ -257,12 +257,10 @@ init() {
         if [ ! -e /etc/config/TZ ] ; then
                 cp $CFG_TEMPLATE_DIR/TZ /etc/config
         fi
-        if [ ! -e /etc/config/localtime ] ; then
-                ln -s /usr/share/zoneinfo/Europe/Berlin /etc/config/localtime
-        fi
-        if [ ! -e /etc/config/timezone ] ; then
-                echo "Europe/Berlin" >/etc/config/timezone
-        fi
+
+        # update /etc/config/localtime and /etc/config/timezone
+        /bin/updateTZ.sh
+
         if [ ! -e /etc/config/netconfig ] ; then
                 cp $CFG_TEMPLATE_DIR/netconfig /etc/config
         fi

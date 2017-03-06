@@ -1,6 +1,15 @@
 --- homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d.orig	2016-12-13 09:57:04.258978176 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d	2017-01-10 22:52:43.744006978 +0100
-@@ -25,17 +25,30 @@
++++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d	2017-03-06 19:30:05.229039899 +0100
+@@ -12,8 +12,6 @@
+ CFG_TEMPLATE_DIR=/etc/config_templates
+ 
+ init() {
+-	export TZ=`cat /etc/config/TZ`
+-
+ 	if [ ! -d /etc/config/hs485d ] ; then
+   		mkdir /etc/config/hs485d
+ 	fi
+@@ -25,17 +23,30 @@
  	else
  		cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
  	fi
@@ -33,7 +42,7 @@
  }
  
  restart() {
-@@ -59,4 +72,3 @@
+@@ -59,4 +70,3 @@
  esac
  
  exit $?

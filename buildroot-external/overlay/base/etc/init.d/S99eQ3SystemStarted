@@ -5,15 +5,8 @@
 
 CFG_TEMPLATE_DIR=/etc/config_templates
 
-init() {
-	export TZ=`cat /etc/config/TZ`
-
-	# Todo: GPIO / LED settings
-}
-
 start() {
 	echo -n "Starting Third-Party Addons: "
-	init
 	if [ ! -e /etc/config/safemode ] ; then
         	# meine-homematic.de starten
         	/opt/mh/startup.sh 2>/dev/null >/dev/null

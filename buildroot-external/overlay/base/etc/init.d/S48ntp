@@ -8,8 +8,6 @@ CFG_TEMPLATE_DIR=/etc/config_templates
 test -x $DAEMON || exit 0
 
 init() {
-	export TZ=`cat /etc/config/TZ`
-
 	if [ ! -e /etc/config/ntpclient ] ; then
 		cp $CFG_TEMPLATE_DIR/ntpclient /etc/config
 	fi

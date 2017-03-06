@@ -5,7 +5,6 @@
 
 start() {
 	echo -n "Starting lighttpd: "
-	export TZ=`cat /etc/config/TZ`
 	if [[ ! -f /etc/config/server.pem ]]; then
           echo -n "."
           /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \

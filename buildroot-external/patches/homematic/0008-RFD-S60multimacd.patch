@@ -1,6 +1,6 @@
 --- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig	2016-12-12 22:00:43.139457618 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd	2017-01-10 22:54:26.665622803 +0100
-@@ -7,44 +7,18 @@
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd	2017-03-06 19:27:16.888929578 +0100
+@@ -7,44 +7,17 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/multimacd.pid
  
@@ -40,7 +40,7 @@
 +source /var/hm_mode 2>/dev/null
 +
  init() {
- 	export TZ=`cat /etc/config/TZ`
+-	export TZ=`cat /etc/config/TZ`
 -	
 -	if [ ! -e /etc/config/multimacd.conf ] ; then
 -		cp $CFG_TEMPLATE_DIR/multimacd.conf /etc/config
@@ -55,7 +55,7 @@
  	fi
  
  	if [ ! -e /etc/config/syslog ] ; then
-@@ -57,44 +31,41 @@
+@@ -57,44 +30,41 @@
  }
  
  waitStartupComplete() {

@@ -1,16 +1,7 @@
---- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf.orig	2016-11-24 14:06:02.479227851 +0100
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf	2016-11-24 14:06:14.610952356 +0100
-@@ -1,3 +1,4 @@
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf.orig	2017-03-06 19:25:10.919846283 +0100
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf	2017-03-06 19:25:59.402723078 +0100
+@@ -1,3 +1,3 @@
  setenv.add-environment = (
 -        "TZ" => "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
-+        "TZ" => "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00",
-+        "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
- )
---- homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/lighttpd/conf.d/setenv.conf.orig	2016-11-24 14:06:02.479227851 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/lighttpd/conf.d/setenv.conf	2016-11-24 14:06:14.610952356 +0100
-@@ -1,3 +1,4 @@
- setenv.add-environment = (
--        "TZ" => "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
-+        "TZ" => "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00",
 +        "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
  )

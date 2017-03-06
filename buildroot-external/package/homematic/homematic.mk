@@ -57,6 +57,10 @@ define HOMEMATIC_FINALIZE_TARGET
 	rm -f $(TARGET_DIR)/etc/nut.conf.sample
 	ln -snf config/nut/nut.conf $(TARGET_DIR)/etc/
 
+	# link timezone information files
+	ln -snf config/localtime $(TARGET_DIR)/etc/
+	ln -snf config/timezone $(TARGET_DIR)/etc/
+
 	# link /etc/firmware to /lib/firmware
 	ln -snf ../lib/firmware $(TARGET_DIR)/etc/
 

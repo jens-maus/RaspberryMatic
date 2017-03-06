@@ -10,8 +10,6 @@ PIDFILE=/var/run/ReGaHss.pid
 PID=-1
 
 init() {
-	export TZ=`cat /etc/config/TZ`
-
 	for i in $CREATE_DIRS; do mkdir -p $i; done
        
 	if [ ! -d /etc/config/userprofiles ] ; then

@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 NAME=ntpd
 DAEMON=/usr/sbin/$NAME

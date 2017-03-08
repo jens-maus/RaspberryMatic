@@ -20,9 +20,6 @@ identify_host() {
     UART_DEV="/dev/bcm2835-raw-uart"
   fi
 
-  echo "HOST=${HOST}" >>/var/hm_mode
-  echo "HM_MODE=${HM_MODE}" >>/var/hm_mode
-  echo "UART_DEV=${UART_DEV}" >>/var/hm_mode
 }
 
 # function to check if a factory reset (clearing whole /usr/local) should be performed
@@ -173,6 +170,20 @@ init() {
     mv /dev/ttyS0 /dev/ttyS1
   fi
 
+  # check if a factory reset should be performed
+  checkFactoryReset
+
+  # check if we should boot in LAN gateway mode
+  if [[ -e /usr/local/HMLGW ]]; then
+    HM_MODE="HMLGW"
+    UART_DEV="/dev/ttyAMA0"
+  fi
+
+  # save all mode information
+  echo "HOST=${HOST}" >/var/hm_mode
+  echo "HM_MODE=${HM_MODE}" >>/var/hm_mode
+  echo "UART_DEV=${UART_DEV}" >>/var/hm_mode
+
   # depending on the HomeMatic mode (HmRF, HmIP) we
   # have to load different kernel modules.
   if [[ ${HM_MODE} == "HmIP" ]]; then
@@ -183,9 +194,6 @@ init() {
     # use standard PL011 UART
     modprobe amba-pl011
   fi
-
-  # check if a factory reset should be performed
-  checkFactoryReset
 
   # make sure to save the urandom pool for future reboots
   save_urandom

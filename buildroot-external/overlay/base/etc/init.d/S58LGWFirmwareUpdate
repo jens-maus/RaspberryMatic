@@ -3,6 +3,11 @@
 # Starts eq3configcmd update-lgw-firmware for RF- and Wired-Gateways
 #
 
+source /var/hm_mode 2>/dev/null
+
+# skip this startup in LAN Gateway mode
+[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+
 start() {
 	waitForIP
 	if [ $? -eq 0 ]; then

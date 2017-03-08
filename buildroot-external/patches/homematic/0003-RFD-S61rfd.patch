@@ -1,8 +1,14 @@
 --- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-12-12 22:04:53.864706566 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2017-03-06 19:34:48.290519367 +0100
-@@ -8,29 +8,28 @@
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2017-03-08 17:24:09.363545282 +0100
+@@ -7,30 +7,33 @@
+ CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/rfd.pid
  
++source /var/hm_mode 2>/dev/null
++
++# skip this startup in LAN Gateway mode
++[[ ${HM_MODE} == "HMLGW" ]] && exit 0
++
  init() {
 -	export TZ=`cat /etc/config/TZ`
  
@@ -31,7 +37,6 @@
 -		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
 -        fi
 +  # patch some settings to match what this hardware expects.
-+  source /var/hm_mode 2>/dev/null
 +  if [[ ${HM_MODE} == "HmIP" ]]; then
 +    sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf
 +  else
@@ -45,7 +50,7 @@
  
  	if [ ! -e /etc/config/syslog ] ; then
  		cp $CFG_TEMPLATE_DIR/syslog /etc/config
-@@ -42,28 +41,27 @@
+@@ -42,28 +45,27 @@
  }
  
  waitStartupComplete() {

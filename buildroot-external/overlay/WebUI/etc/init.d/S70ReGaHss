@@ -9,6 +9,11 @@ LOGLEVEL_REGA=2
 PIDFILE=/var/run/ReGaHss.pid
 PID=-1
 
+source /var/hm_mode 2>/dev/null
+
+# skip this startup in LAN Gateway mode
+[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+
 init() {
 	for i in $CREATE_DIRS; do mkdir -p $i; done
        

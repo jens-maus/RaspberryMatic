@@ -3,6 +3,11 @@
 # Starts lighttpd.
 #
 
+source /var/hm_mode 2>/dev/null
+
+# skip this startup in LAN Gateway mode
+[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+
 start() {
 	echo -n "Starting lighttpd: "
 	if [[ ! -f /etc/config/server.pem ]]; then

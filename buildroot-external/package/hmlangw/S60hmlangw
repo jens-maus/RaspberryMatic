@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# Start RaspberryMatic in LAN Gateway Mode
+#
+
+source /var/hm_mode 2>/dev/null
+
+# skip this startup if NOT in LAN Gateway mode
+[[ ${HM_MODE} != "HMLGW" ]] && exit 0
+
+start() {
+  echo -n "Starting LAN Gateway Daemon: "
+  start-stop-daemon -S -b -m -p /var/run/hmlangw.pid --startas /bin/sh -- -c "exec /bin/hmlangw -n $(cat /var/board_serial) -s ${UART_DEV} -r -1 >/var/log/hmlangw.log 2>&1"
+  [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
+}
+
+stop() {
+  echo -n "Stopping LAN Gateway Daemon: "
+  start-stop-daemon -K -q -o -p /var/run/hmlangw.pid
+  [[ $? -eq 0 ]] && ( rm -f /var/run/hmlangw.pid && echo "OK" ) || echo "ERROR"
+}
+
+restart() {
+  stop
+  start
+}
+
+
+case "$1" in
+  start)
+    start
+  ;;
+
+  stop)
+    stop
+  ;;
+
+  restart|reload)
+    restart
+  ;;
+
+  *)
+    echo "Usage: $0 {start|stop|restart|reload}"
+    exit 1
+esac
+
+exit $?

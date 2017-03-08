@@ -5,6 +5,11 @@
 
 CFG_DIR=/etc/config
 
+source /var/hm_mode 2>/dev/null
+
+# skip this startup in LAN Gateway mode
+[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+
 start() {
 	echo -n "Setting LAN Gateway keys: "
 	/bin/setlgwkey.sh

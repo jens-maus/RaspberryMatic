@@ -2,6 +2,7 @@
 #
 # Starts eq3configd.
 #
+
 init () {
 
   # we output the BidCos-Address and the

@@ -18,7 +18,7 @@ start() {
   if [[ ! -e /etc/config/no-coprocessor-update ]]; then
 
     # for non HmIP mode we copy the fw_directory to /tmp
-    if [[ ${HM_MODE} == "HmRF" ]]; then
+    if [[ ${HM_MODE} != "HmIP" ]]; then
       cp -a ${FW_DIRECTORY} /tmp/
       FW_DIRECTORY=/tmp/HM-MOD-UART
 

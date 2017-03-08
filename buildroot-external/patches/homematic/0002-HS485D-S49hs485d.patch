@@ -1,22 +1,27 @@
 --- homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d.orig	2016-12-13 09:57:04.258978176 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d	2017-03-06 19:30:05.229039899 +0100
-@@ -12,8 +12,6 @@
++++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d	2017-03-08 17:11:55.788590055 +0100
+@@ -11,9 +11,12 @@
+ 
  CFG_TEMPLATE_DIR=/etc/config_templates
  
- init() {
+-init() {
 -	export TZ=`cat /etc/config/TZ`
--
++source /var/hm_mode 2>/dev/null
++
++# skip this startup in LAN Gateway mode
++[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+ 
++init() {
  	if [ ! -d /etc/config/hs485d ] ; then
    		mkdir /etc/config/hs485d
  	fi
-@@ -25,17 +23,30 @@
+@@ -25,17 +28,29 @@
  	else
  		cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
  	fi
 +
 +  # if there is no HmIP support enabled we have to strip
 +  # the HmIP-RF part in InterfacesList.xml
-+  source /var/hm_mode 2>/dev/null
 +  if [[ ${HM_MODE} != "HmIP" ]]; then
 +    line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | head -1)
 +    line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | tail -1)
@@ -42,7 +47,7 @@
  }
  
  restart() {
-@@ -59,4 +70,3 @@
+@@ -59,4 +74,3 @@
  esac
  
  exit $?

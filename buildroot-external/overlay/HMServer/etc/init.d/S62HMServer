@@ -8,6 +8,10 @@ CFG_TEMPLATE_DIR=/etc/config_templates
 STARTWAITFILE=/var/status/HMServerStarted
 
 source /var/hm_mode 2>/dev/null
+
+# skip this startup in LAN Gateway mode
+[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+
 if [[ ${HM_MODE} == "HmIP" ]]; then
   HM_SERVER=/opt/HMServer/HMIPServer.jar
   HM_SERVER_ARGS="/etc/crRFD.conf"

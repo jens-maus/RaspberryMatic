@@ -9,13 +9,13 @@ start() {
 
   source /var/hm_mode 2>/dev/null
 
-	echo -n "Performing coprocessor updates: "
+  echo -n "Performing coprocessor updates: "
 
-	echo "0" > /sys/class/gpio/gpio18/value
-	sleep 1
-	echo "1" > /sys/class/gpio/gpio18/value
+  echo "0" > /sys/class/gpio/gpio18/value
+  sleep 1
+  echo "1" > /sys/class/gpio/gpio18/value
 
-	if [[ ! -e /etc/config/no-coprocessor-update ]]; then
+  if [[ ! -e /etc/config/no-coprocessor-update ]]; then
 
     # for non HmIP mode we copy the fw_directory to /tmp
     if [[ ${HM_MODE} == "HmRF" ]]; then
@@ -28,34 +28,40 @@ start() {
       mv ${FW_DIRECTORY}/fwmap2 ${FW_DIRECTORY}/fwmap
     fi
 
-		/bin/eq3configcmd update-coprocessor -p ${UART_DEV} -u -d ${FW_DIRECTORY}
-		if [[ $? -ne 0 ]]; then
-			echo -n "forcing, "
-			/bin/eq3configcmd update-coprocessor -p ${UART_DEV} -u -f -d ${FW_DIRECTORY}
-		fi
+    NEW_VERSION=$(/bin/eq3configcmd update-coprocessor -d ${FW_DIRECTORY} -av -t HM-MOD-UART -c 2>&1 | grep "<Info>" | cut -d' ' -f4)
+    if [[ ! -e /var/rf_firmware_version || ${NEW_VERSION} != $(cat /var/rf_firmware_version) ]]; then
+      /bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -u -d ${FW_DIRECTORY}
+      if [[ $? -ne 0 ]]; then
+        echo -n "forcing, "
+        /bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -u -f -d ${FW_DIRECTORY}
+      fi
+
+      RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
+      echo "${RF_VERSION}" >/var/rf_firmware_version
+    fi
 
     # for non HmIP mode we copy the fw_directory to /tmp
     if [[ ${HM_MODE} == "HmRF" ]]; then
       rm -rf ${FW_DIRECTORY}
     fi
 
-		sleep 1
-	else
-		echo "disabled, "
-	fi
+    sleep 1
+  else
+    echo "disabled, "
+  fi
 
-	echo "OK"
+  echo "OK"
 }
 
 case "$1" in
   start)
-	start
-	;;
+  start
+  ;;
   stop)
-	;;
+  ;;
   *)
-	echo "Usage: $0 {start}"
-	exit 1
+  echo "Usage: $0 {start}"
+  exit 1
 esac
 
 exit $?

@@ -190,11 +190,11 @@ init() {
   # make sure to save the urandom pool for future reboots
   save_urandom
 
-  RF_SERIAL=$(eq3configcmd update-coprocessor -p ${UART_DEV} -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5)
+  RF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5)
   echo "${RF_SERIAL}" >/var/board_serial
-  RF_VERSION=$(eq3configcmd update-coprocessor -p ${UART_DEV} -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
+  RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
   echo "${RF_VERSION}" >/var/rf_firmware_version
-  RF_ADDRESS=$(eq3configcmd read-default-rf-address -f ${UART_DEV} -h 2>&1 | grep "^0x")
+  RF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${UART_DEV} -h 2>&1 | grep "^0x")
   echo "${RF_ADDRESS}" >/var/rf_address
 
         # cal local init startup file

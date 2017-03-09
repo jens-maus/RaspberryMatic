@@ -54,7 +54,7 @@ rm -f /var/status/hasIP
 rm -f /var/status/hasInternet
 
 # source in the network config
-. /etc/config/netconfig
+source /etc/config/netconfig 2>/dev/null
 
 hostname ${HOSTNAME}
 
@@ -139,6 +139,15 @@ case ${MODE} in
   ;;
 
 esac
+
+# init the firewall only in case
+# we are not in LAN-GW mode
+source /var/hm_mode 2>/dev/null
+if [[ ${HM_MODE} != "HMLGW" ]]; then
+  # set firewall rules
+  /bin/setfirewall.tcl
+  echo -n "firewall, "
+fi
 
 IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
 echo -n "${IP}, "

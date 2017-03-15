@@ -28,9 +28,6 @@ init() {
 	if [ ! -e /etc/config/log4j.xml ] ; then
 		cp $CFG_TEMPLATE_DIR/log4j.xml /etc/config
 	fi
-	if [ ! -e /etc/config/hmip_networkkey.conf ] ; then
-		cp $CFG_TEMPLATE_DIR/hmip_networkkey.conf /etc/config
-	fi
 }
 
 start() {

@@ -69,6 +69,9 @@ define HOMEMATIC_FINALIZE_TARGET
 	rm -f $(TARGET_DIR)/etc/init.d/S49ntp
 	rm -f $(TARGET_DIR)/etc/init.d/S60openvpn
 
+	# remove obsolete config templates
+	rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf
+
 endef
 TARGET_FINALIZE_HOOKS += HOMEMATIC_FINALIZE_TARGET
 

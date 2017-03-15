@@ -13,12 +13,13 @@ install_rfd_arch:
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/bin/* $(TARGET_DIR)/bin
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/lib/* $(TARGET_DIR)/lib
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S61rfd $(TARGET_DIR)/etc/init.d/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/etc/config_templates/* $(TARGET_DIR)/etc/config_templates
+	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/etc/config_templates/* $(TARGET_DIR)/etc/config_templates/
 	cp -R firmware/* $(TARGET_DIR)/firmware
 ifneq (,$(filter $(HOMEMATIC_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S60multimacd $(TARGET_DIR)/etc/init.d/
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/bin/multimacd $(TARGET_DIR)/bin/
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/crRFD.conf $(TARGET_DIR)/etc/
+	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/opt/HmIP $(TARGET_DIR)/opt/
 endif
 
 install_hs485d_arch:
@@ -41,13 +42,12 @@ install_lighttpd_arch:
 
 install_hmserver:
 	mkdir -p $(TARGET_DIR)/opt/HMServer
-	cp -R HMserver/etc/config_templates/* $(TARGET_DIR)/etc/config_templates
+	cp -R HMserver/etc/config_templates/* $(TARGET_DIR)/etc/config_templates/
 	cp -R HMserver/opt/HMServer/groups $(TARGET_DIR)/opt/HMServer/
 	cp -R HMserver/opt/HMServer/measurement $(TARGET_DIR)/opt/HMServer/
 	cp -R HMserver/opt/HMServer/pages $(TARGET_DIR)/opt/HMServer/
 #ifneq (,$(filter $(HOMEMATIC_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a HMserver/opt/HMServer/HMIPServer.jar $(TARGET_DIR)/opt/HMServer/
-	cp -R HMserver/opt/HmIP $(TARGET_DIR)/opt/
 #else
 	cp -a HMserver/opt/HMServer/HMServer.jar $(TARGET_DIR)/opt/HMServer/
 #endif

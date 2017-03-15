@@ -1,2 +1,3 @@
 */30 * * * * /bin/SetInterfaceClock 127.0.0.1:2001
 0 * * * * /bin/setHWClock.sh
+0 4 * * * /usr/sbin/logrotate -f /etc/logrotate.conf || logger -p error -t "logrotate" "logrotate aborted with error $?"

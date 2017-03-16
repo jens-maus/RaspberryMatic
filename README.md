@@ -18,6 +18,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Read-only root file system to minimize write operations on SD card
 * Supports onboard WiFi and Bluetooth of RaspberryPi3 hardware as well as third-party USB WiFi/Bluetooth sticks
 * Supports Network UPS Tools (NUT) setup including USB connection of UPS as well as NUT server use (e.g. via Synology NAS Network UPS functionality)
+* Supports to be used a pure LAN Gateway (HM-LGW-O-TW-W-EU) with disabled WebUI and other typical CCU functionalities.
 * IPv6 support and default HTTPS enabled WebUI support
 * Auto-resizing `/usr/local` partition to use the full capacity of the SD card
 * Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi))

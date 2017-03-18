@@ -226,6 +226,8 @@ init() {
         chmod 775 /var/rega
         mkdir /var/run
         chmod 775 /var/run
+        mkdir /var/spool
+        chmod 775 /var/spool
         mkdir /var/lock
         chmod 775 /var/lock
         mkdir /var/cache
@@ -257,6 +259,9 @@ init() {
     chmod 775 /usr/local/crontabs
   fi
   update_crontab
+  mkdir -p /var/spool/cron
+  chmod 755 /var/spool/cron
+  ln -sf /usr/local/crontabs /var/spool/cron/crontabs
 
 	if [ ! -d /usr/local/etc/config ] ; then
                 mkdir -p /usr/local/etc/config
@@ -302,7 +307,7 @@ start() {
 	init
 	echo "OK"
 	echo -n "Starting crond: "
-	start-stop-daemon -S -q -b -m -p /var/run/crond.pid --exec /usr/sbin/crond -- -f -c /usr/local/crontabs
+	start-stop-daemon -S -q -b -m -p /var/run/crond.pid --exec /usr/sbin/crond -- -f
 	echo "OK"
 }
 

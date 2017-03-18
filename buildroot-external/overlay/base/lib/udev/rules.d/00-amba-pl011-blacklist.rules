@@ -1,0 +1,2 @@
+# the following rule will set MODALIAS to "" to force the amba pl011 to stay uninitialized upon boot
+SUBSYSTEM=="amba", ENV{DEVPATH}=="/devices/platform/soc/3f201000.uart", ENV{MODALIAS}=""

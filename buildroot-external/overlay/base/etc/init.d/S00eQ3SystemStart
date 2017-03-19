@@ -249,6 +249,9 @@ init() {
 	mkdir -p /usr/local/sdcard/measurement
 	mkdir -p /media/sd-mmcblk0
 	ln -sf /usr/local/sdcard/measurement /media/sd-mmcblk0/measurement
+  for i in $(seq 0 7); do
+    mkdir -p /media/usb${i}
+  done
 
   # SSH dir setup (/root/.ssh is linked to /usr/local/etc/ssh)
   mkdir -p /usr/local/etc/ssh

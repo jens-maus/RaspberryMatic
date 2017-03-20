@@ -256,6 +256,10 @@ init() {
   # SSH dir setup (/root/.ssh is linked to /usr/local/etc/ssh)
   mkdir -p /usr/local/etc/ssh
 
+  # create a /usr/local/tmp directory for creating things like backup files, etc.
+  # (we need it on-disk or /tmp will be not enough in case of a filled up /usr/local)
+  mkdir -p /usr/local/tmp
+
 	# crontab dirs
   if [ ! -d /usr/local/crontabs ] ; then
     mkdir -p /usr/local/crontabs

@@ -1,5 +1,5 @@
 --- homematic/WebUI/www/config/cp_security.cgi.orig	2016-12-14 20:34:28.446089427 +0100
-+++ homematic/WebUI/www/config/cp_security.cgi	2016-12-14 20:39:12.118635269 +0100
++++ homematic/WebUI/www/config/cp_security.cgi	2017-03-20 15:07:00.224043685 +0100
 @@ -192,7 +192,7 @@
          }
      }
@@ -49,3 +49,43 @@
  
      if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
        # set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
+@@ -1052,29 +1053,25 @@
+ proc action_create_backup {} {
+     set HOSTNAME [exec hostname]
+     set iso8601_date [exec date -Iseconds]
++    set tmpdir [exec mktemp -d -p /usr/local/tmp]
+     regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
++    set backupfile [set HOSTNAME]-$year-$month-$day-$hour$minute.sbk
+     #save DOM
+     rega system.Save()
+     cd /
+-    exec tar czf /tmp/usr_local.tar.gz usr/local
+-    cd /tmp/
++    exec tar --exclude=usr/local/tmp --exclude=usr/local/lost+found -czf $tmpdir/usr_local.tar.gz usr/local
++    cd $tmpdir/
+     #sign the configuration with the current key
+     exec crypttool -s -t 1 <usr_local.tar.gz >signature
+     #store the current key index
+     exec crypttool -g -t 1 >key_index
+     file copy -force /boot/VERSION firmware_version
+-    set fd [open "|tar c usr_local.tar.gz signature firmware_version key_index"]
+-    catch {fconfigure $fd -translation binary}
+-    catch {fconfigure $fd -encoding binary}
+-    puts "Content-Type:application/x-download"
+-    puts "Content-Disposition:attachment;filename=[set HOSTNAME]-$year-$month-$day.sbk\n"
+-    catch {fconfigure stdout -translation binary}
+-    catch {fconfigure stdout -encoding binary}
+-    while { ! [eof $fd]} {
+-        puts -nonewline [read $fd 65536]
+-    }
+-    close $fd
+-    file delete -force /tmp/usr_local.tar.gz /tmp/firmware_version /tmp/signature
++    exec tar -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index
++    cd /
++    exec rm -rf $tmpdir
++    puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"
++    puts "Content-Type: application/octet-stream"
++    puts "Content-Disposition: attachment; filename=\"$backupfile\"\n"
+ }
+ 
+ proc action_backup_upload {} {

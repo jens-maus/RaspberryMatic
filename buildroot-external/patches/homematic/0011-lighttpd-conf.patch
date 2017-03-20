@@ -1,5 +1,5 @@
 --- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig	2017-02-26 20:09:08.397575287 +0100
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-03-02 15:23:10.682144247 +0100
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-03-20 16:16:40.850165452 +0100
 @@ -14,10 +14,10 @@
  ## chroot example aswell.
  ##
@@ -47,3 +47,12 @@
  }
  
  ##
+@@ -374,7 +397,7 @@
+ ##
+ ## defaults to /var/tmp as we assume it is a local harddisk
+ ##
+-server.upload-dirs = ( "/var/tmp" )
++server.upload-dirs = ( "/usr/local/tmp" )
+ 
+ ##
+ #######################################################################

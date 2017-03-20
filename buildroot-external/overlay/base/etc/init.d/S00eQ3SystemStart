@@ -259,6 +259,7 @@ init() {
   # create a /usr/local/tmp directory for creating things like backup files, etc.
   # (we need it on-disk or /tmp will be not enough in case of a filled up /usr/local)
   mkdir -p /usr/local/tmp
+  rm -rf /usr/local/tmp/*
 
 	# crontab dirs
   if [ ! -d /usr/local/crontabs ] ; then

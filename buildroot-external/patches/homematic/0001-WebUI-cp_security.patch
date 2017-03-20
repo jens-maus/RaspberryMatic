@@ -1,5 +1,5 @@
 --- homematic/WebUI/www/config/cp_security.cgi.orig	2016-12-14 20:34:28.446089427 +0100
-+++ homematic/WebUI/www/config/cp_security.cgi	2017-03-20 15:07:00.224043685 +0100
++++ homematic/WebUI/www/config/cp_security.cgi	2017-03-20 22:24:46.096098225 +0100
 @@ -192,7 +192,7 @@
          }
      }
@@ -20,16 +20,33 @@
      }]} {
  
        # TWIST-22
-@@ -283,7 +283,7 @@
+@@ -278,13 +278,13 @@
+ 
+ proc action_backup_restore_check {} {
+     global env
+-    cd /tmp/
++    cd /usr/local/tmp/
+     
      http_head
      set i 0
      if { [catch {
 -        exec tar xf new_config.tar
-+        exec tar xf new_config.tar 2>/dev/null
-         file delete -force /tmp/new_config.tar
+-        file delete -force /tmp/new_config.tar
++        exec tar xf /usr/local/tmp/new_config.tar 2>/dev/null
++        file delete -force /usr/local/tmp/new_config.tar
      
      set config_version [read_version "firmware_version"]
-@@ -476,12 +476,13 @@
+     set ccu1_backup false
+@@ -414,7 +414,7 @@
+ 
+ proc action_backup_restore_go {} {
+     global env
+-    cd /tmp/
++    cd /usr/local/tmp/
+     http_head
+     
+     set system_version [read_version "/boot/VERSION"]
+@@ -476,14 +476,15 @@
      }
      
    if { "false" == $ccu1_backup } {  # backup for version >= 2
@@ -47,9 +64,50 @@
 +          #exec mount /usr/local
 +          exec rm -rf /usr/local/*
  
-     if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
+-    if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
++    if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
        # set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
-@@ -1052,29 +1053,25 @@
+       # append msg "Falls dieser Fehler wiederholt Auftritt, wenden Sie sich bitte mit der folgenden Fehlermeldung an den Kundenservice:\n<br>"
+       # append msg $errorMessage
+@@ -494,22 +495,22 @@
+     }    
+   } else {  # backup for version < 2      
+     #delete existing files
+-    file delete -force /tmp/backup
++    file delete -force /usr/local/tmp/backup
+     file delete -force /etc/config/hs485d /etc/config/hs485types /etc/config/rfd /etc/config/userprofiles 
+     file delete -force /etc/config/homematic.regadom /etc/config/homematic.regadom.bak
+     file delete -force /etc/config/ids /etc/config/ntpclient /etc/config/rega.conf /etc/config/syslog 
+     file delete -force /etc/config/tweaks /etc/config/TZ /etc/config/server.pem /etc/config/keys
+     file delete -force /etc/config/time.conf
+     
+-    file mkdir /tmp/backup
+-    cd /tmp/backup
+-    if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
++    file mkdir /usr/local/tmp/backup
++    cd /usr/local/tmp/backup
++    if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+       put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+       set backuperror true
+     } else {
+       #copy old files
+-      if { [file exists /tmp/backup/usr/local/etc/config] } {
+-        cd /tmp/backup/usr/local/etc/config
++      if { [file exists /usr/local/tmp/backup/usr/local/etc/config] } {
++        cd /usr/local/tmp/backup/usr/local/etc/config
+       }
+       
+       if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }        
+@@ -609,7 +610,7 @@
+       puts "translatePage('#messagebox');"
+     }
+ 
+-    file delete -force /tmp/new_config.tar /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
++    file delete -force /usr/local/tmp/new_config.tar /usr/local/tmp/firmware_version /usr/local/tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
+ }
+ 
+ proc put_message {title msg args} {
+@@ -1052,38 +1053,34 @@
  proc action_create_backup {} {
      set HOSTNAME [exec hostname]
      set iso8601_date [exec date -Iseconds]
@@ -89,3 +147,14 @@
  }
  
  proc action_backup_upload {} {
+     global env sid
+-    cd /tmp/
++    cd /usr/local/tmp/
+     
+     http_head
+     import_file -client backup_file
+-    file rename -force -- [lindex $backup_file 0] "/tmp/new_config.tar"
++    file rename -force -- [lindex $backup_file 0] "/usr/local/tmp/new_config.tar"
+     cgi_javascript {
+         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+         puts {

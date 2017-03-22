@@ -11,14 +11,13 @@ if [ ! -f /update_script ]; then
 	  sleep 5
 	  sync
   fi
-  echo 1 > /proc/sys/kernel/sysrq
-  echo b > /proc/sysrq-trigger
+  /sbin/reboot
 fi
 
 umount /oldroot/dev/pts
 umount /oldroot/dev/shm
 umount /oldroot/dev
-umount /oldroot/tmp/
+umount /oldroot/tmp
 umount /oldroot/sys/kernel/debug
 umount /oldroot/sys
 umount /oldroot/proc
@@ -26,5 +25,6 @@ umount /oldroot/usr/local
 umount /oldroot/media
 umount /oldroot
 /update_script HM-RASPBERRYMATIC
-echo 1 > /proc/sys/kernel/sysrq 
-echo b > /proc/sysrq-trigger
+sleep 5
+sync
+/sbin/reboot

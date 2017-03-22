@@ -1,5 +1,5 @@
 --- homematic/WebUI/www/config/cp_security.cgi.orig	2016-12-14 20:34:28.446089427 +0100
-+++ homematic/WebUI/www/config/cp_security.cgi	2017-03-20 22:24:46.096098225 +0100
++++ homematic/WebUI/www/config/cp_security.cgi	2017-03-22 16:10:46.686956003 +0100
 @@ -192,7 +192,7 @@
          }
      }
@@ -107,13 +107,15 @@
  }
  
  proc put_message {title msg args} {
-@@ -1052,38 +1053,34 @@
+@@ -1051,39 +1052,36 @@
+ 
  proc action_create_backup {} {
      set HOSTNAME [exec hostname]
++    set system_version [read_version "/boot/VERSION"]
      set iso8601_date [exec date -Iseconds]
 +    set tmpdir [exec mktemp -d -p /usr/local/tmp]
      regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
-+    set backupfile [set HOSTNAME]-$year-$month-$day-$hour$minute.sbk
++    set backupfile [set HOSTNAME]-$system_version-$year-$month-$day-$hour$minute.sbk
      #save DOM
      rega system.Save()
      cd /

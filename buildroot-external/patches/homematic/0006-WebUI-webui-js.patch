@@ -1,6 +1,17 @@
---- homematic/WebUI/www/webui/webui.js.orig	2016-11-25 17:46:24.480091634 +0100
-+++ homematic/WebUI/www/webui/webui.js	2016-11-25 17:55:36.779435439 +0100
-@@ -16943,7 +16943,7 @@
+--- homematic/WebUI/www/webui/webui.js.orig	2017-03-22 10:29:02.525052893 +0100
++++ homematic/WebUI/www/webui/webui.js	2017-03-22 10:25:40.462016779 +0100
+@@ -11285,8 +11285,9 @@
+     var isOk = true;
+     for (var i = 0, len = ips.length; i < len; i++) {
+       var ip = ips[i];
+-      if (!ip.match(/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(\/[0-9]+)?$/)) {
++      if (!ip.match(/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(\/[0-9]+)?$/) && !ip.match(/^[a-f0-9]+:/)) {
+         isOk = false;
++        break;
+       }
+     }
+ 
+@@ -18124,7 +18125,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
@@ -9,7 +20,7 @@
      $("body").appendChild(script);
    },
  
-@@ -17039,7 +17039,7 @@
+@@ -18220,7 +18221,7 @@
     **/
    setLatestVersion: function(latestVersion, product)
    {

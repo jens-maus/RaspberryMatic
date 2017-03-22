@@ -35,7 +35,7 @@ set Firewall_SERVICES(REGA)   [list PORTS [list 8181] ACCESS restricted]
 # eingeschränktem Zugriff eine Verwendung des jeweiligen Serices noch erlaubt
 # ist.
 ##
-set Firewall_IPS [list 192.168.0.1 192.168.0.0/16]
+set Firewall_IPS [list 192.168.0.1 192.168.0.0/16 fc00::/7]
 
 ##
 # @fn loadConfiguration
@@ -149,13 +149,22 @@ proc Firewall_configureFirewall { } {
   exec_cmd "/usr/sbin/iptables -A INPUT -i lo -j ACCEPT"
   exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 8182 -j DROP"
 
+  exec_cmd "/usr/sbin/ip6tables -F"
+  exec_cmd "/usr/sbin/ip6tables -P INPUT ACCEPT"
+  exec_cmd "/usr/sbin/ip6tables -A INPUT -i lo -j ACCEPT"
+  exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 8182 -j DROP"
+
   foreach serviceName [array names Firewall_SERVICES] {
     array set service $Firewall_SERVICES($serviceName)
   
     if { $service(ACCESS) == "restricted" } then {
       foreach port $service(PORTS) {
         foreach ip $Firewall_IPS {
-          exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport $port -s $ip -j ACCEPT"
+          if { [regexp {:} $ip] } then {
+            exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport $port -s $ip -j ACCEPT"
+          } else {
+            exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport $port -s $ip -j ACCEPT"
+          }
         }
       }
     }
@@ -163,6 +172,7 @@ proc Firewall_configureFirewall { } {
     if { $service(ACCESS) == "none" || $service(ACCESS) == "restricted"} then {
       foreach port $service(PORTS) {
         exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport $port -j DROP"
+        exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport $port -j DROP"
       }
     }
   

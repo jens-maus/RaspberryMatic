@@ -33,6 +33,8 @@ start() {
 }
 stop() {
 	echo -n "Stopping ReGaHss: "
+	# workaround for ReGaHss bug not terminating properly and thus loosing changes upon shutdown.
+	echo "load tclrega.so; rega system.Save()" | /bin/tclsh
 	PID=`cat $PIDFILE`
 	start-stop-daemon -K -q -p $PIDFILE
 	rm -f $PIDFILE

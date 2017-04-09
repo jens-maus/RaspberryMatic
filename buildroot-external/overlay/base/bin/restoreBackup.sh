@@ -24,6 +24,10 @@ tar -C ${TMPDIR} -xf ${BACKUPFILE}
 /etc/init.d/S61rfd stop
 /etc/init.d/S60hs485d stop
 /etc/init.d/S50lighttpd stop
+/sbin/start-stop-daemon -K -q -p /var/run/crond.pid
+
+# wait some time to get all daemons time to finish
+sleep 5
 
 # now remove the whole /usr/local, but keep /usr/local/tmp
 find /usr/local -not -name tmp -not -name "lost+found" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;

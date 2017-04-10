@@ -62,16 +62,16 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 ## Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:
 
-1. Download latest release archive (`RaspberryMatic-X.XX.XX.YYYYMMDD.zip`) from [here](https://github.com/jens-maus/RaspberryMatic/releases), e.g.:
-  * `wget https://github.com/jens-maus/RaspberryMatic/releases/download/X.XX.XX.YYYYMMDD/RaspberryMatic-X.XX.XX.YYYYMMDD.zip`
+1. [Download latest release](https://github.com/jens-maus/RaspberryMatic/releases) archive (`RaspberryMatic-X.XX.XX.YYYYMMDD.zip`):
+   * `wget https://github.com/jens-maus/RaspberryMatic/releases/download/X.XX.XX.YYYYMMDD/RaspberryMatic-X.XX.XX.YYYYMMDD.zip`
 2. Unarchive zip file resulting in an SD card image (`RaspberryMatic-X.XX.XX.YYYYMMDD.img`), e.g.:
-  * `unzip RaspberryMatic-X.XX.XX.YYYYMMDD.zip`
+   * `unzip RaspberryMatic-X.XX.XX.YYYYMMDD.zip`
 3. Check sha256 checksum to check integrity of SD card image, e.g.:
-  * `sha256sum -c RaspberryMatic-X.XX.XX.YYYYMMDD.img.sha256`
+   * `sha256sum -c RaspberryMatic-X.XX.XX.YYYYMMDD.img.sha256`
 4. Based on your operating system use a Flash-tool to copy the image onto your microSD card:
-  * <i>Linux</i>: `sudo dd if=RaspberryMatic-X.XX.XX.YYYYMMDD.img of=/dev/sdX bs=4096`
-  * <i>macOS</i>: Use [ApplePiBaker](http://www.tweaking4all.com/hardware/raspberry-pi/macosx-apple-pi-baker/)
-  * <i>Windows</i>: Use [Win32DiskImager](https://sourceforge.net/projects/win32diskimager/)
+   * <i>Linux</i>: `sudo dd if=RaspberryMatic-X.XX.XX.YYYYMMDD.img of=/dev/sdX bs=4096`
+   * <i>macOS</i>: Use [ApplePiBaker](http://www.tweaking4all.com/hardware/raspberry-pi/macosx-apple-pi-baker/)
+   * <i>Windows</i>: Use [Win32DiskImager](https://sourceforge.net/projects/win32diskimager/)
 5. Make sure you have the HM-MOD-RPI-PCB radio modul installed on the GPIO of your RaspberryPi
 6. Install microSD in your RaspberryPi and start it
 7. Wait until bootup process is finished and use a web browser to connect to http://homematic-raspi/

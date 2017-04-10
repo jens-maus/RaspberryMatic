@@ -1,5 +1,5 @@
 --- homematic/WebUI/www/config/cp_security.cgi.orig	2016-12-14 20:34:28.446089427 +0100
-+++ homematic/WebUI/www/config/cp_security.cgi	2017-03-22 16:10:46.686956003 +0100
++++ homematic/WebUI/www/config/cp_security.cgi	2017-04-10 16:00:36.245859877 +0200
 @@ -192,7 +192,7 @@
          }
      }
@@ -46,7 +46,7 @@
      http_head
      
      set system_version [read_version "/boot/VERSION"]
-@@ -476,14 +476,15 @@
+@@ -476,14 +476,14 @@
      }
      
    if { "false" == $ccu1_backup } {  # backup for version >= 2
@@ -62,14 +62,13 @@
 +          #exec /usr/sbin/ubiattach -p /dev/mtd6
 +          #exec /usr/sbin/ubimkvol /dev/ubi1 -N user -m
 +          #exec mount /usr/local
-+          exec rm -rf /usr/local/*
  
 -    if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
-+    if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
++    if { [catch {exec touch /usr/local/.doBackupRestore} errorMessage] } {
        # set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
        # append msg "Falls dieser Fehler wiederholt Auftritt, wenden Sie sich bitte mit der folgenden Fehlermeldung an den Kundenservice:\n<br>"
        # append msg $errorMessage
-@@ -494,22 +495,22 @@
+@@ -494,22 +494,22 @@
      }    
    } else {  # backup for version < 2      
      #delete existing files
@@ -98,16 +97,15 @@
        }
        
        if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }        
-@@ -609,7 +610,7 @@
+@@ -609,7 +609,6 @@
        puts "translatePage('#messagebox');"
      }
  
 -    file delete -force /tmp/new_config.tar /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
-+    file delete -force /usr/local/tmp/new_config.tar /usr/local/tmp/firmware_version /usr/local/tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
  }
  
  proc put_message {title msg args} {
-@@ -1051,39 +1052,36 @@
+@@ -1051,39 +1050,36 @@
  
  proc action_create_backup {} {
      set HOSTNAME [exec hostname]

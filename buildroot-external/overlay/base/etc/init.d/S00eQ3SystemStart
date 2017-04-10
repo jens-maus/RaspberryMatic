@@ -58,6 +58,29 @@ checkFactoryReset() {
   mount /usr/local
 }
 
+# function to check if a backup should be restored that had been placed in /usr/local/tmp
+# in addition to /usr/local/.doBackupRestore being present and empty
+checkBackupRestore() {
+
+  # only continue if .doBackupRestore file exists
+  if [[ ! -r /usr/local/.doBackupRestore ]]; then
+    return
+  fi
+
+  if [[ -f /usr/local/tmp/usr_local.tar.gz ]]; then
+    # now remove the whole /usr/local, but keep /usr/local/tmp
+    find /usr/local -not -name tmp -not -name "lost+found" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
+
+    # unarchive the backup archive to restore everything
+    tar -C / -xf /usr/local/tmp/usr_local.tar.gz
+
+    # make sure everything is written to disk
+    sync
+  fi
+
+  rm -f /usr/local/.doBackupRestore
+}
+
 # initialize a potentially existing RTC clock
 init_rtc_device() {
 
@@ -174,6 +197,9 @@ init() {
 
   # check if a factory reset should be performed
   checkFactoryReset
+
+  # check if we should restore a backup now
+  checkBackupRestore
 
   # check if we should boot in LAN gateway mode
   if [[ -e /usr/local/HMLGW ]]; then

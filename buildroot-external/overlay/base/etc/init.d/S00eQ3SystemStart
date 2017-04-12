@@ -353,7 +353,11 @@ stop () {
   cleanup
   echo "OK"
 
-	/bin/update_firmware_pre
+  # check if we should install an addon
+  if [[ -r /usr/local/.doAddonInstall ]]; then
+    /bin/install_addon
+    rm -f /usr/local/.doAddonInstall
+  fi
 }
 
 restart() {

@@ -1,0 +1,48 @@
+#!/bin/sh
+
+if [[ ! -f /usr/local/tmp/new_addon.tar.gz ]]; then
+  exit
+fi
+
+UPDATEDIR=$(mktemp -d -p /usr/local/tmp)
+
+echo "Extracting addon..."
+umask 022
+tar -C ${UPDATEDIR} --no-same-owner --no-same-permissions -xf /usr/local/tmp/new_addon.tar.gz
+
+if [[ ! -x ${UPDATEDIR}/update_script ]]; then
+  exit
+fi
+
+rm /usr/local/tmp/new_addon.tar.gz
+
+for i in bin usr lib usr dev/pts sys tmp proc; do
+  mkdir -p ${UPDATEDIR}/${i}
+done
+
+echo "Preparing chroot env..."
+cp -a /bin ${UPDATEDIR}/
+cp -a /lib ${UPDATEDIR}/
+cp -a /sbin ${UPDATEDIR}/
+cp -a /etc ${UPDATEDIR}/
+
+find /usr -maxdepth 1 -not -name local -not -name usr -exec cp -a {} ${UPDATEDIR}/usr/ \;
+
+for i in dev proc sys dev/pts; do
+  mkdir -p ${UPDATEDIR}/${i}
+  mount -o bind /${i} ${UPDATEDIR}/${i}
+done
+
+mkdir -p ${UPDATEDIR}/usr/local
+mount -o bind /usr/local ${UPDATEDIR}/usr/local
+
+echo "Executing update_script in chroot..."
+/usr/sbin/chroot ${UPDATEDIR}/ ./update_script HM-RASPBERRYMATIC
+
+umount ${UPDATEDIR}/usr/local
+
+for i in dev/pts sys proc dev; do
+  umount ${UPDATEDIR}/${i}
+done
+
+sync

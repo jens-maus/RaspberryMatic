@@ -1,5 +1,5 @@
 --- homematic/WebUI/www/config/cp_software.cgi.orig	2017-03-22 14:31:29.135159837 +0100
-+++ homematic/WebUI/www/config/cp_software.cgi	2017-03-22 14:35:37.869129058 +0100
++++ homematic/WebUI/www/config/cp_software.cgi	2017-04-12 22:00:00.222839788 +0200
 @@ -488,11 +488,11 @@
  
  proc action_image_upload {} {
@@ -10,7 +10,17 @@
      http_head
      import_file -client firmware_file
 -    file rename -force -- [lindex $firmware_file 0] "/var/new_firmware.tar.gz"
-+    file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_firmware.tar.gz"
++    file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_addon.tar.gz"
      cgi_javascript {
          puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
          puts {
+@@ -507,7 +507,8 @@
+     if {[isOldCCU]} {
+         exec /sbin/init -q
+     } else {
+-        exec /bin/kill -SIGQUIT 1
++        exec touch /usr/local/.doAddonInstall
++        exec /sbin/reboot
+     }
+ }
+ 

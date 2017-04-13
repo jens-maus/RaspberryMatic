@@ -471,17 +471,17 @@ proc action_put_page {} {
             }
             table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
                 table_data {class="CLASS20903"} $styleMaxWidth {
-                    puts "Shutdown"
+		                puts "\${dialogSettingsCMTDCCUShutdown}"
                 }
                 table_data {class="CLASS20904"} {
                     division {class="popupControls CLASS20905"} {
                         division {class="CLASS20910"} {onClick="OnShutdown();"} {
-                            puts "Shutdown"
+                            puts "\${dialogSettingsCMBtnCCUShutdown}"
                         }
                     }
                 }
                 table_data {align="left"} {class="CLASS20904"} {
-                    puts "Will properly shutdown RaspberryMatic and save all settings beforehand."
+                    puts "\${dialogSettingsCMHintShutdown}"
                 }
             }
             
@@ -897,14 +897,14 @@ proc action_shutdown_confirm {} {
                     table {class="CLASS20909"} {width="100%"} {
                         table_row {
                             table_data {colspan="3"} {
-			        puts "Please confirm the shutdown."
+			        puts "\${dialogQuestionShutdown}"
                             }
                         }                        
                         table_row {
                             table_data {align="right"} {class="CLASS20911"} {colspan="3"} {
                                 division {class="popupControls CLASS20905"} {
                                     division {class="CLASS20910"} {onClick="OnNextStep()"} {
-                                        puts "Shutdown"
+                                        puts "\${dialogBtnPerformShutdown}"
                                     }
                                 }
                             }
@@ -948,9 +948,9 @@ proc action_shutdown_go {} {
     
     http_head
 
-    put_message "\${dialogPerformRebootTitle}" {
-        ${dialogPerformRebootContent}
-    } {"\${btnNewLogin}" "window.location.href='/';"}
+    put_message "\${dialogPerformShutdownTitle}" {
+        ${dialogPerformShutdownContent}
+    } "_empty_"
 
     puts ""
     cgi_javascript {

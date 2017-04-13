@@ -31,9 +31,6 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Dedicated Build Environment using a cross compiler (`arm-linux-gcc`) to compile third-party applications
 
 ## Limitations
-* HmIP-RF devices have to be reteached after Config restore from CCU2 (Limitation of HmIP)
-* Updates require complete Backup->Reinstall->Restore procedure
-* Special HomeMatic CCU Addon packages required (CCU2 versions don't work)
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
 
 ## Requirements

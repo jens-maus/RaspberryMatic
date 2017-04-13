@@ -1,0 +1,27 @@
+# TCP Port for XmlRpc connections
+Listen Port = 2001
+
+Log Destination = Syslog
+Log Identifier = rfd
+Log Level = 1
+
+Persist Keys = 1
+
+# PID File = /var/rfd.pid
+# UDS File = /var/socket_rfd
+
+Device Description Dir = /firmware/rftypes
+Device Files Dir = /etc/config/rfd
+Key File = /etc/config/keys
+Address File = /etc/config/ids
+Firmware Dir = /firmware
+Replacemap File = /firmware/rftypes/replaceMap/rfReplaceMap.xml
+Fire NACK Error Events = true
+Improved Coprocessor Initialization = true
+
+[Interface 0]
+Type = CCU2
+ComPortFile = /dev/mmd_bidcos
+#AccessFile = /dev/null
+#ResetFile = /dev/ccu2-ic200
+

@@ -1,0 +1,5 @@
+#### CGI module
+cgi.assign = ( ".pl"  => "/usr/bin/perl",
+                ".cgi" => "/opt/hm/bin/tclsh",
+                ".ccc" => ""
+             )

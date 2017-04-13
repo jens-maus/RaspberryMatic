@@ -506,7 +506,7 @@
  	set _cgi(tmpdir) [pwd]
      } default {
 --- homematic/WebUI/www/webui/js/lang/tr/translate.lang.js.orig	2017-04-13 10:52:58.386938561 +0200
-+++ homematic/WebUI/www/webui/js/lang/tr/translate.lang.js	2017-04-13 12:23:54.842851757 +0200
++++ homematic/WebUI/www/webui/js/lang/tr/translate.lang.js	2017-04-13 13:34:12.170237854 +0200
 @@ -1,8 +1,8 @@
  jQuery.extend(true,HMIdentifier , {
    "tr" : {
@@ -535,9 +535,19 @@
      "dialogEditRoomBtnClose" : "Kapat",
      "dialogEditRoomBtnNew" : "Yeni",
      "infoLoadConfigData" : "Konfig%FCrasyon bilgileri y%FCkleniyor...",
-@@ -473,6 +475,7 @@
+@@ -454,6 +456,7 @@
+     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Adim 2: Indirdiginiz yazilima tiklayin",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Adim 3: Yazilimi " + HMIdentifier.tr.CCUShortName + "'e y%FCkleyin",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Adim 4: G%FCncellemeyi baslatin",
++    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Step 2: Read <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>documentation</a> and <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>update/upgrade instructions</a>",
+     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.tr.BidCosRF,
+     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.tr.BidCosWired,
+     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.tr.CCUShortName + "-Kumanda",
+@@ -472,7 +475,9 @@
+     "dialogSettingsCMHintSoftwareUpdate3" : "G%FCncellemeden %F6nce verileri emniyete alin.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Bataryalarin sarj durumu artik sadece ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Elektrik kesintisi nedeniyle veri kaybini %F6nlemek icin bataryalari g%FCncellemeyi baslatmadan %F6nce degistirmenizi %F6neriyoruz.",
++    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
      "dialogSettingsCMHintRestart" : "Merkezi yeniden baslat. Degistirilmis ayarlar %F6nceden kaydedilir.",
 +    "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic merkezini bir kere g%FCvenli modda baslatin. G%FCvenli modda y%FCklenen ek yazilim baslatilmaz. Degistirilmis ayarlar %F6nceden kaydedilir.",
@@ -562,7 +572,7 @@
 \ No newline at end of file
 +});
 --- homematic/WebUI/www/webui/js/lang/de/translate.lang.js.orig	2017-04-13 10:53:10.426664777 +0200
-+++ homematic/WebUI/www/webui/js/lang/de/translate.lang.js	2017-04-13 12:17:00.924326082 +0200
++++ homematic/WebUI/www/webui/js/lang/de/translate.lang.js	2017-04-13 13:41:22.272394738 +0200
 @@ -1,8 +1,8 @@
  jQuery.extend(true,HMIdentifier , {
    "de" : {
@@ -599,7 +609,15 @@
      "dialogSettingsCMTDCCUSafeMode" : "Abgesicherter<br/>Modus",
      "dialogSettingsCMTDErrorProtocol" : "Fehler-<br/>protokoll",
      "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
-@@ -460,6 +463,7 @@
+@@ -452,6 +455,7 @@
+     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Schritt 2: Heruntergeladene Software ausw%E4hlen",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Schritt 3: Software auf " + HMIdentifier.de.CCUShortName + " laden",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Schritt 4: Update starten",
++    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Schritt 2: Gehen Sie anhand der <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>Dokumentation</a> und <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>Update/Upgrade Anleitung</a> vor",
+     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.de.BidCosRF,
+     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.de.BidCosWired,
+     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.de.CCUShortName + "-Steuerung",
+@@ -460,6 +464,7 @@
      "dialogSettingsCMBtnPerformSoftwareUpdateDownload" : "Herunterladen",
      "dialogSettingsCMBtnPerformSoftwareUpdateUpload" : "Hochladen",
      "dialogSettingsCMBtnCCURestart" : "Neustart",
@@ -607,9 +625,11 @@
      "dialogSettingsCMBtnCCURestartSafe" : "Neustart im abgesicherten Modus",
      "dialogSettingsCMBtnLogSysLogServerAddress" : "Einstellungen %FCbernehmen",
      "dialogSettingsCMBtnLogLoadLogFile" : "Logdatei herunterladen",
-@@ -471,6 +475,7 @@
+@@ -470,7 +475,9 @@
+     "dialogSettingsCMHintSoftwareUpdate3" : "F%FChren Sie vor dem Update eine Datensicherung durch.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Der Ladezustand der Batterien betr%E4gt nur noch ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Um einem Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Update zu erneuern.",
++    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic ist ein gemeinschaftliches Projekt. Wenn Sie die Weiterentwicklung gerne in Form einer Geldspende unterst%FCtzen wollen k%F6nen Sie das gerne mittels einer <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal Spende</a> tun.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
      "dialogSettingsCMHintRestart" : "Zentrale neu starten. Ver%E4nderte Einstellungen werden vorher gespeichert.",
 +    "dialogSettingsCMHintShutdown" : "Zentrale herunterfahren. Ver%E4nderte Einstellungen werden vorher gespeichert.",
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
@@ -634,7 +654,7 @@
 \ No newline at end of file
 +});
 --- homematic/WebUI/www/webui/js/lang/en/translate.lang.js.orig	2017-04-13 10:53:44.081899517 +0200
-+++ homematic/WebUI/www/webui/js/lang/en/translate.lang.js	2017-04-13 12:22:05.481353819 +0200
++++ homematic/WebUI/www/webui/js/lang/en/translate.lang.js	2017-04-13 13:32:45.784215582 +0200
 @@ -1,8 +1,8 @@
  jQuery.extend(true,HMIdentifier , {
    "en" : {
@@ -671,7 +691,15 @@
      "dialogSettingsCMTDCCUSafeMode" : "Safe<br/>mode",
      "dialogSettingsCMTDErrorProtocol" : "Error<br/>log",
      "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
-@@ -460,6 +463,7 @@
+@@ -452,6 +455,7 @@
+     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Step 2: Select downloaded software",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Step 3: Upload software to " + HMIdentifier.en.CCUShortName,
+     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Step 4: Start update",
++    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Step 2: Read <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>documentation</a> and <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>update/upgrade instructions</a>",
+     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.en.BidCosRF,
+     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.en.BidCosWired,
+     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.en.CCUShortName + " control",
+@@ -460,6 +464,7 @@
      "dialogSettingsCMBtnPerformSoftwareUpdateDownload" : "Download",
      "dialogSettingsCMBtnPerformSoftwareUpdateUpload" : "Upload",
      "dialogSettingsCMBtnCCURestart" : "Restart",
@@ -679,9 +707,11 @@
      "dialogSettingsCMBtnCCURestartSafe" : "Restart in safe mode",
      "dialogSettingsCMBtnLogSysLogServerAddress" : "Apply settings",
      "dialogSettingsCMBtnLogLoadLogFile" : "Download log file",
-@@ -471,6 +475,7 @@
+@@ -470,7 +475,9 @@
+     "dialogSettingsCMHintSoftwareUpdate3" : "Please perform a data backup before starting the update.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "The charging status the batteries is only at ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",
++    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
      "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
 +    "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
      "dialogSettingsCMHintRestartSafeMode" : "Start HomeMatic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
@@ -908,7 +938,7 @@
 +};
 +//<.
 --- homematic/WebUI/www/config/cp_maintenance.cgi.orig	2017-03-21 13:52:40.253500448 +0100
-+++ homematic/WebUI/www/config/cp_maintenance.cgi	2017-04-13 12:18:35.838152501 +0200
++++ homematic/WebUI/www/config/cp_maintenance.cgi	2017-04-13 13:34:34.117735425 +0200
 @@ -377,7 +377,7 @@
                                          table_row {
                                              table_data {
@@ -960,7 +990,7 @@
 -                            table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
 -                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
 +                                #puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
-+                                puts "Step 2: Read <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>documentation</a> and <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497' target='_blank'>update instructions</a>"
++                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic}"
                              }
                          }
 +                        #table_row {
@@ -1020,7 +1050,7 @@
 -                    division {class="j_forcedUpdate" style="padding:10px;"} {
 -                      puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
 -                    }
-+                    puts "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>"
++                    puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
 +                    #puts "\${dialogSettingsCMHintSoftwareUpdate1}"
 +                    #number_list {class="j_noForcedUpdate"} {
 +                    #    li {

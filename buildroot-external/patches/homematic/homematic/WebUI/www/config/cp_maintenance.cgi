@@ -388,7 +388,7 @@ proc action_put_page {} {
                             td {width="20"} {}
                             table_data {align="left"} {colspan="2"} {
                                 #puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
-                                puts "Step 2: Read <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>documentation</a> and <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497' target='_blank'>update instructions</a>"
+                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic}"
                             }
                         }
                         #table_row {
@@ -430,7 +430,7 @@ proc action_put_page {} {
                     }
                 }
                 table_data {align="left"} {class="CLASS20921"} {
-                    puts "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>"
+                    puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
                     #puts "\${dialogSettingsCMHintSoftwareUpdate1}"
                     #number_list {class="j_noForcedUpdate"} {
                     #    li {

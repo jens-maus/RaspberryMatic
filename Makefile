@@ -18,7 +18,7 @@ buildroot-$(BUILDROOT_VERSION).tar.bz2:
 BUILDROOT_PATCHES=$(wildcard buildroot-patches/*.patch)
 
 buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.bz2
-	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; for p in `ls buildroot-patches`; do patch -d buildroot-$(BUILDROOT_VERSION) -p1 < buildroot-patches/$${p}; done; fi
+	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; for p in $(BUILDROOT_PATCHES); do patch -d buildroot-$(BUILDROOT_VERSION) -p1 < $${p}; done; fi
 
 build-$(BOARD): | buildroot-$(BUILDROOT_VERSION) download
 	mkdir -p build-$(BOARD)

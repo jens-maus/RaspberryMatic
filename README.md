@@ -92,7 +92,7 @@ $ git clone https://github.com/jens-maus/RaspberryMatic
 $ cd RaspberryMatic
 $ make dist
 [wait up to 1h]
-$ sudo dd if=build-raspmatic_rpi/images/sdcard.img of=/dev/sdX bs=4096
+$ make install of=/dev/sdX
 ```
 
 ### Using the generated cross compiler

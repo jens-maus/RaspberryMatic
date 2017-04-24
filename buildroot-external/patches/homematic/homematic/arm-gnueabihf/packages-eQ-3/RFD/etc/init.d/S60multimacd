@@ -54,7 +54,7 @@ waitStartupComplete() {
 
 start() {
 	echo -n "Starting multimacd: "
-  if [[ ${HM_MODE} == "HmIP" ]]; then
+  if [[ ${HM_MODE} == "HmIP" ]] && [[ ! -z $(cat /var/rf_address) ]]; then
 	  init
 	  start-stop-daemon -S -N -10 -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l $LOGLEVEL_RFD
 	  waitStartupComplete
@@ -64,7 +64,7 @@ start() {
 }
 stop() {
 	echo -n "Stopping multimacd: "
-  if [[ ${HM_MODE} == "HmIP" ]]; then
+  if [[ ${HM_MODE} == "HmIP" ]] && [[ ! -z $(cat /var/rf_address) ]]; then
 	  start-stop-daemon -K -q -p $PIDFILE
 	  rm -f $PIDFILE
   fi

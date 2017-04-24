@@ -31,7 +31,7 @@ init() {
 
   # if there is no HmIP support enabled we have to strip
   # the HmIP-RF part in InterfacesList.xml
-  if [[ ${HM_MODE} != "HmIP" ]]; then
+  if [[ ${HM_MODE} != "HmIP" ]] || [[ -z $(cat /var/rf_address) ]]; then
     line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | head -1)
     line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | tail -1)
     if [[ -n ${line_start} && -n ${line_end} ]]; then

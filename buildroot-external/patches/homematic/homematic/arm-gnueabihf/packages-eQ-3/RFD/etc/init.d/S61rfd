@@ -23,16 +23,25 @@ init() {
 		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config/rfd.conf
   fi
 
-  # patch some settings to match what this hardware expects.
-  if [[ ${HM_MODE} == "HmIP" ]]; then
-    sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf
+  # only modify if real rf module found
+  if [[ ! -z $(cat /var/rf_address) ]]; then
+    # make sure [Interface 0] is uncommented
+    sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
+
+    # patch some settings to match what this hardware expects.
+    if [[ ${HM_MODE} == "HmIP" ]]; then
+      sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf
+    else
+      sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/ttyAMA0/' /etc/config/rfd.conf
+    fi
+    sed -i 's/^#*AccessFile = \/dev\/.*$/AccessFile = \/dev\/null/' /etc/config/rfd.conf
+    sed -i 's/^#*ResetFile = \/dev\/.*$/ResetFile = \/dev\/null/' /etc/config/rfd.conf
+    if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
+      sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
+    fi
   else
-    sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/ttyAMA0/' /etc/config/rfd.conf
-  fi
-  sed -i 's/^#*AccessFile = \/dev\/.*$/AccessFile = \/dev\/null/' /etc/config/rfd.conf
-  sed -i 's/^#*ResetFile = \/dev\/.*$/ResetFile = \/dev\/null/' /etc/config/rfd.conf
-  if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
-    sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
+    # otherwise disable the whole [Interface 0] part
+    sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf
   fi
 
 	if [ ! -e /etc/config/syslog ] ; then

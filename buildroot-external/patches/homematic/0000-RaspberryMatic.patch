@@ -230,8 +230,8 @@
  	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
  	waitStartupComplete
 --- homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/rega.conf.orig	2017-04-06 22:34:28.725017481 +0200
-+++ homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/rega.conf	2017-04-06 22:33:22.522604387 +0200
-@@ -57,6 +57,21 @@
++++ homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/rega.conf	2017-04-24 09:38:31.723554106 +0200
+@@ -57,6 +57,26 @@
  # Standard: 300
  SessionTimeout=300
  
@@ -243,12 +243,17 @@
 +# AutoSaveDOMCycle
 +# Intervalzeit in Sekunden für das automatisch Speichern der Konfiguration
 +# Standard: 43200 (12h)
-+AutoSaveDOMCycle=3600
++AutoSaveDOMCycle=43200
++
++# AutoSaveDOMOnExit
++# Wenn gesetzt wird beim beenden erzwungen das die DOM Konfiguration in gespeichert wird
++# Standard: 0 (false)
++AutoSaveDOMOnExit=0
 +
 +# CheckModifiedCycle
 +# Intervalzeit in Sekunden für das Prüfen+Speichern bei Konfigänderungen
 +# Standard: 600 (10min)
-+CheckModifiedCycle=300
++CheckModifiedCycle=600
 +
  #*******************************************************************************
  # Ereignisse

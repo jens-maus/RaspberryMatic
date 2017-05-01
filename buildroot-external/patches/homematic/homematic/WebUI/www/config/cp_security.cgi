@@ -493,6 +493,10 @@ proc action_backup_restore_go {} {
       set backuperror false
     }    
   } else {  # backup for version < 2      
+    catch {
+        exec killall ReGaHss
+        exec sleep 5
+    }
     #delete existing files
     file delete -force /usr/local/tmp/backup
     file delete -force /etc/config/hs485d /etc/config/hs485types /etc/config/rfd /etc/config/userprofiles 
@@ -563,6 +567,8 @@ proc action_backup_restore_go {} {
       catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
 
       set backuperror false
+      exec /sbin/reboot
+      return
     }          
     cd /
   }

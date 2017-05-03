@@ -1,6 +1,6 @@
 BOARD=raspmatic_rpi
 # BOARD=raspmatic_docker
-BUILDROOT_VERSION=2017.02
+BUILDROOT_VERSION=2017.02.1
 RBE_VERSION=0.1.0
 
 .PHONY: all
@@ -10,6 +10,7 @@ usage:
 	@echo "RaspberryMatic Build Environment (RBE) Version ${RBE_VERSION}"
 	@echo "Usage:"
 	@echo "	make dist: install buildroot and create default RaspberryMatic Image"
+	@echo "	make install of=/dev/sdX: write image to SD card under /dev/sdX"
 	@echo "	make distclean: clean everything"
 
 buildroot-$(BUILDROOT_VERSION).tar.bz2:
@@ -18,7 +19,7 @@ buildroot-$(BUILDROOT_VERSION).tar.bz2:
 BUILDROOT_PATCHES=$(wildcard buildroot-patches/*.patch)
 
 buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.bz2
-	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; for p in `ls buildroot-patches`; do patch -d buildroot-$(BUILDROOT_VERSION) -p1 < buildroot-patches/$${p}; done; fi
+	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; for p in $(BUILDROOT_PATCHES); do patch -d buildroot-$(BUILDROOT_VERSION) -p1 < $${p}; done; fi
 
 build-$(BOARD): | buildroot-$(BUILDROOT_VERSION) download
 	mkdir -p build-$(BOARD)
@@ -49,7 +50,7 @@ umount:
 	sudo kpartx -dv build-$(BOARD)/images/sdcard.img
 
 install:
-	sudo dd if=build-$(BOARD)/images/sdcard.img of=/dev/sdc bs=4096
+	sudo -- /bin/sh -c 'dd if=build-$(BOARD)/images/sdcard.img of=$(of) bs=4096 && sync'
 
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
 	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig

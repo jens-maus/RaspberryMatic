@@ -1,0 +1,121 @@
+#!/bin/sh
+#
+# Starts multimacd.
+#
+
+LOGLEVEL_RFD=5
+CFG_TEMPLATE_DIR=/etc/config_templates
+PIDFILE=/var/run/multimacd.pid
+
+update() {        
+	if [ ! -e /etc/config/no-coprocessor-update ] ; then
+		echo "checking if firmware update is needed..."
+		/bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u
+		if ! [ $? -eq 0 ] ; then
+			echo "error while updating coprocessor, recovering..."
+			avrprog --bo
+			/bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u -f
+			sleep 1
+		else
+			echo "done"
+			sleep 1
+		fi
+	else
+		echo "firmware update disabled"
+	fi
+}
+check_bo(){
+	avrprog --devinfo | grep -q ec,fd,da,ef
+	if ! [ 0 -eq $? ];
+	then
+	avrprog --bo
+	fi
+}
+check_rf_address(){
+        sed 1q /sys/module/plat_eq3ccu2/parameters/radio_mac > /var/log/rf_address
+        /bin/eq3configcmd read-default-rf-address -l 0 -v -h -f /dev/mxs_auart_raw.0 | grep -q -F -f /var/log/rf_address
+        if ! [ 0 -eq $? ];
+        then
+        avrprog --bo
+        fi
+        rm /var/log/rf_address
+}
+init() {
+	export TZ=`cat /etc/config/TZ`
+	
+	if [ ! -e /etc/config/multimacd.conf ] ; then
+		cp $CFG_TEMPLATE_DIR/multimacd.conf /etc/config
+	fi
+
+	if [ ! -e /etc/config/syslog ] ; then
+		cp $CFG_TEMPLATE_DIR/syslog /etc/config
+	fi
+	if [ -e /etc/config/syslog ] ; then
+  		. /etc/config/syslog
+	fi
+
+}
+
+waitStartupComplete() {
+    echo -n "Waiting for multimacd to get ready"
+	STEPS=5
+    for i in $(seq 1 $STEPS)
+    do
+		sleep 2
+		echo -n "."
+        MMDSTATUSPID=`cat /var/status/multimacd.status 2>/dev/null`
+        MMDPID=`pidof multimacd`
+        if [ $MMDSTATUSPID = $MMDPID ] 
+		then
+            echo "multimacd is ready now."
+            break
+		fi 
+        if [ $i -eq $STEPS ]
+		then
+            echo "Timeout while waiting for multimacd to get ready."
+        fi
+    done
+}
+
+start() {
+	echo "Starting multimacd: "
+	init
+	if [ ! -e $PIDFILE ] ; then
+		check_bo
+                check_rf_address
+		update
+	else
+		echo "Skipping coprocessor update because multimacd is running."
+	fi
+	init
+	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /etc/config/multimacd.conf -l $LOGLEVEL_RFD
+	waitStartupComplete
+}
+stop() {
+	echo -n "Stopping multimacd: "
+	start-stop-daemon -K -q -p $PIDFILE
+	rm -f $PIDFILE
+	echo "OK"
+}
+restart() {
+	stop
+	start
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart|reload)
+	restart
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+

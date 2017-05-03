@@ -15,7 +15,7 @@ start() {
   sleep 1
   echo "1" > /sys/class/gpio/gpio18/value
 
-  if [[ ! -e /etc/config/no-coprocessor-update ]]; then
+  if [[ ! -e /etc/config/no-coprocessor-update ]] && [[ ! -z $(cat /var/rf_address) ]]; then
 
     # for non HmIP mode we copy the fw_directory to /tmp
     if [[ ${HM_MODE} != "HmIP" ]]; then
@@ -47,7 +47,7 @@ start() {
 
     sleep 1
   else
-    echo "disabled, "
+    echo -n "disabled, "
   fi
 
   echo "OK"

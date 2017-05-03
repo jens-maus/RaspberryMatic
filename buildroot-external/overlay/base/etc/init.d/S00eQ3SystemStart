@@ -58,40 +58,65 @@ checkFactoryReset() {
   mount /usr/local
 }
 
+# function to check if a backup should be restored that had been placed in /usr/local/tmp
+# in addition to /usr/local/.doBackupRestore being present and empty
+checkBackupRestore() {
+
+  # only continue if .doBackupRestore file exists
+  if [[ ! -r /usr/local/.doBackupRestore ]]; then
+    return
+  fi
+
+  if [[ -f /usr/local/tmp/usr_local.tar.gz ]]; then
+    # now remove the whole /usr/local, but keep /usr/local/tmp
+    find /usr/local -not -name tmp -not -name "lost+found" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
+
+    # unarchive the backup archive to restore everything
+    tar -C / -xf /usr/local/tmp/usr_local.tar.gz
+
+    # make sure everything is written to disk
+    sync
+  fi
+
+  rm -f /usr/local/.doBackupRestore
+}
+
 # initialize a potentially existing RTC clock
 init_rtc_device() {
 
   # only continue if we don't have a valid rtc yet
-  [ -e /dev/rtc0 ] && return 0
+  [[ -e /dev/rtc0 ]] && return 0
 
   # load the common i2c kernel modules
-  modprobe i2c_bcm2708
+  modprobe i2c-bcm2708
   modprobe i2c-dev
 
   # check for MCP7940N RTC clock at 0x6f (PiFace Shim RTC)
-  i2cget -y 1 0x6f 2>/dev/null >/dev/null
-  if [ $? -eq 0 ]; then
+  i2cget -y 1 0x6f 0x00 2>/dev/null >/dev/null
+  if [[ $? -eq 0 ]]; then
     # calibrate MCP7940N
     i2cset -y 1 0x6f 0x08 0x47 2>/dev/null >/dev/null
-    modprobe i2c:mcp7941x
-    echo mcp7941x 0x6f >/sys/class/i2c-dev/i2c-1/device/new_device
-    [ -e /dev/rtc0 ] && return 0
-    echo 0x6f >/sys/class/i2c-dev/i2c-1/device/delete_device
+    if [[ $? -eq 0 ]]; then
+      modprobe i2c:mcp7941x
+      echo mcp7941x 0x6f >/sys/class/i2c-dev/i2c-1/device/new_device
+      [[ -e /dev/rtc0 ]] && return 0
+      echo 0x6f >/sys/class/i2c-dev/i2c-1/device/delete_device
+    fi
   fi
 
   # check for DS3231/DS1307 RTC clock at 0x68
-  i2cget -y 1 0x68 2>/dev/null >/dev/null
-  if [ $? -eq 0 ]; then
+  i2cget -y 1 0x68 0x00 2>/dev/null >/dev/null
+  if [[ $? -eq 0 ]]; then
     # check for DS3231
     modprobe i2c:ds3231
     echo ds3231 0x68 >/sys/class/i2c-dev/i2c-1/device/new_device
-    [ -e /dev/rtc0 ] && return 0
+    [[ -e /dev/rtc0 ]] && return 0
     echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
 
     # check for DS1307
     modprobe i2c:ds1307
     echo ds1307 0x68 >/sys/class/i2c-dev/i2c-1/device/new_device
-    [ -e /dev/rtc0 ] && return 0
+    [[ -e /dev/rtc0 ]] && return 0
     echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
   fi
 
@@ -137,7 +162,7 @@ update_crontab() {
 
     # put all lines not matching setHWClock and SetInterfaceClock
     # to the temporary crontab.root file
-    grep -viE "/bin/setHWClock.sh|/bin/SetInterfaceClock" /usr/local/crontabs/root 2>/dev/null >>/tmp/crontab.root
+    grep -viE "/bin/setHWClock.sh|/bin/SetInterfaceClock|/usr/sbin/logrotate" /usr/local/crontabs/root 2>/dev/null >>/tmp/crontab.root
 
     # make the temp crontab the new usr crontab
     mv /tmp/crontab.root /usr/local/crontabs/root
@@ -151,7 +176,7 @@ init() {
 
   # init a potentially existing rtc clock
   init_rtc_device
-  if [ -e /dev/rtc0 ]; then
+  if [[ -e /dev/rtc0 ]]; then
     hwclock --hctosys --utc
   fi
 
@@ -172,6 +197,9 @@ init() {
 
   # check if a factory reset should be performed
   checkFactoryReset
+
+  # check if we should restore a backup now
+  checkBackupRestore
 
   # check if we should boot in LAN gateway mode
   if [[ -e /usr/local/HMLGW ]]; then
@@ -224,6 +252,8 @@ init() {
         chmod 775 /var/rega
         mkdir /var/run
         chmod 775 /var/run
+        mkdir /var/spool
+        chmod 775 /var/spool
         mkdir /var/lock
         chmod 775 /var/lock
         mkdir /var/cache
@@ -245,9 +275,17 @@ init() {
 	mkdir -p /usr/local/sdcard/measurement
 	mkdir -p /media/sd-mmcblk0
 	ln -sf /usr/local/sdcard/measurement /media/sd-mmcblk0/measurement
+  for i in $(seq 0 7); do
+    mkdir -p /media/usb${i}
+  done
 
   # SSH dir setup (/root/.ssh is linked to /usr/local/etc/ssh)
   mkdir -p /usr/local/etc/ssh
+
+  # create a /usr/local/tmp directory for creating things like backup files, etc.
+  # (we need it on-disk or /tmp will be not enough in case of a filled up /usr/local)
+  mkdir -p /usr/local/tmp
+  rm -rf /usr/local/tmp/*
 
 	# crontab dirs
   if [ ! -d /usr/local/crontabs ] ; then
@@ -255,6 +293,9 @@ init() {
     chmod 775 /usr/local/crontabs
   fi
   update_crontab
+  mkdir -p /var/spool/cron
+  chmod 755 /var/spool/cron
+  ln -sf /usr/local/crontabs /var/spool/cron/crontabs
 
 	if [ ! -d /usr/local/etc/config ] ; then
                 mkdir -p /usr/local/etc/config
@@ -300,7 +341,7 @@ start() {
 	init
 	echo "OK"
 	echo -n "Starting crond: "
-	start-stop-daemon -S -q -b -m -p /var/run/crond.pid --exec /usr/sbin/crond -- -f -c /usr/local/crontabs
+	start-stop-daemon -S -q -b -m -p /var/run/crond.pid --exec /usr/sbin/crond -- -f
 	echo "OK"
 }
 
@@ -312,7 +353,11 @@ stop () {
   cleanup
   echo "OK"
 
-	/bin/update_firmware_pre
+  # check if we should install an addon
+  if [[ -r /usr/local/.doAddonInstall ]]; then
+    /bin/install_addon
+    rm -f /usr/local/.doAddonInstall
+  fi
 }
 
 restart() {

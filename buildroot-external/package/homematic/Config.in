@@ -33,8 +33,8 @@ config BR2_PACKAGE_HOMEMATAIC_RF_PROTOCOL_HMIP_ONLY
 
 config BR2_PACKAGE_HOMEMATIC_RF_PROTOCOL_HM_HMIP
 	bool "HM and HmIP RF"
-        help
-          Support HomeMatic and Homematic IP RF Protocol
+  help
+    Support HomeMatic and Homematic IP RF Protocol
 
 endchoice
 
@@ -42,22 +42,30 @@ choice
 	prompt "Wired Protocol"
 
 config BR2_PACKAGE_HOMEMATIC_WIRED_PROTOCOL_HM_ONLY
-        boolean "HM Wired only"
-        help
-          Support HomeMatic Wired Protocol only
+  bool "HM Wired only"
+  help
+    Support HomeMatic Wired Protocol only
 
 endchoice
 
 config BR2_PACKAGE_HOMEMATIC_WEBUI
-        boolean "HomeMatic WebUI"
-	default "false"
-        help
-          HomeMatic WebUI 
+  bool "HomeMatic WebUI"
+  help
+    HomeMatic WebUI
+
+if BR2_PACKAGE_HOMEMATIC_WEBUI
+
+config BR2_PACKAGE_HOMEMATIC_WEBUI_REGAHSS_BETA
+  bool "ReGaHss Beta"
+  default "false"
+  help
+    Install Beta version of ReGaHss
+
+endif
 
 config BR2_PACKAGE_HOMEMATIC_HMSERVER
-        boolean "HomeMatic HM-Server"
-	default "false"
-        help
-          HomeMatic HM-Server
+  bool "HomeMatic HM-Server"
+  help
+    HomeMatic HM-Server
 
 endif

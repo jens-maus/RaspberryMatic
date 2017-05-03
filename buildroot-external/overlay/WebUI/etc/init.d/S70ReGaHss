@@ -7,7 +7,6 @@ CREATE_DIRS='/usr/local/etc/config/rc.d /usr/local/etc/config/addons/www'
 
 LOGLEVEL_REGA=2
 PIDFILE=/var/run/ReGaHss.pid
-PID=-1
 
 source /var/hm_mode 2>/dev/null
 
@@ -15,60 +14,90 @@ source /var/hm_mode 2>/dev/null
 [[ ${HM_MODE} == "HMLGW" ]] && exit 0
 
 init() {
-	for i in $CREATE_DIRS; do mkdir -p $i; done
+  for i in ${CREATE_DIRS}; do
+    mkdir -p ${i}
+  done
        
-	if [ ! -d /etc/config/userprofiles ] ; then
-                mkdir /etc/config/userprofiles
-        fi
-        if [ -e /etc/config/syslog ] ; then
-                . /etc/config/syslog
-        fi
+  if [ ! -d /etc/config/userprofiles ] ; then
+    mkdir /etc/config/userprofiles
+  fi
+
+  if [ -e /etc/config/syslog ] ; then
+    . /etc/config/syslog
+  fi
+}
+
+waitStartupComplete() {
+  STEPS=20
+  for i in $(seq 1 ${STEPS}); do
+    sleep 2
+    echo -n "."
+    if [[ -n $(pidof ReGaHss) ]]; then
+      echo "OK"
+      break
+    fi
+    if [[ ${i} -eq ${STEPS} ]]; then
+      echo "ERROR"
+    fi
+  done
+}
+
+waitTerminationComplete() {
+  STEPS=20
+  for i in $(seq 1 ${STEPS}); do
+    sleep 2
+    echo -n "."
+    if [[ -z $(pidof ReGaHss) ]]; then
+      echo "OK"
+      break
+    fi
+    if [[ ${i} -eq ${STEPS} ]]; then
+      echo "ERROR"
+    fi
+  done
 }
 
 start() {
-	echo -n "Starting ReGaHss: "
-	init
-	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/ReGaHss -- -f /etc/rega.conf -l $LOGLEVEL_REGA < /dev/null&
-	echo "OK"
+  echo -n "Starting ReGaHss: "
+  init
+  start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec /bin/ReGaHss -- -f /etc/rega.conf -l ${LOGLEVEL_REGA}
+  waitStartupComplete
 }
+
 stop() {
-	echo -n "Stopping ReGaHss: "
-	PID=`cat $PIDFILE`
-	start-stop-daemon -K -q -p $PIDFILE
-	rm -f $PIDFILE
-	echo "OK"
+  echo -n "Stopping ReGaHss: "
+
+  # as ReGaHss is not saving its config upon termination we force a final
+  # config save now
+  echo "load tclrega.so; rega system.Save()" | /bin/tclsh 2>/dev/null
+  sync
+
+  # signal ReGaHss to stop
+  start-stop-daemon -K -q -p ${PIDFILE}
+
+  # wait for ReGaHss to terminate
+  waitTerminationComplete
+  rm -f ${PIDFILE}
 }
+
 restart() {
-	stop
-	# wait for ReGaHss to terminate before restarting (otherwise it could not perform a socket bind)
-	if [ $PID != -1 ]
-	then
-		for i in 1 2 3 4 5 6 7 8 9 10
-		do
-			if [ ! -e /proc/$PID ]
-			then
-				break
-			fi
-			sleep 1
-		done
-	fi
-	start
+  stop
+  start
 }
 
 case "$1" in
   start)
-	start
-	;;
+    start
+  ;;
   stop)
-	stop
-	;;
+    stop
+  ;;
   restart|reload)
-	restart
-	;;
+    restart
+  ;;
   *)
-	echo "Usage: $0 {start|stop|restart}"
-	exit 1
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
 esac
 
 exit $?
-

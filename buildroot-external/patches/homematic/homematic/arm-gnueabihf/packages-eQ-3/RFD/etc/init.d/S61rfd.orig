@@ -1,0 +1,98 @@
+#!/bin/sh
+#
+# Starts rfd.
+#
+
+LOGLEVEL_RFD=5
+CFG_TEMPLATE_DIR=/etc/config_templates
+PIDFILE=/var/run/rfd.pid
+
+init() {
+	export TZ=`cat /etc/config/TZ`
+
+	if [ ! -d /etc/config/rfd ] ; then
+  		mkdir /etc/config/rfd
+	fi
+	#Migration for existing rfd.conf in user space
+	if [ ! -e /etc/config/rfd.conf ] ; then
+		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
+	else
+		sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
+		sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
+		sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
+                if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
+                        sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
+                fi
+	fi
+
+        # Bug fix
+        grep "/etc/config/rfd/keys" /etc/config/rfd.conf
+        if [ $? == 0 ] ; then
+                echo "Copy rfd files"
+		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
+        fi
+
+	if [ ! -e /etc/config/syslog ] ; then
+		cp $CFG_TEMPLATE_DIR/syslog /etc/config
+	fi
+	if [ -e /etc/config/syslog ] ; then
+  		. /etc/config/syslog
+	fi
+
+}
+
+waitStartupComplete() {
+    echo -n "Waiting for rfd to get ready"
+	STEPS=60
+    for i in $(seq 1 $STEPS)
+    do
+		sleep 2
+		echo -n "."
+        RFDSTATUSPID=`cat /var/status/rfd.status 2>/dev/null`
+        RFDPID=`pidof rfd`
+        if [ $RFDSTATUSPID = $RFDPID ] 
+		then
+            echo "rfd is ready now."
+            break
+        fi
+        if [ $i -eq $STEPS ] 
+		then
+            echo "Timeout while waiting for rfd to get ready."
+        fi
+    done
+}
+
+start() {
+	echo "Starting rfd: "
+	init
+	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
+	waitStartupComplete
+}
+stop() {
+	echo -n "Stopping rfd: "
+	start-stop-daemon -K -q -p $PIDFILE
+	rm -f $PIDFILE
+	echo "OK"
+}
+restart() {
+	stop
+	start
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart|reload)
+	restart
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+

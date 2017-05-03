@@ -4,8 +4,8 @@
 #
 #############################################################
 
-HOMEMATIC_OCCU_VERSION = 2.27.2
-HOMEMATIC_VERSION = a574e6525c894374c5ba8d260537ec5d05e887b0
+HOMEMATIC_OCCU_VERSION = 2.27.8
+HOMEMATIC_VERSION = 9d4b3092bf1cb56e113a2e648be5ea5de26eeeec
 HOMEMATIC_SITE = $(call github,eq-3,occu,$(HOMEMATIC_VERSION))
 
 HOMEMATIC_MODULE_SUBDIRS = kernel-modules/bcm2835_raw_uart kernel-modules/eq3_char_loop
@@ -68,6 +68,9 @@ define HOMEMATIC_FINALIZE_TARGET
 	rm -f $(TARGET_DIR)/etc/init.d/S20urandom
 	rm -f $(TARGET_DIR)/etc/init.d/S49ntp
 	rm -f $(TARGET_DIR)/etc/init.d/S60openvpn
+
+	# remove obsolete config templates
+	rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf
 
 endef
 TARGET_FINALIZE_HOOKS += HOMEMATIC_FINALIZE_TARGET

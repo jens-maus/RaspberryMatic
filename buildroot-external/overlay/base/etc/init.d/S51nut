@@ -25,6 +25,15 @@ NUT_CONFIG=/etc/config/nut/nut.conf
 case $1 in
   start)
     echo -n "Starting NUT services: "
+
+    # make sure some necessary state dirs exist
+    mkdir -p /var/state/ups
+    chown root:nogroup /var/state/ups
+    chmod 770 /var/state/ups
+    mkdir -p /var/run/upsd
+    chown root:nogroup /var/run/upsd
+    chmod 770 /var/run/upsd
+
     # start the server (upsdrvctl/upsd)
     case "${MODE}" in
       standalone|netserver)

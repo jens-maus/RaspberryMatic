@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+# Prepares start of hs485d. 
+#
+# Writes /etc/config/InterfacesList.xml
+# It must be started before webserver!
+# It does NOT start hs485d itself! 
+#
+
+LOGLEVEL_HS485D=5
+
+CFG_TEMPLATE_DIR=/etc/config_templates
+
+init() {
+	export TZ=`cat /etc/config/TZ`
+
+	if [ ! -d /etc/config/hs485d ] ; then
+  		mkdir /etc/config/hs485d
+	fi
+	if [ -e /etc/config/syslog ] ; then
+  		. /etc/config/syslog
+	fi
+	if [ ! -e /etc/config/InterfacesList.xml ] ; then
+		cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
+	else
+		cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
+	fi
+}
+
+start() {
+	echo -n "Preparing start of hs485d"
+	init
+	/bin/hs485dLoader -l $LOGLEVEL_HS485D -ds -dd /etc/config/hs485d.conf
+	echo "OK"
+}
+
+stop() {
+	echo "OK"
+}
+
+restart() {
+	stop
+	start
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart|reload)
+	restart
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac
+
+exit $?
+

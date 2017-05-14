@@ -1,5 +1,5 @@
---- homematic/firmware/HM-MOD-UART/fwmap.orig	2017-03-02 17:06:02.819834881 +0100
-+++ homematic/firmware/HM-MOD-UART/fwmap	2017-03-02 17:06:48.050832634 +0100
+--- homematic/firmware/HM-MOD-UART/fwmap.orig	2017-05-12 21:11:01.439444009 +0200
++++ homematic/firmware/HM-MOD-UART/fwmap	2017-05-12 21:11:11.351218335 +0200
 @@ -1,7 +1,7 @@
  #Type           Filename                Version
  
@@ -7,11 +7,11 @@
 -CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
 +#CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
  
--#CCU2					dualcopro_si1002_update_blhm.eq3				2.8.4		   #Dual CoProzessor CCU2
-+CCU2					dualcopro_si1002_update_blhm.eq3				2.8.4		   #Dual CoProzessor CCU2
+-#CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
++CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
  
---- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf.orig	2016-12-16 21:44:50.165092633 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf	2016-12-16 21:45:22.292224178 +0100
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf.orig	2017-05-03 09:19:36.329929081 +0200
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf	2017-05-03 09:19:36.329929081 +0200
 @@ -22,6 +22,5 @@
  [Interface 0]
  Type = CCU2
@@ -21,8 +21,8 @@
 -
 +AccessFile = /dev/null
 +ResetFile = /dev/null
---- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig	2016-12-12 22:00:43.139457618 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd	2017-04-24 21:50:42.575950781 +0200
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig	2017-05-03 09:19:36.329929081 +0200
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd	2017-05-03 09:19:36.329929081 +0200
 @@ -7,44 +7,20 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/multimacd.pid
@@ -142,8 +142,8 @@
  	echo "OK"
  }
  restart() {
---- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2016-12-12 22:04:53.864706566 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2017-04-24 21:29:28.434892373 +0200
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig	2017-05-03 09:19:36.329929081 +0200
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd	2017-05-03 09:19:36.329929081 +0200
 @@ -7,30 +7,42 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/rfd.pid
@@ -238,8 +238,8 @@
  	init
  	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
  	waitStartupComplete
---- homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/rega.conf.orig	2017-04-06 22:34:28.725017481 +0200
-+++ homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/rega.conf	2017-04-24 09:38:31.723554106 +0200
+--- homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/rega.conf.orig	2017-05-03 09:19:36.329929081 +0200
++++ homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/rega.conf	2017-05-03 09:19:36.329929081 +0200
 @@ -57,6 +57,26 @@
  # Standard: 300
  SessionTimeout=300
@@ -267,8 +267,8 @@
  #*******************************************************************************
  # Ereignisse
  #*******************************************************************************
---- homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S60hs485d.orig	2016-11-14 14:10:38.650533398 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S60hs485d	2017-03-08 17:21:40.559001309 +0100
+--- homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S60hs485d.orig	2017-05-03 09:19:36.329929081 +0200
++++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S60hs485d	2017-05-03 09:19:36.329929081 +0200
 @@ -7,9 +7,12 @@
  
  CFG_TEMPLATE_DIR=/etc/config_templates
@@ -284,8 +284,8 @@
  	if [ ! -e /etc/config/syslog ] ; then
  		cp $CFG_TEMPLATE_DIR/syslog /etc/config
  	fi
---- homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d.orig	2016-12-13 09:57:04.258978176 +0100
-+++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d	2017-04-24 22:18:32.043388618 +0200
+--- homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d.orig	2017-05-03 09:19:36.329929081 +0200
++++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d	2017-05-03 09:19:36.329929081 +0200
 @@ -11,9 +11,12 @@
  
  CFG_TEMPLATE_DIR=/etc/config_templates
@@ -338,8 +338,8 @@
  
  exit $?
 -
---- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig	2017-02-26 20:09:08.397575287 +0100
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-03-20 16:16:40.850165452 +0100
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig	2017-05-03 09:19:36.329929081 +0200
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-05-03 09:19:36.329929081 +0200
 @@ -14,10 +14,10 @@
  ## chroot example aswell.
  ##
@@ -396,15 +396,15 @@
  
  ##
  #######################################################################
---- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf.orig	2017-03-06 19:25:10.919846283 +0100
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf	2017-03-06 19:25:59.402723078 +0100
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf.orig	2017-05-03 09:19:36.329929081 +0200
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf	2017-05-03 09:19:36.329929081 +0200
 @@ -1,3 +1,3 @@
  setenv.add-environment = (
 -        "TZ" => "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
 +        "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
  )
---- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf.orig	2016-12-16 13:46:39.807222464 +0100
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf	2017-03-20 15:09:56.907743421 +0100
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf.orig	2017-05-03 09:19:36.329929081 +0200
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf	2017-05-03 09:19:36.329929081 +0200
 @@ -1,5 +1,7 @@
  #### CGI module
  cgi.assign = ( ".pl"  => "/usr/bin/perl",
@@ -414,8 +414,8 @@
               )
 +cgi.x-sendfile = "enable"
 +cgi.x-sendfile-docroot = ( "/usr/local/tmp" )
---- homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl.orig	2017-03-22 15:42:13.149977687 +0100
-+++ homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl	2017-03-22 15:42:36.501436475 +0100
+--- homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl	2017-05-03 09:19:36.309929555 +0200
 @@ -148,38 +148,6 @@
  <div class="CLASS21114 j_translate">
  	<table class="popupTable" border=1 width="100%">
@@ -455,8 +455,8 @@
  		  <td class="CLASS21116">
         ${"$"}{tdPowerCost}
  		  </td>
---- homematic/WebUI/www/rega/pages/tabs/admin/msg/timemodule.htm.orig	2017-04-11 11:07:04.682152590 +0200
-+++ homematic/WebUI/www/rega/pages/tabs/admin/msg/timemodule.htm	2017-04-11 11:07:26.661700023 +0200
+--- homematic/WebUI/www/rega/pages/tabs/admin/msg/timemodule.htm.orig	2017-05-03 09:19:36.313929460 +0200
++++ homematic/WebUI/www/rega/pages/tabs/admin/msg/timemodule.htm	2017-05-03 09:19:36.313929460 +0200
 @@ -53,8 +53,6 @@
      </table>
  </div>
@@ -466,8 +466,8 @@
  <div class="CLASS05103">
    <table class="popupTable CLASS05104" border="0" >
      <colgroup>
---- homematic/WebUI/www/api/homematic.cgi.orig	2017-04-13 10:55:09.559956290 +0200
-+++ homematic/WebUI/www/api/homematic.cgi	2017-04-13 09:31:35.368386447 +0200
+--- homematic/WebUI/www/api/homematic.cgi.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/WebUI/www/api/homematic.cgi	2017-05-03 09:19:36.309929555 +0200
 @@ -22,15 +22,13 @@
  # um eine Notlösung. 
  ##
@@ -485,8 +485,8 @@
  #####################
  # Verwendete Module #
  #####################
---- homematic/WebUI/www/api/methods/ccu/setsshpassword.tcl.orig	2017-02-05 22:54:02.691466845 +0100
-+++ homematic/WebUI/www/api/methods/ccu/setsshpassword.tcl	2017-02-06 21:09:59.447429100 +0100
+--- homematic/WebUI/www/api/methods/ccu/setsshpassword.tcl.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/WebUI/www/api/methods/ccu/setsshpassword.tcl	2017-05-03 09:19:36.309929555 +0200
 @@ -9,9 +9,7 @@
  ##
  
@@ -498,8 +498,8 @@
    set command "s%^root:\\(\[^:\]*:\\)%root:$digest:%"
    set rc [catch {exec sed -i "$command" /etc/config/shadow} msg]
  
---- homematic/WebUI/www/tools/devconfig.cgi.orig	2017-04-12 22:18:15.234306179 +0200
-+++ homematic/WebUI/www/tools/devconfig.cgi	2017-04-12 22:21:34.657850260 +0200
+--- homematic/WebUI/www/tools/devconfig.cgi.orig	2017-05-03 09:19:36.313929460 +0200
++++ homematic/WebUI/www/tools/devconfig.cgi	2017-05-03 09:19:36.313929460 +0200
 @@ -139,6 +139,7 @@
          h3 [url "Link List" $env(SCRIPT_NAME)?cmd=list_links&$urlsid]
          h3 [url "Service Messages" $env(SCRIPT_NAME)?cmd=service_messages&$urlsid]
@@ -508,8 +508,8 @@
      }
  }
  
---- homematic/WebUI/www/tcl/extern/cgi.tcl.orig	2017-03-20 17:29:40.110463057 +0100
-+++ homematic/WebUI/www/tcl/extern/cgi.tcl	2017-03-20 17:30:09.957728991 +0100
+--- homematic/WebUI/www/tcl/extern/cgi.tcl.orig	2017-05-03 09:19:36.313929460 +0200
++++ homematic/WebUI/www/tcl/extern/cgi.tcl	2017-05-03 09:19:36.313929460 +0200
 @@ -2698,7 +2698,7 @@
  # deduce tmp directory
  switch $tcl_platform(platform) {
@@ -519,8 +519,8 @@
      } macintosh {
  	set _cgi(tmpdir) [pwd]
      } default {
---- homematic/WebUI/www/webui/js/lang/tr/translate.lang.js.orig	2017-04-13 10:52:58.386938561 +0200
-+++ homematic/WebUI/www/webui/js/lang/tr/translate.lang.js	2017-04-13 13:34:12.170237854 +0200
+--- homematic/WebUI/www/webui/js/lang/tr/translate.lang.js.orig	2017-05-03 09:19:36.317929365 +0200
++++ homematic/WebUI/www/webui/js/lang/tr/translate.lang.js	2017-05-03 09:19:36.317929365 +0200
 @@ -1,8 +1,8 @@
  jQuery.extend(true,HMIdentifier , {
    "tr" : {
@@ -567,8 +567,8 @@
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic merkezini bir kere g%FCvenli modda baslatin. G%FCvenli modda y%FCklenen ek yazilim baslatilmaz. Degistirilmis ayarlar %F6nceden kaydedilir.",
      "dialogSettingsCMHintErrorLog" : "Merkez tarafindan olusturulacak Log bildiri sayisini ayarlayin.<br>Buna ek olarak merkezin Log bildirilerini Syslog'u kullanarak iletecegi baska bir bilgisayar tanimlayabilirsiniz. Bu bilgisayar %FCzerinde bildirileri alacak uygun bir yazilim y%FCkl%FC olmalidir.<br>Merkezin g%FCncel Log bildirileri teshis amaciyla bir metin dosyasi seklinde indirilebilir.",
      "dialogSettingsCMLogLevel0" : "Her seyi Log'lara gecir",
---- homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js.orig	2017-03-15 14:45:56.729746444 +0100
-+++ homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js	2017-04-13 13:03:43.704200862 +0200
+--- homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js.orig	2017-05-03 09:19:36.317929365 +0200
++++ homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js	2017-05-03 09:19:36.317929365 +0200
 @@ -332,6 +332,8 @@
      "profileNotSaveable" : "Bu profil, profil taslagi olarak kaydedilemez.",
      "dialogPerformRebootTitle" : "Merkezi yeniden baslat",
@@ -585,8 +585,8 @@
 -});
 \ No newline at end of file
 +});
---- homematic/WebUI/www/webui/js/lang/de/translate.lang.js.orig	2017-04-13 10:53:10.426664777 +0200
-+++ homematic/WebUI/www/webui/js/lang/de/translate.lang.js	2017-04-13 13:41:22.272394738 +0200
+--- homematic/WebUI/www/webui/js/lang/de/translate.lang.js.orig	2017-05-03 09:19:36.313929460 +0200
++++ homematic/WebUI/www/webui/js/lang/de/translate.lang.js	2017-05-03 09:19:36.313929460 +0200
 @@ -1,8 +1,8 @@
  jQuery.extend(true,HMIdentifier , {
    "de" : {
@@ -649,8 +649,8 @@
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
      "dialogSettingsCMHintErrorLog" : "Stellen Sie die Anzahl der Logmeldungen ein, die von der Zentrale generiert werden sollen.<br>Sie k%F6nnen zus%E4tzlich einen Rechner angeben, dem die Zentrale ihre Logmeldungen per Syslog schickt. Auf diesem Rechner mu%DF entsprechende Software installiert sein, die die Meldungen entgegennimmt.<br>Zu Diagnosezwecken k%F6nnen die aktuellen Logmeldungen der Zentrale in einer Textdatei heruntergeladen werden.",
      "dialogSettingsCMLogLevel0" : "Alles loggen",
---- homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig	2017-03-15 14:45:56.725746541 +0100
-+++ homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js	2017-04-13 12:16:41.572769320 +0200
+--- homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig	2017-05-03 09:19:36.313929460 +0200
++++ homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js	2017-05-03 09:19:36.313929460 +0200
 @@ -333,6 +333,8 @@
      "dialogSettingsSecurityMessagePerformSystemResetContent" : "Best&auml;tigen Sie hier, um den System-Reset durchzuf&uuml;hren.<br/><br>Die " + HMIdentifier.de.CCUShortName + " wird automatisch neu gestartet. Danach k&ouml;nnen Sie sich wieder anmelden.",
      "dialogPerformRebootTitle" : "Neustart der Zentrale",
@@ -667,8 +667,8 @@
 -});
 \ No newline at end of file
 +});
---- homematic/WebUI/www/webui/js/lang/en/translate.lang.js.orig	2017-04-13 10:53:44.081899517 +0200
-+++ homematic/WebUI/www/webui/js/lang/en/translate.lang.js	2017-04-13 13:32:45.784215582 +0200
+--- homematic/WebUI/www/webui/js/lang/en/translate.lang.js.orig	2017-05-03 09:19:36.317929365 +0200
++++ homematic/WebUI/www/webui/js/lang/en/translate.lang.js	2017-05-03 09:19:36.317929365 +0200
 @@ -1,8 +1,8 @@
  jQuery.extend(true,HMIdentifier , {
    "en" : {
@@ -731,8 +731,8 @@
      "dialogSettingsCMHintRestartSafeMode" : "Start HomeMatic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
      "dialogSettingsCMHintErrorLog" : "Please set the number of log messages to be generated by the CCU.<br>You can also specify a computer that will receive the log messages from the CCU via syslog. An additional software that will be able to receive this messages has to be installed on the computer.<br>To analyse the results, the current log messages of the CCU can be downloaded in a text file.",
      "dialogSettingsCMLogLevel0" : "Log all",
---- homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig	2017-03-15 14:45:56.729746444 +0100
-+++ homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js	2017-04-13 13:01:28.115317951 +0200
+--- homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig	2017-05-03 09:19:36.317929365 +0200
++++ homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js	2017-05-03 09:19:36.313929460 +0200
 @@ -333,6 +333,8 @@
      "dialogSettingsSecurityMessagePerformSystemResetContent" : "Please confirm here to start the system reset.<br/><br>The " + HMIdentifier.en.CCUShortName + " will be restarted automatically. Afterwards, you can log in again.",
      "dialogPerformRebootTitle" : "Restart of CCU",
@@ -749,8 +749,8 @@
 -});
 \ No newline at end of file
 +});
---- homematic/WebUI/www/webui/webui.js.orig	2017-03-22 10:29:02.525052893 +0100
-+++ homematic/WebUI/www/webui/webui.js	2017-03-22 10:25:40.462016779 +0100
+--- homematic/WebUI/www/webui/webui.js.orig	2017-05-03 09:19:36.329929081 +0200
++++ homematic/WebUI/www/webui/webui.js	2017-05-03 09:19:36.325929176 +0200
 @@ -11285,8 +11285,9 @@
      var isOk = true;
      for (var i = 0, len = ips.length; i < len; i++) {
@@ -780,8 +780,8 @@
        homematic.com.m_latestVersion = latestVersion;
        homematic.com.m_isUpdateAvailable = (WEBUI_VERSION != latestVersion);
      } else {
---- homematic/WebUI/www/error/error-503.html.orig	2017-01-14 19:41:53.519736563 +0100
-+++ homematic/WebUI/www/error/error-503.html	2017-01-14 19:42:00.835559789 +0100
+--- homematic/WebUI/www/error/error-503.html.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/WebUI/www/error/error-503.html	2017-05-03 09:19:36.309929555 +0200
 @@ -11,9 +11,14 @@
    </style>
      <script type="text/javascript" src="/webui/js/extern/jquery.js?_version_=2.0pre1"></script>
@@ -797,8 +797,8 @@
    <script type="text/javascript">
  
      CHECK_INTERVAL = 3000;  // Intervall, in dem geprüft wird, ob der ReGa Webserver aktiv ist
---- homematic/WebUI/www/config/cp_time.cgi.orig	2017-03-06 23:12:58.121933368 +0100
-+++ homematic/WebUI/www/config/cp_time.cgi	2017-03-06 23:14:14.240210285 +0100
+--- homematic/WebUI/www/config/cp_time.cgi.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/WebUI/www/config/cp_time.cgi	2017-05-03 09:19:36.309929555 +0200
 @@ -645,7 +645,9 @@
      if { $fd <0 } { return 0 }
      puts $fd "$TIMEZONES($timezone)"
@@ -810,8 +810,8 @@
      rega_script "var x=system.Longitude($lon);var y=system.Latitude($lat);var a=dom.ChangedTimeManually();"
      
      catch {exec /sbin/hwclock -wu}
---- homematic/WebUI/www/config/st_values.js.orig	2017-04-13 10:58:00.216078308 +0200
-+++ homematic/WebUI/www/config/st_values.js	2017-04-13 10:17:06.639479999 +0200
+--- homematic/WebUI/www/config/st_values.js.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/WebUI/www/config/st_values.js	2017-05-03 09:19:36.309929555 +0200
 @@ -0,0 +1,138 @@
 +/*
 +Ãœbersetzt den Inhalt der HTML-Elemente <span class="stringtable_value">...</span>
@@ -951,8 +951,8 @@
 +	else                                          return context;
 +};
 +//<.
---- homematic/WebUI/www/config/cp_maintenance.cgi.orig	2017-03-21 13:52:40.253500448 +0100
-+++ homematic/WebUI/www/config/cp_maintenance.cgi	2017-04-13 13:34:34.117735425 +0200
+--- homematic/WebUI/www/config/cp_maintenance.cgi.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/WebUI/www/config/cp_maintenance.cgi	2017-05-03 09:19:36.309929555 +0200
 @@ -377,7 +377,7 @@
                                          table_row {
                                              table_data {
@@ -1229,8 +1229,8 @@
  
  proc get_logserver {} {
      return [read_var //etc/config/syslog LOGHOST]
---- homematic/WebUI/www/config/cp_security.cgi.orig	2016-12-14 20:34:28.446089427 +0100
-+++ homematic/WebUI/www/config/cp_security.cgi	2017-04-10 16:00:36.245859877 +0200
+--- homematic/WebUI/www/config/cp_security.cgi.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/WebUI/www/config/cp_security.cgi	2017-05-03 09:19:36.309929555 +0200
 @@ -192,7 +192,7 @@
          }
      }
@@ -1299,9 +1299,14 @@
        # set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
        # append msg "Falls dieser Fehler wiederholt Auftritt, wenden Sie sich bitte mit der folgenden Fehlermeldung an den Kundenservice:\n<br>"
        # append msg $errorMessage
-@@ -494,22 +494,22 @@
+@@ -493,23 +493,27 @@
+       set backuperror false
      }    
    } else {  # backup for version < 2      
++    catch {
++        exec killall ReGaHss
++        exec sleep 5
++    }
      #delete existing files
 -    file delete -force /tmp/backup
 +    file delete -force /usr/local/tmp/backup
@@ -1328,7 +1333,16 @@
        }
        
        if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }        
-@@ -609,7 +609,6 @@
+@@ -563,6 +567,8 @@
+       catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
+ 
+       set backuperror false
++      exec /sbin/reboot
++      return
+     }          
+     cd /
+   }
+@@ -609,7 +615,6 @@
        puts "translatePage('#messagebox');"
      }
  
@@ -1336,7 +1350,7 @@
  }
  
  proc put_message {title msg args} {
-@@ -1051,39 +1050,36 @@
+@@ -1051,39 +1056,36 @@
  
  proc action_create_backup {} {
      set HOSTNAME [exec hostname]
@@ -1389,8 +1403,8 @@
      cgi_javascript {
          puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
          puts {
---- homematic/WebUI/www/config/control_panel.cgi.orig	2017-04-12 22:19:32.888571248 +0200
-+++ homematic/WebUI/www/config/control_panel.cgi	2017-04-12 22:11:56.354767638 +0200
+--- homematic/WebUI/www/config/control_panel.cgi.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/WebUI/www/config/control_panel.cgi	2017-05-03 09:19:36.309929555 +0200
 @@ -182,10 +182,9 @@
  set i 1
  
@@ -1404,8 +1418,8 @@
    incr i
  }
  
---- homematic/WebUI/www/config/cp_software.cgi.orig	2017-03-22 14:31:29.135159837 +0100
-+++ homematic/WebUI/www/config/cp_software.cgi	2017-04-12 22:00:00.222839788 +0200
+--- homematic/WebUI/www/config/cp_software.cgi.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/WebUI/www/config/cp_software.cgi	2017-05-03 09:19:36.309929555 +0200
 @@ -488,11 +488,11 @@
  
  proc action_image_upload {} {
@@ -1430,8 +1444,8 @@
      }
  }
  
---- homematic/WebUI/www/config/ic_common.tcl.orig	2017-03-15 16:57:32.862874626 +0100
-+++ homematic/WebUI/www/config/ic_common.tcl	2017-03-15 16:48:27.780331485 +0100
+--- homematic/WebUI/www/config/ic_common.tcl.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/WebUI/www/config/ic_common.tcl	2017-05-03 09:19:36.309929555 +0200
 @@ -23,10 +23,10 @@
  set GL_FLAG_RECEIVER_UNKNOWN     0x8
  
@@ -1619,8 +1633,8 @@
          set paramid $filename
          break
        }
---- homematic/WebUI/www/config/st_values.cgi.orig	2017-04-13 10:57:51.492276496 +0200
-+++ homematic/WebUI/www/config/st_values.cgi	2017-04-13 10:16:43.943989056 +0200
+--- homematic/WebUI/www/config/st_values.cgi.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/WebUI/www/config/st_values.cgi	2017-05-03 09:19:36.309929555 +0200
 @@ -0,0 +1,75 @@
 +#!/bin/tclsh
 +source ../cgi.tcl
@@ -1697,8 +1711,8 @@
 +}
 +parse_file
 +put_js_functions
---- homematic/WebUI/bin/hm_autoconf.orig	2017-03-14 16:07:04.403741781 +0100
-+++ homematic/WebUI/bin/hm_autoconf	2017-03-13 15:25:22.000000000 +0100
+--- homematic/WebUI/bin/hm_autoconf.orig	2017-05-03 09:19:36.309929555 +0200
++++ homematic/WebUI/bin/hm_autoconf	2017-05-03 09:19:36.309929555 +0200
 @@ -74,6 +74,7 @@
      # Mapping of channel type to default function for the channel
      array set CHANNEL_FUNCTIONS {

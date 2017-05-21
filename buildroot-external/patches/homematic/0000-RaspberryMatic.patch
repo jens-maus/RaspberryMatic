@@ -498,6 +498,17 @@
    set command "s%^root:\\(\[^:\]*:\\)%root:$digest:%"
    set rc [catch {exec sed -i "$command" /etc/config/shadow} msg]
  
+--- homematic/WebUI/www/api/methods/device/listalldetail.tcl.orig	2017-05-21 14:21:56.078920601 +0200
++++ homematic/WebUI/www/api/methods/device/listalldetail.tcl	2017-05-21 14:16:44.002337694 +0200
+@@ -128,7 +128,7 @@
+   foreach(id, root.Devices().EnumIDs())
+   {
+     var device = dom.GetObject(id);
+-    if (true == device.ReadyConfig())
++    if (true == device.ReadyConfig() && dom.GetObject(device.Interface()))
+     {
+       if (true != first) { Write(" "); } else { first = false; }
+     Write("{" # id # "}");
 --- homematic/WebUI/www/tools/devconfig.cgi.orig	2017-05-03 09:19:36.313929460 +0200
 +++ homematic/WebUI/www/tools/devconfig.cgi	2017-05-03 09:19:36.313929460 +0200
 @@ -139,6 +139,7 @@

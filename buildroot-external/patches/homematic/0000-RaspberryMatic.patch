@@ -797,6 +797,77 @@
    <script type="text/javascript">
  
      CHECK_INTERVAL = 3000;  // Intervall, in dem geprüft wird, ob der ReGa Webserver aktiv ist
+--- homematic/WebUI/www/config/ic_metadata.tcl.orig	2017-05-21 10:50:56.376075932 +0200
++++ homematic/WebUI/www/config/ic_metadata.tcl	2017-05-21 13:18:06.422327123 +0200
+@@ -222,10 +222,10 @@
+ 	append isecmd "  ch_addr = channel.Address();"
+ 	append isecmd "  ch_name = channel.Name();"
+ 	append isecmd "  ch_iface_id = channel.Interface();"
+-  append isecmd "  ch_iface    = dom.GetObject(ch_iface_id).Name();"
+-	append isecmd "  if (ch_addr != '')"
++  append isecmd "  ch_iface    = dom.GetObject(ch_iface_id);"
++	append isecmd "  if (ch_iface)"
+ 	append isecmd "  {"
+-	append isecmd "    Write(ch_iface # ';' # ch_addr # ' ' # ch_name # '\n');"
++	append isecmd "    Write(ch_iface.Name() # ';' # ch_addr # ' ' # ch_name # '\n');"
+ 	append isecmd "    CHANNEL_COUNT = CHANNEL_COUNT + 1;"
+ 	append isecmd "  }"
+ 	append isecmd "}"
+@@ -235,10 +235,10 @@
+ 	append isecmd "  ch_addr = channel.Address();"
+ 	append isecmd "  ch_name = channel.Name();"
+ 	append isecmd "  ch_iface_id = channel.Interface();"
+-  append isecmd "  ch_iface    = dom.GetObject(ch_iface_id).Name();"
+-	append isecmd "  if (ch_addr != '')"
++  append isecmd "  ch_iface    = dom.GetObject(ch_iface_id);"
++	append isecmd "  if (ch_iface)"
+ 	append isecmd "  {"
+-	append isecmd "    Write(ch_iface # ';' # ch_addr # ' ' # ch_name # '\n');"
++	append isecmd "    Write(ch_iface.Name() # ';' # ch_addr # ' ' # ch_name # '\n');"
+ 	append isecmd "    CHANNEL_COUNT = CHANNEL_COUNT + 1;"
+ 	append isecmd "  }"
+ 	append isecmd "}"
+@@ -442,10 +442,10 @@
+ 	    append isecmd "  ch_addr = channel.Address();"
+ 	    append isecmd "  ch_ready = channel.ReadyConfig();"
+ 	    #append isecmd "  ch_iface_id = channel.Interface();"
+-        #append isecmd "  ch_iface    = dom.GetObject(ch_iface_id).Name();"
++        #append isecmd "  ch_iface    = dom.GetObject(ch_iface_id);"
+ 	    append isecmd "  if (ch_addr != '')"
+ 	    append isecmd "  {"
+-	    #append isecmd "    Write(ch_iface # ';' # ch_addr # ' ' # ch_ready # '\n');"
++	    #append isecmd "    Write(ch_iface.Name() # ';' # ch_addr # ' ' # ch_ready # '\n');"
+ 	    append isecmd "    Write( ch_addr # ' ' # ch_ready # '\n');"
+ 	    append isecmd "    CHANNEL_COUNT = CHANNEL_COUNT + 1;"
+ 	    append isecmd "  }"
+@@ -455,11 +455,11 @@
+ 	    append isecmd "  channel = dom.GetObject(id);"
+ 	    append isecmd "  ch_addr = channel.Address();"
+ 	    #append isecmd "  ch_iface_id = channel.Interface();"
+-        #append isecmd "  ch_iface    = dom.GetObject(ch_iface_id).Name();"
++        #append isecmd "  ch_iface    = dom.GetObject(ch_iface_id);"
+ 	    append isecmd "  ch_ready    = channel.ReadyConfig();"
+ 	    append isecmd "  if (ch_addr != '')"
+ 	    append isecmd "  {"
+-	    #append isecmd "    Write(ch_iface # ';' # ch_addr # ' ' # ch_ready # '\n');"
++	    #append isecmd "    Write(ch_iface.Name() # ';' # ch_addr # ' ' # ch_ready # '\n');"
+ 	    append isecmd "    Write( ch_addr # ' ' # ch_ready # '\n');"
+ 	    append isecmd "    CHANNEL_COUNT = CHANNEL_COUNT + 1;"
+ 	    append isecmd "  }"
+@@ -501,8 +501,11 @@
+   proc metaData_isGroupOnly {chName} {
+ 
+     set isecmd ""
+-    append isecmd "object ch = dom.GetObject('$chName');"
+-    append isecmd "object dev = dom.GetObject(ch.Device());"
++    append isecmd "object dev = dom.GetObject('$chName');"
++    append isecmd "if (dev.TypeName() == 'CHANNEL')"
++    append isecmd "{"
++    append isecmd "  dev = dom.GetObject(dev.Device());"
++    append isecmd "}"
+     append isecmd "var GROUP = dev.MetaData('operateGroupOnly');"
+ 
+ 	  if { [catch { array set result [rega_script $isecmd]} ] } then { return }
 --- homematic/WebUI/www/config/cp_time.cgi.orig	2017-05-03 09:19:36.309929555 +0200
 +++ homematic/WebUI/www/config/cp_time.cgi	2017-05-03 09:19:36.309929555 +0200
 @@ -645,7 +645,9 @@

@@ -31,17 +31,21 @@ for i in /etc/init.d/S??* ;do
     esac
 done
 
-if [ -f /boot/VERSION ]; then
-  . /boot/VERSION
-fi
-
 IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
 /usr/bin/psplash-write "PROGRESS 0"
 
 source /boot/VERSION 2>/dev/null
 source /var/hm_mode 2>/dev/null
 if [[ ${HM_MODE} != "HMLGW" ]]; then
-  /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- http://${IP}/"
+  if [[ -z ${IP} ]]; then
+    /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- ERROR: No IP address set"
+  else
+    /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- http://${IP}/"
+  fi
 else
-  /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- LAN-GW Mode (${IP})"
+  if [[ -z ${IP} ]]; then
+    /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- LAN-GW Mode (ERROR: No IP address set)"
+  else
+    /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- LAN-GW Mode (${IP})"
+  fi
 fi

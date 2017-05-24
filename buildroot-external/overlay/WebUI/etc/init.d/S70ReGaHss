@@ -71,6 +71,7 @@ stop() {
 
     # as ReGaHss is not saving its config upon termination we force a final
     # config save now
+    echo -n "."
     echo "load tclrega.so; rega system.Save()" | /bin/tclsh 2>/dev/null
     sync
 

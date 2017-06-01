@@ -55,7 +55,7 @@ checkFactoryReset() {
   fi
 
   # we create a clean ext4 partition now
-  mkfs.ext4 -F ${DEVNAME}
+  mkfs.ext4 -F ${DEVNAME} -L userfs
 
   # mount /usr/local again
   mount /usr/local

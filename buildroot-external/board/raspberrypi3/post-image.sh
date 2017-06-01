@@ -15,7 +15,7 @@ cp "${BR2_EXTERNAL_RASPBERRYMATIC_PATH}/board/${BOARD_NAME}/config.txt" "${BINAR
 echo "Create user filesystem"
 mkdir -p ${BUILD_DIR}/userfs
 touch "${BUILD_DIR}/userfs/.doFactoryReset"
-mke2img -d ${BUILD_DIR}/userfs -G 4 -R 1 -b 300 -o ${BINARIES_DIR}/userfs.ext4
+mke2img -d ${BUILD_DIR}/userfs -G 4 -R 1 -b 3000 -o ${BINARIES_DIR}/userfs.ext4
 
 #
 # VERSION File

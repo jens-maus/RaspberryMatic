@@ -57,3 +57,15 @@ menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
 
 savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
 	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external savedefconfig BR2_DEFCONFIG=../buildroot-external/configs/$(BOARD)_defconfig
+
+linux-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	cd build-$(BOARD) && make linux-menuconfig
+
+linux-update-defconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	cd build-$(BOARD) && make linux-update-defconfig
+
+busybox-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	cd build-$(BOARD) && make busybox-menuconfig
+
+busybox-update-config: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	cd build-$(BOARD) && make busybox-update-config

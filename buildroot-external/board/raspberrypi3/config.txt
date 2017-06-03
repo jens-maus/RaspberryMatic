@@ -34,3 +34,6 @@ disable_splash=1
 
 # activating the hardware watchdog
 dtparam=watchdog=on
+
+# make sure the firmware enables USB/network boot
+program_usb_boot_mode=1

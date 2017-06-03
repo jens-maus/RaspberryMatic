@@ -11,5 +11,5 @@ sysfs           /sys           sysfs    defaults                                
 tmpfs           /var           tmpfs    defaults,noatime,size=50%                0      0
 tmpfs           /media         tmpfs    defaults,noatime                         0      0
 debugfs         /sys/kernel/debug debugfs noauto                                 0      0
-/dev/mmcblk0p3  /usr/local      ext4    defaults,noatime,rw,data=journal         0      0
-/dev/mmcblk0p1  /boot           vfat    defaults,ro                              0      0
+LABEL=userfs    /usr/local     ext4     defaults,noatime,rw,data=journal         0      0
+LABEL=bootfs    /boot          vfat     defaults,ro                              0      0

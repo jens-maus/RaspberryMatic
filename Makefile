@@ -1,6 +1,6 @@
 BOARD=raspmatic_rpi
 # BOARD=raspmatic_docker
-BUILDROOT_VERSION=2017.02.1
+BUILDROOT_VERSION=2017.05
 RBE_VERSION=0.1.0
 
 .PHONY: all
@@ -57,3 +57,15 @@ menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
 
 savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
 	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external savedefconfig BR2_DEFCONFIG=../buildroot-external/configs/$(BOARD)_defconfig
+
+linux-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	cd build-$(BOARD) && make linux-menuconfig
+
+linux-update-defconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	cd build-$(BOARD) && make linux-update-defconfig
+
+busybox-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	cd build-$(BOARD) && make busybox-menuconfig
+
+busybox-update-config: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	cd build-$(BOARD) && make busybox-update-config

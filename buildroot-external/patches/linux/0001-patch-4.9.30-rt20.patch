@@ -214,6 +214,34 @@ index 000000000000..6f2aeabf7faa
 +is provided.
 +
 +These data are also reset when the wakeup histogram is reset.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 63cefa62324c..be0ea1e5c4cc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5196,6 +5196,23 @@ F:	fs/fuse/
+ F:	include/uapi/linux/fuse.h
+ F:	Documentation/filesystems/fuse.txt
+ 
++FUTEX SUBSYSTEM
++M:	Thomas Gleixner <tglx@linutronix.de>
++M:	Ingo Molnar <mingo@redhat.com>
++R:	Peter Zijlstra <peterz@infradead.org>
++R:	Darren Hart <dvhart@infradead.org>
++L:	linux-kernel@vger.kernel.org
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
++S:	Maintained
++F:	kernel/futex.c
++F:	kernel/futex_compat.c
++F:	include/asm-generic/futex.h
++F:	include/linux/futex.h
++F:	include/uapi/linux/futex.h
++F:	tools/testing/selftests/futex/
++F:	tools/perf/bench/futex*
++F:	Documentation/*futex*
++
+ FUTURE DOMAIN TMC-16x0 SCSI DRIVER (16-bit)
+ M:	Rik Faith <faith@cs.unc.edu>
+ L:	linux-scsi@vger.kernel.org
 diff --git a/arch/Kconfig b/arch/Kconfig
 index 659bdd079277..099fc0f5155e 100644
 --- a/arch/Kconfig
@@ -1215,7 +1243,7 @@ index e9ea5a6bd449..6c500ad63c6a 100644
  #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
  				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
 diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offsets.c
-index 4a2f0f0fef32..6bf2bc17c400 100644
+index c58ddf8c4062..a8f2f7c1fe12 100644
 --- a/arch/arm64/kernel/asm-offsets.c
 +++ b/arch/arm64/kernel/asm-offsets.c
 @@ -38,6 +38,7 @@ int main(void)
@@ -1272,10 +1300,10 @@ index 404dd67080b9..639dc6d12e72 100644
  		} else {
  			local_irq_enable();
 diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index b3c5bde43d34..8122bf058de0 100644
+index 5e844f68e847..dc613cc10f54 100644
 --- a/arch/mips/Kconfig
 +++ b/arch/mips/Kconfig
-@@ -2514,7 +2514,7 @@ config MIPS_ASID_BITS_VARIABLE
+@@ -2516,7 +2516,7 @@ config MIPS_ASID_BITS_VARIABLE
  #
  config HIGHMEM
  	bool "High Memory Support"
@@ -1285,7 +1313,7 @@ index b3c5bde43d34..8122bf058de0 100644
  config CPU_SUPPORTS_HIGHMEM
  	bool
 diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 65fba4c34cd7..4b5ba68910e0 100644
+index 8f01f21e78f1..619485b777d2 100644
 --- a/arch/powerpc/Kconfig
 +++ b/arch/powerpc/Kconfig
 @@ -52,10 +52,11 @@ config LOCKDEP_SUPPORT
@@ -1433,7 +1461,7 @@ index 3841d749a430..6dbaeff192b9 100644
  	andi.	r0,r9,_TIF_USER_WORK_MASK
  	beq	restore_user
 diff --git a/arch/powerpc/kernel/entry_64.S b/arch/powerpc/kernel/entry_64.S
-index 6432d4bf08c8..5509a26f1070 100644
+index 767ef6d68c9e..2cb4d5552319 100644
 --- a/arch/powerpc/kernel/entry_64.S
 +++ b/arch/powerpc/kernel/entry_64.S
 @@ -656,7 +656,7 @@ _GLOBAL(ret_from_except_lite)
@@ -1517,7 +1545,7 @@ index 030d72df5dd5..b471a709e100 100644
  /*
   * void call_do_irq(struct pt_regs *regs, struct thread_info *irqtp);
 diff --git a/arch/powerpc/kernel/misc_64.S b/arch/powerpc/kernel/misc_64.S
-index 4f178671f230..39e7d84a3492 100644
+index 4cefe6888b18..cb2ee4be999a 100644
 --- a/arch/powerpc/kernel/misc_64.S
 +++ b/arch/powerpc/kernel/misc_64.S
 @@ -31,6 +31,7 @@
@@ -2269,7 +2297,7 @@ index 931ced8ca345..167975ac8af7 100644
  /* --------------------------------------------------------------------------
                                Boot-time Configuration
 diff --git a/arch/x86/kernel/apic/io_apic.c b/arch/x86/kernel/apic/io_apic.c
-index d1e25564b3c1..67e585fa801f 100644
+index 7249f1500bcb..a79d5c224004 100644
 --- a/arch/x86/kernel/apic/io_apic.c
 +++ b/arch/x86/kernel/apic/io_apic.c
 @@ -1712,7 +1712,8 @@ static bool io_apic_level_ack_pending(struct mp_chip_data *data)
@@ -2301,7 +2329,7 @@ index c62e015b126c..0cc71257fca6 100644
 +	DEFINE(_PREEMPT_ENABLED, PREEMPT_ENABLED);
  }
 diff --git a/arch/x86/kernel/cpu/mcheck/mce.c b/arch/x86/kernel/cpu/mcheck/mce.c
-index a7fdf453d895..e3a0e969a66e 100644
+index 22cda29d654e..57c85e3af092 100644
 --- a/arch/x86/kernel/cpu/mcheck/mce.c
 +++ b/arch/x86/kernel/cpu/mcheck/mce.c
 @@ -41,6 +41,8 @@
@@ -2313,7 +2341,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  #include <linux/jump_label.h>
  
  #include <asm/processor.h>
-@@ -1317,7 +1319,7 @@ void mce_log_therm_throt_event(__u64 status)
+@@ -1307,7 +1309,7 @@ void mce_log_therm_throt_event(__u64 status)
  static unsigned long check_interval = INITIAL_CHECK_INTERVAL;
  
  static DEFINE_PER_CPU(unsigned long, mce_next_interval); /* in jiffies */
@@ -2322,7 +2350,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  
  static unsigned long mce_adjust_timer_default(unsigned long interval)
  {
-@@ -1326,32 +1328,18 @@ static unsigned long mce_adjust_timer_default(unsigned long interval)
+@@ -1316,32 +1318,18 @@ static unsigned long mce_adjust_timer_default(unsigned long interval)
  
  static unsigned long (*mce_adjust_timer)(unsigned long interval) = mce_adjust_timer_default;
  
@@ -2361,7 +2389,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  	iv = __this_cpu_read(mce_next_interval);
  
  	if (mce_available(this_cpu_ptr(&cpu_info))) {
-@@ -1374,7 +1362,7 @@ static void mce_timer_fn(unsigned long data)
+@@ -1364,7 +1352,7 @@ static void mce_timer_fn(unsigned long data)
  
  done:
  	__this_cpu_write(mce_next_interval, iv);
@@ -2370,7 +2398,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  }
  
  /*
-@@ -1382,7 +1370,7 @@ static void mce_timer_fn(unsigned long data)
+@@ -1372,7 +1360,7 @@ static void mce_timer_fn(unsigned long data)
   */
  void mce_timer_kick(unsigned long interval)
  {
@@ -2379,7 +2407,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  	unsigned long iv = __this_cpu_read(mce_next_interval);
  
  	__restart_timer(t, interval);
-@@ -1397,7 +1385,7 @@ static void mce_timer_delete_all(void)
+@@ -1387,7 +1375,7 @@ static void mce_timer_delete_all(void)
  	int cpu;
  
  	for_each_online_cpu(cpu)
@@ -2388,7 +2416,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  }
  
  static void mce_do_trigger(struct work_struct *work)
-@@ -1407,6 +1395,56 @@ static void mce_do_trigger(struct work_struct *work)
+@@ -1397,6 +1385,56 @@ static void mce_do_trigger(struct work_struct *work)
  
  static DECLARE_WORK(mce_trigger_work, mce_do_trigger);
  
@@ -2445,7 +2473,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  /*
   * Notify the user(s) about new machine check events.
   * Can be called from interrupt context, but not from machine check/NMI
-@@ -1414,19 +1452,8 @@ static DECLARE_WORK(mce_trigger_work, mce_do_trigger);
+@@ -1404,19 +1442,8 @@ static DECLARE_WORK(mce_trigger_work, mce_do_trigger);
   */
  int mce_notify_irq(void)
  {
@@ -2466,7 +2494,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  		return 1;
  	}
  	return 0;
-@@ -1732,7 +1759,7 @@ static void __mcheck_cpu_clear_vendor(struct cpuinfo_x86 *c)
+@@ -1722,7 +1749,7 @@ static void __mcheck_cpu_clear_vendor(struct cpuinfo_x86 *c)
  	}
  }
  
@@ -2475,7 +2503,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  {
  	unsigned long iv = check_interval * HZ;
  
-@@ -1741,16 +1768,17 @@ static void mce_start_timer(unsigned int cpu, struct timer_list *t)
+@@ -1731,16 +1758,17 @@ static void mce_start_timer(unsigned int cpu, struct timer_list *t)
  
  	per_cpu(mce_next_interval, cpu) = iv;
  
@@ -2497,7 +2525,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  	mce_start_timer(cpu, t);
  }
  
-@@ -2475,6 +2503,8 @@ static void mce_disable_cpu(void *h)
+@@ -2465,6 +2493,8 @@ static void mce_disable_cpu(void *h)
  	if (!mce_available(raw_cpu_ptr(&cpu_info)))
  		return;
  
@@ -2506,7 +2534,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  	if (!(action & CPU_TASKS_FROZEN))
  		cmci_clear();
  
-@@ -2497,6 +2527,7 @@ static void mce_reenable_cpu(void *h)
+@@ -2487,6 +2517,7 @@ static void mce_reenable_cpu(void *h)
  		if (b->init)
  			wrmsrl(msr_ops.ctl(i), b->ctl);
  	}
@@ -2514,7 +2542,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  }
  
  /* Get notified when a cpu comes on/off. Be hotplug friendly. */
-@@ -2504,7 +2535,6 @@ static int
+@@ -2494,7 +2525,6 @@ static int
  mce_cpu_callback(struct notifier_block *nfb, unsigned long action, void *hcpu)
  {
  	unsigned int cpu = (unsigned long)hcpu;
@@ -2522,7 +2550,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  
  	switch (action & ~CPU_TASKS_FROZEN) {
  	case CPU_ONLINE:
-@@ -2524,11 +2554,9 @@ mce_cpu_callback(struct notifier_block *nfb, unsigned long action, void *hcpu)
+@@ -2514,11 +2544,9 @@ mce_cpu_callback(struct notifier_block *nfb, unsigned long action, void *hcpu)
  		break;
  	case CPU_DOWN_PREPARE:
  		smp_call_function_single(cpu, mce_disable_cpu, &action, 1);
@@ -2534,7 +2562,7 @@ index a7fdf453d895..e3a0e969a66e 100644
  		break;
  	}
  
-@@ -2567,6 +2595,10 @@ static __init int mcheck_init_device(void)
+@@ -2557,6 +2585,10 @@ static __init int mcheck_init_device(void)
  		goto err_out;
  	}
  
@@ -2635,10 +2663,10 @@ index 3f05c044720b..fe68afd37162 100644
  	/*
  	 * APIC is created enabled. This will prevent kvm_lapic_set_base from
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index e5bc139d1ba7..fa0aa5931a4b 100644
+index 81bba3c2137d..fcb84512e85d 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -5933,6 +5933,13 @@ int kvm_arch_init(void *opaque)
+@@ -5958,6 +5958,13 @@ int kvm_arch_init(void *opaque)
  		goto out;
  	}
  
@@ -2931,7 +2959,7 @@ index b333fc45f9ec..8b85916e6986 100644
  
  /*
 diff --git a/block/blk-core.c b/block/blk-core.c
-index 14d7c0740dc0..dfd905bea77c 100644
+index d1f2801ce836..6f945bb0fa1a 100644
 --- a/block/blk-core.c
 +++ b/block/blk-core.c
 @@ -125,6 +125,9 @@ void blk_rq_init(struct request_queue *q, struct request *rq)
@@ -2980,7 +3008,7 @@ index 14d7c0740dc0..dfd905bea77c 100644
  
  	/*
  	 * Init percpu_ref in atomic mode so that it's faster to shutdown.
-@@ -3177,7 +3180,7 @@ static void queue_unplugged(struct request_queue *q, unsigned int depth,
+@@ -3200,7 +3203,7 @@ static void queue_unplugged(struct request_queue *q, unsigned int depth,
  		blk_run_queue_async(q);
  	else
  		__blk_run_queue(q);
@@ -2989,7 +3017,7 @@ index 14d7c0740dc0..dfd905bea77c 100644
  }
  
  static void flush_plug_callbacks(struct blk_plug *plug, bool from_schedule)
-@@ -3225,7 +3228,6 @@ EXPORT_SYMBOL(blk_check_plugged);
+@@ -3248,7 +3251,6 @@ EXPORT_SYMBOL(blk_check_plugged);
  void blk_flush_plug_list(struct blk_plug *plug, bool from_schedule)
  {
  	struct request_queue *q;
@@ -2997,7 +3025,7 @@ index 14d7c0740dc0..dfd905bea77c 100644
  	struct request *rq;
  	LIST_HEAD(list);
  	unsigned int depth;
-@@ -3245,11 +3247,6 @@ void blk_flush_plug_list(struct blk_plug *plug, bool from_schedule)
+@@ -3268,11 +3270,6 @@ void blk_flush_plug_list(struct blk_plug *plug, bool from_schedule)
  	q = NULL;
  	depth = 0;
  
@@ -3009,7 +3037,7 @@ index 14d7c0740dc0..dfd905bea77c 100644
  	while (!list_empty(&list)) {
  		rq = list_entry_rq(list.next);
  		list_del_init(&rq->queuelist);
-@@ -3262,7 +3259,7 @@ void blk_flush_plug_list(struct blk_plug *plug, bool from_schedule)
+@@ -3285,7 +3282,7 @@ void blk_flush_plug_list(struct blk_plug *plug, bool from_schedule)
  				queue_unplugged(q, depth, from_schedule);
  			q = rq->q;
  			depth = 0;
@@ -3018,7 +3046,7 @@ index 14d7c0740dc0..dfd905bea77c 100644
  		}
  
  		/*
-@@ -3289,8 +3286,6 @@ void blk_flush_plug_list(struct blk_plug *plug, bool from_schedule)
+@@ -3312,8 +3309,6 @@ void blk_flush_plug_list(struct blk_plug *plug, bool from_schedule)
  	 */
  	if (q)
  		queue_unplugged(q, depth, from_schedule);
@@ -3058,7 +3086,7 @@ index 381cb50a673c..dc8785233d94 100644
  		}
  	}
 diff --git a/block/blk-mq.c b/block/blk-mq.c
-index ee54ad01f7ac..1a428fe7bbe1 100644
+index 7b597ec4e9c5..48c9652a701c 100644
 --- a/block/blk-mq.c
 +++ b/block/blk-mq.c
 @@ -72,7 +72,7 @@ EXPORT_SYMBOL_GPL(blk_mq_freeze_queue_start);
@@ -3479,7 +3507,7 @@ index 478cac2ed465..f7a6efdc3285 100644
  
  /* dynamic per-device compression frontend */
 diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index d2ef51ca9cf4..05e749736560 100644
+index c9914d653968..2038d138f286 100644
 --- a/drivers/block/zram/zram_drv.c
 +++ b/drivers/block/zram/zram_drv.c
 @@ -528,6 +528,8 @@ static struct zram_meta *zram_meta_alloc(char *pool_name, u64 disksize)
@@ -3505,14 +3533,14 @@ index d2ef51ca9cf4..05e749736560 100644
  	if (!handle || zram_test_flag(meta, index, ZRAM_ZERO)) {
 -		bit_spin_unlock(ZRAM_ACCESS, &meta->table[index].value);
 +		zram_unlock_table(&meta->table[index]);
- 		clear_page(mem);
+ 		memset(mem, 0, PAGE_SIZE);
  		return 0;
  	}
  
 +	zstrm = zcomp_stream_get(zram->comp);
  	cmem = zs_map_object(meta->mem_pool, handle, ZS_MM_RO);
  	if (size == PAGE_SIZE) {
- 		copy_page(mem, cmem);
+ 		memcpy(mem, cmem, PAGE_SIZE);
  	} else {
 -		struct zcomp_strm *zstrm = zcomp_stream_get(zram->comp);
 -
@@ -3654,10 +3682,18 @@ index 74fcf10da374..fd4020c99b9e 100644
 +
  #endif
 diff --git a/drivers/char/random.c b/drivers/char/random.c
-index d6876d506220..0c60b1e54579 100644
+index 08d1dd58c0d2..25ee319dc8e3 100644
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -1028,8 +1028,6 @@ static void add_timer_randomness(struct timer_rand_state *state, unsigned num)
+@@ -262,6 +262,7 @@
+ #include <linux/syscalls.h>
+ #include <linux/completion.h>
+ #include <linux/uuid.h>
++#include <linux/locallock.h>
+ #include <crypto/chacha20.h>
+ 
+ #include <asm/processor.h>
+@@ -1028,8 +1029,6 @@ static void add_timer_randomness(struct timer_rand_state *state, unsigned num)
  	} sample;
  	long delta, delta2, delta3;
  
@@ -3666,7 +3702,7 @@ index d6876d506220..0c60b1e54579 100644
  	sample.jiffies = jiffies;
  	sample.cycles = random_get_entropy();
  	sample.num = num;
-@@ -1070,7 +1068,6 @@ static void add_timer_randomness(struct timer_rand_state *state, unsigned num)
+@@ -1070,7 +1069,6 @@ static void add_timer_randomness(struct timer_rand_state *state, unsigned num)
  		 */
  		credit_entropy_bits(r, min_t(int, fls(delta>>1), 11));
  	}
@@ -3674,7 +3710,7 @@ index d6876d506220..0c60b1e54579 100644
  }
  
  void add_input_randomness(unsigned int type, unsigned int code,
-@@ -1123,28 +1120,27 @@ static __u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
+@@ -1123,28 +1121,27 @@ static __u32 get_reg(struct fast_pool *f, struct pt_regs *regs)
  	return *(ptr + f->reg_idx++);
  }
  
@@ -3708,6 +3744,55 @@ index d6876d506220..0c60b1e54579 100644
  
  	fast_mix(fast_pool);
  	add_interrupt_bench(cycles);
+@@ -2056,6 +2053,7 @@ struct batched_entropy {
+  * goal of being quite fast and not depleting entropy.
+  */
+ static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_long);
++static DEFINE_LOCAL_IRQ_LOCK(batched_entropy_long_lock);
+ unsigned long get_random_long(void)
+ {
+ 	unsigned long ret;
+@@ -2064,13 +2062,13 @@ unsigned long get_random_long(void)
+ 	if (arch_get_random_long(&ret))
+ 		return ret;
+ 
+-	batch = &get_cpu_var(batched_entropy_long);
++	batch = &get_locked_var(batched_entropy_long_lock, batched_entropy_long);
+ 	if (batch->position % ARRAY_SIZE(batch->entropy_long) == 0) {
+ 		extract_crng((u8 *)batch->entropy_long);
+ 		batch->position = 0;
+ 	}
+ 	ret = batch->entropy_long[batch->position++];
+-	put_cpu_var(batched_entropy_long);
++	put_locked_var(batched_entropy_long_lock, batched_entropy_long);
+ 	return ret;
+ }
+ EXPORT_SYMBOL(get_random_long);
+@@ -2082,6 +2080,8 @@ unsigned int get_random_int(void)
+ }
+ #else
+ static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_int);
++static DEFINE_LOCAL_IRQ_LOCK(batched_entropy_int_lock);
++
+ unsigned int get_random_int(void)
+ {
+ 	unsigned int ret;
+@@ -2090,13 +2090,13 @@ unsigned int get_random_int(void)
+ 	if (arch_get_random_int(&ret))
+ 		return ret;
+ 
+-	batch = &get_cpu_var(batched_entropy_int);
++	batch = &get_locked_var(batched_entropy_int_lock, batched_entropy_int);
+ 	if (batch->position % ARRAY_SIZE(batch->entropy_int) == 0) {
+ 		extract_crng((u8 *)batch->entropy_int);
+ 		batch->position = 0;
+ 	}
+ 	ret = batch->entropy_int[batch->position++];
+-	put_cpu_var(batched_entropy_int);
++	put_locked_var(batched_entropy_int_lock, batched_entropy_int);
+ 	return ret;
+ }
+ #endif
 diff --git a/drivers/clocksource/tcb_clksrc.c b/drivers/clocksource/tcb_clksrc.c
 index 4da2af9694a2..5b6f57f500b8 100644
 --- a/drivers/clocksource/tcb_clksrc.c
@@ -4059,10 +4144,10 @@ index adbd1de1cea5..1fac5074f2cf 100644
  	  This adds the CPUFreq driver for K8/early Opteron/Athlon64 processors.
  	  Support for K10 and newer processors is now in acpi-cpufreq.
 diff --git a/drivers/gpu/drm/i915/i915_gem_execbuffer.c b/drivers/gpu/drm/i915/i915_gem_execbuffer.c
-index 0c400f852a76..97d5f6193751 100644
+index 2117f172d7a2..96c15501b0c8 100644
 --- a/drivers/gpu/drm/i915/i915_gem_execbuffer.c
 +++ b/drivers/gpu/drm/i915/i915_gem_execbuffer.c
-@@ -1537,7 +1537,9 @@ execbuf_submit(struct i915_execbuffer_params *params,
+@@ -1489,7 +1489,9 @@ execbuf_submit(struct i915_execbuffer_params *params,
  	if (ret)
  		return ret;
  
@@ -4073,7 +4158,7 @@ index 0c400f852a76..97d5f6193751 100644
  	i915_gem_execbuffer_move_to_active(vmas, params->request);
  
 diff --git a/drivers/gpu/drm/i915/i915_gem_shrinker.c b/drivers/gpu/drm/i915/i915_gem_shrinker.c
-index 1c237d02f30b..9e9b4404c0d7 100644
+index 755d78832a66..97fb03dc4971 100644
 --- a/drivers/gpu/drm/i915/i915_gem_shrinker.c
 +++ b/drivers/gpu/drm/i915/i915_gem_shrinker.c
 @@ -40,7 +40,7 @@ static bool mutex_is_locked_by(struct mutex *mutex, struct task_struct *task)
@@ -4086,7 +4171,7 @@ index 1c237d02f30b..9e9b4404c0d7 100644
  #else
  	/* Since UP may be pre-empted, we cannot assume that we own the lock */
 diff --git a/drivers/gpu/drm/i915/i915_irq.c b/drivers/gpu/drm/i915/i915_irq.c
-index 3fc286cd1157..252a1117b103 100644
+index 02908e37c228..05c0480576e1 100644
 --- a/drivers/gpu/drm/i915/i915_irq.c
 +++ b/drivers/gpu/drm/i915/i915_irq.c
 @@ -812,6 +812,7 @@ static int i915_get_crtc_scanoutpos(struct drm_device *dev, unsigned int pipe,
@@ -4106,10 +4191,10 @@ index 3fc286cd1157..252a1117b103 100644
  	spin_unlock_irqrestore(&dev_priv->uncore.lock, irqflags);
  
 diff --git a/drivers/gpu/drm/i915/intel_display.c b/drivers/gpu/drm/i915/intel_display.c
-index b9be8a6141d8..3162feddabe8 100644
+index 5dc6082639db..c32458fb3be2 100644
 --- a/drivers/gpu/drm/i915/intel_display.c
 +++ b/drivers/gpu/drm/i915/intel_display.c
-@@ -12141,7 +12141,7 @@ void intel_check_page_flip(struct drm_i915_private *dev_priv, int pipe)
+@@ -12131,7 +12131,7 @@ void intel_check_page_flip(struct drm_i915_private *dev_priv, int pipe)
  	struct intel_crtc *intel_crtc = to_intel_crtc(crtc);
  	struct intel_flip_work *work;
  
@@ -4494,7 +4579,7 @@ index 11a13b5be73a..baaed0ac274b 100644
  	if (WARN_ON(!dev_data->domain))
  		return;
 diff --git a/drivers/iommu/intel-iommu.c b/drivers/iommu/intel-iommu.c
-index b9e50c10213b..fd3b4657723f 100644
+index 87fcbf71b85a..674c82b61f36 100644
 --- a/drivers/iommu/intel-iommu.c
 +++ b/drivers/iommu/intel-iommu.c
 @@ -479,7 +479,7 @@ struct deferred_flush_data {
@@ -4506,7 +4591,7 @@ index b9e50c10213b..fd3b4657723f 100644
  
  /* bitmap for indexing intel_iommus */
  static int g_num_of_iommus;
-@@ -3716,10 +3716,8 @@ static void add_unmap(struct dmar_domain *dom, unsigned long iova_pfn,
+@@ -3719,10 +3719,8 @@ static void add_unmap(struct dmar_domain *dom, unsigned long iova_pfn,
  	struct intel_iommu *iommu;
  	struct deferred_flush_entry *entry;
  	struct deferred_flush_data *flush_data;
@@ -4518,7 +4603,7 @@ index b9e50c10213b..fd3b4657723f 100644
  
  	/* Flush all CPUs' entries to avoid deferring too much.  If
  	 * this becomes a bottleneck, can just flush us, and rely on
-@@ -3752,8 +3750,6 @@ static void add_unmap(struct dmar_domain *dom, unsigned long iova_pfn,
+@@ -3755,8 +3753,6 @@ static void add_unmap(struct dmar_domain *dom, unsigned long iova_pfn,
  	}
  	flush_data->size++;
  	spin_unlock_irqrestore(&flush_data->lock, flags);
@@ -4610,7 +4695,7 @@ index 4d200883c505..98b64ed5cb81 100644
  	Allows a block device to be used as cache for other devices; uses
  	a btree for indexing and the layout is optimized for SSDs.
 diff --git a/drivers/md/dm-rq.c b/drivers/md/dm-rq.c
-index 2c965424d383..2c8877f50626 100644
+index ba7c4c685db3..834ec328f217 100644
 --- a/drivers/md/dm-rq.c
 +++ b/drivers/md/dm-rq.c
 @@ -842,7 +842,7 @@ static void dm_old_request_fn(struct request_queue *q)
@@ -4623,7 +4708,7 @@ index 2c965424d383..2c8877f50626 100644
  }
  
 diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-index cce6057b9aca..fa2c4de32a64 100644
+index f34ad2be66a1..123469f7b560 100644
 --- a/drivers/md/raid5.c
 +++ b/drivers/md/raid5.c
 @@ -1928,8 +1928,9 @@ static void raid_run_ops(struct stripe_head *sh, unsigned long ops_request)
@@ -4647,7 +4732,7 @@ index cce6057b9aca..fa2c4de32a64 100644
  }
  
  static struct stripe_head *alloc_stripe(struct kmem_cache *sc, gfp_t gfp,
-@@ -6391,6 +6393,7 @@ static int raid456_cpu_up_prepare(unsigned int cpu, struct hlist_node *node)
+@@ -6393,6 +6395,7 @@ static int raid456_cpu_up_prepare(unsigned int cpu, struct hlist_node *node)
  		       __func__, cpu);
  		return -ENOMEM;
  	}
@@ -4655,7 +4740,7 @@ index cce6057b9aca..fa2c4de32a64 100644
  	return 0;
  }
  
-@@ -6401,7 +6404,6 @@ static int raid5_alloc_percpu(struct r5conf *conf)
+@@ -6403,7 +6406,6 @@ static int raid5_alloc_percpu(struct r5conf *conf)
  	conf->percpu = alloc_percpu(struct raid5_percpu);
  	if (!conf->percpu)
  		return -ENOMEM;
@@ -5119,7 +5204,7 @@ index 16ca31ad5ec0..c3987347e762 100644
  	/* peek cache of free slot */
  	if (pool->left != FC_XID_UNKNOWN) {
 diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-index 763f012fdeca..d0f61b595470 100644
+index 87f5e694dbed..23c0a50fb6aa 100644
 --- a/drivers/scsi/libsas/sas_ata.c
 +++ b/drivers/scsi/libsas/sas_ata.c
 @@ -190,7 +190,7 @@ static unsigned int sas_ata_qc_issue(struct ata_queued_cmd *qc)
@@ -5365,7 +5450,7 @@ index e2c33b9528d8..53af53c43e8c 100644
  	clk_disable(uap->clk);
  }
 diff --git a/drivers/tty/serial/omap-serial.c b/drivers/tty/serial/omap-serial.c
-index a2a529994ba5..0ee7c4c518df 100644
+index 44e5b5bf713b..400140d1dfff 100644
 --- a/drivers/tty/serial/omap-serial.c
 +++ b/drivers/tty/serial/omap-serial.c
 @@ -1257,13 +1257,10 @@ serial_omap_console_write(struct console *co, const char *s,
@@ -5396,10 +5481,10 @@ index a2a529994ba5..0ee7c4c518df 100644
  
  static int __init
 diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 479e223f9cff..3418a54b4131 100644
+index 3b9735abf2e0..73ba3239869e 100644
 --- a/drivers/usb/core/hcd.c
 +++ b/drivers/usb/core/hcd.c
-@@ -1761,9 +1761,9 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+@@ -1764,9 +1764,9 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
  	 * and no one may trigger the above deadlock situation when
  	 * running complete() in tasklet.
  	 */
@@ -6093,10 +6178,10 @@ index 1452177c822d..f43b01d54c59 100644
  };
  
 diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
-index 1536aeb0abab..0a8bc7eab083 100644
+index fc9b04941739..7c9bc1c7efe7 100644
 --- a/fs/nfs/nfs4proc.c
 +++ b/fs/nfs/nfs4proc.c
-@@ -2698,7 +2698,7 @@ static int _nfs4_open_and_get_state(struct nfs4_opendata *opendata,
+@@ -2697,7 +2697,7 @@ static int _nfs4_open_and_get_state(struct nfs4_opendata *opendata,
  	unsigned int seq;
  	int ret;
  
@@ -6105,7 +6190,7 @@ index 1536aeb0abab..0a8bc7eab083 100644
  
  	ret = _nfs4_proc_open(opendata);
  	if (ret != 0)
-@@ -2736,7 +2736,7 @@ static int _nfs4_open_and_get_state(struct nfs4_opendata *opendata,
+@@ -2735,7 +2735,7 @@ static int _nfs4_open_and_get_state(struct nfs4_opendata *opendata,
  
  	if (d_inode(dentry) == state->inode) {
  		nfs_inode_attach_open_context(ctx);
@@ -6343,10 +6428,10 @@ index d4e37acd4821..000cea46434a 100644
  		if (IS_ERR(child))
  			return false;
 diff --git a/fs/timerfd.c b/fs/timerfd.c
-index 9ae4abb4110b..8644b67c48fd 100644
+index ab8dd1538381..5580853f57dd 100644
 --- a/fs/timerfd.c
 +++ b/fs/timerfd.c
-@@ -460,7 +460,10 @@ static int do_timerfd_settime(int ufd, int flags,
+@@ -471,7 +471,10 @@ static int do_timerfd_settime(int ufd, int flags,
  				break;
  		}
  		spin_unlock_irq(&ctx->wqh.lock);
@@ -6890,7 +6975,7 @@ index 083d61e92706..5899796f50cb 100644
  /**
   * idr_find - return pointer for given id
 diff --git a/include/linux/init_task.h b/include/linux/init_task.h
-index 325f649d77ff..8af70bcc799b 100644
+index 325f649d77ff..a56e263f5005 100644
 --- a/include/linux/init_task.h
 +++ b/include/linux/init_task.h
 @@ -150,6 +150,12 @@ extern struct task_group root_task_group;
@@ -6906,7 +6991,15 @@ index 325f649d77ff..8af70bcc799b 100644
  #ifdef CONFIG_VIRT_CPU_ACCOUNTING_GEN
  # define INIT_VTIME(tsk)						\
  	.vtime_seqcount = SEQCNT_ZERO(tsk.vtime_seqcount),	\
-@@ -250,6 +256,7 @@ extern struct task_group root_task_group;
+@@ -164,6 +170,7 @@ extern struct task_group root_task_group;
+ #ifdef CONFIG_RT_MUTEXES
+ # define INIT_RT_MUTEXES(tsk)						\
+ 	.pi_waiters = RB_ROOT,						\
++	.pi_top_task = NULL,						\
+ 	.pi_waiters_leftmost = NULL,
+ #else
+ # define INIT_RT_MUTEXES(tsk)
+@@ -250,6 +257,7 @@ extern struct task_group root_task_group;
  	.cpu_timers	= INIT_CPU_TIMERS(tsk.cpu_timers),		\
  	.pi_lock	= __RAW_SPIN_LOCK_UNLOCKED(tsk.pi_lock),	\
  	.timer_slack_ns = 50000, /* 50 usec default slack */		\
@@ -8452,7 +8545,7 @@ index af3581b8a451..277295039c8f 100644
   * struct radix_tree_iter - radix tree iterator state
   *
 diff --git a/include/linux/random.h b/include/linux/random.h
-index 7bd2403e4fef..b2df7148a42b 100644
+index 16ab429735a7..9d0fecb5b6c2 100644
 --- a/include/linux/random.h
 +++ b/include/linux/random.h
 @@ -31,7 +31,7 @@ static inline void add_latent_entropy(void) {}
@@ -9105,7 +9198,7 @@ index 000000000000..2ffbf093ae92
 +
 +#endif
 diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 75d9a57e212e..8cb7df0f56e3 100644
+index f425eb3318ab..e010fb4d640d 100644
 --- a/include/linux/sched.h
 +++ b/include/linux/sched.h
 @@ -26,6 +26,7 @@ struct sched_param {
@@ -9181,7 +9274,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  	int nr_cpus_allowed;
  	cpumask_t cpus_allowed;
  
-@@ -1654,6 +1674,9 @@ struct task_struct {
+@@ -1658,6 +1678,9 @@ struct task_struct {
  
  	struct task_cputime cputime_expires;
  	struct list_head cpu_timers[3];
@@ -9191,7 +9284,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  
  /* process credentials */
  	const struct cred __rcu *ptracer_cred; /* Tracer's credentials at attach */
-@@ -1685,10 +1708,15 @@ struct task_struct {
+@@ -1689,10 +1712,15 @@ struct task_struct {
  /* signal handlers */
  	struct signal_struct *signal;
  	struct sighand_struct *sighand;
@@ -9207,7 +9300,16 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  
  	unsigned long sas_ss_sp;
  	size_t sas_ss_size;
-@@ -1917,6 +1945,12 @@ struct task_struct {
+@@ -1723,6 +1751,8 @@ struct task_struct {
+ 	/* PI waiters blocked on a rt_mutex held by this task */
+ 	struct rb_root pi_waiters;
+ 	struct rb_node *pi_waiters_leftmost;
++	/* Updated under owner's pi_lock and rq lock */
++	struct task_struct	*pi_top_task;
+ 	/* Deadlock detection and priority inheritance handling */
+ 	struct rt_mutex_waiter *pi_blocked_on;
+ #endif
+@@ -1921,6 +1951,12 @@ struct task_struct {
  	/* bitmask and counter of trace recursion */
  	unsigned long trace_recursion;
  #endif /* CONFIG_TRACING */
@@ -9220,7 +9322,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  #ifdef CONFIG_KCOV
  	/* Coverage collection mode enabled for this task (0 if disabled). */
  	enum kcov_mode kcov_mode;
-@@ -1942,9 +1976,23 @@ struct task_struct {
+@@ -1946,9 +1982,23 @@ struct task_struct {
  	unsigned int	sequential_io;
  	unsigned int	sequential_io_avg;
  #endif
@@ -9244,7 +9346,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  	int pagefault_disabled;
  #ifdef CONFIG_MMU
  	struct task_struct *oom_reaper_list;
-@@ -1984,14 +2032,6 @@ static inline struct vm_struct *task_stack_vm_area(const struct task_struct *t)
+@@ -1988,14 +2038,6 @@ static inline struct vm_struct *task_stack_vm_area(const struct task_struct *t)
  }
  #endif
  
@@ -9259,7 +9361,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  #define TNF_MIGRATED	0x01
  #define TNF_NO_GROUP	0x02
  #define TNF_SHARED	0x04
-@@ -2207,6 +2247,15 @@ extern struct pid *cad_pid;
+@@ -2211,6 +2253,15 @@ extern struct pid *cad_pid;
  extern void free_task(struct task_struct *tsk);
  #define get_task_struct(tsk) do { atomic_inc(&(tsk)->usage); } while(0)
  
@@ -9275,7 +9377,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  extern void __put_task_struct(struct task_struct *t);
  
  static inline void put_task_struct(struct task_struct *t)
-@@ -2214,6 +2263,7 @@ static inline void put_task_struct(struct task_struct *t)
+@@ -2218,6 +2269,7 @@ static inline void put_task_struct(struct task_struct *t)
  	if (atomic_dec_and_test(&t->usage))
  		__put_task_struct(t);
  }
@@ -9283,7 +9385,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  
  struct task_struct *task_rcu_dereference(struct task_struct **ptask);
  struct task_struct *try_get_task_struct(struct task_struct **ptask);
-@@ -2255,6 +2305,7 @@ extern void thread_group_cputime_adjusted(struct task_struct *p, cputime_t *ut,
+@@ -2259,6 +2311,7 @@ extern void thread_group_cputime_adjusted(struct task_struct *p, cputime_t *ut,
  /*
   * Per process flags
   */
@@ -9291,7 +9393,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  #define PF_EXITING	0x00000004	/* getting shut down */
  #define PF_EXITPIDONE	0x00000008	/* pi exit done on shut down */
  #define PF_VCPU		0x00000010	/* I'm a virtual CPU */
-@@ -2423,6 +2474,10 @@ extern void do_set_cpus_allowed(struct task_struct *p,
+@@ -2427,6 +2480,10 @@ extern void do_set_cpus_allowed(struct task_struct *p,
  
  extern int set_cpus_allowed_ptr(struct task_struct *p,
  				const struct cpumask *new_mask);
@@ -9302,7 +9404,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  #else
  static inline void do_set_cpus_allowed(struct task_struct *p,
  				      const struct cpumask *new_mask)
-@@ -2435,6 +2490,9 @@ static inline int set_cpus_allowed_ptr(struct task_struct *p,
+@@ -2439,6 +2496,9 @@ static inline int set_cpus_allowed_ptr(struct task_struct *p,
  		return -EINVAL;
  	return 0;
  }
@@ -9312,7 +9414,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  #endif
  
  #ifdef CONFIG_NO_HZ_COMMON
-@@ -2673,6 +2731,7 @@ extern void xtime_update(unsigned long ticks);
+@@ -2677,6 +2737,7 @@ extern void xtime_update(unsigned long ticks);
  
  extern int wake_up_state(struct task_struct *tsk, unsigned int state);
  extern int wake_up_process(struct task_struct *tsk);
@@ -9320,7 +9422,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  extern void wake_up_new_task(struct task_struct *tsk);
  #ifdef CONFIG_SMP
   extern void kick_process(struct task_struct *tsk);
-@@ -2881,6 +2940,17 @@ static inline void mmdrop(struct mm_struct *mm)
+@@ -2885,6 +2946,17 @@ static inline void mmdrop(struct mm_struct *mm)
  		__mmdrop(mm);
  }
  
@@ -9338,7 +9440,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  static inline void mmdrop_async_fn(struct work_struct *work)
  {
  	struct mm_struct *mm = container_of(work, struct mm_struct, async_put_work);
-@@ -3273,6 +3343,43 @@ static inline int test_tsk_need_resched(struct task_struct *tsk)
+@@ -3277,6 +3349,43 @@ static inline int test_tsk_need_resched(struct task_struct *tsk)
  	return unlikely(test_tsk_thread_flag(tsk,TIF_NEED_RESCHED));
  }
  
@@ -9382,7 +9484,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  static inline int restart_syscall(void)
  {
  	set_tsk_thread_flag(current, TIF_SIGPENDING);
-@@ -3304,6 +3411,51 @@ static inline int signal_pending_state(long state, struct task_struct *p)
+@@ -3308,6 +3417,51 @@ static inline int signal_pending_state(long state, struct task_struct *p)
  	return (state & TASK_INTERRUPTIBLE) || __fatal_signal_pending(p);
  }
  
@@ -9434,7 +9536,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  /*
   * cond_resched() and cond_resched_lock(): latency reduction via
   * explicit rescheduling in places that are safe. The return
-@@ -3329,12 +3481,16 @@ extern int __cond_resched_lock(spinlock_t *lock);
+@@ -3333,12 +3487,16 @@ extern int __cond_resched_lock(spinlock_t *lock);
  	__cond_resched_lock(lock);				\
  })
  
@@ -9451,7 +9553,7 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  
  static inline void cond_resched_rcu(void)
  {
-@@ -3509,6 +3665,31 @@ static inline void set_task_cpu(struct task_struct *p, unsigned int cpu)
+@@ -3513,6 +3671,31 @@ static inline void set_task_cpu(struct task_struct *p, unsigned int cpu)
  
  #endif /* CONFIG_SMP */
  
@@ -9483,6 +9585,46 @@ index 75d9a57e212e..8cb7df0f56e3 100644
  extern long sched_setaffinity(pid_t pid, const struct cpumask *new_mask);
  extern long sched_getaffinity(pid_t pid, struct cpumask *mask);
  
+diff --git a/include/linux/sched/rt.h b/include/linux/sched/rt.h
+index a30b172df6e1..db3e91f2bc03 100644
+--- a/include/linux/sched/rt.h
++++ b/include/linux/sched/rt.h
+@@ -16,27 +16,20 @@ static inline int rt_task(struct task_struct *p)
+ }
+ 
+ #ifdef CONFIG_RT_MUTEXES
+-extern int rt_mutex_getprio(struct task_struct *p);
+-extern void rt_mutex_setprio(struct task_struct *p, int prio);
+-extern int rt_mutex_get_effective_prio(struct task_struct *task, int newprio);
+-extern struct task_struct *rt_mutex_get_top_task(struct task_struct *task);
++/*
++ * Must hold either p->pi_lock or task_rq(p)->lock.
++ */
++static inline struct task_struct *rt_mutex_get_top_task(struct task_struct *p)
++{
++	return p->pi_top_task;
++}
++extern void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task);
+ extern void rt_mutex_adjust_pi(struct task_struct *p);
+ static inline bool tsk_is_pi_blocked(struct task_struct *tsk)
+ {
+ 	return tsk->pi_blocked_on != NULL;
+ }
+ #else
+-static inline int rt_mutex_getprio(struct task_struct *p)
+-{
+-	return p->normal_prio;
+-}
+-
+-static inline int rt_mutex_get_effective_prio(struct task_struct *task,
+-					      int newprio)
+-{
+-	return newprio;
+-}
+-
+ static inline struct task_struct *rt_mutex_get_top_task(struct task_struct *task)
+ {
+ 	return NULL;
 diff --git a/include/linux/seqlock.h b/include/linux/seqlock.h
 index ead97654c4e9..3d7223ffdd3b 100644
 --- a/include/linux/seqlock.h
@@ -10696,6 +10838,76 @@ index 000000000000..d3f2fbd560b1
 +}
 +
 +#endif /* _LATENCY_HIST_H */
+diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
+index 9b90c57517a9..516ae88cddf4 100644
+--- a/include/trace/events/sched.h
++++ b/include/trace/events/sched.h
+@@ -70,7 +70,7 @@ DECLARE_EVENT_CLASS(sched_wakeup_template,
+ 	TP_fast_assign(
+ 		memcpy(__entry->comm, p->comm, TASK_COMM_LEN);
+ 		__entry->pid		= p->pid;
+-		__entry->prio		= p->prio;
++		__entry->prio		= p->prio; /* XXX SCHED_DEADLINE */
+ 		__entry->success	= 1; /* rudiment, kill when possible */
+ 		__entry->target_cpu	= task_cpu(p);
+ 	),
+@@ -147,6 +147,7 @@ TRACE_EVENT(sched_switch,
+ 		memcpy(__entry->prev_comm, prev->comm, TASK_COMM_LEN);
+ 		__entry->next_pid	= next->pid;
+ 		__entry->next_prio	= next->prio;
++		/* XXX SCHED_DEADLINE */
+ 	),
+ 
+ 	TP_printk("prev_comm=%s prev_pid=%d prev_prio=%d prev_state=%s%s ==> next_comm=%s next_pid=%d next_prio=%d",
+@@ -181,7 +182,7 @@ TRACE_EVENT(sched_migrate_task,
+ 	TP_fast_assign(
+ 		memcpy(__entry->comm, p->comm, TASK_COMM_LEN);
+ 		__entry->pid		= p->pid;
+-		__entry->prio		= p->prio;
++		__entry->prio		= p->prio; /* XXX SCHED_DEADLINE */
+ 		__entry->orig_cpu	= task_cpu(p);
+ 		__entry->dest_cpu	= dest_cpu;
+ 	),
+@@ -206,7 +207,7 @@ DECLARE_EVENT_CLASS(sched_process_template,
+ 	TP_fast_assign(
+ 		memcpy(__entry->comm, p->comm, TASK_COMM_LEN);
+ 		__entry->pid		= p->pid;
+-		__entry->prio		= p->prio;
++		__entry->prio		= p->prio; /* XXX SCHED_DEADLINE */
+ 	),
+ 
+ 	TP_printk("comm=%s pid=%d prio=%d",
+@@ -253,7 +254,7 @@ TRACE_EVENT(sched_process_wait,
+ 	TP_fast_assign(
+ 		memcpy(__entry->comm, current->comm, TASK_COMM_LEN);
+ 		__entry->pid		= pid_nr(pid);
+-		__entry->prio		= current->prio;
++		__entry->prio		= current->prio; /* XXX SCHED_DEADLINE */
+ 	),
+ 
+ 	TP_printk("comm=%s pid=%d prio=%d",
+@@ -413,9 +414,9 @@ DEFINE_EVENT(sched_stat_runtime, sched_stat_runtime,
+  */
+ TRACE_EVENT(sched_pi_setprio,
+ 
+-	TP_PROTO(struct task_struct *tsk, int newprio),
++	TP_PROTO(struct task_struct *tsk, struct task_struct *pi_task),
+ 
+-	TP_ARGS(tsk, newprio),
++	TP_ARGS(tsk, pi_task),
+ 
+ 	TP_STRUCT__entry(
+ 		__array( char,	comm,	TASK_COMM_LEN	)
+@@ -428,7 +429,8 @@ TRACE_EVENT(sched_pi_setprio,
+ 		memcpy(__entry->comm, tsk->comm, TASK_COMM_LEN);
+ 		__entry->pid		= tsk->pid;
+ 		__entry->oldprio	= tsk->prio;
+-		__entry->newprio	= newprio;
++		__entry->newprio	= pi_task ? pi_task->prio : tsk->prio;
++		/* XXX SCHED_DEADLINE bits missing */
+ 	),
+ 
+ 	TP_printk("comm=%s pid=%d oldprio=%d newprio=%d",
 diff --git a/init/Kconfig b/init/Kconfig
 index 34407f15e6d3..2ce33a32e65d 100644
 --- a/init/Kconfig
@@ -10791,7 +11003,7 @@ index c4fb45525d08..821190dfaa75 100644
 -	"$(UTS_MACHINE)" "$(CONFIG_SMP)" "$(CONFIG_PREEMPT)" "$(CC) $(KBUILD_CFLAGS)"
 +	"$(UTS_MACHINE)" "$(CONFIG_SMP)" "$(CONFIG_PREEMPT)" "$(CONFIG_PREEMPT_RT_FULL)" "$(CC) $(KBUILD_CFLAGS)"
 diff --git a/init/main.c b/init/main.c
-index 2858be732f6d..3c97c3c91d88 100644
+index ae3996ae9bac..6470deef01c9 100644
 --- a/init/main.c
 +++ b/init/main.c
 @@ -507,6 +507,7 @@ asmlinkage __visible void __init start_kernel(void)
@@ -10919,10 +11131,10 @@ index 3f9c97419f02..11dbe26a8279 100644
  
  config PREEMPT_COUNT
 diff --git a/kernel/cgroup.c b/kernel/cgroup.c
-index 4e2f3de0e40b..6401eb5fe140 100644
+index a3d2aad2443f..bb6b252648ff 100644
 --- a/kernel/cgroup.c
 +++ b/kernel/cgroup.c
-@@ -5040,10 +5040,10 @@ static void css_free_rcu_fn(struct rcu_head *rcu_head)
+@@ -5041,10 +5041,10 @@ static void css_free_rcu_fn(struct rcu_head *rcu_head)
  	queue_work(cgroup_destroy_wq, &css->destroy_work);
  }
  
@@ -10935,7 +11147,7 @@ index 4e2f3de0e40b..6401eb5fe140 100644
  	struct cgroup_subsys *ss = css->ss;
  	struct cgroup *cgrp = css->cgroup;
  
-@@ -5086,8 +5086,8 @@ static void css_release(struct percpu_ref *ref)
+@@ -5087,8 +5087,8 @@ static void css_release(struct percpu_ref *ref)
  	struct cgroup_subsys_state *css =
  		container_of(ref, struct cgroup_subsys_state, refcnt);
  
@@ -10946,7 +11158,7 @@ index 4e2f3de0e40b..6401eb5fe140 100644
  }
  
  static void init_and_link_css(struct cgroup_subsys_state *css,
-@@ -5739,6 +5739,7 @@ static int __init cgroup_wq_init(void)
+@@ -5740,6 +5740,7 @@ static int __init cgroup_wq_init(void)
  	 */
  	cgroup_destroy_wq = alloc_workqueue("cgroup_destroy", 0, 1);
  	BUG_ON(!cgroup_destroy_wq);
@@ -10955,7 +11167,7 @@ index 4e2f3de0e40b..6401eb5fe140 100644
  	/*
  	 * Used to destroy pidlists and separate to serve as flush domain.
 diff --git a/kernel/cpu.c b/kernel/cpu.c
-index 217fd2e7f435..c23676e58dfd 100644
+index 99c6c568bc55..f1c64e563970 100644
 --- a/kernel/cpu.c
 +++ b/kernel/cpu.c
 @@ -239,6 +239,289 @@ static struct {
@@ -11333,7 +11545,7 @@ index 217fd2e7f435..c23676e58dfd 100644
  #endif /* CONFIG_SMP */
  
  /* Boot processor state steps */
-@@ -1923,6 +2247,10 @@ void __init boot_cpu_init(void)
+@@ -1924,6 +2248,10 @@ void __init boot_cpu_init(void)
  	set_cpu_active(cpu, true);
  	set_cpu_present(cpu, true);
  	set_cpu_possible(cpu, true);
@@ -11657,7 +11869,7 @@ index 3076f3089919..fb2ebcf3ca7c 100644
  	spin_unlock(&sighand->siglock);
  
 diff --git a/kernel/fork.c b/kernel/fork.c
-index ba8a01564985..47784f8aed37 100644
+index 59faac4de181..0edb0f3c1db8 100644
 --- a/kernel/fork.c
 +++ b/kernel/fork.c
 @@ -76,6 +76,7 @@
@@ -11733,7 +11945,15 @@ index ba8a01564985..47784f8aed37 100644
  static inline void __mmput(struct mm_struct *mm)
  {
  	VM_BUG_ON(atomic_read(&mm->mm_users));
-@@ -1426,6 +1462,9 @@ static void rt_mutex_init_task(struct task_struct *p)
+@@ -1417,6 +1453,7 @@ static void rt_mutex_init_task(struct task_struct *p)
+ #ifdef CONFIG_RT_MUTEXES
+ 	p->pi_waiters = RB_ROOT;
+ 	p->pi_waiters_leftmost = NULL;
++	p->pi_top_task = NULL;
+ 	p->pi_blocked_on = NULL;
+ #endif
+ }
+@@ -1426,6 +1463,9 @@ static void rt_mutex_init_task(struct task_struct *p)
   */
  static void posix_cpu_timers_init(struct task_struct *tsk)
  {
@@ -11743,7 +11963,7 @@ index ba8a01564985..47784f8aed37 100644
  	tsk->cputime_expires.prof_exp = 0;
  	tsk->cputime_expires.virt_exp = 0;
  	tsk->cputime_expires.sched_exp = 0;
-@@ -1552,6 +1591,7 @@ static __latent_entropy struct task_struct *copy_process(
+@@ -1552,6 +1592,7 @@ static __latent_entropy struct task_struct *copy_process(
  	spin_lock_init(&p->alloc_lock);
  
  	init_sigpending(&p->pending);
@@ -11752,7 +11972,7 @@ index ba8a01564985..47784f8aed37 100644
  	p->utime = p->stime = p->gtime = 0;
  	p->utimescaled = p->stimescaled = 0;
 diff --git a/kernel/futex.c b/kernel/futex.c
-index 4c6b6e697b73..a01d203939cb 100644
+index 4c6b6e697b73..d9bab63efccb 100644
 --- a/kernel/futex.c
 +++ b/kernel/futex.c
 @@ -800,7 +800,7 @@ static int refill_pi_state_cache(void)
@@ -11850,7 +12070,7 @@ index 4c6b6e697b73..a01d203939cb 100644
   */
  
  /*
-@@ -978,10 +1020,12 @@ void exit_pi_state_list(struct task_struct *curr)
+@@ -978,10 +1020,13 @@ void exit_pi_state_list(struct task_struct *curr)
   * the pi_state against the user space value. If correct, attach to
   * it.
   */
@@ -11860,11 +12080,12 @@ index 4c6b6e697b73..a01d203939cb 100644
  			      struct futex_pi_state **ps)
  {
  	pid_t pid = uval & FUTEX_TID_MASK;
-+	int ret, uval2;
++	u32 uval2;
++	int ret;
  
  	/*
  	 * Userspace might have messed up non-PI and PI futexes [3]
-@@ -989,9 +1033,39 @@ static int attach_to_pi_state(u32 uval, struct futex_pi_state *pi_state,
+@@ -989,9 +1034,39 @@ static int attach_to_pi_state(u32 uval, struct futex_pi_state *pi_state,
  	if (unlikely(!pi_state))
  		return -EINVAL;
  
@@ -11904,7 +12125,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  	 * Handle the owner died case:
  	 */
  	if (uval & FUTEX_OWNER_DIED) {
-@@ -1006,11 +1080,11 @@ static int attach_to_pi_state(u32 uval, struct futex_pi_state *pi_state,
+@@ -1006,11 +1081,11 @@ static int attach_to_pi_state(u32 uval, struct futex_pi_state *pi_state,
  			 * is not 0. Inconsistent state. [5]
  			 */
  			if (pid)
@@ -11918,7 +12139,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  		}
  
  		/*
-@@ -1022,14 +1096,14 @@ static int attach_to_pi_state(u32 uval, struct futex_pi_state *pi_state,
+@@ -1022,14 +1097,14 @@ static int attach_to_pi_state(u32 uval, struct futex_pi_state *pi_state,
  		 * Take a ref on the state and return success. [6]
  		 */
  		if (!pid)
@@ -11935,7 +12156,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  	}
  
  	/*
-@@ -1038,11 +1112,29 @@ static int attach_to_pi_state(u32 uval, struct futex_pi_state *pi_state,
+@@ -1038,11 +1113,29 @@ static int attach_to_pi_state(u32 uval, struct futex_pi_state *pi_state,
  	 * user space TID. [9/10]
  	 */
  	if (pid != task_pid_vnr(pi_state->owner))
@@ -11968,7 +12189,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  }
  
  /*
-@@ -1093,6 +1185,9 @@ static int attach_to_pi_owner(u32 uval, union futex_key *key,
+@@ -1093,6 +1186,9 @@ static int attach_to_pi_owner(u32 uval, union futex_key *key,
  
  	/*
  	 * No existing pi state. First waiter. [2]
@@ -11978,7 +12199,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  	 */
  	pi_state = alloc_pi_state();
  
-@@ -1117,17 +1212,18 @@ static int attach_to_pi_owner(u32 uval, union futex_key *key,
+@@ -1117,17 +1213,18 @@ static int attach_to_pi_owner(u32 uval, union futex_key *key,
  	return 0;
  }
  
@@ -12001,7 +12222,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  
  	/*
  	 * We are the first waiter - try to look up the owner based on
-@@ -1146,7 +1242,7 @@ static int lock_pi_update_atomic(u32 __user *uaddr, u32 uval, u32 newval)
+@@ -1146,7 +1243,7 @@ static int lock_pi_update_atomic(u32 __user *uaddr, u32 uval, u32 newval)
  	if (unlikely(cmpxchg_futex_value_locked(&curval, uaddr, uval, newval)))
  		return -EFAULT;
  
@@ -12010,7 +12231,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  	return curval != uval ? -EAGAIN : 0;
  }
  
-@@ -1174,7 +1270,7 @@ static int futex_lock_pi_atomic(u32 __user *uaddr, struct futex_hash_bucket *hb,
+@@ -1174,7 +1271,7 @@ static int futex_lock_pi_atomic(u32 __user *uaddr, struct futex_hash_bucket *hb,
  				struct task_struct *task, int set_waiters)
  {
  	u32 uval, newval, vpid = task_pid_vnr(task);
@@ -12019,7 +12240,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  	int ret;
  
  	/*
-@@ -1200,9 +1296,9 @@ static int futex_lock_pi_atomic(u32 __user *uaddr, struct futex_hash_bucket *hb,
+@@ -1200,9 +1297,9 @@ static int futex_lock_pi_atomic(u32 __user *uaddr, struct futex_hash_bucket *hb,
  	 * Lookup existing state first. If it exists, try to attach to
  	 * its pi_state.
  	 */
@@ -12032,9 +12253,19 @@ index 4c6b6e697b73..a01d203939cb 100644
  
  	/*
  	 * No waiter and user TID is 0. We are here because the
-@@ -1288,45 +1384,39 @@ static void mark_wake_futex(struct wake_q_head *wake_q, struct futex_q *q)
- 	 * memory barrier is required here to prevent the following
- 	 * store to lock_ptr from getting ahead of the plist_del.
+@@ -1283,50 +1380,45 @@ static void mark_wake_futex(struct wake_q_head *wake_q, struct futex_q *q)
+ 	wake_q_add(wake_q, p);
+ 	__unqueue_futex(q);
+ 	/*
+-	 * The waiting task can free the futex_q as soon as
+-	 * q->lock_ptr = NULL is written, without taking any locks. A
+-	 * memory barrier is required here to prevent the following
+-	 * store to lock_ptr from getting ahead of the plist_del.
++	 * The waiting task can free the futex_q as soon as q->lock_ptr = NULL
++	 * is written, without taking any locks. This is possible in the event
++	 * of a spurious wakeup, for example. A memory barrier is required here
++	 * to prevent the following store to lock_ptr from getting ahead of the
++	 * plist_del in __unqueue_futex().
  	 */
 -	smp_wmb();
 -	q->lock_ptr = NULL;
@@ -12052,7 +12283,7 @@ index 4c6b6e697b73..a01d203939cb 100644
 -	struct futex_pi_state *pi_state = this->pi_state;
  	u32 uninitialized_var(curval), newval;
 +	struct task_struct *new_owner;
-+	bool deboost = false;
++	bool postunlock = false;
  	WAKE_Q(wake_q);
 -	bool deboost;
 +	WAKE_Q(wake_sleeper_q);
@@ -12101,7 +12332,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  	 */
  	newval = FUTEX_WAITERS | task_pid_vnr(new_owner);
  
-@@ -1335,6 +1425,7 @@ static int wake_futex_pi(u32 __user *uaddr, u32 uval, struct futex_q *this,
+@@ -1335,6 +1427,7 @@ static int wake_futex_pi(u32 __user *uaddr, u32 uval, struct futex_q *this,
  
  	if (cmpxchg_futex_value_locked(&curval, uaddr, uval, newval)) {
  		ret = -EFAULT;
@@ -12109,7 +12340,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  	} else if (curval != uval) {
  		/*
  		 * If a unconditional UNLOCK_PI operation (user space did not
-@@ -1347,10 +1438,9 @@ static int wake_futex_pi(u32 __user *uaddr, u32 uval, struct futex_q *this,
+@@ -1347,10 +1440,14 @@ static int wake_futex_pi(u32 __user *uaddr, u32 uval, struct futex_q *this,
  		else
  			ret = -EINVAL;
  	}
@@ -12120,24 +12351,27 @@ index 4c6b6e697b73..a01d203939cb 100644
 +
 +	if (ret)
 +		goto out_unlock;
++
++	/*
++	 * This is a point of no return; once we modify the uval there is no
++	 * going back and subsequent operations must not fail.
++	 */
  
  	raw_spin_lock(&pi_state->owner->pi_lock);
  	WARN_ON(list_empty(&pi_state->list));
-@@ -1363,22 +1453,22 @@ static int wake_futex_pi(u32 __user *uaddr, u32 uval, struct futex_q *this,
+@@ -1363,22 +1460,15 @@ static int wake_futex_pi(u32 __user *uaddr, u32 uval, struct futex_q *this,
  	pi_state->owner = new_owner;
  	raw_spin_unlock(&new_owner->pi_lock);
  
-+	/*
-+	 * We've updated the uservalue, this unlock cannot fail.
-+	 */
-+	deboost = __rt_mutex_futex_unlock(&pi_state->pi_mutex, &wake_q,
-+					  &wake_sleeper_q);
-+
++	postunlock = __rt_mutex_futex_unlock(&pi_state->pi_mutex, &wake_q,
++					     &wake_sleeper_q);
 +out_unlock:
  	raw_spin_unlock_irq(&pi_state->pi_mutex.wait_lock);
  
 -	deboost = rt_mutex_futex_unlock(&pi_state->pi_mutex, &wake_q);
--
++	if (postunlock)
++		rt_mutex_postunlock(&wake_q, &wake_sleeper_q);
+ 
 -	/*
 -	 * First unlock HB so the waiter does not spin on it once he got woken
 -	 * up. Second wake up the waiter before the priority is adjusted. If we
@@ -12147,12 +12381,8 @@ index 4c6b6e697b73..a01d203939cb 100644
 -	spin_unlock(&hb->lock);
 -	wake_up_q(&wake_q);
 -	if (deboost)
-+	if (deboost) {
-+		wake_up_q(&wake_q);
-+		wake_up_q_sleeper(&wake_sleeper_q);
- 		rt_mutex_adjust_prio(current);
-+	}
- 
+-		rt_mutex_adjust_prio(current);
+-
 -	return 0;
 +	return ret;
  }
@@ -12546,7 +12776,19 @@ index 4c6b6e697b73..a01d203939cb 100644
  	goto out_put_key;
  
  out_unlock_put_key:
-@@ -2631,7 +2788,7 @@ static int futex_unlock_pi(u32 __user *uaddr, unsigned int flags)
+@@ -2603,8 +2760,10 @@ static int futex_lock_pi(u32 __user *uaddr, unsigned int flags,
+ out_put_key:
+ 	put_futex_key(&q.key);
+ out:
+-	if (to)
++	if (to) {
++		hrtimer_cancel(&to->timer);
+ 		destroy_hrtimer_on_stack(&to->timer);
++	}
+ 	return ret != -EINTR ? ret : -ERESTARTNOINTR;
+ 
+ uaddr_faulted:
+@@ -2631,7 +2790,7 @@ static int futex_unlock_pi(u32 __user *uaddr, unsigned int flags)
  	u32 uninitialized_var(curval), uval, vpid = task_pid_vnr(current);
  	union futex_key key = FUTEX_KEY_INIT;
  	struct futex_hash_bucket *hb;
@@ -12555,7 +12797,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  	int ret;
  
  retry:
-@@ -2655,12 +2812,48 @@ static int futex_unlock_pi(u32 __user *uaddr, unsigned int flags)
+@@ -2655,12 +2814,48 @@ static int futex_unlock_pi(u32 __user *uaddr, unsigned int flags)
  	 * all and we at least want to know if user space fiddled
  	 * with the futex value instead of blindly unlocking.
  	 */
@@ -12609,7 +12851,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  		 */
  		if (!ret)
  			goto out_putkey;
-@@ -2675,7 +2868,6 @@ static int futex_unlock_pi(u32 __user *uaddr, unsigned int flags)
+@@ -2675,7 +2870,6 @@ static int futex_unlock_pi(u32 __user *uaddr, unsigned int flags)
  		 * setting the FUTEX_WAITERS bit. Try again.
  		 */
  		if (ret == -EAGAIN) {
@@ -12617,7 +12859,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  			put_futex_key(&key);
  			goto retry;
  		}
-@@ -2683,7 +2875,7 @@ static int futex_unlock_pi(u32 __user *uaddr, unsigned int flags)
+@@ -2683,7 +2877,7 @@ static int futex_unlock_pi(u32 __user *uaddr, unsigned int flags)
  		 * wake_futex_pi has detected invalid state. Tell user
  		 * space.
  		 */
@@ -12626,7 +12868,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  	}
  
  	/*
-@@ -2693,8 +2885,10 @@ static int futex_unlock_pi(u32 __user *uaddr, unsigned int flags)
+@@ -2693,8 +2887,10 @@ static int futex_unlock_pi(u32 __user *uaddr, unsigned int flags)
  	 * preserve the WAITERS bit not the OWNER_DIED one. We are the
  	 * owner.
  	 */
@@ -12638,7 +12880,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  
  	/*
  	 * If uval has changed, let user space handle it.
-@@ -2708,7 +2902,6 @@ static int futex_unlock_pi(u32 __user *uaddr, unsigned int flags)
+@@ -2708,7 +2904,6 @@ static int futex_unlock_pi(u32 __user *uaddr, unsigned int flags)
  	return ret;
  
  pi_faulted:
@@ -12646,7 +12888,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  	put_futex_key(&key);
  
  	ret = fault_in_user_writeable(uaddr);
-@@ -2812,8 +3005,9 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
+@@ -2812,8 +3007,9 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
  				 u32 __user *uaddr2)
  {
  	struct hrtimer_sleeper timeout, *to = NULL;
@@ -12657,7 +12899,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  	union futex_key key2 = FUTEX_KEY_INIT;
  	struct futex_q q = futex_q_init;
  	int res, ret;
-@@ -2838,10 +3032,7 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
+@@ -2838,10 +3034,7 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
  	 * The waiter is allocated on our stack, manipulated by the requeue
  	 * code while we sleep on uaddr.
  	 */
@@ -12669,7 +12911,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  
  	ret = get_futex_key(uaddr2, flags & FLAGS_SHARED, &key2, VERIFY_WRITE);
  	if (unlikely(ret != 0))
-@@ -2872,20 +3063,55 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
+@@ -2872,20 +3065,55 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
  	/* Queue the futex_q, drop the hb lock, wait for wakeup. */
  	futex_wait_queue_me(hb, &q, to);
  
@@ -12736,7 +12978,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  
  	/* Check if the requeue code acquired the second futex for us. */
  	if (!q.rt_waiter) {
-@@ -2894,16 +3120,19 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
+@@ -2894,16 +3122,19 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
  		 * did a lock-steal - fix up the PI-state in that case.
  		 */
  		if (q.pi_state && (q.pi_state->owner != current)) {
@@ -12760,7 +13002,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  		}
  	} else {
  		struct rt_mutex *pi_mutex;
-@@ -2915,10 +3144,14 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
+@@ -2915,10 +3146,14 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
  		 */
  		WARN_ON(!q.pi_state);
  		pi_mutex = &q.pi_state->pi_mutex;
@@ -12778,7 +13020,7 @@ index 4c6b6e697b73..a01d203939cb 100644
  		/*
  		 * Fixup the pi_state owner and possibly acquire the lock if we
  		 * haven't already.
-@@ -2936,13 +3169,20 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
+@@ -2936,13 +3171,20 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
  		 * the fault, unlock the rt_mutex and return the fault to
  		 * userspace.
  		 */
@@ -13737,7 +13979,7 @@ index d0519c3432b6..b585af9a1b50 100644
  extern void debug_rt_mutex_free_waiter(struct rt_mutex_waiter *waiter);
  extern void debug_rt_mutex_init(struct rt_mutex *lock, const char *name);
 diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 2c49d76f96c3..674ad9087eb5 100644
+index 2c49d76f96c3..218f1d26afe7 100644
 --- a/kernel/locking/rtmutex.c
 +++ b/kernel/locking/rtmutex.c
 @@ -7,6 +7,11 @@
@@ -13773,7 +14015,166 @@ index 2c49d76f96c3..674ad9087eb5 100644
  /*
   * We can speed up the acquire/release, if there's no debugging state to be
   * set up.
-@@ -414,6 +426,14 @@ static bool rt_mutex_cond_detect_deadlock(struct rt_mutex_waiter *waiter,
+@@ -222,12 +234,25 @@ static inline bool unlock_rt_mutex_safe(struct rt_mutex *lock,
+ }
+ #endif
+ 
++#define STEAL_NORMAL  0
++#define STEAL_LATERAL 1
++/*
++ * Only use with rt_mutex_waiter_{less,equal}()
++ */
++#define task_to_waiter(p)	\
++	&(struct rt_mutex_waiter){ .prio = (p)->prio, .deadline = (p)->dl.deadline }
++
+ static inline int
+ rt_mutex_waiter_less(struct rt_mutex_waiter *left,
+-		     struct rt_mutex_waiter *right)
++		     struct rt_mutex_waiter *right, int mode)
+ {
+-	if (left->prio < right->prio)
+-		return 1;
++	if (mode == STEAL_NORMAL) {
++		if (left->prio < right->prio)
++			return 1;
++	} else {
++		if (left->prio <= right->prio)
++			return 1;
++	}
+ 
+ 	/*
+ 	 * If both waiters have dl_prio(), we check the deadlines of the
+@@ -236,12 +261,30 @@ rt_mutex_waiter_less(struct rt_mutex_waiter *left,
+ 	 * then right waiter has a dl_prio() too.
+ 	 */
+ 	if (dl_prio(left->prio))
+-		return dl_time_before(left->task->dl.deadline,
+-				      right->task->dl.deadline);
++		return dl_time_before(left->deadline, right->deadline);
+ 
+ 	return 0;
+ }
+ 
++static inline int
++rt_mutex_waiter_equal(struct rt_mutex_waiter *left,
++		      struct rt_mutex_waiter *right)
++{
++	if (left->prio != right->prio)
++		return 0;
++
++	/*
++	 * If both waiters have dl_prio(), we check the deadlines of the
++	 * associated tasks.
++	 * If left waiter has a dl_prio(), and we didn't return 0 above,
++	 * then right waiter has a dl_prio() too.
++	 */
++	if (dl_prio(left->prio))
++		return left->deadline == right->deadline;
++
++	return 1;
++}
++
+ static void
+ rt_mutex_enqueue(struct rt_mutex *lock, struct rt_mutex_waiter *waiter)
+ {
+@@ -253,7 +296,7 @@ rt_mutex_enqueue(struct rt_mutex *lock, struct rt_mutex_waiter *waiter)
+ 	while (*link) {
+ 		parent = *link;
+ 		entry = rb_entry(parent, struct rt_mutex_waiter, tree_entry);
+-		if (rt_mutex_waiter_less(waiter, entry)) {
++		if (rt_mutex_waiter_less(waiter, entry, STEAL_NORMAL)) {
+ 			link = &parent->rb_left;
+ 		} else {
+ 			link = &parent->rb_right;
+@@ -292,7 +335,7 @@ rt_mutex_enqueue_pi(struct task_struct *task, struct rt_mutex_waiter *waiter)
+ 	while (*link) {
+ 		parent = *link;
+ 		entry = rb_entry(parent, struct rt_mutex_waiter, pi_tree_entry);
+-		if (rt_mutex_waiter_less(waiter, entry)) {
++		if (rt_mutex_waiter_less(waiter, entry, STEAL_NORMAL)) {
+ 			link = &parent->rb_left;
+ 		} else {
+ 			link = &parent->rb_right;
+@@ -320,72 +363,16 @@ rt_mutex_dequeue_pi(struct task_struct *task, struct rt_mutex_waiter *waiter)
+ 	RB_CLEAR_NODE(&waiter->pi_tree_entry);
+ }
+ 
+-/*
+- * Calculate task priority from the waiter tree priority
+- *
+- * Return task->normal_prio when the waiter tree is empty or when
+- * the waiter is not allowed to do priority boosting
+- */
+-int rt_mutex_getprio(struct task_struct *task)
++static void rt_mutex_adjust_prio(struct task_struct *p)
+ {
+-	if (likely(!task_has_pi_waiters(task)))
+-		return task->normal_prio;
++	struct task_struct *pi_task = NULL;
+ 
+-	return min(task_top_pi_waiter(task)->prio,
+-		   task->normal_prio);
+-}
++	lockdep_assert_held(&p->pi_lock);
+ 
+-struct task_struct *rt_mutex_get_top_task(struct task_struct *task)
+-{
+-	if (likely(!task_has_pi_waiters(task)))
+-		return NULL;
++	if (task_has_pi_waiters(p))
++		pi_task = task_top_pi_waiter(p)->task;
+ 
+-	return task_top_pi_waiter(task)->task;
+-}
+-
+-/*
+- * Called by sched_setscheduler() to get the priority which will be
+- * effective after the change.
+- */
+-int rt_mutex_get_effective_prio(struct task_struct *task, int newprio)
+-{
+-	if (!task_has_pi_waiters(task))
+-		return newprio;
+-
+-	if (task_top_pi_waiter(task)->task->prio <= newprio)
+-		return task_top_pi_waiter(task)->task->prio;
+-	return newprio;
+-}
+-
+-/*
+- * Adjust the priority of a task, after its pi_waiters got modified.
+- *
+- * This can be both boosting and unboosting. task->pi_lock must be held.
+- */
+-static void __rt_mutex_adjust_prio(struct task_struct *task)
+-{
+-	int prio = rt_mutex_getprio(task);
+-
+-	if (task->prio != prio || dl_prio(prio))
+-		rt_mutex_setprio(task, prio);
+-}
+-
+-/*
+- * Adjust task priority (undo boosting). Called from the exit path of
+- * rt_mutex_slowunlock() and rt_mutex_slowlock().
+- *
+- * (Note: We do this outside of the protection of lock->wait_lock to
+- * allow the lock to be taken while or before we readjust the priority
+- * of task. We do not use the spin_xx_mutex() variants here as we are
+- * outside of the debug path.)
+- */
+-void rt_mutex_adjust_prio(struct task_struct *task)
+-{
+-	unsigned long flags;
+-
+-	raw_spin_lock_irqsave(&task->pi_lock, flags);
+-	__rt_mutex_adjust_prio(task);
+-	raw_spin_unlock_irqrestore(&task->pi_lock, flags);
++	rt_mutex_setprio(p, pi_task);
+ }
+ 
+ /*
+@@ -414,6 +401,14 @@ static bool rt_mutex_cond_detect_deadlock(struct rt_mutex_waiter *waiter,
  	return debug_rt_mutex_detect_deadlock(waiter, chwalk);
  }
  
@@ -13788,7 +14189,7 @@ index 2c49d76f96c3..674ad9087eb5 100644
  /*
   * Max number of times we'll walk the boosting chain:
   */
-@@ -421,7 +441,8 @@ int max_lock_depth = 1024;
+@@ -421,7 +416,8 @@ int max_lock_depth = 1024;
  
  static inline struct rt_mutex *task_blocked_on_lock(struct task_struct *p)
  {
@@ -13798,7 +14199,7 @@ index 2c49d76f96c3..674ad9087eb5 100644
  }
  
  /*
-@@ -557,7 +578,7 @@ static int rt_mutex_adjust_prio_chain(struct task_struct *task,
+@@ -557,7 +553,7 @@ static int rt_mutex_adjust_prio_chain(struct task_struct *task,
  	 * reached or the state of the chain has changed while we
  	 * dropped the locks.
  	 */
@@ -13807,7 +14208,43 @@ index 2c49d76f96c3..674ad9087eb5 100644
  		goto out_unlock_pi;
  
  	/*
-@@ -719,13 +740,16 @@ static int rt_mutex_adjust_prio_chain(struct task_struct *task,
+@@ -608,7 +604,7 @@ static int rt_mutex_adjust_prio_chain(struct task_struct *task,
+ 	 * enabled we continue, but stop the requeueing in the chain
+ 	 * walk.
+ 	 */
+-	if (waiter->prio == task->prio) {
++	if (rt_mutex_waiter_equal(waiter, task_to_waiter(task))) {
+ 		if (!detect_deadlock)
+ 			goto out_unlock_pi;
+ 		else
+@@ -704,7 +700,26 @@ static int rt_mutex_adjust_prio_chain(struct task_struct *task,
+ 
+ 	/* [7] Requeue the waiter in the lock waiter tree. */
+ 	rt_mutex_dequeue(lock, waiter);
++
++	/*
++	 * Update the waiter prio fields now that we're dequeued.
++	 *
++	 * These values can have changed through either:
++	 *
++	 *   sys_sched_set_scheduler() / sys_sched_setattr()
++	 *
++	 * or
++	 *
++	 *   DL CBS enforcement advancing the effective deadline.
++	 *
++	 * Even though pi_waiters also uses these fields, and that tree is only
++	 * updated in [11], we can do this here, since we hold [L], which
++	 * serializes all pi_waiters access and rb_erase() does not care about
++	 * the values of the node being removed.
++	 */
+ 	waiter->prio = task->prio;
++	waiter->deadline = task->dl.deadline;
++
+ 	rt_mutex_enqueue(lock, waiter);
+ 
+ 	/* [8] Release the task */
+@@ -719,13 +734,16 @@ static int rt_mutex_adjust_prio_chain(struct task_struct *task,
  	 * follow here. This is the end of the chain we are walking.
  	 */
  	if (!rt_mutex_owner(lock)) {
@@ -13826,33 +14263,33 @@ index 2c49d76f96c3..674ad9087eb5 100644
  		raw_spin_unlock_irq(&lock->wait_lock);
  		return 0;
  	}
-@@ -818,6 +842,25 @@ static int rt_mutex_adjust_prio_chain(struct task_struct *task,
+@@ -745,7 +763,7 @@ static int rt_mutex_adjust_prio_chain(struct task_struct *task,
+ 		 */
+ 		rt_mutex_dequeue_pi(task, prerequeue_top_waiter);
+ 		rt_mutex_enqueue_pi(task, waiter);
+-		__rt_mutex_adjust_prio(task);
++		rt_mutex_adjust_prio(task);
+ 
+ 	} else if (prerequeue_top_waiter == waiter) {
+ 		/*
+@@ -761,7 +779,7 @@ static int rt_mutex_adjust_prio_chain(struct task_struct *task,
+ 		rt_mutex_dequeue_pi(task, waiter);
+ 		waiter = rt_mutex_top_waiter(lock);
+ 		rt_mutex_enqueue_pi(task, waiter);
+-		__rt_mutex_adjust_prio(task);
++		rt_mutex_adjust_prio(task);
+ 	} else {
+ 		/*
+ 		 * Nothing changed. No need to do any priority
+@@ -818,6 +836,7 @@ static int rt_mutex_adjust_prio_chain(struct task_struct *task,
  	return ret;
  }
  
 +
-+#define STEAL_NORMAL  0
-+#define STEAL_LATERAL 1
-+
-+/*
-+ * Note that RT tasks are excluded from lateral-steals to prevent the
-+ * introduction of an unbounded latency
-+ */
-+static inline int lock_is_stealable(struct task_struct *task,
-+				    struct task_struct *pendowner, int mode)
-+{
-+    if (mode == STEAL_NORMAL || rt_task(task)) {
-+	    if (task->prio >= pendowner->prio)
-+		    return 0;
-+    } else if (task->prio > pendowner->prio)
-+	    return 0;
-+    return 1;
-+}
-+
  /*
   * Try to take an rt-mutex
   *
-@@ -828,8 +871,9 @@ static int rt_mutex_adjust_prio_chain(struct task_struct *task,
+@@ -828,9 +847,12 @@ static int rt_mutex_adjust_prio_chain(struct task_struct *task,
   * @waiter: The waiter that is queued to the lock's wait tree if the
   *	    callsite called task_blocked_on_lock(), otherwise NULL
   */
@@ -13862,39 +14299,53 @@ index 2c49d76f96c3..674ad9087eb5 100644
 +				  struct task_struct *task,
 +				  struct rt_mutex_waiter *waiter, int mode)
  {
++	lockdep_assert_held(&lock->wait_lock);
++
  	/*
  	 * Before testing whether we can acquire @lock, we set the
-@@ -866,8 +910,10 @@ static int try_to_take_rt_mutex(struct rt_mutex *lock, struct task_struct *task,
+ 	 * RT_MUTEX_HAS_WAITERS bit in @lock->owner. This forces all
+@@ -866,8 +888,10 @@ static int try_to_take_rt_mutex(struct rt_mutex *lock, struct task_struct *task,
  		 * If waiter is not the highest priority waiter of
  		 * @lock, give up.
  		 */
 -		if (waiter != rt_mutex_top_waiter(lock))
 +		if (waiter != rt_mutex_top_waiter(lock)) {
-+			/* XXX lock_is_stealable() ? */
++			/* XXX rt_mutex_waiter_less() ? */
  			return 0;
 +		}
  
  		/*
  		 * We can acquire the lock. Remove the waiter from the
-@@ -885,14 +931,10 @@ static int try_to_take_rt_mutex(struct rt_mutex *lock, struct task_struct *task,
+@@ -885,14 +909,26 @@ static int try_to_take_rt_mutex(struct rt_mutex *lock, struct task_struct *task,
  		 * not need to be dequeued.
  		 */
  		if (rt_mutex_has_waiters(lock)) {
--			/*
--			 * If @task->prio is greater than or equal to
--			 * the top waiter priority (kernel view),
--			 * @task lost.
--			 */
--			if (task->prio >= rt_mutex_top_waiter(lock)->prio)
--				return 0;
 +			struct task_struct *pown = rt_mutex_top_waiter(lock)->task;
- 
-+			if (task != pown && !lock_is_stealable(task, pown, mode))
++
++			if (task != pown)
 +				return 0;
++
++			/*
++			 * Note that RT tasks are excluded from lateral-steals
++			 * to prevent the introduction of an unbounded latency.
++			 */
++			if (rt_task(task))
++				mode = STEAL_NORMAL;
+ 			/*
+ 			 * If @task->prio is greater than or equal to
+ 			 * the top waiter priority (kernel view),
+ 			 * @task lost.
+ 			 */
+-			if (task->prio >= rt_mutex_top_waiter(lock)->prio)
++			if (!rt_mutex_waiter_less(task_to_waiter(task),
++						  rt_mutex_top_waiter(lock),
++						  mode))
+ 				return 0;
+-
  			/*
  			 * The current top waiter stays enqueued. We
  			 * don't have to change anything in the lock
-@@ -936,11 +978,395 @@ static int try_to_take_rt_mutex(struct rt_mutex *lock, struct task_struct *task,
+@@ -936,11 +972,384 @@ static int try_to_take_rt_mutex(struct rt_mutex *lock, struct task_struct *task,
  	 */
  	rt_mutex_set_owner(lock, task);
  
@@ -14064,9 +14515,9 @@ index 2c49d76f96c3..674ad9087eb5 100644
 +	debug_rt_mutex_free_waiter(&waiter);
 +}
 +
-+static void mark_wakeup_next_waiter(struct wake_q_head *wake_q,
-+				    struct wake_q_head *wake_sleeper_q,
-+				    struct rt_mutex *lock);
++static bool __sched __rt_mutex_unlock_common(struct rt_mutex *lock,
++					     struct wake_q_head *wake_q,
++					     struct wake_q_head *wq_sleeper);
 +/*
 + * Slow path to release a rt_mutex spin_lock style
 + */
@@ -14075,25 +14526,14 @@ index 2c49d76f96c3..674ad9087eb5 100644
 +	unsigned long flags;
 +	WAKE_Q(wake_q);
 +	WAKE_Q(wake_sleeper_q);
++	bool postunlock;
 +
 +	raw_spin_lock_irqsave(&lock->wait_lock, flags);
-+
-+	debug_rt_mutex_unlock(lock);
-+
-+	if (!rt_mutex_has_waiters(lock)) {
-+		lock->owner = NULL;
-+		raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
-+		return;
-+	}
-+
-+	mark_wakeup_next_waiter(&wake_q, &wake_sleeper_q, lock);
-+
++	postunlock = __rt_mutex_unlock_common(lock, &wake_q, &wake_sleeper_q);
 +	raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
-+	wake_up_q(&wake_q);
-+	wake_up_q_sleeper(&wake_sleeper_q);
 +
-+	/* Undo pi boosting.when necessary */
-+	rt_mutex_adjust_prio(current);
++	if (postunlock)
++		rt_mutex_postunlock(&wake_q, &wake_sleeper_q);
 +}
 +
 +void __lockfunc rt_spin_lock__no_mg(spinlock_t *lock)
@@ -14292,10 +14732,20 @@ index 2c49d76f96c3..674ad9087eb5 100644
  /*
   * Task blocks on lock.
   *
-@@ -971,6 +1397,23 @@ static int task_blocks_on_rt_mutex(struct rt_mutex *lock,
+@@ -958,6 +1367,8 @@ static int task_blocks_on_rt_mutex(struct rt_mutex *lock,
+ 	struct rt_mutex *next_lock;
+ 	int chain_walk = 0, res;
+ 
++	lockdep_assert_held(&lock->wait_lock);
++
+ 	/*
+ 	 * Early deadlock detection. We really don't want the task to
+ 	 * enqueue on itself just to untangle the mess later. It's not
+@@ -971,10 +1382,28 @@ static int task_blocks_on_rt_mutex(struct rt_mutex *lock,
  		return -EDEADLK;
  
  	raw_spin_lock(&task->pi_lock);
+-	__rt_mutex_adjust_prio(task);
 +
 +	/*
 +	 * In the case of futex requeue PI, this will be a proxy
@@ -14313,19 +14763,26 @@ index 2c49d76f96c3..674ad9087eb5 100644
 +
 +	BUG_ON(rt_mutex_real_waiter(task->pi_blocked_on));
 +
- 	__rt_mutex_adjust_prio(task);
++	rt_mutex_adjust_prio(task);
  	waiter->task = task;
  	waiter->lock = lock;
-@@ -994,7 +1437,7 @@ static int task_blocks_on_rt_mutex(struct rt_mutex *lock,
+ 	waiter->prio = task->prio;
++	waiter->deadline = task->dl.deadline;
+ 
+ 	/* Get the top priority waiter on the lock */
+ 	if (rt_mutex_has_waiters(lock))
+@@ -993,8 +1422,8 @@ static int task_blocks_on_rt_mutex(struct rt_mutex *lock,
+ 		rt_mutex_dequeue_pi(owner, top_waiter);
  		rt_mutex_enqueue_pi(owner, waiter);
  
- 		__rt_mutex_adjust_prio(owner);
+-		__rt_mutex_adjust_prio(owner);
 -		if (owner->pi_blocked_on)
++		rt_mutex_adjust_prio(owner);
 +		if (rt_mutex_real_waiter(owner->pi_blocked_on))
  			chain_walk = 1;
  	} else if (rt_mutex_cond_detect_deadlock(waiter, chwalk)) {
  		chain_walk = 1;
-@@ -1036,6 +1479,7 @@ static int task_blocks_on_rt_mutex(struct rt_mutex *lock,
+@@ -1036,6 +1465,7 @@ static int task_blocks_on_rt_mutex(struct rt_mutex *lock,
   * Called with lock->wait_lock held and interrupts disabled.
   */
  static void mark_wakeup_next_waiter(struct wake_q_head *wake_q,
@@ -14333,29 +14790,67 @@ index 2c49d76f96c3..674ad9087eb5 100644
  				    struct rt_mutex *lock)
  {
  	struct rt_mutex_waiter *waiter;
-@@ -1064,7 +1508,10 @@ static void mark_wakeup_next_waiter(struct wake_q_head *wake_q,
+@@ -1045,12 +1475,14 @@ static void mark_wakeup_next_waiter(struct wake_q_head *wake_q,
+ 	waiter = rt_mutex_top_waiter(lock);
  
- 	raw_spin_unlock(&current->pi_lock);
+ 	/*
+-	 * Remove it from current->pi_waiters. We do not adjust a
+-	 * possible priority boost right now. We execute wakeup in the
+-	 * boosted mode and go back to normal after releasing
+-	 * lock->wait_lock.
++	 * Remove it from current->pi_waiters and deboost.
++	 *
++	 * We must in fact deboost here in order to ensure we call
++	 * rt_mutex_setprio() to update p->pi_top_task before the
++	 * task unblocks.
+ 	 */
+ 	rt_mutex_dequeue_pi(current, waiter);
++	rt_mutex_adjust_prio(current);
  
--	wake_q_add(wake_q, waiter->task);
+ 	/*
+ 	 * As we are waking up the top waiter, and the waiter stays
+@@ -1062,9 +1494,22 @@ static void mark_wakeup_next_waiter(struct wake_q_head *wake_q,
+ 	 */
+ 	lock->owner = (void *) RT_MUTEX_HAS_WAITERS;
+ 
++	/*
++	 * We deboosted before waking the top waiter task such that we don't
++	 * run two tasks with the 'same' priority (and ensure the
++	 * p->pi_top_task pointer points to a blocked task). This however can
++	 * lead to priority inversion if we would get preempted after the
++	 * deboost but before waking our donor task, hence the preempt_disable()
++	 * before unlock.
++	 *
++	 * Pairs with preempt_enable() in rt_mutex_postunlock();
++	 */
++	preempt_disable();
 +	if (waiter->savestate)
 +		wake_q_add(wake_sleeper_q, waiter->task);
 +	else
 +		wake_q_add(wake_q, waiter->task);
+ 	raw_spin_unlock(&current->pi_lock);
+-
+-	wake_q_add(wake_q, waiter->task);
  }
  
  /*
-@@ -1078,7 +1525,7 @@ static void remove_waiter(struct rt_mutex *lock,
+@@ -1078,7 +1523,9 @@ static void remove_waiter(struct rt_mutex *lock,
  {
  	bool is_top_waiter = (waiter == rt_mutex_top_waiter(lock));
  	struct task_struct *owner = rt_mutex_owner(lock);
 -	struct rt_mutex *next_lock;
 +	struct rt_mutex *next_lock = NULL;
++
++	lockdep_assert_held(&lock->wait_lock);
  
  	raw_spin_lock(&current->pi_lock);
  	rt_mutex_dequeue(lock, waiter);
-@@ -1102,7 +1549,8 @@ static void remove_waiter(struct rt_mutex *lock,
- 	__rt_mutex_adjust_prio(owner);
+@@ -1099,10 +1546,11 @@ static void remove_waiter(struct rt_mutex *lock,
+ 	if (rt_mutex_has_waiters(lock))
+ 		rt_mutex_enqueue_pi(owner, rt_mutex_top_waiter(lock));
+ 
+-	__rt_mutex_adjust_prio(owner);
++	rt_mutex_adjust_prio(owner);
  
  	/* Store the lock on which owner is blocked or NULL */
 -	next_lock = task_blocked_on_lock(owner);
@@ -14369,8 +14864,9 @@ index 2c49d76f96c3..674ad9087eb5 100644
  
  	waiter = task->pi_blocked_on;
 -	if (!waiter || (waiter->prio == task->prio &&
-+	if (!rt_mutex_real_waiter(waiter) || (waiter->prio == task->prio &&
- 			!dl_prio(task->prio))) {
+-			!dl_prio(task->prio))) {
++	if (!rt_mutex_real_waiter(waiter) ||
++	    rt_mutex_waiter_equal(waiter, task_to_waiter(task))) {
  		raw_spin_unlock_irqrestore(&task->pi_lock, flags);
  		return;
  	}
@@ -14627,8 +15123,13 @@ index 2c49d76f96c3..674ad9087eb5 100644
  
  	raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
  
-@@ -1331,7 +1889,8 @@ static inline int rt_mutex_slowtrylock(struct rt_mutex *lock)
-  * Return whether the current task needs to undo a potential priority boosting.
+@@ -1328,10 +1886,12 @@ static inline int rt_mutex_slowtrylock(struct rt_mutex *lock)
+ 
+ /*
+  * Slow path to release a rt-mutex.
+- * Return whether the current task needs to undo a potential priority boosting.
++ *
++ * Return whether the current task needs to call rt_mutex_postunlock().
   */
  static bool __sched rt_mutex_slowunlock(struct rt_mutex *lock,
 -					struct wake_q_head *wake_q)
@@ -14637,7 +15138,7 @@ index 2c49d76f96c3..674ad9087eb5 100644
  {
  	unsigned long flags;
  
-@@ -1340,8 +1899,6 @@ static bool __sched rt_mutex_slowunlock(struct rt_mutex *lock,
+@@ -1340,8 +1900,6 @@ static bool __sched rt_mutex_slowunlock(struct rt_mutex *lock,
  
  	debug_rt_mutex_unlock(lock);
  
@@ -14646,16 +15147,22 @@ index 2c49d76f96c3..674ad9087eb5 100644
  	/*
  	 * We must be careful here if the fast path is enabled. If we
  	 * have no waiters queued we cannot set owner to NULL here
-@@ -1387,7 +1944,7 @@ static bool __sched rt_mutex_slowunlock(struct rt_mutex *lock,
+@@ -1387,12 +1945,10 @@ static bool __sched rt_mutex_slowunlock(struct rt_mutex *lock,
  	 *
  	 * Queue the next waiter for wakeup once we release the wait_lock.
  	 */
 -	mark_wakeup_next_waiter(wake_q, lock);
+-
 +	mark_wakeup_next_waiter(wake_q, wake_sleeper_q, lock);
- 
  	raw_spin_unlock_irqrestore(&lock->wait_lock, flags);
  
-@@ -1403,63 +1960,79 @@ static bool __sched rt_mutex_slowunlock(struct rt_mutex *lock,
+-	/* check PI boosting */
+-	return true;
++	return true; /* call rt_mutex_postunlock() */
+ }
+ 
+ /*
+@@ -1403,63 +1959,85 @@ static bool __sched rt_mutex_slowunlock(struct rt_mutex *lock,
   */
  static inline int
  rt_mutex_fastlock(struct rt_mutex *lock, int state,
@@ -14711,6 +15218,19 @@ index 2c49d76f96c3..674ad9087eb5 100644
  	return slowfn(lock);
  }
  
++/*
++ * Performs the wakeup of the the top-waiter and re-enables preemption.
++ */
++void rt_mutex_postunlock(struct wake_q_head *wake_q,
++			 struct wake_q_head *wq_sleeper)
++{
++	wake_up_q(wake_q);
++	wake_up_q_sleeper(wq_sleeper);
++
++	/* Pairs with preempt_disable() in rt_mutex_slowunlock() */
++	preempt_enable();
++}
++
  static inline void
  rt_mutex_fastunlock(struct rt_mutex *lock,
  		    bool (*slowfn)(struct rt_mutex *lock,
@@ -14720,7 +15240,6 @@ index 2c49d76f96c3..674ad9087eb5 100644
  {
  	WAKE_Q(wake_q);
 +	WAKE_Q(wake_sleeper_q);
-+	bool deboost;
  
 -	if (likely(rt_mutex_cmpxchg_release(lock, current, NULL))) {
 -		rt_mutex_deadlock_account_unlock(current);
@@ -14729,21 +15248,11 @@ index 2c49d76f96c3..674ad9087eb5 100644
  
 -	} else {
 -		bool deboost = slowfn(lock, &wake_q);
-+	deboost = slowfn(lock, &wake_q, &wake_sleeper_q);
++	if (slowfn(lock, &wake_q,  &wake_sleeper_q))
++		rt_mutex_postunlock(&wake_q, &wake_sleeper_q);
++}
  
 -		wake_up_q(&wake_q);
-+	wake_up_q(&wake_q);
-+	wake_up_q_sleeper(&wake_sleeper_q);
- 
--		/* Undo pi boosting if necessary: */
--		if (deboost)
--			rt_mutex_adjust_prio(current);
--	}
-+	/* Undo pi boosting if necessary: */
-+	if (deboost)
-+		rt_mutex_adjust_prio(current);
-+}
-+
 +/**
 + * rt_mutex_lock_state - lock a rt_mutex with a given state
 + *
@@ -14753,12 +15262,16 @@ index 2c49d76f96c3..674ad9087eb5 100644
 +int __sched rt_mutex_lock_state(struct rt_mutex *lock, int state)
 +{
 +	might_sleep();
-+
+ 
+-		/* Undo pi boosting if necessary: */
+-		if (deboost)
+-			rt_mutex_adjust_prio(current);
+-	}
 +	return rt_mutex_fastlock(lock, state, NULL, rt_mutex_slowlock);
  }
  
  /**
-@@ -1469,15 +2042,13 @@ rt_mutex_fastunlock(struct rt_mutex *lock,
+@@ -1469,15 +2047,13 @@ rt_mutex_fastunlock(struct rt_mutex *lock,
   */
  void __sched rt_mutex_lock(struct rt_mutex *lock)
  {
@@ -14776,7 +15289,7 @@ index 2c49d76f96c3..674ad9087eb5 100644
   * @lock:		the rt_mutex to be locked
   *
   * Returns:
-@@ -1486,23 +2057,32 @@ EXPORT_SYMBOL_GPL(rt_mutex_lock);
+@@ -1486,23 +2062,32 @@ EXPORT_SYMBOL_GPL(rt_mutex_lock);
   */
  int __sched rt_mutex_lock_interruptible(struct rt_mutex *lock)
  {
@@ -14820,7 +15333,7 @@ index 2c49d76f96c3..674ad9087eb5 100644
  }
  
  /**
-@@ -1525,6 +2105,7 @@ rt_mutex_timed_lock(struct rt_mutex *lock, struct hrtimer_sleeper *timeout)
+@@ -1525,6 +2110,7 @@ rt_mutex_timed_lock(struct rt_mutex *lock, struct hrtimer_sleeper *timeout)
  
  	return rt_mutex_timed_fastlock(lock, TASK_INTERRUPTIBLE, timeout,
  				       RT_MUTEX_MIN_CHAINWALK,
@@ -14828,7 +15341,7 @@ index 2c49d76f96c3..674ad9087eb5 100644
  				       rt_mutex_slowlock);
  }
  EXPORT_SYMBOL_GPL(rt_mutex_timed_lock);
-@@ -1542,7 +2123,11 @@ EXPORT_SYMBOL_GPL(rt_mutex_timed_lock);
+@@ -1542,7 +2128,11 @@ EXPORT_SYMBOL_GPL(rt_mutex_timed_lock);
   */
  int __sched rt_mutex_trylock(struct rt_mutex *lock)
  {
@@ -14840,23 +15353,22 @@ index 2c49d76f96c3..674ad9087eb5 100644
  		return 0;
  
  	return rt_mutex_fasttrylock(lock, rt_mutex_slowtrylock);
-@@ -1561,20 +2146,41 @@ void __sched rt_mutex_unlock(struct rt_mutex *lock)
+@@ -1560,21 +2150,53 @@ void __sched rt_mutex_unlock(struct rt_mutex *lock)
+ }
  EXPORT_SYMBOL_GPL(rt_mutex_unlock);
  
- /**
+-/**
 - * rt_mutex_futex_unlock - Futex variant of rt_mutex_unlock
 - * @lock: the rt_mutex to be unlocked
 - *
 - * Returns: true/false indicating whether priority adjustment is
 - * required or not.
-+ * Futex variant, that since futex variants do not use the fast-path, can be
-+ * simple and will not need to retry.
-  */
+- */
 -bool __sched rt_mutex_futex_unlock(struct rt_mutex *lock,
 -				   struct wake_q_head *wqh)
-+bool __sched __rt_mutex_futex_unlock(struct rt_mutex *lock,
-+				    struct wake_q_head *wake_q,
-+				    struct wake_q_head *wq_sleeper)
++static bool __sched __rt_mutex_unlock_common(struct rt_mutex *lock,
++					     struct wake_q_head *wake_q,
++					     struct wake_q_head *wq_sleeper)
  {
 -	if (likely(rt_mutex_cmpxchg_release(lock, current, NULL))) {
 -		rt_mutex_deadlock_account_unlock(current);
@@ -14868,32 +15380,47 @@ index 2c49d76f96c3..674ad9087eb5 100644
 +	if (!rt_mutex_has_waiters(lock)) {
 +		lock->owner = NULL;
 +		return false; /* done */
-+	}
+ 	}
+-	return rt_mutex_slowunlock(lock, wqh);
 +
++	/*
++	 * We've already deboosted, mark_wakeup_next_waiter() will
++	 * retain preempt_disabled when we drop the wait_lock, to
++	 * avoid inversion prior to the wakeup.  preempt_disable()
++	 * therein pairs with rt_mutex_postunlock().
++	 */
 +	mark_wakeup_next_waiter(wake_q, wq_sleeper, lock);
-+	return true; /* deboost and wakeups */
++
++	return true; /* call postunlock() */
++}
++
++/**
++ * Futex variant, that since futex variants do not use the fast-path, can be
++ * simple and will not need to retry.
++ */
++bool __sched __rt_mutex_futex_unlock(struct rt_mutex *lock,
++				    struct wake_q_head *wake_q,
++				    struct wake_q_head *wq_sleeper)
++{
++	return __rt_mutex_unlock_common(lock, wake_q, wq_sleeper);
 +}
 +
 +void __sched rt_mutex_futex_unlock(struct rt_mutex *lock)
 +{
 +	WAKE_Q(wake_q);
 +	WAKE_Q(wake_sleeper_q);
-+	bool deboost;
++	bool postunlock;
 +
 +	raw_spin_lock_irq(&lock->wait_lock);
-+	deboost = __rt_mutex_futex_unlock(lock, &wake_q, &wake_sleeper_q);
++	postunlock = __rt_mutex_futex_unlock(lock, &wake_q, &wake_sleeper_q);
 +	raw_spin_unlock_irq(&lock->wait_lock);
 +
-+	if (deboost) {
-+		wake_up_q(&wake_q);
-+		wake_up_q_sleeper(&wake_sleeper_q);
-+		rt_mutex_adjust_prio(current);
- 	}
--	return rt_mutex_slowunlock(lock, wqh);
++	if (postunlock)
++		rt_mutex_postunlock(&wake_q, &wake_sleeper_q);
  }
  
  /**
-@@ -1607,13 +2213,12 @@ EXPORT_SYMBOL_GPL(rt_mutex_destroy);
+@@ -1607,13 +2229,12 @@ EXPORT_SYMBOL_GPL(rt_mutex_destroy);
  void __rt_mutex_init(struct rt_mutex *lock, const char *name)
  {
  	lock->owner = NULL;
@@ -14908,7 +15435,7 @@ index 2c49d76f96c3..674ad9087eb5 100644
  
  /**
   * rt_mutex_init_proxy_locked - initialize and lock a rt_mutex on behalf of a
-@@ -1628,10 +2233,9 @@ EXPORT_SYMBOL_GPL(__rt_mutex_init);
+@@ -1628,10 +2249,9 @@ EXPORT_SYMBOL_GPL(__rt_mutex_init);
  void rt_mutex_init_proxy_locked(struct rt_mutex *lock,
  				struct task_struct *proxy_owner)
  {
@@ -14920,7 +15447,7 @@ index 2c49d76f96c3..674ad9087eb5 100644
  }
  
  /**
-@@ -1647,7 +2251,66 @@ void rt_mutex_proxy_unlock(struct rt_mutex *lock,
+@@ -1647,7 +2267,66 @@ void rt_mutex_proxy_unlock(struct rt_mutex *lock,
  {
  	debug_rt_mutex_proxy_unlock(lock);
  	rt_mutex_set_owner(lock, NULL);
@@ -14988,7 +15515,7 @@ index 2c49d76f96c3..674ad9087eb5 100644
  }
  
  /**
-@@ -1670,33 +2333,9 @@ int rt_mutex_start_proxy_lock(struct rt_mutex *lock,
+@@ -1670,33 +2349,9 @@ int rt_mutex_start_proxy_lock(struct rt_mutex *lock,
  	int ret;
  
  	raw_spin_lock_irq(&lock->wait_lock);
@@ -15023,7 +15550,7 @@ index 2c49d76f96c3..674ad9087eb5 100644
  	return ret;
  }
  
-@@ -1721,21 +2360,23 @@ struct task_struct *rt_mutex_next_owner(struct rt_mutex *lock)
+@@ -1721,36 +2376,106 @@ struct task_struct *rt_mutex_next_owner(struct rt_mutex *lock)
  }
  
  /**
@@ -15051,14 +15578,41 @@ index 2c49d76f96c3..674ad9087eb5 100644
  			       struct hrtimer_sleeper *to,
  			       struct rt_mutex_waiter *waiter)
  {
-@@ -1746,10 +2387,47 @@ int rt_mutex_finish_proxy_lock(struct rt_mutex *lock,
- 	set_current_state(TASK_INTERRUPTIBLE);
++	struct task_struct *tsk = current;
+ 	int ret;
  
+ 	raw_spin_lock_irq(&lock->wait_lock);
+-
+-	set_current_state(TASK_INTERRUPTIBLE);
+-
  	/* sleep on the mutex */
 -	ret = __rt_mutex_slowlock(lock, TASK_INTERRUPTIBLE, to, waiter);
++	set_current_state(TASK_INTERRUPTIBLE);
 +	ret = __rt_mutex_slowlock(lock, TASK_INTERRUPTIBLE, to, waiter, NULL);
++	/*
++	 * try_to_take_rt_mutex() sets the waiter bit unconditionally. We might
++	 * have to fix that up.
++	 */
++	fixup_rt_mutex_waiters(lock);
  
 -	if (unlikely(ret))
++	/*
++	 * RT has a problem here when the wait got interrupted by a timeout
++	 * or a signal. task->pi_blocked_on is still set. The task must
++	 * acquire the hash bucket lock when returning from this function.
++	 *
++	 * If the hash bucket lock is contended then the
++	 * BUG_ON(rt_mutex_real_waiter(task->pi_blocked_on)) in
++	 * task_blocks_on_rt_mutex() will trigger. This can be avoided by
++	 * clearing task->pi_blocked_on which removes the task from the
++	 * boosting chain of the rtmutex. That's correct because the task
++	 * is not longer blocked on it.
++	 */
++	if (ret) {
++		raw_spin_lock(&tsk->pi_lock);
++		tsk->pi_blocked_on = NULL;
++		raw_spin_unlock(&tsk->pi_lock);
++	}
 +	raw_spin_unlock_irq(&lock->wait_lock);
 +
 +	return ret;
@@ -15090,18 +15644,30 @@ index 2c49d76f96c3..674ad9087eb5 100644
 +
 +	raw_spin_lock_irq(&lock->wait_lock);
 +	/*
++	 * Do an unconditional try-lock, this deals with the lock stealing
++	 * state where __rt_mutex_futex_unlock() -> mark_wakeup_next_waiter()
++	 * sets a NULL owner.
++	 *
++	 * We're not interested in the return value, because the subsequent
++	 * test on rt_mutex_owner() will infer that. If the trylock succeeded,
++	 * we will own the lock and it will have removed the waiter. If we
++	 * failed the trylock, we're still not owner and we need to remove
++	 * ourselves.
++	 */
++	try_to_take_rt_mutex(lock, current, waiter);
++	/*
 +	 * Unless we're the owner; we're still enqueued on the wait_list.
 +	 * So check if we became owner, if not, take us off the wait_list.
 +	 */
 +	if (rt_mutex_owner(lock) != current) {
  		remove_waiter(lock, waiter);
-+		fixup_rt_mutex_waiters(lock);
+-
 +		cleanup = true;
 +	}
- 
  	/*
  	 * try_to_take_rt_mutex() sets the waiter bit unconditionally. We might
-@@ -1759,5 +2437,91 @@ int rt_mutex_finish_proxy_lock(struct rt_mutex *lock,
+ 	 * have to fix that up.
+@@ -1759,5 +2484,91 @@ int rt_mutex_finish_proxy_lock(struct rt_mutex *lock,
  
  	raw_spin_unlock_irq(&lock->wait_lock);
  
@@ -15207,10 +15773,10 @@ index c4060584c407..6607802efa8b 100644
  #define debug_rt_mutex_free_waiter(w)			do { } while (0)
  #define debug_rt_mutex_lock(l)				do { } while (0)
 diff --git a/kernel/locking/rtmutex_common.h b/kernel/locking/rtmutex_common.h
-index e317e1cbb3eb..819826407462 100644
+index e317e1cbb3eb..64d89d780059 100644
 --- a/kernel/locking/rtmutex_common.h
 +++ b/kernel/locking/rtmutex_common.h
-@@ -27,6 +27,7 @@ struct rt_mutex_waiter {
+@@ -27,12 +27,14 @@ struct rt_mutex_waiter {
  	struct rb_node          pi_tree_entry;
  	struct task_struct	*task;
  	struct rt_mutex		*lock;
@@ -15218,7 +15784,14 @@ index e317e1cbb3eb..819826407462 100644
  #ifdef CONFIG_DEBUG_RT_MUTEXES
  	unsigned long		ip;
  	struct pid		*deadlock_task_pid;
-@@ -98,22 +99,45 @@ enum rtmutex_chainwalk {
+ 	struct rt_mutex		*deadlock_lock;
+ #endif
+ 	int prio;
++	u64 deadline;
+ };
+ 
+ /*
+@@ -98,21 +100,45 @@ enum rtmutex_chainwalk {
  /*
   * PI-futex support (proxy locking functions, etc.):
   */
@@ -15243,6 +15816,7 @@ index e317e1cbb3eb..819826407462 100644
 -extern int rt_mutex_timed_futex_lock(struct rt_mutex *l, struct hrtimer_sleeper *to);
 -extern bool rt_mutex_futex_unlock(struct rt_mutex *lock,
 -				  struct wake_q_head *wqh);
+-extern void rt_mutex_adjust_prio(struct task_struct *task);
 +extern int rt_mutex_wait_proxy_lock(struct rt_mutex *lock,
 +			       struct hrtimer_sleeper *to,
 +			       struct rt_mutex_waiter *waiter);
@@ -15256,8 +15830,9 @@ index e317e1cbb3eb..819826407462 100644
 +				 struct wake_q_head *wqh,
 +				 struct wake_q_head *wq_sleeper);
 +
- extern void rt_mutex_adjust_prio(struct task_struct *task);
- 
++extern void rt_mutex_postunlock(struct wake_q_head *wake_q,
++				struct wake_q_head *wq_sleeper);
++
 +/* RW semaphore special interface */
 +struct ww_acquire_ctx;
 +
@@ -15266,10 +15841,9 @@ index e317e1cbb3eb..819826407462 100644
 +				     enum rtmutex_chainwalk chwalk,
 +				     struct ww_acquire_ctx *ww_ctx,
 +				     struct rt_mutex_waiter *waiter);
-+
+ 
  #ifdef CONFIG_DEBUG_RT_MUTEXES
  # include "rtmutex-debug.h"
- #else
 diff --git a/kernel/locking/rwsem-rt.c b/kernel/locking/rwsem-rt.c
 new file mode 100644
 index 000000000000..4a708ffcded6
@@ -16097,7 +16671,7 @@ index 9c5b231684d0..cf15bdb6855b 100644
  	 * console_unblank can no longer be called in interrupt context unless
  	 * oops_in_progress is set to 1..
 diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 49ba7c1ade9d..44f44b47ec07 100644
+index a5caecef88be..61e7c5e2183c 100644
 --- a/kernel/ptrace.c
 +++ b/kernel/ptrace.c
 @@ -166,7 +166,14 @@ static bool ptrace_freeze_traced(struct task_struct *task)
@@ -16915,7 +17489,7 @@ index 8d0f35debf35..b62cf6400fe0 100644
  }
  EXPORT_SYMBOL(completion_done);
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 154fd689fe02..a6aa5801b21e 100644
+index 154fd689fe02..30b24f774198 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
 @@ -129,7 +129,11 @@ const_debug unsigned int sysctl_sched_features =
@@ -17535,7 +18109,130 @@ index 154fd689fe02..a6aa5801b21e 100644
  		exception_exit(prev_ctx);
  
  		preempt_latency_stop(1);
-@@ -4939,6 +5172,7 @@ int __cond_resched_lock(spinlock_t *lock)
+@@ -3629,10 +3862,25 @@ EXPORT_SYMBOL(default_wake_function);
+ 
+ #ifdef CONFIG_RT_MUTEXES
+ 
++static inline int __rt_effective_prio(struct task_struct *pi_task, int prio)
++{
++	if (pi_task)
++		prio = min(prio, pi_task->prio);
++
++	return prio;
++}
++
++static inline int rt_effective_prio(struct task_struct *p, int prio)
++{
++	struct task_struct *pi_task = rt_mutex_get_top_task(p);
++
++	return __rt_effective_prio(pi_task, prio);
++}
++
+ /*
+  * rt_mutex_setprio - set the current priority of a task
+- * @p: task
+- * @prio: prio value (kernel-internal form)
++ * @p: task to boost
++ * @pi_task: donor task
+  *
+  * This function changes the 'effective' priority of a task. It does
+  * not touch ->normal_prio like __setscheduler().
+@@ -3640,16 +3888,40 @@ EXPORT_SYMBOL(default_wake_function);
+  * Used by the rt_mutex code to implement priority inheritance
+  * logic. Call site only calls if the priority of the task changed.
+  */
+-void rt_mutex_setprio(struct task_struct *p, int prio)
++void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
+ {
+-	int oldprio, queued, running, queue_flag = DEQUEUE_SAVE | DEQUEUE_MOVE;
++	int prio, oldprio, queued, running, queue_flag = DEQUEUE_SAVE | DEQUEUE_MOVE;
+ 	const struct sched_class *prev_class;
+ 	struct rq_flags rf;
+ 	struct rq *rq;
+ 
+-	BUG_ON(prio > MAX_PRIO);
++	/* XXX used to be waiter->prio, not waiter->task->prio */
++	prio = __rt_effective_prio(pi_task, p->normal_prio);
++
++	/*
++	 * If nothing changed; bail early.
++	 */
++	if (p->pi_top_task == pi_task && prio == p->prio && !dl_prio(prio))
++		return;
+ 
+ 	rq = __task_rq_lock(p, &rf);
++	/*
++	 * Set under pi_lock && rq->lock, such that the value can be used under
++	 * either lock.
++	 *
++	 * Note that there is loads of tricky to make this pointer cache work
++	 * right. rt_mutex_slowunlock()+rt_mutex_postunlock() work together to
++	 * ensure a task is de-boosted (pi_task is set to NULL) before the
++	 * task is allowed to run again (and can exit). This ensures the pointer
++	 * points to a blocked task -- which guaratees the task is present.
++	 */
++	p->pi_top_task = pi_task;
++
++	/*
++	 * For FIFO/RR we only need to set prio, if that matches we're done.
++	 */
++	if (prio == p->prio && !dl_prio(prio))
++		goto out_unlock;
+ 
+ 	/*
+ 	 * Idle task boosting is a nono in general. There is one
+@@ -3669,7 +3941,7 @@ void rt_mutex_setprio(struct task_struct *p, int prio)
+ 		goto out_unlock;
+ 	}
+ 
+-	trace_sched_pi_setprio(p, prio);
++	trace_sched_pi_setprio(p, pi_task);
+ 	oldprio = p->prio;
+ 
+ 	if (oldprio == prio)
+@@ -3693,7 +3965,6 @@ void rt_mutex_setprio(struct task_struct *p, int prio)
+ 	 *          running task
+ 	 */
+ 	if (dl_prio(prio)) {
+-		struct task_struct *pi_task = rt_mutex_get_top_task(p);
+ 		if (!dl_prio(p->normal_prio) ||
+ 		    (pi_task && dl_entity_preempt(&pi_task->dl, &p->dl))) {
+ 			p->dl.dl_boosted = 1;
+@@ -3730,6 +4001,11 @@ void rt_mutex_setprio(struct task_struct *p, int prio)
+ 	balance_callback(rq);
+ 	preempt_enable();
+ }
++#else
++static inline int rt_effective_prio(struct task_struct *p, int prio)
++{
++	return prio;
++}
+ #endif
+ 
+ void set_user_nice(struct task_struct *p, long nice)
+@@ -3974,10 +4250,9 @@ static void __setscheduler(struct rq *rq, struct task_struct *p,
+ 	 * Keep a potential priority boosting if called from
+ 	 * sched_setscheduler().
+ 	 */
++	p->prio = normal_prio(p);
+ 	if (keep_boost)
+-		p->prio = rt_mutex_get_effective_prio(p, normal_prio(p));
+-	else
+-		p->prio = normal_prio(p);
++		p->prio = rt_effective_prio(p, p->prio);
+ 
+ 	if (dl_prio(p->prio))
+ 		p->sched_class = &dl_sched_class;
+@@ -4264,7 +4539,7 @@ static int __sched_setscheduler(struct task_struct *p,
+ 		 * the runqueue. This will be done when the task deboost
+ 		 * itself.
+ 		 */
+-		new_effective_prio = rt_mutex_get_effective_prio(p, newprio);
++		new_effective_prio = rt_effective_prio(p, newprio);
+ 		if (new_effective_prio == oldprio)
+ 			queue_flags &= ~DEQUEUE_MOVE;
+ 	}
+@@ -4939,6 +5214,7 @@ int __cond_resched_lock(spinlock_t *lock)
  }
  EXPORT_SYMBOL(__cond_resched_lock);
  
@@ -17543,7 +18240,7 @@ index 154fd689fe02..a6aa5801b21e 100644
  int __sched __cond_resched_softirq(void)
  {
  	BUG_ON(!in_softirq());
-@@ -4952,6 +5186,7 @@ int __sched __cond_resched_softirq(void)
+@@ -4952,6 +5228,7 @@ int __sched __cond_resched_softirq(void)
  	return 0;
  }
  EXPORT_SYMBOL(__cond_resched_softirq);
@@ -17551,7 +18248,7 @@ index 154fd689fe02..a6aa5801b21e 100644
  
  /**
   * yield - yield the current processor to other threads.
-@@ -5315,7 +5550,9 @@ void init_idle(struct task_struct *idle, int cpu)
+@@ -5315,7 +5592,9 @@ void init_idle(struct task_struct *idle, int cpu)
  
  	/* Set the preempt count _outside_ the spinlocks! */
  	init_idle_preempt_count(idle, cpu);
@@ -17562,7 +18259,7 @@ index 154fd689fe02..a6aa5801b21e 100644
  	/*
  	 * The idle tasks have their own, simple scheduling class:
  	 */
-@@ -5458,6 +5695,8 @@ void sched_setnuma(struct task_struct *p, int nid)
+@@ -5458,6 +5737,8 @@ void sched_setnuma(struct task_struct *p, int nid)
  #endif /* CONFIG_NUMA_BALANCING */
  
  #ifdef CONFIG_HOTPLUG_CPU
@@ -17571,7 +18268,7 @@ index 154fd689fe02..a6aa5801b21e 100644
  /*
   * Ensures that the idle task is using init_mm right before its cpu goes
   * offline.
-@@ -5472,7 +5711,12 @@ void idle_task_exit(void)
+@@ -5472,7 +5753,12 @@ void idle_task_exit(void)
  		switch_mm_irqs_off(mm, &init_mm, current);
  		finish_arch_post_lock_switch();
  	}
@@ -17585,7 +18282,7 @@ index 154fd689fe02..a6aa5801b21e 100644
  }
  
  /*
-@@ -7418,6 +7662,10 @@ int sched_cpu_dying(unsigned int cpu)
+@@ -7418,6 +7704,10 @@ int sched_cpu_dying(unsigned int cpu)
  	update_max_interval();
  	nohz_balance_exit_idle(cpu);
  	hrtick_clear(rq);
@@ -17596,7 +18293,7 @@ index 154fd689fe02..a6aa5801b21e 100644
  	return 0;
  }
  #endif
-@@ -7698,7 +7946,7 @@ void __init sched_init(void)
+@@ -7698,7 +7988,7 @@ void __init sched_init(void)
  #ifdef CONFIG_DEBUG_ATOMIC_SLEEP
  static inline int preempt_count_equals(int preempt_offset)
  {
@@ -20338,7 +21035,7 @@ index 704f595ce83f..763a3e5121ff 100644
  #define CS_NAME_LEN	32
  
 diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index c611c47de884..cdff4411f8f6 100644
+index c611c47de884..08a5ab762495 100644
 --- a/kernel/time/timer.c
 +++ b/kernel/time/timer.c
 @@ -193,8 +193,11 @@ EXPORT_SYMBOL(jiffies_64);
@@ -20354,16 +21051,7 @@ index c611c47de884..cdff4411f8f6 100644
  	unsigned long		clk;
  	unsigned long		next_expiry;
  	unsigned int		cpu;
-@@ -203,6 +206,8 @@ struct timer_base {
- 	bool			is_idle;
- 	DECLARE_BITMAP(pending_map, WHEEL_SIZE);
- 	struct hlist_head	vectors[WHEEL_SIZE];
-+	struct hlist_head	expired_lists[LVL_DEPTH];
-+	int			expired_count;
- } ____cacheline_aligned;
- 
- static DEFINE_PER_CPU(struct timer_base, timer_bases[NR_BASES]);
-@@ -948,10 +953,10 @@ static struct timer_base *lock_timer_base(struct timer_list *timer,
+@@ -948,10 +951,10 @@ static struct timer_base *lock_timer_base(struct timer_list *timer,
  
  		if (!(tf & TIMER_MIGRATING)) {
  			base = get_timer_base(tf);
@@ -20376,7 +21064,7 @@ index c611c47de884..cdff4411f8f6 100644
  		}
  		cpu_relax();
  	}
-@@ -1023,9 +1028,9 @@ __mod_timer(struct timer_list *timer, unsigned long expires, bool pending_only)
+@@ -1023,9 +1026,9 @@ __mod_timer(struct timer_list *timer, unsigned long expires, bool pending_only)
  			/* See the comment in lock_timer_base() */
  			timer->flags |= TIMER_MIGRATING;
  
@@ -20388,7 +21076,7 @@ index c611c47de884..cdff4411f8f6 100644
  			WRITE_ONCE(timer->flags,
  				   (timer->flags & ~TIMER_BASEMASK) | base->cpu);
  		}
-@@ -1050,7 +1055,7 @@ __mod_timer(struct timer_list *timer, unsigned long expires, bool pending_only)
+@@ -1050,7 +1053,7 @@ __mod_timer(struct timer_list *timer, unsigned long expires, bool pending_only)
  	}
  
  out_unlock:
@@ -20397,7 +21085,7 @@ index c611c47de884..cdff4411f8f6 100644
  
  	return ret;
  }
-@@ -1144,19 +1149,46 @@ void add_timer_on(struct timer_list *timer, int cpu)
+@@ -1144,19 +1147,46 @@ void add_timer_on(struct timer_list *timer, int cpu)
  	if (base != new_base) {
  		timer->flags |= TIMER_MIGRATING;
  
@@ -20447,7 +21135,7 @@ index c611c47de884..cdff4411f8f6 100644
  /**
   * del_timer - deactive a timer.
   * @timer: the timer to be deactivated
-@@ -1180,7 +1212,7 @@ int del_timer(struct timer_list *timer)
+@@ -1180,7 +1210,7 @@ int del_timer(struct timer_list *timer)
  	if (timer_pending(timer)) {
  		base = lock_timer_base(timer, &flags);
  		ret = detach_if_pending(timer, base, true);
@@ -20456,7 +21144,7 @@ index c611c47de884..cdff4411f8f6 100644
  	}
  
  	return ret;
-@@ -1208,13 +1240,13 @@ int try_to_del_timer_sync(struct timer_list *timer)
+@@ -1208,13 +1238,13 @@ int try_to_del_timer_sync(struct timer_list *timer)
  		timer_stats_timer_clear_start_info(timer);
  		ret = detach_if_pending(timer, base, true);
  	}
@@ -20472,7 +21160,7 @@ index c611c47de884..cdff4411f8f6 100644
  /**
   * del_timer_sync - deactivate a timer and wait for the handler to finish.
   * @timer: the timer to be deactivated
-@@ -1274,7 +1306,7 @@ int del_timer_sync(struct timer_list *timer)
+@@ -1274,7 +1304,7 @@ int del_timer_sync(struct timer_list *timer)
  		int ret = try_to_del_timer_sync(timer);
  		if (ret >= 0)
  			return ret;
@@ -20481,17 +21169,7 @@ index c611c47de884..cdff4411f8f6 100644
  	}
  }
  EXPORT_SYMBOL(del_timer_sync);
-@@ -1323,7 +1355,8 @@ static void call_timer_fn(struct timer_list *timer, void (*fn)(unsigned long),
- 	}
- }
- 
--static void expire_timers(struct timer_base *base, struct hlist_head *head)
-+static inline void __expire_timers(struct timer_base *base,
-+				   struct hlist_head *head)
- {
- 	while (!hlist_empty(head)) {
- 		struct timer_list *timer;
-@@ -1339,33 +1372,53 @@ static void expire_timers(struct timer_base *base, struct hlist_head *head)
+@@ -1339,14 +1369,17 @@ static void expire_timers(struct timer_base *base, struct hlist_head *head)
  		fn = timer->function;
  		data = timer->data;
  
@@ -20514,56 +21192,7 @@ index c611c47de884..cdff4411f8f6 100644
  		}
  	}
  }
- 
--static int __collect_expired_timers(struct timer_base *base,
--				    struct hlist_head *heads)
-+static void expire_timers(struct timer_base *base)
-+{
-+	struct hlist_head *head;
-+
-+	while (base->expired_count--) {
-+		head = base->expired_lists + base->expired_count;
-+		__expire_timers(base, head);
-+	}
-+	base->expired_count = 0;
-+}
-+
-+static void __collect_expired_timers(struct timer_base *base)
- {
- 	unsigned long clk = base->clk;
- 	struct hlist_head *vec;
--	int i, levels = 0;
-+	int i;
- 	unsigned int idx;
- 
-+	/*
-+	 * expire_timers() must be called at least once before we can
-+	 * collect more timers
-+	 */
-+	if (WARN_ON(base->expired_count))
-+		return;
-+
- 	for (i = 0; i < LVL_DEPTH; i++) {
- 		idx = (clk & LVL_MASK) + i * LVL_SIZE;
- 
- 		if (__test_and_clear_bit(idx, base->pending_map)) {
- 			vec = base->vectors + idx;
--			hlist_move_list(vec, heads++);
--			levels++;
-+			hlist_move_list(vec,
-+				&base->expired_lists[base->expired_count++]);
- 		}
- 		/* Is it time to look at the next level? */
- 		if (clk & LVL_CLK_MASK)
-@@ -1373,7 +1426,6 @@ static int __collect_expired_timers(struct timer_base *base,
- 		/* Shift clock for the next level granularity */
- 		clk >>= LVL_CLK_SHIFT;
- 	}
--	return levels;
- }
- 
- #ifdef CONFIG_NO_HZ_COMMON
-@@ -1515,7 +1567,7 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
+@@ -1515,7 +1548,7 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
  	if (cpu_is_offline(smp_processor_id()))
  		return expires;
  
@@ -20572,7 +21201,7 @@ index c611c47de884..cdff4411f8f6 100644
  	nextevt = __next_timer_interrupt(base);
  	is_max_delta = (nextevt == base->clk + NEXT_TIMER_MAX_DELTA);
  	base->next_expiry = nextevt;
-@@ -1543,7 +1595,7 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
+@@ -1543,7 +1576,7 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
  		if ((expires - basem) > TICK_NSEC)
  			base->is_idle = true;
  	}
@@ -20581,72 +21210,7 @@ index c611c47de884..cdff4411f8f6 100644
  
  	return cmp_next_hrtimer_event(basem, expires);
  }
-@@ -1566,8 +1618,7 @@ void timer_clear_idle(void)
- 	base->is_idle = false;
- }
- 
--static int collect_expired_timers(struct timer_base *base,
--				  struct hlist_head *heads)
-+static void collect_expired_timers(struct timer_base *base)
- {
- 	/*
- 	 * NOHZ optimization. After a long idle sleep we need to forward the
-@@ -1584,20 +1635,49 @@ static int collect_expired_timers(struct timer_base *base,
- 		if (time_after(next, jiffies)) {
- 			/* The call site will increment clock! */
- 			base->clk = jiffies - 1;
--			return 0;
-+			return;
- 		}
- 		base->clk = next;
- 	}
--	return __collect_expired_timers(base, heads);
-+	__collect_expired_timers(base);
- }
- #else
--static inline int collect_expired_timers(struct timer_base *base,
--					 struct hlist_head *heads)
-+static inline void collect_expired_timers(struct timer_base *base)
- {
--	return __collect_expired_timers(base, heads);
-+	__collect_expired_timers(base);
- }
- #endif
- 
-+static int find_expired_timers(struct timer_base *base)
-+{
-+	const unsigned long int end_clk = jiffies;
-+
-+	while (!base->expired_count && time_after_eq(end_clk, base->clk)) {
-+		collect_expired_timers(base);
-+		base->clk++;
-+	}
-+
-+	return base->expired_count;
-+}
-+
-+/* Called from CPU tick routine to quickly collect expired timers */
-+static int tick_find_expired(struct timer_base *base)
-+{
-+	int count;
-+
-+	raw_spin_lock(&base->lock);
-+
-+	if (unlikely(time_after(jiffies, base->clk + HZ))) {
-+		/* defer to ktimersoftd; don't spend too long in irq context */
-+		count = -1;
-+	} else
-+		count = find_expired_timers(base);
-+
-+	raw_spin_unlock(&base->lock);
-+
-+	return count;
-+}
-+
- /*
-  * Called from the timer interrupt handler to charge one tick to the current
-  * process.  user_tick is 1 if the tick is user time, 0 for system.
-@@ -1608,13 +1688,13 @@ void update_process_times(int user_tick)
+@@ -1608,13 +1641,13 @@ void update_process_times(int user_tick)
  
  	/* Note: this timer irq context must be accounted for as well. */
  	account_process_tick(p, user_tick);
@@ -20662,29 +21226,19 @@ index c611c47de884..cdff4411f8f6 100644
  	run_posix_cpu_timers(p);
  }
  
-@@ -1624,24 +1704,13 @@ void update_process_times(int user_tick)
-  */
- static inline void __run_timers(struct timer_base *base)
- {
--	struct hlist_head heads[LVL_DEPTH];
--	int levels;
-+	raw_spin_lock_irq(&base->lock);
- 
--	if (!time_after_eq(jiffies, base->clk))
--		return;
-+	while (find_expired_timers(base))
-+		expire_timers(base);
+@@ -1630,7 +1663,7 @@ static inline void __run_timers(struct timer_base *base)
+ 	if (!time_after_eq(jiffies, base->clk))
+ 		return;
  
 -	spin_lock_irq(&base->lock);
--
--	while (time_after_eq(jiffies, base->clk)) {
--
--		levels = collect_expired_timers(base, heads);
--		base->clk++;
--
--		while (levels--)
--			expire_timers(base, heads + levels);
--	}
++	raw_spin_lock_irq(&base->lock);
+ 
+ 	while (time_after_eq(jiffies, base->clk)) {
+ 
+@@ -1640,8 +1673,8 @@ static inline void __run_timers(struct timer_base *base)
+ 		while (levels--)
+ 			expire_timers(base, heads + levels);
+ 	}
 -	base->running_timer = NULL;
 -	spin_unlock_irq(&base->lock);
 +	raw_spin_unlock_irq(&base->lock);
@@ -20692,7 +21246,7 @@ index c611c47de884..cdff4411f8f6 100644
  }
  
  /*
-@@ -1651,6 +1720,8 @@ static __latent_entropy void run_timer_softirq(struct softirq_action *h)
+@@ -1651,6 +1684,8 @@ static __latent_entropy void run_timer_softirq(struct softirq_action *h)
  {
  	struct timer_base *base = this_cpu_ptr(&timer_bases[BASE_STD]);
  
@@ -20701,22 +21255,7 @@ index c611c47de884..cdff4411f8f6 100644
  	__run_timers(base);
  	if (IS_ENABLED(CONFIG_NO_HZ_COMMON) && base->nohz_active)
  		__run_timers(this_cpu_ptr(&timer_bases[BASE_DEF]));
-@@ -1665,12 +1736,12 @@ void run_local_timers(void)
- 
- 	hrtimer_run_queues();
- 	/* Raise the softirq only if required. */
--	if (time_before(jiffies, base->clk)) {
-+	if (time_before(jiffies, base->clk) || !tick_find_expired(base)) {
- 		if (!IS_ENABLED(CONFIG_NO_HZ_COMMON) || !base->nohz_active)
- 			return;
- 		/* CPU is awake, so check the deferrable base. */
- 		base++;
--		if (time_before(jiffies, base->clk))
-+		if (time_before(jiffies, base->clk) || !tick_find_expired(base))
- 			return;
- 	}
- 	raise_softirq(TIMER_SOFTIRQ);
-@@ -1836,16 +1907,17 @@ int timers_dead_cpu(unsigned int cpu)
+@@ -1836,16 +1871,16 @@ int timers_dead_cpu(unsigned int cpu)
  		 * The caller is globally serialized and nobody else
  		 * takes two locks at once, deadlock is not possible.
  		 */
@@ -20726,7 +21265,6 @@ index c611c47de884..cdff4411f8f6 100644
 +		raw_spin_lock_nested(&old_base->lock, SINGLE_DEPTH_NESTING);
  
  		BUG_ON(old_base->running_timer);
-+		BUG_ON(old_base->expired_count);
  
  		for (i = 0; i < WHEEL_SIZE; i++)
  			migrate_timer_list(new_base, old_base->vectors + i);
@@ -20738,7 +21276,7 @@ index c611c47de884..cdff4411f8f6 100644
  		put_cpu_ptr(&timer_bases);
  	}
  	return 0;
-@@ -1861,8 +1933,12 @@ static void __init init_timer_cpu(int cpu)
+@@ -1861,8 +1896,11 @@ static void __init init_timer_cpu(int cpu)
  	for (i = 0; i < NR_BASES; i++) {
  		base = per_cpu_ptr(&timer_bases[i], cpu);
  		base->cpu = cpu;
@@ -20748,7 +21286,6 @@ index c611c47de884..cdff4411f8f6 100644
 +#ifdef CONFIG_PREEMPT_RT_FULL
 +		init_swait_queue_head(&base->wait_for_running_timer);
 +#endif
-+		base->expired_count = 0;
  	}
  }
  
@@ -22081,7 +22618,7 @@ index 000000000000..7f6ee70dea41
 +
 +device_initcall(latency_hist_init);
 diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 90b66ed6f0e2..7d9897e41ded 100644
+index 83c60f9013cb..6fb207964a84 100644
 --- a/kernel/trace/trace.c
 +++ b/kernel/trace/trace.c
 @@ -1897,6 +1897,7 @@ tracing_generic_entry_update(struct trace_entry *entry, unsigned long flags,
@@ -22152,7 +22689,7 @@ index 90b66ed6f0e2..7d9897e41ded 100644
  
  void
 diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index fd24b1f9ac43..852b2c81be25 100644
+index b0d8576c27ae..702b9376b278 100644
 --- a/kernel/trace/trace.h
 +++ b/kernel/trace/trace.h
 @@ -124,6 +124,7 @@ struct kretprobe_trace_entry_head {
@@ -23597,11 +24134,11 @@ index 1afec32de6f2..11fa431046a8 100644
  	dump_stack();
 diff --git a/localversion-rt b/localversion-rt
 new file mode 100644
-index 000000000000..1199ebade17b
+index 000000000000..e095ab819714
 --- /dev/null
 +++ b/localversion-rt
 @@ -0,0 +1 @@
-+-rt16
++-rt20
 diff --git a/mm/Kconfig b/mm/Kconfig
 index 86e3e0e74d20..77e5862a1ed2 100644
 --- a/mm/Kconfig
@@ -23711,7 +24248,7 @@ index 50b4ca6787f0..77518a3b35a1 100644
  unsigned int nr_free_highpages (void)
  {
 diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 0de26691f0f5..db6fe1ba7b34 100644
+index 47559cc0cdcc..1f2ebc924916 100644
 --- a/mm/memcontrol.c
 +++ b/mm/memcontrol.c
 @@ -67,6 +67,7 @@
@@ -23809,7 +24346,7 @@ index 0de26691f0f5..db6fe1ba7b34 100644
  	put_online_cpus();
  	mutex_unlock(&percpu_charge_mutex);
  }
-@@ -4553,12 +4557,12 @@ static int mem_cgroup_move_account(struct page *page,
+@@ -4555,12 +4559,12 @@ static int mem_cgroup_move_account(struct page *page,
  
  	ret = 0;
  
@@ -23824,7 +24361,7 @@ index 0de26691f0f5..db6fe1ba7b34 100644
  out_unlock:
  	unlock_page(page);
  out:
-@@ -5433,10 +5437,10 @@ void mem_cgroup_commit_charge(struct page *page, struct mem_cgroup *memcg,
+@@ -5435,10 +5439,10 @@ void mem_cgroup_commit_charge(struct page *page, struct mem_cgroup *memcg,
  
  	commit_charge(page, memcg, lrucare);
  
@@ -23837,7 +24374,7 @@ index 0de26691f0f5..db6fe1ba7b34 100644
  
  	if (do_memsw_account() && PageSwapCache(page)) {
  		swp_entry_t entry = { .val = page_private(page) };
-@@ -5492,14 +5496,14 @@ static void uncharge_batch(struct mem_cgroup *memcg, unsigned long pgpgout,
+@@ -5494,14 +5498,14 @@ static void uncharge_batch(struct mem_cgroup *memcg, unsigned long pgpgout,
  		memcg_oom_recover(memcg);
  	}
  
@@ -23854,7 +24391,7 @@ index 0de26691f0f5..db6fe1ba7b34 100644
  
  	if (!mem_cgroup_is_root(memcg))
  		css_put_many(&memcg->css, nr_pages);
-@@ -5654,10 +5658,10 @@ void mem_cgroup_migrate(struct page *oldpage, struct page *newpage)
+@@ -5656,10 +5660,10 @@ void mem_cgroup_migrate(struct page *oldpage, struct page *newpage)
  
  	commit_charge(newpage, memcg, false);
  
@@ -23867,7 +24404,7 @@ index 0de26691f0f5..db6fe1ba7b34 100644
  }
  
  DEFINE_STATIC_KEY_FALSE(memcg_sockets_enabled_key);
-@@ -5837,6 +5841,7 @@ void mem_cgroup_swapout(struct page *page, swp_entry_t entry)
+@@ -5850,6 +5854,7 @@ void mem_cgroup_swapout(struct page *page, swp_entry_t entry)
  {
  	struct mem_cgroup *memcg, *swap_memcg;
  	unsigned short oldid;
@@ -23875,7 +24412,7 @@ index 0de26691f0f5..db6fe1ba7b34 100644
  
  	VM_BUG_ON_PAGE(PageLRU(page), page);
  	VM_BUG_ON_PAGE(page_count(page), page);
-@@ -5877,12 +5882,16 @@ void mem_cgroup_swapout(struct page *page, swp_entry_t entry)
+@@ -5890,12 +5895,16 @@ void mem_cgroup_swapout(struct page *page, swp_entry_t entry)
  	 * important here to have the interrupts disabled because it is the
  	 * only synchronisation we have for udpating the per-CPU variables.
  	 */
@@ -23913,7 +24450,7 @@ index 6f4d27c5bb32..5cd25c745a8f 100644
  #ifdef finish_arch_post_lock_switch
  	finish_arch_post_lock_switch();
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 1460e6ad5e14..dc4eac895340 100644
+index 5b06fb385dd7..86457a2fca20 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
 @@ -61,6 +61,7 @@
@@ -24228,7 +24765,7 @@ index 1460e6ad5e14..dc4eac895340 100644
  	return NULL;
  }
  
-@@ -6531,7 +6593,9 @@ static int page_alloc_cpu_notify(struct notifier_block *self,
+@@ -6532,7 +6594,9 @@ static int page_alloc_cpu_notify(struct notifier_block *self,
  	int cpu = (unsigned long)hcpu;
  
  	if (action == CPU_DEAD || action == CPU_DEAD_FROZEN) {
@@ -24238,7 +24775,7 @@ index 1460e6ad5e14..dc4eac895340 100644
  		drain_pages(cpu);
  
  		/*
-@@ -6557,6 +6621,7 @@ static int page_alloc_cpu_notify(struct notifier_block *self,
+@@ -6558,6 +6622,7 @@ static int page_alloc_cpu_notify(struct notifier_block *self,
  void __init page_alloc_init(void)
  {
  	hotcpu_notifier(page_alloc_cpu_notify, 0);
@@ -24246,7 +24783,7 @@ index 1460e6ad5e14..dc4eac895340 100644
  }
  
  /*
-@@ -7385,7 +7450,7 @@ void zone_pcp_reset(struct zone *zone)
+@@ -7386,7 +7451,7 @@ void zone_pcp_reset(struct zone *zone)
  	struct per_cpu_pageset *pset;
  
  	/* avoid races with drain_pages()  */
@@ -24255,7 +24792,7 @@ index 1460e6ad5e14..dc4eac895340 100644
  	if (zone->pageset != &boot_pageset) {
  		for_each_online_cpu(cpu) {
  			pset = per_cpu_ptr(zone->pageset, cpu);
-@@ -7394,7 +7459,7 @@ void zone_pcp_reset(struct zone *zone)
+@@ -7395,7 +7460,7 @@ void zone_pcp_reset(struct zone *zone)
  		free_percpu(zone->pageset);
  		zone->pageset = &boot_pageset;
  	}
@@ -25160,7 +25697,7 @@ index 604f26a4f696..312006d2db50 100644
  
  void __dec_zone_page_state(struct page *page, enum zone_stat_item item)
 diff --git a/mm/workingset.c b/mm/workingset.c
-index 33f6f4db32fd..f4ff55f4b60e 100644
+index 4c4f05655e6e..b97b1e87b54c 100644
 --- a/mm/workingset.c
 +++ b/mm/workingset.c
 @@ -334,7 +334,8 @@ void workingset_activation(struct page *page)
@@ -25216,8 +25753,8 @@ index 33f6f4db32fd..f4ff55f4b60e 100644
  	pr_info("workingset: timestamp_bits=%d max_order=%d bucket_order=%u\n",
  	       timestamp_bits, max_order, bucket_order);
  
--	ret = list_lru_init_key(&workingset_shadow_nodes, &shadow_nodes_key);
-+	ret = list_lru_init_key(&__workingset_shadow_nodes, &shadow_nodes_key);
+-	ret = __list_lru_init(&workingset_shadow_nodes, true, &shadow_nodes_key);
++	ret = __list_lru_init(&__workingset_shadow_nodes, true, &shadow_nodes_key);
  	if (ret)
  		goto err;
  	ret = register_shrinker(&workingset_shadow_shrinker);
@@ -25231,7 +25768,7 @@ index 33f6f4db32fd..f4ff55f4b60e 100644
  	return ret;
  }
 diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index b0bc023d25c5..5af6426fbcbe 100644
+index 1689bb58e0d1..e52a8cb6aa5a 100644
 --- a/mm/zsmalloc.c
 +++ b/mm/zsmalloc.c
 @@ -53,6 +53,7 @@
@@ -25863,7 +26400,7 @@ index 508e051304fb..bc3b17b78c94 100644
  		      struct gnet_stats_basic_cpu __percpu *cpu,
  		      struct gnet_stats_basic_packed *b)
 diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index f0f462c0573d..3cf5ed766dcd 100644
+index fe008f1bd930..9fa6bea3dd3f 100644
 --- a/net/core/skbuff.c
 +++ b/net/core/skbuff.c
 @@ -64,6 +64,7 @@
@@ -26198,10 +26735,10 @@ index 6988566dc72f..672fffcde28c 100644
  
  static void tcp_v4_timewait_ack(struct sock *sk, struct sk_buff *skb)
 diff --git a/net/mac80211/rx.c b/net/mac80211/rx.c
-index a697ddf56334..f1867acd0e81 100644
+index acaaf616da71..09020dbcc089 100644
 --- a/net/mac80211/rx.c
 +++ b/net/mac80211/rx.c
-@@ -4180,7 +4180,7 @@ void ieee80211_rx_napi(struct ieee80211_hw *hw, struct ieee80211_sta *pubsta,
+@@ -4230,7 +4230,7 @@ void ieee80211_rx_napi(struct ieee80211_hw *hw, struct ieee80211_sta *pubsta,
  	struct ieee80211_supported_band *sband;
  	struct ieee80211_rx_status *status = IEEE80211_SKB_RXCB(skb);
  
@@ -26234,7 +26771,7 @@ index 004af030ef1a..b64f751bda45 100644
  
  const struct nf_afinfo __rcu *nf_afinfo[NFPROTO_NUMPROTO] __read_mostly;
 diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index f2b04a77258d..7d841bcae677 100644
+index cb76ff3088e9..3f42c5b1af55 100644
 --- a/net/packet/af_packet.c
 +++ b/net/packet/af_packet.c
 @@ -63,6 +63,7 @@

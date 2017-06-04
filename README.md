@@ -35,7 +35,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
 
 ## Requirements
-* [RaspberryPi3](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/) or [RaspberryPi2](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
+* [RaspberryPi3](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/), [Raspberry Compute Module 3](https://www.raspberrypi.org/products/compute-module-3/) or [RaspberryPi2](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
 * microSD card (2GB minimum)
 * HomeMatic-RF GPIO radio module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html)) and/or HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 

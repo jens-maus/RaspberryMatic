@@ -32,8 +32,11 @@ checkFactoryReset() {
     return
   fi
 
-  DEV=$(mount | grep /usr/local | cut -d' ' -f1 | head -c-3)
-  PARTNUM=$(mount | grep /usr/local | cut -d' ' -f1 | tail -c2)
+  # extract partition number and device name
+  DEVNODE=$(mountpoint -d /usr/local)
+  DEVNAME=$(mountpoint -n /usr/local | cut -d' ' -f1)
+  PARTNUM=$(echo ${DEVNODE} | cut -d':' -f2)
+  DEV="/dev/$(readlink /sys/dev/block/${DEVNODE} | awk -F/ '{print $(NF-1)}')"
 
   # find out maximum SD card size (in cylinders)
   START_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
@@ -41,7 +44,7 @@ checkFactoryReset() {
   MAX_CHS=$(parted -s ${DEV} unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
 
   # umount /usr/local to regenerate it
-  umount /usr/local
+  umount -f /usr/local
 
   # only resize the partition if END_CHS != MAX_CHS
   if [[ -n "${START_CHS}" && -n "${END_CHS}" && -n "${MAX_CHS}" && "${END_CHS}" != "${MAX_CHS}" ]]; then
@@ -52,7 +55,7 @@ checkFactoryReset() {
   fi
 
   # we create a clean ext4 partition now
-  mkfs.ext4 -F ${DEV}p${PARTNUM}
+  mkfs.ext4 -F ${DEVNAME} -L userfs
 
   # mount /usr/local again
   mount /usr/local

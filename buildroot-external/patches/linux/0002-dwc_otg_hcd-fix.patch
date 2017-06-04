@@ -1,6 +1,17 @@
---- linux-4.6.5-rt10-v7.orig/drivers/usb/host/dwc_otg/dwc_otg_fiq_fsm.h
-+++ linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_fiq_fsm.h
-@@ -373,4 +373,18 @@ extern void dwc_otg_fiq_fsm(struct fiq_s
+It's rebased to 4.8.11 version of the patch available here:
+https://wiki.linuxfoundation.org/realtime/documentation/known_limitations
+
+ drivers/usb/host/dwc_otg/dwc_otg_fiq_fsm.h   |   14 +++++++++
+ drivers/usb/host/dwc_otg/dwc_otg_hcd.c       |   40 +++++++++++----------------
+ drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c  |   39 ++++++++++----------------
+ drivers/usb/host/dwc_otg/dwc_otg_hcd_queue.c |   14 ++++-----
+ 4 files changed, 52 insertions(+), 55 deletions(-)
+
+Index: linux-4.8.11-1.rt7.6abac13.bcm2709.fc24.armv7hl/drivers/usb/host/dwc_otg/dwc_otg_fiq_fsm.h
+===================================================================
+--- linux-4.8.11-1.rt7.6abac13.bcm2709.fc24.armv7hl.orig/drivers/usb/host/dwc_otg/dwc_otg_fiq_fsm.h
++++ linux-4.8.11-1.rt7.6abac13.bcm2709.fc24.armv7hl/drivers/usb/host/dwc_otg/dwc_otg_fiq_fsm.h
+@@ -367,4 +367,18 @@ extern void dwc_otg_fiq_fsm(struct fiq_s
  
  extern void dwc_otg_fiq_nop(struct fiq_state *state);
  
@@ -19,11 +30,11 @@
 +	} while (0)
 +
  #endif /* DWC_OTG_FIQ_FSM_H_ */
-Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
+Index: linux-4.8.11-1.rt7.6abac13.bcm2709.fc24.armv7hl/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
 ===================================================================
---- linux-4.6.5-rt10-v7.orig/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
-+++ linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
-@@ -1418,12 +1418,11 @@ static void assign_and_init_hc(dwc_otg_h
+--- linux-4.8.11-1.rt7.6abac13.bcm2709.fc24.armv7hl.orig/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
++++ linux-4.8.11-1.rt7.6abac13.bcm2709.fc24.armv7hl/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
+@@ -1416,12 +1416,11 @@ static void assign_and_init_hc(dwc_otg_h
  
  	dwc_otg_hc_init(hcd->core_if, hc);
  
@@ -40,7 +51,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
  
  	/* Enable the top level host channel interrupt. */
  	intr_enable = (1 << hc->hc_num);
-@@ -1433,12 +1432,10 @@ static void assign_and_init_hc(dwc_otg_h
+@@ -1431,12 +1430,10 @@ static void assign_and_init_hc(dwc_otg_h
  	gintmsk.b.hcintr = 1;
  	DWC_MODIFY_REG32(&hcd->core_if->core_global_regs->gintmsk, 0, gintmsk.d32);
  
@@ -48,7 +59,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
 -		fiq_fsm_spin_unlock(&hcd->fiq_state->lock);
 -		local_fiq_enable();
 -	}
--	
+-
 -	local_irq_restore(flags);
 +	if (fiq_enable)
 +		fiq_fsm_spin_unlock_irqrestore(&hcd->fiq_state->lock, flags);
@@ -57,7 +68,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
  	hc->qh = qh;
  }
  
-@@ -1616,6 +1613,7 @@ int fiq_fsm_queue_isoc_transaction(dwc_o
+@@ -1614,6 +1611,7 @@ int fiq_fsm_queue_isoc_transaction(dwc_o
  	int xfer_len, nrpackets;
  	hcdma_data_t hcdma;
  	hfnum_data_t hfnum;
@@ -65,7 +76,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
  
  	if (st->fsm != FIQ_PASSTHROUGH)
  		return 0;
-@@ -1691,8 +1689,7 @@ int fiq_fsm_queue_isoc_transaction(dwc_o
+@@ -1689,8 +1687,7 @@ int fiq_fsm_queue_isoc_transaction(dwc_o
  	fiq_print(FIQDBG_INT, hcd->fiq_state, "%08x", st->hctsiz_copy.d32);
  	fiq_print(FIQDBG_INT, hcd->fiq_state, "%08x", st->hcdma_copy.d32);
  	hfnum.d32 = DWC_READ_REG32(&hcd->core_if->host_if->host_global_regs->hfnum);
@@ -75,7 +86,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
  	DWC_WRITE_REG32(&hc_regs->hctsiz, st->hctsiz_copy.d32);
  	DWC_WRITE_REG32(&hc_regs->hcsplt, st->hcsplt_copy.d32);
  	DWC_WRITE_REG32(&hc_regs->hcdma, st->hcdma_copy.d32);
-@@ -1712,8 +1709,7 @@ int fiq_fsm_queue_isoc_transaction(dwc_o
+@@ -1710,8 +1707,7 @@ int fiq_fsm_queue_isoc_transaction(dwc_o
  	}
  	mb();
  	st->hcchar_copy.b.chen = 0;
@@ -85,7 +96,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
  	return 0;
  }
  
-@@ -1739,6 +1735,7 @@ int fiq_fsm_queue_split_transaction(dwc_
+@@ -1737,6 +1733,7 @@ int fiq_fsm_queue_split_transaction(dwc_
  	/* Program HC registers, setup FIQ_state, examine FIQ if periodic, start transfer (not if uframe 5) */
  	int hub_addr, port_addr, frame, uframe;
  	struct fiq_channel_state *st = &hcd->fiq_state->channel[hc->hc_num];
@@ -93,7 +104,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
  
  	if (st->fsm != FIQ_PASSTHROUGH)
  		return 0;
-@@ -1847,8 +1844,7 @@ int fiq_fsm_queue_split_transaction(dwc_
+@@ -1845,8 +1842,7 @@ int fiq_fsm_queue_split_transaction(dwc_
  	DWC_WRITE_REG32(&hc_regs->hcchar, st->hcchar_copy.d32);
  	DWC_WRITE_REG32(&hc_regs->hcintmsk, st->hcintmsk_copy.d32);
  
@@ -103,7 +114,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
  
  	if (hc->ep_type & 0x1) {
  		hfnum.d32 = DWC_READ_REG32(&hcd->core_if->host_if->host_global_regs->hfnum);
-@@ -1947,8 +1943,7 @@ int fiq_fsm_queue_split_transaction(dwc_
+@@ -1945,8 +1941,7 @@ int fiq_fsm_queue_split_transaction(dwc_
  		DWC_WRITE_REG32(&hc_regs->hcchar, st->hcchar_copy.d32);
  	}
  	mb();
@@ -113,7 +124,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
  	return 0;
  }
  
-@@ -2442,6 +2437,7 @@ static void process_non_periodic_channel
+@@ -2440,6 +2435,7 @@ static void process_non_periodic_channel
  void dwc_otg_hcd_queue_transactions(dwc_otg_hcd_t * hcd,
  				    dwc_otg_transaction_type_e tr_type)
  {
@@ -121,7 +132,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
  #ifdef DEBUG_SOF
  	DWC_DEBUGPL(DBG_HCD, "Queue Transactions\n");
  #endif
-@@ -2467,11 +2463,9 @@ void dwc_otg_hcd_queue_transactions(dwc_
+@@ -2465,11 +2461,9 @@ void dwc_otg_hcd_queue_transactions(dwc_
  			gintmsk.b.nptxfempty = 1;
  
  			if (fiq_enable) {
@@ -135,11 +146,11 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd.c
  			} else {
  				DWC_MODIFY_REG32(&hcd->core_if->core_global_regs->gintmsk, gintmsk.d32, 0);
  			}
-Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
+Index: linux-4.8.11-1.rt7.6abac13.bcm2709.fc24.armv7hl/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
 ===================================================================
---- linux-4.6.5-rt10-v7.orig/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
-+++ linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
-@@ -107,6 +107,7 @@ int32_t dwc_otg_hcd_handle_intr(dwc_otg_
+--- linux-4.8.11-1.rt7.6abac13.bcm2709.fc24.armv7hl.orig/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
++++ linux-4.8.11-1.rt7.6abac13.bcm2709.fc24.armv7hl/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
+@@ -82,6 +82,7 @@ int32_t dwc_otg_hcd_handle_intr(dwc_otg_
  	gintmsk_data_t gintmsk;
  	hfnum_data_t hfnum;
  	haintmsk_data_t haintmsk;
@@ -147,7 +158,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
  
  #ifdef DEBUG
  	dwc_otg_core_global_regs_t *global_regs = core_if->core_global_regs;
-@@ -124,8 +125,7 @@ int32_t dwc_otg_hcd_handle_intr(dwc_otg_
+@@ -99,8 +100,7 @@ int32_t dwc_otg_hcd_handle_intr(dwc_otg_
  	/* Check if HOST Mode */
  	if (dwc_otg_is_host_mode(core_if)) {
  		if (fiq_enable) {
@@ -157,7 +168,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
  			/* Pull in from the FIQ's disabled mask */
  			gintmsk.d32 = gintmsk.d32 | ~(dwc_otg_hcd->fiq_state->gintmsk_saved.d32);
  			dwc_otg_hcd->fiq_state->gintmsk_saved.d32 = ~0;
-@@ -144,8 +144,7 @@ int32_t dwc_otg_hcd_handle_intr(dwc_otg_
+@@ -117,8 +117,7 @@ int32_t dwc_otg_hcd_handle_intr(dwc_otg_
  		gintsts.d32 &= gintmsk.d32;
  
  		if (fiq_enable) {
@@ -167,7 +178,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
  		}
  
  		if (!gintsts.d32) {
-@@ -192,11 +191,9 @@ int32_t dwc_otg_hcd_handle_intr(dwc_otg_
+@@ -165,11 +164,9 @@ int32_t dwc_otg_hcd_handle_intr(dwc_otg_
  			gintmsk_data_t gintmsk = { .b.portintr = 1};
  			retval |= dwc_otg_hcd_handle_port_intr(dwc_otg_hcd);
  			if (fiq_enable) {
@@ -181,7 +192,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
  			} else {
  				DWC_MODIFY_REG32(&dwc_otg_hcd->core_if->core_global_regs->gintmsk, 0, gintmsk.d32);
  			}
-@@ -236,8 +233,7 @@ exit_handler_routine:
+@@ -209,8 +206,7 @@ exit_handler_routine:
  	if (fiq_enable)	{
  		gintmsk_data_t gintmsk_new;
  		haintmsk_data_t haintmsk_new;
@@ -191,7 +202,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
  		gintmsk_new.d32 = *(volatile uint32_t *)&dwc_otg_hcd->fiq_state->gintmsk_saved.d32;
  		if(fiq_fsm_enable)
  			haintmsk_new.d32 = *(volatile uint32_t *)&dwc_otg_hcd->fiq_state->haintmsk_saved.d32;
-@@ -260,8 +256,7 @@ exit_handler_routine:
+@@ -233,8 +229,7 @@ exit_handler_routine:
  		haintmsk.d32 = DWC_READ_REG32(&core_if->host_if->host_global_regs->haintmsk);
  		/* Re-enable interrupts that the FIQ masked (first time round) */
  		FIQ_WRITE(dwc_otg_hcd->fiq_state->dwc_regs_base + GINTMSK, gintmsk.d32);
@@ -201,7 +212,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
  
  		if ((jiffies / HZ) > last_time) {
  			//dwc_otg_qh_t *qh;
-@@ -659,6 +654,7 @@ int32_t dwc_otg_hcd_handle_hc_intr(dwc_o
+@@ -632,6 +627,7 @@ int32_t dwc_otg_hcd_handle_hc_intr(dwc_o
  {
  	int i;
  	int retval = 0;
@@ -209,7 +220,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
  	haint_data_t haint = { .d32 = 0 } ;
  
  	/* Clear appropriate bits in HCINTn to clear the interrupt bit in
-@@ -671,12 +667,10 @@ int32_t dwc_otg_hcd_handle_hc_intr(dwc_o
+@@ -644,12 +640,10 @@ int32_t dwc_otg_hcd_handle_hc_intr(dwc_o
  	if(fiq_fsm_enable)
  	{
  		/* check the mask? */
@@ -224,7 +235,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
  	}
  
  	for (i = 0; i < dwc_otg_hcd->core_if->core_params->host_channels; i++) {
-@@ -1088,6 +1082,7 @@ static void halt_channel(dwc_otg_hcd_t *
+@@ -1061,6 +1055,7 @@ static void halt_channel(dwc_otg_hcd_t *
  			 dwc_hc_t * hc,
  			 dwc_otg_qtd_t * qtd, dwc_otg_halt_status_e halt_status)
  {
@@ -232,7 +243,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
  	if (hcd->core_if->dma_enable) {
  		release_channel(hcd, hc, qtd, halt_status);
  		return;
-@@ -1110,11 +1105,9 @@ static void halt_channel(dwc_otg_hcd_t *
+@@ -1083,11 +1078,9 @@ static void halt_channel(dwc_otg_hcd_t *
  			 */
  			gintmsk.b.nptxfempty = 1;
  			if (fiq_enable) {
@@ -246,7 +257,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
  			} else {
  				DWC_MODIFY_REG32(&global_regs->gintmsk, 0, gintmsk.d32);
  			}
-@@ -1135,11 +1128,9 @@ static void halt_channel(dwc_otg_hcd_t *
+@@ -1108,11 +1101,9 @@ static void halt_channel(dwc_otg_hcd_t *
  			 */
  			gintmsk.b.ptxfempty = 1;
  			if (fiq_enable) {
@@ -260,11 +271,11 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_intr.c
  			} else {
  				DWC_MODIFY_REG32(&global_regs->gintmsk, 0, gintmsk.d32);
  			}
-Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_queue.c
+Index: linux-4.8.11-1.rt7.6abac13.bcm2709.fc24.armv7hl/drivers/usb/host/dwc_otg/dwc_otg_hcd_queue.c
 ===================================================================
---- linux-4.6.5-rt10-v7.orig/drivers/usb/host/dwc_otg/dwc_otg_hcd_queue.c
-+++ linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_queue.c
-@@ -671,6 +671,7 @@ static int schedule_periodic(dwc_otg_hcd
+--- linux-4.8.11-1.rt7.6abac13.bcm2709.fc24.armv7hl.orig/drivers/usb/host/dwc_otg/dwc_otg_hcd_queue.c
++++ linux-4.8.11-1.rt7.6abac13.bcm2709.fc24.armv7hl/drivers/usb/host/dwc_otg/dwc_otg_hcd_queue.c
+@@ -672,6 +672,7 @@ static int schedule_periodic(dwc_otg_hcd
  int dwc_otg_hcd_qh_add(dwc_otg_hcd_t * hcd, dwc_otg_qh_t * qh)
  {
  	int status = 0;
@@ -272,7 +283,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_queue.c
  	gintmsk_data_t intr_mask = {.d32 = 0 };
  
  	if (!DWC_LIST_EMPTY(&qh->qh_list_entry)) {
-@@ -689,11 +690,9 @@ int dwc_otg_hcd_qh_add(dwc_otg_hcd_t * h
+@@ -690,11 +691,9 @@ int dwc_otg_hcd_qh_add(dwc_otg_hcd_t * h
  		if ( !hcd->periodic_qh_count ) {
  			intr_mask.b.sofintr = 1;
  			if (fiq_enable) {
@@ -286,7 +297,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_queue.c
  			} else {
  				DWC_MODIFY_REG32(&hcd->core_if->core_global_regs->gintmsk, intr_mask.d32, intr_mask.d32);
  			}
-@@ -737,6 +736,7 @@ static void deschedule_periodic(dwc_otg_
+@@ -738,6 +737,7 @@ static void deschedule_periodic(dwc_otg_
   * @param qh QH to remove from schedule. */
  void dwc_otg_hcd_qh_remove(dwc_otg_hcd_t * hcd, dwc_otg_qh_t * qh)
  {
@@ -294,7 +305,7 @@ Index: linux-4.6.5-rt10-v7/drivers/usb/host/dwc_otg/dwc_otg_hcd_queue.c
  	gintmsk_data_t intr_mask = {.d32 = 0 };
  
  	if (DWC_LIST_EMPTY(&qh->qh_list_entry)) {
-@@ -758,11 +758,9 @@ void dwc_otg_hcd_qh_remove(dwc_otg_hcd_t
+@@ -759,11 +759,9 @@ void dwc_otg_hcd_qh_remove(dwc_otg_hcd_t
  		if( !hcd->periodic_qh_count && !fiq_fsm_enable ) {
  			intr_mask.b.sofintr = 1;
  			if (fiq_enable) {

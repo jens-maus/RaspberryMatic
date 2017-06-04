@@ -52,7 +52,12 @@
 #include <asm/ioctls.h>
 #include <asm/termios.h>
 
-#include <../arch/arm/mach-bcm2709/include/mach/platform.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,9,0)
+  #define CLK_IS_ROOT 0
+  #define UART0_BASE  (0x3f201000)
+#else
+  #include <../arch/arm/mach-bcm2709/include/mach/platform.h>
+#endif
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,3,0)
   #define IRQ_UART 87 /* TODO: is static definition correct? */

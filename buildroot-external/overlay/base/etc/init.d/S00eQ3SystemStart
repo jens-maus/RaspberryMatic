@@ -8,18 +8,94 @@ CFG_TEMPLATE_DIR=/etc/config_templates
 # function to identify the host system used
 identify_host() {
 
+  # default/fallback values
+  HOST="???"
+  HM_MODE="HmIP"
+  UART_DEV="/dev/bcm2835-raw-uart"
+
   # identify the RaspberryPi version used
-  cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | grep -q 2082
-  if [[ $? -eq 0 ]]; then
-    HOST="rpi3"
-    HM_MODE="HmIP"
+  # (see http://elinux.org/RPi_HardwareHistory)
+  hostid=$(cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | sed 's/^1000//')
+  case ${hostid} in
+    # Raspberry Pi 3 Model B
+    a02082|a22082|a32082)
+      HOST="rpi3"
+    ;;
+
+    # Raspberry Pi Compute Module 3
+    a020a0)
+      HOST="rpi3cm"
+    ;;
+
+    # Raspberry Pi 2 Model B
+    a01040|a01041|a21041|a22042)
+      HOST="rpi2"
+    ;;
+
+    # Raspberry Pi Zero W
+    9000c1)
+      HOST="rpi0w"
+      HM_MODE="HmRF"
+    ;;
+
+    # Raspberry Pi Zero
+    900092|900093|920093)
+      HOST="rpi0"
+      HM_MODE="HmRF"
+    ;;
+
+    # Raspberry Pi Compute Module 1
+    011|014)
+      HOST="rpi1cm"
+      HM_MODE="HmRF"
+    ;;
+
+    # Raspberry Pi B+
+    010|013|900032)
+      HOST="rpi1bp"
+      HM_MODE="HmRF"
+    ;;
+
+    # Raspberry Pi A+/512MB
+    015|900021)
+      HOST="rpi1ap512"
+      HM_MODE="HmRF"
+    ;;
+
+    # Raspberry Pi A+/256MB
+    012)
+      HOST="rpi1ap256"
+      HM_MODE="HmRF"
+    ;;
+
+    # Raspberry Pi B/512MB
+    00d|00e|00f)
+      HOST="rpi1b512"
+      HM_MODE="HmRF"
+    ;;
+
+    # Raspberry Pi B/256MB
+    002|003|004|005|006)
+      HOST="rpi1b256"
+      HM_MODE="HmRF"
+    ;;
+
+    # Raspberry Pi A
+    007|008|009)
+      HOST="rpi1a"
+      HM_MODE="HmRF"
+    ;;
+
+    *)
+      echo "WARNING: Couldn't identify host hardware: ${hostid}"
+    ;;
+  esac
+
+  if [[ ${HM_MODE} == "HmIP" ]]; then
     UART_DEV="/dev/bcm2835-raw-uart"
   else
-    HOST="rpi2"
-    HM_MODE="HmIP"
-    UART_DEV="/dev/bcm2835-raw-uart"
+    UART_DEV="/dev/ttyAMA0"
   fi
-
 }
 
 # function to check if a factory reset (clearing whole /usr/local) should be performed

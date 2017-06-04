@@ -15,12 +15,13 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * 100% HomeMatic CCU system compliant using latest [OCCU](https://github.com/eq-3/occu) software releases
 * Full BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatibility
 * Integration of latest [beta versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
-* Self-contained SD card image primarily targeted for RaspberryPi hardware
+* Self-contained disk image primarily targeted for RaspberryPi hardware
 * Up to date [Buildroot](http://buildroot.org/) Linux environment
-* Latest [Linux kernel v4.4.x](https://github.com/raspberrypi/linux/tree/rpi-4.4.y) with hard-float support for RaspberryPi2/3 platform 
+* Latest [Linux kernel v4.9.x](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support for RaspberryPi2/3 platform 
 * [Real-Time Linux](https://rt.wiki.kernel.org) kernel support (`PREEMPT_RT`) to minimize latencies and improve CCU operation properties
 * Read-only root file system to minimize write operations on SD card
-* Supports onboard WiFi and Bluetooth of RaspberryPi3 hardware as well as third-party USB WiFi/Bluetooth sticks
+* Supports onboard WiFi of RaspberryPi3 and Raspberry Pi Zero W hardware and as well as various third-party USB WiFi sticks
+* Supports onboard Bluetooth of RaspberryPi3 hardware and as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setup including USB connection of UPS as well as NUT server use (e.g. via Synology NAS Network UPS functionality)
 * Supports to be used a pure LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) with disabled WebUI and other typical CCU functionalities.
 * Support to be used without any GPIO-based RF module and just connect it to a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
@@ -32,11 +33,21 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Dedicated Build Environment using a cross compiler (`arm-linux-gcc`) to compile third-party applications
 
 ## Limitations
+* HomeMatic-IP (HmIP-RF) support only for RaspberryPi3, RaspberryPi2 or RaspberryPi Compute Module 3 hardware (work in progress)
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
 
 ## Requirements
-* [RaspberryPi3](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/), [Raspberry Compute Module 3](https://www.raspberrypi.org/products/compute-module-3/) or [RaspberryPi2](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
-* microSD card (2GB minimum)
+* Any of the following [RaspberryPi](https://www.raspberrypi.org/products/) models:
+  * [RaspberryPi3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
+  * [RaspberryPi2 Model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
+  * [RaspberryPi Compute Module 3](https://www.raspberrypi.org/products/compute-module-3/)
+  * [RaspberryPi Compute Module 3 lite](https://www.raspberrypi.org/products/compute-module-3-lite/)
+  * [RaspberryPi Zero W](https://www.raspberrypi.org/products/pi-zero-w/)  
+  * [RaspberryPi Zero](https://www.raspberrypi.org/products/pi-zero/)
+  * [RaspberryPi Compute Module 1](https://www.raspberrypi.org/products/compute-module/)  
+  * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/)
+  * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) 
+* microSD card (2GB minimum) or USB memory stick / hard disk with 2GB minimum (when using RaspberryPi3)
 * HomeMatic-RF GPIO radio module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html)) and/or HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 
 ## Compatible Third-Party Addons

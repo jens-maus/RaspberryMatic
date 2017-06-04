@@ -19,6 +19,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Up to date [Buildroot](http://buildroot.org/) Linux environment
 * Latest [Linux kernel v4.9.x](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support for RaspberryPi2/3 platform 
 * [Real-Time Linux](https://rt.wiki.kernel.org) kernel support (`PREEMPT_RT`) to minimize latencies and improve CCU operation properties
+* Support to boot completly using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
 * Supports onboard WiFi of RaspberryPi3 and Raspberry Pi Zero W hardware and as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3 hardware and as well as various third-party USB Bluetooth sticks

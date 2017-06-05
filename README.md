@@ -34,7 +34,6 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Dedicated Build Environment using a cross compiler (`arm-linux-gcc`) to compile third-party applications
 
 ## Limitations
-* HomeMatic-IP (HmIP-RF) support only for RaspberryPi3, RaspberryPi2 or RaspberryPi Compute Module 3 hardware (work in progress)
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
 
 ## Requirements

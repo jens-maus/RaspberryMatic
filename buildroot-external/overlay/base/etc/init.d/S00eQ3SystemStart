@@ -9,92 +9,67 @@ CFG_TEMPLATE_DIR=/etc/config_templates
 identify_host() {
 
   # default/fallback values
-  HOST="???"
+  HOST=""
   HM_MODE="HmIP"
-  UART_DEV="/dev/bcm2835-raw-uart"
+  UART_DEV=""
+  UART_BASE=""
+  UART_IRQ=""
 
   # identify the RaspberryPi version used
   # (see http://elinux.org/RPi_HardwareHistory)
   hostid=$(cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | sed 's/^1000//')
   case ${hostid} in
-    # Raspberry Pi 3 Model B
-    a02082|a22082|a32082)
-      HOST="rpi3"
+    a02082|a22082|a32082)         HOST="rpi3"       ;; # Raspberry Pi 3 Model B
+    a020a0)                       HOST="rpi3cm"     ;; # Raspberry Pi Compute Module 3
+    a01040|a01041|a21041|a22042)  HOST="rpi2"       ;; # Raspberry Pi 2 Model B
+    9000c1)                       HOST="rpi0w"      ;; # Raspberry Pi Zero W
+    900092|900093|920093)         HOST="rpi0"       ;; # Raspberry Pi Zero
+    011|014)                      HOST="rpi1cm"     ;; # Raspberry Pi Compute Module 1
+    010|013|900032)               HOST="rpi1bp"     ;; # Raspberry Pi B+
+    015|900021)                   HOST="rpi1ap512"  ;; # Raspberry Pi A+/512MB
+    012)                          HOST="rpi1ap256"  ;; # Raspberry Pi A+/256MB
+    00d|00e|00f)                  HOST="rpi1b512"   ;; # Raspberry Pi B/512MB
+    002|003|004|005|006)          HOST="rpi1b256"   ;; # Raspberry Pi B/256MB
+    007|008|009)                  HOST="rpi1a"      ;; # Raspberry Pi A
+  esac
+
+  # depending on the host hardware we choose a different
+  # uart base address and irq
+  case ${HOST} in
+
+    # RaspberryPi3 / RaspberryPi2
+    rpi3*|rpi2*)
+      if [[ -z ${UART_BASE} ]]; then
+        UART_BASE="0x3f201000"
+      fi
+      if [[ -z ${UART_IRQ} ]]; then
+        UART_IRQ="87"
+      fi
     ;;
 
-    # Raspberry Pi Compute Module 3
-    a020a0)
-      HOST="rpi3cm"
-    ;;
-
-    # Raspberry Pi 2 Model B
-    a01040|a01041|a21041|a22042)
-      HOST="rpi2"
-    ;;
-
-    # Raspberry Pi Zero W
-    9000c1)
-      HOST="rpi0w"
-      HM_MODE="HmRF"
-    ;;
-
-    # Raspberry Pi Zero
-    900092|900093|920093)
-      HOST="rpi0"
-      HM_MODE="HmRF"
-    ;;
-
-    # Raspberry Pi Compute Module 1
-    011|014)
-      HOST="rpi1cm"
-      HM_MODE="HmRF"
-    ;;
-
-    # Raspberry Pi B+
-    010|013|900032)
-      HOST="rpi1bp"
-      HM_MODE="HmRF"
-    ;;
-
-    # Raspberry Pi A+/512MB
-    015|900021)
-      HOST="rpi1ap512"
-      HM_MODE="HmRF"
-    ;;
-
-    # Raspberry Pi A+/256MB
-    012)
-      HOST="rpi1ap256"
-      HM_MODE="HmRF"
-    ;;
-
-    # Raspberry Pi B/512MB
-    00d|00e|00f)
-      HOST="rpi1b512"
-      HM_MODE="HmRF"
-    ;;
-
-    # Raspberry Pi B/256MB
-    002|003|004|005|006)
-      HOST="rpi1b256"
-      HM_MODE="HmRF"
-    ;;
-
-    # Raspberry Pi A
-    007|008|009)
-      HOST="rpi1a"
-      HM_MODE="HmRF"
+    # RaspberryPi 1 and Zero (W)
+    rpi1*|rpi0*)
+      if [[ -z ${UART_BASE} ]]; then
+        UART_BASE="0x20201000"
+      fi
+      if [[ -z ${UART_IRQ} ]]; then
+        UART_IRQ="81"
+      fi
     ;;
 
     *)
-      echo "WARNING: Couldn't identify host hardware: ${hostid}"
+      echo "ERROR: couldn't identify host hardware: ${hostid}"
     ;;
+
   esac
 
-  if [[ ${HM_MODE} == "HmIP" ]]; then
-    UART_DEV="/dev/bcm2835-raw-uart"
-  else
-    UART_DEV="/dev/ttyAMA0"
+  # depending on HM mode we define a different uart device
+  if [[ -z ${UART_DEV} ]]; then
+    if [[ ${HM_MODE} == "HmIP" ]]; then
+      UART_DEV="/dev/bcm2835-raw-uart"
+    else
+      UART_DEV="/dev/ttyAMA0"
+    fi
   fi
 }
 
@@ -295,7 +270,7 @@ init() {
   # have to load different kernel modules.
   if [[ ${HM_MODE} == "HmIP" ]]; then
     # HM/HmIP Dual Protocol
-    modprobe bcm2835_raw_uart
+    modprobe bcm2835_raw_uart uart0_base=${UART_BASE} uart0_irq=${UART_IRQ}
     modprobe eq3_char_loop
   else
     # use standard PL011 UART

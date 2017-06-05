@@ -54,14 +54,26 @@
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,9,0)
   #define CLK_IS_ROOT 0
-  #define UART0_BASE  (0x3f201000)
+  #define UART0_BASE  (0x3f201000) /* RaspberryPi2/Pi3 default */
 #else
   #include <../arch/arm/mach-bcm2709/include/mach/platform.h>
 #endif
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(4,3,0)
-  #define IRQ_UART 87 /* TODO: is static definition correct? */
+  #define IRQ_UART 87 /* RaspberryPi2/3 default */
 #endif
+
+/*
+ *  Module paramters ----------------------------------------------------------
+ */
+
+static long uart0_base = UART0_BASE;
+module_param(uart0_base, long, 0444);
+MODULE_PARM_DESC(uart0_base, "The base address of the UART");
+
+static int uart0_irq = IRQ_UART;
+module_param(uart0_irq, int, 0444);
+MODULE_PARM_DESC(uart0_irq, "The IRQ number of the UART");
 
 /*
  *  Definitions ---------------------------------------------------------------
@@ -1136,7 +1148,7 @@ static int bcm2835_raw_uart_probe( struct platform_device *pdev )
   proc_create( MODNAME, 0444, NULL, &m_bcm2835_raw_uart_proc_fops );
 #endif
 
-  printk( KERN_INFO "bcm2835_raw_uart: Driver successfully loaded.\n" );
+  printk( KERN_INFO "bcm2835_raw_uart: Driver successfully loaded for uart0_base=0x%08lx, uart0_irq=%d.\n", uart0_base, uart0_irq );
 
   return 0;
 
@@ -1184,6 +1196,8 @@ static int bcm2835_raw_uart_remove( struct platform_device *pdev )
 
     m_bcm2835_raw_uart_port = NULL;
 
+    printk( KERN_INFO "bcm2835_raw_uart: successfully removed platform device\n" );
+
     /*The driver core clears the driver data to NULL.*/
     return 0;
   }
@@ -1194,20 +1208,8 @@ static int bcm2835_raw_uart_remove( struct platform_device *pdev )
   return -EFAULT;
 
 }
-static struct resource bcm2835_raw_uart_resources[] = {
-        {
-            .start = UART0_BASE,        // 0x3f201000
-            .end = UART0_BASE + 0xfff,  // 0x3f201fff
-            .flags = IORESOURCE_MEM,
-            .name = MODNAME,
-        },
-        {
-            .start = IRQ_UART, /*TODO: Check*/
-            .end = IRQ_UART,
-            .flags = IORESOURCE_IRQ,
-            .name = MODNAME,
-        }
-};
+
+static struct resource bcm2835_raw_uart_resources[2];
 
 static struct platform_device bcm2709_raw_uart_device = {
     .name = MODNAME,
@@ -1256,6 +1258,16 @@ static int __init bcm2835_raw_uart_init(void)
   bcm2709_init_clocks();
   #endif
 
+  // dynamic setup of bcm2835_raw_uart_resources
+  bcm2835_raw_uart_resources[0].start = uart0_base;       // e.g. 0x3f201000
+  bcm2835_raw_uart_resources[0].end = uart0_base + 0xfff; // e.g. 0x3f201fff
+  bcm2835_raw_uart_resources[0].flags = IORESOURCE_MEM;
+  bcm2835_raw_uart_resources[0].name = MODNAME;
+  bcm2835_raw_uart_resources[1].start = uart0_irq;
+  bcm2835_raw_uart_resources[1].end = uart0_irq;
+  bcm2835_raw_uart_resources[1].flags = IORESOURCE_IRQ;
+  bcm2835_raw_uart_resources[1].name = MODNAME;
+
   ret = platform_device_register( &bcm2709_raw_uart_device );
   if( ret )
   {
@@ -1292,3 +1304,4 @@ module_exit( bcm2835_raw_uart_exit );
 MODULE_DESCRIPTION( "eQ-3 raw BCM2835 uart driver" );
 MODULE_LICENSE( "GPL" );
 MODULE_AUTHOR( "eQ-3 Entwicklung GmbH" );
+MODULE_VERSION( "1.9" );

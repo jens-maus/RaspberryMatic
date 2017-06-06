@@ -1,0 +1,39 @@
+# the kernel image to load
+kernel=zImage
+
+# setup HDMI output no matter if a HDMI
+# monitor is connected or not
+hdmi_force_hotplug=1
+hdmi_drive=1
+
+# Disable overscan assuming the display supports displaying the full resolution
+# If the text shown on the screen disappears off the edge, comment this out
+disable_overscan=1
+
+# enable i2c,i2s and spi
+dtparam=i2c_arm=on,i2s=on,spi=on
+
+# enable the UART
+enable_uart=1
+
+# make sure the uart is running at 48MHz
+init_uart_clock=48000000
+
+# switch the bluetooth UART to the miniuart
+# for basic bluetooth support and fix core_freq
+dtoverlay=pi3-miniuart-bt
+core_freq=250
+
+# for disabling bluetooth alltogether
+# you can uncomment the following two lines
+#dtoverlay=pi3-disable-bt
+#dtparam=uart1=off
+
+# disable the splash screen
+disable_splash=1
+
+# activating the hardware watchdog
+dtparam=watchdog=on
+
+# make sure the firmware enables USB/network boot
+program_usb_boot_mode=1

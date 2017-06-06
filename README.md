@@ -112,7 +112,7 @@ After a successfull build of RaspberryMatic a dedicated cross compiler (`arm-lin
 
 ```
 $ cd HelloWorld
-$ <path-to-RaspberryMatic-build>/build-raspmatic_rpi/host/usr/bin/arm-linux-gcc -o HelloWorld HelloWorld.c
+$ <path-to-RaspberryMatic-build>/build-raspmatic_rpi3/host/usr/bin/arm-linux-gcc -o HelloWorld HelloWorld.c
 ```
 
 A valid alternative for building RaspberryMatic ARM-hardfloat compatible binaries is to use the linaro based Linux cross compiler suite supplied [here](https://github.com/raspberrypi/tools/tree/master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian).

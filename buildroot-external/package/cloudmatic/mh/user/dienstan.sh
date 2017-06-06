@@ -19,4 +19,4 @@ if [ -s /usr/local/crontabs/root ]; then
 		mv /tmp/crontab.$$ /usr/local/crontabs/root
 	fi
 fi
-(crontab -l 2>/dev/null; echo "* * * * * /bin/sh /usr/local/etc/config/addons/mh/cloudmaticcheck.sh >> /dev/null") | crontab -
+(crontab -l 2>/dev/null; echo "0 */6 * * * /bin/sh /usr/local/etc/config/addons/mh/cloudmaticcheck.sh >> /dev/null") | crontab -

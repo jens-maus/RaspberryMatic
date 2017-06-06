@@ -364,6 +364,12 @@ init() {
         # update /etc/config/localtime and /etc/config/timezone
         /bin/updateTZ.sh
 
+        # if /etc/config/timezone is set to Europe/Berlin we
+        # assume a german keyboard layout
+        if [[ $(cat /etc/config/timezone) == "Europe/Berlin" ]]; then
+          /sbin/loadkmap </etc/de.kmap
+        fi
+
         if [ ! -e /etc/config/netconfig ] ; then
                 cp $CFG_TEMPLATE_DIR/netconfig /etc/config
         fi

@@ -402,8 +402,8 @@
  
  ##
  #######################################################################
---- homematic/firmware/HM-MOD-UART/fwmap.orig	2017-05-12 21:11:01.439444009 +0200
-+++ homematic/firmware/HM-MOD-UART/fwmap	2017-05-12 21:11:11.351218335 +0200
+--- homematic/firmware/HM-MOD-UART/fwmap.orig	2017-06-04 10:55:02.052833494 +0200
++++ homematic/firmware/HM-MOD-UART/fwmap	2017-06-04 10:55:02.052833494 +0200
 @@ -1,7 +1,7 @@
  #Type           Filename                Version
  
@@ -622,8 +622,8 @@
    set command "s%^root:\\(\[^:\]*:\\)%root:$digest:%"
    set rc [catch {exec sed -i "$command" /etc/config/shadow} msg]
  
---- homematic/WebUI/www/api/methods/device/get.tcl.orig	2017-05-12 21:13:34.495958175 +0200
-+++ homematic/WebUI/www/api/methods/device/get.tcl	2017-05-24 15:47:13.947136233 +0200
+--- homematic/WebUI/www/api/methods/device/get.tcl.orig	2017-06-04 10:55:02.052833494 +0200
++++ homematic/WebUI/www/api/methods/device/get.tcl	2017-06-04 10:55:02.052833494 +0200
 @@ -36,84 +36,88 @@
      Write(" GROUP_ONLY {"# device.MetaData("operateGroupOnly") # "}");
    
@@ -783,8 +783,8 @@
        }
      }
      Write("}");
---- homematic/WebUI/www/api/methods/device/listalldetail.tcl.orig	2017-05-21 14:21:56.078920601 +0200
-+++ homematic/WebUI/www/api/methods/device/listalldetail.tcl	2017-05-21 14:16:44.002337694 +0200
+--- homematic/WebUI/www/api/methods/device/listalldetail.tcl.orig	2017-06-04 10:55:02.052833494 +0200
++++ homematic/WebUI/www/api/methods/device/listalldetail.tcl	2017-06-04 10:55:02.052833494 +0200
 @@ -128,7 +128,7 @@
    foreach(id, root.Devices().EnumIDs())
    {
@@ -1489,8 +1489,8 @@
          set paramid $filename
          break
        }
---- homematic/WebUI/www/config/ic_metadata.tcl.orig	2017-05-21 10:50:56.376075932 +0200
-+++ homematic/WebUI/www/config/ic_metadata.tcl	2017-05-21 13:18:06.422327123 +0200
+--- homematic/WebUI/www/config/ic_metadata.tcl.orig	2017-06-04 10:55:02.052833494 +0200
++++ homematic/WebUI/www/config/ic_metadata.tcl	2017-06-04 10:55:02.052833494 +0200
 @@ -222,10 +222,10 @@
  	append isecmd "  ch_addr = channel.Address();"
  	append isecmd "  ch_name = channel.Name();"
@@ -1796,6 +1796,141 @@
    <script type="text/javascript">
  
      CHECK_INTERVAL = 3000;  // Intervall, in dem geprüft wird, ob der ReGa Webserver aktiv ist
+--- homematic/WebUI/www/rega/esp/programs.fn.orig	2017-06-07 16:10:01.093473818 +0200
++++ homematic/WebUI/www/rega/esp/programs.fn	2017-06-07 16:11:19.614662691 +0200
+@@ -84,6 +84,13 @@
+                       object oDP = dom.GetObject( sDP );
+                       if( oDP )
+                       {
++                        string hssid = "";
++
++                        if ( oDP.IsTypeOf( OT_HSSDP ) )
++                        {
++                          hssid = oDP.HSSID();
++                        }
++
+                         if( oDP.ID() == iLV)
+                         {
+                           if( (oDP.Operations() & (OPERATION_READ|OPERATION_EVENT)) != 0 )
+@@ -109,8 +116,8 @@
+                                     }
+                                     if( !oDP.IsTypeOf( OT_VARDP ) )
+                                     {
+-                                      string sLongKey = oCC.ChnLabel()#"|"#oDP.HSSID()#"="#sVLValue;
+-                                      string sShortKey = oDP.HSSID()#"="#sVLValue;
++                                      string sLongKey = oCC.ChnLabel()#"|"#hssid#"="#sVLValue;
++                                      string sShortKey = hssid#"="#sVLValue;
+                                       sValue = web.webKeyFromStringTable(sLongKey);
+                                       if( !sValue.Length() )
+                                       {
+@@ -136,8 +143,8 @@
+                                   string sValue = oDP.Name()#": "#oDP.ValueName1();
+                                   if( (!oDP.IsTypeOf( OT_VARDP )) && (!oDP.IsTypeOf( OT_ALARMDP )) )
+                                   {
+-                                    string sLongKey = oCC.ChnLabel()#"|"#oDP.HSSID()#"=TRUE";
+-                                    string sShortKey = oDP.HSSID()#"=TRUE";
++                                    string sLongKey = oCC.ChnLabel()#"|"#hssid#"=TRUE";
++                                    string sShortKey = hssid#"=TRUE";
+                                     sValue = web.webKeyFromStringTable(sLongKey);
+                                     if( sValue.Length() == 0 )
+                                     {
+@@ -155,8 +162,8 @@
+                                   string sValue = oDP.Name()#": "#oDP.ValueName0();
+                                   if( (!oDP.IsTypeOf( OT_VARDP )) && (!oDP.IsTypeOf( OT_ALARMDP )) )
+                                   {
+-                                    string sLongKey = oCC.ChnLabel()#"|"#oDP.HSSID()#"=FALSE";
+-                                    string sShortKey = oDP.HSSID()#"=FALSE";
++                                    string sLongKey = oCC.ChnLabel()#"|"#hssid#"=FALSE";
++                                    string sShortKey = hssid#"=FALSE";
+                                     sValue = web.webKeyFromStringTable(sLongKey);
+                                     if( sValue.Length() == 0 )
+                                     {
+@@ -181,8 +188,8 @@
+                                   }
+                                   if( (!oDP.IsTypeOf( OT_VARDP )) && (!oDP.IsTypeOf( OT_ALARMDP )) )
+                                   {
+-                                    string sLongKey = oCC.ChnLabel()#"|"#oDP.HSSID();
+-                                    string sShortKey = oDP.HSSID();
++                                    string sLongKey = oCC.ChnLabel()#"|"#hssid;
++                                    string sShortKey = hssid;
+                                     sValue = web.webKeyFromStringTable(sLongKey);
+                                     if( !sValue.Length() )
+                                     {
+@@ -209,8 +216,8 @@
+                                 if( (oDP.ID() == iLV) && (s == iRV1.ToString()) && (iRV1T == ivtSpecialValue) ) 
+                                 { 
+                                   string sValue = oDP.Name();  
+-                                  string sLongKey = oCC.ChnLabel()#"|"#oDP.HSSID()#"="#s;
+-                                  string sShortKey = oDP.HSSID()#"="#s;
++                                  string sLongKey = oCC.ChnLabel()#"|"#hssid#"="#s;
++                                  string sShortKey = hssid#"="#s;
+                                   string sValue = web.webKeyFromStringTable(sLongKey);
+                                   if( !sValue.Length() )
+                                   {
+@@ -452,12 +459,19 @@
+ 
+                 if( oDP )
+                 {
++                  string hssid = "";
++
++                  if ( oDP.IsTypeOf( OT_HSSDP ) )
++                  {
++                    hssid = oDP.HSSID();
++                  }
++
+                   object oCH = dom.GetObject( oDP.Channel() );
+                   if( oCH )
+                   { 
+                     integer iDPvt = oDP.ValueType();
+                     integer iDPst = oDP.ValueSubType();
+-                    string sKey = oCH.ChnLabel()#"|"#oDP.HSSID();
++                    string sKey; = oCH.ChnLabel()#"|"#hssid;
+                     boolean showVal = true;
+ 
+                     if( (iDPvt == ivtInteger) && (iDPst == istEnum) )
+@@ -473,11 +487,11 @@
+                       {
+                         if( iV == 0 )
+                         {
+-                          string sKey = oCH.ChnLabel()#"|"#oDP.HSSID()#"=FALSE";
++                          string sKey = oCH.ChnLabel()#"|"#hssid#"=FALSE";
+                           string sValue = web.webKeyFromStringTable(sKey);
+                           if( sValue.Length() == 0 )
+                           {
+-                            sKey = oDP.HSSID()#"=FALSE";
++                            sKey = hssid#"=FALSE";
+                             string sValue = web.webKeyFromStringTable(sKey);
+                             if( !sValue.Length() )
+                             {
+@@ -488,11 +502,11 @@
+                         }
+                         if( iV == 1 )
+                         {
+-                          string sKey = oCH.ChnLabel()#"|"#oDP.HSSID()#"=TRUE";
++                          string sKey = oCH.ChnLabel()#"|"#hssid#"=TRUE";
+                           string sValue = web.webKeyFromStringTable(sKey);
+                           if( sValue.Length() == 0 )
+                           {
+-                            sKey = oDP.HSSID()#"=TRUE";
++                            sKey = hssid#"=TRUE";
+                             string sValue = web.webKeyFromStringTable(sKey);
+                             if( !sValue.Length() )
+                             {
+@@ -504,12 +518,12 @@
+                       }
+                       else
+                       {
+-                        string sKey = oCH.ChnLabel()#"|"#oDP.HSSID();
++                        string sKey = oCH.ChnLabel()#"|"#hssid;
+                         string sValue = web.webKeyFromStringTable(sKey);
+                         sRet = sRet#sValue;
+                         if( sValue.Length() == 0 )
+                         {
+-                          sKey = oDP.HSSID();
++                          sKey = hssid;
+                           string sValue = web.webKeyFromStringTable(sKey);
+                           if( !sValue.Length() )
+                           {
 --- homematic/WebUI/www/rega/pages/tabs/admin/msg/timemodule.htm.orig	2017-05-03 09:19:36.313929460 +0200
 +++ homematic/WebUI/www/rega/pages/tabs/admin/msg/timemodule.htm	2017-05-03 09:19:36.313929460 +0200
 @@ -53,8 +53,6 @@
@@ -1807,8 +1942,8 @@
  <div class="CLASS05103">
    <table class="popupTable CLASS05104" border="0" >
      <colgroup>
---- homematic/WebUI/www/rega/pages/tabs/startpage.htm.orig	2017-05-22 10:14:02.244572904 +0200
-+++ homematic/WebUI/www/rega/pages/tabs/startpage.htm	2017-05-22 10:15:50.934012237 +0200
+--- homematic/WebUI/www/rega/pages/tabs/startpage.htm.orig	2017-06-04 10:55:02.052833494 +0200
++++ homematic/WebUI/www/rega/pages/tabs/startpage.htm	2017-06-04 10:55:02.052833494 +0200
 @@ -102,50 +102,53 @@
            object objX = dom.GetObject( system.GetVar("id") );
            if( objX )
@@ -1902,8 +2037,8 @@
                }
              }
            }
---- homematic/WebUI/www/rega/pages/tabs/user/newFav.htm.orig	2017-05-12 21:13:34.643954802 +0200
-+++ homematic/WebUI/www/rega/pages/tabs/user/newFav.htm	2017-05-31 21:48:05.352494530 +0200
+--- homematic/WebUI/www/rega/pages/tabs/user/newFav.htm.orig	2017-06-04 10:55:02.052833494 +0200
++++ homematic/WebUI/www/rega/pages/tabs/user/newFav.htm	2017-06-04 10:55:02.052833494 +0200
 @@ -614,9 +614,8 @@
                Write( oEntry.Address() );
              Write( '</td>' );

@@ -1796,8 +1796,8 @@
    <script type="text/javascript">
  
      CHECK_INTERVAL = 3000;  // Intervall, in dem geprüft wird, ob der ReGa Webserver aktiv ist
---- homematic/WebUI/www/rega/esp/programs.fn.orig	2017-06-07 16:10:01.093473818 +0200
-+++ homematic/WebUI/www/rega/esp/programs.fn	2017-06-07 16:11:19.614662691 +0200
+--- homematic/WebUI/www/rega/esp/programs.fn.orig	2017-06-07 16:15:35.006528614 +0200
++++ homematic/WebUI/www/rega/esp/programs.fn	2017-06-07 16:15:35.006528614 +0200
 @@ -84,6 +84,13 @@
                        object oDP = dom.GetObject( sDP );
                        if( oDP )
@@ -1931,6 +1931,18 @@
                            string sValue = web.webKeyFromStringTable(sKey);
                            if( !sValue.Length() )
                            {
+--- homematic/WebUI/www/rega/esp/side.inc.orig	2017-06-07 22:48:47.255863346 +0200
++++ homematic/WebUI/www/rega/esp/side.inc	2017-06-07 22:49:13.308263915 +0200
+@@ -265,7 +265,8 @@
+               }
+             }
+           }
+-          string sEnumSpecial = oDP.EnumSpecialIDs().ToString();
++          string sEnumSpecial = "";
++          if( oDP.IsTypeOf( OT_HSSDP ) ) { sEnumSpecial = oDP.EnumSpecialIDs().ToString(); };
+           if( sEnumSpecial == "65535" ) { sEnumSpecial = ""; }
+           string s;
+           foreach(s,sEnumSpecial)
 --- homematic/WebUI/www/rega/pages/tabs/admin/msg/timemodule.htm.orig	2017-05-03 09:19:36.313929460 +0200
 +++ homematic/WebUI/www/rega/pages/tabs/admin/msg/timemodule.htm	2017-05-03 09:19:36.313929460 +0200
 @@ -53,8 +53,6 @@

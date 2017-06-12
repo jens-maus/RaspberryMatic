@@ -1,6 +1,6 @@
-BOARD=raspmatic_rpi3
-# BOARD=raspmatic_rpi0
-# BOARD=raspmatic_docker
+BOARD=rpi3
+# BOARD=rpi0
+# BOARD=docker
 BUILDROOT_VERSION=2017.05
 RBE_VERSION=0.1.0
 
@@ -22,51 +22,51 @@ BUILDROOT_PATCHES=$(wildcard buildroot-patches/*.patch)
 buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.bz2
 	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; for p in $(BUILDROOT_PATCHES); do patch -d buildroot-$(BUILDROOT_VERSION) -p1 < $${p}; done; fi
 
-build-$(BOARD): | buildroot-$(BUILDROOT_VERSION) download
-	mkdir -p build-$(BOARD)
+build-raspmatic_$(BOARD): | buildroot-$(BUILDROOT_VERSION) download
+	mkdir -p build-raspmatic_$(BOARD)
 
 download: buildroot-$(BUILDROOT_VERSION)
 	mkdir -p download
 
-build-$(BOARD)/.config: | build-$(BOARD) buildroot-external/configs/$(BOARD)_defconfig
-	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external $(BOARD)_defconfig
+build-raspmatic_$(BOARD)/.config: | build-raspmatic_$(BOARD) buildroot-external/configs/raspmatic_$(BOARD)_defconfig
+	cd build-raspmatic_$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external raspmatic_$(BOARD)_defconfig
 
-dist: | buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config
-	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
+dist: | buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)/.config
+	cd build-raspmatic_$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
 
 clean:
-	rm -rf build-$(BOARD) buildroot-$(BUILDROOT_VERSION)
+	rm -rf build-raspmatic_$(BOARD) buildroot-$(BUILDROOT_VERSION)
 
 distclean: clean
 	rm -f buildroot-$(BUILDROOT_VERSION).tar.bz2
 	rm -rf download
 
 mount:
-	sudo kpartx -av build-$(BOARD)/images/sdcard.img
+	sudo kpartx -av build-raspmatic_$(BOARD)/images/sdcard.img
 	sudo mkdir -p /mnt/p2
 	sudo mount /dev/mapper/loop0p2 /mnt/p2
 
 umount:
 	sudo umount /mnt/p2
-	sudo kpartx -dv build-$(BOARD)/images/sdcard.img
+	sudo kpartx -dv build-raspmatic_$(BOARD)/images/sdcard.img
 
 install:
-	sudo -- /bin/sh -c 'dd if=build-$(BOARD)/images/sdcard.img of=$(of) bs=4096 && sync'
+	sudo -- /bin/sh -c 'dd if=build-raspmatic_$(BOARD)/images/sdcard.img of=$(of) bs=4096 && sync'
 
-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
-	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig
+menuconfig: buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)
+	cd build-raspmatic_$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig
 
-savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
-	cd build-$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external savedefconfig BR2_DEFCONFIG=../buildroot-external/configs/$(BOARD)_defconfig
+savedefconfig: buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)
+	cd build-raspmatic_$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external savedefconfig BR2_DEFCONFIG=../buildroot-external/configs/raspmatic_$(BOARD)_defconfig
 
-linux-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
-	cd build-$(BOARD) && make linux-menuconfig
+linux-menuconfig: buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)
+	cd build-raspmatic_$(BOARD) && make linux-menuconfig
 
-linux-update-defconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
-	cd build-$(BOARD) && make linux-update-defconfig
+linux-update-defconfig: buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)
+	cd build-raspmatic_$(BOARD) && make linux-update-defconfig
 
-busybox-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
-	cd build-$(BOARD) && make busybox-menuconfig
+busybox-menuconfig: buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)
+	cd build-raspmatic_$(BOARD) && make busybox-menuconfig
 
-busybox-update-config: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
-	cd build-$(BOARD) && make busybox-update-config
+busybox-update-config: buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)
+	cd build-raspmatic_$(BOARD) && make busybox-update-config

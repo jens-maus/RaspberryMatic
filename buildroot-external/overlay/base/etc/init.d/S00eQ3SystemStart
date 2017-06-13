@@ -103,6 +103,16 @@ checkFactoryReset() {
     # MAX_CHS
     parted -s ${DEV} rm ${PARTNUM}
     parted -s ${DEV} mkpart primary ${START_CHS} ${MAX_CHS}
+
+    # we have to find out the new disk identifier after having modified
+    # the partition table because this modifies the identifier
+    disk_identifier=$(dd if=${DEV} bs=1 count=4 conv=notrunc skip=$((0x1B8)) 2>/dev/null | hexdump -e '"%08x"')
+    if [[ -n ${disk_identifier} && -f /boot/cmdline.txt ]]; then
+      mount -o rw,remount /boot
+      ROOTPARTNUM=$(mountpoint -d / | cut -d':' -f2)
+      sed -i "s/ root=[^[:space:]]*/ root=PARTUUID=${disk_identifier}-$(printf '%02d' ${ROOTPARTNUM})/" /boot/cmdline.txt
+      mount -o ro,remount /boot
+    fi
   fi
 
   # we create a clean ext4 partition now

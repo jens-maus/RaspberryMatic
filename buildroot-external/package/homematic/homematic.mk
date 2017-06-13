@@ -8,14 +8,6 @@ HOMEMATIC_OCCU_VERSION = 2.27.8
 HOMEMATIC_VERSION = 2.27.8-1
 HOMEMATIC_SITE = $(call github,eq-3,occu,$(HOMEMATIC_VERSION))
 
-HOMEMATIC_MODULE_SUBDIRS = kernel-modules/bcm2835_raw_uart kernel-modules/eq3_char_loop
-
-# HOMEMATIC_DEPENDENCIES = rpi-firmware
-
-# ifeq ($(BR2_PACKAGE_RFD_PLATFORM),"SDK")
-#	RFD_DEPENDENCIES += libusb
-# endif
-
 ifeq ($(BR2_PACKAGE_HOMEMATIC),y)
 
 define HOMEMATIC_PRE_PATCH
@@ -104,7 +96,9 @@ define HOMEMATIC_INSTALL_TARGET_CMDS
 			-C $(@D) install 
 endef
 
+ifeq ($(BR2_PACKAGE_HOMEMATIC_RF_PROTOCOL_HM_HMIP),y)
+HOMEMATIC_MODULE_SUBDIRS = kernel-modules/bcm2835_raw_uart kernel-modules/eq3_char_loop
 $(eval $(kernel-module))
+endif
+
 $(eval $(generic-package))
-
-

@@ -15,10 +15,11 @@ identify_host() {
   UART_BASE=""
   UART_IRQ=""
 
-  # identify the RaspberryPi version used
-  # (see http://elinux.org/RPi_HardwareHistory)
+  # hardware identification routine
   hostid=$(cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}' | sed 's/^1000//')
   case ${hostid} in
+    # identify the RaspberryPi version used
+    # (see http://elinux.org/RPi_HardwareHistory)
     a02082|a22082|a32082)         HOST="rpi3"       ;; # Raspberry Pi 3 Model B
     a020a0)                       HOST="rpi3cm"     ;; # Raspberry Pi Compute Module 3
     a01040|a01041|a21041|a22042)  HOST="rpi2"       ;; # Raspberry Pi 2 Model B
@@ -31,6 +32,14 @@ identify_host() {
     00d|00e|00f)                  HOST="rpi1b512"   ;; # Raspberry Pi B/512MB
     002|003|004|005|006)          HOST="rpi1b256"   ;; # Raspberry Pi B/256MB
     007|008|009)                  HOST="rpi1a"      ;; # Raspberry Pi A
+
+    # No RaspberryPi identified, try other boards
+    0000)
+      hardware=$(cat /proc/cpuinfo | grep 'Hardware' | awk '{print $3}')
+      case ${hardware} in
+        Rockchip)                 HOST="tinkerboard";; # ASUS Tinkerboard
+      esac
+    ;;
   esac
 
   # depending on the host hardware we choose a different
@@ -55,6 +64,12 @@ identify_host() {
       if [[ -z ${UART_IRQ} ]]; then
         UART_IRQ="81"
       fi
+    ;;
+
+    # ASUS Tinkerboard
+    tinkerboard)
+      HM_MODE="HmRF"
+      UART_DEV="/dev/ttyS1"
     ;;
 
     *)
@@ -248,15 +263,19 @@ init() {
   init_urandom
 
   # load watchdog kernel module
-  modprobe bcm2835_wdt nowayout=1 heartbeat=15
+  if [[ ${HOST} != "tinkerboard" ]]; then
+    modprobe bcm2835_wdt nowayout=1 heartbeat=15
+  fi
 
   # load tunneling interface support
   modprobe tun
 
   # if /dev/ttyS0 is present move it to ttyS1 for
   # potentiall later use (e.g. bluetooth)
-  if [[ -c /dev/ttyS0 ]]; then
-    mv /dev/ttyS0 /dev/ttyS1
+  if [[ ${HOST} != "tinkerboard" ]]; then
+    if [[ -c /dev/ttyS0 ]]; then
+      mv /dev/ttyS0 /dev/ttyS1
+    fi
   fi
 
   # check if a factory reset should be performed
@@ -278,13 +297,15 @@ init() {
 
   # depending on the HomeMatic mode (HmRF, HmIP) we
   # have to load different kernel modules.
-  if [[ ${HM_MODE} == "HmIP" ]]; then
-    # HM/HmIP Dual Protocol
-    modprobe bcm2835_raw_uart uart0_base=${UART_BASE} uart0_irq=${UART_IRQ}
-    modprobe eq3_char_loop
-  else
-    # use standard PL011 UART
-    modprobe amba-pl011
+  if [[ ${HOST} != "tinkerboard" ]]; then
+    if [[ ${HM_MODE} == "HmIP" ]]; then
+      # HM/HmIP Dual Protocol
+      modprobe bcm2835_raw_uart uart0_base=${UART_BASE} uart0_irq=${UART_IRQ}
+      modprobe eq3_char_loop
+    else
+      # use standard PL011 UART
+      modprobe amba-pl011
+    fi
   fi
 
   # make sure to save the urandom pool for future reboots

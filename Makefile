@@ -2,15 +2,16 @@ BOARD=rpi3
 # BOARD=rpi0
 # BOARD=docker
 BUILDROOT_VERSION=2017.05
-RBE_VERSION=0.1.0
+VERSION=$(shell cat ./VERSION)
 
 .PHONY: all
 all: usage
 
 usage:
-	@echo "RaspberryMatic Build Environment (RBE) Version ${RBE_VERSION}"
+	@echo "RaspberryMatic Build Environment"
 	@echo "Usage:"
-	@echo "	make dist: install buildroot and create default RaspberryMatic Image"
+	@echo "	make dist: install buildroot and create default RaspberryMatic image"
+	@echo "	make release: create RaspberryMatic image and corresponding release archive"
 	@echo "	make install of=/dev/sdX: write image to SD card under /dev/sdX"
 	@echo "	make distclean: clean everything"
 
@@ -29,10 +30,17 @@ download: buildroot-$(BUILDROOT_VERSION)
 	mkdir -p download
 
 build-raspmatic_$(BOARD)/.config: | build-raspmatic_$(BOARD) buildroot-external/configs/raspmatic_$(BOARD)_defconfig
-	cd build-raspmatic_$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external raspmatic_$(BOARD)_defconfig
+	cd build-raspmatic_$(BOARD) && make O=$(shell pwd)/build-raspmatic_$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external raspmatic_$(BOARD)_defconfig
 
 dist: | buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)/.config
-	cd build-raspmatic_$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
+	cd build-raspmatic_$(BOARD) && make O=$(shell pwd)/build-raspmatic_$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
+
+release: dist
+	cp -a build-raspmatic_$(BOARD)/images/sdcard.img ./RaspberryMatic-$(VERSION)-$(BOARD).img
+	sha256sum ./RaspberryMatic-$(VERSION)-$(BOARD).img >./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256
+	rm -f ./RaspberryMatic-$(VERSION)-$(BOARD).zip
+	zip ./RaspberryMatic-$(VERSION)-$(BOARD).zip ./RaspberryMatic-$(VERSION)-$(BOARD).img ./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256 ./LICENSE
+	sha256sum ./RaspberryMatic-$(VERSION)-$(BOARD).zip >./RaspberryMatic-$(VERSION)-$(BOARD).zip.sha256
 
 clean:
 	rm -rf build-raspmatic_$(BOARD) buildroot-$(BUILDROOT_VERSION)
@@ -54,10 +62,10 @@ install:
 	sudo -- /bin/sh -c 'dd if=build-raspmatic_$(BOARD)/images/sdcard.img of=$(of) bs=4096 && sync'
 
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)
-	cd build-raspmatic_$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig
+	cd build-raspmatic_$(BOARD) && make O=$(shell pwd)/build-raspmatic_$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig
 
 savedefconfig: buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)
-	cd build-raspmatic_$(BOARD) && make O=`pwd` -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external savedefconfig BR2_DEFCONFIG=../buildroot-external/configs/raspmatic_$(BOARD)_defconfig
+	cd build-raspmatic_$(BOARD) && make O=$(shell pwd)/build-raspmatic_$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external savedefconfig BR2_DEFCONFIG=../buildroot-external/configs/raspmatic_$(BOARD)_defconfig
 
 linux-menuconfig: buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)
 	cd build-raspmatic_$(BOARD) && make linux-menuconfig

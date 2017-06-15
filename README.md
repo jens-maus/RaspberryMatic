@@ -12,22 +12,23 @@
 The RaspberryMatic project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded devices like the [RaspberryPi](https://www.raspberrypi.org/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full microSD card image that can be directly flashed and then used in a RaspberryPi as the main operating system for controlling all kind of HomeMatic compatible devices with full compatibility to a CCU2 device directly sold by eQ-3.
 
 ## Features
-* 100% HomeMatic CCU system compliant using latest [OCCU](https://github.com/eq-3/occu) software releases
-* Full BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatibility
+* 100% HomeMatic CCU system compliant using latest [OCCU 2.27.8](https://github.com/eq-3/occu) software releases
+* Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
 * Integration of latest [beta versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
 * Self-contained disk image primarily targeted for RaspberryPi hardware
-* Up to date [Buildroot](http://buildroot.org/) Linux environment
-* Latest [Linux kernel v4.9.x](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support for RaspberryPi2/3 platform 
+* Based on latest [Buildroot 2017.05](http://buildroot.org/) Linux environment
+* Latest [Linux kernel v4.9.x](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support 
 * [Real-Time Linux](https://rt.wiki.kernel.org) kernel support (`PREEMPT_RT`) to minimize latencies and improve CCU operation properties
-* Support to boot completly using an external USB memory stick or hard disk (RaspberryPi3 only)
+* Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
-* Supports onboard WiFi of RaspberryPi3 and Raspberry Pi Zero W hardware and as well as various third-party USB WiFi sticks
-* Supports onboard Bluetooth of RaspberryPi3 hardware and as well as various third-party USB Bluetooth sticks
+* Supports latest JAVA8 runtime environment ([1.8.0_121-8.20.0.42](http://www.azul.com/downloads/zulu-embedded/))
+* Supports onboard WiFi of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB WiFi sticks
+* Supports onboard Bluetooth of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setup including USB connection of UPS as well as NUT server use (e.g. via Synology NAS Network UPS functionality)
 * Supports to be used a pure LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) with disabled WebUI and other typical CCU functionalities.
 * Support to be used without any GPIO-based RF module and just connect it to a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
-* IPv6 support and default HTTPS enabled WebUI support
-* Auto-resizing `/usr/local` partition to use the full capacity of the SD card
+* Full IPv6 support and default HTTPS enabled WebUI support
+* Auto-resizing `/usr/local` partition to use the full capacity of the SD card or USB stick
 * Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi))
 * Hardware WatchDog support automatically rebooting the system upon hardware/lockup problems
 * Direct [CloudMatic](http://cloudmatic.de) (meine-homematic.de) support
@@ -47,7 +48,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [RaspberryPi Compute Module 1](https://www.raspberrypi.org/products/compute-module/)  
   * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/)
   * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) 
-* microSD card (2GB minimum) or USB memory stick / hard disk with 2GB minimum (when using RaspberryPi3)
+* 2GB minimum space on microSD card or USB memory stick / hard disk (when using RaspberryPi3)
 * HomeMatic-RF GPIO radio module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html)) and/or HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 
 ## Compatible Third-Party Addons
@@ -73,18 +74,18 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 ## Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:
 
-1. [Download latest release](https://github.com/jens-maus/RaspberryMatic/releases) archive (`RaspberryMatic-X.XX.XX.YYYYMMDD.zip`):
-   * `wget https://github.com/jens-maus/RaspberryMatic/releases/download/X.XX.XX.YYYYMMDD/RaspberryMatic-X.XX.XX.YYYYMMDD.zip`
-2. Unarchive zip file resulting in an SD card image (`RaspberryMatic-X.XX.XX.YYYYMMDD.img`), e.g.:
-   * `unzip RaspberryMatic-X.XX.XX.YYYYMMDD.zip`
+1. [Download latest release](https://github.com/jens-maus/RaspberryMatic/releases) archive (`RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.zip`) for the hardware platform you are using:
+   * `wget https://github.com/jens-maus/RaspberryMatic/releases/download/X.XX.XX.YYYYMMDD/RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.zip`
+2. Unarchive zip file resulting in an SD card image (`RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.img`), e.g.:
+   * `unzip RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.zip`
 3. Check sha256 checksum to check integrity of SD card image, e.g.:
-   * `sha256sum -c RaspberryMatic-X.XX.XX.YYYYMMDD.img.sha256`
+   * `sha256sum -c RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.img.sha256`
 4. Based on your operating system use a Flash-tool to copy the image onto your microSD card:
-   * <i>Linux</i>: `sudo dd if=RaspberryMatic-X.XX.XX.YYYYMMDD.img of=/dev/sdX bs=4096`
+   * <i>Linux</i>: `sudo dd if=RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.img of=/dev/sdX bs=4096`
    * <i>macOS</i>: Use [ApplePiBaker](http://www.tweaking4all.com/hardware/raspberry-pi/macosx-apple-pi-baker/)
    * <i>Windows</i>: Use [Win32DiskImager](https://sourceforge.net/projects/win32diskimager/)
-5. Make sure you have the HM-MOD-RPI-PCB radio modul installed on the GPIO of your RaspberryPi
-6. Install microSD in your RaspberryPi and start it
+5. For HM-MOD-RPI-PCB use only: Make sure you have the HM-MOD-RPI-PCB radio module installed on the GPIO
+6. Install microSD in your RaspberryPi and connect power
 7. Wait until bootup process is finished and use a web browser to connect to http://homematic-raspi/
 
 ## Documentation

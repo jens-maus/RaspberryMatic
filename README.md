@@ -25,8 +25,8 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Supports onboard WiFi of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setup including USB connection of UPS as well as NUT server use (e.g. via Synology NAS Network UPS functionality)
-* Supports to be used a pure LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) with disabled WebUI and other typical CCU functionalities.
-* Support to be used without any GPIO-based RF module and just connect it to a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
+* Support to be used as a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
+* Support to be used without [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) RF module and just connect it to a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Full IPv6 support and default HTTPS enabled WebUI support
 * Auto-resizing `/usr/local` partition to use the full capacity of the SD card or USB stick
 * Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi))

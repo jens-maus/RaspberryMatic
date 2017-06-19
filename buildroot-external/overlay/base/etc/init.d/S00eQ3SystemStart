@@ -393,6 +393,12 @@ init() {
     cp -Rp ${CFG_TEMPLATE_DIR}/nut /etc/config/
   fi
 
+  # copy the SNMP config files in place in
+  # case they don't exist yet
+  if [ ! -e /etc/config/snmp ] ; then
+    cp -Rp ${CFG_TEMPLATE_DIR}/snmp /etc/config/
+  fi
+
 	# cal local postinit file
         if [ ! -e /etc/config/safemode ] ; then
 		if [ -x /usr/local/etc/rc.postinit ]; then

@@ -152,8 +152,8 @@ init_rtc_device() {
   [[ -e /dev/rtc0 ]] && return 0
 
   # load the common i2c kernel modules
-  modprobe i2c-bcm2708
-  modprobe i2c-dev
+  modprobe i2c_bcm2835
+  modprobe i2c_dev
 
   # check for MCP7940N RTC clock at 0x6f (PiFace Shim RTC)
   i2cget -y 1 0x6f 0x00 2>/dev/null >/dev/null

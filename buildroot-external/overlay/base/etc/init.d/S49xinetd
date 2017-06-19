@@ -1,0 +1,36 @@
+#!/bin/sh
+
+NAME=xinetd
+DAEMON=/usr/sbin/$NAME
+PIDFILE=/run/$NAME.pid
+XINETD_OPTS=""
+
+test -x "$DAEMON" || exit 0
+
+case "$1" in
+    start)
+        echo -n "Starting xinetd: "
+        start-stop-daemon --pidfile "$PIDFILE" --start --quiet --background --exec "$DAEMON" -- -pidfile "$PIDFILE" $XINETD_OPTS
+        echo "OK"
+        ;;
+    stop)
+        echo -n "Stopping xinetd: "
+        start-stop-daemon --pidfile "$PIDFILE" --stop --signal 3 --quiet --oknodo --exec "$DAEMON"
+        echo "OK"
+        ;;
+    reload)
+        echo -n "Reloading xinetd: "
+        start-stop-daemon --pidfile "$PIDFILE" --stop --signal 1 --quiet --oknodo --exec "$DAEMON"
+        echo "OK"
+        ;;
+    restart|force-reload)
+        $0 stop
+        $0 start
+        ;;
+    *)
+        echo "Usage: /etc/init.d/xinetd {start|stop|reload|force-reload|restart}"
+        exit 1
+        ;;
+esac
+
+exit 0

@@ -42,13 +42,26 @@
 		url = base_url + "eject?sid=" + SessionId
 		new Ajax.Request(url,opt);
 	};
-	
+
+	/*
+	OnBackupSDCard = function() {
+    homematic('CCU.existsFile', {'file': '/media/sd-mmcblk0/measurement'}, function(result){
+      if(result) {
+        var url = base_url + "backup?sid=" + SessionId;
+        window.open(url,'_blank')
+      } else {
+        alert("Es sind keine Diagrammdaten zum Sichern vorhanden.");
+      }
+    });
+	};
+	*/
+
 	OnBackupSDCard = function() {
 		var url = base_url + "backup?sid=" + SessionId;
-		window.open(url,'_blank')	
+		window.open(url,'_blank')
 	};
 
-	OnRestoreSDCard = function() {				
+	OnRestoreSDCard = function() {
 		var url = base_url + "restore?sid=" + SessionId;
 		jQuery('#uploadForm').attr("action", url);
 		jQuery("#uploadForm").submit();
@@ -208,7 +221,7 @@
 		      <tr><td colspan="2"><hr></td></tr>
 		      <tr>
 		        <td colspan="2" align="center">
-					    <div id="savePriceKWhBtn" class="StdButton CLASS04907" onClick="savePricePerKWh(this)">${"$"}{btnSavePowerCost}</div>
+					    <div id="savePriceKWhBtn" class="StdButton CLASS04907" onClick="savePricePerKWh(this)">${"$"}{btnSave}</div>
 		        </td>
 		      </tr>
 

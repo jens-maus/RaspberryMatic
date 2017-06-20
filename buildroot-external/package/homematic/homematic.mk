@@ -4,8 +4,8 @@
 #
 #############################################################
 
-HOMEMATIC_OCCU_VERSION = 2.27.8
-HOMEMATIC_VERSION = 2.27.8-1
+HOMEMATIC_OCCU_VERSION = 2.29.6
+HOMEMATIC_VERSION = 9b0b11283903768fa43155c49bffa9384c75d17c
 HOMEMATIC_SITE = $(call github,eq-3,occu,$(HOMEMATIC_VERSION))
 
 ifeq ($(BR2_PACKAGE_HOMEMATIC),y)

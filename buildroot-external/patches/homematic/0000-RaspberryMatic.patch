@@ -344,8 +344,8 @@
 -        "TZ" => "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
 +        "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
  )
---- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig	2017-05-03 09:19:36.329929081 +0200
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-05-03 09:19:36.329929081 +0200
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig	2017-06-20 10:03:24.707862340 +0200
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-06-20 10:02:46.403257865 +0200
 @@ -14,10 +14,10 @@
  ## chroot example aswell.
  ##
@@ -359,20 +359,14 @@
  
  ## 
  ## run the server chrooted.
-@@ -87,8 +87,31 @@
+@@ -87,6 +87,24 @@
  ##
  server.port = 80
  
--$SERVER["socket"]==":8181" {
--        server.document-root="/opt/hm/www"
 +$SERVER["socket"] == ":443" {
 +	server.document-root = server_root
 +	ssl.engine = "enable"
 +	ssl.pemfile = "/etc/config/server.pem"
-+}
-+
-+$SERVER["socket"] == ":8181" {
-+	server.document-root = server_root
 +}
 +
 +$SERVER["socket"] == "[::]:80" {
@@ -387,13 +381,10 @@
 +	server.use-ipv6 = "enable"
 +}
 +
-+$SERVER["socket"] == "[::]:8181" {
-+	server.document-root = server_root
-+	server.use-ipv6 = "enable"
- }
- 
  ##
-@@ -374,7 +397,7 @@
+ ## Use IPv6?
+ ##
+@@ -370,7 +388,7 @@
  ##
  ## defaults to /var/tmp as we assume it is a local harddisk
  ##
@@ -414,9 +405,9 @@
 -#CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
 +CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
  
---- homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl.orig	2017-05-03 09:19:36.309929555 +0200
-+++ homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl	2017-05-03 09:19:36.309929555 +0200
-@@ -148,38 +148,6 @@
+--- homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl.orig	2017-06-20 10:05:02.761409386 +0200
++++ homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl	2017-06-20 10:07:19.127560206 +0200
+@@ -161,38 +161,6 @@
  <div class="CLASS21114 j_translate">
  	<table class="popupTable" border=1 width="100%">
  		<tr class="CLASS21115">
@@ -783,17 +774,6 @@
        }
      }
      Write("}");
---- homematic/WebUI/www/api/methods/device/listalldetail.tcl.orig	2017-06-04 10:55:02.052833494 +0200
-+++ homematic/WebUI/www/api/methods/device/listalldetail.tcl	2017-06-04 10:55:02.052833494 +0200
-@@ -128,7 +128,7 @@
-   foreach(id, root.Devices().EnumIDs())
-   {
-     var device = dom.GetObject(id);
--    if (true == device.ReadyConfig())
-+    if (true == device.ReadyConfig() && dom.GetObject(device.Interface()))
-     {
-       if (true != first) { Write(" "); } else { first = false; }
-     Write("{" # id # "}");
 --- homematic/WebUI/www/config/control_panel.cgi.orig	2017-05-03 09:19:36.309929555 +0200
 +++ homematic/WebUI/www/config/control_panel.cgi	2017-05-03 09:19:36.309929555 +0200
 @@ -182,10 +182,9 @@
@@ -809,8 +789,8 @@
    incr i
  }
  
---- homematic/WebUI/www/config/cp_maintenance.cgi.orig	2017-05-03 09:19:36.309929555 +0200
-+++ homematic/WebUI/www/config/cp_maintenance.cgi	2017-05-03 09:19:36.309929555 +0200
+--- homematic/WebUI/www/config/cp_maintenance.cgi.orig	2017-06-20 10:44:19.638516226 +0200
++++ homematic/WebUI/www/config/cp_maintenance.cgi	2017-06-20 10:45:35.815712846 +0200
 @@ -377,7 +377,7 @@
                                          table_row {
                                              table_data {
@@ -966,7 +946,7 @@
              
              # Abgesicherter Modus
              table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-@@ -647,6 +664,12 @@
+@@ -721,6 +738,12 @@
                  dlgPopup.LoadFromFile(url, "action=reboot_confirm");
              }
              
@@ -979,7 +959,7 @@
              OnEnterSafeMode = function() {
                new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRestartSafeMode"), function(result) {
                  if (result == YesNoDialog.RESULT_YES)
-@@ -860,6 +883,89 @@
+@@ -934,6 +957,89 @@
      }
  }
  
@@ -1069,7 +1049,7 @@
  proc action_update_start {} {
      catch { exec killall hss_lcd }
      catch { exec lcdtool {Saving     Data...    } }
-@@ -878,8 +984,17 @@
+@@ -952,8 +1058,17 @@
      catch { exec lcdtool {Saving     Data...    } }
      rega system.Save()
      catch { exec lcdtool {Reboot...             } }
@@ -1489,77 +1469,6 @@
          set paramid $filename
          break
        }
---- homematic/WebUI/www/config/ic_metadata.tcl.orig	2017-06-04 10:55:02.052833494 +0200
-+++ homematic/WebUI/www/config/ic_metadata.tcl	2017-06-04 10:55:02.052833494 +0200
-@@ -222,10 +222,10 @@
- 	append isecmd "  ch_addr = channel.Address();"
- 	append isecmd "  ch_name = channel.Name();"
- 	append isecmd "  ch_iface_id = channel.Interface();"
--  append isecmd "  ch_iface    = dom.GetObject(ch_iface_id).Name();"
--	append isecmd "  if (ch_addr != '')"
-+  append isecmd "  ch_iface    = dom.GetObject(ch_iface_id);"
-+	append isecmd "  if (ch_iface)"
- 	append isecmd "  {"
--	append isecmd "    Write(ch_iface # ';' # ch_addr # ' ' # ch_name # '\n');"
-+	append isecmd "    Write(ch_iface.Name() # ';' # ch_addr # ' ' # ch_name # '\n');"
- 	append isecmd "    CHANNEL_COUNT = CHANNEL_COUNT + 1;"
- 	append isecmd "  }"
- 	append isecmd "}"
-@@ -235,10 +235,10 @@
- 	append isecmd "  ch_addr = channel.Address();"
- 	append isecmd "  ch_name = channel.Name();"
- 	append isecmd "  ch_iface_id = channel.Interface();"
--  append isecmd "  ch_iface    = dom.GetObject(ch_iface_id).Name();"
--	append isecmd "  if (ch_addr != '')"
-+  append isecmd "  ch_iface    = dom.GetObject(ch_iface_id);"
-+	append isecmd "  if (ch_iface)"
- 	append isecmd "  {"
--	append isecmd "    Write(ch_iface # ';' # ch_addr # ' ' # ch_name # '\n');"
-+	append isecmd "    Write(ch_iface.Name() # ';' # ch_addr # ' ' # ch_name # '\n');"
- 	append isecmd "    CHANNEL_COUNT = CHANNEL_COUNT + 1;"
- 	append isecmd "  }"
- 	append isecmd "}"
-@@ -442,10 +442,10 @@
- 	    append isecmd "  ch_addr = channel.Address();"
- 	    append isecmd "  ch_ready = channel.ReadyConfig();"
- 	    #append isecmd "  ch_iface_id = channel.Interface();"
--        #append isecmd "  ch_iface    = dom.GetObject(ch_iface_id).Name();"
-+        #append isecmd "  ch_iface    = dom.GetObject(ch_iface_id);"
- 	    append isecmd "  if (ch_addr != '')"
- 	    append isecmd "  {"
--	    #append isecmd "    Write(ch_iface # ';' # ch_addr # ' ' # ch_ready # '\n');"
-+	    #append isecmd "    Write(ch_iface.Name() # ';' # ch_addr # ' ' # ch_ready # '\n');"
- 	    append isecmd "    Write( ch_addr # ' ' # ch_ready # '\n');"
- 	    append isecmd "    CHANNEL_COUNT = CHANNEL_COUNT + 1;"
- 	    append isecmd "  }"
-@@ -455,11 +455,11 @@
- 	    append isecmd "  channel = dom.GetObject(id);"
- 	    append isecmd "  ch_addr = channel.Address();"
- 	    #append isecmd "  ch_iface_id = channel.Interface();"
--        #append isecmd "  ch_iface    = dom.GetObject(ch_iface_id).Name();"
-+        #append isecmd "  ch_iface    = dom.GetObject(ch_iface_id);"
- 	    append isecmd "  ch_ready    = channel.ReadyConfig();"
- 	    append isecmd "  if (ch_addr != '')"
- 	    append isecmd "  {"
--	    #append isecmd "    Write(ch_iface # ';' # ch_addr # ' ' # ch_ready # '\n');"
-+	    #append isecmd "    Write(ch_iface.Name() # ';' # ch_addr # ' ' # ch_ready # '\n');"
- 	    append isecmd "    Write( ch_addr # ' ' # ch_ready # '\n');"
- 	    append isecmd "    CHANNEL_COUNT = CHANNEL_COUNT + 1;"
- 	    append isecmd "  }"
-@@ -501,8 +501,11 @@
-   proc metaData_isGroupOnly {chName} {
- 
-     set isecmd ""
--    append isecmd "object ch = dom.GetObject('$chName');"
--    append isecmd "object dev = dom.GetObject(ch.Device());"
-+    append isecmd "object dev = dom.GetObject('$chName');"
-+    append isecmd "if (dev.TypeName() == 'CHANNEL')"
-+    append isecmd "{"
-+    append isecmd "  dev = dom.GetObject(dev.Device());"
-+    append isecmd "}"
-     append isecmd "var GROUP = dev.MetaData('operateGroupOnly');"
- 
- 	  if { [catch { array set result [rega_script $isecmd]} ] } then { return }
 --- homematic/WebUI/www/config/st_values.cgi.orig	2017-05-03 09:19:36.309929555 +0200
 +++ homematic/WebUI/www/config/st_values.cgi	2017-05-03 09:19:36.309929555 +0200
 @@ -0,0 +1,75 @@
@@ -1796,153 +1705,6 @@
    <script type="text/javascript">
  
      CHECK_INTERVAL = 3000;  // Intervall, in dem geprüft wird, ob der ReGa Webserver aktiv ist
---- homematic/WebUI/www/rega/esp/programs.fn.orig	2017-06-07 16:15:35.006528614 +0200
-+++ homematic/WebUI/www/rega/esp/programs.fn	2017-06-07 16:15:35.006528614 +0200
-@@ -84,6 +84,13 @@
-                       object oDP = dom.GetObject( sDP );
-                       if( oDP )
-                       {
-+                        string hssid = "";
-+
-+                        if ( oDP.IsTypeOf( OT_HSSDP ) )
-+                        {
-+                          hssid = oDP.HSSID();
-+                        }
-+
-                         if( oDP.ID() == iLV)
-                         {
-                           if( (oDP.Operations() & (OPERATION_READ|OPERATION_EVENT)) != 0 )
-@@ -109,8 +116,8 @@
-                                     }
-                                     if( !oDP.IsTypeOf( OT_VARDP ) )
-                                     {
--                                      string sLongKey = oCC.ChnLabel()#"|"#oDP.HSSID()#"="#sVLValue;
--                                      string sShortKey = oDP.HSSID()#"="#sVLValue;
-+                                      string sLongKey = oCC.ChnLabel()#"|"#hssid#"="#sVLValue;
-+                                      string sShortKey = hssid#"="#sVLValue;
-                                       sValue = web.webKeyFromStringTable(sLongKey);
-                                       if( !sValue.Length() )
-                                       {
-@@ -136,8 +143,8 @@
-                                   string sValue = oDP.Name()#": "#oDP.ValueName1();
-                                   if( (!oDP.IsTypeOf( OT_VARDP )) && (!oDP.IsTypeOf( OT_ALARMDP )) )
-                                   {
--                                    string sLongKey = oCC.ChnLabel()#"|"#oDP.HSSID()#"=TRUE";
--                                    string sShortKey = oDP.HSSID()#"=TRUE";
-+                                    string sLongKey = oCC.ChnLabel()#"|"#hssid#"=TRUE";
-+                                    string sShortKey = hssid#"=TRUE";
-                                     sValue = web.webKeyFromStringTable(sLongKey);
-                                     if( sValue.Length() == 0 )
-                                     {
-@@ -155,8 +162,8 @@
-                                   string sValue = oDP.Name()#": "#oDP.ValueName0();
-                                   if( (!oDP.IsTypeOf( OT_VARDP )) && (!oDP.IsTypeOf( OT_ALARMDP )) )
-                                   {
--                                    string sLongKey = oCC.ChnLabel()#"|"#oDP.HSSID()#"=FALSE";
--                                    string sShortKey = oDP.HSSID()#"=FALSE";
-+                                    string sLongKey = oCC.ChnLabel()#"|"#hssid#"=FALSE";
-+                                    string sShortKey = hssid#"=FALSE";
-                                     sValue = web.webKeyFromStringTable(sLongKey);
-                                     if( sValue.Length() == 0 )
-                                     {
-@@ -181,8 +188,8 @@
-                                   }
-                                   if( (!oDP.IsTypeOf( OT_VARDP )) && (!oDP.IsTypeOf( OT_ALARMDP )) )
-                                   {
--                                    string sLongKey = oCC.ChnLabel()#"|"#oDP.HSSID();
--                                    string sShortKey = oDP.HSSID();
-+                                    string sLongKey = oCC.ChnLabel()#"|"#hssid;
-+                                    string sShortKey = hssid;
-                                     sValue = web.webKeyFromStringTable(sLongKey);
-                                     if( !sValue.Length() )
-                                     {
-@@ -209,8 +216,8 @@
-                                 if( (oDP.ID() == iLV) && (s == iRV1.ToString()) && (iRV1T == ivtSpecialValue) ) 
-                                 { 
-                                   string sValue = oDP.Name();  
--                                  string sLongKey = oCC.ChnLabel()#"|"#oDP.HSSID()#"="#s;
--                                  string sShortKey = oDP.HSSID()#"="#s;
-+                                  string sLongKey = oCC.ChnLabel()#"|"#hssid#"="#s;
-+                                  string sShortKey = hssid#"="#s;
-                                   string sValue = web.webKeyFromStringTable(sLongKey);
-                                   if( !sValue.Length() )
-                                   {
-@@ -452,12 +459,19 @@
- 
-                 if( oDP )
-                 {
-+                  string hssid = "";
-+
-+                  if ( oDP.IsTypeOf( OT_HSSDP ) )
-+                  {
-+                    hssid = oDP.HSSID();
-+                  }
-+
-                   object oCH = dom.GetObject( oDP.Channel() );
-                   if( oCH )
-                   { 
-                     integer iDPvt = oDP.ValueType();
-                     integer iDPst = oDP.ValueSubType();
--                    string sKey = oCH.ChnLabel()#"|"#oDP.HSSID();
-+                    string sKey; = oCH.ChnLabel()#"|"#hssid;
-                     boolean showVal = true;
- 
-                     if( (iDPvt == ivtInteger) && (iDPst == istEnum) )
-@@ -473,11 +487,11 @@
-                       {
-                         if( iV == 0 )
-                         {
--                          string sKey = oCH.ChnLabel()#"|"#oDP.HSSID()#"=FALSE";
-+                          string sKey = oCH.ChnLabel()#"|"#hssid#"=FALSE";
-                           string sValue = web.webKeyFromStringTable(sKey);
-                           if( sValue.Length() == 0 )
-                           {
--                            sKey = oDP.HSSID()#"=FALSE";
-+                            sKey = hssid#"=FALSE";
-                             string sValue = web.webKeyFromStringTable(sKey);
-                             if( !sValue.Length() )
-                             {
-@@ -488,11 +502,11 @@
-                         }
-                         if( iV == 1 )
-                         {
--                          string sKey = oCH.ChnLabel()#"|"#oDP.HSSID()#"=TRUE";
-+                          string sKey = oCH.ChnLabel()#"|"#hssid#"=TRUE";
-                           string sValue = web.webKeyFromStringTable(sKey);
-                           if( sValue.Length() == 0 )
-                           {
--                            sKey = oDP.HSSID()#"=TRUE";
-+                            sKey = hssid#"=TRUE";
-                             string sValue = web.webKeyFromStringTable(sKey);
-                             if( !sValue.Length() )
-                             {
-@@ -504,12 +518,12 @@
-                       }
-                       else
-                       {
--                        string sKey = oCH.ChnLabel()#"|"#oDP.HSSID();
-+                        string sKey = oCH.ChnLabel()#"|"#hssid;
-                         string sValue = web.webKeyFromStringTable(sKey);
-                         sRet = sRet#sValue;
-                         if( sValue.Length() == 0 )
-                         {
--                          sKey = oDP.HSSID();
-+                          sKey = hssid;
-                           string sValue = web.webKeyFromStringTable(sKey);
-                           if( !sValue.Length() )
-                           {
---- homematic/WebUI/www/rega/esp/side.inc.orig	2017-06-13 18:46:23.803148495 +0200
-+++ homematic/WebUI/www/rega/esp/side.inc	2017-06-13 18:46:23.803148495 +0200
-@@ -265,7 +265,8 @@
-               }
-             }
-           }
--          string sEnumSpecial = oDP.EnumSpecialIDs().ToString();
-+          string sEnumSpecial = "";
-+          if( oDP.IsTypeOf( OT_HSSDP ) ) { sEnumSpecial = oDP.EnumSpecialIDs().ToString(); };
-           if( sEnumSpecial == "65535" ) { sEnumSpecial = ""; }
-           string s;
-           foreach(s,sEnumSpecial)
 --- homematic/WebUI/www/rega/pages/tabs/admin/msg/timemodule.htm.orig	2017-05-03 09:19:36.313929460 +0200
 +++ homematic/WebUI/www/rega/pages/tabs/admin/msg/timemodule.htm	2017-05-03 09:19:36.313929460 +0200
 @@ -53,8 +53,6 @@
@@ -1954,101 +1716,6 @@
  <div class="CLASS05103">
    <table class="popupTable CLASS05104" border="0" >
      <colgroup>
---- homematic/WebUI/www/rega/pages/tabs/startpage.htm.orig	2017-06-04 10:55:02.052833494 +0200
-+++ homematic/WebUI/www/rega/pages/tabs/startpage.htm	2017-06-04 10:55:02.052833494 +0200
-@@ -102,50 +102,53 @@
-           object objX = dom.GetObject( system.GetVar("id") );
-           if( objX )
-           {
--            foreach( sid, objX.EnumIDs() )
--            { 
--              object oEntry = dom.GetObject( sid );
--              if( oEntry )
-+            if( objX.TypeName() == "FAVORITE" )
-+            {
-+              foreach( sid, objX.EnumIDs() )
-               {
--                Write('<td>');
--                Write('<table cellpadding="0" cellspacing="0" class="CLASS01806">');
--                Write('<tr>');
--                Write('<td class="CLASS01807">'#dom.GetObject(sid).Name()#'</td>');
--                Write('</tr>');
--                Write('<tr>');
--                Write('<td class="CLASS01808"></td>');
--                Write('</tr>');
--                Write('<tr>');
--                Write('<td id="dpc'#oEntry.ID()#'" class="CLASS01812">');
--                integer cId = oEntry.ID();
--                integer iStatusOnly = 0;
--                boolean bInStatusList = false;
--                boolean bHasFullAccess = (oEntry.UserAccessRights(iulOtherThanAdmin) == iarFullAccess); 
--                string s;
--                foreach(s,objX.FavControlIDs().EnumIDs() )
-+                object oEntry = dom.GetObject( sid );
-+                if( oEntry )
-                 {
--                  if( s == oEntry.ID().ToString() )
-+                  Write('<td>');
-+                  Write('<table cellpadding="0" cellspacing="0" class="CLASS01806">');
-+                  Write('<tr>');
-+                  Write('<td class="CLASS01807">'#dom.GetObject(sid).Name()#'</td>');
-+                  Write('</tr>');
-+                  Write('<tr>');
-+                  Write('<td class="CLASS01808"></td>');
-+                  Write('</tr>');
-+                  Write('<tr>');
-+                  Write('<td id="dpc'#oEntry.ID()#'" class="CLASS01812">');
-+                  integer cId = oEntry.ID();
-+                  integer iStatusOnly = 0;
-+                  boolean bInStatusList = false;
-+                  boolean bHasFullAccess = (oEntry.UserAccessRights(iulOtherThanAdmin) == iarFullAccess);
-+                  string s;
-+                  foreach(s,objX.FavControlIDs().EnumIDs() )
-                   {
--                    bInStatusList = true;
-+                    if( s == oEntry.ID().ToString() )
-+                    {
-+                      bInStatusList = true;
-+                    }
-                   }
-+                  boolean bBoolVar = false;
-+                  if ( oEntry.IsTypeOf( OT_ALARMDP ) ) { bBoolVar = true;}
-+                  if ( oEntry.IsTypeOf( OT_VARDP ) && (oEntry.ValueSubType() == istBool) ) { bBoolVar = true; }
-+                  if (bInStatusList || bBoolVar || (!bHasFullAccess)) {
-+                    iStatusOnly = 1;
-+                  }
-+                  Call("/esp/datapointconfigurator.fn::dcCreate()");
-+                  Write('</td>');
-+                  Write('</tr>');
-+                  Write('<tr>');
-+                  Write('<td class="CLASS01808"></td>');
-+                  Write('</tr>');
-+                  Write('</table>');
-+                  Write('</br>');
-+                  Write('</td>');
-+                  Write('</tr><tr>');
-+                  i = i + 1;
-                 }
--                boolean bBoolVar = false;
--                if ( oEntry.IsTypeOf( OT_ALARMDP ) ) { bBoolVar = true;}
--                if ( oEntry.IsTypeOf( OT_VARDP ) && (oEntry.ValueSubType() == istBool) ) { bBoolVar = true; }
--                if (bInStatusList || bBoolVar || (!bHasFullAccess)) {
--                  iStatusOnly = 1;
--                }
--                Call("/esp/datapointconfigurator.fn::dcCreate()");
--                Write('</td>');
--                Write('</tr>');
--                Write('<tr>');
--                Write('<td class="CLASS01808"></td>');
--                Write('</tr>');
--                Write('</table>');
--                Write('</br>');
--                Write('</td>');
--                Write('</tr><tr>');
--                i = i + 1;
-               }
-             }
-           }
 --- homematic/WebUI/www/rega/pages/tabs/user/newFav.htm.orig	2017-06-04 10:55:02.052833494 +0200
 +++ homematic/WebUI/www/rega/pages/tabs/user/newFav.htm	2017-06-04 10:55:02.052833494 +0200
 @@ -614,9 +614,8 @@
@@ -2094,8 +1761,8 @@
      }
  }
  
---- homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig	2017-05-03 09:19:36.313929460 +0200
-+++ homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js	2017-05-03 09:19:36.313929460 +0200
+--- homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig	2017-06-20 10:59:38.688977314 +0200
++++ homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js	2017-06-20 10:59:45.089078089 +0200
 @@ -333,6 +333,8 @@
      "dialogSettingsSecurityMessagePerformSystemResetContent" : "Best&auml;tigen Sie hier, um den System-Reset durchzuf&uuml;hren.<br/><br>Die " + HMIdentifier.de.CCUShortName + " wird automatisch neu gestartet. Danach k&ouml;nnen Sie sich wieder anmelden.",
      "dialogPerformRebootTitle" : "Neustart der Zentrale",
@@ -2105,7 +1772,7 @@
      "dialogSetSecKeyRebootHead" : "Bitte geben Sie den Sicherheitsschl&uuml;ssel ein und f&uuml;hren Sie anschlie&szlig;end den Systemreset durch.",
      "dialogSetSecKeyRebootLbl" : "Sicherheitsschl&uuml;ssel: ",
      "dialogSetSecKeyRebootFalseTitle" : "System-Reset: Sicherheitsfehler",
-@@ -927,4 +929,4 @@
+@@ -942,4 +944,4 @@
  
      "theEnd" : ""
    }
@@ -2176,8 +1843,8 @@
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
      "dialogSettingsCMHintErrorLog" : "Stellen Sie die Anzahl der Logmeldungen ein, die von der Zentrale generiert werden sollen.<br>Sie k%F6nnen zus%E4tzlich einen Rechner angeben, dem die Zentrale ihre Logmeldungen per Syslog schickt. Auf diesem Rechner mu%DF entsprechende Software installiert sein, die die Meldungen entgegennimmt.<br>Zu Diagnosezwecken k%F6nnen die aktuellen Logmeldungen der Zentrale in einer Textdatei heruntergeladen werden.",
      "dialogSettingsCMLogLevel0" : "Alles loggen",
---- homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig	2017-05-03 09:19:36.317929365 +0200
-+++ homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js	2017-05-03 09:19:36.313929460 +0200
+--- homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig	2017-06-20 10:58:05.935516696 +0200
++++ homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js	2017-06-20 10:58:23.487793113 +0200
 @@ -333,6 +333,8 @@
      "dialogSettingsSecurityMessagePerformSystemResetContent" : "Please confirm here to start the system reset.<br/><br>The " + HMIdentifier.en.CCUShortName + " will be restarted automatically. Afterwards, you can log in again.",
      "dialogPerformRebootTitle" : "Restart of CCU",
@@ -2187,7 +1854,7 @@
      "dialogSetSecKeyRebootHead" : "Please enter the security key and perform the system reset afterwards.",
      "dialogSetSecKeyRebootLbl" : "Security key: ",
      "dialogSetSecKeyRebootFalseTitle" : "System reset: Security error",
-@@ -925,4 +927,4 @@
+@@ -940,4 +942,4 @@
  
      "theEnd" : ""
    }
@@ -2258,8 +1925,8 @@
      "dialogSettingsCMHintRestartSafeMode" : "Start HomeMatic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
      "dialogSettingsCMHintErrorLog" : "Please set the number of log messages to be generated by the CCU.<br>You can also specify a computer that will receive the log messages from the CCU via syslog. An additional software that will be able to receive this messages has to be installed on the computer.<br>To analyse the results, the current log messages of the CCU can be downloaded in a text file.",
      "dialogSettingsCMLogLevel0" : "Log all",
---- homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js.orig	2017-05-03 09:19:36.317929365 +0200
-+++ homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js	2017-05-03 09:19:36.317929365 +0200
+--- homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js.orig	2017-06-20 11:00:32.617826455 +0200
++++ homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js	2017-06-20 11:00:39.041927602 +0200
 @@ -332,6 +332,8 @@
      "profileNotSaveable" : "Bu profil, profil taslagi olarak kaydedilemez.",
      "dialogPerformRebootTitle" : "Merkezi yeniden baslat",
@@ -2269,7 +1936,7 @@
      "dialogSetSecKeyRebootHead" : "L%FCtfen g%FCvenlik kodunu girin ve daha sonra sistemi yeniden baslatin.",
      "dialogSetSecKeyRebootLbl" : "G%FCvenlik kodu: ",
      "dialogSetSecKeyRebootFalseTitle" : "Sistemi yeniden baslat: G%FCvenlik hatasi",
-@@ -920,4 +922,4 @@
+@@ -935,4 +937,4 @@
  
      "theEnd" : ""
    }
@@ -2324,9 +1991,9 @@
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic merkezini bir kere g%FCvenli modda baslatin. G%FCvenli modda y%FCklenen ek yazilim baslatilmaz. Degistirilmis ayarlar %F6nceden kaydedilir.",
      "dialogSettingsCMHintErrorLog" : "Merkez tarafindan olusturulacak Log bildiri sayisini ayarlayin.<br>Buna ek olarak merkezin Log bildirilerini Syslog'u kullanarak iletecegi baska bir bilgisayar tanimlayabilirsiniz. Bu bilgisayar %FCzerinde bildirileri alacak uygun bir yazilim y%FCkl%FC olmalidir.<br>Merkezin g%FCncel Log bildirileri teshis amaciyla bir metin dosyasi seklinde indirilebilir.",
      "dialogSettingsCMLogLevel0" : "Her seyi Log'lara gecir",
---- homematic/WebUI/www/webui/webui.js.orig	2017-05-03 09:19:36.329929081 +0200
-+++ homematic/WebUI/www/webui/webui.js	2017-05-03 09:19:36.325929176 +0200
-@@ -11285,8 +11285,9 @@
+--- homematic/WebUI/www/webui/webui.js.orig	2017-06-20 09:59:12.639883282 +0200
++++ homematic/WebUI/www/webui/webui.js	2017-06-20 11:01:55.311128382 +0200
+@@ -11415,8 +11415,9 @@
      var isOk = true;
      for (var i = 0, len = ips.length; i < len; i++) {
        var ip = ips[i];
@@ -2337,7 +2004,7 @@
        }
      }
  
-@@ -18124,7 +18125,7 @@
+@@ -18276,7 +18277,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
@@ -2346,7 +2013,7 @@
      $("body").appendChild(script);
    },
  
-@@ -18220,7 +18221,7 @@
+@@ -18372,7 +18373,7 @@
     **/
    setLatestVersion: function(latestVersion, product)
    {

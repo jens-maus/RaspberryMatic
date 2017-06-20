@@ -87,10 +87,6 @@ include "modules.conf"
 ##
 server.port = 80
 
-$SERVER["socket"]==":8181" {
-        server.document-root="/opt/hm/www"
-}
-
 ##
 ## Use IPv6?
 ##

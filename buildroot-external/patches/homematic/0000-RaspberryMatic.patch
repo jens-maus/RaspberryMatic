@@ -344,8 +344,8 @@
 -        "TZ" => "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
 +        "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
  )
---- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig	2017-06-20 10:03:24.707862340 +0200
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-06-20 10:02:46.403257865 +0200
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig	2017-06-20 12:15:10.716409882 +0200
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-06-20 23:38:17.516854601 +0200
 @@ -14,10 +14,10 @@
  ## chroot example aswell.
  ##
@@ -359,10 +359,14 @@
  
  ## 
  ## run the server chrooted.
-@@ -87,6 +87,24 @@
+@@ -87,6 +87,33 @@
  ##
  server.port = 80
  
++$SERVER["socket"] == ":8181" {
++	server.document-root = server_root
++}
++
 +$SERVER["socket"] == ":443" {
 +	server.document-root = server_root
 +	ssl.engine = "enable"
@@ -370,6 +374,11 @@
 +}
 +
 +$SERVER["socket"] == "[::]:80" {
++	server.document-root = server_root
++	server.use-ipv6 = "enable"
++}
++
++$SERVER["socket"] == "[::]:8181" {
 +	server.document-root = server_root
 +	server.use-ipv6 = "enable"
 +}
@@ -384,7 +393,7 @@
  ##
  ## Use IPv6?
  ##
-@@ -370,7 +388,7 @@
+@@ -370,7 +397,7 @@
  ##
  ## defaults to /var/tmp as we assume it is a local harddisk
  ##
@@ -405,8 +414,8 @@
 -#CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
 +CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
  
---- homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl.orig	2017-06-20 10:05:02.761409386 +0200
-+++ homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl	2017-06-20 10:07:19.127560206 +0200
+--- homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl.orig	2017-06-20 12:15:10.704409692 +0200
++++ homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl	2017-06-20 12:15:10.704409692 +0200
 @@ -161,38 +161,6 @@
  <div class="CLASS21114 j_translate">
  	<table class="popupTable" border=1 width="100%">
@@ -789,8 +798,8 @@
    incr i
  }
  
---- homematic/WebUI/www/config/cp_maintenance.cgi.orig	2017-06-20 10:44:19.638516226 +0200
-+++ homematic/WebUI/www/config/cp_maintenance.cgi	2017-06-20 10:45:35.815712846 +0200
+--- homematic/WebUI/www/config/cp_maintenance.cgi.orig	2017-06-20 12:15:10.704409692 +0200
++++ homematic/WebUI/www/config/cp_maintenance.cgi	2017-06-20 12:15:10.704409692 +0200
 @@ -377,7 +377,7 @@
                                          table_row {
                                              table_data {
@@ -1761,8 +1770,8 @@
      }
  }
  
---- homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig	2017-06-20 10:59:38.688977314 +0200
-+++ homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js	2017-06-20 10:59:45.089078089 +0200
+--- homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig	2017-06-20 12:15:10.704409692 +0200
++++ homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js	2017-06-20 12:15:10.704409692 +0200
 @@ -333,6 +333,8 @@
      "dialogSettingsSecurityMessagePerformSystemResetContent" : "Best&auml;tigen Sie hier, um den System-Reset durchzuf&uuml;hren.<br/><br>Die " + HMIdentifier.de.CCUShortName + " wird automatisch neu gestartet. Danach k&ouml;nnen Sie sich wieder anmelden.",
      "dialogPerformRebootTitle" : "Neustart der Zentrale",
@@ -1843,8 +1852,8 @@
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
      "dialogSettingsCMHintErrorLog" : "Stellen Sie die Anzahl der Logmeldungen ein, die von der Zentrale generiert werden sollen.<br>Sie k%F6nnen zus%E4tzlich einen Rechner angeben, dem die Zentrale ihre Logmeldungen per Syslog schickt. Auf diesem Rechner mu%DF entsprechende Software installiert sein, die die Meldungen entgegennimmt.<br>Zu Diagnosezwecken k%F6nnen die aktuellen Logmeldungen der Zentrale in einer Textdatei heruntergeladen werden.",
      "dialogSettingsCMLogLevel0" : "Alles loggen",
---- homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig	2017-06-20 10:58:05.935516696 +0200
-+++ homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js	2017-06-20 10:58:23.487793113 +0200
+--- homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig	2017-06-20 12:15:10.704409692 +0200
++++ homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js	2017-06-20 12:15:10.704409692 +0200
 @@ -333,6 +333,8 @@
      "dialogSettingsSecurityMessagePerformSystemResetContent" : "Please confirm here to start the system reset.<br/><br>The " + HMIdentifier.en.CCUShortName + " will be restarted automatically. Afterwards, you can log in again.",
      "dialogPerformRebootTitle" : "Restart of CCU",
@@ -1925,8 +1934,8 @@
      "dialogSettingsCMHintRestartSafeMode" : "Start HomeMatic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
      "dialogSettingsCMHintErrorLog" : "Please set the number of log messages to be generated by the CCU.<br>You can also specify a computer that will receive the log messages from the CCU via syslog. An additional software that will be able to receive this messages has to be installed on the computer.<br>To analyse the results, the current log messages of the CCU can be downloaded in a text file.",
      "dialogSettingsCMLogLevel0" : "Log all",
---- homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js.orig	2017-06-20 11:00:32.617826455 +0200
-+++ homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js	2017-06-20 11:00:39.041927602 +0200
+--- homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js.orig	2017-06-20 12:15:10.708409756 +0200
++++ homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js	2017-06-20 12:15:10.708409756 +0200
 @@ -332,6 +332,8 @@
      "profileNotSaveable" : "Bu profil, profil taslagi olarak kaydedilemez.",
      "dialogPerformRebootTitle" : "Merkezi yeniden baslat",
@@ -1991,8 +2000,8 @@
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic merkezini bir kere g%FCvenli modda baslatin. G%FCvenli modda y%FCklenen ek yazilim baslatilmaz. Degistirilmis ayarlar %F6nceden kaydedilir.",
      "dialogSettingsCMHintErrorLog" : "Merkez tarafindan olusturulacak Log bildiri sayisini ayarlayin.<br>Buna ek olarak merkezin Log bildirilerini Syslog'u kullanarak iletecegi baska bir bilgisayar tanimlayabilirsiniz. Bu bilgisayar %FCzerinde bildirileri alacak uygun bir yazilim y%FCkl%FC olmalidir.<br>Merkezin g%FCncel Log bildirileri teshis amaciyla bir metin dosyasi seklinde indirilebilir.",
      "dialogSettingsCMLogLevel0" : "Her seyi Log'lara gecir",
---- homematic/WebUI/www/webui/webui.js.orig	2017-06-20 09:59:12.639883282 +0200
-+++ homematic/WebUI/www/webui/webui.js	2017-06-20 11:01:55.311128382 +0200
+--- homematic/WebUI/www/webui/webui.js.orig	2017-06-20 12:15:10.716409882 +0200
++++ homematic/WebUI/www/webui/webui.js	2017-06-20 12:15:10.712409818 +0200
 @@ -11415,8 +11415,9 @@
      var isOk = true;
      for (var i = 0, len = ips.length; i < len; i++) {

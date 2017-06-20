@@ -505,78 +505,78 @@ proc action_put_page {} {
             }
 
             # Version Logikschicht
-            table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
+            #table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
 
-              table_data {class="CLASS20903"} $styleMaxWidth {
-                puts "\${lblTDRegaVersion}"
-              }
+            #  table_data {class="CLASS20903"} $styleMaxWidth {
+            #    puts "\${lblTDRegaVersion}"
+            #  }
 
-              table_data {class="CLASS20904"} {
+            #  table_data {class="CLASS20904"} {
 
-                table {class="CLASS20909"} {
-                  table_row {
-                    table_data {
-                      puts "\${dialogHelpInfoLblVersion}"
-                    }
-                    table_data {align="left"} {
-                      puts "<select id='selectedReGaVersion'>"
-                        puts "<option value='NORMAL'>\${optionReGaNORMAL}</option>"
-                        puts "<option value='LEGACY'>\${optionReGaLEGACY}</option>"
-                        puts "<option value='COMMUNITY'>\${optionReGaCOMMUNITY}</option>"
-                      puts "</select>"
-                    }
-                  }
+            #    table {class="CLASS20909"} {
+            #      table_row {
+            #        table_data {
+            #          puts "\${dialogHelpInfoLblVersion}"
+            #        }
+            #        table_data {align="left"} {
+            #          puts "<select id='selectedReGaVersion'>"
+            #            puts "<option value='NORMAL'>\${optionReGaNORMAL}</option>"
+            #            puts "<option value='LEGACY'>\${optionReGaLEGACY}</option>"
+            #            puts "<option value='COMMUNITY'>\${optionReGaCOMMUNITY}</option>"
+            #          puts "</select>"
+            #        }
+            #      }
 
-                  table_row {
-                    table_data {}
-                    table_data {align="left"} {
-                      division {class="popupControls CLASS20905"} {
-                        division {class="CLASS20919"} {onClick="saveRegaVersion(this);"} {
-                            puts "\${btnSave}"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
+            #      table_row {
+            #        table_data {}
+            #        table_data {align="left"} {
+            #          division {class="popupControls CLASS20905"} {
+            #            division {class="CLASS20919"} {onClick="saveRegaVersion(this);"} {
+            #                puts "\${btnSave}"
+            #            }
+            #          }
+            #        }
+            #      }
+            #    }
+            #  }
 
-              table_data {align="left"} {class="CLASS20904"} {
-                puts "\${lblTDReGaVersionHelp}"
-              }
-            }
+            #  table_data {align="left"} {class="CLASS20904"} {
+            #    puts "\${lblTDReGaVersionHelp}"
+            #  }
+            #}
 
-            cgi_javascript {
-              puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
-              puts {
+            #cgi_javascript {
+            #  puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
+            #  puts {
 
-                homematic("User.getReGaVersion",{}, function(result) {
-                  if (result) {
-                    jQuery("#selectedReGaVersion").val(result);
-                  } else {
-                    jQuery("#selectedReGaVersion").val("NORMAL");
-                  }
-                });
+            #    homematic("User.getReGaVersion",{}, function(result) {
+            #      if (result) {
+            #        jQuery("#selectedReGaVersion").val(result);
+            #      } else {
+            #        jQuery("#selectedReGaVersion").val("NORMAL");
+            #      }
+            #    });
 
-                saveRegaVersion = function(elm) {
-                  jQuery(elm).css({"border-width" : "2px"});
-                  var selectedReGa = jQuery("#selectedReGaVersion").val();
-                  homematic("User.setReGaVersion", {"ReGaVersion": selectedReGa}, function() {
-                    jQuery(elm).css({"border-width" : "1px"});
+            #    saveRegaVersion = function(elm) {
+            #      jQuery(elm).css({"border-width" : "2px"});
+            #      var selectedReGa = jQuery("#selectedReGaVersion").val();
+            #      homematic("User.setReGaVersion", {"ReGaVersion": selectedReGa}, function() {
+            #        jQuery(elm).css({"border-width" : "1px"});
 
-                    var dlgYesNo = new YesNoDialog(translateKey("dialogPerformRebootTitle"), translateKey("dialogRestart2ChanceReGaVersion"), function(result) {
-                      if (result == YesNoDialog.RESULT_YES)
-                      {
-                        dlgPopup.hide();
-                        dlgPopup.setWidth(400);
-                        dlgPopup.LoadFromFile(url, "action=reboot_confirm");
-                      }
-                    });
-                    dlgYesNo.btnTextYes(translateKey("dialogBtnPerformRestart"));
-                    dlgYesNo.btnTextNo(translateKey("dialogBtnPerformLaterRestart"));
-                  });
-                }
-              }
-            }
+            #        var dlgYesNo = new YesNoDialog(translateKey("dialogPerformRebootTitle"), translateKey("dialogRestart2ChanceReGaVersion"), function(result) {
+            #          if (result == YesNoDialog.RESULT_YES)
+            #          {
+            #            dlgPopup.hide();
+            #            dlgPopup.setWidth(400);
+            #            dlgPopup.LoadFromFile(url, "action=reboot_confirm");
+            #          }
+            #        });
+            #        dlgYesNo.btnTextYes(translateKey("dialogBtnPerformRestart"));
+            #        dlgYesNo.btnTextNo(translateKey("dialogBtnPerformLaterRestart"));
+            #      });
+            #    }
+            #  }
+            #}
 
             table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
                 table_data {class="CLASS20903"} $styleMaxWidth  {

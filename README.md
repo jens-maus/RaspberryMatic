@@ -18,7 +18,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Self-contained disk image primarily targeted for RaspberryPi hardware
 * Based on latest [Buildroot 2017.05](http://buildroot.org/) Linux environment
 * Latest [Linux kernel v4.9.x](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support 
-* [Real-Time Linux](https://rt.wiki.kernel.org) kernel support (`PREEMPT_RT`) to minimize latencies and improve CCU operation properties
+* Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
 * Supports latest JAVA8 runtime environment ([1.8.0_121-8.20.0.42](http://www.azul.com/downloads/zulu-embedded/))
@@ -28,6 +28,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Support to be used as a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
 * Support to be used without [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) RF module and just connect it to a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Full IPv6 support and default HTTPS enabled WebUI support
+* Supports to query status information of the underlying Linux system using SNMP requests
 * Auto-resizing `/usr/local` partition to use the full capacity of the SD card or USB stick
 * Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi))
 * Hardware WatchDog support automatically rebooting the system upon hardware/lockup problems

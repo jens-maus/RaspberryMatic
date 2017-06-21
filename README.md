@@ -15,9 +15,9 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * 100% HomeMatic CCU system compliant using latest [OCCU 2.27.8](https://github.com/eq-3/occu) software releases
 * Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
 * Integration of latest [beta versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
-* Self-contained disk image primarily targeted for RaspberryPi hardware
+* Self-contained disk image primarily targeted for embedded hardware boards.
 * Based on latest [Buildroot 2017.05](http://buildroot.org/) Linux environment
-* Latest [Linux kernel v4.9.x](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support 
+* Latest Linux kernel v4.x with hard-float support 
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
@@ -30,16 +30,17 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Full IPv6 support and default HTTPS enabled WebUI support
 * Supports to query status information of the underlying Linux system using SNMP requests
 * Auto-resizing `/usr/local` partition to use the full capacity of the SD card or USB stick
-* Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi))
+* Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi), onboard RTC)
 * Hardware WatchDog support automatically rebooting the system upon hardware/lockup problems
 * Direct [CloudMatic](http://cloudmatic.de) (meine-homematic.de) support
 * Dedicated Build Environment using a cross compiler (`arm-linux-gcc`) to compile third-party applications
 
-## Limitations
-* No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
+## Limitations (Work in Progress)
+* No web-based configuration for setting up WiFi or Bluetooth support
+* No HomeMatic-IP support with ASUS Tinkerboard
 
 ## Requirements
-* Any of the following [RaspberryPi](https://www.raspberrypi.org/products/) models:
+* Any of the following embedded hardware boards:
   * [RaspberryPi3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
   * [RaspberryPi2 Model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
   * [RaspberryPi Compute Module 3](https://www.raspberrypi.org/products/compute-module-3/)
@@ -48,7 +49,8 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [RaspberryPi Zero](https://www.raspberrypi.org/products/pi-zero/)
   * [RaspberryPi Compute Module 1](https://www.raspberrypi.org/products/compute-module/)  
   * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/)
-  * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) 
+  * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/)
+  * [ASUS Tinkerboard](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
 * 2GB minimum space on microSD card or USB memory stick / hard disk (when using RaspberryPi3)
 * HomeMatic-RF GPIO radio module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html)) and/or HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 

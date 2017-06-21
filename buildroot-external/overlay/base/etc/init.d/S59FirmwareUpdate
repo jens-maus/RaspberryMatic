@@ -3,13 +3,11 @@
 # Perform coprocessor updates
 #
 
-FW_DIRECTORY=/firmware/HM-MOD-UART
-
 start() {
 
   source /var/hm_mode 2>/dev/null
 
-  echo -n "Performing coprocessor updates: "
+  echo -n "Updating RF-Firmware: "
 
   echo "0" > /sys/class/gpio/gpio18/value
   sleep 1
@@ -17,45 +15,69 @@ start() {
 
   if [[ ! -e /etc/config/no-coprocessor-update ]] && [[ ! -z $(cat /var/rf_address) ]]; then
 
-    # for non HmIP mode we copy the fw_directory to /tmp
-    if [[ ${HM_MODE} != "HmIP" ]]; then
-      cp -a ${FW_DIRECTORY} /tmp/
-      FW_DIRECTORY=/tmp/HM-MOD-UART
+    FW_DIRECTORY=/firmware/HM-MOD-UART
 
-      # change the fwmap file to use the dualcopro
-      # firmware
-      cat ${FW_DIRECTORY}/fwmap | grep "coprocessor_update.eq3" | sed "s/#CCU2/CCU2/" >${FW_DIRECTORY}/fwmap2
-      mv ${FW_DIRECTORY}/fwmap2 ${FW_DIRECTORY}/fwmap
+    # identify which firmware file to take for a potential coprocessor
+    # firmware update
+    if [[ ${HM_MODE} == "HmIP" ]]; then
+      # for HmIP support we flash the dualcopro firmware
+      if [[ ! -e /etc/config/enable-debug-coprocessor ]]; then
+        FW_FILE=dualcopro_si1002_update_blhm.eq3
+      else
+        NEW_VERSION=2.2.1
+        FW_FILE=dualcopro_si1002_update_blhm-2.2.1.eq3
+      fi
+    else
+      # for HmRF only we have to flash the old coprocessor firmware
+      FW_FILE=coprocessor_update.eq3
     fi
 
-    NEW_VERSION=$(/bin/eq3configcmd update-coprocessor -d ${FW_DIRECTORY} -av -t HM-MOD-UART -c 2>&1 | grep "<Info>" | cut -d' ' -f4)
-    if [[ ! -e /var/rf_firmware_version || ${NEW_VERSION} != $(cat /var/rf_firmware_version) ]]; then
-      /bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -u -d ${FW_DIRECTORY}
+    # identify the copro firmware version to be flashed
+    if [[ -z ${NEW_VERSION} ]]; then
+      NEW_VERSION=$(cat ${FW_DIRECTORY}/fwmap | grep "${FW_FILE}" | awk '{ print $3 }')
+    fi
+
+    # if NEW_VERSION is not empty we go ahead and perform the
+    # update operation
+    if [[ -n ${NEW_VERSION} ]] && [[ ! -e /var/rf_firmware_version || ${NEW_VERSION} != $(cat /var/rf_firmware_version) ]]; then
+      # we always perform the firmware update in /tmp
+      # so lets copy the whole firmware directory to tmp
+      TMPDIR_FW=$(mktemp -d)
+      cp -a ${FW_DIRECTORY}/${FW_FILE} ${TMPDIR_FW}
+
+      # create artifical fwmap file
+      echo "CCU2 ${FW_FILE} ${NEW_VERSION}" >${TMPDIR_FW}/fwmap
+
+      # perform the coprocessor update
+      /bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -u -d ${TMPDIR_FW}
       if [[ $? -ne 0 ]]; then
         echo -n "forcing, "
-        /bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -u -f -d ${FW_DIRECTORY}
+        /bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -u -f -d ${TMPDIR_FW}
       fi
-
       RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
       echo "${RF_VERSION}" >/var/rf_firmware_version
-    fi
 
-    # for non HmIP mode we copy the fw_directory to /tmp
-    if [[ ${HM_MODE} == "HmRF" ]]; then
-      rm -rf ${FW_DIRECTORY}
+      if [[ "${NEW_VERSION}" == "${RF_VERSION}" ]]; then
+        echo "${RF_VERSION}, OK"
+      else
+        echo "failed (${RF_VERSION} != ${NEW_VERSION}), ERROR"
+      fi
+
+      # remove the temporary directory again
+      rm -rf ${TMPDIR_FW}
+    else
+      echo "not required (${NEW_VERSION})"
     fi
 
     sleep 1
   else
-    echo -n "disabled, "
+    echo -n "disabled"
   fi
-
-  echo "OK"
 }
 
 case "$1" in
   start)
-  start
+    start
   ;;
   stop)
   ;;

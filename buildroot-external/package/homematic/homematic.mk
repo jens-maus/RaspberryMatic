@@ -64,6 +64,9 @@ define HOMEMATIC_FINALIZE_TARGET
 	# remove obsolete config templates
 	rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf
 
+	# remove unrequired ReGaHss versions
+	rm -f $(TARGET_DIR)/bin/ReGaHss.*
+
 endef
 TARGET_FINALIZE_HOOKS += HOMEMATIC_FINALIZE_TARGET
 

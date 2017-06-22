@@ -54,5 +54,5 @@ if [ $dienst -ge 1 ] ; then
 			mv /tmp/crontab.$$ /usr/local/crontabs/root
 		fi
 	fi
-	(crontab -l 2>/dev/null; echo "0 */6 * * * /bin/sh /usr/local/etc/config/addons/mh/cloudmaticcheck.sh >> /dev/null") | crontab -
+	(crontab -l 2>/dev/null; echo "*/1 * * * * /bin/sh /usr/local/etc/config/addons/mh/cloudmaticcheck.sh >/dev/null") | crontab -
 fi

@@ -8,5 +8,5 @@ origfiles=$(find homematic -name "*.orig" -type f -print | sort)
 
 rm -f 0000-RaspberryMatic.patch
 for file in ${origfiles}; do
-  diff -u ${file} ${file%.orig} >>0000-RaspberryMatic.patch
+  diff -u --label=${file} --label=${file%.orig} ${file} ${file%.orig} >>0000-RaspberryMatic.patch
 done

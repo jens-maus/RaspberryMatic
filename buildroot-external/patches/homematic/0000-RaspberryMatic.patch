@@ -345,7 +345,7 @@
 +        "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
  )
 --- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig	2017-06-20 12:15:10.716409882 +0200
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-06-20 23:38:17.516854601 +0200
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf	2017-06-21 00:09:00.917820713 +0200
 @@ -14,10 +14,10 @@
  ## chroot example aswell.
  ##
@@ -622,6 +622,29 @@
    set command "s%^root:\\(\[^:\]*:\\)%root:$digest:%"
    set rc [catch {exec sed -i "$command" /etc/config/shadow} msg]
  
+--- homematic/WebUI/www/api/methods.conf.orig	2017-06-22 11:01:47.271361081 +0200
++++ homematic/WebUI/www/api/methods.conf	2017-06-22 13:19:20.593184135 +0200
+@@ -988,6 +988,13 @@
+         ARGUMENTS {_session_id_}
+ }
+ 
++User.createCertificate {
++        LEVEL ADMIN
++        SCRIPT_FILE user/createcertificate.tcl
++        INFO {Generiert ein neues Zertifikat (server.pem) unter /etc/config}
++        ARGUMENTS {_session_id_ country hostname email serial}
++}
++
+ User.restartLighttpd {
+         LEVEL ADMIN
+         SCRIPT_FILE user/restartlighttpd.tcl
+@@ -1006,4 +1013,4 @@
+         SCRIPT_FILE diagram/getDataSourceGroups.tcl
+         INFO {Ermittelt alle bekannten Gruppen von Datenquellen}
+         ARGUMENTS {}
+-}
+\ No newline at end of file
++}
 --- homematic/WebUI/www/api/methods/device/get.tcl.orig	2017-06-04 10:55:02.052833494 +0200
 +++ homematic/WebUI/www/api/methods/device/get.tcl	2017-06-04 10:55:02.052833494 +0200
 @@ -36,84 +36,88 @@
@@ -783,6 +806,31 @@
        }
      }
      Write("}");
+--- homematic/WebUI/www/api/methods/user/createcertificate.tcl.orig	2017-06-22 11:05:01.646420178 +0200
++++ homematic/WebUI/www/api/methods/user/createcertificate.tcl	2017-06-22 13:30:03.603287737 +0200
+@@ -0,0 +1,22 @@
++##
++# User.createCertificate
++# Erstellt ein neues Zertifikat unter /etc/config/server.pem
++#
++# Parameter:
++#   country  : [string] Landeskuerzel (z.B. DE)
++#   hostname : [string] Der CN Hostname der eintragen werden soll
++#   email    : [string] EMail-Adresse die eingetragen werden soll
++#   serial   : [string] Die Seriennummer der CCU
++##
++
++if { $args(hostname) != "" } then {
++  # Zertifikat erzeugen
++  exec /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
++                                              -out /etc/config/server.pem \
++                                              -days 3650 \
++                                              -subj "/C=$args(country)/emailAddress=$args(email)/O=HomeMatic/OU=$args(serial)/CN=$args(hostname)" 2>/dev/null >/dev/null
++
++  jsonrpc_response true
++} else {
++  jsonrpc_response false
++}
 --- homematic/WebUI/www/config/control_panel.cgi.orig	2017-05-03 09:19:36.309929555 +0200
 +++ homematic/WebUI/www/config/control_panel.cgi	2017-05-03 09:19:36.309929555 +0200
 @@ -182,10 +182,9 @@
@@ -799,7 +847,7 @@
  }
  
 --- homematic/WebUI/www/config/cp_maintenance.cgi.orig	2017-06-20 12:15:10.704409692 +0200
-+++ homematic/WebUI/www/config/cp_maintenance.cgi	2017-06-20 23:42:47.841122947 +0200
++++ homematic/WebUI/www/config/cp_maintenance.cgi	2017-06-21 00:09:00.917820713 +0200
 @@ -377,7 +377,7 @@
                                          table_row {
                                              table_data {
@@ -1226,6 +1274,32 @@
  
  proc get_logserver {} {
      return [read_var //etc/config/syslog LOGHOST]
+--- homematic/WebUI/www/config/cp_network.cgi.orig	2017-06-17 09:47:30.000000000 +0200
++++ homematic/WebUI/www/config/cp_network.cgi	2017-06-22 13:20:39.894430118 +0200
+@@ -610,13 +610,18 @@
+   }
+   set serial [get_serial]
+   cgi_javascript {
+-    puts "var cert_url = \"$REMOTE_CERT_SCRIPT?serial=$serial\";"
++    puts "var serial = \"$serial\";"
+     puts {
+       OnGetCert = function() {
+-      cert_url += "&country="+document.getElementById("text_country").value;
+-      cert_url += "&url="+document.getElementById("text_url").value;
+-      cert_url += "&mail="+document.getElementById("text_mail").value;
+-      window.location.href=cert_url;
++        var country = document.getElementById("text_country").value;
++        var hostname = document.getElementById("text_url").value;
++        var email = document.getElementById("text_mail").value;
++        homematic("User.createCertificate", {"country": country, "hostname": hostname, "email": email, "serial": serial}, function() {
++          homematic("User.restartLighttpd", {}, function(){
++            MessageBox.show(translateKey("dialogRestartWebserverTitle"),translateKey("dialogRestartWebserverContent"));
++            window.setTimeout(function() {window.location.protocol = "http"},2000);
++          });
++        });
+       };
+ 
+       deleteCert = function() {
 --- homematic/WebUI/www/config/cp_security.cgi.orig	2017-05-03 09:19:36.309929555 +0200
 +++ homematic/WebUI/www/config/cp_security.cgi	2017-05-03 09:19:36.309929555 +0200
 @@ -192,7 +192,7 @@

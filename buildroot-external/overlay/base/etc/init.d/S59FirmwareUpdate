@@ -71,7 +71,7 @@ start() {
 
     sleep 1
   else
-    echo -n "disabled"
+    echo "disabled"
   fi
 }
 

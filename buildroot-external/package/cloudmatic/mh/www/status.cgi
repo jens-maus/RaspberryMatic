@@ -1,2 +1,0 @@
-#!/bin/tclsh
-puts {OK}

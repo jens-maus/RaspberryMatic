@@ -387,68 +387,67 @@ proc action_put_page {} {
                         table_row {
                             td {width="20"} {}
                             table_data {align="left"} {colspan="2"} {
-                                #puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic}"
+                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
                             }
                         }
-                        #table_row {
-                        #    td {width="20"} {}
-                        #    table_data {colspan="2"} {
-                        #        form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
-                        #            export action=firmware_upload
-                        #            export downloadOnly=$downloadOnly
-                        #            file_button firmware_file size=30 maxlength=1000000
-                        #        }
-                        #        puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
-                        #    }
-                        #}
-                        #table_row {
-                        #    td {width="20"} {}
-                        #    table_data {align="left"} {
-                        #        puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep3}"
-                        #    }
-                        #    table_data {
-                        #        division {class="popupControls CLASS20905"} {
-                        #            table {
-                        #                table_row {
-                        #                    table_data {
-                        #                        division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
-                        #                          puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
-                        #                        }
-                        #                    }
-                        #                }
-                        #            }
-                        #        }
-                        #    }
-                        #}
-                        #table_row {
-                        #    td {width="20"} {}
-                        #    table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
-                        #        puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
-                        #    }
-                        #}
+                        table_row {
+                            td {width="20"} {}
+                            table_data {colspan="2"} {
+                                form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
+                                    export action=firmware_upload
+                                    export downloadOnly=$downloadOnly
+                                    file_button firmware_file size=30 maxlength=1000000
+                                }
+                                puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
+                            }
+                        }
+                        table_row {
+                            td {width="20"} {}
+                            table_data {align="left"} {
+                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep3}"
+                            }
+                            table_data {
+                                division {class="popupControls CLASS20905"} {
+                                    table {
+                                        table_row {
+                                            table_data {
+                                                division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
+                                                  puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        table_row {
+                            td {width="20"} {}
+                            table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
+                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
+                            }
+                        }
                     }
                 }
                 table_data {align="left"} {class="CLASS20921"} {
                     puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
-                    #puts "\${dialogSettingsCMHintSoftwareUpdate1}"
-                    #number_list {class="j_noForcedUpdate"} {
-                    #    li {
-                    #      ${dialogSettingsCMHintSoftwareUpdate2}                        }
-                    #    li {
-                    #         ${dialogSettingsCMHintSoftwareUpdate3}
-                    #    }
-                    #    set bat_level [get_bat_level]
-                    #    if {$bat_level < 50} {
-                    #        set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
-                    #        append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
-                    #        li $msg
-                    #    }
-                    #}
+                    puts "\${dialogSettingsCMHintSoftwareUpdate1}"
+                    number_list {class="j_noForcedUpdate"} {
+                        li {
+                          ${dialogSettingsCMHintSoftwareUpdate2}                        }
+                        li {
+                             ${dialogSettingsCMHintSoftwareUpdate3}
+                        }
+                        set bat_level [get_bat_level]
+                        if {$bat_level < 50} {
+                            set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
+                            append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
+                            li $msg
+                        }
+                    }
 
-                    #division {class="j_forcedUpdate" style="padding:10px;"} {
-                    #  puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
-                    #}
+                    division {class="j_forcedUpdate" style="padding:10px;"} {
+                      puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
+                    }
                 }
             }
             table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {

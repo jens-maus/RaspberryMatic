@@ -857,131 +857,15 @@
                                              }
                                          }
                                      }
-@@ -387,66 +387,68 @@
-                         table_row {
-                             td {width="20"} {}
-                             table_data {align="left"} {colspan="2"} {
--                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
--                            }
--                        }
--                        table_row {
--                            td {width="20"} {}
--                            table_data {colspan="2"} {
--                                form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
--                                    export action=firmware_upload
--                                    export downloadOnly=$downloadOnly
--                                    file_button firmware_file size=30 maxlength=1000000
--                                }
--                                puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
--                            }
--                        }
--                        table_row {
--                            td {width="20"} {}
--                            table_data {align="left"} {
--                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep3}"
--                            }
--                            table_data {
--                                division {class="popupControls CLASS20905"} {
--                                    table {
--                                        table_row {
--                                            table_data {
--                                                division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
--                                                  puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
--                                                }
--                                            }
--                                        }
--                                    }
--                                }
--                            }
--                        }
--                        table_row {
--                            td {width="20"} {}
--                            table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
--                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
-+                                #puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
-+                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic}"
-                             }
-                         }
-+                        #table_row {
-+                        #    td {width="20"} {}
-+                        #    table_data {colspan="2"} {
-+                        #        form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
-+                        #            export action=firmware_upload
-+                        #            export downloadOnly=$downloadOnly
-+                        #            file_button firmware_file size=30 maxlength=1000000
-+                        #        }
-+                        #        puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
-+                        #    }
-+                        #}
-+                        #table_row {
-+                        #    td {width="20"} {}
-+                        #    table_data {align="left"} {
-+                        #        puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep3}"
-+                        #    }
-+                        #    table_data {
-+                        #        division {class="popupControls CLASS20905"} {
-+                        #            table {
-+                        #                table_row {
-+                        #                    table_data {
-+                        #                        division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
-+                        #                          puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
-+                        #                        }
-+                        #                    }
-+                        #                }
-+                        #            }
-+                        #        }
-+                        #    }
-+                        #}
-+                        #table_row {
-+                        #    td {width="20"} {}
-+                        #    table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
-+                        #        puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
-+                        #    }
-+                        #}
+@@ -429,6 +429,7 @@
                      }
                  }
                  table_data {align="left"} {class="CLASS20921"} {
--                    puts "\${dialogSettingsCMHintSoftwareUpdate1}"
--                    number_list {class="j_noForcedUpdate"} {
--                        li {
--                          ${dialogSettingsCMHintSoftwareUpdate2}                        }
--                        li {
--                             ${dialogSettingsCMHintSoftwareUpdate3}
--                        }
--                        set bat_level [get_bat_level]
--                        if {$bat_level < 50} {
--                            set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
--                            append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
--                            li $msg
--                        }
--                    }
--
--                    division {class="j_forcedUpdate" style="padding:10px;"} {
--                      puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
--                    }
 +                    puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
-+                    #puts "\${dialogSettingsCMHintSoftwareUpdate1}"
-+                    #number_list {class="j_noForcedUpdate"} {
-+                    #    li {
-+                    #      ${dialogSettingsCMHintSoftwareUpdate2}                        }
-+                    #    li {
-+                    #         ${dialogSettingsCMHintSoftwareUpdate3}
-+                    #    }
-+                    #    set bat_level [get_bat_level]
-+                    #    if {$bat_level < 50} {
-+                    #        set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
-+                    #        append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
-+                    #        li $msg
-+                    #    }
-+                    #}
-+
-+                    #division {class="j_forcedUpdate" style="padding:10px;"} {
-+                    #  puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
-+                    #}
-                 }
-             }
-             table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-@@ -467,6 +469,21 @@
+                     puts "\${dialogSettingsCMHintSoftwareUpdate1}"
+                     number_list {class="j_noForcedUpdate"} {
+                         li {
+@@ -467,6 +468,21 @@
                      puts "\${dialogSettingsCMHintRestart}"
                  }
              }
@@ -1003,12 +887,13 @@
              
              # Abgesicherter Modus
              table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-@@ -488,78 +505,78 @@
+@@ -488,78 +504,78 @@
              }
  
              # Version Logikschicht
 -            table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
--
++            #table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
+ 
 -              table_data {class="CLASS20903"} $styleMaxWidth {
 -                puts "\${lblTDRegaVersion}"
 -              }
@@ -1028,8 +913,7 @@
 -                      puts "</select>"
 -                    }
 -                  }
-+            #table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
- 
+-
 -                  table_row {
 -                    table_data {}
 -                    table_data {align="left"} {
@@ -1153,7 +1037,7 @@
  
              table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
                  table_data {class="CLASS20903"} $styleMaxWidth  {
-@@ -721,6 +738,12 @@
+@@ -721,6 +737,12 @@
                  dlgPopup.LoadFromFile(url, "action=reboot_confirm");
              }
              
@@ -1166,7 +1050,7 @@
              OnEnterSafeMode = function() {
                new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRestartSafeMode"), function(result) {
                  if (result == YesNoDialog.RESULT_YES)
-@@ -934,6 +957,89 @@
+@@ -934,6 +956,89 @@
      }
  }
  
@@ -1256,7 +1140,7 @@
  proc action_update_start {} {
      catch { exec killall hss_lcd }
      catch { exec lcdtool {Saving     Data...    } }
-@@ -952,8 +1058,17 @@
+@@ -952,8 +1057,17 @@
      catch { exec lcdtool {Saving     Data...    } }
      rega system.Save()
      catch { exec lcdtool {Reboot...             } }
@@ -2050,15 +1934,7 @@
      "dialogSettingsCMTDCCUSafeMode" : "Abgesicherter<br/>Modus",
      "dialogSettingsCMTDErrorProtocol" : "Fehler-<br/>protokoll",
      "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
-@@ -452,6 +455,7 @@
-     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Schritt 2: Heruntergeladene Software ausw%E4hlen",
-     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Schritt 3: Software auf " + HMIdentifier.de.CCUShortName + " laden",
-     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Schritt 4: Update starten",
-+    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Schritt 2: Gehen Sie anhand der <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>Dokumentation</a> und <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>Update/Upgrade Anleitung</a> vor",
-     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.de.BidCosRF,
-     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.de.BidCosWired,
-     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.de.CCUShortName + "-Steuerung",
-@@ -460,6 +464,7 @@
+@@ -460,6 +463,7 @@
      "dialogSettingsCMBtnPerformSoftwareUpdateDownload" : "Herunterladen",
      "dialogSettingsCMBtnPerformSoftwareUpdateUpload" : "Hochladen",
      "dialogSettingsCMBtnCCURestart" : "Neustart",
@@ -2066,7 +1942,7 @@
      "dialogSettingsCMBtnCCURestartSafe" : "Neustart im abgesicherten Modus",
      "dialogSettingsCMBtnLogSysLogServerAddress" : "Einstellungen %FCbernehmen",
      "dialogSettingsCMBtnLogLoadLogFile" : "Logdatei herunterladen",
-@@ -470,7 +475,9 @@
+@@ -470,7 +474,9 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "F%FChren Sie vor dem Update eine Datensicherung durch.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Der Ladezustand der Batterien betr%E4gt nur noch ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Um einem Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Update zu erneuern.",
@@ -2132,15 +2008,7 @@
      "dialogSettingsCMTDCCUSafeMode" : "Safe<br/>mode",
      "dialogSettingsCMTDErrorProtocol" : "Error<br/>log",
      "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
-@@ -452,6 +455,7 @@
-     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Step 2: Select downloaded software",
-     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Step 3: Upload software to " + HMIdentifier.en.CCUShortName,
-     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Step 4: Start update",
-+    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Step 2: Read <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>documentation</a> and <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>update/upgrade instructions</a>",
-     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.en.BidCosRF,
-     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.en.BidCosWired,
-     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.en.CCUShortName + " control",
-@@ -460,6 +464,7 @@
+@@ -460,6 +463,7 @@
      "dialogSettingsCMBtnPerformSoftwareUpdateDownload" : "Download",
      "dialogSettingsCMBtnPerformSoftwareUpdateUpload" : "Upload",
      "dialogSettingsCMBtnCCURestart" : "Restart",
@@ -2148,7 +2016,7 @@
      "dialogSettingsCMBtnCCURestartSafe" : "Restart in safe mode",
      "dialogSettingsCMBtnLogSysLogServerAddress" : "Apply settings",
      "dialogSettingsCMBtnLogLoadLogFile" : "Download log file",
-@@ -470,7 +475,9 @@
+@@ -470,7 +474,9 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "Please perform a data backup before starting the update.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "The charging status the batteries is only at ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",
@@ -2206,15 +2074,7 @@
      "dialogEditRoomBtnClose" : "Kapat",
      "dialogEditRoomBtnNew" : "Yeni",
      "infoLoadConfigData" : "Konfig%FCrasyon bilgileri y%FCkleniyor...",
-@@ -454,6 +456,7 @@
-     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Adim 2: Indirdiginiz yazilima tiklayin",
-     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Adim 3: Yazilimi " + HMIdentifier.tr.CCUShortName + "'e y%FCkleyin",
-     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Adim 4: G%FCncellemeyi baslatin",
-+    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Step 2: Read <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>documentation</a> and <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>update/upgrade instructions</a>",
-     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.tr.BidCosRF,
-     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.tr.BidCosWired,
-     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.tr.CCUShortName + "-Kumanda",
-@@ -472,7 +475,9 @@
+@@ -472,7 +474,9 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "G%FCncellemeden %F6nce verileri emniyete alin.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Bataryalarin sarj durumu artik sadece ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Elektrik kesintisi nedeniyle veri kaybini %F6nlemek icin bataryalari g%FCncellemeyi baslatmadan %F6nce degistirmenizi %F6neriyoruz.",

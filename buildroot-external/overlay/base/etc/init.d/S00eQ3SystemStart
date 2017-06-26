@@ -78,30 +78,32 @@ identify_host() {
 # boundaries
 checkFactoryReset() {
 
-  # check if /usr/local is mounted (then rootfs2 and userfs exists)
-  LOCALDEV=$(mountpoint -n /usr/local 2>/dev/null | cut -d' ' -f1)
-  if [[ -n ${LOCALDEV} ]]; then
+  # get id and node of the root device
+  DEVID=$(mountpoint -d / | cut -d':' -f1)
+  ROOTPARTDEV=$(mountpoint -n / | cut -d' ' -f1)
 
-    # wipe whole /usr/local if .doFactoryReset exists
-    if [[ -r /usr/local/.doFactoryReset ]]; then
-      # umount /usr/local to regenerate it
-      umount -f /usr/local
+  # check if /usr/local (partition4) exists (then rootfs2 and userfs exists as well)
+  if [[ -e /sys/dev/block/${DEVID}:4 ]]; then
 
-      # we create a clean ext4 userfs partition
-      mkfs.ext4 -F ${LOCALDEV} -L userfs
+    # check if it is mounted
+    if mount | grep -q /usr/local; then
+      # wipe whole /usr/local if .doFactoryReset exists
+      if [[ -r /usr/local/.doFactoryReset ]]; then
+        # umount /usr/local to regenerate it
+        umount -f /usr/local
 
-      # mount /usr/local again
-      mount /usr/local
+        # we create a clean ext4 userfs partition
+        mkfs.ext4 -F "${ROOTPARTDEV%?}4" -L userfs
+
+        # mount /usr/local again
+        mount /usr/local
+      fi
     fi
 
   else
 
     # if we end up here we have a completly fresh installed
     # image and thus we have to create rootfs2 and userfs from scratch
-
-    # get id and node of the device
-    DEVID=$(mountpoint -d / | cut -d':' -f1)
-    ROOTPARTDEV=$(mountpoint -n / | cut -d' ' -f1)
     DEV="/dev/$(readlink /sys/dev/block/${DEVID}:0 | awk -F/ '{print $(NF)}')"
 
     ###############
@@ -123,7 +125,7 @@ checkFactoryReset() {
     if [[ ! -e /sys/dev/block/${DEVID}:4 ]]; then
       # now we read out the partition size of rootfs2
       END_B=$(parted -s ${DEV} unit b print | grep "^ 3" | awk '{print $3}' | cut -d'B' -f1)
-      MAX_B=$(parted -s ${DEV} unit b print | grep "Disk ${DEV}:" | cut -d' ' -f3)
+      MAX_B=$(parted -s ${DEV} unit b print | grep "Disk ${DEV}:" | cut -d' ' -f3 | cut -d'B' -f1)
 
       # create partition 4 as large as the whole rest of the device
       parted -s ${DEV} mkpart primary "$((END_B+1))B" "$((MAX_B-1))B"
@@ -145,6 +147,7 @@ checkFactoryReset() {
       sed -i "s/ root=[^[:space:]]*/ root=PARTUUID=${disk_identifier}-$(printf '%02d' ${ROOTPARTNUM})/" /boot/cmdline.txt
       mount -o ro,remount /boot
     fi
+
   fi
 }
 

@@ -2425,6 +2425,12 @@ DEV_HIGHLIGHT["HM-RC-19-SW"]["9+10"] = [5, '9', '10'];
 DEV_HIGHLIGHT["HM-RC-19-SW"]["11+12"] = [5, '11', '12'];
 DEV_HIGHLIGHT["HM-RC-19-SW"]["13+14"] = [5, '13', '14'];
 DEV_HIGHLIGHT["HM-RC-19-SW"]["15+16"] = [5, '15', '16'];
+DEV_LIST.push('HmIP-STHO');
+DEV_DESCRIPTION["HmIP-STHO"] = "HmIP-STHO";
+DEV_PATHS["HmIP-STHO"] = new Object();
+DEV_PATHS["HmIP-STHO"]["50"] = "/config/img/devices/50/148_hmip-stho_thumb.png";
+DEV_PATHS["HmIP-STHO"]["250"] = "/config/img/devices/250/148_hmip-stho.png";
+DEV_HIGHLIGHT["HmIP-STHO"] = new Object();
 DEV_LIST.push('HM-LC-Sw1-Ba-PCB');
 DEV_DESCRIPTION["HM-LC-Sw1-Ba-PCB"] = "HM-LC-Sw1-Ba-PCB";
 DEV_PATHS["HM-LC-Sw1-Ba-PCB"] = new Object();
@@ -3729,6 +3735,7 @@ elvST['HUMIDITY_ALARM=FALSE'] = '${stringTableHumidityAlarmFalse}';
 elvST['HUMIDITY_ALARM=TRUE'] = '${stringTableHumidityAlarmTrue}';
 elvST['HUMIDITY_LIMITER=FALSE'] = '${stringTableHumidityLimiterFalse}';
 elvST['HUMIDITY_LIMITER=TRUE'] = '${stringTableHumidityLimiterTrue}';
+elvST['HUMIDITY'] = '${stringTableWeatherHumidity}';
 elvST['ILLUMINATION'] = '${stringTableBrightness}';
 elvST['INHIBIT'] = '${stringTableInhibit}';
 elvST['INHIBIT=FALSE'] = '${stringTableInhibitFalse}';
@@ -4334,6 +4341,7 @@ elvST['TEMPERATURE_LIMITER=TRUE'] = '${stringTableTemperatureLimiterTrue}';
 elvST['TEMPERATURE_LOWERING'] = '${stringTableTemperatureLowering}';
 elvST['TEMPERATURE_MAXIMUM'] = '${stringTableTemperatureMaximum}';
 elvST['TEMPERATURE_MINIMUM'] = '${stringTableTemperatureMinimum}';
+elvST['TEMPERATURE_OFFSET'] = '${stringTableTemperatureOffset}';
 elvST['THERMALCONTROL_TRANSMIT'] = '${stringTableThermalControlTitle}';
 elvST['TILT_SENSOR'] = '${stringTableTiltSensorTitle}';
 elvST['TILT_SENSOR|EVENT_FILTERTIME'] = '${stringTableTiltSensorEventFilterTime}';
@@ -23938,6 +23946,17 @@ getExtendedDescription = function(oChannelDescr) {
     }
   }
 
+  if (chType == "COND_SWITCH_TRANSMITTER") {
+    var tmpDev = deviceType.toLowerCase();
+
+    switch (tmpDev) {
+      case "hmip-stho":
+        if (channelIndex == 2) result = translateKey("chType_COND_TEMPERATURE");
+        if (channelIndex == 3) result = translateKey("chType_COND_HUMIDITY");
+        break;
+    }
+  }
+
   if (result == "") {result = translateKey("chType_" + chType);}
   if (result == noDescrNecessary) {result = "";}
   return (result.split("_")[0] == "chType") ? "" : result;
@@ -29041,6 +29060,12 @@ iseButtonsShutter.prototype = {
     this.shutter.setValue(initState);
     this.opts = opts;
 
+    if (typeof blindLevelDestination == "undefined") {
+      blindLevelDestination = [];
+    }
+
+    blindLevelDestination[id] = (blindLevelDestination[id] != null) ? blindLevelDestination[id] : null;
+
     // Add event handlers
     if (iViewOnly === 0)
     {
@@ -29151,6 +29176,7 @@ iseButtonsShutter.prototype = {
       ControlBtn.off(t.divStop);
       pe.stop();
     }, 1);
+    blindLevelDestination[this.id] = null;
   },
 
   saveValue: function() {
@@ -29264,7 +29290,6 @@ iseButtonsJalousie = Class.create(iseButtonsShutter, {
     dpValue = (levelHex.length < 2) ? "0X0" + levelHex : "0X" + levelHex;
     dpValue += ",";
     dpValue += (levelSlatHex.length < 2) ? "0X0" + levelSlatHex : "0X" + levelSlatHex;
-
     setDpState(this.dpLevelCombined, dpValue);
   }
 
@@ -29277,15 +29302,18 @@ iseHmIPJalousieShutter = Class.create(iseButtonsShutter, {
     this.Perc.value = this.initState;
     this.shutter.setValue(this.initState);
 
-    this.sliderInfoElm = jQuery("#infoSliderPos" + this.id);
-    this.sliderElm = jQuery("#slider" + this.id);
+    this.hasSlats = (this.opts.levelSlatsID) ? true : false;
+    if (this.hasSlats) {
+      this.sliderInfoElm = jQuery("#infoSliderPos" + this.id);
+      this.sliderElm = jQuery("#slider" + this.id);
+      this.levelSlats = this.opts.levelSlatsValue;
+      this.levelReal = this.opts.levelRealChannel;
 
-    this.levelSlats = this.opts.levelSlatsValue;
-    this.initSliderInfoElm();
-    this.initSlider();
-    this.sliderElm.slider('value', this.opts.levelSlatsValue);
-    this.sliderInfoElm.val(this.opts.levelSlatsValue);
-
+      this.initSliderInfoElm();
+      this.initSlider();
+      this.sliderElm.slider('value', this.opts.levelSlatsValue);
+      this.sliderInfoElm.val(this.opts.levelSlatsValue);
+    }
   },
 
   initSliderInfoElm: function() {
@@ -29333,23 +29361,31 @@ iseHmIPJalousieShutter = Class.create(iseButtonsShutter, {
   },
 
   saveSliderValue: function() {
+    var levelValue = (blindLevelDestination[this.id] != null) ? blindLevelDestination[this.id] : this.levelReal;
     homematic("Interface.putParamset",{'interface': 'HmIP-RF', 'address' : this.opts.chnAddress, 'paramsetKey' : 'VALUES', 'set':
       [
-        {name:'LEVEL', type: 'double', value: 1.005},
+        //{name:'LEVEL', type: 'double', value: 1.005},
+        {name:'LEVEL', type: 'double', value: levelValue},
         {name:'LEVEL_2', type: 'double', value: this.levelSlats / 100}
       ]
     },function(result){conInfo(result);});
   },
 
   saveValue: function() {
-    homematic("Interface.putParamset",{'interface': 'HmIP-RF', 'address' : this.opts.chnAddress, 'paramsetKey' : 'VALUES', 'set':
-      [
-        {name:'LEVEL', type: 'double', value: this.state / 100},
-        {name:'LEVEL_2', type: 'double', value: 1.005}
-      ]
-    },function(result){conInfo(result);});
-  }
 
+    if (this.hasSlats) {
+      blindLevelDestination[this.id] = this.state;
+      homematic("Interface.putParamset", {'interface': 'HmIP-RF', 'address': this.opts.chnAddress, 'paramsetKey': 'VALUES', 'set': [
+        {name: 'LEVEL', type: 'double', value: this.state / 100},
+        {name: 'LEVEL_2', type: 'double', value: 1.005}
+      ]
+      }, function (result) {
+        conInfo(result);
+      });
+    } else {
+      setDpState(this.dpLevel, this.state / 100);
+    }
+  }
 });
 iseDualWhiteColorController = Class.create();
 

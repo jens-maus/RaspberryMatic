@@ -71,6 +71,7 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [Watchdog](https://github.com/jens-maus/hm-watchdog)
 * [homeputer CL Studio](http://www.contronics.de/download/homeputer-studio-software.html)
 * [Print / ProgrammeDrucken](https://github.com/litti/hm-print)
+* [HomeMatic Check_MK](https://github.com/alexreinert/homematic_check_mk)
 
 ## Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:

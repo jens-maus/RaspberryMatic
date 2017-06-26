@@ -78,34 +78,66 @@ identify_host() {
 # boundaries
 checkFactoryReset() {
 
-  # only continue if .doFactoryReset file exists
-  if [[ ! -r /usr/local/.doFactoryReset ]]; then
-    return
-  fi
+  # check if /usr/local is mounted (then rootfs2 and userfs exists)
+  LOCALDEV=$(mountpoint -n /usr/local 2>/dev/null | cut -d' ' -f1)
+  if [[ -n ${LOCALDEV} ]]; then
 
-  # extract partition number and device name
-  DEVNODE=$(mountpoint -d /usr/local)
-  DEVNAME=$(mountpoint -n /usr/local | cut -d' ' -f1)
-  PARTNUM=$(echo ${DEVNODE} | cut -d':' -f2)
-  DEV="/dev/$(readlink /sys/dev/block/${DEVNODE} | awk -F/ '{print $(NF-1)}')"
+    # wipe whole /usr/local if .doFactoryReset exists
+    if [[ -r /usr/local/.doFactoryReset ]]; then
+      # umount /usr/local to regenerate it
+      umount -f /usr/local
 
-  # find out maximum SD card size (in cylinders)
-  START_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
-  END_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
-  MAX_CHS=$(parted -s ${DEV} unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
+      # we create a clean ext4 userfs partition
+      mkfs.ext4 -F ${LOCALDEV} -L userfs
 
-  # umount /usr/local to regenerate it
-  umount -f /usr/local
+      # mount /usr/local again
+      mount /usr/local
+    fi
 
-  # only resize the partition if END_CHS != MAX_CHS
-  if [[ -n "${START_CHS}" && -n "${END_CHS}" && -n "${MAX_CHS}" && "${END_CHS}" != "${MAX_CHS}" ]]; then
-    # remove the third partition (/usr/local) and recreate it with
-    # MAX_CHS
-    parted -s ${DEV} rm ${PARTNUM}
-    parted -s ${DEV} mkpart primary ${START_CHS} ${MAX_CHS}
+  else
 
-    # we have to find out the new disk identifier after having modified
-    # the partition table because this modifies the identifier
+    # if we end up here we have a completly fresh installed
+    # image and thus we have to create rootfs2 and userfs from scratch
+
+    # get id and node of the device
+    DEVID=$(mountpoint -d / | cut -d':' -f1)
+    ROOTPARTDEV=$(mountpoint -n / | cut -d' ' -f1)
+    DEV="/dev/$(readlink /sys/dev/block/${DEVID}:0 | awk -F/ '{print $(NF)}')"
+
+    ###############
+    # 1. check if rootfs2 (partition 3) exists and if not we create it using 'parted'
+    if [[ ! -e /sys/dev/block/${DEVID}:3 ]]; then
+      # now we read out the partition size of the main rootfs1
+      END_B=$(parted -s ${DEV} unit b print | grep "^ 2" | awk '{print $3}' | cut -d'B' -f1)
+      SIZE_B=$(parted -s ${DEV} unit b print | grep "^ 2" | awk '{print $4}' | cut -d'B' -f1)
+
+      # create partition 3 with the same size like partition 2
+      parted -s ${DEV} mkpart primary "$((END_B+1))B" "$((END_B+1 + SIZE_B))B"
+
+      # we create a clean ext4 rootfs2 partition
+      mkfs.ext4 -F "${ROOTPARTDEV%?}3" -L rootfs2
+    fi
+
+    ###############
+    # 2. check if userfs (partition 4) exists and if not we create it using 'parted'
+    if [[ ! -e /sys/dev/block/${DEVID}:4 ]]; then
+      # now we read out the partition size of rootfs2
+      END_B=$(parted -s ${DEV} unit b print | grep "^ 3" | awk '{print $3}' | cut -d'B' -f1)
+      MAX_B=$(parted -s ${DEV} unit b print | grep "Disk ${DEV}:" | cut -d' ' -f3)
+
+      # create partition 4 as large as the whole rest of the device
+      parted -s ${DEV} mkpart primary "$((END_B+1))B" "$((MAX_B-1))B"
+
+      # we create a clean ext4 userfs partition
+      mkfs.ext4 -F "${ROOTPARTDEV%?}4" -L userfs
+
+      # mount /usr/local again
+      mount /usr/local
+    fi
+
+    ###############
+    # 3. the partition table was changed and we have to find out
+    #    the new disk identifier and modify the /boot/cmdline.txt file accordingly.
     disk_identifier=$(dd if=${DEV} bs=1 count=4 conv=notrunc skip=$((0x1B8)) 2>/dev/null | hexdump -e '"%08x"')
     if [[ -n ${disk_identifier} && -f /boot/cmdline.txt ]]; then
       mount -o rw,remount /boot
@@ -114,12 +146,6 @@ checkFactoryReset() {
       mount -o ro,remount /boot
     fi
   fi
-
-  # we create a clean ext4 partition now
-  mkfs.ext4 -F ${DEVNAME} -L userfs
-
-  # mount /usr/local again
-  mount /usr/local
 }
 
 # function to check if a backup should be restored that had been placed in /usr/local/tmp

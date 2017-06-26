@@ -645,167 +645,6 @@
 -}
 \ No newline at end of file
 +}
---- homematic/WebUI/www/api/methods/device/get.tcl.orig
-+++ homematic/WebUI/www/api/methods/device/get.tcl
-@@ -36,84 +36,88 @@
-     Write(" GROUP_ONLY {"# device.MetaData("operateGroupOnly") # "}");
-   
-     Write(" CHANNELS {"); 
--    var first = true;
--    string channelId;
--    foreach(channelId, device.Channels())
-+    if (device.TypeName() == "DEVICE")
-     {
--      var channel = dom.GetObject(channelId);
--      if (false == channel.Internal())
-+      var first = true;
-+      string channelId;
-+
-+      foreach(channelId, device.Channels())
-       {
--        if (true != first) { Write(" "); } else { first = false; }
--        Write("{");
--        
--        var readable  = false;
--        var writable  = false;
--        var eventable = false;
--        var logable   = false;
--    
--        string dpId;
--        foreach (dpId, channel.DPs())
-+        var channel = dom.GetObject(channelId);
-+        if (false == channel.Internal())
-         {
--          var dp         = dom.GetObject(dpId);
--          var operations = dp.Operations();
-+          if (true != first) { Write(" "); } else { first = false; }
-+          Write("{");
-+          
-+          var readable  = false;
-+          var writable  = false;
-+          var eventable = false;
-+          var logable   = false;
-       
--          if (!dp.Internal())
-+          string dpId;
-+          foreach (dpId, channel.DPs())
-           {
--            logable = true;
--            if (OPERATION_READ  & operations) { readable  = true; }
--            if (OPERATION_WRITE & operations) { writable  = true; }
--            if (OPERATION_EVENT & operations) { eventable = true; }
-+            var dp         = dom.GetObject(dpId);
-+            var operations = dp.Operations();
-+        
-+            if (!dp.Internal())
-+            {
-+              logable = true;
-+              if (OPERATION_READ  & operations) { readable  = true; }
-+              if (OPERATION_WRITE & operations) { writable  = true; }
-+              if (OPERATION_EVENT & operations) { eventable = true; }
-+            }
-+          }
-+          
-+          var isUsable = false;
-+          if (channel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess)
-+          {
-+            isUsable = true;
-           }
--        }
-         
--        var isUsable = false;
--        if (channel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess)
--        {
--          isUsable = true;
--        }
--      
--        var category = CATEGORY_NONE;
--        if (channel.ChnDirection() == 1) { category = CATEGORY_SENDER; }
--        if (channel.ChnDirection() == 2) { category = CATEGORY_RECEIVER; }
--      
--        var mode = MODE_DEFAULT;
--        if (channel.ChnAESActive())
--        {
--          mode = MODE_AES;
--        }
--            
--        var isAesAvailable = false;
--        if (channel.ChnAESOperation() > 0)
--        {
--          isAesAvailable = true;
--        }
--      
--        var isVirtual = false;
--        if (channel.ChannelType() == 29)
--        {
--          isVirtual = true;
-+          var category = CATEGORY_NONE;
-+          if (channel.ChnDirection() == 1) { category = CATEGORY_SENDER; }
-+          if (channel.ChnDirection() == 2) { category = CATEGORY_RECEIVER; }
-+        
-+          var mode = MODE_DEFAULT;
-+          if (channel.ChnAESActive())
-+          {
-+            mode = MODE_AES;
-+          }
-+              
-+          var isAesAvailable = false;
-+          if (channel.ChnAESOperation() > 0)
-+          {
-+            isAesAvailable = true;
-+          }
-+        
-+          var isVirtual = false;
-+          if (channel.ChannelType() == 29)
-+          {
-+            isVirtual = true;
-+          }
-+        
-+          Write("ID {" # channelId # "}");
-+          Write(" NAME {" # channel.Name() # "}");
-+          Write(" ADDRESS {" # channel.Address() # "}");
-+          Write(" DEVICE {" # channel.Device() # "}");
-+          Write(" INDEX {" # channel.ChnNumber() # "}");
-+          Write(" GROUP_PARTNER_ID {" # channel.ChnGroupPartnerId() # "}");
-+          Write(" READY_CONFIG {" # channel.ReadyConfig() # "}");
-+          Write(" MODE {" # mode # "}");
-+          Write(" CATEGORY {" # category # "}");
-+          Write(" USABLE {" # isUsable # "}");
-+          Write(" LOGGED {" # channel.ChnArchive() # "}");
-+          Write(" VISIBLE {" # channel.Visible() # "}");
-+          Write(" LOGABLE {" # logable # "}");
-+          Write(" READABLE {" # readable # "}");
-+          Write(" WRITABLE {" # writable # "}");
-+          Write(" EVENTABLE {" # eventable # "}");
-+          Write(" AES_AVAILABLE {" # isAesAvailable # "}");
-+          Write(" VIRTUAL {" # isVirtual # "}");
-+          Write(" CHANNEL_TYPE {" # channel.HssType() # "}");
-+          Write("}");
-         }
--      
--        Write("ID {" # channelId # "}");
--        Write(" NAME {" # channel.Name() # "}");
--        Write(" ADDRESS {" # channel.Address() # "}");
--        Write(" DEVICE {" # channel.Device() # "}");
--        Write(" INDEX {" # channel.ChnNumber() # "}");
--        Write(" GROUP_PARTNER_ID {" # channel.ChnGroupPartnerId() # "}");
--        Write(" READY_CONFIG {" # channel.ReadyConfig() # "}");
--        Write(" MODE {" # mode # "}");
--        Write(" CATEGORY {" # category # "}");
--        Write(" USABLE {" # isUsable # "}");
--        Write(" LOGGED {" # channel.ChnArchive() # "}");
--        Write(" VISIBLE {" # channel.Visible() # "}");
--        Write(" LOGABLE {" # logable # "}");
--        Write(" READABLE {" # readable # "}");
--        Write(" WRITABLE {" # writable # "}");
--        Write(" EVENTABLE {" # eventable # "}");
--        Write(" AES_AVAILABLE {" # isAesAvailable # "}");
--        Write(" VIRTUAL {" # isVirtual # "}");
--        Write(" CHANNEL_TYPE {" # channel.HssType() # "}");
--        Write("}");
-       }
-     }
-     Write("}");
 --- homematic/WebUI/www/api/methods/user/createcertificate.tcl.orig
 +++ homematic/WebUI/www/api/methods/user/createcertificate.tcl
 @@ -0,0 +1,22 @@
@@ -1949,30 +1788,6 @@
  <div class="CLASS05103">
    <table class="popupTable CLASS05104" border="0" >
      <colgroup>
---- homematic/WebUI/www/rega/pages/tabs/user/newFav.htm.orig
-+++ homematic/WebUI/www/rega/pages/tabs/user/newFav.htm
-@@ -614,9 +614,8 @@
-               Write( oEntry.Address() );
-             Write( '</td>' );
-             Write( '<td class="tCell">' );
--              object oFunctions = oEntry.ChnFunction();
-               string s;
--              foreach(s, oFunctions.EnumIDs())
-+              foreach(s, oEntry.ChnFunction())
-               {
-                 Write( dom.GetObject(s).Name() );
-                 Write( '<br />' );
-@@ -624,9 +623,8 @@
-               }
-             Write( '</td>' );
-             Write( '<td class="tCell">' );
--              object oRooms = oEntry.ChnRoom();
-               string s;
--              foreach(s, oRooms.EnumIDs())
-+              foreach(s, oEntry.ChnRoom())
-               {
-                 Write( dom.GetObject(s).Name() );
-                 Write( '<br />' );
 --- homematic/WebUI/www/tcl/extern/cgi.tcl.orig
 +++ homematic/WebUI/www/tcl/extern/cgi.tcl
 @@ -2698,7 +2698,7 @@
@@ -2226,7 +2041,7 @@
      "dialogSettingsCMLogLevel0" : "Her seyi Log'lara gecir",
 --- homematic/WebUI/www/webui/webui.js.orig
 +++ homematic/WebUI/www/webui/webui.js
-@@ -11415,8 +11415,9 @@
+@@ -11423,8 +11423,9 @@
      var isOk = true;
      for (var i = 0, len = ips.length; i < len; i++) {
        var ip = ips[i];
@@ -2237,7 +2052,7 @@
        }
      }
  
-@@ -18276,7 +18277,7 @@
+@@ -18284,7 +18285,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
@@ -2246,7 +2061,7 @@
      $("body").appendChild(script);
    },
  
-@@ -18372,7 +18373,7 @@
+@@ -18380,7 +18381,7 @@
     **/
    setLatestVersion: function(latestVersion, product)
    {

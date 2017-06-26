@@ -48,8 +48,8 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [RaspberryPi Zero W](https://www.raspberrypi.org/products/pi-zero-w/)  
   * [RaspberryPi Zero](https://www.raspberrypi.org/products/pi-zero/)
   * [RaspberryPi Compute Module 1](https://www.raspberrypi.org/products/compute-module/)  
-  * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/)
-  * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/)
+  * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/) or [Model B, 512MB](https://www.adafruit.com/product/998)
+  * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) or [Model A, 256MB](https://www.adafruit.com/product/1344)
   * [ASUS Tinkerboard](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
 * 2GB minimum space on microSD card or USB memory stick / hard disk (when using RaspberryPi3)
 * HomeMatic-RF GPIO radio module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html)) and/or HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
@@ -73,6 +73,7 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [Watchdog](https://github.com/jens-maus/hm-watchdog)
 * [homeputer CL Studio](http://www.contronics.de/download/homeputer-studio-software.html)
 * [Print / ProgrammeDrucken](https://github.com/litti/hm-print)
+* [HomeMatic Check_MK](https://github.com/alexreinert/homematic_check_mk)
 
 ## Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:

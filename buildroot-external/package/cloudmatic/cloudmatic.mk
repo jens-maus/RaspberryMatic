@@ -3,19 +3,23 @@
 # CloudMatic/meine-homematic.de support
 #
 #############################################################
-CLOUDMATIC_VERSION = 20160417
-CLOUDMATIC_SOURCE =
-CLOUDMATIC_SITE =
-
-define CLOUDMATIC_PRE_PATCH
-	cp $(CLOUDMATIC_PKGDIR)/Makefile $(@D)
-  cp -R $(CLOUDMATIC_PKGDIR)/mh $(@D)
-endef
-
-CLOUDMATIC_PRE_PATCH_HOOKS += CLOUDMATIC_PRE_PATCH
+CLOUDMATIC_VERSION = 2017020901
+CLOUDMATIC_COMMIT = 1de8d7ec25f8a8a4ae44b21cc2d8e651ab6df7f0
+CLOUDMATIC_SITE = $(call github,EasySmartHome,CloudMatic-CCUAddon,$(CLOUDMATIC_COMMIT))
+CLOUDMATIC_LICENSE = PROPERITARY
 
 define CLOUDMATIC_INSTALL_TARGET_CMDS
-	$(MAKE) -C $(@D) install 
+	mkdir $(TARGET_DIR)/opt/mh
+	cp -a $(@D)/install.tcl $(TARGET_DIR)/opt/mh/
+	chmod a+rx $(TARGET_DIR)/opt/mh/install.tcl
+	cp -a $(@D)/startup.sh $(TARGET_DIR)/opt/mh/
+	chmod a+rx $(TARGET_DIR)/opt/mh/startup.sh
+	ln -s /usr/sbin/openvpn $(TARGET_DIR)/opt/mh/
+	cp -a $(@D)/user $(TARGET_DIR)/opt/mh/
+	chmod a+rx $(TARGET_DIR)/opt/mh/user/*
+	chmod a+rx $(TARGET_DIR)/opt/mh/user/scripts/*
+	cp -a $(@D)/www $(TARGET_DIR)/opt/mh/
+	chmod a+rx $(TARGET_DIR)/opt/mh/www/*.cgi
 endef
 
 $(eval $(generic-package))

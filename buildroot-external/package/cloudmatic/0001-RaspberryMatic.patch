@@ -1,0 +1,51 @@
+--- a/startup.sh.orig	2017-06-23 16:55:03.000000000 +0200
++++ b/startup.sh	2017-06-23 22:08:23.884616470 +0200
+@@ -17,15 +17,24 @@
+   
+   $BASE_DIR/install.tcl
+ 
++else
++
++  # make sure cloudmatic button is always present
++  if ! grep -q "ID mh CONFIG_NAME CloudMatic" /etc/config/hm_addons.cfg 2>/dev/null; then
++    $BASE_DIR/install.tcl
++  fi
++
+ fi
+ 
+-mkdir -p /dev/net
+-mknod /dev/net/tun c 10 200
+-insmod $BASE_DIR/tun.ko
++if [ ! -d /dev/net ]; then
++  mkdir -p /dev/net
++  mknod /dev/net/tun c 10 200
++  insmod $BASE_DIR/tun.ko
++fi
+ 
+ 
+-l1=`ifconfig | grep 'eth0' | tr -s ' ' | cut -d ' ' -f5 | tr ':' '-'`
+-l2=`ifconfig | grep 'usb0' | tr -s ' ' | cut -d ' ' -f5 | tr ':' '-'` 
++l1=`grep Serial /proc/cpuinfo | sed 's|Serial||' | sed 's|:||' | sed 's/^[ \t]*//'`
++l2=`ifconfig | grep 'eth0' | tr -s ' ' | cut -d ' ' -f5 | tr ':' '-'` 
+ echo SerialNumber=$l1 > $USER_DIR/ids
+ echo BidCoS-Address=$l2 >> $USER_DIR/ids
+ 
+@@ -54,4 +63,4 @@
+ 	(crontab -l 2>/dev/null; echo "0 */6 * * * /bin/sh /usr/local/etc/config/addons/mh/cloudmaticcheck.sh >> /dev/null") | crontab -
+   # autostart vpn service
+   dohammer=`/bin/sh $USER_DIR/loophammer.sh`
+-fi
+\ No newline at end of file
++fi
+--- a/user/cleanup.sh.orig	2017-06-23 16:55:03.000000000 +0200
++++ b/user/cleanup.sh	2017-06-23 22:17:31.849663097 +0200
+@@ -37,7 +37,7 @@
+   
+ $BASE_DIR/install.tcl
+ 
+-l1=`ifconfig | grep 'eth0' | tr -s ' ' | cut -d ' ' -f5 | tr ':' '-'`
+-l2=`ifconfig | grep 'usb0' | tr -s ' ' | cut -d ' ' -f5 | tr ':' '-'` 
++l1=`grep Serial /proc/cpuinfo | sed 's|Serial||' | sed 's|:||' | sed 's/^[ \t]*//'`
++l2=`ifconfig | grep 'eth0' | tr -s ' ' | cut -d ' ' -f5 | tr ':' '-'` 
+ echo SerialNumber=$l1 > /etc/config/addons/mh/ids
+ echo BidCoS-Address=$l2 >> /etc/config/addons/mh/ids

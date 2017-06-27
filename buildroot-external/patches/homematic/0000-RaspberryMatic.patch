@@ -393,7 +393,19 @@
  ##
  ## Use IPv6?
  ##
-@@ -370,7 +397,7 @@
+@@ -127,6 +154,11 @@
+ server.pid-file = state_dir + "/lighttpd.pid"
+ 
+ ##
++## number of worker processes to spawn.
++##
++server.max-worker = 4
++
++##
+ #######################################################################
+ 
+ #######################################################################
+@@ -370,7 +402,7 @@
  ##
  ## defaults to /var/tmp as we assume it is a local harddisk
  ##

@@ -1051,14 +1051,17 @@ proc action_shutdown_go {} {
 }
 
 proc action_update_start {} {
+    http_head
     catch { exec killall hss_lcd }
     catch { exec lcdtool {Saving     Data...    } }
     rega system.Save()
     catch { exec lcdtool {Reboot...             } }
     
     set reboot 1
-    set tryrun 1
-    libfirmware::install_latest_version $reboot $tryrun
+    set tryrun 0
+    if [catch {libfirmware::install_latest_version $reboot $tryrun} err] {
+       puts $err
+    }
     #if {[isOldCCU]} {
     #    exec /sbin/init -q
     #} else {

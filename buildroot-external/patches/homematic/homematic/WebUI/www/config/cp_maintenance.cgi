@@ -3,6 +3,7 @@ source once.tcl
 sourceOnce cgi.tcl
 sourceOnce session.tcl
 sourceOnce common.tcl
+sourceOnce /lib/libfirmware.tcl
 
 load tclrega.so
 load tclrpc.so
@@ -363,91 +364,96 @@ proc action_put_page {} {
                         table_row {
                             table_data {align="left"} {colspan="3"} {
                                 #puts "[bold "Software-Update durchführen"]"
-                                puts "<b>\${dialogSettingsCMLblPerformSoftwareUpdate}</b>"
-                            }
-                        }
-                        table_row {
-                            td {width="20"} {}
-                            table_data {align="left"} {
-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep1}"
-                            }
-                            table_data {
                                 division {class="popupControls CLASS20905"} {
-                                    table {
-                                        table_row {
-                                            table_data {
-                                                division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
-                                                division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
-                                            }
-                                        }
+                                    division {class="CLASS20910 colorGradient50px"} {onClick="OnFirmwareUpdate();"} {
+                                        puts "\${dialogSettingsCMLblPerformSoftwareUpdate}"
                                     }
                                 }
                             }
                         }
-                        table_row {
-                            td {width="20"} {}
-                            table_data {align="left"} {colspan="2"} {
-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
-                            }
-                        }
-                        table_row {
-                            td {width="20"} {}
-                            table_data {colspan="2"} {
-                                form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
-                                    export action=firmware_upload
-                                    export downloadOnly=$downloadOnly
-                                    file_button firmware_file size=30 maxlength=1000000
-                                }
-                                puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
-                            }
-                        }
-                        table_row {
-                            td {width="20"} {}
-                            table_data {align="left"} {
-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep3}"
-                            }
-                            table_data {
-                                division {class="popupControls CLASS20905"} {
-                                    table {
-                                        table_row {
-                                            table_data {
-                                                division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
-                                                  puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        table_row {
-                            td {width="20"} {}
-                            table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
-                            }
-                        }
+                        #table_row {
+                        #    td {width="20"} {}
+                        #    table_data {align="left"} {
+                        #        puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep1}"
+                        #    }
+                        #    table_data {
+                        #        division {class="popupControls CLASS20905"} {
+                        #            table {
+                        #                table_row {
+                        #                    table_data {
+                        #                        division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
+                        #                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+                        #                    }
+                        #                }
+                        #            }
+                        #        }
+                        #    }
+                        #}
+                        #table_row {
+                        #    td {width="20"} {}
+                        #    table_data {align="left"} {colspan="2"} {
+                        #        #puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
+                        #        puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic}"
+                        #    }
+                        #}
+                        #table_row {
+                        #    td {width="20"} {}
+                        #    table_data {colspan="2"} {
+                        #        form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
+                        #            export action=firmware_upload
+                        #            export downloadOnly=$downloadOnly
+                        #            file_button firmware_file size=30 maxlength=1000000
+                        #        }
+                        #        puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
+                        #    }
+                        #}
+                        #table_row {
+                        #    td {width="20"} {}
+                        #    table_data {align="left"} {
+                        #        puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep3}"
+                        #    }
+                        #    table_data {
+                        #        division {class="popupControls CLASS20905"} {
+                        #            table {
+                        #                table_row {
+                        #                    table_data {
+                        #                        division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
+                        #                          puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
+                        #                        }
+                        #                    }
+                        #                }
+                        #            }
+                        #        }
+                        #    }
+                        #}
+                        #table_row {
+                        #    td {width="20"} {}
+                        #    table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
+                        #        puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
+                        #    }
+                        #}
                     }
                 }
                 table_data {align="left"} {class="CLASS20921"} {
                     puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
-                    puts "\${dialogSettingsCMHintSoftwareUpdate1}"
-                    number_list {class="j_noForcedUpdate"} {
-                        li {
-                          ${dialogSettingsCMHintSoftwareUpdate2}                        }
-                        li {
-                             ${dialogSettingsCMHintSoftwareUpdate3}
-                        }
-                        set bat_level [get_bat_level]
-                        if {$bat_level < 50} {
-                            set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
-                            append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
-                            li $msg
-                        }
-                    }
+                    #puts "\${dialogSettingsCMHintSoftwareUpdate1}"
+                    #number_list {class="j_noForcedUpdate"} {
+                    #    li {
+                    #      ${dialogSettingsCMHintSoftwareUpdate2}                        }
+                    #    li {
+                    #         ${dialogSettingsCMHintSoftwareUpdate3}
+                    #    }
+                    #    set bat_level [get_bat_level]
+                    #    if {$bat_level < 50} {
+                    #        set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
+                    #        append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
+                    #        li $msg
+                    #    }
+                    #}
 
-                    division {class="j_forcedUpdate" style="padding:10px;"} {
-                      puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
-                    }
+                    #division {class="j_forcedUpdate" style="padding:10px;"} {
+                    #  puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
+                    #}
                 }
             }
             table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
@@ -731,6 +737,11 @@ proc action_put_page {} {
             }
         }
         puts {
+            OnFirmwareUpdate = function() {
+                dlgPopup.hide();
+                dlgPopup.setWidth(400);
+                dlgPopup.LoadFromFile(url, "action=firmware_update_confirm");
+            }
             OnReboot = function() {
                 dlgPopup.hide();
                 dlgPopup.setWidth(400);
@@ -1044,12 +1055,15 @@ proc action_update_start {} {
     catch { exec lcdtool {Saving     Data...    } }
     rega system.Save()
     catch { exec lcdtool {Reboot...             } }
-
-    if {[isOldCCU]} {
-        exec /sbin/init -q
-    } else {
-        exec /bin/kill -SIGQUIT 1
-    }
+    
+    set reboot 1
+    set tryrun 1
+    libfirmware::install_latest_version $reboot $tryrun
+    #if {[isOldCCU]} {
+    #    exec /sbin/init -q
+    #} else {
+    #    exec /bin/kill -SIGQUIT 1
+    #}
 }
 
 proc action_reboot {} {

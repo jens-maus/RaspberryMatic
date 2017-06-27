@@ -402,7 +402,7 @@ proc ::libfirmware::download_firmware {version} {
 	set archive_file "${img_dir}/${archive_file}"
 	file mkdir $img_dir
 	if {$log_file != ""} {
-		exec /usr/bin/wget "${download_url}" --show-progress --progress=dot:giga --no-check-certificate --quiet --output-document=$archive_file 2>>"${log_file}"
+		exec /usr/bin/wget "${download_url}" --show-progress --progress=dot:giga --no-check-certificate --quiet --output-document=$archive_file 2>>${log_file}
 		write_log ""
 	} else {
 		exec /usr/bin/wget "${download_url}" --no-check-certificate --quiet --output-document=$archive_file

@@ -523,6 +523,16 @@ proc ::libfirmware::install_firmware_version {version {reboot 1} {dryrun 0}} {
 	variable log_file
 	variable install_log
 	
+	foreach var {install_lock log_file install_log} {
+		set var [set $var]
+		if {$var != ""} {
+			set basedir [file dirname $var]
+			if {![file exists $basedir]} {
+				file mkdir $basedir
+			}
+		}
+	}
+	
 	set fd [open $install_lock "w"]
 	puts $fd [pid]
 	close $fd

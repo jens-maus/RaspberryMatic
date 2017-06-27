@@ -112,9 +112,9 @@ proc ::libfirmware::get_partion_start_and_size {device partition} {
 
 proc ::libfirmware::is_system_upgradeable {} {
 	variable sys_dev
-	if { [libfirmware::get_filesystem_label "${sys_dev}p2"] != "rootfs1" } {
-		return 0
-	}
+	#if { [libfirmware::get_filesystem_label "${sys_dev}p2"] != "rootfs1" } {
+	#	return 0
+	#}
 	if { [libfirmware::get_filesystem_label "${sys_dev}p3"] != "rootfs2" } {
 		return 0
 	}

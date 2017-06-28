@@ -643,7 +643,7 @@
          INFO {Ermittelt alle bekannten Gruppen von Datenquellen}
          ARGUMENTS {}
 -}
-\ No newline at end of file
+\ Kein Zeilenumbruch am Dateiende.
 +}
 --- homematic/WebUI/www/api/methods/user/createcertificate.tcl.orig
 +++ homematic/WebUI/www/api/methods/user/createcertificate.tcl
@@ -687,24 +687,220 @@
  
 --- homematic/WebUI/www/config/cp_maintenance.cgi.orig
 +++ homematic/WebUI/www/config/cp_maintenance.cgi
-@@ -377,7 +377,7 @@
-                                         table_row {
-                                             table_data {
-                                                 division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
+@@ -3,6 +3,7 @@
+ sourceOnce cgi.tcl
+ sourceOnce session.tcl
+ sourceOnce common.tcl
++sourceOnce /lib/libfirmware.tcl
+ 
+ load tclrega.so
+ load tclrpc.so
+@@ -253,6 +254,31 @@
+                 sendXML: false
+             };
+             new Ajax.Request(url, opts);
++            function update_install_log() {
++                jQuery.ajax({
++                    url: url,
++                    method: "POST",
++                    data: "action=read_install_log",
++                    success: function(data) {
++                        console.log(data);
++                        var regex_success = /INSTALL_FIRMWARE_SUCCESS\n/g;
++                        if (regex_success.test(data)) {
++                            jQuery('#update_log').css('color', 'green');
++                        }
++                        else {
++                            setTimeout(update_install_log, 1000);
++                        }
++                        data = data.replace(regex_success, "");
++                        jQuery('#update_log').html(data);
++                        jQuery('#update_log').scrollTop(jQuery('#update_log').prop("scrollHeight"));
++                    }
++                });
++            }
++            jQuery('div#messagebox').css('width', '800px').css('margin-left', '-400px');
++            jQuery('div#messagebox div.CLASS20900')
++                .append(jQuery('<div style="border: 1px solid black; background-color:#ffffff;">')
++                    .append(jQuery('<pre id="update_log" style="max-height:200px; margin:5px; overflow-x:hidden; overflow-y:auto; white-space:pre-wrap;">')));
++            setTimeout(update_install_log, 1000);
+         }
+     }
+ }
+@@ -363,90 +389,96 @@
+                         table_row {
+                             table_data {align="left"} {colspan="3"} {
+                                 #puts "[bold "Software-Update durchführen"]"
+-                                puts "<b>\${dialogSettingsCMLblPerformSoftwareUpdate}</b>"
+-                            }
+-                        }
+-                        table_row {
+-                            td {width="20"} {}
+-                            table_data {align="left"} {
+-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep1}"
+-                            }
+-                            table_data {
+                                 division {class="popupControls CLASS20905"} {
+-                                    table {
+-                                        table_row {
+-                                            table_data {
+-                                                division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
 -                                                division {class="CLASS20908"}  "onClick=\"showCCULicense();\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
-+                                                division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
-                                             }
-                                         }
+-                                            }
+-                                        }
++                                    division {class="CLASS20910 colorGradient50px"} {onClick="OnFirmwareUpdate();"} {
++                                        puts "\${dialogSettingsCMLblPerformSoftwareUpdate}"
                                      }
-@@ -429,6 +429,7 @@
+                                 }
+                             }
+                         }
+-                        table_row {
+-                            td {width="20"} {}
+-                            table_data {align="left"} {colspan="2"} {
+-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
+-                            }
+-                        }
+-                        table_row {
+-                            td {width="20"} {}
+-                            table_data {colspan="2"} {
+-                                form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
+-                                    export action=firmware_upload
+-                                    export downloadOnly=$downloadOnly
+-                                    file_button firmware_file size=30 maxlength=1000000
+-                                }
+-                                puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
+-                            }
+-                        }
+-                        table_row {
+-                            td {width="20"} {}
+-                            table_data {align="left"} {
+-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep3}"
+-                            }
+-                            table_data {
+-                                division {class="popupControls CLASS20905"} {
+-                                    table {
+-                                        table_row {
+-                                            table_data {
+-                                                division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
+-                                                  puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
+-                                                }
+-                                            }
+-                                        }
+-                                    }
+-                                }
+-                            }
+-                        }
+-                        table_row {
+-                            td {width="20"} {}
+-                            table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
+-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
+-                            }
+-                        }
++                        #table_row {
++                        #    td {width="20"} {}
++                        #    table_data {align="left"} {
++                        #        puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep1}"
++                        #    }
++                        #    table_data {
++                        #        division {class="popupControls CLASS20905"} {
++                        #            table {
++                        #                table_row {
++                        #                    table_data {
++                        #                        division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
++                        #                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
++                        #                    }
++                        #                }
++                        #            }
++                        #        }
++                        #    }
++                        #}
++                        #table_row {
++                        #    td {width="20"} {}
++                        #    table_data {align="left"} {colspan="2"} {
++                        #        #puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
++                        #        puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic}"
++                        #    }
++                        #}
++                        #table_row {
++                        #    td {width="20"} {}
++                        #    table_data {colspan="2"} {
++                        #        form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
++                        #            export action=firmware_upload
++                        #            export downloadOnly=$downloadOnly
++                        #            file_button firmware_file size=30 maxlength=1000000
++                        #        }
++                        #        puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
++                        #    }
++                        #}
++                        #table_row {
++                        #    td {width="20"} {}
++                        #    table_data {align="left"} {
++                        #        puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep3}"
++                        #    }
++                        #    table_data {
++                        #        division {class="popupControls CLASS20905"} {
++                        #            table {
++                        #                table_row {
++                        #                    table_data {
++                        #                        division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
++                        #                          puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
++                        #                        }
++                        #                    }
++                        #                }
++                        #            }
++                        #        }
++                        #    }
++                        #}
++                        #table_row {
++                        #    td {width="20"} {}
++                        #    table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
++                        #        puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
++                        #    }
++                        #}
                      }
                  }
                  table_data {align="left"} {class="CLASS20921"} {
+-                    puts "\${dialogSettingsCMHintSoftwareUpdate1}"
+-                    number_list {class="j_noForcedUpdate"} {
+-                        li {
+-                          ${dialogSettingsCMHintSoftwareUpdate2}                        }
+-                        li {
+-                             ${dialogSettingsCMHintSoftwareUpdate3}
+-                        }
+-                        set bat_level [get_bat_level]
+-                        if {$bat_level < 50} {
+-                            set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
+-                            append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
+-                            li $msg
+-                        }
+-                    }
+-
+-                    division {class="j_forcedUpdate" style="padding:10px;"} {
+-                      puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
+-                    }
 +                    puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
-                     puts "\${dialogSettingsCMHintSoftwareUpdate1}"
-                     number_list {class="j_noForcedUpdate"} {
-                         li {
-@@ -467,6 +468,21 @@
++                    #puts "\${dialogSettingsCMHintSoftwareUpdate1}"
++                    #number_list {class="j_noForcedUpdate"} {
++                    #    li {
++                    #      ${dialogSettingsCMHintSoftwareUpdate2}                        }
++                    #    li {
++                    #         ${dialogSettingsCMHintSoftwareUpdate3}
++                    #    }
++                    #    set bat_level [get_bat_level]
++                    #    if {$bat_level < 50} {
++                    #        set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
++                    #        append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
++                    #        li $msg
++                    #    }
++                    #}
++
++                    #division {class="j_forcedUpdate" style="padding:10px;"} {
++                    #  puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
++                    #}
+                 }
+             }
+             table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
+@@ -467,6 +499,21 @@
                      puts "\${dialogSettingsCMHintRestart}"
                  }
              }
@@ -726,13 +922,12 @@
              
              # Abgesicherter Modus
              table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-@@ -488,78 +504,78 @@
+@@ -488,78 +535,78 @@
              }
  
              # Version Logikschicht
 -            table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-+            #table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
- 
+-
 -              table_data {class="CLASS20903"} $styleMaxWidth {
 -                puts "\${lblTDRegaVersion}"
 -              }
@@ -765,7 +960,8 @@
 -                  }
 -                }
 -              }
--
++            #table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
+ 
 -              table_data {align="left"} {class="CLASS20904"} {
 -                puts "\${lblTDReGaVersionHelp}"
 -              }
@@ -876,7 +1072,18 @@
  
              table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
                  table_data {class="CLASS20903"} $styleMaxWidth  {
-@@ -721,6 +737,12 @@
+@@ -715,12 +762,23 @@
+             }
+         }
+         puts {
++            OnFirmwareUpdate = function() {
++                dlgPopup.hide();
++                dlgPopup.setWidth(400);
++                dlgPopup.LoadFromFile(url, "action=firmware_update_confirm");
++            }
+             OnReboot = function() {
+                 dlgPopup.hide();
+                 dlgPopup.setWidth(400);
                  dlgPopup.LoadFromFile(url, "action=reboot_confirm");
              }
              
@@ -889,7 +1096,7 @@
              OnEnterSafeMode = function() {
                new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRestartSafeMode"), function(result) {
                  if (result == YesNoDialog.RESULT_YES)
-@@ -934,6 +956,89 @@
+@@ -934,17 +992,111 @@
      }
  }
  
@@ -977,9 +1184,36 @@
 +}
 +
  proc action_update_start {} {
++    http_head
      catch { exec killall hss_lcd }
      catch { exec lcdtool {Saving     Data...    } }
-@@ -952,8 +1057,17 @@
+     rega system.Save()
+     catch { exec lcdtool {Reboot...             } }
++    
++    set reboot 1
++    set dryrun 0
++    if [catch {libfirmware::install_latest_version $reboot $dryrun} err] {
++       puts $err
++    }
++    #if {[isOldCCU]} {
++    #    exec /sbin/init -q
++    #} else {
++    #    exec /bin/kill -SIGQUIT 1
++    #}
++}
+ 
+-    if {[isOldCCU]} {
+-        exec /sbin/init -q
+-    } else {
+-        exec /bin/kill -SIGQUIT 1
+-    }
++proc action_read_install_log {} {
++    http_head
++    puts [libfirmware::read_install_log]
+ }
+ 
+ proc action_reboot {} {
+@@ -952,8 +1104,17 @@
      catch { exec lcdtool {Saving     Data...    } }
      rega system.Save()
      catch { exec lcdtool {Reboot...             } }
@@ -1695,6 +1929,21 @@
  
 --- homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
 +++ homematic/WebUI/www/webui/js/lang/de/translate.lang.extension.js
+@@ -248,11 +248,11 @@
+     "dialogSettingsCMDialogPerformSoftwareUpdateLi2" : "L%F6schen Sie den Cache Ihres Webbrowsers.<br />Hinweise dazu erhalten Sie in dem Tutorial <a href='http://www.eq-3.de/service/faq.html?id=38' target='_blank'>WebUI Firmware Update: Browser-Cache leeren</a> auf http://www.eq-3.de",
+     "dialogSettingsCMDialogPerformSoftwareUpdateLi3" : "Starten Sie Ihren Webbrowser neu.",
+     "dialogSettingsCMDialogPerformSoftwareUpdateStartTitle" : "Software-Update - Best%E4tigung",
+-    "dialogSettingsCMDialogPerformSoftwareUpdateStart" : "Die einzuspielende Softwaredatei befindet sich jetzt auf der " + HMIdentifier.de.CCUShortName + ".<br/>",
+-    "dialogSettingsCMDialogPerformSoftwareLblUpdateStart" : "Schritt 4: Software-Update starten",
++    "dialogSettingsCMDialogPerformSoftwareUpdateStart" : "Das Software-Update wird nun heruntergeladen und auf der " + HMIdentifier.de.CCUShortName + " installiert.<br/>",
++    "dialogSettingsCMDialogPerformSoftwareLblUpdateStart" : "Software-Update starten",
+     "dialogSettingsCMDialogPerformSoftwareBtnUpdateStart" : "Update starten",
+     "dialogSettingsCMDialogHintPerformFirmwareUploadTitle" : "Hinweis!",
+-    "dialogSettingsCMDialogHintPerformFirmwareUploadContent" : "Das Firmware-Update wird auf die " + HMIdentifier.de.CCUShortName + " %FCbertragen.<br/><br/>Bitte haben Sie einen Augenblick Geduld.",
++    "dialogSettingsCMDialogHintPerformFirmwareUploadContent" : "Das Firmware-Update wird auf die " + HMIdentifier.de.CCUShortName + " %FCbertragen.<br/><br/>Dieser Vorgang kann einige Minuten dauern.",
+     "commentSettingsDialogMaintenancePerformSoftwareUpdateEnd" : "***********************************************",
+     "forcedUpdateHint" : "F%FCr einen einwandfreien Betrieb Ihrer neuen " + HMIdentifier.de.CCUFullNameText + " muss zun%E4chst ein Update durchgef%FChrt werden. Klicken Sie dazu auf den Button 'Update' und installieren Sie die Dateien. Anschlie%DFend steht Ihnen der volle Funktionsumfang Ihrer " + HMIdentifier.de.CCUShortName + " zur Verf%FCgung.",
+     "forcedUpdateBtn" : "Update",
 @@ -333,6 +333,8 @@
      "dialogSettingsSecurityMessagePerformSystemResetContent" : "Best&auml;tigen Sie hier, um den System-Reset durchzuf&uuml;hren.<br/><br>Die " + HMIdentifier.de.CCUShortName + " wird automatisch neu gestartet. Danach k&ouml;nnen Sie sich wieder anmelden.",
      "dialogPerformRebootTitle" : "Neustart der Zentrale",
@@ -1709,7 +1958,7 @@
      "theEnd" : ""
    }
 -});
-\ No newline at end of file
+\ Kein Zeilenumbruch am Dateiende.
 +});
 --- homematic/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ homematic/WebUI/www/webui/js/lang/de/translate.lang.js
@@ -1769,6 +2018,21 @@
      "dialogSettingsCMLogLevel0" : "Alles loggen",
 --- homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
 +++ homematic/WebUI/www/webui/js/lang/en/translate.lang.extension.js
+@@ -248,11 +248,11 @@
+     "dialogSettingsCMDialogPerformSoftwareUpdateLi2" : "Please delete the cache of your browser.<br />You will find further information in the tutorial <a href='http://www.eq-3.de/service/faq.html?id=38' target='_blank'>Web-UI Firmware Update: Browser-Cache leeren</a> on http://www.eq-3.de",
+     "dialogSettingsCMDialogPerformSoftwareUpdateLi3" : "Restart your browser.",
+     "dialogSettingsCMDialogPerformSoftwareUpdateStartTitle" : "Software update - confirmation",
+-    "dialogSettingsCMDialogPerformSoftwareUpdateStart" : "The software file that has to be installed has been uploaded to your " + HMIdentifier.en.CCUShortName + ".<br/>",
+-    "dialogSettingsCMDialogPerformSoftwareLblUpdateStart" : "Step 4: Start software update",
++    "dialogSettingsCMDialogPerformSoftwareUpdateStart" : "The software update will now be downloaded and installed to your " + HMIdentifier.en.CCUShortName + ".<br/>",
++    "dialogSettingsCMDialogPerformSoftwareLblUpdateStart" : "Start software update",
+     "dialogSettingsCMDialogPerformSoftwareBtnUpdateStart" : "Start update",
+     "dialogSettingsCMDialogHintPerformFirmwareUploadTitle" : "Please note!",
+-    "dialogSettingsCMDialogHintPerformFirmwareUploadContent" : "The firmware update is currently being uploaded to your " + HMIdentifier.en.CCUShortName + ".<br/><br/>Please wait a moment.",
++    "dialogSettingsCMDialogHintPerformFirmwareUploadContent" : "The firmware update is currently being uploaded to your " + HMIdentifier.en.CCUShortName + ".<br/><br/>This process can take several minutes.",
+     "commentSettingsDialogMaintenancePerformSoftwareUpdateEnd" : "***********************************************",
+     "forcedUpdateHint" : "To ensure full operation of your new " + HMIdentifier.en.CCUFullNameText + ", please perform an update first. Therefore, please click the button 'Update' and install the files. The full range of functions will then be available for your " + HMIdentifier.en.CCUShortName + ".",
+     "forcedUpdateBtn" : "Update",
 @@ -333,6 +333,8 @@
      "dialogSettingsSecurityMessagePerformSystemResetContent" : "Please confirm here to start the system reset.<br/><br>The " + HMIdentifier.en.CCUShortName + " will be restarted automatically. Afterwards, you can log in again.",
      "dialogPerformRebootTitle" : "Restart of CCU",
@@ -1783,7 +2047,7 @@
      "theEnd" : ""
    }
 -});
-\ No newline at end of file
+\ Kein Zeilenumbruch am Dateiende.
 +});
 --- homematic/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ homematic/WebUI/www/webui/js/lang/en/translate.lang.js
@@ -1843,6 +2107,19 @@
      "dialogSettingsCMLogLevel0" : "Log all",
 --- homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js.orig
 +++ homematic/WebUI/www/webui/js/lang/tr/translate.lang.extension.js
+@@ -249,10 +249,10 @@
+     "dialogSettingsCMDialogPerformSoftwareUpdateLi3" : "Web tarayicinizi tekrar baslatin.",
+     "dialogSettingsCMDialogPerformSoftwareUpdateStartTitle" : "Yazilim g%FCncellemesini onaylayin",
+     "dialogSettingsCMDialogPerformSoftwareUpdateStart" : "Kurulacak yazilim dosyasini surada bulabilirsiniz: " + HMIdentifier.tr.CCUShortName + ".<br/>",
+-    "dialogSettingsCMDialogPerformSoftwareLblUpdateStart" : "Adim 4: Yazilim g%FCncellemesini baslatma",
++    "dialogSettingsCMDialogPerformSoftwareLblUpdateStart" : "Yazilim g%FCncellemesini baslatma",
+     "dialogSettingsCMDialogPerformSoftwareBtnUpdateStart" : "G%FCncellemeyi baslatin",
+     "dialogSettingsCMDialogHintPerformFirmwareUploadTitle" : "Bilgi!",
+-    "dialogSettingsCMDialogHintPerformFirmwareUploadContent" : "Yazilim g%FCncellemesi suraya aktariliyor: " + HMIdentifier.tr.CCUShortName + ".<br/><br/>L%FCtfen biraz sabredin.",
++    "dialogSettingsCMDialogHintPerformFirmwareUploadContent" : "Yazilim g%FCncellemesi indirilebilir ve kurulacak " + HMIdentifier.tr.CCUShortName + ".<br/><br/>Bu islem birkac dakika alabilir.",
+     "commentSettingsDialogMaintenancePerformSoftwareUpdateEnd" : "***********************************************",
+     "forcedUpdateHint" : "Yeni " + HMIdentifier.tr.CCUFullNameText + "'nin kusursuz calisabilmesi icin %F6nce g%FCncelleme yapmalisiniz. Bunun icin \"g%FCncelleme\" d%FCgmesine tiklayin ve dosyalari y%FCkleyin. Daha sonra " + HMIdentifier.tr.CCUShortName + "'nin t%FCm\nfonksiyonlarini kullanabilirsiniz.",
+     "forcedUpdateBtn" : "G%FCncelleme",
 @@ -332,6 +332,8 @@
      "profileNotSaveable" : "Bu profil, profil taslagi olarak kaydedilemez.",
      "dialogPerformRebootTitle" : "Merkezi yeniden baslat",
@@ -1857,7 +2134,7 @@
      "theEnd" : ""
    }
 -});
-\ No newline at end of file
+\ Kein Zeilenumbruch am Dateiende.
 +});
 --- homematic/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
 +++ homematic/WebUI/www/webui/js/lang/tr/translate.lang.js

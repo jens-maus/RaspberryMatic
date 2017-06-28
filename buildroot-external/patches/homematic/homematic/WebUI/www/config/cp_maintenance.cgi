@@ -254,6 +254,31 @@ proc action_firmware_update_go {} {
                 sendXML: false
             };
             new Ajax.Request(url, opts);
+            function update_install_log() {
+                jQuery.ajax({
+                    url: url,
+                    method: "POST",
+                    data: "action=read_install_log",
+                    success: function(data) {
+                        console.log(data);
+                        var regex_success = /INSTALL_FIRMWARE_SUCCESS\n/g;
+                        if (regex_success.test(data)) {
+                            jQuery('#update_log').css('color', 'green');
+                        }
+                        else {
+                            setTimeout(update_install_log, 1000);
+                        }
+                        data = data.replace(regex_success, "");
+                        jQuery('#update_log').html(data);
+                        jQuery('#update_log').scrollTop(jQuery('#update_log').prop("scrollHeight"));
+                    }
+                });
+            }
+            jQuery('div#messagebox').css('width', '800px').css('margin-left', '-400px');
+            jQuery('div#messagebox div.CLASS20900')
+                .append(jQuery('<div style="border: 1px solid black; background-color:#ffffff;">')
+                    .append(jQuery('<pre id="update_log" style="max-height:200px; margin:5px; overflow-x:hidden; overflow-y:auto; white-space:pre-wrap;">')));
+            setTimeout(update_install_log, 1000);
         }
     }
 }
@@ -1058,8 +1083,8 @@ proc action_update_start {} {
     catch { exec lcdtool {Reboot...             } }
     
     set reboot 1
-    set tryrun 0
-    if [catch {libfirmware::install_latest_version $reboot $tryrun} err] {
+    set dryrun 0
+    if [catch {libfirmware::install_latest_version $reboot $dryrun} err] {
        puts $err
     }
     #if {[isOldCCU]} {
@@ -1067,6 +1092,11 @@ proc action_update_start {} {
     #} else {
     #    exec /bin/kill -SIGQUIT 1
     #}
+}
+
+proc action_read_install_log {} {
+    http_head
+    puts [libfirmware::read_install_log]
 }
 
 proc action_reboot {} {

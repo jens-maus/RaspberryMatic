@@ -19,14 +19,15 @@
 namespace eval libfirmware {
 	variable version 1.0
 	variable release_url "https://github.com/jens-maus/RaspberryMatic/releases"
-	variable img_dir "/usr/local/tmp/libfirmware/img"
-	variable mnt_sys "/usr/local/tmp/libfirmware/mnt_sys"
-	variable mnt_img "/usr/local/tmp/libfirmware/mnt_img"
+	variable img_dir "/usr/local/tmp"
+	variable mnt_sys "/tmp/libfirmware/mnt_sys"
+	variable mnt_img "/tmp/libfirmware/mnt_img"
 	variable sys_dev "/dev/mmcblk0"
 	variable loop_dev "/dev/loop7"
-	variable install_log "/usr/local/tmp/libfirmware/install.log"
-	variable install_lock "/usr/local/tmp/libfirmware/install.lock"
+	variable install_log "/tmp/libfirmware/install.log"
+	variable install_lock "/tmp/libfirmware/install.lock"
 	variable log_file ""
+	variable debug 0
 }
 
 proc ::libfirmware::get_rpi_version {} {
@@ -158,7 +159,7 @@ proc ::libfirmware::update_cmdline {cmdline root} {
 }
 
 proc ::libfirmware::get_current_root_partition {} {
-	set cmdline "/boot/cmdline.txt"
+	set cmdline "/proc/cmdline"
 	set fd [open $cmdline r]
 	set data [read $fd]
 	close $fd
@@ -236,19 +237,28 @@ proc ::libfirmware::mount_system_partition {partition mountpoint} {
 	} else {
 		write_log "Mounting device ${partition} (rw)."
 	}
-	file mkdir $mountpoint
-	catch {exec /bin/umount "${mountpoint}"}
+	
+	if {![file exists $mountpoint]} {
+		file mkdir $mountpoint
+	}
 	
 	if {$remount} {
-		exec /bin/mount -o bind $partition "${mountpoint}"
+		if {$partition != $mountpoint} {
+			exec /bin/mount -o bind $partition "${mountpoint}"
+		}
 		exec /bin/mount -o remount,rw "${mountpoint}"
 	} else {
+		catch {exec /bin/umount "${mountpoint}"}
 		exec /bin/mount -o rw $partition "${mountpoint}"
 	}
 }
 
 proc ::libfirmware::umount {device_or_mountpoint} {
-	exec /bin/umount "${device_or_mountpoint}"
+	if {$device_or_mountpoint == "/boot"} {
+		exec /bin/mount -o remount,ro "${device_or_mountpoint}"
+	} else {
+		exec /bin/umount "${device_or_mountpoint}"
+	}
 }
 
 proc ::libfirmware::get_filesystem_size_and_usage {device_or_mountpoint} {
@@ -298,13 +308,9 @@ proc ::libfirmware::update_filesystems {image {dryrun 0}} {
 	variable mnt_img
 	variable mnt_sys
 	variable sys_dev
+	variable debug
 	
 	set root_partition [get_current_root_partition]
-	
-	set extra_args ""
-	if {$dryrun != 0} {
-		set extra_args "--dry-run"
-	}
 	
 	write_log "Updating filesystems."
 	
@@ -313,37 +319,68 @@ proc ::libfirmware::update_filesystems {image {dryrun 0}} {
 	
 	foreach img_partition [list 2 1] {
 		set sys_partition $img_partition
+		set mnt_s $mnt_sys
 		if {$img_partition == 2 && $root_partition == 2} {
 			set sys_partition 3
+		}
+		if {$sys_partition == 1} {
+			set mnt_s "/boot"
 		}
 		write_log "Updating system partition ${sys_partition}."
 		
 		mount_image_partition $image $img_partition $mnt_img
-		mount_system_partition $sys_partition $mnt_sys
+		mount_system_partition $sys_partition $mnt_s
 		
-		write_log "Rsyncing filesystem of partition ${sys_partition}."
-		if {$img_partition == 1} {
-			after 6000
+		if {$debug} {
+			write_log "ls -la ${mnt_img}"
+			write_log [exec ls -la ${mnt_img}]
+			write_log "ls -la ${mnt_s}"
+			write_log [exec ls -la ${mnt_s}]
 		}
-		if [catch {exec rsync ${extra_args} --progress --archive --delete "${mnt_img}/" "${mnt_sys}"} err] {
-			write_log $err
+		write_log "Rsyncing filesystem of partition ${sys_partition}."
+		if [catch {
+			set out ""
+			if {$dryrun} {
+				if {$debug} {
+					write_log "rsync --dry-run --progress --archive --delete ${mnt_img}/ ${mnt_s}"
+				}
+				set out [exec rsync --dry-run --progress --archive --delete ${mnt_img} ${mnt_s}]
+			} else {
+				if {$debug} {
+					write_log "rsync --progress --archive --delete ${mnt_img}/ ${mnt_s}"
+				}
+				set out [exec rsync --progress --archive --delete ${mnt_img}/ ${mnt_s}]
+			}
+			if {$debug} {
+				write_log $out
+			}
+		} err] {
+			if {$debug} {
+				write_log $err
+			}
 		}
 		write_log "Rsync finished."
+		if {$debug} {
+			write_log "ls -la ${mnt_img}"
+			write_log [exec ls -la ${mnt_img}]
+			write_log "ls -la ${mnt_s}"
+			write_log [exec ls -la ${mnt_s}]
+		}
 		
 		if {$img_partition == 1} {
 			write_log "Update cmdline."
-			if {$dryrun == 0} {
+			if {!$dryrun} {
 				set new_root_partition 2
 				if {$root_partition == 2} {
 					set new_root_partition 3
 				}
 				set part_uuid [libfirmware::get_part_uuid "${sys_dev}p${new_root_partition}"]
-				update_cmdline "${mnt_sys}/cmdline.txt" "PARTUUID=${part_uuid}"
+				update_cmdline "${mnt_s}/cmdline.txt" "PARTUUID=${part_uuid}"
 			}
 		}
 		
 		umount $mnt_img
-		umount $mnt_sys
+		umount $mnt_s
 	}
 }
 

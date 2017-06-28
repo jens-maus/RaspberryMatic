@@ -1,0 +1,97 @@
+#!/bin/tclsh
+#
+#  Copyright (C) 2017  Jan Schneider <oss@janschneider.net>
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+source /lib/libfirmware.tcl
+
+proc usage {} {
+	global argv0
+	puts stderr ""
+	puts stderr "Usage: ${argv0} \[OPTION\]... \[COMMAND\]..."
+	puts stderr ""
+	puts stderr "Commands"
+	puts stderr "   install             download and install firmware"
+	puts stderr "   available           list available firmware versions"
+	puts stderr "   current             show current firmware version"
+	puts stderr ""
+	puts stderr "Options"
+	puts stderr "   --version VERSION   firmware version to install (latest version if omitted)"
+	puts stderr "   --no-reboot         do not reboot system after install"
+	puts stderr "   --dryrun            perform a trial run with no changes made"
+	puts stderr "   --debug             print debugging information"
+}
+
+proc main {} {
+	global argv
+	set cmd ""
+	set dryrun 0
+	set reboot 1
+	set version "latest"
+	set index 0
+	while {$index < [llength $argv]} {
+		set arg [lindex $argv $index]
+		if {[string first "-" $arg 0] == 0} {
+			if {$arg == "--dryrun"} {
+				set dryrun 1
+			} elseif {$arg == "--no-reboot"} {
+				set reboot 0
+			} elseif {$arg == "--debug"} {
+				set libfirmware::debug 1
+			} elseif {$arg == "--version"} {
+				set version [lindex $argv [incr index]]
+			} else {
+				puts stderr "Invalid option: ${arg}"
+				usage
+				exit 1
+			}
+		} else {
+			set cmd [lindex $argv $index]
+		}
+		incr index
+	}
+	
+	if {$cmd == "install"} {
+		if {$version == "latest"} {
+			libfirmware::install_latest_version $reboot $dryrun
+		} else {
+			libfirmware::install_firmware_version $version $reboot $dryrun
+		}
+	} elseif {$cmd == "current"} {
+		puts [libfirmware::get_current_firmware_version]
+	} elseif {$cmd == "available"} {
+		foreach e [libfirmware::get_available_firmware_downloads] {
+			puts [libfirmware::get_version_from_filename $e]
+		}
+	} elseif {$cmd == ""} {
+		puts stderr "Command missing"
+		usage
+		exit 1
+	} else {
+		puts stderr "Invalid command: ${cmd}"
+		usage
+		exit 1
+	}
+}
+
+if { [ catch {
+	main
+} err ] } {
+	puts stderr "ERROR: ${err}"
+	exit 1
+}
+exit 0
+
+

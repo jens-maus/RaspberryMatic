@@ -322,7 +322,12 @@ proc ::libfirmware::update_filesystems {image {dryrun 0}} {
 		mount_system_partition $sys_partition $mnt_sys
 		
 		write_log "Rsyncing filesystem of partition ${sys_partition}."
-		exec rsync ${extra_args} --progress --archive --delete "${mnt_img}/" "${mnt_sys}"
+		if {$img_partition == 1} {
+			after 6000
+		}
+		if [catch {exec rsync ${extra_args} --progress --archive --delete "${mnt_img}/" "${mnt_sys}"} err] {
+			write_log $err
+		}
 		write_log "Rsync finished."
 		
 		if {$img_partition == 1} {

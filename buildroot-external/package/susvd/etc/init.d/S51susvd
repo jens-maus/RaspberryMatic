@@ -20,7 +20,7 @@ case $1 in
     if [[ -n ${I2C_ADDR} ]]; then
 
       # find out if a S.USV unit is installed at all
-      i2cget -y 1 "${I2C_ADDR}" 22>/dev/null >/dev/null
+      i2cget -y 1 "${I2C_ADDR}" 2>/dev/null >/dev/null
       if [[ $? -eq 0 ]]; then
 
         # now start the daemon

@@ -26,6 +26,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Supports onboard Bluetooth of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setup including USB connection of UPS as well as NUT server use (e.g. via Synology NAS Network UPS functionality)
 * Supports [S.USV Hardware](http://www.s-usv.de/) as an uninterruptible power supply (UPS) HAT including alarm notification upon power loss and automatic system shutdown in case batteries are exhausted
+* Supports [PiModules UPS PIco Hardware](http://pimodules.com/) as an uninterruptible power supply (UPS) including automatic system shutdown in case batteries are exhausted
 * Support to be used as a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
 * Support to be used without [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) RF module and just connect it to a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Full IPv6 support and default HTTPS enabled WebUI support

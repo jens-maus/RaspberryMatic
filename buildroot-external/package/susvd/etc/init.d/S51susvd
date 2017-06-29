@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+# S.USV Daemon starting and stopping
+#
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DESC=susvd
+
+DAEMON=/opt/susvd/susvd
+CONFIG=/opt/susvd/susv.cfg
+PIDFILE=/var/run/susvd.pid
+
+test -x $DAEMON || exit 0
+test -e $CONFIG || exit 0
+
+case $1 in
+  start)
+    echo -n "Starting S.USV daemon: "
+    I2C_ADDR="$(grep "address=" ${CONFIG} | awk '{ print $1 }' | cut -d'=' -f2)"
+    if [[ -n ${I2C_ADDR} ]]; then
+
+      # find out if a S.USV unit is installed at all
+      i2cget -y 1 "${I2C_ADDR}" 22>/dev/null >/dev/null
+      if [[ $? -eq 0 ]]; then
+
+        # now start the daemon
+        ${DAEMON} -start 2>&1 >/dev/null
+        [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+
+      else
+        echo "no hardware found"
+      fi
+    else
+      echo "disabled"
+    fi
+  ;;
+
+  stop)
+    echo -n "Stopping S.USV daemon: "
+    if [[ -f ${PIDFILE} ]]; then
+      ${DAEMON} -stop 2>&1 >/dev/null
+    fi
+    [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+  ;;
+
+  restart|force-reload)
+    $0 stop
+    sleep 1
+    $0 start
+  ;;
+
+  status)
+    ${DAEMON} --status
+  ;;
+
+  *)
+    echo "Usage: $0 {start|stop|restart|force-reload|status}" >&2
+    exit 1
+  ;;
+esac
+
+exit 0

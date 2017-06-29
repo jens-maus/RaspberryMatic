@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PICOD
+	bool "Pico UPS Daemon Support"
+	help
+	  Adds support for Pico UPS Support Daemon
+    
+	  https://github.com/ef-gy/rpi-ups-pico http://pimodules.com

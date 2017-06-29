@@ -531,7 +531,7 @@ proc action_put_page {} {
             #        table_data {}
             #        table_data {align="left"} {
             #          division {class="popupControls CLASS20905"} {
-            #            division {class="CLASS20919"} {onClick="saveRegaVersion(this);"} {
+            #            division {class="CLASS20919"} {style="margin-top:10px; margin-left:0px;"} {onClick="saveRegaVersion(this);"} {
             #                puts "\${btnSave}"
             #            }
             #          }

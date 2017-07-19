@@ -523,14 +523,19 @@ proc action_put_page {} {
                 }
               }
 
-              table_data {align="left"} {class="CLASS20904"} {
-                puts "\${lblTDReGaVersionHelp}"
+              table_data {align="center"} {class="CLASS20904"} {
+                # puts "\${lblTDReGaVersionHelp}"
+                division {Class="StdTableBtnHelp"} {puts "<img id='showReGaVersionHelp' src='/ise/img/help.png'>"}
               }
             }
 
             cgi_javascript {
               puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
               puts {
+
+               jQuery("#showReGaVersionHelp").click(function() {
+                MessageBox.show(translateKey("tooltipHelp"), translateKey("lblTDReGaVersionHelp"), "", 600, 250);
+               });
 
                 homematic("User.getReGaVersion",{}, function(result) {
                   if (result) {

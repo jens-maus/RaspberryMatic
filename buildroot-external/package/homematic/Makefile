@@ -49,6 +49,8 @@ install_hmserver:
 	cp -R HMserver/opt/HMServer/groups $(TARGET_DIR)/opt/HMServer/
 	cp -R HMserver/opt/HMServer/measurement $(TARGET_DIR)/opt/HMServer/
 	cp -R HMserver/opt/HMServer/pages $(TARGET_DIR)/opt/HMServer/
+	cp -a HMserver/etc/init.d $(TARGET_DIR)/etc/init.d/S62HMServer
+	chmod a+rx $(TARGET_DIR)/etc/init.d/S62HMServer
 #ifneq (,$(filter $(HOMEMATIC_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a HMserver/opt/HMServer/HMIPServer.jar $(TARGET_DIR)/opt/HMServer/
 #else

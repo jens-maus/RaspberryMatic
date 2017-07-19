@@ -473,6 +473,48 @@
 -#CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
 +CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
  
+--- homematic/HMserver/etc/init.d.orig
++++ homematic/HMserver/etc/init.d
+@@ -5,12 +5,25 @@
+ 
+ LOGLEVEL_HMServer=5
+ CFG_TEMPLATE_DIR=/etc/config_templates
+-PIDFILE=/var/run/HMIPServer.pid
+ STARTWAITFILE=/var/status/HMServerStarted
+ 
++source /var/hm_mode 2>/dev/null
++
++# skip this startup in LAN Gateway mode
++[[ ${HM_MODE} == "HMLGW" ]] && exit 0
++
++if [[ ${HM_MODE} == "HmIP" ]]; then
++  HM_SERVER=/opt/HMServer/HMIPServer.jar
++  HM_SERVER_ARGS="/etc/crRFD.conf"
++  PIDFILE=/var/run/HMServer.pid
++else
++  HM_SERVER=/opt/HMServer/HMServer.jar
++  HM_SERVER_ARGS=""
++  PIDFILE=/var/run/HMIPServer.pid
++fi
++
+ init() {
+-	export TZ=`cat /etc/config/TZ | cut -d'-' -f1 | cut -d'+' -f1`
+-	export JAVA_HOME=/opt/jre-1.8.0_121-compact3
++	export JAVA_HOME=/opt/java/
+ 	export PATH=$PATH:$JAVA_HOME/bin
+ 	if [ ! -e /etc/config/log4j.xml ] ; then
+ 		cp $CFG_TEMPLATE_DIR/log4j.xml /etc/config
+@@ -20,8 +33,8 @@
+ start() {
+ 	echo -n "Starting HMServer: "
+ 	init
+-	start-stop-daemon -S -q -m -p $PIDFILE --exec java -- -Xmx64m -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar /opt/HMServer/HMIPServer.jar /etc/crRFD.conf &
+-	echo "Waiting for HMServer to get ready"
++	start-stop-daemon -b -S -q -m -p $PIDFILE --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar ${HM_SERVER} ${HM_SERVER_ARGS}
++	echo -n "."
+ 	eq3configcmd wait-for-file -f $STARTWAITFILE -p 5 -t 300
+ 	echo "OK"
+ }
 --- homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl.orig
 +++ homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl
 @@ -161,38 +161,6 @@

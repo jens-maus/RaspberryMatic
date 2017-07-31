@@ -16,7 +16,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
 * Integration of latest [beta versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
 * Self-contained disk image primarily targeted for RaspberryPi hardware
-* Based on latest [Buildroot 2017.05.1](http://buildroot.org/) Linux environment
+* Based on latest [Buildroot 2017.05.2](http://buildroot.org/) Linux environment
 * Latest [Linux kernel v4.9.x](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support 
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)

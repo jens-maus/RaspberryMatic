@@ -21,7 +21,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
-* Supports latest JAVA8 runtime environment ([1.8.0_121-8.20.0.42](http://www.azul.com/downloads/zulu-embedded/))
+* Supports latest JAVA8 runtime environment ([1.8.0_131-8.21.0.57](http://www.azul.com/downloads/zulu-embedded/))
 * Supports onboard WiFi of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setup including USB connection of UPS as well as NUT server use (e.g. via Synology NAS Network UPS functionality)

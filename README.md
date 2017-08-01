@@ -39,6 +39,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 
 ## Limitations
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
+* A used [HM-Sys-sRP-Pl](https://www.elv.de/controller.aspx?cid=683&detail=10&detail2=731493) repeater cannot be reconfigured
 
 ## Requirements
 * Any of the following [RaspberryPi](https://www.raspberrypi.org/products/) models:

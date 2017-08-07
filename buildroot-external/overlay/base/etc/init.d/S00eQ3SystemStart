@@ -173,12 +173,14 @@ init_rtc_device() {
   if [[ $? -eq 0 ]]; then
     # check for DS3231
     modprobe i2c:ds3231
+    [[ -e /dev/rtc0 ]] && return 0
     echo ds3231 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
     [[ -e /dev/rtc0 ]] && return 0
     echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
 
     # check for DS1307
     modprobe i2c:ds1307
+    [[ -e /dev/rtc0 ]] && return 0
     echo ds1307 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
     [[ -e /dev/rtc0 ]] && return 0
     echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device

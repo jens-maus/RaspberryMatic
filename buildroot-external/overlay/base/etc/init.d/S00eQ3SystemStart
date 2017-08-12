@@ -63,6 +63,17 @@ identify_host() {
 
   esac
 
+  # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
+  # and set UART_DEV and HM_MODE accordingly
+  if lsusb | grep -q 1b1f:c020; then
+    modprobe ftdi_sio
+    echo 1b1f c020 >/sys/bus/usb-serial/drivers/ftdi_sio/new_id
+    if [[ -e /dev/ttyUSB0 ]]; then
+      UART_DEV="/dev/ttyUSB0"
+      HM_MODE="HmIP-RFUSB"
+    fi
+  fi
+
   # depending on HM mode we define a different uart device
   if [[ -z ${UART_DEV} ]]; then
     if [[ ${HM_MODE} == "HmIP" ]]; then

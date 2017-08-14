@@ -495,6 +495,7 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsSecurityLblEnterSecKey" : "Enter security key",
     "dialogSettingsSecurityLblSecKey" : "Security key",
     "dialogSettingsSecurityLblSecKeyRepeat" : "Repeat<br/>security key",
+    "dialogSettingsSecurityLblSecKeyChanges" : "Number of key changes",
     "dialogSettingsSecurityBtnSaveKey" : "Apply security key",
     "dialogSettingsSecurityBtnBackupCreate" : "Create backup",
     "dialogSettingsSecurityBtnBackupUpload" : "Import backup",

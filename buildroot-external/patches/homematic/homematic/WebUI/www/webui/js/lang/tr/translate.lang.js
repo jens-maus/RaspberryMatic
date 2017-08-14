@@ -495,6 +495,7 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsSecurityLblEnterSecKey" : "Sistem g%FCvenlik kodunu gir",
     "dialogSettingsSecurityLblSecKey" : "G%FCvenlik kodu",
     "dialogSettingsSecurityLblSecKeyRepeat" : "G%FCvenlik kodu<br/>tekrar gir",
+    "dialogSettingsSecurityLblSecKeyChanges" : "sayi anahtar degisiklikle",
     "dialogSettingsSecurityBtnSaveKey" : "Kodu kaydet",
     "dialogSettingsSecurityBtnBackupCreate" : "Yedek al",
     "dialogSettingsSecurityBtnBackupUpload" : "Yedegi y%FCkle",

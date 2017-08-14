@@ -495,6 +495,7 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsSecurityLblEnterSecKey" : "System-Sicherheitsschl%FCssel Eingabe",
     "dialogSettingsSecurityLblSecKey" : "Sicherheitsschl%FCssel",
     "dialogSettingsSecurityLblSecKeyRepeat" : "Sicherheitsschl%FCssel<br/>Wiederholung",
+    "dialogSettingsSecurityLblSecKeyChanges" : "Anzahl vorgenommener<br/>Schl%FCssel%E4nderungen",
     "dialogSettingsSecurityBtnSaveKey" : "Schl%FCssel %FCbernehmen",
     "dialogSettingsSecurityBtnBackupCreate" : "Backup erstellen",
     "dialogSettingsSecurityBtnBackupUpload" : "Backup einspielen",

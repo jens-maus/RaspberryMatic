@@ -720,6 +720,15 @@ proc action_put_page {} {
                             }
                         }
                         table_row {
+                            td {width="20"} {}
+                            table_data {align="left"} {
+                                puts "\${dialogSettingsSecurityLblSecKeyChanges}"
+                            }
+                            table_data {align="right"} {
+                                cgi_text keychanges=[get_current_key_index] {size="3"} {id="key_changes"} {type="text"} {disabled=""}
+                            }
+                        }
+                        table_row {
                             table_data {align="right"} {class="CLASS20812"} {colspan="3"} {
                                 division {class="popupControls CLASS20811"} {
                                     division {class="CLASS20813"} {onClick="OnChangeKey()"} {

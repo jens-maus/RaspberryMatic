@@ -2062,7 +2062,7 @@
      <tr>
 -      <td class="thCell CLASS04900" >${thName}</td>
 +      <%string sCssName="Sort"; if(firstSort||(system.GetSessionVar("sessionLS")=="name")){sCssName="SortSelected";} %>
-+      <td class="thCell CLASS04900"><div id="name" class="tHeaderCell<%Write(sCssName); %>" onclick="IseSort(arItems,'name',true);">${thName}</div></td>
++      <td class="thCell CLASS03302"><div id="name" class="tHeaderCell<%Write(sCssName); %>" onclick="IseSort(arItems,'name',true);">${thName}</div></td>
        <td class="thCell CLASS04900" >${thDescription}</td>
        <td class="thCell CLASS04900" >${thCondition}</td>
        <td class="thCell CLASS04900" >${thActivity}</td>

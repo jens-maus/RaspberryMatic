@@ -1,0 +1,41 @@
+--- homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl.orig
++++ homematic/HMserver/opt/HMServer/pages/StorageSettingsDialog.ftl
+@@ -161,38 +161,6 @@
+ <div class="CLASS21114 j_translate">
+ 	<table class="popupTable" border=1 width="100%">
+ 		<tr class="CLASS21115">
+-			<td class="CLASS21116">${"$"}{dialogSettingsSDCardSettings}</td>
+-			<td  align="center"  width="35%">
+-				<table>
+-					<tr>
+-						<td class="CLASS21112">${"$"}{dialogSettingsSDCardStatus}:</td>
+-						<td>${SDCardStatus}</td>
+-					</tr>
+-					<tr>
+-						<td align="center" class="CLASS21112" colspan="2" >
+-							<div class="popupControls CLASS21107">
+-								<table>
+-								<tr>
+-									<td align="right">
+-										<div id="initaliseSDCardButton" class="StdButton CLASS04907" onClick="OnInitaliseSDCard()">${"$"}{dialogSettingsStorageSettingsBtnInitaliseSDCard}</div>
+-									</td>
+-									<td align="right">
+-										<div id="backupSDCardButton" class="StdButton CLASS04907" onClick="OnBackupSDCard()">${"$"}{dialogSettingsStorageSettingsBtnBackup}</div>
+-									</td>
+-								</tr>
+-								</table>
+-							</div>
+-								<!--<div id="ejectSDCardButton" class="StdButton" onClick="OnEjectSDCard()">${"$"}{dialogSettingsStorageSettingsBtnEjectSDCard}</div> -->
+-						</td>
+-					</tr>
+-				</table>
+-			</td>
+-			<td class="CLASS21113" align="left">
+-				<p> ${"$"}{dialogSettingsStorageHintSDCardP1} </p>
+-				<p> ${"$"}{dialogSettingsStorageHintSDCardP2} </p>
+-			</td>
+-		</tr>
+-		<tr class="CLASS21115">
+ 		  <td class="CLASS21116">
+        ${"$"}{tdPowerCost}
+ 		  </td>

@@ -1,4 +1,3 @@
-
 <script type="text/javascript">
   ResetGAC();
   iseUpdateSVArray = new Array();
@@ -12,14 +11,14 @@
       firstSort = true;
       system.SetSessionVar("sessionLS","");
       oUser.UserTempViewIDs().RemoveAll();
-
+    
       Write('iseClearLastSort();');
       Write('lastSort = "name";');
       Write('lastDir = 0;');
 
       object oTmpArray = dom.GetObject(ID_PROGRAMS);
       if( oTmpArray )
-      {
+      { 
         oTmpArray.SortByName();
         string sTmp;
         foreach(sTmp,oTmpArray.EnumEnabledVisibleIDs())
@@ -66,7 +65,7 @@
       <td class="thCell CLASS04900" >${thActivity}</td>
       <td class="thCell CLASS04900" >${thAction}</td>
     </tr>
-  <tbody>
+      <tbody>
     <tr>
     <td class="CLASS03304">
     <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
@@ -102,100 +101,185 @@
             }
           }
         }
+      }
 
-        if(oUser)
-        {
-          if (oUser.UserTempViewIDs().Count() == 0)
-          {
-            WriteLine("<script type='text/javascript'>");
-            WriteLine("Cursor.set(Cursor.NORMAL);");
-            WriteLine("</script>");
-          }
-
-          string sPID;
-          foreach( sPID, oUser.UserTempViewIDs().EnumIDs() )
-          {
-            object o = dom.GetObject( sPID );
-            if( o )
+       if (( bIsFiltered == true) || ( sEnable == "1" ))
+       {
+           string sPID;
+           foreach( sPID, sEnumPrgIDs )
+           {
+           object o = dom.GetObject( sPID );
+           if( o )
+           {
+           if( (o.IsTypeOf( OT_PROGRAM )) && (o.ProgramCopyID()==ID_ERROR) )
             {
-              if( (o.IsTypeOf( OT_PROGRAM )) && (o.ProgramCopyID()==ID_ERROR) )
-              {
-                string trId = "program"#o.ID();
-                WriteLine( '<tr id="'#trId#'" class="CLASS04901">' );
-                WriteLine( '<td class="tBodyCell">'#o.Name()#'</td>' );
-                WriteLine( '<td class="tBodyCell">'#o.PrgInfo()#'</td>' );
-                WriteLine( '<td class="tBodyCell">' );
-                object oPrgID = o.ID();
-                string sRet = "";
-                Call( "/esp/programs.fn::WriteConditionText()" );
-                Write (sRet);
-                WriteLine( '</td>' );
-                WriteLine( '<td class="tBodyCell">' );
-                string sRet = "";
-                Call( "/esp/programs.fn::WriteDestinationText()" );
-                Write(sRet);
-                WriteLine( '</td>' );
-                WriteLine( '<td class="tBodyCell CLASS04902" >' );
-                  WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
-                    WriteLine( '<tr>' );
-                      WriteLine( '<td>' );
-                        WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
-                          WriteLine( '<tr>' );
-                            WriteLine( '<td class="CLASS04903">' );
-                              WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#');" />' );
-                            WriteLine( '</td>' );
-                          WriteLine( '</tr>' );
-                          WriteLine( '<tr>' );
-                          WriteLine( '<td>' );
+              string trId = "program"#o.ID();
+              WriteLine( '<tr id="'#trId#'" class="CLASS04901">' );
+              WriteLine( '<td class="tBodyCell">'#o.Name()#'</td>' );
+              WriteLine( '<td class="tBodyCell">'#o.PrgInfo()#'</td>' );
+              WriteLine( '<td class="tBodyCell">' );
+              object oPrgID = o.ID();
+              string sRet = "";
+              Call( "/esp/programs.fn::WriteConditionText()" );
+              Write (sRet);
+              WriteLine( '</td>' );
+              WriteLine( '<td class="tBodyCell">' );
+              string sRet = "";
+              Call( "/esp/programs.fn::WriteDestinationText()" );
+              Write(sRet);
+              WriteLine( '</td>' );
+              WriteLine( '<td class="tBodyCell CLASS04902" >' );
+                WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
+                  WriteLine( '<tr>' );
+                    WriteLine( '<td>' );
+                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );    
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#');" />' );
                           WriteLine( '</td>' );
-                          WriteLine( '</tr>' );
-                          WriteLine( '<tr>' );
-                            WriteLine( '<td class="CLASS04903">' );
-                              WriteLine( '<input type="button" name="btnEdit" value="btnEdit" class="StdButton CLASS04907" onclick="EditProgram('#o.ID()#');" />' );
-                            WriteLine( '</td>' );
-                          WriteLine( '</tr>' );
-                        WriteLine( '</table>' );
-                      WriteLine( '</td>' );
-                      WriteLine( '<td>' );
-                        WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
-                          WriteLine( '<tr>' );
-                            WriteLine( '<td class="CLASS04903">' );
-                              string sChecked = ""; if( o.Active() ) { sChecked = "checked"; }
-                              WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetActive('#o.ID()#',this.checked);" />${lblActiv}</label>' );
-                            WriteLine( '</td>' );
-                          WriteLine( '</tr>' );
-                          WriteLine( '<tr>' );
-                            WriteLine( '<td class="CLASS04903">' );
-                              string sChecked = ""; if( o.UserAccessRights(iulOtherThanAdmin) == iarFullAccess ) { sChecked = "checked"; }
-                              WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetOperate('#o.ID()#',this.checked);" />${lblUsable}</label>' );
-                            WriteLine( '</td>' );
-                          WriteLine( '</tr>' );
-                          WriteLine( '<tr>' );
-                            WriteLine( '<td class="CLASS04903">' );
-                              string sChecked = ""; if( o.Visible() ) { sChecked = "checked"; }
-                              WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetVisible('#o.ID()#',this.checked);" />${lblVisible}</label>' );
-                            WriteLine( '</td>' );
-                          WriteLine( '</tr>' );
-                        WriteLine( '</table>' );
-                      WriteLine( '</td>' );
-                    WriteLine( '</tr>' );
-                  WriteLine( '</table>' );
-                WriteLine( '</td>' );
-                WriteLine( '</tr>' );
-
+                        WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                        WriteLine( '<td>' );
+                        WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            WriteLine( '<input type="button" name="btnEdit" value="btnEdit" class="StdButton CLASS04907" onclick="EditProgram('#o.ID()#');" />' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                      WriteLine( '</table>' );
+                    WriteLine( '</td>' );
+                    WriteLine( '<td>' );
+                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );    
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            string sChecked = ""; if( o.Active() ) { sChecked = "checked"; }
+                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetActive('#o.ID()#',this.checked);" />${lblActiv}</label>' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            string sChecked = ""; if( o.UserAccessRights(iulOtherThanAdmin) == iarFullAccess ) { sChecked = "checked"; }
+                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetOperate('#o.ID()#',this.checked);" />${lblUsable}</label>' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            string sChecked = ""; if( o.Visible() ) { sChecked = "checked"; }
+                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetVisible('#o.ID()#',this.checked);" />${lblVisible}</label>' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                      WriteLine( '</table>' );
+                    WriteLine( '</td>' );
+                  WriteLine( '</tr>' );
+                WriteLine( '</table>' );
+              WriteLine( '</td>' );
+              WriteLine( '</tr>' );
                 Write("<script type='text/javascript'>");
-                  Write("var tmp = new Object();");
-                  Write("tmp['id'] = '"#o.ID()#"';");
-                  Write("tmp['name'] = '"#o.Name()#"';");
-                  Write("tmp['trid'] = '"#trId#"';");
-                  Write("arItems[arItems.length] = tmp;");
-                  Write("Cursor.set(Cursor.NORMAL);");
-                  Write("</script>");
+                Write("var tmp = new Object();");
+                Write("tmp['id'] = '"#o.ID()#"';");
+                Write("tmp['name'] = '"#o.Name()#"';");
+                Write("tmp['trid'] = '"#trId#"';");
+                Write("arItems[arItems.length] = tmp;");
+                Write("Cursor.set(Cursor.NORMAL);");
+                Write("</script>");
+             }
+           }
+         }
+       }
+       else
+       {
+          if(oUser)
+          {
+            if (oUser.UserTempViewIDs().Count() == 0)
+            {
+              WriteLine("<script type='text/javascript'>");
+              WriteLine("Cursor.set(Cursor.NORMAL);");
+              WriteLine("</script>");
+            }
+        string sPID;
+        foreach( sPID, oUser.UserTempViewIDs().EnumIDs() )
+        {
+          object o = dom.GetObject( sPID );
+          if( o )
+          {
+            if( (o.IsTypeOf( OT_PROGRAM )) && (o.ProgramCopyID()==ID_ERROR) )
+            {
+              string trId = "program"#o.ID();
+              WriteLine( '<tr id="'#trId#'" class="CLASS04901">' );
+              WriteLine( '<td class="tBodyCell">'#o.Name()#'</td>' );
+              WriteLine( '<td class="tBodyCell">'#o.PrgInfo()#'</td>' );
+              WriteLine( '<td class="tBodyCell">' );
+              object oPrgID = o.ID();
+              string sRet = "";
+              Call( "/esp/programs.fn::WriteConditionText()" );
+              Write (sRet);
+              WriteLine( '</td>' );
+              WriteLine( '<td class="tBodyCell">' );
+              string sRet = "";
+              Call( "/esp/programs.fn::WriteDestinationText()" );
+              Write(sRet);
+              WriteLine( '</td>' );
+              WriteLine( '<td class="tBodyCell CLASS04902" >' );
+                WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
+                  WriteLine( '<tr>' );
+                    WriteLine( '<td>' );
+                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );    
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#');" />' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                        WriteLine( '<td>' );
+                        WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            WriteLine( '<input type="button" name="btnEdit" value="btnEdit" class="StdButton CLASS04907" onclick="EditProgram('#o.ID()#');" />' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                      WriteLine( '</table>' );
+                    WriteLine( '</td>' );
+                    WriteLine( '<td>' );
+                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );    
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            string sChecked = ""; if( o.Active() ) { sChecked = "checked"; }
+                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetActive('#o.ID()#',this.checked);" />${lblActiv}</label>' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            string sChecked = ""; if( o.UserAccessRights(iulOtherThanAdmin) == iarFullAccess ) { sChecked = "checked"; }
+                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetOperate('#o.ID()#',this.checked);" />${lblUsable}</label>' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            string sChecked = ""; if( o.Visible() ) { sChecked = "checked"; }
+                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetVisible('#o.ID()#',this.checked);" />${lblVisible}</label>' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                      WriteLine( '</table>' );
+                    WriteLine( '</td>' );
+                  WriteLine( '</tr>' );
+                WriteLine( '</table>' );
+              WriteLine( '</td>' );
+              WriteLine( '</tr>' );
+              Write("<script type='text/javascript'>");
+                Write("var tmp = new Object();");
+                Write("tmp['id'] = '"#o.ID()#"';");
+                Write("tmp['name'] = '"#o.Name()#"';");
+                Write("tmp['trid'] = '"#trId#"';");
+                Write("arItems[arItems.length] = tmp;");
+                Write("Cursor.set(Cursor.NORMAL);");
+                Write("</script>");
+                }
               }
             }
           }
-        }
-      }
+       }
     %>
   </tbody>
 </table>

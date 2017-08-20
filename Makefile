@@ -59,7 +59,7 @@ umount:
 	sudo kpartx -dv build-raspmatic_$(BOARD)/images/sdcard.img
 
 install:
-	sudo -- /bin/sh -c 'dd if=build-raspmatic_$(BOARD)/images/sdcard.img of=$(of) bs=4096 && sync'
+	sudo dd if=build-raspmatic_$(BOARD)/images/sdcard.img of=$(of) bs=8K conv=sync status=progress
 
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)
 	cd build-raspmatic_$(BOARD) && make O=$(shell pwd)/build-raspmatic_$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig

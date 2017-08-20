@@ -1,0 +1,74 @@
+--- homematic/WebUI/www/api/methods.conf.orig
++++ homematic/WebUI/www/api/methods.conf
+@@ -988,6 +988,13 @@
+         ARGUMENTS {_session_id_}
+ }
+ 
++User.createCertificate {
++        LEVEL ADMIN
++        SCRIPT_FILE user/createcertificate.tcl
++        INFO {Generiert ein neues Zertifikat (server.pem) unter /etc/config}
++        ARGUMENTS {_session_id_ country hostname email serial}
++}
++
+ User.restartLighttpd {
+         LEVEL ADMIN
+         SCRIPT_FILE user/restartlighttpd.tcl
+@@ -1006,4 +1013,4 @@
+         SCRIPT_FILE diagram/getDataSourceGroups.tcl
+         INFO {Ermittelt alle bekannten Gruppen von Datenquellen}
+         ARGUMENTS {}
+-}
+\ No newline at end of file
++}
+--- homematic/WebUI/www/api/methods/user/createcertificate.tcl.orig
++++ homematic/WebUI/www/api/methods/user/createcertificate.tcl
+@@ -0,0 +1,22 @@
++##
++# User.createCertificate
++# Erstellt ein neues Zertifikat unter /etc/config/server.pem
++#
++# Parameter:
++#   country  : [string] Landeskuerzel (z.B. DE)
++#   hostname : [string] Der CN Hostname der eintragen werden soll
++#   email    : [string] EMail-Adresse die eingetragen werden soll
++#   serial   : [string] Die Seriennummer der CCU
++##
++
++if { $args(hostname) != "" } then {
++  # Zertifikat erzeugen
++  exec /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
++                                              -out /etc/config/server.pem \
++                                              -days 3650 \
++                                              -subj "/C=$args(country)/emailAddress=$args(email)/O=HomeMatic/OU=$args(serial)/CN=$args(hostname)" 2>/dev/null >/dev/null
++
++  jsonrpc_response true
++} else {
++  jsonrpc_response false
++}
+--- homematic/WebUI/www/config/cp_network.cgi.orig
++++ homematic/WebUI/www/config/cp_network.cgi
+@@ -610,13 +610,18 @@
+   }
+   set serial [get_serial]
+   cgi_javascript {
+-    puts "var cert_url = \"$REMOTE_CERT_SCRIPT?serial=$serial\";"
++    puts "var serial = \"$serial\";"
+     puts {
+       OnGetCert = function() {
+-      cert_url += "&country="+document.getElementById("text_country").value;
+-      cert_url += "&url="+document.getElementById("text_url").value;
+-      cert_url += "&mail="+document.getElementById("text_mail").value;
+-      window.location.href=cert_url;
++        var country = document.getElementById("text_country").value;
++        var hostname = document.getElementById("text_url").value;
++        var email = document.getElementById("text_mail").value;
++        homematic("User.createCertificate", {"country": country, "hostname": hostname, "email": email, "serial": serial}, function() {
++          homematic("User.restartLighttpd", {}, function(){
++            MessageBox.show(translateKey("dialogRestartWebserverTitle"),translateKey("dialogRestartWebserverContent"));
++            window.setTimeout(function() {window.location.protocol = "http"},2000);
++          });
++        });
+       };
+ 
+       deleteCert = function() {

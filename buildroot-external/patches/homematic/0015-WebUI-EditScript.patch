@@ -1,0 +1,29 @@
+--- homematic/WebUI/www/rega/pages/msg/editScript.htm.orig
++++ homematic/WebUI/www/rega/pages/msg/editScript.htm
+@@ -35,6 +35,8 @@
+     
+     <td class="CLASS00011">
+     <div class="FooterButton CLASS00012" onclick="CheckSyntax();">${lblErrorCheck}</div>
++    <br>
++    <div class="FooterButton CLASS00012" onclick="RunScript();">${dialogScriptExecuterBtnExecute}</div>
+     </td>
+     </tr>
+     
+@@ -53,6 +55,17 @@
+   </table>
+ </div>
+ <script type="text/javascript">
++  RunScript = function()
++  {
++    var script = $F('scrinp');
++    homematic("ReGa.runScript", {"script": script}, function(response, error)
++    {
++      if (error === null)
++      {
++        $('scrout').value = response;
++      }
++    });
++  }
+   SaveScript = function()
+   {
+     dlgResult = $('scrinp').value;

@@ -11,14 +11,14 @@
       firstSort = true;
       system.SetSessionVar("sessionLS","");
       oUser.UserTempViewIDs().RemoveAll();
-    
+
       Write('iseClearLastSort();');
       Write('lastSort = "name";');
       Write('lastDir = 0;');
 
       object oTmpArray = dom.GetObject(ID_PROGRAMS);
       if( oTmpArray )
-      { 
+      {
         oTmpArray.SortByName();
         string sTmp;
         foreach(sTmp,oTmpArray.EnumEnabledVisibleIDs())
@@ -65,7 +65,7 @@
       <td class="thCell CLASS04900" >${thActivity}</td>
       <td class="thCell CLASS04900" >${thAction}</td>
     </tr>
-      <tbody>
+    <tbody>
     <tr>
     <td class="CLASS03304">
     <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
@@ -82,11 +82,11 @@
     <div id="ftSetDescBtn" class="FilterSetButton CLASS03308" onclick="setSFilter(fltVR, 'ftDesc', FIL_DESC);updateTable();$('btnFilterDescSub').hide();" >${filterSet}</div>
     <div id="ftCancelDescBtn" class='FilterSetButton' onclick="$('btnFilterDescSub').hide();">${filterClose}</div>
     </div>
-  </td>
+    </td>
     <td class="CLASS03304"></td>
     <td class="CLASS03304"></td>
     <td class="CLASS03304"></td>
-   </tr>
+    </tr>
     <%
       object oPrograms = dom.GetObject( ID_PROGRAMS );
       if(oPrograms)
@@ -139,7 +139,7 @@
                 WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
                   WriteLine( '<tr>' );
                     WriteLine( '<td>' );
-                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );    
+                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
                         WriteLine( '<tr>' );
                           WriteLine( '<td class="CLASS04903">' );
                             WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#');" />' );
@@ -195,7 +195,7 @@
            }
          }
        }
-       else
+           else
        {
           if(oUser)
           {
@@ -232,7 +232,7 @@
                 WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
                   WriteLine( '<tr>' );
                     WriteLine( '<td>' );
-                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );    
+                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
                         WriteLine( '<tr>' );
                           WriteLine( '<td class="CLASS04903">' );
                             WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#');" />' );
@@ -250,7 +250,7 @@
                       WriteLine( '</table>' );
                     WriteLine( '</td>' );
                     WriteLine( '<td>' );
-                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );    
+                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
                         WriteLine( '<tr>' );
                           WriteLine( '<td class="CLASS04903">' );
                             string sChecked = ""; if( o.Active() ) { sChecked = "checked"; }

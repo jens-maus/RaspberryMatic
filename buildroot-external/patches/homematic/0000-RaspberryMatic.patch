@@ -446,7 +446,7 @@
  
 --- homematic/HMserver/etc/init.d.orig
 +++ homematic/HMserver/etc/init.d
-@@ -5,28 +5,57 @@
+@@ -5,12 +5,25 @@
  
  LOGLEVEL_HMServer=5
  CFG_TEMPLATE_DIR=/etc/config_templates
@@ -459,15 +459,13 @@
 +[[ ${HM_MODE} == "HMLGW" ]] && exit 0
 +
 +if [[ ${HM_MODE} == "HmIP" ]]; then
-+  HM_SERVER_TYPE="HMIPServer"
 +  HM_SERVER=/opt/HMServer/HMIPServer.jar
 +  HM_SERVER_ARGS="/etc/crRFD.conf"
-+  PIDFILE=/var/run/HMIPServer.pid
++  PIDFILE=/var/run/HMServer.pid
 +else
-+  HM_SERVER_TYPE="HMServer"
 +  HM_SERVER=/opt/HMServer/HMServer.jar
 +  HM_SERVER_ARGS=""
-+  PIDFILE=/var/run/HMServer.pid
++  PIDFILE=/var/run/HMIPServer.pid
 +fi
 +
  init() {
@@ -477,42 +475,17 @@
  	export PATH=$PATH:$JAVA_HOME/bin
  	if [ ! -e /etc/config/log4j.xml ] ; then
  		cp $CFG_TEMPLATE_DIR/log4j.xml /etc/config
- 	fi
- }
- 
-+waitStartupComplete() {
-+	STEPS=150
-+	for i in $(seq 1 $STEPS); do
-+		sleep 2
-+		echo -n "."
-+		if [[ -e ${STARTWAITFILE} ]]; then
-+			echo "OK"
-+			break
-+		fi
-+		if [[ ${i} -eq ${STEPS} ]]; then
-+			echo "ERROR"
-+		fi
-+	done
-+}
-+
+@@ -20,8 +33,8 @@
  start() {
--	echo -n "Starting HMServer: "
-+	echo -n "Starting ${HM_SERVER_TYPE}: "
+ 	echo -n "Starting HMServer: "
  	init
 -	start-stop-daemon -S -q -m -p $PIDFILE --exec java -- -Xmx64m -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar /opt/HMServer/HMIPServer.jar /etc/crRFD.conf &
 -	echo "Waiting for HMServer to get ready"
--	eq3configcmd wait-for-file -f $STARTWAITFILE -p 5 -t 300
--	echo "OK"
 +	start-stop-daemon -b -S -q -m -p $PIDFILE --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar ${HM_SERVER} ${HM_SERVER_ARGS}
 +	echo -n "."
-+	waitStartupComplete
+ 	eq3configcmd wait-for-file -f $STARTWAITFILE -p 5 -t 300
+ 	echo "OK"
  }
- stop() {
--	echo -n "Stopping HMServer: "
-+	echo -n "Stopping ${HM_SERVER_TYPE}: "
- 	rm -f $STARTWAITFILE
- 	start-stop-daemon -K -q -p $PIDFILE
- 	rm -f $PIDFILE
 --- homematic/WebUI/www/api/homematic.cgi.orig
 +++ homematic/WebUI/www/api/homematic.cgi
 @@ -22,15 +22,13 @@

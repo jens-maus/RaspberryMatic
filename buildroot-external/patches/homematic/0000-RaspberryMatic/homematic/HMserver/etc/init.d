@@ -32,13 +32,27 @@ init() {
 	fi
 }
 
+waitStartupComplete() {
+	STEPS=150
+	for i in $(seq 1 $STEPS); do
+		sleep 2
+		echo -n "."
+		if [[ -e ${STARTWAITFILE} ]]; then
+			echo "OK"
+			break
+		fi
+		if [[ ${i} -eq ${STEPS} ]]; then
+			echo "ERROR"
+		fi
+	done
+}
+
 start() {
 	echo -n "Starting ${HM_SERVER_TYPE}: "
 	init
 	start-stop-daemon -b -S -q -m -p $PIDFILE --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar ${HM_SERVER} ${HM_SERVER_ARGS}
 	echo -n "."
-	eq3configcmd wait-for-file -f $STARTWAITFILE -p 5 -t 300
-	echo "OK"
+	waitStartupComplete
 }
 stop() {
 	echo -n "Stopping ${HM_SERVER_TYPE}: "

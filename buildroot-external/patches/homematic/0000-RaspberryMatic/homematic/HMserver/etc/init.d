@@ -13,13 +13,15 @@ source /var/hm_mode 2>/dev/null
 [[ ${HM_MODE} == "HMLGW" ]] && exit 0
 
 if [[ ${HM_MODE} == "HmIP" ]]; then
+  HM_SERVER_TYPE="HMIPServer"
   HM_SERVER=/opt/HMServer/HMIPServer.jar
   HM_SERVER_ARGS="/etc/crRFD.conf"
-  PIDFILE=/var/run/HMServer.pid
+  PIDFILE=/var/run/HMIPServer.pid
 else
+  HM_SERVER_TYPE="HMServer"
   HM_SERVER=/opt/HMServer/HMServer.jar
   HM_SERVER_ARGS=""
-  PIDFILE=/var/run/HMIPServer.pid
+  PIDFILE=/var/run/HMServer.pid
 fi
 
 init() {
@@ -31,7 +33,7 @@ init() {
 }
 
 start() {
-	echo -n "Starting HMServer: "
+	echo -n "Starting ${HM_SERVER_TYPE}: "
 	init
 	start-stop-daemon -b -S -q -m -p $PIDFILE --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar ${HM_SERVER} ${HM_SERVER_ARGS}
 	echo -n "."
@@ -39,7 +41,7 @@ start() {
 	echo "OK"
 }
 stop() {
-	echo -n "Stopping HMServer: "
+	echo -n "Stopping ${HM_SERVER_TYPE}: "
 	rm -f $STARTWAITFILE
 	start-stop-daemon -K -q -p $PIDFILE
 	rm -f $PIDFILE

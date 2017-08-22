@@ -1,8 +1,7 @@
 --- homematic/WebUI/www/rega/pages/tabs/admin/views/programlist.htm.orig
 +++ homematic/WebUI/www/rega/pages/tabs/admin/views/programlist.htm
-@@ -1,4 +1,41 @@
+@@ -1,4 +1,40 @@
 -<% system.SetSessionVar("sessionTAB", "programlist"); %>
-+
 +<script type="text/javascript">
 +  ResetGAC();
 +  iseUpdateSVArray = new Array();
@@ -43,7 +42,7 @@
  
  <script type="text/javascript">
    setPath("<span onclick='WebUI.enter(LinksAndProgramsPage);'>"+translateKey('menuProgramsLinksPage')+"</span> &gt; "+ translateKey('submenuPrograms'));
-@@ -19,18 +56,31 @@
+@@ -19,18 +55,38 @@
    %>
  </script>
  
@@ -63,33 +62,80 @@
 -  </thead>
    <tbody>
 +    <tr>
-+    <td class="CLASS03304">
-+    <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
-+    <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
-+    <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class="CLASS03307" NAME="ftName"/>
-+    <div id="ftSetNameBtn" class='FilterSetButton CLASS03308' onclick="setSFilter(fltVR, 'ftName', FIL_NAME);updateTable();$('btnFilterNameSub').hide();" >${filterSet}</div>
-+    <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
-+    </div>
-+    </td>
-+    <td class="CLASS03304"></td>
-+    <td class="CLASS03304"></td>
-+    <td class="CLASS03304"></td>
-+    <td class="CLASS03304"></td>
-+   </tr>
++      <td class="CLASS03304">
++        <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
++        <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
++          <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class="CLASS03307" NAME="ftName"/>
++          <div id="ftSetNameBtn" class='FilterSetButton CLASS03308' onclick="setSFilter(fltVR, 'ftName', FIL_NAME);updateTable();$('btnFilterNameSub').hide();" >${filterSet}</div>
++          <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
++        </div>
++      </td>
++      <td class="CLASS03304">
++        <div id="btnFilterDesc" class="FilterBtn">${thFilter}</div>
++        <div class="FilterSubMenu" id="btnFilterDescSub" style="display:none">
++          <input id="ftDesc" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetDescBtn', 'ftCancelDescBtn')" type="text" size="15" class="CLASS03307" NAME="ftDesc"/>
++          <div id="ftSetDescBtn" class="FilterSetButton CLASS03308" onclick="setSFilter(fltVR, 'ftDesc', FIL_DESC);updateTable();$('btnFilterDescSub').hide();" >${filterSet}</div>
++          <div id="ftCancelDescBtn" class='FilterSetButton' onclick="$('btnFilterDescSub').hide();">${filterClose}</div>
++        </div>
++      </td>
++      <td class="CLASS03304"></td>
++      <td class="CLASS03304"></td>
++      <td class="CLASS03304"></td>
++    </tr>
      <%
        object oPrograms = dom.GetObject( ID_PROGRAMS );
        if(oPrograms)
-@@ -52,75 +102,96 @@
+@@ -52,6 +108,10 @@
              }
            }
          }
--        string sPID;
--        foreach( sPID, sEnumPrgIDs )
++      }
 +
-+        if(oUser)
++      if(( bIsFiltered == true ) || ( sEnable == "1" ))
++      {
+         string sPID;
+         foreach( sPID, sEnumPrgIDs )
          {
--          object o = dom.GetObject( sPID );
--          if( o )
+@@ -60,7 +120,8 @@
+           {
+             if( (o.IsTypeOf( OT_PROGRAM )) && (o.ProgramCopyID()==ID_ERROR) )
+             {
+-              WriteLine( '<tr class="CLASS04901">' );
++              string trId = "program"#o.ID();
++              WriteLine( '<tr id="'#trId#'" class="CLASS04901">' );
+               WriteLine( '<td class="tBodyCell">'#o.Name()#'</td>' );
+               WriteLine( '<td class="tBodyCell">'#o.PrgInfo()#'</td>' );
+               WriteLine( '<td class="tBodyCell">' );
+@@ -78,7 +139,7 @@
+                 WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
+                   WriteLine( '<tr>' );
+                     WriteLine( '<td>' );
+-                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );    
++                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
+                         WriteLine( '<tr>' );
+                           WriteLine( '<td class="CLASS04903">' );
+                             WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#');" />' );
+@@ -121,6 +182,110 @@
+                 WriteLine( '</table>' );
+               WriteLine( '</td>' );
+               WriteLine( '</tr>' );
++              Write("<script type='text/javascript'>");
++                Write("var tmp = new Object();");
++                Write("tmp['id'] = '"#o.ID()#"';");
++                Write("tmp['name'] = '"#o.Name()#"';");
++                Write("tmp['desc'] = '"#o.PrgInfo()#"';");
++                Write("tmp['trid'] = '"#trId#"';");
++                Write("arItems[arItems.length] = tmp;");
++                Write("Cursor.set(Cursor.NORMAL);");
++              Write("</script>");
++            }
++          }
++        }
++      }
++      else
++      {
++        if(oUser)
++        {
 +          if (oUser.UserTempViewIDs().Count() == 0)
 +          {
 +            WriteLine("<script type='text/javascript'>");
@@ -99,33 +145,10 @@
 +
 +          string sPID;
 +          foreach( sPID, oUser.UserTempViewIDs().EnumIDs() )
-           {
--            if( (o.IsTypeOf( OT_PROGRAM )) && (o.ProgramCopyID()==ID_ERROR) )
++          {
 +            object o = dom.GetObject( sPID );
 +            if( o )
-             {
--              WriteLine( '<tr class="CLASS04901">' );
--              WriteLine( '<td class="tBodyCell">'#o.Name()#'</td>' );
--              WriteLine( '<td class="tBodyCell">'#o.PrgInfo()#'</td>' );
--              WriteLine( '<td class="tBodyCell">' );
--              object oPrgID = o.ID();
--              string sRet = "";
--              Call( "/esp/programs.fn::WriteConditionText()" );
--              Write (sRet);
--              WriteLine( '</td>' );
--              WriteLine( '<td class="tBodyCell">' );
--              string sRet = "";
--              Call( "/esp/programs.fn::WriteDestinationText()" );
--              Write(sRet);
--              WriteLine( '</td>' );
--              WriteLine( '<td class="tBodyCell CLASS04902" >' );
--                WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
--                  WriteLine( '<tr>' );
--                    WriteLine( '<td>' );
--                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );    
--                        WriteLine( '<tr>' );
--                          WriteLine( '<td class="CLASS04903">' );
--                            WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#');" />' );
++            {
 +              if( (o.IsTypeOf( OT_PROGRAM )) && (o.ProgramCopyID()==ID_ERROR) )
 +              {
 +                string trId = "program"#o.ID();
@@ -155,45 +178,7 @@
 +                          WriteLine( '</tr>' );
 +                          WriteLine( '<tr>' );
 +                          WriteLine( '<td>' );
-                           WriteLine( '</td>' );
--                        WriteLine( '</tr>' );
--                        WriteLine( '<tr>' );
--                        WriteLine( '<td>' );
--                        WriteLine( '</td>' );
--                        WriteLine( '</tr>' );
--                        WriteLine( '<tr>' );
--                          WriteLine( '<td class="CLASS04903">' );
--                            WriteLine( '<input type="button" name="btnEdit" value="btnEdit" class="StdButton CLASS04907" onclick="EditProgram('#o.ID()#');" />' );
--                          WriteLine( '</td>' );
--                        WriteLine( '</tr>' );
--                      WriteLine( '</table>' );
--                    WriteLine( '</td>' );
--                    WriteLine( '<td>' );
--                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );    
--                        WriteLine( '<tr>' );
--                          WriteLine( '<td class="CLASS04903">' );
--                            string sChecked = ""; if( o.Active() ) { sChecked = "checked"; }
--                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetActive('#o.ID()#',this.checked);" />${lblActiv}</label>' );
--                          WriteLine( '</td>' );
--                        WriteLine( '</tr>' );
--                        WriteLine( '<tr>' );
--                          WriteLine( '<td class="CLASS04903">' );
--                            string sChecked = ""; if( o.UserAccessRights(iulOtherThanAdmin) == iarFullAccess ) { sChecked = "checked"; }
--                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetOperate('#o.ID()#',this.checked);" />${lblUsable}</label>' );
--                          WriteLine( '</td>' );
--                        WriteLine( '</tr>' );
--                        WriteLine( '<tr>' );
--                          WriteLine( '<td class="CLASS04903">' );
--                            string sChecked = ""; if( o.Visible() ) { sChecked = "checked"; }
--                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetVisible('#o.ID()#',this.checked);" />${lblVisible}</label>' );
--                          WriteLine( '</td>' );
--                        WriteLine( '</tr>' );
--                      WriteLine( '</table>' );
--                    WriteLine( '</td>' );
--                  WriteLine( '</tr>' );
--                WriteLine( '</table>' );
--              WriteLine( '</td>' );
--              WriteLine( '</tr>' );
++                          WriteLine( '</td>' );
 +                          WriteLine( '</tr>' );
 +                          WriteLine( '<tr>' );
 +                            WriteLine( '<td class="CLASS04903">' );
@@ -228,20 +213,20 @@
 +                  WriteLine( '</table>' );
 +                WriteLine( '</td>' );
 +                WriteLine( '</tr>' );
-+
 +                Write("<script type='text/javascript'>");
 +                  Write("var tmp = new Object();");
 +                  Write("tmp['id'] = '"#o.ID()#"';");
 +                  Write("tmp['name'] = '"#o.Name()#"';");
++                  Write("tmp['desc'] = '"#o.PrgInfo()#"';");
 +                  Write("tmp['trid'] = '"#trId#"';");
 +                  Write("arItems[arItems.length] = tmp;");
 +                  Write("Cursor.set(Cursor.NORMAL);");
-+                  Write("</script>");
++                Write("</script>");
 +              }
              }
            }
          }
-@@ -128,6 +199,7 @@
+@@ -128,6 +293,7 @@
      %>
    </tbody>
  </table>
@@ -249,7 +234,7 @@
  
  <script type="text/javascript">
    DeleteProgram = function(id)
-@@ -233,6 +305,7 @@
+@@ -233,6 +399,7 @@
    s += "<tr>";
      s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack();'>"+ translateKey('footerBtnPageBack') +"</div></td>";
      s += "<td align='center' valign='middle'><div class='FooterButton' onclick='NewProgram();'>"+ translateKey('footerBtnNew') +"</div></td>";
@@ -257,7 +242,7 @@
      //s += "<td align='center' valign='middle'><div class='FooterButton CLASS04905' onclick='ShowNonVisiblePrograms();' >Systeminterne Programme<br /><% Write(sInternalBtnText); %>blenden</div></td>";
      s += "<td align='center' valign='middle'><div class='FooterButton CLASS04905' onclick='ShowNonVisiblePrograms();' >"+translateKey(internalBtnText) +"</div></td>";
      s += "<td align='center' valign='middle'><div class='FooterButton CLASS04906' onclick='new HMScriptExecutor();' >"+translateKey('footerBtnTestScript')+ "</div></td>";
-@@ -247,4 +320,35 @@
+@@ -247,4 +414,40 @@
    translatePage("#ProgramListTable");
    jQuery("#ProgramListTable").show();
  
@@ -272,9 +257,14 @@
 +  };
 +
 +  new iseSubMenuControl("btnFilterName", "btnFilterNameSub", "ProgramListTable", {d:28, r:18}, mouseOpts, false, true);
++  new iseSubMenuControl("btnFilterDesc", "btnFilterDescSub", "ProgramListTable", {d:28, r:18}, mouseOpts, false, true);
 +
 +  jQuery("#btnFilterName").click(function(){
 +    jQuery("#ftName").focus();
++  });
++
++  jQuery("#btnFilterDesc").click(function(){
++    jQuery("#ftDesc").focus();
 +  });
 +
 +  updateTable = function()

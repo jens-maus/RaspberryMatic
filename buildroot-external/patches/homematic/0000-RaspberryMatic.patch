@@ -15,7 +15,7 @@
  	if [ ! -d /etc/config/hs485d ] ; then
    		mkdir /etc/config/hs485d
  	fi
-@@ -25,17 +28,29 @@
+@@ -25,17 +28,36 @@
  	else
  		cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
  	fi
@@ -23,8 +23,15 @@
 +  # if there is no HmIP support enabled we have to strip
 +  # the HmIP-RF part in InterfacesList.xml
 +  if [[ ${HM_MODE} != "HmIP" ]] || [[ -z $(cat /var/rf_address) ]]; then
-+    line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | head -1)
-+    line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | tail -1)
++    if [[ ${HM_MODE} != "HmIP-RFUSB" ]]; then
++      # remove HmIP-RF from InterfacesList.xml because not required (BidCos-RF only mode)
++      line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | head -1)
++      line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | tail -1)
++    else
++      # remove BidCos-RF from InterfacesList.xml because not required (HmIP-RFUSB only mode)
++      line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | head -1)
++      line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | tail -1)
++    fi
 +    if [[ -n ${line_start} && -n ${line_end} ]]; then
 +      line_start=$((${line_start}-1))
 +      line_end=$((${line_end}+1))
@@ -47,7 +54,7 @@
  }
  
  restart() {
-@@ -59,4 +74,3 @@
+@@ -59,4 +81,3 @@
  esac
  
  exit $?
@@ -121,8 +128,8 @@
 -}
 +source /var/hm_mode 2>/dev/null
 +
-+# skip this startup in LAN Gateway mode
-+[[ ${HM_MODE} == "HMLGW" ]] && exit 0
++# skip this startup in LAN Gateway or HmIP-RFUSB mode
++[[ ${HM_MODE} == "HMLGW" || ${HM_MODE} == "HmIP-RFUSB" ]] && exit 0
 +
  init() {
 -	export TZ=`cat /etc/config/TZ`
@@ -209,8 +216,8 @@
  
 +source /var/hm_mode 2>/dev/null
 +
-+# skip this startup in LAN Gateway mode
-+[[ ${HM_MODE} == "HMLGW" ]] && exit 0
++# skip this startup in LAN Gateway or HmIP-RFUSB mode
++[[ ${HM_MODE} == "HMLGW" || ${HM_MODE} == "HmIP-RFUSB" ]] && exit 0
 +
  init() {
 -	export TZ=`cat /etc/config/TZ`
@@ -446,7 +453,7 @@
  
 --- homematic/HMserver/etc/init.d.orig
 +++ homematic/HMserver/etc/init.d
-@@ -5,28 +5,57 @@
+@@ -5,28 +5,69 @@
  
  LOGLEVEL_HMServer=5
  CFG_TEMPLATE_DIR=/etc/config_templates
@@ -458,15 +465,11 @@
 +# skip this startup in LAN Gateway mode
 +[[ ${HM_MODE} == "HMLGW" ]] && exit 0
 +
-+if [[ ${HM_MODE} == "HmIP" ]]; then
++if [[ ${HM_MODE} == "HmIP" ]] || [[ ${HM_MODE} == "HmIP-RFUSB" ]]; then
 +  HM_SERVER_TYPE="HMIPServer"
-+  HM_SERVER=/opt/HMServer/HMIPServer.jar
-+  HM_SERVER_ARGS="/etc/crRFD.conf"
 +  PIDFILE=/var/run/HMIPServer.pid
 +else
 +  HM_SERVER_TYPE="HMServer"
-+  HM_SERVER=/opt/HMServer/HMServer.jar
-+  HM_SERVER_ARGS=""
 +  PIDFILE=/var/run/HMServer.pid
 +fi
 +
@@ -478,8 +481,24 @@
  	if [ ! -e /etc/config/log4j.xml ] ; then
  		cp $CFG_TEMPLATE_DIR/log4j.xml /etc/config
  	fi
- }
- 
++
++	if [[ ${HM_MODE} == "HmIP" ]] || [[ ${HM_MODE} == "HmIP-RFUSB" ]]; then
++		if [[ ! -e /var/etc/crRFD.conf ]]; then
++		  cp ${CFG_TEMPLATE_DIR}/crRFD.conf /var/etc/
++		fi
++
++		# In HmIP-RFUSB mode we have to change crRFD.conf
++		if [[ ${HM_MODE} == "HmIP-RFUSB" ]]; then
++		  sed -i 's/^Adapter\.1\.Port=\/dev\/.*$/Adapter.1.Port=\/dev\/ttyUSB0/' /var/etc/crRFD.conf
++		fi
++
++		HM_SERVER=/opt/HMServer/HMIPServer.jar
++		HM_SERVER_ARGS="/var/etc/crRFD.conf"
++	else
++		HM_SERVER=/opt/HMServer/HMServer.jar
++	fi
++}
++
 +waitStartupComplete() {
 +	STEPS=150
 +	for i in $(seq 1 $STEPS); do
@@ -493,8 +512,8 @@
 +			echo "ERROR"
 +		fi
 +	done
-+}
-+
+ }
+ 
  start() {
 -	echo -n "Starting HMServer: "
 +	echo -n "Starting ${HM_SERVER_TYPE}: "

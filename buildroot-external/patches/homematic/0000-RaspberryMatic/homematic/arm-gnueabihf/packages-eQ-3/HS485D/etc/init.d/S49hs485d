@@ -36,7 +36,7 @@ init() {
       # remove HmIP-RF from InterfacesList.xml because not required (BidCos-RF only mode)
       line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | head -1)
       line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | tail -1)
-    else
+    elif [[ -z $(cat /var/rf_address) ]]; then
       # remove BidCos-RF from InterfacesList.xml because not required (HmIP-RFUSB only mode)
       line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | head -1)
       line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | tail -1)

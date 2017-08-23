@@ -3,8 +3,6 @@
 # Perform coprocessor updates
 #
 
-[[ ${HM_MODE} == "HmIP-RFUSB" ]] && exit 0
-
 start() {
 
   source /var/hm_mode 2>/dev/null

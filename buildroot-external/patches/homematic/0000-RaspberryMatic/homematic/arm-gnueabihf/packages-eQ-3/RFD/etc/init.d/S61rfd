@@ -9,8 +9,8 @@ PIDFILE=/var/run/rfd.pid
 
 source /var/hm_mode 2>/dev/null
 
-# skip this startup in LAN Gateway or HmIP-RFUSB mode
-[[ ${HM_MODE} == "HMLGW" || ${HM_MODE} == "HmIP-RFUSB" ]] && exit 0
+# skip this startup in LAN Gateway mode
+[[ ${HM_MODE} == "HMLGW" ]] && exit 0
 
 init() {
 

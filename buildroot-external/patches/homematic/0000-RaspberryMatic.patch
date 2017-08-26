@@ -32,7 +32,7 @@
 +      line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | head -1)
 +      line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | tail -1)
 +    fi
-+    if [[ -n ${line_start} && -n ${line_end} ]]; then
++    if [[ -n "${line_start}" && -n "${line_end}" ]]; then
 +      line_start=$((${line_start}-1))
 +      line_end=$((${line_end}+1))
 +      sed -i "${line_start},${line_end}d" /etc/config/InterfacesList.xml

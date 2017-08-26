@@ -27,7 +27,7 @@
 +      # remove HmIP-RF from InterfacesList.xml because not required (BidCos-RF only mode)
 +      line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | head -1)
 +      line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | tail -1)
-+    else
++    elif [[ -z $(cat /var/rf_address) ]]; then
 +      # remove BidCos-RF from InterfacesList.xml because not required (HmIP-RFUSB only mode)
 +      line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | head -1)
 +      line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | tail -1)
@@ -216,8 +216,8 @@
  
 +source /var/hm_mode 2>/dev/null
 +
-+# skip this startup in LAN Gateway or HmIP-RFUSB mode
-+[[ ${HM_MODE} == "HMLGW" || ${HM_MODE} == "HmIP-RFUSB" ]] && exit 0
++# skip this startup in LAN Gateway mode
++[[ ${HM_MODE} == "HMLGW" ]] && exit 0
 +
  init() {
 -	export TZ=`cat /etc/config/TZ`

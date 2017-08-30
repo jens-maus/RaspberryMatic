@@ -42,6 +42,8 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * A used [HM-Sys-sRP-Pl](https://www.elv.de/controller.aspx?cid=683&detail=10&detail2=731493) repeater cannot be reconfigured
 
 ## Requirements
+<img src="https://files.elv.com/bilder/artikel/Produkte/14/1421/142141/Internet/gross/142141_F02_PlHomeMatic.jpg" alt="RaspberryPi equipped with HM-MOD-RPI-PCB" width=300 align=right>
+
 * Any of the following [RaspberryPi](https://www.raspberrypi.org/products/) models:
   * [RaspberryPi3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
   * [RaspberryPi2 Model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)

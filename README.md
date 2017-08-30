@@ -99,6 +99,10 @@ Documentation (e.g. how to port your HomeMatic configuration from a CCU2 to Rasp
 * [RaspberryMatic - Installation Guide](https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057)
 * [RaspberryMatic - Forum](https://homematic-forum.de/forum/viewforum.php?f=65)
 
+## Presentations (German – YouTube)
+<a href="https://www.youtube.com/watch?v=LQrzittdEGg"><img alt="RaspberryMatic (Teil 1) – Usertreffen Kassel 2017" src="https://img.youtube.com/vi/LQrzittdEGg/0.jpg" width=420></a>
+<a href="https://www.youtube.com/watch?v=duSTLdVKSeM"><img alt="RaspberryMatic (Teil 2) – Usertreffen Kassel 2017" src="https://img.youtube.com/vi/duSTLdVKSeM/0.jpg" width=420></a>
+
 ## Contributions
 As the RaspberryMatic project is an open source based project everyone is invited to contribute to this project. Please note, however, that functionality within the corresponding eQ-3 OCCU binaries can not be modified as the main HomeMatic services (rfd, ReGaHSS, HMServer, etc.) are provided in binary format by the [OCCU](https://github.com/eq-3/occu) project and not compiled from sources.
 

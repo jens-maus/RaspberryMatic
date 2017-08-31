@@ -7,7 +7,7 @@
 +# HttpListenerMaxConnections
 +# Maximale Anzahl paralleler Verbindungen
 +# Standardwert: 6
-+HttpListenerMaxConnections=10
++HttpListenerMaxConnections=12
 +
  # VirtualPathInternalConfig
  # Standard: /config/

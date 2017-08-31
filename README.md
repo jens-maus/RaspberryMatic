@@ -12,12 +12,12 @@
 The RaspberryMatic project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded devices like the [RaspberryPi](https://www.raspberrypi.org/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full microSD card image that can be directly flashed and then used in a RaspberryPi as the main operating system for controlling all kind of HomeMatic compatible devices with full compatibility to a CCU2 device directly sold by eQ-3.
 
 ## Features
-* 100% HomeMatic CCU system compliant using latest [OCCU 2.29.18](https://github.com/eq-3/occu) software releases
+* 100% HomeMatic CCU system compliant using latest [OCCU 2.29.22](https://github.com/eq-3/occu) software releases
 * Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
 * Integration of latest [beta versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
 * Self-contained disk image primarily targeted for RaspberryPi hardware
-* Based on latest [Buildroot 2017.05.2](http://buildroot.org/) Linux environment
-* Latest [Linux kernel v4.9.40](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support
+* Based on latest [Buildroot 2017.08](http://buildroot.org/) Linux environment
+* Latest [Linux kernel 4.9.x](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
@@ -54,8 +54,11 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [RaspberryPi Compute Module 1](https://www.raspberrypi.org/products/compute-module/)  
   * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/) or [Model B, 512MB](https://www.adafruit.com/product/998)
   * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) or [Model A, 256MB](https://www.adafruit.com/product/1344)
+* One of the following BidCos-RF/HomeMaticIP capabale RF devices:
+  * HomeMatic-RF GPIO radio module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html))
+  * HomeMaticIP RF USB stick (HmIP-RFUSB)
+  * HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * 2GB minimum space on microSD card or USB memory stick / hard disk (when using RaspberryPi3)
-* HomeMatic-RF GPIO radio module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html)) and/or HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 
 ## Compatible Third-Party Addons
 The CCU platform allows to enhance the functionality of a CCU by installing so-called Addon packages. For RaspberryMatic, standard CCU-Addon packages won't work because included binaries have to be recompiled for the hard-float buildroot environment RaspberryMatic uses. Here is a list of well-known already compatible Addon packages (please note that this list might be incomplete):

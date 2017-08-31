@@ -760,7 +760,7 @@
      cd /
 -    exec tar czf /tmp/usr_local.tar.gz usr/local
 -    cd /tmp/
-+    exec tar --exclude=usr/local/tmp --exclude=usr/local/lost+found -czf $tmpdir/usr_local.tar.gz usr/local
++    catch {exec tar --exclude=usr/local/tmp --exclude=usr/local/lost+found -czf $tmpdir/usr_local.tar.gz usr/local}
 +    cd $tmpdir/
      #sign the configuration with the current key
      exec crypttool -s -t 1 <usr_local.tar.gz >signature
@@ -779,7 +779,7 @@
 -    }
 -    close $fd
 -    file delete -force /tmp/usr_local.tar.gz /tmp/firmware_version /tmp/signature
-+    exec tar -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index
++    catch {exec tar -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index}
 +    cd /
 +    exec rm -rf $tmpdir
 +    puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"

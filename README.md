@@ -103,6 +103,7 @@ Documentation (e.g. how to port your HomeMatic configuration from a CCU2 to Rasp
 
 * [RaspberryMatic - Installation Guide](https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057)
 * [RaspberryMatic - Forum](https://homematic-forum.de/forum/viewforum.php?f=65)
+* [HM-MOD-RPI-PCB - Installation Video](https://www.youtube.com/watch?v=xtzXsvOLa_Y)
 
 ## Presentations (German – YouTube)
 <a href="https://www.youtube.com/watch?v=LQrzittdEGg"><img alt="RaspberryMatic (Teil 1) – Usertreffen Kassel 2017" src="https://img.youtube.com/vi/LQrzittdEGg/0.jpg" width=420></a>

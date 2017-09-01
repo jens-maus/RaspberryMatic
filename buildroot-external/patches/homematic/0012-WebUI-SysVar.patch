@@ -125,7 +125,7 @@
  }
  
  .CLASS02536 {
-@@ -5165,22 +5172,27 @@
+@@ -5165,13 +5172,18 @@
  }
  
  .CLASS02537 {
@@ -146,9 +146,7 @@
  }
  
  .CLASS02539 {
--	background-color:$_(inactiveBackground) ! important;
-+	background-color:$_(activeBackground) ! important;
- }
+@@ -5180,7 +5192,7 @@
  
  .CLASS02540 {
  	text-align:center;

@@ -5187,7 +5187,7 @@ application {
 }
 
 .CLASS02539 {
-	background-color:$_(activeBackground) ! important;
+	background-color:$_(inactiveBackground) ! important;
 }
 
 .CLASS02540 {

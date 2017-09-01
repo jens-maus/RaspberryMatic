@@ -43,15 +43,19 @@
                  boolean tbRead =  ( ( oDP.Operations() & OPERATION_READ ) != 0 );
                  boolean tbEvent = ( ( oDP.Operations() & OPERATION_EVENT ) != 0 );
                  boolean tbWrite = ( ( oDP.Operations() & OPERATION_WRITE ) != 0 );
-@@ -1189,7 +1180,6 @@
+@@ -1185,11 +1176,8 @@
+ 
+ function ::CreateSysVar()
+ {
+-  string sName = "";
    WriteLine( '<td class="CLASS02537">' );
      WriteLine( '<div class="ControlBtnInfo CLASS02538" >' );
-       sName = cObj.Name();
+-      sName = cObj.Name();
 -      WriteLine( '<span class="CLASS02534">'#sName#':  </span>' );
        
        string sSysVarVal = '';
        object cObjTmp = cObj;
-@@ -1218,7 +1208,7 @@
+@@ -1218,7 +1206,7 @@
  !        if( !(i%2) ) { WriteLine( '<tr>' ); }
          WriteLine( '<td class="CLASS02540">' );
            WriteLine( '<div class="ControlBtnInfo CLASS02538" >' );
@@ -125,7 +129,7 @@
  }
  
  .CLASS02536 {
-@@ -5165,13 +5172,18 @@
+@@ -5165,13 +5172,19 @@
  }
  
  .CLASS02537 {
@@ -140,13 +144,14 @@
 -	height:25px;
 +	width:98%;
 +	height:100%;
++	min-height:1em;
 +	max-width: 480px;
 +	clear: both;
 +	display: inline-block;
  }
  
  .CLASS02539 {
-@@ -5180,7 +5192,7 @@
+@@ -5180,7 +5193,7 @@
  
  .CLASS02540 {
  	text-align:center;

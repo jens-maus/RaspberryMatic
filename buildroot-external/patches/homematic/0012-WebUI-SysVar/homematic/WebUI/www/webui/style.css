@@ -5181,6 +5181,7 @@ application {
 .CLASS02538 {
 	width:98%;
 	height:100%;
+	min-height:1em;
 	max-width: 480px;
 	clear: both;
 	display: inline-block;

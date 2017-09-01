@@ -1176,10 +1176,8 @@ function ::ConvWindDir() {
 
 function ::CreateSysVar()
 {
-  string sName = "";
   WriteLine( '<td class="CLASS02537">' );
     WriteLine( '<div class="ControlBtnInfo CLASS02538" >' );
-      sName = cObj.Name();
       
       string sSysVarVal = '';
       object cObjTmp = cObj;

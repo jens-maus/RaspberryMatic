@@ -101,11 +101,11 @@ The installation of RaspberryMatic is quite straight forward as it is delivered 
 ## :memo: Documentation
 Documentation (e.g. how to port your HomeMatic configuration from a CCU2 to RaspberryMatic) and installation support is currently limited to using a mostly german language speaking fora with the following links pointing to the relevant sections of the fora where you can find documentation and help about RaspberryMatic:
 
-* [RaspberryMatic - Installation Guide](https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057)
-* [RaspberryMatic - Forum](https://homematic-forum.de/forum/viewforum.php?f=65)
-* [HM-MOD-RPI-PCB - Installation Video](https://www.youtube.com/watch?v=xtzXsvOLa_Y)
+* [RaspberryMatic - Installation Guide :de:](https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057)
+* [RaspberryMatic - Forum :de:](https://homematic-forum.de/forum/viewforum.php?f=65)
+* [HM-MOD-RPI-PCB - Installation Video :de:](https://www.youtube.com/watch?v=xtzXsvOLa_Y)
 
-## :tv: Presentations (German – YouTube)
+## :tv: Presentations (German :de: – YouTube)
 <a href="https://www.youtube.com/watch?v=LQrzittdEGg"><img alt="RaspberryMatic (Teil 1) – Usertreffen Kassel 2017" src="https://img.youtube.com/vi/LQrzittdEGg/0.jpg" width=420></a>
 <a href="https://www.youtube.com/watch?v=duSTLdVKSeM"><img alt="RaspberryMatic (Teil 2) – Usertreffen Kassel 2017" src="https://img.youtube.com/vi/duSTLdVKSeM/0.jpg" width=420></a>
 

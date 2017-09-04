@@ -75,7 +75,7 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [WebMatic](https://github.com/ldittmar81/webmatic)
 * [Sonos Player](https://github.com/jens-maus/hm-sonos)
 * [hm2mqtt](https://github.com/owagner/hm2mqtt)
-* [CCU-Historian](https://github.com/jens-maus/hm-ccu-historian)
+* [CCU-Historian](https://github.com/mdzio/ccu-historian)
 * [Watchdog](https://github.com/jens-maus/hm-watchdog)
 * [homeputer CL Studio](http://www.contronics.de/download/homeputer-studio-software.html)
 * [Print / ProgrammeDrucken](https://github.com/litti/hm-print)

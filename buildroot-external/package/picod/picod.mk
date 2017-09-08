@@ -16,7 +16,7 @@ endef
 PICOD_PRE_PATCH_HOOKS += PICOD_PRE_PATCH
 
 define PICOD_BUILD_CMDS
-	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS+="-I../i2c-tools-v3.1.2/include/" -C $(@D) all
+	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS+="-I../i2c-tools-3.1.2/include/" -C $(@D) all
 endef
 
 define PICOD_INSTALL_TARGET_CMDS

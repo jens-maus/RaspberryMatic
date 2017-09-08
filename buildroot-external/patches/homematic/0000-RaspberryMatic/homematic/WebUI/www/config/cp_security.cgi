@@ -1058,14 +1058,14 @@ proc action_create_backup {} {
     #save DOM
     rega system.Save()
     cd /
-    exec tar --exclude=usr/local/tmp --exclude=usr/local/lost+found -czf $tmpdir/usr_local.tar.gz usr/local
+    exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local
     cd $tmpdir/
     #sign the configuration with the current key
     exec crypttool -s -t 1 <usr_local.tar.gz >signature
     #store the current key index
     exec crypttool -g -t 1 >key_index
     file copy -force /boot/VERSION firmware_version
-    exec tar -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index
+    exec tar --owner=root --group=root -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index
     cd /
     exec rm -rf $tmpdir
     puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"

@@ -1,6 +1,18 @@
 --- homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/rega.conf.orig
 +++ homematic/arm-gnueabihf/packages-eQ-3/WebUI/etc/rega.conf
-@@ -57,6 +57,26 @@
+@@ -44,6 +44,11 @@
+ # Standardwert: 8181
+ HttpListenerPort=8182
+ 
++# HttpListenerMaxConnections
++# Maximale Anzahl paralleler Verbindungen
++# Standardwert: 6
++HttpListenerMaxConnections=12
++
+ # VirtualPathInternalConfig
+ # Standard: /config/
+ VirtualPathInternalConfig=/config/
+@@ -57,6 +62,26 @@
  # Standard: 300
  SessionTimeout=300
  

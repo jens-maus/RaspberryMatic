@@ -11,13 +11,13 @@
 
 The RaspberryMatic project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded devices like the [RaspberryPi](https://www.raspberrypi.org/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full microSD card image that can be directly flashed and then used in a RaspberryPi as the main operating system for controlling all kind of HomeMatic compatible devices with full compatibility to a CCU2 device directly sold by eQ-3.
 
-## Features
-* 100% HomeMatic CCU system compliant using latest [OCCU 2.29.18](https://github.com/eq-3/occu) software releases
+## :cookie: Features
+* 100% HomeMatic CCU system compliant using latest [OCCU 2.29.22](https://github.com/eq-3/occu) software releases
 * Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
 * Integration of latest [beta versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
 * Self-contained disk image primarily targeted for RaspberryPi hardware
-* Based on latest [Buildroot 2017.05.2](http://buildroot.org/) Linux environment
-* Latest [Linux kernel v4.9.40](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support
+* Based on latest [Buildroot 2017.08](http://buildroot.org/) Linux environment
+* Latest [Linux kernel 4.9.x](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
@@ -37,11 +37,13 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Direct [CloudMatic](http://cloudmatic.de) (meine-homematic.de) support
 * Dedicated Build Environment using a cross compiler (`arm-linux-gcc`) to compile third-party applications
 
-## Limitations
+## :fire: Limitations
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
 * A used [HM-Sys-sRP-Pl](https://www.elv.de/controller.aspx?cid=683&detail=10&detail2=731493) repeater cannot be reconfigured
 
-## Requirements
+## :computer: Requirements
+<img src="https://files.elv.com/bilder/artikel/Produkte/14/1421/142141/Internet/gross/142141_F02_PlHomeMatic.jpg" alt="RaspberryPi equipped with HM-MOD-RPI-PCB" width=300 align=right>
+
 * Any of the following [RaspberryPi](https://www.raspberrypi.org/products/) models:
   * [RaspberryPi3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
   * [RaspberryPi2 Model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
@@ -52,10 +54,13 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [RaspberryPi Compute Module 1](https://www.raspberrypi.org/products/compute-module/)  
   * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/) or [Model B, 512MB](https://www.adafruit.com/product/998)
   * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) or [Model A, 256MB](https://www.adafruit.com/product/1344)
+* One of the following BidCos-RF/HomeMaticIP capabale RF devices:
+  * HomeMatic-RF GPIO radio module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) – [Installation](https://www.youtube.com/watch?v=xtzXsvOLa_Y))
+  * HomeMaticIP RF USB stick (HmIP-RFUSB)
+  * HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * 2GB minimum space on microSD card or USB memory stick / hard disk (when using RaspberryPi3)
-* HomeMatic-RF GPIO radio module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html)) and/or HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 
-## Compatible Third-Party Addons
+## :telescope: Compatible Third-Party Addons
 The CCU platform allows to enhance the functionality of a CCU by installing so-called Addon packages. For RaspberryMatic, standard CCU-Addon packages won't work because included binaries have to be recompiled for the hard-float buildroot environment RaspberryMatic uses. Here is a list of well-known already compatible Addon packages (please note that this list might be incomplete):
 
 * [CUxD](https://github.com/jens-maus/cuxd)
@@ -70,13 +75,13 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [WebMatic](https://github.com/ldittmar81/webmatic)
 * [Sonos Player](https://github.com/jens-maus/hm-sonos)
 * [hm2mqtt](https://github.com/owagner/hm2mqtt)
-* [CCU-Historian](https://github.com/jens-maus/hm-ccu-historian)
+* [CCU-Historian](https://github.com/mdzio/ccu-historian)
 * [Watchdog](https://github.com/jens-maus/hm-watchdog)
 * [homeputer CL Studio](http://www.contronics.de/download/homeputer-studio-software.html)
 * [Print / ProgrammeDrucken](https://github.com/litti/hm-print)
 * [HomeMatic Check_MK](https://github.com/alexreinert/homematic_check_mk)
 
-## Installation
+## :cloud: Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:
 
 1. [Download latest release](https://github.com/jens-maus/RaspberryMatic/releases) archive (`RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.zip`) for the hardware platform you are using:
@@ -93,16 +98,24 @@ The installation of RaspberryMatic is quite straight forward as it is delivered 
 6. Install microSD in your RaspberryPi and connect power
 7. Wait until bootup process is finished and use a web browser to connect to http://homematic-raspi/
 
-## Documentation
+## :memo: Documentation
 Documentation (e.g. how to port your HomeMatic configuration from a CCU2 to RaspberryMatic) and installation support is currently limited to using a mostly german language speaking fora with the following links pointing to the relevant sections of the fora where you can find documentation and help about RaspberryMatic:
 
-* [RaspberryMatic - Installation Guide](https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057)
-* [RaspberryMatic - Forum](https://homematic-forum.de/forum/viewforum.php?f=65)
+* [RaspberryMatic - Installation Guide :de:](https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057)
+* [RaspberryMatic - Forum :de:](https://homematic-forum.de/forum/viewforum.php?f=65)
+* [HM-MOD-RPI-PCB - Installation Video :de:](https://www.youtube.com/watch?v=xtzXsvOLa_Y)
 
-## Contributions
-As the RaspberryMatic project is an open source based project everyone is invited to contribute to this project. Please note, however, that functionality within the corresponding eQ-3 OCCU binaries can not be modified as the main HomeMatic services (rfd, ReGaHSS, HMServer, etc.) are provided in binary format by the [OCCU](https://github.com/eq-3/occu) project and not compiled from sources.
+## :tv: Presentations (German :de: – YouTube)
+<a href="https://www.youtube.com/watch?v=LQrzittdEGg"><img alt="RaspberryMatic (Teil 1) – Usertreffen Kassel 2017" src="https://img.youtube.com/vi/LQrzittdEGg/0.jpg" width=420></a>
+<a href="https://www.youtube.com/watch?v=duSTLdVKSeM"><img alt="RaspberryMatic (Teil 2) – Usertreffen Kassel 2017" src="https://img.youtube.com/vi/duSTLdVKSeM/0.jpg" width=420></a>
 
-### Development
+## :yum: How to contribute
+As the RaspberryMatic project is an open source based project everyone is invited to contribute to this project. Please note, however, that functionality within the corresponding eQ-3 OCCU binaries can not be modified as the main HomeMatic services (rfd, ReGaHSS, HMServer, etc.) are provided in binary format by the [OCCU](https://github.com/eq-3/occu) project and not compiled from sources. Nevertheless, if you are a talented developer and want to contribute to the success of RaspberryMatic feel free to send over pull requests or report issues / enhancement requests.
+
+### :moneybag: Donations [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
+Even for those that don't have the technical knowhow to help developing on RaspberryMatic there are ways to support our development. Please consider sending us a donation to not only help us to compensate for expenses regarding RaspberryMatic, but also to keep our general development motivation on a high level. So if you want to donate some money please feel free to send us money via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL).
+
+### :construction: Development
 Building your own RaspberryMatic sd card image is a very straight forward process using this build environment – given that you have sufficient Linux/Unix knowledge and you know what you are actually doing. But if you know what you are doing and which host tools are required to actually be able to run a RaspberryMatic build, it should be as simple as:
 
 ```
@@ -113,7 +126,7 @@ $ make dist
 $ make install of=/dev/sdX
 ```
 
-### Using the generated cross compiler
+#### :bookmark: Using the generated cross compiler
 After a successfull build of RaspberryMatic a dedicated cross compiler (`arm-linux-gcc`) should be available within the `build-raspberrypi3` path. You can use this GCC-based cross compiler to compile all kind of third party applications which can then be run within RaspberryMatic:
 
 ```
@@ -123,10 +136,10 @@ $ <path-to-RaspberryMatic-build>/build-raspmatic_rpi3/host/usr/bin/arm-linux-gcc
 
 A valid alternative for building RaspberryMatic ARM-hardfloat compatible binaries is to use the linaro based Linux cross compiler suite supplied [here](https://github.com/raspberrypi/tools/tree/master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian).
 
-## License
+## :scroll: License
 The RaspberryMatic build environment itself – the files found in this git repository – as well as the RaspberryMatic sd card images are licensed under the conditions of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0). Please note, however, that the buildroot distribution RaspberryMatic is using is licensed under the [GPLv2](http://www.gnu.org/licenses/gpl-2.0.html) license instead. Furthermore, the [eQ-3 OCCU](https://github.com/eq-3/occu) software RaspberryMatic is using to provide HomeMatic-based services is licensed under the ([HMSL](https://github.com/eq-3/occu/blob/master/LicenseDE.txt)).
 
-## Authors
+## :family: Authors
 
 * Jens Maus
 * Wolfgang Willinghöfer

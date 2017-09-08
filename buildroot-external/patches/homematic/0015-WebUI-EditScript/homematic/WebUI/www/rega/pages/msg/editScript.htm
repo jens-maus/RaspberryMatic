@@ -58,14 +58,41 @@
   RunScript = function()
   {
     var script = $F('scrinp');
-    homematic("ReGa.runScript", {"script": script}, function(response, error)
+    var code = $F('scrinp');
+    var val = $F('Text1');
+    var ths = $F('Text2');
+    var src = $F('Text3');
+    var url = '/esp/system.htm?sid='+SessionId;
+    var pb = "";
+    pb += 'string action = "SyntaxCheck";';
+    pb += 'string code = ^'+code+'^;';
+    pb += 'string val = "'+val+'";';
+    pb += 'string ths = "'+ths+'";';
+    pb += 'string src = "'+src+'";';
+    var opt = 
     {
-      if (error === null)
+      postBody: pb,
+      onComplete: function(t)
       {
-        $('scrout').value = response;
+        conInfo( "EditScript: CheckSyntax returned: ["+iseStripAll(t.responseText)+"]" );
+        if( iseStripAll(t.responseText).length == 0 )
+        {
+          homematic("ReGa.runScript", {"script": script}, function(response, error)
+              {
+                if (error === null)
+                {
+                  $('scrout').value = response;
+                }
+              });
+        }
+        else
+        {
+          $('scrout').value = t.responseText;
       }
-    });
+    }
   }
+    new Ajax.Request(url,opt);
+}
   SaveScript = function()
   {
     dlgResult = $('scrinp').value;

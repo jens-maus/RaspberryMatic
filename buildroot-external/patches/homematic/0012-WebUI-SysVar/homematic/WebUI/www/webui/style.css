@@ -5130,6 +5130,7 @@ application {
 	font-size: 10px;
 	width:220px;
 	height:auto;
+  min-height: 32px;
 	clear: both;
 	display: inline-block;
   /* line-height:25px; problem with controls with a long parameter name */

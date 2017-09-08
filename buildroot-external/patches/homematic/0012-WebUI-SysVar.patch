@@ -32,18 +32,23 @@
        Call( "/esp/datapointconfigurator.fn::CreateSysVar()" );
        WriteLine( '</tr>' );
        WriteLine( '</table>' );
-@@ -1039,8 +1030,8 @@
+@@ -1039,8 +1030,13 @@
            {
              WriteLine( '<td>' );
  
 -              WriteLine( '<div class="ControlBtnInfo CLASS02532" style="height:2.5em;" >' );
 -                WriteLine( '<span class="_CLASS02533"><span class="CLASS02534 j_translate" style="float: none;">'#sTitle#'</span>' );
 +              WriteLine( '<div class="ControlBtnInfo CLASS02532">' );
-+                WriteLine( '<span class="_CLASS02533"><span class="CLASS02534 j_translate">'#sTitle#':  </span>' );
++              if(sTitle == "") {
++                WriteLine( '<span class="_CLASS02533"><span class="CLASS02534 j_translate">'#sTitle#'</span>' );
++                }
++                else {
++                WriteLine( '<span class="_CLASS02533"><span class="CLASS02534 j_translate">'#sTitle#':</span>' );
++                }
                  boolean tbRead =  ( ( oDP.Operations() & OPERATION_READ ) != 0 );
                  boolean tbEvent = ( ( oDP.Operations() & OPERATION_EVENT ) != 0 );
                  boolean tbWrite = ( ( oDP.Operations() & OPERATION_WRITE ) != 0 );
-@@ -1185,11 +1176,8 @@
+@@ -1185,11 +1181,8 @@
  
  function ::CreateSysVar()
  {
@@ -55,7 +60,7 @@
        
        string sSysVarVal = '';
        object cObjTmp = cObj;
-@@ -1218,7 +1206,7 @@
+@@ -1218,7 +1211,7 @@
  !        if( !(i%2) ) { WriteLine( '<tr>' ); }
          WriteLine( '<td class="CLASS02540">' );
            WriteLine( '<div class="ControlBtnInfo CLASS02538" >' );
@@ -106,18 +111,19 @@
  	border:solid 1px $_(black); /* black */
  	color: $_(textColorB); /* black */
  	overflow:auto;
-@@ -5129,7 +5129,9 @@
+@@ -5129,7 +5129,10 @@
  .CLASS02532 {
  	font-size: 10px;
  	width:220px;
 -	height:25px;
 +	height:auto;
++  min-height: 32px;
 +	clear: both;
 +	display: inline-block;
    /* line-height:25px; problem with controls with a long parameter name */
  }
  
-@@ -5158,6 +5160,11 @@
+@@ -5158,6 +5161,11 @@
  
  .CLASS02535 {
  	float: right;
@@ -129,7 +135,7 @@
  }
  
  .CLASS02536 {
-@@ -5165,13 +5172,19 @@
+@@ -5165,13 +5173,19 @@
  }
  
  .CLASS02537 {
@@ -151,7 +157,7 @@
  }
  
  .CLASS02539 {
-@@ -5180,7 +5193,7 @@
+@@ -5180,7 +5194,7 @@
  
  .CLASS02540 {
  	text-align:center;

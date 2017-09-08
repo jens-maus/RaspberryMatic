@@ -111,18 +111,19 @@
  	border:solid 1px $_(black); /* black */
  	color: $_(textColorB); /* black */
  	overflow:auto;
-@@ -5129,7 +5129,9 @@
+@@ -5129,7 +5129,10 @@
  .CLASS02532 {
  	font-size: 10px;
  	width:220px;
 -	height:25px;
 +	height:auto;
++  min-height: 32px;
 +	clear: both;
 +	display: inline-block;
    /* line-height:25px; problem with controls with a long parameter name */
  }
  
-@@ -5158,6 +5160,11 @@
+@@ -5158,6 +5161,11 @@
  
  .CLASS02535 {
  	float: right;
@@ -134,7 +135,7 @@
  }
  
  .CLASS02536 {
-@@ -5165,13 +5172,19 @@
+@@ -5165,13 +5173,19 @@
  }
  
  .CLASS02537 {
@@ -156,7 +157,7 @@
  }
  
  .CLASS02539 {
-@@ -5180,7 +5193,7 @@
+@@ -5180,7 +5194,7 @@
  
  .CLASS02540 {
  	text-align:center;

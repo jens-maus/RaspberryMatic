@@ -1,0 +1,19 @@
+--- homematic/WebUI/www/rega/pages/tabs/control/programs.htm.orig
++++ homematic/WebUI/www/rega/pages/tabs/control/programs.htm
+@@ -47,11 +47,11 @@
+     <thead>
+       <tr class="CLASS03702">
+         <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+-        <th><div id="name" class="pt11 CLASS03704 <%Write(sCssName); %>" onclick="IseSort(arProgs,'name',true);" >${thName}</div></th>
+-        <th class="tHeaderCell CLASS03705" >${thDescription}</th>
+-        <th class="tHeaderCell CLASS03705" >${thActivity}</th>
+-        <th class="tHeaderCell CLASS03705" >${thLastExecution}</th>
+-        <th class="tHeaderCell CLASS03705" >${thAction}</th>
++        <th class="CLASS03302"><div id="name" class="tHeaderCell<%Write(sCssName); %>" onclick="IseSort(arProgs,'name',true);" >${thName}</div></th>
++        <th class="tHeaderCell CLASS03303" >${thDescription}</th>
++        <th class="tHeaderCell CLASS03303" >${thActivity}</th>
++        <th class="tHeaderCell CLASS03303" >${thLastExecution}</th>
++        <th class="tHeaderCell CLASS03303" >${thAction}</th>
+       </tr>
+     </thead>
+       <tbody>

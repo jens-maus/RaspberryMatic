@@ -1,456 +1,3 @@
---- homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d.orig
-+++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d
-@@ -11,9 +11,12 @@
- 
- CFG_TEMPLATE_DIR=/etc/config_templates
- 
--init() {
--	export TZ=`cat /etc/config/TZ`
-+source /var/hm_mode 2>/dev/null
-+
-+# skip this startup in LAN Gateway mode
-+[[ ${HM_MODE} == "HMLGW" ]] && exit 0
- 
-+init() {
- 	if [ ! -d /etc/config/hs485d ] ; then
-   		mkdir /etc/config/hs485d
- 	fi
-@@ -25,17 +28,36 @@
- 	else
- 		cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
- 	fi
-+
-+  # if there is no HmIP support enabled we have to strip
-+  # the HmIP-RF part in InterfacesList.xml
-+  if [[ ${HM_MODE} != "HmIP" ]] || [[ -z $(cat /var/rf_address) ]]; then
-+    if [[ ${HM_MODE} != "HmIP-RFUSB" ]]; then
-+      # remove HmIP-RF from InterfacesList.xml because not required (BidCos-RF only mode)
-+      line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | head -1)
-+      line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | tail -1)
-+    elif [[ -z $(cat /var/rf_address) ]]; then
-+      # remove BidCos-RF from InterfacesList.xml because not required (HmIP-RFUSB only mode)
-+      line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | head -1)
-+      line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | tail -1)
-+    fi
-+    if [[ -n "${line_start}" && -n "${line_end}" ]]; then
-+      line_start=$((${line_start}-1))
-+      line_end=$((${line_end}+1))
-+      sed -i "${line_start},${line_end}d" /etc/config/InterfacesList.xml
-+    fi
-+  fi
- }
- 
- start() {
--	echo -n "Preparing start of hs485d"
-+	echo -n "Preparing start of hs485d: "
- 	init
- 	/bin/hs485dLoader -l $LOGLEVEL_HS485D -ds -dd /etc/config/hs485d.conf
- 	echo "OK"
- }
- 
- stop() {
--	echo "OK"
-+	echo -n ""
- }
- 
- restart() {
-@@ -59,4 +81,3 @@
- esac
- 
- exit $?
--
---- homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S60hs485d.orig
-+++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S60hs485d
-@@ -7,9 +7,12 @@
- 
- CFG_TEMPLATE_DIR=/etc/config_templates
- 
--init() {
--	export TZ=`cat /etc/config/TZ`
-+source /var/hm_mode 2>/dev/null
-+
-+# skip this startup in LAN Gateway mode
-+[[ ${HM_MODE} == "HMLGW" ]] && exit 0
- 
-+init() {
- 	if [ ! -e /etc/config/syslog ] ; then
- 		cp $CFG_TEMPLATE_DIR/syslog /etc/config
- 	fi
---- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf.orig
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf
-@@ -22,6 +22,5 @@
- [Interface 0]
- Type = CCU2
- ComPortFile = /dev/mmd_bidcos
--#AccessFile = /dev/null
--#ResetFile = /dev/ccu2-ic200
--
-+AccessFile = /dev/null
-+ResetFile = /dev/null
---- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd
-@@ -7,44 +7,20 @@
- CFG_TEMPLATE_DIR=/etc/config_templates
- PIDFILE=/var/run/multimacd.pid
- 
--update() {        
--	if [ ! -e /etc/config/no-coprocessor-update ] ; then
--		echo "checking if firmware update is needed..."
--		/bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u
--		if ! [ $? -eq 0 ] ; then
--			echo "error while updating coprocessor, recovering..."
--			avrprog --bo
--			/bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u -f
--			sleep 1
--		else
--			echo "done"
--			sleep 1
--		fi
--	else
--		echo "firmware update disabled"
--	fi
--}
--check_bo(){
--	avrprog --devinfo | grep -q ec,fd,da,ef
--	if ! [ 0 -eq $? ];
--	then
--	avrprog --bo
--	fi
--}
--check_rf_address(){
--        sed 1q /sys/module/plat_eq3ccu2/parameters/radio_mac > /var/log/rf_address
--        /bin/eq3configcmd read-default-rf-address -l 0 -v -h -f /dev/mxs_auart_raw.0 | grep -q -F -f /var/log/rf_address
--        if ! [ 0 -eq $? ];
--        then
--        avrprog --bo
--        fi
--        rm /var/log/rf_address
--}
-+source /var/hm_mode 2>/dev/null
-+
-+# skip this startup in LAN Gateway or HmIP-RFUSB mode
-+[[ ${HM_MODE} == "HMLGW" || ${HM_MODE} == "HmIP-RFUSB" ]] && exit 0
-+
- init() {
--	export TZ=`cat /etc/config/TZ`
--	
--	if [ ! -e /etc/config/multimacd.conf ] ; then
--		cp $CFG_TEMPLATE_DIR/multimacd.conf /etc/config
-+
-+  # make sure there is no /dev/ttyS0
-+  if [ -e /dev/ttyS0 ] ; then
-+    rm -f /dev/ttyS0
-+  fi
-+
-+	if [ ! -e /var/etc/multimacd.conf ] ; then
-+		cp $CFG_TEMPLATE_DIR/multimacd.conf /var/etc/
- 	fi
- 
- 	if [ ! -e /etc/config/syslog ] ; then
-@@ -57,44 +33,41 @@
- }
- 
- waitStartupComplete() {
--    echo -n "Waiting for multimacd to get ready"
- 	STEPS=5
-     for i in $(seq 1 $STEPS)
-     do
- 		sleep 2
- 		echo -n "."
--        MMDSTATUSPID=`cat /var/status/multimacd.status 2>/dev/null`
-+        MMDSTATUSPID=`cat /var/status/multimacd.status 2>&1`
-         MMDPID=`pidof multimacd`
--        if [ $MMDSTATUSPID = $MMDPID ] 
-+        if [ "$MMDSTATUSPID" = "$MMDPID" ] 
- 		then
--            echo "multimacd is ready now."
-+            echo "OK"
-             break
- 		fi 
-         if [ $i -eq $STEPS ]
- 		then
--            echo "Timeout while waiting for multimacd to get ready."
-+            echo "ERROR"
-         fi
-     done
- }
- 
- start() {
--	echo "Starting multimacd: "
--	init
--	if [ ! -e $PIDFILE ] ; then
--		check_bo
--                check_rf_address
--		update
--	else
--		echo "Skipping coprocessor update because multimacd is running."
--	fi
--	init
--	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /etc/config/multimacd.conf -l $LOGLEVEL_RFD
--	waitStartupComplete
-+	echo -n "Starting multimacd: "
-+  if [[ ${HM_MODE} == "HmIP" ]] && [[ ! -z $(cat /var/rf_address) ]]; then
-+	  init
-+	  start-stop-daemon -S -N -10 -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l $LOGLEVEL_RFD
-+	  waitStartupComplete
-+  else
-+    echo "not required"
-+  fi
- }
- stop() {
- 	echo -n "Stopping multimacd: "
--	start-stop-daemon -K -q -p $PIDFILE
--	rm -f $PIDFILE
-+  if [[ ${HM_MODE} == "HmIP" ]] && [[ ! -z $(cat /var/rf_address) ]]; then
-+	  start-stop-daemon -K -q -p $PIDFILE
-+	  rm -f $PIDFILE
-+  fi
- 	echo "OK"
- }
- restart() {
---- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig
-+++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd
-@@ -7,30 +7,42 @@
- CFG_TEMPLATE_DIR=/etc/config_templates
- PIDFILE=/var/run/rfd.pid
- 
-+source /var/hm_mode 2>/dev/null
-+
-+# skip this startup in LAN Gateway mode
-+[[ ${HM_MODE} == "HMLGW" ]] && exit 0
-+
- init() {
--	export TZ=`cat /etc/config/TZ`
- 
- 	if [ ! -d /etc/config/rfd ] ; then
-   		mkdir /etc/config/rfd
- 	fi
-+
- 	#Migration for existing rfd.conf in user space
- 	if [ ! -e /etc/config/rfd.conf ] ; then
--		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
--	else
--		sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
--		sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
--		sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
--                if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
--                        sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
--                fi
--	fi
-+		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config/rfd.conf
-+  fi
- 
--        # Bug fix
--        grep "/etc/config/rfd/keys" /etc/config/rfd.conf
--        if [ $? == 0 ] ; then
--                echo "Copy rfd files"
--		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
--        fi
-+  # only modify if real rf module found
-+  if [[ ! -z $(cat /var/rf_address) ]]; then
-+    # make sure [Interface 0] is uncommented
-+    sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
-+
-+    # patch some settings to match what this hardware expects.
-+    if [[ ${HM_MODE} == "HmIP" ]]; then
-+      sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf
-+    else
-+      sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/ttyAMA0/' /etc/config/rfd.conf
-+    fi
-+    sed -i 's/^#*AccessFile = \/dev\/.*$/AccessFile = \/dev\/null/' /etc/config/rfd.conf
-+    sed -i 's/^#*ResetFile = \/dev\/.*$/ResetFile = \/dev\/null/' /etc/config/rfd.conf
-+    if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
-+      sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
-+    fi
-+  else
-+    # otherwise disable the whole [Interface 0] part
-+    sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf
-+  fi
- 
- 	if [ ! -e /etc/config/syslog ] ; then
- 		cp $CFG_TEMPLATE_DIR/syslog /etc/config
-@@ -42,28 +54,27 @@
- }
- 
- waitStartupComplete() {
--    echo -n "Waiting for rfd to get ready"
--	STEPS=60
-+	STEPS=20
-     for i in $(seq 1 $STEPS)
-     do
- 		sleep 2
- 		echo -n "."
--        RFDSTATUSPID=`cat /var/status/rfd.status 2>/dev/null`
-+        RFDSTATUSPID=`cat /var/status/rfd.status 2>&1`
-         RFDPID=`pidof rfd`
--        if [ $RFDSTATUSPID = $RFDPID ] 
-+        if [ "$RFDSTATUSPID" = "$RFDPID" ] 
- 		then
--            echo "rfd is ready now."
-+            echo "OK"
-             break
-         fi
-         if [ $i -eq $STEPS ] 
- 		then
--            echo "Timeout while waiting for rfd to get ready."
-+            echo "ERROR"
-         fi
-     done
- }
- 
- start() {
--	echo "Starting rfd: "
-+	echo -n "Starting rfd: "
- 	init
- 	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
- 	waitStartupComplete
---- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf.orig
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf
-@@ -1,5 +1,7 @@
- #### CGI module
- cgi.assign = ( ".pl"  => "/usr/bin/perl",
--                ".cgi" => "/opt/hm/bin/tclsh",
-+                ".cgi" => "/bin/tclsh",
-                 ".ccc" => ""
-              )
-+cgi.x-sendfile = "enable"
-+cgi.x-sendfile-docroot = ( "/usr/local/tmp" )
---- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf.orig
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf
-@@ -1,3 +1,3 @@
- setenv.add-environment = (
--        "TZ" => "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
-+        "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
- )
---- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig
-+++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf
-@@ -14,10 +14,10 @@
- ## chroot example aswell.
- ##
- var.log_root    = "/var/log"
--var.server_root = "/opt/hm/www"
-+var.server_root = "/www/"
- var.state_dir   = "/var/run"
- var.home_dir    = "/var/lib/lighttpd"
--var.conf_dir    = "/opt/hm/etc/lighttpd"
-+var.conf_dir    = "/etc/lighttpd"
- 
- ## 
- ## run the server chrooted.
-@@ -87,6 +87,33 @@
- ##
- server.port = 80
- 
-+$SERVER["socket"] == ":8181" {
-+	server.document-root = server_root
-+}
-+
-+$SERVER["socket"] == ":443" {
-+	server.document-root = server_root
-+	ssl.engine = "enable"
-+	ssl.pemfile = "/etc/config/server.pem"
-+}
-+
-+$SERVER["socket"] == "[::]:80" {
-+	server.document-root = server_root
-+	server.use-ipv6 = "enable"
-+}
-+
-+$SERVER["socket"] == "[::]:8181" {
-+	server.document-root = server_root
-+	server.use-ipv6 = "enable"
-+}
-+
-+$SERVER["socket"] == "[::]:443" {
-+	server.document-root = server_root
-+	ssl.engine = "enable"
-+	ssl.pemfile = "/etc/config/server.pem"
-+	server.use-ipv6 = "enable"
-+}
-+
- ##
- ## Use IPv6?
- ##
-@@ -127,6 +154,11 @@
- server.pid-file = state_dir + "/lighttpd.pid"
- 
- ##
-+## number of worker processes to spawn.
-+##
-+server.max-worker = 4
-+
-+##
- #######################################################################
- 
- #######################################################################
-@@ -230,14 +262,14 @@
- ##
- ## Default: 5
- ##
--#server.max-keep-alive-idle = 5
-+server.max-keep-alive-idle = 60
- 
- ##
- ## How many keep-alive requests until closing the connection.
- ##
- ## Default: 16
- ##
--#server.max-keep-alive-requests = 16
-+server.max-keep-alive-requests = 50
- 
- ##
- ## Maximum size of a request in kilobytes.
-@@ -252,14 +284,14 @@
- ##
- ## Default: 60
- ##
--#server.max-read-idle = 60
-+server.max-read-idle = 600
- 
- ##
- ## Time to write to a socket before we consider it idle.
- ##
- ## Default: 360
- ##
--#server.max-write-idle = 360
-+server.max-write-idle = 600
- 
- ##
- ##  Traffic Shaping 
-@@ -370,7 +402,12 @@
- ##
- ## defaults to /var/tmp as we assume it is a local harddisk
- ##
--server.upload-dirs = ( "/var/tmp" )
-+server.upload-dirs = ( "/usr/local/tmp" )
-+
-+##
-+## default size of temp files
-+##
-+server.upload-temp-file-size = 16777216
- 
- ##
- #######################################################################
-@@ -440,6 +477,6 @@
- ## custom includes like vhosts.
- ##
- #include "conf.d/config.conf"
--#include_shell "cat /etc/lighttpd/vhosts.d/*.conf"
-+include_shell "test -d /etc/config/lighttpd && cat /etc/config/lighttpd/*.conf"
- ##
- #######################################################################
---- homematic/firmware/HM-MOD-UART/fwmap.orig
-+++ homematic/firmware/HM-MOD-UART/fwmap
-@@ -1,7 +1,7 @@
- #Type           Filename                Version
- 
- #Coprozessor
--CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
-+#CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
- 
--#CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
-+CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
- 
 --- homematic/HMserver/etc/init.d.orig
 +++ homematic/HMserver/etc/init.d
 @@ -5,28 +5,69 @@
@@ -985,3 +532,456 @@
        homematic.com.m_latestVersion = latestVersion;
        homematic.com.m_isUpdateAvailable = (WEBUI_VERSION != latestVersion);
      } else {
+--- homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d.orig
++++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d
+@@ -11,9 +11,12 @@
+ 
+ CFG_TEMPLATE_DIR=/etc/config_templates
+ 
+-init() {
+-	export TZ=`cat /etc/config/TZ`
++source /var/hm_mode 2>/dev/null
++
++# skip this startup in LAN Gateway mode
++[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+ 
++init() {
+ 	if [ ! -d /etc/config/hs485d ] ; then
+   		mkdir /etc/config/hs485d
+ 	fi
+@@ -25,17 +28,36 @@
+ 	else
+ 		cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
+ 	fi
++
++  # if there is no HmIP support enabled we have to strip
++  # the HmIP-RF part in InterfacesList.xml
++  if [[ ${HM_MODE} != "HmIP" ]] || [[ -z $(cat /var/rf_address) ]]; then
++    if [[ ${HM_MODE} != "HmIP-RFUSB" ]]; then
++      # remove HmIP-RF from InterfacesList.xml because not required (BidCos-RF only mode)
++      line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | head -1)
++      line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | tail -1)
++    elif [[ -z $(cat /var/rf_address) ]]; then
++      # remove BidCos-RF from InterfacesList.xml because not required (HmIP-RFUSB only mode)
++      line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | head -1)
++      line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | tail -1)
++    fi
++    if [[ -n "${line_start}" && -n "${line_end}" ]]; then
++      line_start=$((${line_start}-1))
++      line_end=$((${line_end}+1))
++      sed -i "${line_start},${line_end}d" /etc/config/InterfacesList.xml
++    fi
++  fi
+ }
+ 
+ start() {
+-	echo -n "Preparing start of hs485d"
++	echo -n "Preparing start of hs485d: "
+ 	init
+ 	/bin/hs485dLoader -l $LOGLEVEL_HS485D -ds -dd /etc/config/hs485d.conf
+ 	echo "OK"
+ }
+ 
+ stop() {
+-	echo "OK"
++	echo -n ""
+ }
+ 
+ restart() {
+@@ -59,4 +81,3 @@
+ esac
+ 
+ exit $?
+-
+--- homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S60hs485d.orig
++++ homematic/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S60hs485d
+@@ -7,9 +7,12 @@
+ 
+ CFG_TEMPLATE_DIR=/etc/config_templates
+ 
+-init() {
+-	export TZ=`cat /etc/config/TZ`
++source /var/hm_mode 2>/dev/null
++
++# skip this startup in LAN Gateway mode
++[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+ 
++init() {
+ 	if [ ! -e /etc/config/syslog ] ; then
+ 		cp $CFG_TEMPLATE_DIR/syslog /etc/config
+ 	fi
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf.orig
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf
+@@ -22,6 +22,5 @@
+ [Interface 0]
+ Type = CCU2
+ ComPortFile = /dev/mmd_bidcos
+-#AccessFile = /dev/null
+-#ResetFile = /dev/ccu2-ic200
+-
++AccessFile = /dev/null
++ResetFile = /dev/null
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd
+@@ -7,44 +7,20 @@
+ CFG_TEMPLATE_DIR=/etc/config_templates
+ PIDFILE=/var/run/multimacd.pid
+ 
+-update() {        
+-	if [ ! -e /etc/config/no-coprocessor-update ] ; then
+-		echo "checking if firmware update is needed..."
+-		/bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u
+-		if ! [ $? -eq 0 ] ; then
+-			echo "error while updating coprocessor, recovering..."
+-			avrprog --bo
+-			/bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u -f
+-			sleep 1
+-		else
+-			echo "done"
+-			sleep 1
+-		fi
+-	else
+-		echo "firmware update disabled"
+-	fi
+-}
+-check_bo(){
+-	avrprog --devinfo | grep -q ec,fd,da,ef
+-	if ! [ 0 -eq $? ];
+-	then
+-	avrprog --bo
+-	fi
+-}
+-check_rf_address(){
+-        sed 1q /sys/module/plat_eq3ccu2/parameters/radio_mac > /var/log/rf_address
+-        /bin/eq3configcmd read-default-rf-address -l 0 -v -h -f /dev/mxs_auart_raw.0 | grep -q -F -f /var/log/rf_address
+-        if ! [ 0 -eq $? ];
+-        then
+-        avrprog --bo
+-        fi
+-        rm /var/log/rf_address
+-}
++source /var/hm_mode 2>/dev/null
++
++# skip this startup in LAN Gateway or HmIP-RFUSB mode
++[[ ${HM_MODE} == "HMLGW" || ${HM_MODE} == "HmIP-RFUSB" ]] && exit 0
++
+ init() {
+-	export TZ=`cat /etc/config/TZ`
+-	
+-	if [ ! -e /etc/config/multimacd.conf ] ; then
+-		cp $CFG_TEMPLATE_DIR/multimacd.conf /etc/config
++
++  # make sure there is no /dev/ttyS0
++  if [ -e /dev/ttyS0 ] ; then
++    rm -f /dev/ttyS0
++  fi
++
++	if [ ! -e /var/etc/multimacd.conf ] ; then
++		cp $CFG_TEMPLATE_DIR/multimacd.conf /var/etc/
+ 	fi
+ 
+ 	if [ ! -e /etc/config/syslog ] ; then
+@@ -57,44 +33,41 @@
+ }
+ 
+ waitStartupComplete() {
+-    echo -n "Waiting for multimacd to get ready"
+ 	STEPS=5
+     for i in $(seq 1 $STEPS)
+     do
+ 		sleep 2
+ 		echo -n "."
+-        MMDSTATUSPID=`cat /var/status/multimacd.status 2>/dev/null`
++        MMDSTATUSPID=`cat /var/status/multimacd.status 2>&1`
+         MMDPID=`pidof multimacd`
+-        if [ $MMDSTATUSPID = $MMDPID ] 
++        if [ "$MMDSTATUSPID" = "$MMDPID" ] 
+ 		then
+-            echo "multimacd is ready now."
++            echo "OK"
+             break
+ 		fi 
+         if [ $i -eq $STEPS ]
+ 		then
+-            echo "Timeout while waiting for multimacd to get ready."
++            echo "ERROR"
+         fi
+     done
+ }
+ 
+ start() {
+-	echo "Starting multimacd: "
+-	init
+-	if [ ! -e $PIDFILE ] ; then
+-		check_bo
+-                check_rf_address
+-		update
+-	else
+-		echo "Skipping coprocessor update because multimacd is running."
+-	fi
+-	init
+-	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /etc/config/multimacd.conf -l $LOGLEVEL_RFD
+-	waitStartupComplete
++	echo -n "Starting multimacd: "
++  if [[ ${HM_MODE} == "HmIP" ]] && [[ ! -z $(cat /var/rf_address) ]]; then
++	  init
++	  start-stop-daemon -S -N -10 -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l $LOGLEVEL_RFD
++	  waitStartupComplete
++  else
++    echo "not required"
++  fi
+ }
+ stop() {
+ 	echo -n "Stopping multimacd: "
+-	start-stop-daemon -K -q -p $PIDFILE
+-	rm -f $PIDFILE
++  if [[ ${HM_MODE} == "HmIP" ]] && [[ ! -z $(cat /var/rf_address) ]]; then
++	  start-stop-daemon -K -q -p $PIDFILE
++	  rm -f $PIDFILE
++  fi
+ 	echo "OK"
+ }
+ restart() {
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd
+@@ -7,30 +7,42 @@
+ CFG_TEMPLATE_DIR=/etc/config_templates
+ PIDFILE=/var/run/rfd.pid
+ 
++source /var/hm_mode 2>/dev/null
++
++# skip this startup in LAN Gateway mode
++[[ ${HM_MODE} == "HMLGW" ]] && exit 0
++
+ init() {
+-	export TZ=`cat /etc/config/TZ`
+ 
+ 	if [ ! -d /etc/config/rfd ] ; then
+   		mkdir /etc/config/rfd
+ 	fi
++
+ 	#Migration for existing rfd.conf in user space
+ 	if [ ! -e /etc/config/rfd.conf ] ; then
+-		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
+-	else
+-		sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
+-		sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
+-		sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
+-                if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
+-                        sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
+-                fi
+-	fi
++		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config/rfd.conf
++  fi
+ 
+-        # Bug fix
+-        grep "/etc/config/rfd/keys" /etc/config/rfd.conf
+-        if [ $? == 0 ] ; then
+-                echo "Copy rfd files"
+-		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
+-        fi
++  # only modify if real rf module found
++  if [[ ! -z $(cat /var/rf_address) ]]; then
++    # make sure [Interface 0] is uncommented
++    sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
++
++    # patch some settings to match what this hardware expects.
++    if [[ ${HM_MODE} == "HmIP" ]]; then
++      sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf
++    else
++      sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/ttyAMA0/' /etc/config/rfd.conf
++    fi
++    sed -i 's/^#*AccessFile = \/dev\/.*$/AccessFile = \/dev\/null/' /etc/config/rfd.conf
++    sed -i 's/^#*ResetFile = \/dev\/.*$/ResetFile = \/dev\/null/' /etc/config/rfd.conf
++    if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
++      sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
++    fi
++  else
++    # otherwise disable the whole [Interface 0] part
++    sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf
++  fi
+ 
+ 	if [ ! -e /etc/config/syslog ] ; then
+ 		cp $CFG_TEMPLATE_DIR/syslog /etc/config
+@@ -42,28 +54,27 @@
+ }
+ 
+ waitStartupComplete() {
+-    echo -n "Waiting for rfd to get ready"
+-	STEPS=60
++	STEPS=20
+     for i in $(seq 1 $STEPS)
+     do
+ 		sleep 2
+ 		echo -n "."
+-        RFDSTATUSPID=`cat /var/status/rfd.status 2>/dev/null`
++        RFDSTATUSPID=`cat /var/status/rfd.status 2>&1`
+         RFDPID=`pidof rfd`
+-        if [ $RFDSTATUSPID = $RFDPID ] 
++        if [ "$RFDSTATUSPID" = "$RFDPID" ] 
+ 		then
+-            echo "rfd is ready now."
++            echo "OK"
+             break
+         fi
+         if [ $i -eq $STEPS ] 
+ 		then
+-            echo "Timeout while waiting for rfd to get ready."
++            echo "ERROR"
+         fi
+     done
+ }
+ 
+ start() {
+-	echo "Starting rfd: "
++	echo -n "Starting rfd: "
+ 	init
+ 	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
+ 	waitStartupComplete
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf.orig
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf
+@@ -1,5 +1,7 @@
+ #### CGI module
+ cgi.assign = ( ".pl"  => "/usr/bin/perl",
+-                ".cgi" => "/opt/hm/bin/tclsh",
++                ".cgi" => "/bin/tclsh",
+                 ".ccc" => ""
+              )
++cgi.x-sendfile = "enable"
++cgi.x-sendfile-docroot = ( "/usr/local/tmp" )
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf.orig
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf
+@@ -1,3 +1,3 @@
+ setenv.add-environment = (
+-        "TZ" => "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
++        "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
+ )
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf
+@@ -14,10 +14,10 @@
+ ## chroot example aswell.
+ ##
+ var.log_root    = "/var/log"
+-var.server_root = "/opt/hm/www"
++var.server_root = "/www/"
+ var.state_dir   = "/var/run"
+ var.home_dir    = "/var/lib/lighttpd"
+-var.conf_dir    = "/opt/hm/etc/lighttpd"
++var.conf_dir    = "/etc/lighttpd"
+ 
+ ## 
+ ## run the server chrooted.
+@@ -87,6 +87,33 @@
+ ##
+ server.port = 80
+ 
++$SERVER["socket"] == ":8181" {
++	server.document-root = server_root
++}
++
++$SERVER["socket"] == ":443" {
++	server.document-root = server_root
++	ssl.engine = "enable"
++	ssl.pemfile = "/etc/config/server.pem"
++}
++
++$SERVER["socket"] == "[::]:80" {
++	server.document-root = server_root
++	server.use-ipv6 = "enable"
++}
++
++$SERVER["socket"] == "[::]:8181" {
++	server.document-root = server_root
++	server.use-ipv6 = "enable"
++}
++
++$SERVER["socket"] == "[::]:443" {
++	server.document-root = server_root
++	ssl.engine = "enable"
++	ssl.pemfile = "/etc/config/server.pem"
++	server.use-ipv6 = "enable"
++}
++
+ ##
+ ## Use IPv6?
+ ##
+@@ -127,6 +154,11 @@
+ server.pid-file = state_dir + "/lighttpd.pid"
+ 
+ ##
++## number of worker processes to spawn.
++##
++server.max-worker = 4
++
++##
+ #######################################################################
+ 
+ #######################################################################
+@@ -230,14 +262,14 @@
+ ##
+ ## Default: 5
+ ##
+-#server.max-keep-alive-idle = 5
++server.max-keep-alive-idle = 60
+ 
+ ##
+ ## How many keep-alive requests until closing the connection.
+ ##
+ ## Default: 16
+ ##
+-#server.max-keep-alive-requests = 16
++server.max-keep-alive-requests = 50
+ 
+ ##
+ ## Maximum size of a request in kilobytes.
+@@ -252,14 +284,14 @@
+ ##
+ ## Default: 60
+ ##
+-#server.max-read-idle = 60
++server.max-read-idle = 600
+ 
+ ##
+ ## Time to write to a socket before we consider it idle.
+ ##
+ ## Default: 360
+ ##
+-#server.max-write-idle = 360
++server.max-write-idle = 600
+ 
+ ##
+ ##  Traffic Shaping 
+@@ -370,7 +402,12 @@
+ ##
+ ## defaults to /var/tmp as we assume it is a local harddisk
+ ##
+-server.upload-dirs = ( "/var/tmp" )
++server.upload-dirs = ( "/usr/local/tmp" )
++
++##
++## default size of temp files
++##
++server.upload-temp-file-size = 16777216
+ 
+ ##
+ #######################################################################
+@@ -440,6 +477,6 @@
+ ## custom includes like vhosts.
+ ##
+ #include "conf.d/config.conf"
+-#include_shell "cat /etc/lighttpd/vhosts.d/*.conf"
++include_shell "test -d /etc/config/lighttpd && cat /etc/config/lighttpd/*.conf"
+ ##
+ #######################################################################
+--- homematic/firmware/HM-MOD-UART/fwmap.orig
++++ homematic/firmware/HM-MOD-UART/fwmap
+@@ -1,7 +1,7 @@
+ #Type           Filename                Version
+ 
+ #Coprozessor
+-CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
++#CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
+ 
+-#CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
++CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
+ 

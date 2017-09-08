@@ -1,13 +1,12 @@
 --- homematic/WebUI/www/rega/pages/tabs/admin/views/programlist.htm.orig
 +++ homematic/WebUI/www/rega/pages/tabs/admin/views/programlist.htm
-@@ -1,4 +1,40 @@
+@@ -1,4 +1,37 @@
 -<% system.SetSessionVar("sessionTAB", "programlist"); %>
 +<script type="text/javascript">
 +  ResetGAC();
 +  iseUpdateSVArray = new Array();
 +  <%
 +    system.SetSessionVar("sessionTAB", "programlist");
-+
 +    boolean firstSort = false;
 +    object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
 +    if( (system.GetSessionVar("sessionCTV")=="true") )
@@ -15,17 +14,15 @@
 +      firstSort = true;
 +      system.SetSessionVar("sessionLS","");
 +      oUser.UserTempViewIDs().RemoveAll();
-+
 +      Write('iseClearLastSort();');
 +      Write('lastSort = "name";');
 +      Write('lastDir = 0;');
-+
 +      object oTmpArray = dom.GetObject(ID_PROGRAMS);
 +      if( oTmpArray )
 +      {
 +        oTmpArray.SortByName();
 +        string sTmp;
-+        foreach(sTmp,oTmpArray.EnumEnabledVisibleIDs())
++        foreach(sTmp,oTmpArray.EnumEnabledIDs())
 +        {
 +          object oTmp = dom.GetObject( sTmp );
 +          if( oTmp )
@@ -42,7 +39,7 @@
  
  <script type="text/javascript">
    setPath("<span onclick='WebUI.enter(LinksAndProgramsPage);'>"+translateKey('menuProgramsLinksPage')+"</span> &gt; "+ translateKey('submenuPrograms'));
-@@ -19,18 +55,38 @@
+@@ -19,18 +52,38 @@
    %>
  </script>
  
@@ -85,7 +82,7 @@
      <%
        object oPrograms = dom.GetObject( ID_PROGRAMS );
        if(oPrograms)
-@@ -52,6 +108,10 @@
+@@ -52,6 +105,10 @@
              }
            }
          }
@@ -96,7 +93,7 @@
          string sPID;
          foreach( sPID, sEnumPrgIDs )
          {
-@@ -60,7 +120,8 @@
+@@ -60,7 +117,8 @@
            {
              if( (o.IsTypeOf( OT_PROGRAM )) && (o.ProgramCopyID()==ID_ERROR) )
              {
@@ -106,7 +103,7 @@
                WriteLine( '<td class="tBodyCell">'#o.Name()#'</td>' );
                WriteLine( '<td class="tBodyCell">'#o.PrgInfo()#'</td>' );
                WriteLine( '<td class="tBodyCell">' );
-@@ -78,7 +139,7 @@
+@@ -78,7 +136,7 @@
                  WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
                    WriteLine( '<tr>' );
                      WriteLine( '<td>' );
@@ -115,7 +112,7 @@
                          WriteLine( '<tr>' );
                            WriteLine( '<td class="CLASS04903">' );
                              WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#');" />' );
-@@ -121,6 +182,110 @@
+@@ -121,6 +179,110 @@
                  WriteLine( '</table>' );
                WriteLine( '</td>' );
                WriteLine( '</tr>' );
@@ -226,7 +223,7 @@
              }
            }
          }
-@@ -128,6 +293,7 @@
+@@ -128,12 +290,13 @@
      %>
    </tbody>
  </table>
@@ -234,7 +231,28 @@
  
  <script type="text/javascript">
    DeleteProgram = function(id)
-@@ -233,6 +399,7 @@
+   {
+     var _id_ = id;
+-    //new YesNoDialog("Sicherheitsabfrage", "Möchten Sie das Programm wirklich löschen?", function(result) {
++    //new YesNoDialog("Sicherheitsabfrage", "MÃ¶chten Sie das Programm wirklich lÃ¶schen?", function(result) {
+       new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionRemoveProgram'), function(result) {
+       if (result == YesNoDialog.RESULT_YES)
+       {
+@@ -195,7 +358,6 @@
+       new Ajax.Request(url, opt);
+     }
+   };
+-
+   ShowNonVisiblePrograms = function()
+   {
+     var url = '/esp/programs.htm?sid='+SessionId;
+@@ -227,12 +389,12 @@
+     }
+     Write("var internalBtnText = '"#sInternalBtnText#"';");
+   %>
+-
+   var s = "";
+   s += "<table cellspacing='8'>";
    s += "<tr>";
      s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack();'>"+ translateKey('footerBtnPageBack') +"</div></td>";
      s += "<td align='center' valign='middle'><div class='FooterButton' onclick='NewProgram();'>"+ translateKey('footerBtnNew') +"</div></td>";
@@ -242,12 +260,11 @@
      //s += "<td align='center' valign='middle'><div class='FooterButton CLASS04905' onclick='ShowNonVisiblePrograms();' >Systeminterne Programme<br /><% Write(sInternalBtnText); %>blenden</div></td>";
      s += "<td align='center' valign='middle'><div class='FooterButton CLASS04905' onclick='ShowNonVisiblePrograms();' >"+translateKey(internalBtnText) +"</div></td>";
      s += "<td align='center' valign='middle'><div class='FooterButton CLASS04906' onclick='new HMScriptExecutor();' >"+translateKey('footerBtnTestScript')+ "</div></td>";
-@@ -247,4 +414,40 @@
+@@ -246,5 +408,36 @@
+   translateButtons("btnRemove, btnEdit");
    translatePage("#ProgramListTable");
    jQuery("#ProgramListTable").show();
- 
--</script>
-\ No newline at end of file
+-
 +  var mouseOpts =
 +  {
 +    onTopOver: function(divToShow)
@@ -255,18 +272,14 @@
 +      selectFilters(fltVR, divToShow);
 +    }
 +  };
-+
 +  new iseSubMenuControl("btnFilterName", "btnFilterNameSub", "ProgramListTable", {d:28, r:18}, mouseOpts, false, true);
 +  new iseSubMenuControl("btnFilterDesc", "btnFilterDescSub", "ProgramListTable", {d:28, r:18}, mouseOpts, false, true);
-+
 +  jQuery("#btnFilterName").click(function(){
 +    jQuery("#ftName").focus();
 +  });
-+
 +  jQuery("#btnFilterDesc").click(function(){
 +    jQuery("#ftDesc").focus();
 +  });
-+
 +  updateTable = function()
 +  {
 +    colorFilterBtns(fltVR);
@@ -284,4 +297,5 @@
 +  };
 +  translatePage("#ProgramListTable");
 +  jQuery("#ProgramListTable").removeClass("hidden");
-+</script>
+ </script>
+\ No newline at end of file

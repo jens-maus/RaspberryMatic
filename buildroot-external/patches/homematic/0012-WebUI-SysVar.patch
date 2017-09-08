@@ -39,7 +39,7 @@
 -              WriteLine( '<div class="ControlBtnInfo CLASS02532" style="height:2.5em;" >' );
 -                WriteLine( '<span class="_CLASS02533"><span class="CLASS02534 j_translate" style="float: none;">'#sTitle#'</span>' );
 +              WriteLine( '<div class="ControlBtnInfo CLASS02532">' );
-+                WriteLine( '<span class="_CLASS02533"><span class="CLASS02534 j_translate">'#sTitle#':  </span>' );
++                WriteLine( '<span class="_CLASS02533"><span class="CLASS02534 j_translate">'#sTitle#'</span>' );
                  boolean tbRead =  ( ( oDP.Operations() & OPERATION_READ ) != 0 );
                  boolean tbEvent = ( ( oDP.Operations() & OPERATION_EVENT ) != 0 );
                  boolean tbWrite = ( ( oDP.Operations() & OPERATION_WRITE ) != 0 );

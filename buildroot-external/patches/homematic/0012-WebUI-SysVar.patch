@@ -32,18 +32,23 @@
        Call( "/esp/datapointconfigurator.fn::CreateSysVar()" );
        WriteLine( '</tr>' );
        WriteLine( '</table>' );
-@@ -1039,8 +1030,8 @@
+@@ -1039,8 +1030,13 @@
            {
              WriteLine( '<td>' );
  
 -              WriteLine( '<div class="ControlBtnInfo CLASS02532" style="height:2.5em;" >' );
 -                WriteLine( '<span class="_CLASS02533"><span class="CLASS02534 j_translate" style="float: none;">'#sTitle#'</span>' );
 +              WriteLine( '<div class="ControlBtnInfo CLASS02532">' );
++              if(sTitle == "") {
 +                WriteLine( '<span class="_CLASS02533"><span class="CLASS02534 j_translate">'#sTitle#'</span>' );
++                }
++                else {
++                WriteLine( '<span class="_CLASS02533"><span class="CLASS02534 j_translate">'#sTitle#':</span>' );
++                }
                  boolean tbRead =  ( ( oDP.Operations() & OPERATION_READ ) != 0 );
                  boolean tbEvent = ( ( oDP.Operations() & OPERATION_EVENT ) != 0 );
                  boolean tbWrite = ( ( oDP.Operations() & OPERATION_WRITE ) != 0 );
-@@ -1185,11 +1176,8 @@
+@@ -1185,11 +1181,8 @@
  
  function ::CreateSysVar()
  {
@@ -55,7 +60,7 @@
        
        string sSysVarVal = '';
        object cObjTmp = cObj;
-@@ -1218,7 +1206,7 @@
+@@ -1218,7 +1211,7 @@
  !        if( !(i%2) ) { WriteLine( '<tr>' ); }
          WriteLine( '<td class="CLASS02540">' );
            WriteLine( '<div class="ControlBtnInfo CLASS02538" >' );

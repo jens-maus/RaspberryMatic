@@ -25,7 +25,7 @@
 +      {
 +        oTmpArray.SortByName();
 +        string sTmp;
-+        foreach(sTmp,oTmpArray.EnumEnabledVisibleIDs())
++        foreach(sTmp,oTmpArray.EnumEnabledIDs())
 +        {
 +          object oTmp = dom.GetObject( sTmp );
 +          if( oTmp )

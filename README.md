@@ -139,6 +139,4 @@ A valid alternative for building RaspberryMatic ARM-hardfloat compatible binarie
 The RaspberryMatic build environment itself – the files found in this git repository – as well as the RaspberryMatic sd card images are licensed under the conditions of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0). Please note, however, that the buildroot distribution RaspberryMatic is using is licensed under the [GPLv2](http://www.gnu.org/licenses/gpl-2.0.html) license instead. Furthermore, the [eQ-3 OCCU](https://github.com/eq-3/occu) software RaspberryMatic is using to provide HomeMatic-based services is licensed under the ([HMSL](https://github.com/eq-3/occu/blob/master/LicenseDE.txt)).
 
 ## :family: Authors
-
-* Jens Maus
-* Wolfgang Willinghöfer
+See [Contributors](https://github.com/jens-maus/RaspberryMatic/graphs/contributors) for a complete list of people that have contributed to the success of RaspberryMatic.

@@ -746,7 +746,11 @@ jQuery.extend(true,langJSON, {
     "dialogHelpInfoLblSN" : "Seriennummer:",
     "dialogHelpInfoLblVersion" : "Version:",
     "dialogHelpInfoLblCopyright" : "Copyright",
+<<<<<<< HEAD
     "dialogBackspacePrevent" : "Bitte den Zur%FCck Button in der Oberfl%E4che verwenden%21",
+=======
+    "dialogBackspacePrevent" : "Bitte den Zur%FCck Button in der WebUI verwenden.",
+>>>>>>> jens-maus/master
     "commentDialogNewHelpEnd" : "***********************************************",
     "commentActionStatusControl" : "***********************************************",
     "actionStatusControlLblActive" : "Aktiv",

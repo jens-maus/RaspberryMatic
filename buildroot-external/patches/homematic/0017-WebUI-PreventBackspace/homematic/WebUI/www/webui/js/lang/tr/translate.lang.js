@@ -742,7 +742,11 @@ jQuery.extend(true,langJSON, {
     "dialogHelpInfoLblSN" : "Seri numarasi:",
     "dialogHelpInfoLblVersion" : "Versiyon:",
     "dialogHelpInfoLblCopyright" : "Telif haklari",
+<<<<<<< HEAD
     "dialogBackspacePrevent" : "Lütfen kullanıcı arabiriminin geri düğmesini kullanın",
+=======
+    "dialogBackspacePrevent" : "L%FCtfen kullanıcı arabiriminin geri d%FCgmesini kullanın.",
+>>>>>>> jens-maus/master
     "commentDialogNewHelpEnd" : "***********************************************",
     "commentActionStatusControl" : "***********************************************",
     "actionStatusControlLblActive" : "Etkin",

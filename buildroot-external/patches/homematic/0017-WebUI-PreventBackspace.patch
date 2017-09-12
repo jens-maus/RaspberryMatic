@@ -33,7 +33,11 @@
      "dialogHelpInfoLblSN" : "Seriennummer:",
      "dialogHelpInfoLblVersion" : "Version:",
      "dialogHelpInfoLblCopyright" : "Copyright",
+<<<<<<< HEAD
 +    "dialogBackspacePrevent" : "Bitte den Zur%FCck Button in der Oberfl%E4che verwenden%21",
+=======
++    "dialogBackspacePrevent" : "Bitte den Zur%FCck Button in der WebUI verwenden.",
+>>>>>>> jens-maus/master
      "commentDialogNewHelpEnd" : "***********************************************",
      "commentActionStatusControl" : "***********************************************",
      "actionStatusControlLblActive" : "Aktiv",
@@ -43,7 +47,11 @@
      "dialogHelpInfoLblSN" : "Serial number:",
      "dialogHelpInfoLblVersion" : "Version:",
      "dialogHelpInfoLblCopyright" : "Copyright",
+<<<<<<< HEAD
 +    "dialogBackspacePrevent" : "Please use the back button of the user interface",
+=======
++    "dialogBackspacePrevent" : "Please use the back button of the WebUI.",
+>>>>>>> jens-maus/master
  
      "commentDialogNewHelpEnd" : "***********************************************",
  
@@ -53,7 +61,11 @@
      "dialogHelpInfoLblSN" : "Seri numarasi:",
      "dialogHelpInfoLblVersion" : "Versiyon:",
      "dialogHelpInfoLblCopyright" : "Telif haklari",
+<<<<<<< HEAD
 +    "dialogBackspacePrevent" : "Lütfen kullanıcı arabiriminin geri düğmesini kullanın",
+=======
++    "dialogBackspacePrevent" : "L%FCtfen kullanıcı arabiriminin geri d%FCgmesini kullanın.",
+>>>>>>> jens-maus/master
      "commentDialogNewHelpEnd" : "***********************************************",
      "commentActionStatusControl" : "***********************************************",
      "actionStatusControlLblActive" : "Etkin",

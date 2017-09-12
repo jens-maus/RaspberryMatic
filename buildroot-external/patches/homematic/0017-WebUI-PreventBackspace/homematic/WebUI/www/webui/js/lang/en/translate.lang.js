@@ -772,7 +772,11 @@ jQuery.extend(true,langJSON, {
     "dialogHelpInfoLblSN" : "Serial number:",
     "dialogHelpInfoLblVersion" : "Version:",
     "dialogHelpInfoLblCopyright" : "Copyright",
+<<<<<<< HEAD
     "dialogBackspacePrevent" : "Please use the back button of the user interface",
+=======
+    "dialogBackspacePrevent" : "Please use the back button of the WebUI.",
+>>>>>>> jens-maus/master
 
     "commentDialogNewHelpEnd" : "***********************************************",
 

@@ -55,9 +55,10 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/) or [Model B, 512MB](https://www.adafruit.com/product/998)
   * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) or [Model A, 256MB](https://www.adafruit.com/product/1344)
 * One of the following BidCos-RF/HomeMaticIP capabale RF devices:
-  * HomeMatic-RF GPIO radio module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) – [Installation](https://www.youtube.com/watch?v=xtzXsvOLa_Y))
-  * HomeMaticIP RF USB stick (HmIP-RFUSB)
+  * HomeMatic-RF GPIO Radio Module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) – [Installation](https://www.youtube.com/watch?v=xtzXsvOLa_Y))
+  * HomeMaticIP RF USB Stick (HmIP-RFUSB)
   * HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
+  * HomeMatic Config Adapter ([HM-CFG-USB-2](https://wiki.fhem.de/wiki/HM-CFG-USB_USB_Konfigurations-Adapter))
 * 2GB minimum space on microSD card or USB memory stick / hard disk (when using RaspberryPi3)
 
 ## :telescope: Compatible Third-Party Addons

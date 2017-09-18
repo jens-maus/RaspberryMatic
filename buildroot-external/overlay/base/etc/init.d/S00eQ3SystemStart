@@ -73,6 +73,12 @@ identify_host() {
     fi
   fi
 
+  # check if a HM-CFG-USB-2 (1b1f:c020) USB stick is connected
+  # and set UART_DEV and HM_MODE accordingly
+  if lsusb | grep -q 1b1f:c00f; then
+    HM_MODE="HmRF-CFG-USB-2"
+  fi
+
   # depending on HM mode we define a different uart device
   if [[ -z ${UART_DEV} ]]; then
     if [[ ${HM_MODE} == "HmIP" ]]; then

@@ -44,6 +44,16 @@ init() {
     sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf
   fi
 
+  if [[ ${HM_MODE} == "HmRF-CFG-USB-2" ]] && ! grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
+    inum=$(grep "^\[Interface .*\]" /etc/config/rfd.conf | wc -l)
+    echo >>/etc/config/rfd.conf
+    echo "[Interface ${inum+1}]" >>/etc/config/rfd.conf
+    echo "Type = USB Interface" >>/etc/config/rfd.conf
+    echo "Name = HM-CFG-USB" >>/etc/config/rfd.conf
+    echo "Serial Number = $(cat /sys/bus/usb/devices/*/serial | grep ^L)" >>/etc/config/rfd.conf
+    echo "Encryption Key =" >>/etc/config/rfd.conf
+  fi
+
 	if [ ! -e /etc/config/syslog ] ; then
 		cp $CFG_TEMPLATE_DIR/syslog /etc/config
 	fi

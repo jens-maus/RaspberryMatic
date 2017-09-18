@@ -10,7 +10,7 @@ PIDFILE=/var/run/multimacd.pid
 source /var/hm_mode 2>/dev/null
 
 # skip this startup in LAN Gateway or HmIP-RFUSB mode
-[[ ${HM_MODE} == "HMLGW" || ${HM_MODE} == "HmIP-RFUSB" ]] && exit 0
+[[ ${HM_MODE} == "HMLGW" || ${HM_MODE} == "HmIP-RFUSB" || ${HM_MODE} == "HmRF-CFG-USB-2" ]] && exit 0
 
 init() {
 

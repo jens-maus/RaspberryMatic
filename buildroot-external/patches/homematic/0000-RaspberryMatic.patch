@@ -129,7 +129,7 @@
 +source /var/hm_mode 2>/dev/null
 +
 +# skip this startup in LAN Gateway or HmIP-RFUSB mode
-+[[ ${HM_MODE} == "HMLGW" || ${HM_MODE} == "HmIP-RFUSB" ]] && exit 0
++[[ ${HM_MODE} == "HMLGW" || ${HM_MODE} == "HmIP-RFUSB" || ${HM_MODE} == "HmRF-CFG-USB-2" ]] && exit 0
 +
  init() {
 -	export TZ=`cat /etc/config/TZ`
@@ -210,7 +210,7 @@
  restart() {
 --- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig
 +++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd
-@@ -7,30 +7,42 @@
+@@ -7,30 +7,52 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/rfd.pid
  
@@ -266,10 +266,20 @@
 +    # otherwise disable the whole [Interface 0] part
 +    sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf
 +  fi
++
++  if [[ ${HM_MODE} == "HmRF-CFG-USB-2" ]] && ! grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
++    inum=$(grep "^\[Interface .*\]" /etc/config/rfd.conf | wc -l)
++    echo >>/etc/config/rfd.conf
++    echo "[Interface ${inum+1}]" >>/etc/config/rfd.conf
++    echo "Type = USB Interface" >>/etc/config/rfd.conf
++    echo "Name = HM-CFG-USB" >>/etc/config/rfd.conf
++    echo "Serial Number = $(cat /sys/bus/usb/devices/*/serial | grep ^L)" >>/etc/config/rfd.conf
++    echo "Encryption Key =" >>/etc/config/rfd.conf
++  fi
  
  	if [ ! -e /etc/config/syslog ] ; then
  		cp $CFG_TEMPLATE_DIR/syslog /etc/config
-@@ -42,28 +54,27 @@
+@@ -42,28 +64,27 @@
  }
  
  waitStartupComplete() {

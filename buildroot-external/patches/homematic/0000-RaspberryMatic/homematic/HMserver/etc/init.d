@@ -10,9 +10,9 @@ STARTWAITFILE=/var/status/HMServerStarted
 source /var/hm_mode 2>/dev/null
 
 # skip this startup in LAN Gateway mode
-[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
-if [[ ${HM_MODE} == "HmIP" ]] || [[ ${HM_MODE} == "HmIP-RFUSB" ]]; then
+if [[ -n "${HMIP_DEV}" ]]; then
   HM_SERVER_TYPE="HMIPServer"
   PIDFILE=/var/run/HMIPServer.pid
 else
@@ -27,13 +27,13 @@ init() {
 		cp $CFG_TEMPLATE_DIR/log4j.xml /etc/config
 	fi
 
-	if [[ ${HM_MODE} == "HmIP" ]] || [[ ${HM_MODE} == "HmIP-RFUSB" ]]; then
+	if [[ -n "${HMIP_DEV}" ]]; then
 		if [[ ! -e /var/etc/crRFD.conf ]]; then
 		  cp ${CFG_TEMPLATE_DIR}/crRFD.conf /var/etc/
 		fi
 
 		# In HmIP-RFUSB mode we have to change crRFD.conf
-		if [[ ${HM_MODE} == "HmIP-RFUSB" ]]; then
+		if [[ "${HMIP_DEV}" == "HMIP-RFUSB" ]]; then
 		  sed -i 's/^Adapter\.1\.Port=\/dev\/.*$/Adapter.1.Port=\/dev\/ttyUSB0/' /var/etc/crRFD.conf
 		fi
 
@@ -94,4 +94,3 @@ case "$1" in
 esac
 
 exit $?
-

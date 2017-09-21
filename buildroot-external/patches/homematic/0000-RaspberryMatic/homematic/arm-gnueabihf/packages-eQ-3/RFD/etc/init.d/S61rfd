@@ -10,7 +10,7 @@ PIDFILE=/var/run/rfd.pid
 source /var/hm_mode 2>/dev/null
 
 # skip this startup in LAN Gateway mode
-[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
 init() {
 
@@ -24,12 +24,12 @@ init() {
   fi
 
   # only modify if real rf module found
-  if [[ ! -z $(cat /var/rf_address) ]]; then
+  if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
     # make sure [Interface 0] is uncommented
     sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
 
     # patch some settings to match what this hardware expects.
-    if [[ ${HM_MODE} == "HmIP" ]]; then
+    if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
       sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf
     else
       sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/ttyAMA0/' /etc/config/rfd.conf
@@ -44,14 +44,20 @@ init() {
     sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf
   fi
 
-  if [[ ${HM_MODE} == "HmRF-CFG-USB-2" ]] && ! grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
-    inum=$(grep "^\[Interface .*\]" /etc/config/rfd.conf | wc -l)
-    echo >>/etc/config/rfd.conf
-    echo "[Interface ${inum+1}]" >>/etc/config/rfd.conf
-    echo "Type = USB Interface" >>/etc/config/rfd.conf
-    echo "Name = HM-CFG-USB" >>/etc/config/rfd.conf
-    echo "Serial Number = $(cat /sys/bus/usb/devices/*/serial | grep ^L)" >>/etc/config/rfd.conf
-    echo "Encryption Key =" >>/etc/config/rfd.conf
+  if [[ "${HMRF_DEV}" == "HM-CFG-USB-2" ]]; then
+    if ! grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
+      inum=$(grep "^\[Interface .*\]" /etc/config/rfd.conf | wc -l)
+      echo >>/etc/config/rfd.conf
+      echo "[Interface ${inum+1}]" >>/etc/config/rfd.conf
+      echo "Type = USB Interface" >>/etc/config/rfd.conf
+      echo "Name = HM-CFG-USB" >>/etc/config/rfd.conf
+      echo "Serial Number = $(cat /sys/bus/usb/devices/*/serial | grep -E '^[A-Z]{3}[0-9]{7}.*' )" >>/etc/config/rfd.conf
+      echo "Encryption Key =" >>/etc/config/rfd.conf
+    fi
+  elif grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
+    # otherwise disable the whole [Interface x] part
+    inum=$(grep "^\[Interface .*\]" /etc/config/rfd.conf | awk '{ print $2 }' | cut -d] -f1 | tail -1)
+    sed -i -e "/^\[Interface ${inum}\]/,/^\s*$/ s/^/#/" /etc/config/rfd.conf
   fi
 
 	if [ ! -e /etc/config/syslog ] ; then
@@ -86,8 +92,12 @@ waitStartupComplete() {
 start() {
 	echo -n "Starting rfd: "
 	init
-	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
-	waitStartupComplete
+	if grep -q "^\[Interface .\]" /etc/config/rfd.conf; then
+	  start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
+	  waitStartupComplete
+        else
+	  echo "no BidCos-RF hardware found"
+	fi
 }
 stop() {
 	echo -n "Stopping rfd: "
@@ -116,4 +126,3 @@ case "$1" in
 esac
 
 exit $?
-

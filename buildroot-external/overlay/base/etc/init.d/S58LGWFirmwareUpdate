@@ -6,7 +6,7 @@
 source /var/hm_mode 2>/dev/null
 
 # skip this startup in LAN Gateway mode
-[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
 start() {
 	waitForIP

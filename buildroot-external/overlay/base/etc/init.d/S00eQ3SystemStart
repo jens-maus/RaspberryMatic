@@ -10,8 +10,11 @@ identify_host() {
 
   # default/fallback values
   HOST=""
-  HM_MODE="HmIP"
-  UART_DEV=""
+  HM_MODE="NORMAL"
+  HMRF_DEV="HM-MOD-RPI-PCB"
+  HMRF_DEVNODE=""
+  HMIP_DEV="HM-MOD-RPI-PCB"
+  HMIP_DEVNODE=""
   UART_BASE=""
   UART_IRQ=""
 
@@ -64,28 +67,20 @@ identify_host() {
   esac
 
   # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
-  # and set UART_DEV and HM_MODE accordingly
+  # and set HMIP_DEV and HMIP_DEVNODE accordingly
   if lsusb | grep -q 1b1f:c020; then
     modprobe cp210x
     echo 1b1f c020 >/sys/bus/usb-serial/drivers/cp210x/new_id
     if [[ -e /dev/ttyUSB0 ]]; then
-      HM_MODE="HmIP-RFUSB"
+      HMIP_DEV="HMIP-RFUSB"
+      HMIP_DEVNODE="/dev/ttyUSB0"
     fi
   fi
 
   # check if a HM-CFG-USB-2 (1b1f:c020) USB stick is connected
-  # and set UART_DEV and HM_MODE accordingly
+  # and HMRF_DEV accordingly
   if lsusb | grep -q 1b1f:c00f; then
-    HM_MODE="HmRF-CFG-USB-2"
-  fi
-
-  # depending on HM mode we define a different uart device
-  if [[ -z ${UART_DEV} ]]; then
-    if [[ ${HM_MODE} == "HmIP" ]]; then
-      UART_DEV="/dev/bcm2835-raw-uart"
-    else
-      UART_DEV="/dev/ttyAMA0"
-    fi
+    HMRF_DEV="HM-CFG-USB-2"
   fi
 }
 
@@ -285,35 +280,75 @@ init() {
 
   # check if we should boot in LAN gateway mode
   if [[ -e /usr/local/HMLGW ]]; then
-    HM_MODE="HMLGW"
-    UART_DEV="/dev/ttyAMA0"
+    HM_MODE="HM-LGW"
+    if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+      HMRF_DEVNODE="/dev/ttyAMA0"
+    fi
+    HMIP_DEV=""
+    HMIP_DEVNODE=""
   fi
-
-  # save all mode information
-  echo "HOST=${HOST}" >/var/hm_mode
-  echo "HM_MODE=${HM_MODE}" >>/var/hm_mode
-  echo "UART_DEV=${UART_DEV}" >>/var/hm_mode
 
   # depending on the HomeMatic mode (HmRF, HmIP) we
   # have to load different kernel modules.
-  if [[ ${HM_MODE} == "HmIP" ]]; then
+  if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
     # HM/HmIP Dual Protocol
     modprobe bcm2835_raw_uart uart0_base=${UART_BASE} uart0_irq=${UART_IRQ}
     modprobe eq3_char_loop
+
+    HMIP_DEVNODE="/dev/bcm2835-raw-uart"
+    if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+      HMRF_DEVNODE="${HMIP_DEVNODE}"
+    fi
   else
     # use standard PL011 UART
     modprobe amba-pl011
+
+    if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+      HMRF_DEVNODE="/dev/ttyAMA0"
+    fi
   fi
 
   # make sure to save the urandom pool for future reboots
   save_urandom
 
-  RF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5)
+  if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HMRF_DEVNODE}" ]]; then
+    RPI_PCB_DEVNODE=${HMRF_DEVNODE}
+  elif [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HMIP_DEVNODE}" ]]; then
+    RPI_PCB_DEVNODE=${HMIP_DEVNODE}
+  fi
+
+  if [[ -n "${RPI_PCB_DEVNODE}" ]]; then
+    RF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
+    if [[ -n "${RF_SERIAL}" ]]; then
+      RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
+      RF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${RPI_PCB_DEVNODE} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+    fi
+  fi
+
+  if [[ -z "${RF_SERIAL}" ]]; then
+    # no HM-MOD-RPI-PCB found
+    if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+      HMRF_DEV=""
+      HMRF_DEVNODE=""
+    fi
+    if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+      HMIP_DEV=""
+      HMIP_DEVNODE=""
+    fi
+  fi
+
+  # save all info about the HM-MOD-RPI-PCB
   echo "${RF_SERIAL}" >/var/board_serial
-  RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
   echo "${RF_VERSION}" >/var/rf_firmware_version
-  RF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${UART_DEV} -h 2>&1 | grep "^0x")
   echo "${RF_ADDRESS}" >/var/rf_address
+
+  # save all mode information
+  echo "HOST=${HOST}" >/var/hm_mode
+  echo "HM_MODE=${HM_MODE}" >>/var/hm_mode
+  echo "HMRF_DEV=${HMRF_DEV}" >>/var/hm_mode
+  echo "HMRF_DEVNODE=${HMRF_DEVNODE}" >>/var/hm_mode
+  echo "HMIP_DEV=${HMIP_DEV}" >>/var/hm_mode
+  echo "HMIP_DEVNODE=${HMIP_DEVNODE}" >>/var/hm_mode
 
         # cal local init startup file
         if [ ! -e /etc/config/safemode ] ; then

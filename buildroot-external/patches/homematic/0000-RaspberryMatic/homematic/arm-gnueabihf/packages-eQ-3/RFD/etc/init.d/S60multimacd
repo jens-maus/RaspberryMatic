@@ -9,8 +9,8 @@ PIDFILE=/var/run/multimacd.pid
 
 source /var/hm_mode 2>/dev/null
 
-# skip this startup in LAN Gateway or HmIP-RFUSB mode
-[[ ${HM_MODE} == "HMLGW" || ${HM_MODE} == "HmIP-RFUSB" || ${HM_MODE} == "HmRF-CFG-USB-2" ]] && exit 0
+# skip this startup in LAN Gateway
+[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
 init() {
 
@@ -54,7 +54,7 @@ waitStartupComplete() {
 
 start() {
 	echo -n "Starting multimacd: "
-  if [[ ${HM_MODE} == "HmIP" ]] && [[ ! -z $(cat /var/rf_address) ]]; then
+  if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
 	  init
 	  start-stop-daemon -S -N -10 -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l $LOGLEVEL_RFD
 	  waitStartupComplete
@@ -64,7 +64,7 @@ start() {
 }
 stop() {
 	echo -n "Stopping multimacd: "
-  if [[ ${HM_MODE} == "HmIP" ]] && [[ ! -z $(cat /var/rf_address) ]]; then
+  if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
 	  start-stop-daemon -K -q -p $PIDFILE
 	  rm -f $PIDFILE
   fi
@@ -91,4 +91,3 @@ case "$1" in
 esac
 
 exit $?
-

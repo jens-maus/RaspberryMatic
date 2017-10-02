@@ -1,0 +1,1034 @@
+--- occu/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d.orig
++++ occu/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d
+@@ -11,9 +11,12 @@
+ 
+ CFG_TEMPLATE_DIR=/etc/config_templates
+ 
+-init() {
+-	export TZ=`cat /etc/config/TZ`
++source /var/hm_mode 2>/dev/null
++
++# skip this startup in LAN Gateway mode
++[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
+ 
++init() {
+ 	if [ ! -d /etc/config/hs485d ] ; then
+   		mkdir /etc/config/hs485d
+ 	fi
+@@ -25,17 +28,43 @@
+ 	else
+ 		cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
+ 	fi
++
++  # if there is no HmIP support required we have to strip
++  # the HmIP-RF part from InterfacesList.xml
++  if [[ -z "${HMIP_DEV}" ]]; then
++    # remove HmIP-RF from InterfacesList.xml because not required (BidCos-RF only mode)
++    line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | head -1)
++    line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | tail -1)
++    if [[ -n "${line_start}" && -n "${line_end}" ]]; then
++      line_start=$((${line_start}-1))
++      line_end=$((${line_end}+1))
++      sed -i "${line_start},${line_end}d" /etc/config/InterfacesList.xml
++    fi
++  fi
++
++  # if there is no BidCos-RF support required we have to strip
++  # the BidCos-RF part from InterfacesList.xml
++  if [[ -z "${HMRF_DEV}" ]]; then
++    # remove BidCos-RF from InterfacesList.xml because not required (HmIP-RFUSB only mode)
++    line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | head -1)
++    line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | tail -1)
++    if [[ -n "${line_start}" && -n "${line_end}" ]]; then
++      line_start=$((${line_start}-1))
++      line_end=$((${line_end}+1))
++      sed -i "${line_start},${line_end}d" /etc/config/InterfacesList.xml
++    fi
++  fi
+ }
+ 
+ start() {
+-	echo -n "Preparing start of hs485d"
++	echo -n "Preparing start of hs485d: "
+ 	init
+ 	/bin/hs485dLoader -l $LOGLEVEL_HS485D -ds -dd /etc/config/hs485d.conf
+ 	echo "OK"
+ }
+ 
+ stop() {
+-	echo "OK"
++	echo -n ""
+ }
+ 
+ restart() {
+@@ -59,4 +88,3 @@
+ esac
+ 
+ exit $?
+-
+--- occu/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S60hs485d.orig
++++ occu/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S60hs485d
+@@ -7,9 +7,12 @@
+ 
+ CFG_TEMPLATE_DIR=/etc/config_templates
+ 
+-init() {
+-	export TZ=`cat /etc/config/TZ`
++source /var/hm_mode 2>/dev/null
++
++# skip this startup in LAN Gateway mode
++[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
+ 
++init() {
+ 	if [ ! -e /etc/config/syslog ] ; then
+ 		cp $CFG_TEMPLATE_DIR/syslog /etc/config
+ 	fi
+--- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf.orig
++++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf
+@@ -22,6 +22,5 @@
+ [Interface 0]
+ Type = CCU2
+ ComPortFile = /dev/mmd_bidcos
+-#AccessFile = /dev/null
+-#ResetFile = /dev/ccu2-ic200
+-
++AccessFile = /dev/null
++ResetFile = /dev/null
+--- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig
++++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd
+@@ -7,44 +7,20 @@
+ CFG_TEMPLATE_DIR=/etc/config_templates
+ PIDFILE=/var/run/multimacd.pid
+ 
+-update() {        
+-	if [ ! -e /etc/config/no-coprocessor-update ] ; then
+-		echo "checking if firmware update is needed..."
+-		/bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u
+-		if ! [ $? -eq 0 ] ; then
+-			echo "error while updating coprocessor, recovering..."
+-			avrprog --bo
+-			/bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u -f
+-			sleep 1
+-		else
+-			echo "done"
+-			sleep 1
+-		fi
+-	else
+-		echo "firmware update disabled"
+-	fi
+-}
+-check_bo(){
+-	avrprog --devinfo | grep -q ec,fd,da,ef
+-	if ! [ 0 -eq $? ];
+-	then
+-	avrprog --bo
+-	fi
+-}
+-check_rf_address(){
+-        sed 1q /sys/module/plat_eq3ccu2/parameters/radio_mac > /var/log/rf_address
+-        /bin/eq3configcmd read-default-rf-address -l 0 -v -h -f /dev/mxs_auart_raw.0 | grep -q -F -f /var/log/rf_address
+-        if ! [ 0 -eq $? ];
+-        then
+-        avrprog --bo
+-        fi
+-        rm /var/log/rf_address
+-}
++source /var/hm_mode 2>/dev/null
++
++# skip this startup in LAN Gateway
++[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
++
+ init() {
+-	export TZ=`cat /etc/config/TZ`
+-	
+-	if [ ! -e /etc/config/multimacd.conf ] ; then
+-		cp $CFG_TEMPLATE_DIR/multimacd.conf /etc/config
++
++  # make sure there is no /dev/ttyS0
++  if [ -e /dev/ttyS0 ] ; then
++    rm -f /dev/ttyS0
++  fi
++
++	if [ ! -e /var/etc/multimacd.conf ] ; then
++		cp $CFG_TEMPLATE_DIR/multimacd.conf /var/etc/
+ 	fi
+ 
+ 	if [ ! -e /etc/config/syslog ] ; then
+@@ -57,44 +33,41 @@
+ }
+ 
+ waitStartupComplete() {
+-    echo -n "Waiting for multimacd to get ready"
+ 	STEPS=5
+     for i in $(seq 1 $STEPS)
+     do
+ 		sleep 2
+ 		echo -n "."
+-        MMDSTATUSPID=`cat /var/status/multimacd.status 2>/dev/null`
++        MMDSTATUSPID=`cat /var/status/multimacd.status 2>&1`
+         MMDPID=`pidof multimacd`
+-        if [ $MMDSTATUSPID = $MMDPID ] 
++        if [ "$MMDSTATUSPID" = "$MMDPID" ] 
+ 		then
+-            echo "multimacd is ready now."
++            echo "OK"
+             break
+ 		fi 
+         if [ $i -eq $STEPS ]
+ 		then
+-            echo "Timeout while waiting for multimacd to get ready."
++            echo "ERROR"
+         fi
+     done
+ }
+ 
+ start() {
+-	echo "Starting multimacd: "
+-	init
+-	if [ ! -e $PIDFILE ] ; then
+-		check_bo
+-                check_rf_address
+-		update
+-	else
+-		echo "Skipping coprocessor update because multimacd is running."
+-	fi
+-	init
+-	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /etc/config/multimacd.conf -l $LOGLEVEL_RFD
+-	waitStartupComplete
++	echo -n "Starting multimacd: "
++  if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
++	  init
++	  start-stop-daemon -S -N -10 -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l $LOGLEVEL_RFD
++	  waitStartupComplete
++  else
++    echo "not required"
++  fi
+ }
+ stop() {
+ 	echo -n "Stopping multimacd: "
+-	start-stop-daemon -K -q -p $PIDFILE
+-	rm -f $PIDFILE
++  if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
++	  start-stop-daemon -K -q -p $PIDFILE
++	  rm -f $PIDFILE
++  fi
+ 	echo "OK"
+ }
+ restart() {
+@@ -118,4 +91,3 @@
+ esac
+ 
+ exit $?
+-
+--- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig
++++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd
+@@ -7,30 +7,58 @@
+ CFG_TEMPLATE_DIR=/etc/config_templates
+ PIDFILE=/var/run/rfd.pid
+ 
++source /var/hm_mode 2>/dev/null
++
++# skip this startup in LAN Gateway mode
++[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
++
+ init() {
+-	export TZ=`cat /etc/config/TZ`
+ 
+ 	if [ ! -d /etc/config/rfd ] ; then
+   		mkdir /etc/config/rfd
+ 	fi
++
+ 	#Migration for existing rfd.conf in user space
+ 	if [ ! -e /etc/config/rfd.conf ] ; then
+-		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
+-	else
+-		sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
+-		sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
+-		sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
+-                if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
+-                        sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
+-                fi
+-	fi
++		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config/rfd.conf
++  fi
+ 
+-        # Bug fix
+-        grep "/etc/config/rfd/keys" /etc/config/rfd.conf
+-        if [ $? == 0 ] ; then
+-                echo "Copy rfd files"
+-		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
+-        fi
++  # only modify if real rf module found
++  if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
++    # make sure [Interface 0] is uncommented
++    sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
++
++    # patch some settings to match what this hardware expects.
++    if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
++      sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf
++    else
++      sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/ttyAMA0/' /etc/config/rfd.conf
++    fi
++    sed -i 's/^#*AccessFile = \/dev\/.*$/AccessFile = \/dev\/null/' /etc/config/rfd.conf
++    sed -i 's/^#*ResetFile = \/dev\/.*$/ResetFile = \/dev\/null/' /etc/config/rfd.conf
++    if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
++      sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
++    fi
++  else
++    # otherwise disable the whole [Interface 0] part
++    sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf
++  fi
++
++  if [[ "${HMRF_DEV}" == "HM-CFG-USB-2" ]]; then
++    if ! grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
++      inum=$(grep "^\[Interface .*\]" /etc/config/rfd.conf | wc -l)
++      echo >>/etc/config/rfd.conf
++      echo "[Interface ${inum+1}]" >>/etc/config/rfd.conf
++      echo "Type = USB Interface" >>/etc/config/rfd.conf
++      echo "Name = HM-CFG-USB" >>/etc/config/rfd.conf
++      echo "Serial Number = $(cat /sys/bus/usb/devices/*/serial | grep -E '^[A-Z]{3}[0-9]{7}.*' )" >>/etc/config/rfd.conf
++      echo "Encryption Key =" >>/etc/config/rfd.conf
++    fi
++  elif grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
++    # otherwise disable the whole [Interface x] part
++    inum=$(grep "^\[Interface .*\]" /etc/config/rfd.conf | awk '{ print $2 }' | cut -d] -f1 | tail -1)
++    sed -i -e "/^\[Interface ${inum}\]/,/^\s*$/ s/^/#/" /etc/config/rfd.conf
++  fi
+ 
+ 	if [ ! -e /etc/config/syslog ] ; then
+ 		cp $CFG_TEMPLATE_DIR/syslog /etc/config
+@@ -42,31 +70,34 @@
+ }
+ 
+ waitStartupComplete() {
+-    echo -n "Waiting for rfd to get ready"
+-	STEPS=60
++	STEPS=20
+     for i in $(seq 1 $STEPS)
+     do
+ 		sleep 2
+ 		echo -n "."
+-        RFDSTATUSPID=`cat /var/status/rfd.status 2>/dev/null`
++        RFDSTATUSPID=`cat /var/status/rfd.status 2>&1`
+         RFDPID=`pidof rfd`
+-        if [ $RFDSTATUSPID = $RFDPID ] 
++        if [ "$RFDSTATUSPID" = "$RFDPID" ] 
+ 		then
+-            echo "rfd is ready now."
++            echo "OK"
+             break
+         fi
+         if [ $i -eq $STEPS ] 
+ 		then
+-            echo "Timeout while waiting for rfd to get ready."
++            echo "ERROR"
+         fi
+     done
+ }
+ 
+ start() {
+-	echo "Starting rfd: "
++	echo -n "Starting rfd: "
+ 	init
+-	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
+-	waitStartupComplete
++	if grep -q "^\[Interface .\]" /etc/config/rfd.conf; then
++	  start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
++	  waitStartupComplete
++        else
++	  echo "no BidCos-RF hardware found"
++	fi
+ }
+ stop() {
+ 	echo -n "Stopping rfd: "
+@@ -95,4 +126,3 @@
+ esac
+ 
+ exit $?
+-
+--- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf.orig
++++ occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf
+@@ -1,5 +1,7 @@
+ #### CGI module
+ cgi.assign = ( ".pl"  => "/usr/bin/perl",
+-                ".cgi" => "/opt/hm/bin/tclsh",
++                ".cgi" => "/bin/tclsh",
+                 ".ccc" => ""
+              )
++cgi.x-sendfile = "enable"
++cgi.x-sendfile-docroot = ( "/usr/local/tmp" )
+--- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf.orig
++++ occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf
+@@ -1,3 +1,3 @@
+ setenv.add-environment = (
+-        "TZ" => "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
++        "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
+ )
+--- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig
++++ occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf
+@@ -14,10 +14,10 @@
+ ## chroot example aswell.
+ ##
+ var.log_root    = "/var/log"
+-var.server_root = "/opt/hm/www"
++var.server_root = "/www/"
+ var.state_dir   = "/var/run"
+ var.home_dir    = "/var/lib/lighttpd"
+-var.conf_dir    = "/opt/hm/etc/lighttpd"
++var.conf_dir    = "/etc/lighttpd"
+ 
+ ## 
+ ## run the server chrooted.
+@@ -87,6 +87,33 @@
+ ##
+ server.port = 80
+ 
++$SERVER["socket"] == ":8181" {
++	server.document-root = server_root
++}
++
++$SERVER["socket"] == ":443" {
++	server.document-root = server_root
++	ssl.engine = "enable"
++	ssl.pemfile = "/etc/config/server.pem"
++}
++
++$SERVER["socket"] == "[::]:80" {
++	server.document-root = server_root
++	server.use-ipv6 = "enable"
++}
++
++$SERVER["socket"] == "[::]:8181" {
++	server.document-root = server_root
++	server.use-ipv6 = "enable"
++}
++
++$SERVER["socket"] == "[::]:443" {
++	server.document-root = server_root
++	ssl.engine = "enable"
++	ssl.pemfile = "/etc/config/server.pem"
++	server.use-ipv6 = "enable"
++}
++
+ ##
+ ## Use IPv6?
+ ##
+@@ -127,6 +154,11 @@
+ server.pid-file = state_dir + "/lighttpd.pid"
+ 
+ ##
++## number of worker processes to spawn.
++##
++server.max-worker = 4
++
++##
+ #######################################################################
+ 
+ #######################################################################
+@@ -230,14 +262,14 @@
+ ##
+ ## Default: 5
+ ##
+-#server.max-keep-alive-idle = 5
++server.max-keep-alive-idle = 60
+ 
+ ##
+ ## How many keep-alive requests until closing the connection.
+ ##
+ ## Default: 16
+ ##
+-#server.max-keep-alive-requests = 16
++server.max-keep-alive-requests = 50
+ 
+ ##
+ ## Maximum size of a request in kilobytes.
+@@ -252,14 +284,14 @@
+ ##
+ ## Default: 60
+ ##
+-#server.max-read-idle = 60
++server.max-read-idle = 600
+ 
+ ##
+ ## Time to write to a socket before we consider it idle.
+ ##
+ ## Default: 360
+ ##
+-#server.max-write-idle = 360
++server.max-write-idle = 600
+ 
+ ##
+ ##  Traffic Shaping 
+@@ -370,7 +402,12 @@
+ ##
+ ## defaults to /var/tmp as we assume it is a local harddisk
+ ##
+-server.upload-dirs = ( "/var/tmp" )
++server.upload-dirs = ( "/usr/local/tmp" )
++
++##
++## default size of temp files
++##
++server.upload-temp-file-size = 16777216
+ 
+ ##
+ #######################################################################
+@@ -440,6 +477,6 @@
+ ## custom includes like vhosts.
+ ##
+ #include "conf.d/config.conf"
+-#include_shell "cat /etc/lighttpd/vhosts.d/*.conf"
++include_shell "test -d /etc/config/lighttpd && cat /etc/config/lighttpd/*.conf"
+ ##
+ #######################################################################
+--- occu/firmware/HM-MOD-UART/fwmap.orig
++++ occu/firmware/HM-MOD-UART/fwmap
+@@ -1,7 +1,7 @@
+ #Type           Filename                Version
+ 
+ #Coprozessor
+-CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
++#CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
+ 
+-#CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
++CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
+ 
+--- occu/HMserver/etc/init.d.orig
++++ occu/HMserver/etc/init.d
+@@ -5,28 +5,69 @@
+ 
+ LOGLEVEL_HMServer=5
+ CFG_TEMPLATE_DIR=/etc/config_templates
+-PIDFILE=/var/run/HMIPServer.pid
+ STARTWAITFILE=/var/status/HMServerStarted
+ 
++source /var/hm_mode 2>/dev/null
++
++# skip this startup in LAN Gateway mode
++[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
++
++if [[ -n "${HMIP_DEV}" ]]; then
++  HM_SERVER_TYPE="HMIPServer"
++  PIDFILE=/var/run/HMIPServer.pid
++else
++  HM_SERVER_TYPE="HMServer"
++  PIDFILE=/var/run/HMServer.pid
++fi
++
+ init() {
+-	export TZ=`cat /etc/config/TZ | cut -d'-' -f1 | cut -d'+' -f1`
+-	export JAVA_HOME=/opt/jre-1.8.0_121-compact3
++	export JAVA_HOME=/opt/java/
+ 	export PATH=$PATH:$JAVA_HOME/bin
+ 	if [ ! -e /etc/config/log4j.xml ] ; then
+ 		cp $CFG_TEMPLATE_DIR/log4j.xml /etc/config
+ 	fi
++
++	if [[ -n "${HMIP_DEV}" ]]; then
++		if [[ ! -e /var/etc/crRFD.conf ]]; then
++		  cp ${CFG_TEMPLATE_DIR}/crRFD.conf /var/etc/
++		fi
++
++		# In HmIP-RFUSB mode we have to change crRFD.conf
++		if [[ "${HMIP_DEV}" == "HMIP-RFUSB" ]]; then
++		  sed -i 's/^Adapter\.1\.Port=\/dev\/.*$/Adapter.1.Port=\/dev\/ttyUSB0/' /var/etc/crRFD.conf
++		fi
++
++		HM_SERVER=/opt/HMServer/HMIPServer.jar
++		HM_SERVER_ARGS="/var/etc/crRFD.conf"
++	else
++		HM_SERVER=/opt/HMServer/HMServer.jar
++	fi
++}
++
++waitStartupComplete() {
++	STEPS=150
++	for i in $(seq 1 $STEPS); do
++		sleep 2
++		echo -n "."
++		if [[ -e ${STARTWAITFILE} ]]; then
++			echo "OK"
++			break
++		fi
++		if [[ ${i} -eq ${STEPS} ]]; then
++			echo "ERROR"
++		fi
++	done
+ }
+ 
+ start() {
+-	echo -n "Starting HMServer: "
++	echo -n "Starting ${HM_SERVER_TYPE}: "
+ 	init
+-	start-stop-daemon -S -q -m -p $PIDFILE --exec java -- -Xmx64m -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar /opt/HMServer/HMIPServer.jar /etc/crRFD.conf &
+-	echo "Waiting for HMServer to get ready"
+-	eq3configcmd wait-for-file -f $STARTWAITFILE -p 5 -t 300
+-	echo "OK"
++	start-stop-daemon -b -S -q -m -p $PIDFILE --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar ${HM_SERVER} ${HM_SERVER_ARGS}
++	echo -n "."
++	waitStartupComplete
+ }
+ stop() {
+-	echo -n "Stopping HMServer: "
++	echo -n "Stopping ${HM_SERVER_TYPE}: "
+ 	rm -f $STARTWAITFILE
+ 	start-stop-daemon -K -q -p $PIDFILE
+ 	rm -f $PIDFILE
+@@ -53,4 +94,3 @@
+ esac
+ 
+ exit $?
+-
+--- occu/WebUI/www/api/homematic.cgi.orig
++++ occu/WebUI/www/api/homematic.cgi
+@@ -22,15 +22,13 @@
+ # um eine Notlösung. 
+ ##
+ 
+-set central true
++set central true 
+ 
+ # Zentrale oder Konfigtool (/www/ = Zentrale)
+ if {$env(DOCUMENT_ROOT) != "\/www\/"} then {
+   set central false
+ }
+ 
+-set central true
+-
+ #####################
+ # Verwendete Module #
+ #####################
+--- occu/WebUI/www/config/cp_maintenance.cgi.orig
++++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -377,7 +377,7 @@
+                                         table_row {
+                                             table_data {
+                                                 division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
+-                                                division {class="CLASS20908"}  "onClick=\"showCCULicense();\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
++                                                division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+                                             }
+                                         }
+                                     }
+@@ -387,66 +387,14 @@
+                         table_row {
+                             td {width="20"} {}
+                             table_data {align="left"} {colspan="2"} {
+-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
+-                            }
+-                        }
+-                        table_row {
+-                            td {width="20"} {}
+-                            table_data {colspan="2"} {
+-                                form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
+-                                    export action=firmware_upload
+-                                    export downloadOnly=$downloadOnly
+-                                    file_button firmware_file size=30 maxlength=1000000
+-                                }
+-                                puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
+-                            }
+-                        }
+-                        table_row {
+-                            td {width="20"} {}
+-                            table_data {align="left"} {
+-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep3}"
+-                            }
+-                            table_data {
+-                                division {class="popupControls CLASS20905"} {
+-                                    table {
+-                                        table_row {
+-                                            table_data {
+-                                                division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
+-                                                  puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
+-                                                }
+-                                            }
+-                                        }
+-                                    }
+-                                }
+-                            }
+-                        }
+-                        table_row {
+-                            td {width="20"} {}
+-                            table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
+-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
++                                #puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
++                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic}"
+                             }
+                         }
+                     }
+                 }
+                 table_data {align="left"} {class="CLASS20921"} {
+-                    puts "\${dialogSettingsCMHintSoftwareUpdate1}"
+-                    number_list {class="j_noForcedUpdate"} {
+-                        li {
+-                          ${dialogSettingsCMHintSoftwareUpdate2}                        }
+-                        li {
+-                             ${dialogSettingsCMHintSoftwareUpdate3}
+-                        }
+-                        set bat_level [get_bat_level]
+-                        if {$bat_level < 50} {
+-                            set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
+-                            append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
+-                            li $msg
+-                        }
+-                    }
+-
+-                    division {class="j_forcedUpdate" style="padding:10px;"} {
+-                      puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
+-                    }
++                    puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
+                 }
+             }
+             table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
+@@ -957,6 +905,7 @@
+     catch { exec lcdtool {Saving     Data...    } }
+     rega system.Save()
+     catch { exec lcdtool {Reboot...             } }
++    exec sleep 5
+     exec /sbin/reboot
+ }
+ 
+--- occu/WebUI/www/config/cp_security.cgi.orig
++++ occu/WebUI/www/config/cp_security.cgi
+@@ -202,8 +202,8 @@
+         # exec /usr/sbin/ubiattach -p /dev/mtd6
+         # exec /usr/sbin/ubimkvol /dev/ubi1 -N user -m
+         # exec mount /usr/local
+-        exec touch /var/doFactoryReset
+-        exec kill -SIGQUIT 1
++        exec touch /usr/local/.doFactoryReset
++        exec /sbin/reboot
+     }]} {
+ 
+       # TWIST-22
+@@ -278,13 +278,13 @@
+ 
+ proc action_backup_restore_check {} {
+     global env
+-    cd /tmp/
++    cd /usr/local/tmp/
+     
+     http_head
+     set i 0
+     if { [catch {
+-        exec tar xf new_config.tar
+-        file delete -force /tmp/new_config.tar
++        exec tar xf /usr/local/tmp/new_config.tar 2>/dev/null
++        file delete -force /usr/local/tmp/new_config.tar
+     
+     set config_version [read_version "firmware_version"]
+     set ccu1_backup false
+@@ -414,7 +414,7 @@
+ 
+ proc action_backup_restore_go {} {
+     global env
+-    cd /tmp/
++    cd /usr/local/tmp/
+     http_head
+     
+     set system_version [read_version "/boot/VERSION"]
+@@ -476,14 +476,8 @@
+     }
+     
+   if { "false" == $ccu1_backup } {  # backup for version >= 2
+-    exec umount /usr/local
+-          exec /usr/sbin/ubidetach -p /dev/mtd6
+-          exec /usr/sbin/ubiformat /dev/mtd6 -y
+-          exec /usr/sbin/ubiattach -p /dev/mtd6
+-          exec /usr/sbin/ubimkvol /dev/ubi1 -N user -m
+-          exec mount /usr/local
+ 
+-    if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
++    if { [catch {exec touch /usr/local/.doBackupRestore} errorMessage] } {
+       # set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
+       # append msg "Falls dieser Fehler wiederholt Auftritt, wenden Sie sich bitte mit der folgenden Fehlermeldung an den Kundenservice:\n<br>"
+       # append msg $errorMessage
+@@ -493,23 +487,27 @@
+       set backuperror false
+     }    
+   } else {  # backup for version < 2      
++    catch {
++        exec killall ReGaHss
++        exec sleep 5
++    }
+     #delete existing files
+-    file delete -force /tmp/backup
++    file delete -force /usr/local/tmp/backup
+     file delete -force /etc/config/hs485d /etc/config/hs485types /etc/config/rfd /etc/config/userprofiles 
+     file delete -force /etc/config/homematic.regadom /etc/config/homematic.regadom.bak
+     file delete -force /etc/config/ids /etc/config/ntpclient /etc/config/rega.conf /etc/config/syslog 
+     file delete -force /etc/config/tweaks /etc/config/TZ /etc/config/server.pem /etc/config/keys
+     file delete -force /etc/config/time.conf
+     
+-    file mkdir /tmp/backup
+-    cd /tmp/backup
+-    if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
++    file mkdir /usr/local/tmp/backup
++    cd /usr/local/tmp/backup
++    if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+       put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+       set backuperror true
+     } else {
+       #copy old files
+-      if { [file exists /tmp/backup/usr/local/etc/config] } {
+-        cd /tmp/backup/usr/local/etc/config
++      if { [file exists /usr/local/tmp/backup/usr/local/etc/config] } {
++        cd /usr/local/tmp/backup/usr/local/etc/config
+       }
+       
+       if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }        
+@@ -563,6 +561,8 @@
+       catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
+ 
+       set backuperror false
++      exec /sbin/reboot
++      return
+     }          
+     cd /
+   }
+@@ -609,7 +609,6 @@
+       puts "translatePage('#messagebox');"
+     }
+ 
+-    file delete -force /tmp/new_config.tar /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
+ }
+ 
+ proc put_message {title msg args} {
+@@ -1051,39 +1050,36 @@
+ 
+ proc action_create_backup {} {
+     set HOSTNAME [exec hostname]
++    set system_version [read_version "/boot/VERSION"]
+     set iso8601_date [exec date -Iseconds]
++    set tmpdir [exec mktemp -d -p /usr/local/tmp]
+     regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
++    set backupfile [set HOSTNAME]-$system_version-$year-$month-$day-$hour$minute.sbk
+     #save DOM
+     rega system.Save()
+     cd /
+-    exec tar czf /tmp/usr_local.tar.gz usr/local
+-    cd /tmp/
++    catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
++    cd $tmpdir/
+     #sign the configuration with the current key
+     exec crypttool -s -t 1 <usr_local.tar.gz >signature
+     #store the current key index
+     exec crypttool -g -t 1 >key_index
+     file copy -force /boot/VERSION firmware_version
+-    set fd [open "|tar c usr_local.tar.gz signature firmware_version key_index"]
+-    catch {fconfigure $fd -translation binary}
+-    catch {fconfigure $fd -encoding binary}
+-    puts "Content-Type:application/x-download"
+-    puts "Content-Disposition:attachment;filename=[set HOSTNAME]-$year-$month-$day.sbk\n"
+-    catch {fconfigure stdout -translation binary}
+-    catch {fconfigure stdout -encoding binary}
+-    while { ! [eof $fd]} {
+-        puts -nonewline [read $fd 65536]
+-    }
+-    close $fd
+-    file delete -force /tmp/usr_local.tar.gz /tmp/firmware_version /tmp/signature
++    catch { exec tar --owner=root --group=root -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index }
++    cd /
++    exec rm -rf $tmpdir
++    puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"
++    puts "Content-Type: application/octet-stream"
++    puts "Content-Disposition: attachment; filename=\"$backupfile\"\n"
+ }
+ 
+ proc action_backup_upload {} {
+     global env sid
+-    cd /tmp/
++    cd /usr/local/tmp/
+     
+     http_head
+     import_file -client backup_file
+-    file rename -force -- [lindex $backup_file 0] "/tmp/new_config.tar"
++    file rename -force -- [lindex $backup_file 0] "/usr/local/tmp/new_config.tar"
+     cgi_javascript {
+         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+         puts {
+--- occu/WebUI/www/config/cp_software.cgi.orig
++++ occu/WebUI/www/config/cp_software.cgi
+@@ -488,11 +488,11 @@
+ 
+ proc action_image_upload {} {
+     global env sid
+-    cd /tmp/
++    cd /usr/local/tmp/
+     
+     http_head
+     import_file -client firmware_file
+-    file rename -force -- [lindex $firmware_file 0] "/var/new_firmware.tar.gz"
++    file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_addon.tar.gz"
+     cgi_javascript {
+         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+         puts {
+@@ -507,7 +507,8 @@
+     if {[isOldCCU]} {
+         exec /sbin/init -q
+     } else {
+-        exec /bin/kill -SIGQUIT 1
++        exec touch /usr/local/.doAddonInstall
++        exec /sbin/reboot
+     }
+ }
+ 
+--- occu/WebUI/www/config/cp_time.cgi.orig
++++ occu/WebUI/www/config/cp_time.cgi
+@@ -645,7 +645,9 @@
+     if { $fd <0 } { return 0 }
+     puts $fd "$TIMEZONES($timezone)"
+     close $fd
+-    
++ 
++    catch {exec /bin/updateTZ.sh}
++   
+     rega_script "var x=system.Longitude($lon);var y=system.Latitude($lat);var a=dom.ChangedTimeManually();"
+     
+     catch {exec /sbin/hwclock -wu}
+--- occu/WebUI/www/config/ic_common.tcl.orig
++++ occu/WebUI/www/config/ic_common.tcl
+@@ -23,10 +23,10 @@
+ set GL_FLAG_RECEIVER_UNKNOWN     0x8
+ 
+ set HTMLTITLE "HomeMatic Interne Konfiguration"
+-set INTERFACES_FILE "/opt/hm/etc/config/InterfacesList.xml"
++set INTERFACES_FILE "/etc/config/InterfacesList.xml"
+ 
+ if { ![info exists env(CONFIG_ROOT)] } {
+-    set env(CONFIG_ROOT) "/opt/hm/etc/config"
++    set env(CONFIG_ROOT) "/etc/config"
+ }
+ 
+ set USERPROFILESPATH "$env(CONFIG_ROOT)/userprofiles"
+--- occu/WebUI/www/tcl/extern/cgi.tcl.orig
++++ occu/WebUI/www/tcl/extern/cgi.tcl
+@@ -2698,7 +2698,7 @@
+ # deduce tmp directory
+ switch $tcl_platform(platform) {
+     unix {
+-	set _cgi(tmpdir) /tmp
++	set _cgi(tmpdir) /usr/local/tmp
+     } macintosh {
+ 	set _cgi(tmpdir) [pwd]
+     } default {
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -1,8 +1,8 @@
+ jQuery.extend(true,HMIdentifier , {
+   "de" : {
+-    "CCUFullNameHeader" : "HomeMatic CCU2",
+-    "CCUFullNameText" : "Homematic CCU2",
+-    "CCUShortName" : "CCU2",
++    "CCUFullNameHeader" : "RaspberryMatic",
++    "CCUFullNameText" : "RaspberryMatic",
++    "CCUShortName" : "RaspMatic",
+     "BidCosRF" : "BidCos-RF",
+     "BidCosWired" : "BidCos-Wired",
+     "VirtualDevices" : "VirtualDevices",
+@@ -452,6 +452,7 @@
+     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Schritt 2: Heruntergeladene Software ausw%E4hlen",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Schritt 3: Software auf " + HMIdentifier.de.CCUShortName + " laden",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Schritt 4: Update starten",
++    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Schritt 2: Gehen Sie anhand der <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>Dokumentation</a> und <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>Update/Upgrade Anleitung</a> vor",
+     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.de.BidCosRF,
+     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.de.BidCosWired,
+     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.de.CCUShortName + "-Steuerung",
+@@ -470,6 +471,7 @@
+     "dialogSettingsCMHintSoftwareUpdate3" : "F%FChren Sie vor dem Update eine Datensicherung durch.",
+     "dialogSettingsCMHintSoftwareUpdate4a" : "Der Ladezustand der Batterien betr%E4gt nur noch ",
+     "dialogSettingsCMHintSoftwareUpdate4b" : "Um einem Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Update zu erneuern.",
++    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic ist ein gemeinschaftliches Projekt. Wenn Sie die Weiterentwicklung gerne in Form einer Geldspende unterst%FCtzen wollen k%F6nen Sie das gerne mittels einer <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal Spende</a> tun.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
+     "dialogSettingsCMHintRestart" : "Zentrale neu starten. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintRestartSafeMode" : "HomeMatic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintErrorLog" : "Stellen Sie die Anzahl der Logmeldungen ein, die von der Zentrale generiert werden sollen.<br>Sie k%F6nnen zus%E4tzlich einen Rechner angeben, dem die Zentrale ihre Logmeldungen per Syslog schickt. Auf diesem Rechner mu%DF entsprechende Software installiert sein, die die Meldungen entgegennimmt.<br>Zu Diagnosezwecken k%F6nnen die aktuellen Logmeldungen der Zentrale in einer Textdatei heruntergeladen werden.",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -1,8 +1,8 @@
+ jQuery.extend(true,HMIdentifier , {
+   "en" : {
+-    "CCUFullNameHeader" : "HomeMatic CCU2",
+-    "CCUFullNameText" : "Homematic CCU",
+-    "CCUShortName" : "CCU",
++    "CCUFullNameHeader" : "RaspberryMatic",
++    "CCUFullNameText" : "RaspberryMatic",
++    "CCUShortName" : "RaspMatic",
+     "BidCosRF" : "BidCos-RF",
+     "BidCosWired" : "BidCos-Wired",
+     "HmIPRF" : "HmIP-RF",
+@@ -452,6 +452,7 @@
+     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Step 2: Select downloaded software",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Step 3: Upload software to " + HMIdentifier.en.CCUShortName,
+     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Step 4: Start update",
++    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Step 2: Read <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>documentation</a> and <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>update/upgrade instructions</a>",
+     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.en.BidCosRF,
+     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.en.BidCosWired,
+     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.en.CCUShortName + " control",
+@@ -470,6 +471,7 @@
+     "dialogSettingsCMHintSoftwareUpdate3" : "Please perform a data backup before starting the update.",
+     "dialogSettingsCMHintSoftwareUpdate4a" : "The charging status the batteries is only at ",
+     "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",
++    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
+     "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
+     "dialogSettingsCMHintRestartSafeMode" : "Start HomeMatic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
+     "dialogSettingsCMHintErrorLog" : "Please set the number of log messages to be generated by the CCU.<br>You can also specify a computer that will receive the log messages from the CCU via syslog. An additional software that will be able to receive this messages has to be installed on the computer.<br>To analyse the results, the current log messages of the CCU can be downloaded in a text file.",
+--- occu/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/tr/translate.lang.js
+@@ -1,8 +1,8 @@
+ jQuery.extend(true,HMIdentifier , {
+   "tr" : {
+-    "CCUFullNameHeader" : "HomeMatic CCU2",
+-    "CCUFullNameText" : "Homematic CCU",
+-    "CCUShortName" : "CCU",
++    "CCUFullNameHeader" : "RaspberryMatic",
++    "CCUFullNameText" : "RaspberryMatic",
++    "CCUShortName" : "RaspMatic",
+     "BidCosRF" : "BidCos-RF",
+     "BidCosWired" : "BidCos-Wired",
+     "HmIPRF" : "HmIP-RF",
+@@ -454,6 +454,7 @@
+     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Adim 2: Indirdiginiz yazilima tiklayin",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Adim 3: Yazilimi " + HMIdentifier.tr.CCUShortName + "'e y%FCkleyin",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Adim 4: G%FCncellemeyi baslatin",
++    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Step 2: Read <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>documentation</a> and <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>update/upgrade instructions</a>",
+     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.tr.BidCosRF,
+     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.tr.BidCosWired,
+     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.tr.CCUShortName + "-Kumanda",
+@@ -472,6 +473,7 @@
+     "dialogSettingsCMHintSoftwareUpdate3" : "G%FCncellemeden %F6nce verileri emniyete alin.",
+     "dialogSettingsCMHintSoftwareUpdate4a" : "Bataryalarin sarj durumu artik sadece ",
+     "dialogSettingsCMHintSoftwareUpdate4b" : "Elektrik kesintisi nedeniyle veri kaybini %F6nlemek icin bataryalari g%FCncellemeyi baslatmadan %F6nce degistirmenizi %F6neriyoruz.",
++    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
+     "dialogSettingsCMHintRestart" : "Merkezi yeniden baslat. Degistirilmis ayarlar %F6nceden kaydedilir.",
+     "dialogSettingsCMHintRestartSafeMode" : "HomeMatic merkezini bir kere g%FCvenli modda baslatin. G%FCvenli modda y%FCklenen ek yazilim baslatilmaz. Degistirilmis ayarlar %F6nceden kaydedilir.",
+     "dialogSettingsCMHintErrorLog" : "Merkez tarafindan olusturulacak Log bildiri sayisini ayarlayin.<br>Buna ek olarak merkezin Log bildirilerini Syslog'u kullanarak iletecegi baska bir bilgisayar tanimlayabilirsiniz. Bu bilgisayar %FCzerinde bildirileri alacak uygun bir yazilim y%FCkl%FC olmalidir.<br>Merkezin g%FCncel Log bildirileri teshis amaciyla bir metin dosyasi seklinde indirilebilir.",
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -11423,8 +11423,9 @@
+     var isOk = true;
+     for (var i = 0, len = ips.length; i < len; i++) {
+       var ip = ips[i];
+-      if (!ip.match(/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(\/[0-9]+)?$/)) {
++      if (!ip.match(/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(\/[0-9]+)?$/) && !ip.match(/^[a-f0-9]+:/)) {
+         isOk = false;
++        break;
+       }
+     }
+ 
+@@ -18284,7 +18285,7 @@
+     var script = document.createElement("script");
+     script.id = "homematic_com_script";
+     script.type = "text/javascript";
+-    script.src = "http://update.homematic.com/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product=HM-CCU2&serial=" + serial;
++    script.src = "https://gitcdn.xyz/repo/jens-maus/RaspberryMatic/master/release/LATEST-VERSION.js"
+     $("body").appendChild(script);
+   },
+ 
+@@ -18380,7 +18381,7 @@
+    **/
+   setLatestVersion: function(latestVersion, product)
+   {
+-    if (product == "HM-CCU2") {
++    if (product == "HM-RASPBERRYMATIC") {
+       homematic.com.m_latestVersion = latestVersion;
+       homematic.com.m_isUpdateAvailable = (WEBUI_VERSION != latestVersion);
+     } else {

@@ -1,0 +1,322 @@
+--- occu/WebUI/www/config/cp_maintenance.cgi.orig
++++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -467,6 +467,21 @@
+                     puts "\${dialogSettingsCMHintRestart}"
+                 }
+             }
++            table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
++                table_data {class="CLASS20903"} $styleMaxWidth {
++		                puts "\${dialogSettingsCMTDCCUShutdown}"
++                }
++                table_data {class="CLASS20904"} {
++                    division {class="popupControls CLASS20905"} {
++                        division {class="CLASS20910"} {onClick="OnShutdown();"} {
++                            puts "\${dialogSettingsCMBtnCCUShutdown}"
++                        }
++                    }
++                }
++                table_data {align="left"} {class="CLASS20904"} {
++                    puts "\${dialogSettingsCMHintShutdown}"
++                }
++            }
+             
+             # Abgesicherter Modus
+             table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
+@@ -726,6 +741,12 @@
+                 dlgPopup.LoadFromFile(url, "action=reboot_confirm");
+             }
+             
++            OnShutdown = function() {
++                dlgPopup.hide();
++                dlgPopup.setWidth(400);
++                dlgPopup.LoadFromFile(url, "action=shutdown_confirm");
++            }
++            
+             OnEnterSafeMode = function() {
+               new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRestartSafeMode"), function(result) {
+                 if (result == YesNoDialog.RESULT_YES)
+@@ -939,6 +960,89 @@
+     }
+ }
+ 
++proc action_shutdown_confirm {} {
++   global env
++   
++    http_head
++    division {class="popupTitle"} {
++        puts "\${dialogSafetyCheck}"
++    }
++    division {class="CLASS20900"} {
++        table {class="popupTable CLASS20901"} {border="1"} {
++            table_row {
++                table_data {
++                    table {class="CLASS20909"} {width="100%"} {
++                        table_row {
++                            table_data {colspan="3"} {
++			        puts "\${dialogQuestionShutdown}"
++                            }
++                        }                        
++                        table_row {
++                            table_data {align="right"} {class="CLASS20911"} {colspan="3"} {
++                                division {class="popupControls CLASS20905"} {
++                                    division {class="CLASS20910"} {onClick="OnNextStep()"} {
++                                        puts "\${dialogBtnPerformShutdown}"
++                                    }
++                                }
++                            }
++                        }
++                    }
++                }
++            }
++        }
++    }
++    division {class="popupControls"} {
++        table {
++            table_row {
++                table_data {class="CLASS20907"} {
++                    division {class="CLASS20908"} {onClick="dlgPopup.hide();showMaintenanceCP();"} {
++                        puts "\${btnCancel}"
++                    }
++                }
++            }
++        }
++    }
++    puts ""
++    cgi_javascript {
++        puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
++        puts {
++            OnNextStep = function() {
++                regaMonitor.stop();
++                InterfaceMonitor.stop();
++                dlgPopup.hide();
++                dlgPopup.setWidth(400);
++                dlgPopup.LoadFromFile(url, "action=shutdown_go");
++            }
++        }
++        puts "dlgPopup.readaptSize();"
++        puts "translatePage('#messagebox')"
++    }
++}
++
++proc action_shutdown_go {} {
++    global env
++    cd /tmp/
++    
++    http_head
++
++    put_message "\${dialogPerformShutdownTitle}" {
++        ${dialogPerformShutdownContent}
++    } "_empty_"
++
++    puts ""
++    cgi_javascript {
++        puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
++        puts {
++            var pb = "action=shutdown";
++            var opts = {
++                postBody: pb,
++                sendXML: false
++            };
++            new Ajax.Request(url, opts);
++        }
++    }
++}
++
+ proc action_update_start {} {
+     catch { exec killall hss_lcd }
+     catch { exec lcdtool {Saving     Data...    } }
+@@ -959,6 +1063,14 @@
+     catch { exec lcdtool {Reboot...             } }
+     exec /sbin/reboot
+ }
++proc action_shutdown {} {
++    catch { exec killall hss_lcd }
++    catch { exec lcdtool {Saving     Data...    } }
++    rega system.Save()
++    catch { exec lcdtool {Shutdown...           } }
++    exec sleep 5
++    exec /sbin/poweroff
++}
+ 
+ proc get_logserver {} {
+     return [read_var //etc/config/syslog LOGHOST]
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
+@@ -333,6 +333,8 @@
+     "dialogSettingsSecurityMessagePerformSystemResetContent" : "Best&auml;tigen Sie hier, um den System-Reset durchzuf&uuml;hren.<br/><br>Die " + HMIdentifier.de.CCUShortName + " wird automatisch neu gestartet. Danach k&ouml;nnen Sie sich wieder anmelden.",
+     "dialogPerformRebootTitle" : "Neustart der Zentrale",
+     "dialogPerformRebootContent" : "Der Neustart wird jetzt durchgef&uuml;hrt. Sie k&ouml;nnen sich danach &uuml;ber die Schaltfl&auml;che unten neu anmelden.",
++    "dialogPerformShutdownTitle" : "Herunterfahren der Zentrale",
++    "dialogPerformShutdownContent" : "Die Zentrale wird jetzt heruntergefahren. Bitte warten Sie bis diese komplett heruntergefahren ist und trennen Sie sie erst dann von ihrer Stromquelle.",
+     "dialogSetSecKeyRebootHead" : "Bitte geben Sie den Sicherheitsschl&uuml;ssel ein und f&uuml;hren Sie anschlie&szlig;end den Systemreset durch.",
+     "dialogSetSecKeyRebootLbl" : "Sicherheitsschl&uuml;ssel: ",
+     "dialogSetSecKeyRebootFalseTitle" : "System-Reset: Sicherheitsfehler",
+@@ -942,4 +944,4 @@
+ 
+     "theEnd" : ""
+   }
+-});
+\ No newline at end of file
++});
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -388,6 +388,7 @@
+     "dialogQuestionRemoveCFG" : "M%F6chten Sie den " + HMIdentifier.de.HomeMaticCFGAdapter + " wirklich l%F6schen?",
+     "dialogQuestionRemoveExtraSoftware" : "Wollen Sie die Zusatzsoftware wirklich entfernen?",
+     "dialogQuestionRestart" : "Best%E4tigen Sie hier, um den Neustart durchzuf%FChren.",
++    "dialogQuestionShutdown" : "Best%E4tigen Sie hier, um das Herunterfahren durchzuf%FChren.",
+     "dialogQuestionRestartSafeMode" : "M%F6chten Sie die " + HMIdentifier.de.CCUFullNameText + " wirklich im abgesicherten Modus starten?",
+     "dialogUserAccountTitle" : "Benutzerkonto - Konfiguration",
+     "dialogProgChoseSysVar" : "Programme - Systemvariablenauswahl",
+@@ -413,6 +414,7 @@
+     "dialogRestartSafeModeTitle" : "Neustart",
+     "dialogRestartSafeModeContent" : "Die Zentrale startet nun im abgesicherten Modus. Klicken Sie auf \"OK\", um sich neu anzumelden.",
+     "dialogBtnPerformRestart" : "Neustart ",
++    "dialogBtnPerformShutdown" : "Herunterfahren",
+     "dialogEditRoomBtnClose" : "Schliessen",
+     "dialogEditRoomBtnNew" : "Neu",
+     "infoLoadConfigData" : "Konfigurationsdaten werden geladen...",
+@@ -443,6 +445,7 @@
+     "dialogSettingsCMTitle" : HMIdentifier.de.CCUShortName + "-Wartung",
+     "dialogSettingsCMTDCCUSoftware" : HMIdentifier.de.CCUShortName + "<br/>Software",
+     "dialogSettingsCMTDCCURestart" : HMIdentifier.de.CCUShortName + "<br/>Neustart",
++    "dialogSettingsCMTDCCUShutdown" : "Herunterfahren",
+     "dialogSettingsCMTDCCUSafeMode" : "Abgesicherter<br/>Modus",
+     "dialogSettingsCMTDErrorProtocol" : "Fehler-<br/>protokoll",
+     "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
+@@ -460,6 +463,7 @@
+     "dialogSettingsCMBtnPerformSoftwareUpdateDownload" : "Herunterladen",
+     "dialogSettingsCMBtnPerformSoftwareUpdateUpload" : "Hochladen",
+     "dialogSettingsCMBtnCCURestart" : "Neustart",
++    "dialogSettingsCMBtnCCUShutdown" : "Herunterfahren",
+     "dialogSettingsCMBtnCCURestartSafe" : "Neustart im abgesicherten Modus",
+     "dialogSettingsCMBtnLogSysLogServerAddress" : "Einstellungen %FCbernehmen",
+     "dialogSettingsCMBtnLogLoadLogFile" : "Logdatei herunterladen",
+@@ -471,6 +475,7 @@
+     "dialogSettingsCMHintSoftwareUpdate4a" : "Der Ladezustand der Batterien betr%E4gt nur noch ",
+     "dialogSettingsCMHintSoftwareUpdate4b" : "Um einem Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Update zu erneuern.",
+     "dialogSettingsCMHintRestart" : "Zentrale neu starten. Ver%E4nderte Einstellungen werden vorher gespeichert.",
++    "dialogSettingsCMHintShutdown" : "Zentrale herunterfahren. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintRestartSafeMode" : "HomeMatic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintErrorLog" : "Stellen Sie die Anzahl der Logmeldungen ein, die von der Zentrale generiert werden sollen.<br>Sie k%F6nnen zus%E4tzlich einen Rechner angeben, dem die Zentrale ihre Logmeldungen per Syslog schickt. Auf diesem Rechner mu%DF entsprechende Software installiert sein, die die Meldungen entgegennimmt.<br>Zu Diagnosezwecken k%F6nnen die aktuellen Logmeldungen der Zentrale in einer Textdatei heruntergeladen werden.",
+     "dialogSettingsCMLogLevel0" : "Alles loggen",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
+@@ -333,6 +333,8 @@
+     "dialogSettingsSecurityMessagePerformSystemResetContent" : "Please confirm here to start the system reset.<br/><br>The " + HMIdentifier.en.CCUShortName + " will be restarted automatically. Afterwards, you can log in again.",
+     "dialogPerformRebootTitle" : "Restart of CCU",
+     "dialogPerformRebootContent" : "The restart will be performed. Afterwards, you can log in again with the button below.",
++    "dialogPerformShutdownTitle" : "Shutdown of CCU",
++    "dialogPerformShutdownContent" : "The shutdown will be performed. Please wait until the shutdown is finished before you disconnect your CCU from power.",
+     "dialogSetSecKeyRebootHead" : "Please enter the security key and perform the system reset afterwards.",
+     "dialogSetSecKeyRebootLbl" : "Security key: ",
+     "dialogSetSecKeyRebootFalseTitle" : "System reset: Security error",
+@@ -940,4 +942,4 @@
+ 
+     "theEnd" : ""
+   }
+-});
+\ No newline at end of file
++});
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -388,6 +388,7 @@
+     "dialogQuestionRemoveCFG" : "Do you really want to delete the " + HMIdentifier.en.HomeMaticCFGAdapter + "?",
+     "dialogQuestionRemoveExtraSoftware" : "Do you really want to delete the additional software?",
+     "dialogQuestionRestart" : "Please click here to perform the restart?",
++    "dialogQuestionShutdown" : "Please click here to perform the shutdown?",
+     "dialogQuestionRestartSafeMode" : "Do you really want to start the " + HMIdentifier.en.CCUFullNameText + " in the safe mode?",
+     "dialogUserAccountTitle" : "User account configuration",
+     "dialogProgChoseSysVar" : "Programs - system variable selection",
+@@ -413,6 +414,7 @@
+     "dialogRestartSafeModeTitle" : "Restart",
+     "dialogRestartSafeModeContent" : "The Central Control Unit will now start in safe mode. Please click \"OK\" to log in again.",
+     "dialogBtnPerformRestart" : "Restart ",
++    "dialogBtnPerformShutdown" : "Shutdown",
+     "dialogEditRoomBtnClose" : "Close",
+     "dialogEditRoomBtnNew" : "New",
+     "infoLoadConfigData" : "Loading configuration data",
+@@ -443,6 +445,7 @@
+     "dialogSettingsCMTitle" : HMIdentifier.en.CCUShortName + " maintenance",
+     "dialogSettingsCMTDCCUSoftware" : HMIdentifier.en.CCUShortName + "<br/>software",
+     "dialogSettingsCMTDCCURestart" : HMIdentifier.en.CCUShortName + "<br/>restart",
++    "dialogSettingsCMTDCCUShutdown" : "Shutdown",
+     "dialogSettingsCMTDCCUSafeMode" : "Safe<br/>mode",
+     "dialogSettingsCMTDErrorProtocol" : "Error<br/>log",
+     "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
+@@ -460,6 +463,7 @@
+     "dialogSettingsCMBtnPerformSoftwareUpdateDownload" : "Download",
+     "dialogSettingsCMBtnPerformSoftwareUpdateUpload" : "Upload",
+     "dialogSettingsCMBtnCCURestart" : "Restart",
++    "dialogSettingsCMBtnCCUShutdown" : "Shutdown",
+     "dialogSettingsCMBtnCCURestartSafe" : "Restart in safe mode",
+     "dialogSettingsCMBtnLogSysLogServerAddress" : "Apply settings",
+     "dialogSettingsCMBtnLogLoadLogFile" : "Download log file",
+@@ -471,6 +475,7 @@
+     "dialogSettingsCMHintSoftwareUpdate4a" : "The charging status the batteries is only at ",
+     "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",
+     "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
++    "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
+     "dialogSettingsCMHintRestartSafeMode" : "Start HomeMatic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
+     "dialogSettingsCMHintErrorLog" : "Please set the number of log messages to be generated by the CCU.<br>You can also specify a computer that will receive the log messages from the CCU via syslog. An additional software that will be able to receive this messages has to be installed on the computer.<br>To analyse the results, the current log messages of the CCU can be downloaded in a text file.",
+     "dialogSettingsCMLogLevel0" : "Log all",
+--- occu/WebUI/www/webui/js/lang/tr/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/tr/translate.lang.extension.js
+@@ -332,6 +332,8 @@
+     "profileNotSaveable" : "Bu profil, profil taslagi olarak kaydedilemez.",
+     "dialogPerformRebootTitle" : "Merkezi yeniden baslat",
+     "dialogPerformRebootContent" : "Yeniden baslatma islemi simdi gerceklestiriliyor. Daha sonra alt kisimdaki alandan yeniden oturum acabilirsiniz.",
++    "dialogPerformShutdownTitle" : "Shutdown of CCU",
++    "dialogPerformShutdownContent" : "The shutdown will be performed. Please wait until the shutdown is finished before you disconnect your CCU from power.",
+     "dialogSetSecKeyRebootHead" : "L%FCtfen g%FCvenlik kodunu girin ve daha sonra sistemi yeniden baslatin.",
+     "dialogSetSecKeyRebootLbl" : "G%FCvenlik kodu: ",
+     "dialogSetSecKeyRebootFalseTitle" : "Sistemi yeniden baslat: G%FCvenlik hatasi",
+@@ -935,4 +937,4 @@
+ 
+     "theEnd" : ""
+   }
+-});
+\ No newline at end of file
++});
+--- occu/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/tr/translate.lang.js
+@@ -390,6 +390,7 @@
+     "dialogQuestionRemoveCFG" : HMIdentifier.tr.HomeMaticCFGAdapter + " gercekten silmek istiyor musunuz?",
+     "dialogQuestionRemoveExtraSoftware" : "Ek yazilimi gercekten kaldirmak istiyor musunuz?",
+     "dialogQuestionRestart" : "Sistemi yeniden baslatmak icin buradan onaylayin.",
++    "dialogQuestionShutdown" : "Please click here to perform the shutdown?",
+     "dialogQuestionRestartSafeMode" : HMIdentifier.tr.CCUFullNameText + "'yi gercekten g%FCvenli modda baslatmak istiyor musunuz?",
+     "dialogUserAccountTitle" : "Kullanici hesabi konfig%FCrasyonu",
+     "dialogProgChoseSysVar" : "Programlar - sistem degiskeni sec",
+@@ -415,6 +416,7 @@
+     "dialogRestartSafeModeTitle" : "Yeniden baslat",
+     "dialogRestartSafeModeContent" : "Merkez sadece g%FCvenli modda baslar. Yeniden oturum acmak icin \"OK\"'e tiklayin.",
+     "dialogBtnPerformRestart" : "Yeniden baslat ",
++    "dialogBtnPerformShutdown" : "Shutdown",
+     "dialogEditRoomBtnClose" : "Kapat",
+     "dialogEditRoomBtnNew" : "Yeni",
+     "infoLoadConfigData" : "Konfig%FCrasyon bilgileri y%FCkleniyor...",
+@@ -445,6 +447,7 @@
+     "dialogSettingsCMTitle" : HMIdentifier.tr.CCUShortName + "-Bakim",
+     "dialogSettingsCMTDCCUSoftware" : HMIdentifier.tr.CCUShortName + "<br/>Yazilim",
+     "dialogSettingsCMTDCCURestart" : HMIdentifier.tr.CCUShortName + "<br/>Yeniden baslat",
++    "dialogSettingsCMTDCCUShutdown" : "Shutdown",
+     "dialogSettingsCMTDCCUSafeMode" : "G%FCvenli<br/>mod",
+     "dialogSettingsCMTDErrorProtocol" : "Hata<br/>protokol%FC",
+     "dialogSettingsCMLblActualSoftwareVersion" : "G%FCncel yazilim versiyonu:",
+@@ -462,6 +465,7 @@
+     "dialogSettingsCMBtnPerformSoftwareUpdateDownload" : "Indir",
+     "dialogSettingsCMBtnPerformSoftwareUpdateUpload" : "Y%FCkle",
+     "dialogSettingsCMBtnCCURestart" : "Yeniden baslat",
++    "dialogSettingsCMBtnCCUShutdown" : "Shutdown",
+     "dialogSettingsCMBtnCCURestartSafe" : "G%FCvenli modda yeniden baslat",
+     "dialogSettingsCMBtnLogSysLogServerAddress" : "Ayarlari kaydet",
+     "dialogSettingsCMBtnLogLoadLogFile" : "Log dosyasini indir",
+@@ -473,6 +477,7 @@
+     "dialogSettingsCMHintSoftwareUpdate4a" : "Bataryalarin sarj durumu artik sadece ",
+     "dialogSettingsCMHintSoftwareUpdate4b" : "Elektrik kesintisi nedeniyle veri kaybini %F6nlemek icin bataryalari g%FCncellemeyi baslatmadan %F6nce degistirmenizi %F6neriyoruz.",
+     "dialogSettingsCMHintRestart" : "Merkezi yeniden baslat. Degistirilmis ayarlar %F6nceden kaydedilir.",
++    "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
+     "dialogSettingsCMHintRestartSafeMode" : "HomeMatic merkezini bir kere g%FCvenli modda baslatin. G%FCvenli modda y%FCklenen ek yazilim baslatilmaz. Degistirilmis ayarlar %F6nceden kaydedilir.",
+     "dialogSettingsCMHintErrorLog" : "Merkez tarafindan olusturulacak Log bildiri sayisini ayarlayin.<br>Buna ek olarak merkezin Log bildirilerini Syslog'u kullanarak iletecegi baska bir bilgisayar tanimlayabilirsiniz. Bu bilgisayar %FCzerinde bildirileri alacak uygun bir yazilim y%FCkl%FC olmalidir.<br>Merkezin g%FCncel Log bildirileri teshis amaciyla bir metin dosyasi seklinde indirilebilir.",
+     "dialogSettingsCMLogLevel0" : "Her seyi Log'lara gecir",

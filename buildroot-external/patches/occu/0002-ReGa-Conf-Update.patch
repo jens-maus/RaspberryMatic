@@ -1,0 +1,41 @@
+--- occu/arm-gnueabihf/packages-eQ-3/WebUI/etc/rega.conf.orig
++++ occu/arm-gnueabihf/packages-eQ-3/WebUI/etc/rega.conf
+@@ -44,6 +44,11 @@
+ # Standardwert: 8181
+ HttpListenerPort=8182
+ 
++# HttpListenerMaxConnections
++# Maximale Anzahl paralleler Verbindungen
++# Standardwert: 6
++HttpListenerMaxConnections=12
++
+ # VirtualPathInternalConfig
+ # Standard: /config/
+ VirtualPathInternalConfig=/config/
+@@ -57,6 +62,26 @@
+ # Standard: 300
+ SessionTimeout=300
+ 
++# SessionMaxCount
++# Maximale Anzahl paralleler Sessions.
++# Standard: 3
++SessionMaxCount=10
++
++# AutoSaveDOMCycle
++# Intervalzeit in Sekunden für das automatisch Speichern der Konfiguration
++# Standard: 43200 (12h)
++AutoSaveDOMCycle=43200
++
++# AutoSaveDOMOnExit
++# Wenn gesetzt wird beim beenden erzwungen das die DOM Konfiguration in gespeichert wird
++# Standard: 0 (false)
++AutoSaveDOMOnExit=0
++
++# CheckModifiedCycle
++# Intervalzeit in Sekunden für das Prüfen+Speichern bei Konfigänderungen
++# Standard: 600 (10min)
++CheckModifiedCycle=600
++
+ #*******************************************************************************
+ # Ereignisse
+ #*******************************************************************************

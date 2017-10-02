@@ -5,8 +5,8 @@
 #############################################################
 
 HOMEMATIC_OCCU_VERSION = 2.29.22
-HOMEMATIC_VERSION = 2.29.22-1
-HOMEMATIC_SITE = $(call github,eq-3,occu,$(HOMEMATIC_VERSION))
+HOMEMATIC_VERSION = 2.29.22-2
+HOMEMATIC_SITE = $(call github,jens-maus,occu,$(HOMEMATIC_VERSION))
 
 HOMEMATIC_MODULE_SUBDIRS = kernel-modules/bcm2835_raw_uart kernel-modules/eq3_char_loop
 

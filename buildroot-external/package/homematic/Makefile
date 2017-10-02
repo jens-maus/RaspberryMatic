@@ -31,7 +31,8 @@ install_webui_arch:
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/* $(TARGET_DIR)
 	cp -R WebUI/* $(TARGET_DIR)/
 ifeq (,$(filter $(BR2_PACKAGE_HOMEMATIC_WEBUI_REGAHSS_BETA), y))
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/ReGaHss $(TARGET_DIR)/bin/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/* $(TARGET_DIR)/lib/
 endif
 
 install_linuxbasis_arch:

@@ -18285,7 +18285,7 @@ homematic.com =
     var script = document.createElement("script");
     script.id = "homematic_com_script";
     script.type = "text/javascript";
-    script.src = "https://gitcdn.xyz/repo/jens-maus/RaspberryMatic/master/release/LATEST-VERSION.js"
+    script.src = "https://gitcdn.xyz/repo/jens-maus/RaspberryMatic/master/release/LATEST-VERSION.js?_version_=" + WEBUI_VERSION;
     $("body").appendChild(script);
   },
 
@@ -18337,7 +18337,7 @@ homematic.com =
       var script = document.createElement("script");
       script.id = "homematic_com_script_" + index;
       script.type = "text/javascript";
-      script.src = "http://update.homematic.com/firmware/download?cmd=js_check_version&product=" + product + "&serial=0";
+      script.src = "http://update.homematic.com/firmware/download?cmd=js_check_version&product=" + product + "&serial=0" + "&ts=" + Date.now();
       $("body").appendChild(script);
       homematic.com.callback = callback;
   },
@@ -18347,7 +18347,7 @@ homematic.com =
       var script = document.createElement("script");
       script.id = "homematic_com_script_fw";
       script.type = "text/javascript";
-      script.src = "http://update.homematic.com/firmware/api/firmware/search/DEVICE";
+      script.src = "http://update.homematic.com/firmware/api/firmware/search/DEVICE?ts=" + Date.now();
       $("body").appendChild(script);
       homematic.com.callback = callback;
   },

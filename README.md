@@ -14,7 +14,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 ## :cookie: Features
 * 100% HomeMatic CCU system compliant using latest [OCCU 2.29.22](https://github.com/eq-3/occu) software releases
 * Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
-* Integration of latest [beta versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
+* Integration of latest [community versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
 * Self-contained disk image primarily targeted for RaspberryPi hardware
 * Based on latest [Buildroot 2017.08](http://buildroot.org/) Linux environment
 * Latest [Linux kernel 4.9.x](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support

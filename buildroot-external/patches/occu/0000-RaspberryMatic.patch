@@ -776,7 +776,7 @@
        }
        
        if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }        
-@@ -563,6 +561,8 @@
+@@ -563,13 +561,14 @@
        catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
  
        set backuperror false
@@ -785,7 +785,15 @@
      }          
      cd /
    }
-@@ -609,7 +609,6 @@
+   
+   if { "false" == $backuperror } {
+-        exec mount -o remount,ro /usr/local
+-        exec mount -o remount,rw /usr/local
++        exec sync
+         division {class="popupTitle"} {
+             puts "\${dialogSettingsSecurityMessageSysBackupRestartSystemTitle}"
+         }
+@@ -609,7 +608,6 @@
        puts "translatePage('#messagebox');"
      }
  
@@ -793,7 +801,7 @@
  }
  
  proc put_message {title msg args} {
-@@ -1051,39 +1050,36 @@
+@@ -1051,39 +1049,36 @@
  
  proc action_create_backup {} {
      set HOSTNAME [exec hostname]

@@ -568,8 +568,7 @@ proc action_backup_restore_go {} {
   }
   
   if { "false" == $backuperror } {
-        exec mount -o remount,ro /usr/local
-        exec mount -o remount,rw /usr/local
+        exec sync
         division {class="popupTitle"} {
             puts "\${dialogSettingsSecurityMessageSysBackupRestartSystemTitle}"
         }

@@ -36,7 +36,7 @@ IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
 
 source /boot/VERSION 2>/dev/null
 source /var/hm_mode 2>/dev/null
-if [[ ${HM_MODE} != "HMLGW" ]]; then
+if [[ "${HM_MODE}" != "HM-LGW" ]]; then
   if [[ -z ${IP} ]]; then
     /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- ERROR: No IP address set"
   else
@@ -44,8 +44,8 @@ if [[ ${HM_MODE} != "HMLGW" ]]; then
   fi
 else
   if [[ -z ${IP} ]]; then
-    /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- LAN-GW Mode (ERROR: No IP address set)"
+    /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- HM-LGW-O-TW-W-EU Mode (ERROR: No IP address set)"
   else
-    /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- LAN-GW Mode (${IP})"
+    /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- HM-LGW-O-TW-W-EU Mode (${IP} / $(cat /var/board_serial))"
   fi
 fi

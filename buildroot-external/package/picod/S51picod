@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+# Pico UPS Daemon starting and stopping
+#
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DESC=picod
+
+DAEMON=/opt/picod/picod.sh
+PIDFILE=/var/run/picod.pid
+
+test -x $DAEMON || exit 0
+
+case $1 in
+  start)
+    echo -n "Starting PIco UPS daemon: "
+
+    # find out if a PIco UPS unit is installed at all
+    i2cget -y 1 0x69 0x26 2>/dev/null >/dev/null
+    if [[ $? -eq 0 ]]; then
+
+      # lets set the battery runtime to 0xff (until 3.5v)
+      i2cget -y 1 0x6b 0x09 0xff 2>/dev/null >/dev/null
+
+      # now start the daemon
+      start-stop-daemon --start --background --pidfile ${PIDFILE} --make-pidfile --quiet --exec ${DAEMON}
+      [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+
+    else
+      echo "no hardware found"
+    fi
+  ;;
+
+  stop)
+    echo -n "Stopping PIco UPS daemon: "
+    if [[ -f ${PIDFILE} ]]; then
+      start-stop-daemon --stop --quiet --pidfile ${PIDFILE}
+      [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+      rm -f ${PIDFILE}
+    else
+      echo "OK"
+    fi
+  ;;
+
+  restart|force-reload)
+    $0 stop
+    sleep 1
+    $0 start
+  ;;
+
+  *)
+    echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+    exit 1
+  ;;
+esac
+
+exit 0

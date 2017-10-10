@@ -1,11 +1,11 @@
---- buildroot/package/rpi-firmware/rpi-firmware.mk.orig	2017-06-09 22:44:45.870892238 +0200
-+++ buildroot/package/rpi-firmware/rpi-firmware.mk	2017-06-19 10:48:06.407566360 +0200
+--- buildroot/package/rpi-firmware/rpi-firmware.mk.orig	2017-08-27 08:23:11.249935624 +0200
++++ buildroot/package/rpi-firmware/rpi-firmware.mk	2017-09-24 12:10:47.208686784 +0200
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = 4b24a81a2ce94afd4458d1af4ea1e73d58e69848
-+RPI_FIRMWARE_VERSION = dc069bfd18c0134713fb877afe2e3442fec27966
+-RPI_FIRMWARE_VERSION = 685b3ceb0a6d6d6da7b028ee409850e83fb7ede7
++RPI_FIRMWARE_VERSION = 2669578d1449255edf23f38ed98d208ab73faed7
  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
  RPI_FIRMWARE_LICENSE = BSD-3-Clause
  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
@@ -23,9 +23,9 @@
  endef
  endif
  
---- buildroot/package/rpi-firmware/rpi-firmware.hash.orig	2017-06-09 22:40:23.878873867 +0200
-+++ buildroot/package/rpi-firmware/rpi-firmware.hash	2017-06-19 10:49:36.653028607 +0200
+--- buildroot/package/rpi-firmware/rpi-firmware.hash.orig	2017-08-27 08:23:11.249935624 +0200
++++ buildroot/package/rpi-firmware/rpi-firmware.hash	2017-09-24 12:12:38.334517357 +0200
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 84f44265c7e9bfe3e54a326b95ea7067870cfe08a9aae12f00aec8d47f6fc353 rpi-firmware-4b24a81a2ce94afd4458d1af4ea1e73d58e69848.tar.gz
-+sha256 bdd63082c6cd60a78d6efaf76d06516ede1cfbcbd858476097677e6ebdef3429 rpi-firmware-dc069bfd18c0134713fb877afe2e3442fec27966.tar.gz
+-sha256 42edea8317869f5a5ed87dfe009ceffce6a784ff40cb5da3e9e8a4fc61d79610 rpi-firmware-685b3ceb0a6d6d6da7b028ee409850e83fb7ede7.tar.gz
++sha256 eddb1743145c6b18f967d24973cfe2e2ced14b51c5db3677f5e5389c232d7aee rpi-firmware-2669578d1449255edf23f38ed98d208ab73faed7.tar.gz

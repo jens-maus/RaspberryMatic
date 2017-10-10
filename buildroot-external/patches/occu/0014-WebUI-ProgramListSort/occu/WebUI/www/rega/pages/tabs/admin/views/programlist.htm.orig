@@ -1,0 +1,250 @@
+<% system.SetSessionVar("sessionTAB", "programlist"); %>
+
+<script type="text/javascript">
+  setPath("<span onclick='WebUI.enter(LinksAndProgramsPage);'>"+translateKey('menuProgramsLinksPage')+"</span> &gt; "+ translateKey('submenuPrograms'));
+  <%
+    var bIsFiltered = false;
+    if (system.IsSessionVar("sessionPrgIsFiltered"))
+    {
+      bIsFiltered = system.GetSessionVar("sessionPrgIsFiltered");
+      system.SetSessionVar("sessionPrgIsFiltered", false);
+    }
+    
+    string sPrgFilter = "";    
+    if( system.IsSessionVar("sessionPrgFilter") )
+    {
+      sPrgFilter = system.GetSessionVar("sessionPrgFilter");
+      system.SetSessionVar("sessionPrgFilter","");
+    }
+  %>
+</script>
+
+
+<table id="ProgramListTable" class="tTable"  border="0" cellpadding="0" cellspacing="0" style="display:none">
+  <thead>
+    <tr>
+      <td class="thCell CLASS04900" >${thName}</td>
+      <td class="thCell CLASS04900" >${thDescription}</td>
+      <td class="thCell CLASS04900" >${thCondition}</td>
+      <td class="thCell CLASS04900" >${thActivity}</td>
+      <td class="thCell CLASS04900" >${thAction}</td>
+    </tr>
+  </thead>
+  <tbody>
+    <%
+      object oPrograms = dom.GetObject( ID_PROGRAMS );
+      if(oPrograms)
+      {
+        string sEnumPrgIDs = oPrograms.EnumEnabledIDs(); 
+        if( bIsFiltered == true)
+        {
+          sEnumPrgIDs = sPrgFilter;
+          system.SetSessionVar("sessionSNVPRG", "0");
+        }
+        else
+        {
+          if( system.IsSessionVar("sessionSNVPRG") )
+          {
+            string sEnable = system.GetSessionVar("sessionSNVPRG");
+            if( sEnable == "1" )
+            {
+              sEnumPrgIDs = sEnumPrgIDs#"\t"#oPrograms.EnumEnabledInternalIDs();
+            }
+          }
+        }
+        string sPID;
+        foreach( sPID, sEnumPrgIDs )
+        {
+          object o = dom.GetObject( sPID );
+          if( o )
+          {
+            if( (o.IsTypeOf( OT_PROGRAM )) && (o.ProgramCopyID()==ID_ERROR) )
+            {
+              WriteLine( '<tr class="CLASS04901">' );
+              WriteLine( '<td class="tBodyCell">'#o.Name()#'</td>' );
+              WriteLine( '<td class="tBodyCell">'#o.PrgInfo()#'</td>' );
+              WriteLine( '<td class="tBodyCell">' );
+              object oPrgID = o.ID();
+              string sRet = "";
+              Call( "/esp/programs.fn::WriteConditionText()" );
+              Write (sRet);
+              WriteLine( '</td>' );
+              WriteLine( '<td class="tBodyCell">' );
+              string sRet = "";
+              Call( "/esp/programs.fn::WriteDestinationText()" );
+              Write(sRet);
+              WriteLine( '</td>' );
+              WriteLine( '<td class="tBodyCell CLASS04902" >' );
+                WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
+                  WriteLine( '<tr>' );
+                    WriteLine( '<td>' );
+                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );    
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#');" />' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                        WriteLine( '<td>' );
+                        WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            WriteLine( '<input type="button" name="btnEdit" value="btnEdit" class="StdButton CLASS04907" onclick="EditProgram('#o.ID()#');" />' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                      WriteLine( '</table>' );
+                    WriteLine( '</td>' );
+                    WriteLine( '<td>' );
+                      WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );    
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            string sChecked = ""; if( o.Active() ) { sChecked = "checked"; }
+                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetActive('#o.ID()#',this.checked);" />${lblActiv}</label>' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            string sChecked = ""; if( o.UserAccessRights(iulOtherThanAdmin) == iarFullAccess ) { sChecked = "checked"; }
+                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetOperate('#o.ID()#',this.checked);" />${lblUsable}</label>' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                        WriteLine( '<tr>' );
+                          WriteLine( '<td class="CLASS04903">' );
+                            string sChecked = ""; if( o.Visible() ) { sChecked = "checked"; }
+                            WriteLine( '<label class="CLASS04904"><input type="checkbox" '#sChecked#' onclick="isePrograms.SetVisible('#o.ID()#',this.checked);" />${lblVisible}</label>' );
+                          WriteLine( '</td>' );
+                        WriteLine( '</tr>' );
+                      WriteLine( '</table>' );
+                    WriteLine( '</td>' );
+                  WriteLine( '</tr>' );
+                WriteLine( '</table>' );
+              WriteLine( '</td>' );
+              WriteLine( '</tr>' );
+            }
+          }
+        }
+      }
+    %>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  DeleteProgram = function(id)
+  {
+    var _id_ = id;
+    //new YesNoDialog("Sicherheitsabfrage", "Möchten Sie das Programm wirklich löschen?", function(result) {
+      new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionRemoveProgram'), function(result) {
+      if (result == YesNoDialog.RESULT_YES)
+      {
+        var url = '/esp/programs.htm?sid='+SessionId;
+        var pb = "";
+        pb += 'string action = "DeleteProgram";';
+        pb += 'string id = "' + _id_ +'";';
+        var opt = {postBody: pb, onComplete: function(t){if(dbg){alert(t.responseText);}reloadPage();}};
+        new Ajax.Request(url,opt);
+      }
+    });
+  };
+  
+  EditProgram = function(id)
+  {
+    var url = '/esp/programs.htm?sid='+SessionId;
+    var pb = "";
+    pb += 'string action = "SetProgram";';
+    pb += 'string id = "'+id+'";';
+    var opt =
+    {
+      postBody: pb,
+      onComplete: function(t)
+      {
+        if(dbg)alert(t.responseText);
+        if(t.responseText=="true")
+        {
+          loadPrograms();
+        }
+        else
+        {
+          //alert("Programm konnte nicht geladen werden!"+t.responseText);
+        }
+      }
+    };
+    new Ajax.Request(url,opt);
+  };
+  NewProgram = function()
+  {
+    // TWIST-573
+    if (!createNewProgram) {
+      createNewProgram = true;
+      var url = '/esp/programs.htm?sid=' + SessionId;
+      var pb = "";
+      pb += 'string action = "NewProgram";';
+      var opt =
+      {
+        postBody: pb,
+        onComplete: function (t) {
+          if (t.responseText == "true") {
+            loadPrograms();
+          }
+          else {
+            //alert("Programm konnte nicht geladen werden!"+t.responseText);
+          }
+          createNewProgram = false;
+        }
+      };
+      new Ajax.Request(url, opt);
+    }
+  };
+
+  ShowNonVisiblePrograms = function()
+  {
+    var url = '/esp/programs.htm?sid='+SessionId;
+    var pb = "";
+    pb += 'string action = "ShowNonVisiblePrograms";';
+    var opt =
+    {
+      postBody: pb,
+      onComplete: function(t)
+      {
+        if(dbg){alert(t.responseText);}
+        reloadPage();
+      }
+    };
+    new Ajax.Request(url,opt);
+  };
+  
+  <%
+    string sInternalBtnText = "";
+    if( system.GetSessionVar("sessionSNVPRG") == "1" )
+    {
+        !sInternalBtnText = "aus";
+        sInternalBtnText = "footerBtnHideSystemPrograms";
+    }
+    else
+    {
+        !sInternalBtnText = "ein";
+        sInternalBtnText = "footerBtnShowSystemPrograms";
+    }
+    Write("var internalBtnText = '"#sInternalBtnText#"';");
+  %>
+
+  var s = "";
+  s += "<table cellspacing='8'>";
+  s += "<tr>";
+    s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack();'>"+ translateKey('footerBtnPageBack') +"</div></td>";
+    s += "<td align='center' valign='middle'><div class='FooterButton' onclick='NewProgram();'>"+ translateKey('footerBtnNew') +"</div></td>";
+    //s += "<td align='center' valign='middle'><div class='FooterButton CLASS04905' onclick='ShowNonVisiblePrograms();' >Systeminterne Programme<br /><% Write(sInternalBtnText); %>blenden</div></td>";
+    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04905' onclick='ShowNonVisiblePrograms();' >"+translateKey(internalBtnText) +"</div></td>";
+    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04906' onclick='new HMScriptExecutor();' >"+translateKey('footerBtnTestScript')+ "</div></td>";
+    if(dbg)
+    {
+      s += "<td align='center' valign='middle'><div class='FooterButton' onclick='reloadPage();'>"+translateKey('footerBtnUpdate')+ "</div></td>";
+    }
+  s += "</tr>";
+  s += "</table>";
+  setFooter(s);
+  translateButtons("btnRemove, btnEdit");
+  translatePage("#ProgramListTable");
+  jQuery("#ProgramListTable").show();
+
+</script>

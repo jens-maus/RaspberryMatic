@@ -1,0 +1,1241 @@
+function ::dcCreateTable()
+{
+  object c2Obj = dom.GetObject( system.GetVar("cId") );
+  string sName = c2Obj.Name();
+
+  WriteLine('<table cellpadding="0" cellspacing="0" class="CLASS02500">');
+
+  if( iFavNamePosition == 1 )
+  {
+    WriteLine('<tr>');
+      WriteLine('<td class="CLASS02501">');
+      WriteLine('<div class="CLASS02502">' # sName # '</div>');
+      WriteLine('<td>');
+    WriteLine('</tr>');
+  
+    WriteLine('<tr>');
+      WriteLine('<td class="CLASS02503"><div class="CLASS02504" style="visibility:hidden;"></div></td>');
+    WriteLine('</tr>');
+  
+    WriteLine('<tr>');
+      WriteLine('<td id="dpc'#cId#'" class="CLASS02505">');
+        Call("/esp/datapointconfigurator.fn::dcCreate()");
+      WriteLine('</td>');
+    WriteLine('</tr>');
+  
+    WriteLine('<tr>');
+      WriteLine('<td class="CLASS02503"><div class="CLASS02504" style="visibility:hidden;"></div></td>');
+    WriteLine('</tr>');
+  }
+  
+  if( iFavNamePosition == 0 )
+  {
+    integer iLength = 9;
+    Call("/esp/datapointconfigurator.fn::StringCut()");
+  
+    WriteLine('<tr>');
+      WriteLine('<td class="CLASS02507">');
+      WriteLine('<div class="CLASS02509">'#sName#'</div></td>');
+      WriteLine('<td id="dpc'#cId#'" class="CLASS02508">');
+        Call("/esp/datapointconfigurator.fn::dcCreate()");
+      WriteLine('</td>');
+    WriteLine('</tr>');
+  
+  }
+  WriteLine('</table>');
+}
+
+! dcCreate()
+! [cId]: idnumber, [iStatusOnly]: Controls (un)bedienbar
+function ::dcCreate()
+{
+  ! Control Button Dimensions
+  integer ictCH = 0;
+  integer chnId = system.GetVar("cId");
+  boolean ctrlReqUpdate = false;
+  object cObj = dom.GetObject( system.GetVar("cId") );
+  
+  if( cObj.IsTypeOf( OT_PROGRAM ) )
+  {
+    ictCH = 0;
+    ctrlReqUpdate = true;
+    string progId = cObj.ID();
+    string viewstatus = "";
+    Call("/esp/system.fn::writeProgCtrl()");
+  }
+  
+  if( cObj.IsTypeOf( OT_DP ) )
+  {
+    ictCH = 0;
+    ctrlReqUpdate = true;
+    integer iVT = cObj.ValueType();
+    integer iST = cObj.ValueSubType();
+    boolean bLogic  = ( (iVT==ivtBinary)  && (iST==istBool)    );
+    boolean bList   = ( (iVT==ivtInteger) && (iST==istEnum)    );
+    boolean bNumber = ( (iVT==ivtFloat)   && (iST==istGeneric) );
+    boolean bAlarm  = ( (iVT==ivtBinary)  && (iST==istAlarm)   );
+    boolean bString = ( (iVT==ivtString)  && (iST==istChar8859));
+    boolean bSysVar = ( bLogic || bList || bNumber || bAlarm || bString);
+    if( bSysVar )
+    {
+      WriteLine( '<table id="ctrl'#chnId#'tbl" cellspacing="0" class="ctrlTbl CLASS02510" border="0">' );
+      WriteLine( '<tr>' );
+      Call( "/esp/datapointconfigurator.fn::CreateSysVar()" );
+      WriteLine( '</tr>' );
+      WriteLine( '</table>' );
+    }
+  }
+    
+  if( cObj.IsTypeOf( OT_CHANNEL ) )
+  {
+
+    var CN_ALARM_SWITCH_VIRTUAL_RECEIVER = "ALARM_SWITCH_VIRTUAL_RECEIVER.";
+    var CN_ARMING          = "ARMING.";
+    var CN_BLIND           = "BLIND.";
+    var CN_BLIND_TRANSMITTER      = "BLIND_TRANSMITTER.";
+    var CN_BLIND_VIRTUAL_RECEIVER = "BLIND_VIRTUAL_RECEIVER.";
+    var CN_BTN_SHORT_ONLY  = "BTN_SHORT_ONLY.";
+    var CN_BUTTON          = "BUTTON.";
+    var CN_CAPACITIVE_FILLING_SENSOR  = "CAPACITIVE_FILLING_LEVEL_SENSOR.";
+    var CN_CLIMATE_CONTROL_FLOOR_PUMP_TRANSCEIVER = "CLIMATECONTROL_FLOOR_PUMP_TRANSCEIVER.";
+    var CN_CLIMATE_CONTROL_FLOOR_TRANSCEIVER = "CLIMATECONTROL_FLOOR_TRANSCEIVER.";
+    var CN_COLORTEMP        = "COLORTEMP.";
+    var CN_DANGER          = "DANGER.";
+    var CN_DIGITAL_ANALOG_OUTPUT      = "DIGITAL_ANALOG_OUTPUT.";
+    var CN_DIGITAL_STATE      = "DIGITAL_STATE.";
+    var CN_DIMMER          = "DIMMER.";
+    var CN_DIMMER_REAL     = "DIMMER_REAL.";
+    var CN_DOOR_OPENER     = "DOOROPENER.";
+    var CN_DOOR_SENSOR     = "DOOR_SENSOR.";
+    var CN_DUAL_WHITE_BRIGHTNESS = "DUAL_WHITE_BRIGHTNESS";
+    var CN_DUAL_WHITE_COLOR = "DUAL_WHITE_COLOR";
+    var CN_GENERIC_INPUT_TRANSMITTER = "GENERIC_INPUT_TRANSMITTER.";
+    var CN_HEATING_CONTROL = "HEATING_CONTROL.";
+    var CN_HEATING_CONTROL_HMIP     = "HEATING_CONTROL_HMIP.";
+    var CN_HMIP_BUTTON     = "BUTTON_NO_FUNCTION.";
+    var CN_JALOUSIE        = "JALOUSIE.";
+    var CN_LOCK            = "LOCK.";
+    var CN_NONE            = "NONE";
+    var CN_POWERMETER      = "POWERMETER.";
+    var CN_POWERMETER_IEC1  = "POWERMETER_IEC1.";
+    var CN_POWERMETER_IEC2  = "POWERMETER_IEC2.";
+    var CN_POWERMETER_IGL  = "POWERMETER_IGL.";
+    var CN_POWERMETER_PSM  = "POWERMETER_PSM.";
+    var CN_PRESENCEDETECTOR  = "PRESENCEDETECTOR_TRANSCEIVER.";
+    var CN_RC19_DISPLAY    = "RC19_DISPLAY.";
+    var CN_RGBW_AUTOMATIC  = "RGBW_AUTOMATIC.";
+    var CN_RGBW_COLOR       = "RGBW_COLOR.";
+    var CN_RGB_COLOR        = "RGB_COLOR.";
+    var CN_RHS             = "RHS.";
+    var CN_SHUTTER_TRANSMITTER      = "SHUTTER_TRANSMITTER.";
+    var CN_SHUTTER_VIRTUAL_RECEIVER = "SHUTTER_VIRTUAL_RECEIVER.";
+    var CN_SMOKE_DETECTOR  = "SMOKE_DETECTOR.";
+    var CN_SWITCH          = "SWITCH.";
+    var CN_SWITCH_TRANSM   = "SWITCH_TRANSMITTER.";
+    var CN_THERMO          = "TEMP.";
+    var CN_WEEKLY_PROFILE     = "WEEK_PROFILE.";
+    var CN_WINDOW          = "WINDOW.";
+    var CN_WIN_SC          = "WIN_SC.";
+    var CN_WIN_SC_SECURE   = "WIN_SC_SECURE.";
+    var CN_WIN_SC_SENSOR   = "WIN_SC_SENSOR.";
+
+    var CN_EVENT_INTERFACE = "EVENT_INTERFACE.";
+    var CN_NOT_ACTIVE = "CHANNEL_NOT_ACTIVE";
+
+    var isInvisible = false;
+    var isKnownControl = false;
+    
+    ctrlReqUpdate = true;
+    boolean bUnknown = true;
+    string sLastControlName = "";
+    string sControlName = "";
+    boolean bSV = false;
+    boolean bIsControl = false;
+    
+    ictCH = cObj.ChannelType();
+    WriteLine("<table id='ctrl"#chnId#"tbl' class='ctrlTbl CLASS02520' border='0' >");
+    WriteLine("<tr>");
+    
+    string sE;
+    string oEName;
+
+    foreach( sE, cObj.DPs().EnumEnabledVisibleIDs() )
+    {
+      object oE = dom.GetObject( sE );
+      if( oE )
+      {
+        sControlName = oE.MetaData("CONTROL");
+        ! WriteLine( "<script>conInfo('sControlName: "#sControlName#"');</script>" );
+        if( sControlName )
+        {
+          !# NONE
+          bIsControl = ( sControlName.Find(CN_NONE) > -1 );
+          if( bIsControl && (sLastControlName != CN_NONE) )
+          {
+            ! IGNORE NONE
+          }
+        
+          !# SWITCH
+          bIsControl = ( sControlName.Find(CN_SWITCH) > -1 );
+          if( bIsControl && (sLastControlName != CN_SWITCH) )
+          {
+            object ch = dom.GetObject(chnId);
+            isKnownControl = true;
+            sLastControlName = CN_SWITCH;
+            if (ch.Label().Substr(5,4) != "BWTH") {
+              WriteLine( "<script>conInfo('Control SWITCH found.');</script>" );
+              Call("/esp/controls/switch.fn::CreateBinaryActuator()");
+            } else {
+              ! If the device is a HmIP-BWTH or HmIP-BWTH24
+              WriteLine( "<script>conInfo('Control BWTH found.');</script>" );
+              Call("/esp/controls/heating_control.fn::CreateBWTHSwitchState()");
+            }
+          }
+
+          !# SWITCH_TRANSMITTER
+          bIsControl = ( sControlName.Find(CN_SWITCH_TRANSM) > -1 );
+          if( bIsControl && (sLastControlName != CN_SWITCH_TRANSM) )
+          {
+            WriteLine( "<script>conInfo('Control SWITCH found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_SWITCH_TRANSM;
+            Call("/esp/controls/switch.fn::CreateSwitchTansmitter()");
+          }
+
+          !# DIMMER
+          bIsControl = ( sControlName.Find(CN_DIMMER) > -1 );
+          if( bIsControl && (sLastControlName!=CN_DIMMER) )
+          {
+            WriteLine( "<script>conInfo('Control DIMMER found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_DIMMER;
+            Call("/esp/controls/dimmer.fn::CreateDimmingActuator()");
+          }
+
+          !# CN_DUAL_WHITE_BRIGHTNESS
+          bIsControl = ( sControlName.Find(CN_DUAL_WHITE_BRIGHTNESS) > -1 );
+          if( bIsControl && (sLastControlName!=CN_DUAL_WHITE_BRIGHTNESS) )
+          {
+            WriteLine( "<script>conInfo('Control DUAL_WHITE_BRIGHTNESS found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_DUAL_WHITE_BRIGHTNESS;
+            Call("/esp/controls/dual_white_controller.fn::CreateDualWhiteBrightnessActuator()");
+          }
+
+          !# CN_DUAL_WHITE_COLOR
+          bIsControl = ( sControlName.Find(CN_DUAL_WHITE_COLOR) > -1 );
+          if( bIsControl && (sLastControlName!=CN_DUAL_WHITE_COLOR) )
+          {
+            WriteLine( "<script>conInfo('Control DUAL_WHITE_COLOR found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_DUAL_WHITE_COLOR;
+            Call("/esp/controls/dual_white_controller.fn::CreateDualWhiteColorActuator()");
+          }
+
+          !# BLIND
+          bIsControl = ( sControlName.Find(CN_BLIND) > -1 );
+          if( bIsControl && (sLastControlName!=CN_BLIND) )
+          {
+            WriteLine( "<script>conInfo('Control BLIND found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_BLIND;
+            Call("/esp/controls/blind.fn::CreateShutterActuator()");
+          }
+
+          !# CN_BLIND_TRANSMITTER
+          bIsControl = ( sControlName.Find(CN_BLIND_TRANSMITTER) > -1 );
+          if( bIsControl && (sLastControlName!=CN_BLIND_TRANSMITTER) )
+          {
+            WriteLine( "<script>conInfo('Control BLIND_TRANSMITTER found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_BLIND_TRANSMITTER;
+            Call("/esp/controls/blind.fn::CreateBlindTransmitter()");
+          }
+
+          !# CN_BLIND_VIRTUAL_RECEIVER
+          bIsControl = ( sControlName.Find(CN_BLIND_VIRTUAL_RECEIVER) > -1 );
+          if( bIsControl && (sLastControlName!=CN_BLIND_VIRTUAL_RECEIVER) )
+          {
+            WriteLine( "<script>conInfo('Control BLIND_VIRTUAL_RECEIVER found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_BLIND_VIRTUAL_RECEIVER;
+            Call("/esp/controls/blind.fn::CreateBlindVirtualReceiver()");
+          }
+
+          !# CN_SHUTTER_TRANSMITTER
+          bIsControl = ( sControlName.Find(CN_SHUTTER_TRANSMITTER) > -1 );
+          if( bIsControl && (sLastControlName!=CN_SHUTTER_TRANSMITTER) )
+          {
+            WriteLine( "<script>conInfo('Control SHUTTER_TRANSMITTER found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_SHUTTER_TRANSMITTER;
+            Call("/esp/controls/blind.fn::CreateShutterTransmitter()");
+          }
+
+          !# CN_SHUTTER_VIRTUAL_RECEIVER
+          bIsControl = ( sControlName.Find(CN_SHUTTER_VIRTUAL_RECEIVER) > -1 );
+          if( bIsControl && (sLastControlName!=CN_SHUTTER_VIRTUAL_RECEIVER) )
+          {
+            WriteLine( "<script>conInfo('Control SHUTTER_VIRTUAL_RECEIVER found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_SHUTTER_VIRTUAL_RECEIVER;
+            Call("/esp/controls/blind.fn::CreateShutterVirtualReceiver()");
+          }
+
+          !# CN_JALOUSIE
+          bIsControl = ( sControlName.Find(CN_JALOUSIE) > -1 );
+          if( bIsControl && (sLastControlName!=CN_JALOUSIE) )
+          {
+            WriteLine( "<script>conInfo('Control JALOUSIE found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_JALOUSIE;
+            Call("/esp/controls/blind.fn::CreateJalousieActuator()");
+          }
+
+          !# WINDOW
+          bIsControl = ( sControlName.Find(CN_WINDOW) > -1 );
+          if( bIsControl && (sLastControlName!=CN_WINDOW) )
+          {
+            WriteLine( "<script>conInfo('Control WINDOW found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_WINDOW;
+            Call("/esp/controls/window.fn::CreateWinMatic()");
+          }
+          
+          !# LOCK
+          bIsControl = ( sControlName.Find(CN_LOCK) > -1 );
+          if( bIsControl && (sLastControlName!=CN_LOCK) )
+          {
+            WriteLine( "<script>conInfo('Control LOCK found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_LOCK;
+            Call("/esp/controls/lock.fn::CreateKeyMatic()");
+          }
+ 
+          !# BTN
+          bIsControl = ( sControlName.Find(CN_BTN_SHORT_ONLY) > -1 );
+          if( bIsControl && (sLastControlName!=CN_BTN_SHORT_ONLY) )
+          {
+            WriteLine( "<script>conInfo('Control BTN_SHORT_ONLY found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_BTN_SHORT_ONLY;
+            Call("/esp/controls/button.fn::CreateKeyShortOnly()");
+          }
+         
+          !# BUTTON
+          bIsControl = ( sControlName.Find(CN_BUTTON) > -1 );
+          if( bIsControl && (sLastControlName!=CN_BUTTON) )
+          {
+            WriteLine( "<script>conInfo('Control BUTTON found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_BUTTON;
+            Call("/esp/controls/button.fn::CreateKey()");
+          }
+
+          !# HMIP_BUTTON
+          bIsControl = ( sControlName.Find(CN_HMIP_BUTTON) > -1 );
+          if( bIsControl && (sLastControlName!=CN_HMIP_BUTTON) )
+          {
+            WriteLine( "<script>conInfo('Control CN_HMIP_BUTTON found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_HMIP_BUTTON;
+            Call("/esp/datapointconfigurator.fn::CreateNoFunction()");
+          }
+
+          !# DOOROPENER
+          bIsControl = ( sControlName.Find(CN_DOOR_OPENER) > -1 );
+          if( bIsControl && (sLastControlName!=CN_DOOR_OPENER) )
+          {
+            WriteLine( "<script>conInfo('Control DOOROPENER found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_DOOR_OPENER;
+            Call("/esp/controls/door_opener.fn::CreateDoorOpener()");
+          }
+
+          !# RC19_DISPLAY
+          bIsControl = ( sControlName.Find(CN_RC19_DISPLAY) > -1 );
+          if( bIsControl && (sLastControlName!=CN_RC19_DISPLAY) )
+          {
+            WriteLine( "<script>conInfo('Control RC19_DISPLAY found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_RC19_DISPLAY;
+            Call("/esp/controls/rc19_display.fn::CreateDisplay()");
+          }
+
+          !# DOOR_WINDOW_CONTACT
+          bIsControl = ( sControlName.Find(CN_DOOR_SENSOR) > -1 );
+          if( bIsControl && (sLastControlName!=CN_DOOR_SENSOR) )
+          {
+            WriteLine( "<script>conInfo('Control DOOR_WINDOW_CONTACT found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_DOOR_SENSOR;
+            Call("/esp/controls/door_window_contact.fn::CreateDoorWindowContact()");
+          }
+          
+          !# RHS (Rotary Handle Sensor - Fensterdrehgriffkontakt)
+          bIsControl = ( sControlName.Find(CN_RHS) > -1 );
+          if( bIsControl && (sLastControlName!=CN_RHS) )
+          {
+            WriteLine( "<script>conInfo('Control RHS found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_RHS;
+            Call("/esp/controls/rhs.fn::CreateWndRotSensor()");
+          }
+          
+          !# THERMOSTAT
+          bIsControl = ( sControlName.Find(CN_THERMO) > -1 );
+          if( bIsControl && (sLastControlName!=CN_THERMO) && (sControlName.Find('COLORTEMP') == -1))
+          {
+            WriteLine( "<script>conInfo('Control THERMOSTAT found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_THERMO;
+            Call("/esp/controls/thermostat.fn::CreateThermostat()");
+          }
+
+          !# FREQUENCY
+          bIsControl = ( sControlName.Find(CN_DIGITAL_ANALOG_OUTPUT) > -1 );
+          if( bIsControl && (sLastControlName!=CN_DIGITAL_ANALOG_OUTPUT) )
+          {
+            WriteLine( "<script>conInfo('Control DIGITAL_ANALOG_OUTPUT found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_DIGITAL_ANALOG_OUTPUT;
+            Call("/esp/controls/frequency.fn::CreateFrequency()");
+          }
+
+          bIsControl = ( sControlName.Find(CN_DIGITAL_STATE) > -1 );
+          if( bIsControl && (sLastControlName!=CN_DIGITAL_STATE) )
+          {
+            WriteLine( "<script>conInfo('Control CN_DIGITAL_STATE found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_DIGITAL_STATE;
+            Call("/esp/controls/digitalstate.fn::CreateDigitalState()");
+          }
+
+          !# CAPACITIVE FILLING LEVEL SENSOR 
+          bIsControl = ( sControlName.Find(CN_CAPACITIVE_FILLING_SENSOR) > -1 );
+          if( bIsControl && (sLastControlName!=CN_CAPACITIVE_FILLING_SENSOR) )
+          {
+            WriteLine( "<script>conInfo('Control  CAPACITIVE_FILLING_SENSOR found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_CAPACITIVE_FILLING_SENSOR;
+            Call("/esp/controls/capacitive_filling_level_sensor.fn::CreateCapacitiveFillingSensor()");
+          }
+
+
+         !# DANGER
+          bIsControl = ( sControlName.Find(CN_DANGER) > -1 );
+          if( bIsControl && (sLastControlName!=CN_DANGER) )
+          {
+            WriteLine( "<script>conInfo('Control DANGER-Sensor found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_DANGER;
+            Call("/esp/controls/danger.fn::CreateDangerSensor()");
+          }
+
+          !# WIN_SC
+          bIsControl = ( sControlName.Find(CN_WIN_SC) > -1 );
+          if( bIsControl && (sLastControlName!=CN_WIN_SC) )
+          {
+            !WriteLine( "<script>conInfo('Control WIN_SC found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_WIN_SC;
+            Call("/esp/controls/win_sc.fn::CreateWin_SC()");
+          }
+
+          !# WIN_SC_SENSOR
+          bIsControl = ( sControlName.Find(CN_WIN_SC_SENSOR) > -1 );
+          if( bIsControl && (sLastControlName!=CN_WIN_SC_SENSOR) )
+          {
+            !WriteLine( "<script>conInfo('Control WIN_SC_SENSOR found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_WIN_SC_SENSOR;
+            Call("/esp/controls/win_sc_sensor.fn::CreateWin_SC_SENSOR()");
+          }
+
+          !# WIN_SC_SECURE
+          bIsControl = ( sControlName.Find(CN_WIN_SC_SECURE) > -1 );
+          if( bIsControl && (sLastControlName != CN_WIN_SC_SECURE) )
+          {
+            !WriteLine( "<script>conInfo('Control CN_WIN_SC_SECURE found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_WIN_SC_SECURE;
+            Call("/esp/controls/win_sc_secure.fn::CreateWin_SC_SECURE()");
+          }
+
+          !# HEATING_CONTROL
+          bIsControl = ( sControlName.Find(CN_HEATING_CONTROL) > -1 );
+          if( bIsControl && (sLastControlName != CN_HEATING_CONTROL) )
+          {
+            WriteLine( "<script>conInfo('Control CN_HEATING_CONTROL found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_HEATING_CONTROL;
+            Call("/esp/controls/heating_control.fn::CreateHeatingControl()");
+          }
+
+          !# HEATING_CONTROL_HMIP
+          bIsControl = ( sControlName.Find(CN_HEATING_CONTROL_HMIP) > -1 );
+          if( bIsControl && (sLastControlName != CN_HEATING_CONTROL_HMIP) )
+          {
+            WriteLine( "<script>conInfo('Control CN_HEATING_CONTROL_HMIP found.');</script>" );
+            object ch = dom.GetObject(chnId);
+            isKnownControl = true;
+            sLastControlName = CN_HEATING_CONTROL_HMIP;
+            if (ch.Label() == "ALPHA-IP-RBGa") {
+              Call("/esp/controls/heating_control.fn::CreateHeatingControlHmIPa()");
+            } else {
+              Call("/esp/controls/heating_control.fn::CreateHeatingControlHmIP()");
+            }
+          }
+
+          !# POWERMETER
+          bIsControl = ( sControlName.Find(CN_POWERMETER) > -1 );
+          if( bIsControl && (sLastControlName != CN_POWERMETER) )
+          {
+            WriteLine( "<script>conInfo('Control CN_POWERMETER found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_POWERMETER;
+            Call("/esp/controls/powermeter.fn::CreatePowermeterControl()");
+          }
+
+          !# POWERMETER_IGL
+          bIsControl = ( sControlName.Find(CN_POWERMETER_IGL) > -1 );
+          if( bIsControl && (sLastControlName != CN_POWERMETER_IGL) )
+          {
+            WriteLine( "<script>conInfo('Control CN_POWERMETER_IGL found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_POWERMETER_IGL;
+            Call("/esp/controls/powermeter.fn::CreatePowermeterIGLControl()");
+          }
+          
+          !# POWERMETER_PSM
+          bIsControl = ( sControlName.Find(CN_POWERMETER_PSM) > -1 );
+          if( bIsControl && (sLastControlName != CN_POWERMETER_PSM) )
+          {
+            WriteLine( "<script>conInfo('Control CN_POWERMETER_PSM found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_POWERMETER_PSM;
+            Call("/esp/controls/powermeter.fn::CreatePowermeterPSMControl()");
+          }
+
+          !# POWERMETER_IEC1
+          bIsControl = ( sControlName.Find(CN_POWERMETER_IEC1) > -1 );
+          if( bIsControl && (sLastControlName != CN_POWERMETER_IEC1) )
+          {
+            WriteLine( "<script>conInfo('Control CN_POWERMETER_IEC1 found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_POWERMETER_IEC1;
+            Call("/esp/controls/powermeter.fn::CreatePowermeterIECControl()");
+          }
+
+          !# POWERMETER_IEC2
+          bIsControl = ( sControlName.Find(CN_POWERMETER_IEC2) > -1 );
+          if( bIsControl && (sLastControlName != CN_POWERMETER_IEC2) )
+          {
+            WriteLine( "<script>conInfo('Control CN_POWERMETER_IEC2 found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_POWERMETER_IEC2;
+            Call("/esp/controls/powermeter.fn::CreatePowermeterIECControl()");
+          }
+
+          !# CN_RGBW_COLOR
+          bIsControl = ( sControlName.Find(CN_RGBW_COLOR) > -1 );
+          if( bIsControl && (sLastControlName != CN_RGBW_COLOR) )
+          {
+            WriteLine( "<script>conInfo('Control CN_RGBW_COLOR found.');</script>" );
+            object ch = dom.GetObject(chnId);
+            isKnownControl = true;
+            sLastControlName = CN_RGBW_COLOR;
+
+            if (ch.Label().Substr(0,7) == "VIR-LG-") {
+              string chLabel = ch.Label();
+              if((chLabel.Find("RGBW") > -1) || (chLabel.Find("GROUP") > -1)) {
+                Call("/esp/controls/rgbw.fn::CreateVIR-LGRGBWColorControl()");
+               }
+            } else {
+               Call("/esp/controls/rgbw.fn::CreateRGBWColorControl()");
+            }
+          }
+
+          !# CN_RGB_COLOR
+          bIsControl = ( sControlName.Find(CN_RGB_COLOR) > -1 );
+          if( bIsControl && (sLastControlName != CN_RGB_COLOR) )
+          {
+            WriteLine( "<script>conInfo('Control CN_RGB_COLOR found.');</script>" );
+            object ch = dom.GetObject(chnId);
+            isKnownControl = true;
+            sLastControlName = CN_RGB_COLOR;
+            if (ch.Label().Substr(0,7) == "VIR-LG-") {
+              string chLabel = ch.Label();
+              if(chLabel.Find("RGB") > -1) {
+                Call("/esp/controls/rgbw.fn::CreateVIR-LGRGBColorControl()");
+               }
+            }
+          }
+
+          !# CN_COLORTEMP
+          bIsControl = ( sControlName.Find(CN_COLORTEMP) > -1 );
+          if( bIsControl && (sLastControlName != CN_COLORTEMP) )
+          {
+            WriteLine( "<script>conInfo('Control CN_COLORTEMP found.');</script>" );
+            object ch = dom.GetObject(chnId);
+            isKnownControl = true;
+            sLastControlName = CN_COLORTEMP;
+            if (ch.Label().Substr(0,7) == "VIR-LG-") {
+              Call("/esp/controls/rgbw.fn::CreateVIR-LGWhiteLevelControl()");
+            }
+          }
+
+
+          !# CN_RGBW_AUTOMATIC
+          bIsControl = ( sControlName.Find(CN_RGBW_AUTOMATIC) > -1 );
+          if( bIsControl && (sLastControlName != CN_RGBW_AUTOMATIC) )
+          {
+            WriteLine( "<script>conInfo('Control CN_RGBW_AUTOMATIC found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_RGBW_AUTOMATIC;
+            Call("/esp/controls/rgbw.fn::CreateRGBWAutomaticControl()");
+          }
+
+          !# CN_SMOKE_DETECTOR
+          bIsControl = ( sControlName.Find(CN_SMOKE_DETECTOR) > -1 );
+          if( bIsControl && (sLastControlName != CN_SMOKE_DETECTOR) )
+          {
+            WriteLine( "<script>conInfo('Control CN_SMOKE_DETECTOR found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_SMOKE_DETECTOR;
+            Call("/esp/controls/smokedetector.fn::CreateSmokeDetectorControl()");
+          }
+
+          !# CN_ARMING
+          bIsControl = ( sControlName.Find(CN_ARMING) > -1 );
+          if( bIsControl && (sLastControlName != CN_ARMING) )
+          {
+            WriteLine( "<script>conInfo('Control CN_ARMING found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_ARMING;
+            Call("/esp/controls/alarmsirene.fn::CreateAlarmArmingControl()");
+          }
+
+          !# CN_DIMMER_REAL
+          bIsControl = ( sControlName.Find(CN_DIMMER_REAL) > -1 );
+          if( bIsControl && (sLastControlName != CN_DIMMER_REAL) )
+          {
+            WriteLine( "<script>conInfo('Control CN_DIMMER_REAL found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_DIMMER_REAL;
+            Call("/esp/controls/dimmer.fn::CreateDimmerRealInfoControl()");
+          }
+
+          !# CN_ALARM_SWITCH_VIRTUAL_RECEIVER - HmIP
+          bIsControl = ( sControlName.Find(CN_ALARM_SWITCH_VIRTUAL_RECEIVER) > -1 );
+          if( bIsControl && (sLastControlName != CN_ALARM_SWITCH_VIRTUAL_RECEIVER) )
+          {
+            WriteLine( "<script>conInfo('Control CN_ALARM_SWITCH_VIRTUAL_RECEIVER found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_ALARM_SWITCH_VIRTUAL_RECEIVER;
+            Call("/esp/controls/alarmsirene.fn::CreateAlarmSwitchVirtualReceiver()");
+          }
+
+          !# CN_CLIMATE_CONTROL_FLOOR_TRANSCEIVER - HmIP
+          bIsControl = ( sControlName.Find(CN_CLIMATE_CONTROL_FLOOR_TRANSCEIVER) > -1 );
+          if( bIsControl && (sLastControlName != CN_CLIMATE_CONTROL_FLOOR_TRANSCEIVER) )
+          {
+            WriteLine( "<script>conInfo('Control CN_CLIMATE_CONTROL_FLOOR_TRANSCEIVER found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_CLIMATE_CONTROL_FLOOR_TRANSCEIVER;
+            Call("/esp/controls/climatecontrol_floor_transceiver.fn::CreateClimateControlFloorTransceiver()");
+          }
+
+          !# CN_CLIMATE_CONTROL_FLOOR_PUMP_TRANSCEIVER - HmIP
+          bIsControl = ( sControlName.Find(CN_CLIMATE_CONTROL_FLOOR_PUMP_TRANSCEIVER) > -1 );
+          if( bIsControl && (sLastControlName != CN_CLIMATE_CONTROL_FLOOR_PUMP_TRANSCEIVER) )
+          {
+            WriteLine( "<script>conInfo('Control CN_CLIMATE_CONTROL_FLOOR_PUMP_TRANSCEIVER found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_CLIMATE_CONTROL_FLOOR_PUMP_TRANSCEIVER;
+            Call("/esp/controls/climatecontrol_floor_transceiver.fn::CreateClimateControlFloorPumpTransceiver()");
+          }
+
+          !# CN_GENERIC_INPUT_TRANSMITTER - HmIP
+          bIsControl = ( sControlName.Find(CN_GENERIC_INPUT_TRANSMITTER) > -1 );
+          if( bIsControl && (sLastControlName != CN_GENERIC_INPUT_TRANSMITTER) )
+          {
+            WriteLine( "<script>conInfo('Control CN_GENERIC_INPUT_TRANSMITTER found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_GENERIC_INPUT_TRANSMITTER;
+            Call("/esp/controls/generic_input_transmitter.fn::CreateGenericInputTransmitter()");
+          }
+
+          !# CN_PRESENCEDETECTOR
+          bIsControl = ( sControlName.Find(CN_PRESENCEDETECTOR) > -1 );
+          if( bIsControl && (sLastControlName != CN_PRESENCEDETECTOR) )
+          {
+            WriteLine( "<script>conInfo('Control CN_PRESENCEDETECTOR found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_PRESENCEDETECTOR;
+            Call("/esp/controls/motiondetector.fn::CreatePresenceDetector()");
+          }
+
+          !# CN_WEEKLY_PROFILE - HmIP
+          bIsControl = ( sControlName.Find(CN_WEEKLY_PROFILE) > -1 );
+          if( bIsControl && (sLastControlName != CN_WEEKLY_PROFILE) )
+          {
+            WriteLine( "<script>conInfo('Control CN_WEEKLY_PROFILE found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_WEEKLY_PROFILE;
+            Call("/esp/controls/hmip_weekly_program.fn::CreateWeeklyProgram()");
+          }
+
+          !# EVENT_INTERFACE
+          bIsControl = ( sControlName.Find(CN_EVENT_INTERFACE) > -1 );
+          if( bIsControl && (sLastControlName!=CN_EVENT_INTERFACE) )
+          {
+            WriteLine( "<script>conInfo('Control EVENT_INTERFACE found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_EVENT_INTERFACE;
+            Call("/esp/datapointconfigurator.fn::CreateEventInterface()");
+          }
+
+          !# CHANNEL_NOT_ACTIVE
+          bIsControl = ( sControlName.Find(CN_NOT_ACTIVE) > -1 );
+          if( bIsControl && (sLastControlName!=CN_NOT_ACTIVE) )
+          {
+            WriteLine( "<script>conInfo('Control CHANNEL_NOT_ACTIVE found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_NOT_ACTIVE;
+            Call("/esp/datapointconfigurator.fn::CreateChannelNotActive()");
+          }
+        }
+        else
+        {
+          oEName = oE.Name();
+          bSV = true;
+        }
+      }
+    }
+    if (!isKnownControl)
+    {
+      WriteLine( "<script>conInfo('Control UNKNOWN found.');</script>" );
+      WriteLine( '</tr></table><table cellspacing="0" class="ctrlTbl CLASS02510" border="0" ><tr>' );
+      Call("/esp/datapointconfigurator.fn::CreateUnknown()");
+    }
+    if ( (isKnownControl) && (bSV)  && (oEName.Find("HmIP-RF.") == -1) )
+    {
+      WriteLine( '</tr></table>');
+      WriteLine( "<script>conInfo('SysVar found.');</script>" );
+      WriteLine('<table cellspacing="0" class="ctrlTbl CLASS02510" border="0" ><tr>' );
+      Call("/esp/datapointconfigurator.fn::CreateSysVars()");
+    }
+    WriteLine( '</tr>' );
+    WriteLine( '</table>' );
+  }
+
+  ! write update script
+  if( ctrlReqUpdate )
+  {
+    cId = chnId;
+    WriteLine("<script type='text/javascript'>");
+    string sLastTime = "";
+    Call("/esp/system.fn::getLastTime()");
+    if( cObj.IsTypeOf( OT_PROGRAM ) ) {
+      WriteLine("updateChannelControl(" # chnId # ", '" # sLastTime # cObj.Active() # "');");
+    } else {
+      WriteLine("updateChannelControl(" # chnId # ", '" # sLastTime # "');");
+    }    WriteLine("</script>");
+  }  
+
+    !WriteLine("<script type='text/javascript'>");
+      !WriteLine("translatePage('#content')");
+    !WriteLine("</script>");
+
+  return;
+}
+
+function ::StringCut()
+{ 
+  if(((sName.Find(" ") == -1) || (sName.Find(" ") >= 9)) && (sName.Length()>9) && (sName.Find("${") == -1))
+  {
+    string sI = "";
+    integer iCurrCut = 0;
+    integer iLastCut = 0;
+    string sWorkingName = "";
+
+    foreach(sI,system.GenerateEnum(0,sName.Length()))
+    {
+      iCurrCut = iCurrCut +1;
+
+      if( (iCurrCut % iLength) == 0 )
+      {
+        sWorkingName = sWorkingName#sName.Substr(iLastCut,iLength)#'<br />';
+        iLastCut = iCurrCut;
+      }
+    }
+    sWorkingName = sWorkingName#sName.Substr(iLastCut,sName.Length())#' ';
+    sName = sWorkingName;
+  }
+}
+
+function ::CreateEventInterface()
+{
+  object objEvent = cObj.DPByControl("EVENT_INTERFACE.TRIGGER");
+  if( objEvent )
+  {
+    WriteLine("<td>");
+      WriteLine("<table class='ControlBtnOff CLASS02511' id='"#chnId#"event' >"); 
+        WriteLine("<tr>");
+          WriteLine("<td  class='CLASS02513'>");
+            WriteLine("<div align='center'>");
+              WriteLine("<img id='btn"#chnId#"s' src='/ise/img/btn_no_press.png' width='80' height='80' />");
+            WriteLine("</div>");            
+          WriteLine("</td>");
+        WriteLine("</tr>");
+        WriteLine("<tr><td id='"#chnId#"Txt'>Betätigen</td></tr>");
+      WriteLine("</table>");
+    WriteLine("</td>");
+    WriteLine("<td class='CLASS02524'>&nbsp;</td>");
+    
+    WriteLine("<script type='text/javascript'>");
+      WriteLine("ibk"#cObj.ID()#" = new iseButtonsEvent("#cObj.ID()#", "#objEvent.ID()#", "#system.GetVar("iStatusOnly")#");");
+      Write("jQuery('#"#chnId#"Txt').html(translateKey('actionStatusControlActivate'));");
+    WriteLine("</script>");
+  }
+  return;
+}
+
+function ::CreateChannelNotActive()
+{
+  WriteLine("<td>");
+    WriteLine("<table class=\"ControlBtnInfo\">");
+      WriteLine("<tr>");
+        WriteLine("<td>");
+          WriteLine("<div>");
+            WriteLine("${controlChannelNotActive}");
+          WriteLine("</div>");
+        WriteLine("</td>");
+      WriteLine("</tr>");
+    WriteLine("</table>");
+  WriteLine("</td>");
+  return;
+}
+
+function ::CreateNoFunction()
+{
+  WriteLine("<td>");
+    WriteLine("<table class=\"ControlBtnInfo\">");
+      WriteLine("<tr>");
+        WriteLine("<td>");
+          WriteLine("<div>");
+            WriteLine("${controlChannelHasNoFunction}");
+          WriteLine("</div>");
+        WriteLine("</td>");
+      WriteLine("</tr>");
+    WriteLine("</table>");
+  WriteLine("</td>");
+}
+
+function ::CreateUnknown()
+{
+  boolean bStatusOnly = (system.GetVar("iStatusOnly") == 0);
+  WriteLine( '<td class="CLASS02519">' );
+    WriteLine( '<table cellspacing="10" style="margin: 10px 10px 10px -8px;">' );
+    WriteLine( '<tr>');
+    integer i = 0;
+    string sEnum = "";
+    
+    if( (cObj.IsTypeOf( OT_VARDP )) || (cObj.IsTypeOf( OT_ALARMDP)) )
+    {
+      sEnum = cObj.ID().ToString();
+    }
+    else
+    {
+      sEnum = cObj.DPs().EnumEnabledVisibleIDs();
+    }
+    
+    string sKnownControls = "NONE.SWITCH.DIMMER.BLIND.WINDOW.LOCK.BUTTON.RC19_DISPLAY.DOOR_SENSOR.RHS.TEMP.ANALOG_OUTPUT.";
+    string s;
+    foreach( s, sEnum )
+    {
+      object oDP = dom.GetObject( s );
+      if( oDP )
+      {
+        boolean bIsKnownControl = false;
+        string sCName = oDP.MetaData("CONTROL");
+        if( sCName )
+        {
+          integer iPosPoint = sCName.Find('.');
+          if( iPosPoint != -1 )
+          {
+            string sCtrlName = sCName.Substr(0,iPosPoint);
+            integer iPosCtrl = sKnownControls.Find( sCtrlName );
+            if( iPosCtrl != -1 )
+            {
+              bIsKnownControl = true;
+            }
+          }
+          !# Parameter is not visible
+          if(  sCName.Find("INVISIBLE") > -1)
+          {
+            WriteLine( "<script>conInfo('Control not visible.');</script>" );
+            isInvisible = true;
+          } else {
+            isInvisible = false;
+          }
+        }
+        if( (!bIsKnownControl) && (!isInvisible) )
+        {
+          var value = oDP.Value();
+
+          boolean bIsSysVar = ((oDP.IsTypeOf( OT_VARDP )) || (oDP.IsTypeOf( OT_ALARMDP )));
+          boolean bIsHssDp = ( oDP.IsTypeOf( OT_HSSDP ) );
+          boolean bChannel = ( cObj.IsTypeOf( OT_CHANNEL ) );
+          string sTitle = "";
+          string sKey = "";
+          boolean bHideValue = false;
+          if( bChannel )
+          {
+            if( bIsHssDp )
+            {
+              string sLongKey = cObj.HssType()#"|"#oDP.HSSID();
+              string sShortKey = oDP.HSSID();
+              if( (oDP.ValueType() == ivtInteger) && (oDP.ValueSubType() == istEnum) )
+              {
+                ! Current HmIP devices don`t work properly with web.webGetValueFromList
+                ! Therefore this is deactivated
+                if ( (oEName.Find("HmIP-RF.") == -1) ) {
+                 sLongKey = sLongKey#"="#web.webGetValueFromList( oDP.ValueList(), value );
+                 sShortKey = sShortKey#"="#web.webGetValueFromList( oDP.ValueList(), value );
+                } else {
+                  sLongKey = sLongKey#"="#value;
+                  sShortKey = sShortKey#"="#value;
+                }
+
+                bHideValue = true;
+              }
+              if( (oDP.ValueType() == ivtBinary ) && ((oDP.ValueSubType() == istGeneric)||(oDP.ValueSubType() == istBool)||(oDP.ValueSubType() == istSwitch)) )
+              {
+                string sPVal = "";
+                if( oDP.Value() )
+                {
+                  sPVal = "TRUE";
+                }
+                else
+                {
+                  sPVal = "FALSE";
+                }
+                sLongKey = sLongKey#"="#sPVal;
+                sShortKey = sShortKey#"="#sPVal;
+                bHideValue = true;
+              }
+              sTitle = web.webKeyFromStringTable( sLongKey );
+              if( !sTitle.Length() )
+              {
+                sTitle = web.webKeyFromStringTable( sShortKey );
+                if( !sTitle.Length() )
+                {
+                  sTitle = "["#sShortKey#"]";
+                }
+              }
+            }
+            else
+            {
+              sTitle = oDP.Name();
+            }
+          }
+          else
+          {
+            sTitle = oDP.Name();
+          }
+
+          string sValueUnit = oDP.ValueUnit();
+          string sSpace = " ";
+          if( sValueUnit == "degree" ) { sValueUnit = "&deg;"; sSpace = ""; }
+          if( sValueUnit == "100%" )
+          {
+            value = value * 100;
+            sValueUnit = "%";
+          }
+          if( sValueUnit == "%" )
+          {
+            sSpace = "";
+          }
+
+          string sValue = "?";
+
+          boolean bBoolean = ( value.Type() == "boolean" );
+          boolean bReal = ( value.Type() == "real" );
+
+          if( bBoolean && bChannel )
+          {
+            string sVLKey = "";
+            if( value == false ) { sVLKey = "=FALSE"; }
+            if( value == true ) { sVLKey = "=TRUE"; }
+            sValue = web.webKeyFromStringTable( sKey#sVLKey );
+            if( !sValue.Length() )
+            {
+              sValue = value.ToString(0);
+              if( !sTitle.Length() )
+              {
+                sTitle = sKey;
+              }
+            }
+            else
+            {
+              sTitle = "";
+            }
+          }
+          else
+          {
+            if( !sTitle.Length() )
+            {
+              sTitle = sKey;
+            }
+          }
+
+          if( bReal )
+          {
+            sValue = value.ToString(2);
+
+            ! Show the illumination without decimal places
+            if ( (oEName.Find("HmIP-RF.") != -1) && (sShortKey == "ILLUMINATION") ) {
+              sValue = value.ToString(0);
+            }
+          }
+
+          if( (!bBoolean) && (!bReal) )
+          {
+            sValue = value.ToString(0);
+          }
+
+          if( !value.ToString().Length() )
+          {
+            sValue = "0";
+          }
+
+          if( bHideValue )
+          {
+            if( ( oDP.Operations() & OPERATION_WRITE ) == 0 )
+            {
+              sValue = sTitle;
+              sTitle = "";
+            }
+          }
+
+         ! if( !(i%2) ) { WriteLine( '<tr>' ); }
+          boolean bExistControl = true;
+          if( (bStatusOnly) && (!bIsSysVar) && (sLastControlName != ""))
+          {
+            bExistControl = false;
+          }
+          if( bExistControl  )
+          {
+            WriteLine( '<td>' );
+
+              WriteLine( '<div class="ControlBtnInfo CLASS02532">' );
+              if(sTitle == "") {
+                WriteLine( '<span class="_CLASS02533"><span class="CLASS02534 j_translate">'#sTitle#'</span>' );
+                }
+                else {
+                WriteLine( '<span class="_CLASS02533"><span class="CLASS02534 j_translate">'#sTitle#':</span>' );
+                }
+                boolean tbRead =  ( ( oDP.Operations() & OPERATION_READ ) != 0 );
+                boolean tbEvent = ( ( oDP.Operations() & OPERATION_EVENT ) != 0 );
+                boolean tbWrite = ( ( oDP.Operations() & OPERATION_WRITE ) != 0 );
+                boolean bBoolean = false;
+
+                if (cObj.IsTypeOf(OT_VARDP) || cObj.IsTypeOf(OT_ALARMDP)) {
+                  tbWrite = false;
+                }
+
+                WriteLine( '<span class="CLASS02535" style="color:white">' );
+
+                if( !tbWrite )
+                {
+                  string sValueh = "";
+                  if (oDP.HssType() == "WIND_DIRECTION")
+                  {
+                    Call("/esp/datapointconfigurator.fn::ConvWindDir()");
+                  }
+                  WriteLine(sValueh#sSpace#sValue#sSpace#sValueUnit );
+                }
+                else
+                {
+                  if( !bBoolean )
+                  {
+                    if( (bStatusOnly) && (!bIsSysVar) && (sLastControlName == ""))
+                    {
+                      string sDivider = "";
+                      if( oDP.ValueUnit() == "100%" ) { sDivider = "/100"; }
+                      WriteLine( "<input size='6' value='"#sValue#"' onblur='setDpState("#oDP.ID()#", value"#sDivider#")' />"#sSpace#sValueUnit );
+                    }
+                    else
+                    {
+                      string sSysVarVal = "";
+                      object cObjTmp = oDP;
+                      integer iVT = oDP.ValueType();
+                      integer iST = oDP.ValueSubType();
+                      boolean bLogic  = ( (iVT==ivtBinary)  && (iST==istBool)    );
+                      boolean bList   = ( (iVT==ivtInteger) && (iST==istEnum)    );
+                      boolean bNumber = ( (iVT==ivtFloat)   && (iST==istGeneric) );
+                      boolean bAlarm  = ( (iVT==ivtBinary)  && (iST==istAlarm)   );
+                      boolean bString = ( (iVT==ivtString)  && (iST==istChar8859));
+                      Call( "/esp/system.fn::getSysVarValAsString()" );
+                      WriteLine( sSysVarVal );
+                    }
+                  }
+                  else
+                  {
+
+                    if( system.GetVar("iStatusOnly") == 0 )
+                    {
+                      string sClassName;
+
+                      sClassName = "CLASS02516";
+                      if( oDP.Value() == true ) { sClassName = "CLASS02517"; }
+                      WriteLine("<span class='" # sClassName # "' onclick='setDpState("#oDP.ID()#", true)'>&nbsp;&nbsp;An&nbsp;&nbsp;</span>&nbsp;&nbsp;");
+
+                      sClassName = "CLASS02516";
+                      if( (oDP.Value() == false) || (oDP.Value() == "") ) { sClassName = "CLASS02517"; }
+                      WriteLine("<span class='" # sClassName # "' onclick='setDpState("#oDP.ID()#", false)'>&nbsp;Aus&nbsp;</span>");
+                    }
+                    else
+                    {
+                      if (oDP.Value())
+                      {
+                        WriteLine(oDP.ValueName1());
+                      }
+                      else
+                      {
+                        WriteLine(oDP.ValueName0());
+                      }
+                    }
+                  }
+                }
+                WriteLine("</span></span>");
+              WriteLine( '</div>' );
+            WriteLine( '</td>' );
+          }
+          if( (i%2) ) { WriteLine( '</tr><tr>' ); }
+          i = i + 1;
+        }
+      }
+    }
+  WriteLine('</tr>');
+  WriteLine('</table>');
+  WriteLine('</td>');
+  WriteLine('<script type="text/javascript">translatePage("#tblHDeviChannel");</script>');
+  return;
+}
+
+
+function ::ConvWindDir() {
+
+! --- Konvertierung der Gradanzeige in Himmelsrichtungen ---
+
+ integer iValue = sValue.ToInteger() ; 
+ 
+ sValueh = "no value";
+ 
+ if ( (iValue >= 346) || (iValue <= 15) ) 
+ { 
+  sValueh = "N  ";
+  return;
+ }
+ if ( (iValue >= 16) && (iValue <= 75) )
+ {
+  sValueh = "NO  ";  
+  return;
+ }
+ if ( (iValue >= 76) && (iValue <= 105) )
+ {
+  sValueh = "O  ";  
+  return;
+ }
+ if ( (iValue >= 106) && (iValue <= 165) )
+ {
+  sValueh = "SO  ";  
+  return;
+ }
+ if ( (iValue >= 166) && (iValue <= 195) )
+ {
+  sValueh = "S  ";  
+  return;
+ }
+ if ( (iValue >= 196) && (iValue <= 255) )
+ {
+  sValueh = "SW  ";  
+  return;
+ }
+ if ( (iValue >= 256) && (iValue <= 285) )
+ {
+  sValueh = "W  ";  
+  return;
+ }
+ if ( (iValue >= 286) && (iValue <= 345) )
+ {
+  sValueh = "NW  ";  
+  return;
+ }
+
+ return;
+}
+
+function ::CreateSysVar()
+{
+  WriteLine( '<td class="CLASS02537">' );
+    WriteLine( '<div class="ControlBtnInfo CLASS02538" >' );
+      
+      string sSysVarVal = '';
+      object cObjTmp = cObj;
+      Call( "/esp/system.fn::getSysVarValAsString()" );
+  
+      WriteLine( '<span id="sysvs'#cObj.ID()#'" class="CLASS02535">'#sSysVarVal#'</span>' );
+    WriteLine( '</div>' );
+  WriteLine( '</td>' );
+  return;
+}
+
+function ::CreateSysVars()
+{
+  WriteLine( '<td class="CLASS02539">' );
+  WriteLine( '<table cellspacing="10">' );
+  WriteLine( '<tr>');
+  integer i = 0;
+  string s;
+  foreach(s,cObj.DPs().EnumIDs())
+  {
+    object oSV = dom.GetObject( s );
+    if( oSV )
+    {
+      if( oSV.IsTypeOf( OT_VARDP ) || oSV.IsTypeOf( OT_ALARMDP ) )
+      {
+!        if( !(i%2) ) { WriteLine( '<tr>' ); }
+        WriteLine( '<td class="CLASS02540">' );
+          WriteLine( '<div class="ControlBtnInfo CLASS02538" >' );
+            WriteLine( '<span class="CLASS02534">'#oSV.Name()#':</span>' );
+            
+            string sSysVarVal = "";
+            object cObjTmp = oSV;
+            integer iVT = cObjTmp.ValueType();
+            integer iST = cObjTmp.ValueSubType();
+            boolean bLogic  = ( (iVT==ivtBinary)  && (iST==istBool)    );
+            boolean bList   = ( (iVT==ivtInteger) && (iST==istEnum)    );
+            boolean bNumber = ( (iVT==ivtFloat)   && (iST==istGeneric) );
+            boolean bAlarm  = ( (iVT==ivtBinary)  && (iST==istAlarm)   );
+            boolean bString = ( (iVT==ivtString)  && (iST==istChar8859));
+            boolean bSysVar = ( bLogic || bList || bNumber || bAlarm || bString);
+            Call( "/esp/system.fn::getSysVarValAsString()" );
+        
+            WriteLine( '<span class="CLASS02535">'#sSysVarVal#'</span>' );
+          WriteLine( '</div>' );
+        WriteLine( '</td>' );
+        if( (i%2) ) { WriteLine( '</tr><tr>' ); }
+        i = i + 1;
+      }
+    }
+  }
+  WriteLine( '</tr>' );
+  WriteLine( '</table>' );
+  WriteLine( '</td>' );
+  
+  return;
+}

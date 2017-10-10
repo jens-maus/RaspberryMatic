@@ -1,0 +1,13 @@
+--- occu/WebUI/www/api/methods/ccu/setsshpassword.tcl.orig
++++ occu/WebUI/www/api/methods/ccu/setsshpassword.tcl
+@@ -9,9 +9,7 @@
+ ##
+ 
+ 
+-  package require md5crypt
+-
+-  set digest [md5crypt::md5crypt $args(passwd) [md5crypt::salt]]
++  set digest [exec echo "$args(passwd)" | mkpasswd -m sha512]
+   set command "s%^root:\\(\[^:\]*:\\)%root:$digest:%"
+   set rc [catch {exec sed -i "$command" /etc/config/shadow} msg]
+ 

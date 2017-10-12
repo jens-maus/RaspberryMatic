@@ -388,8 +388,13 @@ init() {
 	fi
 
 	# ToDo GPIO / LED Ports  blink
-	echo "18" > /sys/class/gpio/export
-	echo "out" > /sys/class/gpio/gpio18/direction
+	if [[ "${HOST}" == "tinkerboard" ]]; then
+		echo "184" > /sys/class/gpio/export
+		echo "out" > /sys/class/gpio/gpio184/direction
+	else
+		echo "18" > /sys/class/gpio/export
+		echo "out" > /sys/class/gpio/gpio18/direction
+	fi
         chmod 775 /var
         mkdir /var/log
         chmod 775 /var/log

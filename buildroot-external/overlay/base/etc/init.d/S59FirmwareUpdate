@@ -9,9 +9,15 @@ start() {
 
   echo -n "Updating RF-Firmware: "
 
-  echo "0" > /sys/class/gpio/gpio18/value
-  sleep 1
-  echo "1" > /sys/class/gpio/gpio18/value
+  if [[ "${HOST}" == "tinkerboard" ]]; then
+    echo "0" > /sys/class/gpio/gpio184/value
+    sleep 1
+    echo "1" > /sys/class/gpio/gpio184/value
+  else
+    echo "0" > /sys/class/gpio/gpio18/value
+    sleep 1
+    echo "1" > /sys/class/gpio/gpio18/value
+  fi
 
   if [[ ! -e /etc/config/no-coprocessor-update ]]; then
     if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] || [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then

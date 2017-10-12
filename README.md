@@ -39,7 +39,8 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 
 ## :fire: Limitations
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
-* No HomeMatic-IP support with HM-MOD-RPI-PCB on ASUS Tinkerboard
+* No HomeMatic-IP support with HM-MOD-RPI-PCB on ASUS Tinkerboard (work in progress)
+* No Bluetooth and onboard-WiFi support for ASUS Tinkerboard (work in progress)
 * A used [HM-Sys-sRP-Pl](https://www.elv.de/controller.aspx?cid=683&detail=10&detail2=731493) repeater cannot be reconfigured
 
 ## :computer: Requirements

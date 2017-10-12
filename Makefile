@@ -1,5 +1,6 @@
 BOARD=rpi3
 # BOARD=rpi0
+# BOARD=tinkerboard
 # BOARD=docker
 BUILDROOT_VERSION=2017.08
 VERSION=$(shell cat ./VERSION)

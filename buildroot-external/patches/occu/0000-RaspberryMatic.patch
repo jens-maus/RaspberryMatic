@@ -265,12 +265,12 @@
 +
 +    # patch some settings to match what this hardware expects.
 +    if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-+      sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/mmd_bidcos/' /etc/config/rfd.conf
++      sed -i 's|^ComPortFile = /dev/.*$|ComPortFile = /dev/mmd_bidcos|' /etc/config/rfd.conf
 +    else
-+      sed -i 's/^ComPortFile = \/dev\/.*$/ComPortFile = \/dev\/ttyAMA0/' /etc/config/rfd.conf
++      sed -i "s|^ComPortFile = /dev/.*$|ComPortFile = ${HMRF_DEVNODE}|" /etc/config/rfd.conf
 +    fi
-+    sed -i 's/^#*AccessFile = \/dev\/.*$/AccessFile = \/dev\/null/' /etc/config/rfd.conf
-+    sed -i 's/^#*ResetFile = \/dev\/.*$/ResetFile = \/dev\/null/' /etc/config/rfd.conf
++    sed -i 's|^#*AccessFile = /dev/.*$|AccessFile = /dev/null|' /etc/config/rfd.conf
++    sed -i 's|^#*ResetFile = /dev/.*$|ResetFile = /dev/null|' /etc/config/rfd.conf
 +    if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
 +      sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
 +    fi

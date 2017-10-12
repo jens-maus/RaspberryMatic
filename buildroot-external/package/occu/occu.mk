@@ -7,14 +7,6 @@
 OCCU_VERSION = 2.29.22-2
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 
-OCCU_MODULE_SUBDIRS = kernel-modules/bcm2835_raw_uart kernel-modules/eq3_char_loop
-
-# OCCU_DEPENDENCIES = rpi-firmware
-
-# ifeq ($(BR2_PACKAGE_RFD_PLATFORM),"SDK")
-#	RFD_DEPENDENCIES += libusb
-# endif
-
 ifeq ($(BR2_PACKAGE_OCCU),y)
 
 define OCCU_PRE_PATCH
@@ -105,5 +97,9 @@ define OCCU_INSTALL_TARGET_CMDS
 			-C $(@D) install 
 endef
 
+ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_HMIP),y)
+OCCU_MODULE_SUBDIRS = kernel-modules/bcm2835_raw_uart kernel-modules/eq3_char_loop
 $(eval $(kernel-module))
+endif
+
 $(eval $(generic-package))

@@ -15,6 +15,11 @@ SSD_OPTIONS="--oknodo --quiet --exec $DAEMON -- --compat"
 
 test -f $DAEMON || exit 0
 
+source /var/hm_mode 2>/dev/null
+
+# ASUS Tinkerboard is not yet supported
+[[ "${HOST}" == "tinkerboard" ]] && exit 0
+
 case $1 in
   start)
     echo -n "Starting bluetooth: "

@@ -17,6 +17,7 @@ identify_host() {
   HMIP_DEVNODE=""
   UART_BASE=""
   UART_IRQ=""
+  UART_DEV=""
 
   # identify the RaspberryPi version used
   # (see http://elinux.org/RPi_HardwareHistory)
@@ -34,6 +35,14 @@ identify_host() {
     *000d|*000e|*000f)               HOST="rpi1b512"   ;; # Raspberry Pi B/512MB
     *0002|*0003|*0004|*0005|*0006)   HOST="rpi1b256"   ;; # Raspberry Pi B/256MB
     *0007|*0008|*0009)               HOST="rpi1a"      ;; # Raspberry Pi A
+
+    # No RaspberryPi identified, try other boards
+    *)
+      hardware=$(cat /proc/cpuinfo | grep 'Hardware' | awk '{print $3}')
+      case ${hardware} in
+        Rockchip)                    HOST="tinkerboard";; # ASUS Tinkerboard
+      esac
+    ;;
   esac
 
   # depending on the host hardware we choose a different
@@ -48,6 +57,9 @@ identify_host() {
       if [[ -z ${UART_IRQ} ]]; then
         UART_IRQ="87"
       fi
+      if [[ -z ${UART_DEV} ]]; then
+        UART_DEV="/dev/ttyAMA0"
+      fi
     ;;
 
     # RaspberryPi 1 and Zero (W)
@@ -58,6 +70,18 @@ identify_host() {
       if [[ -z ${UART_IRQ} ]]; then
         UART_IRQ="81"
       fi
+      if [[ -z ${UART_DEV} ]]; then
+        UART_DEV="/dev/ttyAMA0"
+      fi
+    ;;
+
+    # ASUS Tinkerboard
+    tinkerboard)
+      if [[ -z ${UART_DEV} ]]; then
+        UART_DEV="/dev/ttyS1"
+      fi
+      HMIP_DEV=""
+      HMIP_DEVNODE=""
     ;;
 
     *)
@@ -261,15 +285,19 @@ init() {
   init_urandom
 
   # load watchdog kernel module
-  modprobe bcm2835_wdt nowayout=1 heartbeat=15
+  if [[ ${HOST} != "tinkerboard" ]]; then
+    modprobe bcm2835_wdt nowayout=1 heartbeat=15
+  fi
 
   # load tunneling interface support
   modprobe tun
 
   # if /dev/ttyS0 is present move it to ttyS1 for
   # potentiall later use (e.g. bluetooth)
-  if [[ -c /dev/ttyS0 ]]; then
-    mv /dev/ttyS0 /dev/ttyS1
+  if [[ ${HOST} != "tinkerboard" ]]; then
+    if [[ -c /dev/ttyS0 ]]; then
+      mv /dev/ttyS0 /dev/ttyS1
+    fi
   fi
 
   # check if a factory reset should be performed
@@ -282,7 +310,7 @@ init() {
   if [[ -e /usr/local/HMLGW ]]; then
     HM_MODE="HM-LGW"
     if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-      HMRF_DEVNODE="/dev/ttyAMA0"
+      HMRF_DEVNODE=${UART_DEV}
     fi
     HMIP_DEV=""
     HMIP_DEVNODE=""
@@ -290,7 +318,7 @@ init() {
 
   # depending on the HomeMatic mode (HmRF, HmIP) we
   # have to load different kernel modules.
-  if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+  if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ ${HOST} != "tinkerboard" ]]; then
     # HM/HmIP Dual Protocol
     modprobe bcm2835_raw_uart uart0_base=${UART_BASE} uart0_irq=${UART_IRQ}
     modprobe eq3_char_loop
@@ -300,11 +328,13 @@ init() {
       HMRF_DEVNODE="${HMIP_DEVNODE}"
     fi
   else
-    # use standard PL011 UART
-    modprobe amba-pl011
+    if [[ ${HOST} != "tinkerboard" ]]; then
+      # use standard PL011 UART
+      modprobe amba-pl011
+    fi
 
     if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-      HMRF_DEVNODE="/dev/ttyAMA0"
+      HMRF_DEVNODE=${UART_DEV}
     fi
   fi
 
@@ -358,8 +388,13 @@ init() {
 	fi
 
 	# ToDo GPIO / LED Ports  blink
-	echo "18" > /sys/class/gpio/export
-	echo "out" > /sys/class/gpio/gpio18/direction
+	if [[ "${HOST}" == "tinkerboard" ]]; then
+		echo "184" > /sys/class/gpio/export
+		echo "out" > /sys/class/gpio/gpio184/direction
+	else
+		echo "18" > /sys/class/gpio/export
+		echo "out" > /sys/class/gpio/gpio18/direction
+	fi
         chmod 775 /var
         mkdir /var/log
         chmod 775 /var/log

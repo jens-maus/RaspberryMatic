@@ -20,7 +20,8 @@ cat ${BINARIES_DIR}/u-boot-dtb.bin >>${BINARIES_DIR}/u-boot.bin
 echo "Create user filesystem"
 mkdir -p ${BUILD_DIR}/userfs
 touch "${BUILD_DIR}/userfs/.doFactoryReset"
-mke2img -d ${BUILD_DIR}/userfs -G 4 -R 1 -b 3000 -l userfs -o ${BINARIES_DIR}/userfs.ext4
+rm -f ${BINARIES_DIR}/userfs.ext4
+mkfs.ext4 -d ${BUILD_DIR}/userfs -F -L userfs ${BINARIES_DIR}/userfs.ext4 3000
 
 #
 # VERSION File

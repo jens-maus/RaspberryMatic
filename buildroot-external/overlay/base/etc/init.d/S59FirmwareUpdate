@@ -9,14 +9,14 @@ start() {
 
   echo -n "Updating RF-Firmware: "
 
-  if [[ "${HOST}" == "tinkerboard" ]]; then
-    echo "0" > /sys/class/gpio/gpio184/value
+  if [[ -n "${UART_GPIO}" ]]; then
+    echo out >/sys/class/gpio/gpio${UART_GPIO}/direction
     sleep 1
-    echo "1" > /sys/class/gpio/gpio184/value
-  else
-    echo "0" > /sys/class/gpio/gpio18/value
+    echo 1 >/sys/class/gpio/gpio${UART_GPIO}/value
     sleep 1
-    echo "1" > /sys/class/gpio/gpio18/value
+    echo 0 >/sys/class/gpio/gpio${UART_GPIO}/value
+    sleep 1
+    echo 1 >/sys/class/gpio/gpio${UART_GPIO}/value
   fi
 
   if [[ ! -e /etc/config/no-coprocessor-update ]]; then

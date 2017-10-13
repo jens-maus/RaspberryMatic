@@ -18,6 +18,7 @@ identify_host() {
   UART_BASE=""
   UART_IRQ=""
   UART_DEV=""
+  UART_GPIO=""
 
   # identify the RaspberryPi version used
   # (see http://elinux.org/RPi_HardwareHistory)
@@ -60,6 +61,9 @@ identify_host() {
       if [[ -z ${UART_DEV} ]]; then
         UART_DEV="/dev/ttyAMA0"
       fi
+      if [[ -z ${UART_GPIO} ]]; then
+        UART_GPIO=18
+      fi
     ;;
 
     # RaspberryPi 1 and Zero (W)
@@ -73,6 +77,9 @@ identify_host() {
       if [[ -z ${UART_DEV} ]]; then
         UART_DEV="/dev/ttyAMA0"
       fi
+      if [[ -z ${UART_GPIO} ]]; then
+        UART_GPIO=18
+      fi
     ;;
 
     # ASUS Tinkerboard
@@ -80,6 +87,11 @@ identify_host() {
       if [[ -z ${UART_DEV} ]]; then
         UART_DEV="/dev/ttyS1"
       fi
+      if [[ -z ${UART_GPIO} ]]; then
+        UART_GPIO=184 # Tinkerboard requires gpio 184 for reset
+      fi
+
+      # disable HMIP (not supported yet)
       HMIP_DEV=""
       HMIP_DEVNODE=""
     ;;
@@ -365,6 +377,7 @@ init() {
       HMIP_DEV=""
       HMIP_DEVNODE=""
     fi
+    UART_GPIO=""
   fi
 
   # save all info about the HM-MOD-RPI-PCB
@@ -379,6 +392,7 @@ init() {
   echo "HMRF_DEVNODE=${HMRF_DEVNODE}" >>/var/hm_mode
   echo "HMIP_DEV=${HMIP_DEV}" >>/var/hm_mode
   echo "HMIP_DEVNODE=${HMIP_DEVNODE}" >>/var/hm_mode
+  echo "UART_GPIO=${UART_GPIO}" >>/var/hm_mode
 
         # cal local init startup file
         if [ ! -e /etc/config/safemode ] ; then
@@ -387,14 +401,12 @@ init() {
         	fi
 	fi
 
-	# ToDo GPIO / LED Ports  blink
-	if [[ "${HOST}" == "tinkerboard" ]]; then
-		echo "184" > /sys/class/gpio/export
-		echo "out" > /sys/class/gpio/gpio184/direction
-	else
-		echo "18" > /sys/class/gpio/export
-		echo "out" > /sys/class/gpio/gpio18/direction
-	fi
+  # setup GPIO if HM-MOD-RPI-PCB is used
+  if [[ -n "${UART_GPIO}" ]]; then
+    echo ${UART_GPIO} >/sys/class/gpio/export
+    sleep 1
+    echo out >/sys/class/gpio/gpio${UART_GPIO}/direction
+  fi
         chmod 775 /var
         mkdir /var/log
         chmod 775 /var/log

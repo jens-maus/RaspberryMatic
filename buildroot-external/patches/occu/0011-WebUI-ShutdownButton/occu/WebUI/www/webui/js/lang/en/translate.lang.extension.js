@@ -940,6 +940,10 @@ jQuery.extend(true, langJSON, {
 
     "timeModuleUserHint" : "When using the time module, we recommend to use no time intervals shorter than 15 minutes. This ensures that all configured programmes can be executed.",
 
+    "lblAttentionNoPasswd" : "For security reasons, we recommend that you assign a password for the CCU2!",
+    "dialogLblAckSecurityHint" : "I have read the above warning",
+    "btnNext" : "Next",
+
     "theEnd" : ""
   }
 });

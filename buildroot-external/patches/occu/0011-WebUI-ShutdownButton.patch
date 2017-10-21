@@ -151,13 +151,6 @@
      "dialogSetSecKeyRebootHead" : "Bitte geben Sie den Sicherheitsschl&uuml;ssel ein und f&uuml;hren Sie anschlie&szlig;end den Systemreset durch.",
      "dialogSetSecKeyRebootLbl" : "Sicherheitsschl&uuml;ssel: ",
      "dialogSetSecKeyRebootFalseTitle" : "System-Reset: Sicherheitsfehler",
-@@ -942,4 +944,4 @@
- 
-     "theEnd" : ""
-   }
--});
-\ No newline at end of file
-+});
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -388,6 +388,7 @@
@@ -211,13 +204,6 @@
      "dialogSetSecKeyRebootHead" : "Please enter the security key and perform the system reset afterwards.",
      "dialogSetSecKeyRebootLbl" : "Security key: ",
      "dialogSetSecKeyRebootFalseTitle" : "System reset: Security error",
-@@ -940,4 +942,4 @@
- 
-     "theEnd" : ""
-   }
--});
-\ No newline at end of file
-+});
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
 @@ -388,6 +388,7 @@
@@ -271,13 +257,6 @@
      "dialogSetSecKeyRebootHead" : "L%FCtfen g%FCvenlik kodunu girin ve daha sonra sistemi yeniden baslatin.",
      "dialogSetSecKeyRebootLbl" : "G%FCvenlik kodu: ",
      "dialogSetSecKeyRebootFalseTitle" : "Sistemi yeniden baslat: G%FCvenlik hatasi",
-@@ -935,4 +937,4 @@
- 
-     "theEnd" : ""
-   }
--});
-\ No newline at end of file
-+});
 --- occu/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/tr/translate.lang.js
 @@ -390,6 +390,7 @@

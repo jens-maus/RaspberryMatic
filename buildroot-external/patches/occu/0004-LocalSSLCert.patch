@@ -1,6 +1,6 @@
 --- occu/WebUI/www/api/methods.conf.orig
 +++ occu/WebUI/www/api/methods.conf
-@@ -988,6 +988,13 @@
+@@ -1003,6 +1003,13 @@
          ARGUMENTS {_session_id_}
  }
  
@@ -14,13 +14,6 @@
  User.restartLighttpd {
          LEVEL ADMIN
          SCRIPT_FILE user/restartlighttpd.tcl
-@@ -1006,4 +1013,4 @@
-         SCRIPT_FILE diagram/getDataSourceGroups.tcl
-         INFO {Ermittelt alle bekannten Gruppen von Datenquellen}
-         ARGUMENTS {}
--}
-\ No newline at end of file
-+}
 --- occu/WebUI/www/api/methods/user/createcertificate.tcl.orig
 +++ occu/WebUI/www/api/methods/user/createcertificate.tcl
 @@ -0,0 +1,22 @@

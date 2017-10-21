@@ -248,7 +248,7 @@ Interface.listTeams {
 }
 
 Interface.putParamset {
-  LEVEL ADMIN
+  LEVEL USER 
   SCRIPT_FILE interface/dispatch.tcl
   METHOD_FILE interface/putparamset.tcl
   INFO {Schreibt ein komplettes Parameterset für ein Gerät}
@@ -890,6 +890,14 @@ CCU.setSSHPassword {
   INFO {Setzt das Passwort für den SSH-Zugang}
   ARGUMENTS {_session_id_ passwd}
 }
+
+CCU.setSecurityHint {
+  LEVEL USER
+  SCRIPT_FILE ccu/setsecurityhint.tcl
+  INFO {Die Datei wird beim ersten Start der CCU2 angelegt, wenn der User bestätigt, dass er ihn gelesen hat.}
+  ARGUMENTS {_session_id_}
+}
+
 CCU.restartSSHDaemon {
   LEVEL ADMIN
   SCRIPT_FILE ccu/restartsshdaemon.tcl
@@ -910,7 +918,7 @@ CCU.getStickyUnreachState {
 }
 
 CCU.existsFile {
-  LEVEL ADMIN
+  LEVEL USER
   SCRIPT_FILE ccu/existsfile.tcl
   INFO {Prüft, ob eine Datei oder ein Verzeichniss vorhanden ist}
   ARGUMENTS {_session_id_ file}
@@ -941,6 +949,13 @@ User.getUserName {
         INFO {Gibt den Username zurück}
         ARGUMENTS {_session_id_ userID}
 }
+User.getUserPWD {
+        LEVEL NONE
+        SCRIPT_FILE user/getuserpwd.tcl
+        INFO {Gibt UserPWD zurück}
+        ARGUMENTS {_session_id_ userID}
+}
+
 User.isNoExpert {
         LEVEL NONE
         SCRIPT_FILE user/isnoexpert.tcl

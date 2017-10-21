@@ -940,6 +940,10 @@ jQuery.extend(true,langJSON, {
       "<br/>Wir empfehlen bei der Benutzung des Zeitmoduls, keine Zeitabst&auml;nde kleiner 15 Min. zu verwenden.&nbsp;" +
       " So ist sichergestellt, dass alle konfigurierten Programme zuverl&auml;ssig ausgef&uuml;hrt werden k&ouml;nnen.</br><br/>",
 
+   "lblAttentionNoPasswd" : "Aus Sicherheitsgr%FCnden empfehlen wir,<br/>dass Sie ein Passwort f%FCr die CCU2 vergeben",
+    "dialogLblAckSecurityHint" : "Ich habe die obige Warnung gelesen!",
+    "btnNext" : "Weiter",
+
     "theEnd" : ""
   }
 });

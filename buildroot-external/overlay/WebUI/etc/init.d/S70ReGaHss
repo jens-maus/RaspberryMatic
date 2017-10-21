@@ -25,6 +25,27 @@ init() {
   if [ -e /etc/config/syslog ] ; then
     . /etc/config/syslog
   fi
+
+  # source profile.d files
+  if [[ ! -e /etc/config/safemode ]] ; then
+    # source from /etc/profile.d
+    for i in /etc/profile.d/*.sh ; do
+      if [[ -r "$i" ]]; then
+        . $i
+      fi
+      unset i
+    done
+
+    # source from /usr/local/etc/profile.d
+    if [[ -d /usr/local/etc/profile.d ]]; then
+      for i in /usr/local/etc/profile.d/*.sh ; do
+        if [[ -r "$i" ]]; then
+          . $i
+        fi
+        unset i
+      done
+    fi
+  fi
 }
 
 waitStartupComplete() {

@@ -37,11 +37,11 @@ dist: | buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)/.config
 	cd build-raspmatic_$(BOARD) && make O=$(shell pwd)/build-raspmatic_$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
 
 release: dist
-	cp -a build-raspmatic_$(BOARD)/images/sdcard.img ./RaspberryMatic-$(VERSION)-$(BOARD).img
-	sha256sum ./RaspberryMatic-$(VERSION)-$(BOARD).img >./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256
-	rm -f ./RaspberryMatic-$(VERSION)-$(BOARD).zip
-	zip ./RaspberryMatic-$(VERSION)-$(BOARD).zip ./RaspberryMatic-$(VERSION)-$(BOARD).img ./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256 ./LICENSE
-	sha256sum ./RaspberryMatic-$(VERSION)-$(BOARD).zip >./RaspberryMatic-$(VERSION)-$(BOARD).zip.sha256
+	cp -a build-raspmatic_$(BOARD)/images/sdcard.img ./release/RaspberryMatic-$(VERSION)-$(BOARD).img
+	sha256sum ./release/RaspberryMatic-$(VERSION)-$(BOARD).img >./release/RaspberryMatic-$(VERSION)-$(BOARD).img.sha256
+	rm -f ./release/RaspberryMatic-$(VERSION)-$(BOARD).zip
+	cd ./release && zip ./RaspberryMatic-$(VERSION)-$(BOARD).zip ./RaspberryMatic-$(VERSION)-$(BOARD).img ./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256 ../LICENSE
+	sha256sum ./release/RaspberryMatic-$(VERSION)-$(BOARD).zip >./release/RaspberryMatic-$(VERSION)-$(BOARD).zip.sha256
 
 clean:
 	rm -rf build-raspmatic_$(BOARD) buildroot-$(BUILDROOT_VERSION)

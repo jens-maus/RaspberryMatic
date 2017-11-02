@@ -2,7 +2,7 @@ BOARD=rpi3
 # BOARD=rpi0
 # BOARD=tinkerboard
 # BOARD=docker
-BUILDROOT_VERSION=2017.08
+BUILDROOT_VERSION=2017.08.1
 VERSION=$(shell cat ./VERSION)
 
 .PHONY: all
@@ -17,7 +17,7 @@ usage:
 	@echo "	make distclean: clean everything"
 
 buildroot-$(BUILDROOT_VERSION).tar.bz2:
-	wget http://git.buildroot.net/buildroot/snapshot/buildroot-$(BUILDROOT_VERSION).tar.bz2
+	wget https://buildroot.org/downloads/buildroot-$(BUILDROOT_VERSION).tar.bz2
 
 BUILDROOT_PATCHES=$(wildcard buildroot-patches/*.patch)
 

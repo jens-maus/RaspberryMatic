@@ -18,6 +18,8 @@ usage:
 
 buildroot-$(BUILDROOT_VERSION).tar.bz2:
 	wget https://buildroot.org/downloads/buildroot-$(BUILDROOT_VERSION).tar.bz2
+	wget https://buildroot.org/downloads/buildroot-$(BUILDROOT_VERSION).tar.bz2.sign
+	cat buildroot-$(BUILDROOT_VERSION).tar.bz2.sign | grep SHA1: | sed 's/^SHA1: //' | shasum -c
 
 BUILDROOT_PATCHES=$(wildcard buildroot-patches/*.patch)
 

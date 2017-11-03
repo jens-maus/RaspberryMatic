@@ -18,7 +18,7 @@ TMPDIR=$(mktemp -d -p /usr/local/tmp)
 echo 'load tclrega.so; rega system.Save()' | tclsh 2>&1 >/dev/null
 
 # create a gzipped tar of /usr/local
-tar --owner=root --group=root --exclude=/usr/local/tmp --exclude=/usr/local/lost+found --one-file-system --ignore-failed-read -czf ${TMPDIR}/usr_local.tar.gz /usr/local 2>/dev/null
+tar --owner=root --group=root --exclude=/usr/local/tmp --exclude=/usr/local/lost+found --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf ${TMPDIR}/usr_local.tar.gz /usr/local 2>/dev/null
 
 # sign the configuration with the current key
 crypttool -s -t 1 <${TMPDIR}/usr_local.tar.gz >${TMPDIR}/signature

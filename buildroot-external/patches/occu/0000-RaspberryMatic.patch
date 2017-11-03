@@ -815,7 +815,7 @@
      cd /
 -    exec tar czf /tmp/usr_local.tar.gz usr/local
 -    cd /tmp/
-+    catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
++    catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
 +    cd $tmpdir/
      #sign the configuration with the current key
      exec crypttool -s -t 1 <usr_local.tar.gz >signature

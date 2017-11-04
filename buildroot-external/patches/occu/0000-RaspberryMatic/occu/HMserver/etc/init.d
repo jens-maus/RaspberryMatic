@@ -34,7 +34,7 @@ init() {
 
 		# In HmIP-RFUSB mode we have to change crRFD.conf
 		if [[ "${HMIP_DEV}" == "HMIP-RFUSB" ]]; then
-		  sed -i 's/^Adapter\.1\.Port=\/dev\/.*$/Adapter.1.Port=\/dev\/ttyUSB0/' /var/etc/crRFD.conf
+		  sed -i "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HMIP_DEVNODE}|" /var/etc/crRFD.conf
 		fi
 
 		HM_SERVER=/opt/HMServer/HMIPServer.jar

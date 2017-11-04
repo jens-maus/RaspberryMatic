@@ -35,7 +35,7 @@
 +
 +  # if there is no BidCos-RF support required we have to strip
 +  # the BidCos-RF part from InterfacesList.xml
-+  if [[ -z "${HMRF_DEV}" ]]; then
++  if [[ -z "${HMRF_DEV}" ]] && [[ ! -f /etc/config/rfd.conf ]] || ! egrep -q "^Type = (HMLGW2|Lan Interface)" /etc/config/rfd.conf ; then
 +    # remove BidCos-RF from InterfacesList.xml because not required (HmIP-RFUSB only mode)
 +    line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | head -1)
 +    line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | tail -1)

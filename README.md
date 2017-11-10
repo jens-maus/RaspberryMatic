@@ -95,8 +95,8 @@ The installation of RaspberryMatic is quite straight forward as it is delivered 
 3. Check sha256 checksum to check integrity of SD card image, e.g.:
    * `sha256sum -c RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.img.sha256`
 4. Use the  image flasher tool "Etcher" (https://etcher.io) to flash the `*.img` file to your SD card or USB drive. As an alternative you can also use the following command-line calls to manually flash it on Unix-based operating systems:
-   * <i>Linux</i>: `sudo dd if=RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.img of=/dev/sdX bs=4096 conv=sync`
-   * <i>macOS</i>: `sudo dd if=RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.img of=/dev/rdiskX bs=1m conv=sync`
+   * <i>Linux</i>: `sudo dd if=RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.img of=/dev/mmcblk0 bs=1M conv=fsync`
+   * <i>macOS</i>: `sudo dd if=RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.img of=/dev/rdiskX bs=1M conv=fsync`
 5. For HM-MOD-RPI-PCB use only: Make sure you have the HM-MOD-RPI-PCB radio module installed on the GPIO
 6. Install microSD in your RaspberryPi and connect power
 7. Wait until bootup process is finished and use a web browser to connect to http://homematic-raspi/

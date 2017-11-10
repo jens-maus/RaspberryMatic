@@ -379,7 +379,7 @@
  
  ## 
  ## run the server chrooted.
-@@ -87,6 +87,33 @@
+@@ -87,6 +87,37 @@
  ##
  server.port = 80
  
@@ -410,10 +410,14 @@
 +	server.use-ipv6 = "enable"
 +}
 +
++$HTTP["scheme"] == "https" {
++	setenv.add-response-header  = ( "Strict-Transport-Security" => "max-age=31536000; includeSubdomains; preload")
++}
++
  ##
  ## Use IPv6?
  ##
-@@ -127,6 +154,11 @@
+@@ -127,6 +158,11 @@
  server.pid-file = state_dir + "/lighttpd.pid"
  
  ##
@@ -425,7 +429,7 @@
  #######################################################################
  
  #######################################################################
-@@ -230,14 +262,14 @@
+@@ -230,14 +266,14 @@
  ##
  ## Default: 5
  ##
@@ -442,7 +446,7 @@
  
  ##
  ## Maximum size of a request in kilobytes.
-@@ -252,14 +284,14 @@
+@@ -252,14 +288,14 @@
  ##
  ## Default: 60
  ##
@@ -459,7 +463,7 @@
  
  ##
  ##  Traffic Shaping 
-@@ -370,7 +402,12 @@
+@@ -370,7 +406,12 @@
  ##
  ## defaults to /var/tmp as we assume it is a local harddisk
  ##
@@ -473,7 +477,7 @@
  
  ##
  #######################################################################
-@@ -440,6 +477,6 @@
+@@ -440,6 +481,6 @@
  ## custom includes like vhosts.
  ##
  #include "conf.d/config.conf"

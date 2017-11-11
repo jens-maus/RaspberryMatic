@@ -1301,7 +1301,17 @@ static void __exit bcm2835_raw_uart_exit(void)
 
 module_init( bcm2835_raw_uart_init );
 module_exit( bcm2835_raw_uart_exit );
+
+static const struct of_device_id bcm2835_raw_uart_of_match[] = {
+	{.compatible = "brcm,bcm2835-raw-uart",},
+	{ /* sentinel */ },
+};
+
+MODULE_DEVICE_TABLE(of, bcm2835_raw_uart_of_match);
+
+MODULE_ALIAS("platform:bcm2835-raw-uart");
+
 MODULE_DESCRIPTION( "eQ-3 raw BCM2835 uart driver" );
 MODULE_LICENSE( "GPL" );
 MODULE_AUTHOR( "eQ-3 Entwicklung GmbH" );
-MODULE_VERSION( "1.9" );
+MODULE_VERSION( "1.10" );

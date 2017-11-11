@@ -1,7 +1,8 @@
 #!/bin/sh
 
 # Command run on power loss
-: ${POWER_LOSS_CMD:='/sbin/poweroff'}
+#: ${POWER_LOSS_CMD:='/sbin/poweroff'}
+: ${POWER_LOSS_CMD:='/bin/triggerAlarm.tcl "PIco UPS: Power Loss"'}
 
 # File descriptors
 : ${GPIO_PULSE:=22}
@@ -66,7 +67,7 @@ while getFDvalue GPIO_CLOCK GPIO_CLOCK_VALUE_NEW; do
 
         # Check for power loss (=0)
         getFDvalue GPIO_PULSE POWER_STATE
-        [ 0 -eq $POWER_STATE ] && $POWER_LOSS_CMD &
+        [ 0 -eq $POWER_STATE ] && eval $POWER_LOSS_CMD &
 
         # Set GPIO_PULSE to flipped state
         initFD GPIO_PULSE out

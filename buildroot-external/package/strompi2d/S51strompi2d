@@ -15,7 +15,9 @@ case $1 in
   start)
     echo -n "Starting StromPi2 UPS daemon: "
 
-    # find out if a PIco UPS unit is installed at all
+    # if a file /etc/config/strompi2 is found we assume
+    # a StromPi2 to be present because there is no way to
+    # autodetect it.
     if [[ -f /etc/config/strompi2 ]]; then
 
       # now start the daemon

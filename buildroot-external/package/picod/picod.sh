@@ -1,12 +1,19 @@
 #!/bin/sh
 
+source /var/hm_mode 2>/dev/null
+
 # Command run on power loss
 #: ${POWER_LOSS_CMD:='/sbin/poweroff'}
 : ${POWER_LOSS_CMD:='/bin/triggerAlarm.tcl "PIco UPS: Power Loss"'}
 
 # File descriptors
-: ${GPIO_PULSE:=22}
-: ${GPIO_CLOCK:=27}
+if [[ ${HOST} != "tinkerboard" ]]; then
+  : ${GPIO_PULSE:=22}
+  : ${GPIO_CLOCK:=27}
+else
+  : ${GPIO_PULSE:=167}
+  : ${GPIO_CLOCK:=166}
+fi
 
 # Debounce time in while loop
 : ${DEBOUNCE_TIME:='0.3s'}

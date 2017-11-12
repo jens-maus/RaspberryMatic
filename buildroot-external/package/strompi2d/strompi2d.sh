@@ -1,11 +1,17 @@
 #!/bin/sh
 
+source /var/hm_mode 2>/dev/null
+
 # Command run on power loss
 : ${POWER_LOSS_CMD:='/bin/triggerAlarm.tcl "StromPi2: Power Loss"'}
 : ${POWER_RETURN_CMD:='/bin/triggerAlarm.tcl "StromPi2: Power Restored"'}
 
 # File descriptors
-: ${GPIO_POWER:=21}
+if [[ ${HOST} != "tinkerboard" ]]; then
+  : ${GPIO_POWER:=21}
+else
+  : ${GPIO_POWER:=188}
+fi
 
 # Debounce time in while loop
 : ${DEBOUNCE_TIME:='0.3s'}

@@ -39,6 +39,7 @@ case $1 in
     echo -n "Stopping S.USV daemon: "
     if [[ -f ${PIDFILE} ]]; then
       ${DAEMON} -stop 2>&1 >/dev/null
+      rm -f ${PIDFILE}
     fi
     [[ $? = 0 ]] && echo "OK" || echo "FAIL"
   ;;

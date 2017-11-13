@@ -31,7 +31,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Supports to query status information of the underlying Linux system using SNMP requests
 * Auto-resizing `/usr/local` partition to use the full capacity of the SD card or USB stick
 * Support for the following third-party *Hardware Attached on Top* (HAT) boards:
-  * [S.USV Hardware](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown in case batteries are exhausted.
+  * [S.USV](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown in case batteries are exhausted.
   * [PiModules UPS PIco](http://pimodules.com/) – UPS including automatic system shutdown in case batteries are exhausted.
   * [StromPi2](http://www.joy-it.net/strompi-2/) – UPS including alarm notification upon power loss.
 * Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi), onboard Tinkerboard RTC)

@@ -446,7 +446,19 @@
  
  ##
  ## Maximum size of a request in kilobytes.
-@@ -252,14 +288,14 @@
+@@ -248,18 +284,26 @@
+ #server.max-request-size = 0
+ 
+ ##
++## Maximum size of a request headers in kilobytes.
++## By default it is 8k (8192).
++##
++## Requests with a header larger than this will end in a 431 error.
++##
++server.max-request-field-size = 65536
++
++##
+ ## Time to read from a socket before we consider it idle.
  ##
  ## Default: 60
  ##
@@ -463,7 +475,7 @@
  
  ##
  ##  Traffic Shaping 
-@@ -370,7 +406,12 @@
+@@ -370,7 +414,12 @@
  ##
  ## defaults to /var/tmp as we assume it is a local harddisk
  ##
@@ -477,7 +489,7 @@
  
  ##
  #######################################################################
-@@ -440,6 +481,6 @@
+@@ -440,6 +489,6 @@
  ## custom includes like vhosts.
  ##
  #include "conf.d/config.conf"

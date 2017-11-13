@@ -24,14 +24,16 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Supports latest JAVA8 runtime environment ([1.8.0_131-8.21.0.57](http://www.azul.com/downloads/zulu-embedded/))
 * Supports onboard WiFi of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB Bluetooth sticks
-* Supports [Network UPS Tools](http://networkupstools.org) (NUT) setup including USB connection of UPS as well as NUT server use (e.g. via Synology NAS Network UPS functionality)
-* Supports [S.USV Hardware](http://www.s-usv.de/) as an uninterruptible power supply (UPS) HAT including alarm notification upon power loss and automatic system shutdown in case batteries are exhausted
-* Supports [PiModules UPS PIco Hardware](http://pimodules.com/) as an uninterruptible power supply (UPS) including automatic system shutdown in case batteries are exhausted
+* Supports [Network UPS Tools](http://networkupstools.org) (NUT) setups including USB connection to uninterruptible power supply (UPS) as well as remote NUT server use (e.g. via Synology NAS Network UPS functionality)
 * Support to be used as a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
 * Support to be used without [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) RF module and just connect it to a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Full IPv6 support and default HTTPS enabled WebUI support
 * Supports to query status information of the underlying Linux system using SNMP requests
 * Auto-resizing `/usr/local` partition to use the full capacity of the SD card or USB stick
+* Support for the following third-party *Hardware Attached on Top* (HAT) boards:
+  * [S.USV Hardware](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown in case batteries are exhausted.
+  * [PiModules UPS PIco](http://pimodules.com/) – UPS including automatic system shutdown in case batteries are exhausted.
+  * [StromPi2](http://www.joy-it.net/strompi-2/) – UPS including alarm notification upon power loss.
 * Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi), onboard Tinkerboard RTC)
 * Hardware WatchDog support automatically rebooting the system upon hardware/lockup problems
 * Direct [CloudMatic](http://cloudmatic.de) (meine-homematic.de) support

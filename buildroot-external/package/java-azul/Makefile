@@ -7,6 +7,7 @@ HM_ROOT=
 install_jre:
 	mkdir -p $(TARGET_DIR)/opt/java-azul
 	cp -R jre/* $(TARGET_DIR)/opt/java-azul
+	rm -f $(TARGET_DIR)/opt/java
 	ln -s /opt/java-azul $(TARGET_DIR)/opt/java
 
 install:

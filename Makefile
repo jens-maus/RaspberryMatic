@@ -2,7 +2,7 @@ BOARD=rpi3
 # BOARD=rpi0
 # BOARD=tinkerboard
 # BOARD=docker
-BUILDROOT_VERSION=2017.08.1
+BUILDROOT_VERSION=2017.08.2
 VERSION=$(shell cat ./VERSION)
 
 .PHONY: all

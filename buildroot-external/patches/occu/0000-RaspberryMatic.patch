@@ -509,8 +509,8 @@
 -#CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
 +CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
  
---- occu/HMserver/etc/init.d.orig
-+++ occu/HMserver/etc/init.d
+--- occu/HMserver/etc/init.d/S62HMServer.orig
++++ occu/HMserver/etc/init.d/S62HMServer
 @@ -5,28 +5,69 @@
  
  LOGLEVEL_HMServer=5
@@ -578,7 +578,7 @@
  	init
 -	start-stop-daemon -S -q -m -p $PIDFILE --exec java -- -Xmx64m -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar /opt/HMServer/HMIPServer.jar /etc/crRFD.conf &
 -	echo "Waiting for HMServer to get ready"
--	eq3configcmd wait-for-file -f $STARTWAITFILE -p 5 -t 300
+-	eq3configcmd wait-for-file -f $STARTWAITFILE -p 5 -t 600
 -	echo "OK"
 +	start-stop-daemon -b -S -q -m -p $PIDFILE --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar ${HM_SERVER} ${HM_SERVER_ARGS}
 +	echo -n "."
@@ -625,7 +625,7 @@
                                              }
                                          }
                                      }
-@@ -387,66 +387,14 @@
+@@ -387,69 +387,14 @@
                          table_row {
                              td {width="20"} {}
                              table_data {align="left"} {colspan="2"} {
@@ -680,6 +680,9 @@
 -                        li {
 -                             ${dialogSettingsCMHintSoftwareUpdate3}
 -                        }
+-                        li {
+-                             ${dialogSettingsCMHintSoftwareUpdate3a}
+-                        }
 -                        set bat_level [get_bat_level]
 -                        if {$bat_level < 50} {
 -                            set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
@@ -695,7 +698,7 @@
                  }
              }
              table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-@@ -957,6 +905,7 @@
+@@ -960,6 +905,7 @@
      catch { exec lcdtool {Saving     Data...    } }
      rega system.Save()
      catch { exec lcdtool {Reboot...             } }
@@ -1027,7 +1030,7 @@
      "dialogSettingsCMHintErrorLog" : "Merkez tarafindan olusturulacak Log bildiri sayisini ayarlayin.<br>Buna ek olarak merkezin Log bildirilerini Syslog'u kullanarak iletecegi baska bir bilgisayar tanimlayabilirsiniz. Bu bilgisayar %FCzerinde bildirileri alacak uygun bir yazilim y%FCkl%FC olmalidir.<br>Merkezin g%FCncel Log bildirileri teshis amaciyla bir metin dosyasi seklinde indirilebilir.",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -11423,8 +11423,9 @@
+@@ -11792,8 +11792,9 @@
      var isOk = true;
      for (var i = 0, len = ips.length; i < len; i++) {
        var ip = ips[i];
@@ -1038,7 +1041,7 @@
        }
      }
  
-@@ -18284,7 +18285,7 @@
+@@ -18661,7 +18662,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
@@ -1047,7 +1050,7 @@
      $("body").appendChild(script);
    },
  
-@@ -18336,7 +18337,7 @@
+@@ -18713,7 +18714,7 @@
        var script = document.createElement("script");
        script.id = "homematic_com_script_" + index;
        script.type = "text/javascript";
@@ -1056,7 +1059,7 @@
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -18346,7 +18347,7 @@
+@@ -18723,7 +18724,7 @@
        var script = document.createElement("script");
        script.id = "homematic_com_script_fw";
        script.type = "text/javascript";
@@ -1065,7 +1068,7 @@
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -18380,7 +18381,7 @@
+@@ -18757,7 +18758,7 @@
     **/
    setLatestVersion: function(latestVersion, product)
    {

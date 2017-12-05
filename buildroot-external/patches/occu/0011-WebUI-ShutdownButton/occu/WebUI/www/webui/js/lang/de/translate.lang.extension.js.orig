@@ -737,6 +737,7 @@ jQuery.extend(true,langJSON, {
     "optionUnit16M": "16 Minuten",
     "optionUnit18M": "18 Minuten",
     "optionUnit20M": "20 Minuten",
+    "optionUnit25M": "25 Minuten",
     "optionUnit30M": "30 Minuten",
     "optionUnit60M": "60 Minuten",
     "optionUnit120M": "120 Minuten",
@@ -750,7 +751,7 @@ jQuery.extend(true,langJSON, {
     "optionOnWithDelay" : "Ein mit Einschaltverz%F6gerung",
     "optionOnWithoutDelay" : "Ein ohne Einschaltverz%F6gerung",
     "optionInactiv" : "Inaktiv",
-    "optionActiv" : "AKtiv",
+    "optionActiv" : "Aktiv",
     "optionNormalLength" : "Normale L&auml;nge",
     "optionFileLength" : "Dateil%E4nge",
     "optionSetLength" : "L&auml;nge angeben",
@@ -906,7 +907,7 @@ jQuery.extend(true,langJSON, {
     "descriptionTransmitterDataTransmissionCondition5" :  "<b>Modus 6</b><br/><br/>Senden, wenn neuer Logikzustand auf den Dateneing%E4ngen stabil f%FCr die Datenstabilit%E4tsfilterzeit ist.<br/><br/>Der Dateneingang ist deaktivert, wenn der Daten%FCbertragungspin (DU30) auf LOW-Pegel ist (high aktiv)",
     "descriptionTransmitterDataTransmissionCondition6" :  "<b>Modus 7</b><br/><br/>Senden des neuen Logikzustandes sofort, danach Sendeabstand von der Dauer der Datenstabilit%E4tsfilterzeit bis zur n%E4chsten Auswertung des Dateinganges.<br/><br/>Der Dateneingang ist deaktivert, wenn der Daten%FCbertragungspin (DU30) auf LOW-Pegel ist (high aktiv).",
     "dlgEnterMeterReadingsTitle" :  "Konfiguration des CCU-Energiez%E4hlers",
-    "btnSysConfCoupling" :  "Kopplungen<br/>(z.B. OSRAM Lightify)",
+    "btnSysConfCoupling" :  "Kopplungen",
     "couplingDialogTitle" : "Dialog Kopplungen",
     "lblIPAddress" :  "IP-Adresse",
     "enterIPAddress" :  "Manuelle IP-Eingabe",
@@ -926,7 +927,9 @@ jQuery.extend(true,langJSON, {
     "timeoutAddNewDevices" : "Timeout addNewDevices",
     "unknownError" : "Unbekannter Fehler",
     "helpOsramLightify" : "Hier stellen Sie die Kopplung zwischen "+HMIdentifier.de.CCUShortName+" und <b>OSRAM-Lightify</b> her. Mehr Informationen finden Sie hier:",
-    "msgNoGatewayFound" : "Kein OSRAM-Lightify-Gateway gefunden",
+    "helpPhilipsHue" : "Hier stellen Sie die Kopplung zwischen "+HMIdentifier.de.CCUShortName+" und <b>Philips-Hue</b> her. Mehr Informationen finden Sie hier:",
+
+    "msgNoGatewayFound" : "Kein Gateway gefunden",
 
     "dialogDeleteCertificateTitle" : "Zertifikat l%F6schen",
     "dialogSettingsNetworkLblDeleteCertificate" : "Zertifikat von der CCU2 entfernen",
@@ -940,7 +943,29 @@ jQuery.extend(true,langJSON, {
       "<br/>Wir empfehlen bei der Benutzung des Zeitmoduls, keine Zeitabst&auml;nde kleiner 15 Min. zu verwenden.&nbsp;" +
       " So ist sichergestellt, dass alle konfigurierten Programme zuverl&auml;ssig ausgef&uuml;hrt werden k&ouml;nnen.</br><br/>",
 
-   "lblAttentionNoPasswd" : "Aus Sicherheitsgr%FCnden empfehlen wir,<br/>dass Sie ein Passwort f%FCr die CCU2 vergeben",
+    "lblLocation" :                              "Wohnort",
+    "lblMode" :                                  "Modus",
+    "dialogSetWPModeTitle" :                     "Modus einstellen",
+    "lblAutoCalibrationActiv" :                  "Auto-Kalibrierung aktiv",
+    "statePresenceFalse" :                       "Keine Pr%E4senz erkannt",
+    "statePresenceTrue" :                        "Pr%E4senz erkannt",
+    "presenceDetectionFalse" :                   "Pr%E4senzerkennung nicht aktiv",
+    "presenceDetectionTrue" :                    "Pr%E4senzerkennung aktiv",
+    "btnPresenceDetectionFalse" :                "Pr%E4senzerkennung einschalten",
+    "btnPresenceDetectionTrue" :                 "Pr%E4senzerkennung ausschalten",
+    "btnResetPresence" :                         "Reset Status",
+    "lblTDRegaVersion" :                         "Logikschicht<br/>Version",
+    "lblTDReGaVersionHelp" :                     "Hier k%F6nnen Sie festlegen, welche Version der Logikschicht in der CCU2 verwendet werden soll.<br/><br/>W%E4hlen Sie die Version <b>'Standard'</b>, um Fehlerbehebungen im Zeitmodul und neue Funktionen, wie z. B. mathematische Operationen in Skripten, nutzen zu k%F6nnen. " +
+                                                 "<br/><br/>W%E4hlen Sie die Version <b>'Community'</b> f%FCr zus%E4tzliche Verbesserungen zur Fehlerbehebung in Skripten. Bitte beachten Sie, dass diese Version zu Abbr%FCchen von Skripten f%FChren k%F6nnte, auch wenn diese mit bisherigen Versionen der CCU2-Software ausgef%FChrt wurden. " +
+                                                 "<br/><br/>Sollten seit dem Update auf die aktuelle CCU2-Software Probleme aufgetreten sein, k%F6nnen Sie mit der Auswahl <b>'Legacy'</b> auf die Vorg%E4ngerversion wechseln." ,
+
+    "optionReGaNORMAL" :                         "Standard",
+    "optionReGaLEGACY" :                         "Legacy",
+    "optionReGaCOMMUNITY" :                      "Community",
+    "dialogRestart2ChanceReGaVersion" :          "Damit die %C4nderung der Logikschicht-Version wirksam wird, muss die " +HMIdentifier.de.CCUShortName + " neu gestartet werden.",
+    "dialogBtnPerformLaterRestart" :             "Sp%E4ter",
+
+    "lblAttentionNoPasswd" : "Aus Sicherheitsgr%FCnden empfehlen wir,<br/>dass Sie ein Passwort f%FCr die CCU2 vergeben",
     "dialogLblAckSecurityHint" : "Ich habe die obige Warnung gelesen!",
     "btnNext" : "Weiter",
 

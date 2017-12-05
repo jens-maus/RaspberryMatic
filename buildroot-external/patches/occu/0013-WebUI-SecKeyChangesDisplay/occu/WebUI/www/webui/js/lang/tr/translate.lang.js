@@ -343,7 +343,7 @@ jQuery.extend(true,langJSON, {
     "lblSettingsSystemConfig5" : "G%FCncelleme yap",
     "lblSettingsSystemConfig6" : "Saat ve tarih ayari",
     "lblSettingsSystemConfig7" : "Yer ayari",
-    "lblSettingsSystemConfig8" : "Connections (e.g. OSRAM lightify)",
+    "lblSettingsSystemConfig8" : "Connections",
     "commentSettingsBtnSystemConfigEnd" : "***********************************************",
     "btnAddReceiver" : "Alici<br/>ekle",
     "btnAddSender" : "Verici<br/>ekle ",
@@ -983,6 +983,7 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsSecurityMessageSysBackupFWUpdateNecessaryContent" : "",
     "dialogNewDevicesErrorSecKeyLbl1b " : "",
     "optionLastValue" : "Son deger",
+    "optionNoModification" : "No change",
     "optionNone" : "yok",
     "optionNotActive" : "Etkin degil"
   }

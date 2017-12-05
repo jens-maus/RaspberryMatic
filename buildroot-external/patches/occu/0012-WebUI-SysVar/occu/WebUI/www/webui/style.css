@@ -41,6 +41,10 @@
 	width:160px;
 }
 
+.minWidth230px {
+  min-width: 230px;
+}
+
 .conditionEven
 {
   /*Wenn die Farbe nicht nur als Rahmen, sondern für die ganze Bedingung gelten soll,
@@ -820,6 +824,7 @@ a img {
   border: solid 1px $_(black); /* black */
   padding: 5px;
   font-weight: bold;
+  min-height: 30px;
 }
 
 .ControlBtnPushed {
@@ -2105,6 +2110,10 @@ html, body {
 
 .hidden {
     display:none;
+}
+
+.visibilityHidden {
+    visibility: hidden;
 }
 
 .alignRight {

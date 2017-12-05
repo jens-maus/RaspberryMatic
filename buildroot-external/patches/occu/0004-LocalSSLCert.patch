@@ -1,6 +1,6 @@
 --- occu/WebUI/www/api/methods.conf.orig
 +++ occu/WebUI/www/api/methods.conf
-@@ -1003,6 +1003,13 @@
+@@ -1018,6 +1018,13 @@
          ARGUMENTS {_session_id_}
  }
  

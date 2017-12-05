@@ -248,7 +248,7 @@ Interface.listTeams {
 }
 
 Interface.putParamset {
-  LEVEL USER 
+  LEVEL USER
   SCRIPT_FILE interface/dispatch.tcl
   METHOD_FILE interface/putparamset.tcl
   INFO {Schreibt ein komplettes Parameterset für ein Gerät}
@@ -771,7 +771,7 @@ SysVar.createBool {
   LEVEL USER
   SCRIPT_FILE sysvar/createbool.tcl
   INFO {Erzeugt eine Systemvariable vom Typ bool}
-  ARGUMENTS {_session_id_ name init_val internal}
+  ARGUMENTS {_session_id_ name init_val internal chnID}
 }
 SysVar.setBool {
   LEVEL USER
@@ -783,7 +783,7 @@ SysVar.createFloat {
   LEVEL USER
   SCRIPT_FILE sysvar/createfloat.tcl
   INFO {Erzeugt eine Systemvariable vom Typ Number}
-  ARGUMENTS {_session_id_ name minValue maxValue internal}
+  ARGUMENTS {_session_id_ name minValue maxValue internal chnID}
 }
 SysVar.setFloat {
   LEVEL USER
@@ -791,6 +791,21 @@ SysVar.setFloat {
   INFO {Setzt den Wert einer Systemvariable vom Type float}
   ARGUMENTS {_session_id_ name value}
 }
+
+SysVar.createEnum {
+  LEVEL USER
+  SCRIPT_FILE sysvar/createenum.tcl
+  INFO {Erzeugt eine Systemvariable vom Typ enum}
+  ARGUMENTS {_session_id_ name valList internal chnID}
+}
+
+SysVar.setEnum {
+  LEVEL USER
+  SCRIPT_FILE sysvar/setenum.tcl
+  INFO {Setzt den Wert einer Systemvariable vom Typ enum}
+  ARGUMENTS {_session_id_ name valueList}
+}
+
 SysVar.deleteSysVarByName {
   LEVEL USER
   SCRIPT_FILE sysvar/deletesysvarbyname.tcl

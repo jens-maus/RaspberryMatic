@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
-@@ -53,7 +53,26 @@
+@@ -52,7 +52,26 @@
    <script type="text/javascript" src="/webui/js/extern/json2min.js"></script>
    <script type="text/javascript" src="/webui/js/extern/spectrum.js"></script>
  

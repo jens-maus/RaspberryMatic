@@ -50,7 +50,7 @@ install_hmserver:
 	cp -R HMserver/opt/HMServer/groups $(TARGET_DIR)/opt/HMServer/
 	cp -R HMserver/opt/HMServer/measurement $(TARGET_DIR)/opt/HMServer/
 	cp -R HMserver/opt/HMServer/pages $(TARGET_DIR)/opt/HMServer/
-	cp -a HMserver/etc/init.d $(TARGET_DIR)/etc/init.d/S62HMServer
+	cp -a HMserver/etc/init.d/S62HMServer $(TARGET_DIR)/etc/init.d/
 	chmod a+rx $(TARGET_DIR)/etc/init.d/S62HMServer
 #ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a HMserver/opt/HMServer/HMIPServer.jar $(TARGET_DIR)/opt/HMServer/
@@ -80,8 +80,6 @@ update_webui:
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/once.tcl          $(TARGET_DIR)/www/config/display/once.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/common.tcl        $(TARGET_DIR)/www/config/display/common.tcl
 
-	ln -sf ${OCCU_ROOT}/www/tcl/extern/cgi.tcl            $(TARGET_DIR)/www/pda/extern/cgi.tcl
-	ln -sf ${OCCU_ROOT}/www/tcl/extern/tmpl_parser.tcl    $(TARGET_DIR)/www/pda/extern/tmpl_parser.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3/rega.tcl              $(TARGET_DIR)/www/pda/eq3/rega.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3/session.tcl           $(TARGET_DIR)/www/pda/eq3/session.tcl
 

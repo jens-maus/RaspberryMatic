@@ -732,6 +732,7 @@ jQuery.extend(true,langJSON, {
     "optionUnit16M": "16 minutes",
     "optionUnit18M": "18 minutes",
     "optionUnit20M": "20 minutes",
+    "optionUnit25M": "25 minutes",
     "optionUnit30M": "30 minutes",
     "optionUnit60M": "60 minutes",
     "optionUnit120M": "120 minutes",
@@ -901,7 +902,7 @@ jQuery.extend(true,langJSON, {
     "descriptionTransmitterDataTransmissionCondition5" :  "<b>Mode 6</b><br/><br/>Transmit if new logic state on the data inputs is stable for the data stability filter time.<br/><br/>The data input is deactivated, if the data transmission pin (DU30) is on LOW level (high active).",
     "descriptionTransmitterDataTransmissionCondition6" :  "<b>Mode 7</b><br/><br/>Transmit new logic state immediately, afterwards transmit interval lasting from the data stability filter time until the next evaluation of the data input.<br/><br/>The data input is deactivated, if the data transmission pin (DU30) is on LOW level (high active).",
     "dlgEnterMeterReadingsTitle" :  "Configuration of CCU energy meter",
-    "btnSysConfCoupling" :  "Connections<br/>(e.g. OSRAM lightify)",
+    "btnSysConfCoupling" :  "Connections)",
     "couplingDialogTitle" : "Dialogue connections",
     "lblIPAddress" :  "IP address",
     "enterIPAddress" :  "Manual IP input",
@@ -921,7 +922,8 @@ jQuery.extend(true,langJSON, {
     "timeoutAddNewDevices" : "Timeout addNewDevices",
     "unknownError" : "Unknown Error",
     "helpOsramLightify" : "You can create the pairing between the "+HMIdentifier.tr.CCUShortName+" and <b>OSRAM Lightify</b> here. Please find further information here:",
-    "msgNoGatewayFound" : "No OSRAM Lightify Gateway found",
+    "helpPhilipsHue" : "You can create the pairing between the "+HMIdentifier.tr.CCUShortName+" and <b>Philips Hue</b> here. Please find further information here:",
+    "msgNoGatewayFound" : "No Gateway found",
 
     "dialogDeleteCertificateTitle" : "Delete certificate",
     "dialogSettingsNetworkLblDeleteCertificate" : "Remove certificate from CCU2",
@@ -934,6 +936,29 @@ jQuery.extend(true,langJSON, {
     "lblHideStickyUnreach" : "Automatically confirm the device message<br/>'Device communication interrupted'",
 
     "timeModuleUserHint" : "When using the time module, we recommend to use no time intervals shorter than 15 minutes. This ensures that all configured programmes can be executed.",
+
+    "lblLocation" :                              "Place of residence",
+    "lblMode" :                                  "Mode",
+    "dialogSetWPModeTitle" :                     "Set mode",
+    "lblAutoCalibrationActiv" :                  "Auto calibration active",
+    "statePresenceFalse" :                       "No presence detected",
+    "statePresenceTrue" :                        "Presence detected",
+    "presenceDetectionFalse" :                   "Presence detection not active",
+    "presenceDetectionTrue" :                    "Presence detection active",
+    "btnPresenceDetectionFalse" :                "Switch on presence detection",
+    "btnPresenceDetectionTrue" :                 "Switch off presence detection",
+    "btnResetPresence" :                         "Reset status",
+    "lblTDRegaVersion" :                         "Logic tier<br/>version",
+
+    "lblTDReGaVersionHelp" :                     "Here you can specify which logic layer version of the CCU2 should be used. Select the version <b>'Standard'</b> to be able to use bug fixes in the time module as well as new features like mathematical operations in scripts. " +
+                                                 "<br/><br/>Select the version <b>'Community'</b> for additional improvements to troubleshooting in scripts. Please note that in this version scripts may be cancelled even if these have been executed with previous versions of the CCU2 software. " +
+                                                 "<br/><br/>If any problems have occurred after the update to the current CCU2 software has been performed, you can change back to the previous version by selecting <b>'Legacy'</b>." ,
+
+    "optionReGaNORMAL" :                         "Standard",
+    "optionReGaLEGACY" :                         "Legacy",
+    "optionReGaCOMMUNITY" :                      "Community",
+    "dialogRestart2ChanceReGaVersion" :          "For the change of the logic tier version to apply, the " +HMIdentifier.en.CCUShortName + " must be restarted.",
+    "dialogBtnPerformLaterRestart" :             "Later",
 
     "lblAttentionNoPasswd" : "For security reasons, we recommend that you assign a password for the CCU2!",
     "dialogLblAckSecurityHint" : "I have read the above warning",

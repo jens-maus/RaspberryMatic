@@ -222,7 +222,7 @@
 -
 --- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd
-@@ -7,30 +7,58 @@
+@@ -7,30 +7,64 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/rfd.pid
  
@@ -274,6 +274,12 @@
 +    if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
 +      sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
 +    fi
++
++    # reset the RF module once more
++    echo 0 >/sys/class/gpio/gpio${UART_GPIO}/value
++    sleep 0.2
++    echo 1 >/sys/class/gpio/gpio${UART_GPIO}/value
++    sleep 2
 +  else
 +    # otherwise disable the whole [Interface 0] part
 +    sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf
@@ -297,7 +303,7 @@
  
  	if [ ! -e /etc/config/syslog ] ; then
  		cp $CFG_TEMPLATE_DIR/syslog /etc/config
-@@ -42,31 +70,34 @@
+@@ -42,31 +76,34 @@
  }
  
  waitStartupComplete() {
@@ -341,7 +347,7 @@
  }
  stop() {
  	echo -n "Stopping rfd: "
-@@ -95,4 +126,3 @@
+@@ -95,4 +132,3 @@
  esac
  
  exit $?

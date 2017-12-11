@@ -511,7 +511,7 @@
  
 --- occu/HMserver/etc/init.d/S62HMServer.orig
 +++ occu/HMserver/etc/init.d/S62HMServer
-@@ -5,28 +5,69 @@
+@@ -5,12 +5,23 @@
  
  LOGLEVEL_HMServer=5
  CFG_TEMPLATE_DIR=/etc/config_templates
@@ -538,6 +538,9 @@
  	export PATH=$PATH:$JAVA_HOME/bin
  	if [ ! -e /etc/config/log4j.xml ] ; then
  		cp $CFG_TEMPLATE_DIR/log4j.xml /etc/config
+@@ -18,18 +29,48 @@
+ 	if [ ! -e /etc/config/hmip_networkkey.conf ] ; then
+ 		cp $CFG_TEMPLATE_DIR/hmip_networkkey.conf /etc/config
  	fi
 +
 +	if [[ -n "${HMIP_DEV}" ]]; then
@@ -590,7 +593,7 @@
  	rm -f $STARTWAITFILE
  	start-stop-daemon -K -q -p $PIDFILE
  	rm -f $PIDFILE
-@@ -53,4 +94,3 @@
+@@ -56,4 +97,3 @@
  esac
  
  exit $?
@@ -1030,7 +1033,7 @@
      "dialogSettingsCMHintErrorLog" : "Merkez tarafindan olusturulacak Log bildiri sayisini ayarlayin.<br>Buna ek olarak merkezin Log bildirilerini Syslog'u kullanarak iletecegi baska bir bilgisayar tanimlayabilirsiniz. Bu bilgisayar %FCzerinde bildirileri alacak uygun bir yazilim y%FCkl%FC olmalidir.<br>Merkezin g%FCncel Log bildirileri teshis amaciyla bir metin dosyasi seklinde indirilebilir.",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -11792,8 +11792,9 @@
+@@ -11804,8 +11804,9 @@
      var isOk = true;
      for (var i = 0, len = ips.length; i < len; i++) {
        var ip = ips[i];
@@ -1041,7 +1044,7 @@
        }
      }
  
-@@ -18661,7 +18662,7 @@
+@@ -18673,7 +18674,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
@@ -1050,7 +1053,7 @@
      $("body").appendChild(script);
    },
  
-@@ -18713,7 +18714,7 @@
+@@ -18725,7 +18726,7 @@
        var script = document.createElement("script");
        script.id = "homematic_com_script_" + index;
        script.type = "text/javascript";
@@ -1059,7 +1062,7 @@
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -18723,7 +18724,7 @@
+@@ -18735,7 +18736,7 @@
        var script = document.createElement("script");
        script.id = "homematic_com_script_fw";
        script.type = "text/javascript";
@@ -1068,7 +1071,7 @@
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -18757,7 +18758,7 @@
+@@ -18769,7 +18770,7 @@
     **/
    setLatestVersion: function(latestVersion, product)
    {

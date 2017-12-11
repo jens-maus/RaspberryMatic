@@ -4,7 +4,7 @@
 #
 #############################################################
 
-OCCU_VERSION = 518321ad43feef97a69b36e27e55c6abe56cd7d7
+OCCU_VERSION = b3bc9eb8c6cbbfdc8bb4563684b22abce64414d4
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 
 ifeq ($(BR2_PACKAGE_OCCU),y)

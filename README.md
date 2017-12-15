@@ -12,12 +12,12 @@
 The RaspberryMatic project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded devices like the [RaspberryPi](https://www.raspberrypi.org/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full microSD card image that can be directly flashed and then used in a RaspberryPi as the main operating system for controlling all kind of HomeMatic compatible devices with full compatibility to a CCU2 device directly sold by eQ-3.
 
 ## :cookie: Features
-* 100% HomeMatic CCU system compliant using latest [OCCU 2.29.23](https://github.com/eq-3/occu) software releases
+* 100% HomeMatic system compliant based on latest [OCCU 2.29.23](https://github.com/eq-3/occu) CCU software environment
 * Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
+* Based on latest [Buildroot 2017.11](http://buildroot.org/) lightweight Linux operating system
 * Integration of latest [community versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
-* Self-contained disk image primarily targeted for RaspberryPi hardware
-* Based on latest [Buildroot 2017.08.1](http://buildroot.org/) Linux environment
-* Latest [Linux kernel 4.9.x](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support
+* Self-contained disk image targeted for slim embedded devices (primarily RaspberryPi)
+* Latest [Linux kernel 4.9.69](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
@@ -25,17 +25,17 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Supports onboard WiFi of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setups including USB connection to uninterruptible power supply (UPS) as well as remote NUT server use (e.g. via Synology NAS Network UPS functionality)
-* Support to be used as a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
-* Support to be used without [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) RF module and just connect it to a LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
+* Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
+* Support to be used without [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) RF module and just connect it to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Full IPv6 support and default HTTPS enabled WebUI support
-* Supports to query status information of the underlying Linux system using SNMP requests
+* Support to query status information of the underlying Linux system using SNMP requests
 * Auto-resizing `/usr/local` partition to use the full capacity of the SD card or USB stick
 * Support for the following third-party *Hardware Attached on Top* (HAT) boards:
   * [S.USV](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown in case batteries are exhausted.
   * [PiModules UPS PIco](http://pimodules.com/) – UPS including automatic system shutdown in case batteries are exhausted.
   * [StromPi2](http://www.joy-it.net/strompi-2/) – UPS including alarm notification upon power loss.
 * Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi), onboard Tinkerboard RTC)
-* Hardware WatchDog support automatically rebooting the system upon hardware/lockup problems
+* Hardware WatchDog support automatically rebooting the system upon severe hardware/lockup problems
 * Direct [CloudMatic](http://cloudmatic.de) (meine-homematic.de) support
 * Dedicated Build Environment using a cross compiler (`arm-linux-gcc`) to compile third-party applications
 

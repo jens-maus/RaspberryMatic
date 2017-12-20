@@ -47,6 +47,12 @@ identify_host() {
     ;;
   esac
 
+  # if HOST is still empty we fall back to RaspberryPi3
+  if [[ -z "${HOST}" ]]; then
+    HOST="rpi3"
+    echo "couldn't identify hardware platform (${hostid}). Using RaspberryPi3 as fallback"
+  fi
+
   # depending on the host hardware we choose a different
   # uart base address and irq
   case ${HOST} in

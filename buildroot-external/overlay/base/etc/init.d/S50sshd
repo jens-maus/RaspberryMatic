@@ -24,6 +24,9 @@ start() {
 		rm -rf /tmp/etc/ssh
 	fi
 
+	# fix permissions
+	chmod 600 /usr/local/etc/ssh_host_*_key
+
 	printf "Starting sshd: "
 	/usr/sbin/sshd
 	touch /var/lock/sshd

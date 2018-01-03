@@ -1,7 +1,8 @@
 BOARD=rpi3
 # BOARD=rpi0
+# BOARD=tinkerboard
 # BOARD=docker
-BUILDROOT_VERSION=2017.08
+BUILDROOT_VERSION=2017.11
 VERSION=$(shell cat ./VERSION)
 
 .PHONY: all
@@ -16,7 +17,9 @@ usage:
 	@echo "	make distclean: clean everything"
 
 buildroot-$(BUILDROOT_VERSION).tar.bz2:
-	wget http://git.buildroot.net/buildroot/snapshot/buildroot-$(BUILDROOT_VERSION).tar.bz2
+	wget https://buildroot.org/downloads/buildroot-$(BUILDROOT_VERSION).tar.bz2
+	wget https://buildroot.org/downloads/buildroot-$(BUILDROOT_VERSION).tar.bz2.sign
+	cat buildroot-$(BUILDROOT_VERSION).tar.bz2.sign | grep SHA1: | sed 's/^SHA1: //' | shasum -c
 
 BUILDROOT_PATCHES=$(wildcard buildroot-patches/*.patch)
 
@@ -36,11 +39,11 @@ dist: | buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)/.config
 	cd build-raspmatic_$(BOARD) && make O=$(shell pwd)/build-raspmatic_$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
 
 release: dist
-	cp -a build-raspmatic_$(BOARD)/images/sdcard.img ./RaspberryMatic-$(VERSION)-$(BOARD).img
-	sha256sum ./RaspberryMatic-$(VERSION)-$(BOARD).img >./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256
-	rm -f ./RaspberryMatic-$(VERSION)-$(BOARD).zip
-	zip ./RaspberryMatic-$(VERSION)-$(BOARD).zip ./RaspberryMatic-$(VERSION)-$(BOARD).img ./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256 ./LICENSE
-	sha256sum ./RaspberryMatic-$(VERSION)-$(BOARD).zip >./RaspberryMatic-$(VERSION)-$(BOARD).zip.sha256
+	cp -a build-raspmatic_$(BOARD)/images/sdcard.img ./release/RaspberryMatic-$(VERSION)-$(BOARD).img
+	sha256sum ./release/RaspberryMatic-$(VERSION)-$(BOARD).img >./release/RaspberryMatic-$(VERSION)-$(BOARD).img.sha256
+	rm -f ./release/RaspberryMatic-$(VERSION)-$(BOARD).zip
+	cd ./release && zip ./RaspberryMatic-$(VERSION)-$(BOARD).zip ./RaspberryMatic-$(VERSION)-$(BOARD).img ./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256 ../LICENSE
+	sha256sum ./release/RaspberryMatic-$(VERSION)-$(BOARD).zip >./release/RaspberryMatic-$(VERSION)-$(BOARD).zip.sha256
 
 clean:
 	rm -rf build-raspmatic_$(BOARD) buildroot-$(BUILDROOT_VERSION)
@@ -59,7 +62,7 @@ umount:
 	sudo kpartx -dv build-raspmatic_$(BOARD)/images/sdcard.img
 
 install:
-	sudo dd if=build-raspmatic_$(BOARD)/images/sdcard.img of=$(of) bs=8K conv=sync status=progress
+	sudo dd if=build-raspmatic_$(BOARD)/images/sdcard.img of=$(of) bs=1M conv=fsync status=progress
 
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-raspmatic_$(BOARD)
 	cd build-raspmatic_$(BOARD) && make O=$(shell pwd)/build-raspmatic_$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig

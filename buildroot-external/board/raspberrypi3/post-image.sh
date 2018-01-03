@@ -9,6 +9,9 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 cp "${BR2_EXTERNAL_RASPBERRYMATIC_PATH}/board/${BOARD_NAME}/cmdline.txt" "${BINARIES_DIR}/rpi-firmware/"
 cp "${BR2_EXTERNAL_RASPBERRYMATIC_PATH}/board/${BOARD_NAME}/config.txt" "${BINARIES_DIR}/rpi-firmware/"
 
+# Create bcm2835-raw-uart.dtbo device tree overlay
+dtc -@ -I dts -O dtb -o ${BINARIES_DIR}/bcm2835-raw-uart.dtbo ${BR2_EXTERNAL_RASPBERRYMATIC_PATH}/package/occu/kernel-modules/bcm2835_raw_uart/bcm2835-raw-uart.dts
+
 #
 # Create user filesystem
 #

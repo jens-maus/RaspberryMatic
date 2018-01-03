@@ -1,0 +1,11 @@
+--- occu/WebUI/www/config/cp_security.cgi.orig
++++ occu/WebUI/www/config/cp_security.cgi
+@@ -192,7 +192,7 @@
+         }
+     }
+     catch {
+-        exec run-parts /etc/config/rc.d stop
++        exec run-parts -a stop /etc/config/rc.d
+     }
+     if { [catch {
+         exec crypttool -r

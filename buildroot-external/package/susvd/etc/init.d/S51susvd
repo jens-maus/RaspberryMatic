@@ -7,6 +7,7 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin
 DESC=susvd
 
 DAEMON=/opt/susvd/susvd
+CLIENT=/opt/susvd/susv
 CONFIG=/opt/susvd/susv.cfg
 PIDFILE=/var/run/susvd.pid
 
@@ -17,15 +18,39 @@ case $1 in
   start)
     echo -n "Starting S.USV daemon: "
     I2C_ADDR="$(grep "address=" ${CONFIG} | awk '{ print $1 }' | cut -d'=' -f2)"
-    if [[ -n ${I2C_ADDR} ]]; then
+    if [[ -n "${I2C_ADDR}" ]]; then
 
       # find out if a S.USV unit is installed at all
       i2cget -y 1 "${I2C_ADDR}" 2>/dev/null >/dev/null
       if [[ $? -eq 0 ]]; then
 
-        # now start the daemon
-        ${DAEMON} -start 2>&1 >/dev/null
-        [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+        # identify the current firmware version
+        SUSV_FW=$(${CLIENT} -status | grep "Firmware Version:" | cut -d' ' -f4)
+        if [[ -n "${SUSV_FW}" ]]; then
+
+          # identify hardware revision and perform
+          # firmware update accordingly
+          HW_REV=$(echo ${SUSV_FW} | cut -d'.' -f1)
+          if [[ ${HW_REV} -eq 1 ]]; then
+            DAEMON=/opt/susvd/susvd1
+            CLIENT=/opt/susvd/susv1
+
+            if [[ "${SUSV_FW}" != "1.32" ]]; then
+              echo -n "updating firmware, "
+              ${CLIENT} -flash /opt/susvd/fw/susv_fw_132.hex 2>&1 >/dev/null
+            fi
+          else
+            # HW_REV == 2
+            if [[ "${SUSV_FW}" != "2.40" ]]; then
+              echo -n "updating firmware, "
+              ${CLIENT} -flash /opt/susvd/fw/susv_fw_24.hex 2>&1 >/dev/null
+            fi
+          fi
+
+          # now start the daemon
+          ${DAEMON} -start 2>&1 >/dev/null
+          [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+        fi
 
       else
         echo "no hardware found"
@@ -39,6 +64,7 @@ case $1 in
     echo -n "Stopping S.USV daemon: "
     if [[ -f ${PIDFILE} ]]; then
       ${DAEMON} -stop 2>&1 >/dev/null
+      rm -f ${PIDFILE}
     fi
     [[ $? = 0 ]] && echo "OK" || echo "FAIL"
   ;;

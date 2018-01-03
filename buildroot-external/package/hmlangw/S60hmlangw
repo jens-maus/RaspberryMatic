@@ -6,12 +6,16 @@
 source /var/hm_mode 2>/dev/null
 
 # skip this startup if NOT in LAN Gateway mode
-[[ ${HM_MODE} != "HMLGW" ]] && exit 0
+[[ "${HM_MODE}" != "HM-LGW" ]] && exit 0
 
 start() {
   echo -n "Starting LAN Gateway Daemon: "
-  start-stop-daemon -S -b -m -p /var/run/hmlangw.pid --startas /bin/sh -- -c "exec /bin/hmlangw -n $(cat /var/board_serial) -s ${UART_DEV} -r -1 >/var/log/hmlangw.log 2>&1"
-  [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
+  if [[ -n "${HMRF_DEVNODE}" ]]; then
+    start-stop-daemon -S -b -m -p /var/run/hmlangw.pid --startas /bin/sh -- -c "exec /bin/hmlangw -n $(cat /var/board_serial) -s ${HMRF_DEVNODE} -r -1 >/var/log/hmlangw.log 2>&1"
+    [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
+  else
+    echo "ERROR: no BidCos-RF hardware found"
+  fi
 }
 
 stop() {

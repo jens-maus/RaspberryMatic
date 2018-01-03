@@ -1,0 +1,30 @@
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+
+if [ "$PS1" ]; then
+	if [ "`id -u`" -eq 0 ]; then
+		export PS1='# '
+	else
+		export PS1='$ '
+	fi
+fi
+
+export PAGER='/bin/more '
+export EDITOR='/bin/vi'
+
+# Source configuration files from /etc/profile.d
+for i in /etc/profile.d/*.sh ; do
+	if [ -r "$i" ]; then
+		. $i
+	fi
+	unset i
+done
+
+# Source configuration files from /usr/local/etc/profile.d
+if [[ -d /usr/local/etc/profile.d ]]; then
+  for i in /usr/local/etc/profile.d/*.sh ; do
+	  if [ -r "$i" ]; then
+		  . $i
+	  fi
+	  unset i
+  done
+fi

@@ -22,18 +22,20 @@ init () {
 start() {
 	echo -n "Starting eq3configd: "
 	init
-	start-stop-daemon -S -q -p /var/run/eq3configd.pid --exec /bin/eq3configd &
+	start-stop-daemon -S -q -b -m -p /var/run/eq3configd.pid --exec /bin/eq3configd
 	echo "OK"
 	echo -n "Starting ssdpd: "
-	start-stop-daemon -S -q -p /var/run/ssdpd.pid --exec /bin/ssdpd &
+	start-stop-daemon -S -q -b -m -p /var/run/ssdpd.pid --exec /bin/ssdpd
 	echo "OK"
 }
 stop() {
 	echo -n "Stopping ssdpd: "
 	start-stop-daemon -K -q -p /var/run/ssdpd.pid
+	rm -f /var/run/ssdpd.pid
 	echo "OK"
 	echo -n "Stopping eq3configd: "
 	start-stop-daemon -K -q -p /var/run/eq3configd.pid
+	rm -f /var/run/eq3configd.pid
 	echo "OK"
 }
 restart() {

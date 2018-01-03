@@ -1,0 +1,37 @@
+--- occu/WebUI/www/upnp/basic_dev.cgi.orig
++++ occu/WebUI/www/upnp/basic_dev.cgi
+@@ -14,7 +14,7 @@
+ }
+ 
+ proc get_serial_number {} {
+-    return [exec cat /sys/module/plat_eq3ccu2/parameters/board_serial]
++    return [exec cat /var/board_serial]
+ }
+ 
+ proc get_hostname {} {
+@@ -22,19 +22,19 @@
+ }
+ 
+ set hostname "[get_hostname]"
+-if { "$hostname" == "homematic-ccu2" } {
+-    set RESOURCE(TITLE) "HomeMatic Central CCU2"
++if { "$hostname" == "homematic-raspi" } {
++    set RESOURCE(TITLE) "RaspberryMatic CCU"
+ } else {
+     set RESOURCE(TITLE) "$hostname"
+ }
+ 
+ set RESOURCE(MANUFACTURER) "EQ3"
+ set RESOURCE(MANUFACTURER_URL) "http://www.homematic.com"
+-set RESOURCE(PRESENTATION_URL) ""
++set RESOURCE(PRESENTATION_URL) "http://$hostname/"
+ set RESOURCE(DESCRIPTION) "HomeMatic Central [get_serial_number]"
+-set RESOURCE(MODEL_NAME) "HomeMatic Central"
+-set RESOURCE(MODEL_NUMBER) "HomeMatic Central"
+-set RESOURCE(MODEL_URL) $RESOURCE(MANUFACTURER_URL)
++set RESOURCE(MODEL_NAME) "RaspberryMatic"
++set RESOURCE(MODEL_NUMBER) "RaspberryMatic"
++set RESOURCE(MODEL_URL) "https://github.com/jens-maus/RaspberryMatic"
+ set RESOURCE(SERIAL_NUMBER) "[get_serial_number]"
+ set RESOURCE(UUID) "upnp-BasicDevice-1_0-$RESOURCE(SERIAL_NUMBER)"
+ set RESOURCE(UPC) "123456789002"

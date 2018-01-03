@@ -8,23 +8,44 @@ CFG_TEMPLATE_DIR=/etc/config_templates
 source /var/hm_mode 2>/dev/null
 
 # skip this startup in LAN Gateway mode
-[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
 start() {
 	echo -n "Starting Third-Party Addons: "
-	if [ ! -e /etc/config/safemode ] ; then
-        	# meine-homematic.de starten
-        	/opt/mh/startup.sh 2>/dev/null >/dev/null
+	if [[ ! -e /etc/config/safemode ]]; then
 
-        	# Zusatzsoftware starten
-        	run-parts /etc/config/rc.d
+		# CloudMatic (meine-homematic.de) startup
+		if [[ -x /opt/mh/startup.sh ]]; then
+			/opt/mh/startup.sh 2>/dev/null >/dev/null
+		fi
 
-	        # cal local rc file
-        	if [ -x /usr/local/etc/rc.local ]; then
-                	/usr/local/etc/rc.local
-        	fi
+		# source /etc/profile.d profiles
+		for i in /etc/profile.d/*.sh ; do
+			if [[ -r "$i" ]]; then
+				. $i
+			fi
+			unset i
+		done
+
+		# source /usr/local/etc/profile.d profiles
+		if [[ -d /usr/local/etc/profile.d ]]; then
+			for i in /usr/local/etc/profile.d/*.sh ; do
+				if [[ -r "$i" ]]; then
+					. $i
+				fi
+				unset i
+			done
+		fi
+
+		# Zusatzsoftware starten
+		/bin/run-parts -a start /etc/config/rc.d
+
+		# cal local rc file
+		if [[ -x /usr/local/etc/rc.local ]]; then
+			/usr/local/etc/rc.local
+		fi
 	else
-        	rm -f /etc/config/safemode
+		rm -f /etc/config/safemode
 	fi
 	echo "OK"
 }

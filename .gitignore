@@ -2,6 +2,6 @@
 /build-*/
 /buildroot-????.??*
 /download
-/*.zip
-/*.img
-/*.sha256
+/release/*.zip
+/release/*.img
+/release/*.sha256

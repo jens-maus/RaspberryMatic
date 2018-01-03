@@ -11,7 +11,7 @@ PIDFILE=/var/run/ReGaHss.pid
 source /var/hm_mode 2>/dev/null
 
 # skip this startup in LAN Gateway mode
-[[ ${HM_MODE} == "HMLGW" ]] && exit 0
+[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
 init() {
   for i in ${CREATE_DIRS}; do
@@ -24,6 +24,27 @@ init() {
 
   if [ -e /etc/config/syslog ] ; then
     . /etc/config/syslog
+  fi
+
+  # source profile.d files
+  if [[ ! -e /etc/config/safemode ]] ; then
+    # source from /etc/profile.d
+    for i in /etc/profile.d/*.sh ; do
+      if [[ -r "$i" ]]; then
+        . $i
+      fi
+      unset i
+    done
+
+    # source from /usr/local/etc/profile.d
+    if [[ -d /usr/local/etc/profile.d ]]; then
+      for i in /usr/local/etc/profile.d/*.sh ; do
+        if [[ -r "$i" ]]; then
+          . $i
+        fi
+        unset i
+      done
+    fi
   fi
 }
 

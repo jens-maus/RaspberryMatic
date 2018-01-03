@@ -9,17 +9,24 @@ start() {
 
   echo -n "Updating RF-Firmware: "
 
-  echo "0" > /sys/class/gpio/gpio18/value
-  sleep 1
-  echo "1" > /sys/class/gpio/gpio18/value
+  if [[ -n "${UART_GPIO}" ]]; then
+    echo out >/sys/class/gpio/gpio${UART_GPIO}/direction
+    sleep 1
+    echo 1 >/sys/class/gpio/gpio${UART_GPIO}/value
+    sleep 1
+    echo 0 >/sys/class/gpio/gpio${UART_GPIO}/value
+    sleep 1
+    echo 1 >/sys/class/gpio/gpio${UART_GPIO}/value
+  fi
 
-  if [[ ! -e /etc/config/no-coprocessor-update ]] && [[ ! -z $(cat /var/rf_address) ]]; then
+  if [[ ! -e /etc/config/no-coprocessor-update ]]; then
+    if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] || [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
 
     FW_DIRECTORY=/firmware/HM-MOD-UART
 
     # identify which firmware file to take for a potential coprocessor
     # firmware update
-    if [[ ${HM_MODE} == "HmIP" ]]; then
+    if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
       # for HmIP support we flash the dualcopro firmware
       if [[ ! -e /etc/config/enable-debug-coprocessor ]]; then
         FW_FILE=dualcopro_si1002_update_blhm.eq3
@@ -33,13 +40,13 @@ start() {
     fi
 
     # identify the copro firmware version to be flashed
-    if [[ -z ${NEW_VERSION} ]]; then
+    if [[ -z "${NEW_VERSION}" ]]; then
       NEW_VERSION=$(cat ${FW_DIRECTORY}/fwmap | grep "${FW_FILE}" | awk '{ print $3 }')
     fi
 
     # if NEW_VERSION is not empty we go ahead and perform the
     # update operation
-    if [[ -n ${NEW_VERSION} ]] && [[ ! -e /var/rf_firmware_version || ${NEW_VERSION} != $(cat /var/rf_firmware_version) ]]; then
+    if [[ -n "${NEW_VERSION}" ]] && [[ ! -e /var/rf_firmware_version || "${NEW_VERSION}" != $(cat /var/rf_firmware_version) ]]; then
       # we always perform the firmware update in /tmp
       # so lets copy the whole firmware directory to tmp
       TMPDIR_FW=$(mktemp -d)
@@ -48,13 +55,19 @@ start() {
       # create artifical fwmap file
       echo "CCU2 ${FW_FILE} ${NEW_VERSION}" >${TMPDIR_FW}/fwmap
 
+      if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HMRF_DEVNODE}" ]]; then
+        RPI_PCB_DEVNODE=${HMRF_DEVNODE}
+      elif [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HMIP_DEVNODE}" ]]; then
+        RPI_PCB_DEVNODE=${HMIP_DEVNODE}
+      fi
+
       # perform the coprocessor update
-      /bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -u -d ${TMPDIR_FW}
+      /bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -u -d ${TMPDIR_FW}
       if [[ $? -ne 0 ]]; then
         echo -n "forcing, "
-        /bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -u -f -d ${TMPDIR_FW}
+        /bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -u -f -d ${TMPDIR_FW}
       fi
-      RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${UART_DEV} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
+      RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
       echo "${RF_VERSION}" >/var/rf_firmware_version
 
       if [[ "${NEW_VERSION}" == "${RF_VERSION}" ]]; then
@@ -69,7 +82,9 @@ start() {
       echo "not required (${NEW_VERSION})"
     fi
 
-    sleep 1
+  else
+    echo "no HM-MOD-RPI-PCB found"
+  fi
   else
     echo "disabled"
   fi

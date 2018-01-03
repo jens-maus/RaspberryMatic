@@ -1,0 +1,55 @@
+#!/bin/sh
+#
+# StromPi2 UPS Daemon starting and stopping
+#
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DESC=strompi2d
+
+DAEMON=/opt/strompi2d/strompi2d.sh
+PIDFILE=/var/run/strompi2d.pid
+
+test -x $DAEMON || exit 0
+
+case $1 in
+  start)
+    echo -n "Starting StromPi2 UPS daemon: "
+
+    # if a file /etc/config/strompi2 is found we assume
+    # a StromPi2 to be present because there is no way to
+    # autodetect it.
+    if [[ -f /etc/config/strompi2 ]]; then
+
+      # now start the daemon
+      start-stop-daemon --start --background --pidfile ${PIDFILE} --make-pidfile --quiet --exec ${DAEMON}
+      [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+
+    else
+      echo "disabled"
+    fi
+  ;;
+
+  stop)
+    echo -n "Stopping StromPi2 UPS daemon: "
+    if [[ -f ${PIDFILE} ]]; then
+      start-stop-daemon --stop --quiet --pidfile ${PIDFILE}
+      [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+      rm -f ${PIDFILE}
+    else
+      echo "OK"
+    fi
+  ;;
+
+  restart|force-reload)
+    $0 stop
+    sleep 1
+    $0 start
+  ;;
+
+  *)
+    echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+    exit 1
+  ;;
+esac
+
+exit 0

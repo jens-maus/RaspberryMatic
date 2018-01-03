@@ -1,0 +1,71 @@
+--- occu/WebUI/www/rega/pages/index.htm.orig
++++ occu/WebUI/www/rega/pages/index.htm
+@@ -53,7 +53,26 @@
+   <script type="text/javascript" src="/webui/js/extern/json2min.js"></script>
+   <script type="text/javascript" src="/webui/js/extern/spectrum.js"></script>
+ 
++  <script>
++  document.onkeypress = Backspace;
++  function Backspace(event) {
++    if (event.keyCode == 8) {
++        if (document.activeElement.tagName == "INPUT" || "textarea") {
++            return true;
++        } else {
++          alert(unescape(translateKey('dialogBackspacePrevent') ));
++          return false;
++        }
++     }
++  }
+ 
++  history.pushState(null, document.title, location.href);
++  window.addEventListener('popstate', function (event)
++  {
++  history.pushState(null, document.title, location.href);
++  alert(unescape(translateKey('dialogBackspacePrevent') ));
++  });
++  </script>
+ 
+ 
+   <link href="/webui/css/extern/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css">
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -746,6 +746,7 @@
+     "dialogHelpInfoLblSN" : "Seriennummer:",
+     "dialogHelpInfoLblVersion" : "Version:",
+     "dialogHelpInfoLblCopyright" : "Copyright",
+<<<<<<< HEAD
++    "dialogBackspacePrevent" : "Bitte den Zur%FCck Button in der Oberfl%E4che verwenden%21",
+=======
++    "dialogBackspacePrevent" : "Bitte den Zur%FCck Button in der WebUI verwenden.",
+>>>>>>> jens-maus/master
+     "commentDialogNewHelpEnd" : "***********************************************",
+     "commentActionStatusControl" : "***********************************************",
+     "actionStatusControlLblActive" : "Aktiv",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -772,6 +772,7 @@
+     "dialogHelpInfoLblSN" : "Serial number:",
+     "dialogHelpInfoLblVersion" : "Version:",
+     "dialogHelpInfoLblCopyright" : "Copyright",
+<<<<<<< HEAD
++    "dialogBackspacePrevent" : "Please use the back button of the user interface",
+=======
++    "dialogBackspacePrevent" : "Please use the back button of the WebUI.",
+>>>>>>> jens-maus/master
+ 
+     "commentDialogNewHelpEnd" : "***********************************************",
+ 
+--- occu/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/tr/translate.lang.js
+@@ -742,6 +742,7 @@
+     "dialogHelpInfoLblSN" : "Seri numarasi:",
+     "dialogHelpInfoLblVersion" : "Versiyon:",
+     "dialogHelpInfoLblCopyright" : "Telif haklari",
+<<<<<<< HEAD
++    "dialogBackspacePrevent" : "Lütfen kullanıcı arabiriminin geri düğmesini kullanın",
+=======
++    "dialogBackspacePrevent" : "L%FCtfen kullanıcı arabiriminin geri d%FCgmesini kullanın.",
+>>>>>>> jens-maus/master
+     "commentDialogNewHelpEnd" : "***********************************************",
+     "commentActionStatusControl" : "***********************************************",
+     "actionStatusControlLblActive" : "Etkin",

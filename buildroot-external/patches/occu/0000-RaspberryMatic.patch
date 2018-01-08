@@ -5,13 +5,22 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  
 -init() {
--	export TZ=`cat /etc/config/TZ`
+-   export TZ=`cat /etc/config/TZ`
 +source /var/hm_mode 2>/dev/null
 +
 +# skip this startup in LAN Gateway mode
 +[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
  
 +init() {
+<<<<<<< HEAD:buildroot-external/patches/homematic/0000-RaspberryMatic.patch
+    if [ ! -d /etc/config/hs485d ] ; then
+        mkdir /etc/config/hs485d
+    fi
+@@ -25,17 +28,36 @@
+    else
+        cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
+    fi
+=======
  	if [ ! -d /etc/config/hs485d ] ; then
    		mkdir /etc/config/hs485d
  	fi
@@ -19,6 +28,7 @@
  	else
  		cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
  	fi
+>>>>>>> upstream/master:buildroot-external/patches/occu/0000-RaspberryMatic.patch
 +
 +  # if there is no HmIP support required we have to strip
 +  # the HmIP-RF part from InterfacesList.xml
@@ -48,16 +58,16 @@
  }
  
  start() {
--	echo -n "Preparing start of hs485d"
-+	echo -n "Preparing start of hs485d: "
- 	init
- 	/bin/hs485dLoader -l $LOGLEVEL_HS485D -ds -dd /etc/config/hs485d.conf
- 	echo "OK"
+-   echo -n "Preparing start of hs485d"
++   echo -n "Preparing start of hs485d: "
+    init
+    /bin/hs485dLoader -l $LOGLEVEL_HS485D -ds -dd /etc/config/hs485d.conf
+    echo "OK"
  }
  
  stop() {
--	echo "OK"
-+	echo -n ""
+-   echo "OK"
++   echo -n ""
  }
  
  restart() {
@@ -73,18 +83,26 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  
 -init() {
--	export TZ=`cat /etc/config/TZ`
+-   export TZ=`cat /etc/config/TZ`
 +source /var/hm_mode 2>/dev/null
 +
 +# skip this startup in LAN Gateway mode
 +[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
  
 +init() {
+<<<<<<< HEAD:buildroot-external/patches/homematic/0000-RaspberryMatic.patch
+    if [ ! -e /etc/config/syslog ] ; then
+        cp $CFG_TEMPLATE_DIR/syslog /etc/config
+    fi
+--- homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf.orig
++++ homematic/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf
+=======
  	if [ ! -e /etc/config/syslog ] ; then
  		cp $CFG_TEMPLATE_DIR/syslog /etc/config
  	fi
 --- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf
+>>>>>>> upstream/master:buildroot-external/patches/occu/0000-RaspberryMatic.patch
 @@ -22,6 +22,5 @@
  [Interface 0]
  Type = CCU2
@@ -101,28 +119,28 @@
  PIDFILE=/var/run/multimacd.pid
  
 -update() {        
--	if [ ! -e /etc/config/no-coprocessor-update ] ; then
--		echo "checking if firmware update is needed..."
--		/bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u
--		if ! [ $? -eq 0 ] ; then
--			echo "error while updating coprocessor, recovering..."
--			avrprog --bo
--			/bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u -f
--			sleep 1
--		else
--			echo "done"
--			sleep 1
--		fi
--	else
--		echo "firmware update disabled"
--	fi
+-   if [ ! -e /etc/config/no-coprocessor-update ] ; then
+-       echo "checking if firmware update is needed..."
+-       /bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u
+-       if ! [ $? -eq 0 ] ; then
+-           echo "error while updating coprocessor, recovering..."
+-           avrprog --bo
+-           /bin/eq3configcmd update-coprocessor -p "/dev/mxs_auart_raw.0" -u -f
+-           sleep 1
+-       else
+-           echo "done"
+-           sleep 1
+-       fi
+-   else
+-       echo "firmware update disabled"
+-   fi
 -}
 -check_bo(){
--	avrprog --devinfo | grep -q ec,fd,da,ef
--	if ! [ 0 -eq $? ];
--	then
--	avrprog --bo
--	fi
+-   avrprog --devinfo | grep -q ec,fd,da,ef
+-   if ! [ 0 -eq $? ];
+-   then
+-   avrprog --bo
+-   fi
 -}
 -check_rf_address(){
 -        sed 1q /sys/module/plat_eq3ccu2/parameters/radio_mac > /var/log/rf_address
@@ -139,43 +157,43 @@
 +[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 +
  init() {
--	export TZ=`cat /etc/config/TZ`
--	
--	if [ ! -e /etc/config/multimacd.conf ] ; then
--		cp $CFG_TEMPLATE_DIR/multimacd.conf /etc/config
+-   export TZ=`cat /etc/config/TZ`
+-   
+-   if [ ! -e /etc/config/multimacd.conf ] ; then
+-       cp $CFG_TEMPLATE_DIR/multimacd.conf /etc/config
 +
 +  # make sure there is no /dev/ttyS0
 +  if [ -e /dev/ttyS0 ] ; then
 +    rm -f /dev/ttyS0
 +  fi
 +
-+	if [ ! -e /var/etc/multimacd.conf ] ; then
-+		cp $CFG_TEMPLATE_DIR/multimacd.conf /var/etc/
- 	fi
++   if [ ! -e /var/etc/multimacd.conf ] ; then
++       cp $CFG_TEMPLATE_DIR/multimacd.conf /var/etc/
+    fi
  
- 	if [ ! -e /etc/config/syslog ] ; then
+    if [ ! -e /etc/config/syslog ] ; then
 @@ -57,44 +33,41 @@
  }
  
  waitStartupComplete() {
 -    echo -n "Waiting for multimacd to get ready"
- 	STEPS=5
+    STEPS=5
      for i in $(seq 1 $STEPS)
      do
- 		sleep 2
- 		echo -n "."
+        sleep 2
+        echo -n "."
 -        MMDSTATUSPID=`cat /var/status/multimacd.status 2>/dev/null`
 +        MMDSTATUSPID=`cat /var/status/multimacd.status 2>&1`
          MMDPID=`pidof multimacd`
 -        if [ $MMDSTATUSPID = $MMDPID ] 
 +        if [ "$MMDSTATUSPID" = "$MMDPID" ] 
- 		then
+        then
 -            echo "multimacd is ready now."
 +            echo "OK"
              break
- 		fi 
+        fi 
          if [ $i -eq $STEPS ]
- 		then
+        then
 -            echo "Timeout while waiting for multimacd to get ready."
 +            echo "ERROR"
          fi
@@ -183,11 +201,25 @@
  }
  
  start() {
--	echo "Starting multimacd: "
--	init
--	if [ ! -e $PIDFILE ] ; then
--		check_bo
+-   echo "Starting multimacd: "
+-   init
+-   if [ ! -e $PIDFILE ] ; then
+-       check_bo
 -                check_rf_address
+<<<<<<< HEAD:buildroot-external/patches/homematic/0000-RaspberryMatic.patch
+-       update
+-   else
+-       echo "Skipping coprocessor update because multimacd is running."
+-   fi
+-   init
+-   start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /etc/config/multimacd.conf -l $LOGLEVEL_RFD
+-   waitStartupComplete
++   echo -n "Starting multimacd: "
++  if [[ ${HM_MODE} == "HmIP" ]] && [[ ! -z $(cat /var/rf_address) ]]; then
++     init
++     start-stop-daemon -S -N -10 -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l $LOGLEVEL_RFD
++     waitStartupComplete
+=======
 -		update
 -	else
 -		echo "Skipping coprocessor update because multimacd is running."
@@ -200,19 +232,29 @@
 +	  init
 +	  start-stop-daemon -S -N -10 -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l $LOGLEVEL_RFD
 +	  waitStartupComplete
+>>>>>>> upstream/master:buildroot-external/patches/occu/0000-RaspberryMatic.patch
 +  else
 +    echo "not required"
 +  fi
  }
  stop() {
+<<<<<<< HEAD:buildroot-external/patches/homematic/0000-RaspberryMatic.patch
+    echo -n "Stopping multimacd: "
+-   start-stop-daemon -K -q -p $PIDFILE
+-   rm -f $PIDFILE
++  if [[ ${HM_MODE} == "HmIP" ]] && [[ ! -z $(cat /var/rf_address) ]]; then
++     start-stop-daemon -K -q -p $PIDFILE
++     rm -f $PIDFILE
+=======
  	echo -n "Stopping multimacd: "
 -	start-stop-daemon -K -q -p $PIDFILE
 -	rm -f $PIDFILE
 +  if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
 +	  start-stop-daemon -K -q -p $PIDFILE
 +	  rm -f $PIDFILE
+>>>>>>> upstream/master:buildroot-external/patches/occu/0000-RaspberryMatic.patch
 +  fi
- 	echo "OK"
+    echo "OK"
  }
  restart() {
 @@ -118,4 +91,3 @@
@@ -232,31 +274,31 @@
 +[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 +
  init() {
--	export TZ=`cat /etc/config/TZ`
+-   export TZ=`cat /etc/config/TZ`
  
- 	if [ ! -d /etc/config/rfd ] ; then
-   		mkdir /etc/config/rfd
- 	fi
+    if [ ! -d /etc/config/rfd ] ; then
+        mkdir /etc/config/rfd
+    fi
 +
- 	#Migration for existing rfd.conf in user space
- 	if [ ! -e /etc/config/rfd.conf ] ; then
--		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
--	else
--		sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
--		sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
--		sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
+    #Migration for existing rfd.conf in user space
+    if [ ! -e /etc/config/rfd.conf ] ; then
+-       cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
+-   else
+-       sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
+-       sed -i 's/^AccessFile/#AccessFile/' /etc/config/rfd.conf || true
+-       sed -i 's/^ResetFile/#ResetFile/' /etc/config/rfd.conf || true
 -                if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
 -                        sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
 -                fi
--	fi
-+		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config/rfd.conf
+-   fi
++       cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config/rfd.conf
 +  fi
  
 -        # Bug fix
 -        grep "/etc/config/rfd/keys" /etc/config/rfd.conf
 -        if [ $? == 0 ] ; then
 -                echo "Copy rfd files"
--		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
+-       cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
 -        fi
 +  # only modify if real rf module found
 +  if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
@@ -301,31 +343,37 @@
 +    sed -i -e "/^\[Interface ${inum}\]/,/^\s*$/ s/^/#/" /etc/config/rfd.conf
 +  fi
  
+<<<<<<< HEAD:buildroot-external/patches/homematic/0000-RaspberryMatic.patch
+    if [ ! -e /etc/config/syslog ] ; then
+        cp $CFG_TEMPLATE_DIR/syslog /etc/config
+@@ -42,28 +54,27 @@
+=======
  	if [ ! -e /etc/config/syslog ] ; then
  		cp $CFG_TEMPLATE_DIR/syslog /etc/config
 @@ -42,31 +76,34 @@
+>>>>>>> upstream/master:buildroot-external/patches/occu/0000-RaspberryMatic.patch
  }
  
  waitStartupComplete() {
 -    echo -n "Waiting for rfd to get ready"
--	STEPS=60
-+	STEPS=20
+-   STEPS=60
++   STEPS=20
      for i in $(seq 1 $STEPS)
      do
- 		sleep 2
- 		echo -n "."
+        sleep 2
+        echo -n "."
 -        RFDSTATUSPID=`cat /var/status/rfd.status 2>/dev/null`
 +        RFDSTATUSPID=`cat /var/status/rfd.status 2>&1`
          RFDPID=`pidof rfd`
 -        if [ $RFDSTATUSPID = $RFDPID ] 
 +        if [ "$RFDSTATUSPID" = "$RFDPID" ] 
- 		then
+        then
 -            echo "rfd is ready now."
 +            echo "OK"
              break
          fi
          if [ $i -eq $STEPS ] 
- 		then
+        then
 -            echo "Timeout while waiting for rfd to get ready."
 +            echo "ERROR"
          fi
@@ -333,6 +381,15 @@
  }
  
  start() {
+<<<<<<< HEAD:buildroot-external/patches/homematic/0000-RaspberryMatic.patch
+-   echo "Starting rfd: "
++   echo -n "Starting rfd: "
+    init
+    start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
+    waitStartupComplete
+--- homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf.orig
++++ homematic/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf
+=======
 -	echo "Starting rfd: "
 +	echo -n "Starting rfd: "
  	init
@@ -354,6 +411,7 @@
 -
 --- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf.orig
 +++ occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/cgi.conf
+>>>>>>> upstream/master:buildroot-external/patches/occu/0000-RaspberryMatic.patch
 @@ -1,5 +1,7 @@
  #### CGI module
  cgi.assign = ( ".pl"  => "/usr/bin/perl",
@@ -390,30 +448,30 @@
  server.port = 80
  
 +$SERVER["socket"] == ":8181" {
-+	server.document-root = server_root
++   server.document-root = server_root
 +}
 +
 +$SERVER["socket"] == ":443" {
-+	server.document-root = server_root
-+	ssl.engine = "enable"
-+	ssl.pemfile = "/etc/config/server.pem"
++   server.document-root = server_root
++   ssl.engine = "enable"
++   ssl.pemfile = "/etc/config/server.pem"
 +}
 +
 +$SERVER["socket"] == "[::]:80" {
-+	server.document-root = server_root
-+	server.use-ipv6 = "enable"
++   server.document-root = server_root
++   server.use-ipv6 = "enable"
 +}
 +
 +$SERVER["socket"] == "[::]:8181" {
-+	server.document-root = server_root
-+	server.use-ipv6 = "enable"
++   server.document-root = server_root
++   server.use-ipv6 = "enable"
 +}
 +
 +$SERVER["socket"] == "[::]:443" {
-+	server.document-root = server_root
-+	ssl.engine = "enable"
-+	ssl.pemfile = "/etc/config/server.pem"
-+	server.use-ipv6 = "enable"
++   server.document-root = server_root
++   ssl.engine = "enable"
++   ssl.pemfile = "/etc/config/server.pem"
++   server.use-ipv6 = "enable"
 +}
 +
 +#$HTTP["scheme"] == "https" {
@@ -512,8 +570,8 @@
 -CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
 +#CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
  
--#CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
-+CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
+-#CCU2                  dualcopro_si1002_update_blhm.eq3                2.8.5          #Dual CoProzessor CCU2
++CCU2                   dualcopro_si1002_update_blhm.eq3                2.8.5          #Dual CoProzessor CCU2
  
 --- occu/HMserver/etc/init.d.orig
 +++ occu/HMserver/etc/init.d
@@ -538,14 +596,25 @@
 +fi
 +
  init() {
--	export TZ=`cat /etc/config/TZ | cut -d'-' -f1 | cut -d'+' -f1`
--	export JAVA_HOME=/opt/jre-1.8.0_121-compact3
-+	export JAVA_HOME=/opt/java/
- 	export PATH=$PATH:$JAVA_HOME/bin
- 	if [ ! -e /etc/config/log4j.xml ] ; then
- 		cp $CFG_TEMPLATE_DIR/log4j.xml /etc/config
- 	fi
+-   export TZ=`cat /etc/config/TZ | cut -d'-' -f1 | cut -d'+' -f1`
+-   export JAVA_HOME=/opt/jre-1.8.0_121-compact3
++   export JAVA_HOME=/opt/java/
+    export PATH=$PATH:$JAVA_HOME/bin
+    if [ ! -e /etc/config/log4j.xml ] ; then
+        cp $CFG_TEMPLATE_DIR/log4j.xml /etc/config
+    fi
 +
+<<<<<<< HEAD:buildroot-external/patches/homematic/0000-RaspberryMatic.patch
++   if [[ ${HM_MODE} == "HmIP" ]] || [[ ${HM_MODE} == "HmIP-RFUSB" ]]; then
++       if [[ ! -e /var/etc/crRFD.conf ]]; then
++         cp ${CFG_TEMPLATE_DIR}/crRFD.conf /var/etc/
++       fi
++
++       # In HmIP-RFUSB mode we have to change crRFD.conf
++       if [[ ${HM_MODE} == "HmIP-RFUSB" ]]; then
++         sed -i 's/^Adapter\.1\.Port=\/dev\/.*$/Adapter.1.Port=\/dev\/ttyUSB0/' /var/etc/crRFD.conf
++       fi
+=======
 +	if [[ -n "${HMIP_DEV}" ]]; then
 +		if [[ ! -e /var/etc/crRFD.conf ]]; then
 +		  cp ${CFG_TEMPLATE_DIR}/crRFD.conf /var/etc/
@@ -555,42 +624,52 @@
 +		if [[ "${HMIP_DEV}" == "HMIP-RFUSB" ]]; then
 +		  sed -i "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HMIP_DEVNODE}|" /var/etc/crRFD.conf
 +		fi
+>>>>>>> upstream/master:buildroot-external/patches/occu/0000-RaspberryMatic.patch
 +
-+		HM_SERVER=/opt/HMServer/HMIPServer.jar
-+		HM_SERVER_ARGS="/var/etc/crRFD.conf"
-+	else
-+		HM_SERVER=/opt/HMServer/HMServer.jar
-+	fi
++       HM_SERVER=/opt/HMServer/HMIPServer.jar
++       HM_SERVER_ARGS="/var/etc/crRFD.conf"
++   else
++       HM_SERVER=/opt/HMServer/HMServer.jar
++   fi
 +}
 +
 +waitStartupComplete() {
-+	STEPS=150
-+	for i in $(seq 1 $STEPS); do
-+		sleep 2
-+		echo -n "."
-+		if [[ -e ${STARTWAITFILE} ]]; then
-+			echo "OK"
-+			break
-+		fi
-+		if [[ ${i} -eq ${STEPS} ]]; then
-+			echo "ERROR"
-+		fi
-+	done
++   STEPS=150
++   for i in $(seq 1 $STEPS); do
++       sleep 2
++       echo -n "."
++       if [[ -e ${STARTWAITFILE} ]]; then
++           echo "OK"
++           break
++       fi
++       if [[ ${i} -eq ${STEPS} ]]; then
++           echo "ERROR"
++       fi
++   done
  }
  
  start() {
--	echo -n "Starting HMServer: "
-+	echo -n "Starting ${HM_SERVER_TYPE}: "
- 	init
--	start-stop-daemon -S -q -m -p $PIDFILE --exec java -- -Xmx64m -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar /opt/HMServer/HMIPServer.jar /etc/crRFD.conf &
--	echo "Waiting for HMServer to get ready"
--	eq3configcmd wait-for-file -f $STARTWAITFILE -p 5 -t 300
--	echo "OK"
-+	start-stop-daemon -b -S -q -m -p $PIDFILE --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar ${HM_SERVER} ${HM_SERVER_ARGS}
-+	echo -n "."
-+	waitStartupComplete
+-   echo -n "Starting HMServer: "
++   echo -n "Starting ${HM_SERVER_TYPE}: "
+    init
+-   start-stop-daemon -S -q -m -p $PIDFILE --exec java -- -Xmx64m -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar /opt/HMServer/HMIPServer.jar /etc/crRFD.conf &
+-   echo "Waiting for HMServer to get ready"
+-   eq3configcmd wait-for-file -f $STARTWAITFILE -p 5 -t 300
+-   echo "OK"
++   start-stop-daemon -b -S -q -m -p $PIDFILE --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar ${HM_SERVER} ${HM_SERVER_ARGS}
++   echo -n "."
++   waitStartupComplete
  }
  stop() {
+<<<<<<< HEAD:buildroot-external/patches/homematic/0000-RaspberryMatic.patch
+-   echo -n "Stopping HMServer: "
++   echo -n "Stopping ${HM_SERVER_TYPE}: "
+    rm -f $STARTWAITFILE
+    start-stop-daemon -K -q -p $PIDFILE
+    rm -f $PIDFILE
+--- homematic/WebUI/www/api/homematic.cgi.orig
++++ homematic/WebUI/www/api/homematic.cgi
+=======
 -	echo -n "Stopping HMServer: "
 +	echo -n "Stopping ${HM_SERVER_TYPE}: "
  	rm -f $STARTWAITFILE
@@ -603,6 +682,7 @@
 -
 --- occu/WebUI/www/api/homematic.cgi.orig
 +++ occu/WebUI/www/api/homematic.cgi
+>>>>>>> upstream/master:buildroot-external/patches/occu/0000-RaspberryMatic.patch
 @@ -22,15 +22,13 @@
  # um eine Notlösung. 
  ##
@@ -702,6 +782,17 @@
              }
              table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
 @@ -957,6 +905,7 @@
+<<<<<<< HEAD:buildroot-external/patches/homematic/0000-RaspberryMatic.patch
+     catch { exec lcdtool {Saving     Data...    } }
+     rega system.Save()
+     catch { exec lcdtool {Reboot...             } }
++    exec sleep 5
+     exec /sbin/reboot
+ }
+ 
+--- homematic/WebUI/www/config/cp_security.cgi.orig
++++ homematic/WebUI/www/config/cp_security.cgi
+=======
      catch { exec lcdtool {Saving     Data...    } }
      rega system.Save()
      catch { exec lcdtool {Reboot...             } }
@@ -711,6 +802,7 @@
  
 --- occu/WebUI/www/config/cp_security.cgi.orig
 +++ occu/WebUI/www/config/cp_security.cgi
+>>>>>>> upstream/master:buildroot-external/patches/occu/0000-RaspberryMatic.patch
 @@ -202,8 +202,8 @@
          # exec /usr/sbin/ubiattach -p /dev/mtd6
          # exec /usr/sbin/ubimkvol /dev/ubi1 -N user -m
@@ -765,6 +857,113 @@
        # append msg "Falls dieser Fehler wiederholt Auftritt, wenden Sie sich bitte mit der folgenden Fehlermeldung an den Kundenservice:\n<br>"
        # append msg $errorMessage
 @@ -493,23 +487,27 @@
+<<<<<<< HEAD:buildroot-external/patches/homematic/0000-RaspberryMatic.patch
+       set backuperror false
+     }    
+   } else {  # backup for version < 2      
++    catch {
++        exec killall ReGaHss
++        exec sleep 5
++    }
+     #delete existing files
+-    file delete -force /tmp/backup
++    file delete -force /usr/local/tmp/backup
+     file delete -force /etc/config/hs485d /etc/config/hs485types /etc/config/rfd /etc/config/userprofiles 
+     file delete -force /etc/config/homematic.regadom /etc/config/homematic.regadom.bak
+     file delete -force /etc/config/ids /etc/config/ntpclient /etc/config/rega.conf /etc/config/syslog 
+     file delete -force /etc/config/tweaks /etc/config/TZ /etc/config/server.pem /etc/config/keys
+     file delete -force /etc/config/time.conf
+     
+-    file mkdir /tmp/backup
+-    cd /tmp/backup
+-    if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
++    file mkdir /usr/local/tmp/backup
++    cd /usr/local/tmp/backup
++    if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+       put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+       set backuperror true
+     } else {
+       #copy old files
+-      if { [file exists /tmp/backup/usr/local/etc/config] } {
+-        cd /tmp/backup/usr/local/etc/config
++      if { [file exists /usr/local/tmp/backup/usr/local/etc/config] } {
++        cd /usr/local/tmp/backup/usr/local/etc/config
+       }
+       
+       if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }        
+@@ -563,6 +561,8 @@
+       catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
+ 
+       set backuperror false
++      exec /sbin/reboot
++      return
+     }          
+     cd /
+   }
+@@ -609,7 +609,6 @@
+       puts "translatePage('#messagebox');"
+     }
+ 
+-    file delete -force /tmp/new_config.tar /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
+ }
+ 
+ proc put_message {title msg args} {
+@@ -1051,39 +1050,36 @@
+ 
+ proc action_create_backup {} {
+     set HOSTNAME [exec hostname]
++    set system_version [read_version "/boot/VERSION"]
+     set iso8601_date [exec date -Iseconds]
++    set tmpdir [exec mktemp -d -p /usr/local/tmp]
+     regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
++    set backupfile [set HOSTNAME]-$system_version-$year-$month-$day-$hour$minute.sbk
+     #save DOM
+     rega system.Save()
+     cd /
+-    exec tar czf /tmp/usr_local.tar.gz usr/local
+-    cd /tmp/
++    exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local
++    cd $tmpdir/
+     #sign the configuration with the current key
+     exec crypttool -s -t 1 <usr_local.tar.gz >signature
+     #store the current key index
+     exec crypttool -g -t 1 >key_index
+     file copy -force /boot/VERSION firmware_version
+-    set fd [open "|tar c usr_local.tar.gz signature firmware_version key_index"]
+-    catch {fconfigure $fd -translation binary}
+-    catch {fconfigure $fd -encoding binary}
+-    puts "Content-Type:application/x-download"
+-    puts "Content-Disposition:attachment;filename=[set HOSTNAME]-$year-$month-$day.sbk\n"
+-    catch {fconfigure stdout -translation binary}
+-    catch {fconfigure stdout -encoding binary}
+-    while { ! [eof $fd]} {
+-        puts -nonewline [read $fd 65536]
+-    }
+-    close $fd
+-    file delete -force /tmp/usr_local.tar.gz /tmp/firmware_version /tmp/signature
++    exec tar --owner=root --group=root -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index
++    cd /
++    exec rm -rf $tmpdir
++    puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"
++    puts "Content-Type: application/octet-stream"
++    puts "Content-Disposition: attachment; filename=\"$backupfile\"\n"
+ }
+ 
+ proc action_backup_upload {} {
+     global env sid
+-    cd /tmp/
++    cd /usr/local/tmp/
+     
+     http_head
+     import_file -client backup_file
+-    file rename -force -- [lindex $backup_file 0] "/tmp/new_config.tar"
++    file rename -force -- [lindex $backup_file 0] "/usr/local/tmp/new_config.tar"
+     cgi_javascript {
+         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+         puts {
+--- homematic/WebUI/www/config/cp_software.cgi.orig
++++ homematic/WebUI/www/config/cp_software.cgi
+=======
        set backuperror false
      }    
    } else {  # backup for version < 2      
@@ -878,6 +1077,7 @@
          puts {
 --- occu/WebUI/www/config/cp_software.cgi.orig
 +++ occu/WebUI/www/config/cp_software.cgi
+>>>>>>> upstream/master:buildroot-external/patches/occu/0000-RaspberryMatic.patch
 @@ -488,11 +488,11 @@
  
  proc action_image_upload {} {
@@ -893,6 +1093,19 @@
          puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
          puts {
 @@ -507,7 +507,8 @@
+<<<<<<< HEAD:buildroot-external/patches/homematic/0000-RaspberryMatic.patch
+     if {[isOldCCU]} {
+         exec /sbin/init -q
+     } else {
+-        exec /bin/kill -SIGQUIT 1
++        exec touch /usr/local/.doAddonInstall
++        exec /sbin/reboot
+     }
+ }
+ 
+--- homematic/WebUI/www/config/cp_time.cgi.orig
++++ homematic/WebUI/www/config/cp_time.cgi
+=======
      if {[isOldCCU]} {
          exec /sbin/init -q
      } else {
@@ -904,6 +1117,7 @@
  
 --- occu/WebUI/www/config/cp_time.cgi.orig
 +++ occu/WebUI/www/config/cp_time.cgi
+>>>>>>> upstream/master:buildroot-external/patches/occu/0000-RaspberryMatic.patch
 @@ -645,7 +645,9 @@
      if { $fd <0 } { return 0 }
      puts $fd "$TIMEZONES($timezone)"
@@ -918,6 +1132,22 @@
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
 @@ -23,10 +23,10 @@
+<<<<<<< HEAD:buildroot-external/patches/homematic/0000-RaspberryMatic.patch
+ set GL_FLAG_RECEIVER_UNKNOWN     0x8
+ 
+ set HTMLTITLE "HomeMatic Interne Konfiguration"
+-set INTERFACES_FILE "/opt/hm/etc/config/InterfacesList.xml"
++set INTERFACES_FILE "/etc/config/InterfacesList.xml"
+ 
+ if { ![info exists env(CONFIG_ROOT)] } {
+-    set env(CONFIG_ROOT) "/opt/hm/etc/config"
++    set env(CONFIG_ROOT) "/etc/config"
+ }
+ 
+ set USERPROFILESPATH "$env(CONFIG_ROOT)/userprofiles"
+--- homematic/WebUI/www/tcl/extern/cgi.tcl.orig
++++ homematic/WebUI/www/tcl/extern/cgi.tcl
+=======
  set GL_FLAG_RECEIVER_UNKNOWN     0x8
  
  set HTMLTITLE "HomeMatic Interne Konfiguration"
@@ -932,14 +1162,15 @@
  set USERPROFILESPATH "$env(CONFIG_ROOT)/userprofiles"
 --- occu/WebUI/www/tcl/extern/cgi.tcl.orig
 +++ occu/WebUI/www/tcl/extern/cgi.tcl
+>>>>>>> upstream/master:buildroot-external/patches/occu/0000-RaspberryMatic.patch
 @@ -2698,7 +2698,7 @@
  # deduce tmp directory
  switch $tcl_platform(platform) {
      unix {
--	set _cgi(tmpdir) /tmp
-+	set _cgi(tmpdir) /usr/local/tmp
+-   set _cgi(tmpdir) /tmp
++   set _cgi(tmpdir) /usr/local/tmp
      } macintosh {
- 	set _cgi(tmpdir) [pwd]
+    set _cgi(tmpdir) [pwd]
      } default {
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
@@ -1079,4 +1310,4 @@
 +    if (product == "HM-RASPBERRYMATIC") {
        homematic.com.m_latestVersion = latestVersion;
        homematic.com.m_isUpdateAvailable = (WEBUI_VERSION != latestVersion);
-     } else {
+} else {

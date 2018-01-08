@@ -1,0 +1,251 @@
+<script type="text/javascript">
+  <%
+    if( system.GetSessionVar("sessionTAB") != "control/devices" )
+    {
+      system.SetSessionVar("sessionTAB", "control/devices");
+      system.SetSessionVar("sessionTAB1", "");
+    }
+  %>
+  //setPath("<span onclick='WebUI.enter(ControlPage);'>Status und Bedienung</span> &gt; Ger�te");
+  setPath("<span onclick='WebUI.enter(ControlPage);'>"+translateKey('menuControlPage') +"</span> &gt; " +translateKey('submenuDevices'));
+  fltVR = new iseFilter('fltVR');
+  fltVR1 = new iseFilter('fltVR1');
+  fltHD = new iseFilter('fltHD');
+  arItems = new Array();
+</script>
+
+<table width="100%" class="CLASS03900" cellpadding="0" cellspacing="0">
+  <colgroup>
+    <col width="260px" />
+    <col width="*" />
+  </colgroup>
+  <tr>
+    <!-- Linke Spalte -->
+    <td id="contentLeft" class="hidden">
+      <table class="CLASS03901">  
+        <tr>
+          <td valign="top">
+            <div id="divDL" class="CLASS03902">
+
+            <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
+            <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
+            <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class="CLASS03307" NAME="ftName"/>
+            <div id="ftSetNameBtn" class='FilterSetButton CLASS03308' onclick="setSFilter(fltVR, 'ftName', FIL_NAME);updateTable1();$('btnFilterNameSub').hide();" >${filterSet}</div>
+            <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
+
+      </div>
+
+              <script type="text/javascript">
+                var contHeight = $("content").style.height;
+                contHeight = contHeight.replace(/px/, "");
+                $("divDL").style.height = Math.floor((contHeight * 0.98)) + "px";
+              </script>
+              <table id="tblFunctionNames" class="StatViewTbl CLASS03903" cellpadding="4" cellspacing="0" >
+                <colgroup>
+                  <col width="100px" />
+                  <col width="100px" />
+                </colgroup>
+                <%
+                  object obj = dom.GetObject(ID_DEVICES);
+                  if ( obj )
+                  {
+                    obj.SortByName();
+                    string tmp = "";
+                    string sFirstId = "";
+                    foreach( tmp, obj.EnumEnabledIDs() )
+                    {
+                      object devs = dom.GetObject(tmp);
+                      string s1;
+                      foreach( s1, devs.Channels().EnumEnabledVisibleIDs() )
+                      {
+                        object oCH = dom.GetObject( s1 );
+                        if( oCH )
+                        {
+                          boolean bHasFullAccess = (oCH.UserAccessRights(iulOtherThanAdmin) == iarFullAccess);
+                          boolean bHasDPs = (oCH.DPs().EnumEnabledVisibleIDs().Length());
+                          boolean bDefaultDPWrite = (oCH.DefaultDPWrite()!=ID_ERROR);
+                          boolean bIsSysVarDP = false;
+                          object oTmpDP = dom.GetObject( oCH.DefaultDPWrite() );
+                          if( oTmpDP )
+                          {
+                            bIsSysVarDP = ( oTmpDP.IsTypeOf( OT_VARDP ) || oTmpDP.IsTypeOf( OT_ALARMDP ) );
+                          }
+                        }
+                      }
+                      if(devs.Visible()
+                        && devs.ReadyConfig()
+                        && devs.HssType()
+                        && (! devs.MetaData("operateGroupOnly") == "true" )
+                        && devs.HssType() != "VIR-OL-GTW"
+                      )
+                        {
+                        if( sFirstId == "" )
+                        {
+                          sFirstId = tmp;
+                        }
+                        string trId = "devices"#devs.ID();
+                        WriteLine( '<tr id="'#trId#'" class="CLASS03904">' );
+                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltVR1.clearFilters();updateTable();loadChannels("#devs.ID()#")'>");
+                          string sName = devs.Name();
+                          integer iLength = 12;
+                          Call("/esp/datapointconfigurator.fn::StringCut()");
+                          Write(sName);
+                          Write("</td>");
+                          Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' >");
+                          
+                          string sPicDivId = "picDiv"#devs.ID();
+                          Write("<div id='"#sPicDivId#"' class='CLASS03907' style='margin:auto;' ");
+                          Write("onmouseover='picDivShow(jg_250, \""#devs.Label()#"\", 250, -1, this);'");
+                          Write("onmouseout='picDivHide(jg_250);'");
+                          Write("></div>");
+                          
+                          Write("<script type='text/javascript'>");   
+                          Write("var jg_0 = new jsGraphics('"#sPicDivId#"');");
+                          Write("InitGD(jg_0, 50);");
+                          Write("Draw(jg_0, '"#devs.Label()#"', 50, '-1');");
+                          Write("var tmp = new Object();");
+                          Write("tmp['name'] = '"#devs.Name()#"';");
+                          Write("tmp['trid'] = '"#trId#"';");
+                          Write("arItems[arItems.length] = tmp;");
+                          Write("Cursor.set(Cursor.NORMAL);");
+                          Write("</script>");
+                          Write("</td>");
+                          Write("</tr>");
+                      }
+                    }
+                  }
+                %>
+              </table>
+            </div>
+          </td>
+       </tr> 
+     </table>
+   </td>
+   
+   <!-- Rechte Spalte -->
+   <td id="contentRight">
+     <div id="divRTD" class="CLASS03908">
+      <script type="text/javascript">
+        var contHeight = $("content").style.height;
+        contHeight = contHeight.replace(/px/, "");
+        $("divRTD").style.height = Math.floor((contHeight * 0.98)) + "px";
+      </script>
+     <table id="tblRightContent" class="CLASS03909">
+       <tr class="CLASS03910">
+         <td valign="top" id="chnList"></td>
+       </tr>
+     </table>
+     </div>
+   </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+       
+  loadChannels = function(id)
+  {
+    iseInitUpdateArrays();
+    if( id )
+    {
+      // aktuellen Markierung aufheben
+      var tdlist = $("tblFunctionNames").getElementsByTagName('td');
+      for (var i = 0; i < tdlist.length; i++)
+      {
+				$(tdlist[i]).removeClassName("ButtonStatusRoomsSelected");
+				$(tdlist[i]).removeClassName("ButtonStatusRoomsPicSelected");
+      }
+      
+      // Markierung setzen
+      $(id + "name").addClassName("ButtonStatusRoomsSelected");
+      $(id + "pic").addClassName("ButtonStatusRoomsPicSelected");
+      
+      // Inhalt nachladen
+      var pb = '';
+      pb += 'integer id = '+id+';';
+      var opts = 
+      {
+        postBody: pb,
+        evalScripts: true
+      };
+      new Ajax.Updater("chnList", "/pages/tabs/control/hdevichannels.htm?sid=" + SessionId, opts);
+    }
+    else
+    {
+      if(dbg)alert(translateKey("alertIDnotSet") + " (control/devices.htm)");
+    }
+  }
+  
+  // Beim laden der Seite ersten Raum anzeigen
+  <%
+    if( system.GetSessionVar("sessionTAB1") == "" )
+    {
+      system.SetSessionVar("sessionTAB1",sFirstId);
+    }
+  %>
+  loadChannels( <% Write( system.GetSessionVar("sessionTAB1") ); %> );
+  
+  filterOptions = new iseFilter();
+</script>
+
+<script type="text/javascript">
+  var s = "";
+
+  var mouseOpts =
+  {
+    onTopOver: function(divToShow)
+    {
+      selectFilters(fltVR, divToShow);
+    }
+  };
+
+  new iseSubMenuControl("btnFilterName", "btnFilterNameSub", "contentLeft", {d:28, r:18}, mouseOpts, false, true);
+
+  jQuery("#btnFilterName").click(function(){
+    jQuery("#ftName").focus();
+  });
+  
+  s += "<table cellspacing='8'>";
+  s += "<tr>";
+  s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
+  s += "<td align='center' valign='middle'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateTable1();fltVR1.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
+  s += "</tr>";
+  s += "</table>";
+  
+  setFooter(s);
+  
+  updateTable = function()
+  {
+    colorFilterBtns(fltVR1);
+    for (var i = 0; i < arChns.length; i++)
+    {
+      if (!fltVR1.objPassFilter(arChns[i]))
+      {
+        hide(arChns[i]['trid']);
+        if (arChns[i]['ctrlId']) hide(arChns[i]['ctrlId']);
+      }
+      else
+      {
+        show(arChns[i]['trid']);
+        if (arChns[i]['ctrlId']) show(arChns[i]['ctrlId']);
+      }
+    }
+  }
+
+  updateTable1 = function()
+  {
+    colorFilterBtns(fltVR);
+    for (var i = 0; i < arItems.length; i++)
+    {
+      if (!fltVR.objPassFilter(arItems[i]))
+      {
+        hide(arItems[i]['trid']);
+      }
+      else
+      {
+        show(arItems[i]['trid']);
+      }
+    }
+  };
+  translatePage("#contentLeft");
+  jQuery("#contentLeft").removeClass("hidden");
+</script> 

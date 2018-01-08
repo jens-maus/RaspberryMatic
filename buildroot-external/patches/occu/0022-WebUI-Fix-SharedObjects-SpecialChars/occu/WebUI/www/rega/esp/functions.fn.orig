@@ -1,0 +1,580 @@
+function ::WriteDPText()
+{
+  if( system.IsVar("id") )
+  {
+    object to = dom.GetObject( system.GetVar("id") );
+    if( to )
+    {
+      if( to.IsTypeOf( OT_VARDP ) || to.IsTypeOf( OT_ALARMDP ) )
+      {
+        integer itoVT = to.ValueType();
+        integer itoST = to.ValueSubType();
+        boolean btoLogic  = ( (itoVT==ivtBinary)  && (itoST==istBool)    );
+        boolean btoList   = ( (itoVT==ivtInteger) && (itoST==istEnum)    );
+        boolean btoNumber = ( (itoVT==ivtFloat)   && (itoST==istGeneric) );
+        boolean btoAlarm  = ( (itoVT==ivtBinary)  && (itoST==istAlarm)   );
+        boolean btoString  = ( (itoVT==ivtString)  && (itoST==istChar8859));
+        if( btoLogic || btoAlarm )
+        {
+          if ( (sValue == "0") || (sValue == "") )
+          {
+            sRet=sRet#to.ValueName0();
+          }
+          else
+          {
+            sRet=sRet#to.ValueName1();
+          }
+        }
+        if( btoList ) 
+        { 
+          if( sValue == "" )
+          {
+            sRet=sRet#web.webGetValueFromList(to.ValueList(),0);
+          }
+          else
+          {
+            sRet=sRet#web.webGetValueFromList(to.ValueList(),sValue.ToInteger());
+          }
+        }
+        if( btoNumber ) 
+        { 
+          if (sValue == "")
+          {
+            sRet=sRet#"0";
+          }
+          else
+          {
+            sRet=sRet#sValue;
+          }
+        }
+        if (btoString)
+        {
+          sRet = sRet # sValue;
+        }
+        if( to.ValueUnit() != "" )
+        {
+          sRet=sRet#" "#to.ValueUnit();
+        }
+      }
+      else
+      {
+        string tsShortKey = to.HSSID();
+        string tsLongKey = to.HSSID();
+        object toCH = dom.GetObject( to.Channel() );
+        if( toCH )
+        {
+          tsLongKey = toCH.ChnLabel()#"|"#tsLongKey;
+        }
+        
+        boolean tbOptionList = ( (to.ValueType() == ivtInteger) && (to.ValueSubType() == istEnum) );
+        boolean tbAction = ( to.ValueSubType() == istAction );
+        boolean tbBinary = ( to.ValueType() == ivtBinary );
+        boolean tbRead = (to.Operations() & OPERATION_READ);
+        boolean tbEvent = (to.Operations() & OPERATION_EVENT);
+        boolean tbWrite = (to.Operations() & OPERATION_WRITE);
+        
+        boolean bBinary = ( to.ValueTypeStr() == "Binary" );
+        boolean bFloat = ( to.ValueTypeStr() == "Float" );
+        boolean bSpecial = false;
+            
+        string sVUTmp = to.ValueUnit().ToString();
+        string sSpace = " ";
+        
+        ! ### SUBSTITUTE SPECIAL VALUES
+        real fVal1 = 0.0;
+        real fVal2 = 0.0;
+        string sSpecial = "";
+        string stmpSV;
+        foreach(stmpSV,oDP.EnumSpecialIDs())
+        {
+           fVal1 = oDP.GetSpecialValue(stmpSV);
+           fVal2 = sValue.ToFloat();
+           if( fVal1 == fVal2 )
+           {
+             bSpecial = true;
+             sSpecial = stmpSV;
+             sValue = "";
+             sVUTmp = "";
+             sSpace = "";
+           }
+        }
+        
+        if( tbBinary && (tbRead || tbAction) )
+        {
+          if( sValue == "0" )
+          {
+            tsShortKey = tsShortKey#"=FALSE";
+            tsLongKey = tsLongKey#"=FALSE";
+          }
+          else
+          {
+            tsShortKey = tsShortKey#"=TRUE";
+            tsLongKey = tsLongKey#"=TRUE";
+          }
+        }
+        
+        if( tbOptionList )
+        {
+          tsShortKey = tsShortKey#"="#web.webGetValueFromList( to.ValueList(), sValue );
+          tsLongKey = tsLongKey#"="#web.webGetValueFromList( to.ValueList(), sValue );
+        }
+        
+        if( bSpecial )
+        {
+          tsShortKey = tsShortKey#"="#sSpecial;
+          tsLongKey = tsLongKey#"="#sSpecial;
+        }        
+        
+        string sVTmp = web.webKeyFromStringTable( tsLongKey );
+        if( !sVTmp.Length() )
+        {
+          sVTmp = web.webKeyFromStringTable( tsShortKey );
+          if( !sVTmp.Length() )
+          {
+            sVTmp = "${unknownMessage} ("#tsShortKey#")";
+          }
+        }
+        
+        if( !bSpecial )
+        {
+          if( sVUTmp == "100%" )
+          {
+            sValue = sValue.ToFloat() * 100;
+            sValue = sValue.ToString();
+            sVUTmp = "%";
+          }
+
+          if( sVUTmp == "degree" )
+          {
+            sVUTmp = "°";
+          }
+          
+          if( bBinary )
+          {
+            sValue = "";
+            sSpace = "";
+          }
+          if( bFloat )
+          {
+            sValue = sValue.ToFloat();
+            sValue = sValue.ToString(2);
+          }
+          if( (!bBinary) && (!bFloat) )
+          {
+            sValue = sValue.ToInteger();
+            sValue = sValue.ToString(0);
+          }
+          
+          if( tbOptionList )
+          {
+            sValue = "";
+            sVUTmp = "";
+            sSpace = "";
+          }
+        }
+        
+        sVTmp = sVTmp#sSpace#sValue#sVUTmp;
+        sRet = sVTmp;
+      }
+    }
+  }
+}
+
+! [id]
+function ::ReceiptAlarm()
+{
+  if( system.IsVar("id") )
+  {
+    object oTmpAlarm = dom.GetObject( system.GetVar("id") );
+    if( oTmpAlarm )
+    {
+      Write("AL OK|["#oTmpAlarm.AlTriggerDP()#"]");
+      object oAlTriggerDP = dom.GetObject( oTmpAlarm.AlTriggerDP() );
+      if( oAlTriggerDP )
+      {
+        if( oAlTriggerDP.Operations() & OPERATION_WRITE )
+        {
+          oTmpAlarm.AlReceipt();
+        }
+      }
+      else
+      {
+        Write(oTmpAlarm.AlReceipt());
+      }
+    }
+  }
+}
+
+! [id], [newname]
+function ::changeFunctionName() {
+  object obj = dom.GetObject(system.GetVar("id"));
+  if (obj) {
+    obj.Name(system.GetVar("newname"));
+    ! - - - wernerf - - - 
+    Call("/xml-api/cache.fn::InvalidateFunctionList()");
+    ! - - - wernerf - - - 
+  }
+}
+
+! [name]
+function ::createFunctionRetId() {
+  if( system.IsVar( "name" ) ) {
+    object o = dom.CreateObject( OT_ENUM, system.GetVar( "name" ) );
+    if( o ) {
+      o.EnumType( etFunction );
+      boolean res = dom.GetObject( ID_FUNCTIONS ).Add( o );
+      if( !res )
+      {
+        Write("-1");
+        dom.DeleteObject( o.ID() );
+      }
+      else {
+        ! - - - wernerf - - - 
+        Call("/xml-api/cache.fn::InvalidateFunctionList()");
+        ! - - - wernerf - - -       
+        Write(o.ID());
+      }
+    }
+    else {
+      Write("-1");
+    }
+  }
+}
+
+! [id]
+function ::deleteFunction() {
+}
+
+! [id], [newcolor]
+function ::changeFunctionColor() {
+  object obj = dom.GetObject(system.GetVar("id"));
+  if (obj) {
+    
+  }
+}
+
+! [id], [newcomment]
+function ::changeFunctionComment() {
+  object obj = dom.GetObject(system.GetVar("id"));
+  if (obj) {
+    obj.EnumInfo(system.GetVar("newcomment"));
+    ! - - - wernerf - - - 
+    Call("/xml-api/cache.fn::InvalidateFunctionList()");
+    ! - - - wernerf - - -     
+  }
+}
+
+! [id], [newsymbol]
+function ::changeFunctionSymbol() {
+  object obj = dom.GetObject(system.GetVar("id"));
+  if (obj) {
+    
+  }
+}
+
+function ::buildFuncOverlay() {
+  object rooms = dom.GetObject(ID_FUNCTIONS);
+  string s = "";
+  if (rooms) {
+    string tmp = "";
+    s = s#"<table>";
+    foreach( tmp, rooms.EnumEnabledIDs() ) {
+       object func = dom.GetObject(tmp);
+       s = s# "<tr>";
+       s = s# "<td>"# func.Name() # "</td>";
+       s = s#"<td><input id='chk"#func.ID()#"' type='checkbox' onclick='addFunc(id, "#tmp#")' /></td>";
+       s = s# "</tr>";
+    }
+    s = s # "<tr>";
+      s = s # "<td colspan='2'>";
+        !s = s # "<div align='center' class='CLASS01900' onclick='editFuncs();'>Neu...</div>";
+        s = s # "<div align='center' class='CLASS01900' onclick='editFuncs();'>${btnSelectRoomOrFunctionNew}</div>";
+      s = s # "</td>";
+    s = s # "</tr>";
+    
+    s = s # "<tr>";
+      s = s # "<td colspan='2'>";
+        !s = s # "<div align='center' class='CLASS01900' onclick='$(\"funcOverlay\").hide();specialReloadPage();'>Schliessen</div>";
+        s = s # "<div align='center' class='CLASS01900' onclick='$(\"funcOverlay\").hide();specialReloadPage();'>${btnSelectRoomOrFunctionClose}</div>";
+      s = s # "</td>";
+    s = s # "</tr>";
+    s = s#"</table>";
+  }
+  Write(s);
+}
+
+function ::showHideRFChannel() {
+  if(chn.HssType().Find("CONDITION_") != -1) {
+    ! channel 3 - 6 of the powermeter
+    bShowChannel = false;
+  }
+
+  if((chn.HssType().Find("SWITCH_TRANSMIT") != -1) && (chn.HssType().Find("SWITCH_TRANSMITTER") == -1)) {
+    ! channel 7 of the ThermalControl-IndoorTemperatureSensor (e. g. HM-TC-IT-WM-W-EU)
+    bShowChannel = false;
+  }
+
+  ! Status Display EPaper
+  if(( (oDevHssType == "HM-Dis-EP-WM55") ) && (chNumber == 3)) {
+    ! Hide channel 3 of this device
+    bShowChannel = false;
+  }
+}
+
+function ::showHideHmIPChannel() {
+  bShowChannel = true;
+
+  ! A key press doesn't work with the ccu2 and hmip
+  ! When the device is no remote control, don't show the key channel
+  !
+  ! When the device is a remote control, show the channel. The control will say the channel has no function.
+  ! Otherwise the control of the remote control would display only the header of the page, which would look not so good.
+  if ((chn.HssType().Find("KEY_TRANSCEIVER") != -1) && (
+         (oDevHssType != "HmIP-RC8")
+      && (oDevHssType != "HMIP-WRC2")
+      && (oDevHssType != "HmIP-WRC2")
+      && (oDevHssType != "HmIP-WRC6")
+      && (oDevHssType != "HmIP-KRCA")
+      && (oDevHssType != "HmIP-KRCK")
+      && (oDevHssType != "HmIP-KRC4")
+      && (oDevHssType != "HmIP-MOD-RC8")
+      )
+    )
+  {
+    bShowChannel = false;
+    return;
+  }
+
+  if (bShowChannel == true) {
+
+    ! Interface HmIP-RF
+    if(chn.HssType().Find("MAINTENANCE") != -1) {
+      ! Don't show the maintenance channel of the new HmIP devices
+      ! This is necessary because the name of such a channel of an HmIP device
+      !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on
+      ! For BidCos-RF this isn't necessary
+      bShowChannel = false;
+      return;
+    }
+
+    ! Pluggable Switch (PS / PCBS / WGC)
+    if((oDevHssType == "HMIP-PS") || (oDevHssType == "HmIP-PS") || (oDevHssType == "HmIP-PCBS") || (oDevHssType == "HmIP-WGC") ) {
+      ! Hide SWITCH_VIRTUAL_RECEIVER channel 4 and 5 and the real channel when the expert mode is not active
+      if (user.UserEasyLinkMode() == true) {
+        if ((chn.HssType().Find("SWITCH_TRANSMITTER") != -1)) {bShowChannel = false;}
+        if ((chn.HssType().Find("SWITCH_VIRTUAL_RECEIVER") != -1) && (chNumber > 3)) {bShowChannel = false;}
+      }
+      return;
+    }
+
+    ! Pluggable Switch and Meter (PSM)
+    if (
+         (oDevHssType == "HMIP-PSM")
+      || (oDevHssType == "HmIP-PSM")
+      || (oDevHssType == "HmIP-PSM-CH")
+      || (oDevHssType == "HmIP-PSM-IT")
+      || (oDevHssType == "HmIP-PSM-PE")
+      || (oDevHssType == "HmIP-PSM-UK")
+      ) {
+      ! Hide SWITCH_VIRTUAL_RECEIVER channel 4 and 5 and the real channel when the expert mode is not active
+      if (user.UserEasyLinkMode() == true) {
+        if ((chn.HssType().Find("SWITCH_TRANSMITTER") != -1)) {bShowChannel = false;}
+        if ((chn.HssType().Find("SWITCH_VIRTUAL_RECEIVER") != -1) && (chNumber > 3)) {bShowChannel = false;}
+      }
+      return;
+    }
+
+    ! Flush mounted Dimmer (BDT)
+    if (oDevHssType == "HmIP-BDT") {
+      if (user.UserEasyLinkMode() == true) {
+        if ((chn.HssType().Find("DIMMER_TRANSMITTER") != -1)) {bShowChannel = false;}
+        if ((chn.HssType().Find("DIMMER_VIRTUAL_RECEIVER") != -1) && (chNumber > 4)) {bShowChannel = false;}
+      }
+      return;
+    }
+    ! Pluggable Dimmer (PDT)
+    if ((oDevHssType == "HmIP-PDT") || (oDevHssType == "HmIP-PDT-UK")) {
+      if (user.UserEasyLinkMode() == true) {
+        if ((chn.HssType().Find("DIMMER_TRANSMITTER") != -1)) {bShowChannel = false;}
+        if ((chn.HssType().Find("DIMMER_VIRTUAL_RECEIVER") != -1) && (chNumber > 3)) {bShowChannel = false;}
+      }
+      return;
+    }
+    ! Pluggable Dimmer (FDT)
+    if (oDevHssType == "HmIP-FDT") {
+      if (user.UserEasyLinkMode() == true) {
+        if ((chn.HssType().Find("DIMMER_TRANSMITTER") != -1)) {bShowChannel = false;}
+        if ((chn.HssType().Find("DIMMER_VIRTUAL_RECEIVER") != -1) && (chNumber > 2)) {bShowChannel = false;}
+      }
+      return;
+    }
+    ! Flush mounted Switch and Meter (BSM)
+    if (oDevHssType == "HmIP-BSM") {
+      if (user.UserEasyLinkMode() == true) {
+        if ((chn.HssType().Find("SWITCH_TRANSMITTER") != -1)) {bShowChannel = false;}
+        if ((chn.HssType().Find("SWITCH_VIRTUAL_RECEIVER") != -1) && (chNumber > 4)) {bShowChannel = false;}
+      }
+      return;
+    }
+    ! Flush switch actuator with Measuring
+    if ((user.UserEasyLinkMode() == true) && ((oDevHssType == "HmIP-FSM") || (oDevHssType == "HmIP-FSM16"))) {
+      if ((chn.HssType().Find("SWITCH_TRANSMITTER") != -1)) {bShowChannel = false;}
+      if ((chn.HssType().Find("SWITCH_VIRTUAL_RECEIVER") != -1) && (chNumber > 2)) {bShowChannel = false;}
+      return;
+    }
+    ! Don't show the key channel (a key press doesn't work with ccu and hmip) and the  real channel (doesn't make sense with only one virtual channel)
+    if ( (oDevHssType == "HmIP-ASIR")  && (chn.HssType().Find("SWITCH_TRANSMITTER") != -1) ) {
+      bShowChannel = false;
+      return;
+    }
+    ! Multi-IO-Box (MIOB)
+    if ((user.UserEasyLinkMode() == true) && (oDevHssType == "HmIP-MIOB")) {
+      ! Hide the real channels. They are not necessary without virtual channels
+      if ((chn.HssType().Find("SWITCH_TRANSMITTER") != -1)) {
+          bShowChannel = false;
+          return;
+      }
+
+      ! Hide all SWITCH_VIRTUAL_RECEIVER channels other than 3 and 7 when the expert mode is not active
+      if ((chn.HssType().Find("SWITCH_VIRTUAL_RECEIVER") != -1)) {
+        if ((chNumber != 3) && (chNumber != 7)) {
+          bShowChannel = false;
+          return;
+        }
+      }
+    }
+    ! Jalousie actor (BBL/FBL)
+    if ((oDevHssType == "HmIP-BBL") || (oDevHssType == "HmIP-FBL")) {
+     if (user.UserEasyLinkMode() == true) {
+       ! if (chn.HssType().Find("BLIND_TRANSMITTER") != -1) {bShowChannel = false;}
+       if ((chn.HssType().Find("BLIND_VIRTUAL_RECEIVER") != -1) && (chNumber > 4)) {bShowChannel = false;}
+     }
+     return;
+    }
+
+    ! Blind actor (BROLL/FROLL)
+    if ((oDevHssType == "HmIP-BROLL") || (oDevHssType == "HmIP-FROLL")) {
+     if (user.UserEasyLinkMode() == true) {
+       ! if (chn.HssType().Find("SHUTTER_TRANSMITTER") != -1) {bShowChannel = false;}
+       if ((chn.HssType().Find("SHUTTER_VIRTUAL_RECEIVER") != -1) && (chNumber > 4)) {bShowChannel = false;}
+     }
+     return;
+    }
+
+    ! MOD-OC8 (41 channels)
+    if (oDevHssType == "HmIP-MOD-OC8") {
+      if (user.UserEasyLinkMode() == true) {
+        if ((chn.HssType().Find("SWITCH_VIRTUAL_RECEIVER") != -1)) {
+          if ((chNumber == 11) || (chNumber == 12) || (chNumber == 15) || (chNumber == 16) || (chNumber == 19) || (chNumber == 20)
+           || (chNumber == 23) || (chNumber == 24) || (chNumber == 27) || (chNumber == 28) || (chNumber == 31) || (chNumber == 32)
+           || (chNumber == 35) || (chNumber == 36) || (chNumber == 39) || (chNumber == 40)) {
+            bShowChannel = false;
+          }
+          return;
+        }
+      }
+    }
+
+    ! HmIP-WHS2
+    if (oDevHssType == "HmIP-WHS2") {
+      if (user.UserEasyLinkMode() == true) {
+       if (chn.HssType().Find("SWITCH_TRANSMITTER") != -1) {bShowChannel = false;}
+       ! Hide all SWITCH_VIRTUAL_RECEIVER channels other than 2 and 6 when the expert mode is not active
+       if ((chn.HssType().Find("SWITCH_VIRTUAL_RECEIVER") != -1)) {
+         if ((chNumber != 3) && (chNumber != 7)) {
+           bShowChannel = false;
+           return;
+         }
+       }
+      }
+    }
+
+    ! No hit
+    return;
+    }
+  }
+}
+
+! [showHmIPParam]
+function ::isParameterVisible() {
+  string tmp;
+  string excludeBinaryHmIPParams = "PARTY_,PARTY_MODE,SECTION,PROCESS,VALVE_STATE,CONTROL_DIFFERENTIAL_TEMPERATURE,RSSI_DEVICE,RSSI_PEER,";
+  excludeBinaryHmIPParams = excludeBinaryHmIPParams#"CURRENT_ILLUMINATION,OPERATING_VOLTAGE,BOOST_TIME,SMOKE_DETECTOR_TEST_RESULT=NONE";
+
+  showHmIPParam = true;
+
+  foreach (tmp, excludeBinaryHmIPParams.Split(",")) {
+    if ((oDP.HSSID().Find(tmp) != -1)) {
+      showHmIPParam = false;
+      return;
+    }
+  }
+  return;
+}
+
+! [devFwMajor] [devFwMinor] [devFwPatch]
+function ::getFirmwareVersion() {
+  object channel = dom.GetObject(chnId);
+  object dev = dom.GetObject(channel.Device());
+
+  string devMetaData;
+
+  if ( dev != null )
+  {
+    devMetaData = dev.MetaData("DEVDESC");
+    string tmpData;
+    string devFirmware;
+
+    foreach(tmpData, devMetaData.Split(","))
+    {
+      if ((tmpData.Find("AVAILABLE_FIRMWARE") == -1) && (tmpData.Find("FIRMWARE:") > -1)) {
+        devFirmware = tmpData.StrValueByIndex(":",1).Substr(1,5);
+
+        devFwMajor = devFirmware.StrValueByIndex(".",0).ToInteger();
+        devFwMinor = devFirmware.StrValueByIndex(".",1).ToInteger();
+        devFwPatch = devFirmware.StrValueByIndex(".",2).ToInteger();
+      }
+    }
+  }
+}
+
+function ::getSpecialTranslation() {
+
+  ! This is necessary for the passage detector SPDR
+  ! The same parameter of the same channel type (ch 2 and 3) must be translated differently.
+  if (oCC.HssType() == "PASSAGE_DETECTOR_DIRECTION_TRANSMITTER") {
+
+    ! R2L = Passage Right To Left
+    ! L2R = Passage Left To Right
+
+    if (oCC.Label() == "HmIP-SPDR") {
+      if (oCC.ChnNumber() == 2) {
+        if (sShortKey == "CURRENT_PASSAGE_DIRECTION=TRUE") {sValue = "${stringTableCurrentPassageDirectionR2LTrue}";}
+        if (sShortKey == "CURRENT_PASSAGE_DIRECTION=FALSE") {sValue = "${stringTableCurrentPassageDirectionR2LFalse}";}
+
+        if (sShortKey == "LAST_PASSAGE_DIRECTION=TRUE") {sValue = "${stringTableLastPassageDirectionR2LTrue}";}
+        if (sShortKey == "LAST_PASSAGE_DIRECTION=FALSE") {sValue = "${stringTableLastPassageDirectionR2LFalse}";}
+
+        if (sShortKey == "PASSAGE_COUNTER_OVERFLOW=TRUE") {sValue = "${stringTablePassageCounterOverflowR2LTrue}";}
+        if (sShortKey == "PASSAGE_COUNTER_OVERFLOW=FALSE") {sValue = "${stringTablePassageCounterOverflowR2LFalse}";}
+
+        if (sShortKey == "PASSAGE_COUNTER_VALUE") {sValue = "${stringTablePassageCounterValueR2L}";}
+      }
+
+      if (oCC.ChnNumber() == 3) {
+        if (sShortKey == "CURRENT_PASSAGE_DIRECTION=TRUE") {sValue = "${stringTableCurrentPassageDirectionL2RTrue}";}
+        if (sShortKey == "CURRENT_PASSAGE_DIRECTION=FALSE") {sValue = "${stringTableCurrentPassageDirectionL2RFalse}";}
+
+        if (sShortKey == "LAST_PASSAGE_DIRECTION=TRUE") {sValue = "${stringTableLastPassageDirectionL2RTrue}";}
+        if (sShortKey == "LAST_PASSAGE_DIRECTION=FALSE") {sValue = "${stringTableLastPassageDirectionL2RFalse}";}
+
+        if (sShortKey == "PASSAGE_COUNTER_OVERFLOW=TRUE") {sValue = "${stringTablePassageCounterOverflowL2RTrue}";}
+        if (sShortKey == "PASSAGE_COUNTER_OVERFLOW=FALSE") {sValue = "${stringTablePassageCounterOverflowL2RFalse}";}
+
+        if (sShortKey == "PASSAGE_COUNTER_VALUE") {sValue = "${stringTablePassageCounterValueL2R}";}
+      }
+    }
+  }
+
+  return;
+}

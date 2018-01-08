@@ -1,0 +1,275 @@
+--- occu/WebUI/www/rega/pages/msg/editScript.htm.orig
++++ occu/WebUI/www/rega/pages/msg/editScript.htm
+@@ -1,91 +1,130 @@
+-<div class="popupTitle">
+-  &nbsp;&nbsp;
+-  <% 
+-    Write(system.GetVar("title"));
+-  %>
+-</div>
+-<div class="CLASS00001">
+-  <table class="popupTableScript CLASS00002" border="1">
+-    <tr class="popupTableRow">
+-
+-    <td class="CLASS00018" colspan="2">
+-      <textarea id="scrinp" class="CLASS00003"><% object oTmp = dom.GetObject( system.GetVar("sdid") ); if( oTmp ) { if( oTmp.DestinationValueType() == ivtString ) { Write( oTmp.DestinationValue().ToString() ); } } %></textarea>
+-    </td>
+-    </tr>
+-   
+-    <tr >
+-    <td class="CLASS00004">
+-      
+-      <a class="CLASS00005">$val$ = </a>
+-      <input id="Text1" type="text" class="CLASS00006"/>
+-      <a class="CLASS00007">$this$ = </a>
+-      <%
+-        integer iThis = 0;
+-        if(oTmp)
+-        {
+-          iThis = oTmp.DestinationProgram();
+-          if( iThis == ID_ERROR ) { iThis = ""; }
+-        }
+-      %>
+-      <input id="Text2" type="text" class="CLASS00008" value="<% Write(iThis); %>" />
+-      <a class="CLASS00009">$src$ = </a>
+-      <input id="Text3" type="text" class="CLASS00010"/>
+-      
+-    </td>
+-    
+-    <td class="CLASS00011">
+-    <div class="FooterButton CLASS00012" onclick="CheckSyntax();">${lblErrorCheck}</div>
+-    </td>
+-    </tr>
+-    
+-    <tr>
+-    <td class="CLASS00013" colspan="2">
+-      <textarea id="scrout" class="CLASS00014"></textarea>
+-    </td>
+-    </tr>
+-    
+-    <tr class="popupTableRow">
+-    <td class="CLASS00015" colspan="2">
+-    <a class="FooterButton CLASS00016" onclick="PopupClose();" >${btnCancel}</a>
+-    <a class="FooterButton CLASS00017" onclick="SaveScript();PopupClose();" >${btnOk}</a>
+-    </td>
+-    </tr>
+-  </table>
+-</div>
+-<script type="text/javascript">
+-  SaveScript = function()
+-  {
+-    dlgResult = $('scrinp').value;
+-  }
+-  CheckSyntax = function()
+-  {
+-    var code = $F('scrinp');
+-    var val = $F('Text1');
+-    var ths = $F('Text2');
+-    var src = $F('Text3');
+-    var url = '/esp/system.htm?sid='+SessionId;
+-    var pb = "";
+-    pb += 'string action = "SyntaxCheck";';
+-    pb += 'string code = ^'+code+'^;';
+-    pb += 'string val = "'+val+'";';
+-    pb += 'string ths = "'+ths+'";';
+-    pb += 'string src = "'+src+'";';
+-    var opt = 
+-    {
+-      postBody: pb,
+-      onComplete: function(t)
+-      {
+-        conInfo( "EditScript: CheckSyntax returned: ["+iseStripAll(t.responseText)+"]" );
+-        if( iseStripAll(t.responseText).length == 0 )
+-        {
+-          $('scrout').value = translateKey("lblNoError");
+-        }
+-        else
+-        {
+-          $('scrout').value = t.responseText;
+-        }
+-      }
+-    }
+-    new Ajax.Request(url,opt);
+-  }
++<div class="popupTitle">
++  &nbsp;&nbsp;
++  <% 
++    Write(system.GetVar("title"));
++  %>
++</div>
++<div class="CLASS00001">
++  <table class="popupTableScript CLASS00002" border="1">
++    <tr class="popupTableRow">
++
++    <td class="CLASS00018" colspan="2">
++      <textarea id="scrinp" class="CLASS00003"><% object oTmp = dom.GetObject( system.GetVar("sdid") ); if( oTmp ) { if( oTmp.DestinationValueType() == ivtString ) { Write( oTmp.DestinationValue().ToString() ); } } %></textarea>
++    </td>
++    </tr>
++   
++    <tr >
++    <td class="CLASS00004">
++      
++      <a class="CLASS00005">$val$ = </a>
++      <input id="Text1" type="text" class="CLASS00006"/>
++      <a class="CLASS00007">$this$ = </a>
++      <%
++        integer iThis = 0;
++        if(oTmp)
++        {
++          iThis = oTmp.DestinationProgram();
++          if( iThis == ID_ERROR ) { iThis = ""; }
++        }
++      %>
++      <input id="Text2" type="text" class="CLASS00008" value="<% Write(iThis); %>" />
++      <a class="CLASS00009">$src$ = </a>
++      <input id="Text3" type="text" class="CLASS00010"/>
++      
++    </td>
++    
++    <td class="CLASS00011">
++    <a class="FooterButton CLASS00016" onclick="CheckSyntax();">${lblErrorCheck}</a>
++    <a class="FooterButton CLASS00012" onclick="RunScript();">${dialogScriptExecuterBtnExecute}</a>
++    </td>
++    </tr>
++    
++    <tr>
++    <td class="CLASS00013" colspan="2">
++      <textarea id="scrout" class="CLASS00014"></textarea>
++    </td>
++    </tr>
++    
++    <tr class="popupTableRow">
++    <td class="CLASS00015" colspan="2">
++    <a class="FooterButton CLASS00016" onclick="PopupClose();" >${btnCancel}</a>
++    <a class="FooterButton CLASS00017" onclick="SaveScript();PopupClose();" >${btnOk}</a>
++    </td>
++    </tr>
++  </table>
++</div>
++<script type="text/javascript">
++  RunScript = function()
++  {
++    var script = $F('scrinp');
++    var code = $F('scrinp');
++    var val = $F('Text1');
++    var ths = $F('Text2');
++    var src = $F('Text3');
++    var url = '/esp/system.htm?sid='+SessionId;
++    var pb = "";
++    pb += 'string action = "SyntaxCheck";';
++    pb += 'string code = ^'+code+'^;';
++    pb += 'string val = "'+val+'";';
++    pb += 'string ths = "'+ths+'";';
++    pb += 'string src = "'+src+'";';
++    var opt = 
++    {
++      postBody: pb,
++      onComplete: function(t)
++      {
++        conInfo( "EditScript: CheckSyntax returned: ["+iseStripAll(t.responseText)+"]" );
++        if( iseStripAll(t.responseText).length == 0 )
++        {
++          homematic("ReGa.runScript", {"script": script}, function(response, error)
++              {
++                if (error === null)
++                {
++                  $('scrout').value = response;
++                }
++              });
++        }
++        else
++        {
++          $('scrout').value = t.responseText;
++      }
++    }
++  }
++    new Ajax.Request(url,opt);
++}
++  SaveScript = function()
++  {
++    dlgResult = $('scrinp').value;
++  }
++  CheckSyntax = function()
++  {
++    var code = $F('scrinp');
++    var val = $F('Text1');
++    var ths = $F('Text2');
++    var src = $F('Text3');
++    var url = '/esp/system.htm?sid='+SessionId;
++    var pb = "";
++    pb += 'string action = "SyntaxCheck";';
++    pb += 'string code = ^'+code+'^;';
++    pb += 'string val = "'+val+'";';
++    pb += 'string ths = "'+ths+'";';
++    pb += 'string src = "'+src+'";';
++    var opt = 
++    {
++      postBody: pb,
++      onComplete: function(t)
++      {
++        conInfo( "EditScript: CheckSyntax returned: ["+iseStripAll(t.responseText)+"]" );
++        if( iseStripAll(t.responseText).length == 0 )
++        {
++          $('scrout').value = translateKey("lblNoError");
++        }
++        else
++        {
++          $('scrout').value = t.responseText;
++        }
++      }
++    }
++    new Ajax.Request(url,opt);
++  }
+ </script>
+\ No newline at end of file
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -3605,7 +3605,6 @@
+ /* rega\pages\msg\editScript.htm */
+ 
+ .CLASS00001 {
+-	overflow: auto;
+ 	width: 100%;
+ 	height: 100%;
+ }
+@@ -3618,6 +3617,8 @@
+ .CLASS00003 {
+ 	height: 200px;
+ 	width: 100%;
++  min-height: 200px;
++  min-width: 800px;
+ }
+ 
+ .CLASS00004 {
+@@ -3679,6 +3680,7 @@
+ .CLASS00014 {
+ 	height: 200px;
+ 	width: 100%;
++  resize: none;
+ }
+ 
+ .CLASS00015 {
+@@ -3697,9 +3699,11 @@
+ }
+ 
+ .CLASS00018 {
+-	width:20%;
++	width: 20%;
+ 	height:200px;
+ 	background-color: $_(white); /* white */
++  min-height: 200px;
++  min-width: 20%;
+ }
+ 
+ /* rega\pages\msg\statusinfo.htm */
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -20759,7 +20759,7 @@
+       case ID_EDIT_SCRIPT:
+         this.setTitle( translateKey("dialogEditScript") /*"Skript bearbeiten"*/ );
+         this.addToPostBody( 'string sdid = "'+this.type+'";' );
+-        this.setWidth(800);
++        this.setWidth('auto');
+         this.setFile( "/pages/msg/editScript.htm" );
+         break;
+       case ID_CONTROL_TEST:

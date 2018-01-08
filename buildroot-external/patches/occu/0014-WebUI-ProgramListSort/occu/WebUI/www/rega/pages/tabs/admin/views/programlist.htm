@@ -3,7 +3,6 @@
   iseUpdateSVArray = new Array();
   <%
     system.SetSessionVar("sessionTAB", "programlist");
-
     boolean firstSort = false;
     object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
     if( (system.GetSessionVar("sessionCTV")=="true") )
@@ -11,11 +10,9 @@
       firstSort = true;
       system.SetSessionVar("sessionLS","");
       oUser.UserTempViewIDs().RemoveAll();
-
       Write('iseClearLastSort();');
       Write('lastSort = "name";');
       Write('lastDir = 0;');
-
       object oTmpArray = dom.GetObject(ID_PROGRAMS);
       if( oTmpArray )
       {
@@ -299,7 +296,7 @@
   DeleteProgram = function(id)
   {
     var _id_ = id;
-    //new YesNoDialog("Sicherheitsabfrage", "Möchten Sie das Programm wirklich löschen?", function(result) {
+    //new YesNoDialog("Sicherheitsabfrage", "MÃ¶chten Sie das Programm wirklich lÃ¶schen?", function(result) {
       new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionRemoveProgram'), function(result) {
       if (result == YesNoDialog.RESULT_YES)
       {
@@ -361,7 +358,6 @@
       new Ajax.Request(url, opt);
     }
   };
-
   ShowNonVisiblePrograms = function()
   {
     var url = '/esp/programs.htm?sid='+SessionId;
@@ -393,7 +389,6 @@
     }
     Write("var internalBtnText = '"#sInternalBtnText#"';");
   %>
-
   var s = "";
   s += "<table cellspacing='8'>";
   s += "<tr>";
@@ -413,7 +408,6 @@
   translateButtons("btnRemove, btnEdit");
   translatePage("#ProgramListTable");
   jQuery("#ProgramListTable").show();
-
   var mouseOpts =
   {
     onTopOver: function(divToShow)
@@ -421,18 +415,14 @@
       selectFilters(fltVR, divToShow);
     }
   };
-
   new iseSubMenuControl("btnFilterName", "btnFilterNameSub", "ProgramListTable", {d:28, r:18}, mouseOpts, false, true);
   new iseSubMenuControl("btnFilterDesc", "btnFilterDescSub", "ProgramListTable", {d:28, r:18}, mouseOpts, false, true);
-
   jQuery("#btnFilterName").click(function(){
     jQuery("#ftName").focus();
   });
-
   jQuery("#btnFilterDesc").click(function(){
     jQuery("#ftDesc").focus();
   });
-
   updateTable = function()
   {
     colorFilterBtns(fltVR);

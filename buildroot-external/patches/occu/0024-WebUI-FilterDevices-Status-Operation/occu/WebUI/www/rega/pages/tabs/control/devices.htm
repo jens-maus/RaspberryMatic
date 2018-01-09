@@ -95,14 +95,14 @@
                           
                           string sPicDivId = "picDiv"#devs.ID();
                           Write("<div id='"#sPicDivId#"' class='CLASS03907' style='margin:auto;' ");
-                          Write("onmouseover='picDivShow(jg_250, \""#devs.Label()#"\", 250, -1, this);'");
-                          Write("onmouseout='picDivHide(jg_250);'");
+                            Write("onmouseover='picDivShow(jg_250, \""#devs.Label()#"\", 250, -1, this);'");
+                            Write("onmouseout='picDivHide(jg_250);'");
                           Write("></div>");
                           
                           Write("<script type='text/javascript'>");   
                           Write("var jg_0 = new jsGraphics('"#sPicDivId#"');");
-                          Write("InitGD(jg_0, 50);");
-                          Write("Draw(jg_0, '"#devs.Label()#"', 50, '-1');");
+                            Write("InitGD(jg_0, 50);");
+                            Write("Draw(jg_0, '"#devs.Label()#"', 50, '-1');");
                           Write("var tmp = new Object();");
                           Write("tmp['name'] = '"#devs.Name()#"';");
                           Write("tmp['trid'] = '"#trId#"';");
@@ -110,7 +110,7 @@
                           Write("Cursor.set(Cursor.NORMAL);");
                           Write("</script>");
                           Write("</td>");
-                          Write("</tr>");
+                        Write("</tr>");
                       }
                     }
                   }
@@ -189,7 +189,7 @@
 
 <script type="text/javascript">
   var s = "";
-
+  
   var mouseOpts =
   {
     onTopOver: function(divToShow)

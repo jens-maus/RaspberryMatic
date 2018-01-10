@@ -11,41 +11,68 @@
  </script>
  
  <table width="100%" class="CLASS03900" cellpadding="0" cellspacing="0">
-@@ -18,11 +21,20 @@
+@@ -18,21 +21,37 @@
    </colgroup>
    <tr>
      <!-- Linke Spalte -->
 -    <td id="contentLeft">
+-      <table class="CLASS03901">  
 +    <td id="contentLeft" class="hidden">
-       <table class="CLASS03901">  
++      <table class="filterTable CLASS03901 j_translate">
          <tr>
-           <td valign="top">
+-          <td valign="top">
++          <td valign="top" style="border: 0px">
              <div id="divDL" class="CLASS03902">
-+
-+            <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
-+            <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
-+            <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class="CLASS03307" NAME="ftName"/>
-+            <div id="ftSetNameBtn" class='FilterSetButton CLASS03308' onclick="setSFilter(fltVR, 'ftName', FIL_NAME);updateTable1();$('btnFilterNameSub').hide();" >${filterSet}</div>
-+            <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
-+
-+      </div>
-+
                <script type="text/javascript">
                  var contHeight = $("content").style.height;
                  contHeight = contHeight.replace(/px/, "");
-@@ -71,8 +83,9 @@
+                 $("divDL").style.height = Math.floor((contHeight * 0.98)) + "px";
+               </script>
+-              <table id="tblFunctionNames" class="StatViewTbl CLASS03903" cellpadding="4" cellspacing="0" >
++              <table id="tblFunctionNames" class="StatViewTbl CLASS03903" cellpadding="0" cellspacing="0">
+                 <colgroup>
+-                  <col width="100px" />
+-                  <col width="100px" />
++                  <col width="80%" />
++                  <col width="20%" />
+                 </colgroup>
++                <tr>
++                  <th>${thName}</th>
++                  <th>${thPicture}</th>
++                </tr>
++                <tbody>
++                <tr>
++                  <td class="CLASS03501">
++                    <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
++                    <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
++                      <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class="CLASS03307" NAME="ftName"/>
++                      <div id="ftSetNameBtn" class='FilterSetButton CLASS03504' onclick="setSFilter(fltVR, 'ftName', FIL_NAME);updateTable1();$('btnFilterNameSub').hide();" >${filterSet}</div>
++                      <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
++                    </div>
++                  </td>
++                  <td class="CLASS03304"></td>
++                </tr>
+                 <%
+                   object obj = dom.GetObject(ID_DEVICES);
+                   if ( obj )
+@@ -71,12 +90,10 @@
                          {
                            sFirstId = tmp;
                          }
 -                        Write("<tr class='CLASS03904'>");
 -                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='loadChannels("#devs.ID()#")'>");
+-                          string sName = devs.Name();
+-                          integer iLength = 12;
+-                          Call("/esp/datapointconfigurator.fn::StringCut()");
+-                          Write(sName);
 +                        string trId = "devices"#devs.ID();
 +                        WriteLine( '<tr id="'#trId#'" class="CLASS03904">' );
 +                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltVR1.clearFilters();updateTable();loadChannels("#devs.ID()#")'>");
-                           string sName = devs.Name();
-                           integer iLength = 12;
-                           Call("/esp/datapointconfigurator.fn::StringCut()");
-@@ -90,8 +103,12 @@
++                          Write(devs.Name());
+                           Write("</td>");
+                           Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' >");
+                           
+@@ -90,8 +107,12 @@
                            Write("var jg_0 = new jsGraphics('"#sPicDivId#"');");
                              Write("InitGD(jg_0, 50);");
                              Write("Draw(jg_0, '"#devs.Label()#"', 50, '-1');");
@@ -59,7 +86,7 @@
                            Write("</td>");
                          Write("</tr>");
                        }
-@@ -173,10 +190,24 @@
+@@ -173,10 +194,24 @@
  <script type="text/javascript">
    var s = "";
    
@@ -85,7 +112,7 @@
    s += "</tr>";
    s += "</table>";
    
-@@ -184,10 +215,10 @@
+@@ -184,10 +219,10 @@
    
    updateTable = function()
    {
@@ -98,7 +125,7 @@
        {
          hide(arChns[i]['trid']);
          if (arChns[i]['ctrlId']) hide(arChns[i]['ctrlId']);
-@@ -199,4 +230,22 @@
+@@ -199,4 +234,22 @@
        }
      }
    }
@@ -123,6 +150,15 @@
  </script> 
 --- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
+@@ -45,7 +45,7 @@
+   </colgroup>
+   <tr>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+-  <th><div id="name" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'name',true);">${thName}</div></th>
++  <th><div id="name" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'name',true);">${thChannel}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
+   <th><div id="room" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'room',true);">${thRoom}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="func"){sCssName="SortSelected";} %>
 @@ -60,11 +60,11 @@
    %>
    <tr>

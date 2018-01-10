@@ -22,29 +22,36 @@
   <tr>
     <!-- Linke Spalte -->
     <td id="contentLeft" class="hidden">
-      <table class="CLASS03901">  
+      <table class="filterTable CLASS03901 j_translate">
         <tr>
-          <td valign="top">
+          <td valign="top" style="border: 0px">
             <div id="divDL" class="CLASS03902">
-
-            <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
-            <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
-            <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class="CLASS03307" NAME="ftName"/>
-            <div id="ftSetNameBtn" class='FilterSetButton CLASS03308' onclick="setSFilter(fltVR, 'ftName', FIL_NAME);updateTable1();$('btnFilterNameSub').hide();" >${filterSet}</div>
-            <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
-
-      </div>
-
               <script type="text/javascript">
                 var contHeight = $("content").style.height;
                 contHeight = contHeight.replace(/px/, "");
                 $("divDL").style.height = Math.floor((contHeight * 0.98)) + "px";
               </script>
-              <table id="tblFunctionNames" class="StatViewTbl CLASS03903" cellpadding="4" cellspacing="0" >
+              <table id="tblFunctionNames" class="StatViewTbl CLASS03903" cellpadding="0" cellspacing="0">
                 <colgroup>
-                  <col width="100px" />
-                  <col width="100px" />
+                  <col width="80%" />
+                  <col width="20%" />
                 </colgroup>
+                <tr>
+                  <th>${thName}</th>
+                  <th>${thPicture}</th>
+                </tr>
+                <tbody>
+                <tr>
+                  <td class="CLASS03501">
+                    <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
+                    <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
+                      <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class="CLASS03307" NAME="ftName"/>
+                      <div id="ftSetNameBtn" class='FilterSetButton CLASS03504' onclick="setSFilter(fltVR, 'ftName', FIL_NAME);updateTable1();$('btnFilterNameSub').hide();" >${filterSet}</div>
+                      <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
+                    </div>
+                  </td>
+                  <td class="CLASS03304"></td>
+                </tr>
                 <%
                   object obj = dom.GetObject(ID_DEVICES);
                   if ( obj )
@@ -86,10 +93,7 @@
                         string trId = "devices"#devs.ID();
                         WriteLine( '<tr id="'#trId#'" class="CLASS03904">' );
                           Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltVR1.clearFilters();updateTable();loadChannels("#devs.ID()#")'>");
-                          string sName = devs.Name();
-                          integer iLength = 12;
-                          Call("/esp/datapointconfigurator.fn::StringCut()");
-                          Write(sName);
+                          Write(devs.Name());
                           Write("</td>");
                           Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' >");
                           

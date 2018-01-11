@@ -60,11 +60,11 @@
   %>
   <tr>
   <td class="CLASS03501">
-    <div id="btnFilterName1" class="FilterBtn">${thFilter}</div>
-    <div class="FilterSubMenu" id="btnFilterNameSub1" style="display:none">
-        <input id="ftName1" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn1', 'ftCancelNameBtn1')" type="text" size="15" class="CLASS03503" NAME="ftName1"/>
-        <div id="ftSetNameBtn1" class='FilterSetButton CLASS03504' onclick="setSFilter(fltVR1, 'ftName1', FIL_NAME);updateTable();$('btnFilterNameSub1').hide();" >${filterSet}</div>
-        <div id="ftCancelNameBtn1" class='FilterSetButton' onclick="$('btnFilterNameSub1').hide();">${filterClose}</div>
+    <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
+    <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
+        <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class="CLASS03503" />
+        <div id="ftSetNameBtn" class='FilterSetButton CLASS03504' onclick="setSFilter(fltHD, 'ftName', FIL_NAME);updateTable();$('btnFilterNameSub').hide();" >${filterSet}</div>
+        <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
     </div>
   </td>
   <td class="CLASS03501">
@@ -87,7 +87,7 @@
           }
         }
         Write("</table>");
-        Write("<div class='FilterSetButton' onclick='setAFilter(fltVR1, \"rooms\");updateTable();$(\"btnFilterRoomSub\").hide();'>${filterSet}</div>");
+        Write("<div class='FilterSetButton' onclick='setAFilter(fltHD, \"rooms\");updateTable();$(\"btnFilterRoomSub\").hide();'>${filterSet}</div>");
         Write("<div class='FilterSetButton' onclick='$(\"btnFilterRoomSub\").hide();'>${filterClose}</div>");
       %>
     </div>
@@ -112,7 +112,7 @@
           }
         }
         Write("</table>");
-        Write("<div class='FilterSetButton' onclick='setAFilter(fltVR1, \"funcs\");updateTable();$(\"btnFilterFuncSub\").hide();'>${filterSet}</div>");
+        Write("<div class='FilterSetButton' onclick='setAFilter(fltHD, \"funcs\");updateTable();$(\"btnFilterFuncSub\").hide();'>${filterSet}</div>");
         Write("<div class='FilterSetButton' onclick='$(\"btnFilterFuncSub\").hide();'>${filterClose}</div>");
       %>
     </div>
@@ -242,7 +242,7 @@
             Write("var o = buildObj('"#chn.ID()#"','"#trId#"','"#sCtrlId#"','"#chn.Name()#"','"#rooms#"','"#functions#"','"#roomIDs#"', '"#funcIDs#"');");
 
             Write("arChns[arChns.length] = o;");
-            Write("if (!fltVR1.objPassFilter(o ))");
+            Write("if (!fltHD.objPassFilter(o ))");
             Write("hide(o['trid']);");
             Call("/esp/system.fn::writeWarnStateJS()");
             Write("</script>");
@@ -263,18 +263,18 @@
       Write("//IseSort(arChns,'name',true);");
     }
   %>
-  colorFilterBtns(fltVR1);
+  colorFilterBtns(fltHD);
   var mouseOpts = {
     onTopOver: function(divToShow) {
-      selectFilters(fltVR1, divToShow);
+      selectFilters(fltHD, divToShow);
     }
   };  
   new iseSubMenuControl("btnFilterRoom", "btnFilterRoomSub", "divRTD",  {d:2}, mouseOpts, false, true);
-  new iseSubMenuControl("btnFilterName1", "btnFilterNameSub1", "divRTD",  {d:2}, mouseOpts, false, true);
+  new iseSubMenuControl("btnFilterName", "btnFilterNameSub", "divRTD",  {d:2}, mouseOpts, false, true);
   new iseSubMenuControl("btnFilterFunc", "btnFilterFuncSub", "divRTD",  {d:2}, mouseOpts, false, true);
 
-  jQuery("#btnFilterName1").click(function(){
-    jQuery("#ftName1").focus();
+  jQuery("#btnFilterName").click(function(){
+    jQuery("#ftName").focus();
   });
 
   translatePage("#tblHDeviChannel", function () {

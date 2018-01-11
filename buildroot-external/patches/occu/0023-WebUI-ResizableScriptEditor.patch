@@ -1,3 +1,39 @@
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -3605,7 +3605,6 @@
+ /* rega\pages\msg\editScript.htm */
+ 
+ .CLASS00001 {
+-	overflow: auto;
+ 	width: 100%;
+ 	height: 100%;
+ }
+@@ -3618,6 +3617,8 @@
+ .CLASS00003 {
+ 	height: 200px;
+ 	width: 100%;
++	min-height: 200px;
++	min-width: 800px;
+ }
+ 
+ .CLASS00004 {
+@@ -3679,6 +3680,7 @@
+ .CLASS00014 {
+ 	height: 200px;
+ 	width: 100%;
++	resize: none;
+ }
+ 
+ .CLASS00015 {
+@@ -3700,6 +3702,8 @@
+ 	width:20%;
+ 	height:200px;
+ 	background-color: $_(white); /* white */
++	min-height: 200px;
++	min-width: 20%;
+ }
+ 
+ /* rega\pages\msg\statusinfo.htm */
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -20759,7 +20759,7 @@

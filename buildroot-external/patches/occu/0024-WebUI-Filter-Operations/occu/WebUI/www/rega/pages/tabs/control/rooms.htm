@@ -30,14 +30,9 @@
               contHeight = contHeight.replace(/px/, "");
               $("divRL").style.height = Math.floor((contHeight * 0.98)) + "px";
             </script>
-            <table id="tblRoomNames" class="StatViewTbl CLASS04006 j_translate"  cellpadding="0" cellspacing="0" >
-              <colgroup>
-                <col width="80%" />
-                <col width="20%" />
-              </colgroup>
+            <table id="tblRoomNames" class="StatViewTbl CLASS04006 j_translate"  cellpadding="0" cellspacing="0" width="100%">
               <tr>
                 <th>${thRoom}</th>
-                <th>${thPicture}</th>
               </tr>
               <tbody>
               <tr>
@@ -49,7 +44,6 @@
                     <div id="ftCancelRoomBtn" class='FilterSetButton' onclick="$('btnFilterRoomSub').hide();">${filterClose}</div>
                   </div>
                 </td>
-                <td class="CLASS03304"></td>
               </tr>
               <%
                 string sEnumRoomIds = "";
@@ -70,7 +64,6 @@
                         Write("<td id='"#room.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHR.clearFilters();updateTable();loadChannels("#room.ID()#")'>");
                         Write(room.Name());
                         Write("</td>");
-                        Write("<td id='"#room.ID()#"pic' class='ButtonStatusRoomsPic'>");
                         Write("<script type='text/javascript'>");
                         Write("var tmp = new Object();");
                         Write("tmp['name'] = '"#room.Name()#"';");
@@ -78,7 +71,6 @@
                         Write("arItems[arItems.length] = tmp;");
                         Write("Cursor.set(Cursor.NORMAL);");
                         Write("</script>");
-                        Write("</td>");
                       Write("</tr>");
                       sEnumRoomIds = sEnumRoomIds # room.ID() # "\t";
                     }
@@ -129,14 +121,10 @@
         if (tdlist[i].className == "ButtonStatusRoomsSelected") {
           tdlist[i].className = "ButtonStatusRooms"
         }
-        if (tdlist[i].className == "ButtonStatusRoomsPicSelected") {
-          tdlist[i].className = "ButtonStatusRoomsPic"
-        }
       }
       // Markierung setzen
       if(dbg)alert("ID:"+id);
       $(id + "name").className = "ButtonStatusRoomsSelected";
-      $(id + "pic").className = "ButtonStatusRoomsPicSelected";
 
       Cursor.set(Cursor.WAIT);    
       // Inhalt nachladen
@@ -206,7 +194,7 @@
   s += "<table cellspacing='8'>";
   s += "<tr>";
     s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey('footerBtnPageBack')+"</div></td>";
-    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltRM.clearFilters();updateRoomTable();fltHR.clearFilters();updateTable();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
+    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltRM.clearFilters();updateRoomTable();fltHR.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
   s += "</tr>";
   s += "</table>";
   
@@ -242,6 +230,11 @@
         show(arItems[i]['trid']);
       }
     }
+  };
+
+  clearInputLeft = function()
+  {
+    document.getElementById("ftRoom").value = "";
   };
   translatePage("#contentLeft");
   jQuery("#contentLeft").removeClass("hidden");

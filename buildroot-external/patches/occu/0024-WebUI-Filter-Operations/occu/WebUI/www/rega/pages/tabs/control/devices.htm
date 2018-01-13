@@ -211,7 +211,7 @@
   s += "<table cellspacing='8'>";
   s += "<tr>";
   s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
-  s += "<td align='center' valign='middle'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
+  s += "<td align='center' valign='middle'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
   s += "</tr>";
   s += "</table>";
   
@@ -249,6 +249,11 @@
         show(arItems[i]['trid']);
       }
     }
+  };
+
+  clearInputLeft = function()
+  {
+    document.getElementById("ftDevName").value = "";
   };
   translatePage("#contentLeft");
   jQuery("#contentLeft").removeClass("hidden");

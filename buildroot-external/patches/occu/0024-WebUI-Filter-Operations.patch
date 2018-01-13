@@ -105,11 +105,11 @@
    s += "<tr>";
    s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
 -  s += "<td align='center' valign='middle'><div class='FooterButton CLASS03911' onclick='fltHD.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
-+  s += "<td align='center' valign='middle'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
++  s += "<td align='center' valign='middle'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
    s += "</tr>";
    s += "</table>";
    
-@@ -198,5 +233,23 @@
+@@ -198,5 +233,28 @@
          if (arChns[i]['ctrlId']) show(arChns[i]['ctrlId']);
        }
      }
@@ -131,6 +131,11 @@
 +      }
 +    }
 +  };
++
++  clearInputLeft = function()
++  {
++    document.getElementById("ftDevName").value = "";
++  };
 +  translatePage("#contentLeft");
 +  jQuery("#contentLeft").removeClass("hidden");
  </script> 
@@ -146,7 +151,7 @@
  </script>
  
  <table width="100%" class="CLASS04000" cellpadding="0" cellspacing="0">
-@@ -18,21 +20,37 @@
+@@ -18,21 +20,31 @@
    </colgroup>
    <tr>
      <!-- Linke Spalte -->
@@ -164,16 +169,13 @@
                  $("divFL").style.height = Math.floor((contHeight * 0.98)) + "px";
                </script>
 -              <table id="tblFunctionNames" class="StatViewTbl CLASS04006 j_translate" cellpadding="5" cellspacing="0" >
-+              <table id="tblFunctionNames" class="StatViewTbl CLASS04006 j_translate" cellpadding="0" cellspacing="0" >
-                 <colgroup>
+-                <colgroup>
 -                  <col width="50%" />
 -                  <col width="50%" />
-+                  <col width="80%" />
-+                  <col width="20%" />
-                 </colgroup>
+-                </colgroup>
++              <table id="tblFunctionNames" class="StatViewTbl CLASS04006 j_translate" cellpadding="0" cellspacing="0" width="100%">
 +                <tr>
 +                  <th>${thFunc}</th>
-+                  <th>${thPicture}</th>
 +                </tr>
 +                <tbody>
 +                <tr>
@@ -185,24 +187,24 @@
 +                      <div id="ftCancelFuncBtn" class='FilterSetButton' onclick="$('btnFilterFuncSub').hide();">${filterClose}</div>
 +                    </div>
 +                  </td>
-+                  <td class="CLASS03304"></td>
 +                </tr>
                  <%
                    object obj = dom.GetObject(ID_FUNCTIONS);
                    if ( obj )
-@@ -46,11 +64,19 @@
+@@ -46,12 +58,18 @@
                          if (sFirstId == "") {
                            sFirstId = tmp;
                          }
 -                        Write("<tr>");
 -                          Write("<td id='"#func.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='loadChannels("#func.ID()#")'>");
 -                            Write(func.Name());     
+-                          Write("</td>");
+-                          Write("<td id='"#func.ID()#"pic' class='ButtonStatusRoomsPic'>");
 +                        string trId = "funcs"#func.ID();
 +                        Write("<tr id='"#trId#"'>");
 +                          Write("<td id='"#func.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHF.clearFilters();updateTable();loadChannels("#func.ID()#")'>");
 +                            Write(func.Name());
                            Write("</td>");
-                           Write("<td id='"#func.ID()#"pic' class='ButtonStatusRoomsPic'>");
 +                          Write("<script type='text/javascript'>");
 +                          Write("var tmp = new Object();");
 +                          Write("tmp['name'] = '"#func.Name()#"';");
@@ -210,10 +212,25 @@
 +                          Write("arItems[arItems.length] = tmp;");
 +                          Write("Cursor.set(Cursor.NORMAL);");
 +                          Write("</script>");
-                           Write("</td>");
                          Write("</tr>");
                        }
-@@ -139,11 +165,24 @@
+                     }
+@@ -101,14 +119,10 @@
+         if (tdlist[i].className == "ButtonStatusRoomsSelected") {
+           tdlist[i].className = "ButtonStatusRooms"
+         }
+-        if (tdlist[i].className == "ButtonStatusRoomsPicSelected") {
+-          tdlist[i].className = "ButtonStatusRoomsPic"
+-        }
+       }
+       // Markierung setzen
+       if(dbg)alert("ID:"+id);
+       $(id + "name").className = "ButtonStatusRoomsSelected";
+-      $(id + "pic").className = "ButtonStatusRoomsPicSelected";
+       
+       // Inhalt nachladen
+       var pb = "";
+@@ -139,11 +153,24 @@
  
  <script type="text/javascript">
    var s = "";
@@ -235,11 +252,11 @@
    s += "<tr>";
      s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey('footerBtnPageBack')+"</div></td>";
 -    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltHF.clearFilters();updateTable();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
-+    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltFN.clearFilters();updateFuncTable();fltHF.clearFilters();updateTable();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
++    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltFN.clearFilters();updateFuncTable();fltHF.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
    s += "</tr>";
    s += "</table>";
    
-@@ -164,5 +203,22 @@
+@@ -164,5 +191,27 @@
        }
      }
    };
@@ -259,6 +276,11 @@
 +        show(arItems[i]['trid']);
 +      }
 +    }
++  };
++
++  clearInputLeft = function()
++  {
++    document.getElementById("ftFunc").value = "";
 +  };
 +  translatePage("#contentLeft");
 +  jQuery("#contentLeft").removeClass("hidden");
@@ -286,7 +308,7 @@
  </script>
  
  <table width="100%" class="CLASS04000" cellpadding="0" cellspacing="0">
-@@ -18,21 +20,37 @@
+@@ -18,21 +20,31 @@
    </colgroup>
    <tr>
      <!-- Linke Spalte -->
@@ -304,16 +326,13 @@
                $("divRL").style.height = Math.floor((contHeight * 0.98)) + "px";
              </script>
 -            <table id="tblRoomNames" class="StatViewTbl CLASS04006 j_translate"  cellpadding="5" cellspacing="0" >
-+            <table id="tblRoomNames" class="StatViewTbl CLASS04006 j_translate"  cellpadding="0" cellspacing="0" >
-               <colgroup>
+-              <colgroup>
 -                <col width="50%" />
 -                <col width="50%" />
-+                <col width="80%" />
-+                <col width="20%" />
-               </colgroup>
+-              </colgroup>
++            <table id="tblRoomNames" class="StatViewTbl CLASS04006 j_translate"  cellpadding="0" cellspacing="0" width="100%">
 +              <tr>
 +                <th>${thRoom}</th>
-+                <th>${thPicture}</th>
 +              </tr>
 +              <tbody>
 +              <tr>
@@ -325,24 +344,24 @@
 +                    <div id="ftCancelRoomBtn" class='FilterSetButton' onclick="$('btnFilterRoomSub').hide();">${filterClose}</div>
 +                  </div>
 +                </td>
-+                <td class="CLASS03304"></td>
 +              </tr>
                <%
                  string sEnumRoomIds = "";
                  object obj = dom.GetObject(ID_ROOMS);
-@@ -47,11 +65,19 @@
+@@ -47,12 +59,18 @@
                        if (sFirstId == "") {
                          sFirstId = tmp;
                        }
 -                      Write("<tr>");
 -                        Write("<td id='"#room.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='loadChannels("#room.ID()#")'>");
 -                          Write(room.Name());     
+-                        Write("</td>");
+-                        Write("<td id='"#room.ID()#"pic' class='ButtonStatusRoomsPic'>");
 +                      string trId = "rooms"#room.ID();
 +                      Write("<tr id='"#trId#"'>");
 +                        Write("<td id='"#room.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHR.clearFilters();updateTable();loadChannels("#room.ID()#")'>");
 +                        Write(room.Name());
                          Write("</td>");
-                         Write("<td id='"#room.ID()#"pic' class='ButtonStatusRoomsPic'>");
 +                        Write("<script type='text/javascript'>");
 +                        Write("var tmp = new Object();");
 +                        Write("tmp['name'] = '"#room.Name()#"';");
@@ -350,10 +369,25 @@
 +                        Write("arItems[arItems.length] = tmp;");
 +                        Write("Cursor.set(Cursor.NORMAL);");
 +                        Write("</script>");
-                         Write("</td>");
                        Write("</tr>");
                        sEnumRoomIds = sEnumRoomIds # room.ID() # "\t";
-@@ -163,11 +189,24 @@
+                     }
+@@ -103,14 +121,10 @@
+         if (tdlist[i].className == "ButtonStatusRoomsSelected") {
+           tdlist[i].className = "ButtonStatusRooms"
+         }
+-        if (tdlist[i].className == "ButtonStatusRoomsPicSelected") {
+-          tdlist[i].className = "ButtonStatusRoomsPic"
+-        }
+       }
+       // Markierung setzen
+       if(dbg)alert("ID:"+id);
+       $(id + "name").className = "ButtonStatusRoomsSelected";
+-      $(id + "pic").className = "ButtonStatusRoomsPicSelected";
+ 
+       Cursor.set(Cursor.WAIT);    
+       // Inhalt nachladen
+@@ -163,11 +177,24 @@
  
  <script type="text/javascript">
    var s = "";
@@ -375,11 +409,11 @@
    s += "<tr>";
      s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey('footerBtnPageBack')+"</div></td>";
 -    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltHR.clearFilters();updateTable();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
-+    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltRM.clearFilters();updateRoomTable();fltHR.clearFilters();updateTable();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
++    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltRM.clearFilters();updateRoomTable();fltHR.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
    s += "</tr>";
    s += "</table>";
    
-@@ -187,7 +226,24 @@
+@@ -187,7 +214,29 @@
            show(arChns[i]['ctrlId']);
        }
      }
@@ -401,6 +435,11 @@
 +        show(arItems[i]['trid']);
 +      }
 +    }
++  };
++
++  clearInputLeft = function()
++  {
++    document.getElementById("ftRoom").value = "";
 +  };
 +  translatePage("#contentLeft");
 +  jQuery("#contentLeft").removeClass("hidden");

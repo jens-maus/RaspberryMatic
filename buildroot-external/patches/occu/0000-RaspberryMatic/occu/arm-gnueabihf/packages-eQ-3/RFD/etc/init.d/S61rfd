@@ -39,6 +39,12 @@ init() {
     if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
       sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
     fi
+
+    # reset the RF module once more
+    echo 0 >/sys/class/gpio/gpio${UART_GPIO}/value
+    sleep 0.2
+    echo 1 >/sys/class/gpio/gpio${UART_GPIO}/value
+    sleep 2
   else
     # otherwise disable the whole [Interface 0] part
     sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf

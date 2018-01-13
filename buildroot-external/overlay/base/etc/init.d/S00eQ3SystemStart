@@ -21,21 +21,22 @@ identify_host() {
   UART_GPIO=""
 
   # identify the RaspberryPi version used
-  # (see http://elinux.org/RPi_HardwareHistory)
+  # http://elinux.org/RPi_HardwareHistory
+  # https://github.com/MilhouseVH/bcmstat/blob/master/bcmstat.sh#L67
   hostid=$(cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}')
   case ${hostid} in
-    *a02082|*a22082|*a32082)         HOST="rpi3"       ;; # Raspberry Pi 3 Model B
-    *a020a0)                         HOST="rpi3cm"     ;; # Raspberry Pi Compute Module 3
-    *a01040|*a01041|*a21041|*a22042) HOST="rpi2"       ;; # Raspberry Pi 2 Model B
-    *9000c1)                         HOST="rpi0w"      ;; # Raspberry Pi Zero W
-    *900092|*900093|*920093)         HOST="rpi0"       ;; # Raspberry Pi Zero
-    *0011|*0014)                     HOST="rpi1cm"     ;; # Raspberry Pi Compute Module 1
-    *0010|*0013|*900032)             HOST="rpi1bp"     ;; # Raspberry Pi B+
-    *0015|*900021)                   HOST="rpi1ap512"  ;; # Raspberry Pi A+/512MB
-    *0012)                           HOST="rpi1ap256"  ;; # Raspberry Pi A+/256MB
-    *000d|*000e|*000f)               HOST="rpi1b512"   ;; # Raspberry Pi B/512MB
-    *0002|*0003|*0004|*0005|*0006)   HOST="rpi1b256"   ;; # Raspberry Pi B/256MB
-    *0007|*0008|*0009)               HOST="rpi1a"      ;; # Raspberry Pi A
+    *a02080|*a02082|*a22082|*a32082)                 HOST="rpi3"       ;; # Raspberry Pi 3 Model B
+    *a020a0)                                         HOST="rpi3cm"     ;; # Raspberry Pi Compute Module 3
+    *a01040|*a01041|*a02041|*a02042|*a21041|*a22042) HOST="rpi2"       ;; # Raspberry Pi 2 Model B
+    *9000c?)                                         HOST="rpi0w"      ;; # Raspberry Pi Zero W
+    *90009?|*920093)                                 HOST="rpi0"       ;; # Raspberry Pi Zero
+    *0011|*0014)                                     HOST="rpi1cm"     ;; # Raspberry Pi Compute Module 1
+    *0010|*0013|*900032|*90003f)                     HOST="rpi1bp"     ;; # Raspberry Pi B+/512MB
+    *0015|*900021|*900012)                           HOST="rpi1ap512"  ;; # Raspberry Pi A+/512MB
+    *0012)                                           HOST="rpi1ap256"  ;; # Raspberry Pi A+/256MB
+    *000d|*000e|*000f)                               HOST="rpi1b512"   ;; # Raspberry Pi B/512MB
+    *0002|*0003|*0004|*0005|*0006)                   HOST="rpi1b256"   ;; # Raspberry Pi B/256MB
+    *0007|*0008|*0009)                               HOST="rpi1a"      ;; # Raspberry Pi A/256MB
 
     # No RaspberryPi identified, try other boards
     *)
@@ -46,48 +47,54 @@ identify_host() {
     ;;
   esac
 
+  # if HOST is still empty we fall back to RaspberryPi3
+  if [[ -z "${HOST}" ]]; then
+    HOST="rpi3"
+    echo "couldn't identify hardware platform (${hostid}). Using RaspberryPi3 as fallback"
+  fi
+
   # depending on the host hardware we choose a different
   # uart base address and irq
   case ${HOST} in
 
     # RaspberryPi3 / RaspberryPi2
     rpi3*|rpi2*)
-      if [[ -z ${UART_BASE} ]]; then
+      if [[ -z "${UART_BASE}" ]]; then
         UART_BASE="0x3f201000"
       fi
-      if [[ -z ${UART_IRQ} ]]; then
+      if [[ -z "${UART_IRQ}" ]]; then
         UART_IRQ="87"
       fi
-      if [[ -z ${UART_DEV} ]]; then
+      if [[ -z "${UART_DEV}" ]]; then
         UART_DEV="/dev/ttyAMA0"
       fi
-      if [[ -z ${UART_GPIO} ]]; then
+      if [[ -z "${UART_GPIO}" ]]; then
         UART_GPIO=18
       fi
     ;;
 
     # RaspberryPi 1 and Zero (W)
     rpi1*|rpi0*)
-      if [[ -z ${UART_BASE} ]]; then
+      if [[ -z "${UART_BASE}" ]]; then
         UART_BASE="0x20201000"
       fi
-      if [[ -z ${UART_IRQ} ]]; then
+      if [[ -z "${UART_IRQ}" ]]; then
         UART_IRQ="81"
       fi
-      if [[ -z ${UART_DEV} ]]; then
+      if [[ -z "${UART_DEV}" ]]; then
         UART_DEV="/dev/ttyAMA0"
       fi
-      if [[ -z ${UART_GPIO} ]]; then
+      if [[ -z "${UART_GPIO}" ]]; then
         UART_GPIO=18
       fi
     ;;
 
     # ASUS Tinkerboard
     tinkerboard)
-      if [[ -z ${UART_DEV} ]]; then
+      if [[ -z "${UART_DEV}" ]]; then
         UART_DEV="/dev/ttyS1"
       fi
-      if [[ -z ${UART_GPIO} ]]; then
+      if [[ -z "${UART_GPIO}" ]]; then
         UART_GPIO=184 # Tinkerboard requires gpio 184 for reset
       fi
 
@@ -160,7 +167,7 @@ checkFactoryReset() {
     # we have to find out the new disk identifier after having modified
     # the partition table because this modifies the identifier
     disk_identifier=$(dd if=${DEV} bs=1 count=4 conv=notrunc skip=$((0x1B8)) 2>/dev/null | hexdump -e '"%08x"')
-    if [[ -n ${disk_identifier} && -f /boot/cmdline.txt ]]; then
+    if [[ -n "${disk_identifier}" && -f /boot/cmdline.txt ]]; then
       mount -o rw,remount /boot
       ROOTPARTNUM=$(mountpoint -d / | cut -d':' -f2)
       sed -i "s/ root=[^[:space:]]*/ root=PARTUUID=${disk_identifier}-$(printf '%02d' ${ROOTPARTNUM})/" /boot/cmdline.txt
@@ -303,7 +310,7 @@ init() {
   init_urandom
 
   # load watchdog kernel module
-  if [[ ${HOST} != "tinkerboard" ]]; then
+  if [[ "${HOST}" != "tinkerboard" ]]; then
     modprobe bcm2835_wdt nowayout=1 heartbeat=15
   fi
 
@@ -312,7 +319,7 @@ init() {
 
   # if /dev/ttyS0 is present move it to ttyS1 for
   # potentiall later use (e.g. bluetooth)
-  if [[ ${HOST} != "tinkerboard" ]]; then
+  if [[ "${HOST}" != "tinkerboard" ]]; then
     if [[ -c /dev/ttyS0 ]]; then
       mv /dev/ttyS0 /dev/ttyS1
     fi
@@ -336,7 +343,7 @@ init() {
 
   # depending on the HomeMatic mode (HmRF, HmIP) we
   # have to load different kernel modules.
-  if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ ${HOST} != "tinkerboard" ]]; then
+  if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ "${HOST}" != "tinkerboard" ]]; then
     # HM/HmIP Dual Protocol
     modprobe bcm2835_raw_uart uart0_base=${UART_BASE} uart0_irq=${UART_IRQ}
     modprobe eq3_char_loop
@@ -346,7 +353,7 @@ init() {
       HMRF_DEVNODE="${HMIP_DEVNODE}"
     fi
   else
-    if [[ ${HOST} != "tinkerboard" ]]; then
+    if [[ "${HOST}" != "tinkerboard" ]]; then
       # use standard PL011 UART
       modprobe amba-pl011
     fi

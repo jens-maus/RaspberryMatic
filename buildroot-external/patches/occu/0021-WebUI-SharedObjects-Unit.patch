@@ -1,0 +1,45 @@
+--- occu/WebUI/www/rega/pages/tabs/startpage.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/startpage.htm
+@@ -229,22 +229,21 @@
+               if (oUser) {
+                 string tmp;
+                 foreach ( tmp, oUser.UserSharedObjects().EnumIDs()) {
+-                  object oSV = dom.GetObject(tmp);
++                  object oDP = dom.GetObject(tmp);
+                   Write("<tr>");
+-                  Write("<td>"#oSV.Name()#":</td>");
++                  Write("<td>"#oDP.Name()#":</td>");
+                   Write("<td colspan='3' id='SYSVAR_" # tmp # "' >");
+-                  if ( (oSV.ValueSubType() == istAlarm) || (oSV.ValueSubType() == istBool) ) {
+-                    Write(oSV.ValueName());
+-                  }
+-                  if (oSV.ValueSubType() == istGeneric) {
+-                    Write(oSV.Value());
+-                  }
+-                  if (oSV.ValueSubType() == istEnum) {
+-                    Write(web.webGetValueFromList(oSV.ValueList(),oSV.Value()));
+-                  }
+-                  if (oSV.ValueSubType() == istChar8859) {
+-                    Write(oSV.Value());
+-                  }
++                  string sSysVarVal = "";
++                  object cObjTmp = oDP;
++                  integer iVT = oDP.ValueType();
++                  integer iST = oDP.ValueSubType();
++                  boolean bLogic  = ( (iVT==ivtBinary)  && (iST==istBool)    );
++                  boolean bList   = ( (iVT==ivtInteger) && (iST==istEnum)    );
++                  boolean bNumber = ( (iVT==ivtFloat)   && (iST==istGeneric) );
++                  boolean bAlarm  = ( (iVT==ivtBinary)  && (iST==istAlarm)   );
++                  boolean bString = ( (iVT==ivtString)  && (iST==istChar8859));
++                  Call( "/esp/system.fn::getSysVarValAsString()" );
++                  Write( sSysVarVal );
+                   Write("</td>");
+                   Write("</tr>");
+                 }
+@@ -280,4 +279,4 @@
+   translatePage();
+   jQuery("#loadingGif").hide();
+   jQuery("#tblStartpageInfo").show();
+-</script>
+\ No newline at end of file
++</script>

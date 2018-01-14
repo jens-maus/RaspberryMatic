@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
-@@ -8,7 +8,9 @@
+@@ -8,31 +8,49 @@
    %>
    //setPath("<span onclick='WebUI.enter(ControlPage);'>Status und Bedienung</span> &gt; Ger�te");
    setPath("<span onclick='WebUI.enter(ControlPage);'>"+translateKey('menuControlPage') +"</span> &gt; " +translateKey('submenuDevices'));
@@ -10,7 +10,11 @@
  </script>
  
  <table width="100%" class="CLASS03900" cellpadding="0" cellspacing="0">
-@@ -18,21 +20,37 @@
+   <colgroup>
+-    <col width="260px" />
+-    <col width="*" />
++    <col width="20%" />
++    <col width="80%" />
    </colgroup>
    <tr>
      <!-- Linke Spalte -->
@@ -28,7 +32,7 @@
                  $("divDL").style.height = Math.floor((contHeight * 0.98)) + "px";
                </script>
 -              <table id="tblFunctionNames" class="StatViewTbl CLASS03903" cellpadding="4" cellspacing="0" >
-+              <table id="tblFunctionNames" class="StatViewTbl CLASS03903" cellpadding="0" cellspacing="0">
++              <table id="tblFunctionNames" class="StatViewTbl CLASS03903 j_translate" cellpadding="0" cellspacing="0" width="100%">
                  <colgroup>
 -                  <col width="100px" />
 -                  <col width="100px" />
@@ -443,4 +447,15 @@
 +  translatePage("#contentLeft");
 +  jQuery("#contentLeft").removeClass("hidden");
  </script>
+ 
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -6025,8 +6025,6 @@
+ 
+ .CLASS03903 {
+ 	border:solid 1px $_(black); /* black */
+-	margin-top:0px;
+-	width:235px;
+ 	margin-top:27px;
+ }
  

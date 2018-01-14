@@ -1,0 +1,81 @@
+--- occu/WebUI/www/rega/esp/functions.fn.orig
++++ occu/WebUI/www/rega/esp/functions.fn
+@@ -495,18 +495,41 @@
+   }
+ }
+ 
+-! [showHmIPParam]
++! [showChannelParam]
+ function ::isParameterVisible() {
++  object _oIface = dom.GetObject(oCC.Interface());
++  string sInterface = _oIface.Name();
++
++  string hmIPRFIdentifier = "HmIP-RF";
++  string bidCosRFIdentifier = "BidCos-RF";
++  string wiredIdentifier = "BidCos-Wired";
++
+   string tmp;
+-  string excludeBinaryHmIPParams = "PARTY_,PARTY_MODE,SECTION,PROCESS,VALVE_STATE,CONTROL_DIFFERENTIAL_TEMPERATURE,RSSI_DEVICE,RSSI_PEER,";
+-  excludeBinaryHmIPParams = excludeBinaryHmIPParams#"CURRENT_ILLUMINATION,OPERATING_VOLTAGE,BOOST_TIME,SMOKE_DETECTOR_TEST_RESULT=NONE";
++  string excludeBinaryParams;
++  string includeBinaryParams = "NOT_IN_USE";
++  showChannelParam = true;
+ 
+-  showHmIPParam = true;
++  if ( sInterface == hmIPRFIdentifier ) {
++    excludeBinaryParams = "PARTY_,PARTY_MODE,SECTION,PROCESS,VALVE_STATE,CONTROL_DIFFERENTIAL_TEMPERATURE,RSSI_DEVICE,RSSI_PEER,";
++    excludeBinaryParams = excludeBinaryParams#"OPERATING_VOLTAGE,BOOST_TIME,SMOKE_DETECTOR_TEST_RESULT=NONE,QUICK_VETO_TIME";
++  }
++
++  if ( sInterface == bidCosRFIdentifier ) {
++    excludeBinaryParams = "PARTY_";
++    includeBinaryParams = "PARTY_MODE";
++  }
+ 
+-  foreach (tmp, excludeBinaryHmIPParams.Split(",")) {
+-    if ((oDP.HSSID().Find(tmp) != -1)) {
+-      showHmIPParam = false;
+-      return;
++  ! The check of the type is to prevent the hiding of system vars
++  if ((( sInterface == hmIPRFIdentifier ) || ( sInterface == bidCosRFIdentifier )) && ( oDP.IsTypeOf( OT_HSSDP ))) {
++    foreach (tmp, excludeBinaryParams.Split(",")) {
++      if (oDP.HSSID().Find(tmp) != -1) {
++        foreach (tmp, includeBinaryParams.Split(",")) {
++          if (oDP.HSSID().Find(tmp) == -1) {
++            showChannelParam = false;
++          }
++        }
++        return;
++      }
+     }
+   }
+   return;
+--- occu/WebUI/www/rega/esp/sico.inc.orig
++++ occu/WebUI/www/rega/esp/sico.inc
+@@ -10,7 +10,7 @@
+   integer iCC = oSC.ConditionChannel();
+   string sSelected = "";
+ 
+-  boolean showHmIPParam = true;
++  boolean showChannelParam = true;
+ 
+   Write( '<select class="SelectBox" onchange="LeftValSelectChange(this.selectedIndex,'#oSC.ID()#');">' );
+   if( iLVT == ivtEmpty ) { sSelected = " selected"; } else { sSelected = ""; }
+@@ -112,7 +112,7 @@
+ 
+                     ! Some parameters shouldn't be visible
+                     Call("/esp/functions.fn::isParameterVisible()");
+-                    if (showHmIPParam == true)
++                    if (showChannelParam == true)
+                      {
+ 
+                       if( (oDP.ID() == iLV) && (iRV1 == sVLKey) ) { sSelected = " selected"; } else { sSelected = ""; }
+@@ -191,7 +191,7 @@
+                 {
+                   ! Some parameter shouldn´t be visible
+                   Call("/esp/functions.fn::isParameterVisible()");
+-                  if(showHmIPParam == true) {
++                  if(showChannelParam == true) {
+                     if( oDP.ID() == iLV ) { sSelected = " selected"; } else { sSelected = ""; }
+                     Write( '<option value="'#oDP.ID()#':1"'#sSelected#'>' );
+                     string sValue = oDP.Name();

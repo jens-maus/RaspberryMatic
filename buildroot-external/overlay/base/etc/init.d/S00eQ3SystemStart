@@ -196,7 +196,7 @@ checkBackupRestore() {
     find /usr/local -not -name tmp -not -name "lost+found" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
 
     # unarchive the backup archive to restore everything
-    tar -C / -xf /usr/local/tmp/usr_local.tar.gz
+    tar -C / --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz
 
     # make sure everything is written to disk
     sync

@@ -54,7 +54,7 @@
                  <%
                    object obj = dom.GetObject(ID_DEVICES);
                    if ( obj )
-@@ -71,12 +89,10 @@
+@@ -72,12 +90,10 @@
                          {
                            sFirstId = tmp;
                          }
@@ -71,7 +71,7 @@
                            Write("</td>");
                            Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' >");
                            
-@@ -90,6 +106,11 @@
+@@ -91,6 +107,11 @@
                            Write("var jg_0 = new jsGraphics('"#sPicDivId#"');");
                              Write("InitGD(jg_0, 50);");
                              Write("Draw(jg_0, '"#devs.Label()#"', 50, '-1');");
@@ -83,7 +83,7 @@
                            Write("</script>");
                            
                            Write("</td>");
-@@ -173,10 +194,24 @@
+@@ -180,10 +201,24 @@
  <script type="text/javascript">
    var s = "";
    
@@ -109,7 +109,7 @@
    s += "</tr>";
    s += "</table>";
    
-@@ -198,5 +233,28 @@
+@@ -205,5 +240,28 @@
          if (arChns[i]['ctrlId']) show(arChns[i]['ctrlId']);
        }
      }
@@ -354,14 +354,13 @@
                        }
 -                      Write("<tr>");
 -                        Write("<td id='"#room.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='loadChannels("#room.ID()#")'>");
--                          Write(room.Name());     
--                        Write("</td>");
--                        Write("<td id='"#room.ID()#"pic' class='ButtonStatusRoomsPic'>");
 +                      string trId = "rooms"#room.ID();
 +                      Write("<tr id='"#trId#"'>");
 +                        Write("<td id='"#room.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHR.clearFilters();updateTable();loadChannels("#room.ID()#")'>");
-+                        Write(room.Name());
+                           Write(room.Name());     
                          Write("</td>");
+-                        Write("<td id='"#room.ID()#"pic' class='ButtonStatusRoomsPic'>");
+-                        Write("</td>");
 +                        Write("<script type='text/javascript'>");
 +                        Write("var tmp = new Object();");
 +                        Write("tmp['name'] = '"#room.Name()#"';");

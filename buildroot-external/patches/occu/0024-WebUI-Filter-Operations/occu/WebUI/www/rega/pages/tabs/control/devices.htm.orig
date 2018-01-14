@@ -64,7 +64,8 @@
                         && devs.ReadyConfig()
                         && devs.HssType()
                         && (! devs.MetaData("operateGroupOnly") == "true" )
-                        && devs.HssType() != "VIR-OL-GTW"
+                        && (devs.HssType() != "VIR-OL-GTW")
+                        && (devs.HssType() != "VIR-HUE-GTW")
                       )
                         {
                         if( sFirstId == "" )
@@ -125,8 +126,14 @@
 
 <script type="text/javascript">
        
-  loadChannels = function(id)
+  loadChannels = function(id, specialFlag)
   {
+
+    // Introduced with the blind.fn
+    if (! specialFlag) {
+      jQuery('body').data('loadCh_'+id, false );
+    }
+
     iseInitUpdateArrays();
     if( id )
     {

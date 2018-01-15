@@ -9,11 +9,13 @@ install_rfd_arch:
 	mkdir -p $(TARGET_DIR)/bin
 	mkdir -p $(TARGET_DIR)/lib
 	mkdir -p $(TARGET_DIR)/etc/config_templates
+	mkdir -p $(TARGET_DIR)/www/config
 	mkdir -p $(TARGET_DIR)/firmware
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/bin/* $(TARGET_DIR)/bin
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/lib/* $(TARGET_DIR)/lib
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S61rfd $(TARGET_DIR)/etc/init.d/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/etc/config_templates/* $(TARGET_DIR)/etc/config_templates/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/www/config/* $(TARGET_DIR)/www/config/
 	cp -R firmware/* $(TARGET_DIR)/firmware
 ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S60multimacd $(TARGET_DIR)/etc/init.d/

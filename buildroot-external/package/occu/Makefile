@@ -56,6 +56,7 @@ install_hmserver:
 	chmod a+rx $(TARGET_DIR)/etc/init.d/S62HMServer
 #ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a HMserver/opt/HMServer/HMIPServer.jar $(TARGET_DIR)/opt/HMServer/
+	cp -a HMserver/opt/HmIP/hmip-copro-update.jar $(TARGET_DIR)/opt/HmIP/
 #else
 	cp -a HMserver/opt/HMServer/HMServer.jar $(TARGET_DIR)/opt/HMServer/
 #endif

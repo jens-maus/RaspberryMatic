@@ -37,17 +37,7 @@
        else
 --- occu/WebUI/www/rega/esp/system.fn.orig
 +++ occu/WebUI/www/rega/esp/system.fn
-@@ -457,6 +457,9 @@
-       ! Systemvariable vom Typ Zeichenkette
-       if (oSV.ValueSubType() == istChar8859) {
-         svValue = oSV.Value();
-+        svValue = svValue.Replace("\r\n", "<br/>");
-+        svValue = svValue.Replace("\r", "<br/>");
-+        svValue = svValue.Replace("\n", "<br/>");
-       }
-       
-       WriteLine("updateSysVar('" # svId # "', '" # svValue # "');");
-@@ -1410,6 +1413,9 @@
+@@ -1410,6 +1410,9 @@
    if ( bString )
    {
      sSysVarVal = cObjTmp.Value();

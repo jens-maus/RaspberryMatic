@@ -1,3 +1,47 @@
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -437,29 +437,18 @@
+     string svId;
+     foreach(svId, oUser.UserSharedObjects().EnumIDs())
+     {
+-      var oSV     = dom.GetObject(svId);
+-      var svValue = "";
+-      
+-      ! Systemvariable vom Typ Alarm oder Logikwert
+-      if ( (oSV.ValueSubType() == istAlarm) || (oSV.ValueSubType() == istBool) ) {
+-        svValue = oSV.ValueName();
+-      }
+-      
+-      ! Systemvariable vom Typ Zahl
+-      if (oSV.ValueSubType() == istGeneric) {
+-        svValue = oSV.Value();
+-        if (svValue == "") { svValue = "0"; }
+-      }
+-      ! Systemvariable vom Typ Enum
+-      if (oSV.ValueSubType() == istEnum) {
+-        svValue = web.webGetValueFromList(oSV.ValueList(),oSV.Value());
+-      }
+-      ! Systemvariable vom Typ Zeichenkette
+-      if (oSV.ValueSubType() == istChar8859) {
+-        svValue = oSV.Value();
+-      }
+-      
+-      WriteLine("updateSysVar('" # svId # "', '" # svValue # "');");
++      var oDP = dom.GetObject(svId);
++      string sSysVarVal = "";
++      object cObjTmp = oDP;
++      integer iVT = oDP.ValueType();
++      integer iST = oDP.ValueSubType();
++      boolean bLogic  = ( (iVT==ivtBinary)  && (iST==istBool)    );
++      boolean bList   = ( (iVT==ivtInteger) && (iST==istEnum)    );
++      boolean bNumber = ( (iVT==ivtFloat)   && (iST==istGeneric) );
++      boolean bAlarm  = ( (iVT==ivtBinary)  && (iST==istAlarm)   );
++      boolean bString = ( (iVT==ivtString)  && (iST==istChar8859));
++      Call( "/esp/system.fn::getSysVarValAsString()" );
++      WriteLine("updateSysVar('" # svId # "', '" # sSysVarVal # "');");
+     }    
+   }
+ 
 --- occu/WebUI/www/rega/pages/tabs/startpage.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/startpage.htm
 @@ -229,22 +229,21 @@

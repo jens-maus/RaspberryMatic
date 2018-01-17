@@ -457,9 +457,6 @@ function ::UpdateUI()
       ! Systemvariable vom Typ Zeichenkette
       if (oSV.ValueSubType() == istChar8859) {
         svValue = oSV.Value();
-        svValue = svValue.Replace("\r\n", "<br/>");
-        svValue = svValue.Replace("\r", "<br/>");
-        svValue = svValue.Replace("\n", "<br/>");
       }
       
       WriteLine("updateSysVar('" # svId # "', '" # svValue # "');");

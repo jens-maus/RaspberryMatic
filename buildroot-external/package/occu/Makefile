@@ -96,7 +96,7 @@ update_webui:
 
 	ln -snf ${OCCU_ROOT}/etc/config/addons/www            $(TARGET_DIR)/www/addons
 
-	sed -i 's/WEBUI_VERSION = ".*";/WEBUI_VERSION = "$(RASPMATIC_VERSION)";/g' $(TARGET_DIR)/www/rega/pages/index.htm
+	grep -rl 'XXX-WEBUI-VERSION-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-WEBUI-VERSION-XXX/$(RASPMATIC_VERSION)/g'
 
 install:
 	make install_rfd_arch OCCU_ARCH=$(OCCU_ARCH)

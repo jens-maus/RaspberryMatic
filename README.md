@@ -12,16 +12,17 @@
 The RaspberryMatic project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded devices like the [RaspberryPi](https://www.raspberrypi.org/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full microSD card image that can be directly flashed and then used in a RaspberryPi as the main operating system for controlling all kind of HomeMatic compatible devices with full compatibility to a CCU2 device directly sold by eQ-3.
 
 ## :cookie: Features
-* 100% HomeMatic system compliant based on latest [OCCU 2.31.25](https://github.com/eq-3/occu) CCU software environment
+* 100% HomeMatic CCU system compliant based on latest [OCCU 2.31.25](https://github.com/eq-3/occu) CCU software environment
 * Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
 * Based on latest [Buildroot 2017.11.1](http://buildroot.org/) lightweight Linux operating system
 * Integration of latest [community versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
-* Self-contained disk image targeted for slim embedded devices (primarily RaspberryPi)
-* Latest [Linux kernel 4.9.76](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float support
+* Integration of [third-party patches](https://github.com/jens-maus/RaspberryMatic/projects/3) for an improved WebUI experience.
+* Self-contained disk image targeted for lightweight embedded devices (primarily RaspberryPi)
+* Latest [Linux kernel 4.9.77](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float (ARMv7) support
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
-* Supports latest JAVA8 runtime environment ([1.8.0_152-8.25.0.76](http://www.azul.com/downloads/zulu-embedded/))
+* Includes special embedded JAVA8 runtime environment ([1.8.0_152-8.25.0.76](http://www.azul.com/downloads/zulu-embedded/))
 * Supports onboard WiFi of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setups including USB connection to uninterruptible power supply (UPS) as well as remote NUT server use (e.g. via Synology NAS Network UPS functionality)
@@ -29,7 +30,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Support to be used without [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) RF module and just connect it to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Full IPv6 support and default HTTPS enabled WebUI support
 * Support to query status information of the underlying Linux system using SNMP requests
-* Auto-resizing `/usr/local` partition to use the full capacity of the SD card or USB stick
+* Auto-resizing `/usr/local` partition to utilize the full capacity of the SD card or USB stick
 * Support for the following third-party *Hardware Attached on Top* (HAT) boards:
   * [S.USV](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown in case batteries are exhausted.
   * [PiModules UPS PIco](http://pimodules.com/) – UPS including automatic system shutdown in case batteries are exhausted.
@@ -43,7 +44,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
 * No HomeMatic-IP support with HM-MOD-RPI-PCB on ASUS Tinkerboard (work in progress)
 * No Bluetooth and onboard-WiFi support for ASUS Tinkerboard (work in progress)
-* A used [HM-Sys-sRP-Pl](https://www.elv.de/controller.aspx?cid=683&detail=10&detail2=731493) repeater cannot be reconfigured
+* [HM-Sys-sRP-Pl](https://www.elv.de/controller.aspx?cid=683&detail=10&detail2=731493) repeater cannot be reconfigured
 
 ## :computer: Requirements
 <img src="https://files.elv.com/bilder/artikel/Produkte/14/1421/142141/Internet/gross/142141_F02_PlHomeMatic.jpg" alt="RaspberryPi equipped with HM-MOD-RPI-PCB" width=300 align=right>
@@ -66,8 +67,8 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * HomeMatic Config Adapter ([HM-CFG-USB-2](https://wiki.fhem.de/wiki/HM-CFG-USB_USB_Konfigurations-Adapter))
 * 2GB minimum space on microSD card or USB memory stick / hard disk (when using RaspberryPi3)
 
-## :telescope: Compatible Third-Party Addons
-The CCU platform allows to enhance the functionality of a CCU by installing so-called Addon packages. For RaspberryMatic, standard CCU-Addon packages won't work because included binaries have to be recompiled for the hard-float buildroot environment RaspberryMatic uses. Here is a list of well-known already compatible Addon packages (please note that this list might be incomplete):
+## :telescope: Compatible Third-Party CCU Addons
+The CCU platform allows to enhance the functionality of a CCU by installing so-called CCU Addon packages. For RaspberryMatic, standard CCU Addon packages won't work because included binaries have to be recompiled for the hard-float buildroot environment RaspberryMatic uses. Here is a list of well-known already compatible Addon packages (please note that this list might be incomplete):
 
 * [CUxD](https://github.com/jens-maus/cuxd)
 * [XML-API](https://github.com/hobbyquaker/XML-API)
@@ -119,10 +120,10 @@ Documentation (e.g. how to port your HomeMatic configuration from a CCU2 to Rasp
 As the RaspberryMatic project is an open source based project everyone is invited to contribute to this project. Please note, however, that functionality within the corresponding eQ-3 OCCU binaries can not be modified as the main HomeMatic services (rfd, ReGaHSS, HMServer, etc.) are provided in binary format by the [OCCU](https://github.com/eq-3/occu) project and not compiled from sources. Nevertheless, if you are a talented developer and want to contribute to the success of RaspberryMatic feel free to send over pull requests or report issues / enhancement requests.
 
 ### :moneybag: Donations [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
-Even for those that don't have the technical knowhow to help developing on RaspberryMatic there are ways to support our development. Please consider sending us a donation to not only help us to compensate for expenses regarding RaspberryMatic, but also to keep our general development motivation on a high level. So if you want to donate some money please feel free to send us money via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL).
+Even for those that don't have the technical knowhow to help developing on RaspberryMatic there are ways to support our development. Please consider sending us a donation to not only help us to compensate for expenses regarding RaspberryMatic, but also to keep our general development motivation on a high level. So if you want to donate some money please feel free to send us money via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL). And if you are running a business which might integrate RaspberryMatic in one of your products please contact us for a regular donation plan which could not only show that you do care about open source development, but also could secure your product by ensuring that development on RaspberryMatic continues in future.
 
 ### :construction: Development
-Building your own RaspberryMatic sd card image is a very straight forward process using this build environment – given that you have sufficient Linux/Unix knowledge and you know what you are actually doing. But if you know what you are doing and which host tools are required to actually be able to run a RaspberryMatic build, it should be as simple as:
+Building your own RaspberryMatic SD card image is a very straight forward process using this build environment – given that you have sufficient Linux/Unix knowledge and you know what you are actually doing. But if you know what you are doing and which host tools are required to actually be able to run a RaspberryMatic build, it should be as simple as:
 
 ```
 $ git clone https://github.com/jens-maus/RaspberryMatic

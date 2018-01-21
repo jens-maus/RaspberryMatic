@@ -215,6 +215,18 @@ init_rtc_device() {
   modprobe i2c_bcm2835
   modprobe i2c_dev
 
+  # check for RX8130-CE RTC clock at 0x32 (Epson RX8130CE)
+  i2cget -y 1 0x32 0x32 2>/dev/null >/dev/null
+  if [[ $? -eq 0 ]]; then
+    modprobe i2c:rx8130
+    if [[ $? -eq 0 ]]; then
+      [[ -e /dev/rtc0 ]] && return 0
+      echo rx8130 0x32 >/sys/class/i2c-dev/i2c-1/device/new_device
+      [[ -e /dev/rtc0 ]] && return 0
+      echo 0x32 >/sys/class/i2c-dev/i2c-1/device/delete_device
+    fi
+  fi
+
   # check for MCP7940N RTC clock at 0x6f (PiFace Shim RTC)
   i2cget -y 1 0x6f 0x00 2>/dev/null >/dev/null
   if [[ $? -eq 0 ]]; then

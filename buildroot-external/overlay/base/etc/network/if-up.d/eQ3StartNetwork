@@ -4,12 +4,12 @@
 /sbin/sysctl -w net.ipv4.tcp_timestamps=0 >/dev/null 2>&1 || true
 
 # we exit if if-up.d is called for "lo"
-if [[ ${IFACE} == "lo" ]]; then
+if [[ "${IFACE}" == "lo" ]]; then
   exit 0
 fi
 
 # only continue if this network interface exists
-if [[ ! -e /sys/class/net/${IFACE} ]]; then
+if [[ ! -L "/sys/class/net/${IFACE}" ]]; then
   echo -n "${IFACE}:missing, "
   exit 0
 fi
@@ -23,16 +23,16 @@ if [[ -e /var/status/hasIP ]]; then
 fi
 
 # make sure iface is really up
-if [[ $(cat /sys/class/net/${IFACE}/operstate) == "down" ]]; then
+if [[ "$(cat /sys/class/net/${IFACE}/operstate)" == "down" ]]; then
   /sbin/ifconfig ${IFACE} up
   sleep 5
 fi
 
 # start WPA Supplicant if this is a WiFi connection
-case ${IFACE} in
+case "${IFACE}" in
   eth*)
     # if eth0 doesn't have a link we don't continue
-    if [[ ${IFACE} == "eth0" && $(cat /sys/class/net/${IFACE}/carrier) -eq 0 ]]; then
+    if [[ "${IFACE}" == "eth0" && "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; then
       /sbin/ifconfig ${IFACE} down
       echo -n "${IFACE}:no link, "
       exit 0
@@ -54,7 +54,7 @@ echo -n "${IFACE}: up, "
 
 # cleanup first
 RESOLV_CONF=/var/etc/resolv.conf
-rm -f ${RESOLV_CONF}
+rm -f "${RESOLV_CONF}"
 mkdir -p /var/status
 rm -f /var/status/hasLink
 rm -f /var/status/hasIP
@@ -63,7 +63,7 @@ rm -f /var/status/hasInternet
 # source in the network config
 source /etc/config/netconfig 2>/dev/null
 
-hostname ${HOSTNAME}
+hostname "${HOSTNAME}"
 
 # set multicast routes
 route del -net 224.0.0.0 netmask 240.0.0.0 2>/dev/null
@@ -88,7 +88,7 @@ fi
 killall -q udhcpc
 
 # if DHCP is enabled we run udhcpc
-case ${MODE} in
+case "${MODE}" in
 
   # if DHCP is enabled we "only" run udhcpc
   DHCP)
@@ -112,12 +112,12 @@ case ${MODE} in
     /sbin/route del default 2>/dev/null
     /sbin/route add default gw ${GATEWAY}
 
-    if [[ -n ${NAMESERVER1} ]]; then
-      echo nameserver ${NAMESERVER1} >>${RESOLV_CONF}
+    if [[ -n "${NAMESERVER1}" ]]; then
+      echo nameserver "${NAMESERVER1}" >>${RESOLV_CONF}
     fi
 
-    if [[ -n ${NAMESERVER2} ]]; then
-      echo nameserver ${NAMESERVER2} >>${RESOLV_CONF}
+    if [[ -n "${NAMESERVER2}" ]]; then
+      echo nameserver "${NAMESERVER2}" >>${RESOLV_CONF}
     fi
 
     # update CURRENT_XYZ in /etc/config/netconfig
@@ -125,13 +125,13 @@ case ${MODE} in
     # update /etc/config/netconfig
     eq3configcmd netconfigcmd -i ${IP} -g ${GATEWAY} -n ${NETMASK}
 
-    if [[ -n ${NAMESERVER1} ]]; then
+    if [[ -n "${NAMESERVER1}" ]]; then
       eq3configcmd netconfigcmd -d1 ${NAMESERVER1}
     else
       eq3configcmd netconfigcmd -d1 ""
     fi
 
-    if [[ -n ${NAMESERVER2} ]]; then
+    if [[ -n "${NAMESERVER2}" ]]; then
       eq3configcmd netconfigcmd -d2 ${NAMESERVER2}
     else
       eq3configcmd netconfigcmd -d2 ""
@@ -150,7 +150,7 @@ esac
 # init the firewall only in case
 # we are not in LAN-GW mode
 source /var/hm_mode 2>/dev/null
-if [[ ${HM_MODE} != "HMLGW" ]]; then
+if [[ "${HM_MODE}" != "HMLGW" ]]; then
   # set firewall rules
   /bin/setfirewall.tcl
   echo -n "firewall, "

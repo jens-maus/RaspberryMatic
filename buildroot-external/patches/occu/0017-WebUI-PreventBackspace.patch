@@ -1,12 +1,12 @@
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
-@@ -63,7 +63,28 @@
-   
-   <!--[if IE 9]><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" /><![endif]-->
-   <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="/webui/js/extern/excanvas.js"></script><![endif]-->
+@@ -165,7 +165,28 @@
+       return "<%Write(sessionId);%>";
+     }
+    </script>
 -  
 +
-+  <script type="text/javascript">
++   <script type="text/javascript">
 +    document.onkeypress = Backspace;
 +    function Backspace(event) {
 +      if (event.keyCode == 8) {
@@ -26,10 +26,10 @@
 +      alert(unescape(translateKey('dialogBackspacePrevent') ));
 +    });
 +  </script>
-+
-   <script type="text/javascript">
-   
-     /*########################################################################*/
++ 
+ </head>
+ <body id="body" onload="WebUI.start();" >
+   <div id="webuiloader_wrapper">
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -746,6 +746,7 @@

@@ -63,28 +63,7 @@
   
   <!--[if IE 9]><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" /><![endif]-->
   <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="/webui/js/extern/excanvas.js"></script><![endif]-->
-
-  <script type="text/javascript">
-    document.onkeypress = Backspace;
-    function Backspace(event) {
-      if (event.keyCode == 8) {
-        if (document.activeElement.tagName == "INPUT" || "textarea") {
-          return true;
-        } else {
-          alert(unescape(translateKey('dialogBackspacePrevent') ));
-          return false;
-        }
-      }
-    }
-
-    history.pushState(null, document.title, location.href);
-    window.addEventListener('popstate', function (event)
-    {
-      history.pushState(null, document.title, location.href);
-      alert(unescape(translateKey('dialogBackspacePrevent') ));
-    });
-  </script>
-
+  
   <script type="text/javascript">
   
     /*########################################################################*/
@@ -186,7 +165,28 @@
       return "<%Write(sessionId);%>";
     }
    </script>
-  
+
+   <script type="text/javascript">
+    document.onkeypress = Backspace;
+    function Backspace(event) {
+      if (event.keyCode == 8) {
+        if (document.activeElement.tagName == "INPUT" || "textarea") {
+          return true;
+        } else {
+          alert(unescape(translateKey('dialogBackspacePrevent') ));
+          return false;
+        }
+      }
+    }
+
+    history.pushState(null, document.title, location.href);
+    window.addEventListener('popstate', function (event)
+    {
+      history.pushState(null, document.title, location.href);
+      alert(unescape(translateKey('dialogBackspacePrevent') ));
+    });
+  </script>
+ 
 </head>
 <body id="body" onload="WebUI.start();" >
   <div id="webuiloader_wrapper">

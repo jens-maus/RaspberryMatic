@@ -47,6 +47,15 @@ start() {
 	else
 		rm -f /etc/config/safemode
 	fi
+
+	# start is finished lets set the LEDs
+	if [[ -f /sys/class/leds/led0/trigger ]]; then
+		echo "heartbeat" >/sys/class/leds/led0/trigger
+	fi
+	if [[ -f /sys/class/leds/led1/trigger ]]; then
+		echo "mmc0" >/sys/class/leds/led1/trigger
+	fi
+
 	echo "OK"
 }
 
@@ -55,6 +64,13 @@ restart() {
 }
 
 stop() {
+	# stop starts, lets set the LEDs
+	if [[ -f /sys/class/leds/led0/trigger ]]; then
+		echo "mmc0" >/sys/class/leds/led0/trigger
+	fi
+	if [[ -f /sys/class/leds/led1/trigger ]]; then
+		echo "heartbeat" >/sys/class/leds/led1/trigger
+	fi
 	/bin/run-parts -a stop /etc/config/rc.d
 }
 

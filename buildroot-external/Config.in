@@ -1,7 +1,7 @@
 menu "eQ-3 HomeMatic Services"
-	source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/occu/Config.in"
-	source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/cloudmatic/Config.in"
-	source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/hmlangw/Config.in"
+  source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/occu/Config.in"
+  source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/cloudmatic/Config.in"
+  source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/hmlangw/Config.in"
 endmenu
 
 menu "Hardware Support"
@@ -14,6 +14,7 @@ endmenu
 menu "Software Support"
   source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/daemonize/Config.in"
   source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/ssdpd/Config.in"
+  source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/eq3configd/Config.in"
 endmenu
 
 menu "Java Runtime Environment"

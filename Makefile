@@ -1,7 +1,7 @@
-BOARD=rpi3
-# BOARD=rpi0
-# BOARD=tinkerboard
-# BOARD=docker
+BOARD=raspmatic_rpi3
+# BOARD=raspmatic_rpi0
+# BOARD=raspmatic_tinkerboard
+# BOARD=raspmatic_docker
 BUILDROOT_VERSION=2017.11.2
 VERSION=$(shell cat ./VERSION)
 

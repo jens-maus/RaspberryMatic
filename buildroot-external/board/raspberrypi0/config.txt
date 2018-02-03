@@ -36,7 +36,7 @@ disable_splash=1
 dtparam=watchdog=on
 
 # start with heartbeat on PWR led and mmc0 on ACT led
-dtparam=pwr_led_trigger=heartbeat,act_led_trigger=mmc0
+dtparam=pwr_led_trigger=timer,act_led_trigger=mmc0
 
 # make sure the firmware enables USB/network boot
 program_usb_boot_mode=1

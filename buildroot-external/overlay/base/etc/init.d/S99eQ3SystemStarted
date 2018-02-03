@@ -69,7 +69,7 @@ stop() {
 		echo "mmc0" >/sys/class/leds/led0/trigger
 	fi
 	if [[ -f /sys/class/leds/led1/trigger ]]; then
-		echo "heartbeat" >/sys/class/leds/led1/trigger
+		echo "timer" >/sys/class/leds/led1/trigger
 	fi
 	/bin/run-parts -a stop /etc/config/rc.d
 }

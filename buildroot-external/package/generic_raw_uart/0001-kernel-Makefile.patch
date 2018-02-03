@@ -1,0 +1,10 @@
+--- ./kernel/Makefile.orig	2018-02-04 00:13:59.499705350 +0100
++++ ./kernel/Makefile	2018-02-04 00:13:03.454700338 +0100
+@@ -1,5 +1,5 @@
+-obj-m += eq3_char_loop.o
+-obj-m += plat_eq3ccu2.o
++#obj-m += eq3_char_loop.o
++#obj-m += plat_eq3ccu2.o
+ obj-m += generic_raw_uart.o
+ obj-m += pl011_raw_uart.o
+ obj-m += dw_apb_raw_uart.o

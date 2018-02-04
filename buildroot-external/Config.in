@@ -6,6 +6,7 @@ endmenu
 
 menu "Kernel Module Support"
   source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/generic_raw_uart/Config.in"
+  source "$BR2_EXTERNAL_RASPBERRYMATIC_PATH/package/bcm2835_raw_uart/Config.in"
 endmenu
 
 menu "Hardware Support"

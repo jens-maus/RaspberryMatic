@@ -98,7 +98,7 @@ define OCCU_INSTALL_TARGET_CMDS
 endef
 
 ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_HMIP),y)
-OCCU_MODULE_SUBDIRS = kernel-modules/bcm2835_raw_uart kernel-modules/eq3_char_loop
+OCCU_MODULE_SUBDIRS = kernel-modules/eq3_char_loop
 $(eval $(kernel-module))
 endif
 

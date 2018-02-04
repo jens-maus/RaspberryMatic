@@ -48,8 +48,8 @@
 /* Use 'L' as magic number */
 #define EQ3LOOP_IOC_MAGIC  'L'
 
-#define EQ3LOOP_IOCSCREATESLAVE _IOW(EQ3LOOP_IOC_MAGIC,  1, unsigned long)
-#define EQ3LOOP_IOCGEVENTS _IOR(EQ3LOOP_IOC_MAGIC,  2, unsigned long)
+#define EQ3LOOP_IOCSCREATESLAVE _IOW(EQ3LOOP_IOC_MAGIC,  1, uint32_t)
+#define EQ3LOOP_IOCGEVENTS _IOR(EQ3LOOP_IOC_MAGIC,  2, uint32_t)
 
 #define EVENT_BIT_SLAVE_OPENED 0
 #define EVENT_BIT_SLAVE_CLOSED 1
@@ -353,7 +353,7 @@ static ssize_t eq3loop_write_master(struct eq3loop_channel_data* channel, struct
 	{
 		ret=-EFAULT;
 		count_to_end = CIRC_SPACE( head, channel->master2slave_buf.tail, BUFSIZE);
-		printk( KERN_ERR EQ3LOOP_DRIVER_NAME ": eq3loop_write_master() %s: not enought space in the buffers. free space = %i, required space = %i", channel->name,count_to_end,count );
+		printk( KERN_ERR EQ3LOOP_DRIVER_NAME ": eq3loop_write_master() %s: not enought space in the buffers. free space = %zu, required space = %zu", channel->name,count_to_end,count );
 		goto out;
 	}
 	/* ok, space is free, write something */
@@ -908,6 +908,7 @@ static struct file_operations eq3loop_fops = {
 	.ioctl      = eq3loop_ioctl,
 #else
 	.unlocked_ioctl = eq3loop_ioctl,
+	.compat_ioctl = eq3loop_ioctl,
 #endif
 };
 

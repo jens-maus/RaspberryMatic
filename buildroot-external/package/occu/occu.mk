@@ -11,7 +11,6 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 
 define OCCU_PRE_PATCH
 	cp $(OCCU_PKGDIR)/Makefile $(@D)
-	cp -R $(OCCU_PKGDIR)/kernel-modules $(@D)
 endef
 OCCU_PRE_PATCH_HOOKS += OCCU_PRE_PATCH
 
@@ -96,10 +95,5 @@ define OCCU_INSTALL_TARGET_CMDS
 			OCCU_ARCH=$(OCCU_ARCH) \
 			-C $(@D) install 
 endef
-
-ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_HMIP),y)
-OCCU_MODULE_SUBDIRS = kernel-modules/eq3_char_loop
-$(eval $(kernel-module))
-endif
 
 $(eval $(generic-package))

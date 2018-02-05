@@ -1,0 +1,88 @@
+#!/bin/sh
+#
+# Startup script to check for a factory reset
+#
+
+# function to check if a factory reset (clearing whole /usr/local) should be performed
+# in addition we also resize /usr/local in case it hasn't been resized to SD card
+# boundaries
+check_factory_reset() {
+
+  # only continue if .doFactoryReset file exists
+  if [[ ! -r /usr/local/.doFactoryReset ]]; then
+    return 1
+  fi
+
+  # extract partition number and device name
+  DEVNODE=$(mountpoint -d /usr/local)
+  DEVNAME=$(mountpoint -n /usr/local | cut -d' ' -f1)
+  PARTNUM=$(echo ${DEVNODE} | cut -d':' -f2)
+  DEV="/dev/$(readlink /sys/dev/block/${DEVNODE} | awk -F/ '{print $(NF-1)}')"
+
+  # find out maximum SD card size (in cylinders)
+  START_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
+  END_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
+  MAX_CHS=$(parted -s ${DEV} unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
+
+  # umount /usr/local to regenerate it
+  umount -f /usr/local
+
+  # only resize the partition if END_CHS != MAX_CHS
+  if [[ -n "${START_CHS}" && -n "${END_CHS}" && -n "${MAX_CHS}" && "${END_CHS}" != "${MAX_CHS}" ]]; then
+    # remove the third partition (/usr/local) and recreate it with
+    # MAX_CHS
+    parted -s ${DEV} rm ${PARTNUM}
+    parted -s ${DEV} mkpart primary ${START_CHS} ${MAX_CHS}
+
+    # we have to find out the new disk identifier after having modified
+    # the partition table because this modifies the identifier
+    disk_identifier=$(dd if=${DEV} bs=1 count=4 conv=notrunc skip=$((0x1B8)) 2>/dev/null | hexdump -e '"%08x"')
+    if [[ -n "${disk_identifier}" && -f /boot/cmdline.txt ]]; then
+      mount -o rw,remount /boot
+      ROOTPARTNUM=$(mountpoint -d / | cut -d':' -f2)
+      sed -i "s/ root=[^[:space:]]*/ root=PARTUUID=${disk_identifier}-$(printf '%02d' ${ROOTPARTNUM})/" /boot/cmdline.txt
+      mount -o ro,remount /boot
+    fi
+  fi
+
+  # we create a clean ext4 partition now
+  mkfs.ext4 -F ${DEVNAME} -L userfs
+
+  # mount /usr/local again
+  mount /usr/local
+
+  return 0
+}
+
+start() {
+  echo -n "Checking for Factory Reset: "
+
+  check_factory_reset
+
+  if [[ $? -eq 0 ]]; then
+    echo "cleared, OK"
+  else
+    echo "not required"
+  fi
+}
+
+restart() {
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

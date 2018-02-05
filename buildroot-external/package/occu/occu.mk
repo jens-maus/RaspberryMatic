@@ -55,6 +55,7 @@ define OCCU_FINALIZE_TARGET
 	ln -snf ../lib/firmware $(TARGET_DIR)/etc/
 
 	# remove obsolete init.d jobs
+	rm -f $(TARGET_DIR)/etc/init.d/S01logging
 	rm -f $(TARGET_DIR)/etc/init.d/S20urandom
 	rm -f $(TARGET_DIR)/etc/init.d/S49ntp
 	rm -f $(TARGET_DIR)/etc/init.d/S60openvpn

@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# Startup Script to check for a potential addon install
+#
+
+stop() {
+  echo -n "Checking for new CCU-Addon: "
+
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  # check if we should install an addon
+  if [[ -r /usr/local/.doAddonInstall ]]; then
+    echo "Found, installing... "
+    /bin/install_addon
+    rm -f /usr/local/.doAddonInstall
+    echo "DONE"
+  else
+    echo "No new Addon found"
+  fi
+}
+
+restart() {
+  stop
+}
+
+case "$1" in
+  start)
+    # nothing
+  ;;
+  stop)
+    stop
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {stop}"
+    exit 1
+esac
+
+exit $?

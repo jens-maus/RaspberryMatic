@@ -1,37 +1,34 @@
 #!/bin/sh
-
-
+#
 # Stop all init scripts in /etc/init.d
 # executing them in reversed numerical order.
-#
+
 for i in $(ls -r /etc/init.d/S??*) ;do
 
-     # Ignore dangling symlinks (if any).
-     [ ! -f "$i" ] && continue
+  # Ignore dangling symlinks (if any).
+  [[ ! -f "${i}" ]] && continue
 
-     # source all data from /var/hm_mode
-     source /var/hm_mode 2>/dev/null
+  # put the psplash progess bar to the
+  # corresponding level
+  name=${i##*/}
+  num=${name:1:2}
+  /usr/bin/psplash-write "MSG Stopping ${name:3}..."
+  /usr/bin/psplash-write "PROGRESS $((100-${name#0}))"
 
-     # put the psplash progess bar to the
-     # corresponding level
-     name=$(basename $i)
-     /usr/bin/psplash-write "MSG Stopping ${name:3}..."
-     /usr/bin/psplash-write "PROGRESS $((100-${name:1:2}))"
-
-     case "$i" in
-	*.sh)
-	    # Source shell script for speed.
-	    (
-		trap - INT QUIT TSTP
-		set stop
-		. $i
-	    )
-	    ;;
-	*)
-	    # No sh extension, so fork subprocess.
-	    $i stop
-	    ;;
-    esac
+  case "$i" in
+    *.sh)
+      # Source shell script for speed.
+      (
+        trap - INT QUIT TSTP
+        set stop
+        . ${i}
+      )
+      ;;
+    *)
+      # No sh extension, so fork subprocess.
+      ${i} stop
+      ;;
+  esac
 done
 
 /usr/bin/psplash-write "MSG Rebooting..."

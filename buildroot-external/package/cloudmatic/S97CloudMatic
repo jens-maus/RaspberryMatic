@@ -1,18 +1,26 @@
 #!/bin/sh
 #
-# Starts eq3configcmd setlgwkey.
+# init script to start/stop the CloudMatic Addon
 #
 
-CFG_DIR=/etc/config
-
+# source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
 # skip this startup in LAN Gateway mode
 [[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
 start() {
-  echo -n "Setting LAN Gateway keys: "
-  /bin/setlgwkey.sh
+  echo -n "Starting CloudMatic: "
+
+  if [[ ! -e /etc/config/safemode ]]; then
+
+    # CloudMatic (meine-homematic.de) startup
+    if [[ -x /opt/mh/startup.sh ]]; then
+      /opt/mh/startup.sh 2>/dev/null >/dev/null
+    fi
+
+  fi
+
   echo "OK"
 }
 

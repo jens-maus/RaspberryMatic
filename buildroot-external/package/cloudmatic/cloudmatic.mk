@@ -8,14 +8,16 @@ CLOUDMATIC_SITE = $(call github,EasySmartHome,CloudMatic-CCUAddon,$(CLOUDMATIC_V
 CLOUDMATIC_LICENSE = PROPERITARY
 
 define CLOUDMATIC_INSTALL_TARGET_CMDS
-	mkdir -p $(TARGET_DIR)/opt/mh
-	cp -a $(@D)/install.tcl $(TARGET_DIR)/opt/mh/
-	cp -a $(@D)/startup.sh $(TARGET_DIR)/opt/mh/
-	cp -a $(@D)/openvpn $(TARGET_DIR)/opt/mh/
-	cp -a $(@D)/user $(TARGET_DIR)/opt/mh/
-	cp -a $(@D)/www $(TARGET_DIR)/opt/mh/
-	rm -f $(TARGET_DIR)/opt/mh/user/nginx.pi
-	cp -a $(@D)/user/nginx.pi $(TARGET_DIR)/opt/mh/nginx
+  $(INSTALL) -d -m 0755 $(TARGET_DIR)/opt/mh
+  $(INSTALL) -D -m 0755 $(@D)/install.tcl $(TARGET_DIR)/opt/mh/
+  $(INSTALL) -D -m 0755 $(@D)/startup.sh $(TARGET_DIR)/opt/mh/
+  rm -f $(TARGET_DIR)/opt/mh/openvpn
+  ln -s /usr/sbin/openvpn $(TARGET_DIR)/opt/mh/
+  cp -a $(@D)/user $(TARGET_DIR)/opt/mh/
+  cp -a $(@D)/www $(TARGET_DIR)/opt/mh/
+  rm -f $(TARGET_DIR)/opt/mh/user/nginx.pi
+  $(INSTALL) -m 0755 $(@D)/user/nginx.pi $(TARGET_DIR)/opt/mh/nginx
+  $(INSTALL) -D -m 0755 $(CLOUDMATIC_PKGDIR)/S97CloudMatic $(TARGET_DIR)/etc/init.d
 endef
 
 $(eval $(generic-package))

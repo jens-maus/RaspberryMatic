@@ -1,28 +1,26 @@
 #!/bin/sh
 #
-# Perform coprocessor updates
+# startup script that updates HomeMatic-RF devices, if necessary.
 #
 
-start() {
+update_rf_hardware() {
 
-  source /var/hm_mode 2>/dev/null
-
-  echo -n "Starting RF-Module Update: "
-
-  if [[ -n "${UART_GPIO}" ]]; then
-    echo out >/sys/class/gpio/gpio${UART_GPIO}/direction
+  if [[ -n "${HM_UART_GPIO}" ]]; then
+    echo ${HM_UART_GPIO} >/sys/class/gpio/export
     sleep 1
-    echo 1 >/sys/class/gpio/gpio${UART_GPIO}/value
+    echo out >/sys/class/gpio/gpio${HM_UART_GPIO}/direction
     sleep 1
-    echo 0 >/sys/class/gpio/gpio${UART_GPIO}/value
+    echo 1 >/sys/class/gpio/gpio${HM_UART_GPIO}/value
     sleep 1
-    echo 1 >/sys/class/gpio/gpio${UART_GPIO}/value
+    echo 0 >/sys/class/gpio/gpio${HM_UART_GPIO}/value
+    sleep 1
+    echo 1 >/sys/class/gpio/gpio${HM_UART_GPIO}/value
   fi
 
   if [[ ! -e /etc/config/no-coprocessor-update ]]; then
     FOUND=0
     # check if user has a HM-MOD-RPI-PCB installed (GPIO)
-    if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] || [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+    if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] || [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
 
       echo -n "HM-MOD-RPI-PCB: "
 
@@ -30,7 +28,7 @@ start() {
 
       # identify which firmware file to take for a potential coprocessor
       # firmware update
-      if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+      if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
         # for HmIP support we flash the dualcopro firmware
         if [[ ! -e /etc/config/enable-debug-coprocessor ]]; then
           FW_FILE=dualcopro_si1002_update_blhm.eq3
@@ -60,10 +58,10 @@ start() {
         # create artifical fwmap file
         echo "CCU2 ${FW_FILE} ${NEW_VERSION}" >${TMPDIR_FW}/fwmap
 
-        if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HMRF_DEVNODE}" ]]; then
-          RPI_PCB_DEVNODE=${HMRF_DEVNODE}
-        elif [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HMIP_DEVNODE}" ]]; then
-          RPI_PCB_DEVNODE=${HMIP_DEVNODE}
+        if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HM_HMRF_DEVNODE}" ]]; then
+          RPI_PCB_DEVNODE=${HM_HMRF_DEVNODE}
+        elif [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HM_HMIP_DEVNODE}" ]]; then
+          RPI_PCB_DEVNODE=${HM_HMIP_DEVNODE}
         fi
 
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
@@ -74,13 +72,13 @@ start() {
           echo -n "forcing, "
           /bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -u -f -d ${TMPDIR_FW}
         fi
-        RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
-        echo "${RF_VERSION}" >/var/rf_firmware_version
+        HM_RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
+        echo "${HM_RF_VERSION}" >/var/rf_firmware_version
 
-        if [[ "${NEW_VERSION}" == "${RF_VERSION}" ]]; then
+        if [[ "${NEW_VERSION}" == "${HM_RF_VERSION}" ]]; then
           echo -n "OK"
         else
-          echo -n "ERROR (${RF_VERSION} != ${NEW_VERSION})"
+          echo -n "ERROR (${HM_RF_VERSION} != ${NEW_VERSION})"
         fi
 
         # remove the temporary directory again
@@ -92,26 +90,26 @@ start() {
     fi
 
     # check if user has a HMIP-RFUSB installed (USB)
-    if [[ "${HMIP_DEV}" == "HMIP-RFUSB" ]]; then
+    if [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
       if [[ ${FOUND} -eq 1 ]]; then
         echo -n "; "
       fi
       echo -n "HMIP-RFUSB: "
 
       NEW_VERSION=$(ls /firmware/HmIP-RFUSB/hmip_coprocessor_update-*.eq3 | sed 's/.*hmip_coprocessor_update-\(.*\)\.eq3/\1/')
-      OLD_VERSION=$(/opt/java/bin/java -jar /opt/HmIP/hmip-copro-update.jar -p ${HMIP_DEVNODE} -v 2>/dev/null | grep "Application version =" | cut -d' ' -f5)
+      OLD_VERSION=$(/opt/java/bin/java -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v 2>/dev/null | grep "Application version =" | cut -d' ' -f5)
       if [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
         # run firmware update
-        RF_VERSION=$(/opt/java/bin/java -jar /opt/HmIP/hmip-copro-update.jar -p ${HMIP_DEVNODE} -o -f /firmware/HmIP-RFUSB/hmip_coprocessor_update-*.eq3 2>/dev/null | grep "Version:" | cut -d' ' -f5)
+        HM_HMIP_VERSION=$(/opt/java/bin/java -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -o -f /firmware/HmIP-RFUSB/hmip_coprocessor_update-*.eq3 2>/dev/null | grep "Version:" | cut -d' ' -f5)
 
-        echo "${RF_VERSION}" >/var/rfusb_firmware_version
+        echo "${HM_HMIP_VERSION}" >/var/rfusb_firmware_version
 
-        if [[ "${NEW_VERSION}" == "${RF_VERSION}" ]]; then
+        if [[ "${NEW_VERSION}" == "${HM_HMIP_VERSION}" ]]; then
           echo -n "OK"
         else
-          echo -n "ERROR (${RF_VERSION} != ${NEW_VERSION})"
+          echo -n "ERROR (${HM_HMIP_VERSION} != ${NEW_VERSION})"
         fi
       else
         echo -n "${OLD_VERSION}, OK"
@@ -131,15 +129,28 @@ start() {
   fi
 }
 
+start() {
+  echo -n "Updating Homematic RF-Hardware: "
+
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  update_rf_hardware
+
+  # save all HM_ env variables
+  set | grep '^HM_' >/var/hm_mode
+}
+
 case "$1" in
   start)
     start
   ;;
   stop)
+    # nothing
   ;;
   *)
-  echo "Usage: $0 {start}"
-  exit 1
+    echo "Usage: $0 {start}"
+    exit 1
 esac
 
 exit $?

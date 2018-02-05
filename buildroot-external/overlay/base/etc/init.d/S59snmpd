@@ -38,6 +38,12 @@ if [ "$SNMPDCOMPAT" = "yes" ]; then
 fi
 
 start() {
+    # copy the SNMP config files in place in
+    # case they don't exist yet
+    if [[ ! -e /etc/config/snmp ]]; then
+      cp -Rp /etc/config_templates/snmp /etc/config/
+    fi
+
     if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd.conf ]; then
         printf "Starting SNMP daemon: "
         start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS

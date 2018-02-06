@@ -6,12 +6,23 @@
 # function to identify rf hardware
 identify_rf_hardware() {
 
-  # assume a HM-MOD-RPI-PCB to be the default
+  # setup default HM RF variables
   HM_MODE="NORMAL"
-  HM_HMRF_DEV="HM-MOD-RPI-PCB"
+  HM_HMRF_DEV=""
   HM_HMRF_DEVNODE=""
-  HM_HMIP_DEV="HM-MOD-RPI-PCB"
+  HM_HMIP_DEV=""
   HM_HMIP_DEVNODE=""
+
+  # until we have a proper tool to identify the
+  # type of the GPIO rf module we assume a RPI-RF-MOD
+  # as soon as we have found a rx8130 RTC clock
+  if [[ "${HM_RTC}" == "rx8130" ]]; then
+    HM_HMRF_DEV="RPI-RF-MOD"
+    HM_HMIP_DEV="RPI-RF-MOD"
+  else
+    HM_HMRF_DEV="HM-MOD-RPI-PCB"
+    HM_HMIP_DEV="HM-MOD-RPI-PCB"
+  fi
 
   # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
   # and set HMIP_DEV and HMIP_DEVNODE accordingly
@@ -48,18 +59,22 @@ init_rf_kernel_modules() {
   # depending on the HomeMatic mode (HmRF, HmIP) we
   # have to load different kernel modules.
   if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
-     [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+     [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] ||
+     [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
+     [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
 
     # load eq3_char_loop kernel module
     modprobe eq3_char_loop
 
-    if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+    if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
+       [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
       if [[ -c /dev/raw-uart ]]; then
         HM_HMRF_DEVNODE="/dev/raw-uart"
       fi
     fi
 
-    if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+    if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] ||
+       [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
       if [[ -c /dev/raw-uart ]]; then
         HM_HMIP_DEVNODE="/dev/raw-uart"
       elif [[ -c /dev/ttyAMA0 ]]; then
@@ -103,6 +118,16 @@ query_rf_parameters() {
         HM_HMRF_DEV=""
         HM_HMRF_DEVNODE=""
       fi
+    elif [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+      RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMRF_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMRF_DEVNODE} -v -a 2>&1)
+      HM_HMRF_SERIAL=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p' | tail -c 11)
+      if [[ -n "${HM_HMRF_SERIAL}" ]]; then
+        HM_HMRF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
+        HM_HMRF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+      else
+        HM_HMRF_DEV=""
+        HM_HMRF_DEVNODE=""
+      fi
     fi
 
   fi
@@ -110,15 +135,23 @@ query_rf_parameters() {
   # check for HmIP Hardware
   if [[ -n "${HM_HMIP_DEVNODE}" ]]; then
 
-    if [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
-      RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v -a 2>&1)
-      HM_HMIP_SERIAL=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p' | tail -c 11)
-      if [[ -n "${HM_HMIP_SERIAL}" ]]; then
-        HM_HMIP_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
-        HM_HMIP_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+    if [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]] ||
+       [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
+
+      if [[ "${HM_HMIP_DEV}" != "RPI-RF-MOD" ]] || [[ "${HM_HMIP_DEV}" != "${HM_HMRF_DEV}" ]]; then
+        RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v -a 2>&1)
+        HM_HMIP_SERIAL=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p' | tail -c 11)
+        if [[ -n "${HM_HMIP_SERIAL}" ]]; then
+          HM_HMIP_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
+          HM_HMIP_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+        else
+          HM_HMIP_DEV=""
+          HM_HMIP_DEVNODE=""
+        fi
       else
-        HM_HMIP_DEV=""
-        HM_HMIP_DEVNODE=""
+        HM_HMIP_SERIAL=${HM_HMRF_SERIAL}
+        HM_HMIP_VERSION=${HM_HMRF_VERSION}
+        HM_HMIP_ADDRESS=${HM_HMRF_ADDRESS}
       fi
     fi
 

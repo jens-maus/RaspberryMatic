@@ -5,18 +5,6 @@
 
 update_rf_hardware() {
 
-  if [[ -n "${HM_UART_GPIO}" ]]; then
-    echo ${HM_UART_GPIO} >/sys/class/gpio/export
-    sleep 1
-    echo out >/sys/class/gpio/gpio${HM_UART_GPIO}/direction
-    sleep 1
-    echo 1 >/sys/class/gpio/gpio${HM_UART_GPIO}/value
-    sleep 1
-    echo 0 >/sys/class/gpio/gpio${HM_UART_GPIO}/value
-    sleep 1
-    echo 1 >/sys/class/gpio/gpio${HM_UART_GPIO}/value
-  fi
-
   if [[ ! -e /etc/config/no-coprocessor-update ]]; then
     FOUND=0
     # check if user has a HM-MOD-RPI-PCB installed (GPIO)
@@ -28,17 +16,11 @@ update_rf_hardware() {
 
       # identify which firmware file to take for a potential coprocessor
       # firmware update
-      if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-        # for HmIP support we flash the dualcopro firmware
-        if [[ ! -e /etc/config/enable-debug-coprocessor ]]; then
-          FW_FILE=dualcopro_si1002_update_blhm.eq3
-        else
-          NEW_VERSION=2.2.1
-          FW_FILE=dualcopro_si1002_update_blhm-2.2.1.eq3
-        fi
+      if [[ ! -e /etc/config/enable-debug-coprocessor ]]; then
+        FW_FILE=dualcopro_si1002_update_blhm.eq3
       else
-        # for HmRF only we have to flash the old coprocessor firmware
-        FW_FILE=coprocessor_update.eq3
+        NEW_VERSION=2.2.1
+        FW_FILE=dualcopro_si1002_update_blhm-2.2.1.eq3
       fi
 
       # identify the copro firmware version to be flashed

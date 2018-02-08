@@ -207,7 +207,7 @@
 +ResetFile = /dev/null
 --- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd
-@@ -7,115 +7,87 @@
+@@ -7,115 +7,84 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/multimacd.pid
  
@@ -245,9 +245,6 @@
 -        rm /var/log/rf_address
 -}
 +[[ -r /var/hm_mode ]] && . /var/hm_mode
-+
-+# skip this startup in LAN Gateway
-+[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 +
  init() {
 -	export TZ=`cat /etc/config/TZ`
@@ -331,7 +328,7 @@
 -	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /etc/config/multimacd.conf -l $LOGLEVEL_RFD
 -	waitStartupComplete
 +  echo -n "Starting multimacd: "
-+  if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
++  if [[ -n "${HM_HMIP_DEV}" ]]; then
 +    init
 +    start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
 +    waitStartupComplete
@@ -346,7 +343,7 @@
 -	rm -f $PIDFILE
 -	echo "OK"
 +  echo -n "Stopping multimacd: "
-+  if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
++  if [[ -n "${HM_HMIP_DEV}" ]]; then
 +    start-stop-daemon -K -q -p ${PIDFILE}
 +    rm -f ${PIDFILE}
 +  fi
@@ -387,7 +384,7 @@
 -
 --- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd
-@@ -7,92 +7,124 @@
+@@ -7,92 +7,114 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/rfd.pid
  
@@ -443,22 +440,12 @@
 +    sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
 +
 +    # patch some settings to match what this hardware expects.
-+    if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-+      sed -i 's|^ComPortFile = /dev/.*$|ComPortFile = /dev/mmd_bidcos|' /etc/config/rfd.conf
-+    else
-+      sed -i "s|^ComPortFile = /dev/.*$|ComPortFile = ${HM_HMRF_DEVNODE}|" /etc/config/rfd.conf
-+    fi
++    sed -i 's|^ComPortFile = /dev/.*$|ComPortFile = /dev/mmd_bidcos|' /etc/config/rfd.conf
 +    sed -i 's|^#*AccessFile = /dev/.*$|AccessFile = /dev/null|' /etc/config/rfd.conf
 +    sed -i 's|^#*ResetFile = /dev/.*$|ResetFile = /dev/null|' /etc/config/rfd.conf
 +    if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
 +      sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
 +    fi
-+
-+    # reset the RF module once more
-+    echo 0 >/sys/class/gpio/gpio${HM_UART_GPIO}/value
-+    sleep 0.2
-+    echo 1 >/sys/class/gpio/gpio${HM_UART_GPIO}/value
-+    sleep 2
 +  else
 +    # otherwise disable the whole [Interface 0] part
 +    sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf

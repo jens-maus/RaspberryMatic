@@ -4,9 +4,8 @@
 #
 #############################################################
 
-GENERIC_RAW_UART_VERSION = 1.2
-GENERIC_RAW_UART_TAG = 1bec8b24bdf9b1b3a2511a0f1b888eb9f59724dd
-GENERIC_RAW_UART_SITE = $(call github,alexreinert,piVCCU,$(GENERIC_RAW_UART_TAG))
+GENERIC_RAW_UART_VERSION = raspberrymatic_tinkerboard_fix
+GENERIC_RAW_UART_SITE = $(call github,alexreinert,piVCCU,$(GENERIC_RAW_UART_VERSION))
 GENERIC_RAW_UART_LICENSE = GPL
 GENERIC_RAW_UART_DEPENDENCIES = host-dtc
 #GENERIC_RAW_UART_LICENSE_FILES = LICENSE
@@ -20,9 +19,8 @@ define GENERIC_RAW_UART_BUILD_CMDS
 endef
 
 define GENERIC_RAW_UART_INSTALL_IMAGES_CMDS
-  mkdir -p $(BINARIES_DIR)/overlays; \
   for dtbo in $(@D)/dts/*.dtbo; do \
-    $(INSTALL) -D -m 0644 $${dtbo} $(BINARIES_DIR)/overlays/; \
+    $(INSTALL) -D -m 0644 $${dtbo} $(BINARIES_DIR)/; \
   done
 endef
 

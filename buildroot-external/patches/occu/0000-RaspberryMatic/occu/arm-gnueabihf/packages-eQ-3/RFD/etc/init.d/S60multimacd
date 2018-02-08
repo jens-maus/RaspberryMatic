@@ -9,9 +9,6 @@ PIDFILE=/var/run/multimacd.pid
 
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-# skip this startup in LAN Gateway
-[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
-
 init() {
 
   # make sure there is no /dev/ttyS0
@@ -52,7 +49,7 @@ waitStartupComplete() {
 
 start() {
   echo -n "Starting multimacd: "
-  if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+  if [[ -n "${HM_HMIP_DEV}" ]]; then
     init
     start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
     waitStartupComplete
@@ -63,7 +60,7 @@ start() {
 
 stop() {
   echo -n "Stopping multimacd: "
-  if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+  if [[ -n "${HM_HMIP_DEV}" ]]; then
     start-stop-daemon -K -q -p ${PIDFILE}
     rm -f ${PIDFILE}
   fi

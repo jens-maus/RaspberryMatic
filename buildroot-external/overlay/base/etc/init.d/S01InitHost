@@ -8,10 +8,6 @@ identify_host() {
   # default/fallback values
   HM_HOST=""
   HM_MODE="NORMAL"
-  HM_UART_BASE=""
-  HM_UART_IRQ=""
-  HM_UART_DEV=""
-  HM_UART_GPIO=""
 
   # identify the RaspberryPi version used
   # http://elinux.org/RPi_HardwareHistory
@@ -34,7 +30,7 @@ identify_host() {
     # No RaspberryPi identified, try other boards
     *)
       hardware=$(cat /proc/cpuinfo | grep 'Hardware' | awk '{print $3}')
-      case ${hardware} in
+      case "${hardware}" in
         Rockchip)                    HM_HOST="tinkerboard";; # ASUS Tinkerboard
       esac
     ;;
@@ -45,58 +41,6 @@ identify_host() {
     HM_HOST="rpi3"
     echo "couldn't identify hardware platform (${hostid}). Using RaspberryPi3 as fallback"
   fi
-
-  # depending on the host hardware we choose a different
-  # uart base address and irq
-  case "${HM_HOST}" in
-
-    # RaspberryPi3 / RaspberryPi2
-    rpi3*|rpi2*)
-      if [[ -z "${HM_UART_BASE}" ]]; then
-        HM_UART_BASE="0x3f201000"
-      fi
-      if [[ -z "${HM_UART_IRQ}" ]]; then
-        HM_UART_IRQ="87"
-      fi
-      if [[ -z "${HM_UART_DEV}" ]]; then
-        HM_UART_DEV="/dev/ttyAMA0"
-      fi
-      if [[ -z "${HM_UART_GPIO}" ]]; then
-        HM_UART_GPIO=18
-      fi
-    ;;
-
-    # RaspberryPi 1 and Zero (W)
-    rpi1*|rpi0*)
-      if [[ -z "${HM_UART_BASE}" ]]; then
-        HM_UART_BASE="0x20201000"
-      fi
-      if [[ -z "${HM_UART_IRQ}" ]]; then
-        HM_UART_IRQ="81"
-      fi
-      if [[ -z "${HM_UART_DEV}" ]]; then
-        HM_UART_DEV="/dev/ttyAMA0"
-      fi
-      if [[ -z "${HM_UART_GPIO}" ]]; then
-        HM_UART_GPIO=18
-      fi
-    ;;
-
-    # ASUS Tinkerboard
-    tinkerboard)
-      if [[ -z "${HM_UART_DEV}" ]]; then
-        HM_UART_DEV="/dev/ttyS1"
-      fi
-      if [[ -z "${HM_UART_GPIO}" ]]; then
-        HM_UART_GPIO=184 # Tinkerboard requires gpio 184 for reset
-      fi
-    ;;
-
-    *)
-      echo "ERROR: couldn't identify host hardware: ${hostid}"
-    ;;
-
-  esac
 }
 
 start() {

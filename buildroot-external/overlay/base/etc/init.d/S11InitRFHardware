@@ -13,12 +13,6 @@ identify_rf_hardware() {
   HM_HMIP_DEV="HM-MOD-RPI-PCB"
   HM_HMIP_DEVNODE=""
 
-  # disable HmIP for Tinkerboard (not supported yet)
-  if [[ "${HOST}" == "tinkerboard" ]]; then
-    HM_HMIP_DEV=""
-    HM_HMIP_DEVNODE=""
-  fi
-
   # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
   # and set HMIP_DEV and HMIP_DEVNODE accordingly
   if lsusb | grep -q 1b1f:c020; then
@@ -45,11 +39,6 @@ identify_rf_hardware() {
   # check if we should boot in LAN gateway mode
   if [[ -e /usr/local/HMLGW ]]; then
     HM_MODE="HM-LGW"
-    if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-      HM_HMRF_DEVNODE=${HM_UART_DEV}
-    fi
-    HM_HMIP_DEV=""
-    HM_HMIP_DEVNODE=""
   fi
 }
 
@@ -58,23 +47,17 @@ identify_rf_hardware() {
 init_rf_kernel_modules() {
   # depending on the HomeMatic mode (HmRF, HmIP) we
   # have to load different kernel modules.
-  if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ "${HM_HOST}" != "tinkerboard" ]]; then
-    # HM/HmIP Dual Protocol
-    modprobe bcm2835_raw_uart uart0_base=${HM_UART_BASE} uart0_irq=${HM_UART_IRQ}
+  if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
+     [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+
+    # load eq3_char_loop kernel module
     modprobe eq3_char_loop
 
-    HM_HMIP_DEVNODE="/dev/bcm2835-raw-uart"
     if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-      HM_HMRF_DEVNODE="${HM_HMIP_DEVNODE}"
+      HM_HMRF_DEVNODE="/dev/raw-uart"
     fi
-  else
-    if [[ "${HM_HOST}" != "tinkerboard" ]]; then
-      # use standard PL011 UART
-      modprobe amba-pl011
-    fi
-
-    if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-      HM_HMRF_DEVNODE=${UART_DEV}
+    if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+      HM_HMIP_DEVNODE="/dev/raw-uart"
     fi
   fi
 }
@@ -86,6 +69,17 @@ query_rf_parameters() {
     RPI_PCB_DEVNODE=${HM_HMRF_DEVNODE}
   elif [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HM_HMIP_DEVNODE}" ]]; then
     RPI_PCB_DEVNODE=${HM_HMIP_DEVNODE}
+  fi
+
+  # workaround for a tinkerboard related issue where the
+  # generic_raw_uart doesn't seem to be able to reset the rf module
+  # correctly. So we reset it manually.
+  if [[ "${HM_HOST}" == "tinkerboard" ]]; then
+    echo 184 >/sys/class/gpio/export
+    echo out >/sys/class/gpio/gpio184/direction
+    echo 0 >/sys/class/gpio/gpio184/value
+    sleep 0.1
+    echo 1 >/sys/class/gpio/gpio184/value
   fi
 
   if [[ -n "${RPI_PCB_DEVNODE}" ]]; then
@@ -106,7 +100,6 @@ query_rf_parameters() {
       HM_HMIP_DEV=""
       HM_HMIP_DEVNODE=""
     fi
-    HM_UART_GPIO=""
   fi
 
   # save all info about the RF module

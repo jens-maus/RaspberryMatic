@@ -20,9 +20,8 @@ define BCM2835_RAW_UART_BUILD_CMDS
 endef
 
 define BCM2835_RAW_UART_INSTALL_IMAGES_CMDS
-  mkdir -p $(BINARIES_DIR)/overlays; \
   for dtbo in $(@D)/*.dtbo; do \
-    $(INSTALL) -D -m 0644 $${dtbo} $(BINARIES_DIR)/overlays/; \
+    $(INSTALL) -D -m 0644 $${dtbo} $(BINARIES_DIR)/; \
   done
 endef
 

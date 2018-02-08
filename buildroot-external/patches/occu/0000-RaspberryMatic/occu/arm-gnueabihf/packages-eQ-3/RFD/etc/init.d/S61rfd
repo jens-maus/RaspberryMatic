@@ -29,22 +29,12 @@ init() {
     sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
 
     # patch some settings to match what this hardware expects.
-    if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-      sed -i 's|^ComPortFile = /dev/.*$|ComPortFile = /dev/mmd_bidcos|' /etc/config/rfd.conf
-    else
-      sed -i "s|^ComPortFile = /dev/.*$|ComPortFile = ${HM_HMRF_DEVNODE}|" /etc/config/rfd.conf
-    fi
+    sed -i 's|^ComPortFile = /dev/.*$|ComPortFile = /dev/mmd_bidcos|' /etc/config/rfd.conf
     sed -i 's|^#*AccessFile = /dev/.*$|AccessFile = /dev/null|' /etc/config/rfd.conf
     sed -i 's|^#*ResetFile = /dev/.*$|ResetFile = /dev/null|' /etc/config/rfd.conf
     if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
       sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
     fi
-
-    # reset the RF module once more
-    echo 0 >/sys/class/gpio/gpio${HM_UART_GPIO}/value
-    sleep 0.2
-    echo 1 >/sys/class/gpio/gpio${HM_UART_GPIO}/value
-    sleep 2
   else
     # otherwise disable the whole [Interface 0] part
     sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf

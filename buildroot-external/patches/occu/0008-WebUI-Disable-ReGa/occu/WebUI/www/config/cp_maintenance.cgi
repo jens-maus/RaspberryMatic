@@ -436,6 +436,9 @@ proc action_put_page {} {
                         li {
                              ${dialogSettingsCMHintSoftwareUpdate3}
                         }
+                        li {
+                             ${dialogSettingsCMHintSoftwareUpdate3a}
+                        }
                         set bat_level [get_bat_level]
                         if {$bat_level < 50} {
                             set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "

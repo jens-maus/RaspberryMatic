@@ -11,27 +11,27 @@ LOGLEVEL_HS485D=5
 
 CFG_TEMPLATE_DIR=/etc/config_templates
 
-source /var/hm_mode 2>/dev/null
+[[ -r /var/hm_mode ]] && . /var/hm_mode
 
 # skip this startup in LAN Gateway mode
 [[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
 init() {
-	if [ ! -d /etc/config/hs485d ] ; then
-  		mkdir /etc/config/hs485d
-	fi
-	if [ -e /etc/config/syslog ] ; then
-  		. /etc/config/syslog
-	fi
-	if [ ! -e /etc/config/InterfacesList.xml ] ; then
-		cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
-	else
-		cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
-	fi
+  if [ ! -d /etc/config/hs485d ] ; then
+    mkdir -p /etc/config/hs485d
+  fi
+  if [ -e /etc/config/syslog ] ; then
+    . /etc/config/syslog
+  fi
+  if [ ! -e /etc/config/InterfacesList.xml ] ; then
+    cp ${CFG_TEMPLATE_DIR}/InterfacesList.xml /etc/config
+  else
+    cmp -s ${CFG_TEMPLATE_DIR}/InterfacesList.xml /etc/config/InterfacesList.xml || cp ${CFG_TEMPLATE_DIR}/InterfacesList.xml /etc/config
+  fi
 
   # if there is no HmIP support required we have to strip
   # the HmIP-RF part from InterfacesList.xml
-  if [[ -z "${HMIP_DEV}" ]]; then
+  if [[ -z "${HM_HMIP_DEV}" ]]; then
     # remove HmIP-RF from InterfacesList.xml because not required (BidCos-RF only mode)
     line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | head -1)
     line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | tail -1)
@@ -44,7 +44,7 @@ init() {
 
   # if there is no BidCos-RF support required we have to strip
   # the BidCos-RF part from InterfacesList.xml
-  if [[ -z "${HMRF_DEV}" ]] && ( [[ ! -f /etc/config/rfd.conf ]] || ! egrep -q "^Type = (HMLGW2|Lan Interface)" /etc/config/rfd.conf ); then
+  if [[ -z "${HM_HMRF_DEV}" ]] && ( [[ ! -f /etc/config/rfd.conf ]] || ! egrep -q "^Type = (HMLGW2|Lan Interface)" /etc/config/rfd.conf ); then
     # remove BidCos-RF from InterfacesList.xml because not required (HmIP-RFUSB only mode)
     line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | head -1)
     line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | tail -1)
@@ -57,34 +57,29 @@ init() {
 }
 
 start() {
-	echo -n "Preparing start of hs485d: "
-	init
-	/bin/hs485dLoader -l $LOGLEVEL_HS485D -ds -dd /etc/config/hs485d.conf
-	echo "OK"
-}
-
-stop() {
-	echo -n ""
+  echo -n "Preparing start of hs485d: "
+  init
+  /bin/hs485dLoader -l ${LOGLEVEL_HS485D} -ds -dd /etc/config/hs485d.conf
+  echo "OK"
 }
 
 restart() {
-	stop
-	start
+  start
 }
 
 case "$1" in
   start)
-	start
-	;;
+    start
+  ;;
   stop)
-	stop
-	;;
+    # nothing
+  ;;
   restart|reload)
-	restart
-	;;
+    restart
+  ;;
   *)
-	echo "Usage: $0 {start|stop|restart}"
-	exit 1
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
 esac
 
 exit $?

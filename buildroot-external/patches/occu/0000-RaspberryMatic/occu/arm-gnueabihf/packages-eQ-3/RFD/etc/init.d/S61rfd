@@ -7,50 +7,40 @@ LOGLEVEL_RFD=5
 CFG_TEMPLATE_DIR=/etc/config_templates
 PIDFILE=/var/run/rfd.pid
 
-source /var/hm_mode 2>/dev/null
+[[ -r /var/hm_mode ]] && . /var/hm_mode
 
 # skip this startup in LAN Gateway mode
 [[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
 init() {
 
-	if [ ! -d /etc/config/rfd ] ; then
-  		mkdir /etc/config/rfd
-	fi
+  if [[ ! -d /etc/config/rfd ]]; then
+    mkdir -p /etc/config/rfd
+  fi
 
-	#Migration for existing rfd.conf in user space
-	if [ ! -e /etc/config/rfd.conf ] ; then
-		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config/rfd.conf
+  # Migration for existing rfd.conf in user space
+  if [[ ! -e /etc/config/rfd.conf ]]; then
+    cp -a ${CFG_TEMPLATE_DIR}/rfd.conf /etc/config/rfd.conf
   fi
 
   # only modify if real rf module found
-  if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+  if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
     # make sure [Interface 0] is uncommented
     sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
 
     # patch some settings to match what this hardware expects.
-    if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-      sed -i 's|^ComPortFile = /dev/.*$|ComPortFile = /dev/mmd_bidcos|' /etc/config/rfd.conf
-    else
-      sed -i "s|^ComPortFile = /dev/.*$|ComPortFile = ${HMRF_DEVNODE}|" /etc/config/rfd.conf
-    fi
+    sed -i 's|^ComPortFile = /dev/.*$|ComPortFile = /dev/mmd_bidcos|' /etc/config/rfd.conf
     sed -i 's|^#*AccessFile = /dev/.*$|AccessFile = /dev/null|' /etc/config/rfd.conf
     sed -i 's|^#*ResetFile = /dev/.*$|ResetFile = /dev/null|' /etc/config/rfd.conf
     if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
       sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
     fi
-
-    # reset the RF module once more
-    echo 0 >/sys/class/gpio/gpio${UART_GPIO}/value
-    sleep 0.2
-    echo 1 >/sys/class/gpio/gpio${UART_GPIO}/value
-    sleep 2
   else
     # otherwise disable the whole [Interface 0] part
     sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf
   fi
 
-  if [[ "${HMRF_DEV}" == "HM-CFG-USB-2" ]]; then
+  if [[ "${HM_HMRF_DEV}" == "HM-CFG-USB-2" ]]; then
     if ! grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
       inum=$(grep "^\[Interface .*\]" /etc/config/rfd.conf | wc -l)
       echo >>/etc/config/rfd.conf
@@ -66,69 +56,65 @@ init() {
     sed -i -e "/^\[Interface ${inum}\]/,/^\s*$/ s/^/#/" /etc/config/rfd.conf
   fi
 
-	if [ ! -e /etc/config/syslog ] ; then
-		cp $CFG_TEMPLATE_DIR/syslog /etc/config
-	fi
-	if [ -e /etc/config/syslog ] ; then
-  		. /etc/config/syslog
-	fi
-
+  if [[ ! -e /etc/config/syslog ]]; then
+    cp -a ${CFG_TEMPLATE_DIR}/syslog /etc/config
+  fi
+  if [[ -e /etc/config/syslog ]]; then
+    . /etc/config/syslog
+  fi
 }
 
 waitStartupComplete() {
-	STEPS=20
-    for i in $(seq 1 $STEPS)
-    do
-		sleep 2
-		echo -n "."
-        RFDSTATUSPID=`cat /var/status/rfd.status 2>&1`
-        RFDPID=`pidof rfd`
-        if [ "$RFDSTATUSPID" = "$RFDPID" ] 
-		then
-            echo "OK"
-            break
-        fi
-        if [ $i -eq $STEPS ] 
-		then
-            echo "ERROR"
-        fi
-    done
+  STEPS=20
+  for i in $(seq 1 ${STEPS}); do
+    sleep 2
+    echo -n "."
+    RFDSTATUSPID=`cat /var/status/rfd.status 2>&1`
+    RFDPID=`pidof rfd`
+    if [[ "${RFDSTATUSPID}" == "${RFDPID}" ]]; then
+      echo "OK"
+      break
+    fi
+    if [[ ${i} -eq ${STEPS} ]]; then
+      echo "ERROR"
+    fi
+  done
 }
 
 start() {
-	echo -n "Starting rfd: "
-	init
-	if grep -q "^\[Interface .\]" /etc/config/rfd.conf; then
-	  start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
-	  waitStartupComplete
-        else
-	  echo "no BidCos-RF hardware found"
-	fi
+  echo -n "Starting rfd: "
+  init
+  if grep -q "^\[Interface .\]" /etc/config/rfd.conf; then
+    start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec /bin/rfd -- -f /etc/config/rfd.conf -l ${LOGLEVEL_RFD}
+    waitStartupComplete
+  else
+    echo "no BidCos-RF hardware found"
+  fi
 }
 stop() {
-	echo -n "Stopping rfd: "
-	start-stop-daemon -K -q -p $PIDFILE
-	rm -f $PIDFILE
-	echo "OK"
+  echo -n "Stopping rfd: "
+  start-stop-daemon -K -q -p ${PIDFILE}
+  rm -f ${PIDFILE}
+  echo "OK"
 }
 restart() {
-	stop
-	start
+  stop
+  start
 }
 
 case "$1" in
   start)
-	start
-	;;
+    start
+  ;;
   stop)
-	stop
-	;;
+    stop
+  ;;
   restart|reload)
-	restart
-	;;
+    restart
+  ;;
   *)
-	echo "Usage: $0 {start|stop|restart}"
-	exit 1
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
 esac
 
 exit $?

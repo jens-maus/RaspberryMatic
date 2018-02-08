@@ -5,38 +5,34 @@
 
 CFG_DIR=/etc/config
 
-source /var/hm_mode 2>/dev/null
+[[ -r /var/hm_mode ]] && . /var/hm_mode
 
 # skip this startup in LAN Gateway mode
 [[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
 start() {
-	echo -n "Setting LAN Gateway keys: "
-	/bin/setlgwkey.sh
-	echo "OK"
+  echo -n "Setting LAN Gateway keys: "
+  /bin/setlgwkey.sh
+  echo "OK"
 }
 
-stop() {
-	echo ""
-}
 restart() {
-	stop
-	start
+  start
 }
 
 case "$1" in
   start)
-	start
-	;;
+    start
+  ;;
   stop)
-	stop
-	;;
+    # nothing
+  ;;
   restart|reload)
-	restart
-	;;
+    restart
+  ;;
   *)
-	echo "Usage: $0 {start|stop|restart}"
-	exit 1
+    echo "Usage: $0 {start|restart}"
+    exit 1
 esac
 
 exit $?

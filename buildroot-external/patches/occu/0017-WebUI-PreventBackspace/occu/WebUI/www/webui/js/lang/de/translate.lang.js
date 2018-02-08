@@ -341,7 +341,7 @@ jQuery.extend(true,langJSON, {
     "lblSettingsSystemConfig5" : "Updates durchf%FChren",
     "lblSettingsSystemConfig6" : "Zeit und Datum einstellen",
     "lblSettingsSystemConfig7" : "Standorteinstellungen",
-    "lblSettingsSystemConfig8" : "Kopplungen (z.B. OSRAM Lightify)",
+    "lblSettingsSystemConfig8" : "Kopplungen",
     "commentSettingsBtnSystemConfigEnd" : "***********************************************",
     "btnAddReceiver" : "Empf%E4nger<br/>hinzuf%FCgen",
     "btnAddSender" : "Sender<br/>hinzuf%FCgen ",

@@ -1,0 +1,155 @@
+#!/bin/sh
+#
+# Startup script to ensure we have a valid filesystem
+#
+
+init_system() {
+
+  CFG_TEMPLATE_DIR=/etc/config_templates
+
+  # ensure some pathes are there and have
+  # correct permissions
+  chmod 775 /var
+  mkdir -p /var/log
+  chmod 775 /var/log
+  mkdir -p /var/tmp
+  chmod 775 /var/tmp
+  mkdir -p /var/rega
+  chmod 775 /var/rega
+  mkdir -p /var/run
+  chmod 775 /var/run
+  mkdir -p /var/spool
+  chmod 775 /var/spool
+  mkdir -p /var/lock
+  chmod 775 /var/lock
+  mkdir -p /var/cache
+  chmod 775 /var/cache
+  mkdir -p /var/lib
+  chmod 775 /var/lib
+  mkdir -p /var/lib/misc
+  chmod 775 /var/lib/misc
+  mkdir -p /var/lib/dbus
+  chmod 775 /var/lib/dbus
+  mkdir -p /var/empty
+  chmod 600 /var/empty
+  mkdir -p /var/etc
+  chmod 775 /var/etc
+  mkdir -p /var/status
+  chmod 775 /var/status
+  touch /var/status/SDinitialised
+
+  # create pathes for recording data
+  mkdir -p /usr/local/sdcard/measurement
+  mkdir -p /media/sd-mmcblk0
+  ln -sf /usr/local/sdcard/measurement /media/sd-mmcblk0/measurement
+
+  # create /media/usbX directories for automounting USB devices
+  for i in $(seq 0 7); do
+    mkdir -p /media/usb${i}
+  done
+
+  # SSH dir setup (/root/.ssh is linked to /usr/local/etc/ssh)
+  mkdir -p /usr/local/etc/ssh
+
+  # create a /usr/local/tmp directory for creating things like backup files, etc.
+  # (we need it on-disk or /tmp will be not enough in case of a filled up /usr/local)
+  mkdir -p /usr/local/tmp
+  rm -rf /usr/local/tmp/*
+
+  # make sure /usr/local/etc/config exists and has
+  # correct permissions
+  mkdir -p /usr/local/etc/config
+  chmod 775 /usr/local/etc/config
+
+  # make sure the timezone setup is fine
+  if [[ ! -e /etc/config/TZ ]]; then
+    cp -a ${CFG_TEMPLATE_DIR}/TZ /etc/config/
+  fi
+
+  # update /etc/config/localtime and /etc/config/timezone
+  /bin/updateTZ.sh
+
+  # if /etc/config/timezone is set to Europe/Berlin we
+  # assume a german keyboard layout
+  if [[ $(cat /etc/config/timezone) == "Europe/Berlin" ]]; then
+    /sbin/loadkmap </etc/de.kmap
+  fi
+
+  # if no network config is present we make sure to put a template file
+  # there
+  if [[ ! -e /etc/config/netconfig ]] ; then
+    cp -a ${CFG_TEMPLATE_DIR}/netconfig /etc/config/
+  fi
+
+  # if no shadow file with password information is in place we have to
+  # put the template file there.
+  if [[ ! -s /etc/config/shadow ]] ; then
+    cp -a ${CFG_TEMPLATE_DIR}/shadow /etc/config/
+  fi
+
+  # load watchdog kernel module
+  if [[ "${HM_HOST}" != "tinkerboard" ]]; then
+    modprobe bcm2835_wdt nowayout=1 heartbeat=15
+  fi
+
+  # load tunneling interface support
+  modprobe tun
+
+  # if /dev/ttyS0 is present move it to ttyS1 for
+  # potentiall later use (e.g. bluetooth)
+  if [[ "${HM_HOST}" != "tinkerboard" ]]; then
+    if [[ -c /dev/ttyS0 ]]; then
+      mv /dev/ttyS0 /dev/ttyS1
+    fi
+  fi
+}
+
+start() {
+  echo -n "Initializing System: "
+
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  # call rc.init before initializing the system
+  if [[ ! -e /etc/config/safemode ]]; then
+    if [[ -x /usr/local/etc/rc.init ]]; then
+      /usr/local/etc/rc.init
+    fi
+  fi
+
+  # make sure the system is properly initialized
+  init_system
+
+  # call rc.postinit after init of system is finished
+  if [[ ! -e /etc/config/safemode ]]; then
+    if [[ -x /usr/local/etc/rc.postinit ]]; then
+      /usr/local/etc/rc.postinit
+    fi
+  fi
+
+  # save all HM_ env variables
+  set | grep '^HM_' >/var/hm_mode
+
+  echo "OK"
+}
+
+restart() {
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|restart}"
+    exit 1
+esac
+
+exit $?

@@ -115,13 +115,14 @@ function ::dcCreate()
     var CN_HMIP_BUTTON     = "BUTTON_NO_FUNCTION.";
     var CN_JALOUSIE        = "JALOUSIE.";
     var CN_LOCK            = "LOCK.";
+    var CN_MOTIONDETECTOR  = "MOTIONDETECTOR_TRANSCEIVER.";
     var CN_NONE            = "NONE";
+    var CN_PDDT = "PASSAGE_DETECTOR_DIRECTION_TRANSMITTER.";
     var CN_POWERMETER      = "POWERMETER.";
     var CN_POWERMETER_IEC1  = "POWERMETER_IEC1.";
     var CN_POWERMETER_IEC2  = "POWERMETER_IEC2.";
     var CN_POWERMETER_IGL  = "POWERMETER_IGL.";
     var CN_POWERMETER_PSM  = "POWERMETER_PSM.";
-    var CN_PRESENCEDETECTOR  = "PRESENCEDETECTOR_TRANSCEIVER.";
     var CN_RC19_DISPLAY    = "RC19_DISPLAY.";
     var CN_RGBW_AUTOMATIC  = "RGBW_AUTOMATIC.";
     var CN_RGBW_COLOR       = "RGBW_COLOR.";
@@ -133,7 +134,8 @@ function ::dcCreate()
     var CN_SWITCH          = "SWITCH.";
     var CN_SWITCH_TRANSM   = "SWITCH_TRANSMITTER.";
     var CN_THERMO          = "TEMP.";
-    var CN_WEEKLY_PROFILE     = "WEEK_PROFILE.";
+    var CN_WEATHER_TRANSMIT = "WEATHER_TRANSMIT.";
+    var CN_WEEKLY_PROFILE   = "WEEK_PROFILE.";
     var CN_WINDOW          = "WINDOW.";
     var CN_WIN_SC          = "WIN_SC.";
     var CN_WIN_SC_SECURE   = "WIN_SC_SECURE.";
@@ -196,7 +198,7 @@ function ::dcCreate()
           bIsControl = ( sControlName.Find(CN_SWITCH_TRANSM) > -1 );
           if( bIsControl && (sLastControlName != CN_SWITCH_TRANSM) )
           {
-            WriteLine( "<script>conInfo('Control SWITCH found.');</script>" );
+            WriteLine( "<script>conInfo('Control SWITCH_TRANSMITTER found.');</script>" );
             isKnownControl = true;
             sLastControlName = CN_SWITCH_TRANSM;
             Call("/esp/controls/switch.fn::CreateSwitchTansmitter()");
@@ -337,9 +339,15 @@ function ::dcCreate()
           if( bIsControl && (sLastControlName!=CN_HMIP_BUTTON) )
           {
             WriteLine( "<script>conInfo('Control CN_HMIP_BUTTON found.');</script>" );
+            object ch = dom.GetObject(chnId);
             isKnownControl = true;
             sLastControlName = CN_HMIP_BUTTON;
-            Call("/esp/datapointconfigurator.fn::CreateNoFunction()");
+            if (ch.Label().Substr(5,7) != "MOD-RC8") {
+              Call("/esp/datapointconfigurator.fn::CreateNoFunction()");
+            } else {
+              WriteLine( "<script>console.log('HmIP-MOD-RC8 found');</script>" );
+              Call("/esp/controls/key_switch_sc.fn::CreateContent()");
+            }
           }
 
           !# DOOROPENER
@@ -666,14 +674,25 @@ function ::dcCreate()
             Call("/esp/controls/generic_input_transmitter.fn::CreateGenericInputTransmitter()");
           }
 
-          !# CN_PRESENCEDETECTOR
-          bIsControl = ( sControlName.Find(CN_PRESENCEDETECTOR) > -1 );
-          if( bIsControl && (sLastControlName != CN_PRESENCEDETECTOR) )
+          !# CN_MOTIONDETECTOR
+          bIsControl = ( sControlName.Find(CN_MOTIONDETECTOR) > -1 );
+          if( bIsControl && (sLastControlName != CN_MOTIONDETECTOR) )
           {
-            WriteLine( "<script>conInfo('Control CN_PRESENCEDETECTOR found.');</script>" );
+            WriteLine( "<script>conInfo('Control CN_MOTIONDETECTOR found.');</script>" );
             isKnownControl = true;
-            sLastControlName = CN_PRESENCEDETECTOR;
-            Call("/esp/controls/motiondetector.fn::CreatePresenceDetector()");
+            sLastControlName = CN_MOTIONDETECTOR;
+            Call("/esp/controls/motiondetector.fn::CreateMotionDetector()");
+          }
+
+          !# CN_PDDT (PASSAGE_DETECTOR_DIRECTION_TRANSMITTER)
+          bIsControl = ( sControlName.Find(CN_PDDT) > -1 );
+          if( bIsControl && (sLastControlName != CN_PDDT) )
+          {
+            object ch = dom.GetObject(chnId);
+            WriteLine( "<script>conInfo('Control CN_PDDT (PASSAGE_DETECTOR_DIRECTION_TRANSMITTER) found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_PDDT;
+            Call("/esp/controls/passagedetector.fn::CreatePassageDetector()");
           }
 
           !# CN_WEEKLY_PROFILE - HmIP
@@ -684,6 +703,16 @@ function ::dcCreate()
             isKnownControl = true;
             sLastControlName = CN_WEEKLY_PROFILE;
             Call("/esp/controls/hmip_weekly_program.fn::CreateWeeklyProgram()");
+          }
+
+          !# CN_WEATHER_TRANSMIT - HmIP
+          bIsControl = ( sControlName.Find(CN_WEATHER_TRANSMIT) > -1 );
+          if( bIsControl && (sLastControlName != CN_WEATHER_TRANSMIT) )
+          {
+            WriteLine( "<script>conInfo('Control CN_WEATHER_TRANSMIT found.');</script>" );
+            isKnownControl = true;
+            sLastControlName = CN_WEATHER_TRANSMIT;
+            Call("/esp/controls/weather_sensor.fn::CreateWeatherSensor()");
           }
 
           !# EVENT_INTERFACE
@@ -1055,7 +1084,7 @@ function ::CreateUnknown()
                   {
                     Call("/esp/datapointconfigurator.fn::ConvWindDir()");
                   }
-                  WriteLine(sValueh#sSpace#sValue#sSpace#sValueUnit );
+                  WriteLine(sValueh#" "#sValue#""#sValueUnit );
                 }
                 else
                 {
@@ -1137,42 +1166,42 @@ function ::ConvWindDir() {
  
  if ( (iValue >= 346) || (iValue <= 15) ) 
  { 
-  sValueh = "N  ";
+  sValueh = "N";
   return;
  }
  if ( (iValue >= 16) && (iValue <= 75) )
  {
-  sValueh = "NO  ";  
+  sValueh = "NO";
   return;
  }
  if ( (iValue >= 76) && (iValue <= 105) )
  {
-  sValueh = "O  ";  
+  sValueh = "O";
   return;
  }
  if ( (iValue >= 106) && (iValue <= 165) )
  {
-  sValueh = "SO  ";  
+  sValueh = "SO";
   return;
  }
  if ( (iValue >= 166) && (iValue <= 195) )
  {
-  sValueh = "S  ";  
+  sValueh = "S";
   return;
  }
  if ( (iValue >= 196) && (iValue <= 255) )
  {
-  sValueh = "SW  ";  
+  sValueh = "SW";
   return;
  }
  if ( (iValue >= 256) && (iValue <= 285) )
  {
-  sValueh = "W  ";  
+  sValueh = "W";
   return;
  }
  if ( (iValue >= 286) && (iValue <= 345) )
  {
-  sValueh = "NW  ";  
+  sValueh = "NW";
   return;
  }
 

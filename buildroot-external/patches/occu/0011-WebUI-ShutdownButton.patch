@@ -1,6 +1,6 @@
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -467,6 +467,21 @@
+@@ -470,6 +470,21 @@
                      puts "\${dialogSettingsCMHintRestart}"
                  }
              }
@@ -22,7 +22,7 @@
              
              # Abgesicherter Modus
              table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-@@ -726,6 +741,12 @@
+@@ -729,6 +744,12 @@
                  dlgPopup.LoadFromFile(url, "action=reboot_confirm");
              }
              
@@ -35,7 +35,7 @@
              OnEnterSafeMode = function() {
                new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRestartSafeMode"), function(result) {
                  if (result == YesNoDialog.RESULT_YES)
-@@ -939,6 +960,89 @@
+@@ -942,6 +963,89 @@
      }
  }
  
@@ -125,7 +125,7 @@
  proc action_update_start {} {
      catch { exec killall hss_lcd }
      catch { exec lcdtool {Saving     Data...    } }
-@@ -959,6 +1063,14 @@
+@@ -962,6 +1066,14 @@
      catch { exec lcdtool {Reboot...             } }
      exec /sbin/reboot
  }

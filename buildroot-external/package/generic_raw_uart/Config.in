@@ -1,0 +1,2 @@
+config BR2_PACKAGE_GENERIC_RAW_UART
+	bool "Support for Generic RAW UART kernel module"

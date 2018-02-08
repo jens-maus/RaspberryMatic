@@ -6,6 +6,11 @@ kernel=zImage
 hdmi_force_hotplug=1
 hdmi_drive=1
 
+# make sure to use less memory for the GPU and
+# all total memory available
+gpu_mem=32
+total_mem=1024
+
 # Disable overscan assuming the display supports displaying the full resolution
 # If the text shown on the screen disappears off the edge, comment this out
 disable_overscan=1
@@ -29,11 +34,17 @@ core_freq=250
 #dtoverlay=pi3-disable-bt
 #dtparam=uart1=off
 
+# load dtoverlay for raw-uart
+dtoverlay=pivccu-raspberrypi
+
 # disable the splash screen
 disable_splash=1
 
 # activating the hardware watchdog
 dtparam=watchdog=on
+
+# start with heartbeat on PWR led and mmc0 on ACT led
+dtparam=pwr_led_trigger=timer,act_led_trigger=mmc0
 
 # make sure the firmware enables USB/network boot
 program_usb_boot_mode=1

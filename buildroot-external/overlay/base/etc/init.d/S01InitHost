@@ -1,0 +1,83 @@
+#!/bin/sh
+#
+# startup script to identify the host hardware
+#
+
+identify_host() {
+
+  # default/fallback values
+  HM_HOST=""
+  HM_MODE="NORMAL"
+
+  # identify the RaspberryPi version used
+  # http://elinux.org/RPi_HardwareHistory
+  # https://github.com/MilhouseVH/bcmstat/blob/master/bcmstat.sh#L67
+  hostid=$(cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}')
+  case "${hostid}" in
+    *a02080|*a02082|*a22082|*a32082)                 HM_HOST="rpi3"       ;; # Raspberry Pi 3 Model B
+    *a020a0)                                         HM_HOST="rpi3cm"     ;; # Raspberry Pi Compute Module 3
+    *a01040|*a01041|*a02041|*a02042|*a21041|*a22042) HM_HOST="rpi2"       ;; # Raspberry Pi 2 Model B
+    *9000c?)                                         HM_HOST="rpi0w"      ;; # Raspberry Pi Zero W
+    *90009?|*920093)                                 HM_HOST="rpi0"       ;; # Raspberry Pi Zero
+    *0011|*0014)                                     HM_HOST="rpi1cm"     ;; # Raspberry Pi Compute Module 1
+    *0010|*0013|*900032|*90003f)                     HM_HOST="rpi1bp"     ;; # Raspberry Pi B+/512MB
+    *0015|*900021|*900012)                           HM_HOST="rpi1ap512"  ;; # Raspberry Pi A+/512MB
+    *0012)                                           HM_HOST="rpi1ap256"  ;; # Raspberry Pi A+/256MB
+    *000d|*000e|*000f)                               HM_HOST="rpi1b512"   ;; # Raspberry Pi B/512MB
+    *0002|*0003|*0004|*0005|*0006)                   HM_HOST="rpi1b256"   ;; # Raspberry Pi B/256MB
+    *0007|*0008|*0009)                               HM_HOST="rpi1a"      ;; # Raspberry Pi A/256MB
+
+    # No RaspberryPi identified, try other boards
+    *)
+      hardware=$(cat /proc/cpuinfo | grep 'Hardware' | awk '{print $3}')
+      case "${hardware}" in
+        Rockchip)                    HM_HOST="tinkerboard";; # ASUS Tinkerboard
+      esac
+    ;;
+  esac
+
+  # if HOST is still empty we fall back to RaspberryPi3
+  if [[ -z "${HM_HOST}" ]]; then
+    HM_HOST="rpi3"
+    echo "couldn't identify hardware platform (${hostid}). Using RaspberryPi3 as fallback"
+  fi
+}
+
+start() {
+  echo -n "Identifying onboard hardware: "
+
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  identify_host
+
+  # save all HM_ env variables
+  set | grep '^HM_' >/var/hm_mode
+
+  if [[ -n "${HM_HOST}" ]]; then
+    echo "${HM_HOST}, OK"
+  else
+    echo "ERROR"
+  fi
+}
+
+restart() {
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

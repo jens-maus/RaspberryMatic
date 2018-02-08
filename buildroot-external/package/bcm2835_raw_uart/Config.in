@@ -1,0 +1,2 @@
+config BR2_PACKAGE_BCM2835_RAW_UART
+	bool "Support for bcm2835 RAW UART kernel module"

@@ -341,7 +341,7 @@ jQuery.extend(true,langJSON, {
     "lblSettingsSystemConfig5" : "Updates durchf%FChren",
     "lblSettingsSystemConfig6" : "Zeit und Datum einstellen",
     "lblSettingsSystemConfig7" : "Standorteinstellungen",
-    "lblSettingsSystemConfig8" : "Kopplungen (z.B. OSRAM Lightify)",
+    "lblSettingsSystemConfig8" : "Kopplungen",
     "commentSettingsBtnSystemConfigEnd" : "***********************************************",
     "btnAddReceiver" : "Empf%E4nger<br/>hinzuf%FCgen",
     "btnAddSender" : "Sender<br/>hinzuf%FCgen ",
@@ -644,7 +644,7 @@ jQuery.extend(true,langJSON, {
     "commentSettingsDialogFirewallEnd" : "***********************************************",
     "commentSettingsBidCosRFConf" : "***********************************************",
     "dialogSettingsBidCosRFConfPath" : "BidCos-RF Konfiguration",
-    "dialogSettingsBidCosRFConfLblSettings" : "Allgmeine Einstellungen",
+    "dialogSettingsBidCosRFConfLblSettings" : "Allgemeine Einstellungen",
     "dialogSettingsBidCosRFConfLblInternalAntenna" : "Interne Antenne verwenden",
     "dialogSettingsBidCosRFConfLblSettingsUseCFGAdapter" : HMIdentifier.de.HomeMaticCFGAdapter + " verwenden",
     "dialogSettingsBidCosRFConfBtnSave" : "%DCbernehmen",
@@ -987,6 +987,7 @@ jQuery.extend(true,langJSON, {
     "dummy" : "dummy",
 
     "optionLastValue" : "Letzter Wert",
+    "optionNoModification" : "Keine %C4nderung",
     "optionNone" : "Keine",
     "optionNotActive" : "Nicht aktiv"
   }

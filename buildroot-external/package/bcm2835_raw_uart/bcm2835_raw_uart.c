@@ -79,6 +79,7 @@ MODULE_PARM_DESC(uart0_irq, "The IRQ number of the UART");
  *  Definitions ---------------------------------------------------------------
  */
 #define MODNAME "bcm2835-raw-uart"
+#define DRVNAME "raw-uart"
 #define CIRCBUF_SIZE 1024
 #define CON_DATA_TX_BUF_SIZE 4096
 #define PROC_DEBUG  1
@@ -1101,7 +1102,7 @@ static int bcm2835_raw_uart_probe( struct platform_device *pdev )
   }
 
   /*Create character device*/
-  ret = alloc_chrdev_region( &port->devnode, 0, 1, MODNAME );
+  ret = alloc_chrdev_region( &port->devnode, 0, 1, DRVNAME );
   if( ret )
   {
     printk( KERN_ERR "bcm2835_raw_uart: Unable to get device number region\n" );
@@ -1116,7 +1117,7 @@ static int bcm2835_raw_uart_probe( struct platform_device *pdev )
     goto out_unregister_chrdev_region;
   }
 
-  port->class = class_create( THIS_MODULE, MODNAME );
+  port->class = class_create( THIS_MODULE, DRVNAME );
   if( IS_ERR(port->class) )
   {
     ret = -EIO;
@@ -1124,7 +1125,7 @@ static int bcm2835_raw_uart_probe( struct platform_device *pdev )
     goto out_cdev_del;
   }
 
-  device_create( port->class, NULL, MKDEV(MAJOR(port->devnode), MINOR(port->devnode)), "%s", MODNAME );
+  device_create( port->class, NULL, MKDEV(MAJOR(port->devnode), MINOR(port->devnode)), "%s", DRVNAME );
 
 
   port->mapbase = platform_resource->start;
@@ -1145,7 +1146,7 @@ static int bcm2835_raw_uart_probe( struct platform_device *pdev )
   bcm2835_raw_uart_reset();
 
 #ifdef PROC_DEBUG
-  proc_create( MODNAME, 0444, NULL, &m_bcm2835_raw_uart_proc_fops );
+  proc_create( DRVNAME, 0444, NULL, &m_bcm2835_raw_uart_proc_fops );
 #endif
 
   printk( KERN_INFO "bcm2835_raw_uart: Driver successfully loaded for uart0_base=0x%08lx, uart0_irq=%d.\n", uart0_base, uart0_irq );
@@ -1181,7 +1182,7 @@ out:  /*No memory allocated -> no need to free something.*/
 static int bcm2835_raw_uart_remove( struct platform_device *pdev )
 {
 #ifdef PROC_DEBUG
-  remove_proc_entry( MODNAME, NULL );
+  remove_proc_entry( DRVNAME, NULL );
 #endif
 
   if( m_bcm2835_raw_uart_port != NULL )
@@ -1314,4 +1315,4 @@ MODULE_ALIAS("platform:bcm2835-raw-uart");
 MODULE_DESCRIPTION( "eQ-3 raw BCM2835 uart driver" );
 MODULE_LICENSE( "GPL" );
 MODULE_AUTHOR( "eQ-3 Entwicklung GmbH" );
-MODULE_VERSION( "1.10" );
+MODULE_VERSION( "1.11" );

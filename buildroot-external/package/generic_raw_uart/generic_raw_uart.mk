@@ -2,9 +2,12 @@
 #
 # Generic RAW UART kernel module
 #
+# Alexander Reinert <alex@areinert.de>
+# https://github.com/alexreinert/piVCCU/tree/master/kernel
+#
 #############################################################
 
-GENERIC_RAW_UART_VERSION = raspberrymatic_tinkerboard_fix
+GENERIC_RAW_UART_VERSION = 8d0b575ead8c6f810ce6f5c4b239b5ed7b1b9d07
 GENERIC_RAW_UART_SITE = $(call github,alexreinert,piVCCU,$(GENERIC_RAW_UART_VERSION))
 GENERIC_RAW_UART_LICENSE = GPL
 GENERIC_RAW_UART_DEPENDENCIES = host-dtc

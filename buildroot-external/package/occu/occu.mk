@@ -83,11 +83,11 @@ ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_HMIP),y)
 	OCCU_RF_PROTOCOL=HM_HMIP
 endif
 
-ifeq ($(BR2_PACKAGE_OCCU_ARCH_ARM),y)
+ifeq ($(BR2_arm),y)
 	OCCU_ARCH=arm-gnueabihf
 endif
 
-ifeq ($(BR2_PACKAGE_OCCU_ARCH_X86_32),y)
+ifeq ($(BR2_i386),y)
 	OCCU_ARCH=X86_32_Debian_Wheezy
 endif
 

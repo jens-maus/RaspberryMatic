@@ -1,32 +1,35 @@
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
-@@ -52,7 +52,26 @@
-   <script type="text/javascript" src="/webui/js/extern/json2min.js"></script>
-   <script type="text/javascript" src="/webui/js/extern/spectrum.js"></script>
- 
-+  <script>
-+  document.onkeypress = Backspace;
-+  function Backspace(event) {
-+    if (event.keyCode == 8) {
+@@ -165,7 +165,28 @@
+       return "<%Write(sessionId);%>";
+     }
+    </script>
+-  
++
++   <script type="text/javascript">
++    document.onkeypress = Backspace;
++    function Backspace(event) {
++      if (event.keyCode == 8) {
 +        if (document.activeElement.tagName == "INPUT" || "textarea") {
-+            return true;
++          return true;
 +        } else {
 +          alert(unescape(translateKey('dialogBackspacePrevent') ));
 +          return false;
 +        }
-+     }
-+  }
- 
-+  history.pushState(null, document.title, location.href);
-+  window.addEventListener('popstate', function (event)
-+  {
-+  history.pushState(null, document.title, location.href);
-+  alert(unescape(translateKey('dialogBackspacePrevent') ));
-+  });
++      }
++    }
++
++    history.pushState(null, document.title, location.href);
++    window.addEventListener('popstate', function (event)
++    {
++      history.pushState(null, document.title, location.href);
++      alert(unescape(translateKey('dialogBackspacePrevent') ));
++    });
 +  </script>
- 
- 
-   <link href="/webui/css/extern/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css">
++ 
+ </head>
+ <body id="body" onload="WebUI.start();" >
+   <div id="webuiloader_wrapper">
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -746,6 +746,7 @@

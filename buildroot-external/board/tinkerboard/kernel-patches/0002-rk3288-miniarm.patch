@@ -1,0 +1,11 @@
+--- linux/arch/arm/boot/dts/rk3288-miniarm.dts	2017-11-02 07:30:55.834786322 +0100
++++ linux/arch/arm/boot/dts/rk3288-miniarm.dts	2017-11-02 07:33:40.119852816 +0100
+@@ -623,6 +623,8 @@
+ 
+ &uart1 {
+ 	status = "okay";
++	compatible = "pivccu,dw_apb";
++	pivccu,gpio_pin = <0>;
+ };
+ 
+ &uart2 {

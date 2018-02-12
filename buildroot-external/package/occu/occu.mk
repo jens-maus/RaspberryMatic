@@ -4,14 +4,13 @@
 #
 #############################################################
 
-OCCU_VERSION = b3bc9eb8c6cbbfdc8bb4563684b22abce64414d4
+OCCU_VERSION = 2.31.25-1
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 
 ifeq ($(BR2_PACKAGE_OCCU),y)
 
 define OCCU_PRE_PATCH
 	cp $(OCCU_PKGDIR)/Makefile $(@D)
-	cp -R $(OCCU_PKGDIR)/kernel-modules $(@D)
 endef
 OCCU_PRE_PATCH_HOOKS += OCCU_PRE_PATCH
 
@@ -56,6 +55,7 @@ define OCCU_FINALIZE_TARGET
 	ln -snf ../lib/firmware $(TARGET_DIR)/etc/
 
 	# remove obsolete init.d jobs
+	rm -f $(TARGET_DIR)/etc/init.d/S01logging
 	rm -f $(TARGET_DIR)/etc/init.d/S20urandom
 	rm -f $(TARGET_DIR)/etc/init.d/S49ntp
 	rm -f $(TARGET_DIR)/etc/init.d/S60openvpn
@@ -83,11 +83,11 @@ ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_HMIP),y)
 	OCCU_RF_PROTOCOL=HM_HMIP
 endif
 
-ifeq ($(BR2_PACKAGE_OCCU_ARCH_ARM),y)
+ifeq ($(BR2_arm),y)
 	OCCU_ARCH=arm-gnueabihf
 endif
 
-ifeq ($(BR2_PACKAGE_OCCU_ARCH_X86_32),y)
+ifeq ($(BR2_i386),y)
 	OCCU_ARCH=X86_32_Debian_Wheezy
 endif
 
@@ -96,10 +96,5 @@ define OCCU_INSTALL_TARGET_CMDS
 			OCCU_ARCH=$(OCCU_ARCH) \
 			-C $(@D) install 
 endef
-
-ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_HMIP),y)
-OCCU_MODULE_SUBDIRS = kernel-modules/bcm2835_raw_uart kernel-modules/eq3_char_loop
-$(eval $(kernel-module))
-endif
 
 $(eval $(generic-package))

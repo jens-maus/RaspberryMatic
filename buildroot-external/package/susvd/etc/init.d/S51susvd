@@ -28,29 +28,33 @@ case $1 in
         SUSV_FW=$(${CLIENT} -status | grep "Firmware Version:" | cut -d' ' -f4)
         if [[ -n "${SUSV_FW}" ]]; then
 
-          # identify hardware revision and perform
-          # firmware update accordingly
-          HW_REV=$(echo ${SUSV_FW} | cut -d'.' -f1)
-          if [[ ${HW_REV} -eq 1 ]]; then
-            DAEMON=/opt/susvd/susvd1
-            CLIENT=/opt/susvd/susv1
+          # define which daemon version to use
+          # based on the firmeversion found
+          case "${SUSV_FW}" in
 
-            if [[ "${SUSV_FW}" != "1.32" ]]; then
-              echo -n "updating firmware, "
-              ${CLIENT} -flash /opt/susvd/fw/susv_fw_132.hex 2>&1 >/dev/null
-            fi
-          else
-            # HW_REV == 2
-            if [[ "${SUSV_FW}" != "2.40" ]]; then
-              echo -n "updating firmware, "
-              ${CLIENT} -flash /opt/susvd/fw/susv_fw_24.hex 2>&1 >/dev/null
-            fi
-          fi
+            # v1.1x should be a S.USV (mobile) with HW Version 2
+            1.1*)
+              DAEMON=/opt/susvd/susvd
+            ;;
 
-          # now start the daemon
-          ${DAEMON} -start 2>&1 >/dev/null
-          [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+            # v1.3x should be a S.USV with HW Version 1
+            1.3*)
+              DAEMON=/opt/susvd/susvd1
+            ;;
+
+            # v2.4x should be a S.USV with HW Version 2
+            2.4*)
+              DAEMON=/opt/susvd/susvd
+            ;;
+          esac
+
+        else
+          SUSV_FW="WARNING: couldn't identify firmware version"
         fi
+
+        # start the daemon
+        ${DAEMON} -start 2>&1 >/dev/null
+        [[ $? = 0 ]] && echo "${SUSV_FW}, OK" || echo "${SUSV_FW}, FAIL"
 
       else
         echo "no hardware found"

@@ -1,0 +1,55 @@
+#!/bin/sh
+#
+# start script to setup the board leds correctly once the
+# system finished booting
+#
+
+start() {
+  echo -n "Setup onboard LEDs: "
+
+  # start is finished lets set the LEDs
+  if [[ -f /sys/class/leds/led0/trigger ]]; then
+    echo "heartbeat" >/sys/class/leds/led0/trigger
+  fi
+  if [[ -f /sys/class/leds/led1/trigger ]]; then
+    echo "mmc0" >/sys/class/leds/led1/trigger
+  fi
+
+  echo "booted, OK"
+}
+
+restart() {
+  stop
+  start
+}
+
+stop() {
+  echo -n "Setup onboard LEDs: "
+
+  # stop starts, lets set the LEDs
+  if [[ -f /sys/class/leds/led0/trigger ]]; then
+    echo "mmc0" >/sys/class/leds/led0/trigger
+  fi
+  if [[ -f /sys/class/leds/led1/trigger ]]; then
+    echo "timer" >/sys/class/leds/led1/trigger
+  fi
+
+  echo "shutdown, OK"
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    stop
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

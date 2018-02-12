@@ -1,28 +1,49 @@
 --- occu/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S49hs485d
-@@ -11,9 +11,12 @@
+@@ -11,52 +11,75 @@
  
  CFG_TEMPLATE_DIR=/etc/config_templates
  
 -init() {
 -	export TZ=`cat /etc/config/TZ`
-+source /var/hm_mode 2>/dev/null
-+
++[[ -r /var/hm_mode ]] && . /var/hm_mode
+ 
+-	if [ ! -d /etc/config/hs485d ] ; then
+-  		mkdir /etc/config/hs485d
+-	fi
+-	if [ -e /etc/config/syslog ] ; then
+-  		. /etc/config/syslog
+-	fi
+-	if [ ! -e /etc/config/InterfacesList.xml ] ; then
+-		cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
+-	else
+-		cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
+-	fi
+-}
 +# skip this startup in LAN Gateway mode
 +[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
  
+-start() {
+-	echo -n "Preparing start of hs485d"
+-	init
+-	/bin/hs485dLoader -l $LOGLEVEL_HS485D -ds -dd /etc/config/hs485d.conf
+-	echo "OK"
 +init() {
- 	if [ ! -d /etc/config/hs485d ] ; then
-   		mkdir /etc/config/hs485d
- 	fi
-@@ -25,17 +28,43 @@
- 	else
- 		cmp -s $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config/InterfacesList.xml || cp $CFG_TEMPLATE_DIR/InterfacesList.xml /etc/config
- 	fi
++  if [ ! -d /etc/config/hs485d ] ; then
++    mkdir -p /etc/config/hs485d
++  fi
++  if [ -e /etc/config/syslog ] ; then
++    . /etc/config/syslog
++  fi
++  if [ ! -e /etc/config/InterfacesList.xml ] ; then
++    cp ${CFG_TEMPLATE_DIR}/InterfacesList.xml /etc/config
++  else
++    cmp -s ${CFG_TEMPLATE_DIR}/InterfacesList.xml /etc/config/InterfacesList.xml || cp ${CFG_TEMPLATE_DIR}/InterfacesList.xml /etc/config
++  fi
 +
 +  # if there is no HmIP support required we have to strip
 +  # the HmIP-RF part from InterfacesList.xml
-+  if [[ -z "${HMIP_DEV}" ]]; then
++  if [[ -z "${HM_HMIP_DEV}" ]]; then
 +    # remove HmIP-RF from InterfacesList.xml because not required (BidCos-RF only mode)
 +    line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | head -1)
 +    line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>HmIP-RF<' | cut -d: -f1 | tail -1)
@@ -35,7 +56,7 @@
 +
 +  # if there is no BidCos-RF support required we have to strip
 +  # the BidCos-RF part from InterfacesList.xml
-+  if [[ -z "${HMRF_DEV}" ]] && ( [[ ! -f /etc/config/rfd.conf ]] || ! egrep -q "^Type = (HMLGW2|Lan Interface)" /etc/config/rfd.conf ); then
++  if [[ -z "${HM_HMRF_DEV}" ]] && ( [[ ! -f /etc/config/rfd.conf ]] || ! egrep -q "^Type = (HMLGW2|Lan Interface)" /etc/config/rfd.conf ); then
 +    # remove BidCos-RF from InterfacesList.xml because not required (HmIP-RFUSB only mode)
 +    line_start=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | head -1)
 +    line_end=$(cat /etc/config/InterfacesList.xml | grep -n '>BidCos-RF<' | cut -d: -f1 | tail -1)
@@ -47,42 +68,132 @@
 +  fi
  }
  
- start() {
--	echo -n "Preparing start of hs485d"
-+	echo -n "Preparing start of hs485d: "
- 	init
- 	/bin/hs485dLoader -l $LOGLEVEL_HS485D -ds -dd /etc/config/hs485d.conf
- 	echo "OK"
- }
- 
- stop() {
+-stop() {
 -	echo "OK"
-+	echo -n ""
++start() {
++  echo -n "Preparing start of hs485d: "
++  init
++  /bin/hs485dLoader -l ${LOGLEVEL_HS485D} -ds -dd /etc/config/hs485d.conf
++  echo "OK"
  }
  
  restart() {
-@@ -59,4 +88,3 @@
+-	stop
+-	start
++  start
+ }
+ 
+ case "$1" in
+   start)
+-	start
+-	;;
++    start
++  ;;
+   stop)
+-	stop
+-	;;
++    # nothing
++  ;;
+   restart|reload)
+-	restart
+-	;;
++    restart
++  ;;
+   *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
++    echo "Usage: $0 {start|stop|restart}"
++    exit 1
  esac
  
  exit $?
 -
 --- occu/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S60hs485d.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/HS485D/etc/init.d/S60hs485d
-@@ -7,9 +7,12 @@
+@@ -7,50 +7,54 @@
  
  CFG_TEMPLATE_DIR=/etc/config_templates
  
 -init() {
 -	export TZ=`cat /etc/config/TZ`
-+source /var/hm_mode 2>/dev/null
++[[ -r /var/hm_mode ]] && . /var/hm_mode
 +
 +# skip this startup in LAN Gateway mode
 +[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
  
+-	if [ ! -e /etc/config/syslog ] ; then
+-		cp $CFG_TEMPLATE_DIR/syslog /etc/config
+-	fi
+-
+-	if [ -e /etc/config/syslog ] ; then
+-		. /etc/config/syslog
+-	fi
 +init() {
- 	if [ ! -e /etc/config/syslog ] ; then
- 		cp $CFG_TEMPLATE_DIR/syslog /etc/config
- 	fi
++  if [[ ! -e /etc/config/syslog ]]; then
++    cp -a ${CFG_TEMPLATE_DIR}/syslog /etc/config
++  fi
++
++  if [[ -e /etc/config/syslog ]]; then
++    . /etc/config/syslog
++  fi
+ }
+ 
+ start() {
+-	echo -n "Starting hs485d: "
+-	init
+-	start-stop-daemon -S -q --exec /bin/hs485dLoader -- -l $LOGLEVEL_HS485D -dw /etc/config/hs485d.conf 
+-	echo "OK"
++  echo -n "Starting hs485d: "
++  init
++  start-stop-daemon -S -q --exec /bin/hs485dLoader -- -l ${LOGLEVEL_HS485D} -dw /etc/config/hs485d.conf
++  echo "OK"
+ }
++
+ stop() {
+-	echo -n "Stopping hs485d: "
+-	start-stop-daemon -K -q -p /var/run/hs485dLoader.pid
+-	killall hs485d
+-	rm -f /var/run/hs485dLoader.pid
+-	echo "OK"
++  echo -n "Stopping hs485d: "
++  start-stop-daemon -K -q -p /var/run/hs485dLoader.pid
++  killall hs485d
++  rm -f /var/run/hs485dLoader.pid
++  echo "OK"
+ }
++
+ restart() {
+-	stop
+-	start
++  stop
++  start
+ }
+ 
+ case "$1" in
+   start)
+-	start
+-	;;
++    start
++  ;;
+   stop)
+-	stop
+-	;;
++    stop
++  ;;
+   restart|reload)
+-	restart
+-	;;
++    restart
++  ;;
+   *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
++    echo "Usage: $0 {start|stop|restart}"
++    exit 1
+ esac
+ 
+ exit $?
+-
 --- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/config_templates/rfd.conf
 @@ -22,6 +22,5 @@
@@ -96,7 +207,7 @@
 +ResetFile = /dev/null
 --- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd
-@@ -7,44 +7,20 @@
+@@ -7,115 +7,84 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/multimacd.pid
  
@@ -133,53 +244,74 @@
 -        fi
 -        rm /var/log/rf_address
 -}
-+source /var/hm_mode 2>/dev/null
-+
-+# skip this startup in LAN Gateway
-+[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
++[[ -r /var/hm_mode ]] && . /var/hm_mode
 +
  init() {
 -	export TZ=`cat /etc/config/TZ`
 -	
 -	if [ ! -e /etc/config/multimacd.conf ] ; then
 -		cp $CFG_TEMPLATE_DIR/multimacd.conf /etc/config
+-	fi
+-
+-	if [ ! -e /etc/config/syslog ] ; then
+-		cp $CFG_TEMPLATE_DIR/syslog /etc/config
+-	fi
+-	if [ -e /etc/config/syslog ] ; then
+-  		. /etc/config/syslog
+-	fi
 +
 +  # make sure there is no /dev/ttyS0
-+  if [ -e /dev/ttyS0 ] ; then
++  if [[ -e /dev/ttyS0 ]]; then
 +    rm -f /dev/ttyS0
 +  fi
 +
-+	if [ ! -e /var/etc/multimacd.conf ] ; then
-+		cp $CFG_TEMPLATE_DIR/multimacd.conf /var/etc/
- 	fi
++  if [[ ! -e /var/etc/multimacd.conf ]]; then
++    cp -a ${CFG_TEMPLATE_DIR}/multimacd.conf /var/etc/
++  fi
++
++  if [[ ! -e /etc/config/syslog ]]; then
++    cp -a ${CFG_TEMPLATE_DIR}/syslog /etc/config
++  fi
++
++  if [[ -e /etc/config/syslog ]]; then
++    . /etc/config/syslog
++  fi
  
- 	if [ ! -e /etc/config/syslog ] ; then
-@@ -57,44 +33,41 @@
  }
  
  waitStartupComplete() {
 -    echo -n "Waiting for multimacd to get ready"
- 	STEPS=5
-     for i in $(seq 1 $STEPS)
-     do
- 		sleep 2
- 		echo -n "."
+-	STEPS=5
+-    for i in $(seq 1 $STEPS)
+-    do
+-		sleep 2
+-		echo -n "."
 -        MMDSTATUSPID=`cat /var/status/multimacd.status 2>/dev/null`
-+        MMDSTATUSPID=`cat /var/status/multimacd.status 2>&1`
-         MMDPID=`pidof multimacd`
+-        MMDPID=`pidof multimacd`
 -        if [ $MMDSTATUSPID = $MMDPID ] 
-+        if [ "$MMDSTATUSPID" = "$MMDPID" ] 
- 		then
+-		then
 -            echo "multimacd is ready now."
-+            echo "OK"
-             break
- 		fi 
-         if [ $i -eq $STEPS ]
- 		then
+-            break
+-		fi 
+-        if [ $i -eq $STEPS ]
+-		then
 -            echo "Timeout while waiting for multimacd to get ready."
-+            echo "ERROR"
-         fi
-     done
+-        fi
+-    done
++  STEPS=5
++  for i in $(seq 1 ${STEPS}); do
++    sleep 2
++    echo -n "."
++    MMDSTATUSPID=$(cat /var/status/multimacd.status 2>&1)
++    MMDPID=$(pidof multimacd)
++    if [[ "${MMDSTATUSPID}" == "${MMDPID}" ]]; then
++      echo "OK"
++      break
++    fi
++    if [[ ${i} -eq ${STEPS} ]]; then
++      echo "ERROR"
++    fi
++  done
  }
  
  start() {
@@ -195,51 +327,79 @@
 -	init
 -	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /etc/config/multimacd.conf -l $LOGLEVEL_RFD
 -	waitStartupComplete
-+	echo -n "Starting multimacd: "
-+  if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-+	  init
-+	  start-stop-daemon -S -N -10 -q -b -m -p $PIDFILE --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l $LOGLEVEL_RFD
-+	  waitStartupComplete
++  echo -n "Starting multimacd: "
++  if [[ -n "${HM_HMIP_DEV}" ]]; then
++    init
++    start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
++    waitStartupComplete
 +  else
 +    echo "not required"
 +  fi
  }
++
  stop() {
- 	echo -n "Stopping multimacd: "
+-	echo -n "Stopping multimacd: "
 -	start-stop-daemon -K -q -p $PIDFILE
 -	rm -f $PIDFILE
-+  if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-+	  start-stop-daemon -K -q -p $PIDFILE
-+	  rm -f $PIDFILE
+-	echo "OK"
++  echo -n "Stopping multimacd: "
++  if [[ -n "${HM_HMIP_DEV}" ]]; then
++    start-stop-daemon -K -q -p ${PIDFILE}
++    rm -f ${PIDFILE}
 +  fi
- 	echo "OK"
++  echo "OK"
  }
++
  restart() {
-@@ -118,4 +91,3 @@
+-	stop
+-	start
++  stop
++  start
+ }
+ 
+ case "$1" in
+   start)
+-	start
+-	;;
++    start
++  ;;
+   stop)
+-	stop
+-	;;
++    stop
++  ;;
+   restart|reload)
+-	restart
+-	;;
++    restart
++  ;;
+   *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
++    echo "Usage: $0 {start|stop|restart}"
++    exit 1
  esac
  
  exit $?
 -
 --- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd
-@@ -7,30 +7,58 @@
+@@ -7,92 +7,114 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/rfd.pid
  
-+source /var/hm_mode 2>/dev/null
+-init() {
+-	export TZ=`cat /etc/config/TZ`
++[[ -r /var/hm_mode ]] && . /var/hm_mode
 +
 +# skip this startup in LAN Gateway mode
 +[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
-+
- init() {
--	export TZ=`cat /etc/config/TZ`
  
- 	if [ ! -d /etc/config/rfd ] ; then
-   		mkdir /etc/config/rfd
- 	fi
-+
- 	#Migration for existing rfd.conf in user space
- 	if [ ! -e /etc/config/rfd.conf ] ; then
+-	if [ ! -d /etc/config/rfd ] ; then
+-  		mkdir /etc/config/rfd
+-	fi
+-	#Migration for existing rfd.conf in user space
+-	if [ ! -e /etc/config/rfd.conf ] ; then
 -		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
 -	else
 -		sed -i 's/\/dev\/ttyAPP0/\/dev\/mmd_bidcos/' /etc/config/rfd.conf || true
@@ -249,26 +409,38 @@
 -                        sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf || true
 -                fi
 -	fi
-+		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config/rfd.conf
-+  fi
- 
+-
 -        # Bug fix
 -        grep "/etc/config/rfd/keys" /etc/config/rfd.conf
 -        if [ $? == 0 ] ; then
 -                echo "Copy rfd files"
 -		cp $CFG_TEMPLATE_DIR/rfd.conf /etc/config
 -        fi
+-
+-	if [ ! -e /etc/config/syslog ] ; then
+-		cp $CFG_TEMPLATE_DIR/syslog /etc/config
+-	fi
+-	if [ -e /etc/config/syslog ] ; then
+-  		. /etc/config/syslog
+-	fi
++init() {
+ 
++  if [[ ! -d /etc/config/rfd ]]; then
++    mkdir -p /etc/config/rfd
++  fi
++
++  # Migration for existing rfd.conf in user space
++  if [[ ! -e /etc/config/rfd.conf ]]; then
++    cp -a ${CFG_TEMPLATE_DIR}/rfd.conf /etc/config/rfd.conf
++  fi
++
 +  # only modify if real rf module found
-+  if [[ "${HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
++  if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
 +    # make sure [Interface 0] is uncommented
 +    sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
 +
 +    # patch some settings to match what this hardware expects.
-+    if [[ "${HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-+      sed -i 's|^ComPortFile = /dev/.*$|ComPortFile = /dev/mmd_bidcos|' /etc/config/rfd.conf
-+    else
-+      sed -i "s|^ComPortFile = /dev/.*$|ComPortFile = ${HMRF_DEVNODE}|" /etc/config/rfd.conf
-+    fi
++    sed -i 's|^ComPortFile = /dev/.*$|ComPortFile = /dev/mmd_bidcos|' /etc/config/rfd.conf
 +    sed -i 's|^#*AccessFile = /dev/.*$|AccessFile = /dev/null|' /etc/config/rfd.conf
 +    sed -i 's|^#*ResetFile = /dev/.*$|ResetFile = /dev/null|' /etc/config/rfd.conf
 +    if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
@@ -279,7 +451,7 @@
 +    sed -i -e '/^\[Interface 0\]/,/^\s*$/ s/^/#/' /etc/config/rfd.conf
 +  fi
 +
-+  if [[ "${HMRF_DEV}" == "HM-CFG-USB-2" ]]; then
++  if [[ "${HM_HMRF_DEV}" == "HM-CFG-USB-2" ]]; then
 +    if ! grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
 +      inum=$(grep "^\[Interface .*\]" /etc/config/rfd.conf | wc -l)
 +      echo >>/etc/config/rfd.conf
@@ -294,54 +466,102 @@
 +    inum=$(grep "^\[Interface .*\]" /etc/config/rfd.conf | awk '{ print $2 }' | cut -d] -f1 | tail -1)
 +    sed -i -e "/^\[Interface ${inum}\]/,/^\s*$/ s/^/#/" /etc/config/rfd.conf
 +  fi
- 
- 	if [ ! -e /etc/config/syslog ] ; then
- 		cp $CFG_TEMPLATE_DIR/syslog /etc/config
-@@ -42,31 +70,34 @@
++
++  if [[ ! -e /etc/config/syslog ]]; then
++    cp -a ${CFG_TEMPLATE_DIR}/syslog /etc/config
++  fi
++  if [[ -e /etc/config/syslog ]]; then
++    . /etc/config/syslog
++  fi
  }
  
  waitStartupComplete() {
 -    echo -n "Waiting for rfd to get ready"
 -	STEPS=60
-+	STEPS=20
-     for i in $(seq 1 $STEPS)
-     do
- 		sleep 2
- 		echo -n "."
+-    for i in $(seq 1 $STEPS)
+-    do
+-		sleep 2
+-		echo -n "."
 -        RFDSTATUSPID=`cat /var/status/rfd.status 2>/dev/null`
-+        RFDSTATUSPID=`cat /var/status/rfd.status 2>&1`
-         RFDPID=`pidof rfd`
+-        RFDPID=`pidof rfd`
 -        if [ $RFDSTATUSPID = $RFDPID ] 
-+        if [ "$RFDSTATUSPID" = "$RFDPID" ] 
- 		then
+-		then
 -            echo "rfd is ready now."
-+            echo "OK"
-             break
-         fi
-         if [ $i -eq $STEPS ] 
- 		then
+-            break
+-        fi
+-        if [ $i -eq $STEPS ] 
+-		then
 -            echo "Timeout while waiting for rfd to get ready."
-+            echo "ERROR"
-         fi
-     done
+-        fi
+-    done
++  STEPS=20
++  for i in $(seq 1 ${STEPS}); do
++    sleep 2
++    echo -n "."
++    RFDSTATUSPID=`cat /var/status/rfd.status 2>&1`
++    RFDPID=`pidof rfd`
++    if [[ "${RFDSTATUSPID}" == "${RFDPID}" ]]; then
++      echo "OK"
++      break
++    fi
++    if [[ ${i} -eq ${STEPS} ]]; then
++      echo "ERROR"
++    fi
++  done
  }
  
  start() {
 -	echo "Starting rfd: "
-+	echo -n "Starting rfd: "
- 	init
+-	init
 -	start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
 -	waitStartupComplete
-+	if grep -q "^\[Interface .\]" /etc/config/rfd.conf; then
-+	  start-stop-daemon -S -q -b -m -p $PIDFILE --exec /bin/rfd -- -f /etc/config/rfd.conf -l $LOGLEVEL_RFD
-+	  waitStartupComplete
-+        else
-+	  echo "no BidCos-RF hardware found"
-+	fi
++  echo -n "Starting rfd: "
++  init
++  if grep -q "^\[Interface .\]" /etc/config/rfd.conf; then
++    start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec /bin/rfd -- -f /etc/config/rfd.conf -l ${LOGLEVEL_RFD}
++    waitStartupComplete
++  else
++    echo "no BidCos-RF hardware found"
++  fi
  }
  stop() {
- 	echo -n "Stopping rfd: "
-@@ -95,4 +126,3 @@
+-	echo -n "Stopping rfd: "
+-	start-stop-daemon -K -q -p $PIDFILE
+-	rm -f $PIDFILE
+-	echo "OK"
++  echo -n "Stopping rfd: "
++  start-stop-daemon -K -q -p ${PIDFILE}
++  rm -f ${PIDFILE}
++  echo "OK"
+ }
+ restart() {
+-	stop
+-	start
++  stop
++  start
+ }
+ 
+ case "$1" in
+   start)
+-	start
+-	;;
++    start
++  ;;
+   stop)
+-	stop
+-	;;
++    stop
++  ;;
+   restart|reload)
+-	restart
+-	;;
++    restart
++  ;;
+   *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
++    echo "Usage: $0 {start|stop|restart}"
++    exit 1
  esac
  
  exit $?
@@ -503,27 +723,27 @@
  #Type           Filename                Version
  
  #Coprozessor
--CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
-+#CCU2                    coprocessor_update.eq3                          1.4.1          #CoProzessor CCU2  (HM-MOD-UART)
+-CCU2                    coprocessor_update.eq3                         	1.4.1		# CoProzessor HM-MOD-UART
++#CCU2                    coprocessor_update.eq3                         	1.4.1		# CoProzessor HM-MOD-UART
  
--#CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
-+CCU2					dualcopro_si1002_update_blhm.eq3				2.8.5		   #Dual CoProzessor CCU2
+-#CCU2			dualcopro_si1002_update_blhm.eq3		2.8.6		# Dual CoProzessor HM-MOD-UART
++CCU2			dualcopro_si1002_update_blhm.eq3		2.8.6		# Dual CoProzessor HM-MOD-UART
  
 --- occu/HMserver/etc/init.d/S62HMServer.orig
 +++ occu/HMserver/etc/init.d/S62HMServer
-@@ -5,31 +5,74 @@
+@@ -5,55 +5,101 @@
  
  LOGLEVEL_HMServer=5
  CFG_TEMPLATE_DIR=/etc/config_templates
 -PIDFILE=/var/run/HMIPServer.pid
  STARTWAITFILE=/var/status/HMServerStarted
  
-+source /var/hm_mode 2>/dev/null
++[[ -r /var/hm_mode ]] && . /var/hm_mode
 +
 +# skip this startup in LAN Gateway mode
 +[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 +
-+if [[ -n "${HMIP_DEV}" ]]; then
++if [[ -n "${HM_HMIP_DEV}" ]]; then
 +  HM_SERVER_TYPE="HMIPServer"
 +  PIDFILE=/var/run/HMIPServer.pid
 +else
@@ -534,69 +754,113 @@
  init() {
 -	export TZ=`cat /etc/config/TZ | cut -d'-' -f1 | cut -d'+' -f1`
 -	export JAVA_HOME=/opt/jre-1.8.0_121-compact3
-+	export JAVA_HOME=/opt/java/
- 	export PATH=$PATH:$JAVA_HOME/bin
- 	if [ ! -e /etc/config/log4j.xml ] ; then
- 		cp $CFG_TEMPLATE_DIR/log4j.xml /etc/config
- 	fi
- 	if [ ! -e /etc/config/hmip_networkkey.conf ] ; then
+-	export PATH=$PATH:$JAVA_HOME/bin
+-	if [ ! -e /etc/config/log4j.xml ] ; then
+-		cp $CFG_TEMPLATE_DIR/log4j.xml /etc/config
+-	fi
+-	if [ ! -e /etc/config/hmip_networkkey.conf ] ; then
 -		cp $CFG_TEMPLATE_DIR/hmip_networkkey.conf /etc/config
-+		if [[ -f $CFG_TEMPLATE_DIR/hmip_networkkey.conf ]]; then
-+			cp $CFG_TEMPLATE_DIR/hmip_networkkey.conf /etc/config
-+		fi
-+	fi
+-	fi
++  export JAVA_HOME=/opt/java/
++  export PATH=${PATH}:${JAVA_HOME}/bin
 +
-+	if [[ -n "${HMIP_DEV}" ]]; then
-+		if [[ ! -e /var/etc/crRFD.conf ]]; then
-+		  cp ${CFG_TEMPLATE_DIR}/crRFD.conf /var/etc/
-+		fi
++  if [[ ! -e /etc/config/log4j.xml ]]; then
++    cp -a ${CFG_TEMPLATE_DIR}/log4j.xml /etc/config
++  fi
 +
-+		# In HmIP-RFUSB mode we have to change crRFD.conf
-+		if [[ "${HMIP_DEV}" == "HMIP-RFUSB" ]]; then
-+		  sed -i "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HMIP_DEVNODE}|" /var/etc/crRFD.conf
-+		fi
++  if [[ ! -e /etc/config/hmip_networkkey.conf ]]; then
++    if [[ -f ${CFG_TEMPLATE_DIR}/hmip_networkkey.conf ]]; then
++      cp -a ${CFG_TEMPLATE_DIR}/hmip_networkkey.conf /etc/config
++    fi
++  fi
 +
-+		HM_SERVER=/opt/HMServer/HMIPServer.jar
-+		HM_SERVER_ARGS="/var/etc/crRFD.conf"
-+	else
-+		HM_SERVER=/opt/HMServer/HMServer.jar
- 	fi
- }
- 
-+waitStartupComplete() {
-+	STEPS=150
-+	for i in $(seq 1 $STEPS); do
-+		sleep 2
-+		echo -n "."
-+		if [[ -e ${STARTWAITFILE} ]]; then
-+			echo "OK"
-+			break
-+		fi
-+		if [[ ${i} -eq ${STEPS} ]]; then
-+			echo "ERROR"
-+		fi
-+	done
++  if [[ -n "${HM_HMIP_DEV}" ]]; then
++    if [[ ! -e /var/etc/crRFD.conf ]]; then
++      cp -a ${CFG_TEMPLATE_DIR}/crRFD.conf /var/etc/
++    fi
++
++    # In HmIP-RFUSB mode we have to change crRFD.conf
++    if [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
++      sed -i "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_HMIP_DEVNODE}|" /var/etc/crRFD.conf
++    fi
++
++    HM_SERVER=/opt/HMServer/HMIPServer.jar
++    HM_SERVER_ARGS="/var/etc/crRFD.conf"
++  else
++    HM_SERVER=/opt/HMServer/HMServer.jar
++  fi
 +}
 +
++waitStartupComplete() {
++  STEPS=150
++  for i in $(seq 1 ${STEPS}); do
++    sleep 2
++    echo -n "."
++    if [[ -e ${STARTWAITFILE} ]]; then
++      echo "OK"
++      break
++    fi
++    if [[ ${i} -eq ${STEPS} ]]; then
++      echo "ERROR"
++    fi
++  done
+ }
+ 
  start() {
 -	echo -n "Starting HMServer: "
-+	echo -n "Starting ${HM_SERVER_TYPE}: "
- 	init
+-	init
 -	start-stop-daemon -S -q -m -p $PIDFILE --exec java -- -Xmx64m -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar /opt/HMServer/HMIPServer.jar /etc/crRFD.conf &
 -	echo "Waiting for HMServer to get ready"
 -	eq3configcmd wait-for-file -f $STARTWAITFILE -p 5 -t 600
 -	echo "OK"
-+	start-stop-daemon -b -S -q -m -p $PIDFILE --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar ${HM_SERVER} ${HM_SERVER_ARGS}
-+	echo -n "."
-+	waitStartupComplete
++  echo -n "Starting ${HM_SERVER_TYPE}: "
++  init
++  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar ${HM_SERVER} ${HM_SERVER_ARGS}
++  echo -n "."
++  waitStartupComplete
  }
++
  stop() {
 -	echo -n "Stopping HMServer: "
-+	echo -n "Stopping ${HM_SERVER_TYPE}: "
- 	rm -f $STARTWAITFILE
- 	start-stop-daemon -K -q -p $PIDFILE
- 	rm -f $PIDFILE
-@@ -56,4 +99,3 @@
+-	rm -f $STARTWAITFILE
+-	start-stop-daemon -K -q -p $PIDFILE
+-	rm -f $PIDFILE
+-	echo "OK"
++  echo -n "Stopping ${HM_SERVER_TYPE}: "
++  rm -f ${STARTWAITFILE}
++  start-stop-daemon -K -q -p ${PIDFILE}
++  rm -f ${PIDFILE}
++  echo "OK"
+ }
++
+ restart() {
+-	stop
+-	start
++  stop
++  start
+ }
+ 
+ case "$1" in
+   start)
+-	start
+-	;;
++    start
++  ;;
+   stop)
+-	stop
+-	;;
++    stop
++  ;;
+   restart|reload)
+-	restart
+-	;;
++    restart
++  ;;
+   *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
++    echo "Usage: $0 {start|stop|restart}"
++    exit 1
  esac
  
  exit $?

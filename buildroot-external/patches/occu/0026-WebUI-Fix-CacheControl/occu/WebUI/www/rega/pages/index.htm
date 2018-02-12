@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <!-- R1.00.0379.0102 eQ-3 -->
+  <% Call("/esp/system.fn::CheckUserFavorite()"); %>
+  <meta http-equiv="Content-Language" content="de">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="pragma"        content="no-cache">
+  <!-- <meta http-equiv="expires"       content="-1"> -->
+  <meta http-equiv="Expires" content="01 Jan 2015 00:00:00 GMT" />
+  <!-- <meta http-equiv="X-UA-Compatible" content="IE=8"> -->
+
+  <link rel="shortcut icon" href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon"/>
+  <link rel="icon"          href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon" />
+  
+  <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css?_version_=XXX-WEBUI-VERSION-XXX" />
+  <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css?_version_=XXX-WEBUI-VERSION-XXX" />
+  <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.jqplot.css?_version_=XXX-WEBUI-VERSION-XXX" />
+  <link rel="stylesheet" type="text/css" href="/webui/css/extern/msdropdown/dd.css?_version_=XXX-WEBUI-VERSION-XXX" />
+  <link rel="stylesheet" type="text/css" href="/webui/css/extern/spectrum.css?_version_=XXX-WEBUI-VERSION-XXX" />
+  <link id="idCss" rel="stylesheet" type="text/css" href="/webui/style.cgi" />
+
+  <title>HomeMatic WebUI</title>
+
+  
+  <script type="text/javascript" src="/webui/js/extern/jquery.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/jquery.powertip.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/jquery.blockUI.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/jquery.form.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/prototype.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/scriptaculous.js?load=builder,effects,dragdrop,slider&_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/wz_jsgraphics.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/template.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/nfs_datepicker.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/sliderControl.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/jquery.jqplot.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/jquery.dd.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/jqplot.barRenderer.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>  
+  <script type="text/javascript" src="/webui/js/extern/jqplot.dateAxisRenderer.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/jqplot.categoryAxisRenderer.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/jqplot.canvasAxisTickRenderer.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/jqplot.canvasTextRenderer.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/jqplot.cursor.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/jqplot.enhancedLegendRenderer.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/lang/loadTextResource.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/lang/translate.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/knockout.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/common/viewmodels.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/json2min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script type="text/javascript" src="/webui/js/extern/spectrum.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+
+
+
+
+  <link href="/webui/css/extern/smoothness/jquery-ui.min.css?_version_=XXX-WEBUI-VERSION-XXX" rel="stylesheet" type="text/css">
+  <link href="/webui/css/extern/smoothness/jquery.ui.timepicker.css?_version_=XXX-WEBUI-VERSION-XXX" rel="stylesheet" type="text/css" />
+  <script src="/webui/js/extern/jquery-ui.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  <script src="/webui/js/extern/jquery.ui.timepicker.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
+  
+  
+  <!--[if IE 9]><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" /><![endif]-->
+  <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="/webui/js/extern/excanvas.js?_version_=XXX-WEBUI-VERSION-XXX"></script><![endif]-->
+  
+  <script type="text/javascript">
+  
+    /*########################################################################*/
+    /*# Konstanten                                                           #*/
+    /*########################################################################*/
+
+    PLATFORM = "Central";
+    WEBUI_VERSION = "XXX-WEBUI-VERSION-XXX";
+  
+    /**
+     * Flags
+     **/
+    iufNone       = <% Write( iufNone ); %>;
+    iufVisible    = <% Write( iufVisible ); %>;
+    iufInternal   = <% Write( iufInternal ); %>;
+    iufReadyState = <% Write( iufReadyState ); %>;
+    iufOperated   = <% Write( iufOperated ); %>;
+    iufVirtualChn = <% Write( iufVirtualChn ); %>;
+    iufReadable   = <% Write( iufReadable ); %>;
+    iufWriteable  = <% Write( iufWriteable ); %>;
+    iufEventable  = <% Write( iufEventable ); %>;
+    iufAll        = <% Write( iufAll ); %>;
+  
+    /**
+     * User Privilege Level. Gibt die Nutzerrechte des angemeldeten Nutzers an.
+     **/     
+    ul = <% Write( oUser.UserLevel()); %>;
+    userId = <% Write(oUser.ID()); %>;
+      
+    /**
+     * Privilegstufen.
+     **/
+    UPL_NONE  = 0;
+    UPL_GUEST = 1;
+    UPL_USER  = 2;
+    UPL_ADMIN = 8;   
+       
+    /*########################################################################*/
+    /*# Globale Variablen                                                    #*/
+    /*########################################################################*/
+
+    forceUpdate = false;
+    urlParamInterfaces = jQuery.url().param('showRFInterfaces');
+    urlDebug = jQuery.url().param('debug');
+    showDummyLicense = jQuery.url().param('showDummyLicense');
+    createNewProgram = false;
+
+    /**
+     * jg_250
+     * JS-Graphics-Objekt für die Anzeige der vergrößerten Bilder von HomeMatic
+     * Geräten, Kanalgruppen und Kanälen.
+     **/
+    var jg_250; 
+    
+    var mainMenu;
+
+
+    <%
+      object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') );
+      string sUserFullName = oUser.UserFirstName()#' '#oUser.UserLastName();
+      if( sUserFullName == ' ' ){ sUserFullName = oUser.Name(); }
+      WriteLine('var userName = "' # sUserFullName # '";');
+    %>    
+    
+  
+    
+    /*########################################################################*/
+    /*# Funktionen                                                           #*/
+    /*########################################################################*/
+    
+    /**
+     * Ermittelt die Privilegstufe des momentan angemeldeten Benutzers.
+     **/    
+    function getUPL ()
+    {
+      <%
+        integer sessionUPL   = 0;
+        string sUser = system.GetSessionVarStr(sessionId);
+        
+        if ("" != sUser)
+        {
+          string sUPL = sUser.StrValueByIndex(";", 1);
+          sessionUPL  = sUPL.ToInteger(); 
+        }
+        Write("return " # sessionUPL # ";");
+      %>
+    }
+    
+    /**
+     * Prüft, ob der Benutzer eine bestimmte Privilegstufe besitzt
+     **/
+    function hasUPL(upl)
+    {
+      return (upl <= getUPL());
+    }  
+    
+    function getSessionId()
+    {
+      return "<%Write(sessionId);%>";
+    }
+   </script>
+  
+</head>
+<body id="body" onload="WebUI.start();" >
+  <div id="webuiloader_wrapper">
+    <div id="webuiloader_background">
+      <div id="webuiloader">
+        <div id="webuiloader_icon"><img src="/ise/img/homematic_logo_small_gray.jpg" /></div>
+        <!-- <div id="webuiloader_caption">HomeMatic WebUI wird geladen...</div> -->
+        <div id="webuiloader_caption"></div>
+        <script type="text/javascript">jQuery("#webuiloader_caption").html(translateKey("loadWebUI"));</script>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="/webui/webui.js?_version_=XXX-WEBUI-VERSION-XXX" ></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+--- occu/WebUI/www/api/eq3/json.tcl.orig
++++ occu/WebUI/www/api/eq3/json.tcl
+@@ -204,8 +204,6 @@
+   set map {
+     "\"" "\\\""
+     "\\" "\\\\"
+-    "\{" "\\\{"
+-    "\[" "\\\["
+     "/"  "\\/" 
+     "\b"  "\\b" 
+     "\f"  "\\f" 

@@ -1,0 +1,49 @@
+--- occu/WebUI/www/rega/esp/functions.fn.orig
++++ occu/WebUI/www/rega/esp/functions.fn
+@@ -40,20 +40,32 @@
+         { 
+           if (sValue == "")
+           {
+-            sRet=sRet#"0";
++            real n = 0.0;
++            sRet = sRet # n.ToString() # " (" # n.ToString(2);
+           }
+           else
+           {
+-            sRet=sRet#sValue;
++            sRet = sRet # sValue.ToString() # " (" # sValue.ToString(2);
++          }
++          if( to.ValueUnit() == "" )
++          {
++            sRet = sRet # ")";
+           }
+         }
+         if (btoString)
+         {
+           sRet = sRet # sValue;
++          sRet = sRet.Replace("\r\n", "<br/>");
++          sRet = sRet.Replace("\r", "<br/>");
++          sRet = sRet.Replace("\n", "<br/>");
+         }
+         if( to.ValueUnit() != "" )
+         {
+           sRet=sRet#" "#to.ValueUnit();
++          if( btoNumber )
++          {
++            sRet = sRet # ")";
++          }
+         }
+       }
+       else
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -1410,6 +1410,9 @@
+   if ( bString )
+   {
+     sSysVarVal = cObjTmp.Value();
++    sSysVarVal = sSysVarVal.Replace("\r\n", "<br/>");
++    sSysVarVal = sSysVarVal.Replace("\r", "<br/>");
++    sSysVarVal = sSysVarVal.Replace("\n", "<br/>");
+   }
+ }
+ 

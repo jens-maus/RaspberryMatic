@@ -8,21 +8,21 @@ CREATE_DIRS='/usr/local/etc/config/rc.d /usr/local/etc/config/addons/www'
 LOGLEVEL_REGA=2
 PIDFILE=/var/run/ReGaHss.pid
 
-source /var/hm_mode 2>/dev/null
+[[ -r /var/hm_mode ]] && . /var/hm_mode
 
 # skip this startup in LAN Gateway mode
 [[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
 init() {
   for i in ${CREATE_DIRS}; do
-    mkdir -p ${i}
+    [[ ! -e ${i} ]] && mkdir -p ${i}
   done
        
-  if [ ! -d /etc/config/userprofiles ] ; then
-    mkdir /etc/config/userprofiles
+  if [[ ! -d /etc/config/userprofiles ]]; then
+    mkdir -p /etc/config/userprofiles
   fi
 
-  if [ -e /etc/config/syslog ] ; then
+  if [[ -e /etc/config/syslog ]]; then
     . /etc/config/syslog
   fi
 

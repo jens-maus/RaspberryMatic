@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# init script to start/stop the CloudMatic Addon
+#
+
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# skip this startup in LAN Gateway mode
+[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
+
+start() {
+  echo -n "Starting CloudMatic: "
+
+  if [[ ! -e /etc/config/safemode ]]; then
+
+    # CloudMatic (meine-homematic.de) startup
+    if [[ -x /opt/mh/startup.sh ]]; then
+      /opt/mh/startup.sh 2>/dev/null >/dev/null
+    fi
+
+  fi
+
+  echo "OK"
+}
+
+restart() {
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|restart}"
+    exit 1
+esac
+
+exit $?

@@ -2,15 +2,21 @@
 
 BOARD_DIR="$(dirname $0)"
 BOARD_NAME="$(basename ${BOARD_DIR})"
-GENIMAGE_CFG="${BR2_EXTERNAL_RASPBERRYMATIC_PATH}/board/${BOARD_NAME}/genimage.cfg"
+GENIMAGE_CFG="${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/genimage.cfg"
 GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 
 # Use our own cmdline.txt+config.txt
-cp "${BR2_EXTERNAL_RASPBERRYMATIC_PATH}/board/${BOARD_NAME}/cmdline.txt" "${BINARIES_DIR}/rpi-firmware/"
-cp "${BR2_EXTERNAL_RASPBERRYMATIC_PATH}/board/${BOARD_NAME}/config.txt" "${BINARIES_DIR}/rpi-firmware/"
+cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/cmdline.txt" "${BINARIES_DIR}/rpi-firmware/"
+cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/config.txt" "${BINARIES_DIR}/rpi-firmware/"
 
-# Create bcm2835-raw-uart.dtbo device tree overlay
-dtc -@ -I dts -O dtb -o ${BINARIES_DIR}/bcm2835-raw-uart.dtbo ${BR2_EXTERNAL_RASPBERRYMATIC_PATH}/package/occu/kernel-modules/bcm2835_raw_uart/bcm2835-raw-uart.dts
+# select device tree overlay files to be installed in the image
+DTOVERLAYS="pivccu-raspberrypi.dtbo bcm2835-raw-uart.dtbo"
+mkdir -p "${BINARIES_DIR}/overlays"
+for overlay in ${DTOVERLAYS}; do
+  if [ -f "${BINARIES_DIR}/${overlay}" ]; then
+    cp -a "${BINARIES_DIR}/${overlay}" "${BINARIES_DIR}/overlays/"
+  fi
+done
 
 #
 # Create user filesystem

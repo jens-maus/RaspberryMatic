@@ -19,6 +19,12 @@ NUT_CONFIG=/etc/config/nut/nut.conf
 # exit if the package is not installed
 [ -x ${UPSMON} ] || exit 0
 
+# copy the NUT config files in place in
+# case they don't exist yet
+if [[ ! -e /etc/config/nut ]]; then
+  cp -Rp /etc/config_templates/nut /etc/config/
+fi
+
 # include nut.conf
 [ -r ${NUT_CONFIG} ] && . ${NUT_CONFIG}
 

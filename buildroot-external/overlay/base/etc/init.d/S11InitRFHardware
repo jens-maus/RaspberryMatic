@@ -1,0 +1,146 @@
+#!/bin/sh
+#
+# Startup script checking for RF capabale hardware
+#
+
+# function to identify rf hardware
+identify_rf_hardware() {
+
+  # assume a HM-MOD-RPI-PCB to be the default
+  HM_MODE="NORMAL"
+  HM_HMRF_DEV="HM-MOD-RPI-PCB"
+  HM_HMRF_DEVNODE=""
+  HM_HMIP_DEV="HM-MOD-RPI-PCB"
+  HM_HMIP_DEVNODE=""
+
+  # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
+  # and set HMIP_DEV and HMIP_DEVNODE accordingly
+  if lsusb | grep -q 1b1f:c020; then
+    modprobe cp210x
+    echo 1b1f c020 >/sys/bus/usb-serial/drivers/cp210x/new_id
+    for i in $(find /sys/bus/usb/devices/usb*/ -name "ttyUSB*" -maxdepth 4); do
+      DEVDIR=$(dirname $i)
+      if [[ -f "${DEVDIR}/uevent" ]]; then
+        if grep -q PRODUCT=1b1f/c020 ${DEVDIR}/uevent; then
+          HM_HMIP_DEV="HMIP-RFUSB"
+          HM_HMIP_DEVNODE=/dev/$(basename $i)
+          break
+        fi
+      fi
+    done
+  fi
+
+  # check if a HM-CFG-USB-2 (1b1f:c00f) USB stick is connected
+  # and HMRF_DEV accordingly
+  if lsusb | grep -q 1b1f:c00f; then
+    HM_HMRF_DEV="HM-CFG-USB-2"
+  fi
+
+  # check if we should boot in LAN gateway mode
+  if [[ -e /usr/local/HMLGW ]]; then
+    HM_MODE="HM-LGW"
+  fi
+}
+
+# function to init all required kernel modules for the various
+# homematic-rf hardware we support
+init_rf_kernel_modules() {
+  # depending on the HomeMatic mode (HmRF, HmIP) we
+  # have to load different kernel modules.
+  if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
+     [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+
+    # load eq3_char_loop kernel module
+    modprobe eq3_char_loop
+
+    if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+      HM_HMRF_DEVNODE="/dev/raw-uart"
+    fi
+    if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+      HM_HMIP_DEVNODE="/dev/raw-uart"
+    fi
+  fi
+}
+
+# function to read out the serial, version and address of the corresponding
+# rf module
+query_rf_parameters() {
+  if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HM_HMRF_DEVNODE}" ]]; then
+    RPI_PCB_DEVNODE=${HM_HMRF_DEVNODE}
+  elif [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HM_HMIP_DEVNODE}" ]]; then
+    RPI_PCB_DEVNODE=${HM_HMIP_DEVNODE}
+  fi
+
+  # workaround for a tinkerboard related issue where the
+  # generic_raw_uart doesn't seem to be able to reset the rf module
+  # correctly. So we reset it manually.
+  if [[ "${HM_HOST}" == "tinkerboard" ]]; then
+    echo 184 >/sys/class/gpio/export
+    echo out >/sys/class/gpio/gpio184/direction
+    echo 0 >/sys/class/gpio/gpio184/value
+    sleep 0.1
+    echo 1 >/sys/class/gpio/gpio184/value
+  fi
+
+  if [[ -n "${RPI_PCB_DEVNODE}" ]]; then
+    HM_RF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
+    if [[ -n "${HM_RF_SERIAL}" ]]; then
+      HM_RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
+      HM_RF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${RPI_PCB_DEVNODE} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+    fi
+  fi
+
+  if [[ -z "${HM_RF_SERIAL}" ]]; then
+    # no HM-MOD-RPI-PCB found
+    if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+      HM_HMRF_DEV=""
+      HM_HMRF_DEVNODE=""
+    fi
+    if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+      HM_HMIP_DEV=""
+      HM_HMIP_DEVNODE=""
+    fi
+  fi
+
+  # save all info about the RF module
+  echo "${HM_RF_SERIAL}" >/var/board_serial
+  echo "${HM_RF_VERSION}" >/var/rf_firmware_version
+  echo "${HM_RF_ADDRESS}" >/var/rf_address
+}
+
+start() {
+  echo -n "Identifying Homematic RF-Hardware: "
+
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  identify_rf_hardware
+  init_rf_kernel_modules
+  query_rf_parameters
+
+  # save all HM_ env variables
+  set | grep '^HM_' >/var/hm_mode
+
+  echo "BidCos-RF: ${HM_HMRF_DEV}, HmIP: ${HM_HMIP_DEV}, OK"
+}
+
+restart() {
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

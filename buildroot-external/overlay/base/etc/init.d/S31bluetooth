@@ -15,7 +15,7 @@ SSD_OPTIONS="--oknodo --quiet --exec $DAEMON -- --compat"
 
 test -f $DAEMON || exit 0
 
-source /var/hm_mode 2>/dev/null
+[[ -r /var/hm_mode ]] && . /var/hm_mode
 
 # ASUS Tinkerboard is not yet supported
 [[ "${HOST}" == "tinkerboard" ]] && exit 0

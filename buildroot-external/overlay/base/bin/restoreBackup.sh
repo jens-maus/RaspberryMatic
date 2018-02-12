@@ -33,7 +33,7 @@ sleep 5
 find /usr/local -not -name tmp -not -name "lost+found" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
 
 # extract usr_local.tar.gz
-tar -C / -xf ${TMPDIR}/usr_local.tar.gz
+tar -C / --warning=no-timestamp --no-same-owner -xf ${TMPDIR}/usr_local.tar.gz
 
 # remove all temp files
 rm -rf ${TMPDIR}

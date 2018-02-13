@@ -11,10 +11,10 @@ all: usage
 usage:
 	@echo "HomeMatic Build Environment"
 	@echo "Usage:"
-	@echo "	make dist: install buildroot and create default image"
-	@echo "	make release: create image and corresponding release archive"
-	@echo "	make install of=/dev/sdX: write image to SD card under /dev/sdX"
-	@echo "	make distclean: clean everything"
+	@echo "	$(MAKE) dist: install buildroot and create default image"
+	@echo "	$(MAKE) release: create image and corresponding release archive"
+	@echo "	$(MAKE) install of=/dev/sdX: write image to SD card under /dev/sdX"
+	@echo "	$(MAKE) distclean: clean everything"
 
 buildroot-$(BUILDROOT_VERSION).tar.bz2:
 	wget https://buildroot.org/downloads/buildroot-$(BUILDROOT_VERSION).tar.bz2
@@ -33,10 +33,10 @@ download: buildroot-$(BUILDROOT_VERSION)
 	mkdir -p download
 
 build-$(BOARD)/.config: | build-$(BOARD) buildroot-external/configs/$(BOARD)_defconfig
-	cd build-$(BOARD) && make O=$(shell pwd)/build-$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external $(BOARD)_defconfig
+	cd build-$(BOARD) && $(MAKE) O=$(shell pwd)/build-$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external $(BOARD)_defconfig
 
 dist: | buildroot-$(BUILDROOT_VERSION) build-$(BOARD)/.config
-	cd build-$(BOARD) && make O=$(shell pwd)/build-$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
+	cd build-$(BOARD) && $(MAKE) O=$(shell pwd)/build-$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
 
 release: dist
 	cp -a build-$(BOARD)/images/sdcard.img ./release/RaspberryMatic-$(VERSION)-$(BOARD).img
@@ -65,19 +65,18 @@ install:
 	sudo dd if=build-$(BOARD)/images/sdcard.img of=$(of) bs=1M conv=fsync status=progress
 
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
-	cd build-$(BOARD) && make O=$(shell pwd)/build-$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig
+	cd build-$(BOARD) && $(MAKE) O=$(shell pwd)/build-$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig
 
 savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
-	cd build-$(BOARD) && make O=$(shell pwd)/build-$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external savedefconfig BR2_DEFCONFIG=../buildroot-external/configs/$(BOARD)_defconfig
+	cd build-$(BOARD) && $(MAKE) O=$(shell pwd)/build-$(BOARD) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external savedefconfig BR2_DEFCONFIG=../buildroot-external/configs/$(BOARD)_defconfig
 
-linux-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
-	cd build-$(BOARD) && make linux-menuconfig
-
-linux-update-defconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
-	cd build-$(BOARD) && make linux-update-defconfig
-
-busybox-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
-	cd build-$(BOARD) && make busybox-menuconfig
-
-busybox-update-config: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
-	cd build-$(BOARD) && make busybox-update-config
+# Create a fallback target (%) to forward all unknown target calls to the build Makefile.
+# This includes:
+#   linux-menuconfig
+#   linux-update-defconfig
+#   busybox-menuconfig
+#   busybox-update-config
+#   uboot-menuconfig
+#   uboot-update-config
+%: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	@$(MAKE) -C build-$(BOARD) $@

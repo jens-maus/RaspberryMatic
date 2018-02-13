@@ -1,6 +1,6 @@
-# test GPIO6 to be 0 (button pressed) to start recovery system
-gpio input GPIO6
-if test $? -eq 0; then 
+# test GPIO12 to be 1 (button pressed) to start recovery system
+gpio input GPIO12
+if test $? -eq 1; then
   echo "==== STARTING RECOVERY SYSTEM ===="
 else
   echo "==== NORMAL BOOT ===="

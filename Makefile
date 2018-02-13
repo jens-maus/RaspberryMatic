@@ -77,6 +77,6 @@ savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
 #   busybox-menuconfig
 #   busybox-update-config
 #   uboot-menuconfig
-#   uboot-update-config
+#   uboot-update-defconfig
 %: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
 	@$(MAKE) -C build-$(BOARD) $@

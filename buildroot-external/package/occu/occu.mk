@@ -60,6 +60,9 @@ define OCCU_FINALIZE_TARGET
 	rm -f $(TARGET_DIR)/etc/init.d/S49ntp
 	rm -f $(TARGET_DIR)/etc/init.d/S60openvpn
 
+	# move some init scripts
+	mv $(TARGET_DIR)/etc/init.d/S15watchdog $(TARGET_DIR)/etc/init.d/S00watchdog
+
 	# remove obsolete config templates
 	rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf
 

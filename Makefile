@@ -81,3 +81,9 @@ busybox-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
 
 busybox-update-config: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
 	cd build-$(BOARD) && make busybox-update-config
+
+uboot-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	cd build-$(BOARD) && make uboot-menuconfig
+
+uboot-update-defconfig: buildroot-$(BUILDROOT_VERSION) build-$(BOARD)
+	cd build-$(BOARD) && make uboot-update-config

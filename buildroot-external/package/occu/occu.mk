@@ -58,7 +58,6 @@ define OCCU_FINALIZE_TARGET
 	rm -f $(TARGET_DIR)/etc/init.d/S01logging
 	rm -f $(TARGET_DIR)/etc/init.d/S20urandom
 	rm -f $(TARGET_DIR)/etc/init.d/S49ntp
-	rm -f $(TARGET_DIR)/etc/init.d/S60openvpn
 	rm -f $(TARGET_DIR)/etc/init.d/S15watchdog
 
 	# remove obsolete config templates

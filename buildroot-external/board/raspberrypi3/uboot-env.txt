@@ -1,3 +1,0 @@
-stderr=vidconsole
-stdin=usbkbd
-stdout=vidconsole

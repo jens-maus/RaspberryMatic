@@ -23,6 +23,14 @@
  endef
  endif
  
+@@ -41,6 +41,7 @@
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
++	$(INSTALL) -D -m 0644 $(@D)/extra/dt-blob.dts $(BINARIES_DIR)/rpi-firmware/dt-blob.dts
+ 	$(RPI_FIRMWARE_INSTALL_DTB)
+ 	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
+ endef
 --- buildroot/package/rpi-firmware/rpi-firmware.hash.orig	2017-12-01 08:33:11.525437774 +0100
 +++ buildroot/package/rpi-firmware/rpi-firmware.hash	2017-12-01 14:50:12.944575359 +0100
 @@ -1,2 +1,2 @@

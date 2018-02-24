@@ -88,6 +88,7 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [Print / ProgrammeDrucken](https://github.com/litti/hm-print)
 * [HomeMatic Check_MK](https://github.com/alexreinert/homematic_check_mk)
 * [hm-tools](https://github.com/fhetty/hm-tools)
+* [HB-UW-Sen-THPL Universalsensor](https://github.com/jp112sdl/Wettersensor/tree/master/Contrib/CCURM)
 
 ## :cloud: Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:

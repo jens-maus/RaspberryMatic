@@ -14,15 +14,15 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 ## :cookie: Features
 * 100% HomeMatic CCU system compliant based on latest [OCCU 2.31.25](https://github.com/eq-3/occu) CCU software environment
 * Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
-* Based on latest [Buildroot 2017.11.1](http://buildroot.org/) lightweight Linux operating system
+* Based on latest [Buildroot 2017.11.2](http://buildroot.org/) lightweight Linux operating system
 * Integration of latest [community versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
 * Integration of [third-party patches](https://github.com/jens-maus/RaspberryMatic/projects/3) for an improved WebUI experience.
 * Self-contained disk image targeted for lightweight embedded devices (primarily RaspberryPi)
-* Latest [Linux kernel 4.9.77](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float (ARMv7) support
+* Latest [Linux kernel 4.9.80](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float (ARMv7) support
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
-* Includes special embedded JAVA8 runtime environment ([1.8.0_152-8.25.0.76](http://www.azul.com/downloads/zulu-embedded/))
+* Includes special embedded JAVA8 runtime environment ([1.8.0_162-8.27.0.91](http://www.azul.com/downloads/zulu-embedded/))
 * Supports onboard WiFi of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setups including USB connection to uninterruptible power supply (UPS) as well as remote NUT server use (e.g. via Synology NAS Network UPS functionality)
@@ -42,9 +42,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 
 ## :fire: Limitations
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
-* No HomeMatic-IP support with HM-MOD-RPI-PCB on ASUS Tinkerboard (work in progress)
 * No Bluetooth and onboard-WiFi support for ASUS Tinkerboard (work in progress)
-* [HM-Sys-sRP-Pl](https://www.elv.de/controller.aspx?cid=683&detail=10&detail2=731493) repeater cannot be reconfigured
 
 ## :computer: Requirements
 <img src="https://files.elv.com/bilder/artikel/Produkte/14/1421/142141/Internet/gross/142141_F02_PlHomeMatic.jpg" alt="RaspberryPi equipped with HM-MOD-RPI-PCB" width=300 align=right>
@@ -147,5 +145,9 @@ A valid alternative for building RaspberryMatic ARM-hardfloat compatible binarie
 ## :scroll: License
 The RaspberryMatic build environment itself – the files found in this git repository – as well as the RaspberryMatic sd card images are licensed under the conditions of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0). Please note, however, that the buildroot distribution RaspberryMatic is using is licensed under the [GPLv2](http://www.gnu.org/licenses/gpl-2.0.html) license instead. Furthermore, the [eQ-3 OCCU](https://github.com/eq-3/occu) software RaspberryMatic is using to provide HomeMatic-based services is licensed under the ([HMSL](https://github.com/eq-3/occu/blob/master/LicenseDE.txt)).
 
+## :clap: Acknowledgments
+As this project is a collaborative effort also indirectly using several third-party solutions we would like to thank the following authors for their valueable contributions:
+* Alexander Reinert – for his [generic_raw_uart kernel module](https://github.com/alexreinert/piVCCU/tree/master/kernel) enabling HomeMaticIP support with the ASUS Tinkerboard.
+
 ## :family: Authors
-See [Contributors](https://github.com/jens-maus/RaspberryMatic/graphs/contributors) for a complete list of people that have contributed to the success of RaspberryMatic.
+See [Contributors](https://github.com/jens-maus/RaspberryMatic/graphs/contributors) for a complete list of people that have directly contributed to this project.

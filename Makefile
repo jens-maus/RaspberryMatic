@@ -2,7 +2,7 @@ PRODUCT=raspmatic_rpi3
 # PRODUCT=raspmatic_rpi0
 # PRODUCT=raspmatic_tinkerboard
 # PRODUCT=raspmatic_docker
-BUILDROOT_VERSION=2017.11.2
+BUILDROOT_VERSION=2018.02-rc2
 VERSION=$(shell cat ./VERSION)
 BOARD=$(shell echo $(PRODUCT) | cut -d'_' -f2)
 
@@ -81,3 +81,8 @@ savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
 #   uboot-update-defconfig
 #%: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
 #	@$(MAKE) -C build-$(PRODUCT) $@
+linux-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
+	@$(MAKE) -C build-$(PRODUCT) $@
+
+linux-update-defconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
+	@$(MAKE) -C build-$(PRODUCT) $@

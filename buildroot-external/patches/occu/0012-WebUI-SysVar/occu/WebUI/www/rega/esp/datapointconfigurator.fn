@@ -738,7 +738,9 @@ function ::dcCreate()
         else
         {
           oEName = oE.Name();
-          bSV = true;
+          if (!((oEName.Find("CUxD.CUX") == 0) && !sControlName)) {                                                                                                                                         
+            bSV = true;                                                                                                                                                                                     
+          } 
         }
       }
     }

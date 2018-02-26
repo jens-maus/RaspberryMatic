@@ -9,6 +9,7 @@ BOARD=$(shell echo $(PRODUCT) | cut -d'_' -f2)
 .PHONY: all
 all: usage
 
+.PHONY: usage
 usage:
 	@echo "HomeMatic Build Environment"
 	@echo "Usage:"
@@ -33,12 +34,14 @@ build-$(PRODUCT): | buildroot-$(BUILDROOT_VERSION) download
 download: buildroot-$(BUILDROOT_VERSION)
 	mkdir -p download
 
-build-$(PRODUCT)/.config: | build-$(PRODUCT) buildroot-external/configs/$(PRODUCT)_defconfig
+build-$(PRODUCT)/.config: | build-$(PRODUCT)
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external $(PRODUCT)_defconfig
 
+.PHONY: dist
 dist: | buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external
 
+.PHONY: release
 release: dist
 	cp -a build-$(PRODUCT)/images/sdcard.img ./release/RaspberryMatic-$(VERSION)-$(BOARD).img
 	sha256sum ./release/RaspberryMatic-$(VERSION)-$(BOARD).img >./release/RaspberryMatic-$(VERSION)-$(BOARD).img.sha256
@@ -46,28 +49,35 @@ release: dist
 	cd ./release && zip ./RaspberryMatic-$(VERSION)-$(BOARD).zip ./RaspberryMatic-$(VERSION)-$(BOARD).img ./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256 ../LICENSE
 	sha256sum ./release/RaspberryMatic-$(VERSION)-$(BOARD).zip >./release/RaspberryMatic-$(VERSION)-$(BOARD).zip.sha256
 
+.PHONY: clean
 clean:
 	rm -rf build-$(PRODUCT) buildroot-$(BUILDROOT_VERSION)
 
+.PHONY: distclean
 distclean: clean
 	rm -f buildroot-$(BUILDROOT_VERSION).tar.bz2
 	rm -rf download
 
+.PHONY: mount
 mount:
 	sudo kpartx -av build-$(PRODUCT)/images/sdcard.img
 	sudo mkdir -p /mnt/p2
 	sudo mount /dev/mapper/loop0p2 /mnt/p2
 
+.PHONY: unmount
 umount:
 	sudo umount /mnt/p2
 	sudo kpartx -dv build-$(PRODUCT)/images/sdcard.img
 
+.PHONY: install
 install:
 	sudo dd if=build-$(PRODUCT)/images/sdcard.img of=$(of) bs=1M conv=fsync status=progress
 
+.PHONY: menuconfig
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig
 
+.PHONY: savedefconfig
 savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external savedefconfig BR2_DEFCONFIG=../buildroot-external/configs/$(PRODUCT)_defconfig
 
@@ -79,10 +89,5 @@ savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
 #   busybox-update-config
 #   uboot-menuconfig
 #   uboot-update-defconfig
-#%: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
-#	@$(MAKE) -C build-$(PRODUCT) $@
-linux-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
-	@$(MAKE) -C build-$(PRODUCT) $@
-
-linux-update-defconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
+%:
 	@$(MAKE) -C build-$(PRODUCT) $@

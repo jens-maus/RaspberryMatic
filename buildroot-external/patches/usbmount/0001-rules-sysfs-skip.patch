@@ -1,0 +1,16 @@
+--- a/usbmount.rules.orig	2018-02-25 22:29:44.158036354 +0100
++++ b/usbmount.rules	2018-02-26 09:40:59.986672238 +0100
+@@ -1,7 +1,13 @@
+ # Rules for USBmount -*- conf -*-
+ 
++# Do not auto mount system-related filesystems
++ENV{ID_FS_LABEL}=="bootfs|rootfs|rootfs1|rootfs2|userfs", GOTO="END"
++
+ KERNEL=="sd*", DRIVERS=="sbp2",		ACTION=="add",	RUN+="/usr/share/usbmount/usbmount add"
+ KERNEL=="sd*", SUBSYSTEM=="block",	ACTION=="add",	RUN+="/usr/share/usbmount/usbmount add"
+ KERNEL=="ub*", SUBSYSTEM=="block",	ACTION=="add",	RUN+="/usr/share/usbmount/usbmount add"
+ KERNEL=="sd*",				ACTION=="remove",	RUN+="/usr/share/usbmount/usbmount remove"
+ KERNEL=="ub*",				ACTION=="remove",	RUN+="/usr/share/usbmount/usbmount remove"
++
++LABEL="END"
++

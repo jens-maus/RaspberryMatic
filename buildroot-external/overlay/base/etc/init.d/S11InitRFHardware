@@ -54,10 +54,17 @@ init_rf_kernel_modules() {
     modprobe eq3_char_loop
 
     if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-      HM_HMRF_DEVNODE="/dev/raw-uart"
+      if [[ -c /dev/raw-uart ]]; then
+        HM_HMRF_DEVNODE="/dev/raw-uart"
+      fi
     fi
+
     if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-      HM_HMIP_DEVNODE="/dev/raw-uart"
+      if [[ -c /dev/raw-uart ]]; then
+        HM_HMIP_DEVNODE="/dev/raw-uart"
+      elif [[ -c /dev/ttyAMA0 ]]; then
+        HM_HMIP_DEVNODE="/dev/ttyAMA0"
+      fi
     fi
   fi
 }
@@ -80,6 +87,12 @@ query_rf_parameters() {
     echo 0 >/sys/class/gpio/gpio184/value
     sleep 0.1
     echo 1 >/sys/class/gpio/gpio184/value
+  elif [[ "${RPI_PCB_DEVNODE}" != "/dev/raw-uart" ]]; then
+    echo 18 >/sys/class/gpio/export
+    echo out >/sys/class/gpio/gpio18/direction
+    echo 0 >/sys/class/gpio/gpio18/value
+    sleep 0.1
+    echo 1 >/sys/class/gpio/gpio18/value
   fi
 
   if [[ -n "${RPI_PCB_DEVNODE}" ]]; then

@@ -39,9 +39,13 @@ init() {
       cp -a ${CFG_TEMPLATE_DIR}/crRFD.conf /var/etc/
     fi
 
-    # In HmIP-RFUSB mode we have to change crRFD.conf
-    if [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
+    # if no raw-uart is used to connect to the rf module
+    # we have to set the device node
+    if [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]]; then
       sed -i "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_HMIP_DEVNODE}|" /var/etc/crRFD.conf
+      HM_SERVER_PORT=${HM_HMIP_DEVNODE}
+    else
+      HM_SERVER_PORT=/dev/ttyS0
     fi
 
     HM_SERVER=/opt/HMServer/HMIPServer.jar
@@ -69,7 +73,7 @@ waitStartupComplete() {
 start() {
   echo -n "Starting ${HM_SERVER_TYPE}: "
   init
-  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar ${HM_SERVER} ${HM_SERVER_ARGS}
+  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts=${HM_SERVER_PORT} -jar ${HM_SERVER} ${HM_SERVER_ARGS}
   echo -n "."
   waitStartupComplete
 }

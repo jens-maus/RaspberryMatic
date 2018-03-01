@@ -72,11 +72,6 @@ init_rf_kernel_modules() {
 # function to read out the serial, version and address of the corresponding
 # rf module
 query_rf_parameters() {
-  if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HM_HMRF_DEVNODE}" ]]; then
-    RPI_PCB_DEVNODE=${HM_HMRF_DEVNODE}
-  elif [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HM_HMIP_DEVNODE}" ]]; then
-    RPI_PCB_DEVNODE=${HM_HMIP_DEVNODE}
-  fi
 
   # workaround for a tinkerboard related issue where the
   # generic_raw_uart doesn't seem to be able to reset the rf module
@@ -87,7 +82,8 @@ query_rf_parameters() {
     echo 0 >/sys/class/gpio/gpio184/value
     sleep 0.1
     echo 1 >/sys/class/gpio/gpio184/value
-  elif [[ "${RPI_PCB_DEVNODE}" != "/dev/raw-uart" ]]; then
+  elif [[ "${HM_HMRF_DEVNODE}" != "/dev/raw-uart" ]] &&
+       [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]]; then
     echo 18 >/sys/class/gpio/export
     echo out >/sys/class/gpio/gpio18/direction
     echo 0 >/sys/class/gpio/gpio18/value
@@ -95,30 +91,53 @@ query_rf_parameters() {
     echo 1 >/sys/class/gpio/gpio18/value
   fi
 
-  if [[ -n "${RPI_PCB_DEVNODE}" ]]; then
-    HM_RF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
-    if [[ -n "${HM_RF_SERIAL}" ]]; then
-      HM_RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
-      HM_RF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${RPI_PCB_DEVNODE} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
-    fi
-  fi
+  if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HM_HMRF_DEVNODE}" ]]; then
 
-  if [[ -z "${HM_RF_SERIAL}" ]]; then
-    # no HM-MOD-RPI-PCB found
-    if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+    HM_RF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
+    if [[ -n "${HM_RF_SERIAL}" ]]; then
+      HM_RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
+      HM_RF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${HM_HMRF_DEVNODE} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+    else
       HM_HMRF_DEV=""
       HM_HMRF_DEVNODE=""
     fi
-    if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+
+  fi
+
+  if [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]] && [[ -n "${HM_HMIP_DEVNODE}" ]]; then
+
+    RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v -a 2>&1)
+    HM_HMIP_SERIAL=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p' | tail -c 11)
+    if [[ -n "${HM_HMIP_SERIAL}" ]]; then
+      HM_HMIP_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
+      HM_HMIP_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+    else
       HM_HMIP_DEV=""
       HM_HMIP_DEVNODE=""
     fi
+
   fi
 
   # save all info about the RF module
-  echo "${HM_RF_SERIAL}" >/var/board_serial
-  echo "${HM_RF_VERSION}" >/var/rf_firmware_version
-  echo "${HM_RF_ADDRESS}" >/var/rf_address
+  if [[ -n "${HM_RF_SERIAL}" ]]; then
+    echo "${HM_RF_SERIAL}" >/var/board_serial
+    echo "${HM_RF_VERSION}" >/var/rf_firmware_version
+    echo "${HM_RF_ADDRESS}" >/var/rf_address
+  elif [[ -n "${HM_HMIP_SERIAL}" ]]; then
+    echo "${HM_HMIP_SERIAL}" >/var/board_serial
+    echo "${HM_HMIP_VERSION}" >/var/rf_firmware_version
+    echo "${HM_HMIP_ADDRESS}" >/var/rf_address
+  else
+    echo "" >/var/board_serial
+    echo "" >/var/rf_firmware_version
+    echo "" >/var/rf_address
+  fi
+
+  if [[ -n "${HM_HMIP_SERIAL}" ]]; then
+    echo "${HM_HMIP_SERIAL}" >/var/hmip_board_serial
+    echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
+    echo "${HM_HMIP_ADDRESS}" >/var/hmip_address
+  fi
 }
 
 start() {

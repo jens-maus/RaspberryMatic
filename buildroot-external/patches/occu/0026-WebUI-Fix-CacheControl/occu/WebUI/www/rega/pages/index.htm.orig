@@ -71,7 +71,7 @@
     /*########################################################################*/
 
     PLATFORM = "Central";
-    WEBUI_VERSION = "2.31-TRUNK";
+    WEBUI_VERSION = "2.33-TRUNK";
   
     /**
      * Flags
@@ -165,7 +165,28 @@
       return "<%Write(sessionId);%>";
     }
    </script>
-  
+
+   <script type="text/javascript">
+    document.onkeypress = Backspace;
+    function Backspace(event) {
+      if (event.keyCode == 8) {
+        if (document.activeElement.tagName == "INPUT" || "textarea") {
+          return true;
+        } else {
+          alert(unescape(translateKey('dialogBackspacePrevent') ));
+          return false;
+        }
+      }
+    }
+
+    history.pushState(null, document.title, location.href);
+    window.addEventListener('popstate', function (event)
+    {
+      history.pushState(null, document.title, location.href);
+      alert(unescape(translateKey('dialogBackspacePrevent') ));
+    });
+  </script>
+ 
 </head>
 <body id="body" onload="WebUI.start();" >
   <div id="webuiloader_wrapper">

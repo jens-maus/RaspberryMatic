@@ -7,6 +7,7 @@ update_rf_hardware() {
 
   if [[ ! -e /etc/config/no-coprocessor-update ]]; then
     FOUND=0
+
     # check if user has a HM-MOD-RPI-PCB installed (GPIO)
     if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] || [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
 
@@ -88,7 +89,7 @@ update_rf_hardware() {
 
         echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
         if [[ -z "${HM_HMRF_DEV}" ]]; then
-          echo "${HM_HMRF_VERSION}" >/var/rf_firmware_version
+          echo "${HM_HMIP_VERSION}" >/var/rf_firmware_version
         fi
 
         if [[ "${NEW_VERSION}" == "${HM_HMIP_VERSION}" ]]; then

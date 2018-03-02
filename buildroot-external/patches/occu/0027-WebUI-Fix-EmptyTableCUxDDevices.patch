@@ -1,5 +1,5 @@
---- datapointconfigurator.fn.orig	2018-02-26 22:56:12.000000000 +0100
-+++ datapointconfigurator.fn	2018-02-26 22:55:47.000000000 +0100
+--- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
++++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
 @@ -748,7 +748,7 @@
        WriteLine( '</tr></table><table cellspacing="0" class="ctrlTbl CLASS02510" border="0" ><tr>' );
        Call("/esp/datapointconfigurator.fn::CreateUnknown()");

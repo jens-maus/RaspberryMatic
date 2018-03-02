@@ -54,13 +54,13 @@ update_rf_hardware() {
           echo -n "forcing, "
           /bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -u -f -d ${TMPDIR_FW}
         fi
-        HM_RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
-        echo "${HM_RF_VERSION}" >/var/rf_firmware_version
+        HM_HMRF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
+        echo "${HM_HMRF_VERSION}" >/var/rf_firmware_version
 
-        if [[ "${NEW_VERSION}" == "${HM_RF_VERSION}" ]]; then
+        if [[ "${NEW_VERSION}" == "${HM_HMRF_VERSION}" ]]; then
           echo -n "OK"
         else
-          echo -n "ERROR (${HM_RF_VERSION} != ${NEW_VERSION})"
+          echo -n "ERROR (${HM_HMRF_VERSION} != ${NEW_VERSION})"
         fi
 
         # remove the temporary directory again

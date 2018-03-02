@@ -93,10 +93,10 @@ query_rf_parameters() {
 
   if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HM_HMRF_DEVNODE}" ]]; then
 
-    HM_RF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
-    if [[ -n "${HM_RF_SERIAL}" ]]; then
-      HM_RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
-      HM_RF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${HM_HMRF_DEVNODE} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+    HM_HMRF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
+    if [[ -n "${HM_HMRF_SERIAL}" ]]; then
+      HM_HMRF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
+      HM_HMRF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${HM_HMRF_DEVNODE} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
     else
       HM_HMRF_DEV=""
       HM_HMRF_DEVNODE=""
@@ -119,10 +119,10 @@ query_rf_parameters() {
   fi
 
   # save all info about the RF module
-  if [[ -n "${HM_RF_SERIAL}" ]]; then
-    echo "${HM_RF_SERIAL}" >/var/board_serial
-    echo "${HM_RF_VERSION}" >/var/rf_firmware_version
-    echo "${HM_RF_ADDRESS}" >/var/rf_address
+  if [[ -n "${HM_HMRF_SERIAL}" ]]; then
+    echo "${HM_HMRF_SERIAL}" >/var/board_serial
+    echo "${HM_HMRF_VERSION}" >/var/rf_firmware_version
+    echo "${HM_HMRF_ADDRESS}" >/var/rf_address
   elif [[ -n "${HM_HMIP_SERIAL}" ]]; then
     echo "${HM_HMIP_SERIAL}" >/var/board_serial
     echo "${HM_HMIP_VERSION}" >/var/rf_firmware_version

@@ -1,0 +1,157 @@
+--- occu/WebUI/www/rega/pages/msg/sysVarsSelection.htm.orig
++++ occu/WebUI/www/rega/pages/msg/sysVarsSelection.htm
+@@ -70,9 +70,8 @@
+       <col width="10%" />
+       <col width="20%" />
+       <col width="15%" />
+-      <col width="20%" />
++      <col width="35%" />
+       <col width="10%" />
+-      <col width="15%" />
+     </colgroup>
+     <thead id="svsBody">
+     <tr id="rowhead">
+@@ -84,7 +83,6 @@
+       <th class="CLASS00302">${thValues}</th>
+       <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="unit"){sCssName="SortSelected";} %>
+       <th class="CLASS00302"><div id="unit" class="pt11 <%Write(sCssName); %>" onclick="DivSort('unit');">${thUnit}</div></th>
+-      <th class="CLASS00302">${thAction}</th>
+     </tr>
+     
+     <tr id="rowflt">
+@@ -117,6 +115,10 @@
+                 <td>${lblAlarm}</td>
+                 <td><input type="checkbox" id="cbAlarm" /></td>
+               </tr>
++              <tr>
++                <td>${lblString}</td>
++                <td><input type="checkbox" id="cbString" /></td>
++              </tr>
+             </table>
+             <div class='FilterSetButton' onclick='setAFilter(fltSVS, "vartypes");updateTable();$("btnFilterVarTypeSub").hide();'>${filterSet}</div>
+             <div class='FilterSetButton' onclick="$('btnFilterVarTypeSub').hide();">${filterClose}</div>
+@@ -131,7 +133,6 @@
+             <div id="ftCancelUnitBtn" class='FilterSetButton' onclick="$('btnFilterUnitSub').hide();">${filterClose}</div>
+         </div>
+       </td>
+-      <td class="CLASS00307"></td>
+     </tr>
+    </thead>
+    <tbody id="sysVarDisplay">
+--- occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm
+@@ -101,6 +101,9 @@
+             <td>${lblAlarm}</td>
+             <td><input type="checkbox" id="cbAlarm" /></td>
+           </tr>
++            <td>${lblString}</td>
++            <td><input type="checkbox" id="cbString" /></td>
++          </tr>
+         </table>
+         <div class='FilterSetButton' onclick='setAFilter(fltSYV, "vartypes");updateTable();$("btnFilterVarTypeSub").hide();'>${filterSet}</div>
+         <div class='FilterSetButton' onclick="$('btnFilterVarTypeSub').hide();">${filterClose}</div>
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -1090,6 +1090,10 @@
+   color: $_(textColorB); /* black */
+   height:60px;
+   text-align:center;
++  max-width: 215.333px;
++  -ms-word-break: break-all;
++  word-break: break-all;
++  word-break: break-word;
+ }
+ .WhiteBkgChannelPopup {
+   background-color: $_(white); /* white */
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -24812,6 +24812,7 @@
+     this.bTypeValueList = false;
+     this.bTypeNumber = false;
+     this.bTypeAlarm = false;
++    this.bTypeString = false;
+     this.bColLeft = false;
+     this.bColCenter = false;
+     this.bNameLeft = false;
+@@ -25058,6 +25059,12 @@
+             if (!bRet) { bRet = true; }
+           }
+         }
++        if (this.bTypeString) {
++          if (obj['type'] == "string")
++          {
++            if (!bRet) { bRet = true; }
++          }
++        }
+         return bRet;
+       }
+     }
+@@ -25111,6 +25118,7 @@
+     if (this.bTypeValueList) return true;
+     if (this.bTypeNumber) return true;
+     if (this.bTypeAlarm) return true;
++    if (this.bTypeString) return true;
+     return false; 
+   },
+     
+@@ -25187,6 +25195,7 @@
+     this.bTypeValueList = false;
+     this.bTypeNumber = false;
+     this.bTypeAlarm = false;
++    this.bTypeString = false;
+     conInfo("Alle Filter wurden zurückgesetzt.");
+   }
+ };
+@@ -25219,6 +25228,7 @@
+       $("cbValueList").checked = fltObj.bTypeValueList;
+       $("cbNumber").checked = fltObj.bTypeNumber;
+       $("cbAlarm").checked = fltObj.bTypeAlarm;
++      $("cbString").checked = fltObj.bTypeString;
+       break;
+     case "btnFilterIfaceSub":
+       $("cbSend").checked = fltObj.isFilterType(FIL_IFACE_S); 
+@@ -25345,7 +25355,8 @@
+       fltObj.bTypeLogic = $("cbLogic").checked;
+       fltObj.bTypeValueList = $("cbValueList").checked;
+       fltObj.bTypeNumber = $("cbNumber").checked;
+-      fltObj.bTypeAlarm = $("cbAlarm").checked; 
++      fltObj.bTypeAlarm = $("cbAlarm").checked;
++      fltObj.bTypeString = $("cbString").checked;
+       break;
+     case "colPos":
+       fltObj.bColLeft = $("cbColLeft").checked; 
+@@ -28491,25 +28502,20 @@
+       IseSort(arSysVars,this.colName,false,true);
+       for (var i = 0; i < arSysVars.length; i++) 
+       {
++        var sOnclick = "PopupClose();";
++        if( this.sec ) sOnclick = "restorePrevious();";
++        sOnclick = "saveDlgResult("+arSysVars[i]['id']+");"+sOnclick;
++
+         var tr = Builder.node('tr', {id: arSysVars[i]['trid']});
+-        var td = Builder.node('td', {className: 'SysVarsTblPopup'}, strCut(translateString(arSysVars[i]['name']), true));
++        var td = Builder.node('td', {className: 'SysVarsTblPopup', onclick:sOnclick}, strCut(translateString(arSysVars[i]['name']), true));
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['desc']));
++        td = Builder.node('td', {className: 'SysVarsTblPopup', onclick:sOnclick}, translateString(arSysVars[i]['desc']));
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['typenames']));
++        td = Builder.node('td', {className: 'SysVarsTblPopup', onclick:sOnclick}, translateString(arSysVars[i]['typenames']));
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['values']));
++        td = Builder.node('td', {className: 'SysVarsTblPopup', onclick:sOnclick}, translateString(arSysVars[i]['values']));
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['unit']));
+-        tr.appendChild(td);
+-        
+-        var sOnclick = "PopupClose();";
+-        if( this.sec ) sOnclick = "restorePrevious();";
+-        sOnclick = "saveDlgResult("+arSysVars[i]['id']+");"+sOnclick;
+-      
+-        td = Builder.node('td', {className: 'WhiteBkg'}, [
+-          Builder.node('div', {className: 'StdButton', onclick:sOnclick}, translateKey('btnSelect'))
+-         ]);
++        td = Builder.node('td', {className: 'SysVarsTblPopup', onclick:sOnclick}, translateString(arSysVars[i]['unit']));
+         tr.appendChild(td);
+ 
+         tableBody.appendChild(tr);       

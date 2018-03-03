@@ -1,0 +1,55 @@
+--- occu/WebUI/www/rega/esp/side.inc.orig
++++ occu/WebUI/www/rega/esp/side.inc
+@@ -449,12 +449,12 @@
+ 
+                 if (iV == "0") {
+ 
+-                  if (oDP.HSSID().Find("RGBW_COLOR") != -1) {
++                  if (oDP.HSSID().Find("USER_COLOR") != -1) {
+                     ! deprecated iV = "0,200,0.5,0";
+                     iV = "{'ACT_HSV_COLOR_VALUE_STORE':0,'ACT_BRIGHTNESS_STORE':200,'RAMP_TIME_STORE':0.5,'ON_TIME_STORE':0}";
+                   }
+ 
+-                  if (oDP.HSSID().Find("RGBW_AUTOMATIC") != -1) {
++                  if (oDP.HSSID().Find("USER_PROGRAM") != -1) {
+                     ! deprecated iV = "0,200,0.5,0,0,199";
+                     iV = "{'ACT_COLOR_PROGRAM_STORE':0,'ACT_BRIGHTNESS_STORE':200,'RAMP_TIME_STORE':0.5,'ON_TIME_STORE':0, 'ACT_MIN_BORDER_STORE':0, 'ACT_MAX_BORDER_STORE':199}";
+                   }
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -13155,7 +13155,7 @@
+        jQuery("#RGBWControllerBrightness").show();
+        break;
+        */
+-      case "RGBW_COLOR" :
++      case "USER_COLOR" :
+         /*
+          Array curValues
+          0 Color val
+@@ -13203,7 +13203,7 @@
+         jQuery("#RGBWControllerColor").show();
+         this.__activateColorPicker();
+         break;
+-      case "RGBW_AUTOMATIC":
++      case "USER_PROGRAM":
+         /*
+          Array curValues
+          0 Program
+@@ -13375,7 +13375,7 @@
+       case "BRIGHTNESS" :
+         this.configString = this.__getBrightness();
+         break;
+-      case "RGBW_COLOR" :
++      case "USER_COLOR" :
+         var freeRampTimeHour = jQuery("#colorRGBEnterFreeRampTimeHour").val(),
+           freeRampTimeMin = jQuery("#colorRGBEnterFreeRampTimeMin").val(),
+           freeRampTimeSec = jQuery("#colorRGBEnterFreeRampTimeSec").val();
+@@ -13398,7 +13398,7 @@
+ 
+         this.configString = this.__getColor();
+         break;
+-      case "RGBW_AUTOMATIC":
++      case "USER_PROGRAM":
+ 
+         var freeRampTimeHour = jQuery("#prgRGBEnterFreeRampTimeHour").val(),
+           freeRampTimeMin = jQuery("#prgRGBEnterFreeRampTimeMin").val(),

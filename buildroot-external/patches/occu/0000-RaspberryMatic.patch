@@ -717,6 +717,16 @@
 +include_shell "test -d /etc/config/lighttpd && cat /etc/config/lighttpd/*.conf"
  ##
  #######################################################################
+--- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/modules.conf.orig
++++ occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/modules.conf
+@@ -50,6 +50,7 @@
+ #  "mod_usertrack",
+   "mod_cgi",
+   "mod_proxy",
++  "mod_openssl",
+ )
+ 
+ ##
 --- occu/firmware/HM-MOD-UART/fwmap.orig
 +++ occu/firmware/HM-MOD-UART/fwmap
 @@ -1,7 +1,7 @@

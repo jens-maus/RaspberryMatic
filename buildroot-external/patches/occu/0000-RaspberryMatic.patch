@@ -643,7 +643,7 @@
  ##
 +## number of worker processes to spawn.
 +##
-+#server.max-worker = 4
++server.max-worker = 4
 +
 +##
  #######################################################################

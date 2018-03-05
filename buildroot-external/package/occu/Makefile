@@ -38,7 +38,8 @@ ifeq (,$(filter $(BR2_PACKAGE_OCCU_WEBUI_REGAHSS_BETA), y))
 endif
 
 install_linuxbasis_arch:
-	cp -R $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/* $(TARGET_DIR)
+	cp -a $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/bin/eq3configcmd $(TARGET_DIR)/bin/
+	cp -a $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/lib/libeq3config.so $(TARGET_DIR)/lib/
 
 install_lighttpd_arch:
 	mkdir -p $(TARGET_DIR)/etc/lighttpd

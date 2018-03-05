@@ -3,15 +3,15 @@
 # sshd        Starts sshd.
 #
 
-# Only run this if ssh is explicitly enabled
-[ -f /etc/config/sshEnabled ] || exit 0
-
 # Make sure the ssh-keygen progam exists
 [ -f /usr/bin/ssh-keygen ] || exit 0
 
 umask 077
 
 start() {
+	# Only run this if ssh is explicitly enabled
+	[ -f /etc/config/sshEnabled ] || exit 0
+
 	# Create any missing keys
 	if [[ ! -f /usr/local/etc/ssh_host_dsa_key ]] ||
 	   [[ ! -f /usr/local/etc/ssh_host_ecdsa_key ]] ||

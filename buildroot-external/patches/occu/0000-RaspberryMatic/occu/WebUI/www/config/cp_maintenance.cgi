@@ -953,9 +953,7 @@ proc action_apply_logging {} {
         puts "Failure"
         return
     }
-    catch {exec killall syslogd}
-    catch {exec killall klogd}
-    exec /etc/init.d/S01logging start
+    exec /etc/init.d/S07logging restart
     puts "Success -confirm"
 }
 

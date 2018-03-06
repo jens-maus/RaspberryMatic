@@ -990,6 +990,17 @@
      exec /sbin/reboot
  }
  
+@@ -1007,9 +953,7 @@
+         puts "Failure"
+         return
+     }
+-    catch {exec killall syslogd}
+-    catch {exec killall klogd}
+-    exec /etc/init.d/S01logging start
++    exec /etc/init.d/S07logging restart
+     puts "Success -confirm"
+ }
+ 
 --- occu/WebUI/www/config/cp_security.cgi.orig
 +++ occu/WebUI/www/config/cp_security.cgi
 @@ -202,8 +202,8 @@

@@ -1,0 +1,2 @@
+config BR2_PACKAGE_RECOVERY_IMAGE
+	bool "Creates a dedicated Recovery image"

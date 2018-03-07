@@ -1,3 +1,5 @@
+source "$BR2_EXTERNAL_EQ3_PATH/package/recovery-image/Config.in"
+
 menu "eQ-3 HomeMatic Services"
   source "$BR2_EXTERNAL_EQ3_PATH/package/occu/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/cloudmatic/Config.in"

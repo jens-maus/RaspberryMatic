@@ -34,8 +34,8 @@ check_factory_reset() {
     parted -s ${DEV} rm ${PARTNUM}
     parted -s ${DEV} mkpart primary ${START_CHS} ${MAX_CHS}
 
-    # force PARTUUID to 0xDEADBEEF (because parted changes partuuid)
-    echo -en '\xEF\xBE\xAD\xDE' | dd of=${DEV} conv=notrunc bs=1 seek=$((0x1B8)) 2>/dev/null
+    # force PARTUUID to 0xDEEDBEEF (because parted changes partuuid)
+    echo -en '\xEF\xBE\xED\xDE' | dd of=${DEV} conv=notrunc bs=1 seek=$((0x1B8)) 2>/dev/null
   fi
 
   # we create a clean ext4 partition now

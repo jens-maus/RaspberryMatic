@@ -9,6 +9,9 @@ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/cmdline.txt" "${BINARIES_DIR}/rpi-firmware/"
 cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/config.txt" "${BINARIES_DIR}/rpi-firmware/"
 
+# create dt-blob
+${HOST_DIR}/bin/dtc -@ -I dts -O dtb -W no-unit_address_vs_reg -o ${BINARIES_DIR}/rpi-firmware/dt-blob.bin ${BINARIES_DIR}/rpi-firmware/dt-blob.dts
+
 # select device tree overlay files to be installed in the image
 DTOVERLAYS="pivccu-raspberrypi.dtbo bcm2835-raw-uart.dtbo"
 mkdir -p "${BINARIES_DIR}/overlays"

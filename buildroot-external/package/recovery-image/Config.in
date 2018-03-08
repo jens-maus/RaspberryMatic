@@ -1,2 +1,6 @@
 config BR2_PACKAGE_RECOVERY_IMAGE
 	bool "Creates a dedicated Recovery image"
+
+config BR2_PACKAGE_RECOVERY_IMAGE_CONFIG
+	string "defconfig filename"
+	depends on BR2_PACKAGE_RECOVERY_IMAGE

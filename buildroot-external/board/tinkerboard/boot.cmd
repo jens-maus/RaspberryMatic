@@ -9,7 +9,8 @@ else
 fi
 
 # modify bootargs, load kernel and boot it
-fdt addr ${fdt_addr} && fdt get value bootargs /chosen bootargs
-setenv bootargs "${bootargs} root=PARTUUID=deedbeef-${bootpart}"
+load ${devtype} ${devnum}:1 ${fdt_addr_r} /rk3288-miniarm.dtb
+fdt addr ${fdt_addr_r}
+setenv bootargs "console=tty2 root=PARTUUID=deedbeef-${bootpart} ro noswap rootfstype=ext4 elevator=deadline fsck.repair=yes lapic rootwait rootdelay=5 consoleblank=0 logo.nologo loglevel=0 quiet"
 ext4load ${devtype} ${devnum}:${bootpart} ${kernel_addr_r} zImage
-bootz ${kernel_addr_r} - ${fdt_addr};
+bootz ${kernel_addr_r} - ${fdt_addr_r};

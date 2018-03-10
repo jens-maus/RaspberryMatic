@@ -58,7 +58,7 @@ define OCCU_FINALIZE_TARGET
 	rm -f $(TARGET_DIR)/etc/init.d/S01logging
 	rm -f $(TARGET_DIR)/etc/init.d/S20urandom
 	rm -f $(TARGET_DIR)/etc/init.d/S49ntp
-	rm -f $(TARGET_DIR)/etc/init.d/S60openvpn
+	rm -f $(TARGET_DIR)/etc/init.d/S15watchdog
 
 	# remove obsolete config templates
 	rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf
@@ -83,11 +83,11 @@ ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_HMIP),y)
 	OCCU_RF_PROTOCOL=HM_HMIP
 endif
 
-ifeq ($(BR2_PACKAGE_OCCU_ARCH_ARM),y)
+ifeq ($(BR2_arm),y)
 	OCCU_ARCH=arm-gnueabihf
 endif
 
-ifeq ($(BR2_PACKAGE_OCCU_ARCH_X86_32),y)
+ifeq ($(BR2_i386),y)
 	OCCU_ARCH=X86_32_Debian_Wheezy
 endif
 

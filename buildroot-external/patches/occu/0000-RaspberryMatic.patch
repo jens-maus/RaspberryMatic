@@ -717,6 +717,16 @@
 +include_shell "test -d /etc/config/lighttpd && cat /etc/config/lighttpd/*.conf"
  ##
  #######################################################################
+--- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/modules.conf.orig
++++ occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/modules.conf
+@@ -50,6 +50,7 @@
+ #  "mod_usertrack",
+   "mod_cgi",
+   "mod_proxy",
++  "mod_openssl",
+ )
+ 
+ ##
 --- occu/firmware/HM-MOD-UART/fwmap.orig
 +++ occu/firmware/HM-MOD-UART/fwmap
 @@ -1,7 +1,7 @@
@@ -731,7 +741,7 @@
  
 --- occu/HMserver/etc/init.d/S62HMServer.orig
 +++ occu/HMserver/etc/init.d/S62HMServer
-@@ -5,55 +5,101 @@
+@@ -5,55 +5,105 @@
  
  LOGLEVEL_HMServer=5
  CFG_TEMPLATE_DIR=/etc/config_templates
@@ -779,9 +789,13 @@
 +      cp -a ${CFG_TEMPLATE_DIR}/crRFD.conf /var/etc/
 +    fi
 +
-+    # In HmIP-RFUSB mode we have to change crRFD.conf
-+    if [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
++    # if no raw-uart is used to connect to the rf module
++    # we have to set the device node
++    if [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]]; then
 +      sed -i "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_HMIP_DEVNODE}|" /var/etc/crRFD.conf
++      HM_SERVER_PORT=${HM_HMIP_DEVNODE}
++    else
++      HM_SERVER_PORT=/dev/ttyS0
 +    fi
 +
 +    HM_SERVER=/opt/HMServer/HMIPServer.jar
@@ -815,7 +829,7 @@
 -	echo "OK"
 +  echo -n "Starting ${HM_SERVER_TYPE}: "
 +  init
-+  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -jar ${HM_SERVER} ${HM_SERVER_ARGS}
++  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts=${HM_SERVER_PORT} -jar ${HM_SERVER} ${HM_SERVER_ARGS}
 +  echo -n "."
 +  waitStartupComplete
  }
@@ -974,6 +988,17 @@
      catch { exec lcdtool {Reboot...             } }
 +    exec sleep 5
      exec /sbin/reboot
+ }
+ 
+@@ -1007,9 +953,7 @@
+         puts "Failure"
+         return
+     }
+-    catch {exec killall syslogd}
+-    catch {exec killall klogd}
+-    exec /etc/init.d/S01logging start
++    exec /etc/init.d/S07logging restart
+     puts "Success -confirm"
  }
  
 --- occu/WebUI/www/config/cp_security.cgi.orig

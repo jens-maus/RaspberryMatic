@@ -7,6 +7,7 @@ update_rf_hardware() {
 
   if [[ ! -e /etc/config/no-coprocessor-update ]]; then
     FOUND=0
+
     # check if user has a HM-MOD-RPI-PCB installed (GPIO)
     if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] || [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
 
@@ -54,13 +55,13 @@ update_rf_hardware() {
           echo -n "forcing, "
           /bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -u -f -d ${TMPDIR_FW}
         fi
-        HM_RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
-        echo "${HM_RF_VERSION}" >/var/rf_firmware_version
+        HM_HMRF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
+        echo "${HM_HMRF_VERSION}" >/var/rf_firmware_version
 
-        if [[ "${NEW_VERSION}" == "${HM_RF_VERSION}" ]]; then
+        if [[ "${NEW_VERSION}" == "${HM_HMRF_VERSION}" ]]; then
           echo -n "OK"
         else
-          echo -n "ERROR (${HM_RF_VERSION} != ${NEW_VERSION})"
+          echo -n "ERROR (${HM_HMRF_VERSION} != ${NEW_VERSION})"
         fi
 
         # remove the temporary directory again
@@ -79,14 +80,17 @@ update_rf_hardware() {
       echo -n "HMIP-RFUSB: "
 
       NEW_VERSION=$(ls /firmware/HmIP-RFUSB/hmip_coprocessor_update-*.eq3 | sed 's/.*hmip_coprocessor_update-\(.*\)\.eq3/\1/')
-      OLD_VERSION=$(/opt/java/bin/java -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v 2>/dev/null | grep "Application version =" | cut -d' ' -f5)
+      OLD_VERSION=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v 2>/dev/null | grep "Application version =" | cut -d' ' -f5)
       if [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
         # run firmware update
-        HM_HMIP_VERSION=$(/opt/java/bin/java -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -o -f /firmware/HmIP-RFUSB/hmip_coprocessor_update-*.eq3 2>/dev/null | grep "Version:" | cut -d' ' -f5)
+        HM_HMIP_VERSION=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -o -f /firmware/HmIP-RFUSB/hmip_coprocessor_update-*.eq3 2>/dev/null | grep "Version:" | cut -d' ' -f5)
 
-        echo "${HM_HMIP_VERSION}" >/var/rfusb_firmware_version
+        echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
+        if [[ -z "${HM_HMRF_DEV}" ]]; then
+          echo "${HM_HMIP_VERSION}" >/var/rf_firmware_version
+        fi
 
         if [[ "${NEW_VERSION}" == "${HM_HMIP_VERSION}" ]]; then
           echo -n "OK"

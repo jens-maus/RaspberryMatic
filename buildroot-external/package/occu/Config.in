@@ -7,17 +7,6 @@ config BR2_PACKAGE_OCCU
 
 if BR2_PACKAGE_OCCU
 
-choice
-	prompt "Architecture"
-
-config BR2_PACKAGE_OCCU_ARCH_ARM
-	bool "arm-gnueabihf"
-
-config BR2_PACKAGE_OCCU_ARCH_X86_32
-	bool "X86_32"
-	
-endchoice
-
 choice 
 	prompt "RF Protocol"
 

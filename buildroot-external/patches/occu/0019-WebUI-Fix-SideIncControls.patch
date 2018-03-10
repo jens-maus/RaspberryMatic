@@ -11,27 +11,7 @@
                        Write('<span id="wthControlMode'#oSD.ID()#'" class="CLASS02401" onclick="SetWTHControlMode('#oSD.ID()#');"><img src="/ise/img/notepad.png" /></span>' );
  
                        showGenericElem = false;
-@@ -448,24 +448,24 @@
- 
-                 if (iV == "0") {
- 
--                  if (oCH.HSSID() == "RGBW_COLOR") {
-+                  if (oDP.HSSID().Find("RGBW_COLOR") != -1) {
-                     ! deprecated iV = "0,200,0.5,0";
-                     iV = "{'ACT_HSV_COLOR_VALUE_STORE':0,'ACT_BRIGHTNESS_STORE':200,'RAMP_TIME_STORE':0.5,'ON_TIME_STORE':0}";
-                   }
- 
--                  if (oCH.HSSID() == "RGBW_AUTOMATIC") {
-+                  if (oDP.HSSID().Find("RGBW_AUTOMATIC") != -1) {
-                     ! deprecated iV = "0,200,0.5,0,0,199";
-                     iV = "{'ACT_COLOR_PROGRAM_STORE':0,'ACT_BRIGHTNESS_STORE':200,'RAMP_TIME_STORE':0.5,'ON_TIME_STORE':0, 'ACT_MIN_BORDER_STORE':0, 'ACT_MAX_BORDER_STORE':199}";
-                   }
-                 }
--                Write( '<input id="prgStringOptionValue'#oSD.ID()#'" onfocus="SetRGBWController('#oSD.ID()#',\''#oCH.HSSID()#'\');" type="text" class="SelectBox" size="10" value="'#iV#'" onchange="iseSingleDestination.SetValue('#oSD.ID()#',this.value,\'STRING\');" /> ' );
-+                Write( '<input id="prgStringOptionValue'#oSD.ID()#'" onfocus="SetRGBWController('#oSD.ID()#',\''#oDP.HSSID()#'\');" type="text" class="SelectBox" size="10" value="'#iV#'" onchange="iseSingleDestination.SetValue('#oSD.ID()#',this.value,\'STRING\');" /> ' );
-               }
- 
-               if ((jalousieActor != - 1) && (oDP.HSSID().Find("LEVEL_COMBINED") != -1)) {
+@@ -465,7 +465,7 @@
                  if (iV == "0") {
                    iV = "0X00,0X00";
                  }
@@ -40,12 +20,7 @@
                }
  
                if ((osram_rgb != -1) && (oDP.HSSID().Find("RGB") != -1)) {
-@@ -518,11 +518,11 @@
-                 Write( '<span id="setStatusDisplayEPaper'#oSD.ID()#'" class="CLASS02401" onclick="SetStatusDisplay('#oSD.ID()#',\'DIS-EP\');"><img src="/ise/img/notepad.png" /></span>' );
-               }
-               if (rgbw_controller != -1) {
--                Write( '<span id="setRGBWController'#oSD.ID()#'" class="CLASS02401" onclick="SetRGBWController('#oSD.ID()#',\''#oCH.HSSID()#'\');"><img src="/ise/img/notepad.png" /></span>' );
-+                Write( '<span id="setRGBWController'#oSD.ID()#'" class="CLASS02401" onclick="SetRGBWController('#oSD.ID()#',\''#oDP.HSSID()#'\');"><img src="/ise/img/notepad.png" /></span>' );
+@@ -522,7 +522,7 @@
                }
  
                if ((jalousieActor != - 1) && (oDP.HSSID().Find("LEVEL_COMBINED") != -1)) {

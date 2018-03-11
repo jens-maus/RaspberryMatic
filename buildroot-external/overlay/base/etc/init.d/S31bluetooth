@@ -18,7 +18,7 @@ test -f $DAEMON || exit 0
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
 # ASUS Tinkerboard is not yet supported
-[[ "${HOST}" == "tinkerboard" ]] && exit 0
+[[ "${HM_HOST}" == "tinkerboard" ]] && exit 0
 
 case $1 in
   start)

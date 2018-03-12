@@ -8,6 +8,9 @@ identify_host() {
   # default/fallback values
   HM_HOST=""
   HM_MODE="NORMAL"
+  HM_LED_GREEN="/sys/class/leds/led0"
+  HM_LED_RED="/sys/class/leds/led1"
+  HM_LED_YELLOW=""
 
   # identify the RaspberryPi version used
   # http://elinux.org/RPi_HardwareHistory
@@ -31,7 +34,13 @@ identify_host() {
     *)
       hardware=$(cat /proc/cpuinfo | grep 'Hardware' | awk '{print $3}')
       case "${hardware}" in
-        Rockchip)                    HM_HOST="tinkerboard";; # ASUS Tinkerboard
+        # ASUS Tinkerboard
+        Rockchip)
+          HM_HOST="tinkerboard"
+          HM_LED_GREEN="/sys/class/leds/act-led"
+          HM_LED_RED="/sys/class/leds/pwr-led"
+          HM_LED_YELLOW="/sys/class/leds/led1-led"
+        ;;
       esac
     ;;
   esac
@@ -40,6 +49,17 @@ identify_host() {
   if [[ -z "${HM_HOST}" ]]; then
     HM_HOST="rpi3"
     echo "couldn't identify hardware platform (${hostid}). Using RaspberryPi3 as fallback"
+  fi
+
+  # make sure the LEDs are actually setup correctly
+  if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
+    echo "mmc0" >${HM_LED_GREEN}/trigger
+  fi
+  if [[ -f "${HM_LED_RED}/trigger" ]]; then
+    echo "timer" >${HM_LED_RED}/trigger
+  fi
+  if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
+    echo "none" >${HM_LED_YELLOW}/trigger
   fi
 }
 

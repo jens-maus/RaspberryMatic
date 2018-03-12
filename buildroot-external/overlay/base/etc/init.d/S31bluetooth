@@ -9,37 +9,46 @@ DESC=bluetooth
 DAEMON=/usr/libexec/bluetooth/bluetoothd
 HCIATTACH=/usr/bin/hciattach
 HCICONFIG=/usr/bin/hciconfig
+RFKILL=/usr/sbin/rfkill
 DEVICE=/dev/ttyS1
 
 SSD_OPTIONS="--oknodo --quiet --exec $DAEMON -- --compat"
 
 test -f $DAEMON || exit 0
 
-[[ -r /var/hm_mode ]] && . /var/hm_mode
-
-# ASUS Tinkerboard is not yet supported
-[[ "${HM_HOST}" == "tinkerboard" ]] && exit 0
-
 case $1 in
   start)
     echo -n "Starting bluetooth: "
     if [[ -c ${DEVICE} ]]; then
+
+      [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+      if [[ "${HM_HOST}" == "tinkerboard" ]]; then
+        HCIATTACH=/usr/bin/rtk_hciattach
+        HCIATTACH_OPT="-s 115200 ${DEVICE} rtk_h5"
+      else
+        HCIATTACH=/usr/bin/hciattach
+        HCIATTACH_OPT="${DEVICE} bcm43xx 921600 noflow -"
+      fi
+
       # first call will flash the firmware
-      $HCIATTACH $DEVICE bcm43xx 921600 noflow - 2>/dev/null >/dev/null
+      ${RFKILL} unblock bluetooth
+      ${HCIATTACH} ${HCIATTACH_OPT} 2>/dev/null >/dev/null
       echo -n "."
 
       # bring hci0 up
-      hciconfig dev 2>/dev/null >/dev/null
+      ${HCICONFIG} dev 2>/dev/null >/dev/null
       if [ $? -eq 0 ]; then
-        $HCICONFIG hci0 up
+        ${HCICONFIG} hci0 up
 
-        start-stop-daemon --start --background $SSD_OPTIONS
+        start-stop-daemon --start --background ${SSD_OPTIONS}
         echo "OK"
 
         exit 0
       fi
 
-      echo "WARNING: bcm43xx init failed"
+      echo "WARNING: bluetooth setup failed"
+      ${RFKILL} block bluetooth
     else
       echo "not required"
     fi
@@ -47,7 +56,7 @@ case $1 in
 
   stop)
     echo -n "Stopping bluetooth: "
-    start-stop-daemon --stop $SSD_OPTIONS
+    start-stop-daemon --stop ${SSD_OPTIONS}
     echo "OK"
   ;;
 

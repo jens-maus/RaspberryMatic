@@ -17,6 +17,7 @@ menu "Hardware Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/susvd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/picod/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/strompi2d/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/bluetooth-tinker/Config.in"
 endmenu
 
 menu "Software Support"

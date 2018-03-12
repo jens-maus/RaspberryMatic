@@ -36,6 +36,9 @@ case $1 in
       ${HCIATTACH} ${HCIATTACH_OPT} 2>/dev/null >/dev/null
       echo -n "."
 
+      # wait for hciattach
+      sleep 2
+
       # bring hci0 up
       ${HCICONFIG} dev 2>/dev/null >/dev/null
       if [ $? -eq 0 ]; then
@@ -57,6 +60,8 @@ case $1 in
   stop)
     echo -n "Stopping bluetooth: "
     start-stop-daemon --stop ${SSD_OPTIONS}
+    pkill ".*hciattach"
+    ${RFKILL} block bluetooth
     echo "OK"
   ;;
 

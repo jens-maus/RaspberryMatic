@@ -7,7 +7,7 @@ setenv bootfs 1
 setenv recoveryfs 2
 setenv rootfs 3
 setenv userfs 4
-setenv gpio_button "GPIO12"
+setenv gpio_button "H23" # matches GPIO239
 setenv kernel_img "zImage"
 
 # output where we are booting from

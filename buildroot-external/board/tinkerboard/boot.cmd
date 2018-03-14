@@ -39,10 +39,10 @@ load ${devtype} ${devnum}:${bootfs} ${fdt_addr_r} ${fdt_file}
 fdt addr ${fdt_addr_r}
 
 # set bootargs
-setenv bootargs "console=${console} scandelay=5 root=PARTUUID=${partuuid} ro noswap rootfstype=ext4 elevator=deadline fsck.repair=yes lapic rootwait rootdelay=5 consoleblank=0 loglevel=${loglevel} quiet usb-storage.quirks=${usbstoragequirks} ${extraargs}"
+setenv bootargs "console=${console} kgdboc=${console} scandelay=5 root=PARTUUID=${partuuid} ro noswap rootfstype=ext4 elevator=deadline fsck.repair=yes lapic rootwait rootdelay=5 consoleblank=0 loglevel=${loglevel} quiet usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
 
 # load kernel
 ext4load ${devtype} ${devnum}:${root_num} ${kernel_addr_r} ${kernel_img}
 
 # boot kernel
-bootz ${kernel_addr_r} - ${fdt_addr_r};
+bootz ${kernel_addr_r} - ${fdt_addr_r}

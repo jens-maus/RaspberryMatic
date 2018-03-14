@@ -1,45 +1,45 @@
---- rpi-firmware/extra/dt-blob.dts.orig	2018-01-17 18:30:49.000000000 +0100
-+++ rpi-firmware/extra/dt-blob.dts	2018-02-19 21:00:33.295826078 +0100
-@@ -14,6 +14,7 @@
-             pin@p3  { function = "i2c1";   termination = "pull_up"; }; // I2C 1 SCL
-             pin@p5  { function = "output"; termination = "pull_down"; }; // CAM_LED
-             pin@p6  { function = "output"; termination = "pull_down";  startup_state = "active"; }; // LAN_RUN
-+            pin@p12 { function = "input";  termination = "pull_up"; }; // GPIO12 button
+--- rpi-firmware/extra/dt-blob.dts.orig	2018-03-14 01:08:00.850306455 +0100
++++ rpi-firmware/extra/dt-blob.dts	2018-03-14 01:25:49.319083144 +0100
+@@ -17,6 +17,7 @@
              pin@p14 { function = "uart0";  termination = "no_pulling"; drive_strength_mA = < 8 >; }; // TX uart0
              pin@p15 { function = "uart0";  termination = "pull_up"; drive_strength_mA = < 8 >; }; // RX uart0
              pin@p16 { function = "output"; termination = "pull_up"; polarity="active_low"; }; // activity LED
-@@ -150,6 +151,7 @@
-             pin@p1  { function = "i2c0";   termination = "pull_up"; }; // I2C 0 SCL
-             pin@p5  { function = "output"; termination = "pull_down"; }; // CAM_LED
-             pin@p6  { function = "output"; termination = "pull_down"; startup_state = "active"; }; // LAN NRESET
-+            pin@p12 { function = "input";  termination = "pull_up"; }; // GPIO12 button
-             pin@p14 { function = "uart0";  termination = "no_pulling"; drive_strength_mA = < 8 >; }; // TX uart0
++            pin@p24 { function = "input";  termination = "pull_up"; }; // GPIO24 button
+             pin@p27 { function = "output"; termination = "no_pulling";    }; // Camera shutdown
+             pin@p40 { function = "pwm";    termination = "no_pulling"; drive_strength_mA = < 16 >; }; // Left audio
+             pin@p45 { function = "pwm";    termination = "no_pulling"; drive_strength_mA = < 16 >; }; // Right audio
+@@ -154,6 +155,7 @@
              pin@p15 { function = "uart0";  termination = "pull_up"; drive_strength_mA = < 8 >; }; // RX uart0
              pin@p16 { function = "output"; termination = "pull_up"; polarity = "active_low"; }; // activity LED
-@@ -282,6 +284,7 @@
-                startup_state = "inactive";
-                function = "input";
+             pin@p21 { function = "output"; termination = "no_pulling";    }; // Camera shutdown
++            pin@p24 { function = "input";  termination = "pull_up"; }; // GPIO24 button
+             pin@p40 { function = "pwm";    termination = "no_pulling"; drive_strength_mA = < 16 >; }; // Left audio
+             pin@p45 { function = "pwm";    termination = "no_pulling"; drive_strength_mA = < 16 >; }; // Right audio
+             pin@p46 { function = "input";  termination = "no_pulling";    }; // Hotplug
+@@ -284,6 +286,7 @@
              }; // pin
-+            pin@p12 { function = "input";  termination = "pull_up"; }; // GPIO12 button
              pin@p14 { function = "uart0";  termination = "no_pulling"; drive_strength_mA = < 8 >; }; // TX uart0
              pin@p15 { function = "uart0";  termination = "pull_up"; drive_strength_mA = < 8 >; }; // RX uart0
++            pin@p24 { function = "input";  termination = "pull_up"; }; // GPIO24 button
              pin@p28 { function = "input";   termination = "pull_up";    }; // I2C 0 SDA
-@@ -424,6 +427,7 @@
-                startup_state = "inactive";
-                function = "input";
+             pin@p29 { function = "input";   termination = "pull_up";    }; // I2C 0 SCL
+             pin@p31 { function = "input";  termination = "no_pulling"; polarity = "active_low"; }; // Power low
+@@ -426,6 +429,7 @@
              }; // pin
-+            pin@p12 { function = "input";  termination = "pull_up"; }; // GPIO12 button
              pin@p14 { function = "uart0";  termination = "no_pulling"; drive_strength_mA = < 8 >; }; // TX uart0
              pin@p15 { function = "uart0";  termination = "pull_up"; drive_strength_mA = < 8 >; }; // RX uart0
++            pin@p24 { function = "input";  termination = "pull_up"; }; // GPIO24 button
              pin@p28 { function = "input";   termination = "pull_up";    }; // I2C 0 SDA
-@@ -566,6 +570,7 @@
-                startup_state = "inactive";
-                function = "input";
+             pin@p29 { function = "input";   termination = "pull_up";    }; // I2C 0 SCL
+             pin@p31 { function = "output"; termination = "pull_down";  startup_state = "active"; }; // LAN_RUN
+@@ -568,6 +572,7 @@
              }; // pin
-+            pin@p12 { function = "input";  termination = "pull_up"; }; // GPIO12 button
              pin@p14 { function = "uart0";  termination = "no_pulling"; drive_strength_mA = < 8 >; }; // TX uart0
              pin@p15 { function = "uart0";  termination = "pull_up"; drive_strength_mA = < 8 >; }; // RX uart0
++            pin@p24 { function = "input";  termination = "pull_up"; }; // GPIO24 button
              pin@p28 { function = "input";   termination = "pull_up";    }; // I2C 0 SDA
+             pin@p29 { function = "input";   termination = "pull_up";    }; // I2C 0 SCL
+             pin@p32 { function = "output"; termination = "pull_down"; }; // Camera LED
 @@ -704,6 +709,7 @@
                 startup_state = "inactive";
                 function = "input";

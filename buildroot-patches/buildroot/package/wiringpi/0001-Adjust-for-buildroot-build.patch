@@ -105,5 +105,21 @@ index e1868b9..68c950e 100644
  #CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Wconversion -Winline $(INCLUDE) -pipe -fPIC
  
  LIBS    = -lm -lpthread -lrt -lcrypt
--- 
+@@ -76,6 +76,7 @@
+ $(DYNAMIC):	$(OBJ)
+ 	$Q echo "[Link (Dynamic)]"
+ 	$Q $(CC) -shared -Wl,-soname,libwiringPi.so$(WIRINGPI_SONAME_SUFFIX) -o libwiringPi.so.$(VERSION) $(LIBS) $(OBJ)
++	$Q ln -sf libwiringPi.so.$(VERSION) libwiringPi.so
+ 
+ .c.o:
+ 	$Q echo [Compile] $<
+@@ -102,6 +103,7 @@
+ 	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
+ 	$Q install -m 0755 libwiringPi.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)
+ 	$Q ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)	$(DESTDIR)/lib/libwiringPi.so
++	$Q ln -sf libwiringPi.so.$(VERSION)       $(DESTDIR)$(PREFIX)/lib/libwiringPi.so
+ 	$Q $(LDCONFIG)
+ 
+ .PHONY:	install-deb
+--- 
 2.11.0

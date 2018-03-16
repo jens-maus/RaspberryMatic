@@ -1,5 +1,5 @@
---- rpi-firmware/extra/dt-blob.dts.orig	2018-03-14 01:08:00.850306455 +0100
-+++ rpi-firmware/extra/dt-blob.dts	2018-03-14 01:25:49.319083144 +0100
+--- rpi-firmware/extra/dt-blob.dts.orig
++++ rpi-firmware/extra/dt-blob.dts
 @@ -17,6 +17,7 @@
              pin@p14 { function = "uart0";  termination = "no_pulling"; drive_strength_mA = < 8 >; }; // TX uart0
              pin@p15 { function = "uart0";  termination = "pull_up"; drive_strength_mA = < 8 >; }; // RX uart0
@@ -78,9 +78,17 @@
              }; // pin
 +            pin@p12 { function = "input";  termination = "pull_up"; }; // GPIO12 button
              pin@p14 { function = "uart0";  termination = "no_pulling"; drive_strength_mA = < 8 >; }; // TX uart0
+             pin@p15 { function = "uart0";  termination = "pull_up";    drive_strength_mA = < 8 >; }; // RX uart0
+             pin@p28 { function = "input";  termination = "no_pulling"; polarity = "active_low"; }; // Hotplug
+@@ -1501,6 +1511,7 @@
+                startup_state = "inactive";
+                function = "input";
+             }; // pin
++            pin@p12 { function = "input";  termination = "pull_up"; }; // GPIO12 button
+             pin@p14 { function = "uart0";  termination = "no_pulling"; drive_strength_mA = < 8 >; }; // TX uart0
              pin@p15 { function = "uart0";  termination = "pull_up"; drive_strength_mA = < 8 >; }; // RX uart0
              pin@p46 { function = "input";   termination = "pull_up";    }; // SMPS_SCL
-@@ -1415,6 +1425,7 @@
+@@ -1586,6 +1597,7 @@
                 startup_state = "inactive";
                 function = "input";
              }; // pin
@@ -88,7 +96,7 @@
              pin@p14 { function = "uart0";  termination = "no_pulling"; drive_strength_mA = < 8 >; }; // TX uart0
              pin@p15 { function = "uart0";  termination = "pull_up"; drive_strength_mA = < 8 >; }; // RX uart0
              pin@p28 { function = "input";   termination = "pull_up";    }; // I2C 0 SDA
-@@ -1541,6 +1552,7 @@
+@@ -1712,6 +1724,7 @@
                 startup_state = "inactive";
                 function = "input";
              }; // pin
@@ -96,7 +104,7 @@
              pin@p14 { function = "uart0";  termination = "no_pulling"; drive_strength_mA = < 8 >; }; // TX uart0
              pin@p15 { function = "uart0";  termination = "pull_up"; drive_strength_mA = < 8 >; }; // RX uart0
              pin@p28 { function = "input";   termination = "pull_up";    }; // I2C 0 SDA
-@@ -1688,6 +1700,7 @@
+@@ -1859,6 +1872,7 @@
                 startup_state = "inactive";
                 function = "input";
              }; // pin

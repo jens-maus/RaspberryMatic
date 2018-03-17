@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# startup script to start/stop third-party addons
+#
+
+start() {
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  # skip this startup in LAN Gateway mode
+  [[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
+
+  echo -n "Initialize Third-Party Addons: "
+
+  if [[ ! -e /etc/config/safemode ]]; then
+
+    # start third-party addons one after another
+    /bin/run-parts -a init /etc/config/rc.d >/dev/null 2>&1
+
+  fi
+
+  echo "OK"
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  *)
+    echo "Usage: $0 {start|stop}"
+    exit 1
+esac
+
+exit $?

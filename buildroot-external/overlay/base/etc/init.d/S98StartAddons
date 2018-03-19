@@ -32,7 +32,7 @@ start() {
     fi
 
     # start third-party addons one after another
-    /bin/run-parts -a start /etc/config/rc.d
+    /bin/run-parts -a start /etc/config/rc.d >/dev/null 2>&1
 
     # call rc.local
     if [[ -x /usr/local/etc/rc.local ]]; then
@@ -55,7 +55,7 @@ stop() {
   echo -n "Stopping Third-Party Addons: "
 
   # stop all third-party addons one after another
-  /bin/run-parts -a stop /etc/config/rc.d
+  /bin/run-parts -a stop /etc/config/rc.d >/dev/null 2>&1
 
   echo "OK"
 }

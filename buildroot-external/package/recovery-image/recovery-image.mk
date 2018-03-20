@@ -22,7 +22,8 @@ define RECOVERY_IMAGE_BUILD_CMDS
 endef
 
 define RECOVERY_IMAGE_INSTALL_TARGET_CMDS
-	cp -a $(@D)/output/images/rootfs.ext2 $(BINARIES_DIR)/recoveryfs.ext4
+	cp -a $(@D)/output/images/rootfs.cpio.uboot $(BINARIES_DIR)/recoveryfs-initrd
+	cp -a $(@D)/output/images/zImage $(BINARIES_DIR)/recoveryfs-zImage
 endef
 
 $(eval $(generic-package))

@@ -4,11 +4,11 @@ setenv load_addr ${ramdisk_addr_r}
 setenv console "tty2"
 setenv loglevel "0"
 setenv bootfs 1
-setenv recoveryfs 2
-setenv rootfs 3
-setenv userfs 4
+setenv rootfs 2
+setenv userfs 3
 setenv gpio_button "GPIO12"
 setenv kernel_img "zImage"
+setenv recoveryfs_initrd "recoveryfs-initrd"
 
 # output where we are booting from
 itest.b ${devnum} == 0 && echo "U-boot loaded from SD"
@@ -25,24 +25,30 @@ fi
 gpio input ${gpio_button}
 if test $? -eq 0 -o -e ${devtype} ${devnum}:${userfs} /.recoveryMode -o ! -e ${devtype} ${devnum}:${rootfs} ${kernel_img}; then
   echo "==== STARTING RECOVERY SYSTEM ===="
-  setenv root_num ${recoveryfs}
+  # load the initrd file
+  load ${devtype} ${devnum}:${bootfs} ${load_addr} ${recoveryfs_initrd}
+  setenv rootfs_str "/dev/ram0"
+  setenv initrd_addr_r ${ramdisk_addr_r}
+  setenv kernel_img "recoveryfs-zImage"
+  setenv kernelfs ${bootfs}
 else
   echo "==== NORMAL BOOT ===="
-  setenv root_num ${rootfs}
+  # get partuuid of root_num
+  part uuid ${devtype} ${devnum}:${rootfs} partuuid
+  setenv rootfs_str "PARTUUID=${partuuid}"
+  setenv initrd_addr_r "-"
+  setenv kernelfs ${rootfs}
 fi
-
-# get partuuid of root_num
-part uuid ${devtype} ${devnum}:${root_num} partuuid
 
 # load devicetree
 fdt addr ${fdt_addr}
 fdt get value bootargs /chosen bootargs
 
 # set bootargs
-setenv bootargs "dwc_otg.lpm_enable=0 console=${console} kgdboc=${console} scandelay=5 root=PARTUUID=${partuuid} ro noswap rootfstype=ext4 elevator=deadline fsck.repair=yes lapic rootwait rootdelay=5 consoleblank=0 logo.nologo loglevel=${loglevel} quiet usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
+setenv bootargs "dwc_otg.lpm_enable=0 console=${console} kgdboc=${console} scandelay=5 root=${rootfs_str} ro noswap rootfstype=ext4 elevator=deadline fsck.repair=yes lapic rootwait rootdelay=5 consoleblank=0 logo.nologo loglevel=${loglevel} quiet usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
 
 # load kernel
-ext4load ${devtype} ${devnum}:${root_num} ${kernel_addr_r} ${kernel_img}
+load ${devtype} ${devnum}:${kernelfs} ${kernel_addr_r} ${kernel_img}
 
 # boot kernel
-bootz ${kernel_addr_r} - ${fdt_addr}
+bootz ${kernel_addr_r} ${initrd_addr_r} ${fdt_addr}

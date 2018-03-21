@@ -8,20 +8,14 @@ init_urandom() {
     return
   fi
 
-  if [[ -s /etc/config/random-seed ]]; then
-    cat /etc/config/random-seed >/dev/urandom
-  else
-    # initialize urandom with /proc/timer_list
-    head -3 /proc/timer_list | tail -1 | cut -d' ' -f3 >/dev/urandom
-  fi
+  # initialize urandom with /proc/timer_list
+  head -3 /proc/timer_list | tail -1 | cut -d' ' -f3 >/dev/urandom
 }
 
 save_urandom() {
   if [[ ! -c /dev/urandom ]]; then
     return
   fi
-
-  dd if=/dev/urandom of=/etc/config/random-seed count=1 bs=512 2>/dev/null
 }
 
 start() {

@@ -2,32 +2,16 @@
 
 NAME=ntpd
 DAEMON=/usr/sbin/$NAME
-CFG_TEMPLATE_DIR=/etc/config_templates
+NTPSERVERS='0.de.pool.ntp.org 1.de.pool.ntp.org 2.de.pool.ntp.org 3.de.pool.ntp.org'
 
 # Gracefully exit if the package has been removed.
 test -x $DAEMON || exit 0
-
-init() {
-	if [ ! -e /etc/config/ntpclient ] ; then
-		cp $CFG_TEMPLATE_DIR/ntpclient /etc/config
-	fi
-
-	if [ -r /etc/config/ntpclient ] ; then
-		. /etc/config/ntpclient
-	fi
-}
 
 case "$1" in
   start)
     init
     printf "Starting $NAME: "
-	  if [ -z "$NTPSERVERS" ] ; then
-      # try the gateway
-      NTPSERVERS=$(route -n | awk '{if ($1 == "0.0.0.0") print $2}')
-      if [ -z "${NTPSERVERS}" ]; then
-        . $CFG_TEMPLATE_DIR/ntpclient
-      fi
-    fi
+
     # call ntpdate to perform a single sync to the servers
     /usr/bin/ntpdate -b -s ${NTPSERVERS}
 

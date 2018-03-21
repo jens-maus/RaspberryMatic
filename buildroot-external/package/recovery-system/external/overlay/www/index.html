@@ -1,0 +1,27 @@
+#!/bin/sh
+
+echo Content-type: text/html
+echo Pragma-directive: no-cache
+echo Cache-directive: no-cache
+echo Cache-control: no-cache
+echo Pragma: no-cache
+echo Expires: 0
+
+echo -ne "\r\n\r\n"
+
+/bin/cat << EOM
+
+<HTML>
+<HEAD><TITLE>HomeMatic CCU Rescue</TITLE>
+</HEAD>
+<BODY bgcolor="#cccccc" text="#000000">
+EOM
+
+/bin/cat index.inc
+
+<< EOM
+
+</BODY>
+</HTML>
+EOM
+

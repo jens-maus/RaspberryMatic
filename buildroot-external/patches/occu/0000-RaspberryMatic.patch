@@ -207,7 +207,7 @@
 +ResetFile = /dev/null
 --- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd
-@@ -7,115 +7,84 @@
+@@ -7,115 +7,85 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/multimacd.pid
  
@@ -245,6 +245,7 @@
 -        rm /var/log/rf_address
 -}
 +[[ -r /var/hm_mode ]] && . /var/hm_mode
++[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 +
  init() {
 -	export TZ=`cat /etc/config/TZ`

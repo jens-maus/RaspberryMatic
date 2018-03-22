@@ -2,7 +2,7 @@
 #
 # simple wrapper script to generate a CCU compatible sbk file
 #
-# Copyright (c) 2016-2017 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2016-2018 Jens Maus <mail@jens-maus.de>
 #
 
 BACKUPDIR=/usr/local/tmp
@@ -27,8 +27,8 @@ crypttool -s -t 1 <${TMPDIR}/usr_local.tar.gz >${TMPDIR}/signature
 crypttool -g -t 1 >${TMPDIR}/key_index
 
 # store the firmware VERSION
-source /boot/VERSION 2>/dev/null
-cp /boot/VERSION ${TMPDIR}/firmware_version
+source /VERSION 2>/dev/null
+cp /VERSION ${TMPDIR}/firmware_version
 
 # create sbk file
 tar -C ${TMPDIR} --owner=root --group=root -cf ${BACKUPDIR}/"$(hostname)-${VERSION}-$(date +%Y-%m-%d-%H%M).sbk" usr_local.tar.gz signature key_index firmware_version 2>/dev/null

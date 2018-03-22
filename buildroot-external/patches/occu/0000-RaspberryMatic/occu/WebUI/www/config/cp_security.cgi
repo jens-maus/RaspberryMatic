@@ -417,7 +417,7 @@ proc action_backup_restore_go {} {
     cd /usr/local/tmp/
     http_head
     
-    set system_version [read_version "/boot/VERSION"]
+    set system_version [read_version "/VERSION"]
     set config_version [read_version "firmware_version"]
   set ccu1_backup false
   if { [version_compare $config_version 2.0.0] < 0 } {
@@ -1049,7 +1049,7 @@ proc action_put_page {} {
 
 proc action_create_backup {} {
     set HOSTNAME [exec hostname]
-    set system_version [read_version "/boot/VERSION"]
+    set system_version [read_version "/VERSION"]
     set iso8601_date [exec date -Iseconds]
     set tmpdir [exec mktemp -d -p /usr/local/tmp]
     regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
@@ -1063,7 +1063,7 @@ proc action_create_backup {} {
     exec crypttool -s -t 1 <usr_local.tar.gz >signature
     #store the current key index
     exec crypttool -g -t 1 >key_index
-    file copy -force /boot/VERSION firmware_version
+    file copy -force /VERSION firmware_version
     catch { exec tar --owner=root --group=root -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index }
     cd /
     exec rm -rf $tmpdir

@@ -34,7 +34,7 @@ done
 IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
 /usr/bin/psplash-write "PROGRESS 0"
 
-[[ -r /boot/VERSION ]] && . /boot/VERSION
+[[ -r /VERSION ]] && . /VERSION
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
 if [[ "${HM_MODE}" != "HM-LGW" ]]; then

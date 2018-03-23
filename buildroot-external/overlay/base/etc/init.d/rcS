@@ -45,8 +45,8 @@ if [[ "${HM_MODE}" != "HM-LGW" ]]; then
   fi
 else
   if [[ -z "${IP}" ]]; then
-    /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- HM-LGW-O-TW-W-EU Mode (ERROR: No IP address set)"
+    /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- LAN-Gateway Mode (ERROR: No IP address set)"
   else
-    /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- HM-LGW-O-TW-W-EU Mode (${IP} / $(cat /var/board_serial))"
+    /usr/bin/psplash-write "MSG RaspberryMatic ${VERSION} -- LAN-Gateway Mode (IP: ${IP}, Serial: ${HM_HMRF_SERIAL})"
   fi
 fi

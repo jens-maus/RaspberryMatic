@@ -51,9 +51,9 @@ release: dist
 
 .PHONY: updateFile
 updateFile: dist
-        cd buildroot-external/package/eq3-updatefile; tar cvf ../../../build-$(PRODUCT)/images/$(PRODUCT)-$(VERSION).tar -T files-package.txt
-        cd build-$(PRODUCT)/images; tar uvf $(PRODUCT)-$(VERSION).tar -T ../../buildroot-external/package/eq3-updatefile/files-images.txt
-        cd build-$(PRODUCT)/images; gzip $(PRODUCT)-$(VERSION).tar; mv $(PRODUCT)-$(VERSION).tar.gz $(PRODUCT)-$(VERSION).tgz
+	cd buildroot-external/package/eq3-updatefile; tar cvf ../../../build-$(PRODUCT)/images/$(PRODUCT)-$(VERSION).tar -T files-package.txt
+	cd build-$(PRODUCT)/images; tar uvf $(PRODUCT)-$(VERSION).tar -T ../../buildroot-external/package/eq3-updatefile/files-images.txt
+	cd build-$(PRODUCT)/images; gzip $(PRODUCT)-$(VERSION).tar; mv $(PRODUCT)-$(VERSION).tar.gz $(PRODUCT)-$(VERSION).tgz
 
 .PHONY: clean
 clean:

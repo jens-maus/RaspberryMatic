@@ -42,7 +42,6 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 
 ## :fire: Limitations
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
-* No Bluetooth and onboard-WiFi support for ASUS Tinkerboard (work in progress)
 
 ## :computer: Requirements
 <img src="https://files.elv.com/bilder/artikel/Produkte/14/1421/142141/Internet/gross/142141_F02_PlHomeMatic.jpg" alt="RaspberryPi equipped with HM-MOD-RPI-PCB" width=300 align=right>

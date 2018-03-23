@@ -43,6 +43,9 @@ dtparam=watchdog=on
 # start with heartbeat on PWR led and mmc0 on ACT led
 dtparam=pwr_led_trigger=timer,act_led_trigger=mmc0
 
+# make sure gpio12 is set as input and pull_up
+gpio=12=ip,pu
+
 # start device tree at 0x2008000 to have
 # space for the u-boot boot script
 device_tree_address=0x2008000

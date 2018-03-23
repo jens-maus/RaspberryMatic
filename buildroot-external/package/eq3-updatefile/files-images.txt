@@ -1,0 +1,1 @@
+rootfs.ext2

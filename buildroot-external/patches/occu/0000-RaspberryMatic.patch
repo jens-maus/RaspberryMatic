@@ -385,7 +385,7 @@
 -
 --- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S61rfd
-@@ -7,92 +7,114 @@
+@@ -7,92 +7,115 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/rfd.pid
  
@@ -436,7 +436,8 @@
 +  fi
 +
 +  # only modify if real rf module found
-+  if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
++  if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
++     [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
 +    # make sure [Interface 0] is uncommented
 +    sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
 +

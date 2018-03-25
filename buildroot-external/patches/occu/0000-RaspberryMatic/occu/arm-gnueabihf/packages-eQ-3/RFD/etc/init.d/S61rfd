@@ -24,7 +24,8 @@ init() {
   fi
 
   # only modify if real rf module found
-  if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+  if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
+     [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
     # make sure [Interface 0] is uncommented
     sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
 

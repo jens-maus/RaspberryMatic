@@ -8,8 +8,10 @@ update_rf_hardware() {
   if [[ ! -e /etc/config/no-coprocessor-update ]]; then
     FOUND=0
 
-    # check if user has a HM-MOD-RPI-PCB installed (GPIO)
-    if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] || [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+    # check if user has a HM-MOD-RPI-PCB installed (GPIO) and
+    # perform a firmware update if necessary
+    if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
+       [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
 
       echo -n "HM-MOD-RPI-PCB: "
 
@@ -71,6 +73,49 @@ update_rf_hardware() {
       else
         echo -n "${OLD_VERSION}, OK"
       fi
+      FOUND=1
+    fi
+
+    # check if user has a RPI-RF-MOD installed (GPIO) and
+    # perform a firmware update if necessary
+    if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
+       [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
+
+      if [[ ${FOUND} -eq 1 ]]; then
+        echo -n "; "
+      fi
+
+      echo -n "RPI-RF-MOD: "
+
+      # identify which firmware (hmip-only or dualcopro) we should use
+      if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+        FW_TYPE=dualcopro_cc1310_update_blhmip
+      else
+        FW_TYPE=hmip_coprocessor_update
+      fi
+
+      NEW_VERSION=$(ls /firmware/RPI-RF-MOD/${FW_TYPE}-*.eq3 | sed 's/.*-\(.*\)\.eq3/\1/')
+      OLD_VERSION=${HM_RF_VERSION}
+      if [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
+        echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
+
+        # run firmware update
+        HM_HMIP_VERSION=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -o -f /firmware/RPI-RF-MOD/${FW_TYPE}-*.eq3 2>/dev/null | grep "Version:" | cut -d' ' -f5)
+
+        echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
+        if [[ -z "${HM_HMRF_DEV}" ]]; then
+          echo "${HM_HMIP_VERSION}" >/var/rf_firmware_version
+        fi
+
+        if [[ "${NEW_VERSION}" == "${HM_HMIP_VERSION}" ]]; then
+          echo -n "OK"
+        else
+          echo -n "ERROR (${HM_HMIP_VERSION} != ${NEW_VERSION})"
+        fi
+      else
+        echo -n "${OLD_VERSION}, OK"
+      fi
+
       FOUND=1
     fi
 

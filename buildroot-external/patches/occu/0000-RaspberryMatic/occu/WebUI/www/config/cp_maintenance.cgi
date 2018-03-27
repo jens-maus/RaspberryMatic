@@ -221,7 +221,7 @@ proc action_firmware_update_invalid {} {
 
 proc action_firmware_update_go {} {
     global env
-    cd /tmp/
+    cd /usr/local/tmp/
     
     http_head
 
@@ -259,8 +259,8 @@ proc action_firmware_update_go {} {
 
 proc action_firmware_update_cancel {} {
   global env
-  catch {exec rm /var/new_firmware.tar.gz}
-  catch { exec /bin/sh -c "rm /var/EULA.*"}
+  catch { exec /bin/sh -c "rm -f /usr/local/tmp/new_firmware.tar.gz" }
+  catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*" }
   cgi_javascript {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
@@ -771,7 +771,7 @@ proc get_serial { } {
 
 proc action_firmware_upload {} {
     global env sid downloadOnly
-    cd /tmp/
+    cd /usr/local/tmp/
     
     http_head
     import_file -client firmware_file
@@ -865,7 +865,7 @@ proc action_reboot_confirm {} {
 
 proc action_reboot_go {} {
     global env
-    cd /tmp/
+    cd /usr/local/tmp/
     
     http_head
 

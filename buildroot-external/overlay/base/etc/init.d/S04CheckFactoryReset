@@ -46,7 +46,9 @@ check_factory_reset() {
   fi
 
   # we create a clean ext4 partition now
-  mkfs.ext4 -F ${DEVNAME} -L userfs
+  mkfs.ext4 -F -L userfs "${DEVNAME}"
+  tune2fs -c 0 -i 0 "${DEVNAME}"
+  e2fsck -pDf "${DEVNAME}"
 
   # mount /usr/local again
   mount /usr/local

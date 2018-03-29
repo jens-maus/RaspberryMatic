@@ -1279,7 +1279,23 @@
  # Prüft, ob es sich um die alte oder neue CCU handelt
 --- occu/WebUI/www/tcl/extern/cgi.tcl.orig
 +++ occu/WebUI/www/tcl/extern/cgi.tcl
-@@ -2698,7 +2698,7 @@
+@@ -1431,7 +1431,6 @@
+ 	if {[info exists filename]} {
+             if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>Reading file $filename"; flush $dbg_fout}
+ 	    # read the part into a file
+-	    set foutname /tmp/CGI[pid].[incr filecount]
+ 	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
+ 	    set fout [open $foutname w]
+ 	    # "catch" permits this to work with Tcl 7.4
+@@ -1549,7 +1548,6 @@
+ 
+ 	if {[info exists filename]} {
+ 	    # read the part into a file
+-	    set foutname /tmp/CGI[pid].[incr filecount]
+ 	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
+ 	    set fout [open $foutname w]
+ 	    # "catch" permits this to work with Tcl 7.4
+@@ -2698,7 +2696,7 @@
  # deduce tmp directory
  switch $tcl_platform(platform) {
      unix {

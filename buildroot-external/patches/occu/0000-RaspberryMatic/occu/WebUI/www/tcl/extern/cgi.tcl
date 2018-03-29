@@ -1431,7 +1431,6 @@ proc _cgi_input_multipart {fin} {
 	if {[info exists filename]} {
             if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>Reading file $filename"; flush $dbg_fout}
 	    # read the part into a file
-	    set foutname /tmp/CGI[pid].[incr filecount]
 	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
 	    set fout [open $foutname w]
 	    # "catch" permits this to work with Tcl 7.4
@@ -1549,7 +1548,6 @@ proc _cgi_input_multipart_buggy {fin} {
 
 	if {[info exists filename]} {
 	    # read the part into a file
-	    set foutname /tmp/CGI[pid].[incr filecount]
 	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
 	    set fout [open $foutname w]
 	    # "catch" permits this to work with Tcl 7.4

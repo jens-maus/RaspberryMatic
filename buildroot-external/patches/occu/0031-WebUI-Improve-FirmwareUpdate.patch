@@ -1,0 +1,81 @@
+--- occu/WebUI/www/config/cp_maintenance.cgi.orig
++++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -259,8 +259,7 @@
+ 
+ proc action_firmware_update_cancel {} {
+   global env
+-  catch { exec /bin/sh -c "rm -f /usr/local/tmp/new_firmware.tar.gz" }
+-  catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*" }
++  catch { exec /bin/sh -c "rm -f /usr/local/tmp/new_firmware.tar.gz /usr/local/tmp/EULA.* /usr/local/tmp/update_script" }
+   cgi_javascript {
+     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
+     puts {
+@@ -753,16 +752,60 @@
+     http_head
+     import_file -client firmware_file
+ 
+-    # check if the uploaded file looks like a firmware file
+-    set file_valid 0
+-    catch {
+-        #set file_valid [expr [string first "update_script" [exec tar tzf [lindex $firmware_file 0]]] >= 0 ]
+-        exec tar xf -C /usr/local/tmp [lindex $firmware_file 0] update_script EULA.en EULA.de EULA.tr
++    set TMPDIR [exec mktemp -d -p /usr/local/tmp]
++    set file_invalid 1
++
++    #
++    # check if the uploaded file is a valid firmware update file
++    #
++
++    # check for .tar.gz or .tar
++    if {$file_invalid != 0} {
++      set file_invalid [catch {exec file -b [lindex $firmware_file 0] | egrep -q "(gzip compressed|tar archive)"} result]
++      if {$file_invalid == 0} {
++        # the file seems to be a tar archive (perhaps with gzip compression)
++        set file_invalid [catch {exec tar -C $TMPDIR --no-same-owner -xf [lindex $firmware_file 0]} result]
++      }
++    }
++
++    # check for .zip
++    if {$file_invalid != 0} {
++      set file_invalid [catch {exec file -b [lindex $firmware_file 0] | grep -q "Zip archive data"} result]
++      if {$file_invalid == 0} {
++        # the file seems to be a zip archive containing data
++        set file_invalid [catch {exec unzip -q -o -d $TMPDIR [lindex $firmware_file 0] 2>&1} result]
++      }
++    }
++
++    # check for .img
++    if {$file_invalid != 0} {
++      set file_invalid [catch {exec file -b [lindex $firmware_file 0] | grep -q "DOS/MBR boot sector"} result]
++      if {$file_invalid == 0} {
++        # the file seems to be a full-fledged SD card image with MBR boot sector, etc. so lets
++        # check if we have exactly 3 partitions
++        set file_invalid [catch {exec parted -sm [lindex $firmware_file 0] 2>&1 | tail -1 | egrep -q "3:.*:ext4:"} result]
++        if {$file_invalid == 0} {
++          file rename -force -- [lindex $firmware_file 0] "$TMPDIR/new_firmware.img"
++        }
++      }
++    }
++
++    # check for .ext4
++    if {$file_invalid != 0} {
++      set file_invalid [catch {exec file -b [lindex $firmware_file 0] | egrep -q "ext4 filesystem.*rootfs"} result]
++      if {$file_invalid == 0} {
++        # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
++        set file_invalid [catch {exec e2fsck -nf [lindex $firmware_file 0] 2>&1} result]
++        if {$file_invalid == 0} {
++          file rename -force -- [lindex $firmware_file 0] "$TMPDIR/new_firmware.ext4"
++        }
++      }
+     }
+-    set file_valid [file exists "/usr/local/tmp/update_script"]
+ 
+-    if {$file_valid} {
+-      file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_firmware.tar.gz"
++    #
++    # test if the above checks were successfull or not
++    #
++    if {$file_invalid == 0} {
+       #set action "firmware_update_confirm"
+       set action "acceptEula"
+     } else {

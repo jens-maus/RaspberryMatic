@@ -70,7 +70,6 @@ proc action_acceptEula {} {
 
 proc action_firmware_update_confirm {} {
     global env
-   cgi_debug -on
     http_head
     division {class="popupTitle"} {
         #puts "Softwareupdate - Best&auml;tigung"
@@ -258,8 +257,8 @@ proc action_firmware_update_go {} {
 }
 
 proc action_firmware_update_cancel {} {
-  global env
-  catch { exec /bin/sh -c "rm -f /usr/local/tmp/new_firmware.tar.gz /usr/local/tmp/EULA.* /usr/local/tmp/update_script" }
+  global env filename
+  catch { exec /bin/sh -c "rm -rf `readlink /usr/local/tmp/new_firmware` /usr/local/tmp/new_firmware" }
   cgi_javascript {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
@@ -392,9 +391,7 @@ proc action_put_page {} {
                         table_row {
                             td {width="20"} {}
                             table_data {colspan="2"} {
-                                form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
-                                    export action=firmware_upload
-                                    export downloadOnly=$downloadOnly
+                                form "/config/fileupload.ccc?sid=$sid&action=firmware_upload&downloadOnly=$downloadOnly&url=$env(SCRIPT_NAME)" {target=firmware_upload_iframe} name=firmware_form enctype=multipart/form-data method=post {
                                     file_button firmware_file size=30 maxlength=1000000
                                 }
                                 puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
@@ -746,13 +743,11 @@ proc get_serial { } {
 }
 
 proc action_firmware_upload {} {
-    global env sid downloadOnly
+    global env sid downloadOnly filename
     cd /usr/local/tmp/
     
-    http_head
-    import_file -client firmware_file
-
-    set TMPDIR [exec mktemp -d -p /usr/local/tmp]
+    set TMPDIR "$filename-dir"
+    exec mkdir -p $TMPDIR
     set file_invalid 1
 
     #
@@ -761,43 +756,80 @@ proc action_firmware_upload {} {
 
     # check for .tar.gz or .tar
     if {$file_invalid != 0} {
-      set file_invalid [catch {exec file -b [lindex $firmware_file 0] | egrep -q "(gzip compressed|tar archive)"} result]
+      set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
       if {$file_invalid == 0} {
         # the file seems to be a tar archive (perhaps with gzip compression)
-        set file_invalid [catch {exec tar -C $TMPDIR --no-same-owner -xf [lindex $firmware_file 0]} result]
+        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xf $filename} result]
+        file delete -force -- $filename
       }
     }
 
     # check for .zip
     if {$file_invalid != 0} {
-      set file_invalid [catch {exec file -b [lindex $firmware_file 0] | grep -q "Zip archive data"} result]
+      set file_invalid [catch {exec file -b $filename | grep -q "Zip archive data"} result]
       if {$file_invalid == 0} {
         # the file seems to be a zip archive containing data
-        set file_invalid [catch {exec unzip -q -o -d $TMPDIR [lindex $firmware_file 0] 2>&1} result]
+        set file_invalid [catch {exec /usr/bin/unzip -q -o -d $TMPDIR $filename 2>/dev/null} result]
+        file delete -force -- $filename
       }
     }
 
     # check for .img
     if {$file_invalid != 0} {
-      set file_invalid [catch {exec file -b [lindex $firmware_file 0] | grep -q "DOS/MBR boot sector"} result]
+      set file_invalid [catch {exec file -b $filename | grep -q "DOS/MBR boot sector"} result]
       if {$file_invalid == 0} {
         # the file seems to be a full-fledged SD card image with MBR boot sector, etc. so lets
         # check if we have exactly 3 partitions
-        set file_invalid [catch {exec parted -sm [lindex $firmware_file 0] 2>&1 | tail -1 | egrep -q "3:.*:ext4:"} result]
+        set file_invalid [catch {exec /usr/sbin/parted -sm $filename print 2>/dev/null | tail -1 | egrep -q "3:.*:ext4:"} result]
         if {$file_invalid == 0} {
-          file rename -force -- [lindex $firmware_file 0] "$TMPDIR/new_firmware.img"
+          file rename -force -- $filename "$TMPDIR/new_firmware.img"
         }
       }
     }
 
-    # check for .ext4
+    # check for ext4 rootfs or userfs filesystem
     if {$file_invalid != 0} {
-      set file_invalid [catch {exec file -b [lindex $firmware_file 0] | egrep -q "ext4 filesystem.*rootfs"} result]
+      set file_invalid [catch {exec file -b $filename | egrep -q "ext4 filesystem.*(rootfs|userfs)"} result]
       if {$file_invalid == 0} {
         # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
-        set file_invalid [catch {exec e2fsck -nf [lindex $firmware_file 0] 2>&1} result]
+        set file_invalid [catch {exec /sbin/e2fsck -nf $filename 2>/dev/null} result]
         if {$file_invalid == 0} {
-          file rename -force -- [lindex $firmware_file 0] "$TMPDIR/new_firmware.ext4"
+          file rename -force -- $filename "$TMPDIR/new_firmware.ext4"
+        }
+      }
+    }
+
+    ######
+    # now we have unarchived everyting to TMPDIR, so lets check if it is valid
+    if {$file_invalid == 0} {
+      if {[file exists "$TMPDIR/new_firmware.ext4"] != 1 && [file exists "$TMPDIR/new_firmware.img"] != 1} {
+        # check if there are checksum files in TMPDIR and if so check the checksum first
+
+        # check for sha256 checksums
+        foreach chk_file [glob -nocomplain "$TMPDIR/*.sha256"] {
+          set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/sha256sum -sc $chk_file"} result]
+          if {$file_invalid != 0} {
+            break
+          }
+        }
+
+        # check for md5 checksums
+        foreach chk_file [glob -nocomplain "$TMPDIR/*.md5"] {
+          set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/md5sum -sc $chk_file"} result]
+          if {$file_invalid != 0} {
+            break
+          }
+        }
+
+        # everything seems to be fine with the uploaded file so lets
+        # do the final check
+        if {$file_invalid == 0} {
+          # if no *.img exists we have to check for "update_script"
+          if {[glob -nocomplain "$TMPDIR/*.img"] == ""} {
+            if {[file exists "$TMPDIR/update_script"] != 1} {
+              set file_invalid 1
+            }
+          }
         }
       }
     }
@@ -806,11 +838,12 @@ proc action_firmware_upload {} {
     # test if the above checks were successfull or not
     #
     if {$file_invalid == 0} {
-      #set action "firmware_update_confirm"
+      catch { exec ln -sf $TMPDIR /usr/local/tmp/new_firmware }
       set action "acceptEula"
     } else {
-        file delete -force -- [lindex $firmware_file 0]
-        set action "firmware_update_invalid"
+      file delete -force -- $filename
+      file delete -force -- $filename-dir
+      set action "firmware_update_invalid"
     }
     cgi_javascript {
         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
@@ -995,12 +1028,9 @@ proc action_update_start {} {
     catch { exec lcdtool {Saving     Data...    } }
     rega system.Save()
     catch { exec lcdtool {Reboot...             } }
-
-    if {[isOldCCU]} {
-        exec /sbin/init -q
-    } else {
-        exec /bin/kill -SIGQUIT 1
-    }
+    exec touch /usr/local/.recoveryMode
+    exec sleep 5
+    exec /sbin/reboot
 }
 
 proc action_reboot {} {
@@ -1092,15 +1122,17 @@ proc action_download_logfile {} {
 cgi_eval {
     #cgi_debug -on
     cgi_input
-    catch {
-        import debug
-        cgi_debug -on
-    }
+    #catch {
+    #    import debug
+    #    cgi_debug -on
+    #}
 
     set action "put_page"
     set downloadOnly 0
+    set filename ""
     catch {import action}
     catch {import downloadOnly}
+    catch {import filename}
 
     if {[session_requestisvalid 8] > 0} then action_$action
 }

@@ -12,10 +12,10 @@ start() {
 
   # start is finished lets set the LEDs
   if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
-    echo "heartbeat" >${HM_LED_GREEN}/trigger
+    echo "mmc0" >${HM_LED_GREEN}/trigger
   fi
   if [[ -f "${HM_LED_RED}/trigger" ]]; then
-    echo "mmc0" >${HM_LED_RED}/trigger
+    echo "heartbeat" >${HM_LED_RED}/trigger
   fi
   if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
     echo "none" >${HM_LED_YELLOW}/trigger

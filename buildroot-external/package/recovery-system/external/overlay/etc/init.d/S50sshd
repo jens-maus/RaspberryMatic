@@ -9,23 +9,12 @@
 umask 077
 
 start() {
-	# Only run this if ssh is explicitly enabled
-	[ -f /etc/config/sshEnabled ] || exit 0
 
 	# Create any missing keys
-	if [[ ! -f /usr/local/etc/ssh_host_dsa_key ]] ||
-	   [[ ! -f /usr/local/etc/ssh_host_ecdsa_key ]] ||
-	   [[ ! -f /usr/local/etc/ssh_host_ed25519_key ]] ||
-	   [[ ! -f /usr/local/etc/ssh_host_rsa_key ]]; then
-		mkdir -p /tmp/etc/ssh
-		cp -a /usr/local/etc/ssh_host_*_key* /tmp/etc/ssh/
-		/usr/bin/ssh-keygen -A -f /tmp
-		cp -a /tmp/etc/ssh/* /usr/local/etc/
-		rm -rf /tmp/etc/ssh
-	fi
+	/usr/bin/ssh-keygen -A
 
 	# fix permissions
-	chmod 600 /usr/local/etc/ssh_host_*_key
+	chmod 600 /etc/ssh/ssh_host_*_key
 
 	printf "Starting sshd: "
 	/usr/sbin/sshd

@@ -3,15 +3,11 @@
 # cgi.tcl - routines for writing CGI scripts in Tcl
 # Author: Don Libes <libes@nist.gov>, January '95
 #
-# Minor changes by Lars Reemts, eQ-3
-#
 # These routines implement the code described in the paper
 # "Writing CGI scripts in Tcl" which appeared in the Tcl '96 conference.
 # Please read the paper before using this code.  The paper is:
 # http://expect.nist.gov/doc/cgi.pdf
 #
-# F. Werner:
-#  add "charset=iso-8859-1" to header Content-Type
 ##################################################
 
 ##################################################
@@ -27,12 +23,10 @@ proc cgi_http_head {args} {
 
     if {0 == [llength $args]} {
 	cgi_content_type
-    cgi_puts "Expires: Sun, 06 Nov 1994 00:00:00 GMT"
     } else {
 	if {[catch {uplevel 1 [lindex $args 0]} errMsg]} {
 	    set savedInfo $errorInfo
 	    cgi_content_type
-        cgi_puts "Expires: Sun, 06 Nov 1994 00:00:00 GMT"
 	}
     }
     cgi_puts ""
@@ -310,7 +304,7 @@ proc cgi_eval {cmd} {
 			    catch {cgi_mail_add "HTTP_HOST: $env(HTTP_HOST)"}
 			    catch {cgi_mail_add "REMOTE_HOST: $env(REMOTE_HOST)"}
 			    catch {cgi_mail_add "REMOTE_ADDR: $env(REMOTE_ADDR)"}
-			    cgi_mail_add "cgi.tcl version: 1.8.0"
+			    cgi_mail_add "cgi.tcl version: 1.10.0"
 			    cgi_mail_add "input:"
 			    catch {cgi_mail_add $_cgi(input)}
 			    cgi_mail_add "cookie:"
@@ -472,9 +466,8 @@ proc cgi_iframe {args} {
     foreach a [lrange $args 1 end] {
         append buf " $a"
     }
-    return "$buf ></iframe>"
+    return "$buf />"
 }
-
 
 # generate an image reference (<img ...>)
 # first arg is image url
@@ -497,7 +490,7 @@ proc cgi_img {args} {
 
 # names an anchor so that it can be linked to
 proc cgi_anchor_name {name} {
-    return "<a name=\"$name\"></a>"
+    return "<a name=\"$name\"/>"
 }
 
 proc cgi_base {args} {
@@ -513,7 +506,7 @@ proc cgi_base {args} {
 	    cgi_put " $a"
 	}
     }
-    cgi_puts " / >"
+    cgi_puts " />"
 }
 
 ##################################################
@@ -531,7 +524,8 @@ if {[info tclversion] >= 8.2} {
 	regsub -all -nocase {%([a-f0-9][a-f0-9])} $buf {\\u00\1} buf
 
 	# process \u unicode mapped chars
-	encoding convertfrom [subst -novar -nocommand $buf]
+	encoding convertfrom $::_cgi(queryencoding) \
+		 [subst -novar -nocommand $buf]
     }
 } elseif {[info tclversion] >= 8.1} {
     proc cgi_unquote_input buf {
@@ -982,7 +976,7 @@ proc cgi_title {args} {
 # from cgi_http_head.
 proc cgi_http_equiv {type contents} {
     _cgi_http_head_implicit
-    cgi_puts "<meta http-equiv=\"$type\" content=[cgi_dquote_html $contents]></meta>"
+    cgi_puts "<meta http-equiv=\"$type\" content=[cgi_dquote_html $contents]/>"
 }
 
 # Do whatever you want with meta tags.
@@ -1010,7 +1004,7 @@ proc cgi_relationship {rel href args} {
 	    cgi_put " $a"
 	}
     }
-    cgi_puts "></link>"
+    cgi_puts "/>"
 }
 
 proc cgi_name {args} {
@@ -1114,7 +1108,7 @@ proc cgi_javascript {args} {
 
 proc cgi_noscript {args} {
     cgi_puts "<noscript[_cgi_lrange $args 0 [expr [llength $args]-2]]>"
-    _cgi_close_proc_push {puts "</noscript>"}
+    _cgi_close_proc_push {cgi_puts "</noscript>"}
 
     uplevel 1 [lindex $args end]
 
@@ -1135,7 +1129,7 @@ proc cgi_param {nameval} {
     if {$q != "="} {
 	set value ""
     }
-    cgi_puts "<param name=\"$name\" value=[cgi_dquote_html $value]></param>"
+    cgi_puts "<param name=\"$name\" value=[cgi_dquote_html $value]/>"
 }
 
 # record any proc's that must be called prior to displaying an error
@@ -1254,7 +1248,7 @@ proc cgi_isindex {args} {
 	    cgi_put " $a"
 	}
     }
-    cgi_put "></isindex>"
+    cgi_put "/>"
 }
 
 ##################################################
@@ -1294,15 +1288,28 @@ proc cgi_input {{fakeinput {}} {fakecookie {}}} {
 	} else {
 	    set length $env(CONTENT_LENGTH)
 	    if {0!=[string compare $length "-1"]} {
-        if { $length } {
-		    set input [read stdin $env(CONTENT_LENGTH)]		
-        } else {
-            set input ""
-        }
+		set input [read stdin $env(CONTENT_LENGTH)]		
 	    } else {
 		set _cgi(client_error) 1
 		error "Your browser generated a content-length of -1 during a POST method."
 	    }
+	    if {[info tclversion] >= 8.1} {
+                # guess query encoding from Content-Type header
+                if {[info exists env(CONTENT_TYPE)] \
+                    && [regexp -nocase -- {charset=([^[:space:]]+)} $env(CONTENT_TYPE) m cs]} {
+                    if {[regexp -nocase -- {iso-?8859-([[:digit:]]+)} $cs m d]} {
+                        set _cgi(queryencoding) "iso8859-$d"
+                    } elseif {[regexp -nocase -- {windows-([[:digit:]]+)} $cs m d]} {
+                        set _cgi(queryencoding) "cp$d"
+                    } elseif {0==[string compare -nocase $cs "utf-8"]} {
+                        set _cgi(queryencoding) "utf-8"
+                    } elseif {0==[string compare -nocase $cs "utf-16"]} {
+                        set _cgi(queryencoding) "unicode"
+                    }
+                } else {
+                    set _cgi(queryencoding) [encoding system]
+                }
+            }
 	}
 	# save input for possible diagnostics later
 	set _cgi(input) $input
@@ -1345,30 +1352,6 @@ proc cgi_input {{fakeinput {}} {fakecookie {}}} {
     }
 }
 
-set _cgi_read_line_buffer ""
-proc _cgi_read_line {fin bufvar crlfvar} {
-    global _cgi_read_line_buffer
-    upvar $bufvar buffer
-    upvar $crlfvar crlf
-    set line_end [string first "\r\n" $_cgi_read_line_buffer]
-    while {($line_end < 0 ) && ![eof $fin]} {
-        append _cgi_read_line_buffer [read $fin 65536]
-        set line_end [string first "\r\n" $_cgi_read_line_buffer]
-    }
-    if {$line_end >= 0} { 
-        incr line_end -1
-        set buffer [string range $_cgi_read_line_buffer 0 $line_end]
-        set crlf "\r\n"
-        set _cgi_read_line_buffer [string range $_cgi_read_line_buffer [expr $line_end + 3] end]
-        return 1
-    } else {
-        set buffer $_cgi_read_line_buffer
-        set crlf ""
-        set _cgi_read_line_buffer ""
-        return [expr ([string length $buffer] > 0)]
-    }
-}
-
 proc _cgi_input_multipart {fin} {
     global env _cgi _cgi_uservar _cgi_userfile
 
@@ -1379,120 +1362,7 @@ proc _cgi_input_multipart {fin} {
 	# can hang and we won't get to the termination code
 	set dbg_fout [open $dbg_filename w]
 	set _cgi(input) $dbg_filename
-	catch {fconfigure $dbg_fout -translation binary -encoding binary}
-    }
-
-    # figure out boundary
-    if {0==[regexp boundary=(.*) $env(CONTENT_TYPE) dummy boundary]} {
-	set _cgi(client_error) 1
-	error "Your browser failed to generate a \"boundary=\" line in a multipart response (CONTENT_TYPE: $env(CONTENT_TYPE)).  Please upgrade (or fix) your browser."
-    }
-
-    set boundary "--$boundary"
-    set boundary_length [string length $boundary]
-    
-    # don't corrupt or modify uploads yet allow Tcl 7.4 to work
-    catch {fconfigure $fin -translation binary -encoding binary}
-
-    # get first boundary line
-    gets $fin buf
-    if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
-
-    set filecount 0
-    set crlf ""
-    while {1} {
-	# process Content-Disposition:
-	if { ! [_cgi_read_line $fin buf crlf] } break
-	if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
-	catch {unset filename}
-	catch {unset varname}
-	foreach b $buf {
-	    regexp {^name="(.*)"} $b dummy varname
-	}
-	if {0==[info exists varname]} {
-	    set _cgi(client_error) 1
-	    error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
-	}	    
-	# Lame-o encoding (on Netscape at least) doesn't escape field
-	# delimiters (like quotes)!!  Since all we've ever seen is filename=
-	# at end of line, assuming nothing follows.  Sigh.
-	regexp {filename="(.*)"} $buf dummy filename
-
-	# Skip remaining headers until blank line.
-	# Content-Type: can appear here.
-	set conttype ""
-	while {1} {
-            if { ! [_cgi_read_line $fin buf crlf] } break
-	    if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
-	    if {0==[string compare $buf ""]} break
-	    regexp -nocase "^Content-Type:\[ \t]+(.*)\r\n" $buf$crlf x conttype
-	}
-
-	if {[info exists filename]} {
-            if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>Reading file $filename"; flush $dbg_fout}
-	    # read the part into a file
-	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
-	    set fout [open $foutname w]
-	    # "catch" permits this to work with Tcl 7.4
-	    catch {fconfigure $fout -translation binary -encoding binary}
-	    _cgi_set_uservar $varname [list $foutname $filename $conttype]
-	    set _cgi_userfile($varname) [list $foutname $filename $conttype]
-            
-            set leftover ""
-            while { 1 } {
-                if { ! [_cgi_read_line $fin buf crlf] } {
-                    set _cgi(client_error) 1
-                    error "Unexpected end of input data."
-                }
-		if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
-                if {[string compare -length $boundary_length $buf $boundary] == 0} {
-                    if {[string first "--" $buf $boundary_length]>=0} {set eof 1}
-                    break;
-                }
-                puts -nonewline $fout $leftover$buf
-                set leftover $crlf
-            }
-            if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>Read file $filename"; flush $dbg_fout}
-	    close $fout
-	    unset fout
-        
-	} else {
-	    # read the part into a variable
-            if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>Reading variable $varname"; flush $dbg_fout}
-	    set val ""
-            set leftover ""
-            while { 1 } {
-                if { ! [_cgi_read_line $fin buf crlf] } {
-                    set _cgi(client_error) 1
-                    error "Unexpected end of input data."
-                }
-		if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
-                if {[string compare -length $boundary_length $buf $boundary] == 0} {
-                    if {[string first "--" $buf $boundary_length]>=0} {set eof 1}
-                    break;
-                }
-                append val $leftover$buf
-                set leftover $crlf
-	    }
-	    _cgi_set_uservar $varname $val
-            if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>$varname=$val"; flush $dbg_fout}
-	}
-        if {[info exists eof]} break
-    }
-    if {[info exists dbg_fout]} {close $dbg_fout}
-}
-
-proc _cgi_input_multipart_buggy {fin} {
-    global env _cgi _cgi_uservar _cgi_userfile
-
-    cgi_debug -noprint {
-	# save file for debugging purposes
-	set dbg_filename [file join $_cgi(tmpdir) CGIdbg.[pid]]
-	# explicitly flush all writes to fout, because sometimes the writer
-	# can hang and we won't get to the termination code
-	set dbg_fout [open $dbg_filename w]
-	set _cgi(input) $dbg_filename
-	catch {fconfigure $dbg_fout -translation binary -encoding binary}
+	catch {fconfigure $dbg_fout -translation binary}
     }
 
     # figure out boundary
@@ -1512,24 +1382,28 @@ proc _cgi_input_multipart_buggy {fin} {
     set boundary --$boundary
 
     # don't corrupt or modify uploads yet allow Tcl 7.4 to work
-    catch {fconfigure $fin -translation binary -encoding binary}
+    catch {fconfigure $fin -translation binary}
 
     # get first boundary line
     gets $fin buf
     if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
 
-    set filecount 0
+    set _cgi(file,filecount) 0
+
     while {1} {
 	# process Content-Disposition:
 	if {-1 == [gets $fin buf]} break
 	if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
 	catch {unset filename}
-	foreach b $buf {
-	    regexp {^name="(.*)"} $b dummy varname
-	}
+	regexp {name="([^"]*)"} $buf dummy varname
 	if {0==[info exists varname]} {
-	    set _cgi(client_error) 1
-	    error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
+	    # lynx violates spec and doesn't use quotes, so try again but
+	    # assume space is delimiter
+	    regexp {name=([^ ]*)} $buf dummy varname
+	    if {0==[info exists varname]} {
+		set _cgi(client_error) 1
+		error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
+	    }
 	}	    
 	# Lame-o encoding (on Netscape at least) doesn't escape field
 	# delimiters (like quotes)!!  Since all we've ever seen is filename=
@@ -1547,13 +1421,18 @@ proc _cgi_input_multipart_buggy {fin} {
 	}
 
 	if {[info exists filename]} {
+	    if {$_cgi(file,filecount) > $_cgi(file,filelimit)} {
+		error "Too many files submitted.  Max files allowed: $_cgi(file,filelimit)"
+	    }
+
 	    # read the part into a file
-	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
+	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr _cgi(file,filecount)]]
 	    set fout [open $foutname w]
 	    # "catch" permits this to work with Tcl 7.4
-	    catch {fconfigure $fout -translation binary -encoding binary}
+	    catch {fconfigure $fout -translation binary}
 	    _cgi_set_uservar $varname [list $foutname $filename $conttype]
 	    set _cgi_userfile($varname) [list $foutname $filename $conttype]
+
 	    #
 	    # Look for a boundary line preceded by \r\n.
 	    #
@@ -1581,10 +1460,13 @@ proc _cgi_input_multipart_buggy {fin} {
 		    puts -nonewline $fout $leftover$buf
 		    set leftover "\n"
 		}
+ 		if {[file size $foutname] > $_cgi(file,charlimit)} {
+		    error "File size exceeded.  Max file size allowed: $_cgi(file,charlimit)"
+		}
 	    }
+
 	    close $fout
 	    unset fout
-        
 	} else {
 	    # read the part into a variable
 	    set val ""
@@ -1670,7 +1552,8 @@ proc _cgi_input_multipart_binary {fin} {
 	}
     }
 
-    set filecount 0
+    set _cgi(file,filecount) 0
+
     while {1} {
 	# process Content-Disposition:
 	expect {
@@ -1682,9 +1565,7 @@ proc _cgi_input_multipart_binary {fin} {
 	    eof break
 	}
 	catch {unset filename}
-	foreach b $buf {
-	    regexp {^name="(.*)"} $b dummy varname
-	}
+	regexp {name="([^"]*)"} $buf dummy varname
 	if {0==[info exists varname]} {
 	    set _cgi(client_error) 1
 	    error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
@@ -1710,8 +1591,12 @@ proc _cgi_input_multipart_binary {fin} {
 	}
 
 	if {[info exists filename]} {
+	    if {$_cgi(file,filecount) > $_cgi(file,filelimit)} {
+		error "Too many files submitted.  Max files allowed: $_cgi(file,filelimit)"
+	    }
+
 	    # read the part into a file
-	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
+	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr _cgi(file,filecount)]]
 	    spawn -open [open $foutname w]
 	    set fout_sid $spawn_id
 
@@ -1965,6 +1850,23 @@ proc cgi_import_filename {type name} {
     }
 }
 
+# set the urlencoding
+proc cgi_urlencoding {{encoding ""}} {
+    global _cgi 
+    
+    set result [expr {[info exists _cgi(queryencoding)]
+                      ? $_cgi(queryencoding)
+                      : ""}]
+
+    # check if the encoding is available 
+    if {[info tclversion] >= 8.1
+        && [lsearch -exact [encoding names] $encoding] != -1 } {	
+        set _cgi(queryencoding) $encoding
+    }
+
+    return $result
+}
+
 ##################################################
 # button support
 ##################################################
@@ -2086,7 +1988,7 @@ proc cgi_area {args} {
 	    cgi_put " $a"
 	}
     }
-    cgi_put "></area>"
+    cgi_put "/>"
 }
 
 ##################################################
@@ -2180,6 +2082,15 @@ proc cgi_file_button {name args} {
     cgi_put "<input type=file name=\"$name\"[_cgi_list_to_string $args]/>"
 }
 
+# establish a per-file limit for uploads
+
+proc cgi_file_limit {files chars} {
+    global _cgi
+
+    set _cgi(file,filelimit) $files
+    set _cgi(file,charlimit) $chars
+}
+
 ##################################################
 # select support
 ##################################################
@@ -2222,7 +2133,7 @@ proc cgi_option {o args} {
     }
     if {[info exists selected_if_equal]} {
 	if {0 == [string compare $selected_if_equal $value]} {
-	    cgi_put " selected=\"selected\""
+	    cgi_put " selected"
 	}
     }
     cgi_puts ">[cgi_quote_html $o]</option>"
@@ -2249,7 +2160,7 @@ proc cgi_embed {src wh args} {
 	    }
 	}
     }
-    cgi_put "></embed>"
+    cgi_put "/>"
 }
 
 ##################################################
@@ -2523,7 +2434,7 @@ proc cgi_td {args} {
 ##################################################
 
 proc cgi_stylesheet {href} {
-    puts "<link rel=stylesheet href=\"$href\" type=\"text/css\"></link>"
+    puts "<link rel=stylesheet href=\"$href\" type=\"text/css\"/>"
 }
 
 proc cgi_span {args} {
@@ -2582,7 +2493,7 @@ proc cgi_frame {namesrc args} {
 	    cgi_put " $a"
 	}
     }
-    cgi_puts "></frame>"
+    cgi_puts "/>"
 }
 
 proc cgi_noframes {args} {
@@ -2670,28 +2581,45 @@ proc cgi_puts {args} {
 
 # User-defined procedure to generate DOCTYPE declaration
 proc cgi_doctype {} {
-	#Zeile hinzugefügt: 22.02.2007, Badberg, ELV
-	#puts "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"
-
-  # AG, eQ-3, 29.01.2013
-	puts "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"	\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
-
-	#quirks puts "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">"
+    # AG, eQ-3, 29.01.2013
+    puts "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
 }
 
 ##################################################
 # do some initialization
 ##################################################
 
-cgi_name ""
-cgi_root ""
-cgi_body_args ""
+# cgi_init initializes to a known state.
 
-# email addr of person responsible for this service
-cgi_admin_mail_addr "root"	;# you should override this!
+proc cgi_init {} {
+    global _cgi
+    unset _cgi
 
-# most services won't have an actual email addr
-cgi_mail_addr "CGI script - do not reply"
+    # set explicitly for speed
+    set _cgi(debug) -off
+    set _cgi(buffer_nl) "\n"
+
+    cgi_name ""
+    cgi_root ""
+    cgi_body_args ""
+    cgi_file_limit 10 100000000
+
+    if {[info tclversion] >= 8.1} {
+	# set initial urlencoding
+	if { [lsearch -exact [encoding names] "utf-8"] != -1} {
+	    cgi_urlencoding "utf-8"
+	} else {
+	    cgi_urlencoding [encoding system]
+	}
+    }
+
+    # email addr of person responsible for this service
+    cgi_admin_mail_addr "root"	;# you should override this!
+
+    # most services won't have an actual email addr
+    cgi_mail_addr "CGI script - do not reply"
+}
+cgi_init
 
 # deduce tmp directory
 switch $tcl_platform(platform) {
@@ -2709,4 +2637,4 @@ switch $tcl_platform(platform) {
 # regexp for matching attr=val
 set _cgi(attr,regexp) "^(\[^=]*)=(\[^\"].*)"
 
-package provide cgi 1.8.0
+package provide cgi 1.10.0

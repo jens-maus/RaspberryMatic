@@ -1,6 +1,6 @@
 #!/bin/sh
 
-serial=`cat /sys/module/plat_eq3ccu2/parameters/board_serial`
+serial=`ip addr show eth0 | grep ether | awk '{ print $2 }'`
 ip=`ifconfig | grep -A 1 'eth0' | tail -1 |cut -d ':' -f 2 |cut -d ' ' -f 1`
 hostname=`cat /etc/config/netconfig | grep 'HOSTNAME'| cut -d '=' -f 2`
 

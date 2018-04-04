@@ -31,3 +31,6 @@ endmenu
 menu "Java Runtime Environment"
   source "$BR2_EXTERNAL_EQ3_PATH/package/java-azul/Config.in"
 endmenu
+
+# External packages
+source "$BR2_EXTERNAL_EQ3_PATH/Config.ext.in"

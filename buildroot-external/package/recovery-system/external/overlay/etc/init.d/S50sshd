@@ -3,12 +3,23 @@
 # sshd        Starts sshd.
 #
 
+# Only start ssh if recoveryfs-sshpwd exists
+[ -f /bootfs/recoveryfs-sshpwd ] || exit 0
+
 # Make sure the ssh-keygen progam exists
 [ -f /usr/bin/ssh-keygen ] || exit 0
 
 umask 077
 
 start() {
+
+  # set the root password to the
+  # password specified in /bootfs/recoveryfs-sshpwd
+  PASSWD=$(cat /bootfs/recoveryfs-sshpwd)
+  /usr/bin/passwd root >/dev/null 2>&1 << EOF
+${PASSWD}
+${PASSWD}
+EOF
 
 	# Create any missing keys
 	/usr/bin/ssh-keygen -A

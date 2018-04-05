@@ -1,29 +1,27 @@
 #!/bin/sh
 
-USERFS_MTDCHAR=/dev/mtd6
-
 echo -ne "Content-Type: text/plain\r\n\r\n"
-echo -ne "Factory reset..."
+echo -ne "Setting Factory Reset Mode... "
 
-umount /usr/local
-if [ $? -ne 0 ] 
-then
-	echo "Error (umount)\r\n"
+mount -o rw,remount /userfs
+if [ $? -ne 0 ]; then
+	echo "Error (rw umount)\r\n"
 	exit 1
 fi
 
-#mount -t ubifs ubi1:user /usr/local
-if [ $? -ne 0 ]
-then
-	echo "Error (mount)\r\n"
+touch /usr/local/.doFactoryReset
+if [ $? -ne 0 ]; then
+	echo "Error (touch)\r\n"
 	exit 1
 fi
 
-#rm -rf /usr/local/*
-ubidetach -p $USERFS_MTDCHAR
-ubiformat $USERFS_MTDCHAR -y
-ubiattach -p $USERFS_MTDCHAR
-ubimkvol /dev/ubi1 -N user -m
-sleep 5
+mount -o ro,remount /userfs
+if [ $? -ne 0 ]; then
+	echo "Error (ro umount)\r\n"
+	exit 1
+fi
 
 echo -ne "done.\r\n"
+
+echo -ne "Rebooting...\r\n"
+/sbin/reboot

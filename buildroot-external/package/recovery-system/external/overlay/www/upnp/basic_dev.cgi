@@ -1,17 +1,18 @@
 #!/bin/sh
 
-serial=`ip addr show eth0 | grep ether | awk '{ print $2 }'`
-ip=`ifconfig | grep -A 1 'eth0' | tail -1 |cut -d ':' -f 2 |cut -d ' ' -f 1`
-hostname=`cat /etc/config/netconfig | grep 'HOSTNAME'| cut -d '=' -f 2`
+serial=$(ip addr show eth0 | grep ether | awk '{ print $2 }')
+ip=$(ifconfig | grep -A 1 'eth0' | tail -1 | cut -d ':' -f 2 | cut -d ' ' -f 1)
+hostname=$(hostname)
 
-echo Content-type: text/html
-echo Pragma-directive: no-cache
-echo Cache-directive: no-cache
-echo Cache-control: no-cache
-echo Pragma: no-cache
-echo Expires: 0
-/bin/cat << EOM  
+echo -ne "Content-type: text/html\r\n"
+echo -ne "Pragma-directive: no-cache\r\n"
+echo -ne "Cache-directive: no-cache\r\n"
+echo -ne "Cache-control: no-cache\r\n"
+echo -ne "Pragma: no-cache\r\n"
+echo -ne "Expires: 0\r\n"
+echo -ne "\r\n"
 
+/bin/cat << EOM
 <?xml version="1.0"?>
 <root xmlns="urn:schemas-upnp-org:device-1-0">
 <specVersion>
@@ -39,5 +40,5 @@ echo Expires: 0
 </service>
 </serviceList>
 </device>
-"</root>
+</root>
 EOM

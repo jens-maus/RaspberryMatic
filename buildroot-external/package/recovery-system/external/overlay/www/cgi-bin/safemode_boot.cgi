@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo -ne "Content-Type: text/plain\r\n\r\n"
-echo -ne "Setting network configuration to factory defaults..."
+echo -ne "Setting safemode boot..."
 
 mount -o rw,remount /userfs
 if [ $? -ne 0 ]; then
@@ -9,9 +9,9 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-rm -rf /usr/local/etc/config/netconfig
+touch /usr/local/etc/config/safemode
 if [ $? -ne 0 ]; then
-	echo "Error (rm)\r\n"
+	echo "Error (touch)\r\n"
 	exit 1
 fi
 

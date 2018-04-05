@@ -1,7 +1,7 @@
 <html>
   <head>
     <meta http-equiv="expires" content="0">
-	<title>HomeMatic CCU Rescue</title>
+	<title>HomeMatic CCU Recovery System</title>
 	<style type="text/css">
 		body { 
 				background-color:#192c6e;
@@ -54,13 +54,13 @@
       <div id="webuilaoder">
         <div id="webuiloader_icon"></div>
 			<p><img style="float: left;" src="img/homematic_logo_small.png"/></p>
-			<h1>CCU Recovery</h1>
+			<h1>CCU Recovery System</h1>
 			<hr noshade size="4" align="left" color="white">
       </div>
     </div>
 	<p></p>
 
-	<form name="frmUpload" action=cgi-bin/fwupdate.cgi method=post enctype=multipart/form-data>
+	<form name="frmUpload" action="cgi-bin/firmware_upload.cgi" method="post" enctype="multipart/form-data">
 		<p>Update File:<br>
 			<div id='wrapper_'>
 				<input type="file" name="Datei" >
@@ -74,6 +74,10 @@
 	<input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/factory_reset.cgi';" value="Factory reset">
 	
 	<input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/network_reset.cgi';" value="Reset network settings">
+
+	<input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/safemode_boot.cgi';" value="Boot in Safe Mode">
+
+	<input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/create_backup.cgi';" value="Create Backup">
     
 	<hr noshade size="4" align="left" color="white">
   </body>

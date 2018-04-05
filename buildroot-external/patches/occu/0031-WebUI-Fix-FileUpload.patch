@@ -415,8 +415,8 @@
 +echo "   parent.top.dlgPopup.LoadFromFile(url, 'action=${action}&filename=${filename}');"
 +echo "   // End hiding -->"
 +echo "  </script>"
-+echo " <head>"
-+echo "<html>"
++echo " </head>"
++echo "</html>"
 --- occu/WebUI/www/tcl/extern/cgi.tcl.orig
 +++ occu/WebUI/www/tcl/extern/cgi.tcl
 @@ -3,15 +3,11 @@

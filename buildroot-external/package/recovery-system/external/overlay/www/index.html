@@ -38,7 +38,7 @@
         /* For Internet Explorer 8 */
         -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr= #d0d0d0, endColorstr=#ffffff)";
 
-        width: 165px;
+        width: 180px;
         text-align: center;
         border: solid 1px;
         cursor: pointer;
@@ -59,24 +59,45 @@
         <hr noshade size="4" align="left" color="white">
       </div>
     </div>
+
     <p></p>
-    <form name="frmUpload" action="cgi-bin/firmware_upload.cgi" method="post" enctype="multipart/form-data">
-      <p>Update File:<br>
-        <div id='wrapper_'>
-          <input type="file" name="Datei" >
-        </div>
-        <input class="NavButton" type="submit" value="Start Recovery" >
-      </p>
-    </form>
+
+    <table>
+      <tr>
+        <td>
+          <form name="frmUpload" action="cgi-bin/firmware_upload.cgi" method="post" enctype="multipart/form-data">
+            <p>Recovery/Update File<br/>
+              <div id='wrapper_'>
+                <input type="file" name="Datei" >
+              </div>
+              <br/>
+              <input class="NavButton" type="submit" value="Start Recovery/Update" >
+            </p>
+          </form>
+        </td>
+        <td>
+          <form name="bakUpload" action="cgi-bin/restore_backup.cgi" method="post" enctype="multipart/form-data">
+            <p>Config Restore and Backup<br/>
+              <div id='wrapper_'>
+                <input type="file" name="Datei" >
+              </div>
+              <br/>
+              <input class="NavButton" type="submit" value="Restore Config" >
+              <input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/create_backup.cgi';" value="Backup Config">
+            </p>
+          </form>
+        </td>
+      </tr>
+    </table>
 
     <hr noshade size="1" align="left" color="white">
-    <input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/factory_reset.cgi';" value="Factory reset">
+    <input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/factory_reset.cgi';" value="Factory Reset">
 
-    <input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/network_reset.cgi';" value="Reset network settings">
+    <input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/network_reset.cgi';" value="Reset Network Settings">
 
-    <input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/safemode_boot.cgi';" value="Boot in Safe Mode">
+    <input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/safemode_boot.cgi';" value="Safe Mode Reboot">
 
-    <input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/create_backup.cgi';" value="Create Backup">
+    <input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/normal_boot.cgi';" value="Normal Reboot">
 
     <hr noshade size="4" align="left" color="white">
   </body>

@@ -22,7 +22,7 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-echo "done."
+echo "done.<br>"
 
 echo "[2/2] Rebooting..."
 /sbin/reboot

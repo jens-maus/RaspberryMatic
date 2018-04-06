@@ -1,7 +1,8 @@
 #!/bin/sh
 
-echo -ne "Content-Type: text/plain\r\n\r\n"
-echo -ne "Receiving Uploaded File.. "
+echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
+
+echo -ne "[1/2] Processing uploaded data... "
 
 # fake read boundary+disposition, etc.
 read boundary
@@ -18,20 +19,21 @@ c=${#ctype}
 # 6 + 2 newlines == 10 junk bytes
 a=$((a*2+b+c+d+10))
 
-# extract all params from QUERY_STRING
-eval $(echo ${QUERY_STRING//&/;})
-
 # write out the data
 SIZE=$((HTTP_CONTENT_LENGTH-a))
 filename=$(mktemp -p /usr/local/tmp)
 head -c $SIZE >${filename}
-
-echo -ne "$(stat -c%s ${filename}) bytes received.\r\n"
-
-echo -ne "Calculating SHA256 checksum: "
-CHKSUM=$(/usr/bin/sha256sum ${filename})
 if [ $? -ne 0 ]; then
-  echo -ne "ERROR (sha256sum)\r\n"
+  echo "ERROR (head)"
   exit 1
 fi
-echo -ne "$(echo ${CHKSUM} | awk '{ print $1 }')\r\n"
+
+echo "$(stat -c%s ${filename}) bytes received.<br>"
+
+echo -ne "[2/2] Calculating SHA256 checksum: "
+CHKSUM=$(/usr/bin/sha256sum ${filename})
+if [ $? -ne 0 ]; then
+  echo "ERROR (sha256sum)"
+  exit 1
+fi
+echo "$(echo ${CHKSUM} | awk '{ print $1 }')<br>"

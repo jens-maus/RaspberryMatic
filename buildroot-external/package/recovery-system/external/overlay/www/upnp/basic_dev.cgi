@@ -4,7 +4,7 @@ serial=$(ip addr show eth0 | grep ether | awk '{ print $2 }')
 ip=$(ifconfig | grep -A 1 'eth0' | tail -1 | cut -d ':' -f 2 | cut -d ' ' -f 1)
 hostname=$(hostname)
 
-echo -ne "Content-type: text/html\r\n"
+echo -ne "Content-type: text/html; charset=iso-8559-1\r\n"
 echo -ne "Pragma-directive: no-cache\r\n"
 echo -ne "Cache-directive: no-cache\r\n"
 echo -ne "Cache-control: no-cache\r\n"

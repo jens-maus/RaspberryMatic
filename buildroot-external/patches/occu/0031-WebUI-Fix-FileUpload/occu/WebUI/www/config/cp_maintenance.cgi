@@ -258,7 +258,7 @@ proc action_firmware_update_go {} {
 
 proc action_firmware_update_cancel {} {
   global env filename
-  catch { exec /bin/sh -c "rm -rf `readlink /usr/local/tmp/new_firmware` /usr/local/tmp/new_firmware" }
+  catch { exec /bin/sh -c "rm -rf `readlink /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
   cgi_javascript {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
@@ -838,7 +838,7 @@ proc action_firmware_upload {} {
     # test if the above checks were successfull or not
     #
     if {$file_invalid == 0} {
-      catch { exec ln -sf $TMPDIR /usr/local/tmp/new_firmware }
+      catch { exec ln -sf $TMPDIR /usr/local/.firmwareUpdate }
       set action "acceptEula"
     } else {
       file delete -force -- $filename

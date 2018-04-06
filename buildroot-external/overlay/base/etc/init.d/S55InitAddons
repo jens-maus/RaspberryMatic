@@ -9,16 +9,17 @@ start() {
   # skip this startup in LAN Gateway mode
   [[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
-  echo -n "Initialize Third-Party Addons: "
+  echo -n "Initializing Third-Party Addons: "
 
   if [[ ! -e /etc/config/safemode ]]; then
 
     # start third-party addons one after another
     /bin/run-parts -a init /etc/config/rc.d >/dev/null 2>&1
 
+    echo "OK"
+  else
+    echo "skipping (safemode)"
   fi
-
-  echo "OK"
 }
 
 case "$1" in

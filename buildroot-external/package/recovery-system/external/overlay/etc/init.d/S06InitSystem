@@ -53,6 +53,14 @@ init_system() {
   if [[ "${HM_HOST}" != "tinkerboard" ]]; then
     modprobe bcm2835_wdt nowayout=1 heartbeat=15
   fi
+
+  # make sure we remove the .recoveryMode file
+  # now so that upon hard reset the system cancels pending changes
+  if [[ -f /usr/local/.recoveryMode ]]; then
+    mount -o rw,remount /userfs
+    rm -rf /usr/local/.recoveryMode
+    mount -o ro,remount /userfs
+  fi
 }
 
 start() {

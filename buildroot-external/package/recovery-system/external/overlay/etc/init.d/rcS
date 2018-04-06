@@ -1,0 +1,43 @@
+#!/bin/sh
+#
+# Start all init scripts in /etc/init.d
+# executing them in numerical order.
+
+for i in /etc/init.d/S??* ;do
+
+  # Ignore dangling symlinks (if any).
+  [[ ! -f "${i}" ]] && continue
+
+  # put the psplash progess bar to the
+  # corresponding level
+  name=${i##*/}
+  num=${name:1:2}
+  /usr/bin/psplash-write "MSG Starting ${name:3}..."
+  /usr/bin/psplash-write "PROGRESS $((${num#0}+1))"
+
+  case "${i}" in
+    *.sh)
+      # Source shell script for speed.
+      (
+        trap - INT QUIT TSTP
+        set start
+        . ${i}
+      )
+      ;;
+    *)
+      # No sh extension, so fork subprocess.
+      ${i} start
+    ;;
+  esac
+done
+
+IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
+/usr/bin/psplash-write "PROGRESS 0"
+
+[[ -r /VERSION ]] && . /VERSION
+
+if [[ -z "${IP}" ]]; then
+  /usr/bin/psplash-write "MSG CCU Recovery ${VERSION} -- ERROR: No IP address set"
+else
+  /usr/bin/psplash-write "MSG CCU Recovery ${VERSION} -- http://${IP}/"
+fi

@@ -387,8 +387,43 @@ proc action_put_page {} {
                         table_row {
                             td {width="20"} {}
                             table_data {align="left"} {colspan="2"} {
-                                #puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
-                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic}"
+                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
+                            }
+                        }
+                        table_row {
+                            td {width="20"} {}
+                            table_data {colspan="2"} {
+                                form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
+                                    export action=firmware_upload
+                                    export downloadOnly=$downloadOnly
+                                    file_button firmware_file size=30 maxlength=1000000
+                                }
+                                puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
+                            }
+                        }
+                        table_row {
+                            td {width="20"} {}
+                            table_data {align="left"} {
+                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep3}"
+                            }
+                            table_data {
+                                division {class="popupControls CLASS20905"} {
+                                    table {
+                                        table_row {
+                                            table_data {
+                                                division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
+                                                  puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        table_row {
+                            td {width="20"} {}
+                            table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
+                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
                             }
                         }
                     }
@@ -780,12 +815,12 @@ proc action_firmware_upload {} {
     set file_valid 0
     catch {
         #set file_valid [expr [string first "update_script" [exec tar tzf [lindex $firmware_file 0]]] >= 0 ]
-        exec tar zxvf [lindex $firmware_file 0] update_script EULA.en EULA.de EULA.tr -C /var/
+        exec tar xf -C /usr/local/tmp [lindex $firmware_file 0] update_script EULA.en EULA.de EULA.tr
     }
-    set file_valid [file exists "/var/update_script"]
+    set file_valid [file exists "/usr/local/tmp/update_script"]
 
     if {$file_valid} {
-      file rename -force -- [lindex $firmware_file 0] "/var/new_firmware.tar.gz"
+      file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_firmware.tar.gz"
       #set action "firmware_update_confirm"
       set action "acceptEula"
     } else {

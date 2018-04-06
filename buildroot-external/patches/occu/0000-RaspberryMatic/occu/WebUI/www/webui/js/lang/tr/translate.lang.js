@@ -454,7 +454,6 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Adim 2: Indirdiginiz yazilima tiklayin",
     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Adim 3: Yazilimi " + HMIdentifier.tr.CCUShortName + "'e y%FCkleyin",
     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Adim 4: G%FCncellemeyi baslatin",
-    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Step 2: Read <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>documentation</a> and <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>update/upgrade instructions</a>",
     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.tr.BidCosRF,
     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.tr.BidCosWired,
     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.tr.CCUShortName + "-Kumanda",

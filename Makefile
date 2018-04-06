@@ -49,6 +49,12 @@ release: dist
 	cd ./release && zip ./RaspberryMatic-$(VERSION)-$(BOARD).zip ./RaspberryMatic-$(VERSION)-$(BOARD).img ./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256 ../LICENSE
 	sha256sum ./release/RaspberryMatic-$(VERSION)-$(BOARD).zip >./release/RaspberryMatic-$(VERSION)-$(BOARD).zip.sha256
 
+.PHONY: updateFile
+updateFile: dist
+	cd buildroot-external/package/eq3-updatefile; tar cvf ../../../build-$(PRODUCT)/images/$(PRODUCT)-$(VERSION).tar -T files-package.txt
+	cd build-$(PRODUCT)/images; tar uvf $(PRODUCT)-$(VERSION).tar -T ../../buildroot-external/package/eq3-updatefile/files-images.txt
+	cd build-$(PRODUCT)/images; gzip $(PRODUCT)-$(VERSION).tar; mv $(PRODUCT)-$(VERSION).tar.gz $(PRODUCT)-$(VERSION).tgz
+
 .PHONY: clean
 clean:
 	rm -rf build-$(PRODUCT) buildroot-$(BUILDROOT_VERSION)
@@ -76,6 +82,10 @@ install:
 .PHONY: menuconfig
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external menuconfig
+
+.PHONY: xconfig
+xconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
+	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../buildroot-external xconfig
 
 .PHONY: savedefconfig
 savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)

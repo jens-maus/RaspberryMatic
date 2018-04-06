@@ -7,7 +7,6 @@ GENIMAGE_CFG="${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/genimage.cfg"
 GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
 
 # Use our extlinux.conf and hw_intf.conf
-cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/extlinux.conf" "${BINARIES_DIR}/"
 cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/hw_intf.conf" "${BINARIES_DIR}/"
 
 # prepare the uboot image to be flashed

@@ -1,0 +1,129 @@
+#!/bin/sh
+#
+# Startup script to identify and setup RTC clocks
+#
+
+# initialize a potentially existing RTC clock
+init_rtc_device() {
+
+  HM_RTC="onboard"
+
+  # only continue if we don't have a valid rtc yet
+  [[ -e /dev/rtc0 ]] && return 0
+
+  # load the common i2c kernel modules
+  modprobe i2c_bcm2835
+  modprobe i2c_dev
+
+  HM_RTC=""
+  # check for RX8130-CE RTC clock at 0x32 (Epson RX8130CE)
+  i2cget -y 1 0x32 0x32 2>/dev/null >/dev/null
+  if [[ $? -eq 0 ]]; then
+    modprobe i2c:rx8130
+    if [[ $? -eq 0 ]]; then
+      HM_RTC="rx8130"
+      [[ -e /dev/rtc0 ]] && return 0
+      echo rx8130 0x32 >/sys/class/i2c-dev/i2c-1/device/new_device
+      [[ -e /dev/rtc0 ]] && return 0
+      echo 0x32 >/sys/class/i2c-dev/i2c-1/device/delete_device
+    fi
+  fi
+
+  HM_RTC=""
+  # check for MCP7940N RTC clock at 0x6f (PiFace Shim RTC)
+  i2cget -y 1 0x6f 0x00 2>/dev/null >/dev/null
+  if [[ $? -eq 0 ]]; then
+    # calibrate MCP7940N
+    i2cset -y 1 0x6f 0x08 0x47 2>/dev/null >/dev/null
+    if [[ $? -eq 0 ]]; then
+      modprobe i2c:mcp7941x
+      if [[ $? -eq 0 ]]; then
+        HM_RTC="mcp7941x"
+        [[ -e /dev/rtc0 ]] && return 0
+        echo mcp7941x 0x6f >/sys/class/i2c-dev/i2c-1/device/new_device
+        [[ -e /dev/rtc0 ]] && return 0
+        echo 0x6f >/sys/class/i2c-dev/i2c-1/device/delete_device
+      fi
+    fi
+  fi
+
+  HM_RTC=""
+  # check for DS3231/DS1307 RTC clock at 0x68
+  i2cget -y 1 0x68 0x00 2>/dev/null >/dev/null
+  if [[ $? -eq 0 ]]; then
+    # check for DS3231
+    modprobe i2c:ds3231
+    if [[ $? -eq 0 ]]; then
+      HM_RTC="mcp7941x"
+      [[ -e /dev/rtc0 ]] && return 0
+      echo ds3231 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
+      [[ -e /dev/rtc0 ]] && return 0
+      echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
+    fi
+
+    # check for DS1307
+    modprobe i2c:ds1307
+    if [[ $? -eq 0 ]]; then
+      HM_RTC="ds1307"
+      [[ -e /dev/rtc0 ]] && return 0
+      echo ds1307 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
+      [[ -e /dev/rtc0 ]] && return 0
+      echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
+    fi
+  fi
+
+  HM_RTC=""
+  return 1
+}
+
+start() {
+  echo -n "Initializing RTC Clock: "
+
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  init_rtc_device
+
+  # save all HM_ env variables
+  set | grep '^HM_' >/var/hm_mode
+
+  if [[ -e /dev/rtc0 ]]; then
+    hwclock --hctosys --utc
+    echo "${HM_RTC}, OK"
+  else
+    echo "no hardware found"
+  fi
+}
+
+stop() {
+  echo -n "Cleaning up RTC Clock: "
+
+  if [[ -e /dev/rtc0 ]]; then
+    hwclock --systohc --utc
+    echo "OK"
+  else
+    echo "no hardware found"
+  fi
+}
+
+restart() {
+  stop
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    stop
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

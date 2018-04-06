@@ -1,0 +1,6 @@
+config BR2_PACKAGE_RECOVERY_SYSTEM
+	bool "Creates a dedicated recovery system and provide it as an initrd"
+
+config BR2_PACKAGE_RECOVERY_SYSTEM_CONFIG
+	string "defconfig filename"
+	depends on BR2_PACKAGE_RECOVERY_SYSTEM

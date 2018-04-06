@@ -1,0 +1,43 @@
+#!/bin/sh
+
+echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
+
+# fake read boundary+disposition, etc.
+read boundary
+read disposition
+read ctype
+read junk
+
+# get length
+a=${#boundary}
+b=${#disposition}
+c=${#ctype}
+
+# Due to \n\r line breaks we have 2 extra bytes per line read,
+# 6 + 2 newlines == 10 junk bytes
+a=$((a*2+b+c+d+10))
+
+# extract all params from QUERY_STRING
+eval $(echo ${QUERY_STRING//&/;})
+
+# write out the data
+SIZE=$((HTTP_CONTENT_LENGTH-a))
+filename=$(mktemp -p /usr/local/tmp)
+head -c $SIZE >${filename}
+if [ $? -ne 0 ]; then
+  echo "ERROR (head)"
+fi
+
+echo "<html>"
+echo " <head>"
+echo "  <script>"
+echo "   <!--- Hide script from browsers that don't understand JavaScript"
+echo "   var url = '${url}?sid=${sid}';"
+echo "   parent.top.dlgPopup.hide();"
+echo "   parent.top.dlgPopup.setWidth(450);"
+echo "   parent.top.dlgPopup.downloadOnly = ${downloadOnly};"
+echo "   parent.top.dlgPopup.LoadFromFile(url, 'action=${action}&filename=${filename}');"
+echo "   // End hiding -->"
+echo "  </script>"
+echo " </head>"
+echo "</html>"

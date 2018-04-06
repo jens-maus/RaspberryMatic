@@ -1,0 +1,997 @@
+--- occu/WebUI/www/config/cp_maintenance.cgi.orig
++++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -70,7 +70,6 @@
+ 
+ proc action_firmware_update_confirm {} {
+     global env
+-   cgi_debug -on
+     http_head
+     division {class="popupTitle"} {
+         #puts "Softwareupdate - Best&auml;tigung"
+@@ -258,9 +257,8 @@
+ }
+ 
+ proc action_firmware_update_cancel {} {
+-  global env
+-  catch { exec /bin/sh -c "rm -f /usr/local/tmp/new_firmware.tar.gz" }
+-  catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*" }
++  global env filename
++  catch { exec /bin/sh -c "rm -rf `readlink /usr/local/tmp/new_firmware` /usr/local/tmp/new_firmware" }
+   cgi_javascript {
+     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
+     puts {
+@@ -393,9 +391,7 @@
+                         table_row {
+                             td {width="20"} {}
+                             table_data {colspan="2"} {
+-                                form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
+-                                    export action=firmware_upload
+-                                    export downloadOnly=$downloadOnly
++                                form "/config/fileupload.ccc?sid=$sid&action=firmware_upload&downloadOnly=$downloadOnly&url=$env(SCRIPT_NAME)" {target=firmware_upload_iframe} name=firmware_form enctype=multipart/form-data method=post {
+                                     file_button firmware_file size=30 maxlength=1000000
+                                 }
+                                 puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
+@@ -747,27 +743,107 @@
+ }
+ 
+ proc action_firmware_upload {} {
+-    global env sid downloadOnly
++    global env sid downloadOnly filename
+     cd /usr/local/tmp/
+     
+-    http_head
+-    import_file -client firmware_file
++    set TMPDIR "$filename-dir"
++    exec mkdir -p $TMPDIR
++    set file_invalid 1
++
++    #
++    # check if the uploaded file is a valid firmware update file
++    #
++
++    # check for .tar.gz or .tar
++    if {$file_invalid != 0} {
++      set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
++      if {$file_invalid == 0} {
++        # the file seems to be a tar archive (perhaps with gzip compression)
++        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xf $filename} result]
++        file delete -force -- $filename
++      }
++    }
++
++    # check for .zip
++    if {$file_invalid != 0} {
++      set file_invalid [catch {exec file -b $filename | grep -q "Zip archive data"} result]
++      if {$file_invalid == 0} {
++        # the file seems to be a zip archive containing data
++        set file_invalid [catch {exec /usr/bin/unzip -q -o -d $TMPDIR $filename 2>/dev/null} result]
++        file delete -force -- $filename
++      }
++    }
++
++    # check for .img
++    if {$file_invalid != 0} {
++      set file_invalid [catch {exec file -b $filename | grep -q "DOS/MBR boot sector"} result]
++      if {$file_invalid == 0} {
++        # the file seems to be a full-fledged SD card image with MBR boot sector, etc. so lets
++        # check if we have exactly 3 partitions
++        set file_invalid [catch {exec /usr/sbin/parted -sm $filename print 2>/dev/null | tail -1 | egrep -q "3:.*:ext4:"} result]
++        if {$file_invalid == 0} {
++          file rename -force -- $filename "$TMPDIR/new_firmware.img"
++        }
++      }
++    }
++
++    # check for ext4 rootfs or userfs filesystem
++    if {$file_invalid != 0} {
++      set file_invalid [catch {exec file -b $filename | egrep -q "ext4 filesystem.*(rootfs|userfs)"} result]
++      if {$file_invalid == 0} {
++        # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
++        set file_invalid [catch {exec /sbin/e2fsck -nf $filename 2>/dev/null} result]
++        if {$file_invalid == 0} {
++          file rename -force -- $filename "$TMPDIR/new_firmware.ext4"
++        }
++      }
++    }
+ 
+-    # check if the uploaded file looks like a firmware file
+-    set file_valid 0
+-    catch {
+-        #set file_valid [expr [string first "update_script" [exec tar tzf [lindex $firmware_file 0]]] >= 0 ]
+-        exec tar xf -C /usr/local/tmp [lindex $firmware_file 0] update_script EULA.en EULA.de EULA.tr
+-    }
+-    set file_valid [file exists "/usr/local/tmp/update_script"]
+-
+-    if {$file_valid} {
+-      file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_firmware.tar.gz"
+-      #set action "firmware_update_confirm"
++    ######
++    # now we have unarchived everyting to TMPDIR, so lets check if it is valid
++    if {$file_invalid == 0} {
++      if {[file exists "$TMPDIR/new_firmware.ext4"] != 1 && [file exists "$TMPDIR/new_firmware.img"] != 1} {
++        # check if there are checksum files in TMPDIR and if so check the checksum first
++
++        # check for sha256 checksums
++        foreach chk_file [glob -nocomplain "$TMPDIR/*.sha256"] {
++          set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/sha256sum -sc $chk_file"} result]
++          if {$file_invalid != 0} {
++            break
++          }
++        }
++
++        # check for md5 checksums
++        foreach chk_file [glob -nocomplain "$TMPDIR/*.md5"] {
++          set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/md5sum -sc $chk_file"} result]
++          if {$file_invalid != 0} {
++            break
++          }
++        }
++
++        # everything seems to be fine with the uploaded file so lets
++        # do the final check
++        if {$file_invalid == 0} {
++          # if no *.img exists we have to check for "update_script"
++          if {[glob -nocomplain "$TMPDIR/*.img"] == ""} {
++            if {[file exists "$TMPDIR/update_script"] != 1} {
++              set file_invalid 1
++            }
++          }
++        }
++      }
++    }
++
++    #
++    # test if the above checks were successfull or not
++    #
++    if {$file_invalid == 0} {
++      catch { exec ln -sf $TMPDIR /usr/local/tmp/new_firmware }
+       set action "acceptEula"
+     } else {
+-        file delete -force -- [lindex $firmware_file 0]
+-        set action "firmware_update_invalid"
++      file delete -force -- $filename
++      file delete -force -- $filename-dir
++      set action "firmware_update_invalid"
+     }
+     cgi_javascript {
+         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+@@ -952,12 +1028,9 @@
+     catch { exec lcdtool {Saving     Data...    } }
+     rega system.Save()
+     catch { exec lcdtool {Reboot...             } }
+-
+-    if {[isOldCCU]} {
+-        exec /sbin/init -q
+-    } else {
+-        exec /bin/kill -SIGQUIT 1
+-    }
++    exec touch /usr/local/.recoveryMode
++    exec sleep 5
++    exec /sbin/reboot
+ }
+ 
+ proc action_reboot {} {
+@@ -1049,15 +1122,17 @@
+ cgi_eval {
+     #cgi_debug -on
+     cgi_input
+-    catch {
+-        import debug
+-        cgi_debug -on
+-    }
++    #catch {
++    #    import debug
++    #    cgi_debug -on
++    #}
+ 
+     set action "put_page"
+     set downloadOnly 0
++    set filename ""
+     catch {import action}
+     catch {import downloadOnly}
++    catch {import filename}
+ 
+     if {[session_requestisvalid 8] > 0} then action_$action
+ }
+--- occu/WebUI/www/config/cp_network.cgi.orig
++++ occu/WebUI/www/config/cp_network.cgi
+@@ -149,6 +149,8 @@
+   
+   http_head
+ 
++  file rename -force -- "/usr/local/tmp/server.pem" "/etc/config/server.pem"
++
+   put_message "\${dialogSettingsNetworkMessageCertificateTitle}" "\${dialogSettingsNetworkMessageCertificateCCURestart}" {\${btnNewLogin} "window.location.href='/';"}
+   
+   #save DOM
+@@ -245,20 +247,15 @@
+ }
+ 
+ proc action_cert_upload {} {
+-  global env sid
+-  cd /tmp/
+-  
+-  http_head
+-  import_file -client cert_file
+-  file rename -force -- [lindex $cert_file 0] "/var/server.pem"
++  global env sid filename
++  cd /usr/local/tmp/
+   
+-  set filename [open "/var/server.pem" r]
++  set filename [open "$filename" r]
+   gets $filename line
+   close $filename
+   #puts $line;
+   if { [string equal $line "-----BEGIN RSA PRIVATE KEY-----"] == 1 || [string equal $line "-----BEGIN PRIVATE KEY-----"] == 1} {
+-    file copy -force -- "/var/server.pem" "/etc/config/server.pem"
+-    file delete "/var/server.pem"
++    file rename -force -- $filename "/usr/local/tmp/server.pem"
+     
+     cgi_javascript {
+       puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+@@ -269,6 +266,8 @@
+       }
+     }
+   } else {
++    file delete -force -- $filename
++
+     cgi_javascript {
+     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+     puts {
+@@ -459,8 +458,7 @@
+             table_row {
+               table_data {width="20"} {}
+               table_data {colspan="2"} {
+-                form "$env(SCRIPT_NAME)?sid=$sid" name=cert_form {target=cert_upload_iframe} enctype=multipart/form-data method=post {
+-                  export action=cert_upload
++                form "/config/fileupload.ccc?sid=$sid&action=cert_upload&url=$env(SCRIPT_NAME)" name=cert_form {target=cert_upload_iframe} enctype=multipart/form-data method=post {
+                   file_button cert_file size=30 maxlength=1000000
+                 }
+                 puts {<iframe name="cert_upload_iframe" style="display: none;"></iframe>}
+@@ -774,13 +772,16 @@
+ cgi_eval {
+   #cgi_debug -on
+   cgi_input
+-  catch {
+-    import debug
+-    cgi_debug -on
+-  }
++  #catch {
++  #  import debug
++  #  cgi_debug -on
++  #}
+   set action "put_page"
++  set filename ""
+ 
+   catch { import action }
++  catch { import filename }
++
+   if {[session_requestisvalid 8] > 0} then action_$action
+ }
+ 
+--- occu/WebUI/www/config/cp_security.cgi.orig
++++ occu/WebUI/www/config/cp_security.cgi
+@@ -675,8 +675,6 @@
+ proc action_put_page {} {
+     global env sid
+ 
+-    cgi_debug -on
+-
+     http_head
+     division {class="popupTitle j_translate"} {
+         puts "\${dialogSettingsSecurityTitle}"
+@@ -777,8 +775,7 @@
+                         table_row {
+                             td {width="20"} {}
+                             table_data {align="left"} {colspan="2"} {
+-                                form "$env(SCRIPT_NAME)?sid=$sid" name=backup_form {target=config_upload_iframe} enctype=multipart/form-data method=post {
+-                                    export action=backup_upload
++                                form "/config/fileupload.ccc?sid=$sid&action=backup_upload&url=$env(SCRIPT_NAME)" name=backup_form {target=config_upload_iframe} enctype=multipart/form-data method=post {
+                                     file_button backup_file size=20 maxlength=1000000
+                                 }
+                                 puts {<iframe name="config_upload_iframe" class="CLASS20820" style="display: none;"></iframe>}
+@@ -1082,12 +1079,10 @@
+ }
+ 
+ proc action_backup_upload {} {
+-    global env sid
++    global env sid filename
+     cd /usr/local/tmp/
+     
+-    http_head
+-    import_file -client backup_file
+-    file rename -force -- [lindex $backup_file 0] "/usr/local/tmp/new_config.tar"
++    file rename -force -- $filename "/usr/local/tmp/new_config.tar"
+     cgi_javascript {
+         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+         puts {
+@@ -1163,14 +1158,16 @@
+ cgi_eval {
+     #cgi_debug -on
+     cgi_input
+-    catch {
+-        import debug
+-        cgi_debug -on
+-    }
++    #catch {
++    #    import debug
++    #    cgi_debug -on
++    #}
+ 
+     set action "put_page"
++    set filename ""
+ 
+     catch { import action }
++    catch { import filename }
+ 
+     if {[session_requestisvalid 8] > 0} then action_$action
+ }
+--- occu/WebUI/www/config/cp_software.cgi.orig
++++ occu/WebUI/www/config/cp_software.cgi
+@@ -353,8 +353,7 @@
+                                 puts "\${dialogSettingsExtraSoftwareLblSelectExtraSoftware}"
+                             }
+                             table_data {
+-                                form "$env(SCRIPT_NAME)?sid=$sid" name=upload_form {target=image_upload_iframe} enctype=multipart/form-data method=post {
+-                                    export action=image_upload
++                                form "/config/fileupload.ccc?sid=$sid&action=image_upload&url=$env(SCRIPT_NAME)" name=upload_form {target=image_upload_iframe} enctype=multipart/form-data method=post {
+                                     file_button firmware_file size=30 maxlength=1000000
+                                 }
+                                 puts {<iframe name="image_upload_iframe" style="display: none;"></iframe>}
+@@ -487,12 +486,10 @@
+ }
+ 
+ proc action_image_upload {} {
+-    global env sid
++    global env sid filename
+     cd /usr/local/tmp/
+     
+-    http_head
+-    import_file -client firmware_file
+-    file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_addon.tar.gz"
++    file rename -force -- $filename "/usr/local/tmp/new_addon.tar.gz"
+     cgi_javascript {
+         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+         puts {
+@@ -515,14 +512,16 @@
+ cgi_eval {
+     #cgi_debug -on
+     cgi_input
+-    catch {
+-        import debug
+-        cgi_debug -on
+-    }
++    #catch {
++    #    import debug
++    #    cgi_debug -on
++    #}
+ 
+     set action "put_page"
++    set filename ""
+ 
+     catch { import action }
++    catch { import filename }
+ 
+     if {[session_requestisvalid 8] > 0} then action_$action
+ }
+--- occu/WebUI/www/config/fileupload.ccc.orig
++++ occu/WebUI/www/config/fileupload.ccc
+@@ -0,0 +1,40 @@
++#!/bin/sh
++
++# fake read boundary+disposition, etc.
++read boundary
++read disposition
++read ctype
++read junk
++
++# get length
++a=${#boundary}
++b=${#disposition}
++c=${#ctype}
++
++# Due to \n\r line breaks we have 2 extra bytes per line read,
++# 6 + 2 newlines == 10 junk bytes
++a=$((a*2+b+c+d+10))
++
++# extract all params from QUERY_STRING
++eval $(echo ${QUERY_STRING//&/;})
++
++# write out the data
++SIZE=$((HTTP_CONTENT_LENGTH-a))
++filename=$(mktemp -p /usr/local/tmp)
++head -c $SIZE >${filename}
++
++echo "Content-Type: text/html"
++echo ""
++echo "<html>"
++echo " <head>"
++echo "  <script>"
++echo "   <!--- Hide script from browsers that don't understand JavaScript"
++echo "   var url = '${url}?sid=${sid}';"
++echo "   parent.top.dlgPopup.hide();"
++echo "   parent.top.dlgPopup.setWidth(450);"
++echo "   parent.top.dlgPopup.downloadOnly = ${downloadOnly};"
++echo "   parent.top.dlgPopup.LoadFromFile(url, 'action=${action}&filename=${filename}');"
++echo "   // End hiding -->"
++echo "  </script>"
++echo " </head>"
++echo "</html>"
+--- occu/WebUI/www/tcl/extern/cgi.tcl.orig
++++ occu/WebUI/www/tcl/extern/cgi.tcl
+@@ -3,15 +3,11 @@
+ # cgi.tcl - routines for writing CGI scripts in Tcl
+ # Author: Don Libes <libes@nist.gov>, January '95
+ #
+-# Minor changes by Lars Reemts, eQ-3
+-#
+ # These routines implement the code described in the paper
+ # "Writing CGI scripts in Tcl" which appeared in the Tcl '96 conference.
+ # Please read the paper before using this code.  The paper is:
+ # http://expect.nist.gov/doc/cgi.pdf
+ #
+-# F. Werner:
+-#  add "charset=iso-8859-1" to header Content-Type
+ ##################################################
+ 
+ ##################################################
+@@ -27,12 +23,10 @@
+ 
+     if {0 == [llength $args]} {
+ 	cgi_content_type
+-    cgi_puts "Expires: Sun, 06 Nov 1994 00:00:00 GMT"
+     } else {
+ 	if {[catch {uplevel 1 [lindex $args 0]} errMsg]} {
+ 	    set savedInfo $errorInfo
+ 	    cgi_content_type
+-        cgi_puts "Expires: Sun, 06 Nov 1994 00:00:00 GMT"
+ 	}
+     }
+     cgi_puts ""
+@@ -310,7 +304,7 @@
+ 			    catch {cgi_mail_add "HTTP_HOST: $env(HTTP_HOST)"}
+ 			    catch {cgi_mail_add "REMOTE_HOST: $env(REMOTE_HOST)"}
+ 			    catch {cgi_mail_add "REMOTE_ADDR: $env(REMOTE_ADDR)"}
+-			    cgi_mail_add "cgi.tcl version: 1.8.0"
++			    cgi_mail_add "cgi.tcl version: 1.10.0"
+ 			    cgi_mail_add "input:"
+ 			    catch {cgi_mail_add $_cgi(input)}
+ 			    cgi_mail_add "cookie:"
+@@ -472,10 +466,9 @@
+     foreach a [lrange $args 1 end] {
+         append buf " $a"
+     }
+-    return "$buf ></iframe>"
++    return "$buf />"
+ }
+ 
+-
+ # generate an image reference (<img ...>)
+ # first arg is image url
+ # other args are passed through into <img> tag
+@@ -497,7 +490,7 @@
+ 
+ # names an anchor so that it can be linked to
+ proc cgi_anchor_name {name} {
+-    return "<a name=\"$name\"></a>"
++    return "<a name=\"$name\"/>"
+ }
+ 
+ proc cgi_base {args} {
+@@ -513,7 +506,7 @@
+ 	    cgi_put " $a"
+ 	}
+     }
+-    cgi_puts " / >"
++    cgi_puts " />"
+ }
+ 
+ ##################################################
+@@ -531,7 +524,8 @@
+ 	regsub -all -nocase {%([a-f0-9][a-f0-9])} $buf {\\u00\1} buf
+ 
+ 	# process \u unicode mapped chars
+-	encoding convertfrom [subst -novar -nocommand $buf]
++	encoding convertfrom $::_cgi(queryencoding) \
++		 [subst -novar -nocommand $buf]
+     }
+ } elseif {[info tclversion] >= 8.1} {
+     proc cgi_unquote_input buf {
+@@ -982,7 +976,7 @@
+ # from cgi_http_head.
+ proc cgi_http_equiv {type contents} {
+     _cgi_http_head_implicit
+-    cgi_puts "<meta http-equiv=\"$type\" content=[cgi_dquote_html $contents]></meta>"
++    cgi_puts "<meta http-equiv=\"$type\" content=[cgi_dquote_html $contents]/>"
+ }
+ 
+ # Do whatever you want with meta tags.
+@@ -1010,7 +1004,7 @@
+ 	    cgi_put " $a"
+ 	}
+     }
+-    cgi_puts "></link>"
++    cgi_puts "/>"
+ }
+ 
+ proc cgi_name {args} {
+@@ -1114,7 +1108,7 @@
+ 
+ proc cgi_noscript {args} {
+     cgi_puts "<noscript[_cgi_lrange $args 0 [expr [llength $args]-2]]>"
+-    _cgi_close_proc_push {puts "</noscript>"}
++    _cgi_close_proc_push {cgi_puts "</noscript>"}
+ 
+     uplevel 1 [lindex $args end]
+ 
+@@ -1135,7 +1129,7 @@
+     if {$q != "="} {
+ 	set value ""
+     }
+-    cgi_puts "<param name=\"$name\" value=[cgi_dquote_html $value]></param>"
++    cgi_puts "<param name=\"$name\" value=[cgi_dquote_html $value]/>"
+ }
+ 
+ # record any proc's that must be called prior to displaying an error
+@@ -1254,7 +1248,7 @@
+ 	    cgi_put " $a"
+ 	}
+     }
+-    cgi_put "></isindex>"
++    cgi_put "/>"
+ }
+ 
+ ##################################################
+@@ -1294,15 +1288,28 @@
+ 	} else {
+ 	    set length $env(CONTENT_LENGTH)
+ 	    if {0!=[string compare $length "-1"]} {
+-        if { $length } {
+-		    set input [read stdin $env(CONTENT_LENGTH)]		
+-        } else {
+-            set input ""
+-        }
++		set input [read stdin $env(CONTENT_LENGTH)]		
+ 	    } else {
+ 		set _cgi(client_error) 1
+ 		error "Your browser generated a content-length of -1 during a POST method."
+ 	    }
++	    if {[info tclversion] >= 8.1} {
++                # guess query encoding from Content-Type header
++                if {[info exists env(CONTENT_TYPE)] \
++                    && [regexp -nocase -- {charset=([^[:space:]]+)} $env(CONTENT_TYPE) m cs]} {
++                    if {[regexp -nocase -- {iso-?8859-([[:digit:]]+)} $cs m d]} {
++                        set _cgi(queryencoding) "iso8859-$d"
++                    } elseif {[regexp -nocase -- {windows-([[:digit:]]+)} $cs m d]} {
++                        set _cgi(queryencoding) "cp$d"
++                    } elseif {0==[string compare -nocase $cs "utf-8"]} {
++                        set _cgi(queryencoding) "utf-8"
++                    } elseif {0==[string compare -nocase $cs "utf-16"]} {
++                        set _cgi(queryencoding) "unicode"
++                    }
++                } else {
++                    set _cgi(queryencoding) [encoding system]
++                }
++            }
+ 	}
+ 	# save input for possible diagnostics later
+ 	set _cgi(input) $input
+@@ -1345,30 +1352,6 @@
+     }
+ }
+ 
+-set _cgi_read_line_buffer ""
+-proc _cgi_read_line {fin bufvar crlfvar} {
+-    global _cgi_read_line_buffer
+-    upvar $bufvar buffer
+-    upvar $crlfvar crlf
+-    set line_end [string first "\r\n" $_cgi_read_line_buffer]
+-    while {($line_end < 0 ) && ![eof $fin]} {
+-        append _cgi_read_line_buffer [read $fin 65536]
+-        set line_end [string first "\r\n" $_cgi_read_line_buffer]
+-    }
+-    if {$line_end >= 0} { 
+-        incr line_end -1
+-        set buffer [string range $_cgi_read_line_buffer 0 $line_end]
+-        set crlf "\r\n"
+-        set _cgi_read_line_buffer [string range $_cgi_read_line_buffer [expr $line_end + 3] end]
+-        return 1
+-    } else {
+-        set buffer $_cgi_read_line_buffer
+-        set crlf ""
+-        set _cgi_read_line_buffer ""
+-        return [expr ([string length $buffer] > 0)]
+-    }
+-}
+-
+ proc _cgi_input_multipart {fin} {
+     global env _cgi _cgi_uservar _cgi_userfile
+ 
+@@ -1379,121 +1362,7 @@
+ 	# can hang and we won't get to the termination code
+ 	set dbg_fout [open $dbg_filename w]
+ 	set _cgi(input) $dbg_filename
+-	catch {fconfigure $dbg_fout -translation binary -encoding binary}
+-    }
+-
+-    # figure out boundary
+-    if {0==[regexp boundary=(.*) $env(CONTENT_TYPE) dummy boundary]} {
+-	set _cgi(client_error) 1
+-	error "Your browser failed to generate a \"boundary=\" line in a multipart response (CONTENT_TYPE: $env(CONTENT_TYPE)).  Please upgrade (or fix) your browser."
+-    }
+-
+-    set boundary "--$boundary"
+-    set boundary_length [string length $boundary]
+-    
+-    # don't corrupt or modify uploads yet allow Tcl 7.4 to work
+-    catch {fconfigure $fin -translation binary -encoding binary}
+-
+-    # get first boundary line
+-    gets $fin buf
+-    if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
+-
+-    set filecount 0
+-    set crlf ""
+-    while {1} {
+-	# process Content-Disposition:
+-	if { ! [_cgi_read_line $fin buf crlf] } break
+-	if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
+-	catch {unset filename}
+-	catch {unset varname}
+-	foreach b $buf {
+-	    regexp {^name="(.*)"} $b dummy varname
+-	}
+-	if {0==[info exists varname]} {
+-	    set _cgi(client_error) 1
+-	    error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
+-	}	    
+-	# Lame-o encoding (on Netscape at least) doesn't escape field
+-	# delimiters (like quotes)!!  Since all we've ever seen is filename=
+-	# at end of line, assuming nothing follows.  Sigh.
+-	regexp {filename="(.*)"} $buf dummy filename
+-
+-	# Skip remaining headers until blank line.
+-	# Content-Type: can appear here.
+-	set conttype ""
+-	while {1} {
+-            if { ! [_cgi_read_line $fin buf crlf] } break
+-	    if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
+-	    if {0==[string compare $buf ""]} break
+-	    regexp -nocase "^Content-Type:\[ \t]+(.*)\r\n" $buf$crlf x conttype
+-	}
+-
+-	if {[info exists filename]} {
+-            if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>Reading file $filename"; flush $dbg_fout}
+-	    # read the part into a file
+-	    set foutname /tmp/CGI[pid].[incr filecount]
+-	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
+-	    set fout [open $foutname w]
+-	    # "catch" permits this to work with Tcl 7.4
+-	    catch {fconfigure $fout -translation binary -encoding binary}
+-	    _cgi_set_uservar $varname [list $foutname $filename $conttype]
+-	    set _cgi_userfile($varname) [list $foutname $filename $conttype]
+-            
+-            set leftover ""
+-            while { 1 } {
+-                if { ! [_cgi_read_line $fin buf crlf] } {
+-                    set _cgi(client_error) 1
+-                    error "Unexpected end of input data."
+-                }
+-		if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
+-                if {[string compare -length $boundary_length $buf $boundary] == 0} {
+-                    if {[string first "--" $buf $boundary_length]>=0} {set eof 1}
+-                    break;
+-                }
+-                puts -nonewline $fout $leftover$buf
+-                set leftover $crlf
+-            }
+-            if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>Read file $filename"; flush $dbg_fout}
+-	    close $fout
+-	    unset fout
+-        
+-	} else {
+-	    # read the part into a variable
+-            if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>Reading variable $varname"; flush $dbg_fout}
+-	    set val ""
+-            set leftover ""
+-            while { 1 } {
+-                if { ! [_cgi_read_line $fin buf crlf] } {
+-                    set _cgi(client_error) 1
+-                    error "Unexpected end of input data."
+-                }
+-		if {[info exists dbg_fout]} {puts -nonewline $dbg_fout $buf$crlf; flush $dbg_fout}
+-                if {[string compare -length $boundary_length $buf $boundary] == 0} {
+-                    if {[string first "--" $buf $boundary_length]>=0} {set eof 1}
+-                    break;
+-                }
+-                append val $leftover$buf
+-                set leftover $crlf
+-	    }
+-	    _cgi_set_uservar $varname $val
+-            if {[info exists dbg_fout]} {puts $dbg_fout ">>>>>$varname=$val"; flush $dbg_fout}
+-	}
+-        if {[info exists eof]} break
+-    }
+-    if {[info exists dbg_fout]} {close $dbg_fout}
+-}
+-
+-proc _cgi_input_multipart_buggy {fin} {
+-    global env _cgi _cgi_uservar _cgi_userfile
+-
+-    cgi_debug -noprint {
+-	# save file for debugging purposes
+-	set dbg_filename [file join $_cgi(tmpdir) CGIdbg.[pid]]
+-	# explicitly flush all writes to fout, because sometimes the writer
+-	# can hang and we won't get to the termination code
+-	set dbg_fout [open $dbg_filename w]
+-	set _cgi(input) $dbg_filename
+-	catch {fconfigure $dbg_fout -translation binary -encoding binary}
++	catch {fconfigure $dbg_fout -translation binary}
+     }
+ 
+     # figure out boundary
+@@ -1513,24 +1382,28 @@
+     set boundary --$boundary
+ 
+     # don't corrupt or modify uploads yet allow Tcl 7.4 to work
+-    catch {fconfigure $fin -translation binary -encoding binary}
++    catch {fconfigure $fin -translation binary}
+ 
+     # get first boundary line
+     gets $fin buf
+     if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
+ 
+-    set filecount 0
++    set _cgi(file,filecount) 0
++
+     while {1} {
+ 	# process Content-Disposition:
+ 	if {-1 == [gets $fin buf]} break
+ 	if {[info exists dbg_fout]} {puts $dbg_fout $buf; flush $dbg_fout}
+ 	catch {unset filename}
+-	foreach b $buf {
+-	    regexp {^name="(.*)"} $b dummy varname
+-	}
++	regexp {name="([^"]*)"} $buf dummy varname
+ 	if {0==[info exists varname]} {
+-	    set _cgi(client_error) 1
+-	    error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
++	    # lynx violates spec and doesn't use quotes, so try again but
++	    # assume space is delimiter
++	    regexp {name=([^ ]*)} $buf dummy varname
++	    if {0==[info exists varname]} {
++		set _cgi(client_error) 1
++		error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
++	    }
+ 	}	    
+ 	# Lame-o encoding (on Netscape at least) doesn't escape field
+ 	# delimiters (like quotes)!!  Since all we've ever seen is filename=
+@@ -1548,14 +1421,18 @@
+ 	}
+ 
+ 	if {[info exists filename]} {
++	    if {$_cgi(file,filecount) > $_cgi(file,filelimit)} {
++		error "Too many files submitted.  Max files allowed: $_cgi(file,filelimit)"
++	    }
++
+ 	    # read the part into a file
+-	    set foutname /tmp/CGI[pid].[incr filecount]
+-	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
++	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr _cgi(file,filecount)]]
+ 	    set fout [open $foutname w]
+ 	    # "catch" permits this to work with Tcl 7.4
+-	    catch {fconfigure $fout -translation binary -encoding binary}
++	    catch {fconfigure $fout -translation binary}
+ 	    _cgi_set_uservar $varname [list $foutname $filename $conttype]
+ 	    set _cgi_userfile($varname) [list $foutname $filename $conttype]
++
+ 	    #
+ 	    # Look for a boundary line preceded by \r\n.
+ 	    #
+@@ -1583,10 +1460,13 @@
+ 		    puts -nonewline $fout $leftover$buf
+ 		    set leftover "\n"
+ 		}
++ 		if {[file size $foutname] > $_cgi(file,charlimit)} {
++		    error "File size exceeded.  Max file size allowed: $_cgi(file,charlimit)"
++		}
+ 	    }
++
+ 	    close $fout
+ 	    unset fout
+-        
+ 	} else {
+ 	    # read the part into a variable
+ 	    set val ""
+@@ -1672,7 +1552,8 @@
+ 	}
+     }
+ 
+-    set filecount 0
++    set _cgi(file,filecount) 0
++
+     while {1} {
+ 	# process Content-Disposition:
+ 	expect {
+@@ -1684,9 +1565,7 @@
+ 	    eof break
+ 	}
+ 	catch {unset filename}
+-	foreach b $buf {
+-	    regexp {^name="(.*)"} $b dummy varname
+-	}
++	regexp {name="([^"]*)"} $buf dummy varname
+ 	if {0==[info exists varname]} {
+ 	    set _cgi(client_error) 1
+ 	    error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
+@@ -1712,8 +1591,12 @@
+ 	}
+ 
+ 	if {[info exists filename]} {
++	    if {$_cgi(file,filecount) > $_cgi(file,filelimit)} {
++		error "Too many files submitted.  Max files allowed: $_cgi(file,filelimit)"
++	    }
++
+ 	    # read the part into a file
+-	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr filecount]]
++	    set foutname [file join $_cgi(tmpdir) CGI[pid].[incr _cgi(file,filecount)]]
+ 	    spawn -open [open $foutname w]
+ 	    set fout_sid $spawn_id
+ 
+@@ -1967,6 +1850,23 @@
+     }
+ }
+ 
++# set the urlencoding
++proc cgi_urlencoding {{encoding ""}} {
++    global _cgi 
++    
++    set result [expr {[info exists _cgi(queryencoding)]
++                      ? $_cgi(queryencoding)
++                      : ""}]
++
++    # check if the encoding is available 
++    if {[info tclversion] >= 8.1
++        && [lsearch -exact [encoding names] $encoding] != -1 } {	
++        set _cgi(queryencoding) $encoding
++    }
++
++    return $result
++}
++
+ ##################################################
+ # button support
+ ##################################################
+@@ -2088,7 +1988,7 @@
+ 	    cgi_put " $a"
+ 	}
+     }
+-    cgi_put "></area>"
++    cgi_put "/>"
+ }
+ 
+ ##################################################
+@@ -2182,6 +2082,15 @@
+     cgi_put "<input type=file name=\"$name\"[_cgi_list_to_string $args]/>"
+ }
+ 
++# establish a per-file limit for uploads
++
++proc cgi_file_limit {files chars} {
++    global _cgi
++
++    set _cgi(file,filelimit) $files
++    set _cgi(file,charlimit) $chars
++}
++
+ ##################################################
+ # select support
+ ##################################################
+@@ -2224,7 +2133,7 @@
+     }
+     if {[info exists selected_if_equal]} {
+ 	if {0 == [string compare $selected_if_equal $value]} {
+-	    cgi_put " selected=\"selected\""
++	    cgi_put " selected"
+ 	}
+     }
+     cgi_puts ">[cgi_quote_html $o]</option>"
+@@ -2251,7 +2160,7 @@
+ 	    }
+ 	}
+     }
+-    cgi_put "></embed>"
++    cgi_put "/>"
+ }
+ 
+ ##################################################
+@@ -2525,7 +2434,7 @@
+ ##################################################
+ 
+ proc cgi_stylesheet {href} {
+-    puts "<link rel=stylesheet href=\"$href\" type=\"text/css\"></link>"
++    puts "<link rel=stylesheet href=\"$href\" type=\"text/css\"/>"
+ }
+ 
+ proc cgi_span {args} {
+@@ -2584,7 +2493,7 @@
+ 	    cgi_put " $a"
+ 	}
+     }
+-    cgi_puts "></frame>"
++    cgi_puts "/>"
+ }
+ 
+ proc cgi_noframes {args} {
+@@ -2672,33 +2581,50 @@
+ 
+ # User-defined procedure to generate DOCTYPE declaration
+ proc cgi_doctype {} {
+-	#Zeile hinzugefügt: 22.02.2007, Badberg, ELV
+-	#puts "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">"
+-
+-  # AG, eQ-3, 29.01.2013
+-	puts "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"	\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
+-
+-	#quirks puts "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">"
++    # AG, eQ-3, 29.01.2013
++    puts "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">"
+ }
+ 
+ ##################################################
+ # do some initialization
+ ##################################################
+ 
+-cgi_name ""
+-cgi_root ""
+-cgi_body_args ""
++# cgi_init initializes to a known state.
++
++proc cgi_init {} {
++    global _cgi
++    unset _cgi
++
++    # set explicitly for speed
++    set _cgi(debug) -off
++    set _cgi(buffer_nl) "\n"
+ 
+-# email addr of person responsible for this service
+-cgi_admin_mail_addr "root"	;# you should override this!
++    cgi_name ""
++    cgi_root ""
++    cgi_body_args ""
++    cgi_file_limit 10 100000000
+ 
+-# most services won't have an actual email addr
+-cgi_mail_addr "CGI script - do not reply"
++    if {[info tclversion] >= 8.1} {
++	# set initial urlencoding
++	if { [lsearch -exact [encoding names] "utf-8"] != -1} {
++	    cgi_urlencoding "utf-8"
++	} else {
++	    cgi_urlencoding [encoding system]
++	}
++    }
++
++    # email addr of person responsible for this service
++    cgi_admin_mail_addr "root"	;# you should override this!
++
++    # most services won't have an actual email addr
++    cgi_mail_addr "CGI script - do not reply"
++}
++cgi_init
+ 
+ # deduce tmp directory
+ switch $tcl_platform(platform) {
+     unix {
+-	set _cgi(tmpdir) /tmp
++	set _cgi(tmpdir) /usr/local/tmp
+     } macintosh {
+ 	set _cgi(tmpdir) [pwd]
+     } default {
+@@ -2711,4 +2637,4 @@
+ # regexp for matching attr=val
+ set _cgi(attr,regexp) "^(\[^=]*)=(\[^\"].*)"
+ 
+-package provide cgi 1.8.0
++package provide cgi 1.10.0

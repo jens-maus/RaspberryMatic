@@ -376,8 +376,10 @@
  }
 --- occu/WebUI/www/config/fileupload.ccc.orig
 +++ occu/WebUI/www/config/fileupload.ccc
-@@ -0,0 +1,40 @@
+@@ -0,0 +1,43 @@
 +#!/bin/sh
++
++echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
 +
 +# fake read boundary+disposition, etc.
 +read boundary
@@ -401,9 +403,10 @@
 +SIZE=$((HTTP_CONTENT_LENGTH-a))
 +filename=$(mktemp -p /usr/local/tmp)
 +head -c $SIZE >${filename}
++if [ $? -ne 0 ]; then
++  echo "ERROR (head)"
++fi
 +
-+echo "Content-Type: text/html"
-+echo ""
 +echo "<html>"
 +echo " <head>"
 +echo "  <script>"

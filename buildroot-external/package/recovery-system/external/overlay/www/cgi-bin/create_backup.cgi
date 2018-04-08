@@ -1,11 +1,25 @@
 #!/bin/sh
 
+mount | grep -q /userfs
+if [ $? -ne 0 ]; then
+  echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
+  echo "ERROR: userfs not available to create backup"
+  exit 1
+fi
+
+mount | grep -q /rootfs
+if [ $? -ne 0 ]; then
+  echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
+  echo "ERROR: rootfs not available to create backup"
+  exit 1
+fi
+
 echo -ne "Content-Type: application/octet-stream\r\n"
 
 mount -o rw,remount /userfs
 if [ $? -ne 0 ]; then
-	echo "ERROR (rw remount)"
-	exit 1
+  echo "ERROR (rw remount)"
+  exit 1
 fi
 
 # make sure BACKUPDIR exists
@@ -53,8 +67,8 @@ rm -rf ${TMPDIR}
 
 mount -o ro,remount /userfs
 if [ $? -ne 0 ]; then
-	echo "ERROR (ro remount)"
-	exit 1
+  echo "ERROR (ro remount)"
+  exit 1
 fi
 
 echo -ne "X-Sendfile: ${BACKUPFILE}\r\n"

@@ -68,7 +68,7 @@
           <form name="frmUpload" action="cgi-bin/firmware_update.cgi" method="post" enctype="multipart/form-data">
             <p>Recovery/Update File<br/>
               <div id='wrapper_'>
-                <input type="file" name="Datei" >
+                <input type="file" name="Datei" ><br/><br/>
               </div>
               <br/>
               <input class="NavButton" type="submit" value="Start Recovery/Update" >
@@ -77,9 +77,10 @@
         </td>
         <td>
           <form name="bakUpload" action="cgi-bin/restore_backup.cgi" method="post" enctype="multipart/form-data">
-            <p>Restore and Backup<br/>
+            <p>Restore and Backup Configuration<br/>
               <div id='wrapper_'>
-                <input type="file" name="Datei" >
+                Security Key (optional): <input type="text" id="seckey" name="seckey"><br/>
+                Backup File: <input type="file" name="Datei" >
               </div>
               <br/>
               <input class="NavButton" type="submit" value="Restore Backup" >

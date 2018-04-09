@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# start script to check if there are any update jobs
+# waiting which we can perform during bootup automatically.
+#
+
+start() {
+  echo -n "Checking for Auto-Update Jobs: "
+
+  if [[ -L /usr/local/tmp/new_firmware ]]; then
+    echo "performing auto-update... "
+
+    # flag this system in auto-update mode
+    touch /tmp/.runningAutoUpdate
+
+    # stop lighttpd so that nobody interferes
+    /etc/init.d/S50lighttpd stop
+
+  else
+    # remount userfs in rw mode so that lighttpd
+    # can upload data
+    mount -o rw,remount /userfs
+
+    echo "not found, OK"
+  fi
+}
+
+restart() {
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

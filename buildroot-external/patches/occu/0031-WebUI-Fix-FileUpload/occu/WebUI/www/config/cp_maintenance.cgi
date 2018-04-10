@@ -854,7 +854,7 @@ proc action_firmware_upload {} {
         # do the final check
         if {$file_invalid == 0} {
           # if no *.img exists we have to check for "update_script"
-          if {[glob -nocomplain "$TMPDIR/*.img"] == ""} {
+          if {[glob -nocomplain "$TMPDIR/*.img"] == "" && [glob -nocomplain "$TMPDIR/*.ext4"] == ""} {
             if {[file exists "$TMPDIR/update_script"] != 1} {
               set file_invalid 1
             }

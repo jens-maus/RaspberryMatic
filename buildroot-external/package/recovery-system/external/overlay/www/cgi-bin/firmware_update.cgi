@@ -89,7 +89,7 @@ fi
 
 # check for .img
 if [ -z "${FILETYPE}" ]; then
-  /usr/bin/file -b ${filename} | grep -q "DOS/MBR boot sector"
+  /usr/bin/file -b ${filename} | egrep -q "DOS/MBR boot sector.*partition 3"
   if [ $? -eq 0 ]; then
     # the file seems to be a full-fledged SD card image with MBR boot sector, etc. so lets
     # check if we have exactly 3 partitions
@@ -105,20 +105,37 @@ if [ -z "${FILETYPE}" ]; then
   fi
 fi
 
-# check for ext4 rootfs or userfs filesystem
+# check for ext4 rootfs filesystem
 if [ -z "${FILETYPE}" ]; then
-  /usr/bin/file -b ${filename} | egrep -q "ext4 filesystem.*(rootfs|userfs)"
+  /usr/bin/file -b ${filename} | egrep -q "ext4 filesystem.*rootfs"
   if [ $? -eq 0 ]; then
-    # the file seems to be an ext4 fs of the rootfs/userfs lets check if the ext4 is valid
+    # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
     /sbin/e2fsck -nf ${filename} 2>/dev/null >/dev/null
     if [ $? -ne 0 ]; then
       echo "ERROR: (e2fsck)"
       exit 1
     fi
 
-    mv -f ${filename} ${TMPDIR}/new_firmware.ext4
+    mv -f ${filename} ${TMPDIR}/rootfs.ext4
 
     FILETYPE="ext4"
+  fi
+fi
+
+# check for vfat bootfs filesystem
+if [ -z "${FILETYPE}" ]; then
+  /usr/bin/file -b ${filename} | egrep -q "DOS/MBR boot sector.*bootfs.*FAT"
+  if [ $? -eq 0 ]; then
+    # the file seems to be a vfat fs of the bootfs lets check if the ext4 is valid
+    /sbin/fsck.fat -nf ${filename} 2>/dev/null >/dev/null
+    if [ $? -ne 0 ]; then
+      echo "ERROR: (fsck.fat)"
+      exit 1
+    fi
+
+    mv -f ${filename} ${TMPDIR}/bootfs.vfat
+
+    FILETYPE="vfat"
   fi
 fi
 
@@ -133,41 +150,35 @@ fi
 # now we have unarchived everyting to TMPDIR, so lets check if it is valid
 echo -ne "[4/5] Verifying checksums... "
 
-if [ ! -f "${TMPDIR}/new_firmware.ext4" ] && [ ! -f "${TMPDIR}/new_firmware.img" ]; then
-  # check if there are checksum files in TMPDIR and if so check the checksum first
+# check for sha256 checksums
+(cd ${TMPDIR};
+  for chk_file in *.sha256; do
+    [ -f "${chk_file}" ] || break
+    /usr/bin/sha256sum -sc ${chk_file}
+    if [ $? -ne 0 ]; then
+      echo "ERROR: (sha256sum)"
+      exit 1
+    else
+      echo "OK (sha256sum), "
+    fi
+  done
+) || exit 1
 
-  # check for sha256 checksums
-  (cd ${TMPDIR};
-    for chk_file in *.sha256; do
-      [ -f "${chk_file}" ] || break
-      /usr/bin/sha256sum -sc ${chk_file}
-      if [ $? -ne 0 ]; then
-        echo "ERROR: (sha256sum)"
-        exit 1
-      else
-        echo "OK (sha256sum), "
-      fi
-    done
-  ) || exit 1
+# check for md5 checksums
+(cd ${TMPDIR};
+  for chk_file in *.md5; do
+    [ -f "${chk_file}" ] || break
+    /usr/bin/md5sum -sc ${chk_file}
+    if [ $? -ne 0 ]; then
+      echo "ERROR: (md5sum)"
+      exit 1
+    else
+      echo "OK (md5sum), "
+    fi
+  done
+) || exit 1
 
-  # check for md5 checksums
-  (cd ${TMPDIR};
-    for chk_file in *.md5; do
-      [ -f "${chk_file}" ] || break
-      /usr/bin/md5sum -sc ${chk_file}
-      if [ $? -ne 0 ]; then
-        echo "ERROR: (md5sum)"
-        exit 1
-      else
-        echo "OK (md5sum), "
-      fi
-    done
-  ) || exit 1
-
-  echo "DONE<br>"
-else
-  echo "not required for ${FILETYPE}<br>"
-fi
+echo "DONE<br>"
 
 ######
 # now we check if update_script is required and found and if so we
@@ -175,7 +186,8 @@ fi
 echo -ne "[5/5] Preparing firmware update... "
 
 if ! ls ${TMPDIR}/*.img >/dev/null 2>&1 &&
-   ! ls ${TMPDIR}/*.ext4 >/dev/null 2>&1; then
+   ! ls ${TMPDIR}/*.ext4 >/dev/null 2>&1 &&
+   ! ls ${TMPDIR}/*.vfat >/dev/null 2>&1; then
   if [ ! -x "${TMPDIR}/update_script" ]; then
     echo "ERROR: (update_script)"
     exit 1

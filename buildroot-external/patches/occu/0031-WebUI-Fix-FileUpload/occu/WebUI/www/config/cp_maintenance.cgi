@@ -805,7 +805,7 @@ proc action_firmware_upload {} {
 
     # check for .img
     if {$file_invalid != 0} {
-      set file_invalid [catch {exec file -b $filename | grep -q "DOS/MBR boot sector"} result]
+      set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*partition 3"} result]
       if {$file_invalid == 0} {
         # the file seems to be a full-fledged SD card image with MBR boot sector, etc. so lets
         # check if we have exactly 3 partitions
@@ -816,48 +816,61 @@ proc action_firmware_upload {} {
       }
     }
 
-    # check for ext4 rootfs or userfs filesystem
+    # check for ext4 rootfs filesystem
     if {$file_invalid != 0} {
-      set file_invalid [catch {exec file -b $filename | egrep -q "ext4 filesystem.*(rootfs|userfs)"} result]
+      set file_invalid [catch {exec file -b $filename | egrep -q "ext4 filesystem.*rootfs"} result]
       if {$file_invalid == 0} {
         # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
         set file_invalid [catch {exec /sbin/e2fsck -nf $filename 2>/dev/null} result]
         if {$file_invalid == 0} {
-          file rename -force -- $filename "$TMPDIR/new_firmware.ext4"
+          file rename -force -- $filename "$TMPDIR/rootfs.ext4"
+        }
+      }
+    }
+
+    # check for vfat bootfs filesystem
+    if {$file_invalid != 0} {
+      set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*bootfs.*FAT"} result]
+      if {$file_invalid == 0} {
+        # the file seems to be an ext4 fs of the bootfs lets check if the ext4 is valid
+        set file_invalid [catch {exec /sbin/fsck.fat -nf $filename 2>/dev/null} result]
+        if {$file_invalid == 0} {
+          file rename -force -- $filename "$TMPDIR/bootfs.vfat"
         }
       }
     }
 
     ######
-    # now we have unarchived everyting to TMPDIR, so lets check if it is valid
+    # check if there are checksum files in TMPDIR and if so check the checksum first
     if {$file_invalid == 0} {
-      if {[file exists "$TMPDIR/new_firmware.ext4"] != 1 && [file exists "$TMPDIR/new_firmware.img"] != 1} {
-        # check if there are checksum files in TMPDIR and if so check the checksum first
 
-        # check for sha256 checksums
-        foreach chk_file [glob -nocomplain "$TMPDIR/*.sha256"] {
-          set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/sha256sum -sc $chk_file"} result]
-          if {$file_invalid != 0} {
-            break
-          }
+      # check for sha256 checksums
+      foreach chk_file [glob -nocomplain "$TMPDIR/*.sha256"] {
+        set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/sha256sum -sc $chk_file"} result]
+        if {$file_invalid != 0} {
+          break
         }
+      }
 
-        # check for md5 checksums
+      # check for md5 checksums
+      if {$file_invalid == 0} {
         foreach chk_file [glob -nocomplain "$TMPDIR/*.md5"] {
           set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/md5sum -sc $chk_file"} result]
           if {$file_invalid != 0} {
             break
           }
         }
+      }
 
-        # everything seems to be fine with the uploaded file so lets
-        # do the final check
-        if {$file_invalid == 0} {
-          # if no *.img exists we have to check for "update_script"
-          if {[glob -nocomplain "$TMPDIR/*.img"] == "" && [glob -nocomplain "$TMPDIR/*.ext4"] == ""} {
-            if {[file exists "$TMPDIR/update_script"] != 1} {
-              set file_invalid 1
-            }
+      # everything seems to be fine with the uploaded file so lets
+      # do the final check
+      if {$file_invalid == 0} {
+        # if no *.img exists we have to check for "update_script"
+        if {[glob -nocomplain "$TMPDIR/*.img"] == "" &&
+            [glob -nocomplain "$TMPDIR/*.ext4"] == "" &&
+            [glob -nocomplain "$TMPDIR/*.vfat"] == ""} {
+          if {[file exists "$TMPDIR/update_script"] != 1} {
+            set file_invalid 1
           }
         }
       }

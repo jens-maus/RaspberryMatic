@@ -182,4 +182,5 @@ if [[ ${FLASHED_ROOTFS} -eq 1 ]] || [[ ${FLASHED_BOOTFS} -eq 1 ]]; then
   exit 0
 fi
 
-exit 0
+echo "WARNING: no firmware update/recovery performed"
+exit 1

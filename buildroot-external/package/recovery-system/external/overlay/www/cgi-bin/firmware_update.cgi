@@ -204,4 +204,16 @@ fi
 
 echo "DONE<br>"
 
-echo "<br/>Starting firmware update (DO NOT INTERRUPT):<br/>"
+echo "<br/>"
+
+######
+# lets start the firmware update now using /bin/fwinstall.sh
+# and if it returns 0 everything was fine and we can reboot!
+/bin/fwinstall.sh
+if [ $? -ne 0 ]; then
+  echo "ERROR: (fwinstall)"
+  exit 1
+fi
+
+echo "Rebooting..."
+/sbin/reboot

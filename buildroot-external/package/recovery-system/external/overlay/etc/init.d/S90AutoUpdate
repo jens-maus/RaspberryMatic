@@ -7,22 +7,40 @@
 start() {
   echo -n "Checking for Auto-Update Jobs: "
 
-  if [[ -L /usr/local/tmp/new_firmware ]]; then
+  if [[ -L /usr/local/.firmwareUpdate ]]; then
     echo "performing auto-update... "
-
-    # flag this system in auto-update mode
-    touch /tmp/.runningAutoUpdate
 
     # stop lighttpd so that nobody interferes
     /etc/init.d/S50lighttpd stop
 
-  else
-    # remount userfs in rw mode so that lighttpd
-    # can upload data
-    mount -o rw,remount /userfs
+    # run unattended firmware update
+    /bin/fwinstall.sh
+    if [[ $? -ne 0 ]]; then
+      # firmware update failed, lets change to
+      # interactive mode
+      echo "ERROR!"
 
+      rm -f /tmp/.runningAutoUpdate
+      /etc/init.d/S50lighttpd start
+    else
+      # firmware update succeeded, lets reboot!
+      mount -o rw,remount /userfs
+      rm -f /usr/local/.firmwareUpdate
+      mount -o ro,remount /userfs
+
+      echo "OK, rebooting"
+
+      /sbin/reboot
+      exit 1
+    fi
+
+  else
     echo "not found, OK"
   fi
+
+  # remount userfs in rw mode so that lighttpd
+  # can upload data
+  mount -o rw,remount /userfs
 }
 
 restart() {

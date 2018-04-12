@@ -14,13 +14,12 @@ start() {
     /etc/init.d/S50lighttpd stop
 
     # run unattended firmware update
-    /bin/fwinstall.sh
+    /bin/fwinstall.sh >/tmp/fwinstall.log 2>&1
     if [[ $? -ne 0 ]]; then
       # firmware update failed, lets change to
       # interactive mode
       echo "ERROR!"
 
-      rm -f /tmp/.runningAutoUpdate
       /etc/init.d/S50lighttpd start
     else
       # firmware update succeeded, lets reboot!

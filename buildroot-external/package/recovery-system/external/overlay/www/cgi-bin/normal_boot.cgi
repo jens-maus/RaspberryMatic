@@ -2,6 +2,11 @@
 
 echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
 
+if [ -f /tmp/.runningFirmwareUpdate ]; then
+  echo "ERROR: firmware update is currently running"
+  exit 1
+fi
+
 echo -ne "[1/2] Setting normal boot... "
 
 mount -o rw,remount /userfs

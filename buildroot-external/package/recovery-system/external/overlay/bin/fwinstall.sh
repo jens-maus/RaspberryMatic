@@ -2,8 +2,15 @@
 
 echo "Starting firmware update (DO NOT INTERRUPT!!!):<br/>"
 
-# flag this system in auto update
-touch /tmp/.runningAutoUpdate
+# there can be only one!
+if [[ -f /tmp/.runningFirmwareUpdate ]]; then
+  echo "ERROR: Firmware Update already running"
+  exit 1
+fi
+
+# capture on EXIT and create the lock file
+trap 'rm -f /tmp/.runningFirmwareUpdate' EXIT
+touch /tmp/.runningFirmwareUpdate
 
 echo -ne "[1/4] Validate update directory... "
 UPDATEDIR=$(readlink /usr/local/.firmwareUpdate)

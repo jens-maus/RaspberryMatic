@@ -1,5 +1,11 @@
 #!/bin/sh
 
+if [ -f /tmp/.runningFirmwareUpdate ]; then
+  echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
+  echo "ERROR: firmware update is currently running"
+  exit 1
+fi
+
 mount | grep -q /userfs
 if [ $? -ne 0 ]; then
   echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"

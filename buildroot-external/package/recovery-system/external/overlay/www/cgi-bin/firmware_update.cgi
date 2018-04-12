@@ -11,7 +11,7 @@ fi
 rm -f /usr/local/.firmwareUpdate
 
 # process data upload
-echo -ne "[1/5] Processing uploaded data... "
+echo -ne "[1/5] Processing uploaded data.."
 
 # fake read boundary+disposition, etc.
 read boundary
@@ -28,6 +28,11 @@ c=${#ctype}
 # 6 + 2 newlines == 10 junk bytes
 a=$((a*2+b+c+d+10))
 
+# start a progress bar outputing dots every few seconds
+while :;do echo -n .;sleep 3;done &
+PROGRESS_PID=$!
+trap "kill ${PROGRESS_PID}" EXIT
+
 # write out the data
 SIZE=$((HTTP_CONTENT_LENGTH-a))
 filename=$(mktemp -p /usr/local/tmp)
@@ -37,6 +42,10 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# stop the progress output
+kill ${PROGRESS_PID} && trap " " EXIT
+
+# output the number of bytes received
 echo "$(stat -c%s ${filename}) bytes received.<br>"
 
 echo -ne "[2/5] Calculating SHA256 checksum: "
@@ -49,7 +58,7 @@ echo "$(echo ${CHKSUM} | awk '{ print $1 }')<br>"
 
 ########
 # check if file is a valid firmware update/recovery file
-echo -ne "[3/5] Checking/Unarchiving data... "
+echo -ne "[3/5] Checking uploaded data... "
 
 TMPDIR="${filename}-dir"
 mkdir -p "${TMPDIR}"
@@ -64,11 +73,22 @@ FILETYPE=""
 if [ -z "${FILETYPE}" ]; then
   /usr/bin/file -b ${filename} | egrep -q "(gzip compressed|tar archive)"
   if [ $? -eq 0 ]; then
+    echo -ne "tar identified, unarchiving.."
+
+    # start a progress bar outputing dots every few seconds
+    while :;do echo -n .;sleep 3;done &
+    PROGRESS_PID=$!
+    trap "kill ${PROGRESS_PID}" EXIT
+
+    # unarchive the tar
     /bin/tar -C ${TMPDIR} --no-same-owner -xf ${filename}
     if [ $? -ne 0 ]; then
       echo "ERROR: (untar)"
       exit 1
     fi
+
+    # stop the progress output
+    kill ${PROGRESS_PID} && trap " " EXIT
 
     rm -f ${filename}
 
@@ -80,11 +100,22 @@ fi
 if [ -z "${FILETYPE}" ]; then
   /usr/bin/file -b ${filename} | grep -q "Zip archive data"
   if [ $? -eq 0 ]; then
+    echo -ne "zip identified, unarchiving.."
+
+    # start a progress bar outputing dots every few seconds
+    while :;do echo -n .;sleep 3;done &
+    PROGRESS_PID=$!
+    trap "kill ${PROGRESS_PID}" EXIT
+
+    # unarchive the zip
     /usr/bin/unzip -q -o -d ${TMPDIR} ${filename} 2>/dev/null
     if [ $? -ne 0 ]; then
       echo "ERROR: (unzip)"
       exit 1
     fi
+
+    # stop the progress output
+    kill ${PROGRESS_PID} && trap " " EXIT
 
     rm -f ${filename}
 
@@ -96,6 +127,8 @@ fi
 if [ -z "${FILETYPE}" ]; then
   /usr/bin/file -b ${filename} | egrep -q "DOS/MBR boot sector.*partition 3"
   if [ $? -eq 0 ]; then
+    echo -ne "sdcard img identified, validating, "
+
     # the file seems to be a full-fledged SD card image with MBR boot sector, etc. so lets
     # check if we have exactly 3 partitions
     /usr/sbin/parted -sm ${filename} print 2>/dev/null | tail -1 | egrep -q "3:.*:ext4:"
@@ -114,6 +147,8 @@ fi
 if [ -z "${FILETYPE}" ]; then
   /usr/bin/file -b ${filename} | egrep -q "ext4 filesystem.*rootfs"
   if [ $? -eq 0 ]; then
+    echo -ne "rootfs ext4 identified, validating, "
+
     # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
     /sbin/e2fsck -nf ${filename} 2>/dev/null >/dev/null
     if [ $? -ne 0 ]; then
@@ -131,6 +166,8 @@ fi
 if [ -z "${FILETYPE}" ]; then
   /usr/bin/file -b ${filename} | egrep -q "DOS/MBR boot sector.*bootfs.*FAT"
   if [ $? -eq 0 ]; then
+    echo -ne "bootfs vfat identified, validating, "
+
     # the file seems to be a vfat fs of the bootfs lets check if the ext4 is valid
     /sbin/fsck.fat -nf ${filename} 2>/dev/null >/dev/null
     if [ $? -ne 0 ]; then
@@ -148,7 +185,7 @@ if [ -z "${FILETYPE}" ]; then
   echo "ERROR: no valid filetype found"
   exit 1
 else
-  echo "'${FILETYPE}' data type identified, OK<br/>"
+  echo "OK<br/>"
 fi
 
 ######
@@ -216,7 +253,6 @@ echo "<br/>"
 # and if it returns 0 everything was fine and we can reboot!
 /bin/fwinstall.sh
 if [ $? -ne 0 ]; then
-  echo "ERROR: (fwinstall)"
   exit 1
 fi
 

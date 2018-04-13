@@ -201,14 +201,17 @@ fi
 ######
 # check for a full-fledged sdcard image in update dir
 echo -ne "[5/5] Checking for sdcard image... "
-if [[ -f "${UPDATEDIR}/new_firmware.img" ]]; then
+FLASHED_IMG=0
+for img_file in ${UPDATEDIR}/*.img; do
+  [[ -f ${img_file} ]] || break
+
   echo -ne "found, "
 
   # find out which will be the next lofs device node
   LOFS_DEV=$(/sbin/losetup -f)
 
   # perform a lofs mount of the image file
-  /sbin/losetup -r -f -P ${UPDATEDIR}/new_firmware.img
+  /sbin/losetup -r -f -P ${img_file}
   if [[ $? -ne 0 ]]; then
     echo "ERROR: (losetup)"
     exit 1
@@ -348,10 +351,14 @@ if [[ -f "${UPDATEDIR}/new_firmware.img" ]]; then
   fi
 
   echo "DONE<br/>"
-  exit 0
 
-else
+  FLASHED_IMG=1
+  break
+done
+if [[ ${FLASHED_IMG} -eq 0 ]]; then
   echo "none found, OK<br/>"
+else
+  exit 0
 fi
 
 echo "<br/>"

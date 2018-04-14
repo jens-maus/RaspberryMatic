@@ -4,7 +4,7 @@ echo "Starting firmware update (DO NOT INTERRUPT!!!):<br/>"
 
 # there can be only one!
 if [[ -f /tmp/.runningFirmwareUpdate ]]; then
-  echo "ERROR: Firmware Update already running"
+  echo "ERROR: Firmware Update already running<br/>"
   exit 1
 fi
 
@@ -15,7 +15,7 @@ touch /tmp/.runningFirmwareUpdate
 echo -ne "[1/5] Validate update directory... "
 UPDATEDIR=$(readlink /usr/local/.firmwareUpdate)
 if [[ -z "${UPDATEDIR}" ]] || [[ ! -d "${UPDATEDIR}" ]]; then
-  echo "ERROR: (updatedir)"
+  echo "ERROR: (updatedir)<br/>"
   exit 1
 fi
 echo "OK<br/>"
@@ -24,20 +24,20 @@ echo "OK<br/>"
 echo -ne "[2/5] Checking update_script... "
 if [[ -f "${UPDATEDIR}/update_script" ]]; then
   if [[ ! -x "${UPDATEDIR}/update_script" ]]; then
-    echo "ERROR: update_script NOT executable"
+    echo "ERROR: update_script NOT executable<br/>"
     exit 1
   fi
   echo "exists, executing:<br/>"
   echo "================================================<br/>"
 
   # execute update_script
-  (cd ${UPDATEDIR} ; ${UPDATEDIR}/update_script HM-RASPBERRYMATIC)
+  (cd ${UPDATEDIR}; ${UPDATEDIR}/update_script HM-RASPBERRYMATIC)
   if [[ $? -ne 0 ]]; then
-    echo "================================================<br/>"
-    echo "ERROR: update_script failed!"
+    echo "<br/>================================================<br/>"
+    echo "ERROR: update_script failed!<br/>"
     exit 1
   fi
-  echo "================================================<br/>"
+  echo "<br/>================================================<br/>"
 
   # update script succeeded, lets finish immediately
   echo "DONE (succeeded)<br/>"
@@ -63,20 +63,20 @@ for ext4_file in ${UPDATEDIR}/*.ext4; do
     # find out the rootfs device node
     ROOTFS_DEV=$(/sbin/blkid | grep rootfs | cut -f1 -d:)
     if [[ -z "${ROOTFS_DEV}" ]]; then
-      echo "ERROR: (blkid)"
+      echo "ERROR: (blkid)<br/>"
       exit 1
     fi
 
     # get boot partition size in bytes
     ROOTFS_SIZE=$(/sbin/fdisk -l ${ROOTFS_DEV} | head -1 | cut -f5 -d" ")
     if [[ -z "${ROOTFS_SIZE}" ]]; then
-      echo "ERROR: (fdisk)"
+      echo "ERROR: (fdisk)<br/>"
       exit 1
     fi
 
     # check if the found rootfs ext4 file matches the current rootfs partition size
     if [[ "${ROOTFS_SIZE}" != "$(stat -c%s ${ext4_file})" ]]; then
-      echo "ERROR: rootfs partition has different size than provided image"
+      echo "ERROR: rootfs partition has different size than provided image<br/>"
       exit 1
     fi
 
@@ -84,7 +84,7 @@ for ext4_file in ${UPDATEDIR}/*.ext4; do
     echo -ne "flashing.."
     umount -f /rootfs
     if [[ $? -ne 0 ]]; then
-      echo "ERROR: (umount)"
+      echo "ERROR: (umount)<br/>"
       exit 1
     fi
 
@@ -96,7 +96,7 @@ for ext4_file in ${UPDATEDIR}/*.ext4; do
     # use dd to write the image file to the boot partition
     /bin/dd if=${ext4_file} of=${ROOTFS_DEV} bs=1M conv=fsync status=none
     if [[ $? -ne 0 ]]; then
-      echo "ERROR: (dd)"
+      echo "ERROR: (dd)<br/>"
       exit 1
     fi
 
@@ -105,7 +105,7 @@ for ext4_file in ${UPDATEDIR}/*.ext4; do
 
     mount /rootfs
     if [[ $? -ne 0 ]]; then
-      echo "ERROR: (mount)"
+      echo "ERROR: (mount)<br/>"
       exit 1
     fi
 
@@ -137,20 +137,20 @@ for vfat_file in ${UPDATEDIR}/*.vfat; do
     # find out the bootfs device node
     BOOTFS_DEV=$(/sbin/blkid | grep bootfs | cut -f1 -d:)
     if [[ -z "${BOOTFS_DEV}" ]]; then
-      echo "ERROR: (blkid)"
+      echo "ERROR: (blkid)<br/>"
       exit 1
     fi
 
     # get boot partition size in bytes
     BOOTFS_SIZE=$(/sbin/fdisk -l ${BOOTFS_DEV} | head -1 | cut -f5 -d" ")
     if [[ -z "${BOOTFS_SIZE}" ]]; then
-      echo "ERROR: (fdisk)"
+      echo "ERROR: (fdisk)<br/>"
       exit 1
     fi
 
     # check if the found bootfs vfat file matches the current bootfs partition size
     if [[ "${BOOTFS_SIZE}" != "$(stat -c%s ${vfat_file})" ]]; then
-      echo "ERROR: bootfs partition has different size than provided image"
+      echo "ERROR: bootfs partition has different size than provided image<br/>"
       exit 1
     fi
 
@@ -158,7 +158,7 @@ for vfat_file in ${UPDATEDIR}/*.vfat; do
     echo -ne "flashing.."
     umount -f /bootfs
     if [[ $? -ne 0 ]]; then
-      echo "ERROR: (umount)"
+      echo "ERROR: (umount)<br/>"
       exit 1
     fi
 
@@ -170,7 +170,7 @@ for vfat_file in ${UPDATEDIR}/*.vfat; do
     # use dd to write the image file to the boot partition
     /bin/dd if=${vfat_file} of=${BOOTFS_DEV} bs=1M conv=fsync status=none
     if [[ $? -ne 0 ]]; then
-      echo "ERROR: (dd)"
+      echo "ERROR: (dd)<br/>"
       exit 1
     fi
 
@@ -179,7 +179,7 @@ for vfat_file in ${UPDATEDIR}/*.vfat; do
 
     mount /bootfs
     if [[ $? -ne 0 ]]; then
-      echo "ERROR: (mount)"
+      echo "ERROR: (mount)<br/>"
       exit 1
     fi
 
@@ -213,7 +213,7 @@ for img_file in ${UPDATEDIR}/*.img; do
   # perform a lofs mount of the image file
   /sbin/losetup -r -f -P ${img_file}
   if [[ $? -ne 0 ]]; then
-    echo "ERROR: (losetup)"
+    echo "ERROR: (losetup)<br/>"
     exit 1
   fi
 
@@ -223,27 +223,27 @@ for img_file in ${UPDATEDIR}/*.img; do
     # found out the bootfs main device
     BOOTFS_DEV=$(/sbin/blkid | grep -v "${LOFS_DEV}" | grep bootfs | cut -f1 -d:)
     if [[ -z "${BOOTFS_DEV}" ]]; then
-      echo "ERROR: (blkid bootfs)"
+      echo "ERROR: (blkid bootfs)<br/>"
       exit 1
     fi
 
     # get boot partition size in bytes
     BOOTFS_SIZE=$(/sbin/fdisk -l ${BOOTFS_DEV} | head -1 | cut -f5 -d" ")
     if [[ -z "${BOOTFS_SIZE}" ]]; then
-      echo "ERROR: (fdisk bootfs)"
+      echo "ERROR: (fdisk bootfs)<br/>"
       exit 1
     fi
 
     # get boot lofs partition size in bytes
     BOOTFS_LOOPSIZE=$(/sbin/fdisk -l ${BOOTFS_LOOPDEV} | head -1 | cut -f5 -d" ")
     if [[ -z "${BOOTFS_LOOPSIZE}" ]]; then
-      echo "ERROR: (fdisk bootfs loopfs)"
+      echo "ERROR: (fdisk bootfs loopfs)<br/>"
       exit 1
     fi
 
     # check if the found bootfs loopfs size matches the current bootfs partition size
     if [[ "${BOOTFS_SIZE}" != "${BOOTFS_LOOPSIZE}" ]]; then
-      echo "ERROR: bootfs partition has different size than provided image"
+      echo "ERROR: bootfs partition has different size than provided image<br/>"
       exit 1
     fi
 
@@ -251,7 +251,7 @@ for img_file in ${UPDATEDIR}/*.img; do
     echo -ne "flashing bootfs.."
     umount -f /bootfs
     if [[ $? -ne 0 ]]; then
-      echo "ERROR: (umount)"
+      echo "ERROR: (umount)<br/>"
       exit 1
     fi
 
@@ -263,7 +263,7 @@ for img_file in ${UPDATEDIR}/*.img; do
     # use dd to write the image file to the boot partition
     /bin/dd if=${BOOTFS_LOOPDEV} of=${BOOTFS_DEV} bs=1M conv=fsync status=none
     if [[ $? -ne 0 ]]; then
-      echo "ERROR: (dd)"
+      echo "ERROR: (dd)<br/>"
       exit 1
     fi
 
@@ -272,7 +272,7 @@ for img_file in ${UPDATEDIR}/*.img; do
 
     mount -o ro ${BOOTFS_DEV} /bootfs
     if [[ $? -ne 0 ]]; then
-      echo "ERROR: (mount)"
+      echo "ERROR: (mount)<br/>"
       exit 1
     fi
 
@@ -286,27 +286,27 @@ for img_file in ${UPDATEDIR}/*.img; do
     # found out the rootfs main device
     ROOTFS_DEV=$(/sbin/blkid | grep -v "${LOFS_DEV}" | grep rootfs | cut -f1 -d:)
     if [[ -z "${ROOTFS_DEV}" ]]; then
-      echo "ERROR: (blkid rootfs)"
+      echo "ERROR: (blkid rootfs)<br/>"
       exit 1
     fi
 
     # get root partition size in bytes
     ROOTFS_SIZE=$(/sbin/fdisk -l ${ROOTFS_DEV} | head -1 | cut -f5 -d" ")
     if [[ -z "${ROOTFS_SIZE}" ]]; then
-      echo "ERROR: (fdisk rootfs)"
+      echo "ERROR: (fdisk rootfs)<br/>"
       exit 1
     fi
 
     # get root lofs partition size in bytes
     ROOTFS_LOOPSIZE=$(/sbin/fdisk -l ${ROOTFS_LOOPDEV} | head -1 | cut -f5 -d" ")
     if [[ -z "${ROOTFS_LOOPSIZE}" ]]; then
-      echo "ERROR: (fdisk rootfs loopfs)"
+      echo "ERROR: (fdisk rootfs loopfs)<br/>"
       exit 1
     fi
 
     # check if the found rootfs loopfs size matches the current rootfs partition size
     if [[ "${ROOTFS_SIZE}" != "${ROOTFS_LOOPSIZE}" ]]; then
-      echo "ERROR: rootfs partition has different size than provided image"
+      echo "ERROR: rootfs partition has different size than provided image<br/>"
       exit 1
     fi
 
@@ -314,7 +314,7 @@ for img_file in ${UPDATEDIR}/*.img; do
     echo -ne "flashing rootfs.."
     umount -f /rootfs
     if [[ $? -ne 0 ]]; then
-      echo "ERROR: (umount)"
+      echo "ERROR: (umount)<br/>"
       exit 1
     fi
 
@@ -326,7 +326,7 @@ for img_file in ${UPDATEDIR}/*.img; do
     # use dd to write the image file to the boot partition
     /bin/dd if=${ROOTFS_LOOPDEV} of=${ROOTFS_DEV} bs=1M conv=fsync status=none
     if [[ $? -ne 0 ]]; then
-      echo "ERROR: (dd)"
+      echo "ERROR: (dd)<br/>"
       exit 1
     fi
 
@@ -335,7 +335,7 @@ for img_file in ${UPDATEDIR}/*.img; do
 
     mount -o ro ${ROOTFS_DEV} /rootfs
     if [[ $? -ne 0 ]]; then
-      echo "ERROR: (mount)"
+      echo "ERROR: (mount)<br/>"
       exit 1
     fi
 
@@ -346,7 +346,7 @@ for img_file in ${UPDATEDIR}/*.img; do
   # detach all lofs devices
   /sbin/losetup -d ${LOFS_DEV}
   if [[ $? -ne 0 ]]; then
-    echo "ERROR: (lofs detach)"
+    echo "ERROR: (lofs detach)<br/>"
     exit 1
   fi
 

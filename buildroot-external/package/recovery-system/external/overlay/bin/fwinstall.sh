@@ -12,7 +12,7 @@ fi
 trap 'rm -f /tmp/.runningFirmwareUpdate' EXIT
 touch /tmp/.runningFirmwareUpdate
 
-echo -ne "[1/5] Validate update directory... "
+echo -ne "[1] Validate update directory... "
 UPDATEDIR=$(readlink /usr/local/.firmwareUpdate)
 if [[ -z "${UPDATEDIR}" ]] || [[ ! -d "${UPDATEDIR}" ]]; then
   echo "ERROR: (updatedir)<br/>"
@@ -21,7 +21,7 @@ fi
 echo "OK<br/>"
 
 # check for executable update_script in UPDATEDIR
-echo -ne "[2/5] Checking update_script... "
+echo -ne "[2] Checking update_script... "
 if [[ -f "${UPDATEDIR}/update_script" ]]; then
   if [[ ! -x "${UPDATEDIR}/update_script" ]]; then
     echo "ERROR: update_script NOT executable<br/>"
@@ -47,7 +47,7 @@ else
 fi
 
 # check if there is an ext4 file waiting for us in UPDATEDIR
-echo -ne "[3/5] Checking for rootfs filesystem images... "
+echo -ne "[3] Checking for rootfs filesystem images... "
 FLASHED_ROOTFS=0
 for ext4_file in ${UPDATEDIR}/*.ext4; do
   [[ -f ${ext4_file} ]] || break
@@ -121,7 +121,7 @@ if [[ ${FLASHED_ROOTFS} -eq 0 ]]; then
 fi
 
 # check if there is an vfat file waiting for us in UPDATEDIR
-echo -ne "[4/5] Checking for bootfs filesystem images... "
+echo -ne "[4] Checking for bootfs filesystem images... "
 FLASHED_BOOTFS=0
 for vfat_file in ${UPDATEDIR}/*.vfat; do
   [[ -f ${vfat_file} ]] || break
@@ -200,7 +200,7 @@ fi
 
 ######
 # check for a full-fledged sdcard image in update dir
-echo -ne "[5/5] Checking for sdcard image... "
+echo -ne "[5] Checking for sdcard image... "
 FLASHED_IMG=0
 for img_file in ${UPDATEDIR}/*.img; do
   [[ -f ${img_file} ]] || break

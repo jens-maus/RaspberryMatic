@@ -256,5 +256,8 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# cleanup
+rm -f /usr/local/.firmwareUpdate
+
 echo "Rebooting..."
 /sbin/reboot

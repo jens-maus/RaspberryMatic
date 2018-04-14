@@ -1,3 +1,22 @@
+#!/bin/sh
+
+echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
+
+if [ -f /tmp/.runningFirmwareUpdate ]; then
+  echo "Displaying running firmware update output:<br/>"
+  echo "==========================================<br/>"
+
+  [ -f /tmp/fwinstall.pid ] && kill $(cat /tmp/fwinstall.pid)
+  /usr/bin/tail -F /tmp/fwinstall.log &
+  echo $! >/tmp/fwinstall.pid
+  wait $!
+
+  echo "<br/>==========================================<br/>"
+  echo "FINISHED<br/>"
+  exit 0
+fi
+
+cat <<EOF
 <html>
   <head>
     <meta http-equiv="expires" content="0">
@@ -103,3 +122,4 @@
     <hr noshade size="4" align="left" color="white">
   </body>
 </html>
+EOF

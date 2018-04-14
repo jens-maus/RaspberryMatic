@@ -14,7 +14,7 @@ start() {
     /etc/init.d/S50lighttpd stop
 
     # run unattended firmware update
-    /bin/fwinstall.sh >/tmp/fwinstall.log 2>&1
+    ( set -o pipefail; /bin/fwinstall.sh 2>&1 | tee /tmp/fwinstall.log )
     if [[ $? -ne 0 ]]; then
       # firmware update failed, lets change to
       # interactive mode

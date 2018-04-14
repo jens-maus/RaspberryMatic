@@ -1,0 +1,64 @@
+#!/bin/sh
+
+STARTPWD=$(pwd)
+BOOT_FS=boot.vfat
+ROOT_FS=rootfs.ext4
+
+RC=1
+if [ -f ${STARTPWD}/${BOOT_FS} ]; then
+  BOOT_DEV=$(/bin/mount | grep "/bootfs" | cut -f1 -d" ")
+  if [ -n "${BOOT_DEV}" ]; then
+    BOOT_SIZE=$(/sbin/fdisk -l ${BOOT_DEV} | head -1 | cut -f5 -d" ")
+    if [ "${BOOT_SIZE}" == "$(stat -c%s ${STARTPWD}/${BOOT_FS})" ]; then
+      echo -ne "Writing bootfs to ${BOOT_DEV}... "
+      /bin/umount -f /bootfs
+      /bin/dd if=${STARTPWD}/${BOOT_FS} of=${BOOT_DEV} bs=1M conv=fsync
+      if [ $? -ne 0 ]; then
+        echo "ERROR: (dd)"
+        RC=1
+      else
+        echo "OK"
+        RC=0
+      fi
+      /bin/mount /bootfs
+    else
+      echo "ERROR: incorrect bootfs size"
+      RC=1
+    fi
+  else
+    echo "ERROR: no /bootfs found"
+    RC=1
+  fi
+else
+  echo "WARNING: no ${BOOT_FS} found"
+fi
+
+if [ -f ${STARTPWD}/${ROOT_FS} ]; then
+  ROOT_DEV=$(/bin/mount | grep "/rootfs" | cut -f1 -d" ")
+  if [ -n "${ROOT_DEV}" ]; then
+    ROOT_SIZE=$(/sbin/fdisk -l ${ROOT_DEV} | head -1 | cut -f5 -d" ")
+    if [ "${ROOT_SIZE}" == "$(stat -c%s ${STARTPWD}/${ROOT_FS})" ]; then
+      echo -ne "Writing rootfs to ${ROOT_DEV}... "
+      /bin/umount -f /rootfs
+      /bin/dd if=${STARTPWD}/${ROOT_FS} of=${ROOT_DEV} bs=1M conv=fsync
+      if [ $? -ne 0 ]; then
+        echo "ERROR: (dd)"
+        RC=1
+      else
+        echo "OK"
+        RC=0
+      fi
+      /bin/mount /rootfs
+    else
+      echo "ERROR: incorrect rootfs size"
+      RC=1
+    fi
+  else
+    echo "ERROR: not /rootfs found"
+    RC=1
+  fi
+else
+  echo "WARNING: no ${ROOT_FS} found"
+fi
+
+exit ${RC}

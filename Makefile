@@ -49,11 +49,13 @@ release: dist
 	cd ./release && zip ./RaspberryMatic-$(VERSION)-$(BOARD).zip ./RaspberryMatic-$(VERSION)-$(BOARD).img ./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256 ../LICENSE
 	cd ./release && sha256sum RaspberryMatic-$(VERSION)-$(BOARD).zip >RaspberryMatic-$(VERSION)-$(BOARD).zip.sha256
 
-.PHONY: updateFile
-updateFile: dist
-	cd buildroot-external/package/eq3-updatefile; tar cvf ../../../build-$(PRODUCT)/images/$(PRODUCT)-$(VERSION).tar -T files-package.txt
-	cd build-$(PRODUCT)/images; tar uvf $(PRODUCT)-$(VERSION).tar -T ../../buildroot-external/package/eq3-updatefile/files-images.txt
-	cd build-$(PRODUCT)/images; gzip $(PRODUCT)-$(VERSION).tar; mv $(PRODUCT)-$(VERSION).tar.gz $(PRODUCT)-$(VERSION).tgz
+.PHONY: updatePkg
+updatePkg: dist
+	rm -rf /tmp/$(PRODUCT)-$(VERSION) 2>/dev/null; mkdir -p /tmp/$(PRODUCT)-$(VERSION)
+	for f in $(shell cat release/updatepkg/$(PRODUCT)/files-package.txt); do ln -s $(shell pwd)/release/updatepkg/$(PRODUCT)/$${f} /tmp/$(PRODUCT)-$(VERSION)/; done
+	for f in $(shell cat release/updatepkg/$(PRODUCT)/files-images.txt); do ln -s $(shell pwd)/build-$(PRODUCT)/images/$${f} /tmp/$(PRODUCT)-$(VERSION)/; done
+	cd /tmp/$(PRODUCT)-$(VERSION); sha256sum * >$(PRODUCT)-$(VERSION).sha256
+	cd ./release; tar -C /tmp/$(PRODUCT)-$(VERSION) --owner=root --group=root -cvzhf $(PRODUCT)-$(VERSION).tgz $(shell ls /tmp/$(PRODUCT)-$(VERSION))
 
 .PHONY: clean
 clean:

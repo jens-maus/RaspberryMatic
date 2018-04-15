@@ -16401,6 +16401,7 @@ BidcosRfPage =
   m_gatewayTableIPHeader: null,
   m_gatewayTableStateHeader: null,
   m_gatewayTableDCStateHeader: null,
+  m_gatewayTableFWStateHeader: null,
   m_gatewayTableActionHeader: null,
   m_gatewayTableBody: null,
   m_optionsButtonBar: null,
@@ -16518,8 +16519,15 @@ BidcosRfPage =
     this.m_gatewayTableDCStateHeader = document.createElement("th");
     this.m_gatewayTableDCStateHeader.className = "bidcosrf_tableheader";
     //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
-    this.m_gatewayTableDCStateHeader.appendChild(document.createTextNode("DutyCycle / Firmware"));
+    this.m_gatewayTableDCStateHeader.appendChild(document.createTextNode("DutyCycle"));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableDCStateHeader);
+
+    /* Spaltenüberschrift Firmware Status (Tabelle für BidCoS-RF Gateways */
+    this.m_gatewayTableFWStateHeader = document.createElement("th");
+    this.m_gatewayTableFWStateHeader.className = "bidcosrf_tableheader";
+    //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
+    this.m_gatewayTableFWStateHeader.appendChild(document.createTextNode("Firmware"));
+    this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableFWStateHeader);
 
     /* Spaltenüberschrift Verbunden (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableActionHeader = document.createElement("th");
@@ -16843,10 +16851,11 @@ BidcosRfPage =
 				    for (var loop = 0; loop < gatewayStatus.length; loop++) {
 				    	gatewaysn = gatewayStatus[loop].address;
 				    	if (lgwStatus.serial == gatewaysn) {
-				    		var textDC = "";
-				    		textDC += gatewayStatus[loop].dutyCycle + "% / ";
-				    		textDC += gatewayStatus[loop].fwVersion;
+				    		var textDC = gatewayStatus[loop].dutyCycle + "%";
 				    		lgw.setDCState(textDC);
+
+				    		var textFW = gatewayStatus[loop].fwVersion;
+				    		lgw.setFWState(textFW);
 				    	}
 				    }
 		        	if(lgw) 
@@ -16872,7 +16881,6 @@ BidcosRfPage =
 				      textB = translateKey("lanGatewayLblNotActive");
 					}
 					lgw.setState(textB);
-					
 			  }//if lgwstatus
 			  else {
 			  	lgw.setState(translateKey("lanGatewayLblNotActive"));
@@ -16889,14 +16897,16 @@ BidcosRfPage =
 	   	      	gatewaysn = gatewayStatus[loop].address;
 
 	   	      	if (cfglan == gatewaysn) {
-	   	      		textFW = gatewayStatus[loop].fwVersion;
+	   	      		var textDC = gatewayStatus[loop].dutyCycle + "%";
+	   	      		rfGateways[i].setDCState(textDC);
+
+	   	      		var textFW = gatewayStatus[loop].fwVersion;
 	   	      		if (textFW < "965") {
-	   	      			var textDC = gatewayStatus[loop].dutyCycle + "% / 0." + gatewayStatus[loop].fwVersion + " / Update 0.965";
-	   	      			rfGateways[i].setDCState(textDC);
+	   	      			textFW = "0." + gatewayStatus[loop].fwVersion + " (Update: 0.965)";
 	   	      		} else {
-	   	      			textDC = gatewayStatus[loop].dutyCycle + "% / 0." + gatewayStatus[loop].fwVersion;
-	   	      			rfGateways[i].setDCState(textDC);
+	   	      			textFW = "0." + gatewayStatus[loop].fwVersion;
 	   	      		}
+	   	      		rfGateways[i].setFWState(textFW);
 	   	      	}
 	   	  	  }
 
@@ -17101,6 +17111,7 @@ BidcosRfPage.Gateway.prototype =
   m_ipLabel: null,
   m_stateLabel: null,
   m_stateDCLabel: null,
+  m_stateFWLabel: null,
   m_actionCell: null,
   m_deleteButton: null,
   m_onDeleteHandler: null,
@@ -17158,6 +17169,11 @@ BidcosRfPage.Gateway.prototype =
     this.m_stateDCLabel.className = "bidcosrf_tablecell";
     this.m_element.appendChild(this.m_stateDCLabel);
     
+    /* Firmware Status */
+    this.m_stateFWLabel = document.createElement("td");
+    this.m_stateFWLabel.className = "bidcosrf_tablecell";
+    this.m_element.appendChild(this.m_stateFWLabel);
+
     /* Aktion */
     this.m_actionCell = document.createElement("td");
     this.m_actionCell.className = "bidcosrf_actioncell";
@@ -17303,6 +17319,12 @@ BidcosRfPage.Gateway.prototype =
     this.m_stateDCLabel.appendChild(document.createTextNode(state));
   },
   
+  setFWState: function(state)
+  {
+    this.m_stateFWLabel.innerHTML = "";
+    this.m_stateFWLabel.appendChild(document.createTextNode(state));
+  },
+
   getElement: function()
   {
     return this.m_element;

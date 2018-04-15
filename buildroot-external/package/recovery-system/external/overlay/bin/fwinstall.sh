@@ -226,7 +226,7 @@ fwinstall()
 {
   echo "Starting firmware update (DO NOT INTERRUPT!!!):<br/>"
 
-  echo -ne "[1] Validate update directory... "
+  echo -ne "[1/5] Validate update directory... "
   UPDATEDIR=$(readlink /usr/local/.firmwareUpdate)
   if [[ -z "${UPDATEDIR}" ]] || [[ ! -d "${UPDATEDIR}" ]]; then
     echo "ERROR: (updatedir)<br/>"
@@ -235,7 +235,7 @@ fwinstall()
   echo "OK<br/>"
 
   # check for executable update_script in UPDATEDIR
-  echo -ne "[2] Checking update_script... "
+  echo -ne "[2/5] Checking update_script... "
   if [[ -f "${UPDATEDIR}/update_script" ]]; then
     if [[ ! -x "${UPDATEDIR}/update_script" ]]; then
       echo "ERROR: update_script NOT executable<br/>"
@@ -261,7 +261,7 @@ fwinstall()
   fi
 
   # check if there is an ext4 file waiting for us in UPDATEDIR
-  echo -ne "[3] Checking for rootfs filesystem images... "
+  echo -ne "[3/5] Checking for rootfs filesystem images... "
   FLASHED_ROOTFS=0
   for ext4_file in ${UPDATEDIR}/*.ext4; do
     [[ -f ${ext4_file} ]] || break
@@ -308,7 +308,7 @@ fwinstall()
       trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
 
       # use dd to write the image file to the boot partition
-      /bin/dd if=${ext4_file} of=${ROOTFS_DEV} bs=1M conv=fsync status=none
+      /bin/dd if=${ext4_file} of=${ROOTFS_DEV} bs=4M conv=fsync status=none
       if [[ $? -ne 0 ]]; then
         echo "ERROR: (dd)<br/>"
         exit 1
@@ -335,7 +335,7 @@ fwinstall()
   fi
 
   # check if there is an vfat file waiting for us in UPDATEDIR
-  echo -ne "[4] Checking for bootfs filesystem images... "
+  echo -ne "[4/5] Checking for bootfs filesystem images... "
   FLASHED_BOOTFS=0
   for vfat_file in ${UPDATEDIR}/*.vfat; do
     [[ -f ${vfat_file} ]] || break
@@ -382,7 +382,7 @@ fwinstall()
       trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
 
       # use dd to write the image file to the boot partition
-      /bin/dd if=${vfat_file} of=${BOOTFS_DEV} bs=1M conv=fsync status=none
+      /bin/dd if=${vfat_file} of=${BOOTFS_DEV} bs=4M conv=fsync status=none
       if [[ $? -ne 0 ]]; then
         echo "ERROR: (dd)<br/>"
         exit 1
@@ -407,14 +407,16 @@ fwinstall()
     echo "none found, OK<br/>"
   fi
 
+  ######
+  # check for a full-fledged sdcard image in update dir
+  echo -ne "[5/5] Checking for sdcard image... "
+
   # if we flashed either rootfs or bootfs we are finished
   if [[ ${FLASHED_ROOTFS} -eq 1 ]] || [[ ${FLASHED_BOOTFS} -eq 1 ]]; then
+    echo "skipped, OK<br/>"
     exit 0
   fi
 
-  ######
-  # check for a full-fledged sdcard image in update dir
-  echo -ne "[5] Checking for sdcard image... "
   FLASHED_IMG=0
   for img_file in ${UPDATEDIR}/*.img; do
     [[ -f ${img_file} ]] || break
@@ -475,7 +477,7 @@ fwinstall()
       trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
 
       # use dd to write the image file to the boot partition
-      /bin/dd if=${BOOTFS_LOOPDEV} of=${BOOTFS_DEV} bs=1M conv=fsync status=none
+      /bin/dd if=${BOOTFS_LOOPDEV} of=${BOOTFS_DEV} bs=4M conv=fsync status=none
       if [[ $? -ne 0 ]]; then
         echo "ERROR: (dd)<br/>"
         exit 1
@@ -538,7 +540,7 @@ fwinstall()
       trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
 
       # use dd to write the image file to the boot partition
-      /bin/dd if=${ROOTFS_LOOPDEV} of=${ROOTFS_DEV} bs=1M conv=fsync status=none
+      /bin/dd if=${ROOTFS_LOOPDEV} of=${ROOTFS_DEV} bs=4M conv=fsync status=none
       if [[ $? -ne 0 ]]; then
         echo "ERROR: (dd)<br/>"
         exit 1

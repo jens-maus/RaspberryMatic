@@ -15,9 +15,9 @@ set gateways [xmlrpc http://127.0.0.1:2001/ listBidcosInterfaces]
 #puts $gateways
 
 # DC-File anlegen um den DutyCycle Status für den Support anhand eines Backups sichtbar zu machen
-close [open /usr/local/etc/config/dc "w"]
-set date [clock seconds]
-set date [clock format $date -format {%d.%m.%Y %T}]
+#close [open /usr/local/etc/config/dc "w"]
+#set date [clock seconds]
+#set date [clock format $date -format {%d.%m.%Y %T}]
 
 # Gateway Konfiguration aus rfd.conf einlesen
 array set config {}
@@ -86,8 +86,8 @@ foreach line $lines {
     # CCU DutyCycle System-Log Meldung erzeugen
     exec logger -t dutycycle -p info "$ccutype-CCU / FW: $fw / DC: $dutycycle %"
     # Datum/Uhrzeit und CCU DutyCycle in DC-File schreiben
-    exec echo "$date" >> /usr/local/etc/config/dc
-    exec echo "$ccuoben=$dutycycle\nCONNECTED=$connection\nFIRMWARE=$fw" >> /usr/local/etc/config/dc
+    #exec echo "$date" >> /usr/local/etc/config/dc
+    #exec echo "$ccuoben=$dutycycle\nCONNECTED=$connection\nFIRMWARE=$fw" >> /usr/local/etc/config/dc
     } else {
       # Sektion für Gateways
       set gwoben $snoben
@@ -122,7 +122,7 @@ foreach line $lines {
             # DutyCycle System-Log Meldung erzeugen
             exec logger -t dutycycle -p info "$gwnoname / FW: $fw / DC: $dutycycle %"
             # DutyCycle in DC-File schreiben
-            exec echo "$sn1=$dutycycle$\nCONNECTED=$connection\nFIRMWARE=$fw" >> /usr/local/etc/config/dc
+            #exec echo "$sn1=$dutycycle$\nCONNECTED=$connection\nFIRMWARE=$fw" >> /usr/local/etc/config/dc
             } else {
               puts $gwname1
               if {($type2 == "LanInterface") && ($connection == "0" )} then {
@@ -141,7 +141,7 @@ foreach line $lines {
               # DutyCycle System-Log Meldung erzeugen
               exec logger -t dutycycle -p info "$gwname1 / FW: $fw / DC: $dutycycle %"
               # DutyCycle in DC-File schreiben
-              exec echo "$sn1=$dutycycle\nCONNECTED=$connection\nFIRMWARE=$fw" >> /usr/local/etc/config/dc
+              #exec echo "$sn1=$dutycycle\nCONNECTED=$connection\nFIRMWARE=$fw" >> /usr/local/etc/config/dc
             }
         }
       }

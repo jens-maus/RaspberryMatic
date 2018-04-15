@@ -78,7 +78,7 @@ foreach line $lines {
     puts "$connection / $dutycycle"
     puts "$ccutype / $fw"
     # Prüfen ob DC Systemvariable für CCU2 existiert und ggf. anlegen
-    append rega_cmd_create_sv "string svName ='$ccutype';object svObj = dom.GetObject(svName);if (!svObj){object svObjects = dom.GetObject(ID_SYSTEM_VARIABLES);svObj = dom.CreateObject(OT_VARDP);svObjects.Add(svObj.ID());svObj.Name(svName);svObj.ValueType(ivtFloat);svObj.ValueSubType(istGeneric);svObj.DPInfo('nicht löschen');svObj.ValueUnit('%');svObj.ValueMin(-100);svObj.ValueMax(100);svObj.State(0);svObj.Internal(false);svObj.Visible(true);dom.RTUpdate(true);}"
+    append rega_cmd_create_sv "string svName ='$ccutype';object svObj = dom.GetObject(svName);if (!svObj){object svObjects = dom.GetObject(ID_SYSTEM_VARIABLES);svObj = dom.CreateObject(OT_VARDP);svObjects.Add(svObj.ID());svObj.Name(svName);svObj.ValueType(ivtFloat);svObj.ValueSubType(istGeneric);svObj.DPInfo('DutyCycle CCU');svObj.ValueUnit('%');svObj.ValueMin(-100);svObj.ValueMax(100);svObj.State(0);svObj.Internal(false);svObj.Visible(true);dom.RTUpdate(true);}"
     rega_script $rega_cmd_create_sv
     # CCU DutyCycle Variable aktualisieren
     append rega_cmd "dom.GetObject(ID_SYSTEM_VARIABLES).Get('$ccutype').State('$dutycycle');"
@@ -114,7 +114,7 @@ foreach line $lines {
               set dutycycle -1
             }
             # Prüfen ob DC Systemvariable für Gateways existieren und ggf. anlegen
-            append rega_cmd_create_sv "string svName = '$gwnoname';object svObj = dom.GetObject(svName);if (!svObj){object svObjects = dom.GetObject(ID_SYSTEM_VARIABLES);svObj = dom.CreateObject(OT_VARDP);svObjects.Add(svObj.ID());svObj.Name(svName);svObj.ValueType(ivtFloat);svObj.ValueSubType(istGeneric);svObj.DPInfo('nicht löschen');svObj.ValueUnit('%');svObj.ValueMin(-100);svObj.ValueMax(100);svObj.State(0);svObj.Internal(false);svObj.Visible(true);dom.RTUpdate(true);}"
+            append rega_cmd_create_sv "string svName = '$gwnoname';object svObj = dom.GetObject(svName);if (!svObj){object svObjects = dom.GetObject(ID_SYSTEM_VARIABLES);svObj = dom.CreateObject(OT_VARDP);svObjects.Add(svObj.ID());svObj.Name(svName);svObj.ValueType(ivtFloat);svObj.ValueSubType(istGeneric);svObj.DPInfo('DutyCycle Gateway');svObj.ValueUnit('%');svObj.ValueMin(-100);svObj.ValueMax(100);svObj.State(0);svObj.Internal(false);svObj.Visible(true);dom.RTUpdate(true);}"
             rega_script $rega_cmd_create_sv
             # DutyCycle Variable aktualisieren
             append rega_cmd "dom.GetObject(ID_SYSTEM_VARIABLES).Get('$gwnoname').State('$dutycycle');"
@@ -133,7 +133,7 @@ foreach line $lines {
               append rega_cmd_rename_sv "string svName = '$gwnoname';string svNewName = '$gwname1';object svObj = dom.GetObject(svName);if (svObj){dom.GetObject(svName).Name(svNewName);dom.RTUpdate(true)};"
               rega_script $rega_cmd_rename_sv
               # Wenn ein Gateway Name eingetragen wurde, wird dieser angehangen z.B. "DutyCycle-OG1"
-              append rega_cmd_create_sv "string svName = '$gwname1';object svObj  = dom.GetObject(svName);if (!svObj){object svObjects = dom.GetObject(ID_SYSTEM_VARIABLES);svObj = dom.CreateObject(OT_VARDP);svObjects.Add(svObj.ID());svObj.Name(svName);svObj.ValueType(ivtFloat);svObj.ValueSubType(istGeneric);svObj.DPInfo('nicht löschen');svObj.ValueUnit('%');svObj.ValueMin(-100);svObj.ValueMax(100);svObj.State(0);svObj.Internal(false);svObj.Visible(true);dom.RTUpdate(true);}"
+              append rega_cmd_create_sv "string svName = '$gwname1';object svObj  = dom.GetObject(svName);if (!svObj){object svObjects = dom.GetObject(ID_SYSTEM_VARIABLES);svObj = dom.CreateObject(OT_VARDP);svObjects.Add(svObj.ID());svObj.Name(svName);svObj.ValueType(ivtFloat);svObj.ValueSubType(istGeneric);svObj.DPInfo('DutyCycle Gateway');svObj.ValueUnit('%');svObj.ValueMin(-100);svObj.ValueMax(100);svObj.State(0);svObj.Internal(false);svObj.Visible(true);dom.RTUpdate(true);}"
               rega_script $rega_cmd_create_sv
               # DutyCycle Variable aktualisieren
               append rega_cmd "dom.GetObject(ID_SYSTEM_VARIABLES).Get('$gwname1').State('$dutycycle');"

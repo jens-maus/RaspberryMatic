@@ -120,6 +120,11 @@ cat <<EOF
     <input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/normal_boot.cgi';" value="Normal Reboot">
 
     <hr noshade size="4" align="left" color="white">
+    <p style="font-size:9px; color:lightgrey">
+      recoveryfs: $(cat /VERSION | cut -f2 -d=)<br/>
+      bootfs: $(cat /bootfs/VERSION | cut -f2 -d=)<br/>
+      rootfs: $(cat /rootfs/VERSION | cut -f2 -d=)
+    </p>
   </body>
 </html>
 EOF

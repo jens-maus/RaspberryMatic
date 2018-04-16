@@ -13,21 +13,22 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 
 ## :cookie: Features
 * 100% HomeMatic CCU system compliant based on latest [OCCU 2.31.25](https://github.com/eq-3/occu) CCU software environment
-* Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
-* Based on latest [Buildroot 2018.02](http://buildroot.org/) lightweight Linux operating system
-* Integration of latest [community versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
+* Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMaticIP) compatible
+* Integration of latest [community version of ReGaHss](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta)
 * Integration of [third-party patches](https://github.com/jens-maus/RaspberryMatic/projects/3) for an improved WebUI experience.
-* Self-contained disk image targeted for lightweight embedded devices (primarily RaspberryPi)
-* Latest [Linux kernel 4.14.29](https://github.com/raspberrypi/linux/tree/rpi-4.14.y) with hard-float (ARMv7) support
+* Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
+* Support to be used without GPIO RF module just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
+* Integrated WebUI-based firmware update mechanism and Recovery System to perform maintenance operations such as system restore.
+* Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
+* Based on latest [Buildroot 2018.02.1](http://buildroot.org/) lightweight Linux operating system
+* Latest Linux kernel (RaspberryPi: [4.14.33](https://github.com/raspberrypi/linux/tree/rpi-4.14.y), Tinkerboard: [4.4.119](https://github.com/rockchip-linux/kernel)) with hard-float (ARMv7) support
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
-* Includes special embedded JAVA8 runtime environment ([1.8.0_162-8.27.0.91](http://www.azul.com/downloads/zulu-embedded/))
-* Supports onboard WiFi of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB WiFi sticks
-* Supports onboard Bluetooth of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB Bluetooth sticks
+* Includes embedded JAVA8 runtime environment ([1.8.0_162-8.27.0.91](http://www.azul.com/downloads/zulu-embedded/))
+* Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
+* Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setups including USB connection to uninterruptible power supply (UPS) as well as remote NUT server use (e.g. via Synology NAS Network UPS functionality)
-* Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
-* Support to be used without GPIO RF module just connecting it to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Full IPv6 support and default HTTPS enabled WebUI support
 * Support to query status information of the underlying Linux system using SNMP requests
 * Auto-resizing `/usr/local` partition to utilize the full capacity of the SD card or USB stick
@@ -58,12 +59,18 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/) or [Model B, 512MB](https://www.adafruit.com/product/998)
   * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) or [Model A, 256MB](https://www.adafruit.com/product/1344)
   * [ASUS Tinkerboard](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
-* One of the following BidCos-RF/HomeMaticIP capabale RF devices:
-  * HomeMatic-RF GPIO Radio Module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) – [Installation](https://www.youtube.com/watch?v=xtzXsvOLa_Y))
-  * HomeMaticIP RF USB Stick ([HmIP-RFUSB](https://www.elv.de/elv-homematic-ip-rf-usb-stick-hmip-rfusb-fuer-alternative-steuerungsplattformen-arr-bausatz.html))
-  * HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
-  * HomeMatic Config Adapter ([HM-CFG-USB-2](https://wiki.fhem.de/wiki/HM-CFG-USB_USB_Konfigurations-Adapter))
-* 2GB minimum space on microSD card or USB memory stick / hard disk (when using RaspberryPi3)
+* One or more of the following HomeMatic/HomeMatic-Wired/HomeMaticIP capabale devices:
+  * HomeMatic + HomeMaticIP:
+    * GPIO Radio Module HAT – [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) ([Installation](https://www.youtube.com/watch?v=xtzXsvOLa_Y))
+    * GPIO Radio Module HAT – RPI-RF-MOD
+  * HomeMaticIP only:
+    * USB Stick – [HmIP-RFUSB](https://www.elv.de/elv-homematic-ip-rf-usb-stick-hmip-rfusb-fuer-alternative-steuerungsplattformen-arr-bausatz.html)
+  * HomeMatic only:
+    * LAN Gateway – [HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)
+    * USB Config Adapter – [HM-CFG-USB-2](https://wiki.fhem.de/wiki/HM-CFG-USB_USB_Konfigurations-Adapter)
+  * HomeMatic-Wired only:
+    * LAN Wired Gateway – [HMW-LGW-O-DR-GS-EU](https://www.elv.de/homematic-rs485-gateway-1.html)
+* 4 GB minimum sized microSD card or USB memory stick / hard disk (RaspberryPi3 only)
 
 ## :telescope: Compatible Third-Party CCU Addons
 The CCU platform allows to enhance the functionality of a CCU by installing so-called CCU Addon packages. For RaspberryMatic, standard CCU Addon packages won't work because included binaries have to be recompiled for the hard-float buildroot environment RaspberryMatic uses. Here is a list of well-known already compatible Addon packages (please note that this list might be incomplete):

@@ -43,6 +43,8 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 
 ## :fire: Limitations
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
+* No web-based configuration for enabling/disabling the LAN-Gateway mode (work in progress)
+* No web-based configuration for configuring NUT (UPS) support (work in progress)
 
 ## :computer: Requirements
 <img src="https://files.elv.com/bilder/artikel/Produkte/14/1421/142141/Internet/gross/142141_F02_PlHomeMatic.jpg" alt="RaspberryPi equipped with HM-MOD-RPI-PCB" width=300 align=right>
@@ -61,8 +63,8 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [ASUS Tinkerboard](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
 * One or more of the following HomeMatic/HomeMatic-Wired/HomeMaticIP capabale devices:
   * HomeMatic + HomeMaticIP:
+    * GPIO Radio Module HAT – [RPI-RF-MOD](https://www.elv.de/homematic-funk-modulplatine-fuer-raspberry-pi-3-rpi-rf-mod-komplettbausatz.html)  
     * GPIO Radio Module HAT – [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) ([Installation](https://www.youtube.com/watch?v=xtzXsvOLa_Y))
-    * GPIO Radio Module HAT – RPI-RF-MOD
   * HomeMaticIP only:
     * USB Stick – [HmIP-RFUSB](https://www.elv.de/elv-homematic-ip-rf-usb-stick-hmip-rfusb-fuer-alternative-steuerungsplattformen-arr-bausatz.html)
   * HomeMatic only:

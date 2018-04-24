@@ -28,7 +28,7 @@ if test $? -eq 0 -o -e ${devtype} ${devnum}:${userfs} /.recoveryMode -o ! -e ${d
   # load the initrd file
   load ${devtype} ${devnum}:${bootfs} ${load_addr} ${recoveryfs_initrd}
   setenv rootfs_str "/dev/ram0"
-  setenv initrd_addr_r ${ramdisk_addr_r}
+  setenv initrd_addr_r ${load_addr}
   setenv kernel_img "recoveryfs-zImage"
   setenv kernelfs ${bootfs}
 else

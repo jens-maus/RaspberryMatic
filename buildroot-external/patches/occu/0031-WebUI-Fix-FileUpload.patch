@@ -474,7 +474,7 @@
  }
 --- occu/WebUI/www/config/fileupload.ccc.orig
 +++ occu/WebUI/www/config/fileupload.ccc
-@@ -0,0 +1,43 @@
+@@ -0,0 +1,47 @@
 +#!/bin/sh
 +
 +echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
@@ -510,10 +510,14 @@
 +echo "  <script>"
 +echo "   <!--- Hide script from browsers that don't understand JavaScript"
 +echo "   var url = '${url}?sid=${sid}';"
-+echo "   parent.top.dlgPopup.hide();"
-+echo "   parent.top.dlgPopup.setWidth(450);"
-+echo "   parent.top.dlgPopup.downloadOnly = ${downloadOnly};"
-+echo "   parent.top.dlgPopup.LoadFromFile(url, 'action=${action}&filename=${filename}');"
++echo "   if (parent.top.dlgPopup !== undefined) {"
++echo "     parent.top.dlgPopup.hide();"
++echo "     parent.top.dlgPopup.setWidth(450);"
++if [[ -n "${downloadOnly}" ]]; then
++  echo "     parent.top.dlgPopup.downloadOnly=${downloadOnly};"
++fi
++echo "     parent.top.dlgPopup.LoadFromFile(url, 'action=${action}&filename=${filename}');"
++echo "   }"
 +echo "   // End hiding -->"
 +echo "  </script>"
 +echo " </head>"

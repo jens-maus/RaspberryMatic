@@ -47,7 +47,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * No web-based configuration for configuring NUT (UPS) support (work in progress)
 
 ## :computer: Requirements
-<img src="https://files.elv.com/bilder/artikel/Produkte/14/1421/142141/Internet/gross/142141_F02_PlHomeMatic.jpg" alt="RaspberryPi equipped with HM-MOD-RPI-PCB" width=300 align=right>
+<img src="https://files.elv.com/bilder/artikel/Produkte/15/1529/152941/Internet//gross/152941_w01_modulplatine.jpg" alt="RaspberryPi equipped with RPI-RF-MOD" width=300 align=right>
 
 * Any of the following embedded hardware boards:
   * [RaspberryPi3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)

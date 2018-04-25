@@ -316,9 +316,11 @@
 +  cd /usr/local/tmp/
    
 -  set filename [open "/var/server.pem" r]
-+  set filename [open "$filename" r]
-   gets $filename line
-   close $filename
+-  gets $filename line
+-  close $filename
++  set fp [open "$filename" r]
++  gets $fp line
++  close $fp
    #puts $line;
    if { [string equal $line "-----BEGIN RSA PRIVATE KEY-----"] == 1 || [string equal $line "-----BEGIN PRIVATE KEY-----"] == 1} {
 -    file copy -force -- "/var/server.pem" "/etc/config/server.pem"

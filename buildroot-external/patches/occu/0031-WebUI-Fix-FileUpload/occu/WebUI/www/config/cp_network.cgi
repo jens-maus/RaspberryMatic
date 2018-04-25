@@ -250,9 +250,9 @@ proc action_cert_upload {} {
   global env sid filename
   cd /usr/local/tmp/
   
-  set filename [open "$filename" r]
-  gets $filename line
-  close $filename
+  set fp [open "$filename" r]
+  gets $fp line
+  close $fp
   #puts $line;
   if { [string equal $line "-----BEGIN RSA PRIVATE KEY-----"] == 1 || [string equal $line "-----BEGIN PRIVATE KEY-----"] == 1} {
     file rename -force -- $filename "/usr/local/tmp/server.pem"

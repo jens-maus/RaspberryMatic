@@ -109,9 +109,6 @@ install:
 	make install_lighttpd_arch OCCU_ARCH=$(OCCU_ARCH)
 	make install_hmserver
 	make update_webui
-	echo "VERSION=$(RASPMATIC_VERSION)" >$(TARGET_DIR)/VERSION
-	mkdir -p $(TARGET_DIR)/boot
-	ln -sf ../VERSION $(TARGET_DIR)/boot/VERSION
 
 all: 
 	@echo "do nothing"

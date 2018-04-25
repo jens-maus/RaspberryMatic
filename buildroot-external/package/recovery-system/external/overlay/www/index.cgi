@@ -121,9 +121,9 @@ cat <<EOF
 
     <hr noshade size="4" align="left" color="white">
     <p style="font-size:9px; color:lightgrey">
-      recoveryfs: $(cat /VERSION | cut -f2 -d=)<br/>
-      bootfs: $(cat /bootfs/VERSION | cut -f2 -d=)<br/>
-      rootfs: $(cat /rootfs/VERSION | cut -f2 -d=)
+      recoveryfs: $(cat /VERSION | grep "VERSION=" | cut -f2 -d=)<br/>
+      bootfs: $(cat /bootfs/VERSION | grep "VERSION=" | cut -f2 -d=)<br/>
+      rootfs: $(cat /rootfs/VERSION | grep "VERSION=" | cut -f2 -d=)
     </p>
   </body>
 </html>

@@ -294,6 +294,43 @@ fwinstall()
         exit 1
       fi
 
+      # find out if the hardware platform of the current rootfs and the one
+      # we are going to flash are the same
+      ROOTFS_PLATFORM=$(cat /rootfs/VERSION | grep PLATFORM= | cut -d= -f2)
+      if [[ -z "${ROOTFS_PLATFORM}" ]]; then
+        echo "ERROR: (ROOTFS_PLATFORM)<br/>"
+        exit 1
+      fi
+
+      # mount fs readonly
+      mount -o ro,loop ${ext4_file} /mnt
+      if [[ $? -ne 0 ]]; then
+        echo "ERROR: (lo mount)<br/>"
+        exit 1
+      fi
+
+      # get platform info in image file
+      IMG_PLATFORM=$(cat /mnt/VERSION | grep PLATFORM= | cut -d= -f2)
+
+      # unmount immediately
+      umount -f /mnt
+      if [[ $? -ne 0 ]]; then
+        echo "ERROR: (umount /mnt)<br/>"
+        exit 1
+      fi
+
+      # check if plaform is non-empty
+      if [[ -z "${IMG_PLATFORM}" ]]; then
+        echo "ERROR: (IMG_PLATFORM)<br/>"
+        exit 1
+      fi
+
+      # check if both PLATFORM match
+      if [[ "${ROOTFS_PLATFORM}" != "${IMG_PLATFORM}" ]]; then
+        echo "ERROR: incorrect hardware platform (${IMG_PLATFORM} != ${ROOTFS_PLATFORM})<br/>"
+        exit 1
+      fi
+
       # unmount /rootfs and flash the image using dd
       echo -ne "flashing.."
       umount -f /rootfs
@@ -365,6 +402,43 @@ fwinstall()
       # check if the found bootfs vfat file matches the current bootfs partition size
       if [[ "${BOOTFS_SIZE}" != "$(stat -c%s ${vfat_file})" ]]; then
         echo "ERROR: bootfs partition has different size than provided image<br/>"
+        exit 1
+      fi
+
+      # find out if the hardware platform of the current rootfs and the one
+      # we are going to flash are the same
+      BOOTFS_PLATFORM=$(cat /bootfs/VERSION | grep PLATFORM= | cut -d= -f2)
+      if [[ -z "${BOOTFS_PLATFORM}" ]]; then
+        echo "ERROR: (BOOTFS_PLATFORM)<br/>"
+        exit 1
+      fi
+
+      # mount fs readonly
+      mount -o ro,loop ${vfat_file} /mnt
+      if [[ $? -ne 0 ]]; then
+        echo "ERROR: (lo mount)<br/>"
+        exit 1
+      fi
+
+      # get platform info in image file
+      IMG_PLATFORM=$(cat /mnt/VERSION | grep PLATFORM= | cut -d= -f2)
+
+      # unmount immediately
+      umount -f /mnt
+      if [[ $? -ne 0 ]]; then
+        echo "ERROR: (umount /mnt)<br/>"
+        exit 1
+      fi
+
+      # check if plaform is non-empty
+      if [[ -z "${IMG_PLATFORM}" ]]; then
+        echo "ERROR: (IMG_PLATFORM)<br/>"
+        exit 1
+      fi
+
+      # check if both PLATFORM match
+      if [[ "${BOOTFS_PLATFORM}" != "${IMG_PLATFORM}" ]]; then
+        echo "ERROR: incorrect hardware platform (${IMG_PLATFORM} != ${BOOTFS_PLATFORM})<br/>"
         exit 1
       fi
 
@@ -463,6 +537,46 @@ fwinstall()
         exit 1
       fi
 
+      # make sure bootfs is mounted
+      mount -o ro ${BOOTFS_DEV} /bootfs >/dev/null 2>&1
+
+      # find out if the hardware platform of the current rootfs and the one
+      # we are going to flash are the same
+      BOOTFS_PLATFORM=$(cat /bootfs/VERSION | grep PLATFORM= | cut -d= -f2)
+      if [[ -z "${BOOTFS_PLATFORM}" ]]; then
+        echo "ERROR: (BOOTFS_PLATFORM)<br/>"
+        exit 1
+      fi
+
+      # mount fs readonly
+      mount -o ro,loop ${BOOTFS_LOOPDEV} /mnt
+      if [[ $? -ne 0 ]]; then
+        echo "ERROR: (lo mount)<br/>"
+        exit 1
+      fi
+
+      # get platform info in image file
+      IMG_PLATFORM=$(cat /mnt/VERSION | grep PLATFORM= | cut -d= -f2)
+
+      # unmount immediately
+      umount -f /mnt
+      if [[ $? -ne 0 ]]; then
+        echo "ERROR: (umount /mnt)<br/>"
+        exit 1
+      fi
+
+      # check if plaform is non-empty
+      if [[ -z "${IMG_PLATFORM}" ]]; then
+        echo "ERROR: (IMG_PLATFORM)<br/>"
+        exit 1
+      fi
+
+      # check if both PLATFORM match
+      if [[ "${BOOTFS_PLATFORM}" != "${IMG_PLATFORM}" ]]; then
+        echo "ERROR: incorrect hardware platform (${IMG_PLATFORM} != ${BOOTFS_PLATFORM})<br/>"
+        exit 1
+      fi
+
       # unmount /bootfs and flash the image using dd
       echo -ne "flashing bootfs.."
       umount -f /bootfs
@@ -523,6 +637,46 @@ fwinstall()
       # check if the found rootfs loopfs size matches the current rootfs partition size
       if [[ "${ROOTFS_SIZE}" != "${ROOTFS_LOOPSIZE}" ]]; then
         echo "ERROR: rootfs partition has different size than provided image<br/>"
+        exit 1
+      fi
+
+      # make sure rootfs is mounted
+      mount -o ro ${ROOTFS_DEV} /rootfs >/dev/null 2>&1
+
+      # find out if the hardware platform of the current rootfs and the one
+      # we are going to flash are the same
+      ROOTFS_PLATFORM=$(cat /rootfs/VERSION | grep PLATFORM= | cut -d= -f2)
+      if [[ -z "${ROOTFS_PLATFORM}" ]]; then
+        echo "ERROR: (ROOTFS_PLATFORM)<br/>"
+        exit 1
+      fi
+
+      # mount fs readonly
+      mount -o ro,loop ${ROOTFS_LOOPDEV} /mnt
+      if [[ $? -ne 0 ]]; then
+        echo "ERROR: (lo mount)<br/>"
+        exit 1
+      fi
+
+      # get platform info in image file
+      IMG_PLATFORM=$(cat /mnt/VERSION | grep PLATFORM= | cut -d= -f2)
+
+      # unmount immediately
+      umount -f /mnt
+      if [[ $? -ne 0 ]]; then
+        echo "ERROR: (umount /mnt)<br/>"
+        exit 1
+      fi
+
+      # check if plaform is non-empty
+      if [[ -z "${IMG_PLATFORM}" ]]; then
+        echo "ERROR: (IMG_PLATFORM)<br/>"
+        exit 1
+      fi
+
+      # check if both PLATFORM match
+      if [[ "${ROOTFS_PLATFORM}" != "${IMG_PLATFORM}" ]]; then
+        echo "ERROR: incorrect hardware platform (${IMG_PLATFORM} != ${ROOTFS_PLATFORM})<br/>"
         exit 1
       fi
 

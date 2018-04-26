@@ -1,0 +1,30 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+    compatible = "brcm,bcm2708";
+
+    fragment@0 {
+        target = <&leds>;
+        __overlay__ {
+            rpi_rf_mod_red: rpi_rf_mod_red {
+                label = "rpi_rf_mod:red";
+                gpios = <&gpio 16 0>;
+                default-state = "keep";
+                linux,default-trigger = "none";
+            };
+            rpi_rf_mod_green: rpi_rf_mod_green {
+                label = "rpi_rf_mod:green";
+                gpios = <&gpio 20 0>;
+                default-state = "keep";
+                linux,default-trigger = "none";
+            };
+            rpi_rf_mod_blue: rpi_rf_mod_blue {
+                label = "rpi_rf_mod:blue";
+                gpios = <&gpio 21 0>;
+                default-state = "keep";
+                linux,default-trigger = "none";
+            };
+        };
+    };
+};

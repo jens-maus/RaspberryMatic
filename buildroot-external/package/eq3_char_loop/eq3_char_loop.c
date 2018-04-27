@@ -534,11 +534,10 @@ static long eq3loop_ioctl_slave(struct eq3loop_channel_data* channel, struct fil
 	case TIOCMSET:
 		break;
 	case TIOCSERGETLSR:
-		temp = N_TTY;
-		ret = __put_user( temp, (int*)arg );
+		ret = -ENOIOCTLCMD;
 		break;
 	case TIOCGICOUNT:
-		return -ENOTTY;
+		ret = -ENOIOCTLCMD;
 		break;
 	default:
 		ret = -ENOTTY;
@@ -548,6 +547,7 @@ static long eq3loop_ioctl_slave(struct eq3loop_channel_data* channel, struct fil
 	if( ret == -ENOTTY )
 	{
 		printk( KERN_NOTICE EQ3LOOP_DRIVER_NAME ": eq3loop_ioctl_slave() %s: unhandled ioctl 0x%04X\n", channel->name, cmd );
+		ret = -ENOIOCTLCMD;
 	}
 	return ret;
 }

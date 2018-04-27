@@ -533,6 +533,13 @@ static long eq3loop_ioctl_slave(struct eq3loop_channel_data* channel, struct fil
 		break;
 	case TIOCMSET:
 		break;
+	case TIOCSERGETLSR:
+		temp = N_TTY;
+		ret = __put_user( temp, (int*)arg );
+		break;
+	case TIOCGICOUNT:
+		return -ENOTTY;
+		break;
 	default:
 		ret = -ENOTTY;
 		break;

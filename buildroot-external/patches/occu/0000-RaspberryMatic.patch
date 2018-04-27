@@ -743,7 +743,7 @@
  
 --- occu/HMserver/etc/init.d/S62HMServer.orig
 +++ occu/HMserver/etc/init.d/S62HMServer
-@@ -5,55 +5,105 @@
+@@ -5,55 +5,106 @@
  
  LOGLEVEL_HMServer=5
  CFG_TEMPLATE_DIR=/etc/config_templates
@@ -793,7 +793,8 @@
 +
 +    # if no raw-uart is used to connect to the rf module
 +    # we have to set the device node
-+    if [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]]; then
++    if [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]] &&
++       [[ "${HM_HMIP_DEVNODE}" != "/dev/ttyAMA0" ]]; then
 +      sed -i "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_HMIP_DEVNODE}|" /var/etc/crRFD.conf
 +      HM_SERVER_PORT=${HM_HMIP_DEVNODE}
 +    else

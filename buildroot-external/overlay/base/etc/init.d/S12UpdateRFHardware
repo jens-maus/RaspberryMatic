@@ -95,7 +95,7 @@ update_rf_hardware() {
       fi
 
       NEW_VERSION=$(ls /firmware/RPI-RF-MOD/${FW_TYPE}-*.eq3 | sed 's/.*-\(.*\)\.eq3/\1/')
-      OLD_VERSION=${HM_RF_VERSION}
+      OLD_VERSION=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v 2>/dev/null | grep "Application version =" | cut -d' ' -f5)
       if [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 

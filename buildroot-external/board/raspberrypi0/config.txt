@@ -39,6 +39,9 @@ dtparam=watchdog=on
 # start with heartbeat on PWR led and mmc0 on ACT led
 dtparam=pwr_led_trigger=timer,act_led_trigger=mmc0
 
+# setup led device nodes for the rpi-rf-mod leds
+dtoverlay=rpi-rf-mod-leds
+
 # make sure gpio24 is set as input and pull_up
 gpio=24=ip,pu
 

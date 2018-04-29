@@ -10,7 +10,7 @@ cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/cmdline.txt" "${BINARIES_DIR}/r
 cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/config.txt" "${BINARIES_DIR}/rpi-firmware/"
 
 # select device tree overlay files to be installed in the image
-DTOVERLAYS="pivccu-raspberrypi.dtbo bcm2835-raw-uart.dtbo"
+DTOVERLAYS="rpi-rf-mod-leds.dtbo pivccu-raspberrypi.dtbo bcm2835-raw-uart.dtbo"
 mkdir -p "${BINARIES_DIR}/overlays"
 for overlay in ${DTOVERLAYS}; do
   if [ -f "${BINARIES_DIR}/${overlay}" ]; then

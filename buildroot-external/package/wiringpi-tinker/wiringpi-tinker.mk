@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WIRINGPI_TINKER_VERSION = 180da1bb3ab38fe58613b181c71297822bceced2
+WIRINGPI_TINKER_VERSION = 206993cde8ced4405146ab552dfab3b78163a340
 WIRINGPI_TINKER_SITE = git://github.com/TinkerBoard/gpio_lib_c.git
 
 WIRINGPI_TINKER_LICENSE = LGPL-3.0+

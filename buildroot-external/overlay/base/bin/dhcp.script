@@ -65,7 +65,10 @@ handle_renew() {
   fi
 
   # check internet connection
-  if ping -W 5 -c 1 google.com >/dev/null 2>&1; then
+  /usr/bin/wget -q --spider http://google.com/
+  if [[ $? -eq 0 ]]; then
+    touch /var/status/hasInternet
+  elif ping -q -W 5 -c 1 google.com >/dev/null 2>/dev/null; then
     touch /var/status/hasInternet
   fi
 }

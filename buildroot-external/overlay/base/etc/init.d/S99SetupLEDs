@@ -10,6 +10,33 @@ start() {
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
+  # signal that the system is successfully started
+  if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
+     [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
+
+    if [[ ! -f /var/status/hasLink ]]; then
+      # blink yellow
+      GREEN=timer
+      RED=timer
+      BLUE=none
+    elif [[ ! -f /var/status/hasInternet ]]; then
+      # constant yellow
+      GREEN=default-on
+      RED=default-on
+      BLUE=none
+    else
+      # constant blue
+      GREEN=none
+      RED=none
+      BLUE=default-on
+    fi
+
+    # setup the LEDs of the RPI-RF-MOD
+    echo ${GREEN} >/sys/class/leds/rpi_rf_mod\:green/trigger
+    echo ${RED}   >/sys/class/leds/rpi_rf_mod\:red/trigger
+    echo ${BLUE}  >/sys/class/leds/rpi_rf_mod\:blue/trigger
+  fi
+
   # start is finished lets set the LEDs
   if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
     echo "heartbeat" >${HM_LED_GREEN}/trigger

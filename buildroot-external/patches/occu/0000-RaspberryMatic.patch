@@ -260,12 +260,7 @@
 -	if [ -e /etc/config/syslog ] ; then
 -  		. /etc/config/syslog
 -	fi
-+
-+  # make sure there is no /dev/ttyS0
-+  if [[ -e /dev/ttyS0 ]]; then
-+    rm -f /dev/ttyS0
-+  fi
-+
+ 
 +  if [[ ! -e /var/etc/multimacd.conf ]]; then
 +    cp -a ${CFG_TEMPLATE_DIR}/multimacd.conf /var/etc/
 +  fi
@@ -277,7 +272,12 @@
 +  if [[ -e /etc/config/syslog ]]; then
 +    . /etc/config/syslog
 +  fi
- 
++
++  # make sure /var/etc/multimacd.conf contains the correct
++  # coprocessor device path
++  if [[ -f /var/etc/multimacd.conf ]]; then
++    sed -i "s|^Coprocessor Device Path = /dev/.*$|Coprocessor Device Path = ${HM_HOST_GPIO_UART}|" /var/etc/multimacd.conf
++  fi
  }
  
  waitStartupComplete() {
@@ -794,11 +794,11 @@
 +    # if no raw-uart is used to connect to the rf module
 +    # we have to set the device node
 +    if [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]] &&
-+       [[ "${HM_HMIP_DEVNODE}" != "/dev/ttyAMA0" ]]; then
++       [[ "${HM_HMIP_DEVNODE}" != "${HM_HOST_GPIO_UART}" ]]; then
 +      sed -i "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_HMIP_DEVNODE}|" /var/etc/crRFD.conf
 +      HM_SERVER_PORT=${HM_HMIP_DEVNODE}
 +    else
-+      HM_SERVER_PORT=/dev/ttyS0
++      HM_SERVER_PORT=/dev/mmd_hmip
 +    fi
 +
 +    HM_SERVER=/opt/HMServer/HMIPServer.jar

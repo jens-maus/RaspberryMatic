@@ -12,11 +12,6 @@ PIDFILE=/var/run/multimacd.pid
 
 init() {
 
-  # make sure there is no /dev/ttyS0
-  if [[ -e /dev/ttyS0 ]]; then
-    rm -f /dev/ttyS0
-  fi
-
   if [[ ! -e /var/etc/multimacd.conf ]]; then
     cp -a ${CFG_TEMPLATE_DIR}/multimacd.conf /var/etc/
   fi
@@ -29,6 +24,11 @@ init() {
     . /etc/config/syslog
   fi
 
+  # make sure /var/etc/multimacd.conf contains the correct
+  # coprocessor device path
+  if [[ -f /var/etc/multimacd.conf ]]; then
+    sed -i "s|^Coprocessor Device Path = /dev/.*$|Coprocessor Device Path = ${HM_HOST_GPIO_UART}|" /var/etc/multimacd.conf
+  fi
 }
 
 waitStartupComplete() {

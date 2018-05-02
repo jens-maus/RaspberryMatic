@@ -77,16 +77,18 @@ init_rf_kernel_modules() {
        [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
       if [[ -c /dev/raw-uart ]]; then
         HM_HMIP_DEVNODE="/dev/raw-uart"
-      elif [[ -c /dev/ttyAMA0 ]]; then
-        HM_HMIP_DEVNODE="/dev/ttyAMA0"
+      elif [[ -c "${HM_HOST_GPIO_UART}" ]]; then
+        HM_HMIP_DEVNODE="${HM_HOST_GPIO_UART}"
       fi
     fi
 
     # make sure to set low latency serial mode
-    if [[ "${HM_HMRF_DEVNODE}" != "/dev/raw-uart" ]]; then
+    if [[ -n "${HM_HMRF_DEVNODE}" ]] &&
+       [[ "${HM_HMRF_DEVNODE}" != "/dev/raw-uart" ]]; then
       /bin/setserial ${HM_HMRF_DEVNODE} low_latency
     fi
-    if [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]]; then
+    if [[ -n "${HM_HMIP_DEVNODE}" ]] &&
+       [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]]; then
       /bin/setserial ${HM_HMIP_DEVNODE} low_latency
     fi
   fi

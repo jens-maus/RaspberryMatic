@@ -94,12 +94,6 @@ init_system() {
 
   # load tunneling interface support
   modprobe tun
-
-  # if /dev/ttyS0 is present move it to ttyS1 for
-  # potentiall later use (e.g. bluetooth)
-  if [[ -c /dev/ttyS0 ]]; then
-    mv /dev/ttyS0 /dev/ttyS1
-  fi
 }
 
 start() {

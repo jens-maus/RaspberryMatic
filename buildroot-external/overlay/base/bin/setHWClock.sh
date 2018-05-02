@@ -1,6 +1,8 @@
 #!/bin/sh
-if [ -e /var/status/hasNTP ] ; then
-	hwclock -wu 
-else 
-	hwclock -su
+if [[ -c /dev/rtc ]]; then
+  if [[ -f /var/status/hasNTP ]]; then
+    /sbin/hwclock -wu
+  else
+    /sbin/hwclock -su
+  fi
 fi

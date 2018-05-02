@@ -649,7 +649,7 @@
  }
  
  ##################################################
-@@ -1294,15 +1288,28 @@
+@@ -1294,15 +1288,31 @@
  	} else {
  	    set length $env(CONTENT_LENGTH)
  	    if {0!=[string compare $length "-1"]} {
@@ -676,6 +676,9 @@
 +                    } elseif {0==[string compare -nocase $cs "utf-16"]} {
 +                        set _cgi(queryencoding) "unicode"
 +                    }
++                    if { [lsearch -exact [encoding names] _cgi(queryencoding)] == -1} {
++                        set _cgi(queryencoding) [encoding system]
++                    }
 +                } else {
 +                    set _cgi(queryencoding) [encoding system]
 +                }
@@ -683,7 +686,7 @@
  	}
  	# save input for possible diagnostics later
  	set _cgi(input) $input
-@@ -1345,30 +1352,6 @@
+@@ -1345,30 +1355,6 @@
      }
  }
  
@@ -714,7 +717,7 @@
  proc _cgi_input_multipart {fin} {
      global env _cgi _cgi_uservar _cgi_userfile
  
-@@ -1379,121 +1362,7 @@
+@@ -1379,121 +1365,7 @@
  	# can hang and we won't get to the termination code
  	set dbg_fout [open $dbg_filename w]
  	set _cgi(input) $dbg_filename
@@ -837,7 +840,7 @@
      }
  
      # figure out boundary
-@@ -1513,24 +1382,28 @@
+@@ -1513,24 +1385,28 @@
      set boundary --$boundary
  
      # don't corrupt or modify uploads yet allow Tcl 7.4 to work
@@ -873,7 +876,7 @@
  	}	    
  	# Lame-o encoding (on Netscape at least) doesn't escape field
  	# delimiters (like quotes)!!  Since all we've ever seen is filename=
-@@ -1548,14 +1421,18 @@
+@@ -1548,14 +1424,18 @@
  	}
  
  	if {[info exists filename]} {
@@ -895,7 +898,7 @@
  	    #
  	    # Look for a boundary line preceded by \r\n.
  	    #
-@@ -1583,10 +1460,13 @@
+@@ -1583,10 +1463,13 @@
  		    puts -nonewline $fout $leftover$buf
  		    set leftover "\n"
  		}
@@ -910,7 +913,7 @@
  	} else {
  	    # read the part into a variable
  	    set val ""
-@@ -1672,7 +1552,8 @@
+@@ -1672,7 +1555,8 @@
  	}
      }
  
@@ -920,7 +923,7 @@
      while {1} {
  	# process Content-Disposition:
  	expect {
-@@ -1684,9 +1565,7 @@
+@@ -1684,9 +1568,7 @@
  	    eof break
  	}
  	catch {unset filename}
@@ -931,7 +934,7 @@
  	if {0==[info exists varname]} {
  	    set _cgi(client_error) 1
  	    error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
-@@ -1712,8 +1591,12 @@
+@@ -1712,8 +1594,12 @@
  	}
  
  	if {[info exists filename]} {
@@ -945,7 +948,7 @@
  	    spawn -open [open $foutname w]
  	    set fout_sid $spawn_id
  
-@@ -1967,6 +1850,23 @@
+@@ -1967,6 +1853,23 @@
      }
  }
  
@@ -969,7 +972,7 @@
  ##################################################
  # button support
  ##################################################
-@@ -2088,7 +1988,7 @@
+@@ -2088,7 +1991,7 @@
  	    cgi_put " $a"
  	}
      }
@@ -978,7 +981,7 @@
  }
  
  ##################################################
-@@ -2182,6 +2082,15 @@
+@@ -2182,6 +2085,15 @@
      cgi_put "<input type=file name=\"$name\"[_cgi_list_to_string $args]/>"
  }
  
@@ -994,7 +997,7 @@
  ##################################################
  # select support
  ##################################################
-@@ -2224,7 +2133,7 @@
+@@ -2224,7 +2136,7 @@
      }
      if {[info exists selected_if_equal]} {
  	if {0 == [string compare $selected_if_equal $value]} {
@@ -1003,7 +1006,7 @@
  	}
      }
      cgi_puts ">[cgi_quote_html $o]</option>"
-@@ -2251,7 +2160,7 @@
+@@ -2251,7 +2163,7 @@
  	    }
  	}
      }
@@ -1012,7 +1015,7 @@
  }
  
  ##################################################
-@@ -2525,7 +2434,7 @@
+@@ -2525,7 +2437,7 @@
  ##################################################
  
  proc cgi_stylesheet {href} {
@@ -1021,7 +1024,7 @@
  }
  
  proc cgi_span {args} {
-@@ -2584,7 +2493,7 @@
+@@ -2584,7 +2496,7 @@
  	    cgi_put " $a"
  	}
      }
@@ -1030,7 +1033,7 @@
  }
  
  proc cgi_noframes {args} {
-@@ -2672,33 +2581,50 @@
+@@ -2672,33 +2584,50 @@
  
  # User-defined procedure to generate DOCTYPE declaration
  proc cgi_doctype {} {
@@ -1096,7 +1099,7 @@
      } macintosh {
  	set _cgi(tmpdir) [pwd]
      } default {
-@@ -2711,4 +2637,4 @@
+@@ -2711,4 +2640,4 @@
  # regexp for matching attr=val
  set _cgi(attr,regexp) "^(\[^=]*)=(\[^\"].*)"
  

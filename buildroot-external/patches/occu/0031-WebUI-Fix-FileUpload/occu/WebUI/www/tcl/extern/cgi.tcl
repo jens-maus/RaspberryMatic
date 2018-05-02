@@ -1306,6 +1306,9 @@ proc cgi_input {{fakeinput {}} {fakecookie {}}} {
                     } elseif {0==[string compare -nocase $cs "utf-16"]} {
                         set _cgi(queryencoding) "unicode"
                     }
+                    if { [lsearch -exact [encoding names] _cgi(queryencoding)] == -1} {
+                        set _cgi(queryencoding) [encoding system]
+                    }
                 } else {
                     set _cgi(queryencoding) [encoding system]
                 }

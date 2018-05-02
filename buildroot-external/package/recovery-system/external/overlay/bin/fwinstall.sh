@@ -227,7 +227,7 @@ fwinstall()
   echo "Starting firmware update (DO NOT INTERRUPT!!!):<br/>"
 
   echo -ne "[1/5] Validate update directory... "
-  UPDATEDIR=$(readlink /usr/local/.firmwareUpdate)
+  UPDATEDIR=$(readlink -f /usr/local/.firmwareUpdate)
   if [[ -z "${UPDATEDIR}" ]] || [[ ! -d "${UPDATEDIR}" ]]; then
     echo "ERROR: (updatedir)<br/>"
     exit 1

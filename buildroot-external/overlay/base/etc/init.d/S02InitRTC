@@ -19,17 +19,30 @@ init_rtc_device() {
     modprobe i2c:rx8130
     if [[ $? -eq 0 ]]; then
       HM_RTC="rx8130"
-      [[ -e /dev/rtc0 ]] && return 0
-      echo rx8130 0x32 >/sys/class/i2c-dev/i2c-1/device/new_device
-      [[ -e /dev/rtc0 ]] && return 0
-      echo 0x32 >/sys/class/i2c-dev/i2c-1/device/delete_device
+      [[ -c /dev/rtc0 ]] || echo rx8130 0x32 >/sys/class/i2c-dev/i2c-1/device/new_device
+      [[ -c /dev/rtc0 ]] || echo 0x32 >/sys/class/i2c-dev/i2c-1/device/delete_device
+
+      # we found a RX8130, thus we assume the RPI-RF-MOD to
+      # be present, thus we setup the LED GPIOs to OUT
+      if [[ -c /dev/rtc0 ]]; then
+        /usr/bin/gpio mode 27 OUT
+        /usr/bin/gpio mode 28 OUT
+        /usr/bin/gpio mode 29 OUT
+
+        # setup the LEDs to show a constant yellow light
+        echo default-on >/sys/class/leds/rpi_rf_mod\:green/trigger
+        echo default-on >/sys/class/leds/rpi_rf_mod\:red/trigger
+        echo none >/sys/class/leds/rpi_rf_mod\:blue/trigger
+
+        return 0
+      fi
     fi
   fi
 
   # only continue if we don't have a valid rtc yet or otherwise
   # this must be an onboard RTC (e.g. tinkerboard)
   HM_RTC="onboard"
-  [[ -e /dev/rtc0 ]] && return 0
+  [[ -c /dev/rtc0 ]] && return 0
 
   HM_RTC=""
   # check for MCP7940N RTC clock at 0x6f (PiFace Shim RTC)
@@ -41,9 +54,9 @@ init_rtc_device() {
       modprobe i2c:mcp7941x
       if [[ $? -eq 0 ]]; then
         HM_RTC="mcp7941x"
-        [[ -e /dev/rtc0 ]] && return 0
+        [[ -c /dev/rtc0 ]] && return 0
         echo mcp7941x 0x6f >/sys/class/i2c-dev/i2c-1/device/new_device
-        [[ -e /dev/rtc0 ]] && return 0
+        [[ -c /dev/rtc0 ]] && return 0
         echo 0x6f >/sys/class/i2c-dev/i2c-1/device/delete_device
       fi
     fi
@@ -57,9 +70,9 @@ init_rtc_device() {
     modprobe i2c:ds3231
     if [[ $? -eq 0 ]]; then
       HM_RTC="mcp7941x"
-      [[ -e /dev/rtc0 ]] && return 0
+      [[ -c /dev/rtc0 ]] && return 0
       echo ds3231 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
-      [[ -e /dev/rtc0 ]] && return 0
+      [[ -c /dev/rtc0 ]] && return 0
       echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
     fi
 
@@ -67,9 +80,9 @@ init_rtc_device() {
     modprobe i2c:ds1307
     if [[ $? -eq 0 ]]; then
       HM_RTC="ds1307"
-      [[ -e /dev/rtc0 ]] && return 0
+      [[ -c /dev/rtc0 ]] && return 0
       echo ds1307 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
-      [[ -e /dev/rtc0 ]] && return 0
+      [[ -c /dev/rtc0 ]] && return 0
       echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
     fi
   fi
@@ -89,7 +102,7 @@ start() {
   # save all HM_ env variables
   set | grep '^HM_' >/var/hm_mode
 
-  if [[ -e /dev/rtc0 ]]; then
+  if [[ -c /dev/rtc0 ]]; then
     hwclock --hctosys --utc
     echo "${HM_RTC}, OK"
   else
@@ -100,7 +113,7 @@ start() {
 stop() {
   echo -n "Cleaning up RTC Clock: "
 
-  if [[ -e /dev/rtc0 ]]; then
+  if [[ -c /dev/rtc0 ]]; then
     hwclock --systohc --utc
     echo "OK"
   else

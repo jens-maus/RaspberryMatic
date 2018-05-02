@@ -1,5 +1,17 @@
 #!/bin/sh
 
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# signal that we are about to setup the network
+# connection using a blinking blue LED
+if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
+   [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
+  echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
+  echo none >/sys/class/leds/rpi_rf_mod\:red/trigger
+  echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
+fi
+
 # performance tuning to reduce TCP performance spikes
 /sbin/sysctl -w net.ipv4.tcp_timestamps=0 >/dev/null 2>&1 || true
 
@@ -73,8 +85,9 @@ rm -f /var/status/hasIP
 rm -f /var/status/hasInternet
 
 # source in the network config
-source /etc/config/netconfig 2>/dev/null
+[[ -r /etc/config/netconfig ]] && . /etc/config/netconfig
 
+# setup the hostname
 hostname "${HOSTNAME}"
 
 # set multicast routes
@@ -89,10 +102,14 @@ if grep -q nfsroot /proc/cmdline ; then
    touch /var/status/hasLink
    touch /var/status/hasIP
 
-   # check internet connection; use fix ip because no nameserver (nfs boot) 
-   if ping -W 5 -c 1 google.com >/dev/null; then
+   # check internet connection; use fix ip to google because no nameserver (nfs boot)
+   /usr/bin/wget -q --spider http://216.58.213.238/
+   if [[ $? -eq 0 ]]; then
+     touch /var/status/hasInternet
+   elif ping -q -W 5 -c 1 8.8.8.8 >/dev/null 2>/dev/null; then
      touch /var/status/hasInternet
    fi
+
    exit 0
 fi
 
@@ -151,8 +168,11 @@ case "${MODE}" in
 
     touch /var/status/hasIP
 
-    # check internet connection; use fix ip because no nameserver (nfs boot)
-    if ping -W 5 -c 1 google.com >/dev/null 2>/dev/null; then
+    # check internet connection
+    /usr/bin/wget -q --spider http://google.com/
+    if [[ $? -eq 0 ]]; then
+      touch /var/status/hasInternet
+    elif ping -q -W 5 -c 1 google.com >/dev/null 2>/dev/null; then
       touch /var/status/hasInternet
     fi
   ;;
@@ -161,7 +181,6 @@ esac
 
 # init the firewall only in case
 # we are not in LAN-GW mode
-[[ -r /var/hm_mode ]] && . /var/hm_mode
 if [[ "${HM_MODE}" != "HMLGW" ]]; then
   # set firewall rules
   /bin/setfirewall.tcl

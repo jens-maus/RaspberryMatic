@@ -88,22 +88,15 @@ init_rf_kernel_modules() {
 # rf module
 query_rf_parameters() {
 
-  # workaround for a tinkerboard related issue where the
-  # generic_raw_uart doesn't seem to be able to reset the rf module
-  # correctly. So we reset it manually.
-  if [[ "${HM_HOST}" == "tinkerboard" ]]; then
-    echo 184 >/sys/class/gpio/export
-    echo out >/sys/class/gpio/gpio184/direction
-    echo 0 >/sys/class/gpio/gpio184/value
+  # reset the GPIO rf module by switching its reset pin
+  # off and on with a short delay (only required if raw-uart not used)
+  if [[ "${HM_HOST}" == "tinkerboard" ]] ||
+     ( [[ "${HM_HMRF_DEVNODE}" != "/dev/raw-uart" ]] &&
+       [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]] ); then
+    /usr/bin/gpio mode 1 out
+    /usr/bin/gpio write 1 0
     sleep 0.1
-    echo 1 >/sys/class/gpio/gpio184/value
-  elif [[ "${HM_HMRF_DEVNODE}" != "/dev/raw-uart" ]] &&
-       [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]]; then
-    echo 18 >/sys/class/gpio/export
-    echo out >/sys/class/gpio/gpio18/direction
-    echo 0 >/sys/class/gpio/gpio18/value
-    sleep 0.1
-    echo 1 >/sys/class/gpio/gpio18/value
+    /usr/bin/gpio write 1 1
   fi
 
   # check for BidCos-RF (HmRF) Hardware

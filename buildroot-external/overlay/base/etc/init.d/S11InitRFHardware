@@ -19,6 +19,17 @@ identify_rf_hardware() {
   if [[ "${HM_RTC}" == "rx8130" ]]; then
     HM_HMRF_DEV="RPI-RF-MOD"
     HM_HMIP_DEV="RPI-RF-MOD"
+
+    # make sure the LED of the RPI-RF-MOD is setup correctly
+    # even thought udev might have reset the gpio modes
+    /usr/bin/gpio mode 27 out
+    /usr/bin/gpio mode 28 out
+    /usr/bin/gpio mode 29 out
+
+    # setup the LEDs to show a constant yellow light
+    echo default-on >/sys/class/leds/rpi_rf_mod\:green/trigger
+    echo default-on >/sys/class/leds/rpi_rf_mod\:red/trigger
+    echo none >/sys/class/leds/rpi_rf_mod\:blue/trigger
   else
     HM_HMRF_DEV="HM-MOD-RPI-PCB"
     HM_HMIP_DEV="HM-MOD-RPI-PCB"

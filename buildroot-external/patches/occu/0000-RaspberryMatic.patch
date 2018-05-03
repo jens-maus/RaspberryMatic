@@ -207,7 +207,7 @@
 +ResetFile = /dev/null
 --- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd
-@@ -7,115 +7,85 @@
+@@ -7,115 +7,79 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/multimacd.pid
  
@@ -261,10 +261,6 @@
 -  		. /etc/config/syslog
 -	fi
  
-+  if [[ ! -e /var/etc/multimacd.conf ]]; then
-+    cp -a ${CFG_TEMPLATE_DIR}/multimacd.conf /var/etc/
-+  fi
-+
 +  if [[ ! -e /etc/config/syslog ]]; then
 +    cp -a ${CFG_TEMPLATE_DIR}/syslog /etc/config
 +  fi
@@ -275,9 +271,7 @@
 +
 +  # make sure /var/etc/multimacd.conf contains the correct
 +  # coprocessor device path
-+  if [[ -f /var/etc/multimacd.conf ]]; then
-+    sed -i "s|^Coprocessor Device Path = /dev/.*$|Coprocessor Device Path = ${HM_HOST_GPIO_UART}|" /var/etc/multimacd.conf
-+  fi
++  sed "s|^Coprocessor Device Path = /dev/.*$|Coprocessor Device Path = ${HM_HOST_GPIO_UART}|" ${CFG_TEMPLATE_DIR}/multimacd.conf >/var/etc/multimacd.conf
  }
  
  waitStartupComplete() {

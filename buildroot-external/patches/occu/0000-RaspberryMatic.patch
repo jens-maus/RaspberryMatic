@@ -743,7 +743,7 @@
  
 --- occu/HMserver/etc/init.d/S62HMServer.orig
 +++ occu/HMserver/etc/init.d/S62HMServer
-@@ -5,55 +5,106 @@
+@@ -5,55 +5,105 @@
  
  LOGLEVEL_HMServer=5
  CFG_TEMPLATE_DIR=/etc/config_templates
@@ -787,19 +787,18 @@
 +  fi
 +
 +  if [[ -n "${HM_HMIP_DEV}" ]]; then
-+    if [[ ! -e /var/etc/crRFD.conf ]]; then
-+      cp -a ${CFG_TEMPLATE_DIR}/crRFD.conf /var/etc/
-+    fi
 +
-+    # if no raw-uart is used to connect to the rf module
++    # if no uart is used to connect to the rf module (e.g. HmIP-RFUSB)
 +    # we have to set the device node
-+    if [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]] &&
-+       [[ "${HM_HMIP_DEVNODE}" != "${HM_HOST_GPIO_UART}" ]]; then
-+      sed -i "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_HMIP_DEVNODE}|" /var/etc/crRFD.conf
++    if [[ "${HM_HMIP_DEVNODE}" != "${HM_HOST_GPIO_UART}" ]]; then
 +      HM_SERVER_PORT=${HM_HMIP_DEVNODE}
 +    else
 +      HM_SERVER_PORT=/dev/mmd_hmip
 +    fi
++
++    # make sure the Adapter Port setting is correct
++    # when generating /var/etc/crRFD.conf
++    sed "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_SERVER_PORT}|" ${CFG_TEMPLATE_DIR}/crRFD.conf >/var/etc/crRFD.conf
 +
 +    HM_SERVER=/opt/HMServer/HMIPServer.jar
 +    HM_SERVER_ARGS="/var/etc/crRFD.conf"

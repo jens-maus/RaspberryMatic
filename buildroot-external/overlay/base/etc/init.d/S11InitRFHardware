@@ -53,9 +53,8 @@ identify_rf_hardware() {
   fi
 }
 
-# function to init all required kernel modules for the various
-# homematic-rf hardware we support
-init_rf_kernel_modules() {
+# function to init rf hardware
+init_rf_hardware() {
   # depending on the HomeMatic mode (HmRF, HmIP) we
   # have to load different kernel modules.
   if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
@@ -68,46 +67,33 @@ init_rf_kernel_modules() {
 
     if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
        [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
-      if [[ -c /dev/raw-uart ]]; then
-        HM_HMRF_DEVNODE="/dev/raw-uart"
+      if [[ -c "${HM_HOST_GPIO_UART}" ]]; then
+        HM_HMRF_DEVNODE="${HM_HOST_GPIO_UART}"
       fi
     fi
 
     if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] ||
        [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
-      if [[ -c /dev/raw-uart ]]; then
-        HM_HMIP_DEVNODE="/dev/raw-uart"
-      elif [[ -c "${HM_HOST_GPIO_UART}" ]]; then
+      if [[ -c "${HM_HOST_GPIO_UART}" ]]; then
         HM_HMIP_DEVNODE="${HM_HOST_GPIO_UART}"
       fi
     fi
 
     # make sure to set low latency serial mode
-    if [[ -n "${HM_HMRF_DEVNODE}" ]] &&
-       [[ "${HM_HMRF_DEVNODE}" != "/dev/raw-uart" ]]; then
-      /bin/setserial ${HM_HMRF_DEVNODE} low_latency
-    fi
-    if [[ -n "${HM_HMIP_DEVNODE}" ]] &&
-       [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]]; then
-      /bin/setserial ${HM_HMIP_DEVNODE} low_latency
-    fi
+    /bin/setserial ${HM_HOST_GPIO_UART} low_latency >/dev/null 2>&1
+
+    # reset the GPIO rf module by switching its reset pin
+    # (pin 12 - GPIO.1) off and on with a short delay
+    /usr/bin/gpio mode 1 out
+    /usr/bin/gpio write 1 0
+    sleep 0.1
+    /usr/bin/gpio write 1 1
   fi
 }
 
 # function to read out the serial, version and address of the corresponding
 # rf module
 query_rf_parameters() {
-
-  # reset the GPIO rf module by switching its reset pin
-  # off and on with a short delay (only required if raw-uart not used)
-  if [[ "${HM_HOST}" == "tinkerboard" ]] ||
-     ( [[ "${HM_HMRF_DEVNODE}" != "/dev/raw-uart" ]] &&
-       [[ "${HM_HMIP_DEVNODE}" != "/dev/raw-uart" ]] ); then
-    /usr/bin/gpio mode 1 out
-    /usr/bin/gpio write 1 0
-    sleep 0.1
-    /usr/bin/gpio write 1 1
-  fi
 
   # check for BidCos-RF (HmRF) Hardware
   if [[ -n "${HM_HMRF_DEVNODE}" ]]; then
@@ -189,7 +175,7 @@ start() {
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
   identify_rf_hardware
-  init_rf_kernel_modules
+  init_rf_hardware
   query_rf_parameters
 
   # save all HM_ env variables

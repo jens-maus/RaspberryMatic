@@ -21,8 +21,13 @@ start() {
       BLUE=none
     elif [[ ! -f /var/status/hasInternet ]]; then
       # constant yellow
-      GREEN=default-on
-      RED=default-on
+      GREEN=none
+      RED=none
+      BLUE=timer
+    elif [[ ! -f /var/status/HMServerStarted ]]; then
+      # blink red
+      GREEN=none
+      RED=timer
       BLUE=none
     else
       # constant blue

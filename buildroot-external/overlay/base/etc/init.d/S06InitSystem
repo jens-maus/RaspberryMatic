@@ -118,6 +118,11 @@ start() {
   # make sure the system is properly initialized
   init_system
 
+  # start hss_led if it exists
+  if [[ -x /bin/hss_led ]]; then
+    start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
+  fi
+
   # call rc.postinit after init of system is finished
   if [[ ! -e /etc/config/safemode ]]; then
     if [[ -x /usr/local/etc/rc.postinit ]]; then
@@ -131,7 +136,18 @@ start() {
   echo "OK"
 }
 
+stop() {
+  echo -n "Cleaning up System: "
+
+  if [[ -f /var/run/hss_led.pid ]]; then
+    start-stop-daemon -K -q -p /var/run/hss_led.pid
+  fi
+
+  echo "OK"
+}
+
 restart() {
+  stop
   start
 }
 
@@ -140,13 +156,13 @@ case "$1" in
     start
   ;;
   stop)
-    # nothing
+    stop
   ;;
   restart|reload)
     restart
   ;;
   *)
-    echo "Usage: $0 {start|restart}"
+    echo "Usage: $0 {start|stop|restart}"
     exit 1
 esac
 

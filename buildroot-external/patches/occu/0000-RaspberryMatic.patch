@@ -207,7 +207,7 @@
 +ResetFile = /dev/null
 --- occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/RFD/etc/init.d/S60multimacd
-@@ -7,115 +7,79 @@
+@@ -7,115 +7,89 @@
  CFG_TEMPLATE_DIR=/etc/config_templates
  PIDFILE=/var/run/multimacd.pid
  
@@ -272,6 +272,12 @@
 +  # make sure /var/etc/multimacd.conf contains the correct
 +  # coprocessor device path
 +  sed "s|^Coprocessor Device Path = /dev/.*$|Coprocessor Device Path = ${HM_HOST_GPIO_UART}|" ${CFG_TEMPLATE_DIR}/multimacd.conf >/var/etc/multimacd.conf
++
++  # make sure /dev/eq3loop exists
++  if [[ ! -c /dev/eq3loop ]]; then
++    # load eq3_char_loop kernel module
++    modprobe eq3_char_loop
++  fi
  }
  
  waitStartupComplete() {
@@ -325,8 +331,12 @@
 +  echo -n "Starting multimacd: "
 +  if [[ -n "${HM_HMIP_DEV}" ]]; then
 +    init
-+    start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
-+    waitStartupComplete
++    if [[ -c /dev/eq3loop ]]; then
++      start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
++      waitStartupComplete
++    else
++      echo "/dev/eq3loop missing"
++    fi
 +  else
 +    echo "not required"
 +  fi

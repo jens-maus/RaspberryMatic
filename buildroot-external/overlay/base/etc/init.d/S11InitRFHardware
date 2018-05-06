@@ -73,9 +73,6 @@ init_rf_hardware() {
      [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
      [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
 
-    # load eq3_char_loop kernel module
-    modprobe eq3_char_loop
-
     if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
        [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
       if [[ -c "${HM_HOST_GPIO_UART}" ]]; then

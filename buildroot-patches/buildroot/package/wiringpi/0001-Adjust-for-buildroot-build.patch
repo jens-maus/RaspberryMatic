@@ -113,10 +113,10 @@ index e1868b9..68c950e 100644
  
  .c.o:
  	$Q echo [Compile] $<
-@@ -102,6 +103,7 @@
+@@ -102,6 +103,6 @@
  	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
  	$Q install -m 0755 libwiringPi.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)
- 	$Q ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)	$(DESTDIR)/lib/libwiringPi.so
+-	$Q ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)	$(DESTDIR)/lib/libwiringPi.so
 +	$Q ln -sf libwiringPi.so.$(VERSION)       $(DESTDIR)$(PREFIX)/lib/libwiringPi.so
  	$Q $(LDCONFIG)
  

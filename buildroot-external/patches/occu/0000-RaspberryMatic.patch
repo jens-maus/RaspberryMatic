@@ -918,6 +918,26 @@
  #####################
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -221,7 +221,7 @@
+ 
+ proc action_firmware_update_go {} {
+     global env
+-    cd /tmp/
++    cd /usr/local/tmp/
+     
+     http_head
+ 
+@@ -259,8 +259,8 @@
+ 
+ proc action_firmware_update_cancel {} {
+   global env
+-  catch {exec rm /var/new_firmware.tar.gz}
+-  catch { exec /bin/sh -c "rm /var/EULA.*"}
++  catch { exec /bin/sh -c "rm -f /usr/local/tmp/new_firmware.tar.gz" }
++  catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*" }
+   cgi_javascript {
+     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
+     puts {
 @@ -377,7 +377,7 @@
                                          table_row {
                                              table_data {
@@ -927,51 +947,7 @@
                                              }
                                          }
                                      }
-@@ -387,69 +387,14 @@
-                         table_row {
-                             td {width="20"} {}
-                             table_data {align="left"} {colspan="2"} {
--                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
--                            }
--                        }
--                        table_row {
--                            td {width="20"} {}
--                            table_data {colspan="2"} {
--                                form "$env(SCRIPT_NAME)?sid=$sid" name=firmware_form {target=firmware_upload_iframe} enctype=multipart/form-data method=post {
--                                    export action=firmware_upload
--                                    export downloadOnly=$downloadOnly
--                                    file_button firmware_file size=30 maxlength=1000000
--                                }
--                                puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
--                            }
--                        }
--                        table_row {
--                            td {width="20"} {}
--                            table_data {align="left"} {
--                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep3}"
--                            }
--                            table_data {
--                                division {class="popupControls CLASS20905"} {
--                                    table {
--                                        table_row {
--                                            table_data {
--                                                division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
--                                                  puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
--                                                }
--                                            }
--                                        }
--                                    }
--                                }
--                            }
--                        }
--                        table_row {
--                            td {width="20"} {}
--                            table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
--                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
-+                                #puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2}"
-+                                puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic}"
-                             }
-                         }
+@@ -429,27 +429,7 @@
                      }
                  }
                  table_data {align="left"} {class="CLASS20921"} {
@@ -1000,7 +976,41 @@
                  }
              }
              table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-@@ -960,6 +905,7 @@
+@@ -826,7 +806,7 @@
+ 
+ proc action_firmware_upload {} {
+     global env sid downloadOnly
+-    cd /tmp/
++    cd /usr/local/tmp/
+     
+     http_head
+     import_file -client firmware_file
+@@ -835,12 +815,12 @@
+     set file_valid 0
+     catch {
+         #set file_valid [expr [string first "update_script" [exec tar tzf [lindex $firmware_file 0]]] >= 0 ]
+-        exec tar zxvf [lindex $firmware_file 0] update_script EULA.en EULA.de EULA.tr -C /var/
++        exec tar xf -C /usr/local/tmp [lindex $firmware_file 0] update_script EULA.en EULA.de EULA.tr
+     }
+-    set file_valid [file exists "/var/update_script"]
++    set file_valid [file exists "/usr/local/tmp/update_script"]
+ 
+     if {$file_valid} {
+-      file rename -force -- [lindex $firmware_file 0] "/var/new_firmware.tar.gz"
++      file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_firmware.tar.gz"
+       #set action "firmware_update_confirm"
+       set action "acceptEula"
+     } else {
+@@ -920,7 +900,7 @@
+ 
+ proc action_reboot_go {} {
+     global env
+-    cd /tmp/
++    cd /usr/local/tmp/
+     
+     http_head
+ 
+@@ -960,6 +940,7 @@
      catch { exec lcdtool {Saving     Data...    } }
      rega system.Save()
      catch { exec lcdtool {Reboot...             } }
@@ -1008,7 +1018,7 @@
      exec /sbin/reboot
  }
  
-@@ -1007,9 +953,7 @@
+@@ -1007,9 +988,7 @@
          puts "Failure"
          return
      }
@@ -1100,7 +1110,7 @@
 -    if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
 +    file mkdir /usr/local/tmp/backup
 +    cd /usr/local/tmp/backup
-+    if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
++    if { [catch {exec tar xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
        put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
        set backuperror true
      } else {
@@ -1267,17 +1277,6 @@
  }
  
  # Prüft, ob es sich um die alte oder neue CCU handelt
---- occu/WebUI/www/tcl/extern/cgi.tcl.orig
-+++ occu/WebUI/www/tcl/extern/cgi.tcl
-@@ -2698,7 +2698,7 @@
- # deduce tmp directory
- switch $tcl_platform(platform) {
-     unix {
--	set _cgi(tmpdir) /tmp
-+	set _cgi(tmpdir) /usr/local/tmp
-     } macintosh {
- 	set _cgi(tmpdir) [pwd]
-     } default {
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -1,8 +1,8 @@
@@ -1292,15 +1291,7 @@
      "BidCosRF" : "BidCos-RF",
      "BidCosWired" : "BidCos-Wired",
      "VirtualDevices" : "VirtualDevices",
-@@ -452,6 +452,7 @@
-     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Schritt 2: Heruntergeladene Software ausw%E4hlen",
-     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Schritt 3: Software auf " + HMIdentifier.de.CCUShortName + " laden",
-     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Schritt 4: Update starten",
-+    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Schritt 2: Gehen Sie anhand der <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>Dokumentation</a> und <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>Update/Upgrade Anleitung</a> vor",
-     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.de.BidCosRF,
-     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.de.BidCosWired,
-     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.de.CCUShortName + "-Steuerung",
-@@ -470,6 +471,7 @@
+@@ -470,6 +470,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "F%FChren Sie vor dem Update eine Datensicherung durch.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Der Ladezustand der Batterien betr%E4gt nur noch ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Um einem Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Update zu erneuern.",
@@ -1322,15 +1313,7 @@
      "BidCosRF" : "BidCos-RF",
      "BidCosWired" : "BidCos-Wired",
      "HmIPRF" : "HmIP-RF",
-@@ -452,6 +452,7 @@
-     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Step 2: Select downloaded software",
-     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Step 3: Upload software to " + HMIdentifier.en.CCUShortName,
-     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Step 4: Start update",
-+    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Step 2: Read <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>documentation</a> and <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>update/upgrade instructions</a>",
-     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.en.BidCosRF,
-     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.en.BidCosWired,
-     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.en.CCUShortName + " control",
-@@ -470,6 +471,7 @@
+@@ -470,6 +470,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "Please perform a data backup before starting the update.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "The charging status the batteries is only at ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",
@@ -1352,15 +1335,7 @@
      "BidCosRF" : "BidCos-RF",
      "BidCosWired" : "BidCos-Wired",
      "HmIPRF" : "HmIP-RF",
-@@ -454,6 +454,7 @@
-     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Adim 2: Indirdiginiz yazilima tiklayin",
-     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Adim 3: Yazilimi " + HMIdentifier.tr.CCUShortName + "'e y%FCkleyin",
-     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Adim 4: G%FCncellemeyi baslatin",
-+    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Step 2: Read <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>documentation</a> and <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>update/upgrade instructions</a>",
-     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.tr.BidCosRF,
-     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.tr.BidCosWired,
-     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.tr.CCUShortName + "-Kumanda",
-@@ -472,6 +473,7 @@
+@@ -472,6 +472,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "G%FCncellemeden %F6nce verileri emniyete alin.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Bataryalarin sarj durumu artik sadece ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Elektrik kesintisi nedeniyle veri kaybini %F6nlemek icin bataryalari g%FCncellemeyi baslatmadan %F6nce degistirmenizi %F6neriyoruz.",

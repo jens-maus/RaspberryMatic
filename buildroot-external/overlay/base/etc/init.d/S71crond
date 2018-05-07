@@ -3,44 +3,49 @@
 # start/stop cron daemon
 #
 
-CFG_TEMPLATE_DIR=/etc/config_templates
-
 # function to update the crontab file and
 # make sure that it is up to date
 init() {
-  # crontab dirs
-  if [ ! -d /usr/local/crontabs ] ; then
+  # make sure the user crontabs directory exists
+  # in /usr/local
+  if [ ! -d /usr/local/crontabs ]; then
     mkdir -p /usr/local/crontabs
     chmod 775 /usr/local/crontabs
   fi
-  if [ ! -d /var/spool/cron ] ; then
-    mkdir -p /var/spool/cron
-    chmod 775 /var/spool/cron
-    ln -sf /usr/local/crontabs /var/spool/cron/crontabs
+
+  # make sure that the /usr/local/crontabs/root file
+  # exists where the user can put own stuff
+  if [ ! -f /usr/local/crontabs/root ]; then
+    touch /usr/local/crontabs/root
   fi
 
-  NUM_TEMPLATE=$(wc -l ${CFG_TEMPLATE_DIR}/crontab.root | cut -d' ' -f1)
-  NUM_USR=$(grep -Ff ${CFG_TEMPLATE_DIR}/crontab.root /usr/local/crontabs/root 2>/dev/null | wc -l | cut -d' ' -f1)
+  # make sure /var/spool/cron/crontabs exists
+  if [ ! -d /var/spool/cron/crontabs ]; then
+    mkdir -p /var/spool/cron/crontabs
+    chmod 775 /var/spool/cron/crontabs
+  fi
 
-  # if NUM_USR is not equal to NUM_TEMPLATE we have to
-  # update the usr crontab file
-  if [[ ${NUM_USR} -ne ${NUM_TEMPLATE} ]]; then
-    # add the standard commands from our template
-    cat ${CFG_TEMPLATE_DIR}/crontab.root >/tmp/crontab.root
+  # make sure our system-wide crontab is taken for
+  # being merged with the user configuration crontab
+  cp -a /etc/crontab.root /var/spool/cron/crontabs/root
 
-    # put all lines not matching setHWClock and SetInterfaceClock
-    # to the temporary crontab.root file
-    grep -viE "/bin/setHWClock.sh|/bin/SetInterfaceClock|/usr/sbin/logrotate" /usr/local/crontabs/root 2>/dev/null >>/tmp/crontab.root
+  # now we merge /usr/local/crontabs/root and /etc/crontab.root with the
+  # latter having preference
+  EXCLUDE_PATTERN="setHWClock.sh|SetInterfaceClock|logrotate"
+  grep -viE "${EXCLUDE_PATTERN}" /usr/local/crontabs/root 2>/dev/null >>/var/spool/cron/crontabs/root
 
-    # make the temp crontab the new usr crontab
-    mv /tmp/crontab.root /usr/local/crontabs/root
+  # now we cleanup the user modified crontab
+  grep -qiE "${EXCLUDE_PATTERN}" /usr/local/crontabs/root
+  if [ $? -eq 0 ]; then
+    grep -viE "${EXCLUDE_PATTERN}" /usr/local/crontabs/root 2>/dev/null >/tmp/cron.root
+    mv -f /tmp/cron.root /usr/local/crontabs/root
   fi
 }
 
 start() {
   echo -n "Starting crond: "
   init
-  start-stop-daemon -S -q -b -m -p /var/run/crond.pid --exec /usr/sbin/crond -- -f
+  start-stop-daemon -S -q -b -m -p /var/run/crond.pid --exec /usr/sbin/crond -- -f -L 4
   echo "OK"
 }
 

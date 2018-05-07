@@ -452,7 +452,6 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Step 2: Select downloaded software",
     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Step 3: Upload software to " + HMIdentifier.en.CCUShortName,
     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Step 4: Start update",
-    "dialogSettingsCMLblPerformSoftwareUpdateStep2RaspMatic" : "Step 2: Read <a href='https://github.com/jens-maus/RaspberryMatic' target='_blank'>documentation</a> and <a href='https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057' target='_blank'>update/upgrade instructions</a>",
     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.en.BidCosRF,
     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.en.BidCosWired,
     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.en.CCUShortName + " control",

@@ -63,9 +63,9 @@ install_hmserver:
 #endif
 
 update_webui:
-	ln -sf /var/EULA.de                                   $(TARGET_DIR)/www/rega/EULA.de
-	ln -sf /var/EULA.en                                   $(TARGET_DIR)/www/rega/EULA.en
-	ln -sf /var/EULA.tr                                   $(TARGET_DIR)/www/rega/EULA.tr
+	ln -sf /usr/local/.firmwareUpdate/EULA.de             $(TARGET_DIR)/www/rega/EULA.de
+	ln -sf /usr/local/.firmwareUpdate/EULA.en             $(TARGET_DIR)/www/rega/EULA.en
+	ln -sf /usr/local/.firmwareUpdate/EULA.tr             $(TARGET_DIR)/www/rega/EULA.tr
 	ln -sf ${OCCU_ROOT}/www/tcl/extern/cgi.tcl            $(TARGET_DIR)/www/cgi.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/common.tcl        $(TARGET_DIR)/www/common.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/session.tcl       $(TARGET_DIR)/www/session.tcl
@@ -97,6 +97,8 @@ update_webui:
 
 	ln -snf ${OCCU_ROOT}/etc/config/addons/www            $(TARGET_DIR)/www/addons
 
+	chmod a+rx $(TARGET_DIR)/www/config/fileupload.ccc
+
 	grep -rl 'XXX-WEBUI-VERSION-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-WEBUI-VERSION-XXX/$(RASPMATIC_VERSION)/g'
 
 install:
@@ -107,9 +109,6 @@ install:
 	make install_lighttpd_arch OCCU_ARCH=$(OCCU_ARCH)
 	make install_hmserver
 	make update_webui
-	echo "VERSION=$(RASPMATIC_VERSION)" >$(TARGET_DIR)/VERSION
-	mkdir -p $(TARGET_DIR)/boot
-	ln -sf ../VERSION $(TARGET_DIR)/boot/VERSION
 
 all: 
 	@echo "do nothing"

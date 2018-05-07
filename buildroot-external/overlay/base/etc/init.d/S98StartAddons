@@ -39,11 +39,13 @@ start() {
       /usr/local/etc/rc.local
     fi
 
+    echo "OK"
   else
     rm -f /etc/config/safemode
+
+    echo "skipping (safemode)"
   fi
 
-  echo "OK"
 }
 
 restart() {

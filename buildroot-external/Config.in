@@ -1,3 +1,5 @@
+source "$BR2_EXTERNAL_EQ3_PATH/package/recovery-system/Config.in"
+
 menu "eQ-3 HomeMatic Services"
   source "$BR2_EXTERNAL_EQ3_PATH/package/occu/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/cloudmatic/Config.in"
@@ -29,3 +31,6 @@ endmenu
 menu "Java Runtime Environment"
   source "$BR2_EXTERNAL_EQ3_PATH/package/java-azul/Config.in"
 endmenu
+
+# External packages
+source "$BR2_EXTERNAL_EQ3_PATH/Config.ext.in"

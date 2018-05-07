@@ -501,7 +501,7 @@ proc action_backup_restore_go {} {
     
     file mkdir /usr/local/tmp/backup
     cd /usr/local/tmp/backup
-    if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+    if { [catch {exec tar xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
       put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
       set backuperror true
     } else {

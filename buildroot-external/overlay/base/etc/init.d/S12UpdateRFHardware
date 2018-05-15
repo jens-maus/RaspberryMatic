@@ -19,13 +19,15 @@ update_rf_hardware() {
 
       # identify which firmware file to take for a potential coprocessor
       # firmware update
-      if [[ "${HM_MODE}" == "HM-LGW" ]]; then
-        FW_FILE=coprocessor_update.eq3
-      elif [[ ! -e /etc/config/enable-debug-coprocessor ]]; then
-        FW_FILE=dualcopro_si1002_update_blhm.eq3
+      if [[ "${HM_MODE}" == "NORMAL" ]]; then
+        if [[ ! -e /etc/config/enable-debug-coprocessor ]]; then
+          FW_FILE=dualcopro_si1002_update_blhm.eq3
+        else
+          NEW_VERSION=2.2.1
+          FW_FILE=dualcopro_si1002_update_blhm-2.2.1.eq3
+        fi
       else
-        NEW_VERSION=2.2.1
-        FW_FILE=dualcopro_si1002_update_blhm-2.2.1.eq3
+        FW_FILE=coprocessor_update.eq3
       fi
 
       # identify the copro firmware version to be flashed

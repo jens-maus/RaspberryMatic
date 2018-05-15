@@ -37,7 +37,7 @@ IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
 [[ -r /VERSION ]] && . /VERSION
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-if [[ "${HM_MODE}" != "HM-LGW" ]]; then
+if [[ "${HM_MODE}" == "NORMAL" ]]; then
   if [[ -z "${IP}" ]]; then
     /usr/bin/psplash-write "MSG ${VERSION} -- ERROR: No IP address set"
   else

@@ -183,7 +183,7 @@ set i 1
 
 if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
   puts "<td><div class=\"cpButton\">"
-  puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"window.open('/tools/devconfig.cgi?sid=$sid');\">devconfig</div>"
+  puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"window.open('/tools/devconfig.cgi?sid=$sid');\">DevConfig</div>"
   puts "<div class=\"StdTableBtnHelp\"></div></td>"
   incr i
 }

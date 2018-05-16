@@ -88,7 +88,15 @@ rm -f /var/status/hasInternet
 [[ -r /etc/config/netconfig ]] && . /etc/config/netconfig
 
 # setup the hostname
+echo "${HOSTNAME}" >/etc/hostname
 hostname "${HOSTNAME}"
+
+# setup /etc/hosts
+echo "127.0.0.1 localhost" >/etc/hosts
+echo "127.0.1.1 ${HOSTNAME}" >>/etc/hosts
+
+# restart syslogd to update hostname
+/etc/init.d/S07logging restart 2>/dev/null >/dev/null
 
 # set multicast routes
 route del -net 224.0.0.0 netmask 240.0.0.0 2>/dev/null

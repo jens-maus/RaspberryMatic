@@ -15,7 +15,6 @@ define RPI_RF_MOD_BUILD_CMDS
 endef
 
 define RPI_RF_MOD_INSTALL_TARGET_CMDS
-  cp -a $(@D)/rootfs-overlay/* $(TARGET_DIR)/
   for dtbo in $(@D)/dts/*.dtbo; do \
     $(INSTALL) -D -m 0644 $${dtbo} $(BINARIES_DIR)/; \
   done

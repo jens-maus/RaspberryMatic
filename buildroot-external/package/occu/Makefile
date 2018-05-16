@@ -39,6 +39,7 @@ endif
 
 install_linuxbasis_arch:
 	cp -a $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/bin/eq3configcmd $(TARGET_DIR)/bin/
+	cp -a $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/bin/hss_led $(TARGET_DIR)/bin/
 	cp -a $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/lib/libeq3config.so $(TARGET_DIR)/lib/
 
 install_lighttpd_arch:

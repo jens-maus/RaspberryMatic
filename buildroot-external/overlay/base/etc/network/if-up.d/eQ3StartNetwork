@@ -29,7 +29,7 @@ fi
 # only continue if another interface hasn't
 # setup everything correctly already
 if [[ -e /var/status/hasIP ]]; then
-  /sbin/ifconfig ${IFACE} down
+  /sbin/ip link set ${IFACE} down
   echo -n "${IFACE}:disabled, "
 
   # make sure that the wifi power is disabled
@@ -44,7 +44,7 @@ fi
 
 # make sure iface is really up
 if [[ "$(cat /sys/class/net/${IFACE}/operstate)" == "down" ]]; then
-  /sbin/ifconfig ${IFACE} up
+  /sbin/ip link set ${IFACE} up
   sleep 5
 fi
 
@@ -53,7 +53,7 @@ case "${IFACE}" in
   eth*)
     # if eth0 doesn't have a link we don't continue
     if [[ "${IFACE}" == "eth0" && "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; then
-      /sbin/ifconfig ${IFACE} down
+      /sbin/ip link set ${IFACE} down
       echo -n "${IFACE}:no link, "
       exit 0
     fi
@@ -64,7 +64,7 @@ case "${IFACE}" in
       /usr/sbin/rfkill unblock wlan
       /usr/sbin/wpa_supplicant -B w -D wext -i ${IFACE} -c /etc/config/wpa_supplicant.conf -s
     else
-      /sbin/ifconfig ${IFACE} down
+      /sbin/ip link set ${IFACE} down
       echo -n "${IFACE}:no config, "
       # make sure that the wifi power is disabled
       # if not required
@@ -99,8 +99,8 @@ echo "127.0.1.1 ${HOSTNAME}" >>/etc/hosts
 /etc/init.d/S07logging restart 2>/dev/null >/dev/null
 
 # set multicast routes
-route del -net 224.0.0.0 netmask 240.0.0.0 2>/dev/null
-route add -net 224.0.0.0 netmask 240.0.0.0 dev ${IFACE}
+/sbin/ip route del 224.0.0.0/4 2>/dev/null
+/sbin/ip route add 224.0.0.0/4 dev ${IFACE}
 
 # check if we booting via nfs
 if grep -q nfsroot /proc/cmdline ; then
@@ -145,9 +145,9 @@ case "${MODE}" in
     # we checked the link state already way earlier
     touch /var/status/hasLink
 
-    /sbin/ifconfig ${IFACE} ${IP} netmask ${NETMASK}
-    /sbin/route del default 2>/dev/null
-    /sbin/route add default gw ${GATEWAY}
+    /sbin/ip addr add ${IP}/${NETMASK} dev ${IFACE}
+    /sbin/ip route del default 2>/dev/null
+    /sbin/ip route add default via ${GATEWAY}
 
     if [[ -n "${NAMESERVER1}" ]]; then
       echo nameserver "${NAMESERVER1}" >>${RESOLV_CONF}

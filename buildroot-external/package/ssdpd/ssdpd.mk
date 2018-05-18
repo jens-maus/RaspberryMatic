@@ -5,7 +5,7 @@
 #############################################################
 
 SSDPD_VERSION = 1.0.0
-SSDPD_SITE = $(BR2_EXTERNAL)/package/ssdpd
+SSDPD_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/ssdpd
 SSDPD_SITE_METHOD = local
 
 define SSDPD_INSTALL_TARGET_CMDS

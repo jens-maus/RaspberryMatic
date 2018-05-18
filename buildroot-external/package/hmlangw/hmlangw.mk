@@ -5,7 +5,7 @@
 #############################################################
 
 HMLANGW_VERSION = 0.0.2
-HMLANGW_SITE = $(BR2_EXTERNAL)/package/hmlangw
+HMLANGW_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/hmlangw
 HMLANGW_SITE_METHOD = local
 HMLANGW_LICENSE = Apache2
 HMLANGW_INSTALL_TARGET = YES

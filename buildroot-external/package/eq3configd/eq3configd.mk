@@ -5,7 +5,7 @@
 #############################################################
 
 EQ3CONFIGD_VERSION = 1.0.0
-EQ3CONFIGD_SITE = $(BR2_EXTERNAL)/package/eq3configd
+EQ3CONFIGD_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/eq3configd
 EQ3CONFIGD_SITE_METHOD = local
 
 define EQ3CONFIGD_INSTALL_TARGET_CMDS

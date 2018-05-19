@@ -890,15 +890,15 @@ static irqreturn_t bcm2835_raw_uart_irq_handle(int irq, void *context)
   /*Clear interrupts*/
   smp_wmb();
 
+  writel(istat, m_bcm2835_raw_uart_port->membase + UART011_ICR );
+
   if( istat & (UART011_RXIS | UART011_RTIS))
   {
-    writel( UART011_RTIC | UART011_RXIC, m_bcm2835_raw_uart_port->membase + UART011_ICR );
     bcm2835_raw_uart_rx_chars( );
   }
 
   if( istat & UART011_TXIS )
   {
-    writel(  UART011_TXIC , m_bcm2835_raw_uart_port->membase + UART011_ICR );
     spin_lock( &m_bcm2835_raw_uart_port->lock_tx );
     bcm2835_raw_uart_tx_chars( );
     spin_unlock( &m_bcm2835_raw_uart_port->lock_tx );
@@ -1315,4 +1315,4 @@ MODULE_ALIAS("platform:bcm2835-raw-uart");
 MODULE_DESCRIPTION( "eQ-3 raw BCM2835 uart driver" );
 MODULE_LICENSE( "GPL" );
 MODULE_AUTHOR( "eQ-3 Entwicklung GmbH" );
-MODULE_VERSION( "1.11" );
+MODULE_VERSION( "1.12" );

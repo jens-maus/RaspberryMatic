@@ -7,7 +7,7 @@
 #
 #############################################################
 
-GENERIC_RAW_UART_VERSION = 8d0b575ead8c6f810ce6f5c4b239b5ed7b1b9d07
+GENERIC_RAW_UART_VERSION = 9d6b1524232bd711278a7d2fdef1acdb4db925bf
 GENERIC_RAW_UART_SITE = $(call github,alexreinert,piVCCU,$(GENERIC_RAW_UART_VERSION))
 GENERIC_RAW_UART_LICENSE = GPL
 GENERIC_RAW_UART_DEPENDENCIES = host-dtc

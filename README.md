@@ -20,12 +20,12 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Support to be used without GPIO RF module just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Integrated WebUI-based firmware update mechanism and Recovery System to perform maintenance operations such as system restore.
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
-* Based on latest [Buildroot 2018.02.1](http://buildroot.org/) lightweight Linux operating system
+* Based on latest [Buildroot 2018.02.2](http://buildroot.org/) lightweight Linux operating system
 * Latest Linux kernel (RaspberryPi: [4.14.34](https://github.com/raspberrypi/linux/tree/rpi-4.14.y), Tinkerboard: [4.4.126](https://github.com/rockchip-linux/kernel)) with hard-float (ARMv7) support
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
-* Includes embedded JAVA8 runtime environment ([1.8.0_162-8.27.0.91](http://www.azul.com/downloads/zulu-embedded/))
+* Includes embedded JAVA8 runtime environment ([1.8.0_172-8.30.0.106](http://www.azul.com/downloads/zulu-embedded/))
 * Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setups including USB connection to uninterruptible power supply (UPS) as well as remote NUT server use (e.g. via Synology NAS Network UPS functionality)
@@ -33,8 +33,9 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Support to query status information of the underlying Linux system using SNMP requests
 * Auto-resizing `/usr/local` partition to utilize the full capacity of the SD card or USB stick
 * Support for the following third-party *Hardware Attached on Top* (HAT) boards:
-  * [S.USV](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown in case batteries are exhausted.
-  * [PiModules UPS PIco](http://pimodules.com/) – UPS including automatic system shutdown in case batteries are exhausted.
+  * [S.USV](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown.
+  * [PiUSV+](https://www.reichelt.de/?ARTICLE=169883) – UPS including alarm notification upon power loss and automatic system shutdown.
+  * [PiModules UPS PIco](http://pimodules.com/) – UPS including automatic system shutdown.
   * [StromPi2](http://www.joy-it.net/strompi-2/) – UPS including alarm notification upon power loss.
 * Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi), [RX8130CE](https://www5.epsondevice.com/en/products/rtc/rx8130ce.html), onboard Tinkerboard RTC)
 * Hardware WatchDog support automatically rebooting the system upon severe hardware/lockup problems

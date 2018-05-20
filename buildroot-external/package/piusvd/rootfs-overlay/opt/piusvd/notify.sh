@@ -8,8 +8,16 @@ if [[ -n "${STATUS_CHANGE}" ]]; then
   MESSAGE=
 
   case "${STATUS_TO}" in
+    1)
+      MESSAGE="PiUSV+: Battery Fully Charged"
+    ;;
+
     2)
       MESSAGE="PiUSV+: Power Loss"
+    ;;
+
+    5)
+      MESSAGE="PiUSV+: Battery Disconnected"
     ;;
 
     9)

@@ -1,5 +1,5 @@
---- kernel/Makefile.orig	2018-05-22 13:39:10.765603538 +0200
-+++ kernel/Makefile	2018-05-22 13:41:33.320150935 +0200
+--- ./kernel/Makefile.orig	2018-05-22 13:39:10.765603538 +0200
++++ ./kernel/Makefile	2018-05-22 13:41:33.320150935 +0200
 @@ -1,10 +1,16 @@
 -obj-m += eq3_char_loop.o
 -obj-m += plat_eq3ccu2.o

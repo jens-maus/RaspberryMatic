@@ -28,3 +28,12 @@
  	};
  
  	sound {
+@@ -679,6 +700,8 @@
+ 
+ &uart1 {
+ 	status = "okay";
++	compatible = "pivccu,dw_apb";
++	pivccu,gpio_pin = <0>;
+ };
+ 
+ &uart2 {

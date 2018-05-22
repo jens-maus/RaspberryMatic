@@ -88,7 +88,9 @@ init_rf_hardware() {
     fi
 
     # make sure to set low latency serial mode
-    /bin/setserial ${HM_HOST_GPIO_UART} low_latency >/dev/null 2>&1
+    if [[ ${HM_HOST_GPIO_UART} != "/dev/raw-uart" ]]; then
+      /bin/setserial ${HM_HOST_GPIO_UART} low_latency >/dev/null 2>&1
+    fi
 
     # reset the GPIO rf module by switching its reset pin
     # (pin 12 - GPIO.1) off and on with a short delay

@@ -9,8 +9,8 @@ PIDFILE=/var/run/rfd.pid
 
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-# skip this startup in LAN Gateway mode
-[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
+# skip this startup if not in normal mode
+[[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
 init() {
 

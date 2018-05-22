@@ -188,8 +188,8 @@ case "${MODE}" in
 esac
 
 # init the firewall only in case
-# we are not in LAN-GW mode
-if [[ "${HM_MODE}" != "HMLGW" ]]; then
+# we are in normal startup mode
+if [[ "${HM_MODE}" == "NORMAL" ]]; then
   # set firewall rules
   /bin/setfirewall.tcl
   echo -n "firewall, "

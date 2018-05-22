@@ -8,7 +8,9 @@ CFG_TEMPLATE_DIR=/etc/config_templates
 PIDFILE=/var/run/multimacd.pid
 
 [[ -r /var/hm_mode ]] && . /var/hm_mode
-[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
+
+# skip this startup if not in normal mode
+[[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
 init() {
 

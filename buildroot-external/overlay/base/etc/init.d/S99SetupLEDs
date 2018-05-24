@@ -44,13 +44,13 @@ start() {
 
   # start is finished lets set the LEDs
   if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
-    echo "heartbeat" >${HM_LED_GREEN}/trigger
+    echo ${HM_LED_GREEN_MODE2} >${HM_LED_GREEN}/trigger
   fi
   if [[ -f "${HM_LED_RED}/trigger" ]]; then
-    echo "mmc0" >${HM_LED_RED}/trigger
+    echo ${HM_LED_RED_MODE2} >${HM_LED_RED}/trigger
   fi
   if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
-    echo "none" >${HM_LED_YELLOW}/trigger
+    echo ${HM_LED_YELLOW_MODE2} >${HM_LED_YELLOW}/trigger
   fi
 
   echo "booted, OK"
@@ -69,13 +69,13 @@ stop() {
 
   # stop starts, lets set the LEDs
   if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
-    echo "mmc0" >${HM_LED_GREEN}/trigger
+    echo ${HM_LED_GREEN_MODE1} >${HM_LED_GREEN}/trigger
   fi
   if [[ -f "${HM_LED_RED}/trigger" ]]; then
-    echo "timer" >${HM_LED_RED}/trigger
+    echo ${HM_LED_RED_MODE1} >${HM_LED_RED}/trigger
   fi
   if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
-    echo "none" >${HM_LED_YELLOW}/trigger
+    echo ${HM_LED_YELLOW_MODE1} >${HM_LED_YELLOW}/trigger
   fi
 
   echo "shutdown, OK"

@@ -61,7 +61,8 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [RaspberryPi Compute Module 1](https://www.raspberrypi.org/products/compute-module/)  
   * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/) or [Model B, 512MB](https://www.adafruit.com/product/998)
   * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) or [Model A, 256MB](https://www.adafruit.com/product/1344)
-  * [ASUS Tinkerboard](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
+  * [Tinker Board S](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
+  * [Tinker Board](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
 * One or more of the following HomeMatic/HomeMatic-Wired/HomeMaticIP capabale devices:
   * HomeMatic + HomeMaticIP:
     * GPIO Radio Module HAT – [RPI-RF-MOD](https://www.elv.de/homematic-funk-modulplatine-fuer-raspberry-pi-3-rpi-rf-mod-komplettbausatz.html)  

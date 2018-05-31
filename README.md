@@ -37,7 +37,14 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [PiUSV+](https://www.reichelt.de/?ARTICLE=169883) – UPS including alarm notification upon power loss and automatic system shutdown.
   * [PiModules UPS PIco](http://pimodules.com/) – UPS including automatic system shutdown.
   * [StromPi2](http://www.joy-it.net/strompi-2/) – UPS including alarm notification upon power loss.
-* Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi), [RX8130CE](https://www5.epsondevice.com/en/products/rtc/rx8130ce.html), onboard Tinkerboard RTC)
+  * [PiDesktop](http://de.farnell.com/element14/pi-desktop/element-14-pi-desktop-hatencl/dp/2687142) – Addon HAT with power button and dedicated RTC clock (PCF8563).
+* Integrated support for various RTC clock modules:
+  * [PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/)
+  * [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi)
+  * [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi)
+  * [RX8130CE](https://www5.epsondevice.com/en/products/rtc/rx8130ce.html)
+  * [PCF8563](https://www.nxp.com/products/analog/signal-chain/real-time-clocks/ic-real-time-clocks-rtc/real-time-clock-calendar:PCF8563)
+  * onboard Tinkerboard RTC
 * Hardware WatchDog support automatically rebooting the system upon severe hardware/lockup problems
 * Direct [CloudMatic](http://cloudmatic.de) (meine-homematic.de) support
 * Dedicated Build Environment using a cross compiler (`arm-linux-gcc`) to compile third-party applications

@@ -108,21 +108,18 @@ query_rf_parameters() {
   # check for BidCos-RF (HmRF) Hardware
   if [[ -n "${HM_HMRF_DEVNODE}" ]]; then
 
-    if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+    if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
+       [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
       HM_HMRF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
       if [[ -n "${HM_HMRF_SERIAL}" ]]; then
-        HM_HMRF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
-        HM_HMRF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${HM_HMRF_DEVNODE} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
-      else
-        HM_HMRF_DEV=""
-        HM_HMRF_DEVNODE=""
-      fi
-    elif [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
-      RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMRF_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMRF_DEVNODE} -v -a 2>&1)
-      HM_HMRF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
-      if [[ -n "${HM_HMRF_SERIAL}" ]]; then
-        HM_HMRF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
-        HM_HMRF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+        if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+          RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMRF_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMRF_DEVNODE} -v -a 2>&1)
+          HM_HMRF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
+          HM_HMRF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+        else
+          HM_HMRF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
+          HM_HMRF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${HM_HMRF_DEVNODE} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+        fi
       else
         HM_HMRF_DEV=""
         HM_HMRF_DEVNODE=""

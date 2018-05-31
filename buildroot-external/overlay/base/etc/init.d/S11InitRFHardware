@@ -119,7 +119,7 @@ query_rf_parameters() {
       fi
     elif [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
       RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMRF_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMRF_DEVNODE} -v -a 2>&1)
-      HM_HMRF_SERIAL=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p' | tail -c 11)
+      HM_HMRF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
       if [[ -n "${HM_HMRF_SERIAL}" ]]; then
         HM_HMRF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
         HM_HMRF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')

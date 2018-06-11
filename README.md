@@ -6,7 +6,6 @@
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/latest/total.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
 [![Issues](https://img.shields.io/github/issues/jens-maus/RaspberryMatic.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/issues)
 ![License](https://img.shields.io/github/license/jens-maus/RaspberryMatic.svg?style=flat-square)
-[![Code Climate](https://codeclimate.com/github/jens-maus/RaspberryMatic/badges/gpa.svg?style=flat-square)](https://codeclimate.com/github/jens-maus/RaspberryMatic)
 [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
 
 The RaspberryMatic project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded devices like the [RaspberryPi](https://www.raspberrypi.org/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full microSD card image that can be directly flashed and then used in a RaspberryPi as the main operating system for controlling all kind of HomeMatic compatible devices with full compatibility to a CCU device directly sold by eQ-3.

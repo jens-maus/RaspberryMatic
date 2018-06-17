@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PIUSVD
+	bool "PiUSV+ UPS Daemon Support"
+	help
+	  Adds support for PiUSV+ UPS Support Daemon
+
+	  https://www.reichelt.de/?ARTICLE=169883

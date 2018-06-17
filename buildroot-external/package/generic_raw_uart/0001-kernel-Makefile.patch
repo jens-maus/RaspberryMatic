@@ -1,21 +1,22 @@
---- ./kernel/Makefile.orig	2018-02-07 08:33:52.438930125 +0100
-+++ ./kernel/Makefile	2018-02-07 09:05:17.459190626 +0100
-@@ -1,9 +1,15 @@
+--- ./kernel/Makefile.orig	2018-05-22 13:39:10.765603538 +0200
++++ ./kernel/Makefile	2018-05-22 13:41:33.320150935 +0200
+@@ -1,10 +1,16 @@
 -obj-m += eq3_char_loop.o
 -obj-m += plat_eq3ccu2.o
 +#obj-m += eq3_char_loop.o
 +#obj-m += plat_eq3ccu2.o
  obj-m += generic_raw_uart.o
--obj-m += pl011_raw_uart.o
 +ifeq ($(CONFIG_ARCH_BCM2835),y)
-+  obj-m += pl011_raw_uart.o
+ obj-m += pl011_raw_uart.o
 +endif
 +ifeq ($(CONFIG_ARCH_ROCKCHIP),y)
  obj-m += dw_apb_raw_uart.o
 +endif
 +ifeq ($(CONFIG_ARCH_MESON64_ODROIDC2),y)
  obj-m += meson_raw_uart.o
+-obj-m += fake_hmrf.o
 +endif
++#obj-m += fake_hmrf.o
  
  ifeq ($(KERNELRELEASE),)
    KERNELRELEASE := $(shell uname -r)

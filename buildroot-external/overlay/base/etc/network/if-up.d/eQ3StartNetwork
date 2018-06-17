@@ -1,5 +1,17 @@
 #!/bin/sh
 
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# signal that we are about to setup the network
+# connection using a blinking blue LED
+if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
+   [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
+  echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
+  echo none >/sys/class/leds/rpi_rf_mod\:red/trigger
+  echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
+fi
+
 # performance tuning to reduce TCP performance spikes
 /sbin/sysctl -w net.ipv4.tcp_timestamps=0 >/dev/null 2>&1 || true
 
@@ -17,14 +29,22 @@ fi
 # only continue if another interface hasn't
 # setup everything correctly already
 if [[ -e /var/status/hasIP ]]; then
-  /sbin/ifconfig ${IFACE} down
+  /sbin/ip link set ${IFACE} down
   echo -n "${IFACE}:disabled, "
+
+  # make sure that the wifi power is disabled
+  # if not required
+  case "${IFACE}" in
+    wlan*)
+      /usr/sbin/rfkill block wlan
+    ;;
+  esac
   exit 0
 fi
 
 # make sure iface is really up
 if [[ "$(cat /sys/class/net/${IFACE}/operstate)" == "down" ]]; then
-  /sbin/ifconfig ${IFACE} up
+  /sbin/ip link set ${IFACE} up
   sleep 5
 fi
 
@@ -33,7 +53,7 @@ case "${IFACE}" in
   eth*)
     # if eth0 doesn't have a link we don't continue
     if [[ "${IFACE}" == "eth0" && "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; then
-      /sbin/ifconfig ${IFACE} down
+      /sbin/ip link set ${IFACE} down
       echo -n "${IFACE}:no link, "
       exit 0
     fi
@@ -41,10 +61,14 @@ case "${IFACE}" in
 
   wlan*)
     if [[ -e /etc/config/wpa_supplicant.conf ]]; then
+      /usr/sbin/rfkill unblock wlan
       /usr/sbin/wpa_supplicant -B w -D wext -i ${IFACE} -c /etc/config/wpa_supplicant.conf -s
     else
-      /sbin/ifconfig ${IFACE} down
+      /sbin/ip link set ${IFACE} down
       echo -n "${IFACE}:no config, "
+      # make sure that the wifi power is disabled
+      # if not required
+      /usr/sbin/rfkill block wlan
       exit 0
     fi
   ;;
@@ -61,13 +85,22 @@ rm -f /var/status/hasIP
 rm -f /var/status/hasInternet
 
 # source in the network config
-source /etc/config/netconfig 2>/dev/null
+[[ -r /etc/config/netconfig ]] && . /etc/config/netconfig
 
+# setup the hostname
+echo "${HOSTNAME}" >/etc/hostname
 hostname "${HOSTNAME}"
 
+# setup /etc/hosts
+echo "127.0.0.1 localhost" >/etc/hosts
+echo "127.0.1.1 ${HOSTNAME}" >>/etc/hosts
+
+# restart syslogd to update hostname
+/etc/init.d/S07logging restart 2>/dev/null >/dev/null
+
 # set multicast routes
-route del -net 224.0.0.0 netmask 240.0.0.0 2>/dev/null
-route add -net 224.0.0.0 netmask 240.0.0.0 dev ${IFACE}
+/sbin/ip route del 224.0.0.0/4 2>/dev/null
+/sbin/ip route add 224.0.0.0/4 dev ${IFACE}
 
 # check if we booting via nfs
 if grep -q nfsroot /proc/cmdline ; then
@@ -77,10 +110,14 @@ if grep -q nfsroot /proc/cmdline ; then
    touch /var/status/hasLink
    touch /var/status/hasIP
 
-   # check internet connection; use fix ip because no nameserver (nfs boot) 
-   if ping -W 5 -c 1 google.com >/dev/null; then
+   # check internet connection; use fix ip to google because no nameserver (nfs boot)
+   /usr/bin/wget -q --spider http://216.58.213.238/
+   if [[ $? -eq 0 ]]; then
+     touch /var/status/hasInternet
+   elif ping -q -W 5 -c 1 8.8.8.8 >/dev/null 2>/dev/null; then
      touch /var/status/hasInternet
    fi
+
    exit 0
 fi
 
@@ -94,7 +131,7 @@ case "${MODE}" in
   DHCP)
     echo -n "dhcp, "
 
-    /sbin/udhcpc -b -t 100 -T 3 -S -x hostname:${HOSTNAME} -i ${IFACE} -C -F ${HOSTNAME} -V eQ3-CCU2 -s /bin/dhcp.script -p /var/run/udhcpc_${IFACE}.pid 2>/dev/null >/dev/null
+    /sbin/udhcpc -b -t 100 -T 3 -S -x hostname:${HOSTNAME} -i ${IFACE} -F ${HOSTNAME} -V eQ3-CCU2 -s /bin/dhcp.script -p /var/run/udhcpc_${IFACE}.pid 2>/dev/null >/dev/null
     if [[ ! -f "/var/run/udhcpc_${IFACE}.pid" ]]; then
       killall checkDHCP
       /bin/checkDHCP ${IFACE} &
@@ -108,9 +145,9 @@ case "${MODE}" in
     # we checked the link state already way earlier
     touch /var/status/hasLink
 
-    /sbin/ifconfig ${IFACE} ${IP} netmask ${NETMASK}
-    /sbin/route del default 2>/dev/null
-    /sbin/route add default gw ${GATEWAY}
+    /sbin/ip addr add ${IP}/${NETMASK} dev ${IFACE}
+    /sbin/ip route del default 2>/dev/null
+    /sbin/ip route add default via ${GATEWAY}
 
     if [[ -n "${NAMESERVER1}" ]]; then
       echo nameserver "${NAMESERVER1}" >>${RESOLV_CONF}
@@ -139,8 +176,11 @@ case "${MODE}" in
 
     touch /var/status/hasIP
 
-    # check internet connection; use fix ip because no nameserver (nfs boot)
-    if ping -W 5 -c 1 google.com >/dev/null 2>/dev/null; then
+    # check internet connection
+    /usr/bin/wget -q --spider http://google.com/
+    if [[ $? -eq 0 ]]; then
+      touch /var/status/hasInternet
+    elif ping -q -W 5 -c 1 google.com >/dev/null 2>/dev/null; then
       touch /var/status/hasInternet
     fi
   ;;
@@ -148,9 +188,8 @@ case "${MODE}" in
 esac
 
 # init the firewall only in case
-# we are not in LAN-GW mode
-source /var/hm_mode 2>/dev/null
-if [[ "${HM_MODE}" != "HMLGW" ]]; then
+# we are in normal startup mode
+if [[ "${HM_MODE}" == "NORMAL" ]]; then
   # set firewall rules
   /bin/setfirewall.tcl
   echo -n "firewall, "

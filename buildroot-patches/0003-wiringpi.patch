@@ -1,0 +1,62 @@
+--- buildroot/package/wiringpi/0001-Adjust-for-buildroot-build.patch.orig
++++ buildroot/package/wiringpi/0001-Adjust-for-buildroot-build.patch
+@@ -92,7 +92,7 @@
+ index e1868b9..68c950e 100644
+ --- a/wiringPi/Makefile
+ +++ b/wiringPi/Makefile
+-@@ -36,10 +36,10 @@ DYNAMIC=libwiringPi.so.$(VERSION)
++@@ -36,10 +36,10 @@
+  
+  #DEBUG	= -g -O0
+  DEBUG	= -O2
+@@ -102,10 +102,10 @@
+  DEFS	= -D_GNU_SOURCE
+ -CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Winline $(INCLUDE) -pipe -fPIC
+ +CFLAGS	+= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Winline $(INCLUDE) -pipe -fPIC
++ #CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Wconversion -Winline $(INCLUDE) -pipe -fPIC
+  
+  LIBS    = -lm -lpthread -lrt -lcrypt
+- 
+-@@ -79,6 +79,7 @@ $(STATIC):	$(OBJ)
++@@ -76,6 +76,7 @@
+  $(DYNAMIC):	$(OBJ)
+  	$Q echo "[Link (Dynamic)]"
+  	$Q $(CC) -shared -Wl,-soname,libwiringPi.so$(WIRINGPI_SONAME_SUFFIX) -o libwiringPi.so.$(VERSION) $(LIBS) $(OBJ)
+@@ -113,15 +113,13 @@
+  
+  .c.o:
+  	$Q echo [Compile] $<
+-@@ -104,7 +105,7 @@ install:	$(DYNAMIC)
+- 	$Q echo "[Install Dynamic Lib]"
++@@ -102,6 +103,6 @@
+  	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
+  	$Q install -m 0755 libwiringPi.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)
+ -	$Q ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)	$(DESTDIR)/lib/libwiringPi.so
+-+	$Q ln -sf libwiringPi.so.$(VERSION)				$(DESTDIR)$(PREFIX)/lib/libwiringPi.so
+++	$Q ln -sf libwiringPi.so.$(VERSION)       $(DESTDIR)$(PREFIX)/lib/libwiringPi.so
+  	$Q $(LDCONFIG)
+  
+- .PHONY:	install-static
+--- 
++ .PHONY:	install-deb
++--- 
+ 2.11.0
+-
+--- buildroot/package/wiringpi/wiringpi.hash.orig
++++ buildroot/package/wiringpi/wiringpi.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 4eae1d4f37f77534b1e2db4678a1003a5fd7ced4721c340527e3476d0bed1d9f wiringpi-96344ff7125182989f98d3be8d111952a8f74e15.tar.gz
++sha256 2455fc97d2b60ed169675dccbaabf55e1958c3c2499b246c96edfc8b036e9073 wiringpi-2.46.tar.gz 
+--- buildroot/package/wiringpi/wiringpi.mk.orig
++++ buildroot/package/wiringpi/wiringpi.mk
+@@ -4,8 +4,7 @@
+ #
+ ################################################################################
+ 
+-# using git commit id instead of (wrong) 2.44 git tag (Bug 10391)
+-WIRINGPI_VERSION = 96344ff7125182989f98d3be8d111952a8f74e15
++WIRINGPI_VERSION = 2.46
+ WIRINGPI_SITE = git://git.drogon.net/wiringPi
+ 
+ WIRINGPI_LICENSE = LGPL-3.0+

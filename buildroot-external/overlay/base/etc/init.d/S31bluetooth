@@ -9,45 +9,64 @@ DESC=bluetooth
 DAEMON=/usr/libexec/bluetooth/bluetoothd
 HCIATTACH=/usr/bin/hciattach
 HCICONFIG=/usr/bin/hciconfig
-DEVICE=/dev/ttyS1
+RFKILL=/usr/sbin/rfkill
+DEVICE=/dev/ttyS0
 
 SSD_OPTIONS="--oknodo --quiet --exec $DAEMON -- --compat"
 
 test -f $DAEMON || exit 0
 
-[[ -r /var/hm_mode ]] && . /var/hm_mode
-
-# ASUS Tinkerboard is not yet supported
-[[ "${HOST}" == "tinkerboard" ]] && exit 0
-
 case $1 in
   start)
     echo -n "Starting bluetooth: "
-    if [[ -c ${DEVICE} ]]; then
-      # first call will flash the firmware
-      $HCIATTACH $DEVICE bcm43xx 921600 noflow - 2>/dev/null >/dev/null
-      echo -n "."
+    if [[ -f /etc/config/enableBluetooth ]]; then
+      if [[ -c ${DEVICE} ]]; then
 
-      # bring hci0 up
-      hciconfig dev 2>/dev/null >/dev/null
-      if [ $? -eq 0 ]; then
-        $HCICONFIG hci0 up
+        [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-        start-stop-daemon --start --background $SSD_OPTIONS
-        echo "OK"
+        if [[ "${HM_HOST}" == "tinkerboard" ]]; then
+          HCIATTACH=/usr/bin/rtk_hciattach
+          HCIATTACH_OPT="-s 115200 ${DEVICE} rtk_h5"
+        else
+          HCIATTACH=/usr/bin/hciattach
+          HCIATTACH_OPT="${DEVICE} bcm43xx 921600 noflow -"
+        fi
 
-        exit 0
+        # first call will flash the firmware
+        ${RFKILL} unblock bluetooth
+        ${HCIATTACH} ${HCIATTACH_OPT} 2>/dev/null >/dev/null
+        echo -n "."
+
+        # wait for hciattach
+        sleep 2
+
+        # bring hci0 up
+        ${HCICONFIG} dev 2>/dev/null >/dev/null
+        if [ $? -eq 0 ]; then
+          ${HCICONFIG} hci0 up
+
+          start-stop-daemon --start --background ${SSD_OPTIONS}
+          echo "OK"
+
+          exit 0
+        fi
+
+        echo "WARNING: bluetooth setup failed"
+      else
+        echo "not required"
       fi
-
-      echo "WARNING: bcm43xx init failed"
     else
-      echo "not required"
+      echo "disabled"
     fi
+
+    ${RFKILL} block bluetooth 2>/dev/null
   ;;
 
   stop)
     echo -n "Stopping bluetooth: "
-    start-stop-daemon --stop $SSD_OPTIONS
+    start-stop-daemon --stop ${SSD_OPTIONS}
+    pkill ".*hciattach"
+    ${RFKILL} block bluetooth 2>/dev/null
     echo "OK"
   ;;
 

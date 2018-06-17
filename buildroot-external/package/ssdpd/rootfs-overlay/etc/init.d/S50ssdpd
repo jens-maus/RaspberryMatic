@@ -6,13 +6,12 @@
 start() {
   echo -n "Starting ssdpd: "
   start-stop-daemon -S -q -b -m -p /var/run/ssdpd.pid --exec /bin/ssdpd
-  echo "OK"
+  [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
 }
 stop() {
   echo -n "Stopping ssdpd: "
   start-stop-daemon -K -q -p /var/run/ssdpd.pid
-  rm -f /var/run/ssdpd.pid
-  echo "OK"
+  [[ $? -eq 0 ]] && ( rm -f /var/run/ssdpd.pid && echo "OK" ) || echo "ERROR"
 }
 restart() {
   stop

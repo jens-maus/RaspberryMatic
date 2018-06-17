@@ -1,0 +1,80 @@
+#!/bin/sh
+#
+# startup script to start/stop third-party addons
+#
+
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# skip this startup if not in normal mode
+[[ "${HM_MODE}" != "NORMAL" ]] && exit 0
+
+start() {
+  echo -n "Starting Third-Party Addons: "
+
+  if [[ ! -e /etc/config/safemode ]]; then
+
+    # source /etc/profile.d profiles
+    for i in /etc/profile.d/*.sh ; do
+      if [[ -r "$i" ]]; then
+        . $i
+      fi
+      unset i
+    done
+
+    # source /usr/local/etc/profile.d profiles
+    if [[ -d /usr/local/etc/profile.d ]]; then
+      for i in /usr/local/etc/profile.d/*.sh ; do
+        if [[ -r "$i" ]]; then
+          . $i
+        fi
+        unset i
+      done
+    fi
+
+    # start third-party addons one after another
+    /bin/run-parts -a start /etc/config/rc.d >/dev/null 2>&1
+
+    # call rc.local
+    if [[ -x /usr/local/etc/rc.local ]]; then
+      /usr/local/etc/rc.local
+    fi
+
+    echo "OK"
+  else
+    rm -f /etc/config/safemode
+
+    echo "skipping (safemode)"
+  fi
+
+}
+
+restart() {
+  stop
+  start
+}
+
+stop() {
+  echo -n "Stopping Third-Party Addons: "
+
+  # stop all third-party addons one after another
+  /bin/run-parts -a stop /etc/config/rc.d >/dev/null 2>&1
+
+  echo "OK"
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    stop
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

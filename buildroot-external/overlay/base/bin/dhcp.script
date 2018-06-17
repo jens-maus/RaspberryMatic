@@ -16,32 +16,39 @@ handle_deconfig() {
   if [[ ${nfsroot} == true ]]; then
       exit 0
   fi
-  /sbin/ifconfig ${interface} up
-  /sbin/ifconfig ${interface} 0.0.0.0
+  /sbin/ip link set ${interface} up
+  /sbin/ip addr flush dev ${interface}
 }
 
 handle_renew() {
 
   # bring interface up if not nfs rooted
   if [[ ${nfsroot} == false ]]; then
-    /sbin/ifconfig ${interface} ${ip} broadcast ${broadcast} netmask ${subnet}
+    # make sure we can deal with DHCP servers not providing broadcast or subnet
+    [[ -n "${broadcast}" ]] && BROADCAST="broadcast ${broadcast}"
+    [[ -n "${subnet}" ]] && NETMASK="/${subnet}"
+    /sbin/ip addr add ${ip}${NETMASK} ${BROADCAST} dev ${interface}
+
+    # update the info in /etc/config/netconfig
     eq3configcmd netconfigcmd -i ${ip} -n ${subnet} -g ${router}
-    export j=1
+    j=1
     for i in ${dns}; do
       eq3configcmd netconfigcmd -d${j} ${i}
-      export j=$(expr ${j} + 1)
+      j=$((${j} + 1))
     done
   fi
 
   # add default routes
   if [[ -n "${router}" ]]; then
     # delete all default routers
-    while route del default gw 0.0.0.0 dev ${interface} 2>/dev/null; do
+    while /sbin/ip route del default dev ${interface} 2>/dev/null; do
       :
     done
 
+    metric=0
     for i in ${router}; do
-      route add default gw ${i} dev ${interface}
+      /sbin/ip route add default via ${i} dev ${interface} metric ${metric}
+      metric=$((${metric} + 1))
     done
   fi
 
@@ -65,7 +72,10 @@ handle_renew() {
   fi
 
   # check internet connection
-  if ping -W 5 -c 1 google.com >/dev/null 2>&1; then
+  /usr/bin/wget -q --spider http://google.com/
+  if [[ $? -eq 0 ]]; then
+    touch /var/status/hasInternet
+  elif ping -q -W 5 -c 1 google.com >/dev/null 2>/dev/null; then
     touch /var/status/hasInternet
   fi
 }

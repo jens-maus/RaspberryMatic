@@ -7,12 +7,50 @@
 start() {
   echo -n "Setup onboard LEDs: "
 
-  # start is finished lets set the LEDs
-  if [[ -f /sys/class/leds/led0/trigger ]]; then
-    echo "heartbeat" >/sys/class/leds/led0/trigger
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  # signal that the system is successfully started
+  if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
+     [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
+
+    if [[ ! -f /var/status/hasLink ]]; then
+      # blink yellow
+      GREEN=timer
+      RED=timer
+      BLUE=none
+    elif [[ ! -f /var/status/hasInternet ]]; then
+      # constant yellow
+      GREEN=none
+      RED=none
+      BLUE=timer
+    elif [[ ! -f /var/status/HMServerStarted ]]; then
+      # blink red
+      GREEN=none
+      RED=timer
+      BLUE=none
+    else
+      # constant blue
+      GREEN=none
+      RED=none
+      BLUE=default-on
+    fi
+
+    # setup the LEDs of the RPI-RF-MOD
+    echo ${GREEN} >/sys/class/leds/rpi_rf_mod\:green/trigger
+    echo ${RED}   >/sys/class/leds/rpi_rf_mod\:red/trigger
+    echo ${BLUE}  >/sys/class/leds/rpi_rf_mod\:blue/trigger
   fi
-  if [[ -f /sys/class/leds/led1/trigger ]]; then
-    echo "mmc0" >/sys/class/leds/led1/trigger
+
+  # start is finished lets set the LEDs
+  if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
+    echo ${HM_LED_GREEN_MODE2} >${HM_LED_GREEN}/trigger
+  fi
+  if [[ -f "${HM_LED_RED}/trigger" ]]; then
+    echo ${HM_LED_RED_MODE2} >${HM_LED_RED}/trigger
+  fi
+  if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
+    echo ${HM_LED_YELLOW_MODE2} >${HM_LED_YELLOW}/trigger
   fi
 
   echo "booted, OK"
@@ -26,12 +64,18 @@ restart() {
 stop() {
   echo -n "Setup onboard LEDs: "
 
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
   # stop starts, lets set the LEDs
-  if [[ -f /sys/class/leds/led0/trigger ]]; then
-    echo "mmc0" >/sys/class/leds/led0/trigger
+  if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
+    echo ${HM_LED_GREEN_MODE1} >${HM_LED_GREEN}/trigger
   fi
-  if [[ -f /sys/class/leds/led1/trigger ]]; then
-    echo "timer" >/sys/class/leds/led1/trigger
+  if [[ -f "${HM_LED_RED}/trigger" ]]; then
+    echo ${HM_LED_RED_MODE1} >${HM_LED_RED}/trigger
+  fi
+  if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
+    echo ${HM_LED_YELLOW_MODE1} >${HM_LED_YELLOW}/trigger
   fi
 
   echo "shutdown, OK"

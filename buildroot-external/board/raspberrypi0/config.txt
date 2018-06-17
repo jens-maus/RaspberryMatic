@@ -1,6 +1,3 @@
-# the kernel image to load
-kernel=zImage
-
 # setup HDMI output no matter if a HDMI
 # monitor is connected or not
 hdmi_force_hotplug=1
@@ -45,5 +42,15 @@ dtparam=watchdog=on
 # start with heartbeat on PWR led and mmc0 on ACT led
 dtparam=pwr_led_trigger=timer,act_led_trigger=mmc0
 
-# make sure the firmware enables USB/network boot
-program_usb_boot_mode=1
+# setup led device nodes for the rpi-rf-mod leds
+dtoverlay=rpi-rf-mod-leds
+
+# make sure gpio24 is set as input and pull_up
+gpio=24=ip,pu
+
+# start device tree at 0x2008000 to have
+# space for the u-boot boot script
+device_tree_address=0x2008000
+
+# lets u-boot take over the boot process
+kernel=u-boot.bin

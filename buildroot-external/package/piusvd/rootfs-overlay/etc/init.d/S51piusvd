@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+# PiUSV+ Daemon starting and stopping
+#
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DESC=piusvd
+
+DAEMON=/opt/piusvd/piupsmon
+PIDFILE=/var/run/piupsmon.pid
+I2C_ADDR=0x18
+
+test -x $DAEMON || exit 0
+
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+case $1 in
+  start)
+    echo -n "Starting PiUSV+ daemon: "
+
+    # find out if a PiUSV+ unit is installed at all and
+    # also check that no pcf8563 was previously found because
+    # it uses the same i2c address like the PiUSV+.
+    i2cget -y 1 "${I2C_ADDR}" 2>/dev/null >/dev/null
+    if [[ $? -eq 0 ]] && [[ "${HM_RTC}" != "pcf8563" ]]; then
+
+      # start the daemon
+      ${DAEMON} & 2>&1 >/dev/null
+      [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+
+    else
+      echo "no hardware found"
+    fi
+  ;;
+
+  stop)
+    echo -n "Stopping PiUSV+ daemon: "
+    if [[ -f ${PIDFILE} ]]; then
+      ${DAEMON} -stop 2>&1 >/dev/null
+      rm -f ${PIDFILE}
+    fi
+    [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+  ;;
+
+  restart|force-reload)
+    $0 stop
+    sleep 1
+    $0 start
+  ;;
+
+  status)
+    ${DAEMON} --status
+  ;;
+
+  *)
+    echo "Usage: $0 {start|stop|restart|force-reload|status}" >&2
+    exit 1
+  ;;
+esac
+
+exit 0

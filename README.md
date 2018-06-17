@@ -2,52 +2,62 @@
 
 # RaspberryMatic
 
-[![Release](https://img.shields.io/github/release/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/latest/total.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
-[![Issues](https://img.shields.io/github/issues/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/issues)
-[![Code Climate](https://codeclimate.com/github/jens-maus/RaspberryMatic/badges/gpa.svg)](https://codeclimate.com/github/jens-maus/RaspberryMatic)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
+[![Current Release](https://img.shields.io/github/release/jens-maus/RaspberryMatic.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/latest/total.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
+[![Issues](https://img.shields.io/github/issues/jens-maus/RaspberryMatic.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/issues)
+![License](https://img.shields.io/github/license/jens-maus/RaspberryMatic.svg?style=flat-square)
+[![Donate](https://img.shields.io/badge/donate-PayPal-green.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
 
-The RaspberryMatic project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded devices like the [RaspberryPi](https://www.raspberrypi.org/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full microSD card image that can be directly flashed and then used in a RaspberryPi as the main operating system for controlling all kind of HomeMatic compatible devices with full compatibility to a CCU2 device directly sold by eQ-3.
+The RaspberryMatic project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded devices like the [RaspberryPi](https://www.raspberrypi.org/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full microSD card image that can be directly flashed and then used in a RaspberryPi as the main operating system for controlling all kind of HomeMatic compatible devices with full compatibility to a CCU device directly sold by eQ-3.
 
 ## :cookie: Features
-* 100% HomeMatic CCU system compliant based on latest [OCCU 2.31.25](https://github.com/eq-3/occu) CCU software environment
-* Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMatic-IP) compatible
-* Based on latest [Buildroot 2017.11.2](http://buildroot.org/) lightweight Linux operating system
-* Integration of latest [community versions of WebUI](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) (`ReGaHss`)
+* 100% HomeMatic [CCU2](http://www.eq-3.com/products/homematic/control-units-and-gateways/homematic-central-control-unit-ccu2.html)/[CCU3](http://www.eq-3.com/products/homematic/control-units-and-gateways/-473.html) system compliant based on latest [OCCU 2.31.25](https://github.com/eq-3/occu) CCU software environment
+* Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMaticIP) compatible
+* Integration of latest [community version of ReGaHss](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta)
 * Integration of [third-party patches](https://github.com/jens-maus/RaspberryMatic/projects/3) for an improved WebUI experience.
-* Self-contained disk image targeted for lightweight embedded devices (primarily RaspberryPi)
-* Latest [Linux kernel 4.9.80](https://github.com/raspberrypi/linux/tree/rpi-4.9.y) with hard-float (ARMv7) support
+* Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
+* Support to be used without GPIO RF module just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
+* Integrated WebUI-based firmware update mechanism and Recovery System to perform maintenance operations such as system restore.
+* Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
+* Based on latest [Buildroot 2018.02.2](http://buildroot.org/) lightweight Linux operating system
+* Latest Linux kernel (RaspberryPi: [4.14.34](https://github.com/raspberrypi/linux/tree/rpi-4.14.y), Tinkerboard: [4.4.126](https://github.com/rockchip-linux/kernel)) with hard-float (ARMv7) support
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
 * Read-only root file system to minimize write operations on SD card
-* Includes special embedded JAVA8 runtime environment ([1.8.0_162-8.27.0.91](http://www.azul.com/downloads/zulu-embedded/))
-* Supports onboard WiFi of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB WiFi sticks
-* Supports onboard Bluetooth of RaspberryPi3 or Raspberry Pi Zero W as well as various third-party USB Bluetooth sticks
+* Includes embedded JAVA8 runtime environment ([1.8.0_172-8.30.0.106](http://www.azul.com/downloads/zulu-embedded/))
+* Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
+* Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setups including USB connection to uninterruptible power supply (UPS) as well as remote NUT server use (e.g. via Synology NAS Network UPS functionality)
-* Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
-* Support to be used without [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) RF module and just connect it to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Full IPv6 support and default HTTPS enabled WebUI support
 * Support to query status information of the underlying Linux system using SNMP requests
 * Auto-resizing `/usr/local` partition to utilize the full capacity of the SD card or USB stick
 * Support for the following third-party *Hardware Attached on Top* (HAT) boards:
-  * [S.USV](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown in case batteries are exhausted.
-  * [PiModules UPS PIco](http://pimodules.com/) – UPS including automatic system shutdown in case batteries are exhausted.
+  * [S.USV](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown.
+  * [PiUSV+](https://www.reichelt.de/?ARTICLE=169883) – UPS including alarm notification upon power loss and automatic system shutdown.
+  * [PiModules UPS PIco](http://pimodules.com/) – UPS including automatic system shutdown.
   * [StromPi2](http://www.joy-it.net/strompi-2/) – UPS including alarm notification upon power loss.
-* Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi), [RX8130CE](https://www5.epsondevice.com/en/products/rtc/rx8130ce.html), onboard Tinkerboard RTC)
+  * [PiDesktop](http://de.farnell.com/element14/pi-desktop/element-14-pi-desktop-hatencl/dp/2687142) – Addon HAT with power button and dedicated RTC clock (PCF8563).
+* Integrated support for various RTC clock modules:
+  * [PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/)
+  * [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi)
+  * [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi)
+  * [RX8130CE](https://www5.epsondevice.com/en/products/rtc/rx8130ce.html)
+  * [PCF8563](https://www.nxp.com/products/analog/signal-chain/real-time-clocks/ic-real-time-clocks-rtc/real-time-clock-calendar:PCF8563)
+  * onboard Tinkerboard RTC
 * Hardware WatchDog support automatically rebooting the system upon severe hardware/lockup problems
 * Direct [CloudMatic](http://cloudmatic.de) (meine-homematic.de) support
 * Dedicated Build Environment using a cross compiler (`arm-linux-gcc`) to compile third-party applications
 
 ## :fire: Limitations
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
-* No Bluetooth and onboard-WiFi support for ASUS Tinkerboard (work in progress)
+* No web-based configuration for enabling/disabling the LAN-Gateway mode (work in progress)
+* No web-based configuration for configuring NUT (UPS) support (work in progress)
 
 ## :computer: Requirements
-<img src="https://files.elv.com/bilder/artikel/Produkte/14/1421/142141/Internet/gross/142141_F02_PlHomeMatic.jpg" alt="RaspberryPi equipped with HM-MOD-RPI-PCB" width=300 align=right>
+<img src="https://files.elv.com/bilder/artikel/Produkte/15/1529/152941/Internet//gross/152941_w01_modulplatine.jpg" alt="RaspberryPi equipped with RPI-RF-MOD" width=300 align=right>
 
 * Any of the following embedded hardware boards:
+  * [RaspberryPi3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
   * [RaspberryPi3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
   * [RaspberryPi2 Model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
   * [RaspberryPi Compute Module 3](https://www.raspberrypi.org/products/compute-module-3/)
@@ -57,13 +67,20 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [RaspberryPi Compute Module 1](https://www.raspberrypi.org/products/compute-module/)  
   * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/) or [Model B, 512MB](https://www.adafruit.com/product/998)
   * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) or [Model A, 256MB](https://www.adafruit.com/product/1344)
-  * [ASUS Tinkerboard](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
-* One of the following BidCos-RF/HomeMaticIP capabale RF devices:
-  * HomeMatic-RF GPIO Radio Module ([HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) – [Installation](https://www.youtube.com/watch?v=xtzXsvOLa_Y))
-  * HomeMaticIP RF USB Stick ([HmIP-RFUSB](https://www.elv.de/elv-homematic-ip-rf-usb-stick-hmip-rfusb-fuer-alternative-steuerungsplattformen-arr-bausatz.html))
-  * HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
-  * HomeMatic Config Adapter ([HM-CFG-USB-2](https://wiki.fhem.de/wiki/HM-CFG-USB_USB_Konfigurations-Adapter))
-* 2GB minimum space on microSD card or USB memory stick / hard disk (when using RaspberryPi3)
+  * [Tinker Board S](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
+  * [Tinker Board](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
+* One or more of the following HomeMatic/HomeMatic-Wired/HomeMaticIP capabale devices:
+  * HomeMatic + HomeMaticIP:
+    * GPIO Radio Module HAT – [RPI-RF-MOD](https://www.elv.de/homematic-funk-modulplatine-fuer-raspberry-pi-3-rpi-rf-mod-komplettbausatz.html)  
+    * GPIO Radio Module HAT – [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) ([Installation](https://www.youtube.com/watch?v=xtzXsvOLa_Y))
+  * HomeMaticIP only:
+    * USB Stick – [HmIP-RFUSB](https://www.elv.de/elv-homematic-ip-rf-usb-stick-hmip-rfusb-fuer-alternative-steuerungsplattformen-arr-bausatz.html)
+  * HomeMatic only:
+    * LAN Gateway – [HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)
+    * USB Config Adapter – [HM-CFG-USB-2](https://wiki.fhem.de/wiki/HM-CFG-USB_USB_Konfigurations-Adapter)
+  * HomeMatic-Wired only:
+    * LAN Wired Gateway – [HMW-LGW-O-DR-GS-EU](https://www.elv.de/homematic-rs485-gateway-1.html)
+* 4 GB minimum sized microSD card or USB memory stick / hard disk (RaspberryPi3 only)
 
 ## :telescope: Compatible Third-Party CCU Addons
 The CCU platform allows to enhance the functionality of a CCU by installing so-called CCU Addon packages. For RaspberryMatic, standard CCU Addon packages won't work because included binaries have to be recompiled for the hard-float buildroot environment RaspberryMatic uses. Here is a list of well-known already compatible Addon packages (please note that this list might be incomplete):
@@ -87,6 +104,8 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [HomeMatic Check_MK](https://github.com/alexreinert/homematic_check_mk)
 * [hm-tools](https://github.com/fhetty/hm-tools)
 * [HB-UW-Sen-THPL Universalsensor](https://github.com/jp112sdl/Wettersensor/tree/master/Contrib/CCURM)
+* [RedMatic](https://github.com/hobbyquaker/RedMatic)
+* [Mosquitto](https://github.com/hobbyquaker/ccu-addon-mosquitto)
 
 ## :cloud: Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:
@@ -112,8 +131,9 @@ Documentation (e.g. how to port your HomeMatic configuration from a CCU2 to Rasp
 * [HM-MOD-RPI-PCB - Installation Video :de:](https://www.youtube.com/watch?v=xtzXsvOLa_Y)
 
 ## :tv: Presentations (German :de: – YouTube)
-<a href="https://www.youtube.com/watch?v=LQrzittdEGg"><img alt="RaspberryMatic (Teil 1) – Usertreffen Kassel 2017" src="https://img.youtube.com/vi/LQrzittdEGg/0.jpg" width=420></a>
-<a href="https://www.youtube.com/watch?v=duSTLdVKSeM"><img alt="RaspberryMatic (Teil 2) – Usertreffen Kassel 2017" src="https://img.youtube.com/vi/duSTLdVKSeM/0.jpg" width=420></a>
+<a href="https://www.youtube.com/watch?v=hSmDcrkHb7M"><img alt="Usertreffen Kassel 2018 – RaspberryMatic" src="https://img.youtube.com/vi/hSmDcrkHb7M/hqdefault.jpg" width=420></a>
+<a href="https://www.youtube.com/watch?v=LQrzittdEGg"><img alt="Usertreffen Kassel 2017 – RaspberryMatic (Teil 1)" src="https://img.youtube.com/vi/LQrzittdEGg/hqdefault.jpg" width=420></a>
+<a href="https://www.youtube.com/watch?v=duSTLdVKSeM"><img alt="Usertreffen Kassel 2017 - RaspberryMatic (Teil 2)" src="https://img.youtube.com/vi/duSTLdVKSeM/hqdefault.jpg" width=420></a>
 
 ## :yum: How to contribute
 As the RaspberryMatic project is an open source based project everyone is invited to contribute to this project. Please note, however, that functionality within the corresponding eQ-3 OCCU binaries can not be modified as the main HomeMatic services (rfd, ReGaHSS, HMServer, etc.) are provided in binary format by the [OCCU](https://github.com/eq-3/occu) project and not compiled from sources. Nevertheless, if you are a talented developer and want to contribute to the success of RaspberryMatic feel free to send over pull requests or report issues / enhancement requests.

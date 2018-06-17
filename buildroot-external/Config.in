@@ -1,3 +1,5 @@
+source "$BR2_EXTERNAL_EQ3_PATH/package/recovery-system/Config.in"
+
 menu "eQ-3 HomeMatic Services"
   source "$BR2_EXTERNAL_EQ3_PATH/package/occu/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/cloudmatic/Config.in"
@@ -11,10 +13,14 @@ menu "Kernel Module Support"
 endmenu
 
 menu "Hardware Support"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/rpi-rf-mod/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/rx8130-rtc/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/susvd/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/piusvd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/picod/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/strompi2d/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/pidesktopd/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/bluetooth-tinker/Config.in"
 endmenu
 
 menu "Software Support"
@@ -27,3 +33,6 @@ endmenu
 menu "Java Runtime Environment"
   source "$BR2_EXTERNAL_EQ3_PATH/package/java-azul/Config.in"
 endmenu
+
+# External packages
+source "$BR2_EXTERNAL_EQ3_PATH/Config.ext.in"

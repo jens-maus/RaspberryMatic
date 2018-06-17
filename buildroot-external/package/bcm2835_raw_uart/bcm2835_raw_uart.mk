@@ -5,7 +5,7 @@
 #############################################################
 
 BCM2835_RAW_UART_VERSION = 1.2
-BCM2835_RAW_UART_SITE = $(BR2_EXTERNAL)/package/bcm2835_raw_uart
+BCM2835_RAW_UART_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/bcm2835_raw_uart
 BCM2835_RAW_UART_SITE_METHOD = local
 BCM2835_RAW_UART_LICENSE = GPL
 BCM2835_RAW_UART_DEPENDENCIES = host-dtc

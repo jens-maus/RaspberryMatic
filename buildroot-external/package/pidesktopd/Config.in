@@ -1,0 +1,6 @@
+config BR2_PACKAGE_PIDESKTOPD
+	bool "PiDesktop HAT Daemon Support"
+	help
+	  Adds support for PiDesktop Support Daemon
+
+	  https://github.com/hoopsurfer/pidesktop

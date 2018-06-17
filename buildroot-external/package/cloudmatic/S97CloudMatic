@@ -6,8 +6,11 @@
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-# skip this startup in LAN Gateway mode
-[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
+# skip this startup if not in normal mode
+[[ "${HM_MODE}" != "NORMAL" ]] && exit 0
+
+# skip startup if cloudmatic isn't found/installed
+[[ -x /opt/mh/startup.sh ]] || exit 0
 
 start() {
   echo -n "Starting CloudMatic: "
@@ -15,13 +18,12 @@ start() {
   if [[ ! -e /etc/config/safemode ]]; then
 
     # CloudMatic (meine-homematic.de) startup
-    if [[ -x /opt/mh/startup.sh ]]; then
-      /opt/mh/startup.sh 2>/dev/null >/dev/null
-    fi
+    /opt/mh/startup.sh 2>/dev/null >/dev/null
 
+    echo "OK"
+  else
+    echo "skipping (safemode)"
   fi
-
-  echo "OK"
 }
 
 restart() {

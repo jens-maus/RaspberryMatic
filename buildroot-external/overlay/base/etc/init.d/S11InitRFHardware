@@ -112,12 +112,17 @@ query_rf_parameters() {
        [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
 
       if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
-        # run hmip-copro-update first to query info and get copro into app mode
+        # use hmip-copro-update only to query all rf module related info (eq3configcmd is not supported for RPI-RF-MOD)
         RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMRF_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMRF_DEVNODE} -v -a 2>&1)
+        RF_INFO_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
+
+        # use the last 10 chars of the SGTIN as the serial number of the rf module
+        HM_HMRF_SERIAL=$(echo ${RF_INFO_SGTIN} | tail -c 11)
+      else
+        # use eq3configcmd to query the serial number
+        HM_HMRF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
       fi
 
-      # use eq3configcmd to query the serial number
-      HM_HMRF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
       if [[ -n "${HM_HMRF_SERIAL}" ]]; then
         if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
           HM_HMRF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
@@ -144,8 +149,11 @@ query_rf_parameters() {
         # run hmip-copro-update to query info and get copro into app mode
         RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v -a 2>&1)
 
-        # fake the serial number by using the end of the SGTIN
-        HM_HMIP_SERIAL=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p' | tail -c 11)
+        # get the SGTIN
+        HM_HMIP_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
+
+        # use the last 10 chars of the SGTIN as the serial number of the rf module
+        HM_HMIP_SERIAL=$(echo ${HM_HMIP_SGTIN} | tail -c 11)
         if [[ -n "${HM_HMIP_SERIAL}" ]]; then
           HM_HMIP_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
           HM_HMIP_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
@@ -157,6 +165,9 @@ query_rf_parameters() {
         HM_HMIP_SERIAL=${HM_HMRF_SERIAL}
         HM_HMIP_VERSION=${HM_HMRF_VERSION}
         HM_HMIP_ADDRESS=${HM_HMRF_ADDRESS}
+        if [[ -n "${RF_INFO_SGTIN}" ]]; then
+          HM_HMIP_SGTIN=${RF_INFO_SGTIN}
+        fi
       fi
     fi
 
@@ -181,6 +192,10 @@ query_rf_parameters() {
     echo "${HM_HMIP_SERIAL}" >/var/hmip_board_serial
     echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
     echo "${HM_HMIP_ADDRESS}" >/var/hmip_address
+    if [[ -n "${HM_HMIP_SGTIN}" ]]; then
+      echo "${HM_HMIP_SGTIN}" >/var/board_sgtin
+      echo "${HM_HMIP_SGTIN}" >/var/hmip_board_sgtin
+    fi
   fi
 }
 

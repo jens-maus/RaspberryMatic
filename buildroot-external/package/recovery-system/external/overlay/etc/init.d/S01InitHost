@@ -8,9 +8,15 @@ identify_host() {
   # default/fallback values
   HM_HOST=""
   HM_MODE="NORMAL"
-  HM_LED_GREEN="/sys/class/leds/led0"
-  HM_LED_RED="/sys/class/leds/led1"
+  HM_LED_GREEN=""
+  HM_LED_GREEN_MODE1="mmc0"
+  HM_LED_GREEN_MODE2="heartbeat"
+  HM_LED_RED=""
+  HM_LED_RED_MODE1="timer"
+  HM_LED_RED_MODE2="mmc0"
   HM_LED_YELLOW=""
+  HM_LED_YELLOW_MODE1="none"
+  HM_LED_YELLOW_MODE2="none"
 
   # identify the RaspberryPi version used
   # http://elinux.org/RPi_HardwareHistory
@@ -38,9 +44,6 @@ identify_host() {
         # ASUS Tinkerboard
         Rockchip)
           HM_HOST="tinkerboard"
-          HM_LED_GREEN="/sys/class/leds/act-led"
-          HM_LED_RED="/sys/class/leds/pwr-led"
-          HM_LED_YELLOW="/sys/class/leds/led1-led"
         ;;
       esac
     ;;
@@ -52,15 +55,41 @@ identify_host() {
     echo "couldn't identify hardware platform (${hostid}). Using RaspberryPi3 as fallback"
   fi
 
+  # depending on the host hardware we have to define different
+  # HM settings
+  case "${HM_HOST}" in
+
+    # RaspberryPi
+    rpi*)
+      HM_HOST_GPIO_UART="/dev/raw-uart"
+      HM_LED_GREEN="/sys/class/leds/led0"
+      HM_LED_RED="/sys/class/leds/led1"
+      HM_LED_YELLOW=""
+    ;;
+
+    # ASUS Tinkerboard
+    tinkerboard*)
+      HM_HOST_GPIO_UART="/dev/raw-uart"
+      HM_LED_GREEN="/sys/class/leds/act-led"
+      HM_LED_RED="/sys/class/leds/pwr-led"
+      HM_LED_YELLOW="/sys/class/leds/led1-led"
+    ;;
+
+    *)
+      echo "ERROR: couldn't identify host hardware: ${hostid}"
+    ;;
+
+  esac
+
   # make sure the LEDs are actually setup correctly
   if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
-    echo "mmc0" >${HM_LED_GREEN}/trigger
+    echo ${HM_LED_GREEN_MODE1} >${HM_LED_GREEN}/trigger
   fi
   if [[ -f "${HM_LED_RED}/trigger" ]]; then
-    echo "timer" >${HM_LED_RED}/trigger
+    echo ${HM_LED_RED_MODE1} >${HM_LED_RED}/trigger
   fi
   if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
-    echo "none" >${HM_LED_YELLOW}/trigger
+    echo ${HM_LED_YELLOW_MODE1} >${HM_LED_YELLOW}/trigger
   fi
 }
 

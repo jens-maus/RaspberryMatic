@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# start script to setup the board leds correctly after
+# udev started up
+#
+
+start() {
+  echo -n "Setup onboard LEDs: "
+
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  # make sure the RPI-RF-MOD gpio pins are set to out
+  if [[ "${HM_RTC}" == "rx8130" ]]; then
+    /usr/bin/gpio mode 27 out
+    /usr/bin/gpio mode 28 out
+    /usr/bin/gpio mode 29 out
+  fi
+
+  echo "OK"
+}
+
+restart() {
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

@@ -4,12 +4,14 @@
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
 # signal that we are about to setup the network
-# connection using a blinking blue LED
+# connection using a slow blinking blue LED
 if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
    [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
   echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
   echo none >/sys/class/leds/rpi_rf_mod\:red/trigger
   echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
+  echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_on
+  echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_off
 fi
 
 # performance tuning to reduce TCP performance spikes

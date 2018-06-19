@@ -29,10 +29,14 @@ init_rtc_device() {
         /usr/bin/gpio mode 28 out
         /usr/bin/gpio mode 29 out
 
-        # setup the LEDs to show a constant yellow light
-        echo default-on >/sys/class/leds/rpi_rf_mod\:green/trigger
-        echo default-on >/sys/class/leds/rpi_rf_mod\:red/trigger
-        echo none >/sys/class/leds/rpi_rf_mod\:blue/trigger
+        # setup the LEDs to show a slowly blinking magenta light
+        echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
+        echo timer >/sys/class/leds/rpi_rf_mod\:red/trigger
+        echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
+        echo 499 >/sys/class/leds/rpi_rf_mod\:red/delay_on
+        echo 499 >/sys/class/leds/rpi_rf_mod\:red/delay_off
+        echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_on
+        echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_off
 
         return 0
       fi

@@ -14,32 +14,58 @@ start() {
   if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
      [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
 
-    if [[ ! -f /var/status/hasLink ]]; then
-      # blink yellow
+    if [[ ! -f /var/status/hasLink ]] ||
+       [[ ! -f /var/status/hasIP ]]; then
+      # fast blink yellow
       GREEN=timer
       RED=timer
       BLUE=none
+      SPEED=100
     elif [[ ! -f /var/status/hasInternet ]]; then
-      # constant yellow
+      # fast blink blue
       GREEN=none
       RED=none
       BLUE=timer
-    elif [[ ! -f /var/status/HMServerStarted ]]; then
-      # blink red
+      SPEED=100
+    elif [[ ! -f /var/status/HMServerStarted ]] ||
+         [[ ! -f /var/status/rfd.status ]] ||
+         [[ ! -f /var/status/multimacd.status ]] ||
+         [[ ! -f /var/run/ReGaHss.pid ]] ||
+         [[ ! -f /var/run/eq3configd.pid ]]; then
+      # constant red
       GREEN=none
-      RED=timer
+      RED=default-on
       BLUE=none
+      SPEED=
     else
+      # Everything startup up fine!
       # constant blue
       GREEN=none
       RED=none
       BLUE=default-on
+      SPEED=
     fi
 
     # setup the LEDs of the RPI-RF-MOD
     echo ${GREEN} >/sys/class/leds/rpi_rf_mod\:green/trigger
     echo ${RED}   >/sys/class/leds/rpi_rf_mod\:red/trigger
     echo ${BLUE}  >/sys/class/leds/rpi_rf_mod\:blue/trigger
+
+    # setup blink speed
+    if [[ -n "${SPEED}" ]]; then
+      if [[ "${GREEN}" == "timer" ]]; then
+        echo ${SPEED} >/sys/class/leds/rpi_rf_mod\:green/delay_on
+        echo ${SPEED} >/sys/class/leds/rpi_rf_mod\:green/delay_off
+      fi
+      if [[ "${RED}" == "timer" ]]; then
+        echo ${SPEED} >/sys/class/leds/rpi_rf_mod\:red/delay_on
+        echo ${SPEED} >/sys/class/leds/rpi_rf_mod\:red/delay_off
+      fi
+      if [[ "${BLUE}" == "timer" ]]; then
+        echo ${SPEED} >/sys/class/leds/rpi_rf_mod\:blue/delay_on
+        echo ${SPEED} >/sys/class/leds/rpi_rf_mod\:blue/delay_off
+      fi
+    fi
   fi
 
   # start is finished lets set the LEDs

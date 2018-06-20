@@ -25,14 +25,18 @@ init_rtc_device() {
       # we found a RX8130, thus we assume the RPI-RF-MOD to
       # be present, thus we setup the LED GPIOs to OUT
       if [[ -c /dev/rtc0 ]]; then
-        /usr/bin/gpio mode 27 OUT
-        /usr/bin/gpio mode 28 OUT
-        /usr/bin/gpio mode 29 OUT
+        /usr/bin/gpio mode 27 out
+        /usr/bin/gpio mode 28 out
+        /usr/bin/gpio mode 29 out
 
-        # setup the LEDs to show a blinking yellow light
-        echo timer >/sys/class/leds/rpi_rf_mod\:green/trigger
+        # setup the LEDs to show a slowly blinking magenta light
+        echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
         echo timer >/sys/class/leds/rpi_rf_mod\:red/trigger
-        echo none >/sys/class/leds/rpi_rf_mod\:blue/trigger
+        echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
+        echo 499 >/sys/class/leds/rpi_rf_mod\:red/delay_on
+        echo 499 >/sys/class/leds/rpi_rf_mod\:red/delay_off
+        echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_on
+        echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_off
 
         return 0
       fi
@@ -84,6 +88,21 @@ init_rtc_device() {
       echo ds1307 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
       [[ -c /dev/rtc0 ]] && return 0
       echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
+    fi
+  fi
+
+  HM_RTC=""
+  # check for PCF8563 RTC clock at 0x51
+  i2cget -y 1 0x51 0x00 2>/dev/null >/dev/null
+  if [[ $? -eq 0 ]]; then
+    # check for PCF8563
+    modprobe i2c:pcf8563
+    if [[ $? -eq 0 ]]; then
+      HM_RTC="pcf8563"
+      [[ -c /dev/rtc0 ]] && return 0
+      echo pcf8563 0x51 >/sys/class/i2c-adapter/i2c-1/new_device
+      [[ -c /dev/rtc0 ]] && return 0
+      echo 0x51 >/sys/class/i2c-dev/i2c-1/device/delete_device
     fi
   fi
 

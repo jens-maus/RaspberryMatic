@@ -34,6 +34,13 @@ init() {
     fi
   fi
 
+  if [[ ! -e /etc/config/hmip_address.conf ]]; then
+    if [[ -n "${HM_HMIP_ADDRESS}" ]]; then
+      echo "#$(date)" >/etc/config/hmip_address.conf
+      echo "Adapter.1.Address=$(echo ${HM_HMIP_ADDRESS} | sed -n 's/^0x\(.*\)/\1/p')" >>/etc/config/hmip_address.conf
+    fi
+  fi
+
   if [[ -n "${HM_HMIP_DEV}" ]]; then
 
     # if no uart is used to connect to the rf module (e.g. HmIP-RFUSB)

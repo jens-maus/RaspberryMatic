@@ -50,12 +50,12 @@ release: dist
 	cd ./release && sha256sum RaspberryMatic-$(VERSION)-$(BOARD).zip >RaspberryMatic-$(VERSION)-$(BOARD).zip.sha256
 
 .PHONY: updatePkg
-updatePkg: dist
+updatePkg:
 	rm -rf /tmp/$(PRODUCT)-$(VERSION) 2>/dev/null; mkdir -p /tmp/$(PRODUCT)-$(VERSION)
-	for f in $(shell cat release/updatepkg/$(PRODUCT)/files-package.txt); do ln -s $(shell pwd)/release/updatepkg/$(PRODUCT)/$${f} /tmp/$(PRODUCT)-$(VERSION)/; done
-	for f in $(shell cat release/updatepkg/$(PRODUCT)/files-images.txt); do ln -s $(shell pwd)/build-$(PRODUCT)/images/$${f} /tmp/$(PRODUCT)-$(VERSION)/; done
+	for f in `cat release/updatepkg/$(PRODUCT)/files-package.txt`; do ln -s $(shell pwd)/release/updatepkg/$(PRODUCT)/$${f} /tmp/$(PRODUCT)-$(VERSION)/; done
+	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do gzip -c $(shell pwd)/build-$(PRODUCT)/images/$${f} >/tmp/$(PRODUCT)-$(VERSION)/$${f}.gz; done
 	cd /tmp/$(PRODUCT)-$(VERSION); sha256sum * >$(PRODUCT)-$(VERSION).sha256
-	cd ./release; tar -C /tmp/$(PRODUCT)-$(VERSION) --owner=root --group=root -cvzhf $(PRODUCT)-$(VERSION).tgz $(shell ls /tmp/$(PRODUCT)-$(VERSION))
+	cd ./release; tar -C /tmp/$(PRODUCT)-$(VERSION) --owner=root --group=root -cvzhf $(PRODUCT)-$(VERSION).tgz `ls /tmp/$(PRODUCT)-$(VERSION)`
 
 .PHONY: clean
 clean:

@@ -749,6 +749,20 @@ fi
 trap 'rm -f /tmp/.runningFirmwareUpdate' EXIT
 touch /tmp/.runningFirmwareUpdate
 
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# fast blink magenta on RPI-RF-MOD
+if [[ "${HM_RTC}" == "rx8130" ]]; then
+  echo none  >/sys/class/leds/rpi_rf_mod\:green/trigger
+  echo timer >/sys/class/leds/rpi_rf_mod\:red/trigger
+  echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
+  echo 100 >/sys/class/leds/rpi_rf_mod\:red/delay_on
+  echo 100 >/sys/class/leds/rpi_rf_mod\:red/delay_off
+  echo 100 >/sys/class/leds/rpi_rf_mod\:blue/delay_on
+  echo 100 >/sys/class/leds/rpi_rf_mod\:blue/delay_off
+fi
+
 # if an argument was given (filename of the update file/data)
 # we run fwprepare to verify its validity
 if [[ "$#" -eq 1 ]]; then

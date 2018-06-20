@@ -106,10 +106,12 @@
     /*########################################################################*/
 
     forceUpdate = false;
-    urlParamInterfaces = jQuery.url().param('showRFInterfaces');
+    preventInterfaceCheck = false;
+    urlParamInterfaces = jQuery.url().param('showInterfaces');
     urlDebug = jQuery.url().param('debug');
     showDummyLicense = jQuery.url().param('showDummyLicense');
     createNewProgram = false;
+    showAPITools = jQuery.url().param('showAPITools');
 
     /**
      * jg_250

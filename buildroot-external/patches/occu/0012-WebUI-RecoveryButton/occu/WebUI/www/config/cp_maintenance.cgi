@@ -387,7 +387,7 @@ proc action_put_page {} {
                     table_row {
                       table_data {
                         division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
-                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+                        division {class="CLASS20908"}  "onClick=\"showCCULicense();\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
                       }
                     }
                   }
@@ -439,7 +439,27 @@ proc action_put_page {} {
           }
         }
         table_data {align="left"} {class="CLASS20921"} {
-          puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
+          puts "\${dialogSettingsCMHintSoftwareUpdate1}"
+          number_list {class="j_noForcedUpdate"} {
+            li {
+              ${dialogSettingsCMHintSoftwareUpdate2}            }
+            li {
+               ${dialogSettingsCMHintSoftwareUpdate3}
+            }
+            li {
+               ${dialogSettingsCMHintSoftwareUpdate3a}
+            }
+            set bat_level [get_bat_level]
+            if {$bat_level < 50} {
+              set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
+              append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
+              li $msg
+            }
+          }
+
+          division {class="j_forcedUpdate" style="padding:10px;"} {
+            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
+          }
         }
       }
       table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
@@ -573,6 +593,25 @@ set comment {
           });
         }
         }
+      }
+
+      # Recovery Modus
+      table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
+          table_data {class="CLASS20903"} $styleMaxWidth {
+              #puts "Abgesicherter<br>"
+              #puts "Modus"
+              puts "\${dialogSettingsCMTDCCURecoveryMode}"
+          }
+          table_data {class="CLASS20904"} {
+              division {class="popupControls CLASS20905"} {
+                  division {class="CLASS20910 colorGradient50px"} {onClick="OnEnterRecoveryMode();"} {
+                      puts "\${dialogSettingsCMBtnCCURestartRecovery}"
+                  }
+              }
+          }
+          table_data {align="left"} {class="CLASS20904"} {
+              puts "\${dialogSettingsCMHintRestartRecoveryMode}"
+          }
       }
 
       table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
@@ -750,6 +789,18 @@ set comment {
           });
           homematic("SafeMode.enter");
         }
+        });
+      }
+
+      OnEnterRecoveryMode = function() {
+        new YesNoDialog(translateKey("dialogRecoveryCheck"), translateKey("dialogQuestionRestartRecoveryMode"), function(result) {
+          if (result == YesNoDialog.RESULT_YES)
+          {
+            MessageBox.show(translateKey("dialogRestartRecoveryModeTitle"), translateKey("dialogRestartRecoveryModeContent"), function() {
+              window.location.href = "/";
+            });
+            homematic("RecoveryMode.enter");
+          }
         });
       }
     }

@@ -26,7 +26,6 @@ set HS485D_URL "bin://127.0.0.1:2000"
 # set PFMD_URL "bin://127.0.0.1:2002" - not necessary with the ccu2
 
 set REMOTE_FIRMWARE_SCRIPT "http://update.homematic.com/firmware/download"
-#old ccu set REMOTE_FIRMWARE_SCRIPT "http://www.homematic.com/firmware/download.php"
 
 proc action_acceptEula {} {
   global env sid
@@ -220,8 +219,13 @@ proc action_firmware_update_invalid {} {
 
 proc action_firmware_update_go {} {
   global env
-  cd /tmp/
-  
+
+  if {[getProduct] < 3 } {
+     cd /tmp/
+  } else {
+    cd /usr/local/tmp/
+  }
+
   http_head
 
   put_message "\${dialogSettingsCMDialogPerformSoftwareUpdateTitle}" {
@@ -244,8 +248,10 @@ proc action_firmware_update_go {} {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts "dlgPopup.readaptSize();"
     puts {
-      regaMonitor.stop();
-      InterfaceMonitor.stop();
+      if (typeof regaMonitor != "undefined") {
+        regaMonitor.stop();
+        InterfaceMonitor.stop();
+      }
       var pb = "action=update_start";
       var opts = {
         postBody: pb,
@@ -258,7 +264,14 @@ proc action_firmware_update_go {} {
 
 proc action_firmware_update_cancel {} {
   global env filename
-  catch { exec /bin/sh -c "rm -rf `readlink /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
+
+  if {[getProduct] < 3} {
+    catch {exec rm /var/new_firmware.tar.gz}
+    catch { exec /bin/sh -c "rm /var/EULA.*"}
+  } else {
+   catch { exec /bin/sh -c "rm -rf `readlink /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
+  }
+
   cgi_javascript {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
@@ -314,8 +327,6 @@ proc checkIfFwOnly {} {
 }
 
 proc action_put_page {} {
-
-  #global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL PFMD_URL
   global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL downloadOnly
   http_head
 
@@ -581,25 +592,6 @@ set comment {
         }
       }
 
-      # Recovery Modus
-      table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-          table_data {class="CLASS20903"} $styleMaxWidth {
-              #puts "Abgesicherter<br>"
-              #puts "Modus"
-              puts "\${dialogSettingsCMTDCCURecoveryMode}"
-          }
-          table_data {class="CLASS20904"} {
-              division {class="popupControls CLASS20905"} {
-                  division {class="CLASS20910 colorGradient50px"} {onClick="OnEnterRecoveryMode();"} {
-                      puts "\${dialogSettingsCMBtnCCURestartRecovery}"
-                  }
-              }
-          }
-          table_data {align="left"} {class="CLASS20904"} {
-              puts "\${dialogSettingsCMHintRestartRecoveryMode}"
-          }
-      }
-
       table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
         table_data {class="CLASS20903"} $styleMaxWidth  {
           #puts "Fehler-<br>"
@@ -676,7 +668,7 @@ set comment {
                       puts "\${dialogSettingsCMLblLogSysLogServerAddress}"
                     }
                     table_data {align="right"} {
-                      cgi_text log_server=[get_logserver] {size="25"} {id="text_log_server"}
+                      catch {cgi_text log_server=[get_logserver] {size="25"} {id="text_log_server"}}
                     }
                   }
                   table_row {
@@ -777,18 +769,6 @@ set comment {
         }
         });
       }
-
-      OnEnterRecoveryMode = function() {
-        new YesNoDialog(translateKey("dialogRecoveryCheck"), translateKey("dialogQuestionRestartRecoveryMode"), function(result) {
-          if (result == YesNoDialog.RESULT_YES)
-          {
-            MessageBox.show(translateKey("dialogRestartRecoveryModeTitle"), translateKey("dialogRestartRecoveryModeContent"), function() {
-              window.location.href = "/";
-            });
-            homematic("RecoveryMode.enter");
-          }
-        });
-      }
     }
 
 
@@ -875,124 +855,67 @@ proc get_serial { } {
 
 proc action_firmware_upload {} {
   global env sid downloadOnly filename
-  cd /usr/local/tmp/
-  
-  set TMPDIR "$filename-dir"
-  exec mkdir -p $TMPDIR
-  set file_invalid 1
 
-  #
-  # check if the uploaded file is a valid firmware update file
-  #
-
-  # check for .tar.gz or .tar
-  if {$file_invalid != 0} {
-    set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
-    if {$file_invalid == 0} {
-      # the file seems to be a tar archive (perhaps with gzip compression)
-      set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xf $filename} result]
-      file delete -force -- $filename
+  if {[getProduct] < 3} {
+    cd /tmp/
+    # check if the uploaded file looks like a firmware file
+    set file_valid 0
+    catch {
+      exec tar zxvf $filename update_script EULA.en EULA.de EULA.tr -C /var/
     }
-  }
+    set file_valid [file exists "/var/update_script"]
 
-  # check for .zip
-  if {$file_invalid != 0} {
-    set file_invalid [catch {exec file -b $filename | grep -q "Zip archive data"} result]
-    if {$file_invalid == 0} {
-      # the file seems to be a zip archive containing data
-      set file_invalid [catch {exec /usr/bin/unzip -q -o -d $TMPDIR $filename 2>/dev/null} result]
-      file delete -force -- $filename
+    if {$file_valid} {
+      file rename -force -- $filename "/var/new_firmware.tar.gz"
+      #set action "firmware_update_confirm"
+      set action "acceptEula"
+    } else {
+      file delete -force -- [lindex $firmware_file 0]
+      set action "firmware_update_invalid"
     }
-  }
-
-  # check for .img
-  if {$file_invalid != 0} {
-    set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*partition 3"} result]
-    if {$file_invalid == 0} {
-      # the file seems to be a full-fledged SD card image with MBR boot sector, etc. so lets
-      # check if we have exactly 3 partitions
-      set file_invalid [catch {exec /usr/sbin/parted -sm $filename print 2>/dev/null | tail -1 | egrep -q "3:.*:ext4:"} result]
-      if {$file_invalid == 0} {
-        file rename -force -- $filename "$TMPDIR/new_firmware.img"
-      }
-    }
-  }
-
-  # check for ext4 rootfs filesystem
-  if {$file_invalid != 0} {
-    set file_invalid [catch {exec file -b $filename | egrep -q "ext4 filesystem.*rootfs"} result]
-    if {$file_invalid == 0} {
-      # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
-      set file_invalid [catch {exec /sbin/e2fsck -nf $filename 2>/dev/null} result]
-      if {$file_invalid == 0} {
-        file rename -force -- $filename "$TMPDIR/rootfs.ext4"^
-      }
-    }
-  }
-
-  # check for vfat bootfs filesystem
-  if {$file_invalid != 0} {
-    set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*bootfs.*FAT"} result]
-    if {$file_invalid == 0} {
-      # the file seems to be an ext4 fs of the bootfs lets check if the ext4 is valid
-      set file_invalid [catch {exec /sbin/fsck.fat -nf $filename 2>/dev/null} result]
-      if {$file_invalid == 0} {
-        file rename -force -- $filename "$TMPDIR/bootfs.vfat"
-      }
-    }
-  }
-
-  ######
-  # check if there are checksum files in TMPDIR and if so check the checksum first
-  if {$file_invalid == 0} {
-
-    # check for sha256 checksums
-    foreach chk_file [glob -nocomplain "$TMPDIR/*.sha256"] {
-      set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/sha256sum -sc $chk_file"} result]
-      if {$file_invalid != 0} {
-        break
-      }
-    }
-
-    # check for md5 checksums
-    if {$file_invalid == 0} {
-      foreach chk_file [glob -nocomplain "$TMPDIR/*.md5"] {
-        set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/md5sum -sc $chk_file"} result]
-        if {$file_invalid != 0} {
-          break
-        }
-      }
-    }
-
-    # everything seems to be fine with the uploaded file so lets
-    # do the final check
-    if {$file_invalid == 0} {
-      # if no *.img exists we have to check for "update_script"
-      if {[glob -nocomplain "$TMPDIR/*.img"] == "" &&
-          [glob -nocomplain "$TMPDIR/*.ext4"] == "" &&
-          [glob -nocomplain "$TMPDIR/*.vfat"] == ""} {
-        if {[file exists "$TMPDIR/update_script"] != 1} {
-          set file_invalid 1^
-        }
-      }
-    }
-  }
-
-  #
-  # test if the above checks were successfull or not
-  #
-  if {$file_invalid == 0} {
-    catch { exec ln -sf $TMPDIR /usr/local/.firmwareUpdate }
-    set action "acceptEula"
   } else {
-    file delete -force -- $filename
-    file delete -force -- $filename-dir
-    set action "firmware_update_invalid"
+
+    cd /usr/local/tmp/
+    set TMPDIR "[file tail $filename-dir]"
+
+    exec mkdir -p $TMPDIR
+    set file_invalid 1
+
+    catch {
+      exec tar zxvf $filename update_script EULA.en EULA.de EULA.tr -C /usr/local/
+    }
+
+    #
+    # check if the uploaded file is a valid firmware update file
+    #
+
+    # check for .tar.gz or .tar
+    if {$file_invalid != 0} {
+      set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
+      if {$file_invalid == 0} {
+        # the file seems to be a tar archive (perhaps with gzip compression)
+        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xf $filename} result]
+        file delete -force -- $filename
+      }
+    }
+
+    #
+    # test if the above checks were successfull or not
+    #
+    if {$file_invalid == 0} {
+      catch { exec ln -sf tmp/$TMPDIR /usr/local/.firmwareUpdate }
+      set action "acceptEula"
+    } else {
+      file delete -force -- $filename
+      file delete -force -- $filename-dir
+      set action "firmware_update_invalid"
+    }
+
   }
+
   cgi_javascript {
     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
     puts "parent.top.dlgPopup.hide();"
-    # original - doesn´t work furthermore - puts "parent.top.dlgPopup.setWidth(600);"
     puts "parent.top.dlgPopup.setWidth(450);"
     puts "parent.top.dlgPopup.downloadOnly = $downloadOnly;"
     puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
@@ -1046,8 +969,10 @@ proc action_reboot_confirm {} {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
       OnNextStep = function() {
-        regaMonitor.stop();
-        InterfaceMonitor.stop();
+        if (typeof regaMonitor != "undefined") {
+          regaMonitor.stop();
+          InterfaceMonitor.stop();
+        }
         dlgPopup.hide();
         dlgPopup.setWidth(400);
         dlgPopup.LoadFromFile(url, "action=reboot_go");
@@ -1131,8 +1056,10 @@ proc action_shutdown_confirm {} {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
       OnNextStep = function() {
-        regaMonitor.stop();
-        InterfaceMonitor.stop();
+        if (typeof regaMonitor != "undefined") {
+          regaMonitor.stop();
+          InterfaceMonitor.stop();
+        }
         dlgPopup.hide();
         dlgPopup.setWidth(400);
         dlgPopup.LoadFromFile(url, "action=shutdown_go");
@@ -1172,9 +1099,15 @@ proc action_update_start {} {
   catch { exec lcdtool {Saving   Data...  } }
   rega system.Save()
   catch { exec lcdtool {Reboot...       } }
-  exec touch /usr/local/.recoveryMode
-  exec sleep 5
-  exec /sbin/reboot
+
+  if {[getProduct] < 3} {
+    exec /bin/kill -SIGQUIT 1
+  } else {
+    exec touch /usr/local/.recoveryMode
+    exec sleep 5
+    exec /sbin/reboot
+  }
+
 }
 
 proc action_reboot {} {

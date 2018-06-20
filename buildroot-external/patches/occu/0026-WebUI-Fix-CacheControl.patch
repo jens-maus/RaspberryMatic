@@ -180,12 +180,12 @@
      /*########################################################################*/
  
      PLATFORM = "Central";
--    WEBUI_VERSION = "2.33-TRUNK";
+-    WEBUI_VERSION = "3.0.0-TRUNK";
 +    WEBUI_VERSION = "XXX-WEBUI-VERSION-XXX";
    
      /**
       * Flags
-@@ -199,6 +199,6 @@
+@@ -201,6 +201,6 @@
        </div>
      </div>
    </div>

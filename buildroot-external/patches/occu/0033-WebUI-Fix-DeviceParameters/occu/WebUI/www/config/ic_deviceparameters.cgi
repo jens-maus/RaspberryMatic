@@ -278,8 +278,8 @@ proc treatSpecialValue {devType param} {
 }
 
 proc check_RF_links {device iface address channel ch_type name} {
-  if {$device == "HM-MOD-EM-8"} {
-    puts "<script type=\"text/javascript\">arModEM8\[parseInt($channel)\] = false;ShowHintIfProgramExists('$name', '$channel')</script>"
+  if {($device == "HM-MOD-EM-8") || ($ch_type == "MULTI_MODE_INPUT_TRANSMITTER")} {
+    puts "<script type=\"text/javascript\">arChnHasLinks\[parseInt($channel)\] = false;ShowHintIfProgramExists('$name', '$channel')</script>"
     global iface_url
     set links ""
     catch {set links [xmlrpc $iface_url($iface) getLinks [list string $address]]}
@@ -287,7 +287,7 @@ proc check_RF_links {device iface address channel ch_type name} {
       array set link $_link
       if {(($link(SENDER) == $address) || ($link(RECEIVER) == $address))} {
         # wenn Verknuepfung fuer diesen Kanal besteht
-        puts "<script type=\"text/javascript\">RF_existsLink('$device', '$address', '$channel');</script>"
+        puts "<script type=\"text/javascript\">RF_existsLink('$device', '$channel', '$ch_type');</script>"
         break;
       }
     }
@@ -585,6 +585,19 @@ proc isVirtual {paramId} {
   lappend virtualDevices "hmip-wgc_2_master" "hmip-wgc_4_master" "hmip-wgc_5_master"
   lappend virtualDevices "hmip-whs2_1_master" "hmip-whs2_2_master" "hmip-whs2_4_master" "hmip-whs2_5_master" "hmip-whs2_6_master" "hmip-whs2_8_master"
 
+  lappend virtualDevices "hmip-bsl_5_master" "hmip-bsl_6_master" "hmip-bsl_9_master" "hmip-bsl_10_master" "hmip-bsl_13_master" "hmip-bsl_14_master"
+
+  lappend virtualDevices "hmipw-drbl4_3_master" "hmipw-drbl4_4_master" "hmipw-drbl4_7_master" "hmipw-drbl4_8_master" "hmipw-drbl4_11_master" "hmipw-drbl4_12_master" "hmipw-drbl4_15_master" "hmipw-drbl4_16_master"
+
+  lappend virtualDevices "hmipw-drs4_3_master" "hmipw-drs4_4_master" "hmipw-drs4_7_master" "hmipw-drs4_8_master" "hmipw-drs4_11_master" "hmipw-drs4_12_master" "hmipw-drs4_15_master" "hmipw-drs4_16_master"
+
+  lappend virtualDevices "hmipw-drs8_3_master" "hmipw-drs8_4_master" "hmipw-drs8_7_master" "hmipw-drs8_8_master" "hmipw-drs8_11_master" "hmipw-drs8_12_master" "hmipw-drs8_15_master" "hmipw-drs8_16_master"
+  lappend virtualDevices "hmipw-drs8_19_master" "hmipw-drs8_20_master" "hmipw-drs8_23_master" "hmipw-drs8_24_master" "hmipw-drs8_27_master" "hmipw-drs8_28_master" "hmipw-drs8_31_master" "hmipw-drs8_32_master"
+
+  lappend virtualDevices "hmipw-drd3_3_master" "hmipw-drd3_4_master" "hmipw-drd3_7_master" "hmipw-drd3_8_master" "hmipw-drd3_11_master" "hmipw-drd3_12_master"
+
+  lappend virtualDevices "hmipw-fio6_9_master" "hmipw-fio6_10_master" "hmipw-fio6_13_master" "hmipw-fio6_14_master" "hmipw-fio6_17_master" "hmipw-fio6_18_master"
+  lappend virtualDevices "hmipw-fio6_21_master" "hmipw-fio6_22_master" "hmipw-fio6_25_master" "hmipw-fio6_26_master" "hmipw-fio6_29_master" "hmipw-fio6_30_master"
 
   set virtual "false"
 
@@ -601,7 +614,20 @@ proc isVirtual {paramId} {
 proc isHmIP {} {
   global iface
   set hmIPIdentifier "HmIP-RF"
-  if {$iface == $hmIPIdentifier} {
+  set hmIPWIdentifier "HmIP-Wired"
+  if {($iface == $hmIPIdentifier) || ($iface == $hmIPWIdentifier)} {
+    return "true"
+  }
+  return "false"
+}
+
+
+proc isHmIPGroup {devType} {
+  global iface
+  set HmIPGroupIfaceIdentifier "VirtualDevices"
+  set HmIPGroupIdentifier "HmIP-HEATING"
+
+  if {$iface == $HmIPGroupIfaceIdentifier && $devType == $HmIPGroupIdentifier} {
     return "true"
   }
   return "false"
@@ -782,8 +808,14 @@ proc put_channel_parameters {} {
     
     array set ch_descr_orig [array get ch_descr]
 
-    # Für HmIP Kanal 0 aktivieren
-    if {($ch_descr(INDEX) == 0) && ($iface != "HmIP-RF")} then { continue }
+    # Activate channel 0 for HmIP devices and the HmIP group
+    if {($ch_descr(INDEX) == 0) && ([isHmIP] == "false") && ([isHmIPGroup $ch_descr(PARENT_TYPE)] == "false") } {
+      continue
+    } else {
+      if {$ch_descr(INDEX) == 0 && $ch_descr(PARENT_TYPE) == "HM-CC-VG-1"} {
+        continue
+      }
+    }
 
     # Hier kann der Kanal für das Wochenprogramm der HmIP-Geräte unsichtbar geschaltet werden.
     # Ausserdem werden alle Kanäle mit dem FLAG Visible 0 ausgeblendet
@@ -812,7 +844,7 @@ proc put_channel_parameters {} {
 
     set sourcePath "$env(DOCUMENT_ROOT)config/easymodes/$ch_paramid.tcl"
 
-    if {[isHmIP] == "true"} {
+    if {[isHmIP] == "true" || [isHmIPGroup $ch_descr(PARENT_TYPE)] == "true" } {
       if {[file exist $env(DOCUMENT_ROOT)config/easymodes/hmip/$ch_paramid.tcl]} {
         set sourcePath "$env(DOCUMENT_ROOT)config/easymodes/hmip/$ch_paramid.tcl"
       } elseif {[file exists $env(DOCUMENT_ROOT)config/easymodes/hmip/$ch_descr(TYPE).tcl]} {
@@ -1001,7 +1033,7 @@ proc put_channel_parameters {} {
           #end if internalKey 
         }
       } 
-      check_RF_links $dev_descr(TYPE) $iface $ch_descr(ADDRESS) $ch_descr(INDEX) $ch_descr(TYPE) $ch_name
+      catch {check_RF_links $dev_descr(TYPE) $iface $ch_descr(ADDRESS) $ch_descr(INDEX) $ch_descr(TYPE) $ch_name}
       array_clear ch_ps
       destructor
 
@@ -1036,10 +1068,13 @@ proc put_channel_parameters {} {
 
     incr tr_count
 
-    puts "<script type='text/javascript'>"
-      puts "var ext = getExtendedDescription(\{\"deviceType\" : \"$ch_descr(PARENT_TYPE)\", \"channelType\" : \"$ch_descr(TYPE)\" ,\"channelIndex\" : \"$ch_descr(INDEX)\", \"channelAddress\" : \"$ch_descr(ADDRESS)\" \});"
-      puts "jQuery(\"#chDescr_$ch_descr(INDEX)\").html(\"<br/><br/>\" + ext);"
-    puts "</script>"
+    # Due to performance reasons we spare the MULTI_MODE_INPUT_TRANSMITTER
+    if {! [string equal $ch_descr(TYPE) "MULTI_MODE_INPUT_TRANSMITTER"]} {
+      puts "<script type='text/javascript'>"
+        puts "var ext = getExtendedDescription(\{\"deviceType\" : \"$ch_descr(PARENT_TYPE)\", \"channelType\" : \"$ch_descr(TYPE)\" ,\"channelIndex\" : \"$ch_descr(INDEX)\", \"channelAddress\" : \"$ch_descr(ADDRESS)\" \});"
+        puts "jQuery(\"#chDescr_$ch_descr(INDEX)\").html(\"<br/><br/>\" + ext);"
+      puts "</script>"
+    }
   }
 
   if {$tr_count == 0} then {
@@ -1080,6 +1115,7 @@ proc put_Header {} {
   global MODE
 
   set HmIPIdentifier "HmIP-RF"
+  set HmIPWIdentifier "HmIP-Wired"
   set type $dev_descr(TYPE)
 
   array set SENTRY ""
@@ -1108,7 +1144,7 @@ proc put_Header {} {
   append SENTRY(FIRMWARE) "<tr><td>\${lblFirmwareVersion}</td><td class=\"CLASS22006\">$dev_descr(FIRMWARE)</td></tr>"
   if {$MODE == "DEVICEPARAMETERS"} then {
     set fw_update_rows ""
-    if {$iface != $HmIPIdentifier} {
+    if {($iface != $HmIPIdentifier) && ($iface != $HmIPWIdentifier)} {
       catch {
         if {$dev_descr(AVAILABLE_FIRMWARE) != $dev_descr(FIRMWARE)} then {
           #set    fw_update_rows "<tr><td>Verf&uuml;gbare Version:</td><td class=\"CLASS22006\">$dev_descr(AVAILABLE_FIRMWARE)</td></tr>"
@@ -1129,6 +1165,7 @@ proc put_Header {} {
             set fw_update_rows "<tr><td class=\"CLASS22006\">\${lblDeviceFwPerformUpdate}</td></tr>"
           }
 
+          "NEW_FIRMWARE_AVAILABLE" -
           "DELIVER_FIRMWARE_IMAGE" {
             set fw_update_rows "<tr><td class=\"CLASS22008\"><div>\${lblDeviceFwDeliverFwImage}</div><div class=\"StdTableBtnHelp\"><img id=\"hmIPDeliverFirmwareHelp\" height=\"24\" width=\"24\"src=\"/ise/img/help.png\"></div></td></tr>"
           }

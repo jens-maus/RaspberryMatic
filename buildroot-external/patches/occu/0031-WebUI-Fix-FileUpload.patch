@@ -1,48 +1,6 @@
---- occu/WebUI/www/api/methods.conf.orig
-+++ occu/WebUI/www/api/methods.conf
-@@ -875,6 +875,13 @@
-   ARGUMENTS {_session_id_}
- }
- 
-+RecoveryMode.enter {
-+  LEVEL ADMIN
-+  SCRIPT_FILE recoverymode/enter.tcl
-+  INFO {Startet die HomeMatic Zentrale im Recovery Modus}
-+  ARGUMENTS {_session_id_}
-+}
-+
- CCU.getSerial {
-   LEVEL ADMIN
-   SCRIPT_FILE ccu/getserial.tcl
---- occu/WebUI/www/api/methods/recoverymode/enter.tcl.orig
-+++ occu/WebUI/www/api/methods/recoverymode/enter.tcl
-@@ -0,0 +1,23 @@
-+##
-+# RecoveryMode.enter
-+# Startet die HomeMatic Zentrale im Recovery Modus
-+#
-+# Parameter:
-+#   paasword: [string] Passwort für den Recovery Modus
-+#
-+# Rückgabewert: [bool]
-+#   true
-+##
-+
-+set FLAG_FILE "/usr/local/.recoveryMode"
-+
-+# Flag-Datei erzeugen
-+set fd [open $FLAG_FILE w]
-+puts $fd 1
-+close $fd
-+
-+# Neustart
-+rega system.Save()
-+exec /sbin/reboot
-+
-+jsonrpc_response true
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -70,7 +70,6 @@
+@@ -69,7 +69,6 @@
  
  proc action_firmware_update_confirm {} {
    global env
@@ -50,19 +8,16 @@
    http_head
    division {class="popupTitle"} {
      #puts "Softwareupdate - Best&auml;tigung"
-@@ -258,9 +257,8 @@
+@@ -264,7 +263,7 @@
  }
  
  proc action_firmware_update_cancel {} {
 -  global env
--  catch { exec /bin/sh -c "rm -f /usr/local/tmp/new_firmware.tar.gz" }
--  catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*" }
 +  global env filename
-+  catch { exec /bin/sh -c "rm -rf `readlink /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
-   cgi_javascript {
-     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
-     puts {
-@@ -393,9 +391,7 @@
+ 
+   if {[getProduct] < 3} {
+     catch {exec rm /var/new_firmware.tar.gz}
+@@ -403,9 +402,7 @@
              table_row {
                td {width="20"} {}
                table_data {colspan="2"} {
@@ -73,203 +28,21 @@
                    file_button firmware_file size=30 maxlength=1000000
                  }
                  puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
-@@ -585,6 +581,25 @@
-         }
-       }
- 
-+      # Recovery Modus
-+      table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-+          table_data {class="CLASS20903"} $styleMaxWidth {
-+              #puts "Abgesicherter<br>"
-+              #puts "Modus"
-+              puts "\${dialogSettingsCMTDCCURecoveryMode}"
-+          }
-+          table_data {class="CLASS20904"} {
-+              division {class="popupControls CLASS20905"} {
-+                  division {class="CLASS20910 colorGradient50px"} {onClick="OnEnterRecoveryMode();"} {
-+                      puts "\${dialogSettingsCMBtnCCURestartRecovery}"
-+                  }
-+              }
-+          }
-+          table_data {align="left"} {class="CLASS20904"} {
-+              puts "\${dialogSettingsCMHintRestartRecoveryMode}"
-+          }
-+      }
-+
-       table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-         table_data {class="CLASS20903"} $styleMaxWidth  {
-           #puts "Fehler-<br>"
-@@ -762,6 +777,18 @@
-         }
-         });
-       }
-+
-+      OnEnterRecoveryMode = function() {
-+        new YesNoDialog(translateKey("dialogRecoveryCheck"), translateKey("dialogQuestionRestartRecoveryMode"), function(result) {
-+          if (result == YesNoDialog.RESULT_YES)
-+          {
-+            MessageBox.show(translateKey("dialogRestartRecoveryModeTitle"), translateKey("dialogRestartRecoveryModeContent"), function() {
-+              window.location.href = "/";
-+            });
-+            homematic("RecoveryMode.enter");
-+          }
-+        });
-+      }
-     }
- 
- 
-@@ -847,26 +874,119 @@
+@@ -857,12 +854,7 @@
  }
  
  proc action_firmware_upload {} {
 -  global env sid downloadOnly
-+  global env sid downloadOnly filename
-   cd /usr/local/tmp/
-   
+-
 -  http_head
 -  import_file -client firmware_file
-+  set TMPDIR "$filename-dir"
-+  exec mkdir -p $TMPDIR
-+  set file_invalid 1
- 
--  # check if the uploaded file looks like a firmware file
--  set file_valid 0
--  catch {
--    #set file_valid [expr [string first "update_script" [exec tar tzf [lindex $firmware_file 0]]] >= 0 ]
--    exec tar xf -C /usr/local/tmp [lindex $firmware_file 0] update_script EULA.en EULA.de EULA.tr
--  }
--  set file_valid [file exists "/usr/local/tmp/update_script"]
 -
--  if {$file_valid} {
--    file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_firmware.tar.gz"
--    #set action "firmware_update_confirm"
-+  #
-+  # check if the uploaded file is a valid firmware update file
-+  #
-+
-+  # check for .tar.gz or .tar
-+  if {$file_invalid != 0} {
-+    set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
-+    if {$file_invalid == 0} {
-+      # the file seems to be a tar archive (perhaps with gzip compression)
-+      set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xf $filename} result]
-+      file delete -force -- $filename
-+    }
-+  }
-+
-+  # check for .zip
-+  if {$file_invalid != 0} {
-+    set file_invalid [catch {exec file -b $filename | grep -q "Zip archive data"} result]
-+    if {$file_invalid == 0} {
-+      # the file seems to be a zip archive containing data
-+      set file_invalid [catch {exec /usr/bin/unzip -q -o -d $TMPDIR $filename 2>/dev/null} result]
-+      file delete -force -- $filename
-+    }
-+  }
-+
-+  # check for .img
-+  if {$file_invalid != 0} {
-+    set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*partition 3"} result]
-+    if {$file_invalid == 0} {
-+      # the file seems to be a full-fledged SD card image with MBR boot sector, etc. so lets
-+      # check if we have exactly 3 partitions
-+      set file_invalid [catch {exec /usr/sbin/parted -sm $filename print 2>/dev/null | tail -1 | egrep -q "3:.*:ext4:"} result]
-+      if {$file_invalid == 0} {
-+        file rename -force -- $filename "$TMPDIR/new_firmware.img"
-+      }
-+    }
-+  }
-+
-+  # check for ext4 rootfs filesystem
-+  if {$file_invalid != 0} {
-+    set file_invalid [catch {exec file -b $filename | egrep -q "ext4 filesystem.*rootfs"} result]
-+    if {$file_invalid == 0} {
-+      # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
-+      set file_invalid [catch {exec /sbin/e2fsck -nf $filename 2>/dev/null} result]
-+      if {$file_invalid == 0} {
-+        file rename -force -- $filename "$TMPDIR/rootfs.ext4"^
-+      }
-+    }
-+  }
-+
-+  # check for vfat bootfs filesystem
-+  if {$file_invalid != 0} {
-+    set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*bootfs.*FAT"} result]
-+    if {$file_invalid == 0} {
-+      # the file seems to be an ext4 fs of the bootfs lets check if the ext4 is valid
-+      set file_invalid [catch {exec /sbin/fsck.fat -nf $filename 2>/dev/null} result]
-+      if {$file_invalid == 0} {
-+        file rename -force -- $filename "$TMPDIR/bootfs.vfat"
-+      }
-+    }
-+  }
-+
-+  ######
-+  # check if there are checksum files in TMPDIR and if so check the checksum first
-+  if {$file_invalid == 0} {
-+
-+    # check for sha256 checksums
-+    foreach chk_file [glob -nocomplain "$TMPDIR/*.sha256"] {
-+      set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/sha256sum -sc $chk_file"} result]
-+      if {$file_invalid != 0} {
-+        break
-+      }
-+    }
-+
-+    # check for md5 checksums
-+    if {$file_invalid == 0} {
-+      foreach chk_file [glob -nocomplain "$TMPDIR/*.md5"] {
-+        set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/md5sum -sc $chk_file"} result]
-+        if {$file_invalid != 0} {
-+          break
-+        }
-+      }
-+    }
-+
-+    # everything seems to be fine with the uploaded file so lets
-+    # do the final check
-+    if {$file_invalid == 0} {
-+      # if no *.img exists we have to check for "update_script"
-+      if {[glob -nocomplain "$TMPDIR/*.img"] == "" &&
-+          [glob -nocomplain "$TMPDIR/*.ext4"] == "" &&
-+          [glob -nocomplain "$TMPDIR/*.vfat"] == ""} {
-+        if {[file exists "$TMPDIR/update_script"] != 1} {
-+          set file_invalid 1^
-+        }
-+      }
-+    }
-+  }
-+
-+  #
-+  # test if the above checks were successfull or not
-+  #
-+  if {$file_invalid == 0} {
-+    catch { exec ln -sf $TMPDIR /usr/local/.firmwareUpdate }
-     set action "acceptEula"
-   } else {
--    file delete -force -- [lindex $firmware_file 0]
-+    file delete -force -- $filename
-+    file delete -force -- $filename-dir
-     set action "firmware_update_invalid"
-   }
-   cgi_javascript {
-@@ -1052,12 +1172,9 @@
-   catch { exec lcdtool {Saving   Data...  } }
-   rega system.Save()
-   catch { exec lcdtool {Reboot...       } }
--
--  if {[isOldCCU]} {
--    exec /sbin/init -q
--  } else {
--    exec /bin/kill -SIGQUIT 1
--  }
-+  exec touch /usr/local/.recoveryMode
-+  exec sleep 5
-+  exec /sbin/reboot
- }
+-  set filename [lindex $firmware_file 0]
++  global env sid downloadOnly filename
  
- proc action_reboot {} {
-@@ -1150,15 +1267,17 @@
+   if {[getProduct] < 3} {
+     cd /tmp/
+@@ -1208,10 +1200,10 @@
  cgi_eval {
    #cgi_debug -on
    cgi_input
@@ -284,13 +57,6 @@
  
    set action "put_page"
    set downloadOnly 0
-+  set filename ""
-   catch {import action}
-   catch {import downloadOnly}
-+  catch {import filename}
- 
-   if {[session_requestisvalid 8] > 0} then action_$action
- }
 --- occu/WebUI/www/config/cp_network.cgi.orig
 +++ occu/WebUI/www/config/cp_network.cgi
 @@ -149,6 +149,8 @@
@@ -1105,159 +871,3 @@
  
 -package provide cgi 1.8.0
 +package provide cgi 1.10.0
---- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
-+++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -378,6 +378,7 @@
-     "dialogNo" : "Nein",
-     "dialogBack" : "Zur%FCck",
-     "dialogSafetyCheck" : "Sicherheitsabfrage",
-+    "dialogRecoveryCheck" : "Sicherheitsabfrage",
-     "dialogInfo" : "Info",
-     "dialogHint" : "Hinweis",
-     "dialogQuestionRemoveProgram" : "M%F6chten Sie das Programm wirklich l%F6schen?",
-@@ -390,6 +391,7 @@
-     "dialogQuestionRestart" : "Best%E4tigen Sie hier, um den Neustart durchzuf%FChren.",
-     "dialogQuestionShutdown" : "Best%E4tigen Sie hier, um das Herunterfahren durchzuf%FChren.",
-     "dialogQuestionRestartSafeMode" : "M%F6chten Sie die " + HMIdentifier.de.CCUFullNameText + " wirklich im abgesicherten Modus starten?",
-+    "dialogQuestionRestartRecoveryMode" : "M%F6chten Sie die " + HMIdentifier.de.CCUFullNameText + " wirklich im Recovery Modus starten?",
-     "dialogUserAccountTitle" : "Benutzerkonto - Konfiguration",
-     "dialogProgChoseSysVar" : "Programme - Systemvariablenauswahl",
-     "dialogEditRoom" : "Raum bearbeiten",
-@@ -412,7 +414,9 @@
-     "dialogChooseBidCosInterface" : "Auswahl BidCos-Interface",
-     "dialogChooseChannel" : "Kanalauswahl",
-     "dialogRestartSafeModeTitle" : "Neustart",
-+    "dialogRestartRecoveryModeTitle" : "Neustart",
-     "dialogRestartSafeModeContent" : "Die Zentrale startet nun im abgesicherten Modus. Klicken Sie auf \"OK\", um sich neu anzumelden.",
-+    "dialogRestartRecoveryModeContent" : "Die Zentrale startet nun im Recovery Modus. Klicken Sie auf \"OK\", um sich neu anzumelden.",
-     "dialogBtnPerformRestart" : "Neustart ",
-     "dialogBtnPerformShutdown" : "Herunterfahren",
-     "dialogEditRoomBtnClose" : "Schliessen",
-@@ -447,6 +451,7 @@
-     "dialogSettingsCMTDCCURestart" : HMIdentifier.de.CCUShortName + "<br/>Neustart",
-     "dialogSettingsCMTDCCUShutdown" : "Herunterfahren",
-     "dialogSettingsCMTDCCUSafeMode" : "Abgesicherter<br/>Modus",
-+    "dialogSettingsCMTDCCURecoveryMode" : "Recovery<br/>Modus",
-     "dialogSettingsCMTDErrorProtocol" : "Fehler-<br/>protokoll",
-     "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
-     "dialogSettingsCMLblAvailableSoftwareVersion" : "Verf%FCgbare Software-Version:",
-@@ -465,6 +470,7 @@
-     "dialogSettingsCMBtnCCURestart" : "Neustart",
-     "dialogSettingsCMBtnCCUShutdown" : "Herunterfahren",
-     "dialogSettingsCMBtnCCURestartSafe" : "Neustart im abgesicherten Modus",
-+    "dialogSettingsCMBtnCCURestartRecovery" : "Neustart im Recovery Modus",
-     "dialogSettingsCMBtnLogSysLogServerAddress" : "Einstellungen %FCbernehmen",
-     "dialogSettingsCMBtnLogLoadLogFile" : "Logdatei herunterladen",
-     "dialogSettingsCMErrorTitle" : "Softwareupdate - Fehler",
-@@ -478,6 +484,7 @@
-     "dialogSettingsCMHintRestart" : "Zentrale neu starten. Ver%E4nderte Einstellungen werden vorher gespeichert.",
-     "dialogSettingsCMHintShutdown" : "Zentrale herunterfahren. Ver%E4nderte Einstellungen werden vorher gespeichert.",
-     "dialogSettingsCMHintRestartSafeMode" : "HomeMatic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
-+    "dialogSettingsCMHintRestartRecoveryMode" : "HomeMatic Zentrale einmalig im Recovery Modus starten. Im Recovery Modus werden administrative Werkzeuge zur Verf%FCgung gestellt. Ver%E4nderte Einstellungen werden vorher gespeichert.",
-     "dialogSettingsCMHintErrorLog" : "Stellen Sie die Anzahl der Logmeldungen ein, die von der Zentrale generiert werden sollen.<br>Sie k%F6nnen zus%E4tzlich einen Rechner angeben, dem die Zentrale ihre Logmeldungen per Syslog schickt. Auf diesem Rechner mu%DF entsprechende Software installiert sein, die die Meldungen entgegennimmt.<br>Zu Diagnosezwecken k%F6nnen die aktuellen Logmeldungen der Zentrale in einer Textdatei heruntergeladen werden.",
-     "dialogSettingsCMLogLevel0" : "Alles loggen",
-     "dialogSettingsCMLogLevel1" : "Information",
---- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
-+++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -378,6 +378,7 @@
-     "dialogNo" : "No",
-     "dialogBack" : "Back",
-     "dialogSafetyCheck" : "Confirmation prompt",
-+    "dialogRecoveryCheck" : "Confirmation prompt",
-     "dialogInfo" : "Info",
-     "dialogHint" : "Please note",
-     "dialogQuestionRemoveProgram" : "Do you really want to delete the program?",
-@@ -390,6 +391,7 @@
-     "dialogQuestionRestart" : "Please click here to perform the restart?",
-     "dialogQuestionShutdown" : "Please click here to perform the shutdown?",
-     "dialogQuestionRestartSafeMode" : "Do you really want to start the " + HMIdentifier.en.CCUFullNameText + " in the safe mode?",
-+    "dialogQuestionRestartRecoveryMode" : "Do you really want to start the " + HMIdentifier.en.CCUFullNameText + " in the recovery mode?",
-     "dialogUserAccountTitle" : "User account configuration",
-     "dialogProgChoseSysVar" : "Programs - system variable selection",
-     "dialogEditRoom" : "Edit room",
-@@ -412,7 +414,9 @@
-     "dialogChooseBidCosInterface" : "Selection BidCos-Interface",
-     "dialogChooseChannel" : "Channel selection",
-     "dialogRestartSafeModeTitle" : "Restart",
-+    "dialogRestartRecoveryModeTitle" : "Restart",
-     "dialogRestartSafeModeContent" : "The Central Control Unit will now start in safe mode. Please click \"OK\" to log in again.",
-+    "dialogRestartRecoveryModeContent" : "The Central Control Unit will now start in recovery mode. Please click \"OK\" to log in again.",
-     "dialogBtnPerformRestart" : "Restart ",
-     "dialogBtnPerformShutdown" : "Shutdown",
-     "dialogEditRoomBtnClose" : "Close",
-@@ -447,6 +451,7 @@
-     "dialogSettingsCMTDCCURestart" : HMIdentifier.en.CCUShortName + "<br/>restart",
-     "dialogSettingsCMTDCCUShutdown" : "Shutdown",
-     "dialogSettingsCMTDCCUSafeMode" : "Safe<br/>mode",
-+    "dialogSettingsCMTDCCURecoveryMode" : "Recovery<br/>mode",
-     "dialogSettingsCMTDErrorProtocol" : "Error<br/>log",
-     "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
-     "dialogSettingsCMLblAvailableSoftwareVersion" : "Available software version:",
-@@ -465,6 +470,7 @@
-     "dialogSettingsCMBtnCCURestart" : "Restart",
-     "dialogSettingsCMBtnCCUShutdown" : "Shutdown",
-     "dialogSettingsCMBtnCCURestartSafe" : "Restart in safe mode",
-+    "dialogSettingsCMBtnCCURestartRecovery" : "Restart in recovery mode",
-     "dialogSettingsCMBtnLogSysLogServerAddress" : "Apply settings",
-     "dialogSettingsCMBtnLogLoadLogFile" : "Download log file",
-     "dialogSettingsCMErrorTitle" : "Software update - error",
-@@ -478,6 +484,7 @@
-     "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
-     "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
-     "dialogSettingsCMHintRestartSafeMode" : "Start HomeMatic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
-+    "dialogSettingsCMHintRestartRecoveryMode" : "Start HomeMatic Central Control Unit in recovery mode once. In recovery mode, maintenance tasks can be performed. The changed settings will be saved before.",
-     "dialogSettingsCMHintErrorLog" : "Please set the number of log messages to be generated by the CCU.<br>You can also specify a computer that will receive the log messages from the CCU via syslog. An additional software that will be able to receive this messages has to be installed on the computer.<br>To analyse the results, the current log messages of the CCU can be downloaded in a text file.",
-     "dialogSettingsCMLogLevel0" : "Log all",
-     "dialogSettingsCMLogLevel1" : "Information",
---- occu/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
-+++ occu/WebUI/www/webui/js/lang/tr/translate.lang.js
-@@ -380,6 +380,7 @@
-     "dialogNo" : "Hayir",
-     "dialogBack" : "Geri",
-     "dialogSafetyCheck" : "G%FCvenlik sorusu",
-+    "dialogRecoveryCheck" : "Confirmation prompt",
-     "dialogInfo" : "Bilgi",
-     "dialogHint" : "Not",
-     "dialogQuestionRemoveProgram" : "Programi gercekten silmek istiyor musunuz?",
-@@ -392,6 +393,7 @@
-     "dialogQuestionRestart" : "Sistemi yeniden baslatmak icin buradan onaylayin.",
-     "dialogQuestionShutdown" : "Please click here to perform the shutdown?",
-     "dialogQuestionRestartSafeMode" : HMIdentifier.tr.CCUFullNameText + "'yi gercekten g%FCvenli modda baslatmak istiyor musunuz?",
-+    "dialogQuestionRestartRecoveryMode" : "Do you really want to start the " + HMIdentifier.tr.CCUFullNameText + " in the recovery mode?",
-     "dialogUserAccountTitle" : "Kullanici hesabi konfig%FCrasyonu",
-     "dialogProgChoseSysVar" : "Programlar - sistem degiskeni sec",
-     "dialogEditRoom" : "Odayi d%FCzenle",
-@@ -414,7 +416,9 @@
-     "dialogChooseBidCosInterface" : "BidCos aray%FCz secimi",
-     "dialogChooseChannel" : "Kanal secimi",
-     "dialogRestartSafeModeTitle" : "Yeniden baslat",
-+    "dialogRestartRecoveryModeTitle" : "Yeniden baslat",
-     "dialogRestartSafeModeContent" : "Merkez sadece g%FCvenli modda baslar. Yeniden oturum acmak icin \"OK\"'e tiklayin.",
-+    "dialogRestartRecoveryModeContent" : "The Central Control Unit will now start in recovery mode. Please click \"OK\" to log in again.",
-     "dialogBtnPerformRestart" : "Yeniden baslat ",
-     "dialogBtnPerformShutdown" : "Shutdown",
-     "dialogEditRoomBtnClose" : "Kapat",
-@@ -449,6 +453,7 @@
-     "dialogSettingsCMTDCCURestart" : HMIdentifier.tr.CCUShortName + "<br/>Yeniden baslat",
-     "dialogSettingsCMTDCCUShutdown" : "Shutdown",
-     "dialogSettingsCMTDCCUSafeMode" : "G%FCvenli<br/>mod",
-+    "dialogSettingsCMTDCCURecoveryMode" : "Recovery<br/>mode",
-     "dialogSettingsCMTDErrorProtocol" : "Hata<br/>protokol%FC",
-     "dialogSettingsCMLblActualSoftwareVersion" : "G%FCncel yazilim versiyonu:",
-     "dialogSettingsCMLblAvailableSoftwareVersion" : "Y%FCklenebilir yazilim versiyonu:",
-@@ -467,6 +472,7 @@
-     "dialogSettingsCMBtnCCURestart" : "Yeniden baslat",
-     "dialogSettingsCMBtnCCUShutdown" : "Shutdown",
-     "dialogSettingsCMBtnCCURestartSafe" : "G%FCvenli modda yeniden baslat",
-+    "dialogSettingsCMBtnCCURestartRecovery" : "Restart in recovery mode",
-     "dialogSettingsCMBtnLogSysLogServerAddress" : "Ayarlari kaydet",
-     "dialogSettingsCMBtnLogLoadLogFile" : "Log dosyasini indir",
-     "dialogSettingsCMErrorTitle" : "Yazilim g%FCncelleme hatasi",
-@@ -480,6 +486,7 @@
-     "dialogSettingsCMHintRestart" : "Merkezi yeniden baslat. Degistirilmis ayarlar %F6nceden kaydedilir.",
-     "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
-     "dialogSettingsCMHintRestartSafeMode" : "HomeMatic merkezini bir kere g%FCvenli modda baslatin. G%FCvenli modda y%FCklenen ek yazilim baslatilmaz. Degistirilmis ayarlar %F6nceden kaydedilir.",
-+    "dialogSettingsCMHintRestartRecoveryMode" : "Start HomeMatic Central Control Unit in recovery mode once. In recovery mode, maintenance tasks can be performed. The changed settings will be saved before.",
-     "dialogSettingsCMHintErrorLog" : "Merkez tarafindan olusturulacak Log bildiri sayisini ayarlayin.<br>Buna ek olarak merkezin Log bildirilerini Syslog'u kullanarak iletecegi baska bir bilgisayar tanimlayabilirsiniz. Bu bilgisayar %FCzerinde bildirileri alacak uygun bir yazilim y%FCkl%FC olmalidir.<br>Merkezin g%FCncel Log bildirileri teshis amaciyla bir metin dosyasi seklinde indirilebilir.",
-     "dialogSettingsCMLogLevel0" : "Her seyi Log'lara gecir",
-     "dialogSettingsCMLogLevel1" : "Bilgi",

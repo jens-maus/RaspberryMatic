@@ -26,7 +26,6 @@ set HS485D_URL "bin://127.0.0.1:2000"
 # set PFMD_URL "bin://127.0.0.1:2002" - not necessary with the ccu2
 
 set REMOTE_FIRMWARE_SCRIPT "http://update.homematic.com/firmware/download"
-#old ccu set REMOTE_FIRMWARE_SCRIPT "http://www.homematic.com/firmware/download.php"
 
 proc action_acceptEula {} {
   global env sid
@@ -221,8 +220,13 @@ proc action_firmware_update_invalid {} {
 
 proc action_firmware_update_go {} {
   global env
-  cd /tmp/
-  
+
+  if {[getProduct] < 3 } {
+     cd /tmp/
+  } else {
+    cd /usr/local/tmp/
+  }
+
   http_head
 
   put_message "\${dialogSettingsCMDialogPerformSoftwareUpdateTitle}" {
@@ -245,8 +249,10 @@ proc action_firmware_update_go {} {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts "dlgPopup.readaptSize();"
     puts {
-      regaMonitor.stop();
-      InterfaceMonitor.stop();
+      if (typeof regaMonitor != "undefined") {
+        regaMonitor.stop();
+        InterfaceMonitor.stop();
+      }
       var pb = "action=update_start";
       var opts = {
         postBody: pb,
@@ -259,8 +265,14 @@ proc action_firmware_update_go {} {
 
 proc action_firmware_update_cancel {} {
   global env
-  catch { exec /bin/sh -c "rm -f /usr/local/tmp/new_firmware.tar.gz" }
-  catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*" }
+
+  if {[getProduct] < 3} {
+    catch {exec rm /var/new_firmware.tar.gz}
+    catch { exec /bin/sh -c "rm /var/EULA.*"}
+  } else {
+   catch { exec /bin/sh -c "rm -rf `readlink /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
+  }
+
   cgi_javascript {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
@@ -316,8 +328,6 @@ proc checkIfFwOnly {} {
 }
 
 proc action_put_page {} {
-
-  #global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL PFMD_URL
   global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL downloadOnly
   http_head
 
@@ -661,7 +671,7 @@ set comment {
                       puts "\${dialogSettingsCMLblLogSysLogServerAddress}"
                     }
                     table_data {align="right"} {
-                      cgi_text log_server=[get_logserver] {size="25"} {id="text_log_server"}
+                      catch {cgi_text log_server=[get_logserver] {size="25"} {id="text_log_server"}}
                     }
                   }
                   table_row {
@@ -848,31 +858,72 @@ proc get_serial { } {
 
 proc action_firmware_upload {} {
   global env sid downloadOnly
-  cd /usr/local/tmp/
-  
+
   http_head
   import_file -client firmware_file
 
-  # check if the uploaded file looks like a firmware file
-  set file_valid 0
-  catch {
-    #set file_valid [expr [string first "update_script" [exec tar tzf [lindex $firmware_file 0]]] >= 0 ]
-    exec tar xf -C /usr/local/tmp [lindex $firmware_file 0] update_script EULA.en EULA.de EULA.tr
-  }
-  set file_valid [file exists "/usr/local/tmp/update_script"]
+  set filename [lindex $firmware_file 0]
 
-  if {$file_valid} {
-    file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_firmware.tar.gz"
-    #set action "firmware_update_confirm"
-    set action "acceptEula"
+  if {[getProduct] < 3} {
+    cd /tmp/
+    # check if the uploaded file looks like a firmware file
+    set file_valid 0
+    catch {
+      exec tar zxvf $filename update_script EULA.en EULA.de EULA.tr -C /var/
+    }
+    set file_valid [file exists "/var/update_script"]
+
+    if {$file_valid} {
+      file rename -force -- $filename "/var/new_firmware.tar.gz"
+      #set action "firmware_update_confirm"
+      set action "acceptEula"
+    } else {
+      file delete -force -- [lindex $firmware_file 0]
+      set action "firmware_update_invalid"
+    }
   } else {
-    file delete -force -- [lindex $firmware_file 0]
-    set action "firmware_update_invalid"
+
+    cd /usr/local/tmp/
+    set TMPDIR "[file tail $filename-dir]"
+
+    exec mkdir -p $TMPDIR
+    set file_invalid 1
+
+    catch {
+      exec tar zxvf $filename update_script EULA.en EULA.de EULA.tr -C /usr/local/
+    }
+
+    #
+    # check if the uploaded file is a valid firmware update file
+    #
+
+    # check for .tar.gz or .tar
+    if {$file_invalid != 0} {
+      set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
+      if {$file_invalid == 0} {
+        # the file seems to be a tar archive (perhaps with gzip compression)
+        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xf $filename} result]
+        file delete -force -- $filename
+      }
+    }
+
+    #
+    # test if the above checks were successfull or not
+    #
+    if {$file_invalid == 0} {
+      catch { exec ln -sf tmp/$TMPDIR /usr/local/.firmwareUpdate }
+      set action "acceptEula"
+    } else {
+      file delete -force -- $filename
+      file delete -force -- $filename-dir
+      set action "firmware_update_invalid"
+    }
+
   }
+
   cgi_javascript {
     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
     puts "parent.top.dlgPopup.hide();"
-    # original - doesn´t work furthermore - puts "parent.top.dlgPopup.setWidth(600);"
     puts "parent.top.dlgPopup.setWidth(450);"
     puts "parent.top.dlgPopup.downloadOnly = $downloadOnly;"
     puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
@@ -926,8 +977,10 @@ proc action_reboot_confirm {} {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
       OnNextStep = function() {
-        regaMonitor.stop();
-        InterfaceMonitor.stop();
+        if (typeof regaMonitor != "undefined") {
+          regaMonitor.stop();
+          InterfaceMonitor.stop();
+        }
         dlgPopup.hide();
         dlgPopup.setWidth(400);
         dlgPopup.LoadFromFile(url, "action=reboot_go");
@@ -1011,8 +1064,10 @@ proc action_shutdown_confirm {} {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
       OnNextStep = function() {
-        regaMonitor.stop();
-        InterfaceMonitor.stop();
+        if (typeof regaMonitor != "undefined") {
+          regaMonitor.stop();
+          InterfaceMonitor.stop();
+        }
         dlgPopup.hide();
         dlgPopup.setWidth(400);
         dlgPopup.LoadFromFile(url, "action=shutdown_go");
@@ -1053,11 +1108,14 @@ proc action_update_start {} {
   rega system.Save()
   catch { exec lcdtool {Reboot...       } }
 
-  if {[isOldCCU]} {
-    exec /sbin/init -q
-  } else {
+  if {[getProduct] < 3} {
     exec /bin/kill -SIGQUIT 1
+  } else {
+    exec touch /usr/local/.recoveryMode
+    exec sleep 5
+    exec /sbin/reboot
   }
+
 }
 
 proc action_reboot {} {
@@ -1157,8 +1215,10 @@ cgi_eval {
 
   set action "put_page"
   set downloadOnly 0
+  set filename ""
   catch {import action}
   catch {import downloadOnly}
+  catch {import filename}
 
   if {[session_requestisvalid 8] > 0} then action_$action
 }

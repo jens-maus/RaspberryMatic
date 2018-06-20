@@ -208,27 +208,7 @@
  #####################
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -221,7 +221,7 @@
- 
- proc action_firmware_update_go {} {
-   global env
--  cd /tmp/
-+  cd /usr/local/tmp/
-   
-   http_head
- 
-@@ -259,8 +259,8 @@
- 
- proc action_firmware_update_cancel {} {
-   global env
--  catch {exec rm /var/new_firmware.tar.gz}
--  catch { exec /bin/sh -c "rm /var/EULA.*"}
-+  catch { exec /bin/sh -c "rm -f /usr/local/tmp/new_firmware.tar.gz" }
-+  catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*" }
-   cgi_javascript {
-     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
-     puts {
-@@ -377,7 +377,7 @@
+@@ -387,7 +387,7 @@
                      table_row {
                        table_data {
                          division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
@@ -237,7 +217,7 @@
                        }
                      }
                    }
-@@ -429,27 +429,7 @@
+@@ -439,27 +439,7 @@
            }
          }
          table_data {align="left"} {class="CLASS20921"} {
@@ -266,59 +246,6 @@
          }
        }
        table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-@@ -848,7 +828,7 @@
- 
- proc action_firmware_upload {} {
-   global env sid downloadOnly
--  cd /tmp/
-+  cd /usr/local/tmp/
-   
-   http_head
-   import_file -client firmware_file
-@@ -857,12 +837,12 @@
-   set file_valid 0
-   catch {
-     #set file_valid [expr [string first "update_script" [exec tar tzf [lindex $firmware_file 0]]] >= 0 ]
--    exec tar zxvf [lindex $firmware_file 0] update_script EULA.en EULA.de EULA.tr -C /var/
-+    exec tar xf -C /usr/local/tmp [lindex $firmware_file 0] update_script EULA.en EULA.de EULA.tr
-   }
--  set file_valid [file exists "/var/update_script"]
-+  set file_valid [file exists "/usr/local/tmp/update_script"]
- 
-   if {$file_valid} {
--    file rename -force -- [lindex $firmware_file 0] "/var/new_firmware.tar.gz"
-+    file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_firmware.tar.gz"
-     #set action "firmware_update_confirm"
-     set action "acceptEula"
-   } else {
-@@ -1025,7 +1005,7 @@
- 
- proc action_shutdown_go {} {
-   global env
--  cd /tmp/
-+  cd /usr/local/tmp/
-   
-   http_head
- 
-@@ -1065,6 +1045,7 @@
-   catch { exec lcdtool {Saving   Data...  } }
-   rega system.Save()
-   catch { exec lcdtool {Reboot...       } }
-+  exec sleep 5
-   exec /sbin/reboot
- }
- proc action_shutdown {} {
-@@ -1120,9 +1101,7 @@
-     puts "Failure"
-     return
-   }
--  catch {exec killall syslogd}
--  catch {exec killall klogd}
--  exec /etc/init.d/S01logging start
-+  exec /etc/init.d/S07logging restart
-   puts "Success -confirm"
- }
- 
 --- occu/WebUI/www/config/cp_security.cgi.orig
 +++ occu/WebUI/www/config/cp_security.cgi
 @@ -202,8 +202,8 @@
@@ -567,6 +494,24 @@
  }
  
  # Prüft, ob es sich um die alte oder neue CCU handelt
+@@ -192,9 +192,10 @@
+ }
+ 
+ proc getProduct {} {
+-  set product 2
+-  catch {
+-    set product [lindex [split [get_version] .] 0]
+-  }
+-  return "[expr $product*1]"
+-}
+\ No newline at end of file
++  #set product 2
++  #catch {
++  #  set product [lindex [split [get_version] .] 0]
++  #}
++  #return "[expr $product*1]"
++  return 3
++}
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -1,8 +1,8 @@

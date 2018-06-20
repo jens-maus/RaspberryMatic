@@ -160,9 +160,9 @@ proc read_var { filename varname} {
     set var ""
     if { $fd >=0 } {
         while { [gets $fd buf] >=0 } {
-                if [regexp "^ *$varname *= *(.*)$" $buf dummy var] break
+          if [regexp "^ *$varname *= *(.*)$" $buf dummy var] break
         }
-            close $fd
+        close $fd
     }
     return $var
 }
@@ -191,3 +191,11 @@ proc get_bat_level {} {
    return 100;
 }
 
+proc getProduct {} {
+  #set product 2
+  #catch {
+  #  set product [lindex [split [get_version] .] 0]
+  #}
+  #return "[expr $product*1]"
+  return 3
+}

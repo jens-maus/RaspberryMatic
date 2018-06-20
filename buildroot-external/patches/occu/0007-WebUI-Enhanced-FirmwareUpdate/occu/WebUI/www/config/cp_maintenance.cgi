@@ -387,7 +387,7 @@ proc action_put_page {} {
                     table_row {
                       table_data {
                         division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
-                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+                        division {class="CLASS20908"}  "onClick=\"showCCULicense();\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
                       }
                     }
                   }
@@ -439,7 +439,27 @@ proc action_put_page {} {
           }
         }
         table_data {align="left"} {class="CLASS20921"} {
-          puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
+          puts "\${dialogSettingsCMHintSoftwareUpdate1}"
+          number_list {class="j_noForcedUpdate"} {
+            li {
+              ${dialogSettingsCMHintSoftwareUpdate2}            }
+            li {
+               ${dialogSettingsCMHintSoftwareUpdate3}
+            }
+            li {
+               ${dialogSettingsCMHintSoftwareUpdate3a}
+            }
+            set bat_level [get_bat_level]
+            if {$bat_level < 50} {
+              set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
+              append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
+              li $msg
+            }
+          }
+
+          division {class="j_forcedUpdate" style="padding:10px;"} {
+            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
+          }
         }
       }
       table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
@@ -864,14 +884,10 @@ proc action_firmware_upload {} {
   } else {
 
     cd /usr/local/tmp/
-    set TMPDIR "[file tail $filename-dir]"
+    set TMPDIR "$filename-dir"
 
     exec mkdir -p $TMPDIR
     set file_invalid 1
-
-    catch {
-      exec tar zxvf $filename update_script EULA.en EULA.de EULA.tr -C /usr/local/
-    }
 
     #
     # check if the uploaded file is a valid firmware update file
@@ -887,11 +903,91 @@ proc action_firmware_upload {} {
       }
     }
 
+    # check for .zip
+    if {$file_invalid != 0} {
+      set file_invalid [catch {exec file -b $filename | grep -q "Zip archive data"} result]
+      if {$file_invalid == 0} {
+        # the file seems to be a zip archive containing data
+        set file_invalid [catch {exec /usr/bin/unzip -q -o -d $TMPDIR $filename 2>/dev/null} result]
+        file delete -force -- $filename
+      }
+    }
+  
+    # check for .img
+    if {$file_invalid != 0} {
+      set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*partition 3"} result]
+      if {$file_invalid == 0} {
+        # the file seems to be a full-fledged SD card image with MBR boot sector, etc. so lets
+        # check if we have exactly 3 partitions
+        set file_invalid [catch {exec /usr/sbin/parted -sm $filename print 2>/dev/null | tail -1 | egrep -q "3:.*:ext4:"} result]
+        if {$file_invalid == 0} {
+          file rename -force -- $filename "$TMPDIR/new_firmware.img"
+        }
+      }
+    }
+  
+    # check for ext4 rootfs filesystem
+    if {$file_invalid != 0} {
+      set file_invalid [catch {exec file -b $filename | egrep -q "ext4 filesystem.*rootfs"} result]
+      if {$file_invalid == 0} {
+        # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
+        set file_invalid [catch {exec /sbin/e2fsck -nf $filename 2>/dev/null} result]
+        if {$file_invalid == 0} {
+          file rename -force -- $filename "$TMPDIR/rootfs.ext4"^
+        }
+      }
+    }
+  
+    # check for vfat bootfs filesystem
+    if {$file_invalid != 0} {
+      set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*bootfs.*FAT"} result]
+      if {$file_invalid == 0} {
+        # the file seems to be an vfat fs of the bootfs
+        file rename -force -- $filename "$TMPDIR/bootfs.vfat"
+      }
+    }
+  
+    ######
+    # check if there are checksum files in TMPDIR and if so check the checksum first
+    if {$file_invalid == 0} {
+  
+      # check for sha256 checksums
+      foreach chk_file [glob -nocomplain "$TMPDIR/*.sha256"] {
+        set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/sha256sum -sc $chk_file"} result]
+        if {$file_invalid != 0} {
+          break
+        }
+      }
+  
+      # check for md5 checksums
+      if {$file_invalid == 0} {
+        foreach chk_file [glob -nocomplain "$TMPDIR/*.md5"] {
+          set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/md5sum -sc $chk_file"} result]
+          if {$file_invalid != 0} {
+            break
+          }
+        }
+      }
+  
+      # everything seems to be fine with the uploaded file so lets
+      # do the final check
+      if {$file_invalid == 0} {
+        # if no *.img exists we have to check for "update_script"
+        if {[glob -nocomplain "$TMPDIR/*.img"] == "" &&
+            [glob -nocomplain "$TMPDIR/*.ext4"] == "" &&
+            [glob -nocomplain "$TMPDIR/*.vfat"] == ""} {
+          if {[file exists "$TMPDIR/update_script"] != 1} {
+            set file_invalid 1
+          }
+        }
+      }
+    }
+  
     #
     # test if the above checks were successfull or not
     #
     if {$file_invalid == 0} {
-      catch { exec ln -sf tmp/$TMPDIR /usr/local/.firmwareUpdate }
+      catch { exec ln -sf $TMPDIR /usr/local/.firmwareUpdate }
       set action "acceptEula"
     } else {
       file delete -force -- $filename

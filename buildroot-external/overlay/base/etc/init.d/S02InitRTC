@@ -25,9 +25,6 @@ init_rtc_device() {
       # we found a RX8130, thus we assume the RPI-RF-MOD to
       # be present, thus we setup the LED GPIOs to OUT
       if [[ -c /dev/rtc0 ]]; then
-        /usr/bin/gpio mode 27 out
-        /usr/bin/gpio mode 28 out
-        /usr/bin/gpio mode 29 out
 
         # setup the LEDs to show a constant yellow light
         echo default-on >/sys/class/leds/rpi_rf_mod\:green/trigger

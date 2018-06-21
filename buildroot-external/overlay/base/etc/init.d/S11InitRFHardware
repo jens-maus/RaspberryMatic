@@ -20,12 +20,6 @@ identify_rf_hardware() {
     HM_HMRF_DEV="RPI-RF-MOD"
     HM_HMIP_DEV="RPI-RF-MOD"
 
-    # make sure the LED of the RPI-RF-MOD is setup correctly
-    # even thought udev might have reset the gpio modes
-    /usr/bin/gpio mode 27 out
-    /usr/bin/gpio mode 28 out
-    /usr/bin/gpio mode 29 out
-
     # setup the LEDs to show a constant yellow light
     echo default-on >/sys/class/leds/rpi_rf_mod\:green/trigger
     echo default-on >/sys/class/leds/rpi_rf_mod\:red/trigger
@@ -88,16 +82,19 @@ init_rf_hardware() {
     fi
 
     # make sure to set low latency serial mode
-    if [[ ${HM_HOST_GPIO_UART} != "/dev/raw-uart" ]]; then
+    if [[ "${HM_HOST_GPIO_UART}" != "/dev/raw-uart" ]]; then
       /bin/setserial ${HM_HOST_GPIO_UART} low_latency >/dev/null 2>&1
     fi
 
     # reset the GPIO rf module by switching its reset pin
     # (pin 12 - GPIO.1) off and on with a short delay
-    /usr/bin/gpio mode 1 out
-    /usr/bin/gpio write 1 0
-    sleep 0.1
-    /usr/bin/gpio write 1 1
+    if [[ -n "${HM_HOST_GPIO_RESET}" ]]; then
+      echo ${HM_HOST_GPIO_RESET} >/sys/class/gpio/export
+      echo out >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/direction
+      echo 0 >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/value
+      sleep 0.1
+      echo 1 >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/value
+    fi
   fi
 }
 

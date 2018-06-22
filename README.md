@@ -19,7 +19,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Support to be used without GPIO RF module just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Integrated WebUI-based firmware update mechanism and Recovery System to perform maintenance operations such as system restore.
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
-* Based on latest [Buildroot 2018.02.2](http://buildroot.org/) lightweight Linux operating system
+* Based on latest [Buildroot 2018.05](http://buildroot.org/) lightweight Linux operating system
 * Latest Linux kernel (RaspberryPi: [4.14.34](https://github.com/raspberrypi/linux/tree/rpi-4.14.y), Tinkerboard: [4.4.126](https://github.com/rockchip-linux/kernel)) with hard-float (ARMv7) support
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)

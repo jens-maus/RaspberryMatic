@@ -139,11 +139,11 @@ fwprepare()
       echo -ne "bootfs vfat identified, validating, "
 
       # the file seems to be a vfat fs of the bootfs lets check if the ext4 is valid
-      /sbin/fsck.fat -nf ${filename} 2>/dev/null >/dev/null
-      if [ $? -ne 0 ]; then
-        echo "ERROR: (fsck.fat)"
-        exit 1
-      fi
+      #/sbin/fsck.fat -nf ${filename} 2>/dev/null >/dev/null
+      #if [ $? -ne 0 ]; then
+      #  echo "ERROR: (fsck.fat)"
+      #  exit 1
+      #fi
 
       mv -f ${filename} ${TMPDIR}/bootfs.vfat
 

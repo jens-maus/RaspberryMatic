@@ -51,7 +51,7 @@
 +        # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
 +        set file_invalid [catch {exec /sbin/e2fsck -nf $filename 2>/dev/null} result]
 +        if {$file_invalid == 0} {
-+          file rename -force -- $filename "$TMPDIR/rootfs.ext4"^
++          file rename -force -- $filename "$TMPDIR/rootfs.ext4"
 +        }
 +      }
 +    }

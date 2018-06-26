@@ -12,7 +12,7 @@ if [ -f /tmp/.runningFirmwareUpdate ]; then
   wait $!
 
   echo "<br/>==========================================<br/>"
-  echo "FINISHED<br/>"
+  echo "Browser closed connection.<br/>"
   exit 0
 fi
 

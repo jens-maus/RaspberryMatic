@@ -1,0 +1,11 @@
+--- ./dts/pivccu-raspberrypi.dts.orig	2018-05-19 13:27:42.000000000 +0200
++++ ./dts/pivccu-raspberrypi.dts	2018-06-22 08:41:17.119523834 +0200
+@@ -7,7 +7,7 @@
+         target = <&uart0>;
+         __overlay__ {
+             compatible = "pivccu,pl011";
+-            pivccu,gpio_pin = <18>;
++            pivccu,gpio_pin = <0>;
+         };
+     };
+ };

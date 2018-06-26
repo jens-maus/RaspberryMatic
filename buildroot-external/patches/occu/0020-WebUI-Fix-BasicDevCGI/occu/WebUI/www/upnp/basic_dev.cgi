@@ -14,7 +14,14 @@ proc get_ip_address {} {
 }
 
 proc get_serial_number {} {
-    return [exec cat /var/board_serial]
+    set serial [exec cat /var/board_sgtin]
+    if { "$serial" == "" } {
+      set serial [exec cat /var/board_serial]
+    }
+    if { "$serial" == "" } {
+      set serial [exec cat /sys/module/plat_eq3ccu2/parameters/board_serial]
+    }
+    return $serial
 }
 
 proc get_hostname {} {
@@ -22,19 +29,23 @@ proc get_hostname {} {
 }
 
 set hostname "[get_hostname]"
-if { "$hostname" == "homematic-raspi" } {
-    set RESOURCE(TITLE) "RaspberryMatic CCU"
+if { "$hostname" == "homematic-ccu3" } {
+    set RESOURCE(TITLE) "HomeMatic Central CCU3"
+} elseif { "$hostname" == "homematic-raspi" } {
+    set RESOURCE(TITLE) "HomeMatic Central RaspberryMatic"
+} elseif { "$hostname" == "homematic-ccu2" } {
+    set RESOURCE(TITLE) "HomeMatic Central CCU2"
 } else {
-    set RESOURCE(TITLE) "$hostname"
+    set RESOURCE(TITLE) "HomeMatic Central - $hostname"
 }
 
 set RESOURCE(MANUFACTURER) "EQ3"
 set RESOURCE(MANUFACTURER_URL) "http://www.homematic.com"
-set RESOURCE(PRESENTATION_URL) "http://$hostname/"
+set RESOURCE(PRESENTATION_URL) ""
 set RESOURCE(DESCRIPTION) "HomeMatic Central [get_serial_number]"
-set RESOURCE(MODEL_NAME) "RaspberryMatic"
-set RESOURCE(MODEL_NUMBER) "RaspberryMatic"
-set RESOURCE(MODEL_URL) "https://github.com/jens-maus/RaspberryMatic"
+set RESOURCE(MODEL_NAME) "HomeMatic Central"
+set RESOURCE(MODEL_NUMBER) "HomeMatic Central"
+set RESOURCE(MODEL_URL) $RESOURCE(MANUFACTURER_URL)
 set RESOURCE(SERIAL_NUMBER) "[get_serial_number]"
 set RESOURCE(UUID) "upnp-BasicDevice-1_0-$RESOURCE(SERIAL_NUMBER)"
 set RESOURCE(UPC) "123456789002"

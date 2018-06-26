@@ -100,10 +100,6 @@ echo "127.0.1.1 ${HOSTNAME}" >>/etc/hosts
 # restart syslogd to update hostname
 /etc/init.d/S07logging restart 2>/dev/null >/dev/null
 
-# set multicast routes
-/sbin/ip route del 224.0.0.0/4 2>/dev/null
-/sbin/ip route add 224.0.0.0/4 dev ${IFACE}
-
 # check if we booting via nfs
 if grep -q nfsroot /proc/cmdline ; then
    echo Running from nfs root. Skipping network configuration.

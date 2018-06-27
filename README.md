@@ -1,4 +1,4 @@
-<img src="https://github.com/jens-maus/RaspberryMatic/raw/master/buildroot-external/package/occu/logo.png" align=right>
+<img src="https://github.com/jens-maus/RaspberryMatic/raw/master/release/logo.png" align=right>
 
 # RaspberryMatic
 

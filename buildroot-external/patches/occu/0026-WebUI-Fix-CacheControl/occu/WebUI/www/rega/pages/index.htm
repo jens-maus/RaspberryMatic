@@ -105,6 +105,7 @@
     /*# Globale Variablen                                                    #*/
     /*########################################################################*/
 
+    isHTTPS = window.location.protocol.startsWith("https:");
     forceUpdate = false;
     preventInterfaceCheck = false;
     urlParamInterfaces = jQuery.url().param('showInterfaces');
@@ -194,7 +195,7 @@
   <div id="webuiloader_wrapper">
     <div id="webuiloader_background">
       <div id="webuiloader">
-        <div id="webuiloader_icon"><img src="/ise/img/homematic_logo_small_gray.jpg" /></div>
+        <div id="webuiloader_icon"><img src="/ise/img/homematic_logo_small_gray.png" /></div>
         <!-- <div id="webuiloader_caption">HomeMatic WebUI wird geladen...</div> -->
         <div id="webuiloader_caption"></div>
         <script type="text/javascript">jQuery("#webuiloader_caption").html(translateKey("loadWebUI"));</script>

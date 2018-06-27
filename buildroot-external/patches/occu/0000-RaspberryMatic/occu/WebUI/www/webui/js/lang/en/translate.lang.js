@@ -7,12 +7,12 @@ jQuery.extend(true,HMIdentifier , {
     "BidCosWired" : "BidCos-Wired",
     "HmIPRF" : "HmIP-RF",
     "VirtualDevices" : "VirtualDevices",
-    "HomeMaticCFGAdapter" : "HomeMatic Configuration-Adapter",
-    "LabelHomeMatic" : "HomeMatic",
+    "HomeMaticCFGAdapter" : "Homematic Configuration-Adapter",
+    "LabelHomeMatic" : "Homematic",
     "LabelHomematic" : "Homematic",
-    "LabelHomematicWiredHeader" : "HomeMatic Wired",
+    "LabelHomematicWiredHeader" : "Homematic Wired",
     "LabelHomematicWiredText" : "Homematic Wired",
-    "LabelHomematicIPHeader" : "HomeMatic IP",
+    "LabelHomematicIPHeader" : "Homematic IP",
     "LabelHomematicIPText" : "Homematic IP"
   }
 });
@@ -24,6 +24,8 @@ jQuery.extend(true,langJSON, {
     "BidCosWired" : HMIdentifier.en.BidCosWired,
     "HmIPRF" : HMIdentifier.en.HmIPRF,
     "VirtualDevices" : HMIdentifier.en.VirtualDevices,
+    "LabelHomematicIPHeader" : HMIdentifier.de.LabelHomematicIPHeader,
+    "LabelHomeMatic" : HMIdentifier.de.LabelHomeMatic,
     "ccuNotReady" : "The " + HMIdentifier.en.CCUFullNameText + " is not yet ready",
     "ccuNotReadyHint" : "Please wait. You will automatically be redirected to the home page.",
     "loadWebUI" : "Loading...",
@@ -36,6 +38,7 @@ jQuery.extend(true,langJSON, {
     "update" :  HMIdentifier.en.CCUShortName +" update:",
     "firmware" : "Firmware",
     "isAvailable" : "is available",
+    "firmwareAvailOnCCU" : "Firmware available<br/>on the " + HMIdentifier.en.CCUShortName,
     "newFirmwareAvailable" : "New firmware available",
     "login" : "Login",
     "alarmMsg" : "Alarm messages",
@@ -341,7 +344,7 @@ jQuery.extend(true,langJSON, {
     "lblSettingsSystemConfig5" : "Perform updates",
     "lblSettingsSystemConfig6" : "Set time and date",
     "lblSettingsSystemConfig7" : "Location settings",
-    "lblSettingsSystemConfig8" : "Connections (e.g. OSRAM lightify)",
+    "lblSettingsSystemConfig8" : "Connections",
     "commentSettingsBtnSystemConfigEnd" : "***********************************************",
     "btnAddReceiver" : "Add<br/>receiver",
     "btnAddSender" : "Add<br/>transmitter ",
@@ -388,6 +391,7 @@ jQuery.extend(true,langJSON, {
     "dialogQuestionRemoveCFG" : "Do you really want to delete the " + HMIdentifier.en.HomeMaticCFGAdapter + "?",
     "dialogQuestionRemoveExtraSoftware" : "Do you really want to delete the additional software?",
     "dialogQuestionRestart" : "Please click here to perform the restart?",
+    "dialogQuestionShutdown" : "Please click here to perform the shutdown?",
     "dialogQuestionRestartSafeMode" : "Do you really want to start the " + HMIdentifier.en.CCUFullNameText + " in the safe mode?",
     "dialogUserAccountTitle" : "User account configuration",
     "dialogProgChoseSysVar" : "Programs - system variable selection",
@@ -413,6 +417,7 @@ jQuery.extend(true,langJSON, {
     "dialogRestartSafeModeTitle" : "Restart",
     "dialogRestartSafeModeContent" : "The Central Control Unit will now start in safe mode. Please click \"OK\" to log in again.",
     "dialogBtnPerformRestart" : "Restart ",
+    "dialogBtnPerformShutdown" : "Shutdown",
     "dialogEditRoomBtnClose" : "Close",
     "dialogEditRoomBtnNew" : "New",
     "infoLoadConfigData" : "Loading configuration data",
@@ -443,6 +448,7 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsCMTitle" : HMIdentifier.en.CCUShortName + " maintenance",
     "dialogSettingsCMTDCCUSoftware" : HMIdentifier.en.CCUShortName + "<br/>software",
     "dialogSettingsCMTDCCURestart" : HMIdentifier.en.CCUShortName + "<br/>restart",
+    "dialogSettingsCMTDCCUShutdown" : "Shutdown",
     "dialogSettingsCMTDCCUSafeMode" : "Safe<br/>mode",
     "dialogSettingsCMTDErrorProtocol" : "Error<br/>log",
     "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
@@ -460,6 +466,7 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsCMBtnPerformSoftwareUpdateDownload" : "Download",
     "dialogSettingsCMBtnPerformSoftwareUpdateUpload" : "Upload",
     "dialogSettingsCMBtnCCURestart" : "Restart",
+    "dialogSettingsCMBtnCCUShutdown" : "Shutdown",
     "dialogSettingsCMBtnCCURestartSafe" : "Restart in safe mode",
     "dialogSettingsCMBtnLogSysLogServerAddress" : "Apply settings",
     "dialogSettingsCMBtnLogLoadLogFile" : "Download log file",
@@ -472,6 +479,7 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",
     "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
     "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
+    "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
     "dialogSettingsCMHintRestartSafeMode" : "Start HomeMatic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
     "dialogSettingsCMHintErrorLog" : "Please set the number of log messages to be generated by the CCU.<br>You can also specify a computer that will receive the log messages from the CCU via syslog. An additional software that will be able to receive this messages has to be installed on the computer.<br>To analyse the results, the current log messages of the CCU can be downloaded in a text file.",
     "dialogSettingsCMLogLevel0" : "Log all",
@@ -760,19 +768,20 @@ jQuery.extend(true,langJSON, {
 
     "commentDialogHelp" : "***********************************************",
 
+    "homepage" : "Homepage",
     "dialogHelpPath" : "Help",
     "dialogHelpBtnOnlineHelp" : "Online help",
+    "dialogHelpLinkOnlineHelpA" : "Homematic",
+    "dialogHelpLinkOnlineHelpB" : "Homematic IP",
 
-    "dialogHelpLinkOnlineHelpA" : "Access to HomeMatic homepage",
-    "dialogHelpLinkOnlineHelpB" : "",
-
-    "dialogHelpOfflineHelpTitle" : "<b>Offline help<b>",
+    "dialogHelpOfflineHelpTitle" : "<b>Offline help</b>",
     "dialogHelpOfflineHelp" : "Insert the supplied HomeMatic CD into your CD drive. <br/>Afterwards, please click on \"Start => Run\" and then \"Browse\". Set the drive letter of the CD drive and select the file \"setup.exe\". <br/>Then, please follow the instructions on the screen.",
 
-    "dialogHelpInfoTitle" : "<b>Info<b>",
+    "dialogHelpInfoTitle" : "<b>Info</b>",
     "dialogHelpInfoLblSN" : "Serial number:",
     "dialogHelpInfoLblVersion" : "Version:",
     "dialogHelpInfoLblCopyright" : "Copyright",
+    "dialogBackspacePrevent" : "Please use the controls of the web interface to navigate.",
 
     "commentDialogNewHelpEnd" : "***********************************************",
 
@@ -1065,6 +1074,7 @@ jQuery.extend(true,langJSON, {
     "dummy" : "dummy",
 
     "optionLastValue" : "Last value",
+    "optionNoModification" : "No change",
     "optionNone" : "None",
     "optionNotActive" : "Not active"
   }

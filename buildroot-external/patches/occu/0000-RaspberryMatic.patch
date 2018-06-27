@@ -459,15 +459,15 @@
      catch {exec /sbin/hwclock -wu}
 --- occu/WebUI/www/config/help.cgi.orig
 +++ occu/WebUI/www/config/help.cgi
-@@ -13,7 +13,7 @@
-     global PRODUCT_NAME PRODUCT_ID HOMEMATIC_URL HELP_URL LANGUAGE env
-     
-     set SERIAL [read_var /var/ids SerialNumber]
--    set VERSION [read_var /boot/VERSION VERSION]
-+    set VERSION [read_var /VERSION VERSION]
-  
-     set sid ""
-     catch {import sid}
+@@ -19,7 +19,7 @@
+   global PRODUCT_NAME PRODUCT_ID HOMEMATIC_URL HOMEMATIC_IP_URL HELP_URL HELP_IP_URL LANGUAGE CUR_YEAR env
+ 
+   set SERIAL [read_var /var/ids SerialNumber]
+-  set VERSION [read_var /boot/VERSION VERSION]
++  set VERSION [read_var /VERSION VERSION]
+   set HELP_ARGUMENTS "lang=$LANGUAGE&vers=$VERSION&serial=$SERIAL"
+ 
+ 
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
 @@ -23,10 +23,10 @@
@@ -517,29 +517,29 @@
 @@ -1,8 +1,8 @@
  jQuery.extend(true,HMIdentifier , {
    "de" : {
--    "CCUFullNameHeader" : "HomeMatic CCU2",
--    "CCUFullNameText" : "Homematic CCU2",
--    "CCUShortName" : "CCU2",
+-    "CCUFullNameHeader" : "Homematic CCU",
+-    "CCUFullNameText" : "Homematic CCU",
+-    "CCUShortName" : "CCU",
 +    "CCUFullNameHeader" : "RaspberryMatic",
 +    "CCUFullNameText" : "RaspberryMatic",
 +    "CCUShortName" : "RaspMatic",
      "BidCosRF" : "BidCos-RF",
      "BidCosWired" : "BidCos-Wired",
      "VirtualDevices" : "VirtualDevices",
-@@ -470,6 +470,7 @@
+@@ -478,6 +478,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "F%FChren Sie vor dem Update eine Datensicherung durch.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Der Ladezustand der Batterien betr%E4gt nur noch ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Um einem Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Update zu erneuern.",
 +    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic ist ein gemeinschaftliches Projekt. Wenn Sie die Weiterentwicklung gerne in Form einer Geldspende unterst%FCtzen wollen k%F6nen Sie das gerne mittels einer <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal Spende</a> tun.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
      "dialogSettingsCMHintRestart" : "Zentrale neu starten. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintShutdown" : "Zentrale herunterfahren. Ver%E4nderte Einstellungen werden vorher gespeichert.",
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
-     "dialogSettingsCMHintErrorLog" : "Stellen Sie die Anzahl der Logmeldungen ein, die von der Zentrale generiert werden sollen.<br>Sie k%F6nnen zus%E4tzlich einen Rechner angeben, dem die Zentrale ihre Logmeldungen per Syslog schickt. Auf diesem Rechner mu%DF entsprechende Software installiert sein, die die Meldungen entgegennimmt.<br>Zu Diagnosezwecken k%F6nnen die aktuellen Logmeldungen der Zentrale in einer Textdatei heruntergeladen werden.",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
 @@ -1,8 +1,8 @@
  jQuery.extend(true,HMIdentifier , {
    "en" : {
--    "CCUFullNameHeader" : "HomeMatic CCU2",
+-    "CCUFullNameHeader" : "Homematic CCU",
 -    "CCUFullNameText" : "Homematic CCU",
 -    "CCUShortName" : "CCU",
 +    "CCUFullNameHeader" : "RaspberryMatic",
@@ -548,20 +548,20 @@
      "BidCosRF" : "BidCos-RF",
      "BidCosWired" : "BidCos-Wired",
      "HmIPRF" : "HmIP-RF",
-@@ -470,6 +470,7 @@
+@@ -477,6 +477,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "Please perform a data backup before starting the update.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "The charging status the batteries is only at ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",
 +    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
      "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
+     "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
      "dialogSettingsCMHintRestartSafeMode" : "Start HomeMatic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
-     "dialogSettingsCMHintErrorLog" : "Please set the number of log messages to be generated by the CCU.<br>You can also specify a computer that will receive the log messages from the CCU via syslog. An additional software that will be able to receive this messages has to be installed on the computer.<br>To analyse the results, the current log messages of the CCU can be downloaded in a text file.",
 --- occu/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/tr/translate.lang.js
 @@ -1,8 +1,8 @@
  jQuery.extend(true,HMIdentifier , {
    "tr" : {
--    "CCUFullNameHeader" : "HomeMatic CCU2",
+-    "CCUFullNameHeader" : "Homematic CCU",
 -    "CCUFullNameText" : "Homematic CCU",
 -    "CCUShortName" : "CCU",
 +    "CCUFullNameHeader" : "RaspberryMatic",
@@ -570,17 +570,17 @@
      "BidCosRF" : "BidCos-RF",
      "BidCosWired" : "BidCos-Wired",
      "HmIPRF" : "HmIP-RF",
-@@ -472,6 +472,7 @@
+@@ -479,6 +479,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "G%FCncellemeden %F6nce verileri emniyete alin.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Bataryalarin sarj durumu artik sadece ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Elektrik kesintisi nedeniyle veri kaybini %F6nlemek icin bataryalari g%FCncellemeyi baslatmadan %F6nce degistirmenizi %F6neriyoruz.",
 +    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
      "dialogSettingsCMHintRestart" : "Merkezi yeniden baslat. Degistirilmis ayarlar %F6nceden kaydedilir.",
+     "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic merkezini bir kere g%FCvenli modda baslatin. G%FCvenli modda y%FCklenen ek yazilim baslatilmaz. Degistirilmis ayarlar %F6nceden kaydedilir.",
-     "dialogSettingsCMHintErrorLog" : "Merkez tarafindan olusturulacak Log bildiri sayisini ayarlayin.<br>Buna ek olarak merkezin Log bildirilerini Syslog'u kullanarak iletecegi baska bir bilgisayar tanimlayabilirsiniz. Bu bilgisayar %FCzerinde bildirileri alacak uygun bir yazilim y%FCkl%FC olmalidir.<br>Merkezin g%FCncel Log bildirileri teshis amaciyla bir metin dosyasi seklinde indirilebilir.",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -11804,8 +11804,9 @@
+@@ -12261,8 +12261,9 @@
      var isOk = true;
      for (var i = 0, len = ips.length; i < len; i++) {
        var ip = ips[i];
@@ -591,34 +591,34 @@
        }
      }
  
-@@ -18673,7 +18674,7 @@
+@@ -19271,7 +19272,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
--    script.src = "http://update.homematic.com/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product=HM-CCU2&serial=" + serial;
+-    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product=HM-CCU2&serial=" + serial;
 +    script.src = "https://gitcdn.xyz/repo/jens-maus/RaspberryMatic/master/release/LATEST-VERSION.js?_version_=" + WEBUI_VERSION;
      $("body").appendChild(script);
    },
  
-@@ -18725,7 +18726,7 @@
+@@ -19323,7 +19324,7 @@
        var script = document.createElement("script");
        script.id = "homematic_com_script_" + index;
        script.type = "text/javascript";
--      script.src = "http://update.homematic.com/firmware/download?cmd=js_check_version&product=" + product + "&serial=0";
-+      script.src = "http://update.homematic.com/firmware/download?cmd=js_check_version&product=" + product + "&serial=0" + "&ts=" + Date.now();
+-      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0";
++      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0" + "&ts=" + Date.now();
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -18735,7 +18736,7 @@
+@@ -19333,7 +19334,7 @@
        var script = document.createElement("script");
        script.id = "homematic_com_script_fw";
        script.type = "text/javascript";
--      script.src = "http://update.homematic.com/firmware/api/firmware/search/DEVICE";
-+      script.src = "http://update.homematic.com/firmware/api/firmware/search/DEVICE?ts=" + Date.now();
+-      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE";
++      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE?ts=" + Date.now();
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -18769,7 +18770,7 @@
+@@ -19367,7 +19368,7 @@
     **/
    setLatestVersion: function(latestVersion, product)
    {

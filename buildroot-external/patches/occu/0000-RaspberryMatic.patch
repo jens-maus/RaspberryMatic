@@ -459,14 +459,49 @@
      catch {exec /sbin/hwclock -wu}
 --- occu/WebUI/www/config/help.cgi.orig
 +++ occu/WebUI/www/config/help.cgi
-@@ -19,7 +19,7 @@
+@@ -3,8 +3,8 @@
+ source common.tcl
+ load tclrega.so
+ 
+-set PRODUCT_NAME "Zentrale"
+-set PRODUCT_ID "CCU[getProduct]"
++set PRODUCT_NAME "RaspberryMatic"
++set PRODUCT_ID "CCU"
+ set HOMEMATIC_URL "http://www.homematic.com"
+ set HOMEMATIC_IP_URL "https://www.homematic-ip.com"
+ 
+@@ -18,8 +18,14 @@
+ proc action_put_page {} {
    global PRODUCT_NAME PRODUCT_ID HOMEMATIC_URL HOMEMATIC_IP_URL HELP_URL HELP_IP_URL LANGUAGE CUR_YEAR env
  
-   set SERIAL [read_var /var/ids SerialNumber]
+-  set SERIAL [read_var /var/ids SerialNumber]
 -  set VERSION [read_var /boot/VERSION VERSION]
++  set SERIAL [exec cat /var/board_sgtin]
++  if { "$SERIAL" == "" } {
++    set SERIAL [exec cat /var/board_serial]
++  }
++  if { "$SERIAL" == "" } {
++    set SERIAL [exec cat /sys/module/plat_eq3ccu2/parameters/board_serial]
++  }
 +  set VERSION [read_var /VERSION VERSION]
    set HELP_ARGUMENTS "lang=$LANGUAGE&vers=$VERSION&serial=$SERIAL"
  
+ 
+@@ -57,6 +63,7 @@
+                 puts "<li><h1 class='helpTitle'><u>\${menuHelpPage}</u></h1></li>"
+                 puts "<li><a target='_blank' href=\'$HELP_URL\'>\${dialogHelpLinkOnlineHelpA}</a></li>"
+                 puts "<li><a target='_blank' href=\'$HELP_IP_URL\'>\${dialogHelpLinkOnlineHelpB}</a></li>"
++                puts "<li><a target='_blank' href='https://raspberrymatic.de/#memo-documentation'>RaspberryMatic</a></li>"
+                 puts "<li><a target='_blank' href='/licenseinfo.htm'>\${lblLicenseInformation}</a></li>"
+               puts "</ul>"
+       puts "</td>"
+@@ -75,6 +82,7 @@
+           # puts "<li>DOM [rega dom.BuildLabel()]</li>"
+           puts "<li><a target='_blank' href=\"$HOMEMATIC_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
+           puts "<li><a target='_blank' href=\"$HOMEMATIC_IP_URL/start.html\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
++          puts "<li><a target='_blank' href=\"https://raspberrymatic.de/\">\${homepage} RaspberryMatic</a></li>"
+           puts "<li style='padding-top:25px;'><img src='/ise/img/homematic_logo_small.png'/></li>"
+         puts "</ul>"
  
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl

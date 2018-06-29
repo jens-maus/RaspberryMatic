@@ -206,6 +206,35 @@
  #####################
  # Verwendete Module #
  #####################
+--- occu/WebUI/www/config/control_panel.cgi.orig
++++ occu/WebUI/www/config/control_panel.cgi
+@@ -171,16 +171,16 @@
+     <tr>
+   }
+ 
+-  if {[getProduct] >= 3} {
+-    puts {
+-      <!-- Button accesspoint settings -show this button only for a CCU version >= 3 -->
+-
+-        <td>
+-          <div  class="StdTableBtn CLASS21701" onclick="WebUI.enter(CreateAccessPointSettings)">${btnAccessPointSettings}</div>
+-          <div class="StdTableBtnHelp"><img id="showAccessPointSettingsCPHelp" src="/ise/img/help.png"></div>
+-        </td>
+-    }
+-  }
++  #if {[getProduct] >= 3} {
++  #  puts {
++  #    <!-- Button accesspoint settings -show this button only for a CCU version >= 3 -->
++  #
++  #      <td>
++  #        <div  class="StdTableBtn CLASS21701" onclick="WebUI.enter(CreateAccessPointSettings)">${btnAccessPointSettings}</div>
++  #        <div class="StdTableBtnHelp"><img id="showAccessPointSettingsCPHelp" src="/ise/img/help.png"></div>
++  #      </td>
++  #  }
++  #}
+ 
+   puts {
+     <!-- Kopplungen -->
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
 @@ -387,7 +387,7 @@

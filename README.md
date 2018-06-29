@@ -1,4 +1,4 @@
-<img src="https://github.com/jens-maus/RaspberryMatic/raw/master/release/logo.png" align=right>
+<img src="https://github.com/jens-maus/RaspberryMatic/raw/master/release/logo.png" width=250 align=right>
 
 # RaspberryMatic
 

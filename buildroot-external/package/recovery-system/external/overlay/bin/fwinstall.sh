@@ -139,11 +139,11 @@ fwprepare()
       echo -ne "bootfs vfat identified, validating, "
 
       # the file seems to be a vfat fs of the bootfs lets check if the ext4 is valid
-      /sbin/fsck.fat -nf ${filename} 2>/dev/null >/dev/null
-      if [ $? -ne 0 ]; then
-        echo "ERROR: (fsck.fat)"
-        exit 1
-      fi
+      #/sbin/fsck.fat -nf ${filename} 2>/dev/null >/dev/null
+      #if [ $? -ne 0 ]; then
+      #  echo "ERROR: (fsck.fat)"
+      #  exit 1
+      #fi
 
       mv -f ${filename} ${TMPDIR}/bootfs.vfat
 
@@ -748,6 +748,20 @@ fi
 # capture on EXIT and create the lock file
 trap 'rm -f /tmp/.runningFirmwareUpdate' EXIT
 touch /tmp/.runningFirmwareUpdate
+
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# fast blink magenta on RPI-RF-MOD
+if [[ "${HM_RTC}" == "rx8130" ]]; then
+  echo none  >/sys/class/leds/rpi_rf_mod\:green/trigger
+  echo timer >/sys/class/leds/rpi_rf_mod\:red/trigger
+  echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
+  echo 100 >/sys/class/leds/rpi_rf_mod\:red/delay_on
+  echo 100 >/sys/class/leds/rpi_rf_mod\:red/delay_off
+  echo 100 >/sys/class/leds/rpi_rf_mod\:blue/delay_on
+  echo 100 >/sys/class/leds/rpi_rf_mod\:blue/delay_off
+fi
 
 # if an argument was given (filename of the update file/data)
 # we run fwprepare to verify its validity

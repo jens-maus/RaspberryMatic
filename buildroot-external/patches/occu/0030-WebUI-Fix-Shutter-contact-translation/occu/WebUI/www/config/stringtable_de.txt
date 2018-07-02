@@ -16,24 +16,27 @@ ACCELERATION_TRANSCEIVER|MSG_FOR_POS_B=OPEN	${stringTableTiltSensorMsgPosB3}
 ACCELERATION_TRANSCEIVER|NOTIFICATION_SOUND_TYPE_HIGH_TO_LOW	${stringTableAccelerationTransceiverNotificationSoundTypeHighToLow}
 ACCELERATION_TRANSCEIVER|NOTIFICATION_SOUND_TYPE_LOW_TO_HIGH	${stringTableAccelerationTransceiverNotificationSoundTypeLowToHigh}
 ACCELERATION_TRANSCEIVER|TRIGGER_ANGLE	${stringTableAccelerationTransceiverTriggerAngle}
-ACOUSTIC_ALARM_SELECTION=DELAYED_EXTERNALLY_ARMED	${stringTableAlarmDelayedExternallyArmed}
+ACOUSTIC_ALARM_ACTIVE=FALSE	${stringTableAcousticAlarmActiveFalse}
+ACOUSTIC_ALARM_ACTIVE=TRUE	${stringTableAcousticAlarmActiveTrue}
+OPTICAL_ALARM_ACTIVE=FALSE	${stringTableOpticalAlarmActiveFalse}
+OPTICAL_ALARM_ACTIVE=TRUE	${stringTableOpticalAlarmActiveTrue}
 ACOUSTIC_ALARM_SELECTION=DELAYED_INTERNALLY_ARMED	${stringTableAlarmDelayedInternallyArmed}
 ACOUSTIC_ALARM_SELECTION=DISABLE_ACOUSTIC_SIGNAL	${stringTableAlarmDisableAcousticSignal}
 ACOUSTIC_ALARM_SELECTION=DISARMED	${stringTableAlarmDisarmed}
 ACOUSTIC_ALARM_SELECTION=ERROR	${stringTableAlarmError}
 ACOUSTIC_ALARM_SELECTION=EVENT	${stringTableAlarmEvent}
 ACOUSTIC_ALARM_SELECTION=EXTERNALLY_ARMED	${stringTableAlarmExternallyArmed}
-ACOUSTIC_ALARM_SELECTION=FREQUENCY_ALTERNATING_LOW_HIGH	${stringTableAlarmFrequencyAlternatingLowHigh}
-ACOUSTIC_ALARM_SELECTION=FREQUENCY_ALTERNATING_LOW_MID_HIGH	${stringTableAlarmFrequencyAlternatingLowMidHigh}
-ACOUSTIC_ALARM_SELECTION=FREQUENCY_FALLING	${stringTableAlarmFrequencyFalling}
-ACOUSTIC_ALARM_SELECTION=FREQUENCY_HIGHON_LONGOFF	${stringTableAlarmFrequencyHighOnLongOff}
-ACOUSTIC_ALARM_SELECTION=FREQUENCY_HIGHON_OFF	${stringTableAlarmFrequencyHighOnOff}
-ACOUSTIC_ALARM_SELECTION=FREQUENCY_LOWON_LONGOFF_HIGHON_LONGOFF	${stringTableAlarmFrequencyLowOnLongOffHighOnLongOff}
-ACOUSTIC_ALARM_SELECTION=FREQUENCY_LOWON_OFF_HIGHON_OFF	${stringTableAlarmFrequencyLowOnOffHighonOff}
-ACOUSTIC_ALARM_SELECTION=FREQUENCY_RISING	${stringTableAlarmFrequencyRising}
-ACOUSTIC_ALARM_SELECTION=FREQUENCY_RISING_AND_FALLING	${stringTableAlarmFrequencyRisingAndFalling}
 ACOUSTIC_ALARM_SELECTION=INTERNALLY_ARMED	${stringTableAlarmInternallyArmed}
 ACOUSTIC_ALARM_SELECTION=LOW_BATTERY	${stringTableAlarmLowBattery}
+ACOUSTIC_ALARM_SELECTION=FREQUENCY_RISING	${stringTableAlarmFrequencyRising}
+ACOUSTIC_ALARM_SELECTION=FREQUENCY_FALLING	${stringTableAlarmFrequencyFalling}
+ACOUSTIC_ALARM_SELECTION=FREQUENCY_RISING_AND_FALLING	${stringTableAlarmFrequencyRisingAndFalling}
+ACOUSTIC_ALARM_SELECTION=FREQUENCY_ALTERNATING_LOW_HIGH	${stringTableAlarmFrequencyAlternatingLowHigh}
+ACOUSTIC_ALARM_SELECTION=FREQUENCY_ALTERNATING_LOW_MID_HIGH	${stringTableAlarmFrequencyAlternatingLowMidHigh}
+ACOUSTIC_ALARM_SELECTION=FREQUENCY_HIGHON_OFF	${stringTableAlarmFrequencyHighOnOff}
+ACOUSTIC_ALARM_SELECTION=FREQUENCY_HIGHON_LONGOFF	${stringTableAlarmFrequencyHighOnLongOff}
+ACOUSTIC_ALARM_SELECTION=FREQUENCY_LOWON_OFF_HIGHON_OFF	${stringTableAlarmFrequencyLowOnOffHighonOff}
+ACOUSTIC_ALARM_SELECTION=FREQUENCY_LOWON_LONGOFF_HIGHON_LONGOFF	${stringTableAlarmFrequencyLowOnLongOffHighOnLongOff}
 ACTOR_SECURITY	${stringTableActorSecurityTitle}
 ACTOR_SECURITY|ON_TIME	${stringTableActorSecurityOnTime}
 ACTOR_SECURITY|SECURE_STATE=FALSE	${stringTableActorSecuritySecureStateFalse}
@@ -92,6 +95,14 @@ ACTOR_WINDOW|WIN_RELEASE=TRUE	${stringTableActorWindowReleaseTrue}
 ACTOR_WINDOW|WIN_RELEASE_ACT	${stringTableActorWindowReleaseAction}
 ACTUAL_HUMIDITY	${stringTableWeatherHumidity}
 ACTUAL_TEMPERATURE	${stringTableClimateControlRTTransceiverActualTemp}
+ACTUAL_TEMPERATURE_STATUS=NORMAL	${lblValue} ${stringTableClimateControlRTTransceiverActualTemp}: ${lblNormal}
+ACTUAL_TEMPERATURE_STATUS=0	${lblValue} ${stringTableClimateControlRTTransceiverActualTemp}: ${lblNormal}
+ACTUAL_TEMPERATURE_STATUS=UNKNOWN	${lblValue} ${stringTableClimateControlRTTransceiverActualTemp}: ${lblUnknown}
+ACTUAL_TEMPERATURE_STATUS=1	${lblValue} ${stringTableClimateControlRTTransceiverActualTemp}: ${lblUnknown}
+ACTUAL_TEMPERATURE_STATUS=OVERFLOW	${lblValue} ${stringTableClimateControlRTTransceiverActualTemp}: ${lblOverflow}
+ACTUAL_TEMPERATURE_STATUS=2	${lblValue} ${stringTableClimateControlRTTransceiverActualTemp}: ${lblOverflow}
+ACTUAL_TEMPERATURE_STATUS=UNDERFLOW	${lblValue} ${stringTableClimateControlRTTransceiverActualTemp}: ${lblUnderflow}
+ACTUAL_TEMPERATURE_STATUS=3	${lblValue} ${stringTableClimateControlRTTransceiverActualTemp}: ${lblUnderflow}
 AKKU|LEVEL	${stringTableAccuLevel}
 AKKU|STATUS=CHARGE	${stringTableAccuCharging}
 AKKU|STATUS=DISCHARGE	${stringTableAccuDischarge}
@@ -135,6 +146,13 @@ ATC_MODE	${stringTableATCMode}
 ATC_OFF	${stringTableOFF}
 ATC_ON	${stringTableON}
 AUTO_MODE	${stringTableClimateControlRTTransceiverAutoMode}
+AVERAGE_ILLUMINATION	${stringTableAverageIllumination}
+AVERAGE_ILLUMINATION_STATUS=NORMAL	${lblValue} ${stringTableAverageIllumination}: ${lblNormal}
+AVERAGE_ILLUMINATION_STATUS=0	${lblValue} ${stringTableAverageIllumination}: ${lblNormal}
+AVERAGE_ILLUMINATION_STATUS=UNKNOWN	${lblValue} ${stringTableAverageIllumination}: ${lblUnknown}
+AVERAGE_ILLUMINATION_STATUS=1	${lblValue} ${stringTableAverageIllumination}: ${lblUnknown}
+AVERAGE_ILLUMINATION_STATUS=OVERFLOW	${lblValue} ${stringTableAverageIllumination}: ${lblOverflow}
+AVERAGE_ILLUMINATION_STATUS=2	${lblValue} ${stringTableAverageIllumination}: ${lblOverflow}
 BACKLIGHT_AT_CHARGE	${stringTableBackLightAtCharge}
 BACKLIGHT_AT_KEYSTROKE	${stringTableBackLightAtKeystroke}
 BACKLIGHT_AT_MOTION	${stringTableBackLightAtMotion}
@@ -149,12 +167,70 @@ BLIND|REFERENCE_RUNNING_TIME_BOTTOM_TOP	${stringTableBlindRunnintTimeBottomTop}
 BLIND|REFERENCE_RUNNING_TIME_TOP_BOTTOM	${stringTableBlindRunningTimeTopBottom}
 BLIND|REFERENCE_RUN_COUNTER	${stringTableBlindRefRunCounter}
 BLIND|STOP	${stringTableBlindStop}
+BLIND_TRANSMITTER|ACTIVITY_STATE=DOWN	${stringTableBlindActivityStateDown}
+BLIND_TRANSMITTER|ACTIVITY_STATE=UNKNOWN	${stringTableBlindActivityStateUnknown}
+BLIND_TRANSMITTER|ACTIVITY_STATE=UP	${stringTableBlindActivityStateUp}
+BLIND_TRANSMITTER|ACTIVITY_STATE=STABLE	${stringTableProcessStableBlindTransmitter}
+
 BLIND_TRANSMITTER|LEVEL	${stringTableBlindLevel}
+BLIND_TRANSMITTER|LEVEL_STATUS=ERROR	${lblValue} ${stringTableBlindLevel}: ${lblError}
+BLIND_TRANSMITTER|LEVEL_STATUS=4	${lblValue} ${stringTableBlindLevel}: ${lblError}
+BLIND_TRANSMITTER|LEVEL_STATUS=NORMAL	${lblValue} ${stringTableBlindLevel}: ${lblNormal}
+BLIND_TRANSMITTER|LEVEL_STATUS=0	${lblValue} ${stringTableBlindLevel}: ${lblNormal}
+BLIND_TRANSMITTER|LEVEL_STATUS=OVERFLOW	${lblValue} ${stringTableBlindLevel}: ${lblOverflow}
+BLIND_TRANSMITTER|LEVEL_STATUS=2	${lblValue} ${stringTableBlindLevel}: ${lblOverflow}
+BLIND_TRANSMITTER|LEVEL_STATUS=UNDERFLOW	${lblValue} ${stringTableBlindLevel}: ${lblUnderflow}
+BLIND_TRANSMITTER|LEVEL_STATUS=3	${lblValue} ${stringTableBlindLevel}: ${lblUnderflow}
+BLIND_TRANSMITTER|LEVEL_STATUS=UNKNOWN	${lblValue} ${stringTableBlindLevel}: ${lblUnknown}
+BLIND_TRANSMITTER|LEVEL_STATUS=1	${lblValue} ${stringTableBlindLevel}: ${lblUnknown}
+
 BLIND_TRANSMITTER|LEVEL_2	${stringTableJalousieSlatsLevel}
+BLIND_TRANSMITTER|LEVEL_2_STATUS=ERROR	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblError}
+BLIND_TRANSMITTER|LEVEL_2_STATUS=4	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblError}
+BLIND_TRANSMITTER|LEVEL_2_STATUS=NORMAL	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblNormal}
+BLIND_TRANSMITTER|LEVEL_2_STATUS=0	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblNormal}
+BLIND_TRANSMITTER|LEVEL_2_STATUS=OVERFLOW	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblOverflow}
+BLIND_TRANSMITTER|LEVEL_2_STATUS=2	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblOverflow}
+BLIND_TRANSMITTER|LEVEL_2_STATUS=UNDERFLOW	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnderflow}
+BLIND_TRANSMITTER|LEVEL_2_STATUS=3	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnderflow}
+BLIND_TRANSMITTER|LEVEL_2_STATUS=UNKNOWN	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnknown}
+BLIND_TRANSMITTER|LEVEL_2_STATUS=1	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnknown}
+
 BLIND_VIRTUAL_RECEIVER	${stringTableBlindVirtualReceiverTitle}
+BLIND_VIRTUAL_RECEIVER|ACTIVITY_STATE=DOWN	${stringTableBlindActivityStateDown}
+BLIND_VIRTUAL_RECEIVER|ACTIVITY_STATE=UNKNOWN	${stringTableBlindActivityStateUnknown}
+BLIND_VIRTUAL_RECEIVER|ACTIVITY_STATE=UP	${stringTableBlindActivityStateUp}
+BLIND_VIRTUAL_RECEIVER|ACTIVITY_STATE=STABLE	${stringTableProcessStableBlindTransmitter}
+
 BLIND_VIRTUAL_RECEIVER|LEVEL	${stringTableBlindLevel}
+BLIND_VIRTUAL_RECEIVER|LEVEL_STATUS=ERROR	${lblValue} ${stringTableBlindLevel}: ${lblError}
+BLIND_VIRTUAL_RECEIVER|LEVEL_STATUS=4	${lblValue} ${stringTableBlindLevel}: ${lblError}
+BLIND_VIRTUAL_RECEIVER|LEVEL_STATUS=NORMAL	${lblValue} ${stringTableBlindLevel}: ${lblNormal}
+BLIND_VIRTUAL_RECEIVER|LEVEL_STATUS=0	${lblValue} ${stringTableBlindLevel}: ${lblNormal}
+BLIND_VIRTUAL_RECEIVER|LEVEL_STATUS=OVERFLOW	${lblValue} ${stringTableBlindLevel}: ${lblOverflow}
+BLIND_VIRTUAL_RECEIVER|LEVEL_STATUS=2	${lblValue} ${stringTableBlindLevel}: ${lblOverflow}
+BLIND_VIRTUAL_RECEIVER|LEVEL_STATUS=UNDERFLOW	${lblValue} ${stringTableBlindLevel}: ${lblUnderflow}
+BLIND_VIRTUAL_RECEIVER|LEVEL_STATUS=3	${lblValue} ${stringTableBlindLevel}: ${lblUnderflow}
+BLIND_VIRTUAL_RECEIVER|LEVEL_STATUS=UNKNOWN	${lblValue} ${stringTableBlindLevel}: ${lblUnknown}
+BLIND_VIRTUAL_RECEIVER|LEVEL_STATUS=1	${lblValue} ${stringTableBlindLevel}: ${lblUnknown}
+
 BLIND_VIRTUAL_RECEIVER|LEVEL_2	${stringTableJalousieSlatsLevel}
+BLIND_VIRTUAL_RECEIVER|LEVEL_2_STATUS=ERROR	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblError}
+BLIND_VIRTUAL_RECEIVER|LEVEL_2_STATUS=4	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblError}
+BLIND_VIRTUAL_RECEIVER|LEVEL_2_STATUS=NORMAL	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblNormal}
+BLIND_VIRTUAL_RECEIVER|LEVEL_2_STATUS=0	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblNormal}
+BLIND_VIRTUAL_RECEIVER|LEVEL_2_STATUS=OVERFLOW	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblOverflow}
+BLIND_VIRTUAL_RECEIVER|LEVEL_2_STATUS=2	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblOverflow}
+BLIND_VIRTUAL_RECEIVER|LEVEL_2_STATUS=UNDERFLOW	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnderflow}
+BLIND_VIRTUAL_RECEIVER|LEVEL_2_STATUS=3	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnderflow}
+BLIND_VIRTUAL_RECEIVER|LEVEL_2_STATUS=UNKNOWN	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnknown}
+BLIND_VIRTUAL_RECEIVER|LEVEL_2_STATUS=1	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnknown}
+
 BLIND_VIRTUAL_RECEIVER|STOP	${stringTableBlindStop}
+BLIND_TRANSMITTER|PROCESS=NOT_STABLE	${stringTableProcessNotStableBlindTransmitter}
+BLIND_TRANSMITTER|PROCESS=STABLE	${stringTableProcessStableBlindTransmitter}
+BLIND_VIRTUAL_RECEIVER|PROCESS=STABLE	${stringTableProcessStableBlindTransmitter}
+BLIND_VIRTUAL_RECEIVER|PROCESS=NOT_STABLE	${stringTableProcessNotStableBlindTransmitter}
 BLOCKING_PERIOD_UNIT	${stringTableBlockingPeriodUnit}
 BLOCKING_PERIOD_UNIT=100MS	${optionUnit100MS}
 BLOCKING_PERIOD_UNIT=H	${optionUnitH}
@@ -165,8 +241,10 @@ BOOST_MODE	${stringTableClimateControlRTTransceiverBoostMode}
 BOOST_MODE=FALSE	${stringTableBoostModeFalse}
 BOOST_MODE=TRUE	${stringTableBoostModeTrue}
 BOOST_STATE	${stringTableBoostState}
+BOOST_TIME	${stringTableBoostTime}
 BRIGHTNESS	${stringTableBrightness}
 BRIGHTNESS_FILTER	${stringTableBrightnessFilter}
+BRIGHTNESS_TRANSMITTER|FILTER_SIZE	${stringTableBrightnessFilterSize}
 BURST_RX	${stringTableBurstRX}
 BUTTON_LOCK	${stringTableButtonLock}
 BUTTON_RESPONSE_WITHOUT_BACKLIGHT	${stringTableButtonResponseWithoutBacklight}
@@ -318,6 +396,12 @@ CURRENTDETECTION_BEHAVIOR="CURRENTDETECTION_ACTIVE"	${stringTableCurrentDetectio
 CURRENTDETECTION_BEHAVIOR="CURRENTDETECTION_INACTIVE_VALUE_OUTPUT_1"	${stringTableCurrentDetectionBehaviorOutput1}
 CURRENTDETECTION_BEHAVIOR="CURRENTDETECTION_INACTIVE_VALUE_OUTPUT_2"	${stringTableCurrentDetectionBehaviorOutput2}
 CURRENT_ILLUMINATION	${stringTableCurrentIllumination}
+CURRENT_ILLUMINATION_STATUS=NORMAL	${lblValue} ${stringTableCurrentIllumination}: ${lblNormal}
+CURRENT_ILLUMINATION_STATUS=0	${lblValue} ${stringTableCurrentIllumination}: ${lblNormal}
+CURRENT_ILLUMINATION_STATUS=UNKNOWN	${lblValue} ${stringTableCurrentIllumination}: ${lblUnknown}
+CURRENT_ILLUMINATION_STATUS=1	${lblValue} ${stringTableCurrentIllumination}: ${lblUnknown}
+CURRENT_ILLUMINATION_STATUS=OVERFLOW	${lblValue} ${stringTableCurrentIllumination}: ${lblOverflow}
+CURRENT_ILLUMINATION_STATUS=2	${lblValue} ${stringTableCurrentIllumination}: ${lblOverflow}
 CYCLIC_INFO_MSG	${stringTableCyclicInfoMsg}
 CYCLIC_INFO_MSG_DIS	${stringTableCyclicInfoMsgDis}
 CYCLIC_INFO_MSG_DIS_UNCHANGED	${stringTableCyclicInfoMsgDisUnChanged}
@@ -374,6 +458,38 @@ DIMMER|RAMP_TIME	${stringTableDimmerRampTime}
 DIMMER|REDUCE_LEVEL	${stringTableDimmerReduceLevel}
 DIMMER|REDUCE_TEMP_LEVEL	${stringTableDimmerReduceTempLevel}
 DIMMER|RELAY_OFFDELAY_TIME	${stringTableRelayOffdelayTime}
+DIMMER_TRANSMITTER|ACTIVITY_STATE=DOWN	${stringTableDimmerActivityStateDown}
+DIMMER_TRANSMITTER|ACTIVITY_STATE=UNKNOWN	${stringTableDimmerActivityStateUnknown}
+DIMMER_TRANSMITTER|ACTIVITY_STATE=UP	${stringTableDimmerActivityStateUp}
+DIMMER_TRANSMITTER|ACTIVITY_STATE=STABLE	${stringTableProcessStableBlindDimmerTransmitter}
+DIMMER_TRANSMITTER|PROCESS=NOT_STABLE	${stringTableProcessNotStableDimmerTransmitter}
+DIMMER_TRANSMITTER|PROCESS=STABLE	${stringTableProcessStableBlindDimmerTransmitter}
+DIMMER_TRANSMITTER|LEVEL_STATUS=ERROR	${lblValue} ${stringTableDimmerLevel}: ${lblError}
+DIMMER_TRANSMITTER|LEVEL_STATUS=4	${lblValue} ${stringTableDimmerLevel}: ${lblError}
+DIMMER_TRANSMITTER|LEVEL_STATUS=NORMAL	${lblValue} ${stringTableDimmerLevel}: ${lblNormal}
+DIMMER_TRANSMITTER|LEVEL_STATUS=0	${lblValue} ${stringTableDimmerLevel}: ${lblNormal}
+DIMMER_TRANSMITTER|LEVEL_STATUS=OVERFLOW	${lblValue} ${stringTableDimmerLevel}: ${lblOverflow}
+DIMMER_TRANSMITTER|LEVEL_STATUS=2	${lblValue} ${stringTableDimmerLevel}: ${lblOverflow}
+DIMMER_TRANSMITTER|LEVEL_STATUS=UNDERFLOW	${lblValue} ${stringTableDimmerLevel}: ${lblUnderflow}
+DIMMER_TRANSMITTER|LEVEL_STATUS=3	${lblValue} ${stringTableDimmerLevel}: ${lblUnderflow}
+DIMMER_TRANSMITTER|LEVEL_STATUS=UNKNOWN	${lblValue} ${stringTableDimmerLevel}: ${lblUnknown}
+DIMMER_TRANSMITTER|LEVEL_STATUS=1	${lblValue} ${stringTableDimmerLevel}: ${lblUnknown}
+DIMMER_VIRTUAL_RECEIVER|ACTIVITY_STATE=DOWN	${stringTableDimmerActivityStateDown}
+DIMMER_VIRTUAL_RECEIVER|ACTIVITY_STATE=UNKNOWN	${stringTableDimmerActivityStateUnknown}
+DIMMER_VIRTUAL_RECEIVER|ACTIVITY_STATE=UP	${stringTableDimmerActivityStateUp}
+DIMMER_VIRTUAL_RECEIVER|ACTIVITY_STATE=STABLE	${stringTableProcessStableBlindDimmerTransmitter}
+DIMMER_VIRTUAL_RECEIVER|PROCESS=NOT_STABLE	${stringTableProcessNotStableDimmerTransmitter}
+DIMMER_VIRTUAL_RECEIVER|PROCESS=STABLE	${stringTableProcessStableBlindDimmerTransmitter}
+DIMMER_VIRTUAL_RECEIVER|LEVEL_STATUS=ERROR	${lblValue} ${stringTableDimmerLevel}: ${lblError}
+DIMMER_VIRTUAL_RECEIVER|LEVEL_STATUS=4	${lblValue} ${stringTableDimmerLevel}: ${lblError}
+DIMMER_VIRTUAL_RECEIVER|LEVEL_STATUS=NORMAL	${lblValue} ${stringTableDimmerLevel}: ${lblNormal}
+DIMMER_VIRTUAL_RECEIVER|LEVEL_STATUS=0	${lblValue} ${stringTableDimmerLevel}: ${lblNormal}
+DIMMER_VIRTUAL_RECEIVER|LEVEL_STATUS=OVERFLOW	${lblValue} ${stringTableDimmerLevel}: ${lblOverflow}
+DIMMER_VIRTUAL_RECEIVER|LEVEL_STATUS=2	${lblValue} ${stringTableDimmerLevel}: ${lblOverflow}
+DIMMER_VIRTUAL_RECEIVER|LEVEL_STATUS=UNDERFLOW	${lblValue} ${stringTableDimmerLevel}: ${lblUnderflow}
+DIMMER_VIRTUAL_RECEIVER|LEVEL_STATUS=3	${lblValue} ${stringTableDimmerLevel}: ${lblUnderflow}
+DIMMER_VIRTUAL_RECEIVER|LEVEL_STATUS=UNKNOWN	${lblValue} ${stringTableDimmerLevel}: ${lblUnknown}
+DIMMER_VIRTUAL_RECEIVER|LEVEL_STATUS=1	${lblValue} ${stringTableDimmerLevel}: ${lblUnknown}
 DISPLAY_BACKLIGHT_MODE	${stringTableDisplayBacklightMode}
 DISPLAY_BACKLIGHT_MODE=AUTO	${stringTableDisplayBacklightModeAuto}
 DISPLAY_BACKLIGHT_MODE=OFF	${stringTableDisplayBacklightModeOff}
@@ -464,18 +580,38 @@ EMERGENCY_OPERATION=TRUE	${stringTableEmergencyOperationTrue}
 ENABLE_ROUTING	${stringTableEnableRouting}
 ENERGIE_METER_TRANSMITTER|AVERAGING	${stringTablePowerMeterAveraging}
 ENERGIE_METER_TRANSMITTER|CURRENT	${stringTablePowerMeterCurrent}
+ENERGIE_METER_TRANSMITTER|CURRENT_STATUS=NORMAL	${lblValue} ${stringTablePowerMeterCurrent}: ${lblNormal}
+ENERGIE_METER_TRANSMITTER|CURRENT_STATUS=0	${lblValue} ${stringTablePowerMeterCurrent}: ${lblNormal}
+ENERGIE_METER_TRANSMITTER|CURRENT_STATUS=OVERFLOW	${lblValue} ${stringTablePowerMeterCurrent}: ${lblOverflow}
+ENERGIE_METER_TRANSMITTER|CURRENT_STATUS=1	${lblValue} ${stringTablePowerMeterCurrent}: ${lblOverflow}
+ENERGIE_METER_TRANSMITTER|CURRENT_STATUS=UNDERFLOW	${lblValue} ${stringTablePowerMeterCurrent}: ${lblUnderflow}
+ENERGIE_METER_TRANSMITTER|CURRENT_STATUS=2	${lblValue} ${stringTablePowerMeterCurrent}: ${lblUnderflow}
 ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER	${stringTablePowerMeterEnergyCounter}
 ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_OVERFLOW=FALSE	${stringTablePowerMeterOverflowFalse}
 ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_OVERFLOW=TRUE	${stringTablePowerMeterOverflowTrue}
 ENERGIE_METER_TRANSMITTER|FREQUENCY	${stringTablePowerMeterFrequency}
 ENERGIE_METER_TRANSMITTER|POWER	${stringTablePowerMeterPower}
+ENERGIE_METER_TRANSMITTER|POWER_STATUS=NORMAL	${lblValue} ${stringTablePowerMeterPower}: ${lblNormal}
+ENERGIE_METER_TRANSMITTER|POWER_STATUS=0	${lblValue} ${stringTablePowerMeterPower}: ${lblNormal}
+ENERGIE_METER_TRANSMITTER|POWER_STATUS=OVERFLOW	${lblValue} ${stringTablePowerMeterPower}: ${lblOverflow}
+ENERGIE_METER_TRANSMITTER|POWER_STATUS=1	${lblValue} ${stringTablePowerMeterPower}: ${lblOverflow}
+ENERGIE_METER_TRANSMITTER|POWER_STATUS=UNDERFLOW	${lblValue} ${stringTablePowerMeterPower}: ${lblUnderflow}
+ENERGIE_METER_TRANSMITTER|POWER_STATUS=2	${lblValue} ${stringTablePowerMeterPower}: ${lblUnderflow}
 ENERGIE_METER_TRANSMITTER|TX_THRESHOLD_POWER	${stringTablePowerMeterTxThresholdPower}
 ENERGIE_METER_TRANSMITTER|VOLTAGE	${stringTablePowerMeterVoltage}
+ENERGIE_METER_TRANSMITTER|VOLTAGE_STATUS=NORMAL	${lblValue} ${stringTablePowerMeterVoltage}: ${lblNormal}
+ENERGIE_METER_TRANSMITTER|VOLTAGE_STATUS=0	${lblValue} ${stringTablePowerMeterVoltage}: ${lblNormal}
+ENERGIE_METER_TRANSMITTER|VOLTAGE_STATUS=OVERFLOW	${lblValue} ${stringTablePowerMeterVoltage}: ${lblOverflow}
+ENERGIE_METER_TRANSMITTER|VOLTAGE_STATUS=1	${lblValue} ${stringTablePowerMeterVoltage}: ${lblOverflow}
+ENERGIE_METER_TRANSMITTER|VOLTAGE_STATUS=UNDERFLOW	${lblValue} ${stringTablePowerMeterVoltage}: ${lblUnderflow}
+ENERGIE_METER_TRANSMITTER|VOLTAGE_STATUS=2	${lblValue} ${stringTablePowerMeterVoltage}: ${lblUnderflow}
 ERROR	${stringTableError}
 ERROR=NO_ERROR	${stringTableErrorNoError}
 ERROR_BATTERY=FALSE	${stringTableBatteryFailure}
 ERROR_BATTERY=TRUE	${stringTableBatteryOk}
 ERROR_CODE	${stringTableErrorCode}
+ERROR_NON_FLAT_POSITIONING=FALSE	${stringTableErrorNonFlatPositioningFalse}
+ERROR_NON_FLAT_POSITIONING=TRUE	${stringTableErrorNonFlatPositioningTrue}
 ERROR_OVERHEAT=FALSE	${stringTableErrorOverheatFalse}
 ERROR_OVERHEAT=TRUE	${stringTableErrorOverheatTrue}
 ERROR_OVERLOAD=FALSE	${stringTableErrorOverloadFalse}
@@ -516,7 +652,16 @@ EVENT_RANDOMTIME_VALUE	${stringTableStatusInfoRandom}
 EXPECT_AES	${stringTableExpectAES}
 EXTERNAL_CLOCK=FALSE	${stringTableExternalClockFalse}
 EXTERNAL_CLOCK=TRUE	${stringTableExternalClockTrue}
+FREQUENCY_ALTERNATING_LOW_HIGH	${stringTableAlarmFrequencyAlternatingLowHigh}
+FREQUENCY_ALTERNATING_LOW_MID_HIGH	${stringTableAlarmFrequencyAlternatingLowMidHigh}
+FREQUENCY_FALLING	${stringTableAlarmFrequencyFalling}
+FREQUENCY_HIGHON_LONGOFF	${stringTableAlarmFrequencyHighOnLongOff}
+FREQUENCY_HIGHON_OFF	${stringTableAlarmFrequencyHighOnOff}
 FREQUENCY_INPUT	${stringTableFrequencyInput}
+FREQUENCY_LOWON_LONGOFF_HIGHON_LONGOFF	${stringTableAlarmFrequencyLowOnLongOffHighOnLongOff}
+FREQUENCY_LOWON_OFF_HIGHON_OFF	${stringTableAlarmFrequencyLowOnOffHighonOff}
+FREQUENCY_RISING	${stringTableAlarmFrequencyRising}
+FREQUENCY_RISING_AND_FALLING	${stringTableAlarmFrequencyRisingAndFalling}
 FROST_PROTECTION=FALSE	${stringTableFrostProtectionFalse}
 FROST_PROTECTION=TRUE	${stringTableFrostProtectionTrue}
 FROST_PROTECTION_TEMPERATURE	${stringTableFrostProtectionTemperature}
@@ -532,7 +677,7 @@ HEATING_CLIMATECONTROL_TRANSCEIVER|ACTIVE_PROFILE	${stringTableActiveProfile}
 HEATING_CLIMATECONTROL_TRANSCEIVER|CONTROL_MODE	${stringTableControlMode}
 HEATING_CLIMATECONTROL_TRANSCEIVER|FROST_PROTECTION=FALSE	${stringTableFrostProtectFalse}
 HEATING_CLIMATECONTROL_TRANSCEIVER|FROST_PROTECTION=TRUE	${stringTableFrostProtectTrue}
-HEATING_CLIMATECONTROL_TRANSCEIVER|HUMIDITY	${stringTableHeatingHumidity}
+HEATING_CLIMATECONTROL_TRANSCEIVER|HUMIDITY	${stringTableWeatherHumidity}
 HEATING_CLIMATECONTROL_TRANSCEIVER|LEVEL	${stringTableHeatingLevel}
 HEATING_CLIMATECONTROL_TRANSCEIVER|PARTY_MODE=FALSE	${stringTablePartyModeFalse}
 HEATING_CLIMATECONTROL_TRANSCEIVER|PARTY_MODE=TRUE	${stringTablePartyModeTrue}
@@ -550,12 +695,34 @@ HEATING_KEY_RECEIVER	${stringTableHeatingKeyReceiverTitle}
 HEATING_ROOM_TH_RECEIVER	${stringTableHeatingRoomTHReceiverTitle}
 HEATING_ROOM_TH_TRANSCEIVER	${stringTableHeatingRoomTHTransceiverTitle}
 HEATING_SHUTTER_CONTACT_RECEIVER	${stringTableHeatingShutterContactReceiverTitle}
+HIGHEST_ILLUMINATION	${stringTableHighestIllumination}
+HIGHEST_ILLUMINATION_STATUS=NORMAL	${lblValue} ${stringTableHighestIllumination}: ${lblNormal}
+HIGHEST_ILLUMINATION_STATUS=0	${lblValue} ${stringTableHighestIllumination}: ${lblNormal}
+HIGHEST_ILLUMINATION_STATUS=UNKNOWN	${lblValue} ${stringTableHighestIllumination}: ${lblUnknown}
+HIGHEST_ILLUMINATION_STATUS=1	${lblValue} ${stringTableHighestIllumination}: ${lblUnknown}
+HIGHEST_ILLUMINATION_STATUS=OVERFLOW	${lblValue} ${stringTableHighestIllumination}: ${lblOverflow}
+HIGHEST_ILLUMINATION_STATUS=2	${lblValue} ${stringTableHighestIllumination}: ${lblOverflow}
 HUMIDITY_ALARM=FALSE	${stringTableHumidityAlarmFalse}
 HUMIDITY_ALARM=TRUE	${stringTableHumidityAlarmTrue}
 HUMIDITY_LIMITER=FALSE	${stringTableHumidityLimiterFalse}
 HUMIDITY_LIMITER=TRUE	${stringTableHumidityLimiterTrue}
+
 HUMIDITY	${stringTableWeatherHumidity}
+HUMIDITY_STATUS=NORMAL	${lblValue} ${stringTableWeatherHumidity}: ${lblNormal}
+HUMIDITY_STATUS=0	${lblValue} ${stringTableWeatherHumidity}: ${lblNormal}
+HUMIDITY_STATUS=UNKNOWN	${lblValue} ${stringTableWeatherHumidity}: ${lblUnknown}
+HUMIDITY_STATUS=1	${lblValue} ${stringTableWeatherHumidity}: ${lblUnknown}
+HUMIDITY_STATUS=OVERFLOW	${lblValue} ${stringTableWeatherHumidity}: ${lblOverflow}
+HUMIDITY_STATUS=2	${lblValue} ${stringTableWeatherHumidity}: ${lblOverflow}
+HUMIDITY_STATUS=UNDERFLOW	${lblValue} ${stringTableWeatherHumidity}: ${lblUnderflow}
+HUMIDITY_STATUS=3	${lblValue} ${stringTableWeatherHumidity}: ${lblUnderflow}
 ILLUMINATION	${stringTableBrightness}
+ILLUMINATION_STATUS=NORMAL	${lblValue} ${stringTableBrightness}: ${lblNormal}
+ILLUMINATION_STATUS=0	${lblValue} ${stringTableBrightness}: ${lblNormal}
+ILLUMINATION_STATUS=UNKNOWN	${lblValue} ${stringTableBrightness}: ${lblUnknown}
+ILLUMINATION_STATUS=1	${lblValue} ${stringTableBrightness}: ${lblUnknown}
+ILLUMINATION_STATUS=OVERFLOW	${lblValue} ${stringTableBrightness}: ${lblOverflow}
+ILLUMINATION_STATUS=2	${lblValue} ${stringTableBrightness}: ${lblOverflow}
 INHIBIT	${stringTableInhibit}
 INHIBIT=FALSE	${stringTableInhibitFalse}
 INHIBIT=TRUE	${stringTableInhibitTrue}
@@ -655,7 +822,6 @@ LED_STATUS=ORANGE	${stringTableLEDStatusOrange}
 LED_STATUS=RED	${stringTableLEDStatusRed}
 LEVEL	${stringTableDimmerLevel}
 LEVEL_REAL	${stringTableDimmerLevelReal}
-LEVEL_REAL	${stringTableDimmerLevelReal}
 LIVE_MODE_RX	${stringTableLiveModeRX}
 LOCAL_RESET_DISABLE	${stringTableLocalResetDisable}
 LOCAL_RESET_DISABLED	${stringTableLocalResetDisable}
@@ -693,6 +859,13 @@ LOWERING_MODE	${stringTableClimateControlRTTransceiverLoweringMode}
 LOW_BAT=FALSE	${stringTableBatteryOk}
 LOW_BAT=TRUE	${stringTableBatteryEmpty}
 LOW_BAT_LIMIT	${stringTableBatteryLowBatLimit}
+LOWEST_ILLUMINATION	${stringTableLowestIllumination}
+LOWEST_ILLUMINATION_STATUS=NORMAL	${lblValue} ${stringTableLowestIllumination}: ${lblNormal}
+LOWEST_ILLUMINATION_STATUS=0	${lblValue} ${stringTableLowestIllumination}: ${lblNormal}
+LOWEST_ILLUMINATION_STATUS=UNKNOWN	${lblValue} ${stringTableLowestIllumination}: ${lblUnknown}
+LOWEST_ILLUMINATION_STATUS=1	${lblValue} ${stringTableLowestIllumination}: ${lblUnknown}
+LOWEST_ILLUMINATION_STATUS=OVERFLOW	${lblValue} ${stringTableLowestIllumination}: ${lblOverflow}
+LOWEST_ILLUMINATION_STATUS=2	${lblValue} ${stringTableLowestIllumination}: ${lblOverflow}
 LUX	${stringTableLux}
 MAINS_POWERED	${stringTableMainsPowered}
 MAINTENANCE|CONFIG_PENDING	${stringTableConfigPending}
@@ -734,6 +907,8 @@ MOD_EM8BIT_TRANSMITTER|DATA_TRANSMISSION_CONDITION=NEW_DATA_STABLE_FOR_TIME_DEFA
 MOD_EM8BIT_TRANSMITTER|DATA_TRANSMISSION_CONDITION=NEW_DATA_SEND_IMMEDIATELY_DEFAULT_DISABLE	${stringTableTransmitterDataTransmissionCondition6}
 MOD_EM8BIT_TRANSMITTER|STATE	${stringTableTransmitterState}
 MODUS_BUTTON_LOCK	${stringTableModusButtonLock}
+MOISTURE_DETECTED=TRUE	${stringTableMoistureDetectedTrue}
+MOISTURE_DETECTED=FALSE	${stringTableMoistureDetectedFalse}
 MOTION=FALSE	${stringTableMotionDetectorMotionFalse}
 MOTION=TRUE	${stringTableMotionDetectorMotionTrue}
 MOTIONDETECTOR_TRANSCEIVER	${stringTableMotionDetectorTitle}
@@ -750,6 +925,13 @@ NOT_USED	${stringTableNotUsed}
 OLD_LEVEL	${stringTableDimmerOldLevel}
 ON_TIME	${stringTableDimmerOnTime}
 OPERATING_VOLTAGE	${stringTableOperationVoltage}
+OPERATING_VOLTAGE_STATUS	${stringTableOperationVoltage}
+OPERATING_VOLTAGE_STATUS=NORMAL	${lblValue} ${stringTableOperationVoltage}: ${lblNormal}
+OPERATING_VOLTAGE_STATUS=0	${lblValue} ${stringTableOperationVoltage}: ${lblNormal}
+OPERATING_VOLTAGE_STATUS=UNKNOWN	${lblValue} ${stringTableOperationVoltage}: ${lblUnknown}
+OPERATING_VOLTAGE_STATUS=1	${lblValue} ${stringTableOperationVoltage}: ${lblUnknown}
+OPERATING_VOLTAGE_STATUS=OVERFLOW	${lblValue} ${stringTableOperationVoltage}: ${lblOverflow}
+OPERATING_VOLTAGE_STATUS=2	${lblValue} ${stringTableOperationVoltage}: ${lblOverflow}
 OPTICAL_ALARM_SELECTION=BLINKING_ALTERNATELY_REPEATING	${stringTableAlarmBlinkingAlternatelyRepeating}
 OPTICAL_ALARM_SELECTION=BLINKING_BOTH_REPEATING	${stringTableAlarmBlinkingBothRepeating}
 OPTICAL_ALARM_SELECTION=CONFIRMATION_SIGNAL_0	${stringTableAlarmConfirmingSignal0}
@@ -825,6 +1007,16 @@ POWERMETER|AVERAGING	${stringTablePowerMeterAveraging}
 POWERMETER|CURRENT	${stringTablePowerMeterCurrent}
 POWERMETER|ENERGY_COUNTER	${stringTablePowerMeterEnergyCounter}
 POWERMETER|FREQUENCY	${stringTablePowerMeterFrequency}
+POWERMETER|FREQUENCY_STATUS=ERROR 	${lblValue} ${stringTablePowerMeterFrequency}: ${lblError}
+POWERMETER|FREQUENCY_STATUS=4 	${lblValue} ${stringTablePowerMeterFrequency}: ${lblError}
+POWERMETER|FREQUENCY_STATUS=NORMAL	${lblValue} ${stringTablePowerMeterFrequency}: ${lblNormal}
+POWERMETER|FREQUENCY_STATUS=0	${lblValue} ${stringTablePowerMeterFrequency}: ${lblNormal}
+POWERMETER|FREQUENCY_STATUS=OVERFLOW	${lblValue} ${stringTablePowerMeterFrequency}: ${lblOverflow}
+POWERMETER|FREQUENCY_STATUS=2	${lblValue} ${stringTablePowerMeterFrequency}: ${lblOverflow}
+POWERMETER|FREQUENCY_STATUS=UNDERFLOW	${lblValue} ${stringTablePowerMeterFrequency}: ${lblUnderflow}
+POWERMETER|FREQUENCY_STATUS=3	${lblValue} ${stringTablePowerMeterFrequency}: ${lblUnderflow}
+POWERMETER|FREQUENCY_STATUS=UNKNOWN	${lblValue} ${stringTablePowerMeterFrequency}: ${lblUnknown}
+POWERMETER|FREQUENCY_STATUS=1	${lblValue} ${stringTablePowerMeterFrequency}: ${lblUnknown}
 POWERMETER|POWER	${stringTablePowerMeterPower}
 POWERMETER|TX_MINDELAY	${stringTablePowerMeterTxMinDelay}
 POWERMETER|TX_THRESHOLD_CURRENT	${stringTablePowerMeterTxThresholdCurrent}
@@ -873,8 +1065,6 @@ PRESS_LONG	${stringTableKeyPressLong}
 PRESS_LONG=TRUE	${stringTableKeyPressLongTrue}
 PRESS_SHORT	${stringTableKeyPressShort}
 PRESS_SHORT=TRUE	${stringTableKeyPressShortTrue}
-PROCESS=NOT_STABLE	${stringTableProcessNotStable}
-PROCESS=STABLE	${stringTableProcessStable}
 PULSE_SENSOR	${stringTablePulseSensorTitle}
 PULSE_SENSOR|SEQUENCE_OK	${stringTablePulseSensorSequenceOk}
 PULSE_SENSOR|SEQUENCE_PULSE_1	${stringTablePulseSensorSequencePulse1}
@@ -888,6 +1078,7 @@ PULSE_SENSOR|SEQUENCE_PULSE_4=NOT_USED	${stringTablePulseSensorSequencePulse4Unu
 PULSE_SENSOR|SEQUENCE_PULSE_5	${stringTablePulseSensorSequencePulse5}
 PULSE_SENSOR|SEQUENCE_PULSE_5=NOT_USED	${stringTablePulseSensorSequencePulse5Unused}
 PULSE_SENSOR|SEQUENCE_TOLERANCE	${stringTablePulseSensorSequenceTolerance}
+RADIATOR_THERMOSTAT	${stringTableRadiatorThermostatTitle}
 RAINDETECTOR	${stringTableRainDetector}
 RAINDETECTOR_HEAT|STATE=FALSE	${stringTableRainDetectorHeatingOff}
 RAINDETECTOR_HEAT|STATE=TRUE	${stringTableRainDetectorHeatingOn}
@@ -910,7 +1101,6 @@ REFERENCE_RUNNING_TIME_TOP_BOTTOM_VALUE	${stringTableTimeTopBottomValue}
 
 REFERENCE_RUNNING_TIME_SLATS_UNIT	${stringTableTimeSlatsUnit}
 REFERENCE_RUNNING_TIME_SLATS_VALUE	${stringTableTimeSlatsValue}
-
 REMOTECONTROL_RECEIVER	${stringTableRemoteControlReceiver}
 REPEATED_LONG_PRESS_TIMEOUT_UNIT	${stringTableKeyLongPressTimeOutUnit}
 REPEATED_LONG_PRESS_TIMEOUT_UNIT=100ms	${optionUnit100MS}
@@ -1081,14 +1271,65 @@ SHUTTER_CONTACT|STATE=CLOSED	${stringTableShutterContactStateFalse}
 SHUTTER_CONTACT|STATE=FALSE	${stringTableShutterContactStateFalse}
 SHUTTER_CONTACT|STATE=OPEN	${stringTableShutterContactStateTrue}
 SHUTTER_CONTACT|STATE=TRUE	${stringTableShutterContactStateTrue}
-SHUTTER_CONTACT|EVENT_DELAYTIME	${stringTableShutterContactEventDelayTime}
+SHUTTER_CONTACT|EVENT_DELAYTIME  ${stringTableShutterContactEventDelayTime}
+SHUTTER_TRANSMITTER|ACTIVITY_STATE=DOWN	${stringTableShutterActivityStateDown}
+SHUTTER_TRANSMITTER|ACTIVITY_STATE=UNKNOWN	${stringTableShutterActivityStateUnknown}
+SHUTTER_TRANSMITTER|ACTIVITY_STATE=UP	${stringTableShutterActivityStateUp}
+SHUTTER_TRANSMITTER|ACTIVITY_STATE=STABLE	${stringTableProcessStableShutterTransmitter}
 SHUTTER_TRANSMITTER|LEVEL	${stringTableBlindLevel}
+SHUTTER_TRANSMITTER|LEVEL_STATUS=ERROR	${lblValue} ${stringTableBlindLevel}: ${lblError}
+SHUTTER_TRANSMITTER|LEVEL_STATUS=4	${lblValue} ${stringTableBlindLevel}: ${lblError}
+SHUTTER_TRANSMITTER|LEVEL_STATUS=NORMAL	${lblValue} ${stringTableBlindLevel}: ${lblNormal}
+SHUTTER_TRANSMITTER|LEVEL_STATUS=0	${lblValue} ${stringTableBlindLevel}: ${lblNormal}
+SHUTTER_TRANSMITTER|LEVEL_STATUS=OVERFLOW	${lblValue} ${stringTableBlindLevel}: ${lblOverflow}
+SHUTTER_TRANSMITTER|LEVEL_STATUS=2	${lblValue} ${stringTableBlindLevel}: ${lblOverflow}
+SHUTTER_TRANSMITTER|LEVEL_STATUS=UNDERFLOW	${lblValue} ${stringTableBlindLevel}: ${lblUnderflow}
+SHUTTER_TRANSMITTER|LEVEL_STATUS=3	${lblValue} ${stringTableBlindLevel}: ${lblUnderflow}
+SHUTTER_TRANSMITTER|LEVEL_STATUS=UNKNOWN	${lblValue} ${stringTableBlindLevel}: ${lblUnknown}
+SHUTTER_TRANSMITTER|LEVEL_STATUS=1	${lblValue} ${stringTableBlindLevel}: ${lblUnknown}
 SHUTTER_TRANSMITTER|LEVEL_2	${stringTableJalousieSlatsLevel}
-
+SHUTTER_TRANSMITTER|LEVEL_2_STATUS=ERROR	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblError}
+SHUTTER_TRANSMITTER|LEVEL_2_STATUS=4	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblError}
+SHUTTER_TRANSMITTER|LEVEL_2_STATUS=NORMAL	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblNormal}
+SHUTTER_TRANSMITTER|LEVEL_2_STATUS=0	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblNormal}
+SHUTTER_TRANSMITTER|LEVEL_2_STATUS=OVERFLOW	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblOverflow}
+SHUTTER_TRANSMITTER|LEVEL_2_STATUS=2	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblOverflow}
+SHUTTER_TRANSMITTER|LEVEL_2_STATUS=UNDERFLOW	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnderflow}
+SHUTTER_TRANSMITTER|LEVEL_2_STATUS=3	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnderflow}
+SHUTTER_TRANSMITTER|LEVEL_2_STATUS=UNKNOWN	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnknown}
+SHUTTER_TRANSMITTER|LEVEL_2_STATUS=1	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnknown}
+SHUTTER_TRANSMITTER|PROCESS=NOT_STABLE	${stringTableProcessNotStableShutterTransmitter}
+SHUTTER_TRANSMITTER|PROCESS=STABLE	${stringTableProcessStableShutterTransmitter}
 SHUTTER_VIRTUAL_RECEIVER	${stringTableShutterVirtualReceiverTitle}
+SHUTTER_VIRTUAL_RECEIVER|ACTIVITY_STATE=DOWN	${stringTableShutterActivityStateDown}
+SHUTTER_VIRTUAL_RECEIVER|ACTIVITY_STATE=UNKNOWN	${stringTableShutterActivityStateUnknown}
+SHUTTER_VIRTUAL_RECEIVER|ACTIVITY_STATE=UP	${stringTableShutterActivityStateUp}
+SHUTTER_VIRTUAL_RECEIVER|ACTIVITY_STATE=STABLE	${stringTableProcessStableShutterTransmitter}
 SHUTTER_VIRTUAL_RECEIVER|LEVEL	${stringTableBlindLevel}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_STATUS=ERROR	${lblValue} ${stringTableBlindLevel}: ${lblError}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_STATUS=4	${lblValue} ${stringTableBlindLevel}: ${lblError}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_STATUS=NORMAL	${lblValue} ${stringTableBlindLevel}: ${lblNormal}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_STATUS=0	${lblValue} ${stringTableBlindLevel}: ${lblNormal}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_STATUS=OVERFLOW	${lblValue} ${stringTableBlindLevel}: ${lblOverflow}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_STATUS=2	${lblValue} ${stringTableBlindLevel}: ${lblOverflow}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_STATUS=UNDERFLOW	${lblValue} ${stringTableBlindLevel}: ${lblUnderflow}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_STATUS=3	${lblValue} ${stringTableBlindLevel}: ${lblUnderflow}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_STATUS=UNKNOWN	${lblValue} ${stringTableBlindLevel}: ${lblUnknown}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_STATUS=1	${lblValue} ${stringTableBlindLevel}: ${lblUnknown}
 SHUTTER_VIRTUAL_RECEIVER|LEVEL_2	${stringTableJalousieSlatsLevel}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_2_STATUS=ERROR	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblError}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_2_STATUS=4	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblError}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_2_STATUS=NORMAL	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblNormal}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_2_STATUS=0	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblNormal}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_2_STATUS=OVERFLOW	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblOverflow}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_2_STATUS=2	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblOverflow}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_2_STATUS=UNDERFLOW	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnderflow}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_2_STATUS=3	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnderflow}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_2_STATUS=UNKNOWN	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnknown}
+SHUTTER_VIRTUAL_RECEIVER|LEVEL_2_STATUS=1	${lblValue} ${stringTableJalousieSlatsLevel}: ${lblUnknown}
 SHUTTER_VIRTUAL_RECEIVER|STOP	${stringTableBlindStop}
+SHUTTER_VIRTUAL_RECEIVER|PROCESS=STABLE	${stringTableProcessStableShutterTransmitter}
+SHUTTER_VIRTUAL_RECEIVER|PROCESS=NOT_STABLE	${stringTableProcessNotStableShutterTransmitter}
 SIGNAL	${stringTableSignal}
 SIGNAL_CHIME	${stringTableSignalChimeTitle}
 SIGNAL_CHIME|ACT_NUM	${stringTableSignalChimeActNum}
@@ -1167,6 +1408,7 @@ STATUS_INDICATOR|STATE=TRUE	${stringTableStatusIndicatorStateTrue}
 STATUS_MESSAGE_TEXT_ALIGNMENT_LEFT_ALIGNED	${stringTableStatusMessageTextAligmentLeftAligned}
 SUBMIT	${stringTableSubmit}
 SWITCH	${stringTableSwitchTitle}
+SWITCH_ACTUATOR	${stringTableSwitchTitle}
 SWITCH_INTERFACE	${stringTableSwitchInterfaceTitle}
 SWITCH_INTERFACE|PRESS	${stringTableSwitchInterfacePress}
 SWITCH_INTERFACE|STATE=FALSE	${stringTableSwitchInterfaceStateFalse}
@@ -1211,6 +1453,12 @@ TILT_SENSOR|MSG_FOR_POS_B=OPEN	${stringTableTiltSensorMsgPosB3}
 TILT_SENSOR|STATE=FALSE	${stringTableTiltSensorStateFalse}
 TILT_SENSOR|STATE=TRUE	 ${stringTableTiltSensorStateTrue}
 TIME_OF_OPERATION	${stringTableTimeOfOperation}
+TIME_OF_OPERATION_STATUS=NORMAL	${lblValue} ${stringTableTimeOfOperation}: ${lblNormal}
+TIME_OF_OPERATION_STATUS=0	${lblValue} ${stringTableTimeOfOperation}: ${lblNormal}
+TIME_OF_OPERATION_STATUS=UNKNOWN	${lblValue} ${stringTableTimeOfOperation}: ${lblUnknown}
+TIME_OF_OPERATION_STATUS=1	${lblValue} ${stringTableTimeOfOperation}: ${lblUnknown}
+TIME_OF_OPERATION_STATUS=OVERFLOW	${lblValue} ${stringTableTimeOfOperation}: ${lblOverflow}
+TIME_OF_OPERATION_STATUS=2	${lblValue} ${stringTableTimeOfOperation}: ${lblOverflow}
 TRANSMIT_DEV_TRY_MAX	${stringTableTransmitDevTryMax}
 TRANSMIT_TRY_MAX	${stringTableTransmitTryMax}
 TX_MINDELAY	${stringTableTxMinDelay}
@@ -1278,6 +1526,7 @@ WAKEUP_BEHAVIOUR_STATUS_MSG_CONFIRMATION	${stringTableBehaviourStatusMsgConfirma
 WAKEUP_BEHAVIOUR_STATUS_MSG_RESISTANCE	${stringTableBehaviourStatusMsgResistance}
 WAKEUP_BEHAVIOUR_STATUS_SIGNALIZATION_CONFIRMATION	${stringTableBehaviourStatusSignalizationConfirmation}
 WAKEUP_DEFAULT_CHANNEL	${stringTableWakeupDefaultChannel}
+WALLMOUNTED_THERMOSTAT	${stringTableWallMountedThermostatTitle}
 WATERDETECTIONSENSOR	${stringTableWDSTitle}
 WATERDETECTIONSENSOR|EVENT_FILTERTIME	${stringTableWDSEventFilterTime}
 WATERDETECTIONSENSOR|EVENT_FILTERTIME	${stringTableWDSEventFilterTime}
@@ -1295,9 +1544,17 @@ WATERDETECTIONSENSOR|MSG_FOR_POS_C=WATER	${stringTableWDSMsgPosC2}
 WATERDETECTIONSENSOR|MSG_FOR_POS_C=WET	${stringTableWDSMsgPosC3}
 WATERDETECTIONSENSOR|STATE=DRY	${stringTableWDSStateDry}
 WATERDETECTIONSENSOR|STATE=WATER	${stringTableWDSStateWater}
+WATER_DETECTION_TRANSMITTER	${stringTableWaterDetectionTransmitterTitle}
+WATER_DETECTION_TRANSMITTER|ALARMSTATE=FALSE	${stringTableWeatherTransmitAlarmEventFalse}
+WATER_DETECTION_TRANSMITTER|ALARMSTATE=TRUE	${stringTableWeatherTransmitAlarmEventTrue}
+
 WATERDETECTIONSENSOR|STATE=WET	${stringTableWDSStateWet}
+WATERLEVEL_DETECTED=TRUE	${stringTableWaterLevelDetectedTrue}
+WATERLEVEL_DETECTED=FALSE	${stringTableWaterLevelDetectedFalse}
 WEATHER	${stringTableWeatherTitle}
 WEATHER_RECEIVER	${stringTableWeatherReceiver}
+WEATHER_TRANSMIT|ALARMSTATE=FALSE	${stringTableWeatherTransmitAlarmEventFalse}
+WEATHER_TRANSMIT|ALARMSTATE=TRUE	${stringTableWeatherTransmitAlarmEventTrue}
 WEATHER_TRANSMIT|HUMIDITY	${stringTableWeatherHumidity}
 WEATHER_TRANSMIT|TEMPERATURE	${stringTableWeatherTemperature}
 
@@ -1305,13 +1562,16 @@ WEATHER_TRANSMIT|TEMPERATURE	${stringTableWeatherTemperature}
 
 AIR_PRESSURE	${stringTableWeatherAirPressure}
 BRIGHTNESS	${stringTableWeatherBrightness}
-HUMIDITY	${stringTableWeatherHumidity}
 RAINING	${stringTableWeatherRaining}
 RAINING=FALSE	${stringTableWeatherRainingFalse}
 RAINING=TRUE	${stringTableWeatherRainingTrue}
 RAIN_COUNTER	${stringTableWeatherRainCounter}
 RAIN_COUNTER_OVERFLOW=TRUE	${stringTableWeatherRainCounterOverflowTrue}
 RAIN_COUNTER_OVERFLOW=FALSE	${stringTableWeatherRainCounterOverflowFalse}
+RAIN_COUNTER_STATUS=NORMAL	${lblValue} ${stringTableWeatherRainCounter}: ${lblNormal}
+RAIN_COUNTER_STATUS=0	${lblValue} ${stringTableWeatherRainCounter}: ${lblNormal}
+RAIN_COUNTER_STATUS=UNKNOWN	${lblValue} ${stringTableWeatherRainCounter}: ${lblUnknown}
+RAIN_COUNTER_STATUS=1	${lblValue} ${stringTableWeatherRainCounter}: ${lblUnknown}
 STORM_LOWER_THRESHOLD	${stringTableWeatherStormLowerThres}
 STORM_UPPER_THRESHOLD	${stringTableWeatherStormUpperThres}
 SUNSHINEDURATION	${stringTableWeatherSunshineDuration}
@@ -1323,10 +1583,26 @@ SUNSHINE_THRESHOLD_OVERRUN=FALSE	${stringTableWeatherSunshineThresOverrunFalse}
 SUNSHINE_THRESHOLD_OVERRUN=TRUE	${stringTableWeatherSunshineThresOverrunTrue}
 TEMPERATURE	${stringTableWeatherTemperature}
 WIND_DIR	${stringTableWeatherWindDir}
+WIND_DIR_STATUS=NORMAL	${lblValue} ${stringTableWeatherWindDir}: ${lblNormal}
+WIND_DIR_STATUS=0	${lblValue} ${stringTableWeatherWindDir}: ${lblNormal}
+WIND_DIR_STATUS=UNKNOWN	${lblValue} ${stringTableWeatherWindDir}: ${lblUnknown}
+WIND_DIR_STATUS=1	${lblValue} ${stringTableWeatherWindDir}: ${lblUnknown}
 WIND_DIRECTION	${stringTableWeatherWindDir}
 WIND_DIR_RANGE	${stringTableWeatherWindDirRange}
+WIND_DIR_RANGE_STATUS=NORMAL	${lblValue} ${stringTableWeatherWindDirRange}: ${lblNormal}
+WIND_DIR_RANGE_STATUS=0	${lblValue} ${stringTableWeatherWindDirRange}: ${lblNormal}
+WIND_DIR_RANGE_STATUS=UNKNOWN	${lblValue} ${stringTableWeatherWindDirRange}: ${lblUnknown}
+WIND_DIR_RANGE_STATUS=1	${lblValue} ${stringTableWeatherWindDirRange}: ${lblUnknown}
+WIND_DIR_RANGE_STATUS=OVERFLOW	${lblValue} ${stringTableWeatherWindDirRange}: ${lblOverflow}
+WIND_DIR_RANGE_STATUS=2	${lblValue} ${stringTableWeatherWindDirRange}: ${lblOverflow}
 WIND_DIRECTION_RANGE	${stringTableWeatherWindDirRange}
 WIND_SPEED	${stringTableWeatherWindSpeed}
+WIND_SPEED_STATUS=NORMAL	${lblValue} ${stringTableWeatherWindSpeed}: ${lblNormal}
+WIND_SPEED_STATUS=0	${lblValue} ${stringTableWeatherWindSpeed}: ${lblNormal}
+WIND_SPEED_STATUS=UNKNOWN	${lblValue} ${stringTableWeatherWindSpeed}: ${lblUnknown}
+WIND_SPEED_STATUS=1	${lblValue} ${stringTableWeatherWindSpeed}: ${lblUnknown}
+WIND_SPEED_STATUS=OVERFLOW	${lblValue} ${stringTableWeatherWindSpeed}: ${lblOverflow}
+WIND_SPEED_STATUS=2	${lblValue} ${stringTableWeatherWindSpeed}: ${lblOverflow}
 WIND_SPEED_RESULT_SOURCE	${stringTableWeatherWindSpeedResultSource}
 WIND_SPEED_RESULT_SOURCE=AVERAGE_VALUE	${stringTableWeatherWindSpeedResultSourceAverage}
 WIND_SPEED_RESULT_SOURCE=MAX_VALUE	${stringTableWeatherWindSpeedResultSourceMax}
@@ -1370,5 +1646,3 @@ minutes	${stringTableMinute}
 30Min	${optionUnit30M}
 60Min	${optionUnit60M}
 120Min	${optionUnit120M}
-
-

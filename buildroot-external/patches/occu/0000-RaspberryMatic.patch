@@ -206,119 +206,75 @@
  #####################
  # Verwendete Module #
  #####################
+--- occu/WebUI/www/config/control_panel.cgi.orig
++++ occu/WebUI/www/config/control_panel.cgi
+@@ -171,16 +171,16 @@
+     <tr>
+   }
+ 
+-  if {[getProduct] >= 3} {
+-    puts {
+-      <!-- Button accesspoint settings -show this button only for a CCU version >= 3 -->
+-
+-        <td>
+-          <div  class="StdTableBtn CLASS21701" onclick="WebUI.enter(CreateAccessPointSettings)">${btnAccessPointSettings}</div>
+-          <div class="StdTableBtnHelp"><img id="showAccessPointSettingsCPHelp" src="/ise/img/help.png"></div>
+-        </td>
+-    }
+-  }
++  #if {[getProduct] >= 3} {
++  #  puts {
++  #    <!-- Button accesspoint settings -show this button only for a CCU version >= 3 -->
++  #
++  #      <td>
++  #        <div  class="StdTableBtn CLASS21701" onclick="WebUI.enter(CreateAccessPointSettings)">${btnAccessPointSettings}</div>
++  #        <div class="StdTableBtnHelp"><img id="showAccessPointSettingsCPHelp" src="/ise/img/help.png"></div>
++  #      </td>
++  #  }
++  #}
+ 
+   puts {
+     <!-- Kopplungen -->
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -221,7 +221,7 @@
- 
- proc action_firmware_update_go {} {
-     global env
--    cd /tmp/
-+    cd /usr/local/tmp/
-     
-     http_head
- 
-@@ -259,8 +259,8 @@
- 
- proc action_firmware_update_cancel {} {
-   global env
--  catch {exec rm /var/new_firmware.tar.gz}
--  catch { exec /bin/sh -c "rm /var/EULA.*"}
-+  catch { exec /bin/sh -c "rm -f /usr/local/tmp/new_firmware.tar.gz" }
-+  catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*" }
-   cgi_javascript {
-     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
-     puts {
-@@ -377,7 +377,7 @@
-                                         table_row {
-                                             table_data {
-                                                 division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
--                                                division {class="CLASS20908"}  "onClick=\"showCCULicense();\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
-+                                                division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
-                                             }
-                                         }
-                                     }
-@@ -429,27 +429,7 @@
+@@ -387,7 +387,7 @@
+                     table_row {
+                       table_data {
+                         division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
+-                        division {class="CLASS20908"}  "onClick=\"showCCULicense();\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
++                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+                       }
                      }
-                 }
-                 table_data {align="left"} {class="CLASS20921"} {
--                    puts "\${dialogSettingsCMHintSoftwareUpdate1}"
--                    number_list {class="j_noForcedUpdate"} {
--                        li {
--                          ${dialogSettingsCMHintSoftwareUpdate2}                        }
--                        li {
--                             ${dialogSettingsCMHintSoftwareUpdate3}
--                        }
--                        li {
--                             ${dialogSettingsCMHintSoftwareUpdate3a}
--                        }
--                        set bat_level [get_bat_level]
--                        if {$bat_level < 50} {
--                            set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
--                            append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
--                            li $msg
--                        }
--                    }
+                   }
+@@ -439,27 +439,7 @@
+           }
+         }
+         table_data {align="left"} {class="CLASS20921"} {
+-          puts "\${dialogSettingsCMHintSoftwareUpdate1}"
+-          number_list {class="j_noForcedUpdate"} {
+-            li {
+-              ${dialogSettingsCMHintSoftwareUpdate2}            }
+-            li {
+-               ${dialogSettingsCMHintSoftwareUpdate3}
+-            }
+-            li {
+-               ${dialogSettingsCMHintSoftwareUpdate3a}
+-            }
+-            set bat_level [get_bat_level]
+-            if {$bat_level < 50} {
+-              set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
+-              append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
+-              li $msg
+-            }
+-          }
 -
--                    division {class="j_forcedUpdate" style="padding:10px;"} {
--                      puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
--                    }
-+                    puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
-                 }
-             }
-             table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-@@ -826,7 +806,7 @@
- 
- proc action_firmware_upload {} {
-     global env sid downloadOnly
--    cd /tmp/
-+    cd /usr/local/tmp/
-     
-     http_head
-     import_file -client firmware_file
-@@ -835,12 +815,12 @@
-     set file_valid 0
-     catch {
-         #set file_valid [expr [string first "update_script" [exec tar tzf [lindex $firmware_file 0]]] >= 0 ]
--        exec tar zxvf [lindex $firmware_file 0] update_script EULA.en EULA.de EULA.tr -C /var/
-+        exec tar xf -C /usr/local/tmp [lindex $firmware_file 0] update_script EULA.en EULA.de EULA.tr
-     }
--    set file_valid [file exists "/var/update_script"]
-+    set file_valid [file exists "/usr/local/tmp/update_script"]
- 
-     if {$file_valid} {
--      file rename -force -- [lindex $firmware_file 0] "/var/new_firmware.tar.gz"
-+      file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_firmware.tar.gz"
-       #set action "firmware_update_confirm"
-       set action "acceptEula"
-     } else {
-@@ -920,7 +900,7 @@
- 
- proc action_reboot_go {} {
-     global env
--    cd /tmp/
-+    cd /usr/local/tmp/
-     
-     http_head
- 
-@@ -960,6 +940,7 @@
-     catch { exec lcdtool {Saving     Data...    } }
-     rega system.Save()
-     catch { exec lcdtool {Reboot...             } }
-+    exec sleep 5
-     exec /sbin/reboot
- }
- 
-@@ -1007,9 +988,7 @@
-         puts "Failure"
-         return
-     }
--    catch {exec killall syslogd}
--    catch {exec killall klogd}
--    exec /etc/init.d/S01logging start
-+    exec /etc/init.d/S07logging restart
-     puts "Success -confirm"
- }
- 
+-          division {class="j_forcedUpdate" style="padding:10px;"} {
+-            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
+-          }
++          puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
+         }
+       }
+       table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
 --- occu/WebUI/www/config/cp_security.cgi.orig
 +++ occu/WebUI/www/config/cp_security.cgi
 @@ -202,8 +202,8 @@
@@ -532,15 +488,50 @@
      catch {exec /sbin/hwclock -wu}
 --- occu/WebUI/www/config/help.cgi.orig
 +++ occu/WebUI/www/config/help.cgi
-@@ -13,7 +13,7 @@
-     global PRODUCT_NAME PRODUCT_ID HOMEMATIC_URL HELP_URL LANGUAGE env
-     
-     set SERIAL [read_var /var/ids SerialNumber]
--    set VERSION [read_var /boot/VERSION VERSION]
-+    set VERSION [read_var /VERSION VERSION]
-  
-     set sid ""
-     catch {import sid}
+@@ -3,8 +3,8 @@
+ source common.tcl
+ load tclrega.so
+ 
+-set PRODUCT_NAME "Zentrale"
+-set PRODUCT_ID "CCU[getProduct]"
++set PRODUCT_NAME "RaspberryMatic"
++set PRODUCT_ID "CCU"
+ set HOMEMATIC_URL "http://www.homematic.com"
+ set HOMEMATIC_IP_URL "https://www.homematic-ip.com"
+ 
+@@ -18,8 +18,14 @@
+ proc action_put_page {} {
+   global PRODUCT_NAME PRODUCT_ID HOMEMATIC_URL HOMEMATIC_IP_URL HELP_URL HELP_IP_URL LANGUAGE CUR_YEAR env
+ 
+-  set SERIAL [read_var /var/ids SerialNumber]
+-  set VERSION [read_var /boot/VERSION VERSION]
++  set SERIAL [exec cat /var/board_sgtin]
++  if { "$SERIAL" == "" } {
++    set SERIAL [exec cat /var/board_serial]
++  }
++  if { "$SERIAL" == "" } {
++    set SERIAL [exec cat /sys/module/plat_eq3ccu2/parameters/board_serial]
++  }
++  set VERSION [read_var /VERSION VERSION]
+   set HELP_ARGUMENTS "lang=$LANGUAGE&vers=$VERSION&serial=$SERIAL"
+ 
+ 
+@@ -57,6 +63,7 @@
+                 puts "<li><h1 class='helpTitle'><u>\${menuHelpPage}</u></h1></li>"
+                 puts "<li><a target='_blank' href=\'$HELP_URL\'>\${dialogHelpLinkOnlineHelpA}</a></li>"
+                 puts "<li><a target='_blank' href=\'$HELP_IP_URL\'>\${dialogHelpLinkOnlineHelpB}</a></li>"
++                puts "<li><a target='_blank' href='https://raspberrymatic.de/#memo-documentation'>RaspberryMatic</a></li>"
+                 puts "<li><a target='_blank' href='/licenseinfo.htm'>\${lblLicenseInformation}</a></li>"
+               puts "</ul>"
+       puts "</td>"
+@@ -75,6 +82,7 @@
+           # puts "<li>DOM [rega dom.BuildLabel()]</li>"
+           puts "<li><a target='_blank' href=\"$HOMEMATIC_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
+           puts "<li><a target='_blank' href=\"$HOMEMATIC_IP_URL/start.html\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
++          puts "<li><a target='_blank' href=\"https://raspberrymatic.de/\">\${homepage} RaspberryMatic</a></li>"
+           puts "<li style='padding-top:25px;'><img src='/ise/img/homematic_logo_small.png'/></li>"
+         puts "</ul>"
+ 
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
 @@ -23,10 +23,10 @@
@@ -567,34 +558,52 @@
  }
  
  # Prüft, ob es sich um die alte oder neue CCU handelt
+@@ -192,9 +192,10 @@
+ }
+ 
+ proc getProduct {} {
+-  set product 2
+-  catch {
+-    set product [lindex [split [get_version] .] 0]
+-  }
+-  return "[expr $product*1]"
+-}
+\ No newline at end of file
++  #set product 2
++  #catch {
++  #  set product [lindex [split [get_version] .] 0]
++  #}
++  #return "[expr $product*1]"
++  return 3
++}
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -1,8 +1,8 @@
  jQuery.extend(true,HMIdentifier , {
    "de" : {
--    "CCUFullNameHeader" : "HomeMatic CCU2",
--    "CCUFullNameText" : "Homematic CCU2",
--    "CCUShortName" : "CCU2",
+-    "CCUFullNameHeader" : "Homematic CCU",
+-    "CCUFullNameText" : "Homematic CCU",
+-    "CCUShortName" : "CCU",
 +    "CCUFullNameHeader" : "RaspberryMatic",
 +    "CCUFullNameText" : "RaspberryMatic",
 +    "CCUShortName" : "RaspMatic",
      "BidCosRF" : "BidCos-RF",
      "BidCosWired" : "BidCos-Wired",
      "VirtualDevices" : "VirtualDevices",
-@@ -470,6 +470,7 @@
+@@ -478,6 +478,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "F%FChren Sie vor dem Update eine Datensicherung durch.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Der Ladezustand der Batterien betr%E4gt nur noch ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Um einem Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Update zu erneuern.",
 +    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic ist ein gemeinschaftliches Projekt. Wenn Sie die Weiterentwicklung gerne in Form einer Geldspende unterst%FCtzen wollen k%F6nen Sie das gerne mittels einer <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal Spende</a> tun.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
      "dialogSettingsCMHintRestart" : "Zentrale neu starten. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintShutdown" : "Zentrale herunterfahren. Ver%E4nderte Einstellungen werden vorher gespeichert.",
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
-     "dialogSettingsCMHintErrorLog" : "Stellen Sie die Anzahl der Logmeldungen ein, die von der Zentrale generiert werden sollen.<br>Sie k%F6nnen zus%E4tzlich einen Rechner angeben, dem die Zentrale ihre Logmeldungen per Syslog schickt. Auf diesem Rechner mu%DF entsprechende Software installiert sein, die die Meldungen entgegennimmt.<br>Zu Diagnosezwecken k%F6nnen die aktuellen Logmeldungen der Zentrale in einer Textdatei heruntergeladen werden.",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
 @@ -1,8 +1,8 @@
  jQuery.extend(true,HMIdentifier , {
    "en" : {
--    "CCUFullNameHeader" : "HomeMatic CCU2",
+-    "CCUFullNameHeader" : "Homematic CCU",
 -    "CCUFullNameText" : "Homematic CCU",
 -    "CCUShortName" : "CCU",
 +    "CCUFullNameHeader" : "RaspberryMatic",
@@ -603,20 +612,20 @@
      "BidCosRF" : "BidCos-RF",
      "BidCosWired" : "BidCos-Wired",
      "HmIPRF" : "HmIP-RF",
-@@ -470,6 +470,7 @@
+@@ -477,6 +477,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "Please perform a data backup before starting the update.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "The charging status the batteries is only at ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",
 +    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
      "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
+     "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
      "dialogSettingsCMHintRestartSafeMode" : "Start HomeMatic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
-     "dialogSettingsCMHintErrorLog" : "Please set the number of log messages to be generated by the CCU.<br>You can also specify a computer that will receive the log messages from the CCU via syslog. An additional software that will be able to receive this messages has to be installed on the computer.<br>To analyse the results, the current log messages of the CCU can be downloaded in a text file.",
 --- occu/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/tr/translate.lang.js
 @@ -1,8 +1,8 @@
  jQuery.extend(true,HMIdentifier , {
    "tr" : {
--    "CCUFullNameHeader" : "HomeMatic CCU2",
+-    "CCUFullNameHeader" : "Homematic CCU",
 -    "CCUFullNameText" : "Homematic CCU",
 -    "CCUShortName" : "CCU",
 +    "CCUFullNameHeader" : "RaspberryMatic",
@@ -625,17 +634,17 @@
      "BidCosRF" : "BidCos-RF",
      "BidCosWired" : "BidCos-Wired",
      "HmIPRF" : "HmIP-RF",
-@@ -472,6 +472,7 @@
+@@ -479,6 +479,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "G%FCncellemeden %F6nce verileri emniyete alin.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Bataryalarin sarj durumu artik sadece ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Elektrik kesintisi nedeniyle veri kaybini %F6nlemek icin bataryalari g%FCncellemeyi baslatmadan %F6nce degistirmenizi %F6neriyoruz.",
 +    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
      "dialogSettingsCMHintRestart" : "Merkezi yeniden baslat. Degistirilmis ayarlar %F6nceden kaydedilir.",
+     "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic merkezini bir kere g%FCvenli modda baslatin. G%FCvenli modda y%FCklenen ek yazilim baslatilmaz. Degistirilmis ayarlar %F6nceden kaydedilir.",
-     "dialogSettingsCMHintErrorLog" : "Merkez tarafindan olusturulacak Log bildiri sayisini ayarlayin.<br>Buna ek olarak merkezin Log bildirilerini Syslog'u kullanarak iletecegi baska bir bilgisayar tanimlayabilirsiniz. Bu bilgisayar %FCzerinde bildirileri alacak uygun bir yazilim y%FCkl%FC olmalidir.<br>Merkezin g%FCncel Log bildirileri teshis amaciyla bir metin dosyasi seklinde indirilebilir.",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -11804,8 +11804,9 @@
+@@ -12261,8 +12261,9 @@
      var isOk = true;
      for (var i = 0, len = ips.length; i < len; i++) {
        var ip = ips[i];
@@ -646,34 +655,34 @@
        }
      }
  
-@@ -18673,7 +18674,7 @@
+@@ -19271,7 +19272,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
--    script.src = "http://update.homematic.com/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product=HM-CCU2&serial=" + serial;
+-    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product=HM-CCU2&serial=" + serial;
 +    script.src = "https://gitcdn.xyz/repo/jens-maus/RaspberryMatic/master/release/LATEST-VERSION.js?_version_=" + WEBUI_VERSION;
      $("body").appendChild(script);
    },
  
-@@ -18725,7 +18726,7 @@
+@@ -19323,7 +19324,7 @@
        var script = document.createElement("script");
        script.id = "homematic_com_script_" + index;
        script.type = "text/javascript";
--      script.src = "http://update.homematic.com/firmware/download?cmd=js_check_version&product=" + product + "&serial=0";
-+      script.src = "http://update.homematic.com/firmware/download?cmd=js_check_version&product=" + product + "&serial=0" + "&ts=" + Date.now();
+-      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0";
++      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0" + "&ts=" + Date.now();
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -18735,7 +18736,7 @@
+@@ -19333,7 +19334,7 @@
        var script = document.createElement("script");
        script.id = "homematic_com_script_fw";
        script.type = "text/javascript";
--      script.src = "http://update.homematic.com/firmware/api/firmware/search/DEVICE";
-+      script.src = "http://update.homematic.com/firmware/api/firmware/search/DEVICE?ts=" + Date.now();
+-      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE";
++      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE?ts=" + Date.now();
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -18769,7 +18770,7 @@
+@@ -19367,7 +19368,7 @@
     **/
    setLatestVersion: function(latestVersion, product)
    {

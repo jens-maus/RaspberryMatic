@@ -1,4 +1,4 @@
-<img src="https://github.com/jens-maus/RaspberryMatic/raw/master/buildroot-external/package/occu/logo.png" align=right>
+<img src="https://github.com/jens-maus/RaspberryMatic/raw/master/release/logo.png" width=250 align=right>
 
 # RaspberryMatic
 
@@ -6,13 +6,12 @@
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/latest/total.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
 [![Issues](https://img.shields.io/github/issues/jens-maus/RaspberryMatic.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/issues)
 ![License](https://img.shields.io/github/license/jens-maus/RaspberryMatic.svg?style=flat-square)
-[![Code Climate](https://codeclimate.com/github/jens-maus/RaspberryMatic/badges/gpa.svg?style=flat-square)](https://codeclimate.com/github/jens-maus/RaspberryMatic)
 [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
 
-The RaspberryMatic project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded devices like the [RaspberryPi](https://www.raspberrypi.org/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full microSD card image that can be directly flashed and then used in a RaspberryPi as the main operating system for controlling all kind of HomeMatic compatible devices with full compatibility to a CCU device directly sold by eQ-3.
+The RaspberryMatic project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded devices like the [RaspberryPi](https://www.raspberrypi.org/) or [Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full operating system image that can be flashed and then used in a RaspberryPi/Tinkerboard as the main operating system for controlling all HomeMatic compatible devices with full compatibility to a CCU device directly sold by eQ-3.
 
 ## :cookie: Features
-* 100% HomeMatic [CCU2](http://www.eq-3.com/products/homematic/control-units-and-gateways/homematic-central-control-unit-ccu2.html)/[CCU3](http://www.eq-3.com/products/homematic/control-units-and-gateways/-473.html) system compliant based on latest [OCCU 2.31.25](https://github.com/eq-3/occu) CCU software environment
+* 100% HomeMatic [CCU2](http://www.eq-3.com/products/homematic/control-units-and-gateways/homematic-central-control-unit-ccu2.html)/[CCU3](http://www.eq-3.com/products/homematic/control-units-and-gateways/-473.html) system compliant using latest [OCCU](https://github.com/eq-3/occu) software environment
 * Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMaticIP) compatible
 * Integration of latest [community version of ReGaHss](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta)
 * Integration of [third-party patches](https://github.com/jens-maus/RaspberryMatic/projects/3) for an improved WebUI experience.
@@ -20,7 +19,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Support to be used without GPIO RF module just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Integrated WebUI-based firmware update mechanism and Recovery System to perform maintenance operations such as system restore.
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
-* Based on latest [Buildroot 2018.02.2](http://buildroot.org/) lightweight Linux operating system
+* Based on latest [Buildroot 2018.05](http://buildroot.org/) lightweight Linux operating system
 * Latest Linux kernel (RaspberryPi: [4.14.34](https://github.com/raspberrypi/linux/tree/rpi-4.14.y), Tinkerboard: [4.4.126](https://github.com/rockchip-linux/kernel)) with hard-float (ARMv7) support
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
@@ -37,7 +36,14 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [PiUSV+](https://www.reichelt.de/?ARTICLE=169883) – UPS including alarm notification upon power loss and automatic system shutdown.
   * [PiModules UPS PIco](http://pimodules.com/) – UPS including automatic system shutdown.
   * [StromPi2](http://www.joy-it.net/strompi-2/) – UPS including alarm notification upon power loss.
-* Direct support for RTC clock modules ([PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/), [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi), [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi), [RX8130CE](https://www5.epsondevice.com/en/products/rtc/rx8130ce.html), onboard Tinkerboard RTC)
+  * [PiDesktop](http://de.farnell.com/element14/pi-desktop/element-14-pi-desktop-hatencl/dp/2687142) – Addon HAT with power button and dedicated RTC clock (PCF8563).
+* Integrated support for various RTC clock modules:
+  * [PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/)
+  * [DS3231](https://thepihut.com/products/mini-rtc-module-for-raspberry-pi)
+  * [DS1307](https://thepihut.com/products/ds1307-rtc-module-with-battery-for-raspberry-pi)
+  * [RX8130CE](https://www5.epsondevice.com/en/products/rtc/rx8130ce.html)
+  * [PCF8563](https://www.nxp.com/products/analog/signal-chain/real-time-clocks/ic-real-time-clocks-rtc/real-time-clock-calendar:PCF8563)
+  * onboard Tinkerboard RTC
 * Hardware WatchDog support automatically rebooting the system upon severe hardware/lockup problems
 * Direct [CloudMatic](http://cloudmatic.de) (meine-homematic.de) support
 * Dedicated Build Environment using a cross compiler (`arm-linux-gcc`) to compile third-party applications
@@ -98,7 +104,8 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [HomeMatic Check_MK](https://github.com/alexreinert/homematic_check_mk)
 * [hm-tools](https://github.com/fhetty/hm-tools)
 * [HB-UW-Sen-THPL Universalsensor](https://github.com/jp112sdl/Wettersensor/tree/master/Contrib/CCURM)
-* [Node-RED](https://github.com/hobbyquaker/ccu-addon-node-red)
+* [RedMatic](https://github.com/hobbyquaker/RedMatic)
+* [Mosquitto](https://github.com/hobbyquaker/ccu-addon-mosquitto)
 
 ## :cloud: Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:

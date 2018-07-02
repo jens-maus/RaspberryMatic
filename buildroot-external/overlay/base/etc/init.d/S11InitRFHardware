@@ -20,12 +20,6 @@ identify_rf_hardware() {
     HM_HMRF_DEV="RPI-RF-MOD"
     HM_HMIP_DEV="RPI-RF-MOD"
 
-    # make sure the LED of the RPI-RF-MOD is setup correctly
-    # even thought udev might have reset the gpio modes
-    /usr/bin/gpio mode 27 out
-    /usr/bin/gpio mode 28 out
-    /usr/bin/gpio mode 29 out
-
     # setup the LEDs to show a constant yellow light
     echo default-on >/sys/class/leds/rpi_rf_mod\:green/trigger
     echo default-on >/sys/class/leds/rpi_rf_mod\:red/trigger
@@ -88,16 +82,19 @@ init_rf_hardware() {
     fi
 
     # make sure to set low latency serial mode
-    if [[ ${HM_HOST_GPIO_UART} != "/dev/raw-uart" ]]; then
+    if [[ "${HM_HOST_GPIO_UART}" != "/dev/raw-uart" ]]; then
       /bin/setserial ${HM_HOST_GPIO_UART} low_latency >/dev/null 2>&1
     fi
 
     # reset the GPIO rf module by switching its reset pin
     # (pin 12 - GPIO.1) off and on with a short delay
-    /usr/bin/gpio mode 1 out
-    /usr/bin/gpio write 1 0
-    sleep 0.1
-    /usr/bin/gpio write 1 1
+    if [[ -n "${HM_HOST_GPIO_RESET}" ]]; then
+      echo ${HM_HOST_GPIO_RESET} >/sys/class/gpio/export
+      echo out >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/direction
+      echo 0 >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/value
+      sleep 0.1
+      echo 1 >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/value
+    fi
   fi
 }
 
@@ -108,21 +105,29 @@ query_rf_parameters() {
   # check for BidCos-RF (HmRF) Hardware
   if [[ -n "${HM_HMRF_DEVNODE}" ]]; then
 
-    if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-      HM_HMRF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
-      if [[ -n "${HM_HMRF_SERIAL}" ]]; then
-        HM_HMRF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
-        HM_HMRF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${HM_HMRF_DEVNODE} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+    if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
+       [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+
+      if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+        # use hmip-copro-update only to query all rf module related info (eq3configcmd is not supported for RPI-RF-MOD)
+        RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMRF_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMRF_DEVNODE} -v -a 2>&1)
+        RF_INFO_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
+
+        # use the last 10 chars of the SGTIN as the serial number of the rf module
+        HM_HMRF_SERIAL=$(echo ${RF_INFO_SGTIN} | tail -c 11)
       else
-        HM_HMRF_DEV=""
-        HM_HMRF_DEVNODE=""
+        # use eq3configcmd to query the serial number
+        HM_HMRF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
       fi
-    elif [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
-      RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMRF_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMRF_DEVNODE} -v -a 2>&1)
-      HM_HMRF_SERIAL=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p' | tail -c 11)
+
       if [[ -n "${HM_HMRF_SERIAL}" ]]; then
-        HM_HMRF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
-        HM_HMRF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+        if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+          HM_HMRF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
+          HM_HMRF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+        else
+          HM_HMRF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
+          HM_HMRF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${HM_HMRF_DEVNODE} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+        fi
       else
         HM_HMRF_DEV=""
         HM_HMRF_DEVNODE=""
@@ -138,8 +143,14 @@ query_rf_parameters() {
        [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
 
       if [[ "${HM_HMIP_DEV}" != "RPI-RF-MOD" ]] || [[ "${HM_HMIP_DEV}" != "${HM_HMRF_DEV}" ]]; then
+        # run hmip-copro-update to query info and get copro into app mode
         RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v -a 2>&1)
-        HM_HMIP_SERIAL=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p' | tail -c 11)
+
+        # get the SGTIN
+        HM_HMIP_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
+
+        # use the last 10 chars of the SGTIN as the serial number of the rf module
+        HM_HMIP_SERIAL=$(echo ${HM_HMIP_SGTIN} | tail -c 11)
         if [[ -n "${HM_HMIP_SERIAL}" ]]; then
           HM_HMIP_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
           HM_HMIP_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
@@ -151,6 +162,9 @@ query_rf_parameters() {
         HM_HMIP_SERIAL=${HM_HMRF_SERIAL}
         HM_HMIP_VERSION=${HM_HMRF_VERSION}
         HM_HMIP_ADDRESS=${HM_HMRF_ADDRESS}
+        if [[ -n "${RF_INFO_SGTIN}" ]]; then
+          HM_HMIP_SGTIN=${RF_INFO_SGTIN}
+        fi
       fi
     fi
 
@@ -175,6 +189,10 @@ query_rf_parameters() {
     echo "${HM_HMIP_SERIAL}" >/var/hmip_board_serial
     echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
     echo "${HM_HMIP_ADDRESS}" >/var/hmip_address
+    if [[ -n "${HM_HMIP_SGTIN}" ]]; then
+      echo "${HM_HMIP_SGTIN}" >/var/board_sgtin
+      echo "${HM_HMIP_SGTIN}" >/var/hmip_board_sgtin
+    fi
   fi
 }
 

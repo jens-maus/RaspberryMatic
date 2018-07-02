@@ -1,7 +1,7 @@
 menu "Hardware Support"
-  source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/package/rx8130-rtc/Config.in"
+  source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/../../../package/rx8130-rtc/Config.in"
 endmenu
 
 menu "Software Support"
-  source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/package/wiringpi-tinker/Config.in"
+  source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/../../../package/wiringpi-tinker/Config.in"
 endmenu

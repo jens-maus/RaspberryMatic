@@ -74,7 +74,7 @@ identify_host() {
       HM_HOST_GPIO_RESET="184"
       HM_LED_GREEN="/sys/class/leds/act-led"
       HM_LED_RED="/sys/class/leds/pwr-led"
-      HM_LED_YELLOW="/sys/class/leds/led1-led"
+      HM_LED_YELLOW="/sys/class/leds/heartbeat-led"
     ;;
 
     *)

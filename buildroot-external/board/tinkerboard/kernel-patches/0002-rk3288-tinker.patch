@@ -1,27 +1,27 @@
 --- linux/arch/arm/boot/dts/rk3288-tinker.dts.orig	2018-04-27 15:40:57.290066111 +0200
 +++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-04-27 16:11:34.672702795 +0200
 @@ -136,6 +136,27 @@
- 			gpios=<&gpio1 25 GPIO_ACTIVE_HIGH>;
- 			linux,default-trigger="heartbeat";
+ 			gpios=<&gpio0 RK_PA3 GPIO_ACTIVE_HIGH>;
+ 			linux,default-trigger = "default-on";
  		};
 +
 +		rpi_rf_mod_red: rpi_rf_mod_red {
 +			label = "rpi_rf_mod:red";
-+			gpios = <&gpio7 7 0>;
++			gpios = <&gpio7 RK_PA7 GPIO_ACTIVE_HIGH>;
 +			default-state = "keep";
 +			linux,default-trigger = "none";
 +		};
 +
 +		rpi_rf_mod_green: rpi_rf_mod_green {
 +			label = "rpi_rf_mod:green";
-+			gpios = <&gpio6 3 0>;
++			gpios = <&gpio6 RK_PA3 GPIO_ACTIVE_HIGH>;
 +			default-state = "keep";
 +			linux,default-trigger = "none";
 +		};
 +
 +		rpi_rf_mod_blue: rpi_rf_mod_blue {
 +			label = "rpi_rf_mod:blue";
-+			gpios = <&gpio6 4 0>;
++			gpios = <&gpio6 RK_PA4 GPIO_ACTIVE_HIGH>;
 +			default-state = "keep";
 +			linux,default-trigger = "none";
 +		};

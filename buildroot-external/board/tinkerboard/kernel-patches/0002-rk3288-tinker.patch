@@ -1,7 +1,7 @@
---- linux/arch/arm/boot/dts/rk3288-tinker.dts.orig	2018-04-27 15:40:57.290066111 +0200
-+++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-04-27 16:11:34.672702795 +0200
-@@ -136,6 +136,27 @@
- 			gpios=<&gpio0 RK_PA3 GPIO_ACTIVE_HIGH>;
+--- linux/arch/arm/boot/dts/rk3288-tinker.dts.orig	2018-07-03 17:00:23.159868101 +0200
++++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-07-03 16:08:15.818546483 +0200
+@@ -98,6 +98,27 @@
+ 			gpios = <&gpio0 RK_PA3 GPIO_ACTIVE_HIGH>;
  			linux,default-trigger = "default-on";
  		};
 +
@@ -28,7 +28,7 @@
  	};
  
  	sound {
-@@ -679,6 +700,8 @@
+@@ -713,6 +734,8 @@
  
  &uart1 {
  	status = "okay";

@@ -1,34 +1,65 @@
 --- linux/arch/arm/boot/dts/rk3288-tinker.dts.orig	2018-07-03 17:00:23.159868101 +0200
-+++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-07-03 16:08:15.818546483 +0200
-@@ -98,6 +98,27 @@
++++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-07-03 22:39:13.553093044 +0200
+@@ -98,6 +98,33 @@
  			gpios = <&gpio0 RK_PA3 GPIO_ACTIVE_HIGH>;
  			linux,default-trigger = "default-on";
  		};
 +
-+		rpi_rf_mod_red: rpi_rf_mod_red {
++		rpi_rf_mod_red: rpi-rf-mod-red {
 +			label = "rpi_rf_mod:red";
 +			gpios = <&gpio7 RK_PA7 GPIO_ACTIVE_HIGH>;
 +			default-state = "keep";
 +			linux,default-trigger = "none";
++			pinctrl-names = "default";
++			pinctrl-0 = <&rpi_rf_mod_gpios>;
 +		};
 +
-+		rpi_rf_mod_green: rpi_rf_mod_green {
++		rpi_rf_mod_green: rpi-rf-mod-green {
 +			label = "rpi_rf_mod:green";
 +			gpios = <&gpio6 RK_PA3 GPIO_ACTIVE_HIGH>;
 +			default-state = "keep";
 +			linux,default-trigger = "none";
++			pinctrl-names = "default";
++			pinctrl-0 = <&rpi_rf_mod_gpios>;
 +		};
 +
-+		rpi_rf_mod_blue: rpi_rf_mod_blue {
++		rpi_rf_mod_blue: rpi-rf-mod-blue {
 +			label = "rpi_rf_mod:blue";
 +			gpios = <&gpio6 RK_PA4 GPIO_ACTIVE_HIGH>;
 +			default-state = "keep";
 +			linux,default-trigger = "none";
++			pinctrl-names = "default";
++			pinctrl-0 = <&rpi_rf_mod_gpios>;
 +		};
  	};
  
  	sound {
-@@ -713,6 +734,8 @@
+@@ -573,6 +600,10 @@
+ 		drive-strength = <8>;
+ 	};
+ 
++	pcfg_output_high: pcfg-output-high {
++		output-high;
++	};
++
+ 	backlight {
+ 		bl_en: bl-en {
+ 			rockchip,pins = <7 2 RK_FUNC_GPIO &pcfg_pull_none>;
+@@ -656,6 +687,13 @@
+ 		};
+ 	};
+ 
++	rpi_rf_mod {
++		rpi_rf_mod_gpios: rpi-rf-mod-gpios {
++			rockchip,pins = <7 RK_PA7 RK_FUNC_GPIO &pcfg_output_high>,
++			                <6 RK_PA3 RK_FUNC_GPIO &pcfg_output_high>,
++			                <6 RK_PA4 RK_FUNC_GPIO &pcfg_output_high>;
++		};
++	};
+ };
+ 
+ &pwm0 {
+@@ -713,6 +751,8 @@
  
  &uart1 {
  	status = "okay";

@@ -269,7 +269,7 @@
 -          }
 -
 -          division {class="j_forcedUpdate" style="padding:10px;"} {
--            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
+-            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate2}"
 -          }
 +          puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
          }

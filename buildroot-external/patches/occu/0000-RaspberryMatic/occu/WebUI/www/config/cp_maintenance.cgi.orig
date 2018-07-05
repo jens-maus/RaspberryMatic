@@ -458,7 +458,7 @@ proc action_put_page {} {
           }
 
           division {class="j_forcedUpdate" style="padding:10px;"} {
-            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
+            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate2}"
           }
         }
       }

@@ -26,15 +26,6 @@ init_rtc_device() {
       # be present, thus we setup the LED GPIOs to OUT
       if [[ -c /dev/rtc0 ]]; then
 
-        # WORKAROUND: on a tinkerboard we have to set the corresponding GPIOs
-        # to OUT using wiringpi tools because we didn't manage to do it via a device tree
-        if [[ "${HM_HOST}" == "tinkerboard" ]]; then
-          /usr/bin/gpio mode 26 in
-          /usr/bin/gpio mode 27 out
-          /usr/bin/gpio mode 28 out
-          /usr/bin/gpio mode 29 out
-        fi
-
         # setup the LEDs to show a slowly blinking magenta light
         echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
         echo timer >/sys/class/leds/rpi_rf_mod\:red/trigger

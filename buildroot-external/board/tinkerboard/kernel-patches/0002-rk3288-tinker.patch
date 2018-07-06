@@ -1,6 +1,16 @@
 --- linux/arch/arm/boot/dts/rk3288-tinker.dts.orig	2018-07-03 17:00:23.159868101 +0200
-+++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-07-03 22:39:13.553093044 +0200
-@@ -98,6 +98,33 @@
++++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-07-06 00:18:54.697113052 +0200
+@@ -84,6 +84,9 @@
+ 	gpio-leds {
+ 		compatible = "gpio-leds";
+ 
++		pinctrl-names = "default";
++		pinctrl-0 = <&rpi_rf_mod_gpios>;
++
+ 		act-led {
+ 			gpios=<&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>;
+ 			linux,default-trigger="mmc0";
+@@ -98,6 +101,28 @@
  			gpios = <&gpio0 RK_PA3 GPIO_ACTIVE_HIGH>;
  			linux,default-trigger = "default-on";
  		};
@@ -10,8 +20,6 @@
 +			gpios = <&gpio7 RK_PA7 GPIO_ACTIVE_HIGH>;
 +			default-state = "keep";
 +			linux,default-trigger = "none";
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&rpi_rf_mod_gpios>;
 +		};
 +
 +		rpi_rf_mod_green: rpi-rf-mod-green {
@@ -19,8 +27,6 @@
 +			gpios = <&gpio6 RK_PA3 GPIO_ACTIVE_HIGH>;
 +			default-state = "keep";
 +			linux,default-trigger = "none";
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&rpi_rf_mod_gpios>;
 +		};
 +
 +		rpi_rf_mod_blue: rpi-rf-mod-blue {
@@ -28,13 +34,23 @@
 +			gpios = <&gpio6 RK_PA4 GPIO_ACTIVE_HIGH>;
 +			default-state = "keep";
 +			linux,default-trigger = "none";
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&rpi_rf_mod_gpios>;
 +		};
++
  	};
  
  	sound {
-@@ -573,6 +600,10 @@
+@@ -564,6 +589,10 @@
+ 
+ 
+ &pinctrl {
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&rpi_rf_mod_gpios>;
++
+ 	pcfg_pull_none_drv_8ma: pcfg-pull-none-drv-8ma {
+ 		drive-strength = <8>;
+ 	};
+@@ -573,6 +602,10 @@
  		drive-strength = <8>;
  	};
  
@@ -45,21 +61,23 @@
  	backlight {
  		bl_en: bl-en {
  			rockchip,pins = <7 2 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -656,6 +687,13 @@
+@@ -656,6 +689,15 @@
  		};
  	};
  
 +	rpi_rf_mod {
 +		rpi_rf_mod_gpios: rpi-rf-mod-gpios {
-+			rockchip,pins = <7 RK_PA7 RK_FUNC_GPIO &pcfg_output_high>,
-+			                <6 RK_PA3 RK_FUNC_GPIO &pcfg_output_high>,
-+			                <6 RK_PA4 RK_FUNC_GPIO &pcfg_output_high>;
++			rockchip,pins = <6 RK_PA0 RK_FUNC_GPIO &pcfg_output_high>, /* GPIO6A0: reset */
++			                <7 RK_PC7 RK_FUNC_GPIO &pcfg_pull_up>,     /* GPIO7C7: button */
++			                <7 RK_PA7 RK_FUNC_GPIO &pcfg_output_high>, /* GPIO7A7: red LED */
++			                <6 RK_PA3 RK_FUNC_GPIO &pcfg_output_high>, /* GPIO6A3: green LED */
++			                <6 RK_PA4 RK_FUNC_GPIO &pcfg_output_high>; /* GPIO6A4: blue LED */
 +		};
 +	};
  };
  
  &pwm0 {
-@@ -713,6 +751,8 @@
+@@ -713,6 +755,8 @@
  
  &uart1 {
  	status = "okay";

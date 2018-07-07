@@ -18,12 +18,14 @@ set CUR_YEAR [clock format [clock seconds] -format %Y]
 proc action_put_page {} {
   global PRODUCT_NAME PRODUCT_ID HOMEMATIC_URL HOMEMATIC_IP_URL HELP_URL HELP_IP_URL LANGUAGE CUR_YEAR env
 
-  set SERIAL [exec cat /var/board_sgtin]
-  if { "$SERIAL" == "" } {
+  if {[file exist /var/board_sgtin]} {
+    set SERIAL [exec cat /var/board_sgtin]
+  } elseif {[file exist /var/board_serial]} {
     set SERIAL [exec cat /var/board_serial]
-  }
-  if { "$SERIAL" == "" } {
+  } elseif {[file exist /sys/module/plat_eq3ccu2/parameters/board_serial]} {
     set SERIAL [exec cat /sys/module/plat_eq3ccu2/parameters/board_serial]
+  } else {
+    set SERIAL "n/a"
   }
   set VERSION [read_var /VERSION VERSION]
   set HELP_ARGUMENTS "lang=$LANGUAGE&vers=$VERSION&serial=$SERIAL"

@@ -14,12 +14,14 @@ proc get_ip_address {} {
 }
 
 proc get_serial_number {} {
-    set serial [exec cat /var/board_sgtin]
-    if { "$serial" == "" } {
+    if {[file exist /var/board_sgtin]} {
+      set serial [exec cat /var/board_sgtin]
+    } elseif {[file exist /var/board_serial]} {
       set serial [exec cat /var/board_serial]
-    }
-    if { "$serial" == "" } {
+    } elseif {[file exist /sys/module/plat_eq3ccu2/parameters/board_serial]} {
       set serial [exec cat /sys/module/plat_eq3ccu2/parameters/board_serial]
+    } else {
+      set serial ""
     }
     return $serial
 }

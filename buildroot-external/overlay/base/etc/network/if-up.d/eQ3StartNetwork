@@ -22,9 +22,11 @@ if [[ "${IFACE}" == "lo" ]]; then
   exit 0
 fi
 
+echo -n "${IFACE}:"
+
 # only continue if this network interface exists
 if [[ ! -L "/sys/class/net/${IFACE}" ]]; then
-  echo -n "${IFACE}:missing, "
+  echo -n " missing, "
   exit 0
 fi
 
@@ -32,7 +34,7 @@ fi
 # setup everything correctly already
 if [[ -e /var/status/hasIP ]]; then
   /sbin/ip link set ${IFACE} down
-  echo -n "${IFACE}:disabled, "
+  echo -n " disabled, "
 
   # make sure that the wifi power is disabled
   # if not required
@@ -44,30 +46,37 @@ if [[ -e /var/status/hasIP ]]; then
   exit 0
 fi
 
-# make sure iface is really up
-if [[ "$(cat /sys/class/net/${IFACE}/operstate)" == "down" ]]; then
-  /sbin/ip link set ${IFACE} up
-  sleep 5
-fi
-
 # start WPA Supplicant if this is a WiFi connection
 case "${IFACE}" in
   eth*)
-    # if eth0 doesn't have a link we don't continue
-    if [[ "${IFACE}" == "eth0" && "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; then
+    # wait until the link is up
+    /sbin/ip link set ${IFACE} up
+    i=0
+    while [[ "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; do
+      sleep 2
+      i=$(($i+1))
+      if [[ $i -ge 6 ]]; then
+        break
+      fi
+      echo -n "."
+    done
+
+    # if the link is not up we don't continue
+    if [[ "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; then
       /sbin/ip link set ${IFACE} down
-      echo -n "${IFACE}:no link, "
+      echo -n ", no link, "
       exit 0
     fi
   ;;
 
   wlan*)
     if [[ -e /etc/config/wpa_supplicant.conf ]]; then
+      /sbin/ip link set ${IFACE} up
+      sleep 5
       /usr/sbin/rfkill unblock wlan
       /usr/sbin/wpa_supplicant -B w -D wext -i ${IFACE} -c /etc/config/wpa_supplicant.conf -s
     else
-      /sbin/ip link set ${IFACE} down
-      echo -n "${IFACE}:no config, "
+      echo -n " no config, "
       # make sure that the wifi power is disabled
       # if not required
       /usr/sbin/rfkill block wlan
@@ -76,7 +85,7 @@ case "${IFACE}" in
   ;;
 esac
 
-echo -n "${IFACE}: up, "
+echo -n " up, "
 
 # cleanup first
 RESOLV_CONF=/var/etc/resolv.conf

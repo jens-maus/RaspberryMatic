@@ -13,24 +13,28 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 ## :cookie: Features
 * 100% HomeMatic [CCU2](http://www.eq-3.com/products/homematic/control-units-and-gateways/homematic-central-control-unit-ccu2.html)/[CCU3](http://www.eq-3.com/products/homematic/control-units-and-gateways/-473.html) system compliant using latest [OCCU](https://github.com/eq-3/occu) software environment
 * Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMaticIP) compatible
-* Integration of latest [community version of ReGaHss](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta)
+* Integrated WebUI-based firmware update mechanism and Recovery System to perform maintenance operations such as system restore.
+* Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
+* Read-only root file system to minimize write operations on SD card
+* Includes embedded JAVA8 runtime environment ([1.8.0_172-8.30.0.106](http://www.azul.com/downloads/zulu-embedded/))
+* Full IPv6 support and default HTTPS enabled WebUI support
+* Auto-resizing `/usr/local` partition to utilize the full capacity of the SD card or USB stick
+* Hardware WatchDog support automatically rebooting the system upon severe hardware/lockup problems
+* Direct [CloudMatic](http://cloudmatic.de) (meine-homematic.de) support
+
+## :cake: Exclusive Features (not in CCU2/CCU3 firmware)
+* Integration of latest [community version of ReGaHss](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) comming with [latest features and bugfixes](https://github.com/jens-maus/RaspberryMatic/projects/2) in logic engine.
 * Integration of [third-party patches](https://github.com/jens-maus/RaspberryMatic/projects/3) for an improved WebUI experience.
 * Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
 * Support to be used without GPIO RF module just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
-* Integrated WebUI-based firmware update mechanism and Recovery System to perform maintenance operations such as system restore.
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
 * Based on latest [Buildroot 2018.05](http://buildroot.org/) lightweight Linux operating system
 * Latest Linux kernel (RaspberryPi: [4.14.50](https://github.com/raspberrypi/linux/tree/rpi-4.14.y), Tinkerboard: [4.14.53](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
-* Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
-* Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only)
-* Read-only root file system to minimize write operations on SD card
-* Includes embedded JAVA8 runtime environment ([1.8.0_172-8.30.0.106](http://www.azul.com/downloads/zulu-embedded/))
+* Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only) or from internal eMMC storage (ASUS Tinkerboard S)
 * Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setups including USB connection to uninterruptible power supply (UPS) as well as remote NUT server use (e.g. via Synology NAS Network UPS functionality)
-* Full IPv6 support and default HTTPS enabled WebUI support
 * Support to query status information of the underlying Linux system using SNMP requests
-* Auto-resizing `/usr/local` partition to utilize the full capacity of the SD card or USB stick
 * Support for the following third-party *Hardware Attached on Top* (HAT) boards:
   * [S.USV](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown.
   * [PiUSV+](https://www.reichelt.de/?ARTICLE=169883) – UPS including alarm notification upon power loss and automatic system shutdown.
@@ -44,10 +48,8 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [RX8130CE](https://www5.epsondevice.com/en/products/rtc/rx8130ce.html)
   * [PCF8563](https://www.nxp.com/products/analog/signal-chain/real-time-clocks/ic-real-time-clocks-rtc/real-time-clock-calendar:PCF8563)
   * onboard Tinkerboard RTC
-* Hardware WatchDog support automatically rebooting the system upon severe hardware/lockup problems
-* Direct [CloudMatic](http://cloudmatic.de) (meine-homematic.de) support
 * Dedicated Build Environment using a cross compiler (`arm-linux-gcc`) to compile third-party applications
-
+  
 ## :fire: Limitations
 * No web-based configuration for setting up WiFi or Bluetooth support (work in progress)
 * No web-based configuration for enabling/disabling the LAN-Gateway mode (work in progress)

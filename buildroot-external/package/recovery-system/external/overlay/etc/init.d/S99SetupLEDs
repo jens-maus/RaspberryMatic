@@ -61,6 +61,9 @@ start() {
     echo ${HM_LED_YELLOW_MODE2} >${HM_LED_YELLOW}/trigger
   fi
 
+  # signal that the system startup is finished
+  touch /var/status/startupFinished
+
   echo "booted, OK"
 }
 

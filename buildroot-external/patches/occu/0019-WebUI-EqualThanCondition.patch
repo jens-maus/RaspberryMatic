@@ -1,0 +1,193 @@
+--- occu/WebUI/www/rega/esp/programs.fn.orig
++++ occu/WebUI/www/rega/esp/programs.fn
+@@ -270,7 +270,7 @@
+                       sValueUnit = "";
+                     }
+                     
+-                    if( (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 10) & (iCT1 != 11) & (iCT1 != 9) )
++                    if( (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 10) && (iCT1 != 11) && (iCT1 != 9) && (iCT1 != 5) && (iCT1 != 12) )
+                     {
+                       oSC.ConditionType(6);
+                       iCT1 = 6;
+@@ -286,6 +286,11 @@
+                     if( iCT1 == 9 ) { sCT = "${ruleConditionLblGreaterOrEqualThan} "#iRV1.ToString(2)#sValueUnit; }
+                     !if( iCT1 == 11 ) { sCT = "kleiner oder gleich "#iRV1.ToString(2)#sValueUnit; }
+                     if( iCT1 == 11 ) { sCT = "${ruleConditionLblLessOrEqualThan} "#iRV1.ToString(2)#sValueUnit; }
++                    !if( iCT1 == 5 ) { sCT = "ist gleich "#iRV1.ToString(2)#sValueUnit; }
++                    if( iCT1 == 5 ) { sCT = "${ruleConditionLblEqualThan} "#iRV1.ToString(2)#sValueUnit; }
++                    !if( iCT1 == 12 ) { sCT = "ist ungleich "#iRV1.ToString(2)#sValueUnit; }
++                    if( iCT1 == 12 ) { sCT = "${ruleConditionLblNotEqualThan} "#iRV1.ToString(2)#sValueUnit; }
++
+                     sRet = sRet#' '#sCT;
+                   }
+                   boolean bAction = ( oLV.ValueSubType() == istAction );
+@@ -1219,4 +1224,4 @@
+   {
+     system.SetSessionVar("sessionSNVPRG","1");
+   }
+-}
+\ No newline at end of file
++}
+--- occu/WebUI/www/rega/esp/sico.inc.orig
++++ occu/WebUI/www/rega/esp/sico.inc
+@@ -322,7 +322,7 @@
+           sValueUnit = "";
+         }
+         
+-        if( (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 10) & (iCT1 != 11) & (iCT1 != 9) )
++        if( (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 10) && (iCT1 != 11) && (iCT1 != 9) && (iCT1 != 5) && (iCT1 != 12) )
+         {
+           oSC.ConditionType(6);
+           iCT1 = 6;
+@@ -338,6 +338,10 @@
+         if( iCT1 == 9 ) { sCT = "${ruleConditionLblGreaterOrEqualThan} "#iRV1.ToString(2)#sValueUnit; }
+         !if( iCT1 == 11 ) { sCT = "kleiner oder gleich "#iRV1.ToString(2)#sValueUnit; }
+         if( iCT1 == 11 ) { sCT = "${ruleConditionLblLessOrEqualThan} "#iRV1.ToString(2)#sValueUnit; }
++        !if( iCT1 == 5 ) { sCT = "gleich "#iRV1.ToString(2)#sValueUnit; }
++        if( iCT1 == 5) { sCT = "${ruleConditionLblEqualThan} "#iRV1.ToString(2)#sValueUnit; }
++        !if( iCT1 == 12 ) { sCT = "ungleich "#iRV1.ToString(2)#sValueUnit; }
++        if( iCT1 == 12 ) { sCT = "${ruleConditionLblNotEqualThan} "#iRV1.ToString(2)#sValueUnit; }
+ 
+         Write( ' <b class="CLASS02201" onclick="CreatePopup(ID_SET_VALUE_RANGE,'#oSC.ID()#');">'#sCT#'</b>' );
+       }
+--- occu/WebUI/www/rega/pages/msg/setValueRange.htm.orig
++++ occu/WebUI/www/rega/pages/msg/setValueRange.htm
+@@ -21,7 +21,7 @@
+   <table class="popupTableScript CLASS00801" >
+     <tr class="popupTableRow">
+     <td class="CLASS00802">
+-    <div class="CLASS00803">${lblValueRange}:</div>
++    <div class="CLASS00803">${lblValueRange}  / ${lblValue}:</div>
+     <table>
+     <tr>
+       <td>
+@@ -41,6 +41,30 @@
+     
+     <tr>
+       <td>
++        <% string sChecked = ""; if(iCT==5) { sChecked="checked"; } %>
++        <input id="Radio6" type="radio" <% Write(sChecked); %> onclick="SetCT(this);" name="valueRange"/>
++        <a class="CLASS00804">${ruleConditionLblEqualThan}</a>
++      </td>
++      <td>
++        <input id="Text7" type="text" value="<% Write(iRV1.ToString(2)); %>" class="CLASS00806"/>
++        <a class="CLASS00804"><% Write(sValueUnit); %></a>
++      </td>
++    </tr>
++
++    <tr>
++      <td>
++        <% string sChecked = ""; if(iCT==12) { sChecked="checked"; } %>
++        <input id="Radio7" type="radio" <% Write(sChecked); %> onclick="SetCT(this);" name="valueRange"/>
++        <a class="CLASS00804">${ruleConditionLblNotEqualThan}</a>
++      </td>
++      <td>
++        <input id="Text8" type="text" value="<% Write(iRV1.ToString(2)); %>" class="CLASS00806"/>
++        <a class="CLASS00804"><% Write(sValueUnit); %></a>
++      </td>
++    </tr>
++	
++    <tr>
++      <td>
+         <% string sChecked = ""; if(iCT==8) { sChecked="checked"; } %>
+         <input id="Radio2" type="radio" <% Write(sChecked); %> onclick="SetCT(this);" name="valueRange"/>
+         <a class="CLASS00804">${ruleConditionLblGreaterThan}</a>
+@@ -119,6 +143,8 @@
+     if( elem.id=="Radio3" ) ct = 10;
+     if( elem.id=="Radio4" ) ct = 9;
+     if( elem.id=="Radio5" ) ct = 11; 
++    if( elem.id=="Radio6" ) ct = 5; 
++    if( elem.id=="Radio7" ) ct = 12; 
+   }
+   SaveValueRange = function()
+   {
+@@ -207,6 +233,31 @@
+           } 
+         }
+         break;
++      case 5:
++        rv1 = $("Text7").value;
++        if( vu == "100%" ) rv1 = rv1/100;
++        go = 0;
++        if (isNaN(rv1)) {
++        go = 5;
++        } else {
++          if ( ( (rv1/1) < (min/1) ) || ( (rv1/1) > (max/1) ) ) {
++            go = 6;
++          } 
++        }
++        break;
++      case 12:
++        rv1 = $("Text8").value;
++        if( vu == "100%" ) rv1 = rv1/100;
++        go = 0;
++        if (isNaN(rv1)) {
++        go = 5;
++        } else {
++          if ( ( (rv1/1) < (min/1) ) || ( (rv1/1) > (max/1) ) ) {
++            go = 6;
++          } 
++        }
++        break;
++
+       default:
+         break;
+     }
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -774,13 +774,15 @@
+     "ruleConditionSelectDeviceList" : "Ger%E4teauswahl",
+     "ruleConditionLblWhen" : "bei",
+     "ruleConditionSelectSystemState" : "Systemzustand",
+-    "ruleConditionLblWithinValueRange" : "im Wertebereich",
++    "ruleConditionLblWithinValueRange" : "im Wertebereich / mit Wert",
+     "ruleConditionLblRangeFrom" : "von",
+     "ruleConditionLblRangeLessThan" : "bis kleiner",
+     "ruleConditionLblGreaterThan" : "gr%F6%DFer als",
+     "ruleConditionLblLessThan" : "kleiner als",
+     "ruleConditionLblGreaterOrEqualThan" : "gr%F6%DFer oder gleich",
+     "ruleConditionLblLessOrEqualThan" : "kleiner oder gleich",
++    "ruleConditionLblEqualThan" : "gleich",
++    "ruleConditionLblNotEqualThan" : "ungleich",
+     "ruleConditionSelectTimeControl" : "Zeitsteuerung",
+     "ruleConditionLblTimeOnce" : "Einmalig",
+     "ruleConditionLblTimePeriodically" : "Periodisch",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -213,7 +213,7 @@
+     "lblChannelMappingYes" : "with",
+     "lblChannelMappingNo" : "without",
+     "lblValueDescription" : "Value description",
+-    "lblValueRange" : "Value range",
++    "lblValueRange" : "Value range / with value",
+     "lblSystemVariable" : "System variable",
+     "lblLeft" : "Left",
+     "lblCenter" : "Centre",
+@@ -807,13 +807,15 @@
+     "ruleConditionLblWhen" : "when",
+ 
+     "ruleConditionSelectSystemState" : "System state",
+-    "ruleConditionLblWithinValueRange" : "within value range",
++    "ruleConditionLblWithinValueRange" : "within value range / with value",
+     "ruleConditionLblRangeFrom" : "from",
+     "ruleConditionLblRangeLessThan" : "and less than",
+     "ruleConditionLblGreaterThan" : "more than",
+     "ruleConditionLblLessThan" : "less than",
+     "ruleConditionLblGreaterOrEqualThan" : "more or equal",
+     "ruleConditionLblLessOrEqualThan" : "less or equal",
++    "ruleConditionLblEqualThan" : "equal",
++    "ruleConditionLblNotEqualThan" : "not equal",
+ 
+     "ruleConditionSelectTimeControl" : "Time control",
+     "ruleConditionLblTimeOnce" : "Non-recurring",
+--- occu/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/tr/translate.lang.js
+@@ -776,6 +776,8 @@
+     "ruleConditionLblLessThan" : "den daha k%FCc%FCk",
+     "ruleConditionLblGreaterOrEqualThan" : "daha b%FCy%FCk veya esit",
+     "ruleConditionLblLessOrEqualThan" : "daha k%FCc%FCk veya esit",
++    "ruleConditionLblEqualThan" : "veya esit",
++    "ruleConditionLblNotEqualThan" : "voltaji veya esit",
+     "ruleConditionSelectTimeControl" : "Zaman kumandasi",
+     "ruleConditionLblTimeOnce" : "Bir kerelik",
+     "ruleConditionLblTimePeriodically" : "Periyodik",

@@ -54,13 +54,6 @@
  
    <!--
      <script type="text/javascript" src="/webui/js/lang/translate.lang.js"></script>
-@@ -194,4 +194,4 @@
- </script>
- 
- </body>
--</html>
-\ No newline at end of file
-+</html>
 --- occu/WebUI/www/rega/logout.htm.orig
 +++ occu/WebUI/www/rega/logout.htm
 @@ -1,13 +1,13 @@

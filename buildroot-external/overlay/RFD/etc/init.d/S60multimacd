@@ -52,7 +52,8 @@ waitStartupComplete() {
 
 start() {
   echo -n "Starting multimacd: "
-  if [[ -n "${HM_HMIP_DEV}" ]]; then
+  if [[ -n "${HM_HMIP_DEV}" ]] &&
+     [[ -n "${HM_HMRF_DEV}" ]]; then
     init
     if [[ -c /dev/eq3loop ]]; then
       start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}

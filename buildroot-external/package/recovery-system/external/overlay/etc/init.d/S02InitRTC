@@ -9,6 +9,8 @@ init_rtc_device() {
   # load the common i2c kernel modules
   if [[ "${HM_HOST}" != "tinkerboard" ]]; then
     modprobe i2c_bcm2835
+  else
+    modprobe rtc_rk808
   fi
   modprobe i2c_dev
 

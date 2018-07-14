@@ -166,6 +166,11 @@ query_rf_parameters() {
           HM_HMIP_SGTIN=${RF_INFO_SGTIN}
         fi
       fi
+
+    elif [[ -z "${HM_HMRF_DEV}" ]] &&
+         [[ -z "${HM_HMRF_DEVNODE}" ]]; then
+      HM_HMIP_DEV=""
+      HM_HMIP_DEVNODE=""
     fi
 
   fi
@@ -209,7 +214,12 @@ start() {
   # save all HM_ env variables
   set | grep '^HM_' >/var/hm_mode
 
-  echo "BidCos-RF: ${HM_HMRF_DEV}, HmIP: ${HM_HMIP_DEV}, OK"
+  # output some status information
+  echo -n "BidCos-RF: "
+  [[ -n "${HM_HMRF_DEV}" ]] && echo -n "${HM_HMRF_DEV}, " || echo -n "none, "
+  echo -n "HmIP: "
+  [[ -n "${HM_HMIP_DEV}" ]] && echo -n "${HM_HMIP_DEV}, " || echo -n "none, "
+  echo "OK"
 }
 
 restart() {

@@ -1,0 +1,1868 @@
+--- occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm
+@@ -10,7 +10,7 @@
+   boolean firstSort = false;
+   object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+   if( oUser && (system.GetSessionVar("sessionCTV")=="true") )
+-  { 
++  {
+     firstSort = true;
+     oUser.UserTempViewIDs().RemoveAll();
+     system.SetSessionVar("sessionLS","name");
+@@ -56,7 +56,7 @@
+   <th class="thCell">${thPassword}</th>
+   <th class="thCell">${thBtnForLogin}</th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="level"){sCssName="SortSelected";} %>
+-  <th class="thCell CLASS05301"><div id="level" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arUserNames,'level',true);">${thEntitlement}</div></th>
++  <th class="CLASS05301"><div id="level" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arUserNames,'level',true);">${thEntitlement}</div></th>
+ <!--  <th class="thCell">Endger&auml;t</th> -->
+   <th class="thCell">${thEMail}</th>
+   <th class="thCell">${thPhoneNumber}</th>
+@@ -70,13 +70,13 @@
+       WriteLine("<script type='text/javascript'>");
+       WriteLine("Cursor.set(Cursor.NORMAL);");
+       WriteLine("</script>");
+-    }  
++    }
+     object obj = dom.GetObject(ID_USERS);
+     string tmp = "";
+-    foreach(tmp, oUser.UserTempViewIDs()) 
+-    { 
++    foreach(tmp, oUser.UserTempViewIDs())
++    {
+      object user = dom.GetObject(tmp);
+-     if (user.Visible()) 
++     if (user.Visible())
+      {
+         Write("<tr class='CLASS05302' id='ut"#user.ID()#"' >")
+         Write("<td align='center' valign='middle'  class='TblUserAdministration'>")
+@@ -100,25 +100,25 @@
+         Write("<input id='cb"#user.ID()#"' disabled='disabled' "#sChecked#" type='checkbox' />")
+         Write("</td>")
+         Write("<td align='center' valign='middle' class='TblUserAdministration'>");
+-        
++
+         if (user.UserLevel() == iulAdmin)
+-        { 
++        {
+           Write("${lblAdmin}");
+         }
+-        
++
+         if(user.UserLevel() == iulUser)
+         {
+           Write("${lblUser}");
+         }
+-        
++
+         if(user.UserLevel() == iulGuest)
+         {
+           Write("${lblGuest}");
+         }
+-                
++
+         Write("</td>")
+ 
+-! Endgerät        
++! EndgerÃ¤t
+ !        Write("<td align='center' valign='middle' class='TblUserAdministration'>")
+ !        integer uc = user.UserClient();
+ !        if (uc == dwcAuto) { Write("automatisch"); }
+@@ -126,7 +126,7 @@
+ !        if (uc == dwcPC) { Write("PC"); }
+ !        if (uc == dwcHandy) { Write("Handy"); }
+ !        Write("</td>")
+-        
++
+         Write("<td align='center' valign='middle' class='TblUserAdministration'>")
+         Write(user.UserMailAddress());
+         Write("</td>")
+@@ -149,7 +149,7 @@
+           }
+         Write("</td>")
+         Write("</tr>")
+-        
++
+         Write("<script type='text/javascript'>");
+         Write("var tmp = new Object();");
+         Write("tmp['id'] = '"#user.ID()#"';");
+@@ -167,7 +167,7 @@
+ 
+ <script type="text/javascript">
+   var s = "";
+-  
++
+   s += "<table cellspacing='8'>";
+   s += "<tr>";
+     s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
+@@ -177,21 +177,21 @@
+   s += "</table>";
+ 
+   setFooter(s);
+-  
++
+   newUser = function() {
+     CreatePopup(ID_USER_ACCOUNT_CONFIG_ADMIN, 0);
+   }
+-  
++
+   editUser = function(id) {
+     CreatePopup(ID_USER_ACCOUNT_CONFIG_ADMIN, id);
+   }
+-  
++
+   deleteUser = function(id)
+   {
+     var _id_ = id;
+     new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveUser"), function(result) {
+       if (result == YesNoDialog.RESULT_YES)
+-      {  
++      {
+         var url = "/esp/system.htm?sid=" + SessionId;
+         var pb = "string action = 'deleteUser';";
+         pb += "integer userid = " + id + ";";
+@@ -205,7 +205,7 @@
+       }
+     });
+   };
+-  
++
+   showAutoLogin = function() {
+     CreatePopup(ID_AUTO_LOGIN_CONFIG);
+   }
+--- occu/WebUI/www/rega/pages/tabs/admin/views/functions.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/functions.htm
+@@ -7,22 +7,22 @@
+ <%
+   Write("bSortChOnly = "#(system.GetSessionVar("sessionLS") != "func")#";");
+   system.SetSessionVar("sessionTAB", "functions");
+-  
++
+   if( system.GetSessionVar("sessionLS") == "" )
+   {
+     system.SetSessionVar("sessionLS","func");
+   }
+-  
++
+   object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+   if( oUser && (system.GetSessionVar("sessionCTV")=="true") )
+   {
+     system.SetSessionVar("sessionLS","func");
+     oUser.UserTempViewIDs().RemoveAll();
+     oUser.UserTempViewIDs2().RemoveAll();
+-    
++
+     Write('iseClearLastSort();');
+     Write('lastDir = 0;');
+-    
++
+     object oTmpArray = dom.GetObject( ID_FUNCTIONS );
+     if( oTmpArray )
+     {
+@@ -32,18 +32,18 @@
+       {
+         object oTmp = dom.GetObject( sTmp );
+         if( oTmp )
+-        { 
++        {
+           oUser.UserTempViewIDs().Add( oTmp.ID() );
+         }
+       }
+     }
+   }
+-  
++
+   if(oUser && (system.GetSessionVar("sessionCTV2")=="true"))
+   {
+     oUser.UserTempViewIDs2().RemoveAll();
+   }
+-  
++
+   object oTmpArray = dom.GetObject( ID_FUNCTIONS );
+   if( oTmpArray )
+   {
+@@ -54,7 +54,7 @@
+     {
+       object oTmp = dom.GetObject( sTmp );
+       if( oTmp )
+-      { 
++      {
+         string s3;
+         foreach(s3,oTmp.EnumIDs())
+         {
+@@ -62,26 +62,26 @@
+           if( o3 )
+           {
+             if(o3.IsTypeOf(OT_CHANNEL))
+-            {              
++            {
+               string cat = "";
+               if (o3.ChnDirection() == 1) {cat = 'Sender';}
+-              if (o3.ChnDirection() == 2) {cat = 'Empfänger';}
+-              
++              if (o3.ChnDirection() == 2) {cat = 'Empfï¿½nger';}
++
+               Write("tmp = new Object();");
+               Write("tmp['id'] = "#o3.ID()#";");
+               Write("tmp['name'] = '"#o3.Name()#"';");
+-              
++
+               integer devId = o3.Device();
+               if (devId != ID_ERROR)
+               {
+                 object dev = dom.GetObject(devId);
+                 Write("tmp['desc'] = DEV_getDescription('"#dev.Label()#"');");
+               }
+-              
++
+               Write("tmp['type'] = '"#o3.Label()#"';");
+               Write("tmp['iface'] = '"#cat#"';");
+               Write("tmp['sn'] = '"#o3.Address()#"';");
+-              
++
+               if(o3.ChnAESActive())
+               {
+                 Write("tmp['trans'] = '${lblSecured}';"); !transaction mode
+@@ -90,10 +90,10 @@
+               {
+                 Write("tmp['trans'] = '${lblStandard}';"); !transaction mode
+               }
+-              
++
+               string rooms = "";
+               string roomTmp = "";
+-               
++
+               foreach(roomTmp, o3.ChnRoom())
+               {
+                 object objTmp = dom.GetObject(roomTmp);
+@@ -108,7 +108,7 @@
+     }
+   }
+ 
+-  
++
+   object oGhostFunc = dom.CreateObject( OT_ENUM );
+   integer iGhostFuncID = oGhostFunc.ID();
+ %>
+@@ -119,7 +119,7 @@
+   arSortFObj = new Array();
+   fltSF = new iseFilter('fltSF');
+   arTblPos = new Array();
+-<% 
++<%
+   object obj = dom.GetObject(ID_FUNCTIONS);
+   string tmp;
+   foreach(tmp, obj.EnumEnabledIDs())
+@@ -131,8 +131,8 @@
+     Write("arFObj['"#tmp#"']['flt'] = true;");
+     Write("arFObj['"#tmp#"']['exp'] = false;");
+     Write("arFObj['"#tmp#"']['chncount'] = 0;");
+-     
+-    object o = dom.GetObject(tmp);    
++
++    object o = dom.GetObject(tmp);
+     Write("tmpRoom = new Object();");
+     Write("tmpRoom['func'] = '"#o.Name()#"';");
+     Write("tmpRoom['id'] = '"#tmp#"';");
+@@ -140,13 +140,13 @@
+     Write("tmpRoom['exp'] = false;");
+     Write("arSortFObj[arSortFObj.length] = tmpRoom;");
+   }
+-  
++
+   if(system.GetSessionVar("sessionCTV")=="true")
+   {
+     ! Deactivated for testing - this will load the page 2 times
+     ! Write("IseSort(arSortFObj,'func',true);");
+   }
+-%> 
++%>
+ 
+ // add the ghost room for channel sorting with other columns
+ arF[arF.length] = <% Write(iGhostFuncID); %>;
+@@ -193,7 +193,7 @@
+   <td class='CLASS04102 DeviceListCell'><div id="name" class="pt11 <%Write(sCssName); %>" onclick="SortMe('name');"><b>${thName}</b></div></td>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="desc"){sCssName="SortSelected";} %>
+   <td class='CLASS04102 DeviceListCell'><div id="desc" class="pt11 <%Write(sCssName); %>" onclick="SortMe('desc');"><b>${thTypeDescriptor}</b></div></td>
+-  <td><div class="CLASS04102 pt11 Sort DeviceListCell"><b>${thPicture}</b></div></td>
++  <td class='CLASS04102 DeviceListCell'><div class="pt11 Sort"><b>${thPicture}</b></div></td>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="type"){sCssName="SortSelected";} %>
+   <td class='CLASS04102 DeviceListCell'><div id="type" class="pt11 <%Write(sCssName); %>" onclick="SortMe('type');"><b>${thDescriptor}</b></div></td>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="sn"){sCssName="SortSelected";} %>
+@@ -203,9 +203,9 @@
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="trans"){sCssName="SortSelected";} %>
+   <td class='CLASS04102 DeviceListCell'><div id="trans" class="pt11 <%Write(sCssName); %>" onclick="SortMe('trans');"><b>${thTransmitMode}</b></div></td>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
+-  <td><div id="room" class="CLASS04102 pt11 <%Write(sCssName); %> DeviceListCell" onclick="SortMe('room');"><b>${thRoom}</b></div></td>
+-  <td><div class="CLASS04102 pt11 Sort DeviceListCell"><b>${thAction}</b></div></td>
+-  <td><div class="CLASS04102 pt11 Sort DeviceListCell"><b>${thLinks}</b></div></td>
++  <td class='CLASS04102 DeviceListCell'><div id="room" class="pt11 <%Write(sCssName); %>" onclick="SortMe('room');"><b>${thRoom}</b></div></td>
++  <td class='CLASS04102 DeviceListCell'><div class="pt11 Sort"><b>${thAction}</b></div></td>
++  <td class='CLASS04102 DeviceListCell'><div class="pt11 Sort"><b>${thLinks}</b></div></td>
+ </tr>
+ <tr class='CLASS04205'>
+   <td style='height:20px'></td>
+@@ -258,7 +258,7 @@
+         </table>
+         <div class='FilterSetButton' onclick='setIFilter(fltSF, "iface");updateTable();$("btnFilterIfaceSub").hide();'>${filterSet}</div>
+         <div class='FilterSetButton' onclick="$('btnFilterIfaceSub').hide();">${filterClose}</div>
+-    </div> 
++    </div>
+   </td>
+   <td class='CLASS04211' style='height:20px'>
+     <div id="btnFilterMode" class="FilterBtn CLASS00203">${thFilter}</div>
+@@ -280,7 +280,7 @@
+   <td class='CLASS04211' style='height:20px'>
+     <div id="btnFilterRoom" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterRoomSub" style="display:none">
+-      <% 
++      <%
+         Write("<table class='CLASS04212'>");
+         object obj = dom.GetObject(ID_ROOMS);
+         if ( obj ) {
+@@ -314,7 +314,7 @@
+ if ( oUser )
+ {
+   oUser.UserTempViewIDs().Add( iGhostFuncID );
+-  
++
+   string tmp = "";
+   integer iFuncIdx = 0;
+   foreach( tmp, oUser.UserTempViewIDs().EnumEnabledIDs() )
+@@ -323,7 +323,7 @@
+     if (elem)
+     {
+       WriteLine("<tr id='r"#tmp#"'>");
+-      
++
+       Write("<td>"); !+ / -
+       string sStyle = "";
+       integer iEnumCount = 0;
+@@ -343,11 +343,11 @@
+       Write("<img id='img"#elem.ID()#"' src='/ise/img/plus.png' alt='plus' class='CLASS04207' style='"#sStyle#"' onclick='expand("#elem.ID()#", "#iFuncIdx#")' />");
+       Write("<script type='text/javascript'>");
+         Write("arFObj['"#elem.ID()#"']['rowIdx'] = "#iFuncIdx#";");
+-        Write("arTblPos["#iFuncIdx#"] = "#iFuncIdx#" + 2;");  
++        Write("arTblPos["#iFuncIdx#"] = "#iFuncIdx#" + 2;");
+         iFuncIdx = iFuncIdx + 1;
+       Write("</script>");
+-      Write("</td>"); 
+-      
++      Write("</td>");
++
+       Write("<td id='fn"#elem.ID()#"' class='WhiteBkg DeviceListCell' onclick='textEdit(id, "#elem.ID()#", false, textEditCallback);'>"#elem.Name()#"</td>"); !Gewerk
+       Write("<td class='GrayBkg DeviceListCell'></td>"); !Name
+       Write("<td class='GrayBkg DeviceListCell'></td>"); !Typenbezeichnung
+@@ -355,16 +355,16 @@
+       Write("<td class='GrayBkg DeviceListCell'></td>"); !Bezeichnung
+       Write("<td class='GrayBkg DeviceListCell'></td>"); !Seriennummer
+       Write("<td class='GrayBkg DeviceListCell'></td>"); !Interface Kategorie
+-      Write("<td class='GrayBkg DeviceListCell'></td>"); !Übertragungsmodus
++      Write("<td class='GrayBkg DeviceListCell'></td>"); !ï¿½bertragungsmodus
+       Write("<td class='GrayBkg DeviceListCell'></td>"); !Raum
+-      
++
+       Write("<td class='WhiteBkg DeviceListCell'>"); !Aktion
+-! - - - wernerf - - -      
++! - - - wernerf - - -
+         Write( '<div class="StdButtonBig heightAuto" onclick="addChannels2('#elem.ID()#',\''#elem.EnumIDs()#'\')">${btnAddChannel}</div>');
+ !       Write( '<div class="StdButtonBig heightAuto" onclick="addChannels('#elem.ID()#',\''#elem.EnumIDs()#'\')">${btnAddChannel}</div>');
+ ! - - - wernerf - - -
+       Write("</td>");
+-      
++
+       string sEnumPrgFilter = "";
+       integer iLinkCount = 0;
+       integer iProgCount = 0;
+@@ -372,7 +372,7 @@
+       foreach( tmp, elem.EnumEnabledIDs() )
+       {
+         object chnTmp = dom.GetObject(tmp);
+-        if( chnTmp && chnTmp.IsTypeOf(OT_CHANNEL) )        
++        if( chnTmp && chnTmp.IsTypeOf(OT_CHANNEL) )
+         {
+           iLinkCount = iLinkCount + chnTmp.ChnLinkCount();
+           if( chnTmp.ChnDPUsageCount() != ID_ERROR )
+@@ -390,7 +390,7 @@
+           }
+         }
+       }
+-      
++
+       string sLoadProgamList = "WebUI.enter(ProgramListPage, '"#sEnumPrgFilter#"');";
+       Write('<td  class="WhiteBkg DeviceListCell">');
+         Write("<table class='CLASS04208'>");
+@@ -401,18 +401,18 @@
+           Write( '<div class="StdButton" onclick="'#sLoadProgamList#'">${btnPrograms}</div>' );
+           Write("</td></tr>");
+         Write("</table>");
+-      Write("</td>"); !Verknüpfungen
+-      
++      Write("</td>"); !Verknï¿½pfungen
++
+       string chnTmp = "";
+       integer iCount = 0;
+-      
+-      integer iSubObjects = 0; ! Anzahl Unterobjekte je Raum... als "Platzhalter" für Tabellen-Reihen
++
++      integer iSubObjects = 0; ! Anzahl Unterobjekte je Raum... als "Platzhalter" fï¿½r Tabellen-Reihen
+       string tmp = "";
+       foreach(tmp, elem.EnumEnabledIDs())
+       {
+         iSubObjects = iSubObjects + 1;
+       }
+-      
++
+       ! get all channels for rooms to sort them
+       if( elem.ID() == iGhostFuncID )
+       {
+@@ -437,8 +437,8 @@
+       !}
+     } ! if (elem)
+   } ! foreach
+-  dom.DeleteObject( oGhostFunc.ID() ); 
+-  oUser.UserTempViewIDs().Remove( iGhostFuncID ); 
++  dom.DeleteObject( oGhostFunc.ID() );
++  oUser.UserTempViewIDs().Remove( iGhostFuncID );
+ } !if(oUser)
+ 
+ %>
+@@ -459,7 +459,7 @@
+   bEIP = false;
+   hideGhostFunc();
+   colorFilterBtns(fltSF);
+-  
++
+   var iExpFuncs = 0;
+   var mouseOpts = {
+     onTopOver: function(divToShow) {
+@@ -494,10 +494,10 @@
+   updateList = function() {
+     WebUI.enter(FunctionListPage);
+   }
+-  
++
+   expand = function(id, fTblPos) {
+     // Ausklappen
+-    Cursor.set(Cursor.WAIT); 
++    Cursor.set(Cursor.WAIT);
+     if (!isSorting)
+     {
+       if( $("img" + id) )
+@@ -515,7 +515,7 @@
+     }
+     Cursor.set(Cursor.NORMAL);
+   }
+-  
++
+   expandFunc = function(id, fTblPos) {
+     if( $("img" + id) )
+     {
+@@ -539,7 +539,7 @@
+             }
+           }
+         }
+-        else     
++        else
+         {
+           bEIP = true;
+           var opts = {
+@@ -562,15 +562,15 @@
+     refreshFooterButton();
+     }
+   }
+-  
++
+   collapseFunc = function(id) {
+     if ($("img" + id)) {
+       if ($("img" + id).alt == "minus") {
+         $("img" + id).src = "/ise/img/plus.png";
+         $("img" + id).alt = "plus";
+-        
++
+         var i = 0;
+-        
++
+         while(true) {
+           var tmpElem = id + "tr" + i;
+           if ($(tmpElem))
+@@ -582,7 +582,7 @@
+             }
+             i++;
+           }
+-          else 
++          else
+             break;
+         }
+         arFObj[id]['exp'] = false;
+@@ -596,14 +596,14 @@
+       refreshFooterButton();
+     }
+   }
+-  
++
+   refreshFooterButton = function() {
+     if (iExpFuncs == 0)
+       $("btnExp").innerHTML = translateKey("footerBtnOpenTree"); //"Baumstruktur &ouml;ffnen";
+     else
+-      $("btnExp").innerHTML = translateKey("footerBtnCloseTree"); //"Baumstruktur schließen";
++      $("btnExp").innerHTML = translateKey("footerBtnCloseTree"); //"Baumstruktur schlieï¿½en";
+   }
+-  
++
+   expandAll = function() {
+     Cursor.set(Cursor.WAIT);
+     var bExpand = (iExpFuncs == 0);
+@@ -619,15 +619,15 @@
+     }
+     Cursor.set(Cursor.NORMAL);
+   }
+-  
++
+   collapseAll = function()
+-  { 
++  {
+     for (var i = 0; i < arF.length; i++)
+     {
+       collapseFunc(arF[i]);
+     }
+   }
+-  
++
+   addChannels2 = function(id,ids)
+   {
+     var _id_ = id;
+@@ -650,11 +650,11 @@
+     //MultiChannelChooser.show("Gewerke", ids.split("\t"), callback, MultiChannelChooser.SHOW_ALL);
+     MultiChannelChooser.show(translateKey("submenuFunction"), ids.split("\t"), callback, MultiChannelChooser.SHOW_ALL);
+   }
+-  
+-  restoreFuncs = function() {    
++
++  restoreFuncs = function() {
+     filterFunc();
+   }
+-  
++
+   filterFunc= function() {
+     var sTmp = "";
+     var bNo = true;
+@@ -685,7 +685,7 @@
+           for (var x = 0; x < arFObj[arF[i]]['chns'].length; x++) {
+             hide(arFObj[arF[i]]['chns'][x]['trid']);
+             hide("picDiv" + arF[i] + arFObj[arF[i]]['chns'][x]['id']);
+-          }   
++          }
+         }
+         //hide("r" + arF[i]); //###
+       }
+@@ -707,7 +707,7 @@
+   s += "</tr>";
+   s += "</table>";
+   setFooter(s);
+-  
++
+   editFuncs = function() {
+     dlgPopup = new iseMessageBox(ID_FUNCTIONS);
+     PopupClose = function() {
+@@ -716,15 +716,15 @@
+     }
+     dlgPopup.ShowPopup();
+   }
+-  
+-  specialReloadPage = function() 
++
++  specialReloadPage = function()
+   {
+     if(bNecc)
+     {
+       reloadPage();
+-    } 
++    }
+   }
+-  
++
+   updateTable = function()
+   {
+     var bDoOpenStructure = false;
+@@ -740,7 +740,7 @@
+           for (var x = 0; x < arFObj[arF[i]]['chns'].length; x++)
+           {
+             exceptGhostFunc = arFObj[arF[i]]['id'];
+-            if (!fltSF.objPassFilter(arFObj[arF[i]]['chns'][x])) 
++            if (!fltSF.objPassFilter(arFObj[arF[i]]['chns'][x]))
+             {
+               conInfo( "Filter: Hide id "+arFObj[arF[i]]['id'] );
+               hide(arFObj[arF[i]]['chns'][x]['trid']);
+@@ -767,7 +767,7 @@
+           }
+           else
+           {
+-            if( arFObj[arF[i]]['chns'].length > 0 ) show("img" + arF[i]); 
++            if( arFObj[arF[i]]['chns'].length > 0 ) show("img" + arF[i]);
+           }
+         }
+          else
+@@ -779,12 +779,12 @@
+       }
+     }
+    Cursor.set(Cursor.NORMAL);
+-   if( bDoOpenStructure ) 
+-   { 
++   if( bDoOpenStructure )
++   {
+      if (!(exceptGhostFunc == <%Write(iGhostFuncID);%>)) expandAll();
+    }
+   }
+-  
++
+   SortMe = function(colName)
+   {
+     //delete whole tree; get all channels and sort
+@@ -792,13 +792,13 @@
+     hide("btnExp");
+     IseSort2(arCObj,colName,false,true);
+   }
+-  
++
+   SortFuncs = function()
+   {
+     show("btnExp");
+     IseSort(arSortFObj,'func', true);
+   }
+-  
++
+   HideFunctions = function()
+   {
+     var arrayCount = arF.length;
+@@ -806,32 +806,32 @@
+     for(var i = 0; i < arrayCount; i++)
+     {
+       hide("r" + arF[i]);
+-    }  
++    }
+   }
+-  
++
+   GetAllChannels = function()
+   {
+     new Ajax.Updater("dummy", "/pages/tabs/admin/views/functionchannels.htm?sid=" + SessionId + "&id=<% Write(iGhostFuncID); %>&clearSel=false",{evalScripts:true});
+   }
+-  
++
+   function hideGhostFunc()
+   {
+     hide("r<%Write(iGhostFuncID);%>");
+   }
+-  
++
+   decChnCount = function(funcId) {
+     arFObj[funcId]['chncount']--;
+     if (arFObj[funcId]['chncount'] == 0) {
+       hide("img" + funcId);
+     }
+   }
+-  
++
+   isDeleted = function(funcId, id) {
+     for (var i = 0; i < arDelChns.length; i++) {
+       if (arDelChns[i] == ("" + funcId + id)) {
+         return true;
+       }
+-    }  
++    }
+     return false;
+   }
+   translatePage("#tblFunctionList");
+--- occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm
+@@ -4,13 +4,13 @@
+ 
+ <%
+   system.SetSessionVar("sessionTAB", "statusviews/alarmMessages");
+-  
++
+   boolean firstSort = false;
+   object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+   if( oUser && (system.GetSessionVar("sessionCTV")=="true") )
+   {
+     oUser.UserTempViewIDs().RemoveAll();
+-    
++
+     object oTmpArray = dom.GetObject( ID_SYSTEM_VARIABLES );
+     if( oTmpArray )
+     {
+@@ -39,7 +39,7 @@
+ <script type="text/javascript">
+   Cursor.set(Cursor.NORMAL);
+ </script>
+-<table id="tblAlarms" class="tblList CLASS02801" border="0" cellpadding="0" cellspacing="0" frame="void" rules="none" style="display:none;">
++<table id="tblAlarms" class="filterTable tTable CLASS02601" border="0" cellpadding="0" cellspacing="0" frame="void" rules="none" style="display:none;">
+ <colgroup>
+   <col width="10%" />
+   <col width="10%" />
+@@ -53,17 +53,17 @@
+ </colgroup>
+ <tr>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="first"){sCssName="SortSelected";} %>
+-  <th align="center" class="CLASS02802"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'first',true);">${thFirstTriggerDateTime}</div></th>
++  <th align="center" class="CLASS02802"><div id="first" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'first',true);">${thFirstTriggerDateTime}</div></th>
+   <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thLastTriggerDateTime}</div></th>
+   <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thNumberOfTriggerEvents}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+-  <th align="center" class="CLASS02802"><div class="pt11 CLASS02815 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'name',true);">${thNameOfAlarm}</div></th>
++  <th align="center" class="CLASS02802"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'name',true);">${thNameOfAlarm}</div></th>
+   <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thState}</div></th>
+   <th align="center" class="thCell CLASS02802" ><div class="pt11 CLASS02815">${thDescription}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="message"){sCssName="SortSelected";} %>
+-  <th align="center" class="CLASS02802"><div class="pt11 CLASS02815 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'message',true);">${thAlarmMessage}</div></th>
++  <th align="center" class="CLASS02802"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'message',true);">${thAlarmMessage}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
+-  <th align="center" class="CLASS02802" ><div class="pt11 CLASS02815 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'room',true);">${thRoom}</div></th>
++  <th align="center" class="CLASS02802" ><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'room',true);">${thRoom}</div></th>
+   <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thAction}</div></th>
+ </tr>
+ <tr>
+@@ -91,7 +91,7 @@
+   <td align="center" valign="middle" class="CLASS02804">
+     <div id="btnFilterRoom" class="FilterBtn">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterRoomSub" style="display:none">
+-      <% 
++      <%
+         Write("<table class='CLASS02813'>");
+         object obj = dom.GetObject(ID_ROOMS);
+         if ( obj ) {
+@@ -117,7 +117,7 @@
+ </tr>
+ <%
+   integer iAlCount = 0;
+-    
++
+   string sSVID;
+   foreach( sSVID, oUser.UserTempViewIDs().EnumIDs() )
+   {
+@@ -131,7 +131,7 @@
+       string sTimestamp = oSV.Timestamp();
+       Call( "/esp/TimeStamp.fn::TimeStampToString()" );
+       string sLastTimestamp = sTimestamp;
+-     
++
+       object oDestDP = dom.GetObject( oSV.AlDestMapDP() );
+       string sDestDPName = "";
+       if( oDestDP )
+@@ -142,19 +142,19 @@
+       {
+         sDestDPName = "no data point";
+       }
+-      
++
+       string sAlarmName = oSV.Name();
+       if( !sAlarmName.Length() )
+       {
+         sAlarmName = "no name";
+       }
+-      
++
+       string sAlarmDescription = oSV.DPInfo().Replace('\r\n', '<br/>').Replace('\r', '<br/>').Replace('\n', '<br/>');
+       if( !sAlarmDescription.Length() )
+       {
+         sAlarmDescription = "no description";
+       }
+-      
++
+       string sRoom = "";
+       string sLastTriggerName = "";
+       string sLastTriggerMessage = "";
+@@ -171,7 +171,7 @@
+       string roomIDs = "";
+       object oLastTrigger = dom.GetObject( iTmpTriggerID );
+       if( oLastTrigger )
+-      {           
++      {
+         object oLastTriggerChannel = dom.GetObject( oLastTrigger.Channel() );
+         if( oLastTriggerChannel )
+         {
+@@ -187,7 +187,7 @@
+               roomIDs = roomIDs#sRID# "\t";
+             }
+           }
+-          
++
+           if( oLastTrigger.IsTypeOf( OT_HSSDP ) )
+           {
+             string sLongKey = oLastTriggerChannel.ChnLabel()#"|"#oLastTrigger.HSSID();
+@@ -218,7 +218,7 @@
+       }
+       else
+       {
+-        if (oSV.IsTypeOf(OT_ALARMDP)) 
++        if (oSV.IsTypeOf(OT_ALARMDP))
+         {
+           if ((oSV.Value() == false) || (oSV.Value() == "")) {
+             sAlarmMessage = oSV.ValueName0();
+@@ -228,7 +228,7 @@
+           }
+         }
+       }
+-      
++
+       string sTrId = "al"#oSV.ID();
+       Write( '<tr id="'#sTrId#'">' );
+         Write( '<td align="center" valign="middle" class="CLASS02806">'#sFirstTimestamp#'</td>' );
+@@ -247,7 +247,7 @@
+         ! The value of this button is set by JavaScript at the end of this page >> translateButton("btnConfirm");
+         Write( '<td align="center" valign="middle" class="CLASS02807"><input type="button" name="btnConfirm" value="btnConfirm" onclick="ReceiptAlarm('#oSV.ID()#');" class="CLASS02809 colorGradient" /></td>' );
+       Write( '</tr>' );
+-      
++
+       WriteLine( '<script type="text/javascript">' );
+       WriteLine( 'var tmp = new Object();' );
+       WriteLine( 'tmp["id"] = '#oSV.ID()#'; ' );
+@@ -267,14 +267,14 @@
+ </table>
+ 
+ <script type="text/javascript">
+-  
++
+   <%
+     if(firstSort)
+     {
+       Write("//IseSort(arAlarms,'first',true);");
+     }
+   %>
+-  
++
+   if ( <% Write(iAlCount); %> == 0)
+   {
+     show("NoAlarms");
+@@ -283,19 +283,19 @@
+   {
+     show("tblAlarms");
+   }
+-  
+-  var mouseOpts = 
++
++  var mouseOpts =
+   {
+     onTopOver: function(divToShow)
+     {
+       selectFilters(fltAL, divToShow);
+     }
+   };
+-  
++
+   new iseSubMenuControl("btnFilterName", "btnFilterNameSub", "tblAlarms", {r: 11, d:22}, mouseOpts, false, true);
+   new iseSubMenuControl("btnFilterRoom", "btnFilterRoomSub", "tblAlarms", {r: 11, d:22}, mouseOpts, false, true);
+   new iseSubMenuControl("btnFilterDesc", "btnFilterDescSub", "tblAlarms", {r: 11, d:22}, mouseOpts, false, true);
+-  
++
+   _ReceiptAlarm = function(id)
+   {
+     var url = '/esp/functions.htm?sid='+SessionId;
+@@ -314,7 +314,7 @@
+   };
+ 
+   var s = "";
+-  
++
+   s += "<table cellspacing='8'>";
+   s += "<tr>";
+     s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack();'>"+ translateKey('footerBtnPageBack') +"</div></td>";
+@@ -322,9 +322,9 @@
+     s += "<td align='center' valign='middle'><div class='FooterButton CLASS02810' onclick='ackAll();'>"+ translateKey('footerBtnConfirmAll') +"</div></td>";
+   s += "</tr>";
+   s += "</table>";
+-  
++
+   setFooter(s);
+-  
++
+   ackAll = function()
+   {
+     for (var i = 0; i < arAlarms.length; i++)
+@@ -332,7 +332,7 @@
+       ReceiptAlarm(arAlarms[i]['id']);
+     }
+   };
+-  
++
+   updateTable = function()
+   {
+     for (var i = 0; i < arAlarms.length; i++)
+@@ -345,9 +345,8 @@
+       {
+         show(arAlarms[i]['trid']);
+       }
+-    } 
++    }
+   };
+   translatePage("#tblAlarms, #NoAlarms");
+   translateButtons("btnConfirm");
+ </script>
+-  
+--- occu/WebUI/www/rega/pages/tabs/statusviews/serviceMessages.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/statusviews/serviceMessages.htm
+@@ -4,15 +4,15 @@
+ 
+ <%
+   system.SetSessionVar("sessionTAB", "statusviews/serviceMessages");
+-  
++
+   boolean firstSort = false;
+   object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+   if( oUser && (system.GetSessionVar("sessionCTV")=="true") )
+   {
+     oUser.UserTempViewIDs().RemoveAll();
+-    
++
+     Write('iseClearLastSort();');
+-    
++
+     object oTmpArray = dom.GetObject( ID_SERVICES );
+     if( oTmpArray )
+     {
+@@ -72,20 +72,20 @@
+ <tr>
+  <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="first"){sCssName="SortSelected";} %>
+   <th class="CLASS02602"><div id="first" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'first',true);">${thFirstMessageDateTime}</div></th>
+-  <th align="center" valign="middle">${thLastMessageDateTime}</th>
++  <th class="CLASS02603" align="center" valign="middle">${thLastMessageDateTime}</th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+   <th class="CLASS02602"><div id="name" class="pt11 <%Write(sCssName);%> " onclick="IseSort(arServices,'name',true);">${thName}</div></th>
+-  <th align="center" valign="middle"><div class="pt11 Sort">${thPicture}</div></th>
++  <th class="CLASS02603" align="center" valign="middle"><div>${thPicture}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="sn"){sCssName="SortSelected";} %>
+   <th class="CLASS02602"><div id="sn" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'sn',true);">${thSerialNumber}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="func"){sCssName="SortSelected";} %>
+   <th class="CLASS02602"><div id="func" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'func',true);">${thFunc}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
+   <th class="CLASS02602"><div id="room" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'room',true);">${thRoom}</div></th>
+-  <th align="center" valign="middle">${thLastChange}</th>
++  <th class="CLASS02603" align="center" valign="middle">${thLastChange}</th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="desc"){sCssName="SortSelected";} %>
+   <th class="CLASS02602"><div id="desc" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'desc',true);">${thServiceMessage}</div></th>
+-  <th align="center" valign="middle"><div class="pt11 Sort">${thAction}</div></th>
++  <th class="CLASS02603" align="center" valign="middle"><div>${thAction}</div></th>
+ </tr>
+ <tr id="trFlt">
+   <td align="center" valign="middle" class="CLASS02603"></td>
+@@ -110,7 +110,7 @@
+   <td align="center" valign="middle" class="CLASS02603">
+     <div id="btnFilterFunc" class="FilterBtn">${thFilter}</div>
+   <div class="FilterSubMenu" id="btnFilterFuncSub" style="display:none">
+-    <% 
++    <%
+       Write("<table class='CLASS02618'>");
+       object obj = dom.GetObject(ID_FUNCTIONS);
+       if ( obj ) {
+@@ -135,7 +135,7 @@
+   <td align="center" valign="middle" class="CLASS02603">
+     <div id="btnFilterRoom" class="FilterBtn">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterRoomSub" style="display:none">
+-      <% 
++      <%
+         Write("<table class='CLASS02618'>");
+         object obj = dom.GetObject(ID_ROOMS);
+         if ( obj ) {
+@@ -187,7 +187,7 @@
+           string sTimestamp = oAlarm.Timestamp();
+           Call( "/esp/TimeStamp.fn::TimeStampToString()" );
+           string sLastTimestamp = sTimestamp;
+-          
++
+           object oDestDP = dom.GetObject( oAlarm.AlDestMapDP() );
+           string sDestDPName = "";
+           if( oDestDP )
+@@ -198,7 +198,7 @@
+           {
+             sDestDPName = "no data point";
+           }
+-          
++
+           string sLastUse = "";
+           string sServiceMessage = "";
+           string sSerialNumber = "no serial number";
+@@ -219,7 +219,7 @@
+             string sTimestamp = oAlarm.LastTriggerTime();
+             Call( "/esp/TimeStamp.fn::TimeStampToString()" );
+             sLastUse = sTimestamp;
+-            
++
+             object oLastTriggerChannel = dom.GetObject( oLastTrigger.Channel() );
+             if( oLastTriggerChannel )
+             {
+@@ -228,7 +228,7 @@
+               {
+                 sAlarmName = "no name";
+               }
+-              
++
+               string sRID;
+               foreach( sRID, oLastTriggerChannel.ChnRoom() )
+               {
+@@ -240,7 +240,7 @@
+                   roomIDs = roomIDs#sRID# "\t";
+                 }
+               }
+-              
++
+               string sFID;
+               foreach( sFID, oLastTriggerChannel.ChnFunction() )
+               {
+@@ -252,12 +252,12 @@
+                   funcIDs = funcIDs#sFID# "\t";
+                 }
+               }
+-              
++
+               sLastTriggerName = oLastTriggerChannel.Name();
+               if( oLastTrigger.IsTypeOf( OT_HSSDP ) )
+               {
+                 sSerialNumber = oLastTriggerChannel.Address();
+-                
++
+                 string sLongKey = oLastTriggerChannel.ChnLabel()#"|"#oLastTrigger.HSSID();
+                 string sShortKey = oLastTrigger.HSSID();
+                 if( (oLastTrigger.ValueType() == ivtInteger) && (oLastTrigger.ValueSubType() == istEnum) )
+@@ -279,11 +279,11 @@
+                     sServiceMessage = "${unknownMessage} ("#sLongKey#")";
+                   }
+                 }
+-                  
++
+               }
+             }
+           }
+-    
++
+           string sTrId = "al"#oAlarm.ID();
+           Write( '<tr id="'#sTrId#'" class="CLASS02604">' );
+             Write( '<td align="center" valign="middle" class="CLASS02605">'#sFirstTimestamp#'</td>' );
+@@ -299,7 +299,7 @@
+               Write(" onmouseover='picDivShow(jg_250, \""#dev.Label()#"\", 250, -1, this);'");
+               Write(" onmouseout='picDivHide(jg_250);'");
+               Write("></div>");
+-              Write("<script type='text/javascript'>");  
++              Write("<script type='text/javascript'>");
+                 Write("var jg_0 = new jsGraphics('"#sPicDivId#"');");
+                 Write("InitGD(jg_0, 50);");
+                 Write("Draw(jg_0, '"#dev.Label()#"', 50, '-1');");
+@@ -338,7 +338,7 @@
+ 
+             Write( '$("n'#oAlarm.ID()#'").innerHTML = strCut(translateString("'#sAlarmName#'"), false, true);');
+             Write( '$("m'#oAlarm.ID()#'").innerHTML = strCut(translateString("'#sServiceMessage#'"), false, true);');
+-            
++
+           Write( '}');
+           Write( 'var tmp = new Object();');
+           Write( 'tmp["id"] = '#oAlarm.ID()#'; ');
+@@ -386,7 +386,7 @@
+       selectFilters(fltSM, divToShow);
+     }
+   };
+-  new iseSubMenuControl("btnFilterSN",   "btnFilterSNSub",   "SvOffset", {d:12}, mouseOpts, false, true); 
++  new iseSubMenuControl("btnFilterSN",   "btnFilterSNSub",   "SvOffset", {d:12}, mouseOpts, false, true);
+   new iseSubMenuControl("btnFilterName", "btnFilterNameSub", "SvOffset", {d:12}, mouseOpts, false, true);
+   new iseSubMenuControl("btnFilterFunc", "btnFilterFuncSub", "SvOffset", {d:12}, mouseOpts, false, true);
+   new iseSubMenuControl("btnFilterRoom", "btnFilterRoomSub", "SvOffset", {d:12}, mouseOpts, false, true);
+@@ -400,7 +400,7 @@
+   {
+     show("tblServices");
+   }
+-  
++
+   var mouseOpts =
+   {
+     onTopOver: function(divToShow)
+@@ -423,7 +423,7 @@
+   };
+ 
+   var s = "";
+-  
++
+   s += "<table cellspacing='8'>";
+   s += "<tr>";
+     s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack();'>"+ translateKey('footerBtnPageBack') +"</div></td>";
+@@ -431,7 +431,7 @@
+     s += "<td align='center' valign='middle'><div class='FooterButton CLASS02615' onclick='ackAll();' >"+ translateKey('footerBtnConfirmAll') +"</div></td>";
+   s += "</tr>";
+   s += "</table>";
+-  
++
+   setFooter(s);
+ 
+   updateTable = function() {
+@@ -442,7 +442,7 @@
+       else {
+         show(arServices[i]['trid']);
+       }
+-    } 
++    }
+   };
+ 
+   // Funktion wird von system.fn::UpdateUI() aufgerufen
+@@ -456,5 +456,4 @@
+   };
+   translatePage("#tblServices, #NoServices");
+   translateButtons("btnConfirm");
+-</script> 
+-  
++</script>
+--- occu/WebUI/www/rega/pages/tabs/user/favOverview.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/user/favOverview.htm
+@@ -77,7 +77,7 @@
+   <tr>
+     <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+     <th><div class="pt11 CLASS06404 <%Write(sCssName);%>" onclick="IseSort(arFavs,'name',true);" >${thName}</div></th>
+-    <th><div class="pt11 Sort">${thDescription}</div></th>
++    <th class="thCell CLASS02803"><div class="pt11 Sort">${thDescription}</div></th>
+     <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="unit"){sCssName="SortSelected";} %>
+     <th><div class="pt11 CLASS06404 <%Write(sCssName);%>"  onclick="IseSort(arFavs,'unit',true);" >${thNumberOfColumns}</div></th>
+     <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="colpos"){sCssName="SortSelected";} %>
+@@ -86,7 +86,7 @@
+     <th class="CLASS06414"><div class="CLASS06404 <%Write(sCssName);%>" onclick="IseSort(arFavs,'namepos',true);">${thPosOfNameField}</div></th>
+     <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="users"){sCssName="SortSelected";} %>
+     <th><div class="pt11 CLASS06404 <%Write(sCssName);%>" onclick="IseSort(arFavs,'users',true);">${thUser}</div></th>
+-    <th><div class="pt11 Sort">${thAction}</div></th>
++    <th class="thCell CLASS02803"><div class="pt11 Sort">${thAction}</div></th>
+   </tr>
+   <tr>
+     <td class="CLASS06405">
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -47,7 +47,7 @@
+ 
+ .conditionEven
+ {
+-  /*Wenn die Farbe nicht nur als Rahmen, sondern für die ganze Bedingung gelten soll,
++  /*Wenn die Farbe nicht nur als Rahmen, sondern fï¿½r die ganze Bedingung gelten soll,
+     muss background-color in der Klasse .Rule deaktiviert werden */
+   background-color: $_(programEven);
+   /* border: solid 1px $_(black); *//* black */
+@@ -99,7 +99,7 @@
+ 
+ ul ul {
+   margin-top: 0px;
+-  margin-bottom: 0px;  
++  margin-bottom: 0px;
+ }
+ 
+ a img {
+@@ -111,14 +111,14 @@
+  * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ /* Navigation-Leiste */
+-#navbar 
++#navbar
+ {
+   margin: 0px;
+   background-color: $_(background); /* #183473 */
+   width:100%;
+   border-bottom: solid 5px $_(white); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
+ }
+- 
++
+ /* Haupt-Fenster */
+ #_content
+ {
+@@ -208,14 +208,14 @@
+ }
+ 
+ /* Linker Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
+-#contentLeft 
++#contentLeft
+ {
+   vertical-align: top;
+ }
+ 
+ /* Rechter Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
+-#contentRight 
+-{ 
++#contentRight
++{
+   border-left: solid 5px $_(navBarSeparator); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
+   /* padding-top: 10px; */
+   vertical-align: top;
+@@ -238,7 +238,7 @@
+ 
+ /* Grundlegende Tabelle auf der Statusanzeige-Seite */
+ #tblStatus {
+-  width:1200px; 
++  width:1200px;
+   height:100%;
+   table-layout: fixed;
+ }
+@@ -259,11 +259,11 @@
+ 
+ #chnListBody td {
+   /*border: solid 1px $_(black); /* black */*/
+-  text-align: center;  
++  text-align: center;
+ }
+ #chnListBody th {
+   /*border: solid 1px $_(black); /* black */*/
+-  text-align: center;  
++  text-align: center;
+ }
+ 
+ /* * * * * * * * * * * * * * * * * * * * * * *
+@@ -277,13 +277,13 @@
+ /* Desktop Label */
+ .DesktopLabel
+ {
+-  background-color:#C0C0C0; 
+-  width:auto; 
+-  border: solid 1px $_(black); /* black */ 
+-  font-weight:bold;  
+-  text-align: center; 
+-  margin-top:3px; 
+-  margin-left:3px; 
++  background-color:#C0C0C0;
++  width:auto;
++  border: solid 1px $_(black); /* black */
++  font-weight:bold;
++  text-align: center;
++  margin-top:3px;
++  margin-left:3px;
+   margin-right:3px;
+ }
+ 
+@@ -296,7 +296,7 @@
+   padding-left: 10px;
+ }
+ 
+-/* Small Logo Position für An- und Abmeldung */
++/* Small Logo Position fï¿½r An- und Abmeldung */
+ .SmallLogoLog
+ {
+   position: absolute;
+@@ -330,7 +330,7 @@
+ 
+ /* Statusanzeige-Rooms */
+ .ButtonStatusRooms
+-{ 
++{
+   background-color:$_(activeBackground); /* #f0f0f0 */
+   border:solid 1px $_(black); /* black */
+   color: $_(textColorB); /* black */
+@@ -339,7 +339,7 @@
+ }
+ 
+ .ButtonStatusRoomsSelected
+-{ 
++{
+   background-color:$_(active); /* #565657 */
+   border:solid 1px $_(black); /* black */
+   color: $_(textColorA); /* white */
+@@ -366,7 +366,7 @@
+   width: 100px;
+ }
+ 
+-.filterTable 
++.filterTable
+ {
+   empty-cells:show;
+ }
+@@ -376,7 +376,7 @@
+   text-align:center;
+   border:solid 1px $_(black); /* black */
+   background-color:$_(clickable);
+-  height: 20px;
++  height: auto;
+ }
+ 
+ .filterTable td
+@@ -397,14 +397,14 @@
+   height: 80px;
+ }
+ 
+-/* Überschrift im Header-Feld */
++/* ï¿½berschrift im Header-Feld */
+ .HeaderTitle {
+   font-weight: bold;
+   color: $_(textColorA); /* #ffffff */
+ }
+ 
+ /* Buttons innerhalb der Navigations-Leiste */
+-.NavButton 
++.NavButton
+ {
+   background-color: $_(logoutButton);
+   background-image:url(/ise/img/gradientButton25px.png);
+@@ -557,21 +557,21 @@
+ 
+ /* Trennlinie Statusanzeige Systemhistorie*/
+ 
+-.borderBottomHist 
++.borderBottomHist
+ {
+   border-bottom:solid 1px $_(black); /* black */
+ }
+ 
+ /* Logging von Ereignissen (z.B. Seite zur Statusnazeige) */
+-.divLog 
++.divLog
+ {
+   color: $_(textColorB); /* black */
+   overflow: auto;
+   width:100%;
+-  height:75%; /* sorgt für korrekte Darstellung der Scrollbalken im IE */
++  height:75%; /* sorgt fï¿½r korrekte Darstellung der Scrollbalken im IE */
+ }
+ 
+-/* Tabelle zur Listendarstellung von Elementen (z.B. Raumübersicht) */
++/* Tabelle zur Listendarstellung von Elementen (z.B. Raumï¿½bersicht) */
+ .tblList {
+   margin-top: 20px;
+   width: 100%;
+@@ -587,23 +587,25 @@
+ .Sort
+ {
+   cursor: pointer;
+-  text-align: center;
+-  vertical-align: middle;
+-  height: 100%;
++	height: 50px;
++  display: flex;
++  justify-content: center;
++  align-items: center;
+ }
+ 
+ .SortSelected
+ {
+   cursor: pointer;
+   background-color: $_(active); /* #565657 */
+-  text-align: center;
+-  vertical-align: middle;
+-  height: 100%;
++  height: 54px;
++	display: flex;
++  justify-content: center;
++  align-items: center;
+ }
+ 
+ .pt11
+ {
+-  padding-top: 11px;
++
+ }
+ 
+ .tblList td {
+@@ -654,13 +656,13 @@
+ }
+ 
+ .popupTableRow
+-{ 
++{
+   border-bottom: solid 1px $_(clickable);
+   border-top: solid 1px $_(clickable);
+ }
+ 
+ .scriptButton
+-{ 
++{
+   text-align:center;
+   width:10%;
+   background-color:$_(clickable);
+@@ -752,8 +754,8 @@
+   background-color: $_(active); /* #565657 */
+ }
+ 
+-/* Filter Untermenüs */
+-.FilterSubMenu 
++/* Filter Untermenï¿½s */
++.FilterSubMenu
+ {
+   overflow:auto;
+   background-color: $_(inactiveBackground);
+@@ -808,11 +810,11 @@
+ }
+ 
+ .PercBtn {
+-  background-color: $_(clickable); 
+-  color: $_(textColorA); 
++  background-color: $_(clickable);
++  color: $_(textColorA);
+   font-weight: bold;
+   text-align: center;
+-  border: solid 1px $_(black); 
++  border: solid 1px $_(black);
+   border-top: inset 4px $_(clickable);
+   border-right: inset 4px $_(clickable);
+ 	height:96px;
+@@ -837,7 +839,7 @@
+   border-top: inset 4px $_(warnSignal); /* #fdf304 */
+   border-right: inset 4px $_(warnSignal); /* #fdf304 */
+ }
+-  
++
+ #id_progressbar_wrapper
+ {
+  	background-color: $_(activeBackground); /* rgb(220, 220, 220) */
+@@ -879,7 +881,7 @@
+ 	margin: 0;
+ }
+ 
+-/* Buttons (Löschen, Einstellen, Geräte...) auf Geräte/Raum/Gewerk-Übersicht */
++/* Buttons (Lï¿½schen, Einstellen, Gerï¿½te...) auf Gerï¿½te/Raum/Gewerk-ï¿½bersicht */
+ ._StdButton
+ {
+   background-color: $_(clickable);
+@@ -1022,7 +1024,7 @@
+ .TblHeaderUserConfig {
+   background-color:$_(clickable);
+   color: $_(textColorA); /* white */
+-  border:solid 1px $_(black); /* black */  
++  border:solid 1px $_(black); /* black */
+   text-align:center;
+   height: 50px;
+ }
+@@ -1051,7 +1053,7 @@
+   color: $_(textColorB); /* black */
+   text-align:center;
+   border:solid 1px $_(black); /* black */
+-}  
++}
+ 
+ .StatViewTbl {
+   empty-cells: show;
+@@ -1072,10 +1074,10 @@
+ }
+ 
+ .picDiv {
+-  margin:0; 
+-  padding:0; 
+-  position:relative; 
+-  width:50px; 
++  margin:0;
++  padding:0;
++  position:relative;
++  width:50px;
+   height:50px;
+ }
+ 
+@@ -1151,7 +1153,7 @@
+   padding: 4px;
+   text-align : left;
+   vertical-align: middle;
+-} 
++}
+ 
+ .tSubHeaderCell
+ {
+@@ -1391,10 +1393,10 @@
+   text-align:center;
+ }
+ 
+-/* Angaben für die Tabellenspalten und -header */
++/* Angaben fï¿½r die Tabellenspalten und -header */
+ 
+ .thCell
+-{ 
++{
+   background-color:$_(clickable);
+   color: $_(textColorA); /* white */
+   border:solid 1px $_(black); /* black */
+@@ -1412,19 +1414,19 @@
+   text-align:center;
+ }
+ 
+-/* Weisser Zellenhintergrund für Bilder (Geräteübersicht u.ä.) */
++/* Weisser Zellenhintergrund fï¿½r Bilder (Gerï¿½teï¿½bersicht u.ï¿½.) */
+ .WhiteBkgPic {
+   background-color: $_(white); /* #ffffff */
+   color: $_(textColorB); /* black */
+ }
+ 
+-/* Weisser Zellenhintergrund (Geräteübersicht u.ä.) */
++/* Weisser Zellenhintergrund (Gerï¿½teï¿½bersicht u.ï¿½.) */
+ .WhiteBkg {
+   background-color: $_(activeBackground); /* #f0f0f0 */
+   color: $_(textColorB); /* black */
+ }
+ 
+-/* Grauer Zellenhintergrund (Geräteübersicht u.ä.) */
++/* Grauer Zellenhintergrund (Gerï¿½teï¿½bersicht u.ï¿½.) */
+ .GrayBkg {
+   background-color: $_(activeBackground);
+   color: $_(textColorB); /* black */
+@@ -1499,7 +1501,7 @@
+ 	padding: 0;
+ }
+ 
+-#ic_deviceparameters .parameter_area 
++#ic_deviceparameters .parameter_area
+ {
+ 	margin-top:0;
+ 	margin-bottom:0;
+@@ -1521,7 +1523,7 @@
+ 	height: 50px;
+ }
+ 
+-#ic_deviceparameters .parameter_area .parameters_table 
++#ic_deviceparameters .parameter_area .parameters_table
+ {
+ 	width: 99%;
+ 	color: $_(textColorA); /* white */
+@@ -1659,7 +1661,7 @@
+   background-color: $_(activeBackground);
+   color: $_(textColorB); /* black */
+   border: 1px solid $_(black); /* black */
+-  height: 50px;  
++  height: 50px;
+   text-align:center;
+ }
+ 
+@@ -1691,11 +1693,11 @@
+ {
+ 	background-color: $_(white); /* white */
+ 	text-align: left;
+-	height: 80px;  
++	height: 80px;
+ }
+ /*--------------------------------------------*/
+ #modalbox #id_messagebox
+-{ 
++{
+   background-color: $_(black); /* #000000 */
+   position: absolute;
+   width: 100%;
+@@ -1757,7 +1759,7 @@
+ 	background-color: $_(background); /* #183473 */
+ 	margin: 20px;
+ }
+-	
++
+ #ic_selchannel #createLinkStep1 {
+ 	color: $_(textColorA); /* white */
+ 	border: 1px solid $_(black); /* black */
+@@ -1818,9 +1820,9 @@
+ }
+ 
+ #ic_selchannel .ChnListTbl .filterBox table td {
+-	border:  0; 
+-	padding: 0; 
+-	margin:  0; 
++	border:  0;
++	padding: 0;
++	margin:  0;
+ 	height:  auto;
+ 	width: auto;
+ 	color:   $_(white); /* white */
+@@ -1843,7 +1845,7 @@
+ /*IDs in der Tabelle*/
+ /*==================*/
+ 
+-/*Überschriftzeile*/
++/*ï¿½berschriftzeile*/
+ #ic_selchannel .ChnListTbl .chnListTbl_Caption
+ {
+ 	background-color: $_(clickable);
+@@ -1854,7 +1856,7 @@
+ }
+ /*--------------------------------------------*/
+ 
+-/*Überschriftzeile Sortierfunktion*/
++/*ï¿½berschriftzeile Sortierfunktion*/
+ #ic_selchannel .ChnListTbl .sorted
+ {
+ 	background-color: $_(active); /* #565657 */
+@@ -1881,7 +1883,7 @@
+ }
+ /*--------------------------------------------*/
+ 
+-/*Überschriftzeile Filterfunktion*/
++/*ï¿½berschriftzeile Filterfunktion*/
+ #ic_selchannel .ChnListTbl .filtered
+ {
+ 	background-color: $_(active); /* #565657 */
+@@ -1921,7 +1923,7 @@
+ }
+ /*--------------------------------------------*/
+ 
+-/*Tabellenkörper Virtuelle Tasten*/
++/*Tabellenkï¿½rper Virtuelle Tasten*/
+ #ic_selchannel #body_wrapper
+ {
+ 	background-color: $_(background); /* #183473 */
+@@ -1929,7 +1931,7 @@
+ }
+ /*--------------------------------------------*/
+ 
+-/*Tabellenkörper Virtuelle Tasten*/
++/*Tabellenkï¿½rper Virtuelle Tasten*/
+ #ic_selchannel .ChnListTbl  .virtual_key_hidden
+ {
+ 	visibility: hidden;
+@@ -1942,16 +1944,16 @@
+ }
+ /*--------------------------------------------*/
+ 
+-/*Tabellenkörper Bilderspalte*/
+-#ic_selchannel .ChnListTbl .chnListTbl_dev_img 
++/*Tabellenkï¿½rper Bilderspalte*/
++#ic_selchannel .ChnListTbl .chnListTbl_dev_img
+ {
+ 	background-color: $_(white); /* white */
+ 	text-align: left;
+-	height: 50px;  
++	height: 50px;
+ }
+ /*--------------------------------------------*/
+ 
+-/*Tabellenfuß Navibuttons*/
++/*Tabellenfuï¿½ Navibuttons*/
+ #ic_selchannel .ChnListTbl #chnListFoot tr td
+ {
+ 	background-color: $_(clickable);
+@@ -2002,7 +2004,7 @@
+ 	padding:0;
+ 	margin:0;
+ 	border:0;
+-	
++
+ 	width: 100%;
+ 	color: $_(textColorA); /* white */
+ }
+@@ -2037,9 +2039,9 @@
+ 	border: 0;
+ }
+ 
+-/*Anzeige-Feld für Expertenprofil und Easy-Mode-Profile*/
++/*Anzeige-Feld fï¿½r Expertenprofil und Easy-Mode-Profile*/
+ #ic_setprofiles .SetProfLinkTbl .easymode_wrapper {
+-	
++
+ }
+ 
+ #ic_setprofiles #body_wrapper
+@@ -2066,7 +2068,7 @@
+ 	color: $_(textColorB); /* black */
+ }
+ 
+-.pname_color 
++.pname_color
+ {
+ 	color: $_(windowText);/* windowText */
+ }
+@@ -2192,7 +2194,7 @@
+   color: $_(textColorB); /* black */
+   /* font-weight:bold; */
+   text-align:left;
+-  vertical-align:middle;  
++  vertical-align:middle;
+ }
+ 
+ .FilterHeight20 {
+@@ -2207,7 +2209,7 @@
+   color: $_(textColorB); /* black */
+   /* font-weight:bold; */
+   text-align:left;
+-  vertical-align:middle;  
++  vertical-align:middle;
+ }
+ 
+ .FilterCaption {
+@@ -2221,12 +2223,12 @@
+   line-height:20px;
+   width: 100%;
+   text-align:center;
+-  cursor:pointer; 
++  cursor:pointer;
+ }
+ 
+ .FilterBodyWrapper {
+   position:absolute;
+-  z-index:500; 
++  z-index:500;
+ }
+ 
+ .FilterBody {
+@@ -2271,7 +2273,7 @@
+   margin: 0;
+   border: 0 none;
+   padding: 0;
+-  overflow:hidden; 
++  overflow:hidden;
+ }
+ */
+ 
+@@ -2365,7 +2367,7 @@
+   background-color: $_(background);
+   float: left;
+ }
+-    
++
+ .MainMenuItem_Right {
+   height: 30px;
+   cursor: pointer;
+@@ -2459,7 +2461,7 @@
+   background-color: $_(subMenuBackground);
+   font-weight: bold;
+   padding-left: 5px;
+-  padding-right: 5px; 
++  padding-right: 5px;
+   text-align:left;
+   vertical-align:middle;
+   color: $_(textColorB); /* black */
+@@ -2558,7 +2560,7 @@
+   width: 996px;
+   height: 520px;
+   background-color: $_(white); /* white */
+-  overflow: scroll;  
++  overflow: scroll;
+ }
+ 
+ #ChannelChooserFooter {
+@@ -2636,7 +2638,7 @@
+ .ChannelChooserRow {
+   background-color: $_(activeBackground);
+ }
+-  
++
+ .ChannelChooserRow_Highlight {
+   background-color: $_(inactiveBackground);
+   cursor:pointer;
+@@ -2700,7 +2702,7 @@
+   width: 996px;
+   height: 520px;
+   background-color: $_(white); /* white */
+-  overflow: scroll;  
++  overflow: scroll;
+ }
+ 
+ #MultiChannelChooserFooter {
+@@ -2954,7 +2956,7 @@
+   height: 520px;
+   background-color: $_(white); /* white */
+   color: $_(textColorB); /* black */
+-  overflow: scroll;  
++  overflow: scroll;
+ }
+ 
+ #ChannelConfigDialogFooter {
+@@ -3077,7 +3079,7 @@
+   background-color: $_(white); /* white */
+   color: $_(textColorB); /* black */
+ /*  overflow: scroll;   */
+-  overflow: hidden;   
++  overflow: hidden;
+ }
+ 
+ #DeviceConfigDialogFooter {
+@@ -3199,7 +3201,7 @@
+   /* height: 70px; */
+   height: auto;
+   background-color: $_(white); /* white */
+-  overflow: hidden;  
++  overflow: hidden;
+ }
+ 
+ .YesNoDialogContent {
+@@ -3231,7 +3233,7 @@
+   background-color: $_(clickable);
+   overflow: hidden;
+   left: 491px;
+-  width: 100px;  
++  width: 100px;
+ }
+ 
+ .YesNoDialog_noButton {
+@@ -3291,7 +3293,7 @@
+   /* height: 70px; */
+   height: auto;
+   background-color: $_(white); /* white */
+-  overflow: hidden;  
++  overflow: hidden;
+ }
+ 
+ .EulaDialogContent {
+@@ -3323,7 +3325,7 @@
+   background-color: $_(clickable);
+   overflow: hidden;
+   left: 4px;
+-  width: 100px;  
++  width: 100px;
+ }
+ 
+ .EulaDialog_noButton {
+@@ -3431,7 +3433,7 @@
+   position:absolute;
+   border: 0 none;
+   margin: 0;
+-  padding: 0;    
++  padding: 0;
+   width:100%;
+   height:100%;
+   overflow:hidden;
+@@ -3588,7 +3590,7 @@
+ 
+ .UITextEdit {
+   position: absolute;
+-/*  
++/*
+   border: 1px solid $_(black); /* black */
+   margin: 0;
+   padding: 0;
+@@ -3598,7 +3600,7 @@
+ 
+ .UITextArea {
+   position: absolute;
+-/*  
++/*
+   border: 1px solid $_(black); /* black */
+   margin: 0;
+   padding: 0;
+@@ -3608,7 +3610,7 @@
+ 
+ .UIListbox {
+   position: absolute;
+-/*  
++/*
+   border: 1px solid $_(black); /* black */
+   margin: 0;
+   padding: 0;
+@@ -5204,6 +5206,7 @@
+ 	word-wrap: break-word;
+ 	max-width: 480px;
+ 	display: inline-block;
++	padding-right: 5px;
+ }
+ 
+ .CLASS02536 {
+@@ -5226,6 +5229,7 @@
+ 	max-width: 480px;
+ 	clear: both;
+ 	display: inline-block;
++	padding-right: initial;
+ }
+ 
+ .CLASS02539 {
+@@ -5378,7 +5382,7 @@
+ }
+ 
+ .CLASS02602 {
+-	height:44px;
++	height: auto;
+ }
+ 
+ .CLASS02603 {
+@@ -5560,10 +5564,12 @@
+ 	vertical-align:middle;
+ 	border:solid 1px $_(black); /* #000000 */
+ 	font-weight:bold;
++	height: auto;
+ }
+ 
+ .CLASS02803 {
+ 	font-weight:bold;
++	height: auto;
+ }
+ 
+ .CLASS02804 {
+@@ -8858,4 +8864,3 @@
+   height:5px;
+   border:solid 1px $_(black);
+ }
+-

@@ -1,0 +1,15 @@
+--- occu/WebUI/www/tools/devconfig.cgi.orig
++++ occu/WebUI/www/tools/devconfig.cgi
+@@ -877,7 +877,11 @@
+                                         }
+                                     }
+                                 } else {
+-                                    puts "[lindex $value_list $value]"
++                                    if { [string is integer $value] } {
++                                      puts "[lindex $value_list $value]"
++                                    } else {
++                                      puts $value
++                                    }
+                                 }
+                             }
+                             td

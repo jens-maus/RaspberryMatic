@@ -107,6 +107,7 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [HomeMatic Check_MK](https://github.com/alexreinert/homematic_check_mk)
 * [hm-tools](https://github.com/fhetty/hm-tools)
 * [HB-UW-Sen-THPL Universalsensor](https://github.com/jp112sdl/Wettersensor/tree/master/Contrib/CCURM)
+* [Redis](https://github.com/hobbyquaker/redis)
 * [RedMatic](https://github.com/hobbyquaker/RedMatic)
 * [Mosquitto](https://github.com/hobbyquaker/ccu-addon-mosquitto)
 

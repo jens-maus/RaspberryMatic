@@ -107,9 +107,9 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [HomeMatic Check_MK](https://github.com/alexreinert/homematic_check_mk)
 * [hm-tools](https://github.com/fhetty/hm-tools)
 * [HB-UW-Sen-THPL Universalsensor](https://github.com/jp112sdl/Wettersensor/tree/master/Contrib/CCURM)
-* [Redis](https://github.com/hobbyquaker/redis)
 * [RedMatic](https://github.com/hobbyquaker/RedMatic)
 * [Mosquitto](https://github.com/hobbyquaker/ccu-addon-mosquitto)
+* [Redis](https://github.com/hobbyquaker/ccu-addon-redis)
 
 ## :cloud: Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:

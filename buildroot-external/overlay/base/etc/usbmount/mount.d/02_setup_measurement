@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ -d "/media/usb0/measurement" ]; then
+	echo "measurement directory already exists"
+	touch "USBinitialised"
+	# CCU2 compatibility
+	touch "SDinitialised"
+else 
+	echo "measurement directory not exists"
+	mkdir /media/usb0/measurement
+	retVal=$?
+	if [ $retVal -ne 0 ]; then
+		echo "error creating measurement directory"
+	else 
+		echo "measurement directory created successfully"
+		touch "/var/status/USBinitialised"
+		# CCU2 compatibility
+		touch "/var/status/SDinitialised"
+	fi
+fi

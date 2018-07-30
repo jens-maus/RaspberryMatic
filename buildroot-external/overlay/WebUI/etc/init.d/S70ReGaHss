@@ -7,6 +7,8 @@ CREATE_DIRS='/usr/local/etc/config/rc.d /usr/local/etc/config/addons/www'
 
 LOGLEVEL_REGA=2
 PIDFILE=/var/run/ReGaHss.pid
+REGA_BIN_VERSION=COMMUNITY
+REGA_BIN_FILE=/bin/ReGaHss.community
 
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
@@ -25,6 +27,16 @@ init() {
   if [[ -e /etc/config/syslog ]]; then
     . /etc/config/syslog
   fi
+
+
+  if [ -e /etc/config/ReGaHssVersion ] ; then
+    REGA_BIN_VERSION=$(cat /etc/config/ReGaHssVersion)
+  fi
+  case ${REGA_BIN_VERSION} in
+    NORMAL)         REGA_BIN_FILE=/bin/ReGaHss.normal;;
+    COMMUNITY)      REGA_BIN_FILE=/bin/ReGaHss.community;;
+  esac
+
 
   # source profile.d files
   if [[ ! -e /etc/config/safemode ]] ; then
@@ -81,7 +93,7 @@ waitTerminationComplete() {
 start() {
   echo -n "Starting ReGaHss: "
   init
-  start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec /bin/ReGaHss -- -f /etc/rega.conf -l ${LOGLEVEL_REGA}
+  start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec ${REGA_BIN_FILE} -- -f /etc/rega.conf -l ${LOGLEVEL_REGA}
   waitStartupComplete
 }
 

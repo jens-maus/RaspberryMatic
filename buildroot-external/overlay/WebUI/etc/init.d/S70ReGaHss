@@ -8,7 +8,7 @@ CREATE_DIRS='/usr/local/etc/config/rc.d /usr/local/etc/config/addons/www'
 LOGLEVEL_REGA=2
 PIDFILE=/var/run/ReGaHss.pid
 REGA_BIN_VERSION=COMMUNITY
-REGA_BIN_FILE=/bin/ReGaHss.community
+REGA_BIN_FILE=ReGaHss.community
 
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
@@ -33,8 +33,8 @@ init() {
     REGA_BIN_VERSION=$(cat /etc/config/ReGaHssVersion)
   fi
   case ${REGA_BIN_VERSION} in
-    NORMAL)         REGA_BIN_FILE=/bin/ReGaHss.normal;;
-    COMMUNITY)      REGA_BIN_FILE=/bin/ReGaHss.community;;
+    NORMAL)         REGA_BIN_FILE=ReGaHss.normal;;
+    COMMUNITY)      REGA_BIN_FILE=ReGaHss.community;;
   esac
 
 
@@ -65,7 +65,7 @@ waitStartupComplete() {
   for i in $(seq 1 ${STEPS}); do
     sleep 2
     echo -n "."
-    if [[ -n "$(pidof ReGaHss)" ]]; then
+    if [[ -n "$(pidof ${REGA_BIN_FILE})" ]]; then
       echo "OK"
       break
     fi
@@ -80,7 +80,7 @@ waitTerminationComplete() {
   for i in $(seq 1 ${STEPS}); do
     sleep 2
     echo -n "."
-    if [[ -z "$(pidof ReGaHss)" ]]; then
+    if [[ -z "$(pidof ${REGA_BIN_FILE})" ]]; then
       echo "OK"
       break
     fi
@@ -93,7 +93,7 @@ waitTerminationComplete() {
 start() {
   echo -n "Starting ReGaHss: "
   init
-  start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec ${REGA_BIN_FILE} -- -f /etc/rega.conf -l ${LOGLEVEL_REGA}
+  start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec /bin/${REGA_BIN_FILE} -- -f /etc/rega.conf -l ${LOGLEVEL_REGA}
   waitStartupComplete
 }
 

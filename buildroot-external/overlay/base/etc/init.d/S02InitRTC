@@ -16,6 +16,7 @@ init_rtc_device() {
   # is the RPI-RF-MOD onboard RTC.
   i2cget -y 1 0x32 0x32 2>/dev/null >/dev/null
   if [[ $? -eq 0 ]]; then
+    i2cset -y 1 0x32 0x1f 0x30 > /dev/null
     modprobe i2c:rx8130
     if [[ $? -eq 0 ]]; then
       HM_RTC="rx8130"

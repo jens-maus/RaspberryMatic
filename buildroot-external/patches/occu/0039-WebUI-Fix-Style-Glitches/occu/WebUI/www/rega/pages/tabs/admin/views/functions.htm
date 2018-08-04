@@ -7,22 +7,22 @@ bNecc = false; // to reload page in neccecary
 <%
   Write("bSortChOnly = "#(system.GetSessionVar("sessionLS") != "func")#";");
   system.SetSessionVar("sessionTAB", "functions");
-
+  
   if( system.GetSessionVar("sessionLS") == "" )
   {
     system.SetSessionVar("sessionLS","func");
   }
-
+  
   object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
   if( oUser && (system.GetSessionVar("sessionCTV")=="true") )
   {
     system.SetSessionVar("sessionLS","func");
     oUser.UserTempViewIDs().RemoveAll();
     oUser.UserTempViewIDs2().RemoveAll();
-
+    
     Write('iseClearLastSort();');
     Write('lastDir = 0;');
-
+    
     object oTmpArray = dom.GetObject( ID_FUNCTIONS );
     if( oTmpArray )
     {
@@ -32,18 +32,18 @@ bNecc = false; // to reload page in neccecary
       {
         object oTmp = dom.GetObject( sTmp );
         if( oTmp )
-        {
+        { 
           oUser.UserTempViewIDs().Add( oTmp.ID() );
         }
       }
     }
   }
-
+  
   if(oUser && (system.GetSessionVar("sessionCTV2")=="true"))
   {
     oUser.UserTempViewIDs2().RemoveAll();
   }
-
+  
   object oTmpArray = dom.GetObject( ID_FUNCTIONS );
   if( oTmpArray )
   {
@@ -54,7 +54,7 @@ bNecc = false; // to reload page in neccecary
     {
       object oTmp = dom.GetObject( sTmp );
       if( oTmp )
-      {
+      { 
         string s3;
         foreach(s3,oTmp.EnumIDs())
         {
@@ -62,26 +62,26 @@ bNecc = false; // to reload page in neccecary
           if( o3 )
           {
             if(o3.IsTypeOf(OT_CHANNEL))
-            {
+            {              
               string cat = "";
               if (o3.ChnDirection() == 1) {cat = 'Sender';}
-              if (o3.ChnDirection() == 2) {cat = 'Empfï¿½nger';}
-
+              if (o3.ChnDirection() == 2) {cat = 'Empfänger';}
+              
               Write("tmp = new Object();");
               Write("tmp['id'] = "#o3.ID()#";");
               Write("tmp['name'] = '"#o3.Name()#"';");
-
+              
               integer devId = o3.Device();
               if (devId != ID_ERROR)
               {
                 object dev = dom.GetObject(devId);
                 Write("tmp['desc'] = DEV_getDescription('"#dev.Label()#"');");
               }
-
+              
               Write("tmp['type'] = '"#o3.Label()#"';");
               Write("tmp['iface'] = '"#cat#"';");
               Write("tmp['sn'] = '"#o3.Address()#"';");
-
+              
               if(o3.ChnAESActive())
               {
                 Write("tmp['trans'] = '${lblSecured}';"); !transaction mode
@@ -90,10 +90,10 @@ bNecc = false; // to reload page in neccecary
               {
                 Write("tmp['trans'] = '${lblStandard}';"); !transaction mode
               }
-
+              
               string rooms = "";
               string roomTmp = "";
-
+               
               foreach(roomTmp, o3.ChnRoom())
               {
                 object objTmp = dom.GetObject(roomTmp);
@@ -108,7 +108,7 @@ bNecc = false; // to reload page in neccecary
     }
   }
 
-
+  
   object oGhostFunc = dom.CreateObject( OT_ENUM );
   integer iGhostFuncID = oGhostFunc.ID();
 %>
@@ -119,7 +119,7 @@ bNecc = false; // to reload page in neccecary
   arSortFObj = new Array();
   fltSF = new iseFilter('fltSF');
   arTblPos = new Array();
-<%
+<% 
   object obj = dom.GetObject(ID_FUNCTIONS);
   string tmp;
   foreach(tmp, obj.EnumEnabledIDs())
@@ -131,8 +131,8 @@ bNecc = false; // to reload page in neccecary
     Write("arFObj['"#tmp#"']['flt'] = true;");
     Write("arFObj['"#tmp#"']['exp'] = false;");
     Write("arFObj['"#tmp#"']['chncount'] = 0;");
-
-    object o = dom.GetObject(tmp);
+     
+    object o = dom.GetObject(tmp);    
     Write("tmpRoom = new Object();");
     Write("tmpRoom['func'] = '"#o.Name()#"';");
     Write("tmpRoom['id'] = '"#tmp#"';");
@@ -140,13 +140,13 @@ bNecc = false; // to reload page in neccecary
     Write("tmpRoom['exp'] = false;");
     Write("arSortFObj[arSortFObj.length] = tmpRoom;");
   }
-
+  
   if(system.GetSessionVar("sessionCTV")=="true")
   {
     ! Deactivated for testing - this will load the page 2 times
     ! Write("IseSort(arSortFObj,'func',true);");
   }
-%>
+%> 
 
 // add the ghost room for channel sorting with other columns
 arF[arF.length] = <% Write(iGhostFuncID); %>;
@@ -258,7 +258,7 @@ arSortFObj[arSortFObj.length] = tmpFunction;
         </table>
         <div class='FilterSetButton' onclick='setIFilter(fltSF, "iface");updateTable();$("btnFilterIfaceSub").hide();'>${filterSet}</div>
         <div class='FilterSetButton' onclick="$('btnFilterIfaceSub').hide();">${filterClose}</div>
-    </div>
+    </div> 
   </td>
   <td class='CLASS04211' style='height:20px'>
     <div id="btnFilterMode" class="FilterBtn CLASS00203">${thFilter}</div>
@@ -280,7 +280,7 @@ arSortFObj[arSortFObj.length] = tmpFunction;
   <td class='CLASS04211' style='height:20px'>
     <div id="btnFilterRoom" class="FilterBtn CLASS00203">${thFilter}</div>
     <div class="FilterSubMenu" id="btnFilterRoomSub" style="display:none">
-      <%
+      <% 
         Write("<table class='CLASS04212'>");
         object obj = dom.GetObject(ID_ROOMS);
         if ( obj ) {
@@ -314,7 +314,7 @@ arSortFObj[arSortFObj.length] = tmpFunction;
 if ( oUser )
 {
   oUser.UserTempViewIDs().Add( iGhostFuncID );
-
+  
   string tmp = "";
   integer iFuncIdx = 0;
   foreach( tmp, oUser.UserTempViewIDs().EnumEnabledIDs() )
@@ -323,7 +323,7 @@ if ( oUser )
     if (elem)
     {
       WriteLine("<tr id='r"#tmp#"'>");
-
+      
       Write("<td>"); !+ / -
       string sStyle = "";
       integer iEnumCount = 0;
@@ -343,11 +343,11 @@ if ( oUser )
       Write("<img id='img"#elem.ID()#"' src='/ise/img/plus.png' alt='plus' class='CLASS04207' style='"#sStyle#"' onclick='expand("#elem.ID()#", "#iFuncIdx#")' />");
       Write("<script type='text/javascript'>");
         Write("arFObj['"#elem.ID()#"']['rowIdx'] = "#iFuncIdx#";");
-        Write("arTblPos["#iFuncIdx#"] = "#iFuncIdx#" + 2;");
+        Write("arTblPos["#iFuncIdx#"] = "#iFuncIdx#" + 2;");  
         iFuncIdx = iFuncIdx + 1;
       Write("</script>");
-      Write("</td>");
-
+      Write("</td>"); 
+      
       Write("<td id='fn"#elem.ID()#"' class='WhiteBkg DeviceListCell' onclick='textEdit(id, "#elem.ID()#", false, textEditCallback);'>"#elem.Name()#"</td>"); !Gewerk
       Write("<td class='GrayBkg DeviceListCell'></td>"); !Name
       Write("<td class='GrayBkg DeviceListCell'></td>"); !Typenbezeichnung
@@ -355,16 +355,16 @@ if ( oUser )
       Write("<td class='GrayBkg DeviceListCell'></td>"); !Bezeichnung
       Write("<td class='GrayBkg DeviceListCell'></td>"); !Seriennummer
       Write("<td class='GrayBkg DeviceListCell'></td>"); !Interface Kategorie
-      Write("<td class='GrayBkg DeviceListCell'></td>"); !ï¿½bertragungsmodus
+      Write("<td class='GrayBkg DeviceListCell'></td>"); !Übertragungsmodus
       Write("<td class='GrayBkg DeviceListCell'></td>"); !Raum
-
+      
       Write("<td class='WhiteBkg DeviceListCell'>"); !Aktion
-! - - - wernerf - - -
+! - - - wernerf - - -      
         Write( '<div class="StdButtonBig heightAuto" onclick="addChannels2('#elem.ID()#',\''#elem.EnumIDs()#'\')">${btnAddChannel}</div>');
 !       Write( '<div class="StdButtonBig heightAuto" onclick="addChannels('#elem.ID()#',\''#elem.EnumIDs()#'\')">${btnAddChannel}</div>');
 ! - - - wernerf - - -
       Write("</td>");
-
+      
       string sEnumPrgFilter = "";
       integer iLinkCount = 0;
       integer iProgCount = 0;
@@ -372,7 +372,7 @@ if ( oUser )
       foreach( tmp, elem.EnumEnabledIDs() )
       {
         object chnTmp = dom.GetObject(tmp);
-        if( chnTmp && chnTmp.IsTypeOf(OT_CHANNEL) )
+        if( chnTmp && chnTmp.IsTypeOf(OT_CHANNEL) )        
         {
           iLinkCount = iLinkCount + chnTmp.ChnLinkCount();
           if( chnTmp.ChnDPUsageCount() != ID_ERROR )
@@ -390,7 +390,7 @@ if ( oUser )
           }
         }
       }
-
+      
       string sLoadProgamList = "WebUI.enter(ProgramListPage, '"#sEnumPrgFilter#"');";
       Write('<td  class="WhiteBkg DeviceListCell">');
         Write("<table class='CLASS04208'>");
@@ -401,18 +401,18 @@ if ( oUser )
           Write( '<div class="StdButton" onclick="'#sLoadProgamList#'">${btnPrograms}</div>' );
           Write("</td></tr>");
         Write("</table>");
-      Write("</td>"); !Verknï¿½pfungen
-
+      Write("</td>"); !Verknüpfungen
+      
       string chnTmp = "";
       integer iCount = 0;
-
-      integer iSubObjects = 0; ! Anzahl Unterobjekte je Raum... als "Platzhalter" fï¿½r Tabellen-Reihen
+      
+      integer iSubObjects = 0; ! Anzahl Unterobjekte je Raum... als "Platzhalter" für Tabellen-Reihen
       string tmp = "";
       foreach(tmp, elem.EnumEnabledIDs())
       {
         iSubObjects = iSubObjects + 1;
       }
-
+      
       ! get all channels for rooms to sort them
       if( elem.ID() == iGhostFuncID )
       {
@@ -437,8 +437,8 @@ if ( oUser )
       !}
     } ! if (elem)
   } ! foreach
-  dom.DeleteObject( oGhostFunc.ID() );
-  oUser.UserTempViewIDs().Remove( iGhostFuncID );
+  dom.DeleteObject( oGhostFunc.ID() ); 
+  oUser.UserTempViewIDs().Remove( iGhostFuncID ); 
 } !if(oUser)
 
 %>
@@ -459,7 +459,7 @@ if ( oUser )
   bEIP = false;
   hideGhostFunc();
   colorFilterBtns(fltSF);
-
+  
   var iExpFuncs = 0;
   var mouseOpts = {
     onTopOver: function(divToShow) {
@@ -494,10 +494,10 @@ if ( oUser )
   updateList = function() {
     WebUI.enter(FunctionListPage);
   }
-
+  
   expand = function(id, fTblPos) {
     // Ausklappen
-    Cursor.set(Cursor.WAIT);
+    Cursor.set(Cursor.WAIT); 
     if (!isSorting)
     {
       if( $("img" + id) )
@@ -515,7 +515,7 @@ if ( oUser )
     }
     Cursor.set(Cursor.NORMAL);
   }
-
+  
   expandFunc = function(id, fTblPos) {
     if( $("img" + id) )
     {
@@ -539,7 +539,7 @@ if ( oUser )
             }
           }
         }
-        else
+        else     
         {
           bEIP = true;
           var opts = {
@@ -562,15 +562,15 @@ if ( oUser )
     refreshFooterButton();
     }
   }
-
+  
   collapseFunc = function(id) {
     if ($("img" + id)) {
       if ($("img" + id).alt == "minus") {
         $("img" + id).src = "/ise/img/plus.png";
         $("img" + id).alt = "plus";
-
+        
         var i = 0;
-
+        
         while(true) {
           var tmpElem = id + "tr" + i;
           if ($(tmpElem))
@@ -582,7 +582,7 @@ if ( oUser )
             }
             i++;
           }
-          else
+          else 
             break;
         }
         arFObj[id]['exp'] = false;
@@ -596,14 +596,14 @@ if ( oUser )
       refreshFooterButton();
     }
   }
-
+  
   refreshFooterButton = function() {
     if (iExpFuncs == 0)
       $("btnExp").innerHTML = translateKey("footerBtnOpenTree"); //"Baumstruktur &ouml;ffnen";
     else
-      $("btnExp").innerHTML = translateKey("footerBtnCloseTree"); //"Baumstruktur schlieï¿½en";
+      $("btnExp").innerHTML = translateKey("footerBtnCloseTree"); //"Baumstruktur schließen";
   }
-
+  
   expandAll = function() {
     Cursor.set(Cursor.WAIT);
     var bExpand = (iExpFuncs == 0);
@@ -619,15 +619,15 @@ if ( oUser )
     }
     Cursor.set(Cursor.NORMAL);
   }
-
+  
   collapseAll = function()
-  {
+  { 
     for (var i = 0; i < arF.length; i++)
     {
       collapseFunc(arF[i]);
     }
   }
-
+  
   addChannels2 = function(id,ids)
   {
     var _id_ = id;
@@ -650,11 +650,11 @@ if ( oUser )
     //MultiChannelChooser.show("Gewerke", ids.split("\t"), callback, MultiChannelChooser.SHOW_ALL);
     MultiChannelChooser.show(translateKey("submenuFunction"), ids.split("\t"), callback, MultiChannelChooser.SHOW_ALL);
   }
-
-  restoreFuncs = function() {
+  
+  restoreFuncs = function() {    
     filterFunc();
   }
-
+  
   filterFunc= function() {
     var sTmp = "";
     var bNo = true;
@@ -685,7 +685,7 @@ if ( oUser )
           for (var x = 0; x < arFObj[arF[i]]['chns'].length; x++) {
             hide(arFObj[arF[i]]['chns'][x]['trid']);
             hide("picDiv" + arF[i] + arFObj[arF[i]]['chns'][x]['id']);
-          }
+          }   
         }
         //hide("r" + arF[i]); //###
       }
@@ -707,7 +707,7 @@ if ( oUser )
   s += "</tr>";
   s += "</table>";
   setFooter(s);
-
+  
   editFuncs = function() {
     dlgPopup = new iseMessageBox(ID_FUNCTIONS);
     PopupClose = function() {
@@ -716,15 +716,15 @@ if ( oUser )
     }
     dlgPopup.ShowPopup();
   }
-
-  specialReloadPage = function()
+  
+  specialReloadPage = function() 
   {
     if(bNecc)
     {
       reloadPage();
-    }
+    } 
   }
-
+  
   updateTable = function()
   {
     var bDoOpenStructure = false;
@@ -740,7 +740,7 @@ if ( oUser )
           for (var x = 0; x < arFObj[arF[i]]['chns'].length; x++)
           {
             exceptGhostFunc = arFObj[arF[i]]['id'];
-            if (!fltSF.objPassFilter(arFObj[arF[i]]['chns'][x]))
+            if (!fltSF.objPassFilter(arFObj[arF[i]]['chns'][x])) 
             {
               conInfo( "Filter: Hide id "+arFObj[arF[i]]['id'] );
               hide(arFObj[arF[i]]['chns'][x]['trid']);
@@ -767,7 +767,7 @@ if ( oUser )
           }
           else
           {
-            if( arFObj[arF[i]]['chns'].length > 0 ) show("img" + arF[i]);
+            if( arFObj[arF[i]]['chns'].length > 0 ) show("img" + arF[i]); 
           }
         }
          else
@@ -779,12 +779,12 @@ if ( oUser )
       }
     }
    Cursor.set(Cursor.NORMAL);
-   if( bDoOpenStructure )
-   {
+   if( bDoOpenStructure ) 
+   { 
      if (!(exceptGhostFunc == <%Write(iGhostFuncID);%>)) expandAll();
    }
   }
-
+  
   SortMe = function(colName)
   {
     //delete whole tree; get all channels and sort
@@ -792,13 +792,13 @@ if ( oUser )
     hide("btnExp");
     IseSort2(arCObj,colName,false,true);
   }
-
+  
   SortFuncs = function()
   {
     show("btnExp");
     IseSort(arSortFObj,'func', true);
   }
-
+  
   HideFunctions = function()
   {
     var arrayCount = arF.length;
@@ -806,32 +806,32 @@ if ( oUser )
     for(var i = 0; i < arrayCount; i++)
     {
       hide("r" + arF[i]);
-    }
+    }  
   }
-
+  
   GetAllChannels = function()
   {
     new Ajax.Updater("dummy", "/pages/tabs/admin/views/functionchannels.htm?sid=" + SessionId + "&id=<% Write(iGhostFuncID); %>&clearSel=false",{evalScripts:true});
   }
-
+  
   function hideGhostFunc()
   {
     hide("r<%Write(iGhostFuncID);%>");
   }
-
+  
   decChnCount = function(funcId) {
     arFObj[funcId]['chncount']--;
     if (arFObj[funcId]['chncount'] == 0) {
       hide("img" + funcId);
     }
   }
-
+  
   isDeleted = function(funcId, id) {
     for (var i = 0; i < arDelChns.length; i++) {
       if (arDelChns[i] == ("" + funcId + id)) {
         return true;
       }
-    }
+    }  
     return false;
   }
   translatePage("#tblFunctionList");

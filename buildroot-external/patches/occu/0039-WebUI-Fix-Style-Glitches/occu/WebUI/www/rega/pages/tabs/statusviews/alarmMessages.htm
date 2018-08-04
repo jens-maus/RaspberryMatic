@@ -4,13 +4,13 @@ iseInitUpdateArrays();
 
 <%
   system.SetSessionVar("sessionTAB", "statusviews/alarmMessages");
-
+  
   boolean firstSort = false;
   object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
   if( oUser && (system.GetSessionVar("sessionCTV")=="true") )
   {
     oUser.UserTempViewIDs().RemoveAll();
-
+    
     object oTmpArray = dom.GetObject( ID_SYSTEM_VARIABLES );
     if( oTmpArray )
     {
@@ -91,7 +91,7 @@ iseInitUpdateArrays();
   <td align="center" valign="middle" class="CLASS02804">
     <div id="btnFilterRoom" class="FilterBtn">${thFilter}</div>
     <div class="FilterSubMenu" id="btnFilterRoomSub" style="display:none">
-      <%
+      <% 
         Write("<table class='CLASS02813'>");
         object obj = dom.GetObject(ID_ROOMS);
         if ( obj ) {
@@ -117,7 +117,7 @@ iseInitUpdateArrays();
 </tr>
 <%
   integer iAlCount = 0;
-
+    
   string sSVID;
   foreach( sSVID, oUser.UserTempViewIDs().EnumIDs() )
   {
@@ -131,7 +131,7 @@ iseInitUpdateArrays();
       string sTimestamp = oSV.Timestamp();
       Call( "/esp/TimeStamp.fn::TimeStampToString()" );
       string sLastTimestamp = sTimestamp;
-
+     
       object oDestDP = dom.GetObject( oSV.AlDestMapDP() );
       string sDestDPName = "";
       if( oDestDP )
@@ -142,19 +142,19 @@ iseInitUpdateArrays();
       {
         sDestDPName = "no data point";
       }
-
+      
       string sAlarmName = oSV.Name();
       if( !sAlarmName.Length() )
       {
         sAlarmName = "no name";
       }
-
+      
       string sAlarmDescription = oSV.DPInfo().Replace('\r\n', '<br/>').Replace('\r', '<br/>').Replace('\n', '<br/>');
       if( !sAlarmDescription.Length() )
       {
         sAlarmDescription = "no description";
       }
-
+      
       string sRoom = "";
       string sLastTriggerName = "";
       string sLastTriggerMessage = "";
@@ -171,7 +171,7 @@ iseInitUpdateArrays();
       string roomIDs = "";
       object oLastTrigger = dom.GetObject( iTmpTriggerID );
       if( oLastTrigger )
-      {
+      {           
         object oLastTriggerChannel = dom.GetObject( oLastTrigger.Channel() );
         if( oLastTriggerChannel )
         {
@@ -187,7 +187,7 @@ iseInitUpdateArrays();
               roomIDs = roomIDs#sRID# "\t";
             }
           }
-
+          
           if( oLastTrigger.IsTypeOf( OT_HSSDP ) )
           {
             string sLongKey = oLastTriggerChannel.ChnLabel()#"|"#oLastTrigger.HSSID();
@@ -218,7 +218,7 @@ iseInitUpdateArrays();
       }
       else
       {
-        if (oSV.IsTypeOf(OT_ALARMDP))
+        if (oSV.IsTypeOf(OT_ALARMDP)) 
         {
           if ((oSV.Value() == false) || (oSV.Value() == "")) {
             sAlarmMessage = oSV.ValueName0();
@@ -228,7 +228,7 @@ iseInitUpdateArrays();
           }
         }
       }
-
+      
       string sTrId = "al"#oSV.ID();
       Write( '<tr id="'#sTrId#'">' );
         Write( '<td align="center" valign="middle" class="CLASS02806">'#sFirstTimestamp#'</td>' );
@@ -247,7 +247,7 @@ iseInitUpdateArrays();
         ! The value of this button is set by JavaScript at the end of this page >> translateButton("btnConfirm");
         Write( '<td align="center" valign="middle" class="CLASS02807"><input type="button" name="btnConfirm" value="btnConfirm" onclick="ReceiptAlarm('#oSV.ID()#');" class="CLASS02809 colorGradient" /></td>' );
       Write( '</tr>' );
-
+      
       WriteLine( '<script type="text/javascript">' );
       WriteLine( 'var tmp = new Object();' );
       WriteLine( 'tmp["id"] = '#oSV.ID()#'; ' );
@@ -267,14 +267,14 @@ iseInitUpdateArrays();
 </table>
 
 <script type="text/javascript">
-
+  
   <%
     if(firstSort)
     {
       Write("//IseSort(arAlarms,'first',true);");
     }
   %>
-
+  
   if ( <% Write(iAlCount); %> == 0)
   {
     show("NoAlarms");
@@ -283,19 +283,19 @@ iseInitUpdateArrays();
   {
     show("tblAlarms");
   }
-
-  var mouseOpts =
+  
+  var mouseOpts = 
   {
     onTopOver: function(divToShow)
     {
       selectFilters(fltAL, divToShow);
     }
   };
-
+  
   new iseSubMenuControl("btnFilterName", "btnFilterNameSub", "tblAlarms", {r: 11, d:22}, mouseOpts, false, true);
   new iseSubMenuControl("btnFilterRoom", "btnFilterRoomSub", "tblAlarms", {r: 11, d:22}, mouseOpts, false, true);
   new iseSubMenuControl("btnFilterDesc", "btnFilterDescSub", "tblAlarms", {r: 11, d:22}, mouseOpts, false, true);
-
+  
   _ReceiptAlarm = function(id)
   {
     var url = '/esp/functions.htm?sid='+SessionId;
@@ -314,7 +314,7 @@ iseInitUpdateArrays();
   };
 
   var s = "";
-
+  
   s += "<table cellspacing='8'>";
   s += "<tr>";
     s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack();'>"+ translateKey('footerBtnPageBack') +"</div></td>";
@@ -322,9 +322,9 @@ iseInitUpdateArrays();
     s += "<td align='center' valign='middle'><div class='FooterButton CLASS02810' onclick='ackAll();'>"+ translateKey('footerBtnConfirmAll') +"</div></td>";
   s += "</tr>";
   s += "</table>";
-
+  
   setFooter(s);
-
+  
   ackAll = function()
   {
     for (var i = 0; i < arAlarms.length; i++)
@@ -332,7 +332,7 @@ iseInitUpdateArrays();
       ReceiptAlarm(arAlarms[i]['id']);
     }
   };
-
+  
   updateTable = function()
   {
     for (var i = 0; i < arAlarms.length; i++)
@@ -345,8 +345,9 @@ iseInitUpdateArrays();
       {
         show(arAlarms[i]['trid']);
       }
-    }
+    } 
   };
   translatePage("#tblAlarms, #NoAlarms");
   translateButtons("btnConfirm");
 </script>
+  

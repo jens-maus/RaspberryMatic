@@ -4,15 +4,15 @@ iseInitUpdateArrays();
 
 <%
   system.SetSessionVar("sessionTAB", "statusviews/serviceMessages");
-
+  
   boolean firstSort = false;
   object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
   if( oUser && (system.GetSessionVar("sessionCTV")=="true") )
   {
     oUser.UserTempViewIDs().RemoveAll();
-
+    
     Write('iseClearLastSort();');
-
+    
     object oTmpArray = dom.GetObject( ID_SERVICES );
     if( oTmpArray )
     {
@@ -110,7 +110,7 @@ iseInitUpdateArrays();
   <td align="center" valign="middle" class="CLASS02603">
     <div id="btnFilterFunc" class="FilterBtn">${thFilter}</div>
   <div class="FilterSubMenu" id="btnFilterFuncSub" style="display:none">
-    <%
+    <% 
       Write("<table class='CLASS02618'>");
       object obj = dom.GetObject(ID_FUNCTIONS);
       if ( obj ) {
@@ -135,7 +135,7 @@ iseInitUpdateArrays();
   <td align="center" valign="middle" class="CLASS02603">
     <div id="btnFilterRoom" class="FilterBtn">${thFilter}</div>
     <div class="FilterSubMenu" id="btnFilterRoomSub" style="display:none">
-      <%
+      <% 
         Write("<table class='CLASS02618'>");
         object obj = dom.GetObject(ID_ROOMS);
         if ( obj ) {
@@ -187,7 +187,7 @@ iseInitUpdateArrays();
           string sTimestamp = oAlarm.Timestamp();
           Call( "/esp/TimeStamp.fn::TimeStampToString()" );
           string sLastTimestamp = sTimestamp;
-
+          
           object oDestDP = dom.GetObject( oAlarm.AlDestMapDP() );
           string sDestDPName = "";
           if( oDestDP )
@@ -198,7 +198,7 @@ iseInitUpdateArrays();
           {
             sDestDPName = "no data point";
           }
-
+          
           string sLastUse = "";
           string sServiceMessage = "";
           string sSerialNumber = "no serial number";
@@ -219,7 +219,7 @@ iseInitUpdateArrays();
             string sTimestamp = oAlarm.LastTriggerTime();
             Call( "/esp/TimeStamp.fn::TimeStampToString()" );
             sLastUse = sTimestamp;
-
+            
             object oLastTriggerChannel = dom.GetObject( oLastTrigger.Channel() );
             if( oLastTriggerChannel )
             {
@@ -228,7 +228,7 @@ iseInitUpdateArrays();
               {
                 sAlarmName = "no name";
               }
-
+              
               string sRID;
               foreach( sRID, oLastTriggerChannel.ChnRoom() )
               {
@@ -240,7 +240,7 @@ iseInitUpdateArrays();
                   roomIDs = roomIDs#sRID# "\t";
                 }
               }
-
+              
               string sFID;
               foreach( sFID, oLastTriggerChannel.ChnFunction() )
               {
@@ -252,12 +252,12 @@ iseInitUpdateArrays();
                   funcIDs = funcIDs#sFID# "\t";
                 }
               }
-
+              
               sLastTriggerName = oLastTriggerChannel.Name();
               if( oLastTrigger.IsTypeOf( OT_HSSDP ) )
               {
                 sSerialNumber = oLastTriggerChannel.Address();
-
+                
                 string sLongKey = oLastTriggerChannel.ChnLabel()#"|"#oLastTrigger.HSSID();
                 string sShortKey = oLastTrigger.HSSID();
                 if( (oLastTrigger.ValueType() == ivtInteger) && (oLastTrigger.ValueSubType() == istEnum) )
@@ -279,11 +279,11 @@ iseInitUpdateArrays();
                     sServiceMessage = "${unknownMessage} ("#sLongKey#")";
                   }
                 }
-
+                  
               }
             }
           }
-
+    
           string sTrId = "al"#oAlarm.ID();
           Write( '<tr id="'#sTrId#'" class="CLASS02604">' );
             Write( '<td align="center" valign="middle" class="CLASS02605">'#sFirstTimestamp#'</td>' );
@@ -299,7 +299,7 @@ iseInitUpdateArrays();
               Write(" onmouseover='picDivShow(jg_250, \""#dev.Label()#"\", 250, -1, this);'");
               Write(" onmouseout='picDivHide(jg_250);'");
               Write("></div>");
-              Write("<script type='text/javascript'>");
+              Write("<script type='text/javascript'>");  
                 Write("var jg_0 = new jsGraphics('"#sPicDivId#"');");
                 Write("InitGD(jg_0, 50);");
                 Write("Draw(jg_0, '"#dev.Label()#"', 50, '-1');");
@@ -338,7 +338,7 @@ iseInitUpdateArrays();
 
             Write( '$("n'#oAlarm.ID()#'").innerHTML = strCut(translateString("'#sAlarmName#'"), false, true);');
             Write( '$("m'#oAlarm.ID()#'").innerHTML = strCut(translateString("'#sServiceMessage#'"), false, true);');
-
+            
           Write( '}');
           Write( 'var tmp = new Object();');
           Write( 'tmp["id"] = '#oAlarm.ID()#'; ');
@@ -386,7 +386,7 @@ iseInitUpdateArrays();
       selectFilters(fltSM, divToShow);
     }
   };
-  new iseSubMenuControl("btnFilterSN",   "btnFilterSNSub",   "SvOffset", {d:12}, mouseOpts, false, true);
+  new iseSubMenuControl("btnFilterSN",   "btnFilterSNSub",   "SvOffset", {d:12}, mouseOpts, false, true); 
   new iseSubMenuControl("btnFilterName", "btnFilterNameSub", "SvOffset", {d:12}, mouseOpts, false, true);
   new iseSubMenuControl("btnFilterFunc", "btnFilterFuncSub", "SvOffset", {d:12}, mouseOpts, false, true);
   new iseSubMenuControl("btnFilterRoom", "btnFilterRoomSub", "SvOffset", {d:12}, mouseOpts, false, true);
@@ -400,7 +400,7 @@ iseInitUpdateArrays();
   {
     show("tblServices");
   }
-
+  
   var mouseOpts =
   {
     onTopOver: function(divToShow)
@@ -423,7 +423,7 @@ iseInitUpdateArrays();
   };
 
   var s = "";
-
+  
   s += "<table cellspacing='8'>";
   s += "<tr>";
     s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack();'>"+ translateKey('footerBtnPageBack') +"</div></td>";
@@ -431,7 +431,7 @@ iseInitUpdateArrays();
     s += "<td align='center' valign='middle'><div class='FooterButton CLASS02615' onclick='ackAll();' >"+ translateKey('footerBtnConfirmAll') +"</div></td>";
   s += "</tr>";
   s += "</table>";
-
+  
   setFooter(s);
 
   updateTable = function() {
@@ -442,7 +442,7 @@ iseInitUpdateArrays();
       else {
         show(arServices[i]['trid']);
       }
-    }
+    } 
   };
 
   // Funktion wird von system.fn::UpdateUI() aufgerufen
@@ -456,4 +456,5 @@ iseInitUpdateArrays();
   };
   translatePage("#tblServices, #NoServices");
   translateButtons("btnConfirm");
-</script>
+</script> 
+  

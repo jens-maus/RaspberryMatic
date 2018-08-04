@@ -47,7 +47,7 @@
 
 .conditionEven
 {
-  /*Wenn die Farbe nicht nur als Rahmen, sondern fï¿½r die ganze Bedingung gelten soll,
+  /*Wenn die Farbe nicht nur als Rahmen, sondern für die ganze Bedingung gelten soll,
     muss background-color in der Klasse .Rule deaktiviert werden */
   background-color: $_(programEven);
   /* border: solid 1px $_(black); *//* black */
@@ -99,7 +99,7 @@ ul {
 
 ul ul {
   margin-top: 0px;
-  margin-bottom: 0px;
+  margin-bottom: 0px;  
 }
 
 a img {
@@ -111,14 +111,14 @@ a img {
  * * * * * * * * * * * * * * * * * * * * * * */
 
 /* Navigation-Leiste */
-#navbar
+#navbar 
 {
   margin: 0px;
   background-color: $_(background); /* #183473 */
   width:100%;
   border-bottom: solid 5px $_(white); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
 }
-
+ 
 /* Haupt-Fenster */
 #_content
 {
@@ -208,14 +208,14 @@ a img {
 }
 
 /* Linker Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
-#contentLeft
+#contentLeft 
 {
   vertical-align: top;
 }
 
 /* Rechter Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
-#contentRight
-{
+#contentRight 
+{ 
   border-left: solid 5px $_(navBarSeparator); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
   /* padding-top: 10px; */
   vertical-align: top;
@@ -238,7 +238,7 @@ a img {
 
 /* Grundlegende Tabelle auf der Statusanzeige-Seite */
 #tblStatus {
-  width:1200px;
+  width:1200px; 
   height:100%;
   table-layout: fixed;
 }
@@ -259,11 +259,11 @@ a img {
 
 #chnListBody td {
   /*border: solid 1px $_(black); /* black */*/
-  text-align: center;
+  text-align: center;  
 }
 #chnListBody th {
   /*border: solid 1px $_(black); /* black */*/
-  text-align: center;
+  text-align: center;  
 }
 
 /* * * * * * * * * * * * * * * * * * * * * * *
@@ -277,13 +277,13 @@ a img {
 /* Desktop Label */
 .DesktopLabel
 {
-  background-color:#C0C0C0;
-  width:auto;
-  border: solid 1px $_(black); /* black */
-  font-weight:bold;
-  text-align: center;
-  margin-top:3px;
-  margin-left:3px;
+  background-color:#C0C0C0; 
+  width:auto; 
+  border: solid 1px $_(black); /* black */ 
+  font-weight:bold;  
+  text-align: center; 
+  margin-top:3px; 
+  margin-left:3px; 
   margin-right:3px;
 }
 
@@ -296,7 +296,7 @@ a img {
   padding-left: 10px;
 }
 
-/* Small Logo Position fï¿½r An- und Abmeldung */
+/* Small Logo Position für An- und Abmeldung */
 .SmallLogoLog
 {
   position: absolute;
@@ -330,7 +330,7 @@ a img {
 
 /* Statusanzeige-Rooms */
 .ButtonStatusRooms
-{
+{ 
   background-color:$_(activeBackground); /* #f0f0f0 */
   border:solid 1px $_(black); /* black */
   color: $_(textColorB); /* black */
@@ -339,7 +339,7 @@ a img {
 }
 
 .ButtonStatusRoomsSelected
-{
+{ 
   background-color:$_(active); /* #565657 */
   border:solid 1px $_(black); /* black */
   color: $_(textColorA); /* white */
@@ -366,7 +366,7 @@ a img {
   width: 100px;
 }
 
-.filterTable
+.filterTable 
 {
   empty-cells:show;
 }
@@ -397,14 +397,14 @@ a img {
   height: 80px;
 }
 
-/* ï¿½berschrift im Header-Feld */
+/* Überschrift im Header-Feld */
 .HeaderTitle {
   font-weight: bold;
   color: $_(textColorA); /* #ffffff */
 }
 
 /* Buttons innerhalb der Navigations-Leiste */
-.NavButton
+.NavButton 
 {
   background-color: $_(logoutButton);
   background-image:url(/ise/img/gradientButton25px.png);
@@ -557,21 +557,21 @@ a img {
 
 /* Trennlinie Statusanzeige Systemhistorie*/
 
-.borderBottomHist
+.borderBottomHist 
 {
   border-bottom:solid 1px $_(black); /* black */
 }
 
 /* Logging von Ereignissen (z.B. Seite zur Statusnazeige) */
-.divLog
+.divLog 
 {
   color: $_(textColorB); /* black */
   overflow: auto;
   width:100%;
-  height:75%; /* sorgt fï¿½r korrekte Darstellung der Scrollbalken im IE */
+  height:75%; /* sorgt für korrekte Darstellung der Scrollbalken im IE */
 }
 
-/* Tabelle zur Listendarstellung von Elementen (z.B. Raumï¿½bersicht) */
+/* Tabelle zur Listendarstellung von Elementen (z.B. Raumübersicht) */
 .tblList {
   margin-top: 20px;
   width: 100%;
@@ -587,7 +587,7 @@ a img {
 .Sort
 {
   cursor: pointer;
-	height: 50px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -598,14 +598,14 @@ a img {
   cursor: pointer;
   background-color: $_(active); /* #565657 */
   height: 54px;
-	display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .pt11
 {
-
+  
 }
 
 .tblList td {
@@ -656,13 +656,13 @@ a img {
 }
 
 .popupTableRow
-{
+{ 
   border-bottom: solid 1px $_(clickable);
   border-top: solid 1px $_(clickable);
 }
 
 .scriptButton
-{
+{ 
   text-align:center;
   width:10%;
   background-color:$_(clickable);
@@ -754,8 +754,8 @@ a img {
   background-color: $_(active); /* #565657 */
 }
 
-/* Filter Untermenï¿½s */
-.FilterSubMenu
+/* Filter Untermenüs */
+.FilterSubMenu 
 {
   overflow:auto;
   background-color: $_(inactiveBackground);
@@ -810,11 +810,11 @@ a img {
 }
 
 .PercBtn {
-  background-color: $_(clickable);
-  color: $_(textColorA);
+  background-color: $_(clickable); 
+  color: $_(textColorA); 
   font-weight: bold;
   text-align: center;
-  border: solid 1px $_(black);
+  border: solid 1px $_(black); 
   border-top: inset 4px $_(clickable);
   border-right: inset 4px $_(clickable);
 	height:96px;
@@ -839,7 +839,7 @@ a img {
   border-top: inset 4px $_(warnSignal); /* #fdf304 */
   border-right: inset 4px $_(warnSignal); /* #fdf304 */
 }
-
+  
 #id_progressbar_wrapper
 {
  	background-color: $_(activeBackground); /* rgb(220, 220, 220) */
@@ -881,7 +881,7 @@ a img {
 	margin: 0;
 }
 
-/* Buttons (Lï¿½schen, Einstellen, Gerï¿½te...) auf Gerï¿½te/Raum/Gewerk-ï¿½bersicht */
+/* Buttons (Löschen, Einstellen, Geräte...) auf Geräte/Raum/Gewerk-Übersicht */
 ._StdButton
 {
   background-color: $_(clickable);
@@ -1024,7 +1024,7 @@ a img {
 .TblHeaderUserConfig {
   background-color:$_(clickable);
   color: $_(textColorA); /* white */
-  border:solid 1px $_(black); /* black */
+  border:solid 1px $_(black); /* black */  
   text-align:center;
   height: 50px;
 }
@@ -1053,7 +1053,7 @@ a img {
   color: $_(textColorB); /* black */
   text-align:center;
   border:solid 1px $_(black); /* black */
-}
+}  
 
 .StatViewTbl {
   empty-cells: show;
@@ -1074,10 +1074,10 @@ a img {
 }
 
 .picDiv {
-  margin:0;
-  padding:0;
-  position:relative;
-  width:50px;
+  margin:0; 
+  padding:0; 
+  position:relative; 
+  width:50px; 
   height:50px;
 }
 
@@ -1153,7 +1153,7 @@ a img {
   padding: 4px;
   text-align : left;
   vertical-align: middle;
-}
+} 
 
 .tSubHeaderCell
 {
@@ -1393,10 +1393,10 @@ div.caption  { display: table-caption; }
   text-align:center;
 }
 
-/* Angaben fï¿½r die Tabellenspalten und -header */
+/* Angaben für die Tabellenspalten und -header */
 
 .thCell
-{
+{ 
   background-color:$_(clickable);
   color: $_(textColorA); /* white */
   border:solid 1px $_(black); /* black */
@@ -1414,19 +1414,19 @@ div.caption  { display: table-caption; }
   text-align:center;
 }
 
-/* Weisser Zellenhintergrund fï¿½r Bilder (Gerï¿½teï¿½bersicht u.ï¿½.) */
+/* Weisser Zellenhintergrund für Bilder (Geräteübersicht u.ä.) */
 .WhiteBkgPic {
   background-color: $_(white); /* #ffffff */
   color: $_(textColorB); /* black */
 }
 
-/* Weisser Zellenhintergrund (Gerï¿½teï¿½bersicht u.ï¿½.) */
+/* Weisser Zellenhintergrund (Geräteübersicht u.ä.) */
 .WhiteBkg {
   background-color: $_(activeBackground); /* #f0f0f0 */
   color: $_(textColorB); /* black */
 }
 
-/* Grauer Zellenhintergrund (Gerï¿½teï¿½bersicht u.ï¿½.) */
+/* Grauer Zellenhintergrund (Geräteübersicht u.ä.) */
 .GrayBkg {
   background-color: $_(activeBackground);
   color: $_(textColorB); /* black */
@@ -1501,7 +1501,7 @@ div.caption  { display: table-caption; }
 	padding: 0;
 }
 
-#ic_deviceparameters .parameter_area
+#ic_deviceparameters .parameter_area 
 {
 	margin-top:0;
 	margin-bottom:0;
@@ -1523,7 +1523,7 @@ div.caption  { display: table-caption; }
 	height: 50px;
 }
 
-#ic_deviceparameters .parameter_area .parameters_table
+#ic_deviceparameters .parameter_area .parameters_table 
 {
 	width: 99%;
 	color: $_(textColorA); /* white */
@@ -1661,7 +1661,7 @@ div.caption  { display: table-caption; }
   background-color: $_(activeBackground);
   color: $_(textColorB); /* black */
   border: 1px solid $_(black); /* black */
-  height: 50px;
+  height: 50px;  
   text-align:center;
 }
 
@@ -1693,11 +1693,11 @@ div.caption  { display: table-caption; }
 {
 	background-color: $_(white); /* white */
 	text-align: left;
-	height: 80px;
+	height: 80px;  
 }
 /*--------------------------------------------*/
 #modalbox #id_messagebox
-{
+{ 
   background-color: $_(black); /* #000000 */
   position: absolute;
   width: 100%;
@@ -1759,7 +1759,7 @@ background-color: $_(inactiveBackground);
 	background-color: $_(background); /* #183473 */
 	margin: 20px;
 }
-
+	
 #ic_selchannel #createLinkStep1 {
 	color: $_(textColorA); /* white */
 	border: 1px solid $_(black); /* black */
@@ -1820,9 +1820,9 @@ background-color: $_(inactiveBackground);
 }
 
 #ic_selchannel .ChnListTbl .filterBox table td {
-	border:  0;
-	padding: 0;
-	margin:  0;
+	border:  0; 
+	padding: 0; 
+	margin:  0; 
 	height:  auto;
 	width: auto;
 	color:   $_(white); /* white */
@@ -1845,7 +1845,7 @@ background-color: $_(inactiveBackground);
 /*IDs in der Tabelle*/
 /*==================*/
 
-/*ï¿½berschriftzeile*/
+/*Überschriftzeile*/
 #ic_selchannel .ChnListTbl .chnListTbl_Caption
 {
 	background-color: $_(clickable);
@@ -1856,7 +1856,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*ï¿½berschriftzeile Sortierfunktion*/
+/*Überschriftzeile Sortierfunktion*/
 #ic_selchannel .ChnListTbl .sorted
 {
 	background-color: $_(active); /* #565657 */
@@ -1883,7 +1883,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*ï¿½berschriftzeile Filterfunktion*/
+/*Überschriftzeile Filterfunktion*/
 #ic_selchannel .ChnListTbl .filtered
 {
 	background-color: $_(active); /* #565657 */
@@ -1923,7 +1923,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*Tabellenkï¿½rper Virtuelle Tasten*/
+/*Tabellenkörper Virtuelle Tasten*/
 #ic_selchannel #body_wrapper
 {
 	background-color: $_(background); /* #183473 */
@@ -1931,7 +1931,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*Tabellenkï¿½rper Virtuelle Tasten*/
+/*Tabellenkörper Virtuelle Tasten*/
 #ic_selchannel .ChnListTbl  .virtual_key_hidden
 {
 	visibility: hidden;
@@ -1944,16 +1944,16 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*Tabellenkï¿½rper Bilderspalte*/
-#ic_selchannel .ChnListTbl .chnListTbl_dev_img
+/*Tabellenkörper Bilderspalte*/
+#ic_selchannel .ChnListTbl .chnListTbl_dev_img 
 {
 	background-color: $_(white); /* white */
 	text-align: left;
-	height: 50px;
+	height: 50px;  
 }
 /*--------------------------------------------*/
 
-/*Tabellenfuï¿½ Navibuttons*/
+/*Tabellenfuß Navibuttons*/
 #ic_selchannel .ChnListTbl #chnListFoot tr td
 {
 	background-color: $_(clickable);
@@ -2004,7 +2004,7 @@ background-color: $_(inactiveBackground);
 	padding:0;
 	margin:0;
 	border:0;
-
+	
 	width: 100%;
 	color: $_(textColorA); /* white */
 }
@@ -2039,9 +2039,9 @@ background-color: $_(inactiveBackground);
 	border: 0;
 }
 
-/*Anzeige-Feld fï¿½r Expertenprofil und Easy-Mode-Profile*/
+/*Anzeige-Feld für Expertenprofil und Easy-Mode-Profile*/
 #ic_setprofiles .SetProfLinkTbl .easymode_wrapper {
-
+	
 }
 
 #ic_setprofiles #body_wrapper
@@ -2068,7 +2068,7 @@ background-color: $_(inactiveBackground);
 	color: $_(textColorB); /* black */
 }
 
-.pname_color
+.pname_color 
 {
 	color: $_(windowText);/* windowText */
 }
@@ -2194,7 +2194,7 @@ html, body {
   color: $_(textColorB); /* black */
   /* font-weight:bold; */
   text-align:left;
-  vertical-align:middle;
+  vertical-align:middle;  
 }
 
 .FilterHeight20 {
@@ -2209,7 +2209,7 @@ html, body {
   color: $_(textColorB); /* black */
   /* font-weight:bold; */
   text-align:left;
-  vertical-align:middle;
+  vertical-align:middle;  
 }
 
 .FilterCaption {
@@ -2223,12 +2223,12 @@ html, body {
   line-height:20px;
   width: 100%;
   text-align:center;
-  cursor:pointer;
+  cursor:pointer; 
 }
 
 .FilterBodyWrapper {
   position:absolute;
-  z-index:500;
+  z-index:500; 
 }
 
 .FilterBody {
@@ -2273,7 +2273,7 @@ html, body {
   margin: 0;
   border: 0 none;
   padding: 0;
-  overflow:hidden;
+  overflow:hidden; 
 }
 */
 
@@ -2367,7 +2367,7 @@ html, body {
   background-color: $_(background);
   float: left;
 }
-
+    
 .MainMenuItem_Right {
   height: 30px;
   cursor: pointer;
@@ -2461,7 +2461,7 @@ html, body {
   background-color: $_(subMenuBackground);
   font-weight: bold;
   padding-left: 5px;
-  padding-right: 5px;
+  padding-right: 5px; 
   text-align:left;
   vertical-align:middle;
   color: $_(textColorB); /* black */
@@ -2560,7 +2560,7 @@ html, body {
   width: 996px;
   height: 520px;
   background-color: $_(white); /* white */
-  overflow: scroll;
+  overflow: scroll;  
 }
 
 #ChannelChooserFooter {
@@ -2638,7 +2638,7 @@ html, body {
 .ChannelChooserRow {
   background-color: $_(activeBackground);
 }
-
+  
 .ChannelChooserRow_Highlight {
   background-color: $_(inactiveBackground);
   cursor:pointer;
@@ -2702,7 +2702,7 @@ html, body {
   width: 996px;
   height: 520px;
   background-color: $_(white); /* white */
-  overflow: scroll;
+  overflow: scroll;  
 }
 
 #MultiChannelChooserFooter {
@@ -2956,7 +2956,7 @@ html, body {
   height: 520px;
   background-color: $_(white); /* white */
   color: $_(textColorB); /* black */
-  overflow: scroll;
+  overflow: scroll;  
 }
 
 #ChannelConfigDialogFooter {
@@ -3079,7 +3079,7 @@ html, body {
   background-color: $_(white); /* white */
   color: $_(textColorB); /* black */
 /*  overflow: scroll;   */
-  overflow: hidden;
+  overflow: hidden;   
 }
 
 #DeviceConfigDialogFooter {
@@ -3201,7 +3201,7 @@ html, body {
   /* height: 70px; */
   height: auto;
   background-color: $_(white); /* white */
-  overflow: hidden;
+  overflow: hidden;  
 }
 
 .YesNoDialogContent {
@@ -3233,7 +3233,7 @@ html, body {
   background-color: $_(clickable);
   overflow: hidden;
   left: 491px;
-  width: 100px;
+  width: 100px;  
 }
 
 .YesNoDialog_noButton {
@@ -3293,7 +3293,7 @@ html, body {
   /* height: 70px; */
   height: auto;
   background-color: $_(white); /* white */
-  overflow: hidden;
+  overflow: hidden;  
 }
 
 .EulaDialogContent {
@@ -3325,7 +3325,7 @@ html, body {
   background-color: $_(clickable);
   overflow: hidden;
   left: 4px;
-  width: 100px;
+  width: 100px;  
 }
 
 .EulaDialog_noButton {
@@ -3433,7 +3433,7 @@ application {
   position:absolute;
   border: 0 none;
   margin: 0;
-  padding: 0;
+  padding: 0;    
   width:100%;
   height:100%;
   overflow:hidden;
@@ -3590,7 +3590,7 @@ application {
 
 .UITextEdit {
   position: absolute;
-/*
+/*  
   border: 1px solid $_(black); /* black */
   margin: 0;
   padding: 0;
@@ -3600,7 +3600,7 @@ application {
 
 .UITextArea {
   position: absolute;
-/*
+/*  
   border: 1px solid $_(black); /* black */
   margin: 0;
   padding: 0;
@@ -3610,7 +3610,7 @@ application {
 
 .UIListbox {
   position: absolute;
-/*
+/*  
   border: 1px solid $_(black); /* black */
   margin: 0;
   padding: 0;
@@ -5206,7 +5206,7 @@ application {
 	word-wrap: break-word;
 	max-width: 480px;
 	display: inline-block;
-	padding-right: 5px;
+  padding-right: 5px;
 }
 
 .CLASS02536 {
@@ -5229,7 +5229,7 @@ application {
 	max-width: 480px;
 	clear: both;
 	display: inline-block;
-	padding-right: initial;
+  padding-right: initial;
 }
 
 .CLASS02539 {
@@ -5564,12 +5564,12 @@ color: $_(textColorA); /* white */
 	vertical-align:middle;
 	border:solid 1px $_(black); /* #000000 */
 	font-weight:bold;
-	height: auto;
+  height: auto;
 }
 
 .CLASS02803 {
 	font-weight:bold;
-	height: auto;
+  height: auto;
 }
 
 .CLASS02804 {
@@ -8864,3 +8864,4 @@ color: $_(textColorA); /* white */
   height:5px;
   border:solid 1px $_(black);
 }
+

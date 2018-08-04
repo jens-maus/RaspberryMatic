@@ -10,7 +10,7 @@
   boolean firstSort = false;
   object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
   if( oUser && (system.GetSessionVar("sessionCTV")=="true") )
-  {
+  { 
     firstSort = true;
     oUser.UserTempViewIDs().RemoveAll();
     system.SetSessionVar("sessionLS","name");
@@ -70,13 +70,13 @@
       WriteLine("<script type='text/javascript'>");
       WriteLine("Cursor.set(Cursor.NORMAL);");
       WriteLine("</script>");
-    }
+    }  
     object obj = dom.GetObject(ID_USERS);
     string tmp = "";
-    foreach(tmp, oUser.UserTempViewIDs())
-    {
+    foreach(tmp, oUser.UserTempViewIDs()) 
+    { 
      object user = dom.GetObject(tmp);
-     if (user.Visible())
+     if (user.Visible()) 
      {
         Write("<tr class='CLASS05302' id='ut"#user.ID()#"' >")
         Write("<td align='center' valign='middle'  class='TblUserAdministration'>")
@@ -100,25 +100,25 @@
         Write("<input id='cb"#user.ID()#"' disabled='disabled' "#sChecked#" type='checkbox' />")
         Write("</td>")
         Write("<td align='center' valign='middle' class='TblUserAdministration'>");
-
+        
         if (user.UserLevel() == iulAdmin)
-        {
+        { 
           Write("${lblAdmin}");
         }
-
+        
         if(user.UserLevel() == iulUser)
         {
           Write("${lblUser}");
         }
-
+        
         if(user.UserLevel() == iulGuest)
         {
           Write("${lblGuest}");
         }
-
+                
         Write("</td>")
 
-! Endger√§t
+! Endger‰t        
 !        Write("<td align='center' valign='middle' class='TblUserAdministration'>")
 !        integer uc = user.UserClient();
 !        if (uc == dwcAuto) { Write("automatisch"); }
@@ -126,7 +126,7 @@
 !        if (uc == dwcPC) { Write("PC"); }
 !        if (uc == dwcHandy) { Write("Handy"); }
 !        Write("</td>")
-
+        
         Write("<td align='center' valign='middle' class='TblUserAdministration'>")
         Write(user.UserMailAddress());
         Write("</td>")
@@ -149,7 +149,7 @@
           }
         Write("</td>")
         Write("</tr>")
-
+        
         Write("<script type='text/javascript'>");
         Write("var tmp = new Object();");
         Write("tmp['id'] = '"#user.ID()#"';");
@@ -167,7 +167,7 @@
 
 <script type="text/javascript">
   var s = "";
-
+  
   s += "<table cellspacing='8'>";
   s += "<tr>";
     s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
@@ -177,21 +177,21 @@
   s += "</table>";
 
   setFooter(s);
-
+  
   newUser = function() {
     CreatePopup(ID_USER_ACCOUNT_CONFIG_ADMIN, 0);
   }
-
+  
   editUser = function(id) {
     CreatePopup(ID_USER_ACCOUNT_CONFIG_ADMIN, id);
   }
-
+  
   deleteUser = function(id)
   {
     var _id_ = id;
     new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveUser"), function(result) {
       if (result == YesNoDialog.RESULT_YES)
-      {
+      {  
         var url = "/esp/system.htm?sid=" + SessionId;
         var pb = "string action = 'deleteUser';";
         pb += "integer userid = " + id + ";";
@@ -205,7 +205,7 @@
       }
     });
   };
-
+  
   showAutoLogin = function() {
     CreatePopup(ID_AUTO_LOGIN_CONFIG);
   }

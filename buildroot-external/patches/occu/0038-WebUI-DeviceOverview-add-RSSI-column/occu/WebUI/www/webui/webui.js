@@ -1,11 +1,11 @@
-CHANNELCHOOSER_JST = "{macro printHead(name, id, transKey)}\n  {if id != sortId}\n    <th class=\"ChannelChooserHead clickable\" name=${transKey} onclick=\"ChannelChooser.sortBy(\'${id}\');\">${name}<\/th>\n  {else}\n    <th class=\"ChannelChooserHead_Active clickable\" name=${transKey} onclick=\"ChannelChooser.sortBy(\'${id}\');\">\n      ${name}&#160;\n      {if sortDescend}\n        <img src=\"\/ise\/img\/arrow_down.gif\" \/>\n      {else}\n        <img src=\"\/ise\/img\/arrow_up.gif\" \/>\n      {\/if}\n    <\/th>\n  {\/if}\n{\/macro}\n<div id=\"ChannelChooserDialog\">\n<div id=\"ChannelChooserTitle\" name=\"dialogChooseChannel\" onmousedown=\"new Drag($(\'ChannelChooserDialog\'), event);\">Kanalauswahl<\/div>\n<div id=\"ChannelChooserContent\">\n  <table id=\"ChannelChooserTable\" width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n    <colgroup>\n      <col width=\"20%\" \/>\n      <col width=\"55px\" \/>\n      <col width=\"30%\" \/>\n      <col width=\"12%\" \/>\n      <col width=\"17%\" \/>\n      <col width=\"17%\" \/>\n    <\/colgroup>\n    <thead>\n      <tr> <!-- ï¿½berschriften -->\n        ${printHead(\"Name\", \"NAME\", \"thName\")}\n        <th class=\"ChannelChooserHead\" name=\"thPicture\">Bild<\/th>\n        ${printHead(\"Beschreibung\", \"DESCRIPTION\", \"thDescription\")}\n        ${printHead(\"Seriennummer\", \"ADDRESS\", \"thSerialNumber\")}\n        ${printHead(\"Gewerke\", \"FUNC_NAMES\", \"thFuncs\")}\n        ${printHead(\"R&auml;ume\", \"ROOM_NAMES\", \"thRooms\")}\n      <\/tr>\n      <tr> <!-- Filter -->\n        ${nameFilter.getHTML()}\n        <th class=\"Filter\">&nbsp;<\/th>\n        ${descriptionFilter.getHTML()}\n        ${addressFilter.getHTML()}\n        ${funcFilter.getHTML()}\n        ${roomFilter.getHTML()}\n      <\/tr>      \n    <\/thead>\n    <tbody>\n      {for channel in channels}\n        {var virtualChannel = \"\"}\n        {var classExpertOnly = \"hidden j_expertChannel\"}\n        {var channelTypeID = channel.deviceType.id.toUpperCase()}\n\n        {if channel.channelType == \"VIRTUAL_DIMMER\"} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n        {if (channel.channelType == \"VIRTUAL_DUAL_WHITE_BRIGHTNESS\") || (channel.channelType == \"VIRTUAL_DUAL_WHITE_COLOR\")} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n        {if (channelTypeID == \"HMIP-PS\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PCBS\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-IT\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-CH\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-PE\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-UK\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BDT\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PDT\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PDT-UK\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-FDT\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 2)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BSM\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-FSM\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 2)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-FSM16\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 2)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-MIOB\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && ((channel.index != 3) && (channel.index != 7))))} {var virtualChannel = classExpertOnly} {\/if}\n        {if ((channelTypeID == \"HMIP-BBL\") || (channelTypeID == \"HMIP-FBL\")) && ((channel.channelType == \"BLIND_TRANSMITTER\") || ((channel.channelType == \"BLIND_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if ((channelTypeID == \"HMIP-BROLL\") || (channelTypeID == \"HMIP-FROLL\")) && ((channel.channelType == \"SHUTTER_TRANSMITTER\") || ((channel.channelType == \"SHUTTER_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-WGC\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BSL\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BSL\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && ((channel.index == 9) || (channel.index == 10) || (channel.index == 13) || (channel.index == 14))))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIP-WHS2\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 2) || (channel.index == 4) || (channel.index == 6) || (channel.index == 8))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIP-MOD-OC8\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 11) || (channel.index == 12) || (channel.index == 15) || (channel.index == 16) || (channel.index == 19) || (channel.index == 20) ||\n           (channel.index == 23) || (channel.index == 24) || (channel.index == 27) || (channel.index == 28) || (channel.index == 31) || (channel.index == 32) ||\n           (channel.index == 35) || (channel.index == 36) || (channel.index == 39) || (channel.index == 40))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIPW-DRBL4\") && ((channel.channelType == \"BLIND_TRANSMITTER\") || ((channel.channelType == \"BLIND_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 3) || (channel.index == 4) || (channel.index == 7) || (channel.index == 8)  ||\n           (channel.index == 11) || (channel.index == 12) || (channel.index == 15) || (channel.index == 16))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if (((channelTypeID == \"HMIPW-DRS4\") || (channelTypeID == \"HMIPW-DRS8\")) && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 3) || (channel.index == 4) || (channel.index == 7) || (channel.index == 8)  ||\n           (channel.index == 11) || (channel.index == 12) || (channel.index == 15) || (channel.index == 16) ||\n           (channel.index == 19) || (channel.index == 20) || (channel.index == 23) || (channel.index == 24) ||\n           (channel.index == 27) || (channel.index == 28) || (channel.index == 31) || (channel.index == 32))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIPW-DRD3\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 3) || (channel.index == 4) || (channel.index == 7) || (channel.index == 8)  ||\n           (channel.index == 11) || (channel.index == 12))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIPW-FIO6\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || (channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\")) &&\n          ((channel.index == 9) || (channel.index == 10) || (channel.index == 13) || (channel.index == 14)  || (channel.index == 17) || (channel.index == 18)  ||\n           (channel.index == 21) || (channel.index == 22) || (channel.index == 25) || (channel.index == 26) || (channel.index == 29) || (channel.index == 30))\n        )} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if channel.channelType == \"VIR-OL-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n        {if channel.channelType == \"VIR-HUE-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n\n        {if channel.channelType != \"_MAINTENANCE\"}\n            <tr class=\"ChannelChooserRow ${virtualChannel}\" id=\"${PREFIX}${channel.id}\" onclick=\"ChannelChooser.select(this.id);\" onmouseover=\"this.className=\'ChannelChooserRow_Highlight\';\" onmouseout=\"this.className=\'ChannelChooserRow\';\">\n              <td class=\"ChannelChooserCell\">${channel.name}<br\/><br\/><span class=\"j_extChnDescr\">${channel.typeDescription}_${channel.address}<\/span><\/td>\n              <td class=\"ChannelChooserThumbnail\"><div class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n              <td class=\"ChannelChooserCell\">${channel.typeDescription}<br\/>${channel.device.name}<\/td>\n              <td class=\"ChannelChooserCell\">${channel.address}<\/td>\n              <td class=\"ChannelChooserCell j_functions\">\n                {for subsection in channel.subsections}\n                  ${subsection.name}<br \/>\n                {forelse}\n                  &#160;\n                {\/for}\n              <\/td>\n              <td class=\"ChannelChooserCell j_rooms\">\n                {for room in channel.rooms}\n                  ${room.name}<br \/>\n                {forelse}\n                  &#160;\n                {\/for}\n              <\/td>\n            <\/tr>\n           {forelse}\n            <tr class=\"ChannelChooserRow\">\n              <td colspan=\"10\" class=\"ChannelChooserCell\" name=\"\"lblNoChannelsAvailable>Keine Kan&auml;le verf&uuml;gbar<\/td>\n            <\/tr>\n        {\/if}\n      {\/for}\n    <\/tbody>\n  <\/table>\n<\/div>\n<div id=\"ChannelChooserFooter\">\n  <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserAbortButton\" name=\"footerBtnCancel\" onclick=\"ChannelChooser.abort();\">Abbrechen<\/div>\n  <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserResetFiltersButton\" name=\"footerBtnResetFilterWOLineBreak\" onclick=\"ChannelChooser.resetFilters();\">Filter zur&uuml;cksetzen<\/div>\n  {if false === showVirtual}\n    <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsShow\" onclick=\"ChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le anzeigen<\/div>\n  {else}\n    <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsHide\" onclick=\"ChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le ausblenden<\/div>\n  {\/if}\n<\/div>\n<\/div>\n";
-CHANNEL_CONFIG_DIALOG_JST = "<div id=\"ChannelConfigDialog\">\n<div id=\"ChannelConfigDialogTitle\" onmousedown=\"new Drag($(\'ChannelConfigDialog\'), event);\"><span name=\"generalChannelConfigTitle\">Allgemeine Kanaleinstellungen:<\/span> ${channel.address}<\/div>\n<div id=\"ChannelConfigDialogContent\">\n\n  <div id=\"ChannelConfigDialogContentLeft\">\n    <div  class=\"ChannelConfigDialogSection\">\n      <div class=\"CLASS11000\">\n        <div class=\"CLASS11001\">${channel.imageHTML}<\/div>\n      <\/div>\n      <div class=\"CLASS11002\">${channel.typeName}<\/div>\n    <\/div>\n    \n    {if channel.supportsComTest()}\n    <div id=\"channelFunctionTestPanel\" class=\"ChannelConfigDialogSection\">\n      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblFuncTest\">Funktionstest<\/div>\n      <hr \/>\n      <div>\n        <table border=\"0\"  class=\"ChannelConfigDialogTable\" width=\"250px\">\n          <tr>\n            <td width=\"50%\"><div id=\"ChannelConfigDialogTestButton\" class=\"StdButton\" name=\"generalDeviceChannelConfigBtnFuncTest\" onclick=\"ChannelConfigDialog.startTest();\">Test starten<\/div><\/td>\n            <td width=\"50%\"><div id=\"ChannelConfigDialogTestResult\">--:--:--<\/div><\/td>\n          <\/tr>\n        <\/table>\n        <div class=\"CLASS11004\">\n          <p name=\"generalChannelConfigHint\">\n            Im Rahmen des Funktionstests wird gepr&uuml;ft, ob die Kommunikation mit dem Kanal fehlerfrei funktioniert.\n          <\/p>\n          {if channel.category == Channel.CATEGORY.SENDER}<p name=\"generalChannelConfigHintSender\">Bei Sensoren wartet die HomeMatic Zentrale, bis diese sich melden. Eine Fernbedienung meldet sich z.B. erst dann, wenn sie manuell betï¿½tigt wird.<\/p>{\/if}\n          {if channel.category == Channel.CATEGORY.RECEIVER}<p name=\"generalChannelConfigHintReceiver\">Bei Aktoren wird dazu in der Regel ein Schaltbefehl ausgelï¿½st.<\/p>{\/if}\n          <\/div>\n      <\/div>\n    <\/div>\n    {\/if}\n  <\/div>\n\n  <div id=\"ChannelConfigDialogContentMain\">\n    <div class=\"ChannelConfigDialogSection\">\n      <table border=\"0\" cellspacing=\"0\" cellpadding=\"2px\"  class=\"ChannelConfigDialogTable\">\n        <tr><td name=\"generalDeviceChannelConfigLblName\">Name:<\/td><td><input id=\"ChannelConfigDialog_ChannelName\" class=\"CLASS11005\" type=\"text\" value=\"${channel.name}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblTypeDescription\">Typenbezeichnung:<\/td><td><input class=\"CLASS11005\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${channel.typeName}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblSerialNumber\">Seriennummer:<\/td><td><input class=\"CLASS11005\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${channel.address}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblCategory\">Kategorie:<\/td><td><input class=\"CLASS11005\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" \n            {if channel.category == Channel.CATEGORY.SENDER} value=\"Sender (Sensor)\" id=\"generalChannelConfigLblSender\" {\/if}\n            {if channel.category == Channel.CATEGORY.RECEIVER} value=\"Empf&auml;nger (Aktor)\" id=\"generalChannelConfigLblReceiver\" {\/if}\n            {if channel.category == Channel.CATEGORY.NONE} value=\"nicht verkn&uuml;pfbar\" id=\"generalChannelConfigLblNone\"{\/if}\n            \/>\n        <\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblTransmitMode\">&Uuml;bertragungsmodus:<\/td>\n          <td>\n            <select id=\"ChannelConfigDialog_Mode\" class=\"CLASS11005\" {if !channel.isAesAvailable} disabled=\"disabled\" readonly=\"readonly\" {\/if}>\n              <option value=\"Standard\" name=\"lblStandard\" {if channel.mode == translateKey(Channel.MODE.DEFAULT)} selected=\"selected\" {\/if} >Standard<\/option>\n              <option value=\"Gesichert\" name=\"lblSecured\" {if channel.mode == translateKey(Channel.MODE.AES)} selected=\"selected\" {\/if} >Gesichert<\/option>\n            <\/select>\n          <\/td>\n        <\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblUsable\">Bedienbar:<\/td><td><input id=\"ChannelConfigDialog_isUsable\" type=\"checkbox\" {if channel.isUsable} checked=\"checked\" {\/if} {if !channel.isWritable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblVisible\">Sichtbar:<\/td><td><input id=\"ChannelConfigDialog_isVisible\" type=\"checkbox\" {if channel.isVisible} checked=\"checked\" {\/if}\/><\/td><\/tr>\n        <tr id=\"btnEnableChannelLogging\"><td name=\"generalDeviceChannelConfigLblLogged\">Protokolliert:<\/td><td><input id=\"ChannelConfigDialog_isLogged\" type=\"checkbox\" {if channel.isLogged} checked=\"checked\" {\/if} {if !channel.isLogable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n      <\/table>\n    <\/div>\n    \n    <div  class=\"ChannelConfigDialogSection\">\n      <img src=\"{if !isRoomListVisible}\/ise\/img\/plus.png{else}\/ise\/img\/minus.png{\/if}\" class=\"CLASS11006\" width=\"16px\" height=\"16px\" onclick=\"ChannelConfigDialog.toggleRooms(this);\">\n      <div class=\"CLASS11007\" name=\"generalChannelConfigLblRooms\">R&auml;ume<\/div>\n      <hr \/>\n      <form id=\"ChannelConfigDialogRooms\" {if !isRoomListVisible} style=\"display:none\" {\/if} >\n        <table class=\"ChannelConfigDialogTable\">\n          {for room in rooms}\n          <tr>\n            <td><input type=\"checkbox\" name=\"values\" value=\"${room.id}\" {if room.contains(channel.id)} checked=\"checked\" {\/if}\/><\/td><td>${room.name}<\/td>\n          <\/tr>\n          {\/for}\n        <\/table>\n      <\/form>\n    <\/div>\n    \n    <div class=\"ChannelConfigDialogSection\">\n      <img src=\"{if !isSubsectionListVisible}\/ise\/img\/plus.png{else}\/ise\/img\/minus.png{\/if}\" class=\"CLASS11006\" width=\"16px\" height=\"16px\" onclick=\"ChannelConfigDialog.toggleFuncs(this);\">\n      <div class=\"CLASS11007\" name=\"generalChannelConfigLblFunctions\">Gewerke<\/div>\n      <hr \/>\n      <form id=\"ChannelConfigDialogFuncs\" {if !isSubsectionListVisible} style=\"display:none\" {\/if}>\n        <table class=\"ChannelConfigDialogTable\">\n          {for func in funcs}\n          <tr>\n            <td><input type=\"checkbox\" name=\"values\" value=\"${func.id}\" {if func.contains(channel.id)} checked=\"checked\" {\/if}\/><\/td><td>${func.name}<\/td>\n          <\/tr>\n          {\/for}\n        <\/table>\n      <\/form>\n    <\/div>\n    \n  <\/div>\n<\/div>\n<div id=\"ChannelConfigDialogFooter\">\n  <div class=\"ChannelConfigDialogButton FooterButton\" name=\"btnOk\" id=\"ChannelConfigDialogOkButton\" onclick=\"ChannelConfigDialog.ok();\">OK<\/div>\n  <div class=\"ChannelConfigDialogButton FooterButton\" name=\"btnCancel\" id=\"ChannelConfigDialogAbortButton\" onclick=\"ChannelConfigDialog.abort();\">Abbrechen<\/div>\n<\/div>\n<\/div>\n";
-DEVICE_CONFIG_DIALOG_JST = "<div id=\"DeviceConfigDialog\">\n<div id=\"DeviceConfigDialogTitle\" onmousedown=\"new Drag($(\'DeviceConfigDialog\'), event);\"><span name=\"generalDeviceConfigTitle\">Allgemeine Gerï¿½teeinstellungen:<\/span> ${device.address}<\/div>\n<div id=\"DeviceConfigDialogContent\">\n\n  <div id=\"DeviceConfigDialogContentLeft\">\n    <div  class=\"DeviceConfigDialogSection\">\n      <div class=\"CLASS10800\">\n        <div class=\"CLASS10801\">${device.imageHTML}<\/div>\n      <\/div>\n      <div class=\"CLASS10802\">${device.typeName}<\/div>\n    <\/div>\n  <\/div>\n\n  <div id=\"DeviceConfigDialogContentMain\">\n    <div class=\"DeviceConfigDialogSection\">\n      <table border=\"0\" cellspacing=\"0\" cellpadding=\"2px\"  class=\"DeviceConfigDialogTable\">\n        <tr><td name=\"generalDeviceChannelConfigLblName\">Name:<\/td><td><input id=\"DeviceConfigDialog_DeviceName\" class=\"CLASS10803\" type=\"text\" value=\"${device.name}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblTypeDescription\">Typenbezeichnung:<\/td><td><input class=\"CLASS10803\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${device.typeName}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblSerialNumber\">Seriennummer:<\/td><td><input class=\"CLASS10803\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${device.address}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblUsable\">Bedienbar:<\/td><td><input id=\"DeviceConfigDialog_isUsable\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isUsabilityChanged=true;\" {if device.isUsable} checked=\"checked\" {\/if} {if !device.isWritable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblVisible\">Sichtbar:<\/td><td><input id=\"DeviceConfigDialog_isVisible\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isVisibilityChanged=true;\" {if device.isVisible} checked=\"checked\" {\/if}\/><\/td><\/tr>\n        <tr id=\"btnEnableDeviceLogging\"><td name=\"generalDeviceChannelConfigLblLogged\">Protokolliert:<\/td><td><input id=\"DeviceConfigDialog_isLogged\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isLoggingChanged=true;\" {if device.isLogged} checked=\"checked\" {\/if} {if !device.isLogable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n      <\/table>\n    <\/div>\n    \n    <div id=\"deviceFunctionTestPanel\" class=\"DeviceConfigDialogSection\">\n      <div class=\"CLASS10804\" name=\"generalDeviceChannelConfigLblFuncTest\">Funktionstest<\/div>\n      <hr \/>\n      <div>\n        <table border=\"0\"  class=\"DeviceConfigDialogTable\" width=\"250px\">\n          <tr>\n            <td width=\"50%\"><div id=\"DeviceConfigDialogTestButton\" class=\"StdButton\" name=\"generalDeviceChannelConfigBtnFuncTest\" onclick=\"DeviceConfigDialog.startTest();\">Test starten<\/div><\/td>\n            <td width=\"50%\"><div id=\"DeviceConfigDialogTestResult\">--:--:--<\/div><\/td>\n          <\/tr>\n        <\/table>\n        <div class=\"CLASS10805\" name=\"generalDeviceConfigHint\">\n          Im Rahmen des Funktionstests wird geprï¿½ft, ob die Kommunikation mit dem Gerï¿½t fehlerfrei funktioniert. Der Test gilt als bestanden, sobald die erste Rï¿½ckmeldung von dem Gerï¿½t empfangen wurde. <br \/> Dazu werden an alle Aktoren des Gerï¿½ts Schaltbefehle gesendet, die deren Zustand ï¿½ndern. Sensoren, wie z.B. Fernbedienungen, melden sich im Allgemeinen erst dann, wenn sie durch ein entsprechendes Ereignis ausgelï¿½st wurden.\n        <\/div>\n      <\/div>\n    <\/div>\n\n  <\/div>\n<\/div>\n<div id=\"DeviceConfigDialogFooter\">\n  <div class=\"DeviceConfigDialogButton FooterButton\" name=\"btnOk\" id=\"DeviceConfigDialogOkButton\" onclick=\"DeviceConfigDialog.ok();\">Ok<\/div>\n  <div class=\"DeviceConfigDialogButton FooterButton\" name=\"btnCancel\" id=\"DeviceConfigDialogAbortButton\" onclick=\"DeviceConfigDialog.abort();\">Abbrechen<\/div>\n<\/div>\n<\/div>\n";
+CHANNELCHOOSER_JST = "{macro printHead(name, id, transKey)}\n  {if id != sortId}\n    <th class=\"ChannelChooserHead clickable\" name=${transKey} onclick=\"ChannelChooser.sortBy(\'${id}\');\">${name}<\/th>\n  {else}\n    <th class=\"ChannelChooserHead_Active clickable\" name=${transKey} onclick=\"ChannelChooser.sortBy(\'${id}\');\">\n      ${name}&#160;\n      {if sortDescend}\n        <img src=\"\/ise\/img\/arrow_down.gif\" \/>\n      {else}\n        <img src=\"\/ise\/img\/arrow_up.gif\" \/>\n      {\/if}\n    <\/th>\n  {\/if}\n{\/macro}\n<div id=\"ChannelChooserDialog\">\n<div id=\"ChannelChooserTitle\" name=\"dialogChooseChannel\" onmousedown=\"new Drag($(\'ChannelChooserDialog\'), event);\">Kanalauswahl<\/div>\n<div id=\"ChannelChooserContent\">\n  <table id=\"ChannelChooserTable\" width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n    <colgroup>\n      <col width=\"20%\" \/>\n      <col width=\"55px\" \/>\n      <col width=\"30%\" \/>\n      <col width=\"12%\" \/>\n      <col width=\"17%\" \/>\n      <col width=\"17%\" \/>\n    <\/colgroup>\n    <thead>\n      <tr> <!-- Überschriften -->\n        ${printHead(\"Name\", \"NAME\", \"thName\")}\n        <th class=\"ChannelChooserHead\" name=\"thPicture\">Bild<\/th>\n        ${printHead(\"Beschreibung\", \"DESCRIPTION\", \"thDescription\")}\n        ${printHead(\"Seriennummer\", \"ADDRESS\", \"thSerialNumber\")}\n        ${printHead(\"Gewerke\", \"FUNC_NAMES\", \"thFuncs\")}\n        ${printHead(\"R&auml;ume\", \"ROOM_NAMES\", \"thRooms\")}\n      <\/tr>\n      <tr> <!-- Filter -->\n        ${nameFilter.getHTML()}\n        <th class=\"Filter\">&nbsp;<\/th>\n        ${descriptionFilter.getHTML()}\n        ${addressFilter.getHTML()}\n        ${funcFilter.getHTML()}\n        ${roomFilter.getHTML()}\n      <\/tr>      \n    <\/thead>\n    <tbody>\n      {for channel in channels}\n        {var virtualChannel = \"\"}\n        {var classExpertOnly = \"hidden j_expertChannel\"}\n        {var channelTypeID = channel.deviceType.id.toUpperCase()}\n\n        {if channel.channelType == \"VIRTUAL_DIMMER\"} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n        {if (channel.channelType == \"VIRTUAL_DUAL_WHITE_BRIGHTNESS\") || (channel.channelType == \"VIRTUAL_DUAL_WHITE_COLOR\")} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n        {if (channelTypeID == \"HMIP-PS\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PCBS\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-IT\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-CH\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-PE\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-UK\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BDT\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PDT\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PDT-UK\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-FDT\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 2)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BSM\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-FSM\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 2)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-FSM16\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 2)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-MIOB\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && ((channel.index != 3) && (channel.index != 7))))} {var virtualChannel = classExpertOnly} {\/if}\n        {if ((channelTypeID == \"HMIP-BBL\") || (channelTypeID == \"HMIP-FBL\")) && ((channel.channelType == \"BLIND_TRANSMITTER\") || ((channel.channelType == \"BLIND_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if ((channelTypeID == \"HMIP-BROLL\") || (channelTypeID == \"HMIP-FROLL\")) && ((channel.channelType == \"SHUTTER_TRANSMITTER\") || ((channel.channelType == \"SHUTTER_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-WGC\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BSL\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BSL\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && ((channel.index == 9) || (channel.index == 10) || (channel.index == 13) || (channel.index == 14))))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIP-WHS2\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 2) || (channel.index == 4) || (channel.index == 6) || (channel.index == 8))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIP-MOD-OC8\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 11) || (channel.index == 12) || (channel.index == 15) || (channel.index == 16) || (channel.index == 19) || (channel.index == 20) ||\n           (channel.index == 23) || (channel.index == 24) || (channel.index == 27) || (channel.index == 28) || (channel.index == 31) || (channel.index == 32) ||\n           (channel.index == 35) || (channel.index == 36) || (channel.index == 39) || (channel.index == 40))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIPW-DRBL4\") && ((channel.channelType == \"BLIND_TRANSMITTER\") || ((channel.channelType == \"BLIND_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 3) || (channel.index == 4) || (channel.index == 7) || (channel.index == 8)  ||\n           (channel.index == 11) || (channel.index == 12) || (channel.index == 15) || (channel.index == 16))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if (((channelTypeID == \"HMIPW-DRS4\") || (channelTypeID == \"HMIPW-DRS8\")) && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 3) || (channel.index == 4) || (channel.index == 7) || (channel.index == 8)  ||\n           (channel.index == 11) || (channel.index == 12) || (channel.index == 15) || (channel.index == 16) ||\n           (channel.index == 19) || (channel.index == 20) || (channel.index == 23) || (channel.index == 24) ||\n           (channel.index == 27) || (channel.index == 28) || (channel.index == 31) || (channel.index == 32))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIPW-DRD3\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 3) || (channel.index == 4) || (channel.index == 7) || (channel.index == 8)  ||\n           (channel.index == 11) || (channel.index == 12))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIPW-FIO6\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || (channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\")) &&\n          ((channel.index == 9) || (channel.index == 10) || (channel.index == 13) || (channel.index == 14)  || (channel.index == 17) || (channel.index == 18)  ||\n           (channel.index == 21) || (channel.index == 22) || (channel.index == 25) || (channel.index == 26) || (channel.index == 29) || (channel.index == 30))\n        )} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if channel.channelType == \"VIR-OL-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n        {if channel.channelType == \"VIR-HUE-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n\n        {if channel.channelType != \"_MAINTENANCE\"}\n            <tr class=\"ChannelChooserRow ${virtualChannel}\" id=\"${PREFIX}${channel.id}\" onclick=\"ChannelChooser.select(this.id);\" onmouseover=\"this.className=\'ChannelChooserRow_Highlight\';\" onmouseout=\"this.className=\'ChannelChooserRow\';\">\n              <td class=\"ChannelChooserCell\">${channel.name}<br\/><br\/><span class=\"j_extChnDescr\">${channel.typeDescription}_${channel.address}<\/span><\/td>\n              <td class=\"ChannelChooserThumbnail\"><div class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n              <td class=\"ChannelChooserCell\">${channel.typeDescription}<br\/>${channel.device.name}<\/td>\n              <td class=\"ChannelChooserCell\">${channel.address}<\/td>\n              <td class=\"ChannelChooserCell j_functions\">\n                {for subsection in channel.subsections}\n                  ${subsection.name}<br \/>\n                {forelse}\n                  &#160;\n                {\/for}\n              <\/td>\n              <td class=\"ChannelChooserCell j_rooms\">\n                {for room in channel.rooms}\n                  ${room.name}<br \/>\n                {forelse}\n                  &#160;\n                {\/for}\n              <\/td>\n            <\/tr>\n           {forelse}\n            <tr class=\"ChannelChooserRow\">\n              <td colspan=\"10\" class=\"ChannelChooserCell\" name=\"\"lblNoChannelsAvailable>Keine Kan&auml;le verf&uuml;gbar<\/td>\n            <\/tr>\n        {\/if}\n      {\/for}\n    <\/tbody>\n  <\/table>\n<\/div>\n<div id=\"ChannelChooserFooter\">\n  <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserAbortButton\" name=\"footerBtnCancel\" onclick=\"ChannelChooser.abort();\">Abbrechen<\/div>\n  <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserResetFiltersButton\" name=\"footerBtnResetFilterWOLineBreak\" onclick=\"ChannelChooser.resetFilters();\">Filter zur&uuml;cksetzen<\/div>\n  {if false === showVirtual}\n    <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsShow\" onclick=\"ChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le anzeigen<\/div>\n  {else}\n    <div class=\"ChannelChooserButton colorGradient50px\" id=\"ChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsHide\" onclick=\"ChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le ausblenden<\/div>\n  {\/if}\n<\/div>\n<\/div>\n";
+CHANNEL_CONFIG_DIALOG_JST = "<div id=\"ChannelConfigDialog\">\n<div id=\"ChannelConfigDialogTitle\" onmousedown=\"new Drag($(\'ChannelConfigDialog\'), event);\"><span name=\"generalChannelConfigTitle\">Allgemeine Kanaleinstellungen:<\/span> ${channel.address}<\/div>\n<div id=\"ChannelConfigDialogContent\">\n\n  <div id=\"ChannelConfigDialogContentLeft\">\n    <div  class=\"ChannelConfigDialogSection\">\n      <div class=\"CLASS11000\">\n        <div class=\"CLASS11001\">${channel.imageHTML}<\/div>\n      <\/div>\n      <div class=\"CLASS11002\">${channel.typeName}<\/div>\n    <\/div>\n    \n    {if channel.supportsComTest()}\n    <div id=\"channelFunctionTestPanel\" class=\"ChannelConfigDialogSection\">\n      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblFuncTest\">Funktionstest<\/div>\n      <hr \/>\n      <div>\n        <table border=\"0\"  class=\"ChannelConfigDialogTable\" width=\"250px\">\n          <tr>\n            <td width=\"50%\"><div id=\"ChannelConfigDialogTestButton\" class=\"StdButton\" name=\"generalDeviceChannelConfigBtnFuncTest\" onclick=\"ChannelConfigDialog.startTest();\">Test starten<\/div><\/td>\n            <td width=\"50%\"><div id=\"ChannelConfigDialogTestResult\">--:--:--<\/div><\/td>\n          <\/tr>\n        <\/table>\n        <div class=\"CLASS11004\">\n          <p name=\"generalChannelConfigHint\">\n            Im Rahmen des Funktionstests wird gepr&uuml;ft, ob die Kommunikation mit dem Kanal fehlerfrei funktioniert.\n          <\/p>\n          {if channel.category == Channel.CATEGORY.SENDER}<p name=\"generalChannelConfigHintSender\">Bei Sensoren wartet die HomeMatic Zentrale, bis diese sich melden. Eine Fernbedienung meldet sich z.B. erst dann, wenn sie manuell betätigt wird.<\/p>{\/if}\n          {if channel.category == Channel.CATEGORY.RECEIVER}<p name=\"generalChannelConfigHintReceiver\">Bei Aktoren wird dazu in der Regel ein Schaltbefehl ausgelöst.<\/p>{\/if}\n          <\/div>\n      <\/div>\n    <\/div>\n    {\/if}\n  <\/div>\n\n  <div id=\"ChannelConfigDialogContentMain\">\n    <div class=\"ChannelConfigDialogSection\">\n      <table border=\"0\" cellspacing=\"0\" cellpadding=\"2px\"  class=\"ChannelConfigDialogTable\">\n        <tr><td name=\"generalDeviceChannelConfigLblName\">Name:<\/td><td><input id=\"ChannelConfigDialog_ChannelName\" class=\"CLASS11005\" type=\"text\" value=\"${channel.name}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblTypeDescription\">Typenbezeichnung:<\/td><td><input class=\"CLASS11005\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${channel.typeName}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblSerialNumber\">Seriennummer:<\/td><td><input class=\"CLASS11005\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${channel.address}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblCategory\">Kategorie:<\/td><td><input class=\"CLASS11005\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" \n            {if channel.category == Channel.CATEGORY.SENDER} value=\"Sender (Sensor)\" id=\"generalChannelConfigLblSender\" {\/if}\n            {if channel.category == Channel.CATEGORY.RECEIVER} value=\"Empf&auml;nger (Aktor)\" id=\"generalChannelConfigLblReceiver\" {\/if}\n            {if channel.category == Channel.CATEGORY.NONE} value=\"nicht verkn&uuml;pfbar\" id=\"generalChannelConfigLblNone\"{\/if}\n            \/>\n        <\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblTransmitMode\">&Uuml;bertragungsmodus:<\/td>\n          <td>\n            <select id=\"ChannelConfigDialog_Mode\" class=\"CLASS11005\" {if !channel.isAesAvailable} disabled=\"disabled\" readonly=\"readonly\" {\/if}>\n              <option value=\"Standard\" name=\"lblStandard\" {if channel.mode == translateKey(Channel.MODE.DEFAULT)} selected=\"selected\" {\/if} >Standard<\/option>\n              <option value=\"Gesichert\" name=\"lblSecured\" {if channel.mode == translateKey(Channel.MODE.AES)} selected=\"selected\" {\/if} >Gesichert<\/option>\n            <\/select>\n          <\/td>\n        <\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblUsable\">Bedienbar:<\/td><td><input id=\"ChannelConfigDialog_isUsable\" type=\"checkbox\" {if channel.isUsable} checked=\"checked\" {\/if} {if !channel.isWritable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblVisible\">Sichtbar:<\/td><td><input id=\"ChannelConfigDialog_isVisible\" type=\"checkbox\" {if channel.isVisible} checked=\"checked\" {\/if}\/><\/td><\/tr>\n        <tr id=\"btnEnableChannelLogging\"><td name=\"generalDeviceChannelConfigLblLogged\">Protokolliert:<\/td><td><input id=\"ChannelConfigDialog_isLogged\" type=\"checkbox\" {if channel.isLogged} checked=\"checked\" {\/if} {if !channel.isLogable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n      <\/table>\n    <\/div>\n    \n    <div  class=\"ChannelConfigDialogSection\">\n      <img src=\"{if !isRoomListVisible}\/ise\/img\/plus.png{else}\/ise\/img\/minus.png{\/if}\" class=\"CLASS11006\" width=\"16px\" height=\"16px\" onclick=\"ChannelConfigDialog.toggleRooms(this);\">\n      <div class=\"CLASS11007\" name=\"generalChannelConfigLblRooms\">R&auml;ume<\/div>\n      <hr \/>\n      <form id=\"ChannelConfigDialogRooms\" {if !isRoomListVisible} style=\"display:none\" {\/if} >\n        <table class=\"ChannelConfigDialogTable\">\n          {for room in rooms}\n          <tr>\n            <td><input type=\"checkbox\" name=\"values\" value=\"${room.id}\" {if room.contains(channel.id)} checked=\"checked\" {\/if}\/><\/td><td>${room.name}<\/td>\n          <\/tr>\n          {\/for}\n        <\/table>\n      <\/form>\n    <\/div>\n    \n    <div class=\"ChannelConfigDialogSection\">\n      <img src=\"{if !isSubsectionListVisible}\/ise\/img\/plus.png{else}\/ise\/img\/minus.png{\/if}\" class=\"CLASS11006\" width=\"16px\" height=\"16px\" onclick=\"ChannelConfigDialog.toggleFuncs(this);\">\n      <div class=\"CLASS11007\" name=\"generalChannelConfigLblFunctions\">Gewerke<\/div>\n      <hr \/>\n      <form id=\"ChannelConfigDialogFuncs\" {if !isSubsectionListVisible} style=\"display:none\" {\/if}>\n        <table class=\"ChannelConfigDialogTable\">\n          {for func in funcs}\n          <tr>\n            <td><input type=\"checkbox\" name=\"values\" value=\"${func.id}\" {if func.contains(channel.id)} checked=\"checked\" {\/if}\/><\/td><td>${func.name}<\/td>\n          <\/tr>\n          {\/for}\n        <\/table>\n      <\/form>\n    <\/div>\n    \n  <\/div>\n<\/div>\n<div id=\"ChannelConfigDialogFooter\">\n  <div class=\"ChannelConfigDialogButton FooterButton\" name=\"btnOk\" id=\"ChannelConfigDialogOkButton\" onclick=\"ChannelConfigDialog.ok();\">OK<\/div>\n  <div class=\"ChannelConfigDialogButton FooterButton\" name=\"btnCancel\" id=\"ChannelConfigDialogAbortButton\" onclick=\"ChannelConfigDialog.abort();\">Abbrechen<\/div>\n<\/div>\n<\/div>\n";
+DEVICE_CONFIG_DIALOG_JST = "<div id=\"DeviceConfigDialog\">\n<div id=\"DeviceConfigDialogTitle\" onmousedown=\"new Drag($(\'DeviceConfigDialog\'), event);\"><span name=\"generalDeviceConfigTitle\">Allgemeine Geräteeinstellungen:<\/span> ${device.address}<\/div>\n<div id=\"DeviceConfigDialogContent\">\n\n  <div id=\"DeviceConfigDialogContentLeft\">\n    <div  class=\"DeviceConfigDialogSection\">\n      <div class=\"CLASS10800\">\n        <div class=\"CLASS10801\">${device.imageHTML}<\/div>\n      <\/div>\n      <div class=\"CLASS10802\">${device.typeName}<\/div>\n    <\/div>\n  <\/div>\n\n  <div id=\"DeviceConfigDialogContentMain\">\n    <div class=\"DeviceConfigDialogSection\">\n      <table border=\"0\" cellspacing=\"0\" cellpadding=\"2px\"  class=\"DeviceConfigDialogTable\">\n        <tr><td name=\"generalDeviceChannelConfigLblName\">Name:<\/td><td><input id=\"DeviceConfigDialog_DeviceName\" class=\"CLASS10803\" type=\"text\" value=\"${device.name}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblTypeDescription\">Typenbezeichnung:<\/td><td><input class=\"CLASS10803\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${device.typeName}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblSerialNumber\">Seriennummer:<\/td><td><input class=\"CLASS10803\" disabled=\"disabled\" readonly=\"readonly\" type=\"text\" value=\"${device.address}\"\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblUsable\">Bedienbar:<\/td><td><input id=\"DeviceConfigDialog_isUsable\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isUsabilityChanged=true;\" {if device.isUsable} checked=\"checked\" {\/if} {if !device.isWritable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n        <tr><td name=\"generalDeviceChannelConfigLblVisible\">Sichtbar:<\/td><td><input id=\"DeviceConfigDialog_isVisible\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isVisibilityChanged=true;\" {if device.isVisible} checked=\"checked\" {\/if}\/><\/td><\/tr>\n        <tr id=\"btnEnableDeviceLogging\"><td name=\"generalDeviceChannelConfigLblLogged\">Protokolliert:<\/td><td><input id=\"DeviceConfigDialog_isLogged\" type=\"checkbox\" onclick=\"DeviceConfigDialog.isLoggingChanged=true;\" {if device.isLogged} checked=\"checked\" {\/if} {if !device.isLogable} disabled=\"disabled\" readonly=\"readonly\" {\/if}\/><\/td><\/tr>\n      <\/table>\n    <\/div>\n    \n    <div id=\"deviceFunctionTestPanel\" class=\"DeviceConfigDialogSection\">\n      <div class=\"CLASS10804\" name=\"generalDeviceChannelConfigLblFuncTest\">Funktionstest<\/div>\n      <hr \/>\n      <div>\n        <table border=\"0\"  class=\"DeviceConfigDialogTable\" width=\"250px\">\n          <tr>\n            <td width=\"50%\"><div id=\"DeviceConfigDialogTestButton\" class=\"StdButton\" name=\"generalDeviceChannelConfigBtnFuncTest\" onclick=\"DeviceConfigDialog.startTest();\">Test starten<\/div><\/td>\n            <td width=\"50%\"><div id=\"DeviceConfigDialogTestResult\">--:--:--<\/div><\/td>\n          <\/tr>\n        <\/table>\n        <div class=\"CLASS10805\" name=\"generalDeviceConfigHint\">\n          Im Rahmen des Funktionstests wird geprüft, ob die Kommunikation mit dem Gerät fehlerfrei funktioniert. Der Test gilt als bestanden, sobald die erste Rückmeldung von dem Gerät empfangen wurde. <br \/> Dazu werden an alle Aktoren des Geräts Schaltbefehle gesendet, die deren Zustand ändern. Sensoren, wie z.B. Fernbedienungen, melden sich im Allgemeinen erst dann, wenn sie durch ein entsprechendes Ereignis ausgelöst wurden.\n        <\/div>\n      <\/div>\n    <\/div>\n\n  <\/div>\n<\/div>\n<div id=\"DeviceConfigDialogFooter\">\n  <div class=\"DeviceConfigDialogButton FooterButton\" name=\"btnOk\" id=\"DeviceConfigDialogOkButton\" onclick=\"DeviceConfigDialog.ok();\">Ok<\/div>\n  <div class=\"DeviceConfigDialogButton FooterButton\" name=\"btnCancel\" id=\"DeviceConfigDialogAbortButton\" onclick=\"DeviceConfigDialog.abort();\">Abbrechen<\/div>\n<\/div>\n<\/div>\n";
 DEVICELIST_FLAT_JST = "{macro printHead(name, id)}\n  {if id != sortId}\n    <th class=\"DeviceListHead clickable\" name=\"${name}\" onclick=\"DeviceListPage.sortBy(\'${id}\');\">${name}<\/th>\n  {else}\n    <th class=\"DeviceListHead_Active clickable\" name=\"${name}\" onclick=\"DeviceListPage.sortBy(\'${id}\');\">\n      ${name}&#160;\n      {if sortDescend}\n        <img src=\"\/ise\/img\/arrow_down.gif\" \/>\n      {else}\n        <img src=\"\/ise\/img\/arrow_up.gif\" \/>\n      {\/if}\n    <\/th>\n  {\/if}\n{\/macro}\n<table id=\"DeviceListTable\" width=\"97%\"  border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n  <colgroup>\n    <col width=\"11%\"\/>\n    <col width=\"11%\"\/>\n    <col width=\"55px\"\/>\n    <col width=\"11%\"\/>\n    <col width=\"11%\"\/>\n    <col width=\"11%\"\/>\n    <col width=\"11%\"\/>\n    <col width=\"11%\"\/>\n    <col width=\"11%\"\/>\n    <col width=\"25px\"\/>\n    <col width=\"25px\"\/>\n    <col width=\"25px\"\/>\n    <col width=\"11%\"\/>\n  <\/colgroup>\n  <thead>\n    <tr>\n      ${printHead(\"thName\", \"NAME\")}\n      ${printHead(\"thTypeDescriptor\", \"TYPE_NAME\")}\n      <th class=\"DeviceListHead\" name=\"thPicture\">Bild<\/th>\n      ${printHead(\"thDescriptor\", \"DESCRIPTION\")}\n      ${printHead(\"thSerialNumber\", \"ADDRESS\")}\n      ${printHead(\"thInterfaceCategory\", \"CATEGORY\")}\n      ${printHead(\"thTransmitMode\", \"MODE\")}\n      ${printHead(\"thFuncs\", \"FUNC_NAMES\")}\n      ${printHead(\"thRooms\", \"ROOM_NAMES\")}\n      <th class=\"DeviceListHead\"><img name=\"lblVisible\" src=\"\/ise\/img\/visible.png\" width=\"24px\" height=\"24px\" alt=\"sichtbar\" title=\"sichtbar\"\/><\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblUsable\" src=\"\/ise\/img\/usable.png\" width=\"24px\" height=\"24px\" alt=\"bedienbar\" title=\"bedienbar\"\/><\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblRecorded\" src=\"\/ise\/img\/logged.png\" width=\"24px\" height=\"24px\" alt=\"protokolliert\" title=\"protokolliert\"\/><\/th>\n      <th class=\"DeviceListHead\" name=\"thActions\">Flat Aktionen<\/th>\n    <\/tr>\n    <tr>\n      ${nameFilter.getHTML()}\n      ${typeNameFilter.getHTML()}\n      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n      ${descriptionFilter.getHTML()}\n      ${addressFilter.getHTML()}\n      ${categoryFilter.getHTML()}\n      ${modeFilter.getHTML()}\n      ${funcFilter.getHTML()}\n      ${roomFilter.getHTML()}\n      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n      <th class=\"Filter CLASS10700\" >&nbsp;<\/th>\n    <\/tr>\n  <\/thead>\n  <tbody>\n    {for channel in channels}\n      <tr class=\"DeviceListRow\" id=\"${PREFIX}${channel.Id}\"  onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" onmouseover=\"this.className = \'DeviceListRow_Highlight\';\" onmouseout=\"this.className = \'DeviceListRow\';\">\n        <td class=\"DeviceListCell\">${channel.name}<\/td>\n        <td class=\"DeviceListCell\">${channel.typeName}<\/td>\n        <td class=\"DeviceListThumbnail\"><div class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.device.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n        <td class=\"DeviceListCell\" name=\"${channel.typeDescription}\" >${channel.typeDescription}<\/td>\n        <td class=\"DeviceListCell\">${channel.address}<\/td>\n        <td class=\"DeviceListCell\">${channel.category}<\/td>\n        <td class=\"DeviceListCell j_chMode\">${channel.mode}<\/td>\n        <td class=\"DeviceListCell j_function\">\n          {for subsection in channel.subsections}\n            ${subsection.name}<br \/>\n          {forelse}\n            &#160;\n          {\/for}\n        <\/td>\n        <td class=\"DeviceListCell j_rooms\">\n          {for room in channel.rooms}\n            ${room.name}<br \/>\n          {forelse}\n            &#160;\n          {\/for}\n        <\/td>\n        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n        <td class=\"DeviceListCell\">\n          <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'CHANNEL\', \'${channel.id}\');\">Einstellen<\/div>\n          <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'CHANNEL\', \'${channel.id}\');\">Direkte<\/div>\n          <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'CHANNEL\', \'${channel.id}\');\">Programme<\/div>\n        <\/td>\n      <\/tr>\n    {forelse}\n      <tr class=\"DeviceListRow\">\n        <td class=\"DeviceListCell\" name=\"noChannelsAvailable\" colspan=\"13\">Keine Kan&auml;le verf&uuml;gbar<\/td>\n      <\/tr>\n    {\/for}\n  <\/tbody>\n<\/table>\n\n";
-DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n  <colgroup>\n    <col width=\"25px\" \/>\n    <col width=\"25px\" \/>\n    <col width=\"25px\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"55px\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"25px\" \/>\n    <col width=\"25px\" \/>\n    <col width=\"25px\" \/>\n    <col width=\"25px\" \/>\n    <col width=\"11%\" \/>\n  <\/colgroup>\n  <thead>\n    <tr>\n      <!-- Alle Elemente mit Name-Attribut werden ï¿½bersetzt. Der Wert des Name-Attributs ist der Key f. die ï¿½bersetzungsdatei -->\n      <th class=\"DeviceListCell_Invisible\"><div class=\"CLASS10900\">&nbsp;<\/div><\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thName\" colspan=\"3\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Name<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thTypeDescriptor\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Typen- Bezeichnung<\/th>\n      <th class=\"DeviceListHead\" name=\"thPicture\">Bild<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thDescriptor\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Bezeichnung<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thSerialNumber\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Serien- Nummer<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thInterfaceCategory\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Interface \/ Kategorie<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thTransmitMode\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">&Uuml;bertragungsmodus<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thFuncs\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Gewerke<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thRooms\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">R&auml;ume<\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblRSSI\" src=\"\/ise\/img\/rssi-icon.png\" width=\"24px\" height=\"24px\" alt=\"RSSI\" title=\"RSSI\"\/><\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblVisible\" src=\"\/ise\/img\/visible.png\" width=\"24px\" height=\"24px\" alt=\"sichtbar\" title=\"sichtbar\"\/><\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblUsable\" src=\"\/ise\/img\/usable.png\" width=\"24px\" height=\"24px\" alt=\"bedienbar\" title=\"bedienbar\"\/><\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblRecorded\" src=\"\/ise\/img\/logged.png\" width=\"24px\" height=\"24px\" alt=\"protokolliert\" title=\"protokolliert\"\/><\/th>\n      <th class=\"DeviceListHead\" name=\"thActions\" >Aktionen<\/th>\n    <\/tr>\n    <tr>\n      <th class=\"DeviceListCell_Invisible CLASS10901\" ><div class=\"CLASS10900\">&nbsp;<\/div><\/th>\n      ${nameFilter.getHTML(3)}\n      ${typeNameFilter.getHTML()}\n      <th class=\"Filter CLASS10901\" >&nbsp;<\/th>\n      ${descriptionFilter.getHTML()}\n      ${addressFilter.getHTML()}\n      ${interfaceFilter.getHTML()}\n      ${modeFilter.getHTML()}\n      ${funcFilter.getHTML()}\n      ${roomFilter.getHTML()}\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n    <\/tr>\n  <\/thead>\n  <tbody>\n    {for device in devices}\n      <tr id=\"${PREFIX}${device.id}\" class=\"DeviceListRow\" onclick=\"DeviceListPage.selectDevice(\'${device.id}\');\" onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n        <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">\n          <img id=\"${PREFIX}${device.id}PLUS\" onclick=\"DeviceListPage.expandDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/plus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le anzeigen\" title=\"Kan&auml;le anzeigen\" {if device._expanded} style=\"display:none;\"{\/if}\/>\n          <img id=\"${PREFIX}${device.id}MINUS\" onclick=\"DeviceListPage.collapseDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/minus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le verbergen\" title=\"Kan&auml;le verbergen\" {if !device._expanded} style=\"display:none;\"{\/if}\/>\n        <\/td>\n        <td class=\"DeviceListCell\" colspan=\"3\">${device.name}<\/td>\n        <td class=\"DeviceListCell\" >${device.typeName}<\/td>\n        <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${device.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${device.deviceType.id}\', 250, \'\', this);\" onmouseout=\"picDivHide(jg_250);\">${device.getThumbnailHTML()}<\/div><\/td>\n        <td class=\"DeviceListCell\" name=\"${device.typeDescription}\" >${device.typeDescription}<\/td>\n        <td class=\"DeviceListCell\" >${device.address}<\/td>\n        <td class=\"DeviceListCell\" >${device.interfaceName}<\/td>\n        <td class=\"DeviceListCell j_chMode\" >{for name in device.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n        <td class=\"DeviceListCell j_functions\" >{for subsection in device.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n        <td class=\"DeviceListCell j_rooms\" >{for room in device.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n        <td class=\"DeviceListCell\" >xyz dBm<\/td>\n        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isVisible}checked=\"checked\"{\/if}\/><\/td>\n        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isUsable}checked=\"checked\"{\/if}\/><\/td>\n        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isLogged}checked=\"checked\"{\/if}\/><\/td>\n        <td class=\"DeviceListCell\" >\n          <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'DEVICE\', \'${device.id}\');\">Einstellen<\/div>\n          {if device.isDeletable}\n            <div class=\"DeviceListButton\" name=\"btnRemove\" onclick=\"DeviceListPage.deleteDevice(event, \'${device.id}\');\">L&ouml;schen<\/div>\n          {else}\n            <div class=\"DeviceListButton CLASS10902\" name=\"btnRemove\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\" >L&ouml;schen<\/div>\n          {\/if}\n          <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'DEVICE\', \'${device.id}\');\">Direkte<\/div>\n          <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'DEVICE\', \'${device.id}\');\">Programme<\/div>\n        <\/td>\n      <\/tr>\n      {for group in device.groups}\n        <tr id=\"${PREFIX}${group.id}\"class=\"DeviceListRow\" {if !device._expanded}style=\"display:none;\"{\/if}>\n          <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">&#160;<\/td>\n          <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">\n            <img id=\"${PREFIX}${group.id}PLUS\" onclick=\"DeviceListPage.expandGroup(event, \'${group.id}\');\" src=\"\/ise\/img\/plus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le anzeigen\" title=\"Kan&auml;le anzeigen\" {if group._expanded} style=\"display:none;\"{\/if}\/>\n            <img id=\"${PREFIX}${group.id}MINUS\" onclick=\"DeviceListPage.collapseGroup(event, \'${group.id}\');\" src=\"\/ise\/img\/minus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le verbergen\" title=\"Kan&auml;le verbergen\" {if !group._expanded} style=\"display:none;\"{\/if}\/>\n          <\/td>\n          <td class=\"DeviceListCell\" colspan=\"2\">${group.name}<\/td>\n          <td class=\"DeviceListCell\" >${group.typeName}<\/td>\n          <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${group.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${group.device.deviceType.id}\', 250, \'${group.formName}\', this);\" onmouseout=\"picDivHide(jg_250);\">${group.thumbnailHTML}<\/div><\/td>\n          <td class=\"DeviceListCell\" name=\"${group.typeDescription}\" >${group.typeDescription}<\/td>\n          <td class=\"DeviceListCell\" >${group.address}<\/td>\n          <td class=\"DeviceListCell\" >{for name in group.categories}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n          <td class=\"DeviceListCell j_chMode\" >{for name in group.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n          <td class=\"DeviceListCell\" >{for subsection in group.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n          <td class=\"DeviceListCell\" >{for room in group.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n          <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isVisible}checked=\"checked\"{\/if}\/><\/td>\n          <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isUsable}checked=\"checked\"{\/if}\/><\/td>\n          <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isLogged}checked=\"checked\"{\/if}\/><\/td>\n          <td class=\"DeviceListCell\" >\n            <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'GROUP\', \'${group.id}\');\">Einstellen<\/div>\n            <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'GROUP\', \'${group.id}\');\">Direkte<\/div>\n            <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'GROUP\', \'${group.id}\');\">Programme<\/div>\n          <\/td>\n        <\/tr>\n        {for channel in group.channels}\n          <tr id=\"${PREFIX}${channel.id}\" onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" class=\"DeviceListRow\" {if (!group._expanded) | (!device._expanded)}style=\"display:none;\"{\/if} onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n            <td class=\"DeviceListCell_Invisible\" colspan=\"3\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">&#160;<\/td>\n            <td class=\"DeviceListCell\" >${channel.name}<br\/>${channel.nameExtention}<\/td>\n            <td class=\"DeviceListCell\" >${channel.typeName}<\/td>\n            <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${channel.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.device.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n            <td class=\"DeviceListCell\" name=\"${channel.typeDescription}\" >${channel.typeDescription}<\/td>\n            <td class=\"DeviceListCell\" >${channel.address}<\/td>\n            <td class=\"DeviceListCell\" >${channel.category}<\/td>\n            <td class=\"DeviceListCell j_chMode\" >${channel.mode}<\/td>\n            <td class=\"DeviceListCell\" >{for subsection in channel.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n            <td class=\"DeviceListCell\" >{for room in channel.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n            <td class=\"DeviceListCell\" >\n              <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'CHANNEL\', \'${channel.id}\');\">Einstellen<\/div>\n              <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'CHANNEL\', \'${channel.id}\');\">Direkte<\/div>\n              <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'CHANNEL\', \'${channel.id}\');\">Programme<\/div>\n            <\/td>\n          <\/tr>        \n        {\/for}\n      {\/for}\n      {for channel in device.singles}\n        \n      {if channel._isVisible}       \n          <tr id=\"${PREFIX}${channel.id}\" onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" class=\"DeviceListRow\" {if !device._expanded}style=\"display:none;\"{\/if} onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n            <td class=\"DeviceListCell_Invisible\" colspan=\"2\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">&#160;<\/td>\n            <td class=\"DeviceListCell\" colspan=\"2\">${channel.name}<br\/>${channel.nameExtention}<\/td>\n            <td class=\"DeviceListCell\" >${channel.typeName}<\/td>\n            <td class=\"DeviceListThumbnail\" ><div  id=\"${PREFIX}${channel.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.device.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n            <td class=\"DeviceListCell\" name=\"${channel.typeDescription}\" >${channel.typeDescription}<\/td>\n            <td class=\"DeviceListCell\" >${channel.address}<\/td>\n            <td class=\"DeviceListCell\" >${channel.category}<\/td>\n            <td class=\"DeviceListCell j_chMode\" >${channel.mode}<\/td>\n            <td class=\"DeviceListCell\" >{for subsection in channel.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n            <td class=\"DeviceListCell\" >{for room in channel.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n            <td class=\"DeviceListCell\"><\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n            <td class=\"DeviceListCell\" >\n              <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'CHANNEL\', \'${channel.id}\');\">Einstellen<\/div>\n              <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'CHANNEL\', \'${channel.id}\');\">Direkte<\/div>\n              <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'CHANNEL\', \'${channel.id}\');\">Programme<\/div>\n            <\/td>\n          <\/tr>        \n       {\/if} \n      \n      {\/for}\n    {forelse}\n      <tr class=\"DeviceListRow\">\n        <td class=\"DeviceListCell_Invisible\">&#160;<\/td>\n        <td class=\"DeviceListCell\" name=\"noDevicesAvailable\" colspan=\"15\">Keine Ger&auml;te verf&uuml;gbar<\/td>\n      <\/tr>\n    {\/for}\n  <\/tbody>\n  <tfoot>\n    <tr class=\"CLASS10903\">\n      <td class=\"DeviceListCell_Invisible CLASS10903\" ><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot CLASS10906\" ><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot CLASS10907\" ><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot CLASS10908\" ><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10909\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n    <\/tr>  \n  <\/tfoot>\n<\/table>\n";
+DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n  <colgroup>\n    <col width=\"25px\" \/>\n    <col width=\"25px\" \/>\n    <col width=\"25px\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"55px\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"11%\" \/>\n    <col width=\"25px\" \/>\n    <col width=\"25px\" \/>\n    <col width=\"25px\" \/>\n    <col width=\"25px\" \/>\n    <col width=\"11%\" \/>\n  <\/colgroup>\n  <thead>\n    <tr>\n      <!-- Alle Elemente mit Name-Attribut werden übersetzt. Der Wert des Name-Attributs ist der Key f. die Übersetzungsdatei -->\n      <th class=\"DeviceListCell_Invisible\"><div class=\"CLASS10900\">&nbsp;<\/div><\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thName\" colspan=\"3\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Name<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thTypeDescriptor\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Typen- Bezeichnung<\/th>\n      <th class=\"DeviceListHead\" name=\"thPicture\">Bild<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thDescriptor\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Bezeichnung<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thSerialNumber\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Serien- Nummer<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thInterfaceCategory\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Interface \/ Kategorie<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thTransmitMode\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">&Uuml;bertragungsmodus<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thFuncs\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Gewerke<\/th>\n      <th class=\"DeviceListHead clickable\" name=\"thRooms\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">R&auml;ume<\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblRSSI\" src=\"\/ise\/img\/rssi-icon.png\" width=\"24px\" height=\"24px\" alt=\"RSSI\" title=\"RSSI\"\/><\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblVisible\" src=\"\/ise\/img\/visible.png\" width=\"24px\" height=\"24px\" alt=\"sichtbar\" title=\"sichtbar\"\/><\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblUsable\" src=\"\/ise\/img\/usable.png\" width=\"24px\" height=\"24px\" alt=\"bedienbar\" title=\"bedienbar\"\/><\/th>\n      <th class=\"DeviceListHead\"><img name=\"lblRecorded\" src=\"\/ise\/img\/logged.png\" width=\"24px\" height=\"24px\" alt=\"protokolliert\" title=\"protokolliert\"\/><\/th>\n      <th class=\"DeviceListHead\" name=\"thActions\" >Aktionen<\/th>\n    <\/tr>\n    <tr>\n      <th class=\"DeviceListCell_Invisible CLASS10901\" ><div class=\"CLASS10900\">&nbsp;<\/div><\/th>\n      ${nameFilter.getHTML(3)}\n      ${typeNameFilter.getHTML()}\n      <th class=\"Filter CLASS10901\" >&nbsp;<\/th>\n      ${descriptionFilter.getHTML()}\n      ${addressFilter.getHTML()}\n      ${interfaceFilter.getHTML()}\n      ${modeFilter.getHTML()}\n      ${funcFilter.getHTML()}\n      ${roomFilter.getHTML()}\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n      <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n    <\/tr>\n  <\/thead>\n  <tbody>\n    {for device in devices}\n      <tr id=\"${PREFIX}${device.id}\" class=\"DeviceListRow\" onclick=\"DeviceListPage.selectDevice(\'${device.id}\');\" onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n        <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">\n          <img id=\"${PREFIX}${device.id}PLUS\" onclick=\"DeviceListPage.expandDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/plus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le anzeigen\" title=\"Kan&auml;le anzeigen\" {if device._expanded} style=\"display:none;\"{\/if}\/>\n          <img id=\"${PREFIX}${device.id}MINUS\" onclick=\"DeviceListPage.collapseDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/minus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le verbergen\" title=\"Kan&auml;le verbergen\" {if !device._expanded} style=\"display:none;\"{\/if}\/>\n        <\/td>\n        <td class=\"DeviceListCell\" colspan=\"3\">${device.name}<\/td>\n        <td class=\"DeviceListCell\" >${device.typeName}<\/td>\n        <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${device.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${device.deviceType.id}\', 250, \'\', this);\" onmouseout=\"picDivHide(jg_250);\">${device.getThumbnailHTML()}<\/div><\/td>\n        <td class=\"DeviceListCell\" name=\"${device.typeDescription}\" >${device.typeDescription}<\/td>\n        <td class=\"DeviceListCell\" >${device.address}<\/td>\n        <td class=\"DeviceListCell\" >${device.interfaceName}<\/td>\n        <td class=\"DeviceListCell j_chMode\" >{for name in device.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n        <td class=\"DeviceListCell j_functions\" >{for subsection in device.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n        <td class=\"DeviceListCell j_rooms\" >{for room in device.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n        <td class=\"DeviceListCell\" >xyz dBm<\/td>\n        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isVisible}checked=\"checked\"{\/if}\/><\/td>\n        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isUsable}checked=\"checked\"{\/if}\/><\/td>\n        <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isLogged}checked=\"checked\"{\/if}\/><\/td>\n        <td class=\"DeviceListCell\" >\n          <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'DEVICE\', \'${device.id}\');\">Einstellen<\/div>\n          {if device.isDeletable}\n            <div class=\"DeviceListButton\" name=\"btnRemove\" onclick=\"DeviceListPage.deleteDevice(event, \'${device.id}\');\">L&ouml;schen<\/div>\n          {else}\n            <div class=\"DeviceListButton CLASS10902\" name=\"btnRemove\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\" >L&ouml;schen<\/div>\n          {\/if}\n          <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'DEVICE\', \'${device.id}\');\">Direkte<\/div>\n          <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'DEVICE\', \'${device.id}\');\">Programme<\/div>\n        <\/td>\n      <\/tr>\n      {for group in device.groups}\n        <tr id=\"${PREFIX}${group.id}\"class=\"DeviceListRow\" {if !device._expanded}style=\"display:none;\"{\/if}>\n          <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">&#160;<\/td>\n          <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">\n            <img id=\"${PREFIX}${group.id}PLUS\" onclick=\"DeviceListPage.expandGroup(event, \'${group.id}\');\" src=\"\/ise\/img\/plus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le anzeigen\" title=\"Kan&auml;le anzeigen\" {if group._expanded} style=\"display:none;\"{\/if}\/>\n            <img id=\"${PREFIX}${group.id}MINUS\" onclick=\"DeviceListPage.collapseGroup(event, \'${group.id}\');\" src=\"\/ise\/img\/minus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le verbergen\" title=\"Kan&auml;le verbergen\" {if !group._expanded} style=\"display:none;\"{\/if}\/>\n          <\/td>\n          <td class=\"DeviceListCell\" colspan=\"2\">${group.name}<\/td>\n          <td class=\"DeviceListCell\" >${group.typeName}<\/td>\n          <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${group.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${group.device.deviceType.id}\', 250, \'${group.formName}\', this);\" onmouseout=\"picDivHide(jg_250);\">${group.thumbnailHTML}<\/div><\/td>\n          <td class=\"DeviceListCell\" name=\"${group.typeDescription}\" >${group.typeDescription}<\/td>\n          <td class=\"DeviceListCell\" >${group.address}<\/td>\n          <td class=\"DeviceListCell\" >{for name in group.categories}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n          <td class=\"DeviceListCell j_chMode\" >{for name in group.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n          <td class=\"DeviceListCell\" >{for subsection in group.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n          <td class=\"DeviceListCell\" >{for room in group.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n          <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isVisible}checked=\"checked\"{\/if}\/><\/td>\n          <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isUsable}checked=\"checked\"{\/if}\/><\/td>\n          <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isLogged}checked=\"checked\"{\/if}\/><\/td>\n          <td class=\"DeviceListCell\" >\n            <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'GROUP\', \'${group.id}\');\">Einstellen<\/div>\n            <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'GROUP\', \'${group.id}\');\">Direkte<\/div>\n            <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'GROUP\', \'${group.id}\');\">Programme<\/div>\n          <\/td>\n        <\/tr>\n        {for channel in group.channels}\n          <tr id=\"${PREFIX}${channel.id}\" onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" class=\"DeviceListRow\" {if (!group._expanded) | (!device._expanded)}style=\"display:none;\"{\/if} onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n            <td class=\"DeviceListCell_Invisible\" colspan=\"3\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">&#160;<\/td>\n            <td class=\"DeviceListCell\" >${channel.name}<br\/>${channel.nameExtention}<\/td>\n            <td class=\"DeviceListCell\" >${channel.typeName}<\/td>\n            <td class=\"DeviceListThumbnail\" ><div id=\"${PREFIX}${channel.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.device.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n            <td class=\"DeviceListCell\" name=\"${channel.typeDescription}\" >${channel.typeDescription}<\/td>\n            <td class=\"DeviceListCell\" >${channel.address}<\/td>\n            <td class=\"DeviceListCell\" >${channel.category}<\/td>\n            <td class=\"DeviceListCell j_chMode\" >${channel.mode}<\/td>\n            <td class=\"DeviceListCell\" >{for subsection in channel.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n            <td class=\"DeviceListCell\" >{for room in channel.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n            <td class=\"DeviceListCell\"><\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n            <td class=\"DeviceListCell\" >\n              <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'CHANNEL\', \'${channel.id}\');\">Einstellen<\/div>\n              <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'CHANNEL\', \'${channel.id}\');\">Direkte<\/div>\n              <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'CHANNEL\', \'${channel.id}\');\">Programme<\/div>\n            <\/td>\n          <\/tr>        \n        {\/for}\n      {\/for}\n      {for channel in device.singles}\n        \n      {if channel._isVisible}       \n          <tr id=\"${PREFIX}${channel.id}\" onclick=\"DeviceListPage.selectChannel(\'${channel.id}\');\" class=\"DeviceListRow\" {if !device._expanded}style=\"display:none;\"{\/if} onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n            <td class=\"DeviceListCell_Invisible\" colspan=\"2\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">&#160;<\/td>\n            <td class=\"DeviceListCell\" colspan=\"2\">${channel.name}<br\/>${channel.nameExtention}<\/td>\n            <td class=\"DeviceListCell\" >${channel.typeName}<\/td>\n            <td class=\"DeviceListThumbnail\" ><div  id=\"${PREFIX}${channel.id}Thumbnail\" class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.device.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n            <td class=\"DeviceListCell\" name=\"${channel.typeDescription}\" >${channel.typeDescription}<\/td>\n            <td class=\"DeviceListCell\" >${channel.address}<\/td>\n            <td class=\"DeviceListCell\" >${channel.category}<\/td>\n            <td class=\"DeviceListCell j_chMode\" >${channel.mode}<\/td>\n            <td class=\"DeviceListCell\" >{for subsection in channel.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n            <td class=\"DeviceListCell\" >{for room in channel.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n            <td class=\"DeviceListCell\" >\n              <div class=\"DeviceListButton\" name=\"btnConfigure\" onclick=\"DeviceListPage.showConfiguration(event, \'CHANNEL\', \'${channel.id}\');\">Einstellen<\/div>\n              <div class=\"DeviceListButton\" name=\"btnDirectLinks\" onclick=\"DeviceListPage.showDirectLinks(event, \'CHANNEL\', \'${channel.id}\');\">Direkte<\/div>\n              <div class=\"DeviceListButton\" name=\"btnPrograms\" onclick=\"DeviceListPage.showPrograms(event, \'CHANNEL\', \'${channel.id}\');\">Programme<\/div>\n            <\/td>\n          <\/tr>        \n       {\/if} \n      \n      {\/for}\n    {forelse}\n      <tr class=\"DeviceListRow\">\n        <td class=\"DeviceListCell_Invisible\">&#160;<\/td>\n        <td class=\"DeviceListCell\" name=\"noDevicesAvailable\" colspan=\"15\">Keine Ger&auml;te verf&uuml;gbar<\/td>\n      <\/tr>\n    {\/for}\n  <\/tbody>\n  <tfoot>\n    <tr class=\"CLASS10903\">\n      <td class=\"DeviceListCell_Invisible CLASS10903\" ><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot CLASS10906\" ><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot CLASS10907\" ><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot CLASS10908\" ><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10909\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n      <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n    <\/tr>  \n  <\/tfoot>\n<\/table>\n";
 LISTFILTER_JST = "<th class=\"{if isSet}Filter_Active{else}Filter{\/if}\">\n  <div class=\"FilterCaption\" name=\"thFilter\" onclick=\"Element.show(\'${id}\');\">Filter<\/div>\n  <div class=\"FilterBodyWrapper\" id=\"${id}\" style=\"display:none\">\n    <form class=\"FilterBody\" id=\"${formId}\">\n      <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n        <tbody>\n          {for item in list}\n          <tr>\n            <td class=\"FilterBodyCell\"><input type=\"checkbox\" name=\"values\" value=\"${item.id}\" {if true === item._selected}checked=\"\"{\/if}\/><td>\n            <td class=\"FilterBodyCell j_Filter_${item.id}\">${item.name}<\/td>\n          <\/tr>\n          {\/for}\n        <\/tbody>\n      <\/table>\n      <div class=\"FilterButton\" name=\"filterSet\" onclick=\"${name}.set();\">Setzen<\/div>\n      <div class=\"FilterButton\" name=\"filterClose\" onclick=\"${name}.close();\">Schlie&szlig;en<\/div>\n    <\/form>\n  <\/div>\n<\/th>\n";
-MULTI_CHANNELCHOOSER_JST = "{macro printHead(name, id, langKey)}\n  {if id != sortId}\n    <th class=\"MultiChannelChooserHead clickable\" name=${langKey} onclick=\"MultiChannelChooser.sortBy(\'${id}\');\">${name}<\/th>\n  {else}\n    <th class=\"MultiChannelChooserHead_Active clickable\" name=${langKey} onclick=\"MultiChannelChooser.sortBy(\'${id}\');\">\n      ${name}&#160;\n      {if sortDescend}\n        <img src=\"\/ise\/img\/arrow_down.gif\" \/>\n      {else}\n        <img src=\"\/ise\/img\/arrow_up.gif\" \/>\n      {\/if}\n    <\/th>\n  {\/if}\n{\/macro}\n<div id=\"MultiChannelChooserDialog\">\n<div id=\"MultiChannelChooserTitle\" onmousedown=\"new Drag($(\'MultiChannelChooserDialog\'), event);\"><span name=\"dialogChooseChannel\">Kanalauswahl<\/span>: ${title}<\/div>\n<div id=\"MultiChannelChooserContent\">\n  <table id=\"MultiChannelChooserTable\" width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n    <colgroup>\n      <col width=\"5%\" \/>\n      <col width=\"19%\" \/>\n      <col width=\"55px\" \/>\n      <col width=\"30%\" \/>\n      <col width=\"12%\" \/>\n      <col width=\"17%\" \/>\n      <col width=\"17%\" \/>\n    <\/colgroup>\n    <thead>\n      <tr> <!-- ï¿½berschriften -->\n        <th class=\"MultiChannelChooserHead\">&nbsp;<\/th>\n        ${printHead(\"Name\", \"NAME\", \"thName\")}\n        <th class=\"MultiChannelChooserHead\" name=\"thPicture\">Bild<\/th>\n        ${printHead(\"Beschreibung\", \"DESCRIPTION\", \"thDescription\")}\n        ${printHead(\"Seriennummer\", \"ADDRESS\", \"thSerialNumber\")}\n        ${printHead(\"Gewerke\", \"FUNC_NAMES\", \"thFunc\")}\n        ${printHead(\"R&auml;ume\", \"ROOM_NAMES\", \"thRooms\")}\n      <\/tr>\n      <tr> <!-- Filter -->\n        <th class=\"Filter\">&nbsp;<\/th>\n        ${nameFilter.getHTML()}\n        <th class=\"Filter\">&nbsp;<\/th>\n        ${descriptionFilter.getHTML()}\n        ${addressFilter.getHTML()}\n        ${funcFilter.getHTML()}\n        ${roomFilter.getHTML()}\n      <\/tr>      \n    <\/thead>\n    <tbody>\n      {for channel in channels}\n\n        {var virtualChannel = \"\"}\n        {var classExpertOnly = \"hidden j_expertChannel\"}\n        {var channelTypeID = channel.deviceType.id.toUpperCase()}\n\n        {if channel.channelType == \"VIRTUAL_DIMMER\"} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channel.channelType == \"VIRTUAL_DUAL_WHITE_BRIGHTNESS\") || (channel.channelType == \"VIRTUAL_DUAL_WHITE_COLOR\")} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n        {if (channelTypeID == \"HMIP-PS\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PCBS\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-IT\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-CH\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-PE\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-UK\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BDT\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PDT\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PDT-UK\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-FDT\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 2)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BSM\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-FSM\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 2)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-FSM16\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 2)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-MIOB\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && ((channel.index != 3) && (channel.index != 7))))} {var virtualChannel = classExpertOnly} {\/if}\n        {if ((channelTypeID == \"HMIP-BBL\") || (channelTypeID == \"HMIP-FBL\")) && ((channel.channelType == \"BLIND_TRANSMITTER\") || ((channel.channelType == \"BLIND_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if ((channelTypeID == \"HMIP-BROLL\") || (channelTypeID == \"HMIP-FROLL\")) && ((channel.channelType == \"SHUTTER_TRANSMITTER\") || ((channel.channelType == \"SHUTTER_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-WGC\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BSL\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BSL\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && ((channel.index == 9) || (channel.index == 10) || (channel.index == 13) || (channel.index == 14))))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIP-WHS2\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 2) || (channel.index == 4) || (channel.index == 6) || (channel.index == 8))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIP-MOD-OC8\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 11) || (channel.index == 12) || (channel.index == 15) || (channel.index == 16) || (channel.index == 19) || (channel.index == 20) ||\n           (channel.index == 23) || (channel.index == 24) || (channel.index == 27) || (channel.index == 28) || (channel.index == 31) || (channel.index == 32) ||\n           (channel.index == 35) || (channel.index == 36) || (channel.index == 39) || (channel.index == 40))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIPW-DRBL4\") && ((channel.channelType == \"BLIND_TRANSMITTER\") || ((channel.channelType == \"BLIND_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 3) || (channel.index == 4) || (channel.index == 7) || (channel.index == 8)  ||\n           (channel.index == 11) || (channel.index == 12) || (channel.index == 15) || (channel.index == 16))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if (((channelTypeID == \"HMIPW-DRS4\") || (channelTypeID == \"HMIPW-DRS8\")) && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 3) || (channel.index == 4) || (channel.index == 7) || (channel.index == 8)  ||\n           (channel.index == 11) || (channel.index == 12) || (channel.index == 15) || (channel.index == 16) ||\n           (channel.index == 19) || (channel.index == 20) || (channel.index == 23) || (channel.index == 24) ||\n           (channel.index == 27) || (channel.index == 28) || (channel.index == 31) || (channel.index == 32))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIPW-DRD3\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 3) || (channel.index == 4) || (channel.index == 7) || (channel.index == 8)  ||\n           (channel.index == 11) || (channel.index == 12))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIPW-FIO6\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || (channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\")) &&\n          ((channel.index == 9) || (channel.index == 10) || (channel.index == 13) || (channel.index == 14)  || (channel.index == 17) || (channel.index == 18)  ||\n           (channel.index == 21) || (channel.index == 22) || (channel.index == 25) || (channel.index == 26) || (channel.index == 29) || (channel.index == 30))\n        )} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if channel.channelType == \"VIR-OL-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n        {if channel.channelType == \"VIR-HUE-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n\n      <tr class=\"MultiChannelChooserRow ${virtualChannel}\" id=\"${PREFIX}${channel.id}\" onmouseover=\"this.className=\'MultiChannelChooserRow_Highlight\';\" onmouseout=\"this.className=\'MultiChannelChooserRow\';\">\n        <td class=\"MultiChannelChooserCell_Active\"><input type=\"checkbox\" onclick=\"MultiChannelChooser.select(\'${channel.id}\', this);\" {if true === channel._selected}checked=\"\"{\/if}\/><\/td>\n        <td class=\"MultiChannelChooserCell\">${channel.name}<br\/>${channel.nameExtention}<\/td>\n        <td class=\"MultiChannelChooserThumbnail\"><div class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n        <td class=\"MultiChannelChooserCell\">${channel.typeDescription}<br\/>${channel.device.name}<\/td>\n        <td class=\"MultiChannelChooserCell\">${channel.address}<\/td>\n        <td class=\"MultiChannelChooserCell\">\n          {for subsection in channel.subsections}\n            ${subsection.name}<br \/>\n          {forelse}\n            &#160;\n          {\/for}\n        <\/td>\n        <td class=\"MultiChannelChooserCell\">\n          {for room in channel.rooms}\n            ${room.name}<br \/>\n          {forelse}\n            &#160;\n          {\/for}\n        <\/td>\n      <\/tr>\n      {forelse}\n      <tr class=\"MultiChannelChooserRow\">\n        <td colspan=\"10\" class=\"MultiChannelChooserCell\" name=\"hintMultiChannelChooserNoChannelsAvailable\">Keine Kan&auml;le verf&uuml;gbar<\/td>\n      <\/tr>        \n    {\/for}\n    <\/tbody>\n  <\/table>\n<\/div>\n<div id=\"MultiChannelChooserFooter\">\n  <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserAbortButton\" name=\"footerBtnCancel\" onclick=\"MultiChannelChooser.abort();\">Abbrechen<\/div>\n  <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserOkButton\" name=\"footerBtnOk\" onclick=\"MultiChannelChooser.ok();\">OK<\/div>\n  <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserResetFiltersButton\" name=\"footerBtnResetFilterWOLineBreak\" onclick=\"MultiChannelChooser.resetFilters();\">Filter zur&uuml;cksetzen<\/div>\n  {if false === showVirtual}\n    <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsShow\" onclick=\"MultiChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le anzeigen<\/div>\n  {else}\n    <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsHide\" onclick=\"MultiChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le ausblenden<\/div>\n  {\/if}\n<\/div>\n<\/div>";
-RF_CONFIG_JST = "<div class=\"CLASS10500\">\n<form name=\"RFConfig_Interfaces\">\n<table class=\"RFConfig_InterfacesTable\" width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"5\">\n  <colgroup>\n    <col width=\"10%\" \/>\n    <col width=\"30%\" colspan=\"3\" \/>\n  <\/colgroup>\n  <tr>\n    <th>Auswahl<\/th>\n    <th>Seriennummer<\/th>\n    <th>Zugriffscode<\/th>\n    <th>IP Adresse<\/td>\n  <\/tr>\n\t{for gateway in m_gateways}\n  <tr class=\"RFConfig_InterfacesTable_tr\" onmouseover=\"this.className=\'RFConfig_InterfacesTable_tr_hover\';\" onmouseout=\"this.className=\'RFConfig_InterfacesTable_tr\';\">\n    <td><input id=\"${gateway.id}\" name=\"${gateway.id}\" type=\"checkbox\" \/><\/td>\n    <td onclick=\"RFConfigDialog.changeGateway(${m_dialogId}, \'${gateway.id}\');\">${gateway.serial}&nbsp;<\/td>\n    <td onclick=\"RFConfigDialog.changeGateway(${m_dialogId}, \'${gateway.id}\');\">${gateway.key}&nbsp;<\/td>\n    <td onclick=\"RFConfigDialog.changeGateway(${m_dialogId}, \'${gateway.id}\');\">${gateway.ip}&nbsp;<\/td>\n  <\/tr>\n\t{forelse}\n\t<tr class=\"RFConfig_InterfacesTable_tr\">\n    <td colspan=\"4\" align=\"center\" valign=\"middle\">Momentan sind keine Funk-LAN-Gateways verfï¿½gbar.<\/td>\n  <\/tr>\n\t{\/for}\n<\/table>\n<\/div>\n<\/form>";
+MULTI_CHANNELCHOOSER_JST = "{macro printHead(name, id, langKey)}\n  {if id != sortId}\n    <th class=\"MultiChannelChooserHead clickable\" name=${langKey} onclick=\"MultiChannelChooser.sortBy(\'${id}\');\">${name}<\/th>\n  {else}\n    <th class=\"MultiChannelChooserHead_Active clickable\" name=${langKey} onclick=\"MultiChannelChooser.sortBy(\'${id}\');\">\n      ${name}&#160;\n      {if sortDescend}\n        <img src=\"\/ise\/img\/arrow_down.gif\" \/>\n      {else}\n        <img src=\"\/ise\/img\/arrow_up.gif\" \/>\n      {\/if}\n    <\/th>\n  {\/if}\n{\/macro}\n<div id=\"MultiChannelChooserDialog\">\n<div id=\"MultiChannelChooserTitle\" onmousedown=\"new Drag($(\'MultiChannelChooserDialog\'), event);\"><span name=\"dialogChooseChannel\">Kanalauswahl<\/span>: ${title}<\/div>\n<div id=\"MultiChannelChooserContent\">\n  <table id=\"MultiChannelChooserTable\" width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n    <colgroup>\n      <col width=\"5%\" \/>\n      <col width=\"19%\" \/>\n      <col width=\"55px\" \/>\n      <col width=\"30%\" \/>\n      <col width=\"12%\" \/>\n      <col width=\"17%\" \/>\n      <col width=\"17%\" \/>\n    <\/colgroup>\n    <thead>\n      <tr> <!-- Überschriften -->\n        <th class=\"MultiChannelChooserHead\">&nbsp;<\/th>\n        ${printHead(\"Name\", \"NAME\", \"thName\")}\n        <th class=\"MultiChannelChooserHead\" name=\"thPicture\">Bild<\/th>\n        ${printHead(\"Beschreibung\", \"DESCRIPTION\", \"thDescription\")}\n        ${printHead(\"Seriennummer\", \"ADDRESS\", \"thSerialNumber\")}\n        ${printHead(\"Gewerke\", \"FUNC_NAMES\", \"thFunc\")}\n        ${printHead(\"R&auml;ume\", \"ROOM_NAMES\", \"thRooms\")}\n      <\/tr>\n      <tr> <!-- Filter -->\n        <th class=\"Filter\">&nbsp;<\/th>\n        ${nameFilter.getHTML()}\n        <th class=\"Filter\">&nbsp;<\/th>\n        ${descriptionFilter.getHTML()}\n        ${addressFilter.getHTML()}\n        ${funcFilter.getHTML()}\n        ${roomFilter.getHTML()}\n      <\/tr>      \n    <\/thead>\n    <tbody>\n      {for channel in channels}\n\n        {var virtualChannel = \"\"}\n        {var classExpertOnly = \"hidden j_expertChannel\"}\n        {var channelTypeID = channel.deviceType.id.toUpperCase()}\n\n        {if channel.channelType == \"VIRTUAL_DIMMER\"} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channel.channelType == \"VIRTUAL_DUAL_WHITE_BRIGHTNESS\") || (channel.channelType == \"VIRTUAL_DUAL_WHITE_COLOR\")} {var virtualChannel = \"hidden j_expertChannel\"} {\/if}\n        {if (channelTypeID == \"HMIP-PS\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PCBS\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-IT\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-CH\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-PE\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PSM-UK\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BDT\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PDT\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-PDT-UK\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-FDT\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && (channel.index > 2)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BSM\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-FSM\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 2)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-FSM16\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 2)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-MIOB\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && ((channel.index != 3) && (channel.index != 7))))} {var virtualChannel = classExpertOnly} {\/if}\n        {if ((channelTypeID == \"HMIP-BBL\") || (channelTypeID == \"HMIP-FBL\")) && ((channel.channelType == \"BLIND_TRANSMITTER\") || ((channel.channelType == \"BLIND_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if ((channelTypeID == \"HMIP-BROLL\") || (channelTypeID == \"HMIP-FROLL\")) && ((channel.channelType == \"SHUTTER_TRANSMITTER\") || ((channel.channelType == \"SHUTTER_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-WGC\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 3)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BSL\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") && (channel.index > 4)))} {var virtualChannel = classExpertOnly} {\/if}\n        {if (channelTypeID == \"HMIP-BSL\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") && ((channel.index == 9) || (channel.index == 10) || (channel.index == 13) || (channel.index == 14))))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIP-WHS2\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 2) || (channel.index == 4) || (channel.index == 6) || (channel.index == 8))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIP-MOD-OC8\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 11) || (channel.index == 12) || (channel.index == 15) || (channel.index == 16) || (channel.index == 19) || (channel.index == 20) ||\n           (channel.index == 23) || (channel.index == 24) || (channel.index == 27) || (channel.index == 28) || (channel.index == 31) || (channel.index == 32) ||\n           (channel.index == 35) || (channel.index == 36) || (channel.index == 39) || (channel.index == 40))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIPW-DRBL4\") && ((channel.channelType == \"BLIND_TRANSMITTER\") || ((channel.channelType == \"BLIND_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 3) || (channel.index == 4) || (channel.index == 7) || (channel.index == 8)  ||\n           (channel.index == 11) || (channel.index == 12) || (channel.index == 15) || (channel.index == 16))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if (((channelTypeID == \"HMIPW-DRS4\") || (channelTypeID == \"HMIPW-DRS8\")) && ((channel.channelType == \"SWITCH_TRANSMITTER\") || ((channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 3) || (channel.index == 4) || (channel.index == 7) || (channel.index == 8)  ||\n           (channel.index == 11) || (channel.index == 12) || (channel.index == 15) || (channel.index == 16) ||\n           (channel.index == 19) || (channel.index == 20) || (channel.index == 23) || (channel.index == 24) ||\n           (channel.index == 27) || (channel.index == 28) || (channel.index == 31) || (channel.index == 32))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIPW-DRD3\") && ((channel.channelType == \"DIMMER_TRANSMITTER\") || ((channel.channelType == \"DIMMER_VIRTUAL_RECEIVER\") &&\n          ((channel.index == 3) || (channel.index == 4) || (channel.index == 7) || (channel.index == 8)  ||\n           (channel.index == 11) || (channel.index == 12))\n        )))} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if ((channelTypeID == \"HMIPW-FIO6\") && ((channel.channelType == \"SWITCH_TRANSMITTER\") || (channel.channelType == \"SWITCH_VIRTUAL_RECEIVER\")) &&\n          ((channel.index == 9) || (channel.index == 10) || (channel.index == 13) || (channel.index == 14)  || (channel.index == 17) || (channel.index == 18)  ||\n           (channel.index == 21) || (channel.index == 22) || (channel.index == 25) || (channel.index == 26) || (channel.index == 29) || (channel.index == 30))\n        )} {var virtualChannel = classExpertOnly} {\/if}\n\n        {if channel.channelType == \"VIR-OL-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n        {if channel.channelType == \"VIR-HUE-GTW-CH\"} {var virtualChannel = \"hidden\"} {\/if}\n\n      <tr class=\"MultiChannelChooserRow ${virtualChannel}\" id=\"${PREFIX}${channel.id}\" onmouseover=\"this.className=\'MultiChannelChooserRow_Highlight\';\" onmouseout=\"this.className=\'MultiChannelChooserRow\';\">\n        <td class=\"MultiChannelChooserCell_Active\"><input type=\"checkbox\" onclick=\"MultiChannelChooser.select(\'${channel.id}\', this);\" {if true === channel._selected}checked=\"\"{\/if}\/><\/td>\n        <td class=\"MultiChannelChooserCell\">${channel.name}<br\/>${channel.nameExtention}<\/td>\n        <td class=\"MultiChannelChooserThumbnail\"><div class=\"thumbnail\" onmouseover=\"picDivShow(jg_250, \'${channel.deviceType.id}\', 250, \'${channel.index}\', this);\" onmouseout=\"picDivHide(jg_250);\">${channel.thumbnailHTML}<\/div><\/td>\n        <td class=\"MultiChannelChooserCell\">${channel.typeDescription}<br\/>${channel.device.name}<\/td>\n        <td class=\"MultiChannelChooserCell\">${channel.address}<\/td>\n        <td class=\"MultiChannelChooserCell\">\n          {for subsection in channel.subsections}\n            ${subsection.name}<br \/>\n          {forelse}\n            &#160;\n          {\/for}\n        <\/td>\n        <td class=\"MultiChannelChooserCell\">\n          {for room in channel.rooms}\n            ${room.name}<br \/>\n          {forelse}\n            &#160;\n          {\/for}\n        <\/td>\n      <\/tr>\n      {forelse}\n      <tr class=\"MultiChannelChooserRow\">\n        <td colspan=\"10\" class=\"MultiChannelChooserCell\" name=\"hintMultiChannelChooserNoChannelsAvailable\">Keine Kan&auml;le verf&uuml;gbar<\/td>\n      <\/tr>        \n    {\/for}\n    <\/tbody>\n  <\/table>\n<\/div>\n<div id=\"MultiChannelChooserFooter\">\n  <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserAbortButton\" name=\"footerBtnCancel\" onclick=\"MultiChannelChooser.abort();\">Abbrechen<\/div>\n  <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserOkButton\" name=\"footerBtnOk\" onclick=\"MultiChannelChooser.ok();\">OK<\/div>\n  <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserResetFiltersButton\" name=\"footerBtnResetFilterWOLineBreak\" onclick=\"MultiChannelChooser.resetFilters();\">Filter zur&uuml;cksetzen<\/div>\n  {if false === showVirtual}\n    <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsShow\" onclick=\"MultiChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le anzeigen<\/div>\n  {else}\n    <div class=\"MultiChannelChooserButton colorGradient50px\" id=\"MultiChannelChooserVirtualButton\" name=\"footerBtnVirtualChannelsHide\" onclick=\"MultiChannelChooser.toggleVirtualChannels();\">virtuelle Kan&auml;le ausblenden<\/div>\n  {\/if}\n<\/div>\n<\/div>";
+RF_CONFIG_JST = "<div class=\"CLASS10500\">\n<form name=\"RFConfig_Interfaces\">\n<table class=\"RFConfig_InterfacesTable\" width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"5\">\n  <colgroup>\n    <col width=\"10%\" \/>\n    <col width=\"30%\" colspan=\"3\" \/>\n  <\/colgroup>\n  <tr>\n    <th>Auswahl<\/th>\n    <th>Seriennummer<\/th>\n    <th>Zugriffscode<\/th>\n    <th>IP Adresse<\/td>\n  <\/tr>\n\t{for gateway in m_gateways}\n  <tr class=\"RFConfig_InterfacesTable_tr\" onmouseover=\"this.className=\'RFConfig_InterfacesTable_tr_hover\';\" onmouseout=\"this.className=\'RFConfig_InterfacesTable_tr\';\">\n    <td><input id=\"${gateway.id}\" name=\"${gateway.id}\" type=\"checkbox\" \/><\/td>\n    <td onclick=\"RFConfigDialog.changeGateway(${m_dialogId}, \'${gateway.id}\');\">${gateway.serial}&nbsp;<\/td>\n    <td onclick=\"RFConfigDialog.changeGateway(${m_dialogId}, \'${gateway.id}\');\">${gateway.key}&nbsp;<\/td>\n    <td onclick=\"RFConfigDialog.changeGateway(${m_dialogId}, \'${gateway.id}\');\">${gateway.ip}&nbsp;<\/td>\n  <\/tr>\n\t{forelse}\n\t<tr class=\"RFConfig_InterfacesTable_tr\">\n    <td colspan=\"4\" align=\"center\" valign=\"middle\">Momentan sind keine Funk-LAN-Gateways verfügbar.<\/td>\n  <\/tr>\n\t{\/for}\n<\/table>\n<\/div>\n<\/form>";
 STRINGFILTER_JST = "<th class=\"{if isSet}Filter_Active{else}Filter{\/if}\" colspan=\"${colspan}\">\n  <div class=\"FilterCaption\" name=\"thFilter\" onclick=\"${name}.show();\">Filter<\/div>\n  <div class=\"FilterBodyWrapper\" id=\"${id}\" style=\"display:none;\">\n    <div class=\"FilterBody\">\n        <input class=\"FilterText\" id=\"${textId}\" onkeypress=\"${name}.checkEnterEsc(event.keyCode);\" type=\"text\" name=\"${textId}\" value=\"${value}\" \/>\n        <div class=\"FilterButton\" name=\"filterSet\" onclick=\"${name}.set();\">Setzen<\/div>\n        <div class=\"FilterButton\" name=\"filterClose\" onclick=\"${name}.close();\">Schlie&szlig;en<\/div>\n    <\/div>\n  <\/div>\n<\/th>";
 DEV_LIST        = new Array();
 DEV_DESCRIPTION = new Array();
@@ -3360,7 +3360,7 @@ DEV_getDescription = function(type)
 	//if (DEV_TypeExists(type)) descr = DEV_DESCRIPTION[type];
 
 	var descr;
-
+	
 	try {
 		descr = DEV_DESCRIPTION[type];
 	} catch (e) { }
@@ -3374,20 +3374,20 @@ DEV_getImagePath = function(type, size)
 {
 	//if (DEV_TypeExists(type)) path = DEV_PATHS[type][size];
 	var path;
-
+	
 	try {
 		path = DEV_PATHS[type][size];
 	} catch (e) { }
 
 	if (! path) path = "#";
-
+	
 	return path;
 };
 
 DEV_getImageHighlight = function(type, form)
 {
 	var form;
-
+	
 	try {
 		form = DEV_HIGHLIGHT[type][form];
 	} catch (e) { }
@@ -5045,30 +5045,30 @@ elvST['30Min'] = '${optionUnit30M}';
 elvST['60Min'] = '${optionUnit60M}';
 elvST['120Min'] = '${optionUnit120M}';
 /*
-ï¿½bersetzt den Inhalt der HTML-Elemente <span class="stringtable_value">...</span>
+Übersetzt den Inhalt der HTML-Elemente <span class="stringtable_value">...</span>
 und <select class="stringtable_select">...</select>
 */
 st_setStringTableValues = function()
 {
 	var translation;
-
-	//In <span class="stringtable_value">...</span> eingeschlossene Wï¿½rter ï¿½bersetzen
+	
+	//In <span class="stringtable_value">...</span> eingeschlossene Wörter übersetzen
 	var temp = document.getElementsByClassName('stringtable_value');
-
+  
     var wrappers = new Array();
 	for (var i=0; i<temp.length; i++)
-	{
+	{	
 		wrappers[i]=temp[i];
 	}
-
+    
 	for (var i=0; i<wrappers.length; i++)
-	{
+	{	
 		wrappers[i].innerHTML = st_getValue( wrappers[i].innerHTML ).escapeHTML();
 		wrappers[i].className += "_translated";
 	}
 	//-------------------------------------------------------------------------
 
-	//Comboboxen ï¿½bersetzen <select class="stringtable_select" ... >...</select>
+	//Comboboxen übersetzen <select class="stringtable_select" ... >...</select>
 	var temp = document.getElementsByClassName('stringtable_select');
 
 	var selboxes = new Array();
@@ -5076,13 +5076,13 @@ st_setStringTableValues = function()
 	{
 		selboxes[i] = temp[i];
 	}
-
+	
 	for (var i=0; i<selboxes.length; i++)
 	{
 		var selectelem = selboxes[i];
 
 		if (selectelem.type != "select-one") continue;
-
+		
 		for (var k=0; k<selectelem.options.length; k++)
 		{
 			selectelem.options[k].text = st_getValue(selectelem.options[k].text).escapeHTML();
@@ -5091,8 +5091,8 @@ st_setStringTableValues = function()
 		selectelem.className += "_translated";
 	}
 	//-------------------------------------------------------------------------
-
-	//Input-Felder ï¿½bersetzen <input class="stringtable_input" ...>
+	
+	//Input-Felder übersetzen <input class="stringtable_input" ...> 
 	var temp = document.getElementsByClassName('stringtable_input');
 
 	var input = new Array();
@@ -5113,13 +5113,13 @@ st_setStringTableValues = function()
 //context: <channeltype>|<value_id>(=<value>)?
 //context: <channeltype>|<value_id>
 //context: <value_id>
-//Rï¿½ckgabeparameter:
-//return: ï¿½bersetzung, wenn context gefunden in den Spezialisierungsgraden:
+//Rückgabeparameter:
+//return: übersetzung, wenn context gefunden in den Spezialisierungsgraden:
 //	1. <channeltype>|<value_id>(=<value>)?
 //	2. <channeltype>|<value_id>
 //	3. <value_id>
 //	sonst: value, wenn value aus dem context extrahiert werden kann
-//	sonst: context wird wieder zurï¿½ckgegeben.
+//	sonst: context wird wieder zurückgegeben.
 st_getValue = function(context)
 {
 	var translation;
@@ -5128,17 +5128,17 @@ st_getValue = function(context)
 	var value_id_assign; //Inhalt: <value_id>=<value>
 	var value_id;
 	var value;
-
+		
 	//Voller context vorhanden?=========================================
 	translation = elvST[context];
 
 	if (translation && translation != "") return translation;
 	//==================================================================
-
+	
 	//Gibt es einen Eintrag nur mit value_id_assign?====================
 	tokens = context.split('|');
 	value_id_assign = "";
-
+	
 	if (tokens.length > 1)
 	{
 		//channel_type = tokens[0];
@@ -5151,7 +5151,7 @@ st_getValue = function(context)
 	//Gibt es einen Eintrag nur mit dem Variablennamen?=================
 	tokens = context.split('=');
 	value = "";
-
+	
 	if (tokens.length > 1)
 	{
 		//value_id = tokens[0];
@@ -5161,7 +5161,7 @@ st_getValue = function(context)
 		else if (value       && value       != "") return value;
 	}
 	//==================================================================
-
+	
 	//Gibt es einen Eintrag im INPUT-Feld?==============================
 
 	tokens = context.split(" ");
@@ -5169,7 +5169,7 @@ st_getValue = function(context)
 
 	for (var i = 0; i < tokens.length; i++)
 	{
-		if (typeof elvST[tokens[i]] != 'undefined')
+		if (typeof elvST[tokens[i]] != 'undefined') 
 		{
 			tokens[i] = elvST[tokens[i]];
 		}
@@ -5191,7 +5191,7 @@ Singleton = {
   {
 		var _members = "";
     if (typeof(members) != "undefined") { var _members = members; }
-    var singleton = Class.create(base, _members);
+    var singleton = Class.create(base, _members); 
     return new singleton();
   }
 };
@@ -5205,9 +5205,9 @@ Interface = {
   {
     return members;
   },
-
+  
   /**
-   * Prï¿½ft, ob ein Objekt eine spezielle Schnittstelle implementiert
+   * Prüft, ob ein Objekt eine spezielle Schnittstelle implementiert
    **/
   isImplemented: function(obj, iface)
   {
@@ -5217,16 +5217,16 @@ Interface = {
     }
     return true;
   }
-
+  
 };
-
+ 
 Array.prototype.ex_joinItem = function(name, separator)
 {
   var _separator = " ";
   var result = "";
-
+  
   if (typeof(separator) != "undefined") { _separator = separator; }
-
+  
   if (0 < this.length)
   {
     result = this[0][name];
@@ -5235,10 +5235,10 @@ Array.prototype.ex_joinItem = function(name, separator)
       result += separator + this[i][name];
     }
   }
-
+  
   return result;
-};
-
+}; 
+ 
 /**
  * Wie join, nur dass jeweils eine Eigenschaft verkettet wird
  **/
@@ -5246,9 +5246,9 @@ Array.prototype.ex_joinProperty = function(name, separator)
 {
   var _separator = " ";
   var result = "";
-
+  
   if (typeof(separator) != "undefined") { _separator = separator; }
-
+  
   if (0 < this.length)
   {
     result = this[0][name]();
@@ -5257,7 +5257,7 @@ Array.prototype.ex_joinProperty = function(name, separator)
       result += separator + this[i][name]();
     }
   }
-
+  
   return result;
 };
 
@@ -5270,7 +5270,7 @@ Array.prototype.ex_sortBy = function(name, sortReverse)
 {
   this.sort(function(a,b) { return Object.ex_compare(a[name], b[name]); });
   if (sortReverse) { this.reverse(); }
-
+  
   return this;
 };
 
@@ -5283,7 +5283,7 @@ Array.prototype.ex_sortByProperty = function(name, sortReverse)
 {
   this.sort(function(a, b) { return Object.ex_compare(a[name](), b[name]()); });
   if (sortReverse) { this.reverse(); }
-
+  
   return this;
 };
 
@@ -5314,11 +5314,11 @@ String.prototype.ex_compareTo = function(other)
   {
     var strA = this.toLowerCase();
     var strB = other.toLowerCase();
-
+  
     if      (strA > strB) { return 1; }
     else if (strA < strB) { return -1; }
   }
-
+  
   return 0;
 };
 
@@ -5331,7 +5331,7 @@ Array.prototype.ex_contains = function(item)
 };
 
 /**
- * Fï¿½gt einem Array ein Element hinzu, falls
+ * Fügt einem Array ein Element hinzu, falls
  * dieses noch nicht enthalten ist.
  **/
 Array.prototype.ex_pushUnique = function(item)
@@ -5348,7 +5348,7 @@ String.prototype.reverse = function () {
     return result;
 };/*******************************************************************************
  * xmlhttprequest.js
- * Browserunabhï¿½ngiger Zugriff auf das XMLHttpRequest-Objekt.
+ * Browserunabhängiger Zugriff auf das XMLHttpRequest-Objekt.
  *
  * Autor      : Falk Werner
  * Erstellt am: 04.06.2008
@@ -5357,10 +5357,10 @@ String.prototype.reverse = function () {
 /*############################################################################*/
 /*# Funktionen                                                               #*/
 /*############################################################################*/
-
+ 
 /*******************************************************************************
  * XMLHttpRequest_create ()
- * Erstellt browserunabhï¿½ngig ein neuen XMLHttpRequest-Objekt.
+ * Erstellt browserunabhängig ein neuen XMLHttpRequest-Objekt.
  *
  * Dieser Code wurde inspiriert von folgendem Buch:
  * Titel : Ajax - schnell und kompakt
@@ -5371,7 +5371,7 @@ String.prototype.reverse = function () {
 XMLHttpRequest_create = function ()
 {
   var xmlHttp = null;
-
+  
   if ( window.XMLHttpRequest )
   {
     xmlHttp = new XMLHttpRequest();
@@ -5384,7 +5384,7 @@ XMLHttpRequest_create = function ()
     }
     catch (ex)
     {
-      try
+      try 
       {
         xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
       }
@@ -5394,40 +5394,40 @@ XMLHttpRequest_create = function ()
       }
     }
   }
-
+  
   return xmlHttp;
 };
 
 /*******************************************************************************
  * XMLHttpRequest_supported ()
- * Prï¿½ft, ob das XMLHttpRequest-Objekt verfï¿½gbar ist.
+ * Prüft, ob das XMLHttpRequest-Objekt verfügbar ist.
  *
- * Rï¿½ckgabe:
- *  true  - Das XMLHttpRequest-Objekt ist verfï¿½gbar.
- *  false - Das XMLHttpRequest-Objekt ist NICHT verfï¿½gbar.
+ * Rückgabe:
+ *  true  - Das XMLHttpRequest-Objekt ist verfügbar.
+ *  false - Das XMLHttpRequest-Objekt ist NICHT verfügbar.
  ******************************************************************************/
 XMLHttpRequest_supported = function ()
 {
   var request = XMLHttpRequest_create();
-
+  
   if (null !== xmlHttpRequest) { return true;  }
   else                        { return false; }
 };
 /**
  * httploader.js
  **/
-
+ 
 /**
- * Lï¿½dt XML- bzw Textdateien synchron.
- **/
+ * Lädt XML- bzw Textdateien synchron.
+ **/ 
 HttpLoader = new function()
 {
   /*####################*/
   /*# Private Elemente #*/
   /*####################*/
-
+  
   /**
-   * Hï¿½ngt die Version der HomeMatic WebUI an eine URL an,
+   * Hängt die Version der HomeMatic WebUI an eine URL an,
    * um Probleme mit dem Browsercache zu umgehen.
    **/
   var addVersion = function(url)
@@ -5435,47 +5435,47 @@ HttpLoader = new function()
     if (0 <= url.indexOf("?")) { return url + "&_version_=" + WEBUI_VERSION; }
     else                       { return url + "?_version_=" + WEBUI_VERSION; }
   };
-
+  
   /**
-   * Lï¿½dt synchron Daten und gibt das XMLHttpRequest-Objekt zurï¿½ck.
+   * Lädt synchron Daten und gibt das XMLHttpRequest-Objekt zurück.
    **/
   var load = function(method, url, data)
   {
     url = addVersion(url);
     var xhr = XMLHttpRequest_create();
-
+    
     if (null !== xhr)
     {
       xhr.open(method, url, false);
       xhr.send(data);
       if ((xhr.status != 200) && (xhr.status !== 0)) { xhr = null; }
     }
-
+    
     return xhr;
   };
-
+ 
   /*########################*/
-  /*# ï¿½ffentliche Elemente #*/
+  /*# Öffentliche Elemente #*/
   /*########################*/
-
+  
   /**
-   * Lï¿½dt einen Text synchron.
+   * Lädt einen Text synchron.
    **/
   this.getText = function(url)
   {
     var xhr = load("GET", url, null);
-
+    
     if (null !== xhr) { return xhr.responseText; }
     else              { return ""; }
   };
-
+  
   /**
-   * Lï¿½dt ein XML-Dokument synchron.
+   * Lädt ein XML-Dokument synchron.
    **/
   this.getXML = function(url)
   {
     var xhr = load("GET", url, null);
-
+    
     if (null !== xhr) { return xhr.responseXML; }
     else              { return null; }
   };
@@ -5491,20 +5491,20 @@ HttpLoader = new function()
 eQ3 = {};
 
 /**
- * Singleton fï¿½r systemweite Hilfsfunktionen
+ * Singleton für systemweite Hilfsfunktionen
  **/
 eQ3.system = {
 
-	MAX_OBJECT_ID: 1000000,		//< grï¿½ï¿½te Id, die ein Objekt haben kann
-
-	m_objects: {},						//< Enthï¿½lt alle registierten Objekte
-	m_id: 0,									//< vorgeschlagene Id fï¿½r das nï¿½chste Objekt
+	MAX_OBJECT_ID: 1000000,		//< größte Id, die ein Objekt haben kann
+	
+	m_objects: {},						//< Enthält alle registierten Objekte
+	m_id: 0,									//< vorgeschlagene Id für das nächste Objekt
 	m_objectCount: 0,					//< Aktuelle Anzahl der registrieten Objekte (zu Debug-Zwecken)
-
+	
 	/**
 	 * @fn m_getNextFreeId
-	 * @brief Liefert die nï¿½chste freie Id, die einem Objekt zugewiesen
-	 *        werden kann.
+	 * @brief Liefert die nächste freie Id, die einem Objekt zugewiesen 
+	 *        werden kann. 
 	 **/
 	m_getNextFreeId: function()
 	{
@@ -5512,35 +5512,35 @@ eQ3.system = {
 		var objects       = eQ3.system.m_objects;
 		var id            = eQ3.system.m_id;
 		var count         = 0;
-
+		
 		while ( typeof(objects[id]) != "undefined" )
 		{
 			id++;
 			if (id > MAX_OBJECT_ID) { id = 0; }
-
+			
 			count++;
 			if (count > MAX_OBJECT_ID) { throw new Error("max. object count reached"); }
 		}
-
+		
 		if (id < MAX_OBJECT_ID) { eQ3.system.m_id = id + 1; }
 		else                    { eQ3.system.m_id = 0;      }
-
+		
 		return id;
 	},
-
+	
 	/**
 	 * @fn registerObject
-	 * @brief Weist einem Objekt eine Id zu, ï¿½ber die es angesprochen werden kann
+	 * @brief Weist einem Objekt eine Id zu, über die es angesprochen werden kann
 	 */
 	registerObject: function(object)
 	{
 		var id = eQ3.system.m_getNextFreeId();
 		eQ3.system.m_objects[id] = object;
 		eQ3.system.m_objectCount++;
-
+		
 		return id;
 	},
-
+	
 	/**
 	 * @fn unregisterObject
 	 * @brief Gibt eine Objekt-Id frei.
@@ -5553,7 +5553,7 @@ eQ3.system = {
 			eQ3.system.m_objectCount--;
 		}
 	},
-
+	
 	/**
 	 * @fn getObjectById
 	 * @brief liefert ein registriertes Objekt anhand seiner Id.
@@ -5562,18 +5562,18 @@ eQ3.system = {
 	{
 		return eQ3.system.m_objects[id];
 	}
-
+	
 };
 
 /**
  * @fn $o
- * @brief Shortcut fï¿½r eq3.system.getObjectById
+ * @brief Shortcut für eq3.system.getObjectById
  **/
 $o = eQ3.system.getObjectById;
 
 
 /**
- * Klasse fï¿½r allgemeine Ereignisse
+ * Klasse für allgemeine Ereignisse
  **/
 eQ3.Event = Class.create({
 
@@ -5584,10 +5584,10 @@ eQ3.Event = Class.create({
   {
     this.reset();
   },
-
+  
   /**
-   * Fï¿½gt einen neuen Event-Listener hinzu.
-   * Falls ein Listener bereits existiert, wird er kein zweites Mal hinzugefï¿½gt.
+   * Fügt einen neuen Event-Listener hinzu.
+   * Falls ein Listener bereits existiert, wird er kein zweites Mal hinzugefügt.
    **/
   add: function(listener)
   {
@@ -5597,7 +5597,7 @@ eQ3.Event = Class.create({
     }
     return this;
   },
-
+  
   /**
    * Entfernt einen Event-Listener.
    **/
@@ -5606,9 +5606,9 @@ eQ3.Event = Class.create({
     this.m_listeners = this.m_listeners.without(listener);
     return this;
   },
-
+  
   /**
-   * Lï¿½st das Ereinigs aus
+   * Löst das Ereinigs aus
    **/
   fire: function(source, event)
   {
@@ -5616,10 +5616,10 @@ eQ3.Event = Class.create({
     listeners.each(function(listener) { listener(source, event); });
     return this;
   },
-
+  
   /**
-   * Setzt das Ereignis zurï¿½ck.
-   * Lï¿½scht alle angemeldeten Event-Handler.
+   * Setzt das Ereignis zurück.
+   * Löscht alle angemeldeten Event-Handler.
    **/
   reset: function()
   {
@@ -5631,20 +5631,20 @@ eQ3.Event = Class.create({
 /**
  * debug.js
  **/
-
+ 
 /**
  * Debug-Schnittstelle
  **/
 Debug =  Singleton.create({
   isEnabled: true,
-
+  
   /**
    * Wirft eine Exception, falls eine Zusicherung nicht
    * eingehalten werden kann.
    **/
   assert: function(expression, message)
   {
-    if (true !== expression)
+    if (true !== expression) 
     {
       if (typeof(message) != "undefined") { throw new Error("assertion failed: " + message); }
       else { throw new Error("assertions failed"); }
@@ -5663,28 +5663,28 @@ Debug =  Singleton.create({
 /**
  * Allgemeine JSON-RPC Fehler
  **/
-JSONRPC_ERROR =
+JSONRPC_ERROR = 
 {
-	INVALID_JSON:
+	INVALID_JSON: 
 	{
 		"result": null,
     "error" : {"code": 200, "text": "invalid response"},
     "id"    : null
 	}
-};
-
+}; 
+ 
 /**
- *
+ * 
  **/
 jsonrpc_check = function(response)
 {
-	if ((null       === response)                   ||
+	if ((null       === response)                   || 
 			("undefined" == typeof(response["result"])) ||
 			("undefined" == typeof(response["error"])))
 	{
 		response = JSONRPC_ERROR.INVALID_JSON;
 	}
-
+	
 	return response;
 };
 
@@ -5706,7 +5706,7 @@ jsonrpc_async = function(url, method, params, callback)
 {
 	var user_callback = callback;
 	var xhr           = XMLHttpRequest_create();
-
+	
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.onreadystatechange = function()
@@ -5723,7 +5723,7 @@ jsonrpc_async = function(url, method, params, callback)
 		}
 	};
 	xhr.send(Object.toJSON({"version": "1.1", "method": method, "params": params }));
-
+  
   return true;
 };
 
@@ -5734,7 +5734,7 @@ jsonrpc_sync = function(url, method, params)
 {
 	var result = null;
 	var xhr    = XMLHttpRequest_create();
-
+	
 	xhr.open("POST", url, false);
 	xhr.setRequestHeader("Content-Type", "application/json");
 	xhr.send(Object.toJSON({"version": "1.1", "method": method, "params": params }));
@@ -5747,7 +5747,7 @@ jsonrpc_sync = function(url, method, params)
 };
 
 /**
- * JSON-RPC Aufruf ohne Rï¿½ckgabewert.
+ * JSON-RPC Aufruf ohne Rückgabewert.
  **/
 jsonrpc_notify = function(url, method, params)
 {
@@ -5803,17 +5803,17 @@ function showSecurityDialog() {
  * drag.js
  * Drag & Drop
  **/
-
+ 
 Drag = function(element, event, callback)
 {
 
   var m_x = (document.all) ? window.event.clientX : event.pageX;
   var m_y = (document.all) ? window.event.clientY : event.pageY;
-  var m_element  = element;
+  var m_element  = element; 
   var m_callback = callback;
-  var m_top      = m_y - element.offsetTop;
-  var m_left     = m_x - element.offsetLeft;
-
+  var m_top      = m_y - element.offsetTop;      
+  var m_left     = m_x - element.offsetLeft;      
+  
   /**
    * Callback. Wird beim Bewegen der Maus aufgerufen
    **/
@@ -5821,7 +5821,7 @@ Drag = function(element, event, callback)
   {
     m_x = (document.all) ? window.event.clientX : event.pageX;
     m_y = (document.all) ? window.event.clientY : event.pageY;
-
+    
     if (m_element !== null)
     {
       Element.setStyle(m_element, {
@@ -5830,7 +5830,7 @@ Drag = function(element, event, callback)
       });
     }
   };
-
+  
   /**
    * Callback. Wird beim Loslassen der Maus aufgerufen
    **/
@@ -5838,15 +5838,15 @@ Drag = function(element, event, callback)
   {
     var x = (document.all) ? window.event.clientX : event.pageX;
     var y = (document.all) ? window.event.clientY : event.pageY;
-
+    
     Event.stopObserving(document, "mousemove", onMouseMove);
     Event.stopObserving(document, "mouseip", onMouseUp);
-
+    
     if (m_callback) { m_callback(m_element, x, y); }
   };
-
+  
   Element.absolutize(m_element);
-  Element.setStyle(m_element, {marginTop: "0px", marginLeft: "0px"}); // BugFix: relativ positionierte Elemente werden ï¿½ber margin ausgerichtet, absolutize() setzz dies jedoch nicht zurï¿½ck
+  Element.setStyle(m_element, {marginTop: "0px", marginLeft: "0px"}); // BugFix: relativ positionierte Elemente werden über margin ausgerichtet, absolutize() setzz dies jedoch nicht zurück
   Element.observe(document, "mousemove", onMouseMove);
   Element.observe(document, "mouseup", onMouseUp);
 
@@ -5854,24 +5854,24 @@ Drag = function(element, event, callback)
 /**
  * configdata.js
  **/
-
+ 
 /**
- * @fileOverview Daten fï¿½r die Konfgurationsseiten
+ * @fileOverview Daten für die Konfgurationsseiten
  * @author F. Werner (eQ-3)
  **/
-
+ 
 ConfigData = Singleton.create({
 
   initialize: function()
   {
     this.isPresent = false;
   },
-
+  
   check: function(callback)
   {
     if (this.isPresent === false)
     {
-      this.isPresent = true;
+      this.isPresent = true;      
       new ConfigDataLoader(callback);
     }
     else
@@ -5892,13 +5892,13 @@ ConfigDataLoader = Class.create({
   initialize: function(callback)
   {
     var that = this;
-
+    
     this.TASKLIST = [
       {name: "WEBUILOADER_DEVICES"  , action: function() { DeviceList.reload(that); }},
       {name: "WEBUILOADER_ROOMS"    , action: function() { RoomList.reload(that); }},
       {name: "WEBUILOADER_FUNCTIONS", action: function() { SubsectionList.reload(that); }}
     ];
-
+    
     var screenWidth  = WebUI.getWidth();
     var screenHeight = WebUI.getHeight();
     var frameWidth   = ConfigDataLoader.CONTENT_WIDTH;
@@ -5908,10 +5908,10 @@ ConfigDataLoader = Class.create({
 
     this.m_currentTask = -1;
     this.m_callback = callback;
-
+    
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
-
+        
     this.m_frame = new UI.Frame()
       .setTitle(translateKey('infoLoadConfigData'))
       .setContentSize(frameWidth, frameHeight)
@@ -5922,10 +5922,10 @@ ConfigDataLoader = Class.create({
         //.setHtml(ConfigDataLoader.CONTENT)
         .setHtml("<img src='/ise/img/ajaxload_white.gif' style='float:left;margin-right:10px' />" + translateKey('infoLoadConfigDataPlsWait'))
       );
-
+      
     this.m_layer.appendChild(this.m_frame.getElement());
     Layer.add(this.m_layer);
-
+    
     this.ready();
   },
 
@@ -5940,18 +5940,18 @@ ConfigDataLoader = Class.create({
     {
       this.m_frame.dispose();
       Layer.remove(this.m_layer);
-
+    
       if (this.m_callback) { this.m_callback(); }
     }
   },
-
+  
   reportLoadingState: function(state)
   {
     var width = parseInt((this.m_currentTask + state) * 100);
     //this.m_frame.setTitle(ConfigDataLoader.TITLE + " (" + width + "%)");
     this.m_frame.setTitle(translateKey('infoLoadConfigData') + " (" + width + "%)");
   }
-
+  
 });
 
 ConfigDataLoader.CONTENT_WIDTH = 320;
@@ -5960,23 +5960,23 @@ ConfigDataLoader.TITLE = translateKey('infoLoadConfigData');
 ConfigDataLoader.CONTENT = "<img src='/ise/img/ajaxload_white.gif' style='float:left;margin-right:10px' />" + translateKey('infoLoadConfigDataPlsWait');
 /**
  * webui.js
- * Allgemeine Funktionen der Web-Oberflï¿½che.
+ * Allgemeine Funktionen der Web-Oberfläche.
  **/
-
-WebUI = Singleton.create({
-  HEADER_HEIGHT: 72,   // Hï¿½he der Kopfzeile
-  MENUBAR_HEIGHT: 34,   // Hï¿½he der Navigationsleiste
-  FOOTER_HEIGHT: 47,   // Hï¿½he der Fuï¿½leiste
-  BOTTOM_HEIGHT: 27,   // Hï¿½he des weiï¿½en Bereichs unter der Seite
-  MIN_WIDTH: 750,
+ 
+WebUI = Singleton.create({  
+  HEADER_HEIGHT: 72,   // Höhe der Kopfzeile
+  MENUBAR_HEIGHT: 34,   // Höhe der Navigationsleiste
+  FOOTER_HEIGHT: 47,   // Höhe der Fußleiste
+  BOTTOM_HEIGHT: 27,   // Höhe des weißen Bereichs unter der Seite
+  MIN_WIDTH: 750,  
   MIN_HEIGHT: 400,
-
-  serviceMessageCount: 0,
+ 
+  serviceMessageCount: 0, 
 
   initialize: function()
   {
     this.STATIC_HEIGHT = this.HEADER_HEIGHT + this.MENUBAR_HEIGHT + this.FOOTER_HEIGHT + this.BOTTOM_HEIGHT;
-
+    
     this.currentPage         = null;    // Aktuelle Seite
     this.currentPageOptions  = null;    // Argumente der aktuellen Seite
     this.previousPage        = null;    // Vorherige Seite
@@ -5985,36 +5985,36 @@ WebUI = Singleton.create({
 
     this.onResizeHandler = this.onResize.bindAsEventListener(this);
     Event.observe(window, "resize", this.onResizeHandler);
-  },
-
+  },  
+  
   /**
-   * Ereignis. Wird bei der ï¿½nderung der Fenstergrï¿½ï¿½e aufgerufen.
-   * Passt die Steuerelemente entsprechend der ï¿½nderung an.
+   * Ereignis. Wird bei der Änderung der Fenstergröße aufgerufen.
+   * Passt die Steuerelemente entsprechend der Änderung an.
    */
   onResize: function()
   {
     var height       = WebUI.getHeight();
-    var width        = WebUI.getWidth();
+    var width        = WebUI.getWidth();         
     var bodyOverflow = "hidden";
-
+   
     if (width  < this.MIN_WIDTH)  { width  = this.MIN_WIDTH;  bodyOverflow = "auto"; }
     if (height < this.MIN_HEIGHT) { height = this.MIN_HEIGHT; bodyOverflow = "auto"; }
     var contentHeight = height - this.STATIC_HEIGHT;
 
-    if ($("body"))    { Element.setStyle("body", {"overflow": bodyOverflow, "width": width  + "px", "height": height + "px"}); }
+    if ($("body"))    { Element.setStyle("body", {"overflow": bodyOverflow, "width": width  + "px", "height": height + "px"}); }    
     if ($("header"))  { Element.setStyle("header" , {"height": this.HEADER_HEIGHT  + "px", "width": width + "px"}); }
     if ($("menubar")) { Element.setStyle("menubar", {"height": this.MENUBAR_HEIGHT + "px", "width": width + "px"}); }
     if ($("content")) { Element.setStyle("content", {"height": contentHeight       + "px", "width": width + "px"}); }
     if ($("footer"))  { Element.setStyle("footer" , {"height": this.FOOTER_HEIGHT  + "px", "width": width + "px"}); }
-
+    
     if (this.currentPage) { this.currentPage.resize(); }
-
+    
   },
 
   /*########################*/
-  /*# ï¿½ffentliche Elemente #*/
+  /*# Öffentliche Elemente #*/
   /*########################*/
-
+  
   start: function()
   {
     this.USERNAME = jQuery.trim(homematic('User.getUserName', {'userID': userId}));
@@ -6027,7 +6027,7 @@ WebUI = Singleton.create({
     conInfo("Refreshing started.");
     if (((typeof preventInterfaceCheck == "undefined") || (! preventInterfaceCheck)) && (PLATFORM == 'Central')) {new iseRefresher(iseRefrCycle);}
     iseRefrTimer = 0;
-
+    
    $("body").innerHTML = "";
     // Dummy-Element
     var dummyElement = document.createElement("div");
@@ -6050,7 +6050,7 @@ WebUI = Singleton.create({
     globalValues.appendChild(globalValuesForm);
     $("body").appendChild(globalValues);
 
-    // picDiv: Vergrï¿½ï¿½erte Bild von HomeMatic Gerï¿½ten und Kanï¿½len
+    // picDiv: Vergrößerte Bild von HomeMatic Geräten und Kanälen
     var picDiv = document.createElement("div");
     picDiv.id  = "picDiv";
     Element.setStyle(picDiv, {
@@ -6067,9 +6067,9 @@ WebUI = Singleton.create({
     });
     $("body").appendChild(picDiv);
     jg_250 = new jsGraphics("picDiv");
-    InitGD(jg_250, 250);
+    InitGD(jg_250, 250);  
 
-    // Elemente fï¿½r Popup-Fenster der ersten Ebene
+    // Elemente für Popup-Fenster der ersten Ebene
     var trLayer = document.createElement("div");
     trLayer.id = "trlayer";
     Element.setStyle(trLayer, {
@@ -6094,19 +6094,19 @@ WebUI = Singleton.create({
       display:  "none"
     });
     $("body").appendChild(centerBox);
-
+    
     var progressBox = document.createElement("div");
     progressBox.id = "progressbox";
     Element.setStyle(progressBox, {
       position: "absolute",
       zIndex:   "159",  // 299
       width:    "100%",
-      top:      "50%",
+      top:      "50%", 
       display:  "none"
     });
     $("body").appendChild(progressBox);
-
-    // Elemente fï¿½r Popup-Fenster der zweiten Ebene
+    
+    // Elemente für Popup-Fenster der zweiten Ebene
     var trLayer2 = document.createElement("div");
     trLayer2.id = "trlayer2";
     Element.setStyle(trLayer2, {
@@ -6119,7 +6119,7 @@ WebUI = Singleton.create({
       display: "none"
     });
     $("body").appendChild(trLayer2);
-
+    
     var centerBox2 = document.createElement("div");
     centerBox2.id = "centerbox2";
     Element.setStyle(centerBox2, {
@@ -6131,36 +6131,36 @@ WebUI = Singleton.create({
     });
     $("body").appendChild(centerBox2);
 
-    // Elemente fï¿½r den Seiteninhalt
+    // Elemente für den Seiteninhalt
     Layer.init();
     var layer0 = document.createElement("div");
     Element.addClassName(layer0, "Layer0");
     Layer.add(layer0);
-
+    
     var header = document.createElement("div");
     header.id = "header";
     header.lang = this.USERLANGUAGE;
     layer0.appendChild(header);
-
+    
     var menuBar = document.createElement("div");
     menuBar.id = "menubar";
     layer0.appendChild(menuBar);
-
+    
     var content = document.createElement("div");
     content.id = "content";
     Element.setStyle(content, {cursor: "wait"});
     layer0.appendChild(content);
-
+    
     var footer = document.createElement("div");
     footer.id = "footer";
     layer0.appendChild(footer);
-
+    
     // Weitere Elemente
     var popupContainer = document.createElement("div");
     popupContainer.id = "popup_container";
     Element.setStyle(popupContainer, {display: "none"});
     $("body").appendChild(popupContainer);
-
+    
     var canvas = document.createElement("div");
     canvas.id = "canvas";
     Element.setStyle(canvas, {display:"none"});
@@ -6197,27 +6197,27 @@ WebUI = Singleton.create({
       }
       homematic.com.init();
     }
-    else
+    else 
     {
         WebUI.serviceMessageCount = setServiceMessage();
         new PeriodicalExecuter(function() {
-        var newServiceMessageCount = setServiceMessage();
+        var newServiceMessageCount = setServiceMessage(); 
         if ((newServiceMessageCount != WebUI.serviceMessageCount) && (WebUI.currentPage == ServiceMessagesPage))
-        {
+        { 
           WebUI.serviceMessageCount = newServiceMessageCount;
-          WebUI.reload();
+          WebUI.reload(); 
         }
       }, 5);
     }
   },
-
+  
   /**
    * Read-Only. Breite des Browserfensters (Pixel).
    */
   getWidth: function()
   {
     var width = 0;
-
+  
     if (window.innerWidth)
     {
       width = window.innerWidth;
@@ -6231,22 +6231,22 @@ WebUI = Singleton.create({
     {
       width = window.document.body.offsetWidth;
     }
-
+  
     return width;
   },
-
+  
   /**
-   * Read-Only. Hï¿½he des Browserfensters (Pixel).
+   * Read-Only. Höhe des Browserfensters (Pixel).
    */
   getHeight: function()
   {
     var height = 0;
-
+  
     if (window.innerHeight)
     {
       height = window.innerHeight;
     }
-    else if ((window.document.documentElement) &&
+    else if ((window.document.documentElement) && 
            (window.document.documentElement.clientHeight))
     {
       height = window.document.documentElement.clientHeight;
@@ -6255,10 +6255,10 @@ WebUI = Singleton.create({
     {
       height = window.document.body.offsetHeight;
     }
-
-    return height;
+  
+    return height;  
   },
-
+  
   setContent: function(contentElement)
   {
     if ($("content"))
@@ -6278,24 +6278,24 @@ WebUI = Singleton.create({
   {
     this.onResize();
   },
-
+  
   /**
-   * Lï¿½dt eine Seite.
+   * Lädt eine Seite.
    */
   enter: function(page, options)
   {
     Debug.assert(Interface.isImplemented(page, IPage), "WebUI.enter: Interface IPage not implemented");
-
+    
     if (this.currentPage) { this.currentPage.leave(); }
-
+    
     this.previousPage        = this.currentPage;
     this.previousPageOptions = this.currentPageOptions;
     this.currentPage         = page;
     this.currentPageOptions  = options;
-
+    
     this.currentPage.enter(options);
   },
-
+  
   reload: function()
   {
     if (this.currentPage)
@@ -6304,21 +6304,21 @@ WebUI = Singleton.create({
       this.currentPage.enter(this.currentPageOptions);
     }
   },
-
+  
   /**
-   * Zurï¿½ck zur vorherigen Seite.
+   * Zurück zur vorherigen Seite.
    */
   goBack: function()
   {
     if (null !== this.previousPage) { this.enter(this.previousPage, this.previousPageOptions); }
   },
-
+  
   /**
    * @var m_isColorMapLoaded
    * @brief [intern] Gibt an, ob die Farbtabelle bereits geladen ist
    **/
   m_isColorMapLoaded: false,
-
+  
   /**
    * @var m_colorMap
    * @brief [intern] Farbtabelle
@@ -6338,38 +6338,38 @@ WebUI = Singleton.create({
     {
       this.m_loadColorMap();
     }
-
+  
     var color = this.m_colorMap[colorId];
-
+  
     if (typeof(color) != "string")
     {
       throw new Error("WebUI.getColor: unknown color id (" + colorId  + ")");
     }
-
+  
     return color;
   },
-
+  
   /**
    * @fn m_loadColorMap
-   * @brief [intern] Lï¿½dt die Farbtabelle
+   * @brief [intern] Lädt die Farbtabelle
    **/
   m_loadColorMap: function()
   {
     this.m_colorMap = homematic("WebUI.getColors");
     this.m_isColorMapLoaded = true;
   }
-
+ 
 });
 /**
  * @file controlbtn.js
  * @brief ControlBtn
  **/
-
+ 
 ControlBtn = {
 
   CLASSNAME_ON : "ControlBtnOn",          //< CSS-Klasse "aktiv"
   CLASSNAME_OFF: "ControlBtnOff",          //< CSS-Klasse "inaktiv"
-  CLASSNAME_PUSHED: "ControlBtnPushed",    //< CSS-Klasse "gedrï¿½ckt"
+  CLASSNAME_PUSHED: "ControlBtnPushed",    //< CSS-Klasse "gedrückt"
 
   /**
    * Entfernt alle ControlBtn-Klassenamen von dem Element
@@ -6395,7 +6395,7 @@ ControlBtn = {
       $(element).addClassName(this.CLASSNAME_ON);
     }
   },
-
+  
   /**
    * Zeigt das Element als inaktiven ControlBrn an
    **/
@@ -6407,9 +6407,9 @@ ControlBtn = {
       $(element).addClassName(this.CLASSNAME_OFF);
     }
   },
-
+  
   /**
-   * Zeigt das Element als gedrï¿½ckten ControlBtn an
+   * Zeigt das Element als gedrückten ControlBtn an
    **/
   pushed: function(element)
   {
@@ -6426,7 +6426,7 @@ ControlBtn = {
 JControlBtn = {
   CLASSNAME_ON : "ControlBtnOn",          //< CSS-Klasse "aktiv"
   CLASSNAME_OFF: "ControlBtnOff",          //< CSS-Klasse "inaktiv"
-  CLASSNAME_PUSHED: "ControlBtnPushed",    //< CSS-Klasse "gedrï¿½ckt"
+  CLASSNAME_PUSHED: "ControlBtnPushed",    //< CSS-Klasse "gedrückt"
 
   /**
    * Entfernt alle ControlBtn-Klassenamen von dem Element
@@ -6466,7 +6466,7 @@ JControlBtn = {
   },
 
   /**
-   * Zeigt das Element als gedrï¿½ckten ControlBtn an
+   * Zeigt das Element als gedrückten ControlBtn an
    **/
   pushed: function(element)
   {
@@ -6478,7 +6478,7 @@ JControlBtn = {
   },
 
   /**
-   * Zeigt das Element kurz gedrï¿½ckt an und geht dann wieder in den inaktiven Zustand
+   * Zeigt das Element kurz gedrückt an und geht dann wieder in den inaktiven Zustand
    */
   pressed: function(element)
   {
@@ -6498,10 +6498,10 @@ JControlBtn = {
  * Cursor-Objekt
  **/
 Cursor = {
-
+	
 	NORMAL: "auto",		//< normaler Cursor
 	WAIT  : "wait",		//< Sanduhr
-
+	
 	/**
 	 * Setzt den Cursor-Typ.
 	 * @param cursorType Cursor-Typ
@@ -6510,37 +6510,37 @@ Cursor = {
 	{
 		document.body.style.cursor = cursorType;
 	}
-
+	
 };/**
  * stringfilter.js
  **/
-
+ 
 /**
- * Konstrukor. Filter fï¿½r Zeichenketten
+ * Konstrukor. Filter für Zeichenketten
  **/
 StringFilter = function(name, callback)
 {
   /*####################*/
   /*# Private Elemente #*/
   /*####################*/
-
-
+  
+  
   var m_name     = name;
   var m_value    = "";
   var m_callback = callback;
-
+  
   var m_id     = name.replace(/\,/g, "_");
   var m_textId = m_id + "Text";
-
+    
   var isSet = function()
   {
     return (m_value !== "");
   };
-
+  
   /*########################*/
-  /*# ï¿½ffentliche Elemente #*/
+  /*# Öffentliche Elemente #*/
   /*########################*/
-
+  
   /**
    * Liefert den HTML-Code des Filters
    **/
@@ -6548,7 +6548,7 @@ StringFilter = function(name, callback)
   {
     var _colspan_ = colspan;
     if (typeof(_colspan_) == "undefined") { _colspan_ = 1; }
-
+    
     return StringFilter.TEMPLATE.process({
       colspan: _colspan_,
       name   : m_name,
@@ -6558,7 +6558,7 @@ StringFilter = function(name, callback)
       value  : m_value
     });
   };
-
+  
 	/**
 	 * Zeigt den Filter an.
 	 **/
@@ -6566,35 +6566,35 @@ StringFilter = function(name, callback)
 	{
 		var filterElement = $(m_id);
 		var textElement = $(m_textId);
-
+		
 		if ((filterElement) && (textElement))
 		{
 			filterElement.show();
 			textElement.focus();
 		}
 	};
-
+	
   /**
-   * Prï¿½ft, ob der Filter auf einen Text zutrifft
+   * Prüft, ob der Filter auf einen Text zutrifft
    **/
   this.match = function(text)
   {
     if (false === isSet()) { return true; }
-
+    
     var patternList = m_value.toLowerCase().split("|");
     //var patternList = m_value.split("|");
     text            = text.toLowerCase();
-
+    
     for (var i = 0, len = patternList.length; i < len; i++)
     {
       if (0 <= text.indexOf(patternList[i])) { return true; }
     }
-
+    
     return false;
   };
-
+  
   /**
-   * Schlieï¿½t den Filter und ruft dei Callback-Funktion auf
+   * Schließt den Filter und ruft dei Callback-Funktion auf
    **/
   this.set = function()
   {
@@ -6602,18 +6602,18 @@ StringFilter = function(name, callback)
     if ($(m_id))     { $(m_id).hide(); }
     if (m_callback)  { m_callback(); }
   };
-
+  
   /**
-   * Schlieï¿½t den Filter ohne ï¿½nderungen zu ï¿½bernehmen
+   * Schließt den Filter ohne Änderungen zu übernehmen
    **/
   this.close = function()
   {
     if ($(m_textId)) { $(m_textId).value = m_value; }
     if ($(m_id)) { $(m_id).hide(); }
   };
-
+  
   /**
-   * Setzt den Filter zurï¿½ck
+   * Setzt den Filter zurück
    **/
   this.reset = function()
   {
@@ -6622,7 +6622,7 @@ StringFilter = function(name, callback)
   };
 
   /**
-   * Prï¿½ft, ob Enter oder ESC gedrï¿½ckt wurde und schlieï¿½t den Filter entsprechend
+   * Prüft, ob Enter oder ESC gedrückt wurde und schließt den Filter entsprechend
    */
   this.checkEnterEsc = function(key)
   {
@@ -6639,9 +6639,9 @@ StringFilter = function(name, callback)
   /*###################*/
   /*# Initialisierung #*/
   /*###################*/
-
+  
   this.reset();
-
+  
 };
 
 StringFilter.TEMPLATE = TrimPath.parseTemplate(STRINGFILTER_JST);
@@ -6653,7 +6653,7 @@ StringFilter.TEMPLATE = TrimPath.parseTemplate(STRINGFILTER_JST);
  * Konstruktor. ListFilter
  **/
 ListFilter = Class.create({
-
+  
   /**
    * Konstruktor
    **/
@@ -6668,7 +6668,7 @@ ListFilter = Class.create({
   },
 
   /**
-   * Prï¿½ft, ob der Filter aktiv ist
+   * Prüft, ob der Filter aktiv ist
    **/
   isSet: function()
   {
@@ -6678,24 +6678,24 @@ ListFilter = Class.create({
     }
     return false;
   },
-
+  
   /**
-   * Wï¿½hlt ein Listenelement aus
+   * Wählt ein Listenelement aus
    **/
   select: function(id, selected)
   {
     for (var i = 0, len = this.list.length; i < len; i++)
     {
-      if (id == this.list[i].id)
+      if (id == this.list[i].id) 
       {
         this.list[i]._selected = selected;
         break;
       }
     }
   },
-
+  
   /**
-   * Prï¿½ft, ob ein Listenelement ausgewï¿½hlt ist
+   * Prüft, ob ein Listenelement ausgewählt ist
    **/
   isSelected: function(id)
   {
@@ -6705,7 +6705,7 @@ ListFilter = Class.create({
     }
     return false;
   },
-
+    
   /**
    * Liefert den HTML-Code des Filters
    **/
@@ -6719,56 +6719,56 @@ ListFilter = Class.create({
       formId: this.formId
     });
   },
-
+   
   matchString: function(str)
   {
     if (false === this.isSet()) { return true; }
-
+    
     for (var i = 0, len = this.list.length; i < len; i++)
     {
-      if (true === this.list[i]._selected)
+      if (true === this.list[i]._selected) 
       {
         if (this.list[i].name == str) { return true; }
-      }
+      } 
     }
     return false;
   },
-
+  
   matchStringArray: function(list)
   {
     if (false === this.isSet()) { return true; }
-
+    
     for (var i = 0, len = this.list.length; i < len; i++)
     {
-      if (true === this.list[i]._selected)
+      if (true === this.list[i]._selected) 
       {
         var name = this.list[i].name;
         if (0 <= list.indexOf(name)) { return true; }
-      }
+      } 
     }
     return false;
   },
-
+  
   matchArray: function(list)
   {
     if (false === this.isSet()) { return true; }
-
+    
     for (var i = 0, len = this.list.length; i < len; i++)
     {
-      if (true === this.list[i]._selected)
+      if (true === this.list[i]._selected) 
       {
         var id = this.list[i].id;
         for (var j = 0; j < list.length; j++)
         {
           if (list[j].id == id) { return true; }
         }
-      }
+      } 
     }
     return false;
   },
-
+  
   /**
-   * Schlieï¿½t den Filter und ruft die Callback-Funktion auf
+   * Schließt den Filter und ruft die Callback-Funktion auf
    **/
   set: function()
   {
@@ -6780,32 +6780,32 @@ ListFilter = Class.create({
       {
         this.select(values[i].value, values[i].checked);
       }
-
+      
       if ($(this.id))    { $(this.id).hide(); }
       if (this.callback) { this.callback(); }
     }
   },
-
+  
   /**
-   * Schlieï¿½t den Filter ohne ï¿½nderungen zu ï¿½bernhemen
+   * Schließt den Filter ohne Änderungen zu übernhemen
    **/
   close: function()
   {
     if ($(this.formId))
     {
       var values = $(this.formId).values;
-
+      
       for (var i = 0, len = values.length; i < len; i++)
       {
         values[i].checked = this.isSelected(values[i].value);
       }
     }
-
+    
     if ($(this.id)) { $(this.id).hide(); }
   },
-
+  
   /**
-   * Setzt den Filter zurï¿½ck
+   * Setzt den Filter zurück
    **/
   reset: function()
   {
@@ -6813,10 +6813,10 @@ ListFilter = Class.create({
     {
       this.list[i]._selected = false;
     }
-
+    
     this.close();
   }
-
+  
 });
 
 ListFilter.TEMPLATE = TrimPath.parseTemplate(LISTFILTER_JST);
@@ -6825,12 +6825,12 @@ ListFilter.TEMPLATE = TrimPath.parseTemplate(LISTFILTER_JST);
  **/
 
 /**
- * Namensraum fï¿½r UI-Komponenten
- **/
+ * Namensraum für UI-Komponenten
+ **/ 
 UI = { };
 
 /**
- * Basisklasse fï¿½r UI-Komponenten
+ * Basisklasse für UI-Komponenten
  **/
 UI.Component = Class.create({
 
@@ -6850,7 +6850,7 @@ UI.Component = Class.create({
   {
     return this.m_element;
   },
-
+  
   /**
    * Setzt die Breite der Komponente in Pixeln
    **/
@@ -6861,9 +6861,9 @@ UI.Component = Class.create({
     });
     return this;
   },
-
+  
   /**
-   * Setzt die Hï¿½he der Komponente in Pixeln
+   * Setzt die Höhe der Komponente in Pixeln
    **/
   setHeight: function(height)
   {
@@ -6872,7 +6872,7 @@ UI.Component = Class.create({
     });
     return this;
   },
-
+  
   /**
    * Setzt die Position der Komponente
    **/
@@ -6884,15 +6884,15 @@ UI.Component = Class.create({
     });
     return this;
   },
-
+  
   /**
    * Ermittelt, ob die Komponente aktiv ist
    **/
-  isEnabled: function()
+  isEnabled: function() 
   {
     return this.m_isEnabled;
   },
-
+  
 	/**
 	 * Aktiviert bzw. Deaktiviert die Komponente.
 	 **/
@@ -6900,10 +6900,10 @@ UI.Component = Class.create({
 	{
 		if (isEnabled) { this.enable();  }
 		else           { this.disable(); }
-
+		
 		return this;
 	},
-
+	
   /**
    * Setzt die Komponente auf aktiv.
    **/
@@ -6914,7 +6914,7 @@ UI.Component = Class.create({
     this.m_isEnabled = true;
     return this;
   },
-
+  
   /**
    * Setzt die Komponente auf inaktiv.
    **/
@@ -6938,7 +6938,7 @@ UI.Component = Class.create({
     Element.remove(this.m_element);
     return this;
   }
-
+  
 });
 
 UI.InputComponent = Class.create(UI.Component, {
@@ -6948,7 +6948,7 @@ UI.InputComponent = Class.create(UI.Component, {
     this.m_isEnabled = true;
     this.m_element   = document.createElement("div");
   },
-
+  
   enable: function()
   {
     if (this.m_isEnabled === false)
@@ -6959,7 +6959,7 @@ UI.InputComponent = Class.create(UI.Component, {
     }
     return this;
   },
-
+  
   disable: function()
   {
     if (this.m_isEnabled === true)
@@ -6974,7 +6974,7 @@ UI.InputComponent = Class.create(UI.Component, {
 });
 
 /**
- * Basisklasse fï¿½r UI-Container
+ * Basisklasse für UI-Container
  **/
 UI.Container = Class.create(UI.Component, {
 
@@ -6989,7 +6989,7 @@ UI.Container = Class.create(UI.Component, {
   },
 
   /**
-   * Fï¿½gt dem Container eine neue Komponente hinzu
+   * Fügt dem Container eine neue Komponente hinzu
    **/
   add: function(component)
   {
@@ -6997,7 +6997,7 @@ UI.Container = Class.create(UI.Component, {
     this.m_content.appendChild(component.getElement());
     return this;
   },
-
+  
   /**
    * Entfernt eine Komponente aus dem Container
    **/
@@ -7007,7 +7007,7 @@ UI.Container = Class.create(UI.Component, {
     component.dispose();
     return this;
   },
-
+  
   /**
    * Entfernt den Container und alle seine Komponenten
    **/
@@ -7027,35 +7027,35 @@ UI.Container = Class.create(UI.Component, {
  **/
 
 /**
- * Rahmen fï¿½r Dialog-Fenster
- **/
+ * Rahmen für Dialog-Fenster
+ **/ 
 UI.Frame = Class.create(UI.Container, {
 
   initialize: function()
   {
     var _this_ = this;
-
-    this.m_isEnabled  = true;
+  
+    this.m_isEnabled  = true; 
     this.m_components = [];
-
+  
     this.m_contentWidth  = UI.Frame.DEFAULT_CONTENT_WIDTH;
     this.m_contentHeight = UI.Frame.DEFAULT_CONTENT_HEIGHT;
 
     this.m_element = document.createElement("div");
     this.m_element.className = UI.Frame.CLASS_NAME;
-
+  
     this.m_title = document.createElement("div");
     this.m_title.className = UI.Frame.TITLE_CLASS;
     this.m_title.appendChild(document.createTextNode(UI.Frame.DEFAULT_TITLE));
     Event.observe(this.m_title, "mousedown", function(event) {
-        new Drag(_this_.m_element, event);
+        new Drag(_this_.m_element, event); 
     });
     this.m_element.appendChild(this.m_title);
-
+  
     this.m_content = document.createElement("div");
     this.m_content.className = UI.Frame.CONTENT_CLASS;
     this.m_element.appendChild(this.m_content);
-
+  
     this.m_resize();
   },
 
@@ -7066,7 +7066,7 @@ UI.Frame = Class.create(UI.Container, {
   {
     this.m_width  = this.m_contentWidth  + (2 * UI.Frame.BORDER_SIZE);
     this.m_height = this.m_contentHeight + (3 * UI.Frame.BORDER_SIZE) + UI.Frame.TITLE_HEIGHT;
-
+    
     Element.setStyle(this.m_element, {
       width : this.m_width  + "px",
       height: this.m_height + "px"
@@ -7084,22 +7084,22 @@ UI.Frame = Class.create(UI.Container, {
       width : this.m_contentWidth  + "px",
       height: this.m_contentHeight + "px"
     });
-
+    
     return this;
   },
-
+  
   /**
-   * Setzt die Hï¿½he und Breite des Content-Bereichs.
+   * Setzt die Höhe und Breite des Content-Bereichs.
    **/
   setContentSize: function(contentWidth, contentHeight)
   {
     this.m_contentWidth  = parseInt(contentWidth);
     this.m_contentHeight = parseInt(contentHeight);
-
+    
     this.m_resize();
     return this;
   },
-
+  
   /**
    * Liefert die Breite des Content-Bereichs in Pixeln
    **/
@@ -7107,15 +7107,15 @@ UI.Frame = Class.create(UI.Container, {
   {
     return this.m_contentWidth;
   },
-
+  
   /**
-   * Liefert die Hï¿½he des Content-Bereichs in Pixeln
+   * Liefert die Höhe des Content-Bereichs in Pixeln
    **/
   getContentHeight: function()
   {
     return this.m_contentHeight;
   },
-
+  
   /**
    * Liefert die Gesamtbreite des Frames in Pixlen
    **/
@@ -7123,15 +7123,15 @@ UI.Frame = Class.create(UI.Container, {
   {
     return this.m_width;
   },
-
+  
   /**
-   * Liefert die Gesamthï¿½he des Frames in Pixeln
+   * Liefert die Gesamthöhe des Frames in Pixeln
    **/
   getHeight: function()
   {
     return this.m_height;
   },
-
+  
   /**
    * Setzt den Titel
    **/
@@ -7141,7 +7141,7 @@ UI.Frame = Class.create(UI.Container, {
     this.m_title.appendChild(document.createTextNode(title));
     return this;
   },
-
+  
   _enable: function()
   {
     this.m_isEnabled = true;
@@ -7150,7 +7150,7 @@ UI.Frame = Class.create(UI.Container, {
     Element.removeClassName(this.m_content, UI.Frame.CONTENT_CLASS_DISABLED);
     return this;
   },
-
+  
   _disable: function()
   {
     this.m_isEnabled = false;
@@ -7159,13 +7159,13 @@ UI.Frame = Class.create(UI.Container, {
     Element.addClassName(this.m_content, UI.Frame.CONTENT_CLASS_DISABLED);
     return this;
   }
-
-});
+  
+}); 
 
 /**
  * Konstanten
  **/
-UI.Frame.DEFAULT_CONTENT_WIDTH  = 320;
+UI.Frame.DEFAULT_CONTENT_WIDTH  = 320; 
 UI.Frame.DEFAULT_CONTENT_HEIGHT = 240;
 UI.Frame.DEFAULT_TITLE = "UI.Frame";
 UI.Frame.TITLE_HEIGHT = 20;
@@ -7187,7 +7187,7 @@ UI.Label = Class.create(UI.Component, {
 
   /**
    * Konstruktor. Erstellt ein einzeiliges Textfeld.
-   **/
+   **/ 
   initialize: function()
   {
     this.m_isEnabled = true;
@@ -7206,7 +7206,7 @@ UI.Label = Class.create(UI.Component, {
     this.m_element.appendChild(document.createTextNode(text));
     return this;
   },
-
+  
   /**
    * Setzt die Breite des Labels.
    * Neben numerischen Angaben ist auch der Wert "auto" erlaubt.
@@ -7217,28 +7217,28 @@ UI.Label = Class.create(UI.Component, {
     Element.setStyle(this.m_element, { width: width });
     return this;
   },
-
+  
   /**
-   * Setzt die Hï¿½he des Labels.
+   * Setzt die Höhe des Labels.
    * Neben numerischen Angaben ist auch der Wert "auto" erlaubt.
-   * Es wird immer auch die Zeilenhï¿½he gesetzt!
+   * Es wird immer auch die Zeilenhöhe gesetzt!
    **/
   setHeight: function(height)
   {
     var lineHeight = "100%";
-    if (height != "auto")
+    if (height != "auto") 
     {
-      height     = parseInt(height) + "px";
+      height     = parseInt(height) + "px"; 
       lineHeight = height;
     }
-
+    
     Element.setStyle(this.m_element, {
       height    : height,
       lineHeight: lineHeight});
     return this;
   }
-
-});
+  
+}); 
 
 /**
  * Konstanten
@@ -7257,10 +7257,10 @@ UI.Text = Class.create(UI.Component, {
   initialize: function()
   {
     this.m_isEnabled = true;
-
+    
     this.m_text = document.createElement("span");
     this.m_text.appendChild(document.createTextNode(UI.Text.DEFAULT_TEXT));
-
+    
     this.m_element = document.createElement("div");
     this.m_element.className = UI.Text.CLASS_NAME;
     this.m_element.appendChild(this.m_text);
@@ -7295,7 +7295,7 @@ UI.Text = Class.create(UI.Component, {
     Element.setStyle(this.m_element, {"textAlign": alignment});
     return this;
   },
-
+  
   /**
    * Setzt die Breite des Labels.
    * Neben numerischen Angaben ist auch der Wert "auto" erlaubt.
@@ -7306,9 +7306,9 @@ UI.Text = Class.create(UI.Component, {
     Element.setStyle(this.m_element, { width: width });
     return this;
   },
-
+  
   /**
-   * Setzt die Hï¿½he des Labels.
+   * Setzt die Höhe des Labels.
    * Neben numerischen Angaben ist auch der Wert "auto" erlaubt.
    **/
   setHeight: function(height)
@@ -7318,7 +7318,7 @@ UI.Text = Class.create(UI.Component, {
     return this;
   }
 });
-
+ 
 /**
  * Konstanten
  **/
@@ -7327,9 +7327,9 @@ UI.Text.DEFAULT_TEXT = "UI Text";
 /**
  * scrollpane.js
  **/
-
+ 
 UI.ScrollPane = Class.create(UI.Container, {
-
+  
   /**
    * Konstruktor. Erstellt eine neue ScrollPane
    **/
@@ -7337,18 +7337,18 @@ UI.ScrollPane = Class.create(UI.Container, {
   {
     this.m_isEnabled = true;
     this.m_components = [];
-
+  
     this.m_element = document.createElement("div");
     this.m_element.className = UI.ScrollPane.CLASS_NAME;
-
+    
     this.m_content = document.createElement("div");
     this.m_content.className = UI.ScrollPane.CONTENT_CLASS_NAME;
     this.m_element.appendChild(this.m_content);
-
+  
     this.setWidth(UI.ScrollPane.DEFAULT_WIDTH)
       .setHeight(UI.ScrollPane.DEFAULT_HEIGHT);
   },
-
+  
   /**
    * Setzt die Breite der Komponente in Pixeln
    **/
@@ -7362,9 +7362,9 @@ UI.ScrollPane = Class.create(UI.Container, {
     });
     return this;
   },
-
+  
   /**
-   * Setzt die Hï¿½he der Komponente in Pixeln
+   * Setzt die Höhe der Komponente in Pixeln
    **/
   setHeight: function(height)
   {
@@ -7376,7 +7376,7 @@ UI.ScrollPane = Class.create(UI.Container, {
     });
     return this;
   }
-
+  
 });
 
 UI.ScrollPane.CLASS_NAME = "UIScrollPane";
@@ -7387,7 +7387,7 @@ UI.ScrollPane.DEFAULT_HEIGHT = 100;
 /**
  * button.js
  **/
-
+ 
 /**
  * Button
  **/
@@ -7399,17 +7399,17 @@ UI.Button = Class.create(UI.Component, {
   initialize: function()
   {
     var _this_ = this;
-
+    
     this.m_isEnabled = true;
     this.m_action    = null;
-
+    
     this.m_element = document.createElement("div");
     this.m_element.className = UI.Button.CLASS_NAME;
     Element.setStyle(this.m_element, {
       width : UI.Button.DEFAULT_WIDTH  + "px",
       height: UI.Button.DEFAULT_HEIGHT + "px"
     });
-
+    
     this.m_text = document.createElement("div");
     this.m_text.className = UI.Button.TEXT_CLASS_NAME;
     this.m_text.appendChild(document.createTextNode(UI.Button.DEFAULT_TEXT));
@@ -7428,9 +7428,9 @@ UI.Button = Class.create(UI.Component, {
     Event.observe(this.m_text, "mousedown", this._onMouseDown);
     Event.observe(this.m_text, "mouseup"  , this._onMouseUp);
     this.m_element.appendChild(this.m_text);
-
+    
   },
-
+  
   /**
    * Setzt den Text des Button
    **/
@@ -7440,7 +7440,7 @@ UI.Button = Class.create(UI.Component, {
     this.m_text.appendChild(document.createTextNode(text));
     return this;
   },
-
+  
   /**
    * Setzt den OnClick-EventHandler
    **/
@@ -7450,22 +7450,22 @@ UI.Button = Class.create(UI.Component, {
     else                                { this.m_action = action; }
     return this;
   },
-
+	
 	_onMouseOver: function(event)
 	 {
 		//this.className = "UIButtonHighlight";
 	 },
-
+	 
 	 _onMouseOut: function(event)
 	 {
 		//this.className = "UIButtonText";
 	 },
-
+	 
 	 _onMouseDown: function(event)
 	 {
 		//this.className = "UIButtonPressed";
 	 },
-
+	 
 	 _onMouseUp: function(event)
 	 {
 		//this.className = "UIButtonHighlight";
@@ -7479,11 +7479,11 @@ UI.Button.HIGHLIGHT_CLASS_NAME = "UIButtonHighlight";
 UI.Button.DEFAULT_TEXT    = "UI.Button";
 UI.Button.BORDER_SIZE     = 0;
 UI.Button.DEFAULT_WIDTH   = 150;
-UI.Button.DEFAULT_HEIGHT  = 22;
+UI.Button.DEFAULT_HEIGHT  = 22; 
 /**
  * textedit.js
  **/
-
+ 
 /**
  * Text-Eingabefeld
  **/
@@ -7492,19 +7492,19 @@ UI.TextEdit = Class.create(UI.InputComponent, {
   initialize: function()
   {
     this.m_isEnabled = true;
-
+    
     this.m_element = document.createElement("input");
     this.m_element.className = UI.TextEdit.CLASS_NAME;
     this.m_element.type = "text";
     this.m_element.value = UI.TextEdit.DEFAULT_VALUE;
   },
-
+  
   setText: function(text)
   {
     this.m_element.value = text;
     return this;
   },
-
+  
   getText: function()
   {
     return this.m_element.value;
@@ -7517,7 +7517,7 @@ UI.TextEdit.CLASS_NAME = "UITextEdit";
 UI.TextEdit.DEFAULT_VALUE = "";/**
  * textedit.js
  **/
-
+ 
 /**
  * Text-Eingabefeld
  **/
@@ -7526,19 +7526,19 @@ UI.PasswordEdit = Class.create(UI.InputComponent, {
   initialize: function()
   {
     this.m_isEnabled = true;
-
+    
     this.m_element = document.createElement("input");
     this.m_element.className = UI.PasswordEdit.CLASS_NAME;
     this.m_element.type = "password";
     this.m_element.value = UI.PasswordEdit.DEFAULT_VALUE;
   },
-
+  
   setText: function(text)
   {
     this.m_element.value = text;
     return this;
   },
-
+  
   getText: function()
   {
     return this.m_element.value;
@@ -7551,12 +7551,12 @@ UI.PasswordEdit.CLASS_NAME = "UITextEdit";
 UI.PasswordEdit.DEFAULT_VALUE = "";/**
  * textarea.js
  **/
-
+ 
 /**
  * @fileOverview UI.Textarea
  * @author F. Werner (eQ-3)
  **/
-
+ 
 /**
  * @class UI.Textarea
  **/
@@ -7565,27 +7565,27 @@ UI.Textarea = Class.create(UI.InputComponent, {
   initialize: function()
   {
     this.isEnabled = true;
-
+    
     this.m_element = document.createElement("textarea");
     this.m_element.className = UI.Textarea.CLASS_NAME;
     Element.writeAttribute(this.m_element, "wrap", "off");
     this.m_element.value = UI.Textarea.DEFAULT_VALUE;
   },
-
+  
   setText: function(text)
   {
     this.m_element.value = text;
     return this;
   },
-
+  
 	setWrap: function(isWrap)
 	{
 		if (isWrap) { Element.writeAttribute(this.m_element, "wrap", "soft"); }
 		else        { Element.writeAttribute(this.m_element, "wrap", "off"); }
-
+	
 		return this;
 	},
-
+	
   getText: function()
   {
     return this.m_element.value;
@@ -7598,7 +7598,7 @@ UI.Textarea.DEFAULT_VALUE = "";
 /**
  * listbox.js
  **/
-
+ 
 /**
  * Auswahl aus einer Liste
  **/
@@ -7611,14 +7611,14 @@ UI.ListBox = Class.create(UI.InputComponent, {
   {
     this.m_isEnabled = true;
     this.m_onChangeHandler = this.m_onChange.bind(this);
-
+    
     this.m_items = [];
-
+    
     this.m_element = document.createElement("select");
     this.m_element.className = UI.ListBox.CLASS_NAME;
     Event.observe(this.m_element, "change", this.m_onChangeHandler);
   },
-
+  
   m_onChange: function(event)
   {
     if (this.m_onChangeCallback)
@@ -7626,18 +7626,18 @@ UI.ListBox = Class.create(UI.InputComponent, {
       this.m_onChangeCallback(this.getSelectedItem());
     }
   },
-
+  
   getSelectedItem: function()
   {
     return this.m_items[this.m_element.selectedIndex];
   },
-
+  
   setOnChangeCallback: function(onChangeCallback)
   {
     this.m_onChangeCallback = onChangeCallback;
     return this;
   },
-
+  
   add: function(item)
   {
     var option = document.createElement("option");
@@ -7646,25 +7646,25 @@ UI.ListBox = Class.create(UI.InputComponent, {
     this.m_items.push(item);
     return this;
   },
-
+    
   remove: function(item)
   {
     /* todo */
   },
-
+    
   selectItem: function(item)
   {
     return this.selectIndex(this.m_items.indexOf(item));
   },
-
+	
 	/**
 	 * @fn selectItemById
-	 * Wï¿½hlt ein
+	 * Wählt ein
 	 **/
 	selectItemById: function(id)
 	{
 		var items = this.m_items;
-
+		
 		for (var i = 0, len = items.length; i < len; i++)
 		{
 			var item = items[i];
@@ -7673,22 +7673,22 @@ UI.ListBox = Class.create(UI.InputComponent, {
 
 		return this;
 	},
-
+  
   selectIndex: function(index)
   {
     this.m_element.selectedIndex = index;
     return this;
   }
-
-
-
+  
+  
+  
 
 });
 
 UI.ListBox.CLASS_NAME = "UIListbox";/**
  * ui.checkbox.js
  **/
-
+ 
 UI.Checkbox = Class.create(UI.Component, {
 
   /**
@@ -7698,15 +7698,15 @@ UI.Checkbox = Class.create(UI.Component, {
   {
     this.m_isEnabled = true;
     this.m_action = null;
-
+    
     this.m_checkbox = document.createElement("input");
     this.m_checkbox.type = "checkbox";
     this.m_checkbox.checked = UI.Checkbox.DEFAUT_CHECKED;
     Event.observe(this.m_checkbox, "click", this.onChange.bind(this));
-
+    
     this.m_text = document.createElement("span");
     this.m_text.appendChild(document.createTextNode(UI.Checkbox.DEFALUT_TEXT));
-
+    
     this.m_element = document.createElement("div");
     this.m_element.className = UI.Checkbox.CLASS_NAME;
     this.m_element.appendChild(this.m_checkbox);
@@ -7719,18 +7719,18 @@ UI.Checkbox = Class.create(UI.Component, {
     this.m_text.appendChild(document.createTextNode(text));
     return this;
   },
-
+  
   setIsChecked: function(isChecked)
   {
     this.m_checkbox.checked = isChecked;
     return this;
   },
-
+  
   isChecked: function()
   {
     return this.m_checkbox.checked;
   },
-
+  
   /**
    * Setzt die Breite des Labels.
    * Neben numerischen Angaben ist auch der Wert "auto" erlaubt.
@@ -7741,9 +7741,9 @@ UI.Checkbox = Class.create(UI.Component, {
     Element.setStyle(this.m_element, { width: width });
     return this;
   },
-
+  
   /**
-   * Setzt die Hï¿½he des Labels.
+   * Setzt die Höhe des Labels.
    * Neben numerischen Angaben ist auch der Wert "auto" erlaubt.
    **/
   setHeight: function(height)
@@ -7752,7 +7752,7 @@ UI.Checkbox = Class.create(UI.Component, {
     Element.setStyle(this.m_element, { height    : height });
     return this;
   },
-
+  
   setAction: function(action, context)
   {
     this.m_action = action.bind(context);
@@ -7766,7 +7766,7 @@ UI.Checkbox = Class.create(UI.Component, {
       this.m_action(this);
     }
   }
-
+  
 });
 
 UI.Checkbox.CLASS_NAME = "UICheckbox";
@@ -7782,7 +7782,7 @@ UI.Image = Class.create(UI.Component, {
 
   /**
    * Konstruktor. Erstellt ein Image
-   **/
+   **/ 
   initialize: function()
   {
     this.m_isEnabled = true;
@@ -7818,9 +7818,9 @@ UI.Image.CLASS_NAME   = "UIImage";
  * room.js
  * Raum.
  **/
-
+  
 Room = Class.create({
-
+  
   /**
    * Konstruktor
    **/
@@ -7830,13 +7830,13 @@ Room = Class.create({
     this.name        = "";
     this.description = "";
     this.channelIds  = [];
-
+    
     this.addChannelEvent    = new eQ3.Event();
     this.removeChannelEvent = new eQ3.Event();
-
+    
     this.update(data);
   },
-
+  
   /**
    * Aktualisiert den Raum
    **/
@@ -7846,16 +7846,16 @@ Room = Class.create({
     channelIds.each(function(id) { this.removeChannel(id); }, this);
 
     this.id          = data["id"];           // Id
-    this.name        = data["name"];         // Name
+    this.name        = data["name"];         // Name 
     this.description = data["description"];  // Beschreibung
-    this.channelIds  = [];                   // Ids der Kanï¿½le
-
+    this.channelIds  = [];                   // Ids der Kanäle
+    
     data["channelIds"].each(function(id) { this.addChannel(id); }, this);
   },
-
+  
   /**
-   * Fï¿½gt einen Kanal hinzu.
-   * writeBack: [bool] Optional: false. Falls true, wird die ï¿½nderung an die HomeMatic Zentrale ï¿½bermittelt.
+   * Fügt einen Kanal hinzu.
+   * writeBack: [bool] Optional: false. Falls true, wird die Änderung an die HomeMatic Zentrale übermittelt.
    **/
   addChannel: function(channelId, writeBack)
   {
@@ -7866,10 +7866,10 @@ Room = Class.create({
       this.addChannelEvent.fire(this, {channelId: channelId});
     }
   },
-
+  
   /**
    * Entfernt einen Kanal.
-   * writeBack: [bool] Optional: false. Falls true, wird die ï¿½nderung an die HomeMatic Zentrale ï¿½bermittelt.
+   * writeBack: [bool] Optional: false. Falls true, wird die Änderung an die HomeMatic Zentrale übermittelt.
    **/
   removeChannel: function(channelId, writeBack)
   {
@@ -7880,15 +7880,15 @@ Room = Class.create({
       this.removeChannelEvent.fire(this, {channelId: channelId});
     }
   },
-
+  
   /**
-   * Prï¿½ft, ob ein Kanal in dem Raum definiert ist.
+   * Prüft, ob ein Kanal in dem Raum definiert ist.
    **/
   contains: function(channelId)
   {
     return (0 <= this.channelIds.indexOf(channelId));
   },
-
+  
   /**
    * Liefert die Ids aller Programme, die wenigesten einen Kanal des Raums verwenden
    **/
@@ -7896,14 +7896,14 @@ Room = Class.create({
   {
     return homematic("Room.listProgramIds", {id: this.id});
   }
-
+  
 });
 
 /**
  * roomlist.js
  * Raumliste.
  **/
-
+ 
 /**
  * Raumliste.
  **/
@@ -7916,22 +7916,22 @@ RoomList = Singleton.create({
   {
     this.addEvent    = new eQ3.Event();
     this.removeEvent = new eQ3.Event();
-
+    
     this.m_rooms = {};
   },
-
+ 
   /**
    * Callback. Aktualisiert einen Raum.
    **/
   update: function(data, callback)
   {
     var room;
-
+    
     if (data !== null)
     {
       var id = data["id"];
       room = this.m_rooms[id];
-
+      
       if (typeof(room) != "undefined")
       {
         room.update(data);
@@ -7943,19 +7943,19 @@ RoomList = Singleton.create({
         this.addEvent.fire(this, {room: room});
       }
     }
-
+    
     if (callback) { callback(); }
     return room;
   },
-
+  
   /**
-   * Liefert die Liste aller Rï¿½ume.
+   * Liefert die Liste aller Räume.
    **/
-  list: function()
-  {
+  list: function() 
+  { 
     return Object.values(this.m_rooms);
   },
-
+  
   /**
    * Initialisiert die Raumliste.
    **/
@@ -7963,7 +7963,7 @@ RoomList = Singleton.create({
   {
     var _this_   = this;
     var _loader_ = loader;
-
+    
     homematic("Room.getAll", null, function(rooms) {
       if (rooms)
       {
@@ -7976,7 +7976,7 @@ RoomList = Singleton.create({
       _loader_.ready();
     });
   },
-
+  
   /**
    * Startet die Aktualiserung eines Raums.
    **/
@@ -7984,7 +7984,7 @@ RoomList = Singleton.create({
   {
     var _this_ = this;
     var _callback_ = callback;
-
+    
     homematic("Room.get", {"id": id}, function(data) { _this_.update(data, _callback_); });
   },
 
@@ -7997,24 +7997,24 @@ RoomList = Singleton.create({
     if (typeof(room) != "undefined") { return room; }
     else                             { return null; }
   },
-
+  
   remove: function(room)
   {
     var channelIds = room.channelIds.clone();
-
+    
     delete this.m_rooms[room.id];
     channelIds.each(function(id) { room.removeChannel(id); });
     this.removeEvent.fire(this, {room: room});
   }
-
+  
 });
 /**
  * subsection.js
  * Gewerk.
  **/
-
+ 
 Subsection = Class.create({
-
+  
   /**
    * Konstruktor
    **/
@@ -8024,13 +8024,13 @@ Subsection = Class.create({
     this.name        = "";
     this.description = "";
     this.channelIds  = [];
-
+    
     this.addChannelEvent    = new eQ3.Event();
     this.removeChannelEvent = new eQ3.Event();
-
+    
     this.update(data);
   },
-
+  
   /**
    * Aktualisiert den Raum
    **/
@@ -8038,18 +8038,18 @@ Subsection = Class.create({
   {
     var channelIds = this.channelIds.clone();
     channelIds.each(function(id) { this.removeChannel(id); }, this);
-
+  
     this.id          = data["id"];            // Id
     this.name        = data["name"];          // Name
     this.description = data["description"];   // Beschreibung
-    this.channelIds  = [];                    // Ids der Kanï¿½le
-
+    this.channelIds  = [];                    // Ids der Kanäle
+    
     data["channelIds"].each(function(id) { this.addChannel(id); }, this);
   },
-
+  
   /**
-   * Fï¿½gt einen Kanal hinzu.
-   * writeback: [bool] Optional (false). Falls true, wird die ï¿½nderung an die HomeMatic Zentrale ï¿½bermittelt.
+   * Fügt einen Kanal hinzu.
+   * writeback: [bool] Optional (false). Falls true, wird die Änderung an die HomeMatic Zentrale übermittelt.
    **/
   addChannel: function(channelId, writeBack)
   {
@@ -8060,10 +8060,10 @@ Subsection = Class.create({
       this.addChannelEvent.fire(this, {channelId: channelId});
     }
   },
-
+  
   /**
    * Entfernt einen Kanal.
-   * writeBack: [bool] Optional (false). Falls true, wird die ï¿½nderung an die HomeMatic Zentrale ï¿½bermittelt.
+   * writeBack: [bool] Optional (false). Falls true, wird die Änderung an die HomeMatic Zentrale übermittelt.
    **/
   removeChannel: function(channelId, writeBack)
   {
@@ -8074,15 +8074,15 @@ Subsection = Class.create({
       this.removeChannelEvent.fire(this, {channelId: channelId});
     }
   },
-
+  
   /**
-   * Prï¿½ft, ob ein Kanal in dem Raum definiert ist.
+   * Prüft, ob ein Kanal in dem Raum definiert ist.
    **/
   contains: function(channelId)
   {
     return (0 <= this.channelIds.indexOf(channelId));
   },
-
+  
   /**
    * Liefert die Ids aller Programme, die mindestens einen Kanal in dem Gewerk verwenden
    **/
@@ -8090,13 +8090,13 @@ Subsection = Class.create({
   {
     return homematic("Subsection.listProgramIds", {id: this.id});
   }
-
+  
 });
 /**
  * SubsectionList.js
  * Gewerkeliste.
  **/
-
+ 
 /**
  * Gewerkeliste
  **/
@@ -8109,22 +8109,22 @@ SubsectionList = Singleton.create({
   {
     this.addEvent    = new eQ3.Event();
     this.removeEvent = new eQ3.Event();
-
+  
     this.m_subsections = {};
   },
-
+  
   /**
    * Callback. Aktualiert ein Gewerk.
    **/
   update: function(data, callback)
   {
     var subsection;
-
+    
     if (data !== null)
     {
       var id = data["id"];
       subsection = this.m_subsections[id];
-
+      
       if (typeof(subsection) != "undefined")
       {
         subsection.update(data);
@@ -8136,11 +8136,11 @@ SubsectionList = Singleton.create({
         this.addEvent.fire(this, {subsection: subsection});
       }
     }
-
+    
     if (callback) { callback(); }
     return subsection;
   },
-
+    
   /**
    * Liefert die Liste aller Gewerke.
    **/
@@ -8150,7 +8150,7 @@ SubsectionList = Singleton.create({
   },
 
   /**
-   * Lï¿½dt die Gewerkeliste erneut
+   * Lädt die Gewerkeliste erneut
    **/
   reload: function(loader)
   {
@@ -8166,7 +8166,7 @@ SubsectionList = Singleton.create({
       _loader_.ready();
     });
   },
-
+  
   /**
    * Startet die Aktualisierung eines Gewerks.
    **/
@@ -8174,10 +8174,10 @@ SubsectionList = Singleton.create({
   {
     var _this_     = this;
     var _callback_ = callback;
-
+    
     homematic("Subsection.get", {"id": id}, function(data) { _this_.update(data, _callback_); });
   },
-
+  
   /**
    * Liefert ein Gewerk anhand seiner Id.
    **/
@@ -8185,67 +8185,67 @@ SubsectionList = Singleton.create({
   {
     return this.m_subsections[id];
   },
-
+  
   remove: function(subsection)
   {
     var channelIds = subsection.channelIds.clone();
-
+    
     delete this.m_subsections[subsection.id];
     channelIds.each(function(id) { subsection.removeChannel(id); });
     this.removeEvent.fire(this, {subsection: subsection});
   }
-
-});
+  
+}); 
 /**
  * devicetype.js
  **/
-
+ 
 /**
- * Gerï¿½tetyp.
+ * Gerätetyp.
  **/
 DeviceType = Class.create({
-
+ 
   initialize: function(id)
   {
     this.id          = id;
     this.name        = id;
     this.description = DEV_getDescription(id);
   },
-
+  
   isDeletable: function()
   {
     return DeviceTypeList.isDeletable(this);
   },
-
+  
   /**
-   * Liefert den HTML-Code eines Thumbnails fï¿½r das Gerï¿½t.
+   * Liefert den HTML-Code eines Thumbnails für das Gerät.
    **/
   getThumbnailHTML: function(formName)
-  {
+  { 
     return DeviceTypeList.getThumbnailHTML(this.id, formName);
   },
-
+  
   /**
-   * Liefert den HTML-Code eines Bildes fï¿½r das Gerï¿½t.
+   * Liefert den HTML-Code eines Bildes für das Gerät.
    **/
   getImageHTML: function(formName)
   {
     return DeviceTypeList.getImageHTML(this.id, formName);
   }
-
+  
 });/**
  * devicetypelist.js
  **/
 
 /**
- * Liste der verfï¿½gbaren Gerï¿½tetypen.
+ * Liste der verfügbaren Gerätetypen.
  **/
 DeviceTypeList = Singleton.create({
-  THUMBNAIL_SIZE: 50,   // Grï¿½ï¿½e eines (quadratischen) Thumbnails
-  IMAGE_SIZE: 250,   // Grï¿½ï¿½e eines (quadratischen) Bildes
-
+  THUMBNAIL_SIZE: 50,   // Größe eines (quadratischen) Thumbnails
+  IMAGE_SIZE: 250,   // Größe eines (quadratischen) Bildes
+  
   /**
-   * Liste der nicht lï¿½schbaren Gerï¿½tetypen
+   * Liste der nicht löschbaren Gerätetypen
    **/
   m_undeletableTypeNames: [
     "HM-CCU-1",
@@ -8254,79 +8254,79 @@ DeviceTypeList = Singleton.create({
     "HM-Sec-SD-Team",
     "HM-Sec-SD-2-Team"
   ],
-
+  
   /**
    * Konstruktor
    **/
   initialize: function()
   {
-    this.deviceTypes = {};     // verfï¿½gbare Gerï¿½tetypen
-
+    this.deviceTypes = {};     // verfügbare Gerätetypen
+    
     for (var i = 0, len = DEV_LIST.length; i < len; i++)
     {
       var deviceType = new DeviceType(DEV_LIST[i]);
       this.deviceTypes[deviceType.id] = deviceType;
     }
-
-    this.unknownType = this.deviceTypes["DEVICE"];
+  
+    this.unknownType = this.deviceTypes["DEVICE"];    
   },
-
+  
   /**
-   * Ermittelt, ob ein Gerï¿½t von diesem Typ gelï¿½scht werden kann.
+   * Ermittelt, ob ein Gerät von diesem Typ gelöscht werden kann.
    **/
   isDeletable: function(deviceType)
   {
     return !this.m_undeletableTypeNames.ex_contains(deviceType.name);
   },
-
+  
   /**
    * Erstellt den HTML-Code zu einem Bild bzw. Thumbnail
    **/
   getPictureHTML: function(typeId, formName, size)
-  {
+  {   
     var wrapper, canvas, jg, result;
-
+    
     wrapper = document.createElement("div");
-    Element.setStyle(wrapper, {display: "none"});
+    Element.setStyle(wrapper, {display: "none"});    
     $("body").appendChild(wrapper);
-
+    
     canvas = document.createElement("div");
     wrapper.appendChild(canvas);
     Element.setStyle(canvas, {
       position: "absolute",
       left:     "0px",
-      top:      "0px"
-    });
-
+      top:      "0px"      
+    });    
+    
     jg = new jsGraphics(canvas);
     InitGD(jg, size);
     Draw(jg, typeId, size, formName);
-
+    
     result = wrapper.innerHTML;
-
+    
     Element.remove(wrapper);
     return result;
   },
-
+  
   /**
-   * Liefert die Liste aller Gerï¿½tetypen.
+   * Liefert die Liste aller Gerätetypen.
    **/
   listDeviceTypes: function()
   {
     return Object.values(this.deviceTypes);
   },
-
+  
   /**
    * Liefert einen Geratetypen anhand seiner Id
    **/
   getDeviceType: function(id)
   {
     var deviceType = this.deviceTypes[id];
-
+    
     if (typeof(deviceType) != "undefined") { return deviceType; }
     else                                   { return this.unknownType; }
   },
-
+  
   /**
    * Liefert den HTML-Code eines Thumbnails
    **/
@@ -8334,7 +8334,7 @@ DeviceTypeList = Singleton.create({
   {
     return this.getPictureHTML(typeId, formName, this.THUMBNAIL_SIZE);
   },
-
+  
   /**
    * Liefert den HTML-Code eines Bildes
    **/
@@ -8358,10 +8358,10 @@ Channel = Class.create({
   initialize: function(device, data)
   {
     this.updateEvent = new eQ3.Event();
-
+    
     this.update(device, data);
   },
-
+  
   /**
    * Aktualisiert die Kanaldaten
    **/
@@ -8371,31 +8371,31 @@ Channel = Class.create({
 
     if ((device) && (data))
     {
-      this.id = data["id"];
+      this.id = data["id"];            
       this.name = data["name"];
       this.nameExtention = "";
-      this.address = data["address"];
-      this.deviceId = data["deviceId"];
+      this.address = data["address"];       
+      this.deviceId = data["deviceId"];  
       this.device = device;
       this.deviceType = deviceType;
       this.typeName = deviceType.name;
       this.typeDescription = deviceType.description;
       this.channelType = data["channelType"];
-      this.partnerId = data["partnerId"];
+      this.partnerId = data["partnerId"];  
       this.groupId = (this.id < this.partnerId) ? this.id + "_" + this.partnerId : this.partnerId + "_" +this.id;
       this.index = data["index"];
       this.category = translateKey(Channel.getCategoryName(data["category"]));
       this.mode = translateKey(Channel.getModeName(data["mode"]));
-      this.isAesAvailable = data["isAesAvailable"];
-      this.isLogged = data["isLogged"];
-      this.isVisible = data["isVisible"];
-      this.isReadyConfig = data["isReady"];
-      this.isVirtual = data["isVirtual"];
-      this.isLogable = data["isLogable"];
-      this.isReadable = data["isReadable"];
-      this.isWritable = data["isWritable"];
-      this.isEventable = data["isEventable"];
-      this.isUsable = (this.isWritable && data["isUsable"]);
+      this.isAesAvailable = data["isAesAvailable"];  
+      this.isLogged = data["isLogged"];      
+      this.isVisible = data["isVisible"];      
+      this.isReadyConfig = data["isReady"];  
+      this.isVirtual = data["isVirtual"];      
+      this.isLogable = data["isLogable"];      
+      this.isReadable = data["isReadable"];      
+      this.isWritable = data["isWritable"];      
+      this.isEventable = data["isEventable"];     
+      this.isUsable = (this.isWritable && data["isUsable"]);          
       this.thumbnailHTML = deviceType.getThumbnailHTML(this.index);
       this.imageHTML = deviceType.getImageHTML(this.index);
     }
@@ -8404,8 +8404,8 @@ Channel = Class.create({
 
     this.rooms = this.m_getRooms();
     this.subsections = this.m_getSubsections();
-
-
+    
+    
   },
 
   m_extendName: function() {
@@ -8417,21 +8417,21 @@ Channel = Class.create({
   },
 
   /**
-   * Ermittelt alls Rï¿½ume, in denen der Kanal definiert ist
+   * Ermittelt alls Räume, in denen der Kanal definiert ist
    **/
   m_getRooms: function()
   {
     var result = [];
     var rooms  = RoomList.list();
     var id     = this.id;
-
+    
     rooms.each(function(room) {
       if (room.contains(id)) { result.push(room); }
     });
-
+    
     return result;
   },
-
+  
   /**
    * Ermittelt alls Gewerke, in denen der Kanal definiert ist
    **/
@@ -8440,14 +8440,14 @@ Channel = Class.create({
     var result       = [];
     var subsections  = SubsectionList.list();
     var id           = this.id;
-
+    
     subsections.each(function(subsection) {
       if (subsection.contains(id)) { result.push(subsection); }
     });
-
+    
     return result;
   },
-
+    
   /**
    * Legt den Namen des Kanals fest
    **/
@@ -8459,15 +8459,15 @@ Channel = Class.create({
       if (typeof(result) == "string")
       {
         this.name = result;
-        this.updateEvent.fire(this, {reason: "setName", isUsable: this.name});
+        this.updateEvent.fire(this, {reason: "setName", isUsable: this.name}); 
       }
     }
-
+    
     return this.name;
   },
-
+  
   /**
-   * Legt fest, ob der Kanal fï¿½r normale Anwender sichtbar ist
+   * Legt fest, ob der Kanal für normale Anwender sichtbar ist
    **/
   setVisibility: function(isVisible)
   {
@@ -8477,15 +8477,15 @@ Channel = Class.create({
       if (typeof(result) == "boolean")
       {
         this.isVisible = result;
-        this.updateEvent.fire(this, {reason: "setVisibility", isUsable: this.isVisible});
+        this.updateEvent.fire(this, {reason: "setVisibility", isUsable: this.isVisible}); 
       }
     }
-
+    
     return this.isVisible;
   },
-
+  
   /**
-   * Legt fest, ob der Kanal fï¿½r normale Anwender bedienbar ist
+   * Legt fest, ob der Kanal für normale Anwender bedienbar ist
    **/
   setUsability: function(isUsable)
   {
@@ -8495,13 +8495,13 @@ Channel = Class.create({
       if (typeof(result) == "boolean")
       {
         this.isUsable = result;
-        this.updateEvent.fire(this, {reason: "setUsability", isUsable: this.isUsable});
+        this.updateEvent.fire(this, {reason: "setUsability", isUsable: this.isUsable}); 
       }
     }
-
+    
     return this.isUsable;
   },
-
+  
   /**
    * Legt fest, ob der Kanal protokolliert wird
    **/
@@ -8513,15 +8513,15 @@ Channel = Class.create({
       if (typeof(result) == "boolean")
       {
         this.isLogged = result;
-        this.updateEvent.fire(this, {reason: "setLogging", isLogged: this.isLogged});
+        this.updateEvent.fire(this, {reason: "setLogging", isLogged: this.isLogged}); 
       }
     }
-
+    
     return this.isLogged;
   },
-
+  
   /**
-   * Legt den ï¿½bertragungsmodus des Kanals fest.
+   * Legt den Übertragungsmodus des Kanals fest.
    **/
   setMode: function(mode)
   {
@@ -8550,31 +8550,31 @@ Channel = Class.create({
   {
     return DeviceList.getChannelGroup(this.groupId);
   },
-
+  
   addToRoom: function(room)
   {
     if (!this.rooms.ex_contains(room))
     {
       this.rooms.push(room);
       this.rooms.ex_sortBy("name");
-      this.updateEvent.fire(this, {reason: "addToRoom", room: room});
+      this.updateEvent.fire(this, {reason: "addToRoom", room: room}); 
     }
   },
-
+  
   removeFromRoom: function(room)
   {
     if (this.rooms.ex_contains(room))
     {
       this.rooms = this.rooms.without(room);
       this.rooms.ex_sortBy("name");
-      this.updateEvent.fire(this, {reason: "removeFromRoom", room: room});
+      this.updateEvent.fire(this, {reason: "removeFromRoom", room: room}); 
     }
   },
-
+  
   /**
-   * Fï¿½gt dem Kanal ein Gewerk hinzu.
+   * Fügt dem Kanal ein Gewerk hinzu.
    * Diese Methode dient lediglich zur Aktualisierung des Datenmodells.
-   * Um den Kanal einem Gewerk hinzuzufï¿½gen, sollte
+   * Um den Kanal einem Gewerk hinzuzufügen, sollte 
    *   Subsection.addChannel(channel, true)
    * verwendet werden.
    **/
@@ -8584,14 +8584,14 @@ Channel = Class.create({
     {
       this.subsections.push(subsection);
       this.subsections.ex_sortBy("name");
-      this.updateEvent.fire(this, {reason: "addToSubsection", subsection: subsection});
+      this.updateEvent.fire(this, {reason: "addToSubsection", subsection: subsection}); 
     }
   },
-
+  
   /**
    * Entfernt den Kanal aus einem Gewerk.
    * Diese Methode dient lediglich zur Aktualisierung des Datenmodells.
-   * Um den Kanal aus dem Gewerk zu lï¿½schen, sollte
+   * Um den Kanal aus dem Gewerk zu löschen, sollte 
    *   Subsection.removeChannel(channel, true)
    * verwendet werden.
    **/
@@ -8601,29 +8601,29 @@ Channel = Class.create({
     {
       this.subsections = this.subsections.without(subsection);
       this.subsections.ex_sortBy("name");
-      this.updateEvent.fire(this, {reason: "removeFroSubsections", subsection: subsection});
+      this.updateEvent.fire(this, {reason: "removeFroSubsections", subsection: subsection}); 
     }
    },
-
-
+  
+  
   /**
-   * Liefert eine Liste sï¿½mtlicher Programme (Ids), die den Kanal verwenden
+   * Liefert eine Liste sämtlicher Programme (Ids), die den Kanal verwenden
    **/
   listProgramIds: function()
   {
     return homematic("Channel.listProgramIds", {"id": this.id});
   },
-
+  
   /**
-   * Ermittelt, ob der Kanal den Funktionstest unterstï¿½tzt.
+   * Ermittelt, ob der Kanal den Funktionstest unterstützt.
    **/
   supportsComTest: function()
   {
     return this.isEventable;
   }
-
+  
 });
-
+ 
 /*##############*/
 /*# Konstanten #*/
 /*##############*/
@@ -8642,14 +8642,14 @@ Channel.MODE =
   AES    : "lblSecured"
 };
 
-Channel.INVALID_ID = "";
+Channel.INVALID_ID = "";   
 
 /*########################*/
 /*# Statische Funktionen #*/
 /*########################*/
 
 /**
- * Liefert den ï¿½bertragungsmodus anhand seines Namens.
+ * Liefert den Übertragungsmodus anhand seines Namens.
  **/
 Channel.getMode = function(modeName)
 {
@@ -8664,7 +8664,7 @@ Channel.getMode = function(modeName)
 };
 
 /**
- * Liefert den Namen eines ï¿½bertragungs-Modus
+ * Liefert den Namen eines Übertragungs-Modus
  **/
 Channel.getModeName = function(mode)
 {
@@ -8683,36 +8683,36 @@ Channel.getCategoryName = function(category)
 {
   switch (category)
   {
-    case "CATEGORY_NONE":      return Channel.CATEGORY.NONE;
-    case "CATEGORY_SENDER":    return Channel.CATEGORY.SENDER;
-    case "CATEGORY_RECEIVER":  return Channel.CATEGORY.RECEIVER;
+    case "CATEGORY_NONE":      return Channel.CATEGORY.NONE; 
+    case "CATEGORY_SENDER":    return Channel.CATEGORY.SENDER; 
+    case "CATEGORY_RECEIVER":  return Channel.CATEGORY.RECEIVER; 
     default:                   return Channel.CATEGORY.NONE;
   }
 };
 /**
  * channelgroup.js
  **/
-
+ 
 /**
  * Kanalgruppe.
  **/
 ChannelGroup = Class.create({
-
+  
   /**
    * Konstruktor
    **/
   initialize: function(device, channel)
   {
     this.m_updateChannelHandler = this.m_onUpdateChannel.bind(this);
-
+    
     this.id              = channel.groupId;
     this.device          = device;
     this.typeName        = device.deviceType.name;
     this.typeDescription = device.deviceType.description;
     this.channels        = [];
     this.thumbnailHTML   = null;
-    this.imageHTML       = null;
-
+    this.imageHTML       = null;    
+    
     this.update(device, channel);
   },
 
@@ -8724,9 +8724,9 @@ ChannelGroup = Class.create({
     if ((device) && (channel))
     {
       var deviceType = device.deviceType;
-
+      
       channel.updateEvent.add(this.m_updateChannelHandler);
-
+      
       this.channels.ex_pushUnique(channel);
       this.channels.ex_sortBy("index");
       this.formName = this.channels.ex_joinItem("index", "+");
@@ -8735,7 +8735,7 @@ ChannelGroup = Class.create({
       this.thumbnailHTML = deviceType.getThumbnailHTML(this.formName);
       this.imageHTML     = deviceType.getImageHTML(this.formName);
     }
-
+    
     this.isUsable        = false;
     this.isVisible       = false;
     this.isLogged        = false;
@@ -8753,18 +8753,18 @@ ChannelGroup = Class.create({
       this.rooms = this.rooms.concat(channel.rooms);
       this.subsections = this.subsections.concat(channel.subsections);
     }, this);
-
+    
     this.categories  = this.categories.uniq();
     this.modes       = this.modes.uniq();
     this.rooms       = this.rooms.uniq().ex_sortBy("name");
     this.subsections = this.subsections.uniq().ex_sortBy("name");
   },
-
+  
   m_onUpdateChannel: function(channel, eventArgs)
   {
     this.update(this.device, channel);
   },
-
+  
   addSubsection: function(subsection)
   {
     if (!this.subsections.ex_contains(subsection))
@@ -8773,7 +8773,7 @@ ChannelGroup = Class.create({
       this.subsections.ex_sortBy("name");
     }
   },
-
+  
   removeSubsection: function(subsection)
   {
     if (this.subsections.ex_contains(subsection))
@@ -8789,19 +8789,19 @@ ChannelGroup = Class.create({
   {
     var ids = [];
     this.channels.each(function(channel) {
-      ids = ids.concat(homematic("Channel.listProgramIds", {"id": channel.id}));
+      ids = ids.concat(homematic("Channel.listProgramIds", {"id": channel.id})); 
     });
     return ids.uniq();
   }
-
+    
 });
 
 /**
  * device.js
  **/
-
+ 
 /**
- * HomeMatic Gerï¿½t.
+ * HomeMatic Gerät.
  **/
 Device = Class.create({
 
@@ -8811,19 +8811,19 @@ Device = Class.create({
   initialize: function(data)
   {
     this.m_updateChannelHandler = this.m_onUpdateChannel.bind(this);
-
+    
     this.update(data);
   },
-
+  
   /**
-   * Aktualisiert die Gerï¿½tedaten
+   * Aktualisiert die Gerätedaten
    **/
   update: function(data)
   {
     if (data)
     {
       var deviceType = DeviceTypeList.getDeviceType(data["type"]);
-
+    
       this.id  = data["id"];
       this.name = data["name"];
       this.address = data["address"];
@@ -8837,7 +8837,7 @@ Device = Class.create({
       this.isDeletable = deviceType.isDeletable();
       this.isOperateGroupOnly = (data["operateGroupOnly"] == "true") ? true : false;
       this.deviceInputCheck = false;
-
+    
       this.channels = new Array();
       this.groups = new Array();
       this.singles = new Array();
@@ -8845,7 +8845,7 @@ Device = Class.create({
         var channel = DeviceList.updateChannel(this, data);
         channel.updateEvent.add(this.m_updateChannelHandler);
         this.channels.push(channel);
-
+      
         if (channel.partnerId == Channel.INVALID_ID)
         {
           this.singles.push(channel);
@@ -8857,7 +8857,7 @@ Device = Class.create({
         }
       }, this);
     }
-
+    
     this.isWritable  = false;
     this.isVisible   = false;
     this.isUsable    = false;
@@ -8867,27 +8867,27 @@ Device = Class.create({
     this.modes       = [];
     this.rooms       = [];
     this.subsections = [];
-
+    
     this.channels.each(function(channel) {
       this.isWritable |= channel.isWritable;
       this.isVisible  |= channel.isVisible;
       this.isUsable   |= channel.isUsable;
       this.isLogged   |= channel.isLogged;
-      this.isLogable  |= channel.isLogable;
+      this.isLogable  |= channel.isLogable; 
       this.categories.push(channel.category);
       this.modes.push(channel.mode);
       this.rooms       = this.rooms.concat(channel.rooms);
       this.subsections = this.subsections.concat(channel.subsections);
     }, this);
-
+    
     this.categories  = this.categories.uniq();
     this.modes       = this.modes.uniq();
     this.rooms       = this.rooms.uniq().ex_sortBy("name");
     this.subsections = this.subsections.uniq().ex_sortBy("name");
   },
-
+  
   /**
-   * Legt den Namen des Gerï¿½ts fest.
+   * Legt den Namen des Geräts fest.
    **/
   setName: function(name)
   {
@@ -8899,21 +8899,21 @@ Device = Class.create({
         this.name = result;
       }
     }
-
+    
     return this.name;
   },
 
   setUsable: function(isUsable)
   {
   },
-
+  
   setVisible: function(isVisible)
   {
   },
-
+  
   setLogging: function(isLogged)
   {
-  },
+  },  
 
   setDeviceInputCheck: function() {
     this.deviceInputCheck = true;
@@ -8927,7 +8927,7 @@ Device = Class.create({
   {
     this.update();
   },
-
+  
   addSubsection: function(subsection)
   {
     if (!this.subsections.ex_contains(subsection))
@@ -8936,7 +8936,7 @@ Device = Class.create({
       this.subsections.ex_sortBy("name");
     }
   },
-
+  
   removeSubsection: function(subsection)
   {
     if (this.subsections.ex_contains(subsection))
@@ -8951,7 +8951,7 @@ Device = Class.create({
   },
 
   /**
-   * Liefert den HTML-Code des Gerï¿½te-Vorschau-Bildes
+   * Liefert den HTML-Code des Geräte-Vorschau-Bildes
    **/
   getThumbnailHTML: function()
   {
@@ -8959,12 +8959,12 @@ Device = Class.create({
     {
       this.thumbnailHTML = this.deviceType.getThumbnailHTML();
     }
-
+    
     return this.thumbnailHTML;
   },
-
+  
   /**
-   * Liefert den HTML-Code des Gerï¿½tebildes
+   * Liefert den HTML-Code des Gerätebildes
    **/
   getImageHTML: function()
   {
@@ -8972,20 +8972,20 @@ Device = Class.create({
     {
       this.imageHTML = this.deviceType.getImageHTML();
     }
-
+    
     return this.imageHTML;
   },
-
+  
   /**
-   * Liefert die Ids der Programme, die mindestens einen Kanal des Gerï¿½ts verwenden
+   * Liefert die Ids der Programme, die mindestens einen Kanal des Geräts verwenden
    **/
   listProgramIds: function()
   {
     return homematic("Device.listProgramIds", {id: this.id});
   },
-
+  
   /**
-   * Ermittelt, ob das Gerï¿½t direkte Verknï¿½pfungen oder Programme besitzt.
+   * Ermittelt, ob das Gerät direkte Verknüpfungen oder Programme besitzt.
    **/
   hasLinksOrPrograms: function(callback)
   {
@@ -9014,15 +9014,15 @@ Device = Class.create({
       }
     }
   },
-
+  
   /**
-   * Asynchron. Versucht ein Gerï¿½t zu lï¿½schen.
+   * Asynchron. Versucht ein Gerät zu löschen.
    **/
   remove: function(flags, callback)
   {
     var _this_     = this;
     var _callback_ = callback;
-
+    
     homematic("Interface.deleteDevice", {
       "interface": this.interfaceName,
       address:     this.address,
@@ -9035,15 +9035,15 @@ Device = Class.create({
       if (_callback_) { _callback_(result, error); }
     });
   }
-
+  
 });
 /**
  * devicelist.js
- * Gerï¿½teliste.
+ * Geräteliste.
  **/
 
 /**
- * Gerï¿½teliste.
+ * Geräteliste.
  **/
 DeviceList = Singleton.create({
 
@@ -9056,7 +9056,7 @@ DeviceList = Singleton.create({
     this.m_removeRoomHandler = this.m_onRemoveRoom.bind(this);
     this.m_addChannelToRoomHandler      = this.m_onAddChannelToRoom.bind(this);
     this.m_removeChannelFromRoomHandler = this.m_onRemoveChannelFromRoom.bind(this);
-
+    
     this.m_addSubsectionHandler = this.m_onAddSubsection.bind(this);
     this.m_removeSubsectionHandler = this.m_onRemoveSubsection.bind(this);
     this.m_addChannelToSubsectionHandler      = this.m_onAddChannelToSubsection.bind(this);
@@ -9064,66 +9064,66 @@ DeviceList = Singleton.create({
 
     this.addEvent    = new eQ3.Event();
     this.removeEvent = new eQ3.Event();
-
+    
     this.devices  = {};
     this.channels = {};
     this.groups   = {};
   },
-
+  
   /**
-   * Aktualisiert ein Gerï¿½t
+   * Aktualisiert ein Gerät
    **/
   updateDevice: function(data, callback)
   {
     var device;
-
+    
     if (data !== null)
     {
       var id = data["id"];
       device = this.devices[id];
 
-      if (typeof(device) != "undefined")
+      if (typeof(device) != "undefined") 
       {
-        device.update(data);
+        device.update(data); 
       }
       else
       {
-        device =  new Device(data);
+        device =  new Device(data); 
         this.devices[id] = device;
         this.addEvent.fire(this, {device: device});
       }
     }
-
+    
     if (callback) { callback(); }
     return device;
   },
-
+  
   /**
    * Aktualisiert einen Kanal
    **/
   updateChannel: function(device, data)
   {
     var channel;
-
+    
     if (data !== null)
     {
       var id  = data["id"];
       channel = this.channels[id];
-
-      if (typeof(channel) != "undefined")
-      {
-        channel.update(device, data);
+      
+      if (typeof(channel) != "undefined") 
+      { 
+        channel.update(device, data); 
       }
       else
-      {
-        channel = new Channel(device, data);
-        this.channels[id] = channel;
+      { 
+        channel = new Channel(device, data); 
+        this.channels[id] = channel; 
       }
     }
-
+    
     return channel;
   },
-
+  
   /**
    * Aktualisiert eine Kanalgruppe
    **/
@@ -9131,42 +9131,42 @@ DeviceList = Singleton.create({
   {
     var id = channel.groupId;
     var group  = this.groups[id];
-
-    if (typeof(group) != "undefined")
+      
+    if (typeof(group) != "undefined") 
     {
-      group.update(device, channel);
+      group.update(device, channel); 
     }
     else
     {
       group = new ChannelGroup(device, channel);
       this.groups[id] = group;
     }
-
+    
     return group;
   },
-
+  
   /**
-   * Entfernt ein Gerï¿½t aus dem Datenmodell
+   * Entfernt ein Gerät aus dem Datenmodell
    **/
   removeDevice: function(device)
   {
     // alert("removeDevice: " + device.id);
-
+  
     delete this.devices[device.id];
     device.groups.each(function(group) { delete this.groups[group.id]; }, this);
     device.channels.each(function(channel) { delete this.channels[channel.id]; }, this);
-
+    
     this.removeEvent.fire(this, {device: device});
   },
 
   /**
-   * Liefert die Liste aller Gerï¿½te.
+   * Liefert die Liste aller Geräte.
    **/
   listDevices: function()
   {
     return Object.values(this.devices);
   },
-
+  
   /**
    * Liefert die Liste aller Kanalgruppen.
    **/
@@ -9174,17 +9174,17 @@ DeviceList = Singleton.create({
   {
     return Object.values(this.groups);
   },
-
+  
   /**
-   * Liefert die Liste aller Kanï¿½le.
+   * Liefert die Liste aller Kanäle.
    **/
   listChannels: function()
   {
     return Object.values(this.channels);
   },
-
+  
   /**
-   * Liefert die Liste aller Kanï¿½le ohne Gruppen-Partner.
+   * Liefert die Liste aller Kanäle ohne Gruppen-Partner.
    **/
   listSingleChannels: function()
   {
@@ -9192,30 +9192,30 @@ DeviceList = Singleton.create({
     for (var id in m_devices) { singles = singles.concat(m_devices[id].SingleChannels()); }
     return singles;
   },
-
+  
   /**
-   * Lï¿½dt die Gerï¿½teliste erneut
+   * Lädt die Geräteliste erneut
    **/
   reload: function(loader)
   {
     eQ3.HomeMatic.Event.subscribe("delete", function(type, data) {
       var address = data;
       var device = DeviceList.getDeviceByAddress(address);
-
+      
       if (device) { DeviceList.removeDevice(device); }
     });
     RoomList.addEvent.add(this.m_addRoomHandler);
     RoomList.removeEvent.add(this.m_removeRoomHandler);
     SubsectionList.addEvent.add(this.m_addSubsectionHandler);
     SubsectionList.removeEvent.add(this.m_removeSubsectionHandler);
-
+  
     var _loader_ = loader;
     var _this_   = this;
     var _ids_    = [];
     var current = 0;
 
     var typeCCU1 = "HM-CCU-1";
-
+    
     var loadNext = function()
     {
       if (current < _ids_.length)
@@ -9229,7 +9229,7 @@ DeviceList = Singleton.create({
         _loader_.ready();
       }
     };
-
+    
     this.devices  = {};
     this.channels = {};
     this.groups   = {};
@@ -9272,28 +9272,28 @@ DeviceList = Singleton.create({
     });
   */
   },
-
+  
   /**
-   * Startet die Akualisierung eines Gerï¿½ts.
+   * Startet die Akualisierung eines Geräts.
    **/
   beginUpdateDevice:function(id, callback)
   {
     var _this_ = this;
     var _callback_ = callback;
-
+    
     homematic("Device.get", {"id": id}, function(data) { _this_.updateDevice(data, _callback_); });
   },
-
+  
   /**
-   * Liefert ein Gerï¿½t anhand seiner Id.
+   * Liefert ein Gerät anhand seiner Id.
    **/
   getDevice: function(id)
   {
     return this.devices[id];
   },
-
+  
   /**
-   * Liefert ein Gerï¿½t anhand seiner Seriennummer.
+   * Liefert ein Gerät anhand seiner Seriennummer.
    **/
   getDeviceByAddress: function(address)
   {
@@ -9305,7 +9305,7 @@ DeviceList = Singleton.create({
         return device;
       }
     }
-
+    
     return undefined;
   },
 
@@ -9316,7 +9316,7 @@ DeviceList = Singleton.create({
   {
     return this.groups[id];
   },
-
+  
   /**
    * Liefert einen Kanal anhand seiner Id.
    **/
@@ -9324,7 +9324,7 @@ DeviceList = Singleton.create({
   {
     return this.channels[id];
   },
-
+  
   /**
    * Liefert einen Kanal anhand seiner Seriennummer.
    **/
@@ -9338,52 +9338,52 @@ DeviceList = Singleton.create({
         return channel;
       }
     }
-
-    return undefined;
+    
+    return undefined;  
   },
-
+  
   /**
-   * Event-Handler.
-   * Wird aufgerufen, sobald ein Raum hinzugefï¿½gt wurde.
+   * Event-Handler. 
+   * Wird aufgerufen, sobald ein Raum hinzugefügt wurde.
    **/
   m_onAddRoom: function(roomList, eventArgs)
   {
     var room = eventArgs.room;
     room.addChannelEvent.add(this.m_addChannelToRoomHandler);
     room.removeChannelEvent.add(this.m_removeChannelFromRoomHandler);
-
+    
     room.channelIds.each(function(id) {
       var channel = DeviceList.getChannel(id);
       if (channel) { channel.addToRoom(room); }
     });
   },
-
+  
   /**
    * Event-Handler.
-   * Wird aufgerufen, sobald ein Raum gelï¿½scht wurde.
+   * Wird aufgerufen, sobald ein Raum gelöscht wurde.
    **/
   m_onRemoveRoom: function(roomList, eventArgs)
   {
     var room = eventArgs.room;
     room.addChannelEvent.add(this.m_addChannelToRoomHandler);
     room.removeChannelEvent.add(this.m_removeChannelFromRoomHandler);
-
+    
     room.channelIds.each(function(id) {
       var channel = DeviceList.getChannel(id);
       if (channel) { channel.removeFromRoom(room); }
     });
   },
-
+  
   /**
    * Event-Handler.
-   * Wird aufgerufen, sobald ein Kanal einem Raum hinzugefï¿½gr wurde.
+   * Wird aufgerufen, sobald ein Kanal einem Raum hinzugefügr wurde.
    **/
   m_onAddChannelToRoom: function(room, eventArgs)
   {
     var channel = this.channels[eventArgs.channelId];
-    if (channel) { channel.addToRoom(room); }
+    if (channel) { channel.addToRoom(room); } 
   },
-
+  
   /**
    * Event-Handler.
    * Wird aufgerufen, sobald ein Kanal aus einem Raum entfernt wurde.
@@ -9393,49 +9393,49 @@ DeviceList = Singleton.create({
     var channel = this.channels[eventArgs.channelId];
     if (channel) { channel.removeFromRoom(room); }
   },
-
+  
   /**
    * Event-Handler.
-   * Wird aufgerufen, sobald ein neues Gewerk hinzugefï¿½gt wurde.
+   * Wird aufgerufen, sobald ein neues Gewerk hinzugefügt wurde.
    **/
   m_onAddSubsection: function(subsectionList, eventArgs)
   {
     var subsection = eventArgs.subsection;
     subsection.addChannelEvent.add(this.m_addChannelToSubsectionHandler);
     subsection.removeChannelEvent.add(this.m_removeChannelFromSubsectionHandler);
-
+    
     subsection.channelIds.each(function(id) {
       var channel = DeviceList.getChannel(id);
       if (channel) { channel.addToSubsection(subsection); }
     });
   },
-
+  
   /**
    * Event-Handler.
-   * Wird aufgerufen, sobald ein Gewerk gelï¿½scht wurde.
+   * Wird aufgerufen, sobald ein Gewerk gelöscht wurde.
    **/
   m_onRemoveSubsection: function(subsectionList, eventArgs)
   {
     var subsection = eventArgs.subsection;
     subsection.addChannelEvent.add(this.m_addChannelToSubsectionHandler);
     subsection.removeChannelEvent.add(this.m_removeChannelFromSubsectionHandler);
-
+    
     subsection.channelIds.each(function(id) {
       var channel = DeviceList.getChannel(id);
       if (channel) { channel.removeFromSubsection(subsection); }
-    });
+    });  
   },
-
+  
   /**
    * Event-Handler.
-   * Wird aufgerufen, sobald ein Kanal einem Gewerk hinzugefï¿½gt wurde.
+   * Wird aufgerufen, sobald ein Kanal einem Gewerk hinzugefügt wurde.
    **/
   m_onAddChannelToSubsection: function(subsection, eventArgs)
   {
     var channel = this.channels[eventArgs.channelId];
-    if (channel) { channel.addToSubsection(subsection); }
+    if (channel) { channel.addToSubsection(subsection); } 
   },
-
+  
   /**
    * Event-Handler.
    * Wird aufgerufen, sobald ein Kanal aus einem Gewerk entfernt wurde.
@@ -9454,39 +9454,39 @@ DeviceList = Singleton.create({
 
 /**
  * Ebenenverwaltung.
- **/
+ **/ 
 Layer = new function()
 {
   /*####################*/
   /*# Private Elemente #*/
   /*####################*/
-
-  var Z_INDEX_INCR = 100;    // Inkrement fï¿½r den Ebenenindex
-
-  var m_container = null;   // Container fï¿½r die Ebenen
+  
+  var Z_INDEX_INCR = 100;    // Inkrement für den Ebenenindex
+  
+  var m_container = null;   // Container für die Ebenen
   var m_maxIndex  = 0;      // Maximal vergebener Index
   var m_layer     = {};     // Speichert die Indizes aller Ebenen
-
+  
   /**
    * Ermittelt den maximalen Z-Index.
    **/
   var getMaxIndex = function()
   {
     var maxIndex = 0;
-
+    
     for (id in m_layer)
     {
       var index = m_layer[id];
       if (index > maxIndex) { maxIndex = index; }
     }
-
+    
     return maxIndex;
   };
-
+  
   /*########################*/
-  /*# ï¿½ffentliche Elemente #*/
+  /*# Öffentliche Elemente #*/
   /*########################*/
-
+  
   /**
    * Initialisiert die Ebenenverwaltung.
    **/
@@ -9495,24 +9495,24 @@ Layer = new function()
     m_container = document.createElement("div");
     m_maxIndex  = 0;
     m_layer     = {};
-
+    
     Element.addClassName(m_container, "LayerContainer");
     $("body").appendChild(m_container);
   };
-
+  
   /**
-   * Fï¿½gt eine Ebene hinzu.
+   * Fügt eine Ebene hinzu.
    **/
   this.add = function(layer)
   {
     m_maxIndex     = getMaxIndex() + Z_INDEX_INCR;
     layer._layerId = m_maxIndex;
     m_layer[layer._layerId] = m_maxIndex;
-
+    
     Element.setStyle(layer, {"zIndex": m_maxIndex, "position": "absolute"});
-    m_container.appendChild(layer);
+    m_container.appendChild(layer);    
   };
-
+  
   /**
    * Entfernt eine Ebene.
    **/
@@ -9524,52 +9524,52 @@ Layer = new function()
       m_container.removeChild(layer);
     } catch(e) {};
   };
-
+  
 }();
 /**
  * dialogbox.js
  * Autor: Falk Werner, eQ-3 Entwicklung GmbH
  **/
-
+ 
 /**
- * Allgmeine Dialogbox fï¿½r die Kommunikation mit dem Benutzer.
+ * Allgmeine Dialogbox für die Kommunikation mit dem Benutzer.
  **/
 DialogBox = function(callback, width, height)
 {
   /*####################*/
   /*# Private Elemente #*/
   /*####################*/
-
+ 
   var DEFAULT_CONTENT_WIDTH  = 320; // Konstante. Standardbreite des Arbeitsbereichs
-  var DEFAULT_CONTENT_HEIGHT = 80;  // Konstante. Standardhï¿½he des Arbeitsbereichs
-  var TITLE_HEIGHT           = 20;  // Konstante. Hï¿½he der Titelleiste
-  var FOOTER_HEIGHT          = 40;  // Konstante. Hï¿½he der Fuï¿½leiste
+  var DEFAULT_CONTENT_HEIGHT = 80;  // Konstante. Standardhöhe des Arbeitsbereichs
+  var TITLE_HEIGHT           = 20;  // Konstante. Höhe der Titelleiste  
+  var FOOTER_HEIGHT          = 40;  // Konstante. Höhe der Fußleiste
   var BORDER_WIDTH           = 2;   // Konstante. Breite des Dialog-Rahmens
-  var BUTTON_HEIGHT          = 32;  // Konstante. Hï¿½he eines Buttons
+  var BUTTON_HEIGHT          = 32;  // Konstante. Höhe eines Buttons
   var BUTTON_WIDTH           = 100; // Konstante. Breite eines Buttons
   var BUTTON_BORDER          = 1;   // Konstante. Rahmenbreite eines Buttons
-
+ 
   var m_wrapper;              // DOM-Element. Dialog-Hintergrund
   var m_dialog;               // DOM-Element. Dialogfenster
   var m_title;                // DOM-Element. Dialog-Titel
   var m_content;              // DOM-Element. Inhalt
-  var m_footer;               // DOM-Element. Fuï¿½leiste
-  var m_callback = callback;  // Rï¿½ckruffunktion
-
+  var m_footer;               // DOM-Element. Fußleiste
+  var m_callback = callback;  // Rückruffunktion
+    
   /**
    * Interne Klasse.
    **/
   var DialogBoxButton = function(caption, dialogResult, style)
-  {
+  {    
     /*####################*/
     /*# Private Elemente #*/
     /*####################*/
-
+    
     var m_button;                       // DOM-Element. Button
     var m_caption;                      // DOM-Element. Beschriftung
     var m_onClickListener;              // onClick-Ereignis
-    var m_dialogResult = dialogResult;  // Rï¿½ckgabewert
-
+    var m_dialogResult = dialogResult;  // Rückgabewert
+    
     /**
      * onClick-Ereignis-Handler.
      **/
@@ -9577,11 +9577,11 @@ DialogBox = function(callback, width, height)
     {
       if (m_callback) { m_callback(dialogResult); }
     };
-
+    
     /*########################*/
-    /*# ï¿½ffentliche Elemente #*/
+    /*# Öffentliche Elemente #*/
     /*########################*/
-
+    
     /**
      * Setzt die Beschriftung des Buttons.
      **/
@@ -9591,9 +9591,9 @@ DialogBox = function(callback, width, height)
       {
         m_caption.innerHTML = "";
         m_caption.appendChild(document.createTextNode(caption));
-      }
+      }  
     };
-
+    
     /**
      * Ermittelt das DOM-Element.
      **/
@@ -9601,43 +9601,43 @@ DialogBox = function(callback, width, height)
     {
       return m_button;
     };
-
+    
     /*###################*/
     /*# Initialisierung #*/
     /*###################*/
-
+    
     // Button-Style
     if ("undefined" == typeof(style["width"])) { style["width"] = BUTTON_WIDTH + "px"; }
     if ("undefined" == typeof(style["float"])) { style["float"] = "left"; }
     style["height"] = BUTTON_HEIGHT + "px";
     style["margin"] = parseInt((FOOTER_HEIGHT - BUTTON_HEIGHT) / 2) + "px";
-
+    
     // Button-Beschriftung
     m_caption = document.createElement("div");
     Element.addClassName(m_caption, "DialogButtonCaption");
-    Element.setStyle(m_caption,
+    Element.setStyle(m_caption, 
     {
       "margin"    : BUTTON_BORDER + "px",
       "lineHeight": (BUTTON_HEIGHT - (2 * BUTTON_BORDER)) + "px"
     });
     m_caption.appendChild(document.createTextNode(caption));
-
+      
     // Button-Element
     var margin = parseInt((FOOTER_HEIGHT - BUTTON_HEIGHT - (2 * BUTTON_BORDER)) / 2);
     m_button = document.createElement("div");
     Element.addClassName(m_button, "DialogButton");
     Element.setStyle(m_button, style);
-    m_button.appendChild(m_caption);
-
+    m_button.appendChild(m_caption);    
+  
     // Event-Handler
     m_onClickListener = onClick.bindAsEventListener(this);
     Event.observe(m_caption, "click", m_onClickListener);
   };
-
+  
   /*########################*/
-  /*# ï¿½ffentliche Elemente #*/
+  /*# Öffentliche Elemente #*/
   /*########################*/
-
+  
   /**
    * Zeigt die Dialogbox an.
    **/
@@ -9646,15 +9646,15 @@ DialogBox = function(callback, width, height)
     Layer.add(m_wrapper);
     m_wrapper.show();
   };
-
+  
   /**
-   * Schlieï¿½t die Dialogbox und entfernt sie aus dem DOM.
+   * Schließt die Dialogbox und entfernt sie aus dem DOM.
    **/
   this.close = function()
   {
     Layer.remove(m_wrapper);
   };
-
+    
   /**
    * Setzt den Titel der Dialogbox.
    **/
@@ -9663,7 +9663,7 @@ DialogBox = function(callback, width, height)
     m_title.innerHTML = "";
     m_title.appendChild(document.createTextNode(title));
   };
-
+  
   /**
    * Setzt den Inhalt der Dialogbox mit einem HTML-Text.
    **/
@@ -9671,7 +9671,7 @@ DialogBox = function(callback, width, height)
   {
     m_content.innerHTML = contentHTML;
   };
-
+  
   /**
    * Setzt den Inhalt der Dialogbox mit einem DOM-Element.
    **/
@@ -9680,18 +9680,18 @@ DialogBox = function(callback, width, height)
     m_content.innerHTML = "";
     m_content.appendChild(content);
   };
-
+  
   /**
-   * Fï¿½gt dem Dialog einen Button hinzu.
+   * Fügt dem Dialog einen Button hinzu.
    **/
   this.addButton = function(caption, dialogResult, style)
   {
     var button = new DialogBoxButton(caption, dialogResult, style);
-    m_footer.appendChild(button.getElement());
-
+    m_footer.appendChild(button.getElement());    
+    
     return button;
   };
-
+    
   /*###################*/
   /*# Initialisierung #*/
   /*###################*/
@@ -9700,47 +9700,47 @@ DialogBox = function(callback, width, height)
   var contentWidth  = DEFAULT_CONTENT_WIDTH;
   if ("undefined" != typeof(height)) { contentHeight = height; }
   if ("undefined" != typeof(width )) { contentWidth  = width;  }
-
+  
   var dialogWidth  = contentWidth + (2 * BORDER_WIDTH);
-  var dialogHeight = contentHeight + TITLE_HEIGHT + FOOTER_HEIGHT + (4 * BORDER_WIDTH);
-
+  var dialogHeight = contentHeight + TITLE_HEIGHT + FOOTER_HEIGHT + (4 * BORDER_WIDTH); 
+  
   // Titelleiste
   m_title = document.createElement("div");
   Element.addClassName(m_title, "DialogBoxTitle");
-  Element.setStyle(m_title,
+  Element.setStyle(m_title, 
   {
     "top"   : BORDER_WIDTH + "px",
     "left"  : BORDER_WIDTH + "px",
     "width" : contentWidth + "px",
     "height": TITLE_HEIGHT + "px"
   });
-
+  
   // Arbeitsbereich
   m_content = document.createElement("div");
   Element.addClassName(m_content, "DialogBoxContent");
-  Element.setStyle(m_content,
+  Element.setStyle(m_content, 
   {
     "top"   : TITLE_HEIGHT + (2 * BORDER_WIDTH) + "px",
-    "left"  : BORDER_WIDTH + "px",
+    "left"  : BORDER_WIDTH + "px",    
     "width" : contentWidth + "px",
     "height": contentHeight + "px"
   });
-
-  // Fuï¿½leiste
+  
+  // Fußleiste
   m_footer = document.createElement("div");
   Element.addClassName(m_footer, "DialogBoxFooter");
-  Element.setStyle(m_footer,
+  Element.setStyle(m_footer, 
   {
     "top"   : TITLE_HEIGHT + contentHeight + (3 * BORDER_WIDTH) + "px",
     "left"  : BORDER_WIDTH + "px",
     "width" : contentWidth + "px",
     "height": FOOTER_HEIGHT + "px"
   });
-
+  
   // Dialog
   m_dialog = document.createElement("div");
   Element.addClassName(m_dialog, "DialogBox");
-  Element.setStyle(m_dialog,
+  Element.setStyle(m_dialog,   
   {
     "top"   : parseInt((WebUI.getHeight() - dialogHeight) / 2) + "px",
     "left"  : parseInt((WebUI.getWidth()  - dialogWidth)  / 2) + "px",
@@ -9751,21 +9751,21 @@ DialogBox = function(callback, width, height)
   m_dialog.appendChild(m_content);
   m_dialog.appendChild(m_footer);
   new Draggable(m_dialog);
-
+  
   // Dialog-Rahmen
   m_wrapper = document.createElement("div");
   Element.addClassName(m_wrapper, "DialogBoxWrapper");
-  m_wrapper.appendChild(m_dialog);
+  m_wrapper.appendChild(m_dialog);  
 };
-
+ 
 /**
  * DialogResult
- * Vordefinierte Rï¿½ckgabewerte der DialogBox.
- **/
-DialogResult =
+ * Vordefinierte Rückgabewerte der DialogBox.
+ **/ 
+DialogResult = 
 {
-  "ABORT" : -1,
-  "CANCEL": -2,
+  "ABORT" : -1,    
+  "CANCEL": -2,   
   "IGNORE": -3,
   "NO"    : -4,
   "NONE"  : -5,
@@ -9778,7 +9778,7 @@ DialogResult =
  * messagebox.js
  * Autor: Falk Werner, eQ-3 Entwicklung GmbH
  **/
-
+ 
 
 MessageBox = Class.create({
 
@@ -9797,32 +9797,32 @@ MessageBox = Class.create({
     this.m_action = null;
     this.frameWidth = frameWidth;
     this.frameHeight = frameHeight;
-
+    
     this.m_layer = document.createElement("div");
 
     this.m_layer.className = "DialogLayer";
-
+    
     this.m_content = new UI.Text()
       .setText("")
       .setPosition(10, 10)
       .setWidth(this.frameWidth - 20)
       .setHeight(this.frameHeight - 50);
-
+      
     this.m_okButton = new UI.Button()
       .setPosition(parseInt((this.frameWidth - 150) / 2), this.frameHeight - 30)
       .setText("OK")
       .setAction(this.ok, this);
-
+      
     this.m_frame = new UI.Frame()
       .setTitle("Info")
       .setContentSize(this.frameWidth, this.frameHeight)
       .setPosition(frameX, frameY)
       .add(this.m_content)
       .add(this.m_okButton);
-
+      
     this.m_layer.appendChild(this.m_frame.getElement());
     Layer.add(this.m_layer);
-
+  
   },
 
   setId: function(id)
@@ -9841,7 +9841,7 @@ MessageBox = Class.create({
     this.m_frame.setTitle(title);
     return this;
   },
-
+  
   setContentSize: function(width, height)
   {
     this.m_content.setWidth(width);
@@ -9863,21 +9863,21 @@ MessageBox = Class.create({
     this.m_content.setText(text);
     return this;
   },
-
+  
   setHtml: function(html)
   {
     this.m_content.setHtml(html);
     return this;
   },
-
+  
   setAction: function(action, context)
   {
     if (typeof(context) != "undefined") { this.m_action = action.bind(context); }
     else { this.m_action = action; }
-
+    
     return this;
   },
-
+  
   ok: function()
   {
     Layer.remove(this.m_layer);
@@ -9887,18 +9887,18 @@ MessageBox = Class.create({
 });
 
 MessageBox.DEFAULT_CONTENT_HEIGHT = 80;
-MessageBox.DEFAULT_CONTENT_WIDTH  = 320;
+MessageBox.DEFAULT_CONTENT_WIDTH  = 320; 
 
 MessageBox.show = function(title, content, callback, width, height, id, barGraphId)
 {
   this.msgBox = new MessageBox();
   this.msgBox.setTitle(title);
   this.msgBox.setHtml(content);
-
+    
   translatePage(".DialogLayer");
-
+  
   if (callback && callback != "")
-  {
+  { 
     this.msgBox.setAction(callback);
   }
 
@@ -9926,15 +9926,15 @@ MessageBox.close = function() {
 /**
  * yesnodialog.js
  **/
-
+ 
 /**
- * Dialogbox mit den Schaltflï¿½chen "Ja" und "Neine"
- * Normalerweise wird als content Text ï¿½bergeben,
- * wenn contentType 'html' gesetzt ist, kann auch HTML ï¿½bergeben werden.
- * Die Hï¿½he des Dialoges sollte sich dynamisch der Contentgrï¿½ï¿½e anpassen.
+ * Dialogbox mit den Schaltflächen "Ja" und "Neine"
+ * Normalerweise wird als content Text übergeben,
+ * wenn contentType 'html' gesetzt ist, kann auch HTML übergeben werden.
+ * Die Höhe des Dialoges sollte sich dynamisch der Contentgröße anpassen.
  **/
 YesNoDialog = Class.create({
-
+ 
   initialize: function(title, content, callback, contentType)
   {
     var _this_ = this;
@@ -9942,20 +9942,20 @@ YesNoDialog = Class.create({
     this.m_contentType = contentType;
     this.m_callback = callback;
     this.m_layer = document.createElement("div");
-    this.m_layer.className = "YesNoDialogLayer";
+    this.m_layer.className = "YesNoDialogLayer"; 
 
     var dialog = document.createElement("div");
     dialog.className = "YesNoDialog";
-
+    
     var titleElement = document.createElement("div");
     titleElement.className = "YesNoDialogTitle";
     titleElement.appendChild(document.createTextNode(title));
     titleElement.onmousedown = function(event) { new Drag(this.parentNode, event); };
     dialog.appendChild(titleElement);
-
+    
     var contentWrapper = document.createElement("div");
     contentWrapper.className = "YesNoDialogContentWrapper";
-
+    
     var contentElement = document.createElement("div");
     contentElement.className = "YesNoDialogContent";
 
@@ -9966,48 +9966,48 @@ YesNoDialog = Class.create({
     }
 
     contentWrapper.appendChild(contentElement);
-
+    
     dialog.appendChild(contentWrapper);
 
     var footer = document.createElement("div");
     footer.className= "YesNoDialogFooter";
-
+    
     var yesButton = document.createElement("div");
     yesButton.className = "YesNoDialog_yesButton borderRadius5px colorGradient50px";
     yesButton.appendChild(document.createTextNode(translateKey('dialogYes')));
     yesButton.onclick = function() { _this_.yes(); };
     footer.appendChild(yesButton);
-
+    
     var noButton = document.createElement("div");
     noButton.className = "YesNoDialog_noButton borderRadius5px colorGradient50px";
     noButton.appendChild(document.createTextNode(translateKey('dialogNo')));
     noButton.onclick = function() { _this_.no(); };
     footer.appendChild(noButton);
-
+    
     dialog.appendChild(footer);
-
+    
     this.m_layer.appendChild(dialog);
-
+    
     Layer.add(this.m_layer);
 
-    //AG sorgt dafï¿½r, daï¿½ die Dialoghï¿½he sich dynamisch dem Content anpasst.
+    //AG sorgt dafür, daß die Dialoghöhe sich dynamisch dem Content anpasst.
     jQuery(".YesNoDialog").css("height", jQuery(".YesNoDialogContentWrapper").height() + 78);
     jQuery(".YesNoDialogFooter").css("top", jQuery(".YesNoDialogContentWrapper").height() + 26);
 
 
   },
-
+    
   close: function(result)
   {
     Layer.remove(this.m_layer);
     if (this.m_callback) { this.m_callback(result); }
   },
-
+  
   yes: function()
   {
     this.close(YesNoDialog.RESULT_YES);
   },
-
+  
   no: function()
   {
     this.close(YesNoDialog.RESULT_NO);
@@ -10020,7 +10020,7 @@ YesNoDialog = Class.create({
   btnTextNo: function(btnTxt) {
     jQuery(".YesNoDialog_noButton").text(btnTxt);
   }
-
+  
 });
 
 YesNoDialog.RESULT_NO = 0;
@@ -10028,15 +10028,15 @@ YesNoDialog.RESULT_YES = 1;
 /**
  * euladialog.js
  **/
-
+ 
 /**
- * Dialogbox mit den Schaltflï¿½chen "Ja" und "Neine"
- * Normalerweise wird als content Text ï¿½bergeben,
- * wenn contentType 'html' gesetzt ist, kann auch HTML ï¿½bergeben werden.
- * Die Hï¿½he des Dialoges sollte sich dynamisch der Contentgrï¿½ï¿½e anpassen.
+ * Dialogbox mit den Schaltflächen "Ja" und "Neine"
+ * Normalerweise wird als content Text übergeben,
+ * wenn contentType 'html' gesetzt ist, kann auch HTML übergeben werden.
+ * Die Höhe des Dialoges sollte sich dynamisch der Contentgröße anpassen.
  **/
 EulaDialog = Class.create({
-
+ 
   initialize: function(title, content, callback, contentType)
   {
     var _this_ = this;
@@ -10044,20 +10044,20 @@ EulaDialog = Class.create({
     this.m_contentType = contentType;
     this.m_callback = callback;
     this.m_layer = document.createElement("div");
-    this.m_layer.className = "EulaDialogLayer";
+    this.m_layer.className = "EulaDialogLayer"; 
 
     var dialog = document.createElement("div");
     dialog.className = "EulaDialog";
-
+    
     var titleElement = document.createElement("div");
     titleElement.className = "EulaDialogTitle";
     titleElement.appendChild(document.createTextNode(title));
     titleElement.onmousedown = function(event) { new Drag(this.parentNode, event); };
     dialog.appendChild(titleElement);
-
+    
     var contentWrapper = document.createElement("div");
     contentWrapper.className = "EulaDialogContentWrapper";
-
+    
     var contentElement = document.createElement("div");
     contentElement.className = "EulaDialogContent";
 
@@ -10068,7 +10068,7 @@ EulaDialog = Class.create({
     }
 
     contentWrapper.appendChild(contentElement);
-
+    
     dialog.appendChild(contentWrapper);
 
     var footer = document.createElement("div");
@@ -10107,11 +10107,11 @@ EulaDialog = Class.create({
     noButton.appendChild(document.createTextNode(translateKey('dialogEulaBtnCancel')));
     noButton.onclick = function() { _this_.no(); };
     footer.appendChild(noButton);
-
+    
     dialog.appendChild(footer);
-
+    
     this.m_layer.appendChild(dialog);
-
+    
     Layer.add(this.m_layer);
 
     if (jQuery(".EulaDialogContentWrapper").height() >= 400) {
@@ -10119,7 +10119,7 @@ EulaDialog = Class.create({
       jQuery(".EulaDialogContentWrapper").css("overflow", "scroll");
     }
 
-    //AG sorgt dafï¿½r, daï¿½ die Dialoghï¿½he sich dynamisch dem Content anpasst.
+    //AG sorgt dafür, daß die Dialoghöhe sich dynamisch dem Content anpasst.
     jQuery(".EulaDialog").css("height", jQuery(".EulaDialogContentWrapper").height() + 108);
     jQuery(".EulaDialogFooter").css("top", jQuery(".EulaDialogContentWrapper").height() + 26);
 
@@ -10129,18 +10129,18 @@ EulaDialog = Class.create({
 
 
   },
-
+    
   close: function(result)
   {
     Layer.remove(this.m_layer);
     if (this.m_callback) { this.m_callback(result); }
   },
-
+  
   yes: function()
   {
     this.close(EulaDialog.RESULT_YES);
   },
-
+  
   no: function()
   {
     this.close(EulaDialog.RESULT_NO);
@@ -10159,10 +10159,10 @@ EulaDialog.RESULT_YES = 1;
 /**
  * firstsecuritydialog.js
  **/
-
+ 
 
 FirstSecurityDialog = Class.create({
-
+ 
   initialize: function(title, content, callback, contentType)
   {
     var _this_ = this;
@@ -10170,17 +10170,17 @@ FirstSecurityDialog = Class.create({
     this.m_contentType = contentType;
     this.m_callback = callback;
     this.m_layer = document.createElement("div");
-    this.m_layer.className = "EulaDialogLayer";
+    this.m_layer.className = "EulaDialogLayer"; 
 
     var dialog = document.createElement("div");
     dialog.className = "EulaDialog";
-
+    
     var titleElement = document.createElement("div");
     titleElement.className = "EulaDialogTitle";
     titleElement.appendChild(document.createTextNode(title));
     titleElement.onmousedown = function(event) { new Drag(this.parentNode, event); };
     dialog.appendChild(titleElement);
-
+    
     var contentWrapper = document.createElement("div");
     contentWrapper.className = "EulaDialogContentWrapper";
     var contentElement = document.createElement("div");
@@ -10194,7 +10194,7 @@ FirstSecurityDialog = Class.create({
     }
 
     contentWrapper.appendChild(contentElement);
-
+    
     dialog.appendChild(contentWrapper);
 
     var pwdElement = document.createElement("div");
@@ -10247,11 +10247,11 @@ FirstSecurityDialog = Class.create({
     //noButton.appendChild(document.createTextNode(translateKey('dialogEulaBtnCancel')));
     //noButton.onclick = function() { _this_.no(); };
     //footer.appendChild(noButton);
-
+    
     dialog.appendChild(footer);
-
+    
     this.m_layer.appendChild(dialog);
-
+    
     Layer.add(this.m_layer);
 
     if (jQuery(".EulaDialogContentWrapper").height() >= 400) {
@@ -10259,7 +10259,7 @@ FirstSecurityDialog = Class.create({
       jQuery(".EulaDialogContentWrapper").css("overflow", "scroll");
     }
 
-    //AG sorgt dafï¿½r, daï¿½ die Dialoghï¿½he sich dynamisch dem Content anpasst.
+    //AG sorgt dafür, daß die Dialoghöhe sich dynamisch dem Content anpasst.
     jQuery(".EulaDialog").css("height", jQuery(".EulaDialogContentWrapper").height() + 108);
     jQuery(".EulaDialogFooter").css("top", jQuery(".EulaDialogContentWrapper").height() + 26);
 
@@ -10269,18 +10269,18 @@ FirstSecurityDialog = Class.create({
 
 
   },
-
+    
   close: function(result)
   {
     Layer.remove(this.m_layer);
     if (this.m_callback) { this.m_callback(result); }
   },
-
+  
   yes: function()
   {
     this.close(EulaDialog.RESULT_YES);
   },
-
+  
   no: function()
   {
     this.close(EulaDialog.RESULT_NO);
@@ -10299,19 +10299,19 @@ EulaDialog.RESULT_YES = 1;
 /**
  * channelchosser.js
  **/
-
+ 
 /**
  * Einfache Kanalauswahl.
  **/
 ChannelChooser = Singleton.create({
-  SHOW_READABLE: 0x1,    // zeigt lesbare Kanï¿½le an
-  SHOW_WRITABLE: 0x2,    // zeigt schreibbare Kanï¿½le an
-  SHOW_EVENTABLE: 0x4,    // zeigt Kanï¿½le mit Ereignisbehandlung an
-  SHOW_ALL: 0x7,    // zeigt alle Kanï¿½le an
+  SHOW_READABLE: 0x1,    // zeigt lesbare Kanäle an
+  SHOW_WRITABLE: 0x2,    // zeigt schreibbare Kanäle an
+  SHOW_EVENTABLE: 0x4,    // zeigt Kanäle mit Ereignisbehandlung an
+  SHOW_ALL: 0x7,    // zeigt alle Kanäle an
 
   PRG_CONDITION: 1,
   PRG_ACTIVITY: 2,
-
+    
   SORT_FN:  {
     NAME       : function(channels, reverse) { return channels.ex_sortBy("name", reverse); },
     DESCRIPTION: function(channels, reverse) { return channels.ex_sortBy("typeDescription", reverse); },
@@ -10325,11 +10325,11 @@ ChannelChooser = Singleton.create({
       return (reverse) ? channels.reverse() : channels;
     }
   },
-
-  PREFIX: "ChannelChooser",                // Prefix fï¿½r Ids der Tabellenzeilen
+    
+  PREFIX: "ChannelChooser",                // Prefix für Ids der Tabellenzeilen
   WRAPPER_ID: "ChannelChooserWrapper",         // Id des Wrapper-Elements
-  HIGHLIGHT_CLASS: "ChannelChooserCell_Highlight",  // Klasse fï¿½r hervorgehobene Tabellenzellen
-
+  HIGHLIGHT_CLASS: "ChannelChooserCell_Highlight",  // Klasse für hervorgehobene Tabellenzellen
+  
   /**
    * Konstruktor
    **/
@@ -10340,12 +10340,12 @@ ChannelChooser = Singleton.create({
     this.VirtualDevicesIdentifier = "VirtualDevices";
     this.template = TrimPath.parseTemplate(CHANNELCHOOSER_JST);
   },
-
+    
   /**
    * Wendet alle Filter auf einen Kanal an.
    **/
   match: function(channel)
-  {
+  {  
     return ((hasUPL(UPL_ADMIN) | channel.isVisible)           &&
         ((this.showReadable  & channel.isReadable)      ||
          (this.showWritable  & channel.isWritable)      ||
@@ -10355,7 +10355,7 @@ ChannelChooser = Singleton.create({
       (this.DescriptionFilter.match(channel.typeDescription)) &&
       (this.AddressFilter.match(channel.address))             &&
       (this.RoomFilter.matchArray(channel.rooms))             &&
-      (this.FuncFilter.matchArray(channel.subsections)));
+      (this.FuncFilter.matchArray(channel.subsections)));     
   },
 
   filterHmIPChannels4ProgramConditions: function(channel, arChannels) {
@@ -10440,37 +10440,37 @@ ChannelChooser = Singleton.create({
     }, this);
     return result;
   },
-
+    
   /**
    * Sortiert eine Kanalliste
    **/
   sort: function(channels)
   {
     var sort_fn = this.SORT_FN[this.sortId];
-
+    
     if (typeof(sort_fn) != "undefined") { return sort_fn(channels, this.sortDescend); }
     else                                { return channels; }
   },
-
+    
   /**
-   * Schlieï¿½t das Dialogfenster
+   * Schließt das Dialogfenster
    **/
   close: function(result)
-  {
+  {    
     picDivHide(jg_250);
     Layer.remove(this.layer);
     if (this.callback) { this.callback(result); }
   },
-
+  
   /**
    * Startet die Aktualisierung der Anzeige
    **/
   beginUpdateView: function()
   {
     Element.setStyle(ChannelChooser.layer, {cursor: "wait"});
-    window.setTimeout("ChannelChooser.updateView();", 1);
+    window.setTimeout("ChannelChooser.updateView();", 1);  
   },
-
+   
   /**
    * Zeigt den Dialog an
    **/
@@ -10488,10 +10488,10 @@ ChannelChooser = Singleton.create({
     this.showReadable  = (0 !== (options & this.SHOW_READABLE));
     this.showWritable  = (0 !== (options & this.SHOW_WRITABLE));
     this.showEventable = (0 !== (options & this.SHOW_EVENTABLE));
-
+    
 
     this.channels = DeviceList.listChannels();
-
+    
     var rooms    = RoomList.list().ex_sortBy("name");
     var funcs    = SubsectionList.list().ex_sortBy("name");
     this.NameFilter        = new StringFilter("ChannelChooser.NameFilter", this.beginUpdateView);
@@ -10499,25 +10499,25 @@ ChannelChooser = Singleton.create({
     this.AddressFilter     = new StringFilter("ChannelChooser.AddressFilter", this.beginUpdateView);
     this.RoomFilter        = new ListFilter("ChannelChooser.RoomFilter", rooms, this.beginUpdateView);
     this.FuncFilter        = new ListFilter("ChannelChooser.FuncFilter", funcs, this.beginUpdateView);
-
+    
     this.layer    = document.createElement("div");
     this.layer.id = this.WRAPPER_ID;
     Layer.add(this.layer);
-
+      
     this.beginUpdateView();
 
 
   },
 
   /**
-   * Wï¿½hlt einen Kanal aus
+   * Wählt einen Kanal aus
    **/
   select: function(str_id)
   {
     var id = str_id.substring(this.PREFIX.length);
     this.close(id);
   },
-
+  
   /**
    * Bricht den Dialog ab
    **/
@@ -10525,7 +10525,7 @@ ChannelChooser = Singleton.create({
   {
     this.close();
   },
-
+  
   /**
    * Setzt die Sortierreihenfolge
    **/
@@ -10534,22 +10534,22 @@ ChannelChooser = Singleton.create({
     if (this.sortId == sortId) { this.sortDescend = !this.sortDescend; }
     else                       { this.sortDescend = false; }
     this.sortId = sortId;
-
+    
     this.beginUpdateView();
   },
-
+  
   /**
-   * Blendet virtuelle Kanï¿½le ein bzw. aus
+   * Blendet virtuelle Kanäle ein bzw. aus
    **/
   toggleVirtualChannels: function()
   {
     this.showVirtual = !this.showVirtual;
-
+    
     this.beginUpdateView();
   },
-
+  
   /**
-   * Setzt alle Filter zurï¿½ck
+   * Setzt alle Filter zurück
    **/
   resetFilters: function()
   {
@@ -10558,10 +10558,10 @@ ChannelChooser = Singleton.create({
     this.AddressFilter.reset();
     this.RoomFilter.reset();
     this.FuncFilter.reset();
-
+    
     this.beginUpdateView();
   },
-
+        
   /**
    * Callback. Aktualisiert die Anzeige.
    **/
@@ -10629,16 +10629,16 @@ ChannelChooser = Singleton.create({
 /**
  * multichannelchosser.js
  **/
-
+ 
 /**
  * Kanal-Mehrfachauswahl.
  **/
 MultiChannelChooser = Singleton.create({
-  SHOW_READABLE: 0x1,    // zeigt lesbare Kanï¿½le an
-  SHOW_WRITABLE: 0x2,    // zeigt schreibbare Kanï¿½le an
-  SHOW_EVENTABLE: 0x4,    // zeigt Kanï¿½le mit Ereignisbehandlung an
-  SHOW_ALL: 0x7,    // zeigt alle Kanï¿½le an
-
+  SHOW_READABLE: 0x1,    // zeigt lesbare Kanäle an
+  SHOW_WRITABLE: 0x2,    // zeigt schreibbare Kanäle an
+  SHOW_EVENTABLE: 0x4,    // zeigt Kanäle mit Ereignisbehandlung an
+  SHOW_ALL: 0x7,    // zeigt alle Kanäle an
+  
   SORT_FN: {
     NAME       : function(channels, reverse) { return channels.ex_sortBy("name", reverse); },
     DESCRIPTION: function(channels, reverse) { return channels.ex_sortBy("typeDescription", reverse); },
@@ -10648,31 +10648,31 @@ MultiChannelChooser = Singleton.create({
       channels.sort(function(a, b) { return Object.ex_compare(a.rooms.ex_joinItem("name"), b.rooms.ex_joinItem("name")); });
       return (reverse) ? channels.reverse() : channels;
     },
-
+    
     FUNC_NAMES : function(channels, reverse)
     {
       channels.sort(function(a, b) { return Object.ex_compare(a.subsections.ex_joinItem("name"), b.subsections.ex_joinItem("name")); });
       return (reverse) ? channels.reverse() : channels;
     }
   },
-
-  PREFIX: "MultiChannelChooser",
-  WRAPPER_ID:      "MultiChannelChooserWrapper",
+  
+  PREFIX: "MultiChannelChooser",               
+  WRAPPER_ID:      "MultiChannelChooserWrapper",       
   HIGHLIGHT_CLASS: "MultiChannelChooserCell_Highlight",
-
+  
   initialize: function()
   {
     this.HmIPIdentifier = "HmIP-RF";
     this.HmIPWIdentifier = "HmIP-Wired";
     this.template = TrimPath.parseTemplate(MULTI_CHANNELCHOOSER_JST);
   },
-
+  
   /**
    * Wendet alle Filter auf einen Kanal an.
    **/
   match: function(channel)
   {
-    return ((!channel._hidden)                                &&
+    return ((!channel._hidden)                                && 
       (hasUPL(UPL_ADMIN) | channel.isVisible)                 &&
         ((this.showReadable  & channel.isReadable)      ||
          (this.showWritable  & channel.isWritable)      ||
@@ -10682,9 +10682,9 @@ MultiChannelChooser = Singleton.create({
       (this.DescriptionFilter.match(channel.typeDescription)) &&
       (this.AddressFilter.match(channel.address))             &&
       (this.RoomFilter.matchArray(channel.rooms))             &&
-      (this.FuncFilter.matchArray(channel.subsections)));
+      (this.FuncFilter.matchArray(channel.subsections)));     
   },
-
+  
 
   filterHmIPChannels: function(channel, arChannels) {
     conInfo("filterHmIPChannels");
@@ -10711,18 +10711,18 @@ MultiChannelChooser = Singleton.create({
     }, this);
     return result;
   },
-
+    
   /**
    * Sortiert eine Kanalliste
    **/
   sort: function(channels)
   {
     var sort_fn = this.SORT_FN[this.sortId];
-
+    
     if (typeof(sort_fn) != "undefined") { return sort_fn(channels, this.sortDescend); }
     else                                { return channels; }
   },
-
+  
   /**
    * Startet die Aktualisierung der Anzeige
    **/
@@ -10731,17 +10731,17 @@ MultiChannelChooser = Singleton.create({
     Element.setStyle(MultiChannelChooser.layer, {cursor: "wait"});
     window.setTimeout("MultiChannelChooser.updateView();", 1);
   },
-
+    
   /**
-   * Schlieï¿½t das Dialogfenster
+   * Schließt das Dialogfenster
    **/
   close: function(result)
-  {
+  {    
     picDivHide(jg_250);
     Layer.remove(this.layer);
     if (this.callback) { this.callback(result); }
   },
-
+    
   /**
    * Konstruktor. Versteckter Kanal
    **/
@@ -10750,15 +10750,15 @@ MultiChannelChooser = Singleton.create({
     /*####################*/
     /*# Private Elemente #*/
     /*####################*/
-
+    
     var m_id = id;
-
+    
     /*########################*/
-    /*# ï¿½ffentliche Elemente #*/
+    /*# Öffentliche Elemente #*/
     /*########################*/
-
+    
     this._hidden   = true;  // markiert den Kanal als versteckt
-    this._selected = true;  // markiert den Kanal als ausgewï¿½hlt
+    this._selected = true;  // markiert den Kanal als ausgewählt
 
     /**
      * Liefert die Id des Kanals
@@ -10767,9 +10767,9 @@ MultiChannelChooser = Singleton.create({
     {
       return m_id;
     };
-
+    
   },
-
+    
   /**
    * Zeigt den Dialog an
    **/
@@ -10784,53 +10784,53 @@ MultiChannelChooser = Singleton.create({
     this.showReadable  = (0 !== (options & ChannelChooser.SHOW_READABLE));
     this.showWritable  = (0 !== (options & ChannelChooser.SHOW_WRITABLE));
     this.showEventable = (0 !== (options & ChannelChooser.SHOW_EVENTABLE));
-
+      
     this.channels = DeviceList.listChannels();
     this.channels.each(function(channel) {
       channel._selected = ids.ex_contains(channel.id);
       channel._hidden   = false;
     }, this);
-
-    // Die Kanï¿½le, die im Posteingang schon einem Raum oder Gewerk zugeordnet
-    // wurden, existieren noch nicht in der Gerï¿½teliste.
-    // Diese Kanï¿½le werden hier als "versteckte" Kanï¿½le behandelt.
-    ids.each(function(id) {
-      if (null === DeviceList.getChannel(id))
-      {
-        this.channels.push(new HiddenChannel(id));
+    
+    // Die Kanäle, die im Posteingang schon einem Raum oder Gewerk zugeordnet
+    // wurden, existieren noch nicht in der Geräteliste.
+    // Diese Kanäle werden hier als "versteckte" Kanäle behandelt.
+    ids.each(function(id) {    
+      if (null === DeviceList.getChannel(id)) 
+      { 
+        this.channels.push(new HiddenChannel(id)); 
       }
     });
-
+    
     var rooms    = RoomList.list().ex_sortBy("name");
     var funcs    = SubsectionList.list().ex_sortBy("name");
-
+    
     this.NameFilter        = new StringFilter("MultiChannelChooser.NameFilter", this.beginUpdateView);
     this.DescriptionFilter = new StringFilter("MultiChannelChooser.DescriptionFilter", this.beginUpdateView);
     this.AddressFilter     = new StringFilter("MultiChannelChooser.AddressFilter", this.beginUpdateView);
     this.RoomFilter        = new ListFilter("MultiChannelChooser.RoomFilter", rooms, this.beginUpdateView);
     this.FuncFilter        = new ListFilter("MultiChannelChooser.FuncFilter", funcs, this.beginUpdateView);
-
+    
     this.layer = document.createElement("div");
     this.layer.id = this.WRAPPER_ID;
     Layer.add(this.layer);
-
+    
     this.beginUpdateView();
   },
-
+  
   /**
-   * Wï¿½hlt einen Kanal aus
+   * Wählt einen Kanal aus
    **/
   ok: function()
   {
     var ids = new Array();
-
+    
     this.channels.each(function(channel) {
       if (true === channel._selected) { ids.push(channel.id); }
     });
-
+    
     this.close(ids);
   },
-
+  
   /**
    * Bricht den Dialog ab
    **/
@@ -10838,20 +10838,20 @@ MultiChannelChooser = Singleton.create({
   {
     this.close();
   },
-
+  
   /**
-   * Wï¿½hlt einen Kanal aus bzw. ab
+   * Wählt einen Kanal aus bzw. ab
    **/
   select: function(id, checkBox)
   {
     this.channels.each(function(channel) {
-      if (channel.id == id)
-      {
-        channel._selected = checkBox.checked;
+      if (channel.id == id) 
+      { 
+        channel._selected = checkBox.checked; 
       }
     });
   },
-
+  
   /**
    * Setzt die Sortierreihenfolge
    **/
@@ -10860,22 +10860,22 @@ MultiChannelChooser = Singleton.create({
     if (this.sortId == sortId) { this.sortDescend = !this.sortDescend; }
     else                       { this.sortDescend = false; }
     this.sortId = sortId;
-
+    
     this.beginUpdateView();
   },
-
+  
   /**
-   * Blendet virtuelle Kanï¿½le ein bzw. aus
+   * Blendet virtuelle Kanäle ein bzw. aus
    **/
   toggleVirtualChannels: function()
   {
     this.showVirtual = !this.showVirtual;
-
+    
     this.beginUpdateView();
   },
-
+  
   /**
-   * Setzt alle Filter zurï¿½ck
+   * Setzt alle Filter zurück
    **/
   resetFilters: function()
   {
@@ -10884,10 +10884,10 @@ MultiChannelChooser = Singleton.create({
     this.AddressFilter.reset();
     this.RoomFilter.reset();
     this.FuncFilter.reset();
-
+    
     this.beginUpdateView();
   },
-
+  
   /**
    * Callback. Aktualisiert die Anzeige.
    **/
@@ -10915,15 +10915,15 @@ MultiChannelChooser = Singleton.create({
     translateJSTemplate("#MultiChannelChooserDialog");
     translatePage(".MultiChannelChooserRow");
   }
-
+    
 });
 /**
  * channelconfig.js
  **/
 
 /**
- * Dialog fï¿½r Kanaleinstellungen (Name, Rï¿½ume, Gewerke, Funktionstest)
- **/
+ * Dialog für Kanaleinstellungen (Name, Räume, Gewerke, Funktionstest)
+ **/ 
 ChannelConfigDialog = Singleton.create({
   PLUS_IMAGE_SRC: "/ise/img/plus.png",
   MINUS_IMAGE_SRC: "/ise/img/minus.png",
@@ -10937,9 +10937,9 @@ ChannelConfigDialog = Singleton.create({
   SUBSECTIONLIST_ID: "ChannelConfigDialogFuncs",
   TEST_RESULT_ID: "ChannelConfigDialogTestResult",
   RESULT_ABORT: 0,
-  RESULT_OK: 1,
+  RESULT_OK: 1,  
   POLL_INTERVAL: 3,
-
+  
   /**
    * Konstruktor
    **/
@@ -10947,7 +10947,7 @@ ChannelConfigDialog = Singleton.create({
   {
     this.template = TrimPath.parseTemplate(CHANNEL_CONFIG_DIALOG_JST);
   },
-
+  
   /**
    * Zeigt den Konfigurationsdialog an
    **/
@@ -10955,7 +10955,7 @@ ChannelConfigDialog = Singleton.create({
   {
     this.m_testId = null;
     this.m_isTestRunning = false;
-
+    
     this.isRoomListVisible = false;
     this.isSubsectionListVisible = false;
     this.channel  = channel;
@@ -10995,7 +10995,7 @@ ChannelConfigDialog = Singleton.create({
   },
 
   /**
-   * Schlieï¿½t den Konfigurationsdialog.
+   * Schließt den Konfigurationsdialog.
    **/
   close: function(result)
   {
@@ -11003,55 +11003,55 @@ ChannelConfigDialog = Singleton.create({
     Layer.remove(this.layer);
     if (this.callback) { this.callback(result); }
   },
-
+  
   /**
-   * ï¿½bernimmt die ï¿½nderungen und schlieï¿½t den Dialog.
+   * Übernimmt die Änderungen und schließt den Dialog.
    **/
   ok: function()
   {
     if (isTextAllowed($(this.NAME_ID).value))
     {
       var channel = this.channel;
-
+    
       channel.setName($(this.NAME_ID).value);
       channel.setVisibility($(this.VISIBLE_ID).checked);
       channel.setUsability($(this.USABLE_ID).checked);
       channel.setLogging($(this.LOGGED_ID).checked);
       channel.setMode($(this.MODE_ID).options[$(this.MODE_ID).options.selectedIndex].value);
-
+    
       $A($(this.ROOMLIST_ID).values).each(function(item) {
         var room = RoomList.get(item.value);
 
         if (item.checked === true) { room.addChannel(channel.id, true); }
         else                       { room.removeChannel(channel.id, true); }
       }, this);
-
+    
       $A($(this.SUBSECTIONLIST_ID).values).each(function(item) {
         var subsection = SubsectionList.get(item.value);
-
+      
         if (item.checked === true) { subsection.addChannel(channel.id, true); }
         else                       { subsection.removeChannel(channel.id, true); }
       }, this);
-
+    
       this.close(this.RESULT_OK);
     }
   },
-
+  
   /**
-   * Schlieï¿½t den Dialog ohne die ï¿½nderungen zu ï¿½bernehmen.
+   * Schließt den Dialog ohne die Änderungen zu übernehmen.
    **/
   abort: function()
   {
     this.close(this.RESULT_ABORT);
   },
-
+  
   /**
    * Startet den Funktionstest.
    **/
   startTest: function()
   {
     var _this_ = this;
-
+    
     this.m_isTestRunning = true;
     $(this.TEST_RESULT_ID).setStyle({backgroundColor: WebUI.getColor("testActive")});
     homematic("Channel.startComTest", {id: this.channel.id}, function(testId) {
@@ -11059,14 +11059,14 @@ ChannelConfigDialog = Singleton.create({
       _this_.pollTest();
     });
   },
-
+  
   /**
    * Callback. Fragt zyklisch das Ergebnis des Funktionstests ab.
    **/
   pollTest: function(timestamp)
   {
     var _this_ = ChannelConfigDialog;
-
+    
     if (typeof(timestamp) == "string")
     {
       var time = timestamp.split(" ")[1];
@@ -11074,8 +11074,8 @@ ChannelConfigDialog = Singleton.create({
       $(_this_.TEST_RESULT_ID).innerHTML = "";
       $(_this_.TEST_RESULT_ID).appendChild(document.createTextNode(time));
       _this_.m_isTestRunning = false;
-    }
-
+    }    
+    
     if (_this_.m_isTestRunning)
     {
       homematic.delay(_this_.POLL_INTERVAL, "Channel.pollComTest", {
@@ -11084,7 +11084,7 @@ ChannelConfigDialog = Singleton.create({
       }, _this_.pollTest);
     }
   },
-
+  
   /**
    * Blendet die Raumliste ein bzw. aus.
    **/
@@ -11103,7 +11103,7 @@ ChannelConfigDialog = Singleton.create({
       this.isRoomListVisible = true;
     }
   },
-
+  
   /**
    * Blendet die Gewerkeliste ein bzw. aus.
    **/
@@ -11128,8 +11128,8 @@ ChannelConfigDialog = Singleton.create({
  **/
 
 /**
- * Dialog fï¿½r Kanaleinstellungen (Name, Rï¿½ume, Gewerke, Funktionstest)
- **/
+ * Dialog für Kanaleinstellungen (Name, Räume, Gewerke, Funktionstest)
+ **/ 
 DeviceConfigDialog = Singleton.create({
   LAYER_ID: "DeviceConfigDialogLayer",
   NAME_ID: "DeviceConfigDialog_DeviceName",
@@ -11140,7 +11140,7 @@ DeviceConfigDialog = Singleton.create({
   RESULT_OK: 1,
   RESULT_ABORT: 0,
   POLL_INTERVAL: 3,
-
+  
   /**
    * Konstruktor
    **/
@@ -11148,7 +11148,7 @@ DeviceConfigDialog = Singleton.create({
   {
     this.template = TrimPath.parseTemplate(DEVICE_CONFIG_DIALOG_JST);
   },
-
+  
   /**
    * Zeigt den Konfigurationsdialog an
    **/
@@ -11156,11 +11156,11 @@ DeviceConfigDialog = Singleton.create({
   {
     this.m_testId = null;
     this.m_isTestRunning = false;
-
+    
     this.device  = device;
     this.isVisibilityChanged = false;
     this.isUsabilityChanged = false;
-    this.isLoggingChanged = false;
+    this.isLoggingChanged = false;   
     this.callback = callback;
     this.layer = document.createElement("div");
     this.layer.id = this.LAYER_ID;
@@ -11186,7 +11186,7 @@ DeviceConfigDialog = Singleton.create({
   },
 
   /**
-   * Schlieï¿½t den Konfigurationsdialog.
+   * Schließt den Konfigurationsdialog.
    **/
   close: function(result)
   {
@@ -11194,9 +11194,9 @@ DeviceConfigDialog = Singleton.create({
     Layer.remove(this.layer);
     if (this.callback) { this.callback(result); }
   },
-
+  
   /**
-   * ï¿½bernimmt die ï¿½nderungen und schlieï¿½t den Dialog.
+   * Übernimmt die Änderungen und schließt den Dialog.
    **/
   ok: function()
   {
@@ -11206,25 +11206,25 @@ DeviceConfigDialog = Singleton.create({
 
       var isVisible = $(this.VISIBLE_ID).checked;
       var isUsable  = $(this.USABLE_ID).checked;
-      var isLogged  = $(this.LOGGED_ID).checked;
+      var isLogged  = $(this.LOGGED_ID).checked;   
       this.device.channels.each(function(channel) {
         if (this.isVisibilityChanged) { channel.setVisibility(isVisible); }
         if (this.isUsabilityChanged) { channel.setUsability(isUsable); }
         if (this.isLoggingChanged) { channel.setLogging(isLogged); }
       }, this);
-
+    
       this.close(this.RESULT_OK);
     }
   },
-
+  
   /**
-   * Schlieï¿½t den Dialog ohne die ï¿½nderungen zu ï¿½bernehmen.
+   * Schließt den Dialog ohne die Änderungen zu übernehmen.
    **/
   abort: function()
   {
     this.close(this.RESULT_ABORT);
   },
-
+  
   /**
    * Startet den Funktionstest.
    **/
@@ -11237,14 +11237,14 @@ DeviceConfigDialog = Singleton.create({
         _this_.pollTest();
       });
   },
-
+  
   /**
    * Callback. Fragt zyklisch das Ergebnis des Funktionstests ab.
    **/
   pollTest: function(timestamp)
   {
     var _this_ = DeviceConfigDialog;
-
+    
     if (typeof(timestamp) == "string")
     {
       var time = timestamp.split(" ")[1];
@@ -11253,7 +11253,7 @@ DeviceConfigDialog = Singleton.create({
       $(_this_.TEST_RESULT_ID).appendChild(document.createTextNode(time));
       _this_.m_isTestRunning = false;
     }
-
+    
     if (_this_.m_isTestRunning)
     {
       homematic.delay(_this_.POLL_INTERVAL, "Device.pollComTest", {
@@ -11262,7 +11262,7 @@ DeviceConfigDialog = Singleton.create({
       }, _this_.pollTest);
     }
   }
-
+  
 });
 /**
  * deletedevicedialog.js
@@ -11271,22 +11271,22 @@ DeviceConfigDialog = Singleton.create({
 
 /**
  * Ablauf:
- *   1) Prï¿½fe, ob direkte Verknï¿½pfungen oder Programme bestehen
- *   2) Anwender muss bestï¿½tigen, ob er das Gerï¿½t wirklich lï¿½schen mï¿½chte
- *      --> dabei wird angezeigt, on direkte Verknï¿½pfungen oder Programme bestehen
- *      --> der Anwender wï¿½hlt eine Lï¿½schoption:
+ *   1) Prüfe, ob direkte Verknüpfungen oder Programme bestehen
+ *   2) Anwender muss bestätigen, ob er das Gerät wirklich löschen möchte
+ *      --> dabei wird angezeigt, on direkte Verknüpfungen oder Programme bestehen
+ *      --> der Anwender wählt eine Löschoption:
  *          - nur ablernen
- *          - in Werkzustand zurï¿½cksetzen
- *   3) Falls das Gerï¿½t gelï¿½scht werden soll, wird nun der Lï¿½schvorgang durchgefï¿½hrt
- *   4) Falls der Lï¿½schvorgang fehlgeschlagen ist, kann der Anwender wï¿½hlen:
- *      - erneute lï¿½schen
- *      - spï¿½ter automatisch lï¿½schen
- *      - lï¿½schen, auch wenn nicht erreichbar
- *      - abbrechen (nicht lï¿½schen)
+ *          - in Werkzustand zurücksetzen
+ *   3) Falls das Gerät gelöscht werden soll, wird nun der Löschvorgang durchgeführt
+ *   4) Falls der Löschvorgang fehlgeschlagen ist, kann der Anwender wählen:
+ *      - erneute löschen
+ *      - später automatisch löschen
+ *      - löschen, auch wenn nicht erreichbar
+ *      - abbrechen (nicht löschen)
  */
 
 /**
- * "Bitte warten...", "Prï¿½fe Programme und direkte Verknï¿½pfungen..."
+ * "Bitte warten...", "Prüfe Programme und direkte Verknüpfungen..."
  **/
 CheckLinksAndProgramsWindow = Class.create({
 
@@ -11305,10 +11305,10 @@ CheckLinksAndProgramsWindow = Class.create({
 
     this.m_device = device;
     this.m_callback = callback;
-
+    
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
-
+    
     this.m_frame = new UI.Frame()
       .setTitle(CheckLinksAndProgramsWindow.TITLE)
       .setContentSize(frameWidth, frameHeight)
@@ -11318,21 +11318,21 @@ CheckLinksAndProgramsWindow = Class.create({
         .setWidth(frameWidth - 10)
         .setHtml(CheckLinksAndProgramsWindow.CONTENT)
       );
-
+      
     this.m_layer.appendChild(this.m_frame.getElement());
     Layer.add(this.m_layer);
-
+    
     this.m_device.hasLinksOrPrograms(onResultHandler);
   },
-
+  
   m_onResult: function(result)
   {
     this.m_frame.dispose();
     Layer.remove(this.m_layer);
-
+    
     if (this.m_callback) { this.m_callback(result); }
   }
-
+  
 });
 
 CheckLinksAndProgramsWindow.CONTENT_WIDTH = 320;
@@ -11341,7 +11341,7 @@ CheckLinksAndProgramsWindow.CONTENT_HEIGHT = 60;
 //CheckLinksAndProgramsWindow.CONTENT = "<img src='/ise/img/ajaxload_white.gif' style='float:left;margin-right:10px' />" + translateKey("CheckLinksAndProgramsWindowContent");
 
 /**
- * "Mï¿½chten Sie das Gerï¿½t wirklich lï¿½schen?"
+ * "Möchten Sie das Gerät wirklich löschen?"
  **/
 ConfirmDeleteDeviceWindow = Class.create({
 
@@ -11376,7 +11376,7 @@ ConfirmDeleteDeviceWindow = Class.create({
     this.m_showRemoveOption = (this.m_device.interfaceName != this.hmIPIdentifier) ? true : false;
     this.m_hasLinksOrPrograms = hasLinksOrPrograms;
     this.m_callback = callback;
-
+    
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
 
@@ -11396,8 +11396,8 @@ ConfirmDeleteDeviceWindow = Class.create({
       this.m_listbox.add({name: ConfirmDeleteDeviceWindow.REMOVE, description: ConfirmDeleteDeviceWindow.REMOVE_DESCRIPTION, flags: 0});
     }
 
-    // The deviceType doesnï¿½t exist when in device inbox.
-    // That means as long as a device is in the device inbox a factory reset isnï¿½t possible when deleting the device.
+    // The deviceType doesn´t exist when in device inbox.
+    // That means as long as a device is in the device inbox a factory reset isn´t possible when deleting the device.
     if(this.m_device.deviceType != null) {
       // The new group device has no factory reset
       if (this.m_device.deviceType.id != "HM-CC-VG-1") {
@@ -11465,28 +11465,28 @@ ConfirmDeleteDeviceWindow = Class.create({
         .setHtml(ConfirmDeleteDeviceWindow.WARNING)
       );
     }
-
+    
     this.m_layer.appendChild(this.m_frame.getElement());
     Layer.add(this.m_layer);
   },
-
+  
   m_close: function(result)
   {
     this.m_frame.dispose();
     Layer.remove(this.m_layer);
     if (this.m_callback) { this.m_callback(result); }
   },
-
+  
   m_onDelete: function()
   {
-    this.m_close(this.m_listbox.getSelectedItem().flags);
+    this.m_close(this.m_listbox.getSelectedItem().flags); 
   },
-
+  
   m_onAbort: function()
   {
     this.m_close(null);
   },
-
+  
   m_onChange: function(item)
   {
     this.m_description.setText(item.description);
@@ -11510,10 +11510,10 @@ ConfirmDeleteDeviceWindow.WARNING = translateKey("ConfirmDeleteDeviceWindowWarni
 */
 
 /**
- * "Bitte warten", "Gerï¿½t wird gelï¿½scht..."
+ * "Bitte warten", "Gerät wird gelöscht..."
  **/
 DeleteDeviceWindow = Class.create({
-
+  
   initialize: function(device, flags, callback)
   {
     var onResultHandler = this.m_onResult.bind(this);
@@ -11530,7 +11530,7 @@ DeleteDeviceWindow = Class.create({
     this.m_device   = device;
     this.m_flags    = flags;
     this.m_callback = callback;
-
+    
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
 
@@ -11543,13 +11543,13 @@ DeleteDeviceWindow = Class.create({
         .setWidth(frameWidth - 10)
         .setHtml(DeleteDeviceWindow.CONTENT)
       );
-
+      
     this.m_layer.appendChild(this.m_frame.getElement());
     Layer.add(this.m_layer);
 
     device.remove(this.m_flags, onResultHandler);
   },
-
+  
   m_onResult: function(result, error)
   {
     errorCode = DeleteDeviceDialog.ERROR_NO_ERROR;
@@ -11593,7 +11593,7 @@ DeleteDeviceWindow.CONTENT = "<img src='/ise/img/ajaxload_white.gif' style='floa
 */
 
 /**
- * "Fehler", "Gerï¿½t konnte nicht gelï¿½scht werden"
+ * "Fehler", "Gerät konnte nicht gelöscht werden"
  **/
 ErrorOnDeleteWindow = Class.create({
 
@@ -11607,7 +11607,7 @@ ErrorOnDeleteWindow = Class.create({
     var frameWidth   = ErrorOnDeleteWindow.CONTENT_WIDTH;
     var frameHeight  = ErrorOnDeleteWindow.CONTENT_HEIGHT;
     var frameX = parseInt((screenWidth  - frameWidth ) / 2);
-    var frameY = parseInt((screenHeight - frameHeight) / 2);
+    var frameY = parseInt((screenHeight - frameHeight) / 2); 
 
     ErrorOnDeleteWindow.TITLE = translateKey("ErrorOnDeleteWindowTitle");
     ErrorOnDeleteWindow.DELETE_OPTIONS = translateKey("ErrorOnDeleteWindowDeleteOptions");
@@ -11630,7 +11630,7 @@ ErrorOnDeleteWindow = Class.create({
 
     this.hmIPIdentifier = "HmIP-RF";
 
-
+    
     var errorMessage;
     switch(errorCode)
     {
@@ -11643,8 +11643,8 @@ ErrorOnDeleteWindow = Class.create({
       default:
         errorMessage = ErrorOnDeleteWindow.UKNOWN_ERROR.process({device: this.m_device});
         break;
-    }
-
+    }  
+    
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
 
@@ -11661,7 +11661,7 @@ ErrorOnDeleteWindow = Class.create({
       .setPosition(30,190)
       .setWidth(frameWidth - 60)
       .setText(ErrorOnDeleteWindow.RETRY_DESCRIPTION);
-
+    
     this.m_frame = new UI.Frame()
       .setTitle(ErrorOnDeleteWindow.TITLE)
       .setContentSize(frameWidth, frameHeight)
@@ -11694,11 +11694,11 @@ ErrorOnDeleteWindow = Class.create({
         .setText(ErrorOnDeleteWindow.DELETE_BUTTON)
         .setAction(onDeleteHandler)
       );
-
+    
     this.m_layer.appendChild(this.m_frame.getElement());
     Layer.add(this.m_layer);
   },
-
+  
   m_close: function(result)
   {
     if (this.m_frame != undefined) {
@@ -11706,25 +11706,25 @@ ErrorOnDeleteWindow = Class.create({
     }
 
     Layer.remove(this.m_layer);
-
+    
     if (this.m_callback) { this.m_callback(result); }
   },
-
+  
   m_onDelete: function()
   {
     this.m_close(this.m_flags + this.m_listbox.getSelectedItem().flags);
   },
-
+  
   m_onAbort: function()
   {
     this.m_close(null);
   },
-
+  
   m_onChange: function(item)
   {
     this.m_description.setText(item.description);
   }
-
+  
 });
 
 ErrorOnDeleteWindow.CONTENT_WIDTH = 400;
@@ -11746,7 +11746,7 @@ ErrorOnDeleteWindow.DELETE_BUTTON = translateKey("ErrorOnDeleteWindowDeleteButto
 */
 
 /**
- * Dialogbox zum Lï¿½schen eines Gerï¿½ts
+ * Dialogbox zum Löschen eines Geräts
  **/
 DeleteDeviceDialog = Class.create({
 
@@ -11765,7 +11765,7 @@ DeleteDeviceDialog = Class.create({
 
 
     new CheckLinksAndProgramsWindow(device, this.m_onLinksAndProgramsCheckedHandler);
-
+    
   },
 
   m_onLinksAndProgramsChecked: function(result)
@@ -11773,7 +11773,7 @@ DeleteDeviceDialog = Class.create({
     this.m_hasLinksOrPrograms = result;
     new ConfirmDeleteDeviceWindow(this.m_device, this.m_hasLinksOrPrograms, this.m_onDeleteDeviceConfirmedHandler);
   },
-
+  
   m_onDeleteDeviceConfirmed: function(flags)
   {
     if (flags !== null)
@@ -11911,8 +11911,8 @@ DeleteDeviceDialog = Class.create({
     //if ((errorCode === DeleteDeviceDialog.ERROR_NO_ERROR) || (errorCode === DeleteDeviceDialog.HmIP_CONFIG_PENDING) || (errorCode === DeleteDeviceDialog.ERROR_UNKNOWN_DEVICE))
     if ((errorCode === DeleteDeviceDialog.ERROR_NO_ERROR) || (errorCode === DeleteDeviceDialog.ERROR_UNKNOWN_DEVICE))
     {
-      // Prï¿½fen, ob ein Kanal des Gerï¿½tes ein HmIP-Wettersensor ist, als Energy-Counter oder ob das Gerï¿½t ein HmIP-MOD-RC8 ist dient.
-      // Wenn ja, mï¿½ssen beim Lï¿½schen die dazugehï¿½rigen Systemvariablen
+      // Prüfen, ob ein Kanal des Gerätes ein HmIP-Wettersensor ist, als Energy-Counter oder ob das Gerät ein HmIP-MOD-RC8 ist dient.
+      // Wenn ja, müssen beim Löschen die dazugehörigen Systemvariablen
       // sowie das enstprechende Systemprogramm zum aktualisieren der Systemvariablen entfernt werden.
       var oChnIdAndAddress = this.m_hasDeviceInternalProgramOrSysvar(),
         chId = oChnIdAndAddress.id,
@@ -11958,7 +11958,7 @@ DeleteDeviceDialog.HmIP_CONFIG_PENDING = 507;
 /**
  * crashdialog.js
  **/
-
+ 
 CrashDialog = Class.create({
 
   initialize: function(name)
@@ -11969,10 +11969,10 @@ CrashDialog = Class.create({
     var frameHeight  = CrashDialog.CONTENT_HEIGHT;
     var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
     var frameY       = parseInt((screenHeight - frameHeight) / 2);
-
+    
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
-
+    
     this.m_frame = new UI.Frame()
       .setTitle(name)
       .setContentSize(frameWidth, frameHeight)
@@ -11987,7 +11987,7 @@ CrashDialog = Class.create({
         .setText(translateKey("crashDialogBtnClose"))
         .setAction(this.close.bind(this))
       );
-
+  
     this.m_layer.appendChild(this.m_frame.getElement());
     Layer.add(this.m_layer);
   },
@@ -11996,31 +11996,31 @@ CrashDialog = Class.create({
   {
     Layer.remove(this.m_layer);
   }
-
+  
 });
 
 CrashDialog.CONTENT_WIDTH = 400;
 CrashDialog.CONTENT_HEIGHT = 260;
 /*
 CrashDialog.TEXT  = "<div style='font-weight: bold;'>Eine Komponente der HomeMatic Zentrale reagiert nicht mehr.</div>"
-                  + "<p>Hierfï¿½r kann es eine Reihe von Ursachen geben:</p>"
+                  + "<p>Hierfür kann es eine Reihe von Ursachen geben:</p>"
                   + "<ul>"
                   + "<li>es besteht keine Netzwerk-Verbindung</li>"
                   + "<li>die Stromversorung der HomeMatic Zentrale wurde unterbrochen</li>"
-                  + "<li>mindestens eine Komponente der HomeMatic Zentrale ist abgestï¿½rzt</li>"
+                  + "<li>mindestens eine Komponente der HomeMatic Zentrale ist abgestürzt</li>"
                   + "</ul>"
-                  + "<p>ï¿½berprï¿½fen Sie die Netzwerk-Verbindung und die Stromversorgung der HomeMatic Zentrale. Starten Sie ggf. die HomeMatic Zentrale neu.</p>";
+                  + "<p>Überprüfen Sie die Netzwerk-Verbindung und die Stromversorgung der HomeMatic Zentrale. Starten Sie ggf. die HomeMatic Zentrale neu.</p>";
 */
 
 /**
  * hmscriptexecutor.js
  **/
-
+ 
 /**
  * @fileOverview HM Script Executor
  * @author F. Werner (eQ-3)
  **/
-
+ 
 /**
  * @class HMScriptExecturor
  * Dialog zum Testen von HomeMatic Script.
@@ -12039,21 +12039,21 @@ HMScriptExecutor = Class.create({
     HMScriptExecutor.TITLE = translateKey("dialogScriptExecuterTitle");
     HMScriptExecutor.TEXT_RUN = translateKey("dialogScriptExecuterBtnExecute");
     HMScriptExecutor.TEXT_CLOSE = translateKey("dialogScriptExecuterBtnClose");
-
+    
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
-
+    
     this.m_input = new UI.Textarea()
         .setPosition(5,25)
         .setWidth(590)
         .setHeight(200)
         .setText('WriteLine("'+ translateKey("dialogScriptExecuterHelloWorld") +'");');
-
+    
     this.m_output = new UI.Textarea()
         .setPosition(5,250)
         .setWidth(590)
-        .setHeight(200);
-
+        .setHeight(200); 
+    
     this.m_frame = new UI.Frame(true)
       .setTitle(HMScriptExecutor.TITLE)
       .setContentSize(frameWidth, frameHeight)
@@ -12078,7 +12078,7 @@ HMScriptExecutor = Class.create({
         .setText(HMScriptExecutor.TEXT_CLOSE)
         .setAction(this.close, this)
       );
-
+      
       this.m_layer.appendChild(this.m_frame.getElement());
       Layer.add(this.m_layer);
   },
@@ -12098,7 +12098,7 @@ HMScriptExecutor = Class.create({
     pb += 'string val = "'+val+'";';
     pb += 'string ths = "'+ths+'";';
     pb += 'string src = "'+src+'";';
-    var opt =
+    var opt = 
     {
       postBody: ReGa.encode(pb),
       onComplete: function(t)
@@ -12121,12 +12121,12 @@ HMScriptExecutor = Class.create({
   }
     new Ajax.Request(url,opt);
   },
-
+  
   close: function()
   {
     Layer.remove(this.m_layer);
   }
-
+  
 });
 
 HMScriptExecutor.CONTENT_WIDTH = 600;
@@ -12157,7 +12157,7 @@ FirewallConfigDialog = Class.create({
       .setPosition(FirewallConfigDialog.CONTENT_WIDTH - 160, 10)
       .setWidth(150)
       //.add({id: "full"      , name: "Vollzugriff"})
-      //.add({id: "restricted", name: "eingeschrï¿½nkt"})
+      //.add({id: "restricted", name: "eingeschränkt"})
       //.add({id: "none"      , name: "kein Zugriff"});
       .add({id: "full", name: translateKey("dialogSettingsFirewallLblFullAccess")})
       .add({id: "restricted", name: translateKey("dialogSettingsFirewallLblRestrictedAccess")})
@@ -12168,7 +12168,7 @@ FirewallConfigDialog = Class.create({
       .setPosition(FirewallConfigDialog.CONTENT_WIDTH - 160, 80)
       .setWidth(150)
       //.add({id: "full"      , name: "Vollzugriff"})
-      //.add({id: "restricted", name: "eingeschrï¿½nkt"})
+      //.add({id: "restricted", name: "eingeschränkt"})
       //.add({id: "none"      , name: "kein Zugriff"});
       .add({id: "full", name: translateKey("dialogSettingsFirewallLblFullAccess")})
       .add({id: "restricted", name: translateKey("dialogSettingsFirewallLblRestrictedAccess")})
@@ -12193,7 +12193,7 @@ FirewallConfigDialog = Class.create({
       .add(new UI.Text()
         .setPosition(10, 40)
         .setWidth(FirewallConfigDialog.CONTENT_WIDTH - 20)
-        //.setText("Ermï¿½glicht den direkten Zugriff auf angelernte HomeMatic Gerï¿½te")
+        //.setText("Ermöglicht den direkten Zugriff auf angelernte HomeMatic Geräte")
         .setText(translateKey("dialogSettingsFirewallLblHintXMLRPCAPI"))
     )
       .add(this.m_xmlrpcListBox)
@@ -12205,20 +12205,20 @@ FirewallConfigDialog = Class.create({
       .add(new UI.Text()
         .setPosition(10, 110)
         .setWidth(FirewallConfigDialog.CONTENT_WIDTH - 20)
-        //.setText("Ermï¿½glicht den Zugriff auf die Logikschicht der HomeMatic Zentrale")
+        //.setText("Ermöglicht den Zugriff auf die Logikschicht der HomeMatic Zentrale")
         .setText(translateKey("dialogSettingsFirewallLblHintScriptAPI"))
     )
       .add(this.m_hmscriptListBox)
       .add(new UI.Text()
         .setPosition(10, 150)
-        //.setHtml("<b>IP-Adressen fï¿½r den eingeschrï¿½nkten Zugriff:</b>")
+        //.setHtml("<b>IP-Adressen für den eingeschränkten Zugriff:</b>")
         .setHtml(translateKey("dialogSettingsFirewallLblIPAddresses"))
     )
       .add(this.m_ipTextArea)
       .add(new UI.Text()
         .setPosition(10, 290)
         .setWidth(FirewallConfigDialog.CONTENT_WIDTH - 20)
-        //.setText("Sie kï¿½nnen den Zugriff wahlweise fï¿½r einzelne IP-Adressen (z.B. 192.168.0.1) oder ganze Adressbereiche (z.B. 192.168.0.0/16) freigeben.")
+        //.setText("Sie können den Zugriff wahlweise für einzelne IP-Adressen (z.B. 192.168.0.1) oder ganze Adressbereiche (z.B. 192.168.0.0/16) freigeben.")
         .setText(translateKey("dialogSettingsFirewallLblHintIPAddresses"))
     )
       .add(new UI.Button()
@@ -12267,14 +12267,14 @@ FirewallConfigDialog = Class.create({
   },
 
   /**
-   * Schlieï¿½t den FirewallConfigDialog ohne ï¿½nderungen zu ï¿½bernehmen.
+   * Schließt den FirewallConfigDialog ohne Änderungen zu übernehmen.
    **/
   close: function () {
     Layer.remove(this.m_layer);
   },
 
   /**
-   * ï¿½bernimmt die ï¿½nderungen und schlieï¿½t den FirewallConfigDialog anschlieï¿½end.
+   * Übernimmt die Änderungen und schließt den FirewallConfigDialog anschließend.
    **/
   ok: function () {
     var xmlrpcAccess = this.m_xmlrpcListBox.getSelectedItem().id;
@@ -12376,13 +12376,13 @@ allDataSet = function() {
 };
 
 /**
- * Dialogbox mit den Schaltflï¿½chen "Ja" und "Nein"
- * Normalerweise wird als content Text ï¿½bergeben,
- * wenn contentType 'html' gesetzt ist, kann auch HTML ï¿½bergeben werden.
- * Die Hï¿½he des Dialoges sollte sich dynamisch der Contentgrï¿½ï¿½e anpassen.
+ * Dialogbox mit den Schaltflächen "Ja" und "Nein"
+ * Normalerweise wird als content Text übergeben,
+ * wenn contentType 'html' gesetzt ist, kann auch HTML übergeben werden.
+ * Die Höhe des Dialoges sollte sich dynamisch der Contentgröße anpassen.
  **/
 PartyModeDialog = Class.create({
-
+ 
   initialize: function(title, content, deviceData ,callback, contentType)
   {
     showEmptyTimeFields = deviceData.showEmptyFields;
@@ -12401,7 +12401,7 @@ PartyModeDialog = Class.create({
 
     var dialog = document.createElement("div");
     dialog.className = "YesNoDialog";
-
+    
     var titleElement = document.createElement("div");
     titleElement.className = "YesNoDialogTitle";
 
@@ -12412,10 +12412,10 @@ PartyModeDialog = Class.create({
     titleElement.appendChild(document.createTextNode(title));
     titleElement.onmousedown = function(event) { new Drag(this.parentNode, event); };
     dialog.appendChild(titleElement);
-
+    
     var contentWrapper = document.createElement("div");
     contentWrapper.className = "YesNoDialogContentWrapper";
-
+    
     var contentElement = document.createElement("div");
     contentElement.className = "YesNoDialogContent";
 
@@ -12426,7 +12426,7 @@ PartyModeDialog = Class.create({
     }
 
     contentWrapper.appendChild(contentElement);
-
+    
     dialog.appendChild(contentWrapper);
 
     var footer = document.createElement("div");
@@ -12447,15 +12447,15 @@ PartyModeDialog = Class.create({
     footer.appendChild(yesButton);
 
     dialog.appendChild(footer);
-
+    
     this.m_layer.appendChild(dialog);
-
+    
     Layer.add(this.m_layer);
 
     this.j_YesButton = jQuery("#yesButton");
     if (showEmptyTimeFields) {this.j_YesButton.hide();}
 
-    //Sorgt dafï¿½r, daï¿½ die Dialoghï¿½he sich dynamisch dem Content anpasst.
+    //Sorgt dafür, daß die Dialoghöhe sich dynamisch dem Content anpasst.
     jQuery(".YesNoDialog").css("height", jQuery(".YesNoDialogContentWrapper").height() + 78);
     jQuery(".YesNoDialogFooter").css("top", jQuery(".YesNoDialogContentWrapper").height() + 26);
 
@@ -12518,13 +12518,13 @@ PartyModeDialog = Class.create({
       if (this.m_callback) { this.m_callback(result); }
     }
   },
-
+  
   yes: function()
   {
     this.SetPartyMode = true;
     this.close(PartyModeDialog.RESULT_YES);
   },
-
+  
   no: function()
   {
     this.SetPartyMode = false;
@@ -12648,7 +12648,7 @@ PartyModeDialog = Class.create({
     // Adds a selectbox for the temperature to the party mode dialog
     var selBox = "<select>";
     for (var loop = 5; loop <= 30; loop++) {
-      selBox += "<option value='"+loop+"'>"+loop+"ï¿½C</option>";
+      selBox += "<option value='"+loop+"'>"+loop+"°C</option>";
     }
     selBox += "</select>";
 
@@ -12710,7 +12710,7 @@ PartyModeDialog = Class.create({
     allDataSet();
   },
 
-  // Makes only valid time selectors selectable - e. g. itsï¿½s not possible to set an end time earlier than the start time
+  // Makes only valid time selectors selectable - e. g. its´s not possible to set an end time earlier than the start time
   OnEndHourShowCallBack: function(hour) {
     var startHour = jQuery("#partyStartTime").timepicker('getHour'),
     startMin = jQuery("#partyStartTime").timepicker('getMinute');
@@ -12854,14 +12854,14 @@ function setFreeTextContainer() {
 }
 
 StatusDisplayDialog = Class.create({
-
+ 
   initialize: function(title, content, value, callback, contentType) {
     var _this_ = this;
 
     this.m_contentType = contentType;
     this.m_callback = callback;
     this.m_layer = document.createElement("div");
-    this.m_layer.className = "YesNoDialogLayer";
+    this.m_layer.className = "YesNoDialogLayer"; 
 
     this.arDisplayData = [];
     this.channelValue = value;
@@ -12881,16 +12881,16 @@ StatusDisplayDialog = Class.create({
 
     var dialog = document.createElement("div");
     dialog.className = "YesNoDialog";
-
+    
     var titleElement = document.createElement("div");
     titleElement.className = "YesNoDialogTitle";
     titleElement.appendChild(document.createTextNode(title));
     titleElement.onmousedown = function(event) { new Drag(this.parentNode, event); };
     dialog.appendChild(titleElement);
-
+    
     var contentWrapper = document.createElement("div");
     contentWrapper.className = "YesNoDialogContentWrapper";
-
+    
     var contentElement = document.createElement("div");
     contentElement.className = "YesNoDialogContent";
 
@@ -12901,28 +12901,28 @@ StatusDisplayDialog = Class.create({
     }
 
     contentWrapper.appendChild(contentElement);
-
+    
     dialog.appendChild(contentWrapper);
 
     var footer = document.createElement("div");
     footer.className= "YesNoDialogFooter";
-
+    
     var yesButton = document.createElement("div");
     yesButton.className = "YesNoDialog_yesButton borderRadius5px colorGradient50px";
     yesButton.appendChild(document.createTextNode(translateKey('btnOk')));
     yesButton.onclick = function() { _this_.yes(); };
     footer.appendChild(yesButton);
-
+    
     var noButton = document.createElement("div");
     noButton.className = "YesNoDialog_noButton borderRadius5px colorGradient50px";
     noButton.appendChild(document.createTextNode(translateKey('btnCancel')));
     noButton.onclick = function() { _this_.no(); };
     footer.appendChild(noButton);
-
+    
     dialog.appendChild(footer);
-
+    
     this.m_layer.appendChild(dialog);
-
+    
     Layer.add(this.m_layer);
 
     this.initEPaper();
@@ -12932,7 +12932,7 @@ StatusDisplayDialog = Class.create({
     setStatusDisplayTableHeader();
 
 
-    // Remark 1: This doesnï¿½t work satisfying -- see Remark 2
+    // Remark 1: This doesn´t work satisfying -- see Remark 2
     // This should display an icon within the options of the icon selector
     //jQuery("[name='statusDialogIconOptions']").msDropDown({childWidth:"200px"});
 
@@ -13025,7 +13025,7 @@ StatusDisplayDialog = Class.create({
 
     options += "<option name='option_NotUsed' value='-1'>" + translateKey("stringTableNotUsed") + "</option>";
     for (var loop = 0; loop < 12; loop++) {
-      // Remark 2: This doesnï¿½t work satisfying -- see Remark 1
+      // Remark 2: This doesn´t work satisfying -- see Remark 1
       //options += "<option name='option'"+loop+" value='"+loop+"' data-image='/ise/img/tr50.gif'>Icon "+loop+"</option>";
       options += "<option name='option_"+loop+"' value='"+loop+"'>" + arOptionText[loop] + "</option>";
     }
@@ -13039,7 +13039,7 @@ StatusDisplayDialog = Class.create({
     var arValues = val.split(","), //replace(/ /g, "").split(","),
     arLines = []; // contains the lines 0 - 5
 
-    // Is a start key and end key available? Otherwise the string isnï¿½t valid.
+    // Is a start key and end key available? Otherwise the string isn´t valid.
     if (arValues[0] == this.startKey && arValues[arValues.length - 1] == this.endKey) {
       var lineIndex = 0,
       textEndIndex,
@@ -13240,18 +13240,18 @@ StatusDisplayDialog = Class.create({
     Layer.remove(this.m_layer);
     if (this.m_callback) { this.m_callback(result); }
   },
-
+  
   yes: function()
   {
     this._createConfigString();
     this.close(YesNoDialog.RESULT_YES);
   },
-
+  
   no: function()
   {
     this.close(YesNoDialog.RESULT_NO);
   }
-
+  
 });
 
 StatusDisplayDialogEPaper = Class.create(StatusDisplayDialog, {
@@ -13483,7 +13483,7 @@ StatusDisplayDialogEPaper = Class.create(StatusDisplayDialog, {
     var arValues = val.split(","), //replace(/ /g, "").split(","),
     arLines = []; // contains the lines 1,2,3
 
-    // Is a start key and end key available? Otherwise the string isnï¿½t valid.
+    // Is a start key and end key available? Otherwise the string isn´t valid.
     if (arValues[0] == this.startKey && arValues[arValues.length - 1] == this.endKey) {
       var lineIndex = 0,
       textIndex,
@@ -13519,14 +13519,14 @@ StatusDisplayDialogEPaper = Class.create(StatusDisplayDialog, {
             nextTextBlockIndex++;
           } while ((arValues[textIndex] != this.iconKey) && (arValues[textIndex] != this.lf)) ;
 
-          // Icon hinzufï¿½gen, entweder nicht benutzt (-1) oder den entsprechenden Wert
+          // Icon hinzufügen, entweder nicht benutzt (-1) oder den entsprechenden Wert
           // Add the icon, either not used (-1) or the correspondent value
           valueSet.icon = (arValues[textIndex] == this.iconKey) ? arValues[textIndex + 1] : -1;
           arLines[lineIndex] = valueSet;
           lineIndex++;
           if (valueSet.icon == -1) {textOffset = 1;} else {textOffset = 3;}
           // Jump to the next text block
-          loopx += nextTextBlockIndex + textOffset; // Springe zum nï¿½chsten Textblock
+          loopx += nextTextBlockIndex + textOffset; // Springe zum nächsten Textblock
           //console.log("new loopx : " + loopx);
         }
       }
@@ -13545,10 +13545,10 @@ YesNoDialog.RESULT_YES = 1;
  **/
 
 /**
- * Dialogbox mit den Schaltflï¿½chen "Ja" und "Neine"
- * Normalerweise wird als content Text ï¿½bergeben,
- * wenn contentType 'html' gesetzt ist, kann auch HTML ï¿½bergeben werden.
- * Die Hï¿½he des Dialoges sollte sich dynamisch der Contentgrï¿½ï¿½e anpassen.
+ * Dialogbox mit den Schaltflächen "Ja" und "Neine"
+ * Normalerweise wird als content Text übergeben,
+ * wenn contentType 'html' gesetzt ist, kann auch HTML übergeben werden.
+ * Die Höhe des Dialoges sollte sich dynamisch der Contentgröße anpassen.
  **/
 RGBWControllerDialog = Class.create({
 
@@ -13619,7 +13619,7 @@ RGBWControllerDialog = Class.create({
 
     this.__activateSubDialog();
 
-    //AG sorgt dafï¿½r, daï¿½ die Dialoghï¿½he sich dynamisch dem Content anpasst.
+    //AG sorgt dafür, daß die Dialoghöhe sich dynamisch dem Content anpasst.
     jQuery(".YesNoDialog").css("height", jQuery(".YesNoDialogContentWrapper").height() + 78);
     jQuery(".YesNoDialogFooter").css("top", jQuery(".YesNoDialogContentWrapper").height() + 26);
 
@@ -13990,10 +13990,10 @@ YesNoDialog.RESULT_YES = 1;
  **/
 
 /**
- * Dialogbox mit den Schaltflï¿½chen "Ja" und "Neine"
- * Normalerweise wird als content Text ï¿½bergeben,
- * wenn contentType 'html' gesetzt ist, kann auch HTML ï¿½bergeben werden.
- * Die Hï¿½he des Dialoges sollte sich dynamisch der Contentgrï¿½ï¿½e anpassen.
+ * Dialogbox mit den Schaltflächen "Ja" und "Neine"
+ * Normalerweise wird als content Text übergeben,
+ * wenn contentType 'html' gesetzt ist, kann auch HTML übergeben werden.
+ * Die Höhe des Dialoges sollte sich dynamisch der Contentgröße anpassen.
  **/
 VIR_LG_RGBWControllerDialog = Class.create({
 
@@ -14069,7 +14069,7 @@ VIR_LG_RGBWControllerDialog = Class.create({
 
     this.__activateSubDialog();
 
-    //AG sorgt dafï¿½r, daï¿½ die Dialoghï¿½he sich dynamisch dem Content anpasst.
+    //AG sorgt dafür, daß die Dialoghöhe sich dynamisch dem Content anpasst.
     jQuery(".YesNoDialog").css("height", jQuery(".YesNoDialogContentWrapper").height() + 78);
     jQuery(".YesNoDialogFooter").css("top", jQuery(".YesNoDialogContentWrapper").height() + 26);
 
@@ -14231,10 +14231,10 @@ YesNoDialog.RESULT_YES = 1;
  **/
 
 /**
- * Dialogbox mit den Schaltflï¿½chen "Ja" und "Neine"
- * Normalerweise wird als content Text ï¿½bergeben,
- * wenn contentType 'html' gesetzt ist, kann auch HTML ï¿½bergeben werden.
- * Die Hï¿½he des Dialoges sollte sich dynamisch der Contentgrï¿½ï¿½e anpassen.
+ * Dialogbox mit den Schaltflächen "Ja" und "Neine"
+ * Normalerweise wird als content Text übergeben,
+ * wenn contentType 'html' gesetzt ist, kann auch HTML übergeben werden.
+ * Die Höhe des Dialoges sollte sich dynamisch der Contentgröße anpassen.
  **/
 VIR_LG_WHITEControllerDialog = Class.create({
 
@@ -14310,7 +14310,7 @@ VIR_LG_WHITEControllerDialog = Class.create({
 
     this.__activateSubDialog();
 
-    //AG sorgt dafï¿½r, daï¿½ die Dialoghï¿½he sich dynamisch dem Content anpasst.
+    //AG sorgt dafür, daß die Dialoghöhe sich dynamisch dem Content anpasst.
     jQuery(".YesNoDialog").css("height", jQuery(".YesNoDialogContentWrapper").height() + 78);
     jQuery(".YesNoDialogFooter").css("top", jQuery(".YesNoDialogContentWrapper").height() + 26);
 
@@ -14407,7 +14407,7 @@ VIR_LG_WHITEControllerDialog.RESULT_NO = 0;
 VIR_LG_WHITEControllerDialog.RESULT_YES = 1;
 
 ASIR_SetAlarmDialog = Class.create({
-
+ 
   initialize: function(title, content, callback, contentType)
   {
     var _this_ = this;
@@ -14415,20 +14415,20 @@ ASIR_SetAlarmDialog = Class.create({
     this.m_contentType = contentType;
     this.m_callback = callback;
     this.m_layer = document.createElement("div");
-    this.m_layer.className = "YesNoDialogLayer";
+    this.m_layer.className = "YesNoDialogLayer"; 
 
     var dialog = document.createElement("div");
     dialog.className = "YesNoDialog";
-
+    
     var titleElement = document.createElement("div");
     titleElement.className = "YesNoDialogTitle";
     titleElement.appendChild(document.createTextNode(title));
     titleElement.onmousedown = function(event) { new Drag(this.parentNode, event); };
     dialog.appendChild(titleElement);
-
+    
     var contentWrapper = document.createElement("div");
     contentWrapper.className = "YesNoDialogContentWrapper";
-
+    
     var contentElement = document.createElement("div");
     contentElement.className = "YesNoDialogContent";
 
@@ -14439,31 +14439,31 @@ ASIR_SetAlarmDialog = Class.create({
     }
 
     contentWrapper.appendChild(contentElement);
-
+    
     dialog.appendChild(contentWrapper);
 
     var footer = document.createElement("div");
     footer.className= "YesNoDialogFooter";
-
+    
     var yesButton = document.createElement("div");
     yesButton.className = "YesNoDialog_yesButton borderRadius5px colorGradient50px";
     yesButton.appendChild(document.createTextNode(translateKey('btnOk')));
     yesButton.onclick = function() { _this_.yes(); };
     footer.appendChild(yesButton);
-
+    
     var noButton = document.createElement("div");
     noButton.className = "YesNoDialog_noButton borderRadius5px colorGradient50px";
     noButton.appendChild(document.createTextNode(translateKey('btnCancel')));
     noButton.onclick = function() { _this_.no(); };
     footer.appendChild(noButton);
-
+    
     dialog.appendChild(footer);
-
+    
     this.m_layer.appendChild(dialog);
-
+    
     Layer.add(this.m_layer);
 
-    //AG sorgt dafï¿½r, daï¿½ die Dialoghï¿½he sich dynamisch dem Content anpasst.
+    //AG sorgt dafür, daß die Dialoghöhe sich dynamisch dem Content anpasst.
     jQuery(".YesNoDialog").css("height", jQuery(".YesNoDialogContentWrapper").height() + 78);
     jQuery(".YesNoDialogFooter").css("top", jQuery(".YesNoDialogContentWrapper").height() + 26);
     translatePage(".YesNoDialog");
@@ -14515,17 +14515,17 @@ ASIR_SetAlarmDialog = Class.create({
     Layer.remove(this.m_layer);
     if (this.m_callback) { this.m_callback(result); }
   },
-
+  
   yes: function()
   {
     this.close(ASIR_SetAlarmDialog.RESULT_YES);
   },
-
+  
   no: function()
   {
     this.close(ASIR_SetAlarmDialog.RESULT_NO);
   }
-
+  
 });
 
 ASIR_SetAlarmDialog.RESULT_NO = 0;
@@ -14533,15 +14533,15 @@ ASIR_SetAlarmDialog.RESULT_YES = 1;
 /**
  * JalousieActorConvertHexValDialog.js
  **/
-
+ 
 /**
- * Dialogbox mit den Schaltflï¿½chen "Ja" und "Neine"
- * Normalerweise wird als content Text ï¿½bergeben,
- * wenn contentType 'html' gesetzt ist, kann auch HTML ï¿½bergeben werden.
- * Die Hï¿½he des Dialoges sollte sich dynamisch der Contentgrï¿½ï¿½e anpassen.
+ * Dialogbox mit den Schaltflächen "Ja" und "Neine"
+ * Normalerweise wird als content Text übergeben,
+ * wenn contentType 'html' gesetzt ist, kann auch HTML übergeben werden.
+ * Die Höhe des Dialoges sollte sich dynamisch der Contentgröße anpassen.
  **/
 JalousieActorConvertHexValDialog = Class.create({
-
+ 
   initialize: function(title, content, iseVal, callback, contentType)
   {
     var _this_ = this;
@@ -14556,16 +14556,16 @@ JalousieActorConvertHexValDialog = Class.create({
 
     var dialog = document.createElement("div");
     dialog.className = "YesNoDialog";
-
+    
     var titleElement = document.createElement("div");
     titleElement.className = "YesNoDialogTitle";
     titleElement.appendChild(document.createTextNode(title));
     titleElement.onmousedown = function(event) { new Drag(this.parentNode, event); };
     dialog.appendChild(titleElement);
-
+    
     var contentWrapper = document.createElement("div");
     contentWrapper.className = "YesNoDialogContentWrapper";
-
+    
     var contentElement = document.createElement("div");
     contentElement.className = "YesNoDialogContent";
 
@@ -14576,31 +14576,31 @@ JalousieActorConvertHexValDialog = Class.create({
     }
 
     contentWrapper.appendChild(contentElement);
-
+    
     dialog.appendChild(contentWrapper);
 
     var footer = document.createElement("div");
     footer.className= "YesNoDialogFooter";
-
+    
     var yesButton = document.createElement("div");
     yesButton.className = "YesNoDialog_yesButton borderRadius5px colorGradient50px";
     yesButton.appendChild(document.createTextNode(translateKey('footerBtnOk')));
     yesButton.onclick = function() { _this_.yes(); };
     footer.appendChild(yesButton);
-
+    
     var noButton = document.createElement("div");
     noButton.className = "YesNoDialog_noButton borderRadius5px colorGradient50px";
     noButton.appendChild(document.createTextNode(translateKey('footerBtnCancel')));
     noButton.onclick = function() { _this_.no(); };
     footer.appendChild(noButton);
-
+    
     dialog.appendChild(footer);
-
+    
     this.m_layer.appendChild(dialog);
-
+    
     Layer.add(this.m_layer);
 
-    //AG sorgt dafï¿½r, daï¿½ die Dialoghï¿½he sich dynamisch dem Content anpasst.
+    //AG sorgt dafür, daß die Dialoghöhe sich dynamisch dem Content anpasst.
     jQuery(".YesNoDialog").css("height", jQuery(".YesNoDialogContentWrapper").height() + 78);
     jQuery(".YesNoDialogFooter").css("top", jQuery(".YesNoDialogContentWrapper").height() + 26);
 
@@ -14675,24 +14675,24 @@ JalousieActorConvertHexValDialog = Class.create({
     Layer.remove(this.m_layer);
     if (this.m_callback) { this.m_callback(result); }
   },
-
+  
   yes: function()
   {
     this._createConfigString();
     this.close(JalousieActorConvertHexValDialog.RESULT_YES);
   },
-
+  
   no: function()
   {
     this.close(JalousieActorConvertHexValDialog.RESULT_NO);
   }
-
+  
 });
 
 JalousieActorConvertHexValDialog.RESULT_NO = 0;
 JalousieActorConvertHexValDialog.RESULT_YES = 1;
 WTHSelectModeDialog = Class.create({
-
+ 
   initialize: function(title, content, val, paramName, callback, contentType)
   {
     var _this_ = this;
@@ -14700,23 +14700,23 @@ WTHSelectModeDialog = Class.create({
     this.m_contentType = contentType;
     this.m_callback = callback;
     this.m_layer = document.createElement("div");
-    this.m_layer.className = "YesNoDialogLayer";
+    this.m_layer.className = "YesNoDialogLayer"; 
 
     this.m_selectedMode = val;
     this.m_paramName = paramName;
 
     var dialog = document.createElement("div");
     dialog.className = "YesNoDialog";
-
+    
     var titleElement = document.createElement("div");
     titleElement.className = "YesNoDialogTitle";
     titleElement.appendChild(document.createTextNode(title));
     titleElement.onmousedown = function(event) { new Drag(this.parentNode, event); };
     dialog.appendChild(titleElement);
-
+    
     var contentWrapper = document.createElement("div");
     contentWrapper.className = "YesNoDialogContentWrapper";
-
+    
     var contentElement = document.createElement("div");
     contentElement.className = "YesNoDialogContent";
 
@@ -14727,31 +14727,31 @@ WTHSelectModeDialog = Class.create({
     }
 
     contentWrapper.appendChild(contentElement);
-
+    
     dialog.appendChild(contentWrapper);
 
     var footer = document.createElement("div");
     footer.className= "YesNoDialogFooter";
-
+    
     var yesButton = document.createElement("div");
     yesButton.className = "YesNoDialog_yesButton borderRadius5px colorGradient50px";
     yesButton.appendChild(document.createTextNode(translateKey('dialogYes')));
     yesButton.onclick = function() { _this_.yes(); };
     footer.appendChild(yesButton);
-
+    
     var noButton = document.createElement("div");
     noButton.className = "YesNoDialog_noButton borderRadius5px colorGradient50px";
     noButton.appendChild(document.createTextNode(translateKey('dialogBack')));
     noButton.onclick = function() { _this_.no(); };
     footer.appendChild(noButton);
-
+    
     dialog.appendChild(footer);
-
+    
     this.m_layer.appendChild(dialog);
-
+    
     Layer.add(this.m_layer);
 
-    //AG sorgt dafï¿½r, daï¿½ die Dialoghï¿½he sich dynamisch dem Content anpasst.
+    //AG sorgt dafür, daß die Dialoghöhe sich dynamisch dem Content anpasst.
     jQuery(".YesNoDialog").css("height", jQuery(".YesNoDialogContentWrapper").height() + 78);
     jQuery(".YesNoDialogFooter").css("top", jQuery(".YesNoDialogContentWrapper").height() + 26);
     translatePage(".YesNoDialog");
@@ -14774,17 +14774,17 @@ WTHSelectModeDialog = Class.create({
     Layer.remove(this.m_layer);
     if (this.m_callback) { this.m_callback(result); }
   },
-
+  
   yes: function()
   {
     this.close(WTHSelectModeDialog.RESULT_YES);
   },
-
+  
   no: function()
   {
     this.close(WTHSelectModeDialog.RESULT_NO);
   }
-
+  
 });
 
 WTHSelectModeDialog.RESULT_NO = 0;
@@ -14820,9 +14820,9 @@ HeaderBar = new function()
  **/
 
 /**
- * Hauptmenï¿½
+ * Hauptmenü
  **/
-MainMenu = Singleton.create({
+MainMenu = Singleton.create({  
   MAINMENU_ADMIN_FILE:   "/webui/js/mainmenu/admin.js",
   MAINMENU_USER_FILE:    "/webui/js/mainmenu/user.js",
   ID:                    "menubar",
@@ -14835,15 +14835,15 @@ MainMenu = Singleton.create({
   ITEM_SELECTED:         "MainMenuItem_Selected",
   ITEM_HIGHLIGH:         "MainMenuItem_Highlight",
   SUBITEM_HIGHLIGHT:     "MainMenuSubItem_Highlight",
-
+  
   /**
-   * Initialisiert das Hauptmenï¿½
+   * Initialisiert das Hauptmenü
    **/
   initialize: function()
   {
     this.m_selectedId = null;
     this.m_id         = null;
-
+    
     switch (getUPL())
     {
       case UPL_ADMIN: this.m_menu = eval("(" + HttpLoader.getText(this.MAINMENU_ADMIN_FILE) + ")"); break;
@@ -14851,37 +14851,37 @@ MainMenu = Singleton.create({
       default:        this.m_menu = null; break;
     }
   },
-
+  
   /**
-   * Erzeugt ein Untermenï¿½-Element.
+   * Erzeugt ein Untermenü-Element.
    **/
   m_createSubmenuItem: function(menuItem, submenuItem)
   {
     var _submenuItem_ = submenuItem;
     var _menuItem_ = menuItem;
-
+    
     var row = document.createElement("tr");
 
     var cell = document.createElement("td");
     cell.className = "MainMenuSubItem";
     cell.id = submenuItem.id;
-    //cell.appendChild(document.createTextNode("${"+submenuItem.id+"}"));
+    //cell.appendChild(document.createTextNode("${"+submenuItem.id+"}"));  
     cell.appendChild(document.createTextNode(translateKey(submenuItem.id)));
     Event.observe(cell, "mouseover", function() { MainMenu.highlightOn(this); });
     Event.observe(cell, "mouseout", function()  { MainMenu.highlightOff(this); });
     Event.observe(cell, "click", function() { MainMenu.beginHideSubmenu(_menuItem_); _submenuItem_.action.defer(); });
     row.appendChild(cell);
-
+    
     return row;
   },
-
+  
   /**
-   * Erzeugt ein Menï¿½element
+   * Erzeugt ein Menüelement
    **/
   m_createMenuItem: function(menuItem)
   {
     var _menuItem_ = menuItem;
-
+    
     var menuElement = document.createElement("div");
     menuElement.id = menuItem.id;
     if (menuItem.align == "left") { menuElement.className = "MainMenuItem_Left"; }
@@ -14891,7 +14891,7 @@ MainMenu = Singleton.create({
 
     Event.observe(menuElement, "mouseover", function() { MainMenu.showSubmenu(_menuItem_); });
     Event.observe(menuElement, "mouseout", function() { MainMenu.beginHideSubmenu(_menuItem_); });
-
+    
     var caption = document.createElement("div");
     caption.id = menuItem.id + "_TITLE";
     caption.className = "MainMenuItemCaption";
@@ -14899,7 +14899,7 @@ MainMenu = Singleton.create({
     caption.appendChild(document.createTextNode(translateKey(menuItem.id)));
     Event.observe(caption, "click", function() { MainMenu.beginHideSubmenu(_menuItem_); _menuItem_.action.defer(); });
     menuElement.appendChild(caption);
-
+    
     var submenu = menuItem.submenu;
     if (submenu.length > 0)
     {
@@ -14907,26 +14907,26 @@ MainMenu = Singleton.create({
       submenuElement.id = menuItem.id + "_SUBMENU";
       submenuElement.className = "MainMenuSubMenu";
       Element.setStyle(submenuElement, {display: "none"});
-
+      
       var table = document.createElement("table");
       table.border = "0";
       submenuElement.appendChild(table);
-
+      
       var tbody =  document.createElement("tbody");
       table.appendChild(tbody);
-
+      
       for (var i = 0, len = submenu.length; i < len; i++)
       {
         tbody.appendChild(this.m_createSubmenuItem(menuItem, submenu[i]));
       }
       menuElement.appendChild(submenuElement);
     }
-
+    
     return menuElement;
   },
-
+    
   /**
-   * Erzeugt ein neues Hauptmenï¿½
+   * Erzeugt ein neues Hauptmenü
    **/
   create: function(menubar)
   {
@@ -14942,34 +14942,34 @@ MainMenu = Singleton.create({
       menubar.hide();
     }
   },
-
+    
   /**
-   * Zeigt ein Untermenï¿½ an
+   * Zeigt ein Untermenü an
    **/
   showSubmenu: function(menuItem)
   {
     this.hideSubmenu();
-
+    
     var id = menuItem.id;
-
+    
     if (this.m_id == id) { this.m_id = null; }
-
+    
     Element.addClassName(id, this.ITEM_HIGHLIGH);
     var submenu = $(id + this.SUBMENU_SUFFIX);
     if (submenu) { submenu.show(); }
   },
-
+  
   /**
-   * Beginnt damit, ein Untermenï¿½ verzï¿½gert zu schlieï¿½en
+   * Beginnt damit, ein Untermenü verzögert zu schließen
    **/
   beginHideSubmenu: function(menuItem)
   {
     this.m_id = menuItem.id;
     window.setTimeout("MainMenu.hideSubmenu();", 1);
   },
-
+  
   /**
-   * Schlieï¿½t ein Untermenï¿½
+   * Schließt ein Untermenü
    **/
   hideSubmenu: function()
   {
@@ -14983,25 +14983,25 @@ MainMenu = Singleton.create({
       this.m_id = null;
     }
   },
-
+  
   /**
-   * Hebt ein Untermenï¿½element farblich hervor.
+   * Hebt ein Untermenüelement farblich hervor.
    **/
   highlightOn: function(element, event)
   {
     Element.addClassName(element, this.SUBITEM_HIGHLIGHT);
   },
-
+  
   /**
-   * Deaktiviert die Hervorhebung eines Untermenï¿½elements
+   * Deaktiviert die Hervorhebung eines Untermenüelements
    **/
   highlightOff: function(element, event)
-  {
+  {    
     Element.removeClassName(element, this.SUBITEM_HIGHLIGHT);
   },
-
+  
   /**
-   * Wï¿½hlt ein Menï¿½element aus.
+   * Wählt ein Menüelement aus.
    * Dieses wird dann entsprechend farblich hinterlegt.
    **/
   select: function(id)
@@ -15010,44 +15010,44 @@ MainMenu = Singleton.create({
     this.m_selectedId = id;
     if (this.m_selectedId !== null) { Element.addClassName(this.m_selectedId, this.ITEM_SELECTED); }
   }
-
+  
 });
 /**
  * ipage.js
  **/
 
 /**
- * Schnittstelle fï¿½r Seiten
+ * Schnittstelle für Seiten
  **/
 IPage = Interface.create({
 
   /**
-   * Callback fï¿½r das Betreten der Seite
+   * Callback für das Betreten der Seite
    **/
   enter: function(options) {},
-
+  
   /**
-   * Callback fï¿½r das Verlassen der Seite
+   * Callback für das Verlassen der Seite
    **/
   leave: function() {},
-
+  
   /**
-   * Callback beim Verï¿½ndern der Bildschirmgrï¿½ï¿½e
+   * Callback beim Verändern der Bildschirmgröße
    **/
   resize: function() {}
-
+  
 });
 /**
  * page.js
  **/
 
 /**
- * Basisklasse fï¿½r alle Seiten
- **/
+ * Basisklasse für alle Seiten
+ **/ 
 Page = Class.create({
   __interfaces__: [IPage],
   MAINMENU_ID: null,
-
+  
   /**
    * Callback. Wird beim Betreten der Seite aufgerufen.
    **/
@@ -15055,26 +15055,26 @@ Page = Class.create({
   {
     MainMenu.select(MAINMENU_ID);
   },
-
+  
   /**
    * Callback. Wird beim Verlassen der Seite aufgerufen.
    **/
   leave: function()
   {
   },
-
+  
   /**
-   * Callback. Wird beim Verï¿½ndern des Bildschirms aufgerufen.
+   * Callback. Wird beim Verändern des Bildschirms aufgerufen.
    **/
   resize: function()
   {
   }
-
+  
 });
 /**
  * StartPage.js
  **/
-
+ 
 StartPage = Singleton.create(Page, {
   MAINMENU_ID: "MAINMENU_STARTPAGE",
   downloadURL: (isHTTPS) ? "https://update.homematic.com:8443/firmware/download?cmd=download" : "http://update.homematic.com/firmware/download?cmd=download",
@@ -15117,7 +15117,7 @@ StartPage = Singleton.create(Page, {
     setPath("");
     setFooter("");
     WebUI.resize();
-
+  
     switch (getUPL())
     {
       case UPL_ADMIN:
@@ -15132,16 +15132,16 @@ StartPage = Singleton.create(Page, {
         break;
     }
   },
-
+  
   /**
-   * Berechnet die Grï¿½ï¿½e der normalen Startseite (Admin und Benutzer)
+   * Berechnet die Größe der normalen Startseite (Admin und Benutzer)
    **/
   resizeUser: function()
   {
     var contentHeight     = $("content").getHeight();
     var contentWidth      = $("content").getWidth();
     var width = parseInt(contentWidth / 2);
-
+    
     if ($("contentLeft"))
     {
       //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
@@ -15152,11 +15152,11 @@ StartPage = Singleton.create(Page, {
       //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
       Element.setStyle("contentRight", {"height": contentHeight + "px", "width": "44%"});
     }
-
+    
     if ($("favSelector"))
-    {
+    {   
       var FavSelectorHeight = $("favSelector").getHeight();
-      var FAV_MARGIN_HEIGHT = 8;
+      var FAV_MARGIN_HEIGHT = 8;          
       var favViewHeight = (contentHeight - FavSelectorHeight - FAV_MARGIN_HEIGHT) * 0.95;
       $("favView").setStyle({"height": favViewHeight});
     }
@@ -15256,7 +15256,7 @@ StartPage = Singleton.create(Page, {
       var devAddress = self.devList[self.devIndex].address,
         curFw = self.devList[self.devIndex].firmware,
         arCurFw = curFw.split("."),
-        availableFW = self.devList[self.devIndex].availableFirmware,// auf der CCU gespeicherte Gerï¿½te-Fw.
+        availableFW = self.devList[self.devIndex].availableFirmware,// auf der CCU gespeicherte Geräte-Fw.
         devIsUpdatable = self.devList[self.devIndex].updatable,
         arResultMajorMinorPatch,
         resultMajorMinor,
@@ -15365,24 +15365,24 @@ StartPage = Singleton.create(Page, {
       window.setTimeout(fn, 5000);
     }
   },
-
+  
   /**
-   * Berechnet die Grï¿½ï¿½e der Startseite fï¿½r den Gast
+   * Berechnet die Größe der Startseite für den Gast
    **/
-  resizeGuest: function() { }
-
-
+  resizeGuest: function() { }   
+  
+  
 });
 ControlPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_CONTROL";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
     loadStatus(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -15390,18 +15390,18 @@ ControlPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 ControlRoomsPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_CONTROL";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
     loadHandlingRooms(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -15409,18 +15409,18 @@ ControlRoomsPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 ControlFunctionsPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_CONTROL";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
     loadHandlingFunctions(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -15428,19 +15428,19 @@ ControlFunctionsPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 ControlFavoritesPage = new function()
 {
 
   var MAINMENU_ID = "MAINMENU_FAVORITES";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
     loadFavorites(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -15448,18 +15448,18 @@ ControlFavoritesPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 ControlFavoritePage = new function()
 {
   var MAINMENU_ID = "MAINMENU_FAVORITES";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
     loadFavViewer(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -15467,18 +15467,18 @@ ControlFavoritePage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 ControlDevicesPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_CONTROL";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
     loadHandlingDevices(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -15486,18 +15486,18 @@ ControlDevicesPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 ControlProgramsPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_CONTROL";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
     loadHandlingPrograms();
   };
-
+  
   this.leave = function()
   {
   };
@@ -15505,18 +15505,18 @@ ControlProgramsPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 ControlVariablesPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_STATUS";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
     loadStatusviewSysVars(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -15524,18 +15524,18 @@ ControlVariablesPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 ControlProtocolPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_STATUS";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
     loadStatusviewSysProtocol(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -15543,18 +15543,18 @@ ControlProtocolPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 LinksAndProgramsPage = new function()
 {
   var m_menuId = "MAINMENU_LINKSANDPROGRAMS";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(m_menuId);
     loadLinkProg(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -15562,19 +15562,19 @@ LinksAndProgramsPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 LinkListPage = new function()
 {
   var m_menuId = "MAINMENU_LINKSANDPROGRAMS";
-
+  
   this.enter = function(options)
   {
     var args = "";
-
+    
     MainMenu.select(m_menuId);
-    if (typeof(options) != "undefined")
-    {
+    if (typeof(options) != "undefined") 
+    {    
       for(key in options)
       {
         args += "&" + key + "=" + options[key];
@@ -15582,7 +15582,7 @@ LinkListPage = new function()
     }
     updateContent("/config/ic_linkpeerlist.cgi", args);
   };
-
+  
   this.leave = function()
   {
   };
@@ -15590,18 +15590,18 @@ LinkListPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 ProgramListPage = new function()
 {
   var m_menuId = "MAINMENU_LINKSANDPROGRAMS";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(m_menuId);
     loadProgramList(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -15609,41 +15609,41 @@ ProgramListPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 LinkEditProfilePage = new function()
 {
   var m_menuId = "MAINMENU_LINKSANDPROGRAMS";
-
+  
   this.enter = function(options)
   {
     var iface    = options.iface;
     var sender   = options.sender;
     var receiver = options.receiver;
-
+    
     MainMenu.select(m_menuId);
     OpenSetProfiles(iface, sender, receiver);
-
+  
   };
-
+  
   this.leave = function()
   {
   };
-
+  
   this.resize = function()
   {
   };
-
+  
 };AlarmMessagesPage = new function()
 {
-
+  
   this.enter = function(options)
   {
     MainMenu.select(null);
     if ($("msgAlarms")) { $("msgAlarms").addClassName("Messages_Selected"); }
     loadAlarmMessages(options);
   };
-
+  
   this.leave = function()
   {
     if ($("msgAlarms")) { $("msgAlarms").removeClassName("Messages_Selected"); }
@@ -15652,18 +15652,18 @@ LinkEditProfilePage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 ServiceMessagesPage = new function()
 {
-
+  
   this.enter = function(options)
   {
     MainMenu.select(null);
     if ($("msgServices")) { $("msgServices").addClassName("Messages_Selected"); }
     loadServiceMessages(options);
   };
-
+  
   this.leave = function()
   {
     if ($("msgServices")) { $("msgServices").removeClassName("Messages_Selected"); }
@@ -15672,19 +15672,19 @@ ServiceMessagesPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 HelpPage = new function()
 {
 
   var m_menuId = "MAINMENU_HELP";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(m_menuId);
     loadHelp(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -15692,14 +15692,14 @@ HelpPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 /**
  * devielistpage.js
  **/
 
 /**
- * Gerï¿½teliste.
+ * Geräteliste.
  **/
 
 if (PLATFORM == "Central") {
@@ -15708,25 +15708,25 @@ if (PLATFORM == "Central") {
   MAINMENU_ID: "MAINMENU_OPTIONS",
   TREE_COLLAPSED_FOOTER_HTML: "" +
     "<table style='backgroud-color:white' boder='0' cellspacing='8'>" +
-      "<tr>" +
-        "<td align='center' valign='middle'><div class='FooterButton'  onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
-        "<td align='center' valign='middle'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
-        "<td align='center' valign='middle'><div class='FooterButton CLASS04312' onclick='DeviceListPage.expandTree();'>${footerBtnOpenTree}</div></td>" +
+      "<tr>" + 
+        "<td align='center' valign='middle'><div class='FooterButton'  onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" + 
+        "<td align='center' valign='middle'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" + 
+        "<td align='center' valign='middle'><div class='FooterButton CLASS04312' onclick='DeviceListPage.expandTree();'>${footerBtnOpenTree}</div></td>" + 
       "</tr>" +
     "</table>",
   TREE_EXPANDED_FOOTER_HTML: "" +
     "<table style='backgroud-color:white' boder='0' cellspacing='8'>" +
-      "<tr>" +
-        "<td align='center' valign='middle'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
-        "<td align='center' valign='middle'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
-        "<td align='center' valign='middle'><div class='FooterButton CLASS04312' onclick='DeviceListPage.collapseTree();'>${footerBtnCloseTree}</div></td>" +
+      "<tr>" + 
+        "<td align='center' valign='middle'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" + 
+        "<td align='center' valign='middle'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" + 
+        "<td align='center' valign='middle'><div class='FooterButton CLASS04312' onclick='DeviceListPage.collapseTree();'>${footerBtnCloseTree}</div></td>" + 
       "</tr>" +
     "</table>",
   FLAT_FOOTER_HTML: "" +
     "<table style='backgroud-color:white' boder='0' cellspacing='8'>" +
-      "<tr>" +
-        "<td align='center' valign='middle'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
-        "<td align='center' valign='middle'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
+      "<tr>" + 
+        "<td align='center' valign='middle'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" + 
+        "<td align='center' valign='middle'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" + 
         "<td align='center' valign='middle'><div class='FooterButton CLASS04312' onclick='DeviceListPage.recoverTree();'>${footerBtnRestoreTree}</div></td>" +
       "</tr>" +
     "</table>",
@@ -15753,13 +15753,13 @@ if (PLATFORM == "Central") {
       return (reverse) ? channels.reverse() : channels;
     }
   },
-  PREFIX: "DeviceListPage",
+  PREFIX: "DeviceListPage",  
   HIGHLIGHT_CLASS: "DeviceListCell_Highlight",
   CATEGORIES:
   [
     {id: "CATEGORY_SENDER", name: translateKey("generalChannelConfigLblSender")}, // Sender
-    {id: "CATEGORY_RECEIVER", name: translateKey("generalChannelConfigLblReceiver")}, // Empfï¿½nger
-    {id: "CATEGORY_NOT_LINKABLE", name: translateKey("generalChannelConfigLblNone")} // nicht verknï¿½pfbar
+    {id: "CATEGORY_RECEIVER", name: translateKey("generalChannelConfigLblReceiver")}, // Empfänger
+    {id: "CATEGORY_NOT_LINKABLE", name: translateKey("generalChannelConfigLblNone")} // nicht verknüpfbar
   ],
   MODES:
   [
@@ -15774,43 +15774,43 @@ if (PLATFORM == "Central") {
     {id: "INTERFACE_VIRTUAL_DEVICES", name: translateKey("VirtualDevices")},
     {id: "INTERFACE_SYSTEM", name: "System"} //
   ],
-
+  
   /**
    * Konstruktor
    **/
   initialize: function()
   {
     this.m_onRemoveDevice = this.onRemoveDevice.bind(this);
-
+    
     this.treeTemplate = TrimPath.parseTemplate(DEVICELIST_TREE_JST);
     this.flatTemplate = TrimPath.parseTemplate(DEVICELIST_FLAT_JST);
-
-    this.channels = new Array();
+    
+    this.channels = new Array(); 
     this.devices  = new Array();
     this.groups   = {};
-
+  
     this.mode        = this.MODE.TREE;
     this.sortId      = "NAME";
     this.sortDescend = false;
     this.isExpanded  = false;
-
+    
     DeviceList.removeEvent.add(this.m_onRemoveDevice);
   },
-
+    
   /**
-   * Aktualisiert die zwischengespeicherten Daten eines Gerï¿½ts
+   * Aktualisiert die zwischengespeicherten Daten eines Geräts
    **/
   updateDeviceData: function(device)
   {
     device.groups.each(function(group) {
       if (typeof(group._expanded) == "undefined") { group._expanded = false; }
     });
-
+    
     // if (typeof(device._expanded) == "undefined") { device._expanded = false; }
     device._expanded = false;
-
+    
     device.channels.each(function(channel) {
-      channel._isVisible = true;
+      channel._isVisible = true;        
     });
   },
 
@@ -15823,18 +15823,18 @@ if (PLATFORM == "Central") {
     this.channels = DeviceList.listChannels();
     this.devices.each(this.updateDeviceData, this);
   },
-
+  
   /**
    *
    **/
   sort: function(channels)
   {
     var sort_fn = this.SORT_FN[this.sortId];
-
+    
     if (typeof(sort_fn) != "undefined") { return sort_fn(channels, this.sortDescend); }
     else                                { return channels; }
   },
-
+  
   /**
    *
    **/
@@ -15849,21 +15849,21 @@ if (PLATFORM == "Central") {
             (this.RoomFilter.matchArray(channel.rooms))                  &&
             (this.FuncFilter.matchArray(channel.subsections)));
   },
-
+  
   /**
    *
    **/
   filterChannels: function(channels)
   {
     var result = new Array();
-
+    
     channels.each(function(channel) {
       if (this.matchChannel(channel)) { result.push(channel); }
     }, this);
-
+    
     return result;
   },
-
+    
   matchDevice: function(device)
   {
     return ((this.NameFilter.match(device.name))                         &&
@@ -15875,7 +15875,7 @@ if (PLATFORM == "Central") {
             (this.RoomFilter.matchArray(device.rooms))                   &&
             (this.FuncFilter.matchArray(device.subsections)));
   },
-
+  
   filterDevices: function(devices)
   {
     var result = new Array();
@@ -15883,10 +15883,10 @@ if (PLATFORM == "Central") {
     devices.each(function(device) {
       if (this.matchDevice(device)) { result.push(device); }
     }, this);
-
+    
     return result;
   },
-
+    
   /**
    * Startet die Aktualisierung der Anzeige
    **/
@@ -15894,29 +15894,29 @@ if (PLATFORM == "Central") {
   {
     var _updateData_ = updateData;
     if (typeof(_updateData_) == "undefined") { _updateData_ = false; }
-
+  
     $("content").setStyle({cursor: "wait"});
     window.setTimeout("DeviceListPage.updateView(" + _updateData_ + ");", 1);
   },
 
   /**
-   * Betreten der Gerï¿½teliste
+   * Betreten der Geräteliste
    **/
   enter: function(options)
   {
     this.m_visible = true;
-
+    
     MainMenu.select(this.MAINMENU_ID);
     setPath("<span onclick='WebUI.enter(SystemConfigPage);'>"+translateKey('menuSettingsPage')+"</span> &gt; "+translateKey('submenuDevices'));
     setFooter("");
     $("content").innerHTML = "";
 
     this.userIsNoExpert = homematic("User.isNoExpert", {"id": userId});
-
+    
     this.mode        = this.MODE.TREE;
     this.sortId      = "NAME";
     this.sortDescend = false;
-
+       
     var rooms = RoomList.list().ex_sortBy("name");
     var funcs = SubsectionList.list().ex_sortBy("name");
 
@@ -15941,13 +15941,13 @@ if (PLATFORM == "Central") {
   {
     this.m_visible = false;
   },
-
+  
   /**
-   *  Prï¿½ft, ob es sich bei dem Kanal um einen der neuen virtellen Kanï¿½le handelt (z. B. VIRTUAL_DIMMER, VIRTUAL_SWITCH, VIRTUAL_BLIND)
-   *  Diese Kanï¿½le sollen nur dann angezeigt werden, wenn der User den Expertenmodus aktiviert hat.
+   *  Prüft, ob es sich bei dem Kanal um einen der neuen virtellen Kanäle handelt (z. B. VIRTUAL_DIMMER, VIRTUAL_SWITCH, VIRTUAL_BLIND)
+   *  Diese Kanäle sollen nur dann angezeigt werden, wenn der User den Expertenmodus aktiviert hat.  
    *  Die virtuellen Fernbedienungen der CCU 'VIRTUAL_KEY' sind nicht betroffen
-   *  TODO Diese Prï¿½fung dringend umbauen.....
-   **/
+   *  TODO Diese Prüfung dringend umbauen.....
+   **/ 
   showVirtualChannel: function(channel) {
     var deviceType = channel.deviceType.name.toUpperCase(),
     interfaceName = channel.device.interfaceName,
@@ -16057,7 +16057,7 @@ if (PLATFORM == "Central") {
 
 
   /**
-   * Zeigt den Konfigurationsdialog fï¿½r einen Kanal an.
+   * Zeigt den Konfigurationsdialog für einen Kanal an.
    **/
   selectChannel: function(id)
   {
@@ -16071,15 +16071,15 @@ if (PLATFORM == "Central") {
       }
     });
   },
-
+  
   /**
-   * Zeigt den Konfigurationsdialog fï¿½r ein Gerï¿½t an.
+   * Zeigt den Konfigurationsdialog für ein Gerät an.
    **/
   selectDevice: function(id)
   {
     var _this_ = this;
     var device = DeviceList.getDevice(id);
-
+    
     DeviceConfigDialog.show(device, function(result) {
       if (result == DeviceConfigDialog.RESULT_OK)
       {
@@ -16087,9 +16087,9 @@ if (PLATFORM == "Central") {
       }
     });
   },
-
+  
   /**
-   *
+   * 
    **/
   sortBy: function(sortId)
   {
@@ -16104,20 +16104,20 @@ if (PLATFORM == "Central") {
       this.mode   = this.MODE.FLAT;
       this.resetFilters(false);
     }
-
+    
     this.sortId = sortId;
     this.beginUpdateView();
   },
-
-
+  
+  
   /**
-   * Filter zurï¿½cksetzen
+   * Filter zurücksetzen
    **/
   resetFilters: function(update)
   {
     var _update_ = update;
     if (typeof(_update_) == "undefined") { _update_ = true; }
-
+    
     this.NameFilter.reset();
     this.TypeNameFilter.reset();
     this.DescriptionFilter.reset();
@@ -16127,29 +16127,29 @@ if (PLATFORM == "Central") {
     this.ModeFilter.reset();
     this.RoomFilter.reset();
     this.FuncFilter.reset();
-
+    
     if (_update_ == true) { this.beginUpdateView(); }
   },
 
   expandTree: function()
   {
     this.mode = this.MODE.TREE;
-
+    
     this.devices.each(function(device) {
       device._expanded = true;
-
+   
       device.channels.each(function(channel) {
         channel._isVisible = false;
         if(this.showVirtualChannel(channel)) {
           channel._isVisible = true;
          }
       }, this);
-
+      
       device.groups.each(function(group) {
         group._expanded = true;
       });
     }, this);
-
+    
     this.isExpanded = true;
     this.beginUpdateView();
   },
@@ -16164,7 +16164,7 @@ if (PLATFORM == "Central") {
         group._expanded = false;
       });
     });
-
+    
     this.isExpanded = false;
     this.beginUpdateView();
   },
@@ -16173,15 +16173,15 @@ if (PLATFORM == "Central") {
   {
     var evt = (event) ? event : window.event;
     Event.stop(evt);
-
+    
     var device = DeviceList.getDevice(id);
     //var userIsNoExpert = homematic("User.isNoExpert", {"id": userId});
 
     device._expanded = true;
-
+    
     $(this.PREFIX + id + "PLUS").hide();
     $(this.PREFIX + id + "MINUS").show();
-
+    
     device.groups.each(function(group) {
       $(this.PREFIX + group.id).show();
       $(this.PREFIX + group.id + "Thumbnail").show();
@@ -16205,10 +16205,10 @@ if (PLATFORM == "Central") {
 
     var device = DeviceList.getDevice(id);
     device._expanded = false;
-
+    
     $(this.PREFIX + id + "MINUS").hide();
     $(this.PREFIX + id + "PLUS").show();
-
+    
     device.groups.each(function(group) {
       $(this.PREFIX + group.id).hide();
       $(this.PREFIX + group.id + "Thumbnail").hide();
@@ -16219,24 +16219,24 @@ if (PLATFORM == "Central") {
       $(this.PREFIX + channel.id + "Thumbnail").hide();
     }, this);
   },
-
+  
   expandGroup: function(event, id)
   {
     var evt = (event) ? event : window.event;
     Event.stop(evt);
-
+    
     var group = DeviceList.getChannelGroup(id);
     group._expanded = true;
-
+    
     $(this.PREFIX + id + "PLUS").hide();
     $(this.PREFIX + id + "MINUS").show();
-
+    
     group.channels.each(function(channel) {
       $(this.PREFIX + channel.id).show();
       $(this.PREFIX + channel.id + "Thumbnail").show();
     }, this);
   },
-
+  
   collapseGroup: function(event, id)
   {
     var evt = (event) ? event : window.event;
@@ -16244,16 +16244,16 @@ if (PLATFORM == "Central") {
 
     var group = DeviceList.getChannelGroup(id);
     group._expanded = false;
-
+    
     $(this.PREFIX + id + "MINUS").hide();
     $(this.PREFIX + id + "PLUS").show();
-
+    
     group.channels.each(function(channel) {
       $(this.PREFIX + channel.id).hide();
       $(this.PREFIX + channel.id + "Thumbnail").hide();
     }, this);
   },
-
+  
   /**
    * Baumstruktur wiederherstellen
    **/
@@ -16261,24 +16261,24 @@ if (PLATFORM == "Central") {
   {
     this.mode = this.MODE.TREE;
     this.resetFilters();
-  },
-
+  }, 
+  
   /**
-   * Gerï¿½t lï¿½schen
+   * Gerät löschen
    **/
   deleteDevice: function(event, id)
   {
     var evt = (event) ? event : window.event;
     Event.stop(evt);
-
+  
     var device = DeviceList.getDevice(id);
     new DeleteDeviceDialog(device, function(isDeleted) {
       // if (isDeleted) { WebUI.reload(); }
     });
   },
-
+  
   /**
-   * Gerï¿½t, Kanal oder Kanalgruppe konfigurieren
+   * Gerät, Kanal oder Kanalgruppe konfigurieren
    **/
   showConfiguration: function(event, typeId, id)
   {
@@ -16289,7 +16289,7 @@ if (PLATFORM == "Central") {
 
     switch (typeId)
     {
-      case "DEVICE":
+      case "DEVICE": 
         var device  = DeviceList.getDevice(id);
         var iface   = device.interfaceName;
         var address = device.address;
@@ -16311,17 +16311,17 @@ if (PLATFORM == "Central") {
         Debug.assert(false, "DeviceListPage.showConfiguration: invalid type id");
         break;
     }
-
+    
   },
-
+  
   /**
-   * Direkte Verknï¿½pfungen anzeigen
+   * Direkte Verknüpfungen anzeigen
    **/
   showDirectLinks: function(event, typeId, id)
   {
     var evt = (event) ? event : window.event;
     Event.stop(evt);
-
+    
     switch (typeId)
     {
       case "DEVICE":
@@ -16351,7 +16351,7 @@ if (PLATFORM == "Central") {
         break;
     }
   },
-
+  
   /**
    * Programme anzeigen
    **/
@@ -16359,7 +16359,7 @@ if (PLATFORM == "Central") {
   {
     var evt = (event) ? event : window.event;
     Event.stop(evt);
-
+    
     switch (typeId)
     {
       case "DEVICE":
@@ -16369,7 +16369,7 @@ if (PLATFORM == "Central") {
         break;
       case "GROUP":
         var group = DeviceList.getChannelGroup(id);
-        var ids   = group.listProgramIds();
+        var ids   = group.listProgramIds();        
         WebUI.enter(ProgramListPage, ids.join("\t"));
         break;
       case "CHANNEL":
@@ -16380,9 +16380,9 @@ if (PLATFORM == "Central") {
       default:
         Debug.assert(false, "DeviceListPage.showPrograms: invalid type id");
         break;
-    }
+    }    
   },
-
+  
   /**
    * Aktualisert die Anzeige
    **/
@@ -16443,7 +16443,7 @@ if (PLATFORM == "Central") {
     translatePage(".j_rooms, .j_functions"); // this translates the room name as well the function name within the main devicelist (Settings > Devices)
     translateFilter(); // this translates the filter in the header of the page
   },
-
+  
   onRemoveDevice: function(whatEver)
   {
     if (this.m_visible)
@@ -16451,14 +16451,14 @@ if (PLATFORM == "Central") {
       WebUI.reload();
     }
   }
-
+  
 });
 
 } else {
 
  DeviceListPage = new function()
  {
-  //Gerï¿½teliste Konfigtool
+  //Geräteliste Konfigtool
   var m_menuId = "MAINMENU_OPTIONS_DEVICES";
   this.enter = function(options)
   {
@@ -16480,13 +16480,13 @@ if (PLATFORM == "Central") {
 FavoriteListPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
-    MainMenu.select(MAINMENU_ID);
+    MainMenu.select(MAINMENU_ID);    
     loadFavOverview(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -16494,17 +16494,17 @@ FavoriteListPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 FunctionListPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
     loadFunctionList(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -16512,26 +16512,26 @@ FunctionListPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 NewDeviceListPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
-    MainMenu.select(MAINMENU_ID);
-
+    MainMenu.select(MAINMENU_ID);    
+    
     // Aktualisiert alle Gewerke
-    // ==> neue Gerï¿½te werden beim Anlernen automatisch einem Gewerk zugeordnet
+    // ==> neue Geräte werden beim Anlernen automatisch einem Gewerk zugeordnet
     var subsections = SubsectionList.list();
     subsections.each(function(subsection) {
       SubsectionList.beginUpdate(subsection.id);
     });
-
+    
     loadNewDevices(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -16539,18 +16539,18 @@ NewDeviceListPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 RoomListPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
-    MainMenu.select(MAINMENU_ID);
+    MainMenu.select(MAINMENU_ID);    
     loadRoomList(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -16558,18 +16558,18 @@ RoomListPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 SystemConfigPageUser = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
-    MainMenu.select(MAINMENU_ID);
+    MainMenu.select(MAINMENU_ID);    
     loadSystemConfigUser(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -16577,18 +16577,18 @@ SystemConfigPageUser = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 SystemConfigPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
-    MainMenu.select(MAINMENU_ID);
+    MainMenu.select(MAINMENU_ID);    
     loadSystemConfig(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -16596,18 +16596,18 @@ SystemConfigPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 UserAdminPageUser = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
-    MainMenu.select(MAINMENU_ID);
+    MainMenu.select(MAINMENU_ID);    
     updateContent('/pages/tabs/user/userAdministrationUser.htm');
   };
-
+  
   this.leave = function()
   {
   };
@@ -16615,18 +16615,18 @@ UserAdminPageUser = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 UserAdminPageAdmin = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
-    MainMenu.select(MAINMENU_ID);
+    MainMenu.select(MAINMENU_ID);    
     loadSysconfigUserAdmin(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -16634,18 +16634,18 @@ UserAdminPageAdmin = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 SystemControlPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
-    MainMenu.select(MAINMENU_ID);
+    MainMenu.select(MAINMENU_ID);    
     loadSystemControl(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -16653,12 +16653,12 @@ SystemControlPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 CreateDiagramPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
@@ -16687,7 +16687,7 @@ CreateDiagramPage = new function()
       updateContent("jpages/diagram/settings");
     }
   };
-
+  
   this.leave = function()
   {
   };
@@ -16695,12 +16695,12 @@ CreateDiagramPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 CreateDiagramPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
@@ -16729,7 +16729,7 @@ CreateDiagramPage = new function()
       updateContent("jpages/diagram/settings");
     }
   };
-
+  
   this.leave = function()
   {
   };
@@ -16737,7 +16737,7 @@ CreateDiagramPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 CreateAccessPointSettings = new function()
 {
@@ -16747,7 +16747,7 @@ CreateAccessPointSettings = new function()
     conInfo("create page accesspoint settings");
     updateContent("jpages/hmip/AccessPointSettings");
   };
-
+  
   this.leave = function()
   {
   };
@@ -16755,12 +16755,12 @@ CreateAccessPointSettings = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 DiagramListPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
@@ -16777,7 +16777,7 @@ DiagramListPage = new function()
     }
 
   };
-
+  
   this.leave = function()
   {
   };
@@ -16785,12 +16785,12 @@ DiagramListPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 CreateGroupPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
@@ -16809,7 +16809,7 @@ CreateGroupPage = new function()
     }
 
   };
-
+  
   this.leave = function()
   {
   };
@@ -16817,12 +16817,12 @@ CreateGroupPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 CreateTestPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
@@ -16839,7 +16839,7 @@ CreateTestPage = new function()
       updateContent("jpages/testjavapage");
     }
   };
-
+  
   this.leave = function()
   {
   };
@@ -16847,12 +16847,12 @@ CreateTestPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 DeviceFirmware = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
     MainMenu.select(MAINMENU_ID);
@@ -16869,7 +16869,7 @@ DeviceFirmware = new function()
       updateContent("jpages/devicefirmware");
     }
   };
-
+  
   this.leave = function()
   {
   };
@@ -16877,7 +16877,7 @@ DeviceFirmware = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 function compare(a,b) {
   if (a.name < b.name)
@@ -16933,13 +16933,13 @@ DeviceFirmwareInformation = new function()
 }();VariableListPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   this.enter = function(options)
   {
-    MainMenu.select(MAINMENU_ID);
+    MainMenu.select(MAINMENU_ID);    
     loadSysconfigSysVars(options);
   };
-
+  
   this.leave = function()
   {
   };
@@ -16947,12 +16947,12 @@ DeviceFirmwareInformation = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 DeviceConfigPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
-
+  
   /**
    * @param options
    *        iface
@@ -16963,8 +16963,8 @@ DeviceConfigPage = new function()
   this.enter = function(options)
   {
   	ResetPostString();
-
-    MainMenu.select(MAINMENU_ID);
+    
+    MainMenu.select(MAINMENU_ID);    
     var poststr = "";
     if (typeof(options) != "undefined")
     {
@@ -16976,7 +16976,7 @@ DeviceConfigPage = new function()
 
     updateContent(UI_PATH + 'ic_deviceparameters.cgi', poststr);
   };
-
+  
   this.leave = function()
   {
   };
@@ -16984,7 +16984,7 @@ DeviceConfigPage = new function()
   this.resize = function()
   {
   };
-
+  
 }();
 getGatewayStatus = function()
 {
@@ -17001,7 +17001,7 @@ var globalGWClasses = {RF : "RF", Wired : "Wired"};
 BidcosRfPage =
 {
   UPDATE_INTERVALL: 5,
-
+  
   m_page: null,
   m_optionsContainer: null,
   m_optionsHeadline: null,
@@ -17051,219 +17051,219 @@ BidcosRfPage =
     globalLGWTypeMap[globalLGWTypes.HMWLGW] = "HomeMatic RS485 Gateway";
     globalLGWTypeMap[globalLGWTypes.HMLGW2] = "HomeMatic RF-LAN Gateway";
     globalLGWTypeMap[globalLGWTypes.LANIF] = "HM Configuration Tool LAN";
-
+        
     /* Event-Handler */
     this.m_onUpdateHandler = function() { BidcosRfPage.onUpdate(); };
     this.m_onSourceChangedHandler = function() { BidcosRfPage.onSourceChanged(); };
     this.m_onAddGatewayHandlerRF = function() { BidcosRfPage.onAddGateway(); };
     this.m_onApplyHandler = function() { BidcosRfPage.onApply(); };
-
+    
     /* Periodisches Update */
     this.m_periodicalUpdater = new PeriodicalExecuter(this.m_onUpdateHandler, this.UPDATE_INTERVALL);
-
+    
     /* Allgmeine Einstellungen */
     this.m_optionsContainer = document.createElement("div");
     this.m_page.appendChild(this.m_optionsContainer);
-
-    /* ï¿½berschrift */
+    
+    /* Überschrift */
     this.m_optionsHeadline = document.createElement("h1");
     //this.m_optionsHeadline.appendChild(document.createTextNode("Allgmeine Einstellungen"));
-    this.m_optionsHeadline.appendChild(document.createTextNode(translateKey("dialogSettingsBidCosRFConfLblSettings")));
+    this.m_optionsHeadline.appendChild(document.createTextNode(translateKey("dialogSettingsBidCosRFConfLblSettings")));    
     this.m_optionsContainer.appendChild(this.m_optionsHeadline);
-
+    
     /* Formular zur Auswahl der Quelle */
     this.m_optionsForm = document.createElement("form");
     this.m_optionsContainer.appendChild(this.m_optionsForm);
-
-    /* Container fï¿½r BidCoS-RF Gateways */
+    
+    /* Container für BidCoS-RF Gateways */
     this.m_gatewayContainer = document.createElement("div");
     $(this.m_gatewayContainer).hide();
     this.m_optionsContainer.appendChild(this.m_gatewayContainer);
-
-    /* Tabelle fï¿½r BidCoS-RF Gateways */
+    
+    /* Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTable = document.createElement("table");
     this.m_gatewayTable.className = "bidcosrf_table";
     $(this.m_gatewayTable).writeAttribute("cellspacing", "0");
     this.m_gatewayContainer.appendChild(this.m_gatewayTable);
-
-    /* Tabellenkopf (Tabelle fï¿½r BidCoS-RF Gateways) */
+    
+    /* Tabellenkopf (Tabelle für BidCoS-RF Gateways) */
     this.m_gatewayTableHead = document.createElement("thead");
     this.m_gatewayTable.appendChild(this.m_gatewayTableHead);
-
-    /* Kopfzeile (Tabelle fï¿½r BidCoS-RF Gateways) */
+    
+    /* Kopfzeile (Tabelle für BidCoS-RF Gateways) */
     this.m_gatewayTableHeadRow = document.createElement("tr");
     this.m_gatewayTableHead.appendChild(this.m_gatewayTableHeadRow);
 
-    /* Spaltenï¿½berschrift Name (Tabelle fï¿½r BidCoS-RF Gateways */
+    /* Spaltenüberschrift Name (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableAddressHeader = document.createElement("th");
     this.m_gatewayTableAddressHeader.className = "bidcosrf_tableheader";
     this.m_gatewayTableAddressHeader.appendChild(document.createTextNode(translateKey("thName")));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableAddressHeader);
 
-    /* Spaltenï¿½berschrift Seriennummer (Tabelle fï¿½r BidCoS-RF Gateways */
+    /* Spaltenüberschrift Seriennummer (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableAddressHeader = document.createElement("th");
     this.m_gatewayTableAddressHeader.className = "bidcosrf_tableheader";
     //this.m_gatewayTableAddressHeader.appendChild(document.createTextNode("Seriennummer"));
     this.m_gatewayTableAddressHeader.appendChild(document.createTextNode("Gateway"));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableAddressHeader);
-
-    /* Spaltenï¿½berschrift AES-Schlï¿½ssel (Tabelle fï¿½r BidCoS-RF Gateways */
+    
+    /* Spaltenüberschrift AES-Schlüssel (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableKeyHeader = document.createElement("th");
     this.m_gatewayTableKeyHeader.className = "bidcosrf_tableheader";
     //this.m_gatewayTableKeyHeader.appendChild(document.createTextNode("Zugriffscode"));
     this.m_gatewayTableKeyHeader.appendChild(document.createTextNode(translateKey("dialogSettingsBidcosRFSecurityKey")));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableKeyHeader);
 
-    /* Spaltenï¿½berschrift IP (Tabelle fï¿½r BidCoS-RF Gateways */
+    /* Spaltenüberschrift IP (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableIPHeader = document.createElement("th");
     this.m_gatewayTableIPHeader.className = "bidcosrf_tableheader";
     //this.m_gatewayTableIPHeader.appendChild(document.createTextNode("IP-Adresse"));
     this.m_gatewayTableIPHeader.appendChild(document.createTextNode(translateKey("thIPAddress")));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableIPHeader);
 
-    /* Spaltenï¿½berschrift Status (Tabelle fï¿½r BidCoS-RF Gateways */
+    /* Spaltenüberschrift Status (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableStateHeader = document.createElement("th");
     this.m_gatewayTableStateHeader.className = "bidcosrf_tableheader";
     //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
     this.m_gatewayTableStateHeader.appendChild(document.createTextNode(translateKey("thState")));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableStateHeader);
 
-    /* Spaltenï¿½berschrift DutyCycle Status (Tabelle fï¿½r BidCoS-RF Gateways */
+    /* Spaltenüberschrift DutyCycle Status (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableDCStateHeader = document.createElement("th");
     this.m_gatewayTableDCStateHeader.className = "bidcosrf_tableheader";
     //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
     this.m_gatewayTableDCStateHeader.appendChild(document.createTextNode("DutyCycle"));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableDCStateHeader);
 
-    /* Spaltenï¿½berschrift Firmware Status (Tabelle fï¿½r BidCoS-RF Gateways */
+    /* Spaltenüberschrift Firmware Status (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableFWStateHeader = document.createElement("th");
     this.m_gatewayTableFWStateHeader.className = "bidcosrf_tableheader";
     //this.m_gatewayTableStateHeader.appendChild(document.createTextNode("Status"));
     this.m_gatewayTableFWStateHeader.appendChild(document.createTextNode("Firmware"));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableFWStateHeader);
 
-    /* Spaltenï¿½berschrift Verbunden (Tabelle fï¿½r BidCoS-RF Gateways */
+    /* Spaltenüberschrift Verbunden (Tabelle für BidCoS-RF Gateways */
     this.m_gatewayTableActionHeader = document.createElement("th");
     this.m_gatewayTableActionHeader.className = "bidcosrf_tableheader";
     //this.m_gatewayTableActionHeader.appendChild(document.createTextNode("Aktion"));
     this.m_gatewayTableActionHeader.appendChild(document.createTextNode(translateKey("thAction")));
     this.m_gatewayTableHeadRow.appendChild(this.m_gatewayTableActionHeader);
-
-    /* Tabellenkï¿½rper (Tabelle fï¿½r BidCoS-RF Gateways) */
+    
+    /* Tabellenkörper (Tabelle für BidCoS-RF Gateways) */
     this.m_gatewayTableBody = document.createElement("tbody");
     this.m_gatewayTable.appendChild(this.m_gatewayTableBody);
-
-    /* Optionsmenï¿½ */
+    
+    /* Optionsmenü */
     this.m_optionsButtonBar = document.createElement("div");
     this.m_optionsContainer.appendChild(this.m_optionsButtonBar);
-
-    /* Button zum ï¿½bernehmen der Einstellungen */
+    
+    /* Button zum Übernehmen der Einstellungen */
     this.m_applyButton = document.createElement("div");
-    //this.m_applyButton.appendChild(document.createTextNode("ï¿½bernehmen"));
+    //this.m_applyButton.appendChild(document.createTextNode("Übernehmen"));
     this.m_applyButton.appendChild(document.createTextNode(translateKey("dialogSettingsBidCosRFConfBtnSave")));
     Event.observe($(this.m_applyButton), "click", this.m_onApplyHandler);
     this.m_applyButton.className = "StdButton bidcosrf_optionbutton";
     this.m_optionsButtonBar.appendChild(this.m_applyButton);
-
-    /* Button zum Hinzufï¿½gen von RF Gateways */
+    
+    /* Button zum Hinzufügen von RF Gateways */
     this.m_addGatewayButton = document.createElement("div");
     $(this.m_addGatewayButton).hide();
-    //this.m_addGatewayButton.appendChild(document.createTextNode("Hinzufï¿½gen"));
+    //this.m_addGatewayButton.appendChild(document.createTextNode("Hinzufügen"));
     this.m_addGatewayButton.appendChild(document.createTextNode(translateKey("dialogSettingsBidCosRFConfBtnAdd")));
     Event.observe($(this.m_addGatewayButton), "click", this.m_onAddGatewayHandlerRF);
     this.m_addGatewayButton.className = "StdButton bidcosrf_optionbutton";
-    this.m_optionsButtonBar.appendChild(this.m_addGatewayButton);
+    this.m_optionsButtonBar.appendChild(this.m_addGatewayButton);  
 
-    /* float-Bereich lï¿½schen */
+    /* float-Bereich löschen */
     this.m_optionButtonClear = document.createElement("div");
     this.m_optionButtonClear.className = "bidcosrf_clear";
     this.m_optionsButtonBar.appendChild(this.m_optionButtonClear);
-
-    /* Footer fï¿½r allgemeine Einstellungen*/
+    
+    /* Footer für allgemeine Einstellungen*/
     this.m_optionsFooter = document.createElement("div");
     this.m_optionsFooter.className = "bidcosrf_footer";
     this.m_optionsContainer.appendChild(this.m_optionsFooter);
-
-    /* Gateway-Zuordnung */
+    
+    /* Gateway-Zuordnung */  
     this.m_allocationContainer = document.createElement("div");
     this.m_page.appendChild(this.m_allocationContainer);
-
-    /* ï¿½berschrift fï¿½r Gateway-Zuordnung */
+    
+    /* Überschrift für Gateway-Zuordnung */
     this.m_allocationHeadline = document.createElement("h1");
     //this.m_allocationHeadline.appendChild(document.createTextNode("Interface-Zuordnung"));
     this.m_allocationHeadline.appendChild(document.createTextNode(translateKey("dialogSettingsBidCosRFConfIfaceAssignment")));
     this.m_allocationContainer.appendChild(this.m_allocationHeadline);
-
-    /* Tabelle fï¿½r Gateway-Zuordnung */
+    
+    /* Tabelle für Gateway-Zuordnung */
     this.m_allocationTable = document.createElement("table");
-    this.m_allocationTable.className = "bidcosrf_table";
+    this.m_allocationTable.className = "bidcosrf_table";    
     $(this.m_allocationTable).writeAttribute("cellspacing", "0");
     this.m_allocationContainer.appendChild(this.m_allocationTable);
-
-    /* Tabellenkopf (Tabelle fï¿½r Gateway-Zuordnung) */
+    
+    /* Tabellenkopf (Tabelle für Gateway-Zuordnung) */
     this.m_allocationTableHead = document.createElement("thead");
     this.m_allocationTable.appendChild(this.m_allocationTableHead);
-
-    /* Zeile im Tabellenkopf (Tabelle fï¿½r Gateway-Zuordnung) */
+    
+    /* Zeile im Tabellenkopf (Tabelle für Gateway-Zuordnung) */
     this.m_allocationTableHeadRow = document.createElement("tr");
     this.m_allocationTableHead.appendChild(this.m_allocationTableHeadRow);
-
-    /* Spaltenï¿½berschrift "Name" (Tabelle fï¿½r Gateway-Zuordnung) */
+    
+    /* Spaltenüberschrift "Name" (Tabelle für Gateway-Zuordnung) */
     this.m_allocationTableNameHeader = document.createElement("th");
     this.m_allocationTableNameHeader.className = "bidcosrf_tableheader";
     //this.m_allocationTableNameHeader.appendChild(document.createTextNode("Name"));
     this.m_allocationTableNameHeader.appendChild(document.createTextNode(translateKey("thName")));
     this.m_allocationTableHeadRow.appendChild(this.m_allocationTableNameHeader);
 
-    /* Spaltenï¿½berschrift "Bild" (Tabelle fï¿½r Gateway-Zuordnung) */
+    /* Spaltenüberschrift "Bild" (Tabelle für Gateway-Zuordnung) */
     this.m_allocationTableImageHeader = document.createElement("th");
     this.m_allocationTableImageHeader.className = "bidcosrf_tableheader";
     //this.m_allocationTableImageHeader.appendChild(document.createTextNode("Bild"));
     this.m_allocationTableImageHeader.appendChild(document.createTextNode(translateKey("thPicture")));
     this.m_allocationTableHeadRow.appendChild(this.m_allocationTableImageHeader);
 
-    /* Spaltenï¿½berschrift "Seriennummer" (Tabelle fï¿½r Gateway-Zuordnung) */
+    /* Spaltenüberschrift "Seriennummer" (Tabelle für Gateway-Zuordnung) */
     this.m_allocationTableAddressHeader = document.createElement("th");
     this.m_allocationTableAddressHeader.className = "bidcosrf_tableheader";
     //this.m_allocationTableAddressHeader.appendChild(document.createTextNode("Seriennummer"));
     this.m_allocationTableAddressHeader.appendChild(document.createTextNode(translateKey("thSerialNumber")));
     this.m_allocationTableHeadRow.appendChild(this.m_allocationTableAddressHeader);
 
-    /* Spaltenï¿½berschrift "Gatway" (Tabelle fï¿½r Gateway-Zuordnung) */
+    /* Spaltenüberschrift "Gatway" (Tabelle für Gateway-Zuordnung) */
     this.m_allocationTableGatewayHeader = document.createElement("th");
     this.m_allocationTableGatewayHeader.className = "bidcosrf_tableheader";
     this.m_allocationTableGatewayHeader.appendChild(document.createTextNode("Gateway"));
     this.m_allocationTableHeadRow.appendChild(this.m_allocationTableGatewayHeader);
 
-    /* Spaltenï¿½berschrift "Aktion" (Tabelle fï¿½r Gateway-Zuordnung) */
+    /* Spaltenüberschrift "Aktion" (Tabelle für Gateway-Zuordnung) */
     this.m_allocationTableActionHeader = document.createElement("th");
     this.m_allocationTableActionHeader.className = "bidcosrf_tableheader";
     //this.m_allocationTableActionHeader.appendChild(document.createTextNode("Aktion"));
     this.m_allocationTableActionHeader.appendChild(document.createTextNode(translateKey("thAction")));
     this.m_allocationTableHeadRow.appendChild(this.m_allocationTableActionHeader);
-
-    /* Tabellenkï¿½rper (Tabelle fï¿½r Gateway-Zuordnung) */
+    
+    /* Tabellenkörper (Tabelle für Gateway-Zuordnung) */
     this.m_allocationTableBody = document.createElement("tbody");
     this.m_allocationTable.appendChild(this.m_allocationTableBody);
-
+    
     this.m_gatewayContainer.show();
     this.m_addGatewayButton.show();
-
+    
   },
 
   destroy: function()
   {
     var i, len;
-
+    
     /* Periodisches Update deaktivieren */
     this.m_periodicalUpdater.stop();
-
+    
     /* Ereignis-Handler  abmelden */
     //Event.stopObserving($(this.m_antennaRadioButton), "click", this.m_sourceChangedHandler);
     //Event.stopObserving($(this.m_hmcfgRadioButton), "click", this.m_sourceChangedHandler);
     Event.stopObserving($(this.m_applyButton), "click", this.m_onApplyHandler);
     Event.stopObserving($(this.m_addGatewayButton), "click", this.m_onAddGatewayHandlerRF);
-
+    
     /* Gateways entfernen */
     for (i = 0, len = this.m_gateways.length; i < len; i++)
     {
@@ -17271,8 +17271,8 @@ BidcosRfPage =
       gateway.destroy();
     }
     this.m_gateways = [];
-
-    /* Gerï¿½te entfernen */
+    
+    /* Geräte entfernen */
     for (i = 0, len = this.m_devices.length; i < len; i++)
     {
       var device = this.m_devices[i];
@@ -17304,24 +17304,24 @@ BidcosRfPage =
     setPath(PATH_HTML);
     setFooter(FOOTER_HTML);
     InterfaceMonitor.stop();
-
+    
     this.create();
     this.loadGateways();
     this.loadDevices();
-
+        
     WebUI.setContent(this.m_page);
   },
-
+  
   leave: function()
   {
     this.destroy();
     InterfaceMonitor.start();
   },
-
+  
   resize: function()
   {
   },
-
+  
   onSourceChanged: function()
   {
  /*   if (this.m_hmcfgRadioButton.checked)
@@ -17335,11 +17335,11 @@ BidcosRfPage =
       $(this.m_addGatewayButton).hide();
     }*/
   },
-
+  
   onAddGateway: function()
   {
-
-  	 var wiredGWExists = false;
+  
+  	 var wiredGWExists = false;    
      for (var i = 0, len = this.m_gateways.length; i < len; i++)
      {
       var gateway = this.m_gateways[i];
@@ -17351,7 +17351,7 @@ BidcosRfPage =
     new BidcosRfPage.AddGatewayDialog(wiredGWExists)
       .setAction(this.onGatewayAdded, this);
   },
-
+  
   onGatewayAdded: function(dialog)
   {
     var gateway = new BidcosRfPage.Gateway()
@@ -17362,24 +17362,24 @@ BidcosRfPage =
       .setKey(dialog.getKey())
       .setIP(dialog.getIp())
       .setState(translateKey("lanGatewayLblNotActive"));
-
+      
     this.m_gatewayTableBody.appendChild(gateway.getElement());
     this.m_gateways.push(gateway);
   },
-
-
+  
+  
   onApply: function()
   {
     var gatewaysRF = [];
     var gatewaysWired = [];
 
 /*    var useInternalAntenna = this.m_antennaRadioButton.checked;
-    if (this.ss.length == 0)
+    if (this.ss.length == 0) 
     {
       useInternalAntenna = true;
     }
-  */
-
+  */  
+    
     /* RF-Gateways */
     for (var i = 0, len = this.m_gateways.length; i < len; i++)
     {
@@ -17400,40 +17400,40 @@ BidcosRfPage =
 		    serialNumber : gateway.getAddress(),
 		    encryptionKey: gateway.getKey(),
 		    ipAddress    : gateway.getIP()
-		  });
+		  });	  	
 	  }
     }
-
+    
     homematic("BidCoS_RF.setConfigurationRF", {
      // "useInternalAntenna": useInternalAntenna,
       "interfaces": gatewaysRF
     });
-
+    
     homematic("BidCoS_Wired.setConfigurationWired", {
       "interfaces": gatewaysWired
     });
-
-
+  
+    
  //   if (/*(useInternalAntenna == false) &&*/ (homematic("BidCoS_RF.isKeySet", null))) //TODO Check if this is okay
  //   {
  //     new BidcosRfPage.OptionsDialog();
  //   }
  //   else
  //   {
-      //MessageBox.show("Info", "Die Konfiguration wurde an die HomeMatic Zentrale ï¿½bertragen.\nDie ï¿½nderungen werden mit dem nï¿½chsten Start der HomeMatic Zentrale wirksam.");
+      //MessageBox.show("Info", "Die Konfiguration wurde an die HomeMatic Zentrale übertragen.\nDie Änderungen werden mit dem nächsten Start der HomeMatic Zentrale wirksam.");
       MessageBox.show(translateKey("dialogInfo"), translateKey("dialogSettingsBidcosRFSaveConfigSucceed"));
       WebUI.enter(BidcosRfPage);
  //   }
   },
-
+  
   onUpdate: function()
-  {
+  { 
     var that = this;
     //Sort gateways into own arrays to avoid interferences when doing more than one homematic() calls.
     var rfGateways = new Array();
     var wiredGateways = new Array();
-
-    for(var i = 0, len = that.m_gateways.length; i < len; i++)
+    
+    for(var i = 0, len = that.m_gateways.length; i < len; i++) 
     {
     	if(that.m_gateways[i].getGatewayClass() == globalGWClasses.Wired) {
     		wiredGateways.push(that.m_gateways[i]);
@@ -17454,7 +17454,7 @@ BidcosRfPage =
 		    homematic("Interface.getLGWConnectionStatus", {"interface" : "BidCos-RF", "serial" : rfGateways[i].getAddress()}, function(lgwStatus) {
 		        var textB = "";
 		        var lgw = null;
-		        if(lgwStatus)
+		        if(lgwStatus) 
 		        {
 				    for(var j = 0; j < rfGateways.length; j++) {
 				    	if(rfGateways[j].getAddress() == lgwStatus.serial) {
@@ -17471,7 +17471,7 @@ BidcosRfPage =
 				    		lgw.setFWState(textFW);
 				    	}
 				    }
-		        	if(lgw)
+		        	if(lgw) 
 		        	{
 					  if(lgwStatus.connstat == "NO_ERROR") {
 					    textB = translateKey("lanGatewayLblConnected");
@@ -17489,7 +17489,7 @@ BidcosRfPage =
 					    textB = translateKey("lanGatewayLblNotConnected");
 					  }
 					}
-					else
+					else 
 					{
 				      textB = translateKey("lanGatewayLblNotActive");
 					}
@@ -17536,7 +17536,7 @@ BidcosRfPage =
 		      rfGateways[i].setState(text);
 		  }
         }
-
+        
         //Set address of default gateway
         if (!that.m_defaultGateway)
         {
@@ -17560,14 +17560,14 @@ BidcosRfPage =
 		    homematic("Interface.getLGWConnectionStatus", {"interface" : "BidCos-Wired", "serial" : wiredLGW.getAddress()}, function(lgwStatus) {
 		    var textB = "";
 		    var lgw = null;
-		    if(lgwStatus)
+		    if(lgwStatus) 
 		    {
 				for(var j = 0; j < wiredGateways.length; j++) {
 					if(wiredGateways[j].getAddress() == lgwStatus.serial) {
 					 lgw = wiredGateways[j];
 					}
 				}
-		    	if(lgw)
+		    	if(lgw) 
 		    	{
 				  if(lgwStatus.connstat == "NO_ERROR") {
 					textB = translateKey("lanGatewayLblConnected");
@@ -17596,12 +17596,12 @@ BidcosRfPage =
 		});
     }
   },
-
+  
   loadGateways: function()
   {
     var i, len;
     this.m_gateways = [];
-
+    
     //HomeMatic RF Gateways
     var response = homematic("BidCoS_RF.getConfigurationRF");
     if (response)
@@ -17609,7 +17609,7 @@ BidcosRfPage =
  //     this.m_antennaRadioButton.checked = response.useInternalAntenna;
  //     this.m_hmcfgRadioButton.checked = !response.useInternalAntenna;
       this.onSourceChanged();
-
+      
       for (i = 0, len = response.interfaces.length; i < len; i++)
       {
         var gateway = response.interfaces[i];
@@ -17621,9 +17621,9 @@ BidcosRfPage =
           .setKey(gateway.encryptionKey)
           .setIP(gateway.ipAddress));
       }
-
+    
     }
-
+    
    //HomeMatic Wired Gateways
 	response = homematic("BidCoS_Wired.getConfigurationWired");
 	if(response)
@@ -17647,22 +17647,22 @@ BidcosRfPage =
       var gateway = this.m_gateways[i];
       this.m_gatewayTableBody.appendChild(gateway.getElement());
     }
-
+      
   },
-
+  
   removeGateway: function(gateway)
   {
     gateway.destroy();
     this.m_gateways = this.m_gateways.without(gateway);
   },
-
+  
   loadDevices: function()
   {
     var i, len, device;
     this.m_devices = [];
-
+    
     var devices = DeviceList.listDevices();
-
+    
     for (i = 0, len = devices.length; i < len; i++)
     {
       device = devices[i];
@@ -17675,13 +17675,13 @@ BidcosRfPage =
           );
       }
     }
-
+    
     for (i = 0, len = this.m_devices.length; i < len; i++)
     {
       device = this.m_devices[i];
       this.m_allocationTableBody.appendChild(device.getElement());
     }
-
+    
     var that = this;
     homematic("Interface.listDevices", {"interface": "BidCos-RF"}, function(deviceList) {
       if (deviceList)
@@ -17691,15 +17691,15 @@ BidcosRfPage =
           var device = that.m_devices[i];
           device.setGatewayFromDeviceList(deviceList);
         }
-      }
+      }    
     });
   },
-
+  
   getGateways: function()
   {
     return this.m_gateways;
   },
-
+  
   getDefaultGateway: function()
   {
     return this.m_defaultGateway;
@@ -17732,7 +17732,7 @@ BidcosRfPage.Gateway.prototype =
   m_onEditHandler: null,
   m_changeKeyButton : null,
   m_onChangeKeyHandler : null,
-
+  
   create: function()
   {
     /* Event-Handler */
@@ -17740,13 +17740,13 @@ BidcosRfPage.Gateway.prototype =
     this.m_onDeleteHandler = function() { that.onDelete(); };
     this.m_onEditHandler = function() { that.onEdit(); };
     this.m_onChangeKeyHandler = function() { that.onChangeKey(); };
-
+    
     /* Tabellenzeile */
     this.m_element = document.createElement("tr");
-
+    
     /** Gateway-Klasse (RF oder Wired)*/
     this.m_gatewayClass = "";
-
+    
     /** Gateway-Typ (Lan Interface / HMWLGW) */
     this.m_type = "";
 
@@ -17761,27 +17761,27 @@ BidcosRfPage.Gateway.prototype =
     this.m_addressLabel = document.createElement("td");
     this.m_addressLabel.className = "bidcosrf_tablecell";
     this.m_element.appendChild(this.m_addressLabel);
-
+    
     /* Zugriffscode */
     this.m_keyLabel = document.createElement("td");
     this.m_keyLabel.className = "bidcosrf_tablecell";
     this.m_element.appendChild(this.m_keyLabel);
-
+    
     /* IP-Addresse */
     this.m_ipLabel = document.createElement("td");
     this.m_ipLabel.className = "bidcosrf_tablecell";
     this.m_element.appendChild(this.m_ipLabel);
-
+    
     /* Status */
     this.m_stateLabel = document.createElement("td");
     this.m_stateLabel.className = "bidcosrf_tablecell";
     this.m_element.appendChild(this.m_stateLabel);
-
+    
     /* DutyCycle Status */
     this.m_stateDCLabel = document.createElement("td");
     this.m_stateDCLabel.className = "bidcosrf_tablecell";
     this.m_element.appendChild(this.m_stateDCLabel);
-
+    
     /* Firmware Status */
     this.m_stateFWLabel = document.createElement("td");
     this.m_stateFWLabel.className = "bidcosrf_tablecell";
@@ -17791,18 +17791,18 @@ BidcosRfPage.Gateway.prototype =
     this.m_actionCell = document.createElement("td");
     this.m_actionCell.className = "bidcosrf_actioncell";
     this.m_element.appendChild(this.m_actionCell);
-
-    /* Lï¿½schen-Button */
+    
+    /* Löschen-Button */
     this.m_deleteButton = document.createElement("div");
     this.m_deleteButton.className = "StdButton";//"bidcosrf_button";
-    //this.m_deleteButton.appendChild(document.createTextNode("Lï¿½schen"));
+    //this.m_deleteButton.appendChild(document.createTextNode("Löschen"));
     this.m_deleteButton.appendChild(document.createTextNode(translateKey("btnRemove")));
     Event.observe($(this.m_deleteButton), "click", this.m_onDeleteHandler);
       Element.setStyle(this.m_deleteButton, {
       margin : "1px"
     });
     this.m_actionCell.appendChild(this.m_deleteButton);
-
+    
     /* Edit-Button */
     this.m_editButton = document.createElement("div");
     this.m_editButton.className = "StdButton";//"bidcosrf_button";
@@ -17812,8 +17812,8 @@ BidcosRfPage.Gateway.prototype =
     this.m_editButton.appendChild(document.createTextNode(translateKey("dialogSettingsBidCosRFConfBtnSet")));
 	Event.observe($(this.m_editButton), "click", this.m_onEditHandler);
     this.m_actionCell.appendChild(this.m_editButton);
-
-
+    
+    
     /* change key button */
     this.m_changeKeyButton = document.createElement("div");
     this.m_changeKeyButton.className = "StdButton";
@@ -17825,7 +17825,7 @@ BidcosRfPage.Gateway.prototype =
     Event.observe($(this.m_changeKeyButton), "click", this.m_onChangeKeyHandler);
     this.m_actionCell.appendChild(this.m_changeKeyButton);
   },
-
+  
   destroy: function()
   {
     Event.stopObserving($(this.m_deleteButton), "click", this.m_onDeleteHandler);
@@ -17833,12 +17833,12 @@ BidcosRfPage.Gateway.prototype =
     Event.stopObserving($(this.m_changeKeyButton), "click", this.m_onChangeKeyHandler);
     $(this.m_element).remove();
   },
-
+  
   getGatewayClass : function()
   {
   	return this.m_gatewayClass;
   },
-
+  
   setGatewayClass: function(gwClass)
   {
     this.m_gatewayClass = gwClass;
@@ -17854,7 +17854,7 @@ BidcosRfPage.Gateway.prototype =
     }
     return this;
   },
-
+  
   getType: function()
   {
     return this.m_type;
@@ -17881,42 +17881,42 @@ BidcosRfPage.Gateway.prototype =
     this.m_addressLabel.innerHTML = this.m_address+"<br/>"+globalLGWTypeMap[this.m_type];
     return this;
   },
-
+  
   getAddress: function()
   {
     return this.m_address;
   },
-
+  
   setKey: function(key)
   {
     this.m_key = key;
-
+    
     this.m_keyLabel.innerHTML = "";
     this.m_keyLabel.appendChild(document.createTextNode(key));
-
+    
     return this;
   },
-
+  
   getKey: function()
   {
     return this.m_key;
   },
-
+  
   setIP: function(ip)
   {
     this.m_ip = ip;
-
+    
     this.m_ipLabel.innerHTML = "";
     this.m_ipLabel.appendChild(document.createTextNode(ip));
-
+    
     return this;
   },
-
+  
   getIP: function()
   {
     return this.m_ip;
   },
-
+  
   setState: function(state)
   {
 
@@ -17925,13 +17925,13 @@ BidcosRfPage.Gateway.prototype =
 
     return this;
   },
-
+  
   setDCState: function(state)
   {
     this.m_stateDCLabel.innerHTML = "";
     this.m_stateDCLabel.appendChild(document.createTextNode(state));
   },
-
+  
   setFWState: function(state)
   {
     this.m_stateFWLabel.innerHTML = "";
@@ -17942,7 +17942,7 @@ BidcosRfPage.Gateway.prototype =
   {
     return this.m_element;
   },
-
+  
   determineState: function(status)
   {
     for (i = 0, len = status.length; i < len; i++)
@@ -17952,23 +17952,23 @@ BidcosRfPage.Gateway.prototype =
         return status[i];
       }
     }
-
+    
     return null;
   },
-
+  
   onDelete: function()
   {
     var that = this;
-    //new YesNoDialog("Sicherheitsabfrage", "Mï¿½chten Sie den HomeMatic Konfigurations-Adapter wirklich lï¿½schen?", function(result) {
+    //new YesNoDialog("Sicherheitsabfrage", "Möchten Sie den HomeMatic Konfigurations-Adapter wirklich löschen?", function(result) {
     new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveCFG"), function(result) {
-
+      
       if (result == YesNoDialog.RESULT_YES)
       {
         BidcosRfPage.removeGateway(that);
       }
     });
   },
-
+  
   onEdit : function()
   {
   	var that = this;
@@ -17981,21 +17981,21 @@ BidcosRfPage.Gateway.prototype =
     this.setKey(dialog.getKey());
     this.setIP(dialog.getIPAddress());
   },
-
+  
   onChangeKey : function()
   {
   	var that = this;
   	new BidcosRfPage.ChangeKeyDialog(that).setAction(this.onKeyChanged, this);
   },
-
+  
   keyContainsNoForbiddenCharacter : function(key) {
     if(key.indexOf("<") != -1) { return false; }
     else if(key.indexOf(">") != -1) { return false; }
-    else if(key.indexOf("\'") != -1) { return false; }
+    else if(key.indexOf("\'") != -1) { return false; }    
     else if(key.indexOf("\"") != -1) { return false; }
     else if(key.indexOf("&") != -1) { return false; }
     else if(key.indexOf("$") != -1) { return false; }
-    else if(key.indexOf("?") != -1) { return false; }
+    else if(key.indexOf("?") != -1) { return false; }    
     else if(key.indexOf("[") != -1) { return false; }
     else if(key.indexOf("]") != -1) { return false; }
     else if(key.indexOf("{") != -1) { return false; }
@@ -18005,15 +18005,15 @@ BidcosRfPage.Gateway.prototype =
     else { return true; }
     return false;
   },
-
+  
   onKeyChanged : function(dialog)
   {
     var key = dialog.getKey();
     var key2 = dialog.getKeyRepetition();
-    if(key === "") {
+    if(key === "") { 
     	MessageBox.show(translateKey("dialogSettingsBidcosRFChangeAccessCodeDialogErrorTitle"), translateKey("dialogSettingsBidcosRFChangeAccessCodeDialogErrorTooShort"));
     }
-  	else if(key === key2) {
+  	else if(key === key2) { 
   	  if(this.keyContainsNoForbiddenCharacter(key)) {//check if key contains a forbidden character
 		  if( homematic("BidCoS.changeLanGatewayKey", {
 		    "lgwclass" : this.getGatewayClass(), //RF or Wired
@@ -18036,8 +18036,8 @@ BidcosRfPage.Gateway.prototype =
   	  MessageBox.show(translateKey("dialogSettingsBidcosRFChangeAccessCodeDialogErrorTitle"), translateKey("dialogSettingsBidcosRFChangeAccessCodeDialogErrorDontMatch"));
   	}
   }
-
-
+  
+ 
 };
 
 
@@ -18045,7 +18045,7 @@ BidcosRfPage.Device = function()
 {
   this.create();
 };
-
+  
 BidcosRfPage.Device.prototype =
 {
   m_element: null,
@@ -18071,15 +18071,15 @@ BidcosRfPage.Device.prototype =
     /* Event-Handler */
     var that = this;
     this.m_onConfigHandler = function() { that.onConfig(); };
-
+    
     /* Tabellenzeile */
     this.m_element = document.createElement("tr");
-
+      
     /* Name */
     this.m_nameLabel = document.createElement("td");
     this.m_nameLabel.className = "bidcosrf_tablecell";
     this.m_element.appendChild(this.m_nameLabel);
-
+      
     /* Bild */
     this.m_image = document.createElement("td");
     this.m_image.className = "bidcosrf_imagecell bidcosrf_imagesize";
@@ -18095,12 +18095,12 @@ BidcosRfPage.Device.prototype =
     this.m_gatewayLabel = document.createElement("td");
     this.m_gatewayLabel.className = "bidcosrf_tablecell";
     this.m_element.appendChild(this.m_gatewayLabel);
-
+      
     /* Aktion */
     this.m_action = document.createElement("td");
     this.m_action.className = "bidcosrf_actioncell";
     this.m_element.appendChild(this.m_action);
-
+    
     /* Button zur Konfiguration */
     this.m_configButton = document.createElement("div");
     this.m_configButton.className = "StdButton";//"bidcosrf_button";
@@ -18116,49 +18116,49 @@ BidcosRfPage.Device.prototype =
     Event.stopObserving($(this.m_configButton), "click", this.m_onConfigHandler);
     $(this.m_element).remove();
   },
-
+    
   setName: function(name)
   {
     this.m_name = name;
-
+    
     this.m_nameLabel.innerHtml = "";
     this.m_nameLabel.appendChild(document.createTextNode(name));
-
+    
     return this;
   },
-
+  
   getName: function()
   {
     return this.m_name;
   },
-
+    
   setImageHtml: function(imageHtml)
   {
     var div = document.createElement("div");
     div.innerHTML = imageHtml;
     div.className = "thumbnail";
-
+    
     this.m_image.innerHTML = "";
     this.m_image.appendChild(div);
-
+    
     return this;
   },
-
+    
   setAddress: function(address)
   {
     this.m_address = address;
-
+    
     this.m_addressLabel.innerHtml = "";
     this.m_addressLabel.appendChild(document.createTextNode(address));
-
+    
     return this;
   },
-
+  
   getAddress: function()
   {
     return this.m_address;
   },
-
+   
   setGateway: function(gateway)
   {
     var label = gateway;
@@ -18182,29 +18182,29 @@ BidcosRfPage.Device.prototype =
     this.m_gatewayLabel.setAttribute("class", "bidcosrf_tablecell " + label.replace(/\s+/g,""));
     return this;
   },
-
+  
   getGateway: function()
   {
     return this.m_gateway;
   },
-
+  
   setRoaming: function(roaming)
   {
     this.m_roaming = roaming;
-
+    
     return this;
   },
-
+  
   getRoaming: function()
   {
     return this.m_roaming;
   },
-
+  
   getElement: function()
   {
     return this.m_element;
   },
-
+  
   setGatewayFromDeviceList: function(deviceList)
   {
     for (var i = 0, len = deviceList.length; i < len; i++)
@@ -18218,19 +18218,19 @@ BidcosRfPage.Device.prototype =
     }
     return this;
   },
-
+  
   onConfig: function()
   {
     new BidcosRfPage.EditAssignmentDialog()
       .setDevice(this)
       .setAction(this.saveConfig, this);
   },
-
+  
   saveConfig: function(dialog)
   {
     var gateway = dialog.getGateway();
     var roaming = dialog.getRoaming();
-
+    
     if (gateway)
     {
       homematic("Interface.setBidcosInterface", {
@@ -18257,7 +18257,7 @@ BidcosRfPage.EditGatewayDialog = Class.create({
 
   /** Constructor
   * Fuehrt die Grundinitialisierung durch und zeigt das Dialogfenster an.
-  **/
+  **/	
   initialize: function(gateway)
   {
     var screenWidth  = WebUI.getWidth();
@@ -18267,11 +18267,11 @@ BidcosRfPage.EditGatewayDialog = Class.create({
     var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
     var frameY       = parseInt((screenHeight - frameHeight) / 2);
 	var m_gateway = gateway;
-
+  
   	this.m_action = null;//Callback function
-
+  
     this.m_layer = document.createElement("div");
-    this.m_layer.className = "DialogLayer";
+    this.m_layer.className = "DialogLayer"; 
 
 
     //Create content ui-elements
@@ -18287,18 +18287,18 @@ BidcosRfPage.EditGatewayDialog = Class.create({
       .setWidth(frameWidth - 190)
       .setText(m_gateway.getUserName());
 
-    //Serial
+    //Serial  
     this.m_serialTextEdit = new UI.TextEdit()
       .setPosition(180, 70)
       .setWidth(frameWidth - 190)
       .setText(m_gateway.getAddress());
-
-	//Key
+	
+	//Key    
     this.m_keyTextEdit = new UI.TextEdit()
       .setPosition(180, 100)
       .setWidth(frameWidth - 190)
       .setText(m_gateway.getKey());
-
+    
     //IP Address
     this.m_ipTextEdit = new UI.TextEdit()
       .setPosition(180, 130)
@@ -18326,11 +18326,11 @@ BidcosRfPage.EditGatewayDialog = Class.create({
         .setText(translateKey("btnOk"))
         .setAction(this.ok, this)
       )
-
+      
       //Content:
       //Type label
       .add(new UI.Text().setPosition(10,10).setText(translateKey("dialogSettingsBidCosRFLblType")))
-      .add(this.m_typeText)
+      .add(this.m_typeText) 
 
       //Name
       .add(new UI.Text()
@@ -18349,9 +18349,9 @@ BidcosRfPage.EditGatewayDialog = Class.create({
       //Accesscode / passphrase
       .add(this.m_keyLabel
         .setPosition(10,100)
-        .setText(
+        .setText( 
           (m_gateway.getType() == "Lan Interface" ?  translateKey("dialogSettingsBidCosRFLblAccessCode") : translateKey("dialogSettingsBidCosRFLblPassphrase"))
-        )
+        ) 
       )
       .add(this.m_keyTextEdit)
       //IP label
@@ -18362,42 +18362,42 @@ BidcosRfPage.EditGatewayDialog = Class.create({
         .setText(translateKey("dialogSettingsBidCosRFLblIPAddress"))
       );
 
-
+  
     /* Add frame to layer and layer to Layer */
-    this.m_layer.appendChild(this.m_frame.getElement());
+    this.m_layer.appendChild(this.m_frame.getElement()); 
     Layer.add(this.m_layer);
   },
-
+  
   /**
    * @fn close
-   * @brief Schlieï¿½t das Dialogfenster
+   * @brief Schließt das Dialogfenster
    **/
   close: function()
   {
     Layer.remove(this.m_layer);
   },
-
+  
   /** @fn ok
-   *  @brief Fï¿½hrt die Callbackfuntion aus nachdem auf "OK" geklickt wurde
-   *        und schlieï¿½t anschlieï¿½end das Dialogfenster
+   *  @brief Führt die Callbackfuntion aus nachdem auf "OK" geklickt wurde
+   *        und schließt anschließend das Dialogfenster
    **/
   ok: function()
   {
     if (this.m_action) { this.m_action(this); }
     this.close();
   },
-
+  
   /** @fn cancel
-   * @brief Schlieï¿½t das Dialogfenster, nachdem auf "Abbrechen" geklickt wurde
+   * @brief Schließt das Dialogfenster, nachdem auf "Abbrechen" geklickt wurde 
    **/
   cancel: function()
   {
     this.close();
   },
-
+  
    /**
    * @fn setAction
-   * @brief Setzt die Callbackfuntion, die aufgerufen wird, wenn OK-gedrï¿½ckt wurde
+   * @brief Setzt die Callbackfuntion, die aufgerufen wird, wenn OK-gedrückt wurde
    * @param action  Callbackfuntion "onOK"
    * @param context Optional. Kontext, an die action gebunden wird
    **/
@@ -18405,7 +18405,7 @@ BidcosRfPage.EditGatewayDialog = Class.create({
   {
     if (context) { this.m_action = action.bind(context); }
     else         { this.m_action = action; }
-
+    
     return this;
   },
 
@@ -18418,25 +18418,25 @@ BidcosRfPage.EditGatewayDialog = Class.create({
   {
     return this.m_serialTextEdit.getText();
   },
-
+  
   getKey: function()
   {
     return this.m_keyTextEdit.getText();
   },
-
+  
   getIPAddress : function()
   {
     return this.m_ipTextEdit.getText();
   }
-
+  
 });
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 
 BidcosRfPage.ChangeKeyDialog = Class.create({
-
+	
   initialize : function(gateway) {
-
+    
     var screenWidth  = WebUI.getWidth();
     var screenHeight = WebUI.getHeight();
     var frameWidth   = 500;
@@ -18444,28 +18444,28 @@ BidcosRfPage.ChangeKeyDialog = Class.create({
     var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
     var frameY       = parseInt((screenHeight - frameHeight) / 2);
 	var m_gateway = gateway;
-
+  
   	this.m_action = null;//Callback function
-
+  
     this.m_layer = document.createElement("div");
-    this.m_layer.className = "DialogLayer";
-
-    this.m_newKeyTextEdit = new UI.TextEdit()
+    this.m_layer.className = "DialogLayer"; 
+    
+    this.m_newKeyTextEdit = new UI.TextEdit() 
       .setPosition(180, 40)
-      .setWidth(frameWidth - 190);
+      .setWidth(frameWidth - 190);	
 
-    this.m_newKeyTextRepetition = new UI.TextEdit()
+    this.m_newKeyTextRepetition = new UI.TextEdit() 
       .setPosition(180, 70)
       .setWidth(frameWidth - 190);
-
+      
     this.m_newKeyRepetitionLabel = new UI.Text();
     this.m_newKeyRepetitionLabel.setPosition(10, 70);
     this.m_newKeyRepetitionLabel.setHtml(translateKey("dialogSettingsBidcosRFChangeAccessCodeNewKeyRepetition"));
-
-
+	
+    
     //Create new frame and add stuff
     this.m_frame = new UI.Frame()
-      .setTitle(translateKey("dialogSettingsBidcosRFChangeAccessCodeTitle"))
+      .setTitle(translateKey("dialogSettingsBidcosRFChangeAccessCodeTitle")) 
       .setContentSize(frameWidth, frameHeight)
       .setPosition(frameX, frameY)
       /* Add Cancel Button */
@@ -18481,7 +18481,7 @@ BidcosRfPage.ChangeKeyDialog = Class.create({
         //.setText("OK")
         .setText(translateKey("btnOk"))
         .setAction(this.ok, this)
-
+        
       )
       //New key
       .add(new UI.Text()
@@ -18492,25 +18492,25 @@ BidcosRfPage.ChangeKeyDialog = Class.create({
       //Repetition of new key
 	  .add(this.m_newKeyRepetitionLabel)
 	  .add(this.m_newKeyTextRepetition);
-
+    
     /* Add frame to layer and layer to Layer */
-    this.m_layer.appendChild(this.m_frame.getElement());
+    this.m_layer.appendChild(this.m_frame.getElement()); 
     Layer.add(this.m_layer);
   },
-
-  getKey : function()
+  
+  getKey : function() 
   {
     return this.m_newKeyTextEdit.getText();
   },
-
+  
   getKeyRepetition : function()
   {
     return this.m_newKeyTextRepetition.getText();
   },
-
+	
   /**
   * @fn setAction
-  * @brief Setzt die Callbackfuntion, die aufgerufen wird, wenn OK-gedrï¿½ckt wurde
+  * @brief Setzt die Callbackfuntion, die aufgerufen wird, wenn OK-gedrückt wurde
   * @param action  Callbackfuntion "onOK"
   * @param context Optional. Kontext, an die action gebunden wird
   **/
@@ -18518,31 +18518,31 @@ BidcosRfPage.ChangeKeyDialog = Class.create({
   {
     if (context) { this.m_action = action.bind(context); }
     else         { this.m_action = action; }
-
+    
     return this;
   },
-
+  
     /**
    * @fn close
-   * @brief Schlieï¿½t das Dialogfenster
+   * @brief Schließt das Dialogfenster
    **/
   close: function()
   {
     Layer.remove(this.m_layer);
   },
-
+  
   /** @fn ok
-   *  @brief Fï¿½hrt die Callbackfuntion aus nachdem auf "OK" geklickt wurde
-   *        und schlieï¿½t anschlieï¿½end das Dialogfenster
+   *  @brief Führt die Callbackfuntion aus nachdem auf "OK" geklickt wurde
+   *        und schließt anschließend das Dialogfenster
    **/
   ok: function()
   {
     if (this.m_action) { this.m_action(this); }
     this.close();
   },
-
+  
   /** @fn cancel
-   * @brief Schlieï¿½t das Dialogfenster, nachdem auf "Abbrechen" geklickt wurde
+   * @brief Schließt das Dialogfenster, nachdem auf "Abbrechen" geklickt wurde 
    **/
   cancel: function()
   {
@@ -18562,7 +18562,7 @@ BidcosRfPage.AddGatewayDialog = Class.create({
 
   /**
    * @constructor
-   * Fï¿½hrt eine Grundinitialisierung durch und zeigt das Dialogfenster an.
+   * Führt eine Grundinitialisierung durch und zeigt das Dialogfenster an.
    **/
   initialize: function(wiredGWExists, gateway)
   {
@@ -18583,7 +18583,7 @@ BidcosRfPage.AddGatewayDialog = Class.create({
 
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
-
+    
     this.m_action = null;
     this.m_id     = null;
 
@@ -18619,7 +18619,7 @@ BidcosRfPage.AddGatewayDialog = Class.create({
         }
         that.m_gatewayImg.setPosition(offsetPreviewPic + (BidcosRfPage.AddGatewayDialog.CONTENT_WIDTH / 2),10);
       });
-
+    
     /*Add Wired LGW only if there is no one*/
     if(!wiredGWExists) {
     	this.m_typeListBox.add({id:globalLGWTypes.HMWLGW, name: "Wired: "+globalLGWTypeMap[globalLGWTypes.HMWLGW]});
@@ -18628,25 +18628,25 @@ BidcosRfPage.AddGatewayDialog = Class.create({
     this.m_nameTextEdit = new UI.TextEdit()
       .setPosition(180, 40 + imageHeight)
       .setWidth(BidcosRfPage.AddGatewayDialog.CONTENT_WIDTH - 190);
-
+    
     this.m_serialTextEdit = new UI.TextEdit()
       .setPosition(180, 70 + imageHeight)
       .setWidth(BidcosRfPage.AddGatewayDialog.CONTENT_WIDTH - 190);
-
+    
     this.m_keyTextEdit = new UI.TextEdit()
       .setPosition(180, 70 + imageHeight)
       .setWidth(BidcosRfPage.AddGatewayDialog.CONTENT_WIDTH - 190);
-
+    
     this.m_keyTextEdit = new UI.TextEdit()
       .setPosition(180, 100 + imageHeight)
       .setWidth(BidcosRfPage.AddGatewayDialog.CONTENT_WIDTH - 190);
-
+      
     this.m_ipTextEdit = new UI.TextEdit()
       .setPosition(180, 130 + imageHeight)
       .setWidth(BidcosRfPage.AddGatewayDialog.CONTENT_WIDTH - 190);
-
+    
     this.m_frame = new UI.Frame()
-      //.setTitle("HomeMatic Konfigurations-Adapter hinzufï¿½gen")
+      //.setTitle("HomeMatic Konfigurations-Adapter hinzufügen")
       .setTitle(translateKey("dialogSettingsBidCosRFAddCFGTitle"))
       .setContentSize(frameWidth, frameHeight)
       .setPosition(frameX, frameY)
@@ -18710,13 +18710,13 @@ BidcosRfPage.AddGatewayDialog = Class.create({
     this.m_keyTextEdit.setText(gateway.key);
     this.m_ipTextEdit.setText(gateway.ip);
     this.m_id = gateway.id;
-
+    
     return this;
   },
-
+  
   /**
    * @fn setAction
-   * @brief Setzt die Callbackfuntion, die aufgerufen wird, wenn OK-gedrï¿½ckt
+   * @brief Setzt die Callbackfuntion, die aufgerufen wird, wenn OK-gedrückt 
    *        wurde
    *
    * @param action  Callbackfuntion "onOK"
@@ -18726,7 +18726,7 @@ BidcosRfPage.AddGatewayDialog = Class.create({
   {
     if (context) { this.m_action = action.bind(context); }
     else         { this.m_action = action; }
-
+    
     return this;
   },
 
@@ -18743,7 +18743,7 @@ BidcosRfPage.AddGatewayDialog = Class.create({
   {
     return this.m_serialTextEdit.getText().toUpperCase();
   },
-
+  
   /**
    * @fn getKey
    * @brief Liefert den Inhalt des Feldes Zugriffcode
@@ -18757,7 +18757,7 @@ BidcosRfPage.AddGatewayDialog = Class.create({
 		return this.m_keyTextEdit.getText().toUpperCase();
 	}
   },
-
+  
   /**
    * @fn getType
    * @brief Liefert den Inhalt des Feldes Zugriffcode
@@ -18765,8 +18765,8 @@ BidcosRfPage.AddGatewayDialog = Class.create({
   getType: function()
   {
     return this.m_typeListBox.getSelectedItem().id;
-  },
-
+  },  
+  
   /**
    * @fn getType
    * @brief Liefert den Inhalt des Feldes Zugriffcode
@@ -18778,8 +18778,8 @@ BidcosRfPage.AddGatewayDialog = Class.create({
    		gwClass = globalGWClasses.Wired;
     }
     return gwClass;
-  },
-
+  }, 
+  
   /**
    * @fn getIp
    * @brief Liefert den Inhalt des Feldes IP-Addresse
@@ -18788,7 +18788,7 @@ BidcosRfPage.AddGatewayDialog = Class.create({
   {
     return this.m_ipTextEdit.getText();
   },
-
+  
   /**
    * @fn getId
    * @brief Liefert die Id des momentan bearbeiten Gateways.
@@ -18797,30 +18797,30 @@ BidcosRfPage.AddGatewayDialog = Class.create({
   {
     return this.m_id;
   },
-
+  
   /**
    * @fn close
-   * @brief Schlieï¿½t das Dialogfenster
+   * @brief Schließt das Dialogfenster
    **/
   close: function()
   {
     Layer.remove(this.m_layer);
   },
-
+  
   /**
    * @fn ok
-   * @brief Fï¿½hrt die Callbackfuntion aus nachdem auf "OK" geklickt wurde
-   *        und schlieï¿½t anschlieï¿½end das Dialogfenster
+   * @brief Führt die Callbackfuntion aus nachdem auf "OK" geklickt wurde
+   *        und schließt anschließend das Dialogfenster
    **/
   ok: function()
   {
     if (this.m_action) { this.m_action(this); }
     this.close();
   },
-
+  
   /**
    * @fn cancel
-   * @brief Schlieï¿½t das Dialogfenster, nachdem auf "Abbrechen" geklickt wurde
+   * @brief Schließt das Dialogfenster, nachdem auf "Abbrechen" geklickt wurde 
    **/
   cancel: function()
   {
@@ -18830,7 +18830,7 @@ BidcosRfPage.AddGatewayDialog = Class.create({
 });
 
 BidcosRfPage.AddGatewayDialog.CONTENT_WIDTH  = 500;    //< Breite des Dialogfensters
-BidcosRfPage.AddGatewayDialog.CONTENT_HEIGHT = 200; //< Hï¿½he des Dialogfensters
+BidcosRfPage.AddGatewayDialog.CONTENT_HEIGHT = 200; //< Höhe des Dialogfensters
 
 
 BidcosRfPage.EditAssignmentDialog = Class.create({
@@ -18850,18 +18850,18 @@ BidcosRfPage.EditAssignmentDialog = Class.create({
     var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
     var frameY       = parseInt((screenHeight - frameHeight) / 2);
     var gateways     = BidcosRfPage.getGateways();
-
+  
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
 
     this.m_gatewaysListbox = new UI.ListBox()
       .setPosition(100,10)
       .setWidth(BidcosRfPage.EditAssignmentDialog.CONTENT_WIDTH - 110);
-
+      
     this.m_gateways = [];
-
+    
     this.m_gatewaysListbox.add({name: translateKey("dialogSettingsBidcosRFIFaceAssignmentLblStandard"), value: BidcosRfPage.getDefaultGateway()});
-
+    
     for (var i = 0, len = gateways.length; i < len; i++)
     {
       var gateway = gateways[i];
@@ -18875,15 +18875,15 @@ BidcosRfPage.EditAssignmentDialog = Class.create({
         }
       }
     }
-
+      
     this.m_roamingCheckbox = new UI.Checkbox()
       //.setText("feste Zuordnung aufheben")
       .setText(translateKey("dialogSettingsBidcosRFIFaceAssignmentLblNullify"))
       .setPosition(100,40)
       .setWidth(BidcosRfPage.EditAssignmentDialog.CONTENT_WIDTH - 110)
       .setIsChecked(true);
-
-
+      
+    
     this.m_frame = new UI.Frame()
       //.setTitle("Interface-Zuordnung: ")
       .setTitle(translateKey("dialogSettingsBidcosRFIFaceAssignmentTitle"))
@@ -18893,7 +18893,7 @@ BidcosRfPage.EditAssignmentDialog = Class.create({
         .setPosition(10, 10)
         //.setText("Gateway:")
         .setText(translateKey("dialogSettingsBidcosRFIFaceAssignmentLblGateway"))
-
+        
       )
       .add(this.m_gatewaysListbox)
       .add(this.m_roamingCheckbox)
@@ -18909,15 +18909,15 @@ BidcosRfPage.EditAssignmentDialog = Class.create({
         .setText(translateKey("btnOk"))
         .setAction(this.ok, this)
       );
-
+    
     this.m_layer.appendChild(this.m_frame.getElement());
     Layer.add(this.m_layer);
   },
-
+  
   setDevice: function(device)
   {
     this.m_device = device;
-
+    
     this.m_frame.setTitle(translateKey("dialogSettingsBidcosRFIFaceAssignmentTitle") + device.getName());
     this.m_roamingCheckbox.setIsChecked(device.getRoaming());
     for (var i = 0, len = this.m_gateways.length; i < len; i++)
@@ -18929,15 +18929,15 @@ BidcosRfPage.EditAssignmentDialog = Class.create({
         break;
       }
     }
-
+ 
     return this;
   },
-
+  
   setAction: function(action, context)
   {
     if (context) { this.m_action = action.bind(context); }
     else         { this.m_action = action; }
-
+    
     return this;
   },
 
@@ -18945,44 +18945,44 @@ BidcosRfPage.EditAssignmentDialog = Class.create({
   {
     return this.m_gatewaysListbox.getSelectedItem().value;
   },
-
+  
   getRoaming: function()
   {
     return this.m_roamingCheckbox.isChecked();
   },
-
+  
   /**
    * @fn close
-   * @brief Schlieï¿½t das Dialogfenster
+   * @brief Schließt das Dialogfenster
    **/
   close: function()
   {
     Layer.remove(this.m_layer);
   },
-
+  
   /**
    * @fn ok
-   * @brief Fï¿½hrt die Callbackfuntion aus nachdem auf "OK" geklickt wurde
-   *        und schlieï¿½t anschlieï¿½end das Dialogfenster
+   * @brief Führt die Callbackfuntion aus nachdem auf "OK" geklickt wurde
+   *        und schließt anschließend das Dialogfenster
    **/
   ok: function()
   {
     if (this.m_action) { this.m_action(this); }
     this.close();
   },
-
+  
   /**
    * @fn cancel
-   * @brief Schlieï¿½t das Dialogfenster, nachdem auf "Abbrechen" geklickt wurde
+   * @brief Schließt das Dialogfenster, nachdem auf "Abbrechen" geklickt wurde 
    **/
   cancel: function()
   {
     this.close();
   }
-
+  
 });
 
-BidcosRfPage.EditAssignmentDialog.CONTENT_WIDTH  = 400;
+BidcosRfPage.EditAssignmentDialog.CONTENT_WIDTH  = 400; 
 BidcosRfPage.EditAssignmentDialog.CONTENT_HEIGHT = 150;
 
 BidcosRfPage.OptionsDialog = Class.create({
@@ -18997,22 +18997,22 @@ BidcosRfPage.OptionsDialog = Class.create({
     var frameHeight  = BidcosRfPage.OptionsDialog.CONTENT_HEIGHT;
     var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
     var frameY       = parseInt((screenHeight - frameHeight) / 2);
-
+  
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
-
+    
     this.m_passwordEdit = new UI.PasswordEdit()
       .setPosition(90, 50)
       .setWidth(BidcosRfPage.OptionsDialog.CONTENT_WIDTH - 100);
-
+    
     this.m_frame = new UI.Frame()
-      //.setTitle("Sicherheitsschlï¿½ssel: ")
+      //.setTitle("Sicherheitsschlüssel: ")
       .setTitle(translateKey("dialogSettingsBidcosRFEnterSecKeyTitle"))
       .setContentSize(frameWidth, frameHeight)
       .setPosition(frameX, frameY)
       .add(new UI.Text()
         .setPosition(10, 10)
-        //.setText("Bitte geben Sie den System-Sicherheitsschlï¿½ssel ein:")
+        //.setText("Bitte geben Sie den System-Sicherheitsschlüssel ein:")
         .setText(translateKey("dialogSettingsBidcosRFEnterSecKeyContent"))
       )
       .add(this.m_passwordEdit)
@@ -19021,54 +19021,54 @@ BidcosRfPage.OptionsDialog = Class.create({
         .setText("OK")
         .setAction(this.ok, this)
       );
-
+    
     this.m_layer.appendChild(this.m_frame.getElement());
     Layer.add(this.m_layer);
   },
-
+    
   /**
    * @fn close
-   * @brief Schlieï¿½t das Dialogfenster
+   * @brief Schließt das Dialogfenster
    **/
   close: function()
   {
     Layer.remove(this.m_layer);
   },
-
+  
   /**
    * @fn ok
-   * @brief Fï¿½hrt die Callbackfuntion aus nachdem auf "OK" geklickt wurde
-   *        und schlieï¿½t anschlieï¿½end das Dialogfenster
+   * @brief Führt die Callbackfuntion aus nachdem auf "OK" geklickt wurde
+   *        und schließt anschließend das Dialogfenster
    **/
   ok: function()
   {
     var key = this.m_passwordEdit.getText();
-
+    
     homematic("BidCoS_RF.createKeyFile", { "key": key });
-
+    
     if (homematic("BidCoS_RF.validateKey", {"key": key}))
     {
-      //MessageBox.show("Info", "Die Konfiguration wurde an die HomeMatic Zentrale ï¿½bertragen.\nDie ï¿½nderungen werden mit dem nï¿½chsten Start der HomeMatic Zentrale wirksam.");
+      //MessageBox.show("Info", "Die Konfiguration wurde an die HomeMatic Zentrale übertragen.\nDie Änderungen werden mit dem nächsten Start der HomeMatic Zentrale wirksam.");
       MessageBox.show(translateKey("dialogInfo"), translateKey("dialogSettingsBidcosRFSaveConfigSucceed"));
     }
     else
     {
-      //MessageBox.show("Hinweis", "Der eingegebene Schlï¿½ssel entspricht nicht dem aktuellen System-Sicherheitsschlï¿½ssel.\nDie Konfiguration wurde an die HomeMatic Zentrale ï¿½bertragen.\nDie ï¿½nderungen werden mit dem nï¿½chsten Start der HomeMatic Zentrale wirksam.\nFalls Probleme auftreten, wiederholen Sie ggf. die Eingabe.", null, 320, 120);
+      //MessageBox.show("Hinweis", "Der eingegebene Schlüssel entspricht nicht dem aktuellen System-Sicherheitsschlüssel.\nDie Konfiguration wurde an die HomeMatic Zentrale übertragen.\nDie Änderungen werden mit dem nächsten Start der HomeMatic Zentrale wirksam.\nFalls Probleme auftreten, wiederholen Sie ggf. die Eingabe.", null, 320, 120);
       MessageBox.show(translateKey("dialogHint"), translateKey("dialogSettingsBidcosRFSaveConfigFailure"), null, 320, 120);
     }
-
+    
     this.close();
   }
-
-
+  
+  
 });
 
-BidcosRfPage.OptionsDialog.CONTENT_WIDTH  = 250;
+BidcosRfPage.OptionsDialog.CONTENT_WIDTH  = 250; 
 BidcosRfPage.OptionsDialog.CONTENT_HEIGHT = 130;
 /**
  * homematic.js
  **/
-
+  
 /**
  * Stellt eine Anfrage an die HomeMatic Zentrale
  * Der Parameter callback ist optional. Wird er weggelassen, so ist die Anfrage synchron.
@@ -19078,8 +19078,8 @@ homematic = function(method, params, callback)
   var _params_ = params;
   if (!_params_) { _params_ = { }; }
   _params_["_session_id_"] = getSessionId();
-
-  if (typeof(callback) != "undefined")
+  
+  if (typeof(callback) != "undefined") 
   {
     var _callback_ = callback;
     return jsonrpc(homematic.URL, method, _params_, function(response) {
@@ -19098,7 +19098,7 @@ homematic = function(method, params, callback)
 homematic.URL = "/api/homematic.cgi";
 
 /**
- * Prï¿½ft die JSON-Antwort ud liefert deren Resultat
+ * Prüft die JSON-Antwort ud liefert deren Resultat
  **/
 homematic._checkResponse = function(response)
 {
@@ -19115,12 +19115,12 @@ homematic._checkResponse = function(response)
 /**
  * regamonitor.js
  **/
-
+ 
 /**
- * ï¿½berwacht die Logikschicht "ReGa" und gibt eine Meldung, falls diese sich nicht meldet.
+ * Überwacht die Logikschicht "ReGa" und gibt eine Meldung, falls diese sich nicht meldet.
  **/
 ReGaMonitor = Class.create({
-
+  
   initialize: function()
   {
     this.m_pollHandler     = this.poll.bind(this);
@@ -19129,7 +19129,7 @@ ReGaMonitor = Class.create({
     this.m_failureCount = 0;
     this.poll();
   },
-
+  
   poll: function()
   {
     if (this.m_isRunning)
@@ -19137,7 +19137,7 @@ ReGaMonitor = Class.create({
       homematic("ReGa.isPresent", null, this.m_responseHandler);
     }
   },
-
+  
   response: function(result)
   {
     if (this.m_isRunning)
@@ -19161,12 +19161,12 @@ ReGaMonitor = Class.create({
       }
     }
   },
-
+  
   stop: function()
   {
     this.m_isRunning = false;
   }
-
+  
 });
 
 ReGaMonitor.INTERVAL = 30;
@@ -19174,12 +19174,12 @@ ReGaMonitor.FAILURE_RETRY = 3;
 /**
  * interfacemonitor.js
  **/
-
+ 
 /**
- * ï¿½berwacht einen Schnittstellenprozess
+ * Überwacht einen Schnittstellenprozess
  **/
 InterfaceMonitor = Class.create({
-
+  
   initialize: function(interfaceName)
   {
     this.m_interface = interfaceName;
@@ -19190,7 +19190,7 @@ InterfaceMonitor = Class.create({
     this.storageElm = jQuery("body");
     this.poll();
   },
-
+  
   poll: function()
   {
     if (this.m_isRunning)
@@ -19198,7 +19198,7 @@ InterfaceMonitor = Class.create({
       homematic("Interface.isPresent", {"interface": this.m_interface}, this.m_responseHandler);
     }
   },
-
+  
   response: function(result)
   {
     if (this.m_isRunning)
@@ -19224,12 +19224,12 @@ InterfaceMonitor = Class.create({
       }
     }
   },
-
+  
   stop: function()
   {
     this.m_isRunning = false;
   }
-
+  
 });
 
 InterfaceMonitor.INTERVAL = 30;
@@ -19237,7 +19237,7 @@ InterfaceMonitor.FAILURE_RETRY = 3;
 InterfaceMonitor.start = function()
 {
   InterfaceMonitor.m_monitors = [];
-
+  
   var result = homematic("Interface.listInterfaces", null);
   if (result)
   {
@@ -19255,38 +19255,38 @@ InterfaceMonitor.stop = function()
 /**
  * eQ3.HomeMatic.Event.js
  **/
-
+ 
 /**
  * @fileOverview Ereignisse von der HomeMatic Zentrale
  * @author F. Werner (eQ-3)
  **/
-
+ 
 if (!eQ3) { eQ3 = {}; }
 if (!eQ3.HomeMatic) { eQ3.HomeMatic = {}; }
 
 eQ3.HomeMatic.Event = Singleton.create({
-
+  
   INTERVALL: 5,
-
+  
   initialize: function()
   {
     this.m_listeners = { };
     this.m_poll = this.poll.bind(this);
 
     this.m_dispatch = this.dispatch.bind(this);
-
+    
     homematic("Event.subscribe", null);
 
     if ((typeof preventInterfaceCheck == "undefined") || (! preventInterfaceCheck)) {
       this.m_pe = new PeriodicalExecuter(this.m_poll, this.INTERVALL);
     }
   },
-
+  
   poll: function(pe)
   {
     homematic("Event.poll", null, this.m_dispatch);
   },
-
+  
   dispatch: function(events, error)
   {
     if (!error)
@@ -19297,13 +19297,13 @@ eQ3.HomeMatic.Event = Singleton.create({
       }
     }
   },
-
+  
   stop: function()
   {
     this.m_pe.stop();
     homematic("Event.unsubscribe", null);
   },
-
+  
   subscribe: function(eventType, listener)
   {
     var listeners = this.m_listeners[eventType];
@@ -19312,38 +19312,38 @@ eQ3.HomeMatic.Event = Singleton.create({
       listeners = [];
       this.m_listeners[eventType] = listeners;
     }
-
-    listeners.push(listener);
+    
+    listeners.push(listener); 
   },
 
   unsubscribe: function(eventType, listener)
   {
     var listeners = this.m_listeners[eventType];
-
+    
     if (listeners)
     {
       this.m_listeners[eventType] = listeners.without(listener);
     }
   },
-
+  
   fire: function(event)
   {
     var type = event.type;
-    var data = event.data;
+    var data = event.data; 
     var listeners = this.m_listeners[type];
-
+    
     if (listeners)
     {
       listeners.each(function(listener) { listener(type, data); });
     }
   }
-
+  
 });/**
  * homematic.com.js
  * Schnittstelle zu HomeMatic.com
  **/
-
-homematic.com =
+ 
+homematic.com = 
 {
   m_latestVersion: translateKey("lblAvailableFirmwareVersionNotKnown"),
   m_isUpdateAvailable: false,
@@ -19403,12 +19403,12 @@ homematic.com =
   {
     return homematic.com.m_isUpdateAvailable;
   },
-
+  
   getLatestVersion: function()
   {
     return homematic.com.m_latestVersion;
-  },
-
+  }, 
+  
 
   getAvailableDeviceFirmware: function(product, index, callback) {
       // The server should return a string like "homematic.com.setLatestVersion('1.2.2', 'product');"
@@ -19455,7 +19455,7 @@ homematic.com =
   },
 
   /**
-   * wird von homematic.com zurï¿½ck geliefert
+   * wird von homematic.com zurück geliefert
    **/
   setLatestVersion: function(latestVersion, product)
   {
@@ -19469,12 +19469,12 @@ homematic.com =
     }
   },
 
-  // wird von homematic.com zurï¿½ck geliefert
+  // wird von homematic.com zurück geliefert
   setDeviceFirmwareVersions: function(result) {
     homematic.com.callback(result);
   },
 
-  // wird von homematic.com zurï¿½ck geliefert
+  // wird von homematic.com zurück geliefert
   getCCU2LicenceText: function(result) {
     homematic.com.callback(result);
   }
@@ -19483,7 +19483,7 @@ homematic.com =
  * rega.js
  * Zugriff auf den ise ReGa Webserver.
  **/
-
+ 
 /**
  * @fileOverview ?
  * @author Falk Werner (eQ-3)
@@ -19491,22 +19491,22 @@ homematic.com =
 
 /**
  * @class
- **/
+ **/ 
 ReGa = {
 
   /**
    * 1) ReGa arbeitet mit Latin-1 Zeichencodierung (ISO-8859-1)
-   * 2) Anfragen ï¿½ber das XMLHttpRequest-Objekt sind i.d.R. UTF-8-codiert
+   * 2) Anfragen über das XMLHttpRequest-Objekt sind i.d.R. UTF-8-codiert
    *
    * ==> Codierung der Anfrage:
-   *     - escape() wandelt UTF-8 nach ASCII um
+   *     - escape() wandelt UTF-8 nach ASCII um 
    *       (Latin-1 Sonderzeichen werden durch Escape-Sequenzen ersetzt)
    *     - Anfrage wird in <prototypejs><![CDATA[ ... ]]><prototypejs>
    *       verpackt
    *
    * ==> Decodierung erfolgt durch den ReGa Webserver
    **/
-  encode: function(data)
+  encode: function(data) 
   {
     return "<prototypejs><![CDATA[" + escape(data) + "]]></prototypejs>";
   }
@@ -19534,7 +19534,7 @@ ise = {};
  **/
 ise.Favorites = Class.create();
 
-ise.Favorites.prototype =
+ise.Favorites.prototype = 
 {
   initialize: function()
   {
@@ -19609,7 +19609,7 @@ ise.Favorites.prototype =
       }
     };
     new Ajax.Request(url, opts);
-  },
+  },  
   RemoveFromList: function(flid,id)
   {
     var url = "/esp/favorites.htm?sid="+SessionId;
@@ -19802,7 +19802,7 @@ ise.Rooms = Class.create();
 ise.Rooms.prototype =  {
   initialize: function() {
   },
-
+  
   // ### CREATE ROOM ###
   // [name]: room object name
   CreateRoomRetId: function(name, baseId) {
@@ -19812,7 +19812,7 @@ ise.Rooms.prototype =  {
     var pb = "";
     pb += 'string action = "createRoomRetId";';
     pb += 'string name = "'+name+'";';
-    var opt =
+    var opt = 
     {
       postBody: ReGa.encode(pb),
       onComplete: function(transport) {
@@ -19824,7 +19824,7 @@ ise.Rooms.prototype =  {
     };
     new Ajax.Request(url,opt);
   },
-
+  
   // ### DELETE ROOM ###
   // [id]: room object id
   DeleteRoom: function(id) {
@@ -19834,13 +19834,13 @@ ise.Rooms.prototype =  {
     pb += 'integer id = '+id+';';
     var opt = {
       postBody: ReGa.encode(pb),
-
+      
       onSuccess: function(t) {
       }
     };
     new Ajax.Request(url,opt);
   },
-
+  
   // ### CHANGE ROOM NAME ###
   // [id]: room object id
   // [newName]: new name of room object
@@ -19855,7 +19855,7 @@ ise.Rooms.prototype =  {
     };
     new Ajax.Request(url,opt);
   },
-
+  
   // ### CHANGE ROOM COLOR###
   // [id]: room object id
   // [newColor]: new color of room object
@@ -19870,7 +19870,7 @@ ise.Rooms.prototype =  {
     };
     new Ajax.Request(url,opt);
   },
-
+  
   // ### CHANGE ROOM COMMENT###
   // [id]: room object id
   // [newColor]: new color of room object
@@ -19885,7 +19885,7 @@ ise.Rooms.prototype =  {
     };
     new Ajax.Request(url,opt);
   },
-
+  
   // ### CHANGE ROOM SYMBOL###
   // [id]: room object id
   // [newSymbol]: new symbol of room object
@@ -19900,7 +19900,7 @@ ise.Rooms.prototype =  {
     };
     new Ajax.Request(url,opt);
   },
-
+  
   buildRoomOverlay: function() {
     var url = "/esp/rooms.htm?sid="+SessionId;
     var pb = "string action = 'buildRoomOverlay';";
@@ -19929,7 +19929,7 @@ ise.Functions = Class.create();
 ise.Functions.prototype = {
   initialize: function() {
   },
-
+  
   // ### CREATE FUNCTION ###
   // [name]: function object name
   CreateFunctionRetId: function(name, baseId) {
@@ -19941,14 +19941,14 @@ ise.Functions.prototype = {
       postBody: ReGa.encode(pb),
       onComplete: function(transport) {
         buildPropTable(baseId);
-
+        
         var id = transport.responseText;
         SubsectionList.beginUpdate(id);
       }
     };
     new Ajax.Request(url,opt);
   },
-
+  
   // ### CHANGE FUNCTION NAME ###
   // [id]: function object id
   // [newName]: new name of function object
@@ -19963,7 +19963,7 @@ ise.Functions.prototype = {
     };
     new Ajax.Request(url,opt);
   },
-
+  
   // ### DELETE FUNCTION ###
   // [id]: function object id
   DeleteFunction: function(id) {
@@ -19973,13 +19973,13 @@ ise.Functions.prototype = {
     pb += 'integer id = '+id+';';
     var opt = {
       postBody: ReGa.encode(pb),
-
+      
       onSuccess: function(t) {
       }
     };
     new Ajax.Request(url,opt);
   },
-
+  
   // ### CHANGE FUNCTION COLOR###
   // [id]: function object id
   // [newColor]: new color of function object
@@ -19994,7 +19994,7 @@ ise.Functions.prototype = {
     };
     new Ajax.Request(url,opt);
   },
-
+  
   // ### CHANGE FUNCTION COMMENT###
   // [id]: function object id
   // [newComment]: new comment of function object
@@ -20009,7 +20009,7 @@ ise.Functions.prototype = {
     };
     new Ajax.Request(url,opt);
   },
-
+  
   // ### CHANGE FUNCTION SYMBOL###
   // [id]: function object id
   // [newSymbol]: new symbol of function object
@@ -20024,7 +20024,7 @@ ise.Functions.prototype = {
     };
     new Ajax.Request(url,opt);
   },
-
+  
   buildFuncOverlay: function() {
     var url = "/esp/functions.htm?sid="+SessionId;
     var pb = "string action = 'buildFuncOverlay';";
@@ -20052,22 +20052,22 @@ ise.Channels = Class.create();
 ise.Channels.prototype = {
   initialize: function() {
   },
-
+  
   // ### SetReadyConfig
   // [ctrlId]: id of checkbox
-  // [id]: id of channel
+  // [id]: id of channel 
   setReadyConfig: function(ctrlId, id) {
     var url   = "/esp/channels.htm?sid="+SessionId;
     var state = ($(ctrlId)._isReady) ? 0 : 1;
-
+    
     var pb = "string chnId = " + id + ";";
     pb    += "string action= 'setReadyConfig';";
     pb    += "string state = " + state + ";";
-
+    
     if(dbg){alert($(ctrlId).checked);}
     new Ajax.Updater("dummy", url, {postBody: ReGa.encode(pb),evalScripts:true,onComplete:function(t){if(dbg){alert(t.responseText);}}});
   },
-
+  
   setHandling: function(id, ctrlId) {
     var url = "/esp/channels.htm?sid="+SessionId;
     var pb = "integer chnId = " + id + ";";
@@ -20075,7 +20075,7 @@ ise.Channels.prototype = {
     pb += "integer iHandling = "+($(ctrlId).checked? 1: 0)+";";
     new Ajax.Updater("dummy", url, {postBody: ReGa.encode(pb), evalScripts:true});
   },
-
+  
   setVisible: function(id, ctrlId)
   {
     var url = "/esp/channels.htm?sid="+SessionId;
@@ -20084,7 +20084,7 @@ ise.Channels.prototype = {
     pb += "integer iVis = "+($(ctrlId).checked? 1: 0)+";";
     new Ajax.Updater("dummy", url, {postBody: ReGa.encode(pb), evalScripts:true});
   },
-
+  
   setProto: function(id, ctrlId) {
     var url = "/esp/channels.htm?sid="+SessionId;
     var pb = "integer chnId = " + id + ";";
@@ -20092,7 +20092,7 @@ ise.Channels.prototype = {
     pb += "integer iProto = "+($(ctrlId).checked? 1: 0)+";";
     new Ajax.Updater("dummy", url, {postBody: ReGa.encode(pb), evalScripts:true});
   },
-
+  
   setTransMode: function(id, bAES) {
     var url = "/esp/channels.htm?sid="+SessionId;
     var pb = "integer chnId = " + id + ";";
@@ -20100,7 +20100,7 @@ ise.Channels.prototype = {
     pb += "integer iAES = "+(bAES? 1: 0)+";";
     new Ajax.Updater("dummy", url, {postBody: ReGa.encode(pb), evalScripts: true});
   },
-
+  
   chnToRoom: function(idChn, idRoom, bAdd) {
     var url = "/esp/channels.htm?sid="+SessionId;
     var pb = "integer chnId = "+  idChn + ";";
@@ -20108,7 +20108,7 @@ ise.Channels.prototype = {
     pb += "string action= 'chnToRoom';";
     pb += "integer iAdd = "+  (bAdd ? 1 : 0) + ";";
     new Ajax.Updater('dummy', url, {postBody: ReGa.encode(pb), evalScripts: true});
-
+    
     var room = RoomList.get(idRoom);
     if (room)
     {
@@ -20116,7 +20116,7 @@ ise.Channels.prototype = {
       else      { room.removeChannel(idChn); }
     }
   },
-
+  
   delChnFromAllRooms: function(chnId,bCTV) {
     var url = "/esp/channels.htm?sid="+SessionId;
     var pb = "";
@@ -20166,7 +20166,7 @@ ise.Channels.prototype = {
     };
     new Ajax.Request(url, opts);
   },
-
+  
   chnToFunc: function(idChn, idFunc, bAdd) {
     var url = "/esp/channels.htm?sid="+SessionId;
     var pb = "integer chnId = "+  idChn + ";";
@@ -20180,9 +20180,9 @@ ise.Channels.prototype = {
     {
       if (bAdd) { subsection.addChannel(idChn); }
       else      { subsection.removeChannel(idChn); }
-    }
+    }    
   },
-
+  
   showOverlay: function(idChn, baseId) {
     var url = "/esp/channels.htm?sid="+SessionId;
     var pb = "integer chnId = "+  idChn + ";";
@@ -20190,7 +20190,7 @@ ise.Channels.prototype = {
     pb += "string action= 'showOverlay';";
     new Ajax.Updater('dummy', url, {postBody: ReGa.encode(pb), evalScripts: true});
   },
-
+  
   // sChns: tab-separiert wg. ESP foreach
   addChnsToID: function(sChns, destId, clearAll, onComplete) {
     var _onComplete_ = onComplete;
@@ -20219,7 +20219,7 @@ ise.Channels.prototype = {
     };
     new Ajax.Updater("dummy", url, opts );
   },
-
+  
   Test: function(ids)
   {
     var url = '/esp/channels.htm?sid='+SessionId;
@@ -20237,7 +20237,7 @@ ise.Channels.prototype = {
     };
     new Ajax.Request( url, opts );
   },
-
+  
   delChnFromID: function(chnId, destId,bCTV) {
     var url = "/esp/channels.htm?sid="+SessionId;
     var pb = "integer destId = "+  destId + ";";
@@ -20262,7 +20262,7 @@ ise.Channels.prototype = {
     };
     new Ajax.Request(url, opts);
   },
-
+  
   saveDisplayValues: function(chnId)
   {
     var id = chnId;
@@ -20317,19 +20317,19 @@ ise.Devices.prototype = {
   },
 
   // ### SetReadyConfig
-  // [id]: id of device
+  // [id]: id of device 
   setReadyConfig: function(id) {
-    // dazugehï¿½rige Tabellenreihe ausblenden
+    // dazugehörige Tabellenreihe ausblenden
     //$("tr" + id).hide();
     var url = "/esp/devices.htm?sid="+SessionId;
     var pb = "integer devId = " + id + ";";
     pb += "string action= 'setReadyConfig';";
     new Ajax.Updater("dummy", url, {postBody: ReGa.encode(pb), evalScripts: true, onComplete: function(t){if(dbg){alert(t.responseText);}}});
-
-    // Gerï¿½t in Gerï¿½teliste ï¿½bernehmen
+    
+    // Gerät in Geräteliste übernehmen
     //DeviceList.beginUpdateDevice(id);
 
-     // Gerï¿½t in Gerï¿½teliste ï¿½bernehmen
+     // Gerät in Geräteliste übernehmen
     DeviceList.beginUpdateDevice(id, function() {
      //DeviceList.devices[id].isOperateGroupOnly = this.deviceOperateGroupOnly;
       if (DeviceList.devices[id]) {
@@ -20339,7 +20339,7 @@ ise.Devices.prototype = {
     });
 
   },
-
+  
   setHandling: function(id, ctrlId) {
     var url = "/esp/devices.htm?sid="+SessionId;
     var pb = "integer devId = " + id + ";";
@@ -20347,7 +20347,7 @@ ise.Devices.prototype = {
     pb += "integer iHandling = "+($(ctrlId).checked? 1: 0)+";";
     new Ajax.Updater("dummy", url, {postBody: ReGa.encode(pb), evalScripts:true});
   },
-
+  
   setVisible: function(id, ctrlId) {
     var url = "/esp/devices.htm?sid="+SessionId;
     var pb = "integer devId = " + id + ";";
@@ -20355,7 +20355,7 @@ ise.Devices.prototype = {
     pb += "integer iVis = " + ($(ctrlId).checked? 1: 0) + ";";
     new Ajax.Updater("dummy", url, {postBody: ReGa.encode(pb), evalScripts:true});
   },
-
+  
   setProto: function(id, ctrlId)
   {
     var url = "/esp/devices.htm?sid="+SessionId;
@@ -20383,7 +20383,7 @@ ise.System = Class.create();
 ise.System.prototype = {
   initialize: function() {
   },
-
+  
   checkName: function(name,divid)
   {
     var url = "/esp/exec.htm?sid="+SessionId;
@@ -20394,7 +20394,7 @@ ise.System.prototype = {
     var opts = { postBody: ReGa.encode(pb) };
     new Ajax.Updater(divid,url,opts);
   },
-
+  
   saveName: function(id, name, ctrlId, callStrFunc) {
     var url = "/esp/system.htm?sid="+SessionId;
     var pb = '';
@@ -20403,49 +20403,49 @@ ise.System.prototype = {
     pb += 'string name = "'+name+'";';
     if(dbg){alert(pb);}
     var opts = {
-      postBody: ReGa.encode(pb),
+      postBody: ReGa.encode(pb), 
       onComplete: function(resp) {
         if ($(ctrlId)) {
            // alert("iseSystem.saveName: " + resp.responseText + "(" + resp.responseText.length + ")");
           if (callStrFunc) {
-            if (callStrFunc == CALL_STRCUT)
+            if (callStrFunc == CALL_STRCUT) 
               $(ctrlId).innerHTML = strCut(resp.responseText, true, true);
-            if (callStrFunc == CALL_SPACECUT)
+            if (callStrFunc == CALL_SPACECUT) 
               $(ctrlId).innerHTML = spaceCutHtmlIf(resp.responseText, 1);
           }
           else
             $(ctrlId).innerHTML = resp.responseText;
         }
-      }
+      } 
     };
-    new Ajax.Request(url, opts);
+    new Ajax.Request(url, opts);  
   },
-
+  
   saveDesc: function(id, desc) {
     var url = "/esp/system.htm?sid="+SessionId;
     var pb = "integer objId = " + id + ";";
     pb += "string desc   = '"+desc+"';";
-    pb += "string action = 'saveDesc';";
+    pb += "string action = 'saveDesc';";    
     if(dbg){alert(pb);}
-    new Ajax.Request(url, {postBody: ReGa.encode(pb),onComplete:function(t){if(dbg){alert(t.responseText);}}});
+    new Ajax.Request(url, {postBody: ReGa.encode(pb),onComplete:function(t){if(dbg){alert(t.responseText);}}});  
   },
-
+  
   saveDpProto: function(id, ctrlId) {
     var url = "/esp/system.htm?sid="+SessionId;
     var pb = "string action = 'saveDpProto';";
     pb += "integer dpId = " + id + ";";
     pb += "integer iProto   = '"+($(ctrlId).checked ? 1 : 0)+"';";
-    new Ajax.Request(url, {postBody: ReGa.encode(pb)});
+    new Ajax.Request(url, {postBody: ReGa.encode(pb)});  
   },
-
+  
   saveDpVisibility: function(id, ctrlId) {
     var url = "/esp/system.htm?sid="+SessionId;
     var pb = "string action = 'saveDpVisibility';";
     pb += "integer dpId = " + id + ";";
     pb += "integer iVisible   = '"+($(ctrlId).checked ? 1 : 0)+"';";
-    new Ajax.Request(url, {postBody: ReGa.encode(pb)});
+    new Ajax.Request(url, {postBody: ReGa.encode(pb)});  
   },
-
+  
   ClearHistoryData: function()
   {
     var url = "/esp/system.htm?sid="+SessionId;
@@ -20460,7 +20460,7 @@ ise.System.prototype = {
         reloadPage();
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   }
 };
 
@@ -20481,7 +20481,7 @@ ise.Programs.prototype = {
 
   SetBreakOnRestart: function( rid, id, value )
   {
-
+    
     var url = "/esp/programs.htm?sid="+SessionId;
     var pb = '';
     pb += 'string action = "SetBreakOnRestart";';
@@ -20496,7 +20496,7 @@ ise.Programs.prototype = {
         ReloadRule(rid);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
     if(dbg)alert(pb);
   },
 
@@ -20516,7 +20516,7 @@ ise.Programs.prototype = {
         //reloadPage();
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
 
   SetVisible: function( id, value )
@@ -20535,7 +20535,7 @@ ise.Programs.prototype = {
         //reloadPage();
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
 
   SetOperate: function( id, value )
@@ -20554,9 +20554,9 @@ ise.Programs.prototype = {
         //reloadPage();
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
-
+  
   ProgramUpdate: function( id )
   {
     var url = "/esp/programs.htm?sid="+SessionId;
@@ -20572,7 +20572,7 @@ ise.Programs.prototype = {
         reloadPage();
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
 
   SetVisibility: function( id, value )
@@ -20591,7 +20591,7 @@ ise.Programs.prototype = {
         //reloadPage();
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
 
   // ### CONDITIONS ###
@@ -20856,7 +20856,7 @@ ise.Programs.prototype = {
       onComplete:function(t)
       {
         if(dbg){alert( t.responseText );}
-        WebUI.enter(ProgramListPage);
+        WebUI.enter(ProgramListPage);        
       }
     };
     new Ajax.Request(url,opts);
@@ -20878,8 +20878,8 @@ ise.SingleCondition.prototype =
 {
   initialize: function()
   {
-  },
-
+  }, 
+  
   OperatorType: function(cid,id,value)
   {
     var url = "/esp/sico.htm?sid="+SessionId;
@@ -20899,7 +20899,7 @@ ise.SingleCondition.prototype =
     };
     new Ajax.Request(url,opts);
   },
-
+  
   SetValueRange: function(id,rv1,rv2,ct)
   {
     var url = "/esp/sico.htm?sid="+SessionId;
@@ -20918,7 +20918,7 @@ ise.SingleCondition.prototype =
         ReloadSingleCondition(id);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);        
   },
 
   SetLeftValue: function(scid,lv)
@@ -20937,9 +20937,9 @@ ise.SingleCondition.prototype =
         ReloadSingleCondition(scid);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
-
+  
   SetRightValue: function(scid,rv)
   {
     var url = "/esp/sico.htm?sid="+SessionId;
@@ -20955,9 +20955,9 @@ ise.SingleCondition.prototype =
         if(dbg){alert( t.responseText );}
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
-
+  
   SetLeftAndRightValue: function(scid,lv,rv)
   {
     var url = "/esp/sico.htm?sid="+SessionId;
@@ -20965,7 +20965,7 @@ ise.SingleCondition.prototype =
     pb += 'string action = "SetLeftAndRightValue";';
     pb += 'string scid = "'+scid+'";';
     pb += 'string rv = "'+rv+'";';
-    pb += 'string lv = "'+lv+'";';
+    pb += 'string lv = "'+lv+'";';    
     var opts =
     {
       postBody: ReGa.encode(pb),
@@ -20975,9 +20975,9 @@ ise.SingleCondition.prototype =
         ReloadSingleCondition(scid);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
-
+  
   SetLeftValType: function(scid,lvt)
   {
     var url = "/esp/sico.htm?sid="+SessionId;
@@ -20994,7 +20994,7 @@ ise.SingleCondition.prototype =
         ReloadSingleCondition(scid);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
   SetConditionType2: function(scid,ct)
   {
@@ -21012,7 +21012,7 @@ ise.SingleCondition.prototype =
         ReloadSingleCondition(scid);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
   SetChannel: function(scid,chid)
   {
@@ -21030,7 +21030,7 @@ ise.SingleCondition.prototype =
         ReloadSingleCondition(scid);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
   SetTimeModule: function(scid,tmid)
   {
@@ -21048,7 +21048,7 @@ ise.SingleCondition.prototype =
         ReloadSingleCondition(scid);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   }
 };
 
@@ -21068,7 +21068,7 @@ ise.SingleDestination.prototype =
   initialize: function()
   {
     this.reload = true;
-  },
+  },  
 
   SetDP: function(id,value)
   {
@@ -21086,7 +21086,7 @@ ise.SingleDestination.prototype =
         reloadPage();
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
   SetChannel: function(id,value)
   {
@@ -21104,7 +21104,7 @@ ise.SingleDestination.prototype =
         ReloadSingleDestination(id);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
   SetParam: function(id,value)
   {
@@ -21122,7 +21122,7 @@ ise.SingleDestination.prototype =
         ReloadSingleDestination(id);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
   SetValue: function(id,value,unit)
   {
@@ -21145,7 +21145,7 @@ ise.SingleDestination.prototype =
         iseSingleDestination.reload = true;
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
 
   SetValueMinMax: function(id,value,unit,min,max)
@@ -21160,12 +21160,12 @@ ise.SingleDestination.prototype =
       value = min;
     }
 
-    if ((unit == "ï¿½C") && (value != min) && (value != max)) {
+    if ((unit == "°C") && (value != min) && (value != max)) {
       value = roundValue05(value);
     }
 
 		if (unit == "%") {min = min * 100; max = max * 100;}
-
+		
 		if (value < min) {value = min;}
 		if (value > max) {value = max;}
 
@@ -21190,7 +21190,7 @@ ise.SingleDestination.prototype =
         iseSingleDestination.reload = true;
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
   SetValueType: function(id,value)
   {
@@ -21208,7 +21208,7 @@ ise.SingleDestination.prototype =
         if(iseSingleDestination.reload) reloadPage();
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
   SetValueAndType: function(id,value,type)
   {
@@ -21228,14 +21228,14 @@ ise.SingleDestination.prototype =
         //if(iseSingleDestination.reload) reloadPage();
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
   SetValueAndTypeMinMax: function(id,value,type, min, max)
   {
-
+   	 
 		if ((value < min) || (isNaN(value))) {value = min;}
 		if (value > max) {value = max;}
-
+    
 		var url = "/esp/side.htm?sid="+SessionId;
     var pb = '';
     pb += 'string action = "SetValueAndType";';
@@ -21252,7 +21252,7 @@ ise.SingleDestination.prototype =
         //if(iseSingleDestination.reload) reloadPage();
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
   SetDP: function(id,value)
   {
@@ -21261,7 +21261,7 @@ ise.SingleDestination.prototype =
     pb += 'string action = "SetDP";';
     pb += 'string id = "'+id+'";';
     pb += 'string value = "'+value+'";';
-    var opts =
+    var opts = 
     {
       postBody: ReGa.encode(pb),
       onComplete:function(t)
@@ -21289,7 +21289,7 @@ ise.SingleDestination.prototype =
     pb += 'string id = "'+id+'";';
     pb += 'string value = "'+value+'";';
     pb += 'string dp = "'+dp+'";';
-    var opts =
+    var opts = 
     {
       postBody: ReGa.encode(pb),
       onComplete:function(t)
@@ -21316,7 +21316,7 @@ ise.SingleDestination.prototype =
         ReloadSingleDestination(id);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
   SetValueParamType: function(id,value)
   {
@@ -21334,7 +21334,7 @@ ise.SingleDestination.prototype =
         ReloadSingleDestination(id);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   },
   SetScript: function(id,script)
   {
@@ -21352,7 +21352,7 @@ ise.SingleDestination.prototype =
         ReloadSingleDestination(id);
       }
     };
-    new Ajax.Request(url,opts);
+    new Ajax.Request(url,opts);    
   }
 };
 
@@ -21370,9 +21370,9 @@ ise.User = Class.create();
 ise.User.prototype =
 {
   initialize: function()
-  {
+  {    
   },
-
+  
   buildSysVarTable: function(uid) {
     var url = "/esp/system.htm?sid="+SessionId;
     var pb = "string action = 'BuildUserSvTable';";
@@ -21387,7 +21387,7 @@ ise.User.prototype =
     };
     new Ajax.Updater("userSysVarTbl", url, opts);
   },
-
+  
   addSysVarBuildTable: function(uid, newVarId) {
     //var url = "/esp/system.htm?sid="+SessionId+"&curDateTime="+new Date().getTime();
     var url = "/esp/system.htm?sid="+SessionId;
@@ -21408,7 +21408,7 @@ ise.User.prototype =
     };
     new Ajax.Updater("userSysVarTbl", url, opts);
   },
-
+  
   DeleteSysVar: function(uid, svId) {
     var url = "/esp/system.htm?sid=" + SessionId;
     var pb = "string action = 'UserDeleteSysVarBuildTable';";
@@ -21428,12 +21428,12 @@ ise.User.prototype =
     };
     new Ajax.Updater("userSysVarTbl", url, opts);
   },
-
+  
   buildTmpSysVarTable: function(arSysVars) {
     var url = "/esp/system.htm?sid="+SessionId;
     var pb = "string action = 'BuildUserSvTable';";
     pb += "integer userId = 0;";
-
+    
     var s = "";
     for(var i = 0; i < arSysVars.length; i++) {
       s += arSysVars[i] + "\t";
@@ -21454,15 +21454,15 @@ ise.User.prototype =
     };
     new Ajax.Updater("userSysVarTbl", url, opts);
   },
-
+  
   setAutoLogin: function(alPC, alPDA) {
     var url = "/esp/system.htm?sid="+SessionId;
     var pb = "string action = 'setAutoLogin';";
     pb += "integer alPC = " + alPC + ";";
     pb += "integer alPDA = " + alPDA + ";";
-
+    
     var opts = {
-      postBody: ReGa.encode(pb),
+      postBody: ReGa.encode(pb), 
       onComplete:function()
       {
         PopupClose();
@@ -21485,7 +21485,7 @@ iseUser = new ise.User();
 
 /**
  * @class
- **/
+ **/ 
 iseRefresher = Class.create();
 
 iseRefresher.prototype =
@@ -21494,7 +21494,7 @@ iseRefresher.prototype =
   {
     this.updating = false;
     this.ajax = null;
-    this.pe = new PeriodicalExecuter(this.refresh, iPollingInterval);
+    this.pe = new PeriodicalExecuter(this.refresh, iPollingInterval); 
   },
   refresh: function()
   {
@@ -21544,9 +21544,9 @@ iseMessageBox = Class.create();
 iseMessageBox.prototype =
 {
   /* id:        Steuert welches Popup dargestellt wird
-   * type:      "Extra-parameter" fï¿½r einige Popups
-   * secondary: Popup wird ï¿½ber einem anderen Popup eingeblendet
-   * showAll:   All Kanï¿½le auch virtuelle sollen angezeigt werden
+   * type:      "Extra-parameter" für einige Popups
+   * secondary: Popup wird über einem anderen Popup eingeblendet
+   * showAll:   All Kanäle auch virtuelle sollen angezeigt werden
    * popUpTitle:Titel der auf dem popUp angezeigt werden soll
    */
   initialize: function(id, type, secondary)
@@ -21568,7 +21568,7 @@ iseMessageBox.prototype =
       this.secondary = true;
       this.oldMsgHtml = $("messagebox").innerHTML;
       this.oldMsgWidth = $("messagebox").getWidth();
-      //$("messagebox").style.width = this.width + "px";
+      //$("messagebox").style.width = this.width + "px"; 
     }
     else
     {
@@ -21577,9 +21577,9 @@ iseMessageBox.prototype =
         this.createMessagebox();
       }
     }
-
+    
     this.initPopup(id);
-
+    
     this.load();
   },
   initPopup: function(id)
@@ -21592,28 +21592,28 @@ iseMessageBox.prototype =
         this.setHeight(700);
         this.setFile( "/pages/msg/popupPropEditor.htm" );
         break;
-      case ID_FUNCTIONS:
+      case ID_FUNCTIONS: 
         this.setTitle( translateKey("dialogEditFunction") /*"Gewerk bearbeiten"*/ );
         this.setWidth75Perc();
         this.setHeight(700);
         this.setFile( "/pages/msg/popupPropEditor.htm" );
         break;
       case ID_TRANSFER_PARAMETERS:
-
+        
         if (PLATFORM == 'Central') {
           this.setTitle( translateKey("dialogChooseTransmitMode") /*"Auswahl &Uuml;bertragungsmodus"*/ );
           this.addToPostBody( 'integer chnId = '+this.type+';' );
           this.setWidth(1000);
           this.setFile( "/pages/msg/popupTransEditor.htm" );
         } else {
-
+          
         //ConfigTool
           ResetPostString();
           poststr += "&title=" + translateKey("dialogChooseTransmitMode") /*"Auswahl &Uuml;bertragungsmodus"*/;
           poststr += "&channel=" + this.type;
           //SendRequest('/popupTransEditor.cgi');
         }
-
+        
         break;
       case ID_CHANNEL_LIST:
         this.setTitle( translateKey("dialogChannelOverView") /*"Kanal&uuml;bersicht"*/ );
@@ -21710,7 +21710,7 @@ iseMessageBox.prototype =
         this.addToPostBody( 'integer userid = '+this.type+';' );
         this.setWidth(800);
         this.setFile( "/pages/msg/userAccountConfigAdmin.htm" );
-        break;
+        break;   
       case ID_USER_ACCOUNT_CONFIG_USER:
         this.setTitle(translateKey("dialogUserAccountTitle")/*"Benutzerkonto - Konfiguration" */);
         this.setWidth(1000);
@@ -21726,7 +21726,7 @@ iseMessageBox.prototype =
         this.addToPostBody( 'string type = "'+this.type+'";' );
         this.setWidth(800);
         this.setFile( "/pages/msg/chooseOULED16.htm" );
-        break;
+        break;       
         case ID_SET_OUCFM_MODE:
         this.setTitle( translateKey("dialogEnterValue") /*"Wert eingeben" */);
         this.addToPostBody( 'string type = "'+this.type+'";' );
@@ -21746,7 +21746,7 @@ iseMessageBox.prototype =
         poststr += "&channel=" + this.type;
         //SendRequest('/popupInterfaceEditor.cgi');
         break;
-
+      
       default:
         throw new Error("unknown id (" + this.id + ")");
         break;
@@ -21784,12 +21784,12 @@ iseMessageBox.prototype =
       maxHeight = window.innerHeight;
     }
     else {
-      if (window.document.documentElement && window.document.documentElement.clientHeight)
+      if (window.document.documentElement && window.document.documentElement.clientHeight) 
         maxHeight = window.document.documentElement.clientHeight;
       else
         maxHeight = window.document.body.offsetHeight;
-
-      this.setHeight(maxHeight - 50);
+      
+      this.setHeight(maxHeight - 50);  
     }
     var maxWidth = screen.availWidth;
     this.setWidth(maxWidth - 50);
@@ -21803,12 +21803,12 @@ iseMessageBox.prototype =
     }
     else
     {
-      if (window.document.documentElement && window.document.documentElement.clientHeight)
+      if (window.document.documentElement && window.document.documentElement.clientHeight) 
         maxHeight = window.document.documentElement.clientHeight;
       else
         maxHeight = window.document.body.offsetHeight;
-
-      // this.setHeight(maxHeight * 0.5);
+      
+      // this.setHeight(maxHeight * 0.5);  
     }
 
     var maxWidth = document.body.offsetWidth;
@@ -21832,17 +21832,17 @@ iseMessageBox.prototype =
   setTopMargin: function(top)
   {
     this.TopMargin = top;
-  },
+  },  
   createMessagebox: function()
   {
     if ( !$('messagebox') )
-    {
+    {      
       var newDiv = document.createElement("div");
       var newDivId = document.createAttribute("id");
       newDivId.nodeValue = "messagebox";
       newDiv.setAttributeNode(newDivId);
       var newDivStyle = document.createAttribute("style");
-
+      
       if ((this.baseId != ID_CHANNEL_LIST))
       {
         newDivStyle.nodeValue = "width:"+this.width+"px;height:"+this.height+"px;padding: 0px;position:absolute;left: 50%;margin-left: -"+(this.width/2)+"px;margin-top: -"+(this.height/2)+"px;";
@@ -21851,12 +21851,12 @@ iseMessageBox.prototype =
       {
         newDivStyle.nodeValue = "width:"+this.width+"px;height:"+this.height+"px;padding: 0px;position:absolute;";
       }
-
+      
       if( typeof( newDiv.style.cssText ) == "string" )
         newDiv.style.cssText = newDivStyle.nodeValue;
       else
         newDiv.setAttributeNode(newDivStyle);
-
+      
       $('centerbox').appendChild(newDiv);
 
     }
@@ -21901,11 +21901,11 @@ iseMessageBox.prototype =
   LoadFromFile: function(fn,pb) {
     var url = fn+'?sid='+SessionId;
     var t = this;
-    var opt =
+    var opt = 
     {
       method: 'post',
       evalScripts: true,
-      postBody: ReGa.encode(pb),
+      postBody: ReGa.encode(pb), 
       onComplete: function(trans)
       {
         //$("messagebox").style.width = t.width + "px";
@@ -21917,21 +21917,21 @@ iseMessageBox.prototype =
       }
     };
     new Ajax.Updater('messagebox',url,opt);
-  },
+  },  
   ShowPopup: function() {
     this.show();
   },
-
+  
   restorePrevious: function() {
     $("messagebox").innerHTML = this.oldMsgHtml;
     $("messagebox").setStyle({width: this.oldMsgWidth + "px"});
   },
-
+  
   keepAlive: function() {
     var url = "/esp/system.htm?sid="+SessionId+"&action=keepAlive";
     new Ajax.Updater("divTitle", url, {});
   },
-
+  
   addToPostBody: function(pb)
   {
     this.pb += pb;
@@ -21946,7 +21946,7 @@ iseMessageBox.prototype =
   {
     this.title = sTitle;
   },
-
+  
   setFile: function(sFile)
   {
     this.file = sFile;
@@ -21972,32 +21972,32 @@ iseMessageBox.prototype =
 iseSubMenuControl = Class.create();
 
 iseSubMenuControl.prototype = {
-  // topMenuId: Id des TopMenï¿½s bei dessen MouseOver das Submenï¿½ eingeblendet werden soll
-  // subMenuId: Id des SubMenï¿½s das eingeblendet werden soll
-  // offsetDivId [optional]: wird benï¿½tigt um Verhalten des IE7 bei Positionierung auszugleichen
+  // topMenuId: Id des TopMenüs bei dessen MouseOver das Submenü eingeblendet werden soll
+  // subMenuId: Id des SubMenüs das eingeblendet werden soll
+  // offsetDivId [optional]: wird benötigt um Verhalten des IE7 bei Positionierung auszugleichen
   //
   //      Wird eine Seite per Ajax nachgeladen ergibt im IE7 der Aufruf von Position.page() und
-  //      Position.cumulativeOffset() (fï¿½r ein Element bei dem Position auf 'aboslute' oder 'relative'
+  //      Position.cumulativeOffset() (für ein Element bei dem Position auf 'aboslute' oder 'relative'
   //      gesetzt ist) immer die Position vom Ursprung der nachgeladenen Seite wieder,
   //      nicht die Position vom Ursprung des Browser-Fensters.
-  //      Wenn ein Div direkt am Anfang der nachgeladenen Seite eingefï¿½gt wird (mit Position:'static'), kann mit
+  //      Wenn ein Div direkt am Anfang der nachgeladenen Seite eingefügt wird (mit Position:'static'), kann mit
   //      Position.cumulativeOffset() etc. dessen Position zum Ursprung des Browser-Fenstern ermittelt
-  //      werden, und somit kann man die Position des SubMenï¿½s berechnen.
+  //      werden, und somit kann man die Position des SubMenüs berechnen. 
   // shiftLeft: zur Darstellungs-Korrektur
-  // mouseOpts: Um Custom-MouseOvers etc. hinzuzufï¿½gen
-  // popup: submenï¿½s sind in einem Popup (Darstellungskorrektur MOZ)
-  // bOnClick: Submenï¿½s ï¿½ffnen bei OnClick, nicht bei MouseOver
+  // mouseOpts: Um Custom-MouseOvers etc. hinzuzufügen
+  // popup: submenüs sind in einem Popup (Darstellungskorrektur MOZ)
+  // bOnClick: Submenüs öffnen bei OnClick, nicht bei MouseOver
   initialize: function(topMenuId, subMenuId, offsetDivId, shiftOpts, mouseOpts, popup, bOnClick,iFuncCount,iScreenHight)
   {
     this.bIE = NAV_IE;
     this.bMoz = NAV_MOZ;
-
+    
     this.top = $(topMenuId);
     this.sub = $(subMenuId);
     this.offsetDiv = null;
     if (offsetDivId !== null) {
       this.offsetDiv = $(offsetDivId);
-    }
+    }   
     //this.offsetDiv = $("indexOffset");
     this.shiftOpts = shiftOpts;
     this.mouseOpts = mouseOpts;
@@ -22014,9 +22014,9 @@ iseSubMenuControl.prototype = {
     {
       this.iScreenHight = document.body.clientHeight;
     }
-
+      
     this.positionSubMenu();
-
+    
     // Top menu Click (DEBUG)
     this.topMenuClick = this.topMenuMouseClick.bindAsEventListener(this);
     Event.observe($(topMenuId), 'click', this.topMenuClick);
@@ -22036,17 +22036,17 @@ iseSubMenuControl.prototype = {
       // Top menu Mouseout
       this.topMenuOut = this.topMenuMouseOut.bindAsEventListener(this);
       Event.observe($(topMenuId), 'mouseout', this.topMenuOut);
-
+      
       // Sub menu Mouseout
       this.subMenuOut = this.subMenuMouseOut.bindAsEventListener(this);
       Event.observe($(subMenuId), 'mouseout', this.subMenuOut);
     }
-
+    
     // Sub menu Mouseover
     this.subMenuOver = this.subMenuMouseOver.bindAsEventListener(this);
     Event.observe($(subMenuId), 'mouseover', this.subMenuOver);
   },
-
+  
   positionSubMenu: function()
   {
     /*
@@ -22056,17 +22056,17 @@ iseSubMenuControl.prototype = {
       return;
     }
     */
-
+    
     var newX = 0;
     var newY = 0;
-
+    
     //var topCoords = Position.cumulativeOffset(this.top);
     var topCoords = Position.page(this.top);
-
+    
     var dimTop = this.top.getDimensions();
     var offsetCoords = new Array(2);
-
-    if (this.popup)
+   
+    if (this.popup) 
     {
       var tp = Position.page(this.top);
       var rp = Position.page($("rowhead"));
@@ -22077,45 +22077,45 @@ iseSubMenuControl.prototype = {
       newX = l;
       newY = t;
       newY -= 4;
-
+      
     }
-    else
-    {
-      if ( this.offsetDiv && this.bIE )
+    else 
+    { 
+      if ( this.offsetDiv && this.bIE ) 
       {
         offsetCoords = Position.page(this.offsetDiv);
         newY = topCoords[1] - offsetCoords[1] + dimTop.height;
         newX = topCoords[0] - offsetCoords[0];
 /*
         // Function is disabled, because another solution is avaiable, but is possibly needed once.
-        if (this.iFuncCount)
-        {
+        if (this.iFuncCount)  
+        { 
           //alert(newY+170+(this.iFuncCount*16)+' > '+(this.iScreenHight)); // Have a lock for debugging.
           if ( (newY+170+(this.iFuncCount*16)>this.iScreenHight) )
             newY -= (this.iFuncCount*16)+3; // Pull-down-menu pulls up, if screen is to short.
-
+          
         }
 */
-        if (this.shiftOpts.l)
+        if (this.shiftOpts.l) 
           newX -= this.shiftOpts.l;
-        if (this.shiftOpts.r)
+        if (this.shiftOpts.r) 
           newX += this.shiftOpts.r;
-        if (this.shiftOpts.d)
+        if (this.shiftOpts.d) 
           newY += this.shiftOpts.d;
-        if (this.shiftOpts.u)
+        if (this.shiftOpts.u) 
           newY -= this.shiftOpts.u;
-/*
+/*          
         if (this.offsetDiv.getHeight() > 0) {
           newY -= this.offsetDiv.getHeight();
         }
 */
       }
-      else
+      else 
       {
         newY = parseInt(topCoords[1] + dimTop.height);
 /*
         // Function is disabled, because another solution is avaiable, but is possibly needed once.
-        if (this.iFuncCount)
+        if (this.iFuncCount) 
         {
           if ( (newY+(this.iFuncCount*16)>this.iScreenHight) )
           {
@@ -22129,17 +22129,17 @@ iseSubMenuControl.prototype = {
         }
       }
     }
-
+    
     this.sub.style.top = newY + "px";
     this.sub.style.left = newX + "px";
   },
-
+  
   topMenuMouseClick: function(mEvent)
   {
     // this.sub.style.left = "0px";
     // this.sub.style.top = "0px";
   },
-
+  
   topMenuMouseOver: function(mEvent)
   {
     this.sub.show();
@@ -22148,9 +22148,9 @@ iseSubMenuControl.prototype = {
       if (typeof(this.mouseOpts.onTopOver) == 'function')
         this.mouseOpts.onTopOver(this.sub.id);
     }
-
+    
   },
-
+  
   topMenuMouseOut: function(mEvent)
   {
     var xPos = Event.pointerX(mEvent);
@@ -22160,19 +22160,19 @@ iseSubMenuControl.prototype = {
       this.sub.hide();
     }
   },
-
+  
   subMenuMouseOver: function(mEvent)
   {
     var xPos = Event.pointerX(mEvent);
     var yPos = Event.pointerY(mEvent);
   },
-
+  
   subMenuMouseOut: function(mEvent)
   {
     var xPos = Event.pointerX(mEvent);
     var yPos = Event.pointerY(mEvent);
-
-    if (this.bIE) { // IE-Probleme fï¿½r linken Rand beheben
+    
+    if (this.bIE) { // IE-Probleme für linken Rand beheben
       var subCoords = Position.cumulativeOffset(this.sub);
       if (xPos < (subCoords[0] + 5)) // wenn Maus am linken Rand...
         xPos = xPos - 3;
@@ -22181,7 +22181,7 @@ iseSubMenuControl.prototype = {
       this.sub.hide();
     }
   },
-
+  
   dbgLog: function(s)
   {
     if ($("dbgLog"))
@@ -22197,7 +22197,7 @@ iseSubMenuControl.prototype = {
  **/
 
 // isePropEditorRow
-// Reprï¿½sentiert eine Zeile in den Popup-Fenstern "Eigenschaft bearbeiten"
+// Repräsentiert eine Zeile in den Popup-Fenstern "Eigenschaft bearbeiten"
 
 /**
  * @class
@@ -22209,7 +22209,7 @@ isePropEditorRow.prototype = {
   // id: Id des Objekts dessen Inhalt in der Zeile dargestellt wird
   //     Bei neu angelegten Zeilen = -1
   // baseId: ID_ROOMS, ID_FUNCTIONS etc
-  // objInfo
+  // objInfo 
   //    .name, .comment
   initialize: function(id, baseId, objInfo) {
     this.id = id;
@@ -22218,13 +22218,13 @@ isePropEditorRow.prototype = {
       comment: "< "+translateKey("lblEmpty")+" >"
     };
     Object.extend(this.objInfo, objInfo || {});
-
+    
     if (id == -1) {
       switch(this.baseId) {
         case ID_ROOMS:
           this.objInfo.name = "< "+translateKey("lblNewRoom")+" >";
           break;
-        case ID_FUNCTIONS:
+        case ID_FUNCTIONS: 
           this.objInfo.name = "< "+translateKey("lblNewFunction")+" >";
           break;
         default:
@@ -22233,13 +22233,13 @@ isePropEditorRow.prototype = {
     }
     bNecc = true;
     this.oldVal = "";
-
+    
     // IDs der einzelnen Tabellenzellen
     this.nameCellId    = (id == -1 ? 'newName'    : 'name' + id);
     this.commentCellId = (id == -1 ? 'newComment' : 'comment' + id);
-
+    
     var tr = Builder.node("tr", {className: "popupWhiteCells"});
-
+    
     // Namen erzeugen
     var td1 = Builder.node("td", {id: this.nameCellId}, this.objInfo.name);
     tr.appendChild(td1);
@@ -22251,14 +22251,14 @@ isePropEditorRow.prototype = {
     tr.appendChild(td4);
     this.commentListener = this.editComment.bindAsEventListener(this);
     Event.observe(td4, 'click', this.commentListener);
-
+    
     $("propTable").appendChild(tr);
     jQuery("#tableContainer").animate({scrollTop: jQuery("#propTable").height()},1000);
   },
-
+    
   /*---------------------------------*/
   /*-----   Name Functions      -----*/
-  /*---------------------------------*/
+  /*---------------------------------*/  
   editName: function() {
     var inputId = 'nEdit' + this.id;
     var nameElem = $(this.nameCellId);
@@ -22266,17 +22266,17 @@ isePropEditorRow.prototype = {
     if (this.oldVal.toLowerCase().indexOf('input') == -1) {
       var s = "<input id='"+inputId+"' type='text' value='"+this.oldVal+"' />";
       nameElem.innerHTML = s;
-
-      // Namen im DOM ï¿½ndern beim Verlassen des Textfeldes
+      
+      // Namen im DOM ändern beim Verlassen des Textfeldes
       var changeListener = this.saveNameToDom.bindAsEventListener(this);
       Event.observe($(inputId), 'blur', changeListener);
       var keypressEvent = this.onKeyPress.bindAsEventListener(this);
       Event.observe($(inputId), "keyup", keypressEvent);
-
+      
       $(inputId).focus();
     }
   },
-
+  
   onKeyPress: function(ev) {
     if (ev.keyCode == Event.KEY_RETURN)
       this.saveNameToDom();
@@ -22297,83 +22297,83 @@ isePropEditorRow.prototype = {
         }
       }
       return;
-    }
+    } 
     if( !isTextAllowed( newName , 1 ) ) return;
     $(this.nameCellId).innerHTML = newName;
-    if(newName != this.objInfo.name) {
+    if(newName != this.objInfo.name) { 
       var opts;
       var t = this;
       var url = "/esp/system.htm?sid="+SessionId;
       var pb = '';
       pb += 'string action = "checkName";';
-      pb += 'string checkName = "'+newName+'";';
+      pb += 'string checkName = "'+newName+'";';   
       pb += 'integer checkTypeId = '+ this.baseId +';';
-
+       
       if (this.baseId == ID_ROOMS) {
         if (this.id == -1) {
           opts = {
-            postBody: ReGa.encode(pb),
+            postBody: ReGa.encode(pb), 
             asynchronous: false,
             onComplete: function(resp) {
               newName = resp.responseText.replace(/[\r\n\t]/g, "");
               iseRooms.CreateRoomRetId(newName, t.baseId);
             }
           };
-          new Ajax.Request(url, opts);
-        }
+          new Ajax.Request(url, opts);  
+        } 
         else {
           iseSystem.saveName(this.id, newName, this.nameCellId);
         }
       }
-
-
+      
+      
       if (this.baseId == ID_FUNCTIONS) {
         if (this.id == -1) {
           opts = {
-            postBody: ReGa.encode(pb),
+            postBody: ReGa.encode(pb), 
             asynchronous: false,
             onComplete: function(resp) {
               newName = resp.responseText.replace(/[\r\n\t]/g, "");
               iseFunctions.CreateFunctionRetId(newName, t.baseId);
             }
           };
-          new Ajax.Request(url, opts);
-        }
+          new Ajax.Request(url, opts);  
+        } 
         else {
           iseSystem.saveName(this.id, newName, this.nameCellId);
         }
       }
     }
   },
-
+  
   /*---------------------------------*/
   /*-----   Comment Functions   -----*/
-  /*---------------------------------*/
+  /*---------------------------------*/   
   editComment: function() {
     var inputId = 'cEdit' + this.id;
     var commentElem = $(this.commentCellId);
     var oldVal = commentElem.innerHTML;
-
+    
     if (oldVal.toLowerCase().indexOf('input') == -1) {
       var s = "<input id='"+inputId+"' type='text' value='"+oldVal+"' />";
       commentElem.innerHTML = s;
-
-      // Namen im DOM ï¿½ndern beim Verlassen des Textfeldes
+      
+      // Namen im DOM ändern beim Verlassen des Textfeldes
       var changeListener = this.saveCommentToDom.bindAsEventListener(this);
       Event.observe($(inputId), 'blur', changeListener);
-
+      
       $(inputId).focus();
     }
   },
-
+  
   saveCommentToDom: function() {
     var newComment = $("cEdit" + this.id).value;
     $(this.commentCellId).innerHTML = newComment;
-
+    
     if (this.baseId == ID_ROOMS) {
       iseRooms.ChangeRoomComment(this.id, newComment);
     }
-
+    
     if (this.baseId == ID_FUNCTIONS) {
       iseFunctions.ChangeFunctionComment(this.id, newComment);
     }
@@ -22392,23 +22392,23 @@ iseCellEditor.prototype = {
     var clickListener = this.editName.bindAsEventListener(this);
     Event.observe(this.cell, 'click', clickListener);
   },
-
+  
   editName: function() {
     var inputId = 'nEdit' + this.cell.id;
     this.oldVal = this.cell.innerHTML;
-
+    
     if (this.oldVal.toLowerCase().indexOf('input') == -1) {
       var s = "<input id='"+inputId+"' type='text' value='"+this.oldVal+"' />";
       this.cell.innerHTML = s;
-
-      // Namen im DOM ï¿½ndern beim Verlassen des Textfeldes
+      
+      // Namen im DOM ändern beim Verlassen des Textfeldes
       var changeListener = this.saveNameToDom.bindAsEventListener(this);
       Event.observe($(inputId), 'blur', changeListener);
-
+      
       $(inputId).focus();
     }
   },
-
+  
   saveNameToDom: function () {
     var newName = $("nEdit" + this.cell.id).value;
     $(this.cell).innerHTML = newName;
@@ -22442,7 +22442,7 @@ iseEventLog.prototype = {
     this.tBodyElem = null;
     this.buildTable();
   },
-
+  
   // Add a message to the table structure
   add: function(s1, s2, s3) {
     var tr = Builder.node("tr");
@@ -22459,7 +22459,7 @@ iseEventLog.prototype = {
     }
     this.tBodyElem.appendChild(tr);
   },
-
+  
   // Delete all rows in the table
   deleteAll: function()
   {
@@ -22471,7 +22471,7 @@ iseEventLog.prototype = {
       }
     }
   },
-
+  
   // Build table node
   buildTable: function() {
     var table = Builder.node("table", {id: this.tblId, style: "width:100%;white-space: nowrap;color:Black;"});
@@ -22485,7 +22485,7 @@ iseEventLog.prototype = {
     table.appendChild(colgroup);
     var tbody = Builder.node("tbody");
     table.appendChild(tbody);
-
+    
     this.tBodyElem = tbody;
     $(this.parentElemId).appendChild(table);
   }
@@ -22495,7 +22495,7 @@ iseEventLog.prototype = {
 
 /**
  * @fileOverview Allgemeine Funktionen
- * @author ise, ï¿½nderungen durch Falk Werner (eQ-3)
+ * @author ise, Änderungen durch Falk Werner (eQ-3)
  **/
 
 /* * * * * * * * * * * * * * * * * * * * * * * * *
@@ -22513,7 +22513,7 @@ ID_LINKS     = 301;  // Links collection ID.
 ID_TRANSFER_PARAMETERS = 1001;
 ID_CHANNEL_LIST        = 1002;
 ID_NEW_SYSVAR          = 1003;
-ID_CREATE_SCRIPT       = 1005;
+ID_CREATE_SCRIPT       = 1005; 
 ID_EDIT_SCRIPT         = 1006;
 ID_CONTROL_TEST        = 1007;
 ID_INSERT_VALUE        = 1008;
@@ -22706,8 +22706,8 @@ updateSysVar = function(id, value)
 {
   var PREFIX = "SYSVAR_";
   var element = $(PREFIX + id);
-
-  if (element)
+  
+  if (element) 
   {
     element.innerHTML = "";
     element.appendChild(document.createTextNode(translateString(value)));
@@ -22755,21 +22755,21 @@ updateSysVarEnergyCounter = function() {
         arrEnergyCounter.push(sysvar);
       }
     });
-    readEnergyCounter = false; // wird beim Anlernen eines neuen Gerï¿½tes wieder auf true gesetzt
+    readEnergyCounter = false; // wird beim Anlernen eines neuen Gerätes wieder auf true gesetzt
   }
   setValueOfEnergyCounters();
  };
 
 /**
- * Markiert ein Gerï¿½t im Posteingang als fertig bzw. nicht fertig
+ * Markiert ein Gerät im Posteingang als fertig bzw. nicht fertig
  **/
 setDeviceReadyConfig = function(id, isReady)
 {
   var readyButton = $("readyBtn" + id);
-
+  
   if (readyButton)
   {
-    readyButton._isReady = isReady;
+    readyButton._isReady = isReady; 
   }
 };
 
@@ -22790,7 +22790,7 @@ setChannelReadyConfig = function(id, isReady)
 /* * * * * * * * * * * * * * * * * * * * * * * * *
  * * * * *   Navigation Functions        * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * */
-
+ 
 LoadingHTML = function()
 {
   var sRet = '<img style="margin: 30px;" src="/ise/img/loading.gif" />';
@@ -22837,14 +22837,14 @@ updateContent = function(file, argsForUrl, codeToExec, bDontSaveUrl)
     {
       pb += codeToExec;
     }
-
+    
     iseInitUpdateArrays();
-
+    
     /* <!-- ELV */
     var opts;
     if (file.substring(0, UI_PATH.length) == UI_PATH)
     {
-      //method: 'get' ist fï¿½r die ELV-CGIs notwendig.
+      //method: 'get' ist für die ELV-CGIs notwendig.
       opts = {evalScripts: true, method: 'get', onComplete:function(){iseRefr(true);bUpdateContentRunning=false;}};
     }
     else
@@ -22852,12 +22852,12 @@ updateContent = function(file, argsForUrl, codeToExec, bDontSaveUrl)
       opts = {postBody: ReGa.encode(pb),evalScripts: true, onComplete:function(){iseRefr(true);bUpdateContentRunning=false;}};
     }
     /* ELV --> */
-
+    
     var url = file + "?sid=" + SessionId;
     if (argsForUrl){ url += argsForUrl; }
-
+    
     //console.info( "updateContent with "+pb );
-
+    
     new Ajax.Updater("content", url, opts);
   }
 };
@@ -22879,11 +22879,11 @@ clearUserTempViewIDs2 = function(file, args)
   sActPage = file;
   var pb = '';
   pb += 'system.SetSessionVar("sessionCTV2", "true");';
-  var opts =
+  var opts = 
   {
     postBody: ReGa.encode(pb),
     evalScripts: true
-  };
+  };  
   var url = file + "?sid=" + SessionId;
   if (args){ url += args; }
   // new Ajax.Updater("content", url, opts);
@@ -22927,17 +22927,17 @@ loadStartPageGuest = function() {
   {
     updateContent("/pages/tabs/guest/startpageguest.htm","&fid="+fid);
   }
-
+  
 };
 
 _loadHandling = function(fid) {
   doClearTempView = true;
   if (typeof fid == "undefined")
     updateContent("/pages/tabs/handling.htm");
-  else
+  else 
     updateContent("/pages/tabs/handling.htm", "&fid="+fid);
 };
-
+  
 loadDeviceConfig = function() {
   doClearTempView = true;
   updateContent("/pages/tabs/admin/deviceconfig.htm");
@@ -23029,53 +23029,53 @@ loadProgramList = function(filter)
 
 loadHandlingRooms = function(roomId)
 {
-  doClearTempView = true;
+  doClearTempView = true; 
   if (typeof(roomId) == "undefined") { updateContent('/pages/tabs/control/rooms.htm'); }
   else                               { updateContent('/pages/tabs/control/rooms.htm', roomId); }
 };
 
 loadHandlingFunctions = function(funcId)
 {
-  doClearTempView = true;
+  doClearTempView = true; 
   if (typeof(funcId) == "undefined") { updateContent('/pages/tabs/control/functions.htm'); }
   else                               { updateContent('/pages/tabs/control/functions.htm', funcId); }
 };
 
 loadHandlingDevices = function()
 {
-  doClearTempView = true;
+  doClearTempView = true; 
   updateContent('/pages/tabs/control/devices.htm');
 };
 
 loadHandlingPrograms = function()
 {
-  doClearTempView = true;
+  doClearTempView = true; 
   updateContent('/pages/tabs/control/programs.htm');
 };
 
 
 loadSysconfigUserAdmin = function()
 {
-  doClearTempView = true;
+  doClearTempView = true; 
   updateContent('/pages/tabs/admin/userAdministration.htm');
 };
 
 loadSysconfigSysVars = function()
 {
-  doClearTempView = true;
+  doClearTempView = true; 
   updateContent('/pages/tabs/admin/systemvars.htm');
 };
 
 loadStatusviewSysProtocol = function()
 {
-  doClearTempView = true;
+  doClearTempView = true; 
   updateContent('/pages/tabs/control/systemProtocol.htm');
 };
 
 
 loadStatusviewSysVars = function()
 {
-  doClearTempView = true;
+  doClearTempView = true; 
   updateContent('/pages/tabs/control/sysvars.htm');
 };
 
@@ -23113,7 +23113,7 @@ loadSystemControl = function() {
   doClearTempView = true;
   updateContent("/config/control_panel.cgi");
 };
-
+  
 loadNewLinkPage = function()
 {
   updateContent("/config/ic_selchannel.cgi");
@@ -23144,7 +23144,7 @@ logout = function() {
  * * * * *     Misc Functions        * * * * * * *
  * * * * * * * * * * * * * * * * * * * * * * * * */
 
-/* Funktion fï¿½r Popup */
+/* Funktion für Popup */
 CreatePopup = function(id, type)
 {
   dlgPopup = new iseMessageBox(id, type, false);
@@ -23196,7 +23196,7 @@ centerMessageBox = function() {
 };
 
 saveDlgResult = function(id) {
-  dlgResult = id;
+  dlgResult = id; 
 };
 
 checkTimeVal = function(val) {
@@ -23212,7 +23212,7 @@ checkTimeVal = function(val) {
   if ((iTmp < 0) || (iTmp > 23)) { return false; }
   iTmp = parseInt(sSplit[1],10);
   if ( (iTmp < 0) || (iTmp > 59) ) { return false; }
-
+  
   return true;
 };
 
@@ -23225,14 +23225,14 @@ setFooter = function(s)
 SetFilter = function(id)
 {
   return;
-/*
+/*  
   if ($(id)) {
     var inplist = $(id).getElementsByTagName('input');
     for (var i = 0; i < inplist.length; i++) {
       var tmpId = inplist[i].id.substr(6);
-      if (inplist[i].checked === true)
+      if (inplist[i].checked === true) 
         filterOptions.addFilter(tmpId);
-      else
+      else 
         filterOptions.removeFilter(tmpId);
       // TODO: Channel-Liste neu laden (mit Filtern)
     }
@@ -23240,15 +23240,15 @@ SetFilter = function(id)
 */
 };
 
- // Prï¿½ft anhand der filterOptions ob Checkboxen in Submenï¿½s gesetzt werden sollen
+ // Prüft anhand der filterOptions ob Checkboxen in Submenüs gesetzt werden sollen
 selectFilters = function(divToShow) {
  if ($(divToShow)) {
     var inplist = $(divToShow).getElementsByTagName('input');
     for (var i = 0; i < inplist.length; i++) {
       var tmpId = inplist[i].id.substr(6);
-      if (filterOptions.isFilterId(tmpId))
+      if (filterOptions.isFilterId(tmpId)) 
         inplist[i].checked = true;
-      else
+      else 
         inplist[i].checked = false;
     }
   }
@@ -23265,8 +23265,8 @@ writeDevProg = function(tdParent, chnObj, bClosePopup) {
   var iTmp = 0;
   if( chnObj['gm'] )
     iTmp = 1;
-  divSub.onclick = function()
-  {
+  divSub.onclick = function() 
+  { 
     WebUI.enter(LinkListPage, {
       "iface"  : chnObj['deviface'],
       "channel": chnObj['sn'],
@@ -23334,10 +23334,10 @@ callbackStartUpdateTest = function(chid)
   var url = "/esp/system.htm?sid=" + SessionId;
   var pb = "string action = 'TestRunning';";
   pb += 'string id = "' + chid + '";';
-  var opts =
+  var opts = 
   {
     postBody: ReGa.encode(pb),
-    onComplete: function(t)
+    onComplete: function(t) 
     {
       $("TestDateCH"+chid).innerHTML = t.responseText;
       if( t.responseText == "--:--:--" )
@@ -23349,7 +23349,7 @@ callbackStartUpdateTest = function(chid)
         $("OkButtonCH"+chid).className = "OkButtonRunning";
       }
     }
-  };
+  };  
   new Ajax.Request(url, opts);
 };
 
@@ -23517,7 +23517,7 @@ writeDeviceAction = function(tdParent, includeChecks, bIsDev, bDelBtn, obj, bIsG
   var tdLeft = Builder.node('td');
   var tdRight = Builder.node('td');
 
-  // buttons Lï¿½schen / Einstellen
+  // buttons Löschen / Einstellen
   var tblSub = Builder.node('table', {width: '100%'});
   var tbodySub = Builder.node('tbody');
 
@@ -23529,7 +23529,7 @@ writeDeviceAction = function(tdParent, includeChecks, bIsDev, bDelBtn, obj, bIsG
   }
     var tdSub = Builder.node('td');
   var s;
-  //var divSub = Builder.node('div', {className: 'StdButton'}, 'Lï¿½schen...');
+  //var divSub = Builder.node('div', {className: 'StdButton'}, 'Löschen...');
 
   if (bIsDev && bDelBtn) {
    s = "PrepareDeleteDeviceForm('"+ obj['iface']+"', '"+obj['sn']+"', '"+obj['name']+"', '"+obj['type']+"'), arrayDeleteVal(deviceInputCheckedDevices, "+obj['id']+"), removeErrorFlag("+obj['id']+");";
@@ -23539,17 +23539,17 @@ writeDeviceAction = function(tdParent, includeChecks, bIsDev, bDelBtn, obj, bIsG
 
    var divSub = Builder.node('div', {
      className: 'StdButton',
-     onclick: s}, translateKey('btnRemove') /*'Lï¿½schen'*/);
+     onclick: s}, translateKey('btnRemove') /*'Löschen'*/);
    tdSub.appendChild(divSub);
    trSub.appendChild(tdSub);
    tbodySub.appendChild(trSub);
   }
   trSub = Builder.node('tr', {name: 'newDevAction' + id, className: hidden});
   tdSub = Builder.node('td');
-
+  
   s = "";
   if (bIsDev) { s = "WebUI.enter(DeviceConfigPage, {'iface': '" + obj['iface'] + "', 'address': '" + obj['sn'] + "', 'redirect_url':'GO_BACK'});"; }
-  else
+  else 
   {
     if (bIsGroup) { s = "WebUI.enter(DeviceConfigPage, {'iface': '" + obj['deviface'] + "' ,'address': '" + obj['sn'] + "', 'redirect_url':'GO_BACK', 'with_group': 1});"; }
     else          { s = "WebUI.enter(DeviceConfigPage, {'iface': '" + obj['deviface'] + "' ,'address': '" + obj['sn'] + "', 'redirect_url':'GO_BACK'});"; }
@@ -23569,7 +23569,7 @@ writeDeviceAction = function(tdParent, includeChecks, bIsDev, bDelBtn, obj, bIsG
     tbodySub.appendChild(trSub);
   }
   /* END Geraetetausch */
-
+  
   tblSub.appendChild(tbodySub);
   tdLeft.appendChild(tblSub);
 
@@ -23582,7 +23582,7 @@ writeDeviceAction = function(tdParent, includeChecks, bIsDev, bDelBtn, obj, bIsG
     var h = {type: 'checkbox', id: 'ha' + id};
     var sH = "";
 
-
+    
     if( bIsDev )
     {
       sH = 'iseDevices.setHandling('+id+',id)';
@@ -23660,7 +23660,7 @@ spaceCut = function(s) {
   {
     var arTmp = s.split(' ');
     var z = new Array();
-
+    
     for(var i = 0; i < arTmp.length; i++)
     {
       if (arTmp[i] !== "")
@@ -23681,7 +23681,7 @@ spaceCutHtmlIf = function(s, iCount) {
     var sRet = "";
     var arTmp = s.split(' ');
     var iTmp = 0;
-
+    
     if (arTmp.length > iCount)
     {
       for (var i = 0; i < arTmp.length; i++)
@@ -23729,12 +23729,12 @@ strCut = function(s, bCountOnly, bPlainText) {
   var arSplit = new Array();
   var iLastCutPos = 0;
   var i;
-
+  
   if(s)
   {
     for (i = 0; i < s.length; i++) {
       var c = s.charAt(i);
-
+      
       if (!bCountOnly) {
         for (var x = 0; x < CUTS.length; x++) {
           bCutChar = false;
@@ -23746,7 +23746,7 @@ strCut = function(s, bCountOnly, bPlainText) {
           }
         }
       }
-
+    
       iSinceLastCut++;
       if (iSinceLastCut == MAX_WITHOUT_CUT) {
         arSplit[arSplit.length] = s.slice(iLastCutPos, i);
@@ -23756,12 +23756,12 @@ strCut = function(s, bCountOnly, bPlainText) {
     }
     if (iLastCutPos !== 0) { arSplit[arSplit.length] = s.slice(iLastCutPos, i); }
     else                   { arSplit[arSplit.length] = s; }
-
+    
     if (bPlainText) {
       var _s = "";
       for (i = 0; i < arSplit.length; i++) {
         _s += arSplit[i] + "<br />";
-      }
+      } 
       return _s;
     }
     else {
@@ -23798,7 +23798,7 @@ insertBR = function(s) {
   var arSplit = s.split('\t');
   for (var i = 0; i < arSplit.length; i++)
   {
-    if (arSplit[i] !== "")
+    if (arSplit[i] !== "") 
     {
       z[z.length] = document.createTextNode(arSplit[i]);
       z[z.length] = document.createElement('br');
@@ -23822,28 +23822,28 @@ hide = function(id) {
 setProtoIfExist = function(id, bProto) {
   if ($("pr" + id)) {
     $("pr" + id).checked = bProto;
-  }
+  }  
 };
 
 setHandlingIfExist = function(id, bHand) {
   if ($("ha" + id)) {
     $("ha" + id).checked = bHand;
-  }
+  }  
 };
 
 setVisibleIfExist = function(id, bVisi) {
   if ($("vi" + id)) {
     $("vi" + id).checked = bVisi;
-  }
+  }  
 };
 
 /*
-textEdit = function(ctrlId, id, allowEmptyString, callback, callStrFunc)
+textEdit = function(ctrlId, id, allowEmptyString, callback, callStrFunc) 
 {
   bTxtEditMode = true;
   var iSize = 8;
   if (screen.availWidth >= 1024) iSize = 12;
-  if (!$(ctrlId+"inp"))
+  if (!$(ctrlId+"inp"))  
   {
     sPrevVal = $(ctrlId).innerHTML;
     var isEmptyAllowed = false;
@@ -23859,7 +23859,7 @@ textEdit = function(ctrlId, id, allowEmptyString, callback, callStrFunc)
       sValue = sValue.replace("<BR>","");
     }
     sValue = sValue.replace(/^\s+/,""); // Left trim
-    sValue = sValue.replace(/$\s+/,""); // Left trim
+    sValue = sValue.replace(/$\s+/,""); // Left trim         
     sValue = sValue.replace(/<br>/gi, "");
       var s = "<input id='"+ctrlId+"inp' value='"+sValue+"' size='"+iSize+"' maxlength='100' onblur='saveEdit(id, "+id+","+isEmptyAllowed+"," + callback +"," + callStrFunc+")' onkeypress='checkkey(id, "+id+","+isEmptyAllowed+"," + callback + "," + callStrFunc + ", event)'/>";
     //var s = "<input id='"+ctrlId+"inp' value='"+sValue+"' size='"+iSize+"' maxlength='100' onblur=\"saveEdit(id, '"+id+"',"+isEmptyAllowed+"," + callback +"," + callStrFunc+")\" onkeypress=\"checkkey(id, '"+id+"',"+isEmptyAllowed+"," + callback + "," + callStrFunc + ", event)\"/>";
@@ -23872,12 +23872,12 @@ textEdit = function(ctrlId, id, allowEmptyString, callback, callStrFunc)
 };
 */
 
-textEdit = function(ctrlId, id, allowEmptyString, callback, callStrFunc)
+textEdit = function(ctrlId, id, allowEmptyString, callback, callStrFunc) 
 {
   bTxtEditMode = true;
   var iSize = 8;
   if (screen.availWidth >= 1024) iSize = 12;
-  if (!$(ctrlId+"inp"))
+  if (!$(ctrlId+"inp"))  
   {
     sPrevVal = $(ctrlId).innerHTML;
     var isEmptyAllowed = false;
@@ -23893,7 +23893,7 @@ textEdit = function(ctrlId, id, allowEmptyString, callback, callStrFunc)
       sValue = sValue.replace("<BR>","");
     }
     sValue = sValue.replace(/^\s+/,""); // Left trim
-    sValue = sValue.replace(/$\s+/,""); // Left trim
+    sValue = sValue.replace(/$\s+/,""); // Left trim         
     sValue = sValue.replace(/<br>/gi, "");
    // var s = "<input id='"+ctrlId+"inp' value='"+sValue+"' size='"+iSize+"' maxlength='50' onblur='saveEdit(id, "+id+","+isEmptyAllowed+"," + callback +"," + callStrFunc+")' onkeypress='checkkey(id, "+id+","+isEmptyAllowed+"," + callback + "," + callStrFunc + ", event)'/>";
     if (PLATFORM == "Central") {
@@ -23925,12 +23925,12 @@ checkKeyInfo = function(ctrlId, id, allowEmptyString, e) {
     saveEditInfo(ctrlId, id, allowEmptyString);
 };
 
-textEditInfo = function(ctrlId, id, allowEmptyString)
+textEditInfo = function(ctrlId, id, allowEmptyString) 
 {
   bTxtEditMode = true;
   var iSize = 8;
   if (screen.availWidth >= 1024) iSize = 12;
-  if (!$(ctrlId+"inp"))
+  if (!$(ctrlId+"inp"))  
   {
     var isEmptyAllowed = false;
     if ((allowEmptyString !== null) && (allowEmptyString === true))
@@ -23939,8 +23939,8 @@ textEditInfo = function(ctrlId, id, allowEmptyString)
     }
     sPrevValInfo = $(ctrlId).innerHTML;
     var sValue = $(ctrlId).innerHTML;
-    sValue = sValue.replace(/^\s+/,""); // Left trim
-    sValue = sValue.replace(/$\s+/,""); // Left trim
+    sValue = sValue.replace(/^\s+/,""); // Left trim    
+    sValue = sValue.replace(/$\s+/,""); // Left trim     
     sValue = sValue.replace(/<br>/gi,"");
     sValue = sValue.replace(/&nbsp;/gi,"");
     var s = "<input id='"+ctrlId+"inp' value='"+sValue+"' size='"+iSize+"' onblur='saveEditInfo(id, "+id+","+isEmptyAllowed+")' onkeypress='checkKeyInfo(id, "+id+","+isEmptyAllowed+", event)' />";
@@ -23952,37 +23952,37 @@ textEditInfo = function(ctrlId, id, allowEmptyString)
 
 isPasswordAllowed = function(text,minLen,suppressAlert)
 {
-  var re = new RegExp( '^[a-zA-Z0-9.=!$():;#*ï¿½ï¿½ï¿½ï¿½-]{'+minLen+',}$', 'i' );
+  var re = new RegExp( '^[a-zA-Z0-9.=!$():;#*ßüäö-]{'+minLen+',}$', 'i' );
   var bRet = re.test( text );
   var bShowAlert = (typeof(suppressAlert)=="undefined");
-  //if( !bRet && ( bShowAlert ) ) alert( "Bitte verwenden Sie nur die erlaubten Sonderzeichen [., !, $, (, ), :, ;, #, ï¿½, ï¿½, ï¿½, ï¿½, -]." );
+  //if( !bRet && ( bShowAlert ) ) alert( "Bitte verwenden Sie nur die erlaubten Sonderzeichen [., !, $, (, ), :, ;, #, ß, ä, ö, ü, -]." );
   if( !bRet && ( bShowAlert ) ) alert( translateKey("alertUseOnlySpecialChars") );
   return bRet;
 };
 
 /**
- * Prï¿½ft, ob ein Text verbotene Sonderzeichen verwendet.
- * Zu diesen Zeichen gehï¿½ren: <, >, ', ", &, $, [, ], {, } und \
+ * Prüft, ob ein Text verbotene Sonderzeichen verwendet.
+ * Zu diesen Zeichen gehören: <, >, ', ", &, $, [, ], {, } und \
  * --> Es ist alles erlaubt, was nicht verboten ist
  **/
 isTextAllowed = function(text, minLen, suppressAlert)
 {
   var forbidden   = /[<>'"&$\[\]\{\}\\]/;
   var isForbidden = forbidden.test( text );
-
+  
   if ((isForbidden) && (typeof(suppressAlert) == "undefined"))
   {
-    //alert("Bezeichnungen dï¿½rfen keines der folgenden Zeichen enthalten: <, >, ', \", &, $, [, ], {, } und \\");
+    //alert("Bezeichnungen dürfen keines der folgenden Zeichen enthalten: <, >, ', \", &, $, [, ], {, } und \\");
     alert(translateKey("alertCharsNotAllowed"));
   }
-
+  
   return !(isForbidden);
 };
 
 /*
 isTextAllowed = function(text,minLen,suppressAlert)
 {
-  var re = new RegExp( '^[a-zA-Z0-9 .=!$&():;#*ï¿½ï¿½ï¿½ï¿½?-]{'+minLen+',}$', 'i' );
+  var re = new RegExp( '^[a-zA-Z0-9 .=!$&():;#*ßüäö?-]{'+minLen+',}$', 'i' );
   var bRet = re.test( text );
   var bShowAlert = (typeof(suppressAlert)=="undefined");
   if( !bRet && ( bShowAlert ) ) alert( "Bitte verwenden Sie nur die erlaubten Sonderzeichen!" );
@@ -23992,10 +23992,10 @@ isTextAllowed = function(text,minLen,suppressAlert)
 */
 
 if (PLATFORM == "Central")
-{
+{  
   saveEdit = function(ctrlId, id, allowEmptyString, callback, callStrFunc)
   {
-    // verhindern dass das OnBlur-Event ausgelï¿½st wird wenn mit ENTER bestï¿½tigt wurde
+    // verhindern dass das OnBlur-Event ausgelöst wird wenn mit ENTER bestätigt wurde
     if (!bTxtEditMode) return;
     bTxtEditMode = false;
     var divId = ctrlId.substr(0, ctrlId.length - 3);
@@ -24003,11 +24003,11 @@ if (PLATFORM == "Central")
     var oldV = "";
     if($(divId+"old")){
       oldV = $(divId+"old").value;
-      oldV = oldV.replace(/\n/,""); //  trim
+      oldV = oldV.replace(/\n/,""); //  trim        
       if (NAV_IE) {
         oldV = oldV.replace(/^\s+|$\s+/,""); // trim
       } else {
-        oldV = oldV.replace(/^\s+|\s+$/,""); // trim
+        oldV = oldV.replace(/^\s+|\s+$/,""); // trim      
       }
     }
     var minLen = 1;
@@ -24029,7 +24029,7 @@ if (PLATFORM == "Central")
       else
       {
         if (newVal != oldV){
-          iseSystem.checkName( newVal, divId );
+          iseSystem.checkName( newVal, divId );        
         } else {
           $(divId).innerHTML = sPrevVal;
         }
@@ -24040,10 +24040,10 @@ if (PLATFORM == "Central")
       $(divId).innerHTML = sPrevVal;
     }
   };
-
-  saveEditInfo = function(ctrlId, id, allowEmptyString)
+  
+  saveEditInfo = function(ctrlId, id, allowEmptyString) 
   {
-    // verhindern dass das OnBlur-Event ausgelï¿½st wird wenn mit ENTER bestï¿½tigt wurde
+    // verhindern dass das OnBlur-Event ausgelöst wird wenn mit ENTER bestätigt wurde
     if (!bTxtEditMode) return;
     bTxtEditMode = false;
     var divId = ctrlId.substr(0, ctrlId.length - 3);
@@ -24058,18 +24058,18 @@ if (PLATFORM == "Central")
       $(divId).innerHTML = newVal;
       if( id !== 0 ) { iseSystem.saveDesc(id, newVal); }
     }
-    else
+    else 
     {
       $(divId).innerHTML = sPrevValInfo;
     }
   };
-}
-else
+} 
+else 
 {
-  //Funktionen fï¿½r das Konfigtool
+  //Funktionen für das Konfigtool
   saveEdit = function(ctrlId, id, allowEmptyString, callback, callStrFunc)
   {
-    // verhindern dass das OnBlur-Event ausgelï¿½st wird wenn mit ENTER bestï¿½tigt wurde
+    // verhindern dass das OnBlur-Event ausgelöst wird wenn mit ENTER bestätigt wurde
     if (!bTxtEditMode) return;
     bTxtEditMode = false;
     var divId = ctrlId.substr(0, ctrlId.length - 3);
@@ -24077,11 +24077,11 @@ else
     var oldV = "";
     if($(divId+"old")){
       oldV = $(divId+"old").value;
-      oldV = oldV.replace(/\n/,""); //  trim
+      oldV = oldV.replace(/\n/,""); //  trim        
       if (NAV_IE) {
         oldV = oldV.replace(/^\s+|$\s+/,""); // trim
       } else {
-        oldV = oldV.replace(/^\s+|\s+$/,""); // trim
+        oldV = oldV.replace(/^\s+|\s+$/,""); // trim      
       }
     }
     var minLen = 1;
@@ -24104,7 +24104,7 @@ else
       else
       {
         if (newVal != oldV){
-          //iseSystem.checkName( newVal, divId );
+          //iseSystem.checkName( newVal, divId );        
         } else {
           $(divId).innerHTML = sPrevVal;
         }
@@ -24115,9 +24115,9 @@ else
       $(divId).innerHTML = sPrevVal;
     }
   };
-  saveEditInfo = function(ctrlId, id, allowEmptyString)
+  saveEditInfo = function(ctrlId, id, allowEmptyString) 
   {
-    // verhindern dass das OnBlur-Event ausgelï¿½st wird wenn mit ENTER bestï¿½tigt wurde
+    // verhindern dass das OnBlur-Event ausgelöst wird wenn mit ENTER bestätigt wurde
     if (!bTxtEditMode) return;
     bTxtEditMode = false;
     var divId = ctrlId.substr(0, ctrlId.length - 3);
@@ -24132,7 +24132,7 @@ else
       $(divId).innerHTML = newVal;
       if( id != 0 ) iseSystem.saveDesc(id, newVal);
     }
-    else
+    else 
     {
       $(divId).innerHTML = sPrevValInfo;
     }
@@ -24241,7 +24241,7 @@ removeDuplicates = function(s1, s2, splitChar, bPlainText) {
   if (splitChar) { sSC = splitChar; }
   var ar1 = s1.split(sSC);
   var ar2 = s2.split(sSC);
-
+  
   for (var i1 = 0; i1 < ar1.length; i1++) {
     bFound = false;
     for (iAr = 0; iAr < arTmp.length; iAr++) {
@@ -24266,7 +24266,7 @@ removeDuplicates = function(s1, s2, splitChar, bPlainText) {
       arTmp[arTmp.length] = ar2[i2];
     }
   }
-
+  
   var i;
   if (bPlainText)
   {
@@ -24374,17 +24374,17 @@ iseSortMultiArray = function(arr,dsc,dir,sln, sessionVar,popup)
       if( typeof arr[i+1][dsc] == "undefined" )
       {
         arr[i+1][dsc] = "";
-      }
+      }      
       var item = arr[i][dsc].toLowerCase();
-      item = item.replace("ï¿½", "o");
-      item = item.replace("ï¿½", "a");
-      item = item.replace("ï¿½", "u");
-      item = item.replace("ï¿½", "ss");
+      item = item.replace("ö", "o");
+      item = item.replace("ä", "a");
+      item = item.replace("ü", "u");
+      item = item.replace("ß", "ss");
       var nextitem = arr[i+1][dsc].toLowerCase();
-      nextitem = nextitem.replace("ï¿½", "o");
-      nextitem = nextitem.replace("ï¿½", "a");
-      nextitem = nextitem.replace("ï¿½", "u");
-      nextitem = nextitem.replace("ï¿½", "ss");
+      nextitem = nextitem.replace("ö", "o");
+      nextitem = nextitem.replace("ä", "a");
+      nextitem = nextitem.replace("ü", "u");
+      nextitem = nextitem.replace("ß", "ss");
       if( dir === 0 )
       {
         if( item > nextitem )
@@ -24403,9 +24403,9 @@ iseSortMultiArray = function(arr,dsc,dir,sln, sessionVar,popup)
       }
     }
   } while( bSwapped );
-
+    
   if (!popup) iseTransferSortedArray(arr,dsc,sln, sessionVar);
-
+  
 };
 
 iseTransferSortedArray = function(arr,dsc,sortListNumber, sessionVar)
@@ -24414,7 +24414,7 @@ iseTransferSortedArray = function(arr,dsc,sortListNumber, sessionVar)
   var url = "/esp/system.htm?sid="+SessionId;
   var pb = "";
   pb += 'string action = "AddToTempView'+sortListNumber+'";';
-
+  
   var s = "sessionLS";
   if (typeof(sessionVar) != 'undefined') s = sessionVar;
   pb += 'system.SetSessionVar("'+s+'", "'+dsc+'");';
@@ -24429,7 +24429,7 @@ iseTransferSortedArray = function(arr,dsc,sortListNumber, sessionVar)
   }
   pb += '";';
   if(dbg)alert(pb);
-  var opts =
+  var opts = 
   {
     postBody: ReGa.encode(pb),
     onComplete: function(t)
@@ -24440,15 +24440,15 @@ iseTransferSortedArray = function(arr,dsc,sortListNumber, sessionVar)
       isSorting = false;
     }
   };
-  new Ajax.Request(url,opts);
+  new Ajax.Request(url,opts); 
 
 };
 
 iseRemoveSpecialCharacters = function(s, bBrToSpace)
 {
   var newVal;
-
-  // replace all whitespaces (\f, \n, \t, \v)
+  
+  // replace all whitespaces (\f, \n, \t, \v) 
   if( bBrToSpace ) { newVal = s.replace(/\s/g, " "); }
   else             { newVal = s.replace(/\s/g, ""); }
   return newVal;
@@ -24478,7 +24478,7 @@ IseSort = function(array, colName, reload, popup)
     rsp = reload;
     conInfo( "IseSort: SET RSP = "+rsp );
     if( lastSort == colName ) { iseChangeDirection(); } else { iseResetDirection(); }
-    if (popup)
+    if (popup) 
     {
       iseSortMultiArray(array,colName,lastDir,1,this.popup);
     }
@@ -24494,7 +24494,7 @@ IseSort2 = function(array, colName, reload, gacCall,utvNo, sessionVar)
 {
   conInfo("Start IseSort2");
   if (!isSorting)
-  {
+  { 
     isSorting = true;
     Cursor.set(Cursor.WAIT);
     if(typeof utvNo == "undefined")
@@ -24545,10 +24545,10 @@ callbackUpdateChannelControl = function( chnId, lastTimestamp )
   var url = "/esp/system.htm?sid=" + SessionId;
   var pb = "string action = 'getLastTimeOfChn';";
   pb += 'string chnId = "' + chnId + '";';
-  var opts =
+  var opts = 
   {
     postBody: Rega.encode(pb),
-    onComplete: function(t)
+    onComplete: function(t) 
     {
       var sResp = t.responseText;
       // CR or LF may be appended which must be ignored
@@ -24565,8 +24565,8 @@ callbackUpdateChannelControl = function( chnId, lastTimestamp )
         updateChannelControl( chnId, lastTimestamp );
       }
     }
-  };
-
+  };  
+  
   new Ajax.Request(url, opts);
 };
 
@@ -24593,7 +24593,7 @@ recreateControl = function(chnId,sTimeStamp)
   var url;
   var pb;
   var opts;
-
+  
   //alert("recreating control "+chnId+" at "+sTimeStamp);
   conInfo("recreateControl");
   if( $("tmc"+chnId) )
@@ -24617,13 +24617,13 @@ recreateControl = function(chnId,sTimeStamp)
       $("tmc"+chnId).innerHTML = sTimeStamp;
     }
   }
-
+  
   if( $("dpc" + chnId) )
   {
     var iStatusOnly = 0;
-    if (sActPage.indexOf("statusviews") > -1)
+    if (sActPage.indexOf("statusviews") > -1) 
     {
-      iStatusOnly = 1;
+      iStatusOnly = 1;    
     }
     url = "/esp/datapointconfigurator.htm?sid="+SessionId;
     pb = "string action = 'dcCreate';";
@@ -24655,7 +24655,7 @@ LogoClick = function()
 
 updateGroupCell = function(prefix, chnId1, chnId2, content) {
   var sCellId = prefix + chnId1 + chnId2;
-  if ($(sCellId))
+  if ($(sCellId)) 
     $(sCellId).innerHTML = content;
   else {
     sCellId = prefix + chnId2 + chnId1;
@@ -24819,14 +24819,14 @@ DeleteObject = function(id)
   var pb = "";
   pb += 'string action = "DeleteObject";';
   pb += 'string id = "'+id+'";';
-  var opts =
+  var opts = 
   {
     postBody: ReGa.encode(pb),
-    onSuccess: function(t)
+    onSuccess: function(t) 
     {
       if( t.responseText == "false" )
       {
-        //if(dbg){alert("Objekt konnte nicht gelï¿½scht werden.");}
+        //if(dbg){alert("Objekt konnte nicht gelöscht werden.");}
         if(dbg){alert(translateKey("alertErrorDeleteObject"));}
       }
       reloadPage();
@@ -24841,16 +24841,16 @@ DeleteObject2 = function(id)
   var pb = "";
   pb += 'string action = "DeleteObject";';
   pb += 'string id = "'+id+'";';
-  var opts = {
-    postBody: ReGa.encode(pb),
-    onSuccess: function(t)
-    {
+  var opts = { 
+    postBody: ReGa.encode(pb), 
+    onSuccess: function(t) 
+    { 
       if( t.responseText == "false" )
       {
-        //if(dbg){alert("Objekt konnte nicht gelï¿½scht werden.");}
+        //if(dbg){alert("Objekt konnte nicht gelöscht werden.");}
         if(dbg){alert(translateKey("alertErrorDeleteObject"));}
       }
-      dlgPopup.load();
+      dlgPopup.load(); 
     }
   };
   new Ajax.Request(url, opts);
@@ -24922,8 +24922,8 @@ roundValue05 = function(val) {
 };
 
 round = function(x, n)
-{
-  // x = Flieï¿½kommazahl, n = gewï¿½nschte Nachkommastellen
+{ 
+  // x = Fließkommazahl, n = gewünschte Nachkommastellen
   if (!n) n = 2; //wenn n fehlt wird n = 2
   if (n < 1 || n > 14) return false;
   var e = Math.pow(10, n);
@@ -24952,7 +24952,7 @@ removeChannelFromRoom = function(roomId, channelId)
   decChnCount(roomId);
   iseChannels.delChnFromID(channelId, roomId, true);
   clearUserTempViewIDs2Room();
-
+  
   var room = RoomList.get(roomId);
   if (room)
   {
@@ -24961,14 +24961,14 @@ removeChannelFromRoom = function(roomId, channelId)
 };
 
 /**
- * Entfernt einen Kanal aus allen Rï¿½umen.
+ * Entfernt einen Kanal aus allen Räumen.
  **/
 removeChannelFromAllRooms = function(roomId, channelId)
 {
   decChnCount(roomId);
   iseChannels.delChnFromAllRooms(channelId, true);
   clearUserTempViewIDs2Room();
-
+  
   RoomList.list().each(function (room) {
     room.removeChannel(channelId);
   });
@@ -24979,7 +24979,7 @@ removeChannelFromSubsection = function(subsectionId, channelId)
   decChnCount(subsectionId);
   iseChannels.delChnFromID(channelId, subsectionId, true);
   clearUserTempViewIDs2Function();
-
+  
   var subsection = SubsectionList.get(subsectionId);
   if (subsection)
   {
@@ -24992,7 +24992,7 @@ removeChannelFromAllSubsections = function(subsectionId, channelId)
   decChnCount(subsectionId);
   iseChannels.delChnFromAllFunctions(channelId, true);
   clearUserTempViewIDs2Function();
-
+  
   SubsectionList.list().each(function (subsection) {
     subsection.removeChannel(channelId);
   });
@@ -25002,24 +25002,24 @@ removeRoomOrSubsection = function(id)
 {
   var room = RoomList.get(id);
   if (room) { RoomList.remove(room); }
-
+  
   var subsection = SubsectionList.get(id);
   if (subsection) { SubsectionList.remove(subsection); }
-
+  
 };
 
 changeRoomOrSubsection = function(id)
 {
   var room = RoomList.get(id);
   if (room) { RoomList.beginUpdate(id); }
-
+  
   var subsection = SubsectionList.get(id);
   if (subsection) { SubsectionList.beginUpdate(id); }
 };
 
 encodeStringStatusDisplay = function(elmID, is4Dis, specialSZ)
 {
-	//Wird zur Zeit nur fï¿½r die Textzeilen des HM-PB-4Dis-WM und des HM-Dis-WM55 genutzt,
+	//Wird zur Zeit nur für die Textzeilen des HM-PB-4Dis-WM und des HM-Dis-WM55 genutzt,
 	//da dort einige Zeichen im Speicher an anderer Stelle liegen.
   var jElm = jQuery("#"+elmID),
   inString = jElm.val(),
@@ -25028,11 +25028,11 @@ encodeStringStatusDisplay = function(elmID, is4Dis, specialSZ)
 
   conInfo("encodeStringStatusDisplay - inString: " + inString);
 
-  // Beim HM-PB-4Dis-WM wird die Tilde zum Darstellen des ï¿½ benutzt.
+  // Beim HM-PB-4Dis-WM wird die Tilde zum Darstellen des ß benutzt.
   // Hier ist kein ReGa im Spiel.
   // Beim HM-Dis-WM55 ist ReGA im Spiel. Leider wandelt Ise-Script
-  // die Tilde in ein " um, so daï¿½ der generierte String zerstï¿½rt wird.
-  // Daher hier die Prï¿½fung ....
+  // die Tilde in ein " um, so daß der generierte String zerstört wird.
+  // Daher hier die Prüfung ....
   szKey = (is4Dis == true) ? "~" : szKey;
 
   if (specialSZ) {
@@ -25040,25 +25040,25 @@ encodeStringStatusDisplay = function(elmID, is4Dis, specialSZ)
   }
 
   if (is4Dis == true) {
-    outString = inString.replace(/ï¿½/g, "[");
-    outString = outString.replace(/ï¿½/g, "#");
-    outString = outString.replace(/ï¿½/g, "$");
-    outString = outString.replace(/ï¿½/g, "{");
-    outString = outString.replace(/ï¿½/g, "|");
-    outString = outString.replace(/ï¿½/g, "}");
-    outString = outString.replace(/ï¿½/g, szKey);
+    outString = inString.replace(/Ä/g, "[");
+    outString = outString.replace(/Ö/g, "#");
+    outString = outString.replace(/Ü/g, "$");
+    outString = outString.replace(/ä/g, "{");
+    outString = outString.replace(/ö/g, "|");
+    outString = outString.replace(/ü/g, "}");
+    outString = outString.replace(/ß/g, szKey);
     outString = outString.replace(/&/g, "]");
     outString = outString.replace(/=/g, "'");
     jQuery("#"+elmID.replace(/^_/, "")).val(outString);
     return;
   } else {
-    outString = inString.replace(/0xc4/g, "0x5b"); //ï¿½
-    outString = outString.replace(/0xd6/g, "0x23"); // ï¿½
-    outString = outString.replace(/0xdc/g, "0x24"); // ï¿½
-    outString = outString.replace(/0xe4/g, "0x7b"); // ï¿½
-    outString = outString.replace(/0xf6/g, "0x7c"); // ï¿½
-    outString = outString.replace(/0xfc/g, "0x7d"); // ï¿½
-    outString = outString.replace(/0xdf/g, szKey); // ï¿½
+    outString = inString.replace(/0xc4/g, "0x5b"); //Ä
+    outString = outString.replace(/0xd6/g, "0x23"); // Ö
+    outString = outString.replace(/0xdc/g, "0x24"); // Ü
+    outString = outString.replace(/0xe4/g, "0x7b"); // ä
+    outString = outString.replace(/0xf6/g, "0x7c"); // ö
+    outString = outString.replace(/0xfc/g, "0x7d"); // ü
+    outString = outString.replace(/0xdf/g, szKey); // ß
     outString = outString.replace(/0x26/g, "0x5d"); // &
     outString = outString.replace(/0x3d/g, "0x27"); // =
   }
@@ -25066,13 +25066,13 @@ encodeStringStatusDisplay = function(elmID, is4Dis, specialSZ)
 };
 
 decodeStringStatusDisplay = function(sString) {
-  var outString = sString.replace(/\[/g,"ï¿½");
-  outString = outString.replace(/#/g,"ï¿½");
-  outString = outString.replace(/\$/g,"ï¿½");
-  outString = outString.replace(/{/g,"ï¿½");
-  outString = outString.replace(/\|/g,"ï¿½");
-  outString = outString.replace(/}/g,"ï¿½");
-  outString = outString.replace(/\_/g,"ï¿½");
+  var outString = sString.replace(/\[/g,"Ä");
+  outString = outString.replace(/#/g,"Ö");
+  outString = outString.replace(/\$/g,"Ü");
+  outString = outString.replace(/{/g,"ä");
+  outString = outString.replace(/\|/g,"ö");
+  outString = outString.replace(/}/g,"ü");
+  outString = outString.replace(/\_/g,"ß");
   outString = outString.replace(/\]/g,"&");
   outString = outString.replace(/\'/g,"=");
   return outString;
@@ -25459,11 +25459,11 @@ getDualWhiteControllerDiagramURLs = function() {
  * @fileOverview Debug-Funktionen
  * @author ise
  **/
-
+ 
 debugAddMsg = function() {
   if(typeof(eventLogSystem) == "undefined") {
     $("dbgLog").innerHTML = "eventLogSystem -> undefined";
-  }
+  } 
   else {
     $("dbgLog").innerHTML = "calling eventLogSystem.add()";
     eventLogSystem.add("10.07.2007 12:15", "Wetterstation", "LowBat");
@@ -25471,7 +25471,7 @@ debugAddMsg = function() {
 };
 
 createDebugAlarmMsgs = function() {
-
+  
   var table = Builder.node("table", {id:"tblDebugAlarms", style: "width:100%;color:Black;"});
   var colgroup = Builder.node("colgroup");
   var col1 = Builder.node("col", {width: "25%"});
@@ -25487,31 +25487,31 @@ createDebugAlarmMsgs = function() {
   var td1 = Builder.node("td", {}, "01.03. 13:22");
   var td2 = Builder.node("td", {}, "Bewegungsmelder - Eingang");
   var td3 = Builder.node("td", {}, "Low Bat");
-
-  // Zeile 1 hinzufï¿½gen
+  
+  // Zeile 1 hinzufügen
   tr.appendChild(td1);
   tr.appendChild(td2);
   tr.appendChild(td3);
   tbody.appendChild(tr);
-
+  
   // Zeile 2 erstellen
   tr = Builder.node("tr");
   td1 = Builder.node("td", {}, "01.03. 13:19");
   td2 = Builder.node("td", {}, "Kombi-Wettersensor");
   td3 = Builder.node("td", {}, "Empfangsausfall");
-
-  // Zeile 2 hinzufï¿½gen
+  
+  // Zeile 2 hinzufügen
   tr.appendChild(td1);
   tr.appendChild(td2);
   tr.appendChild(td3);
-
+  
   tbody.appendChild(tr);
-
-  tr = Builder.node("tr");td1 = Builder.node("td", {}, "01.03. 13:44");td2 = Builder.node("td", {}, "Mï¿½lleimer");td3 = Builder.node("td", {}, "Voll");tr.appendChild(td1);tr.appendChild(td2);tr.appendChild(td3);
+  
+  tr = Builder.node("tr");td1 = Builder.node("td", {}, "01.03. 13:44");td2 = Builder.node("td", {}, "Mülleimer");td3 = Builder.node("td", {}, "Voll");tr.appendChild(td1);tr.appendChild(td2);tr.appendChild(td3);
   tbody.appendChild(tr);
-  tr = Builder.node("tr");td1 = Builder.node("td", {}, "01.03. 13:45");td2 = Builder.node("td", {}, "Badewanne");td3 = Builder.node("td", {}, "ï¿½bergelaufen");tr.appendChild(td1);tr.appendChild(td2);tr.appendChild(td3);
+  tr = Builder.node("tr");td1 = Builder.node("td", {}, "01.03. 13:45");td2 = Builder.node("td", {}, "Badewanne");td3 = Builder.node("td", {}, "Übergelaufen");tr.appendChild(td1);tr.appendChild(td2);tr.appendChild(td3);
   tbody.appendChild(tr);
-
+  
   table.appendChild(tbody);
 
   if( $('logAlarms') )
@@ -25535,7 +25535,7 @@ debugForcePos = function() {
     var topCoords = Position.positionedOffset($("btnRooms"));
     var offsetCoords = Position.positionedOffset($("subOffsetDiv"));
     var dimTop = $("btnRooms").getDimensions();
-
+    
     $("btnRoomsSub").style.top = topCoords[1] - offsetCoords[1] + dimTop.height;
     $("btnRoomsSub").style.left = topCoords[0] - offsetCoords[0] - 5;
     $("btnRoomsSub").show();
@@ -25562,7 +25562,7 @@ showTimemodule = function() {
  **/
 
 /**
- * @fileOverview Speichert und verwaltet Filter-Kriterien fï¿½r Listen-Ansichten
+ * @fileOverview Speichert und verwaltet Filter-Kriterien für Listen-Ansichten
  * @author Michael Niehaus (ise)
  **/
 
@@ -25570,9 +25570,9 @@ showTimemodule = function() {
 // author: Michael Niehaus
 // date created: 15.05.2007
 //
-// speichert und verwaltet Filter-Kriterien fï¿½r Listen-Ansichten
+// speichert und verwaltet Filter-Kriterien für Listen-Ansichten
 FLT_OBJ_TYP_VARS = 1;
-bFilterUsed = false;
+bFilterUsed = false;           
 
 /**
  * @class
@@ -25613,7 +25613,7 @@ iseFilter.prototype = {
     if (fltObjType)
       this.fltObjType = fltObjType;
   },
-
+  
 
   saveModeFilter: function(bModeStd, bModeSafe)
   {
@@ -25631,7 +25631,7 @@ iseFilter.prototype = {
     };
     new Ajax.Request(url, opt);
   },
-
+  
   saveIfaceFilter: function(bSend, bRec)
   {
     this.bSend = bSend;
@@ -25649,7 +25649,7 @@ iseFilter.prototype = {
     new Ajax.Request(url, opt);
   },
 
-
+  
   addStringFilter: function(fId, s) {
     s = s.toLowerCase();
     switch(fId) {
@@ -25667,7 +25667,7 @@ iseFilter.prototype = {
       default:        break;
     }
   },
-
+  
   isFilterType: function(ft) {
     switch(ft) {
       case FIL_MODE_AES: return this.bSafe;
@@ -25677,7 +25677,7 @@ iseFilter.prototype = {
       default          : return null;
     }
   },
-
+  
   objPassFilter: function(obj)
   {
     var bFound;
@@ -25685,13 +25685,13 @@ iseFilter.prototype = {
     var arO;
     var i;
     var x;
-
-    bFilterUsed = true;
+    
+    bFilterUsed = true;                  
     if (this.filRooms !== "")
     {
       bFound = false;
       arF = this.filRooms.split('\t');
-
+      
       if (obj['fltOpts']['rooms'])
       {
         arO = obj['fltOpts']['rooms'].split('\t');
@@ -25712,13 +25712,13 @@ iseFilter.prototype = {
       }
       if (!bFound) { return false; }
     }
-
+    
     if (this.filFuncs !== "")
     {
       bFound = false;
       arF    = this.filFuncs.split('\t');
        arO   = obj['fltOpts']['funcs'].split('\t');
-
+       
       for (i = 0; i < arF.length; i++)
       {
         if (!bFound) {
@@ -25785,7 +25785,7 @@ iseFilter.prototype = {
         if (obj['time'].toLowerCase().indexOf(this.filTime) == -1) { return false; }
       }
     }
-
+    
     if (this.filDate !== "")
     {
       if (typeof obj['date'] != 'undefined')
@@ -25799,11 +25799,11 @@ iseFilter.prototype = {
       if (obj['chn'] === "")                         { return false; }
       if (obj['chn'].toLowerCase().indexOf(this.filChnLink) == -1) { return false; }
     }
-/*
+/*    
     if (this.filVarTypes !== "")
     {
     }
-*/
+*/    
     if (this.bSend != this.bRec) {
       if (this.bSend) {
         if (obj['fltOpts']['iCat'] == 2)
@@ -25899,23 +25899,23 @@ iseFilter.prototype = {
     }
     return true;
   },
-
+  
   varTypeFilterSet: function() {
     if (this.bTypeLogic) return true;
     if (this.bTypeValueList) return true;
     if (this.bTypeNumber) return true;
     if (this.bTypeAlarm) return true;
     if (this.bTypeString) return true;
-    return false;
+    return false; 
   },
-
+    
   isFilterId: function(id, fId)
   {
     var i;
     var rIds;
     var fIds;
-
-    switch(fId)
+    
+    switch(fId) 
     {
       case FIL_ROOMS:
         rIds = this.filRooms.split('\t');
@@ -25939,7 +25939,7 @@ iseFilter.prototype = {
         return false;
     }
   },
-
+  
   clearFilters: function(id, ftType)
   {
 //    var url = "/esp/system.htm?sid="+SessionId;
@@ -25954,14 +25954,14 @@ iseFilter.prototype = {
 //      }
 //    }
 //    new Ajax.Request(url, opt);
-
+    
     this.filRooms = "";
     this.filFuncs = "";
     this.filType = "";
     this.filDesc = "";
     this.filSn = "";
-    this.filName = "";
-    this.filUnit = "";
+    this.filName = "";  
+    this.filUnit = ""; 
     this.filChnLink = "";
     this.filVarTypes = "";
     this.filTime = "";
@@ -25969,7 +25969,7 @@ iseFilter.prototype = {
     this.bSend = false;
     this.bRec = false;
     this.bStd = false;
-    this.bSafe = false;
+    this.bSafe = false; 
     this.bColLeft = false;
     this.bColCenter = false;
     this.bNameLeft = false;
@@ -25983,18 +25983,18 @@ iseFilter.prototype = {
     this.bTypeNumber = false;
     this.bTypeAlarm = false;
     this.bTypeString = false;
-    conInfo("Alle Filter wurden zurï¿½ckgesetzt.");
+    conInfo("Alle Filter wurden zurückgesetzt.");
   }
 };
-
+ 
 /* * * * * * * * * * * * *   HILFS-FUNKTIONEN   * * * * * * * * * * * * * * */
 
-// Prï¿½ft anhand der filterOptions ob Checkboxen in Submenï¿½s gesetzt werden sollen
+// Prüft anhand der filterOptions ob Checkboxen in Submenüs gesetzt werden sollen
 selectFilters = function(fltObj, divToShow)
 {
   var i;
   var inplist;
-
+  
   switch(divToShow) {
     case "btnFilterRoomSub":
       inplist = $("btnFilterRoomSub").getElementsByTagName('input');
@@ -26018,12 +26018,12 @@ selectFilters = function(fltObj, divToShow)
       $("cbString").checked = fltObj.bTypeString;
       break;
     case "btnFilterIfaceSub":
-      $("cbSend").checked = fltObj.isFilterType(FIL_IFACE_S);
-      $("cbRec").checked = fltObj.isFilterType(FIL_IFACE_R);
+      $("cbSend").checked = fltObj.isFilterType(FIL_IFACE_S); 
+      $("cbRec").checked = fltObj.isFilterType(FIL_IFACE_R); 
       break;
     case "btnFilterModeSub":
-      $("cbSafe").checked = fltObj.isFilterType(FIL_MODE_AES);
-      $("cbStd").checked = fltObj.isFilterType(FIL_MODE_STD);
+      $("cbSafe").checked = fltObj.isFilterType(FIL_MODE_AES); 
+      $("cbStd").checked = fltObj.isFilterType(FIL_MODE_STD); 
       break;
     case "btnFilterNameSub":
       $("ftName").value = fltObj.filName;
@@ -26099,7 +26099,7 @@ setIFilter = function(fltObj, sId)
 {
   switch (sId)
   {
-    case "mode":
+    case "mode": 
       fltObj.saveModeFilter($("cbStd").checked, $("cbSafe").checked);
       break;
     case "iface":
@@ -26116,7 +26116,7 @@ setAFilter = function(fltObj, sId)
   var sTmp = "";
   var inplist;
   var i;
-
+  
   switch(sId) {
     case "rooms":
       inplist = $("btnFilterRoomSub").getElementsByTagName('input');
@@ -26146,12 +26146,12 @@ setAFilter = function(fltObj, sId)
       fltObj.bTypeString = $("cbString").checked;
       break;
     case "colPos":
-      fltObj.bColLeft = $("cbColLeft").checked;
-      fltObj.bColCenter = $("cbColCenter").checked;
+      fltObj.bColLeft = $("cbColLeft").checked; 
+      fltObj.bColCenter = $("cbColCenter").checked; 
       break;
     case "namePos":
-      fltObj.bNameLeft = $("cbNameLeft").checked;
-      fltObj.bNameTop = $("cbNameTop").checked;
+      fltObj.bNameLeft = $("cbNameLeft").checked; 
+      fltObj.bNameTop = $("cbNameTop").checked; 
       break;
     case "endDev":
       fltObj.bPC = $("cbPC").checked;
@@ -26185,13 +26185,13 @@ filterBtnSelected = function(id) {
 
 colorFilterBtns = function(fltObj)
 {
-  if (fltObj.filName !== "") filterBtnSelected('btnFilterName');
+  if (fltObj.filName !== "") filterBtnSelected('btnFilterName'); 
   else filterBtn('btnFilterName');
-  if (fltObj.filType !== "") filterBtnSelected('btnFilterType');
+  if (fltObj.filType !== "") filterBtnSelected('btnFilterType'); 
   else filterBtn('btnFilterType');
-  if (fltObj.filDesc !== "") filterBtnSelected('btnFilterDesc');
+  if (fltObj.filDesc !== "") filterBtnSelected('btnFilterDesc'); 
   else filterBtn('btnFilterDesc');
-  if (fltObj.filSn !== "") filterBtnSelected('btnFilterSN');
+  if (fltObj.filSn !== "") filterBtnSelected('btnFilterSN'); 
   else filterBtn('btnFilterSN');
   if (fltObj.filRooms !== "") filterBtnSelected('btnFilterRoom');
   else filterBtn('btnFilterRoom');
@@ -26202,22 +26202,22 @@ colorFilterBtns = function(fltObj)
   if (fltObj.bStd||fltObj.bSafe) filterBtnSelected('btnFilterMode');
   else filterBtn('btnFilterMode');
   if (fltObj.varTypeFilterSet()) filterBtnSelected('btnFilterVarType');
-  else filterBtn('btnFilterVarType');
-  if (fltObj.filTime !== "") filterBtnSelected('btnFilterTime');
+  else filterBtn('btnFilterVarType'); 
+  if (fltObj.filTime !== "") filterBtnSelected('btnFilterTime'); 
   else filterBtn('btnFilterTime');
-  if (fltObj.filDate !== "") filterBtnSelected('btnFilterDate');
+  if (fltObj.filDate !== "") filterBtnSelected('btnFilterDate'); 
   else filterBtn('btnFilterDate');
-  if (fltObj.bColLeft) filterBtnSelected('btnFilterColPos');
+  if (fltObj.bColLeft) filterBtnSelected('btnFilterColPos'); 
   else filterBtn('btnFilterColPos');
-  if (fltObj.bColCenter) filterBtnSelected('btnFilterColPos');
+  if (fltObj.bColCenter) filterBtnSelected('btnFilterColPos'); 
   else filterBtn('btnFilterColPos');
-  if (fltObj.bNameLeft) filterBtnSelected('btnFilterNamePos');
+  if (fltObj.bNameLeft) filterBtnSelected('btnFilterNamePos'); 
   else filterBtn('btnFilterNamePos');
-  if (fltObj.bNameTop) filterBtnSelected('btnFilterNamePos');
+  if (fltObj.bNameTop) filterBtnSelected('btnFilterNamePos'); 
   else filterBtn('btnFilterNamePos');
-  if (fltObj.filChnLink !== "") filterBtnSelected('btnFilterChn');
+  if (fltObj.filChnLink !== "") filterBtnSelected('btnFilterChn'); 
   else filterBtn('btnFilterChn');
-
+  
 };
 /**
  * ise/iseButtonsSwitch.js
@@ -26253,21 +26253,21 @@ iseButtonsSwitch.prototype = {
     this.labelVIR_LG_ONOFF = "VIR-LG-ONOFF";
 
     this.garageDoorControllerOnTime = 0.5;
-
+    
     if (initState) { ControlBtn.on(this.divOn); }
     else  { ControlBtn.on(this.divOff); }
-
+      
     // Add event handlers
     if (iViewOnly === 0)
     {
       this.clickOff = this.onClickOff.bindAsEventListener(this);
       Event.observe(this.divOff, 'mousedown', this.clickOff);
-
+      
       this.clickOn = this.onClickOn.bindAsEventListener(this);
       Event.observe(this.divOn, 'mousedown', this.clickOn);
     }
   },
-
+  
   onClickOff: function() {
     ControlBtn.pushed(this.divOff);
     //this.state = false;
@@ -26282,7 +26282,7 @@ iseButtonsSwitch.prototype = {
       pe.stop();
     }, 1);
   },
-
+ 
   onClickOn: function() {
     ControlBtn.pushed(this.divOn);
     if (this.chnLabel != this.labelGarageDoorController) {
@@ -26334,10 +26334,10 @@ iseButtonsKey.prototype = {
     this.divLong = $(this.id + "Long");
     this.shortId = shortId;
     this.longId = longId;
-
+    
     if( this.divShort ) { ControlBtn.off(this.divShort); }
     if( this.divLong ) { ControlBtn.off(this.divLong); }
-
+    
     // Add event handlers
     if (iViewOnly === 0)
     {
@@ -26351,7 +26351,7 @@ iseButtonsKey.prototype = {
       }
     }
   },
-
+  
   onClickShort: function() {
     setDpState(this.shortId, 1);
     ControlBtn.pushed(this.divShort);
@@ -26363,7 +26363,7 @@ iseButtonsKey.prototype = {
       pe.stop();
     }, 1);
   },
-
+  
   onClickLong: function() {
     setDpState(this.longId, 1);
     ControlBtn.pushed(this.divLong);
@@ -26385,18 +26385,18 @@ iseButtonProg.prototype = {
   initialize: function(id, progActive) {
     this.id = id;
     this.progActive = progActive;
-
+    
     this.startBtn = $(id + "Start");
     this.actBtn = $(id + "Act");
-
+    
     if ( progActive ) { ControlBtn.on(this.actBtn); }
-
+    
     // Add event handlers
     this.clickStart = this.onClickStart.bindAsEventListener(this);
     Event.observe(this.startBtn, 'mousedown', this.clickStart);
   },
-
-  onClickStart: function()
+  
+  onClickStart: function() 
   {
     ControlBtn.pushed(this.startBtn);
     ExecuteProgram(this.id);
@@ -26421,9 +26421,9 @@ iseButtonsEvent.prototype = {
     this.id = id;
     this.divEvent = $(this.id + "event");
     this.eventId = eventId;
-
+    
     if( this.divEvent ) { ControlBtn.off(this.divEvent); }
-
+    
     // Add event handlers
     if (iViewOnly === 0)
     {
@@ -26431,7 +26431,7 @@ iseButtonsEvent.prototype = {
       Event.observe(this.divEvent, 'mousedown', this.clickEvent);
     }
   },
-
+  
   onClickEvent: function() {
     setDpState(this.eventId, 1);
     ControlBtn.pushed(this.divEvent);
@@ -26443,7 +26443,7 @@ iseButtonsEvent.prototype = {
       pe.stop();
     }, 1);
   }
-
+ 
 };/**
  * ise/iseButtonsDimmer.js
  **/
@@ -26455,13 +26455,13 @@ iseButtonsEvent.prototype = {
 
 /**
  * @class
- **/
+ **/ 
 iseButtonsDimmer = Class.create();
 
 iseButtonsDimmer.prototype = {
   /*
    * id = DOM-ID of switch
-   * initState = Creation State
+   * initState = Creation State 
    */
   initialize: function(id, initState, lvlDP, oldLvlDP, iViewOnly, bSliderPosFlag, label)
   {
@@ -26485,23 +26485,23 @@ iseButtonsDimmer.prototype = {
         this.bSliderPosFlag = false;
     }
     this.slider = new sliderControl("dimmer", this.id, initState, iViewOnly,this.bSliderPosFlag);
-
+    
     this.hasRampClicked = false;
-
+    
     this.txtPerc = $(this.id + "Perc");
-
+    
     // Add event handlers
     if (iViewOnly === 0)
     {
       this.mouseOut = this.onMouseOut.bindAsEventListener(this);
       Event.observe($("slidCtrl" + this.id), 'mouseout', this.mouseOut);
-
+    
       this.rampClick = this.onRampClick.bindAsEventListener(this);
       Event.observe(this.slider.e_base, 'mousedown', this.rampClick);
-
+      
       this.handleClick = this.onHandleClick.bindAsEventListener(this);
       Event.observe($("slidCtrl" + this.id), 'mouseup', this.handleClick);
-
+      
       this.clickUp = this.onClickUp.bindAsEventListener(this);
       Event.observe($(this.id + "Up"), 'click', this.clickUp);
 
@@ -26517,13 +26517,13 @@ iseButtonsDimmer.prototype = {
       }
       this.clickOff  = this.onClickOff.bindAsEventListener(this);
       Event.observe($(this.id + "Off"), 'mousedown', this.clickOff);
-
+      
       this.percChange = this.onPercChange.bindAsEventListener(this);
       Event.observe($(this.id + "Perc"), 'change', this.percChange);
     }
     this.refresh(false);
   },
-
+  
   onMouseOut: function(event)
   {
     var e = event;
@@ -26534,7 +26534,7 @@ iseButtonsDimmer.prototype = {
       var b1 = (relTarg.id.indexOf("slider")!=-1);
       var b2 = (relTarg.id.indexOf("base")!=-1);
       var b3 = (relTarg.id.indexOf("green")!=-1);
-      if( !b1 && !b2 && !b3 )
+      if( !b1 && !b2 && !b3 ) 
       {
         if( this.hasRampClicked )
         {
@@ -26546,57 +26546,57 @@ iseButtonsDimmer.prototype = {
       }
     }
   },
-
+ 
   onRampClick: function(ev)
   {
      conInfo( "iseDimmer: onRampClick()" );
      this.hasRampClicked = true;
      var pos = Position.page(this.slider.e_base);
      var offset = ev.clientX - pos[0];
-     var val = ( offset * 100 ) / this.slider.n_controlWidth;
+     var val = ( offset * 100 ) / this.slider.n_controlWidth;  
      var oldstate = parseInt(this.state);
      this.state = Math.floor(val);
      if (this.state < (oldstate-3))
      {
-       this.slider.f_setValue(val);
-     }
+       this.slider.f_setValue(val);     
+     }     
      else if (this.state > (oldstate+3))
      {
-       this.slider.f_setValue(val);
-     }
-     //conInfo("setting Dimmer DP "+this.lvlDP+" State --> " + this.state + " -- old State --> "+oldstate);
+       this.slider.f_setValue(val);     
+     } 
+     //conInfo("setting Dimmer DP "+this.lvlDP+" State --> " + this.state + " -- old State --> "+oldstate);   
      //window.setTimeout("ibd"+this.id+".refresh()",1000);
   },
-
+  
   onHandleClick: function()
   {
     conInfo( "iseDimmer: onHandleClick()" );
     this.state = this.txtPerc.value;
     this.refresh();
   },
-
+  
   onClickUp: function()
   {
     conInfo( "iseDimmer: onClickUp()" );
     this.state = this.slider.n_value;
-    this.state += 10;
+    this.state += 10; 
     if (this.state > 100)
     {
       this.state = 100;
     }
     this.refresh();
   },
-
+  
   onClickDown: function()
   {
     conInfo( "iseDimmer: onClickDown()" );
     this.state = this.slider.n_value;
-    this.state -= 10;
+    this.state -= 10; 
     if (this.state < 0)
       this.state = 0;
     this.refresh();
   },
-
+  
   onClickOn: function()
   {
     conInfo( "iseDimmer: onClickOn()" );
@@ -26697,8 +26697,8 @@ iseButtonsDimmer.prototype = {
     }
 
   },
-
-
+ 
+  
   onPercChange: function()
   {
     conInfo( "iseDimmer: onPercChange()" );
@@ -26708,14 +26708,14 @@ iseButtonsDimmer.prototype = {
     this.state = this.txtPerc.value;
     this.refresh();
   },
-
+  
   update: function(newVal)
   {
     conInfo( "iseDimmer: update()" );
     this.state = newVal;
     this.refresh(newVal);
   },
-
+  
   refresh: function(setstate)
   {
     conInfo( "iseDimmer: refresh()" );
@@ -26738,7 +26738,7 @@ iseButtonsDimmer.prototype = {
     }
     if(typeof setstate == "undefined")
     {
-      conInfo("setting Dimmer DP "+this.lvlDP+" State -------> " + this.state);
+      conInfo("setting Dimmer DP "+this.lvlDP+" State -------> " + this.state);    
       setDpState(this.lvlDP, (this.state / 100));
     }
   }
@@ -26760,7 +26760,7 @@ iseThermostat = Class.create();
 iseThermostat.prototype = {
   /*
    * id = DOM-ID of switch
-   * initState = Creation State
+   * initState = Creation State 
    */
   initialize: function(id, initState, lvlDP, min, max, iViewOnly, bSliderPosFlag, opts)
   {
@@ -27233,7 +27233,7 @@ iseThermostatHMIP.prototype = {
     this.max = 30;
     this.off = 4.5;
     this.on = 30.5;
-    this.unit = "ï¿½C";
+    this.unit = "°C";
     this.factor = 100/(this.max-this.min);
     this.iViewOnly = false;
     this.bSliderPosFlag = false;
@@ -27701,7 +27701,7 @@ iseFrequency = Class.create();
 iseFrequency.prototype = {
   /*
    * id = DOM-ID of switch
-   * initState = Creation State
+   * initState = Creation State 
    */
   initialize: function(id, initState, lvlDP, min, max, iViewOnly, bSliderPosFlag)
   {
@@ -27714,7 +27714,7 @@ iseFrequency.prototype = {
     this.max = max;
     this.factor = 100/(max-min);
     this.unit = " mHz";
-    if(bSliderPosFlag)
+    if(bSliderPosFlag) 
     {
         this.bSliderPosFlag = bSliderPosFlag;
     }
@@ -27730,13 +27730,13 @@ iseFrequency.prototype = {
     {
       this.mouseOut = this.onMouseOut.bindAsEventListener(this);
       Event.observe($("slidCtrl" + this.id), 'mouseout', this.mouseOut);
-
+    
       this.rampClick = this.onRampClick.bindAsEventListener(this);
       Event.observe(this.slider.e_base, 'mousedown', this.rampClick);
-
+      
       this.handleClick = this.onHandleClick.bindAsEventListener(this);
       Event.observe($("slidCtrl" + this.id), 'mouseup', this.handleClick);
-
+      
       this.clickUp = this.onClickUp.bindAsEventListener(this);
       Event.observe($(this.id + "Up"), 'click', this.clickUp);
 
@@ -27748,7 +27748,7 @@ iseFrequency.prototype = {
     }
     this.refresh(false);
   },
-
+  
   onMouseOut: function(event)
   {
     var e = event;
@@ -27760,33 +27760,33 @@ iseFrequency.prototype = {
       var b2 = (relTarg.id.indexOf("base")!=-1);
       var b3 = (relTarg.id.indexOf("green")!=-1);
       var b4 = (relTarg.id.indexOf("spec")!=-1);
-      if( !b1 && !b2 && !b3 && !b4)
+      if( !b1 && !b2 && !b3 && !b4) 
       {
         if( this.hasRampClicked )
         {
           conInfo( "iseFrequency: onMouseOut() ["+relTarg.id+"], wanna set: " + ( (this.slider.n_value/this.factor) + this.min)  );
           this.hasRampClicked = false;
-
+          
           this.state = (this.slider.n_value/this.factor) + this.min;
           this.refresh();
         }
       }
     }
   },
-
+ 
   onRampClick: function(ev)
   {
      this.hasRampClicked = true;
      var pos = Position.page(this.slider.e_base);
      var offset = ev.clientX - pos[0];
-     var val = ( offset * 100 ) / this.slider.n_controlWidth;
+     var val = ( offset * 100 ) / this.slider.n_controlWidth;  
      this.slider.f_setValue(val);
      this.state = (Math.floor(val)/ this.factor) + this.min;
      conInfo( "iseFrequency: onRampClick() at ("+val + ") set-> " + this.state );
      // this.refresh();
      //window.setTimeout("ibd"+this.id+".refresh()",1000);
   },
-
+  
   onHandleClick: function()
   {
     conInfo( "iseFrequency: onHandleClick() perc: "  + this.txtDeg.value);
@@ -27794,29 +27794,29 @@ iseFrequency.prototype = {
     this.state = this.txtDeg.value;
     this.refresh();
   },
-
+  
   onClickUp: function()
   {
     conInfo( "iseFrequency: onClickUp()" );
     // this.state = (this.slider.n_value/this.factor);
-    this.state = Math.round(this.state  + 100);
+    this.state = Math.round(this.state  + 100); 
     if (this.state > this.max)
       this.state = this.max;
 
     this.refresh();
   },
-
+  
   onClickDown: function()
   {
     conInfo( "iseFrequency: onClickDown()" );
     // this.state = (this.slider.n_value/this.factor);
-    this.state = Math.round(this.state - 100);
+    this.state = Math.round(this.state - 100); 
     if (this.state < this.min)
       this.state = this.min;
 
     this.refresh();
   },
-
+  
   onPercChange: function()
   {
     conInfo( "iseFrequency: onPercChange()" );
@@ -27826,14 +27826,14 @@ iseFrequency.prototype = {
     this.state = this.txtDeg.value;
     this.refresh();
   },
-
+  
   update: function(newVal)
   {
     conInfo( "iseFrequency: update()" );
     this.state = newVal;
     this.refresh(newVal);
   },
-
+  
   refresh: function(setstate)
   {
     conInfo( "iseFrequency: refresh()"+this.state );
@@ -27859,7 +27859,7 @@ iseFrequency.prototype = {
 
 /**
  * @class
- **/
+ **/ 
 iseButtonsDoorContact = Class.create();
 
 iseButtonsDoorContact.prototype = {
@@ -27873,12 +27873,12 @@ iseButtonsDoorContact.prototype = {
     this.state = this.convertInitState(initState);
     this.divOpen = $(this.id + "Open");
     this.divClosed = $(this.id + "Closed");
-
+    
     if( this.state > 0 )
     {
       ControlBtn.on(this.divOpen);
     }
-    else
+    else 
     {
       ControlBtn.on(this.divClosed);
     }
@@ -27914,7 +27914,7 @@ iseButtonsDoorContact.prototype = {
 
 /**
  * @class
- **/
+ **/ 
 iseButtonsWindow = Class.create();
 
 iseButtonsWindow.prototype = {
@@ -27928,7 +27928,7 @@ iseButtonsWindow.prototype = {
     this.divOpenH = $(this.id + "OpenH");
     this.divOpenV = $(this.id + "OpenV");
     this.divClosed = $(this.id + "Closed");
-
+    
     switch (initState) {
       case 0:
         ControlBtn.on(this.divClosed);
@@ -27941,7 +27941,7 @@ iseButtonsWindow.prototype = {
         break;
       default:
         break;
-    }
+    }    
   }
 };
 
@@ -27952,7 +27952,7 @@ iseButtonsWindow.prototype = {
 
 /**
  * @class
- **/
+ **/ 
 iseButtonsWinMatic= Class.create();
 
 iseButtonsWinMatic.prototype = {
@@ -27982,8 +27982,8 @@ iseButtonsWinMatic.prototype = {
             "<img src='/ise/img/window/circle.png' /></div></div>";
     this.Circle.innerHTML = s;
     this.graphics = new jsGraphics(this.id+"Ctrl");
-    this.graphics.setColor(WebUI.getColor("active")); // grï¿½n
-
+    this.graphics.setColor(WebUI.getColor("active")); // grün
+    
     // Add event handlers
     if (iViewOnly === 0) {
       this.bindEvents();
@@ -27999,14 +27999,14 @@ iseButtonsWinMatic.prototype = {
     if (offsetX < 60)
       this.state = 0;
     else {
-      if (this.isInZone50(offsetX, offsetY) )
+      if (this.isInZone50(offsetX, offsetY) ) 
         this.state = 50;
       else
         this.state = 100;
     }
-    this.refresh();
+    this.refresh();    
   },
-
+  
   isInZone50: function(x, y)
   {
     var px = x;
@@ -28029,22 +28029,22 @@ iseButtonsWinMatic.prototype = {
     }
     return bRet;
   },
-
+  
   onClickPercUp: function()
   {
-    this.state += 10;
+    this.state += 10; 
     if( this.state > 100 ) this.state = 100;
     this.Perc.value = this.state;
     this.refresh();
   },
-
+  
   onClickPercDown: function()
   {
-    this.state -= 10;
+    this.state -= 10; 
     if( this.state < 0 ) this.state = 0;
     this.refresh();
   },
-
+  
   onChangePerc: function()
   {
     if( !isNaN( this.Perc.value ) )
@@ -28056,7 +28056,7 @@ iseButtonsWinMatic.prototype = {
       this.refresh();
     }
   },
-
+  
   onClickOpen: function() {
     this.state = 100;
     ControlBtn.pushed(this.divOpen);
@@ -28067,7 +28067,7 @@ iseButtonsWinMatic.prototype = {
       pe.stop();
     }, 1);
   },
-
+  
   onClickClose: function() {
     this.state = 0;
     this.Perc.value = this.state;
@@ -28079,7 +28079,7 @@ iseButtonsWinMatic.prototype = {
       pe.stop();
     }, 1);
   },
-
+  
   onClickStop: function()
   {
     var t = this;
@@ -28092,7 +28092,7 @@ iseButtonsWinMatic.prototype = {
       pe.stop();
     }, 1);
   },
-
+  
   onClickLock: function() {
     ControlBtn.pushed(this.divLocked);
     this.state = -5;
@@ -28527,7 +28527,7 @@ iseButtonsWin_SC_SENSOR = Class.create(iseButtonsWinMatic, {
 
     this.level = (this.state < 0 ) ? 0 : this.state;
 
-    jQuery("#" + this.id + "lblPerc").html("ï¿½ffnungs-<br/>winkel<br/>" + this.level);
+    jQuery("#" + this.id + "lblPerc").html("Öffnungs-<br/>winkel<br/>" + this.level);
     this.initControls();
   },
 
@@ -28599,8 +28599,8 @@ iseButtonsWin_SC_SENSOR = Class.create(iseButtonsWinMatic, {
  * * * * * * * * * * * * * * * * * * * * * * * */
 
 /**
- * @class Bedien-Control fï¿½r die KeyMatic
- **/
+ * @class Bedien-Control für die KeyMatic
+ **/ 
 iseButtonsKeyMatic = Class.create();
 
 iseButtonsKeyMatic.prototype = {
@@ -28614,28 +28614,28 @@ iseButtonsKeyMatic.prototype = {
     this.divClosed = $(opts.idState + "Close");
     this.divOpenDoor = $(opts.idOpen + "OpenDoor");
     this.divStatusIndefinite = $(opts.idUncertain + "na");
-
+        
     if (iViewOnly === 0)
     {
       this.clickClose = this.onClickClose.bindAsEventListener(this);
       Event.observe(this.divClosed, 'mousedown', this.clickClose);
-
+      
       this.clickOpen = this.onClickOpen.bindAsEventListener(this);
       Event.observe(this.divOpen, 'mousedown', this.clickOpen);
-
+      
       this.clickDoorOpen = this.onClickDoorOpen.bindAsEventListener(this);
       Event.observe(this.divOpenDoor, 'mousedown', this.clickDoorOpen);
     }
-
+    
     if (opts.stState == 1)
-    {
+    { 
       ControlBtn.on(this.divOpen);
     }
     else
     {
       ControlBtn.on(this.divClosed);
     }
-
+    
     if (opts.stUncertain == 1) {
       ControlBtn.on(this.divStatusIndefinite);
     }
@@ -28643,7 +28643,7 @@ iseButtonsKeyMatic.prototype = {
       ControlBtn.on(this.divOpenDoor);
     }
   },
-
+  
   onClickClose: function() {
     ControlBtn.pushed(this.divClosed);
     setDpState (this.opts.idState, 0);
@@ -28654,7 +28654,7 @@ iseButtonsKeyMatic.prototype = {
       pe.stop();
     }, 1);
   },
-
+  
   onClickOpen: function() {
     ControlBtn.pushed(this.divOpen);
     setDpState (this.opts.idState, 1);
@@ -28665,7 +28665,7 @@ iseButtonsKeyMatic.prototype = {
       pe.stop();
     }, 1);
   },
-
+  
   onClickDoorOpen: function() {
     ControlBtn.pushed(this.divOpenDoor);
     setDpState(this.opts.idOpen, 1);
@@ -28679,7 +28679,7 @@ iseButtonsKeyMatic.prototype = {
 };
 /**
  * ise/DoorOpener.js
- * Tï¿½rï¿½ffner.
+ * Türöffner.
  **/
 
 /**
@@ -28688,39 +28688,39 @@ iseButtonsKeyMatic.prototype = {
  **/
 
 /**
- * @class Bedien-Control fï¿½r den Tï¿½rï¿½ffner
- **/
+ * @class Bedien-Control für den Türöffner
+ **/ 
 DoorOpenerControl = Class.create();
 DoorOpenerControl.prototype = {
 
   /**
    * Konstruktor.
-   *   channelId  : Id des Tï¿½rï¿½ffners (Kanal)
+   *   channelId  : Id des Türöffners (Kanal)
    *   dataPointId: Id des Datenpunkts DOOROPENER.STATE
    *   iViewOnly  :     0: Control bedienbar
    *                sonst: Control nicht bedienbar
    **/
-  initialize: function(channelId, dataPointId, iViewOnly)
+  initialize: function(channelId, dataPointId, iViewOnly) 
   {
     this.channelId     = channelId;
     this.dataPointId   = dataPointId;
     this.doorOpenerDiv = $(channelId + "DoorOpener");
-
+    
     if( this.doorOpenerDiv ) { ControlBtn.off(this.doorOpenerDiv); }
-
-    if (iViewOnly === 0)
+    
+    if (iViewOnly === 0) 
     {
       this.click = this.onClick.bindAsEventListener(this);
       Event.observe(this.doorOpenerDiv, 'mousedown', this.click);
       Element.setStyle(this.doorOpenerDiv, {"cursor": "pointer"});
     }
   },
-
+  
   /**
    * Ereignis: Click auf this.doorOpenerDiv
-   * ï¿½ffnet die Tï¿½r.
+   * Öffnet die Tür.
    **/
-  onClick: function()
+  onClick: function() 
   {
     setDpState(this.dataPointId, 1);
     ControlBtn.pushed(this.doorOpenerDiv);
@@ -28765,7 +28765,7 @@ iseSysProtoLoader.prototype =
       this.loadHistoryData();
     }
   },
-
+  
   loadHistoryData: function()
   {
     var t = this;
@@ -28797,7 +28797,7 @@ iseSysProtoLoader.prototype =
     };
     new Ajax.Updater("dummy",this.url,opts);
   },
-
+  
   updateTable: function()
   {
     if( this.updateOnly )
@@ -28811,34 +28811,34 @@ iseSysProtoLoader.prototype =
       var sDateTime = arTempHistoryData[i]['datetime'];
       var sDate = arTempHistoryData[i]['date'];
       var sTime = arTempHistoryData[i]['time'];
-
+      
       var tr = Builder.node('tr', {id:  arTempHistoryData[i]['trid']} );
       var td;
-
+      
       if( this.tbody.id == "sysprotopreview" )
       {
         td = Builder.node('td', {className: "GrayBkg"}, sDate+" "+sTime);
-        tr.appendChild(td);
+        tr.appendChild(td);        
       }
       else
       {
         td = Builder.node('td', {className: "GrayBkg"}, sTime);
         tr.appendChild(td);
-
+  
         td = Builder.node('td', {className: "GrayBkg"}, sDate);
         tr.appendChild(td);
       }
-
+  
       td = Builder.node('td', {className: "GrayBkg"}, translateString(sName));
       tr.appendChild(td);
-
+  
       var div = document.createElement("div");
       //div.innerHTML = sValue;
       div.innerHTML = translateString(sValue) ;
       td = Builder.node('td', {className: "GrayBkg"}, div);
       Element.setStyle(td, {textAlign: "left", paddingLeft: "6px"});
       tr.appendChild(td);
-
+      
       if( this.tbody )
       {
         this.tbody.appendChild(tr);
@@ -28860,7 +28860,7 @@ iseSysProtoLoader.prototype =
 
 /**
  * @class
- **/
+ **/ 
 iseChannelLoader = Class.create();
 iseChannelLoader.prototype =
 {
@@ -28921,32 +28921,32 @@ iseChannelLoader.prototype =
     {
       var tr = Builder.node('tr', {id: 'tr'+arTempChannels[i]['id']} );
       var td;
-
+      
       var sName = arTempChannels[i]['name'];
       td = Builder.node('td', {className: "GrayBkg"}, sName);
       tr.appendChild(td);
-
+      
       var sRooms = arTempChannels[i]['rooms'];
       td = Builder.node('td', {className: "GrayBkg"}, sRooms);
       tr.appendChild(td);
-
+      
       var sFunctions = arTempChannels[i]['funcs'];
       td = Builder.node('td', {className: "GrayBkg"}, sFunctions);
       tr.appendChild(td);
-
+      
       var sLastTime = arTempChannels[i]['lasttime'];
       td = Builder.node('td', {id: 'tmc'+arTempChannels[i]['id'], className: "GrayBkg"}, sLastTime);
       tr.appendChild(td);
-
+      
       var sDatapoint = arTempChannels[i]['id'];
       td = Builder.node('td', {id: 'dpc'+arTempChannels[i]['id'], className: "GrayBkg"});
       tr.appendChild(td);
-
+      
       if( this.tbody ) this.tbody.appendChild(tr);
-
+      
       recreateControl(arTempChannels[i]['id'],sLastTime);
     }
-
+    
     if( this.updateOnly ) Cursor.set(Cursor.NORMAL);
     arTempChannels = new Array();
   }
@@ -28968,15 +28968,15 @@ shutterControl = Class.create();
 shutterControl.prototype = {
 
   m_color: WebUI.getColor("shutterOpeningDegree"),
-
+  
   /*
    * id = id of div containing shutter-image
-   * initState
+   * initState 
    */
   initialize: function(id, initState) {
     this.MAX_HEIGHT = 100;
     this.state = initState;
-
+    
 
     $("shutter" + id).innerHTML = "<div id='shutterBg" + id + "' style='width:139px;height:"+this.MAX_HEIGHT+"px;background-image:url(/ise/img/shutterCtrl.png);'>" +
         "<div style='text-align:left;' id='spec"+id+"'><div id='shutterCtrl" +id +"' style='border-bottom:solid 1px Black;width:98px;height:"+ parseInt(this.MAX_HEIGHT - 1) + "px;background-color:" + this.m_color + ";position:relative;left:1px;top:1px;'></div>" +
@@ -28984,7 +28984,7 @@ shutterControl.prototype = {
     this.divShutter = $("shutterCtrl" + id);
     this.divShutterBg = $("shutterBg" + id);
   },
-
+  
   setValue: function(val) {
     this.state = val;
     this.divShutter.style.height = parseInt(this.MAX_HEIGHT - (val * (this.MAX_HEIGHT / 100))) + "px";
@@ -28997,7 +28997,7 @@ shutterControl.prototype = {
  * @fileOverview ?
  * @author ise
  **/
-
+ 
 /**
  * @class
  **/
@@ -29006,15 +29006,15 @@ channelLoader = Class.create();
 channelLoader.prototype = {
   /*
    * id = DOM-ID of switch
-   * initState = Creation State
+   * initState = Creation State 
    */
   initialize: function(channelCount) {
-    this.channelCount = channelCount;
+    this.channelCount = channelCount;    
     this.currentIndex = 0;
     this.loadChannels(this.currentIndex);
   },
 
-
+  
   loadChannels: function(index) {
     var url = "";
     var t = this;
@@ -29048,15 +29048,15 @@ newDevChnLoader = Class.create();
 newDevChnLoader.prototype = {
   /*
    * id = DOM-ID of switch
-   * initState = Creation State
+   * initState = Creation State 
    */
   initialize: function(channelCount) {
-    this.channelCount = channelCount;
+    this.channelCount = channelCount;    
     this.currentIndex = 0;
     this.loadChannels(channelCount);
   },
 
-
+  
   loadChannels: function(index)
   {
     var url = "";
@@ -29092,13 +29092,13 @@ newDevChnLoader.prototype = {
  * @fileOverview ?
  * @author ise
  **/
-
+ 
 /**
  * @class
  **/
 channelPopupLoader = Class.create();
 channelPopupLoader.prototype =
-{
+{  
   initialize: function(path,colName,bSecondary,operations,channellist)
   {
     this.currentIndex = 0;
@@ -29135,12 +29135,12 @@ channelPopupLoader.prototype =
           me.currentIndex+=me.count;
           me.loadArray();
         }
-      }
+      }      
     };
     Cursor.set(Cursor.WAIT);
     new Ajax.Updater("dummy",url,opts);
-  }
-
+  } 
+  
 };
 /**
  * ise/programPopupLoader.js
@@ -29157,7 +29157,7 @@ channelPopupLoader.prototype =
 programPopupLoader = Class.create();
 programPopupLoader.prototype =
 {
-
+  
   initialize: function(path,colName)
   {
     this.currentIndex = 0;
@@ -29167,8 +29167,8 @@ programPopupLoader.prototype =
   },
 
   loadPopupProgram: function(index)
-  {
-    var t = this;
+  {      
+    var t = this;    
     var url = t.path+"?sid="+SessionId;
     var pb = '';
     pb += 'integer iCurrentIndex = '+this.currentIndex+';';
@@ -29185,14 +29185,14 @@ programPopupLoader.prototype =
           t.loadPopupProgram(t.currentIndex);
         }
         else
-        {
+        {          
           t.updateTable();
         }
       }
     };
     new Ajax.Updater("dummy",url,opts);
   },
-
+ 
   updateTable: function()
   {
     var tableBody = $("prgBody");
@@ -29205,7 +29205,7 @@ programPopupLoader.prototype =
       }
 
       IseSort(arProgs,this.colName,false);
-      for (var i = 0; i < arProgs.length; i++)
+      for (var i = 0; i < arProgs.length; i++) 
       {
         var tr = Builder.node('tr', {id: arProgs[i]['trid']});
         //var td = Builder.node('td', {className: 'SysVarsTblPopup'}, strCut(translateString(arProgs[i]['name']) , true) );
@@ -29215,18 +29215,18 @@ programPopupLoader.prototype =
         tr.appendChild(td);
         td = Builder.node('td', {className: 'SysVarsTblPopup'},  translateString(arProgs[i]['active']) );
         tr.appendChild(td);
-
+      
         td = Builder.node('td', {className: 'WhiteBkg'}, [
           Builder.node('div', {className: 'StdButton', onclick:"saveDlgResult(" + arProgs[i]['id'] + ");PopupClose();"}, translateKey('btnSelect'))
          ]);
         tr.appendChild(td);
 
-        tableBody.appendChild(tr);
+        tableBody.appendChild(tr);       
       }
-      Cursor.set(Cursor.NORMAL);
-   }
+      Cursor.set(Cursor.NORMAL);   
+   } 
   }
-
+  
 };
 /**
  * ise/sysVarsPopupLoader.js
@@ -29245,9 +29245,9 @@ sysVarsPopupLoader = Class.create();
 sysVarsPopupLoader.prototype = {
   /*
    * id = DOM-ID of switch
-   * initState = Creation State
+   * initState = Creation State 
    */
-
+  
   initialize: function(path,colName,iSec)
   {
     this.currentIndex = 0;
@@ -29258,7 +29258,7 @@ sysVarsPopupLoader.prototype = {
   },
 
   loadPopupsysVars: function()
-  {
+  {      
     var t = this;
     var url = t.path+"?sid="+SessionId;
     var pb = '';
@@ -29276,14 +29276,14 @@ sysVarsPopupLoader.prototype = {
           t.loadPopupsysVars(t.currentIndex);
         }
         else
-        {
+        {          
           t.updateTable();
         }
       }
     };
     new Ajax.Updater("dummy",url,opts);
   },
-
+ 
   updateTable: function()
   {
     var tableBody = $("sysVarDisplay");
@@ -29296,7 +29296,7 @@ sysVarsPopupLoader.prototype = {
       }
 
       IseSort(arSysVars,this.colName,false,true);
-      for (var i = 0; i < arSysVars.length; i++)
+      for (var i = 0; i < arSysVars.length; i++) 
       {
         var sOnclick = "PopupClose();";
         if( this.sec ) sOnclick = "restorePrevious();";
@@ -29314,12 +29314,12 @@ sysVarsPopupLoader.prototype = {
         td = Builder.node('td', {className: 'SysVarsTblPopup', onclick:sOnclick}, translateString(arSysVars[i]['unit']));
         tr.appendChild(td);
 
-        tableBody.appendChild(tr);
+        tableBody.appendChild(tr);       
       }
-      Cursor.set(Cursor.NORMAL);
+      Cursor.set(Cursor.NORMAL);   
    }
-
-
+    
+    
   }
 };
 /**
@@ -29329,43 +29329,43 @@ sysVarsPopupLoader.prototype = {
 /**
  * @fileOverview ?
  * @author ise
- **/
-
-/*
+ **/ 
+ 
+/* 
  * * * checkUserInput.js
  * * * Enthaltene Funktionen
  *
  * checkTemperatureMinMax(input, MinVal, MaxVal)
- *    ï¿½berprï¿½ft ob Temperatur gï¿½ltig und innerhalb von MinVal und MaxVal ist
+ *    Überprüft ob Temperatur gültig und innerhalb von MinVal und MaxVal ist
  *
  * checkTemperature(input)
- *    ï¿½berprï¿½ft Temperatur ohne Min- und Max-Werte
- *    Erlaubt sind Eingaben wie 12, 13, 12C, 12ï¿½C, 87F, 87ï¿½F (sowie Dezimalwerte)
- *
+ *    Überprüft Temperatur ohne Min- und Max-Werte
+ *    Erlaubt sind Eingaben wie 12, 13, 12C, 12°C, 87F, 87°F (sowie Dezimalwerte)
+ * 
  * checkCharOnly(input)
  *
  * checkDigitsOnly(input)
  *
  * checkDecimal(input)
- *    Prï¿½ft auf eine Dezimalzahl
+ *    Prüft auf eine Dezimalzahl
  *
  * checkPercentage(input)
  *   Erlaubte Eingaben: 50, 12, 13%, 13 %
- *
+ * 
  * convertPercentage(input)
- *   Entfernt das Prozentzeichen der Eingabe und gibt (input / 100) zurï¿½ck
+ *   Entfernt das Prozentzeichen der Eingabe und gibt (input / 100) zurück
  *
  * checkInput(input, type)
  *   Kann mit einer der globalen Konstanten aufgerufen werden
  *
  * checkTime(val)
- *   gï¿½ltige Eingabe  --> 12:54
+ *   gültige Eingabe  --> 12:54
  *
  * checkDate(val)
- *   gï¿½ltige Eingabe  -->  18.09.2007 oder 18.09.07
+ *   gültige Eingabe  -->  18.09.2007 oder 18.09.07
  */
 
-
+ 
 // * * *  Global Constants
 CHK_TEMP = 1;
 CHK_CHAR_ONLY = 2;
@@ -29374,44 +29374,44 @@ CHK_PERCENT = 4;
 CHK_DECIMAL = 5;
 
 
-// * * * * * * * * * * * * * * * *
+// * * * * * * * * * * * * * * * * 
 // * * *       FUNCTIONS         *
-// * * * * * * * * * * * * * * * *
+// * * * * * * * * * * * * * * * * 
 
 // Temperatur: erlaubt sind Zahlen sowie '.' und ','
-// ausserdem: 'C', 'F', 'ï¿½C'und 'ï¿½F' als letzte Zeichen
+// ausserdem: 'C', 'F', '°C'und '°F' als letzte Zeichen
 // Bei Fahrenheit-Werten wird ausserdem nach Celsius umgerechnet
 // und mit MinVal und MaxVal verglichen
 //
-// Wenn kein Vergleich mit Minimal- und Maximal-Werten gewï¿½nscht ist
-// mï¿½ssen MinVal und MaxVal auf 0 gesetzt werden
+// Wenn kein Vergleich mit Minimal- und Maximal-Werten gewünscht ist
+// müssen MinVal und MaxVal auf 0 gesetzt werden
 checkTemperatureMinMax = function(input, MinVal, MaxVal) {
   var doMinMaxCheck = ((MinVal !== 0) || (MaxVal !== 0));
   var tmpInput = input;
   var isFarVal = false;
   if (!checkDecimal(tmpInput)) {
-    // Zeichen fï¿½r Temperaturangaben rausfiltern
-    if (tmpInput.indexOf('ï¿½C') != -1) {
-      tmpInput = tmpInput.substr(0, tmpInput.indexOf('ï¿½C'));
+    // Zeichen für Temperaturangaben rausfiltern
+    if (tmpInput.indexOf('°C') != -1) {
+      tmpInput = tmpInput.substr(0, tmpInput.indexOf('°C'));
     }
     if (tmpInput.indexOf('C') != -1) {
       tmpInput = tmpInput.substr(0, tmpInput.indexOf('C'));
     }
-    if (tmpInput.indexOf('ï¿½F') != -1) {
-      tmpInput = tmpInput.substr(0, tmpInput.indexOf('ï¿½F'));
-      isFarVal = true;
+    if (tmpInput.indexOf('°F') != -1) {
+      tmpInput = tmpInput.substr(0, tmpInput.indexOf('°F'));
+      isFarVal = true;      
     }
     if (tmpInput.indexOf('F') != -1) {
       tmpInput = tmpInput.substr(0, tmpInput.indexOf('F'));
-      isFarVal = true;
+      isFarVal = true;      
     }
-
-    // Fall Abgleich mit MinValue und MaxValue gewï¿½nscht wird und ein
+    
+    // Fall Abgleich mit MinValue und MaxValue gewünscht wird und ein
     // Fahrenheit-Wert eingegeben wurde...
     if (doMinMaxCheck) {
-      if (isFarVal) {
+      if (isFarVal) { 
         if (checkDecimal(tmpInput)) {
-          var celVal = farToCel(tmpInput); // Umrechnen und prï¿½fen ob innerhalb MinVal und MaxVal
+          var celVal = farToCel(tmpInput); // Umrechnen und prüfen ob innerhalb MinVal und MaxVal
           return ((celVal > MinVal) && (celVal < MaxVal));
         }
         else {
@@ -29423,19 +29423,19 @@ checkTemperatureMinMax = function(input, MinVal, MaxVal) {
   // Falls Chars entfernt wurden nochmal auf Dezimalwert testen
   if (checkDecimal(tmpInput)) {
     if (doMinMaxCheck) {
-      tmpInput = tmpInput.replace(/,/, "."); // fï¿½r WerteVergleich
+      tmpInput = tmpInput.replace(/,/, "."); // für WerteVergleich
       return ((tmpInput >= MinVal) && (tmpInput <= MaxVal ));
-    }
+    } 
     else {
       return true;
     }
-  }
+  } 
   else {
    return false;
-  }
+  }     
 };
 
-// Temperatur-ï¿½berprï¿½fung ohne Beachtung von Minimal- und Maximal-Werten
+// Temperatur-Überprüfung ohne Beachtung von Minimal- und Maximal-Werten
 checkTemperature = function(input) {
   return checkTemperatureMinMax(input, 0, 0);
 };
@@ -29463,16 +29463,16 @@ checkDigitsOnly = function(input) {
 };
 
 // CheckDecimal: erlaubt sind [0..9] und ' und .
-// True wird auch bei ganzen oder negativen Zahlen zurï¿½ckgegeben
+// True wird auch bei ganzen oder negativen Zahlen zurückgegeben 
 checkDecimal = function(input) {
   var ok = true;
   var i = 0;
-  if (input.charAt(0) == '-') // fï¿½r negative Zahlen
+  if (input.charAt(0) == '-') // für negative Zahlen
     i = 1;
   for (i; i < input.length; i++) {
     tmp = input.charAt(i);
     if (isNaN(tmp)) {
-      // Ausnahmen fï¿½r '.' und ','
+      // Ausnahmen für '.' und ','
       if (tmp != '.' && tmp != ',') {
         ok = false;
         break;
@@ -29490,19 +29490,19 @@ checkPercentage = function(input) {
   // Evtl. vorhandenes Prozentzeichen zuerst entfernen
   if (input.indexOf('%') != -1) {
     tmpInput = input.substr(0, input.indexOf('%'));
-    if(tmpInput.length < 1) { // falls nur '%' ï¿½bergeben wurde
+    if(tmpInput.length < 1) { // falls nur '%' übergeben wurde
       return false;
     }
-  }
+  } 
   else {
     tmpInput = input;
   }
   if (checkDigitsOnly(tmpInput)) {
-    if (tmpInput < 0)
+    if (tmpInput < 0) 
       return false;
     if (tmpInput > 100)
       return false;
-  }
+  } 
   else {
     return false;
   }
@@ -29510,21 +29510,21 @@ checkPercentage = function(input) {
 };
 
 // Von einem Prozentwert (string: 50, 50%, 50 % usw.) wird das
-// Prozentzeichen entfernt und der Wert geteilt durch 100 zurï¿½ckgegeben
+// Prozentzeichen entfernt und der Wert geteilt durch 100 zurückgegeben
 convertPercentage = function(input) {
   var tmpInput = "";
   // Evtl. vorhandenes Prozentzeichen zuerst entfernen
   if (input.indexOf('%') != -1) {
     tmpInput = input.substr(0, input.indexOf('%'));
-    if(tmpInput.length < 1) { // falls nur '%' ï¿½bergeben wurde
+    if(tmpInput.length < 1) { // falls nur '%' übergeben wurde
       return false;
     }
-  }
+  } 
   else {
     tmpInput = input;
   }
   return  parseInt(tmpInput,10) / 100;
-
+  
 };
 
 checkInput = function(input, type) {
@@ -29548,9 +29548,9 @@ checkInput = function(input, type) {
   return null;
 };
 
-// * * * * * * * * * * * * * * * *
+// * * * * * * * * * * * * * * * * 
 // * * *   DATUMS-FUNKTIONEN     *
-// * * * * * * * * * * * * * * * *
+// * * * * * * * * * * * * * * * * 
 checkDay = function(val) {
   var ret = false;
   if (checkDigitsOnly(val)) {
@@ -29605,7 +29605,7 @@ checkSeconds = function(val)
   return false;
 };
 
-// Eingabe abhï¿½ngig von Parameter bSeparator
+// Eingabe abhängig von Parameter bSeparator 
 checkTime = function(val)
 {
   var sSplit = new Array(2);
@@ -29619,16 +29619,16 @@ checkTime = function(val)
 };
 
 
-// Eingabe abhï¿½ngig von Parameter bSeparator
+// Eingabe abhängig von Parameter bSeparator 
 checkDate = function(val) {
   var ret = false;
   var sSplit = new Array(3);
-
+  
   if (val === "")
     return false;
   sSplit = val.split(".");
-
-  if (sSplit.length != 3)
+  
+  if (sSplit.length != 3) 
     return false;
   if (checkDay(sSplit[0])) {
     if (checkMonth(sSplit[1])) {
@@ -29641,18 +29641,18 @@ checkDate = function(val) {
 };
 
 
-// * * * * * * * * * * * * * * * *
+// * * * * * * * * * * * * * * * * 
 // * * *    HILFS-FUNKTIONEN     *
-// * * * * * * * * * * * * * * * *
+// * * * * * * * * * * * * * * * * 
 
 // Konvertiert einen Fahrenheit- in einen Celsius-Wert
-farToCel = function(farVal) {
+farToCel = function(farVal) { 
   return ((farVal - 32) / 1.8);
 };
 
-// Gibt true zurï¿½ck falls ein Character ï¿½bergeben wurde
+// Gibt true zurück falls ein Character übergeben wurde
 isChar = function(Data) {
-  var varChars = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+  var varChars = "éèàùûôoöë-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
   return (varChars.indexOf(Data) != -1);
 };
 /**
@@ -29666,7 +29666,7 @@ isChar = function(Data) {
 
 /**
  * @class Control for the 'POWERMETER'
- **/
+ **/ 
 isePowerMeter = Class.create();
 
 isePowerMeter.prototype = {
@@ -29730,7 +29730,7 @@ isePowerMeter.prototype = {
 
     this.energyConfig = homematic("system.getEnergyPrice", {}, function (result) {
       self.energyConfig = result;
-      // When the energy price config is available and itï¿½s a known sensor (electricity or gas)
+      // When the energy price config is available and it´s a known sensor (electricity or gas)
       // then show the energy cost
       if (result && (self.measurementType != self.sensorTypeID.unknown)) {
         self.showEnergyCost();
@@ -30197,10 +30197,10 @@ iseSmokeDetectorHmIP.prototype = {
     this.divOn = $(this.id + "On");
     this.divOff = $(this.id + "Off");
     this.idDpState = controlID;
-
+    
     if (this.state == 2) { ControlBtn.on(this.divOn); }
     else  { ControlBtn.on(this.divOff); }
-
+      
     // Add event handlers
     this.clickOff = this.onClickOff.bindAsEventListener(this);
     Event.observe(this.divOff, 'mousedown', this.clickOff);
@@ -30210,7 +30210,7 @@ iseSmokeDetectorHmIP.prototype = {
 
 
   },
-
+  
   onClickOff: function() {
     ControlBtn.pushed(this.divOff);
     setDpState(this.idDpState, 1, false);
@@ -30220,7 +30220,7 @@ iseSmokeDetectorHmIP.prototype = {
       pe.stop();
     }, 1);
   },
-
+ 
   onClickOn: function() {
     ControlBtn.pushed(this.divOn);
     setDpState(this.idDpState, 2, false);
@@ -30230,8 +30230,8 @@ iseSmokeDetectorHmIP.prototype = {
       pe.stop();
     }, 1);
   },
-
-
+ 
+  
   refresh: function() {
     if (this.state == 2) {
       ControlBtn.on(this.divOn);
@@ -31478,7 +31478,7 @@ HL_STROKE = 4;//Background
 InitGD = function(jg, size)
 {
   //alert(jg);
-
+  
   ClearCanvas(jg, size);
     jg.setColor(HL_COLOR);
     jg.setStroke(parseInt(HL_STROKE));
@@ -31508,7 +31508,7 @@ Draw = function(jg, devtype, size, formname)
 DrawForm = function(jg, formname, devtype, size, x_offset, y_offset)
 {
   var form = DEV_getImageHighlight(devtype, formname);
-
+  
   if (!form) return;
 
   if (!x_offset) x_offset = 0;
@@ -31561,13 +31561,13 @@ DrawBorder = function(jg, size)
   jg.paint();
   jg.setColor(HL_COLOR);
 };
-
+ 
 picDivShow = function(jg, devtype, size, formname, divelem)
 {
   if (! jg) return;
 
-  if (! DEV_TypeExists(devtype)) return; //kein Bild anzeigen, wenn das Gerï¿½t unbekannt ist.
-
+  if (! DEV_TypeExists(devtype)) return; //kein Bild anzeigen, wenn das Gerät unbekannt ist.
+  
   var dim_div = Element.getDimensions(divelem);
   var dim     = getInnerDimensions();
   var off     = getPageOffsets();
@@ -31576,7 +31576,7 @@ picDivShow = function(jg, devtype, size, formname, divelem)
 
   //Mouse-Position (circa)-----
   var pagePosition = Position.page(divelem);//Returns the X/Y coordinates of element relative to the viewport
-
+    
   //Draw Image and Highlight-----
   ClearCanvas(jg, size);
   Draw(jg, devtype, size, formname);
@@ -31592,12 +31592,12 @@ picDivShow = function(jg, devtype, size, formname, divelem)
 
   $('picDiv').style.top  = y + "px";
   //-----
-
+    
   //x-Position-----
   winrx    = dim.width + off.xOffset;
   x        = pagePosition[0] + dim_div.width + 30; //etwas rechts
   x_rechts = x + size;
-
+    
   if (x_rechts > winrx) x = pagePosition[0] - size - 30;
 
   $('picDiv').style.left = x + "px";
@@ -31623,7 +31623,7 @@ UI_PATH = "/config/";
 Get_UI_CONTENTBOX_ID = function()
 {
   //Muss als Funktion abgefragt werden, weil zur Zeit des Ladens
-  //die Boxen noch nicht vollstï¿½ndig existieren.
+  //die Boxen noch nicht vollständig existieren.
   return ( document.getElementById('infobox') ? 'infobox' : 'centerbox'  );
 };
 
@@ -31646,7 +31646,7 @@ AddProfileValues = function(prefix)
 AddSeparateSettings = function(prefix, pnr)
 {
   var i = 1;
-
+  
   while (document.getElementById(prefix + pnr + '_' + i))
   {
     AddParam(document.getElementById(prefix + pnr + '_' + i));
@@ -31679,40 +31679,40 @@ AddParam = function(elem)
         if (elem.checked) { elem.value = "true";  }
         else              { elem.value = "false"; }
       }
-
+       
       var arrId = elem.id.split("_");
       var type = arrId[1];
-
-      // falls es sich um Kanalparameter handelt (die ID ist lï¿½nger)
+          
+      // falls es sich um Kanalparameter handelt (die ID ist länger)
       if (arrId.length == 6) {
-        type = arrId[1] + "_" + arrId[2] + "_" + arrId[3];
-      }
-
-      if (elem.value == "99999999" )
-      {
+        type = arrId[1] + "_" + arrId[2] + "_" + arrId[3]; 
+      } 
+         
+      if (elem.value == "99999999" ) 
+      {  
           var sec  = document.getElementById("sec_"  + prefix[elem.name + type]);
           var min = document.getElementById("min_"  + prefix[elem.name + type]);
           var hour = document.getElementById("hour_"  + prefix[elem.name + type]);
-
-          free_options = (hour.value * 3600) + (min.value * 60) + (sec.value * 1);
-          // elem.name = "SHORT_ON_TIME|LONG_ON_TIME" usw
+     
+          free_options = (hour.value * 3600) + (min.value * 60) + (sec.value * 1);  
+          // elem.name = "SHORT_ON_TIME|LONG_ON_TIME" usw 
           poststr += elem.name + "=" + parseFloat(free_options);
-        }
+        } 
         else if (elem.value == "99999998" )
         {
-          var percent = document.getElementById("percent_" + prefix[elem.name + type]);
-
+          var percent = document.getElementById("percent_" + prefix[elem.name + type]);  
+          
           free_options = percent.value / 100 ;
           poststr += elem.name + "=" + parseFloat(free_options);
         }
         else if (elem.value == "99999997" )
         {
-          var temp = document.getElementById("temp_" + prefix[elem.name + type]);
-
+          var temp = document.getElementById("temp_" + prefix[elem.name + type]);  
+          
           // falls Fahrenheit eingestellt, dann Wert umrechnen
           if ( temp.value >= 31 ) free_options = ((temp.value - 32) / 9 * 5);
           else free_options = temp.value ;
-
+          
           poststr += elem.name + "=" + parseFloat(free_options);
         }
         else if (elem.value == "99999996" ) // Expertenmodus HM-Sen-EP
@@ -31724,17 +31724,17 @@ AddParam = function(elem)
           ad = type[1];
           type = ad.split("&");
           ch = type[0];
-          // Der Kanal steht jetzt in ch zur Verfuegung
+          // Der Kanal steht jetzt in ch zur Verfuegung  
           poststr += "SEQUENCE_PULSE_1="    +  $F('free_CHANNEL_' + ch + '_1') ;
-          poststr += "&SEQUENCE_PULSE_2="    +  $F('free_CHANNEL_' + ch + '_2') ;
-          poststr += "&SEQUENCE_PULSE_3="    +  $F('free_CHANNEL_' + ch + '_3') ;
-          poststr += "&SEQUENCE_PULSE_4="    +  $F('free_CHANNEL_' + ch + '_4') ;
-          poststr += "&SEQUENCE_PULSE_5="    +  $F('free_CHANNEL_' + ch + '_5') ;
+          poststr += "&SEQUENCE_PULSE_2="    +  $F('free_CHANNEL_' + ch + '_2') ;    
+          poststr += "&SEQUENCE_PULSE_3="    +  $F('free_CHANNEL_' + ch + '_3') ;    
+          poststr += "&SEQUENCE_PULSE_4="    +  $F('free_CHANNEL_' + ch + '_4') ;    
+          poststr += "&SEQUENCE_PULSE_5="    +  $F('free_CHANNEL_' + ch + '_5') ;    
           poststr += "&SEQUENCE_TOLERANCE="  +  $F('free_CHANNEL_' + ch + '_6') ;
         }
         else if (elem.value == "99999995" )
         {
-          poststr += "SEQUENCE_PULSE_1=0.496" ;
+          poststr += "SEQUENCE_PULSE_1=0.496" ; 
           poststr += "&SEQUENCE_PULSE_2=0.496" ;
           poststr += "&SEQUENCE_PULSE_3=0.496" ;
           poststr += "&SEQUENCE_PULSE_4=0.496" ;
@@ -31748,40 +31748,40 @@ AddParam = function(elem)
           poststr += "&SEQUENCE_PULSE_3=0.496" ;
           poststr += "&SEQUENCE_PULSE_4=0" ;
           poststr += "&SEQUENCE_PULSE_5=0" ;
-          poststr += "&SEQUENCE_TOLERANCE=0.496" ;
+          poststr += "&SEQUENCE_TOLERANCE=0.496" ; 
         }
         else if (elem.value == "99999993" )
         {
           poststr += "SEQUENCE_PULSE_1=0.496" ;
           poststr += "&SEQUENCE_PULSE_2=0" ;
           poststr += "&SEQUENCE_PULSE_3=0" ;
-          poststr += "&SEQUENCE_PULSE_4=0" ;
-          poststr += "&SEQUENCE_PULSE_5=0" ;
-          poststr += "&SEQUENCE_TOLERANCE=0.496" ;
+          poststr += "&SEQUENCE_PULSE_4=0" ; 
+          poststr += "&SEQUENCE_PULSE_5=0" ; 
+          poststr += "&SEQUENCE_TOLERANCE=0.496" ; 
         }
         else if (elem.value == "99999992" )
         {
           poststr += "SEQUENCE_PULSE_1=0" ;
           poststr += "&SEQUENCE_PULSE_2=0" ;
           poststr += "&SEQUENCE_PULSE_3=0" ;
-          poststr += "&SEQUENCE_PULSE_4=0" ;
+          poststr += "&SEQUENCE_PULSE_4=0" ; 
           poststr += "&SEQUENCE_PULSE_5=0" ;
-          poststr += "&SEQUENCE_TOLERANCE=0.496" ;
+          poststr += "&SEQUENCE_TOLERANCE=0.496" ; 
         }
-
+      
         //else   poststr += elem.name + "=" + elem.value;
-        else poststr += elem.name + "=" + encodeURIComponent(elem.value);
+        else poststr += elem.name + "=" + encodeURIComponent(elem.value);  
     }
   }
 };
 
 Get_ReGa_Path = function(path)
 {
-  //WebUI lï¿½uft von ise aus (Session-Parameter ist "sid")
-  //der Pfad fï¿½ngt nicht mit dem vom ise WebUI aus nï¿½tigen Prefix an
+  //WebUI läuft von ise aus (Session-Parameter ist "sid")
+  //der Pfad fängt nicht mit dem vom ise WebUI aus nötigen Prefix an
   if ( ($('global_sid').name == "sid") && (path.substr(0, UI_PATH.length ) != UI_PATH))
   {
-    //Prefix anfï¿½gen:
+    //Prefix anfügen:
     path = UI_PATH + path;
   }
 
@@ -31799,8 +31799,8 @@ SendRequest = function(scriptname, html_container_id, callback)
   if ((html_container_id) && (html_container_id !== "")) { id = html_container_id; }
   else                                                   { id = Get_UI_CONTENTBOX_ID(); }
 
-  var _callback_ = callback;
-
+  var _callback_ = callback; 
+  
   var opt =
   {
     method:'get',
@@ -31814,7 +31814,7 @@ SendRequest = function(scriptname, html_container_id, callback)
 
 ShowLoadingBox = function(msg)
 {
-
+  
   $(Get_UI_CONTENTBOX_ID()).innerHTML = "<table><tr><td><img style=\"margin: 4px;\" src=\"/ise/img/loading.gif\"/></td>" +
     "<td><span>"+msg.escapeHTML()+"</span></td></tr></table>";
 
@@ -31871,12 +31871,12 @@ EnableAllSeparateComponents = function(pcount)
 {
   var elem;
   var i, j;
-
+  
   for (i=0; i<=pcount; i++)
   {
     j = 1;
     elem = document.getElementById('separate_' + i + '_' + j);
-
+    
     while (elem)
     {
       elem.enabled = true;
@@ -31890,12 +31890,12 @@ initComponents = function(pcount)
 {
   var elem;
   var i, j;
-
+  
   for (i=0; i<=pcount; i++)
   {
     j    = 1;
     elem = document.getElementById('use_separate_' + i + '_' + j);
-
+    
     while (elem)
     {
       elem.checked = elem.defaultChecked;
@@ -31911,22 +31911,22 @@ SwitchActiveProfile = function(pnr)
 {
   var i = 0;
   var elem = document.getElementById('caption_profile' + i);
-
+  
   while (elem)
   {
     elem.innerHTML = elem.innerHTML.replace(/ \(aktiv\)/, '');
     elem.style.backgroundColor = WebUI.getColor("profile");
-
+  
     if (i == pnr)
     {
       elem.innerHTML += ' (aktiv)';
       elem.style.backgroundColor = WebUI.getColor("profileActive");
     }
-
+  
     ++i;
     elem = document.getElementById('caption_profile' + i);
   }
-
+  
   ShowElement('profile'+pnr);
 };
 
@@ -31937,9 +31937,9 @@ ShowDeviceDetails = function()
   var len     = select.length - 1;
   var idx     = otext.search(/\=\=/);
   var devname = otext.substr(idx+2);
-
+  
   if (idx == -1) return;
-
+  
   var elemId = "";
   var i;
 
@@ -31947,7 +31947,7 @@ ShowDeviceDetails = function()
   try       { elemId = $('radio_channels_'+devname).id; }
   catch (e) { elemId = ""; }
 
-  for (i = 0; i<=len; i++)
+  for (i = 0; i<=len; i++) 
   {
     HideElement('radio_channels_' + i);
 
@@ -31957,7 +31957,7 @@ ShowDeviceDetails = function()
       if (elemId == "" && document.getElementById)
       {
         var elem = document.getElementById('radio_channels_' + i);
-        if (elem.name && elem.name == 'radio_channels_' + devname) elemId = 'radio_channels_' + i;
+        if (elem.name && elem.name == 'radio_channels_' + devname) elemId = 'radio_channels_' + i; 
       }
     }
     catch (e) { elemId = ""; }
@@ -31971,14 +31971,14 @@ ShowDeviceDetails = function()
   }
   catch (e) { elemId = ""; }
 
-  try
-  {
+  try 
+  { 
     if ((elemId === "") && (document.getElementsByTagName))
     {
       var divtags = document.getElementsByTagName("div");
       len = divtags.length - 1;
-
-      for (i = 0; i <= len; i++)
+      
+      for (i = 0; i <= len; i++) 
       {
         var elem = divtags[i];
         if (((elem.name) && (elem.name == 'radio_channels_' + devname)) || ((elem.className) && (elem.className == 'radio_channels_' + devname)))
@@ -32010,15 +32010,15 @@ AddPeer2Channel = function(iface, device, radioid)
       break;
     }
   }
-
+      
   if (inputelem === null)
   {
-    alert("Bitte wï¿½hlen Sie einen Kanal aus.");
+    alert("Bitte wählen Sie einen Kanal aus.");
     return;
   }
 
   var peer = inputelem.value;
-
+  
   AddLinkPeer (iface, device, peer);
 };
 
@@ -32026,12 +32026,12 @@ SwitchDeviceInstallMode = function(iface, b)
 {
   ShowLoadingBox('Bitte warten, der Installationsmodus wird gesetzt...');
   ResetPostString();
-
+  
   document.getElementById('global_iface').value = iface;
 
   if (b) document.getElementById('global_cmd').value = 'enterinstallmode';
   else   document.getElementById('global_cmd').value = 'leaveinstallmode';
-
+  
   AddParam(document.getElementById('global_sid'));
   AddParam(document.getElementById('global_cmd'));
   AddParam(document.getElementById('global_iface'));
@@ -32043,24 +32043,24 @@ AddDeviceBySN = function(iface, sn)
 {
   if (sn.length != 10)
   {
-    alert('Bitte geben Sie eine gï¿½ltige Seriennummer ein.');
+    alert('Bitte geben Sie eine gültige Seriennummer ein.');
   }
   else
   {
-    ShowLoadingBox('Bitte warten, das Gerï¿½t mit der Seriennummer '+sn+' wird angelernt...');
+    ShowLoadingBox('Bitte warten, das Gerät mit der Seriennummer '+sn+' wird angelernt...');
     ResetPostString();
-
+  
     document.getElementById('global_iface' ).value = iface;
     document.getElementById('global_cmd'   ).value = 'installviaserial';
     document.getElementById('global_serial').value = sn;
-
+  
     AddParam(document.getElementById('global_sid'));
     AddParam(document.getElementById('global_cmd'));
     AddParam(document.getElementById('global_iface'));
     AddParam(document.getElementById('global_serial'));
 
     SendRequest('ic_newdev.cgi');
-  }
+  }  
 };
 
 PrepareDeleteDeviceForm = function(iface, sn, devname, devtype)
@@ -32085,20 +32085,20 @@ PrepareDeleteDeviceForm = function(iface, sn, devname, devtype)
       }, callback);
     }
   };
-
+  
   new DeleteDeviceDialog(device, function(isDeleted) {
     if (isDeleted)
     {
       window.setTimeout("WebUI.reload()", 2500);
     }
   });
-
+  
 };
 
 PrepareDeleteDeviceForm_old = function(iface, sn, devname, devtype)
-{
+{  
   ResetPostString();
-
+  
   AddParam(document.getElementById('global_sid'));
   poststr += "&cmd=DeleteDeviceForm";
   poststr += "&iface="   + iface;
@@ -32108,7 +32108,7 @@ PrepareDeleteDeviceForm_old = function(iface, sn, devname, devtype)
 
   SendRequest('ic_ifacecmd.cgi');
 
-  ProgressBar = new ProgressBarMsgBox("Verknï¿½pfungen und Programme werden abgefragt...", 1);
+  ProgressBar = new ProgressBarMsgBox("Verknüpfungen und Programme werden abgefragt...", 1);
   ProgressBar.show();
     ProgressBar.StartKnightRiderLight();
 };
@@ -32122,35 +32122,35 @@ DeleteDeviceForm = function(iface, sn, devname, devtype, devimg, linkcount)
 
 DeleteDevice = function(iface, sn)
 {
-  if (confirm("Mï¿½chten Sie das Gerï¿½t mit der Seriennummer \'"+sn+"\' wirklich lï¿½schen?"))
+  if (confirm("Möchten Sie das Gerät mit der Seriennummer \'"+sn+"\' wirklich löschen?"))
   {
-    ShowLoadingBox('Bitte warten, das Gerï¿½t mit der Seriennummer '+sn+' wird abgelernt...');
+    ShowLoadingBox('Bitte warten, das Gerät mit der Seriennummer '+sn+' wird abgelernt...');
     ResetPostString();
 
     document.getElementById('global_iface' ).value = iface;
     document.getElementById('global_cmd'   ).value = 'deletedevice';
     document.getElementById('global_device').value = sn;
-
+  
     AddParam(document.getElementById('global_sid'));
     AddParam(document.getElementById('global_cmd'));
     AddParam(document.getElementById('global_iface'));
     AddParam(document.getElementById('global_device'));
 
     SendRequest('ic_devices.cgi');
-  }
+  }  
 };
 
 DeleteDeviceAndReset = function(iface, sn)
 {
-  if (confirm("Mï¿½chten Sie das Gerï¿½t mit der Seriennummer \'"+sn+"\' wirklich lï¿½schen und auf Werkseinstellungen zurï¿½cksetzen?"))
+  if (confirm("Möchten Sie das Gerät mit der Seriennummer \'"+sn+"\' wirklich löschen und auf Werkseinstellungen zurücksetzen?"))
   {
-    ShowLoadingBox('Bitte warten, das Gerï¿½t mit der Seriennummer '+sn+' wird abgelernt...');
+    ShowLoadingBox('Bitte warten, das Gerät mit der Seriennummer '+sn+' wird abgelernt...');
     ResetPostString();
 
     document.getElementById('global_iface' ).value = iface;
     document.getElementById('global_cmd'   ).value = 'deletedevice';
     document.getElementById('global_device').value = sn;
-
+  
     AddParam(document.getElementById('global_sid'));
     AddParam(document.getElementById('global_cmd'));
     AddParam(document.getElementById('global_iface'));
@@ -32158,19 +32158,19 @@ DeleteDeviceAndReset = function(iface, sn)
     AddParam(document.getElementById('global_reset'));
 
     SendRequest('ic_devices.cgi');
-  }
+  }  
 };
 
 AddLinkPeer = function(iface, device, peer)
 {
-  ShowLoadingBox('Bitte warten, der Verknï¿½pfungspartner \'' +peer+ '\' wird hinzugefï¿½gt...');
+  ShowLoadingBox('Bitte warten, der Verknüpfungspartner \'' +peer+ '\' wird hinzugefügt...');
   ResetPostString();
 
   document.getElementById('global_iface'  ).value = iface;
   document.getElementById('global_cmd'    ).value = 'newlinkpeer';
   document.getElementById('global_device' ).value = device;
   document.getElementById('global_peer'   ).value = peer;
-
+  
   AddParam(document.getElementById('global_sid'));
   AddParam(document.getElementById('global_iface'));
   AddParam(document.getElementById('global_cmd'));
@@ -32182,16 +32182,16 @@ AddLinkPeer = function(iface, device, peer)
 
 DeleteLinkPeer = function(iface, device, peer)
 {
-  if (confirm("Mï¿½chten Sie diesen Verknï¿½pfungspartner \'" +peer+ "\' wirklich lï¿½schen?"))
+  if (confirm("Möchten Sie diesen Verknüpfungspartner \'" +peer+ "\' wirklich löschen?"))
   {
-    ShowLoadingBox('Bitte warten, der Verknï¿½pfungspartner \'' +peer+ '\' wird gelï¿½scht...');
+    ShowLoadingBox('Bitte warten, der Verknüpfungspartner \'' +peer+ '\' wird gelöscht...');
     ResetPostString();
 
     document.getElementById('global_iface'  ).value = iface;
     document.getElementById('global_cmd'    ).value = 'deletelinkpeer';
     document.getElementById('global_device' ).value = device;
     document.getElementById('global_peer'   ).value = peer;
-
+  
     AddParam(document.getElementById('global_sid'));
     AddParam(document.getElementById('global_iface'));
     AddParam(document.getElementById('global_cmd'));
@@ -32199,7 +32199,7 @@ DeleteLinkPeer = function(iface, device, peer)
     AddParam(document.getElementById('global_peer'));
 
     SendRequest('ic_linkpeers.cgi');
-  }
+  }  
 };
 
 GoToStartPage = function()
@@ -32224,10 +32224,10 @@ CheckNetworkSettings = function()
   var b = isIPAddress(document.getElementsByName('NETMASK')[0].value);
   var c = isIPAddress(document.getElementsByName('GATEWAY')[0].value);
 
-  if (!a) alert("Die IP-Adresse ist ungï¿½ltig");
-  if (!b) alert("Die Netzmaske ist ungï¿½ltig");
-  if (!c) alert("Die Gateway-Adresse ist ungï¿½ltig");
-
+  if (!a) alert("Die IP-Adresse ist ungültig");
+  if (!b) alert("Die Netzmaske ist ungültig");
+  if (!c) alert("Die Gateway-Adresse ist ungültig");
+  
   return ( a && b && c );
 };
 
@@ -32258,7 +32258,7 @@ SimulateLongKeyPress = function()
 
 SimulateKeyPress = function(longpress)
 {
-  ShowLoadingBox('Bitte warten, der Tastendruck wird ausgelï¿½st...');
+  ShowLoadingBox('Bitte warten, der Tastendruck wird ausgelöst...');
   ResetPostString();
   AddParam(document.getElementById('global_1'));//sid
   AddParam(document.getElementById('global_2'));//peer
@@ -32266,7 +32266,7 @@ SimulateKeyPress = function(longpress)
   AddParam(document.getElementById('global_5'));//iface
   AddParam(document.getElementById('global_6'));//device
   poststr += "&longpress" + "=" +longpress;
-  poststr += "&cmd" + "=" +"simulate";
+  poststr += "&cmd" + "=" +"simulate"; 
   SendRequest('ic_paramset.cgi');
 };
 
@@ -32274,14 +32274,14 @@ SetExpertMode = function(b)
 {
   ShowLoadingBox('Bitte warten, der Expertenmodus wird gesetzt...');
   ResetPostString();
-
+  
   AddParam(document.getElementById('global_sid'));
 
   if (b) document.getElementById('expert').value = 'true';
   else   document.getElementById('expert').value = 'false';
 
   AddParam(document.getElementById('expert'));
-
+  
   SendRequest('ic_start.cgi');
 };
 
@@ -32310,20 +32310,20 @@ SetCurrentTime = function()
 
 RebootCentral = function()
 {
-  if (confirm("Mï¿½chten Sie die Zentrale wirklich neu starten?"))
+  if (confirm("Möchten Sie die Zentrale wirklich neu starten?"))
   {
     ShowLoadingBox('Bitte warten, Zentrale startet neu...');
     ResetPostString();
     AddProfileValues('global_');
     poststr += "&cmd=reboot";
     SendRequest('ic_central.cgi');
-  }
+  }  
 };
 
 set_value = function(input_id, id, type)
 {
   var elem = document.getElementById(input_id);
-
+  
   ShowLoadingBox('Bitte warten, Wert \''+id+'\' wird gesetzt');
   ResetPostString();
   document.getElementById('profile').value = "9999";
@@ -32411,12 +32411,12 @@ getPageOffsets = function()
 };
 
 /*
-Wenn nur ein Gerï¿½t angezeigt werden soll, kann man sender_address, oder receiver_address leer lassen ( '' )
+Wenn nur ein Gerät angezeigt werden soll, kann man sender_address, oder receiver_address leer lassen ( '' )
 */
 CheckConfigPending = function(iface, sender_address, receiver_address, redirect_url, goBack)
 {
   ResetPostString();
-
+  
   AddParam($('global_sid'));
 
   poststr += "&go_back="          + goBack;
@@ -32444,7 +32444,7 @@ OpenSetProfiles = function(iface, sender_address, receiver_address)
   poststr += "&iface="            +iface;
   poststr += "&sender_address="   +sender_address;
   poststr += "&receiver_address=" +receiver_address;
-
+  
   updateContent(UI_PATH + 'ic_setprofiles.cgi', poststr);
 };
 
@@ -32479,18 +32479,18 @@ IsDirty = function(inputelem)
 
 ConvTime = function(u_value)
 {
-  //wird in SetInputValue fï¿½r User-Profilvorlagen benï¿½tigt
+  //wird in SetInputValue für User-Profilvorlagen benötigt
   var Userwert = "";
   var hour = parseInt(u_value / 3600);
   var min  = parseInt((u_value % 3600) / 60);
   var sec  = parseInt((u_value % 3600) % 60);
-  var msec = u_value - parseInt(u_value);
-
+  var msec = u_value - parseInt(u_value); 
+  
   if (hour > 0) {
     Userwert = hour + "h ";
     if (min > 0) Userwert = Userwert.concat(min + "min ");
     if (sec > 0) Userwert = Userwert.concat(sec + "s");
-  }
+  } 
   else if (min > 0) {
     Userwert = min + "min ";
     if (sec > 0) Userwert = Userwert.concat(sec + "s");
@@ -32501,10 +32501,10 @@ ConvTime = function(u_value)
   }
   else if (msec > 0) {
     Userwert = msec + "s";
-  }
+  } 
   else Userwert = "0s";
 
-
+  
   return Userwert ;
 };
 
@@ -32513,18 +32513,18 @@ sort_num = function(a,b) {
 };
 
 sort_opt = function(elem) {
-
+  
   arrVal = new Array();
   arrTexts = new Array();
   arrTexts[0] = new Object();
-
+  
   for(i = 0; i < elem.length; i++) {
-    arrVal[i] = parseFloat(elem.options[i].value);
+    arrVal[i] = parseFloat(elem.options[i].value); 
     arrTexts[0][arrVal[i].toString(10)] = elem.options[i].text;
   }
-
+  
   arrVal.sort(sort_num);
-
+  
   for(i = 0; i < elem.length; i++) {
     elem.options[i].value = arrVal[i];
     elem.options[i].text  = arrTexts[0][arrVal[i].toString(10)];
@@ -32536,53 +32536,53 @@ SetInputValue = function(html_inputelem_id, value)
   var inputelem = $(html_inputelem_id);
   var Userwert;
   var i;
-
+  
   if (inputelem === null) return;
 
   if (inputelem.type == "select-one")
   {
     var selectelem = inputelem;
     var  no_entry = true;
-
-    //AG
-
+      
+    //AG  
+    
     for (i = 0; i < selectelem.options.length; i++)
-    {
-      if (selectelem.options[i].value == value) {
+    {  
+      if (selectelem.options[i].value == value) {  
         no_entry = false;
-      }
-    }
-
+      } 
+    }  
+  
     // falls in der Profilvorlage kein entsprechender Wert vorhanden ist,
     // weil eine beutzerdef. Wert eingegeben wurde, der nicht als Auswahl vorhanden ist,
     // wird hier ein neuer Eintrag mit dem entsprechenden Wert erzeugt.
-    // Die Werte mï¿½ssen entsprechend konvertiert werden, 90 Sek. werden z. B. zu 1min 30sec usw.
-
-    if (no_entry === true)
+    // Die Werte müssen entsprechend konvertiert werden, 90 Sek. werden z. B. zu 1min 30sec usw.
+    
+    if (no_entry === true) 
     {
         perc = selectelem.options[1].text.search(/%/);
         h = selectelem.options[1].text.search(/min/);
         m = selectelem.options[1].text.search(/s/);
         s = selectelem.options[1].text.search(/h/);
-
+      
         if (h != -1 || m != -1 || s != -1) Userwert = ConvTime(value);   //es handelt sich um einen Zeitwert
         if (perc != -1) {Userwert = parseInt(value * 100) + "%";}    //es handelt sich um einen Prozentwert
-
-        new_option = new Option(Userwert,value,true,true);  //Userwert = angezeigter Wert, value = zu ï¿½bertragener Wert
-        selectelem.options[selectelem.length] = new_option;  // hier wird der neue Eintrag hinzugefï¿½gt
-
-      //  Optionen neu sortieren , die beiden nï¿½chsten Zeilen sortieren jeweils  wunderbar in Firefox. Im IE gehts mal wieder nicht
+          
+        new_option = new Option(Userwert,value,true,true);  //Userwert = angezeigter Wert, value = zu übertragener Wert  
+        selectelem.options[selectelem.length] = new_option;  // hier wird der neue Eintrag hinzugefügt
+        
+      //  Optionen neu sortieren , die beiden nächsten Zeilen sortieren jeweils  wunderbar in Firefox. Im IE gehts mal wieder nicht
       //  $A(selectelem.options).sort(function(a,b) {return (parseFloat(a.value) < parseFloat(b.value)) ? -1 : 1;}).each(function(o,i){selectelem.options[i] = o});
       //  Array.prototype.sort.call(selectelem.options,function(a,b){return parseFloat(a.value) < parseFloat(b.value) ? -1 : parseFloat(a.value) > parseFloat(b.value) ? 1 : 0;});
-
+        
       //  Dieser Aufwand ist wegen IE noetig
         sort_opt(selectelem);
     }
-    //End AG
-
+    //End AG 
+    
     for (i = 0; i < selectelem.options.length; i++)
     {
-
+      
       selectelem.options[i].selected        = (value == selectelem.options[i].value);
       selectelem.options[i].defaultSelected = (value == selectelem.options[i].value);
     }
@@ -32602,7 +32602,7 @@ SetInputValue = function(html_inputelem_id, value)
 DetermineParameterValue = function(iface, address, ps_id, param_id, html_inputelem_id)
 {
   ResetPostString();
-
+  
   AddParam(document.getElementById('global_sid'));
   poststr += "&cmd=determineParameter";
   poststr += "&iface="             + iface;
@@ -32621,28 +32621,28 @@ DetermineParameterValue = function(iface, address, ps_id, param_id, html_inputel
 
 ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, event)
 {
-  // Falls das Tasten-Event nicht mit ï¿½bergeben wurde ....
+  // Falls das Tasten-Event nicht mit übergeben wurde ....
   var keyCode = 0,
     finalVal;
 
   if (event) {
     keyCode = event.keyCode;
   }
-
+ 
   var ok = true;
-
+    
   if (! min) min = 0;
   if (! max) max = 100;
   if (! dstValueFactor) dstValueFactor = 0.01;//dstValue = value/100
-
+  
   value = $F(srcid);
-
+  
   //replace , by .
   var idx = value.indexOf(',');
   if (idx >= 0)
   {
     var tokens = value.split(",");
-
+    
     value = "";
     if (tokens[0]) value += tokens[0];
     value += '.';
@@ -32678,7 +32678,7 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, event)
   }
   else if (value > max)
   {
-    //alert("Der grï¿½ï¿½te Wert ist 100.");
+    //alert("Der größte Wert ist 100.");
     //value = max;
     finalVal = max;
     ok = false;
@@ -32693,7 +32693,7 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, event)
     // beim IE (Version 8 u. 9) mit jedem Druck auf eine Cursortaste ans Ende des Wertes.
     // Man kann nicht mittels Cursor-Links nach links wandern, da der Cursor immer ans Ende springt.
     // [HM-1293]
-    if ((keyCode) < 37 && (keyCode > 40) ) {
+    if ((keyCode) < 37 && (keyCode > 40) ) {    
       $(srcid).value = value;
     }
   }
@@ -32713,7 +32713,7 @@ elv_toQueryString = function(s)
   s = s.replace(/ /g, "%20");
   s = s.replace(/"/g, "%22");
   s = s.replace(/\?/g,"%3f");
-
+  
   //Weicht von der tcl 'cgi_quote_url'-Funktion (cgi.tcl) ab:
   s = s.replace(/\&/g,"%26");
 
@@ -32796,7 +32796,7 @@ MsgBox.prototype =
 
     this.setTopMargin(6);
     this.setLeftMargin(6);
-
+  
     this.createMessagebox();
   },
   setWidth: function(width)
@@ -32814,8 +32814,8 @@ MsgBox.prototype =
   setTopMargin: function(top)
   {
     this.TopMargin = top;
-  },
-  stretchToMax: function() {
+  },  
+  stretchToMax: function() { 
     var maxHeight = 0;
     if (window.innerHeight) {
       maxHeight = window.innerHeight;
@@ -32825,7 +32825,7 @@ MsgBox.prototype =
         maxHeight = window.document.documentElement.clientHeight;
       else
         maxHeight = window.document.body.offsetHeight;
-
+      
       this.setHeight(maxHeight - 50);
     }
     var maxWidth = screen.availWidth;
@@ -32834,7 +32834,7 @@ MsgBox.prototype =
   createMessagebox: function()
   {
     if ( !$('messagebox') )
-    {
+    {      
       var newDiv = document.createElement("div");
       var newDivId = document.createAttribute("id");
       newDivId.nodeValue = "messagebox";
@@ -32845,10 +32845,10 @@ MsgBox.prototype =
         newDiv.style.cssText = newDivStyle.nodeValue;
       else
         newDiv.setAttributeNode(newDivStyle);
-
+      
       $(this.container_id).appendChild(newDiv);
       jQuery("#messagebox").draggable();
-    }
+    }  
   },
   removeMessagebox: function()
   {
@@ -32881,7 +32881,7 @@ MsgBox.prototype =
     var newDiv;
     var newDivId;
     var newDivStyle;
-
+    
     this.messagediv = id;
     newDiv = document.createElement("div");
     newDivId = document.createAttribute("id");
@@ -32905,7 +32905,7 @@ MsgBox.prototype =
     newInput.type = "button";
     newInput.value= text;
     newInput.onclick = func;
-    Element.addClassName(newInput, "CLASS10100");
+    Element.addClassName(newInput, "CLASS10100");  
 //    var newBR = document.createElement("<br>");
 //    $(this.messagediv).appendChild(newBR);
     $(this.messagediv+"_ctrls").appendChild(newInput);
@@ -32917,7 +32917,7 @@ MsgBox.prototype =
   this.readaptSize();
   $('trlayer').show();
   $(this.container_id).show();
-  },
+  },  
   hide: function(do_not_remove)
   {
   //$('messagebox').style.visibility = "hidden";
@@ -32933,7 +32933,7 @@ MsgBox.prototype =
 //  this.remove();
   reloadPage();
   //location.reload();
-  },
+  },    
   remove: function()
   {
     this.removeMessagebox();
@@ -32948,15 +32948,15 @@ MsgBox.prototype =
 */
 
   //var url = fn+'?sid='+SessionId;
-  //var t = this;
-  var opt =
+  //var t = this; 
+  var opt = 
   {
-    method: 'get',
+    method: 'get', 
     evalScripts: true,
     onComplete: function(trans) {
       centerMessageBox();
     },
-    onFailure: function() {
+    onFailure: function() { 
       alert('LoadFromFile-Error');
     }
   };
@@ -32964,19 +32964,19 @@ MsgBox.prototype =
   new Ajax.Updater('messagebox', url, opt);
   },
 
-  CreateButton: function(text)
+  CreateButton: function(text) 
   {
     var newInputDiv = document.createElement("span");
     Element.addClassName(newInputDiv, "CLASS10101 colorGradient borderRadius2px");
-
+    
     var newInputDivText = document.createTextNode(text);
     newInputDiv.appendChild(newInputDivText);
-
+    
     return newInputDiv;
-  },
-
+  }, 
+  
   AddDivWrapper: function(divid, parentnodeid) {
-
+    
   var newDiv = document.createElement("div");
   newDiv.setAttribute("id", divid);
 
@@ -32995,13 +32995,13 @@ ShowInfoMsg = function(msg)
 };
 
 ShowWarningMsg = function(msg)
-{
+{ 
   InfoMsg = new InfoMessageBox("WARNING", msg);
   InfoMsg.show();
 };
 
 ShowErrorMsg = function(msg)
-{
+{ 
   InfoMsg = new InfoMessageBox("ERROR", msg);
   InfoMsg.show();
 };
@@ -33009,9 +33009,9 @@ ShowErrorMsg = function(msg)
 InfoMessageBox = Class.create();
 
 InfoMessageBox.prototype = Object.extend(new MsgBox(), {
-
+  
   initialize: function(type, msg) {
-
+  
   this.init(320, 240);
 
   this.AddDivWrapper("id_messagebox");
@@ -33022,14 +33022,14 @@ InfoMessageBox.prototype = Object.extend(new MsgBox(), {
 
   var img = document.createElement("img");
   img.style.margin = "4px";
-
+  
   if      (type == "INFO")    img.src = "/ise/img/dialog-information.png";
   else if (type == "WARNING") img.src = "/ise/img/dialog-warning.png";
   else                        img.src = "/ise/img/dialog-error.png";
 
   $("id_messagebox_head").style.verticalAlign = "top";
   $("id_messagebox_head").appendChild(img);
-
+  
   var textnode;
 
   //if      (type == "INFO")    textnode = document.createTextNode("HomeMatic Information");
@@ -33038,7 +33038,7 @@ InfoMessageBox.prototype = Object.extend(new MsgBox(), {
   else if (type == "WARNING") textnode = document.createTextNode(translateKey("dialogTitleHomeMaticWarn"));
   //else                        textnode = document.createTextNode("HomeMatic Fehler");
   else                        textnode = document.createTextNode(translateKey("dialogTitleHomeMaticError"));
-
+  
   $("id_messagebox_head").appendChild(textnode);
 
   div = document.createElement("div");
@@ -33078,9 +33078,9 @@ InfoMessageBox.prototype = Object.extend(new MsgBox(), {
 PROGRESSBAR_HL_COLOR = WebUI.getColor("progressbarHighlight");  //Highlight
 PROGRESSBAR_BG_COLOR = WebUI.getColor("progressbarBackground"); //Background
 PROGRESSBAR_TX_COLOR = WebUI.getColor("progressbarText");       //Text-Color
-PROGRESSBAR_HL_STROKE = 4;//Strichstï¿½rke
+PROGRESSBAR_HL_STROKE = 4;//Strichstärke
 PROGRESSBAR_WIDTH = 300;//Breite des Balkens
-PROGRESSBAR_HEIGHT = 20;//Hï¿½he des Balkens
+PROGRESSBAR_HEIGHT = 20;//Höhe des Balkens
 PROGRESSBAR_KNIGHTRIDER_WIDTH = parseInt(PROGRESSBAR_WIDTH/5);
 PROGRESSBAR_KNIGHTRIDER_STEP = 61;
 //-----
@@ -33088,9 +33088,9 @@ PROGRESSBAR_KNIGHTRIDER_STEP = 61;
 ProgressBarMsgBox = Class.create();
 
 ProgressBarMsgBox.prototype = Object.extend(new MsgBox(), {
-
+  
   initialize: function(caption, endcounter) {
-
+  
   this.init(335, 240, 'progressbox');
   this.index = 0;
   this.endcounter = endcounter;
@@ -33111,7 +33111,7 @@ ProgressBarMsgBox.prototype = Object.extend(new MsgBox(), {
 
   this.AddDivWrapper("id_progressbar_wrapper");
   $('id_progressbar_wrapper').style.border = "3px solid " +PROGRESSBAR_HL_COLOR;
-
+  
   this.AddDivWrapper("id_progressbar_head", "id_progressbar_wrapper");
   this.AddDivWrapper("id_progressbar_body", "id_progressbar_wrapper");
   this.AddDivWrapper("id_progressbar_foot", "id_progressbar_wrapper");
@@ -33149,15 +33149,15 @@ ProgressBarMsgBox.prototype = Object.extend(new MsgBox(), {
   {
     this.knightrider_position = 0;
     if (PROGRESSBAR_KNIGHTRIDER_STEP < 0) PROGRESSBAR_KNIGHTRIDER_STEP = -PROGRESSBAR_KNIGHTRIDER_STEP; //rechts lang!
-
+    
     this.ClearCanvas();
     this.jg_progressbar.fillRect(parseInt(0), parseInt(0), parseInt(PROGRESSBAR_KNIGHTRIDER_WIDTH), parseInt(PROGRESSBAR_HEIGHT));
     this.jg_progressbar.paint();
-
+  
       this.knightrider_running = true;
     window.setTimeout("ProgressBar.StepKnightRiderLight();", 250);
   },
-
+  
   StopKnightRiderLight: function ()
   {
     this.knightrider_running = false;
@@ -33169,7 +33169,7 @@ ProgressBarMsgBox.prototype = Object.extend(new MsgBox(), {
 
   if (this.knightrider_position + PROGRESSBAR_KNIGHTRIDER_STEP + PROGRESSBAR_KNIGHTRIDER_WIDTH > PROGRESSBAR_WIDTH)
   {
-    this.knightrider_position = PROGRESSBAR_WIDTH - PROGRESSBAR_KNIGHTRIDER_WIDTH; //Letzte mï¿½gliche Position
+    this.knightrider_position = PROGRESSBAR_WIDTH - PROGRESSBAR_KNIGHTRIDER_WIDTH; //Letzte mögliche Position
     PROGRESSBAR_KNIGHTRIDER_STEP = -PROGRESSBAR_KNIGHTRIDER_STEP; //anders herum
   }
   else if (this.knightrider_position + PROGRESSBAR_KNIGHTRIDER_STEP < 0)
@@ -33181,7 +33181,7 @@ ProgressBarMsgBox.prototype = Object.extend(new MsgBox(), {
   {
     this.knightrider_position += PROGRESSBAR_KNIGHTRIDER_STEP;
   }
-
+  
   this.ClearCanvas();
   this.jg_progressbar.fillRect(parseInt(this.knightrider_position), parseInt(0), parseInt(PROGRESSBAR_KNIGHTRIDER_WIDTH), parseInt(PROGRESSBAR_HEIGHT));
   this.jg_progressbar.paint();
@@ -33206,7 +33206,7 @@ ProgressBarMsgBox.prototype = Object.extend(new MsgBox(), {
   SetMessage: function(msg) {
 
   if (! $('id_progressbar_foot')) return;
-
+  
   $('id_progressbar_foot').innerHTML = "";
   var textnode = document.createTextNode(msg);
   $('id_progressbar_foot').appendChild(textnode);
@@ -33217,7 +33217,7 @@ ProgressBarMsgBox.prototype = Object.extend(new MsgBox(), {
   },
 
   IncCounter: function(msg) {
-
+  
   this.index++;
 
   this.SetMessage(msg);
@@ -33252,11 +33252,11 @@ ProgressBarMsgBox.prototype = Object.extend(new MsgBox(), {
 /**
  * ic_configpendingmsg.js
  **/
-
+ 
 ConfigPendingMsgBox = Class.create();
 
 ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
-
+  
   initialize: function(w, h)
   {
     this.init(w, h);
@@ -33265,7 +33265,7 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
     this.url     = ""; //s. setReturnURL
     this.sid     = ""; //s. setReturnURL
     this.sidname = ""; //s. setReturnURL
-
+    
     this.returnurl = "";
     this.returnurl_params = "";
     this.go_back = false;
@@ -33281,14 +33281,14 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
     this.AddDivWrapper("id_configpending_head");
     $("id_configpending_head").className = "popupTitle";
     $("id_configpending_head").style.fontWeight = "bold";
-    //this.AddTextNode("id_configpending_head", "Verknï¿½pfungs- und Programmstatus");
+    //this.AddTextNode("id_configpending_head", "Verknüpfungs- und Programmstatus");
     this.AddTextNode("id_configpending_head", translateKey("dialogCreateLinkTitle"));
-
+  
     this.AddDivWrapper("id_configpending_overflow");
     $("id_configpending_overflow").style.overflow = "auto";
     $("id_configpending_overflow").style.width  = "100%";
     $("id_configpending_overflow").style.height = "100%";
-
+  
     this.AddDivWrapper("id_configpending_body", "id_configpending_overflow");
     this.AddDivWrapper("id_configpending_foot", "id_configpending_overflow");
     $("id_configpending_foot").addClassName("CLASS10200");
@@ -33311,14 +33311,14 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
           receiver: (this.addr)[this.CONFIGPENDING_RECEIVER]
         });
         break;
-      case "GO_BACK":
+      case "GO_BACK": 
         WebUI.goBack();
         break;
       default:
         break;
     }
   },
-
+  
   setReturnURL: function(sidname, sid, url, goBack)
   {
     this.go_back = goBack;
@@ -33328,7 +33328,7 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
 
     if (goBack === true) { this.url = "GO_BACK"; }
 
-/*
+/*    
     if (url == "IC_LINKPEERLIST")
     {
       this.returnurl = UI_PATH + "ic_linkpeerlist.cgi";
@@ -33350,23 +33350,23 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
     {
       this.returnurl = "";
     }
-*/
+*/    
   },
 
   ClearTable: function()
   {
     if($('id_configpending_table_tbody')) $('id_configpending_table_tbody').innerHTML = "";
   },
-
+  
   AddTextNode: function (id, text)
-  {
+  {    
     var textnode = document.createTextNode(text);
     $(id).appendChild(textnode);
   },
 
   SetNavigationBar: function ()
   {
-
+    
     $('id_configpending_foot').innerHTML = "";
 
     if (this.configpendingcount === 0)
@@ -33375,17 +33375,17 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
       newInputDiv.onclick = function()
       {
         ConfigPendingFrm.hide();
-/*
+/*        
         if (ConfigPendingFrm.go_back) { WebUI.goBack(); }
         else { updateContent(ConfigPendingFrm.returnurl, ConfigPendingFrm.returnurl_params); }
-*/
+*/        
         ConfigPendingFrm.m_return();
       };
       $('id_configpending_foot').appendChild(newInputDiv);
     }
     else
     {
-      //var newInputDiv1 = this.CreateButton("Erneut prï¿½fen");
+      //var newInputDiv1 = this.CreateButton("Erneut prüfen");
       var newInputDiv1 = this.CreateButton(translateKey("btnDirectDeviceLinkCheckAgain"));
       newInputDiv1.onclick = function()
       {
@@ -33393,17 +33393,17 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
         CheckConfigPending(ConfigPendingFrm.iface, (ConfigPendingFrm.addr)[ConfigPendingFrm.CONFIGPENDING_SENDER], (ConfigPendingFrm.addr)[ConfigPendingFrm.CONFIGPENDING_RECEIVER], ConfigPendingFrm.url, ConfigPendingFrm.go_back);
       };
       $('id_configpending_foot').appendChild(newInputDiv1);
-
+    
       //var newInputDiv2 = this.CreateButton("Ignorieren");
       var newInputDiv2 = this.CreateButton(translateKey("lblIgnore"));
       newInputDiv2.onclick = function()
       {
         ConfigPendingFrm.hide();
         ConfigPendingFrm.m_return();
-/*
+/*        
         if (ConfigPendingFrm.go_back) { WebUI.goBack(); }
         else { updateContent(ConfigPendingFrm.returnurl, ConfigPendingFrm.returnurl_params); }
-*/
+*/        
       };
       $('id_configpending_foot').appendChild(newInputDiv2);
     }
@@ -33428,25 +33428,25 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
     var textnode = document.createTextNode(translateKey("thName"));
     td[0] = document.createElement("th");
     td[0].appendChild(textnode);
-    tr.appendChild(td[0]);
+    tr.appendChild(td[0]);  
 
     //textnode = document.createTextNode("Typenbezeichnung");
     textnode = document.createTextNode(translateKey("thTypeDescriptorWOLineBreak"));
     td[1] = document.createElement("th");
     td[1].appendChild(textnode);
-    tr.appendChild(td[1]);
+    tr.appendChild(td[1]);  
 
     //textnode = document.createTextNode("Bild");
     textnode = document.createTextNode(translateKey("thPicture"));
     td[2] = document.createElement("th");
     td[2].appendChild(textnode);
-    tr.appendChild(td[2]);
+    tr.appendChild(td[2]);  
 
     //textnode = document.createTextNode("Hinweis");
     textnode = document.createTextNode(translateKey("thHint"));
     td[3] = document.createElement("th");
     td[3].appendChild(textnode);
-    tr.appendChild(td[3]);
+    tr.appendChild(td[3]);  
 
     thead.appendChild(tr);
 
@@ -33457,13 +33457,13 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
   {
 
     this.configpendingcount = 0;
-
+  
     try
     {
       Element.remove($('id_configpending_table_tbody'));
     }
     catch (e) {}
-
+  
     var tbody = document.createElement("tbody");
     tbody.id = "id_configpending_table_tbody";
     $('id_configpending_table').appendChild(tbody);
@@ -33473,17 +33473,17 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
     tr.style.height = "50px";
     tr.className = "popupTableRowGray";
 
-    //var textnode = document.createTextNode("Die ï¿½bertragung ist erfolgreich verlaufen.");
+    //var textnode = document.createTextNode("Die Übertragung ist erfolgreich verlaufen.");
     var textnode = document.createTextNode(translateKey('dialogCreateLinkSuccessContent'));
     var td = document.createElement("td");
     td.colSpan = 4;
     td.appendChild(textnode);
-    tr.appendChild(td);
+    tr.appendChild(td);  
 
     tbody.appendChild(tr);
   },
 
-  SetDevice: function(iface, address, direction)
+  SetDevice: function(iface, address, direction) 
   {
     if (direction == this.CONFIGPENDING_SENDER) (this.addr)[this.CONFIGPENDING_SENDER]   = address;
     else                                        (this.addr)[this.CONFIGPENDING_RECEIVER] = address;
@@ -33493,7 +33493,7 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
     this.SetNavigationBar();
   },
 
-  ShowConfigPending: function(iface, address, name, type, configpending, index, direction)
+  ShowConfigPending: function(iface, address, name, type, configpending, index, direction) 
   {
     if (direction == this.CONFIGPENDING_SENDER) (this.addr)[this.CONFIGPENDING_SENDER]   = address;
     else                                        (this.addr)[this.CONFIGPENDING_RECEIVER] = address;
@@ -33513,63 +33513,63 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
     td[0] = document.createElement("td");
 //    td[0].appendChild(textnode);
     td[0].innerHTML = name;
-    tr.appendChild(td[0]);
+    tr.appendChild(td[0]);  
 
     textnode = document.createTextNode(type);
     td[1] = document.createElement("td");
     td[1].appendChild(textnode);
-    tr.appendChild(td[1]);
+    tr.appendChild(td[1]);  
 
     var img = document.createElement("img");
     img.setAttribute("src",   DEV_getImagePath(type, 50));
     img.setAttribute("title", name);
     img.setAttribute("alt",   address);
-
+  
     var div = document.createElement("div");
     div.setAttribute('id', 'id_configpending_picDiv_' + this.configpendingcount);
     div.onmouseover = function () { picDivShow(jg_250, type, 250, -1, this); };
     div.onmouseout  = function () { picDivHide(jg_250); };
     div.style.position = "relative";
     div.appendChild(img);
-
+  
     td[2] = document.createElement("td");
     td[2].style.backgroundColor = WebUI.getColor("white");
     td[2].appendChild(div);
-    tr.appendChild(td[2]);
+    tr.appendChild(td[2]);  
 
     var linecount = $('id_configpending_table_tbody').getElementsByTagName("tr").length;
-
+  
     if (((linecount > 1) && (this.configpendingcount === 1) && (configpending === 1)) ||
         ((linecount > 1) && (this.configpendingcount === 0) && (configpending === 0))) /*linecount > 1 weil die erste Zeile unsichtbar ist.*/
     {
-      //Die letzte Meldung soll fï¿½r dieses Gerï¿½t mitgelten. Meldungen zusammenfassen:
+      //Die letzte Meldung soll für dieses Gerät mitgelten. Meldungen zusammenfassen:
 
       var msg_td = $('id_configpending_tr_0').getElementsByTagName("td")[3];
       var rs = msg_td.getAttribute("rowspan");
 
       if ( !rs || rs === "") { msg_td.rowSpan = 2; }                 //Attribut neu anlegen
-      else                   { msg_td.rowSpan = parseInt(rs) + 1; }  //Attributwert hochzï¿½hlen
+      else                   { msg_td.rowSpan = parseInt(rs) + 1; }  //Attributwert hochzählen
     }
     else if (configpending == 1)
     {
       td[3] = document.createElement("td");
       td[3].style.padding = "5px";
-
-      //textnode = document.createTextNode("Die ï¿½bertragung der Daten zum Gerï¿½t konnte nicht ordnungsgemï¿½ï¿½ durchgefï¿½hrt werden. Wï¿½hlen Sie:");
+    
+      //textnode = document.createTextNode("Die Übertragung der Daten zum Gerät konnte nicht ordnungsgemäß durchgeführt werden. Wählen Sie:");
       textnode = document.createTextNode(translateKey("dialogCreateLinkErrorContent1"));
       td[3].appendChild(textnode);
-
+    
       var ul = document.createElement("ul");
 
       var li_text = new Array(2);
-      //li_text[0] = document.createTextNode("\"Erneut prï¿½fen\", wenn Sie die ï¿½bertragung zum Gerï¿½t jetzt abschlieï¿½en mï¿½chten. Sorgen Sie dazu bitte dafï¿½r, dass sich");
+      //li_text[0] = document.createTextNode("\"Erneut prüfen\", wenn Sie die Übertragung zum Gerät jetzt abschließen möchten. Sorgen Sie dazu bitte dafür, dass sich");
       li_text[0] = document.createTextNode(translateKey("dialogCreateLinkErrorContent2"));
-
+      
       var ul2 = document.createElement("ul");
       var li_text2 = new Array(2);
-      //li_text2[0] = document.createTextNode("das Gerï¿½t innerhalb der Funkreichweite befindet und aktiv ist,");
+      //li_text2[0] = document.createTextNode("das Gerät innerhalb der Funkreichweite befindet und aktiv ist,");
       li_text2[0] = document.createTextNode(translateKey("dialogCreateLinkErrorContent3"));
-      //li_text2[1] = document.createTextNode("das Gerï¿½t im Anlernmodus befindet.");
+      //li_text2[1] = document.createTextNode("das Gerät im Anlernmodus befindet.");
       li_text2[1] = document.createTextNode(translateKey("dialogCreateLinkErrorContent4"));
       var li2 = new Array(2);
       li2[0] = document.createElement("li");
@@ -33578,10 +33578,10 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
       li2[1].appendChild(li_text2[1]);
       ul2.appendChild(li2[0]);
       ul2.appendChild(li2[1]);
-
-      //li_text[1] = document.createTextNode("\"Ignorieren\", wenn die Zentrale die ï¿½bertragung zum Gerï¿½t bei nï¿½chster Gelegenheit selbststï¿½ndig durchfï¿½hren soll. Bis dahin ist dieser Konfigurationsvorgang als offene Servicemeldung sichtbar.");
+    
+      //li_text[1] = document.createTextNode("\"Ignorieren\", wenn die Zentrale die Übertragung zum Gerät bei nächster Gelegenheit selbstständig durchführen soll. Bis dahin ist dieser Konfigurationsvorgang als offene Servicemeldung sichtbar.");
       li_text[1] = document.createTextNode(translateKey("dialogCreateLinkErrorContent5"));
-
+      
       var li = new Array(2);
       li[0] = document.createElement("li");
       li[0].appendChild(li_text[0]);
@@ -33591,35 +33591,35 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
 
       ul.appendChild(li[0]);
       ul.appendChild(li[1]);
-
+    
       td[3].appendChild(ul);
       td[3].align = "left";
       td[3].style.color = WebUI.getColor("red");
       td[3].style.fontWeight = "bold";
 
-      tr.appendChild(td[3]);
+      tr.appendChild(td[3]);  
 
       this.configpendingcount++;
     }
     else if (configpending === 0)
     {
-      //textnode = document.createTextNode("Die ï¿½bertragung der Daten zum Gerï¿½t wurde erfolgreich abgeschlossen.");
+      //textnode = document.createTextNode("Die Übertragung der Daten zum Gerät wurde erfolgreich abgeschlossen.");
       textnode = document.createTextNode(translateKey("dialogCreateLinkSuccessContent"));
       td[3] = document.createElement("td");
       td[3].appendChild(textnode);
       td[3].align = "left";
-      tr.appendChild(td[3]);
+      tr.appendChild(td[3]);  
     }
     else
     {
-      //textnode = document.createTextNode("ï¿½bertragung nicht erfolgt, weil das Gerï¿½t unbekannt ist.");
+      //textnode = document.createTextNode("Übertragung nicht erfolgt, weil das Gerät unbekannt ist.");
       textnode = document.createTextNode(translateKey("dialogCreateLinkErrorUnknownDevice"));
       td[3] = document.createElement("td");
       td[3].appendChild(textnode);
       td[3].align = "left";
       td[3].style.color = WebUI.getColor("red");
       td[3].style.fontWeight = "bold";
-      tr.appendChild(td[3]);
+      tr.appendChild(td[3]);  
     }
 
     tbody.appendChild(tr);
@@ -33632,9 +33632,9 @@ ConfigPendingMsgBox.prototype = Object.extend(new MsgBox(), {
 /**
  * ic_selchannel.js
  **/
-
+ 
 //======================================================================
-// Globale Variablen fï¿½r diese Datei
+// Globale Variablen für diese Datei
 SORT_DESC   = false;
 IGNORE_CASE = true;
 SORTED_COL  = -1;
@@ -33643,7 +33643,7 @@ SORT_DESC_SRC = "/ise/img/arrow_down.gif";
 //======================================================================
 
 //------------------------------------------------------------------------
-//Klasse SelChannelBox fï¿½r das PopUp Kanalauswahl:
+//Klasse SelChannelBox für das PopUp Kanalauswahl:
 /*
 SelChannelBox = Class.create();
 
@@ -33667,7 +33667,7 @@ Sort = function(tableid, colNr)
 
   if (($F('global_realchannels') === 0) && ($F('global_virtualchannels') === 0)) return;
 
-  try
+  try 
   {
     SORTED_COL = document.getElementsByClassName('sorted')[0].cellIndex;
   }
@@ -33675,16 +33675,16 @@ Sort = function(tableid, colNr)
     //alle unsorted: einen auf sorted stellen
     $('tr_caption_colnames').getElementsByTagName("td")[colNr     ].className = "sorted";
   }
-
+      
   if (SORTED_COL != colNr && SORTED_COL != -1)
   {
-    //Highlighting ï¿½ndern
+    //Highlighting ändern
     $('tr_caption_colnames').getElementsByTagName("td")[SORTED_COL].className = "unsorted";
     $('tr_caption_colnames').getElementsByTagName("td")[colNr     ].className = "sorted";
   }
 
   SetSortingOrder(colNr);
-
+  
   //Sortierungssymbol zuordnen:
   var img = $('tr_caption_colnames').getElementsByTagName("td")[colNr].getElementsByTagName("img")[0];
   SORT_DESC ? img.src=SORT_DESC_SRC : img.src=SORT_ASC_SRC;
@@ -33697,7 +33697,7 @@ Sort = function(tableid, colNr)
 
 //Wenn b_order_desc nicht gesetzt, dann wird die Sortierreihenfolge gewechselt,
 //es sei denn, die Spalte wird zum ersten mal sortiert. Bei der ersten Sortierung
-//wird standardmï¿½ï¿½ig aufsteigend sortiert.
+//wird standardmäßig aufsteigend sortiert.
 SetSortingOrder = function(colNr, b_order_desc)
 {
   if (b_order_desc)
@@ -33723,13 +33723,13 @@ SortTable = function(tableid, colNr)
   for (i = 0; i < tr_list.length; i++)
   {
     value = tr_list[i].cells[colNr].innerHTML.replace(/<[^>]+>/g,"");
-
+    
     if (typeof(valueMap[value]) == "undefined")
     {
       valueMap[value] = new Array(); //Liste nimmt Tabellenzeile gleichen values auf.
       valueList.push(value); //In dieser Liste ist value nur einmal drin.
     }
-
+    
     valueMap[value].push(tr_list[i]); //Liste gleicher values nimmt Zeile auf
   }
 
@@ -33742,8 +33742,8 @@ SortTable = function(tableid, colNr)
   for (i = 0; i<valueList.length; i++) //Zeilen eines gleich bleibenden values nacheinander einbauen
   {
     rowList = valueMap[valueList[i]];
-
-    for (var j = 0; j < rowList.length; j++) //Fï¿½r jede Zeile mit gleichem value (Array)
+    
+    for (var j = 0; j < rowList.length; j++) //Für jede Zeile mit gleichem value (Array)
     {
       if (k+headerlen != rowList[j].rowIndex) swapRows(tableid, k + headerlen, rowList[j].rowIndex);
       k++;
@@ -33758,7 +33758,7 @@ compareStrings_globalsettings = function(x, y)
 
 //b_order_desc == true:  Sortierreihenfolge absteigend
 //             == false:                    aufsteigend
-//b_ignore_case == true: Groï¿½-/Kleinschreibung nicht beachten (Muster == muster)
+//b_ignore_case == true: Groß-/Kleinschreibung nicht beachten (Muster == muster)
 //              == false:                      beachten       (Muster != muster)
 compareStrings = function(x, y, b_order_desc, b_ignore_case)
 {
@@ -33780,14 +33780,14 @@ compareStrings = function(x, y, b_order_desc, b_ignore_case)
     higherindex =  1;
     lowerindex  = -1;
   }
-
+  
   if (b_ignore_case)
   {
-    //Groï¿½-/Kleinschreibung ignorieren
+    //Groß-/Kleinschreibung ignorieren
     xx = xx.toLowerCase();
     yy = yy.toLowerCase();
   }
-
+  
   if      (xx < yy) return lowerindex;
   else if (xx > yy) return higherindex;
   else              return equalindex;
@@ -33799,7 +33799,7 @@ swapRows = function(tableid, i, j)
   var minNode    = table.rows[Math.min(i, j)];
   var maxNode    = table.rows[Math.max(i, j)];
   var parentNode = minNode.parentNode;
-
+  
   if ((i - j) * (i - j) == 1)
   {
     parentNode.removeChild(maxNode);
@@ -33808,7 +33808,7 @@ swapRows = function(tableid, i, j)
   else
   {
     var nextNode = minNode.nextSibling;
-
+    
     parentNode.removeChild(minNode);
     parentNode.replaceChild(minNode, maxNode);
     parentNode.insertBefore(maxNode, nextNode);
@@ -33831,16 +33831,16 @@ AddFilter = function(colNr)
   {
     patternlist = input[0].value;
   }
-  else if (input[0].type == "checkbox")
+  else if (input[0].type == "checkbox") 
   {
     for (i = 0; i < input.length; i++)
     {
       if (input[i].checked) patternlist += input[i].value + '|';
     }
-
+  
     if (patternlist.length !== "") { patternlist = patternlist.substring(0, patternlist.length-1); }
   }
-  else if (input[0].type== "radio")
+  else if (input[0].type== "radio") 
   {
     for (i = 0; i < input.length; i++)
     {
@@ -33851,9 +33851,9 @@ AddFilter = function(colNr)
       }
     }
   }
-
+    
   addFilterColumn($('chnListBody').getElementsByTagName("tr"), colNr, patternlist);
-
+  
   if (patternlist !== "") { $('id_filtertd_'+ colNr).className = "filtered"; }
   else                    { $('id_filtertd_'+ colNr).className = "unfiltered"; }
 };
@@ -33863,7 +33863,7 @@ ResetFilter = function()
   //var table  = document.getElementById('ChnListTbl');
   //var len = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr")[0].getElementsByTagName("td").length;
   var i=0;
-
+  
   while ($('id_filtercontrol_'+i) !== null)
   {
     HideElement('id_filtercontrol_' + i);
@@ -33876,14 +33876,14 @@ ResetFilter = function()
       {
         input[0].value = "";
       }
-      else if ((input[0].type == "checkbox") || (input[0].type == "radio"))
+      else if ((input[0].type == "checkbox") || (input[0].type == "radio")) 
       {
         for (var j=0; j<input.length; j++) input[j].checked = false;
       }
-
+  
       $('id_filtertd_'+ i).className = "unfiltered";
     }
-
+    
     i++;
   }
 };
@@ -33891,13 +33891,13 @@ ResetFilter = function()
 ResetTable = function()
 {
   if (($F('global_realchannels') === 0) && ($F('global_virtualchannels') === 0)) return;
-
+  
   var tr_list  = $('chnListBody').getElementsByTagName("tr");
-  for (var i=0; i<tr_list.length; i++)
+  for (var i=0; i<tr_list.length; i++) 
   {
     tr_list[i].style.display = '';
     //wenn Verknuepfungspartner vorhanden ist, trifft die 2. Bedingung nicht zu (kein Bild vorhanden)
-		if ((tr_list[i].className != "virtual_key_hidden") && (tr_list[i].cells.length > 1))
+		if ((tr_list[i].className != "virtual_key_hidden") && (tr_list[i].cells.length > 1)) 
     {
       tr_list[i].cells[2].childNodes[0].style.display = '';  //um die Bilder wieder einzublenden
     }
@@ -33913,7 +33913,7 @@ ResetFilterAndTable = function()
 HideFilterControls = function()
 {
   var i=0;
-
+  
   while ( $('id_filtercontrol_'+i) !== null)
   {
     HideElement('id_filtercontrol_' + i);
@@ -33927,7 +33927,7 @@ ShowFilterControl = function(colNr)
 
   HideFilterControls();
 
-  if (! visible)
+  if (! visible) 
   {
     ShowElement('id_filtercontrol_' + colNr);
 
@@ -33968,11 +33968,11 @@ filterCheckEnterEsc = function(keyCode, filterNr)
   }
 };
 
-//Filtert eine Tabelle und lï¿½sst nur die Zeilen sichtbar,
-//  die mit einem Muster (Liste) ï¿½bereinstimmen. Die
+//Filtert eine Tabelle und lässt nur die Zeilen sichtbar,
+//  die mit einem Muster (Liste) übereinstimmen. Die 
 //  Tabelle muss ein <tbody> - Tag haben.
 //tableid: html-id des table-Tags
-//colNr: Spalte, die nach pattern gefiltert werden soll
+//colNr: Spalte, die nach pattern gefiltert werden soll 
 //patternlist: pattern1|pattern2|pattern3|...|patternN
 addFilterColumn = function(tr_list, colNr, patternlist)
 {
@@ -33988,7 +33988,7 @@ addFilterColumn = function(tr_list, colNr, patternlist)
     for (var j=0; j<patterns.length; j++)
     {
       var pattern = patterns[j].toLowerCase();
-
+      
       if (text.indexOf(pattern) < 0)
       {
         tr_list[i].style.display = 'none';
@@ -34003,19 +34003,19 @@ ToggleVirtualKeys = function()
 {
   var i;
   var tr;
-
-  //if ( $('ToggleVirtualKeys').firstChild.nodeValue == "Virtuelle Kanï¿½le ausblenden" )
+  
+  //if ( $('ToggleVirtualKeys').firstChild.nodeValue == "Virtuelle Kanäle ausblenden" )
   if ( $('ToggleVirtualKeys').firstChild.nodeValue == translateKey("footerBtnVirtualChannelsHide") )
   {
     tr = $A(document.getElementsByClassName('virtual_key_visible'));
 
-    for (i = 0; i < tr.length; i++)
+    for (i = 0; i < tr.length; i++) 
     {
       tr[i].className = "virtual_key_hidden";
       tr[i].cells[2].childNodes[0].style.display = 'none';  //um die Bilder im IE auszublenden
     }
 
-    //$('ToggleVirtualKeys').firstChild.nodeValue  = "Virtuelle Kanï¿½le einblenden";
+    //$('ToggleVirtualKeys').firstChild.nodeValue  = "Virtuelle Kanäle einblenden";
     $('ToggleVirtualKeys').firstChild.nodeValue  = translateKey("footerBtnVirtualChannelsShow");
   }
   else
@@ -34030,8 +34030,8 @@ ToggleVirtualKeys = function()
         tr[i].cells[2].childNodes[0].style.display = '';  //um die Bilder im IE wieder einzublenden
       }
     }
-
-    //$('ToggleVirtualKeys').firstChild.nodeValue  = "Virtuelle Kanï¿½le ausblenden";
+    
+    //$('ToggleVirtualKeys').firstChild.nodeValue  = "Virtuelle Kanäle ausblenden";
     $('ToggleVirtualKeys').firstChild.nodeValue  = translateKey("footerBtnVirtualChannelsHide");
   }
 
@@ -34044,23 +34044,23 @@ SizeTable = function()
 
   if (window.navigator.userAgent.toUpperCase().indexOf("MSIE ") > -1) return;
 
-  //Die Funktion SizeTable hat bei begrenzter Auflï¿½sung keinen Sinn.
+  //Die Funktion SizeTable hat bei begrenzter Auflösung keinen Sinn.
     if (screen.availWidth < 1200) return;
 
-  $('chnListBody').style.overflow = "";//um ï¿½berhaupt sinnvoll Hï¿½hen bestimmen zu kï¿½nnen
+  $('chnListBody').style.overflow = "";//um überhaupt sinnvoll Höhen bestimmen zu können
   $('chnListBody').style.height   = "";
-
+    
   var dim = getInnerDimensions();
-
+  
   var adjusted_tbody_height;
-
+    
   if ( $('previous_step_wrapper') ) adjusted_tbody_height = dim.height -507; //(zusammengefasst aus vorigem Statement)
   else                              adjusted_tbody_height = dim.height -353; //(zusammengefasst aus vorigem Statement)
 
   if (adjusted_tbody_height < 130) adjusted_tbody_height = 130;
 
   var cur_tbody_height = Element.getHeight($('chnListBody'));
-
+  
   if (adjusted_tbody_height < cur_tbody_height)
   {
     //$('chnListBody').style.height   = adjusted_tbody_height +"px"; // causes problems with IE11
@@ -34071,7 +34071,7 @@ SizeTable = function()
 AddLink = function(iface, sender_address, sender_group, receiver_address, name, description, group_name, group_description, redirect_url)
 {
   ResetPostString();
-
+  
   AddParam($('global_sid'));
 
   poststr += "&redirect_url="       +redirect_url;
@@ -34085,7 +34085,7 @@ AddLink = function(iface, sender_address, sender_group, receiver_address, name, 
   poststr += "&group_description="  +group_description;
   poststr += "&cmd=addLink";
 
-  //ProgressBar = new ProgressBarMsgBox("Verknï¿½pfung wird erstellt...", 1);
+  //ProgressBar = new ProgressBarMsgBox("Verknüpfung wird erstellt...", 1);
   ProgressBar = new ProgressBarMsgBox(translateKey("progressBarCreateLinkTitle"), 1);
   ProgressBar.show();
     ProgressBar.StartKnightRiderLight();
@@ -34096,18 +34096,18 @@ AddLink = function(iface, sender_address, sender_group, receiver_address, name, 
 ShowNewLinkSummary = function(iface, sender_address, receiver_address, name, description, group_name, group_description)
 {
   ResetPostString();
-
+  
   poststr += "&iface="             +iface;
   poststr += "&sender_address="    +sender_address;
   poststr += "&receiver_address="  +receiver_address;
 
   name = name.escapeHTML();
   poststr += "&name="              +name;
-
+  
   description = description.escapeHTML();
   poststr += "&description="       +description;
-
-  if (group_name)
+  
+  if (group_name)        
   {
     group_name = group_name.escapeHTML();
     poststr += "&group_name=" +group_name;
@@ -34127,24 +34127,24 @@ Select2ndLinkPartner = function(iface, address, direction)
   ResetPostString();
 
   poststr += "&iface=" +iface;
-
+  
   if (direction == 2) poststr += "&receiver_address=" +address;
   else                poststr += "&sender_address="   +address;
-
+  
   updateContent(UI_PATH + "ic_selchannel.cgi", poststr);
 };
 
 CollectData_AddLink = function(goto_profiles)
 {
   var nextPage = (goto_profiles==1 ? 'IC_SETPROFILES' : 'IC_LINKPEERLIST');
-
+  
   AddLink(
-  $F('global_iface'),
+  $F('global_iface'), 
   $F('global_sender_address'),
   $F('global_sender_group'),
   $F('global_receiver_address'),
   $F('input_name'),
-  $F('input_description'),
+  $F('input_description'), 
   $F('input_group_name'),
   $F('input_group_description'),
   nextPage);
@@ -34265,7 +34265,7 @@ CloseSetProfiles = function () {
   //updateContent(UI_PATH + "ic_linkpeerlist.cgi");
 };
 
-// User-Profilvorlage fï¿½r die folgenden Gerï¿½te sperren
+// User-Profilvorlage für die folgenden Geräte sperren
 //var senderNoUserProfile =  "MOTION_DETECTOR, WEATHER";
 //var receiverNoUserProfile = "CLIMATECONTROL_VENT_DRIVE, BLIND, WATERDETECTIONSENSOR";
 isUserProfileAvailable = function (deviceType) {
@@ -34305,7 +34305,7 @@ ShowEasyMode = function (selectelem) {
 
 
   if (selectelem.id == "receiver_profiles" || selectelem.id == "receivergroup_profiles") {
-    // Test auf WetterKombisensor
+    // Test auf WetterKombisensor   
     WEATHER(selectelem);
     e = $('ProfileTbl_' + selectelem.id.split('_')[0]);
   } else {
@@ -34339,7 +34339,7 @@ ShowEasyMode = function (selectelem) {
 };
 
 CheckGroup = function () {
-  //prï¿½fen, ob es sich um ein Tastenpaar handelt
+  //prüfen, ob es sich um ein Tastenpaar handelt
   try {
     if (document.getElementById('NewProfileTemplate_receivergroup')) {
       throw "true";
@@ -34374,7 +34374,7 @@ ActivateLinkParamset = function (iface, sender_address, receiver_address, hideWa
     }
 
     if (dirty) {
-      //ShowWarningMsg("Ihre ï¿½nderungen wurden noch nicht in die Komponenten ï¿½bertragen.");
+      //ShowWarningMsg("Ihre Änderungen wurden noch nicht in die Komponenten übertragen.");
       ShowWarningMsg(translateKey("dialogSetProfileMsgProfileNotYetSet"));
       InfoMsg.OnOK = function () {
         ActivateLinkParamset(iface, sender_address, receiver_address, true);
@@ -34427,7 +34427,7 @@ SetEasyMode = function (iface, address, peer, special_input_id, paramid) {
   poststr += "&address=" + address;
   poststr += "&peer=" + peer;
   poststr += "&pnr=" + pnr;
-  poststr += "&paramid=" + paramid; //1
+  poststr += "&paramid=" + paramid; //1 
   poststr += "&ps_type=LINK";
   poststr += "&ps_id=LINK";
   poststr += "&cmd=set_profile";
@@ -34489,12 +34489,12 @@ CollectData_SaveProfileSettings = function (reload) {
     CheckConfigPending($F('global_iface'), $F('global_sender_address'), $F('global_receiver_address'), redirect, go_back);
   }
   else {
-    //ProgressBar = new ProgressBarMsgBox("ï¿½bertrage Profileinstellungen an Komponenten...", actions);
+    //ProgressBar = new ProgressBarMsgBox("Übertrage Profileinstellungen an Komponenten...", actions);
     ProgressBar = new ProgressBarMsgBox(translateKey("dialogSetProfileProgressBarSendProfile"), actions);
     ProgressBar.show();
     ProgressBar.StartKnightRiderLight();
 
-    //1
+    //1 
     if ($('dev_descr_sender_tmp')) var dev_descr_sender_tmp = $F('dev_descr_sender_tmp');
 
     ProgressBar.OnFinish = function () {
@@ -34513,8 +34513,8 @@ IsProfileDirty = function (special_input_id) {
 
   if (IsDirty(selectelem)) return true;
 
-  //Der im Aktor gespeicherte Easy-Mode ist immer noch aktuell. Aber: einzelne Parameter verï¿½ndert?
-  //Einzelnen Input-Felder auf Verï¿½nderung prï¿½fen:
+  //Der im Aktor gespeicherte Easy-Mode ist immer noch aktuell. Aber: einzelne Parameter verändert?
+  //Einzelnen Input-Felder auf Veränderung prüfen:
 
   var pnr = selectelem.options[selectelem.selectedIndex].value;
 
@@ -34599,7 +34599,7 @@ EnterDescriptionTemplate = function (special_input_id) {
     while ($('separate_' + special_input_id + '_' + pnr + '_' + i)) {
       var input_id;
 
-      //Wenn es ein temporï¿½res Input-Element gibt, muss der Wert daraus kommen (z.B. die Umsetzung von 0..1 auf 0%..100% wird so gehandhabt)
+      //Wenn es ein temporäres Input-Element gibt, muss der Wert daraus kommen (z.B. die Umsetzung von 0..1 auf 0%..100% wird so gehandhabt)
       if ($('separate_' + special_input_id + '_' + pnr + '_' + i + '_temp')) input_id = 'separate_' + special_input_id + '_' + pnr + '_' + i + '_temp';
       else                                                                     input_id = 'separate_' + special_input_id + '_' + pnr + '_' + i;
 
@@ -34631,7 +34631,7 @@ EnterDescriptionTemplate = function (special_input_id) {
 RemoveProfile = function (special_input_id, pnr) {
   var selectelem = $(special_input_id + '_profiles');
 
-  //prï¿½fen, ob es sich um ein Kanalpaar handelt
+  //prüfen, ob es sich um ein Kanalpaar handelt
   try {
     var tmp = selectelem.options[0].value;
     if (tmp) {
@@ -34714,7 +34714,7 @@ DeleteEasyMode = function (special_input_id) {
 
   SendRequest('ic_neweasymode.cgi');
 
-  //ProgressBar = new ProgressBarMsgBox("Profilvorlage wird gelï¿½scht...", 1);
+  //ProgressBar = new ProgressBarMsgBox("Profilvorlage wird gelöscht...", 1);
   ProgressBar = new ProgressBarMsgBox(translateKey("dialogSettingsDeleteProfileTemplateTitle"), 1);
   ProgressBar.show();
   ProgressBar.StartKnightRiderLight();
@@ -34736,17 +34736,17 @@ UpdateSpecialInputs = function (special_input_id, arr, u_subset) {
 
   while (inputelem) {
     namelist = inputelem.name;
-    name = namelist.split('|')[0]; //1
-    receiver_type = inputelem.id.split('_')[1]; //2
+    name = namelist.split('|')[0]; //1 
+    receiver_type = inputelem.id.split('_')[1]; //2 
 
     value = arr[ String(name) ];
 
-    //3
+    //3 
     pnr_split = inputelem.id.split('_');
-    pref = pnr_split[3];  //4
-    gusr_pnr = pnr_split[2]; //5
-    base_pnr = gusr_pnr.split('.')[0]; //6
-    usr_pnr = gusr_pnr.split('.')[1]; //7
+    pref = pnr_split[3];  //4 
+    gusr_pnr = pnr_split[2]; //5 
+    base_pnr = gusr_pnr.split('.')[0]; //6 
+    usr_pnr = gusr_pnr.split('.')[1]; //7 
 
     try {
       var vis_hour = document.getElementById('vis_hour_' + base_pnr + "_" + pref + "_" + receiver_type);
@@ -34811,7 +34811,7 @@ UpdateSpecialInputs = function (special_input_id, arr, u_subset) {
       }
     }
 
-//10
+//10   
 
     if (typeof(value) != 'undefined') SetInputValue(inputelem, value);
     i++;
@@ -34853,7 +34853,7 @@ ToggleChannelView = function()
 FirmwareUpdate = function()
 {
   ResetPostString();
-
+  
   AddParam($('global_sid'));
 
   poststr += "&iface="   +$F('global_iface');
@@ -34861,7 +34861,7 @@ FirmwareUpdate = function()
   poststr += "&cmd=firmware_update";
 
   SendRequest('ic_ifacecmd.cgi');
-
+  
   ProgressBar = new ProgressBarMsgBox(translateKey("performingFirmwareUpdate"), 1);
   ProgressBar.show();
   ProgressBar.StartKnightRiderLight();
@@ -34895,7 +34895,7 @@ SaveDeviceParameters = function()
   var actions = 0,
   parentChannelAddress;
 
-  //Gerï¿½teparameter speichern
+  //Geräteparameter speichern
   if (AreParametersDirty('DEVICE'))
   {
     SetParameters ($F('global_iface'), $F('global_address'), 'DEVICE');
@@ -34907,7 +34907,7 @@ SaveDeviceParameters = function()
   var channel_address;
   var startChannel = (($F('global_iface')!= "HmIP-RF") && ($F('global_iface')!= "HmIP-Wired") && ($F('global_iface') != "VirtualDevices"))? 1 : 0;
 
-  for (var i=startChannel; i<ch_count; i++) //(Kanal 0 ist bei BidCos-RF / Wired der Maintenance-Kanal, der nicht in seinen Parametern verï¿½ndert werden kann.)
+  for (var i=startChannel; i<ch_count; i++) //(Kanal 0 ist bei BidCos-RF / Wired der Maintenance-Kanal, der nicht in seinen Parametern verändert werden kann.)
   {
     channel_address = $F('global_channel_address_' +(i+1) );
 
@@ -34921,15 +34921,15 @@ SaveDeviceParameters = function()
       // Alle Adressen der internen Links
       var _internalLinks = $('chInternalPeers_' + i).innerHTML,
       internalLinks = _internalLinks.split(" ");
-
+  
       for (var intKey = 1; intKey <= internalLinks.length; intKey++) {
         var selectelem;
-        try {
+        try { 
           selectelem = $('receiver_' + i + '_' + intKey + '_profiles');
           if (selectelem) throw "internalKey";
-        } catch (result) {
+        } catch (result) { 
           if (result == 'internalKey') {
-
+          
             var pnr = selectelem.options[selectelem.selectedIndex].value;
             if (AreParametersDirty('receiver_' + i + '_' + intKey + '_' + pnr) || IsInternalKeyDirty('receiver_' + i + '_' + intKey + '_profiles'))
             {
@@ -34937,8 +34937,8 @@ SaveDeviceParameters = function()
               actions++;
             }
           }
-        }
-      }
+        } 
+      }    
     }
 
     //Timeout-Module?
@@ -34996,9 +34996,9 @@ SaveDeviceParameters = function()
   {
     CheckConfigPending($F('global_iface'), $F('global_address'), '', $F('global_redirect_url'), true);
   }
-  else
+  else 
   {
-    //ProgressBar = new ProgressBarMsgBox("ï¿½bertrage Gerï¿½te-/Kanaleinstellungen an Komponenten...", actions);
+    //ProgressBar = new ProgressBarMsgBox("Übertrage Geräte-/Kanaleinstellungen an Komponenten...", actions);
     ProgressBar = new ProgressBarMsgBox(translateKey("transferConfigData"), actions);
     ProgressBar.OnFinish = function ()
     {
@@ -35013,14 +35013,14 @@ AreParametersDirty = function(special_input_id)
 {
   var i = 1;
   var inputelem = $('separate_' + special_input_id + '_' + i);
-
+  
   while (inputelem)
   {
     if (IsDirty(inputelem)) return true;
 
-    //Integer und Floats werden ï¿½ber ein zweites input-element eingestellt. das hidden-input ist relevant,
-    //jedoch ist es immer "clean" aufgrund seines Typs. Deshalb muss das dazugehï¿½rende input-element noch
-    //geprï¿½ft werden (wenn es eines gibt).
+    //Integer und Floats werden über ein zweites input-element eingestellt. das hidden-input ist relevant,
+    //jedoch ist es immer "clean" aufgrund seines Typs. Deshalb muss das dazugehörende input-element noch 
+    //geprüft werden (wenn es eines gibt).
     if (IsDirty($('separate_' + special_input_id + '_' + i + '_temp'))) return true;
 
     i++;
@@ -35041,9 +35041,9 @@ SetParameters = function(iface, address, special_input_id)
 {
   var command,
     tomIsSet = false;
-
+  
   try {
-
+    
       if ($('separate_CHANNEL_1_1').name == "TEAM" && special_input_id != "DEVICE")
       throw "TEAM";
       else throw "noTEAM";
@@ -35060,7 +35060,7 @@ SetParameters = function(iface, address, special_input_id)
     poststr += "&ps_type=MASTER";
     poststr += "&paramid=";
     poststr += "&pnr=";
-    poststr += command;
+    poststr += command;  
 
 
     if (typeof oChnMultiModeTransmitter != "undefined") {
@@ -35120,10 +35120,10 @@ SetParameters = function(iface, address, special_input_id)
     if(!tomIsSet) {
       AddSeparateSettings('separate_' + special_input_id, '');
     }
-
-   try
+ 
+   try 
    {
-    var device = DeviceList.getDeviceByAddress(address);
+    var device = DeviceList.getDeviceByAddress(address);   
     if (!device)
     {
       var channel = DeviceList.getChannelByAddress(address);
@@ -35164,7 +35164,7 @@ SendInternalKeyPress = function(iface, sender, receiver, longKeyPress)
 SetInternalKey = function(iface, address, special_input_id, peerAddress)
 {
   var mainChannel = address;
-
+ 
   var ch = address.split(':')[1];
   var selectelem = $(special_input_id + '_profiles');
   var pnr = selectelem.options[selectelem.selectedIndex].value;
@@ -35174,10 +35174,10 @@ SetInternalKey = function(iface, address, special_input_id, peerAddress)
   ResetPostString();
   AddParam($('global_sid'));
   poststr += "&iface="   + iface;
-  poststr += "&address=" + mainChannel;
+  poststr += "&address=" + mainChannel; 
   poststr += "&peer="    + peerAddress;
   poststr += "&pnr="     + pnr;
-  poststr += "&paramid=" + paramid;
+  poststr += "&paramid=" + paramid;  
   poststr += "&ps_type=receiver";
   poststr += "&ps_id=receiver" ;
   poststr += "&internalKey=true";
@@ -35185,7 +35185,7 @@ SetInternalKey = function(iface, address, special_input_id, peerAddress)
   poststr += "&cmd=set_profile";
   AddSeparateSettings('separate_' + special_input_id + '_', pnr);
   AddSeparateSettings('subset_'   + special_input_id + '_', pnr);
-
+  
   //alert(poststr);
   SendRequest('ic_ifacecmd.cgi');
 };
@@ -35202,7 +35202,7 @@ ShowInternalKeyProfile = function(selectelem, channel, counter)
   }
 
   if (e.tagName != "TABLE" && e.className != "ProfileTbl") return;
-
+  
   var table = e;
   var elem  = table.getElementsByTagName("tr")[0];
 
@@ -35232,11 +35232,11 @@ NewEasyModeForm.prototype = Object.extend(new MsgBox(), {
 
   this.init(w, h);
   this.w = w;
-  this.h = h;
-  this.base_pnr = base_pnr;
-  this.ps_id    = ps_id;
-  this.ps_ids   = ps_ids;
-  this.special_input_id = special_input_id;
+  this.h = h;  
+  this.base_pnr = base_pnr;  
+  this.ps_id    = ps_id;  
+  this.ps_ids   = ps_ids;  
+  this.special_input_id = special_input_id;  
 
   this.ProfilesMap = new Array();
   },
@@ -35262,7 +35262,7 @@ NewEasyModeForm.prototype = Object.extend(new MsgBox(), {
   },
   StoreNewProfile: function() {
   ResetPostString();
-  profile = is_newProfile(this.ps_id);
+  profile = is_newProfile(this.ps_id); 
   poststr += "&cmd=SAVE";
   poststr += "&base_pnr="     +this.base_pnr;
   poststr += "&ps_id="        +profile;
@@ -35270,7 +35270,7 @@ NewEasyModeForm.prototype = Object.extend(new MsgBox(), {
   poststr += "&sensor="		+$F('dev_descr_sender_tmp').split("-")[0];
   poststr += "&actor="	+$F('dev_descr_receiver_tmp');
   poststr += "&EasyModeName=" +elv_toQueryString($F('EasyModeName'));
-
+  
   AddSeparateSettings('separate_' + this.special_input_id + '_', this.base_pnr);
   AddSeparateSettings('subset_'   + this.special_input_id + '_', this.base_pnr);
   SendRequest('ic_neweasymode.cgi');
@@ -35330,7 +35330,7 @@ TimeoutManager.prototype = Object.extend(new MsgBox(), {
     //Woche anlegen und initialisieren
     this.week = new Array(7);
     this.divname = new Array(7); //DIV-Container
-    this.weekdirty = new Array(7); //Sind ï¿½nderungen erfolgt?
+    this.weekdirty = new Array(7); //Sind Änderungen erfolgt?
 
     this.setMaxTimouts();
 
@@ -35497,7 +35497,7 @@ TimeoutManager.prototype = Object.extend(new MsgBox(), {
     var postStr = "";
 
     for (var dayidx = 0; dayidx < 7; dayidx++) {
-      //Welcher Tag enthï¿½lt die relevanten Daten: "wie am Vortag"-Funktion?
+      //Welcher Tag enthält die relevanten Daten: "wie am Vortag"-Funktion?
       var prev_day = $(this.prg + 'prevday_' + dayidx);
       var p = dayidx;
       while (prev_day.checked) {
@@ -35596,7 +35596,7 @@ TimeoutManager.prototype = Object.extend(new MsgBox(), {
     var timeouts = this.week[dayidx];
 
     if (timeouts.length >= this.maxTimeOuts ) {
-      //alert('Der Zeitabschnitt kann nicht angelegt werden. Es kï¿½nnen nur bis zu '+this.maxTimeOuts+'  Zeitabschnitte angelegt werden.');
+      //alert('Der Zeitabschnitt kann nicht angelegt werden. Es können nur bis zu '+this.maxTimeOuts+'  Zeitabschnitte angelegt werden.');
       alert(translateKey('errorCreateTimePeriod') + translateKey('maxTimePeriodReachedA') + this.maxTimeOuts+translateKey('maxTimePeriodReachedB'));
       return;
     }
@@ -35654,7 +35654,7 @@ TimeoutManager.prototype = Object.extend(new MsgBox(), {
 
     for (i = 1; i < timeouts.length; i++) {
       if (timeouts[i][tom_endtime] <= timeouts[i - 1][tom_endtime]) {
-        alert("Der " + i + ". Zeitabschnitt hat eine ungï¿½ltige Dauer");
+        alert("Der " + i + ". Zeitabschnitt hat eine ungültige Dauer");
       }
     }
   },
@@ -35769,7 +35769,7 @@ TimeoutManagerHmIPOnOff.prototype = Object.extend(new TimeoutManager(), {
     var postStr = "";
 
     for (var dayidx = 0; dayidx < 7; dayidx++) {
-      //Welcher Tag enthï¿½lt die relevanten Daten: "wie am Vortag"-Funktion?
+      //Welcher Tag enthält die relevanten Daten: "wie am Vortag"-Funktion?
       var prev_day = $(this.prg + 'prevday_' + dayidx);
       var p = dayidx;
       while (prev_day.checked) {
@@ -35976,13 +35976,13 @@ TimeoutManagerHmIPOnOff.prototype = Object.extend(new TimeoutManager(), {
 });/**
  * ic_partyendtime.js
  **/
-
+ 
 //pet = Party End Time Module
 
 PartyEndTimeManager = Class.create();
 
 PartyEndTimeManager.prototype = Object.extend(new MsgBox(), {
-
+  
   initialize: function (iface, address, htmlcontainer, name, id) {
 
     this.iface    = iface;
@@ -36012,14 +36012,14 @@ PartyEndTimeManager.prototype = Object.extend(new MsgBox(), {
 
       endtime = d * 24;
     }
-    else
+    else 
     {
       $('pet_m').disabled = false;
       $('pet_h').disabled = false;
     }
-
+		
 		if (endtime > 3048) {endtime = 3048;}
-
+		
     $(this.id).value = endtime;
   },
 
@@ -36029,7 +36029,7 @@ PartyEndTimeManager.prototype = Object.extend(new MsgBox(), {
   var d, h, m;
 
   d = Math.floor(endtime / 24);
-
+  
   tmp  = endtime - (d * 24);
   h = Math.floor(tmp);
 
@@ -36041,10 +36041,10 @@ PartyEndTimeManager.prototype = Object.extend(new MsgBox(), {
   msg += "<select onchange=\"pet.pet_Update();\" id=\"pet_h\">";
   for (var i=0; i<24; i++)
   {
-		if (i < 10)
+		if (i < 10) 
 		{
 			var zero = "0";
-		} else
+		} else 
 		{
 			var zero = "";
 		}
@@ -36059,7 +36059,7 @@ PartyEndTimeManager.prototype = Object.extend(new MsgBox(), {
   //msg += "max. 127 Tage";
   msg += translateKey("partyMaxDays127");
 
-  //Sammelobjekt fï¿½r richtigen Datenwert:
+  //Sammelobjekt für richtigen Datenwert:
   msg += "<span style=\"visibility: hidden; display: none;\"><input id=\""+this.id+"\" type=\"text\" value=\""+endtime+"\" name=\""+this.name+"\"/></span>";
 
   $(this.htmlcont).innerHTML = msg;
@@ -36075,7 +36075,7 @@ showAddDeviceCP = function(activate_install_mode)
 {
   var path = "/config/";
   if (PLATFORM != "Central") {path = "/configapp/";}
-
+  
   if(activate_install_mode)CreateCPPopup(path + "cp_add_device.cgi", "call_js=rf_install_mode(true);");
   else CreateCPPopup(path + "cp_add_device.cgi");
   dlgPopup.setWidth("925");
@@ -36134,27 +36134,27 @@ CreateCPPopup = function(src, pb) {
   PopupClose = function() {
     dlgPopup.close();
   };
-
+  
   PopupReload = function() {
     dlgPopup.reload();
     dlgPopup.ShowPopup();
   };
-
+  
   dlgPopup.ShowPopup();
 };
 
 CreateCPPopup2 = function(src, pb) {
   dlgPopup2 = new cpMessageBox2(src, pb);
-
+  
   Popup2Close = function() {
     dlgPopup2.close();
   };
-
+  
   Popup2Reload = function() {
     dlgPopup2.reload();
     dlgPopup2.ShowPopup();
   };
-
+  
   dlgPopup2.ShowPopup();
   //new Draggable("messagebox");
 };
@@ -36173,7 +36173,7 @@ cpMessageBox.prototype =
 
     this.setTopMargin(6);
     this.setLeftMargin(6);
-
+    
     this.setWidth(800);
 
     this.createMessagebox();
@@ -36193,26 +36193,26 @@ cpMessageBox.prototype =
         $('messagebox').style.width=this.width+"px";
     }
   },
-
+  
   setHeight: function(height)
   {
     this.height = height;
   },
-
+  
   setLeftMargin: function(left)
   {
     this.LeftMargin = left;
   },
-
+  
   setTopMargin: function(top)
   {
     this.TopMargin = top;
-  },
-
+  },  
+  
   createMessagebox: function()
   {
     if ( !$('messagebox') )
-    {
+    {      
       var newDiv = document.createElement("div");
       var newDivId = document.createAttribute("id");
       newDivId.nodeValue = "messagebox";
@@ -36232,7 +36232,7 @@ cpMessageBox.prototype =
     }
     jQuery("#messagebox").addClass("j_translate");
   },
-
+  
   removeMessagebox: function()
   {
     if ( $('messagebox') )
@@ -36241,7 +36241,7 @@ cpMessageBox.prototype =
     }
   },
 
-   // TODO Es wird zur Zeit nur die Hï¿½he ausgewertet und angepasst, die Breite ist noch nicht implementiert.
+   // TODO Es wird zur Zeit nur die Höhe ausgewertet und angepasst, die Breite ist noch nicht implementiert.
   /**
    * Adds a scrollbar and adjusts the position when the height of the message box is > than those of the viewport
    * @param boxHeight
@@ -36281,29 +36281,29 @@ cpMessageBox.prototype =
     this.readaptSize();
     $('trlayer').show();
     $('centerbox').show();
-  },
-
+  },  
+  
   close: function(o)
   {
     $('centerbox').hide();
     this.remove();
     $('trlayer').hide();
   },
-
+  
   hide: function(o)
   {
     $('messagebox').style.display="none";
   },
-
+  
   remove: function()
   {
     this.removeMessagebox();
   },
-
+  
   LoadFromFile: function(src, pb) {
     var url = src+'?sid='+SessionId;
     var t = this;
-    var opt =
+    var opt = 
     {
       method: 'post',
       evalScripts: true,
@@ -36316,7 +36316,7 @@ cpMessageBox.prototype =
     };
     new Ajax.Updater('messagebox',url,opt);
   },
-
+  
   ShowPopup: function() {
     this.show();
   }
@@ -36330,13 +36330,13 @@ cpMessageBox2.prototype =
   {
     this.setTopMargin(6);
     this.setLeftMargin(6);
-
-    this.setWidth(400);
-
+    
+    this.setWidth(400); 
+    
     this.createMessagebox();
     this.LoadFromFile(src, pb);
   },
-
+  
   setWidth: function(width)
   {
     this.width = width;
@@ -36344,45 +36344,45 @@ cpMessageBox2.prototype =
         $('messagebox2').style.width=this.width+"px";
     }
   },
-
+  
   setHeight: function(height)
   {
     this.height = height;
   },
-
+  
   setLeftMargin: function(left)
   {
     this.LeftMargin = left;
   },
-
+  
   setTopMargin: function(top)
   {
     this.TopMargin = top;
-  },
-
+  },  
+  
   createMessagebox: function()
   {
     if ( !$('messagebox2') )
-    {
+    {      
       var newDiv = document.createElement("div");
       var newDivId = document.createAttribute("id");
       newDivId.nodeValue = "messagebox2";
       newDiv.setAttributeNode(newDivId);
       var newDivStyle = document.createAttribute("style");
       newDivStyle.nodeValue = "width:"+this.width+"px;height:"+this.height+"px;padding: 0px;position:absolute;left: 50%;margin-left: -"+(this.width/2)+"px;margin-top: -"+(this.height/2)+"px;";
-
+      
       if( typeof( newDiv.style.cssText ) == "string" )
         newDiv.style.cssText = newDivStyle.nodeValue;
       else
         newDiv.setAttributeNode(newDivStyle);
-
+      
       $('centerbox2').appendChild(newDiv);
       jQuery("#messagebox2").draggable();
     }  else {
         $('messagebox2').style.width=this.width+"px";
     }
   },
-
+  
   removeMessagebox: function()
   {
     if ( $('messagebox2') )
@@ -36390,7 +36390,7 @@ cpMessageBox2.prototype =
       $('messagebox2').remove();
     }
   },
-
+  
   readaptSize: function()
   {
     if ( $('messagebox2') )
@@ -36400,36 +36400,36 @@ cpMessageBox2.prototype =
       $('messagebox2').style.marginTop = (h/2)*(-1)+"px";
     }
   },
-
+  
   show: function()
   {
     this.readaptSize();
     $('trlayer2').show();
     $('centerbox2').show();
-  },
-
+  },  
+  
   close: function(o)
   {
     $('centerbox2').hide();
     this.remove();
     $('trlayer2').hide();
   },
-
+  
   hide: function(o)
   {
     $('messagebox2').style.display="none";
   },
-
+  
   remove: function()
   {
     this.removeMessagebox();
   },
-
+  
   LoadFromFile: function(src, pb)
   {
     var url = src+'?sid='+SessionId;
     var t = this;
-    var opt =
+    var opt = 
     {
       method: 'post',
       evalScripts: true,
@@ -36442,7 +36442,7 @@ cpMessageBox2.prototype =
     };
     new Ajax.Updater('messagebox2',url,opt);
   },
-
+  
   ShowPopup: function()
   {
     this.show();
@@ -36471,64 +36471,64 @@ temp_tmp = "";
 exists_bib = [] ;
 arChnHasLinks = [];
 
-getInternalKeySpecialInputId = function(arrId)
+getInternalKeySpecialInputId = function(arrId) 
 {
   var id = "";
   var arrIdLength = arrId.length - 1;
 
   for (var loop = 0; loop < arrIdLength; loop++) {
     id += arrId[loop];
-
+    
     if ((loop + 1) < arrIdLength) {
-     id += "_";
-    }
+     id += "_";       
+    }           
   }
-  return id;
+  return id;    
 };
 
 ActivateFreeTime4InternalKey = function(selectelem, pref)
 {
-  ActivateFreeTime(selectelem, pref, true);
+  ActivateFreeTime(selectelem, pref, true);   
 };
 
 ActivateFreeTime = function(selectelem, pref, internalKey)
 {
-  //alert($('selectelem').id + " pref= " + pref);
-  var pnr = selectelem.options[selectelem.selectedIndex].value;
+  //alert($('selectelem').id + " pref= " + pref);  
+  var pnr = selectelem.options[selectelem.selectedIndex].value;  
   var upnr = pnr.split(".")[1];
   var intkey = selectelem.id.split("_")[0].slice(8);
 
   if (isNaN(upnr) == true) {
     var arrSpecialInputId = selectelem.id.split("_");
-     var special_input_id = arrSpecialInputId[0];
-
+     var special_input_id = arrSpecialInputId[0]; 
+  
     if (internalKey) {
       special_input_id = getInternalKeySpecialInputId(arrSpecialInputId);
     }
 
-     var selectedvalue = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).value; //4
-    var parameter = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).name; //5
+     var selectedvalue = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).value; //4  
+    var parameter = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).name; //5   
     var sec = document.getElementById("vis_sec_" + pnr + "_" + pref + "_" + special_input_id);
     var min = document.getElementById("vis_min_" + pnr + "_" + pref + "_" + special_input_id);
     var hour = document.getElementById("vis_hour_" + pnr + "_" + pref + "_" + special_input_id);
     var x_max = selectelem.length + 1;
-    //6
+    //6  
     if (pnr > x_max) {x_max = parseInt(pnr) + 1;}
     var y_max = 15;
 
-    //7
-    if (exists_timearr != "ok" || time_tmp != x_max)
+    //7 
+    if (exists_timearr != "ok" || time_tmp != x_max) 
     {
       //8
       time2d = [];
-      for (var i = 0; i < x_max; ++i)
+      for (var i = 0; i < x_max; ++i) 
       time2d[i] = [];
-      exists_timearr = "ok";
+      exists_timearr = "ok"; 
       time_tmp = x_max;     //9
     }
 
     time2d[pnr][pref] = 0;
-    prefix[parameter + special_input_id] = pnr + "_" + pref + "_" + special_input_id;
+    prefix[parameter + special_input_id] = pnr + "_" + pref + "_" + special_input_id; 
 
     if (selectedvalue == "99999999")
     {
@@ -36537,13 +36537,13 @@ ActivateFreeTime = function(selectelem, pref, internalKey)
         document.getElementById(special_input_id + "_profiles").options[selectelem.selectedIndex].style.color = "gray";
         if (CheckGroup()) document.getElementById("NewProfileTemplate_receivergroup").style.visibility = "hidden";
       }
-    time2d[pnr][pref] = 1; //10
+    time2d[pnr][pref] = 1; //10 
       hour.style.display = "inline";
       min.style.display = "inline";
       sec.style.display = "inline";
     }
-    else
-    {
+    else 
+    { 
       if (free_time != 1 && free_perc != 1 && free_temp != 1) {
       if (intkey == "" && !internalKey) {
         document.getElementById("NewProfileTemplate_receiver").style.visibility = "visible";
@@ -36551,7 +36551,7 @@ ActivateFreeTime = function(selectelem, pref, internalKey)
         }
     } else  document.getElementById(special_input_id + "_profiles").options[selectelem.selectedIndex].style.color = TextColor(_textcolor);
 
-      time2d[pnr][pref] = 0; //11
+      time2d[pnr][pref] = 0; //11 
 
       hour.style.display = "none";
       min.style.display = "none";
@@ -36586,17 +36586,17 @@ ActivateFreeTime = function(selectelem, pref, internalKey)
 // Kann hier entfernt werden.
 _encodeString = function(elem)
 {
-  //wird nur fï¿½r die ï¿½bersetzung der Parameter des HM-PB-4Dis-WM genutzt,
+  //wird nur für die Übersetzung der Parameter des HM-PB-4Dis-WM genutzt, 
   //da dort einige Zeichen an anderer Stelle liegen.
 
   var inString = $F("_" + elem);
-  var outString = inString.replace(/ï¿½/g, "[");
-  outString = outString.replace(/ï¿½/g, "#");
-  outString = outString.replace(/ï¿½/g, "$");
-  outString = outString.replace(/ï¿½/g, "{");
-  outString = outString.replace(/ï¿½/g, "|");
-  outString = outString.replace(/ï¿½/g, "}");
-  outString = outString.replace(/ï¿½/g, "~");
+  var outString = inString.replace(/Ä/g, "[");
+  outString = outString.replace(/Ö/g, "#");
+  outString = outString.replace(/Ü/g, "$");
+  outString = outString.replace(/ä/g, "{");  
+  outString = outString.replace(/ö/g, "|");  
+  outString = outString.replace(/ü/g, "}");  
+  outString = outString.replace(/ß/g, "~");  
   outString = outString.replace(/&/g, "]");
   outString = outString.replace(/=/g, "'");
 
@@ -36605,7 +36605,7 @@ _encodeString = function(elem)
 
 ActivateFreePercent4InternalKey = function(selectelem, pref)
 {
-  ActivateFreePercent(selectelem, pref, true);
+  ActivateFreePercent(selectelem, pref, true);   
 };
 
 ActivateFreePercent = function(selectelem, pref, internalKey)
@@ -36618,36 +36618,36 @@ ActivateFreePercent = function(selectelem, pref, internalKey)
   if (isNaN(upnr) == true) {
     // var special_input_id = selectelem.id.split("_")[0]; //3
     var arrSpecialInputId = selectelem.id.split("_");
-    var special_input_id = arrSpecialInputId[0];
+    var special_input_id = arrSpecialInputId[0]; 
 
     if (internalKey) {
       special_input_id = getInternalKeySpecialInputId(arrSpecialInputId);
-    }
+    } 
 
-    var selectedvalue = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).value; //4
-    var parameter = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).name; //5
+    var selectedvalue = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).value; //4 
+    var parameter = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).name; //5  
     var percent = document.getElementById("vis_percent_" + pnr + "_" + pref + "_" + special_input_id);
-    var x_max = selectelem.length + 1;
-    //6
+    var x_max = selectelem.length + 1; 
+    //6 
     if (pnr > x_max) {x_max = parseInt(pnr) + 1;}
     var y_max = 15;
-
+    
     //7
-    if (exists_percarr != "ok" || perc_tmp != x_max)
+    if (exists_percarr != "ok" || perc_tmp != x_max) 
     {
       //8
       perc2d = [];
-      for (i = 0; i < x_max; ++i)
+      for (i = 0; i < x_max; ++i) 
       perc2d[i] = [];
       exists_percarr = "ok";
       perc_tmp = x_max; //9
     }
     perc2d[pnr][pref] = 0;
-
-    prefix[parameter + special_input_id] = pnr + "_" + pref + "_" + special_input_id;
-
+    
+    prefix[parameter + special_input_id] = pnr + "_" + pref + "_" + special_input_id; 
+    
     if (selectedvalue == "99999998" )
-    {
+    {   
       if (intkey == "" && !internalKey) {
         document.getElementById("NewProfileTemplate_receiver").style.visibility = "hidden";
         document.getElementById(special_input_id +  "_profiles").options[selectelem.selectedIndex].style.color = "gray";
@@ -36655,20 +36655,20 @@ ActivateFreePercent = function(selectelem, pref, internalKey)
       }
       perc2d[pnr][pref] = 1; //10
       percent.style.display = "inline";
-
-    } else {
+    
+    } else { 
       if (free_time != 1 && free_perc != 1 && free_temp != 1) {
       if (intkey == "" && !internalKey) {
         document.getElementById("NewProfileTemplate_receiver").style.visibility = "visible";
         if (CheckGroup()) document.getElementById("NewProfileTemplate_receivergroup").style.visibility = "visible";
         }
       } else  document.getElementById(special_input_id + "_profiles").options[selectelem.selectedIndex].style.color = TextColor(_textcolor);
-
-      perc2d[pnr][pref] = 0; //11
+      
+      perc2d[pnr][pref] = 0; //11 
       percent.style.display = "none";
     }
-
-    free_perc = 0; //12
+    
+    free_perc = 0; //12 
     for (var loopx = 0; loopx < x_max; loopx++){
       for (var loopy = 0; loopy < y_max; loopy++){
         if (perc2d[loopx][loopy] == 1) {free_perc = 1; break;}
@@ -36678,7 +36678,7 @@ ActivateFreePercent = function(selectelem, pref, internalKey)
       if (perc2d[pnr][loopy] == 1)   {perc_textcolor = 1; break;}
       else perc_textcolor = 0;
     }
-
+    
     if (time_textcolor == 0 && perc_textcolor == 0 && temp_textcolor == 0) _textcolor = 0;
     else _textcolor = 1;
     document.getElementById(special_input_id + "_profiles").options[selectelem.selectedIndex].style.color = TextColor(_textcolor);
@@ -36702,28 +36702,28 @@ ActivateFreeTemp = function(selectelem, pref)
 
   //2
   if (isNaN(upnr) == true) {
-    var special_input_id = selectelem.id.split("_")[0]; //3
-    var selectedvalue = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).value; //4
-    var parameter = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).name; //5
+    var special_input_id = selectelem.id.split("_")[0]; //3 
+    var selectedvalue = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).value; //4 
+    var parameter = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).name; //5  
     var temperatur = document.getElementById("vis_temp_" + pnr + "_" + pref + "_" + special_input_id);
     var x_max = selectelem.length + 1;
-    //6
+    //6 
     if (pnr > x_max) {x_max = parseInt(pnr) + 1;}
     var y_max = 15;
     //7
-    if (exists_temparr != "ok" || temp_tmp != x_max)
+    if (exists_temparr != "ok" || temp_tmp != x_max) 
     {
       //8
       temp2d = [];
-      for (var i = 0; i < x_max; ++i)
+      for (var i = 0; i < x_max; ++i) 
       temp2d[i] = [];
       exists_temparr = "ok";
       temp_tmp = x_max; //9
     }
     temp2d[pnr][pref] = 0;
-
-    prefix[parameter + special_input_id] = pnr + "_" + pref + "_" + special_input_id;
-
+    
+    prefix[parameter + special_input_id] = pnr + "_" + pref + "_" + special_input_id; 
+      
     if (selectedvalue == "99999997" )
     {
     if (intkey == "") {
@@ -36733,35 +36733,35 @@ ActivateFreeTemp = function(selectelem, pref)
       }
     temp2d[pnr][pref] = 1; //10
       temperatur.style.display = "inline";
-
-    } else {
+    
+    } else { 
       if (free_time != 1 && free_perc != 1 && free_temp != 1) {
       if (intkey == "") {
        document.getElementById("NewProfileTemplate_receiver").style.visibility = "visible";
          if (CheckGroup()) document.getElementById("NewProfileTemplate_receivergroup").style.visibility = "visible";
         }
     } else  document.getElementById(special_input_id + "_profiles").options[selectelem.selectedIndex].style.color = TextColor(_textcolor);
-
+      
       temp2d[pnr][pref] = 0; //11
       temperatur.style.display = "none";
     }
-
-    free_temp = 0; //12
+  
+    free_temp = 0; //12 
     for (var loopx = 0; loopx < x_max; loopx++){
       for (var loopy = 0; loopy < y_max; loopy++){
         if (temp2d[loopx][loopy] == 1) {free_temp = 1; break;}
       }
     }
-
+    
     for (loopy = 0; loopy <= y_max; loopy++) {
       if (temp2d[pnr][loopy] == 1)   {temp_textcolor = 1; break;}
       else temp_textcolor = 0;
     }
-
+    
     if ((time_textcolor == 0) && (perc_textcolor == 0) && (temp_textcolor == 0)) { _textcolor = 0; }
     else _textcolor = 1;
     document.getElementById(special_input_id + "_profiles").options[selectelem.selectedIndex].style.color = TextColor(_textcolor);
-
+    
     if ((free_time == 0) && (free_perc == 0) && (free_temp == 0))
     {
     if (intkey == "") {
@@ -36778,10 +36778,10 @@ BLIND_fetchType = function(id) {
 
   for (var loop = 1; loop < arrID.length; loop++) {
     type += arrID[loop];
-
+    
     if ((loop + 1) < arrID.length) {
-      type += "_";
-    }
+      type += "_";        
+    } 
   }
   return type;
 };
@@ -36789,13 +36789,13 @@ BLIND_fetchType = function(id) {
 BLIND_setPosition = function(id)
 {
   var type = BLIND_fetchType(id);
-  var index = $(id).selectedIndex;
+  var index = $(id).selectedIndex; 
   var v_up = "visible";
   var v_down = "hidden";
   var d_up = "";
   var d_down = "none";
 
-  if (index == 1) {v_up = "hidden"; v_down = "visible"; d_up = "none"; d_down = "";}
+  if (index == 1) {v_up = "hidden"; v_down = "visible"; d_up = "none"; d_down = "";} 
   else if (index == 2) {v_up = "visible"; v_down = "visible"; d_up = ""; d_down = "";}
 
 
@@ -36836,7 +36836,7 @@ jalousieShowSlatInputElem = function(id, chn) {
   }
 };
 
-Disable_SimKey = function(ch, prn, specialInputId)
+Disable_SimKey = function(ch, prn, specialInputId) 
 {
   var arrSpecialInputId = specialInputId.split("_"),
   pref_dirty = false,
@@ -36844,27 +36844,27 @@ Disable_SimKey = function(ch, prn, specialInputId)
   jBtnSim = $("SimKey_" + arrSpecialInputId[1] + "_" +  arrSpecialInputId[2] + "_" + prn),
   jBtnLongSim = $("SimLongKey_" + arrSpecialInputId[1] + "_" +  arrSpecialInputId[2] + "_" + prn),
   jHintSim = $("SimKeyHint_" + arrSpecialInputId[1] + "_" +  arrSpecialInputId[2] + "_" + prn);
-
+  
   if (jBtnSim) {
 
     while ($('separate_' +  specialInputId + '_' + prn + '_' + i))
     {
-      if (IsDirty($('separate_' + specialInputId + '_' + prn + '_' + i)))
+      if (IsDirty($('separate_' + specialInputId + '_' + prn + '_' + i))) 
       {
         pref_dirty = true;
       }
       i++;
     }
 
-     if ( (pref_dirty == true ) || ( IsDirty($(specialInputId + '_profiles')) ) )
+     if ( (pref_dirty == true ) || ( IsDirty($(specialInputId + '_profiles')) ) ) 
     {
       jBtnSim.disabled = true;
       if (jBtnLongSim) jBtnLongSim.disabled = true;
-      //jBtnSim.value = "Simulation nicht mï¿½glich!";
+      //jBtnSim.value = "Simulation nicht möglich!";
       jBtnSim.value = translateKey("simulateKeyPressBtnTxtNotPossible");
       if (jBtnLongSim) jBtnLongSim.value = translateKey("simulateKeyPressBtnTxtNotPossible");
       jHintSim.style.display = "inline";
-    }
+    } 
     else
     {
       jBtnSim.disabled = false;
@@ -36923,14 +36923,14 @@ MD_checkMaxValue = function(id_on_time, channel, id_on_time_mode)
   var  prn = id_on_time.split("_")[2];
   var  pref = id_on_time.split("_")[3];
   var val = $F(id_on_time);
-
+  
   // mode 0 = absolut, mode 1 = minimal
   var mode = $F(id_on_time_mode);
 
   if (mode == 0) $('hint_'+ prn + '_' + pref).firstChild.data = " ";
 
 
-  if ((val > 120 || mode == 1 ) && channel == 1 )
+  if ((val > 120 || mode == 1 ) && channel == 1 ) 
   {
     if (val > 120) {
       $(id_on_time).options[$(id_on_time).length -1].style.color = WebUI.getColor('red');
@@ -36939,7 +36939,7 @@ MD_checkMaxValue = function(id_on_time, channel, id_on_time_mode)
     }
 
     switch (mode) {
-
+      
       case("0"):   $('hint_'+ prn + '_' + pref).style.color = WebUI.getColor('red');
             $('hint_'+ prn + '_' + pref).firstChild.data = unescape(localized[0]['hint_ontime_0']);
             break;
@@ -36965,8 +36965,8 @@ MD_checkPNAME = function(id, param, id_on_time)
 
   var min_interval = $F(md_min_interval).split(",")[0]; // enthaelt den Wert des Kanalparameters 'Mindestsendeabstand'. Moegl. Werte 0, 1, 2, 3, 4
   $(md_min_interval).value = min_interval + "," + $(id).selectedIndex;
-
-
+  
+  
   var min_value = new Array(15, 30, 60, 120, 240);
   var h = "hour_" + id_on_time.split("_")[2] + "_" + id_on_time.split("_")[3] + "_" + id_on_time.split("_")[1];
   var m = h.replace('hour_', 'min_');
@@ -36974,20 +36974,20 @@ MD_checkPNAME = function(id, param, id_on_time)
 
   var t = (parseFloat($F(h)) * 3600) + (parseFloat($F(m)) * 60) + parseFloat($F(s));
 
-  if (t < min_value[min_interval] && $(id).selectedIndex !== 0 )
+  if (t < min_value[min_interval] && $(id).selectedIndex !== 0 ) 
   {
-    $(s).value = min_value[min_interval];
+    $(s).value = min_value[min_interval];  
     MD_set_h_m_s(h, m, s);
   }
-
-
+  
+  
   if ($F(id_on_time) < min_value[min_interval] && $(id).selectedIndex == 0)
   {
     jQuery('#'+id_on_time + '_hint0:first-child').html(unescape(localized[0]['hint0a']) +  min_value[min_interval] + unescape(localized[0]['hint0b']));
     jQuery('#'+id_on_time + '_hint1:first-child').html(unescape(localized[0]['hint1a']) +  min_value[min_interval] + unescape(localized[0]['hint1b']));
   } else {
-    $(id_on_time + '_hint0').firstChild.data = " ";
-    $(id_on_time + '_hint1').firstChild.data = " ";
+    $(id_on_time + '_hint0').firstChild.data = " "; 
+    $(id_on_time + '_hint1').firstChild.data = " "; 
   }
 };
 
@@ -36999,18 +36999,18 @@ MD_init = function(id, min, max)
   var wert     = min;
   var channel = id.split("_")[2];
 
-  if (! wert_int) {wert = min;} //1
+  if (! wert_int) {wert = min;} //1 
   if (! isNaN(wert_int)) {wert = wert_int;}
 
   if (wert < min) {wert = min;}
   if (wert > max) {wert = max;}
-
+    
   input.value = wert;
 
   if (input.name == "EVENT_FILTER_NUMBER")
   {
     var efn = document.getElementsByClassName('event_filter_number');
-    if (wert == 1)
+    if (wert == 1) 
     {
       //input.options[0].text = "jedem";
       input.options[0].text = translateKey("motionDetectorEventFilterNumberA");
@@ -37042,20 +37042,20 @@ MD_init = function(id, min, max)
 
 MD_getHelp = function(min, max, brightness, ready)
 {
-  // liest die Hilfedatei fï¿½r den MotionSensor ein
+  // liest die Hilfedatei für den MotionSensor ein
 //  var language = $F('language') ;
   var language = getLang();
   var font_bold = "\"font-style:normal; font-weight:bold\"";
   var font_underline = "\"font-style:normal; text-decoration:underline\"";
   var active = localized[0]['active_' + ready];
-
-  //Je nachdem, ob die aktuelle Helligkeit zur Verfï¿½gung steht, oder nicht, werden verschiedene Hilfstexte generiert.
+  
+  //Je nachdem, ob die aktuelle Helligkeit zur Verfügung steht, oder nicht, werden verschiedene Hilfstexte generiert.
   if (brightness != -1) {
     var path = '/config/easymodes/etc/localization/' + language + '/MOTION_DETECTOR_1.txt';
   } else {
     var path = '/config/easymodes/etc/localization/' + language + '/MOTION_DETECTOR_0.txt';
   }
-
+  
   // die entsprechende Uebersetzungstabellen der Easymodes einlesen
   new Ajax.Request(path ,
     {
@@ -37074,14 +37074,14 @@ MD_getHelp = function(min, max, brightness, ready)
 
 MD_link_help = function()
 {
-  // Hilfetext fï¿½r die Art der Verweildauer des Motion-Detectors
+  // Hilfetext für die Art der Verweildauer des Motion-Detectors
   var help_txt = MD_getHelp();
-
+  
   MessageBox.show(help_txt[0]['title_kind_of'], help_txt[0]['help_kind_of'] ,"" ,450 , 260);
 };
 
 MD_catchBright_help = function(min, max, brightness, ready, condition) {
-  //Hilfetext fï¿½r die Helligkeitsschwelle des Motion-Detectors
+  //Hilfetext für die Helligkeitsschwelle des Motion-Detectors    
   var help_txt = MD_getHelp(min, max, brightness, ready);
 
   if (condition == "LT_LO") {
@@ -37094,7 +37094,7 @@ MD_catchBright_help = function(min, max, brightness, ready, condition) {
 
 MD_minInterval = function(id)
 {
-  var modus = $(id).selectedIndex; // 0 = klassisch, 1 = dynamisch
+  var modus = $(id).selectedIndex; // 0 = klassisch, 1 = dynamisch  
   var min_interval_txt = $('min_interval');
 
   var arId = id.split("_");
@@ -37103,13 +37103,13 @@ MD_minInterval = function(id)
   //var txt = "Mindestsendeabstand";
   var txt = translateKey("motionDetectorMinimumOnAirInterval");
 
-  if (modus == 0)
-  {
+  if (modus == 0) 
+  {  
     //txt = "Sendeabstand";
     txt = translateKey("motionDetectorOnAirInterval");
     var newEntry = new Option("240s", "4", false, true);
     min_interval.options[min_interval.length] = newEntry ;
-
+    
     min_interval.disabled = true;
   } else
   {
@@ -37117,17 +37117,17 @@ MD_minInterval = function(id)
     txt = translateKey("motionDetectorMinimumOnAirInterval");
   //  Mehr als 5 Eintraege vorhanden?
   //  min_interval.options[0].selected = true;
-    if (min_interval.length == 6)
+    if (min_interval.length == 6) 
     {
       min_interval.options[min_interval.length -1] = null;
       min_interval.options[min_interval.length -1] = null;
     }
-
-    if (min_interval.length == 5)
+    
+    if (min_interval.length == 5) 
     {
       min_interval.options[min_interval.length -1] = null;
     }
-
+    
     min_interval.disabled = false;
   }
 
@@ -37142,21 +37142,21 @@ MD_proofClassic = function(id)
 
   var min_interval = $(arId[0] + "_" + arId[1] + "_" + arId[2] + "_" + (parseInt(arId[3]) + 1));
 
-  if (min_interval.value == min_interval.length - 1)
+  if (min_interval.value == min_interval.length - 1) 
   {
     $(id).options[0].selected = true;
 
-  } else
+  } else 
   {
     $(id).options[1].selected = true;
   }
-
+  
   MD_minInterval(id);
 };
 
 MD_set_h_m_s = function(id_h, id_m, id_s)
 {
-
+  
   switch ($F(id_s)) {
 
   case "15":
@@ -37176,9 +37176,9 @@ MD_set_h_m_s = function(id_h, id_m, id_s)
     break;
   }
 
-  $(id_h).value = h;
-  $(id_m).value = m;
-  $(id_s).value = s;
+  $(id_h).value = h; 
+  $(id_m).value = m; 
+  $(id_s).value = s; 
 };
 
 MD_setMode = function(id_on_time_mode, channel, id_on_time)
@@ -37231,7 +37231,7 @@ ProofFreeTime = function(id, min, max)
 {
   var input = $(id);
   input.value = input.value.replace(/,/g,".");
-  //1
+  //1 
   var ausdr_float = /\d+.\d+/;
   var ausdr_int  = /\d+/;
   if (ausdr_float.test(input.value)) {var wert_float = ausdr_float.exec(input.value); wert_float = wert_float[0];}
@@ -37242,16 +37242,16 @@ ProofFreeTime = function(id, min, max)
   if (! wert_int) {wert = '00';} //2
   if (! isNaN(wert_int)) {wert = wert_int;}
   if (! isNaN(wert_float)) {wert = wert_float;}
-
-
+  
+   
   if (id.indexOf('hour_') != -1)
   {
 
     if (wert < min) {wert = min;}
-    if ((wert * 3600) > max)
-    {
+    if ((wert * 3600) > max) 
+    {  
       input.value = (max / 3600);
-
+    
       min_id = id.replace('hour_', 'min_');
       input = $(min_id);
       input.value = '00';
@@ -37259,19 +37259,19 @@ ProofFreeTime = function(id, min, max)
       sec_id = id.replace ('hour_', 'sec_');
       input = $(sec_id);
       input.value = '00';
-    }  else {input.value = wert;}
+    }  else {input.value = wert;} 
 
-  }
-  else
-  {
-    if (id.indexOf('min_') != -1)
+  } 
+  else 
+  { 
+    if (id.indexOf('min_') != -1) 
     {
       if (wert < min) {wert = min;}
       hour_id = id.replace('min_', 'hour_');
       hour_input = $(hour_id);
       if (hour_input.value >= (max / 3600)) {input.value = '00';} else {input.value = wert;}
-    }
-    else
+    } 
+    else 
     {
        if(id.indexOf('sec_') != -1)
       {
@@ -37283,10 +37283,10 @@ ProofFreeTime = function(id, min, max)
     }
   }
 
-  //3
+  //3 
   var prn = id.split("_")[1];
   var pref = 1;
-
+  
   try
   {
     x = $F("md_min_interval_" + prn + "_" + pref);
@@ -37295,19 +37295,19 @@ ProofFreeTime = function(id, min, max)
   }
   catch (ergebniss)
   {
-    if (ergebniss == "true")
+    if (ergebniss == "true") 
     {
       var hit = 1;
     } else hit = 0;
   }
-
+  
   if ($F('dev_descr_sender_tmp').split("-")[0] == "MOTION_DETECTOR" && hit == 1)
   {
     var prn = id.split("_")[1];
     var pref = 1;
     var md_verweild = "md_verweildauer_" + prn + "_" + pref;
     var md_min_interval = "md_min_interval_" + prn + "_" + pref;
-
+  
     // enthaelt den Wert des Geraeteparameters 'SHORT_ON_TIME_MODE'. Moegl. Werte 0 und 1
     var absolute_minimal = $F(md_min_interval).split(",")[1];
 
@@ -37321,19 +37321,19 @@ ProofFreeTime = function(id, min, max)
       if (ergebniss == true) md_verweildauer = true;
       else md_verweildauer = false;
     }
-
+    
     //if (md_verweildauer == true) {$('md_verweildauer').data = "Verweildauer";}
     if (md_verweildauer == true) {$('md_verweildauer').data = translateKey("motionDetectorRetentionTime");}
 
-    if (absolute_minimal == 1) //wenn Modus 'minimal'
+    if (absolute_minimal == 1) //wenn Modus 'minimal' 
     {
       var profile = $(id).name.split("_");
-      //4
+      //4   
       var param_tmp = $('separate_receiver_' + profile[1] + "_" + profile[2]).name.split("|");
       param_tmp = param_tmp[0].split("_");
       var param = param_tmp[1] + "_" + param_tmp[2];
-
-      if (param == "ON_TIME" || param == "OFF_TIME")
+    
+      if (param == "ON_TIME" || param == "OFF_TIME") 
       {
         var min_interval = $F(md_min_interval).split(",")[0]; // enthaelt den Wert des Kanalparameters 'Mindestsendeabstand'. Moegl. Werte 0, 1, 2, 3, 4
         var min_value = new Array(15, 30, 60, 120, 240);
@@ -37341,12 +37341,12 @@ ProofFreeTime = function(id, min, max)
         var m = h.replace('hour_', 'min_');
         var s = h.replace('hour_', 'sec_');
         var t = (parseFloat($F(h)) * 3600) + (parseFloat($F(m)) * 60) + parseFloat($F(s));
-
-        if (t < (min_value[min_interval] + 1) && $(id).selectedIndex !== 0 )
+        
+        if (t < (min_value[min_interval] + 1) && $(id).selectedIndex !== 0 ) 
         {
-          $(s).value = min_value[min_interval];
+          $(s).value = min_value[min_interval]; 
           MD_set_h_m_s(h, m, s);
-        }
+        } 
       }
       //if (md_verweildauer == true) {$('md_verweildauer').data = "Mindestverweildauer";}
       if (md_verweildauer == true) {$('md_verweildauer').data = translateKey("motionDetectorMinimumRetentionTime");}
@@ -37357,7 +37357,7 @@ ProofFreeTime = function(id, min, max)
 ProofFreePercent = function(id, min, max)
 {
   var input = document.getElementById(id);
-
+  
   var ausdr_float = /\d+.\d+/;
   var ausdr_int  = /\d+/;
   if (ausdr_float.test(input.value))
@@ -37365,7 +37365,7 @@ ProofFreePercent = function(id, min, max)
     var wert_float = ausdr_float.exec(input.value);
     wert_float = wert_float[0];
   }
-  if (ausdr_int.test(input.value))
+  if (ausdr_int.test(input.value)) 
   {
     var wert_int = ausdr_int.exec(input.value);
     wert_int = wert_int[0];
@@ -37373,22 +37373,22 @@ ProofFreePercent = function(id, min, max)
   if (min == 0) { min = '00'; }
   var wert = '00';
 
-  if (!(wert_int))          { wert = '00'; } //1
+  if (!(wert_int))          { wert = '00'; } //1 
   if (!(isNaN(wert_int)))   { wert = wert_int; }
   if (!(isNaN(wert_float))) { wert = wert_float; }
-
+  
   if (wert < (min * 100)) { wert = (min * 100); }
   if (wert > (max * 100)) { wert = (max * 100); }
-
+    
   input.value = wert;
 };
 
 ProofFreeTemp = function(id, min, max, unit)
 {
   var input = document.getElementById(id);
-  var ausdr_float = /\d+.\d+/;
+  var ausdr_float = /\d+.\d+/; 
   var ausdr_int  = /\d+/;
-  if (ausdr_float.test(input.value))
+  if (ausdr_float.test(input.value)) 
   {
     var wert_float = ausdr_float.exec(input.value);
     wert_float = wert_float[0];
@@ -37406,22 +37406,22 @@ ProofFreeTemp = function(id, min, max, unit)
     max = ((max * 9) / 5) + 32 ;
   }
 
-  if (!(wert_int))          {wert = min; }    //2
+  if (!(wert_int))          {wert = min; }    //2 
   if (!(isNaN(wert_int)))   {wert = wert_int; }
   if (!(isNaN(wert_float))) {wert = wert_float; }
 
   if (wert < min) { wert = min; }
   if (wert > max) { wert = max; }
-
+    
   input.value = wert;
 };
 
 ProofFreeValue = function(id, min, max)
 {
   var input = document.getElementById(id);
-  var ausdr_float = /\d+.\d+/;
+  var ausdr_float = /\d+.\d+/; 
   var ausdr_int  = /\d+/;
-  if (ausdr_float.test(input.value))
+  if (ausdr_float.test(input.value)) 
   {
     var wert_float = ausdr_float.exec(input.value);
     wert_float = wert_float[0];
@@ -37433,46 +37433,46 @@ ProofFreeValue = function(id, min, max)
   }
   var wert     = min;
 
-  if (!(wert_int))          { wert = min; } //1
+  if (!(wert_int))          { wert = min; } //1 
   if (!(isNaN(wert_int)))   { wert = wert_int; }
   if (!(isNaN(wert_float))) { wert = wert_float; }
 
 
   if (wert < min) {wert = min; }
   if (wert > max) {wert = max; }
-
+    
   input.value = wert;
 };
 
 add_HMW_onchange_ = function(ch_type)
-{
-  switch (ch_type) {
-
+{  
+  switch (ch_type) { 
+    
     case "INPUT_OUTPUT":
 
       var inputType = document.getElementsByName("INPUT_TYPE");
       var behaviour = document.getElementsByName("BEHAVIOUR");
 
-      for (var loop=0;loop < inputType.length;loop++)
+      for (var loop=0;loop < inputType.length;loop++) 
       {
         var onchange = document.createAttribute("onchange");
         onchange.nodeValue= "alert('A')";
         inputType[loop].setAttributeNode(onchange);
       }
-
-      for (loop=0;loop < behaviour.length;loop++)
+      
+      for (loop=0;loop < behaviour.length;loop++) 
       {
         var onchange = document.createAttribute("onchange");
         onchange.nodeValue= "alert('B')";
         behaviour[loop].setAttributeNode(onchange);
       }
       break;
-
+    
     case "KEY" :
-
+      
       var inputType = document.getElementsByName("INPUT_TYPE");
-
-      for (var loop=0;loop < inputType.length;loop++)
+      
+      for (var loop=0;loop < inputType.length;loop++) 
       {
         var onchange = document.createAttribute("onchange");
         onchange.nodeValue= "alert('C')";
@@ -37488,19 +37488,19 @@ add_HMW_onchange_ = function(ch_type)
 
 HMW_setIOType = function(elem)
 {
-  // Zeigt die einstellbaren Parameter des Kanals entsprechend der gewï¿½hlten Einstellung an.
+  // Zeigt die einstellbaren Parameter des Kanals entsprechend der gewählten Einstellung an.
   // Es wird zwischen Schalter und Taster unterschieden.
-
-  // gewï¿½hlte Einstellung
+  
+  // gewählte Einstellung
   var sel = elem.selectedIndex;
-
+  
   // Schalter (0)  oder Taster (1)
   var type = elem.options[sel].value;
-
+  
   var tr = elem.parentNode.parentNode.nextSibling.nextSibling;
 
   switch (type) {
-
+    
     case "0":
       tr.style.visibility = "hidden";
       tr.style.display = "none";
@@ -37518,25 +37518,25 @@ HMW_setIOType = function(elem)
 
 HMW_setBehaviour = function(id)
 {
-  // Zeigt die einstellbaren Parameter des Kanals entsprechend der gewï¿½hlten Einstellung an.
+  // Zeigt die einstellbaren Parameter des Kanals entsprechend der gewählten Einstellung an.
   // Es wird zwischen Ein-  und Ausgang unterschieden.
 
   // wird von tcl erledigt, da bei Ein- u. Ausgang verschiedene Parameter verwendet werden,
-  // muï¿½ die ï¿½nderung zuerst an den Aktor gesendet werden.
+  // muß die Änderung zuerst an den Aktor gesendet werden.
 };
 
 HMW_WebUIsetChannel = function(id, ch_type)
 {
   id = id.split("=")[1];
-  id = id.substring(1, id.length -1);
-
+  id = id.substring(1, id.length -1); 
+  
   var elem = document.getElementById(id);
-
+  
   switch (ch_type) {
-
+    
     case "INPUT_OUTPUT":
-
-      switch (elem.name) {
+      
+      switch (elem.name) { 
         case "INPUT_TYPE":
           HMW_setIOType(elem);
           $(id).observe('change', function(event) {HMW_setIOType(elem);});
@@ -37547,11 +37547,11 @@ HMW_WebUIsetChannel = function(id, ch_type)
         default:
           break;
       }
-
+    
     break;
 
     case "KEY":
-
+      
       switch (elem.name) {
         case "INPUT_TYPE":
           HMW_setIOType(elem);
@@ -37559,10 +37559,10 @@ HMW_WebUIsetChannel = function(id, ch_type)
         break;
         default:
           break;
-      }
-
+      }  
+    
     break;
-  }
+  }  
 };
 
 
@@ -37614,7 +37614,7 @@ RF_existsLink = function(deviceType, ch, ch_type) {
 
 HMW_existsLink = function(channel, ch_type)
 {
-  //var hint = document.createTextNode("Es besteht mindestens eine Verknï¿½pfung. Daher sind einige Funktionen gesperrt.");
+  //var hint = document.createTextNode("Es besteht mindestens eine Verknüpfung. Daher sind einige Funktionen gesperrt.");
   var hint = document.createTextNode(translateKey("hintLinkExists"));
   var new_tr = document.createElement("tr");
   var new_td = document.createElement("td");
@@ -37626,26 +37626,26 @@ HMW_existsLink = function(channel, ch_type)
   if ($$('.ch_' + channel).length == 0)
   {
     switch (ch_type) {
-
+    
       case "INPUT_OUTPUT":
         var elem1 = $('separate_CHANNEL_' + channel + '_3'); // Eingangsbeschaltung
         var elem2 = $('separate_CHANNEL_' + channel + '_6'); // Funktion Eingang
         var elem3 = $('separate_CHANNEL_' + channel + '_4'); // Funktion Ausgang
-
-        if (elem1.name == 'INPUT_TYPE')
+        
+        if (elem1.name == 'INPUT_TYPE') 
         {
           elem1.disabled = true;
           elem2.disabled = true;
-
+        
           var td = elem1.parentNode.parentNode.parentNode.appendChild(new_tr).appendChild(new_td);
           td.setAttributeNode(colspan);
           td.setAttributeNode(class_attention);
           td.appendChild(hint);
-        }
+        } 
         else
         {
           elem3.disabled = "true";
-
+        
           var td = elem3.parentNode.parentNode.parentNode.appendChild(new_tr).appendChild(new_td);
           td.setAttributeNode(colspan);
           td.setAttributeNode(class_attention);
@@ -37656,14 +37656,14 @@ HMW_existsLink = function(channel, ch_type)
       case "KEY":
         var elem1 = $('separate_CHANNEL_' + channel + '_3'); // Eingangsbeschaltung
         elem1.disabled = true;
-
+      
         var td = elem1.parentNode.parentNode.parentNode.appendChild(new_tr).appendChild(new_td);
         td.setAttributeNode(colspan);
         td.setAttributeNode(class_attention);
         td.appendChild(hint);
         break;
-
-      default:
+    
+      default: 
         break;
     }
   }
@@ -37711,13 +37711,13 @@ Virtual_DimmerChannel_help = function(ch, lc)
 WDS_DisableOnTime = function(selectelem)
 {
   // Schaltet beim WATERDETECTIONSENSOR die Einschaltdauer
-  // im Profil ï¿½nderungsignal / Subset Aus bei ....
+  // im Profil Änderungsignal / Subset Aus bei ....
   // unsichtbar
 
     if (selectelem.selectedIndex >= 5)
   {
     $('on_time').style.visibility = 'hidden';
-  }
+  }  
   else
   {
     $('on_time').style.visibility = 'visible';
@@ -37726,8 +37726,8 @@ WDS_DisableOnTime = function(selectelem)
 
 WEATHER_change_thres = function(id)
 {
-  //1
-  switch_dir = $('separate_receiver_' +  id).selectedIndex; //2
+  //1 
+  switch_dir = $('separate_receiver_' +  id).selectedIndex; //2 
   WEATHER_check_dir();
 };
 
@@ -37739,7 +37739,7 @@ WEATHER_check_dir = function()
 
   var ein;
   var aus;
-  //1
+  //1 
 
   if (sensorTypeDesc != newSensor) {
     if (switch_dir) {
@@ -37807,10 +37807,10 @@ WEATHER_check_dir = function()
 };
 
 WEATHER_check_expert = function()
-{
+{  
   //1
-
-  try //2
+    
+  try //2 
   {
     high = $F('separate_sender_0_3');
     if (high) { throw "true"; }
@@ -37820,10 +37820,10 @@ WEATHER_check_expert = function()
   {
     if (ergebniss == "true")
     {
-      high = $F('separate_sender_0_3');
+      high = $F('separate_sender_0_3');  
       low  = $F('separate_sender_0_4');
-      if (parseInt(low) > parseInt(high))  return true; //3
-      else return false;
+      if (parseInt(low) > parseInt(high))  return true; //3 
+      else return false;  
     } else return "noExpert";
   }
 };
@@ -37831,7 +37831,7 @@ WEATHER_check_expert = function()
 WEATHER_check_profile_switch = function(selectelem)
 {
   var actor = $F('dev_descr_receiver_tmp');
-
+  
   if (actor != "SWITCH") {switch_on_off = false; return 0;}
 
   if ((((selectelem.options[selectelem.selectedIndex].value) == "1") && ($('sender_profiles').options[$('sender_profiles').selectedIndex].value == "1")) ||
@@ -37839,10 +37839,10 @@ WEATHER_check_profile_switch = function(selectelem)
       (((selectelem.options[selectelem.selectedIndex].value) == "0") && ($('sender_profiles').options[$('sender_profiles').selectedIndex].value == "1") && ($('receiver_profiles').options[1].value == "1")) ||
       (((selectelem.options[selectelem.selectedIndex].value) == "1") && ($('receiver_profiles').options[$('receiver_profiles').selectedIndex].value == "0") && ($('receiver_profiles').options[1].value == "1")))
   {
-    switch_on_off = true; //1
+    switch_on_off = true; //1 
     return 1;
   }
-  else
+  else 
   {
     switch_on_off = false; //2
     return 0;
@@ -37851,7 +37851,7 @@ WEATHER_check_profile_switch = function(selectelem)
 
 WEATHER_check_weather = function()
 {
-  //1
+  //1 
   var link = "", linkPeer = "";
   try {
     link = $('dev_descr_sender_tmp').value.split("-");
@@ -37867,67 +37867,67 @@ WEATHER_check_weather = function()
 
 WEATHER_put_desc = function(id,x)
 {
-    //1
-
-    if ((WEATHER_check_expert()) && (x == 0))   //2
+    //1 
+    
+    if ((WEATHER_check_expert()) && (x == 0))   //2 
     {
 //    $('sender_profiles').options[0].selected = true;
 //    $('separate_sender_1_1').options[4].selected = true;
 //    $('separate_sender_1_2').options[2].selected = true;
-    }
-    else if (WEATHER_check_expert() != "noExpert" && x == 1) //3
+    } 
+    else if (WEATHER_check_expert() != "noExpert" && x == 1) //3 
     {
-      $('separate_sender_0_3_temp').value = $('separate_sender_1_1').options[$('separate_sender_1_1').selectedIndex].value;
-      $('separate_sender_0_4_temp').value = $('separate_sender_1_2').options[$('separate_sender_1_2').selectedIndex].value;
+      $('separate_sender_0_3_temp').value = $('separate_sender_1_1').options[$('separate_sender_1_1').selectedIndex].value; 
+      $('separate_sender_0_4_temp').value = $('separate_sender_1_2').options[$('separate_sender_1_2').selectedIndex].value; 
   }
-
-    var upper_index = $('separate_sender_1_1').selectedIndex; //4
-    var lower_index = $('separate_sender_1_2').selectedIndex; //5
-
+    
+    var upper_index = $('separate_sender_1_1').selectedIndex; //4 
+    var lower_index = $('separate_sender_1_2').selectedIndex; //5 
+    
     var desc = new Array();
     var upper_desc = document.getElementById('upper_desc');
     var lower_desc = document.getElementById('lower_desc');
     var elem = id.split("_");
-
-    //6
+    
+    //6 
     $('separate_sender_1_1').options[0].disabled = true;
     $('separate_sender_1_1').options[0].style.color = WebUI.getColor("grayText");
     if ($('separate_sender_1_1').selectedIndex == 0) { $('separate_sender_1_1').options[1].selected = true; }
-
+    
     for (var loop = 1; loop <= 12; loop++)
     {
-      $('separate_sender_1_1').options[loop].style.color = WebUI.getColor("windowText"); //7
+      $('separate_sender_1_1').options[loop].style.color = WebUI.getColor("windowText"); //7 
       $('separate_sender_1_1').options[loop].disabled = false;
     }
-
+  
     if ($('lower_tab').style.display == "block")
     {
       for (loop = 1; loop <= lower_index; loop++)
       {
-        $('separate_sender_1_1').options[loop].style.color = WebUI.getColor("grayText"); //8
+        $('separate_sender_1_1').options[loop].style.color = WebUI.getColor("grayText"); //8 
         $('separate_sender_1_1').options[loop].disabled = true;
       }
     }
-
+  
     if ((lower_index >= upper_index) && ($('lower_tab').style.display == "block") && (switch_on_off == true))
-    {
-      if (lower_index <= 11)
+    {  
+      if (lower_index <= 11)   
       {
         $('separate_sender_1_1').selectedIndex = lower_index + 1;
         if (WEATHER_check_expert() != "noExpert")
-        $('separate_sender_0_3_temp').value = $('separate_sender_1_1').options[$('separate_sender_1_1').selectedIndex].value;
+        $('separate_sender_0_3_temp').value = $('separate_sender_1_1').options[$('separate_sender_1_1').selectedIndex].value; 
       }
       else $('separate_sender_1_1').selectedIndex = 12;
     }
-
+ 
     for (loop = 0; loop <= 12; loop++) {
       desc[loop] = document.createTextNode(unescape(translateKey("windDesc"+loop)));
     }
-
+  
     switch (elem[3]) {
       case ("1"):
         upper_desc.replaceChild(desc[$(id).selectedIndex], upper_desc.firstChild);
-        break;
+        break;  
       case ("2"):
         lower_desc.replaceChild(desc[$(id).selectedIndex], lower_desc.firstChild);
         break;
@@ -37948,52 +37948,52 @@ WEATHER_translate= function() {
 WEATHER = function(selectelem)
 {
   var loop;
-
-  if (WEATHER_check_weather()) //1
+  
+  if (WEATHER_check_weather()) //1 
   {
     if ((((selectelem.options[selectelem.selectedIndex].value) == "2") && ($('sender_profiles').options[$('sender_profiles').selectedIndex].value == "1")) ||
         (((selectelem.options[selectelem.selectedIndex].value) == "1") && ($('receiver_profiles').options[$('receiver_profiles').selectedIndex].value == "2")))
-
-    {
+    
+    {  
     //2
-      switch_on_off = false;
+      switch_on_off = false;  
 
       if ($('lower_tab')) {
         $('lower_tab').style.display = "none";
       }
       $('separate_sender_1_2').options[0].selected = true; // Ausschaltschwelle auf 0 setzten
-
+      
       //var ein = document.createTextNode("Einschaltschwelle");
       var ein = document.createTextNode(translateKey("upperStormThreshold"));
       $('ein').replaceChild(ein, $('ein').firstChild);  //3
-
+      
       $('separate_sender_1_1').options[0].disabled = true; //4
-      $('separate_sender_1_1').options[0].style.color = WebUI.getColor("grayText"); //5
-
+      $('separate_sender_1_1').options[0].style.color = WebUI.getColor("grayText"); //5 
+      
       for (loop = 1; loop <= 12; loop++)
       {
         $('separate_sender_1_1').options[loop].style.color = WebUI.getColor("windowText"); //6
         $('separate_sender_1_1').options[loop].disabled = false; //7
       }
-  }
-    else
+  } 
+    else 
     {
-      try
+      try 
       {
-
-        if (WEATHER_check_profile_switch(selectelem) == 1)  //8
+       
+        if (WEATHER_check_profile_switch(selectelem) == 1)  //8    
         {
-          throw "block";
+          throw "block"; 
         } else throw "none";
-      }
-      catch (ergebniss)
+      }   
+      catch (ergebniss) 
       {
         if (ergebniss == "none") //9
-        {
-          switch_on_off = false;
-          $('lower_tab').style.display = "none";
+        {  
+          switch_on_off = false;  
+          $('lower_tab').style.display = "none";  
           $('separate_sender_1_2').options[0].selected = true; // Ausschaltschwelle auf 0 setzten
-
+          
           $('separate_sender_1_1').options[0].disabled = true; //10
           $('separate_sender_1_1').options[0].style.color = WebUI.getColor("grayText") ; //11
 
@@ -38003,27 +38003,27 @@ WEATHER = function(selectelem)
             $('separate_sender_1_1').options[loop].style.color = WebUI.getColor("windowText"); //12
           }
           WEATHER_check_dir(); //13
-        }
+        } 
         else if (ergebniss == "block") //14
         {
-
-          $('lower_tab').style.display = "block"; //15
-
+        
+          $('lower_tab').style.display = "block"; //15  
+        
           var selected_high = $('separate_sender_1_1').selectedIndex;
           var selected_low = $('separate_sender_1_2').selectedIndex;
-
+          
           if (selected_low >= selected_high)  //16
           {
             $('separate_sender_1_2').options[0].selected = true;
-
+            
             $('separate_sender_1_1').options[0].style.color = WebUI.getColor("grayText") ; //17
             $('separate_sender_1_1').options[0].disabled = true;
-
+            
             //var desc = document.createTextNode(unescape("Keine Luftbewegung, Rauch steigt senkrecht empor."));
             //var desc = document.createTextNode(unescape(translateKey("hintNoAirFlow")));
             var desc = document.createTextNode(unescape(translateKey("windDesc0")));
             lower_desc.replaceChild(desc, lower_desc.firstChild);
-          }
+          } 
           else //18
           {
             for (loop = 0; loop <= $('separate_sender_1_2').selectedIndex; loop++)
@@ -38032,11 +38032,11 @@ WEATHER = function(selectelem)
               $('separate_sender_1_1').options[loop].style.color = WebUI.getColor("grayText"); //19
             }
           }
-
-          prn = selectelem.options[selectelem.selectedIndex].value; //20
-
-          switch_dir = $('separate_receiver_' + prn + '_1').selectedIndex; //21
-          WEATHER_check_dir(); //22
+          
+          prn = selectelem.options[selectelem.selectedIndex].value; //20 
+            
+          switch_dir = $('separate_receiver_' + prn + '_1').selectedIndex; //21 
+          WEATHER_check_dir(); //22 
         }
       }
     }
@@ -38052,20 +38052,20 @@ isJSFunc_active = function(fbib) {
 load_JSFunc = function(fbib) {
   //fbib gibt die gewuenschte Funktionsbibliothek incl. Pfad an
 
-  if (isJSFunc_active(fbib) == false) // falls die Bibliothek noch nicht geladen wurde
+  if (isJSFunc_active(fbib) == false) // falls die Bibliothek noch nicht geladen wurde 
   {
-//    alert('Bib wird geladen');
-      new Ajax.Request(fbib,
+//    alert('Bib wird geladen'); 
+      new Ajax.Request(fbib, 
         {
-        method:   'get',
-
+        method:   'get', 
+        
         asynchronous: false,
 
         onSuccess:  function(success) {
                 eval(success.responseText);
                 exists_bib[fbib] = true; //Bibliothek geladen
               },
-
+        
         onFailure:  function(failure) {
                 alert(fbib + ': ' + failure.statusText);
               }
@@ -38085,23 +38085,23 @@ rfd_test = function() {
   homematic('Interface.isPresent', {"interface": "BidCos-RF"}, function(result, error) {
   if (result === true)
   {
-    alert("rfd lï¿½uft");
+    alert("rfd läuft");
   }
   else
   {
-    alert(Object.toJSON(error) + "  Achtung: rfd lï¿½uft nicht!");
+    alert(Object.toJSON(error) + "  Achtung: rfd läuft nicht!");
   }
   });
 };
-
+  
 // language = getLang();//"de";
 
 setLanguage = function(lang)
 {
   //Funktion wird zur Zeit nicht genutzt
 
-  //Sprache dokumentenï¿½bergreifend speichern
-  $('language').value = lang;
+  //Sprache dokumentenübergreifend speichern 
+  $('language').value = lang; 
   //  language 0 = de , 1 = en
 };
 
@@ -38110,7 +38110,7 @@ Ajax_failure = function(file, failure)
   var msg = '<div style=text-align:center>';
     msg += '<br/><br/>Error while loading the following file:<br/><br/>';
     msg += file + '<br/><br/>';
-    msg += '<span style=font-weight:bold>' + failure + '</span></div>';
+    msg += '<span style=font-weight:bold>' + failure + '</span></div>'; 
 
   MessageBox.show('File request failed!', msg, '', 480,120);
 };
@@ -38142,14 +38142,14 @@ getLangInfo = function(sender, actor)
     asynchronous: false,
     onSuccess: function(success) {
             set_description = "[{".concat(success.responseText);
-
+            
           },
 
     onFailure: function(failure) {
             Ajax_failure(path_1, failure.statusText);
           }
     });
-
+  
   new Ajax.Request(path_2,
     {
     method:    'get',
@@ -38190,8 +38190,8 @@ getLangInfo = function(sender, actor)
             Ajax_failure(global_generic, failure.statusText);
           }
     });
-
-     var dummy = "\"dummy\" : \"dummy\"}]" ;
+    
+     var dummy = "\"dummy\" : \"dummy\"}]" ; 
     localized = eval(set_description.concat(set_pname).concat(generic).concat(dummy));
 };
 
@@ -38212,7 +38212,7 @@ getLangInfo_Special = function(file)
 
     onFailure: function(failure) {
             Ajax_failure(path, failure.statusText);
-
+          
           }
     });
 
@@ -38240,9 +38240,9 @@ translate_newProfile = function()
             Ajax_failure(path, failure.statusText);
           }
     });
-
+  
   set_newprofile[0]  = Object.extend(set_newprofile[0], localized[0]);
-
+  
   $('id_header').innerHTML = TrimPath.processDOMTemplate('title_SaveNewProfile', set_newprofile[0]);
   $('id_body').innerHTML = TrimPath.processDOMTemplate('id_body_textarea', set_newprofile[0]);
   $('id_footer').innerHTML = TrimPath.processDOMTemplate('id_footer_textarea', set_newprofile[0]);
@@ -38263,7 +38263,7 @@ translate = function(id, group)
     if (isNaN(isUser)) {   // wenn kein Userprofil
       $('param_' + id).id = group + '_param_' + id;
       $('profile_' + id).id = group + '_profile_' + id;
-      // hier werden die Platzhalter der EasyModes durch die ï¿½bersetzten Texte ersetzt.
+      // hier werden die Platzhalter der EasyModes durch die übersetzten Texte ersetzt.   
       $(group + '_param_' + id).innerHTML = TrimPath.processDOMTemplate(group + '_profile_' + id, localized[0]);
     } else translate_usrprofile(id, group);
   }
@@ -38271,23 +38271,23 @@ translate = function(id, group)
 
 translate_usrprofile = function(userid, group)
 {
-  // wenn es sich um ein Userprofil handelt, mï¿½ssen die IDs angepasst werden.
+  // wenn es sich um ein Userprofil handelt, müssen die IDs angepasst werden.
   // ansonsten kann nicht korrekt uebersetzt werden
 
   var loop ;
   var x = [];
   var span = document.getElementsByTagName("span");
   var txtarea = document.getElementsByTagName("textarea");
-
-  var pruefling = "descrTemplate_" + group + "_" + userid;
-
+  
+  var pruefling = "descrTemplate_" + group + "_" + userid; 
+  
   // Anpassung der IDs
   for (loop = 0; loop < span.length; loop++) {
     if ( span[loop].className == pruefling ) {
       span[loop].nextSibling.id = group + "_param_" + userid;
       txtarea[0].id = group + "_profile_" + userid;
-
-      // hier werden die Platzhalter durch die ï¿½bersetzten Texte ersetzt.
+      
+      // hier werden die Platzhalter durch die übersetzten Texte ersetzt.   
     //  $('param_' + userid).innerHTML = TrimPath.processDOMTemplate('profile_' + userid, localized[0]);
       $(group + '_param_' + userid).innerHTML = TrimPath.processDOMTemplate(group + '_profile_' + userid, localized[0]);
       break;
@@ -38541,19 +38541,19 @@ configMetadata = new function()
       onComplete: function(resp) {
         if ($(ctrlId)) {
           if (callStrFunc) {
-            if (callStrFunc == CALL_STRCUT)
+            if (callStrFunc == CALL_STRCUT) 
               $(ctrlId).innerHTML = strCut(resp.responseText, true, true);
-            if (callStrFunc == CALL_SPACECUT)
+            if (callStrFunc == CALL_SPACECUT) 
               $(ctrlId).innerHTML = spaceCutHtmlIf(resp.responseText, 1);
           }
           else
             $(ctrlId).innerHTML = resp.responseText;
         }
-      }
+      } 
     };
-    new Ajax.Request(url, opts);
+    new Ajax.Request(url, opts);  
   };
-
+  
   this.saveProfileParam = function(object_id, profile_id, param_id, value) {
     var url = "/configapp/metadata.cgi";
     var pb = '';
@@ -38565,9 +38565,9 @@ configMetadata = new function()
       postBody: pb,
       sendXML: false
     };
-    new Ajax.Request(url, opts);
+    new Ajax.Request(url, opts);  
   };
-
+  
   this.saveBidcosInterface = function(object_id, iface_id, roaming) {
     var url = "/configapp/metadata.cgi";
     var pb = '';
@@ -38580,9 +38580,9 @@ configMetadata = new function()
       postBody: pb,
       sendXML: false
     };
-    new Ajax.Request(url, opts);
+    new Ajax.Request(url, opts);  
   };
-
+  
 }();
 
 configRefresher = Class.create();
@@ -38594,7 +38594,7 @@ configRefresher.prototype =
     this.updating = false;
     this.ajax = null;
     this.pe = new PeriodicalExecuter(this.refresh, iPollingInterval);
-    this.refresh();
+    this.refresh();    
   },
   refresh: function()
   {
@@ -38628,7 +38628,7 @@ configRefresher.prototype =
   }
 };
 
-// nur fï¿½r das Konfigtool implementiert, Code aus der Datei /www/configapp/js/function.js der Version 1.4
+// nur für das Konfigtool implementiert, Code aus der Datei /www/configapp/js/function.js der Version 1.4
 //ID_BIDCOS_INTERFACE = 1024;
 
 changeBidcosIface = function(chnId, ctrlId) {
@@ -38644,13 +38644,14 @@ changeBidcosIface = function(chnId, ctrlId) {
 setServiceMessage = function() {
   var service_count = (homematic("Interface.getServiceMessageCount", {"interface": "default"}));
   $("msgServices").firstChild.data = "Servicemeldungen (" + service_count + ")";
-
+          
   if (service_count == 0)
   {
-    $("imgServices").src = "/ise/img/dot/green.png";
+    $("imgServices").src = "/ise/img/dot/green.png"; 
   } else {
-    $("imgServices").src = "/ise/img/dot/yellow.png";
+    $("imgServices").src = "/ise/img/dot/yellow.png"; 
   }
-
+                                       
   return service_count;
 };
+

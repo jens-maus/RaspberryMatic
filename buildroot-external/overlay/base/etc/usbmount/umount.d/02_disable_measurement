@@ -1,0 +1,5 @@
+#!/bin/sh
+
+rm "/var/status/USBinitialised"
+# CCU2 compatibility
+rm "/var/status/SDinitialised"

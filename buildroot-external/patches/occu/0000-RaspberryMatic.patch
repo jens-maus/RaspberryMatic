@@ -141,12 +141,13 @@
  
  ##
  #######################################################################
-@@ -440,6 +489,6 @@
+@@ -439,7 +488,6 @@
+ ##
  ## custom includes like vhosts.
  ##
- #include "conf.d/config.conf"
+-#include "conf.d/config.conf"
 -#include_shell "cat /etc/lighttpd/vhosts.d/*.conf"
-+include_shell "test -d /etc/config/lighttpd && cat /etc/config/lighttpd/*.conf"
++include "/etc/config/lighttpd/*.conf"
  ##
  #######################################################################
 --- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/modules.conf.orig

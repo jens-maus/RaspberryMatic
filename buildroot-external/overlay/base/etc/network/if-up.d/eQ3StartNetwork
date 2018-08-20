@@ -27,7 +27,7 @@ echo -n "${IFACE}:"
 # only continue if this network interface exists
 if [[ ! -L "/sys/class/net/${IFACE}" ]]; then
   echo -n " missing, "
-  exit 0
+  exit 1
 fi
 
 # only continue if another interface hasn't
@@ -65,7 +65,7 @@ case "${IFACE}" in
     if [[ "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; then
       /sbin/ip link set ${IFACE} down
       echo -n ", no link, "
-      exit 0
+      exit 1
     fi
   ;;
 
@@ -80,7 +80,7 @@ case "${IFACE}" in
       # make sure that the wifi power is disabled
       # if not required
       /usr/sbin/rfkill block wlan
-      exit 0
+      exit 1
     fi
   ;;
 esac

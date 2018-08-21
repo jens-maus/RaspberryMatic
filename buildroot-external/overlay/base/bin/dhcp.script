@@ -26,8 +26,8 @@ handle_renew() {
   if [[ ${nfsroot} == false ]]; then
     # make sure we can deal with DHCP servers not providing broadcast or subnet
     [[ -n "${broadcast}" ]] && BROADCAST="broadcast ${broadcast}"
-    [[ -n "${subnet}" ]] && NETMASK="/${subnet}"
-    /sbin/ip addr add ${ip}${NETMASK} ${BROADCAST} dev ${interface}
+    [[ -n "${subnet}" ]] && NETMASK="netmask ${subnet}"
+    /sbin/ifconfig ${interface} ${ip} ${BROADCAST} ${NETMASK}
 
     # update the info in /etc/config/netconfig
     eq3configcmd netconfigcmd -i ${ip} -n ${subnet} -g ${router}

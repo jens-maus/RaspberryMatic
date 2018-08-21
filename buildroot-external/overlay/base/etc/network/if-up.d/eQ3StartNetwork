@@ -152,7 +152,10 @@ case "${MODE}" in
     # we checked the link state already way earlier
     touch /var/status/hasLink
 
-    /sbin/ip addr add ${IP}/${NETMASK} dev ${IFACE}
+    # use ifconfig so that broadcast address is correctly calculated
+    /sbin/ifconfig ${IFACE} ${IP} netmask ${NETMASK}
+
+    # reset default gateway
     /sbin/ip route del default 2>/dev/null
     /sbin/ip route add default via ${GATEWAY}
 

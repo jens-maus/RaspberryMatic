@@ -11,11 +11,10 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 
 	define OCCU_PRE_PATCH
 		cp $(OCCU_PKGDIR)/Makefile $(@D)
-	endef
+  endef
 	OCCU_PRE_PATCH_HOOKS += OCCU_PRE_PATCH
 
 	define OCCU_FINALIZE_TARGET
-
 		# setup /usr/local/etc/config
 		mkdir -p $(TARGET_DIR)/usr/local/etc/config
 		rm -rf $(TARGET_DIR)/etc/config
@@ -64,9 +63,9 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 
 		# remove unrequired ReGaHss versions
 		rm -f $(TARGET_DIR)/bin/ReGaHss.*
-	endef
-
+  endef
 	TARGET_FINALIZE_HOOKS += OCCU_FINALIZE_TARGET
+
 endif
 
 ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_ONLY),y)

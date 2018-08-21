@@ -7,30 +7,35 @@ if [ -f /tmp/.runningFirmwareUpdate ]; then
   exit 1
 fi
 
-echo -ne "[1/3] Do Factory Reset. Check requirements ...<br>"
+echo -ne "[1/3] Factory Reset: Checking requirements... "
 
-umount /userfs
-if [ $? -ne 0 ]; then
-	echo "INFO user filesystem not mounted.<br>"
-fi
-
-if [ -e /dev/mmcblk0p3 ]
-then
-	echo "INFO user partition exists.<br>"
+DEVNAME=$(/sbin/blkid | grep userfs | cut -d: -f1)
+if [ -n "${DEVNAME}" ] && [ -e "${DEVNAME}" ]; then
+  umount -f "${DEVNAME}"
+  echo "INFO: user partition '${DEVNAME}' exists.<br>"
 else
-	echo "Info user partition does not exists. Please contact support hotline.<br>"
-	exit 1
+  echo "ERROR: user partition '${DEVNAME}' does NOT exists. Please contact support hotline.<br>"
+  exit 1
 fi
 
-echo -ne "[2/3] Do Factory Reset. Create new user filesystem ...<br>"
+echo -ne "[2/3] Factory Reset: Creating new user filesystem... "
 
-mkfs.ext4 -q -F -L userfs /dev/mmcblk0p3
-
+mkfs.ext4 -q -F -L userfs "${DEVNAME}"
 if [ $? -ne 0 ]; then
-        echo "INFO user filesystem not created properly.Please contact support hotline"
+  echo "ERROR: mkfs.ext4 failed. Please contact support hotline.<br>"
+else
+  tune2fs -c 0 -i 0 "${DEVNAME}" >/dev/null
+  if [ $? -ne 0 ]; then
+    echo "ERROR: tune2fs failed. Please contact support hotline.<br>"
+  else
+    e2fsck -pDf "${DEVNAME}" >/dev/null
+    if [ $? -ne 0 ]; then
+      echo "ERROR: e2fsck failed. Please contact support hotline.<br>"
+    fi
+  fi
 fi
 
 echo "done.<br>"
 
-echo "[3/3] Rebooting..."
+echo "[3/3] Rebooting...<br>"
 /sbin/reboot

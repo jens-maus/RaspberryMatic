@@ -4,7 +4,7 @@ pathBackup=$1
 
 # This log is for debugging only
 echo $pathBackup > /tmp/bckPath.log
-/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=/dev/mmd_hmip -cp /opt/HMServer/HMIPServer.jar de.eq3.ccu.server.ip.validation.ValidateHmIPBackup /etc/crRFD.conf $pathBackup
+/opt/java/bin/java -Dvertx.cacheDirBase=/tmp/.vertx-backuprestore  -Dgnu.io.rxtx.SerialPorts=/dev/mmd_hmip -cp /opt/HMServer/HMIPServer.jar de.eq3.ccu.server.ip.validation.ValidateHmIPBackup /etc/crRFD.conf $pathBackup
 
 case $? in
  -1) exitCode=9 ;;

@@ -4,7 +4,7 @@
 #
 #############################################################
 
-OCCU_VERSION = 2.35.16-1
+OCCU_VERSION = 2.35.16-2
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 
 ifeq ($(BR2_PACKAGE_OCCU),y)
@@ -61,7 +61,8 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 		# remove obsolete config templates
 		rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf
 
-		# remove unrequired ReGaHss versions
+		# make ReGaHss.community the default
+		mv $(TARGET_DIR)/bin/ReGaHss.community $(TARGET_DIR)/bin/ReGaHss
 		rm -f $(TARGET_DIR)/bin/ReGaHss.*
   endef
 	TARGET_FINALIZE_HOOKS += OCCU_FINALIZE_TARGET

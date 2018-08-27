@@ -207,38 +207,9 @@
  #####################
  # Verwendete Module #
  #####################
---- occu/WebUI/www/config/control_panel.cgi.orig
-+++ occu/WebUI/www/config/control_panel.cgi
-@@ -171,16 +171,16 @@
-     <tr>
-   }
- 
--  if {[getProduct] >= 3} {
--    puts {
--      <!-- Button accesspoint settings -show this button only for a CCU version >= 3 -->
--
--        <td>
--          <div  class="StdTableBtn CLASS21701" onclick="WebUI.enter(CreateAccessPointSettings)">${btnAccessPointSettings}</div>
--          <div class="StdTableBtnHelp"><img id="showAccessPointSettingsCPHelp" src="/ise/img/help.png"></div>
--        </td>
--    }
--  }
-+  #if {[getProduct] >= 3} {
-+  #  puts {
-+  #    <!-- Button accesspoint settings -show this button only for a CCU version >= 3 -->
-+  #
-+  #      <td>
-+  #        <div  class="StdTableBtn CLASS21701" onclick="WebUI.enter(CreateAccessPointSettings)">${btnAccessPointSettings}</div>
-+  #        <div class="StdTableBtnHelp"><img id="showAccessPointSettingsCPHelp" src="/ise/img/help.png"></div>
-+  #      </td>
-+  #  }
-+  #}
- 
-   puts {
-     <!-- Kopplungen -->
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -387,7 +387,7 @@
+@@ -394,7 +394,7 @@
                      table_row {
                        table_data {
                          division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
@@ -247,7 +218,7 @@
                        }
                      }
                    }
-@@ -439,27 +439,7 @@
+@@ -446,27 +446,7 @@
            }
          }
          table_data {align="left"} {class="CLASS20921"} {
@@ -278,18 +249,16 @@
        table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
 --- occu/WebUI/www/config/cp_security.cgi.orig
 +++ occu/WebUI/www/config/cp_security.cgi
-@@ -202,8 +202,8 @@
-         # exec /usr/sbin/ubiattach -p /dev/mtd6
-         # exec /usr/sbin/ubimkvol /dev/ubi1 -N user -m
-         # exec mount /usr/local
--        exec touch /var/doFactoryReset
+@@ -258,7 +258,7 @@
+         } else {
+           exec touch /usr/local/.doFactoryReset
+         }
 -        exec kill -SIGQUIT 1
-+        exec touch /usr/local/.doFactoryReset
 +        exec /sbin/reboot
      }]} {
  
        # TWIST-22
-@@ -278,13 +278,13 @@
+@@ -333,13 +333,13 @@
  
  proc action_backup_restore_check {} {
      global env
@@ -306,79 +275,119 @@
      
      set config_version [read_version "firmware_version"]
      set ccu1_backup false
-@@ -414,10 +414,10 @@
+@@ -471,10 +471,10 @@
  
  proc action_backup_restore_go {} {
-     global env
--    cd /tmp/
-+    cd /usr/local/tmp/
-     http_head
+   global env
+-  cd /tmp/
++  cd /usr/local/tmp/
+   http_head
      
--    set system_version [read_version "/boot/VERSION"]
-+    set system_version [read_version "/VERSION"]
-     set config_version [read_version "firmware_version"]
+-  set system_version [read_version "/boot/VERSION"]
++  set system_version [read_version "/VERSION"]
+   set config_version [read_version "firmware_version"]
    set ccu1_backup false
    if { [version_compare $config_version 2.0.0] < 0 } {
-@@ -476,14 +476,8 @@
+@@ -569,7 +569,7 @@
      }
-     
-   if { "false" == $ccu1_backup } {  # backup for version >= 2
--    exec umount /usr/local
--          exec /usr/sbin/ubidetach -p /dev/mtd6
--          exec /usr/sbin/ubiformat /dev/mtd6 -y
--          exec /usr/sbin/ubiattach -p /dev/mtd6
--          exec /usr/sbin/ubimkvol /dev/ubi1 -N user -m
--          exec mount /usr/local
+     if { "CCU2_CCU2" == $migration_mode } {
+       # CCU2 ==> CCU2
+-      if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
++      if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+           # set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
+           # append msg "Falls dieser Fehler wiederholt Auftritt, wenden Sie sich bitte mit der folgenden Fehlermeldung an den Kundenservice:\n<br>"
+           # append msg $errorMessage
+@@ -583,31 +583,32 @@
+     file delete -force /usr/local/eQ-3-Backup/restore
+     file mkdir /usr/local/eQ-3-Backup/restore
+     cd /usr/local/eQ-3-Backup/restore
+-      if { [catch {exec tar xzf /tmp/usr_local.tar.gz --strip 2} errorMessage] } {
++      if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz --strip 2} errorMessage] } {
+           # show message "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
+           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+           set backuperror true
+         } else {
+           set backuperror false
++          exec touch /usr/local/.doBackupRestore
+         }
+     } elseif { "CCU2_CCU3" == $migration_mode } {
+           # CCU2 ==> CCU3
+-        # be sure /tmp/backup is empty
+-        file delete -force /tmp/backup
++        # be sure /usr/local/tmp/backup is empty
++        file delete -force /usr/local/tmp/backup
+         # be sure restore directory is empty
+         file delete -force /usr/local/eQ-3-Backup/restore
+-        file mkdir /tmp/backup
++        file mkdir /usr/local/tmp/backup
  
--    if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
-+    if { [catch {exec touch /usr/local/.doBackupRestore} errorMessage] } {
-       # set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
-       # append msg "Falls dieser Fehler wiederholt Auftritt, wenden Sie sich bitte mit der folgenden Fehlermeldung an den Kundenservice:\n<br>"
-       # append msg $errorMessage
-@@ -493,23 +487,27 @@
-       set backuperror false
-     }    
-   } else {  # backup for version < 2      
-+    catch {
+-        cd /tmp/backup
+-        if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
++        cd /usr/local/tmp/backup
++        if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+           set backuperror true
+         } else {
+           # only do this when the compatibility check says ok:
+           #copy old files
+           file mkdir /usr/local/eQ-3-Backup/restore/etc/config
+-          if { [file exists /tmp/backup/usr/local/etc/config] } {
+-            cd /tmp/backup/usr/local/etc/config
++          if { [file exists /usr/local/tmp/backup/usr/local/etc/config] } {
++            cd /usr/local/tmp/backup/usr/local/etc/config
+           }
+ 
+           if { [file exists InterfacesList.xml] } { file copy InterfacesList.xml /usr/local/eQ-3-Backup/restore/etc/config/InterfacesList.xml }
+@@ -636,26 +637,31 @@
+           if { [file exists time.conf] } { file copy time.conf /usr/local/eQ-3-Backup/restore/etc/config/time.conf }
+           set backuperror false
+           cd /
++          exec touch /usr/local/.doBackupRestore
+         }
+       }
+     } else {  # backup for version < 2
++      catch {
 +        exec killall ReGaHss
 +        exec sleep 5
-+    }
-     #delete existing files
--    file delete -force /tmp/backup
-+    file delete -force /usr/local/tmp/backup
-     file delete -force /etc/config/hs485d /etc/config/hs485types /etc/config/rfd /etc/config/userprofiles 
-     file delete -force /etc/config/homematic.regadom /etc/config/homematic.regadom.bak
-     file delete -force /etc/config/ids /etc/config/ntpclient /etc/config/rega.conf /etc/config/syslog 
-     file delete -force /etc/config/tweaks /etc/config/TZ /etc/config/server.pem /etc/config/keys
-     file delete -force /etc/config/time.conf
-     
--    file mkdir /tmp/backup
--    cd /tmp/backup
--    if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
-+    file mkdir /usr/local/tmp/backup
-+    cd /usr/local/tmp/backup
-+    if { [catch {exec tar xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
-       put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
-       set backuperror true
-     } else {
-       #copy old files
--      if { [file exists /tmp/backup/usr/local/etc/config] } {
--        cd /tmp/backup/usr/local/etc/config
-+      if { [file exists /usr/local/tmp/backup/usr/local/etc/config] } {
-+        cd /usr/local/tmp/backup/usr/local/etc/config
-       }
-       
-       if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }        
-@@ -563,13 +561,14 @@
-       catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
++      } 
+       #delete existing files
+-      file delete -force /tmp/backup
++      file delete -force /usr/local/tmp/backup
+       file delete -force /etc/config/hs485d /etc/config/hs485types /etc/config/rfd /etc/config/userprofiles
+       file delete -force /etc/config/homematic.regadom /etc/config/homematic.regadom.bak
+       file delete -force /etc/config/ids /etc/config/ntpclient /etc/config/rega.conf /etc/config/syslog
+       file delete -force /etc/config/tweaks /etc/config/TZ /etc/config/server.pem /etc/config/keys
+       file delete -force /etc/config/time.conf
  
-       set backuperror false
-+      exec /sbin/reboot
-+      return
-     }          
+-      file mkdir /tmp/backup
+-      cd /tmp/backup
+-      if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
++      file mkdir /usr/local/tmp/backup
++      cd /usr/local/tmp/backup
++      if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+         put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+         set backuperror true
+       } else {
+         #copy old files
+-        if { [file exists /tmp/backup/usr/local/etc/config] } {
+-          cd /tmp/backup/usr/local/etc/config
++        if { [file exists /usr/local/tmp/backup/usr/local/etc/config] } {
++          cd /usr/local/tmp/backup/usr/local/etc/config
+         }
+ 
+         if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }
+@@ -709,6 +715,8 @@
+         catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
+ 
+         set backuperror false
++        exec /sbin/reboot
++        return
+       }
      cd /
    }
-   
+@@ -729,8 +737,7 @@
+   }
+ 
    if { "false" == $backuperror } {
 -        exec mount -o remount,ro /usr/local
 -        exec mount -o remount,rw /usr/local
@@ -386,15 +395,16 @@
          division {class="popupTitle"} {
              puts "\${dialogSettingsSecurityMessageSysBackupRestartSystemTitle}"
          }
-@@ -609,7 +608,6 @@
+@@ -771,8 +778,6 @@
+     cgi_javascript {
        puts "translatePage('#messagebox');"
      }
- 
+-
 -    file delete -force /tmp/new_config.tar /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
  }
  
  proc put_message {title msg args} {
-@@ -1051,39 +1049,36 @@
+@@ -1215,30 +1220,27 @@
  
  proc action_create_backup {} {
      set HOSTNAME [exec hostname]
@@ -437,43 +447,6 @@
  }
  
  proc action_backup_upload {} {
-     global env sid
--    cd /tmp/
-+    cd /usr/local/tmp/
-     
-     http_head
-     import_file -client backup_file
--    file rename -force -- [lindex $backup_file 0] "/tmp/new_config.tar"
-+    file rename -force -- [lindex $backup_file 0] "/usr/local/tmp/new_config.tar"
-     cgi_javascript {
-         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-         puts {
---- occu/WebUI/www/config/cp_software.cgi.orig
-+++ occu/WebUI/www/config/cp_software.cgi
-@@ -488,11 +488,11 @@
- 
- proc action_image_upload {} {
-     global env sid
--    cd /tmp/
-+    cd /usr/local/tmp/
-     
-     http_head
-     import_file -client firmware_file
--    file rename -force -- [lindex $firmware_file 0] "/var/new_firmware.tar.gz"
-+    file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_addon.tar.gz"
-     cgi_javascript {
-         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-         puts {
-@@ -507,7 +507,8 @@
-     if {[isOldCCU]} {
-         exec /sbin/init -q
-     } else {
--        exec /bin/kill -SIGQUIT 1
-+        exec touch /usr/local/.doAddonInstall
-+        exec /sbin/reboot
-     }
- }
- 
 --- occu/WebUI/www/config/cp_time.cgi.orig
 +++ occu/WebUI/www/config/cp_time.cgi
 @@ -645,7 +645,9 @@
@@ -550,35 +523,6 @@
  }
  
  set USERPROFILESPATH "$env(CONFIG_ROOT)/userprofiles"
---- occu/WebUI/www/tcl/eq3_old/common.tcl.orig
-+++ occu/WebUI/www/tcl/eq3_old/common.tcl
-@@ -169,7 +169,7 @@
- 
- 
- proc get_version { } {
--    return [read_var /boot/VERSION VERSION]
-+    return [read_var /VERSION VERSION]
- }
- 
- # Prüft, ob es sich um die alte oder neue CCU handelt
-@@ -192,9 +192,10 @@
- }
- 
- proc getProduct {} {
--  set product 2
--  catch {
--    set product [lindex [split [get_version] .] 0]
--  }
--  return "[expr $product*1]"
--}
-\ No newline at end of file
-+  #set product 2
-+  #catch {
-+  #  set product [lindex [split [get_version] .] 0]
-+  #}
-+  #return "[expr $product*1]"
-+  return 3
-+}
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -1,8 +1,8 @@
@@ -647,27 +591,25 @@
      "dialogSettingsCMHintRestartSafeMode" : "HomeMatic merkezini bir kere g%FCvenli modda baslatin. G%FCvenli modda y%FCklenen ek yazilim baslatilmaz. Degistirilmis ayarlar %F6nceden kaydedilir.",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -12261,8 +12261,9 @@
-     var isOk = true;
-     for (var i = 0, len = ips.length; i < len; i++) {
-       var ip = ips[i];
--      if (!ip.match(/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(\/[0-9]+)?$/)) {
-+      if (!ip.match(/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(\/[0-9]+)?$/) && !ip.match(/^[a-f0-9]+:/)) {
-         isOk = false;
-+        break;
-       }
-     }
+@@ -19349,7 +19349,7 @@
+   {
+     this.m_ccuProduct = getProduct();
+     this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
+-    this.m_product ="HM-CCU" + this.m_ccuProduct;
++    this.m_product = "HM-RASPBERRYMATIC";
+     this.m_URLServer = (isHTTPS) ? "https://"+this.preURL+"update.homematic.com:8443" : "http://"+this.preURL+"update.homematic.com";
  
-@@ -19271,7 +19272,7 @@
+     var serial = homematic("CCU.getSerial");
+@@ -19359,7 +19359,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
--    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product=HM-CCU2&serial=" + serial;
+-    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product="+this.m_product+"&serial=" + serial;
 +    script.src = "https://gitcdn.xyz/repo/jens-maus/RaspberryMatic/master/release/LATEST-VERSION.js?_version_=" + WEBUI_VERSION;
      $("body").appendChild(script);
    },
  
-@@ -19323,7 +19324,7 @@
+@@ -19411,7 +19411,7 @@
        var script = document.createElement("script");
        script.id = "homematic_com_script_" + index;
        script.type = "text/javascript";
@@ -676,7 +618,7 @@
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -19333,7 +19334,7 @@
+@@ -19421,7 +19421,7 @@
        var script = document.createElement("script");
        script.id = "homematic_com_script_fw";
        script.type = "text/javascript";
@@ -685,12 +627,3 @@
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -19367,7 +19368,7 @@
-    **/
-   setLatestVersion: function(latestVersion, product)
-   {
--    if (product == "HM-CCU2") {
-+    if (product == "HM-RASPBERRYMATIC") {
-       homematic.com.m_latestVersion = latestVersion;
-       homematic.com.m_isUpdateAvailable = (WEBUI_VERSION != latestVersion);
-     } else {

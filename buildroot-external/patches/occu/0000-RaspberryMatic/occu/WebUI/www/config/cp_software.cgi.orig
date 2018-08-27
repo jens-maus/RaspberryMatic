@@ -492,7 +492,13 @@ proc action_image_upload {} {
     
     http_head
     import_file -client firmware_file
-    file rename -force -- [lindex $firmware_file 0] "/var/new_firmware.tar.gz"
+    if {[getProduct] < 3} {
+        # CCU2
+        file rename -force -- [lindex $firmware_file 0] "/var/new_firmware.tar.gz"
+    } else {
+        # CCU3
+        file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_addon.tar.gz"
+    }
     cgi_javascript {
         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
         puts {
@@ -504,11 +510,10 @@ proc action_image_upload {} {
 }
 
 proc action_install_start {} {
-    if {[isOldCCU]} {
-        exec /sbin/init -q
-    } else {
-        exec /bin/kill -SIGQUIT 1
+    if {[getProduct] == 3} {
+       exec touch /usr/local/.doAddonInstall
     }
+    exec /sbin/reboot
 }
 
 cgi_eval {

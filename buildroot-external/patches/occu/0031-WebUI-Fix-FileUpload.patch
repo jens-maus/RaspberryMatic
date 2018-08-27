@@ -42,6 +42,15 @@
  
    if {[getProduct] < 3} {
      cd /tmp/
+@@ -902,7 +894,7 @@
+       set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
+       if {$file_invalid == 0} {
+         # the file seems to be a tar archive (perhaps with gzip compression)
+-        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xf $filename} result]
++        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xmf $filename} result]
+         file delete -force -- $filename
+       }
+     }
 @@ -1208,10 +1200,10 @@
  cgi_eval {
    #cgi_debug -on
@@ -137,7 +146,7 @@
  
 --- occu/WebUI/www/config/cp_security.cgi.orig
 +++ occu/WebUI/www/config/cp_security.cgi
-@@ -675,8 +675,6 @@
+@@ -840,8 +840,6 @@
  proc action_put_page {} {
      global env sid
  
@@ -146,7 +155,7 @@
      http_head
      division {class="popupTitle j_translate"} {
          puts "\${dialogSettingsSecurityTitle}"
-@@ -777,8 +775,7 @@
+@@ -934,8 +932,7 @@
                          table_row {
                              td {width="20"} {}
                              table_data {align="left"} {colspan="2"} {
@@ -156,22 +165,23 @@
                                      file_button backup_file size=20 maxlength=1000000
                                  }
                                  puts {<iframe name="config_upload_iframe" class="CLASS20820" style="display: none;"></iframe>}
-@@ -1082,12 +1079,10 @@
+@@ -1242,12 +1239,10 @@
  }
  
  proc action_backup_upload {} {
 -    global env sid
+-    cd /tmp/
 +    global env sid filename
-     cd /usr/local/tmp/
-     
++    cd /usr/local/tmp/
+ 
 -    http_head
 -    import_file -client backup_file
--    file rename -force -- [lindex $backup_file 0] "/usr/local/tmp/new_config.tar"
+-    file rename -force -- [lindex $backup_file 0] "/tmp/new_config.tar"
 +    file rename -force -- $filename "/usr/local/tmp/new_config.tar"
      cgi_javascript {
          puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
          puts {
-@@ -1163,14 +1158,16 @@
+@@ -1323,14 +1318,16 @@
  cgi_eval {
      #cgi_debug -on
      cgi_input
@@ -204,22 +214,29 @@
                                      file_button firmware_file size=30 maxlength=1000000
                                  }
                                  puts {<iframe name="image_upload_iframe" style="display: none;"></iframe>}
-@@ -487,12 +486,10 @@
+@@ -487,17 +486,15 @@
  }
  
  proc action_image_upload {} {
 -    global env sid
+-    cd /tmp/
 +    global env sid filename
-     cd /usr/local/tmp/
++    cd /usr/local/tmp/
      
 -    http_head
 -    import_file -client firmware_file
--    file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_addon.tar.gz"
-+    file rename -force -- $filename "/usr/local/tmp/new_addon.tar.gz"
+     if {[getProduct] < 3} {
+         # CCU2
+-        file rename -force -- [lindex $firmware_file 0] "/var/new_firmware.tar.gz"
++        file rename -force -- $filename "/var/new_firmware.tar.gz"
+     } else {
+         # CCU3
+-        file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_addon.tar.gz"
++        file rename -force -- $filename "/usr/local/tmp/new_addon.tar.gz"
+     }
      cgi_javascript {
          puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-         puts {
-@@ -515,14 +512,16 @@
+@@ -519,14 +516,16 @@
  cgi_eval {
      #cgi_debug -on
      cgi_input

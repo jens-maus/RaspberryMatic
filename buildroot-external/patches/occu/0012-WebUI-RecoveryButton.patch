@@ -89,7 +89,7 @@
  
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -378,6 +378,7 @@
+@@ -382,6 +382,7 @@
      "dialogNo" : "Nein",
      "dialogBack" : "Zur%FCck",
      "dialogSafetyCheck" : "Sicherheitsabfrage",
@@ -97,7 +97,7 @@
      "dialogInfo" : "Info",
      "dialogHint" : "Hinweis",
      "dialogQuestionRemoveProgram" : "M%F6chten Sie das Programm wirklich l%F6schen?",
-@@ -390,6 +391,7 @@
+@@ -394,6 +395,7 @@
      "dialogQuestionRestart" : "Best%E4tigen Sie hier, um den Neustart durchzuf%FChren.",
      "dialogQuestionShutdown" : "Best%E4tigen Sie hier, um das Herunterfahren durchzuf%FChren.",
      "dialogQuestionRestartSafeMode" : "M%F6chten Sie die " + HMIdentifier.de.CCUFullNameText + " wirklich im abgesicherten Modus starten?",
@@ -105,7 +105,7 @@
      "dialogUserAccountTitle" : "Benutzerkonto - Konfiguration",
      "dialogProgChoseSysVar" : "Programme - Systemvariablenauswahl",
      "dialogEditRoom" : "Raum bearbeiten",
-@@ -412,7 +414,9 @@
+@@ -416,7 +418,9 @@
      "dialogChooseBidCosInterface" : "Auswahl BidCos-Interface",
      "dialogChooseChannel" : "Kanalauswahl",
      "dialogRestartSafeModeTitle" : "Neustart",
@@ -115,7 +115,7 @@
      "dialogBtnPerformRestart" : "Neustart ",
      "dialogBtnPerformShutdown" : "Herunterfahren",
      "dialogEditRoomBtnClose" : "Schliessen",
-@@ -447,6 +451,7 @@
+@@ -451,6 +455,7 @@
      "dialogSettingsCMTDCCURestart" : HMIdentifier.de.CCUShortName + "<br/>Neustart",
      "dialogSettingsCMTDCCUShutdown" : "Herunterfahren",
      "dialogSettingsCMTDCCUSafeMode" : "Abgesicherter<br/>Modus",
@@ -123,7 +123,7 @@
      "dialogSettingsCMTDErrorProtocol" : "Fehler-<br/>protokoll",
      "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
      "dialogSettingsCMLblAvailableSoftwareVersion" : "Verf%FCgbare Software-Version:",
-@@ -465,6 +470,7 @@
+@@ -469,6 +474,7 @@
      "dialogSettingsCMBtnCCURestart" : "Neustart",
      "dialogSettingsCMBtnCCUShutdown" : "Herunterfahren",
      "dialogSettingsCMBtnCCURestartSafe" : "Neustart im abgesicherten Modus",
@@ -131,17 +131,17 @@
      "dialogSettingsCMBtnLogSysLogServerAddress" : "Einstellungen %FCbernehmen",
      "dialogSettingsCMBtnLogLoadLogFile" : "Logdatei herunterladen",
      "dialogSettingsCMErrorTitle" : "Softwareupdate - Fehler",
-@@ -478,6 +484,7 @@
+@@ -481,6 +487,7 @@
      "dialogSettingsCMHintRestart" : "Zentrale neu starten. Ver%E4nderte Einstellungen werden vorher gespeichert.",
      "dialogSettingsCMHintShutdown" : "Zentrale herunterfahren. Ver%E4nderte Einstellungen werden vorher gespeichert.",
-     "dialogSettingsCMHintRestartSafeMode" : "HomeMatic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintRestartSafeMode" : "Homematic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
 +    "dialogSettingsCMHintRestartRecoveryMode" : "HomeMatic Zentrale einmalig im Recovery Modus starten. Im Recovery Modus werden administrative Werkzeuge zur Verf%FCgung gestellt. Ver%E4nderte Einstellungen werden vorher gespeichert.",
      "dialogSettingsCMHintErrorLog" : "Stellen Sie die Anzahl der Logmeldungen ein, die von der Zentrale generiert werden sollen.<br>Sie k%F6nnen zus%E4tzlich einen Rechner angeben, dem die Zentrale ihre Logmeldungen per Syslog schickt. Auf diesem Rechner mu%DF entsprechende Software installiert sein, die die Meldungen entgegennimmt.<br>Zu Diagnosezwecken k%F6nnen die aktuellen Logmeldungen der Zentrale in einer Textdatei heruntergeladen werden.",
      "dialogSettingsCMLogLevel0" : "Alles loggen",
      "dialogSettingsCMLogLevel1" : "Information",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -378,6 +378,7 @@
+@@ -381,6 +381,7 @@
      "dialogNo" : "No",
      "dialogBack" : "Back",
      "dialogSafetyCheck" : "Confirmation prompt",
@@ -149,7 +149,7 @@
      "dialogInfo" : "Info",
      "dialogHint" : "Please note",
      "dialogQuestionRemoveProgram" : "Do you really want to delete the program?",
-@@ -390,6 +391,7 @@
+@@ -393,6 +394,7 @@
      "dialogQuestionRestart" : "Please click here to perform the restart?",
      "dialogQuestionShutdown" : "Please click here to perform the shutdown?",
      "dialogQuestionRestartSafeMode" : "Do you really want to start the " + HMIdentifier.en.CCUFullNameText + " in the safe mode?",
@@ -157,7 +157,7 @@
      "dialogUserAccountTitle" : "User account configuration",
      "dialogProgChoseSysVar" : "Programs - system variable selection",
      "dialogEditRoom" : "Edit room",
-@@ -412,7 +414,9 @@
+@@ -415,7 +417,9 @@
      "dialogChooseBidCosInterface" : "Selection BidCos-Interface",
      "dialogChooseChannel" : "Channel selection",
      "dialogRestartSafeModeTitle" : "Restart",
@@ -167,7 +167,7 @@
      "dialogBtnPerformRestart" : "Restart ",
      "dialogBtnPerformShutdown" : "Shutdown",
      "dialogEditRoomBtnClose" : "Close",
-@@ -447,6 +451,7 @@
+@@ -450,6 +454,7 @@
      "dialogSettingsCMTDCCURestart" : HMIdentifier.en.CCUShortName + "<br/>restart",
      "dialogSettingsCMTDCCUShutdown" : "Shutdown",
      "dialogSettingsCMTDCCUSafeMode" : "Safe<br/>mode",
@@ -175,7 +175,7 @@
      "dialogSettingsCMTDErrorProtocol" : "Error<br/>log",
      "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
      "dialogSettingsCMLblAvailableSoftwareVersion" : "Available software version:",
-@@ -465,6 +470,7 @@
+@@ -468,6 +473,7 @@
      "dialogSettingsCMBtnCCURestart" : "Restart",
      "dialogSettingsCMBtnCCUShutdown" : "Shutdown",
      "dialogSettingsCMBtnCCURestartSafe" : "Restart in safe mode",
@@ -183,63 +183,11 @@
      "dialogSettingsCMBtnLogSysLogServerAddress" : "Apply settings",
      "dialogSettingsCMBtnLogLoadLogFile" : "Download log file",
      "dialogSettingsCMErrorTitle" : "Software update - error",
-@@ -478,6 +484,7 @@
+@@ -480,6 +486,7 @@
      "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
      "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
-     "dialogSettingsCMHintRestartSafeMode" : "Start HomeMatic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
+     "dialogSettingsCMHintRestartSafeMode" : "Start Homematic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
 +    "dialogSettingsCMHintRestartRecoveryMode" : "Start HomeMatic Central Control Unit in recovery mode once. In recovery mode, maintenance tasks can be performed. The changed settings will be saved before.",
      "dialogSettingsCMHintErrorLog" : "Please set the number of log messages to be generated by the CCU.<br>You can also specify a computer that will receive the log messages from the CCU via syslog. An additional software that will be able to receive this messages has to be installed on the computer.<br>To analyse the results, the current log messages of the CCU can be downloaded in a text file.",
      "dialogSettingsCMLogLevel0" : "Log all",
      "dialogSettingsCMLogLevel1" : "Information",
---- occu/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
-+++ occu/WebUI/www/webui/js/lang/tr/translate.lang.js
-@@ -380,6 +380,7 @@
-     "dialogNo" : "Hayir",
-     "dialogBack" : "Geri",
-     "dialogSafetyCheck" : "G%FCvenlik sorusu",
-+    "dialogRecoveryCheck" : "Confirmation prompt",
-     "dialogInfo" : "Bilgi",
-     "dialogHint" : "Not",
-     "dialogQuestionRemoveProgram" : "Programi gercekten silmek istiyor musunuz?",
-@@ -392,6 +393,7 @@
-     "dialogQuestionRestart" : "Sistemi yeniden baslatmak icin buradan onaylayin.",
-     "dialogQuestionShutdown" : "Please click here to perform the shutdown?",
-     "dialogQuestionRestartSafeMode" : HMIdentifier.tr.CCUFullNameText + "'yi gercekten g%FCvenli modda baslatmak istiyor musunuz?",
-+    "dialogQuestionRestartRecoveryMode" : "Do you really want to start the " + HMIdentifier.tr.CCUFullNameText + " in the recovery mode?",
-     "dialogUserAccountTitle" : "Kullanici hesabi konfig%FCrasyonu",
-     "dialogProgChoseSysVar" : "Programlar - sistem degiskeni sec",
-     "dialogEditRoom" : "Odayi d%FCzenle",
-@@ -414,7 +416,9 @@
-     "dialogChooseBidCosInterface" : "BidCos aray%FCz secimi",
-     "dialogChooseChannel" : "Kanal secimi",
-     "dialogRestartSafeModeTitle" : "Yeniden baslat",
-+    "dialogRestartRecoveryModeTitle" : "Yeniden baslat",
-     "dialogRestartSafeModeContent" : "Merkez sadece g%FCvenli modda baslar. Yeniden oturum acmak icin \"OK\"'e tiklayin.",
-+    "dialogRestartRecoveryModeContent" : "The Central Control Unit will now start in recovery mode. Please click \"OK\" to log in again.",
-     "dialogBtnPerformRestart" : "Yeniden baslat ",
-     "dialogBtnPerformShutdown" : "Shutdown",
-     "dialogEditRoomBtnClose" : "Kapat",
-@@ -449,6 +453,7 @@
-     "dialogSettingsCMTDCCURestart" : HMIdentifier.tr.CCUShortName + "<br/>Yeniden baslat",
-     "dialogSettingsCMTDCCUShutdown" : "Shutdown",
-     "dialogSettingsCMTDCCUSafeMode" : "G%FCvenli<br/>mod",
-+    "dialogSettingsCMTDCCURecoveryMode" : "Recovery<br/>mode",
-     "dialogSettingsCMTDErrorProtocol" : "Hata<br/>protokol%FC",
-     "dialogSettingsCMLblActualSoftwareVersion" : "G%FCncel yazilim versiyonu:",
-     "dialogSettingsCMLblAvailableSoftwareVersion" : "Y%FCklenebilir yazilim versiyonu:",
-@@ -467,6 +472,7 @@
-     "dialogSettingsCMBtnCCURestart" : "Yeniden baslat",
-     "dialogSettingsCMBtnCCUShutdown" : "Shutdown",
-     "dialogSettingsCMBtnCCURestartSafe" : "G%FCvenli modda yeniden baslat",
-+    "dialogSettingsCMBtnCCURestartRecovery" : "Restart in recovery mode",
-     "dialogSettingsCMBtnLogSysLogServerAddress" : "Ayarlari kaydet",
-     "dialogSettingsCMBtnLogLoadLogFile" : "Log dosyasini indir",
-     "dialogSettingsCMErrorTitle" : "Yazilim g%FCncelleme hatasi",
-@@ -480,6 +486,7 @@
-     "dialogSettingsCMHintRestart" : "Merkezi yeniden baslat. Degistirilmis ayarlar %F6nceden kaydedilir.",
-     "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
-     "dialogSettingsCMHintRestartSafeMode" : "HomeMatic merkezini bir kere g%FCvenli modda baslatin. G%FCvenli modda y%FCklenen ek yazilim baslatilmaz. Degistirilmis ayarlar %F6nceden kaydedilir.",
-+    "dialogSettingsCMHintRestartRecoveryMode" : "Start HomeMatic Central Control Unit in recovery mode once. In recovery mode, maintenance tasks can be performed. The changed settings will be saved before.",
-     "dialogSettingsCMHintErrorLog" : "Merkez tarafindan olusturulacak Log bildiri sayisini ayarlayin.<br>Buna ek olarak merkezin Log bildirilerini Syslog'u kullanarak iletecegi baska bir bilgisayar tanimlayabilirsiniz. Bu bilgisayar %FCzerinde bildirileri alacak uygun bir yazilim y%FCkl%FC olmalidir.<br>Merkezin g%FCncel Log bildirileri teshis amaciyla bir metin dosyasi seklinde indirilebilir.",
-     "dialogSettingsCMLogLevel0" : "Her seyi Log'lara gecir",
-     "dialogSettingsCMLogLevel1" : "Bilgi",

@@ -534,8 +534,8 @@
 +    "CCUFullNameHeader" : "RaspberryMatic",
 +    "CCUFullNameText" : "RaspberryMatic",
 +    "CCUShortName" : "RaspMatic",
-     "BidCosRF" : "BidCos-RF",
-     "BidCosWired" : "BidCos-Wired",
+     "BidCosRF" : "Homematic Funk ",
+     "BidCosWired" : "Homematic Wired",
      "VirtualDevices" : "VirtualDevices",
 @@ -478,6 +478,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "F%FChren Sie vor dem Update eine Datensicherung durch.",
@@ -544,7 +544,7 @@
 +    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic ist ein gemeinschaftliches Projekt. Wenn Sie die Weiterentwicklung gerne in Form einer Geldspende unterst%FCtzen wollen k%F6nen Sie das gerne mittels einer <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal Spende</a> tun.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
      "dialogSettingsCMHintRestart" : "Zentrale neu starten. Ver%E4nderte Einstellungen werden vorher gespeichert.",
      "dialogSettingsCMHintShutdown" : "Zentrale herunterfahren. Ver%E4nderte Einstellungen werden vorher gespeichert.",
-     "dialogSettingsCMHintRestartSafeMode" : "HomeMatic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintRestartSafeMode" : "Homematic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
 @@ -1,8 +1,8 @@
@@ -556,7 +556,7 @@
 +    "CCUFullNameHeader" : "RaspberryMatic",
 +    "CCUFullNameText" : "RaspberryMatic",
 +    "CCUShortName" : "RaspMatic",
-     "BidCosRF" : "BidCos-RF",
+     "BidCosRF" : "Homematic RF",
      "BidCosWired" : "BidCos-Wired",
      "HmIPRF" : "HmIP-RF",
 @@ -477,6 +477,7 @@
@@ -566,29 +566,7 @@
 +    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
      "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
      "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
-     "dialogSettingsCMHintRestartSafeMode" : "Start HomeMatic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
---- occu/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
-+++ occu/WebUI/www/webui/js/lang/tr/translate.lang.js
-@@ -1,8 +1,8 @@
- jQuery.extend(true,HMIdentifier , {
-   "tr" : {
--    "CCUFullNameHeader" : "Homematic CCU",
--    "CCUFullNameText" : "Homematic CCU",
--    "CCUShortName" : "CCU",
-+    "CCUFullNameHeader" : "RaspberryMatic",
-+    "CCUFullNameText" : "RaspberryMatic",
-+    "CCUShortName" : "RaspMatic",
-     "BidCosRF" : "BidCos-RF",
-     "BidCosWired" : "BidCos-Wired",
-     "HmIPRF" : "HmIP-RF",
-@@ -479,6 +479,7 @@
-     "dialogSettingsCMHintSoftwareUpdate3" : "G%FCncellemeden %F6nce verileri emniyete alin.",
-     "dialogSettingsCMHintSoftwareUpdate4a" : "Bataryalarin sarj durumu artik sadece ",
-     "dialogSettingsCMHintSoftwareUpdate4b" : "Elektrik kesintisi nedeniyle veri kaybini %F6nlemek icin bataryalari g%FCncellemeyi baslatmadan %F6nce degistirmenizi %F6neriyoruz.",
-+    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif'></a>",
-     "dialogSettingsCMHintRestart" : "Merkezi yeniden baslat. Degistirilmis ayarlar %F6nceden kaydedilir.",
-     "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
-     "dialogSettingsCMHintRestartSafeMode" : "HomeMatic merkezini bir kere g%FCvenli modda baslatin. G%FCvenli modda y%FCklenen ek yazilim baslatilmaz. Degistirilmis ayarlar %F6nceden kaydedilir.",
+     "dialogSettingsCMHintRestartSafeMode" : "Start Homematic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -19349,7 +19349,7 @@

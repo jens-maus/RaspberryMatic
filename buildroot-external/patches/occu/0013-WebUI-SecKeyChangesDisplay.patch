@@ -36,13 +36,3 @@
      "dialogSettingsSecurityBtnSaveKey" : "Apply security key",
      "dialogSettingsSecurityBtnBackupCreate" : "Create backup",
      "dialogSettingsSecurityBtnBackupUpload" : "Import backup",
---- occu/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
-+++ occu/WebUI/www/webui/js/lang/tr/translate.lang.js
-@@ -490,6 +490,7 @@
-     "dialogSettingsSecurityLblEnterSecKey" : "Sistem g%FCvenlik kodunu gir",
-     "dialogSettingsSecurityLblSecKey" : "G%FCvenlik kodu",
-     "dialogSettingsSecurityLblSecKeyRepeat" : "G%FCvenlik kodu<br/>tekrar gir",
-+    "dialogSettingsSecurityLblSecKeyChanges" : "sayi anahtar degisiklikle",
-     "dialogSettingsSecurityBtnSaveKey" : "Kodu kaydet",
-     "dialogSettingsSecurityBtnBackupCreate" : "Yedek al",
-     "dialogSettingsSecurityBtnBackupUpload" : "Yedegi y%FCkle",

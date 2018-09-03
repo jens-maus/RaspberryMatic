@@ -561,9 +561,9 @@ proc action_put_page {} {
         }
         }
 
-        table_data {align="center"} {class="CLASS20904"} {
-        # puts "\${lblTDReGaVersionHelp}"
-        division {Class="StdTableBtnHelp"} {puts "<img id='showReGaVersionHelp' src='/ise/img/help.png'>"}
+        table_data {align="left"} {class="CLASS20904"} {
+        # division {Class="StdTableBtnHelp"} {puts "<img id='showReGaVersionHelp' src='/ise/img/help.png'>"}
+        division {Class="StdTableBtnHelp"} {puts "\${lblTDReGaVersionHelp}"}
         }
       }
 

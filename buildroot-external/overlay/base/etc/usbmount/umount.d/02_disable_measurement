@@ -1,5 +1,8 @@
 #!/bin/sh
 
-rm "/var/status/USBinitialised"
-# CCU2 compatibility
-rm "/var/status/SDinitialised"
+mount | grep -q /media/usb
+if [ $? -ne 0 ]; then
+  rm -f /var/status/USBinitialised
+  # CCU2 compatibility
+  rm -f /var/status/SDinitialised
+fi

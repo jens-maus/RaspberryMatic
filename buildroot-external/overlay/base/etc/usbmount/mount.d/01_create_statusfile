@@ -1,4 +1,7 @@
 #!/bin/sh
-touch /var/status/hasUSB
-# CCU2 compatibility 
-touch /var/status/hasSD
+mountpoint -q ${UM_MOUNTPOINT}
+if [ $? -eq 0 ]; then
+  touch /var/status/hasUSB
+  # CCU2 compatibility 
+  touch /var/status/hasSD
+fi

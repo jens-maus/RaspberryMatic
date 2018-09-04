@@ -1,21 +1,38 @@
 #!/bin/sh
 mountpoint -q ${UM_MOUNTPOINT}
 if [ $? -eq 0 ]; then
-  if [ -d "${UM_MOUNTPOINT}/measurement" ]; then
-    echo "measurement directory already exists"
-    touch "/var/status/USBinitialised"
-    # CCU2 compatibility
-    touch "/var/status/SDinitialised"
-  else 
-    echo "measurement directory not exists"
-    mkdir ${UM_MOUNTPOINT}/measurement
-    if [ $? -ne 0 ]; then
-      echo "error creating measurement directory"
+  if [ ! -L /media/usb0 ]; then
+    RET=0
+    if [ -d "${UM_MOUNTPOINT}/measurement" ]; then
+      echo "measurement directory already exists"
+      RET=1
     else 
-      echo "measurement directory created successfully"
+      echo "measurement directory not exists"
+      # check if /usr/local/sdcard/measurement exists
+      # and if so, move it to the usb stick
+      if [ -d /usr/local/sdcard/measurement ]; then
+        cp -a /usr/local/sdcard/measurement ${UM_MOUNTPOINT}/
+        if [ $? -eq 0 ]; then
+          mv /usr/local/sdcard/measurement /usr/local/sdcard/measurement_bak
+          RET=1
+        fi
+      else
+        mkdir ${UM_MOUNTPOINT}/measurement
+        if [ $? -ne 0 ]; then
+          echo "error creating measurement directory"
+        else 
+          echo "measurement directory created successfully"
+          RET=1
+        fi
+      fi
+    fi
+
+    if [ ${RET} -eq 1 ]; then
       touch "/var/status/USBinitialised"
       # CCU2 compatibility
       touch "/var/status/SDinitialised"
+      # link /media/usb0 to the active usb mountpoint
+      ln -sf ${UM_MOUNTPOINT} /media/usb0
     fi
   fi
 fi

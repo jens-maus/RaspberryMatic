@@ -1,8 +1,10 @@
 #!/bin/sh
-
-mount | grep -q /media/usb
-if [ $? -ne 0 ]; then
-  rm -f /var/status/USBinitialised
-  # CCU2 compatibility
-  rm -f /var/status/SDinitialised
+if [ -L /media/usb0 ]; then
+  if [ "$(readlink /media/usb0)" = "${UM_MOUNTPOINT}" ]; then
+    rm -f /var/status/USBinitialised
+    # CCU2 compatibility
+    rm -f /var/status/SDinitialised
+    # remove linked directory
+    rm -f /media/usb0
+  fi
 fi

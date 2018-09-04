@@ -36,7 +36,7 @@ init_system() {
   chmod 775 /var/status
 
   # create /media/usbX directories for automounting USB devices
-  for i in $(seq 0 7); do
+  for i in $(seq 1 8); do
     mkdir -p /media/usb${i}
   done
 

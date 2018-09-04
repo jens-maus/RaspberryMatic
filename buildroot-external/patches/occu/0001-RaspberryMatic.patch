@@ -188,31 +188,12 @@
 +}
 +
 +startup
---- occu/WebUI/www/api/homematic.cgi.orig
-+++ occu/WebUI/www/api/homematic.cgi
-@@ -22,15 +22,13 @@
- # um eine Notlösung. 
- ##
- 
--set central true
-+set central true 
- 
- # Zentrale oder Konfigtool (/www/ = Zentrale)
- if {$env(DOCUMENT_ROOT) != "\/www\/"} then {
-   set central false
- }
- 
--set central true
--
- #####################
- # Verwendete Module #
- #####################
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
 @@ -394,7 +394,7 @@
                      table_row {
                        table_data {
-                         division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
+                         division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU3';\"" {}
 -                        division {class="CLASS20908"}  "onClick=\"showCCULicense();\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
 +                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
                        }
@@ -510,21 +491,6 @@
          puts "</ul>"
  
        puts "</td>"
---- occu/WebUI/www/config/ic_common.tcl.orig
-+++ occu/WebUI/www/config/ic_common.tcl
-@@ -23,10 +23,10 @@
- set GL_FLAG_RECEIVER_UNKNOWN     0x8
- 
- set HTMLTITLE "HomeMatic Interne Konfiguration"
--set INTERFACES_FILE "/opt/hm/etc/config/InterfacesList.xml"
-+set INTERFACES_FILE "/etc/config/InterfacesList.xml"
- 
- if { ![info exists env(CONFIG_ROOT)] } {
--    set env(CONFIG_ROOT) "/opt/hm/etc/config"
-+    set env(CONFIG_ROOT) "/etc/config"
- }
- 
- set USERPROFILESPATH "$env(CONFIG_ROOT)/userprofiles"
 --- occu/WebUI/www/error/error-500.html.orig
 +++ occu/WebUI/www/error/error-500.html
 @@ -100,7 +100,7 @@

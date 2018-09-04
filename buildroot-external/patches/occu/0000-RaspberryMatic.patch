@@ -500,14 +500,16 @@
                  puts "<li><a target='_blank' href='/licenseinfo.htm'>\${lblLicenseInformation}</a></li>"
                puts "</ul>"
        puts "</td>"
-@@ -75,6 +84,7 @@
+@@ -75,7 +84,8 @@
            # puts "<li>DOM [rega dom.BuildLabel()]</li>"
            puts "<li><a target='_blank' href=\"$HOMEMATIC_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
            puts "<li><a target='_blank' href=\"$HOMEMATIC_IP_URL/start.html\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
+-          puts "<li style='padding-top:25px;'><img src='/ise/img/homematic_logo_small.png'/></li>"
 +          puts "<li><a target='_blank' href=\"https://raspberrymatic.de/\">\${homepage} RaspberryMatic</a></li>"
-           puts "<li style='padding-top:25px;'><img src='/ise/img/homematic_logo_small.png'/></li>"
++          puts "<li style='padding-top:25px;'><img src='/ise/img/rm-logo_small.png'/></li>"
          puts "</ul>"
  
+       puts "</td>"
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
 @@ -23,10 +23,10 @@
@@ -523,6 +525,146 @@
  }
  
  set USERPROFILESPATH "$env(CONFIG_ROOT)/userprofiles"
+--- occu/WebUI/www/error/error-500.html.orig
++++ occu/WebUI/www/error/error-500.html
+@@ -100,7 +100,7 @@
+     <p>${ccuNotReadyHint}</p>
+   </div>
+   <div align="center" style="padding-top:250px;">
+-    <img id="imgLogo" src="/ise/img/hm-logo.png" alt=""/>
++    <img id="imgLogo" src="/ise/img/rm-logo.png" alt=""/>
+   </div>
+ </div>
+ 
+--- occu/WebUI/www/error/error-503.html.orig
++++ occu/WebUI/www/error/error-503.html
+@@ -94,7 +94,7 @@
+     <p>${ccuNotReadyHint}</p>
+   </div>
+   <div align="center" style="padding-top:250px;">
+-    <img id="imgLogo" src="/ise/img/hm-logo.png" alt=""/>
++    <img id="imgLogo" src="/ise/img/rm-logo.png" alt=""/>
+   </div>
+ </div>
+ 
+--- occu/WebUI/www/ise/htm/header.htm.orig
++++ occu/WebUI/www/ise/htm/header.htm
+@@ -7,7 +7,7 @@
+ </colgroup>
+ <tr>
+   <!-- Logo -->
+-          <td class="CLASS11100"><img id="headerLogo" src="/ise/img/homematic_logo_small.png" onclick="LogoClick();" class="SmallLogo" alt="" /></td>
++          <td class="CLASS11100"><img id="headerLogo" src="/ise/img/rm-logo_small.png" onclick="LogoClick();" class="SmallLogo" alt="" /></td>
+   <!-- Username und Pfad-->
+   <td class="CLASS11101">
+     <table class="CLASS11102">
+--- occu/WebUI/www/ise/js/functions.j_.orig
++++ occu/WebUI/www/ise/js/functions.j_
+@@ -1904,11 +1904,11 @@
+       {
+         if( $("headerLogo").src.indexOf("_red") >= 0 )
+         {
+-          $("headerLogo").src = "/ise/img/homematic_logo_small.png";
++          $("headerLogo").src = "/ise/img/rm-logo_small.png";
+         }
+         else
+         {
+-          $("headerLogo").src = "/ise/img/homematic_logo_small_red.png";
++          $("headerLogo").src = "/ise/img/rm-logo_small_red.png";
+         }
+       }
+     },
+@@ -1923,12 +1923,12 @@
+ 
+ SwitchOnFlashLight = function()
+ {
+-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small_red.png"; }
++  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small_red.png"; }
+ };
+ 
+ SwitchOffFlashLight = function()
+ {
+-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small.png"; }
++  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small.png"; }
+ };
+ 
+ ShowAjaxLoad = function()
+--- occu/WebUI/www/rega/help.htm.orig
++++ occu/WebUI/www/rega/help.htm
+@@ -53,7 +53,7 @@
+           <td>http://www.homematic.com </td>
+         </tr>
+         <tr>
+-          <td><img src="/ise/img/homematic_logo_small_gray.png" /></td>
++          <td><img src="/ise/img/rm-logo_small_gray.png" /></td>
+         </tr>
+     </table>
+     </td>
+--- occu/WebUI/www/rega/login.htm.orig
++++ occu/WebUI/www/rega/login.htm
+@@ -73,7 +73,7 @@
+     <td id="navbar">
+       <table cellpadding="0" cellspacing="0">
+         <tr>
+-          <td style="text-align: center;"><div style="width: 180px;"><img src="/ise/img/homematic_logo_small.png" alt="HomeMatic Logo" /></div></td>
++          <td style="text-align: center;"><div style="width: 180px;"><img src="/ise/img/rm-logo_small.png" alt="RaspberryMatic Logo" /></div></td>
+           <td><span class="HeaderTitle">${lblUsrLogin}</span></td>
+           <td style="width: 100%;"></td>
+           <!-- <td><a href="/pda/index.cgi" target="_blank"><img id="WebUIorPDA" src="/ise/img/mobile_device.png" width="48px;" height="48px" alt="WebUI PDA" title="WebUI PDA"/></a></td> -->
+@@ -194,4 +194,4 @@
+ </script>
+ 
+ </body>
+-</html>
+\ No newline at end of file
++</html>
+--- occu/WebUI/www/rega/logout.htm.orig
++++ occu/WebUI/www/rega/logout.htm
+@@ -44,7 +44,7 @@
+       <td id="navbar">
+         <table cellpadding="0" cellspacing="0">
+         <tr>
+-          <td style="text-align: center;"><div style="width: 180px;" ><img src="/ise/img/homematic_logo_small.png" alt="HomeMatic Logo" /></div></td>
++          <td style="text-align: center;"><div style="width: 180px;" ><img src="/ise/img/rm-logo_small.png" alt="RaspberryMatic Logo" /></div></td>
+           <td><span class="HeaderTitle">${lblUsrLogoff}</span></td>
+             <td style="width: 100%;"></td>
+             <td style="padding-right:63px;"><div class="clickable" onclick="loadHelp()"><img id="idHelp" src="/ise/img/help.png" width="48px" height="48px" alt="Hilfe" title="Hilfe"/></div></td>
+--- occu/WebUI/www/rega/pages/index.htm.orig
++++ occu/WebUI/www/rega/pages/index.htm
+@@ -12,8 +12,8 @@
+   <meta http-equiv="Expires" content="01 Jan 2015 00:00:00 GMT" />
+   <!-- <meta http-equiv="X-UA-Compatible" content="IE=8"> -->
+ 
+-  <link rel="shortcut icon" href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon"/>
+-  <link rel="icon"          href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon" />
++  <link rel="shortcut icon" href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon"/>
++  <link rel="icon"          href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon" />
+   
+   <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css" />
+   <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css" />
+@@ -195,7 +195,7 @@
+   <div id="webuiloader_wrapper">
+     <div id="webuiloader_background">
+       <div id="webuiloader">
+-        <div id="webuiloader_icon"><img src="/ise/img/homematic_logo_small_gray.png" /></div>
++        <div id="webuiloader_icon"><img src="/ise/img/rm-logo_small_gray.png" /></div>
+         <!-- div id="webuiloader_caption">HomeMatic WebUI wird geladen...</div-->
+         <div id="webuiloader_caption"></div>
+         <script type="text/javascript">jQuery("#webuiloader_caption").html(translateKey("loadWebUI"));</script>
+--- occu/WebUI/www/webui/error/notready.html.orig
++++ occu/WebUI/www/webui/error/notready.html
+@@ -12,8 +12,8 @@
+     <p>Bitte warten Sie. Sie werden automatisch auf die Startseite weitergeleitet.</p>
+   </div>
+   <div align="center" style="padding-top:250px;">
+-    <img id="imgLogo" src="/ise/img/hm-logo.png" alt=""/>
++    <img id="imgLogo" src="/ise/img/rm-logo.png" alt=""/>
+   </div>
+ </body>
+ 
+-</html>
+\ No newline at end of file
++</html>
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -1,8 +1,8 @@
@@ -605,3 +747,32 @@
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
+@@ -24695,11 +24695,11 @@
+       {
+         if( $("headerLogo").src.indexOf("_red") >= 0 )
+         {
+-          $("headerLogo").src = "/ise/img/homematic_logo_small.png";
++          $("headerLogo").src = "/ise/img/rm-logo_small.png";
+         }
+         else
+         {
+-          $("headerLogo").src = "/ise/img/homematic_logo_small_red.png";
++          $("headerLogo").src = "/ise/img/rm-logo_small_red.png";
+         }
+       }
+     },
+@@ -24714,12 +24714,12 @@
+ 
+ SwitchOnFlashLight = function()
+ {
+-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small_red.png"; }
++  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small_red.png"; }
+ };
+ 
+ SwitchOffFlashLight = function()
+ {
+-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small.png"; }
++  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small.png"; }
+ };
+ 
+ getAjaxLoadElem = function() {

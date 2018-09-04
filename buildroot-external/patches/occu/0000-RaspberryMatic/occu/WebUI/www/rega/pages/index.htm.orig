@@ -12,11 +12,8 @@
   <meta http-equiv="Expires" content="01 Jan 2015 00:00:00 GMT" />
   <!-- <meta http-equiv="X-UA-Compatible" content="IE=8"> -->
 
-  <link rel="apple-touch-icon" href="/ise/img/rm-touch-icon-iphone.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/ise/img/rm-touch-icon-iphone-retina.png" />
-
-  <link rel="shortcut icon" href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon"/>
-  <link rel="icon"          href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon" />
+  <link rel="shortcut icon" href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon"/>
+  <link rel="icon"          href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon" />
   
   <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css" />
   <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css" />
@@ -199,7 +196,7 @@
     <div id="webuiloader_background">
       <div id="webuiloader">
         <div id="webuiloader_icon"><img src="/ise/img/homematic_logo_small_gray.png" /></div>
-        <!-- <div id="webuiloader_caption">HomeMatic WebUI wird geladen...</div> -->
+        <!-- div id="webuiloader_caption">HomeMatic WebUI wird geladen...</div-->
         <div id="webuiloader_caption"></div>
         <script type="text/javascript">jQuery("#webuiloader_caption").html(translateKey("loadWebUI"));</script>
       </div>

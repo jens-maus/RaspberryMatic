@@ -85,7 +85,7 @@ proc action_put_page {} {
           puts "<li><a target='_blank' href=\"$HOMEMATIC_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
           puts "<li><a target='_blank' href=\"$HOMEMATIC_IP_URL/start.html\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
           puts "<li><a target='_blank' href=\"https://raspberrymatic.de/\">\${homepage} RaspberryMatic</a></li>"
-          puts "<li style='padding-top:25px;'><img src='/ise/img/homematic_logo_small.png'/></li>"
+          puts "<li style='padding-top:25px;'><img src='/ise/img/rm-logo_small.png'/></li>"
         puts "</ul>"
 
       puts "</td>"

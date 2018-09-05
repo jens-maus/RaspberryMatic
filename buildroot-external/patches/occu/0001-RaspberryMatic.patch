@@ -230,6 +230,17 @@
        table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
 --- occu/WebUI/www/config/cp_security.cgi.orig
 +++ occu/WebUI/www/config/cp_security.cgi
+@@ -97,8 +97,8 @@
+ proc checkUserBackupValidility {migrationMode} {
+ 
+     switch $migrationMode {
+-      "CCU2_CCU2" {set pathBackup "/tmp/backup/"}
+-      "CCU2_CCU3" {set pathBackup "/tmp/backup/usr/local/"}
++      "CCU2_CCU2" {set pathBackup "/usr/local/tmp/backup/"}
++      "CCU2_CCU3" {set pathBackup "/usr/local/tmp/backup/usr/local/"}
+       "CCU3_CCU3" {set pathBackup "/usr/local/eQ-3-Backup/restore/"}
+     }
+ 
 @@ -258,7 +258,7 @@
          } else {
            exec touch /usr/local/.doFactoryReset

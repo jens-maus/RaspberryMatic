@@ -97,8 +97,8 @@ proc readBackupStatus {} {
 proc checkUserBackupValidility {migrationMode} {
 
     switch $migrationMode {
-      "CCU2_CCU2" {set pathBackup "/tmp/backup/"}
-      "CCU2_CCU3" {set pathBackup "/tmp/backup/usr/local/"}
+      "CCU2_CCU2" {set pathBackup "/usr/local/tmp/backup/"}
+      "CCU2_CCU3" {set pathBackup "/usr/local/tmp/backup/usr/local/"}
       "CCU3_CCU3" {set pathBackup "/usr/local/eQ-3-Backup/restore/"}
     }
 

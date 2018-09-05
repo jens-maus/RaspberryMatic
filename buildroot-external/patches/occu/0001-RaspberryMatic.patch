@@ -269,7 +269,7 @@
    set config_version [read_version "firmware_version"]
    set ccu1_backup false
    if { [version_compare $config_version 2.0.0] < 0 } {
-@@ -569,7 +569,7 @@
+@@ -571,7 +571,7 @@
      }
      if { "CCU2_CCU2" == $migration_mode } {
        # CCU2 ==> CCU2
@@ -278,7 +278,7 @@
            # set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
            # append msg "Falls dieser Fehler wiederholt Auftritt, wenden Sie sich bitte mit der folgenden Fehlermeldung an den Kundenservice:\n<br>"
            # append msg $errorMessage
-@@ -583,31 +583,32 @@
+@@ -585,31 +585,32 @@
      file delete -force /usr/local/eQ-3-Backup/restore
      file mkdir /usr/local/eQ-3-Backup/restore
      cd /usr/local/eQ-3-Backup/restore
@@ -319,7 +319,7 @@
            }
  
            if { [file exists InterfacesList.xml] } { file copy InterfacesList.xml /usr/local/eQ-3-Backup/restore/etc/config/InterfacesList.xml }
-@@ -636,26 +637,31 @@
+@@ -638,26 +639,31 @@
            if { [file exists time.conf] } { file copy time.conf /usr/local/eQ-3-Backup/restore/etc/config/time.conf }
            set backuperror false
            cd /
@@ -357,7 +357,7 @@
          }
  
          if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }
-@@ -709,6 +715,8 @@
+@@ -711,12 +717,14 @@
          catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
  
          set backuperror false
@@ -366,8 +366,15 @@
        }
      cd /
    }
-@@ -729,8 +737,7 @@
-   }
+ 
+ 
+-  set source_version [read_version "/tmp/firmware_version"]
++  set source_version [read_version "/usr/local/tmp/firmware_version"]
+ 
+   set source_version [split $source_version .]
+   set source_major [lindex $source_version 0]
+@@ -738,8 +746,7 @@
+   cgi_javascript {puts "MessageBox.close();"}
  
    if { "false" == $backuperror } {
 -        exec mount -o remount,ro /usr/local
@@ -376,7 +383,7 @@
          division {class="popupTitle"} {
              puts "\${dialogSettingsSecurityMessageSysBackupRestartSystemTitle}"
          }
-@@ -771,8 +778,6 @@
+@@ -780,8 +787,6 @@
      cgi_javascript {
        puts "translatePage('#messagebox');"
      }
@@ -385,7 +392,7 @@
  }
  
  proc put_message {title msg args} {
-@@ -1215,30 +1220,27 @@
+@@ -1224,30 +1229,27 @@
  
  proc action_create_backup {} {
      set HOSTNAME [exec hostname]

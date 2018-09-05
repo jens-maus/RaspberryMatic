@@ -499,6 +499,7 @@ proc action_backup_restore_go {} {
         # check the entered key against our current system key
         if { [catch {exec crypttool -v -t 3 -k "$key"}]} {
             #Der eingegebene System-Sicherheitsschl&uuml;ssel entspricht nicht dem aktuellen System-Sicherheitsschl&uuml;ssel der Zentrale.
+            cgi_javascript {puts "MessageBox.close();"}
             put_message "\${dialogSettingsSecurityMessageSysBackupSecurityErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupSecurityError1Content}"
             return
         }
@@ -506,6 +507,7 @@ proc action_backup_restore_go {} {
     if { $config_has_user_key } {
         if { "$stored_signature" != "[exec crypttool -t 3 -k "$key" -s <usr_local.tar.gz]" } {
             # Der eingegebene System-Sicherheitsschl&uuml;ssel entspricht nicht dem zur Backup-Datei geh&ouml;renden System-Sicherheitsschl&uuml;ssel.
+            cgi_javascript {puts "MessageBox.close();"}
             put_message "\${dialogSettingsSecurityMessageSysBackupSecurityErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupSecurityError2Content}"
             return
         }
@@ -515,7 +517,7 @@ proc action_backup_restore_go {} {
         # set msg "Das Einspielen des Backups ist nicht m&ouml;glich. Das vorliegende Backup basiert auf der Zentralen-Firmware $config_version.<br>\n"
         # append msg "Diese Firmware ist aktueller, als die derzeit auf der Zentrale installierte Version ($system_version).<br>\n"
         # append msg "F&uuml;hren Sie zun&auml;chst ein Update der Zentralen-Firmware durch und starten Sie dann das Einspielen des Systembackups erneut."
-
+        cgi_javascript {puts "MessageBox.close();"}
         put_message "\${dialogSettingsSecurityMessageSysBackupFWUpdateNecessaryTitle}" "\${dialogSettingsSecurityMessageSysBackupFWUpdateNecessaryContentA} $config_version \${dialogSettingsSecurityMessageSysBackupFWUpdateNecessaryContentB} ($system_version) \${dialogSettingsSecurityMessageSysBackupFWUpdateNecessaryContentC}"
         return
     }
@@ -713,8 +715,16 @@ proc action_backup_restore_go {} {
     cd /
   }
 
-  # Check if the backup can be used without problems
-  if {[file exists /etc/config/crRFD]} {
+
+  set source_version [read_version "/tmp/firmware_version"]
+
+  set source_version [split $source_version .]
+  set source_major [lindex $source_version 0]
+  set source_minor [lindex $source_version 1]
+  set source_patch [lindex $source_version 2]
+
+  # Check if a backup with HmIP support can be used without problems - A CCU with a version < 2.17.14 had no HmIP support. Therefore we don't check such backups
+  if {($source_major >= 3) || (($source_major == 2)  && ($source_minor > 17)) || (($source_major == 2) && ($source_minor == 17) && ($source_patch >= 14))} {
     set checkBackupState [checkUserBackupValidility $migration_mode]
     if {$checkBackupState != 10} {
       # It's not possible to use the backup
@@ -724,9 +734,8 @@ proc action_backup_restore_go {} {
       cgi_javascript {puts "homematic('User.restartHmIPServer');"}
       put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} [getBackupErrorMessage $checkBackupState]"
     }
-
-    cgi_javascript {puts "MessageBox.close();"}
   }
+  cgi_javascript {puts "MessageBox.close();"}
 
   if { "false" == $backuperror } {
         exec mount -o remount,ro /usr/local

@@ -95,7 +95,7 @@ echo "OK<br>"
 echo -ne "[4/8] Checking backup version... "
 source ${TMPDIR}/firmware_version
 BACKUP_VERSION=${VERSION}
-if [ $(echo ${BACKUP_VERSION} | cut -d'.' -f1) != "2" ]; then
+if [ $(echo ${BACKUP_VERSION} | cut -d'.' -f1) != "2" ] && [ $(echo ${BACKUP_VERSION} | cut -d'.' -f1) != "3" ]; then
   echo "ERROR: backup version (${BACKUP_VERSION}) not supported"
   exit 1
 fi

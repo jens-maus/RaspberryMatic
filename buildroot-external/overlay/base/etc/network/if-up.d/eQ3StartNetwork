@@ -27,7 +27,7 @@ echo -n "${IFACE}:"
 # only continue if this network interface exists
 if [[ ! -L "/sys/class/net/${IFACE}" ]]; then
   echo -n " missing, "
-  exit 0
+  exit 1
 fi
 
 # only continue if another interface hasn't
@@ -65,7 +65,7 @@ case "${IFACE}" in
     if [[ "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; then
       /sbin/ip link set ${IFACE} down
       echo -n ", no link, "
-      exit 0
+      exit 1
     fi
   ;;
 
@@ -80,7 +80,7 @@ case "${IFACE}" in
       # make sure that the wifi power is disabled
       # if not required
       /usr/sbin/rfkill block wlan
-      exit 0
+      exit 1
     fi
   ;;
 esac
@@ -152,7 +152,10 @@ case "${MODE}" in
     # we checked the link state already way earlier
     touch /var/status/hasLink
 
-    /sbin/ip addr add ${IP}/${NETMASK} dev ${IFACE}
+    # use ifconfig so that broadcast address is correctly calculated
+    /sbin/ifconfig ${IFACE} ${IP} netmask ${NETMASK}
+
+    # reset default gateway
     /sbin/ip route del default 2>/dev/null
     /sbin/ip route add default via ${GATEWAY}
 

@@ -1,12 +1,28 @@
 #!/bin/tclsh
-
-# DutyCycle Script v.2.4 developed by Andreas Bünting
-# Dieses Script liest den DutyCycle Status der HomeMatic CCU und Gateways aus
-# und erstellt automatisch eine Systemvariable vom Typ Zahl mit dem Gateway Namen bzw. alternativ mit der Geräte-Seriennummer.
-# Wird der Gateway Name nachträglich gesetzt, wird die zuvor erstellte Systemvariable automatisch umbenannt.
-# Zudem wird eine DutyCycle System-Log Meldung erzeugt, sofern der DutyCycle über 80% steigt.
-# Für den HM-CFG-LAN wird der DutyCycle Status bei einer Verbindungsunterbrechung auf -1 gesetzt.
-# Sofern Wired-Gateway eingebunden, wird eine Systemvariabel mit dem Namen "Wired-Status" und den Zuständen "online/offline" angelegt
+#
+# DutyCycle Script v2.4 developed by Andreas Bünting
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Dieses Script liest den DutyCycle Status der HomeMatic CCU und Gateways
+# aus und erstellt automatisch eine Systemvariable vom Typ Zahl mit dem
+# Gateway Namen bzw. alternativ mit der Geräte-Seriennummer. Wird der
+# Gateway Name nachträglich gesetzt, wird die zuvor erstellte Systemvariable
+# automatisch umbenannt. Zudem wird eine DutyCycle System-Log Meldung erzeugt,
+# sofern der DutyCycle über 80% steigt. Für den HM-CFG-LAN wird der DutyCycle
+# Status bei einer Verbindungsunterbrechung auf -1 gesetzt. Sofern
+# Wired-Gateway eingebunden, wird eine Systemvariabel mit dem Namen
+# "Wired-Status" und den Zuständen "online/offline" angelegt.
 
 load tclrpc.so
 load tclrega.so

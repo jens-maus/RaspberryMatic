@@ -1,0 +1,4 @@
+#!/bin/sh
+touch /var/status/hasUSB
+# CCU2 compatibility 
+touch /var/status/hasSD

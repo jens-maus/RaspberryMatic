@@ -2,7 +2,7 @@ PRODUCT=raspmatic_rpi3
 # PRODUCT=raspmatic_rpi0
 # PRODUCT=raspmatic_tinkerboard
 # PRODUCT=raspmatic_docker
-BUILDROOT_VERSION=2018.05
+BUILDROOT_VERSION=2018.08
 VERSION=$(shell cat ./VERSION)
 BOARD=$(shell echo $(PRODUCT) | cut -d'_' -f2)
 
@@ -46,7 +46,7 @@ release: dist
 	cp -a build-$(PRODUCT)/images/sdcard.img ./release/RaspberryMatic-$(VERSION)-$(BOARD).img
 	cd ./release && sha256sum RaspberryMatic-$(VERSION)-$(BOARD).img >RaspberryMatic-$(VERSION)-$(BOARD).img.sha256
 	rm -f ./release/RaspberryMatic-$(VERSION)-$(BOARD).zip
-	cd ./release && zip ./RaspberryMatic-$(VERSION)-$(BOARD).zip ./RaspberryMatic-$(VERSION)-$(BOARD).img ./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256 ../LICENSE
+	cd ./release && zip --junk-paths ./RaspberryMatic-$(VERSION)-$(BOARD).zip ./RaspberryMatic-$(VERSION)-$(BOARD).img ./RaspberryMatic-$(VERSION)-$(BOARD).img.sha256 ../LICENSE ./updatepkg/$(PRODUCT)/EULA.*
 	cd ./release && sha256sum RaspberryMatic-$(VERSION)-$(BOARD).zip >RaspberryMatic-$(VERSION)-$(BOARD).zip.sha256
 
 .PHONY: updatePkg

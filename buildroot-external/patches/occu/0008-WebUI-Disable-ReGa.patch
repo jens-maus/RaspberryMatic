@@ -1,6 +1,6 @@
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -506,85 +506,6 @@
+@@ -525,85 +525,6 @@
          }
        }
  
@@ -21,7 +21,7 @@
 -          table_data {align="left"} {
 -            puts "<select id='selectedReGaVersion'>"
 -            puts "<option value='NORMAL'>\${optionReGaNORMAL}</option>"
--            puts "<option value='LEGACY'>\${optionReGaLEGACY}</option>"
+-            # puts "<option value='LEGACY'>\${optionReGaLEGACY}</option>"
 -            puts "<option value='COMMUNITY'>\${optionReGaCOMMUNITY}</option>"
 -            puts "</select>"
 -          }
@@ -40,9 +40,9 @@
 -        }
 -        }
 -
--        table_data {align="center"} {class="CLASS20904"} {
--        # puts "\${lblTDReGaVersionHelp}"
--        division {Class="StdTableBtnHelp"} {puts "<img id='showReGaVersionHelp' src='/ise/img/help.png'>"}
+-        table_data {align="left"} {class="CLASS20904"} {
+-        # division {Class="StdTableBtnHelp"} {puts "<img id='showReGaVersionHelp' src='/ise/img/help.png'>"}
+-        division {Class="StdTableBtnHelp"} {puts "\${lblTDReGaVersionHelp}"}
 -        }
 -      }
 -

@@ -1,0 +1,56 @@
+#!/bin/sh
+#
+# init script to start/stop the Mediola Addon
+#
+
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# skip this startup in LAN Gateway mode
+[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
+
+# skip startup if mediola  isn't found/installed
+if [ -d /usr/local/addons/mediola ]; then
+    exit 0
+fi
+
+
+if [ -e /etc/config/neoDisabled ];then
+    exit 0
+fi
+
+start() {
+  echo -n "Starting NeoServer: "
+
+  if [[ ! -e /etc/config/safemode ]]; then
+
+
+    /opt/mediola/startup.sh 2>/dev/null >/dev/null
+
+    echo "OK"
+  else
+    echo "skipping (safemode)"
+  fi
+}
+
+restart() {
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+	killall node	 
+	 echo "OK"
+ ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|restart}"
+    exit 1
+esac
+
+exit $?

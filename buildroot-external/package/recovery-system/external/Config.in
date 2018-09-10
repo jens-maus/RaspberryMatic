@@ -2,6 +2,14 @@ menu "Hardware Support"
   source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/../../../package/rx8130-rtc/Config.in"
 endmenu
 
+menu "Kernel Module Support"
+  source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/../../../package/generic_raw_uart/Config.in"
+endmenu
+
 menu "Software Support"
   source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/../../../package/wiringpi-tinker/Config.in"
 endmenu
+
+# External packages
+source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/Config.ext.in"
+

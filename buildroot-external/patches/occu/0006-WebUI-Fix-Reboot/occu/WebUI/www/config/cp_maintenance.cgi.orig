@@ -902,7 +902,7 @@ proc action_firmware_upload {} {
       set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
       if {$file_invalid == 0} {
         # the file seems to be a tar archive (perhaps with gzip compression)
-        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xf $filename} result]
+        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xmf $filename} result]
         file delete -force -- $filename
       }
     }

@@ -9,13 +9,6 @@
          <table id="login_content" style="width: 200px;">
            <tr>
              <!-- Liste der Benutzer -->
-@@ -194,4 +194,4 @@
- </script>
- 
- </body>
--</html>
-\ No newline at end of file
-+</html>
 --- occu/WebUI/www/rega/logout.htm.orig
 +++ occu/WebUI/www/rega/logout.htm
 @@ -54,7 +54,7 @@

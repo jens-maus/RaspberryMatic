@@ -1,0 +1,20 @@
+--- buildroot/package/lighttpd/lighttpd.hash.orig
++++ buildroot/package/lighttpd/lighttpd.hash
+@@ -1,4 +1,4 @@
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.49.sha256sum
+-sha256 aedf49d7127d9e4c0ea56618e9e945a17674dc46a37ac7990120f87dd939ce09  lighttpd-1.4.49.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.50.sha256sum
++sha256 29378312d8887cbc14ffe8a7fadef2d5a08c7e7e1be942795142346ad95629eb lighttpd-1.4.50.tar.xz
+ # Locally calculated
+ sha256 5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+--- buildroot/package/lighttpd/lighttpd.mk.orig
++++ buildroot/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).49
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).50
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause

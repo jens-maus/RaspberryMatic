@@ -180,14 +180,3 @@
  
      "ruleConditionSelectTimeControl" : "Time control",
      "ruleConditionLblTimeOnce" : "Non-recurring",
---- occu/WebUI/www/webui/js/lang/tr/translate.lang.js.orig
-+++ occu/WebUI/www/webui/js/lang/tr/translate.lang.js
-@@ -776,6 +776,8 @@
-     "ruleConditionLblLessThan" : "den daha k%FCc%FCk",
-     "ruleConditionLblGreaterOrEqualThan" : "daha b%FCy%FCk veya esit",
-     "ruleConditionLblLessOrEqualThan" : "daha k%FCc%FCk veya esit",
-+    "ruleConditionLblEqualThan" : "veya esit",
-+    "ruleConditionLblNotEqualThan" : "voltaji veya esit",
-     "ruleConditionSelectTimeControl" : "Zaman kumandasi",
-     "ruleConditionLblTimeOnce" : "Bir kerelik",
-     "ruleConditionLblTimePeriodically" : "Periyodik",

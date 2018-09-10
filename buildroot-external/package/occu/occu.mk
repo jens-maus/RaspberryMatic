@@ -4,69 +4,67 @@
 #
 #############################################################
 
-OCCU_VERSION = 2.35.16-1
+OCCU_VERSION = 3.37.8-2
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 
 ifeq ($(BR2_PACKAGE_OCCU),y)
 
-define OCCU_PRE_PATCH
-	cp $(OCCU_PKGDIR)/Makefile $(@D)
-endef
-OCCU_PRE_PATCH_HOOKS += OCCU_PRE_PATCH
+	define OCCU_PRE_PATCH
+		cp $(OCCU_PKGDIR)/Makefile $(@D)
+  endef
+	OCCU_PRE_PATCH_HOOKS += OCCU_PRE_PATCH
 
-define OCCU_FINALIZE_TARGET
+	define OCCU_FINALIZE_TARGET
+		# setup /usr/local/etc/config
+		mkdir -p $(TARGET_DIR)/usr/local/etc/config
+		rm -rf $(TARGET_DIR)/etc/config
+		ln -snf ../usr/local/etc/config $(TARGET_DIR)/etc/
 
-	# setup /usr/local/etc/config
-	mkdir -p $(TARGET_DIR)/usr/local/etc/config
-	rm -rf $(TARGET_DIR)/etc/config
-	ln -snf ../usr/local/etc/config $(TARGET_DIR)/etc/
+		# shadow file setup
+		touch $(TARGET_DIR)/usr/local/etc/config/shadow
+		rm -f $(TARGET_DIR)/etc/shadow
+		ln -snf config/shadow $(TARGET_DIR)/etc/
 
-	# shadow file setup
-	touch $(TARGET_DIR)/usr/local/etc/config/shadow
-	rm -f $(TARGET_DIR)/etc/shadow
-	ln -snf config/shadow $(TARGET_DIR)/etc/
+		# relink resolv.conf to /var/etc
+		rm -f $(TARGET_DIR)/etc/resolv.conf
+		ln -snf ../var/etc/resolv.conf $(TARGET_DIR)/etc/
 
-	# relink resolv.conf to /var/etc
-	rm -f $(TARGET_DIR)/etc/resolv.conf
-	ln -snf ../var/etc/resolv.conf $(TARGET_DIR)/etc/
+		# remove the local wpa_supplicant config
+		rm -f $(TARGET_DIR)/etc/wpa_supplicant.conf
 
-	# remove the local wpa_supplicant config
-	rm -f $(TARGET_DIR)/etc/wpa_supplicant.conf
+		# relink the NUT config files
+		rm -f $(TARGET_DIR)/etc/upssched.conf.sample
+		ln -snf config/nut/upssched.conf $(TARGET_DIR)/etc/
+		rm -f $(TARGET_DIR)/etc/upsmon.conf.sample
+		ln -snf config/nut/upsmon.conf $(TARGET_DIR)/etc/
+		rm -f $(TARGET_DIR)/etc/upsd.conf.sample
+		ln -snf config/nut/upsd.conf $(TARGET_DIR)/etc/
+		rm -f $(TARGET_DIR)/etc/upsd.users.sample
+		ln -snf config/nut/upsd.users $(TARGET_DIR)/etc/
+		rm -f $(TARGET_DIR)/etc/ups.conf.sample
+		ln -snf config/nut/ups.conf $(TARGET_DIR)/etc/
+		rm -f $(TARGET_DIR)/etc/nut.conf.sample
+		ln -snf config/nut/nut.conf $(TARGET_DIR)/etc/
 
-	# relink the NUT config files
-	rm -f $(TARGET_DIR)/etc/upssched.conf.sample
-	ln -snf config/nut/upssched.conf $(TARGET_DIR)/etc/
-	rm -f $(TARGET_DIR)/etc/upsmon.conf.sample
-	ln -snf config/nut/upsmon.conf $(TARGET_DIR)/etc/
-	rm -f $(TARGET_DIR)/etc/upsd.conf.sample
-	ln -snf config/nut/upsd.conf $(TARGET_DIR)/etc/
-	rm -f $(TARGET_DIR)/etc/upsd.users.sample
-	ln -snf config/nut/upsd.users $(TARGET_DIR)/etc/
-	rm -f $(TARGET_DIR)/etc/ups.conf.sample
-	ln -snf config/nut/ups.conf $(TARGET_DIR)/etc/
-	rm -f $(TARGET_DIR)/etc/nut.conf.sample
-	ln -snf config/nut/nut.conf $(TARGET_DIR)/etc/
+		# link timezone information files
+		ln -snf config/localtime $(TARGET_DIR)/etc/
+		ln -snf config/timezone $(TARGET_DIR)/etc/
 
-	# link timezone information files
-	ln -snf config/localtime $(TARGET_DIR)/etc/
-	ln -snf config/timezone $(TARGET_DIR)/etc/
+		# link /etc/firmware to /lib/firmware
+		ln -snf ../lib/firmware $(TARGET_DIR)/etc/
 
-	# link /etc/firmware to /lib/firmware
-	ln -snf ../lib/firmware $(TARGET_DIR)/etc/
+		# remove obsolete init.d jobs
+		rm -f $(TARGET_DIR)/etc/init.d/S01logging
+		rm -f $(TARGET_DIR)/etc/init.d/S20urandom
+		rm -f $(TARGET_DIR)/etc/init.d/S49ntp
 
-	# remove obsolete init.d jobs
-	rm -f $(TARGET_DIR)/etc/init.d/S01logging
-	rm -f $(TARGET_DIR)/etc/init.d/S20urandom
-	rm -f $(TARGET_DIR)/etc/init.d/S49ntp
+		# remove obsolete config templates
+		rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf
 
-	# remove obsolete config templates
-	rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf
-
-	# remove unrequired ReGaHss versions
-	rm -f $(TARGET_DIR)/bin/ReGaHss.*
-
-endef
-TARGET_FINALIZE_HOOKS += OCCU_FINALIZE_TARGET
+		# make sure ReGaHss.* is deleted
+		rm -f $(TARGET_DIR)/bin/ReGaHss.*
+  endef
+	TARGET_FINALIZE_HOOKS += OCCU_FINALIZE_TARGET
 
 endif
 

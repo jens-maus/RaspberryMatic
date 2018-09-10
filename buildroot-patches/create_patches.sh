@@ -13,7 +13,7 @@ for dir in ${patchdirs}; do
   package=$(basename ${dir})
   [[ "${package}" == "package" ]] && continue
   count=$(printf %04d ${COUNTER})
-  patchfile=${count}-${package}.patch
+  patchfile=0000-${package}.patch
   echo ${patchfile}
   origfiles=$(find ${dir} -name "*.orig" -type f -print | sort)
   rm -f ${patchfile}

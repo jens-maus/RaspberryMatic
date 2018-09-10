@@ -36,15 +36,9 @@ init_system() {
   chmod 775 /var/etc
   mkdir -p /var/status
   chmod 775 /var/status
-  touch /var/status/SDinitialised
-
-  # create pathes for recording data
-  mkdir -p /usr/local/sdcard/measurement
-  mkdir -p /media/sd-mmcblk0
-  ln -sf /usr/local/sdcard/measurement /media/sd-mmcblk0/measurement
 
   # create /media/usbX directories for automounting USB devices
-  for i in $(seq 0 7); do
+  for i in $(seq 1 8); do
     mkdir -p /media/usb${i}
   done
 

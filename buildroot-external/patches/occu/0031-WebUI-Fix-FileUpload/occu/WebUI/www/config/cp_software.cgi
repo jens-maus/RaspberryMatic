@@ -489,7 +489,13 @@ proc action_image_upload {} {
     global env sid filename
     cd /usr/local/tmp/
     
-    file rename -force -- $filename "/usr/local/tmp/new_addon.tar.gz"
+    if {[getProduct] < 3} {
+        # CCU2
+        file rename -force -- $filename "/var/new_firmware.tar.gz"
+    } else {
+        # CCU3
+        file rename -force -- $filename "/usr/local/tmp/new_addon.tar.gz"
+    }
     cgi_javascript {
         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
         puts {
@@ -501,12 +507,10 @@ proc action_image_upload {} {
 }
 
 proc action_install_start {} {
-    if {[isOldCCU]} {
-        exec /sbin/init -q
-    } else {
-        exec touch /usr/local/.doAddonInstall
-        exec /sbin/reboot
+    if {[getProduct] == 3} {
+       exec touch /usr/local/.doAddonInstall
     }
+    exec /sbin/reboot
 }
 
 cgi_eval {

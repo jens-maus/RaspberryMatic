@@ -9176,6 +9176,7 @@ DeviceList = Singleton.create({
     this.devices  = {};
     this.channels = {};
     this.groups   = {};
+    this.rssiInfoHmIP = new Array();
     this.rssiInfoHmRF = new Array();
   },
   

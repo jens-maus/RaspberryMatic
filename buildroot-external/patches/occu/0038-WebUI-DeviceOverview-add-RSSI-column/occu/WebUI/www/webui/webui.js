@@ -8939,12 +8939,11 @@ Device = Class.create({
   /**
    * Startet die Akualisierung der RSSI Werte
    **/
-  updateRssiInfoHmRF:function()
+  updateRssiInfo:function(rssiList)
   {
-    if (this.interfaceName === 'BidCos-RF' &&
-        DeviceList.rssiInfoHmRF !== 'undefined')
+    if (rssiList != "undefined")
     {
-      var rssiInfo = DeviceList.rssiInfoHmRF.find(x => x.name === this.address);
+      var rssiInfo = rssiList.find(x => x.name === this.address);
       if (rssiInfo && rssiInfo.partner)
       {
         var rssiData = rssiInfo.partner[0].rssiData;
@@ -9349,16 +9348,18 @@ DeviceList = Singleton.create({
   /**
    * Startet die Akualisierung der RSSI Werte
    **/
-  updateRssiInfoHmRF:function()
+  updateRssiInfo:function()
   {
+    this.rssiInfoHmIP = homematic("Interface.rssiInfo", {"interface": "HmIP-RF"});
     this.rssiInfoHmRF = homematic("Interface.rssiInfo", {"interface": "BidCos-RF"});
+
     for (var id in this.devices)
     {
       var device = this.devices[id];
       if (device.interfaceName === 'BidCos-RF')
-      {
-        device.updateRssiInfoHmRF();
-      }
+        device.updateRssiInfo(this.rssiInfoHmRF);
+      else if (device.interfaceName === 'HmIP-RF')
+        device.updateRssiInfo(this.rssiInfoHmIP);
     }
   },
 
@@ -16012,7 +16013,7 @@ if (PLATFORM == "Central") {
 
     this.userIsNoExpert = homematic("User.isNoExpert", {"id": userId});
     
-    DeviceList.updateRssiInfoHmRF();
+    DeviceList.updateRssiInfo();
 
     this.mode        = this.MODE.TREE;
     this.sortId      = "NAME";

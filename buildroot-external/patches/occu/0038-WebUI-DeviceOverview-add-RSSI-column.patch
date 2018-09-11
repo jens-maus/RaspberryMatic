@@ -60,6 +60,43 @@
  
 -jsonrpc_response $result
 +jsonrpc_response $result
+--- occu/WebUI/www/api/methods/interface/rssiinfo.tcl.orig
++++ occu/WebUI/www/api/methods/interface/rssiinfo.tcl
+@@ -16,8 +16,27 @@
+ #                           Der Wert 65536 bedeutet, dass keine Informationen vorliegen.
+ ##
+ 
+-checkXmlRpcStatus [catch { array set rssiInfo [xmlrpc $interface(URL) rssiInfo] }]
++if { [catch {
++  set rssi_list [xmlrpc $interface(URL) rssiInfo]
++} ] } {
++  set rssi_list ""
++  if { "$interface(INFO)" == "HmIP-RF" } {
++    set devlist [xmlrpc $interface(URL) listDevices [list bool 0]]
++    foreach dev $devlist {
++      array_clear dev_descr
++      array set dev_descr $dev
++      if { "$dev_descr(PARENT)" == "" } {
++        set rssi_device 65536
++        set rssi_peer 65536
++        catch { set rssi_device [xmlrpc $interface(URL) getValue "$dev_descr(ADDRESS):0" "RSSI_DEVICE"] }
++        catch { set rssi_peer [xmlrpc $interface(URL) getValue "$dev_descr(ADDRESS):0" "RSSI_PEER"] }
++        set rssi_list "$dev_descr(ADDRESS) { $dev_descr(ADDRESS) { $rssi_device $rssi_peer }} $rssi_list"
++      }
++    }
++  }
++}
+ 
++array set rssiInfo $rssi_list
+ set result "\["
+ set first 1
+ 
+@@ -51,4 +70,4 @@
+ 
+ 
+ 
+-jsonrpc_response $result
++jsonrpc_response $result
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -2,7 +2,7 @@
@@ -82,3 +119,73 @@
        this.channels = new Array();
        this.groups = new Array();
        this.singles = new Array();
+@@ -8935,6 +8937,27 @@
+   },
+   
+   /**
++   * Startet die Akualisierung der RSSI Werte
++   **/
++  updateRssiInfo:function(rssiList)
++  {
++    if (rssiList != "undefined")
++    {
++      var rssiInfo = rssiList.find(x => x.name === this.address);
++      if (rssiInfo && rssiInfo.partner)
++      {
++        var rssiData = rssiInfo.partner[0].rssiData;
++        this.rssiDevice = rssiData[0];
++        this.rssiPeer = rssiData[1];
++        if(this.rssiDevice === 65536)
++          this.rssiDevice = -65535;
++        if(this.rssiPeer === 65536)
++          this.rssiPeer = -65535;
++      }
++    }
++  },
++
++  /**
+    * Legt den Namen des Geräts fest.
+    **/
+   setName: function(name)
+@@ -9116,6 +9139,7 @@
+     this.devices  = {};
+     this.channels = {};
+     this.groups   = {};
++    this.rssiInfoHmRF = new Array();
+   },
+   
+   /**
+@@ -9322,6 +9346,24 @@
+   },
+   
+   /**
++   * Startet die Akualisierung der RSSI Werte
++   **/
++  updateRssiInfo:function()
++  {
++    this.rssiInfoHmIP = homematic("Interface.rssiInfo", {"interface": "HmIP-RF"});
++    this.rssiInfoHmRF = homematic("Interface.rssiInfo", {"interface": "BidCos-RF"});
++
++    for (var id in this.devices)
++    {
++      var device = this.devices[id];
++      if (device.interfaceName === 'BidCos-RF')
++        device.updateRssiInfo(this.rssiInfoHmRF);
++      else if (device.interfaceName === 'HmIP-RF')
++        device.updateRssiInfo(this.rssiInfoHmIP);
++    }
++  },
++
++  /**
+    * Startet die Akualisierung eines Geräts.
+    **/
+   beginUpdateDevice:function(id, callback)
+@@ -15971,6 +16013,8 @@
+ 
+     this.userIsNoExpert = homematic("User.isNoExpert", {"id": userId});
+     
++    DeviceList.updateRssiInfo();
++
+     this.mode        = this.MODE.TREE;
+     this.sortId      = "NAME";
+     this.sortDescend = false;

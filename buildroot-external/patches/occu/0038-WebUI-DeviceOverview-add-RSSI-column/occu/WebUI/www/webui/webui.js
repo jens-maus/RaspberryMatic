@@ -8937,6 +8937,28 @@ Device = Class.create({
   },
   
   /**
+   * Startet die Akualisierung der RSSI Werte
+   **/
+  updateRssiInfoHmRF:function()
+  {
+    if (this.interfaceName === 'BidCos-RF' &&
+        DeviceList.rssiInfoHmRF !== 'undefined')
+    {
+      var rssiInfo = DeviceList.rssiInfoHmRF.find(x => x.name === this.address);
+      if (rssiInfo && rssiInfo.partner)
+      {
+        var rssiData = rssiInfo.partner[0].rssiData;
+        this.rssiDevice = rssiData[0];
+        this.rssiPeer = rssiData[1];
+        if(this.rssiDevice === 65536)
+          this.rssiDevice = -65535;
+        if(this.rssiPeer === 65536)
+          this.rssiPeer = -65535;
+      }
+    }
+  },
+
+  /**
    * Legt den Namen des Geräts fest.
    **/
   setName: function(name)
@@ -9118,6 +9140,7 @@ DeviceList = Singleton.create({
     this.devices  = {};
     this.channels = {};
     this.groups   = {};
+    this.rssiInfoHmRF = new Array();
   },
   
   /**
@@ -9323,6 +9346,22 @@ DeviceList = Singleton.create({
   */
   },
   
+  /**
+   * Startet die Akualisierung der RSSI Werte
+   **/
+  updateRssiInfoHmRF:function()
+  {
+    this.rssiInfoHmRF = homematic("Interface.rssiInfo", {"interface": "BidCos-RF"});
+    for (var id in this.devices)
+    {
+      var device = this.devices[id];
+      if (device.interfaceName === 'BidCos-RF')
+      {
+        device.updateRssiInfoHmRF();
+      }
+    }
+  },
+
   /**
    * Startet die Akualisierung eines Geräts.
    **/
@@ -15973,6 +16012,8 @@ if (PLATFORM == "Central") {
 
     this.userIsNoExpert = homematic("User.isNoExpert", {"id": userId});
     
+    DeviceList.updateRssiInfoHmRF();
+
     this.mode        = this.MODE.TREE;
     this.sortId      = "NAME";
     this.sortDescend = false;

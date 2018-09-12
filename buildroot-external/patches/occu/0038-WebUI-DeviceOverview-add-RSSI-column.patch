@@ -59,6 +59,7 @@
  # exec echo "End devicelistdetail: " >> /tmp/devicelistdetail.log
  
 -jsonrpc_response $result
+\ No newline at end of file
 +jsonrpc_response $result
 --- occu/WebUI/www/api/methods/interface/rssiinfo.tcl.orig
 +++ occu/WebUI/www/api/methods/interface/rssiinfo.tcl
@@ -96,6 +97,7 @@
  
  
 -jsonrpc_response $result
+\ No newline at end of file
 +jsonrpc_response $result
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js

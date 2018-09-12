@@ -71,7 +71,7 @@
 @@ -72,20 +72,20 @@
  <tr>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="first"){sCssName="SortSelected";} %>
-   <th class="CLASS02602"><div id="first" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'first',true);">${thFirstMessageDateTime}</div></th>
+   <th class="CLASS02602"><div id="_first" class="_pt11 <%Write(sCssName);%>" style="height:auto;" onclick="IseSort(arServices,'first',true);">${thFirstMessageDateTime}</div></th>
 -  <th align="center" valign="middle">${thLastMessageDateTime}</th>
 +  <th class="CLASS02603" align="center" valign="middle">${thLastMessageDateTime}</th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>

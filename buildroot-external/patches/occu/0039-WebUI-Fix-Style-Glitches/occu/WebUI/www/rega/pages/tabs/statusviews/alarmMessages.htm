@@ -53,17 +53,17 @@ iseInitUpdateArrays();
 </colgroup>
 <tr>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="first"){sCssName="SortSelected";} %>
-  <th align="center" class="CLASS02802"><div id="first" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'first',true);">${thFirstTriggerDateTime}</div></th>
+  <th align="center" class="thCell CLASS02803"><div id="first" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'first',true);">${thFirstTriggerDateTime}</div></th>
   <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thLastTriggerDateTime}</div></th>
   <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thNumberOfTriggerEvents}</div></th>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
-  <th align="center" class="CLASS02802"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'name',true);">${thNameOfAlarm}</div></th>
+  <th align="center" class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'name',true);">${thNameOfAlarm}</div></th>
   <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thState}</div></th>
-  <th align="center" class="thCell CLASS02802" ><div class="pt11 CLASS02815">${thDescription}</div></th>
+  <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thDescription}</div></th>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="message"){sCssName="SortSelected";} %>
-  <th align="center" class="CLASS02802"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'message',true);">${thAlarmMessage}</div></th>
+  <th align="center" class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'message',true);">${thAlarmMessage}</div></th>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
-  <th align="center" class="CLASS02802" ><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'room',true);">${thRoom}</div></th>
+  <th align="center" class="thCell CLASS02803" ><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'room',true);">${thRoom}</div></th>
   <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thAction}</div></th>
 </tr>
 <tr>

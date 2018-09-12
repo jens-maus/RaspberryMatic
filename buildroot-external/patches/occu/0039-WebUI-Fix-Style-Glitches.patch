@@ -33,6 +33,39 @@
  </tr>
  <tr class='CLASS04205'>
    <td style='height:20px'></td>
+--- occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm
+@@ -88,18 +88,18 @@
+ <tr id="tblNewDevicesHeader">
+   <th id="tblListFold"></th>
+ 
+-  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('type')" colspan='3'><b>${thTypeDescriptor}</b></th>
+-  <th class="Sort CLASS04304 border1px"><b>${thPicture}</b></th>
+-  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('desc')"><b>${thDescriptor}</b></th>
+-  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('sn')"><b>${thSerialNumber}</b></th>
+-  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('iface')"><b>${thInterfaceCategory}</b></th>
+-  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('trans')"><b>${thTransmitMode}</b></th>
+-  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('name')"><b>${thName}</b></th>
+-  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('func')"><b>${thFunc}</b></th>
+-  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('room')"><b>${thRoom}</b></th>
+-  <th class="Sort CLASS04304 border1px"><b>${thFunctionTest}</b></th>
+-  <th class="Sort CLASS04304 border1px"><b>${thAction}</b></th>
+-  <th class="Sort CLASS04304 border1px"><b>${thReady}</b></th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'><b>${thTypeDescriptor}</b></th>
++  <th class="DeviceListHead"><b>${thPicture}</b></th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('desc')"><b>${thDescriptor}</b></th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('sn')"><b>${thSerialNumber}</b></th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('iface')"><b>${thInterfaceCategory}</b></th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('trans')"><b>${thTransmitMode}</b></th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('name')"><b>${thName}</b></th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('func')"><b>${thFunc}</b></th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('room')"><b>${thRoom}</b></th>
++  <th class="DeviceListHead"><b>${thFunctionTest}</b></th>
++  <th class="DeviceListHead"><b>${thAction}</b></th>
++  <th class="DeviceListHead"><b>${thReady}</b></th>
+ </tr>
+ 
+ <script type="text/javascript">
 --- occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm
 @@ -39,7 +39,7 @@
@@ -49,20 +82,21 @@
  <tr>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="first"){sCssName="SortSelected";} %>
 -  <th align="center" class="CLASS02802"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'first',true);">${thFirstTriggerDateTime}</div></th>
-+  <th align="center" class="CLASS02802"><div id="first" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'first',true);">${thFirstTriggerDateTime}</div></th>
++  <th align="center" class="thCell CLASS02803"><div id="first" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'first',true);">${thFirstTriggerDateTime}</div></th>
    <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thLastTriggerDateTime}</div></th>
    <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thNumberOfTriggerEvents}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
 -  <th align="center" class="CLASS02802"><div class="pt11 CLASS02815 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'name',true);">${thNameOfAlarm}</div></th>
-+  <th align="center" class="CLASS02802"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'name',true);">${thNameOfAlarm}</div></th>
++  <th align="center" class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'name',true);">${thNameOfAlarm}</div></th>
    <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thState}</div></th>
-   <th align="center" class="thCell CLASS02802" ><div class="pt11 CLASS02815">${thDescription}</div></th>
+-  <th align="center" class="thCell CLASS02802" ><div class="pt11 CLASS02815">${thDescription}</div></th>
++  <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thDescription}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="message"){sCssName="SortSelected";} %>
 -  <th align="center" class="CLASS02802"><div class="pt11 CLASS02815 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'message',true);">${thAlarmMessage}</div></th>
-+  <th align="center" class="CLASS02802"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'message',true);">${thAlarmMessage}</div></th>
++  <th align="center" class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'message',true);">${thAlarmMessage}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
 -  <th align="center" class="CLASS02802" ><div class="pt11 CLASS02815 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'room',true);">${thRoom}</div></th>
-+  <th align="center" class="CLASS02802" ><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'room',true);">${thRoom}</div></th>
++  <th align="center" class="thCell CLASS02803" ><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arAlarms,'room',true);">${thRoom}</div></th>
    <th align="center" class="thCell CLASS02803" ><div class="pt11 CLASS02815">${thAction}</div></th>
  </tr>
  <tr>

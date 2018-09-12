@@ -52,11 +52,11 @@
 
 <tr class="CLASS05300">
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
-  <th class="CLASS05301"><div id="name" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arUserNames,'name',true);">${thUserName}</div></th>
+  <th class="thCell CLASS05301"><div id="name" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arUserNames,'name',true);">${thUserName}</div></th>
   <th class="thCell">${thPassword}</th>
   <th class="thCell">${thBtnForLogin}</th>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="level"){sCssName="SortSelected";} %>
-  <th class="CLASS05301"><div id="level" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arUserNames,'level',true);">${thEntitlement}</div></th>
+  <th class="thCell CLASS05301"><div id="level" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arUserNames,'level',true);">${thEntitlement}</div></th>
 <!--  <th class="thCell">Endger&auml;t</th> -->
   <th class="thCell">${thEMail}</th>
   <th class="thCell">${thPhoneNumber}</th>

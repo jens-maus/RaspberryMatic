@@ -6,7 +6,7 @@ ResetGAC();
   object oPC = dom.GetObject( 202 );
   object oPDA = dom.GetObject( 203 );
   object oCentral = dom.GetObject( 204 );
-
+  
   object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
   if( oUser && (system.GetSessionVar("sessionCTV")=="true") )
   {
@@ -15,7 +15,7 @@ ResetGAC();
     Write('iseClearLastSort();');
     Write('lastSort = "name";');
     Write('lastDir = 1;');
-
+    
     object oTmpArray = dom.GetObject( ID_FAVORITES );
     if( oTmpArray )
     {
@@ -143,7 +143,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
     <td class="CLASS06405">
       <div id="btnFilterUsers" class="FilterBtn">${thFilter}</div>
       <div class="FilterSubMenu" id="btnFilterUsersSub" style="display:none">
-        <%
+        <% 
           Write("<table class='CLASS06406'>");
           object obj = dom.GetObject(ID_USERS);
           if ( obj ) {
@@ -175,7 +175,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
       WriteLine("<script type='text/javascript'>");
       WriteLine("Cursor.set(Cursor.NORMAL);");
       WriteLine("</script>");
-    }
+    } 
     foreach( sID, oUser.UserTempViewIDs().EnumIDs() )
     {
       object oFav = dom.GetObject( sID );
@@ -183,16 +183,16 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
       {
         iCount = iCount + 1;
         object oOrigFav = oFav;
-
+      
         string sName = oFav.Name();
         if( !sName.Length() ) { sName = "${lblWithoutName}"; }
-
+        
         string sInfo = oFav.EnumInfo();
         if( !sInfo.Length() ) { sInfo = "${lblWithoutDescription}"; }
-
+        
         string sColumnCount = oFav.FavColumnCount().ToString();
         if( sColumnCount == "0" ) { sColumnCount = "${lblAuto}"; }
-
+        
         string sColumnAlign = oFav.FavColumnAlign().ToString();
         if( sColumnAlign == "0" ) { sColumnAlign = "${lblLeft}"; }
         if( sColumnAlign == "1" ) { sColumnAlign = "${lblCenter}"; }
@@ -208,7 +208,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
           Write('<td class="tCell">'#sColumnAlign#'</td>');
           Write('<td class="tCell">'#sNamePosition#'</td>');
 
-! Endgerï¿½t
+! Endgerät          
 !          Write('<td class="tCell">' );
             string endDevices = "";
 !            Call( '/esp/favorites.fn::WriteEndDevices()' );
@@ -219,12 +219,12 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
             Call( '/esp/favorites.fn::WriteUsers()' );
           Write('</td>');
           Write('<td class="tCell" align="center" valign="middle" class="TblUserAdministration bcWhite">');
-
-            ! User darf Favoriten nur dann lï¿½schen wenn er "ihm alleine" gehï¿½rt, und Favoriten anderer User nicht bearbeiten
+            
+            ! User darf Favoriten nur dann löschen wenn er "ihm alleine" gehört, und Favoriten anderer User nicht bearbeiten
             boolean bEditAllowed = false;
             boolean bDelAllowed = false;
-
-            ! Der Admin darf sï¿½mtliche Favoriten lï¿½schen und bearbeiten
+            
+            ! Der Admin darf sämtliche Favoriten löschen und bearbeiten
             if (oUser.UserLevel() == iulAdmin)
             {
               bEditAllowed = true;
@@ -239,7 +239,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
                 if (oUserTmp != oUser.ID())
                 {
                   bHasOtherOwners = true;
-                }
+                } 
                 else {
                   bEditAllowed = true;
                   bDelAllowed = true;
@@ -262,7 +262,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
             else {
               Write('<div class="CLASS06412">${btnRemove}</div>');
             }
-
+            
           Write('</td>');
         Write('</tr>');
         Write('<script type="text/javascript">');
@@ -282,7 +282,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
           Write("tmp['name'] = '"#oFav.Name()#"';");
           Write("tmp['colpos'] = '"#oFav.FavColumnAlign().ToString()#"';");
           Write("tmp['enddevices'] = '"#endDevices#"';");
-
+          
           boolean bEndDevPC = false;
           if( oPC )
           {
@@ -291,7 +291,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
             {
               if( s == oFav.ID() ) { bEndDevPC = true; }
             }
-          }
+          }  
           Write("tmp['devPC'] = "#bEndDevPC#";");
           boolean bEndDevPDA = false;
           if( oPDA )
@@ -313,7 +313,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
             }
           }
           Write("tmp['devCentral'] = "#bEndDevCentral#";");
-
+          
           Write("tmp['namepos'] = '"#oFav.FavNamePosition().ToString()#"';");
           Write("arFavs[arFavs.length] = tmp;");
           Write("Cursor.set(Cursor.NORMAL);");
@@ -355,17 +355,17 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
     s += "<td align='center' valign='middle'><div class='FooterButton' onclick='NewFavoriteList();'>${footerBtnNew}</div></td>";
   s += "</tr>";
   s += "</table>";
-
+  
   setFooter(s);
 
   var iFavCount = <% Write(iCount);%>;
-  if (iFavCount > 0)
+  if (iFavCount > 0) 
     $("tblFavs").show();
   else
     $("tblNoFavs").show();
 
   updateTable = function() {
-
+    
     if (fltFO.filName !== "") { $("btnFilterName").addClassName("FilterBtnActive"); }
     else { $("btnFilterName").removeClassName("FilterBtnActive"); }
 
@@ -380,7 +380,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
 
     if (fltFO.filUsers !== "") { $("btnFilterUsers").addClassName("FilterBtnActive"); }
     else { $("btnFilterUsers").removeClassName("FilterBtnActive"); }
-
+    
     for (var i = 0; i < arFavs.length; i++) {
       if (fltFO.objPassFilter(arFavs[i])) {
         show(arFavs[i]['trid']);
@@ -390,7 +390,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
       }
     }
   }
-
+  
   EditFavoriteList = function(id)
   {
     var url = '/esp/favorites.htm?sid='+SessionId;
@@ -400,7 +400,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
     var opt = {postBody: pb, onComplete: function(t){loadEditFav();if(dbg){alert(t.responseText);} }}
     new Ajax.Request(url,opt);
   }
-
+  
   NewFavoriteList = function()
   {
     var url = '/esp/favorites.htm?sid='+SessionId;
@@ -408,22 +408,22 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
     pb += 'string action = "NewFavoriteList";';
     var opt = {postBody: pb, onComplete: function(t){loadEditFav();if(dbg){alert(t.responseText);} }}
     new Ajax.Request(url,opt);
-  }
+  }  
 
   loadEditFav = function()
   {
     doClearTempView = true;
     updateContent("/pages/tabs/user/newFav.htm");
   }
-
+  
   DeleteFavorite = function(id)
   {
     var _id_ = id;
     new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveFavorite"), function(result) {
       if (result == YesNoDialog.RESULT_YES) { iseFavorites.RemoveList(_id_); }
-    });
+    });     
   };
-
+  
   <%
   if( firstSort )
   {

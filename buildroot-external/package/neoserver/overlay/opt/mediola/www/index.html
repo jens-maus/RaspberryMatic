@@ -65,7 +65,17 @@
 		<div class="card mb-4 box-shadow">
 			<div class="card-header">
 				<h4 class="my-0 font-weight-normal">
-					NEO SERVER Neustart 
+					NEO SERVER<br/>Deaktivieren 
+				</h4>
+			</div>
+			<div class="card-body">
+				<button type="button" class="btn btn-lg btn-block btn-primary" onclick="serverDisable();">Deaktivieren</button> 
+			</div>
+		</div>
+		<div class="card mb-4 box-shadow">
+			<div class="card-header">
+				<h4 class="my-0 font-weight-normal">
+					NEO SERVER<br/>Neustart 
 				</h4>
 			</div>
 			<div class="card-body">
@@ -75,7 +85,7 @@
 		<div class="card mb-4 box-shadow">
 			<div class="card-header">
 				<h4 class="my-0 pricing-card-title">
-					NEO SERVER Logfiles 
+					NEO SERVER<br/>Logfiles 
 				</h4>
 			</div>
 			<div class="card-body">
@@ -220,6 +230,22 @@
   				location.href = url;
   			}, 10000);
     	}   	
+
+     	function serverDisable(){
+   			$.ajax({
+    			type: 'HEAD',
+    			url: "http://"+self.location.host+"/addons/mediola/bin/disableServer.cgi",
+    			success: function(){},
+    			error: function() {}
+  			});   	
+  			alert("NEO SERVER wird gestoppt bitte haben Sie etwas Geduld");
+  			
+  			setTimeout(function(){
+  				var url = "http://"+self.location.host+"/addons/mediola/";
+  				location.href = url;
+  			}, 10000);
+    	}   	
+	
 		function urlExists(){
   			$.ajax({
     			type: 'HEAD',

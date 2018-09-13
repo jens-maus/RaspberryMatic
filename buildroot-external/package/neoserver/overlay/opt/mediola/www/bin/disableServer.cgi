@@ -2,17 +2,12 @@
 
 package require HomeMatic
 
-if {[catch {exec rm /etc/config/neoDisabled } result]} {
-	# non-zero exit status, get it:
-	set status [lindex $errorCode 2]
-}
-
-if {[catch {exec rm /usr/local/addons/mediola/Disabled } result]} {
+if {[catch {exec touch /usr/local/addons/mediola/Disabled } result]} {
 	# non-zero exit status, get it:
 	set status [lindex $errorCode 2]
 }   
 
-if {[catch {exec /bin/sh -c "/etc/init.d/S??NeoServer restart" } result]} {
+if {[catch {exec /bin/sh -c "/etc/init.d/S??NeoServer stop" } result]} {
 	# non-zero exit status, get it:
 	set status [lindex $errorCode 2]
 }

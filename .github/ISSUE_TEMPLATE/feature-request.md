@@ -1,14 +1,14 @@
-<!---
-  NOTE:
-  - Do NOT submit anything other than bug reports or feature requests via the issue tracker!
-  - Do NOT submit bug reports about anything but the two most recently released versions!
---->
-
 ---
 name: Feature Request
 about: Suggest an idea for RaspberryMatic
 
 ---
+
+<!---
+  NOTE:
+  - Do NOT submit anything other than bug reports or feature requests via the issue tracker!
+  - Do NOT submit bug reports about anything but the two most recently released versions!
+--->
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]

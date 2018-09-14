@@ -1,3 +1,9 @@
+<!---
+  NOTE:
+  - Do NOT submit anything other than bug reports or feature requests via the issue tracker!
+  - Do NOT submit bug reports about anything but the two most recently released versions!
+--->
+
 ---
 name: Bug Report
 about: Create a report to help us improve RaspberryMatic

@@ -4617,6 +4617,8 @@ elvST['SABOTAGE=TRUE'] = '${stringTableSabotageContactWasActive}';
 elvST['SABOTAGE_MSG'] = '${stringTableSabotageMsg}';
 elvST['SABOTAGE|SHAKING'] = '${stringTableSabotageContact}';
 elvST['SECTION'] = '${stringTableSection}';
+elvST['SECTION_STATUS=NORMAL'] = '${stringTableSectionStatusNormal}';
+elvST['SECTION_STATUS=UNKNOWN'] = '${stringTableSectionStatusUnknown}';
 elvST['SELF_CALIBRATION_RESULT=FALSE'] = '${stringTableSelfCalibrationResultFalse}';
 elvST['SELF_CALIBRATION_RESULT=TRUE'] = '${stringTableSelfCalibrationResultTrue}';
 elvST['SELF_CALIBRATION=START'] = '${stringTableSelfCalibrationStart}';
@@ -8885,7 +8887,7 @@ Device = Class.create({
       this.isDeletable = deviceType.isDeletable();
       this.isOperateGroupOnly = (data["operateGroupOnly"] == "true") ? true : false;
       this.deviceInputCheck = false;
-
+    
       this.channels = new Array();
       this.groups = new Array();
       this.singles = new Array();
@@ -9424,7 +9426,6 @@ DeviceList = Singleton.create({
     {
       var device = this.devices[id];
       var deviceStatus = homematic("Device.listStatus", {"id": device.id});
-      console.log(deviceStatus);
       device.updateStatus(deviceStatus, _rssiInfoHmRF_);
     }
   },
@@ -19459,7 +19460,7 @@ homematic.com =
   {
     this.m_ccuProduct = getProduct();
     this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
-    this.m_product = "HM-RASPBERRYMATIC";
+    this.m_product ="HM-CCU" + this.m_ccuProduct;
     this.m_URLServer = (isHTTPS) ? "https://"+this.preURL+"update.homematic.com:8443" : "http://"+this.preURL+"update.homematic.com";
 
     var serial = homematic("CCU.getSerial");
@@ -19469,7 +19470,7 @@ homematic.com =
     var script = document.createElement("script");
     script.id = "homematic_com_script";
     script.type = "text/javascript";
-    script.src = "https://gitcdn.xyz/repo/jens-maus/RaspberryMatic/master/release/LATEST-VERSION.js?_version_=" + WEBUI_VERSION;
+    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product="+this.m_product+"&serial=" + serial;
     $("body").appendChild(script);
   },
 
@@ -19521,7 +19522,7 @@ homematic.com =
       var script = document.createElement("script");
       script.id = "homematic_com_script_" + index;
       script.type = "text/javascript";
-      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0" + "&ts=" + Date.now();
+      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0";
       $("body").appendChild(script);
       homematic.com.callback = callback;
   },
@@ -19531,7 +19532,7 @@ homematic.com =
       var script = document.createElement("script");
       script.id = "homematic_com_script_fw";
       script.type = "text/javascript";
-      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE?ts=" + Date.now();
+      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE";
       $("body").appendChild(script);
       homematic.com.callback = callback;
   },
@@ -24805,11 +24806,11 @@ StartFlashing = function()
       {
         if( $("headerLogo").src.indexOf("_red") >= 0 )
         {
-          $("headerLogo").src = "/ise/img/rm-logo_small.png";
+          $("headerLogo").src = "/ise/img/homematic_logo_small.png";
         }
         else
         {
-          $("headerLogo").src = "/ise/img/rm-logo_small_red.png";
+          $("headerLogo").src = "/ise/img/homematic_logo_small_red.png";
         }
       }
     },
@@ -24824,12 +24825,12 @@ StopFlashing = function()
 
 SwitchOnFlashLight = function()
 {
-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small_red.png"; }
+  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small_red.png"; }
 };
 
 SwitchOffFlashLight = function()
 {
-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small.png"; }
+  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small.png"; }
 };
 
 getAjaxLoadElem = function() {

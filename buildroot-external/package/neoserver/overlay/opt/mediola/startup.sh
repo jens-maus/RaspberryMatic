@@ -19,7 +19,7 @@ if [ ! -e $PLUGIN_DIR ] ; then
   chown -R root:root $USER_DIR
    
   rm -rf $WWW_DIR
-  ln -s $BASE_DIR/www $WWW_DIR
+  ln -s $PLUGIN_DIR/www $WWW_DIR
 
   mkdir -p $PLUGIN_DIR
   tar -C $PLUGIN_DIR -xf /opt/mediola/pkg/neo_server.tar.gz --strip-components=1 data/

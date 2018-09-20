@@ -15,6 +15,17 @@ REGA_BIN_FILE="ReGaHss.community"
 # skip this startup if not in normal mode
 [[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
+if [[ -e /etc/config/ReGaHssVersion ]]; then
+  REGA_BIN_VERSION=$(cat /etc/config/ReGaHssVersion)
+fi
+case "${REGA_BIN_VERSION}" in
+  NORMAL)    REGA_BIN_FILE="ReGaHss.normal";;
+  COMMUNITY) REGA_BIN_FILE="ReGaHss.community";;
+esac
+if [[ ! -e "/bin/${REGA_BIN_FILE}" ]]; then
+  REGA_BIN_FILE="ReGaHss"
+fi
+
 init() {
   for i in ${CREATE_DIRS}; do
     [[ ! -e ${i} ]] && mkdir -p ${i}
@@ -26,17 +37,6 @@ init() {
 
   if [[ -e /etc/config/syslog ]]; then
     . /etc/config/syslog
-  fi
-
-  if [[ -e /etc/config/ReGaHssVersion ]]; then
-    REGA_BIN_VERSION=$(cat /etc/config/ReGaHssVersion)
-  fi
-  case "${REGA_BIN_VERSION}" in
-    NORMAL)    REGA_BIN_FILE="ReGaHss.normal";;
-    COMMUNITY) REGA_BIN_FILE="ReGaHss.community";;
-  esac
-  if [[ ! -e "/bin/${REGA_BIN_FILE}" ]]; then
-    REGA_BIN_FILE="ReGaHss"
   fi
 
   # source profile.d files

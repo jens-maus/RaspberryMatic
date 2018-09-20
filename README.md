@@ -12,7 +12,7 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 
 ## :cookie: Features
 * 100% HomeMatic [CCU2](http://www.eq-3.com/products/homematic/control-units-and-gateways/homematic-central-control-unit-ccu2.html)/[CCU3](http://www.eq-3.com/products/homematic/control-units-and-gateways/-473.html) system compliant using latest [OCCU](https://github.com/eq-3/occu) software environment
-* Fully BidCos-RF (HomeMatic), Wired (HomeMatic-Wired) and HmIP-RF (HomeMaticIP) compatible
+* Fully HomeMatic (BidCos-RF), HomeMatic-Wired (BidCos-Wired), homematicIP (HmIP-RF) and homematicIP-Wired (HmIP-Wired) compatible.
 * Integrated WebUI-based firmware update mechanism and Recovery System to perform maintenance operations such as system restore.
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Read-only root file system to minimize write operations on SD card
@@ -29,8 +29,8 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
 * Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
 * Support to be used without GPIO RF module just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
-* Based on latest [Buildroot 2018.05.1](http://buildroot.org/) lightweight Linux operating system
-* Latest Linux kernel (RaspberryPi: [4.14.62](https://github.com/raspberrypi/linux/tree/rpi-4.14.y), Tinkerboard: [4.14.66](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
+* Based on latest [Buildroot 2018.08](http://buildroot.org/) lightweight Linux operating system
+* Latest Linux kernel (RaspberryPi: [4.14.62](https://github.com/raspberrypi/linux/tree/rpi-4.14.y), Tinkerboard: [4.14.68](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only) or from internal eMMC storage (ASUS Tinkerboard S)
 * Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks
@@ -72,17 +72,19 @@ The RaspberryMatic project is a collaborate effort to provide a lightweight, [Li
   * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) or [Model A, 256MB](https://www.adafruit.com/product/1344)
   * [Tinker Board S](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
   * [Tinker Board](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
-* One or more of the following HomeMatic/HomeMatic-Wired/HomeMaticIP capabale devices:
-  * HomeMatic + HomeMaticIP:
+* One or more of the following HomeMatic/HomeMatic-Wired/homematicIP/homematicIP-Wired capabale devices:
+  * HomeMatic َ+ homematicIP:
     * GPIO Radio Module HAT – [RPI-RF-MOD](https://www.elv.de/homematic-funk-modulplatine-fuer-raspberry-pi-3-rpi-rf-mod-komplettbausatz.html)  
     * GPIO Radio Module HAT – [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) ([Installation](https://www.youtube.com/watch?v=xtzXsvOLa_Y))
-  * HomeMaticIP only:
+  * homematicIP only:
     * USB Stick – [HmIP-RFUSB](https://www.elv.de/elv-homematic-ip-rf-usb-stick-hmip-rfusb-fuer-alternative-steuerungsplattformen-arr-bausatz.html)
   * HomeMatic only:
     * LAN Gateway – [HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)
     * USB Config Adapter – [HM-CFG-USB-2](https://wiki.fhem.de/wiki/HM-CFG-USB_USB_Konfigurations-Adapter)
   * HomeMatic-Wired only:
     * LAN Wired Gateway – [HMW-LGW-O-DR-GS-EU](https://www.elv.de/homematic-rs485-gateway-1.html)
+  * homematicIP-Wired only:
+    * Wired Access Point (DRAP) – [HmIPW-DRAP](https://www.elv.de/homematic-ip-wired-access-point.html)
 * 4 GB minimum sized microSD card or USB memory stick / hard disk (RaspberryPi3 only)
 
 ## :telescope: Compatible Third-Party CCU Addons
@@ -171,7 +173,7 @@ The RaspberryMatic build environment itself – the files found in this git repo
 
 ## :clap: Acknowledgments
 As this project is a collaborative effort also indirectly using several third-party solutions we would like to thank the following authors for their valueable contributions:
-* Alexander Reinert – for his [generic_raw_uart kernel module](https://github.com/alexreinert/piVCCU/tree/master/kernel) enabling HomeMaticIP support with the ASUS Tinkerboard.
+* Alexander Reinert – for his [generic_raw_uart kernel module](https://github.com/alexreinert/piVCCU/tree/master/kernel) enabling homematicIP support with the ASUS Tinkerboard.
 
 ## :family: Authors
 See [Contributors](https://github.com/jens-maus/RaspberryMatic/graphs/contributors) for a complete list of people that have directly contributed to this project.

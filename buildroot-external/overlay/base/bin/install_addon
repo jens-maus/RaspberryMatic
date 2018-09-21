@@ -1,48 +1,62 @@
 #!/bin/sh
+#
+# simple install_addon script that will install CCU addons
+# and return either codes >= 10 to signal errors or lower
+# numbers to signal success.
+#
 
+# check if we have an update archive
 if [[ ! -f /usr/local/tmp/new_addon.tar.gz ]]; then
-  exit
+  exit 101
 fi
 
+# create temp update directory
 UPDATEDIR=$(mktemp -d -p /usr/local/tmp)
 
-echo "Extracting addon..."
+# unarchive addon archive
 umask 022
-tar -C ${UPDATEDIR} --no-same-owner --no-same-permissions -xf /usr/local/tmp/new_addon.tar.gz
-
-if [[ ! -x ${UPDATEDIR}/update_script ]]; then
-  exit
+/bin/tar -C ${UPDATEDIR} --no-same-owner --no-same-permissions -xf /usr/local/tmp/new_addon.tar.gz
+if [[ $? -ne 0 ]]; then
+  exit 102
 fi
 
-rm /usr/local/tmp/new_addon.tar.gz
+# remove addon archive after unarchiving
+rm -f /usr/local/tmp/new_addon.tar.gz
+if [[ $? -ne 0 ]]; then
+  exit 103
+fi
 
-for i in bin usr lib usr dev/pts sys tmp proc; do
-  mkdir -p ${UPDATEDIR}/${i}
-done
+# check that the update archive contains
+# and executable 'update_script' file
+if [[ ! -x ${UPDATEDIR}/update_script ]]; then
+  exit 104
+fi
 
-echo "Preparing chroot env..."
-cp -a /bin ${UPDATEDIR}/
-cp -a /lib ${UPDATEDIR}/
-cp -a /sbin ${UPDATEDIR}/
-cp -a /etc ${UPDATEDIR}/
+# if there are any *.sha256 files we verify
+# the integrity of the archive via the included SHA256 checksums
+(cd ${UPDATEDIR};
+  for chk_file in ${UPDATEDIR}/*.sha256; do
+    [ -f "${chk_file}" ] || break
+    /usr/bin/sha256sum -sc ${chk_file}
+    if [ $? -ne 0 ]; then
+      exit 106
+    fi
+  done
+) || exit 105
 
-find /usr -maxdepth 1 -not -name local -not -name usr -exec cp -a {} ${UPDATEDIR}/usr/ \;
+# perform addon install by executing the 'update_script' script
+(cd ${UPDATEDIR}; ./update_script HM-RASPBERRYMATIC 2>/dev/null >/dev/null)
+RESULT=$?
 
-for i in dev proc sys dev/pts; do
-  mkdir -p ${UPDATEDIR}/${i}
-  mount -o bind /${i} ${UPDATEDIR}/${i}
-done
+# make sure rootfs and bootfs are read-only
+mount -o ro,remount /
+mount -o ro,remount /boot
 
-mkdir -p ${UPDATEDIR}/usr/local
-mount -o bind /usr/local ${UPDATEDIR}/usr/local
+# cleanup UPDATEDIR
+rm -rf ${UPDATEDIR}
 
-echo "Executing update_script in chroot..."
-/usr/sbin/chroot ${UPDATEDIR}/ ./update_script HM-RASPBERRYMATIC
-
-umount ${UPDATEDIR}/usr/local
-
-for i in dev/pts sys proc dev; do
-  umount ${UPDATEDIR}/${i}
-done
-
+# make sure all data is written to disk
 sync
+
+# exit with supplied EXIT code of update_script
+exit ${RESULT}

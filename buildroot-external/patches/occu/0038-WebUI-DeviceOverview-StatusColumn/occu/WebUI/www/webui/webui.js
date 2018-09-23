@@ -8966,7 +8966,9 @@ Device = Class.create({
     // values fron the supplied rssiListHmRF
     if (this.interfaceName === 'BidCos-RF')
     {
-      var rssiInfo = rssiListHmRF.find(x => x.name === this.address);
+      var address = this.address;
+      var rssiInfo = rssiListHmRF.find(function(x) { return x.name === address });
+
       if (rssiInfo !== null && typeof(rssiInfo) !== 'undefined' &&
           rssiInfo.partner !== null && typeof(rssiInfo.partner) !== 'undefined')
       {

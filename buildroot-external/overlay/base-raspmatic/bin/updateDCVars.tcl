@@ -27,6 +27,12 @@
 load tclrpc.so
 load tclrega.so
 
+set NODCVARS_FILE {/etc/config/NoUpdateDCVars}
+if { [file exists $NODCVARS_FILE] == 1} {
+  puts "NoUpdateDCVars file exists. Exiting."
+  exit
+}
+
 set CONFIG_FILE {/usr/local/etc/config/rfd.conf}
 set gateways [xmlrpc http://127.0.0.1:2001/ listBidcosInterfaces]
 

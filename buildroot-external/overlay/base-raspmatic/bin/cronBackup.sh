@@ -20,7 +20,10 @@
 #
 # Usage:
 # cronBackup.sh <directory> <maxbackups>
+# - to disable cron created backups, create an empty file: touch /etc/config/NoCronBackup
 #
+
+[[ -e /etc/config/NoCronBackup ]] && (echo "NoCronBackup exists. Exiting."; exit 0)
 
 BACKUPDIR=/media/usb0/backup
 MAXBACKUPS=30

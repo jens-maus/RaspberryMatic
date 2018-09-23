@@ -9425,8 +9425,12 @@ DeviceList = Singleton.create({
     for (var id in this.devices)
     {
       var device = this.devices[id];
-      var deviceStatus = homematic("Device.listStatus", {"id": device.id});
-      device.updateStatus(deviceStatus, _rssiInfoHmRF_);
+      if (device !== null && typeof(device) !== 'undefined')
+      {
+        var deviceStatus = homematic("Device.listStatus", {"id": device.id});
+        if (deviceStatus !== null && typeof(deviceStatus) !== 'undefined')
+          device.updateStatus(deviceStatus, _rssiInfoHmRF_);
+      }
     }
   },
 

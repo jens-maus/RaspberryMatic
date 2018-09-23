@@ -42,7 +42,11 @@ if { ![info exists device(NAME)] } then {
 # get device status information
 #
 set url [getIfaceURL $device(INTERFACE)]
-array set valueset [xmlrpc $url getParamset [list string "$device(ADDRESS):0"] [list string VALUES]]
+if { $url != "" } then {
+  array set valueset [xmlrpc $url getParamset [list string "$device(ADDRESS):0"] [list string VALUES]]
+} else {
+  array set valueset {}
+}
 
 #
 # form output JSON

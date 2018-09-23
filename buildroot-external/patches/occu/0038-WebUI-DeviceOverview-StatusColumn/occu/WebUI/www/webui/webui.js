@@ -8967,7 +8967,8 @@ Device = Class.create({
     if (this.interfaceName === 'BidCos-RF')
     {
       var rssiInfo = rssiListHmRF.find(x => x.name === this.address);
-      if (rssiInfo && rssiInfo.partner)
+      if (rssiInfo !== null && typeof(rssiInfo) !== 'undefined' &&
+          rssiInfo.partner !== null && typeof(rssiInfo.partner) !== 'undefined')
       {
         var rssiData = rssiInfo.partner[0].rssiData;
         this.RSSI_DEVICE = rssiData[0];
@@ -8989,7 +8990,7 @@ Device = Class.create({
 
     // update/calculate the web colors for displaying
     // the RSSI values like in devconfig
-    if (this.RSSI_DEVICE || this.RSSI_PEER)
+    if (this.RSSI_DEVICE !== null || this.RSSI_PEER !== null)
       this.updateRssiColors();
   },
 

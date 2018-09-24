@@ -27,10 +27,7 @@ if [ -n "${1}" ]; then
 fi
 
 # make sure BACKUPDIR exists
-if [ -d "/media/usb0" ];
-	then TMPDIR=$(mktemp -d -p /media/usb0)
-	else TMPDIR=$(mktemp -d -p /usr/local/tmp)
-fi
+TMPDIR=$(mktemp -d -p ${BACKUPDIR})
 
 # make sure ReGaHSS saves its current settings
 echo 'load tclrega.so; rega system.Save()' | tclsh 2>&1 >/dev/null

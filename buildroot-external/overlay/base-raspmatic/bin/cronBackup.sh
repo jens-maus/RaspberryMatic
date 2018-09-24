@@ -20,14 +20,27 @@
 #
 # Usage:
 # cronBackup.sh <directory> <maxbackups>
-# - to disable cron created backups, create an empty file: touch /etc/config/NoCronBackup
+#
+# - to disable cron created backups, create an empty
+#   /etc/config/NoCronBackup file
+# - to set a different default path, put it in a file
+#   /etc/config/CronBackupPath
+# - to set a different default maxbackups number (0=no limit) put it in
+#   a file /etc/config/CronBackupMaxBackups
 #
 
-[[ -e /etc/config/NoCronBackup ]] && (echo "NoCronBackup exists. Exiting."; exit 0)
+# skip the script if /etc/config/NoCronBackup exists
+[ -e /etc/config/NoCronBackup ] && exit 0
 
+# set default values
 BACKUPDIR=/media/usb0/backup
 MAXBACKUPS=30
 
+# check for external default parameters
+[ -f /etc/config/CronBackupPath ] && BACKUPDIR=$(cat /etc/config/CronBackupPath)
+[ -f /etc/config/CronBackupMaxBackups ] && MAXBACKUPS=$(cat /etc/config/CronBackupMaxBackups)
+
+# cmdline parameter overrules everything
 [ -n "${1}" ] && BACKUPDIR=${1}
 [ -n "${2}" ] && MAXBACKUPS=${2}
 

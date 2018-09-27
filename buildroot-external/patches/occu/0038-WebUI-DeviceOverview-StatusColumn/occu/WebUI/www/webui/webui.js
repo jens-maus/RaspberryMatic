@@ -9423,6 +9423,7 @@ DeviceList = Singleton.create({
    **/
   updateDeviceStatus:function()
   {
+    var _this_ = this;
     var _rssiInfoHmRF_ = homematic("Interface.rssiInfo", {"interface": "BidCos-RF"});
 
     for (var id in this.devices)
@@ -9430,9 +9431,18 @@ DeviceList = Singleton.create({
       var device = this.devices[id];
       if (device !== null && typeof(device) !== 'undefined' && device.interfaceName !== 'VirtualDevices')
       {
-        var deviceStatus = homematic("Device.listStatus", {"id": device.id});
-        if (deviceStatus !== null && typeof(deviceStatus) !== 'undefined')
-          device.updateStatus(deviceStatus, _rssiInfoHmRF_);
+        homematic("Device.listStatus", {"id": device.id}, function(data) {
+          if (data !== null && typeof(data) !== 'undefined')
+          {
+            var id = data["ID"];
+            if (id !== null && typeof(id) !== 'undefined')
+            {
+              var device = _this_.devices[id];
+              if (device !== null && typeof(device) !== 'undefined')
+                device.updateStatus(data, _rssiInfoHmRF_);
+            }
+          }
+        });
       }
     }
   },

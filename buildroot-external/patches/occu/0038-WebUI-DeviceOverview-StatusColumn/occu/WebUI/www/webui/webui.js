@@ -9451,27 +9451,28 @@ DeviceList = Singleton.create({
   updateDeviceStatus:function()
   {
     var _this_ = this;
-    var _rssiInfoHmRF_ = homematic("Interface.rssiInfo", {"interface": "BidCos-RF"});
 
-    for (var id in this.devices)
-    {
-      var device = this.devices[id];
-      if (device !== null && typeof(device) !== 'undefined' && device.interfaceName !== 'VirtualDevices')
+    homematic("Interface.rssiInfo", {"interface": "BidCos-RF"}, function(rssiInfo) {
+      for (var id in _this_.devices)
       {
-        homematic("Device.listStatus", {"id": device.id}, function(data) {
-          if (data !== null && typeof(data) !== 'undefined')
-          {
-            var id = data["ID"];
-            if (id !== null && typeof(id) !== 'undefined')
+        var device = _this_.devices[id];
+        if (device !== null && typeof(device) !== 'undefined' && device.interfaceName !== 'VirtualDevices')
+        {
+          homematic("Device.listStatus", {"id": device.id}, function(data) {
+            if (data !== null && typeof(data) !== 'undefined')
             {
-              var device = _this_.devices[id];
-              if (device !== null && typeof(device) !== 'undefined')
-                device.updateStatus(data, _rssiInfoHmRF_);
+              var id = data["ID"];
+              if (id !== null && typeof(id) !== 'undefined')
+              {
+                var device = _this_.devices[id];
+                if (device !== null && typeof(device) !== 'undefined')
+                  device.updateStatus(data, rssiInfo);
+              }
             }
-          }
-        });
+          });
+        }
       }
-    }
+    });
   },
 
   /**

@@ -15,16 +15,16 @@
 
 # Startup the system
 null::sysinit:/bin/mount -t proc proc /proc
-#null::sysinit:/bin/mount -o remount,rw / # REMOUNT_ROOTFS_RW
 null::sysinit:/bin/mkdir -p /dev/pts
 null::sysinit:/bin/mkdir -p /dev/shm
-null::sysinit:/bin/mount -a
+tty2::sysinit:/sbin/fsck -A -R -p
+tty2::sysinit:/bin/mount -a
 null::sysinit:/bin/hostname -F /etc/hostname
 null::sysinit:/usr/bin/psplash -n &
 # now run any rc scripts
 ::sysinit:/etc/init.d/rcS
 
-# Put a getty on the serial port
+# Put a getty on tty2
 tty2::askfirst:/sbin/getty -L tty2 0 vt100
 
 # Stuff to do for the 3-finger salute
@@ -32,6 +32,5 @@ tty2::askfirst:/sbin/getty -L tty2 0 vt100
 
 # Stuff to do before rebooting
 ::shutdown:/etc/init.d/rcK
-null::shutdown:/bin/umount -a -r
+tty2::shutdown:/bin/umount -a -r
 null::shutdown:/sbin/swapoff -a
-

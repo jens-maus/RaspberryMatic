@@ -9458,7 +9458,7 @@ DeviceList = Singleton.create({
         var device = _this_.devices[id];
         if (device !== null && typeof(device) !== 'undefined' && device.interfaceName !== 'VirtualDevices')
         {
-          homematic("Device.listStatus", {"id": device.id}, function(data) {
+          homematic("Device.listStatus", {"id": device.id, "address": device.address, "interface": device.interfaceName}, function(data) {
             if (data !== null && typeof(data) !== 'undefined')
             {
               var id = data["ID"];

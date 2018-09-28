@@ -5,7 +5,21 @@ about: Suggest an idea for RaspberryMatic
 ---
 
 <!---
+  WARNING/WARNUNG:
+  ================
+
+  DON'T USE THIS TICKET SYSTEM FOR FINDING HELP IN USING RASPBERRYMATIC.
+
+  Please use the following discussion fora instead:
+  https://homematic-forum.de/forum/viewforum.php?f=65
+
+  BITTE DIESES TICKETSYSTEM NICHT FÜR HILFEANFRAGEN BEI DER BEDIENUNG VON RASPBERRYMATIC NUTZEN.
+
+  Bitte dafür das folgende Diskussionsforum nutzen:
+  https://homematic-forum.de/forum/viewforum.php?f=65
+  
   NOTE:
+  =====
   - Do NOT submit anything other than bug reports or feature requests via the issue tracker!
   - Do NOT submit bug reports about anything but the two most recently released versions!
 --->

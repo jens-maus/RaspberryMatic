@@ -1,6 +1,6 @@
 <img src="release/logo.png" width="250px" align="left">
 
-<br><br><br>
+<br>
 
 [![Current Release](https://img.shields.io/github/release/jens-maus/RaspberryMatic.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/latest/total.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/releases/latest)

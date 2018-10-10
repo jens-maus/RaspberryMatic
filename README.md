@@ -2,6 +2,7 @@
 
 <br/><br/>
 [![Current Release](https://img.shields.io/github/release/jens-maus/RaspberryMatic.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
+[![HitCount](http://hits.dwyl.io/jens-maus/RaspberryMatic.svg)](http://hits.dwyl.io/jens-maus/RaspberryMatic)
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/latest/total.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
 [![Issues](https://img.shields.io/github/issues/jens-maus/RaspberryMatic.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/issues)
 ![License](https://img.shields.io/github/license/jens-maus/RaspberryMatic.svg?style=flat-square)

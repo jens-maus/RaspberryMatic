@@ -224,8 +224,6 @@ fwprepare()
 # directory containing the update files
 fwinstall()
 {
-  echo "Starting firmware update (DO NOT INTERRUPT!!!):<br/>"
-
   echo -ne "[1/5] Validate update directory... "
   UPDATEDIR=$(readlink -f /usr/local/.firmwareUpdate)
   if [[ -z "${UPDATEDIR}" ]] || [[ ! -d "${UPDATEDIR}" ]]; then
@@ -255,7 +253,7 @@ fwinstall()
 
     # update script succeeded, lets finish immediately
     echo "DONE (succeeded)<br/>"
-    exit 0
+    return 0
   else
     echo "no 'update_script', OK<br/>"
   fi
@@ -270,9 +268,6 @@ fwinstall()
     file -b ${ext4_file} | egrep -q "ext4 filesystem.*rootfs"
     if [[ $? -eq 0 ]]; then
       echo -ne "found ($(basename ${ext4_file})), "
-
-      # make sure rootfs is mounted
-      mount /rootfs >/dev/null 2>&1
 
       # find out the rootfs device node
       ROOTFS_DEV=$(/sbin/blkid | grep rootfs | cut -f1 -d:)
@@ -296,7 +291,7 @@ fwinstall()
 
       # find out if the hardware platform of the current rootfs and the one
       # we are going to flash are the same
-      ROOTFS_PLATFORM=$(cat /rootfs/VERSION | grep PLATFORM= | cut -d= -f2)
+      ROOTFS_PLATFORM=$(cat /VERSION | grep PLATFORM= | cut -d= -f2)
       if [[ -z "${ROOTFS_PLATFORM}" ]]; then
         echo "ERROR: (ROOTFS_PLATFORM)<br/>"
         exit 1
@@ -333,11 +328,7 @@ fwinstall()
 
       # unmount /rootfs and flash the image using dd
       echo -ne "flashing.."
-      umount -f /rootfs
-      if [[ $? -ne 0 ]]; then
-        echo "ERROR: (umount)<br/>"
-        exit 1
-      fi
+      umount -f ${ROOTFS_DEV}
 
       # start a progress bar outputing dots every few seconds
       while :;do echo -n .;sleep 3;done &
@@ -354,7 +345,7 @@ fwinstall()
       # stop the progress output
       kill ${PROGRESS_PID} && trap "rm -f /tmp/.runningFirmwareUpdate" EXIT
 
-      mount /rootfs
+      mount -o ro ${ROOTFS_DEV} /rootfs
       if [[ $? -ne 0 ]]; then
         echo "ERROR: (mount)<br/>"
         exit 1
@@ -382,9 +373,6 @@ fwinstall()
     if [[ $? -eq 0 ]]; then
       echo -ne "found ($(basename ${vfat_file})), "
 
-      # make sure bootfs is mounted
-      mount /bootfs >/dev/null 2>&1
-
       # find out the bootfs device node
       BOOTFS_DEV=$(/sbin/blkid | grep bootfs | cut -f1 -d:)
       if [[ -z "${BOOTFS_DEV}" ]]; then
@@ -407,7 +395,7 @@ fwinstall()
 
       # find out if the hardware platform of the current rootfs and the one
       # we are going to flash are the same
-      BOOTFS_PLATFORM=$(cat /bootfs/VERSION | grep PLATFORM= | cut -d= -f2)
+      BOOTFS_PLATFORM=$(cat /VERSION | grep PLATFORM= | cut -d= -f2)
       if [[ -z "${BOOTFS_PLATFORM}" ]]; then
         echo "ERROR: (BOOTFS_PLATFORM)<br/>"
         exit 1
@@ -444,11 +432,7 @@ fwinstall()
 
       # unmount /bootfs and flash the image using dd
       echo -ne "flashing.."
-      umount -f /bootfs
-      if [[ $? -ne 0 ]]; then
-        echo "ERROR: (umount)<br/>"
-        exit 1
-      fi
+      umount -f ${BOOTFS_DEV}
 
       # start a progress bar outputing dots every few seconds
       while :;do echo -n .;sleep 3;done &
@@ -465,7 +449,7 @@ fwinstall()
       # stop the progress output
       kill ${PROGRESS_PID} && trap "rm -f /tmp/.runningFirmwareUpdate" EXIT
 
-      mount /bootfs
+      mount -o ro ${BOOTFS_DEV} /bootfs
       if [[ $? -ne 0 ]]; then
         echo "ERROR: (mount)<br/>"
         exit 1
@@ -488,7 +472,7 @@ fwinstall()
   # if we flashed either rootfs or bootfs we are finished
   if [[ ${FLASHED_ROOTFS} -eq 1 ]] || [[ ${FLASHED_BOOTFS} -eq 1 ]]; then
     echo "skipped, OK<br/>"
-    exit 0
+    return 0
   fi
 
   FLASHED_IMG=0
@@ -537,12 +521,9 @@ fwinstall()
         exit 1
       fi
 
-      # make sure bootfs is mounted
-      mount -o ro ${BOOTFS_DEV} /bootfs >/dev/null 2>&1
-
       # find out if the hardware platform of the current rootfs and the one
       # we are going to flash are the same
-      BOOTFS_PLATFORM=$(cat /bootfs/VERSION | grep PLATFORM= | cut -d= -f2)
+      BOOTFS_PLATFORM=$(cat /VERSION | grep PLATFORM= | cut -d= -f2)
       if [[ -z "${BOOTFS_PLATFORM}" ]]; then
         echo "ERROR: (BOOTFS_PLATFORM)<br/>"
         exit 1
@@ -579,11 +560,7 @@ fwinstall()
 
       # unmount /bootfs and flash the image using dd
       echo -ne "flashing bootfs.."
-      umount -f /bootfs
-      if [[ $? -ne 0 ]]; then
-        echo "ERROR: (umount)<br/>"
-        exit 1
-      fi
+      umount -f ${BOOTFS_DEV}
 
       # start a progress bar outputing dots every few seconds
       while :;do echo -n .;sleep 3;done &
@@ -640,12 +617,9 @@ fwinstall()
         exit 1
       fi
 
-      # make sure rootfs is mounted
-      mount -o ro ${ROOTFS_DEV} /rootfs >/dev/null 2>&1
-
       # find out if the hardware platform of the current rootfs and the one
       # we are going to flash are the same
-      ROOTFS_PLATFORM=$(cat /rootfs/VERSION | grep PLATFORM= | cut -d= -f2)
+      ROOTFS_PLATFORM=$(cat /VERSION | grep PLATFORM= | cut -d= -f2)
       if [[ -z "${ROOTFS_PLATFORM}" ]]; then
         echo "ERROR: (ROOTFS_PLATFORM)<br/>"
         exit 1
@@ -682,11 +656,7 @@ fwinstall()
 
       # unmount /rootfs and flash the image using dd
       echo -ne "flashing rootfs.."
-      umount -f /rootfs
-      if [[ $? -ne 0 ]]; then
-        echo "ERROR: (umount)<br/>"
-        exit 1
-      fi
+      umount -f ${ROOTFS_DEV}
 
       # start a progress bar outputing dots every few seconds
       while :;do echo -n .;sleep 3;done &
@@ -728,7 +698,7 @@ fwinstall()
   if [[ ${FLASHED_IMG} -eq 0 ]]; then
     echo "none found, OK<br/>"
   else
-    exit 0
+    return 0
   fi
 
   echo "<br/>"
@@ -771,4 +741,8 @@ fi
 
 # run the fwinstall function to actually
 # run the unattended firmware update
+echo "Starting firmware update (DO NOT INTERRUPT!!!):<br/>"
 fwinstall
+echo "Finished firmware update successfully.<br/>"
+
+exit 0

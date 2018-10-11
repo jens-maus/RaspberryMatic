@@ -15,8 +15,8 @@ define CLOUDMATIC_INSTALL_TARGET_CMDS
   ln -s /usr/sbin/openvpn $(TARGET_DIR)/opt/mh/
   cp -a $(@D)/user $(TARGET_DIR)/opt/mh/
   cp -a $(@D)/www $(TARGET_DIR)/opt/mh/
-  rm -f $(TARGET_DIR)/opt/mh/user/nginx.pi
-  $(INSTALL) -m 0755 $(@D)/user/nginx.pi $(TARGET_DIR)/opt/mh/nginx
+  rm -f $(TARGET_DIR)/opt/mh/user/nginx.pi $(TARGET_DIR)/opt/mh/user/nginx
+  $(INSTALL) -m 0755 $(@D)/user/nginx.pi $(TARGET_DIR)/opt/mh/user/nginx
   $(INSTALL) -D -m 0755 $(CLOUDMATIC_PKGDIR)/S97CloudMatic $(TARGET_DIR)/etc/init.d
 endef
 

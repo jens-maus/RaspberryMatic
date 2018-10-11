@@ -118,12 +118,7 @@ if grep -q nfsroot /proc/cmdline ; then
    touch /var/status/hasIP
 
    # check internet connection; use fix ip to google because no nameserver (nfs boot)
-   /usr/bin/wget -q --spider http://216.58.213.238/
-   if [[ $? -eq 0 ]]; then
-     touch /var/status/hasInternet
-   elif ping -q -W 5 -c 1 8.8.8.8 >/dev/null 2>/dev/null; then
-     touch /var/status/hasInternet
-   fi
+   /bin/checkInternet
 
    exit 0
 fi
@@ -187,12 +182,7 @@ case "${MODE}" in
     touch /var/status/hasIP
 
     # check internet connection
-    /usr/bin/wget -q --spider http://google.com/
-    if [[ $? -eq 0 ]]; then
-      touch /var/status/hasInternet
-    elif ping -q -W 5 -c 1 google.com >/dev/null 2>/dev/null; then
-      touch /var/status/hasInternet
-    fi
+    /bin/checkInternet
   ;;
 
 esac

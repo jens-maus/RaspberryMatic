@@ -13,13 +13,10 @@ umask 077
 
 start() {
 
-  # set the root password to the
-  # password specified in /bootfs/recoveryfs-sshpwd
-  PASSWD=$(cat /bootfs/recoveryfs-sshpwd)
-  /usr/bin/passwd root >/dev/null 2>&1 << EOF
-${PASSWD}
-${PASSWD}
-EOF
+	# set the root password to the
+	# password specified in /bootfs/recoveryfs-sshpwd
+	PASSWD=$(cat /bootfs/recoveryfs-sshpwd | /usr/bin/mkpasswd)
+	/bin/sed -i "s#^root::\(.*$\)#root:${PASSWD}:\1#" /etc/shadow
 
 	# Create any missing keys
 	/usr/bin/ssh-keygen -A

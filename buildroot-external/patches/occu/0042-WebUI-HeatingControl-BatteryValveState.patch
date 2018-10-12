@@ -1,0 +1,123 @@
+--- occu/WebUI/www/rega/esp/controls/heating_control.fn.orig
++++ occu/WebUI/www/rega/esp/controls/heating_control.fn
+@@ -4,11 +4,15 @@
+   real rMin = 4.5;
+   real rMax = 30.5;
+   string sUnit = "&deg;<i>C</i>";
++  string bUnit = "V";
++  string vUnit = "%";
+   integer iReadOnlyState = 0;
+ 
+   object oControlMode = cObj.DPByControl("HEATING_CONTROL.CONTROL_MODE");
+   object oLevel = cObj.DPByControl("HEATING_CONTROL.SETPOINT");
+   object oTemperature = cObj.DPByControl("HEATING_CONTROL.TEMPERATURE");
++  object oBatteryState = cObj.DPByHssDP("BATTERY_STATE");
++  object oValveState = cObj.DPByHssDP("VALVE_STATE");  
+   object oModeAuto = cObj.DPByControl("HEATING_CONTROL.AUTO");
+   object oModeManu = cObj.DPByControl("HEATING_CONTROL.MANU");
+   object oModeBoost = cObj.DPByControl("HEATING_CONTROL.BOOST");
+@@ -33,7 +37,17 @@
+     ! WriteLine(' <script>conInfo("oTemperature: '#oTemperature.Value()#'");</script> ');
+     actTemp = oTemperature.Value();
+   }
+-
++  
++  if ( oBatteryState )
++  {
++    actBatteryState = oBatteryState.Value();
++  }
++  
++  if ( oValveState )
++  {
++    actValveState = oValveState.Value();
++  }
++  
+   if( oLevel )
+   {
+     iLvlDpId = oLevel.ID();
+@@ -67,6 +81,34 @@
+       !WriteLine("<div class='ControlBtnInfo _CLASS02550' style='line-height:15px; min-width:200px' id='"#chnId#"actualTemp' ><span>${stringTableWeatherTemperature}</span><span id='actTemp'"#sUnit#"></span></div>");
+     WriteLine("</td>");
+   WriteLine("</tr>");
++ 
++  if ( oBatteryState )
++  { 
++   WriteLine("<tr>");
++     WriteLine("<td>");
++       WriteLine("<table id='"#chnId#"tblShowBatteryState' class='ControlBtnInfo hidden' style='width:200px; display: table;'>");
++         WriteLine("<tr>");
++           WriteLine("<td>${stringTableClimateControlRTTransceiverBatteryState}</td>");
++           WriteLine("<td><span id='"#chnId#"actBatteryState'></span><span><b>"#bUnit#"</b></span></td>");
++        WriteLine("</tr>");
++       WriteLine("</table>");
++     WriteLine("</td>");
++   WriteLine("</tr>");
++  }
++
++  if ( oValveState )
++  {  
++   WriteLine("<tr>");
++     WriteLine("<td>");
++       WriteLine("<table id='"#chnId#"tblShowValveState' class='ControlBtnInfo hidden' style='width:200px; display: table;'>");
++         WriteLine("<tr>");
++           WriteLine("<td>${stringTableClimateControlRTTransceiverVentPos}</td>");
++           WriteLine("<td><span id='"#chnId#"actValveState'></span><span><b>"#vUnit#"</b></span></td>");
++         WriteLine("</tr>");
++       WriteLine("</table>");
++     WriteLine("</td>");
++   WriteLine("</tr>");
++  }
+ 
+   WriteLine("<tr>");
+     WriteLine("<td colspan='1' id='slidCtrl"#cObj.ID()#"' class='CLASS02529'></td>");
+@@ -179,6 +221,18 @@
+       WriteLine("opts.stTemp = "#oTemperature.Value()#";");
+       WriteLine("opts.stUnit = '"#sUnit#"';");
+     }
++    
++    if (oBatteryState)
++    {
++      WriteLine("opts.stBat = "#oBatteryState.Value()#";");
++      WriteLine("opts.stbUnit = '"#bUnit#"';");
++    }
++    
++    if (oValveState)
++    {
++      WriteLine("opts.stValve = "#oValveState.Value()#";");
++      WriteLine("opts.stvUnit = '"#vUnit#"';");
++    }
+ 
+     WriteLine("its"#chnId#" = new iseThermostat_2ndGen("#chnId#", "#rState#", "#iLvlDpId#", "#rMin#", "#rMax#", " #system.GetVar("iReadOnlyState")#", "#system.GetVar('bSliderFlag')#", opts);");
+   WriteLine("</script>");
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -26988,6 +26988,12 @@
+     if (this.opts.stTemp) {
+       this.showActualTemp();
+     }
++    if (this.opts.stBat) {
++      this.showActualBat();
++    }
++    if (this.opts.stValve !== null) {
++      this.showActualValve();
++    }
+     if (this.opts.idComfort && this.opts.idLowering) {
+       this.showComfortEco();
+     }
+@@ -27179,6 +27185,16 @@
+     jQuery("#"+this.id +"tblShowTemp").show();
+   },
+ 
++  showActualBat: function() {
++    jQuery("#"+this.id +"actBatteryState").text(this.opts.stBat);
++    jQuery("#"+this.id +"tblShowBatteryState").show();
++  },
++  
++  showActualValve: function() {
++    jQuery("#"+this.id +"actValveState").text(this.opts.stValve);
++    jQuery("#"+this.id +"tblShowValveState").show();
++  },
++  
+   showHolidayEndTime: function() {
+     var stopTime = this.getHolidayEndTime();
+     if (stopTime) {

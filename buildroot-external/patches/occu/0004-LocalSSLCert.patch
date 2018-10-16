@@ -39,6 +39,18 @@
 +} else {
 +  jsonrpc_response false
 +}
+--- occu/WebUI/www/api/methods/user/restartlighttpd.tcl.orig
++++ occu/WebUI/www/api/methods/user/restartlighttpd.tcl
+@@ -7,8 +7,6 @@
+ #
+ # Rückgabewert: true
+ 
+-exec -- /usr/bin/nohup /etc/init.d/S50lighttpd restart >/dev/null
+-
+-#exec /etc/init.d/S50lighttpd restart
++exec /etc/init.d/S50lighttpd reload &
+ 
+ jsonrpc_response true
 --- occu/WebUI/www/config/cp_network.cgi.orig
 +++ occu/WebUI/www/config/cp_network.cgi
 @@ -610,13 +610,18 @@

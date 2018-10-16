@@ -10,13 +10,16 @@
 
 start() {
   echo -n "Starting lighttpd: "
-  if [[ ! -f /etc/config/server.pem ]]; then
-          echo -n "."
-          /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
-                                                 -out /etc/config/server.pem \
-                                                 -days 3650 \
-                                                 -subj "/C=DE/O=HomeMatic/OU=$(cat /var/board_serial)/CN=$(hostname)" 2>/dev/null >/dev/null
-        fi
+
+  # check if a valid/non-expired SSL cert exists and if
+  # not we regenerate it.
+  if ! /usr/bin/openssl x509 -checkend 86400 -noout -in /etc/config/server.pem 2>/dev/null >/dev/null; then
+    echo -n "creating new SSL cert... "
+    /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
+                                           -out /etc/config/server.pem \
+                                           -days 3650 \
+                                           -subj "/C=DE/O=HomeMatic/OU=$(cat /var/board_serial)/CN=$(hostname)" 2>/dev/null >/dev/null
+  fi
 
   start-stop-daemon -S -q -b -m -p /var/run/lighttpd-angel.pid --exec /usr/sbin/lighttpd-angel -- -f /etc/lighttpd/lighttpd.conf -D
   [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"

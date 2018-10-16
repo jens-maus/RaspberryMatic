@@ -14,6 +14,7 @@ start() {
   # check if a valid/non-expired SSL cert exists and if
   # not we regenerate it.
   if ! /usr/bin/openssl x509 -checkend 86400 -noout -in /etc/config/server.pem 2>/dev/null >/dev/null; then
+    [[ -f /etc/config/server.pem ]] && mv -f /etc/config/server.pem /etc/config/server.pem_$(date +'%Y%m%d')
     echo -n "creating new SSL cert... "
     /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
                                            -out /etc/config/server.pem \

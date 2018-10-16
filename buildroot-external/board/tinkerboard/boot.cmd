@@ -1,5 +1,5 @@
 # fallback defaults
-setenv fdt_file "rk3288-miniarm.dtb"
+setenv fdt_file "rk3288-tinker.dtb"
 setenv load_addr "0x21000000"
 setenv console "tty2"
 setenv loglevel "0"

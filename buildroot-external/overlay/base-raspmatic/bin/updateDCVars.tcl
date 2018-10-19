@@ -1,6 +1,7 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v2.4 developed by Andreas Bünting
+# DutyCycle Script v3.0
+# Copyright (c) 2018 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,198 +25,264 @@
 # Wired-Gateway eingebunden, wird eine Systemvariabel mit dem Namen
 # "Wired-Status" und den Zuständen "online/offline" angelegt.
 
+# if user doesn't want this script to be running
+if { [file exists /etc/config/NoUpdateDCVars] == 1} {
+  exit 0
+}
+
 load tclrpc.so
 load tclrega.so
 
-set NODCVARS_FILE {/etc/config/NoUpdateDCVars}
-if { [file exists $NODCVARS_FILE] == 1} {
-  puts "NoUpdateDCVars file exists. Exiting."
-  exit
+###################################################################
+# Helper functions to parse an ini-type file
+# like /etc/config/rfd.conf
+namespace eval cfg {
+  variable version 1.0
+  variable sections [list DEFAULT]
+  variable cursection DEFAULT
+  variable DEFAULT;   # DEFAULT section
 }
 
-set CONFIG_FILE {/usr/local/etc/config/rfd.conf}
-set gateways [xmlrpc http://127.0.0.1:2001/ listBidcosInterfaces]
+proc cfg::sections {} {
+  return $cfg::sections
+}
 
-# Gateway Konfiguration aus rfd.conf einlesen
-array set config {}
-array set section {}
-set sectionName {}
+proc cfg::variables {{section DEFAULT}} {
+  return [array names ::cfg::$section]
+}
 
-catch {
-  set fd [open $CONFIG_FILE r]
+proc cfg::add_section {str} {
+  variable sections
+  variable cursection
+
+  set cursection [string trim $str \[\]]
+  if {[lsearch -exact $sections $cursection] == -1} {
+    lappend sections $cursection
+    variable ::cfg::${cursection}
+  }
+}
+
+proc cfg::setvar {varname value {section DEFAULT}} {
+  variable sections
+  if {[lsearch -exact $sections $section] == -1} {
+    cfg::add_section $section
+  }
+  set ::cfg::${section}($varname) $value
+}
+
+proc cfg::getvar {varname {section DEFAULT}} {
+  variable sections
+  if {[lsearch -exact $sections $section] == -1} {
+    error "No such section: $section"
+  }
+  return [set ::cfg::${section}($varname)]
+}
+
+proc cfg::parse_file {filename} {
+  foreach section [::cfg::sections] {
+    foreach var [cfg::variables "$section"] {
+      unset ::cfg::${section}($var)
+    }
+    if {$section != "DEFAULT"} {
+      unset ::cfg::${section}
+    }
+  }
+  set ::cfg::sections [list DEFAULT]
+  set ::cfg::cursection DEFAULT
+  variable sections
+  variable cursection
+  set line_no 1
   catch {
-    while { ![eof $fd] } {
-      set line [string trimleft [gets $fd]]
-      if { "\#" != [string index $line 0] } then {
-        if { [regexp {\[([^\]]+)\]} $line dummy newSectionName] } then {
-          set config($sectionName) [array get section]
-          set sectionName $newSectionName
+    set fd [open $filename r]
+    while {![eof $fd]} {
+      set line [string trim [gets $fd] " "]
+      if {$line == ""} continue
+      switch -regexp -- $line {
+        ^#.* { }
+        ^\\[.*\\]$ {
+          cfg::add_section $line
         }
-        if { [regexp {([^=]+)=(.+)} $line dummy name value] } then {
-          set section([string trim $name]) [string trim $value]
+        .*=.* {
+          set pair [split $line =]
+          set name [string trim [lindex $pair 0] " "]
+          set value [string trim [lindex $pair 1] " "]
+          cfg::setvar $name $value $cursection
+        }
+        default {
+          error "Error parsing $filename (line: $line_no): $line"
         }
       }
+      incr line_no
     }
-    set config($sectionName) [array get section]
+    close $fd
   }
-  close $fd
 }
 
-# Zentralen und Gateway DutyCycle und weitere Infos abfragen
-set lines [split [string map [list "{AD" "\x00"] $gateways] "\x00"]
+###################################################################
+# Helper functio to create/set/rename a ReGa variable using the
+# tclrega interface
+proc setDutyCycleSV {name desc value serial} {
+  set prefix "DutyCycle"
 
-regsub -all "]" $lines "" lines
-regsub -all "{" $lines "" lines
-regsub -all "}" $lines "" lines
+  # check how we should name the
+  # system variable
+  if {$name != ""} {
+    set svName "$prefix-$name"
 
-set ccuoben ""
-set gwoben ""
-set interfaces {}
-set gwname {}
-
-foreach line $lines {
-
-  set snoben ""
-  set dutycycle ""
-  set type ""
-
-  regexp "DRESS (.+?) " $line dummy snoben
-  regexp "CONNECTED (.+?) " $line dummy connection
-  regexp "DUTY_CYCLE (.+?) " $line dummy dutycycle
-  regexp "FIRMWARE_VERSION (.+?) " $line dummy fw
-  regexp "TYPE (.+)" $line dummy type
-  regsub -all {\\} $type "" type
-  regsub -all " " $type "" type
-
-  if {$type == "CCU2"} {
-    set ccuoben $snoben
-    set ccutype "DutyCycle"
-    puts "--------------------"
-    puts "$dutycycle %"
-    puts "$ccuoben / $fw"
-    puts "$ccutype-CCU"
-    # Prüfen ob DC Systemvariable für CCU2 existiert und ggf. anlegen
-    append rega_cmd_create_sv "string svName ='$ccutype';object svObj = dom.GetObject(ID_SYSTEM_VARIABLES).Get(svName);if (!svObj){object svObjects = dom.GetObject(ID_SYSTEM_VARIABLES);svObj = dom.CreateObject(OT_VARDP);svObjects.Add(svObj.ID());svObj.Name(svName);svObj.ValueType(ivtFloat);svObj.ValueSubType(istGeneric);svObj.DPInfo('DutyCycle CCU');svObj.ValueUnit('%');svObj.ValueMin(-100);svObj.ValueMax(100);svObj.State(0);svObj.Internal(false);svObj.Visible(true);dom.RTUpdate(true);}"
-    rega_script $rega_cmd_create_sv
-    # CCU DutyCycle Variable aktualisieren
-    append rega_cmd "dom.GetObject(ID_SYSTEM_VARIABLES).Get('$ccutype').State('$dutycycle');"
-    rega_script $rega_cmd
-    # CCU DutyCycle System-Log Meldung erzeugen sofern DC größer 80%
-    if {$dutycycle >= "80"} {
-      exec logger -t dutycycle -p info "$ccutype-CCU / FW: $fw / DC: $dutycycle %"
+    if {$serial != ""} {
+      # if the system variable should have a clear-text
+      # name we check if there is already a one with the serial
+      # number and rename it accordingly.
+      set script "
+        object svObj=dom.GetObject(ID_SYSTEM_VARIABLES).Get(\"$prefix-$serial\");
+        if(svObj) {
+          svObj.Name(\"$svName\");
+          dom.RTUpdate(1);
+        }
+      "
+      rega_script $script
     }
+  } elseif {$serial != ""} {
+    set svName "$prefix-$serial"
+  } else {
+    set svName "$prefix"
   }
 
-  # Sektion für Gateways
-  set gwoben $snoben
-  foreach sectionName [array names config] {
-    if { {} != $sectionName } then {
-      array set section $config($sectionName)
-      set type2 [array get section {Type}]
-        if { ($type2 != "Type CCU2") } then {
-          set sn1 $section(Serial Number)
-          if { $sn1 == $gwoben } then {
-            if { $connection == 1 } then {
-              set con "Online"
-            } else {
-              set con "Offline"
-            }
-            puts "--------------------"
-            puts "$con / $dutycycle %"
-            puts "$gwoben / $fw"
+  # create the rega script
+  set script "
+    object svObj=dom.GetObject(ID_SYSTEM_VARIABLES).Get(\"$svName\");
+    if(!svObj) {
+      svObj=dom.CreateObject(OT_VARDP);
+      if(svObj) {
+        svObj.Name(\"$svName\");
+        svObj.ValueMin(-1);
+        svObj.Internal(false);
+        svObj.Visible(true);
+        dom.GetObject(ID_SYSTEM_VARIABLES).Add(svObj.ID());
+        dom.RTUpdate(1);
+      }
+    }
 
-            set gwname $section(Name)
-            set gwname1 "DutyCycle-$gwname"
-            set gwnoname "DutyCycle-$sn1"
-            # Wenn kein Gateway Name eingetragen wurde, wird als Variablenname "DutyCycle-Seriennummer" gesetzt
-            if { $gwname == "" } then {
-              puts $gwnoname
-              # Wenn HM-CFG-LAN disconnected dann DC -1 setzen
-              if {($type == "LanInterface") && ($connection == "0" )} then {
-                set dutycycle -1
-                puts "Set DC to $dutycycle"
-              }
-              # Prüfen ob DC Systemvariable für Gateways existieren und ggf. anlegen
-              append rega_cmd_create_sv "string svName = '$gwnoname';object svObj = dom.GetObject(ID_SYSTEM_VARIABLES).Get(svName);if (!svObj){object svObjects = dom.GetObject(ID_SYSTEM_VARIABLES);svObj = dom.CreateObject(OT_VARDP);svObjects.Add(svObj.ID());svObj.Name(svName);svObj.ValueType(ivtFloat);svObj.ValueSubType(istGeneric);svObj.DPInfo('DutyCycle Gateway');svObj.ValueUnit('%');svObj.ValueMin(-100);svObj.ValueMax(100);svObj.State(0);svObj.Internal(false);svObj.Visible(true);dom.RTUpdate(true);}"
-              rega_script $rega_cmd_create_sv
-              # DutyCycle Variable aktualisieren
-              append rega_cmd "dom.GetObject(ID_SYSTEM_VARIABLES).Get('$gwnoname').State('$dutycycle');"
-              rega_script $rega_cmd
-              # DutyCycle System-Log Meldung erzeugen sofern DC größer 80%
-              if {$dutycycle >= "80"} {
-                exec logger -t dutycycle -p info "$gwnoname / FW: $fw / DC: $dutycycle %"
-              }
-              } else {
-                puts $gwname1
-                if {($type == "LanInterface") && ($connection == "0" )} then {
-                  set dutycycle -1
-                  puts "Set DC to $dutycycle"
-                }
-                # Wird der Gateway Name nachträglich gesetzt, Systemvariable mit Seriennummer umbenennen
-                append rega_cmd_rename_sv "string svName = '$gwnoname';string svNewName = '$gwname1';object svObj = dom.GetObject(ID_SYSTEM_VARIABLES).Get(svName);if (svObj){dom.GetObject(ID_SYSTEM_VARIABLES).Get(svName).Name(svNewName);dom.RTUpdate(true)};"
-                rega_script $rega_cmd_rename_sv
-                # Wenn ein Gateway Name eingetragen wurde, wird dieser angehangen z.B. "DutyCycle-OG1"
-                append rega_cmd_create_sv "string svName = '$gwname1';object svObj  = dom.GetObject(ID_SYSTEM_VARIABLES).Get(svName);if (!svObj){object svObjects = dom.GetObject(ID_SYSTEM_VARIABLES);svObj = dom.CreateObject(OT_VARDP);svObjects.Add(svObj.ID());svObj.Name(svName);svObj.ValueType(ivtFloat);svObj.ValueSubType(istGeneric);svObj.DPInfo('DutyCycle Gateway');svObj.ValueUnit('%');svObj.ValueMin(-100);svObj.ValueMax(100);svObj.State(0);svObj.Internal(false);svObj.Visible(true);dom.RTUpdate(true);}"
-                rega_script $rega_cmd_create_sv
-                # DutyCycle Variable aktualisieren
-                append rega_cmd "dom.GetObject(ID_SYSTEM_VARIABLES).Get('$gwname1').State('$dutycycle');"
-                rega_script $rega_cmd
-                # DutyCycle System-Log Meldung erzeugen sofern DC größer 80%
-                if {$dutycycle >= "80"} {
-                  exec logger -t dutycycle -p info "$gwname1 / FW: $fw / DC: $dutycycle %"
-                }
-              }
+    if(svObj) {
+      svObj.DPInfo(\"$desc\");
+      svObj.ValueType(ivtFloat);
+      svObj.ValueSubType(istGeneric);
+      svObj.ValueUnit(\"%\");
+      svObj.ValueMin(-1);
+      svObj.ValueMax(100);
+      svObj.State($value);
+    }
+  "
+
+  rega_script $script
+}
+
+###################################################################
+# BIDCOS/HMIP-RF
+#
+
+# get all bidcos interface status using a listBidcosInterfaces
+# XMLRPC query
+set result [catch {set gateways [xmlrpc http://127.0.0.1:2001/ listBidcosInterfaces]}]
+if {$result == 0} {
+
+  # iterate over all gateways returned by listBidcosInterfaces
+  foreach _gateway $gateways {
+    array set gateway $_gateway
+    if {[info exists gateway(DUTY_CYCLE)]} {
+
+      # if the gw is flagged as NOT connected set dutycycle to -1
+      if {$gateway(CONNECTED) == 1} {
+        set dutycycle $gateway(DUTY_CYCLE)
+      } else {
+        set dutycycle -1
+      }
+
+      if {$gateway(TYPE) == "CCU2"} {
+        setDutyCycleSV "" "DutyCycle CCU" $dutycycle ""
+      } else {
+        # make sure to parse the /etc/config/rfd.conf file for later use
+        # if it hasn't been parsed yet
+        if {[cfg::variables] == ""} {
+          cfg::parse_file /etc/config/rfd.conf
+        }
+
+        # get the cleartext name a user assigned for that gateway
+        # we try to find it based on the defined serial number
+        set name ""
+        foreach section [cfg::sections] {
+          set result [catch {set serNum [cfg::getvar "Serial Number" "$section"]}]
+          if {$result == 0} {
+            if {$serNum == $gateway(ADDRESS)} {
+              catch {set name [cfg::getvar "Name" "$section"]}
             }
           }
         }
+        setDutyCycleSV $name "DutyCycle LGW ($gateway(ADDRESS))" $dutycycle $gateway(ADDRESS)
       }
-    }
 
-# Section Wired-Gateway
-puts "--------------------"
-set fp [open "/usr/local/etc/config/hs485d.conf" r]
-set filecontent [read $fp]
-set input_list [split $filecontent "\n"]
-set wiredList [lsearch -exact $input_list "\[Interface 0\]"]
-close $fp
-set wiredgateway ""
-set wiredvarName "Wired-Status"
-
-# Sofern kein Wired-Gateway eingebunden, wird nichts gemacht
-if { $wiredList == -1 } then {
-  puts "Wired: no"
-  }
-
-if { $wiredList > -1 } then {
-    puts "Wired: yes"
-    # Prüfen ob Wired Gateway verbunden ist und ggf. Connection Status auf 0 setzen
-    if { [catch {set wiredgateway [xmlrpc http://127.0.0.1:2000/ getLGWStatus]} fid] } {
-      set connection "diconnected"
-      puts "Gateway $connection"
-      #puts "Fehlermeldung: $fid"
-      # Prüfen ob Wired-Status Systemvariable existiert und ggf. anlegen
-      append rega_cmd_create_sv "string svName='Wired-Status';object svObj=dom.GetObject(ID_SYSTEM_VARIABLES).Get(svName);if (!svObj){object svObjects=dom.GetObject(ID_SYSTEM_VARIABLES);svObj=dom.CreateObject(OT_VARDP);svObjects.Add(svObj.ID());svObj.Name(svName);svObj.ValueType(ivtBinary);svObj.ValueSubType(istBool);svObj.ValueName0('offline');svObj.ValueName1('online');svObj.State(true);svObj.DPInfo('Wired-Status');svObj.ValueUnit('');dom.RTUpdate(true);}"
-      rega_script $rega_cmd_create_sv
-      # Wired-Status Variable aktualisieren
-      append rega_cmd "dom.GetObject(ID_SYSTEM_VARIABLES).Get('$wiredvarName').State(false);"
-      rega_script $rega_cmd
-      } else {
-        set connection "1"
-        set wiredgateway [xmlrpc http://127.0.0.1:2000/ getLGWStatus]
+      set infoTxt "DutyCycle-$gateway(ADDRESS) / $gateway(TYPE) / FW: $gateway(FIRMWARE_VERSION) / DC: $dutycycle %"
+      if {$dutycycle >= "80"} {
+        exec logger -t dutycycle -p info "$infoTxt"
       }
+      puts "$infoTxt"
     }
-
-# Sofern getLGWStatus verfügbar, Connetion Status direkt über getLGWStatus abfragen
-set lines [split [string map [list "{CO" "\x00"] $wiredgateway] "\x00"]
-if { $connection == "1" } {
-  foreach line $lines {
-    regexp "CONNECTED (.?) " $line dummy connection1
-    # Prüfen ob Wired-Status Systemvariable existiert und ggf. anlegen
-    append rega_cmd_create_sv "string svName='Wired-Status';object svObj=dom.GetObject(ID_SYSTEM_VARIABLES).Get(svName);if (!svObj){object svObjects=dom.GetObject(ID_SYSTEM_VARIABLES);svObj=dom.CreateObject(OT_VARDP);svObjects.Add(svObj.ID());svObj.Name(svName);svObj.ValueType(ivtBinary);svObj.ValueSubType(istBool);svObj.ValueName0('offline');svObj.ValueName1('online');svObj.State(true);svObj.DPInfo('Wired-Status');svObj.ValueUnit('');dom.RTUpdate(true);}"
-    rega_script $rega_cmd_create_sv
-    # Wired-Status Variable aktualisieren
-    append rega_cmd "dom.GetObject(ID_SYSTEM_VARIABLES).Get('$wiredvarName').State(true);"
-    rega_script $rega_cmd
-    puts "Gateway connected"
   }
 }
+
+###################################################################
+# BidCos-WIRED
+#
+
+# parse the hs485d.conf file to identify if there are
+# any wired gateways configured
+cfg::parse_file /etc/config/hs485d.conf
+if {[llength [cfg::sections]] > 1} {
+  set connected "false"
+  set result [catch {set gateways [xmlrpc http://127.0.0.1:2000/ getLGWStatus]}]
+  if {$result == 0} {
+    foreach _gateway $gateways {
+      array set gateway $_gateway
+      if {[info exists gateway(CONNECTED)]} {
+        if {$gateway(CONNECTED) == 1} {
+          set connected "true"
+        }
+
+        break
+      }
+    }
+  }
+
+  set script "
+    string svName=\"Wired-Status\";
+    object svObj=dom.GetObject(ID_SYSTEM_VARIABLES).Get(svName);
+    if(!svObj) {
+      svObj=dom.CreateObject(OT_VARDP);
+      if(svObj) {
+        svObj.Name(svName);
+        dom.GetObject(ID_SYSTEM_VARIABLES).Add(svObj.ID());
+        dom.RTUpdate(1);
+      }
+    }
+
+    if(svObj) {
+      svObj.DPInfo(\"Wired-LGW Status\");
+      svObj.ValueType(ivtBinary);
+      svObj.ValueSubType(istBool);
+      svObj.ValueName0(\"offline\");
+      svObj.ValueName1(\"online\");
+      svObj.ValueUnit(\"\");
+      svObj.State($connected);
+    }
+  "
+
+  rega_script $script
+
+  set infoTxt "Wired-LGW-Status: $connected"
+  if {$connected == "0"} {
+    exec logger -t dutycycle -p info "$infoTxt"
+  }
+  puts $infoTxt
+}
+
+exit 0

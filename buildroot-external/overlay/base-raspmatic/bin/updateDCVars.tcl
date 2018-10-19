@@ -279,7 +279,7 @@ if {[llength [cfg::sections]] > 1} {
   rega_script $script
 
   set infoTxt "Wired-LGW-Status: $connected"
-  if {$connected == "0"} {
+  if {$connected == "false"} {
     exec logger -t dutycycle -p info "$infoTxt"
   }
   puts $infoTxt

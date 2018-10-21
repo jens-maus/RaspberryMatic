@@ -221,8 +221,11 @@ if {$result == 0} {
         setDutyCycleSV $name "DutyCycle LGW ($gateway(ADDRESS))" $dutycycle $gateway(ADDRESS)
       }
 
-      set infoTxt "DutyCycle-$gateway(ADDRESS) / $gateway(TYPE) / FW: $gateway(FIRMWARE_VERSION) / DC: $dutycycle %"
-      if {$dutycycle >= "80"} {
+      set infoTxt "DutyCycle-$gateway(ADDRESS) / $gateway(TYPE) / FW: $gateway(FIRMWARE_VERSION) / DC: $dutycycle%"
+      if {$dutycycle >= 98} {
+        exec /bin/triggerAlarm.tcl "DutyCycle $dutycycle% ($gateway(ADDRESS))" "DutyCycle-Alarm"
+        exec logger -t dutycycle -p error "$infoTxt"
+      } elseif {$dutycycle >= 80} {
         exec logger -t dutycycle -p info "$infoTxt"
       }
       puts "$infoTxt"

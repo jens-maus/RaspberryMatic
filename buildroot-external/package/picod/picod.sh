@@ -5,7 +5,7 @@
 
 # Command run on power loss
 #: ${POWER_LOSS_CMD:='/sbin/poweroff'}
-: ${POWER_LOSS_CMD:='/bin/triggerAlarm.tcl "PIco UPS: Power Loss"'}
+: ${POWER_LOSS_CMD:='/bin/triggerAlarm.tcl "Power Loss" "PIcoUPS-Alarm"'}
 
 # File descriptors
 if [[ ${HM_HOST} != "tinkerboard" ]]; then

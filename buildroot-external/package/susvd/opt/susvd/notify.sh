@@ -1,2 +1,2 @@
 #!/bin/sh
-/bin/triggerAlarm.tcl "S.USV Power Loss"
+/bin/triggerAlarm.tcl "Power Loss" "S.USV-Alarm"

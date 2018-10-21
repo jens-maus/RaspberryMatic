@@ -9,23 +9,23 @@ if [[ -n "${STATUS_CHANGE}" ]]; then
 
   case "${STATUS_TO}" in
     1)
-      MESSAGE="PiUSV+: Battery Fully Charged"
+      MESSAGE="Battery Fully Charged"
     ;;
 
     2)
-      MESSAGE="PiUSV+: Power Loss"
+      MESSAGE="Power Loss"
     ;;
 
     5)
-      MESSAGE="PiUSV+: Battery Disconnected"
+      MESSAGE="Battery Disconnected"
     ;;
 
     9)
-      MESSAGE="PiUSV+: Power Restored"
+      MESSAGE="Power Restored"
     ;;
   esac
 
   if [[ -n "${MESSAGE}" ]]; then
-    /bin/triggerAlarm.tcl "${MESSAGE}"
+    /bin/triggerAlarm.tcl "${MESSAGE}" "PiUSV-Alarm"
   fi
 fi

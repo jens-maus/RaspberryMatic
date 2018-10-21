@@ -3,8 +3,8 @@
 source /var/hm_mode 2>/dev/null
 
 # Command run on power loss
-: ${POWER_LOSS_CMD:='/bin/triggerAlarm.tcl "StromPi2: Power Loss"'}
-: ${POWER_RETURN_CMD:='/bin/triggerAlarm.tcl "StromPi2: Power Restored"'}
+: ${POWER_LOSS_CMD:='/bin/triggerAlarm.tcl "Power Loss" "StromPi2-Alarm"'}
+: ${POWER_RETURN_CMD:='/bin/triggerAlarm.tcl "Power Restored" "StromPi2-Alarm"'}
 
 # File descriptors
 if [[ ${HOST} != "tinkerboard" ]]; then

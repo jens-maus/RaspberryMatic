@@ -11,6 +11,7 @@ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSIO
 LIGHTTPD_LICENSE = BSD-3-Clause
 LIGHTTPD_LICENSE_FILES = COPYING
 LIGHTTPD_DEPENDENCIES = host-pkgconf
+LIGHTTPD_AUTORECONF = YES
 LIGHTTPD_CONF_OPTS = \
 	--libdir=/usr/lib/lighttpd \
 	--libexecdir=/usr/lib

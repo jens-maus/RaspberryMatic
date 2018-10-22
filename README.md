@@ -29,8 +29,8 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 * Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
 * Support to be used without GPIO RF module just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
-* Based on latest [Buildroot 2018.08](http://buildroot.org/) lightweight Linux operating system
-* Latest Linux kernel (RaspberryPi: [4.14.70](https://github.com/raspberrypi/linux/tree/rpi-4.14.y), Tinkerboard: [4.14.70](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
+* Based on latest [Buildroot 2018.08.1](http://buildroot.org/) lightweight Linux operating system
+* Latest Linux kernel (RaspberryPi: [4.14.71](https://github.com/raspberrypi/linux/tree/rpi-4.14.y), Tinkerboard: [4.14.75](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only) or from internal eMMC storage (ASUS Tinkerboard S)
 * Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks
@@ -151,7 +151,7 @@ Even for those that don't have the technical knowhow to help developing on Raspb
 ### :construction: Development
 Building your own RaspberryMatic SD card image is a very straight forward process using this build environment – given that you have sufficient Linux/Unix knowledge and you know what you are actually doing. But if you know what you are doing and which host tools are required to actually be able to run a RaspberryMatic build, it should be as simple as:
 
-```
+```sh
 $ git clone https://github.com/jens-maus/RaspberryMatic
 $ cd RaspberryMatic
 $ make dist
@@ -160,9 +160,9 @@ $ make install of=/dev/sdX
 ```
 
 #### :bookmark: Using the generated cross compiler
-After a successfull build of RaspberryMatic a dedicated cross compiler (`arm-linux-gcc`) should be available within the `build-raspberrypi3` path. You can use this GCC-based cross compiler to compile all kind of third party applications which can then be run within RaspberryMatic:
+After a successfull build of RaspberryMatic a dedicated cross compiler (`arm-linux-gcc`) should be available within the `build-raspmatic_rpi3` path. You can use this GCC-based cross compiler to compile all kind of third party applications which can then be run within RaspberryMatic:
 
-```
+```sh
 $ cd HelloWorld
 $ <path-to-RaspberryMatic-build>/build-raspmatic_rpi3/host/usr/bin/arm-linux-gcc -o HelloWorld HelloWorld.c
 ```

@@ -71,7 +71,7 @@
     /*########################################################################*/
 
     PLATFORM = "Central";
-    WEBUI_VERSION = "3.0.0-TRUNK";
+    WEBUI_VERSION = "2.40.0-TRUNK";
   
     /**
      * Flags
@@ -196,7 +196,7 @@
     <div id="webuiloader_background">
       <div id="webuiloader">
         <div id="webuiloader_icon"><img src="/ise/img/homematic_logo_small_gray.png" /></div>
-        <!-- <div id="webuiloader_caption">HomeMatic WebUI wird geladen...</div> -->
+        <!-- div id="webuiloader_caption">HomeMatic WebUI wird geladen...</div-->
         <div id="webuiloader_caption"></div>
         <script type="text/javascript">jQuery("#webuiloader_caption").html(translateKey("loadWebUI"));</script>
       </div>

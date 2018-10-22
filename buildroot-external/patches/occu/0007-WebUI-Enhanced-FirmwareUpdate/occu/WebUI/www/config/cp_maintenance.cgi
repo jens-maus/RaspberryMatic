@@ -21,11 +21,28 @@ array set REGA_LOGLEVELS {
   3 "\${dialogSettingsCMLogLevel4}"
 }
 
-set RFD_URL "bin://127.0.0.1:2001"
-set HS485D_URL "bin://127.0.0.1:2000"
+set portnumber 2001
+catch { source "/etc/eq3services.ports.tcl" }
+if { [info exists EQ3_SERVICE_RFD_PORT] } {
+  set portnumber $EQ3_SERVICE_RFD_PORT
+}
+
+set RFD_URL "bin://127.0.0.1:$portnumber"
+
+set portnumber 2000
+catch { source "/etc/eq3services.ports.tcl" }
+if { [info exists EQ3_SERVICE_HS485D_PORT] } {
+  set portnumber $EQ3_SERVICE_HS485D_PORT
+}
+set HS485D_URL "bin://127.0.0.1:$portnumber"
 # set PFMD_URL "bin://127.0.0.1:2002" - not necessary with the ccu2
 
-set REMOTE_FIRMWARE_SCRIPT "http://update.homematic.com/firmware/download"
+
+if {[getProduct] < 3} {
+  set REMOTE_FIRMWARE_SCRIPT "http://update.homematic.com/firmware/download"
+} else {
+  set REMOTE_FIRMWARE_SCRIPT "http://ccu3-update.homematic.com/firmware/download"
+}
 
 proc action_acceptEula {} {
   global env sid
@@ -270,7 +287,9 @@ proc action_firmware_update_cancel {} {
     catch {exec rm /var/new_firmware.tar.gz}
     catch { exec /bin/sh -c "rm /var/EULA.*"}
   } else {
-   catch { exec /bin/sh -c "rm -rf `readlink /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
+   catch { exec /bin/sh -c "rm -rf `readlink -f /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
+   catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*"}
+   catch { exec /bin/sh -c "rm -f /usr/local/tmp/update_script"}
   }
 
   cgi_javascript {
@@ -458,7 +477,7 @@ proc action_put_page {} {
           }
 
           division {class="j_forcedUpdate" style="padding:10px;"} {
-            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
+            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate2}"
           }
         }
       }
@@ -480,23 +499,25 @@ proc action_put_page {} {
           puts "\${dialogSettingsCMHintRestart}"
         }
       }
-set comment {
-      table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-        table_data {class="CLASS20903"} $styleMaxWidth {
-          puts "\${dialogSettingsCMTDCCUShutdown}"
-        }
-        table_data {class="CLASS20904"} {
-          division {class="popupControls CLASS20905"} {
-            division {class="CLASS20910"} {onClick="OnShutdown();"} {
-              puts "\${dialogSettingsCMBtnCCUShutdown}"
+
+      if {[getProduct] >= 3} {
+        table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
+          table_data {class="CLASS20903"} $styleMaxWidth {
+            puts "\${dialogSettingsCMTDCCUShutdown}"
+          }
+          table_data {class="CLASS20904"} {
+            division {class="popupControls CLASS20905"} {
+              division {class="CLASS20910"} {onClick="OnShutdown();"} {
+                puts "\${dialogSettingsCMBtnCCUShutdown}"
+              }
             }
           }
-        }
-        table_data {align="left"} {class="CLASS20904"} {
-          puts "\${dialogSettingsCMHintShutdown}"
+          table_data {align="left"} {class="CLASS20904"} {
+            puts "\${dialogSettingsCMHintShutdown}"
+          }
         }
       }
-}
+
       # Abgesicherter Modus
       table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
         table_data {class="CLASS20903"} $styleMaxWidth {
@@ -533,7 +554,7 @@ set comment {
           table_data {align="left"} {
             puts "<select id='selectedReGaVersion'>"
             puts "<option value='NORMAL'>\${optionReGaNORMAL}</option>"
-            puts "<option value='LEGACY'>\${optionReGaLEGACY}</option>"
+            # puts "<option value='LEGACY'>\${optionReGaLEGACY}</option>"
             puts "<option value='COMMUNITY'>\${optionReGaCOMMUNITY}</option>"
             puts "</select>"
           }
@@ -552,9 +573,9 @@ set comment {
         }
         }
 
-        table_data {align="center"} {class="CLASS20904"} {
-        # puts "\${lblTDReGaVersionHelp}"
-        division {Class="StdTableBtnHelp"} {puts "<img id='showReGaVersionHelp' src='/ise/img/help.png'>"}
+        table_data {align="left"} {class="CLASS20904"} {
+        # division {Class="StdTableBtnHelp"} {puts "<img id='showReGaVersionHelp' src='/ise/img/help.png'>"}
+        division {Class="StdTableBtnHelp"} {puts "\${lblTDReGaVersionHelp}"}
         }
       }
 
@@ -784,7 +805,7 @@ set comment {
         translateKey('dialogSettingsCMDialogHintPerformFirmwareUploadTitle'),
         translateKey('dialogSettingsCMDialogHintPerformFirmwareUploadContent')+
         ' <br/><br/><img id="msgBoxBarGraph" src="/ise/img/anim_bargraph.gif"><br/>',
-        '','320','100','fwUpload', 'msgBoxBarGraph');
+        '','320','105','fwUpload', 'msgBoxBarGraph');
       } else {
         elem.show();
       }
@@ -869,7 +890,7 @@ proc action_firmware_upload {} {
     # check if the uploaded file looks like a firmware file
     set file_valid 0
     catch {
-      exec tar zxvf $filename update_script EULA.en EULA.de EULA.tr -C /var/
+      exec tar zxvf $filename update_script EULA.en -C /var/
     }
     set file_valid [file exists "/var/update_script"]
 
@@ -885,20 +906,20 @@ proc action_firmware_upload {} {
 
     cd /usr/local/tmp/
     set TMPDIR "$filename-dir"
-
     exec mkdir -p $TMPDIR
-    set file_invalid 1
 
     #
     # check if the uploaded file is a valid firmware update file
     #
+
+    set file_invalid 1
 
     # check for .tar.gz or .tar
     if {$file_invalid != 0} {
       set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
       if {$file_invalid == 0} {
         # the file seems to be a tar archive (perhaps with gzip compression)
-        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xf $filename} result]
+        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xmf $filename} result]
         file delete -force -- $filename
       }
     }
@@ -912,7 +933,7 @@ proc action_firmware_upload {} {
         file delete -force -- $filename
       }
     }
-  
+
     # check for .img
     if {$file_invalid != 0} {
       set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*partition 3"} result]
@@ -925,7 +946,7 @@ proc action_firmware_upload {} {
         }
       }
     }
-  
+
     # check for ext4 rootfs filesystem
     if {$file_invalid != 0} {
       set file_invalid [catch {exec file -b $filename | egrep -q "ext4 filesystem.*rootfs"} result]
@@ -937,7 +958,7 @@ proc action_firmware_upload {} {
         }
       }
     }
-  
+
     # check for vfat bootfs filesystem
     if {$file_invalid != 0} {
       set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*bootfs.*FAT"} result]
@@ -946,11 +967,10 @@ proc action_firmware_upload {} {
         file rename -force -- $filename "$TMPDIR/bootfs.vfat"
       }
     }
-  
+
     ######
     # check if there are checksum files in TMPDIR and if so check the checksum first
     if {$file_invalid == 0} {
-  
       # check for sha256 checksums
       foreach chk_file [glob -nocomplain "$TMPDIR/*.sha256"] {
         set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/sha256sum -sc $chk_file"} result]
@@ -958,7 +978,7 @@ proc action_firmware_upload {} {
           break
         }
       }
-  
+
       # check for md5 checksums
       if {$file_invalid == 0} {
         foreach chk_file [glob -nocomplain "$TMPDIR/*.md5"] {
@@ -968,7 +988,7 @@ proc action_firmware_upload {} {
           }
         }
       }
-  
+
       # everything seems to be fine with the uploaded file so lets
       # do the final check
       if {$file_invalid == 0} {
@@ -982,7 +1002,7 @@ proc action_firmware_upload {} {
         }
       }
     }
-  
+
     #
     # test if the above checks were successfull or not
     #
@@ -1256,7 +1276,7 @@ proc action_apply_logging {} {
   }
   catch {exec killall syslogd}
   catch {exec killall klogd}
-  exec /etc/init.d/S01logging start
+  exec /etc/init.d/S07logging start
   puts "Success -confirm"
 }
 

@@ -771,6 +771,12 @@ DEV_PATHS["HM-ES-PMSw1-Pl-DN-R5"] = new Object();
 DEV_PATHS["HM-ES-PMSw1-Pl-DN-R5"]["50"] = "/config/img/devices/50/107_hm-es-pmsw1-pl-R5_thumb.png";
 DEV_PATHS["HM-ES-PMSw1-Pl-DN-R5"]["250"] = "/config/img/devices/250/107_hm-es-pmsw1-pl-R5.png";
 DEV_HIGHLIGHT["HM-ES-PMSw1-Pl-DN-R5"] = new Object();
+DEV_LIST.push('HmIP-eTRV-C');
+DEV_DESCRIPTION["HmIP-eTRV-C"] = "TRV-C";
+DEV_PATHS["HmIP-eTRV-C"] = new Object();
+DEV_PATHS["HmIP-eTRV-C"]["50"] = "/config/img/devices/50/unknown_device_thumb.png";
+DEV_PATHS["HmIP-eTRV-C"]["250"] = "/config/img/devices/250/unknown_device.png";
+DEV_HIGHLIGHT["HmIP-eTRV-C"] = new Object();
 DEV_LIST.push('HM-Sen-DB-PCB');
 DEV_DESCRIPTION["HM-Sen-DB-PCB"] = "HM-Sen-DB-PCB";
 DEV_PATHS["HM-Sen-DB-PCB"] = new Object();
@@ -2424,6 +2430,12 @@ DEV_PATHS["VIR-LG-RGB"] = new Object();
 DEV_PATHS["VIR-LG-RGB"]["50"] = "/config/img/devices/50/coupling/hm-coupling-rgb.png";
 DEV_PATHS["VIR-LG-RGB"]["250"] = "/config/img/devices/250/coupling/hm-coupling-rgb.png";
 DEV_HIGHLIGHT["VIR-LG-RGB"] = new Object();
+DEV_LIST.push('HmIP-MP3P');
+DEV_DESCRIPTION["HmIP-MP3P"] = "HmIP-MP3P";
+DEV_PATHS["HmIP-MP3P"] = new Object();
+DEV_PATHS["HmIP-MP3P"]["50"] = "/config/img/devices/50/186_hmip-mp3p_thumb.png";
+DEV_PATHS["HmIP-MP3P"]["250"] = "/config/img/devices/250/186_hmip-mp3p.png";
+DEV_HIGHLIGHT["HmIP-MP3P"] = new Object();
 DEV_LIST.push('HM-OU-CFM-Pl');
 DEV_DESCRIPTION["HM-OU-CFM-Pl"] = "HM-OU-CFM-Pl";
 DEV_PATHS["HM-OU-CFM-Pl"] = new Object();
@@ -4008,6 +4020,7 @@ elvST['DURATION_UNIT=D'] = '${stringTableDurationUnitD}';
 elvST['DURATION_UNIT=H'] = '${stringTableDurationUnitH}';
 elvST['DURATION_UNIT=M'] = '${stringTableDurationUnitM}';
 elvST['DURATION_UNIT=S'] = '${stringTableDurationUnitS}';
+elvST['DURATION_UNIT=10MS'] = '${stringTableRampTimeUnit10MS}';
 elvST['DURATION_VALUE'] = '${stringTableDurationValue}';
 elvST['DUTYCYCLE_LIMIT'] = '${stringTableDutyCycleLimit}';
 elvST['DUTY_CYCLE=FALSE'] = '${stringTableDutyCycleFalse}';
@@ -4538,6 +4551,7 @@ elvST['RAMP_TIME_UNIT=D'] = '${stringTableRampTimeUnitD}';
 elvST['RAMP_TIME_UNIT=H'] = '${stringTableRampTimeUnitH}';
 elvST['RAMP_TIME_UNIT=M'] = '${stringTableRampTimeUnitM}';
 elvST['RAMP_TIME_UNIT=S'] = '${stringTableRampTimeUnitS}';
+elvST['RAMP_TIME_UNIT=10MS'] = '${stringTableRampTimeUnit10MS}';
 elvST['RAMP_TIME_VALUE'] = '${stringTableRampTimeValue}';
 elvST['REDUCE_LEVEL'] = '${stringTableDimmerReduceLevel}';
 elvST['REDUCE_TEMP_LEVEL'] = '${stringTableDimmerReduceTempLevel}';
@@ -5084,6 +5098,10 @@ elvST['15Min'] = '${optionUnit15M}';
 elvST['30Min'] = '${optionUnit30M}';
 elvST['60Min'] = '${optionUnit60M}';
 elvST['120Min'] = '${optionUnit120M}';
+elvST['SOUNDFILE=INTERNAL_SOUNDFILE'] = '${stringTableInternalSoundFile}';
+elvST['SOUNDFILE=RANDOM_SOUNDFILE'] = '${stringTableRandomSoundFile}';
+elvST['SOUNDFILE=OLD_VALUE'] = '${stringTableOldValueSoundFile}';
+elvST['SOUNDFILE=DO_NOT_CARE'] = '${stringTableDoNotCareSoundFile}';
 /*
 Übersetzt den Inhalt der HTML-Elemente <span class="stringtable_value">...</span>
 und <select class="stringtable_select">...</select>
@@ -5821,11 +5839,14 @@ function showSecurityDialog() {
          1 - user selected YES
          */
         if (action == 1) {
-          // userAckSecurityHint doesn't exist
-          homematic("CCU.setSecurityHint");
           WebUI.resize();
           jQuery(".Layer0").show();
-          WebUI.enter(StartPage);
+          if (getProduct() >= 3) {
+            new InstallWizard();
+          } else {
+            WebUI.enter(StartPage);
+            homematic("CCU.setSecurityHint");
+          }
         }
       }, "html");
     });
@@ -6057,7 +6078,12 @@ WebUI = Singleton.create({
   
   start: function()
   {
-    this.USERNAME = jQuery.trim(homematic('User.getUserName', {'userID': userId}));
+    this.USERNAME = jQuery.trim(homematic('User.getUserFirstName', {'userID': userId}));
+
+    if ((this.USERNAME == "") || (typeof this.USERNAME == "undefined")) {
+      this.USERNAME = jQuery.trim(homematic('User.getUserName', {'userID': userId}));
+    }
+
     this.USERLANGUAGE = homematic('User.getLanguage', {'userID': userId});
     this.HIDESTICKYUNREACH = (homematic("CCU.getStickyUnreachState", {}) == 0 ) ? false : true ;
     userIsNoExpert = homematic('User.isNoExpert', {"id": userId});
@@ -6220,7 +6246,8 @@ WebUI = Singleton.create({
     $("content").style.cursor = "default";
 
     var fileSecHint = "/etc/config/userAckSecurityHint",
-    result = homematic('CCU.existsFile', {'file': fileSecHint});
+    result = homematic('CCU.existsFile', {'file': fileSecHint}),
+      securityDialogDisplayed = false;
 
     if (result) {
       WebUI.resize();
@@ -6228,6 +6255,7 @@ WebUI = Singleton.create({
       WebUI.enter(StartPage);
     } else {
       showSecurityDialog();
+      securityDialogDisplayed = true;
     }
     if (PLATFORM == 'Central') {
       if ((typeof preventInterfaceCheck == "undefined") || (! preventInterfaceCheck))
@@ -6236,6 +6264,36 @@ WebUI = Singleton.create({
         InterfaceMonitor.start();
       }
       homematic.com.init();
+
+      if (getProduct() >= 3) {
+        var usrPwd = homematic('User.getUserPWD', {'userID': userId});
+        if ( usrPwd == "") {
+            var result = homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + userName.replace(" ", ";")});
+            if (!result) {
+              var checkUpdateContentRunning = window.setInterval(function () {
+                if (!bUpdateContentRunning) {
+                  clearInterval(checkUpdateContentRunning);
+                  new InstallWizard(getUPL());
+                }
+              }, 100);
+            } else if (! homematic('CCU.existsFile', {'file': "/etc/config/firewallConfigured"})) {
+              new DialogChooseSecuritySettings(true);
+            }
+        } else {
+          // Admin password set
+          // Firewall settings not yet set (default)
+          if ((getUPL() == UPL_ADMIN) && (! homematic('CCU.existsFile', {'file': "/etc/config/firewallConfigured"}))) {
+            new DialogChooseSecuritySettings(true);
+          }
+
+          // User password set
+          // The User will see a hint that new firewall settings are active
+          if ((getUPL() == UPL_USER) && (! homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + userName.replace(" ", ";")}))) {
+            new MessageBox.show(translateKey("dglUserNewFwSettingsTitle"),translateKey("dglUserNewFwSettingsContent"));
+            homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+          }
+        }
+      }
     }
     else 
     {
@@ -6890,7 +6948,13 @@ UI.Component = Class.create({
   {
     return this.m_element;
   },
-  
+
+  setName: function(name)
+  {
+    this.m_element.name = name;
+    return this;
+  },
+
   /**
    * Setzt die Breite der Komponente in Pixeln
    **/
@@ -7480,7 +7544,12 @@ UI.Button = Class.create(UI.Component, {
     this.m_text.appendChild(document.createTextNode(text));
     return this;
   },
-  
+
+  setId: function(id) {
+    this.m_text.id = id;
+    return this;
+  },
+
   /**
    * Setzt den OnClick-EventHandler
    **/
@@ -8428,6 +8497,7 @@ Channel = Class.create({
       this.deviceId = data["deviceId"];  
       this.device = device;
       this.deviceType = deviceType;
+      this.virtChannelType = ""; // for HmIPW-DRBLx
       this.typeName = deviceType.name;
       this.typeDescription = deviceType.description;
       this.channelType = data["channelType"];
@@ -8459,11 +8529,11 @@ Channel = Class.create({
   },
 
   m_extendName: function() {
-    //var ext = getExtendedDescription(this.deviceType.id,this.index, this.channelType);
     var ext = getExtendedDescription({"deviceType":this.typeName,"channelType": this.channelType,"channelID": this.id, "channelIndex" : this.index, "isVisible" : this.isVisible});
     if (ext.length > 0) {
       this.nameExtention += "<br/>" + ext;
     }
+    this.m_setWiredBlind();
   },
 
   /**
@@ -8497,7 +8567,43 @@ Channel = Class.create({
     
     return result;
   },
-    
+
+  m_setWiredBlind: function() {
+    if ((this.typeDescription.indexOf("HmIPW-") != -1) && (this.channelType.indexOf("BLIND_") != -1) ) {
+      if (this.channelType.indexOf("BLIND_WEEK_PROFILE") == -1) {
+        var curType = "";
+
+        var devMode = homematic("Interface.getMetadata", {
+          "objectId": this.address,
+          "dataId": "channelMode"
+        });
+
+        curType = (devMode == "shutter") ? this.channelType.replace("BLIND", "SHUTTER") : this.channelType;
+
+        this.virtChannelType = curType;
+
+        var ext = getExtendedDescription({
+          "deviceType": this.typeName,
+          "channelType": curType,
+          "channelID": this.id,
+          "channelIndex": this.index,
+          "isVisible": this.isVisible
+        });
+        if (ext.length > 0) {
+          this.nameExtention = "<br/>" + ext;
+        }
+      }
+    }
+  },
+
+  getVirtChannelType : function() {
+    return this.virtChannelType;
+  },
+
+  changeChannelDescription: function() {
+    this.m_setWiredBlind();
+  },
+
   /**
    * Legt den Namen des Kanals fest
    **/
@@ -10026,12 +10132,14 @@ YesNoDialog = Class.create({
     yesButton.className = "YesNoDialog_yesButton borderRadius5px colorGradient50px";
     yesButton.appendChild(document.createTextNode(translateKey('dialogYes')));
     yesButton.onclick = function() { _this_.yes(); };
+    yesButton.id="btnYes";
     footer.appendChild(yesButton);
     
     var noButton = document.createElement("div");
     noButton.className = "YesNoDialog_noButton borderRadius5px colorGradient50px";
     noButton.appendChild(document.createTextNode(translateKey('dialogNo')));
     noButton.onclick = function() { _this_.no(); };
+    noButton.id = "btnNo";
     footer.appendChild(noButton);
     
     dialog.appendChild(footer);
@@ -10040,10 +10148,7 @@ YesNoDialog = Class.create({
     
     Layer.add(this.m_layer);
 
-    //AG sorgt dafür, daß die Dialoghöhe sich dynamisch dem Content anpasst.
-    jQuery(".YesNoDialog").css("height", jQuery(".YesNoDialogContentWrapper").height() + 78);
-    jQuery(".YesNoDialogFooter").css("top", jQuery(".YesNoDialogContentWrapper").height() + 26);
-
+    this.setHeight();
 
   },
     
@@ -10067,8 +10172,38 @@ YesNoDialog = Class.create({
     jQuery(".YesNoDialog_yesButton").text(btnTxt);
   },
 
+  btnYesHide: function() {
+    jQuery("#btnYes").addClass("hidden");
+  },
+
+  btnYesShow: function() {
+    jQuery("#btnYes").removeClass("hidden");
+  },
+
   btnTextNo: function(btnTxt) {
     jQuery(".YesNoDialog_noButton").text(btnTxt);
+  },
+
+  btnNoHide: function() {
+    jQuery("#btnNo").addClass("hidden");
+  },
+
+  btnNoShow: function() {
+    jQuery("#btnNo").removeClass("hidden");
+  },
+
+  setHeight: function() {
+    var heightContentWrapper = jQuery(".YesNoDialogContentWrapper").height(),
+      yesNoElm = jQuery(".YesNoDialog"),
+      footerElm = jQuery(".YesNoDialogFooter");
+
+    yesNoElm.css("height", heightContentWrapper + 78);
+    footerElm.css("top", heightContentWrapper + 26);
+    yesNoElm.css("top", (window.innerHeight / 2) - (yesNoElm.height() / 2));
+  },
+
+  resetHeight: function() {
+    this.setHeight();
   },
 
   setWidth: function(dlgWidth) {
@@ -10762,8 +10897,8 @@ MultiChannelChooser = Singleton.create({
 
   filterHmIPChannels: function(channel, arChannels) {
     conInfo("filterHmIPChannels");
-    // Channel KEY_TRANSCEIVER = key press - this doesn't work for HmIP devices and the CCU2
-    if ((channel.channelType != "KEY_TRANSCEIVER") && channel.isVisible) {arChannels.push(channel);}
+    //if ((channel.channelType != "_KEY_TRANSCEIVER") && channel.isVisible) {arChannels.push(channel);}
+    if (channel.isVisible) {arChannels.push(channel);}
     return arChannels;
   },
 
@@ -12195,43 +12330,64 @@ FirewallConfigDialog = Class.create({
    * @constructor
    * Erzeugt einen neuen FirewallConfigDialog
    **/
-  initialize: function () {
+  initialize: function (dlgWoPasswd) {
+    var yOffset = 320;
+
     var screenWidth = WebUI.getWidth();
     var screenHeight = WebUI.getHeight();
     var frameWidth = FirewallConfigDialog.CONTENT_WIDTH;
-    var frameHeight = FirewallConfigDialog.CONTENT_HEIGHT;
+    var frameHeight = FirewallConfigDialog.CONTENT_HEIGHT + yOffset;
     var frameX = parseInt((screenWidth - frameWidth) / 2);
-    var frameY = parseInt((screenHeight - frameHeight) / 2);
+    // var frameY = parseInt((screenHeight - frameHeight) / 2);
+    var frameY = 10;
+
+    this.dlgWoPasswd = dlgWoPasswd;
 
     this.m_layer = document.createElement("div");
     this.m_layer.className = "DialogLayer";
+    this.m_layer.style = "overflow:scroll;";
+
+    this.m_portListBox = new UI.ListBox()
+      .setPosition(FirewallConfigDialog.CONTENT_WIDTH - 180, 10)
+      .setWidth(150)
+      .add({id: "RESTRICTIVE", name: translateKey("dialogSettingsFirewallLblPortsRestricted")})
+      .add({id: "MOST_OPEN", name: translateKey("dialogSettingsFirewallLblPortsOpen")});
 
     this.m_xmlrpcListBox = new UI.ListBox()
-      .setPosition(FirewallConfigDialog.CONTENT_WIDTH - 160, 10)
+      .setPosition(FirewallConfigDialog.CONTENT_WIDTH - 180, 80)
       .setWidth(150)
-      //.add({id: "full"      , name: "Vollzugriff"})
-      //.add({id: "restricted", name: "eingeschränkt"})
-      //.add({id: "none"      , name: "kein Zugriff"});
       .add({id: "full", name: translateKey("dialogSettingsFirewallLblFullAccess")})
       .add({id: "restricted", name: translateKey("dialogSettingsFirewallLblRestrictedAccess")})
       .add({id: "none", name: translateKey("dialogSettingsFirewallLblNoAccess")});
 
 
     this.m_hmscriptListBox = new UI.ListBox()
-      .setPosition(FirewallConfigDialog.CONTENT_WIDTH - 160, 80)
+      .setPosition(FirewallConfigDialog.CONTENT_WIDTH - 180, 150)
       .setWidth(150)
-      //.add({id: "full"      , name: "Vollzugriff"})
-      //.add({id: "restricted", name: "eingeschränkt"})
-      //.add({id: "none"      , name: "kein Zugriff"});
       .add({id: "full", name: translateKey("dialogSettingsFirewallLblFullAccess")})
       .add({id: "restricted", name: translateKey("dialogSettingsFirewallLblRestrictedAccess")})
       .add({id: "none", name: translateKey("dialogSettingsFirewallLblNoAccess")});
 
-    this.m_ipTextArea = new UI.Textarea()
-      .setPosition(10, 180)
+    this.m_mediolaListBox = new UI.ListBox()
+      .setPosition(FirewallConfigDialog.CONTENT_WIDTH - 180, 220)
+      .setWidth(150)
+      .add({id: "full", name: translateKey("dialogSettingsFirewallLblFullAccess")})
+      .add({id: "restricted", name: translateKey("dialogSettingsFirewallLblRestrictedAccess")})
+      .add({id: "none", name: translateKey("dialogSettingsFirewallLblNoAccess")});
+
+    this.m_portTextArea = new UI.Textarea()
+      .setPosition(10, 320)
       .setWidth(FirewallConfigDialog.CONTENT_WIDTH - 20)
       .setHeight(100)
-      .setWrap(true);
+      .setWrap(true)
+      .disableResize();
+
+    this.m_ipTextArea = new UI.Textarea()
+      .setPosition(10, 200 + yOffset)
+      .setWidth(FirewallConfigDialog.CONTENT_WIDTH - 20)
+      .setHeight(100)
+      .setWrap(true)
+      .disableResize();
 
     this.m_frame = new UI.Frame()
       //.setTitle("Firewall Konfiguration")
@@ -12240,49 +12396,106 @@ FirewallConfigDialog = Class.create({
       .setPosition(frameX, frameY)
       .add(new UI.Text()
         .setPosition(10, 10)
+        .setHtml(translateKey("dialogSettingsFirewallLblFWPolicy"))
+      )
+      .add(this.m_portListBox)
+      .add(new UI.Text()
+        .setPosition(10, 40)
+        .setHtml(translateKey("dialogSettingsFirewallLblHintPortAccess"))
+      )
+      .add(new UI.Text()
+        .setPosition(10, 80)
         //.setHtml("<b>HomeMatic XML-RPC API:</b>")
         .setHtml(translateKey("dialogSettingsFirewallLblXMLRPCAPI"))
       )
       .add(new UI.Text()
-        .setPosition(10, 40)
+        .setPosition(10, 110)
         .setWidth(FirewallConfigDialog.CONTENT_WIDTH - 20)
         //.setText("Ermöglicht den direkten Zugriff auf angelernte HomeMatic Geräte")
         .setText(translateKey("dialogSettingsFirewallLblHintXMLRPCAPI"))
       )
       .add(this.m_xmlrpcListBox)
+
+      .add(new UI.Image()
+        .setPath("/ise/img/help.png")
+        .setWidth(25)
+        .setHeight(25)
+        .setPosition(475, 75)
+        .setName("helpToolTip")
+      )
+
       .add(new UI.Text()
-        .setPosition(10, 80)
+        .setPosition(10, 150)
         //.setHtml("<b>Remote HomeMatic-Script API:</b>")
         .setHtml(translateKey("dialogSettingsFirewallLblScriptAPI"))
       )
       .add(new UI.Text()
-        .setPosition(10, 110)
+        .setPosition(10, 180)
         .setWidth(FirewallConfigDialog.CONTENT_WIDTH - 20)
         //.setText("Ermöglicht den Zugriff auf die Logikschicht der HomeMatic Zentrale")
         .setText(translateKey("dialogSettingsFirewallLblHintScriptAPI"))
       )
       .add(this.m_hmscriptListBox)
+      .add(new UI.Image()
+        .setPath("/ise/img/help.png")
+        .setWidth(25)
+        .setHeight(25)
+        .setPosition(475, 145)
+        .setName("helpToolTip")
+      )
+
       .add(new UI.Text()
-        .setPosition(10, 150)
+        .setPosition(10, 220)
+        .setHtml(translateKey("dialogSettingsFirewallLblMediola"))
+      )
+      .add(new UI.Text()
+        .setPosition(10, 250)
+        .setWidth(FirewallConfigDialog.CONTENT_WIDTH - 20)
+        .setText(translateKey("dialogSettingsFirewallLblHintMediola"))
+      )
+      .add(this.m_mediolaListBox)
+      .add(new UI.Image()
+        .setPath("/ise/img/help.png")
+        .setWidth(25)
+        .setHeight(25)
+        .setPosition(475, 215)
+        .setName("helpToolTip")
+      )
+
+      .add(new UI.Text()
+        .setPosition(10, 290)
+        .setHtml(translateKey("portEnablingTitle"))
+      )
+
+      .add(this.m_portTextArea)
+
+      .add(new UI.Text()
+        .setPosition(10, 430)
+        .setWidth(FirewallConfigDialog.CONTENT_WIDTH - 20)
+        .setText(translateKey("portEnablingCaption"))
+      )
+
+      .add(new UI.Text()
+        .setPosition(10, 170 + yOffset)
         //.setHtml("<b>IP-Adressen für den eingeschränkten Zugriff:</b>")
         .setHtml(translateKey("dialogSettingsFirewallLblIPAddresses"))
       )
       .add(this.m_ipTextArea)
       .add(new UI.Text()
-        .setPosition(10, 290)
+        .setPosition(10, 310 + yOffset)
         .setWidth(FirewallConfigDialog.CONTENT_WIDTH - 20)
         //.setText("Sie können den Zugriff wahlweise für einzelne IP-Adressen (z.B. 192.168.0.1) oder ganze Adressbereiche (z.B. 192.168.0.0/16) freigeben.")
         .setText(translateKey("dialogSettingsFirewallLblHintIPAddresses"))
       )
       .add(new UI.Button()
-        .setPosition(10, FirewallConfigDialog.CONTENT_HEIGHT - 30)
+        .setPosition(10, FirewallConfigDialog.CONTENT_HEIGHT - 30 + yOffset)
         //.setText("Abbrechen")
         .setText(translateKey("btnCancel"))
-
+        .setId("btnCancel")
         .setAction(this.close, this)
       )
       .add(new UI.Button()
-        .setPosition(FirewallConfigDialog.CONTENT_WIDTH - 160, FirewallConfigDialog.CONTENT_HEIGHT - 30)
+        .setPosition(FirewallConfigDialog.CONTENT_WIDTH - 160, FirewallConfigDialog.CONTENT_HEIGHT - 30 + yOffset)
         //.setText("OK")
         .setText(translateKey("btnOk"))
         .setAction(this.ok, this)
@@ -12292,16 +12505,26 @@ FirewallConfigDialog = Class.create({
 
     this.m_layer.appendChild(this.m_frame.getElement());
     Layer.add(this.m_layer);
+    this.setTooltips();
+  },
+
+  setTooltips: function() {
+    var toolTipsElems = jQuery("[name='helpToolTip']");
+    toolTipsElems.data('powertip', translateKey("toolTipFirewallAccessModes"));
+    toolTipsElems.powerTip({placement: 'se', followMouse: true});
   },
 
   loadConfiguration: function () {
 
     var response = homematic("Firewall.getConfiguration");
     if (null != response) {
-      var services = response.services;
-      var ips = response.ips.join(";\n");
-      var xmlrpcAccess = "full";
-      var hmscriptAccess = "full";
+      var services = response.services,
+       ips = response.ips.join(";\n"),
+       userPorts = response.userports.join(";\n"),
+       firewallPolicy = response.mode,
+       xmlrpcAccess = "full",
+       hmscriptAccess = "full",
+       mediolaAccess = "restricted";
 
       for (var i = 0, len = services.length; i < len; i++) {
         var service = services[i];
@@ -12311,11 +12534,17 @@ FirewallConfigDialog = Class.create({
         if (service.id == "REGA") {
           hmscriptAccess = service.access;
         }
-      }
+        if (service.id == "NEOSERVER") {
+          mediolaAccess = service.access;
+        }
 
+      }
+      this.m_portListBox.selectItemById(firewallPolicy);
       this.m_xmlrpcListBox.selectItemById(xmlrpcAccess);
       this.m_hmscriptListBox.selectItemById(hmscriptAccess);
+      this.m_mediolaListBox.selectItemById(mediolaAccess);
       this.m_ipTextArea.setText(ips);
+      this.m_portTextArea.setText(userPorts);
     }
   },
 
@@ -12331,12 +12560,27 @@ FirewallConfigDialog = Class.create({
    **/
   ok: function () {
     var xmlrpcAccess = this.m_xmlrpcListBox.getSelectedItem().id,
+    firewallPolicy = this.m_portListBox.getSelectedItem().id,
     hmscriptAccess = this.m_hmscriptListBox.getSelectedItem().id,
-    ips = this.m_ipTextArea.getText();
+    mediolaAccess = this.m_mediolaListBox.getSelectedItem().id,
+    ips = this.m_ipTextArea.getText(),
+    userPorts = this.m_portTextArea.getText().replace(/\s+/g, '').split(";");
 
     // Remove a trailing ; at the end of ips
     ips = (ips.charAt(ips.length -1) == ";") ? ips.slice(0,-1) : ips;
     ips = ips.replace(/\s+/g, '').split(";");
+
+    if ((typeof firstStartInstallWizard !== "undefined") && (firstStartInstallWizard)) {
+      WebUI.enter(StartPage);
+      delete firstStartInstallWizard;
+      homematic("CCU.setSecurityHint");
+      homematic("CCU.setFirewallConfigured");
+      homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+    }
+
+    if (this.dlgWoPasswd ) {
+      homematic("CCU.setFirewallConfigured");
+    }
 
     var isOk = true;
     if (ips[0] != "" ) {
@@ -12349,14 +12593,17 @@ FirewallConfigDialog = Class.create({
     }
 
     if (isOk) {
+      this.close();
       homematic("Firewall.setConfiguration", {
         services: [
           {name: "XMLRPC", access: xmlrpcAccess},
-          {name: "REGA", access: hmscriptAccess}
+          {name: "REGA", access: hmscriptAccess},
+          {name: "NEOSERVER", access: mediolaAccess}
         ],
-        ips: ips
+        ips: ips,
+        userports: userPorts,
+        mode: firewallPolicy
       });
-      this.close();
     }
     else {
       //MessageBox.show("Eingabefehler", "Verwenden Sie bitte nur IP-Adressen im Format \"1.2.3.4\" und Adressgruppen im Format \"1.2.3.0/8\". Separieren Sie die einzelnen Adressen durch Semikola.");
@@ -14848,6 +15095,504 @@ WTHSelectModeDialog = Class.create({
 
 WTHSelectModeDialog.RESULT_NO = 0;
 WTHSelectModeDialog.RESULT_YES = 1;
+InstallWizard = Class.create({
+  initialize: function (userLevel) {
+    firstStartInstallWizard = true;
+
+    if (userLevel == UPL_ADMIN) {
+      WebUI.enter(adminFirstStartup);
+    }
+    if (userLevel == UPL_USER) {
+      WebUI.enter(userFirstStartup);
+    }
+  }
+});
+
+DialogUserPassword = Class.create({
+  initialize: function () {
+    var self=this;
+    this.dlg = new YesNoDialog(translateKey("securitySettingsTitle"), this._getHTMLBody(),function(btnPress) {
+
+      if (btnPress == YesNoDialog.RESULT_NO) {
+        // Cancel pressed
+          // Don't set the user password when Cancel is pressed
+        passWord = "";
+        saveUserPassword();
+      }
+    }, "html");
+
+    this.passChanged = false;
+    this.elmBtnNext = jQuery('.YesNoDialog_yesButton')[0];
+    this.elmPwd1 = jQuery('#pwd_1');
+    this.elmPwd2 = jQuery('#pwd_2');
+    this.elmPwdError = jQuery('#pwdError');
+    //this.dlg.btnTextNo(translateKey("footerBtnCancel"));
+    this.dlg.btnNoHide();
+    this.dlg.btnTextYes(translateKey("btnNext"));
+
+    this.dlg.yes = function() {
+      var pwdOK = self._checkPassword();
+
+      if (pwdOK) {
+        this.close(YesNoDialog.RESULT_YES);
+        self._saveUserPassword();
+
+        if (homematic('CCU.existsFile', {'file': "/etc/config/firewallConfigured"})) {
+          WebUI.enter(StartPage);
+          homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+
+          if (getUPL() == UPL_USER) {
+            new MessageBox.show(translateKey("dglUserNewFwSettingsTitle"),translateKey("dglUserNewFwSettingsContent"));
+          }
+
+        } else {
+          if(getUPL() == UPL_ADMIN) {
+            new DialogChooseSecuritySettings();
+          } else {
+            WebUI.enter(StartPage);
+            homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+          }
+        }
+      }
+    };
+
+    this.dlg.no = function() {
+      this.close(YesNoDialog.RESULT_NO);
+      delete firstStartInstallWizard;
+    };
+  },
+
+  _checkPassword: function() {
+    var pwd1 = this.elmPwd1.val(),
+      pwd2 = this.elmPwd2.val();
+
+    var pwdError_0 = translateKey("noPasswdSet"),
+      pwdError_1 = translateKey("passwdNotIdentical");
+
+    if( !isPasswordAllowed( pwd1, 0 ) ) {
+      this.elmPwd1.val("");
+      this.elmPwd2.val("");
+      return false;
+    }
+
+    if (pwd1 == "") {
+      this._showErrorMessage(pwdError_0);
+      return false;
+    }
+
+    if (this.elmPwd1.val() != this.elmPwd2.val()) {
+      this._showErrorMessage(pwdError_1);
+      return false;
+    } else {
+      this._noErrorMessage();
+    }
+    return true;
+
+  },
+
+  _showErrorMessage: function(msg) {
+    this.elmPwdError.removeClass('visibilityHidden').html(msg);
+  },
+
+  _noErrorMessage: function() {
+    this.elmPwdError.addClass('visibilityHidden');
+  },
+
+  _saveUserPassword: function() {
+    if (this.passChanged) {
+      passWord = this.elmPwd1.val();
+      saveUserPassword();
+    }
+  },
+
+  _getHTMLBody: function () {
+    var self = this;
+    onPw1Change = function() {
+      self.passChanged = true;
+    };
+
+    var html = "";
+    html += "<table align='center'>";
+
+      html += "<tr>";
+        html += "<td colspan='2'>";
+        if (getUPL() == UPL_ADMIN) {
+          html += translateKey('dlgAdminPasswdHint1');
+        } else {
+          html += translateKey('dlgUserPasswdHint1');
+        }
+        html += "</td>";
+      html += "</tr>";
+
+      html += "<tr align='center'>";
+        html += "<td colspan='2'><hr></td>";
+      html += "</tr>";
+
+      html += "<tr align='center'>";
+        if (getUPL() == UPL_ADMIN) {
+          html += "<td colspan='2' style='padding-bottom: 20px;'>" + translateKey('adminPasswordTitle') + "</td>";
+        } else {
+          html += "<td colspan='2' style='padding-bottom: 20px;'>" + translateKey('userPasswordTitle') + "</td>";
+        }
+      html += "</tr>";
+
+      html += "<tr>";
+        html += "<td>";
+          html += translateKey("lblUserPassword");
+        html += "</td>";
+        html += "<td>";
+          html += "<input id='pwd_1' onchange='onPw1Change()' type='password' value="+passWord+">";
+        html += "</td>";
+      html += "</tr>";
+      html += "<tr>";
+        html += "<td>";
+          html += translateKey("lblUserPasswordRepeat");
+        html += "</td>";
+        html += "<td>";
+         html += "<input id='pwd_2' type='password' value="+passWord+">";
+        html += "</td>";
+
+      html += "</tr>";
+
+      html += "<tr align='center'>";
+        html += "<td colspan='2' class='visibilityHidden attention' id='pwdError'>noError</td>";
+      html += "</tr>";
+
+    html += "</table>";
+
+    return html;
+  }
+});
+
+DialogChooseSecuritySettings = Class.create({
+  initialize: function(dlgWoPasswd) {
+    var self = this;
+    this.mode;
+    this.dlgWoPasswd = dlgWoPasswd;
+
+    firstStartInstallWizard = ((typeof firstStartInstallWizard == "undefined") || (!firstStartInstallWizard)) ? false : true;
+
+    this.dlg = new YesNoDialog(translateKey("securitySettingsTitle"), this._getHTMLBody(),function(btnPress) {
+      if (btnPress == YesNoDialog.RESULT_NO) {
+        // Back pressed
+        if (firstStartInstallWizard) {
+          new DialogUserPassword();
+        } else {WebUI.enter(SystemControlPage);}
+      }
+
+      if (btnPress == YesNoDialog.RESULT_YES) {
+        // Next pressed
+        switch (self.mode) {
+          case "express":
+            new DialogExpressSettings(self.dlgWoPasswd);
+            break;
+          case "user":
+            new DialogUserDefinedSettings(self.dlgWoPasswd);
+            break;
+          default: "express";
+        }
+      }
+
+
+    }, "html");
+
+    this.dlg.setWidth(400);
+    this.dlg.btnTextNo(translateKey("footerBtnPageBack"));
+    this.dlg.btnTextYes(translateKey("btnNext"));
+
+    if (this.dlgWoPasswd) {
+      this.dlg.btnNoHide();
+    }
+
+  },
+
+  _getHTMLBody: function() {
+    var self = this;
+    this.mode = "express"; // Default
+    setSelectedMode = function() {
+      self.mode = jQuery("input[name='secSettings']:checked").val();
+    };
+
+    var html = "";
+    html += "<table align='center'>";
+
+      html += "<tr>";
+        html += "<td colspan='2'>";
+          html += translateKey("lblSetting");
+        html += "</td>";
+      html += "</tr>";
+
+      html += "<tr align='center'>";
+        html += "<td colspan='2'><hr></td>";
+      html += "</tr>";
+
+      html += "<tr>";
+        html += "<td><input type='radio' id='optionExpress' name='secSettings' value='express' onchange='setSelectedMode();' checked><label for='optionExpress'>"+translateKey('dialogSetSecurityLevelExpress')+"</label></td>";
+      html += "</tr>";
+
+      html += "<tr>";
+        html += "<td><input type='radio' id='optionUserDef' name='secSettings' value='user' onchange='setSelectedMode();' ><label for='optionUserDef'>"+translateKey('dialogSetSecurityLevelUserDefined')+"</label></td>";
+      html += "</tr>";
+
+    html += "</table>";
+      return html;
+  }
+
+});
+
+DialogExpressSettings = Class.create({
+  initialize: function(dlgWoPasswd) {
+    var self = this;
+    var tmpMode = this._getSecurityLevel(); // Read current security level for setting the radio box.
+
+    this.idLOW = "LOW";
+    this.idMID = "MEDIUM";
+    this.idHIGH= "HIGH";
+    this.idCUSTOM= "CUSTOM";
+    this.modeHasChanged = false;
+    this.dlgWoPasswd = dlgWoPasswd;
+
+    this.mode = (tmpMode != null) ? tmpMode : this.idHIGH;
+
+    this.dlg = new YesNoDialog(translateKey("securitySettingsTitle"), this._getHTMLBody(),function(btnPress) {
+
+      if (btnPress == YesNoDialog.RESULT_NO) {
+        // Back pressed
+        new DialogChooseSecuritySettings();
+      }
+
+      if (btnPress == YesNoDialog.RESULT_YES) {
+        // Next pressed
+        var newMode = self._getSelectedLevel();
+
+        if (tmpMode == null || self.modeHasChanged) {
+          conInfo("Write new level: " + newMode);
+          self._setSecurityLevel(newMode);
+        } else {
+          conInfo("The mode hasn't changed!");
+        }
+
+        if ((typeof firstStartInstallWizard !== "undefined") && (firstStartInstallWizard)) {
+          WebUI.enter(StartPage);
+          delete firstStartInstallWizard;
+          homematic("CCU.setSecurityHint");
+          homematic("CCU.setFirewallConfigured");
+          homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
+        }
+
+        if (self.dlgWoPasswd) {
+          homematic("CCU.setFirewallConfigured");
+        }
+
+        if (newMode == self.idCUSTOM) {
+          new DialogUserDefinedSettings(self.dlgWoPasswd);
+        }
+
+      }
+    }, "html");
+    this.dlg.setWidth(400);
+    this._initRadioGroup();
+    this.dlg.btnTextNo(translateKey("footerBtnPageBack"));
+    this.dlg.btnTextYes(translateKey("btnOk"));
+    this._setHelp();
+  },
+
+  _initRadioGroup: function () {
+    var elm = jQuery("[type=radio]");
+    elm.val([this.mode]);
+    setSelectedMode();
+  },
+
+  _getSelectedLevel: function () {
+    return this.mode;
+  },
+
+  _setSecurityLevel: function (mode) {
+    var self = this;
+    homematic("CCU.setSecurityLevel", {"level": mode}, function() {
+      if (mode != self.idCUSTOM) {
+        homematic("User.restartLighttpd", {}, function () {
+          conInfo("Lighttpd restarted");
+        });
+      }
+    });
+  },
+
+  _getSecurityLevel: function () {
+    // Returns null when the
+    return homematic("CCU.getSecurityLevel");
+  },
+
+  _getHTMLBody: function() {
+    var self = this;
+
+    setSelectedMode = function() {
+      var secLevelHighElm = jQuery("[name='secLevelHigh']"),
+      secLevelMidElm = jQuery("[name='secLevelMid']"),
+      secLevelLowElml = jQuery("[name='secLevelLow']");
+
+      self.mode = jQuery("input[name='secMode']:checked").val();
+      self.modeHasChanged = true;
+
+      switch (self.mode) {
+        case "HIGH":
+          secLevelMidElm.hide();
+          secLevelLowElml.hide();
+          secLevelHighElm.show();
+          break;
+        case "MEDIUM":
+          secLevelHighElm.hide();
+          secLevelLowElml.hide();
+          secLevelMidElm.show();
+          break;
+        case "LOW":
+          secLevelHighElm.hide();
+          secLevelMidElm.hide();
+          secLevelLowElml.show();
+          break;
+      }
+      self.dlg.resetHeight();
+    };
+
+    var helpStyle = "cursor: pointer; width:25px; height:25px; position:relative; top:2px";
+
+    var html = "";
+    html += "<table align='center'>";
+
+      html += "<tr>";
+        html += "<td colspan='2'>"+translateKey('secLevelUserHint')+"</td>";
+      html += "</tr>";
+
+      html += "<tr align='center'>";
+        html += "<td colspan='2'><hr></td>";
+      html += "</tr>";
+
+      html += "<tr align='center'>";
+        html += "<td colspan='2'>";
+          html += translateKey('dlgSecurityLevelHeader');
+        html += "</td>";
+      html += "</tr>";
+
+      html += "<tr align='center'>";
+        html += "<td colspan='2'><hr></td>";
+      html += "</tr>";
+
+      html += "<tr align='left'>";
+        html += "<td style='width:50%'><input type='radio' id='secHigh' name='secMode' value='HIGH' onchange='setSelectedMode();' checked><label for='secHigh'>"+translateKey('secLevelHigh')+"</label></td>";
+        html += "<td style='width:50%; text-align:center'><div><img id=\"showHelpSecurityHigh\" src=\"/ise/img/help.png\" style='"+helpStyle+"'></div></td>";
+      html += "</tr>";
+
+      html += "<tr>";
+        html += "<td colspan='2'>";
+          html += "<table>";
+            html += "<tr name='secLevelHigh' class='hidden'>";
+              html += "<td style='font-weight: normal'>"+translateKey('secLevelHighCaptionA')+"</td>";
+            html += "</tr>";
+            html += "<tr name='secLevelHigh' class='hidden'>";
+              html += "<td style='font-weight: normal'>"+translateKey('secLevelHighCaptionB')+"</td>";
+            html += "</tr>";
+          html += "</table>";
+        html += "<td>";
+      html += "</tr>";
+
+      html += "<tr align='center'>";
+        html += "<td colspan='2'><hr></td>";
+      html += "</tr>";
+
+      html += "<tr align='left'>";
+        html += "<td style='width:50%'><input type='radio' id='secMed' name='secMode' value='MEDIUM' onchange='setSelectedMode();' ><label for='secMed'>"+translateKey('secLevelMid')+"</label></td>";
+        html += "<td style='width:50%; text-align:center'><div><img id=\"showHelpSecurityMid\" src=\"/ise/img/help.png\" style='"+helpStyle+"'></div></td>";
+      html += "</tr>";
+      html += "<tr>";
+        html += "<td colspan='2'>";
+          html += "<table>";
+            html += "<tr name='secLevelMid' class='hidden'>";
+              html += "<td style='font-weight: normal'>"+translateKey('secLevelMidCaption')+"</td>";
+            html += "</tr>";
+          html += "</table>";
+        html += "<td>";
+      html += "</tr>";
+
+      html += "<tr align='center'>";
+        html += "<td colspan='2'><hr></td>";
+      html += "</tr>";
+
+      html += "<tr align='left'>";
+        html += "<td style='width:50%'><input type='radio' id='secLow' name='secMode' value='LOW' onchange='setSelectedMode();' ><label for='secLow'>"+translateKey('secLevelLow')+"</label></td>";
+        html += "<td style='width:50%; text-align:center'><div><img id=\"showHelpSecurityLow\" src=\"/ise/img/help.png\" style='"+helpStyle+"'></div></td>";
+      html += "</tr>";
+      html += "<tr>";
+        html += "<td colspan='2'>";
+          html += "<table>";
+            html += "<tr name='secLevelLow' class='hidden'>";
+              html += "<td style='font-weight: normal'>";
+                html += translateKey("secLevelLowCaptionA");
+              html += "</td>";
+            html += "</tr>";
+
+          html += "</table>";
+        html += "<td>";
+      html += "</tr>";
+
+      if(self.mode == self.idCUSTOM) {
+
+        html += "<tr align='center'>";
+          html += "<td colspan='2'><hr></td>";
+        html += "</tr>";
+
+        html += "<tr align='left'>";
+          html += "<td style='width:50%'><input type='radio' id='secCustom' name='secMode' value='CUSTOM' onchange='setSelectedMode();' ><label for='secCustom'>"+translateKey('secLevelCustom')+"</label></td>";
+          html += "<td style='width:50%; text-align:center'><div><img id=\"showHelpSecurityCustom\" src=\"/ise/img/help.png\" style='"+helpStyle+"'></div></td>";
+        html += "</tr>";
+        html += "<tr>";
+          html += "<td colspan='2'>";
+            html += "<table>";
+              html += "<tr name='secLevelCustom'>";
+                html += "<td style='font-weight: normal'>";
+                  html += "";
+                html += "</td>";
+              html += "</tr>";
+            html += "</table>";
+          html += "<td>";
+        html += "</tr>";
+      }
+    html += "</table>";
+    return html;
+  },
+
+  _setHelp: function() {
+    var helpContainer = ["#showHelpSecurityHigh","#showHelpSecurityMid","#showHelpSecurityLow","#showHelpSecurityCustom"];
+    var help = [
+      translateKey("showHelpSecurityHigh"),
+      translateKey("showHelpSecurityMid"),
+      translateKey("showHelpSecurityLow"),
+      translateKey("showHelpSecurityCustom")
+      ];
+
+    jQuery.each(helpContainer, function(index, container){
+     var element = jQuery(container);
+     var tooltip = help[index];
+     element.data('powertip', tooltip);
+     element.powerTip({placement: 'se', followMouse: true});
+    });
+  }
+
+});
+
+DialogUserDefinedSettings = Class.create({
+  initialize: function(dlgWoPasswd) {
+    var self = this;
+    this.dlg = new FirewallConfigDialog(dlgWoPasswd);
+
+    window.setTimeout(function() {
+      var btnCancel = jQuery("#btnCancel");
+      btnCancel.click(function () {
+        Layer.remove(self.dlg.m_layer);
+        new DialogChooseSecuritySettings();
+      });
+    },100);
+  }
+});
 /**
  * Kopfleiste
  **/
@@ -15754,6 +16499,40 @@ HelpPage = new function()
   };
   
 }();
+adminFirstStartup = new function()
+{
+
+  this.enter = function(options)
+  {
+    ccuAdminFirstStartup(options);
+  };
+  
+  this.leave = function()
+  {
+  };
+
+  this.resize = function()
+  {
+  };
+  
+}();
+userFirstStartup = new function()
+{
+
+  this.enter = function(options)
+  {
+    ccuUserFirstStartup(options);
+  };
+  
+  this.leave = function()
+  {
+  };
+
+  this.resize = function()
+  {
+  };
+  
+}();
 /**
  * devielistpage.js
  **/
@@ -16279,8 +17058,10 @@ if (PLATFORM == "Central") {
       this.collapseGroup(evt, group.id);
     }, this);
     device.singles.each(function(channel) {
-      $(this.PREFIX + channel.id).hide();
-      $(this.PREFIX + channel.id + "Thumbnail").hide();
+        try {
+          $(this.PREFIX + channel.id).hide();
+          $(this.PREFIX + channel.id + "Thumbnail").hide();
+        } catch (e) {}
     }, this);
   },
   
@@ -23051,6 +23832,15 @@ loadHandlingPrograms = function()
   updateContent('/pages/tabs/control/programs.htm');
 };
 
+ccuAdminFirstStartup = function() {
+  doClearTempView = true;
+  updateContent('/pages/tabs/admin/adminFirstStart.htm');
+};
+
+ccuUserFirstStartup = function() {
+  doClearTempView = true;
+  updateContent('/pages/tabs/user/userFirstStart.htm');
+};
 
 loadSysconfigUserAdmin = function()
 {
@@ -25349,6 +26139,19 @@ getExtendedDescription = function(oChannelDescr) {
       if (typeExt == "_null") {typeExt = "_1";}
     }
     result = translateKey("chType_MULTI_MODE_INPUT_TRANSMITTER" + typeExt);
+  }
+
+  if ((deviceType.indexOf("HmIPW-") != -1) && (chType.indexOf("BLIND_") != -1)) {
+
+    if (chType == "BLIND_WEEK_PROFILE") {
+      result = translateKey("chType_BLIND_WEEK_PROFILE");
+    } else {
+      if (typeof channel != "undefined") {
+        var virtChannelType = channel.getVirtChannelType(),
+        devMode = virtChannelType.split("_")[0].toLowerCase();
+        result = (devMode == "shutter") ? translateKey("chType_" + chType.replace("BLIND", "SHUTTER")) : translateKey("chType_" + chType.replace("SHUTTER", "BLIND"));
+      }
+    }
   }
 
   if (result == "") {result = translateKey("chType_" + chType);}
@@ -31385,7 +32188,7 @@ iseHmIPWeeklyProgram.prototype = {
     arNonExpertChannels["HMIP-FSM16"] = [2];
     arNonExpertChannels["HMIP-PCBS"] = [3];
     arNonExpertChannels["HMIP-PCBS-BAT"] = [3];
-    arNonExpertChannels["HMIP-PCBS2"] = [4, 8];
+    arNonExpertChannels["HMIP-PCBS2"] = [4,8];
     arNonExpertChannels["HMIP-PDT"] = [3];
     arNonExpertChannels["HMIP-PDT-UK"] = [3];
     arNonExpertChannels["HMIP-PS"] = [3];
@@ -31394,18 +32197,16 @@ iseHmIPWeeklyProgram.prototype = {
     arNonExpertChannels["HMIP-PSM-IT"] = [3];
     arNonExpertChannels["HMIP-PSM-PE"] = [3];
     arNonExpertChannels["HMIP-PSM-UK"] = [3];
-
     arNonExpertChannels["HMIP-BBL"] = [4];
     arNonExpertChannels["HMIP-BDT"] = [4];
     arNonExpertChannels["HMIP-BROLL"] = [4];
     arNonExpertChannels["HMIP-BSM"] = [4];
     arNonExpertChannels["HMIP-FBL"] = [4];
     arNonExpertChannels["HMIP-FROLL"] = [4];
-
-
     arNonExpertChannels["HMIP-BSL"] = [4,8,12];
     arNonExpertChannels["HMIP-MOD-OC8"] = [10,14,18,22,26,30,34,38];
     arNonExpertChannels["HMIP-WHS2"] = [3,7];
+    arNonExpertChannels["HMIP-MP3P"] = [2,6];
     arNonExpertChannels["HMIPW-DRBL4"] = [2,6,10,14];
     arNonExpertChannels["HMIPW-DRD3"] = [2,6,10];
     arNonExpertChannels["HMIPW-DRS4"] = [2,6,10,14];
@@ -31430,6 +32231,7 @@ iseHmIPWeeklyProgram.prototype = {
 
   getBinChannelState: function() {
     var missingZero = "",
+    tmp = "",
     bVal = this.opts.channelLocks.toString(2);
 
     jQuery.each(this.relevantChn, function(index, value) {
@@ -31437,7 +32239,15 @@ iseHmIPWeeklyProgram.prototype = {
     });
 
     bVal = missingZero.substr(bVal.length)+bVal;
-    return this.reverseString(bVal);
+    bVal = this.reverseString(bVal);
+
+    if (! this.expert) {
+      for (var x = 0; x < bVal.length; x+=3) {
+        tmp+= bVal[x];
+      }
+      bVal = tmp;
+    }
+    return bVal;
   },
 
   reverseString: function (str) {
@@ -35095,6 +35905,13 @@ SetParameters = function(iface, address, special_input_id)
       var relevantMultiModeTransmitter =  oChnMultiModeTransmitter[address.toString()];
 
       if (typeof relevantMultiModeTransmitter != "undefined") {
+
+        homematic("Interface.setMetadata_crRFD", {
+          'interface': iface,
+          'objectId' : address.toString(),
+          'dataId' : relevantMultiModeTransmitter.dataId,
+          'value': relevantMultiModeTransmitter.mode});
+
         homematic("Interface.setMetadata", {
           "objectId": relevantMultiModeTransmitter.channelId,
           "dataId": relevantMultiModeTransmitter.dataId,

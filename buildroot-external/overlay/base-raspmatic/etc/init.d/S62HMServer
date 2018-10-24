@@ -49,9 +49,10 @@ init() {
     sed "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_SERVER_PORT}|" ${CFG_TEMPLATE_DIR}/crRFD.conf >/var/etc/crRFD.conf
 
     HM_SERVER=/opt/HMServer/HMIPServer.jar
-    HM_SERVER_ARGS="/var/etc/crRFD.conf"
+    HM_SERVER_ARGS="/var/etc/crRFD.conf /etc/HMServer.conf"
   else
     HM_SERVER=/opt/HMServer/HMServer.jar
+    HM_SERVER_ARGS="/etc/HMServer.conf"
   fi
 }
 

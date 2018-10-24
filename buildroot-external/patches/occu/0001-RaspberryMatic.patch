@@ -11,10 +11,19 @@
 +cgi.x-sendfile-docroot = ( "/usr/local/tmp" )
 --- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf.orig
 +++ occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf
-@@ -1,3 +1,3 @@
+@@ -1,3 +1,12 @@
  setenv.add-environment = (
 -        "TZ" => "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
-+        "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
++  "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
++)
++setenv.add-response-header = (
++  "X-Frame-Options" => "DENY",
++  "X-Content-Type-Options" => "nosniff",
++  "X-XSS-Protection" => "1; mode=block",
++  "X-Robots-Tag" => "none",
++  "X-Download-Options" => "noopen",
++  "X-Permitted-Cross-Domain-Policies" => "none",
++  "Referrer-Policy" => "no-referrer"
  )
 --- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig
 +++ occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf
@@ -31,18 +40,13 @@
  
  ## 
  ## run the server chrooted.
-@@ -87,6 +87,37 @@
+@@ -87,6 +87,22 @@
  ##
  server.port = 80
  
-+$SERVER["socket"] == ":8181" {
-+	server.document-root = server_root
-+}
-+
 +$SERVER["socket"] == ":443" {
 +	server.document-root = server_root
-+	ssl.engine = "enable"
-+	ssl.pemfile = "/etc/config/server.pem"
++  include "/etc/lighttpd/conf.d/sslsettings.conf"
 +}
 +
 +$SERVER["socket"] == "[::]:80" {
@@ -50,26 +54,16 @@
 +	server.use-ipv6 = "enable"
 +}
 +
-+$SERVER["socket"] == "[::]:8181" {
-+	server.document-root = server_root
-+	server.use-ipv6 = "enable"
-+}
-+
 +$SERVER["socket"] == "[::]:443" {
 +	server.document-root = server_root
-+	ssl.engine = "enable"
-+	ssl.pemfile = "/etc/config/server.pem"
 +	server.use-ipv6 = "enable"
++  include "/etc/lighttpd/conf.d/sslsettings.conf"
 +}
-+
-+#$HTTP["scheme"] == "https" {
-+#	setenv.add-response-header  = ( "Strict-Transport-Security" => "max-age=31536000; includeSubdomains; preload")
-+#}
 +
  ##
  ## Use IPv6?
  ##
-@@ -127,6 +158,11 @@
+@@ -127,6 +143,11 @@
  server.pid-file = state_dir + "/lighttpd.pid"
  
  ##
@@ -81,7 +75,7 @@
  #######################################################################
  
  #######################################################################
-@@ -230,14 +266,14 @@
+@@ -230,14 +251,14 @@
  ##
  ## Default: 5
  ##
@@ -98,7 +92,7 @@
  
  ##
  ## Maximum size of a request in kilobytes.
-@@ -248,18 +284,26 @@
+@@ -248,18 +269,26 @@
  #server.max-request-size = 0
  
  ##
@@ -127,7 +121,7 @@
  
  ##
  ##  Traffic Shaping 
-@@ -370,7 +414,12 @@
+@@ -370,7 +399,12 @@
  ##
  ## defaults to /var/tmp as we assume it is a local harddisk
  ##
@@ -141,7 +135,7 @@
  
  ##
  #######################################################################
-@@ -439,7 +488,6 @@
+@@ -439,7 +473,6 @@
  ##
  ## custom includes like vhosts.
  ##
@@ -152,7 +146,15 @@
  #######################################################################
 --- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/modules.conf.orig
 +++ occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/modules.conf
-@@ -50,6 +50,7 @@
+@@ -42,6 +42,7 @@
+ server.modules = (
+   "mod_access",
+ #  "mod_alias",
++  "mod_authn_rega",
+   "mod_auth",
+ #  "mod_evasive",
+   "mod_redirect",
+@@ -50,6 +51,7 @@
  #  "mod_usertrack",
    "mod_cgi",
    "mod_proxy",

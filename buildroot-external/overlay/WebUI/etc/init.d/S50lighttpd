@@ -22,6 +22,13 @@ start() {
                                            -subj "/C=DE/O=HomeMatic/OU=$(cat /var/board_serial)/CN=$(hostname)" 2>/dev/null >/dev/null
   fi
 
+  # activate/deactivate service interface authentication
+  if [[ -f /etc/config/authEnabled ]] && [[ -f /etc/lighttpd/conf.d/auth.conf ]]; then
+    echo "include \"/etc/lighttpd/conf.d/auth.conf\"" >/var/etc/lighttpd_auth.conf
+  else
+    echo "" >/var/etc/lighttpd_auth.conf
+  fi
+
   start-stop-daemon -S -q -b -m -p /var/run/lighttpd-angel.pid --exec /usr/sbin/lighttpd-angel -- -f /etc/lighttpd/lighttpd.conf -D
   [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
 }

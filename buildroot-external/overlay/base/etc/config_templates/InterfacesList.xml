@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<interfaces v="1.0">
+	<ipc>
+	 	<name>BidCos-RF</name>
+	 	<url>xmlrpc_bin://127.0.0.1:32001</url> 
+	 	<info>BidCos-RF</info> 
+	</ipc>
+	<ipc>
+	 	<name>VirtualDevices</name>
+	 	<url>xmlrpc://127.0.0.1:39292/groups</url> 
+	 	<info>Virtual Devices</info> 
+	</ipc>
+	<ipc>
+	 	<name>HmIP-RF</name>
+	 	<url>xmlrpc://127.0.0.1:32010</url>
+	 	<info>HmIP-RF</info>
+	</ipc>
+</interfaces>

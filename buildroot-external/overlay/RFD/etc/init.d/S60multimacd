@@ -13,15 +13,6 @@ PIDFILE=/var/run/multimacd.pid
 [[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
 init() {
-
-  if [[ ! -e /etc/config/syslog ]]; then
-    cp -a ${CFG_TEMPLATE_DIR}/syslog /etc/config
-  fi
-
-  if [[ -e /etc/config/syslog ]]; then
-    . /etc/config/syslog
-  fi
-
   # make sure /var/etc/multimacd.conf contains the correct
   # coprocessor device path
   sed "s|^Coprocessor Device Path = /dev/.*$|Coprocessor Device Path = ${HM_HOST_GPIO_UART}|" ${CFG_TEMPLATE_DIR}/multimacd.conf >/var/etc/multimacd.conf
@@ -56,6 +47,9 @@ start() {
      [[ -n "${HM_HMRF_DEV}" ]]; then
     init
     if [[ -c /dev/eq3loop ]]; then
+      # get the current syslog settings
+      [[ -r /etc/config/syslog ]] && . /etc/config/syslog
+
       start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
       waitStartupComplete
     else

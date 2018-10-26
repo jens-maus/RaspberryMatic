@@ -3,8 +3,8 @@
 # CloudMatic/meine-homematic.de support
 #
 #############################################################
-CLOUDMATIC_VERSION = 9da84466edfff19897a7836d449eb31126ddb02d
-CLOUDMATIC_SITE = $(call github,EasySmartHome,CloudMatic-CCUAddon,$(CLOUDMATIC_VERSION))
+CLOUDMATIC_VERSION = 87ad087243dea1042fb95860aa3545af04340bbf
+CLOUDMATIC_SITE = $(call github,jens-maus,CloudMatic-CCUAddon,$(CLOUDMATIC_VERSION))
 CLOUDMATIC_LICENSE = PROPERITARY
 
 define CLOUDMATIC_INSTALL_TARGET_CMDS

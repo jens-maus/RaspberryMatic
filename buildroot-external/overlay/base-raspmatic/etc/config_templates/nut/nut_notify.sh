@@ -7,5 +7,5 @@
 # ${NOTIFYTYPE} which will be set by NUT.
 #
 
-# trigger a HomeMatic alarm message to "Alarmzone 1"
+# trigger a HomeMatic alarm message to "${UPSNAME}-Alarm"
 /bin/triggerAlarm.tcl "${NOTIFYTYPE}" "${UPSNAME}-Alarm"

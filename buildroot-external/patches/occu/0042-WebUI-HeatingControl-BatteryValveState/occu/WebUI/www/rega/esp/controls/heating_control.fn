@@ -61,13 +61,14 @@ function ::CreateHeatingControl() {
     ! rMax = oLevel.MetaData("MAX").ToFloat();
   }
   string sReadOnly = "";
-
+  string cssDisplay = "; display: table;";
   integer iInvalidState = 0;
 
   if( ( system.GetVar("iStatusOnly" ) == 1) || iInvalidState )
   {
     sReadOnly = "disabled";
     iReadOnlyState = 1;
+    cssDisplay = "";
   }
 
   WriteLine("<tr>");
@@ -86,7 +87,7 @@ function ::CreateHeatingControl() {
   { 
    WriteLine("<tr>");
      WriteLine("<td>");
-       WriteLine("<table id='"#chnId#"tblShowBatteryState' class='ControlBtnInfo hidden' style='width:200px; display: table;'>");
+       WriteLine("<table id='"#chnId#"tblShowBatteryState' class='ControlBtnInfo hidden' style='width:200px"#cssDisplay#"'>");
          WriteLine("<tr>");
            WriteLine("<td>${stringTableClimateControlRTTransceiverBatteryState}</td>");
            WriteLine("<td><span id='"#chnId#"actBatteryState'></span><span><b>"#bUnit#"</b></span></td>");
@@ -100,7 +101,7 @@ function ::CreateHeatingControl() {
   {  
    WriteLine("<tr>");
      WriteLine("<td>");
-       WriteLine("<table id='"#chnId#"tblShowValveState' class='ControlBtnInfo hidden' style='width:200px; display: table;'>");
+       WriteLine("<table id='"#chnId#"tblShowValveState' class='ControlBtnInfo hidden' style='width:200px"#cssDisplay#"'>");
          WriteLine("<tr>");
            WriteLine("<td>${stringTableClimateControlRTTransceiverVentPos}</td>");
            WriteLine("<td><span id='"#chnId#"actValveState'></span><span><b>"#vUnit#"</b></span></td>");

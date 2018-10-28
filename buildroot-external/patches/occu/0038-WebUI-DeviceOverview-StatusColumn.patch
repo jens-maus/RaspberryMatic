@@ -1,26 +1,19 @@
 --- occu/WebUI/www/api/methods.conf.orig
 +++ occu/WebUI/www/api/methods.conf
-@@ -445,6 +445,13 @@
-   INFO {Liefert Detailinformationen zu einem Gerät}
+@@ -462,6 +462,13 @@
    ARGUMENTS {_session_id_ id}
  }
-+
+ 
 +Device.listStatus {
 +  LEVEL GUEST
 +  SCRIPT_FILE device/liststatus.tcl
 +  INFO {Liefert Statusinformationen zu einem Gerät}
 +  ARGUMENTS {_session_id_ id address interface}
 +}
- 
++
  Device.setName {
    LEVEL ADMIN
-@@ -1041,4 +1048,4 @@
-         SCRIPT_FILE diagram/getDataSourceGroups.tcl
-         INFO {Ermittelt alle bekannten Gruppen von Datenquellen}
-         ARGUMENTS {}
--}
-\ No newline at end of file
-+}
+   SCRIPT_FILE device/setname.tcl
 --- occu/WebUI/www/api/methods/device/liststatus.tcl.orig
 +++ occu/WebUI/www/api/methods/device/liststatus.tcl
 @@ -0,0 +1,46 @@

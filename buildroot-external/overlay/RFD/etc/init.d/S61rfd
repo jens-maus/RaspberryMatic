@@ -57,12 +57,10 @@ init() {
     sed -i -e "/^\[Interface ${inum}\]/,/^\s*$/ s/^/#/" /etc/config/rfd.conf
   fi
 
-  if [[ ! -e /etc/config/syslog ]]; then
-    cp -a ${CFG_TEMPLATE_DIR}/syslog /etc/config
-  fi
-  if [[ -e /etc/config/syslog ]]; then
-    . /etc/config/syslog
-  fi
+  # Now we copy rfd.conf to /var/etc and modify things that
+  # users should not override
+  cp -a /etc/config/rfd.conf /var/etc/
+  sed -i -e 's/^Listen\s+Port\s*=.*$/Listen Port = 32001/' /var/etc/rfd.conf
 }
 
 waitStartupComplete() {
@@ -85,8 +83,11 @@ waitStartupComplete() {
 start() {
   echo -n "Starting rfd: "
   init
-  if grep -q "^\[Interface .\]" /etc/config/rfd.conf; then
-    start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec /bin/rfd -- -f /etc/config/rfd.conf -l ${LOGLEVEL_RFD}
+  if grep -q "^\[Interface .\]" /var/etc/rfd.conf 2>/dev/null; then
+    # get the current syslog settings
+    [[ -r /etc/config/syslog ]] && . /etc/config/syslog
+
+    start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec /bin/rfd -- -f /var/etc/rfd.conf -l ${LOGLEVEL_RFD}
     waitStartupComplete
   else
     echo "no BidCos-RF hardware found"

@@ -11,10 +11,19 @@
 +cgi.x-sendfile-docroot = ( "/usr/local/tmp" )
 --- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf.orig
 +++ occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/conf.d/setenv.conf
-@@ -1,3 +1,3 @@
+@@ -1,3 +1,12 @@
  setenv.add-environment = (
 -        "TZ" => "CET-1CEST-2,M3.5.0/02:00:00,M10.5.0/03:00:00"
-+        "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
++  "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
++)
++setenv.add-response-header = (
++  "X-Frame-Options" => "DENY",
++  "X-Content-Type-Options" => "nosniff",
++  "X-XSS-Protection" => "1; mode=block",
++  "X-Robots-Tag" => "none",
++  "X-Download-Options" => "noopen",
++  "X-Permitted-Cross-Domain-Policies" => "none",
++  "Referrer-Policy" => "no-referrer"
  )
 --- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf.orig
 +++ occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/lighttpd.conf
@@ -31,18 +40,13 @@
  
  ## 
  ## run the server chrooted.
-@@ -87,6 +87,37 @@
+@@ -87,6 +87,22 @@
  ##
  server.port = 80
  
-+$SERVER["socket"] == ":8181" {
-+	server.document-root = server_root
-+}
-+
 +$SERVER["socket"] == ":443" {
 +	server.document-root = server_root
-+	ssl.engine = "enable"
-+	ssl.pemfile = "/etc/config/server.pem"
++  include "/etc/lighttpd/conf.d/sslsettings.conf"
 +}
 +
 +$SERVER["socket"] == "[::]:80" {
@@ -50,26 +54,16 @@
 +	server.use-ipv6 = "enable"
 +}
 +
-+$SERVER["socket"] == "[::]:8181" {
-+	server.document-root = server_root
-+	server.use-ipv6 = "enable"
-+}
-+
 +$SERVER["socket"] == "[::]:443" {
 +	server.document-root = server_root
-+	ssl.engine = "enable"
-+	ssl.pemfile = "/etc/config/server.pem"
 +	server.use-ipv6 = "enable"
++  include "/etc/lighttpd/conf.d/sslsettings.conf"
 +}
-+
-+#$HTTP["scheme"] == "https" {
-+#	setenv.add-response-header  = ( "Strict-Transport-Security" => "max-age=31536000; includeSubdomains; preload")
-+#}
 +
  ##
  ## Use IPv6?
  ##
-@@ -127,6 +158,11 @@
+@@ -127,6 +143,11 @@
  server.pid-file = state_dir + "/lighttpd.pid"
  
  ##
@@ -81,7 +75,7 @@
  #######################################################################
  
  #######################################################################
-@@ -230,14 +266,14 @@
+@@ -230,14 +251,14 @@
  ##
  ## Default: 5
  ##
@@ -98,7 +92,7 @@
  
  ##
  ## Maximum size of a request in kilobytes.
-@@ -248,18 +284,26 @@
+@@ -248,18 +269,26 @@
  #server.max-request-size = 0
  
  ##
@@ -127,7 +121,7 @@
  
  ##
  ##  Traffic Shaping 
-@@ -370,7 +414,12 @@
+@@ -370,7 +399,12 @@
  ##
  ## defaults to /var/tmp as we assume it is a local harddisk
  ##
@@ -141,7 +135,7 @@
  
  ##
  #######################################################################
-@@ -439,7 +488,6 @@
+@@ -439,7 +473,6 @@
  ##
  ## custom includes like vhosts.
  ##
@@ -152,7 +146,15 @@
  #######################################################################
 --- occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/modules.conf.orig
 +++ occu/arm-gnueabihf/packages/lighttpd/etc/lighttpd/modules.conf
-@@ -50,6 +50,7 @@
+@@ -42,6 +42,7 @@
+ server.modules = (
+   "mod_access",
+ #  "mod_alias",
++  "mod_authn_rega",
+   "mod_auth",
+ #  "mod_evasive",
+   "mod_redirect",
+@@ -50,6 +51,7 @@
  #  "mod_usertrack",
    "mod_cgi",
    "mod_proxy",
@@ -230,44 +232,55 @@
        table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
 --- occu/WebUI/www/config/cp_security.cgi.orig
 +++ occu/WebUI/www/config/cp_security.cgi
-@@ -97,8 +97,8 @@
+@@ -77,8 +77,8 @@
+ proc getSGTIN_Backup {migrationMode} {
+ 
+   switch $migrationMode {
+-    "CCU2_CCU2" {set path_crRFD "/tmp/backup/etc/config/crRFD/data"}
+-    "CCU2_CCU3" {set path_crRFD "/tmp/backup/usr/local/etc/config/crRFD/data"}
++    "CCU2_CCU2" {set path_crRFD "/usr/local/tmp/backup/etc/config/crRFD/data"}
++    "CCU2_CCU3" {set path_crRFD "/usr/local/tmp/backup/usr/local/etc/config/crRFD/data"}
+     "CCU3_CCU3" {set path_crRFD "/usr/local/eQ-3-Backup/restore/etc/config/crRFD/data"}
+   }
+ 
+@@ -135,8 +135,8 @@
  proc checkUserBackupValidility {migrationMode} {
  
-     switch $migrationMode {
--      "CCU2_CCU2" {set pathBackup "/tmp/backup/"}
--      "CCU2_CCU3" {set pathBackup "/tmp/backup/usr/local/"}
-+      "CCU2_CCU2" {set pathBackup "/usr/local/tmp/backup/"}
-+      "CCU2_CCU3" {set pathBackup "/usr/local/tmp/backup/usr/local/"}
-       "CCU3_CCU3" {set pathBackup "/usr/local/eQ-3-Backup/restore/"}
+   switch $migrationMode {
+-    "CCU2_CCU2" {set pathBackup "/tmp/backup/"}
+-    "CCU2_CCU3" {set pathBackup "/tmp/backup/usr/local/"}
++    "CCU2_CCU2" {set pathBackup "/usr/local/tmp/backup/"}
++    "CCU2_CCU3" {set pathBackup "/usr/local/tmp/backup/usr/local/"}
+     "CCU3_CCU3" {set pathBackup "/usr/local/eQ-3-Backup/restore/"}
+   }
+ 
+@@ -296,7 +296,7 @@
+     } else {
+       exec touch /usr/local/.doFactoryReset
      }
+-    exec kill -SIGQUIT 1
++    exec /sbin/reboot
+   }]} {
  
-@@ -258,7 +258,7 @@
-         } else {
-           exec touch /usr/local/.doFactoryReset
-         }
--        exec kill -SIGQUIT 1
-+        exec /sbin/reboot
-     }]} {
- 
-       # TWIST-22
-@@ -333,13 +333,13 @@
+     # TWIST-22
+@@ -371,13 +371,13 @@
  
  proc action_backup_restore_check {} {
-     global env
--    cd /tmp/
-+    cd /usr/local/tmp/
-     
-     http_head
-     set i 0
-     if { [catch {
--        exec tar xf new_config.tar
--        file delete -force /tmp/new_config.tar
-+        exec tar xf /usr/local/tmp/new_config.tar 2>/dev/null
-+        file delete -force /usr/local/tmp/new_config.tar
-     
-     set config_version [read_version "firmware_version"]
-     set ccu1_backup false
-@@ -471,10 +471,10 @@
+   global env
+-  cd /tmp/
++  cd /usr/local/tmp/
+   
+   http_head
+   set i 0
+   if { [catch {
+-    exec tar xf new_config.tar
+-    file delete -force /tmp/new_config.tar
++    exec tar xf /usr/local/tmp/new_config.tar 2>/dev/null
++    file delete -force /usr/local/tmp/new_config.tar
+   
+   set config_version [read_version "firmware_version"]
+   set ccu1_backup false
+@@ -509,10 +509,10 @@
  
  proc action_backup_restore_go {} {
    global env
@@ -280,7 +293,7 @@
    set config_version [read_version "firmware_version"]
    set ccu1_backup false
    if { [version_compare $config_version 2.0.0] < 0 } {
-@@ -571,7 +571,7 @@
+@@ -609,7 +609,7 @@
      }
      if { "CCU2_CCU2" == $migration_mode } {
        # CCU2 ==> CCU2
@@ -289,7 +302,7 @@
            # set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
            # append msg "Falls dieser Fehler wiederholt Auftritt, wenden Sie sich bitte mit der folgenden Fehlermeldung an den Kundenservice:\n<br>"
            # append msg $errorMessage
-@@ -585,31 +585,32 @@
+@@ -623,31 +623,32 @@
      file delete -force /usr/local/eQ-3-Backup/restore
      file mkdir /usr/local/eQ-3-Backup/restore
      cd /usr/local/eQ-3-Backup/restore
@@ -330,8 +343,8 @@
            }
  
            if { [file exists InterfacesList.xml] } { file copy InterfacesList.xml /usr/local/eQ-3-Backup/restore/etc/config/InterfacesList.xml }
-@@ -638,26 +639,31 @@
-           if { [file exists time.conf] } { file copy time.conf /usr/local/eQ-3-Backup/restore/etc/config/time.conf }
+@@ -680,26 +681,31 @@
+ 
            set backuperror false
            cd /
 +          exec touch /usr/local/.doBackupRestore
@@ -339,9 +352,9 @@
        }
      } else {  # backup for version < 2
 +      catch {
-+        exec killall ReGaHss
++        exec pkill ReGaHss
 +        exec sleep 5
-+      } 
++      }
        #delete existing files
 -      file delete -force /tmp/backup
 +      file delete -force /usr/local/tmp/backup
@@ -368,7 +381,7 @@
          }
  
          if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }
-@@ -711,12 +717,14 @@
+@@ -753,12 +759,14 @@
          catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
  
          set backuperror false
@@ -384,65 +397,65 @@
  
    set source_version [split $source_version .]
    set source_major [lindex $source_version 0]
-@@ -738,8 +746,7 @@
+@@ -780,8 +788,7 @@
    cgi_javascript {puts "MessageBox.close();"}
  
    if { "false" == $backuperror } {
--        exec mount -o remount,ro /usr/local
--        exec mount -o remount,rw /usr/local
-+        exec sync
-         division {class="popupTitle"} {
-             puts "\${dialogSettingsSecurityMessageSysBackupRestartSystemTitle}"
-         }
-@@ -780,8 +787,6 @@
-     cgi_javascript {
-       puts "translatePage('#messagebox');"
+-    exec mount -o remount,ro /usr/local
+-    exec mount -o remount,rw /usr/local
++    exec sync
+     division {class="popupTitle"} {
+       puts "\${dialogSettingsSecurityMessageSysBackupRestartSystemTitle}"
      }
+@@ -822,8 +829,6 @@
+   cgi_javascript {
+     puts "translatePage('#messagebox');"
+   }
 -
--    file delete -force /tmp/new_config.tar /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
+-  file delete -force /tmp/new_config.tar /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
  }
  
  proc put_message {title msg args} {
-@@ -1224,30 +1229,27 @@
+@@ -1428,30 +1433,27 @@
  
  proc action_create_backup {} {
-     set HOSTNAME [exec hostname]
-+    set system_version [read_version "/VERSION"]
-     set iso8601_date [exec date -Iseconds]
-+    set tmpdir [exec mktemp -d -p /usr/local/tmp]
-     regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
-+    set backupfile [set HOSTNAME]-$system_version-$year-$month-$day-$hour$minute.sbk
-     #save DOM
-     rega system.Save()
-     cd /
--    exec tar czf /tmp/usr_local.tar.gz usr/local
--    cd /tmp/
-+    catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
-+    cd $tmpdir/
-     #sign the configuration with the current key
-     exec crypttool -s -t 1 <usr_local.tar.gz >signature
-     #store the current key index
-     exec crypttool -g -t 1 >key_index
--    file copy -force /boot/VERSION firmware_version
--    set fd [open "|tar c usr_local.tar.gz signature firmware_version key_index"]
--    catch {fconfigure $fd -translation binary}
--    catch {fconfigure $fd -encoding binary}
--    puts "Content-Type:application/x-download"
--    puts "Content-Disposition:attachment;filename=[set HOSTNAME]-$year-$month-$day.sbk\n"
--    catch {fconfigure stdout -translation binary}
--    catch {fconfigure stdout -encoding binary}
--    while { ! [eof $fd]} {
--        puts -nonewline [read $fd 65536]
--    }
--    close $fd
--    file delete -force /tmp/usr_local.tar.gz /tmp/firmware_version /tmp/signature
-+    file copy -force /VERSION firmware_version
-+    catch { exec tar --owner=root --group=root -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index }
-+    cd /
-+    exec rm -rf $tmpdir
-+    puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"
-+    puts "Content-Type: application/octet-stream"
-+    puts "Content-Disposition: attachment; filename=\"$backupfile\"\n"
+   set HOSTNAME [exec hostname]
++  set system_version [read_version "/VERSION"]
+   set iso8601_date [exec date -Iseconds]
++  set tmpdir [exec mktemp -d -p /usr/local/tmp]
+   regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
++  set backupfile [set HOSTNAME]-$system_version-$year-$month-$day-$hour$minute.sbk
+   #save DOM
+   rega system.Save()
+   cd /
+-  exec tar czf /tmp/usr_local.tar.gz usr/local
+-  cd /tmp/
++  catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
++  cd $tmpdir/
+   #sign the configuration with the current key
+   exec crypttool -s -t 1 <usr_local.tar.gz >signature
+   #store the current key index
+   exec crypttool -g -t 1 >key_index
+-  file copy -force /boot/VERSION firmware_version
+-  set fd [open "|tar c usr_local.tar.gz signature firmware_version key_index"]
+-  catch {fconfigure $fd -translation binary}
+-  catch {fconfigure $fd -encoding binary}
+-  puts "Content-Type:application/x-download"
+-  puts "Content-Disposition:attachment;filename=[set HOSTNAME]-$year-$month-$day.sbk\n"
+-  catch {fconfigure stdout -translation binary}
+-  catch {fconfigure stdout -encoding binary}
+-  while { ! [eof $fd]} {
+-    puts -nonewline [read $fd 65536]
+-  }
+-  close $fd
+-  file delete -force /tmp/usr_local.tar.gz /tmp/firmware_version /tmp/signature
++  file copy -force /VERSION firmware_version
++  catch { exec tar --owner=root --group=root -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index }
++  cd /
++  exec rm -rf $tmpdir
++  puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"
++  puts "Content-Type: application/octet-stream"
++  puts "Content-Disposition: attachment; filename=\"$backupfile\"\n"
  }
  
  proc action_backup_upload {} {

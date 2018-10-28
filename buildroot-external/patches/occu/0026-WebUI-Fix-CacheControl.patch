@@ -87,12 +87,13 @@
 -  <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.jqplot.css" />
 -  <link rel="stylesheet" type="text/css" href="/webui/css/extern/msdropdown/dd.css" />
 -  <link rel="stylesheet" type="text/css" href="/webui/css/extern/spectrum.css" />
+-  <link id="idCss" rel="stylesheet" type="text/css" href="/webui/style.cgi" />
 +  <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css?_version_=XXX-WEBUI-VERSION-XXX" />
 +  <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css?_version_=XXX-WEBUI-VERSION-XXX" />
 +  <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.jqplot.css?_version_=XXX-WEBUI-VERSION-XXX" />
 +  <link rel="stylesheet" type="text/css" href="/webui/css/extern/msdropdown/dd.css?_version_=XXX-WEBUI-VERSION-XXX" />
 +  <link rel="stylesheet" type="text/css" href="/webui/css/extern/spectrum.css?_version_=XXX-WEBUI-VERSION-XXX" />
-   <link id="idCss" rel="stylesheet" type="text/css" href="/webui/style.cgi" />
++  <link id="idCss" rel="stylesheet" type="text/css" href="/webui/style.cgi?_version_=XXX-WEBUI-VERSION-XXX" />
  
    <title>HomeMatic WebUI</title>
  
@@ -158,7 +159,7 @@
 -  <script src="/webui/js/extern/jquery-ui.min.js"></script>
 -  <script src="/webui/js/extern/jquery.ui.timepicker.js"></script>
 +  <link href="/webui/css/extern/smoothness/jquery-ui.min.css?_version_=XXX-WEBUI-VERSION-XXX" rel="stylesheet" type="text/css">
-+  <link href="/webui/css/extern/smoothness/jquery.ui.timepicker.css?_version_=XXX-WEBUI-VERSION-XXX" rel="stylesheet" type="text/css" />
++  <link href="/webui/css/extern/smoothness/jquery.ui.timepicker.css??_version_=XXX-WEBUI-VERSION-XXX" rel="stylesheet" type="text/css" />
 +  <script src="/webui/js/extern/jquery-ui.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script src="/webui/js/extern/jquery.ui.timepicker.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
    
@@ -173,7 +174,7 @@
      /*########################################################################*/
  
      PLATFORM = "Central";
--    WEBUI_VERSION = "3.0.0-TRUNK";
+-    WEBUI_VERSION = "2.40.0-TRUNK";
 +    WEBUI_VERSION = "XXX-WEBUI-VERSION-XXX";
    
      /**

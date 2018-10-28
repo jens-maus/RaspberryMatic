@@ -1,46 +1,46 @@
 --- occu/WebUI/www/config/cp_software.cgi.orig
 +++ occu/WebUI/www/config/cp_software.cgi
 @@ -117,7 +117,31 @@
-     #    Nach der Installation wird die Zentrale automatisch neu gestartet. Sie k&ouml;nnen sich dann &uuml;ber die Schaltfl&auml;che unten neu anmelden.
-     #} {"Neu anmelden" "window.location.href='/';"}
+   #  Nach der Installation wird die Zentrale automatisch neu gestartet. Sie k&ouml;nnen sich dann &uuml;ber die Schaltfl&auml;che unten neu anmelden.
+   #} {"Neu anmelden" "window.location.href='/';"}
  
--    put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContent}" {"\${btnNewLogin}" "window.location.href='/';"}
-+    if {[getProduct] == 3} {
-+       set result 0
-+       if { [catch {exec /bin/install_addon 2>/dev/null} results] } {
-+         if { [lindex $::errorCode 0] == "CHILDSTATUS" } {
-+           set result [lindex $::errorCode 2]
-+         } else {
-+           # Some kind of unexpected failure
-+           set result 100
-+         }
-+       } else {
-+         set result 0
-+       }
-+
-+       if { $result == 0 } {
-+         put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContentNoReboot}" {"\${btnOk}" "window.location.href='/';"}
-+       } elseif { $result == 10 } {
-+         put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContent}" {"\${btnNewLogin}" "window.location.href='/';"}
-+         exec /sbin/reboot
-+       } else {
-+         put_message "Error ($result)" "\${dialogSettingsExtraSoftwareHintPerformInstallationFailure}"
-+       }
+-  put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContent}" {"\${btnNewLogin}" "window.location.href='/';"}
++  if {[getProduct] == 3} {
++    set result 0
++    if { [catch {exec /bin/install_addon 2>/dev/null} results] } {
++      if { [lindex $::errorCode 0] == "CHILDSTATUS" } {
++        set result [lindex $::errorCode 2]
++      } else {
++        # Some kind of unexpected failure
++        set result 100
++      }
 +    } else {
-+       put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContent}" {"\${btnNewLogin}" "window.location.href='/';"}
-+       exec /sbin/reboot
++      set result 0
 +    }
++
++    if { $result == 0 } {
++      put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContentNoReboot}" {"\${btnOk}" "window.location.href='/';"}
++    } elseif { $result == 10 } {
++      put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContent}" {"\${btnNewLogin}" "window.location.href='/';"}
++      exec /sbin/reboot
++    } else {
++      put_message "Error ($result)" "\${dialogSettingsExtraSoftwareHintPerformInstallationFailure}"
++    }
++  } else {
++    put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContent}" {"\${btnNewLogin}" "window.location.href='/';"}
++    exec /sbin/reboot
++  }
  
-     puts ""
-     cgi_javascript {
+   puts ""
+   cgi_javascript {
 @@ -510,10 +534,6 @@
  }
  
  proc action_install_start {} {
--    if {[getProduct] == 3} {
--       exec touch /usr/local/.doAddonInstall
--    }
--    exec /sbin/reboot
+-  if {[getProduct] == 3} {
+-     exec touch /usr/local/.doAddonInstall
+-  }
+-  exec /sbin/reboot
  }
  
  cgi_eval {

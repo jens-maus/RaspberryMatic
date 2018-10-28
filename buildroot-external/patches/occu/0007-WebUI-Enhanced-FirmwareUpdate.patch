@@ -1,23 +1,27 @@
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -884,15 +884,11 @@
+@@ -905,17 +905,17 @@
    } else {
  
      cd /usr/local/tmp/
 -    set TMPDIR "[file tail $filename-dir]"
 +    set TMPDIR "$filename-dir"
- 
      exec mkdir -p $TMPDIR
-     set file_invalid 1
  
--    catch {
--      exec tar zxvf $filename update_script EULA.en EULA.de EULA.tr -C /usr/local/
--    }
--
      #
      # check if the uploaded file is a valid firmware update file
      #
-@@ -907,11 +903,91 @@
+ 
+-    set file_invalid [catch {exec tar zxvf $filename update_script EULA.en EULA.de -C /usr/local/}]
++    set file_invalid 1
+ 
+     # check for .tar.gz or .tar
+-    if {$file_invalid == 0} {
++    if {$file_invalid != 0} {
+       set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
+       if {$file_invalid == 0} {
+         # the file seems to be a tar archive (perhaps with gzip compression)
+@@ -924,11 +924,90 @@
        }
      }
  
@@ -30,7 +34,7 @@
 +        file delete -force -- $filename
 +      }
 +    }
-+  
++
 +    # check for .img
 +    if {$file_invalid != 0} {
 +      set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*partition 3"} result]
@@ -43,7 +47,7 @@
 +        }
 +      }
 +    }
-+  
++
 +    # check for ext4 rootfs filesystem
 +    if {$file_invalid != 0} {
 +      set file_invalid [catch {exec file -b $filename | egrep -q "ext4 filesystem.*rootfs"} result]
@@ -55,7 +59,7 @@
 +        }
 +      }
 +    }
-+  
++
 +    # check for vfat bootfs filesystem
 +    if {$file_invalid != 0} {
 +      set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*bootfs.*FAT"} result]
@@ -64,11 +68,10 @@
 +        file rename -force -- $filename "$TMPDIR/bootfs.vfat"
 +      }
 +    }
-+  
++
 +    ######
 +    # check if there are checksum files in TMPDIR and if so check the checksum first
 +    if {$file_invalid == 0} {
-+  
 +      # check for sha256 checksums
 +      foreach chk_file [glob -nocomplain "$TMPDIR/*.sha256"] {
 +        set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/sha256sum -sc $chk_file"} result]
@@ -76,7 +79,7 @@
 +          break
 +        }
 +      }
-+  
++
 +      # check for md5 checksums
 +      if {$file_invalid == 0} {
 +        foreach chk_file [glob -nocomplain "$TMPDIR/*.md5"] {
@@ -86,7 +89,7 @@
 +          }
 +        }
 +      }
-+  
++
 +      # everything seems to be fine with the uploaded file so lets
 +      # do the final check
 +      if {$file_invalid == 0} {
@@ -100,7 +103,7 @@
 +        }
 +      }
 +    }
-+  
++
      #
      # test if the above checks were successfull or not
      #

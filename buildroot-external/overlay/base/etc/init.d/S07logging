@@ -6,6 +6,7 @@
 SYSLOGD_ARGS="-n -m 0"
 KLOGD_ARGS="-n"
 
+[[ ! -e /etc/config/syslog ]] && cp /etc/config_templates/syslog /etc/config/
 [[ -r /etc/config/syslog ]] && . /etc/config/syslog
 
 if [[ -n "$LOGHOST" ]]; then

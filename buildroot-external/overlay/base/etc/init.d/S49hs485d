@@ -17,13 +17,21 @@ CFG_TEMPLATE_DIR=/etc/config_templates
 [[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
 init() {
-  if [ ! -d /etc/config/hs485d ] ; then
+  # check that /etc/config/hs485d exists
+  if [[ ! -d /etc/config/hs485d ]]; then
     mkdir -p /etc/config/hs485d
   fi
-  if [ -e /etc/config/syslog ] ; then
-    . /etc/config/syslog
+
+  # make sure to generate a copy of /etc/config/hs485d.conf in /var/etc
+  # and modify things users should not change (e.g. port, etc).
+  if [[ -e /etc/config/hs485d.conf ]]; then
+    cp /etc/config/hs485d.conf /var/etc
+    sed -i -e 's/^Listen\s+Port\s*=.*$/Listen Port = 32000/' /var/etc/hs485d.conf
   fi
-  if [ ! -e /etc/config/InterfacesList.xml ] ; then
+
+  # check for differences in /etc/config/InterfacesList.xml between
+  # the template and the active file and adapt it accordingly.
+  if [[ ! -e /etc/config/InterfacesList.xml ]]; then
     cp ${CFG_TEMPLATE_DIR}/InterfacesList.xml /etc/config
   else
     cmp -s ${CFG_TEMPLATE_DIR}/InterfacesList.xml /etc/config/InterfacesList.xml || cp ${CFG_TEMPLATE_DIR}/InterfacesList.xml /etc/config
@@ -59,8 +67,15 @@ init() {
 start() {
   echo -n "Preparing start of hs485d: "
   init
-  /bin/hs485dLoader -l ${LOGLEVEL_HS485D} -ds -dd /etc/config/hs485d.conf
-  echo "OK"
+  if grep -q "^\[Interface .\]" /var/etc/hs485d.conf 2>/dev/null; then
+    # get the current syslog settings
+    [[ -r /etc/config/syslog ]] && . /etc/config/syslog
+
+    /bin/hs485dLoader -l ${LOGLEVEL_HS485D} -ds -dd /var/etc/hs485d.conf
+    echo "OK"
+  else
+    echo "no Hm-Wired hardware found"
+  fi
 }
 
 restart() {

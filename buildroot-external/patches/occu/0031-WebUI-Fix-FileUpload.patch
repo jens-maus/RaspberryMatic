@@ -146,116 +146,116 @@
  
 --- occu/WebUI/www/config/cp_security.cgi.orig
 +++ occu/WebUI/www/config/cp_security.cgi
-@@ -840,8 +840,6 @@
+@@ -891,8 +891,6 @@
  proc action_put_page {} {
-     global env sid
+   global env sid
  
--    cgi_debug -on
+-  cgi_debug -on
 -
-     http_head
-     division {class="popupTitle j_translate"} {
-         puts "\${dialogSettingsSecurityTitle}"
-@@ -934,8 +932,7 @@
-                         table_row {
-                             td {width="20"} {}
-                             table_data {align="left"} {colspan="2"} {
--                                form "$env(SCRIPT_NAME)?sid=$sid" name=backup_form {target=config_upload_iframe} enctype=multipart/form-data method=post {
--                                    export action=backup_upload
-+                                form "/config/fileupload.ccc?sid=$sid&action=backup_upload&url=$env(SCRIPT_NAME)" name=backup_form {target=config_upload_iframe} enctype=multipart/form-data method=post {
-                                     file_button backup_file size=20 maxlength=1000000
-                                 }
-                                 puts {<iframe name="config_upload_iframe" class="CLASS20820" style="display: none;"></iframe>}
-@@ -1242,12 +1239,10 @@
+   http_head
+   division {class="popupTitle j_translate"} {
+     puts "\${dialogSettingsSecurityTitle}"
+@@ -985,8 +983,7 @@
+             table_row {
+               td {width="20"} {}
+               table_data {align="left"} {colspan="2"} {
+-                form "$env(SCRIPT_NAME)?sid=$sid" name=backup_form {target=config_upload_iframe} enctype=multipart/form-data method=post {
+-                  export action=backup_upload
++                form "/config/fileupload.ccc?sid=$sid&action=backup_upload&url=$env(SCRIPT_NAME)" name=backup_form {target=config_upload_iframe} enctype=multipart/form-data method=post {
+                   file_button backup_file size=20 maxlength=1000000
+                 }
+                 puts {<iframe name="config_upload_iframe" class="CLASS20820" style="display: none;"></iframe>}
+@@ -1455,12 +1452,10 @@
  }
  
  proc action_backup_upload {} {
--    global env sid
--    cd /tmp/
-+    global env sid filename
-+    cd /usr/local/tmp/
+-  global env sid
+-  cd /tmp/
++  global env sid filename
++  cd /usr/local/tmp/
  
--    http_head
--    import_file -client backup_file
--    file rename -force -- [lindex $backup_file 0] "/tmp/new_config.tar"
-+    file rename -force -- $filename "/usr/local/tmp/new_config.tar"
-     cgi_javascript {
-         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-         puts {
-@@ -1323,14 +1318,16 @@
+-  http_head
+-  import_file -client backup_file
+-  file rename -force -- [lindex $backup_file 0] "/tmp/new_config.tar"
++  file rename -force -- $filename "/usr/local/tmp/new_config.tar"
+   cgi_javascript {
+     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+     puts {
+@@ -1536,14 +1531,16 @@
  cgi_eval {
-     #cgi_debug -on
-     cgi_input
--    catch {
--        import debug
--        cgi_debug -on
--    }
-+    #catch {
-+    #    import debug
-+    #    cgi_debug -on
-+    #}
+   #cgi_debug -on
+   cgi_input
+-  catch {
+-    import debug
+-    cgi_debug -on
+-  }
++  #catch {
++  #  import debug
++  #  cgi_debug -on
++  #}
  
-     set action "put_page"
-+    set filename ""
+   set action "put_page"
++  set filename ""
  
-     catch { import action }
-+    catch { import filename }
+   catch { import action }
++  catch { import filename }
  
-     if {[session_requestisvalid 8] > 0} then action_$action
+   if {[session_requestisvalid 8] > 0} then action_$action
  }
 --- occu/WebUI/www/config/cp_software.cgi.orig
 +++ occu/WebUI/www/config/cp_software.cgi
 @@ -353,8 +353,7 @@
-                                 puts "\${dialogSettingsExtraSoftwareLblSelectExtraSoftware}"
-                             }
-                             table_data {
--                                form "$env(SCRIPT_NAME)?sid=$sid" name=upload_form {target=image_upload_iframe} enctype=multipart/form-data method=post {
--                                    export action=image_upload
-+                                form "/config/fileupload.ccc?sid=$sid&action=image_upload&url=$env(SCRIPT_NAME)" name=upload_form {target=image_upload_iframe} enctype=multipart/form-data method=post {
-                                     file_button firmware_file size=30 maxlength=1000000
-                                 }
-                                 puts {<iframe name="image_upload_iframe" style="display: none;"></iframe>}
+                 puts "\${dialogSettingsExtraSoftwareLblSelectExtraSoftware}"
+               }
+               table_data {
+-                form "$env(SCRIPT_NAME)?sid=$sid" name=upload_form {target=image_upload_iframe} enctype=multipart/form-data method=post {
+-                  export action=image_upload
++                form "/config/fileupload.ccc?sid=$sid&action=image_upload&url=$env(SCRIPT_NAME)" name=upload_form {target=image_upload_iframe} enctype=multipart/form-data method=post {
+                   file_button firmware_file size=30 maxlength=1000000
+                 }
+                 puts {<iframe name="image_upload_iframe" style="display: none;"></iframe>}
 @@ -487,17 +486,15 @@
  }
  
  proc action_image_upload {} {
--    global env sid
--    cd /tmp/
-+    global env sid filename
-+    cd /usr/local/tmp/
-     
--    http_head
--    import_file -client firmware_file
-     if {[getProduct] < 3} {
-         # CCU2
--        file rename -force -- [lindex $firmware_file 0] "/var/new_firmware.tar.gz"
-+        file rename -force -- $filename "/var/new_firmware.tar.gz"
-     } else {
-         # CCU3
--        file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_addon.tar.gz"
-+        file rename -force -- $filename "/usr/local/tmp/new_addon.tar.gz"
-     }
-     cgi_javascript {
-         puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+-  global env sid
+-  cd /tmp/
++  global env sid filename
++  cd /usr/local/tmp/
+   
+-  http_head
+-  import_file -client firmware_file
+   if {[getProduct] < 3} {
+     # CCU2
+-    file rename -force -- [lindex $firmware_file 0] "/var/new_firmware.tar.gz"
++    file rename -force -- $filename "/var/new_firmware.tar.gz"
+   } else {
+     # CCU3
+-    file rename -force -- [lindex $firmware_file 0] "/usr/local/tmp/new_addon.tar.gz"
++    file rename -force -- $filename "/usr/local/tmp/new_addon.tar.gz"
+   }
+   cgi_javascript {
+     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
 @@ -519,14 +516,16 @@
  cgi_eval {
-     #cgi_debug -on
-     cgi_input
--    catch {
--        import debug
--        cgi_debug -on
--    }
-+    #catch {
-+    #    import debug
-+    #    cgi_debug -on
-+    #}
+   #cgi_debug -on
+   cgi_input
+-  catch {
+-    import debug
+-    cgi_debug -on
+-  }
++  #catch {
++  #  import debug
++  #  cgi_debug -on
++  #}
  
-     set action "put_page"
-+    set filename ""
+   set action "put_page"
++  set filename ""
  
-     catch { import action }
-+    catch { import filename }
+   catch { import action }
++  catch { import filename }
  
-     if {[session_requestisvalid 8] > 0} then action_$action
+   if {[session_requestisvalid 8] > 0} then action_$action
  }
 --- occu/WebUI/www/config/fileupload.ccc.orig
 +++ occu/WebUI/www/config/fileupload.ccc

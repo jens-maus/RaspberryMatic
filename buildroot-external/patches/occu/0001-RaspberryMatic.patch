@@ -17,7 +17,7 @@
 +  "EQ3_OS_PLATFORM" => "HM-RASPBERRYMATIC"
 +)
 +setenv.add-response-header = (
-+  "X-Frame-Options" => "DENY",
++  "X-Frame-Options" => "SAMEORIGIN",
 +  "X-Content-Type-Options" => "nosniff",
 +  "X-XSS-Protection" => "1; mode=block",
 +  "X-Robots-Tag" => "none",
@@ -40,30 +40,16 @@
  
  ## 
  ## run the server chrooted.
-@@ -87,6 +87,22 @@
+@@ -85,7 +85,7 @@
+ ##  Basic Configuration
+ ## ---------------------
  ##
- server.port = 80
+-server.port = 80
++#server.port = 80
  
-+$SERVER["socket"] == ":443" {
-+	server.document-root = server_root
-+  include "/etc/lighttpd/conf.d/sslsettings.conf"
-+}
-+
-+$SERVER["socket"] == "[::]:80" {
-+	server.document-root = server_root
-+	server.use-ipv6 = "enable"
-+}
-+
-+$SERVER["socket"] == "[::]:443" {
-+	server.document-root = server_root
-+	server.use-ipv6 = "enable"
-+  include "/etc/lighttpd/conf.d/sslsettings.conf"
-+}
-+
  ##
  ## Use IPv6?
- ##
-@@ -127,6 +143,11 @@
+@@ -127,6 +127,11 @@
  server.pid-file = state_dir + "/lighttpd.pid"
  
  ##
@@ -75,7 +61,7 @@
  #######################################################################
  
  #######################################################################
-@@ -230,14 +251,14 @@
+@@ -230,14 +235,14 @@
  ##
  ## Default: 5
  ##
@@ -92,7 +78,7 @@
  
  ##
  ## Maximum size of a request in kilobytes.
-@@ -248,18 +269,26 @@
+@@ -248,18 +253,26 @@
  #server.max-request-size = 0
  
  ##
@@ -121,7 +107,7 @@
  
  ##
  ##  Traffic Shaping 
-@@ -370,7 +399,12 @@
+@@ -370,7 +383,12 @@
  ##
  ## defaults to /var/tmp as we assume it is a local harddisk
  ##
@@ -135,7 +121,7 @@
  
  ##
  #######################################################################
-@@ -439,7 +473,6 @@
+@@ -439,7 +457,6 @@
  ##
  ## custom includes like vhosts.
  ##

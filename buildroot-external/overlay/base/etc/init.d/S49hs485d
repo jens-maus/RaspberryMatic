@@ -26,7 +26,7 @@ init() {
   # and modify things users should not change (e.g. port, etc).
   if [[ -e /etc/config/hs485d.conf ]]; then
     cp /etc/config/hs485d.conf /var/etc
-    sed -i -e 's/^Listen\s+Port\s*=.*$/Listen Port = 32000/' /var/etc/hs485d.conf
+    sed -i -e 's/^Listen\s\+Port\s*=.*$/Listen Port = 32000/' /var/etc/hs485d.conf
   fi
 
   # check for differences in /etc/config/InterfacesList.xml between

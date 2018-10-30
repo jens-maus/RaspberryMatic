@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/esp/controls/heating_control.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/heating_control.fn
-@@ -4,11 +4,15 @@
+@@ -4,11 +4,17 @@
    real rMin = 4.5;
    real rMax = 30.5;
    string sUnit = "&deg;<i>C</i>";
@@ -11,31 +11,27 @@
    object oControlMode = cObj.DPByControl("HEATING_CONTROL.CONTROL_MODE");
    object oLevel = cObj.DPByControl("HEATING_CONTROL.SETPOINT");
    object oTemperature = cObj.DPByControl("HEATING_CONTROL.TEMPERATURE");
++
 +  object oBatteryState = cObj.DPByHssDP("BATTERY_STATE");
 +  object oValveState = cObj.DPByHssDP("VALVE_STATE");  
++
    object oModeAuto = cObj.DPByControl("HEATING_CONTROL.AUTO");
    object oModeManu = cObj.DPByControl("HEATING_CONTROL.MANU");
    object oModeBoost = cObj.DPByControl("HEATING_CONTROL.BOOST");
-@@ -33,7 +37,17 @@
-     ! WriteLine(' <script>conInfo("oTemperature: '#oTemperature.Value()#'");</script> ');
-     actTemp = oTemperature.Value();
-   }
+@@ -28,12 +34,6 @@
+ 
+   ! WriteLine(' <script>conInfo("oControlMode: '#oControlMode.Value()#'");</script> ');
+ 
+-  if ( oTemperature )
+-  {
+-    ! WriteLine(' <script>conInfo("oTemperature: '#oTemperature.Value()#'");</script> ');
+-    actTemp = oTemperature.Value();
+-  }
 -
-+  
-+  if ( oBatteryState )
-+  {
-+    actBatteryState = oBatteryState.Value();
-+  }
-+  
-+  if ( oValveState )
-+  {
-+    actValveState = oValveState.Value();
-+  }
-+  
    if( oLevel )
    {
      iLvlDpId = oLevel.ID();
-@@ -47,13 +61,14 @@
+@@ -47,13 +47,14 @@
      ! rMax = oLevel.MetaData("MAX").ToFloat();
    }
    string sReadOnly = "";
@@ -51,7 +47,7 @@
    }
  
    WriteLine("<tr>");
-@@ -67,6 +82,34 @@
+@@ -67,6 +68,34 @@
        !WriteLine("<div class='ControlBtnInfo _CLASS02550' style='line-height:15px; min-width:200px' id='"#chnId#"actualTemp' ><span>${stringTableWeatherTemperature}</span><span id='actTemp'"#sUnit#"></span></div>");
      WriteLine("</td>");
    WriteLine("</tr>");
@@ -76,7 +72,7 @@
 +     WriteLine("<td>");
 +       WriteLine("<table id='"#chnId#"tblShowValveState' class='ControlBtnInfo hidden' style='width:200px"#cssDisplay#"'>");
 +         WriteLine("<tr>");
-+           WriteLine("<td>${stringTableClimateControlRTTransceiverVentPos}</td>");
++           WriteLine("<td>${stringTableHeatingLevel}</td>");
 +           WriteLine("<td><span id='"#chnId#"actValveState'></span><span><b>"#vUnit#"</b></span></td>");
 +         WriteLine("</tr>");
 +       WriteLine("</table>");
@@ -86,7 +82,7 @@
  
    WriteLine("<tr>");
      WriteLine("<td colspan='1' id='slidCtrl"#cObj.ID()#"' class='CLASS02529'></td>");
-@@ -179,6 +222,18 @@
+@@ -179,6 +208,18 @@
        WriteLine("opts.stTemp = "#oTemperature.Value()#";");
        WriteLine("opts.stUnit = '"#sUnit#"';");
      }
@@ -105,9 +101,101 @@
  
      WriteLine("its"#chnId#" = new iseThermostat_2ndGen("#chnId#", "#rState#", "#iLvlDpId#", "#rMin#", "#rMax#", " #system.GetVar("iReadOnlyState")#", "#system.GetVar('bSliderFlag')#", opts);");
    WriteLine("</script>");
+@@ -203,12 +244,17 @@
+ 
+   string tUnit = "&deg;<i>C</i>";
+   string hUnit = "&#37;";
++  string bUnit = "V";
++  string vUnit = "%";
+   real rState = 0;
+ 
+   object oTemperature = cObj.DPByControl("HEATING_CONTROL_HMIP.TEMPERATURE");
+   object oSetPoint = cObj.DPByControl("HEATING_CONTROL_HMIP.SETPOINT");
+   object oWindowState = cObj.DPByControl("HEATING_CONTROL_HMIP.WINDOW_STATE");
+ 
++  object oBatteryState = cObj.DPByHssDP("BATTERY_STATE");
++  object oValveState = cObj.DPByHssDP("VALVE_STATE");
++
+   object oActiveProfile = cObj.DPByControl("HEATING_CONTROL_HMIP.ACTIVE_PROFILE");
+   object oHumidity = cObj.DPByControl("HEATING_CONTROL_HMIP.HUMIDITY");
+   object oSetPointMode = cObj.DPByControl("HEATING_CONTROL_HMIP.SETPOINT_MODE");
+@@ -222,11 +268,6 @@
+   string sReadOnly = "";
+   rState = oSetPoint.Value();
+ 
+-  if ( oTemperature )
+-  {
+-    ! WriteLine(' <script>conInfo("oTemperature: '#oTemperature.Value()#'");</script> ');
+-    actTemp = oTemperature.Value();
+-  }
+   WriteLine("<tr>");
+     WriteLine("<td id='"#chnId#"tdACTUAL_TEMPERATURE'>");
+       WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+@@ -261,6 +302,30 @@
+       WriteLine("</td>");
+     WriteLine("</tr>");
+ 
++  WriteLine("<tr>");
++    if (oBatteryState) {
++      WriteLine("<td id='"#chnId#"tdBATTERY_STATE'>");
++        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
++          WriteLine("<tr>");
++            WriteLine("<td>${stringTableClimateControlRTTransceiverBatteryState}</td>");
++            WriteLine("<td><span id='"#chnId#"valBATTERY_STATE'></span><span><b>"#bUnit#"</b></span></td>");
++          WriteLine("</tr>");
++        WriteLine("</table>");
++      WriteLine("</td>");
++    }
++
++    if (oValveState) {
++      WriteLine("<td id='"#chnId#"tdVALVE_STATE'>");
++        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
++          WriteLine("<tr>");
++            WriteLine("<td id='"#chnId#"VALVE_STATE'>${stringTableHeatingLevel}</td>");
++            WriteLine("<td><span id='"#chnId#"valVALVE_STATE'></span><span><b>"#vUnit#"</b></span></td>");
++          WriteLine("</tr>");
++        WriteLine("</table>");
++      WriteLine("</td>");
++    }
++  WriteLine("</tr>");
++
+  ! SLIDER
+ 
+   WriteLine("<tr>");
+@@ -395,6 +460,14 @@
+       WriteLine("opts.humidityID = '"#oHumidity.ID()#"';");
+       WriteLine("opts.HUMIDITY = '"#oHumidity.Value()#"';");
+     }
++    if (oBatteryState) {
++      WriteLine("opts.batteryStateID = '"#oBatteryState.ID()#"';");
++      WriteLine("opts.BATTERY_STATE = '"#oBatteryState.Value()#"';");
++    }
++    if (oValveState) {
++      WriteLine("opts.valveStateID = '"#oValveState.ID()#"';");
++      WriteLine("opts.VALVE_STATE = '"#oValveState.Value()#"';");
++    }
+     if (oWindowState) {
+       WriteLine("opts.windowStateID = '"#oWindowState.ID()#"';");
+       WriteLine("opts.WINDOW_STATE = '"#oWindowState.Value()#"';");
+@@ -520,7 +593,7 @@
+ }
+ 
+ function ::CreateBWTHSwitchState() {
+-    object oValveState = cObj.DPByControl("SWTICH.STATE");
++    object oValveState = cObj.DPByControl("SWITCH.STATE");
+ 
+     string lblValveState = "${stringTableValveStateNotAvailable}";
+     boolean valveState = false;
+@@ -545,4 +618,4 @@
+     WriteLine("</td>");
+   WriteLine("</tr>");
+ 
+-}
+\ No newline at end of file
++}
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -26988,6 +26988,12 @@
+@@ -25374,6 +25374,12 @@
      if (this.opts.stTemp) {
        this.showActualTemp();
      }
@@ -120,7 +208,7 @@
      if (this.opts.idComfort && this.opts.idLowering) {
        this.showComfortEco();
      }
-@@ -27179,6 +27185,16 @@
+@@ -25565,6 +25571,16 @@
      jQuery("#"+this.id +"tblShowTemp").show();
    },
  
@@ -137,3 +225,21 @@
    showHolidayEndTime: function() {
      var stopTime = this.getHolidayEndTime();
      if (stopTime) {
+@@ -25667,6 +25683,8 @@
+       self.setSControl("ACTUAL_TEMPERATURE", self.ACTUAL_TEMPERATURE);
+       self.setSControl("HUMIDITY", self.HUMIDITY);
+       self.setSControl("WINDOW_STATE", self.WINDOW_STATE);
++      self.setSControl("BATTERY_STATE", self.BATTERY_STATE);
++      self.setSControl("VALVE_STATE", self.VALVE_STATE);
+       self.setSlider();
+       self.initElements();
+       self.bindEvents();
+@@ -25681,6 +25699,8 @@
+     this.BOOST_MODE = (this.checkBool(opts.BOOST_MODE, false) == "true") ? true : false;
+     //this.FROST_PROTECTION = opts.FROST_PROTECTION;
+     this.HUMIDITY = this.checkValue(opts.HUMIDITY, this.unknownState);
++    this.BATTERY_STATE = this.checkValue(opts.BATTERY_STATE, this.unknownState);
++    this.VALVE_STATE = this.checkValue(opts.VALVE_STATE, this.unknownState);
+     //this.PARTY_MODE = opts.PARTY_MODE;
+     this.SET_POINT_MODE = this.checkValue(opts.SET_POINT_MODE, 0);
+     this.SET_POINT_TEMPERATURE = this.checkValue(opts.SET_POINT_TEMPERATURE, 4.5);

@@ -799,7 +799,7 @@ proc show_paramset {device ps_type ps_id ps_var ps_descr_var redir_url sid} {
                     td "$param_id$unknown"
                     switch $type {
                         "BOOL" {
-                            if { $value } {
+                            if { $value == 1 } {
                                 set checked "checked"
                             } else {
                                 set checked ""

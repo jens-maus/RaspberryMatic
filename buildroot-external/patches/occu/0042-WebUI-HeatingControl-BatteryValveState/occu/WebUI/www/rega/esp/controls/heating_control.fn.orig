@@ -520,7 +520,7 @@ function ::CreateHeatingControlHmIPa() {
 }
 
 function ::CreateBWTHSwitchState() {
-    object oValveState = cObj.DPByControl("SWTICH.STATE");
+    object oValveState = cObj.DPByControl("SWITCH.STATE");
 
     string lblValveState = "${stringTableValveStateNotAvailable}";
     boolean valveState = false;

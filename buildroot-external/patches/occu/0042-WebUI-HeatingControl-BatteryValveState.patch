@@ -177,22 +177,6 @@
      if (oWindowState) {
        WriteLine("opts.windowStateID = '"#oWindowState.ID()#"';");
        WriteLine("opts.WINDOW_STATE = '"#oWindowState.Value()#"';");
-@@ -520,7 +593,7 @@
- }
- 
- function ::CreateBWTHSwitchState() {
--    object oValveState = cObj.DPByControl("SWTICH.STATE");
-+    object oValveState = cObj.DPByControl("SWITCH.STATE");
- 
-     string lblValveState = "${stringTableValveStateNotAvailable}";
-     boolean valveState = false;
-@@ -545,4 +618,4 @@
-     WriteLine("</td>");
-   WriteLine("</tr>");
- 
--}
-\ No newline at end of file
-+}
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -25374,6 +25374,12 @@

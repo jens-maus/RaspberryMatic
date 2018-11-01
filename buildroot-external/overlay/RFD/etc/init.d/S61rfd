@@ -23,6 +23,11 @@ init() {
     cp -a ${CFG_TEMPLATE_DIR}/rfd.conf /etc/config/rfd.conf
   fi
 
+  # Bug fixing user spoiled config file
+  if grep -q "/etc/config/rfd/keys" /etc/config/rfd.conf; then
+    cp -a ${CFG_TEMPLATE_DIR}/rfd.conf /etc/config/rfd.conf
+  fi
+
   # only modify if real rf module found
   if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
      [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then

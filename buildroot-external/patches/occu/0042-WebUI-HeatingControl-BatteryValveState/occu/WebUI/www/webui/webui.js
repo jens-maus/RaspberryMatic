@@ -25684,7 +25684,7 @@ iseThermostatHMIP.prototype = {
       self.setSControl("HUMIDITY", self.HUMIDITY);
       self.setSControl("WINDOW_STATE", self.WINDOW_STATE);
       self.setSControl("BATTERY_STATE", self.BATTERY_STATE);
-      self.setSControl("VALVE_STATE", self.VALVE_STATE);
+      self.setSControl("LEVEL", self.LEVEL);
       self.setSlider();
       self.initElements();
       self.bindEvents();
@@ -25700,7 +25700,7 @@ iseThermostatHMIP.prototype = {
     //this.FROST_PROTECTION = opts.FROST_PROTECTION;
     this.HUMIDITY = this.checkValue(opts.HUMIDITY, this.unknownState);
     this.BATTERY_STATE = this.checkValue(opts.BATTERY_STATE, this.unknownState);
-    this.VALVE_STATE = this.checkValue(opts.VALVE_STATE, this.unknownState);
+    this.LEVEL = this.checkValue(opts.LEVEL, this.unknownState);
     //this.PARTY_MODE = opts.PARTY_MODE;
     this.SET_POINT_MODE = this.checkValue(opts.SET_POINT_MODE, 0);
     this.SET_POINT_TEMPERATURE = this.checkValue(opts.SET_POINT_TEMPERATURE, 4.5);

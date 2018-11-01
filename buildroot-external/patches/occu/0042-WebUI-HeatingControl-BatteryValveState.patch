@@ -114,7 +114,7 @@
    object oWindowState = cObj.DPByControl("HEATING_CONTROL_HMIP.WINDOW_STATE");
  
 +  object oBatteryState = cObj.DPByHssDP("BATTERY_STATE");
-+  object oValveState = cObj.DPByHssDP("VALVE_STATE");
++  object oValveLevel = cObj.DPByHssDP("LEVEL");
 +
    object oActiveProfile = cObj.DPByControl("HEATING_CONTROL_HMIP.ACTIVE_PROFILE");
    object oHumidity = cObj.DPByControl("HEATING_CONTROL_HMIP.HUMIDITY");
@@ -147,12 +147,12 @@
 +      WriteLine("</td>");
 +    }
 +
-+    if (oValveState) {
-+      WriteLine("<td id='"#chnId#"tdVALVE_STATE'>");
++    if (oValveLevel) {
++      WriteLine("<td id='"#chnId#"tdLEVEL'>");
 +        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
 +          WriteLine("<tr>");
-+            WriteLine("<td id='"#chnId#"VALVE_STATE'>${stringTableHeatingLevel}</td>");
-+            WriteLine("<td><span id='"#chnId#"valVALVE_STATE'></span><span><b>"#vUnit#"</b></span></td>");
++            WriteLine("<td id='"#chnId#"LEVEL'>${stringTableHeatingLevel}</td>");
++            WriteLine("<td><span id='"#chnId#"valLEVEL'></span><span><b>"#vUnit#"</b></span></td>");
 +          WriteLine("</tr>");
 +        WriteLine("</table>");
 +      WriteLine("</td>");
@@ -170,9 +170,9 @@
 +      WriteLine("opts.batteryStateID = '"#oBatteryState.ID()#"';");
 +      WriteLine("opts.BATTERY_STATE = '"#oBatteryState.Value()#"';");
 +    }
-+    if (oValveState) {
-+      WriteLine("opts.valveStateID = '"#oValveState.ID()#"';");
-+      WriteLine("opts.VALVE_STATE = '"#oValveState.Value()#"';");
++    if (oValveLevel) {
++      WriteLine("opts.levelID = '"#oValveLevel.ID()#"';");
++      WriteLine("opts.LEVEL = '" # (oValveLevel.Value()*100).ToInteger() # "';");
 +    }
      if (oWindowState) {
        WriteLine("opts.windowStateID = '"#oWindowState.ID()#"';");
@@ -214,7 +214,7 @@
        self.setSControl("HUMIDITY", self.HUMIDITY);
        self.setSControl("WINDOW_STATE", self.WINDOW_STATE);
 +      self.setSControl("BATTERY_STATE", self.BATTERY_STATE);
-+      self.setSControl("VALVE_STATE", self.VALVE_STATE);
++      self.setSControl("LEVEL", self.LEVEL);
        self.setSlider();
        self.initElements();
        self.bindEvents();
@@ -223,7 +223,7 @@
      //this.FROST_PROTECTION = opts.FROST_PROTECTION;
      this.HUMIDITY = this.checkValue(opts.HUMIDITY, this.unknownState);
 +    this.BATTERY_STATE = this.checkValue(opts.BATTERY_STATE, this.unknownState);
-+    this.VALVE_STATE = this.checkValue(opts.VALVE_STATE, this.unknownState);
++    this.LEVEL = this.checkValue(opts.LEVEL, this.unknownState);
      //this.PARTY_MODE = opts.PARTY_MODE;
      this.SET_POINT_MODE = this.checkValue(opts.SET_POINT_MODE, 0);
      this.SET_POINT_TEMPERATURE = this.checkValue(opts.SET_POINT_TEMPERATURE, 4.5);

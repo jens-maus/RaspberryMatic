@@ -253,7 +253,7 @@ function ::CreateHeatingControlHmIP() {
   object oWindowState = cObj.DPByControl("HEATING_CONTROL_HMIP.WINDOW_STATE");
 
   object oBatteryState = cObj.DPByHssDP("BATTERY_STATE");
-  object oValveState = cObj.DPByHssDP("VALVE_STATE");
+  object oValveLevel = cObj.DPByHssDP("LEVEL");
 
   object oActiveProfile = cObj.DPByControl("HEATING_CONTROL_HMIP.ACTIVE_PROFILE");
   object oHumidity = cObj.DPByControl("HEATING_CONTROL_HMIP.HUMIDITY");
@@ -314,12 +314,12 @@ function ::CreateHeatingControlHmIP() {
       WriteLine("</td>");
     }
 
-    if (oValveState) {
-      WriteLine("<td id='"#chnId#"tdVALVE_STATE'>");
+    if (oValveLevel) {
+      WriteLine("<td id='"#chnId#"tdLEVEL'>");
         WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
           WriteLine("<tr>");
-            WriteLine("<td id='"#chnId#"VALVE_STATE'>${stringTableHeatingLevel}</td>");
-            WriteLine("<td><span id='"#chnId#"valVALVE_STATE'></span><span><b>"#vUnit#"</b></span></td>");
+            WriteLine("<td id='"#chnId#"LEVEL'>${stringTableHeatingLevel}</td>");
+            WriteLine("<td><span id='"#chnId#"valLEVEL'></span><span><b>"#vUnit#"</b></span></td>");
           WriteLine("</tr>");
         WriteLine("</table>");
       WriteLine("</td>");
@@ -464,9 +464,9 @@ function ::CreateHeatingControlHmIP() {
       WriteLine("opts.batteryStateID = '"#oBatteryState.ID()#"';");
       WriteLine("opts.BATTERY_STATE = '"#oBatteryState.Value()#"';");
     }
-    if (oValveState) {
-      WriteLine("opts.valveStateID = '"#oValveState.ID()#"';");
-      WriteLine("opts.VALVE_STATE = '"#oValveState.Value()#"';");
+    if (oValveLevel) {
+      WriteLine("opts.levelID = '"#oValveLevel.ID()#"';");
+      WriteLine("opts.LEVEL = '" # (oValveLevel.Value()*100).ToInteger() # "';");
     }
     if (oWindowState) {
       WriteLine("opts.windowStateID = '"#oWindowState.ID()#"';");

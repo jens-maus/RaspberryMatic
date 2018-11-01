@@ -293,11 +293,27 @@ proc FirewallInternal::sshEnabled {} {
 # @fn sshEnabled
 # Prüft, ob ip6tables vorhanden ist und ausgeführt werden kann
 ##
-proc FirewallInternal::ip6tablesExists {} {
-  set fx [ expr [catch { exec which ip6tables } ] == 0 ? 1 : 0 ]
-  return $fx
+proc FirewallInternal::ip6Supported {} {
+  set a [ file exists "/proc/net/if_inet6" ]
+  set b [ expr [catch { exec which ip6tables } ] == 0 ? 1 : 0 ]
+  set r [ expr { $a && $b } ]
+  return $r
 }
 
+##
+# @fn configureFirewallMostOpen
+# Gibt 1 zurueck, wenn es sich um einen UDP Port handelt, ansonsten 0.
+##
+proc FirewallInternal::Firewall_isUdpPort { port } {
+    switch $port {
+        161 {
+            return 1
+        }
+        default {
+            return 0
+        }
+    }
+} 
 
 ##
 # @fn configureFirewall
@@ -343,32 +359,41 @@ proc FirewallInternal::Firewall_configureFirewallMostOpen { } {
 	
 		if { $service(ACCESS) == "restricted" } then {
 			foreach port $service(PORTS) {
+                set prot tcp
+                if { [ FirewallInternal::Firewall_isUdpPort $port ] } {
+                    set prot udp
+                }
 				foreach ip $Firewall_IPS {
-          if { [regexp {:} $ip] } then {
-            try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport $port -s $ip -j ACCEPT"
-          } else {
-            try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport $port -s $ip -j ACCEPT"
-          }
+                    if { [regexp {:} $ip] } then {
+                        try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p $prot --dport $port -s $ip -j ACCEPT"
+                    } else {
+                        try_exec_cmd "/usr/sbin/iptables -A INPUT -p $prot --dport $port -s $ip -j ACCEPT"
+                    }
 				}
 			}
 		}
 		
 		if { $service(ACCESS) == "none" || $service(ACCESS) == "restricted"} then {
 			foreach port $service(PORTS) {
-        			try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport $port -j DROP"
-				try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport $port -j DROP"
+                set prot tcp
+                if { [FirewallInternal::Firewall_isUdpPort $port] } {
+                    set prot udp
+                }
+                try_exec_cmd "/usr/sbin/iptables -A INPUT -p $prot --dport $port -j DROP"
+				try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p $prot --dport $port -j DROP"
 			}
 		}
 	
 	#block internal ports 
-	set has_ip6tables [FirewallInternal::ip6tablesExists]
+	set has_ip6tables [FirewallInternal::ip6Supported]
 	foreach port $service(PORTS) {
-		try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 3$port -j DROP"  
-		if {$has_ip6tables} {      
-			try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 3$port -j DROP"
-		}
+        if { $port < 40000 && ![string equal "SNMP" $serviceName] } {
+            try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 3$port -j DROP"  
+            if {$has_ip6tables} {      
+                try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 3$port -j DROP"
+            }
+        }
 	}
-	
 }
 
 }
@@ -401,7 +426,7 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport 1900 -j ACCEPT"
   
 #IPv6
-  set has_ip6tables [FirewallInternal::ip6tablesExists]
+  set has_ip6tables [FirewallInternal::ip6Supported]
   exec logger -t firewall -p user.info "has ip6 $has_ip6tables"
   if { $has_ip6tables } {
     # flush rules
@@ -431,11 +456,17 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   
     if { $service(ACCESS) == "restricted" } then {
       foreach port $service(PORTS) {
+        set prot "tcp"
+        set options "-m state --state NEW"
+        if { [FirewallInternal::Firewall_isUdpPort $port] } {
+            set prot "udp"
+            set options ""
+        }
         foreach ip $Firewall_IPS {
           if { [ FirewallInternal::IsIPV4 $ip ] == 1 } then {
-          try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport $port -s $ip -m state --state NEW -j ACCEPT"
+          try_exec_cmd "/usr/sbin/iptables -A INPUT -p $prot --dport $port -s $ip $options -j ACCEPT"
           } elseif { $has_ip6tables } {
-            try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport $port -s $ip -m state --state NEW -j ACCEPT"
+            try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p $prot --dport $port -s $ip $options -j ACCEPT"
           }
         }
       }
@@ -443,9 +474,15 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
     
     if { $service(ACCESS) == "full"} then {
       foreach port $service(PORTS) {
-        try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport $port -m state --state NEW -j ACCEPT"
+        set prot "tcp"
+        set options "-m state --state NEW"
+        if { [FirewallInternal::Firewall_isUdpPort $port] } {
+            set prot "udp"
+            set options ""
+        }
+        try_exec_cmd "/usr/sbin/iptables -A INPUT -p $prot --dport $port $options -j ACCEPT"
         if { $has_ip6tables } {
-          try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport $port -m state --state NEW -j ACCEPT"
+          try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p $prot --dport $port $options -j ACCEPT"
         }
       }
     }

@@ -21,11 +21,11 @@ proc SEC_setsecuritylevel { lvl } {
 		Firewall_set_service_access "XMLRPC" "full"
 		Firewall_set_service_access "REGA" "restricted"
 		Firewall_set_service_access "NEOSERVER" "full"
-		Firewall_set_service_access "SNMP" "full"
+		# SNMP shall not be controlled by security wizard / mode
 		Firewall_saveConfiguration
 		Firewall_configureFirewall
 		SEC_setAuthEnabled false
-
+		
 	} elseif { [string compare $lvl "MEDIUM"] == 0 } {
 
 		Firewall_loadConfiguration
@@ -33,7 +33,6 @@ proc SEC_setsecuritylevel { lvl } {
 		Firewall_set_service_access "XMLRPC" "restricted"
 		Firewall_set_service_access "REGA" "restricted"
 		Firewall_set_service_access "NEOSERVER" "restricted"
-		Firewall_set_service_access "SNMP" "restricted"
 		Firewall_saveConfiguration
 		Firewall_configureFirewall
 		SEC_setAuthEnabled true
@@ -45,7 +44,6 @@ proc SEC_setsecuritylevel { lvl } {
 		Firewall_set_service_access "XMLRPC" "none"
 		Firewall_set_service_access "REGA" "none"
 		Firewall_set_service_access "NEOSERVER" "none"
-		Firewall_set_service_access "SNMP" "none"
 		Firewall_saveConfiguration
 		Firewall_configureFirewall
 		SEC_setAuthEnabled true
@@ -73,7 +71,9 @@ proc SEC_getsecuritylevel { } {
 	set lvlServiceXMLRPC [Firewall_get_service_access "XMLRPC"]
 	set lvlServiceREGA [Firewall_get_service_access "REGA"]
 	set lvlServiceNEO [Firewall_get_service_access "NEOSERVER"]
-	set lvlServiceSNMP [Firewall_get_service_access "SNMP"]
+	
+	# SNMP shall not be controlled by security wizard / mode
+	#set lvlServiceSNMP [Firewall_get_service_access "SNMP"]
 
 	set authEnabled [ file exist "/etc/config/authEnabled" ]
 	set initialSetupDone [ file exist "/etc/config/userAckInstallWizard" ]
@@ -81,13 +81,11 @@ proc SEC_getsecuritylevel { } {
 		#level can be MEDIUM, HIGH or CUSTOM
 		if {	[ string compare $lvlServiceXMLRPC "none" ] == 0 && 
 				[ string compare $lvlServiceREGA "none" ] == 0 &&
-				[ string compare $lvlServiceNEO "none" ] == 0 &&
-				[ string compare $lvlServiceSNMP "none" ] == 0 } {
+				[ string compare $lvlServiceNEO "none" ] == 0 } {
 		return "HIGH"
 		} elseif {	[ string compare $lvlServiceXMLRPC "restricted" ] == 0 &&
 					[ string compare $lvlServiceREGA "restricted" ] == 0 &&
-					[ string compare $lvlServiceNEO "restricted" ] == 0 &&
-					[ string compare $lvlServiceSNMP "restricted" ] == 0 } {
+					[ string compare $lvlServiceNEO "restricted" ] == 0 } {
 		return "MEDIUM"
 		} else {
 			return "CUSTOM"
@@ -97,8 +95,7 @@ proc SEC_getsecuritylevel { } {
 		if { [string compare $Firewall_MODE $Firewall_MODE_MOST_OPEN] == 0 } {
 			if {	[ string compare $lvlServiceXMLRPC "full" ] == 0 &&
 					[ string compare $lvlServiceREGA "restricted" ] == 0 &&
-					[ string compare $lvlServiceNEO "full" ] == 0 &&
-					[ string compare $lvlServiceSNMP "full" ] == 0 } {
+					[ string compare $lvlServiceNEO "full" ] == 0 } {
 				return "LOW"
 			} else {
 				return "CUSTOM"

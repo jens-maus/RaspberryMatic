@@ -44,7 +44,16 @@ start() {
       cp -Rp /etc/config_templates/snmp /etc/config/
     fi
 
-    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd.conf ]; then
+    # check if includeFile statement is present in snmpd.conf
+    if ! grep -q "includeFile snmpd-ccu3.conf" /etc/config/snmp/snmpd.conf; then
+      echo "includeFile snmpd-ccu3.conf" >>/etc/config/snmp/snmpd.conf
+    fi
+
+    # make sure "rocommunity public default" is disabled
+    sed -i 's/^rocommunity public default/#rocommunity public default/' /etc/config/snmp/snmpd.conf
+    sed -i 's/^rocommunity6 public default/#rocommunity6 public default/' /etc/config/snmp/snmpd.conf
+
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd-ccu3.conf ]; then
         printf "Starting SNMP daemon: "
         start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
         [ $? = 0 ] && echo "OK" || echo "FAIL"
@@ -58,7 +67,7 @@ start() {
 }
 
 stop() {
-    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd.conf ]; then
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd-ccu3.conf ]; then
         printf "Stopping SNMP daemon: "
         start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmpd
         [ $? = 0 ] && echo "OK" || echo "FAIL"
@@ -72,7 +81,7 @@ stop() {
 }
 
 reload() {
-    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd.conf ]; then
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd-ccu3.conf ]; then
         printf "Reloading SNMP daemon: "
         start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd
         [ $? = 0 ] && echo "OK" || echo "FAIL"

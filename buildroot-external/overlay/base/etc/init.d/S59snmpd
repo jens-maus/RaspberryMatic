@@ -20,9 +20,9 @@ test -x /usr/sbin/snmptrapd || exit 0
 # Defaults
 export MIBDIRS=/usr/share/snmp/mibs
 SNMPDRUN=yes
-SNMPDOPTS='-Lsd -Lf /dev/null -c /etc/config/snmp/snmpd.conf -I -smux,mteTrigger,mteTriggerConf -p /run/snmpd.pid'
+SNMPDOPTS='-Lsd -Lf /dev/null -c /etc/snmp/snmpd-global.conf -I -smux,mteTrigger,mteTriggerConf -p /var/run/snmpd.pid'
 TRAPDRUN=no
-TRAPDOPTS='-Lsd -c /etc/config/snmp/snmptrapd.conf -p /run/snmptrapd.pid'
+TRAPDOPTS='-Lsd -c /etc/snmp/snmptrapd-global.conf -p /var/run/snmptrapd.pid'
 
 # Reads config file (will override defaults above)
 [ -r /etc/default/snmpd ] && . /etc/default/snmpd
@@ -40,18 +40,9 @@ fi
 start() {
     # copy the SNMP config files in place in
     # case they don't exist yet
-    if [[ ! -e /etc/config/snmp ]]; then
+    if [[ ! -e /etc/config/snmp/snmpd-user.conf ]]; then
       cp -Rp /etc/config_templates/snmp /etc/config/
     fi
-
-    # check if includeFile statement is present in snmpd.conf
-    if ! grep -q "includeFile snmpd-ccu3.conf" /etc/config/snmp/snmpd.conf; then
-      echo "includeFile snmpd-ccu3.conf" >>/etc/config/snmp/snmpd.conf
-    fi
-
-    # make sure "rocommunity public default" is disabled
-    sed -i 's/^rocommunity public default/#rocommunity public default/' /etc/config/snmp/snmpd.conf
-    sed -i 's/^rocommunity6 public default/#rocommunity6 public default/' /etc/config/snmp/snmpd.conf
 
     if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd-ccu3.conf ]; then
         printf "Starting SNMP daemon: "

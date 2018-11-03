@@ -61,6 +61,9 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 		# remove obsolete config templates
 		rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf
 
+		# remove obsolete lighttpd config files
+		rm -f $(TARGET_DIR)/etc/lighttpd/lighttpd_ssl.conf
+
 		# make sure ReGaHss.* is deleted
 		rm -f $(TARGET_DIR)/bin/ReGaHss.*
   endef

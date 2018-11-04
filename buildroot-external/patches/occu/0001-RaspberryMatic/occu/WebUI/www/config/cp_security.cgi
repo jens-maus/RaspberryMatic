@@ -376,7 +376,7 @@ proc action_backup_restore_check {} {
   http_head
   set i 0
   if { [catch {
-    exec tar xf /usr/local/tmp/new_config.tar 2>/dev/null
+    exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/new_config.tar 2>/dev/null
     file delete -force /usr/local/tmp/new_config.tar
   
   set config_version [read_version "firmware_version"]
@@ -609,7 +609,7 @@ proc action_backup_restore_go {} {
     }
     if { "CCU2_CCU2" == $migration_mode } {
       # CCU2 ==> CCU2
-      if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+      if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
           # set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
           # append msg "Falls dieser Fehler wiederholt Auftritt, wenden Sie sich bitte mit der folgenden Fehlermeldung an den Kundenservice:\n<br>"
           # append msg $errorMessage
@@ -623,7 +623,7 @@ proc action_backup_restore_go {} {
     file delete -force /usr/local/eQ-3-Backup/restore
     file mkdir /usr/local/eQ-3-Backup/restore
     cd /usr/local/eQ-3-Backup/restore
-      if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz --strip 2} errorMessage] } {
+      if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz --strip 2} errorMessage] } {
           # show message "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
           set backuperror true
@@ -640,7 +640,7 @@ proc action_backup_restore_go {} {
         file mkdir /usr/local/tmp/backup
 
         cd /usr/local/tmp/backup
-        if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+        if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
           set backuperror true
         } else {
@@ -699,7 +699,7 @@ proc action_backup_restore_go {} {
 
       file mkdir /usr/local/tmp/backup
       cd /usr/local/tmp/backup
-      if { [catch {exec tar xzf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+      if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
         put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
         set backuperror true
       } else {

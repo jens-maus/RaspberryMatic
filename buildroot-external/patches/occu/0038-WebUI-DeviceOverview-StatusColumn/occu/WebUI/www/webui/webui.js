@@ -8947,6 +8947,10 @@ Device = Class.create({
     if (typeof(deviceStatus.DUTYCYCLE) !== "undefined")
       this.DUTY_CYCLE = !!+deviceStatus.DUTYCYCLE;
 
+    // catch OPERATING_VOLTAGE
+    if (typeof(deviceStatus.OPERATING_VOLTAGE) !== "undefined")
+      this.OPERATING_VOLTAGE = deviceStatus.OPERATING_VOLTAGE;
+
     // catch UNREACH
     if (typeof(deviceStatus.UNREACH) !== "undefined")
       this.UNREACH = !!+deviceStatus.UNREACH;
@@ -9009,6 +9013,9 @@ Device = Class.create({
 
       if (this.UNREACH === true)
         html += '<span style="background-color: #FFFF00;">UNREACH</span><br/>';
+
+      if (this.OPERATING_VOLTAGE)
+        html += Number.parseFloat(this.OPERATING_VOLTAGE).toFixed(1) + '&nbsp;V<br/>';
 
       if (this.RSSI_DEVICE && this.RSSI_DEVICE > -65535)
         html += this.RSSI_DEVICE + '&nbsp;dBm&nbsp;<span style="background-color: ' + this.rssiDeviceColor + '">&darr;</span><br/>';

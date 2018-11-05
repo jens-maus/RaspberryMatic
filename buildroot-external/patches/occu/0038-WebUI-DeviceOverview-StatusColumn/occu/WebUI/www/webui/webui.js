@@ -8951,9 +8951,17 @@ Device = Class.create({
     if (typeof(deviceStatus.OPERATING_VOLTAGE) !== "undefined")
       this.OPERATING_VOLTAGE = deviceStatus.OPERATING_VOLTAGE;
 
+    // catch SABOTAGE
+    if (typeof(deviceStatus.SABOTAGE) !== "undefined")
+      this.SABOTAGE = !!+deviceStatus.SABOTAGE;
+
     // catch UNREACH
     if (typeof(deviceStatus.UNREACH) !== "undefined")
       this.UNREACH = !!+deviceStatus.UNREACH;
+
+    // catch ERROR_OVERHEAT
+    if (typeof(deviceStatus.ERROR_OVERHEAT) !== "undefined")
+      this.ERROR_OVERHEAT = !!+deviceStatus.ERROR_OVERHEAT;
 
     // catch LOWBAT or LOW_BAT
     if (typeof(deviceStatus.LOWBAT) !== "undefined")
@@ -8964,6 +8972,10 @@ Device = Class.create({
     // catch CONFIG_PENDING
     if (typeof(deviceStatus.CONFIG_PENDING) !== "undefined")
       this.CONFIG_PENDING = !!+deviceStatus.CONFIG_PENDING;
+
+    // catch UPDATE_PENDING
+    if (typeof(deviceStatus.UPDATE_PENDING) !== "undefined")
+      this.UPDATE_PENDING = !!+deviceStatus.UPDATE_PENDING;
 
     // catch RSSI_DEVICE and RSSI_PEER
     // in case of a BidCos-RF device we take the RSSI
@@ -9008,14 +9020,23 @@ Device = Class.create({
       if (this.CONFIG_PENDING === true)
         html += '<span style="background-color: #FFFF00;">CONFIG</span><br/>';
 
+      if (this.UPDATE_PENDING === true)
+        html += '<span style="background-color: #FFFF00;">UPDATE</span><br/>';
+
       if (this.LOWBAT === true)
         html += '<span style="background-color: #FFFF00;">LOWBAT</span><br/>';
 
       if (this.UNREACH === true)
         html += '<span style="background-color: #FFFF00;">UNREACH</span><br/>';
 
-      if (this.OPERATING_VOLTAGE)
-        html += Number.parseFloat(this.OPERATING_VOLTAGE).toFixed(1) + '&nbsp;V<br/>';
+      if (this.ERROR_OVERHEAT === true)
+        html += '<span style="background-color: #FF0000;">OVERHEAT</span><br/>';
+
+      if (this.SABOTAGE === true)
+        html += '<span style="background-color: #FF0000;">SABOTAGE</span><br/>';
+
+      if (this.OPERATING_VOLTAGE && parseFloat(this.OPERATING_VOLTAGE) > 0)
+        html += parseFloat(this.OPERATING_VOLTAGE).toFixed(1) + '&nbsp;V<br/>';
 
       if (this.RSSI_DEVICE && this.RSSI_DEVICE > -65535)
         html += this.RSSI_DEVICE + '&nbsp;dBm&nbsp;<span style="background-color: ' + this.rssiDeviceColor + '">&darr;</span><br/>';

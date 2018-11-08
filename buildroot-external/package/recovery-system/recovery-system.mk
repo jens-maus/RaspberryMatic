@@ -5,7 +5,7 @@
 #############################################################
 
 RECOVERY_SYSTEM_VERSION = 1.3.0
-RECOVERY_SYSTEM_BUILDROOT = 2018.08.1
+RECOVERY_SYSTEM_BUILDROOT = 2018.08.2
 RECOVERY_SYSTEM_SITE = $(call github,buildroot,buildroot,$(RECOVERY_SYSTEM_BUILDROOT))
 RECOVERY_SYSTEM_LICENSE = Apache-2.0
 

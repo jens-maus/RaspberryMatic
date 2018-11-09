@@ -309,6 +309,24 @@ proc FirewallInternal::Firewall_isUdpPort { port } {
         161 {
             return 1
         }
+        1901 {
+            return 1
+        }
+        1902 {
+            return 1
+        }
+        5987 {
+            return 1
+        }
+        10000 {
+            return 1
+        }
+        48899 {
+            return 1
+        }
+        49880 {
+            return 1
+        }
         default {
             return 0
         }
@@ -335,7 +353,7 @@ proc Firewall_configureFirewall { } {
 # Konfiguriert die Firewall mit weniger restriktiven Einstellungen. (Kompatibilitätsmodus)
 ##
 proc FirewallInternal::Firewall_configureFirewallMostOpen { } {
-	global Firewall_SERVICES Firewall_IPS
+	global Firewall_SERVICES Firewall_IPS Firewall_USER_PORTS
 	
   try_exec_cmd "/usr/sbin/iptables -F"
   try_exec_cmd "/usr/sbin/iptables -P INPUT ACCEPT"
@@ -352,6 +370,18 @@ proc FirewallInternal::Firewall_configureFirewallMostOpen { } {
     try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 22 -j ACCEPT"  
   } else {
     try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 22 -j DROP"
+  }
+
+  set has_ip6tables [FirewallInternal::ip6Supported]
+
+  # user defined ports (the only reason to do this is to enable the user to override settings for services)
+  foreach userport $Firewall_USER_PORTS {
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport $userport -j ACCEPT"
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport $userport -j ACCEPT"
+    if { $has_ip6tables } {
+      try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport $userport -j ACCEPT"
+      try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport $userport -j ACCEPT"
+    }
   }
 
 	foreach serviceName [array names Firewall_SERVICES] {
@@ -385,7 +415,6 @@ proc FirewallInternal::Firewall_configureFirewallMostOpen { } {
 		}
 	
 	#block internal ports 
-	set has_ip6tables [FirewallInternal::ip6Supported]
 	foreach port $service(PORTS) {
         if { $port < 40000 && ![string equal "SNMP" $serviceName] } {
             try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 3$port -j DROP"  
@@ -451,6 +480,18 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
 
   }
 
+
+  # user defined ports
+  foreach userport $Firewall_USER_PORTS {
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport $userport -m state --state NEW -j ACCEPT"
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport $userport -j ACCEPT"
+    if { $has_ip6tables } {
+      try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport $userport -m state --state NEW -j ACCEPT"
+      try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport $userport -j ACCEPT"
+    }
+  }
+
+  #services ports
   foreach serviceName [array names Firewall_SERVICES] {
     array set service $Firewall_SERVICES($serviceName)
   
@@ -487,16 +528,6 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
       }
     }
   
-  }
-
-  # user defined ports
-  foreach userport $Firewall_USER_PORTS {
-    try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport $userport -m state --state NEW -j ACCEPT"
-    try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport $userport -j ACCEPT"
-    if { $has_ip6tables } {
-      try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport $userport -m state --state NEW -j ACCEPT"
-      try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport $userport -j ACCEPT"
-    }
   }
 
   # allow udp based multicast and broadcast from 43439 and (to/from) 23272 to search for LAN Gateways

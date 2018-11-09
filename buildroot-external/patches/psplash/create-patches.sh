@@ -7,7 +7,7 @@
 # This tool requires "gdk-pixbuf-csource" from libgtk
 #
 
-logofiles=$(find . -maxdepth 2 -type f -name logo.png -print0)
+logofiles=$(find . -maxdepth 2 -type f -name logo.png -print)
 for file in ${logofiles}; do
   dir=$(dirname ${file})
   gdk-pixbuf-csource --macros --name=POKY_IMG ${dir}/logo.png | sed 's/guint8/uint8/g' >/tmp/psplash-poky-img.h

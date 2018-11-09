@@ -12,13 +12,8 @@ CFG_TEMPLATE_DIR=/etc/config_templates
 # skip this startup if not in normal mode
 [[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
-init() {
-  # nothing
-}
-
 start() {
   echo -n "Starting hs485d: "
-  init
   if grep -q "^\[Interface .\]" /var/etc/hs485d.conf 2>/dev/null; then
     # get the current syslog settings
     [[ -r /etc/config/syslog ]] && . /etc/config/syslog

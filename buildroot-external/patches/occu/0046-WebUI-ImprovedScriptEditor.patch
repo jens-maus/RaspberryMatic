@@ -1,0 +1,220 @@
+--- occu/WebUI/www/rega/pages/index.htm.orig
++++ occu/WebUI/www/rega/pages/index.htm
+@@ -190,6 +190,9 @@
+     });
+   </script>
+  
++  <link rel="stylesheet" type="text/css" href="/webui/js/extern/codemirror/lib/codemirror.css?_version_=XXX-WEBUI-VERSION-XXX">
++  <script type="text/javascript" src="/webui/js/extern/codemirror/lib/codemirror.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++
+ </head>
+ <body id="body" onload="WebUI.start();" >
+   <div id="webuiloader_wrapper">
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -8882,3 +8882,4 @@
+   border:solid 1px $_(black);
+ }
+ 
++.CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -7420,7 +7420,13 @@
+     Element.setStyle(this.m_element, {"textAlign": alignment});
+     return this;
+   },
+-  
++
++  setStyle: function(style)
++  {
++    Element.setStyle(this.m_element, style);
++    return this;
++  },
++
+   /**
+    * Setzt die Breite des Labels.
+    * Neben numerischen Angaben ist auch der Wert "auto" erlaubt.
+@@ -7441,7 +7447,13 @@
+     if (height != "auto") { height = parseInt(height) + "px"; }
+     Element.setStyle(this.m_element, { height    : height });
+     return this;
+-  }
++  },
++
++  setClass: function(name)
++  {
++    this.m_element.className = name;
++    return this;
++  },
+ });
+  
+ /**
+@@ -7708,6 +7720,16 @@
+     return this;
+   },
+   
++  setID : function(id) {
++    this.m_element.setAttribute("id",id);
++    return this;
++  },
++
++  setName : function(name) {
++    this.m_element.setAttribute("name",name);
++    return this;
++  },
++
+   setWrap: function(isWrap)
+   {
+     if (isWrap) { Element.writeAttribute(this.m_element, "wrap", "soft"); }
+@@ -12261,8 +12283,8 @@
+   {
+     var screenWidth  = WebUI.getWidth();
+     var screenHeight = WebUI.getHeight();
+-    var frameWidth   = HMScriptExecutor.CONTENT_WIDTH;
+-    var frameHeight  = HMScriptExecutor.CONTENT_HEIGHT;
++    var frameWidth   = parseInt(screenWidth * 0.8);
++    var frameHeight  = parseInt(screenHeight * 0.8);
+     var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
+     var frameY       = parseInt((screenHeight - frameHeight) / 2);
+ 
+@@ -12272,63 +12294,97 @@
+     
+     this.m_layer = document.createElement("div");
+     this.m_layer.className = "DialogLayer";
+-    
+-    this.m_input = new UI.Textarea()
+-        .setPosition(5,25)
+-        .setWidth(590)
+-        .setHeight(200)
+-        .setText('WriteLine("'+ translateKey("dialogScriptExecuterHelloWorld") +'");');
+-    
+-    this.m_output = new UI.Textarea()
+-        .setPosition(5,250)
+-        .setWidth(590)
+-        .setHeight(200); 
+-    
++
+     this.m_frame = new UI.Frame(true)
+       .setTitle(HMScriptExecutor.TITLE)
+       .setContentSize(frameWidth, frameHeight)
+       .setPosition(frameX, frameY)
+       .add(new UI.Text()
+-        .setPosition(5,5)
+-        .setText(translateKey("dialogScriptExecuterLblInput"))
++        .setStyle('margin-left: 5px')
++        .setHtml('<b>' + translateKey("dialogScriptExecuterLblInput") + '</b>')
++        .setClass("")
++      )
++      .add(new UI.Textarea()
++        .setID("code")
++        .setName("code")
++        .setText('WriteLine("'+ translateKey("dialogScriptExecuterHelloWorld") +'");')
+       )
+-      .add(this.m_input)
+       .add(new UI.Text()
+-        .setPosition(5,230)
+-        .setText(translateKey("dialogScriptExecuterLblOutput"))
++        .setStyle('margin-left: 5px')
++        .setHtml('<b>' + translateKey("dialogScriptExecuterLblOutput") + '</b>')
++        .setClass("")
++      )
++      .add(new UI.Textarea()
++        .setID("output")
++        .setName("output")
+       )
+-      .add(this.m_output)
+       .add(new UI.Button()
+-        .setPosition(5,455)
++        .setPosition(5, frameHeight-30)
+         .setText(HMScriptExecutor.TEXT_RUN)
+         .setAction(this.run, this)
+       )
+       .add(new UI.Button()
+-        .setPosition(445, 455)
++        .setPosition(frameWidth-155, frameHeight-30)
+         .setText(HMScriptExecutor.TEXT_CLOSE)
+         .setAction(this.close, this)
+       );
+       
+-      this.m_layer.appendChild(this.m_frame.getElement());
+-      Layer.add(this.m_layer);
++    this.m_layer.appendChild(this.m_frame.getElement());
++    Layer.add(this.m_layer);
++
++    this.m_input = CodeMirror.fromTextArea(document.getElementById('code'), {
++      autofocus: true,
++      matchBrackets: true,
++      lineWrapping: true,
++      lineNumbers: true
++    });
++    this.m_input.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.6));
++
++    this.m_output = CodeMirror.fromTextArea(document.getElementById('output'), {
++      readOnly: true,
++      lineWrapping: true,
++      lineNumbers: false
++    });
++    this.m_output.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.4));
+   },
+ 
+   run: function()
+   {
++    this.m_output.setValue("");
+     var _this_ = this;
+-    this.m_output.setText("");
+-       
+-    homematic("ReGa.runScript", {script: this.m_input.getText()}, function(response, error)
++    var code = this.m_input.getValue();
++    var val = "";
++    var ths = "2459";
++    var src = "";
++    var url = '/esp/system.htm?sid='+SessionId;
++    var pb = "";
++    pb += 'string action = "SyntaxCheck";';
++    pb += 'string code = ^'+code+'^;';
++    pb += 'string val = "'+val+'";';
++    pb += 'string ths = "'+ths+'";';
++    pb += 'string src = "'+src+'";';
++    var opt = 
+     {
+-      if (error === null)
++      postBody: ReGa.encode(pb),
++      onComplete: function(t)
+       {
+-        _this_.m_output.setText(response);
+-      }
+-      else
+-      {
+-        _this_.m_output.setText("Fehler: " + Object.toJSON(error));
++        if( iseStripAll(t.responseText).length == 0 )
++        {
++          homematic("ReGa.runScript", {script: code}, function(response, error)
++              {
++                if (error === null)
++                {
++                  _this_.m_output.setValue(response);
++                }
++                });
++              }
++          else
++          {
++          	_this_.m_output.setValue(t.responseText);
+       }
+-    });
++    }
++  }
++    new Ajax.Request(url,opt);
+   },
+   
+   close: function()
+@@ -12338,8 +12394,8 @@
+   
+ });
+ 
+-HMScriptExecutor.CONTENT_WIDTH = 600;
+-HMScriptExecutor.CONTENT_HEIGHT = 485;
++HMScriptExecutor.CONTENT_WIDTH = 800;
++HMScriptExecutor.CONTENT_HEIGHT = 500;
+ 
+ /**
+  * firewallconfigdialog.js

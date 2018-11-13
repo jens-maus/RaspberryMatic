@@ -1,8 +1,3 @@
-* {
-	font-family:Verdana,Tahoma,Arial,Helvetica,sans-serif ! important;
-	font-size: 12px ! important;
-}
-
 .j_translate, .j_startPage
 {
     display: none;
@@ -3431,11 +3426,18 @@ html, body {
   width: 50px;
   height:80px;
 }
+
 html, body {
   border: 0 none;
   margin: 0;
   padding: 0;
-  font:10pt Verdana;
+  font-family: Verdana,Tahoma,Arial,Helvetica,sans-serif;
+  font-size: 12px;
+}
+
+input, textarea, select, button, h1 {
+  font-family: Verdana,Tahoma,Arial,Helvetica,sans-serif;
+  font-size: 12px;
 }
 
 application {
@@ -3633,11 +3635,6 @@ application {
 	cursor: pointer;
 }
 
-* {
-  font-family: Verdana,Tahoma,Arial,Helvetica,sans-serif;
-  font-size: 12px;
-}
-
 /* rega\pages\msg\editScript.htm */
 
 .CLASS00001 {
@@ -3660,7 +3657,6 @@ application {
 
 .CLASS00004 {
 	width:75%;
-	height:120px;
 	background-color: $_(activeBackground); /* #dcdcdc */
 	text-align:left;
 }
@@ -3699,7 +3695,6 @@ application {
 
 .CLASS00011 {
 	width:25%;
-	height:120px;
 	background-color: $_(white); /* white */
 }
 
@@ -3931,7 +3926,6 @@ application {
 
 .CLASS00314 {
 	line-height:15px;
-	font-size:smaller;
 	text-align:center
 }
 
@@ -4121,7 +4115,6 @@ application {
 	text-align:left;
 	color: $_(textColorA) ! important; /* white */
 	font-weight:bold;
-	font-size:10pt;
 }
 
 .CLASS00716 {
@@ -4527,7 +4520,6 @@ application {
 	font-weight:bold;
 	color: $_(textColorB); /* black */
 	cursor:pointer;
-	font-size:12px;
 }
 
 .CLASS01217 {
@@ -4928,7 +4920,6 @@ application {
 /* rega\esp\rule.inc */
 
 .CLASS02300 {
-	font-size: 14px;
 	font-weight: bold;
 }
 
@@ -4962,7 +4953,6 @@ application {
 
 .CLASS02501 {
 	background-color:$_(clickable);
-	font-size:12px;
 	padding:4px;
 	border:solid 1px $_(black); /* black */
 	text-align:center;
@@ -5001,7 +4991,6 @@ application {
 
 .CLASS02507 {
 	background-color:$_(activeBackground);
-	font-size:12px;
 	padding:4px;
 	color: $_(textColorB); /* black */
 	height:30px;
@@ -5175,7 +5164,6 @@ application {
 }
 
 .CLASS02532 {
-	font-size: 10px;
 	width:220px;
 	/*height:25px;*/
 	height:auto;
@@ -5186,14 +5174,12 @@ application {
 }
 
 .CLASS02532a {
-	font-size: 10px;
 	width:220px;
 	height:25px;
   color: $_(white) ! important;
 }
 
 .CLASS02532b {
-	font-size: 10px;
 	width:220px;
 	height:30px;
   color: $_(white) ! important;
@@ -5261,13 +5247,11 @@ application {
 
 .CLASS02542 {
 	border:solid 1px $_(black); /* black */
-	font-size:20px;
 	text-align:right;
 }
 
 .CLASS02542b {
 	border:solid 1px $_(black); /* black */
-	font-size:18px;
 	text-align:right;
 }
 
@@ -5865,7 +5849,6 @@ color: $_(textColorA); /* white */
 
 .CLASS03306 {
 	line-height:15px;
-	font-size:smaller;
 }
 
 .CLASS03307 {
@@ -6003,7 +5986,6 @@ color: $_(textColorA); /* white */
 
 .CLASS03703 {
 	line-height:15px;
-	font-size:smaller;
 }
 
 .CLASS03704 {
@@ -6140,7 +6122,6 @@ color: $_(textColorA); /* white */
 
 .CLASS03911 {
 	line-height:15px;
-	font-size:smaller;
 }
 
 /* rega\pages\tabs\handling\rooms.htm */
@@ -6172,7 +6153,6 @@ color: $_(textColorA); /* white */
 
 .CLASS04005 {
 	line-height:15px;
-	font-size:smaller;
 }
 
 .CLASS04006 {
@@ -6222,7 +6202,6 @@ color: $_(textColorA); /* white */
 
 .CLASS04107 {
 	line-height:15px;
-	font-size:smaller;
 }
 
 .CLASS04108 {
@@ -6264,12 +6243,10 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS04203 {
-	font-size:10pt;
 	height:100%;
 }
 
 .CLASS04204 {
-	font-size:10pt;
 }
 
 .CLASS04205 {
@@ -6290,7 +6267,6 @@ color: $_(textColorA); /* white */
 
 .CLASS04209 {
 	line-height:15px;
-	font-size:smaller;
 }
 
 .CLASS04210 {
@@ -6342,7 +6318,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS04304 {
-	font-size:10pt;
 	height:40px;
 }
 
@@ -6383,7 +6358,6 @@ color: $_(textColorA); /* white */
 
 .CLASS04312 {
 	line-height:15px;
-	font-size:smaller;
 }
 
 .CLASS04313 {
@@ -6484,7 +6458,6 @@ color: $_(textColorA); /* white */
 
 .CLASS04800 {
 	line-height:14px;
-	font-size:smaller;
 	width:200px;
 }
 
@@ -6525,12 +6498,10 @@ color: $_(textColorA); /* white */
 
 .CLASS04904 {
 	color: $_(textColorB); /* black */
-	font-size:12px;
 }
 
 .CLASS04905 {
 	line-height:15px;
-	font-size:smaller;
 	width:220px;
 }
 
@@ -6584,7 +6555,6 @@ color: $_(textColorA); /* white */
 
 .CLASS05007 {
 	color: $_(textColorB); /* black */
-	font-size:9pt;
 }
 
 .CLASS05008 {
@@ -6605,7 +6575,6 @@ color: $_(textColorA); /* white */
 
 .CLASS05010 {
 	color: $_(textColorB); /* black */
-	font-size:9pt;
 	width:100%;
 }
 
@@ -6615,7 +6584,6 @@ color: $_(textColorA); /* white */
 
 .CLASS05012 {
 	color: $_(textColorB); /* black */
-	font-size:9pt;
 }
 
 /* rega\pages\tabs\admin\msg\timemodule.htm */
@@ -6725,7 +6693,6 @@ color: $_(textColorA); /* white */
 
 .CLASS05207 {
 	line-height:15px;
-	font-size:smaller;
 }
 
 .CLASS05208 {
@@ -6778,7 +6745,6 @@ color: $_(textColorA); /* white */
 
 .CLASS05305 {
 	line-height:15px;
-	font-size:smaller;
 }
 
 /* rega\pages\tabs\admin\linkprog.htm */
@@ -6916,7 +6882,6 @@ color: $_(textColorA); /* white */
 
 .CLASS05705 {
 	width:572px;
-	font-size:9pt;
 }
 
 .CLASS05706 {
@@ -6929,7 +6894,6 @@ color: $_(textColorA); /* white */
 
 .CLASS05707 {
 	width:570px;
-	font-size:9pt;
 }
 
 /* rega\pages\tabs\favViewer.htm  */
@@ -7373,7 +7337,6 @@ color: $_(textColorA); /* white */
 
 .CLASS06413 {
   line-height:15px;
-  font-size:smaller;
 }
 
 .CLASS06414 {
@@ -7777,7 +7740,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS20801 {
-  font-size: 8pt;
  	color: $_(textColorB); /* black */
 }
 
@@ -7798,7 +7760,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS20805 {
-  font-size: 8pt;
 }
 
 .CLASS20806 {
@@ -7809,7 +7770,6 @@ color: $_(textColorA); /* white */
   background-color:$_(clickable);
  color: $_(textColorA); /* white */
   vertical-align: middle;
-  font-size: 10pt;
 }
 
 .CLASS20808 {
@@ -7825,7 +7785,6 @@ color: $_(textColorA); /* white */
 .CLASS20810 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
-  font-size: 8pt;
 }
 
 .CLASS20811 {
@@ -7860,7 +7819,6 @@ color: $_(textColorA); /* white */
 .CLASS20817 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
-  font-size: 8pt;
 }
 
 .CLASS20818 {
@@ -7886,7 +7844,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS20901 {
-  font-size: 8pt;
 }
 
 .CLASS20902 {
@@ -7928,7 +7885,6 @@ color: $_(textColorA); /* white */
   color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
   width: 100%;
-  font-size: 8pt;
 }
 
 .CLASS20910 {
@@ -7948,7 +7904,6 @@ color: $_(textColorA); /* white */
 .CLASS20913 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
-  font-size: 8pt;
   width: 100%;
 }
 
@@ -7961,7 +7916,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS20916 {
-  font-size: 8pt;
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
 }
@@ -8021,7 +7975,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21101 {
-  font-size: 8pt;
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
 }
@@ -8043,13 +7996,11 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21105 {
-  font-size: 8pt;
 }
 
 .CLASS21106 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
-  font-size: 8pt;
   width: 100%;
 }
 
@@ -8075,7 +8026,6 @@ color: $_(textColorA); /* white */
 .CLASS21111 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
-  font-size: 8pt;
 }
 
 .CLASS21112 {
@@ -8130,7 +8080,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21201 {
-  font-size: 8pt;
 }
 
 .CLASS21202 {
@@ -8144,7 +8093,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21204 {
-  font-size: 8pt;
  	color: $_(textColorB); /* black */
 }
 
@@ -8236,7 +8184,6 @@ color: $_(textColorA); /* white */
 
 .CLASS21302 {
  	color: $_(textColorB); /* black */
-  font-size: 20px;
   text-align:center;
   margin: 5px;
 }
@@ -8270,7 +8217,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21401 {
-  font-size: 8pt;
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
 }
@@ -8292,7 +8238,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21405 {
-  font-size: 8pt;
 }
 
 .CLASS21406 {
@@ -8321,7 +8266,6 @@ color: $_(textColorA); /* white */
 .CLASS21410 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
-  font-size: 8pt;
 }
 
 .CLASS21411 {
@@ -8348,7 +8292,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21501 {
-  font-size: 8pt;
 }
 
 .CLASS21502 {
@@ -8370,7 +8313,6 @@ color: $_(textColorA); /* white */
 .CLASS21505 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
-  font-size: 8pt;
 }
 
 .CLASS21506 {
@@ -8406,7 +8348,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21601 {
-  font-size: 8pt;
 }
 
 .CLASS21602 {
@@ -8420,7 +8361,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21604 {
-  font-size: 8pt;
  	color: $_(textColorB); /* black */
 }
 
@@ -8470,7 +8410,6 @@ color: $_(textColorA); /* white */
 .CLASS21800 {
   width: 100%;
   font-weight: bold;
-  font-size: 12px;
   cursor: pointer;
 }
 
@@ -8547,7 +8486,7 @@ color: $_(textColorA); /* white */
 
 .CLASS21906 {
   color: $_(red);
-  font-size: large;
+  font-size: larger;
   font-weight: bold;
 }
 
@@ -8690,7 +8629,6 @@ color: $_(textColorA); /* white */
 
 .CLASS22100 {
   line-height:14px;
-  font-size:smaller;
 }
 
 .CLASS22101 {
@@ -8882,4 +8820,9 @@ color: $_(textColorA); /* white */
   border:solid 1px $_(black);
 }
 
-.CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}
+.CodeMirror {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  text-align: left;
+  font-family: Arial, monospace;
+}

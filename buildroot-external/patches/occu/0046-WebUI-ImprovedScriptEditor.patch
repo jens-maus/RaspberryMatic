@@ -1,22 +1,704 @@
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
-@@ -190,6 +190,9 @@
+@@ -190,6 +190,13 @@
      });
    </script>
   
 +  <link rel="stylesheet" type="text/css" href="/webui/js/extern/codemirror/lib/codemirror.css?_version_=XXX-WEBUI-VERSION-XXX">
++  <link rel="stylesheet" type="text/css" href="/webui/js/extern/codemirror/addon/hint/show-hint.css?_version_=XXX-WEBUI-VERSION-XXX">
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/lib/codemirror.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/edit/matchbrackets.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/hint/show-hint.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/mode/clike/clike.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +
  </head>
  <body id="body" onload="WebUI.start();" >
    <div id="webuiloader_wrapper">
+--- occu/WebUI/www/rega/pages/msg/editScript.htm.orig
++++ occu/WebUI/www/rega/pages/msg/editScript.htm
+@@ -1,24 +1,24 @@
+ <div class="popupTitle">
+-  &nbsp;&nbsp;
++  &nbsp;
+   <% 
+     Write(system.GetVar("title"));
+   %>
+ </div>
+-<div class="CLASS00001">
+-  <table class="popupTableScript CLASS00002" border="1">
++<div class="CLASS05103">
++  <table class="popupTableScript CLASS00002" border="0" cellspacing="0" cellpadding="0">
+     <tr class="popupTableRow">
+ 
+-    <td class="CLASS00018" colspan="2">
+-      <textarea id="scrinp" class="CLASS00003"><% object oTmp = dom.GetObject( system.GetVar("sdid") ); if( oTmp ) { if( oTmp.DestinationValueType() == ivtString ) { Write( oTmp.DestinationValue().ToString() ); } } %></textarea>
++    <td colspan="2">
++      <textarea name="scrinp" id="scrinp"><% object oTmp = dom.GetObject( system.GetVar("sdid") ); if( oTmp ) { if( oTmp.DestinationValueType() == ivtString ) { Write( oTmp.DestinationValue().ToString() ); } } %></textarea>
+     </td>
+     </tr>
+    
+     <tr >
+-    <td class="CLASS00004">
++    <td class="CLASS00004" style="padding: 5px">
+       
+-      <a class="CLASS00005">$val$ = </a>
++      <div class="CLASS00005">$val$ =
+       <input id="Text1" type="text" class="CLASS00006"/>
+-      <a class="CLASS00007">$this$ = </a>
++      $this$ =
+       <%
+         integer iThis = 0;
+         if(oTmp)
+@@ -28,38 +28,95 @@
+         }
+       %>
+       <input id="Text2" type="text" class="CLASS00008" value="<% Write(iThis); %>" />
+-      <a class="CLASS00009">$src$ = </a>
+-      <input id="Text3" type="text" class="CLASS00010"/>
++      $src$ =
++      <input id="Text3" type="text" class="CLASS00010"/></div>
+       
+     </td>
+     
+     <td class="CLASS00011">
+-    <div class="FooterButton CLASS00012" onclick="CheckSyntax();">${lblErrorCheck}</div>
++    <div class="StdButton CLASS00012" onclick="CheckSyntax();">${lblErrorCheck}</div>
++    <div class="StdButton CLASS00012" onclick="RunScript();">${dialogScriptExecuterBtnExecute}</div>
+     </td>
+     </tr>
+     
+     <tr>
+-    <td class="CLASS00013" colspan="2">
+-      <textarea id="scrout" class="CLASS00014"></textarea>
++    <td colspan="2">
++      <textarea id="scrout"></textarea>
+     </td>
+     </tr>
+     
+-    <tr class="popupTableRow">
+-    <td class="CLASS00015" colspan="2">
+-    <a class="FooterButton CLASS00016" onclick="PopupClose();" >${btnCancel}</a>
+-    <a class="FooterButton CLASS00017" onclick="SaveScript();PopupClose();" >${btnOk}</a>
+-    </td>
++  </table>
++</div>
++<div class="popupControls"> 
++  <table>
++    <tr>
++      <td><div onclick="PopupClose();" class="StdButton CLASS05109">${btnCancel}</div></td>
++      <td><div onclick="SaveScript();PopupClose();" class="StdButton CLASS05109">  ${btnSave}  </div></td>
+     </tr>
+   </table>
+ </div>
+ <script type="text/javascript">
++
++  var frameHeight = <% Write(system.GetVar("frameHeight")) %>;
++  var editor_code = CodeMirror.fromTextArea(document.getElementById('scrinp'), {    
++    mode: "text/x-csrc",
++    autofocus: true,                                                       
++    matchBrackets: true,                                                   
++    lineWrapping: true,                                                                    
++    lineNumbers: true                                                      
++  });                                                                      
++  editor_code.setSize("100%", (frameHeight - 64) * 0.6);
++                                                                           
++  var editor_output = CodeMirror.fromTextArea(document.getElementById('scrout'), {
++    lineWrapping: true,                                                    
++    lineNumbers: false                                                     
++  });                                          
++  editor_output.setSize("100%", (frameHeight - 64) * 0.4);
++
++  RunScript = function()
++  {
++    var code = editor_code.getValue();
++    var val = $F('Text1');
++    var ths = $F('Text2');
++    var src = $F('Text3');
++    var url = '/esp/system.htm?sid='+SessionId;
++    var pb = "";
++    pb += 'string action = "SyntaxCheck";';
++    pb += 'string code = ^'+code+'^;';
++    pb += 'string val = "'+val+'";';
++    pb += 'string ths = "'+ths+'";';
++    pb += 'string src = "'+src+'";';
++    var opt = 
++    {
++      postBody: pb,
++      onComplete: function(t)
++      {
++        conInfo( "EditScript: CheckSyntax returned: ["+iseStripAll(t.responseText)+"]" );
++        if( iseStripAll(t.responseText).length == 0 )
++        {
++          homematic("ReGa.runScript", {"script": editor_code.getValue()}, function(response, error)
++              {
++                if (error === null)
++                {
++                  editor_output.setValue(response);
++                }
++              });
++        }
++        else
++        {
++          editor_output.setValue(t.responseText);
++      }
++    }
++  }
++    new Ajax.Request(url,opt);
++}
+   SaveScript = function()
+   {
+-    dlgResult = $('scrinp').value;
++    dlgResult = editor_code.getValue();
+   }
+   CheckSyntax = function()
+   {
+-    var code = $F('scrinp');
++    var code = editor_code.getValue();
+     var val = $F('Text1');
+     var ths = $F('Text2');
+     var src = $F('Text3');
+@@ -78,14 +135,14 @@
+         conInfo( "EditScript: CheckSyntax returned: ["+iseStripAll(t.responseText)+"]" );
+         if( iseStripAll(t.responseText).length == 0 )
+         {
+-          $('scrout').value = translateKey("lblNoError");
++          editor_output.setValue(translateKey("lblNoError"));
+         }
+         else
+         {
+-          $('scrout').value = t.responseText;
++          editor_output.setValue(t.responseText);
+         }
+       }
+     }
+     new Ajax.Request(url,opt);
+   }
+-</script>
+\ No newline at end of file
++</script>
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -8882,3 +8882,4 @@
+@@ -1,8 +1,3 @@
+-* {
+-	font-family:Verdana,Tahoma,Arial,Helvetica,sans-serif ! important;
+-	font-size: 12px ! important;
+-}
+-
+ .j_translate, .j_startPage
+ {
+     display: none;
+@@ -3431,11 +3426,18 @@
+   width: 50px;
+   height:80px;
+ }
++
+ html, body {
+   border: 0 none;
+   margin: 0;
+   padding: 0;
+-  font:10pt Verdana;
++  font-family: Verdana,Tahoma,Arial,Helvetica,sans-serif;
++  font-size: 12px;
++}
++
++input, textarea, select, button, h1 {
++  font-family: Verdana,Tahoma,Arial,Helvetica,sans-serif;
++  font-size: 12px;
+ }
+ 
+ application {
+@@ -3633,11 +3635,6 @@
+ 	cursor: pointer;
+ }
+ 
+-* {
+-  font-family: Verdana,Tahoma,Arial,Helvetica,sans-serif;
+-  font-size: 12px;
+-}
+-
+ /* rega\pages\msg\editScript.htm */
+ 
+ .CLASS00001 {
+@@ -3660,7 +3657,6 @@
+ 
+ .CLASS00004 {
+ 	width:75%;
+-	height:120px;
+ 	background-color: $_(activeBackground); /* #dcdcdc */
+ 	text-align:left;
+ }
+@@ -3699,7 +3695,6 @@
+ 
+ .CLASS00011 {
+ 	width:25%;
+-	height:120px;
+ 	background-color: $_(white); /* white */
+ }
+ 
+@@ -3931,7 +3926,6 @@
+ 
+ .CLASS00314 {
+ 	line-height:15px;
+-	font-size:smaller;
+ 	text-align:center
+ }
+ 
+@@ -4121,7 +4115,6 @@
+ 	text-align:left;
+ 	color: $_(textColorA) ! important; /* white */
+ 	font-weight:bold;
+-	font-size:10pt;
+ }
+ 
+ .CLASS00716 {
+@@ -4527,7 +4520,6 @@
+ 	font-weight:bold;
+ 	color: $_(textColorB); /* black */
+ 	cursor:pointer;
+-	font-size:12px;
+ }
+ 
+ .CLASS01217 {
+@@ -4928,7 +4920,6 @@
+ /* rega\esp\rule.inc */
+ 
+ .CLASS02300 {
+-	font-size: 14px;
+ 	font-weight: bold;
+ }
+ 
+@@ -4962,7 +4953,6 @@
+ 
+ .CLASS02501 {
+ 	background-color:$_(clickable);
+-	font-size:12px;
+ 	padding:4px;
+ 	border:solid 1px $_(black); /* black */
+ 	text-align:center;
+@@ -5001,7 +4991,6 @@
+ 
+ .CLASS02507 {
+ 	background-color:$_(activeBackground);
+-	font-size:12px;
+ 	padding:4px;
+ 	color: $_(textColorB); /* black */
+ 	height:30px;
+@@ -5175,7 +5164,6 @@
+ }
+ 
+ .CLASS02532 {
+-	font-size: 10px;
+ 	width:220px;
+ 	/*height:25px;*/
+ 	height:auto;
+@@ -5186,14 +5174,12 @@
+ }
+ 
+ .CLASS02532a {
+-	font-size: 10px;
+ 	width:220px;
+ 	height:25px;
+   color: $_(white) ! important;
+ }
+ 
+ .CLASS02532b {
+-	font-size: 10px;
+ 	width:220px;
+ 	height:30px;
+   color: $_(white) ! important;
+@@ -5261,13 +5247,11 @@
+ 
+ .CLASS02542 {
+ 	border:solid 1px $_(black); /* black */
+-	font-size:20px;
+ 	text-align:right;
+ }
+ 
+ .CLASS02542b {
+ 	border:solid 1px $_(black); /* black */
+-	font-size:18px;
+ 	text-align:right;
+ }
+ 
+@@ -5865,7 +5849,6 @@
+ 
+ .CLASS03306 {
+ 	line-height:15px;
+-	font-size:smaller;
+ }
+ 
+ .CLASS03307 {
+@@ -6003,7 +5986,6 @@
+ 
+ .CLASS03703 {
+ 	line-height:15px;
+-	font-size:smaller;
+ }
+ 
+ .CLASS03704 {
+@@ -6140,7 +6122,6 @@
+ 
+ .CLASS03911 {
+ 	line-height:15px;
+-	font-size:smaller;
+ }
+ 
+ /* rega\pages\tabs\handling\rooms.htm */
+@@ -6172,7 +6153,6 @@
+ 
+ .CLASS04005 {
+ 	line-height:15px;
+-	font-size:smaller;
+ }
+ 
+ .CLASS04006 {
+@@ -6222,7 +6202,6 @@
+ 
+ .CLASS04107 {
+ 	line-height:15px;
+-	font-size:smaller;
+ }
+ 
+ .CLASS04108 {
+@@ -6264,12 +6243,10 @@
+ }
+ 
+ .CLASS04203 {
+-	font-size:10pt;
+ 	height:100%;
+ }
+ 
+ .CLASS04204 {
+-	font-size:10pt;
+ }
+ 
+ .CLASS04205 {
+@@ -6290,7 +6267,6 @@
+ 
+ .CLASS04209 {
+ 	line-height:15px;
+-	font-size:smaller;
+ }
+ 
+ .CLASS04210 {
+@@ -6342,7 +6318,6 @@
+ }
+ 
+ .CLASS04304 {
+-	font-size:10pt;
+ 	height:40px;
+ }
+ 
+@@ -6383,7 +6358,6 @@
+ 
+ .CLASS04312 {
+ 	line-height:15px;
+-	font-size:smaller;
+ }
+ 
+ .CLASS04313 {
+@@ -6484,7 +6458,6 @@
+ 
+ .CLASS04800 {
+ 	line-height:14px;
+-	font-size:smaller;
+ 	width:200px;
+ }
+ 
+@@ -6525,12 +6498,10 @@
+ 
+ .CLASS04904 {
+ 	color: $_(textColorB); /* black */
+-	font-size:12px;
+ }
+ 
+ .CLASS04905 {
+ 	line-height:15px;
+-	font-size:smaller;
+ 	width:220px;
+ }
+ 
+@@ -6584,7 +6555,6 @@
+ 
+ .CLASS05007 {
+ 	color: $_(textColorB); /* black */
+-	font-size:9pt;
+ }
+ 
+ .CLASS05008 {
+@@ -6605,7 +6575,6 @@
+ 
+ .CLASS05010 {
+ 	color: $_(textColorB); /* black */
+-	font-size:9pt;
+ 	width:100%;
+ }
+ 
+@@ -6615,7 +6584,6 @@
+ 
+ .CLASS05012 {
+ 	color: $_(textColorB); /* black */
+-	font-size:9pt;
+ }
+ 
+ /* rega\pages\tabs\admin\msg\timemodule.htm */
+@@ -6725,7 +6693,6 @@
+ 
+ .CLASS05207 {
+ 	line-height:15px;
+-	font-size:smaller;
+ }
+ 
+ .CLASS05208 {
+@@ -6778,7 +6745,6 @@
+ 
+ .CLASS05305 {
+ 	line-height:15px;
+-	font-size:smaller;
+ }
+ 
+ /* rega\pages\tabs\admin\linkprog.htm */
+@@ -6916,7 +6882,6 @@
+ 
+ .CLASS05705 {
+ 	width:572px;
+-	font-size:9pt;
+ }
+ 
+ .CLASS05706 {
+@@ -6929,7 +6894,6 @@
+ 
+ .CLASS05707 {
+ 	width:570px;
+-	font-size:9pt;
+ }
+ 
+ /* rega\pages\tabs\favViewer.htm  */
+@@ -7373,7 +7337,6 @@
+ 
+ .CLASS06413 {
+   line-height:15px;
+-  font-size:smaller;
+ }
+ 
+ .CLASS06414 {
+@@ -7777,7 +7740,6 @@
+ }
+ 
+ .CLASS20801 {
+-  font-size: 8pt;
+  	color: $_(textColorB); /* black */
+ }
+ 
+@@ -7798,7 +7760,6 @@
+ }
+ 
+ .CLASS20805 {
+-  font-size: 8pt;
+ }
+ 
+ .CLASS20806 {
+@@ -7809,7 +7770,6 @@
+   background-color:$_(clickable);
+  color: $_(textColorA); /* white */
+   vertical-align: middle;
+-  font-size: 10pt;
+ }
+ 
+ .CLASS20808 {
+@@ -7825,7 +7785,6 @@
+ .CLASS20810 {
+  	color: $_(textColorB); /* black */
+   background-color: $_(white); /* white */
+-  font-size: 8pt;
+ }
+ 
+ .CLASS20811 {
+@@ -7860,7 +7819,6 @@
+ .CLASS20817 {
+  	color: $_(textColorB); /* black */
+   background-color: $_(white); /* white */
+-  font-size: 8pt;
+ }
+ 
+ .CLASS20818 {
+@@ -7886,7 +7844,6 @@
+ }
+ 
+ .CLASS20901 {
+-  font-size: 8pt;
+ }
+ 
+ .CLASS20902 {
+@@ -7928,7 +7885,6 @@
+   color: $_(textColorB); /* black */
+   background-color: $_(white); /* white */
+   width: 100%;
+-  font-size: 8pt;
+ }
+ 
+ .CLASS20910 {
+@@ -7948,7 +7904,6 @@
+ .CLASS20913 {
+  	color: $_(textColorB); /* black */
+   background-color: $_(white); /* white */
+-  font-size: 8pt;
+   width: 100%;
+ }
+ 
+@@ -7961,7 +7916,6 @@
+ }
+ 
+ .CLASS20916 {
+-  font-size: 8pt;
+  	color: $_(textColorB); /* black */
+   background-color: $_(white); /* white */
+ }
+@@ -8021,7 +7975,6 @@
+ }
+ 
+ .CLASS21101 {
+-  font-size: 8pt;
+  	color: $_(textColorB); /* black */
+   background-color: $_(white); /* white */
+ }
+@@ -8043,13 +7996,11 @@
+ }
+ 
+ .CLASS21105 {
+-  font-size: 8pt;
+ }
+ 
+ .CLASS21106 {
+  	color: $_(textColorB); /* black */
+   background-color: $_(white); /* white */
+-  font-size: 8pt;
+   width: 100%;
+ }
+ 
+@@ -8075,7 +8026,6 @@
+ .CLASS21111 {
+  	color: $_(textColorB); /* black */
+   background-color: $_(white); /* white */
+-  font-size: 8pt;
+ }
+ 
+ .CLASS21112 {
+@@ -8130,7 +8080,6 @@
+ }
+ 
+ .CLASS21201 {
+-  font-size: 8pt;
+ }
+ 
+ .CLASS21202 {
+@@ -8144,7 +8093,6 @@
+ }
+ 
+ .CLASS21204 {
+-  font-size: 8pt;
+  	color: $_(textColorB); /* black */
+ }
+ 
+@@ -8236,7 +8184,6 @@
+ 
+ .CLASS21302 {
+  	color: $_(textColorB); /* black */
+-  font-size: 20px;
+   text-align:center;
+   margin: 5px;
+ }
+@@ -8270,7 +8217,6 @@
+ }
+ 
+ .CLASS21401 {
+-  font-size: 8pt;
+  	color: $_(textColorB); /* black */
+   background-color: $_(white); /* white */
+ }
+@@ -8292,7 +8238,6 @@
+ }
+ 
+ .CLASS21405 {
+-  font-size: 8pt;
+ }
+ 
+ .CLASS21406 {
+@@ -8321,7 +8266,6 @@
+ .CLASS21410 {
+  	color: $_(textColorB); /* black */
+   background-color: $_(white); /* white */
+-  font-size: 8pt;
+ }
+ 
+ .CLASS21411 {
+@@ -8348,7 +8292,6 @@
+ }
+ 
+ .CLASS21501 {
+-  font-size: 8pt;
+ }
+ 
+ .CLASS21502 {
+@@ -8370,7 +8313,6 @@
+ .CLASS21505 {
+  	color: $_(textColorB); /* black */
+   background-color: $_(white); /* white */
+-  font-size: 8pt;
+ }
+ 
+ .CLASS21506 {
+@@ -8406,7 +8348,6 @@
+ }
+ 
+ .CLASS21601 {
+-  font-size: 8pt;
+ }
+ 
+ .CLASS21602 {
+@@ -8420,7 +8361,6 @@
+ }
+ 
+ .CLASS21604 {
+-  font-size: 8pt;
+  	color: $_(textColorB); /* black */
+ }
+ 
+@@ -8470,7 +8410,6 @@
+ .CLASS21800 {
+   width: 100%;
+   font-weight: bold;
+-  font-size: 12px;
+   cursor: pointer;
+ }
+ 
+@@ -8547,7 +8486,7 @@
+ 
+ .CLASS21906 {
+   color: $_(red);
+-  font-size: large;
++  font-size: larger;
+   font-weight: bold;
+ }
+ 
+@@ -8690,7 +8629,6 @@
+ 
+ .CLASS22100 {
+   line-height:14px;
+-  font-size:smaller;
+ }
+ 
+ .CLASS22101 {
+@@ -8882,3 +8820,9 @@
    border:solid 1px $_(black);
  }
  
-+.CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}
++.CodeMirror {
++  border-top: 1px solid black;
++  border-bottom: 1px solid black;
++  text-align: left;
++  font-family: Arial, monospace;
++}
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -7420,7 +7420,13 @@
@@ -77,7 +759,7 @@
      var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
      var frameY       = parseInt((screenHeight - frameHeight) / 2);
  
-@@ -12272,63 +12294,97 @@
+@@ -12272,63 +12294,98 @@
      
      this.m_layer = document.createElement("div");
      this.m_layer.className = "DialogLayer";
@@ -142,6 +824,7 @@
 +    Layer.add(this.m_layer);
 +
 +    this.m_input = CodeMirror.fromTextArea(document.getElementById('code'), {
++      mode: "text/x-csrc",
 +      autofocus: true,
 +      matchBrackets: true,
 +      lineWrapping: true,
@@ -178,13 +861,13 @@
 +    var opt = 
      {
 -      if (error === null)
-+      postBody: ReGa.encode(pb),
-+      onComplete: function(t)
-       {
+-      {
 -        _this_.m_output.setText(response);
 -      }
 -      else
--      {
++      postBody: ReGa.encode(pb),
++      onComplete: function(t)
+       {
 -        _this_.m_output.setText("Fehler: " + Object.toJSON(error));
 +        if( iseStripAll(t.responseText).length == 0 )
 +        {
@@ -207,7 +890,7 @@
    },
    
    close: function()
-@@ -12338,8 +12394,8 @@
+@@ -12338,8 +12395,8 @@
    
  });
  
@@ -218,3 +901,51 @@
  
  /**
   * firewallconfigdialog.js
+@@ -22390,6 +22447,9 @@
+   },
+   initPopup: function(id)
+   {
++    var screenWidth  = WebUI.getWidth();
++    var screenHeight = WebUI.getHeight();
++
+     switch(this.id)
+     {
+       case ID_ROOMS:
+@@ -22449,9 +22509,10 @@
+         break;
+       case ID_EDIT_SCRIPT:
+         this.setTitle( translateKey("dialogEditScript") /*"Skript bearbeiten"*/ );
++        this.setWidth(parseInt(screenWidth * 0.8));
++        this.setHeight(parseInt(screenHeight * 0.8));
+         this.addToPostBody( 'string sdid = "'+this.type+'";' );
+-        //this.setWidth(800);
+-        this.setWidth('auto');
++        this.addToPostBody( 'string frameHeight = "'+this.height+'";' );
+         this.setFile( "/pages/msg/editScript.htm" );
+         break;
+       case ID_CONTROL_TEST:
+@@ -22559,7 +22620,9 @@
+     }
+ 
+     if (this.draggable) {
+-      jQuery("#messagebox").draggable();
++      jQuery("#messagebox").draggable({
++        cancel: "input,textarea,button,select,option,.FooterButton,.StdButton,.CodeMirror"
++      });
+     }
+ 
+   },
+@@ -22715,7 +22778,12 @@
+       onComplete: function(trans)
+       {
+         //$("messagebox").style.width = t.width + "px";
+-        jQuery("#messagebox").width(t.width + "px");
++        if(t.width !== "undefined") {
++          jQuery("#messagebox").width(t.width + "px");
++        }
++        if(t.height !== "undefined") {
++          jQuery("#messagebox").height(t.height + "px");
++        }
+         jQuery("#tableContainer").css("max-height",(parseInt(jQuery(window).height() * 0.75)) + "px");
+         centerMessageBox();
+         iseRefr(true);

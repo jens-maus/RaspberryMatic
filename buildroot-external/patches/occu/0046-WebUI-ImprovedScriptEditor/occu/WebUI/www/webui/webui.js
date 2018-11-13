@@ -12333,7 +12333,7 @@ HMScriptExecutor = Class.create({
     Layer.add(this.m_layer);
 
     this.m_input = CodeMirror.fromTextArea(document.getElementById('code'), {
-      mode: "text/x-csrc",
+      mode: "text/x-rega",
       autofocus: true,
       matchBrackets: true,
       lineWrapping: true,

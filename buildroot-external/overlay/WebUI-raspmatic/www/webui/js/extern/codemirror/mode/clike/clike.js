@@ -876,4 +876,87 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     }
   });
 
+  def("text/x-rega", {
+    name: "clike",
+    keywords: words(
+      /* statements */
+      "if while foreach return quit for else elseif " +
+
+      /* calls */
+      "Call Write WriteLine WriteURL WriteXML WriteHTML Debug Dump"
+    ),
+    types: words(
+      "var boolean integer real string time object idarray xml"
+    ),
+    multiLineStrings: true,
+    blockKeywords: words("if while foreach for else elseif"),
+    defKeywords: words(
+      "system dom root devices channels datapoints structure scheduler xmlrpc interfaces tcap web"
+    ),
+    atoms: words(
+      "null true false currenttime localtime on off up down higher lower " +
+      "M_E M_LOG2E M_LOG10E M_LN2 M_LN10 M_PI M_PI_2 M_PI_4 M_1_PI M_2_PI " +
+      "M_2_SQRTPI M_SQRT2 M_SQRT1_2 " +
+      "OT_OBJECT OT_ENUM OT_ROOT OT_DOM OT_DEVICE OT_DEVICES OT_MESSAGE OT_CHANNEL " +
+      "OT_CHANNELS OT_DP OT_DPS OT_TIMERDP OT_CALENDARDP OT_CALENDARDPS OT_MAPDP " +
+      "OT_VARDP OT_COMMDP OT_ALARMDP OT_IPDP OT_UPNPDP OT_KNXDP OT_OCEANDP OT_RFDP " +
+      "OT_IRDP OT_HSSDP OT_HISTORYDP OT_USER OT_USERS OT_SCHEDULER OT_USERPAGE " +
+      "OT_INTERFACE OT_INTERFACES OT_PROGRAM OT_SMTPSRV OT_POPCLIENT OT_RULE " +
+      "OT_RULES OT_CONDITION OT_SINGLECONDITION OT_DESTINATION OT_SINGLEDESTINATION " +
+      "OT_UIDATA OT_FAVORITE OT_XMLNODE OT_XMLNODES " +
+      "ID_DOM ID_ROOT ID_DEVICES ID_CHANNELS ID_DATAPOINTS ID_STRUCTURE ID_USERS " +
+      "ID_USERPAGES ID_INTERFACES ID_VALUE_EVENTING ID_EVENTING ID_GW_DEVICE " +
+      "ID_GW_CHANNEL ID_GW_DATAPOINT ID_PROGRAMS ID_HISTORYDPS ID_SMTPSERVER " +
+      "ID_POPCLIENT ID_PRESENCE_SIMULATION ID_GATEWAYCONFIG ID_RUNTIMECONFIG " +
+      "ID_WEBCONFIG ID_CHANNEL_STATE_VARIABLES ID_CHANNEL_COMMUNICATION " +
+      "ID_CHN_COM_DP_SMS ID_CHN_COM_DP_EMAIL ID_SYSTEM_VARIABLES ID_SERVICES " +
+      "ID_VIEW_OBJECTS ID_MESSAGES ID_UI_DATAS ID_RULES ID_CALENDARDPS " +
+      "ID_CONDITIONS ID_SCONDITIONS ID_DESTINATIONS ID_SDESTINATIONS " +
+      "ID_IP_DP_GW ID_GW_SYSALARM ID_GW_SYSSERVICE ID_INTERNALCHANNEL " +
+      "ID_ROOMS ID_FUNCTIONS ID_FAVORITES ID_LINKS ID_SCENES ID_CIRCUITS " +
+      "ID_CONTACTS ID_ALARM_MAPS ID_ALARMS ID_UPNP ID_UPNP_BEGIN ID_UPNP_DISCOVER " +
+      "ID_ENOCEAN ID_RF ID_SERVER_DP ID_PRESENT ID_ERROR " +
+      "atGeneric asNone asOncoming asReceipted "
+    ),
+    indentStatements: false,
+    indentSwitch: false,
+    isOperatorChar: /[+\-*&%=<>!?|\/#:@]/,
+    hooks: {
+      "@": function(stream) {
+        stream.eatWhile(/[\w\$_]/);
+        return "meta";
+      },
+      '"': function(stream, state) {
+        if (!stream.match('""')) return false;
+        state.tokenize = tokenTripleString;
+        return state.tokenize(stream, state);
+      },
+      "'": function(stream) {
+        stream.eatWhile(/[\w\$_\xa1-\uffff]/);
+        return "atom";
+      },
+      "=": function(stream, state) {
+        var cx = state.context
+        if (cx.type == "}" && cx.align && stream.eat(">")) {
+          state.context = new Context(cx.indented, cx.column, cx.type, cx.info, null, cx.prev)
+          return "operator"
+        } else {
+          return false
+        }
+      },
+      token: function(_stream, state, style) {
+        if ((style == "variable" || style == "type") &&
+            state.prevToken == ".") {
+          return "variable-2";
+        }
+      },
+      "!": function(stream, state) {
+        if (!stream.eat(" ")) return false
+        stream.skipToEnd();
+        return "comment"
+      }
+    },
+    modeProps: {closeBrackets: {pairs: '()[]{}""', triples: '"'}}
+  });
+
 });

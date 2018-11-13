@@ -68,6 +68,7 @@
   editor_code.setSize("100%", (frameHeight - 64) * 0.6);
                                                                            
   var editor_output = CodeMirror.fromTextArea(document.getElementById('scrout'), {
+    mode: "default",
     lineWrapping: true,                                                    
     lineNumbers: false                                                     
   });                                          

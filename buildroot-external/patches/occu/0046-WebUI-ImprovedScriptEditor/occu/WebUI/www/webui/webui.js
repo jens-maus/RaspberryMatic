@@ -12342,6 +12342,7 @@ HMScriptExecutor = Class.create({
     this.m_input.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.6));
 
     this.m_output = CodeMirror.fromTextArea(document.getElementById('output'), {
+      mode: "default",
       readOnly: true,
       lineWrapping: true,
       lineNumbers: false

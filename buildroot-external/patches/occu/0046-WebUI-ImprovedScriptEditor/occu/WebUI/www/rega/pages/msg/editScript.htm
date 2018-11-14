@@ -58,20 +58,21 @@
 <script type="text/javascript">
 
   var frameHeight = <% Write(system.GetVar("frameHeight")) %>;
-  var editor_code = CodeMirror.fromTextArea(document.getElementById('scrinp'), {    
-    mode: "text/x-rega",
-    autofocus: true,                                                       
-    matchBrackets: true,                                                   
-    lineWrapping: true,                                                                    
-    lineNumbers: true                                                      
-  });                                                                      
+  var editor_code = CodeMirror.fromTextArea(document.getElementById('scrinp'), {
+    mode: "text/x-rega"
+    autofocus: true,
+    matchBrackets: true,
+    lineWrapping: true,
+    lineNumbers: true,
+    extraKeys: {"Ctrl-Space": "autocomplete"}
+  });
   editor_code.setSize("100%", (frameHeight - 64) * 0.6);
                                                                            
   var editor_output = CodeMirror.fromTextArea(document.getElementById('scrout'), {
     mode: "default",
     readOnly: true,
-    lineWrapping: true,                                                    
-    lineNumbers: false                                                     
+    lineWrapping: true,
+    lineNumbers: false
   });                                          
   editor_output.setSize("100%", (frameHeight - 64) * 0.4);
 

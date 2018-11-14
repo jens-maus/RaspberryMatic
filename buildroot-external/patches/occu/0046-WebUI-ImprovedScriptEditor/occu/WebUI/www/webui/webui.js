@@ -12337,7 +12337,8 @@ HMScriptExecutor = Class.create({
       autofocus: true,
       matchBrackets: true,
       lineWrapping: true,
-      lineNumbers: true
+      lineNumbers: true,
+      extraKeys: {"Ctrl-Space": "autocomplete"}
     });
     this.m_input.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.6));
 

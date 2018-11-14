@@ -12339,7 +12339,10 @@ HMScriptExecutor = Class.create({
       autoCloseBrackets: true,
       lineWrapping: true,
       lineNumbers: true,
-      extraKeys: {"Ctrl-Space": "autocomplete"}
+      foldGutter: true,
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+      extraKeys: {"Ctrl-Space": "autocomplete",
+                  "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }}
     });
     this.m_input.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.6));
 

@@ -65,7 +65,10 @@
     autoCloseBrackets: true,
     lineWrapping: true,
     lineNumbers: true,
-    extraKeys: {"Ctrl-Space": "autocomplete"}
+    foldGutter: true,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    extraKeys: {"Ctrl-Space": "autocomplete",
+                "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }}
   });
   editor_code.setSize("100%", (frameHeight - 64) * 0.6);
                                                                            

@@ -1,17 +1,23 @@
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
-@@ -190,6 +190,15 @@
+@@ -190,6 +190,21 @@
      });
    </script>
   
 +  <link rel="stylesheet" type="text/css" href="/webui/js/extern/codemirror/lib/codemirror.css?_version_=XXX-WEBUI-VERSION-XXX">
 +  <link rel="stylesheet" type="text/css" href="/webui/js/extern/codemirror/addon/hint/show-hint.css?_version_=XXX-WEBUI-VERSION-XXX">
++  <link rel="stylesheet" type="text/css" href="/webui/js/extern/codemirror/addon/fold/foldgutter.css?_version_=XXX-WEBUI-VERSION-XXX">
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/lib/codemirror.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/mode/clike/clike.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/edit/matchbrackets.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/edit/closebrackets.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/hint/show-hint.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/hint/anyword-hint.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/codemirror/mode/clike/clike.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/fold/foldcode.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/fold/foldgutter.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/fold/brace-fold.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/fold/indent-fold.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/fold/comment-fold.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +
  </head>
  <body id="body" onload="WebUI.start();" >
@@ -51,7 +57,7 @@
        <%
          integer iThis = 0;
          if(oTmp)
-@@ -28,38 +28,99 @@
+@@ -28,38 +28,102 @@
          }
        %>
        <input id="Text2" type="text" class="CLASS00008" value="<% Write(iThis); %>" />
@@ -102,7 +108,10 @@
 +    autoCloseBrackets: true,
 +    lineWrapping: true,
 +    lineNumbers: true,
-+    extraKeys: {"Ctrl-Space": "autocomplete"}
++    foldGutter: true,
++    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
++    extraKeys: {"Ctrl-Space": "autocomplete",
++                "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }}
 +  });
 +  editor_code.setSize("100%", (frameHeight - 64) * 0.6);
 +                                                                           
@@ -163,7 +172,7 @@
      var val = $F('Text1');
      var ths = $F('Text2');
      var src = $F('Text3');
-@@ -78,14 +139,14 @@
+@@ -78,14 +142,14 @@
          conInfo( "EditScript: CheckSyntax returned: ["+iseStripAll(t.responseText)+"]" );
          if( iseStripAll(t.responseText).length == 0 )
          {
@@ -769,7 +778,7 @@
      var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
      var frameY       = parseInt((screenHeight - frameHeight) / 2);
  
-@@ -12272,63 +12294,101 @@
+@@ -12272,63 +12294,104 @@
      
      this.m_layer = document.createElement("div");
      this.m_layer.className = "DialogLayer";
@@ -840,7 +849,10 @@
 +      autoCloseBrackets: true,
 +      lineWrapping: true,
 +      lineNumbers: true,
-+      extraKeys: {"Ctrl-Space": "autocomplete"}
++      foldGutter: true,
++      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
++      extraKeys: {"Ctrl-Space": "autocomplete",
++                  "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }}
 +    });
 +    this.m_input.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.6));
 +
@@ -903,7 +915,7 @@
    },
    
    close: function()
-@@ -12338,8 +12398,8 @@
+@@ -12338,8 +12401,8 @@
    
  });
  
@@ -914,7 +926,7 @@
  
  /**
   * firewallconfigdialog.js
-@@ -22390,6 +22450,9 @@
+@@ -22390,6 +22453,9 @@
    },
    initPopup: function(id)
    {
@@ -924,7 +936,7 @@
      switch(this.id)
      {
        case ID_ROOMS:
-@@ -22449,9 +22512,10 @@
+@@ -22449,9 +22515,10 @@
          break;
        case ID_EDIT_SCRIPT:
          this.setTitle( translateKey("dialogEditScript") /*"Skript bearbeiten"*/ );
@@ -937,7 +949,7 @@
          this.setFile( "/pages/msg/editScript.htm" );
          break;
        case ID_CONTROL_TEST:
-@@ -22559,7 +22623,9 @@
+@@ -22559,7 +22626,9 @@
      }
  
      if (this.draggable) {
@@ -948,7 +960,7 @@
      }
  
    },
-@@ -22715,7 +22781,12 @@
+@@ -22715,7 +22784,12 @@
        onComplete: function(trans)
        {
          //$("messagebox").style.width = t.width + "px";

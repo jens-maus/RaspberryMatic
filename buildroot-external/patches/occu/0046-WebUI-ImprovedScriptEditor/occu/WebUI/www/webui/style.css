@@ -8824,5 +8824,9 @@ color: $_(textColorA); /* white */
   border-top: 1px solid black;
   border-bottom: 1px solid black;
   text-align: left;
-  font-family: Arial, monospace;
+  font-family: monospace;
+}
+
+.CodeMirror-gutter-wrapper {
+  font-family: monospace;
 }

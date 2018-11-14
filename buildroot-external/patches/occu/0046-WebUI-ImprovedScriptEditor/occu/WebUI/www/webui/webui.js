@@ -12342,7 +12342,9 @@ HMScriptExecutor = Class.create({
       foldGutter: true,
       gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
       extraKeys: {"Ctrl-Space": "autocomplete",
-                  "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }}
+                  "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); },
+                  "F11": function(cm) { cm.setOption("fullScreen", !cm.getOption("fullScreen")); },
+                  "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); }}
     });
     this.m_input.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.6));
 

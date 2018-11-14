@@ -4,7 +4,7 @@
     Write(system.GetVar("title"));
   %>
 </div>
-<div class="CLASS05103">
+<div>
   <table class="popupTableScript CLASS00002" border="0" cellspacing="0" cellpadding="0">
     <tr class="popupTableRow">
 
@@ -47,7 +47,7 @@
     
   </table>
 </div>
-<div class="popupControls"> 
+<div class="popupControls">
   <table>
     <tr>
       <td><div onclick="PopupClose();" class="StdButton CLASS05109">${btnCancel}</div></td>
@@ -73,15 +73,16 @@
                 "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); },
                 "Alt-F": "findPersistent" }
   });
-  editor_code.setSize("100%", (frameHeight - 64) * 0.6);
-                                                                           
+  var codeHeight = parseInt((frameHeight - 64) * 0.6);
+  editor_code.setSize("100%", codeHeight);
+
   var editor_output = CodeMirror.fromTextArea(document.getElementById('scrout'), {
     mode: "default",
     readOnly: true,
     lineWrapping: true,
     lineNumbers: false
   });                                          
-  editor_output.setSize("100%", (frameHeight - 64) * 0.4);
+  editor_output.setSize("100%", parseInt((frameHeight - 64) - codeHeight));
 
   RunScript = function()
   {

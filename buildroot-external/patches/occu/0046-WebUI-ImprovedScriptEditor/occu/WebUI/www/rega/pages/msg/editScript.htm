@@ -51,7 +51,7 @@
   <table>
     <tr>
       <td><div onclick="PopupClose();" class="StdButton CLASS05109">${btnCancel}</div></td>
-      <td><div onclick="SaveScript();PopupClose();" class="StdButton CLASS05109">  ${btnSave}  </div></td>
+      <td><div onclick="SaveScript();PopupClose();" class="StdButton CLASS05109">  ${btnOk}  </div></td>
     </tr>
   </table>
 </div>
@@ -59,7 +59,7 @@
 
   var frameHeight = <% Write(system.GetVar("frameHeight")) %>;
   var editor_code = CodeMirror.fromTextArea(document.getElementById('scrinp'), {
-    mode: "text/x-rega"
+    mode: "text/x-rega",
     autofocus: true,
     matchBrackets: true,
     autoCloseBrackets: true,
@@ -70,7 +70,8 @@
     extraKeys: {"Ctrl-Space": "autocomplete",
                 "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); },
                 "F11": function(cm) { cm.setOption("fullScreen", !cm.getOption("fullScreen")); },
-                "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); }}
+                "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); },
+                "Alt-F": "findPersistent" }
   });
   editor_code.setSize("100%", (frameHeight - 64) * 0.6);
                                                                            

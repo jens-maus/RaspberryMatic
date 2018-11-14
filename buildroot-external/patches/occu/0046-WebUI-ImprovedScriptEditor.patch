@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
-@@ -190,6 +190,23 @@
+@@ -190,6 +190,31 @@
      });
    </script>
   
@@ -8,6 +8,8 @@
 +  <link rel="stylesheet" type="text/css" href="/webui/js/extern/codemirror/addon/hint/show-hint.css?_version_=XXX-WEBUI-VERSION-XXX">
 +  <link rel="stylesheet" type="text/css" href="/webui/js/extern/codemirror/addon/fold/foldgutter.css?_version_=XXX-WEBUI-VERSION-XXX">
 +  <link rel="stylesheet" type="text/css" href="/webui/js/extern/codemirror/addon/display/fullscreen.css?_version_=XXX-WEBUI-VERSION-XXX">
++  <link rel="stylesheet" type="text/css" href="/webui/js/extern/codemirror/addon/dialog/dialog.css?_version_=XXX-WEBUI-VERSION-XXX">
++  <link rel="stylesheet" type="text/css" href="/webui/js/extern/codemirror/addon/search/matchesonscrollbar.css?_version_=XXX-WEBUI-VERSION-XXX">
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/lib/codemirror.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/mode/clike/clike.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/edit/matchbrackets.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
@@ -20,6 +22,12 @@
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/fold/indent-fold.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/fold/comment-fold.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/display/fullscreen.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/dialog/dialog.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/search/searchcursor.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/search/search.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/scroll/annotatescrollbar.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/search/matchesonscrollbar.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/search/jump-to-line.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +
  </head>
  <body id="body" onload="WebUI.start();" >
@@ -59,7 +67,7 @@
        <%
          integer iThis = 0;
          if(oTmp)
-@@ -28,38 +28,104 @@
+@@ -28,38 +28,105 @@
          }
        %>
        <input id="Text2" type="text" class="CLASS00008" value="<% Write(iThis); %>" />
@@ -96,7 +104,7 @@
 +  <table>
 +    <tr>
 +      <td><div onclick="PopupClose();" class="StdButton CLASS05109">${btnCancel}</div></td>
-+      <td><div onclick="SaveScript();PopupClose();" class="StdButton CLASS05109">  ${btnSave}  </div></td>
++      <td><div onclick="SaveScript();PopupClose();" class="StdButton CLASS05109">  ${btnOk}  </div></td>
      </tr>
    </table>
  </div>
@@ -104,7 +112,7 @@
 +
 +  var frameHeight = <% Write(system.GetVar("frameHeight")) %>;
 +  var editor_code = CodeMirror.fromTextArea(document.getElementById('scrinp'), {
-+    mode: "text/x-rega"
++    mode: "text/x-rega",
 +    autofocus: true,
 +    matchBrackets: true,
 +    autoCloseBrackets: true,
@@ -115,7 +123,8 @@
 +    extraKeys: {"Ctrl-Space": "autocomplete",
 +                "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); },
 +                "F11": function(cm) { cm.setOption("fullScreen", !cm.getOption("fullScreen")); },
-+                "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); }}
++                "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); },
++                "Alt-F": "findPersistent" }
 +  });
 +  editor_code.setSize("100%", (frameHeight - 64) * 0.6);
 +                                                                           
@@ -176,7 +185,7 @@
      var val = $F('Text1');
      var ths = $F('Text2');
      var src = $F('Text3');
-@@ -78,14 +144,14 @@
+@@ -78,14 +145,14 @@
          conInfo( "EditScript: CheckSyntax returned: ["+iseStripAll(t.responseText)+"]" );
          if( iseStripAll(t.responseText).length == 0 )
          {
@@ -206,7 +215,15 @@
  .j_translate, .j_startPage
  {
      display: none;
-@@ -3431,11 +3426,18 @@
+@@ -418,7 +413,6 @@
+   border: solid 1px $_(black); /* black */
+   cursor: pointer;
+   border-radius: 5px;
+-  font-size: 15px;
+   padding-top: 5px;
+   padding-bottom: 5px;
+ }
+@@ -3431,11 +3425,18 @@
    width: 50px;
    height:80px;
  }
@@ -226,7 +243,7 @@
  }
  
  application {
-@@ -3633,11 +3635,6 @@
+@@ -3633,11 +3634,6 @@
  	cursor: pointer;
  }
  
@@ -238,7 +255,7 @@
  /* rega\pages\msg\editScript.htm */
  
  .CLASS00001 {
-@@ -3660,7 +3657,6 @@
+@@ -3660,7 +3656,6 @@
  
  .CLASS00004 {
  	width:75%;
@@ -246,7 +263,7 @@
  	background-color: $_(activeBackground); /* #dcdcdc */
  	text-align:left;
  }
-@@ -3699,7 +3695,6 @@
+@@ -3699,7 +3694,6 @@
  
  .CLASS00011 {
  	width:25%;
@@ -254,7 +271,7 @@
  	background-color: $_(white); /* white */
  }
  
-@@ -3931,7 +3926,6 @@
+@@ -3931,7 +3925,6 @@
  
  .CLASS00314 {
  	line-height:15px;
@@ -262,7 +279,7 @@
  	text-align:center
  }
  
-@@ -4121,7 +4115,6 @@
+@@ -4121,7 +4114,6 @@
  	text-align:left;
  	color: $_(textColorA) ! important; /* white */
  	font-weight:bold;
@@ -270,7 +287,7 @@
  }
  
  .CLASS00716 {
-@@ -4527,7 +4520,6 @@
+@@ -4527,7 +4519,6 @@
  	font-weight:bold;
  	color: $_(textColorB); /* black */
  	cursor:pointer;
@@ -278,7 +295,7 @@
  }
  
  .CLASS01217 {
-@@ -4928,7 +4920,6 @@
+@@ -4928,7 +4919,6 @@
  /* rega\esp\rule.inc */
  
  .CLASS02300 {
@@ -286,7 +303,7 @@
  	font-weight: bold;
  }
  
-@@ -4962,7 +4953,6 @@
+@@ -4962,7 +4952,6 @@
  
  .CLASS02501 {
  	background-color:$_(clickable);
@@ -294,7 +311,7 @@
  	padding:4px;
  	border:solid 1px $_(black); /* black */
  	text-align:center;
-@@ -5001,7 +4991,6 @@
+@@ -5001,7 +4990,6 @@
  
  .CLASS02507 {
  	background-color:$_(activeBackground);
@@ -302,7 +319,7 @@
  	padding:4px;
  	color: $_(textColorB); /* black */
  	height:30px;
-@@ -5175,7 +5164,6 @@
+@@ -5175,7 +5163,6 @@
  }
  
  .CLASS02532 {
@@ -310,7 +327,7 @@
  	width:220px;
  	/*height:25px;*/
  	height:auto;
-@@ -5186,14 +5174,12 @@
+@@ -5186,14 +5173,12 @@
  }
  
  .CLASS02532a {
@@ -325,7 +342,7 @@
  	width:220px;
  	height:30px;
    color: $_(white) ! important;
-@@ -5261,13 +5247,11 @@
+@@ -5261,13 +5246,11 @@
  
  .CLASS02542 {
  	border:solid 1px $_(black); /* black */
@@ -339,7 +356,7 @@
  	text-align:right;
  }
  
-@@ -5865,7 +5849,6 @@
+@@ -5865,7 +5848,6 @@
  
  .CLASS03306 {
  	line-height:15px;
@@ -347,7 +364,7 @@
  }
  
  .CLASS03307 {
-@@ -6003,7 +5986,6 @@
+@@ -6003,7 +5985,6 @@
  
  .CLASS03703 {
  	line-height:15px;
@@ -355,7 +372,7 @@
  }
  
  .CLASS03704 {
-@@ -6140,7 +6122,6 @@
+@@ -6140,7 +6121,6 @@
  
  .CLASS03911 {
  	line-height:15px;
@@ -363,7 +380,7 @@
  }
  
  /* rega\pages\tabs\handling\rooms.htm */
-@@ -6172,7 +6153,6 @@
+@@ -6172,7 +6152,6 @@
  
  .CLASS04005 {
  	line-height:15px;
@@ -371,7 +388,7 @@
  }
  
  .CLASS04006 {
-@@ -6222,7 +6202,6 @@
+@@ -6222,7 +6201,6 @@
  
  .CLASS04107 {
  	line-height:15px;
@@ -379,7 +396,7 @@
  }
  
  .CLASS04108 {
-@@ -6264,12 +6243,10 @@
+@@ -6264,12 +6242,10 @@
  }
  
  .CLASS04203 {
@@ -392,7 +409,7 @@
  }
  
  .CLASS04205 {
-@@ -6290,7 +6267,6 @@
+@@ -6290,7 +6266,6 @@
  
  .CLASS04209 {
  	line-height:15px;
@@ -400,7 +417,7 @@
  }
  
  .CLASS04210 {
-@@ -6342,7 +6318,6 @@
+@@ -6342,7 +6317,6 @@
  }
  
  .CLASS04304 {
@@ -408,7 +425,7 @@
  	height:40px;
  }
  
-@@ -6383,7 +6358,6 @@
+@@ -6383,7 +6357,6 @@
  
  .CLASS04312 {
  	line-height:15px;
@@ -416,7 +433,7 @@
  }
  
  .CLASS04313 {
-@@ -6484,7 +6458,6 @@
+@@ -6484,7 +6457,6 @@
  
  .CLASS04800 {
  	line-height:14px;
@@ -424,7 +441,7 @@
  	width:200px;
  }
  
-@@ -6525,12 +6498,10 @@
+@@ -6525,12 +6497,10 @@
  
  .CLASS04904 {
  	color: $_(textColorB); /* black */
@@ -437,7 +454,7 @@
  	width:220px;
  }
  
-@@ -6584,7 +6555,6 @@
+@@ -6584,7 +6554,6 @@
  
  .CLASS05007 {
  	color: $_(textColorB); /* black */
@@ -445,7 +462,7 @@
  }
  
  .CLASS05008 {
-@@ -6605,7 +6575,6 @@
+@@ -6605,7 +6574,6 @@
  
  .CLASS05010 {
  	color: $_(textColorB); /* black */
@@ -453,7 +470,7 @@
  	width:100%;
  }
  
-@@ -6615,7 +6584,6 @@
+@@ -6615,7 +6583,6 @@
  
  .CLASS05012 {
  	color: $_(textColorB); /* black */
@@ -461,7 +478,7 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -6725,7 +6693,6 @@
+@@ -6725,7 +6692,6 @@
  
  .CLASS05207 {
  	line-height:15px;
@@ -469,7 +486,7 @@
  }
  
  .CLASS05208 {
-@@ -6778,7 +6745,6 @@
+@@ -6778,7 +6744,6 @@
  
  .CLASS05305 {
  	line-height:15px;
@@ -477,7 +494,7 @@
  }
  
  /* rega\pages\tabs\admin\linkprog.htm */
-@@ -6916,7 +6882,6 @@
+@@ -6916,7 +6881,6 @@
  
  .CLASS05705 {
  	width:572px;
@@ -485,7 +502,7 @@
  }
  
  .CLASS05706 {
-@@ -6929,7 +6894,6 @@
+@@ -6929,7 +6893,6 @@
  
  .CLASS05707 {
  	width:570px;
@@ -493,7 +510,7 @@
  }
  
  /* rega\pages\tabs\favViewer.htm  */
-@@ -7373,7 +7337,6 @@
+@@ -7373,7 +7336,6 @@
  
  .CLASS06413 {
    line-height:15px;
@@ -501,7 +518,7 @@
  }
  
  .CLASS06414 {
-@@ -7777,7 +7740,6 @@
+@@ -7777,7 +7739,6 @@
  }
  
  .CLASS20801 {
@@ -509,7 +526,7 @@
   	color: $_(textColorB); /* black */
  }
  
-@@ -7798,7 +7760,6 @@
+@@ -7798,7 +7759,6 @@
  }
  
  .CLASS20805 {
@@ -517,7 +534,7 @@
  }
  
  .CLASS20806 {
-@@ -7809,7 +7770,6 @@
+@@ -7809,7 +7769,6 @@
    background-color:$_(clickable);
   color: $_(textColorA); /* white */
    vertical-align: middle;
@@ -525,7 +542,7 @@
  }
  
  .CLASS20808 {
-@@ -7825,7 +7785,6 @@
+@@ -7825,7 +7784,6 @@
  .CLASS20810 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -533,7 +550,7 @@
  }
  
  .CLASS20811 {
-@@ -7860,7 +7819,6 @@
+@@ -7860,7 +7818,6 @@
  .CLASS20817 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -541,7 +558,7 @@
  }
  
  .CLASS20818 {
-@@ -7886,7 +7844,6 @@
+@@ -7886,7 +7843,6 @@
  }
  
  .CLASS20901 {
@@ -549,7 +566,7 @@
  }
  
  .CLASS20902 {
-@@ -7928,7 +7885,6 @@
+@@ -7928,7 +7884,6 @@
    color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
    width: 100%;
@@ -557,7 +574,7 @@
  }
  
  .CLASS20910 {
-@@ -7948,7 +7904,6 @@
+@@ -7948,7 +7903,6 @@
  .CLASS20913 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -565,7 +582,7 @@
    width: 100%;
  }
  
-@@ -7961,7 +7916,6 @@
+@@ -7961,7 +7915,6 @@
  }
  
  .CLASS20916 {
@@ -573,7 +590,7 @@
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
  }
-@@ -8021,7 +7975,6 @@
+@@ -8021,7 +7974,6 @@
  }
  
  .CLASS21101 {
@@ -581,7 +598,7 @@
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
  }
-@@ -8043,13 +7996,11 @@
+@@ -8043,13 +7995,11 @@
  }
  
  .CLASS21105 {
@@ -595,7 +612,7 @@
    width: 100%;
  }
  
-@@ -8075,7 +8026,6 @@
+@@ -8075,7 +8025,6 @@
  .CLASS21111 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -603,7 +620,7 @@
  }
  
  .CLASS21112 {
-@@ -8130,7 +8080,6 @@
+@@ -8130,7 +8079,6 @@
  }
  
  .CLASS21201 {
@@ -611,7 +628,7 @@
  }
  
  .CLASS21202 {
-@@ -8144,7 +8093,6 @@
+@@ -8144,7 +8092,6 @@
  }
  
  .CLASS21204 {
@@ -619,7 +636,7 @@
   	color: $_(textColorB); /* black */
  }
  
-@@ -8236,7 +8184,6 @@
+@@ -8236,7 +8183,6 @@
  
  .CLASS21302 {
   	color: $_(textColorB); /* black */
@@ -627,7 +644,7 @@
    text-align:center;
    margin: 5px;
  }
-@@ -8270,7 +8217,6 @@
+@@ -8270,7 +8216,6 @@
  }
  
  .CLASS21401 {
@@ -635,7 +652,7 @@
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
  }
-@@ -8292,7 +8238,6 @@
+@@ -8292,7 +8237,6 @@
  }
  
  .CLASS21405 {
@@ -643,7 +660,7 @@
  }
  
  .CLASS21406 {
-@@ -8321,7 +8266,6 @@
+@@ -8321,7 +8265,6 @@
  .CLASS21410 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -651,7 +668,7 @@
  }
  
  .CLASS21411 {
-@@ -8348,7 +8292,6 @@
+@@ -8348,7 +8291,6 @@
  }
  
  .CLASS21501 {
@@ -659,7 +676,7 @@
  }
  
  .CLASS21502 {
-@@ -8370,7 +8313,6 @@
+@@ -8370,7 +8312,6 @@
  .CLASS21505 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -667,7 +684,7 @@
  }
  
  .CLASS21506 {
-@@ -8406,7 +8348,6 @@
+@@ -8406,7 +8347,6 @@
  }
  
  .CLASS21601 {
@@ -675,7 +692,7 @@
  }
  
  .CLASS21602 {
-@@ -8420,7 +8361,6 @@
+@@ -8420,7 +8360,6 @@
  }
  
  .CLASS21604 {
@@ -683,7 +700,7 @@
   	color: $_(textColorB); /* black */
  }
  
-@@ -8470,7 +8410,6 @@
+@@ -8470,7 +8409,6 @@
  .CLASS21800 {
    width: 100%;
    font-weight: bold;
@@ -691,7 +708,7 @@
    cursor: pointer;
  }
  
-@@ -8547,7 +8486,7 @@
+@@ -8547,7 +8485,7 @@
  
  .CLASS21906 {
    color: $_(red);
@@ -700,7 +717,7 @@
    font-weight: bold;
  }
  
-@@ -8690,7 +8629,6 @@
+@@ -8690,7 +8628,6 @@
  
  .CLASS22100 {
    line-height:14px;
@@ -708,7 +725,7 @@
  }
  
  .CLASS22101 {
-@@ -8882,3 +8820,13 @@
+@@ -8882,3 +8819,13 @@
    border:solid 1px $_(black);
  }
  
@@ -782,7 +799,7 @@
      var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
      var frameY       = parseInt((screenHeight - frameHeight) / 2);
  
-@@ -12272,63 +12294,106 @@
+@@ -12272,63 +12294,107 @@
      
      this.m_layer = document.createElement("div");
      this.m_layer.className = "DialogLayer";
@@ -858,7 +875,8 @@
 +      extraKeys: {"Ctrl-Space": "autocomplete",
 +                  "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); },
 +                  "F11": function(cm) { cm.setOption("fullScreen", !cm.getOption("fullScreen")); },
-+                  "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); }}
++                  "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); },
++                  "Alt-F": "findPersistent" }
 +    });
 +    this.m_input.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.6));
 +
@@ -921,7 +939,7 @@
    },
    
    close: function()
-@@ -12338,8 +12403,8 @@
+@@ -12338,8 +12404,8 @@
    
  });
  
@@ -932,7 +950,7 @@
  
  /**
   * firewallconfigdialog.js
-@@ -22390,6 +22455,9 @@
+@@ -22390,6 +22456,9 @@
    },
    initPopup: function(id)
    {
@@ -942,7 +960,7 @@
      switch(this.id)
      {
        case ID_ROOMS:
-@@ -22449,9 +22517,10 @@
+@@ -22449,9 +22518,10 @@
          break;
        case ID_EDIT_SCRIPT:
          this.setTitle( translateKey("dialogEditScript") /*"Skript bearbeiten"*/ );
@@ -955,7 +973,7 @@
          this.setFile( "/pages/msg/editScript.htm" );
          break;
        case ID_CONTROL_TEST:
-@@ -22559,7 +22628,9 @@
+@@ -22559,7 +22629,9 @@
      }
  
      if (this.draggable) {
@@ -966,7 +984,7 @@
      }
  
    },
-@@ -22715,7 +22786,12 @@
+@@ -22715,7 +22787,12 @@
        onComplete: function(trans)
        {
          //$("messagebox").style.width = t.width + "px";

@@ -413,7 +413,6 @@ a img {
   border: solid 1px $_(black); /* black */
   cursor: pointer;
   border-radius: 5px;
-  font-size: 15px;
   padding-top: 5px;
   padding-bottom: 5px;
 }

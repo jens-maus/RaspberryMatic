@@ -9129,6 +9129,9 @@ Device = Class.create({
     {
       var html = '';
 
+      if (this.enabledServiceMsg === false)
+        html += '<span style="background-color: #FFFF00;">NO&nbsp;SERVICEMSG</span><br/>';
+
       if (this.CONFIG_PENDING === true)
         html += '<span style="background-color: #FFFF00;">CONFIG</span><br/>';
 

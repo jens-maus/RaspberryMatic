@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
-@@ -190,6 +190,14 @@
+@@ -190,6 +190,15 @@
      });
    </script>
   
@@ -8,6 +8,7 @@
 +  <link rel="stylesheet" type="text/css" href="/webui/js/extern/codemirror/addon/hint/show-hint.css?_version_=XXX-WEBUI-VERSION-XXX">
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/lib/codemirror.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/edit/matchbrackets.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
++  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/edit/closebrackets.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/hint/show-hint.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/addon/hint/anyword-hint.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
 +  <script type="text/javascript" src="/webui/js/extern/codemirror/mode/clike/clike.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
@@ -50,7 +51,7 @@
        <%
          integer iThis = 0;
          if(oTmp)
-@@ -28,38 +28,98 @@
+@@ -28,38 +28,99 @@
          }
        %>
        <input id="Text2" type="text" class="CLASS00008" value="<% Write(iThis); %>" />
@@ -98,6 +99,7 @@
 +    mode: "text/x-rega"
 +    autofocus: true,
 +    matchBrackets: true,
++    autoCloseBrackets: true,
 +    lineWrapping: true,
 +    lineNumbers: true,
 +    extraKeys: {"Ctrl-Space": "autocomplete"}
@@ -161,7 +163,7 @@
      var val = $F('Text1');
      var ths = $F('Text2');
      var src = $F('Text3');
-@@ -78,14 +138,14 @@
+@@ -78,14 +139,14 @@
          conInfo( "EditScript: CheckSyntax returned: ["+iseStripAll(t.responseText)+"]" );
          if( iseStripAll(t.responseText).length == 0 )
          {
@@ -763,7 +765,7 @@
      var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
      var frameY       = parseInt((screenHeight - frameHeight) / 2);
  
-@@ -12272,63 +12294,100 @@
+@@ -12272,63 +12294,101 @@
      
      this.m_layer = document.createElement("div");
      this.m_layer.className = "DialogLayer";
@@ -831,6 +833,7 @@
 +      mode: "text/x-rega",
 +      autofocus: true,
 +      matchBrackets: true,
++      autoCloseBrackets: true,
 +      lineWrapping: true,
 +      lineNumbers: true,
 +      extraKeys: {"Ctrl-Space": "autocomplete"}
@@ -896,7 +899,7 @@
    },
    
    close: function()
-@@ -12338,8 +12397,8 @@
+@@ -12338,8 +12398,8 @@
    
  });
  
@@ -907,7 +910,7 @@
  
  /**
   * firewallconfigdialog.js
-@@ -22390,6 +22449,9 @@
+@@ -22390,6 +22450,9 @@
    },
    initPopup: function(id)
    {
@@ -917,7 +920,7 @@
      switch(this.id)
      {
        case ID_ROOMS:
-@@ -22449,9 +22511,10 @@
+@@ -22449,9 +22512,10 @@
          break;
        case ID_EDIT_SCRIPT:
          this.setTitle( translateKey("dialogEditScript") /*"Skript bearbeiten"*/ );
@@ -930,7 +933,7 @@
          this.setFile( "/pages/msg/editScript.htm" );
          break;
        case ID_CONTROL_TEST:
-@@ -22559,7 +22622,9 @@
+@@ -22559,7 +22623,9 @@
      }
  
      if (this.draggable) {
@@ -941,7 +944,7 @@
      }
  
    },
-@@ -22715,7 +22780,12 @@
+@@ -22715,7 +22781,12 @@
        onComplete: function(trans)
        {
          //$("messagebox").style.width = t.width + "px";

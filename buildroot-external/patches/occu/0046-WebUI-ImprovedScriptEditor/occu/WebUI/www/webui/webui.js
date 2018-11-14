@@ -12336,6 +12336,7 @@ HMScriptExecutor = Class.create({
       mode: "text/x-rega",
       autofocus: true,
       matchBrackets: true,
+      autoCloseBrackets: true,
       lineWrapping: true,
       lineNumbers: true,
       extraKeys: {"Ctrl-Space": "autocomplete"}

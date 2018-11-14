@@ -67,7 +67,7 @@
        <%
          integer iThis = 0;
          if(oTmp)
-@@ -28,38 +28,106 @@
+@@ -28,38 +28,141 @@
          }
        %>
        <input id="Text2" type="text" class="CLASS00008" value="<% Write(iThis); %>" />
@@ -119,12 +119,47 @@
 +    lineWrapping: true,
 +    lineNumbers: true,
 +    foldGutter: true,
++    indentUnit: 2,
++    tabSize: 2,
++    indentWithTabs: false,
 +    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
 +    extraKeys: {"Ctrl-Space": "autocomplete",
 +                "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); },
 +                "F11": function(cm) { cm.setOption("fullScreen", !cm.getOption("fullScreen")); },
 +                "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); },
-+                "Alt-F": "findPersistent" }
++                "Alt-F": "findPersistent",
++                "Tab": function(cm) {
++                  if (cm.somethingSelected()) {
++                    var sel = cm.getSelection("\n");
++                    // Indent only if there are multiple lines selected, or if the selection spans a full line
++                    if (sel.length > 0 && (sel.indexOf("\n") > -1 || sel.length === cm.getLine(cm.getCursor().line).length)) {
++                      cm.execCommand("indentMore");
++                      return;
++                    }
++                  }
++                  if (cm.options.indentWithTabs)
++                    cm.execCommand("insertTab");
++                  else
++                    cm.execCommand("insertSoftTab");
++                },
++                "Shift-Tab": function(cm) {
++                  if (cm.somethingSelected()) {
++                    var sel = cm.getSelection("\n");
++                    // Outdent only if there are multiple lines selected, or if the selection spans a full line
++                    if (sel.length > 0 && (sel.indexOf("\n") > -1 || sel.length === cm.getLine(cm.getCursor().line).length)) {
++                      cm.execCommand("indentLess");
++                      return;
++                    }
++                  }
++                  var charSize = cm.options.tabSize;
++                  if (cm.options.indentWithTabs)
++                    charSize = 1;
++                  var c = cm.getCursor();
++                  var lineText = cm.getRange({line: c.line, ch: c.ch - charSize}, {line: c.line, ch: c.ch});
++                  var m = /^(\s+)/.exec(lineText.reverse());
++                  if(m && m.length == 2)
++                    cm.replaceRange('', {line: c.line, ch: c.ch - m[1].length}, {line: c.line, ch: c.ch});
++                }}
 +  });
 +  var codeHeight = parseInt((frameHeight - 64) * 0.6);
 +  editor_code.setSize("100%", codeHeight);
@@ -186,7 +221,7 @@
      var val = $F('Text1');
      var ths = $F('Text2');
      var src = $F('Text3');
-@@ -78,14 +146,14 @@
+@@ -78,14 +181,14 @@
          conInfo( "EditScript: CheckSyntax returned: ["+iseStripAll(t.responseText)+"]" );
          if( iseStripAll(t.responseText).length == 0 )
          {
@@ -800,7 +835,7 @@
      var frameX       = parseInt((screenWidth  - frameWidth)  / 2);
      var frameY       = parseInt((screenHeight - frameHeight) / 2);
  
-@@ -12272,63 +12294,107 @@
+@@ -12272,63 +12294,142 @@
      
      this.m_layer = document.createElement("div");
      this.m_layer.className = "DialogLayer";
@@ -872,12 +907,47 @@
 +      lineWrapping: true,
 +      lineNumbers: true,
 +      foldGutter: true,
++      indentUnit: 2,
++      tabSize: 2,
++      indentWithTabs: false,
 +      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
 +      extraKeys: {"Ctrl-Space": "autocomplete",
 +                  "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); },
 +                  "F11": function(cm) { cm.setOption("fullScreen", !cm.getOption("fullScreen")); },
 +                  "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); },
-+                  "Alt-F": "findPersistent" }
++                  "Alt-F": "findPersistent",
++                  "Tab": function(cm) {
++                    if (cm.somethingSelected()) {
++                      var sel = cm.getSelection("\n");
++                      // Indent only if there are multiple lines selected, or if the selection spans a full line
++                      if (sel.length > 0 && (sel.indexOf("\n") > -1 || sel.length === cm.getLine(cm.getCursor().line).length)) {
++                        cm.execCommand("indentMore");
++                        return;
++                      }
++                    }
++                    if (cm.options.indentWithTabs)
++                      cm.execCommand("insertTab");
++                    else
++                      cm.execCommand("insertSoftTab");
++                  },
++                  "Shift-Tab": function(cm) {
++                    if (cm.somethingSelected()) {
++                      var sel = cm.getSelection("\n");
++                      // Outdent only if there are multiple lines selected, or if the selection spans a full line
++                      if (sel.length > 0 && (sel.indexOf("\n") > -1 || sel.length === cm.getLine(cm.getCursor().line).length)) {
++                        cm.execCommand("indentLess");
++                        return;
++                      }
++                    }
++                    var charSize = cm.options.tabSize;
++                    if (cm.options.indentWithTabs)
++                      charSize = 1;
++                    var c = cm.getCursor();
++                    var lineText = cm.getRange({line: c.line, ch: c.ch - charSize}, {line: c.line, ch: c.ch});
++                    var m = /^(\s+)/.exec(lineText.reverse());
++                    if(m && m.length == 2)
++                      cm.replaceRange('', {line: c.line, ch: c.ch - m[1].length}, {line: c.line, ch: c.ch});
++                  }}
 +    });
 +    this.m_input.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.6));
 +
@@ -940,7 +1010,7 @@
    },
    
    close: function()
-@@ -12338,8 +12404,8 @@
+@@ -12338,8 +12439,8 @@
    
  });
  
@@ -951,7 +1021,7 @@
  
  /**
   * firewallconfigdialog.js
-@@ -22390,6 +22456,9 @@
+@@ -22390,6 +22491,9 @@
    },
    initPopup: function(id)
    {
@@ -961,7 +1031,7 @@
      switch(this.id)
      {
        case ID_ROOMS:
-@@ -22449,9 +22518,10 @@
+@@ -22449,9 +22553,10 @@
          break;
        case ID_EDIT_SCRIPT:
          this.setTitle( translateKey("dialogEditScript") /*"Skript bearbeiten"*/ );
@@ -974,7 +1044,7 @@
          this.setFile( "/pages/msg/editScript.htm" );
          break;
        case ID_CONTROL_TEST:
-@@ -22559,7 +22629,9 @@
+@@ -22559,7 +22664,9 @@
      }
  
      if (this.draggable) {
@@ -985,7 +1055,7 @@
      }
  
    },
-@@ -22715,7 +22787,12 @@
+@@ -22715,7 +22822,12 @@
        onComplete: function(trans)
        {
          //$("messagebox").style.width = t.width + "px";

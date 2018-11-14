@@ -12340,12 +12340,47 @@ HMScriptExecutor = Class.create({
       lineWrapping: true,
       lineNumbers: true,
       foldGutter: true,
+      indentUnit: 2,
+      tabSize: 2,
+      indentWithTabs: false,
       gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
       extraKeys: {"Ctrl-Space": "autocomplete",
                   "Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); },
                   "F11": function(cm) { cm.setOption("fullScreen", !cm.getOption("fullScreen")); },
                   "Esc": function(cm) { if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false); },
-                  "Alt-F": "findPersistent" }
+                  "Alt-F": "findPersistent",
+                  "Tab": function(cm) {
+                    if (cm.somethingSelected()) {
+                      var sel = cm.getSelection("\n");
+                      // Indent only if there are multiple lines selected, or if the selection spans a full line
+                      if (sel.length > 0 && (sel.indexOf("\n") > -1 || sel.length === cm.getLine(cm.getCursor().line).length)) {
+                        cm.execCommand("indentMore");
+                        return;
+                      }
+                    }
+                    if (cm.options.indentWithTabs)
+                      cm.execCommand("insertTab");
+                    else
+                      cm.execCommand("insertSoftTab");
+                  },
+                  "Shift-Tab": function(cm) {
+                    if (cm.somethingSelected()) {
+                      var sel = cm.getSelection("\n");
+                      // Outdent only if there are multiple lines selected, or if the selection spans a full line
+                      if (sel.length > 0 && (sel.indexOf("\n") > -1 || sel.length === cm.getLine(cm.getCursor().line).length)) {
+                        cm.execCommand("indentLess");
+                        return;
+                      }
+                    }
+                    var charSize = cm.options.tabSize;
+                    if (cm.options.indentWithTabs)
+                      charSize = 1;
+                    var c = cm.getCursor();
+                    var lineText = cm.getRange({line: c.line, ch: c.ch - charSize}, {line: c.line, ch: c.ch});
+                    var m = /^(\s+)/.exec(lineText.reverse());
+                    if(m && m.length == 2)
+                      cm.replaceRange('', {line: c.line, ch: c.ch - m[1].length}, {line: c.line, ch: c.ch});
+                  }}
     });
     this.m_input.setSize("100%", parseInt((this.m_frame.getContentHeight()-70) * 0.6));
 

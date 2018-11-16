@@ -1,0 +1,18 @@
+#!/bin/sh
+
+
+if [ -e /etc/config/neoDisabled ];then
+    exit 0
+fi
+
+if [ -e /usr/local/addons/mediola/Disabled ];then
+	exit 0
+fi
+
+
+
+PIDOFD=`ps ax |grep node |grep automation.js |awk '{print $1}'` 
+
+if [ -z "$PIDOFD" ]; then
+		/usr/local/etc/config/rc.d/97NeoServer start		
+fi

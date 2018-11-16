@@ -9,6 +9,11 @@ if ! grep -q "ID mediola CONFIG_NAME NEOServer" /etc/config/hm_addons.cfg 2>/dev
   $BASE_DIR/install.tcl
 fi
 
+if [ ! "$(readlink $WWW_DIR)" = "$BASE_DIR/www" ]; then
+  rm -rf $WWW_DIR
+  ln -sf $BASE_DIR/www $WWW_DIR
+fi
+
 if [ ! -e $PLUGIN_DIR ] ; then
 
   rm -rf $USER_DIR
@@ -18,12 +23,8 @@ if [ ! -e $PLUGIN_DIR ] ; then
   chmod -R 777 $USER_DIR
   chown -R root:root $USER_DIR
    
-  rm -rf $WWW_DIR
-  ln -s $PLUGIN_DIR/www $WWW_DIR
-
-  mkdir -p $PLUGIN_DIR
-  tar -C $PLUGIN_DIR -xf /opt/mediola/pkg/neo_server.tar.gz --strip-components=1 data/
-  touch $PLUGIN_DIR/Disabled
+  mkdir -p /usr/local/addons
+  tar -C /usr/local/addons -xf /opt/mediola/pkg/mediola.tar.gz
 
   ln -sf /usr/local/addons/mediola/rc.d/97NeoServer /etc/config/rc.d/97NeoServer
 

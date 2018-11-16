@@ -1,0 +1,41 @@
+{
+    "name": "neo_server",
+    "version": "2.3.4",
+    "main": "index.html",
+    "config": {
+        "WEB_SERVER_PORT": 8088,
+        "DATA_FOLDER": "/etc/config/addons/mediola",
+        "APP_FOLDER": "/etc/config/addons/mediola",
+	"LOG_ROOT": "/var/log/neo_server"
+    },
+    "window": {
+        "frame": true,
+        "width": 300,
+        "height": 300,
+        "icon": "./images/icon.png",
+        "show": true,
+        "show_in_taskbar": true,
+        "title": "NEO SERVER",
+        "position": "mouse"
+    },
+    "dependencies": {
+        "adm-zip": "*",
+        "archiver": "*",
+        "async": "*",
+        "aws-sdk": "*",
+        "big-integer": "1.3.18",
+        "body-parser": "*",
+        "cron": "*",
+        "express": "*",
+        "fs-extra": "*",
+        "loop-protect": "0.9.0",
+        "md5": "*",
+        "moment-timezone": "*",
+        "node-dir": "*",
+        "suncalc": "*",
+        "unorm": "*",
+        "winreg": "1.2.2",
+        "ws": "*",
+        "node-localstorage": "*"
+    }
+}

@@ -24,8 +24,29 @@ start() {
   echo -n "Starting NeoServer: "
 
   if [[ ! -e /etc/config/safemode ]]; then
-    /opt/mediola/startup.sh 2>/dev/null >/dev/null
-    /usr/local/addons/mediola/bin/watchdog
+
+    # perform an automatic update of the neo server addon
+    # if outdated.
+    if [[ -d /usr/local/addons/mediola ]]; then
+      function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+      if [[ $(version $(cat /opt/mediola/VERSION )) -gt $(version $(cat /usr/local/addons/mediola/VERSION )) ]]; then
+        DISABLED=0
+        [[ -f /usr/local/addons/mediola/Disabled ]] && DISABLED=1
+
+        rm -rf /usr/local/addons/mediola
+        /opt/mediola/startup.sh 2>/dev/null
+
+        [[ ${DISABLED} -eq 0 ]] && rm -f /usr/local/addons/mediola/Disabled
+      fi
+    fi
+
+    if [[ ! -e /usr/local/addons/mediola/Disabled ]]; then
+      /opt/mediola/startup.sh 2>/dev/null >/dev/null
+      /usr/local/addons/mediola/bin/watchdog
+      echo "OK"
+    else
+      echo "disabled"
+    fi
   else
     echo "skipping (safemode)"
   fi

@@ -585,6 +585,25 @@ fwinstall()
 
       echo -ne "OK, "
 
+      # on the tinkerboard platform we have to check if we can
+      # update U-Boot as well.
+      if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]]; then
+        BOOTFS_ROOTDEV=$(/sbin/blkid | grep -v "${LOFS_DEV}" | grep PTTYPE | cut -f1 -d:)
+        BOOTFS_START=$(/sbin/fdisk -l ${BOOTFS_ROOTDEV} | grep FAT32 | head -1 | awk '{ printf $3 }')
+        BOOTFS_LOOPROOTDEV=$(/sbin/blkid | egrep "${LOFS_DEV}.*PTTYPE" | cut -f1 -d:)
+        BOOTFS_LOOPSTART=$(/sbin/fdisk -l ${BOOTFS_LOOPROOTDEV} | grep FAT32 | head -1 | awk '{ printf $3 }')
+        echo -ne "updating U-Boot..."
+        if [[ "${BOOTFS_START}" == "${BOOTFS_LOOPSTART}" ]] && [[ "${BOOTFS_LOOPSTART}" == "2048" ]]; then
+          /bin/dd if=${BOOTFS_LOOPROOTDEV} of=${BOOTFS_ROOTDEV} bs=32K count=31 seek=1 skip=1 conv=fsync status=none
+          if [[ $? -ne 0 ]]; then
+            echo "ERROR: (dd)<br/>"
+            exit 1
+          fi
+          echo -ne "OK, "
+        else
+          echo -ne "WARNING (${BOOTFS_START}:${BOOTFS_LOOPSTART}), "
+        fi
+      fi
     fi
 
     # find out the rootfs loop device node

@@ -306,12 +306,30 @@
     * Startet die Akualisierung eines Geräts.
     **/
    beginUpdateDevice:function(id, callback)
-@@ -15973,6 +16153,8 @@
- 
-     this.userIsNoExpert = homematic("User.isNoExpert", {"id": userId});
-     
-+    DeviceList.updateDeviceStatus();
+@@ -10698,6 +10878,8 @@
+         conInfo(e);
+       }
+     });
 +
-     this.mode        = this.MODE.TREE;
-     this.sortId      = "NAME";
-     this.sortDescend = false;
++    DeviceList.updateDeviceStatus();
+   }
+ });
+ /**
+@@ -10988,6 +11170,8 @@
+ 
+     translateJSTemplate("#MultiChannelChooserDialog");
+     translatePage(".MultiChannelChooserRow");
++
++    DeviceList.updateDeviceStatus();
+   }
+     
+ });
+@@ -16506,6 +16690,8 @@
+     translateJSTemplate("#DeviceListTable");
+     translatePage(".j_rooms, .j_functions"); // this translates the room name as well the function name within the main devicelist (Settings > Devices)
+     translateFilter(); // this translates the filter in the header of the page
++
++    DeviceList.updateDeviceStatus();
+   },
+   
+   onRemoveDevice: function(whatEver)

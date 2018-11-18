@@ -10878,6 +10878,8 @@ ChannelChooser = Singleton.create({
         conInfo(e);
       }
     });
+
+    DeviceList.updateDeviceStatus();
   }
 });
 /**
@@ -11168,6 +11170,8 @@ MultiChannelChooser = Singleton.create({
 
     translateJSTemplate("#MultiChannelChooserDialog");
     translatePage(".MultiChannelChooserRow");
+
+    DeviceList.updateDeviceStatus();
   }
     
 });
@@ -16153,8 +16157,6 @@ if (PLATFORM == "Central") {
 
     this.userIsNoExpert = homematic("User.isNoExpert", {"id": userId});
     
-    DeviceList.updateDeviceStatus();
-
     this.mode        = this.MODE.TREE;
     this.sortId      = "NAME";
     this.sortDescend = false;
@@ -16688,6 +16690,8 @@ if (PLATFORM == "Central") {
     translateJSTemplate("#DeviceListTable");
     translatePage(".j_rooms, .j_functions"); // this translates the room name as well the function name within the main devicelist (Settings > Devices)
     translateFilter(); // this translates the filter in the header of the page
+
+    DeviceList.updateDeviceStatus();
   },
   
   onRemoveDevice: function(whatEver)

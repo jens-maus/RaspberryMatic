@@ -62,6 +62,7 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 * Any of the following embedded hardware boards:
   * [RaspberryPi3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
   * [RaspberryPi3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
+  * [RaspberryPi3 Model A+](https://www.raspberrypi.org/products/raspberry-pi-3-model-a-plus/}
   * [RaspberryPi2 Model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
   * [RaspberryPi Compute Module 3](https://www.raspberrypi.org/products/compute-module-3/)
   * [RaspberryPi Compute Module 3 lite](https://www.raspberrypi.org/products/compute-module-3-lite/)

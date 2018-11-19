@@ -880,7 +880,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     name: "clike",
     keywords: words(
       /* statements */
-      "if while foreach return quit for else elseif " +
+      "if while foreach return quit else elseif " +
 
       /* calls */
       "Call Write WriteLine WriteURL WriteXML WriteHTML Debug Dump"
@@ -889,7 +889,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
       "var boolean integer real string time object idarray xml"
     ),
     multiLineStrings: true,
-    blockKeywords: words("if while foreach for else elseif"),
+    blockKeywords: words("if while foreach else elseif"),
     defKeywords: words(
       "system dom root devices channels datapoints structure scheduler xmlrpc interfaces tcap web"
     ),
@@ -897,13 +897,18 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
       "null true false currenttime localtime on off up down higher lower " +
       "M_E M_LOG2E M_LOG10E M_LN2 M_LN10 M_PI M_PI_2 M_PI_4 M_1_PI M_2_PI " +
       "M_2_SQRTPI M_SQRT2 M_SQRT1_2 " +
-      "OT_OBJECT OT_ENUM OT_ROOT OT_DOM OT_DEVICE OT_DEVICES OT_MESSAGE OT_CHANNEL " +
+      "OT_NONE OT_OBJECT OT_ENUM OT_ROOT OT_DOM OT_DEVICE OT_DEVICES OT_MESSAGE OT_CHANNEL " +
       "OT_CHANNELS OT_DP OT_DPS OT_TIMERDP OT_CALENDARDP OT_CALENDARDPS OT_MAPDP " +
       "OT_VARDP OT_COMMDP OT_ALARMDP OT_IPDP OT_UPNPDP OT_KNXDP OT_OCEANDP OT_RFDP " +
       "OT_IRDP OT_HSSDP OT_HISTORYDP OT_USER OT_USERS OT_SCHEDULER OT_USERPAGE " +
       "OT_INTERFACE OT_INTERFACES OT_PROGRAM OT_SMTPSRV OT_POPCLIENT OT_RULE " +
       "OT_RULES OT_CONDITION OT_SINGLECONDITION OT_DESTINATION OT_SINGLEDESTINATION " +
-      "OT_UIDATA OT_FAVORITE OT_XMLNODE OT_XMLNODES " +
+      "OT_UIDATA OT_FAVORITE OT_XMLNODE OT_XMLNODES OT_ALL " +
+      "etUnknown etRooms etRoom etFunctions etFunction etFavorites etFavorite " +
+      "etStructure etLinks etScenes etCircuits etContacts etAlarms etAlarmMaps " +
+      "etUserPages etHistoryDPs etUPnP etEnocean etRF etIR etUsers etPrograms " +
+      "etPresenceSimulation etViewObjects etMessages etInterfaces etUIData " +
+      "etSystemVars etServices etRules etCalendarDPs etXmlNodes " +
       "ID_DOM ID_ROOT ID_DEVICES ID_CHANNELS ID_DATAPOINTS ID_STRUCTURE ID_USERS " +
       "ID_USERPAGES ID_INTERFACES ID_VALUE_EVENTING ID_EVENTING ID_GW_DEVICE " +
       "ID_GW_CHANNEL ID_GW_DATAPOINT ID_PROGRAMS ID_HISTORYDPS ID_SMTPSERVER " +
@@ -916,14 +921,48 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
       "ID_ROOMS ID_FUNCTIONS ID_FAVORITES ID_LINKS ID_SCENES ID_CIRCUITS " +
       "ID_CONTACTS ID_ALARM_MAPS ID_ALARMS ID_UPNP ID_UPNP_BEGIN ID_UPNP_DISCOVER " +
       "ID_ENOCEAN ID_RF ID_SERVER_DP ID_PRESENT ID_ERROR " +
-      "atGeneric asNone asOncoming asReceipted "
+      "pppNone pppServer pppClient " +
+      "ictUnknown ictBinaryTrigger ictBinarySensor ictBinaryActuator ictDimmingSensor " +
+      "ictDimmingActuator ictShutterSensor ictShutterActuator ictBitMask ictHeating " +
+      "ictTimeServer ictTimeClient ictMessage ictScalingSensor ictScalingActuator " +
+      "ictFloatSensor ictFloatActuator ictHSS ictDoorWindowContact ictSmokeDetector " +
+      "ictWaterDetector ictMotionDetector ictWeatherStation ictStateVariables " +
+      "ictCommunication ictBlindActuator ictHSSBinaryActuator ictHSSDimmingActuator " +
+      "ictInput ictMaintenance ictCentralMaintenance ictVirtualKey ictKey " +
+      "ictHSSListener ictHSSKeyMatic ictHSSWinMatic ictHSSBlind ictHSSDoorWindowContact " +
+      "ictHSSWindowRotarySensor " +
+      "ivtEmpty ivtNull ivtBinary ivtToggle ivtFloat ivtRelScaling ivtScaling " +
+      "ivtByte ivtWord ivtDWord ivtBitMask ivtDate ivtTime ivtDateTime ivtString " +
+      "ivtSceneNumber ivtInteger ivtObjectId ivtSystemId ivtCurrentValue ivtCurrentDateTime " +
+      "ivtCurrentDate ivtCurrentTime ivtSunrise ivtSunset ivtDelay ivtCalMonthly " +
+      "ivtCalYearly ivtCalOnce ivtCalDaily ivtCalWeekly ivtDeviceId ivtSpecialValue " +
+      "istGeneric istSwitch istBool istEnable istStep istUpDown istAlarm istOpenClose " +
+      "istStopStart istState istPresent istByteCounter istCharAscii istChar8859 " +
+      "istWordCounter istDWordCounter istTemperature istVelocity istLux " +
+      "istDegree istValueS istValueU istSMS istEMail istStopStart istByteUCounter " +
+      "istIntUCounter istPercent istHumidity istAction istEnum " +
+      "OPERATION_NONE OPERATION_READ OPERATION_WRITE OPERATION_EVENT OPERATION_ALL " +
+      "ttOnce ttDaily ttWeekdays ttPeriodic ttCalWeekly ttCalMonthly ttCalYearly " +
+      "ttCalOnce ttCalDaily " +
+      "sotNone sotSunrise sotBeforeSunrise sotAfterSunrise sotSunset sotBeforeSunset " +
+      "sotAfterSunset " +
+      "mtNone mtLink mtScene mtCircuit " +
+      "ctNone ctSMTP ctSMTPvisaSOAP ctSMSviaSOAP ctMMSviaSOAP ctMSGviaSOAP " +
+      "atGeneric atEmergency atFire atBurglary atSystem atService " +
+      "asNone asOncoming asReceipted " +
+      "iulNone iulGuest iulUser iulMainuser iulAdmin iulOtherThanAdmin " +
+      "dwcAuto dwcPDA dwcHandy dwcPC " +
+      "iarNone iarRead iarWrite iarCreate iarChange iarExecute iarFullAccess " +
+      "OPERATOR_NONE OPERATOR_AND OPERATOR_OR OPERATOR_XOR " +
+      "iufNone iufVisible iufInternal iufReadyState iufOperated iufVirtualChn " +
+      "iufReadable iufWriteable iufEventable iufAll"
     ),
     indentStatements: false,
     indentSwitch: false,
     isOperatorChar: /[+\-*&%=<>!?|\/#:@]/,
     hooks: {
       "@": function(stream) {
-        stream.eatWhile(/[\w\$_]/);
+        stream.eatWhile(/[0-9 :-]/);
         return "meta";
       },
       '"': function(stream, state) {

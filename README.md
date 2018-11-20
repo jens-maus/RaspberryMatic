@@ -8,7 +8,7 @@
 ![License](https://img.shields.io/github/license/jens-maus/RaspberryMatic.svg?style=flat-square)
 [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
 
-The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded devices like the [RaspberryPi](https://www.raspberrypi.org/) or [Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full operating system image that can be flashed and then used in a RaspberryPi/Tinkerboard as the main operating system for controlling all HomeMatic compatible devices with full compatibility to a CCU device directly sold by eQ-3.
+The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible distribution for embedded single board computers (SBC) like the [RaspberryPi](https://www.raspberrypi.org/) or [Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full operating system image that can be flashed and then used in a RaspberryPi/Tinkerboard as the main operating system for controlling all HomeMatic compatible devices with full compatibility to a CCU device directly sold by eQ-3.
 
 ## :cookie: Features
 * 100% HomeMatic [CCU2](http://www.eq-3.com/products/homematic/control-units-and-gateways/homematic-central-control-unit-ccu2.html)/[CCU3](http://www.eq-3.com/products/homematic/control-units-and-gateways/-473.html) system compliant using latest [OCCU](https://github.com/eq-3/occu) software environment
@@ -25,7 +25,7 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 ## :cake: Exclusive Features (not available in CCU2/CCU3 firmware)
 * Fully compatible to all available [RaspberryPi](https://www.raspberrypi.org/) and [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/) hardware models on the market.
 * Integration of latest [community version of ReGaHss](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) comming with [latest features and bugfixes](https://github.com/jens-maus/RaspberryMatic/projects/2) in logic engine.
-* Integration of [third-party patches](https://github.com/jens-maus/RaspberryMatic/projects/3) for an improved WebUI experience.
+* Integration of over 40 [third-party patches](https://github.com/jens-maus/RaspberryMatic/projects/3) for an improved WebUI experience.
 * Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
 * Support to be used without GPIO RF module just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
@@ -116,7 +116,7 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [HomeMatic Virtual Interface](https://github.com/thkl/Homematic-Virtual-Interface)
 
 ## :cloud: Installation
-The installation of RaspberryMatic is quite straight forward as it is delivered as a full SD card image that can be directly flashed onto a microSD card and put into the corresponding RaspberryPi. As such the installation consists of the following basic steps:
+The installation of RaspberryMatic is quite straight forward as it is delivered as a full system image that can be directly flashed onto a microSD / eMMC and put into the corresponding SBC. As such the installation consists of the following basic steps:
 
 1. [Download latest release](https://github.com/jens-maus/RaspberryMatic/releases) archive (`RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.zip`) for the hardware platform you are using:
    * `wget https://github.com/jens-maus/RaspberryMatic/releases/download/X.XX.XX.YYYYMMDD/RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.zip`
@@ -127,12 +127,12 @@ The installation of RaspberryMatic is quite straight forward as it is delivered 
 4. Use the  image flasher tool "Etcher" (https://etcher.io) to flash the `*.img` file to your SD card or USB drive. As an alternative you can also use the following command-line calls to manually flash it on Unix-based operating systems:
    * <i>Linux</i>: `sudo dd if=RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.img of=/dev/mmcblk0 bs=1M conv=fsync`
    * <i>macOS</i>: `sudo dd if=RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.img of=/dev/rdiskX bs=1m`
-5. For HM-MOD-RPI-PCB use only: Make sure you have the HM-MOD-RPI-PCB radio module installed on the GPIO
-6. Install microSD in your RaspberryPi and connect power
+5. For RPI-RF-MOD/HM-MOD-RPI-PCB use only: Make sure you have the RPI-RF-MOD/HM-MOD-RPI-PCB radio module correctly installed on the GPIO
+6. Install microSD in your SBC and connect power
 7. Wait until bootup process is finished and use a web browser to connect to http://homematic-raspi/
 
 ## :memo: Documentation
-Documentation (e.g. how to port your HomeMatic configuration from a CCU2 to RaspberryMatic) and installation support is currently limited to using a mostly german language speaking fora with the following links pointing to the relevant sections of the fora where you can find documentation and help about RaspberryMatic:
+Documentation (e.g. how to port your HomeMatic configuration from a CCU2/CCU3 to RaspberryMatic) and installation support is currently limited to using a mostly german language speaking fora with the following links pointing to the relevant sections of the fora where you can find documentation and help about RaspberryMatic:
 
 * [RaspberryMatic - Installation Guide :de:](https://homematic-forum.de/forum/viewtopic.php?f=65&t=34497#p328057)
 * [RaspberryMatic - Forum :de:](https://homematic-forum.de/forum/viewforum.php?f=65)

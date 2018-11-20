@@ -168,7 +168,7 @@ $ cd HelloWorld
 $ <path-to-RaspberryMatic-build>/build-raspmatic_rpi3/host/usr/bin/arm-linux-gcc -o HelloWorld HelloWorld.c
 ```
 
-A valid alternative for building RaspberryMatic ARM-hardfloat compatible binaries is to use the linaro based Linux cross compiler suite supplied [here](https://github.com/raspberrypi/tools/tree/master/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian).
+A valid alternative for building RaspberryMatic ARM-hardfloat compatible binaries is to use the following Linux cross compiler suite [supplied by the RaspberryPi foundation](https://github.com/raspberrypi/tools/tree/master/arm-bcm2708/arm-rpi-4.9.3-linux-gnueabihf).
 
 ## :scroll: License
 The RaspberryMatic build environment itself – the files found in this git repository – as well as the RaspberryMatic sd card images are licensed under the conditions of the [Apache License 2.0](https://opensource.org/licenses/Apache-2.0). Please note, however, that the buildroot distribution RaspberryMatic is using is licensed under the [GPLv2](http://www.gnu.org/licenses/gpl-2.0.html) license instead. Furthermore, the [eQ-3 OCCU](https://github.com/eq-3/occu) software RaspberryMatic is using to provide HomeMatic-based services is licensed under the ([HMSL](https://github.com/eq-3/occu/blob/master/LicenseDE.txt)).

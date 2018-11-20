@@ -59,11 +59,18 @@ case "$1" in
     ;;
     
   uninstall)
+  	touch /etc/config/neoDisabled
+	 if [ -d /opt/mediola/www ];then
+	 		rm /usr/local/etc/config/addons/www/mediola
+	     	ln -s /opt/mediola/www/ /usr/local/etc/config/addons/www/mediola
+  		else
+  		#	${ADDONDIR}/update_addon mediola
+  			 rm -rf ${CONFIGDIR}/addons/www/mediola
+    fi
 	do_stop
-	touch /etc/config/neoDisabled
-	${ADDONDIR}/update_addon mediola
+
+	#${ADDONDIR}/update_addon mediola
     rm -rf ${ADDONDIR}
-    rm -rf ${CONFIGDIR}/addons/www/mediola
     rm /etc/config/rc.d/97NeoServer 
     echo "OK"
     ;;

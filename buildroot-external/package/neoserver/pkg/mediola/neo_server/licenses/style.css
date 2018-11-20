@@ -1,0 +1,146 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(../app/fonts/Open_Sans/OpenSans-Light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(../app/fonts/Open_Sans/OpenSans-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(../app/fonts/Open_Sans/OpenSans-Semibold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(../app/fonts/Open_Sans/OpenSans-Bold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Open Sans Extrabold'), local('OpenSans-Extrabold'), url(../app/fonts/Open_Sans/OpenSans-ExtraBold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 300;
+  src: local('Open Sans Light Italic'), local('OpenSansLight-Italic'), url(../app/fonts/Open_Sans/OpenSans-LightItalic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(../app/fonts/Open_Sans/OpenSans-Italic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 600;
+  src: local('Open Sans Semibold Italic'), local('OpenSans-SemiboldItalic'), url(../app/fonts/Open_Sans/OpenSans-SemiboldItalic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(../app/fonts/Open_Sans/OpenSans-BoldItalic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 800;
+  src: local('Open Sans Extrabold Italic'), local('OpenSans-ExtraboldItalic'), url(../app/fonts/Open_Sans/OpenSans-ExtraBoldItalic.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'DejaVu Sans Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: local('DejaVu Sans Mono'), local('DejaVuSansMono'), url(../app/fonts/dejavu-fonts-ttf-2.35/ttf/DejaVuSansMono.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'DejaVu Sans Mono';
+  font-style: normal;
+  font-weight: 700;
+  src: local('DejaVu Sans Mono Bold'), local('DejaVuSansMono-Bold'), url(../app/fonts/dejavu-fonts-ttf-2.35/ttf/DejaVuSansMono-Bold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'DejaVu Sans Mono';
+  font-style: italic;
+  font-weight: 700;
+  src: local('DejaVu Sans Mono BoldOblique'), local('DejaVuSansMono-BoldOblique'), url(../app/fonts/dejavu-fonts-ttf-2.35/ttf/DejaVuSansMono-BoldOblique.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'DejaVu Sans Mono';
+  font-style: italic;
+  font-weight: 400;
+  src: local('DejaVu Sans Mono Oblique'), local('DejaVuSansMono-Oblique'), url(../app/fonts/dejavu-fonts-ttf-2.35/ttf/DejaVuSansMono-Oblique.ttf) format('truetype');
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-color: #E6E6E6;
+    color: #000000;
+    display: flex;
+    font-family: "Open Sans", sans-serif;
+    font-size: 12px;
+}
+
+#software {
+    flex-grow: 0;
+    flex-shrink: 0;
+    list-style: none;
+    overflow-y: auto;
+}
+
+    #software li {
+        cursor: pointer;
+        padding: 6px 20px;
+    }
+
+    #software li:hover {
+        background-color: #FF9C00;
+    }
+
+    #software li.active {
+        background-color: #FFFFFF;
+    }
+
+        #software .name {
+            display: block;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        #software .type {
+            color: #303030;
+            display: block;
+            font-size: 10px;
+        }
+
+#license {
+    border: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-family: "DejaVu Sans Mono", monospace;
+    outline: none;
+    padding: 10px;
+    resize: none;
+}

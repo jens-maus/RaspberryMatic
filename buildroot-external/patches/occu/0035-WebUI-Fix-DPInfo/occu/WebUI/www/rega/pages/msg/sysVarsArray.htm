@@ -55,7 +55,7 @@
           { 
             Write("tmp['type'] = 'enum';");
             Write("tmp['typenames'] = translateKey('lblValueList');");
-            Write("tmp['values'] = '"#oSysVar.ValueList()#"';");
+            Write("tmp['values'] = '"#oSysVar.ValueList().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"';");
           }
           if (iVST == istBool)
           { 

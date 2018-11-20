@@ -20,6 +20,15 @@
  
            ! "Set once when the system is starting for the first time by hm_autoconf - see create_sysvars
            ! The text of the description is then fix either german or english. Therefore we have to translate the value here
+@@ -57,7 +57,7 @@
+           { 
+             Write("tmp['type'] = 'enum';");
+             Write("tmp['typenames'] = translateKey('lblValueList');");
+-            Write("tmp['values'] = '"#oSysVar.ValueList()#"';");
++            Write("tmp['values'] = '"#oSysVar.ValueList().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"';");
+           }
+           if (iVST == istBool)
+           { 
 --- occu/WebUI/www/rega/pages/msg/sysVarsArray.htm.orig
 +++ occu/WebUI/www/rega/pages/msg/sysVarsArray.htm
 @@ -19,7 +19,7 @@
@@ -31,6 +40,26 @@
  
            ! "Set once when the system is starting for the first time by hm_autoconf - see create_sysvars
            ! The text of the description is then fix either german or english. Therefore we have to translate the value here
+@@ -55,7 +55,7 @@
+           { 
+             Write("tmp['type'] = 'enum';");
+             Write("tmp['typenames'] = translateKey('lblValueList');");
+-            Write("tmp['values'] = '"#oSysVar.ValueList()#"';");
++            Write("tmp['values'] = '"#oSysVar.ValueList().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"';");
+           }
+           if (iVST == istBool)
+           { 
+--- occu/WebUI/www/rega/pages/tabs/admin/msg/newSysVar.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/msg/newSysVar.htm
+@@ -378,7 +378,7 @@
+         Write("loadIntEdit('"#sv.ValueMin()#"', '"#sv.ValueMax()#"');");
+       }
+       if (sv.ValueSubType() == istEnum) {
+-        Write("loadValueEdit('"#sv.ValueList()#"');");
++        Write("loadValueEdit('"#sv.ValueList().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"');");
+       }
+       if (sv.ValueSubType() == istBool) {
+         Write("loadLogicEdit('"#sv.ValueName1()#"', '"#sv.ValueName0()#"');");
 --- occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm
 @@ -143,7 +143,7 @@

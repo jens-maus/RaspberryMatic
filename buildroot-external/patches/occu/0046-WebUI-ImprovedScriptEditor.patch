@@ -744,7 +744,15 @@
    cursor: pointer;
  }
  
-@@ -8547,7 +8485,7 @@
+@@ -8518,7 +8456,6 @@
+ 
+ .CLASS21901 {
+   line-height:15px;
+-  font-size:smaller;
+ }
+ 
+ .CLASS21902 {
+@@ -8547,7 +8484,7 @@
  
  .CLASS21906 {
    color: $_(red);
@@ -753,7 +761,7 @@
    font-weight: bold;
  }
  
-@@ -8690,7 +8628,6 @@
+@@ -8690,7 +8627,6 @@
  
  .CLASS22100 {
    line-height:14px;
@@ -761,7 +769,7 @@
  }
  
  .CLASS22101 {
-@@ -8882,3 +8819,13 @@
+@@ -8882,3 +8818,13 @@
    border:solid 1px $_(black);
  }
  

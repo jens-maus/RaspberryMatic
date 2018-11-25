@@ -153,7 +153,7 @@ if {[isOldCCU]} {
     <!-- Zusatzsoftware -->
     <td>
       <div class="cpButton">
-        <div  class="StdTableBtn CLASS21701" onclick="showSoftwareCP();">${btnSysConfAdditionalSoft}</div>
+        <div class="StdTableBtn CLASS21701" onclick="showSoftwareCP();">${btnSysConfAdditionalSoft}</div>
         <div class="StdTableBtnHelp"><img id="showSoftwareCPHelp" src="/ise/img/help.png"></div>
       </div>
     </td>
@@ -174,9 +174,8 @@ if {[isOldCCU]} {
   if {[getProduct] >= 3} {
     puts {
       <!-- Button accesspoint settings -show this button only for a CCU version >= 3 -->
-
         <td>
-          <div  class="StdTableBtn CLASS21701" onclick="WebUI.enter(CreateAccessPointSettings)">${btnAccessPointSettings}</div>
+          <div class="StdTableBtn CLASS21701" onclick="WebUI.enter(CreateAccessPointSettings)">${btnAccessPointSettings}</div>
           <div class="StdTableBtnHelp"><img id="showAccessPointSettingsCPHelp" src="/ise/img/help.png"></div>
         </td>
     }
@@ -193,7 +192,7 @@ if {[isOldCCU]} {
   }
 
 set COL_COUNT 4
-set i 1
+set i 2
 
 if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
   puts "<td><div class=\"cpButton\">"

@@ -416,7 +416,7 @@ proc FirewallInternal::Firewall_configureFirewallMostOpen { } {
 	
 	#block internal ports 
 	foreach port $service(PORTS) {
-        if { $port < 40000 && ![string equal "SNMP" $serviceName] } {
+        if { $port < 10000 && ![string equal "SNMP" $serviceName] && ![string equal "NEOSERVER" $serviceName] } {
             try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 3$port -j DROP"  
             if {$has_ip6tables} {      
                 try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 3$port -j DROP"

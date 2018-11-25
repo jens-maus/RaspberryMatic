@@ -27,6 +27,10 @@ init() {
   if [[ -e /etc/config/hs485d.conf ]]; then
     cp /etc/config/hs485d.conf /var/etc
     sed -i -e 's/^Listen\s\+Port\s*=.*$/Listen Port = 32000/' /var/etc/hs485d.conf
+
+    # workaround for hs485dLoader not propagating the path to
+    # hs485d.conf to the hs485 daemon
+    sed -i -e 's/^Listen\s\+Port\s*=.*$/Listen Port = 32000/' /etc/config/hs485d.conf
   fi
 
   # check for differences in /etc/config/InterfacesList.xml between

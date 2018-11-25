@@ -174,6 +174,7 @@ if {[isOldCCU]} {
   if {[getProduct] >= 3} {
     puts {
       <!-- Button accesspoint settings -show this button only for a CCU version >= 3 -->
+
         <td>
           <div  class="StdTableBtn CLASS21701" onclick="WebUI.enter(CreateAccessPointSettings)">${btnAccessPointSettings}</div>
           <div class="StdTableBtnHelp"><img id="showAccessPointSettingsCPHelp" src="/ise/img/help.png"></div>

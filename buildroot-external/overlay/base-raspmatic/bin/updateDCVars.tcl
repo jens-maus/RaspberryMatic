@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.0
+# DutyCycle Script v3.1
 # Copyright (c) 2018 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -183,7 +183,7 @@ proc setDutyCycleSV {name desc value serial} {
 
 # get all bidcos interface status using a listBidcosInterfaces
 # XMLRPC query
-set result [catch {set gateways [xmlrpc http://127.0.0.1:2001/ listBidcosInterfaces]}]
+set result [catch {set gateways [xmlrpc http://127.0.0.1:32001/ listBidcosInterfaces]}]
 if {$result == 0} {
 
   # iterate over all gateways returned by listBidcosInterfaces
@@ -242,7 +242,7 @@ if {$result == 0} {
 cfg::parse_file /etc/config/hs485d.conf
 if {[llength [cfg::sections]] > 1} {
   set connected "false"
-  set result [catch {set gateways [xmlrpc http://127.0.0.1:2000/ getLGWStatus]}]
+  set result [catch {set gateways [xmlrpc http://127.0.0.1:32000/ getLGWStatus]}]
   if {$result == 0} {
     foreach _gateway $gateways {
       array set gateway $_gateway

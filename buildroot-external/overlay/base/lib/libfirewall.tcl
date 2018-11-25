@@ -558,10 +558,10 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
 # Prüft ob es sich um eine IPv4 Adresse handelt. Gibt 1 zurück bei IPv4, ansonsten 0.
 ##
 proc FirewallInternal::IsIPV4 { address } {
-  if { [string first "." address] == -1 } {
-    return 1  
+  if { [string first "." $address] == -1 } {
+    return 0  
   } else {
-    return 0
+    return 1
   }
 }
 

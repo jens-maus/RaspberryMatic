@@ -66,7 +66,7 @@ set Firewall_LOG_ENABLED 0
 # eingeschränktem Zugriff eine Verwendung des jeweiligen Serices noch erlaubt
 # ist.
 ##
-set Firewall_IPS [list 192.168.0.1 192.168.0.0/16 fc00::/7]
+set Firewall_IPS [list 192.168.0.1 192.168.0.0/16 fc00::/7 fe80::/10]
 
 #------------------------------------------------------------------------------
 

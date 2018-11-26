@@ -414,19 +414,18 @@ proc FirewallInternal::Firewall_configureFirewallMostOpen { } {
 			}
 		}
 	
-	#block internal ports 
-  if { [string equal "XMLRPC" $serviceName] || [string equal "REGA" $serviceName] } {
-	  foreach port $service(PORTS) {
-        if { $port < 30000 } {
-            try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 3$port -j DROP"  
-            if {$has_ip6tables} {      
-                try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 3$port -j DROP"
-            }
-        }
-	  }
-  }
-}
-
+		#block internal ports
+		if { [string equal "XMLRPC" $serviceName] || [string equal "REGA" $serviceName] } {
+			foreach port $service(PORTS) {
+				if { $port < 30000 } {
+					try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 3$port -j DROP"
+					if {$has_ip6tables} {
+						try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 3$port -j DROP"
+					}
+				}
+			}
+		}
+	}
 }
 
 ##

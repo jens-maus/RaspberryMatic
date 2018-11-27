@@ -15,21 +15,40 @@ init() {
 	if [ -r /etc/config/ntpclient ] ; then
 		. /etc/config/ntpclient
 	fi
+
+  # make sure "ntp.homematic.com" is not used anymore
+  if [[ "${NTPSERVERS}" == "ntp.homematic.com" ]]; then
+    cp ${CFG_TEMPLATE_DIR}/ntpclient /etc/config/
+    . /etc/config/ntpclient
+  fi
+
+  if [[ -z "${NTPSERVERS}" ]]; then
+    # try the gateway
+    NTPSERVERS=$(route -n | awk '{if ($1 == "0.0.0.0") print $2}')
+  fi
 }
 
 case "$1" in
   start)
     init
     printf "Starting $NAME: "
-	  if [ -z "$NTPSERVERS" ] ; then
-      # try the gateway
-      NTPSERVERS=$(route -n | awk '{if ($1 == "0.0.0.0") print $2}')
-      if [ -z "${NTPSERVERS}" ]; then
-        . $CFG_TEMPLATE_DIR/ntpclient
-      fi
-    fi
+
     # call ntpdate to perform a single sync to the servers
     /usr/bin/ntpdate -b -s ${NTPSERVERS}
+    if [[ $? -ne 0 ]]; then
+      # use default NTP servers because the user selected
+      # ones didn't work out
+      . ${CFG_TEMPLATE_DIR}/ntpclient
+
+      /usr/bin/ntpdate -b -s ${NTPSERVERS}
+      if [[ $? -ne 0 ]]; then
+        echo -n "could not sync to '${NTPSERVERS}', FAIL"
+        exit 0
+      else
+        # make sure to preserve the default NTP servers
+        cp ${CFG_TEMPLATE_DIR}/ntpclient /etc/config/
+      fi
+    fi
 
     # start ntpd
     start-stop-daemon -S -q -x $DAEMON -- -g ${NTPSERVERS}
@@ -38,7 +57,8 @@ case "$1" in
   stop)
     printf "Stopping $NAME: "
     start-stop-daemon -K -q -n $NAME
-    [ $? = 0 ] && ( echo "OK"; rm -f /var/status/hasNTP ) || echo "FAIL"
+    [ $? = 0 ] && echo "OK" || echo "FAIL"
+    rm -f /var/status/hasNTP
     ;;
   restart|reload)
     echo "Restarting $NAME: "

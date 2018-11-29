@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.2
+# DutyCycle Script v3.3
 # Copyright (c) 2018 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -243,6 +243,7 @@ if {[llength [cfg::sections]] > 1} {
   set port [cfg::getvar "Listen Port"]
   set result [catch {set gateways [xmlrpc http://127.0.0.1:$port/ getLGWStatus]}]
   if {$result == 0} {
+    set gateways "{ $gateways }"
     foreach _gateway $gateways {
       array set gateway $_gateway
       if {[info exists gateway(CONNECTED)]} {

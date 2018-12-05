@@ -442,6 +442,8 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   try_exec_cmd "/usr/sbin/iptables -A INPUT -i lo -j ACCEPT"
   # allow all established and related packets to pass  
   try_exec_cmd "/usr/sbin/iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT" 
+  # tcp port for hmip wired gateways
+  try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 9293 -m state --state NEW -j ACCEPT"
   # ssh
   if { [FirewallInternal::sshEnabled] == 1 } {
     try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT"  
@@ -452,6 +454,11 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
 
   # udp port for eq3configd
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport 43439 -j ACCEPT"
+  try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport 23272 -j ACCEPT"
+
+  #hmip drap
+  try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport 43438 -j ACCEPT"
+
   # udp uPnP/ssdp port
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport 1900 -j ACCEPT"
   
@@ -467,6 +474,8 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -i lo -j ACCEPT"
     # allow all established and related packets to pass  
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT"
+    # tcp port for hmip wired gateways
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 9293 -m state --state NEW -j ACCEPT"
     # ssh
     if { [FirewallInternal::sshEnabled] == 1 } {
       try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT" 
@@ -476,9 +485,26 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 443 -m state --state NEW -j ACCEPT" 
     # udp port for eq3configd
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 43439 -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 23272 -j ACCEPT"
+
+      # allow udp based multicast and broadcast from 43439 and (to/from) 23272 to search for LAN Gateways
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type broadcast -p udp --dport 43439 -j ACCEPT"
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type multicast -p udp --dport 43439 -j ACCEPT"
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type broadcast -p udp --sport 23272 --dport 23272 -j ACCEPT"
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type multicast -p udp --sport 23272 --dport 23272 -j ACCEPT"
+    if {$has_ip6tables} {
+     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type broadcast -p udp --dport 43439 -j ACCEPT"
+     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type multicast -p udp --dport 43439 -j ACCEPT"
+     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type broadcast -p udp --sport 23272 --dport 23272 -j ACCEPT"
+     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type multicast -p udp --sport 23272 --dport 23272 -j ACCEPT"
+    }
+
+    #hmip drap
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 43438 -j ACCEPT"
+  
 	  # udp uPnP/ssdp port
 	  try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 1900 -j ACCEPT"
-
+  
   }
 
 
@@ -529,18 +555,6 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
       }
     }
   
-  }
-
-  # allow udp based multicast and broadcast from 43439 and (to/from) 23272 to search for LAN Gateways
-  try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type broadcast -p udp --sport 43439 -j ACCEPT"
-  try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type multicast -p udp --sport 43439 -j ACCEPT"
-  try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type broadcast -p udp --sport 23272 --dport 23272 -j ACCEPT"
-  try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type multicast -p udp --sport 23272 --dport 23272 -j ACCEPT"
-  if {$has_ip6tables} {
-    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type broadcast -p udp --sport 43439 -j ACCEPT"
-    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type multicast -p udp --sport 43439 -j ACCEPT"
-    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type broadcast -p udp --sport 23272 --dport 23272 -j ACCEPT"
-    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type multicast -p udp --sport 23272 --dport 23272 -j ACCEPT"
   }
 
   # allow echo request

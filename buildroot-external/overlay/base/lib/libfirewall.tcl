@@ -560,7 +560,7 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   # allow echo request
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -m state --state NEW -j ACCEPT"
   if {$has_ip6tables} {
-    try_exec_cmd "/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -m state --state NEW -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmp --icmp-type echo-request -m state --state NEW -j ACCEPT"
   }
 
     # default INPUT policy DROP (do this at very last step)

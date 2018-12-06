@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.0
+# DutyCycle Script v3.3
 # Copyright (c) 2018 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -183,52 +183,50 @@ proc setDutyCycleSV {name desc value serial} {
 
 # get all bidcos interface status using a listBidcosInterfaces
 # XMLRPC query
-set result [catch {set gateways [xmlrpc http://127.0.0.1:2001/ listBidcosInterfaces]}]
-if {$result == 0} {
+cfg::parse_file /var/etc/rfd.conf
+if {[llength [cfg::sections]] > 1} {
+  set port [cfg::getvar "Listen Port"]
+  set result [catch {set gateways [xmlrpc http://127.0.0.1:$port/ listBidcosInterfaces]}]
+  if {$result == 0} {
 
-  # iterate over all gateways returned by listBidcosInterfaces
-  foreach _gateway $gateways {
-    array set gateway $_gateway
-    if {[info exists gateway(DUTY_CYCLE)]} {
+    # iterate over all gateways returned by listBidcosInterfaces
+    foreach _gateway $gateways {
+      array set gateway $_gateway
+      if {[info exists gateway(DUTY_CYCLE)]} {
 
-      # if the gw is flagged as NOT connected set dutycycle to -1
-      if {$gateway(CONNECTED) == 1} {
-        set dutycycle $gateway(DUTY_CYCLE)
-      } else {
-        set dutycycle -1
-      }
-
-      if {$gateway(TYPE) == "CCU2"} {
-        setDutyCycleSV "" "DutyCycle CCU" $dutycycle ""
-      } else {
-        # make sure to parse the /etc/config/rfd.conf file for later use
-        # if it hasn't been parsed yet
-        if {[cfg::variables] == ""} {
-          cfg::parse_file /etc/config/rfd.conf
+        # if the gw is flagged as NOT connected set dutycycle to -1
+        if {$gateway(CONNECTED) == 1} {
+          set dutycycle $gateway(DUTY_CYCLE)
+        } else {
+          set dutycycle -1
         }
 
-        # get the cleartext name a user assigned for that gateway
-        # we try to find it based on the defined serial number
-        set name ""
-        foreach section [cfg::sections] {
-          set result [catch {set serNum [cfg::getvar "Serial Number" "$section"]}]
-          if {$result == 0} {
-            if {$serNum == $gateway(ADDRESS)} {
-              catch {set name [cfg::getvar "Name" "$section"]}
+        if {$gateway(TYPE) == "CCU2"} {
+          setDutyCycleSV "" "DutyCycle CCU" $dutycycle ""
+        } else {
+          # get the cleartext name a user assigned for that gateway
+          # we try to find it based on the defined serial number
+          set name ""
+          foreach section [cfg::sections] {
+            set result [catch {set serNum [cfg::getvar "Serial Number" "$section"]}]
+            if {$result == 0} {
+              if {$serNum == $gateway(ADDRESS)} {
+                catch {set name [cfg::getvar "Name" "$section"]}
+              }
             }
           }
+          setDutyCycleSV $name "DutyCycle LGW ($gateway(ADDRESS))" $dutycycle $gateway(ADDRESS)
         }
-        setDutyCycleSV $name "DutyCycle LGW ($gateway(ADDRESS))" $dutycycle $gateway(ADDRESS)
-      }
 
-      set infoTxt "DutyCycle-$gateway(ADDRESS) / $gateway(TYPE) / FW: $gateway(FIRMWARE_VERSION) / DC: $dutycycle%"
-      if {$dutycycle >= 98} {
-        exec /bin/triggerAlarm.tcl "DutyCycle $dutycycle% ($gateway(ADDRESS))" "DutyCycle-Alarm"
-        exec logger -t dutycycle -p error "$infoTxt"
-      } elseif {$dutycycle >= 80} {
-        exec logger -t dutycycle -p info "$infoTxt"
+        set infoTxt "DutyCycle-$gateway(ADDRESS) / $gateway(TYPE) / FW: $gateway(FIRMWARE_VERSION) / DC: $dutycycle%"
+        if {$dutycycle >= 98} {
+          exec /bin/triggerAlarm.tcl "DutyCycle $dutycycle% ($gateway(ADDRESS))" "DutyCycle-Alarm"
+          exec logger -t dutycycle -p error "$infoTxt"
+        } elseif {$dutycycle >= 80} {
+          exec logger -t dutycycle -p info "$infoTxt"
+        }
+        puts "$infoTxt"
       }
-      puts "$infoTxt"
     }
   }
 }
@@ -239,11 +237,13 @@ if {$result == 0} {
 
 # parse the hs485d.conf file to identify if there are
 # any wired gateways configured
-cfg::parse_file /etc/config/hs485d.conf
+cfg::parse_file /var/etc/hs485d.conf
 if {[llength [cfg::sections]] > 1} {
   set connected "false"
-  set result [catch {set gateways [xmlrpc http://127.0.0.1:2000/ getLGWStatus]}]
+  set port [cfg::getvar "Listen Port"]
+  set result [catch {set gateways [xmlrpc http://127.0.0.1:$port/ getLGWStatus]}]
   if {$result == 0} {
+    set gateways "{ $gateways }"
     foreach _gateway $gateways {
       array set gateway $_gateway
       if {[info exists gateway(CONNECTED)]} {

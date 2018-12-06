@@ -66,7 +66,7 @@ set Firewall_LOG_ENABLED 0
 # eingeschränktem Zugriff eine Verwendung des jeweiligen Serices noch erlaubt
 # ist.
 ##
-set Firewall_IPS [list 192.168.0.1 192.168.0.0/16 fc00::/7]
+set Firewall_IPS [list 192.168.0.1 192.168.0.0/16 fc00::/7 fe80::/10]
 
 #------------------------------------------------------------------------------
 
@@ -414,17 +414,18 @@ proc FirewallInternal::Firewall_configureFirewallMostOpen { } {
 			}
 		}
 	
-	#block internal ports 
-	foreach port $service(PORTS) {
-        if { $port < 40000 && ![string equal "SNMP" $serviceName] } {
-            try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 3$port -j DROP"  
-            if {$has_ip6tables} {      
-                try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 3$port -j DROP"
-            }
-        }
+		#block internal ports
+		if { [string equal "XMLRPC" $serviceName] || [string equal "REGA" $serviceName] } {
+			foreach port $service(PORTS) {
+				if { $port < 30000 } {
+					try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 3$port -j DROP"
+					if {$has_ip6tables} {
+						try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 3$port -j DROP"
+					}
+				}
+			}
+		}
 	}
-}
-
 }
 
 ##
@@ -443,6 +444,8 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   try_exec_cmd "/usr/sbin/iptables -A INPUT -i lo -j ACCEPT"
   # allow all established and related packets to pass  
   try_exec_cmd "/usr/sbin/iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT" 
+  # tcp port for hmip wired gateways
+  try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 9293 -m state --state NEW -j ACCEPT"
   # ssh
   if { [FirewallInternal::sshEnabled] == 1 } {
     try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT"  
@@ -453,6 +456,11 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
 
   # udp port for eq3configd
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport 43439 -j ACCEPT"
+  try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport 23272 -j ACCEPT"
+
+  #hmip drap
+  try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport 43438 -j ACCEPT"
+
   # udp uPnP/ssdp port
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport 1900 -j ACCEPT"
   
@@ -468,6 +476,8 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -i lo -j ACCEPT"
     # allow all established and related packets to pass  
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT"
+    # tcp port for hmip wired gateways
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 9293 -m state --state NEW -j ACCEPT"
     # ssh
     if { [FirewallInternal::sshEnabled] == 1 } {
       try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT" 
@@ -477,9 +487,26 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 443 -m state --state NEW -j ACCEPT" 
     # udp port for eq3configd
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 43439 -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 23272 -j ACCEPT"
+
+      # allow udp based multicast and broadcast from 43439 and (to/from) 23272 to search for LAN Gateways
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type broadcast -p udp --dport 43439 -j ACCEPT"
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type multicast -p udp --dport 43439 -j ACCEPT"
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type broadcast -p udp --sport 23272 --dport 23272 -j ACCEPT"
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type multicast -p udp --sport 23272 --dport 23272 -j ACCEPT"
+    if {$has_ip6tables} {
+     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type broadcast -p udp --dport 43439 -j ACCEPT"
+     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type multicast -p udp --dport 43439 -j ACCEPT"
+     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type broadcast -p udp --sport 23272 --dport 23272 -j ACCEPT"
+     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type multicast -p udp --sport 23272 --dport 23272 -j ACCEPT"
+    }
+
+    #hmip drap
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 43438 -j ACCEPT"
+  
 	  # udp uPnP/ssdp port
 	  try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 1900 -j ACCEPT"
-
+  
   }
 
 
@@ -532,18 +559,6 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   
   }
 
-  # allow udp based multicast and broadcast from 43439 and (to/from) 23272 to search for LAN Gateways
-  try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type broadcast -p udp --sport 43439 -j ACCEPT"
-  try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type multicast -p udp --sport 43439 -j ACCEPT"
-  try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type broadcast -p udp --sport 23272 --dport 23272 -j ACCEPT"
-  try_exec_cmd "/usr/sbin/iptables -A INPUT -m pkttype --pkt-type multicast -p udp --sport 23272 --dport 23272 -j ACCEPT"
-  if {$has_ip6tables} {
-    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type broadcast -p udp --sport 43439 -j ACCEPT"
-    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type multicast -p udp --sport 43439 -j ACCEPT"
-    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type broadcast -p udp --sport 23272 --dport 23272 -j ACCEPT"
-    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -m pkttype --pkt-type multicast -p udp --sport 23272 --dport 23272 -j ACCEPT"
-  }
-
   # allow echo request
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -m state --state NEW -j ACCEPT"
   if {$has_ip6tables} {
@@ -563,10 +578,10 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
 # Prüft ob es sich um eine IPv4 Adresse handelt. Gibt 1 zurück bei IPv4, ansonsten 0.
 ##
 proc FirewallInternal::IsIPV4 { address } {
-  if { [string first "." address] == -1 } {
-    return 1  
+  if { [string first "." $address] == -1 } {
+    return 0  
   } else {
-    return 0
+    return 1
   }
 }
 

@@ -40,9 +40,6 @@ init_system() {
     mkdir -p /media/usb${i}
   done
 
-  # mount all relevant filesystems (read-only first)
-  mount -a
-
   # if /etc/timezone is set to Europe/Berlin we
   # assume a german keyboard layout
   if [[ $(cat /etc/timezone) == "Europe/Berlin" ]]; then
@@ -52,14 +49,6 @@ init_system() {
   # load watchdog kernel module
   if [[ "${HM_HOST}" != "tinkerboard" ]]; then
     modprobe bcm2835_wdt nowayout=1 heartbeat=15
-  fi
-
-  # make sure we remove the .recoveryMode file
-  # now so that upon hard reset the system cancels pending changes
-  if [[ -f /usr/local/.recoveryMode ]]; then
-    mount -o rw,remount /userfs
-    rm -rf /usr/local/.recoveryMode
-    mount -o ro,remount /userfs
   fi
 }
 

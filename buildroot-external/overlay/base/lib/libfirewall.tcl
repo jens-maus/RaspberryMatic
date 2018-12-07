@@ -37,7 +37,7 @@ set Firewall_USER_PORTS {}
 
 ##
 # @const Firewall_MODE_RESTRICTIVE
-# Firewall Modus RESTRICTIVE. INPUT Policy DROP
+# Firewall Modus RESTRICTIVE. INPUT Policy DROP. Last Rule REJECTs all.
 ##
 set Firewall_MODE_RESTRICTIVE "RESTRICTIVE"
 
@@ -436,6 +436,7 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   global Firewall_SERVICES Firewall_IPS Firewall_USER_PORTS
   
 #IPv4
+  # flush rules
   try_exec_cmd "/usr/sbin/iptables -F"
 
   # allow all loopback
@@ -468,8 +469,6 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   if { $has_ip6tables } {
     # flush rules
     try_exec_cmd "/usr/sbin/ip6tables -F"    
-    # default INPUT policy DROP
-    try_exec_cmd "/usr/sbin/ip6tables -P INPUT DROP"  
     # allow all loopback
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -i lo -j ACCEPT"
     # allow all established and related packets to pass  
@@ -563,8 +562,13 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmp --icmp-type echo-request -m state --state NEW -j ACCEPT"
   }
 
-    # default INPUT policy DROP (do this at very last step)
+  # default INPUT policy DROP and last Rule REJECTS all (do this at very last step)
   try_exec_cmd "/usr/sbin/iptables -P INPUT DROP" 
+  try_exec_cmd "/usr/sbin/iptables -A INPUT -j REJECT" 
+  if {$has_ip6tables} {
+    try_exec_cmd "/usr/sbin/ip6tables -P INPUT DROP" 
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -j REJECT" 
+  }
 
 }
 

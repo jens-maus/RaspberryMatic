@@ -2,7 +2,10 @@ version: 2
 jobs:
   build:
     docker:
-      - image: debian:stretch
+      - image: buildpack-deps:trusty
+    branches:
+      only:
+        - master
     steps:
       - checkout
       - run:

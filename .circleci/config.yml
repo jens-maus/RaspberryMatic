@@ -9,6 +9,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install deps
+          command: sudo apt-get update && sudo apt-get install -y unzip
+      - run:
           name: Tinkerboard-Build
           command: make PRODUCT=raspmatic_tinkerboard release
       - run:

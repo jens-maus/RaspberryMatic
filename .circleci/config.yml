@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: debian:stretch
+    steps:
+      - checkout
+      - run:
+          name: Tinkerboard-Build
+          command: make PRODUCT=raspmatic_tinkerboard release
+      - run:
+          name: Print the Current Time
+          command: date

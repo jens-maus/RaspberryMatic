@@ -9,8 +9,6 @@ RECOVERY_SPLASHSCREEN_TITLE="CCU Recovery"
 # Load product specific parameters  
 [[ -r /etc/product ]] && . /etc/product
 
-rm psplash/psplash-poky$IMAGE_EXT
-
 for i in /etc/init.d/S??* ;do
 
   # Ignore dangling symlinks (if any).

@@ -208,6 +208,7 @@ fwprepare()
     echo "OK (update_script found), "
   fi
 
+  rm -f /usr/local/.firmwareUpdate
   ln -sf ${TMPDIR} /usr/local/.firmwareUpdate
   if [ $? -ne 0 ]; then
     echo "ERROR: (ln)"

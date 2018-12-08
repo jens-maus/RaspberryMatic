@@ -3,6 +3,14 @@
 # Start all init scripts in /etc/init.d
 # executing them in numerical order.
 
+# Parameters (default values)
+RECOVERY_SPLASHSCREEN_TITLE="CCU Recovery"
+
+# Load product specific parameters  
+[[ -r /etc/product ]] && . /etc/product
+
+rm psplash/psplash-poky$IMAGE_EXT
+
 for i in /etc/init.d/S??* ;do
 
   # Ignore dangling symlinks (if any).
@@ -37,7 +45,7 @@ IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
 [[ -r /VERSION ]] && . /VERSION
 
 if [[ -z "${IP}" ]]; then
-  /usr/bin/psplash-write "MSG CCU Recovery ${VERSION} -- ERROR: No IP address set"
+  /usr/bin/psplash-write "MSG ${RECOVERY_SPLASHSCREEN_TITLE} ${VERSION} -- ERROR: No IP address set"
 else
-  /usr/bin/psplash-write "MSG CCU Recovery ${VERSION} -- http://${IP}/"
+  /usr/bin/psplash-write "MSG ${RECOVERY_SPLASHSCREEN_TITLE} ${VERSION} -- Open http://${IP}/ in browser"
 fi

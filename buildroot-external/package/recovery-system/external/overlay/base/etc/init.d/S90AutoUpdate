@@ -53,8 +53,23 @@ start() {
   if [[ -L /usr/local/.firmwareUpdate ]]; then
     echo "found waiting firmware update... "
 
+    # if only one compressed file is present,
+    # run fwinstall.h with filename to make it extract the file
+    FWINSTALL_PARAM=""
+    if [ $(ls -1 /usr/local/.firmwareUpdate | wc -l)  -eq 1 ]; then
+      # read link to avoid circular reference
+      FILEPATH="$(readlink -f /usr/local/.firmwareUpdate)/$(ls -1 /usr/local/.firmwareUpdate)"
+      if file -b $FILEPATH | egrep -q "(gzip compressed|tar archive)"; then
+        echo "Found compressed update file ${FILEPATH}"
+        FWINSTALL_PARAM=$FILEPATH
+      fi
+    fi
+
     # run unattended firmware update
-    ( set -o pipefail; /bin/fwinstall.sh 2>&1 | tee /tmp/fwinstall.log )
+    # (remount userfs in rw mode so that
+    #  fwinstall.sh can extract data if necessary)
+    mount -o rw,remount /userfs
+    ( set -o pipefail; /bin/fwinstall.sh $FWINSTALL_PARAM 2>&1 | tee /tmp/fwinstall.log )
     if [[ $? -ne 0 ]]; then
       [ -f /tmp/fwinstall.pid ] && kill $(cat /tmp/fwinstall.pid) 2>/dev/null
       # firmware update failed, lets change to

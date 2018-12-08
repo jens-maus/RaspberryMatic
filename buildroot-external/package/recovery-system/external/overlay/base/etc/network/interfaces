@@ -1,6 +1,7 @@
 auto lo
 iface lo inet loopback
 
+# Vendor ID might be replaced by post-build.sh
 auto eth0
 iface eth0 inet dhcp
   wait-delay 20

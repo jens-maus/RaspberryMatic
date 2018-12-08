@@ -16,40 +16,6 @@ start() {
     # start third-party addons one after another
     /bin/run-parts -a init /etc/config/rc.d >/dev/null 2>&1
 
-    # CUxD cuxd.ini CCU 3.41.x upgrade patch
-    if [[ -e /usr/local/addons/cuxd/cuxd.ini ]]; then
-      cp -a /usr/local/addons/cuxd/cuxd.ini /tmp/
-
-      # make sure HM-HOST exists
-      if ! grep -q "^HM-HOST=" /tmp/cuxd.ini; then
-        echo "HM-HOST=127.0.0.1" >>/tmp/cuxd.ini
-      fi
-
-      # only continue if HM-HOST is set to 127.0.0.1
-      if grep -q "^HM-HOST=127\.0\.0\.1" /tmp/cuxd.ini; then
-        # patch SCRIPTPORT
-        if grep -q "^HM-SCRIPTPORT=" /tmp/cuxd.ini; then
-          sed -i -e 's/^HM-SCRIPTPORT=8181$/HM-SCRIPTPORT=8183/' /tmp/cuxd.ini
-        else
-          echo "HM-SCRIPTPORT=8183" >>/tmp/cuxd.ini
-        fi
-        # patch REGAPORT
-        if grep -q "^HM-REGAPORT=" /tmp/cuxd.ini; then
-          sed -i -e 's/^HM-REGAPORT=1999$/HM-REGAPORT=31999/' /tmp/cuxd.ini
-        else
-          echo "HM-REGAPORT=31999" >>/tmp/cuxd.ini
-        fi
-
-        # restart CUxD if ini file was patched
-        if ! cmp -s /tmp/cuxd.ini /usr/local/addons/cuxd/cuxd.ini; then
-          cp -a /tmp/cuxd.ini /usr/local/addons/cuxd/
-          /etc/config/rc.d/cuxdaemon restart >/dev/null 2>&1
-        fi
-      fi
-
-      rm -f /tmp/cuxd.ini
-    fi
-
     echo "OK"
   else
     echo "skipping (safemode)"

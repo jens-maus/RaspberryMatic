@@ -15,16 +15,16 @@ if [ -f ${STARTPWD}/${BOOT_FS} ]; then
       echo "ERROR: (dd)"
       RC=1
     else
-      echo "OK"
+      echo "OK<br>"
       RC=0
     fi
     /bin/mount /bootfs
   else
-    echo "ERROR: no /bootfs found"
+    echo "ERROR: no /bootfs found<br>"
     RC=1
   fi
 else
-  echo "INFO: no ${BOOT_FS} found"
+  echo "INFO: no boofs update found, OK<br>"
 fi
 
 if [ -f ${STARTPWD}/${ROOT_FS} ]; then
@@ -37,16 +37,16 @@ if [ -f ${STARTPWD}/${ROOT_FS} ]; then
       echo "ERROR: (dd)"
       RC=1
     else
-      echo "OK"
+      echo "OK<br>"
       RC=0
     fi
     /bin/mount /rootfs
   else
-    echo "ERROR: not /rootfs found"
+    echo "ERROR: not /rootfs found<br>"
     RC=1
   fi
 else
-  echo "WARNING: no ${ROOT_FS} found"
+  echo "INFO: no rootfs update found, OK<br>"
 fi
 
 exit ${RC}

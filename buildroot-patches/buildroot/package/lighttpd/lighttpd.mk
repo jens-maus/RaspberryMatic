@@ -5,7 +5,7 @@
 ################################################################################
 
 LIGHTTPD_VERSION_MAJOR = 1.4
-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).50
+LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).51
 LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
 LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
 LIGHTTPD_LICENSE = BSD-3-Clause
@@ -13,6 +13,7 @@ LIGHTTPD_LICENSE_FILES = COPYING
 LIGHTTPD_DEPENDENCIES = host-pkgconf
 LIGHTTPD_AUTORECONF = YES
 LIGHTTPD_CONF_OPTS = \
+	--without-wolfssl \
 	--libdir=/usr/lib/lighttpd \
 	--libexecdir=/usr/lib
 
@@ -21,6 +22,13 @@ LIGHTTPD_DEPENDENCIES += openssl
 LIGHTTPD_CONF_OPTS += --with-openssl
 else
 LIGHTTPD_CONF_OPTS += --without-openssl
+endif
+
+ifeq ($(BR2_PACKAGE_LIGHTTPD_PAM),y)
+LIGHTTPD_DEPENDENCIES += linux-pam
+LIGHTTPD_CONF_OPTS += --with-pam
+else
+LIGHTTPD_CONF_OPTS += --without-pam
 endif
 
 ifeq ($(BR2_PACKAGE_LIGHTTPD_ZLIB),y)

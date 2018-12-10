@@ -512,8 +512,12 @@ proc action_image_upload {} {
 proc action_install_start {} {
   if {[getProduct] == 3} {
      exec touch /usr/local/.doAddonInstall
+     exec /sbin/reboot
+  } else {
+    # CCU 2
+    exec /bin/kill -SIGQUIT 1
   }
-  exec /sbin/reboot
+  
 }
 
 cgi_eval {

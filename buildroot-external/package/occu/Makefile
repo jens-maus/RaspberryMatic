@@ -31,11 +31,10 @@ install_webui_arch:
 	rm -r $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/* $(TARGET_DIR)
 	cp -R WebUI/* $(TARGET_DIR)/
-ifeq (,$(filter $(BR2_PACKAGE_OCCU_WEBUI_REGAHSS_BETA), y))
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/* $(TARGET_DIR)/lib/
-endif
 	mv $(TARGET_DIR)/bin/ReGaHss.community $(TARGET_DIR)/bin/ReGaHss
+ifeq (,$(filter $(BR2_PACKAGE_OCCU_WEBUI_REGAHSS_BETA), y))
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/* $(TARGET_DIR)/
+endif
 
 install_linuxbasis_arch:
 	cp -av $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/bin/* $(TARGET_DIR)/bin/

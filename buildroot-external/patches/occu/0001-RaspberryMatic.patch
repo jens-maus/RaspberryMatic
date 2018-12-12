@@ -433,6 +433,21 @@
          </tr>
      </table>
      </td>
+--- occu/WebUI/www/rega/index.htm.orig
++++ occu/WebUI/www/rega/index.htm
+@@ -89,7 +89,11 @@
+     
+       if (true == checkBrowser())
+       {
+-        sStartPage = STARTPAGE_PC + "?sid=" + SessionId;
++        if(typeof(SessionId) === 'undefined') {
++          sStartPage = STARTPAGE_PC;
++        } else {
++          sStartPage = STARTPAGE_PC + "?sid=" + SessionId;
++        }
+         <%
+           if ( (false == system.IsVar("NoAutoLogin")) || (false == system.GetVar("NoAutoLogin")) )
+           {
 --- occu/WebUI/www/rega/login.htm.orig
 +++ occu/WebUI/www/rega/login.htm
 @@ -73,7 +73,7 @@

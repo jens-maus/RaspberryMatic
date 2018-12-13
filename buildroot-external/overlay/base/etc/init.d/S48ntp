@@ -38,15 +38,13 @@ case "$1" in
     if [[ $? -ne 0 ]]; then
       # use default NTP servers because the user selected
       # ones didn't work out
+      echo -n "using default NTPs, "
       . ${CFG_TEMPLATE_DIR}/ntpclient
 
       /usr/bin/ntpdate -b -s ${NTPSERVERS}
       if [[ $? -ne 0 ]]; then
         echo -n "could not sync to '${NTPSERVERS}', FAIL"
         exit 0
-      else
-        # make sure to preserve the default NTP servers
-        cp ${CFG_TEMPLATE_DIR}/ntpclient /etc/config/
       fi
     fi
 

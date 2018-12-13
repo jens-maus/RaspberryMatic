@@ -880,7 +880,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     name: "clike",
     keywords: words(
       /* statements */
-      "if while foreach return quit else elseif " +
+      "if while foreach return quit else elseif break continue " +
 
       /* calls */
       "Call Write WriteLine WriteURL WriteXML WriteHTML Debug Dump"

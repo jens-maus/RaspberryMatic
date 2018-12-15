@@ -43,8 +43,8 @@ waitStartupComplete() {
 
 start() {
   echo -n "Starting multimacd: "
-  if [[ -n "${HM_HMIP_DEV}" ]] &&
-     [[ -n "${HM_HMRF_DEV}" ]]; then
+  if [[ -n "${HM_HMIP_DEV}" ]] && [[ -n "${HM_HMRF_DEV}" ]] &&
+     ( [[ "${HM_HMIP_DEV}" != "HMIP-RFUSB" ]] || [[ "${HM_HMRF_DEV}" != "HM-CFG-USB-2" ]] ); then
     init
     if [[ -c /dev/eq3loop ]]; then
       # get the current syslog settings

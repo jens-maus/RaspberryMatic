@@ -53,7 +53,7 @@ init() {
       echo "[Interface ${inum+1}]" >>/etc/config/rfd.conf
       echo "Type = USB Interface" >>/etc/config/rfd.conf
       echo "Name = HM-CFG-USB" >>/etc/config/rfd.conf
-      echo "Serial Number = $(cat /sys/bus/usb/devices/*/serial | grep -E '^[A-Z]{3}[0-9]{7}.*' )" >>/etc/config/rfd.conf
+      echo "Serial Number = ${HM_HMRF_SERIAL}" >>/etc/config/rfd.conf
       echo "Encryption Key =" >>/etc/config/rfd.conf
     fi
   elif grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then

@@ -44,6 +44,14 @@ restart() {
 }
 reload() {
   echo -n "Reloading lighttpd: "
+
+  # activate/deactivate service interface authentication
+  if [[ -f /etc/config/authEnabled ]] && [[ -f /etc/lighttpd/conf.d/auth.conf ]]; then
+    echo "include \"/etc/lighttpd/conf.d/auth.conf\"" >/var/etc/lighttpd_auth.conf
+  else
+    echo "" >/var/etc/lighttpd_auth.conf
+  fi
+
   start-stop-daemon -K -s HUP -q -p /var/run/lighttpd-angel.pid
   sleep 2
   [[ -f /var/run/lighttpd.pid ]] && echo "OK" || echo "ERROR"

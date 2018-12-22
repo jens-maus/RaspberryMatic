@@ -53,6 +53,12 @@ identify_rf_hardware() {
     HM_HMRF_SERIAL=$(cat /sys/bus/usb/devices/*/serial | grep -E '^[A-Z]{3}[0-9]{7}.*')
   fi
 
+  # check if a HB-RF-USB (https://github.com/alexreinert/PCB/tree/master/HB-RF-USB)
+  # is present and if yes, use /dev/raw-uart1 instead.
+  if lsusb | grep -q 0403:6f70; then
+    HM_HOST_GPIO_UART="/dev/raw-uart1"
+  fi
+
   # check if we should boot in LAN gateway mode
   if [[ -e /usr/local/HMLGW ]]; then
     HM_MODE="HM-LGW"
@@ -83,7 +89,7 @@ init_rf_hardware() {
     fi
 
     # make sure to set low latency serial mode
-    if [[ "${HM_HOST_GPIO_UART}" != "/dev/raw-uart" ]]; then
+    if [[ -z "$(echo ${HM_HOST_GPIO_UART} | grep /dev/raw-uart)" ]]; then
       /bin/setserial ${HM_HOST_GPIO_UART} low_latency >/dev/null 2>&1
     fi
 

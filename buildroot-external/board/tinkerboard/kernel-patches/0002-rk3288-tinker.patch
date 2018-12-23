@@ -1,6 +1,6 @@
---- linux/arch/arm/boot/dts/rk3288-tinker.dts.orig	2018-07-03 17:00:23.159868101 +0200
-+++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-07-06 21:23:36.721098415 +0200
-@@ -84,6 +84,9 @@
+--- linux/arch/arm/boot/dts/rk3288-tinker.dts.orig	2018-12-23 23:24:21.223132915 +0100
++++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-12-24 00:19:31.266459048 +0100
+@@ -83,6 +83,9 @@
  	gpio-leds {
  		compatible = "gpio-leds";
  
@@ -10,7 +10,7 @@
  		act-led {
  			gpios=<&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>;
  			linux,default-trigger="mmc0";
-@@ -98,6 +101,28 @@
+@@ -97,6 +100,28 @@
  			gpios = <&gpio0 RK_PA3 GPIO_ACTIVE_HIGH>;
  			linux,default-trigger = "default-on";
  		};
@@ -39,7 +39,7 @@
  	};
  
  	sound {
-@@ -573,6 +598,10 @@
+@@ -387,6 +412,10 @@
  		drive-strength = <8>;
  	};
  
@@ -50,28 +50,32 @@
  	backlight {
  		bl_en: bl-en {
  			rockchip,pins = <7 2 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -656,6 +685,15 @@
+@@ -444,6 +473,16 @@
  		};
  	};
  
 +	rpi_rf_mod {
 +		rpi_rf_mod_gpios: rpi-rf-mod-gpios {
 +			rockchip,pins = <6 RK_PA0 RK_FUNC_GPIO &pcfg_output_low>, /* GPIO6A0: reset */
-+			                <7 RK_PC7 RK_FUNC_GPIO &pcfg_pull_up>,    /* GPIO7C7: button */
-+			                <7 RK_PA7 RK_FUNC_GPIO &pcfg_output_low>, /* GPIO7A7: red LED */
-+			                <6 RK_PA3 RK_FUNC_GPIO &pcfg_output_low>, /* GPIO6A3: green LED */
-+			                <6 RK_PA4 RK_FUNC_GPIO &pcfg_output_low>; /* GPIO6A4: blue LED */
++					<7 RK_PC7 RK_FUNC_GPIO &pcfg_pull_up>,    /* GPIO7C7: button */
++					<7 RK_PA7 RK_FUNC_GPIO &pcfg_output_low>, /* GPIO7A7: red LED */
++					<6 RK_PA3 RK_FUNC_GPIO &pcfg_output_low>, /* GPIO6A3: green LED */
++					<6 RK_PA4 RK_FUNC_GPIO &pcfg_output_low>; /* GPIO6A4: blue LED */
 +		};
 +	};
- };
- 
- &pwm0 {
-@@ -713,6 +751,8 @@
++
+ 	usb {
+ 		host_vbus_drv: host-vbus-drv {
+ 			rockchip,pins = <0 14 RK_FUNC_GPIO &pcfg_pull_none>;
+@@ -489,6 +528,11 @@
  
  &uart1 {
  	status = "okay";
 +	compatible = "pivccu,dw_apb";
-+	pivccu,gpio_pin = <0>;
++	pivccu,reset_pin = <0>;
++	pivccu,red_pin = <0>;
++	pivccu,green_pin = <0>;
++	pivccu,blue_pin = <0>;
  };
  
  &uart2 {

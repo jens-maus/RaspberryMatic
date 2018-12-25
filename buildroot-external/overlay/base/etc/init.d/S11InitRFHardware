@@ -90,19 +90,23 @@ init_rf_hardware() {
       fi
     fi
 
-    # make sure to set low latency serial mode
-    if [[ -z "$(echo ${HM_HOST_GPIO_UART} | grep /dev/raw-uart)" ]]; then
-      /bin/setserial ${HM_HOST_GPIO_UART} low_latency >/dev/null 2>&1
-    fi
+    # if we are using a raw uart we make sure to reset the rf module
+    # using the sysfs link
+    if [[ -e "/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module" ]]; then
+      echo 1 >/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module
+    else
+      # reset the GPIO rf module by switching its reset pin
+      # (pin 12 - GPIO.1) off and on with a short delay
+      if [[ -n "${HM_HOST_GPIO_RESET}" ]]; then
+        echo ${HM_HOST_GPIO_RESET} >/sys/class/gpio/export
+        echo out >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/direction
+        echo 0 >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/value
+        sleep 0.1
+        echo 1 >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/value
+      fi
 
-    # reset the GPIO rf module by switching its reset pin
-    # (pin 12 - GPIO.1) off and on with a short delay
-    if [[ -n "${HM_HOST_GPIO_RESET}" ]]; then
-      echo ${HM_HOST_GPIO_RESET} >/sys/class/gpio/export
-      echo out >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/direction
-      echo 0 >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/value
-      sleep 0.1
-      echo 1 >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/value
+      # slso set tty device to low_latency mode (if possible)
+      /bin/setserial ${HM_HOST_GPIO_UART} low_latency >/dev/null 2>&1
     fi
   fi
 }

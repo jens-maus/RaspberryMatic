@@ -1,5 +1,5 @@
 --- linux/arch/arm/boot/dts/rk3288-tinker.dts.orig	2018-12-23 23:24:21.223132915 +0100
-+++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-12-24 00:19:31.266459048 +0100
++++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-12-24 22:49:07.549300434 +0100
 @@ -83,6 +83,9 @@
  	gpio-leds {
  		compatible = "gpio-leds";
@@ -72,7 +72,7 @@
  &uart1 {
  	status = "okay";
 +	compatible = "pivccu,dw_apb";
-+	pivccu,reset_pin = <0>;
++	pivccu,reset_pin = <&pivccu_gpio6 0 0>;
 +	pivccu,red_pin = <0>;
 +	pivccu,green_pin = <0>;
 +	pivccu,blue_pin = <0>;

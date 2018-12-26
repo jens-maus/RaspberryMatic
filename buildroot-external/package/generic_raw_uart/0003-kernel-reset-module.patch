@@ -1,0 +1,17 @@
+--- ./kernel/generic_raw_uart.c.orig	2018-12-26 01:06:02.406053422 +0100
++++ ./kernel/generic_raw_uart.c	2018-12-26 13:01:52.671307560 +0100
+@@ -249,13 +249,11 @@
+ {
+   if (instance->reset_pin != 0)
+   {
+-    gpio_direction_output(instance->reset_pin, false);
++    gpio_direction_output(instance->reset_pin, 0);
+     gpio_set_value(instance->reset_pin, 0);
+     msleep(50);
+     gpio_set_value(instance->reset_pin, 1);
+     msleep(50);
+-    gpio_direction_input(instance->reset_pin);
+-    msleep(50);
+   }
+ }
+ 

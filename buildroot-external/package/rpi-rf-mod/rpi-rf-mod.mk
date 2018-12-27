@@ -4,7 +4,7 @@
 #
 #############################################################
 
-RPI_RF_MOD_VERSION = 1.0.0
+RPI_RF_MOD_VERSION = 1.1.0
 RPI_RF_MOD_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/rpi-rf-mod
 RPI_RF_MOD_SITE_METHOD = local
 

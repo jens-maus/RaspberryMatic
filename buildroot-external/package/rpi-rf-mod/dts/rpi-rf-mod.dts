@@ -19,9 +19,9 @@
         target = <&gpio>;
         __overlay__ {
             rpi_rf_mod_pins: rpi_rf_mod_pins {
-                brcm,pins = <18 12 16 20 21>; // 18=reset, 12=button, 16=red, 20=green, 21=blue
-                brcm,pull = <0 2 0 0 0>; // 18=no-pullup, 12=pullup, 16,20,21=no-pullup
-                brcm,function = <1 0 1 1 1>; // 18=output, 12=input, 16,20,21=output
+                brcm,pins = <19 18 12 16 20 21>; // 19=reset, 18=reset (HM-MOD), 12=button, 16=red, 20=green, 21=blue
+                brcm,pull = <0 0 2 0 0 0>; // 19,18=no-pullup, 12=pullup, 16,20,21=no-pullup
+                brcm,function = <0 0 0 1 1 1>; // 19,18,12=input, 16,20,21=output
             };
         };
     };

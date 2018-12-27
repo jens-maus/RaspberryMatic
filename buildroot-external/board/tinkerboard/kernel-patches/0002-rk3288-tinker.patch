@@ -1,11 +1,11 @@
 --- linux/arch/arm/boot/dts/rk3288-tinker.dts.orig	2018-12-23 23:24:21.223132915 +0100
-+++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-12-26 01:12:07.598166172 +0100
++++ linux/arch/arm/boot/dts/rk3288-tinker.dts	2018-12-27 00:09:31.462692345 +0100
 @@ -83,6 +83,9 @@
  	gpio-leds {
  		compatible = "gpio-leds";
  
 +		pinctrl-names = "default";
-+		pinctrl-0 = <&rpi_rf_mod_gpios>;
++		pinctrl-0 = <&rpi_rf_mod_gpios &hm_mod_rpi_pcb_gpios>;
 +
  		act-led {
  			gpios=<&gpio1 RK_PD0 GPIO_ACTIVE_HIGH>;
@@ -50,13 +50,13 @@
  	backlight {
  		bl_en: bl-en {
  			rockchip,pins = <7 2 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -444,6 +473,16 @@
+@@ -444,6 +473,22 @@
  		};
  	};
  
 +	rpi_rf_mod {
 +		rpi_rf_mod_gpios: rpi-rf-mod-gpios {
-+			rockchip,pins = <6 RK_PA0 RK_FUNC_GPIO &pcfg_output_low>, /* GPIO6A0: reset */
++			rockchip,pins = <6 RK_PA1 RK_FUNC_GPIO &pcfg_pull_none>,  /* GPIO6A1: reset */
 +					<7 RK_PC7 RK_FUNC_GPIO &pcfg_pull_up>,    /* GPIO7C7: button */
 +					<7 RK_PA7 RK_FUNC_GPIO &pcfg_output_low>, /* GPIO7A7: red LED */
 +					<6 RK_PA3 RK_FUNC_GPIO &pcfg_output_low>, /* GPIO6A3: green LED */
@@ -64,15 +64,21 @@
 +		};
 +	};
 +
++	hm_mod_rpi_pcb {
++		hm_mod_rpi_pcb_gpios: hm-mod-rpi-pcb-gpios {
++			rockchip,pins = <6 RK_PA0 RK_FUNC_GPIO &pcfg_pull_none>; /* GPIO6A0: reset */
++		};
++	};
++
  	usb {
  		host_vbus_drv: host-vbus-drv {
  			rockchip,pins = <0 14 RK_FUNC_GPIO &pcfg_pull_none>;
-@@ -489,6 +528,11 @@
+@@ -489,6 +534,11 @@
  
  &uart1 {
  	status = "okay";
 +	compatible = "pivccu,dw_apb";
-+	pivccu,reset_pin = <&gpio6 RK_PA0 GPIO_ACTIVE_HIGH>;
++	pivccu,reset_pin = <0>;
 +	pivccu,red_pin = <0>;
 +	pivccu,green_pin = <0>;
 +	pivccu,blue_pin = <0>;

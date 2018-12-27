@@ -29,6 +29,30 @@ identify_rf_hardware() {
     HM_HMIP_DEV="HM-MOD-RPI-PCB"
   fi
 
+  # set default HM_HOST_GPIO_UART
+  if [[ -c /dev/raw-uart ]]; then
+    HM_HOST_GPIO_UART="/dev/raw-uart"
+  else
+    # if no raw uart device is present we try to use the
+    # hardware specific tty device
+    case "${HM_HOST}" in
+
+      # RaspberryPi
+      rpi*)
+        HM_HOST_GPIO_UART="/dev/ttyAMA0"
+      ;;
+
+      # ASUS Tinkerboard
+      tinkerboard*)
+        HM_HOST_GPIO_UART="/dev/ttyS1"
+      ;;
+
+    esac
+
+    # also set tty device to low_latency mode (if possible)
+    /bin/setserial ${HM_HOST_GPIO_UART} low_latency >/dev/null 2>&1
+  fi
+
   # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
   # and set HMIP_DEV and HMIP_DEVNODE accordingly
   if lsusb | grep -q 1b1f:c020; then
@@ -90,23 +114,55 @@ init_rf_hardware() {
       fi
     fi
 
-    # if we are using a raw uart we make sure to reset the rf module
-    # using the sysfs link
-    if [[ -e "/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module" ]]; then
+    # if we are using a HB-RF-USB with raw uart we make sure to
+    # reset the rf module using the provided sysfs link.
+    if [[ "${HM_HOST_GPIO_UART}" == "/dev/raw-uart1" ]]; then
       echo 1 >/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module
     else
+      # identify which GPIO reset pin to drive
+      if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
+         [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
+
+        # depending on the host hardware we have to define different
+        # reset pins
+        case "${HM_HOST}" in
+          # RaspberryPi
+          rpi*)
+            HM_HOST_GPIO_RESET=19  # GPIO19/GPIO.24 (pin 35)
+          ;;
+
+          # ASUS Tinkerboard
+          tinkerboard*)
+            HM_HOST_GPIO_RESET=185 # GPIO185/GPIO6A1 (pin 35)
+          ;;
+        esac
+      else
+        # depending on the host hardware we have to define different
+        # reset pins
+        case "${HM_HOST}" in
+          # RaspberryPi
+          rpi*)
+            HM_HOST_GPIO_RESET=18  # GPIO18/GPIO.1 (pin 12)
+          ;;
+
+          # ASUS Tinkerboard
+          tinkerboard*)
+            HM_HOST_GPIO_RESET=184 # GPIO184/GPIO6A0 (pin 12)
+          ;;
+        esac
+      fi
+
       # reset the GPIO rf module by switching its reset pin
-      # (pin 12 - GPIO.1) off and on with a short delay
+      # and reset it to an input pin to get it floating again.
       if [[ -n "${HM_HOST_GPIO_RESET}" ]]; then
         echo ${HM_HOST_GPIO_RESET} >/sys/class/gpio/export
         echo out >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/direction
         echo 0 >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/value
         sleep 0.1
         echo 1 >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/value
+        sleep 0.1
+        echo in >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/direction
       fi
-
-      # slso set tty device to low_latency mode (if possible)
-      /bin/setserial ${HM_HOST_GPIO_UART} low_latency >/dev/null 2>&1
     fi
   fi
 }

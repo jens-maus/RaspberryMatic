@@ -35,9 +35,15 @@ update_rf_hardware() {
         NEW_VERSION=$(cat ${FW_DIRECTORY}/fwmap | grep "${FW_FILE}" | awk '{ print $3 }')
       fi
 
+      # get OLD_VERSION from var tmp file
+      if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+        OLD_VERSION=$(cat /var/rf_firmware_version 2>/dev/null)
+      else
+        OLD_VERSION=$(cat /var/hmip_firmware_version 2>/dev/null)
+      fi
+
       # if NEW_VERSION is not empty we go ahead and perform the
       # update operation
-      OLD_VERSION=$(cat /var/rf_firmware_version 2>/dev/null)
       if [[ -n "${NEW_VERSION}" ]] && [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
         # we always perform the firmware update in /tmp
         # so lets copy the whole firmware directory to tmp
@@ -90,7 +96,16 @@ update_rf_hardware() {
       echo -n "RPI-RF-MOD: "
 
       NEW_VERSION=$(ls /firmware/RPI-RF-MOD/dualcopro_update_blhmip-*.eq3 | sed 's/.*-\(.*\)\.eq3/\1/')
-      OLD_VERSION=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -v 2>/dev/null | grep "Application version =" | cut -d' ' -f5)
+
+      # get OLD_VERSION from var tmp file
+      if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+        OLD_VERSION=$(cat /var/rf_firmware_version 2>/dev/null)
+      else
+        OLD_VERSION=$(cat /var/hmip_firmware_version 2>/dev/null)
+      fi
+
+      # if NEW_VERSION is not empty we go ahead and perform the
+      # update operation
       if [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
@@ -122,7 +137,12 @@ update_rf_hardware() {
       echo -n "HMIP-RFUSB: "
 
       NEW_VERSION=$(ls /firmware/HmIP-RFUSB/hmip_coprocessor_update-*.eq3 | sed 's/.*hmip_coprocessor_update-\(.*\)\.eq3/\1/')
-      OLD_VERSION=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v 2>/dev/null | grep "Application version =" | cut -d' ' -f5)
+
+      # get OLD_VERSION from var tmp file
+      OLD_VERSION=$(cat /var/hmip_firmware_version 2>/dev/null)
+
+      # if NEW_VERSION is not empty we go ahead and perform the
+      # update operation
       if [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 

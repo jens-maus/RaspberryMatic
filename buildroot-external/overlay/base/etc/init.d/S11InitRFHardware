@@ -276,10 +276,10 @@ query_rf_parameters() {
   if [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
     # run hmip-copro-update to query info and get copro into app mode
     RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v -a 2>&1)
-    RF_INFO_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
+    RF_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
 
     # use the last 10 chars of the SGTIN as the serial number of the rf module
-    RF_SERIAL=$(echo ${RF_INFO_SGTIN} | tail -c 11)
+    RF_SERIAL=$(echo -n ${RF_SGTIN} | tail -c 10)
     if [[ -n "${RF_SERIAL}" ]]; then
       RF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
       RF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
@@ -287,6 +287,7 @@ query_rf_parameters() {
       HM_HMIP_SERIAL=${RF_SERIAL}
       HM_HMIP_VERSION=${RF_VERSION}
       HM_HMIP_ADDRESS=${RF_ADDRESS}
+      HM_HMIP_SGTIN=${RF_SGTIN}
     else
       HM_HMIP_DEV=
       HM_HMIP_SERIAL=

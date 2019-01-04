@@ -77,6 +77,7 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
   * HomeMatic َ+ homematicIP:
     * GPIO Radio Module HAT – [RPI-RF-MOD](https://www.elv.de/homematic-funk-modulplatine-fuer-raspberry-pi-3-rpi-rf-mod-komplettbausatz.html)  
     * GPIO Radio Module HAT – [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) ([Installation](https://www.youtube.com/watch?v=xtzXsvOLa_Y))
+    * USB Radio Module Adapter PCB – [HB-RF-USB](https://github.com/alexreinert/PCB/tree/master/HB-RF-USB) ([Discussion](https://homematic-forum.de/forum/viewtopic.php?f=69&t=47691#p477528))
   * homematicIP only:
     * USB Stick – [HmIP-RFUSB](https://www.elv.de/elv-homematic-ip-rf-usb-stick-hmip-rfusb-fuer-alternative-steuerungsplattformen-arr-bausatz.html)
   * HomeMatic only:

@@ -22665,7 +22665,7 @@ iseMessageBox.prototype =
 
     if (this.draggable) {
       jQuery("#messagebox").draggable({
-        cancel: "input,textarea,button,select,option,.FooterButton,.StdButton,.CodeMirror"
+        cancel: "input,textarea,button,select,option,.FooterButton,.StdButton,.CodeMirror,.CodeMirror-line"
       });
     }
 

@@ -2,11 +2,11 @@
 
 <br/><br/>
 [![Current Release](https://img.shields.io/github/release/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
-[![HitCount](http://hits.dwyl.io/jens-maus/RaspberryMatic.svg)](http://hits.dwyl.io/jens-maus/RaspberryMatic)
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/latest/total.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jens-maus/RaspberryMatic.svg)](http://isitmaintained.com/project/jens-maus/RaspberryMatic "Average time to resolve an issue")
-[![Percentage of issues still open](http://isitmaintained.com/badge/open/jens-maus/RaspberryMatic.svg)](http://isitmaintained.com/project/jens-maus/RaspberryMatic "Percentage of issues still open")
-![Commits since last release](https://img.shields.io/github/commits-since/jens-maus/RaspberryMatic/latest.svg)
+[![HitCount](http://hits.dwyl.io/jens-maus/RaspberryMatic.svg)](http://hits.dwyl.io/jens-maus/RaspberryMatic)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/issues)
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/issues)
+[![Commits since last release](https://img.shields.io/github/commits-since/jens-maus/RaspberryMatic/latest.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
 ![License](https://img.shields.io/github/license/jens-maus/RaspberryMatic.svg)
 [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
 

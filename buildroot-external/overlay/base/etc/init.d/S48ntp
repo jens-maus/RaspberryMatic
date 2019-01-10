@@ -8,11 +8,11 @@ CFG_TEMPLATE_DIR=/etc/config_templates
 test -x $DAEMON || exit 0
 
 init() {
-	if [ ! -e /etc/config/ntpclient ] ; then
+	if [[ ! -e /etc/config/ntpclient ]]; then
 		cp $CFG_TEMPLATE_DIR/ntpclient /etc/config
 	fi
 
-	if [ -r /etc/config/ntpclient ] ; then
+	if [[ -r /etc/config/ntpclient ]]; then
 		. /etc/config/ntpclient
 	fi
 
@@ -25,6 +25,12 @@ init() {
   if [[ -z "${NTPSERVERS}" ]]; then
     # try the gateway
     NTPSERVERS=$(route -n | awk '{if ($1 == "0.0.0.0") print $2}')
+  fi
+
+  # make sure /var/lib/ntp exists so that the drift file
+  # can be saved later on
+  if [[ ! -e /var/lib/ntp ]]; then
+    mkdir -p /var/lib/ntp
   fi
 }
 

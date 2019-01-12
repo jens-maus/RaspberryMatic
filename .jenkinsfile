@@ -1,0 +1,17 @@
+pipeline {
+  agent any
+  stages {
+    stage('clone repository') {
+      steps {
+        sh "rm -rf RaspberryMatic"
+        sh "git clone https://github.com/jens-maus/RapberryMatic.git"
+      }
+    }
+    stage('build rpi3') {
+      steps {
+        sh "make PRODUCT=raspmatic_rpi3 clean"
+        sh "make PRODUCT=raspmatic_rpi3 dist"
+      }
+    }
+  }
+}

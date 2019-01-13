@@ -1,10 +1,26 @@
 pipeline {
   agent any
   stages {
-    stage('build rpi3') {
-      steps {
-        sh "make PRODUCT=raspmatic_rpi3 clean"
-        sh "make PRODUCT=raspmatic_rpi3 dist"
+    stage('Build') {
+      parallel {
+        stage('RaspberryPi3') {
+          steps {
+            sh "make PRODUCT=raspmatic_rpi3 clean"
+            sh "make PRODUCT=raspmatic_rpi3 dist"
+          }
+        }
+        stage('RaspberryPi0') {
+          steps {
+            sh "make PRODUCT=raspmatic_rpi0 clean"
+            sh "make PRODUCT=raspmatic_rpi0 dist"
+          }
+        }
+        stage('Tinkerboard') {
+          steps {
+            sh "make PRODUCT=raspmatic_tinkerboard clean"
+            sh "make PRODUCT=raspmatic_tinkerboard dist"
+          }
+        }
       }
     }
   }

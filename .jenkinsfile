@@ -1,27 +1,31 @@
 pipeline {
-  agent any
-  stages {
-    stage('Build') {
-      parallel {
-        stage('RaspberryPi3') {
-          steps {
-            sh "make PRODUCT=raspmatic_rpi3 clean"
-            sh "make PRODUCT=raspmatic_rpi3 dist"
-          }
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                parallel "RaspberryPi3": {
+                    node('linux') {
+                        ws("workspace/RaspberryMatic/rpi3") {
+                            checkout scm
+                            sh 'make PRODUCT=raspmatic_rpi3 distclean dist'
+                        }
+                    }
+                }, "Tinkerboard": {
+                    node('linux') {
+                        ws("workspace/RaspberryMatic/tinkerboard") {
+                            checkout scm
+                            sh 'make PRODUCT=raspmatic_tinkerboard distclean dist'
+                        }
+                    }
+                }, "RaspberryPi0": {
+                    node('linux') {
+                        ws("workspace/RaspberryMatic/rpi0") {
+                            checkout scm
+                            sh 'make PRODUCT=raspmatic_rpi0 distclean dist'
+                        }
+                    }
+                }, failFast: false
+            }
         }
-        stage('RaspberryPi0') {
-          steps {
-            sh "make PRODUCT=raspmatic_rpi0 clean"
-            sh "make PRODUCT=raspmatic_rpi0 dist"
-          }
-        }
-        stage('Tinkerboard') {
-          steps {
-            sh "make PRODUCT=raspmatic_tinkerboard clean"
-            sh "make PRODUCT=raspmatic_tinkerboard dist"
-          }
-        }
-      }
     }
-  }
 }

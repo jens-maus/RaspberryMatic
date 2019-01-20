@@ -1,6 +1,7 @@
-# setup HDMI output no matter if a HDMI
-# monitor is connected or not
-hdmi_force_hotplug=1
+# disable HDMI port on blanking
+hdmi_blanking=1
+
+# disable HDMI audio
 hdmi_drive=1
 
 # make sure to use less memory for the GPU and

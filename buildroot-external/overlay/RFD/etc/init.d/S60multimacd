@@ -52,6 +52,10 @@ start() {
 
       start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
       waitStartupComplete
+
+      # set low out-of-memory-killing priority to
+      # prevent kernel from killing this process
+      [[ -s ${PIDFILE} ]] && echo -900 >/proc/$(cat ${PIDFILE})/oom_score_adj
     else
       echo "/dev/eq3loop missing"
     fi

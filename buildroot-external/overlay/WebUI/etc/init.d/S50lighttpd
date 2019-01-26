@@ -31,6 +31,10 @@ start() {
 
   start-stop-daemon -S -q -b -m -p /var/run/lighttpd-angel.pid --exec /usr/sbin/lighttpd-angel -- -f /etc/lighttpd/lighttpd.conf -D
   [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
+
+  # set low out-of-memory-killing priority to
+  # prevent kernel from killing this process
+  [[ -s ${PIDFILE} ]] && echo -900 >/proc/$(cat ${PIDFILE})/oom_score_adj
 }
 stop() {
   echo -n "Stopping lighttpd: "

@@ -96,6 +96,10 @@ start() {
   init
   start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec /bin/${REGA_BIN_FILE} -- -f /etc/rega.conf -l ${LOGLEVEL_REGA}
   waitStartupComplete
+
+  # set low out-of-memory-killing priority to
+  # prevent kernel from killing this process
+  [[ -s ${PIDFILE} ]] && echo -900 >/proc/$(cat ${PIDFILE})/oom_score_adj
 }
 
 stop() {

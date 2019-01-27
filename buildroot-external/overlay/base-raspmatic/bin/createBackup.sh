@@ -26,26 +26,31 @@ source /VERSION 2>/dev/null
 
 BACKUPFILE="$(hostname)-${VERSION}-$(date +%Y-%m-%d-%H%M).sbk"
 
-while [[ $# -gt 0 ]]
-do
-key="$1"
+if [[ $# -eq 1 ]]
+then
+	BACKUPDIR=$1
+else
+	while [[ $# -gt 0 ]]
+	do
+	key="$1"
 
-case $key in
-    -f|--file)
-    BACKUPFILE="$2"
-    shift # past argument
-    shift # past value
-    ;;
-    -o|--output)
-    BACKUPDIR="$2"
-    shift # past argument
-    shift # past value
-    ;;
-    *)    # unknown option
-    shift # past argument
-    ;;
-esac
-done
+	case $key in
+		-f|--file)
+		BACKUPFILE="$2"
+		shift # past argument
+		shift # past value
+		;;
+		-o|--output)
+		BACKUPDIR="$2"
+		shift # past argument
+		shift # past value
+		;;
+		*)    # unknown option
+		shift # past argument
+		;;
+	esac
+	done
+fi
 
 # make sure BACKUPDIR exists
 TMPDIR=$(mktemp -d -p ${BACKUPDIR})

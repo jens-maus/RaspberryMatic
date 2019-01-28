@@ -2,7 +2,7 @@
 #
 # simple wrapper script to generate a CCU compatible sbk file
 #
-# Copyright (c) 2016-2018 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2016-2019 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,61 +17,63 @@
 # limitations under the License.
 #
 # Usage:
-# createBackup.sh <directory>
+# createBackup.sh <directory/file>
 #
 
+# default backup destination directory
 BACKUPDIR=/usr/local/tmp
 
-source /VERSION 2>/dev/null
-
-BACKUPFILE="$(hostname)-${VERSION}-$(date +%Y-%m-%d-%H%M).sbk"
-
-if [[ $# -eq 1 ]]
-then
-	BACKUPDIR=$1
+# let caller overwrite the backup path
+if [[ -n "${1}" ]]; then
+  BACKUPPATH="${1}"
 else
-	while [[ $# -gt 0 ]]
-	do
-	key="$1"
-
-	case $key in
-		-f|--file)
-		BACKUPFILE="$2"
-		shift # past argument
-		shift # past value
-		;;
-		-o|--output)
-		BACKUPDIR="$2"
-		shift # past argument
-		shift # past value
-		;;
-		*)    # unknown option
-		shift # past argument
-		;;
-	esac
-	done
+  BACKUPPATH=${BACKUPDIR}
 fi
 
-# make sure BACKUPDIR exists
+# check if specified path is a directory or file
+if [[ -d "${BACKUPPATH}" ]]; then
+  # a directory path was specified, lets construct the complete filepath
+  BACKUPDIR="${BACKUPPATH}"
+  source /VERSION 2>/dev/null
+  BACKUPFILE="$(hostname)-${VERSION}-$(date +%Y-%m-%d-%H%M).sbk"
+elif [[ "$(dirname ${BACKUPPATH})" == "." ]]; then
+  # a filename without path was specified, thus add it to default backup path
+  BACKUPFILE="${BACKUPPATH}"
+else
+  # a file was specified with a directory path
+  BACKUPDIR="$(dirname ${BACKUPPATH})"
+  BACKUPFILE="$(basename ${BACKUPPATH})"
+fi
+
+# use the backupdir as base directory for creating
+# a temporary directory to create the backup stuff in there.
 TMPDIR=$(mktemp -d -p ${BACKUPDIR})
+if [[ -d "${TMPDIR}" ]]; then
+  # make sure ReGaHSS saves its current settings
+  echo 'load tclrega.so; rega system.Save()' | tclsh 2>&1 >/dev/null
 
-# make sure ReGaHSS saves its current settings
-echo 'load tclrega.so; rega system.Save()' | tclsh 2>&1 >/dev/null
+  # create a gzipped tar of /usr/local
+  tar --owner=root --group=root --exclude=/usr/local/tmp --exclude=/usr/local/lost+found --exclude=${BACKUPDIR} --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf "${TMPDIR}/usr_local.tar.gz" /usr/local 2>/dev/null
 
-# create a gzipped tar of /usr/local
-tar --owner=root --group=root --exclude=/usr/local/tmp --exclude=/usr/local/lost+found --exclude=${BACKUPDIR} --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf ${TMPDIR}/usr_local.tar.gz /usr/local 2>/dev/null
+  # sign the configuration with the current key
+  crypttool -s -t 1 <"${TMPDIR}/usr_local.tar.gz" >"${TMPDIR}/signature"
 
-# sign the configuration with the current key
-crypttool -s -t 1 <${TMPDIR}/usr_local.tar.gz >${TMPDIR}/signature
+  # store the current key index
+  crypttool -g -t 1 >"${TMPDIR}/key_index"
 
-# store the current key index
-crypttool -g -t 1 >${TMPDIR}/key_index
+  # store the firmware VERSION
+  cp /VERSION "${TMPDIR}/firmware_version"
 
-# store the firmware VERSION
-cp /VERSION ${TMPDIR}/firmware_version
+  # create sha256 checksum of all files
+  (cd ${TMPDIR}; sha256sum * >signature.sha256)
 
-# create sbk file
-tar -C ${TMPDIR} --owner=root --group=root -cf ${BACKUPDIR}/${BACKUPFILE} usr_local.tar.gz signature key_index firmware_version 2>/dev/null
+  # create sbk file
+  tar -C "${TMPDIR}" --owner=root --group=root -cf "${BACKUPDIR}/${BACKUPFILE}" usr_local.tar.gz signature signature.sha256 key_index firmware_version 2>/dev/null
 
-# remove all temp files
-rm -rf ${TMPDIR}
+  # remove all temp files
+  rm -rf "${TMPDIR}"
+
+  exit 0
+else
+  exit 1
+fi

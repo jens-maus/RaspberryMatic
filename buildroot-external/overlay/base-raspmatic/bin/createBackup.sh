@@ -22,8 +22,34 @@
 
 BACKUPDIR=/usr/local/tmp
 
-if [ -n "${1}" ]; then
-  BACKUPDIR=$1
+source /VERSION 2>/dev/null
+
+BACKUPFILE="$(hostname)-${VERSION}-$(date +%Y-%m-%d-%H%M).sbk"
+
+if [[ $# -eq 1 ]]
+then
+	BACKUPDIR=$1
+else
+	while [[ $# -gt 0 ]]
+	do
+	key="$1"
+
+	case $key in
+		-f|--file)
+		BACKUPFILE="$2"
+		shift # past argument
+		shift # past value
+		;;
+		-o|--output)
+		BACKUPDIR="$2"
+		shift # past argument
+		shift # past value
+		;;
+		*)    # unknown option
+		shift # past argument
+		;;
+	esac
+	done
 fi
 
 # make sure BACKUPDIR exists
@@ -42,11 +68,10 @@ crypttool -s -t 1 <${TMPDIR}/usr_local.tar.gz >${TMPDIR}/signature
 crypttool -g -t 1 >${TMPDIR}/key_index
 
 # store the firmware VERSION
-source /VERSION 2>/dev/null
 cp /VERSION ${TMPDIR}/firmware_version
 
 # create sbk file
-tar -C ${TMPDIR} --owner=root --group=root -cf ${BACKUPDIR}/"$(hostname)-${VERSION}-$(date +%Y-%m-%d-%H%M).sbk" usr_local.tar.gz signature key_index firmware_version 2>/dev/null
+tar -C ${TMPDIR} --owner=root --group=root -cf ${BACKUPDIR}/${BACKUPFILE} usr_local.tar.gz signature key_index firmware_version 2>/dev/null
 
 # remove all temp files
 rm -rf ${TMPDIR}

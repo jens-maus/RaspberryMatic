@@ -30,11 +30,13 @@ else
   BACKUPPATH=${BACKUPDIR}
 fi
 
+# get running firmware version
+source /VERSION 2>/dev/null
+
 # check if specified path is a directory or file
 if [[ -d "${BACKUPPATH}" ]]; then
   # a directory path was specified, lets construct the complete filepath
   BACKUPDIR="${BACKUPPATH}"
-  source /VERSION 2>/dev/null
   BACKUPFILE="$(hostname)-${VERSION}-$(date +%Y-%m-%d-%H%M).sbk"
 elif [[ "$(dirname ${BACKUPPATH})" == "." ]]; then
   # a filename without path was specified, thus add it to default backup path
@@ -62,7 +64,7 @@ if [[ -d "${TMPDIR}" ]]; then
   crypttool -g -t 1 >"${TMPDIR}/key_index"
 
   # store the firmware VERSION
-  cp /VERSION "${TMPDIR}/firmware_version"
+  echo "VERSION=${VERSION}" >"${TMPDIR}/firmware_version"
 
   # create sha256 checksum of all files
   (cd ${TMPDIR}; sha256sum * >signature.sha256)

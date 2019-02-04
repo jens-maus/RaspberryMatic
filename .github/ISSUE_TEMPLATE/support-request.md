@@ -3,13 +3,14 @@ name: Support Request
 about: Find help in using RaspberryMatic
 
 ---
-
-DON'T USE THIS TICKET SYSTEM FOR FINDING HELP IN USING RASPBERRYMATIC.
-
-Please use the following discussion fora instead:
+ACHTUNG / ATTENTION:
+===================
+BITTE HIER KEINE HILFEANFRAGEN BEI DER BEDIENUNG/NUTZUNG VON
+RASPBERRYMATIC, SONDERN HIERFÜR DAS HOMEMATIC FORUM VERWENDEN:
 https://homematic-forum.de/forum/viewforum.php?f=65
 
-BITTE DIESES TICKETSYSTEM NICHT FÜR HILFEANFRAGEN IN DER BEDIENUNG VON RASPBERRYMATIC NUTZEN.
+====================
 
-Bitte dafür das folgende Diskussionsforum nutzen:
+DON'T USE THIS TICKET SYSTEM FOR FINDING HELP IN USING RASPBERRYMATIC.
+USE THE HOMEMATIC FORA INSTEAD:
 https://homematic-forum.de/forum/viewforum.php?f=65

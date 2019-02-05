@@ -77,7 +77,7 @@ proc getSGTIN_CCU {} {
 proc getSGTIN_Backup {migrationMode} {
 
   switch $migrationMode {
-    "CCU2_CCU2" {set path_crRFD "/tmp/backup/etc/config/crRFD/data"}
+    "CCU2_CCU2" {set path_crRFD "/tmp/backup/usr/local/etc/config/crRFD/data"}
     "CCU2_CCU3" {set path_crRFD "/tmp/backup/usr/local/etc/config/crRFD/data"}
     "CCU3_CCU3" {set path_crRFD "/usr/local/eQ-3-Backup/restore/etc/config/crRFD/data"}
   }
@@ -135,7 +135,7 @@ proc readBackupStatus {} {
 proc checkUserBackupValidility {migrationMode} {
 
   switch $migrationMode {
-    "CCU2_CCU2" {set pathBackup "/tmp/backup/"}
+    "CCU2_CCU2" {set pathBackup "/tmp/backup/usr/local/"}
     "CCU2_CCU3" {set pathBackup "/tmp/backup/usr/local/"}
     "CCU3_CCU3" {set pathBackup "/usr/local/eQ-3-Backup/restore/"}
   }
@@ -575,24 +575,9 @@ proc action_backup_restore_go {} {
     }
 
     after 5000
+    # backup for version >= 2/3
+    if { "false" == $ccu1_backup } {  
 
-    if { "false" == $ccu1_backup } {  # backup for version >= 2/3
-        if { [version_compare $system_version 3.0.0] < 0 } {
-        # This is for the CCU2
-        exec umount /usr/local
-        exec /usr/sbin/ubidetach -p /dev/mtd6
-        exec /usr/sbin/ubiformat /dev/mtd6 -y
-        exec /usr/sbin/ubiattach -p /dev/mtd6
-        exec /usr/sbin/ubimkvol /dev/ubi1 -N user -m
-        exec mount /usr/local
-      } else {
-        # This is for the CCU3
-    # do nothing, 
-        # exec umount /usr/local
-        # exec /sbin/mkfs.ext4 -q -F /dev/mmcblk0p3
-        # exec /sbin/e2label /dev/mmcblk0p3 userfs
-        # exec mount /usr/local
-      }
     set migration_mode "invalid"
       if { [version_compare $config_version 3.0.0] < 0 } {
     # CCU2 Backup
@@ -609,15 +594,64 @@ proc action_backup_restore_go {} {
     }
     if { "CCU2_CCU2" == $migration_mode } {
       # CCU2 ==> CCU2
-      if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
+      set backuperror false
+      set source_version [read_version "/tmp/firmware_version"]
+      set source_version [split $source_version .]
+      set source_major [lindex $source_version 0]
+      set source_minor [lindex $source_version 1]
+      set source_patch [lindex $source_version 2]
+      if { (($source_major == 2)  && ($source_minor > 17)) || (($source_major == 2) && ($source_minor == 17) && ($source_patch >= 14))} {
+        # extract backup to /tmp to enable checkUsrBackup.sh to validate backup
+        file delete -force /tmp/backup
+        file mkdir /tmp/backup
+        cd /tmp/backup
+        if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
+          cgi_javascript {puts "MessageBox.close();"}
+          put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+          file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
+          return
+          #set backuperror true
+        } else {
+          set backuperror false
+          # Check if a backup with HmIP support can be used without problems
+          set checkBackupState [checkUserBackupValidility $migration_mode]
+          if {$checkBackupState != 10} {
+            # It's not possible to use the backup
+            set backuperror true
+            # Start /etc/init.d/S62HMServer start
+            cgi_javascript {puts "MessageBox.close();"}
+            put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} [getBackupErrorMessage $checkBackupState $migration_mode]"
+            file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
+            cgi_javascript {puts "homematic('User.restartHmIPServer');"}
+            return
+          } 
+        }
+      }  
+      if { "false" == $backuperror } { 
+        #if { [version_compare $system_version 3.0.0] < 0 } {
+        # Erase user file system
+        exec umount /usr/local
+        exec /usr/sbin/ubidetach -p /dev/mtd6
+        exec /usr/sbin/ubiformat /dev/mtd6 -y
+        exec /usr/sbin/ubiattach -p /dev/mtd6
+        exec /usr/sbin/ubimkvol /dev/ubi1 -N user -m
+        exec mount /usr/local
+        #} 
+        #Apply backup
+        cd /
+        if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
           # set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
           # append msg "Falls dieser Fehler wiederholt Auftritt, wenden Sie sich bitte mit der folgenden Fehlermeldung an den Kundenservice:\n<br>"
           # append msg $errorMessage
+          cgi_javascript {puts "MessageBox.close();"}
           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
-          set backuperror true
+          file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
+          return
         } else {
           set backuperror false
         }
+        
+      }
     } elseif { "CCU3_CCU3" == $migration_mode }  {
     # CCU3 ==> CCU3
     file delete -force /usr/local/eQ-3-Backup/restore
@@ -625,6 +659,7 @@ proc action_backup_restore_go {} {
     cd /usr/local/eQ-3-Backup/restore
       if { [catch {exec tar xzf /tmp/usr_local.tar.gz --strip 2} errorMessage] } {
           # show message "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
+          cgi_javascript {puts "MessageBox.close();"}
           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
           set backuperror true
         } else {
@@ -640,6 +675,7 @@ proc action_backup_restore_go {} {
 
         cd /tmp/backup
         if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
+          cgi_javascript {puts "MessageBox.close();"}
           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
           set backuperror true
         } else {
@@ -757,7 +793,6 @@ proc action_backup_restore_go {} {
     cd /
   }
 
-
   set source_version [read_version "/tmp/firmware_version"]
 
   set source_version [split $source_version .]
@@ -766,15 +801,17 @@ proc action_backup_restore_go {} {
   set source_patch [lindex $source_version 2]
 
   # Check if a backup with HmIP support can be used without problems - A CCU with a version < 2.17.14 had no HmIP support. Therefore we don't check such backups
-  if {($source_major >= 3) || (($source_major == 2)  && ($source_minor > 17)) || (($source_major == 2) && ($source_minor == 17) && ($source_patch >= 14))} {
-    set checkBackupState [checkUserBackupValidility $migration_mode]
-    if {$checkBackupState != 10} {
-      # It's not possible to use the backup
-      set backuperror true
-
-      # Start /etc/init.d/S62HMServer start
-      cgi_javascript {puts "homematic('User.restartHmIPServer');"}
-      put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} [getBackupErrorMessage $checkBackupState $migration_mode]"
+  # (For CCU2_CCU2 this check has been executed above)
+  if { "CCU2_CCU2" != $migration_mode } {
+    if {($source_major >= 3) || (($source_major == 2)  && ($source_minor > 17)) || (($source_major == 2) && ($source_minor == 17) && ($source_patch >= 14))} {
+      set checkBackupState [checkUserBackupValidility $migration_mode]
+      if {$checkBackupState != 10} {
+        # It's not possible to use the backup
+        set backuperror true
+        # Start /etc/init.d/S62HMServer start
+        cgi_javascript {puts "homematic('User.restartHmIPServer');"}
+        put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} [getBackupErrorMessage $checkBackupState $migration_mode]"
+      }
     }
   }
   cgi_javascript {puts "MessageBox.close();"}

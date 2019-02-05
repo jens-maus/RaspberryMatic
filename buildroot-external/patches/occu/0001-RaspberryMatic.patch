@@ -72,9 +72,9 @@
  proc getSGTIN_Backup {migrationMode} {
  
    switch $migrationMode {
--    "CCU2_CCU2" {set path_crRFD "/tmp/backup/etc/config/crRFD/data"}
+-    "CCU2_CCU2" {set path_crRFD "/tmp/backup/usr/local/etc/config/crRFD/data"}
 -    "CCU2_CCU3" {set path_crRFD "/tmp/backup/usr/local/etc/config/crRFD/data"}
-+    "CCU2_CCU2" {set path_crRFD "/usr/local/tmp/backup/etc/config/crRFD/data"}
++    "CCU2_CCU2" {set path_crRFD "/usr/local/tmp/backup/usr/local/etc/config/crRFD/data"}
 +    "CCU2_CCU3" {set path_crRFD "/usr/local/tmp/backup/usr/local/etc/config/crRFD/data"}
      "CCU3_CCU3" {set path_crRFD "/usr/local/eQ-3-Backup/restore/etc/config/crRFD/data"}
    }
@@ -83,9 +83,9 @@
  proc checkUserBackupValidility {migrationMode} {
  
    switch $migrationMode {
--    "CCU2_CCU2" {set pathBackup "/tmp/backup/"}
+-    "CCU2_CCU2" {set pathBackup "/tmp/backup/usr/local/"}
 -    "CCU2_CCU3" {set pathBackup "/tmp/backup/usr/local/"}
-+    "CCU2_CCU2" {set pathBackup "/usr/local/tmp/backup/"}
++    "CCU2_CCU2" {set pathBackup "/usr/local/tmp/backup/usr/local/"}
 +    "CCU2_CCU3" {set pathBackup "/usr/local/tmp/backup/usr/local/"}
      "CCU3_CCU3" {set pathBackup "/usr/local/eQ-3-Backup/restore/"}
    }
@@ -129,22 +129,60 @@
    set config_version [read_version "firmware_version"]
    set ccu1_backup false
    if { [version_compare $config_version 2.0.0] < 0 } {
-@@ -609,7 +609,7 @@
-     }
+@@ -595,20 +595,20 @@
      if { "CCU2_CCU2" == $migration_mode } {
        # CCU2 ==> CCU2
--      if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
-+      if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
-           # set msg "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
-           # append msg "Falls dieser Fehler wiederholt Auftritt, wenden Sie sich bitte mit der folgenden Fehlermeldung an den Kundenservice:\n<br>"
+       set backuperror false
+-      set source_version [read_version "/tmp/firmware_version"]
++      set source_version [read_version "/usr/local/tmp/firmware_version"]
+       set source_version [split $source_version .]
+       set source_major [lindex $source_version 0]
+       set source_minor [lindex $source_version 1]
+       set source_patch [lindex $source_version 2]
+       if { (($source_major == 2)  && ($source_minor > 17)) || (($source_major == 2) && ($source_minor == 17) && ($source_patch >= 14))} {
+-        # extract backup to /tmp to enable checkUsrBackup.sh to validate backup
+-        file delete -force /tmp/backup
+-        file mkdir /tmp/backup
+-        cd /tmp/backup
+-        if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
++        # extract backup to /usr/local/tmp to enable checkUsrBackup.sh to validate backup
++        file delete -force /usr/local/tmp/backup
++        file mkdir /usr/local/tmp/backup
++        cd /usr/local/tmp/backup
++        if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+           cgi_javascript {puts "MessageBox.close();"}
+           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+-          file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
++          file delete -force /usr/local/tmp/firmware_version /usr/local//tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
+           return
+           #set backuperror true
+         } else {
+@@ -621,7 +621,7 @@
+             # Start /etc/init.d/S62HMServer start
+             cgi_javascript {puts "MessageBox.close();"}
+             put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} [getBackupErrorMessage $checkBackupState $migration_mode]"
+-            file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
++            file delete -force /usr/local/tmp/firmware_version /usr/local/tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
+             cgi_javascript {puts "homematic('User.restartHmIPServer');"}
+             return
+           } 
+@@ -645,7 +645,7 @@
            # append msg $errorMessage
-@@ -623,31 +623,32 @@
+           cgi_javascript {puts "MessageBox.close();"}
+           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+-          file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
++          file delete -force /usr/local/tmp/firmware_version /usr/local/tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
+           return
+         } else {
+           set backuperror false
+@@ -657,24 +657,25 @@
      file delete -force /usr/local/eQ-3-Backup/restore
      file mkdir /usr/local/eQ-3-Backup/restore
      cd /usr/local/eQ-3-Backup/restore
 -      if { [catch {exec tar xzf /tmp/usr_local.tar.gz --strip 2} errorMessage] } {
 +      if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz --strip 2} errorMessage] } {
            # show message "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
+           cgi_javascript {puts "MessageBox.close();"}
            put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
            set backuperror true
          } else {
@@ -166,9 +204,10 @@
 -        if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
 +        cd /usr/local/tmp/backup
 +        if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+           cgi_javascript {puts "MessageBox.close();"}
            put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
            set backuperror true
-         } else {
+@@ -682,8 +683,8 @@
            # only do this when the compatibility check says ok:
            #copy old files
            file mkdir /usr/local/eQ-3-Backup/restore/etc/config
@@ -179,7 +218,7 @@
            }
  
            if { [file exists InterfacesList.xml] } { file copy InterfacesList.xml /usr/local/eQ-3-Backup/restore/etc/config/InterfacesList.xml }
-@@ -680,26 +681,31 @@
+@@ -716,26 +717,31 @@
  
            set backuperror false
            cd /
@@ -217,7 +256,7 @@
          }
  
          if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }
-@@ -753,12 +759,14 @@
+@@ -789,11 +795,13 @@
          catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
  
          set backuperror false
@@ -227,13 +266,12 @@
      cd /
    }
  
- 
 -  set source_version [read_version "/tmp/firmware_version"]
 +  set source_version [read_version "/usr/local/tmp/firmware_version"]
  
    set source_version [split $source_version .]
    set source_major [lindex $source_version 0]
-@@ -780,8 +788,7 @@
+@@ -817,8 +825,7 @@
    cgi_javascript {puts "MessageBox.close();"}
  
    if { "false" == $backuperror } {
@@ -243,7 +281,7 @@
      division {class="popupTitle"} {
        puts "\${dialogSettingsSecurityMessageSysBackupRestartSystemTitle}"
      }
-@@ -822,8 +829,6 @@
+@@ -859,8 +866,6 @@
    cgi_javascript {
      puts "translatePage('#messagebox');"
    }
@@ -252,7 +290,7 @@
  }
  
  proc put_message {title msg args} {
-@@ -1428,30 +1433,27 @@
+@@ -1465,30 +1470,27 @@
  
  proc action_create_backup {} {
    set HOSTNAME [exec hostname]
@@ -433,21 +471,6 @@
          </tr>
      </table>
      </td>
---- occu/WebUI/www/rega/index.htm.orig
-+++ occu/WebUI/www/rega/index.htm
-@@ -89,7 +89,11 @@
-     
-       if (true == checkBrowser())
-       {
--        sStartPage = STARTPAGE_PC + "?sid=" + SessionId;
-+        if(typeof(SessionId) === 'undefined') {
-+          sStartPage = STARTPAGE_PC;
-+        } else {
-+          sStartPage = STARTPAGE_PC + "?sid=" + SessionId;
-+        }
-         <%
-           if ( (false == system.IsVar("NoAutoLogin")) || (false == system.GetVar("NoAutoLogin")) )
-           {
 --- occu/WebUI/www/rega/login.htm.orig
 +++ occu/WebUI/www/rega/login.htm
 @@ -73,7 +73,7 @@

@@ -5,6 +5,9 @@
 
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
+PIDFILE=/var/run/lighttpd.pid
+PIDFILE_ANGEL=/var/run/lighttpd-angel.pid
+
 # skip this startup if not in normal mode
 [[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
@@ -29,18 +32,18 @@ start() {
     echo "" >/var/etc/lighttpd_auth.conf
   fi
 
-  start-stop-daemon -S -q -b -m -p /var/run/lighttpd-angel.pid --exec /usr/sbin/lighttpd-angel -- -f /etc/lighttpd/lighttpd.conf -D
-  [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
+  # adjust the oom score (which is inherited by start-stop-daemon)
+  # to ensure that others are killed first in case of low memory situations
+  echo -900 >/proc/$$/oom_score_adj
 
-  # set low out-of-memory-killing priority to
-  # prevent kernel from killing this process
-  [[ -s ${PIDFILE} ]] && echo -900 >/proc/$(cat ${PIDFILE})/oom_score_adj
+  start-stop-daemon -S -q -b -m -p ${PIDFILE_ANGEL} --exec /usr/sbin/lighttpd-angel -- -f /etc/lighttpd/lighttpd.conf -D
+  [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
 }
 stop() {
   echo -n "Stopping lighttpd: "
-  start-stop-daemon -K -q -p /var/run/lighttpd-angel.pid
-  rm -f /var/run/lighttpd-angel.pid
-  [[ ! -f /var/run/lighttpd.pid ]] && echo "OK" || echo "ERROR"
+  start-stop-daemon -K -q -p ${PIDFILE_ANGEL}
+  rm -f ${PIDFILE_ANGEL}
+  [[ ! -f ${PIDFILE} ]] && echo "OK" || echo "ERROR"
 }
 restart() {
   stop
@@ -56,9 +59,9 @@ reload() {
     echo "" >/var/etc/lighttpd_auth.conf
   fi
 
-  start-stop-daemon -K -s HUP -q -p /var/run/lighttpd-angel.pid
+  start-stop-daemon -K -s HUP -q -p ${PIDFILE_ANGEL}
   sleep 2
-  [[ -f /var/run/lighttpd.pid ]] && echo "OK" || echo "ERROR"
+  [[ -f ${PIDFILE} ]] && echo "OK" || echo "ERROR"
 }
 
 case "$1" in

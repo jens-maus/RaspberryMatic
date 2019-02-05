@@ -71,6 +71,10 @@ start() {
     # get the current syslog settings
     [[ -r /etc/config/syslog ]] && . /etc/config/syslog
 
+    # adjust the oom score (which is inherited by start-stop-daemon)
+    # to ensure that others are killed first in case of low memory situations
+    echo -900 >/proc/$$/oom_score_adj
+
     /bin/hs485dLoader -l ${LOGLEVEL_HS485D} -ds -dd /var/etc/hs485d.conf
     echo "OK"
   else

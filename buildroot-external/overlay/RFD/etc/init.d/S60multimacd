@@ -50,12 +50,12 @@ start() {
       # get the current syslog settings
       [[ -r /etc/config/syslog ]] && . /etc/config/syslog
 
+      # adjust the oom score (which is inherited by start-stop-daemon)
+      # to ensure that others are killed first in case of low memory situations
+      echo -900 >/proc/$$/oom_score_adj
+
       start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
       waitStartupComplete
-
-      # set low out-of-memory-killing priority to
-      # prevent kernel from killing this process
-      [[ -s ${PIDFILE} ]] && echo -900 >/proc/$(cat ${PIDFILE})/oom_score_adj
     else
       echo "/dev/eq3loop missing"
     fi

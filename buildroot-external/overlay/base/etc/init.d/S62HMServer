@@ -74,13 +74,14 @@ waitStartupComplete() {
 start() {
   echo -n "Starting ${HM_SERVER_TYPE}: "
   init
+
+  # adjust the oom score (which is inherited by start-stop-daemon)
+  # to ensure that others are killed first in case of low memory situations
+  echo -900 >/proc/$$/oom_score_adj
+
   start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts=${HM_SERVER_PORT} -jar ${HM_SERVER} ${HM_SERVER_ARGS}
   echo -n "."
   waitStartupComplete
-
-  # set low out-of-memory-killing priority to
-  # prevent kernel from killing this process
-  [[ -s ${PIDFILE} ]] && echo -900 >/proc/$(cat ${PIDFILE})/oom_score_adj
 }
 
 stop() {

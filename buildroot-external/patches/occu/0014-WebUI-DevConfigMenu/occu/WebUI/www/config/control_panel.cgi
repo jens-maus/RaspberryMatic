@@ -193,7 +193,7 @@ if {[isOldCCU]} {
   }
 
 set COL_COUNT 4
-set i 2
+set i 3
 
 if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
   puts "<td><div class=\"cpButton\">"

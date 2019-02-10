@@ -96,6 +96,7 @@ proc Firewall_loadConfiguration { } {
   array set config  {}
   array set section {}
   set sectionName   {}
+  set migrationPerformed 0
   
   if { ![catch { set fd [open $Firewall_CONFIG_FILE r] }] } then {
     catch {
@@ -132,21 +133,23 @@ proc Firewall_loadConfiguration { } {
       set ports  [array_getValue section Ports]
       set id     [array_getValue section Id]
 
-      # Check if port 2010 for the service XMLRPC is set - if not add it.
-      if {$sectionName == "SERVICE XMLRPC"} {
-       if {[string first 2010 $ports] == -1} {
-           append ports " 2010"
-         }
-      } elseif { $sectionName == "SERVICE REGA" } {
-        if {[string first 1999 $ports] == -1} {
-           append ports " 1999"
-         }
-      }
-
       # Hinzufuegen von Ports, die oben definiert, jedoch nicht in der Config Datei stehen.
       # (Migration etc.)
+      #puts "Search in $ports"
+      set service $Firewall_SERVICES($id)
+      set defaultServicePorts [lindex $service 1]
+      foreach p $defaultServicePorts {
+        #puts "Searching for $p"
+        if { [lsearch -exact $ports "$p"] == -1 } {
+          #puts "$p not in list appending"
+          lappend ports $p
+          #puts $ports
+          set migrationPerformed 1
+        }
+      }
+      #end of migration
+
       set access [array_getValue section Access]
-      
       set Firewall_SERVICES($id) [list PORTS [lsort -integer $ports] ACCESS $access]
       
       array_clear section
@@ -167,6 +170,10 @@ proc Firewall_loadConfiguration { } {
       set Firewall_USER_PORTS $userPorts
     } 
 	}
+
+  if { $migrationPerformed == 1 } {
+    Firewall_saveConfiguration
+  }
 	
 }
 
@@ -467,7 +474,7 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   
 #IPv6
   set has_ip6tables [FirewallInternal::ip6Supported]
-  exec logger -t firewall -p user.info "has ip6 $has_ip6tables"
+  #exec logger -t firewall -p user.info "has ip6 $has_ip6tables"
   if { $has_ip6tables } {
     # flush rules
     try_exec_cmd "/usr/sbin/ip6tables -F"    
@@ -495,7 +502,7 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   
 	  # udp uPnP/ssdp port
 	  try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 1900 -j ACCEPT"
-  
+
   }
 
 

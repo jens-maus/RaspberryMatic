@@ -11,8 +11,8 @@ install_rfd_arch:
 	mkdir -p $(TARGET_DIR)/etc/config_templates
 	mkdir -p $(TARGET_DIR)/www/config
 	mkdir -p $(TARGET_DIR)/firmware
-	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/bin/* $(TARGET_DIR)/bin
-	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/lib/* $(TARGET_DIR)/lib
+	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/bin/* $(TARGET_DIR)/bin/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/lib/* $(TARGET_DIR)/lib/
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S61rfd $(TARGET_DIR)/etc/init.d/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/etc/config_templates/* $(TARGET_DIR)/etc/config_templates/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/www/config/* $(TARGET_DIR)/www/config/
@@ -24,16 +24,17 @@ ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
 endif
 
 install_hs485d_arch:
-	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/* $(TARGET_DIR)
+	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/* $(TARGET_DIR)/
 
 install_webui_arch:
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/config
 	rm -r $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/* $(TARGET_DIR)
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/* $(TARGET_DIR)/
 	cp -R WebUI/* $(TARGET_DIR)/
 	mv $(TARGET_DIR)/bin/ReGaHss.community $(TARGET_DIR)/bin/ReGaHss
 ifeq (,$(filter $(BR2_PACKAGE_OCCU_WEBUI_REGAHSS_BETA), y))
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/* $(TARGET_DIR)/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/* $(TARGET_DIR)/lib/
 endif
 
 install_linuxbasis_arch:
@@ -54,12 +55,12 @@ install_hmserver:
 	cp -R HMserver/opt/HMServer/pages $(TARGET_DIR)/opt/HMServer/
 	cp -a HMserver/etc/init.d/S62HMServer $(TARGET_DIR)/etc/init.d/
 	chmod a+rx $(TARGET_DIR)/etc/init.d/S62HMServer
-#ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
+ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a HMserver/opt/HMServer/HMIPServer.jar $(TARGET_DIR)/opt/HMServer/
 	cp -a HMserver/opt/HmIP $(TARGET_DIR)/opt/
-#else
+else
 	cp -a HMserver/opt/HMServer/HMServer.jar $(TARGET_DIR)/opt/HMServer/
-#endif
+endif
 
 update_webui:
 	ln -sf /usr/local/.firmwareUpdate/EULA.de             $(TARGET_DIR)/www/rega/EULA.de

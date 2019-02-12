@@ -12,13 +12,10 @@ STARTWAITFILE=/var/status/HMServerStarted
 # skip this startup if not in normal mode
 [[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
-if [[ -n "${HM_HMIP_DEV}" ]]; then
-  HM_SERVER_TYPE="HMIPServer"
-  PIDFILE=/var/run/HMIPServer.pid
-else
-  HM_SERVER_TYPE="HMServer"
-  PIDFILE=/var/run/HMServer.pid
-fi
+HM_SERVER=/opt/HMServer/HMIPServer.jar
+HM_SERVER_ARGS="/var/etc/crRFD.conf /etc/HMServer.conf"
+HM_SERVER_DEVNODE=/dev/mmd_hmip
+PIDFILE=/var/run/HMIPServer.pid
 
 init() {
   export JAVA_HOME=/opt/java/
@@ -34,26 +31,15 @@ init() {
     fi
   fi
 
-  if [[ -n "${HM_HMIP_DEV}" ]]; then
-
-    # if no uart is used to connect to the rf module (e.g. HmIP-RFUSB)
-    # we have to set the device node
-    if [[ "${HM_HMIP_DEVNODE}" != "${HM_HOST_GPIO_UART}" ]]; then
-      HM_SERVER_PORT=${HM_HMIP_DEVNODE}
-    else
-      HM_SERVER_PORT=/dev/mmd_hmip
-    fi
-
-    # make sure the Adapter Port setting is correct
-    # when generating /var/etc/crRFD.conf
-    sed "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_SERVER_PORT}|" ${CFG_TEMPLATE_DIR}/crRFD.conf >/var/etc/crRFD.conf
-
-    HM_SERVER=/opt/HMServer/HMIPServer.jar
-    HM_SERVER_ARGS="/var/etc/crRFD.conf /etc/HMServer.conf"
-  else
-    HM_SERVER=/opt/HMServer/HMServer.jar
-    HM_SERVER_ARGS="/etc/HMServer.conf"
+  # if no uart is used to connect to the rf module (e.g. HmIP-RFUSB)
+  # we have to set the device node
+  if [[ "${HM_HMIP_DEVNODE}" != "${HM_HOST_GPIO_UART}" ]]; then
+    HM_SERVER_DEVNODE=${HM_HMIP_DEVNODE}
   fi
+
+  # make sure the Adapter Port setting is correct
+  # when generating /var/etc/crRFD.conf
+  sed "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_SERVER_DEVNODE}|" ${CFG_TEMPLATE_DIR}/crRFD.conf >/var/etc/crRFD.conf
 }
 
 waitStartupComplete() {
@@ -72,20 +58,20 @@ waitStartupComplete() {
 }
 
 start() {
-  echo -n "Starting ${HM_SERVER_TYPE}: "
+  echo -n "Starting HMIPServer: "
   init
 
   # adjust the oom score (which is inherited by start-stop-daemon)
   # to ensure that others are killed first in case of low memory situations
   echo -900 >/proc/$$/oom_score_adj
 
-  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts=${HM_SERVER_PORT} -jar ${HM_SERVER} ${HM_SERVER_ARGS}
+  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts=${HM_SERVER_DEVNODE} -jar ${HM_SERVER} ${HM_SERVER_ARGS}
   echo -n "."
   waitStartupComplete
 }
 
 stop() {
-  echo -n "Stopping ${HM_SERVER_TYPE}: "
+  echo -n "Stopping HMIPServer: "
   rm -f ${STARTWAITFILE}
   start-stop-daemon -K -q -p ${PIDFILE}
   rm -f ${PIDFILE}

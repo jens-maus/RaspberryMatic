@@ -34,7 +34,6 @@ install_webui_arch:
 	mv $(TARGET_DIR)/bin/ReGaHss.community $(TARGET_DIR)/bin/ReGaHss
 ifeq (,$(filter $(BR2_PACKAGE_OCCU_WEBUI_REGAHSS_BETA), y))
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/* $(TARGET_DIR)/lib/
 endif
 
 install_linuxbasis_arch:

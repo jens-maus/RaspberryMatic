@@ -93,7 +93,7 @@ int checkAuth(int port, const char* user, const char* pass) {
 
   int m = 0;
   //user
-  for(int i = 0 ; i < lengthUser && m <= 1023; i++) {
+  for(int i = 0 ; i < lengthUser && m <= 1022; i++) {
     const char c = user[i];
     if(c == '\\') {
       msg[m] = '\\';
@@ -114,7 +114,7 @@ int checkAuth(int port, const char* user, const char* pass) {
   msg[m] = ':';
   m++;
   //pass
-  for(int i = 0; i < lengthPass && m <= 1023; i++) {
+  for(int i = 0; i < lengthPass && m <= 1022; i++) {
     const char c = pass[i];
     if(c == '\\') {
       msg[m] = '\\';

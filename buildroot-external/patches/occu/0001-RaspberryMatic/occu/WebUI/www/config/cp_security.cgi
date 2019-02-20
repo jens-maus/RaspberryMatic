@@ -608,7 +608,7 @@ proc action_backup_restore_go {} {
         if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
           cgi_javascript {puts "MessageBox.close();"}
           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
-          file delete -force /usr/local/tmp/firmware_version /usr/local//tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
+          file delete -force /usr/local/tmp/firmware_version /usr/local/tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
           return
           #set backuperror true
         } else {

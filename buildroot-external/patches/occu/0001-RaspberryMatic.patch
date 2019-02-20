@@ -153,7 +153,7 @@
            cgi_javascript {puts "MessageBox.close();"}
            put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
 -          file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
-+          file delete -force /usr/local/tmp/firmware_version /usr/local//tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
++          file delete -force /usr/local/tmp/firmware_version /usr/local/tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
            return
            #set backuperror true
          } else {

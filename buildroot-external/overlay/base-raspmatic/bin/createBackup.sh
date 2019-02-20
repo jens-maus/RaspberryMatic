@@ -36,14 +36,14 @@ source /VERSION 2>/dev/null
 # check if specified path is a directory or file
 if [[ -d "${BACKUPPATH}" ]]; then
   # a directory path was specified, lets construct the complete filepath
-  BACKUPDIR="${BACKUPPATH}"
+  BACKUPDIR="$(realpath ${BACKUPPATH})"
   BACKUPFILE="$(hostname)-${VERSION}-$(date +%Y-%m-%d-%H%M).sbk"
-elif [[ "$(dirname ${BACKUPPATH})" == "." ]]; then
+elif [[ "${BACKUPPATH:0:1}" != "." && "${BACKUPPATH:0:1}" != "/" ]]; then
   # a filename without path was specified, thus add it to default backup path
   BACKUPFILE="${BACKUPPATH}"
 else
   # a file was specified with a directory path
-  BACKUPDIR="$(dirname ${BACKUPPATH})"
+  BACKUPDIR="$(realpath $(dirname ${BACKUPPATH}))"
   BACKUPFILE="$(basename ${BACKUPPATH})"
 fi
 

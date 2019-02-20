@@ -4,7 +4,7 @@
 #
 #############################################################
 
-OCCU_VERSION = 3.43.15
+OCCU_VERSION = 3.43.15-1
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 
 ifeq ($(BR2_PACKAGE_OCCU),y)
@@ -65,6 +65,9 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 
 		# make sure ReGaHss.* is deleted
 		rm -f $(TARGET_DIR)/bin/ReGaHss.*
+
+		# make sure no /etc/ntp.conf is there anymore (chrony used)
+		rm -f $(TARGET_DIR)/etc/ntp.conf
   endef
 	TARGET_FINALIZE_HOOKS += OCCU_FINALIZE_TARGET
 

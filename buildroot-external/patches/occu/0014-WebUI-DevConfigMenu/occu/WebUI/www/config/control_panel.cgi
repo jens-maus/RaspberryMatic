@@ -209,6 +209,14 @@ if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
   puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"window.open('/tools/devconfig.cgi?sid=$sid');\">DevConfig</div>"
   puts "<div class=\"StdTableBtnHelp\"></div></td>"
   incr i
+  if { $i == $COL_COUNT } {
+    puts {
+      <td class="_CLASS21702"></td>
+      </tr>
+      <tr>
+    }
+    set i 0
+  }
 }
 
 array set addons [::HomeMatic::Addon::GetAll]

@@ -140,12 +140,12 @@ proc Firewall_loadConfiguration { } {
       set defaultServicePorts [lindex $service 1]
       foreach p $defaultServicePorts {
         #puts "Searching for $p"
-        if { [lsearch -exact $ports "$p"] == -1 } {
-          #puts "$p not in list appending"
+        if { [lsearch -exact $ports "$p"] == -1 } {	
+          #puts "$p not in list appending"	
           lappend ports $p
           #puts $ports
           set migrationPerformed 1
-        }
+        } 
       }
       #end of migration
 

@@ -1,6 +1,6 @@
 --- occu/WebUI/www/config/control_panel.cgi.orig
 +++ occu/WebUI/www/config/control_panel.cgi
-@@ -206,7 +206,7 @@
+@@ -206,9 +206,17 @@
  
  if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
    puts "<td><div class=\"cpButton\">"
@@ -8,4 +8,14 @@
 +  puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"window.open('/tools/devconfig.cgi?sid=$sid');\">DevConfig</div>"
    puts "<div class=\"StdTableBtnHelp\"></div></td>"
    incr i
++  if { $i == $COL_COUNT } {
++    puts {
++      <td class="_CLASS21702"></td>
++      </tr>
++      <tr>
++    }
++    set i 0
++  }
  }
+ 
+ array set addons [::HomeMatic::Addon::GetAll]

@@ -486,9 +486,16 @@ fwinstall()
     LOFS_DEV=$(/sbin/losetup -f)
 
     # perform a lofs mount of the image file
-    /sbin/losetup -r -f -P ${img_file}
+    /sbin/losetup -r -f ${img_file}
     if [[ $? -ne 0 ]]; then
       echo "ERROR: (losetup)<br/>"
+      exit 1
+    fi
+
+    # lets scan for partitions using partprobe
+    /usr/sbin/partprobe ${LOFS_DEV}
+    if [[ $? -ne 0 ]]; then
+      echo "ERROR: (partprobe)<br/>"
       exit 1
     fi
 

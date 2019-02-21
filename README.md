@@ -19,7 +19,7 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 * Integrated WebUI-based firmware update mechanism and Recovery System to perform maintenance operations such as system restore.
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Read-only root file system to minimize write operations on SD card
-* Includes embedded JAVA11 runtime environment ([11.1.8-jdk11-c2](http://www.azul.com/downloads/zulu-embedded/))
+* Includes embedded JAVA8 runtime environment ([1.8.0_192-8.33.0.134](http://www.azul.com/downloads/zulu-embedded/))
 * Full IPv6 support and default HTTPS enabled WebUI support
 * Auto-resizing `/usr/local` partition to utilize the full capacity of the SD card or USB stick
 * Hardware WatchDog support automatically rebooting the system upon severe hardware/lockup problems

@@ -171,6 +171,8 @@ if {[isOldCCU]} {
     <tr>
   }
 
+ set i 0
+
   if {[showHmIPWired]} {
     puts {
       <td>
@@ -178,6 +180,7 @@ if {[isOldCCU]} {
         <div class="StdTableBtnHelp"><img id="showAccessPointSettingsCPHelp" src="/ise/img/help.png"></div>
       </td>
     }
+    incr i
   }
 
   if {[getProduct] >= 3} {
@@ -189,6 +192,7 @@ if {[isOldCCU]} {
         <div class="StdTableBtnHelp"><img id="showSecuritySettingsCPHelp" src="/ise/img/help.png"></div>
       </td>
     }
+    incr i
   }
 
   puts {
@@ -200,9 +204,9 @@ if {[isOldCCU]} {
       </div>
     </td>
   }
+  incr i
 
 set COL_COUNT 4
-set i 3
 
 if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
   puts "<td><div class=\"cpButton\">"

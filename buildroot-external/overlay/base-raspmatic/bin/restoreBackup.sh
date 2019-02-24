@@ -35,7 +35,7 @@ if [[ -d "${TMPDIR}" ]]; then
   tar -C "${TMPDIR}" -xf "${BACKUPFILE}"
 
   # check archive consistency using sha256
-  if [[ "${TMPDIR}/signature.sha256" ]]; then
+  if [[ -f "${TMPDIR}/signature.sha256" ]]; then
     (cd "${TMPDIR}"; sha256sum -s -c signature.sha256)
     if [[ $? -ne 0 ]]; then
       echo "ERROR: inconsistent backup archive identified (sha256)."

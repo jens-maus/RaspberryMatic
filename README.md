@@ -89,7 +89,7 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
   * HomeMatic-Wired only:
     * LAN Wired Gateway – [HMW-LGW-O-DR-GS-EU](https://www.elv.de/homematic-rs485-gateway-1.html)
   * homematicIP-Wired only:
-    * Wired Access Point (DRAP) – [HmIPW-DRAP](https://www.elv.de/homematic-ip-wired-access-point.html)
+    * Wired Access Point (DRAP) – [HmIPW-DRAP](https://www.elv.de/homematic-ip-wired-access-point.html), only together with RPI-RF-MOD!
 * 4 GB minimum sized microSD card or USB memory stick / hard disk (RaspberryPi3 only)
 
 ## :telescope: Compatible Third-Party CCU Addons

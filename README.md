@@ -26,11 +26,62 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 * Direct [CloudMatic](http://cloudmatic.de) (meine-homematic.de) support
 
 ## :cake: Exclusive Features (not available in CCU2/CCU3 firmware)
-* Fully compatible to all available [RaspberryPi](https://www.raspberrypi.org/) and [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/) hardware models on the market.
+* Runs on all available [RaspberryPi](https://www.raspberrypi.org/) and [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/) hardware models on the market.
 * Integration of latest [community version of ReGaHss](https://github.com/eq-3/occu/tree/master/arm-gnueabihf/packages-eQ-3/WebUI-Beta) comming with [latest features and bugfixes](https://github.com/jens-maus/RaspberryMatic/projects/2) in logic engine.
-* Integration of over 40 [third-party patches](https://github.com/jens-maus/RaspberryMatic/projects/3) for an improved WebUI experience.
+* Integration of over 40 [third-party patches](https://github.com/jens-maus/RaspberryMatic/projects/3) for an improved WebUI experience providing the following additional functionalities:
+  * Possibility to disable service messages for manually deactivating homematic devices
+  * Direct display of important status messages (config pending, unreach, etc.) and RSSI values for each device
+  * Added display of battery level and valve state for all heating control devices (e.g. `HM-CC-RT-DN` or `HMIP-eTRV`)
+  * Completly reworked scripting editor (using [CodeMirror](https://codemirror.net/) engine) with the following features:
+    * display of line numbers
+    * syntax highlighting
+    * internal (regex) search & replace functionality as well as match display on the scrollbar
+    * internal command completion based on already existing words in the currently edited script
+    * brackets-based code folding capabilities
+    * brackets matching display to highlight all opening/closing brackets while editing
+    * auto adding of closing brackets while editing
+    * switchable fullscreen mode
+    * Advanced editor keyboard shortcuts (e.g. `Ctrl-Q`: auto folding/un-folding of brackets)
+  * Possibility to use "equal" and "not equal" comparisons in WebUI programs  
+  * Possibility to force a boot into the recovery system on next boot
+  * Optimized WebUI-based file upload/download with improved large file support
+  * Possibility to perform a CCU addon installation without a forced reboot
+  * Display of the number of previously performed security key changes
+  * Possibility to alphabetically sort all system variables added as user favorites
+  * Improved browser cache handling for reduced conflicts when updating to newer firmware versions
+  * Added Apple-Touch icons to be displayed if the WebUI is displayed as an iOS App on the Desktop of a iPad/iPhone
+  * Integrated certain bug fixes in case system variables with white spaces and newlines are used
+  * System variables can now be added as user favorites even though they were previously connected to a device channel
+  * Cosmetical enhancements in the various table displays in the WebUI
+  * More table filter possibilities for a faster search for devices/channels
+  * Minor fixes to DevConfig tweak to also display RSSI values for HmIP devices
+* Integration of certain general security enhancements:
+  * Improved WebUI security via enabled cross-site-scripting preventions (`X-Frame-Options`, `X-XSS-Protection`, `X-Robots-Tag`, etc.)
+  * Integration of important security fixes ([CVE-2018-7296](
+https://www.cvedetails.com/cve/CVE-2018-7296/), [CVE-2018-7300](
+https://www.cvedetails.com/cve/CVE-2018-7300/))
+  * Encryption certificates for HTTPS are exclusively generated on the system itself (and not via third-party servers)
+  * Delivered `robots.txt` to prevent web crawlers from indexing a CCU in case it is accidently available from the internet
+  * General use of SHA512 strong password hashes when entering a new SSH connection password
+  * In case of low-memory conditions critical homematic services will be killed as one of the last services
+* Improved backup/restore functionality for
+  * manually running a backup/restore on the command-line (`createBackup.sh`, `restoreBackup.sh`)
+  * automatic nightly backups on a connected USB memory stick
+  * possibility to route nightly backups to external storage devices (e.g. NAS)
+* Additional linux packages installed/available:
+  * `wiringPi` - GPIO library and command-line tools to easily query/set GPIO states
+  * `chrony` - as a drop-in replacement for the old `ntpd` NTP daemon used
+  * `jq` - json parsing command-line tool
+  * `ethtool` - command-line tool to query/set information on network links
+  * `f2fs` - F2FS filesystem which is explicitly developed for flash devices and can be used for e.g. external USB devices
+* Additional helper scripts useable on command-line:
+  * `triggerAlarm.tcl` – can be used to trigger an own alarm in the WebUI
+  * `updateAddonContig.tcl` – to add/remove CCU addon buttons to the WebUI
+* Automatic generation and update of `DutyCycle` system variables which will contain the percentage of each rf module (GPIO module or connected LAN gateways) as well as automatic alarm triggering in case a duty cycle > 98% is reached
+* Use of the RaspberryPi/Tinkerboard onboard LEDs to signal general system load using heartbeat-typed LED flashes
+* A combination of multiple homematic RF-modules can be used to distribute DutyCycle and allow for a wider range of different homematic access scenarios (e.g. `HmIP-RF-USB` and `HM-CFG-USB-2` at the same time)
 * Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
-* Support to be used without GPIO RF module just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
+* Support to be used without any GPIO RF module HAT when just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
 * Based on latest [Buildroot 2018.11.2](http://buildroot.org/) lightweight Linux operating system
 * Latest Linux kernel (RaspberryPi: [4.14.98](https://github.com/raspberrypi/linux/tree/rpi-4.14.y), Tinkerboard: [4.14.101](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
@@ -38,7 +89,6 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 * Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setups including USB connection to uninterruptible power supply (UPS) as well as remote NUT server use (e.g. via Synology NAS Network UPS functionality)
-* Support to query status information of the underlying Linux system using SNMP requests
 * Support for the following third-party *Hardware Attached on Top* (HAT) boards:
   * [S.USV](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown.
   * [PiUSV+](https://www.reichelt.de/?ARTICLE=169883) – UPS including alarm notification upon power loss and automatic system shutdown.

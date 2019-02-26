@@ -1,0 +1,119 @@
+set init
+set daemon 3
+set log syslog
+set statefile /var/run/monit.state
+set idfile /usr/local/etc/monit.id
+
+set httpd unixsocket /var/run/monit.sock
+    allow localhost
+
+check process watchdog with matching /dev/watchdog
+    start = "/etc/init.d/S00watchdog start"
+    stop = "/etc/init.d/S00watchdog stop"
+
+check process hss_led with pidfile /var/run/hss_led.pid
+    start = "/sbin/start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6"
+    stop = "/sbin/start-stop-daemon -K -q -p /var/run/hss_led.pid"
+    #if failed port 8182 type udp for 3 cycles then restart
+
+check process klogd with pidfile /var/run/klogd.pid
+    start = "/etc/init.d/S07logging start"
+    stop = "/etc/init.d/S07logging stop"
+
+check process syslogd with pidfile /var/run/syslogd.pid
+    start = "/etc/init.d/S07logging start"
+    stop = "/etc/init.d/S07logging stop"
+
+check process udevd with matching /sbin/udevd
+    start = "/etc/init.d/S10udev start"
+    stop = "/etc/init.d/S10udev stop"
+
+check process irqbalance with pidfile /var/run/irqbalance.pid
+    start = "/etc/init.d/S13irqbalance start"
+    stop = "/etc/init.d/S13irqbalance stop"
+
+check process rngd with pidfile /var/run/rngd.pid
+    start = "/etc/init.d/S21rngd start"
+    stop = "/etc/init.d/S21rngd stop"
+
+check process dbus with pidfile /var/run/messagebus.pid
+    start = "/etc/init.d/S30dbus start"
+    stop = "/etc/init.d/S30dbus stop"
+    if failed unixsocket /var/run/dbus/system_bus_socket for 3 cycles then restart
+
+check process ifplugd with pidfile /var/run/ifplugd.eth0.pid
+    start = "/etc/init.d/S45ifplugd start"
+    stop = "/etc/init.d/S45ifplugd stop"
+
+check process chronyd with pidfile /var/run/chrony/chronyd.pid
+    start = "/etc/init.d/S49chrony start"
+    stop = "/etc/init.d/S49chrony stop"
+    if failed port 323 type udp for 3 cycles then restart
+    if failed unixsocket /var/run/chrony/chronyd.sock type udp for 3 cycles then restart
+
+check process eq3configd with pidfile /var/run/eq3configd.pid
+    start = "/etc/init.d/S50eq3configd start"
+    stop = "/etc/init.d/S50eq3configd stop"
+    if failed port 43439 type udp for 3 cycles then restart
+
+check process lighttpd with pidfile /var/run/lighttpd-angel.pid
+    start = "/etc/init.d/S50lighttpd start"
+    stop = "/etc/init.d/S50lighttpd stop"
+    if failed
+      port 80
+      protocol http
+      for 3 cycles
+    then restart
+    if failed
+      port 443
+      protocol https
+      and certificate valid > 30 days
+      for 3 cycles
+    then restart
+    if failed port 1999 for 3 cycles then restart
+    if failed port 2000 for 3 cycles then restart
+    if failed port 2001 for 3 cycles then restart
+    if failed port 2010 for 3 cycles then restart
+    if failed port 8181 for 3 cycles then restart
+    if failed port 9292 for 3 cycles then restart
+    if failed port 41999 for 3 cycles then restart
+    if failed port 42000 for 3 cycles then restart
+    if failed port 42001 for 3 cycles then restart
+    if failed port 42010 for 3 cycles then restart
+    if failed port 48181 for 3 cycles then restart
+    if failed port 49292 for 3 cycles then restart
+
+check process ssdpd with pidfile /var/run/ssdpd.pid
+    start = "/etc/init.d/S50ssdpd start"
+    stop = "/etc/init.d/S50ssdpd stop"
+    if failed port 1900 type udp for 3 cycles then restart
+
+check process multimacd with pidfile /var/run/multimacd.pid
+    start = "/etc/init.d/S60multimacd start"
+    stop = "/etc/init.d/S60multimacd stop"
+
+check process rfd with pidfile /var/run/rfd.pid
+    start = "/etc/init.d/S61rfd start"
+    stop = "/etc/init.d/S61rfd stop"
+    if failed port 32001 for 3 cycles then restart
+
+check process HMIPServer with pidfile /var/run/HMIPServer.pid
+    start = "/etc/init.d/S62HMServer start"
+    stop = "/etc/init.d/S62HMServer stop"
+    if failed port 9293 for 3 cycles then restart
+    if failed port 32010 for 3 cycles then restart
+    if failed port 39292 for 3 cycles then restart
+    if failed port 43438 type udp for 3 cycles then restart
+
+check process ReGaHss with pidfile /var/run/ReGaHss.pid
+    start = "/etc/init.d/S70ReGaHss start"
+    stop = "/etc/init.d/S70ReGaHss stop"
+    if failed port 8183 protocol http for 3 cycles then restart
+    if failed port 31999 for 3 cycles then restart
+    if failed port 1998 type udp for 3 cycles then restart
+
+check process crond with pidfile /var/run/crond.pid
+    start = "/etc/init.d/S98crond start"
+    stop = "/etc/init.d/S98crond stop"
+
+include /usr/local/etc/monit*.cfg

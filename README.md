@@ -76,21 +76,19 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
   * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) or [Model A, 256MB](https://www.adafruit.com/product/1344)
   * [Tinker Board S](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
   * [Tinker Board](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
-* One or more of the following HomeMatic/HomeMatic-Wired/homematicIP/homematicIP-Wired capabale devices:
-  * HomeMatic َ+ homematicIP:
-    * GPIO Radio Module HAT – [RPI-RF-MOD](https://www.elv.de/homematic-funk-modulplatine-fuer-raspberry-pi-3-rpi-rf-mod-komplettbausatz.html)  
-    * GPIO Radio Module HAT – [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) ([Installation](https://www.youtube.com/watch?v=xtzXsvOLa_Y))
-    * USB Radio Module Adapter PCB – [HB-RF-USB](https://github.com/alexreinert/PCB/tree/master/HB-RF-USB) ([Discussion](https://homematic-forum.de/forum/viewtopic.php?f=69&t=47691#p477528))
-  * homematicIP only:
-    * USB Stick – [HmIP-RFUSB](https://www.elv.de/elv-homematic-ip-rf-usb-stick-hmip-rfusb-fuer-alternative-steuerungsplattformen-arr-bausatz.html)
-  * HomeMatic only:
-    * LAN Gateway – [HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)
-    * USB Config Adapter – [HM-CFG-USB-2](https://wiki.fhem.de/wiki/HM-CFG-USB_USB_Konfigurations-Adapter)
-  * HomeMatic-Wired only:
-    * LAN Wired Gateway – [HMW-LGW-O-DR-GS-EU](https://www.elv.de/homematic-rs485-gateway-1.html)
-  * homematicIP-Wired only:
-    * Wired Access Point (DRAP) – [HmIPW-DRAP](https://www.elv.de/homematic-ip-wired-access-point.html)
 * 4 GB minimum sized microSD card or USB memory stick / hard disk (RaspberryPi3 only)
+* One or more of the following HomeMatic/HomeMatic-Wired/homematicIP/homematicIP-Wired capabale devices:
+
+| device desc | device | HomeMatic | homematicIP | HomeMatic-Wired | homematicIP-Wired |
+| ----------- | ------ | :-------: | :---------: | :-------------: | :---------------: |
+| new GPIO Radio Module HAT | [RPI-RF-MOD](https://www.elv.de/homematic-funk-modulplatine-fuer-raspberry-pi-3-rpi-rf-mod-komplettbausatz.html) | :heavy_check_mark: | :heavy_check_mark: |
+| old GPIO Radio Module HAT | [HM-MOD-RPI-PCB](http://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) | :heavy_check_mark: | :heavy_check_mark: |
+| USB Radio Module Adapter PCB | [HB-RF-USB](https://github.com/alexreinert/PCB/tree/master/HB-RF-USB) ([Discussion](https://homematic-forum.de/forum/viewtopic.php?f=69&t=47691#p477528)) | :heavy_check_mark: | :heavy_check_mark: |
+| USB Stick | [HmIP-RFUSB](https://www.elv.de/elv-homematic-ip-rf-usb-stick-hmip-rfusb-fuer-alternative-steuerungsplattformen-arr-bausatz.html) | | :heavy_check_mark: |
+| LAN Gateway | [HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html) | :heavy_check_mark: |
+| USB Config Adapter | [HM-CFG-USB-2](https://wiki.fhem.de/wiki/HM-CFG-USB_USB_Konfigurations-Adapter) | :heavy_check_mark: |
+| LAN Wired Gateway | [HMW-LGW-O-DR-GS-EU](https://www.elv.de/homematic-rs485-gateway-1.html) | | | :heavy_check_mark: |
+| Wired Access Point (DRAP) | [HmIPW-DRAP](https://www.elv.de/homematic-ip-wired-access-point.html) | | | | :heavy_check_mark: <br /> only with RPI-RF-MOD |
 
 ## :telescope: Compatible Third-Party CCU Addons
 The CCU platform allows to enhance the functionality of a CCU by installing so-called CCU Addon packages. For RaspberryMatic, standard CCU Addon packages won't work because included binaries have to be recompiled for the hard-float buildroot environment RaspberryMatic uses. Here is a list of well-known already compatible Addon packages (please note that this list might be incomplete):

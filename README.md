@@ -62,22 +62,22 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 ## :computer: Requirements
 <img src="https://files.elv.com/bilder/artikel/Produkte/15/1529/152941/Internet//gross/152941_w01_modulplatine.jpg" alt="RaspberryPi equipped with RPI-RF-MOD" width=300 align=right>
 
-* Any of the following embedded hardware boards:
-  * [RaspberryPi3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
-  * [RaspberryPi3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
-  * [RaspberryPi3 Model A+](https://www.raspberrypi.org/products/raspberry-pi-3-model-a-plus/)
-  * [RaspberryPi2 Model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
-  * [RaspberryPi Compute Module 3](https://www.raspberrypi.org/products/compute-module-3/)
-  * [RaspberryPi Compute Module 3 lite](https://www.raspberrypi.org/products/compute-module-3-lite/)
-  * [RaspberryPi Zero W](https://www.raspberrypi.org/products/pi-zero-w/)  
-  * [RaspberryPi Zero](https://www.raspberrypi.org/products/pi-zero/)
-  * [RaspberryPi Compute Module 1](https://www.raspberrypi.org/products/compute-module/)  
-  * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/) or [Model B, 512MB](https://www.adafruit.com/product/998)
-  * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) or [Model A, 256MB](https://www.adafruit.com/product/1344)
-  * [Tinker Board S](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
-  * [Tinker Board](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
-* 4 GB minimum sized microSD card or USB memory stick / hard disk (RaspberryPi3 only)
-* One or more of the following HomeMatic/HomeMatic-Wired/homematicIP/homematicIP-Wired capabale devices:
+1. Any of the following embedded hardware boards:
+   * [RaspberryPi3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
+   * [RaspberryPi3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
+   * [RaspberryPi3 Model A+](https://www.raspberrypi.org/products/raspberry-pi-3-model-a-plus/)
+   * [RaspberryPi2 Model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
+   * [RaspberryPi Compute Module 3](https://www.raspberrypi.org/products/compute-module-3/)
+   * [RaspberryPi Compute Module 3 lite](https://www.raspberrypi.org/products/compute-module-3-lite/)
+   * [RaspberryPi Zero W](https://www.raspberrypi.org/products/pi-zero-w/)  
+   * [RaspberryPi Zero](https://www.raspberrypi.org/products/pi-zero/)
+   * [RaspberryPi Compute Module 1](https://www.raspberrypi.org/products/compute-module/)  
+   * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/) or [Model B, 512MB](https://www.adafruit.com/product/998)
+   * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) or [Model A, 256MB](https://www.adafruit.com/product/1344)
+   * [Tinker Board S](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
+   * [Tinker Board](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
+2. A minimum 4 GB sized microSD card or USB device (memory stick, SSD, hard disk)
+3. One or more of the following homematic capabale communication devices:
 
 |  | | HomeMatic | homematicIP | HomeMatic-Wired | homematicIP-Wired |
 | ----------- | ------ | :-------: | :---------: | :-------------: | :---------------: |

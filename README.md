@@ -62,7 +62,7 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 ## :computer: Requirements
 <img src="https://files.elv.com/bilder/artikel/Produkte/15/1529/152941/Internet//gross/152941_w01_modulplatine.jpg" alt="RaspberryPi equipped with RPI-RF-MOD" width=300 align=right>
 
-1. Any of the following embedded hardware boards:
+1. One of the following embedded hardware boards:
    * [RaspberryPi3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
    * [RaspberryPi3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
    * [RaspberryPi3 Model A+](https://www.raspberrypi.org/products/raspberry-pi-3-model-a-plus/)

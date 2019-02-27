@@ -1,10 +1,10 @@
 --- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
 +++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
-@@ -430,6 +430,7 @@
-   }
+@@ -411,6 +411,7 @@
  
-   set param EVENT_DELAY_UNIT
-+  set eventDelayPrn 1
-   if { ! [catch {set tmp $ps($param)}]  } {
-     incr prn
-     set eventDelayPrn $prn
+   set hlpBoxWidth 450
+   set hlpBoxHeight 80
++  set eventDelayPrn 0
+ 
+   set specialID "[getSpecialID $special_input_id]"
+   set CHANNEL $special_input_id

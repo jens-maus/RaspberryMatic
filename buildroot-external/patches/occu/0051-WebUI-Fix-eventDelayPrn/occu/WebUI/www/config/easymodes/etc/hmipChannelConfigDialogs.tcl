@@ -411,6 +411,7 @@ proc getMultiModeInputTransmitter {chn p descr address} {
 
   set hlpBoxWidth 450
   set hlpBoxHeight 80
+  set eventDelayPrn 0
 
   set specialID "[getSpecialID $special_input_id]"
   set CHANNEL $special_input_id
@@ -430,7 +431,6 @@ proc getMultiModeInputTransmitter {chn p descr address} {
   }
 
   set param EVENT_DELAY_UNIT
-  set eventDelayPrn 1
   if { ! [catch {set tmp $ps($param)}]  } {
     incr prn
     set eventDelayPrn $prn

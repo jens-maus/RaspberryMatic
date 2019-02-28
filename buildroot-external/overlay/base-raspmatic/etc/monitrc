@@ -139,24 +139,23 @@ check process sshd with pidfile /var/run/sshd.pid
     if failed port 22 for 3 cycles then restart
     depends on sshdEnabled
 
-check file sshdEnabled with path /etc/config/sshEnabled
+check program sshdEnabled with path "/usr/bin/test -f /etc/config/sshEnabled"
     group system
-    if not exist for 3 cycles then unmonitor
+    if status != 0 for 1 cycles then unmonitor
 
-#check process hs485d with pidfile /var/run/hs485dLoader.pid
-#    group homematic
-#    start = "/etc/init.d/S60hs485d start"
-#    stop = "/etc/init.d/S60hs485d stop"
-#    restart = "/etc/init.d/S60hs485d restart"
-#    if not exist for 3 cycles then restart
-#    if 1 restart within 1 cycles then exec "/bin/triggerAlarm.tcl 'hs485d restarted' WatchDog-Alarm"
-#    #if failed port 22 for 3 cycles then restart
-#    depends on hs485dEnabled
-
-check file hs485dEnabled with path /var/etc/hs485d.conf
+check process hs485d with pidfile /var/run/hs485dLoader.pid
     group homematic
-    if not exist for 3 cycles then unmonitor
-    if not match "^\[Interface .\].*" for 3 cycles then unmonitor
+    start = "/etc/init.d/S60hs485d start"
+    stop = "/etc/init.d/S60hs485d stop"
+    restart = "/etc/init.d/S60hs485d restart"
+    if not exist for 3 cycles then restart
+    if 1 restart within 1 cycles then exec "/bin/triggerAlarm.tcl 'hs485d restarted' WatchDog-Alarm"
+    if failed port 32000 for 3 cycles then restart
+    depends on hs485dEnabled
+
+check program hs485dEnabled with path "/bin/grep -q '^\[Interface .\]' /var/etc/hs485d.conf"
+    group homematic
+    if status != 0 for 1 cycles then unmonitor
 
 check process multimacd with pidfile /var/run/multimacd.pid
     group homematic

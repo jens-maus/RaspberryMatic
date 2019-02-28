@@ -20,6 +20,7 @@ check process hss_led with pidfile /var/run/hss_led.pid
     #if failed port 8182 type udp for 3 cycles then restart
     if not exist for 3 cycles then restart
     if 1 restart within 1 cycles then exec "/bin/triggerAlarm.tcl 'hss_led restarted' WatchDog-Alarm"
+    depends on hmlangwDisabled
 
 check process klogd with pidfile /var/run/klogd.pid
     group system
@@ -119,6 +120,7 @@ check process lighttpd with pidfile /var/run/lighttpd-angel.pid
     if failed port 42010 for 3 cycles then restart
     if failed port 48181 for 3 cycles then restart
     if failed port 49292 for 3 cycles then restart
+    depends hmlangwDisabled
 
 check process ssdpd with pidfile /var/run/ssdpd.pid
     group homematic
@@ -151,7 +153,7 @@ check process hs485d with pidfile /var/run/hs485dLoader.pid
     if not exist for 3 cycles then restart
     if 1 restart within 1 cycles then exec "/bin/triggerAlarm.tcl 'hs485d restarted' WatchDog-Alarm"
     if failed port 32000 for 3 cycles then restart
-    depends on hs485dEnabled
+    depends on hs485dEnabled, hmlangwDisabled
 
 check program hs485dEnabled with path "/bin/grep -q '^\[Interface .\]' /var/etc/hs485d.conf"
     group homematic
@@ -164,6 +166,27 @@ check process multimacd with pidfile /var/run/multimacd.pid
     restart = "/etc/init.d/S60multimacd restart"
     if not exist for 3 cycles then restart
     if 1 restart within 1 cycles then exec "/bin/triggerAlarm.tcl 'multimacd restarted' WatchDog-Alarm"
+    depends on multimacdEnabled, hmlangwDisabled
+
+check program multimacdEnabled with path "/usr/bin/test -c /dev/eq3loop"
+    group homematic
+    if status != 0 for 1 cycles then unmonitor
+
+check process hmlangw with pidfile /var/run/hmlangw.pid
+    group homematic
+    start = "/etc/init.d/S61hmlangw start"
+    stop = "/etc/init.d/S61hmlangw stop"
+    restart = "/etc/init.d/S61hmlangw restart"
+    if not exist for 3 cycles then restart
+    depends on hmlangwEnabled
+
+check program hmlangwEnabled with path "/usr/bin/test -e /usr/local/HMLGW"
+    group system
+    if status != 0 for 1 cycles then unmonitor
+
+check program hmlangwDisabled with path "/usr/bin/test -e /usr/local/HMLGW"
+    group system
+    if status = 0 for 1 cycles then unmonitor
 
 check process rfd with pidfile /var/run/rfd.pid
     group homematic
@@ -173,6 +196,11 @@ check process rfd with pidfile /var/run/rfd.pid
     if not exist for 3 cycles then restart
     if 1 restart within 1 cycles then exec "/bin/triggerAlarm.tcl 'rfd restarted' WatchDog-Alarm"
     if failed port 32001 for 3 cycles then restart
+    depends on rfdEnabled, hmlangwDisabled
+
+check program rfdEnabled with path "/bin/grep -q '^\[Interface .\]' /var/etc/rfd.conf"
+    group homematic
+    if status != 0 for 1 cycles then unmonitor
 
 check process HMIPServer with pidfile /var/run/HMIPServer.pid
     group homematic
@@ -185,6 +213,7 @@ check process HMIPServer with pidfile /var/run/HMIPServer.pid
     if failed port 32010 for 3 cycles then restart
     if failed port 39292 for 3 cycles then restart
     if failed port 43438 type udp for 3 cycles then restart
+    depends on hmlangwDisabled
 
 check process ReGaHss with pidfile /var/run/ReGaHss.pid
     group homematic
@@ -196,6 +225,7 @@ check process ReGaHss with pidfile /var/run/ReGaHss.pid
     if failed port 8183 protocol http for 3 cycles then restart
     if failed port 31999 for 3 cycles then restart
     if failed port 1998 type udp for 3 cycles then restart
+    depends on hmlangwDisabled
 
 check process crond with pidfile /var/run/crond.pid
     group system

@@ -298,6 +298,16 @@ check filesystem userfs with path /usr/local
     if space usage > 95% for 10 cycles then
       exec "/bin/triggerAlarm.tcl 'userfs (/usr/local) running low on disk space' WatchDog-Alarm"
 
+check filesystem usb1 with path /media/usb1
+    group system
+    if space usage > 95% for 10 cycles then
+      exec "/bin/triggerAlarm.tcl 'usb1 (/media/usb1) running low on disk space' WatchDog-Alarm"
+    depends on hasUSB
+
+check program hasUSB with path "/usr/bin/test -e /var/status/hasUSB"
+    group system
+    if status != 0 for 3 cycles then unmonitor
+
 # network interface (eth0) monitoring
 check network eth0 interface eth0
     group system

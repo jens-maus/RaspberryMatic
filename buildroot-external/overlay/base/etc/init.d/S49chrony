@@ -41,14 +41,14 @@ case "$1" in
     printf "Starting $NAME: "
 
     # call ntpdate to perform a single sync to the servers
-    /usr/bin/ntpdate -b -s ${NTPSERVERS}
+    /usr/bin/ntpdate -b -s -u ${NTPSERVERS}
     if [[ $? -ne 0 ]]; then
       # use default NTP servers because the user selected
       # ones didn't work out
       echo -n "using default NTPs, "
       . ${CFG_TEMPLATE_DIR}/ntpclient
 
-      /usr/bin/ntpdate -b -s ${NTPSERVERS}
+      /usr/bin/ntpdate -b -s -u ${NTPSERVERS}
       if [[ $? -ne 0 ]]; then
         echo -n "could not sync to '${NTPSERVERS}', FAIL"
         exit 0

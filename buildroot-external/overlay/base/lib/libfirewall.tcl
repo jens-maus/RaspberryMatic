@@ -7,21 +7,21 @@
 
 ##
 # @const Firewall_CONFIG_FILE
-# Konfigurationsdatei für die Firewall
+# Konfigurationsdatei fÃ¼r die Firewall
 ##
 set Firewall_CONFIG_FILE /etc/config/firewall.conf
 
 ##
 # @const Firewall_SERVICES
-# Enthält die verfügbaren Services und deren TCP-Ports
+# EnthÃ¤lt die verfÃ¼gbaren Services und deren TCP-Ports
 #
 # Jeder Service kann als assoziatives Array mit den folgenden
 # Elementen aufgefasst werden:
 #   PORTS : Liste der TCP-Portnummern des Services
-#   ACCESS: Zugriffsrechte für den Service:
-#           full      : Vollzugriff; keine Einschränkungen
-#           restricted: Eingeschränkter Zugriff
-#           none      : Kein Zugriff möglich
+#   ACCESS: Zugriffsrechte fÃ¼r den Service:
+#           full      : Vollzugriff; keine EinschrÃ¤nkungen
+#           restricted: EingeschrÃ¤nkter Zugriff
+#           none      : Kein Zugriff mÃ¶glich
 ##
 array set Firewall_SERVICES {}
 set Firewall_SERVICES(XMLRPC) [list PORTS [list 2000 2001 2002 2010 9292 42000 42001 42010 49292] ACCESS none]
@@ -42,7 +42,7 @@ set Firewall_USER_PORTS {}
 set Firewall_MODE_RESTRICTIVE "RESTRICTIVE"
 
 ## @const Firewall_MODE_MOST_OPEN
-# Firewall Modus MOST_OPEN (Kompatibilitätsmodus). INPUT Policy ACCEPT
+# Firewall Modus MOST_OPEN (KompatibilitÃ¤tsmodus). INPUT Policy ACCEPT
 ##
 set Firewall_MODE_MOST_OPEN "MOST_OPEN"
 
@@ -54,16 +54,16 @@ set Firewall_MODE $Firewall_MODE_RESTRICTIVE
 
 ##
 # @var Firewall_LOG_ENABLED
-# Aktiviert Logging über syslog, default ist 'aus'.
+# Aktiviert Logging Ã¼ber syslog, default ist 'aus'.
 ##
 set Firewall_LOG_ENABLED 0
 
 ##
 # @var Firewall_IPS
-# IP-Adressen für den eingeschränkten Zugriff
+# IP-Adressen fÃ¼r den eingeschrÃ¤nkten Zugriff
 #
 # Beinhaltet eine Liste der IP-Adressen oder Addressgruppen, denen bei
-# eingeschränktem Zugriff eine Verwendung des jeweiligen Serices noch erlaubt
+# eingeschrÃ¤nktem Zugriff eine Verwendung des jeweiligen Serices noch erlaubt
 # ist.
 ##
 set Firewall_IPS [list 192.168.0.1 192.168.0.0/16 fc00::/7 fe80::/10]
@@ -72,8 +72,8 @@ set Firewall_IPS [list 192.168.0.1 192.168.0.0/16 fc00::/7 fe80::/10]
 
 ##
 # @fn Firewall_setLoggingEnabled
-# Aktiviert Logging über Syslog (1)
-# oder deaktiviert Logging über Syslog (0)
+# Aktiviert Logging Ã¼ber Syslog (1)
+# oder deaktiviert Logging Ã¼ber Syslog (0)
 # 
 ##
 proc Firewall_setLoggingEnabled { enabled } {
@@ -88,7 +88,7 @@ proc Firewall_setLoggingEnabled { enabled } {
 
 ##
 # @fn loadConfiguration
-# Lädt die Firwall-Einstellunfen aus der Konfigurationsdatei
+# LÃ¤dt die Firwall-Einstellunfen aus der Konfigurationsdatei
 ##
 proc Firewall_loadConfiguration { } {
   global Firewall_CONFIG_FILE Firewall_SERVICES Firewall_IPS Firewall_MODE Firewall_USER_PORTS
@@ -223,7 +223,7 @@ proc Firewall_saveConfiguration {} {
 ##
 # @fn setFirewallMode
 # Setzt die Firewall Modus Einstellung.
-# Die Firewall kann im Modus "MOST_OPEN" (auch Kompatibilitätsmodus) oder im Modus "RESTRICTIVE" betrieben werden.
+# Die Firewall kann im Modus "MOST_OPEN" (auch KompatibilitÃ¤tsmodus) oder im Modus "RESTRICTIVE" betrieben werden.
 ##
 proc Firewall_setMode { modeName } {
   global Firewall_MODE Firewall_MODE_RESTRICTIVE Firewall_MODE_MOST_OPEN
@@ -265,7 +265,7 @@ proc Firewall_set_service_access { service accessLevel } {
 ##
 # @fn Firewall_get_service_access
 # Gibt den ACCESS Modus (none/restricted/full) des Dienstes 'service'
-# innerhalb der Liste Firewall_SERVICES zurück
+# innerhalb der Liste Firewall_SERVICES zurÃ¼ck
 ##
 proc Firewall_get_service_access { service  } {
         global Firewall_SERVICES
@@ -289,7 +289,7 @@ namespace eval FirewallInternal {}
 
 ##
 # @fn sshEnabled
-# Prüft, ob SSH aktiviert ist
+# PrÃ¼ft, ob SSH aktiviert ist
 ##
 proc FirewallInternal::sshEnabled {} {
   set fx [ file exists "/etc/config/sshEnabled" ]
@@ -298,7 +298,7 @@ proc FirewallInternal::sshEnabled {} {
 
 ##
 # @fn sshEnabled
-# Prüft, ob ip6tables vorhanden ist und ausgeführt werden kann
+# PrÃ¼ft, ob ip6tables vorhanden ist und ausgefÃ¼hrt werden kann
 ##
 proc FirewallInternal::ip6Supported {} {
   set a [ file exists "/proc/net/if_inet6" ]
@@ -357,7 +357,7 @@ proc Firewall_configureFirewall { } {
 
 ##
 # @fn configureFirewallMostOpen
-# Konfiguriert die Firewall mit weniger restriktiven Einstellungen. (Kompatibilitätsmodus)
+# Konfiguriert die Firewall mit weniger restriktiven Einstellungen. (KompatibilitÃ¤tsmodus)
 ##
 proc FirewallInternal::Firewall_configureFirewallMostOpen { } {
 	global Firewall_SERVICES Firewall_IPS Firewall_USER_PORTS
@@ -558,7 +558,7 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   # allow echo request
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -m state --state NEW -j ACCEPT"
   if {$has_ip6tables} {
-    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmp --icmp-type echo-request -m state --state NEW -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-request -m state --state NEW -j ACCEPT"
   }
 
   # default INPUT policy DROP and last Rule REJECTS all (do this at very last step)
@@ -573,7 +573,7 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
 
 ##
 # @fn exec_cmd
-# Prüft ob es sich um eine IPv4 Adresse handelt. Gibt 1 zurück bei IPv4, ansonsten 0.
+# PrÃ¼ft ob es sich um eine IPv4 Adresse handelt. Gibt 1 zurÃ¼ck bei IPv4, ansonsten 0.
 ##
 proc FirewallInternal::IsIPV4 { address } {
   if { [string first "." $address] == -1 } {
@@ -585,7 +585,7 @@ proc FirewallInternal::IsIPV4 { address } {
 
 ##
 # @fn exec_cmd
-# Führt eine Kommandozeile aus
+# FÃ¼hrt eine Kommandozeile aus
 ##
 proc exec_cmd {cmdline} {
 	set fd [open "|$cmdline" r]
@@ -594,7 +594,7 @@ proc exec_cmd {cmdline} {
 
 ##
 # @fn exec_cmd
-# Führt eine Kommandozeile aus
+# FÃ¼hrt eine Kommandozeile aus
 ##
 proc try_exec_cmd {cmdline} {
   global Firewall_LOG_ENABLED
@@ -611,7 +611,7 @@ proc try_exec_cmd {cmdline} {
 
 ##
 # @fn array_clear
-# Löscht die Elemente in einem Array
+# LÃ¶scht die Elemente in einem Array
 ##
 proc array_clear {name} {
 	upvar $name arr
@@ -623,7 +623,7 @@ proc array_clear {name} {
 ##
 # @fn array_getValue
 # Liefert einen Wert aus einem Array
-# Ist der Wert nicht vorhanden, wird {} zurückgegeben
+# Ist der Wert nicht vorhanden, wird {} zurÃ¼ckgegeben
 ##
 proc array_getValue { pArray name } {
   upvar $pArray arr

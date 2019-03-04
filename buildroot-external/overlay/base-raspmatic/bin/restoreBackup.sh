@@ -32,7 +32,7 @@ TMPDIR=$(mktemp -d -p ${BACKUPDIR})
 if [[ -d "${TMPDIR}" ]]; then
 
   # extract the sbk to /usr/local/tmp
-  tar -C "${TMPDIR}" -xf "${BACKUPFILE}"
+  tar -C "${TMPDIR}" --warning=no-timestamp --no-same-owner -xf "${BACKUPFILE}"
 
   # check archive consistency using sha256
   if [[ -f "${TMPDIR}/signature.sha256" ]]; then
@@ -42,15 +42,6 @@ if [[ -d "${TMPDIR}" ]]; then
       rm -rf "${TMPDIR}"
       exit 1
     fi
-  fi
-
-  # check archive consistency using crypttool
-  CUR_SIGNATURE=$(crypttool -s -t 0 <"${TMPDIR}/usr_local.tar.gz")
-  OLD_SIGNATURE=$(cat "${TMPDIR}/signature")
-  if [[ -z "${CUR_SIGNATURE}" || "${CUR_SIGNATURE}" != "${OLD_SIGNATURE}" ]]; then
-    echo "ERROR: inconsistent backup archive identified (crypttool)."
-    rm -rf "${TMPDIR}"
-    exit 1
   fi
 
   # make sure all relevant services are stopped

@@ -51,7 +51,7 @@ fwprepare()
       trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
 
       # unarchive the tar
-      /bin/tar -C ${TMPDIR} --no-same-owner -xf ${filename}
+      /bin/tar -C ${TMPDIR} --warning=no-timestamp --no-same-owner -xmf ${filename}
       if [ $? -ne 0 ]; then
         echo "ERROR: (untar)"
         exit 1

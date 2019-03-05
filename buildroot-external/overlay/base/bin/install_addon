@@ -15,7 +15,7 @@ UPDATEDIR=$(mktemp -d -p /usr/local/tmp)
 
 # unarchive addon archive
 umask 022
-/bin/tar -C ${UPDATEDIR} --no-same-owner --no-same-permissions -xf /usr/local/tmp/new_addon.tar.gz
+/bin/tar -C ${UPDATEDIR} --warning=no-timestamp --no-same-owner --no-same-permissions -xf /usr/local/tmp/new_addon.tar.gz
 if [[ $? -ne 0 ]]; then
   exit 102
 fi

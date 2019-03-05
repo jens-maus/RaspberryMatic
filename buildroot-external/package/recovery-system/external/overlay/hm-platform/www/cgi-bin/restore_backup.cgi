@@ -83,7 +83,7 @@ echo -ne "[3/8] Extracting to temp location... "
 TMPDIR=${filename}-dir
 mkdir -p ${TMPDIR}
 
-/bin/tar -C ${TMPDIR} -xf ${filename} 2>/dev/null
+/bin/tar -C ${TMPDIR} --warning=no-timestamp --no-same-owner -xf ${filename} 2>/dev/null
 if [ $? -ne 0 ]; then
   echo "ERROR (untar)"
   exit 1

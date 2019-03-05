@@ -1,14 +1,5 @@
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -902,7 +902,7 @@
-       set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
-       if {$file_invalid == 0} {
-         # the file seems to be a tar archive (perhaps with gzip compression)
--        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xmf $filename} result]
-+        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xf $filename} result]
-         file delete -force -- $filename
-       }
-     }
 @@ -1123,6 +1123,7 @@
    catch { exec lcdtool {Saving   Data...  } }
    rega system.Save()

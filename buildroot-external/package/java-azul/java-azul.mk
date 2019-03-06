@@ -5,7 +5,7 @@
 # http://www.azul.com/downloads/zulu-embedded/
 #
 #############################################################
-JAVA_AZUL_VERSION = 8.33.0.134-jdk1.8.0_192
+JAVA_AZUL_VERSION = 8.36.0.152-ca-jdk1.8.0_202
 JAVA_AZUL_SOURCE=zulu$(JAVA_AZUL_VERSION)-linux_aarch32hf.tar.gz
 JAVA_AZUL_SITE = http://cdn.azul.com/zulu-embedded/bin
 JAVA_AZUL_DEPENDENCIES = fontconfig dejavu liberation

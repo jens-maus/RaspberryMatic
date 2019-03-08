@@ -93,7 +93,7 @@ https://www.cvedetails.com/cve/CVE-2018-7300/))
   * [S.USV](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown.
   * [PiUSV+](https://www.reichelt.de/?ARTICLE=169883) – UPS including alarm notification upon power loss and automatic system shutdown.
   * [PiModules UPS PIco](http://pimodules.com/) – UPS including automatic system shutdown.
-  * [StromPi2](https://strompi.joy-it.net/strompi-2/) – UPS including alarm notification upon power loss.
+  * [StromPi2](https://strompi.joy-it.net/strompi-2/) – UPS including alarm notification upon power loss (WARNING: [StromPi3](https://strompi.joy-it.net/strompi-3/) is *NOT* supported!)
   * [PiDesktop](http://de.farnell.com/element14/pi-desktop/element-14-pi-desktop-hatencl/dp/2687142) – Addon HAT with power button and dedicated RTC clock (PCF8563).
 * Integrated support for various RTC clock modules:
   * [PiFace Shim RTC](http://www.piface.org.uk/products/piface_clock/)

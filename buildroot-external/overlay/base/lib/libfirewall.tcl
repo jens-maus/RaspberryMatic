@@ -555,12 +555,30 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   
   }
 
+
+  # Allow some ICMPv6 types in the INPUT chain for local IPv6 Communication
+  if {$has_ip6tables} {
+	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type destination-unreachable -j ACCEPT"
+	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type packet-too-big -j ACCEPT"
+	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type time-exceeded -j ACCEPT"
+	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type parameter-problem -j ACCEPT"
+  }
+  
   # allow echo request
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -m state --state NEW -j ACCEPT"
   if {$has_ip6tables} {
-    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-request -m state --state NEW -j ACCEPT"
+	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-request -m state --state NEW -m limit --limit 900/min -j ACCEPT"
+	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-reply -m state --state NEW -m limit --limit 900/min -j ACCEPT"
   }
 
+  # allow DHCPv6 / Router Advertisement and NDP but only if the hop limit field is 255
+  if {$has_ip6tables} {
+	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type router-advertisement -m hl --hl-eq 255 -j ACCEPT"
+	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type neighbor-advertisement -m hl --hl-eq 255 -j ACCEPT"
+	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type neighbor-solicitation -m hl --hl-eq 255 -j ACCEPT"
+	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type redirect -m hl --hl-eq 255 -j ACCEPT"
+  }
+  
   # default INPUT policy DROP and last Rule REJECTS all (do this at very last step)
   try_exec_cmd "/usr/sbin/iptables -P INPUT DROP" 
   try_exec_cmd "/usr/sbin/iptables -A INPUT -j REJECT" 

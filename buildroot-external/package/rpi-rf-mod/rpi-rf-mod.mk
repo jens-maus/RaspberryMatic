@@ -1,10 +1,10 @@
 #############################################################
 #
-# Support for RPI-RF-MOD RF-Module
+# Support for RPI-RF-MOD / HM-MOD-RPI-PCB RF-Module
 #
 #############################################################
 
-RPI_RF_MOD_VERSION = 1.1.0
+RPI_RF_MOD_VERSION = 1.2.0
 RPI_RF_MOD_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/rpi-rf-mod
 RPI_RF_MOD_SITE_METHOD = local
 

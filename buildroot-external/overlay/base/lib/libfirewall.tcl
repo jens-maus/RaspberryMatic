@@ -85,7 +85,6 @@ proc Firewall_setLoggingEnabled { enabled } {
   }
 }
 
-
 ##
 # @fn loadConfiguration
 # Lädt die Firwall-Einstellunfen aus der Konfigurationsdatei
@@ -140,8 +139,8 @@ proc Firewall_loadConfiguration { } {
       set defaultServicePorts [lindex $service 1]
       foreach p $defaultServicePorts {
         #puts "Searching for $p"
-        if { [lsearch -exact $ports "$p"] == -1 } {	
-          #puts "$p not in list appending"	
+        if { [lsearch -exact $ports "$p"] == -1 } { 
+          #puts "$p not in list appending"  
           lappend ports $p
           #puts $ports
           set migrationPerformed 1
@@ -156,9 +155,9 @@ proc Firewall_loadConfiguration { } {
     }
   }
 
-	if { [info exists config()] } then {
-		array set emptySection $config()
-		set Firewall_IPS [array_getValue emptySection IPs]
+  if { [info exists config()] } then {
+    array set emptySection $config()
+    set Firewall_IPS [array_getValue emptySection IPs]
     
     set aModes [array_getValue emptySection MODE]
     if { [string equal $aModes ""] == 0 } {
@@ -169,12 +168,11 @@ proc Firewall_loadConfiguration { } {
     if { [string equal $userPorts ""] == 0 } {
       set Firewall_USER_PORTS $userPorts
     } 
-	}
+  }
 
   if { $migrationPerformed == 1 } {
     Firewall_saveConfiguration
   }
-	
 }
 
 ##
@@ -183,22 +181,22 @@ proc Firewall_loadConfiguration { } {
 ##
 proc Firewall_saveConfiguration {} {
   global Firewall_CONFIG_FILE Firewall_SERVICES Firewall_IPS Firewall_MODE Firewall_USER_PORTS
-	
-	set fd [open $Firewall_CONFIG_FILE w]
-	catch {
-	
-		puts $fd "# Firewall Configuration file"
-		puts $fd "#   created [clock format [clock seconds]]"
-		puts $fd "# This file was automatically gernerated"
-		puts $fd "# Please do not change anything"
+  
+  set fd [open $Firewall_CONFIG_FILE w]
+  catch {
+  
+    puts $fd "# Firewall Configuration file"
+    puts $fd "#   created [clock format [clock seconds]]"
+    puts $fd "# This file was automatically gernerated"
+    puts $fd "# Please do not change anything"
     puts $fd ""
     
     puts $fd "MODE = $Firewall_MODE"
-		puts $fd ""
-		
-		puts $fd "IPs = $Firewall_IPS"
-		puts $fd ""
-		
+    puts $fd ""
+    
+    puts $fd "IPs = $Firewall_IPS"
+    puts $fd ""
+    
     if { [llength $Firewall_USER_PORTS] > 0 } {
       puts -nonewline $fd "USERPORTS ="
       foreach port $Firewall_USER_PORTS {
@@ -207,17 +205,18 @@ proc Firewall_saveConfiguration {} {
     }
     puts $fd "\n"
     
-		foreach serviceName [array names Firewall_SERVICES] {
-			array set service $Firewall_SERVICES($serviceName)
-			puts $fd "\[SERVICE $serviceName\]"
-			puts $fd "Id = $serviceName"
-			puts $fd "Ports = $service(PORTS)"
-			puts $fd "Access = $service(ACCESS)"
-			puts $fd ""
-		}
-		
-	}
-		close $fd
+    foreach serviceName [array names Firewall_SERVICES] {
+      array set service $Firewall_SERVICES($serviceName)
+      puts $fd "\[SERVICE $serviceName\]"
+      puts $fd "Id = $serviceName"
+      puts $fd "Ports = $service(PORTS)"
+      puts $fd "Access = $service(ACCESS)"
+      puts $fd ""
+    }
+    
+  }
+
+  close $fd
 }
 
 ##
@@ -245,21 +244,19 @@ proc Firewall_setMode { modeName } {
 # innerhalb der Liste Firewall_SERVICES
 ##
 proc Firewall_set_service_access { service accessLevel } {
-
-        global Firewall_SERVICES
-        set serviceList [array get Firewall_SERVICES $service]
-        if { [llength serviceList ] > 0 && [ lindex serviceList 0  ] != ""  } {
-                #write new value
-                set accessIndex [lsearch $Firewall_SERVICES($service) ACCESS]
-                set valueIndex [ expr { int($accessIndex + 1) } ]
-                set Firewall_SERVICES($service) [lreplace $Firewall_SERVICES($service) $valueIndex $valueIndex $accessLevel]
-                #puts "New value is"
-                #puts $Firewall_SERVICES($service)
-        } else {
-                puts "No such service $level"
-                return
-        }
-
+  global Firewall_SERVICES
+  set serviceList [array get Firewall_SERVICES $service]
+  if { [llength serviceList ] > 0 && [ lindex serviceList 0  ] != ""  } {
+    #write new value
+    set accessIndex [lsearch $Firewall_SERVICES($service) ACCESS]
+    set valueIndex [ expr { int($accessIndex + 1) } ]
+    set Firewall_SERVICES($service) [lreplace $Firewall_SERVICES($service) $valueIndex $valueIndex $accessLevel]
+    #puts "New value is"
+    #puts $Firewall_SERVICES($service)
+  } else {
+    puts "No such service $level"
+    return
+  }
 }
 
 ##
@@ -268,22 +265,19 @@ proc Firewall_set_service_access { service accessLevel } {
 # innerhalb der Liste Firewall_SERVICES zurück
 ##
 proc Firewall_get_service_access { service  } {
-        global Firewall_SERVICES
-        
-        set serviceList [array get Firewall_SERVICES $service]
-        if { [llength serviceList ] > 0 && [ lindex serviceList 0  ] != ""  } {
-                #read value and return it
-                set accessIndex [lsearch $Firewall_SERVICES($service) ACCESS]
-                set valueIndex [ expr { int($accessIndex + 1) } ]
-                return [lindex $Firewall_SERVICES($service) $valueIndex ]
-        } else {
-                puts "No such service $level"
-                return ""
-        }
-
-
+  global Firewall_SERVICES
+  
+  set serviceList [array get Firewall_SERVICES $service]
+  if { [llength serviceList ] > 0 && [ lindex serviceList 0  ] != ""  } {
+    #read value and return it
+    set accessIndex [lsearch $Firewall_SERVICES($service) ACCESS]
+    set valueIndex [ expr { int($accessIndex + 1) } ]
+    return [lindex $Firewall_SERVICES($service) $valueIndex ]
+  } else {
+    puts "No such service $level"
+    return ""
+  }
 }
-
 
 namespace eval FirewallInternal {}
 
@@ -312,32 +306,32 @@ proc FirewallInternal::ip6Supported {} {
 # Gibt 1 zurueck, wenn es sich um einen UDP Port handelt, ansonsten 0.
 ##
 proc FirewallInternal::Firewall_isUdpPort { port } {
-    switch $port {
-        161 {
-            return 1
-        }
-        1901 {
-            return 1
-        }
-        1902 {
-            return 1
-        }
-        5987 {
-            return 1
-        }
-        10000 {
-            return 1
-        }
-        48899 {
-            return 1
-        }
-        49880 {
-            return 1
-        }
-        default {
-            return 0
-        }
+  switch $port {
+    161 {
+      return 1
     }
+    1901 {
+      return 1
+    }
+    1902 {
+      return 1
+    }
+    5987 {
+      return 1
+    }
+    10000 {
+      return 1
+    }
+    48899 {
+      return 1
+    }
+    49880 {
+      return 1
+    }
+    default {
+      return 0
+    }
+  }
 } 
 
 ##
@@ -352,7 +346,6 @@ proc Firewall_configureFirewall { } {
   } else {
     FirewallInternal::Firewall_configureFirewallRestrictive
   }
- 
 }
 
 ##
@@ -360,8 +353,8 @@ proc Firewall_configureFirewall { } {
 # Konfiguriert die Firewall mit weniger restriktiven Einstellungen. (Kompatibilitätsmodus)
 ##
 proc FirewallInternal::Firewall_configureFirewallMostOpen { } {
-	global Firewall_SERVICES Firewall_IPS Firewall_USER_PORTS
-	
+  global Firewall_SERVICES Firewall_IPS Firewall_USER_PORTS
+  
   try_exec_cmd "/usr/sbin/iptables -F"
   try_exec_cmd "/usr/sbin/iptables -P INPUT ACCEPT"
   try_exec_cmd "/usr/sbin/iptables -A INPUT -i lo -j ACCEPT"
@@ -391,48 +384,48 @@ proc FirewallInternal::Firewall_configureFirewallMostOpen { } {
     }
   }
 
-	foreach serviceName [array names Firewall_SERVICES] {
-		array set service $Firewall_SERVICES($serviceName)
-	
-		if { $service(ACCESS) == "restricted" } then {
-			foreach port $service(PORTS) {
-                set prot tcp
-                if { [ FirewallInternal::Firewall_isUdpPort $port ] } {
-                    set prot udp
-                }
-				foreach ip $Firewall_IPS {
-                    if { [regexp {:} $ip] } then {
-                        try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p $prot --dport $port -s $ip -j ACCEPT"
-                    } else {
-                        try_exec_cmd "/usr/sbin/iptables -A INPUT -p $prot --dport $port -s $ip -j ACCEPT"
-                    }
-				}
-			}
-		}
-		
-		if { $service(ACCESS) == "none" || $service(ACCESS) == "restricted"} then {
-			foreach port $service(PORTS) {
-                set prot tcp
-                if { [FirewallInternal::Firewall_isUdpPort $port] } {
-                    set prot udp
-                }
-                try_exec_cmd "/usr/sbin/iptables -A INPUT -p $prot --dport $port -j DROP"
-				try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p $prot --dport $port -j DROP"
-			}
-		}
-	
-		#block internal ports
-		if { [string equal "XMLRPC" $serviceName] || [string equal "REGA" $serviceName] } {
-			foreach port $service(PORTS) {
-				if { $port < 30000 } {
-					try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 3$port -j DROP"
-					if {$has_ip6tables} {
-						try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 3$port -j DROP"
-					}
-				}
-			}
-		}
-	}
+  foreach serviceName [array names Firewall_SERVICES] {
+    array set service $Firewall_SERVICES($serviceName)
+  
+    if { $service(ACCESS) == "restricted" } then {
+      foreach port $service(PORTS) {
+        set prot tcp
+        if { [ FirewallInternal::Firewall_isUdpPort $port ] } {
+          set prot udp
+        }
+        foreach ip $Firewall_IPS {
+          if { [regexp {:} $ip] } then {
+            try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p $prot --dport $port -s $ip -j ACCEPT"
+          } else {
+            try_exec_cmd "/usr/sbin/iptables -A INPUT -p $prot --dport $port -s $ip -j ACCEPT"
+          }
+        }
+      }
+    }
+    
+    if { $service(ACCESS) == "none" || $service(ACCESS) == "restricted"} then {
+      foreach port $service(PORTS) {
+        set prot tcp
+        if { [FirewallInternal::Firewall_isUdpPort $port] } {
+          set prot udp
+        }
+        try_exec_cmd "/usr/sbin/iptables -A INPUT -p $prot --dport $port -j DROP"
+        try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p $prot --dport $port -j DROP"
+      }
+    }
+  
+    #block internal ports
+    if { [string equal "XMLRPC" $serviceName] || [string equal "REGA" $serviceName] } {
+      foreach port $service(PORTS) {
+        if { $port < 30000 } {
+          try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 3$port -j DROP"
+          if {$has_ip6tables} {
+            try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 3$port -j DROP"
+          }
+        }
+      }
+    }
+  }
 }
 
 ##
@@ -442,7 +435,7 @@ proc FirewallInternal::Firewall_configureFirewallMostOpen { } {
 proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   global Firewall_SERVICES Firewall_IPS Firewall_USER_PORTS
   
-#IPv4
+  # IPv4
   # flush rules
   try_exec_cmd "/usr/sbin/iptables -F"
 
@@ -466,13 +459,13 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --sport 23272 -j ACCEPT"
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport 23272 -j ACCEPT"
 
-  #hmip drap
+  # hmip drap
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport 43438 -j ACCEPT"
 
   # udp uPnP/ssdp port
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p udp --dport 1900 -j ACCEPT"
   
-#IPv6
+  # IPv6
   set has_ip6tables [FirewallInternal::ip6Supported]
   #exec logger -t firewall -p user.info "has ip6 $has_ip6tables"
   if { $has_ip6tables } {
@@ -497,14 +490,12 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --sport 23272 -j ACCEPT"
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 23272 -j ACCEPT"
 
-    #hmip drap
+    # hmip drap
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 43438 -j ACCEPT"
   
-	  # udp uPnP/ssdp port
-	  try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 1900 -j ACCEPT"
-
+    # udp uPnP/ssdp port
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 1900 -j ACCEPT"
   }
-
 
   # user defined ports
   foreach userport $Firewall_USER_PORTS {
@@ -516,7 +507,7 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
     }
   }
 
-  #services ports
+  # services ports
   foreach serviceName [array names Firewall_SERVICES] {
     array set service $Firewall_SERVICES($serviceName)
   
@@ -552,31 +543,29 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
         }
       }
     }
-  
   }
-
 
   # Allow some ICMPv6 types in the INPUT chain for local IPv6 Communication
   if {$has_ip6tables} {
-	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type destination-unreachable -j ACCEPT"
-	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type packet-too-big -j ACCEPT"
-	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type time-exceeded -j ACCEPT"
-	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type parameter-problem -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type destination-unreachable -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type packet-too-big -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type time-exceeded -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type parameter-problem -j ACCEPT"
   }
   
   # allow echo request
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p icmp --icmp-type echo-request -m state --state NEW -j ACCEPT"
   if {$has_ip6tables} {
-	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-request -m state --state NEW -m limit --limit 900/min -j ACCEPT"
-	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-reply -m state --state NEW -m limit --limit 900/min -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-request -m state --state NEW -m limit --limit 900/min -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type echo-reply -m state --state NEW -m limit --limit 900/min -j ACCEPT"
   }
 
   # allow DHCPv6 / Router Advertisement and NDP but only if the hop limit field is 255
   if {$has_ip6tables} {
-	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type router-advertisement -m hl --hl-eq 255 -j ACCEPT"
-	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type neighbor-advertisement -m hl --hl-eq 255 -j ACCEPT"
-	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type neighbor-solicitation -m hl --hl-eq 255 -j ACCEPT"
-	try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type redirect -m hl --hl-eq 255 -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type router-advertisement -m hl --hl-eq 255 -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type neighbor-advertisement -m hl --hl-eq 255 -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type neighbor-solicitation -m hl --hl-eq 255 -j ACCEPT"
+    try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p icmpv6 --icmpv6-type redirect -m hl --hl-eq 255 -j ACCEPT"
   }
   
   # default INPUT policy DROP and last Rule REJECTS all (do this at very last step)
@@ -586,7 +575,6 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
     try_exec_cmd "/usr/sbin/ip6tables -P INPUT DROP" 
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -j REJECT" 
   }
-
 }
 
 ##
@@ -606,8 +594,8 @@ proc FirewallInternal::IsIPV4 { address } {
 # Führt eine Kommandozeile aus
 ##
 proc exec_cmd {cmdline} {
-	set fd [open "|$cmdline" r]
-	close $fd
+  set fd [open "|$cmdline" r]
+  close $fd
 }
 
 ##
@@ -632,10 +620,10 @@ proc try_exec_cmd {cmdline} {
 # Löscht die Elemente in einem Array
 ##
 proc array_clear {name} {
-	upvar $name arr
-	foreach key [array names arr] {
-		unset arr($key)
-	}
+  upvar $name arr
+  foreach key [array names arr] {
+    unset arr($key)
+  }
 }
 
 ##

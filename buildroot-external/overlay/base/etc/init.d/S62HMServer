@@ -31,15 +31,25 @@ init() {
     fi
   fi
 
-  # if no uart is used to connect to the rf module (e.g. HmIP-RFUSB)
-  # we have to set the device node
-  if [[ "${HM_HMIP_DEVNODE}" != "${HM_HOST_GPIO_UART}" ]]; then
-    HM_SERVER_DEVNODE=${HM_HMIP_DEVNODE}
-  fi
+  if [[ -n "${HM_HMIP_DEV}" ]]; then
 
-  # make sure the Adapter Port setting is correct
-  # when generating /var/etc/crRFD.conf
-  sed "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_SERVER_DEVNODE}|" ${CFG_TEMPLATE_DIR}/crRFD.conf >/var/etc/crRFD.conf
+    # if no uart is used to connect to the rf module (e.g. HmIP-RFUSB)
+    # we have to set the device node
+    if [[ "${HM_HMIP_DEVNODE}" != "${HM_HOST_GPIO_UART}" ]]; then
+      HM_SERVER_DEVNODE=${HM_HMIP_DEVNODE}
+    else
+      HM_SERVER_DEVNODE=/dev/mmd_hmip
+    fi
+
+    # make sure the Adapter Port setting is correct
+    # when generating /var/etc/crRFD.conf
+    sed "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_SERVER_DEVNODE}|" ${CFG_TEMPLATE_DIR}/crRFD.conf >/var/etc/crRFD.conf
+
+  else
+    HM_SERVER=/opt/HMServer/HMServer.jar
+    HM_SERVER_ARGS="/etc/HMServer.conf"
+    HM_SERVER_DEVNODE=""
+  fi
 }
 
 waitStartupComplete() {

@@ -247,10 +247,10 @@ check process HMIPServer with pidfile /var/run/HMIPServer.pid
     stop = "/etc/init.d/S62HMServer stop"
     restart = "/etc/init.d/S62HMServer restart"
     if not exist for 3 cycles then restart
-    if failed port 9293 for 3 cycles then restart
-    if failed port 32010 for 3 cycles then restart
+    #if failed port 9293 for 3 cycles then restart
+    #if failed port 32010 for 3 cycles then restart
     if failed port 39292 for 3 cycles then restart
-    if failed port 43438 type udp for 3 cycles then restart
+    #if failed port 43438 type udp for 3 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'HMIPServer restarted' WatchDog-Alarm"
     depends on hmlangwDisabled

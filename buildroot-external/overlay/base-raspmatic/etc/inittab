@@ -24,7 +24,7 @@ null::sysinit:/usr/bin/psplash -n &
 # now run any rc scripts
 ::sysinit:/etc/init.d/rcS
 # run monit to monitor our important services
-::respawn:/usr/bin/monit -Ic /etc/monitrc
+null::respawn:/usr/bin/monit -Ic /etc/monitrc
 
 # Put a getty on tty2
 tty2::askfirst:/sbin/getty -L tty2 0 vt100
@@ -33,7 +33,7 @@ tty2::askfirst:/sbin/getty -L tty2 0 vt100
 ::ctrlaltdel:/sbin/reboot
 
 # Stuff to do before rebooting
-::shutdown:/usr/bin/monit unmonitor all
+null::shutdown:/usr/bin/monit unmonitor all
 ::shutdown:/etc/init.d/rcK
 tty2::shutdown:/bin/umount -a -r
 null::shutdown:/sbin/swapoff -a

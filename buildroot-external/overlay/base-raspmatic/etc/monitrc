@@ -167,7 +167,7 @@ check process sshd with pidfile /var/run/sshd.pid
     stop = "/etc/init.d/S50sshd stop"
     restart = "/etc/init.d/S50sshd restart"
     if not exist for 3 cycles then restart
-    if failed port 22 for 3 cycles then restart
+    #if failed port 22 for 3 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'sshd restarted' WatchDog-Alarm"
     depends on sshdEnabled

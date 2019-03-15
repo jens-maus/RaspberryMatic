@@ -1,0 +1,20 @@
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -1329,10 +1329,13 @@
+ 
+ ! [alPC], [alPDA]
+ function ::setAutoLogin() {
+-  object users = dom.GetObject(ID_USERS);
+-  if (users) {
+-    users.UsersDefaultLogin(dwcPC, system.GetVar("alPC"));
+-    users.UsersDefaultLogin(dwcPDA, system.GetVar("alPDA"));
++  object oUser = dom.GetObject(system.GetSessionVar("sessionUserID"));
++  if (oUser.UserLevel() == iulAdmin) {
++    object users = dom.GetObject(ID_USERS);
++    if (users) {
++      users.UsersDefaultLogin(dwcPC, system.GetVar("alPC"));
++      users.UsersDefaultLogin(dwcPDA, system.GetVar("alPDA"));
++    }
+   }
+   return;
+ }

@@ -1,4 +1,4 @@
-0 */4 * * * /bin/SetInterfaceClock
+0 */6 * * * /bin/SetInterfaceClock
 0 * * * * /bin/setHWClock.sh >/dev/null 2>/dev/null
 0 4 * * * /usr/sbin/logrotate -f /etc/logrotate.conf || logger -p error -t "logrotate" "logrotate aborted with error $?"
 */3 * * * * /bin/updateDCVars.tcl >/dev/null 2>/dev/null

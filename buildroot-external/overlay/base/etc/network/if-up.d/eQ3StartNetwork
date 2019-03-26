@@ -74,7 +74,7 @@ case "${IFACE}" in
       /sbin/ip link set ${IFACE} up
       sleep 5
       /usr/sbin/rfkill unblock wlan
-      /usr/sbin/wpa_supplicant -B w -D wext -i ${IFACE} -c /etc/config/wpa_supplicant.conf -s
+      /usr/sbin/wpa_supplicant -B w -i ${IFACE} -c /etc/config/wpa_supplicant.conf -s
     else
       echo -n " no config, "
       # make sure that the wifi power is disabled

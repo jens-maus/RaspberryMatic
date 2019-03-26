@@ -1,0 +1,20 @@
+--- ./dts/pivccu-tinkerboard.dts.orig	2019-03-11 13:29:51.226401633 +0100
++++ ./dts/pivccu-tinkerboard.dts	2019-03-11 13:31:29.527275806 +0100
+@@ -0,0 +1,17 @@
++/dts-v1/;
++/plugin/;
++
++/ {
++  compatible = "rockchip,rk3288-miniarm", "rockchip,rk3288";
++  fragment@0 {
++    target = <&uart1>;
++    __overlay__ {
++      compatible = "pivccu,dw_apb";
++      status = "okay";
++      pivccu,reset_pin = <0>;
++      pivccu,red_pin = <0>;
++      pivccu,green_pin = <0>;
++      pivccu,blue_pin = <0>;
++    };
++  };
++};

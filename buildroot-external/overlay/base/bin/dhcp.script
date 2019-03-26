@@ -16,6 +16,12 @@ handle_deconfig() {
   if [[ ${nfsroot} == true ]]; then
       exit 0
   fi
+
+  # Disable Auto-IP daemon
+  if [ -x /usr/sbin/avahi-autoipd ]; then
+    /usr/sbin/avahi-autoipd -k ${interface}
+  fi
+
   /sbin/ip link set ${interface} up
   /sbin/ip addr flush dev ${interface}
 }
@@ -24,6 +30,11 @@ handle_renew() {
 
   # bring interface up if not nfs rooted
   if [[ ${nfsroot} == false ]]; then
+    # Disable Auto-IP daemon
+    if [ -x /usr/sbin/avahi-autoipd ]; then
+      /usr/sbin/avahi-autoipd -k ${interface}
+    fi
+    
     # make sure we can deal with DHCP servers not providing broadcast or subnet
     [[ -n "${broadcast}" ]] && BROADCAST="broadcast ${broadcast}"
     [[ -n "${subnet}" ]] && NETMASK="netmask ${subnet}"
@@ -84,6 +95,18 @@ handle_bound() {
     handle_renew
 }
 
+handle_leasefail() {
+  # No DHCP IP received
+  # Start Auto-IP daemon
+  if [ -x /usr/sbin/avahi-autoipd ]; then
+    /usr/sbin/avahi-autoipd -wD ${interface} --no-chroot
+  fi
+}
+
+handle_nak() {
+    handle_leasefail
+}
+
 case $action in
 'deconfig')
         handle_deconfig ;;
@@ -91,4 +114,8 @@ case $action in
         handle_bound ;;
 'renew')
         handle_renew ;;
+'leasefail')
+        handle_leasefail ;;
+'nak')
+        handle_nak ;;
 esac

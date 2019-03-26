@@ -2,10 +2,10 @@
 /plugin/;
 
 /*
-** Device Tree Overlay for eQ-3 RPI-RF-MOD
+** Device Tree Overlay for eQ-3 RPI-RF-MOD and
+** HM-MOD-RPI-PCB for RaspberryPi
 **
-**
-** Copyright (c) 2018 Jens Maus <mail@jens-maus.de>
+** Copyright (c) 2018-2019 Jens Maus <mail@jens-maus.de>
 ** Licensed under Apache 2.0
 **
 */

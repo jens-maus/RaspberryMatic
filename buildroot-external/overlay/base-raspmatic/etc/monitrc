@@ -108,7 +108,7 @@ check process chronyd with pidfile /var/run/chrony/chronyd.pid
 
 check program ntpOffsetCheck with path /bin/sh -c "/usr/bin/chronyc -n tracking | grep 'Last offset' | awk '{ print $4; if($4 < 1.0 && $4 > -1.0) { exit 10 } else { exit 20 } }';"
     group system
-    if status != 10 for 3 cycles then
+    if status != 10 for 10 cycles then
       exec "/bin/triggerAlarm.tcl 'NTP offset > 1 second' WatchDog-Alarm"
 
 # eq3config daemon monitoring
@@ -120,7 +120,7 @@ check process eq3configd with pidfile /var/run/eq3configd.pid
     if not exist for 3 cycles then restart
     if failed port 43439 type udp for 3 cycles then restart
     if 1 restart within 1 cycles then
-      exec "/bin/triggerAlarm.tcl 'klogd restarted' WatchDog-Alarm"
+      exec "/bin/triggerAlarm.tcl 'eq3configd restarted' WatchDog-Alarm"
 
 # lighttpd web server daemon monitoring
 check process lighttpd with pidfile /var/run/lighttpd-angel.pid
@@ -167,7 +167,7 @@ check process sshd with pidfile /var/run/sshd.pid
     stop = "/etc/init.d/S50sshd stop"
     restart = "/etc/init.d/S50sshd restart"
     if not exist for 3 cycles then restart
-    if failed port 22 for 3 cycles then restart
+    #if failed port 22 for 3 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'sshd restarted' WatchDog-Alarm"
     depends on sshdEnabled
@@ -247,10 +247,10 @@ check process HMIPServer with pidfile /var/run/HMIPServer.pid
     stop = "/etc/init.d/S62HMServer stop"
     restart = "/etc/init.d/S62HMServer restart"
     if not exist for 3 cycles then restart
-    if failed port 9293 for 3 cycles then restart
-    if failed port 32010 for 3 cycles then restart
+    #if failed port 9293 for 3 cycles then restart
+    #if failed port 32010 for 3 cycles then restart
     if failed port 39292 for 3 cycles then restart
-    if failed port 43438 type udp for 3 cycles then restart
+    #if failed port 43438 type udp for 3 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'HMIPServer restarted' WatchDog-Alarm"
     depends on hmlangwDisabled
@@ -339,7 +339,7 @@ check program wlan0Enabled with path "/bin/sh -c '/usr/sbin/rfkill list wlan | g
 # internet connectivity monitoring
 check program hasInternet with path "/usr/bin/test -e /var/status/hasInternet"
     group system
-    if status != 0 for 3 cycles then
+    if status != 0 for 10 cycles then
       exec "/bin/triggerAlarm.tcl 'Internet connection lost'"
 
 # include user-defined configuration files

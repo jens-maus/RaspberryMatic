@@ -13,6 +13,8 @@ check process watchdog with matching /dev/watchdog
     start = "/etc/init.d/S00watchdog start"
     stop = "/etc/init.d/S00watchdog stop"
     if not exist for 1 cycles then restart
+    if 1 restart within 1 cycles then
+      exec "/bin/triggerAlarm.tcl 'hardware watchdog restarted' WatchDog-Alarm"
 
 # hss_led service monitoring
 check process hss_led with pidfile /var/run/hss_led.pid
@@ -308,6 +310,12 @@ check program hasUSB with path "/usr/bin/test -e /var/status/hasUSB"
     group system
     if status != 0 for 3 cycles then unmonitor
 
+# check system temperature limits
+check program temperature with path /bin/sh -c "cat /sys/class/thermal/thermal_zone0/temp | awk '{ print $1/1000; if($1/1000 < 80.0) { exit 10 } else { exit 20 } }';"
+    group system
+    if status != 10 for 10 cycles then
+      exec "/bin/triggerAlarm.tcl 'high system temperature (> 80 deg) detected' WatchDog-Alarm"
+
 # network interface (eth0) monitoring
 check network eth0 interface eth0
     group system
@@ -340,7 +348,7 @@ check program wlan0Enabled with path "/bin/sh -c '/usr/sbin/rfkill list wlan | g
 check program hasInternet with path "/usr/bin/test -e /var/status/hasInternet"
     group system
     if status != 0 for 10 cycles then
-      exec "/bin/triggerAlarm.tcl 'Internet connection lost'"
+      exec "/bin/triggerAlarm.tcl 'No internet connection detected' WatchDog-Alarm"
 
 # include user-defined configuration files
 include /usr/local/etc/monit*.cfg

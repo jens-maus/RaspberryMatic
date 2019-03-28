@@ -1,0 +1,11 @@
+--- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
+@@ -1874,6 +1874,8 @@
+ 
+   set specialID "[getSpecialID $special_input_id]"
+ 
++  set hlpBoxWidth 450
++  set hlpBoxHeight 80
+   set isGroup ""
+ 
+   if {[string equal [string range $address 0 2] "INT"] == 1} {

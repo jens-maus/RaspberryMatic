@@ -547,10 +547,10 @@
 +    "CCUFullNameHeader" : "RaspberryMatic",
 +    "CCUFullNameText" : "RaspberryMatic",
 +    "CCUShortName" : "RaspMatic",
-     "BidCosRF" : "Homematic Funk ",
+     "BidCosRF" : "Homematic Funk",
      "BidCosWired" : "Homematic Wired",
      "VirtualDevices" : "VirtualDevices",
-@@ -478,6 +478,7 @@
+@@ -483,6 +483,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "F%FChren Sie vor dem Update eine Datensicherung durch.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Der Ladezustand der Batterien betr%E4gt nur noch ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Um einem Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Update zu erneuern.",

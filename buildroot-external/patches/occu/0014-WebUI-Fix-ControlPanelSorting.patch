@@ -25,7 +25,7 @@
    }
  
    puts {
-@@ -200,15 +204,23 @@
+@@ -200,13 +204,13 @@
        </div>
      </td>
    }
@@ -40,14 +40,4 @@
 +  puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"window.open('/tools/devconfig.cgi?sid=$sid');\">DevConfig</div>"
    puts "<div class=\"StdTableBtnHelp\"></div></td>"
    incr i
-+  if { $i == $COL_COUNT } {
-+    puts {
-+      <td class="_CLASS21702"></td>
-+      </tr>
-+      <tr>
-+    }
-+    set i 0
-+  }
- }
  
- array set addons [::HomeMatic::Addon::GetAll]

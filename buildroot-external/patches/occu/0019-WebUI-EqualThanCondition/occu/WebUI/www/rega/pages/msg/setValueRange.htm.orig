@@ -1,5 +1,5 @@
 <div class="popupTitle">
-  <% 
+  <%
     Write( system.GetVar("title") );
     object oSC = dom.GetObject( system.GetVar("type") );
     object oLV = dom.GetObject( oSC.LeftVal() );
@@ -38,7 +38,7 @@
         <a class="CLASS00804"><% Write(sValueUnit); %></a>
       </td>
     </tr>
-    
+
     <tr>
       <td>
         <% string sChecked = ""; if(iCT==8) { sChecked="checked"; } %>
@@ -50,7 +50,7 @@
         <a class="CLASS00804"><% Write(sValueUnit); %></a>
       </td>
     </tr>
-    
+
     <tr>
       <td>
         <% string sChecked = ""; if(iCT==10) { sChecked="checked"; } %>
@@ -62,7 +62,7 @@
         <a class="CLASS00804"><% Write(sValueUnit); %></a>
       </td>
     </tr>
-    
+
     <tr>
       <td>
         <% string sChecked = ""; if(iCT==9) { sChecked="checked"; } %>
@@ -74,7 +74,7 @@
         <a class="CLASS00804"><% Write(sValueUnit); %></a>
       </td>
     </tr>
-    
+
     <tr>
       <td>
         <% string sChecked = ""; if(iCT==11) { sChecked="checked"; } %>
@@ -107,7 +107,7 @@
 
   vu = "<% Write(oLV.ValueUnit()); %>";
   min ="<% Write(oLV.ValueMin()); %>";
-  max ="<% Write(oLV.ValueMax()); %>";  
+  max ="<% Write(oLV.ValueMax()); %>";
 
   var minVal = (vu == "100%") ? min*100 : min;
   var maxVal = (vu == "100%") ? max*100 : max;
@@ -118,25 +118,25 @@
     if( elem.id=="Radio2" ) ct = 8;
     if( elem.id=="Radio3" ) ct = 10;
     if( elem.id=="Radio4" ) ct = 9;
-    if( elem.id=="Radio5" ) ct = 11; 
+    if( elem.id=="Radio5" ) ct = 11;
   }
   SaveValueRange = function()
   {
     var id = <% Write(system.GetVar("type")); %>;
     var rv1 = 0;
     var rv2 = 0;
-    
+
     switch( ct )
     {
       case 6:
         rv1 = $("Text1").value;
-        go = 0;        
+        go = 0;
         if (isNaN(rv1)) {
           go = 1;
         } else {
           if ( vu != "100%" && (((rv1/1) < (min/1)) || ((rv1/1) > (max/1)))) {
             go = 2;
-          } 
+          }
         }
         rv2 = $("Text2").value;
         if (isNaN(rv2)) {
@@ -144,8 +144,8 @@
         } else {
           if (  vu != "100%" && (((rv2/1) < (min/1)) || ( (rv2/1) > (max/1)))) {
             go = 4;
-          } 
-        }       
+          }
+        }
         if( vu == "100%" )
         {
           if ( go <= 0 ){
@@ -153,12 +153,12 @@
             rv2 = (rv2/100 >= 1) ? 1 : rv2/100;
             go = 0;
           }
-        }      
+        }
         if(go == 0) {
           if ((rv1/1) > (rv2/1)) go = 7;
         }
         break;
-        
+
       case 8:
         rv1 = $("Text3").value;
         if( vu == "100%" ) rv1 = rv1/100;
@@ -168,20 +168,20 @@
         } else {
           if ( ( (rv1/1) < (min/1) ) || ( (rv1/1) > (max/1) ) ) {
             go = 6;
-          } 
+          }
         }
         break;
       case 10:
         rv1 = $("Text4").value;
         if( vu == "100%" ) rv1 = rv1/100;
-        go = 0; 
+        go = 0;
         if (isNaN(rv1)) {
         go = 5;
         } else {
           if ( ( (rv1/1) < (min/1) ) || ( (rv1/1) > (max/1) ) ) {
             go = 6;
-          } 
-        }       
+          }
+        }
         break;
       case 9:
         rv1 = $("Text5").value;
@@ -192,7 +192,7 @@
         } else {
           if ( ( (rv1/1) < (min/1) ) || ( (rv1/1) > (max/1) ) ) {
             go = 6;
-          } 
+          }
         }
         break;
       case 11:
@@ -204,7 +204,7 @@
         } else {
           if ( ( (rv1/1) < (min/1) ) || ( (rv1/1) > (max/1) ) ) {
             go = 6;
-          } 
+          }
         }
         break;
       default:
@@ -232,13 +232,13 @@
         alert("Der rechte Wert darf nicht kleiner als '"+minVal+" ' und nicht grösser als '"+maxVal+"' sein.");
         break;
       case 5:
-        alert("Der Wert ist keine Zahl.");          
+        alert("Der Wert ist keine Zahl.");
         break;
       case 6:
         alert("Der Wert darf nicht kleiner als '"+minVal+" ' und nicht grösser als '"+maxVal+"' sein.");
         break;
       case 7:
-        alert("Der linke Wert ist grosser als der rechte.");   
+        alert("Der linke Wert ist grosser als der rechte.");
         break;
       default:
         break;

@@ -37,12 +37,3 @@
      }
  }
  
-@@ -780,7 +799,7 @@
-                     td "$param_id$unknown"
-                     switch $type {
-                         "BOOL" {
--                            if { $value } {
-+                            if { $value == 1 } {
-                                 set checked "checked"
-                             } else {
-                                 set checked ""

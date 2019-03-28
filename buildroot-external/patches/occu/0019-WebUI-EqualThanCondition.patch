@@ -30,16 +30,16 @@
 +}
 --- occu/WebUI/www/rega/esp/sico.inc.orig
 +++ occu/WebUI/www/rega/esp/sico.inc
-@@ -322,7 +322,7 @@
+@@ -324,7 +324,7 @@
            sValueUnit = "";
          }
-         
+ 
 -        if( (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 10) & (iCT1 != 11) & (iCT1 != 9) )
 +        if( (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 10) && (iCT1 != 11) && (iCT1 != 9) && (iCT1 != 5) && (iCT1 != 12) )
          {
            oSC.ConditionType(6);
            iCT1 = 6;
-@@ -338,6 +338,10 @@
+@@ -340,6 +340,10 @@
          if( iCT1 == 9 ) { sCT = "${ruleConditionLblGreaterOrEqualThan} "#iRV1.ToString(2)#sValueUnit; }
          !if( iCT1 == 11 ) { sCT = "kleiner oder gleich "#iRV1.ToString(2)#sValueUnit; }
          if( iCT1 == 11 ) { sCT = "${ruleConditionLblLessOrEqualThan} "#iRV1.ToString(2)#sValueUnit; }
@@ -62,7 +62,7 @@
      <tr>
        <td>
 @@ -41,6 +41,30 @@
-     
+ 
      <tr>
        <td>
 +        <% string sChecked = ""; if(iCT==5) { sChecked="checked"; } %>
@@ -86,7 +86,7 @@
 +        <a class="CLASS00804"><% Write(sValueUnit); %></a>
 +      </td>
 +    </tr>
-+	
++
 +    <tr>
 +      <td>
          <% string sChecked = ""; if(iCT==8) { sChecked="checked"; } %>
@@ -95,26 +95,29 @@
 @@ -119,6 +143,8 @@
      if( elem.id=="Radio3" ) ct = 10;
      if( elem.id=="Radio4" ) ct = 9;
-     if( elem.id=="Radio5" ) ct = 11; 
-+    if( elem.id=="Radio6" ) ct = 5; 
-+    if( elem.id=="Radio7" ) ct = 12; 
+     if( elem.id=="Radio5" ) ct = 11;
++    if( elem.id=="Radio6" ) ct = 5;
++    if( elem.id=="Radio7" ) ct = 12;
    }
    SaveValueRange = function()
    {
-@@ -207,6 +233,31 @@
-           } 
-         }
-         break;
+@@ -204,6 +230,30 @@
+         } else {
+           if ( ( (rv1/1) < (min/1) ) || ( (rv1/1) > (max/1) ) ) {
+             go = 6;
++          }
++        }
++        break;
 +      case 5:
 +        rv1 = $("Text7").value;
 +        if( vu == "100%" ) rv1 = rv1/100;
 +        go = 0;
 +        if (isNaN(rv1)) {
-+        go = 5;
++          go = 5;
 +        } else {
 +          if ( ( (rv1/1) < (min/1) ) || ( (rv1/1) > (max/1) ) ) {
 +            go = 6;
-+          } 
++          }
 +        }
 +        break;
 +      case 12:
@@ -122,17 +125,13 @@
 +        if( vu == "100%" ) rv1 = rv1/100;
 +        go = 0;
 +        if (isNaN(rv1)) {
-+        go = 5;
++          go = 5;
 +        } else {
 +          if ( ( (rv1/1) < (min/1) ) || ( (rv1/1) > (max/1) ) ) {
 +            go = 6;
-+          } 
-+        }
-+        break;
-+
-       default:
+           }
+         }
          break;
-     }
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -774,13 +774,15 @@

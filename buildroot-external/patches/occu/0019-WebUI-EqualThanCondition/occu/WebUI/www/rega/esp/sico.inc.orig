@@ -65,7 +65,7 @@
       boolean isGenericValueType = ((oLV.ValueType() == ivtFloat) || (oLV.ValueType() == ivtInteger));
       boolean bSysVarGeneric = ( (iLVT == ivtSystemId) && (isGenericValueType)  && (oLV.ValueSubType() == istGeneric ) );
       boolean bSysVarString  = ( (iLVT == ivtSystemId) && (oLV.ValueType() == ivtString) && (oLV.ValueSubType() == istChar8859) );
-      
+
       if (bSysVarString)
       {
         !Write("<i>bei</i>");
@@ -74,7 +74,7 @@
         Write("<input type='text' onblur='iseSingleCondition.SetRightValue(" # oSC.ID() # ",this.value);' value='" # iRV1 # "' class='SelectBox' />");
 
       }
-        
+
       if( (!bSysVarGeneric) && (!bSysVarString) )
       {
         !Write( ' <i>bei</i> ' );
@@ -96,7 +96,7 @@
               integer iDPvt = oDP.ValueType();
               integer iDPst = oDP.ValueSubType();
               string sSelected = "";
-              
+
               if( (iDPvt == ivtInteger) && (iDPst == istEnum) )
               {
                 integer iVLCount = web.webGetValueListCount( oDP.ValueList() );
@@ -114,7 +114,7 @@
                     }
 
                     ! Some parameters shouldn't be visible
-                    Call("/esp/functions.fn::isParameterVisible()");
+                    Call("/esp/functions.fn::conditionIsParameterVisible()");
                     if (showChannelParam == true)
                     {
 
@@ -135,6 +135,7 @@
                           }
                         }
                       }
+                      Call("/esp/functions.fn::getSpecialTranslationPrgCond()");
                       Write( sValue );
                       Write( '</option>' );
                     }
@@ -146,7 +147,7 @@
                 if( (iDPvt == ivtBinary) && ((iDPst != istAction)))
                 {
                   ! Some parameters shouldn't be visible
-                  Call("/esp/functions.fn::isParameterVisible()");
+                  Call("/esp/functions.fn::conditionIsParameterVisible()");
                   if (showChannelParam == true)
                   {
                     if( (oDP.ID() == iLV) && (iRV1 == 1) ) { sSelected = " selected"; } else { sSelected = ""; }
@@ -171,7 +172,7 @@
 
                     Write( '</option>' );
 
-                    Call("/esp/functions.fn::isBinaryOptionVisible()");
+                    Call("/esp/functions.fn::conditionIsBinaryOptionVisible()");
                     if (showChannelParam == true)
                     {
                       if( (oDP.ID() == iLV) && (iRV1 == 0) ) { sSelected = " selected"; } else { sSelected = ""; }
@@ -203,7 +204,7 @@
                 else
                 {
                   ! Some parameter shouldn´t be visible
-                  Call("/esp/functions.fn::isParameterVisible()");
+                  Call("/esp/functions.fn::conditionIsParameterVisible()");
                   if(showChannelParam == true) {
                     if( oDP.ID() == iLV ) { sSelected = " selected"; } else { sSelected = ""; }
                     Write( '<option value="'#oDP.ID()#':1"'#sSelected#'>' );
@@ -247,6 +248,7 @@
                     sValue = sShortKey;
                   }
                 }
+                Call("/esp/functions.fn::getSpecialTranslationPrgCond()");
                 Write( sValue );
                 Write( '</option>' );
               }
@@ -254,12 +256,12 @@
           }
         }
       }
-      
+
       boolean bOptionList = ( (oLV.ValueType() == ivtInteger) && (oLV.ValueSubType() == istEnum) );
       boolean bBinary = ( oLV.ValueType() == ivtBinary );
-      
+
       if( iLVT == ivtSystemId )
-      {        
+      {
         if( bOptionList )
         {
           integer iVLCount = web.webGetValueListCount( oLV.ValueList() );
@@ -287,14 +289,14 @@
           Write( '</option>' );
         }
       }
-      
+
       if( (!bSysVarGeneric) && (!bSysVarString) )
       {
         Write( '</select>' );
       }
-      
+
       boolean bSpecial = (iRV1T==ivtSpecialValue);
-      
+
       if( (!bOptionList) && (!bBinary) && (!bSpecial) && (!bSysVarString) )
       {
         !Write( ' <i>im Wertebereich</i> ' );
@@ -307,7 +309,7 @@
           iRV1 = iRV1*100;
           iRV2 = iRV2*100;
         }
-        
+
         if( sValueUnit == "°C" )
         {
           sValueUnit = "° C";
@@ -316,18 +318,18 @@
         {
           sValueUnit = " "#sValueUnit;
         }
-        
+
         if( sValueUnit == " " )
         {
           sValueUnit = "";
         }
-        
+
         if( (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 10) & (iCT1 != 11) & (iCT1 != 9) )
         {
           oSC.ConditionType(6);
           iCT1 = 6;
         }
-        
+
         !if( iCT1 == 6 ) { sCT = "von "#iRV1.ToString(2)#sValueUnit#" bis kleiner "#iRV2.ToString(2)#sValueUnit; }
         if( iCT1 == 6 ) { sCT = "${ruleConditionLblRangeFrom} "#iRV1.ToString(2)#sValueUnit#" ${ruleConditionLblRangeLessThan} "#iRV2.ToString(2)#sValueUnit; }
         !if( iCT1 == 8 ) { sCT = "größer als "#iRV1.ToString(2)#sValueUnit; }
@@ -348,7 +350,7 @@
         {
           oSC.ConditionType2(4);
         }
-      
+
         Write( '&nbsp;<select class="SelectBox" onchange="iseSingleCondition.SetConditionType2('#oSC.ID()#',this.value);">' );
         string sSelected = "";
         if( oSC.ConditionType2() == 13 ) { sSelected = " selected"; } else { sSelected = ""; }
@@ -374,7 +376,7 @@
       Call("/esp/system.fn::TmToString()");
       Write(sTm);
       Write( '</b> ' );
-      
+
       if( (oSC.ConditionType2() != 15) && (oSC.ConditionType2() != 13) )
       {
         oSC.ConditionType2(13);

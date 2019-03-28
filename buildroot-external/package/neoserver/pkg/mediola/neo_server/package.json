@@ -1,12 +1,12 @@
 {
     "name": "neo_server",
-    "version": "2.4.1",
+    "version": "2.4.4",
     "main": "index.html",
-    "config":{
+    "config": {
         "WEB_SERVER_PORT": 8088,
-        "DATA_FOLDER":"/etc/config/addons/mediola",
-        "APP_FOLDER":"/etc/config/addons/mediola",
-        "LOG_ROOT":"/var/log/neo_server"
+        "DATA_FOLDER": "/etc/config/addons/mediola",
+        "APP_FOLDER": "/etc/config/addons/mediola",
+        "LOG_ROOT": "/var/log/neo_server"
     },
     "window": {
         "frame": true,
@@ -29,11 +29,11 @@
         "express": "*",
         "fs-extra": "*",
         "loop-protect": "*",
-        "md5":"*",
-        "moment-timezone":"*",
+        "md5": "*",
+        "moment-timezone": "*",
         "node-dir": "*",
-        "suncalc":"*",
-        "unorm":"*",
+        "suncalc": "*",
+        "unorm": "*",
         "winreg": "1.2.2",
         "ws": "*",
         "node-localstorage": "*"

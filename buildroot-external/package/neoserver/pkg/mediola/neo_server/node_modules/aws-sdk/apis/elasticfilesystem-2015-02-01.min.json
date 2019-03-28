@@ -1,0 +1,517 @@
+{
+  "version": "2.0",
+  "metadata": {
+    "apiVersion": "2015-02-01",
+    "endpointPrefix": "elasticfilesystem",
+    "protocol": "rest-json",
+    "serviceAbbreviation": "EFS",
+    "serviceFullName": "Amazon Elastic File System",
+    "serviceId": "EFS",
+    "signatureVersion": "v4",
+    "uid": "elasticfilesystem-2015-02-01"
+  },
+  "operations": {
+    "CreateFileSystem": {
+      "http": {
+        "requestUri": "/2015-02-01/file-systems",
+        "responseCode": 201
+      },
+      "input": {
+        "type": "structure",
+        "required": [
+          "CreationToken"
+        ],
+        "members": {
+          "CreationToken": {},
+          "PerformanceMode": {},
+          "Encrypted": {
+            "type": "boolean"
+          },
+          "KmsKeyId": {},
+          "ThroughputMode": {},
+          "ProvisionedThroughputInMibps": {
+            "type": "double"
+          },
+          "Tags": {
+            "shape": "S8"
+          }
+        }
+      },
+      "output": {
+        "shape": "Sc"
+      }
+    },
+    "CreateMountTarget": {
+      "http": {
+        "requestUri": "/2015-02-01/mount-targets",
+        "responseCode": 200
+      },
+      "input": {
+        "type": "structure",
+        "required": [
+          "FileSystemId",
+          "SubnetId"
+        ],
+        "members": {
+          "FileSystemId": {},
+          "SubnetId": {},
+          "IpAddress": {},
+          "SecurityGroups": {
+            "shape": "So"
+          }
+        }
+      },
+      "output": {
+        "shape": "Sq"
+      }
+    },
+    "CreateTags": {
+      "http": {
+        "requestUri": "/2015-02-01/create-tags/{FileSystemId}",
+        "responseCode": 204
+      },
+      "input": {
+        "type": "structure",
+        "required": [
+          "FileSystemId",
+          "Tags"
+        ],
+        "members": {
+          "FileSystemId": {
+            "location": "uri",
+            "locationName": "FileSystemId"
+          },
+          "Tags": {
+            "shape": "S8"
+          }
+        }
+      }
+    },
+    "DeleteFileSystem": {
+      "http": {
+        "method": "DELETE",
+        "requestUri": "/2015-02-01/file-systems/{FileSystemId}",
+        "responseCode": 204
+      },
+      "input": {
+        "type": "structure",
+        "required": [
+          "FileSystemId"
+        ],
+        "members": {
+          "FileSystemId": {
+            "location": "uri",
+            "locationName": "FileSystemId"
+          }
+        }
+      }
+    },
+    "DeleteMountTarget": {
+      "http": {
+        "method": "DELETE",
+        "requestUri": "/2015-02-01/mount-targets/{MountTargetId}",
+        "responseCode": 204
+      },
+      "input": {
+        "type": "structure",
+        "required": [
+          "MountTargetId"
+        ],
+        "members": {
+          "MountTargetId": {
+            "location": "uri",
+            "locationName": "MountTargetId"
+          }
+        }
+      }
+    },
+    "DeleteTags": {
+      "http": {
+        "requestUri": "/2015-02-01/delete-tags/{FileSystemId}",
+        "responseCode": 204
+      },
+      "input": {
+        "type": "structure",
+        "required": [
+          "FileSystemId",
+          "TagKeys"
+        ],
+        "members": {
+          "FileSystemId": {
+            "location": "uri",
+            "locationName": "FileSystemId"
+          },
+          "TagKeys": {
+            "type": "list",
+            "member": {}
+          }
+        }
+      }
+    },
+    "DescribeFileSystems": {
+      "http": {
+        "method": "GET",
+        "requestUri": "/2015-02-01/file-systems",
+        "responseCode": 200
+      },
+      "input": {
+        "type": "structure",
+        "members": {
+          "MaxItems": {
+            "location": "querystring",
+            "locationName": "MaxItems",
+            "type": "integer"
+          },
+          "Marker": {
+            "location": "querystring",
+            "locationName": "Marker"
+          },
+          "CreationToken": {
+            "location": "querystring",
+            "locationName": "CreationToken"
+          },
+          "FileSystemId": {
+            "location": "querystring",
+            "locationName": "FileSystemId"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "Marker": {},
+          "FileSystems": {
+            "type": "list",
+            "member": {
+              "shape": "Sc"
+            }
+          },
+          "NextMarker": {}
+        }
+      }
+    },
+    "DescribeLifecycleConfiguration": {
+      "http": {
+        "method": "GET",
+        "requestUri": "/2015-02-01/file-systems/{FileSystemId}/lifecycle-configuration",
+        "responseCode": 200
+      },
+      "input": {
+        "type": "structure",
+        "required": [
+          "FileSystemId"
+        ],
+        "members": {
+          "FileSystemId": {
+            "location": "uri",
+            "locationName": "FileSystemId"
+          }
+        }
+      },
+      "output": {
+        "shape": "S14"
+      }
+    },
+    "DescribeMountTargetSecurityGroups": {
+      "http": {
+        "method": "GET",
+        "requestUri": "/2015-02-01/mount-targets/{MountTargetId}/security-groups",
+        "responseCode": 200
+      },
+      "input": {
+        "type": "structure",
+        "required": [
+          "MountTargetId"
+        ],
+        "members": {
+          "MountTargetId": {
+            "location": "uri",
+            "locationName": "MountTargetId"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "SecurityGroups"
+        ],
+        "members": {
+          "SecurityGroups": {
+            "shape": "So"
+          }
+        }
+      }
+    },
+    "DescribeMountTargets": {
+      "http": {
+        "method": "GET",
+        "requestUri": "/2015-02-01/mount-targets",
+        "responseCode": 200
+      },
+      "input": {
+        "type": "structure",
+        "members": {
+          "MaxItems": {
+            "location": "querystring",
+            "locationName": "MaxItems",
+            "type": "integer"
+          },
+          "Marker": {
+            "location": "querystring",
+            "locationName": "Marker"
+          },
+          "FileSystemId": {
+            "location": "querystring",
+            "locationName": "FileSystemId"
+          },
+          "MountTargetId": {
+            "location": "querystring",
+            "locationName": "MountTargetId"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "Marker": {},
+          "MountTargets": {
+            "type": "list",
+            "member": {
+              "shape": "Sq"
+            }
+          },
+          "NextMarker": {}
+        }
+      }
+    },
+    "DescribeTags": {
+      "http": {
+        "method": "GET",
+        "requestUri": "/2015-02-01/tags/{FileSystemId}/",
+        "responseCode": 200
+      },
+      "input": {
+        "type": "structure",
+        "required": [
+          "FileSystemId"
+        ],
+        "members": {
+          "MaxItems": {
+            "location": "querystring",
+            "locationName": "MaxItems",
+            "type": "integer"
+          },
+          "Marker": {
+            "location": "querystring",
+            "locationName": "Marker"
+          },
+          "FileSystemId": {
+            "location": "uri",
+            "locationName": "FileSystemId"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "Tags"
+        ],
+        "members": {
+          "Marker": {},
+          "Tags": {
+            "shape": "S8"
+          },
+          "NextMarker": {}
+        }
+      }
+    },
+    "ModifyMountTargetSecurityGroups": {
+      "http": {
+        "method": "PUT",
+        "requestUri": "/2015-02-01/mount-targets/{MountTargetId}/security-groups",
+        "responseCode": 204
+      },
+      "input": {
+        "type": "structure",
+        "required": [
+          "MountTargetId"
+        ],
+        "members": {
+          "MountTargetId": {
+            "location": "uri",
+            "locationName": "MountTargetId"
+          },
+          "SecurityGroups": {
+            "shape": "So"
+          }
+        }
+      }
+    },
+    "PutLifecycleConfiguration": {
+      "http": {
+        "method": "PUT",
+        "requestUri": "/2015-02-01/file-systems/{FileSystemId}/lifecycle-configuration",
+        "responseCode": 200
+      },
+      "input": {
+        "type": "structure",
+        "required": [
+          "FileSystemId",
+          "LifecyclePolicies"
+        ],
+        "members": {
+          "FileSystemId": {
+            "location": "uri",
+            "locationName": "FileSystemId"
+          },
+          "LifecyclePolicies": {
+            "shape": "S15"
+          }
+        }
+      },
+      "output": {
+        "shape": "S14"
+      }
+    },
+    "UpdateFileSystem": {
+      "http": {
+        "method": "PUT",
+        "requestUri": "/2015-02-01/file-systems/{FileSystemId}",
+        "responseCode": 202
+      },
+      "input": {
+        "type": "structure",
+        "required": [
+          "FileSystemId"
+        ],
+        "members": {
+          "FileSystemId": {
+            "location": "uri",
+            "locationName": "FileSystemId"
+          },
+          "ThroughputMode": {},
+          "ProvisionedThroughputInMibps": {
+            "type": "double"
+          }
+        }
+      },
+      "output": {
+        "shape": "Sc"
+      }
+    }
+  },
+  "shapes": {
+    "S8": {
+      "type": "list",
+      "member": {
+        "type": "structure",
+        "required": [
+          "Key",
+          "Value"
+        ],
+        "members": {
+          "Key": {},
+          "Value": {}
+        }
+      }
+    },
+    "Sc": {
+      "type": "structure",
+      "required": [
+        "OwnerId",
+        "CreationToken",
+        "FileSystemId",
+        "CreationTime",
+        "LifeCycleState",
+        "NumberOfMountTargets",
+        "SizeInBytes",
+        "PerformanceMode",
+        "Tags"
+      ],
+      "members": {
+        "OwnerId": {},
+        "CreationToken": {},
+        "FileSystemId": {},
+        "CreationTime": {
+          "type": "timestamp"
+        },
+        "LifeCycleState": {},
+        "Name": {},
+        "NumberOfMountTargets": {
+          "type": "integer"
+        },
+        "SizeInBytes": {
+          "type": "structure",
+          "required": [
+            "Value"
+          ],
+          "members": {
+            "Value": {
+              "type": "long"
+            },
+            "Timestamp": {
+              "type": "timestamp"
+            },
+            "ValueInIA": {
+              "type": "long"
+            },
+            "ValueInStandard": {
+              "type": "long"
+            }
+          }
+        },
+        "PerformanceMode": {},
+        "Encrypted": {
+          "type": "boolean"
+        },
+        "KmsKeyId": {},
+        "ThroughputMode": {},
+        "ProvisionedThroughputInMibps": {
+          "type": "double"
+        },
+        "Tags": {
+          "shape": "S8"
+        }
+      }
+    },
+    "So": {
+      "type": "list",
+      "member": {}
+    },
+    "Sq": {
+      "type": "structure",
+      "required": [
+        "MountTargetId",
+        "FileSystemId",
+        "SubnetId",
+        "LifeCycleState"
+      ],
+      "members": {
+        "OwnerId": {},
+        "MountTargetId": {},
+        "FileSystemId": {},
+        "SubnetId": {},
+        "LifeCycleState": {},
+        "IpAddress": {},
+        "NetworkInterfaceId": {}
+      }
+    },
+    "S14": {
+      "type": "structure",
+      "members": {
+        "LifecyclePolicies": {
+          "shape": "S15"
+        }
+      }
+    },
+    "S15": {
+      "type": "list",
+      "member": {
+        "type": "structure",
+        "members": {
+          "TransitionToIA": {}
+        }
+      }
+    }
+  }
+}

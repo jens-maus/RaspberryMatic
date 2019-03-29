@@ -56,6 +56,8 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 		# remove obsolete init.d jobs
 		rm -f $(TARGET_DIR)/etc/init.d/S01logging
 		rm -f $(TARGET_DIR)/etc/init.d/S20urandom
+		rm -f $(TARGET_DIR)/etc/init.d/S01syslogd
+		rm -f $(TARGET_DIR)/etc/init.d/S02klogd
 
 		# remove obsolete config templates
 		rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf

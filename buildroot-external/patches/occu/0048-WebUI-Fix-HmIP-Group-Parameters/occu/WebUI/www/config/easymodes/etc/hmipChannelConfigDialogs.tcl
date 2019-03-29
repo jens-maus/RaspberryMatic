@@ -1875,7 +1875,8 @@ proc getHeatingClimateControlTransceiver {chn p descr address {extraparam ""}} {
   set specialID "[getSpecialID $special_input_id]"
 
   set hlpBoxWidth 450
-  set hlpBoxHeight 80
+  set hlpBoxHeight 160
+
   set isGroup ""
 
   if {[string equal [string range $address 0 2] "INT"] == 1} {

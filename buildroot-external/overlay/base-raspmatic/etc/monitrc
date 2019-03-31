@@ -340,9 +340,9 @@ check network wlan0 interface wlan0
       exec "/bin/triggerAlarm.tcl 'wlan0 interface link down' WatchDog-Alarm"
     depends on wlan0Enabled
 
-check program wlan0Enabled with path "/bin/sh -c '/usr/sbin/rfkill list wlan | grep yes'"
+check program wlan0Enabled with path "/usr/bin/test -e /etc/config/wpa_supplicant.conf"
     group system
-    if status = 0 for 1 cycles then unmonitor
+    if status != 0 for 1 cycles then unmonitor
 
 # internet connectivity monitoring
 check program hasInternet with path "/usr/bin/test -e /var/status/hasInternet"

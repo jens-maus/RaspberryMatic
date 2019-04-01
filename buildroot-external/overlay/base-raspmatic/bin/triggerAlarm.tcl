@@ -3,8 +3,8 @@
 # Simple tclsh script for triggering an alarm message with DPInfo
 # <msg> to alarm variable <var> with eventually creating it.
 #
-# triggerAlarm.ctl v2.0
-# Copyright (c) 2017-2018 Jens Maus <mail@jens-maus.de>
+# triggerAlarm.ctl v2.1
+# Copyright (c) 2017-2019 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,7 +43,6 @@ if { $var == "" } {
     foreach(sSysVarId, dom.GetObject(ID_SYSTEM_VARIABLES).EnumUsedIDs()) {
       object oSysVar = dom.GetObject(sSysVarId);
       if((alObj == null) &&
-        (oSysVar.TypeName() == \"ALARMDP\") &&
         ((oSysVar.Name() == \"\${sysVarAlarmZone1}\") || (oSysVar.Name() == \"Alarmzone 1\"))) {
         alObj=oSysVar;
       }
@@ -57,8 +56,7 @@ if { $var == "" } {
     foreach(sSysVarId, dom.GetObject(ID_SYSTEM_VARIABLES).EnumUsedIDs()) {
       object oSysVar = dom.GetObject(sSysVarId);
       if((alObj == null) &&
-         (oSysVar.Name() == \"$var\") &&
-         (oSysVar.TypeName() == \"ALARMDP\")) {
+         (oSysVar.Name() == \"$var\")) {
         alObj=oSysVar;
       }
     }
@@ -66,8 +64,15 @@ if { $var == "" } {
 }
 
 # try to get an alarm variable with name $var
-# or create it if it does not exist
+# create it or change the existing one to be an alarmdp variable
 append script "
+  ! delete object if not of type OT_ALARMDP
+  if( (alObj != null) && (alObj.IsTypeOf(OT_ALARMDP) == false) ) {
+    dom.DeleteObject(alObj.ID());
+    alObj = null;
+  }
+
+  ! (re)create the alarm system variable
   if(alObj == null) {
     alObj=dom.CreateObject(OT_ALARMDP);
     if(alObj != null) {
@@ -79,12 +84,14 @@ append script "
       alObj.ValueUnit(\"\");
       alObj.AlType(atSystem);
       alObj.AlArm(true);
+      alObj.AlSetBinaryCondition();
       alObj.State(false);
       dom.GetObject(ID_SYSTEM_VARIABLES).Add(alObj.ID());
       dom.RTUpdate(1);
     }
   }
 
+  ! raise alarm message
   if(alObj != null) {
     alObj.ValueType(ivtBinary);
     alObj.ValueSubType(istAlarm);

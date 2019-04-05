@@ -1,0 +1,762 @@
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -168,14 +168,18 @@
+ ![id]
+ function ::DeleteObject()
+ {
+-  if( system.IsVar( "id" ) )
++  object oUser = dom.GetObject( system.GetSessionVar( "sessionUserID" ) );
++  if( oUser.UserLevel() == iulAdmin )
+   {
+-    object o = dom.GetObject( system.GetVar( "id" ) );
+-    if( o )
++    if( system.IsVar( "id" ) )
+     {
+-      if( !o.Unerasable() )
++      object o = dom.GetObject( system.GetVar( "id" ) );
++      if( o )
+       {
+-        Write( dom.DeleteObject( o ) );
++        if( !o.Unerasable() )
++        {
++          Write( dom.DeleteObject( o ) );
++        }
+       }
+     }
+   }
+@@ -227,34 +231,38 @@
+ ! [id], [name]
+ function ::saveName()
+ {
+-  if( system.IsVar("id") && system.IsVar("name") )
++  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
++  if( oUser.UserLevel() != iulGuest )
+   {
+-    object o = dom.GetObject( system.GetVar("id") );
+-    if( o )
++    if( system.IsVar("id") && system.IsVar("name") )
+     {
+-      integer iExId = ID_ERROR;
+-      if( o.IsTypeOf( OT_PROGRAM ) )
+-      {
+-        iExId = o.ProgramCopyID();
+-      }
+-      if( o.IsTypeOf( OT_FAVORITE ) )
+-      {
+-        iExId = o.EnCopyID();
+-      }
+-      
+-      string sNewName;
+-      if( iExId == ID_ERROR )
+-      {
+-        o.Name( system.GetVar("name"), &sNewName );
+-        ! - - - wernerf - - -
+-        Call("/xml-api/cache.fn::InvalidateDeviceList()");
+-        ! - - - wernerf - - -     
+-      }
+-      else
++      object o = dom.GetObject( system.GetVar("id") );
++      if( o )
+       {
+-        o.Name( system.GetVar("name"), &sNewName, iExId );
++        integer iExId = ID_ERROR;
++        if( o.IsTypeOf( OT_PROGRAM ) )
++        {
++          iExId = o.ProgramCopyID();
++        }
++        if( o.IsTypeOf( OT_FAVORITE ) )
++        {
++          iExId = o.EnCopyID();
++        }
++        
++        string sNewName;
++        if( iExId == ID_ERROR )
++        {
++          o.Name( system.GetVar("name"), &sNewName );
++          ! - - - wernerf - - -
++          Call("/xml-api/cache.fn::InvalidateDeviceList()");
++          ! - - - wernerf - - -     
++        }
++        else
++        {
++          o.Name( system.GetVar("name"), &sNewName, iExId );
++        }
++        Write(sNewName);
+       }
+-      Write(sNewName);
+     }
+   }
+   return;
+@@ -269,12 +277,16 @@
+ 
+ ! [objId], [desc]
+ function ::saveDesc() {
+-  object obj = dom.GetObject(system.GetVar("objId"));
+-  if (obj)
++  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
++  if( oUser.UserLevel() != iulGuest )
+   {
+-    if( obj.IsTypeOf( OT_ENUM ) ) { Write( "ENUM|"#obj.EnumInfo(system.GetVar("desc")) ); }
+-    if( obj.IsTypeOf( OT_DP ) ) { Write( "DP|"#obj.DPInfo(system.GetVar("desc")) ); }
+-    if( obj.IsTypeOf( OT_PROGRAM ) ) { Write( "PRG|"#obj.PrgInfo(system.GetVar("desc")) ); }
++    object obj = dom.GetObject(system.GetVar("objId"));
++    if (obj)
++    {
++      if( obj.IsTypeOf( OT_ENUM ) ) { Write( "ENUM|"#obj.EnumInfo(system.GetVar("desc")) ); }
++      if( obj.IsTypeOf( OT_DP ) ) { Write( "DP|"#obj.DPInfo(system.GetVar("desc")) ); }
++      if( obj.IsTypeOf( OT_PROGRAM ) ) { Write( "PRG|"#obj.PrgInfo(system.GetVar("desc")) ); }
++    }
+   }
+   return;
+ }
+@@ -740,209 +752,227 @@
+   ! [sTrue], [sFalse]
+ function ::saveSysVar()
+ {
+-  integer ist = system.GetVar("iSubType"); 
+-  object oChn = dom.GetObject( system.GetVar("iChnId") );
+-
+-  object oSysVars = dom.GetObject( ID_SYSTEM_VARIABLES );
+-  object oAlarms = dom.GetObject( ID_ALARMS );
+-  
+-  object sv;
+-  if( system.GetVar("createNew") == 1 )
++  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
++  if( oUser.UserLevel() == iulAdmin )
+   {
+-    if( ist == istAlarm )
++    integer ist = system.GetVar("iSubType"); 
++    object oChn = dom.GetObject( system.GetVar("iChnId") );
++
++    object oSysVars = dom.GetObject( ID_SYSTEM_VARIABLES );
++    object oAlarms = dom.GetObject( ID_ALARMS );
++    
++    object sv;
++    if( system.GetVar("createNew") == 1 )
+     {
+-      sv = dom.CreateObject(OT_ALARMDP);
+-      sv.Name( system.GetVar("sName") );
+-      sv.AlSetBinaryCondition();
+-      oSysVars.Add( sv.ID() );
++      if( ist == istAlarm )
++      {
++        sv = dom.CreateObject(OT_ALARMDP);
++        sv.Name( system.GetVar("sName") );
++        sv.AlSetBinaryCondition();
++        oSysVars.Add( sv.ID() );
++      }
++      else
++      {
++        sv = dom.CreateObject(OT_VARDP);
++        sv.Name( system.GetVar("sName") );
++        oSysVars.Add( sv.ID() );
++      }
+     }
+     else
+     {
+-      sv = dom.CreateObject(OT_VARDP);
++      sv = dom.GetObject( system.GetVar("varid") );
+       sv.Name( system.GetVar("sName") );
+-      oSysVars.Add( sv.ID() );
+-    }
+-  }
+-  else
+-  {
+-    sv = dom.GetObject( system.GetVar("varid") );
+-    sv.Name( system.GetVar("sName") );
+-    object ch = dom.GetObject( sv.Channel() );
+-    if( ch )
+-    {
+-      ch.DPs().Remove( sv.ID() );
++      object ch = dom.GetObject( sv.Channel() );
++      if( ch )
++      {
++        ch.DPs().Remove( sv.ID() );
++      }
++
++      if( (ist == istAlarm) && (sv.ValueSubType() != istAlarm) )
++      {
++        dom.DeleteObject( sv.ID() );
++        sv = dom.CreateObject( OT_ALARMDP, system.GetVar("sName") );
++        oSysVars.Add( sv.ID() );
++      }
++      elseif( (ist != istAlarm ) && (sv.ValueSubType() == istAlarm) )
++      {
++        dom.DeleteObject( sv.ID() );
++        sv = dom.CreateObject( OT_VARDP, system.GetVar("sName") );
++        oSysVars.Add( sv.ID() );
++      }    
++    }
++     
++    !sv.ValueSubType(ist);
++    sv.DPInfo( system.GetVar("sInfo") );
++    sv.ValueUnit( system.GetVar("sUnit") );
++    if (ist == istAlarm)
++    {
++      sv.ValueType( ivtBinary );
++      sv.ValueSubType( istAlarm );
++      sv.ValueName1(system.GetVar("sTrue"));
++      sv.ValueName0(system.GetVar("sFalse"));
++      sv.AlType(atSystem);
++      sv.AlArm(true);
++    }
++    elseif (ist == istBool)
++    {
++      sv.ValueType( ivtBinary );
++      sv.ValueSubType( istBool );
++      sv.ValueName1(system.GetVar("sTrue"));
++      sv.ValueName0(system.GetVar("sFalse"));
++      sv.State(false);
++    }
++    elseif (ist == istGeneric)
++    {
++      sv.ValueType( ivtFloat );
++      sv.ValueSubType( istGeneric );
++      sv.ValueMin(system.GetVar("iMinVal"));
++      sv.ValueMax(system.GetVar("iMaxVal"));
++      sv.State(system.GetVar("iMinVal"));
++    }
++    elseif (ist == istEnum)
++    {
++      sv.ValueType( ivtInteger );
++      sv.ValueSubType( istEnum );
++      sv.ValueList(system.GetVar("sValList"));
++      sv.State(0);
++    }
++    elseif (ist == istChar8859)
++    {
++      sv.ValueType(ivtString);
++      sv.ValueSubType(istChar8859);
++      sv.State("???");
+     }
+-    if( (ist == istAlarm) && (sv.ValueSubType() != istAlarm) )
++
++    if (oChn) 
+     {
+-      dom.DeleteObject( sv.ID() );
+-      sv = dom.CreateObject( OT_ALARMDP, system.GetVar("sName") );
+-      oSysVars.Add( sv.ID() );
++      oChn.DPs().Add( sv.ID() );
++      sv.Channel( oChn.ID() );
+     }
+-    if( (ist != istAlarm ) && (sv.ValueSubType() == istAlarm) )
+-    {
+-      dom.DeleteObject( sv.ID() );
+-      sv = dom.CreateObject( OT_VARDP, system.GetVar("sName") );
+-      oSysVars.Add( sv.ID() );
+-    }    
+-  }
+-   
+-  !sv.ValueSubType(ist);
+-  sv.DPInfo( system.GetVar("sInfo") );
+-  sv.ValueUnit( system.GetVar("sUnit") );
+-  if (ist == istAlarm)
+-  {
+-    sv.ValueType( ivtBinary );
+-    sv.ValueSubType( istAlarm );
+-    sv.ValueName1(system.GetVar("sTrue"));
+-    sv.ValueName0(system.GetVar("sFalse"));
+-    sv.AlType(atSystem);
+-    sv.AlArm(true);
+-  }
+-  if (ist == istBool)
+-  {
+-    sv.ValueType( ivtBinary );
+-    sv.ValueSubType( istBool );
+-    sv.ValueName1(system.GetVar("sTrue"));
+-    sv.ValueName0(system.GetVar("sFalse"));
+-    sv.State(false);
+-  }
+-  if (ist == istGeneric)
+-  {
+-    sv.ValueType( ivtFloat );
+-    sv.ValueSubType( istGeneric );
+-    sv.ValueMin(system.GetVar("iMinVal"));
+-    sv.ValueMax(system.GetVar("iMaxVal"));
+-    sv.State(system.GetVar("iMinVal"));
+-  }
+-  if (ist == istEnum)
+-  {
+-    sv.ValueType( ivtInteger );
+-    sv.ValueSubType( istEnum );
+-    sv.ValueList(system.GetVar("sValList"));
+-    sv.State(0);
+-  }
+-  if (ist == istChar8859)
+-  {
+-    sv.ValueType(ivtString);
+-    sv.ValueSubType(istChar8859);
+-    sv.State("???");
+-  }
+-  if (oChn) 
+-  {
+-    oChn.DPs().Add( sv.ID() );
+-    sv.Channel( oChn.ID() );
+-  }
+-  else
+-  {
+-    oChn = dom.GetObject( sv.Channel() );
+-    if( oChn )
++    else
+     {
+-      oChn.DPs().Remove( sv.ID() );
++      oChn = dom.GetObject( sv.Channel() );
++      if( oChn )
++      {
++        oChn.DPs().Remove( sv.ID() );
++      }
++      sv.Channel( ID_ERROR );
+     }
+-    sv.Channel( ID_ERROR );
++    dom.RTUpdate(0);
+   }
+-  dom.RTUpdate(0);
+   return;
+ }
+ 
+ ! [id], [iProto]
+ function ::saveDpProto() {
+-  object obj = dom.GetObject(system.GetVar("dpId"));
+-  if (obj) {
+-    boolean b = false;
+-    if (system.GetVar("iProto") == 1) {
+-      b = true;
++  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
++  if( oUser.UserLevel() == iulAdmin )
++  {
++    object obj = dom.GetObject(system.GetVar("dpId"));
++    if (obj) {
++      boolean b = false;
++      if (system.GetVar("iProto") == 1) {
++        b = true;
++      }
++      obj.DPArchive(b);
+     }
+-    obj.DPArchive(b);
+   }
+   return;
+ }
+ 
+ ! [id], [iVisible]
+ function ::saveDpVisibility() {
+-  object obj = dom.GetObject(system.GetVar("dpId"));
+-  if (obj) {
+-    boolean b = false;
+-    if (system.GetVar("iVisible") == 1) {
+-      b = true;
++  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
++  if( oUser.UserLevel() == iulAdmin )
++  {
++    object obj = dom.GetObject(system.GetVar("dpId"));
++    if (obj) {
++      boolean b = false;
++      if (system.GetVar("iVisible") == 1) {
++        b = true;
++      }
++      obj.Visible(b);
+     }
+-    obj.Visible(b);
+   }
+   return;
+ }
+ 
+ function ::saveTimeModule()
+ {
+-  Write( '<script type="text/javascript">' );
+-  string sCI = "saveTimeModule: ";
+-  object tmObj;
+-  if( system.GetVar("tmid") == 0 )
+-  {
+-    tmObj = dom.CreateObject( OT_CALENDARDP, "Zeitmodul" );
+-    dom.GetObject( ID_CALENDARDPS ).Add( tmObj );
+-    sCI = sCI#"Create new timemodule ["#tmObj.ID()#"], ";
+-  }
+-  else
+-  {
+-    tmObj = dom.GetObject( system.GetVar("tmid") );
+-    sCI = sCI#"Open existing timemodule ["#tmObj.ID()#"], ";
+-  }
+-  if( tmObj )
++  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
++  if( oUser.UserLevel() == iulAdmin )
+   {
+-    sCI=sCI#"Try to set TimerType to ["#system.GetVar("tmType")#"] ";
+-    tmObj.TimerType( system.GetVar("tmType") );
+-    if( tmObj.TimerType() == system.GetVar("tmType") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
+-    
+-    sCI=sCI#"Try to set Time to ["#system.GetVar("tmTime")#"] ";
+-    tmObj.Time( system.GetVar("tmTime") );
+-    if( tmObj.Time() == system.GetVar("tmTime") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
+-    
+-    sCI=sCI#"Try to set CalDuration to ["#system.GetVar("tmCaldur")#"] ";
+-    tmObj.CalDuration( system.GetVar("tmCaldur") );
+-    if( tmObj.CalDuration() == system.GetVar("tmCaldur") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
+-    
+-    sCI=sCI#"Try to set CalRepeatTime to ["#system.GetVar("tmCaltime")#"] ";
+-    tmObj.CalRepeatTime( system.GetVar("tmCaltime") );
+-    if( tmObj.CalRepeatTime() == system.GetVar("tmCaltime") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
+-    
+-    sCI=sCI#"Try to set Weekdays to ["#system.GetVar("tmWd")#"] ";
+-    tmObj.Weekdays( system.GetVar("tmWd") );
+-    if( tmObj.Weekdays() == system.GetVar("tmWd") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
+-    
+-    sCI=sCI#"Try to set Period to ["#system.GetVar("tmPeriod")#"] ";
+-    tmObj.Period( system.GetVar("tmPeriod") );
+-    if( tmObj.Period() == system.GetVar("tmPeriod") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
+-    
+-    sCI=sCI#"Try to set CalRepetitionValue to ["#system.GetVar("tmCalrep")#"] ";
+-    tmObj.CalRepetitionValue( system.GetVar("tmCalrep") );
+-    if( tmObj.CalRepetitionValue() == system.GetVar("tmCalrep") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
+-    
+-    sCI=sCI#"Try to set Begin to ["#system.GetVar("tmBegin")#"] ";
+-    tmObj.Begin( system.GetVar("tmBegin") );
+-    if( tmObj.Begin() == system.GetVar("tmBegin") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
+-    
+-    sCI=sCI#"Try to set End to ["#system.GetVar("tmEnd")#"] ";
+-    tmObj.End( system.GetVar("tmEnd") );
+-    if( tmObj.End() == system.GetVar("tmEnd") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
+-    
+-    sCI=sCI#"Try to set CalRepetitionCount to ["#system.GetVar("tmCalcount")#"] ";
+-    tmObj.CalRepetitionCount( system.GetVar("tmCalcount") );
+-    if( tmObj.CalRepetitionCount() == system.GetVar("tmCalcount") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
+-    
+-    sCI=sCI#"Try to set SunOffsetType to ["#system.GetVar("tmSot")#"] ";
+-    tmObj.SunOffsetType( system.GetVar("tmSot") );
+-    if( tmObj.SunOffsetType() == system.GetVar("tmSot") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
+-    
+-    Write( 'dlgResult = '#tmObj.ID()#';' );
+-    Write( 'PopupClose();' );
+-  }
+-  else
+-  {
+-    sCI = sCI#"Failed to get timemodule object";
++    Write( '<script type="text/javascript">' );
++    string sCI = "saveTimeModule: ";
++    object tmObj;
++    if( system.GetVar("tmid") == 0 )
++    {
++      tmObj = dom.CreateObject( OT_CALENDARDP, "Zeitmodul" );
++      dom.GetObject( ID_CALENDARDPS ).Add( tmObj );
++      sCI = sCI#"Create new timemodule ["#tmObj.ID()#"], ";
++    }
++    else
++    {
++      tmObj = dom.GetObject( system.GetVar("tmid") );
++      sCI = sCI#"Open existing timemodule ["#tmObj.ID()#"], ";
++    }
++    if( tmObj )
++    {
++      sCI=sCI#"Try to set TimerType to ["#system.GetVar("tmType")#"] ";
++      tmObj.TimerType( system.GetVar("tmType") );
++      if( tmObj.TimerType() == system.GetVar("tmType") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
++      
++      sCI=sCI#"Try to set Time to ["#system.GetVar("tmTime")#"] ";
++      tmObj.Time( system.GetVar("tmTime") );
++      if( tmObj.Time() == system.GetVar("tmTime") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
++      
++      sCI=sCI#"Try to set CalDuration to ["#system.GetVar("tmCaldur")#"] ";
++      tmObj.CalDuration( system.GetVar("tmCaldur") );
++      if( tmObj.CalDuration() == system.GetVar("tmCaldur") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
++      
++      sCI=sCI#"Try to set CalRepeatTime to ["#system.GetVar("tmCaltime")#"] ";
++      tmObj.CalRepeatTime( system.GetVar("tmCaltime") );
++      if( tmObj.CalRepeatTime() == system.GetVar("tmCaltime") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
++      
++      sCI=sCI#"Try to set Weekdays to ["#system.GetVar("tmWd")#"] ";
++      tmObj.Weekdays( system.GetVar("tmWd") );
++      if( tmObj.Weekdays() == system.GetVar("tmWd") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
++      
++      sCI=sCI#"Try to set Period to ["#system.GetVar("tmPeriod")#"] ";
++      tmObj.Period( system.GetVar("tmPeriod") );
++      if( tmObj.Period() == system.GetVar("tmPeriod") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
++      
++      sCI=sCI#"Try to set CalRepetitionValue to ["#system.GetVar("tmCalrep")#"] ";
++      tmObj.CalRepetitionValue( system.GetVar("tmCalrep") );
++      if( tmObj.CalRepetitionValue() == system.GetVar("tmCalrep") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
++      
++      sCI=sCI#"Try to set Begin to ["#system.GetVar("tmBegin")#"] ";
++      tmObj.Begin( system.GetVar("tmBegin") );
++      if( tmObj.Begin() == system.GetVar("tmBegin") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
++      
++      sCI=sCI#"Try to set End to ["#system.GetVar("tmEnd")#"] ";
++      tmObj.End( system.GetVar("tmEnd") );
++      if( tmObj.End() == system.GetVar("tmEnd") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
++      
++      sCI=sCI#"Try to set CalRepetitionCount to ["#system.GetVar("tmCalcount")#"] ";
++      tmObj.CalRepetitionCount( system.GetVar("tmCalcount") );
++      if( tmObj.CalRepetitionCount() == system.GetVar("tmCalcount") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
++      
++      sCI=sCI#"Try to set SunOffsetType to ["#system.GetVar("tmSot")#"] ";
++      tmObj.SunOffsetType( system.GetVar("tmSot") );
++      if( tmObj.SunOffsetType() == system.GetVar("tmSot") ) { sCI=sCI#"OK, "; } else { sCI=sCI#"FAILED, "; }
++      
++      Write( 'dlgResult = '#tmObj.ID()#';' );
++      Write( 'PopupClose();' );
++    }
++    else
++    {
++      sCI = sCI#"Failed to get timemodule object";
++    }
++    sCI = sCI#".";
++    Write( 'conInfo("'#sCI#'");' );
++    Write( '</script>' );
+   }
+-  sCI = sCI#".";
+-  Write( 'conInfo("'#sCI#'");' );
+-  Write( '</script>' );
+   return;
+ }
+ 
+@@ -1026,97 +1056,117 @@
+ }
+ 
+ function ::saveUserPwd() {
+-  integer uid = system.GetVar("userId");
+-  string pwd = system.GetVar("pw");
+-  object user = dom.GetObject(uid);
+-  if (user) {
+-    user.UserBlankPwd(pwd);
+-    if (pwd != "") {
+-      Write("Password for user "#user.Name()#" set!");
+-    } else {
+-      Write("Password for user "#user.Name()#" cleared!");
++  integer uid = system.GetSessionVar("sessionUserID");
++  object oUser = dom.GetObject( uid );
++  if( oUser.UserLevel() != iulGuest )
++  {
++    integer targetUID = system.GetVar("userId");
++    if( (targetID == uid) || (oUser.UserLevel() == iulAdmin) )
++    {
++      string pwd = system.GetVar("pw");
++      object user = dom.GetObject(targetUID);
++      if (user) {
++        user.UserBlankPwd(pwd);
++        if (pwd != "") {
++          Write("Password for user "#user.Name()#" set!");
++        } else {
++          Write("Password for user "#user.Name()#" cleared!");
++        }
++      } else {
++        Write("User unknown");
++      }
+     }
+-  } else {
+-    Write("User unknown");
+   }
+ }
+ 
+ function ::saveUser() {
+-  integer uid = system.GetVar("iUserid");
+-  if (uid == 0) {
+-    object users = dom.GetObject(ID_USERS);
+-    object user = users.UsersAdd();
+-    user.UserBlankPwd(system.GetVar("pw"));
+-    string tmp = "";
+-    foreach (tmp, system.GetVar("sSysVars")) {
+-      user.UserSharedObjects().Add(tmp);
+-    }
+-  }
+-  else {
+-    object user = dom.GetObject(uid);
+-    if (system.GetVar("iPwChanged") == 1) {
+-      user.UserBlankPwd(system.GetVar("pw"));
+-    }    
+-  }
+-  user.Name(system.GetVar("userName"));
+-  user.UserFirstName(system.GetVar("firstName"));
+-  user.UserLastName(system.GetVar("lastName"));
+-  user.UserEasyLinkMode(system.GetVar("bEasy"));
+-  user.UserLevel(system.GetVar("level"));
+-  user.UserPhoneNumber(system.GetVar("phone"));
+-  user.UserMailAddress(system.GetVar("mail"));
+-  boolean bLogin = false;
+-  if (system.GetVar("iLogin") == 1) {
+-    bLogin = true;
+-  }
+-  user.UserShowLogin(bLogin);
+-  user.UserClient(system.GetVar("dev"));
+-  
+-  Write( "FAV=[" );
+-  object oFavorites = dom.GetObject( ID_FAVORITES );
+-  if( oFavorites )
+-  {
+-    object oUserFavorite = dom.GetObject( "_USER"#user.ID() );
+-    if( !oUserFavorite )
+-    {
+-      object oUserFavorite = dom.CreateObject( OT_FAVORITE, "_USER"#user.ID() );
+-    }
+-    if( oUserFavorite )
+-    {
+-      Write( "2:OK|" );
+-      Write( "3:" );
+-      Write( oUserFavorite.EnumType( etFavorite ) );
+-      Write( "|" );
+-      Write( "4:" );
+-      Write( oUserFavorite.Visible( false ) );
+-      Write( "|" );
+-      Write( "5:" );      
+-      Write( oFavorites.Add( oUserFavorite.ID() ) );
++  integer uid = system.GetSessionVar("sessionUserID");
++  object oUser = dom.GetObject( uid );
++  if( oUser.UserLevel() != iulGuest )
++  {
++    integer targetUID = system.GetVar("iUserid");
++    if( (targetUID == uid) || (oUser.UserLevel() == iulAdmin) )
++    {
++      if (targetUID == 0) {
++        object users = dom.GetObject(ID_USERS);
++        object user = users.UsersAdd();
++        user.UserBlankPwd(system.GetVar("pw"));
++        string tmp = "";
++        foreach (tmp, system.GetVar("sSysVars")) {
++          user.UserSharedObjects().Add(tmp);
++        }
++      }
++      else {
++        object user = dom.GetObject(targetUID);
++        if (system.GetVar("iPwChanged") == 1) {
++          user.UserBlankPwd(system.GetVar("pw"));
++        }    
++      }
++      user.Name(system.GetVar("userName"));
++      user.UserFirstName(system.GetVar("firstName"));
++      user.UserLastName(system.GetVar("lastName"));
++      user.UserEasyLinkMode(system.GetVar("bEasy"));
++      user.UserLevel(system.GetVar("level"));
++      user.UserPhoneNumber(system.GetVar("phone"));
++      user.UserMailAddress(system.GetVar("mail"));
++      boolean bLogin = false;
++      if (system.GetVar("iLogin") == 1) {
++        bLogin = true;
++      }
++      user.UserShowLogin(bLogin);
++      user.UserClient(system.GetVar("dev"));
++      
++      Write( "FAV=[" );
++      object oFavorites = dom.GetObject( ID_FAVORITES );
++      if( oFavorites )
++      {
++        object oUserFavorite = dom.GetObject( "_USER"#user.ID() );
++        if( !oUserFavorite )
++        {
++          object oUserFavorite = dom.CreateObject( OT_FAVORITE, "_USER"#user.ID() );
++        }
++        if( oUserFavorite )
++        {
++          Write( "2:OK|" );
++          Write( "3:" );
++          Write( oUserFavorite.EnumType( etFavorite ) );
++          Write( "|" );
++          Write( "4:" );
++          Write( oUserFavorite.Visible( false ) );
++          Write( "|" );
++          Write( "5:" );      
++          Write( oFavorites.Add( oUserFavorite.ID() ) );
++        }
++      }
++      Write( "]" );
+     }
+   }
+-  Write( "]" );
+ }
+ 
+ function ::deleteUser()
+ {
+-  object oUser = dom.GetObject( system.GetVar("userid") );
+-  if( oUser )
++  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
++  if( oUser.UserLevel() != iulGuest )
+   {
+-    if( !oUser.Unerasable() )
++    oUser = dom.GetObject( system.GetVar("userid") );
++    if( oUser )
+     {
+-      object oFavorites = dom.GetObject( ID_FAVORITES );
+-      if( oFavorites )
+-      { 
+-        oFavorites.Remove( oUser.UserFavorite() );
+-      }
+-      dom.DeleteObject( oUser.UserFavorite() );
+-    
+-      object oUsers = dom.GetObject( ID_USERS );
+-      if( oUsers )
++      if( !oUser.Unerasable() )
+       {
+-        oUsers.Remove( oUser.ID() );
++        object oFavorites = dom.GetObject( ID_FAVORITES );
++        if( oFavorites )
++        { 
++          oFavorites.Remove( oUser.UserFavorite() );
++        }
++        dom.DeleteObject( oUser.UserFavorite() );
++      
++        object oUsers = dom.GetObject( ID_USERS );
++        if( oUsers )
++        {
++          oUsers.Remove( oUser.ID() );
++        }
++        dom.DeleteObject( oUser.ID() );
+       }
+-      dom.DeleteObject( oUser.ID() );
+     }
+   }
+ }
+@@ -1233,11 +1283,21 @@
+ 
+ ! [newSvId], [opt: userId]
+ function ::AddSysVarAndBuildTable() {
+-  if (system.GetVar("userid") != 0) {
+-    object user = dom.GetObject(system.GetVar("userId"));
+-    user.UserSharedObjects().Add(system.GetVar("newSvId"));
++  integer uid = system.GetSessionVar("sessionUserID");
++  object oUser = dom.GetObject( uid );
++  if( oUser.UserLevel() != iulGuest )
++  {
++    integer targetUID = system.GetVar("userId");
++    if( targetUID != 0 )
++    {
++      if( (targetUID == uid) || (oUser.UserLevel() == iulAdmin) )
++      {
++        object user = dom.GetObject(targetUID);
++        user.UserSharedObjects().Add(system.GetVar("newSvId"));
++      }
++    }
++    Call("system.fn::BuildUserSvTable()");
+   }
+-  Call("system.fn::BuildUserSvTable()");
+   return;
+ }
+ 
+@@ -1325,17 +1385,27 @@
+ 
+ ! [userId], [svId]
+ function ::UserDeleteSysVarBuildTable() {
+-  object user = dom.GetObject(system.GetVar("userId"));
+-  if (user) {
+-    user.UserSharedObjects().Remove(system.GetVar("svId"));
+-    Call("system.fn::BuildUserSvTable()");
++  integer uid = system.GetSessionVar("sessionUserID");
++  object oUser = dom.GetObject( uid );
++  if( oUser.UserLevel() != iulGuest )
++  {
++    integer targetUID = system.GetVar("userId");
++    if( (targetUID == uid) || (oUser.UserLevel() == iulAdmin) )
++    {
++      object user = dom.GetObject(targetUID);
++      if (user) 
++      {
++        user.UserSharedObjects().Remove(system.GetVar("svId"));
++        Call("system.fn::BuildUserSvTable()");
++      }
++    }
+   }
+   return;
+ }
+ 
+ ! [alPC], [alPDA]
+ function ::setAutoLogin() {
+- object oUser = dom.GetObject(system.GetSessionVar("sessionUserID"));
++  object oUser = dom.GetObject(system.GetSessionVar("sessionUserID"));
+   if (oUser.UserLevel() == iulAdmin) {
+     object users = dom.GetObject(ID_USERS);
+     if (users) {

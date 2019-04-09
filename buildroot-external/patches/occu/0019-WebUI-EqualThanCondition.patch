@@ -35,7 +35,7 @@
          }
  
 -        if( (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 10) & (iCT1 != 11) & (iCT1 != 9) )
-+        if( (iCT1 != 1) && (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 10) && (iCT1 != 11) && (iCT1 != 9) && (iCT1 != 5) && (iCT1 != 12) )
++        if( (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 10) && (iCT1 != 11) && (iCT1 != 9) && (iCT1 != 5) && (iCT1 != 12) )
          {
            oSC.ConditionType(6);
            iCT1 = 6;

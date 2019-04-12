@@ -22,8 +22,8 @@ handle_deconfig() {
     /usr/sbin/avahi-autoipd -k ${interface}
   fi
 
-  /sbin/ip link set ${interface} up
-  /sbin/ip addr flush dev ${interface}
+  /sbin/ip -4 addr flush dev ${interface}
+  /sbin/ip link set dev ${interface} up
 }
 
 handle_renew() {

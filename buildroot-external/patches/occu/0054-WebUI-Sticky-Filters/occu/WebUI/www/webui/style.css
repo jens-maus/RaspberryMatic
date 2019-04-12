@@ -47,7 +47,7 @@
 
 .conditionEven
 {
-  /*Wenn die Farbe nicht nur als Rahmen, sondern fï¿½r die ganze Bedingung gelten soll,
+  /*Wenn die Farbe nicht nur als Rahmen, sondern für die ganze Bedingung gelten soll,
     muss background-color in der Klasse .Rule deaktiviert werden */
   background-color: $_(programEven);
   /* border: solid 1px $_(black); *//* black */
@@ -296,7 +296,7 @@ a img {
   padding-left: 10px;
 }
 
-/* Small Logo Position fï¿½r An- und Abmeldung */
+/* Small Logo Position für An- und Abmeldung */
 .SmallLogoLog
 {
   position: absolute;
@@ -397,7 +397,7 @@ a img {
   height: 80px;
 }
 
-/* ï¿½berschrift im Header-Feld */
+/* Überschrift im Header-Feld */
 .HeaderTitle {
   font-weight: bold;
   color: $_(textColorA); /* #ffffff */
@@ -568,10 +568,10 @@ a img {
   color: $_(textColorB); /* black */
   overflow: auto;
   width:100%;
-  height:75%; /* sorgt fï¿½r korrekte Darstellung der Scrollbalken im IE */
+  height:75%; /* sorgt für korrekte Darstellung der Scrollbalken im IE */
 }
 
-/* Tabelle zur Listendarstellung von Elementen (z.B. Raumï¿½bersicht) */
+/* Tabelle zur Listendarstellung von Elementen (z.B. Raumübersicht) */
 .tblList {
   margin-top: 20px;
   width: 100%;
@@ -736,6 +736,10 @@ a img {
   height: 30px;
 }
 
+.Filter_Active .FilterCaption {
+  color: red;
+}
+
 .FilterBtn {
   background-image:url(/ise/img/gradientButton25px.png);
 
@@ -752,7 +756,7 @@ a img {
   background-color: $_(active); /* #565657 */
 }
 
-/* Filter Untermenï¿½s */
+/* Filter Untermenüs */
 .FilterSubMenu 
 {
   overflow:auto;
@@ -783,10 +787,6 @@ a img {
   width: 90%;
   cursor:pointer;
   z-index:501;
-}
-
-.Filter_Active .FilterCaption {
-  color: red;
 }
 
 .ControlBtnOff {
@@ -883,7 +883,7 @@ a img {
 	margin: 0;
 }
 
-/* Buttons (Lï¿½schen, Einstellen, Gerï¿½te...) auf Gerï¿½te/Raum/Gewerk-ï¿½bersicht */
+/* Buttons (Löschen, Einstellen, Geräte...) auf Geräte/Raum/Gewerk-Übersicht */
 ._StdButton
 {
   background-color: $_(clickable);
@@ -1401,7 +1401,7 @@ div.caption  { display: table-caption; }
   text-align:center;
 }
 
-/* Angaben fï¿½r die Tabellenspalten und -header */
+/* Angaben für die Tabellenspalten und -header */
 
 .thCell
 { 
@@ -1422,19 +1422,19 @@ div.caption  { display: table-caption; }
   text-align:center;
 }
 
-/* Weisser Zellenhintergrund fï¿½r Bilder (Gerï¿½teï¿½bersicht u.ï¿½.) */
+/* Weisser Zellenhintergrund für Bilder (Geräteübersicht u.ä.) */
 .WhiteBkgPic {
   background-color: $_(white); /* #ffffff */
   color: $_(textColorB); /* black */
 }
 
-/* Weisser Zellenhintergrund (Gerï¿½teï¿½bersicht u.ï¿½.) */
+/* Weisser Zellenhintergrund (Geräteübersicht u.ä.) */
 .WhiteBkg {
   background-color: $_(activeBackground); /* #f0f0f0 */
   color: $_(textColorB); /* black */
 }
 
-/* Grauer Zellenhintergrund (Gerï¿½teï¿½bersicht u.ï¿½.) */
+/* Grauer Zellenhintergrund (Geräteübersicht u.ä.) */
 .GrayBkg {
   background-color: $_(activeBackground);
   color: $_(textColorB); /* black */
@@ -1853,7 +1853,7 @@ background-color: $_(inactiveBackground);
 /*IDs in der Tabelle*/
 /*==================*/
 
-/*ï¿½berschriftzeile*/
+/*Überschriftzeile*/
 #ic_selchannel .ChnListTbl .chnListTbl_Caption
 {
 	background-color: $_(clickable);
@@ -1864,7 +1864,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*ï¿½berschriftzeile Sortierfunktion*/
+/*Überschriftzeile Sortierfunktion*/
 #ic_selchannel .ChnListTbl .sorted
 {
 	background-color: $_(active); /* #565657 */
@@ -1891,7 +1891,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*ï¿½berschriftzeile Filterfunktion*/
+/*Überschriftzeile Filterfunktion*/
 #ic_selchannel .ChnListTbl .filtered
 {
 	background-color: $_(active); /* #565657 */
@@ -1931,7 +1931,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*Tabellenkï¿½rper Virtuelle Tasten*/
+/*Tabellenkörper Virtuelle Tasten*/
 #ic_selchannel #body_wrapper
 {
 	background-color: $_(background); /* #183473 */
@@ -1939,7 +1939,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*Tabellenkï¿½rper Virtuelle Tasten*/
+/*Tabellenkörper Virtuelle Tasten*/
 #ic_selchannel .ChnListTbl  .virtual_key_hidden
 {
 	visibility: hidden;
@@ -1952,7 +1952,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*Tabellenkï¿½rper Bilderspalte*/
+/*Tabellenkörper Bilderspalte*/
 #ic_selchannel .ChnListTbl .chnListTbl_dev_img 
 {
 	background-color: $_(white); /* white */
@@ -1961,7 +1961,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*Tabellenfuï¿½ Navibuttons*/
+/*Tabellenfuß Navibuttons*/
 #ic_selchannel .ChnListTbl #chnListFoot tr td
 {
 	background-color: $_(clickable);
@@ -2047,7 +2047,7 @@ background-color: $_(inactiveBackground);
 	border: 0;
 }
 
-/*Anzeige-Feld fï¿½r Expertenprofil und Easy-Mode-Profile*/
+/*Anzeige-Feld für Expertenprofil und Easy-Mode-Profile*/
 #ic_setprofiles .SetProfLinkTbl .easymode_wrapper {
 	
 }

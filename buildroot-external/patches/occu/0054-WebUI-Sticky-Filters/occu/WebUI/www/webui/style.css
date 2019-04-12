@@ -736,10 +736,6 @@ a img {
   height: 30px;
 }
 
-.Filter_Active .FilterCaption {
-  color: red;
-}
-
 .FilterBtn {
   background-image:url(/ise/img/gradientButton25px.png);
 
@@ -787,6 +783,10 @@ a img {
   width: 90%;
   cursor:pointer;
   z-index:501;
+}
+
+.Filter_Active .FilterCaption {
+  color: red;
 }
 
 .ControlBtnOff {
@@ -2199,7 +2199,12 @@ html, body {
   vertical-align: middle;
 }
 
-.Filter {
+.centerSelect {
+   text-align-last: center;
+   text-align: center;
+   -ms-text-align-last: center;
+   -moz-text-align-last: center;
+}.Filter {
   margin:0;
   border:1px solid $_(black); /* black */
   padding:0;

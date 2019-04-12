@@ -36,9 +36,8 @@ handle_renew() {
     fi
     
     # make sure we can deal with DHCP servers not providing broadcast or subnet
-    [[ -n "${broadcast}" ]] && BROADCAST="broadcast ${broadcast}"
-    [[ -n "${subnet}" ]] && NETMASK="netmask ${subnet}"
-    /sbin/ifconfig ${interface} ${ip} ${BROADCAST} ${NETMASK}
+    [[ -n "${broadcast}" ]] && BROADCAST="${broadcast}" || BROADCAST="+"
+    /sbin/ip addr add dev ${interface} local ${ip}/${mask} broadcast ${BROADCAST}
 
     # update the info in /etc/config/netconfig
     eq3configcmd netconfigcmd -i ${ip} -n ${subnet} -g ${router}
@@ -56,7 +55,7 @@ handle_renew() {
       :
     done
 
-    metric=0
+    metric=10
     for i in ${router}; do
       /sbin/ip route add default via ${i} dev ${interface} metric ${metric}
       metric=$((${metric} + 1))

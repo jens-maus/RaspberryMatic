@@ -64,6 +64,11 @@ check process irqbalance with pidfile /var/run/irqbalance.pid
     if not exist for 3 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'irqbalance restarted' WatchDog-Alarm"
+    depends on irqbalanceEnabled
+
+check program irqbalanceEnabled with path /bin/sh -c "/usr/bin/test $(nproc) -gt 1"
+    group system
+    if status != 0 for 1 cycles then unmonitor
 
 # rng daemon (random number generator) monitoring
 check process rngd with pidfile /var/run/rngd.pid

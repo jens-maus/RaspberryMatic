@@ -117,6 +117,7 @@ check program ntpOffsetCheck with path /bin/sh -c "/usr/bin/chronyc -n tracking 
     group system
     if status != 10 for 3 cycles then
       exec "/bin/triggerAlarm.tcl 'NTP offset > 1 second' WatchDog-Alarm"
+    depends on chronyd
 
 # eq3config daemon monitoring
 check process eq3configd with pidfile /var/run/eq3configd.pid

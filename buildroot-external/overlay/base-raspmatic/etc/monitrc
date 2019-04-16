@@ -352,7 +352,7 @@ check program wlan0Enabled with path "/usr/bin/test -e /etc/config/wpa_supplican
 # internet connectivity monitoring
 check program hasInternet with path "/usr/bin/test -e /var/status/hasInternet"
     group system
-    if status != 0 for 10 cycles then
+    if status != 0 for 100 cycles then
       exec "/bin/triggerAlarm.tcl 'No internet connection detected' WatchDog-Alarm"
 
 # include user-defined configuration files

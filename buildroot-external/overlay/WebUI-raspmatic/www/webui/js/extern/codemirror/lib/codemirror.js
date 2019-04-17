@@ -1878,7 +1878,7 @@
 
   // Build up the DOM representation for a single token, and add it to
   // the line map. Takes care to render special characters separately.
-  function buildToken(builder, text, style, startStyle, endStyle, title, css) {
+  function buildToken(builder, text, style, startStyle, endStyle, css, attributes) {
     if (!text) { return }
     var displayText = builder.splitSpaces ? splitSpaces(text, builder.trailingSpace) : text;
     var special = builder.cm.state.specialChars, mustWrap = false;
@@ -1934,7 +1934,10 @@
       if (startStyle) { fullStyle += startStyle; }
       if (endStyle) { fullStyle += endStyle; }
       var token = elt("span", [content], fullStyle, css);
-      if (title) { token.title = title; }
+      if (attributes) {
+        for (var attr in attributes) { if (attributes.hasOwnProperty(attr) && attr != "style" && attr != "class")
+          { token.setAttribute(attr, attributes[attr]); } }
+      }
       return builder.content.appendChild(token)
     }
     builder.content.appendChild(content);
@@ -1958,7 +1961,7 @@
   // Work around nonsense dimensions being reported for stretches of
   // right-to-left text.
   function buildTokenBadBidi(inner, order) {
-    return function (builder, text, style, startStyle, endStyle, title, css) {
+    return function (builder, text, style, startStyle, endStyle, css, attributes) {
       style = style ? style + " cm-force-border" : "cm-force-border";
       var start = builder.pos, end = start + text.length;
       for (;;) {
@@ -1968,8 +1971,8 @@
           part = order[i];
           if (part.to > start && part.from <= start) { break }
         }
-        if (part.to >= end) { return inner(builder, text, style, startStyle, endStyle, title, css) }
-        inner(builder, text.slice(0, part.to - start), style, startStyle, null, title, css);
+        if (part.to >= end) { return inner(builder, text, style, startStyle, endStyle, css, attributes) }
+        inner(builder, text.slice(0, part.to - start), style, startStyle, null, css, attributes);
         startStyle = null;
         text = text.slice(part.to - start);
         start = part.to;
@@ -2004,10 +2007,11 @@
     }
 
     var len = allText.length, pos = 0, i = 1, text = "", style, css;
-    var nextChange = 0, spanStyle, spanEndStyle, spanStartStyle, title, collapsed;
+    var nextChange = 0, spanStyle, spanEndStyle, spanStartStyle, collapsed, attributes;
     for (;;) {
       if (nextChange == pos) { // Update current marker set
-        spanStyle = spanEndStyle = spanStartStyle = title = css = "";
+        spanStyle = spanEndStyle = spanStartStyle = css = "";
+        attributes = null;
         collapsed = null; nextChange = Infinity;
         var foundBookmarks = [], endStyles = (void 0);
         for (var j = 0; j < spans.length; ++j) {
@@ -2023,7 +2027,13 @@
             if (m.css) { css = (css ? css + ";" : "") + m.css; }
             if (m.startStyle && sp.from == pos) { spanStartStyle += " " + m.startStyle; }
             if (m.endStyle && sp.to == nextChange) { (endStyles || (endStyles = [])).push(m.endStyle, sp.to); }
-            if (m.title && !title) { title = m.title; }
+            // support for the old title property
+            // https://github.com/codemirror/CodeMirror/pull/5673
+            if (m.title) { (attributes || (attributes = {})).title = m.title; }
+            if (m.attributes) {
+              for (var attr in m.attributes)
+                { (attributes || (attributes = {}))[attr] = m.attributes[attr]; }
+            }
             if (m.collapsed && (!collapsed || compareCollapsedMarkers(collapsed.marker, m) < 0))
               { collapsed = sp; }
           } else if (sp.from > pos && nextChange > sp.from) {
@@ -2051,7 +2061,7 @@
           if (!collapsed) {
             var tokenText = end > upto ? text.slice(0, upto - pos) : text;
             builder.addToken(builder, tokenText, style ? style + spanStyle : spanStyle,
-                             spanStartStyle, pos + tokenText.length == nextChange ? spanEndStyle : "", title, css);
+                             spanStartStyle, pos + tokenText.length == nextChange ? spanEndStyle : "", css, attributes);
           }
           if (end >= upto) {text = text.slice(upto - pos); pos = upto; break}
           pos = end;
@@ -3260,7 +3270,8 @@
     var display = cm.display;
     var prevBottom = display.lineDiv.offsetTop;
     for (var i = 0; i < display.view.length; i++) {
-      var cur = display.view[i], height = (void 0);
+      var cur = display.view[i], wrapping = cm.options.lineWrapping;
+      var height = (void 0), width = 0;
       if (cur.hidden) { continue }
       if (ie && ie_version < 8) {
         var bot = cur.node.offsetTop + cur.node.offsetHeight;
@@ -3269,14 +3280,25 @@
       } else {
         var box = cur.node.getBoundingClientRect();
         height = box.bottom - box.top;
+        // Check that lines don't extend past the right of the current
+        // editor width
+        if (!wrapping && cur.text.firstChild)
+          { width = cur.text.firstChild.getBoundingClientRect().right - box.left - 1; }
       }
       var diff = cur.line.height - height;
-      if (height < 2) { height = textHeight(display); }
       if (diff > .005 || diff < -.005) {
         updateLineHeight(cur.line, height);
         updateWidgetHeight(cur.line);
         if (cur.rest) { for (var j = 0; j < cur.rest.length; j++)
           { updateWidgetHeight(cur.rest[j]); } }
+      }
+      if (width > cm.display.sizerWidth) {
+        var chWidth = Math.ceil(width / charWidth(cm.display));
+        if (chWidth > cm.display.maxLineLength) {
+          cm.display.maxLineLength = chWidth;
+          cm.display.maxLine = cur.line;
+          cm.display.maxLineChanged = true;
+        }
       }
     }
   }
@@ -3726,7 +3748,7 @@
       viewChanged: false,      // Flag that indicates that lines might need to be redrawn
       startHeight: cm.doc.height, // Used to detect need to update scrollbar
       forceUpdate: false,      // Used to force a redraw
-      updateInput: null,       // Whether to reset the input textarea
+      updateInput: 0,       // Whether to reset the input textarea
       typing: false,           // Whether this reset should be careful to leave existing text (for compositing)
       changeObjs: null,        // Accumulated changes, for firing change events
       cursorActivityHandlers: null, // Set of handlers to fire cursorActivity on
@@ -5075,7 +5097,8 @@
     doc.sel = sel;
 
     if (doc.cm) {
-      doc.cm.curOp.updateInput = doc.cm.curOp.selectionChanged = true;
+      doc.cm.curOp.updateInput = 1;
+      doc.cm.curOp.selectionChanged = true;
       signalCursorActivity(doc.cm);
     }
     signalLater(doc, "cursorActivity", doc);
@@ -5187,7 +5210,10 @@
     signal(doc, "beforeChange", doc, obj);
     if (doc.cm) { signal(doc.cm, "beforeChange", doc.cm, obj); }
 
-    if (obj.canceled) { return null }
+    if (obj.canceled) {
+      if (doc.cm) { doc.cm.curOp.updateInput = 2; }
+      return null
+    }
     return {from: obj.from, to: obj.to, text: obj.text, origin: obj.origin}
   }
 
@@ -5944,7 +5970,8 @@
       if (updateMaxLine) { cm.curOp.updateMaxLine = true; }
       if (marker.collapsed)
         { regChange(cm, from.line, to.line + 1); }
-      else if (marker.className || marker.title || marker.startStyle || marker.endStyle || marker.css)
+      else if (marker.className || marker.startStyle || marker.endStyle || marker.css ||
+               marker.attributes || marker.title)
         { for (var i = from.line; i <= to.line; i++) { regLineChange(cm, i, "text"); } }
       if (marker.atomic) { reCheckSelection(cm.doc); }
       signalLater(cm, "markerAdded", cm, marker);
@@ -6562,11 +6589,14 @@
 
   function forEachCodeMirror(f) {
     if (!document.getElementsByClassName) { return }
-    var byClass = document.getElementsByClassName("CodeMirror");
+    var byClass = document.getElementsByClassName("CodeMirror"), editors = [];
     for (var i = 0; i < byClass.length; i++) {
       var cm = byClass[i].CodeMirror;
-      if (cm) { f(cm); }
+      if (cm) { editors.push(cm); }
     }
+    if (editors.length) { editors[0].operation(function () {
+      for (var i = 0; i < editors.length; i++) { f(editors[i]); }
+    }); }
   }
 
   var globalsRegistered = false;
@@ -7659,6 +7689,8 @@
       throw new Error("inputStyle can not (yet) be changed in a running editor") // FIXME
     }, true);
     option("spellcheck", false, function (cm, val) { return cm.getInputField().spellcheck = val; }, true);
+    option("autocorrect", false, function (cm, val) { return cm.getInputField().autocorrect = val; }, true);
+    option("autocapitalize", false, function (cm, val) { return cm.getInputField().autocapitalize = val; }, true);
     option("rtlMoveVisually", !windows);
     option("wholeLineUpdateBefore", true);
 
@@ -7807,7 +7839,7 @@
       delayingBlurEvent: false,
       focused: false,
       suppressEdits: false, // used to disable editing during key handlers when in readOnly mode
-      pasteIncoming: false, cutIncoming: false, // help recognize paste/cut edits in input.poll
+      pasteIncoming: -1, cutIncoming: -1, // help recognize paste/cut edits in input.poll
       selectingText: false,
       draggingText: false,
       highlight: new Delayed(), // stores highlight worker timeout
@@ -8040,7 +8072,8 @@
     cm.display.shift = false;
     if (!sel) { sel = doc.sel; }
 
-    var paste = cm.state.pasteIncoming || origin == "paste";
+    var recent = +new Date - 200;
+    var paste = origin == "paste" || cm.state.pasteIncoming > recent;
     var textLines = splitLinesAuto(inserted), multiPaste = null;
     // When pasting N lines into N selections, insert one line per selection
     if (paste && sel.ranges.length > 1) {
@@ -8055,7 +8088,7 @@
       }
     }
 
-    var updateInput;
+    var updateInput = cm.curOp.updateInput;
     // Normal behavior is to insert the new text into every selection
     for (var i$1 = sel.ranges.length - 1; i$1 >= 0; i$1--) {
       var range$$1 = sel.ranges[i$1];
@@ -8068,9 +8101,8 @@
         else if (paste && lastCopied && lastCopied.lineWise && lastCopied.text.join("\n") == inserted)
           { from = to = Pos(from.line, 0); }
       }
-      updateInput = cm.curOp.updateInput;
       var changeEvent = {from: from, to: to, text: multiPaste ? multiPaste[i$1 % multiPaste.length] : textLines,
-                         origin: origin || (paste ? "paste" : cm.state.cutIncoming ? "cut" : "+input")};
+                         origin: origin || (paste ? "paste" : cm.state.cutIncoming > recent ? "cut" : "+input")};
       makeChange(cm.doc, changeEvent);
       signalLater(cm, "inputRead", cm, changeEvent);
     }
@@ -8078,9 +8110,9 @@
       { triggerElectric(cm, inserted); }
 
     ensureCursorVisible(cm);
-    cm.curOp.updateInput = updateInput;
+    if (cm.curOp.updateInput < 2) { cm.curOp.updateInput = updateInput; }
     cm.curOp.typing = true;
-    cm.state.pasteIncoming = cm.state.cutIncoming = false;
+    cm.state.pasteIncoming = cm.state.cutIncoming = -1;
   }
 
   function handlePaste(e, cm) {
@@ -8128,9 +8160,9 @@
     return {text: text, ranges: ranges}
   }
 
-  function disableBrowserMagic(field, spellcheck) {
-    field.setAttribute("autocorrect", "off");
-    field.setAttribute("autocapitalize", "off");
+  function disableBrowserMagic(field, spellcheck, autocorrect, autocapitalize) {
+    field.setAttribute("autocorrect", !!autocorrect);
+    field.setAttribute("autocapitalize", !!autocapitalize);
     field.setAttribute("spellcheck", !!spellcheck);
   }
 
@@ -8701,7 +8733,7 @@
 
     var input = this, cm = input.cm;
     var div = input.div = display.lineDiv;
-    disableBrowserMagic(div, cm.options.spellcheck);
+    disableBrowserMagic(div, cm.options.spellcheck, cm.options.autocorrect, cm.options.autocapitalize);
 
     on(div, "paste", function (e) {
       if (signalDOMEvent(cm, e) || handlePaste(e, cm)) { return }
@@ -9241,7 +9273,7 @@
     on(te, "paste", function (e) {
       if (signalDOMEvent(cm, e) || handlePaste(e, cm)) { return }
 
-      cm.state.pasteIncoming = true;
+      cm.state.pasteIncoming = +new Date;
       input.fastPoll();
     });
 
@@ -9262,15 +9294,23 @@
           selectInput(te);
         }
       }
-      if (e.type == "cut") { cm.state.cutIncoming = true; }
+      if (e.type == "cut") { cm.state.cutIncoming = +new Date; }
     }
     on(te, "cut", prepareCopyCut);
     on(te, "copy", prepareCopyCut);
 
     on(display.scroller, "paste", function (e) {
       if (eventInWidget(display, e) || signalDOMEvent(cm, e)) { return }
-      cm.state.pasteIncoming = true;
-      input.focus();
+      if (!te.dispatchEvent) {
+        cm.state.pasteIncoming = +new Date;
+        input.focus();
+        return
+      }
+
+      // Pass the `paste` event to the textarea so it's handled by its event listener.
+      var event = new Event("paste");
+      event.clipboardData = e.clipboardData;
+      te.dispatchEvent(event);
     });
 
     // Prevent normal selection in the editor (we handle our own)
@@ -9461,6 +9501,7 @@
 
   TextareaInput.prototype.onContextMenu = function (e) {
     var input = this, cm = input.cm, display = cm.display, te = input.textarea;
+    if (input.contextMenuPending) { input.contextMenuPending(); }
     var pos = posFromMouse(cm, e), scrollPos = display.scroller.scrollTop;
     if (!pos || presto) { return } // Opera is difficult.
 
@@ -9471,8 +9512,8 @@
       { operation(cm, setSelection)(cm.doc, simpleSelection(pos), sel_dontScroll); }
 
     var oldCSS = te.style.cssText, oldWrapperCSS = input.wrapper.style.cssText;
-    input.wrapper.style.cssText = "position: absolute";
-    var wrapperBox = input.wrapper.getBoundingClientRect();
+    var wrapperBox = input.wrapper.offsetParent.getBoundingClientRect();
+    input.wrapper.style.cssText = "position: static";
     te.style.cssText = "position: absolute; width: 30px; height: 30px;\n      top: " + (e.clientY - wrapperBox.top - 5) + "px; left: " + (e.clientX - wrapperBox.left - 5) + "px;\n      z-index: 1000; background: " + (ie ? "rgba(255, 255, 255, .05)" : "transparent") + ";\n      outline: none; border-width: 0; outline: none; overflow: hidden; opacity: .05; filter: alpha(opacity=5);";
     var oldScrollY;
     if (webkit) { oldScrollY = window.scrollY; } // Work around Chrome issue (#2712)
@@ -9481,7 +9522,7 @@
     display.input.reset();
     // Adds "Select all" to context menu in FF
     if (!cm.somethingSelected()) { te.value = input.prevInput = " "; }
-    input.contextMenuPending = true;
+    input.contextMenuPending = rehide;
     display.selForContextMenu = cm.doc.sel;
     clearTimeout(display.detectingSelectAll);
 
@@ -9502,6 +9543,7 @@
       }
     }
     function rehide() {
+      if (input.contextMenuPending != rehide) { return }
       input.contextMenuPending = false;
       input.wrapper.style.cssText = oldWrapperCSS;
       te.style.cssText = oldCSS;
@@ -9691,7 +9733,7 @@
 
   addLegacyProps(CodeMirror);
 
-  CodeMirror.version = "5.41.0";
+  CodeMirror.version = "5.45.0";
 
   return CodeMirror;
 

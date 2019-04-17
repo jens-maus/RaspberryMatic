@@ -75,7 +75,7 @@
      if ($(this.formId))
      {
        var values = $(this.formId).values;
-+       var filterValues = [];
++      var filterValues = [];
  
        for (var i = 0, len = values.length; i < len; i++)
        {
@@ -89,15 +89,15 @@
        if (this.callback) { this.callback(); }
      }
    },
-@@ -18578,6 +18603,7 @@
-     translateJSTemplate("#DeviceListTable");
-     translatePage(".j_rooms, .j_functions"); // this translates the room name as well the function name within the main devicelist (Settings > Devices)
+@@ -18891,6 +18916,7 @@
      translateFilter(); // this translates the filter in the header of the page
+ 
+     DeviceList.updateDeviceStatus();
 +    eQ3.HomeMatic.Event.fire({type: 'DeviceListPageLoaded'});
    },
    
    onRemoveDevice: function(whatEver)
-@@ -24918,11 +24944,31 @@
+@@ -25327,11 +25353,31 @@
      if (file.substring(0, UI_PATH.length) == UI_PATH)
      {
        //method: 'get' ist für die ELV-CGIs notwendig.
@@ -131,7 +131,7 @@
      }
      /* ELV --> */
      
-@@ -27802,6 +27848,26 @@
+@@ -28212,6 +28258,26 @@
      this.fltObjType = 0;
      if (fltObjType)
        this.fltObjType = fltObjType;
@@ -158,7 +158,7 @@
    },
    
  
-@@ -28273,6 +28339,12 @@
+@@ -28692,6 +28758,12 @@
  {
    //conInfo("iseFilter: setSFilter "+fId+" to "+$(ctrlId).value);
    fltObj.addStringFilter(fId, $(ctrlId).value);

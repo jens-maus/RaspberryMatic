@@ -174,7 +174,7 @@
      /*########################################################################*/
  
      PLATFORM = "Central";
--    WEBUI_VERSION = "3.45.5"
+-    WEBUI_VERSION = "3.45.7"
 +    WEBUI_VERSION = "XXX-WEBUI-VERSION-XXX";
    
      /**

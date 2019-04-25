@@ -7018,6 +7018,7 @@ StringFilter = function(name, callback)
   this.reset = function()
   {
     m_value = "";
+    localStorage.removeItem(m_id);
     this.close();
   };
 
@@ -7237,7 +7238,8 @@ ListFilter = Class.create({
     {
       this.list[i]._selected = false;
     }
-    
+
+    localStorage.removeItem(this.id);
     this.close();
   }
   
@@ -28649,6 +28651,8 @@ iseFilter.prototype = {
     this.bTypeNumber = false;
     this.bTypeAlarm = false;
     this.bTypeString = false;
+    localStorage.removeItem('iseSFilters_' + this.pageID);
+    jQuery('.FilterBtn').css('color', '');
     conInfo("Alle Filter wurden zurückgesetzt.");
   }
 };

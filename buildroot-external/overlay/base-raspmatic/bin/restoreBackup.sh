@@ -45,15 +45,15 @@ if [[ -d "${TMPDIR}" ]]; then
   fi
 
   # make sure all relevant services are stopped
-  /etc/init.d/S98crond stop
-  /etc/init.d/S70ReGaHss stop
-  /etc/init.d/S62HMServer stop
-  /etc/init.d/S61rfd stop
-  /etc/init.d/S60hs485d stop
-  /etc/init.d/S50lighttpd stop
+  /usr/bin/monit stop crond
+  /usr/bin/monit stop ReGaHss
+  /usr/bin/monit stop HMIPServer
+  /usr/bin/monit stop rfd
+  /usr/bin/monit stop hs485d
+  /usr/bin/monit stop lighttpd
 
   # wait some time to get all daemons time to finish
-  sleep 5
+  sleep 10
 
   # now remove the whole /usr/local, but keep /usr/local/tmp
   find /usr/local -xdev -not -name tmp -not -name "lost+found" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
@@ -69,12 +69,12 @@ if [[ -d "${TMPDIR}" ]]; then
   sync
 
   # make sure all relevant services are started again
-  /etc/init.d/S50lighttpd start
-  /etc/init.d/S60hs485d start
-  /etc/init.d/S61rfd start
-  /etc/init.d/S62HMServer start
-  /etc/init.d/S70ReGaHss start
-  /etc/init.d/S98crond start
+  /usr/bin/monit start lighttpd
+  /usr/bin/monit start hs485d
+  /usr/bin/monit start rfd
+  /usr/bin/monit start HMIPServer
+  /usr/bin/monit start ReGaHss
+  /usr/bin/monit start crond
 
   exit 0
 else

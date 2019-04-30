@@ -20,7 +20,7 @@ We must be able to understand the design of your change from this description. I
 
 <!--- Please link to an open issue here: -->
 
-## Types of changes
+### Types of changes
 
 <!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
 

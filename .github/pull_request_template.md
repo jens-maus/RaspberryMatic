@@ -8,13 +8,26 @@ Requirements for Contributing
 
 -->
 
-### Description of the change
+### Description
 
 <!--
 
 We must be able to understand the design of your change from this description. If we can't get a good idea of what the code will be doing from the description here, the pull request may be closed at the maintainers' discretion. Keep in mind that the maintainer reviewing this PR may not be familiar with or have worked with the code here recently, so please walk us through the concepts.
 
 -->
+
+### Related Issue
+
+<!--- Please link to an open issue here: -->
+
+## Types of changes
+
+<!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
+
+- [ ] Docs change / refactoring / dependency upgrade
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to change)
 
 ### Alternate Designs
 
@@ -50,9 +63,14 @@ Examples:
 
 -->
 
-### Licensing conflicts
+### Contributing checklist
 
-- [ ] Not applicable (licensing terms read+understood and changes can be distributed under Apache 2.0 license)
+<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+
+- [ ] My code follows the code style of this project.
+- [ ] I have read the **CONTRIBUTING** and **LICENSE** document.
+- [ ] I fully agree to distribute my changes under Apache 2.0 license.
 
 <!--
 

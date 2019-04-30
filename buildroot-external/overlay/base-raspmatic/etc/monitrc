@@ -350,6 +350,17 @@ check program wlan0Enabled with path "/usr/bin/test -e /etc/config/wpa_supplican
     group system
     if status != 0 for 1 cycles then unmonitor
 
+# monitor under-voltage/too high temperature using vcgencmd (RaspberryPi only)
+check program vcgenCheck with path /bin/sh -c "/usr/bin/vcgencmd get_throttled | grep -v '=0x0$';"
+    group system
+    if status != 1 for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'under-voltage/high system temperature detected' WatchDog-Alarm"
+    depends on vcgenCheckEnabled
+
+check program vcgenCheckEnabled with path "/usr/bin/test -e /usr/bin/vcgencmd"
+    group system
+    if status != 0 for 1 cycles then unmonitor
+
 # internet connectivity monitoring
 check program hasInternet with path "/usr/bin/test -e /var/status/hasInternet"
     group system

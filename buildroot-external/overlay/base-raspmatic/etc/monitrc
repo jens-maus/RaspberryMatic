@@ -344,9 +344,9 @@ check network wlan0 interface wlan0
     if failed link then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'wlan0 interface link down' WatchDog-Alarm"
-    depends on wlan0Enabled
+    depends on wlan0CheckEnabled
 
-check program wlan0Enabled with path "/usr/bin/test -e /etc/config/wpa_supplicant.conf"
+check program wlan0CheckEnabled with path /bin/sh -c "[[ -e /etc/config/wpa_supplicant.conf ]] && /bin/grep 0 /sys/class/net/eth0/carrier 2>/dev/null"
     group system
     if status != 0 for 1 cycles then unmonitor
 

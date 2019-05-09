@@ -1,0 +1,1 @@
+KERNEL=="ttyUSB*", ATTRS{idProduct}=="e88a", SYMLINK+="refclock-%m"

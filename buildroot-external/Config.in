@@ -28,6 +28,7 @@ menu "Software Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/ssdpd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/eq3configd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/wiringpi-tinker/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/ntp-refclock/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/neoserver/Config.in"
 endmenu
 

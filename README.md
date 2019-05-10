@@ -59,9 +59,6 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
   * Minor fixes to DevConfig tweak to also display RSSI values for HmIP devices
 * Integration of certain general security enhancements:
   * Improved WebUI security via enabled cross-site-scripting preventions (`X-Frame-Options`, `X-XSS-Protection`, `X-Robots-Tag`, etc.)
-  * Integration of important security fixes ([CVE-2018-7296](
-https://www.cvedetails.com/cve/CVE-2018-7296/), [CVE-2018-7300](
-https://www.cvedetails.com/cve/CVE-2018-7300/))
   * Encryption certificates for HTTPS are exclusively generated on the system itself (and not via third-party servers)
   * Delivered `robots.txt` to prevent web crawlers from indexing a CCU in case it is accidently available from the internet
   * General use of SHA512 strong password hashes when entering a new SSH connection password
@@ -85,8 +82,8 @@ https://www.cvedetails.com/cve/CVE-2018-7300/))
 * Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
 * Support to be used without any GPIO RF module HAT when just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
-* Based on latest [Buildroot 2019.02.1](http://buildroot.org/) lightweight Linux operating system
-* Latest Linux kernel (RaspberryPi: [4.19.36](https://github.com/raspberrypi/linux/tree/rpi-4.19.y), Tinkerboard: [4.19.36](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
+* Based on latest [Buildroot 2019.02.2](http://buildroot.org/) lightweight Linux operating system
+* Latest Linux kernel (RaspberryPi: [4.19.40](https://github.com/raspberrypi/linux/tree/rpi-4.19.y), Tinkerboard: [4.19.40](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only) or from internal eMMC storage (ASUS Tinkerboard S)
 * Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks

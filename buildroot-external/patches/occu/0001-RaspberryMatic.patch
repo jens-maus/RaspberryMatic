@@ -386,13 +386,17 @@
                  puts "<li><a target='_blank' href='/licenseinfo.htm'>\${lblLicenseInformation}</a></li>"
                puts "</ul>"
        puts "</td>"
-@@ -75,7 +84,8 @@
+@@ -75,7 +84,12 @@
            # puts "<li>DOM [rega dom.BuildLabel()]</li>"
            puts "<li><a target='_blank' href=\"$HOMEMATIC_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
            puts "<li><a target='_blank' href=\"$HOMEMATIC_IP_URL/start.html\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
 -          puts "<li style='padding-top:25px;'><img src='/ise/img/homematic_logo_small.png'/></li>"
-+          puts "<li><a target='_blank' href=\"https://raspberrymatic.de/\">\${homepage} RaspberryMatic</a></li>"
 +          puts "<li style='padding-top:25px;'><img src='/ise/img/rm-logo_small.png'/></li>"
++          puts "<li>\${dialogHelpInfoLblCopyright} &copy; 2016 - $CUR_YEAR</li>"
++          puts "<li>RaspberryMatic Contributors (<a target='_blank' href='https://github.com/jens-maus/RaspberryMatic/graphs/contributors'>see here</a>)</li>"
++          puts "<li>Licensed under Apache 2.0 OpenSource license</li>"
++          puts "<li><a target='_blank' href=\"https://raspberrymatic.de/\">\${homepage} RaspberryMatic</a></li>"
++          puts "<li><br/>\${dialogSettingsCMHintSoftwareUpdateRaspMatic}</a></li>"
          puts "</ul>"
  
        puts "</td>"

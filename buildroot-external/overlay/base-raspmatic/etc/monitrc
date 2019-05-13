@@ -91,15 +91,37 @@ check process dbus with pidfile /var/run/messagebus.pid
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'dbus restarted' WatchDog-Alarm"
 
-# ifplug daemon monitoring
-check process ifplugd with pidfile /var/run/ifplugd.eth0.pid
+# ifplug.eth0 daemon monitoring
+check process ifplugd.eth0 with pidfile /var/run/ifplugd.eth0.pid
     group system
-    start = "/etc/init.d/S45ifplugd start"
-    stop = "/etc/init.d/S45ifplugd stop"
-    restart = "/etc/init.d/S45ifplugd restart"
+    start = "/etc/init.d/S45ifplugd start eth0"
+    stop = "/etc/init.d/S45ifplugd stop eth0"
+    restart = "/etc/init.d/S45ifplugd restart eth0"
     if not exist for 1 cycles then restart
     if 1 restart within 1 cycles then
-      exec "/bin/triggerAlarm.tcl 'ifplugd restarted' WatchDog-Alarm"
+      exec "/bin/triggerAlarm.tcl 'ifplugd(eth0) restarted' WatchDog-Alarm"
+    depends on eth0Exists
+
+# eth0Exists
+check program eth0Exists with path "/usr/bin/test -d /sys/class/net/eth0"
+    group system
+    if status != 0 for 1 cycles then unmonitor
+
+# ifplug.wlan0 daemon monitoring
+check process ifplugd.wlan0 with pidfile /var/run/ifplugd.wlan0.pid
+    group system
+    start = "/etc/init.d/S45ifplugd start wlan0"
+    stop = "/etc/init.d/S45ifplugd stop wlan0"
+    restart = "/etc/init.d/S45ifplugd restart wlan0"
+    if not exist for 1 cycles then restart
+    if 1 restart within 1 cycles then
+      exec "/bin/triggerAlarm.tcl 'ifplugd(wlan0) restarted' WatchDog-Alarm"
+    depends on wlan0Exists, wlan0CheckEnabled
+
+# wlan0Exists
+check program wlan0Exists with path "/usr/bin/test -d /sys/class/net/wlan0"
+    group system
+    if status != 0 for 1 cycles then unmonitor
 
 # chrony/ntp daemon/status monitoring
 check process chronyd with pidfile /var/run/chrony/chronyd.pid
@@ -344,11 +366,12 @@ check network wlan0 interface wlan0
     if failed link then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'wlan0 interface link down' WatchDog-Alarm"
-    depends on wlan0CheckEnabled
+    depends on wlan0CheckEnabled, wlan0Exists
 
 check program wlan0CheckEnabled with path /bin/sh -c "[[ -e /etc/config/wpa_supplicant.conf ]] && /bin/grep 0 /sys/class/net/eth0/carrier 2>/dev/null"
     group system
     if status != 0 for 1 cycles then unmonitor
+    depends on wlan0Exists
 
 # monitor under-voltage using vcgencmd (RaspberryPi only)
 check program voltageCheck with path /bin/sh -c "[ $(( $(/usr/bin/vcgencmd get_throttled | cut -f2 -d=) & 0x10000 )) -eq $(( 0x10000 )) ]"

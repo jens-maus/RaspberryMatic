@@ -28652,7 +28652,14 @@ iseFilter.prototype = {
     this.bTypeAlarm = false;
     this.bTypeString = false;
     localStorage.removeItem('iseSFilters_' + this.pageID);
-    jQuery('.FilterBtn').css('color', '');
+    var filterButtons = document.querySelectorAll('.FilterSetButton[onclick*=' + this.pageID + ']');
+    filterButtons.forEach(function(el) {
+      try {
+        el.parentElement.parentElement.querySelector('.FilterBtn').style.color = '';
+      } catch(e) {
+        console.error(e);
+      }
+    });
     conInfo("Alle Filter wurden zurückgesetzt.");
   }
 };

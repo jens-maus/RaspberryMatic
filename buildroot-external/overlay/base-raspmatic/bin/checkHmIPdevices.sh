@@ -26,7 +26,7 @@
 # check for "-f" option to start fixing operation
 [[ "${1}" == "-f" ]] && FIX=1 || FIX=0
 
-FILES=$(ls /etc/config/crRFD/data | egrep ".+\.(dev|ap|apkx|deva)$")
+FILES=$(ls /etc/config/crRFD/data | egrep ".+\.(dev|ap|apkx)$")
 for file in ${FILES}; do
   SGTIN=${file%.*}
   DEVADR=${SGTIN:(-14)}

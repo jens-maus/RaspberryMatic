@@ -1,0 +1,48 @@
+#!/bin/sh
+#
+# crRFD device check tool v1.0
+# Copyright (c) 2019 Jens Maus <mail@jens-maus.de>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# This script checks all *.dev,*.ap,*.apkx files in /etc/config/crRFD/data
+# and moves files to a backup directory for which the SGTIN cannot be found
+# in the homematic.regadom file of ReGaHss
+#
+
+# do not continue if homematic.regadom is not there or empty
+[[ -s /etc/config/homematic.regadom ]] || exit 1
+
+# check for "-f" option to start fixing operation
+[[ "${1}" == "-f" ]] && FIX=1 || FIX=0
+
+FILES=$(ls /etc/config/crRFD/data | egrep ".+\.(dev|ap|apkx|deva)$")
+for file in ${FILES}; do
+  SGTIN=${file%.*}
+  DEVADR=${SGTIN:(-14)}
+  if [[ -n "${DEVADR}" ]]; then
+    grep -iq -m1 "<devadr>${DEVADR}</devadr>" /etc/config/homematic.regadom
+    if [[ $? -ne 0 ]]; then
+      echo -n "WARNING: ${DEVADR} not found in regadom"
+      if [[ ${FIX} -eq 1 ]]; then
+        [[ -d /etc/config/crRFD/data/old ]] || mkdir -p /etc/config/crRFD/data/old
+        mv /etc/config/crRFD/data/${file} /etc/config/crRFD/data/old/
+        echo "... moved ${file} to /etc/config/crRFD/data/old/"
+      else
+        echo "."
+      fi
+    fi
+  fi
+done
+
+exit 0

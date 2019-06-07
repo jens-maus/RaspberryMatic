@@ -50,6 +50,12 @@ init() {
     HM_SERVER_ARGS="/etc/HMServer.conf"
     HM_SERVER_DEVNODE=""
   fi
+
+  # use checkHmIPdevices.sh to find obsolete devices files
+  # and move them to a backup folder
+  if [[ -x /bin/checkHmIPdevices.sh ]]; then
+    /bin/checkHmIPdevices.sh -f
+  fi
 }
 
 waitStartupComplete() {

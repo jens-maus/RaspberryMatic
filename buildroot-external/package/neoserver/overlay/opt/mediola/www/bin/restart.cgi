@@ -1,6 +1,12 @@
 #!/bin/tclsh
 
 package require HomeMatic
+cd /www
+source session.tcl
+
+if {[session_requestisvalid 0] < 0 } {
+ exit
+}
 
 	if {[catch {exec /usr/local/etc/config/rc.d/97NeoServer restart } result]} {
 		# non-zero exit status, get it:

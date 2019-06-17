@@ -64,6 +64,10 @@ var charsetRegExp = /;\s*charset\s*=/;
  */
 
 res.status = function status(code) {
+  if (code === undefined || code === null) {
+    throw new TypeError('code argument is required to res.status')
+  }
+
   this.statusCode = code;
   return this;
 };
@@ -409,6 +413,10 @@ res.sendFile = function sendFile(path, options, callback) {
 
   if (!path) {
     throw new TypeError('path argument is required to res.sendFile');
+  }
+
+  if (typeof path !== 'string') {
+    throw new TypeError('path must be a string to res.sendFile')
   }
 
   // support function as second arg
@@ -814,7 +822,7 @@ res.clearCookie = function clearCookie(name, options) {
  *    // "Remember Me" for 15 minutes
  *    res.cookie('rememberme', '1', { expires: new Date(Date.now() + 900000), httpOnly: true });
  *
- *    // save as above
+ *    // same as above
  *    res.cookie('rememberme', '1', { maxAge: 900000, httpOnly: true })
  *
  * @param {String} name
@@ -1127,6 +1135,7 @@ function stringify (value, replacer, spaces, escape) {
           return '\\u003e'
         case 0x26:
           return '\\u0026'
+        /* istanbul ignore next: unreachable default */
         default:
           return c
       }

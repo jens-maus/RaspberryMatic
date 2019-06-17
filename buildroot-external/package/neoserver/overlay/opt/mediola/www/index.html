@@ -209,6 +209,47 @@
 <script src="js/x.crypt.md5.js"></script>
 <script>
 
+function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,    
+    function(m,key,value) {
+      vars[key] = value;
+    });
+    return vars;
+}
+  
+  var fType = getUrlVars()["sid"];
+  
+  
+		$.ajax({
+			type: 'GET',
+			dataType: "json",
+			url: "http://"+self.location.host+"/addons/mediola/bin/hmFunc.cgi?sid="+fType,
+			success: function(data){
+				
+				if(typeof data==="object" && data!=null){
+					data=data;
+			    }else{
+			    	window.location.href="http://"+self.location.host;
+			    }
+				
+			},
+			error: function() {
+				window.location.href="http://"+self.location.host;
+			
+			}
+			});  
+  
+  
     	function getLogFilesDialog(){
     	  $('#getLogFilesDialog').simplePopup();
     	}    	
@@ -221,7 +262,7 @@
     		
    			$.ajax({
     			type: 'HEAD',
-    			url: "http://"+self.location.host+"/addons/mediola/bin/restart.cgi",
+    			url: "http://"+self.location.host+"/addons/mediola/bin/restart.cgi?sid="+fType,
     			success: function(){},
     			error: function() {}
   			});   	
@@ -231,14 +272,14 @@
      	function serverEnable(){
    			$.ajax({
     			type: 'HEAD',
-    			url: "http://"+self.location.host+"/addons/mediola/bin/enableServer.cgi",
+    			url: "http://"+self.location.host+"/addons/mediola/bin/enableServer.cgi?sid="+fType,
     			success: function(){},
     			error: function() {}
   			});   	
   			alert("NEO SERVER wird gestartet bitte haben Sie etwas Geduld");
   			
   			setTimeout(function(){
-  				var url = "http://"+self.location.host+"/addons/mediola/";
+  				var url = "http://"+self.location.host+"/addons/mediola/index.html?sid="+fType;
   				location.href = url;
   			}, 10000);
     	}   	

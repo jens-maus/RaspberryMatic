@@ -5,18 +5,20 @@
 
 case "$1" in
   start)
-    if grep -q "^dtoverlay=dwc2" /boot/config.txt; then
+    if true; then
       printf "Starting usb gadget mode: "
+      /usr/bin/dtoverlay dwc2
       /sbin/modprobe dwc2
       /sbin/modprobe g_ether host_addr=00:11:22:33:44:55 dev_addr=00:55:66:77:88:99
       echo "OK"
     fi
     ;;
   stop)
-    if grep -q "^dtoverlay=dwc2" /boot/config.txt; then
+    if true; then
       printf "Stopping usb gadget mode: "
       /sbin/rmmod g_ether
       /sbin/rmmod dwc2
+      /usr/bin/dtoverlay -r dwc2
       echo "OK"
     fi
     ;;

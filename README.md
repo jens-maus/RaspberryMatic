@@ -86,7 +86,7 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 * Latest Linux kernel (RaspberryPi: [4.19.36](https://github.com/raspberrypi/linux/tree/rpi-4.19.y), Tinkerboard: [4.19.40](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only) or from internal eMMC storage (ASUS Tinkerboard S)
 * Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
-* Supports USB Gadget Mode on the Raspberry Pi Zero (add `dtoverlay=dwc2` to `/boot/config.txt` on the sd card)
+* Supports USB Gadget Mode on the Raspberry Pi Zero (after `touch /usr/local/etc/gadgetEnabled`)
 * Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setups including USB connection to uninterruptible power supply (UPS) as well as remote NUT server use (e.g. via Synology NAS Network UPS functionality)
 * Support for the following third-party *Hardware Attached on Top* (HAT) boards:

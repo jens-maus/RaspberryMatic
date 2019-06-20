@@ -5,7 +5,7 @@
 
 case "$1" in
   start)
-    if true; then
+    if test -f /usr/local/etc/gadgetEnabled; then
       printf "Starting usb gadget mode: "
       /usr/bin/dtoverlay dwc2
       /sbin/modprobe dwc2
@@ -14,7 +14,7 @@ case "$1" in
     fi
     ;;
   stop)
-    if true; then
+    if test -f /usr/local/etc/gadgetEnabled; then
       printf "Stopping usb gadget mode: "
       /sbin/rmmod g_ether
       /sbin/rmmod dwc2

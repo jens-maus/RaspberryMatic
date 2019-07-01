@@ -21,7 +21,7 @@ function getDefaultLang() {
  * @return {Array} Available languages
  */
 function getAvailableLang() {
-  return ["de", "en", "tr"];
+  return ["de", "en"];
 }
 
 /**
@@ -94,10 +94,10 @@ function getLang() {
       return getBrowserLang();
     } else {
       if (langID == "0") {
-      // The user has choosen "Auto" which will use the browser settings
+      // The user has chosen "Auto" which will use the browser settings
       return getBrowserLang();
       } else {
-        return arrLang[parseInt(langID)];
+        return (parseInt(langID) < arrLang.length) ? arrLang[parseInt(langID)] : getBrowserLang();
       }
     }
     return defaultLang;
@@ -125,7 +125,7 @@ function loadTextResource() {
       async: false,
       contentType: "application/x-www-form-urlencoded;charset=ISO-8859-1",
       dataType: "script",
-      cache: true
+      cache: false
     });
 
     request.done(function(result) {

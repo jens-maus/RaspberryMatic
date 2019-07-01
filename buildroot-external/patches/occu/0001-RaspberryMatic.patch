@@ -335,17 +335,15 @@
  proc action_backup_upload {} {
 --- occu/WebUI/www/config/cp_time.cgi.orig
 +++ occu/WebUI/www/config/cp_time.cgi
-@@ -645,7 +645,9 @@
-     if { $fd <0 } { return 0 }
-     puts $fd "$TIMEZONES($timezone)"
-     close $fd
--    
-+ 
-+    catch {exec /bin/updateTZ.sh}
-+   
-     rega_script "var x=system.Longitude($lon);var y=system.Latitude($lat);var a=dom.ChangedTimeManually();"
-     
-     catch {exec /sbin/hwclock -wu}
+@@ -681,6 +681,8 @@
+   puts $fd "$TIMEZONES($timezone)"
+   close $fd
+   
++  catch {exec /bin/updateTZ.sh}
++
+   rega_script "var x=system.Longitude($lon);var y=system.Latitude($lat);var a=dom.ChangedTimeManually();"
+   
+   catch {exec /sbin/hwclock -wu}
 --- occu/WebUI/www/config/help.cgi.orig
 +++ occu/WebUI/www/config/help.cgi
 @@ -3,8 +3,8 @@
@@ -483,10 +481,10 @@
          <tr>
 -          <td style="text-align: center;"><div style="width: 180px;"><img src="/ise/img/homematic_logo_small.png" alt="HomeMatic Logo" /></div></td>
 +          <td style="text-align: center;"><div style="width: 180px;"><img src="/ise/img/rm-logo_small.png" alt="RaspberryMatic Logo" /></div></td>
-           <td><span class="HeaderTitle">${lblUsrLogin}</span></td>
+           <td><span class="HeaderTitle" style="cursor: pointer;" onclick="gotoLoginPage();">${lblUsrLogin}</span></td>
            <td style="width: 100%;"></td>
            <!-- <td><a href="/pda/index.cgi" target="_blank"><img id="WebUIorPDA" src="/ise/img/mobile_device.png" width="48px;" height="48px" alt="WebUI PDA" title="WebUI PDA"/></a></td> -->
-@@ -194,4 +194,4 @@
+@@ -199,4 +199,4 @@
  </script>
  
  </body>
@@ -501,9 +499,9 @@
          <tr>
 -          <td style="text-align: center;"><div style="width: 180px;" ><img src="/ise/img/homematic_logo_small.png" alt="HomeMatic Logo" /></div></td>
 +          <td style="text-align: center;"><div style="width: 180px;" ><img src="/ise/img/rm-logo_small.png" alt="RaspberryMatic Logo" /></div></td>
-           <td><span class="HeaderTitle">${lblUsrLogoff}</span></td>
+           <td><span class="HeaderTitle" style="cursor: pointer;" onclick="gotoLoginPage();">${lblUsrLogin}</span></td>
              <td style="width: 100%;"></td>
-             <td style="padding-right:63px;"><div class="clickable" onclick="loadHelp()"><img id="idHelp" src="/ise/img/help.png" width="48px" height="48px" alt="Hilfe" title="Hilfe"/></div></td>
+             <td style="padding-right:63px;"><div class="clickable" onclick="loadHelp();"><img id="idHelp" src="/ise/img/help.png" width="48px" height="48px" alt="Hilfe" title="Hilfe"/></div></td>
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
 @@ -12,8 +12,8 @@

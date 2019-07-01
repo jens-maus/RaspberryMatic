@@ -189,7 +189,7 @@
  </html>
 --- occu/WebUI/www/webui/js/lang/loadTextResource.js.orig
 +++ occu/WebUI/www/webui/js/lang/loadTextResource.js
-@@ -120,11 +120,12 @@
+@@ -120,7 +120,7 @@
  
    jQuery.each(arResource, function(index, res){
      var request = jQuery.ajax({
@@ -198,13 +198,7 @@
        type:  "GET",
        async: false,
        contentType: "application/x-www-form-urlencoded;charset=ISO-8859-1",
--      dataType: "script"
-+      dataType: "script",
-+      cache: true
-     });
- 
-     request.done(function(result) {
-@@ -136,4 +137,4 @@
+@@ -137,4 +137,4 @@
    });
  };
  

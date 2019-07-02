@@ -1136,7 +1136,7 @@ proc action_put_page {} {
             }else{
               if (setAllHmIPDevices) {
               counterSetPosition = 0;
-              setPositionAllDevices(lon, lat, tZone);
+              setPositionAllDevices();
               MessageBox.show(translateKey("Info"), translateKey("dialogSettingsTimePositionMessageSetPositionSucceedIncludingAllDevices"));
               } else {
               MessageBox.show(translateKey("Info"), translateKey("dialogSettingsTimePositionMessageSetPositionSucceed"));

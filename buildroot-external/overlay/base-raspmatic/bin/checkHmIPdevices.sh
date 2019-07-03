@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# crRFD device check script v1.1
+# crRFD device check script v1.2
 # Copyright (c) 2019 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,13 @@ fi
 
 FILES=$(ls /etc/config/crRFD/data | egrep ${FILE_PATTERN} | cut -d. -f1 | uniq)
 for sgtin in ${FILES}; do
+
+  # check if this SGTIN belongs to a HmIPW-DRAP by checking if it is
+  # listed in metaData.conf and if so skip it
+  if grep -q "${sgtin}:type\":\"HmIPW-DRAP\"" /etc/config/crRFD/data/metaData.conf &>/dev/null; then
+    continue
+  fi
+
   DEVADR=${sgtin:(-14)}
   if [[ -n "${DEVADR}" ]]; then
     grep -iq -m1 "<devadr>${DEVADR}" /etc/config/homematic.regadom

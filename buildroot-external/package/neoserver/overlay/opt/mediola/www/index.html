@@ -229,22 +229,25 @@ function getUrlVars() {
   
   var fType = getUrlVars()["sid"];
   
+  if(self.location.protocol === "https:") {
+    window.location.href="http://"+self.location.host+"/addons/mediola/index.html?sid="+fType;
+  }
   
 		$.ajax({
 			type: 'GET',
 			dataType: "json",
-			url: "http://"+self.location.host+"/addons/mediola/bin/hmFunc.cgi?sid="+fType,
+			url: self.location.protocol+"//"+self.location.host+"/addons/mediola/bin/hmFunc.cgi?sid="+fType,
 			success: function(data){
 				
 				if(typeof data==="object" && data!=null){
 					data=data;
 			    }else{
-			    	window.location.href="http://"+self.location.host;
+			    	window.location.href=self.location.protocol+"//"+self.location.host;
 			    }
 				
 			},
 			error: function() {
-				window.location.href="http://"+self.location.host;
+				window.location.href=self.location.protocol+"//"+self.location.host;
 			
 			}
 			});  
@@ -256,13 +259,13 @@ function getUrlVars() {
     	function getLogFiles(){
     		
     		var at = crypt_MD5.md5(unescape(encodeURI($('#password').val() + '_SALT!')));
-            window.open("http://"+self.location.host+":8088/getLogs?at=" + at,'_blank');
+            window.open(self.location.protocol+"//"+self.location.host+":8088/getLogs?at=" + at,'_blank');
     	}
     	function doResetNeoServer(){
     		
    			$.ajax({
     			type: 'HEAD',
-    			url: "http://"+self.location.host+"/addons/mediola/bin/restart.cgi?sid="+fType,
+    			url: self.location.protocol+"//"+self.location.host+"/addons/mediola/bin/restart.cgi?sid="+fType,
     			success: function(){},
     			error: function() {}
   			});   	
@@ -272,21 +275,21 @@ function getUrlVars() {
      	function serverEnable(){
    			$.ajax({
     			type: 'HEAD',
-    			url: "http://"+self.location.host+"/addons/mediola/bin/enableServer.cgi?sid="+fType,
+    			url: self.location.protocol+"//"+self.location.host+"/addons/mediola/bin/enableServer.cgi?sid="+fType,
     			success: function(){},
     			error: function() {}
   			});   	
   			alert("NEO SERVER wird gestartet bitte haben Sie etwas Geduld");
   			
   			setTimeout(function(){
-  				var url = "http://"+self.location.host+"/addons/mediola/index.html?sid="+fType;
+  				var url = self.location.protocol+"//"+self.location.host+"/addons/mediola/index.html?sid="+fType;
   				location.href = url;
   			}, 10000);
     	}   	
 		function urlExists(){
   			$.ajax({
     			type: 'HEAD',
-    			url: "http://" + self.location.host+":8088",
+    			url: self.location.protocol+"//"+self.location.host+":8088",
     			success: function(){
       				$("#onlinecheck").html("Status: <span style='font-weight:bold;color:#00FF00;'>online</span>");
       				$("#con_online").show();

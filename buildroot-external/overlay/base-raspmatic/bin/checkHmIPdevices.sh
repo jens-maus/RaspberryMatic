@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# crRFD device check tool v1.0
+# crRFD device check script v1.1
 # Copyright (c) 2019 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,17 +26,24 @@
 # check for "-f" option to start fixing operation
 [[ "${1}" == "-f" ]] && FIX=1 || FIX=0
 
-FILES=$(ls /etc/config/crRFD/data | egrep ".+\.(dev|ap|apkx)$")
-for file in ${FILES}; do
-  SGTIN=${file%.*}
-  DEVADR=${SGTIN:(-14)}
+# check if regadom contains HmIP-RCV already and if not we don't
+# move away any ap + apkx files
+if grep -q -m1 "HmIP-RCV" /etc/config/homematic.regadom; then
+  FILE_PATTERN="[0-9A-F]{24}\.(dev|ap|apkx)$"
+else
+  FILE_PATTERN="[0-9A-F]{24}\.dev$"
+fi
+
+FILES=$(ls /etc/config/crRFD/data | egrep ${FILE_PATTERN} | cut -d. -f1 | uniq)
+for sgtin in ${FILES}; do
+  DEVADR=${sgtin:(-14)}
   if [[ -n "${DEVADR}" ]]; then
-    grep -iq -m1 "<devadr>${DEVADR}</devadr>" /etc/config/homematic.regadom
+    grep -iq -m1 "<devadr>${DEVADR}" /etc/config/homematic.regadom
     if [[ $? -ne 0 ]]; then
-      echo -n "WARNING: ${DEVADR} not found in regadom"
+      echo -n "WARNING: SGTIN ${DEVADR} not found in regadom"
       if [[ ${FIX} -eq 1 ]]; then
         [[ -d /etc/config/crRFD/data/old ]] || mkdir -p /etc/config/crRFD/data/old
-        mv /etc/config/crRFD/data/${file} /etc/config/crRFD/data/old/
+        mv /etc/config/crRFD/data/${sgtin}.* /etc/config/crRFD/data/old/
         echo "... moved ${file} to /etc/config/crRFD/data/old/"
       else
         echo "."

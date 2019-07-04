@@ -28,7 +28,7 @@
 
 # check if regadom contains HmIP-RCV already and if not we don't
 # move away any ap + apkx files
-if grep -q -m1 "HmIP-RCV" /etc/config/homematic.regadom; then
+if grep -q -m1 "<devlabel>HmIP-RCV-" /etc/config/homematic.regadom; then
   FILE_PATTERN="[0-9A-F]{24}\.(dev|ap|apkx)$"
 else
   FILE_PATTERN="[0-9A-F]{24}\.dev$"
@@ -51,7 +51,7 @@ for sgtin in ${FILES}; do
       if [[ ${FIX} -eq 1 ]]; then
         [[ -d /etc/config/crRFD/data/old ]] || mkdir -p /etc/config/crRFD/data/old
         mv /etc/config/crRFD/data/${sgtin}.* /etc/config/crRFD/data/old/
-        echo "... moved ${file} to /etc/config/crRFD/data/old/"
+        echo "... moved ${sgtin}.* to /etc/config/crRFD/data/old/"
       else
         echo "."
       fi

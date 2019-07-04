@@ -62,6 +62,12 @@
 
 #define DUMP_READWRITE 0
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0))
+  #define _access_ok(__type, __addr, __size) access_ok(__addr, __size)
+#else
+  #define _access_ok(__type, __addr, __size) access_ok(__type, __addr, __size)
+#endif
+
 struct eq3loop_channel_data
 {
 	struct circ_buf master2slave_buf;
@@ -456,9 +462,9 @@ static long eq3loop_ioctl_master(struct eq3loop_channel_data* channel, struct fi
 	* "write" is reversed
 	*/
 	if (_IOC_DIR(cmd) & _IOC_READ)
-	ret = !access_ok(VERIFY_WRITE, (void *)arg, _IOC_SIZE(cmd));
+	  ret = !_access_ok(VERIFY_WRITE, (void *)arg, _IOC_SIZE(cmd));
 	else if (_IOC_DIR(cmd) & _IOC_WRITE)
-	ret =  !access_ok(VERIFY_READ, (void *)arg, _IOC_SIZE(cmd));
+	  ret =  !_access_ok(VERIFY_READ, (void *)arg, _IOC_SIZE(cmd));
 	if (ret) return -EFAULT;
 
 	switch(cmd) {
@@ -500,7 +506,7 @@ static long eq3loop_ioctl_slave(struct eq3loop_channel_data* channel, struct fil
 	switch(cmd) {
 
 	case TCGETS:
-		if( access_ok(VERIFY_READ, (void *)arg, sizeof(struct termios) ) )
+		if( _access_ok(VERIFY_READ, (void *)arg, sizeof(struct termios) ) )
 		{
 			ret = copy_to_user( (void*)arg, &channel->termios, sizeof(struct termios) );
 		} else {
@@ -508,7 +514,7 @@ static long eq3loop_ioctl_slave(struct eq3loop_channel_data* channel, struct fil
 		}
 		break;
 	case TCSETS:
-		if( access_ok(VERIFY_WRITE, (void *)arg, sizeof(struct termios) ) )
+		if( _access_ok(VERIFY_WRITE, (void *)arg, sizeof(struct termios) ) )
 		{
 			ret = copy_from_user( &channel->termios, (void*)arg, sizeof(struct termios) );
 		} else {

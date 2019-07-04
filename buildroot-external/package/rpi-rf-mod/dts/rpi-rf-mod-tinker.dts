@@ -65,4 +65,22 @@
             };
         };
     };
+
+    // fragment to define settings for the rx8130 RTC clock
+    // of the RPI-RF-MOD
+    fragment@2 {
+        target = <&i2c1>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+
+            rx8130@32 {
+                compatible = "epson,rx8130-legacy";
+                reg = <0x32>;
+                status = "okay";
+                enable-external-capacitor;
+            };
+        };
+    };
 };

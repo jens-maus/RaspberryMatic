@@ -15,7 +15,7 @@
 
     // fragment to ensure we have the correct gpio pin
     // setup for the RPI-RF-MOD
-    fragment@1 {
+    fragment@0 {
         target = <&gpio>;
         __overlay__ {
             rpi_rf_mod_pins: rpi_rf_mod_pins {
@@ -27,8 +27,8 @@
     };
 
     // fragment to define dedicated led nodes for
-    // each ѕeparate led supported by the RPI-RF-MOD
-    fragment@0 {
+    // each separate led supported by the RPI-RF-MOD
+    fragment@1 {
         target = <&leds>;
         __overlay__ {
             pinctrl-names = "default";
@@ -50,6 +50,24 @@
                 gpios = <&gpio 21 0>;
                 default-state = "keep";
                 linux,default-trigger = "none";
+            };
+        };
+    };
+
+    // fragment to define settings for the rx8130 RTC clock
+    // of the RPI-RF-MOD
+    fragment@2 {
+        target = <&i2c1>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+
+            rx8130@32 {
+                compatible = "epson,rx8130-legacy";
+                reg = <0x32>;
+                status = "okay";
+                enable-external-capacitor;
             };
         };
     };

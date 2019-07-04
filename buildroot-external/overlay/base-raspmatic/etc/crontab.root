@@ -1,5 +1,5 @@
 0 * * * * /bin/setHWClock.sh >/dev/null 2>/dev/null
 1 */6 * * * /bin/SetInterfaceClock
 0 4 * * * /usr/sbin/logrotate /etc/logrotate.conf || logger -p error -t "logrotate" "logrotate aborted with error $?"
-*/3 * * * * /bin/updateDCVars.tcl >/dev/null 2>/dev/null
+*/1 * * * * /bin/updateDCVars.tcl >/dev/null 2>/dev/null
 7 0 * * * /bin/cronBackup.sh >/dev/null 2>/dev/null

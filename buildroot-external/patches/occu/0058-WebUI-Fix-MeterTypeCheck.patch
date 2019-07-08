@@ -1,0 +1,13 @@
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -32914,8 +32914,8 @@
+     /* No meter type available
+        this.energyMeterTransmitter = e. g. a PSM or a Hm-ES-TX-WM Fw. >= 2.0.0
+     */
+-    if (typeof paramSet.METER_TYPE == "undefined") {
+-      return (this.opts.chType == this.energyMeterTransmitter) ? this.sensorTypeID.eletricity : this.sensorTypeID.iec;
++    if (typeof(paramSet.METER_TYPE) === "undefined") {
++      return (this.opts.chType === this.energyMeterTransmitter) ? this.sensorTypeID.iec : this.sensorTypeID.eletricity;
+     }
+ 
+     // No IEC Sensor

@@ -81,8 +81,8 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 * Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
 * Support to be used without any GPIO RF module HAT when just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
-* Based on latest [Buildroot 2019.05](http://buildroot.org/) lightweight Linux operating system
-* Latest Linux kernel (RaspberryPi: [4.19.42](https://github.com/raspberrypi/linux/tree/rpi-4.19.y), Tinkerboard: [4.19.51](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
+* Based on latest [Buildroot 2019.05.1](http://buildroot.org/) lightweight Linux operating system
+* Latest Linux kernel (RaspberryPi: [4.19.57](https://github.com/raspberrypi/linux/tree/rpi-4.19.y), Tinkerboard: [4.19.57](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only) or from internal eMMC storage (ASUS Tinkerboard S)
 * Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks

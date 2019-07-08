@@ -32915,7 +32915,7 @@ isePowerMeter.prototype = {
        this.energyMeterTransmitter = e. g. a PSM or a Hm-ES-TX-WM Fw. >= 2.0.0
     */
     if (typeof(paramSet.METER_TYPE) === "undefined") {
-      return (this.opts.chType === this.energyMeterTransmitter) ? this.sensorTypeID.iec : this.sensorTypeID.eletricity;
+      return ((this.opts.chType === "POWERMETER_IEC1" || this.opts.chType === "POWERMETER_IEC2") ? this.sensorTypeID.iec : this.sensorTypeID.eletricity);
     }
 
     // No IEC Sensor

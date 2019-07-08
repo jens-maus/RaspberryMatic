@@ -7,7 +7,7 @@
 -    if (typeof paramSet.METER_TYPE == "undefined") {
 -      return (this.opts.chType == this.energyMeterTransmitter) ? this.sensorTypeID.eletricity : this.sensorTypeID.iec;
 +    if (typeof(paramSet.METER_TYPE) === "undefined") {
-+      return (this.opts.chType === this.energyMeterTransmitter) ? this.sensorTypeID.iec : this.sensorTypeID.eletricity;
++      return ((this.opts.chType === "POWERMETER_IEC1" || this.opts.chType === "POWERMETER_IEC2") ? this.sensorTypeID.iec : this.sensorTypeID.eletricity);
      }
  
      // No IEC Sensor

@@ -2,7 +2,7 @@ PRODUCT=raspmatic_rpi3
 # PRODUCT=raspmatic_rpi0
 # PRODUCT=raspmatic_tinkerboard
 # PRODUCT=raspmatic_docker
-BUILDROOT_VERSION=2019.05
+BUILDROOT_VERSION=2019.05.1
 VERSION=$(shell cat ./VERSION)
 BOARD=$(shell echo $(PRODUCT) | cut -d'_' -f2)
 

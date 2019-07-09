@@ -32828,6 +32828,7 @@ isePowerMeter.prototype = {
   initialize: function(id, opts) {
     conInfo("PowerMeter");
     var self = this;
+    this.powerMeter = "POWERMETER"; // e. g. Hm-ES-PMSw1-PL-DN-R1
     this.POWERMETER_IEC = "POWERMETER_IEC"; // e. g. Hm-ES-TX-WM
     this.energyMeterTransmitter = "ENERGIE_METER_TRANSMITTER"; // e. g. HmIP-PSM
     this.arMeasurementTypes = [];
@@ -32914,8 +32915,8 @@ isePowerMeter.prototype = {
     /* No meter type available
        this.energyMeterTransmitter = e. g. a PSM or a Hm-ES-TX-WM Fw. >= 2.0.0
     */
-    if (typeof(paramSet.METER_TYPE) === "undefined") {
-      return ((this.opts.chType === "POWERMETER_IEC1" || this.opts.chType === "POWERMETER_IEC2") ? this.sensorTypeID.iec : this.sensorTypeID.eletricity);
+    if (typeof paramSet.METER_TYPE == "undefined") {
+      return ((this.opts.chType == this.energyMeterTransmitter) || (this.opts.chType == this.powerMeter)) ? this.sensorTypeID.eletricity : this.sensorTypeID.iec;
     }
 
     // No IEC Sensor

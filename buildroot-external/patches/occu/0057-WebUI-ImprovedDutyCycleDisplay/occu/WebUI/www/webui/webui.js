@@ -27868,46 +27868,56 @@ showDutyCycle = function() {
       dcNotAvailable = -1,
       dcAlarm = 89;  // Attention when dc >= 90%
 
-    homematic("SysVar.getValueByName", {"name": "DutyCycle"}, function(dcVal) {
+    homematic("Interface.getDutyCycle", {}, function(dcArray) {
+      if(typeof dcArray !== "undefined") {
+        jQuery.each(dcArray, function(index, iface) {
+          var dutyCycleProgressElem = jQuery("#dutyCycleProgress"+index),
+            dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"+index),
+            dutyCycleValElm = jQuery("#dutyCycleVal"+index),
+            dutyCycleAddrElm = jQuery("#dutyCycleAddr"+index),
+            trDutyCycle = jQuery("[name='trDutyCycle"+index+"']"),
+            trPartingLineElm = jQuery("#partingLine1"),
+            dcVal,
+            width, value;
 
-      var dutyCycleProgressElem = jQuery("#dutyCycleProgress"),
-        dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"),
-        dutyCycleValElm = jQuery("#dutyCycleVal"),
-        trDutyCycle = jQuery("[name='trDutyCycle']"),
-        trPartingLineElm = jQuery("#partingLine1"),
-        width, value;
+          if (typeof iface.dutyCycle !== "undefined") {
+            dcVal = Math.floor(iface.dutyCycle);
+            conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + " " + dcUnit);
+            arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
+          } else {
+            conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
+            arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
+          }
 
-      if (typeof dcVal !== "undefined") {
-        dcVal = Math.floor(dcVal);
-        conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + " " + dcUnit);
-        arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
-      } else {
-        conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
-        arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
-      }
+          if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
+            dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
+            if (iface.type === "CCU2") {
+              dutyCycleAddrElm.text("DutyCycle CCU:");
+            } else {
+              dutyCycleAddrElm.text("DutyCycle LGW ("+iface.address+"):");
+            }
 
-      if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
-        dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
+            width = parseInt(dutyCycleProgressElem.css("width"));
+            value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
 
-        width = parseInt(dutyCycleProgressElem.css("width"));
-        value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
+            dutyCycleProgressBarElm.css("width", value + "px");
 
-        dutyCycleProgressBarElm.css("width", value + "px");
+            if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
+              trDutyCycle.addClass("attention");
+            } else {
+              trDutyCycle.removeClass("attention");
+            }
+            trPartingLineElm.show();
+            showPartingLine = true;
+            trDutyCycle.css("visibility", "visible");
+          } else {
+            trDutyCycle.css("visibility", "hidden");
+          }
 
-        if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
-          trDutyCycle.addClass("attention");
-        } else {
-          trDutyCycle.removeClass("attention");
-        }
-        trPartingLineElm.show();
-        showPartingLine = true;
-        trDutyCycle.css("visibility", "visible");
-      } else {
-        trDutyCycle.css("visibility", "hidden");
-      }
-
-      if (!showPartingLine) {
-        trPartingLineElm.hide();
+          if (!showPartingLine) {
+            trPartingLineElm.hide();
+          }
+        });
       }
     });
   }

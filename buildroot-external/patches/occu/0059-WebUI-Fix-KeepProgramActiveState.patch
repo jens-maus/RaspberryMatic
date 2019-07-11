@@ -1,0 +1,21 @@
+--- occu/WebUI/www/rega/esp/programs.fn.orig
++++ occu/WebUI/www/rega/esp/programs.fn
+@@ -849,15 +849,17 @@
+     object oOrig = dom.GetObject( system.GetVar("orig") );
+     if( oCopy && oOrig )
+     {
++      boolean isActive = true;
+       if( system.GetVar("copy") != system.GetVar("orig") )
+       {
++        isActive = oOrig.Active();
+         oCopy.ProgramCopyTo( oOrig.ID() );
+         dom.DeleteObject( oCopy.ID() );
+         oOrig.ProgramCopyID( ID_ERROR );        
+         Write( oOrig.Name() );
+       }
+       oOrig.ProgramUpdate();
+-      oOrig.Active(true);
++      oOrig.Active(isActive);
+     }
+   }
+   return;

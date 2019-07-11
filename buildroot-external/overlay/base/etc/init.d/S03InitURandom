@@ -3,6 +3,16 @@
 # Startup script to init the random number generator interface (urandom)
 #
 
+save_urandom() {
+  if [[ ! -c /dev/urandom ]]; then
+    return
+  fi
+
+  if [[ -d /etc/config ]]; then
+    dd if=/dev/urandom of=/etc/config/random-seed count=1 bs=512 &>/dev/null
+  fi
+}
+
 init_urandom() {
   if [[ ! -c /dev/urandom ]]; then
     return
@@ -10,18 +20,15 @@ init_urandom() {
 
   if [[ -s /etc/config/random-seed ]]; then
     cat /etc/config/random-seed >/dev/urandom
+    [[ -x /bin/rndaddtoentcnt ]] && /bin/rndaddtoentcnt 4096
   else
     # initialize urandom with /proc/timer_list
     head -3 /proc/timer_list | tail -1 | cut -d' ' -f3 >/dev/urandom
-  fi
-}
-
-save_urandom() {
-  if [[ ! -c /dev/urandom ]]; then
-    return
+    [[ -x /bin/rndaddtoentcnt ]] && /bin/rndaddtoentcnt 128
   fi
 
-  dd if=/dev/urandom of=/etc/config/random-seed count=1 bs=512 2>/dev/null
+  # make sure we save the entropy pool right away for the next boot
+  save_urandom
 }
 
 start() {

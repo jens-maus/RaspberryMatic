@@ -33,10 +33,11 @@
     {id: "submenuFunction"             , action: function() { ConfigData.check(function() { WebUI.enter(FunctionListPage); }); }  },
     {id: "submenuCreateGroups"     , action: function() { ConfigData.check(function() { WebUI.enter(CreateGroupPage); } );  } },
     {id: "submenuRooms"               , action: function() { ConfigData.check(function() { WebUI.enter(RoomListPage); }); }      },
+
     //{id: "submenuCreateTestPage"     , action: function() { ConfigData.check(function() { WebUI.enter(CreateTestPage); } );  } },
     //{id: "submenuDeviceFirmware"     , action: function() { ConfigData.check(function() { WebUI.enter(DeviceFirmware); } );  } },
-    {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } },
-    {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  }
+    {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  },
+    {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } }
 
   ]},
   {id: "menuHelpPage"          , align: "right", action: function() { WebUI.enter(HelpPage); }, submenu: [ ]},

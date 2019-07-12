@@ -1,62 +1,55 @@
 --- occu/WebUI/www/rega/pages/tabs/admin/systemconfig.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/systemconfig.htm
-@@ -1,182 +1,187 @@
--<%
--system.SetSessionVar("sessionTAB", "systemconfig");
--%>
--<script type="text/javascript">
--  setPath(translateKey("menuSettingsPage"));
--</script>
--
--<div id="subOffsetDiv"></div>
--<table class="StdTable j_translate" cellspacing="20">
--  <colgroup>
--    <col width="25%"/>
--    <col width="25%"/>
--    <col width="25%"/>
--    <col width="25%"/>
--  </colgroup>
--  <tr class="CLASS05500">
--    <td class="sysConfigHeight">
+@@ -15,18 +15,38 @@
+   </colgroup>
+   <tr class="CLASS05500">
+     <td class="sysConfigHeight">
 -      <div class="StdTableBtn" onclick="WebUI.enter(NewDeviceListPage);">${btnSettingsDeviceInBox}</div>
--      <ul>
++      <div class="StdTableBtn" onclick="WebUI.enter(UserAdminPageAdmin);">${btnSettingsUserAdministration}</div>
+       <ul>
 -        <li>${lblSettingsDeviceInBox1}</li>
--        <li>
++        <li>${lblSettingsUserAdministration1}</li>
++        <li>${lblSettingsUserAdministration2}</li>
++        <li>${lblSettingsUserAdministration3}</li>
++        <li>${lblSettingsUserAdministration4}</li>
++      </ul>
++    </td>
++  
++    <td class="sysConfigHeight">
++      <div class="StdTableBtn" onclick="WebUI.enter(CreateDiagramPage);">${btnSettingsDiagrams}</div>
++      <ul>
++        <li>${lblSettingsDiagrams1}</li>
++        <li>${lblSettingsDiagrams2}</li>
++        <li>${lblSettingsDiagrams3}</li>
++        <li>${lblSettingsDiagrams4}</li>
++      </ul>
++    </td>
++
++    <td class="sysConfigHeight">
++      <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
++      <ul>
++        <li>${lblSettingsFavorites1}</li>
+         <li>
 -          ${lblSettingsDeviceInBox2}
--          <ul>
++          ${lblSettingsFavorites2}
+           <ul>
 -            <li>${lblSettingsDeviceInBox2a}</li>
 -            <li>${lblSettingsDeviceInBox2b}</li>
 -            <li>${lblSettingsDeviceInBox2c}</li>
--          </ul>
--        </li>
++            <li>${lblSettingsFavorites2a}</li>
++            <li>${lblSettingsFavorites2b}</li>
++            <li>${lblSettingsFavorites2c}</li>
+           </ul>
+         </li>
 -        <li>${lblSettingsDeviceInBox3}</li>
--      </ul>
--    </td>
--
--    <td class="sysConfigHeight">
--      <div class="StdTableBtn" onclick="WebUI.enter(DeviceListPage);">${btnSettingsDevices}</div>
--      <ul>
--        <li>
--          ${lblSettingsDevices1}
--          <ul>
--            <li>${lblSettingsDevices1a}</li>
--            <li>${lblSettingsDevices1b}</li>
--            <li>${lblSettingsDevices1c}</li>
--            <li>${lblSettingsDevices1d}</li>
--          </ul>
--        </li>
--        <li>
--          ${lblSettingsDevices2}
--          <ul>
--            <li>${lblSettingsDevices2a}</li>
--            <li>${lblSettingsDevices2b}</li>
--            <li>${lblSettingsDevices2c}</li>
--          </ul>
--        </li>
--        <li>${lblSettingsDevices3}</li>
--        <li>${lblSettingsDevices4}</li>
--      </ul>
--    </td>
++        <li>${lblSettingsFavorites3}</li>
+       </ul>
+     </td>
+ 
+@@ -54,52 +74,9 @@
+         <li>${lblSettingsDevices4}</li>
+       </ul>
+     </td>
 -
 -    <td class="sysConfigHeight">
 -      <div class="StdTableBtn" onclick="WebUI.enter(RoomListPage);">${btnSettingsRooms}</div>
@@ -103,189 +96,23 @@
 -      </ul>
 -    </td>
 -
--    <td class="sysConfigHeight">
--      <div class="StdTableBtn" onclick="WebUI.enter(DeviceFirmwareInformation);">${submenuDeviceFirmwareInformation}</div>
--      <ul>
--        <li>${lblSettingsDeviceFirmwareMain0}
--          <ul>
--            <li>${lblSettingsDeviceFirmwareMain1}</li>
--          </ul>
--        </li>
--      </ul>
--      <ul>
--        <li>${lblSettingsDeviceFirmware0}
--          <ul>
--            <li>${lblSettingsDeviceFirmware1}</li>
--            <li>${lblSettingsDeviceFirmware2}</li>
--            <li>${lblSettingsDeviceFirmware3}</li>
--          </ul>
--        </li>
--      </ul>
--    </td>
--
--    <td class="sysConfigHeight">
++ </tr>
++ <tr>
++ 
+     <td class="sysConfigHeight">
+       <div class="StdTableBtn" onclick="WebUI.enter(DeviceFirmwareInformation);">${submenuDeviceFirmwareInformation}</div>
+       <ul>
+@@ -121,40 +98,53 @@
+     </td>
+ 
+     <td class="sysConfigHeight">
 -      <div class="StdTableBtn" onclick="WebUI.enter(UserAdminPageAdmin);">${btnSettingsUserAdministration}</div>
--      <ul>
++      <div class="StdTableBtn" onclick="WebUI.enter(NewDeviceListPage);">${btnSettingsDeviceInBox}</div>
+       <ul>
 -        <li>${lblSettingsUserAdministration1}</li>
 -        <li>${lblSettingsUserAdministration2}</li>
 -        <li>${lblSettingsUserAdministration3}</li>
 -        <li>${lblSettingsUserAdministration4}</li>
--      </ul>
--    </td>
--  </tr>
--
--  <tr>
--    <td class="sysConfigHeight">
--      <div class="StdTableBtn" onclick="loadSystemVars();">${btnSettingsSysVar}</div>
--      <ul>
--        <li>${lblSettingsSysVar1}</li>
--        <li>${lblSettingsSysVar2}</li>
--        <li>${lblSettingsSysVar3}</li>
--        <li>${lblSettingsSysVar4}</li>
--      </ul>
--    </td>
--
--    <td class="sysConfigHeight">
--      <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
--      <ul>
--        <li>${lblSettingsFavorites1}</li>
--        <li>
--          ${lblSettingsFavorites2}
--          <ul>
--            <li>${lblSettingsFavorites2a}</li>
--            <li>${lblSettingsFavorites2b}</li>
--            <li>${lblSettingsFavorites2c}</li>
--          </ul>
--        </li>
--        <li>${lblSettingsFavorites3}</li>
--      </ul>
--    </td>
--
--    <td class="sysConfigHeight">
--      <div class="StdTableBtn" onclick="WebUI.enter(SystemControlPage);">${btnSettingsSystemConfig}</div>
--      <ul>
--        <li>${lblSettingsSystemConfig1}</li>
--        <li>${lblSettingsSystemConfig2}</li>
--        <li>${lblSettingsSystemConfig3}</li>
--        <li>${lblSettingsSystemConfig4}</li>
--        <li>${lblSettingsSystemConfig5}</li>
--        <li>${lblSettingsSystemConfig6}</li>
--        <li>${lblSettingsSystemConfig7}</li>
--        <li>${lblSettingsSystemConfig8}</li>
--      </ul>
--    </td>
--    <td class="CLASS05501" style="background-color: white;"></td>
--    <td class="CLASS05501" style="background-color: white;"></td>
--  </tr>
--</table>
--
--<script type="text/javascript">
--  setFooter("");
--  translatePage("#content");
-+<%
-+system.SetSessionVar("sessionTAB", "systemconfig");
-+%>
-+<script type="text/javascript">
-+  setPath(translateKey("menuSettingsPage"));
-+</script>
-+
-+<div id="subOffsetDiv"></div>
-+<table class="StdTable j_translate" cellspacing="20">
-+  <colgroup>
-+    <col width="25%"/>
-+    <col width="25%"/>
-+    <col width="25%"/>
-+    <col width="25%"/>
-+  </colgroup>
-+  <tr class="CLASS05500">
-+  
-+    <td class="sysConfigHeight">
-+      <div class="StdTableBtn" onclick="WebUI.enter(UserAdminPageAdmin);">${btnSettingsUserAdministration}</div>
-+      <ul>
-+        <li>${lblSettingsUserAdministration1}</li>
-+        <li>${lblSettingsUserAdministration2}</li>
-+        <li>${lblSettingsUserAdministration3}</li>
-+        <li>${lblSettingsUserAdministration4}</li>
-+      </ul>
-+    </td>
-+	
-+    <td class="sysConfigHeight">
-+      <div class="StdTableBtn" onclick="WebUI.enter(CreateDiagramPage);">${btnSettingsDiagrams}</div>
-+      <ul>
-+        <li>${lblSettingsDiagrams1}</li>
-+        <li>${lblSettingsDiagrams2}</li>
-+        <li>${lblSettingsDiagrams3}</li>
-+        <li>${lblSettingsDiagrams4}</li>
-+      </ul>
-+    </td>
-+
-+	<td class="sysConfigHeight">
-+      <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
-+      <ul>
-+        <li>${lblSettingsFavorites1}</li>
-+        <li>
-+          ${lblSettingsFavorites2}
-+          <ul>
-+            <li>${lblSettingsFavorites2a}</li>
-+            <li>${lblSettingsFavorites2b}</li>
-+            <li>${lblSettingsFavorites2c}</li>
-+          </ul>
-+        </li>
-+        <li>${lblSettingsFavorites3}</li>
-+      </ul>
-+    </td>
-+	
-+    <td class="sysConfigHeight">
-+      <div class="StdTableBtn" onclick="WebUI.enter(DeviceListPage);">${btnSettingsDevices}</div>
-+      <ul>
-+        <li>
-+          ${lblSettingsDevices1}
-+          <ul>
-+            <li>${lblSettingsDevices1a}</li>
-+            <li>${lblSettingsDevices1b}</li>
-+            <li>${lblSettingsDevices1c}</li>
-+            <li>${lblSettingsDevices1d}</li>
-+          </ul>
-+        </li>
-+        <li>
-+          ${lblSettingsDevices2}
-+          <ul>
-+            <li>${lblSettingsDevices2a}</li>
-+            <li>${lblSettingsDevices2b}</li>
-+            <li>${lblSettingsDevices2c}</li>
-+          </ul>
-+        </li>
-+        <li>${lblSettingsDevices3}</li>
-+        <li>${lblSettingsDevices4}</li>
-+      </ul>
-+    </td>	
-+
-+  </tr>
-+  <tr>
-+
-+    <td class="sysConfigHeight">
-+      <div class="StdTableBtn" onclick="WebUI.enter(DeviceFirmwareInformation);">${submenuDeviceFirmwareInformation}</div>
-+      <ul>
-+        <li>${lblSettingsDeviceFirmwareMain0}
-+          <ul>
-+            <li>${lblSettingsDeviceFirmwareMain1}</li>
-+          </ul>
-+        </li>
-+      </ul>
-+      <ul>
-+        <li>${lblSettingsDeviceFirmware0}
-+          <ul>
-+            <li>${lblSettingsDeviceFirmware1}</li>
-+            <li>${lblSettingsDeviceFirmware2}</li>
-+            <li>${lblSettingsDeviceFirmware3}</li>
-+          </ul>
-+        </li>
-+      </ul>
-+    </td>	
-+
-+    <td class="sysConfigHeight">
-+      <div class="StdTableBtn" onclick="WebUI.enter(NewDeviceListPage);">${btnSettingsDeviceInBox}</div>
-+      <ul>
 +        <li>${lblSettingsDeviceInBox1}</li>
 +        <li>
 +          ${lblSettingsDeviceInBox2}
@@ -296,35 +123,51 @@
 +          </ul>
 +        </li>
 +        <li>${lblSettingsDeviceInBox3}</li>
-+      </ul>
-+    </td>
-+
-+    <td class="sysConfigHeight">
+       </ul>
+     </td>
+-  </tr>
+ 
+-  <tr>
+     <td class="sysConfigHeight">
+-      <div class="StdTableBtn" onclick="loadSystemVars();">${btnSettingsSysVar}</div>
 +      <div class="StdTableBtn" onclick="WebUI.enter(FunctionListPage);">${btnSettingsFunctions}</div>
-+      <ul>
+       <ul>
+-        <li>${lblSettingsSysVar1}</li>
+-        <li>${lblSettingsSysVar2}</li>
+-        <li>${lblSettingsSysVar3}</li>
+-        <li>${lblSettingsSysVar4}</li>
 +        <li>${lblSettingsFunctions1}</li>
 +        <li>${lblSettingsFunctions2}</li>
 +        <li>${lblSettingsFunctions3}</li>
 +        <li>${lblSettingsFunctions4}</li>
 +        <li>${lblSettingsFunctions5}</li>
-+      </ul>
-+    </td>
-+	
-+    <td class="sysConfigHeight">
+       </ul>
+     </td>
+ 
+     <td class="sysConfigHeight">
+-      <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
 +      <div class="StdTableBtn" onclick="WebUI.enter(CreateGroupPage);">${btnSettingsGroups}</div>
-+      <ul>
+       <ul>
+-        <li>${lblSettingsFavorites1}</li>
+-        <li>
+-          ${lblSettingsFavorites2}
+-          <ul>
+-            <li>${lblSettingsFavorites2a}</li>
+-            <li>${lblSettingsFavorites2b}</li>
+-            <li>${lblSettingsFavorites2c}</li>
+-          </ul>
+-        </li>
+-        <li>${lblSettingsFavorites3}</li>
 +        <li>${lblSettingsGroups1}</li>
 +        <li>${lblSettingsGroups2}</li>
 +        <li>${lblSettingsGroups3}</li>
 +        <li>${lblSettingsGroups4}</li>
 +        <li>${lblSettingsGroups5}</li>
 +      </ul>
-+    </td>	
-+
++    </td>
 +  </tr>
 +
 +  <tr>
-+  
 +    <td class="sysConfigHeight">
 +      <div class="StdTableBtn" onclick="WebUI.enter(RoomListPage);">${btnSettingsRooms}</div>
 +      <ul>
@@ -333,23 +176,14 @@
 +        <li>${lblSettingsRooms3}</li>
 +        <li>${lblSettingsRooms4}</li>
 +        <li>${lblSettingsRooms5}</li>
-+      </ul>
-+    </td>
-+	
-+    <td class="sysConfigHeight">
-+      <div class="StdTableBtn" onclick="WebUI.enter(SystemControlPage);">${btnSettingsSystemConfig}</div>
-+      <ul>
-+        <li>${lblSettingsSystemConfig1}</li>
-+        <li>${lblSettingsSystemConfig2}</li>
-+        <li>${lblSettingsSystemConfig3}</li>
-+        <li>${lblSettingsSystemConfig4}</li>
-+        <li>${lblSettingsSystemConfig5}</li>
-+        <li>${lblSettingsSystemConfig6}</li>
-+        <li>${lblSettingsSystemConfig7}</li>
-+        <li>${lblSettingsSystemConfig8}</li>
-+      </ul>
-+    </td>
-+	
+       </ul>
+     </td>
+ 
+@@ -171,6 +161,16 @@
+         <li>${lblSettingsSystemConfig8}</li>
+       </ul>
+     </td>
++    
 +    <td class="sysConfigHeight">
 +      <div class="StdTableBtn" onclick="loadSystemVars();">${btnSettingsSysVar}</div>
 +      <ul>
@@ -359,70 +193,54 @@
 +        <li>${lblSettingsSysVar4}</li>
 +      </ul>
 +    </td>
-+
-+    <td class="CLASS05501" style="background-color: white;"></td>
-+    <td class="CLASS05501" style="background-color: white;"></td>
-+  </tr>
-+</table>
-+
-+<script type="text/javascript">
-+  setFooter("");
-+  translatePage("#content");
- </script>
-\ No newline at end of file
+     <td class="CLASS05501" style="background-color: white;"></td>
+     <td class="CLASS05501" style="background-color: white;"></td>
+   </tr>
 --- occu/WebUI/www/rega/pages/tabs/control.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control.htm
-@@ -1,133 +1,136 @@
--<%
--  system.SetSessionVar("sessionTAB", "statusview");
--%>
--
--<script type="text/javascript">
--
--  setPath(translateKey("menuControlPage"));
--</script>
--
--<div id="subOffsetDiv"></div>
--
--<table id="tblStatus" class="StdTable CLASS05700 j_translate" cellspacing="20" >
--  <colgroup>
--    <col width="25%" />
--    <col width="25%" />
--    <col width="25%" />
--    <col width="25%" />
--  </colgroup>
--  
--  <tr  id="statusRow2" class="CLASS05701">
--
--    <td>
+@@ -20,54 +20,47 @@
+   <tr  id="statusRow2" class="CLASS05701">
+ 
+     <td>
 -      <div id="btnChns" class="StdTableBtn" onclick="WebUI.enter(ControlDevicesPage);">${btnMenuStatusControlDevices}</div>
--      <ul>
++      <!--<div  class="StdTableBtn" id="btnDiagramList" onclick="WebUI.enter(DiagramListPage);">${btnMenuStatusControlDiagramList}</div>-->
++      <div  class="StdTableBtn" id="btnDiagramList" onclick="jQuery('#submenuDiagramListPage').click();">${submenuDiagramListPage}</div>
+       <ul>
 -        <li>${lblMenuStatusControlDevices1}</li>
--      </ul>
--    </td>
--
--    <td>
++        <li>${lblMenuStatusControlDiagramList1}</li>
+       </ul>
+     </td>
+ 
+     <td>
 -      <div class="StdTableBtn" onclick="WebUI.enter(ControlRoomsPage);" id="btnRooms">${btnMenuStatusControlRooms}</div>
--      <ul>
++      <div id="btnChns" class="StdTableBtn" onclick="WebUI.enter(ControlFavoritesPage);">${btnMenuStatusControlFavorites}</div>
+       <ul>
 -        <li>${lblMenuStatusControlRooms1}</li>
--      </ul>
--    </td>
--
--    <td>
++        <li>${lblMenuStatusControlFavorites1}</li>
+       </ul>
+     </td>
+ 
+     <td>
 -      <div  class="StdTableBtn" id="btnFunctions" onclick="WebUI.enter(ControlFunctionsPage);">${btnMenuStatusControlFunctions}</div>
--      <ul>
++      <div id="btnChns" class="StdTableBtn" onclick="WebUI.enter(ControlDevicesPage);">${btnMenuStatusControlDevices}</div>
+       <ul>
 -        <li>${lblMenuStatusControlFunctions1}</li>
 -      </ul>      
--    </td>
--
--    <td>
++        <li>${lblMenuStatusControlDevices1}</li>
++      </ul>
+     </td>
+ 
+     <td>
 -      <!--<div  class="StdTableBtn" id="btnDiagramList" onclick="WebUI.enter(DiagramListPage);">${btnMenuStatusControlDiagramList}</div>-->
 -      <div  class="StdTableBtn" id="btnDiagramList" onclick="jQuery('#submenuDiagramListPage').click();">${submenuDiagramListPage}</div>
--      <ul>
++      <div  class="StdTableBtn" id="btnFunctions" onclick="WebUI.enter(ControlFunctionsPage);">${btnMenuStatusControlFunctions}</div>
+       <ul>
 -        <li>${lblMenuStatusControlDiagramList1}</li>
 -      </ul>
--    </td>
--  </tr>
++        <li>${lblMenuStatusControlFunctions1}</li>
++      </ul>      
+     </td>
+   </tr>
 -	
 -  <tr id="statusRow1" class="CLASS05701">
 -    <td>
@@ -431,156 +249,31 @@
 -        <li>${lblMenuStatusControlFavorites1}</li>
 -      </ul>
 -    </td>
--
--    <td>
--      <div class="StdTableBtn" onclick="WebUI.enter(ControlProgramsPage);" id="btnProgs">${btnMenuStatusControlPrograms}</div>
--      <ul>
--        <li>${lblMenuStatusControlPrograms1}</li>
--      </ul>
--     </td>
--		
--    <td>
--      <div id="btnSysVar" class="StdTableBtn" onclick="WebUI.enter(ControlVariablesPage);">${btnMenuStatusControlSysVars}</div>
--      <ul>
--        <li>${lblMenuStatusControlSysVars1}</li>
--      </ul>
--    </td>
--
--    <td>
--      <div id="tdSysProc" class="StdTableBtn" onclick="WebUI.enter(ControlProtocolPage);">${btnMenuStatusControlSysProtocol}</div>
--      <ul>
--        <li>${lblMenuStatusControlSysProtocol}</li>
--      </ul>
--    </td>
--     
--  </tr>
--
--  <!--
--  <tr>
--    <td colspan="2" id="tdSysProc">
--      <div class="CLASS05703">
--        <div>
--          <div onclick="WebUI.enter(ControlProtocolPage);" class="CLASS05704 StdTableBtn">${btnMenuStatusControlSysProtocol}</div>
--        </div>
--        <table class="CLASS05705">
--          <colgroup>
--            <col width="30%" />
--            <col width="35%" />
--            <col width="35%" />
--          </colgroup>
--          <tr>
--            <td><b>${lblMenuStatusControlSysProtocolTime}</b></td>
--            <td><b>${lblMenuStatusControlSysProtocolChannelSysvar}</b></td>
--            <td><b>${lblMenuStatusControlSysProtocolActivity}</b></td>
--          </tr>
--        </table>
--      </div>
--      <div id='divSysProc' class="CLASS05706">
--        <table class="CLASS05707">
--          <colgroup>
--            <col width="30%" />
--            <col width="35%" />
--            <col width="35%" />
--          </colgroup>
--          <tbody id="sysprotopreview"></tbody>
--        </table>
--      </div>
--    </td>
--  </tr>
--  -->
--</table>
--
--<script type="text/javascript">
-- 
--  DivSort = function(colName)
--  {
--    // No Sorting, but Function has to be overwritten!
--  };
--  setFooter("");
--  /*
--  $("divSysProc").style.height = ($("tdSysProc").getHeight() - 30) + "px";
--  //RemoveAllRowsFromTable("histlist");
--  var spl = new iseSysProtoLoader("sysprotopreview",20,false);
--  */
--  translatePage("#tblStatus");
--
--</script>
--
-+<%
-+  system.SetSessionVar("sessionTAB", "statusview");
-+%>
-+
-+<script type="text/javascript">
-+
-+  setPath(translateKey("menuControlPage"));
-+</script>
-+
-+<div id="subOffsetDiv"></div>
-+
-+<table id="tblStatus" class="StdTable CLASS05700 j_translate" cellspacing="20" >
-+  <colgroup>
-+    <col width="25%" />
-+    <col width="25%" />
-+    <col width="25%" />
-+    <col width="25%" />
-+  </colgroup>
-+  
-+  <tr  id="statusRow2" class="CLASS05701">
-+
-+    <td>
-+      <!--<div  class="StdTableBtn" id="btnDiagramList" onclick="WebUI.enter(DiagramListPage);">${btnMenuStatusControlDiagramList}</div>-->
-+      <div  class="StdTableBtn" id="btnDiagramList" onclick="jQuery('#submenuDiagramListPage').click();">${submenuDiagramListPage}</div>
-+      <ul>
-+        <li>${lblMenuStatusControlDiagramList1}</li>
-+      </ul>
-+    </td>
-+
-+    <td>
-+      <div id="btnChns" class="StdTableBtn" onclick="WebUI.enter(ControlFavoritesPage);">${btnMenuStatusControlFavorites}</div>
-+      <ul>
-+        <li>${lblMenuStatusControlFavorites1}</li>
-+      </ul>
-+    </td>
-+
-+    <td>
-+      <div id="btnChns" class="StdTableBtn" onclick="WebUI.enter(ControlDevicesPage);">${btnMenuStatusControlDevices}</div>
-+      <ul>
-+        <li>${lblMenuStatusControlDevices1}</li>
-+      </ul>
-+    </td>
-+
-+    <td>
-+      <div  class="StdTableBtn" id="btnFunctions" onclick="WebUI.enter(ControlFunctionsPage);">${btnMenuStatusControlFunctions}</div>
-+      <ul>
-+        <li>${lblMenuStatusControlFunctions1}</li>
-+      </ul>      
-+    </td>
-+
-+  </tr>
-+	
+ 
 +  <tr id="statusRow1" class="CLASS05701">
+     <td>
+       <div class="StdTableBtn" onclick="WebUI.enter(ControlProgramsPage);" id="btnProgs">${btnMenuStatusControlPrograms}</div>
+       <ul>
+         <li>${lblMenuStatusControlPrograms1}</li>
+       </ul>
+      </td>
+-		
 +
-+    <td>
-+      <div class="StdTableBtn" onclick="WebUI.enter(ControlProgramsPage);" id="btnProgs">${btnMenuStatusControlPrograms}</div>
-+      <ul>
-+        <li>${lblMenuStatusControlPrograms1}</li>
-+      </ul>
-+    </td>
-+		
-+    <td>
+     <td>
+-      <div id="btnSysVar" class="StdTableBtn" onclick="WebUI.enter(ControlVariablesPage);">${btnMenuStatusControlSysVars}</div>
 +      <div class="StdTableBtn" onclick="WebUI.enter(ControlRoomsPage);" id="btnRooms">${btnMenuStatusControlRooms}</div>
-+      <ul>
+       <ul>
+-        <li>${lblMenuStatusControlSysVars1}</li>
 +        <li>${lblMenuStatusControlRooms1}</li>
-+      </ul>
-+    </td>
-+
-+    <td>
-+      <div id="tdSysProc" class="StdTableBtn" onclick="WebUI.enter(ControlProtocolPage);">${btnMenuStatusControlSysProtocol}</div>
-+      <ul>
-+        <li>${lblMenuStatusControlSysProtocol}</li>
-+      </ul>
-+    </td>
-+
+       </ul>
+     </td>
+ 
+@@ -77,7 +70,14 @@
+         <li>${lblMenuStatusControlSysProtocol}</li>
+       </ul>
+     </td>
+-     
++		
 +    <td>
 +      <div id="btnSysVar" class="StdTableBtn" onclick="WebUI.enter(ControlVariablesPage);">${btnMenuStatusControlSysVars}</div>
 +      <ul>
@@ -588,133 +281,29 @@
 +      </ul>
 +    </td>
 +
-+     
-+  </tr>
-+
-+  <!--
-+  <tr>
-+    <td colspan="2" id="tdSysProc">
-+      <div class="CLASS05703">
-+        <div>
-+          <div onclick="WebUI.enter(ControlProtocolPage);" class="CLASS05704 StdTableBtn">${btnMenuStatusControlSysProtocol}</div>
-+        </div>
-+        <table class="CLASS05705">
-+          <colgroup>
-+            <col width="30%" />
-+            <col width="35%" />
-+            <col width="35%" />
-+          </colgroup>
-+          <tr>
-+            <td><b>${lblMenuStatusControlSysProtocolTime}</b></td>
-+            <td><b>${lblMenuStatusControlSysProtocolChannelSysvar}</b></td>
-+            <td><b>${lblMenuStatusControlSysProtocolActivity}</b></td>
-+          </tr>
-+        </table>
-+      </div>
-+      <div id='divSysProc' class="CLASS05706">
-+        <table class="CLASS05707">
-+          <colgroup>
-+            <col width="30%" />
-+            <col width="35%" />
-+            <col width="35%" />
-+          </colgroup>
-+          <tbody id="sysprotopreview"></tbody>
-+        </table>
-+      </div>
-+    </td>
-+  </tr>
-+  -->
-+</table>
-+
-+<script type="text/javascript">
-+ 
-+  DivSort = function(colName)
-+  {
-+    // No Sorting, but Function has to be overwritten!
-+  };
-+  setFooter("");
-+  /*
-+  $("divSysProc").style.height = ($("tdSysProc").getHeight() - 30) + "px";
-+  //RemoveAllRowsFromTable("histlist");
-+  var spl = new iseSysProtoLoader("sysprotopreview",20,false);
-+  */
-+  translatePage("#tblStatus");
-+
-+</script>
-+
+   </tr>
+ 
+   <!--
 --- occu/WebUI/www/rega/pages/tabs/user/systemConfigUser.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/user/systemConfigUser.htm
-@@ -1,47 +1,57 @@
--<%
--  system.SetSessionVar("sessionTAB", "systemconfigUser");
--%>
--<script type="text/javascript">
--  setPath(translateKey("menuSettingsPage"));
--</script>
--
--<table class="StdTable" cellspacing="20">
--  <colgroup>
--    <col width="25%" />
--    <col width="25%" />
--    <col width="25%" />
--    <col width="25%" />
--  </colgroup>
--  <tr class="CLASS06100">
+@@ -13,25 +13,35 @@
+     <col width="25%" />
+   </colgroup>
+   <tr class="CLASS06100">
 -    <!-- Favoriten -->
--    <td>
++    <!-- Benutzerverwaltung -->
+     <td>
 -      <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
--      <ul>
++      <div  class="StdTableBtn" onclick="WebUI.enter(UserAdminPageUser);">${btnSettingsUserAdministration}</div>
+       <ul>
 -        <li>${lblSettingsFavorites1User}</li>
 -        <li>${lblSettingsFavorites2User}</li>
 -        <li>${lblSettingsFavorites3}</li>
--      </ul>
--    </td>
--    
--    <!-- Benutzerverwaltung -->
--    <td>
--      <div  class="StdTableBtn" onclick="WebUI.enter(UserAdminPageUser);">${btnSettingsUserAdministration}</div>
--      <ul>
--        <li>${lblSettingsUserAdministrationUser}</li>
--      </ul>
--    </td>
--    <td class="CLASS06101"></td>
--    <td class="CLASS06101"></td>
--  </tr>
--  <tr>
--    <td class="CLASS06101"></td>
--    <td class="CLASS06101"></td>
--    <td class="CLASS06101"></td>
--    <td class="CLASS06101"></td>
--  </tr>
--</table>
--
--<script type="text/javascript">
--  setFooter("");
--  translatePage("#content");
--</script>
-+<%
-+  system.SetSessionVar("sessionTAB", "systemconfigUser");
-+%>
-+<script type="text/javascript">
-+  setPath(translateKey("menuSettingsPage"));
-+</script>
-+
-+<table class="StdTable" cellspacing="20">
-+  <colgroup>
-+    <col width="25%" />
-+    <col width="25%" />
-+    <col width="25%" />
-+    <col width="25%" />
-+  </colgroup>
-+  <tr class="CLASS06100">
-+
-+    <!-- Benutzerverwaltung -->
-+    <td>
-+      <div  class="StdTableBtn" onclick="WebUI.enter(UserAdminPageUser);">${btnSettingsUserAdministration}</div>
-+      <ul>
 +        <li>${lblSettingsUserAdministrationUser}</li>
 +      </ul>
 +    </td>
++
++    <!-- Diagramme -->
 +    <td>
 +      <div class="StdTableBtn" onclick="WebUI.enter(CreateDiagramPage);">${btnSettingsDiagrams}</div>
 +      <ul>
@@ -722,33 +311,26 @@
 +        <li>${lblSettingsDiagrams2}</li>
 +        <li>${lblSettingsDiagrams3}</li>
 +        <li>${lblSettingsDiagrams4}</li>
-+      </ul>
-+    </td>
-+
+       </ul>
+     </td>
+     
+-    <!-- Benutzerverwaltung -->
 +    <!-- Favoriten -->
-+    <td>
+     <td>
+-      <div  class="StdTableBtn" onclick="WebUI.enter(UserAdminPageUser);">${btnSettingsUserAdministration}</div>
 +      <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
-+      <ul>
+       <ul>
+-        <li>${lblSettingsUserAdministrationUser}</li>
 +        <li>${lblSettingsFavorites1User}</li>
 +        <li>${lblSettingsFavorites2User}</li>
 +        <li>${lblSettingsFavorites3}</li>
-+      </ul>
-+    </td>
-+    <td class="CLASS06101"></td>    
-+
-+  </tr>
-+  <tr>
-+    <td class="CLASS06101"></td>
-+    <td class="CLASS06101"></td>
-+    <td class="CLASS06101"></td>
-+    <td class="CLASS06101"></td>
-+  </tr>
-+</table>
-+
-+<script type="text/javascript">
-+  setFooter("");
-+  translatePage("#content");
-+</script>
+       </ul>
+     </td>
+     <td class="CLASS06101"></td>
+-    <td class="CLASS06101"></td>
+   </tr>
+   <tr>
+     <td class="CLASS06101"></td>
 --- occu/WebUI/www/webui/js/mainmenu/admin.js.orig
 +++ occu/WebUI/www/webui/js/mainmenu/admin.js
 @@ -7,14 +7,14 @@
@@ -771,7 +353,7 @@
  
  	]},
    {id: "menuProgramsLinksPage", align: "left", action: function() { ConfigData.check(function() { WebUI.enter(LinksAndProgramsPage); }); }, submenu:
-@@ -24,20 +24,19 @@
+@@ -24,19 +24,19 @@
    ]},
    {id: "menuSettingsPage", align: "left", action: function() { ConfigData.check(function() { WebUI.enter(SystemConfigPage); }); }, submenu:
    [ 
@@ -787,19 +369,17 @@
 -    {id: "submenuCreateDiagram"     , action: function() { ConfigData.check(function() { WebUI.enter(CreateDiagramPage); } ); } },
      {id: "submenuCreateGroups"     , action: function() { ConfigData.check(function() { WebUI.enter(CreateGroupPage); } );  } },
 +    {id: "submenuRooms"               , action: function() { ConfigData.check(function() { WebUI.enter(RoomListPage); }); }      },
++
      //{id: "submenuCreateTestPage"     , action: function() { ConfigData.check(function() { WebUI.enter(CreateTestPage); } );  } },
      //{id: "submenuDeviceFirmware"     , action: function() { ConfigData.check(function() { WebUI.enter(DeviceFirmware); } );  } },
 -    {id: "submenuDeviceFirmwareInformation"     , action: function() { ConfigData.check(function() { WebUI.enter(DeviceFirmwareInformation); } );  } },
 -
 -    {id: "submenuUserManagement"  , action: function() { WebUI.enter(UserAdminPageAdmin); }},
--    {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  },
+     {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  },
 -    {id: "submenuFavorites"           , action: function() { ConfigData.check(function() { WebUI.enter(FavoriteListPage); } ); } },
--    {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } }
-+    {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } },
-+    {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  }
+     {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } }
  
    ]},
-   {id: "menuHelpPage"          , align: "right", action: function() { WebUI.enter(HelpPage); }, submenu: [ ]},
 --- occu/WebUI/www/webui/js/mainmenu/user.js.orig
 +++ occu/WebUI/www/webui/js/mainmenu/user.js
 @@ -7,14 +7,14 @@

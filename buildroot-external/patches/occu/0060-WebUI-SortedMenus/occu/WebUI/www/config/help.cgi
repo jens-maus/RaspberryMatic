@@ -73,8 +73,6 @@ proc action_put_page {} {
           puts "<li>26789 Leer</li>"
           puts "<li>Germany</li>"
           # puts "<li>DOM [rega dom.BuildLabel()]</li>"
-          puts "<li>Menu icons made by <a target='_blank' href=\"https://www.flaticon.com/authors/smartline\">Smartline</a> from <a href=\"https://www.flaticon.com/\">www.flaticon.com</a> is licensed by <a target='_blank' href=\"http://creativecommons.org/licenses/by/3.0/\" >CC 3.0 BY</a></li>"
-          puts "<li>Menu icons made by <a target='_blank' href=\"https://www.flaticon.com/authors/creaticca-creative-agency\">Creaticca Creative Agency</a> from <a href=\"https://www.flaticon.com/\">www.flaticon.com</a> is licensed by <a target='_blank' href=\"http://creativecommons.org/licenses/by/3.0/\" >CC 3.0 BY</a></li>"
           puts "<li>Menu icons made by <a target='_blank' href=\"http://www.icons8.de\">Icons8</a></li>"
           puts "<li><a target='_blank' href=\"$HOMEMATIC_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
           puts "<li><a target='_blank' href=\"$HOMEMATIC_IP_URL/start.html\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"

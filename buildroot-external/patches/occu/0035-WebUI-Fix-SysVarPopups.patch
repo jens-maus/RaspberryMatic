@@ -9,26 +9,6 @@
          
          WriteLine("<td class='GrayBkg'>");
          string s = "Unbekannt: " # sysvar.ValueSubType();
---- occu/WebUI/www/rega/pages/msg/sysVarsArrayAll.htm.orig
-+++ occu/WebUI/www/rega/pages/msg/sysVarsArrayAll.htm
-@@ -20,7 +20,7 @@
-           Write("tmp['trid'] = 'svd"#oSysVar.ID()#"';");
-           Write("tmp['name'] = '"#oSysVar.Name()#"';");
- 
--          Write("tmp['desc'] = '"#oSysVar.DPInfo()#"';");
-+          Write("tmp['desc'] = '"#oSysVar.DPInfo().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"';");
- 
-           ! "Set once when the system is starting for the first time by hm_autoconf - see create_sysvars
-           ! The text of the description is then fix either german or english. Therefore we have to translate the value here
-@@ -57,7 +57,7 @@
-           { 
-             Write("tmp['type'] = 'enum';");
-             Write("tmp['typenames'] = translateKey('lblValueList');");
--            Write("tmp['values'] = '"#oSysVar.ValueList()#"';");
-+            Write("tmp['values'] = '"#oSysVar.ValueList().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"';");
-           }
-           if (iVST == istBool)
-           { 
 --- occu/WebUI/www/rega/pages/msg/sysVarsArray.htm.orig
 +++ occu/WebUI/www/rega/pages/msg/sysVarsArray.htm
 @@ -19,7 +19,7 @@
@@ -41,6 +21,26 @@
            ! "Set once when the system is starting for the first time by hm_autoconf - see create_sysvars
            ! The text of the description is then fix either german or english. Therefore we have to translate the value here
 @@ -55,7 +55,7 @@
+           { 
+             Write("tmp['type'] = 'enum';");
+             Write("tmp['typenames'] = translateKey('lblValueList');");
+-            Write("tmp['values'] = '"#oSysVar.ValueList()#"';");
++            Write("tmp['values'] = '"#oSysVar.ValueList().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"';");
+           }
+           if (iVST == istBool)
+           { 
+--- occu/WebUI/www/rega/pages/msg/sysVarsArrayAll.htm.orig
++++ occu/WebUI/www/rega/pages/msg/sysVarsArrayAll.htm
+@@ -20,7 +20,7 @@
+           Write("tmp['trid'] = 'svd"#oSysVar.ID()#"';");
+           Write("tmp['name'] = '"#oSysVar.Name()#"';");
+ 
+-          Write("tmp['desc'] = '"#oSysVar.DPInfo()#"';");
++          Write("tmp['desc'] = '"#oSysVar.DPInfo().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"';");
+ 
+           ! "Set once when the system is starting for the first time by hm_autoconf - see create_sysvars
+           ! The text of the description is then fix either german or english. Therefore we have to translate the value here
+@@ -57,7 +57,7 @@
            { 
              Write("tmp['type'] = 'enum';");
              Write("tmp['typenames'] = translateKey('lblValueList');");

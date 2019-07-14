@@ -1,15 +1,3 @@
---- occu/firmware/HM-MOD-UART/fwmap.orig
-+++ occu/firmware/HM-MOD-UART/fwmap
-@@ -1,7 +1,7 @@
- #Type           Filename                Version
- 
- #Coprozessor
--CCU2                    coprocessor_update.eq3                         	1.4.1		# CoProzessor HM-MOD-UART
-+#CCU2                    coprocessor_update.eq3                         	1.4.1		# CoProzessor HM-MOD-UART
- 
--#CCU2			dualcopro_si1002_update_blhm.eq3		2.8.6		# Dual CoProzessor HM-MOD-UART
-+CCU2			dualcopro_si1002_update_blhm.eq3		2.8.6		# Dual CoProzessor HM-MOD-UART
- 
 --- occu/WebUI/www/api/backup/version.cgi.orig
 +++ occu/WebUI/www/api/backup/version.cgi
 @@ -1 +1,11 @@
@@ -649,3 +637,15 @@
  };
  
  getAjaxLoadElem = function() {
+--- occu/firmware/HM-MOD-UART/fwmap.orig
++++ occu/firmware/HM-MOD-UART/fwmap
+@@ -1,7 +1,7 @@
+ #Type           Filename                Version
+ 
+ #Coprozessor
+-CCU2                    coprocessor_update.eq3                         	1.4.1		# CoProzessor HM-MOD-UART
++#CCU2                    coprocessor_update.eq3                         	1.4.1		# CoProzessor HM-MOD-UART
+ 
+-#CCU2			dualcopro_si1002_update_blhm.eq3		2.8.6		# Dual CoProzessor HM-MOD-UART
++CCU2			dualcopro_si1002_update_blhm.eq3		2.8.6		# Dual CoProzessor HM-MOD-UART
+ 

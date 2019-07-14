@@ -1,0 +1,8 @@
+config BR2_PACKAGE_RNDADDTOENTCNT
+	bool "rndaddtoentcnt"
+	help
+	  rndaddtoentcnt: A tool to update the entropy count
+	  of /dev/urandom in the kernel after having feed in
+	  some entropy.
+	  
+	  https://github.com/jumpnow/rndaddtoentcnt

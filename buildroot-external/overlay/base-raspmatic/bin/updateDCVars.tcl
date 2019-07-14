@@ -1,7 +1,7 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.3
-# Copyright (c) 2018 Andreas Buenting, Jens Maus
+# DutyCycle Script v3.4
+# Copyright (c) 2018-2019 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -119,7 +119,23 @@ proc cfg::parse_file {filename} {
 }
 
 ###################################################################
-# Helper functio to create/set/rename a ReGa variable using the
+# Helper function encode a JSON string
+proc json_toString { str } {
+  set map {
+    "\"" "\\\""
+    "\\" "\\\\"
+    "/"  "\\/"
+    "\b"  "\\b"
+    "\f"  "\\f"
+    "\n"  "\\n"
+    "\r"  "\\r"
+    "\t"  "\\t"
+  }
+  return "\"[string map $map $str]\""
+}
+
+###################################################################
+# Helper function to create/set/rename a ReGa variable using the
 # tclrega interface
 proc setDutyCycleSV {name desc value serial} {
   set prefix "DutyCycle"
@@ -174,7 +190,10 @@ proc setDutyCycleSV {name desc value serial} {
     }
   "
 
+  # execute the ReGa script
   rega_script $script
+
+  return $svName
 }
 
 ###################################################################
@@ -189,6 +208,10 @@ if {[llength [cfg::sections]] > 1} {
   set result [catch {set gateways [xmlrpc http://127.0.0.1:$port/ listBidcosInterfaces]}]
   if {$result == 0} {
 
+    # catch all dutyCycle values in an additional JSON array
+    set jsonResult "\["
+    set first 1
+
     # iterate over all gateways returned by listBidcosInterfaces
     foreach _gateway $gateways {
       array set gateway $_gateway
@@ -202,11 +225,11 @@ if {[llength [cfg::sections]] > 1} {
         }
 
         if {$gateway(TYPE) == "CCU2"} {
-          setDutyCycleSV "" "DutyCycle CCU" $dutycycle ""
+          set sysVarName [setDutyCycleSV "" "DutyCycle CCU" $dutycycle ""]
         } else {
+          set name ""
           # get the cleartext name a user assigned for that gateway
           # we try to find it based on the defined serial number
-          set name ""
           foreach section [cfg::sections] {
             set result [catch {set serNum [cfg::getvar "Serial Number" "$section"]}]
             if {$result == 0} {
@@ -215,8 +238,17 @@ if {[llength [cfg::sections]] > 1} {
               }
             }
           }
-          setDutyCycleSV $name "DutyCycle LGW ($gateway(ADDRESS))" $dutycycle $gateway(ADDRESS)
+          set sysVarName [setDutyCycleSV $name "DutyCycle LGW ($gateway(ADDRESS))" $dutycycle $gateway(ADDRESS)]
         }
+
+        # add the dutyCycle to our jsonResult array
+        if { 1 != $first } then { append jsonResult "," } else { set first 0 }
+        append jsonResult "\{"
+        append jsonResult "\"address\":[json_toString $gateway(ADDRESS)]"
+        append jsonResult ",\"sysVar\":[json_toString $sysVarName]"
+        append jsonResult ",\"dutyCycle\":[json_toString $gateway(DUTY_CYCLE)]"
+        append jsonResult ",\"type\":[json_toString $gateway(TYPE)]"
+        append jsonResult "\}"
 
         set infoTxt "DutyCycle-$gateway(ADDRESS) / $gateway(TYPE) / FW: $gateway(FIRMWARE_VERSION) / DC: $dutycycle%"
         if {$dutycycle >= 98} {
@@ -228,6 +260,14 @@ if {[llength [cfg::sections]] > 1} {
         puts "$infoTxt"
       }
     }
+
+    # finish jsonResult array
+    append jsonResult "\]"
+
+    # write to file
+    set jsonOutputFile [open /tmp/dutycycle.json w]
+    puts $jsonOutputFile $jsonResult
+    close $jsonOutputFile
   }
 }
 

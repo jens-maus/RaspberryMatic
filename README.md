@@ -12,7 +12,7 @@
 [![Twitter](https://img.shields.io/twitter/follow/RaspberryMatic.svg?style=social&label=Follow)](https://twitter.com/RaspberryMatic)
 [![GitHub stars](https://img.shields.io/github/stars/jens-maus/RaspberryMatic.svg?style=social&label=Star)](https://github.com/jens-maus/RaspberryMatic/stargazers/)
 
-The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible operating system for embedded single board computers (SBC) like the [RaspberryPi](https://www.raspberrypi.org/) or [Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/). It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full operating system image that can be flashed and then used in a RaspberryPi/Tinkerboard as the main operating system for controlling all HomeMatic compatible devices with full compatibility to a CCU device directly sold by eQ-3.
+The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible operating system for embedded single board computers (SBC) like the [RaspberryPi](https://www.raspberrypi.org/) or [Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/). It is meant to provide a an alternative operating system for [CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html) or [ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html) systems. It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full operating system image that can be flashed and then used in a RaspberryPi/Tinkerboard as the main operating system for controlling all HomeMatic compatible devices with full compatibility to a CCU device directly sold by eQ-3.
 
 ## :cookie: Features
 * 100% HomeMatic [CCU2](http://www.eq-3.com/products/homematic/control-units-and-gateways/homematic-central-control-unit-ccu2.html)/[CCU3](http://www.eq-3.com/products/homematic/control-units-and-gateways/-473.html) system compliant using latest [OCCU](https://github.com/eq-3/occu) software environment
@@ -81,8 +81,8 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 * Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
 * Support to be used without any GPIO RF module HAT when just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
-* Based on latest [Buildroot 2019.05](http://buildroot.org/) lightweight Linux operating system
-* Latest Linux kernel (RaspberryPi: [4.19.42](https://github.com/raspberrypi/linux/tree/rpi-4.19.y), Tinkerboard: [4.19.51](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
+* Based on latest [Buildroot 2019.05.1](http://buildroot.org/) lightweight Linux operating system
+* Latest Linux kernel (RaspberryPi: [4.19.57](https://github.com/raspberrypi/linux/tree/rpi-4.19.y), Tinkerboard: [4.19.58](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only) or from internal eMMC storage (ASUS Tinkerboard S)
 * Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks
@@ -108,9 +108,20 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 * No web-based configuration for configuring NUT (UPS) support (work in progress)
 
 ## :computer: Requirements
-<img src="https://files.elv.com/bilder/artikel/Produkte/15/1529/152941/Internet//gross/152941_w01_modulplatine.jpg" alt="RaspberryPi equipped with RPI-RF-MOD" width=300 align=right>
+#### Existing product
+You can use one of the following existing ready-to-go products:
 
-1. One of the following embedded hardware boards:
+<img src="https://files.elv.com/bilder/artikel/Produkte/15/1519/151965/Internet/normalneu/151965_F03_GeCCU3.jpg" alt="CCU3" width=150 align=right>
+
+1. [CCU3](https://www.elv.de/homematic-ip-smart-home-zentrale-ccu3-inklusive-mediola-aio-creator-neo-lizenz.html)
+2. [ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)
+
+#### Build-your-Own hardware
+... or you can build your own embedded system using the following components:
+
+<img src="https://files.elv.com/bilder/artikel/Produkte/25/2502/250297/Internet/normalneu/250297_w01_charly.jpg" alt="ELV Charly with RaspberryPi+RPI-RF-MOD" width=200 align=right>
+
+1. One of the following hardware boards:
    * [RaspberryPi3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
    * [RaspberryPi3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
    * [RaspberryPi3 Model A+](https://www.raspberrypi.org/products/raspberry-pi-3-model-a-plus/)

@@ -111,6 +111,7 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 #### Existing product
 <img src="https://www.homematic-ip.com/assets/images/8/hmip-zentrale-ccu3-schraeg_151965a0-8ad9a2a2.png" alt="CCU3" width=150 align=right>
 You can use one of the following existing ready-to-go products:
+
 1. [CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html)
 2. [ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)
 

@@ -111,15 +111,15 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 #### Existing product
 You can use one of the following existing ready-to-go products:
 
-<img src="https://www.homematic-ip.com/assets/images/8/hmip-zentrale-ccu3-schraeg_151965a0-8ad9a2a2.png" alt="CCU3" width=150 align=right>
+<img src="https://files.elv.com/bilder/artikel/Produkte/15/1519/151965/Internet/normalneu/151965_F03_GeCCU3.jpg" alt="CCU3" width=150 align=right>
 
-1. [CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html)
+1. [CCU3](https://www.elv.de/homematic-ip-smart-home-zentrale-ccu3-inklusive-mediola-aio-creator-neo-lizenz.html)
 2. [ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)
 
 #### Build-your-Own hardware
 ... or you can build your own embedded system using the following components:
 
-<img src="https://files.elv.com/bilder/artikel/Produkte/15/1529/152941/Internet//gross/152941_w01_modulplatine.jpg" alt="RaspberryPi equipped with RPI-RF-MOD" width=200 align=right>
+<img src="https://files.elv.com/bilder/artikel/Produkte/25/2502/250297/Internet/normalneu/250297_w01_charly.jpg" alt="ELV Charly with RaspberryPi+RPI-RF-MOD" width=200 align=right>
 
 1. One of the following hardware boards:
    * [RaspberryPi3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)

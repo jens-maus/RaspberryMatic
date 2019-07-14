@@ -4,6 +4,8 @@
 # patchset files by generating diff output of orig<>real file differences in
 # all the 0000-XXXX folders
 
+export LC_ALL=C
+
 patchdirs=$(find buildroot/package -maxdepth 1 -type d | sort)
 
 #rm *.patch

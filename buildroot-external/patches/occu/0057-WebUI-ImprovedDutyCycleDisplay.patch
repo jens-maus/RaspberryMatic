@@ -118,7 +118,7 @@
                    string sSysVarVal = "";
                    object cObjTmp = oDP;
                    integer iVT = oDP.ValueType();
-@@ -250,13 +250,29 @@
+@@ -250,13 +250,38 @@
                }
               %>
  
@@ -130,7 +130,6 @@
 -            <tr name="trDutyCycle" style="visibility: hidden">
 -              <td>${lblDutyCycle}</td>
 -              <td> <div id="dutyCycleProgress"  align="right"><div id="dutyCycleProgressBar"></div></div> </td>
-+            <tr name="trDutyCycle" style="display: none"></tr>
 +            <tr name="trDutyCycle0" style="display: none">
 +              <td id="dutyCycleAddr0" align="left"</td>
 +              <td><div id="dutyCycleProgress0" align="right"><div id="dutyCycleProgressBar0"></div></div></td>
@@ -150,6 +149,16 @@
 +              <td id="dutyCycleAddr3" align="left"</td>
 +              <td><div id="dutyCycleProgress3" align="right"><div id="dutyCycleProgressBar3"></div></div></td>
 +              <td style="white-space: nowrap"><div id="dutyCycleVal3" style="width:75%; text-align:left"></div></td>
++            </tr>
++            <tr name="trDutyCycle4" style="display: none">
++              <td id="dutyCycleAddr4" align="left"</td>
++              <td><div id="dutyCycleProgress4" align="right"><div id="dutyCycleProgressBar4"></div></div></td>
++              <td style="white-space: nowrap"><div id="dutyCycleVal4" style="width:75%; text-align:left"></div></td>
++            </tr>
++            <tr name="trDutyCycle5" style="display: none">
++              <td id="dutyCycleAddr5" align="left"</td>
++              <td><div id="dutyCycleProgress5" align="right"><div id="dutyCycleProgressBar5"></div></div></td>
++              <td style="white-space: nowrap"><div id="dutyCycleVal5" style="width:75%; text-align:left"></div></td>
              </tr>
  
            </table>
@@ -160,7 +169,7 @@
  progress::-webkit-progress-value { background: #3678c9; }
  
 -#dutyCycleProgress {
-+#dutyCycleProgress0, #dutyCycleProgress1, #dutyCycleProgress2, #dutyCycleProgress3 {
++#dutyCycleProgress0, #dutyCycleProgress1, #dutyCycleProgress2, #dutyCycleProgress3, #dutyCycleProgress4, #dutyCycleProgress5 {
    width: 75%;
  
    background: -moz-linear-gradient(0deg, rgba(13,255,0,1) 0%, rgba(255,255,0,1) 63%, rgba(255,0,0,1) 100%); /* ff3.6+ */
@@ -169,13 +178,13 @@
  }
  
 -#dutyCycleProgressBar {
-+#dutyCycleProgressBar0, #dutyCycleProgressBar1, #dutyCycleProgressBar2, #dutyCycleProgressBar3 {
++#dutyCycleProgressBar0, #dutyCycleProgressBar1, #dutyCycleProgressBar2, #dutyCycleProgressBar3, #dutyCycleProgressBar4, #dutyCycleProgressBar5 {
    width: 1%;
    height: 12px;
    background-color: #d9d9d9;
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -27868,47 +27868,56 @@
+@@ -27868,47 +27868,58 @@
        dcNotAvailable = -1,
        dcAlarm = 89;  // Attention when dc >= 90%
  
@@ -245,6 +254,8 @@
 +            dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
 +            if (iface.type === "CCU2") {
 +              dutyCycleAddrElm.text("DutyCycle CCU:");
++            } else if(iface.name !== "") {
++              dutyCycleAddrElm.text("DutyCycle LGW ("+iface.name+"):");
 +            } else {
 +              dutyCycleAddrElm.text("DutyCycle LGW ("+iface.address+"):");
 +            }

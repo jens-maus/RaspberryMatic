@@ -224,10 +224,10 @@ if {[llength [cfg::sections]] > 1} {
           set dutycycle -1
         }
 
+        set name ""
         if {$gateway(TYPE) == "CCU2"} {
           set sysVarName [setDutyCycleSV "" "DutyCycle CCU" $dutycycle ""]
         } else {
-          set name ""
           # get the cleartext name a user assigned for that gateway
           # we try to find it based on the defined serial number
           foreach section [cfg::sections] {
@@ -245,6 +245,7 @@ if {[llength [cfg::sections]] > 1} {
         if { 1 != $first } then { append jsonResult "," } else { set first 0 }
         append jsonResult "\{"
         append jsonResult "\"address\":[json_toString $gateway(ADDRESS)]"
+        append jsonResult ",\"name\":[json_toString $name]"
         append jsonResult ",\"sysVar\":[json_toString $sysVarName]"
         append jsonResult ",\"dutyCycle\":[json_toString $gateway(DUTY_CYCLE)]"
         append jsonResult ",\"type\":[json_toString $gateway(TYPE)]"

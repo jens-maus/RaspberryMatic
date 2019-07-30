@@ -27909,9 +27909,9 @@ showDutyCycle = function() {
             }
             trPartingLineElm.show();
             showPartingLine = true;
-            trDutyCycle.css("visibility", "visible");
+            trDutyCycle.css("display", "table-row");
           } else {
-            trDutyCycle.css("visibility", "hidden");
+            trDutyCycle.css("display", "none");
           }
 
           if (!showPartingLine) {

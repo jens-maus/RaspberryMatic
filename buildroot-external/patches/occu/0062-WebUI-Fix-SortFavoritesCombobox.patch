@@ -1,0 +1,10 @@
+--- occu/WebUI/www/rega/pages/startpage.htm.orig
++++ occu/WebUI/www/rega/pages/startpage.htm
+@@ -50,6 +50,7 @@
+             { 
+               Write( '<option>${noFav}</option>' ); 
+             }
++            oFavoriteList.SortByName();
+             string s;
+             foreach(s,oFavoriteList.EnumIDs())
+             {

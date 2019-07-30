@@ -385,10 +385,15 @@ check program voltageCheckEnabled with path "/usr/bin/test -e /usr/bin/vcgencmd"
     if status != 0 for 1 cycles then unmonitor
 
 # internet connectivity monitoring
-check program hasInternet with path "/usr/bin/test -e /var/status/hasInternet"
+check program internetCheck with path "/usr/bin/test -e /var/status/hasInternet"
     group system
     if status != 0 for 24 cycles then
       exec "/bin/triggerAlarm.tcl 'No internet connection detected' WatchDog-Alarm"
+    depends on internetCheckEnabled
+
+check program internetCheckEnabled with path "/usr/bin/test -e /etc/config/internetCheckDisabled"
+    group system
+    if status == 0 for 1 cycles then unmonitor
 
 # include user-defined configuration files
 include /usr/local/etc/monit*.cfg

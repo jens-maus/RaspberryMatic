@@ -312,9 +312,9 @@ check process crond with pidfile /var/run/crond.pid
 # system cpu/memory monitoring
 check system $HOST
     group system
-    if cpu usage > 95% for 5 cycles then
+    if cpu usage > 95% for 24 cycles then
       exec "/bin/triggerAlarm.tcl 'high CPU usage (>95%) detected' WatchDog-Alarm"
-    if memory usage > 95% for 5 cycles then
+    if memory usage > 95% for 24 cycles then
       exec "/bin/triggerAlarm.tcl 'high memory usage (>95%) detected' WatchDog-Alarm"
 
 # filesystem space monitoring

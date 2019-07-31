@@ -1,5 +1,5 @@
---- occu/WebUI/www/rega/pages/startpage.htm.orig
-+++ occu/WebUI/www/rega/pages/startpage.htm
+--- occu/WebUI/www/rega/pages/tabs/startpage.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/startpage.htm
 @@ -50,6 +50,7 @@
              { 
                Write( '<option>${noFav}</option>' ); 

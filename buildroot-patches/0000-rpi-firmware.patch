@@ -1,9 +1,29 @@
+--- buildroot/package/rpi-firmware/Config.in.orig
++++ buildroot/package/rpi-firmware/Config.in
+@@ -40,11 +40,17 @@
+ 	  The cut-down firmware, for emergency situations, with only
+ 	  features required to boot a Linux kernel.
+ 
++config BR2_PACKAGE_RPI_FIRMWARE_PI4
++	bool "Pi 4"
++	help
++	  The Raspberry Pi 4 boot files
++
+ endchoice
+ 
+ config BR2_PACKAGE_RPI_FIRMWARE_BOOT
+ 	string
+ 	default ""      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT
++	default "4"     if BR2_PACKAGE_RPI_FIRMWARE_PI4
+ 	default "_x"    if BR2_PACKAGE_RPI_FIRMWARE_X
+ 	default "_cd"   if BR2_PACKAGE_RPI_FIRMWARE_CD
+ 
 --- buildroot/package/rpi-firmware/rpi-firmware.hash.orig
 +++ buildroot/package/rpi-firmware/rpi-firmware.hash
 @@ -1,2 +1,2 @@
  # Locally computed
 -sha256 e911f6342ea8aa9380cae97c6f5ac4ddd370527265f23d5b5d4b2c6f679d4ba8 rpi-firmware-ebf7b40cdc6effe7ffa3fd5195e8be01b94f80da.tar.gz
-+sha256 58bdf8e78b39811124ed49c580418a97ec7f122d70d8deca99cf4ad8e7319110 rpi-firmware-cbf712782411e563be8c5c3d514f3ff10a5cc8d3.tar.gz
++sha256 62a63b4a8be10da779342799148919d1a50c1939bf6cae93d61cb1b5daed810f rpi-firmware-cba4be275b9943b353ea2e5201ab2badd4c760e9.tar.gz
 --- buildroot/package/rpi-firmware/rpi-firmware.mk.orig
 +++ buildroot/package/rpi-firmware/rpi-firmware.mk
 @@ -4,7 +4,7 @@
@@ -11,16 +31,18 @@
  ################################################################################
  
 -RPI_FIRMWARE_VERSION = ebf7b40cdc6effe7ffa3fd5195e8be01b94f80da
-+RPI_FIRMWARE_VERSION = cbf712782411e563be8c5c3d514f3ff10a5cc8d3
++RPI_FIRMWARE_VERSION = cba4be275b9943b353ea2e5201ab2badd4c760e9
  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
  RPI_FIRMWARE_LICENSE = BSD-3-Clause
  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
-@@ -45,6 +45,8 @@
+@@ -43,8 +43,8 @@
+ 
+ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
  	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
- 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
- 	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
-+	$(INSTALL) -D -m 0644 $(@D)/boot/start4.elf $(BINARIES_DIR)/rpi-firmware/start4.elf
-+	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4.dat $(BINARIES_DIR)/rpi-firmware/fixup4.dat
+-	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+-	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
++	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf
++	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat
  	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
  	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
  	$(RPI_FIRMWARE_INSTALL_DTB)

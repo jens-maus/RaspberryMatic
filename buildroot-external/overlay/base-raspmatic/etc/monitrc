@@ -312,9 +312,9 @@ check process crond with pidfile /var/run/crond.pid
 # system cpu/memory monitoring
 check system $HOST
     group system
-    if cpu usage > 95% for 5 cycles then
+    if cpu usage > 95% for 24 cycles then
       exec "/bin/triggerAlarm.tcl 'high CPU usage (>95%) detected' WatchDog-Alarm"
-    if memory usage > 95% for 5 cycles then
+    if memory usage > 95% for 24 cycles then
       exec "/bin/triggerAlarm.tcl 'high memory usage (>95%) detected' WatchDog-Alarm"
 
 # filesystem space monitoring
@@ -385,10 +385,15 @@ check program voltageCheckEnabled with path "/usr/bin/test -e /usr/bin/vcgencmd"
     if status != 0 for 1 cycles then unmonitor
 
 # internet connectivity monitoring
-check program hasInternet with path "/usr/bin/test -e /var/status/hasInternet"
+check program internetCheck with path "/usr/bin/test -e /var/status/hasInternet"
     group system
     if status != 0 for 24 cycles then
       exec "/bin/triggerAlarm.tcl 'No internet connection detected' WatchDog-Alarm"
+    depends on internetCheckEnabled
+
+check program internetCheckEnabled with path "/usr/bin/test -e /etc/config/internetCheckDisabled"
+    group system
+    if status == 0 for 1 cycles then unmonitor
 
 # include user-defined configuration files
 include /usr/local/etc/monit*.cfg

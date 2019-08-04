@@ -1061,7 +1061,7 @@ function ::saveUserPwd() {
   if( oUser.UserLevel() != iulGuest )
   {
     integer targetUID = system.GetVar("userId");
-    if( (targetID == uid) || (oUser.UserLevel() == iulAdmin) )
+    if( (targetUID == uid) || (oUser.UserLevel() == iulAdmin) )
     {
       string pwd = system.GetVar("pw");
       object user = dom.GetObject(targetUID);

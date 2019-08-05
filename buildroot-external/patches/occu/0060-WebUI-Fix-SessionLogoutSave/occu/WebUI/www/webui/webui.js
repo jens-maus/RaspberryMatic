@@ -13124,8 +13124,7 @@ FirewallConfigDialog_CCU2 = Class.create({
     var response = homematic("Firewall.getConfiguration");
     if (null != response) {
       var services = response.services,
-      arIps = response.ips.join(";\n").split(";"),
-      ips = arIps[0] + ";" + arIps[1],
+      ips = response.ips.join(";\n"),
       xmlrpcAccess = "full",
       hmscriptAccess = "full";
 
@@ -27871,46 +27870,51 @@ showDutyCycle = function() {
 
     homematic("Interface.listBidcosInterfaces", {"interface": ifaceBidCosRF}, function (interfaceStatus) {
 
-      var dutyCycleProgressElem = jQuery("#dutyCycleProgress"),
-        dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"),
-        dutyCycleValElm = jQuery("#dutyCycleVal"),
-        trDutyCycle = jQuery("[name='trDutyCycle']"),
-        trPartingLineElm = jQuery("#partingLine1"),
-        dcVal,
-        width, value;
+      jQuery.each(interfaceStatus, function(index, iFace) {
+        if (iFace.type == "CCU2") {
+          var dutyCycleProgressElem = jQuery("#dutyCycleProgress"),
+            dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"),
+            dutyCycleValElm = jQuery("#dutyCycleVal"),
+            trDutyCycle = jQuery("[name='trDutyCycle']"),
+            trPartingLineElm = jQuery("#partingLine1"),
+            dcVal,
+            width, value;
 
-      if (interfaceStatus && (typeof interfaceStatus[0].dutyCycle != "undefined")) {
-        dcVal = parseInt(interfaceStatus[0].dutyCycle);
-        conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + dcUnit);
-        arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
-      } else {
-        conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
-        arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
-      }
+          if (typeof iFace.dutyCycle != "undefined") {
+            dcVal = parseInt(iFace.dutyCycle);
+            conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + dcUnit);
+            arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
+          } else {
+            conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
+            arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
+          }
 
-      if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
-        dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + dcUnit);
+          if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
+            dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + dcUnit);
 
-        width = parseInt(dutyCycleProgressElem.css("width"));
-        value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
+            width = parseInt(dutyCycleProgressElem.css("width"));
+            value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
 
-        dutyCycleProgressBarElm.css("width", value + "px");
+            dutyCycleProgressBarElm.css("width", value + "px");
 
-        if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
-          trDutyCycle.addClass("attention");
-        } else {
-          trDutyCycle.removeClass("attention");
+            if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
+              trDutyCycle.addClass("attention");
+            } else {
+              trDutyCycle.removeClass("attention");
+            }
+            trPartingLineElm.show();
+            showPartingLine = true;
+            trDutyCycle.css("visibility", "visible");
+          } else {
+            trDutyCycle.css("visibility", "hidden");
+          }
+
+          if (!showPartingLine) {
+            trPartingLineElm.hide();
+          }
+          return false; // Leave each loop
         }
-        trPartingLineElm.show();
-        showPartingLine = true;
-        trDutyCycle.css("visibility", "visible");
-      } else {
-        trDutyCycle.css("visibility", "hidden");
-      }
-
-      if (!showPartingLine) {
-        trPartingLineElm.hide();
-      }
+      });
     });
   }
 };
@@ -32829,6 +32833,7 @@ isePowerMeter.prototype = {
   initialize: function(id, opts) {
     conInfo("PowerMeter");
     var self = this;
+    this.powerMeter = "POWERMETER"; // e. g. Hm-ES-PMSw1-PL-DN-R1
     this.POWERMETER_IEC = "POWERMETER_IEC"; // e. g. Hm-ES-TX-WM
     this.energyMeterTransmitter = "ENERGIE_METER_TRANSMITTER"; // e. g. HmIP-PSM
     this.arMeasurementTypes = [];
@@ -32916,7 +32921,7 @@ isePowerMeter.prototype = {
        this.energyMeterTransmitter = e. g. a PSM or a Hm-ES-TX-WM Fw. >= 2.0.0
     */
     if (typeof paramSet.METER_TYPE == "undefined") {
-      return (this.opts.chType == this.energyMeterTransmitter) ? this.sensorTypeID.eletricity : this.sensorTypeID.iec;
+      return ((this.opts.chType == this.energyMeterTransmitter) || (this.opts.chType == this.powerMeter)) ? this.sensorTypeID.eletricity : this.sensorTypeID.iec;
     }
 
     // No IEC Sensor

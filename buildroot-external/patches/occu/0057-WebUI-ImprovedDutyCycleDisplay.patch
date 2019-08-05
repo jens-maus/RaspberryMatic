@@ -184,51 +184,18 @@
    background-color: #d9d9d9;
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -27868,47 +27868,58 @@
+@@ -27866,21 +27866,21 @@
        dcNotAvailable = -1,
        dcAlarm = 89;  // Attention when dc >= 90%
  
 -    homematic("Interface.listBidcosInterfaces", {"interface": ifaceBidCosRF}, function (interfaceStatus) {
 -
--      var dutyCycleProgressElem = jQuery("#dutyCycleProgress"),
--        dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"),
--        dutyCycleValElm = jQuery("#dutyCycleVal"),
--        trDutyCycle = jQuery("[name='trDutyCycle']"),
--        trPartingLineElm = jQuery("#partingLine1"),
--        dcVal,
--        width, value;
--
--      if (interfaceStatus && (typeof interfaceStatus[0].dutyCycle != "undefined")) {
--        dcVal = parseInt(interfaceStatus[0].dutyCycle);
--        conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + dcUnit);
--        arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
--      } else {
--        conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
--        arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
--      }
--
--      if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
--        dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + dcUnit);
--
--        width = parseInt(dutyCycleProgressElem.css("width"));
--        value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
--
--        dutyCycleProgressBarElm.css("width", value + "px");
--
--        if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
--          trDutyCycle.addClass("attention");
--        } else {
--          trDutyCycle.removeClass("attention");
--        }
--        trPartingLineElm.show();
--        showPartingLine = true;
--        trDutyCycle.css("visibility", "visible");
--      } else {
--        trDutyCycle.css("visibility", "hidden");
--      }
--
--      if (!showPartingLine) {
--        trPartingLineElm.hide();
+-      jQuery.each(interfaceStatus, function(index, iFace) {
+-        if (iFace.type == "CCU2") {
+-          var dutyCycleProgressElem = jQuery("#dutyCycleProgress"),
+-            dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"),
+-            dutyCycleValElm = jQuery("#dutyCycleVal"),
+-            trDutyCycle = jQuery("[name='trDutyCycle']"),
 +    homematic("Interface.getDutyCycle", {}, function(dcArray) {
 +      if(typeof dcArray !== "undefined") {
 +        jQuery.each(dcArray, function(index, iface) {
@@ -237,20 +204,24 @@
 +            dutyCycleValElm = jQuery("#dutyCycleVal"+index),
 +            dutyCycleAddrElm = jQuery("#dutyCycleAddr"+index),
 +            trDutyCycle = jQuery("[name='trDutyCycle"+index+"']"),
-+            trPartingLineElm = jQuery("#partingLine1"),
-+            dcVal,
-+            width, value;
-+
+             trPartingLineElm = jQuery("#partingLine1"),
+             dcVal,
+             width, value;
+ 
+-          if (typeof iFace.dutyCycle != "undefined") {
+-            dcVal = parseInt(iFace.dutyCycle);
+-            conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + dcUnit);
 +          if (typeof iface.dutyCycle !== "undefined") {
 +            dcVal = Math.floor(iface.dutyCycle);
 +            conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + " " + dcUnit);
-+            arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
-+          } else {
-+            conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
-+            arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
-+          }
-+
-+          if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
+             arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
+           } else {
+             conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
+@@ -27888,7 +27888,14 @@
+           }
+ 
+           if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
+-            dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + dcUnit);
 +            dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
 +            if (iface.type === "CCU2") {
 +              dutyCycleAddrElm.text("DutyCycle CCU:");
@@ -259,28 +230,28 @@
 +            } else {
 +              dutyCycleAddrElm.text("DutyCycle LGW ("+iface.address+"):");
 +            }
-+
-+            width = parseInt(dutyCycleProgressElem.css("width"));
-+            value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
-+
-+            dutyCycleProgressBarElm.css("width", value + "px");
-+
-+            if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
-+              trDutyCycle.addClass("attention");
-+            } else {
-+              trDutyCycle.removeClass("attention");
-+            }
-+            trPartingLineElm.show();
-+            showPartingLine = true;
+ 
+             width = parseInt(dutyCycleProgressElem.css("width"));
+             value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
+@@ -27902,17 +27909,16 @@
+             }
+             trPartingLineElm.show();
+             showPartingLine = true;
+-            trDutyCycle.css("visibility", "visible");
 +            trDutyCycle.css("display", "table-row");
-+          } else {
+           } else {
+-            trDutyCycle.css("visibility", "hidden");
 +            trDutyCycle.css("display", "none");
-+          }
-+
-+          if (!showPartingLine) {
-+            trPartingLineElm.hide();
-+          }
+           }
+ 
+           if (!showPartingLine) {
+             trPartingLineElm.hide();
+           }
+-          return false; // Leave each loop
+-        }
+-      });
 +        });
-       }
++      }
      });
    }
+ };

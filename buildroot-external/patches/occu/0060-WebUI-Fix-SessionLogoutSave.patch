@@ -20,10 +20,13 @@
  }
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -25975,6 +25975,7 @@
+@@ -25972,7 +25972,9 @@
+   regaMonitor.stop();
+   InterfaceMonitor.stop();
    // The second url-param has to be appended by a '?' instead of a '&'
-   //location.href = "/logout.htm?sid=" + SessionId+"?lang="+getLang();
-   location.href = "/logout.htm?lang="+getLang();
+-  location.href = "/logout.htm?sid=" + SessionId+"?lang="+getLang();
++  //location.href = "/logout.htm?sid=" + SessionId+"?lang="+getLang();
++  location.href = "/logout.htm?lang="+getLang();
 +  homematic('Session.logout', {});
  };
  

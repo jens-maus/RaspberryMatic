@@ -20,7 +20,7 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 * Integrated WebUI-based firmware update mechanism and Recovery System to perform maintenance operations such as system restore.
 * Enabled Preemptive kernel support (`PREEMPT`) to minimize latencies and improve CCU operation properties
 * Read-only root file system to minimize write operations on SD card
-* Includes embedded JAVA8 runtime environment ([1.8.0_212-8.38.0.163](http://www.azul.com/downloads/zulu-embedded/))
+* Includes embedded JAVA8 runtime environment ([1.8.0_222-8.40.0.178](http://www.azul.com/downloads/zulu-embedded/))
 * Full IPv6 support and default HTTPS enabled WebUI support
 * Auto-resizing `/usr/local` partition to utilize the full capacity of the SD card or USB stick
 * Hardware WatchDog support automatically rebooting the system upon severe hardware/lockup problems
@@ -82,7 +82,7 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 * Support to be used without any GPIO RF module HAT when just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
 * Based on latest [Buildroot 2019.05.1](http://buildroot.org/) lightweight Linux operating system
-* Latest Linux kernel (RaspberryPi: [4.19.57](https://github.com/raspberrypi/linux/tree/rpi-4.19.y), Tinkerboard: [4.19.58](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
+* Latest Linux kernel (RaspberryPi: [4.19.58](https://github.com/raspberrypi/linux/tree/rpi-4.19.y), Tinkerboard: [4.19.63](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only) or from internal eMMC storage (ASUS Tinkerboard S)
 * Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
 * Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks

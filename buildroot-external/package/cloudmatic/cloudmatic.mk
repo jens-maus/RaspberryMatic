@@ -3,7 +3,7 @@
 # CloudMatic/meine-homematic.de support
 #
 #############################################################
-CLOUDMATIC_VERSION = 191de2bea42ed9119d3639fb28a982a0fd04af24
+CLOUDMATIC_VERSION = 76274aa77bb494aac3b4bfbc6c6e89d382852a96
 CLOUDMATIC_SITE = $(call github,jens-maus,CloudMatic-CCUAddon,$(CLOUDMATIC_VERSION))
 CLOUDMATIC_LICENSE = PROPERITARY
 

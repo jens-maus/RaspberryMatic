@@ -122,6 +122,7 @@ You can use one of the following existing ready-to-go products:
 <img src="https://files.elv.com/bilder/artikel/Produkte/25/2502/250297/Internet/normalneu/250297_w01_charly.jpg" alt="ELV Charly with RaspberryPi+RPI-RF-MOD" width=200 align=right>
 
 1. One of the following hardware boards:
+   * [RaspberryPi4 Model B](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)
    * [RaspberryPi3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
    * [RaspberryPi3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
    * [RaspberryPi3 Model A+](https://www.raspberrypi.org/products/raspberry-pi-3-model-a-plus/)

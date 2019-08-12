@@ -106,7 +106,7 @@ index beb6c502da..9e95fee78e 100644
  	compatible = "brcm,bcm2837";
 diff --git a/arch/arm/dts/bcm2838-rpi-4-b.dts b/arch/arm/dts/bcm2838-rpi-4-b.dts
 new file mode 100644
-index 0000000000..168179c17c
+index 0000000000..b7241be3fd
 --- /dev/null
 +++ b/arch/arm/dts/bcm2838-rpi-4-b.dts
 @@ -0,0 +1,52 @@
@@ -151,7 +151,7 @@ index 0000000000..168179c17c
 +};
 +
 +&emmc2 {
-+	compatible = "brcm,bcm2835-sdhci";
++	compatible = "brcm,bcm2711-emmc2";
 +	status = "okay";
 +};
 +
@@ -727,10 +727,10 @@ index 617c892dde..4242ef35a4 100644
  int dram_init(void)
 diff --git a/configs/rpi_4_32b_defconfig b/configs/rpi_4_32b_defconfig
 new file mode 100644
-index 0000000000..9f2b805d0f
+index 0000000000..b71a14735a
 --- /dev/null
 +++ b/configs/rpi_4_32b_defconfig
-@@ -0,0 +1,43 @@
+@@ -0,0 +1,40 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_BCM283X=y
 +CONFIG_SYS_TEXT_BASE=0x00008000
@@ -764,11 +764,8 @@ index 0000000000..9f2b805d0f
 +# CONFIG_REQUIRE_SERIAL_CONSOLE is not set
 +CONFIG_USB=y
 +CONFIG_DM_USB=y
-+CONFIG_USB_DWC2=y
 +CONFIG_USB_KEYBOARD=y
 +CONFIG_USB_HOST_ETHER=y
-+CONFIG_USB_ETHER_LAN78XX=y
-+CONFIG_USB_ETHER_SMSC95XX=y
 +CONFIG_DM_VIDEO=y
 +CONFIG_SYS_WHITE_ON_BLACK=y
 +CONFIG_CONSOLE_SCROLL_LINES=10
@@ -776,10 +773,10 @@ index 0000000000..9f2b805d0f
 +CONFIG_OF_LIBFDT_OVERLAY=y
 diff --git a/configs/rpi_4_defconfig b/configs/rpi_4_defconfig
 new file mode 100644
-index 0000000000..83d1bd0cdb
+index 0000000000..b27e3f823b
 --- /dev/null
 +++ b/configs/rpi_4_defconfig
-@@ -0,0 +1,43 @@
+@@ -0,0 +1,40 @@
 +CONFIG_ARM=y
 +CONFIG_ARCH_BCM283X=y
 +CONFIG_SYS_TEXT_BASE=0x00080000
@@ -813,11 +810,8 @@ index 0000000000..83d1bd0cdb
 +# CONFIG_REQUIRE_SERIAL_CONSOLE is not set
 +CONFIG_USB=y
 +CONFIG_DM_USB=y
-+CONFIG_USB_DWC2=y
 +CONFIG_USB_KEYBOARD=y
 +CONFIG_USB_HOST_ETHER=y
-+CONFIG_USB_ETHER_LAN78XX=y
-+CONFIG_USB_ETHER_SMSC95XX=y
 +CONFIG_DM_VIDEO=y
 +CONFIG_SYS_WHITE_ON_BLACK=y
 +CONFIG_CONSOLE_SCROLL_LINES=10

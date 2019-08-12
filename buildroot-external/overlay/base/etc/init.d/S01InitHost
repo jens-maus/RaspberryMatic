@@ -23,7 +23,9 @@ identify_host() {
   # https://github.com/MilhouseVH/bcmstat/blob/master/bcmstat.sh#L67
   hostid=$(cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}')
   case "${hostid}" in
-    *a03111|*b03111|*c03111)                         HM_HOST="rpi4"       ;; # Raspberry Pi 4 Model B
+    *c03111)                                         HM_HOST="rpi4b4g"    ;; # Raspberry Pi 4 Model B/4GB
+    *b03111)                                         HM_HOST="rpi4b2g"    ;; # Raspberry Pi 4 Model B/2GB
+    *a03111)                                         HM_HOST="rpi4b1g"    ;; # Raspberry Pi 4 Model B/1GB
     *a020d3)                                         HM_HOST="rpi3p"      ;; # Raspberry Pi 3 Model B+
     *a02080|*a02082|*a22082|*a32082)                 HM_HOST="rpi3"       ;; # Raspberry Pi 3 Model B
     *9020e0)                                         HM_HOST="rpi3ap"     ;; # Raspberry Pi 3 Model A+

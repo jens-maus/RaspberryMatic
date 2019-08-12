@@ -27867,7 +27867,7 @@ showDutyCycle = function() {
       dcAlarm = 89;  // Attention when dc >= 90%
 
     homematic("Interface.getDutyCycle", {}, function(dcArray) {
-      if(typeof dcArray !== "undefined") {
+      if(jQuery.isArray(dcArray)) {
         jQuery.each(dcArray, function(index, iface) {
           var dutyCycleProgressElem = jQuery("#dutyCycleProgress"+index),
             dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"+index),

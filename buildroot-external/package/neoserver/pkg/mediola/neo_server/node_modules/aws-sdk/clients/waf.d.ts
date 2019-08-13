@@ -468,6 +468,14 @@ declare class WAF extends Service {
    */
   listSubscribedRuleGroups(callback?: (err: AWSError, data: WAF.Types.ListSubscribedRuleGroupsResponse) => void): Request<WAF.Types.ListSubscribedRuleGroupsResponse, AWSError>;
   /**
+   * 
+   */
+  listTagsForResource(params: WAF.Types.ListTagsForResourceRequest, callback?: (err: AWSError, data: WAF.Types.ListTagsForResourceResponse) => void): Request<WAF.Types.ListTagsForResourceResponse, AWSError>;
+  /**
+   * 
+   */
+  listTagsForResource(callback?: (err: AWSError, data: WAF.Types.ListTagsForResourceResponse) => void): Request<WAF.Types.ListTagsForResourceResponse, AWSError>;
+  /**
    * Returns an array of WebACLSummary objects in the response.
    */
   listWebACLs(params: WAF.Types.ListWebACLsRequest, callback?: (err: AWSError, data: WAF.Types.ListWebACLsResponse) => void): Request<WAF.Types.ListWebACLsResponse, AWSError>;
@@ -484,11 +492,11 @@ declare class WAF extends Service {
    */
   listXssMatchSets(callback?: (err: AWSError, data: WAF.Types.ListXssMatchSetsResponse) => void): Request<WAF.Types.ListXssMatchSetsResponse, AWSError>;
   /**
-   * Associates a LoggingConfiguration with a specified web ACL. You can access information about all traffic that AWS WAF inspects using the following steps:   Create an Amazon Kinesis Data Firehose .  Create the data firehose with a PUT source and in the region that you are operating. However, if you are capturing logs for Amazon CloudFront, always create the firehose in US East (N. Virginia).    Associate that firehose to your web ACL using a PutLoggingConfiguration request.   When you successfully enable logging using a PutLoggingConfiguration request, AWS WAF will create a service linked role with the necessary permissions to write logs to the Amazon Kinesis Data Firehose. For more information, see Logging Web ACL Traffic Information in the AWS WAF Developer Guide.
+   * Associates a LoggingConfiguration with a specified web ACL. You can access information about all traffic that AWS WAF inspects using the following steps:   Create an Amazon Kinesis Data Firehose .  Create the data firehose with a PUT source and in the region that you are operating. However, if you are capturing logs for Amazon CloudFront, always create the firehose in US East (N. Virginia).   Do not create the data firehose using a Kinesis stream as your source.    Associate that firehose to your web ACL using a PutLoggingConfiguration request.   When you successfully enable logging using a PutLoggingConfiguration request, AWS WAF will create a service linked role with the necessary permissions to write logs to the Amazon Kinesis Data Firehose. For more information, see Logging Web ACL Traffic Information in the AWS WAF Developer Guide.
    */
   putLoggingConfiguration(params: WAF.Types.PutLoggingConfigurationRequest, callback?: (err: AWSError, data: WAF.Types.PutLoggingConfigurationResponse) => void): Request<WAF.Types.PutLoggingConfigurationResponse, AWSError>;
   /**
-   * Associates a LoggingConfiguration with a specified web ACL. You can access information about all traffic that AWS WAF inspects using the following steps:   Create an Amazon Kinesis Data Firehose .  Create the data firehose with a PUT source and in the region that you are operating. However, if you are capturing logs for Amazon CloudFront, always create the firehose in US East (N. Virginia).    Associate that firehose to your web ACL using a PutLoggingConfiguration request.   When you successfully enable logging using a PutLoggingConfiguration request, AWS WAF will create a service linked role with the necessary permissions to write logs to the Amazon Kinesis Data Firehose. For more information, see Logging Web ACL Traffic Information in the AWS WAF Developer Guide.
+   * Associates a LoggingConfiguration with a specified web ACL. You can access information about all traffic that AWS WAF inspects using the following steps:   Create an Amazon Kinesis Data Firehose .  Create the data firehose with a PUT source and in the region that you are operating. However, if you are capturing logs for Amazon CloudFront, always create the firehose in US East (N. Virginia).   Do not create the data firehose using a Kinesis stream as your source.    Associate that firehose to your web ACL using a PutLoggingConfiguration request.   When you successfully enable logging using a PutLoggingConfiguration request, AWS WAF will create a service linked role with the necessary permissions to write logs to the Amazon Kinesis Data Firehose. For more information, see Logging Web ACL Traffic Information in the AWS WAF Developer Guide.
    */
   putLoggingConfiguration(callback?: (err: AWSError, data: WAF.Types.PutLoggingConfigurationResponse) => void): Request<WAF.Types.PutLoggingConfigurationResponse, AWSError>;
   /**
@@ -499,6 +507,22 @@ declare class WAF extends Service {
    * Attaches a IAM policy to the specified resource. The only supported use for this action is to share a RuleGroup across accounts. The PutPermissionPolicy is subject to the following restrictions:   You can attach only one policy with each PutPermissionPolicy request.   The policy must include an Effect, Action and Principal.     Effect must specify Allow.   The Action in the policy must be waf:UpdateWebACL, waf-regional:UpdateWebACL, waf:GetRuleGroup and waf-regional:GetRuleGroup . Any extra or wildcard actions in the policy will be rejected.   The policy cannot include a Resource parameter.   The ARN in the request must be a valid WAF RuleGroup ARN and the RuleGroup must exist in the same region.   The user making the request must be the owner of the RuleGroup.   Your policy must be composed using IAM Policy version 2012-10-17.   For more information, see IAM Policies.  An example of a valid policy parameter is shown in the Examples section below.
    */
   putPermissionPolicy(callback?: (err: AWSError, data: WAF.Types.PutPermissionPolicyResponse) => void): Request<WAF.Types.PutPermissionPolicyResponse, AWSError>;
+  /**
+   * 
+   */
+  tagResource(params: WAF.Types.TagResourceRequest, callback?: (err: AWSError, data: WAF.Types.TagResourceResponse) => void): Request<WAF.Types.TagResourceResponse, AWSError>;
+  /**
+   * 
+   */
+  tagResource(callback?: (err: AWSError, data: WAF.Types.TagResourceResponse) => void): Request<WAF.Types.TagResourceResponse, AWSError>;
+  /**
+   * 
+   */
+  untagResource(params: WAF.Types.UntagResourceRequest, callback?: (err: AWSError, data: WAF.Types.UntagResourceResponse) => void): Request<WAF.Types.UntagResourceResponse, AWSError>;
+  /**
+   * 
+   */
+  untagResource(callback?: (err: AWSError, data: WAF.Types.UntagResourceResponse) => void): Request<WAF.Types.UntagResourceResponse, AWSError>;
   /**
    * Inserts or deletes ByteMatchTuple objects (filters) in a ByteMatchSet. For each ByteMatchTuple object, you specify the following values:    Whether to insert or delete the object from the array. If you want to change a ByteMatchSetUpdate object, you delete the existing object and add a new one.   The part of a web request that you want AWS WAF to inspect, such as a query string or the value of the User-Agent header.    The bytes (typically a string that corresponds with ASCII characters) that you want AWS WAF to look for. For more information, including how you specify the values for the AWS WAF API and the AWS CLI or SDKs, see TargetString in the ByteMatchTuple data type.    Where to look, such as at the beginning or the end of a query string.   Whether to perform any conversions on the request, such as converting it to lowercase, before inspecting it for the specified string.   For example, you can add a ByteMatchSetUpdate object that matches web requests in which User-Agent headers contain the string BadBot. You can then configure AWS WAF to block those requests. To create and configure a ByteMatchSet, perform the following steps:   Create a ByteMatchSet. For more information, see CreateByteMatchSet.   Use GetChangeToken to get the change token that you provide in the ChangeToken parameter of an UpdateByteMatchSet request.   Submit an UpdateByteMatchSet request to specify the part of the request that you want AWS WAF to inspect (for example, the header or the URI) and the value that you want AWS WAF to watch for.   For more information about how to use the AWS WAF API to allow or block HTTP requests, see the AWS WAF Developer Guide.
    */
@@ -752,7 +776,7 @@ declare namespace WAF {
      */
     Name: ResourceName;
     /**
-     * A friendly name or description for the metrics for this RateBasedRule. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the RateBasedRule.
+     * A friendly name or description for the metrics for this RateBasedRule. The name can contain only alphanumeric characters (A-Z, a-z, 0-9), with maximum length 128 and minimum length one. It can't contain whitespace or metric names reserved for AWS WAF, including "All" and "Default_Action." You can't change the name of the metric after you create the RateBasedRule.
      */
     MetricName: MetricName;
     /**
@@ -767,6 +791,7 @@ declare namespace WAF {
      * The ChangeToken that you used to submit the CreateRateBasedRule request. You can also use this value to query the status of the request. For more information, see GetChangeTokenStatus.
      */
     ChangeToken: ChangeToken;
+    Tags?: TagList;
   }
   export interface CreateRateBasedRuleResponse {
     /**
@@ -824,13 +849,14 @@ declare namespace WAF {
      */
     Name: ResourceName;
     /**
-     * A friendly name or description for the metrics for this RuleGroup. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the RuleGroup.
+     * A friendly name or description for the metrics for this RuleGroup. The name can contain only alphanumeric characters (A-Z, a-z, 0-9), with maximum length 128 and minimum length one. It can't contain whitespace or metric names reserved for AWS WAF, including "All" and "Default_Action." You can't change the name of the metric after you create the RuleGroup.
      */
     MetricName: MetricName;
     /**
      * The value returned by the most recent call to GetChangeToken.
      */
     ChangeToken: ChangeToken;
+    Tags?: TagList;
   }
   export interface CreateRuleGroupResponse {
     /**
@@ -848,13 +874,14 @@ declare namespace WAF {
      */
     Name: ResourceName;
     /**
-     * A friendly name or description for the metrics for this Rule. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain white space. You can't change the name of the metric after you create the Rule.
+     * A friendly name or description for the metrics for this Rule. The name can contain only alphanumeric characters (A-Z, a-z, 0-9), with maximum length 128 and minimum length one. It can't contain whitespace or metric names reserved for AWS WAF, including "All" and "Default_Action." You can't change the name of the metric after you create the Rule.
      */
     MetricName: MetricName;
     /**
      * The value returned by the most recent call to GetChangeToken.
      */
     ChangeToken: ChangeToken;
+    Tags?: TagList;
   }
   export interface CreateRuleResponse {
     /**
@@ -912,7 +939,7 @@ declare namespace WAF {
      */
     Name: ResourceName;
     /**
-     * A friendly name or description for the metrics for this WebACL. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain white space. You can't change MetricName after you create the WebACL.
+     * A friendly name or description for the metrics for this WebACL.The name can contain only alphanumeric characters (A-Z, a-z, 0-9), with maximum length 128 and minimum length one. It can't contain whitespace or metric names reserved for AWS WAF, including "All" and "Default_Action." You can't change MetricName after you create the WebACL.
      */
     MetricName: MetricName;
     /**
@@ -923,6 +950,7 @@ declare namespace WAF {
      * The value returned by the most recent call to GetChangeToken.
      */
     ChangeToken: ChangeToken;
+    Tags?: TagList;
   }
   export interface CreateWebACLResponse {
     /**
@@ -1824,6 +1852,15 @@ declare namespace WAF {
      */
     RuleGroups?: SubscribedRuleGroupSummaries;
   }
+  export interface ListTagsForResourceRequest {
+    NextMarker?: NextMarker;
+    Limit?: PaginationLimit;
+    ResourceARN: ResourceArn;
+  }
+  export interface ListTagsForResourceResponse {
+    NextMarker?: NextMarker;
+    TagInfoForResource?: TagInfoForResource;
+  }
   export interface ListWebACLsRequest {
     /**
      * If you specify a value for Limit and you have more WebACL objects than the number that you specify for Limit, AWS WAF returns a NextMarker value in the response that allows you to list another group of WebACL objects. For the second and subsequent ListWebACLs requests, specify the value of NextMarker from the previous response to get information about another batch of WebACL objects.
@@ -1941,7 +1978,7 @@ declare namespace WAF {
      */
     Name?: ResourceName;
     /**
-     * A friendly name or description for the metrics for a RateBasedRule. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the RateBasedRule.
+     * A friendly name or description for the metrics for a RateBasedRule. The name can contain only alphanumeric characters (A-Z, a-z, 0-9), with maximum length 128 and minimum length one. It can't contain whitespace or metric names reserved for AWS WAF, including "All" and "Default_Action." You can't change the name of the metric after you create the RateBasedRule.
      */
     MetricName?: MetricName;
     /**
@@ -2062,7 +2099,7 @@ declare namespace WAF {
      */
     Name?: ResourceName;
     /**
-     * A friendly name or description for the metrics for this Rule. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change MetricName after you create the Rule.
+     * A friendly name or description for the metrics for this Rule. The name can contain only alphanumeric characters (A-Z, a-z, 0-9), with maximum length 128 and minimum length one. It can't contain whitespace or metric names reserved for AWS WAF, including "All" and "Default_Action." You can't change MetricName after you create the Rule.
      */
     MetricName?: MetricName;
     /**
@@ -2080,7 +2117,7 @@ declare namespace WAF {
      */
     Name?: ResourceName;
     /**
-     * A friendly name or description for the metrics for this RuleGroup. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the RuleGroup.
+     * A friendly name or description for the metrics for this RuleGroup. The name can contain only alphanumeric characters (A-Z, a-z, 0-9), with maximum length 128 and minimum length one. It can't contain whitespace or metric names reserved for AWS WAF, including "All" and "Default_Action." You can't change the name of the metric after you create the RuleGroup.
      */
     MetricName?: MetricName;
   }
@@ -2267,10 +2304,28 @@ declare namespace WAF {
      */
     Name: ResourceName;
     /**
-     * A friendly name or description for the metrics for this RuleGroup. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the RuleGroup.
+     * A friendly name or description for the metrics for this RuleGroup. The name can contain only alphanumeric characters (A-Z, a-z, 0-9), with maximum length 128 and minimum length one. It can't contain whitespace or metric names reserved for AWS WAF, including "All" and "Default_Action." You can't change the name of the metric after you create the RuleGroup.
      */
     MetricName: MetricName;
   }
+  export interface Tag {
+    Key?: TagKey;
+    Value?: TagValue;
+  }
+  export interface TagInfoForResource {
+    ResourceARN?: ResourceArn;
+    TagList?: TagList;
+  }
+  export type TagKey = string;
+  export type TagKeyList = TagKey[];
+  export type TagList = Tag[];
+  export interface TagResourceRequest {
+    ResourceARN: ResourceArn;
+    Tags: TagList;
+  }
+  export interface TagResourceResponse {
+  }
+  export type TagValue = string;
   export type TextTransformation = "NONE"|"COMPRESS_WHITE_SPACE"|"HTML_ENTITY_DECODE"|"LOWERCASE"|"CMD_LINE"|"URL_DECODE"|string;
   export interface TimeWindow {
     /**
@@ -2284,6 +2339,12 @@ declare namespace WAF {
   }
   export type Timestamp = Date;
   export type URIString = string;
+  export interface UntagResourceRequest {
+    ResourceARN: ResourceArn;
+    TagKeys: TagKeyList;
+  }
+  export interface UntagResourceResponse {
+  }
   export interface UpdateByteMatchSetRequest {
     /**
      * The ByteMatchSetId of the ByteMatchSet that you want to update. ByteMatchSetId is returned by CreateByteMatchSet and by ListByteMatchSets.
@@ -2557,7 +2618,7 @@ declare namespace WAF {
      */
     Name?: ResourceName;
     /**
-     * A friendly name or description for the metrics for this WebACL. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change MetricName after you create the WebACL.
+     * A friendly name or description for the metrics for this WebACL. The name can contain only alphanumeric characters (A-Z, a-z, 0-9), with maximum length 128 and minimum length one. It can't contain whitespace or metric names reserved for AWS WAF, including "All" and "Default_Action." You can't change MetricName after you create the WebACL.
      */
     MetricName?: MetricName;
     /**

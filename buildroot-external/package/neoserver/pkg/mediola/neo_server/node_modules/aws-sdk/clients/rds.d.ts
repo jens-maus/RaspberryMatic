@@ -854,6 +854,14 @@ declare class RDS extends Service {
    */
   revokeDBSecurityGroupIngress(callback?: (err: AWSError, data: RDS.Types.RevokeDBSecurityGroupIngressResult) => void): Request<RDS.Types.RevokeDBSecurityGroupIngressResult, AWSError>;
   /**
+   * Starts a database activity stream to monitor activity on the database. For more information, see Database Activity Streams in the Amazon Aurora User Guide.
+   */
+  startActivityStream(params: RDS.Types.StartActivityStreamRequest, callback?: (err: AWSError, data: RDS.Types.StartActivityStreamResponse) => void): Request<RDS.Types.StartActivityStreamResponse, AWSError>;
+  /**
+   * Starts a database activity stream to monitor activity on the database. For more information, see Database Activity Streams in the Amazon Aurora User Guide.
+   */
+  startActivityStream(callback?: (err: AWSError, data: RDS.Types.StartActivityStreamResponse) => void): Request<RDS.Types.StartActivityStreamResponse, AWSError>;
+  /**
    * Starts an Amazon Aurora DB cluster that was stopped using the AWS console, the stop-db-cluster AWS CLI command, or the StopDBCluster action. For more information, see  Stopping and Starting an Aurora Cluster in the Amazon Aurora User Guide.   This action only applies to Aurora DB clusters. 
    */
   startDBCluster(params: RDS.Types.StartDBClusterMessage, callback?: (err: AWSError, data: RDS.Types.StartDBClusterResult) => void): Request<RDS.Types.StartDBClusterResult, AWSError>;
@@ -869,6 +877,14 @@ declare class RDS extends Service {
    *  Starts an Amazon RDS DB instance that was stopped using the AWS console, the stop-db-instance AWS CLI command, or the StopDBInstance action.  For more information, see  Starting an Amazon RDS DB instance That Was Previously Stopped in the Amazon RDS User Guide.    This command doesn't apply to Aurora MySQL and Aurora PostgreSQL. For Aurora DB clusters, use StartDBCluster instead.  
    */
   startDBInstance(callback?: (err: AWSError, data: RDS.Types.StartDBInstanceResult) => void): Request<RDS.Types.StartDBInstanceResult, AWSError>;
+  /**
+   * Stops a database activity stream that was started using the AWS console, the start-activity-stream AWS CLI command, or the StartActivityStream action. For more information, see Database Activity Streams in the Amazon Aurora User Guide.
+   */
+  stopActivityStream(params: RDS.Types.StopActivityStreamRequest, callback?: (err: AWSError, data: RDS.Types.StopActivityStreamResponse) => void): Request<RDS.Types.StopActivityStreamResponse, AWSError>;
+  /**
+   * Stops a database activity stream that was started using the AWS console, the start-activity-stream AWS CLI command, or the StartActivityStream action. For more information, see Database Activity Streams in the Amazon Aurora User Guide.
+   */
+  stopActivityStream(callback?: (err: AWSError, data: RDS.Types.StopActivityStreamResponse) => void): Request<RDS.Types.StopActivityStreamResponse, AWSError>;
   /**
    *  Stops an Amazon Aurora DB cluster. When you stop a DB cluster, Aurora retains the DB cluster's metadata, including its endpoints and DB parameter groups. Aurora also retains the transaction logs so you can do a point-in-time restore if necessary.  For more information, see  Stopping and Starting an Aurora Cluster in the Amazon Aurora User Guide.   This action only applies to Aurora DB clusters. 
    */
@@ -943,6 +959,8 @@ declare namespace RDS {
     Max?: Long;
   }
   export type AccountQuotaList = AccountQuota[];
+  export type ActivityStreamMode = "sync"|"async"|string;
+  export type ActivityStreamStatus = "stopped"|"starting"|"started"|"stopping"|string;
   export interface AddRoleToDBClusterMessage {
     /**
      * The name of the DB cluster to associate the IAM role with.
@@ -1451,7 +1469,7 @@ declare namespace RDS {
      */
     DBInstanceIdentifier: String;
     /**
-     * The amount of storage (in gibibytes) to allocate for the DB instance. Type: Integer  Amazon Aurora  Not applicable. Aurora cluster volumes automatically grow as the amount of data in your database increases, though you are only charged for the space that you use in an Aurora cluster volume.  MySQL  Constraints to the amount of storage for each storage type are the following:    General Purpose (SSD) storage (gp2): Must be an integer from 20 to 32768.   Provisioned IOPS storage (io1): Must be an integer from 100 to 32768.   Magnetic storage (standard): Must be an integer from 5 to 3072.    MariaDB  Constraints to the amount of storage for each storage type are the following:    General Purpose (SSD) storage (gp2): Must be an integer from 20 to 32768.   Provisioned IOPS storage (io1): Must be an integer from 100 to 32768.   Magnetic storage (standard): Must be an integer from 5 to 3072.    PostgreSQL  Constraints to the amount of storage for each storage type are the following:    General Purpose (SSD) storage (gp2): Must be an integer from 20 to 32768.   Provisioned IOPS storage (io1): Must be an integer from 100 to 32768.   Magnetic storage (standard): Must be an integer from 5 to 3072.    Oracle  Constraints to the amount of storage for each storage type are the following:    General Purpose (SSD) storage (gp2): Must be an integer from 20 to 32768.   Provisioned IOPS storage (io1): Must be an integer from 100 to 32768.   Magnetic storage (standard): Must be an integer from 10 to 3072.    SQL Server  Constraints to the amount of storage for each storage type are the following:    General Purpose (SSD) storage (gp2):   Enterprise and Standard editions: Must be an integer from 200 to 16384.   Web and Express editions: Must be an integer from 20 to 16384.     Provisioned IOPS storage (io1):   Enterprise and Standard editions: Must be an integer from 200 to 16384.   Web and Express editions: Must be an integer from 100 to 16384.     Magnetic storage (standard):   Enterprise and Standard editions: Must be an integer from 200 to 1024.   Web and Express editions: Must be an integer from 20 to 1024.    
+     * The amount of storage (in gibibytes) to allocate for the DB instance. Type: Integer  Amazon Aurora  Not applicable. Aurora cluster volumes automatically grow as the amount of data in your database increases, though you are only charged for the space that you use in an Aurora cluster volume.  MySQL  Constraints to the amount of storage for each storage type are the following:    General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536.   Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.   Magnetic storage (standard): Must be an integer from 5 to 3072.    MariaDB  Constraints to the amount of storage for each storage type are the following:    General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536.   Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.   Magnetic storage (standard): Must be an integer from 5 to 3072.    PostgreSQL  Constraints to the amount of storage for each storage type are the following:    General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536.   Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.   Magnetic storage (standard): Must be an integer from 5 to 3072.    Oracle  Constraints to the amount of storage for each storage type are the following:    General Purpose (SSD) storage (gp2): Must be an integer from 20 to 65536.   Provisioned IOPS storage (io1): Must be an integer from 100 to 65536.   Magnetic storage (standard): Must be an integer from 10 to 3072.    SQL Server  Constraints to the amount of storage for each storage type are the following:    General Purpose (SSD) storage (gp2):   Enterprise and Standard editions: Must be an integer from 200 to 16384.   Web and Express editions: Must be an integer from 20 to 16384.     Provisioned IOPS storage (io1):   Enterprise and Standard editions: Must be an integer from 200 to 16384.   Web and Express editions: Must be an integer from 100 to 16384.     Magnetic storage (standard):   Enterprise and Standard editions: Must be an integer from 200 to 1024.   Web and Express editions: Must be an integer from 20 to 1024.    
      */
     AllocatedStorage?: IntegerOptional;
     /**
@@ -1622,6 +1640,10 @@ declare namespace RDS {
      * A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see  Deleting a DB Instance. 
      */
     DeletionProtection?: BooleanOptional;
+    /**
+     * The upper limit to which Amazon RDS can automatically scale the storage of the DB instance.
+     */
+    MaxAllocatedStorage?: IntegerOptional;
   }
   export interface CreateDBInstanceReadReplicaMessage {
     /**
@@ -1961,7 +1983,7 @@ declare namespace RDS {
     /**
      * Specifies whether the DB cluster has instances in multiple Availability Zones.
      */
-    MultiAZ?: Boolean;
+    MultiAZ?: BooleanOptional;
     /**
      * Provides the name of the database engine to be used for this DB cluster.
      */
@@ -2037,7 +2059,7 @@ declare namespace RDS {
     /**
      * A value that indicates whether the mapping of AWS Identity and Access Management (IAM) accounts to database accounts is enabled.
      */
-    IAMDatabaseAuthenticationEnabled?: Boolean;
+    IAMDatabaseAuthenticationEnabled?: BooleanOptional;
     /**
      * Identifies the clone group to which the DB cluster is associated.
      */
@@ -2074,15 +2096,35 @@ declare namespace RDS {
     /**
      * Indicates if the DB cluster has deletion protection enabled. The database can't be deleted when deletion protection is enabled. 
      */
-    DeletionProtection?: Boolean;
+    DeletionProtection?: BooleanOptional;
     /**
-     *  HTTP endpoint functionality is in beta for Aurora Serverless and is subject to change.  A value that indicates whether the HTTP endpoint for an Aurora Serverless DB cluster is enabled. When enabled, the HTTP endpoint provides a connectionless web service API for running SQL queries on the Aurora Serverless DB cluster. You can also query your database from inside the RDS console with the query editor. For more information about Aurora Serverless, see Using Amazon Aurora Serverless in the Amazon Aurora User Guide.
+     * A value that indicates whether the HTTP endpoint for an Aurora Serverless DB cluster is enabled. When enabled, the HTTP endpoint provides a connectionless web service API for running SQL queries on the Aurora Serverless DB cluster. You can also query your database from inside the RDS console with the query editor. For more information, see Using the Data API for Aurora Serverless in the Amazon Aurora User Guide.
      */
-    HttpEndpointEnabled?: Boolean;
+    HttpEndpointEnabled?: BooleanOptional;
+    /**
+     * The mode of the database activity stream. Database events such as a change or access generate an activity stream event. The database session can handle these events either synchronously or asynchronously. 
+     */
+    ActivityStreamMode?: ActivityStreamMode;
+    /**
+     * The status of the database activity stream.
+     */
+    ActivityStreamStatus?: ActivityStreamStatus;
+    /**
+     * The AWS KMS key identifier used for encrypting messages in the database activity stream.
+     */
+    ActivityStreamKmsKeyId?: String;
+    /**
+     * The name of the Amazon Kinesis data stream used for the database activity stream.
+     */
+    ActivityStreamKinesisStreamName?: String;
     /**
      * Specifies whether tags are copied from the DB cluster to snapshots of the DB cluster.
      */
-    CopyTagsToSnapshot?: Boolean;
+    CopyTagsToSnapshot?: BooleanOptional;
+    /**
+     * Specifies whether the DB cluster is a clone of a DB cluster owned by a different AWS account.
+     */
+    CrossAccountClone?: BooleanOptional;
   }
   export interface DBClusterBacktrack {
     /**
@@ -2468,6 +2510,10 @@ declare namespace RDS {
      *  A list of features supported by the DB engine. Supported feature names include the following.    s3Import  
      */
     SupportedFeatureNames?: FeatureNameList;
+    /**
+     * The status of the DB engine version, either available or deprecated.
+     */
+    Status?: String;
   }
   export type DBEngineVersionList = DBEngineVersion[];
   export interface DBEngineVersionMessage {
@@ -2709,6 +2755,10 @@ declare namespace RDS {
      * Specifies the listener connection endpoint for SQL Server Always On.
      */
     ListenerEndpoint?: Endpoint;
+    /**
+     * The upper limit to which Amazon RDS can automatically scale the storage of the DB instance.
+     */
+    MaxAllocatedStorage?: IntegerOptional;
   }
   export interface DBInstanceAutomatedBackup {
     /**
@@ -3435,6 +3485,10 @@ declare namespace RDS {
      * An optional pagination token provided by a previous DescribeDBClusters request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by MaxRecords. 
      */
     Marker?: String;
+    /**
+     * Optional Boolean parameter that specifies whether the output includes information about clusters shared from other AWS accounts.
+     */
+    IncludeShared?: Boolean;
   }
   export interface DescribeDBEngineVersionsMessage {
     /**
@@ -3473,6 +3527,10 @@ declare namespace RDS {
      * A value that indicates whether to list the supported time zones for each engine version. If this parameter is enabled and the requested engine supports the TimeZone parameter for CreateDBInstance, the response includes a list of supported time zones for each engine version. 
      */
     ListSupportedTimezones?: BooleanOptional;
+    /**
+     * A value that indicates whether to include engine versions that aren't available in the list. The default is to list only available engine versions.
+     */
+    IncludeAll?: BooleanOptional;
   }
   export interface DescribeDBInstanceAutomatedBackupsMessage {
     /**
@@ -4415,7 +4473,7 @@ declare namespace RDS {
   }
   export interface ModifyDBClusterMessage {
     /**
-     * The DB cluster identifier for the cluster being modified. This parameter is not case-sensitive. Constraints:   Must match the identifier of an existing DBCluster.  
+     * The DB cluster identifier for the cluster being modified. This parameter is not case-sensitive. Constraints: This identifier must match the identifier of an existing DB cluster.
      */
     DBClusterIdentifier: String;
     /**
@@ -4475,6 +4533,14 @@ declare namespace RDS {
      */
     EngineVersion?: String;
     /**
+     * A value that indicates whether major version upgrades are allowed. Constraints: You must allow major version upgrades when specifying a value for the EngineVersion parameter that is a different major version than the DB cluster's current version.
+     */
+    AllowMajorVersionUpgrade?: Boolean;
+    /**
+     * The name of the DB parameter group to apply to all instances of the DB cluster.   When you apply a parameter group using the DBInstanceParameterGroupName parameter, the DB cluster isn't rebooted automatically. Also, parameter changes aren't applied during the next maintenance window but instead are applied immediately.  Default: The existing name setting Constraints:   The DB parameter group must be in the same DB parameter group family as this DB cluster.   The DBInstanceParameterGroupName parameter is only valid in combination with the AllowMajorVersionUpgrade parameter.  
+     */
+    DBInstanceParameterGroupName?: String;
+    /**
      * The scaling properties of the DB cluster. You can only modify scaling properties for DB clusters in serverless DB engine mode.
      */
     ScalingConfiguration?: ScalingConfiguration;
@@ -4483,7 +4549,7 @@ declare namespace RDS {
      */
     DeletionProtection?: BooleanOptional;
     /**
-     *  HTTP endpoint functionality is in beta for Aurora Serverless and is subject to change.  A value that indicates whether to enable the HTTP endpoint for an Aurora Serverless DB cluster. By default, the HTTP endpoint is disabled. When enabled, the HTTP endpoint provides a connectionless web service API for running SQL queries on the Aurora Serverless DB cluster. You can also query your database from inside the RDS console with the query editor. For more information about Aurora Serverless, see Using Amazon Aurora Serverless in the Amazon Aurora User Guide.
+     * A value that indicates whether to enable the HTTP endpoint for an Aurora Serverless DB cluster. By default, the HTTP endpoint is disabled. When enabled, the HTTP endpoint provides a connectionless web service API for running SQL queries on the Aurora Serverless DB cluster. You can also query your database from inside the RDS console with the query editor. For more information, see Using the Data API for Aurora Serverless in the Amazon Aurora User Guide.
      */
     EnableHttpEndpoint?: BooleanOptional;
     /**
@@ -4559,7 +4625,7 @@ declare namespace RDS {
      */
     MasterUserPassword?: String;
     /**
-     * The name of the DB parameter group to apply to the DB instance. Changing this setting doesn't result in an outage. The parameter group name itself is changed immediately, but the actual parameter changes are not applied until you reboot the instance without failover. The DB instance will NOT be rebooted automatically and the parameter changes will NOT be applied during the next maintenance window. Default: Uses existing setting Constraints: The DB parameter group must be in the same DB parameter group family as this DB instance.
+     * The name of the DB parameter group to apply to the DB instance. Changing this setting doesn't result in an outage. The parameter group name itself is changed immediately, but the actual parameter changes are not applied until you reboot the instance without failover. In this case, the DB instance isn't rebooted automatically and the parameter changes isn't applied during the next maintenance window. Default: Uses existing setting Constraints: The DB parameter group must be in the same DB parameter group family as this DB instance.
      */
     DBParameterGroupName?: String;
     /**
@@ -4686,6 +4752,10 @@ declare namespace RDS {
      * A value that indicates whether the DB instance has deletion protection enabled. The database can't be deleted when deletion protection is enabled. By default, deletion protection is disabled. For more information, see  Deleting a DB Instance. 
      */
     DeletionProtection?: BooleanOptional;
+    /**
+     * The upper limit to which Amazon RDS can automatically scale the storage of the DB instance.
+     */
+    MaxAllocatedStorage?: IntegerOptional;
   }
   export interface ModifyDBInstanceResult {
     DBInstance?: DBInstance;
@@ -5192,6 +5262,10 @@ declare namespace RDS {
      * A list of the supported DB engine modes.
      */
     SupportedEngineModes?: EngineModeList;
+    /**
+     * Whether or not Amazon RDS can automatically scale storage for DB instances that use the specified instance class.
+     */
+    SupportsStorageAutoscaling?: BooleanOptional;
   }
   export type OrderableDBInstanceOptionsList = OrderableDBInstanceOption[];
   export interface OrderableDBInstanceOptionsMessage {
@@ -6480,6 +6554,46 @@ declare namespace RDS {
     SourceRegions?: SourceRegionList;
   }
   export type SourceType = "db-instance"|"db-parameter-group"|"db-security-group"|"db-snapshot"|"db-cluster"|"db-cluster-snapshot"|string;
+  export interface StartActivityStreamRequest {
+    /**
+     * The Amazon Resource Name (ARN) of the DB cluster, for example arn:aws:rds:us-east-1:12345667890:cluster:das-cluster.
+     */
+    ResourceArn: String;
+    /**
+     * Specifies the mode of the database activity stream. Database events such as a change or access generate an activity stream event. The database session can handle these events either synchronously or asynchronously. 
+     */
+    Mode: ActivityStreamMode;
+    /**
+     * The AWS KMS key identifier for encrypting messages in the database activity stream. The key identifier can be either a key ID, a key ARN, or a key alias.
+     */
+    KmsKeyId: String;
+    /**
+     * Specifies whether or not the database activity stream is to start as soon as possible, regardless of the maintenance window for the database.
+     */
+    ApplyImmediately?: BooleanOptional;
+  }
+  export interface StartActivityStreamResponse {
+    /**
+     * The AWS KMS key identifier for encryption of messages in the database activity stream.
+     */
+    KmsKeyId?: String;
+    /**
+     * The name of the Amazon Kinesis data stream to be used for the database activity stream.
+     */
+    KinesisStreamName?: String;
+    /**
+     * The status of the database activity stream.
+     */
+    Status?: ActivityStreamStatus;
+    /**
+     * The mode of the database activity stream.
+     */
+    Mode?: ActivityStreamMode;
+    /**
+     * Indicates whether or not the database activity stream will start as soon as possible, regardless of the maintenance window for the database.
+     */
+    ApplyImmediately?: Boolean;
+  }
   export interface StartDBClusterMessage {
     /**
      * The DB cluster identifier of the Amazon Aurora DB cluster to be started. This parameter is stored as a lowercase string.
@@ -6497,6 +6611,30 @@ declare namespace RDS {
   }
   export interface StartDBInstanceResult {
     DBInstance?: DBInstance;
+  }
+  export interface StopActivityStreamRequest {
+    /**
+     * The Amazon Resource Name (ARN) of the DB cluster for the database activity stream. For example, arn:aws:rds:us-east-1:12345667890:cluster:das-cluster. 
+     */
+    ResourceArn: String;
+    /**
+     * Specifies whether or not the database activity stream is to stop as soon as possible, regardless of the maintenance window for the database.
+     */
+    ApplyImmediately?: BooleanOptional;
+  }
+  export interface StopActivityStreamResponse {
+    /**
+     * The AWS KMS key identifier used for encrypting messages in the database activity stream.
+     */
+    KmsKeyId?: String;
+    /**
+     * The name of the Amazon Kinesis data stream used for the database activity stream.
+     */
+    KinesisStreamName?: String;
+    /**
+     * The status of the database activity stream.
+     */
+    Status?: ActivityStreamStatus;
   }
   export interface StopDBClusterMessage {
     /**
@@ -6610,6 +6748,10 @@ declare namespace RDS {
      * The valid range of Provisioned IOPS to gibibytes of storage multiplier. For example, 3-10, which means that provisioned IOPS can be between 3 and 10 times storage. 
      */
     IopsToStorageRatio?: DoubleRangeList;
+    /**
+     * Whether or not Amazon RDS can automatically scale storage for DB instances that use the new instance class.
+     */
+    SupportsStorageAutoscaling?: Boolean;
   }
   export type ValidStorageOptionsList = ValidStorageOptions[];
   export type ValidUpgradeTargetList = UpgradeTarget[];

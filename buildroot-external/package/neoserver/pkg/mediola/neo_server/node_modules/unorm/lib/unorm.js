@@ -424,10 +424,15 @@ UChar.udata={
          enumerable: false,
          configurable: true,
          writable: true,
-         value: function(form) {
-            var str = "" + this;
-            form =  form === undefined ? "NFC" : form;
+         value: function normalize (/*form*/) {
             
+            var str = "" + this;
+            var form = arguments[0] === undefined ? "NFC" : arguments[0];
+
+            if (this === null || this === undefined) {
+               throw new TypeError("Cannot call method on " + Object.prototype.toString.call(this));
+            }
+
             if (form === "NFC") {
                return unorm.nfc(str);
             } else if (form === "NFD") {

@@ -12,11 +12,11 @@ declare class SSM extends Service {
   constructor(options?: SSM.Types.ClientConfiguration)
   config: Config & SSM.Types.ClientConfiguration;
   /**
-   * Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test. Each resource can have a maximum of 50 tags.  We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters.  For more information about tags, see Tagging Your Amazon EC2 Resources in the Amazon EC2 User Guide.
+   * Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, maintenance windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test. Each resource can have a maximum of 50 tags.  We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters.  For more information about tags, see Tagging Your Amazon EC2 Resources in the Amazon EC2 User Guide.
    */
   addTagsToResource(params: SSM.Types.AddTagsToResourceRequest, callback?: (err: AWSError, data: SSM.Types.AddTagsToResourceResult) => void): Request<SSM.Types.AddTagsToResourceResult, AWSError>;
   /**
-   * Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test. Each resource can have a maximum of 50 tags.  We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters.  For more information about tags, see Tagging Your Amazon EC2 Resources in the Amazon EC2 User Guide.
+   * Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, maintenance windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test. Each resource can have a maximum of 50 tags.  We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters.  For more information about tags, see Tagging Your Amazon EC2 Resources in the Amazon EC2 User Guide.
    */
   addTagsToResource(callback?: (err: AWSError, data: SSM.Types.AddTagsToResourceResult) => void): Request<SSM.Types.AddTagsToResourceResult, AWSError>;
   /**
@@ -28,19 +28,19 @@ declare class SSM extends Service {
    */
   cancelCommand(callback?: (err: AWSError, data: SSM.Types.CancelCommandResult) => void): Request<SSM.Types.CancelCommandResult, AWSError>;
   /**
-   * Stops a Maintenance Window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)
+   * Stops a maintenance window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)
    */
   cancelMaintenanceWindowExecution(params: SSM.Types.CancelMaintenanceWindowExecutionRequest, callback?: (err: AWSError, data: SSM.Types.CancelMaintenanceWindowExecutionResult) => void): Request<SSM.Types.CancelMaintenanceWindowExecutionResult, AWSError>;
   /**
-   * Stops a Maintenance Window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)
+   * Stops a maintenance window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)
    */
   cancelMaintenanceWindowExecution(callback?: (err: AWSError, data: SSM.Types.CancelMaintenanceWindowExecutionResult) => void): Request<SSM.Types.CancelMaintenanceWindowExecutionResult, AWSError>;
   /**
-   * Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see Setting Up Systems Manager in Hybrid Environments.
+   * Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see Setting Up AWS Systems Manager for Hybrid Environments.
    */
   createActivation(params: SSM.Types.CreateActivationRequest, callback?: (err: AWSError, data: SSM.Types.CreateActivationResult) => void): Request<SSM.Types.CreateActivationResult, AWSError>;
   /**
-   * Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see Setting Up Systems Manager in Hybrid Environments.
+   * Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see Setting Up AWS Systems Manager for Hybrid Environments.
    */
   createActivation(callback?: (err: AWSError, data: SSM.Types.CreateActivationResult) => void): Request<SSM.Types.CreateActivationResult, AWSError>;
   /**
@@ -68,13 +68,21 @@ declare class SSM extends Service {
    */
   createDocument(callback?: (err: AWSError, data: SSM.Types.CreateDocumentResult) => void): Request<SSM.Types.CreateDocumentResult, AWSError>;
   /**
-   * Creates a new Maintenance Window.
+   * Creates a new maintenance window.
    */
   createMaintenanceWindow(params: SSM.Types.CreateMaintenanceWindowRequest, callback?: (err: AWSError, data: SSM.Types.CreateMaintenanceWindowResult) => void): Request<SSM.Types.CreateMaintenanceWindowResult, AWSError>;
   /**
-   * Creates a new Maintenance Window.
+   * Creates a new maintenance window.
    */
   createMaintenanceWindow(callback?: (err: AWSError, data: SSM.Types.CreateMaintenanceWindowResult) => void): Request<SSM.Types.CreateMaintenanceWindowResult, AWSError>;
+  /**
+   * Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see Getting Started with OpsCenter in the AWS Systems Manager User Guide. Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see AWS Systems Manager OpsCenter in the AWS Systems Manager User Guide. 
+   */
+  createOpsItem(params: SSM.Types.CreateOpsItemRequest, callback?: (err: AWSError, data: SSM.Types.CreateOpsItemResponse) => void): Request<SSM.Types.CreateOpsItemResponse, AWSError>;
+  /**
+   * Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see Getting Started with OpsCenter in the AWS Systems Manager User Guide. Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see AWS Systems Manager OpsCenter in the AWS Systems Manager User Guide. 
+   */
+  createOpsItem(callback?: (err: AWSError, data: SSM.Types.CreateOpsItemResponse) => void): Request<SSM.Types.CreateOpsItemResponse, AWSError>;
   /**
    * Creates a patch baseline.  For information about valid key and value pairs in PatchFilters for each supported operating system type, see PatchFilter. 
    */
@@ -124,11 +132,11 @@ declare class SSM extends Service {
    */
   deleteInventory(callback?: (err: AWSError, data: SSM.Types.DeleteInventoryResult) => void): Request<SSM.Types.DeleteInventoryResult, AWSError>;
   /**
-   * Deletes a Maintenance Window.
+   * Deletes a maintenance window.
    */
   deleteMaintenanceWindow(params: SSM.Types.DeleteMaintenanceWindowRequest, callback?: (err: AWSError, data: SSM.Types.DeleteMaintenanceWindowResult) => void): Request<SSM.Types.DeleteMaintenanceWindowResult, AWSError>;
   /**
-   * Deletes a Maintenance Window.
+   * Deletes a maintenance window.
    */
   deleteMaintenanceWindow(callback?: (err: AWSError, data: SSM.Types.DeleteMaintenanceWindowResult) => void): Request<SSM.Types.DeleteMaintenanceWindowResult, AWSError>;
   /**
@@ -140,11 +148,11 @@ declare class SSM extends Service {
    */
   deleteParameter(callback?: (err: AWSError, data: SSM.Types.DeleteParameterResult) => void): Request<SSM.Types.DeleteParameterResult, AWSError>;
   /**
-   * Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.
+   * Delete a list of parameters.
    */
   deleteParameters(params: SSM.Types.DeleteParametersRequest, callback?: (err: AWSError, data: SSM.Types.DeleteParametersResult) => void): Request<SSM.Types.DeleteParametersResult, AWSError>;
   /**
-   * Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.
+   * Delete a list of parameters.
    */
   deleteParameters(callback?: (err: AWSError, data: SSM.Types.DeleteParametersResult) => void): Request<SSM.Types.DeleteParametersResult, AWSError>;
   /**
@@ -180,27 +188,27 @@ declare class SSM extends Service {
    */
   deregisterPatchBaselineForPatchGroup(callback?: (err: AWSError, data: SSM.Types.DeregisterPatchBaselineForPatchGroupResult) => void): Request<SSM.Types.DeregisterPatchBaselineForPatchGroupResult, AWSError>;
   /**
-   * Removes a target from a Maintenance Window.
+   * Removes a target from a maintenance window.
    */
   deregisterTargetFromMaintenanceWindow(params: SSM.Types.DeregisterTargetFromMaintenanceWindowRequest, callback?: (err: AWSError, data: SSM.Types.DeregisterTargetFromMaintenanceWindowResult) => void): Request<SSM.Types.DeregisterTargetFromMaintenanceWindowResult, AWSError>;
   /**
-   * Removes a target from a Maintenance Window.
+   * Removes a target from a maintenance window.
    */
   deregisterTargetFromMaintenanceWindow(callback?: (err: AWSError, data: SSM.Types.DeregisterTargetFromMaintenanceWindowResult) => void): Request<SSM.Types.DeregisterTargetFromMaintenanceWindowResult, AWSError>;
   /**
-   * Removes a task from a Maintenance Window.
+   * Removes a task from a maintenance window.
    */
   deregisterTaskFromMaintenanceWindow(params: SSM.Types.DeregisterTaskFromMaintenanceWindowRequest, callback?: (err: AWSError, data: SSM.Types.DeregisterTaskFromMaintenanceWindowResult) => void): Request<SSM.Types.DeregisterTaskFromMaintenanceWindowResult, AWSError>;
   /**
-   * Removes a task from a Maintenance Window.
+   * Removes a task from a maintenance window.
    */
   deregisterTaskFromMaintenanceWindow(callback?: (err: AWSError, data: SSM.Types.DeregisterTaskFromMaintenanceWindowResult) => void): Request<SSM.Types.DeregisterTaskFromMaintenanceWindowResult, AWSError>;
   /**
-   * Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.
+   * Describes details about the activation, such as the date and time the activation was created, its expiration date, the IAM role assigned to the instances in the activation, and the number of instances registered by using this activation.
    */
   describeActivations(params: SSM.Types.DescribeActivationsRequest, callback?: (err: AWSError, data: SSM.Types.DescribeActivationsResult) => void): Request<SSM.Types.DescribeActivationsResult, AWSError>;
   /**
-   * Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.
+   * Describes details about the activation, such as the date and time the activation was created, its expiration date, the IAM role assigned to the instances in the activation, and the number of instances registered by using this activation.
    */
   describeActivations(callback?: (err: AWSError, data: SSM.Types.DescribeActivationsResult) => void): Request<SSM.Types.DescribeActivationsResult, AWSError>;
   /**
@@ -244,11 +252,11 @@ declare class SSM extends Service {
    */
   describeAutomationStepExecutions(callback?: (err: AWSError, data: SSM.Types.DescribeAutomationStepExecutionsResult) => void): Request<SSM.Types.DescribeAutomationStepExecutionsResult, AWSError>;
   /**
-   * Lists all patches that could possibly be included in a patch baseline.
+   * Lists all patches eligible to be included in a patch baseline.
    */
   describeAvailablePatches(params: SSM.Types.DescribeAvailablePatchesRequest, callback?: (err: AWSError, data: SSM.Types.DescribeAvailablePatchesResult) => void): Request<SSM.Types.DescribeAvailablePatchesResult, AWSError>;
   /**
-   * Lists all patches that could possibly be included in a patch baseline.
+   * Lists all patches eligible to be included in a patch baseline.
    */
   describeAvailablePatches(callback?: (err: AWSError, data: SSM.Types.DescribeAvailablePatchesResult) => void): Request<SSM.Types.DescribeAvailablePatchesResult, AWSError>;
   /**
@@ -332,69 +340,77 @@ declare class SSM extends Service {
    */
   describeInventoryDeletions(callback?: (err: AWSError, data: SSM.Types.DescribeInventoryDeletionsResult) => void): Request<SSM.Types.DescribeInventoryDeletionsResult, AWSError>;
   /**
-   * Retrieves the individual task executions (one per target) for a particular task run as part of a Maintenance Window execution.
+   * Retrieves the individual task executions (one per target) for a particular task run as part of a maintenance window execution.
    */
   describeMaintenanceWindowExecutionTaskInvocations(params: SSM.Types.DescribeMaintenanceWindowExecutionTaskInvocationsRequest, callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowExecutionTaskInvocationsResult) => void): Request<SSM.Types.DescribeMaintenanceWindowExecutionTaskInvocationsResult, AWSError>;
   /**
-   * Retrieves the individual task executions (one per target) for a particular task run as part of a Maintenance Window execution.
+   * Retrieves the individual task executions (one per target) for a particular task run as part of a maintenance window execution.
    */
   describeMaintenanceWindowExecutionTaskInvocations(callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowExecutionTaskInvocationsResult) => void): Request<SSM.Types.DescribeMaintenanceWindowExecutionTaskInvocationsResult, AWSError>;
   /**
-   * For a given Maintenance Window execution, lists the tasks that were run.
+   * For a given maintenance window execution, lists the tasks that were run.
    */
   describeMaintenanceWindowExecutionTasks(params: SSM.Types.DescribeMaintenanceWindowExecutionTasksRequest, callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowExecutionTasksResult) => void): Request<SSM.Types.DescribeMaintenanceWindowExecutionTasksResult, AWSError>;
   /**
-   * For a given Maintenance Window execution, lists the tasks that were run.
+   * For a given maintenance window execution, lists the tasks that were run.
    */
   describeMaintenanceWindowExecutionTasks(callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowExecutionTasksResult) => void): Request<SSM.Types.DescribeMaintenanceWindowExecutionTasksResult, AWSError>;
   /**
-   * Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.
+   * Lists the executions of a maintenance window. This includes information about when the maintenance window was scheduled to be active, and information about tasks registered and run with the maintenance window.
    */
   describeMaintenanceWindowExecutions(params: SSM.Types.DescribeMaintenanceWindowExecutionsRequest, callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowExecutionsResult) => void): Request<SSM.Types.DescribeMaintenanceWindowExecutionsResult, AWSError>;
   /**
-   * Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.
+   * Lists the executions of a maintenance window. This includes information about when the maintenance window was scheduled to be active, and information about tasks registered and run with the maintenance window.
    */
   describeMaintenanceWindowExecutions(callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowExecutionsResult) => void): Request<SSM.Types.DescribeMaintenanceWindowExecutionsResult, AWSError>;
   /**
-   * Retrieves information about upcoming executions of a Maintenance Window.
+   * Retrieves information about upcoming executions of a maintenance window.
    */
   describeMaintenanceWindowSchedule(params: SSM.Types.DescribeMaintenanceWindowScheduleRequest, callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowScheduleResult) => void): Request<SSM.Types.DescribeMaintenanceWindowScheduleResult, AWSError>;
   /**
-   * Retrieves information about upcoming executions of a Maintenance Window.
+   * Retrieves information about upcoming executions of a maintenance window.
    */
   describeMaintenanceWindowSchedule(callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowScheduleResult) => void): Request<SSM.Types.DescribeMaintenanceWindowScheduleResult, AWSError>;
   /**
-   * Lists the targets registered with the Maintenance Window.
+   * Lists the targets registered with the maintenance window.
    */
   describeMaintenanceWindowTargets(params: SSM.Types.DescribeMaintenanceWindowTargetsRequest, callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowTargetsResult) => void): Request<SSM.Types.DescribeMaintenanceWindowTargetsResult, AWSError>;
   /**
-   * Lists the targets registered with the Maintenance Window.
+   * Lists the targets registered with the maintenance window.
    */
   describeMaintenanceWindowTargets(callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowTargetsResult) => void): Request<SSM.Types.DescribeMaintenanceWindowTargetsResult, AWSError>;
   /**
-   * Lists the tasks in a Maintenance Window.
+   * Lists the tasks in a maintenance window.
    */
   describeMaintenanceWindowTasks(params: SSM.Types.DescribeMaintenanceWindowTasksRequest, callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowTasksResult) => void): Request<SSM.Types.DescribeMaintenanceWindowTasksResult, AWSError>;
   /**
-   * Lists the tasks in a Maintenance Window.
+   * Lists the tasks in a maintenance window.
    */
   describeMaintenanceWindowTasks(callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowTasksResult) => void): Request<SSM.Types.DescribeMaintenanceWindowTasksResult, AWSError>;
   /**
-   * Retrieves the Maintenance Windows in an AWS account.
+   * Retrieves the maintenance windows in an AWS account.
    */
   describeMaintenanceWindows(params: SSM.Types.DescribeMaintenanceWindowsRequest, callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowsResult) => void): Request<SSM.Types.DescribeMaintenanceWindowsResult, AWSError>;
   /**
-   * Retrieves the Maintenance Windows in an AWS account.
+   * Retrieves the maintenance windows in an AWS account.
    */
   describeMaintenanceWindows(callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowsResult) => void): Request<SSM.Types.DescribeMaintenanceWindowsResult, AWSError>;
   /**
-   * Retrieves information about the Maintenance Windows targets or tasks that an instance is associated with.
+   * Retrieves information about the maintenance window targets or tasks that an instance is associated with.
    */
   describeMaintenanceWindowsForTarget(params: SSM.Types.DescribeMaintenanceWindowsForTargetRequest, callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowsForTargetResult) => void): Request<SSM.Types.DescribeMaintenanceWindowsForTargetResult, AWSError>;
   /**
-   * Retrieves information about the Maintenance Windows targets or tasks that an instance is associated with.
+   * Retrieves information about the maintenance window targets or tasks that an instance is associated with.
    */
   describeMaintenanceWindowsForTarget(callback?: (err: AWSError, data: SSM.Types.DescribeMaintenanceWindowsForTargetResult) => void): Request<SSM.Types.DescribeMaintenanceWindowsForTargetResult, AWSError>;
+  /**
+   * Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see Getting Started with OpsCenter in the AWS Systems Manager User Guide. Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see AWS Systems Manager OpsCenter in the AWS Systems Manager User Guide. 
+   */
+  describeOpsItems(params: SSM.Types.DescribeOpsItemsRequest, callback?: (err: AWSError, data: SSM.Types.DescribeOpsItemsResponse) => void): Request<SSM.Types.DescribeOpsItemsResponse, AWSError>;
+  /**
+   * Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see Getting Started with OpsCenter in the AWS Systems Manager User Guide. Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see AWS Systems Manager OpsCenter in the AWS Systems Manager User Guide. 
+   */
+  describeOpsItems(callback?: (err: AWSError, data: SSM.Types.DescribeOpsItemsResponse) => void): Request<SSM.Types.DescribeOpsItemsResponse, AWSError>;
   /**
    * Get information about a parameter. Request results are returned on a best-effort basis. If you specify MaxResults in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of MaxResults. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a NextToken. You can specify the NextToken in a subsequent call to get the next set of results.
    */
@@ -508,45 +524,61 @@ declare class SSM extends Service {
    */
   getInventorySchema(callback?: (err: AWSError, data: SSM.Types.GetInventorySchemaResult) => void): Request<SSM.Types.GetInventorySchemaResult, AWSError>;
   /**
-   * Retrieves a Maintenance Window.
+   * Retrieves a maintenance window.
    */
   getMaintenanceWindow(params: SSM.Types.GetMaintenanceWindowRequest, callback?: (err: AWSError, data: SSM.Types.GetMaintenanceWindowResult) => void): Request<SSM.Types.GetMaintenanceWindowResult, AWSError>;
   /**
-   * Retrieves a Maintenance Window.
+   * Retrieves a maintenance window.
    */
   getMaintenanceWindow(callback?: (err: AWSError, data: SSM.Types.GetMaintenanceWindowResult) => void): Request<SSM.Types.GetMaintenanceWindowResult, AWSError>;
   /**
-   * Retrieves details about a specific task run as part of a Maintenance Window execution.
+   * Retrieves details about a specific a maintenance window execution.
    */
   getMaintenanceWindowExecution(params: SSM.Types.GetMaintenanceWindowExecutionRequest, callback?: (err: AWSError, data: SSM.Types.GetMaintenanceWindowExecutionResult) => void): Request<SSM.Types.GetMaintenanceWindowExecutionResult, AWSError>;
   /**
-   * Retrieves details about a specific task run as part of a Maintenance Window execution.
+   * Retrieves details about a specific a maintenance window execution.
    */
   getMaintenanceWindowExecution(callback?: (err: AWSError, data: SSM.Types.GetMaintenanceWindowExecutionResult) => void): Request<SSM.Types.GetMaintenanceWindowExecutionResult, AWSError>;
   /**
-   * Retrieves the details about a specific task run as part of a Maintenance Window execution.
+   * Retrieves the details about a specific task run as part of a maintenance window execution.
    */
   getMaintenanceWindowExecutionTask(params: SSM.Types.GetMaintenanceWindowExecutionTaskRequest, callback?: (err: AWSError, data: SSM.Types.GetMaintenanceWindowExecutionTaskResult) => void): Request<SSM.Types.GetMaintenanceWindowExecutionTaskResult, AWSError>;
   /**
-   * Retrieves the details about a specific task run as part of a Maintenance Window execution.
+   * Retrieves the details about a specific task run as part of a maintenance window execution.
    */
   getMaintenanceWindowExecutionTask(callback?: (err: AWSError, data: SSM.Types.GetMaintenanceWindowExecutionTaskResult) => void): Request<SSM.Types.GetMaintenanceWindowExecutionTaskResult, AWSError>;
   /**
-   * Retrieves a task invocation. A task invocation is a specific task running on a specific target. Maintenance Windows report status for all invocations. 
+   * Retrieves information about a specific task running on a specific target.
    */
   getMaintenanceWindowExecutionTaskInvocation(params: SSM.Types.GetMaintenanceWindowExecutionTaskInvocationRequest, callback?: (err: AWSError, data: SSM.Types.GetMaintenanceWindowExecutionTaskInvocationResult) => void): Request<SSM.Types.GetMaintenanceWindowExecutionTaskInvocationResult, AWSError>;
   /**
-   * Retrieves a task invocation. A task invocation is a specific task running on a specific target. Maintenance Windows report status for all invocations. 
+   * Retrieves information about a specific task running on a specific target.
    */
   getMaintenanceWindowExecutionTaskInvocation(callback?: (err: AWSError, data: SSM.Types.GetMaintenanceWindowExecutionTaskInvocationResult) => void): Request<SSM.Types.GetMaintenanceWindowExecutionTaskInvocationResult, AWSError>;
   /**
-   * Lists the tasks in a Maintenance Window.
+   * Lists the tasks in a maintenance window.
    */
   getMaintenanceWindowTask(params: SSM.Types.GetMaintenanceWindowTaskRequest, callback?: (err: AWSError, data: SSM.Types.GetMaintenanceWindowTaskResult) => void): Request<SSM.Types.GetMaintenanceWindowTaskResult, AWSError>;
   /**
-   * Lists the tasks in a Maintenance Window.
+   * Lists the tasks in a maintenance window.
    */
   getMaintenanceWindowTask(callback?: (err: AWSError, data: SSM.Types.GetMaintenanceWindowTaskResult) => void): Request<SSM.Types.GetMaintenanceWindowTaskResult, AWSError>;
+  /**
+   * Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see Getting Started with OpsCenter in the AWS Systems Manager User Guide. Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see AWS Systems Manager OpsCenter in the AWS Systems Manager User Guide. 
+   */
+  getOpsItem(params: SSM.Types.GetOpsItemRequest, callback?: (err: AWSError, data: SSM.Types.GetOpsItemResponse) => void): Request<SSM.Types.GetOpsItemResponse, AWSError>;
+  /**
+   * Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see Getting Started with OpsCenter in the AWS Systems Manager User Guide. Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see AWS Systems Manager OpsCenter in the AWS Systems Manager User Guide. 
+   */
+  getOpsItem(callback?: (err: AWSError, data: SSM.Types.GetOpsItemResponse) => void): Request<SSM.Types.GetOpsItemResponse, AWSError>;
+  /**
+   * View a summary of OpsItems based on specified filters and aggregators.
+   */
+  getOpsSummary(params: SSM.Types.GetOpsSummaryRequest, callback?: (err: AWSError, data: SSM.Types.GetOpsSummaryResult) => void): Request<SSM.Types.GetOpsSummaryResult, AWSError>;
+  /**
+   * View a summary of OpsItems based on specified filters and aggregators.
+   */
+  getOpsSummary(callback?: (err: AWSError, data: SSM.Types.GetOpsSummaryResult) => void): Request<SSM.Types.GetOpsSummaryResult, AWSError>;
   /**
    * Get information about a parameter by using the parameter name. Don't confuse this API action with the GetParameters API action.
    */
@@ -740,11 +772,11 @@ declare class SSM extends Service {
    */
   putParameter(callback?: (err: AWSError, data: SSM.Types.PutParameterResult) => void): Request<SSM.Types.PutParameterResult, AWSError>;
   /**
-   * Defines the default patch baseline.
+   * Defines the default patch baseline for the relevant operating system. To reset the AWS predefined patch baseline as the default, specify the full patch baseline ARN as the baseline ID value. For example, for CentOS, specify arn:aws:ssm:us-east-2:733109147000:patchbaseline/pb-0574b43a65ea646ed instead of pb-0574b43a65ea646ed.
    */
   registerDefaultPatchBaseline(params: SSM.Types.RegisterDefaultPatchBaselineRequest, callback?: (err: AWSError, data: SSM.Types.RegisterDefaultPatchBaselineResult) => void): Request<SSM.Types.RegisterDefaultPatchBaselineResult, AWSError>;
   /**
-   * Defines the default patch baseline.
+   * Defines the default patch baseline for the relevant operating system. To reset the AWS predefined patch baseline as the default, specify the full patch baseline ARN as the baseline ID value. For example, for CentOS, specify arn:aws:ssm:us-east-2:733109147000:patchbaseline/pb-0574b43a65ea646ed instead of pb-0574b43a65ea646ed.
    */
   registerDefaultPatchBaseline(callback?: (err: AWSError, data: SSM.Types.RegisterDefaultPatchBaselineResult) => void): Request<SSM.Types.RegisterDefaultPatchBaselineResult, AWSError>;
   /**
@@ -756,27 +788,27 @@ declare class SSM extends Service {
    */
   registerPatchBaselineForPatchGroup(callback?: (err: AWSError, data: SSM.Types.RegisterPatchBaselineForPatchGroupResult) => void): Request<SSM.Types.RegisterPatchBaselineForPatchGroupResult, AWSError>;
   /**
-   * Registers a target with a Maintenance Window.
+   * Registers a target with a maintenance window.
    */
   registerTargetWithMaintenanceWindow(params: SSM.Types.RegisterTargetWithMaintenanceWindowRequest, callback?: (err: AWSError, data: SSM.Types.RegisterTargetWithMaintenanceWindowResult) => void): Request<SSM.Types.RegisterTargetWithMaintenanceWindowResult, AWSError>;
   /**
-   * Registers a target with a Maintenance Window.
+   * Registers a target with a maintenance window.
    */
   registerTargetWithMaintenanceWindow(callback?: (err: AWSError, data: SSM.Types.RegisterTargetWithMaintenanceWindowResult) => void): Request<SSM.Types.RegisterTargetWithMaintenanceWindowResult, AWSError>;
   /**
-   * Adds a new task to a Maintenance Window.
+   * Adds a new task to a maintenance window.
    */
   registerTaskWithMaintenanceWindow(params: SSM.Types.RegisterTaskWithMaintenanceWindowRequest, callback?: (err: AWSError, data: SSM.Types.RegisterTaskWithMaintenanceWindowResult) => void): Request<SSM.Types.RegisterTaskWithMaintenanceWindowResult, AWSError>;
   /**
-   * Adds a new task to a Maintenance Window.
+   * Adds a new task to a maintenance window.
    */
   registerTaskWithMaintenanceWindow(callback?: (err: AWSError, data: SSM.Types.RegisterTaskWithMaintenanceWindowResult) => void): Request<SSM.Types.RegisterTaskWithMaintenanceWindowResult, AWSError>;
   /**
-   * Removes all tags from the specified resource.
+   * Removes tag keys from the specified resource.
    */
   removeTagsFromResource(params: SSM.Types.RemoveTagsFromResourceRequest, callback?: (err: AWSError, data: SSM.Types.RemoveTagsFromResourceResult) => void): Request<SSM.Types.RemoveTagsFromResourceResult, AWSError>;
   /**
-   * Removes all tags from the specified resource.
+   * Removes tag keys from the specified resource.
    */
   removeTagsFromResource(callback?: (err: AWSError, data: SSM.Types.RemoveTagsFromResourceResult) => void): Request<SSM.Types.RemoveTagsFromResourceResult, AWSError>;
   /**
@@ -868,11 +900,11 @@ declare class SSM extends Service {
    */
   updateAssociationStatus(callback?: (err: AWSError, data: SSM.Types.UpdateAssociationStatusResult) => void): Request<SSM.Types.UpdateAssociationStatusResult, AWSError>;
   /**
-   * The document you want to update.
+   * Updates one or more values for an SSM document.
    */
   updateDocument(params: SSM.Types.UpdateDocumentRequest, callback?: (err: AWSError, data: SSM.Types.UpdateDocumentResult) => void): Request<SSM.Types.UpdateDocumentResult, AWSError>;
   /**
-   * The document you want to update.
+   * Updates one or more values for an SSM document.
    */
   updateDocument(callback?: (err: AWSError, data: SSM.Types.UpdateDocumentResult) => void): Request<SSM.Types.UpdateDocumentResult, AWSError>;
   /**
@@ -884,37 +916,45 @@ declare class SSM extends Service {
    */
   updateDocumentDefaultVersion(callback?: (err: AWSError, data: SSM.Types.UpdateDocumentDefaultVersionResult) => void): Request<SSM.Types.UpdateDocumentDefaultVersionResult, AWSError>;
   /**
-   * Updates an existing Maintenance Window. Only specified parameters are modified.
+   * Updates an existing maintenance window. Only specified parameters are modified.
    */
   updateMaintenanceWindow(params: SSM.Types.UpdateMaintenanceWindowRequest, callback?: (err: AWSError, data: SSM.Types.UpdateMaintenanceWindowResult) => void): Request<SSM.Types.UpdateMaintenanceWindowResult, AWSError>;
   /**
-   * Updates an existing Maintenance Window. Only specified parameters are modified.
+   * Updates an existing maintenance window. Only specified parameters are modified.
    */
   updateMaintenanceWindow(callback?: (err: AWSError, data: SSM.Types.UpdateMaintenanceWindowResult) => void): Request<SSM.Types.UpdateMaintenanceWindowResult, AWSError>;
   /**
-   * Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following: The target from being an ID target to a Tag target, or a Tag target to an ID target. IDs for an ID target. Tags for a Tag target. Owner. Name. Description. If a parameter is null, then the corresponding field is not modified.
+   * Modifies the target of an existing maintenance window. You can change the following:   Name   Description   Owner   IDs for an ID target   Tags for a Tag target   From any supported tag type to another. The three supported tag types are ID target, Tag target, and resource group. For more information, see Target.    If a parameter is null, then the corresponding field is not modified. 
    */
   updateMaintenanceWindowTarget(params: SSM.Types.UpdateMaintenanceWindowTargetRequest, callback?: (err: AWSError, data: SSM.Types.UpdateMaintenanceWindowTargetResult) => void): Request<SSM.Types.UpdateMaintenanceWindowTargetResult, AWSError>;
   /**
-   * Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following: The target from being an ID target to a Tag target, or a Tag target to an ID target. IDs for an ID target. Tags for a Tag target. Owner. Name. Description. If a parameter is null, then the corresponding field is not modified.
+   * Modifies the target of an existing maintenance window. You can change the following:   Name   Description   Owner   IDs for an ID target   Tags for a Tag target   From any supported tag type to another. The three supported tag types are ID target, Tag target, and resource group. For more information, see Target.    If a parameter is null, then the corresponding field is not modified. 
    */
   updateMaintenanceWindowTarget(callback?: (err: AWSError, data: SSM.Types.UpdateMaintenanceWindowTargetResult) => void): Request<SSM.Types.UpdateMaintenanceWindowTargetResult, AWSError>;
   /**
-   * Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:   TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.   ServiceRoleArn   TaskInvocationParameters   Priority   MaxConcurrency   MaxErrors   If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.
+   * Modifies a task assigned to a maintenance window. You can't change the task type, but you can change the following values:   TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.   ServiceRoleArn   TaskInvocationParameters   Priority   MaxConcurrency   MaxErrors   If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.
    */
   updateMaintenanceWindowTask(params: SSM.Types.UpdateMaintenanceWindowTaskRequest, callback?: (err: AWSError, data: SSM.Types.UpdateMaintenanceWindowTaskResult) => void): Request<SSM.Types.UpdateMaintenanceWindowTaskResult, AWSError>;
   /**
-   * Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:   TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.   ServiceRoleArn   TaskInvocationParameters   Priority   MaxConcurrency   MaxErrors   If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.
+   * Modifies a task assigned to a maintenance window. You can't change the task type, but you can change the following values:   TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.   ServiceRoleArn   TaskInvocationParameters   Priority   MaxConcurrency   MaxErrors   If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.
    */
   updateMaintenanceWindowTask(callback?: (err: AWSError, data: SSM.Types.UpdateMaintenanceWindowTaskResult) => void): Request<SSM.Types.UpdateMaintenanceWindowTaskResult, AWSError>;
   /**
-   * Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.
+   * Assigns or changes an Amazon Identity and Access Management (IAM) role for the managed instance.
    */
   updateManagedInstanceRole(params: SSM.Types.UpdateManagedInstanceRoleRequest, callback?: (err: AWSError, data: SSM.Types.UpdateManagedInstanceRoleResult) => void): Request<SSM.Types.UpdateManagedInstanceRoleResult, AWSError>;
   /**
-   * Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.
+   * Assigns or changes an Amazon Identity and Access Management (IAM) role for the managed instance.
    */
   updateManagedInstanceRole(callback?: (err: AWSError, data: SSM.Types.UpdateManagedInstanceRoleResult) => void): Request<SSM.Types.UpdateManagedInstanceRoleResult, AWSError>;
+  /**
+   * Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see Getting Started with OpsCenter in the AWS Systems Manager User Guide. Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see AWS Systems Manager OpsCenter in the AWS Systems Manager User Guide. 
+   */
+  updateOpsItem(params: SSM.Types.UpdateOpsItemRequest, callback?: (err: AWSError, data: SSM.Types.UpdateOpsItemResponse) => void): Request<SSM.Types.UpdateOpsItemResponse, AWSError>;
+  /**
+   * Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see Getting Started with OpsCenter in the AWS Systems Manager User Guide. Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see AWS Systems Manager OpsCenter in the AWS Systems Manager User Guide. 
+   */
+  updateOpsItem(callback?: (err: AWSError, data: SSM.Types.UpdateOpsItemResponse) => void): Request<SSM.Types.UpdateOpsItemResponse, AWSError>;
   /**
    * Modifies an existing patch baseline. Fields not specified in the request are left unchanged.  For information about valid key and value pairs in PatchFilters for each supported operating system type, see PatchFilter. 
    */
@@ -985,11 +1025,11 @@ declare namespace SSM {
   export type ActivationList = Activation[];
   export interface AddTagsToResourceRequest {
     /**
-     * Specifies the type of resource you are tagging.  The ManagedInstance type for this API action is for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f. 
+     * Specifies the type of resource you are tagging.  The ManagedInstance type for this API action is for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f. 
      */
     ResourceType: ResourceTypeForTagging;
     /**
-     * The resource ID you want to tag. Use the ID of the resource. Here are some examples: ManagedInstance: mi-012345abcde MaintenanceWindow: mw-012345abcde PatchBaseline: pb-012345abcde For the Document and Parameter values, use the name of the resource.  The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f. 
+     * The resource ID you want to tag. Use the ID of the resource. Here are some examples: ManagedInstance: mi-012345abcde MaintenanceWindow: mw-012345abcde PatchBaseline: pb-012345abcde For the Document and Parameter values, use the name of the resource.  The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f. 
      */
     ResourceId: ResourceId;
     /**
@@ -1629,13 +1669,13 @@ declare namespace SSM {
   }
   export interface CancelMaintenanceWindowExecutionRequest {
     /**
-     * The ID of the Maintenance Window execution to stop.
+     * The ID of the maintenance window execution to stop.
      */
     WindowExecutionId: MaintenanceWindowExecutionId;
   }
   export interface CancelMaintenanceWindowExecutionResult {
     /**
-     * The ID of the Maintenance Window execution that has been stopped.
+     * The ID of the maintenance window execution that has been stopped.
      */
     WindowExecutionId?: MaintenanceWindowExecutionId;
   }
@@ -2138,7 +2178,7 @@ declare namespace SSM {
      */
     InstanceId?: InstanceId;
     /**
-     * The parameters for the runtime configuration of the document. 
+     * The parameters for the runtime configuration of the document.
      */
     Parameters?: Parameters;
     /**
@@ -2222,39 +2262,39 @@ declare namespace SSM {
   }
   export interface CreateMaintenanceWindowRequest {
     /**
-     * The name of the Maintenance Window.
+     * The name of the maintenance window.
      */
     Name: MaintenanceWindowName;
     /**
-     * An optional description for the Maintenance Window. We recommend specifying a description to help you organize your Maintenance Windows. 
+     * An optional description for the maintenance window. We recommend specifying a description to help you organize your maintenance windows. 
      */
     Description?: MaintenanceWindowDescription;
     /**
-     * The date and time, in ISO-8601 Extended format, for when you want the Maintenance Window to become active. StartDate allows you to delay activation of the Maintenance Window until the specified future date.
+     * The date and time, in ISO-8601 Extended format, for when you want the maintenance window to become active. StartDate allows you to delay activation of the maintenance window until the specified future date.
      */
     StartDate?: MaintenanceWindowStringDateTime;
     /**
-     * The date and time, in ISO-8601 Extended format, for when you want the Maintenance Window to become inactive. EndDate allows you to set a date and time in the future when the Maintenance Window will no longer run.
+     * The date and time, in ISO-8601 Extended format, for when you want the maintenance window to become inactive. EndDate allows you to set a date and time in the future when the maintenance window will no longer run.
      */
     EndDate?: MaintenanceWindowStringDateTime;
     /**
-     * The schedule of the Maintenance Window in the form of a cron or rate expression.
+     * The schedule of the maintenance window in the form of a cron or rate expression.
      */
     Schedule: MaintenanceWindowSchedule;
     /**
-     * The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the Time Zone Database on the IANA website.
+     * The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the Time Zone Database on the IANA website.
      */
     ScheduleTimezone?: MaintenanceWindowTimezone;
     /**
-     * The duration of the Maintenance Window in hours.
+     * The duration of the maintenance window in hours.
      */
     Duration: MaintenanceWindowDurationHours;
     /**
-     * The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.
+     * The number of hours before the end of the maintenance window that Systems Manager stops scheduling new tasks for execution.
      */
     Cutoff: MaintenanceWindowCutoff;
     /**
-     * Enables a Maintenance Window task to run on managed instances, even if you have not registered those instances as targets. If enabled, then you must specify the unregistered instances (by instance ID) when you register a task with the Maintenance Window  If you don't enable this option, then you must specify previously-registered targets when you register a task with the Maintenance Window. 
+     * Enables a maintenance window task to run on managed instances, even if you have not registered those instances as targets. If enabled, then you must specify the unregistered instances (by instance ID) when you register a task with the maintenance window. If you don't enable this option, then you must specify previously-registered targets when you register a task with the maintenance window.
      */
     AllowUnassociatedTargets: MaintenanceWindowAllowUnassociatedTargets;
     /**
@@ -2262,15 +2302,55 @@ declare namespace SSM {
      */
     ClientToken?: ClientToken;
     /**
-     * Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag a Maintenance Window to identify the type of tasks it will run, the types of targets, and the environment it will run in. In this case, you could specify the following key name/value pairs:    Key=TaskType,Value=AgentUpdate     Key=OS,Value=Windows     Key=Environment,Value=Production     To add tags to an existing Maintenance Window, use the AddTagsToResource action. 
+     * Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag a maintenance window to identify the type of tasks it will run, the types of targets, and the environment it will run in. In this case, you could specify the following key name/value pairs:    Key=TaskType,Value=AgentUpdate     Key=OS,Value=Windows     Key=Environment,Value=Production     To add tags to an existing maintenance window, use the AddTagsToResource action. 
      */
     Tags?: TagList;
   }
   export interface CreateMaintenanceWindowResult {
     /**
-     * The ID of the created Maintenance Window.
+     * The ID of the created maintenance window.
      */
     WindowId?: MaintenanceWindowId;
+  }
+  export interface CreateOpsItemRequest {
+    /**
+     * Information about the OpsItem. 
+     */
+    Description: OpsItemDescription;
+    /**
+     * Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.  Operational data keys can't begin with the following: amazon, aws, amzn, ssm, /amazon, /aws, /amzn, /ssm.  You can choose to make the data searchable by other users in the account or you can restrict search access. Searchable data means that all users with access to the OpsItem Overview page (as provided by the DescribeOpsItems API action) can view and search on the specified data. Operational data that is not searchable is only viewable by users who have access to the OpsItem (as provided by the GetOpsItem API action). Use the /aws/resources key in OperationalData to specify a related resource in the request. Use the /aws/automations key in OperationalData to associate an Automation runbook with the OpsItem. To view AWS CLI example commands that use these keys, see Creating OpsItems Manually in the AWS Systems Manager User Guide.
+     */
+    OperationalData?: OpsItemOperationalData;
+    /**
+     * The Amazon Resource Name (ARN) of an SNS topic where notifications are sent when this OpsItem is edited or changed.
+     */
+    Notifications?: OpsItemNotifications;
+    /**
+     * The importance of this OpsItem in relation to other OpsItems in the system.
+     */
+    Priority?: OpsItemPriority;
+    /**
+     * One or more OpsItems that share something in common with the current OpsItems. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.
+     */
+    RelatedOpsItems?: RelatedOpsItems;
+    /**
+     * The origin of the OpsItem, such as Amazon EC2 or AWS Systems Manager.
+     */
+    Source: OpsItemSource;
+    /**
+     * A short heading that describes the nature of the OpsItem and the impacted resource.
+     */
+    Title: OpsItemTitle;
+    /**
+     * Optional metadata that you assign to a resource. You can restrict access to OpsItems by using an inline IAM policy that specifies tags. For more information, see Getting Started with OpsCenter in the AWS Systems Manager User Guide. Tags use a key-value pair. For example:  Key=Department,Value=Finance   To add tags to an existing OpsItem, use the AddTagsToResource action. 
+     */
+    Tags?: TagList;
+  }
+  export interface CreateOpsItemResponse {
+    /**
+     * The ID of the OpsItem.
+     */
+    OpsItemId?: String;
   }
   export interface CreatePatchBaselineRequest {
     /**
@@ -2377,6 +2457,14 @@ declare namespace SSM {
      * The name of the document.
      */
     Name: DocumentName;
+    /**
+     * The version of the document that you want to delete. If not provided, all versions of the document are deleted.
+     */
+    DocumentVersion?: DocumentVersion;
+    /**
+     * The version name of the document that you want to delete. If not provided, all versions of the document are deleted.
+     */
+    VersionName?: DocumentVersionName;
   }
   export interface DeleteDocumentResult {
   }
@@ -2386,7 +2474,7 @@ declare namespace SSM {
      */
     TypeName: InventoryItemTypeName;
     /**
-     * Use the SchemaDeleteOption to delete a custom inventory type (schema). If you don't choose this option, the system only deletes existing inventory data associated with the custom inventory type. Choose one of the following options: DisableSchema: If you choose this option, the system ignores all inventory data for the specified version, and any earlier versions. To enable this schema again, you must call the PutInventory action for a version greater than the disbled version. DeleteSchema: This option deletes the specified custom type from the Inventory service. You can recreate the schema later, if you want.
+     * Use the SchemaDeleteOption to delete a custom inventory type (schema). If you don't choose this option, the system only deletes existing inventory data associated with the custom inventory type. Choose one of the following options: DisableSchema: If you choose this option, the system ignores all inventory data for the specified version, and any earlier versions. To enable this schema again, you must call the PutInventory action for a version greater than the disabled version. DeleteSchema: This option deletes the specified custom type from the Inventory service. You can recreate the schema later, if you want.
      */
     SchemaDeleteOption?: InventorySchemaDeleteOption;
     /**
@@ -2414,13 +2502,13 @@ declare namespace SSM {
   }
   export interface DeleteMaintenanceWindowRequest {
     /**
-     * The ID of the Maintenance Window to delete.
+     * The ID of the maintenance window to delete.
      */
     WindowId: MaintenanceWindowId;
   }
   export interface DeleteMaintenanceWindowResult {
     /**
-     * The ID of the deleted Maintenance Window.
+     * The ID of the deleted maintenance window.
      */
     WindowId?: MaintenanceWindowId;
   }
@@ -2499,7 +2587,7 @@ declare namespace SSM {
   }
   export interface DeregisterTargetFromMaintenanceWindowRequest {
     /**
-     * The ID of the Maintenance Window the target should be removed from.
+     * The ID of the maintenance window the target should be removed from.
      */
     WindowId: MaintenanceWindowId;
     /**
@@ -2507,13 +2595,13 @@ declare namespace SSM {
      */
     WindowTargetId: MaintenanceWindowTargetId;
     /**
-     * The system checks if the target is being referenced by a task. If the target is being referenced, the system returns an error and does not deregister the target from the Maintenance Window.
+     * The system checks if the target is being referenced by a task. If the target is being referenced, the system returns an error and does not deregister the target from the maintenance window.
      */
     Safe?: Boolean;
   }
   export interface DeregisterTargetFromMaintenanceWindowResult {
     /**
-     * The ID of the Maintenance Window the target was removed from.
+     * The ID of the maintenance window the target was removed from.
      */
     WindowId?: MaintenanceWindowId;
     /**
@@ -2523,21 +2611,21 @@ declare namespace SSM {
   }
   export interface DeregisterTaskFromMaintenanceWindowRequest {
     /**
-     * The ID of the Maintenance Window the task should be removed from.
+     * The ID of the maintenance window the task should be removed from.
      */
     WindowId: MaintenanceWindowId;
     /**
-     * The ID of the task to remove from the Maintenance Window.
+     * The ID of the task to remove from the maintenance window.
      */
     WindowTaskId: MaintenanceWindowTaskId;
   }
   export interface DeregisterTaskFromMaintenanceWindowResult {
     /**
-     * The ID of the Maintenance Window the task was removed from.
+     * The ID of the maintenance window the task was removed from.
      */
     WindowId?: MaintenanceWindowId;
     /**
-     * The ID of the task removed from the Maintenance Window.
+     * The ID of the task removed from the maintenance window.
      */
     WindowTaskId?: MaintenanceWindowTaskId;
   }
@@ -2983,11 +3071,11 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowExecutionTaskInvocationsRequest {
     /**
-     * The ID of the Maintenance Window execution the task is part of.
+     * The ID of the maintenance window execution the task is part of.
      */
     WindowExecutionId: MaintenanceWindowExecutionId;
     /**
-     * The ID of the specific task in the Maintenance Window task that should be retrieved.
+     * The ID of the specific task in the maintenance window task that should be retrieved.
      */
     TaskId: MaintenanceWindowExecutionTaskId;
     /**
@@ -3015,7 +3103,7 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowExecutionTasksRequest {
     /**
-     * The ID of the Maintenance Window execution whose task executions should be retrieved.
+     * The ID of the maintenance window execution whose task executions should be retrieved.
      */
     WindowExecutionId: MaintenanceWindowExecutionId;
     /**
@@ -3043,7 +3131,7 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowExecutionsRequest {
     /**
-     * The ID of the Maintenance Window whose executions should be retrieved.
+     * The ID of the maintenance window whose executions should be retrieved.
      */
     WindowId: MaintenanceWindowId;
     /**
@@ -3061,7 +3149,7 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowExecutionsResult {
     /**
-     * Information about the Maintenance Windows execution.
+     * Information about the maintenance window executions.
      */
     WindowExecutions?: MaintenanceWindowExecutionList;
     /**
@@ -3071,7 +3159,7 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowScheduleRequest {
     /**
-     * The ID of the Maintenance Window to retrieve information about.
+     * The ID of the maintenance window to retrieve information about.
      */
     WindowId?: MaintenanceWindowId;
     /**
@@ -3083,7 +3171,7 @@ declare namespace SSM {
      */
     ResourceType?: MaintenanceWindowResourceType;
     /**
-     * Filters used to limit the range of results. For example, you can limit Maintenance Window executions to only those scheduled before or after a certain date and time.
+     * Filters used to limit the range of results. For example, you can limit maintenance window executions to only those scheduled before or after a certain date and time.
      */
     Filters?: PatchOrchestratorFilterList;
     /**
@@ -3097,7 +3185,7 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowScheduleResult {
     /**
-     * Information about Maintenance Window executions scheduled for the specified time range.
+     * Information about maintenance window executions scheduled for the specified time range.
      */
     ScheduledWindowExecutions?: ScheduledWindowExecutionList;
     /**
@@ -3107,7 +3195,7 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowTargetsRequest {
     /**
-     * The ID of the Maintenance Window whose targets should be retrieved.
+     * The ID of the maintenance window whose targets should be retrieved.
      */
     WindowId: MaintenanceWindowId;
     /**
@@ -3125,7 +3213,7 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowTargetsResult {
     /**
-     * Information about the targets in the Maintenance Window.
+     * Information about the targets in the maintenance window.
      */
     Targets?: MaintenanceWindowTargetList;
     /**
@@ -3135,7 +3223,7 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowTasksRequest {
     /**
-     * The ID of the Maintenance Window whose tasks should be retrieved.
+     * The ID of the maintenance window whose tasks should be retrieved.
      */
     WindowId: MaintenanceWindowId;
     /**
@@ -3153,7 +3241,7 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowTasksResult {
     /**
-     * Information about the tasks in the Maintenance Window.
+     * Information about the tasks in the maintenance window.
      */
     Tasks?: MaintenanceWindowTaskList;
     /**
@@ -3181,7 +3269,7 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowsForTargetResult {
     /**
-     * Information about the Maintenance Window targets and tasks an instance is associated with.
+     * Information about the maintenance window targets and tasks an instance is associated with.
      */
     WindowIdentities?: MaintenanceWindowsForTargetList;
     /**
@@ -3191,7 +3279,7 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowsRequest {
     /**
-     * Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are Name and Enabled.
+     * Optional filters used to narrow down the scope of the returned maintenance windows. Supported filter keys are Name and Enabled.
      */
     Filters?: MaintenanceWindowFilterList;
     /**
@@ -3205,13 +3293,37 @@ declare namespace SSM {
   }
   export interface DescribeMaintenanceWindowsResult {
     /**
-     * Information about the Maintenance Windows.
+     * Information about the maintenance windows.
      */
     WindowIdentities?: MaintenanceWindowIdentityList;
     /**
      * The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.
      */
     NextToken?: NextToken;
+  }
+  export interface DescribeOpsItemsRequest {
+    /**
+     * One or more filters to limit the reponse.   Key: CreatedTime Operations: GreaterThan, LessThan   Key: LastModifiedBy Operations: Contains, Equals   Key: LastModifiedTime Operations: GreaterThan, LessThan   Key: Priority Operations: Equals   Key: Source Operations: Contains, Equals   Key: Status Operations: Equals   Key: Title Operations: Contains   Key: OperationalData* Operations: Equals   Key: OperationalDataKey Operations: Equals   Key: OperationalDataValue Operations: Equals, Contains   Key: OpsItemId Operations: Equals   Key: ResourceId Operations: Contains   Key: AutomationId Operations: Equals   *If you filter the response by using the OperationalData operator, specify a key-value pair by using the following JSON format: {"key":"key_name","value":"a_value"}
+     */
+    OpsItemFilters?: OpsItemFilters;
+    /**
+     * The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.
+     */
+    MaxResults?: OpsItemMaxResults;
+    /**
+     * A token to start the list. Use this token to get the next set of results.
+     */
+    NextToken?: String;
+  }
+  export interface DescribeOpsItemsResponse {
+    /**
+     * The token for the next set of items to return. Use this token to get the next set of results.
+     */
+    NextToken?: String;
+    /**
+     * A list of OpsItems.
+     */
+    OpsItemSummaries?: OpsItemSummaries;
   }
   export interface DescribeParametersRequest {
     /**
@@ -3960,21 +4072,21 @@ declare namespace SSM {
   }
   export interface GetMaintenanceWindowExecutionRequest {
     /**
-     * The ID of the Maintenance Window execution that includes the task.
+     * The ID of the maintenance window execution that includes the task.
      */
     WindowExecutionId: MaintenanceWindowExecutionId;
   }
   export interface GetMaintenanceWindowExecutionResult {
     /**
-     * The ID of the Maintenance Window execution.
+     * The ID of the maintenance window execution.
      */
     WindowExecutionId?: MaintenanceWindowExecutionId;
     /**
-     * The ID of the task executions from the Maintenance Window execution.
+     * The ID of the task executions from the maintenance window execution.
      */
     TaskIds?: MaintenanceWindowExecutionTaskIdList;
     /**
-     * The status of the Maintenance Window execution.
+     * The status of the maintenance window execution.
      */
     Status?: MaintenanceWindowExecutionStatus;
     /**
@@ -3982,21 +4094,21 @@ declare namespace SSM {
      */
     StatusDetails?: MaintenanceWindowExecutionStatusDetails;
     /**
-     * The time the Maintenance Window started running.
+     * The time the maintenance window started running.
      */
     StartTime?: DateTime;
     /**
-     * The time the Maintenance Window finished running.
+     * The time the maintenance window finished running.
      */
     EndTime?: DateTime;
   }
   export interface GetMaintenanceWindowExecutionTaskInvocationRequest {
     /**
-     * The ID of the Maintenance Window execution for which the task is a part.
+     * The ID of the maintenance window execution for which the task is a part.
      */
     WindowExecutionId: MaintenanceWindowExecutionId;
     /**
-     * The ID of the specific task in the Maintenance Window task that should be retrieved. 
+     * The ID of the specific task in the maintenance window task that should be retrieved. 
      */
     TaskId: MaintenanceWindowExecutionTaskId;
     /**
@@ -4006,7 +4118,7 @@ declare namespace SSM {
   }
   export interface GetMaintenanceWindowExecutionTaskInvocationResult {
     /**
-     * The Maintenance Window execution ID.
+     * The maintenance window execution ID.
      */
     WindowExecutionId?: MaintenanceWindowExecutionId;
     /**
@@ -4022,7 +4134,7 @@ declare namespace SSM {
      */
     ExecutionId?: MaintenanceWindowExecutionTaskExecutionId;
     /**
-     * Retrieves the task type for a Maintenance Window. Task types include the following: LAMBDA, STEP_FUNCTION, AUTOMATION, RUN_COMMAND.
+     * Retrieves the task type for a maintenance window. Task types include the following: LAMBDA, STEP_FUNCTIONS, AUTOMATION, RUN_COMMAND.
      */
     TaskType?: MaintenanceWindowTaskType;
     /**
@@ -4046,31 +4158,31 @@ declare namespace SSM {
      */
     EndTime?: DateTime;
     /**
-     * User-provided value to be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window. 
+     * User-provided value to be included in any CloudWatch events raised while running tasks for these targets in this maintenance window. 
      */
     OwnerInformation?: OwnerInformation;
     /**
-     * The Maintenance Window target ID.
+     * The maintenance window target ID.
      */
     WindowTargetId?: MaintenanceWindowTaskTargetId;
   }
   export interface GetMaintenanceWindowExecutionTaskRequest {
     /**
-     * The ID of the Maintenance Window execution that includes the task.
+     * The ID of the maintenance window execution that includes the task.
      */
     WindowExecutionId: MaintenanceWindowExecutionId;
     /**
-     * The ID of the specific task execution in the Maintenance Window task that should be retrieved.
+     * The ID of the specific task execution in the maintenance window task that should be retrieved.
      */
     TaskId: MaintenanceWindowExecutionTaskId;
   }
   export interface GetMaintenanceWindowExecutionTaskResult {
     /**
-     * The ID of the Maintenance Window execution that includes the task.
+     * The ID of the maintenance window execution that includes the task.
      */
     WindowExecutionId?: MaintenanceWindowExecutionId;
     /**
-     * The ID of the specific task execution in the Maintenance Window task that was retrieved.
+     * The ID of the specific task execution in the maintenance window task that was retrieved.
      */
     TaskExecutionId?: MaintenanceWindowExecutionTaskId;
     /**
@@ -4086,7 +4198,7 @@ declare namespace SSM {
      */
     Type?: MaintenanceWindowTaskType;
     /**
-     * The parameters passed to the task when it was run.   TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters.  The map has the following format: Key: string, between 1 and 255 characters Value: an array of strings, each string is between 1 and 255 characters
+     * The parameters passed to the task when it was run.   TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters.  The map has the following format: Key: string, between 1 and 255 characters Value: an array of strings, each string is between 1 and 255 characters
      */
     TaskParameters?: MaintenanceWindowTaskParametersList;
     /**
@@ -4120,85 +4232,85 @@ declare namespace SSM {
   }
   export interface GetMaintenanceWindowRequest {
     /**
-     * The ID of the desired Maintenance Window.
+     * The ID of the maintenance window for which you want to retrieve information.
      */
     WindowId: MaintenanceWindowId;
   }
   export interface GetMaintenanceWindowResult {
     /**
-     * The ID of the created Maintenance Window.
+     * The ID of the created maintenance window.
      */
     WindowId?: MaintenanceWindowId;
     /**
-     * The name of the Maintenance Window.
+     * The name of the maintenance window.
      */
     Name?: MaintenanceWindowName;
     /**
-     * The description of the Maintenance Window.
+     * The description of the maintenance window.
      */
     Description?: MaintenanceWindowDescription;
     /**
-     * The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become active. The Maintenance Window will not run before this specified time.
+     * The date and time, in ISO-8601 Extended format, for when the maintenance window is scheduled to become active. The maintenance window will not run before this specified time.
      */
     StartDate?: MaintenanceWindowStringDateTime;
     /**
-     * The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become inactive. The Maintenance Window will not run after this specified time.
+     * The date and time, in ISO-8601 Extended format, for when the maintenance window is scheduled to become inactive. The maintenance window will not run after this specified time.
      */
     EndDate?: MaintenanceWindowStringDateTime;
     /**
-     * The schedule of the Maintenance Window in the form of a cron or rate expression.
+     * The schedule of the maintenance window in the form of a cron or rate expression.
      */
     Schedule?: MaintenanceWindowSchedule;
     /**
-     * The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the Time Zone Database on the IANA website.
+     * The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the Time Zone Database on the IANA website.
      */
     ScheduleTimezone?: MaintenanceWindowTimezone;
     /**
-     * The next time the Maintenance Window will actually run, taking into account any specified times for the Maintenance Window to become active or inactive.
+     * The next time the maintenance window will actually run, taking into account any specified times for the maintenance window to become active or inactive.
      */
     NextExecutionTime?: MaintenanceWindowStringDateTime;
     /**
-     * The duration of the Maintenance Window in hours.
+     * The duration of the maintenance window in hours.
      */
     Duration?: MaintenanceWindowDurationHours;
     /**
-     * The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.
+     * The number of hours before the end of the maintenance window that Systems Manager stops scheduling new tasks for execution.
      */
     Cutoff?: MaintenanceWindowCutoff;
     /**
-     * Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.
+     * Whether targets must be registered with the maintenance window before tasks can be defined for those targets.
      */
     AllowUnassociatedTargets?: MaintenanceWindowAllowUnassociatedTargets;
     /**
-     * Whether the Maintenance Windows is enabled.
+     * Indicates whether the maintenance window is enabled.
      */
     Enabled?: MaintenanceWindowEnabled;
     /**
-     * The date the Maintenance Window was created.
+     * The date the maintenance window was created.
      */
     CreatedDate?: DateTime;
     /**
-     * The date the Maintenance Window was last modified.
+     * The date the maintenance window was last modified.
      */
     ModifiedDate?: DateTime;
   }
   export interface GetMaintenanceWindowTaskRequest {
     /**
-     * The Maintenance Window ID that includes the task to retrieve.
+     * The maintenance window ID that includes the task to retrieve.
      */
     WindowId: MaintenanceWindowId;
     /**
-     * The Maintenance Window task ID to retrieve.
+     * The maintenance window task ID to retrieve.
      */
     WindowTaskId: MaintenanceWindowTaskId;
   }
   export interface GetMaintenanceWindowTaskResult {
     /**
-     * The retrieved Maintenance Window ID.
+     * The retrieved maintenance window ID.
      */
     WindowId?: MaintenanceWindowId;
     /**
-     * The retrieved Maintenance Window task ID.
+     * The retrieved maintenance window task ID.
      */
     WindowTaskId?: MaintenanceWindowTaskId;
     /**
@@ -4206,11 +4318,11 @@ declare namespace SSM {
      */
     Targets?: Targets;
     /**
-     * The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the Systems Manager Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.
+     * The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the Systems Manager Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTIONS tasks, the value is the state machine ARN.
      */
     TaskArn?: MaintenanceWindowTaskArn;
     /**
-     * The IAM service role to assume during task execution.
+     * The ARN of the IAM service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for maintenance window Run Command tasks.
      */
     ServiceRoleArn?: ServiceRole;
     /**
@@ -4218,7 +4330,7 @@ declare namespace SSM {
      */
     TaskType?: MaintenanceWindowTaskType;
     /**
-     * The parameters to pass to the task when it runs.   TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters. 
+     * The parameters to pass to the task when it runs.   TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters. 
      */
     TaskParameters?: MaintenanceWindowTaskParameters;
     /**
@@ -4238,7 +4350,7 @@ declare namespace SSM {
      */
     MaxErrors?: MaxErrors;
     /**
-     * The location in Amazon S3 where the task results are logged.   LoggingInfo has been deprecated. To specify an S3 bucket to contain logs, instead use the OutputS3BucketName and OutputS3KeyPrefix options in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters. 
+     * The location in Amazon S3 where the task results are logged.   LoggingInfo has been deprecated. To specify an S3 bucket to contain logs, instead use the OutputS3BucketName and OutputS3KeyPrefix options in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters. 
      */
     LoggingInfo?: LoggingInfo;
     /**
@@ -4249,6 +4361,46 @@ declare namespace SSM {
      * The retrieved task description.
      */
     Description?: MaintenanceWindowDescription;
+  }
+  export interface GetOpsItemRequest {
+    /**
+     * The ID of the OpsItem that you want to get.
+     */
+    OpsItemId: OpsItemId;
+  }
+  export interface GetOpsItemResponse {
+    /**
+     * The OpsItem.
+     */
+    OpsItem?: OpsItem;
+  }
+  export interface GetOpsSummaryRequest {
+    /**
+     * Optional filters used to scope down the returned OpsItems. 
+     */
+    Filters?: OpsFilterList;
+    /**
+     * Optional aggregators that return counts of OpsItems based on one or more expressions.
+     */
+    Aggregators: OpsAggregatorList;
+    /**
+     * A token to start the list. Use this token to get the next set of results. 
+     */
+    NextToken?: NextToken;
+    /**
+     * The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.
+     */
+    MaxResults?: MaxResults;
+  }
+  export interface GetOpsSummaryResult {
+    /**
+     * The list of aggregated and filtered OpsItems.
+     */
+    Entities?: OpsEntityList;
+    /**
+     * The token for the next set of items to return. Use this token to get the next set of results.
+     */
+    NextToken?: NextToken;
   }
   export interface GetParameterHistoryRequest {
     /**
@@ -4347,7 +4499,7 @@ declare namespace SSM {
      */
     Parameters?: ParameterList;
     /**
-     * A list of parameters that are not formatted correctly or do not run when executed.
+     * A list of parameters that are not formatted correctly or do not run during an execution.
      */
     InvalidParameters?: ParameterNameList;
   }
@@ -4512,7 +4664,7 @@ declare namespace SSM {
      */
     Name?: DocumentARN;
     /**
-     * The association document verions.
+     * The association document versions.
      */
     DocumentVersion?: DocumentVersion;
     /**
@@ -5349,7 +5501,7 @@ declare namespace SSM {
      */
     DocumentVersion?: DocumentVersion;
     /**
-     * The parameters for the AUTOMATION task. For information about specifying and updating task parameters, see RegisterTaskWithMaintenanceWindow and UpdateMaintenanceWindowTask.   LoggingInfo has been deprecated. To specify an S3 bucket to contain logs, instead use the OutputS3BucketName and OutputS3KeyPrefix options in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters.  TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters. For AUTOMATION task types, Systems Manager ignores any values specified for these parameters. 
+     * The parameters for the AUTOMATION task. For information about specifying and updating task parameters, see RegisterTaskWithMaintenanceWindow and UpdateMaintenanceWindowTask.   LoggingInfo has been deprecated. To specify an S3 bucket to contain logs, instead use the OutputS3BucketName and OutputS3KeyPrefix options in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters.  TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters. For AUTOMATION task types, Systems Manager ignores any values specified for these parameters. 
      */
     Parameters?: AutomationParameterMap;
   }
@@ -5359,11 +5511,11 @@ declare namespace SSM {
   export type MaintenanceWindowEnabled = boolean;
   export interface MaintenanceWindowExecution {
     /**
-     * The ID of the Maintenance Window.
+     * The ID of the maintenance window.
      */
     WindowId?: MaintenanceWindowId;
     /**
-     * The ID of the Maintenance Window execution.
+     * The ID of the maintenance window execution.
      */
     WindowExecutionId?: MaintenanceWindowExecutionId;
     /**
@@ -5392,11 +5544,11 @@ declare namespace SSM {
   export type MaintenanceWindowExecutionTaskIdList = MaintenanceWindowExecutionTaskId[];
   export interface MaintenanceWindowExecutionTaskIdentity {
     /**
-     * The ID of the Maintenance Window execution that ran the task.
+     * The ID of the maintenance window execution that ran the task.
      */
     WindowExecutionId?: MaintenanceWindowExecutionId;
     /**
-     * The ID of the specific task execution in the Maintenance Window execution.
+     * The ID of the specific task execution in the maintenance window execution.
      */
     TaskExecutionId?: MaintenanceWindowExecutionTaskId;
     /**
@@ -5428,11 +5580,11 @@ declare namespace SSM {
   export type MaintenanceWindowExecutionTaskInvocationId = string;
   export interface MaintenanceWindowExecutionTaskInvocationIdentity {
     /**
-     * The ID of the Maintenance Window execution that ran the task.
+     * The ID of the maintenance window execution that ran the task.
      */
     WindowExecutionId?: MaintenanceWindowExecutionId;
     /**
-     * The ID of the specific task execution in the Maintenance Window execution.
+     * The ID of the specific task execution in the maintenance window execution.
      */
     TaskExecutionId?: MaintenanceWindowExecutionTaskId;
     /**
@@ -5468,11 +5620,11 @@ declare namespace SSM {
      */
     EndTime?: DateTime;
     /**
-     * User-provided value that was specified when the target was registered with the Maintenance Window. This was also included in any CloudWatch events raised during the task invocation.
+     * User-provided value that was specified when the target was registered with the maintenance window. This was also included in any CloudWatch events raised during the task invocation.
      */
     OwnerInformation?: OwnerInformation;
     /**
-     * The ID of the target definition in this Maintenance Window the invocation was performed for.
+     * The ID of the target definition in this maintenance window the invocation was performed for.
      */
     WindowTargetId?: MaintenanceWindowTaskTargetId;
   }
@@ -5495,57 +5647,57 @@ declare namespace SSM {
   export type MaintenanceWindowId = string;
   export interface MaintenanceWindowIdentity {
     /**
-     * The ID of the Maintenance Window.
+     * The ID of the maintenance window.
      */
     WindowId?: MaintenanceWindowId;
     /**
-     * The name of the Maintenance Window.
+     * The name of the maintenance window.
      */
     Name?: MaintenanceWindowName;
     /**
-     * A description of the Maintenance Window.
+     * A description of the maintenance window.
      */
     Description?: MaintenanceWindowDescription;
     /**
-     * Whether the Maintenance Window is enabled.
+     * Indicates whether the maintenance window is enabled.
      */
     Enabled?: MaintenanceWindowEnabled;
     /**
-     * The duration of the Maintenance Window in hours.
+     * The duration of the maintenance window in hours.
      */
     Duration?: MaintenanceWindowDurationHours;
     /**
-     * The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.
+     * The number of hours before the end of the maintenance window that Systems Manager stops scheduling new tasks for execution.
      */
     Cutoff?: MaintenanceWindowCutoff;
     /**
-     * The schedule of the Maintenance Window in the form of a cron or rate expression.
+     * The schedule of the maintenance window in the form of a cron or rate expression.
      */
     Schedule?: MaintenanceWindowSchedule;
     /**
-     * The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format.
+     * The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format.
      */
     ScheduleTimezone?: MaintenanceWindowTimezone;
     /**
-     * The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become inactive.
+     * The date and time, in ISO-8601 Extended format, for when the maintenance window is scheduled to become inactive.
      */
     EndDate?: MaintenanceWindowStringDateTime;
     /**
-     * The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become active.
+     * The date and time, in ISO-8601 Extended format, for when the maintenance window is scheduled to become active.
      */
     StartDate?: MaintenanceWindowStringDateTime;
     /**
-     * The next time the Maintenance Window will actually run, taking into account any specified times for the Maintenance Window to become active or inactive.
+     * The next time the maintenance window will actually run, taking into account any specified times for the maintenance window to become active or inactive.
      */
     NextExecutionTime?: MaintenanceWindowStringDateTime;
   }
   export interface MaintenanceWindowIdentityForTarget {
     /**
-     * The ID of the Maintenance Window.
+     * The ID of the maintenance window.
      */
     WindowId?: MaintenanceWindowId;
     /**
-     * The name of the Maintenance Window.
+     * The name of the maintenance window.
      */
     Name?: MaintenanceWindowName;
   }
@@ -5569,10 +5721,10 @@ declare namespace SSM {
   export type MaintenanceWindowLambdaQualifier = string;
   export type MaintenanceWindowMaxResults = number;
   export type MaintenanceWindowName = string;
-  export type MaintenanceWindowResourceType = "INSTANCE"|string;
+  export type MaintenanceWindowResourceType = "INSTANCE"|"RESOURCE_GROUP"|string;
   export interface MaintenanceWindowRunCommandParameters {
     /**
-     * Information about the command(s) to run.
+     * Information about the commands to run.
      */
     Comment?: Comment;
     /**
@@ -5600,7 +5752,7 @@ declare namespace SSM {
      */
     Parameters?: Parameters;
     /**
-     * The IAM service role to assume during task execution.
+     * The ARN of the IAM service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for maintenance window Run Command tasks.
      */
     ServiceRoleArn?: ServiceRole;
     /**
@@ -5614,18 +5766,18 @@ declare namespace SSM {
   export type MaintenanceWindowStepFunctionsName = string;
   export interface MaintenanceWindowStepFunctionsParameters {
     /**
-     * The inputs for the STEP_FUNCTION task.
+     * The inputs for the STEP_FUNCTIONS task.
      */
     Input?: MaintenanceWindowStepFunctionsInput;
     /**
-     * The name of the STEP_FUNCTION task.
+     * The name of the STEP_FUNCTIONS task.
      */
     Name?: MaintenanceWindowStepFunctionsName;
   }
   export type MaintenanceWindowStringDateTime = string;
   export interface MaintenanceWindowTarget {
     /**
-     * The ID of the Maintenance Window to register the target with.
+     * The ID of the maintenance window to register the target with.
      */
     WindowId?: MaintenanceWindowId;
     /**
@@ -5633,7 +5785,7 @@ declare namespace SSM {
      */
     WindowTargetId?: MaintenanceWindowTargetId;
     /**
-     * The type of target that is being registered with the Maintenance Window.
+     * The type of target that is being registered with the maintenance window.
      */
     ResourceType?: MaintenanceWindowResourceType;
     /**
@@ -5641,11 +5793,11 @@ declare namespace SSM {
      */
     Targets?: Targets;
     /**
-     * A user-provided value that will be included in any CloudWatch events that are raised while running tasks for these targets in this Maintenance Window.
+     * A user-provided value that will be included in any CloudWatch events that are raised while running tasks for these targets in this maintenance window.
      */
     OwnerInformation?: OwnerInformation;
     /**
-     * The target name.
+     * The name for the maintenance window target.
      */
     Name?: MaintenanceWindowName;
     /**
@@ -5657,7 +5809,7 @@ declare namespace SSM {
   export type MaintenanceWindowTargetList = MaintenanceWindowTarget[];
   export interface MaintenanceWindowTask {
     /**
-     * The ID of the Maintenance Window where the task is registered.
+     * The ID of the maintenance window where the task is registered.
      */
     WindowId?: MaintenanceWindowId;
     /**
@@ -5665,11 +5817,11 @@ declare namespace SSM {
      */
     WindowTaskId?: MaintenanceWindowTaskId;
     /**
-     * The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, TaskArn is the Systems Manager document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.
+     * The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, TaskArn is the Systems Manager document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTIONS tasks, it's the state machine ARN.
      */
     TaskArn?: MaintenanceWindowTaskArn;
     /**
-     * The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION, LAMBDA, or STEP_FUNCTION.
+     * The type of task. The type can be one of the following: RUN_COMMAND, AUTOMATION, LAMBDA, or STEP_FUNCTIONS.
      */
     Type?: MaintenanceWindowTaskType;
     /**
@@ -5677,19 +5829,19 @@ declare namespace SSM {
      */
     Targets?: Targets;
     /**
-     * The parameters that should be passed to the task when it is run.   TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters. 
+     * The parameters that should be passed to the task when it is run.   TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters. 
      */
     TaskParameters?: MaintenanceWindowTaskParameters;
     /**
-     * The priority of the task in the Maintenance Window. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.
+     * The priority of the task in the maintenance window. The lower the number, the higher the priority. Tasks that have the same priority are scheduled in parallel.
      */
     Priority?: MaintenanceWindowTaskPriority;
     /**
-     * Information about an Amazon S3 bucket to write task-level logs to.   LoggingInfo has been deprecated. To specify an S3 bucket to contain logs, instead use the OutputS3BucketName and OutputS3KeyPrefix options in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters. 
+     * Information about an Amazon S3 bucket to write task-level logs to.   LoggingInfo has been deprecated. To specify an S3 bucket to contain logs, instead use the OutputS3BucketName and OutputS3KeyPrefix options in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters. 
      */
     LoggingInfo?: LoggingInfo;
     /**
-     * The role that should be assumed when running the task.
+     * The ARN of the IAM service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for maintenance window Run Command tasks.
      */
     ServiceRoleArn?: ServiceRole;
     /**
@@ -5721,7 +5873,7 @@ declare namespace SSM {
      */
     Automation?: MaintenanceWindowAutomationParameters;
     /**
-     * The parameters for a STEP_FUNCTION task type.
+     * The parameters for a STEP_FUNCTIONS task type.
      */
     StepFunctions?: MaintenanceWindowStepFunctionsParameters;
     /**
@@ -5786,11 +5938,11 @@ declare namespace SSM {
   export type NotificationArn = string;
   export interface NotificationConfig {
     /**
-     * An Amazon Resource Name (ARN) for a Simple Notification Service (SNS) topic. Run Command pushes notifications about command status changes to this topic.
+     * An Amazon Resource Name (ARN) for an Amazon Simple Notification Service (Amazon SNS) topic. Run Command pushes notifications about command status changes to this topic.
      */
     NotificationArn?: NotificationArn;
     /**
-     * The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see Configuring Amazon SNS Notifications for Run Command in the AWS Systems Manager User Guide.
+     * The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see Configuring Amazon SNS Notifications for AWS Systems Manager in the AWS Systems Manager User Guide.
      */
     NotificationEvents?: NotificationEventList;
     /**
@@ -5802,6 +5954,229 @@ declare namespace SSM {
   export type NotificationEventList = NotificationEvent[];
   export type NotificationType = "Command"|"Invocation"|string;
   export type OperatingSystem = "WINDOWS"|"AMAZON_LINUX"|"AMAZON_LINUX_2"|"UBUNTU"|"REDHAT_ENTERPRISE_LINUX"|"SUSE"|"CENTOS"|string;
+  export interface OpsAggregator {
+    /**
+     * Either a Range or Count aggregator for limiting an OpsItem summary.
+     */
+    AggregatorType?: OpsAggregatorType;
+    /**
+     * The data type name to use for viewing counts of OpsItems.
+     */
+    TypeName?: OpsDataTypeName;
+    /**
+     * The name of an OpsItem attribute on which to limit the count of OpsItems.
+     */
+    AttributeName?: OpsDataAttributeName;
+    /**
+     * The aggregator value.
+     */
+    Values?: OpsAggregatorValueMap;
+    /**
+     * The aggregator filters.
+     */
+    Filters?: OpsFilterList;
+    /**
+     * A nested aggregator for viewing counts of OpsItems.
+     */
+    Aggregators?: OpsAggregatorList;
+  }
+  export type OpsAggregatorList = OpsAggregator[];
+  export type OpsAggregatorType = string;
+  export type OpsAggregatorValue = string;
+  export type OpsAggregatorValueKey = string;
+  export type OpsAggregatorValueMap = {[key: string]: OpsAggregatorValue};
+  export type OpsDataAttributeName = string;
+  export type OpsDataTypeName = string;
+  export interface OpsEntity {
+    /**
+     * The query ID.
+     */
+    Id?: OpsEntityId;
+    /**
+     * The data returned by the query.
+     */
+    Data?: OpsEntityItemMap;
+  }
+  export type OpsEntityId = string;
+  export interface OpsEntityItem {
+    /**
+     * The detailed data content for an OpsItem summaries result item.
+     */
+    Content?: OpsEntityItemEntryList;
+  }
+  export type OpsEntityItemEntry = {[key: string]: AttributeValue};
+  export type OpsEntityItemEntryList = OpsEntityItemEntry[];
+  export type OpsEntityItemKey = string;
+  export type OpsEntityItemMap = {[key: string]: OpsEntityItem};
+  export type OpsEntityList = OpsEntity[];
+  export interface OpsFilter {
+    /**
+     * The name of the filter.
+     */
+    Key: OpsFilterKey;
+    /**
+     * The filter value.
+     */
+    Values: OpsFilterValueList;
+    /**
+     * The type of filter.
+     */
+    Type?: OpsFilterOperatorType;
+  }
+  export type OpsFilterKey = string;
+  export type OpsFilterList = OpsFilter[];
+  export type OpsFilterOperatorType = "Equal"|"NotEqual"|"BeginWith"|"LessThan"|"GreaterThan"|"Exists"|string;
+  export type OpsFilterValue = string;
+  export type OpsFilterValueList = OpsFilterValue[];
+  export interface OpsItem {
+    /**
+     * The ARN of the AWS account that created the OpsItem.
+     */
+    CreatedBy?: String;
+    /**
+     * The date and time the OpsItem was created.
+     */
+    CreatedTime?: DateTime;
+    /**
+     * The OpsItem description.
+     */
+    Description?: OpsItemDescription;
+    /**
+     * The ARN of the AWS account that last updated the OpsItem.
+     */
+    LastModifiedBy?: String;
+    /**
+     * The date and time the OpsItem was last updated.
+     */
+    LastModifiedTime?: DateTime;
+    /**
+     * The Amazon Resource Name (ARN) of an SNS topic where notifications are sent when this OpsItem is edited or changed.
+     */
+    Notifications?: OpsItemNotifications;
+    /**
+     * The importance of this OpsItem in relation to other OpsItems in the system.
+     */
+    Priority?: OpsItemPriority;
+    /**
+     * One or more OpsItems that share something in common with the current OpsItem. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.
+     */
+    RelatedOpsItems?: RelatedOpsItems;
+    /**
+     * The OpsItem status. Status can be Open, In Progress, or Resolved. For more information, see Editing OpsItem Details in the AWS Systems Manager User Guide.
+     */
+    Status?: OpsItemStatus;
+    /**
+     * The ID of the OpsItem.
+     */
+    OpsItemId?: OpsItemId;
+    /**
+     * The version of this OpsItem. Each time the OpsItem is edited the version number increments by one.
+     */
+    Version?: String;
+    /**
+     * A short heading that describes the nature of the OpsItem and the impacted resource.
+     */
+    Title?: OpsItemTitle;
+    /**
+     * The origin of the OpsItem, such as Amazon EC2 or AWS Systems Manager. The impacted resource is a subset of source.
+     */
+    Source?: OpsItemSource;
+    /**
+     * Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.  Operational data keys can't begin with the following: amazon, aws, amzn, ssm, /amazon, /aws, /amzn, /ssm.  You can choose to make the data searchable by other users in the account or you can restrict search access. Searchable data means that all users with access to the OpsItem Overview page (as provided by the DescribeOpsItems API action) can view and search on the specified data. Operational data that is not searchable is only viewable by users who have access to the OpsItem (as provided by the GetOpsItem API action). Use the /aws/resources key in OperationalData to specify a related resource in the request. Use the /aws/automations key in OperationalData to associate an Automation runbook with the OpsItem. To view AWS CLI example commands that use these keys, see Creating OpsItems Manually in the AWS Systems Manager User Guide.
+     */
+    OperationalData?: OpsItemOperationalData;
+  }
+  export type OpsItemDataKey = string;
+  export type OpsItemDataType = "SearchableString"|"String"|string;
+  export interface OpsItemDataValue {
+    /**
+     * The value of the OperationalData key.
+     */
+    Value?: OpsItemDataValueString;
+    /**
+     * The type of key-value pair. Valid types include SearchableString and String.
+     */
+    Type?: OpsItemDataType;
+  }
+  export type OpsItemDataValueString = string;
+  export type OpsItemDescription = string;
+  export interface OpsItemFilter {
+    /**
+     * The name of the filter.
+     */
+    Key: OpsItemFilterKey;
+    /**
+     * The filter value.
+     */
+    Values: OpsItemFilterValues;
+    /**
+     * The operator used by the filter call.
+     */
+    Operator: OpsItemFilterOperator;
+  }
+  export type OpsItemFilterKey = "Status"|"CreatedBy"|"Source"|"Priority"|"Title"|"OpsItemId"|"CreatedTime"|"LastModifiedTime"|"OperationalData"|"OperationalDataKey"|"OperationalDataValue"|"ResourceId"|"AutomationId"|string;
+  export type OpsItemFilterOperator = "Equal"|"Contains"|"GreaterThan"|"LessThan"|string;
+  export type OpsItemFilterValue = string;
+  export type OpsItemFilterValues = OpsItemFilterValue[];
+  export type OpsItemFilters = OpsItemFilter[];
+  export type OpsItemId = string;
+  export type OpsItemMaxResults = number;
+  export interface OpsItemNotification {
+    /**
+     * The Amazon Resource Name (ARN) of an SNS topic where notifications are sent when this OpsItem is edited or changed.
+     */
+    Arn?: String;
+  }
+  export type OpsItemNotifications = OpsItemNotification[];
+  export type OpsItemOperationalData = {[key: string]: OpsItemDataValue};
+  export type OpsItemOpsDataKeysList = String[];
+  export type OpsItemPriority = number;
+  export type OpsItemSource = string;
+  export type OpsItemStatus = "Open"|"InProgress"|"Resolved"|string;
+  export type OpsItemSummaries = OpsItemSummary[];
+  export interface OpsItemSummary {
+    /**
+     * The Amazon Resource Name (ARN) of the IAM entity that created the OpsItem.
+     */
+    CreatedBy?: String;
+    /**
+     * The date and time the OpsItem was created.
+     */
+    CreatedTime?: DateTime;
+    /**
+     * The Amazon Resource Name (ARN) of the IAM entity that created the OpsItem.
+     */
+    LastModifiedBy?: String;
+    /**
+     * The date and time the OpsItem was last updated.
+     */
+    LastModifiedTime?: DateTime;
+    /**
+     * The importance of this OpsItem in relation to other OpsItems in the system.
+     */
+    Priority?: OpsItemPriority;
+    /**
+     * The impacted AWS resource.
+     */
+    Source?: OpsItemSource;
+    /**
+     * The OpsItem status. Status can be Open, In Progress, or Resolved.
+     */
+    Status?: OpsItemStatus;
+    /**
+     * The ID of the OpsItem.
+     */
+    OpsItemId?: OpsItemId;
+    /**
+     * A short heading that describes the nature of the OpsItem and the impacted resource.
+     */
+    Title?: OpsItemTitle;
+    /**
+     * Operational data is custom data that provides useful reference details about the OpsItem. 
+     */
+    OperationalData?: OpsItemOperationalData;
+  }
+  export type OpsItemTitle = string;
   export interface OutputSource {
     /**
      * The ID of the output source, for example the URL of an Amazon S3 bucket.
@@ -5900,7 +6275,7 @@ declare namespace SSM {
      */
     Tier?: ParameterTier;
     /**
-     * Information about the policies assigned to a parameter.
+     * Information about the policies assigned to a parameter.  Working with Parameter Policies in the AWS Systems Manager User Guide.
      */
     Policies?: ParameterPolicyList;
   }
@@ -6405,19 +6780,19 @@ declare namespace SSM {
   }
   export interface RegisterTargetWithMaintenanceWindowRequest {
     /**
-     * The ID of the Maintenance Window the target should be registered with.
+     * The ID of the maintenance window the target should be registered with.
      */
     WindowId: MaintenanceWindowId;
     /**
-     * The type of target being registered with the Maintenance Window.
+     * The type of target being registered with the maintenance window.
      */
     ResourceType: MaintenanceWindowResourceType;
     /**
-     * The targets (either instances or tags).  Specify instances using the following format:  Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;  Specify tags using either of the following formats:  Key=tag:&lt;tag-key&gt;,Values=&lt;tag-value-1&gt;,&lt;tag-value-2&gt;   Key=tag-key,Values=&lt;tag-key-1&gt;,&lt;tag-key-2&gt; 
+     * The targets to register with the maintenance window. In other words, the instances to run commands on when the maintenance window runs. You can specify targets using instance IDs, resource group names, or tags that have been applied to instances.  Example 1: Specify instance IDs  Key=InstanceIds,Values=instance-id-1,instance-id-2,instance-id-3    Example 2: Use tag key-pairs applied to instances  Key=tag:my-tag-key,Values=my-tag-value-1,my-tag-value-2    Example 3: Use tag-keys applied to instances  Key=tag-key,Values=my-tag-key-1,my-tag-key-2    Example 4: Use resource group names  Key=resource-groups:Name,Values=resource-group-name    Example 5: Use filters for resource group types  Key=resource-groups:ResourceTypeFilters,Values=resource-type-1,resource-type-2    For Key=resource-groups:ResourceTypeFilters, specify resource types in the following format  Key=resource-groups:ResourceTypeFilters,Values=AWS::EC2::INSTANCE,AWS::EC2::VPC    For more information about these examples formats, including the best use case for each one, see Examples: Register Targets with a Maintenance Window in the AWS Systems Manager User Guide.
      */
     Targets: Targets;
     /**
-     * User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.
+     * User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this maintenance window.
      */
     OwnerInformation?: OwnerInformation;
     /**
@@ -6435,17 +6810,17 @@ declare namespace SSM {
   }
   export interface RegisterTargetWithMaintenanceWindowResult {
     /**
-     * The ID of the target definition in this Maintenance Window.
+     * The ID of the target definition in this maintenance window.
      */
     WindowTargetId?: MaintenanceWindowTargetId;
   }
   export interface RegisterTaskWithMaintenanceWindowRequest {
     /**
-     * The ID of the Maintenance Window the task should be added to.
+     * The ID of the maintenance window the task should be added to.
      */
     WindowId: MaintenanceWindowId;
     /**
-     * The targets (either instances or Maintenance Window targets). Specify instances using the following format:   Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;  Specify Maintenance Window targets using the following format:  Key=&lt;WindowTargetIds&gt;,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt; 
+     * The targets (either instances or maintenance window targets). Specify instances using the following format:   Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;  Specify maintenance window targets using the following format:  Key=WindowTargetIds;,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt; 
      */
     Targets: Targets;
     /**
@@ -6453,7 +6828,7 @@ declare namespace SSM {
      */
     TaskArn: MaintenanceWindowTaskArn;
     /**
-     * The role to assume when running the Maintenance Window task. If you do not specify a service role ARN, Systems Manager will use your account's service-linked role for Systems Manager by default. If no service-linked role for Systems Manager exists in your account, it will be created when you run RegisterTaskWithMaintenanceWindow without specifying a service role ARN. For more information, see Service-Linked Role Permissions for Systems Manager and Should I Use a Service-Linked Role or a Custom Service Role to Run Maintenance Window Tasks?  in the AWS Systems Manager User Guide.
+     * The ARN of the IAM service role for Systems Manager to assume when running a maintenance window task. If you do not specify a service role ARN, Systems Manager uses your account's service-linked role. If no service-linked role for Systems Manager exists in your account, it is created when you run RegisterTaskWithMaintenanceWindow. For more information, see the following topics in the in the AWS Systems Manager User Guide:    Service-Linked Role Permissions for Systems Manager     Should I Use a Service-Linked Role or a Custom Service Role to Run Maintenance Window Tasks?    
      */
     ServiceRoleArn?: ServiceRole;
     /**
@@ -6461,7 +6836,7 @@ declare namespace SSM {
      */
     TaskType: MaintenanceWindowTaskType;
     /**
-     * The parameters that should be passed to the task when it is run.   TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters. 
+     * The parameters that should be passed to the task when it is run.   TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters. 
      */
     TaskParameters?: MaintenanceWindowTaskParameters;
     /**
@@ -6469,7 +6844,7 @@ declare namespace SSM {
      */
     TaskInvocationParameters?: MaintenanceWindowTaskInvocationParameters;
     /**
-     * The priority of the task in the Maintenance Window, the lower the number the higher the priority. Tasks in a Maintenance Window are scheduled in priority order with tasks that have the same priority scheduled in parallel.
+     * The priority of the task in the maintenance window, the lower the number the higher the priority. Tasks in a maintenance window are scheduled in priority order with tasks that have the same priority scheduled in parallel.
      */
     Priority?: MaintenanceWindowTaskPriority;
     /**
@@ -6481,7 +6856,7 @@ declare namespace SSM {
      */
     MaxErrors: MaxErrors;
     /**
-     * A structure containing information about an Amazon S3 bucket to write instance-level logs to.    LoggingInfo has been deprecated. To specify an S3 bucket to contain logs, instead use the OutputS3BucketName and OutputS3KeyPrefix options in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters. 
+     * A structure containing information about an Amazon S3 bucket to write instance-level logs to.    LoggingInfo has been deprecated. To specify an S3 bucket to contain logs, instead use the OutputS3BucketName and OutputS3KeyPrefix options in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters. 
      */
     LoggingInfo?: LoggingInfo;
     /**
@@ -6499,20 +6874,27 @@ declare namespace SSM {
   }
   export interface RegisterTaskWithMaintenanceWindowResult {
     /**
-     * The ID of the task in the Maintenance Window.
+     * The ID of the task in the maintenance window.
      */
     WindowTaskId?: MaintenanceWindowTaskId;
   }
   export type RegistrationLimit = number;
   export type RegistrationsCount = number;
+  export interface RelatedOpsItem {
+    /**
+     * The ID of an OpsItem related to the current OpsItem.
+     */
+    OpsItemId: String;
+  }
+  export type RelatedOpsItems = RelatedOpsItem[];
   export type RemainingCount = number;
   export interface RemoveTagsFromResourceRequest {
     /**
-     * The type of resource of which you want to remove a tag.  The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f. 
+     * The type of resource from which you want to remove a tag.  The ManagedInstance type for this API action is only for on-premises managed instances. Specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f. 
      */
     ResourceType: ResourceTypeForTagging;
     /**
-     * The resource ID for which you want to remove tags. Use the ID of the resource. Here are some examples: ManagedInstance: mi-012345abcde MaintenanceWindow: mw-012345abcde PatchBaseline: pb-012345abcde For the Document and Parameter values, use the name of the resource.  The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f. 
+     * The ID of the resource from which you want to remove tags. For example: ManagedInstance: mi-012345abcde MaintenanceWindow: mw-012345abcde PatchBaseline: pb-012345abcde For the Document and Parameter values, use the name of the resource.  The ManagedInstance type for this API action is only for on-premises managed instances. Specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f. 
      */
     ResourceId: ResourceId;
     /**
@@ -6634,7 +7016,7 @@ declare namespace SSM {
      */
     Region: ResourceDataSyncS3Region;
     /**
-     * The ARN of an encryption key for a destination in Amazon S3. Must belong to the same region as the destination Amazon S3 bucket.
+     * The ARN of an encryption key for a destination in Amazon S3. Must belong to the same Region as the destination Amazon S3 bucket.
      */
     AWSKMSKeyARN?: ResourceDataSyncAWSKMSKeyARN;
   }
@@ -6643,7 +7025,7 @@ declare namespace SSM {
   export type ResourceDataSyncS3Region = string;
   export type ResourceId = string;
   export type ResourceType = "ManagedInstance"|"Document"|"EC2Instance"|string;
-  export type ResourceTypeForTagging = "Document"|"ManagedInstance"|"MaintenanceWindow"|"Parameter"|"PatchBaseline"|string;
+  export type ResourceTypeForTagging = "Document"|"ManagedInstance"|"MaintenanceWindow"|"Parameter"|"PatchBaseline"|"OpsItem"|string;
   export type ResponseCode = number;
   export interface ResultAttribute {
     /**
@@ -6668,7 +7050,7 @@ declare namespace SSM {
      */
     TokenValue?: TokenValue;
     /**
-     * A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: wss://ssm-messages.region.amazonaws.com/v1/data-channel/session-id?stream=(input|output).  region represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as us-east-2 for the US East (Ohio) Region. For a list of supported region values, see the Region column in the AWS Systems Manager table of regions and endpoints in the AWS General Reference.  session-id represents the ID of a Session Manager session, such as 1a2b3c4dEXAMPLE.
+     * A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: wss://ssmmessages.region.amazonaws.com/v1/data-channel/session-id?stream=(input|output).  region represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as us-east-2 for the US East (Ohio) Region. For a list of supported region values, see the Region column in the AWS Systems Manager table of regions and endpoints in the AWS General Reference.  session-id represents the ID of a Session Manager session, such as 1a2b3c4dEXAMPLE.
      */
     StreamUrl?: StreamUrl;
   }
@@ -6698,15 +7080,15 @@ declare namespace SSM {
   export type ScheduleExpression = string;
   export interface ScheduledWindowExecution {
     /**
-     * The ID of the Maintenance Window to be run.
+     * The ID of the maintenance window to be run.
      */
     WindowId?: MaintenanceWindowId;
     /**
-     * The name of the Maintenance Window to be run.
+     * The name of the maintenance window to be run.
      */
     Name?: MaintenanceWindowName;
     /**
-     * The time, in ISO-8601 Extended format, that the Maintenance Window is scheduled to be run.
+     * The time, in ISO-8601 Extended format, that the maintenance window is scheduled to be run.
      */
     ExecutionTime?: MaintenanceWindowStringDateTime;
   }
@@ -6717,11 +7099,11 @@ declare namespace SSM {
      */
     AutomationExecutionId: AutomationExecutionId;
     /**
-     * The type of signal. Valid signal types include the following: Approve and Reject 
+     * The type of signal to send to an Automation execution. 
      */
     SignalType: SignalType;
     /**
-     * The data sent with the signal. The data schema depends on the type of signal used in the request. 
+     * The data sent with the signal. The data schema depends on the type of signal used in the request. For Approve and Reject signal types, the payload is an optional comment that you can send with the signal type. For example:  Comment="Looks good"  For StartStep and Resume signal types, you must send the name of the Automation step to start or resume as the payload. For example:  StepName="step1"  For the StopStep signal type, you must send the step execution ID as the payload. For example:  StepExecutionId="97fff367-fc5a-4299-aed8-0123456789ab" 
      */
     Payload?: AutomationParameterMap;
   }
@@ -6785,7 +7167,7 @@ declare namespace SSM {
      */
     MaxErrors?: MaxErrors;
     /**
-     * The IAM role that Systems Manager uses to send notifications. 
+     * The ARN of the IAM service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for Run Command commands.
      */
     ServiceRoleArn?: ServiceRole;
     /**
@@ -7022,7 +7404,7 @@ declare namespace SSM {
      */
     TokenValue?: TokenValue;
     /**
-     * A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: wss://ssm-messages.region.amazonaws.com/v1/data-channel/session-id?stream=(input|output)   region represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as us-east-2 for the US East (Ohio) Region. For a list of supported region values, see the Region column in the AWS Systems Manager table of regions and endpoints in the AWS General Reference.  session-id represents the ID of a Session Manager session, such as 1a2b3c4dEXAMPLE.
+     * A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: wss://ssmmessages.region.amazonaws.com/v1/data-channel/session-id?stream=(input|output)   region represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as us-east-2 for the US East (Ohio) Region. For a list of supported region values, see the Region column in the AWS Systems Manager table of regions and endpoints in the AWS General Reference.  session-id represents the ID of a Session Manager session, such as 1a2b3c4dEXAMPLE.
      */
     StreamUrl?: StreamUrl;
   }
@@ -7167,11 +7549,11 @@ declare namespace SSM {
   export type TagValue = string;
   export interface Target {
     /**
-     * User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see Using Targets and Rate Controls to Send Commands to a Fleet in the AWS Systems Manager User Guide.
+     * User-defined criteria for sending commands that target instances that meet the criteria.
      */
     Key?: TargetKey;
     /**
-     * User-defined criteria that maps to Key. For example, if you specified tag:ServerRole, you could specify value:WebServer to run a command on instances that include Amazon EC2 tags of ServerRole,WebServer. For more information about how to send commands that target instances using Key,Value parameters, see Using Targets and Rate Controls to Send Commands to a Fleet in the AWS Systems Manager User Guide.
+     * User-defined criteria that maps to Key. For example, if you specified tag:ServerRole, you could specify value:WebServer to run a command on instances that include Amazon EC2 tags of ServerRole,WebServer. 
      */
     Values?: TargetValues;
   }
@@ -7187,11 +7569,11 @@ declare namespace SSM {
      */
     Regions?: Regions;
     /**
-     * The maxium number of AWS accounts and AWS regions allowed to run the Automation concurrently 
+     * The maximum number of AWS accounts and AWS regions allowed to run the Automation concurrently 
      */
     TargetLocationMaxConcurrency?: MaxConcurrency;
     /**
-     * The maxium number of errors allowed before the system stops queueing additional Automation executions for the currently running Automation. 
+     * The maximum number of errors allowed before the system stops queueing additional Automation executions for the currently running Automation. 
      */
     TargetLocationMaxErrors?: MaxErrors;
     /**
@@ -7359,11 +7741,11 @@ declare namespace SSM {
   }
   export interface UpdateMaintenanceWindowRequest {
     /**
-     * The ID of the Maintenance Window to update.
+     * The ID of the maintenance window to update.
      */
     WindowId: MaintenanceWindowId;
     /**
-     * The name of the Maintenance Window.
+     * The name of the maintenance window.
      */
     Name?: MaintenanceWindowName;
     /**
@@ -7371,35 +7753,35 @@ declare namespace SSM {
      */
     Description?: MaintenanceWindowDescription;
     /**
-     * The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the Time Zone Database on the IANA website.
+     * The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the Time Zone Database on the IANA website.
      */
     StartDate?: MaintenanceWindowStringDateTime;
     /**
-     * The date and time, in ISO-8601 Extended format, for when you want the Maintenance Window to become inactive. EndDate allows you to set a date and time in the future when the Maintenance Window will no longer run.
+     * The date and time, in ISO-8601 Extended format, for when you want the maintenance window to become inactive. EndDate allows you to set a date and time in the future when the maintenance window will no longer run.
      */
     EndDate?: MaintenanceWindowStringDateTime;
     /**
-     * The schedule of the Maintenance Window in the form of a cron or rate expression.
+     * The schedule of the maintenance window in the form of a cron or rate expression.
      */
     Schedule?: MaintenanceWindowSchedule;
     /**
-     * The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the Time Zone Database on the IANA website.
+     * The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the Time Zone Database on the IANA website.
      */
     ScheduleTimezone?: MaintenanceWindowTimezone;
     /**
-     * The duration of the Maintenance Window in hours.
+     * The duration of the maintenance window in hours.
      */
     Duration?: MaintenanceWindowDurationHours;
     /**
-     * The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.
+     * The number of hours before the end of the maintenance window that Systems Manager stops scheduling new tasks for execution.
      */
     Cutoff?: MaintenanceWindowCutoff;
     /**
-     * Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.
+     * Whether targets must be registered with the maintenance window before tasks can be defined for those targets.
      */
     AllowUnassociatedTargets?: MaintenanceWindowAllowUnassociatedTargets;
     /**
-     * Whether the Maintenance Window is enabled.
+     * Whether the maintenance window is enabled.
      */
     Enabled?: MaintenanceWindowEnabled;
     /**
@@ -7409,11 +7791,11 @@ declare namespace SSM {
   }
   export interface UpdateMaintenanceWindowResult {
     /**
-     * The ID of the created Maintenance Window.
+     * The ID of the created maintenance window.
      */
     WindowId?: MaintenanceWindowId;
     /**
-     * The name of the Maintenance Window.
+     * The name of the maintenance window.
      */
     Name?: MaintenanceWindowName;
     /**
@@ -7421,41 +7803,41 @@ declare namespace SSM {
      */
     Description?: MaintenanceWindowDescription;
     /**
-     * The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become active. The Maintenance Window will not run before this specified time.
+     * The date and time, in ISO-8601 Extended format, for when the maintenance window is scheduled to become active. The maintenance window will not run before this specified time.
      */
     StartDate?: MaintenanceWindowStringDateTime;
     /**
-     * The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become inactive. The Maintenance Window will not run after this specified time.
+     * The date and time, in ISO-8601 Extended format, for when the maintenance window is scheduled to become inactive. The maintenance window will not run after this specified time.
      */
     EndDate?: MaintenanceWindowStringDateTime;
     /**
-     * The schedule of the Maintenance Window in the form of a cron or rate expression.
+     * The schedule of the maintenance window in the form of a cron or rate expression.
      */
     Schedule?: MaintenanceWindowSchedule;
     /**
-     * The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the Time Zone Database on the IANA website.
+     * The time zone that the scheduled maintenance window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the Time Zone Database on the IANA website.
      */
     ScheduleTimezone?: MaintenanceWindowTimezone;
     /**
-     * The duration of the Maintenance Window in hours.
+     * The duration of the maintenance window in hours.
      */
     Duration?: MaintenanceWindowDurationHours;
     /**
-     * The number of hours before the end of the Maintenance Window that Systems Manager stops scheduling new tasks for execution.
+     * The number of hours before the end of the maintenance window that Systems Manager stops scheduling new tasks for execution.
      */
     Cutoff?: MaintenanceWindowCutoff;
     /**
-     * Whether targets must be registered with the Maintenance Window before tasks can be defined for those targets.
+     * Whether targets must be registered with the maintenance window before tasks can be defined for those targets.
      */
     AllowUnassociatedTargets?: MaintenanceWindowAllowUnassociatedTargets;
     /**
-     * Whether the Maintenance Window is enabled.
+     * Whether the maintenance window is enabled.
      */
     Enabled?: MaintenanceWindowEnabled;
   }
   export interface UpdateMaintenanceWindowTargetRequest {
     /**
-     * The Maintenance Window ID with which to modify the target.
+     * The maintenance window ID with which to modify the target.
      */
     WindowId: MaintenanceWindowId;
     /**
@@ -7467,7 +7849,7 @@ declare namespace SSM {
      */
     Targets?: Targets;
     /**
-     * User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this Maintenance Window.
+     * User-provided value that will be included in any CloudWatch events raised while running tasks for these targets in this maintenance window.
      */
     OwnerInformation?: OwnerInformation;
     /**
@@ -7485,7 +7867,7 @@ declare namespace SSM {
   }
   export interface UpdateMaintenanceWindowTargetResult {
     /**
-     * The Maintenance Window ID specified in the update request.
+     * The maintenance window ID specified in the update request.
      */
     WindowId?: MaintenanceWindowId;
     /**
@@ -7511,7 +7893,7 @@ declare namespace SSM {
   }
   export interface UpdateMaintenanceWindowTaskRequest {
     /**
-     * The Maintenance Window ID that contains the task to modify.
+     * The maintenance window ID that contains the task to modify.
      */
     WindowId: MaintenanceWindowId;
     /**
@@ -7527,11 +7909,11 @@ declare namespace SSM {
      */
     TaskArn?: MaintenanceWindowTaskArn;
     /**
-     * The IAM service role ARN to modify. The system assumes this role during task execution. If you do not specify a service role ARN, Systems Manager will use your account's service-linked role for Systems Manager by default. If no service-linked role for Systems Manager exists in your account, it will be created when you run RegisterTaskWithMaintenanceWindow without specifying a service role ARN. For more information, see Service-Linked Role Permissions for Systems Manager and Should I Use a Service-Linked Role or a Custom Service Role to Run Maintenance Window Tasks?  in the AWS Systems Manager User Guide.
+     * The ARN of the IAM service role for Systems Manager to assume when running a maintenance window task. If you do not specify a service role ARN, Systems Manager uses your account's service-linked role. If no service-linked role for Systems Manager exists in your account, it is created when you run RegisterTaskWithMaintenanceWindow. For more information, see the following topics in the in the AWS Systems Manager User Guide:    Service-Linked Role Permissions for Systems Manager     Should I Use a Service-Linked Role or a Custom Service Role to Run Maintenance Window Tasks?    
      */
     ServiceRoleArn?: ServiceRole;
     /**
-     * The parameters to modify.   TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters.  The map has the following format: Key: string, between 1 and 255 characters Value: an array of strings, each string is between 1 and 255 characters
+     * The parameters to modify.   TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters.  The map has the following format: Key: string, between 1 and 255 characters Value: an array of strings, each string is between 1 and 255 characters
      */
     TaskParameters?: MaintenanceWindowTaskParameters;
     /**
@@ -7551,7 +7933,7 @@ declare namespace SSM {
      */
     MaxErrors?: MaxErrors;
     /**
-     * The new logging location in Amazon S3 to specify.   LoggingInfo has been deprecated. To specify an S3 bucket to contain logs, instead use the OutputS3BucketName and OutputS3KeyPrefix options in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters. 
+     * The new logging location in Amazon S3 to specify.   LoggingInfo has been deprecated. To specify an S3 bucket to contain logs, instead use the OutputS3BucketName and OutputS3KeyPrefix options in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters. 
      */
     LoggingInfo?: LoggingInfo;
     /**
@@ -7569,11 +7951,11 @@ declare namespace SSM {
   }
   export interface UpdateMaintenanceWindowTaskResult {
     /**
-     * The ID of the Maintenance Window that was updated.
+     * The ID of the maintenance window that was updated.
      */
     WindowId?: MaintenanceWindowId;
     /**
-     * The task ID of the Maintenance Window that was updated.
+     * The task ID of the maintenance window that was updated.
      */
     WindowTaskId?: MaintenanceWindowTaskId;
     /**
@@ -7585,11 +7967,11 @@ declare namespace SSM {
      */
     TaskArn?: MaintenanceWindowTaskArn;
     /**
-     * The updated service role ARN value.
+     * The ARN of the IAM service role to use to publish Amazon Simple Notification Service (Amazon SNS) notifications for maintenance window Run Command tasks.
      */
     ServiceRoleArn?: ServiceRole;
     /**
-     * The updated parameter values.   TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters. 
+     * The updated parameter values.   TaskParameters has been deprecated. To specify parameters to pass to a task when it runs, instead use the Parameters option in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters. 
      */
     TaskParameters?: MaintenanceWindowTaskParameters;
     /**
@@ -7609,7 +7991,7 @@ declare namespace SSM {
      */
     MaxErrors?: MaxErrors;
     /**
-     * The updated logging information in Amazon S3.   LoggingInfo has been deprecated. To specify an S3 bucket to contain logs, instead use the OutputS3BucketName and OutputS3KeyPrefix options in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported Maintenance Window task types, see MaintenanceWindowTaskInvocationParameters. 
+     * The updated logging information in Amazon S3.   LoggingInfo has been deprecated. To specify an S3 bucket to contain logs, instead use the OutputS3BucketName and OutputS3KeyPrefix options in the TaskInvocationParameters structure. For information about how Systems Manager handles these options for the supported maintenance window task types, see MaintenanceWindowTaskInvocationParameters. 
      */
     LoggingInfo?: LoggingInfo;
     /**
@@ -7632,6 +8014,46 @@ declare namespace SSM {
     IamRole: IamRole;
   }
   export interface UpdateManagedInstanceRoleResult {
+  }
+  export interface UpdateOpsItemRequest {
+    /**
+     * Update the information about the OpsItem. Provide enough information so that users reading this OpsItem for the first time understand the issue. 
+     */
+    Description?: OpsItemDescription;
+    /**
+     * Add new keys or edit existing key-value pairs of the OperationalData map in the OpsItem object. Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.  Operational data keys can't begin with the following: amazon, aws, amzn, ssm, /amazon, /aws, /amzn, /ssm.  You can choose to make the data searchable by other users in the account or you can restrict search access. Searchable data means that all users with access to the OpsItem Overview page (as provided by the DescribeOpsItems API action) can view and search on the specified data. Operational data that is not searchable is only viewable by users who have access to the OpsItem (as provided by the GetOpsItem API action). Use the /aws/resources key in OperationalData to specify a related resource in the request. Use the /aws/automations key in OperationalData to associate an Automation runbook with the OpsItem. To view AWS CLI example commands that use these keys, see Creating OpsItems Manually in the AWS Systems Manager User Guide.
+     */
+    OperationalData?: OpsItemOperationalData;
+    /**
+     * Keys that you want to remove from the OperationalData map.
+     */
+    OperationalDataToDelete?: OpsItemOpsDataKeysList;
+    /**
+     * The Amazon Resource Name (ARN) of an SNS topic where notifications are sent when this OpsItem is edited or changed.
+     */
+    Notifications?: OpsItemNotifications;
+    /**
+     * The importance of this OpsItem in relation to other OpsItems in the system.
+     */
+    Priority?: OpsItemPriority;
+    /**
+     * One or more OpsItems that share something in common with the current OpsItems. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.
+     */
+    RelatedOpsItems?: RelatedOpsItems;
+    /**
+     * The OpsItem status. Status can be Open, In Progress, or Resolved. For more information, see Editing OpsItem Details in the AWS Systems Manager User Guide.
+     */
+    Status?: OpsItemStatus;
+    /**
+     * The ID of the OpsItem.
+     */
+    OpsItemId: OpsItemId;
+    /**
+     * A short heading that describes the nature of the OpsItem and the impacted resource.
+     */
+    Title?: OpsItemTitle;
+  }
+  export interface UpdateOpsItemResponse {
   }
   export interface UpdatePatchBaselineRequest {
     /**

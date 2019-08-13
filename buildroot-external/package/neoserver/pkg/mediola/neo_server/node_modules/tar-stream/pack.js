@@ -1,8 +1,7 @@
 var constants = require('fs-constants')
 var eos = require('end-of-stream')
-var util = require('util')
-var alloc = require('buffer-alloc')
-var toBuffer = require('to-buffer')
+var inherits = require('inherits')
+var alloc = Buffer.alloc
 
 var Readable = require('readable-stream').Readable
 var Writable = require('readable-stream').Writable
@@ -41,7 +40,7 @@ var Sink = function (to) {
   this._destroyed = false
 }
 
-util.inherits(Sink, Writable)
+inherits(Sink, Writable)
 
 Sink.prototype._write = function (data, enc, cb) {
   this.written += data.length
@@ -62,7 +61,7 @@ var LinkSink = function () {
   this._destroyed = false
 }
 
-util.inherits(LinkSink, Writable)
+inherits(LinkSink, Writable)
 
 LinkSink.prototype._write = function (data, enc, cb) {
   this.linkname += this._decoder.write(data)
@@ -80,7 +79,7 @@ var Void = function () {
   this._destroyed = false
 }
 
-util.inherits(Void, Writable)
+inherits(Void, Writable)
 
 Void.prototype._write = function (data, enc, cb) {
   cb(new Error('No body allowed for this entry'))
@@ -103,7 +102,7 @@ var Pack = function (opts) {
   this._stream = null
 }
 
-util.inherits(Pack, Readable)
+inherits(Pack, Readable)
 
 Pack.prototype.entry = function (header, buffer, callback) {
   if (this._stream) throw new Error('already piping an entry')
@@ -125,7 +124,7 @@ Pack.prototype.entry = function (header, buffer, callback) {
   if (!header.gid) header.gid = 0
   if (!header.mtime) header.mtime = new Date()
 
-  if (typeof buffer === 'string') buffer = toBuffer(buffer)
+  if (typeof buffer === 'string') buffer = Buffer.from(buffer)
   if (Buffer.isBuffer(buffer)) {
     header.size = buffer.length
     this._encode(header)

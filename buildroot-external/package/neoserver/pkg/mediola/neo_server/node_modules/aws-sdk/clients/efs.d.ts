@@ -108,11 +108,11 @@ declare class EFS extends Service {
    */
   modifyMountTargetSecurityGroups(callback?: (err: AWSError, data: {}) => void): Request<{}, AWSError>;
   /**
-   * Enables lifecycle management by creating a new LifecycleConfiguration object. A LifecycleConfiguration object defines when files in an Amazon EFS file system are automatically transitioned to the lower-cost EFS Infrequent Access (IA) storage class. A LifecycleConfiguration applies to all files in a file system. Each Amazon EFS file system supports one lifecycle configuration, which applies to all files in the file system. If a LifecycleConfiguration object already exists for the specified file system, a PutLifecycleConfiguration call modifies the existing configuration. A PutLifecycleConfiguration call with an empty LifecyclePolicies array in the request body deletes any existing LifecycleConfiguration and disables lifecycle management.  You can enable lifecycle management only for EFS file systems created after the release of EFS infrequent access.  In the request, specify the following:    The ID for the file system for which you are creating a lifecycle management configuration.   A LifecyclePolicies array of LifecyclePolicy objects that define when files are moved to the IA storage class. The array can contain only one "TransitionToIA": "AFTER_30_DAYS" LifecyclePolicy item.   This operation requires permissions for the elasticfilesystem:PutLifecycleConfiguration operation. To apply a LifecycleConfiguration object to an encrypted file system, you need the same AWS Key Management Service (AWS KMS) permissions as when you created the encrypted file system. 
+   * Enables lifecycle management by creating a new LifecycleConfiguration object. A LifecycleConfiguration object defines when files in an Amazon EFS file system are automatically transitioned to the lower-cost EFS Infrequent Access (IA) storage class. A LifecycleConfiguration applies to all files in a file system. Each Amazon EFS file system supports one lifecycle configuration, which applies to all files in the file system. If a LifecycleConfiguration object already exists for the specified file system, a PutLifecycleConfiguration call modifies the existing configuration. A PutLifecycleConfiguration call with an empty LifecyclePolicies array in the request body deletes any existing LifecycleConfiguration and disables lifecycle management. In the request, specify the following:    The ID for the file system for which you are enabling, disabling, or modifying lifecycle management.   A LifecyclePolicies array of LifecyclePolicy objects that define when files are moved to the IA storage class. The array can contain only one LifecyclePolicy item.   This operation requires permissions for the elasticfilesystem:PutLifecycleConfiguration operation. To apply a LifecycleConfiguration object to an encrypted file system, you need the same AWS Key Management Service (AWS KMS) permissions as when you created the encrypted file system. 
    */
   putLifecycleConfiguration(params: EFS.Types.PutLifecycleConfigurationRequest, callback?: (err: AWSError, data: EFS.Types.LifecycleConfigurationDescription) => void): Request<EFS.Types.LifecycleConfigurationDescription, AWSError>;
   /**
-   * Enables lifecycle management by creating a new LifecycleConfiguration object. A LifecycleConfiguration object defines when files in an Amazon EFS file system are automatically transitioned to the lower-cost EFS Infrequent Access (IA) storage class. A LifecycleConfiguration applies to all files in a file system. Each Amazon EFS file system supports one lifecycle configuration, which applies to all files in the file system. If a LifecycleConfiguration object already exists for the specified file system, a PutLifecycleConfiguration call modifies the existing configuration. A PutLifecycleConfiguration call with an empty LifecyclePolicies array in the request body deletes any existing LifecycleConfiguration and disables lifecycle management.  You can enable lifecycle management only for EFS file systems created after the release of EFS infrequent access.  In the request, specify the following:    The ID for the file system for which you are creating a lifecycle management configuration.   A LifecyclePolicies array of LifecyclePolicy objects that define when files are moved to the IA storage class. The array can contain only one "TransitionToIA": "AFTER_30_DAYS" LifecyclePolicy item.   This operation requires permissions for the elasticfilesystem:PutLifecycleConfiguration operation. To apply a LifecycleConfiguration object to an encrypted file system, you need the same AWS Key Management Service (AWS KMS) permissions as when you created the encrypted file system. 
+   * Enables lifecycle management by creating a new LifecycleConfiguration object. A LifecycleConfiguration object defines when files in an Amazon EFS file system are automatically transitioned to the lower-cost EFS Infrequent Access (IA) storage class. A LifecycleConfiguration applies to all files in a file system. Each Amazon EFS file system supports one lifecycle configuration, which applies to all files in the file system. If a LifecycleConfiguration object already exists for the specified file system, a PutLifecycleConfiguration call modifies the existing configuration. A PutLifecycleConfiguration call with an empty LifecyclePolicies array in the request body deletes any existing LifecycleConfiguration and disables lifecycle management. In the request, specify the following:    The ID for the file system for which you are enabling, disabling, or modifying lifecycle management.   A LifecyclePolicies array of LifecyclePolicy objects that define when files are moved to the IA storage class. The array can contain only one LifecyclePolicy item.   This operation requires permissions for the elasticfilesystem:PutLifecycleConfiguration operation. To apply a LifecycleConfiguration object to an encrypted file system, you need the same AWS Key Management Service (AWS KMS) permissions as when you created the encrypted file system. 
    */
   putLifecycleConfiguration(callback?: (err: AWSError, data: EFS.Types.LifecycleConfigurationDescription) => void): Request<EFS.Types.LifecycleConfigurationDescription, AWSError>;
   /**
@@ -144,11 +144,11 @@ declare namespace EFS {
      */
     KmsKeyId?: KmsKeyId;
     /**
-     * The throughput mode for the file system to be created. There are two throughput modes to choose from for your file system: bursting and provisioned. You can decrease your file system's throughput in Provisioned Throughput mode or change between the throughput modes as long as it’s been more than 24 hours since the last decrease or throughput mode change.
+     * The throughput mode for the file system to be created. There are two throughput modes to choose from for your file system: bursting and provisioned. If you set ThroughputMode to provisioned, you must also set a value for ProvisionedThroughPutInMibps. You can decrease your file system's throughput in Provisioned Throughput mode or change between the throughput modes as long as it’s been more than 24 hours since the last decrease or throughput mode change. For more, see Specifying Throughput with Provisioned Mode in the Amazon EFS User Guide. 
      */
     ThroughputMode?: ThroughputMode;
     /**
-     * The throughput, measured in MiB/s, that you want to provision for a file system that you're creating. The limit on throughput is 1024 MiB/s. You can get these limits increased by contacting AWS Support. For more information, see Amazon EFS Limits That You Can Increase in the Amazon EFS User Guide. 
+     * The throughput, measured in MiB/s, that you want to provision for a file system that you're creating. Valid values are 1-1024. Required if ThroughputMode is set to provisioned. The upper limit for throughput is 1024 MiB/s. You can get this limit increased by contacting AWS Support. For more information, see Amazon EFS Limits That You Can Increase in the Amazon EFS User Guide. 
      */
     ProvisionedThroughputInMibps?: ProvisionedThroughputInMibps;
     /**
@@ -209,7 +209,7 @@ declare namespace EFS {
   }
   export interface DescribeFileSystemsRequest {
     /**
-     * (Optional) Specifies the maximum number of file systems to return in the response (integer). Currently, this number is automatically set to 10. 
+     * (Optional) Specifies the maximum number of file systems to return in the response (integer). Currently, this number is automatically set to 10, and other values are ignored. The response is paginated at 10 per page if you have more than 10 file systems. 
      */
     MaxItems?: MaxItems;
     /**
@@ -259,7 +259,7 @@ declare namespace EFS {
   }
   export interface DescribeMountTargetsRequest {
     /**
-     * (Optional) Maximum number of mount targets to return in the response. Currently, this number is automatically set to 10.
+     * (Optional) Maximum number of mount targets to return in the response. Currently, this number is automatically set to 10, and other values are ignored. The response is paginated at 10 per page if you have more than 10 mount targets.
      */
     MaxItems?: MaxItems;
     /**
@@ -291,7 +291,7 @@ declare namespace EFS {
   }
   export interface DescribeTagsRequest {
     /**
-     * (Optional) The maximum number of file system tags to return in the response. Currently, this number is automatically set to 10.
+     * (Optional) The maximum number of file system tags to return in the response. Currently, this number is automatically set to 10, and other values are ignored. The response is paginated at 10 per page if you have more than 10 tags.
      */
     MaxItems?: MaxItems;
     /**
@@ -364,11 +364,11 @@ declare namespace EFS {
      */
     KmsKeyId?: KmsKeyId;
     /**
-     * The throughput mode for a file system. There are two throughput modes to choose from for your file system: bursting and provisioned. You can decrease your file system's throughput in Provisioned Throughput mode or change between the throughput modes as long as it’s been more than 24 hours since the last decrease or throughput mode change.
+     * The throughput mode for a file system. There are two throughput modes to choose from for your file system: bursting and provisioned. If you set ThroughputMode to provisioned, you must also set a value for ProvisionedThroughPutInMibps. You can decrease your file system's throughput in Provisioned Throughput mode or change between the throughput modes as long as it’s been more than 24 hours since the last decrease or throughput mode change. 
      */
     ThroughputMode?: ThroughputMode;
     /**
-     * The throughput, measured in MiB/s, that you want to provision for a file system. The limit on throughput is 1024 MiB/s. You can get these limits increased by contacting AWS Support. For more information, see Amazon EFS Limits That You Can Increase in the Amazon EFS User Guide. 
+     * The throughput, measured in MiB/s, that you want to provision for a file system. Valid values are 1-1024. Required if ThroughputMode is set to provisioned. The limit on throughput is 1024 MiB/s. You can get these limits increased by contacting AWS Support. For more information, see Amazon EFS Limits That You Can Increase in the Amazon EFS User Guide. 
      */
     ProvisionedThroughputInMibps?: ProvisionedThroughputInMibps;
     /**
@@ -410,7 +410,7 @@ declare namespace EFS {
   export type LifecyclePolicies = LifecyclePolicy[];
   export interface LifecyclePolicy {
     /**
-     * A value that indicates how long it takes to transition files to the IA storage class. Currently, the only valid value is AFTER_30_DAYS.  AFTER_30_DAYS indicates files that have not been read from or written to for 30 days are transitioned from the Standard storage class to the IA storage class. Metadata operations such as listing the contents of a directory don't count as a file access event.
+     *  A value that describes the period of time that a file is not accessed, after which it transitions to the IA storage class. Metadata operations such as listing the contents of a directory don't count as file access events.
      */
     TransitionToIA?: TransitionToIARules;
   }
@@ -491,18 +491,18 @@ declare namespace EFS {
   export type Tags = Tag[];
   export type ThroughputMode = "bursting"|"provisioned"|string;
   export type Timestamp = Date;
-  export type TransitionToIARules = "AFTER_30_DAYS"|string;
+  export type TransitionToIARules = "AFTER_14_DAYS"|"AFTER_30_DAYS"|"AFTER_60_DAYS"|"AFTER_90_DAYS"|string;
   export interface UpdateFileSystemRequest {
     /**
      * The ID of the file system that you want to update.
      */
     FileSystemId: FileSystemId;
     /**
-     * (Optional) The throughput mode that you want your file system to use. If you're not updating your throughput mode, you don't need to provide this value in your request.
+     * (Optional) The throughput mode that you want your file system to use. If you're not updating your throughput mode, you don't need to provide this value in your request. If you are changing the ThroughputMode to provisioned, you must also set a value for ProvisionedThroughputInMibps.
      */
     ThroughputMode?: ThroughputMode;
     /**
-     * (Optional) The amount of throughput, in MiB/s, that you want to provision for your file system. If you're not updating the amount of provisioned throughput for your file system, you don't need to provide this value in your request.
+     * (Optional) The amount of throughput, in MiB/s, that you want to provision for your file system. Valid values are 1-1024. Required if ThroughputMode is changed to provisioned on update. If you're not updating the amount of provisioned throughput for your file system, you don't need to provide this value in your request. 
      */
     ProvisionedThroughputInMibps?: ProvisionedThroughputInMibps;
   }

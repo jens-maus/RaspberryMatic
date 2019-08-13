@@ -300,11 +300,11 @@ declare class ServiceCatalog extends Service {
    */
   describeProvisioningParameters(callback?: (err: AWSError, data: ServiceCatalog.Types.DescribeProvisioningParametersOutput) => void): Request<ServiceCatalog.Types.DescribeProvisioningParametersOutput, AWSError>;
   /**
-   * Gets information about the specified request operation. Use this operation after calling a request operation (for example, ProvisionProduct, TerminateProvisionedProduct, or UpdateProvisionedProduct). 
+   * Gets information about the specified request operation. Use this operation after calling a request operation (for example, ProvisionProduct, TerminateProvisionedProduct, or UpdateProvisionedProduct).   If a provisioned product was transferred to a new owner using UpdateProvisionedProductProperties, the new owner will be able to describe all past records for that product. The previous owner will no longer be able to describe the records, but will be able to use ListRecordHistory to see the product's history from when he was the owner. 
    */
   describeRecord(params: ServiceCatalog.Types.DescribeRecordInput, callback?: (err: AWSError, data: ServiceCatalog.Types.DescribeRecordOutput) => void): Request<ServiceCatalog.Types.DescribeRecordOutput, AWSError>;
   /**
-   * Gets information about the specified request operation. Use this operation after calling a request operation (for example, ProvisionProduct, TerminateProvisionedProduct, or UpdateProvisionedProduct). 
+   * Gets information about the specified request operation. Use this operation after calling a request operation (for example, ProvisionProduct, TerminateProvisionedProduct, or UpdateProvisionedProduct).   If a provisioned product was transferred to a new owner using UpdateProvisionedProductProperties, the new owner will be able to describe all past records for that product. The previous owner will no longer be able to describe the records, but will be able to use ListRecordHistory to see the product's history from when he was the owner. 
    */
   describeRecord(callback?: (err: AWSError, data: ServiceCatalog.Types.DescribeRecordOutput) => void): Request<ServiceCatalog.Types.DescribeRecordOutput, AWSError>;
   /**
@@ -315,6 +315,14 @@ declare class ServiceCatalog extends Service {
    * Describes a self-service action.
    */
   describeServiceAction(callback?: (err: AWSError, data: ServiceCatalog.Types.DescribeServiceActionOutput) => void): Request<ServiceCatalog.Types.DescribeServiceActionOutput, AWSError>;
+  /**
+   * 
+   */
+  describeServiceActionExecutionParameters(params: ServiceCatalog.Types.DescribeServiceActionExecutionParametersInput, callback?: (err: AWSError, data: ServiceCatalog.Types.DescribeServiceActionExecutionParametersOutput) => void): Request<ServiceCatalog.Types.DescribeServiceActionExecutionParametersOutput, AWSError>;
+  /**
+   * 
+   */
+  describeServiceActionExecutionParameters(callback?: (err: AWSError, data: ServiceCatalog.Types.DescribeServiceActionExecutionParametersOutput) => void): Request<ServiceCatalog.Types.DescribeServiceActionExecutionParametersOutput, AWSError>;
   /**
    * Gets information about the specified TagOption.
    */
@@ -532,6 +540,14 @@ declare class ServiceCatalog extends Service {
    */
   listServiceActionsForProvisioningArtifact(callback?: (err: AWSError, data: ServiceCatalog.Types.ListServiceActionsForProvisioningArtifactOutput) => void): Request<ServiceCatalog.Types.ListServiceActionsForProvisioningArtifactOutput, AWSError>;
   /**
+   * Returns summary information about stack instances that are associated with the specified CFN_STACKSET type provisioned product. You can filter for stack instances that are associated with a specific AWS account name or region. 
+   */
+  listStackInstancesForProvisionedProduct(params: ServiceCatalog.Types.ListStackInstancesForProvisionedProductInput, callback?: (err: AWSError, data: ServiceCatalog.Types.ListStackInstancesForProvisionedProductOutput) => void): Request<ServiceCatalog.Types.ListStackInstancesForProvisionedProductOutput, AWSError>;
+  /**
+   * Returns summary information about stack instances that are associated with the specified CFN_STACKSET type provisioned product. You can filter for stack instances that are associated with a specific AWS account name or region. 
+   */
+  listStackInstancesForProvisionedProduct(callback?: (err: AWSError, data: ServiceCatalog.Types.ListStackInstancesForProvisionedProductOutput) => void): Request<ServiceCatalog.Types.ListStackInstancesForProvisionedProductOutput, AWSError>;
+  /**
    * Lists the specified TagOptions or all TagOptions.
    */
   listTagOptions(params: ServiceCatalog.Types.ListTagOptionsInput, callback?: (err: AWSError, data: ServiceCatalog.Types.ListTagOptionsOutput) => void): Request<ServiceCatalog.Types.ListTagOptionsOutput, AWSError>;
@@ -627,6 +643,14 @@ declare class ServiceCatalog extends Service {
    * Requests updates to the configuration of the specified provisioned product. If there are tags associated with the object, they cannot be updated or added. Depending on the specific updates requested, this operation can update with no interruption, with some interruption, or replace the provisioned product entirely. You can check the status of this request using DescribeRecord.
    */
   updateProvisionedProduct(callback?: (err: AWSError, data: ServiceCatalog.Types.UpdateProvisionedProductOutput) => void): Request<ServiceCatalog.Types.UpdateProvisionedProductOutput, AWSError>;
+  /**
+   * Requests updates to the properties of the specified provisioned product.
+   */
+  updateProvisionedProductProperties(params: ServiceCatalog.Types.UpdateProvisionedProductPropertiesInput, callback?: (err: AWSError, data: ServiceCatalog.Types.UpdateProvisionedProductPropertiesOutput) => void): Request<ServiceCatalog.Types.UpdateProvisionedProductPropertiesOutput, AWSError>;
+  /**
+   * Requests updates to the properties of the specified provisioned product.
+   */
+  updateProvisionedProductProperties(callback?: (err: AWSError, data: ServiceCatalog.Types.UpdateProvisionedProductPropertiesOutput) => void): Request<ServiceCatalog.Types.UpdateProvisionedProductPropertiesOutput, AWSError>;
   /**
    * Updates the specified provisioning artifact (also known as a version) for the specified product. You cannot update a provisioning artifact for a product that was shared with you.
    */
@@ -1106,7 +1130,7 @@ declare namespace ServiceCatalog {
      */
     IdempotencyToken: IdempotencyToken;
     /**
-     * One or more tags.
+     * One or more tags. If the plan is for an existing provisioned product, the product must have a RESOURCE_UPDATE constraint with TagUpdatesOnProvisionedProduct set to ALLOWED to allow tag updates.
      */
     Tags?: Tags;
   }
@@ -1663,6 +1687,14 @@ declare namespace ServiceCatalog {
      */
     NextPageToken?: PageToken;
   }
+  export interface DescribeServiceActionExecutionParametersInput {
+    ProvisionedProductId: Id;
+    ServiceActionId: Id;
+    AcceptLanguage?: AcceptLanguage;
+  }
+  export interface DescribeServiceActionExecutionParametersOutput {
+    ServiceActionParameters?: ExecutionParameters;
+  }
   export interface DescribeServiceActionInput {
     /**
      * The self-service action identifier.
@@ -1818,6 +1850,7 @@ declare namespace ServiceCatalog {
      * The language code.    en - English (default)    jp - Japanese    zh - Chinese  
      */
     AcceptLanguage?: AcceptLanguage;
+    Parameters?: ExecutionParameterMap;
   }
   export interface ExecuteProvisionedProductServiceActionOutput {
     /**
@@ -1825,6 +1858,17 @@ declare namespace ServiceCatalog {
      */
     RecordDetail?: RecordDetail;
   }
+  export interface ExecutionParameter {
+    Name?: ExecutionParameterKey;
+    Type?: ExecutionParameterType;
+    DefaultValues?: ExecutionParameterValueList;
+  }
+  export type ExecutionParameterKey = string;
+  export type ExecutionParameterMap = {[key: string]: ExecutionParameterValueList};
+  export type ExecutionParameterType = string;
+  export type ExecutionParameterValue = string;
+  export type ExecutionParameterValueList = ExecutionParameterValue[];
+  export type ExecutionParameters = ExecutionParameter[];
   export interface FailedServiceActionAssociation {
     /**
      * The self-service action identifier. For example, act-fs7abcd89wxyz.
@@ -2336,6 +2380,34 @@ declare namespace ServiceCatalog {
      */
     NextPageToken?: PageToken;
   }
+  export interface ListStackInstancesForProvisionedProductInput {
+    /**
+     * The language code.    en - English (default)    jp - Japanese    zh - Chinese  
+     */
+    AcceptLanguage?: AcceptLanguage;
+    /**
+     * The identifier of the provisioned product.
+     */
+    ProvisionedProductId: Id;
+    /**
+     * The page token for the next set of results. To retrieve the first set of results, use null.
+     */
+    PageToken?: PageToken;
+    /**
+     * The maximum number of items to return with this call.
+     */
+    PageSize?: PageSize;
+  }
+  export interface ListStackInstancesForProvisionedProductOutput {
+    /**
+     * List of stack instances.
+     */
+    StackInstances?: StackInstances;
+    /**
+     * The page token to use to retrieve the next set of results. If there are no additional results, this value is null.
+     */
+    NextPageToken?: PageToken;
+  }
   export interface ListTagOptionsFilters {
     /**
      * The TagOption key.
@@ -2544,7 +2616,9 @@ declare namespace ServiceCatalog {
      */
     SupportUrl?: SupportUrl;
   }
+  export type PropertyKey = "OWNER"|string;
   export type PropertyName = string;
+  export type PropertyValue = string;
   export type ProviderName = string;
   export interface ProvisionProductInput {
     /**
@@ -2800,6 +2874,7 @@ declare namespace ServiceCatalog {
   }
   export type ProvisionedProductPlanType = "CLOUDFORMATION"|string;
   export type ProvisionedProductPlans = ProvisionedProductPlanSummary[];
+  export type ProvisionedProductProperties = {[key: string]: PropertyValue};
   export type ProvisionedProductStatus = "AVAILABLE"|"UNDER_CHANGE"|"TAINTED"|"ERROR"|"PLAN_IN_PROGRESS"|string;
   export type ProvisionedProductStatusMessage = string;
   export type ProvisionedProductType = string;
@@ -2823,6 +2898,10 @@ declare namespace ServiceCatalog {
      * The UTC time stamp of the creation time.
      */
     CreatedTime?: ProvisioningArtifactCreatedTime;
+    /**
+     * Information set by the administrator to provide guidance to end users about which provisioning artifacts to use.
+     */
+    Guidance?: ProvisioningArtifactGuidance;
   }
   export type ProvisioningArtifactActive = boolean;
   export type ProvisioningArtifactCreatedTime = Date;
@@ -2852,8 +2931,13 @@ declare namespace ServiceCatalog {
      * Indicates whether the product version is active.
      */
     Active?: ProvisioningArtifactActive;
+    /**
+     * Information set by the administrator to provide guidance to end users about which provisioning artifacts to use.
+     */
+    Guidance?: ProvisioningArtifactGuidance;
   }
   export type ProvisioningArtifactDetails = ProvisioningArtifactDetail[];
+  export type ProvisioningArtifactGuidance = "DEFAULT"|"DEPRECATED"|string;
   export type ProvisioningArtifactInfo = {[key: string]: ProvisioningArtifactInfoValue};
   export type ProvisioningArtifactInfoKey = string;
   export type ProvisioningArtifactInfoValue = string;
@@ -3441,6 +3525,22 @@ declare namespace ServiceCatalog {
   export type SortOrder = "ASCENDING"|"DESCENDING"|string;
   export type SourceProvisioningArtifactProperties = SourceProvisioningArtifactPropertiesMap[];
   export type SourceProvisioningArtifactPropertiesMap = {[key: string]: ProvisioningArtifactPropertyValue};
+  export interface StackInstance {
+    /**
+     * The name of the AWS account that the stack instance is associated with.
+     */
+    Account?: AccountId;
+    /**
+     * The name of the AWS region that the stack instance is associated with.
+     */
+    Region?: Region;
+    /**
+     * The status of the stack instance, in terms of its synchronization with its associated stack set.     INOPERABLE: A DeleteStackInstances operation has failed and left the stack in an unstable state. Stacks in this state are excluded from further UpdateStackSet operations. You might need to perform a DeleteStackInstances operation, with RetainStacks set to true, to delete the stack instance, and then delete the stack manually.     OUTDATED: The stack isn't currently up to date with the stack set because either the associated stack failed during a CreateStackSet or UpdateStackSet operation, or the stack was part of a CreateStackSet or UpdateStackSet operation that failed or was stopped before the stack was created or updated.    CURRENT: The stack is currently up to date with the stack set.  
+     */
+    StackInstanceStatus?: StackInstanceStatus;
+  }
+  export type StackInstanceStatus = "CURRENT"|"OUTDATED"|"INOPERABLE"|string;
+  export type StackInstances = StackInstance[];
   export type StackSetAccounts = AccountId[];
   export type StackSetFailureToleranceCount = number;
   export type StackSetFailureTolerancePercentage = number;
@@ -3667,7 +3767,7 @@ declare namespace ServiceCatalog {
      */
     AcceptLanguage?: AcceptLanguage;
     /**
-     * The updated name of the provisioned product. You cannot specify both ProvisionedProductName and ProvisionedProductId.
+     * The name of the provisioned product. You cannot specify both ProvisionedProductName and ProvisionedProductId.
      */
     ProvisionedProductName?: ProvisionedProductNameOrArn;
     /**
@@ -3709,6 +3809,42 @@ declare namespace ServiceCatalog {
      */
     RecordDetail?: RecordDetail;
   }
+  export interface UpdateProvisionedProductPropertiesInput {
+    /**
+     * The language code.    en - English (default)    jp - Japanese    zh - Chinese  
+     */
+    AcceptLanguage?: AcceptLanguage;
+    /**
+     * The identifier of the provisioned product.
+     */
+    ProvisionedProductId: Id;
+    /**
+     * A map that contains the provisioned product properties to be updated. The OWNER key only accepts user ARNs. The owner is the user that is allowed to see, update, terminate, and execute service actions in the provisioned product. The administrator can change the owner of a provisioned product to another IAM user within the same account. Both end user owners and administrators can see ownership history of the provisioned product using the ListRecordHistory API. The new owner can describe all past records for the provisioned product using the DescribeRecord API. The previous owner can no longer use DescribeRecord, but can still see the product's history from when he was an owner using ListRecordHistory. If a provisioned product ownership is assigned to an end user, they can see and perform any action through the API or Service Catalog console such as update, terminate, and execute service actions. If an end user provisions a product and the owner is updated to someone else, they will no longer be able to see or perform any actions through API or the Service Catalog console on that provisioned product.
+     */
+    ProvisionedProductProperties: ProvisionedProductProperties;
+    /**
+     * The idempotency token that uniquely identifies the provisioning product update request.
+     */
+    IdempotencyToken: IdempotencyToken;
+  }
+  export interface UpdateProvisionedProductPropertiesOutput {
+    /**
+     * The provisioned product identifier.
+     */
+    ProvisionedProductId?: Id;
+    /**
+     * A map that contains the properties updated.
+     */
+    ProvisionedProductProperties?: ProvisionedProductProperties;
+    /**
+     * The identifier of the record.
+     */
+    RecordId?: Id;
+    /**
+     * The status of the request.
+     */
+    Status?: RecordStatus;
+  }
   export interface UpdateProvisioningArtifactInput {
     /**
      * The language code.    en - English (default)    jp - Japanese    zh - Chinese  
@@ -3734,6 +3870,10 @@ declare namespace ServiceCatalog {
      * Indicates whether the product version is active.
      */
     Active?: ProvisioningArtifactActive;
+    /**
+     * Information set by the administrator to provide guidance to end users about which provisioning artifacts to use. The DEFAULT value indicates that the product version is active. The administrator can set the guidance to DEPRECATED to inform users that the product version is deprecated. Users are able to make updates to a provisioned product of a deprecated version but cannot launch new provisioned products using a deprecated version.
+     */
+    Guidance?: ProvisioningArtifactGuidance;
   }
   export interface UpdateProvisioningArtifactOutput {
     /**

@@ -41,6 +41,8 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
    * Creates a managed upload object with a set of configuration options.
    *
    * @note A "Body" parameter is required to be set prior to calling {send}.
+   * @note In Node.js, sending "Body" as {https://nodejs.org/dist/latest/docs/api/stream.html#stream_object_mode object-mode stream}
+   *   may result in upload hangs. Using buffer stream is preferable.
    * @option options params [map] a map of parameters to pass to the upload
    *   requests. The "Body" parameter is required to be specified either on
    *   the service or in the params option.
@@ -234,7 +236,7 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
    * @example Aborting an upload
    *   var params = {
    *     Bucket: 'bucket', Key: 'key',
-   *     Body: new Buffer(1024 * 1024 * 25) // 25MB payload
+   *     Body: Buffer.alloc(1024 * 1024 * 25) // 25MB payload
    *   };
    *   var upload = s3.upload(params);
    *   upload.send(function (err, data) {
@@ -264,7 +266,7 @@ AWS.S3.ManagedUpload = AWS.util.inherit({
     var self = this;
     self.body = self.service.config.params.Body;
     if (typeof self.body === 'string') {
-      self.body = new AWS.util.Buffer(self.body);
+      self.body = AWS.util.buffer.toBuffer(self.body);
     } else if (!self.body) {
       throw new Error('params.Body is required');
     }

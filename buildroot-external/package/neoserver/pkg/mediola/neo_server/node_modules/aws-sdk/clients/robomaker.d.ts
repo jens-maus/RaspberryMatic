@@ -20,6 +20,14 @@ declare class RoboMaker extends Service {
    */
   batchDescribeSimulationJob(callback?: (err: AWSError, data: RoboMaker.Types.BatchDescribeSimulationJobResponse) => void): Request<RoboMaker.Types.BatchDescribeSimulationJobResponse, AWSError>;
   /**
+   * Cancels the specified deployment job.
+   */
+  cancelDeploymentJob(params: RoboMaker.Types.CancelDeploymentJobRequest, callback?: (err: AWSError, data: RoboMaker.Types.CancelDeploymentJobResponse) => void): Request<RoboMaker.Types.CancelDeploymentJobResponse, AWSError>;
+  /**
+   * Cancels the specified deployment job.
+   */
+  cancelDeploymentJob(callback?: (err: AWSError, data: RoboMaker.Types.CancelDeploymentJobResponse) => void): Request<RoboMaker.Types.CancelDeploymentJobResponse, AWSError>;
+  /**
    * Cancels the specified simulation job.
    */
   cancelSimulationJob(params: RoboMaker.Types.CancelSimulationJobRequest, callback?: (err: AWSError, data: RoboMaker.Types.CancelSimulationJobResponse) => void): Request<RoboMaker.Types.CancelSimulationJobResponse, AWSError>;
@@ -132,11 +140,11 @@ declare class RoboMaker extends Service {
    */
   deregisterRobot(callback?: (err: AWSError, data: RoboMaker.Types.DeregisterRobotResponse) => void): Request<RoboMaker.Types.DeregisterRobotResponse, AWSError>;
   /**
-   * Describes a deployment job. [Does it work regardless of deployment status, e.g. Failed?]
+   * Describes a deployment job.
    */
   describeDeploymentJob(params: RoboMaker.Types.DescribeDeploymentJobRequest, callback?: (err: AWSError, data: RoboMaker.Types.DescribeDeploymentJobResponse) => void): Request<RoboMaker.Types.DescribeDeploymentJobResponse, AWSError>;
   /**
-   * Describes a deployment job. [Does it work regardless of deployment status, e.g. Failed?]
+   * Describes a deployment job.
    */
   describeDeploymentJob(callback?: (err: AWSError, data: RoboMaker.Types.DescribeDeploymentJobResponse) => void): Request<RoboMaker.Types.DescribeDeploymentJobResponse, AWSError>;
   /**
@@ -313,6 +321,14 @@ declare namespace RoboMaker {
     unprocessedJobs?: Arns;
   }
   export type Boolean = boolean;
+  export interface CancelDeploymentJobRequest {
+    /**
+     * The deployment job ARN to cancel.
+     */
+    job: Arn;
+  }
+  export interface CancelDeploymentJobResponse {
+  }
   export interface CancelSimulationJobRequest {
     /**
      * The simulation job ARN to cancel.
@@ -711,6 +727,10 @@ declare namespace RoboMaker {
      */
     status?: SimulationJobStatus;
     /**
+     * The time, in milliseconds since the epoch, when the simulation job was last started.
+     */
+    lastStartedAt?: LastStartedAt;
+    /**
      * The time, in milliseconds since the epoch, when the simulation job was last updated.
      */
     lastUpdatedAt?: LastUpdatedAt;
@@ -859,7 +879,7 @@ declare namespace RoboMaker {
      */
     createdAt?: CreatedAt;
   }
-  export type DeploymentJobErrorCode = "ResourceNotFound"|"EnvironmentSetupError"|"EtagMismatch"|"FailureThresholdBreached"|"RobotDeploymentNoResponse"|"RobotAgentConnectionTimeout"|"GreengrassDeploymentFailed"|"MissingRobotArchitecture"|"MissingRobotApplicationArchitecture"|"MissingRobotDeploymentResource"|"GreengrassGroupVersionDoesNotExist"|"ExtractingBundleFailure"|"PreLaunchFileFailure"|"PostLaunchFileFailure"|"BadPermissionError"|"InternalServerError"|string;
+  export type DeploymentJobErrorCode = "ResourceNotFound"|"EnvironmentSetupError"|"EtagMismatch"|"FailureThresholdBreached"|"RobotDeploymentAborted"|"RobotDeploymentNoResponse"|"RobotAgentConnectionTimeout"|"GreengrassDeploymentFailed"|"MissingRobotArchitecture"|"MissingRobotApplicationArchitecture"|"MissingRobotDeploymentResource"|"GreengrassGroupVersionDoesNotExist"|"ExtractingBundleFailure"|"PreLaunchFileFailure"|"PostLaunchFileFailure"|"BadPermissionError"|"InternalServerError"|string;
   export type DeploymentJobs = DeploymentJob[];
   export interface DeploymentLaunchConfig {
     /**
@@ -883,7 +903,7 @@ declare namespace RoboMaker {
      */
     environmentVariables?: EnvironmentVariableMap;
   }
-  export type DeploymentStatus = "Pending"|"Preparing"|"InProgress"|"Failed"|"Succeeded"|string;
+  export type DeploymentStatus = "Pending"|"Preparing"|"InProgress"|"Failed"|"Succeeded"|"Canceled"|string;
   export type DeploymentVersion = string;
   export interface DeregisterRobotRequest {
     /**
@@ -1157,6 +1177,10 @@ declare namespace RoboMaker {
      */
     status?: SimulationJobStatus;
     /**
+     * The time, in milliseconds since the epoch, when the simulation job was last started.
+     */
+    lastStartedAt?: LastStartedAt;
+    /**
      * The time, in milliseconds since the epoch, when the simulation job was last updated.
      */
     lastUpdatedAt?: LastUpdatedAt;
@@ -1257,6 +1281,7 @@ declare namespace RoboMaker {
   export type IamRole = string;
   export type Id = string;
   export type JobDuration = number;
+  export type LastStartedAt = Date;
   export type LastUpdatedAt = Date;
   export interface LaunchConfig {
     /**
@@ -1438,6 +1463,7 @@ declare namespace RoboMaker {
   }
   export type MaxResults = number;
   export type Name = string;
+  export type NonEmptyString = string;
   export interface OutputLocation {
     /**
      * The S3 bucket for output.
@@ -1454,7 +1480,7 @@ declare namespace RoboMaker {
   export type Percentage = number;
   export interface ProgressDetail {
     /**
-     * The current progress status.  Validating  Validating the deployment.  Downloading/Extracting  Downloading and extracting the bundle on the robot.  Executing pre-launch script(s)  Executing pre-launch script(s) if provided.  Launching  Launching the robot application.  Executing post-launch script(s)  Executing post-launch script(s) if provided.  Finished  Deployment is complete.  
+     * The current progress status.  Validating  Validating the deployment.  DownloadingExtracting  Downloading and extracting the bundle on the robot.  ExecutingPreLaunch  Executing pre-launch script(s) if provided.  Launching  Launching the robot application.  ExecutingPostLaunch  Executing post-launch script(s) if provided.  Finished  Deployment is complete.  
      */
     currentProgress?: RobotDeploymentStep;
     /**
@@ -1583,6 +1609,10 @@ declare namespace RoboMaker {
      * The time, in milliseconds since the epoch, when the robot application was last updated.
      */
     lastUpdatedAt?: LastUpdatedAt;
+    /**
+     * Information about a robot software suite.
+     */
+    robotSoftwareSuite?: RobotSoftwareSuite;
   }
   export interface RobotDeployment {
     /**
@@ -1627,13 +1657,13 @@ declare namespace RoboMaker {
     version?: RobotSoftwareSuiteVersionType;
   }
   export type RobotSoftwareSuiteType = "ROS"|string;
-  export type RobotSoftwareSuiteVersionType = "Kinetic"|string;
+  export type RobotSoftwareSuiteVersionType = "Kinetic"|"Melodic"|string;
   export type RobotStatus = "Available"|"Registered"|"PendingNewDeployment"|"Deploying"|"Failed"|"InSync"|"NoResponse"|string;
   export type Robots = Robot[];
   export type S3Bucket = string;
   export type S3Etag = string;
   export type S3Key = string;
-  export type SecurityGroups = GenericString[];
+  export type SecurityGroups = NonEmptyString[];
   export interface SimulationApplicationConfig {
     /**
      * The application information for the simulation application.
@@ -1668,6 +1698,14 @@ declare namespace RoboMaker {
      * The time, in milliseconds since the epoch, when the simulation application was last updated.
      */
     lastUpdatedAt?: LastUpdatedAt;
+    /**
+     * Information about a robot software suite.
+     */
+    robotSoftwareSuite?: RobotSoftwareSuite;
+    /**
+     * Information about a simulation software suite.
+     */
+    simulationSoftwareSuite?: SimulationSoftwareSuite;
   }
   export interface SimulationJob {
     /**
@@ -1682,6 +1720,10 @@ declare namespace RoboMaker {
      * Status of the simulation job.
      */
     status?: SimulationJobStatus;
+    /**
+     * The time, in milliseconds since the epoch, when the simulation job was last started.
+     */
+    lastStartedAt?: LastStartedAt;
     /**
      * The time, in milliseconds since the epoch, when the simulation job was last updated.
      */
@@ -1715,7 +1757,7 @@ declare namespace RoboMaker {
      */
     simulationTimeMillis?: SimulationTimeMillis;
     /**
-     * The IAM role that allows the simulation instance to call the AWS APIs that are specified in its associated policies on your behalf. This is how credentials are passed in to your simulation job. See how to specify AWS security credentials for your application. 
+     * The IAM role that allows the simulation instance to call the AWS APIs that are specified in its associated policies on your behalf. This is how credentials are passed in to your simulation job. 
      */
     iamRole?: IamRole;
     /**
@@ -1812,7 +1854,7 @@ declare namespace RoboMaker {
   }
   export type SourceConfigs = SourceConfig[];
   export type Sources = Source[];
-  export type Subnets = GenericString[];
+  export type Subnets = NonEmptyString[];
   export interface SyncDeploymentJobRequest {
     /**
      * Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.

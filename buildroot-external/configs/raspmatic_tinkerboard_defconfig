@@ -29,6 +29,7 @@ BR2_LINUX_KERNEL_LZ4=y
 BR2_LINUX_KERNEL_DTS_SUPPORT=y
 BR2_LINUX_KERNEL_INTREE_DTS_NAME="rk3288-tinker overlay/rockchip-ds1307 overlay/rockchip-i2c1 overlay/rockchip-i2c4 overlay/rockchip-spi0 overlay/rockchip-spi2 overlay/rockchip-spidev0 overlay/rockchip-spidev2 overlay/rockchip-uart1 overlay/rockchip-uart2 overlay/rockchip-uart3 overlay/rockchip-uart4 overlay/rockchip-w1-gpio"
 BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT=y
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 BR2_PACKAGE_LINUX_TOOLS_GPIO=y
 BR2_PACKAGE_BUSYBOX_CONFIG="$(BR2_EXTERNAL_EQ3_PATH)/Busybox.config"
 BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y

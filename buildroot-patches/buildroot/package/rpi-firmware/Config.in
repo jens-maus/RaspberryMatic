@@ -11,6 +11,10 @@ config BR2_PACKAGE_RPI_FIRMWARE
 
 if BR2_PACKAGE_RPI_FIRMWARE
 
+config BR2_PACKAGE_RPI_FIRMWARE_VERSION
+	string "Custom firmware version"
+	default "1.20190718"
+
 choice
 	bool "Firmware to boot"
 	default BR2_PACKAGE_RPI_FIRMWARE_DEFAULT

@@ -4,11 +4,13 @@
 #
 ################################################################################
 
-RPI_FIRMWARE_VERSION = 66bafab005569e3eb92ec54cd3efeee3da338738
+RPI_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_RPI_FIRMWARE_VERSION))
 RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
 RPI_FIRMWARE_LICENSE = BSD-3-Clause
 RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
 RPI_FIRMWARE_INSTALL_IMAGES = YES
+
+BR_NO_CHECK_HASH_FOR += $(RPI_FIRMWARE_SOURCE)
 
 ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
 define RPI_FIRMWARE_INSTALL_DTB

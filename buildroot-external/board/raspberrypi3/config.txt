@@ -7,7 +7,6 @@ hdmi_drive=1
 # make sure to use less memory for the GPU and
 # all total memory available
 gpu_mem=32
-total_mem=1024
 
 # Disable overscan assuming the display supports displaying the full resolution
 # If the text shown on the screen disappears off the edge, comment this out

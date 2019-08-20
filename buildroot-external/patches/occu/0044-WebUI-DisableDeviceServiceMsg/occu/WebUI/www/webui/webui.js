@@ -20439,7 +20439,7 @@ homematic.com =
     var script = document.createElement("script");
     script.id = "homematic_com_script";
     script.type = "text/javascript";
-    script.src = "https://gitcdn.xyz/repo/jens-maus/RaspberryMatic/master/release/LATEST-VERSION.js?_version_=" + WEBUI_VERSION;
+    script.src = "https://cdn.jsdelivr.net/gh/jens-maus/RaspberryMatic/release/LATEST-VERSION.js?_version_=" + WEBUI_VERSION;
     $("body").appendChild(script);
   },
 

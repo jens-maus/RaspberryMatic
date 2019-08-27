@@ -170,48 +170,48 @@
 
             <tr>
               <th style="width:40%"></th>
-              <th colspan="2" style="width:60%"></th>
+              <th style="width:60%"></th>
             </tr>
 
             <tr>
                 <!-- Uhrzeit -->
               <td>${time}:</td>
-              <td colspan="2"><span id="maintime"><% Write(system.Date("%H:%M")); %></span><!-- Uhr--></td>
+              <td><span id="maintime"><% Write(system.Date("%H:%M")); %></span><!-- Uhr--></td>
             </tr>
             <tr>
               <!--Datum -->
               <td>${date}:</td>
-              <td colspan="2"><span id="maindate"><% Write(system.Date("%d.%m.%Y")); %></span></td>
+              <td><span id="maindate"><% Write(system.Date("%d.%m.%Y")); %></span></td>
             </tr>
 
             <tr>
             <!-- Sonnenaufgang -->
               <td>${sunrise}:</td>
-              <td colspan="2" id="sunrise"><% Write(system.SunriseTime("%H:%M")); %><!-- Uhr --></td>
+              <td id="sunrise"><% Write(system.SunriseTime("%H:%M")); %><!-- Uhr --></td>
             </tr>
 
             <tr>
             <!-- Sonnenuntergang -->
               <td>${sunset}:</td>
-              <td colspan="2" id="sunset"><% Write(system.SunsetTime("%H:%M")); %><!-- Uhr--></td>
+              <td id="sunset"><% Write(system.SunsetTime("%H:%M")); %><!-- Uhr--></td>
             </tr>
 
             <tr>
               <td>${currentFirmwareVersion}</td>
-              <td colspan="2" id="currentFirmware">${lblCurrentFirmwareVersionNotKnown}</td>
+              <td id="currentFirmware">${lblCurrentFirmwareVersionNotKnown}</td>
             </tr>
 
             <tr id="updateRow" style="display:none;">
               <!-- CCU2-Update -->
               <td>${update}</td>
                <!-- Firmware ist verf&uuml;gbar -->
-              <td colspan="2" id="updateCol">${newFirmwareAvailable}</td>
+              <td colspan="3" id="updateCol">${newFirmwareAvailable}</td>
             </tr>
 
             <!-- Device-Firmware -->
             <tr id="devFwAvailable" class="hidden">
               <td>${deviceUpdate}</td>
-              <td colspan="2" class="firmwareAvailable">${lblNewDeviceFirmwareAvailable}&nbsp;<span id="devFwAvailableCounter"></span></td>
+              <td class="firmwareAvailable">${lblNewDeviceFirmwareAvailable}&nbsp;<span id="devFwAvailableCounter"></span></td>
             </tr>
 
             <%
@@ -222,7 +222,7 @@
 
                   Write("<td>${login}:</td>");
 
-                  Write("<td colspan='2' class='attention'>${noPasswd}</td>");
+                  Write("<td colspan='3' class='attention'>${noPasswd}</td>");
                 Write("</tr>");
               }
               
@@ -232,7 +232,7 @@
                   object oDP = dom.GetObject(tmp);
                   Write("<tr>");
                   Write("<td>"#oDP.Name()#":</td>");
-                  Write("<td colspan='2' id='SYSVAR_" # tmp # "' >");
+                  Write("<td colspan='3' id='SYSVAR_" # tmp # "' >");
                   string sSysVarVal = "";
                   object cObjTmp = oDP;
                   integer iVT = oDP.ValueType();

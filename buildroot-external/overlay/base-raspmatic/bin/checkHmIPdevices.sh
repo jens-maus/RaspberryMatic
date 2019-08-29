@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# crRFD device check script v1.2
+# crRFD device check script v1.3
 # Copyright (c) 2019 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,9 @@
 
 # do not continue if homematic.regadom is not there or empty
 [[ -s /etc/config/homematic.regadom ]] || exit 1
+
+# do not continue if /etc/config/crRFD/data does not exist
+[[ -d /etc/config/crRFD/data ]] || exit 1
 
 # check for "-f" option to start fixing operation
 [[ "${1}" == "-f" ]] && FIX=1 || FIX=0

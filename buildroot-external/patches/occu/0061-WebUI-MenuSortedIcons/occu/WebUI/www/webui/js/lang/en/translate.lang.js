@@ -64,7 +64,7 @@ jQuery.extend(true,langJSON, {
     "submenuSysVar" : "System variables",
     "submenuSysProtocol" : "System log",
     "submenuDirectLinks" : "Direct device connections",
-    "submenuProgramsLinks" : "Programs & "+ HMIdentifier.en.CCUShortName +" connection",
+    "submenuProgramsLinks" : "Programs & "+ HMIdentifier.en.CCUShortName +" connections",
     "submenuDeviceInbox" : "Device inbox",
     "submenuUserManagement" : "User management",
     "submenuSysControl" : "Control panel",

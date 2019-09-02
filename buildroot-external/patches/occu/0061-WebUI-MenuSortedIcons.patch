@@ -343,7 +343,7 @@
      <td class="CLASS06101"></td>
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -62,7 +62,7 @@
+@@ -62,10 +62,10 @@
      "submenuFavorites" : "Favoriten",
      "submenuCreateFavorite" : "Favoriten erstellen",
      "submenuPrograms" : "Programme",
@@ -351,7 +351,20 @@
 +    "submenuSysVar" : "Systemvariablen",
      "submenuSysProtocol" : "Systemprotokoll",
      "submenuDirectLinks" : "Direkte Verkn%FCpfungen",
-     "submenuProgramsLinks" : "Programme & Zentralenverkn%FCpfung",
+-    "submenuProgramsLinks" : "Programme & Zentralenverkn%FCpfung",
++    "submenuProgramsLinks" : "Programme & Zentralenverkn%FCpfungen",
+     "submenuDeviceInbox" : "Ger%E4te - Posteingang",
+     "submenuUserManagement" : "Benutzerverwaltung",
+     "submenuSysControl" : "Systemsteuerung",
+@@ -109,7 +109,7 @@
+     "thValues" : "Werte",
+     "thUnit" : "Ma%DFeinheit",
+     "thLastUpdate" : "Letzte<br/>Aktualisierung",
+-    "thControl" : "Control",
++    "thControl" : "Bedienung",
+     "thFilter" : "Filter",
+     "thDescription" : "Beschreibung",
+     "thActivity" : "Aktivit%E4t",
 @@ -319,7 +319,7 @@
      "lblSettingsFunctions5" : "Gewerkeigenschaften bearbeiten",
      "commentSettingsBtnFunctionsEnd" : "***********************************************",
@@ -372,7 +385,7 @@
      "lblMenuStatusControlSysProtocolTime" : "Zeit",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -61,7 +61,7 @@
+@@ -61,10 +61,10 @@
      "submenuFavorites" : "Favourites",
      "submenuCreateFavorite" : "Create favourites",
      "submenuPrograms" : "Programs",
@@ -380,7 +393,11 @@
 +    "submenuSysVar" : "System variables",
      "submenuSysProtocol" : "System log",
      "submenuDirectLinks" : "Direct device connections",
-     "submenuProgramsLinks" : "Programs & "+ HMIdentifier.en.CCUShortName +" connection",
+-    "submenuProgramsLinks" : "Programs & "+ HMIdentifier.en.CCUShortName +" connection",
++    "submenuProgramsLinks" : "Programs & "+ HMIdentifier.en.CCUShortName +" connections",
+     "submenuDeviceInbox" : "Device inbox",
+     "submenuUserManagement" : "User management",
+     "submenuSysControl" : "Control panel",
 @@ -318,7 +318,7 @@
      "lblSettingsFunctions5" : "Edit function properties",
      "commentSettingsBtnFunctionsEnd" : "***********************************************",

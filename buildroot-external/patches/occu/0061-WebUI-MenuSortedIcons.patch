@@ -363,7 +363,7 @@
  
  	]},
    {id: "menuProgramsLinksPage", align: "left", action: function() { ConfigData.check(function() { WebUI.enter(LinksAndProgramsPage); }); }, submenu:
-@@ -24,19 +24,19 @@
+@@ -24,20 +24,20 @@
    ]},
    {id: "menuSettingsPage", align: "left", action: function() { ConfigData.check(function() { WebUI.enter(SystemConfigPage); }); }, submenu:
    [ 
@@ -385,11 +385,14 @@
 -    {id: "submenuDeviceFirmwareInformation"     , action: function() { ConfigData.check(function() { WebUI.enter(DeviceFirmwareInformation); } );  } },
 -
 -    {id: "submenuUserManagement"  , action: function() { WebUI.enter(UserAdminPageAdmin); }},
-     {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  },
+-    {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  },
 -    {id: "submenuFavorites"           , action: function() { ConfigData.check(function() { WebUI.enter(FavoriteListPage); } ); } },
-     {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } }
+-    {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } }
++    {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } },
++    {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  }
  
    ]},
+   {id: "menuHelpPage"          , align: "right", action: function() { WebUI.enter(HelpPage); }, submenu: [ ]},
 --- occu/WebUI/www/webui/js/mainmenu/user.js.orig
 +++ occu/WebUI/www/webui/js/mainmenu/user.js
 @@ -7,14 +7,14 @@

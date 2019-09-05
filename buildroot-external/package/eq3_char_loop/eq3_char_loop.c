@@ -58,7 +58,7 @@
 #define CONNECTION_TYPE_MASTER 0
 #define CONNECTION_TYPE_SLAVE 1
 
-#define BUFSIZE 1024  //just use buffer size power of 2. otherwise the size and index calculation dosn't work
+#define BUFSIZE 2048  //just use buffer size power of 2. otherwise the size and index calculation dosn't work
 
 #define DUMP_READWRITE 0
 

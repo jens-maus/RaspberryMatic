@@ -359,7 +359,7 @@ static ssize_t eq3loop_write_master(struct eq3loop_channel_data* channel, struct
 	{
 		ret=-EFAULT;
 		count_to_end = CIRC_SPACE( head, channel->master2slave_buf.tail, BUFSIZE);
-		printk( KERN_ERR EQ3LOOP_DRIVER_NAME ": eq3loop_write_master() %s: not enought space in the buffers. free space = %zu, required space = %zu", channel->name,count_to_end,count );
+		printk( KERN_ERR EQ3LOOP_DRIVER_NAME ": eq3loop_write_master() %s: not enough space in buffers. free space = %zu, required space = %zu", channel->name,count_to_end,count );
 		goto out;
 	}
 	/* ok, space is free, write something */
@@ -395,7 +395,7 @@ out:
 	up (&channel->sem);
 	if(ret < 0)
 	{
-		printk( KERN_INFO EQ3LOOP_DRIVER_NAME ": eq3loop_write_master() retrun error:");
+		printk( KERN_INFO EQ3LOOP_DRIVER_NAME ": eq3loop_write_master() return error: %d", ret);
 	}
 	if( ret > 0 || CIRC_CNT(channel->master2slave_buf.head,channel->master2slave_buf.tail,BUFSIZE) )
 	{

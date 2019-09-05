@@ -993,3 +993,4 @@ module_init(eq3loop_init);
 module_exit(eq3loop_exit);
 MODULE_DESCRIPTION("eQ-3 IPC loopback char driver");
 MODULE_LICENSE("GPL");
+MODULE_VERSION("1.1");

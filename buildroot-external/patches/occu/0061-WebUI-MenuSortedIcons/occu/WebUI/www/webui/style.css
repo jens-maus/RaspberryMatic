@@ -1365,7 +1365,7 @@ div.caption  { display: table-caption; }
 
 .sysConfigHeight
 {
-  height: 263px;
+  min-height: 263px;
 }
 
 .posPreBtn
@@ -6882,6 +6882,7 @@ color: $_(textColorA); /* white */
 .CLASS05502 > div {
 	margin: 10px;
 	flex: 0 1 calc(25% - 20px);
+	overflow: hidden;
 	/* copied from .StdTable td */
 	background-color: $_(inactiveBackground);
 	text-align:left;
@@ -6981,6 +6982,7 @@ color: $_(textColorA); /* white */
 .CLASS05701 > div {
 	margin: 10px;
 	flex: 0 1 calc(25% - 20px);
+        overflow: hidden;
 	/* copied from .StdTable td */
 	background-color: $_(inactiveBackground);
 	text-align:left;
@@ -7136,6 +7138,7 @@ color: $_(textColorA); /* white */
 .CLASS06102 > div {
 	margin: 10px;
 	flex: 0 1 calc(25% - 20px);
+        overflow: hidden;
 	/* copied from .StdTable td */
 	background-color: $_(inactiveBackground);
 	text-align:left;

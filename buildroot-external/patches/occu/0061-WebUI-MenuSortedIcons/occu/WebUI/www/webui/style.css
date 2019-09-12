@@ -2516,8 +2516,8 @@ html, body {
 
   background-color: $_(subMenuBackground);
   font-weight: bold;
-  padding-left: 5px;
-  padding-right: 5px; 
+  /* padding-left: 5px; */
+  padding-right: 2px 5px; 
   text-align:left;
   vertical-align:middle;
   color: $_(textColorB); /* black */
@@ -6881,7 +6881,8 @@ color: $_(textColorA); /* white */
 
 .CLASS05502 > div {
 	margin: 10px;
-	flex: 0 1 calc(25% - 20px);
+	padding: 1px;
+	flex: 0 1 calc(25% - 22px);
 	overflow: hidden;
 	/* copied from .StdTable td */
 	background-color: $_(inactiveBackground);
@@ -6981,7 +6982,8 @@ color: $_(textColorA); /* white */
 
 .CLASS05701 > div {
 	margin: 10px;
-	flex: 0 1 calc(25% - 20px);
+        padding: 1px;
+	flex: 0 1 calc(25% - 22px);
         overflow: hidden;
 	/* copied from .StdTable td */
 	background-color: $_(inactiveBackground);
@@ -7137,7 +7139,8 @@ color: $_(textColorA); /* white */
 
 .CLASS06102 > div {
 	margin: 10px;
-	flex: 0 1 calc(25% - 20px);
+        padding: 1px;
+	flex: 0 1 calc(25% - 22px);
         overflow: hidden;
 	/* copied from .StdTable td */
 	background-color: $_(inactiveBackground);

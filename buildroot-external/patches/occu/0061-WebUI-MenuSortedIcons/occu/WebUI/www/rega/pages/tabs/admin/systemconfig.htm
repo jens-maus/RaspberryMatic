@@ -1,20 +1,18 @@
 <%
-system.SetSessionVar("sessionTAB", "systemconfig");
+  system.SetSessionVar("sessionTAB", "systemconfig");
 %>
+
 <script type="text/javascript">
   setPath(translateKey("menuSettingsPage"));
 </script>
 
 <div id="subOffsetDiv"></div>
-<table class="StdTable j_translate" cellspacing="20">
-  <colgroup>
-    <col width="25%"/>
-    <col width="25%"/>
-    <col width="25%"/>
-    <col width="25%"/>
-  </colgroup>
-  <tr class="CLASS05500">
-    <td class="sysConfigHeight">
+
+<div id="tblSettings" class="StdTable CLASS05500 j_translate">
+
+  <div id="statusRow2" class="CLASS05502">
+
+    <div id="btnSettingsUserAdministration_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="WebUI.enter(UserAdminPageAdmin);">${btnSettingsUserAdministration}</div>
       <ul>
         <li>${lblSettingsUserAdministration1}</li>
@@ -22,9 +20,9 @@ system.SetSessionVar("sessionTAB", "systemconfig");
         <li>${lblSettingsUserAdministration3}</li>
         <li>${lblSettingsUserAdministration4}</li>
       </ul>
-    </td>
-  
-    <td class="sysConfigHeight">
+    </div>
+
+    <div id="btnSettingsDiagrams_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="WebUI.enter(CreateDiagramPage);">${btnSettingsDiagrams}</div>
       <ul>
         <li>${lblSettingsDiagrams1}</li>
@@ -32,9 +30,9 @@ system.SetSessionVar("sessionTAB", "systemconfig");
         <li>${lblSettingsDiagrams3}</li>
         <li>${lblSettingsDiagrams4}</li>
       </ul>
-    </td>
+    </div>
 
-    <td class="sysConfigHeight">
+    <div id="btnSettingsFavorites_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
       <ul>
         <li>${lblSettingsFavorites1}</li>
@@ -48,9 +46,9 @@ system.SetSessionVar("sessionTAB", "systemconfig");
         </li>
         <li>${lblSettingsFavorites3}</li>
       </ul>
-    </td>
+    </div>
 
-    <td class="sysConfigHeight">
+    <div id="btnSettingsDevices_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="WebUI.enter(DeviceListPage);">${btnSettingsDevices}</div>
       <ul>
         <li>
@@ -73,11 +71,9 @@ system.SetSessionVar("sessionTAB", "systemconfig");
         <li>${lblSettingsDevices3}</li>
         <li>${lblSettingsDevices4}</li>
       </ul>
-    </td>
- </tr>
- <tr>
- 
-    <td class="sysConfigHeight">
+    </div>
+
+    <div id="submenuDeviceFirmwareInformation_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="WebUI.enter(DeviceFirmwareInformation);">${submenuDeviceFirmwareInformation}</div>
       <ul>
         <li>${lblSettingsDeviceFirmwareMain0}
@@ -95,9 +91,9 @@ system.SetSessionVar("sessionTAB", "systemconfig");
           </ul>
         </li>
       </ul>
-    </td>
+    </div>
 
-    <td class="sysConfigHeight">
+    <div id="btnSettingsDeviceInBox_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="WebUI.enter(NewDeviceListPage);">${btnSettingsDeviceInBox}</div>
       <ul>
         <li>${lblSettingsDeviceInBox1}</li>
@@ -111,9 +107,9 @@ system.SetSessionVar("sessionTAB", "systemconfig");
         </li>
         <li>${lblSettingsDeviceInBox3}</li>
       </ul>
-    </td>
+    </div>
 
-    <td class="sysConfigHeight">
+    <div id="btnSettingsFunctions_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="WebUI.enter(FunctionListPage);">${btnSettingsFunctions}</div>
       <ul>
         <li>${lblSettingsFunctions1}</li>
@@ -122,9 +118,9 @@ system.SetSessionVar("sessionTAB", "systemconfig");
         <li>${lblSettingsFunctions4}</li>
         <li>${lblSettingsFunctions5}</li>
       </ul>
-    </td>
+    </div>
 
-    <td class="sysConfigHeight">
+    <div id="btnSettingsGroups_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="WebUI.enter(CreateGroupPage);">${btnSettingsGroups}</div>
       <ul>
         <li>${lblSettingsGroups1}</li>
@@ -133,11 +129,9 @@ system.SetSessionVar("sessionTAB", "systemconfig");
         <li>${lblSettingsGroups4}</li>
         <li>${lblSettingsGroups5}</li>
       </ul>
-    </td>
-  </tr>
+    </div>
 
-  <tr>
-    <td class="sysConfigHeight">
+    <div id="btnSettingsRooms_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="WebUI.enter(RoomListPage);">${btnSettingsRooms}</div>
       <ul>
         <li>${lblSettingsRooms1}</li>
@@ -146,9 +140,9 @@ system.SetSessionVar("sessionTAB", "systemconfig");
         <li>${lblSettingsRooms4}</li>
         <li>${lblSettingsRooms5}</li>
       </ul>
-    </td>
+    </div>
 
-    <td class="sysConfigHeight">
+    <div id="btnSettingsSystemConfig_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="WebUI.enter(SystemControlPage);">${btnSettingsSystemConfig}</div>
       <ul>
         <li>${lblSettingsSystemConfig1}</li>
@@ -160,9 +154,9 @@ system.SetSessionVar("sessionTAB", "systemconfig");
         <li>${lblSettingsSystemConfig7}</li>
         <li>${lblSettingsSystemConfig8}</li>
       </ul>
-    </td>
+    </div>
     
-    <td class="sysConfigHeight">
+    <div id="btnSettingsSysVar_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="loadSystemVars();">${btnSettingsSysVar}</div>
       <ul>
         <li>${lblSettingsSysVar1}</li>
@@ -170,11 +164,11 @@ system.SetSessionVar("sessionTAB", "systemconfig");
         <li>${lblSettingsSysVar3}</li>
         <li>${lblSettingsSysVar4}</li>
       </ul>
-    </td>
-    <td class="CLASS05501" style="background-color: white;"></td>
-    <td class="CLASS05501" style="background-color: white;"></td>
-  </tr>
-</table>
+    </div>
+    <div class="CLASS05501" style="background-color: white;"></div>
+    <div class="CLASS05501" style="background-color: white;"></div>
+  </div>
+</div>
 
 <script type="text/javascript">
   setFooter("");

@@ -2517,7 +2517,7 @@ html, body {
   background-color: $_(subMenuBackground);
   font-weight: bold;
   /* padding-left: 5px; */
-  padding-right: 2px 5px; 
+  padding: 2px 5px; 
   text-align:left;
   vertical-align:middle;
   color: $_(textColorB); /* black */

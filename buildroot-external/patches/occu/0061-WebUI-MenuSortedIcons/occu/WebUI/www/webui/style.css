@@ -239,7 +239,7 @@ a img {
 
 /* Grundlegende Tabelle auf der Statusanzeige-Seite */
 #tblStatus {
-  width:1200px; 
+  /* width:1200px; */
   height:100%;
   table-layout: fixed;
 }
@@ -6847,11 +6847,12 @@ color: $_(textColorA); /* white */
 /* rega\pages\tabs\admin\linkprog.htm */
 
 .CLASS05400 {
-	height:130px;
+	/* height:130px; */
 }
 
 .CLASS05401 {
 	height:160px;
+	margin-left: 10px;
 }
 
 .CLASS05402 {
@@ -6860,6 +6861,25 @@ color: $_(textColorA); /* white */
 
 .CLASS05403 {
 	text-align:center ! important;
+}
+
+.CLASS05405 {
+	min-height:50%;
+	display: flex;
+	flex-flow: row wrap;
+	margin: 10px;
+}
+
+.CLASS05405 > div {
+	margin: 10px;
+	padding: 1px;
+	flex: 0 1 calc(50% - 22px);
+	overflow: hidden;
+	/* copied from .StdTable td */
+	background-color: $_(inactiveBackground);
+	text-align:left;
+	vertical-align: top;
+	color: $_(textColorB); /* black */
 }
 
 /* rega\pages\tabs\admin\systemconfig.htm */

@@ -5,24 +5,22 @@
   setPath(translateKey("menuSettingsPage"));
 </script>
 
-<table class="StdTable" cellspacing="20">
-  <colgroup>
-    <col width="25%" />
-    <col width="25%" />
-    <col width="25%" />
-    <col width="25%" />
-  </colgroup>
-  <tr class="CLASS06100">
+<div id="subOffsetDiv"></div>
+
+<div id="tblSettings" class="StdTable CLASS06100 j_translate">
+
+  <div id="statusRow2" class="CLASS06102">
+
     <!-- Benutzerverwaltung -->
-    <td>
-      <div  class="StdTableBtn" onclick="WebUI.enter(UserAdminPageUser);">${btnSettingsUserAdministration}</div>
+    <div id="btnSettingsUserAdministration_container" class="sysConfigHeight">
+      <div class="StdTableBtn" onclick="WebUI.enter(UserAdminPageUser);">${btnSettingsUserAdministration}</div>
       <ul>
         <li>${lblSettingsUserAdministrationUser}</li>
       </ul>
-    </td>
+    </div>
 
     <!-- Diagramme -->
-    <td>
+    <div id="btnSettingsDiagrams_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="WebUI.enter(CreateDiagramPage);">${btnSettingsDiagrams}</div>
       <ul>
         <li>${lblSettingsDiagrams1}</li>
@@ -30,26 +28,24 @@
         <li>${lblSettingsDiagrams3}</li>
         <li>${lblSettingsDiagrams4}</li>
       </ul>
-    </td>
+    </div>
     
     <!-- Favoriten -->
-    <td>
+    <div id="btnSettingsFavorites_container" class="sysConfigHeight">
       <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
       <ul>
         <li>${lblSettingsFavorites1User}</li>
         <li>${lblSettingsFavorites2User}</li>
         <li>${lblSettingsFavorites3}</li>
       </ul>
-    </td>
-    <td class="CLASS06101"></td>
-  </tr>
-  <tr>
-    <td class="CLASS06101"></td>
-    <td class="CLASS06101"></td>
-    <td class="CLASS06101"></td>
-    <td class="CLASS06101"></td>
-  </tr>
-</table>
+    </div>
+    <div class="CLASS06101"></div>
+    <div class="CLASS06101"></div>
+    <div class="CLASS06101"></div>
+    <div class="CLASS06101"></div>
+    <div class="CLASS06101"></div>
+  </div>
+</div>
 
 <script type="text/javascript">
   setFooter("");

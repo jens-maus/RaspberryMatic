@@ -46,6 +46,10 @@ check_factory_reset() {
   # mount /usr/local again
   mount /usr/local
 
+  # make sure a potential rf copro is factory
+  # reset as well
+  touch /usr/local/.doCoproFactoryReset
+
   return 0
 }
 

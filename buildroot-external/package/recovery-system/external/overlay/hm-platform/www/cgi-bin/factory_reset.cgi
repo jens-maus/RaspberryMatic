@@ -35,6 +35,11 @@ else
   fi
 fi
 
+# make sure to trigger a factory reset within
+# the normal system as well (will reset the copro as well)
+mount -o rw /userfs
+touch /userfs/.doFactoryReset
+
 echo "done.<br>"
 
 echo "[3/3] Rebooting...<br>"

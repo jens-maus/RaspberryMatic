@@ -4,7 +4,7 @@
 #
 #############################################################
 
-RECOVERY_SYSTEM_VER = 1.6.4
+RECOVERY_SYSTEM_VER = 1.6.5
 RECOVERY_SYSTEM_VERSION = $(RECOVERY_SYSTEM_VER)-$(BR2_VERSION)
 RECOVERY_SYSTEM_BUILDROOT = $(BR2_VERSION)
 RECOVERY_SYSTEM_SITE = $(call github,buildroot,buildroot,$(RECOVERY_SYSTEM_BUILDROOT))

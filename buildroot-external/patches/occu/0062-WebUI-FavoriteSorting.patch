@@ -1,3 +1,23 @@
+--- occu/WebUI/www/rega/esp/favorites.fn.orig
++++ occu/WebUI/www/rega/esp/favorites.fn
+@@ -244,7 +244,7 @@
+             oU = dom.CreateObject( OT_FAVORITE, "_USER"#s );
+             oFavorites.Add( oU );
+           }
+-          else
++          elseif( system.GetVar("sargs").Contains(s) == false )
+           {
+             oU.Remove( iOrigID );
+             Write( "|rem "#iOrigID#" from "#oU.ID()#"|" );
+@@ -257,7 +257,7 @@
+       foreach(s,system.GetVar("sargs"))
+       {
+         object oU = oFavorites.Get( "_USER"#s );
+-        if( oU )
++        if( oU && (oU.Get(iOrigID) != null) )
+         {
+           oU.Add( iOrigID );
+           Write( "|add "#iOrigID#" to "#oU.ID()#"|" );
 --- occu/WebUI/www/rega/pages/tabs/user/favOverview.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/user/favOverview.htm
 @@ -27,10 +27,17 @@

@@ -17699,7 +17699,6 @@ MainMenu = Singleton.create({
     var cell = document.createElement("div");
     var img = document.createElement("img");
     img.src="../ise/img/menuicons/"+submenuItem.id+".png";
-    img.style.cssText = "vertical-align: middle; width: 16px";
     cell.appendChild(img);
     cell.className = "MainMenuSubItem";
     cell.id = submenuItem.id;

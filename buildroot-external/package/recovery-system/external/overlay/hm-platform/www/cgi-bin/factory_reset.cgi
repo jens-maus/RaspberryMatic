@@ -9,7 +9,7 @@ fi
 
 echo -ne "[1/3] Factory Reset: Checking requirements... "
 
-DEVNAME=$(/sbin/blkid | grep userfs | cut -d: -f1)
+DEVNAME=$(/sbin/blkid --label userfs)
 if [ -n "${DEVNAME}" ] && [ -e "${DEVNAME}" ]; then
   umount -f "${DEVNAME}"
   echo "INFO: user partition '${DEVNAME}' exists.<br>"

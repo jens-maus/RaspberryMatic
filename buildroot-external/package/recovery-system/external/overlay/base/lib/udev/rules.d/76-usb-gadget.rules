@@ -1,0 +1,2 @@
+# Rename usb0 to eth0 to make usb gadget ethernet devices work
+SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*",ATTR{address}=="00:55:66:77:88:99",ATTR{dev_id}=="0x0", ATTR{type}=="1",KERNEL=="usb*", NAME="eth0"

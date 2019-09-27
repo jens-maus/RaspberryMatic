@@ -1,0 +1,336 @@
+diff --git a/arch/arm/mach-bcm283x/Kconfig b/arch/arm/mach-bcm283x/Kconfig
+index 3eb5a9a897..09a5b42bbb 100644
+--- a/arch/arm/mach-bcm283x/Kconfig
++++ b/arch/arm/mach-bcm283x/Kconfig
+@@ -26,6 +26,23 @@ config BCM2837_64B
+ 	select BCM2837
+ 	select ARM64
+ 
++config BCM2838
++	bool "Broadcom BCM2838 SoC support"
++	depends on ARCH_BCM283X
++
++config BCM2838_32B
++	bool "Broadcom BCM2838 SoC 32-bit support"
++	depends on ARCH_BCM283X
++	select BCM2838
++	select ARMV7_LPAE
++	select CPU_V7A
++
++config BCM2838_64B
++	bool "Broadcom BCM2838 SoC 64-bit support"
++	depends on ARCH_BCM283X
++	select BCM2838
++	select ARM64
++
+ menu "Broadcom BCM283X family"
+ 	depends on ARCH_BCM283X
+ 
+@@ -127,6 +144,50 @@ config TARGET_RPI_3
+ 	  This option creates a build targeting the ARMv8/AArch64 ISA.
+ 	select BCM2837_64B
+ 
++config TARGET_RPI_4_32B
++	bool "Raspberry Pi 4 32-bit build"
++	help
++	  Support for all BCM2838-based Raspberry Pi variants, such as
++	  the RPi 4 model B, in AArch32 (32-bit) mode.
++
++	  This option assumes the VideoCore firmware is configured to use the
++	  mini UART (rather than PL011) for the serial console. This is the
++	  default on the RPi 4. To enable the UART console, the following non-
++	  default option must be present in config.txt: enable_uart=1. This is
++	  required for U-Boot to operate correctly, even if you only care
++	  about the HDMI/usbkbd console.
++
++	  Due to hardware incompatibilities, this can't be used with
++	  BCM283/5/6/7.
++
++	  This option creates a build targeting the ARMv7/AArch32 ISA.
++	select BCM2838_32B
++
++config TARGET_RPI_4
++	bool "Raspberry Pi 4 64-bit build"
++	help
++	  Support for all BCM2838-based Raspberry Pi variants, such as
++	  the RPi 4 model B, in AArch64 (64-bit) mode.
++
++	  This option assumes the VideoCore firmware is configured to use the
++	  mini UART (rather than PL011) for the serial console. This is the
++	  default on the RPi 4. To enable the UART console, the following non-
++	  default option must be present in config.txt: enable_uart=1. This is
++	  required for U-Boot to operate correctly, even if you only care
++	  about the HDMI/usbkbd console.
++
++	  Due to hardware incompatibilities, this can't be used with
++	  BCM283/5/6/7.
++
++	  Also, due to a bug in firmware, switching to 64bit mode doesn't
++	  happen automatically based on the kernel's image filename. See
++	  https://github.com/raspberrypi/firmware/issues/1193 for more details.
++	  Until that is resolved, the configuration (config.txt) needs to
++	  explicitly set: arm_64bit=1.
++
++	  This option creates a build targeting the ARMv8/AArch64 ISA.
++	select BCM2838_64B
++
+ endchoice
+ 
+ config SYS_BOARD
+@@ -141,4 +202,10 @@ config SYS_SOC
+ config SYS_CONFIG_NAME
+ 	default "rpi"
+ 
++config BCM283x_BASE
++	hex
++	default "0x20000000" if BCM2835
++	default "0x3f000000" if BCM2836 || BCM2837
++	default "0xfe000000" if BCM2838
++
+ endmenu
+diff --git a/arch/arm/mach-bcm283x/include/mach/mbox.h b/arch/arm/mach-bcm283x/include/mach/mbox.h
+index e3a893e49c..f2a98acddd 100644
+--- a/arch/arm/mach-bcm283x/include/mach/mbox.h
++++ b/arch/arm/mach-bcm283x/include/mach/mbox.h
+@@ -37,11 +37,7 @@
+ 
+ /* Raw mailbox HW */
+ 
+-#ifndef CONFIG_BCM2835
+-#define BCM2835_MBOX_PHYSADDR	0x3f00b880
+-#else
+-#define BCM2835_MBOX_PHYSADDR	0x2000b880
+-#endif
++#define BCM2835_MBOX_PHYSADDR	(CONFIG_BCM283x_BASE + 0x0000b880)
+ 
+ struct bcm2835_mbox_regs {
+ 	u32 read;
+@@ -234,6 +230,7 @@ struct bcm2835_mbox_tag_set_power_state {
+ #define BCM2835_MBOX_CLOCK_ID_SDRAM	8
+ #define BCM2835_MBOX_CLOCK_ID_PIXEL	9
+ #define BCM2835_MBOX_CLOCK_ID_PWM	10
++#define BCM2835_MBOX_CLOCK_ID_EMMC2	12
+ 
+ struct bcm2835_mbox_tag_get_clock_rate {
+ 	struct bcm2835_mbox_tag_hdr tag_hdr;
+diff --git a/arch/arm/mach-bcm283x/include/mach/sdhci.h b/arch/arm/mach-bcm283x/include/mach/sdhci.h
+index 5cb6ec3340..b443c379d8 100644
+--- a/arch/arm/mach-bcm283x/include/mach/sdhci.h
++++ b/arch/arm/mach-bcm283x/include/mach/sdhci.h
+@@ -6,11 +6,7 @@
+ #ifndef _BCM2835_SDHCI_H_
+ #define _BCM2835_SDHCI_H_
+ 
+-#ifndef CONFIG_BCM2835
+-#define BCM2835_SDHCI_BASE 0x3f300000
+-#else
+-#define BCM2835_SDHCI_BASE 0x20300000
+-#endif
++#define BCM2835_SDHCI_BASE (CONFIG_BCM283x_BASE + 0x00300000)
+ 
+ int bcm2835_sdhci_init(u32 regbase, u32 emmc_freq);
+ 
+diff --git a/arch/arm/mach-bcm283x/include/mach/timer.h b/arch/arm/mach-bcm283x/include/mach/timer.h
+index 56b0c356bb..014355e759 100644
+--- a/arch/arm/mach-bcm283x/include/mach/timer.h
++++ b/arch/arm/mach-bcm283x/include/mach/timer.h
+@@ -6,11 +6,7 @@
+ #ifndef _BCM2835_TIMER_H
+ #define _BCM2835_TIMER_H
+ 
+-#ifndef CONFIG_BCM2835
+-#define BCM2835_TIMER_PHYSADDR	0x3f003000
+-#else
+-#define BCM2835_TIMER_PHYSADDR	0x20003000
+-#endif
++#define BCM2835_TIMER_PHYSADDR	(CONFIG_BCM283x_BASE + 0x00003000)
+ 
+ #define BCM2835_TIMER_CS_M3	(1 << 3)
+ #define BCM2835_TIMER_CS_M2	(1 << 2)
+diff --git a/arch/arm/mach-bcm283x/include/mach/wdog.h b/arch/arm/mach-bcm283x/include/mach/wdog.h
+index 99c88e5df7..00b5e06c3a 100644
+--- a/arch/arm/mach-bcm283x/include/mach/wdog.h
++++ b/arch/arm/mach-bcm283x/include/mach/wdog.h
+@@ -6,11 +6,7 @@
+ #ifndef _BCM2835_WDOG_H
+ #define _BCM2835_WDOG_H
+ 
+-#ifndef CONFIG_BCM2835
+-#define BCM2835_WDOG_PHYSADDR			0x3f100000
+-#else
+-#define BCM2835_WDOG_PHYSADDR			0x20100000
+-#endif
++#define BCM2835_WDOG_PHYSADDR 			(CONFIG_BCM283x_BASE + 0x00100000)
+ 
+ struct bcm2835_wdog_regs {
+ 	u32 unknown0[7];
+diff --git a/board/raspberrypi/rpi/rpi.c b/board/raspberrypi/rpi/rpi.c
+index 617c892dde..1c4fae9166 100644
+--- a/board/raspberrypi/rpi/rpi.c
++++ b/board/raspberrypi/rpi/rpi.c
+@@ -148,6 +148,11 @@ static const struct rpi_model rpi_models_new_scheme[] = {
+ 		DTB_DIR "bcm2837-rpi-cm3.dtb",
+ 		false,
+ 	},
++	[0x11] = {
++		"4 Model B",
++		DTB_DIR "bcm2711-rpi-4-b.dtb",
++		true,
++	},
+ };
+ 
+ static const struct rpi_model rpi_models_old_scheme[] = {
+@@ -244,7 +249,8 @@ static uint32_t rev_type;
+ static const struct rpi_model *model;
+ 
+ #ifdef CONFIG_ARM64
+-static struct mm_region bcm2837_mem_map[] = {
++#ifndef CONFIG_BCM2838
++static struct mm_region bcm283x_mem_map[] = {
+ 	{
+ 		.virt = 0x00000000UL,
+ 		.phys = 0x00000000UL,
+@@ -263,8 +269,28 @@ static struct mm_region bcm2837_mem_map[] = {
+ 		0,
+ 	}
+ };
+-
+-struct mm_region *mem_map = bcm2837_mem_map;
++#else
++static struct mm_region bcm283x_mem_map[] = {
++	{
++		.virt = 0x00000000UL,
++		.phys = 0x00000000UL,
++		.size = 0xfe000000UL,
++		.attrs = PTE_BLOCK_MEMTYPE(MT_NORMAL) |
++			 PTE_BLOCK_INNER_SHARE
++	}, {
++		.virt = 0xfe000000UL,
++		.phys = 0xfe000000UL,
++		.size = 0x01800000UL,
++		.attrs = PTE_BLOCK_MEMTYPE(MT_DEVICE_NGNRNE) |
++			 PTE_BLOCK_NON_SHARE |
++			 PTE_BLOCK_PXN | PTE_BLOCK_UXN
++	}, {
++		/* List terminator */
++		0,
++	}
++};
++#endif
++struct mm_region *mem_map = bcm283x_mem_map;
+ #endif
+ 
+ int dram_init(void)
+diff --git a/configs/rpi_4_32b_defconfig b/configs/rpi_4_32b_defconfig
+new file mode 100644
+index 0000000000..a31a617a5f
+--- /dev/null
++++ b/configs/rpi_4_32b_defconfig
+@@ -0,0 +1,33 @@
++CONFIG_ARM=y
++CONFIG_ARCH_BCM283X=y
++CONFIG_SYS_TEXT_BASE=0x00008000
++CONFIG_TARGET_RPI_4_32B=y
++CONFIG_SYS_MALLOC_F_LEN=0x2000
++CONFIG_DISTRO_DEFAULTS=y
++CONFIG_NR_DRAM_BANKS=1
++# CONFIG_ARCH_FIXUP_FDT_MEMORY is not set
++CONFIG_OF_BOARD=y
++CONFIG_OF_BOARD_SETUP=y
++CONFIG_MISC_INIT_R=y
++# CONFIG_DISPLAY_CPUINFO is not set
++# CONFIG_DISPLAY_BOARDINFO is not set
++CONFIG_SYS_PROMPT="U-Boot> "
++# CONFIG_CMD_FLASH is not set
++CONFIG_CMD_GPIO=y
++CONFIG_CMD_MMC=y
++CONFIG_CMD_FS_UUID=y
++CONFIG_ENV_FAT_INTERFACE="mmc"
++CONFIG_ENV_FAT_DEVICE_AND_PART="0:1"
++CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG=y
++CONFIG_DM_KEYBOARD=y
++CONFIG_DM_MMC=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_BCM2835=y
++CONFIG_PINCTRL=y
++# CONFIG_PINCTRL_GENERIC is not set
++# CONFIG_REQUIRE_SERIAL_CONSOLE is not set
++CONFIG_DM_VIDEO=y
++CONFIG_SYS_WHITE_ON_BLACK=y
++CONFIG_CONSOLE_SCROLL_LINES=10
++CONFIG_PHYS_TO_BUS=y
++CONFIG_OF_LIBFDT_OVERLAY=y
+diff --git a/configs/rpi_4_defconfig b/configs/rpi_4_defconfig
+new file mode 100644
+index 0000000000..da8c960a2a
+--- /dev/null
++++ b/configs/rpi_4_defconfig
+@@ -0,0 +1,33 @@
++CONFIG_ARM=y
++CONFIG_ARCH_BCM283X=y
++CONFIG_SYS_TEXT_BASE=0x00080000
++CONFIG_TARGET_RPI_4=y
++CONFIG_SYS_MALLOC_F_LEN=0x2000
++CONFIG_DISTRO_DEFAULTS=y
++CONFIG_NR_DRAM_BANKS=1
++# CONFIG_ARCH_FIXUP_FDT_MEMORY is not set
++CONFIG_OF_BOARD=y
++CONFIG_OF_BOARD_SETUP=y
++CONFIG_MISC_INIT_R=y
++# CONFIG_DISPLAY_CPUINFO is not set
++# CONFIG_DISPLAY_BOARDINFO is not set
++CONFIG_SYS_PROMPT="U-Boot> "
++# CONFIG_CMD_FLASH is not set
++CONFIG_CMD_GPIO=y
++CONFIG_CMD_MMC=y
++CONFIG_CMD_FS_UUID=y
++CONFIG_ENV_FAT_INTERFACE="mmc"
++CONFIG_ENV_FAT_DEVICE_AND_PART="0:1"
++CONFIG_ENV_VARS_UBOOT_RUNTIME_CONFIG=y
++CONFIG_DM_KEYBOARD=y
++CONFIG_DM_MMC=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_BCM2835=y
++CONFIG_PINCTRL=y
++# CONFIG_PINCTRL_GENERIC is not set
++# CONFIG_REQUIRE_SERIAL_CONSOLE is not set
++CONFIG_DM_VIDEO=y
++CONFIG_SYS_WHITE_ON_BLACK=y
++CONFIG_CONSOLE_SCROLL_LINES=10
++CONFIG_PHYS_TO_BUS=y
++CONFIG_OF_LIBFDT_OVERLAY=y
+diff --git a/drivers/mmc/bcm2835_sdhci.c b/drivers/mmc/bcm2835_sdhci.c
+index 08bddd410e..e68dec3be7 100644
+--- a/drivers/mmc/bcm2835_sdhci.c
++++ b/drivers/mmc/bcm2835_sdhci.c
+@@ -178,12 +178,13 @@ static int bcm2835_sdhci_probe(struct udevice *dev)
+ 	fdt_addr_t base;
+ 	int emmc_freq;
+ 	int ret;
++	int clock_id = (int)dev_get_driver_data(dev);
+ 
+ 	base = devfdt_get_addr(dev);
+ 	if (base == FDT_ADDR_T_NONE)
+ 		return -EINVAL;
+ 
+-	ret = bcm2835_get_mmc_clock(BCM2835_MBOX_CLOCK_ID_EMMC);
++	ret = bcm2835_get_mmc_clock(clock_id);
+ 	if (ret < 0) {
+ 		debug("%s: Failed to set MMC clock (err=%d)\n", __func__, ret);
+ 		return ret;
+@@ -228,7 +229,14 @@ static int bcm2835_sdhci_probe(struct udevice *dev)
+ }
+ 
+ static const struct udevice_id bcm2835_sdhci_match[] = {
+-	{ .compatible = "brcm,bcm2835-sdhci" },
++	{
++		.compatible = "brcm,bcm2835-sdhci",
++		.data = BCM2835_MBOX_CLOCK_ID_EMMC
++	},
++	{
++		.compatible = "brcm,bcm2711-emmc2",
++		.data = BCM2835_MBOX_CLOCK_ID_EMMC2
++	},
+ 	{ /* sentinel */ }
+ };
+ 

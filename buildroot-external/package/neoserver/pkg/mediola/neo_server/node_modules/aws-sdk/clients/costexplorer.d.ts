@@ -60,6 +60,14 @@ declare class CostExplorer extends Service {
    */
   getReservationUtilization(callback?: (err: AWSError, data: CostExplorer.Types.GetReservationUtilizationResponse) => void): Request<CostExplorer.Types.GetReservationUtilizationResponse, AWSError>;
   /**
+   * Creates recommendations that helps you save cost by identifying idle and underutilized Amazon EC2 instances. Recommendations are generated to either downsize or terminate instances, along with providing savings detail and metrics. For details on calculation and function, see Optimizing Your Cost with Rightsizing Recommendations.
+   */
+  getRightsizingRecommendation(params: CostExplorer.Types.GetRightsizingRecommendationRequest, callback?: (err: AWSError, data: CostExplorer.Types.GetRightsizingRecommendationResponse) => void): Request<CostExplorer.Types.GetRightsizingRecommendationResponse, AWSError>;
+  /**
+   * Creates recommendations that helps you save cost by identifying idle and underutilized Amazon EC2 instances. Recommendations are generated to either downsize or terminate instances, along with providing savings detail and metrics. For details on calculation and function, see Optimizing Your Cost with Rightsizing Recommendations.
+   */
+  getRightsizingRecommendation(callback?: (err: AWSError, data: CostExplorer.Types.GetRightsizingRecommendationResponse) => void): Request<CostExplorer.Types.GetRightsizingRecommendationResponse, AWSError>;
+  /**
    * Queries for available tag keys and tag values for a specified period. You can search the tag values for an arbitrary string. 
    */
   getTags(params: CostExplorer.Types.GetTagsRequest, callback?: (err: AWSError, data: CostExplorer.Types.GetTagsResponse) => void): Request<CostExplorer.Types.GetTagsResponse, AWSError>;
@@ -67,6 +75,14 @@ declare class CostExplorer extends Service {
    * Queries for available tag keys and tag values for a specified period. You can search the tag values for an arbitrary string. 
    */
   getTags(callback?: (err: AWSError, data: CostExplorer.Types.GetTagsResponse) => void): Request<CostExplorer.Types.GetTagsResponse, AWSError>;
+  /**
+   * Retrieves a forecast for how much Amazon Web Services predicts that you will use over the forecast time period that you select, based on your past usage. 
+   */
+  getUsageForecast(params: CostExplorer.Types.GetUsageForecastRequest, callback?: (err: AWSError, data: CostExplorer.Types.GetUsageForecastResponse) => void): Request<CostExplorer.Types.GetUsageForecastResponse, AWSError>;
+  /**
+   * Retrieves a forecast for how much Amazon Web Services predicts that you will use over the forecast time period that you select, based on your past usage. 
+   */
+  getUsageForecast(callback?: (err: AWSError, data: CostExplorer.Types.GetUsageForecastResponse) => void): Request<CostExplorer.Types.GetUsageForecastResponse, AWSError>;
 }
 declare namespace CostExplorer {
   export type AccountScope = "PAYER"|"LINKED"|string;
@@ -149,6 +165,44 @@ declare namespace CostExplorer {
   }
   export type CoverageNormalizedUnitsPercentage = string;
   export type CoveragesByTime = CoverageByTime[];
+  export interface CurrentInstance {
+    /**
+     * Resource ID of the current instance.
+     */
+    ResourceId?: GenericString;
+    /**
+     * Cost allocation resource tags applied to the instance.
+     */
+    Tags?: TagValuesList;
+    /**
+     *  Details about the resource and utilization.
+     */
+    ResourceDetails?: ResourceDetails;
+    /**
+     *  Utilization information of the current instance during the lookback period.
+     */
+    ResourceUtilization?: ResourceUtilization;
+    /**
+     *  Number of hours during the lookback period covered by reservations.
+     */
+    ReservationCoveredHoursInLookbackPeriod?: GenericString;
+    /**
+     *  Number of hours during the lookback period billed at On Demand rates.
+     */
+    OnDemandHoursInLookbackPeriod?: GenericString;
+    /**
+     *  The total number of hours the instance ran during the lookback period.
+     */
+    TotalRunningHoursInLookbackPeriod?: GenericString;
+    /**
+     *  Current On Demand cost of operating this instance on a monthly basis.
+     */
+    MonthlyCost?: GenericString;
+    /**
+     *  The currency code that Amazon Web Services used to calculate the costs for this instance.
+     */
+    CurrencyCode?: GenericString;
+  }
   export interface DateInterval {
     /**
      * The beginning of the time period that you want the usage and costs for. The start date is inclusive. For example, if start is 2017-01-01, AWS retrieves cost and usage data starting at 2017-01-01 up to the end date.
@@ -159,7 +213,7 @@ declare namespace CostExplorer {
      */
     End: YearMonthDay;
   }
-  export type Dimension = "AZ"|"INSTANCE_TYPE"|"LINKED_ACCOUNT"|"OPERATION"|"PURCHASE_TYPE"|"REGION"|"SERVICE"|"USAGE_TYPE"|"USAGE_TYPE_GROUP"|"RECORD_TYPE"|"OPERATING_SYSTEM"|"TENANCY"|"SCOPE"|"PLATFORM"|"SUBSCRIPTION_ID"|"LEGAL_ENTITY_NAME"|"DEPLOYMENT_OPTION"|"DATABASE_ENGINE"|"CACHE_ENGINE"|"INSTANCE_TYPE_FAMILY"|"BILLING_ENTITY"|"RESERVATION_ID"|string;
+  export type Dimension = "AZ"|"INSTANCE_TYPE"|"LINKED_ACCOUNT"|"OPERATION"|"PURCHASE_TYPE"|"REGION"|"SERVICE"|"USAGE_TYPE"|"USAGE_TYPE_GROUP"|"RECORD_TYPE"|"OPERATING_SYSTEM"|"TENANCY"|"SCOPE"|"PLATFORM"|"SUBSCRIPTION_ID"|"LEGAL_ENTITY_NAME"|"DEPLOYMENT_OPTION"|"DATABASE_ENGINE"|"CACHE_ENGINE"|"INSTANCE_TYPE_FAMILY"|"BILLING_ENTITY"|"RESERVATION_ID"|"RIGHTSIZING_TYPE"|string;
   export interface DimensionValues {
     /**
      * The names of the metadata types that you can use to filter and group your results. For example, AZ returns a list of Availability Zones.
@@ -214,6 +268,58 @@ declare namespace CostExplorer {
      * Whether the recommended reservation is size flexible.
      */
     SizeFlexEligible?: GenericBoolean;
+  }
+  export interface EC2ResourceDetails {
+    /**
+     *  Hourly public On Demand rate for the instance type.
+     */
+    HourlyOnDemandRate?: GenericString;
+    /**
+     *  The type of Amazon Web Services instance.
+     */
+    InstanceType?: GenericString;
+    /**
+     *  The platform of the Amazon Web Services instance. The platform is the specific combination of operating system, license model, and software on an instance.
+     */
+    Platform?: GenericString;
+    /**
+     *  The Amazon Web Services Region of the instance.
+     */
+    Region?: GenericString;
+    /**
+     *  The SKU of the product.
+     */
+    Sku?: GenericString;
+    /**
+     *  Memory capacity of Amazon Web Services instance.
+     */
+    Memory?: GenericString;
+    /**
+     *  Network performance capacity of the Amazon Web Services instance.
+     */
+    NetworkPerformance?: GenericString;
+    /**
+     *  The disk storage of the Amazon Web Services instance (Not EBS storage).
+     */
+    Storage?: GenericString;
+    /**
+     *  Number of VCPU cores in the Amazon Web Services instance type.
+     */
+    Vcpu?: GenericString;
+  }
+  export interface EC2ResourceUtilization {
+    /**
+     *  Maximum observed or expected CPU utilization of the instance.
+     */
+    MaxCpuUtilizationPercentage?: GenericString;
+    /**
+     *  Maximum observed or expected memory utilization of the instance.
+     */
+    MaxMemoryUtilizationPercentage?: GenericString;
+    /**
+     *  Maximum observed or expected storage utilization of the instance (does not measure EBS storage).
+     */
+    MaxStorageUtilizationPercentage?: GenericString;
   }
   export interface EC2Specification {
     /**
@@ -361,7 +467,7 @@ declare namespace CostExplorer {
      */
     TimePeriod: DateInterval;
     /**
-     * Which metric Cost Explorer uses to create your forecast. For more information about blended and unblended rates, see Why does the "blended" annotation appear on some line items in my bill?.  Valid values for a GetCostForecast call are the following:   AmortizedCost   BlendedCost   NetAmortizedCost   NetUnblendedCost   UnblendedCost  
+     * Which metric Cost Explorer uses to create your forecast. For more information about blended and unblended rates, see Why does the "blended" annotation appear on some line items in my bill?.  Valid values for a GetCostForecast call are the following:   AMORTIZED_COST   BLENDED_COST   NET_AMORTIZED_COST   NET_UNBLENDED_COST   UNBLENDED_COST  
      */
     Metric: Metric;
     /**
@@ -555,6 +661,39 @@ declare namespace CostExplorer {
      */
     NextPageToken?: NextPageToken;
   }
+  export interface GetRightsizingRecommendationRequest {
+    Filter?: Expression;
+    /**
+     * The specific service that you want recommendations for.
+     */
+    Service: GenericString;
+    /**
+     * The number of recommendations that you want returned in a single response object.
+     */
+    PageSize?: NonNegativeInteger;
+    /**
+     * The pagination token that indicates the next set of results that you want to retrieve.
+     */
+    NextPageToken?: NextPageToken;
+  }
+  export interface GetRightsizingRecommendationResponse {
+    /**
+     * Information regarding this specific recommendation set.
+     */
+    Metadata?: RightsizingRecommendationMetadata;
+    /**
+     * Summary of this recommendation set.
+     */
+    Summary?: RightsizingRecommendationSummary;
+    /**
+     * Recommendations to rightsize resources.
+     */
+    RightsizingRecommendations?: RightsizingRecommendationList;
+    /**
+     * The token to retrieve the next set of results.
+     */
+    NextPageToken?: NextPageToken;
+  }
   export interface GetTagsRequest {
     /**
      * The value that you want to search for.
@@ -590,6 +729,38 @@ declare namespace CostExplorer {
      * The total number of query results.
      */
     TotalSize: PageSize;
+  }
+  export interface GetUsageForecastRequest {
+    /**
+     * The start and end dates of the period that you want to retrieve usage forecast for. The start date is inclusive, but the end date is exclusive. For example, if start is 2017-01-01 and end is 2017-05-01, then the cost and usage data is retrieved from 2017-01-01 up to and including 2017-04-30 but not including 2017-05-01.
+     */
+    TimePeriod: DateInterval;
+    /**
+     * Which metric Cost Explorer uses to create your forecast. Valid values for a GetUsageForecast call are the following:   USAGE_QUANTITY   NORMALIZED_USAGE_AMOUNT  
+     */
+    Metric: Metric;
+    /**
+     * How granular you want the forecast to be. You can get 3 months of DAILY forecasts or 12 months of MONTHLY forecasts. The GetUsageForecast operation supports only DAILY and MONTHLY granularities.
+     */
+    Granularity: Granularity;
+    /**
+     * The filters that you want to use to filter your forecast. Cost Explorer API supports all of the Cost Explorer filters.
+     */
+    Filter?: Expression;
+    /**
+     * Cost Explorer always returns the mean forecast as a single point. You can request a prediction interval around the mean by specifying a confidence level. The higher the confidence level, the more confident Cost Explorer is about the actual value falling in the prediction interval. Higher confidence levels result in wider prediction intervals.
+     */
+    PredictionIntervalLevel?: PredictionIntervalLevel;
+  }
+  export interface GetUsageForecastResponse {
+    /**
+     * How much you're forecasted to use over the forecast period.
+     */
+    Total?: MetricValue;
+    /**
+     * The forecasts for your query, in order. For DAILY forecasts, this is a list of days. For MONTHLY forecasts, this is a list of months.
+     */
+    ForecastResultsByTime?: ForecastResultsByTime;
   }
   export type Granularity = "DAILY"|"MONTHLY"|"HOURLY"|string;
   export interface Group {
@@ -657,6 +828,12 @@ declare namespace CostExplorer {
     Unit?: MetricUnit;
   }
   export type Metrics = {[key: string]: MetricValue};
+  export interface ModifyRecommendationDetail {
+    /**
+     *  Identifies whether this instance type is the Amazon Web Services default recommendation.
+     */
+    TargetInstances?: TargetInstancesList;
+  }
   export type NetRISavings = string;
   export type NextPageToken = string;
   export type NonNegativeInteger = number;
@@ -956,6 +1133,18 @@ declare namespace CostExplorer {
   export type ReservationUtilizationGroups = ReservationUtilizationGroup[];
   export type ReservedHours = string;
   export type ReservedNormalizedUnits = string;
+  export interface ResourceDetails {
+    /**
+     * Details on the Amazon EC2 resource.
+     */
+    EC2ResourceDetails?: EC2ResourceDetails;
+  }
+  export interface ResourceUtilization {
+    /**
+     * Utilization of current Amazon EC2 Instance 
+     */
+    EC2ResourceUtilization?: EC2ResourceUtilization;
+  }
   export interface ResultByTime {
     /**
      * The time period that the result covers.
@@ -975,6 +1164,62 @@ declare namespace CostExplorer {
     Estimated?: Estimated;
   }
   export type ResultsByTime = ResultByTime[];
+  export interface RightsizingRecommendation {
+    /**
+     * The account that this recommendation is for.
+     */
+    AccountId?: GenericString;
+    /**
+     *  Context regarding the current instance.
+     */
+    CurrentInstance?: CurrentInstance;
+    /**
+     * Recommendation to either terminate or modify the resource.
+     */
+    RightsizingType?: RightsizingType;
+    /**
+     *  Details for modification recommendations. 
+     */
+    ModifyRecommendationDetail?: ModifyRecommendationDetail;
+    /**
+     * Details for termination recommendations.
+     */
+    TerminateRecommendationDetail?: TerminateRecommendationDetail;
+  }
+  export type RightsizingRecommendationList = RightsizingRecommendation[];
+  export interface RightsizingRecommendationMetadata {
+    /**
+     *  The ID for this specific recommendation.
+     */
+    RecommendationId?: GenericString;
+    /**
+     *  The time stamp for when Amazon Web Services made this recommendation.
+     */
+    GenerationTimestamp?: GenericString;
+    /**
+     *  How many days of previous usage that Amazon Web Services considers when making this recommendation.
+     */
+    LookbackPeriodInDays?: LookbackPeriodInDays;
+  }
+  export interface RightsizingRecommendationSummary {
+    /**
+     *  Total number of instance recommendations.
+     */
+    TotalRecommendationCount?: GenericString;
+    /**
+     *  Estimated total savings resulting from modifications, on a monthly basis.
+     */
+    EstimatedTotalMonthlySavingsAmount?: GenericString;
+    /**
+     *  The currency code that Amazon Web Services used to calculate the savings.
+     */
+    SavingsCurrencyCode?: GenericString;
+    /**
+     *  Savings percentage based on the recommended modifications, relative to the total On Demand costs associated with these instances.
+     */
+    SavingsPercentage?: GenericString;
+  }
+  export type RightsizingType = "TERMINATE"|"MODIFY"|string;
   export type SearchString = string;
   export interface ServiceSpecification {
     /**
@@ -994,7 +1239,45 @@ declare namespace CostExplorer {
      */
     Values?: Values;
   }
+  export type TagValuesList = TagValues[];
+  export interface TargetInstance {
+    /**
+     *  Expected cost to operate this instance type on a monthly basis.
+     */
+    EstimatedMonthlyCost?: GenericString;
+    /**
+     *  Estimated savings resulting from modification, on a monthly basis.
+     */
+    EstimatedMonthlySavings?: GenericString;
+    /**
+     *  The currency code that Amazon Web Services used to calculate the costs for this instance.
+     */
+    CurrencyCode?: GenericString;
+    /**
+     *  Indicates whether or not this recommendation is the defaulted Amazon Web Services recommendation.
+     */
+    DefaultTargetInstance?: GenericBoolean;
+    /**
+     *  Details on the target instance type. 
+     */
+    ResourceDetails?: ResourceDetails;
+    /**
+     *  Expected utilization metrics for target instance type.
+     */
+    ExpectedResourceUtilization?: ResourceUtilization;
+  }
+  export type TargetInstancesList = TargetInstance[];
   export type TermInYears = "ONE_YEAR"|"THREE_YEARS"|string;
+  export interface TerminateRecommendationDetail {
+    /**
+     *  Estimated savings resulting from modification, on a monthly basis.
+     */
+    EstimatedMonthlySavings?: GenericString;
+    /**
+     *  The currency code that Amazon Web Services used to calculate the costs for this instance.
+     */
+    CurrencyCode?: GenericString;
+  }
   export type TotalActualHours = string;
   export type TotalActualUnits = string;
   export type TotalAmortizedFee = string;

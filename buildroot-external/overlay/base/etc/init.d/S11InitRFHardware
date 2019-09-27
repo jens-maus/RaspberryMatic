@@ -232,6 +232,11 @@ query_rf_parameters() {
   if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
      [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
 
+    # perform a coprocessor factory reset if selected
+    if [[ -r /usr/local/.doCoproFactoryReset ]]; then
+      /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -r >/dev/null 2>&1
+    fi
+
     # use hmip-copro-update only to query all rf module related info (eq3configcmd is not supported for RPI-RF-MOD)
     RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -v -a 2>&1)
     RF_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
@@ -274,6 +279,12 @@ query_rf_parameters() {
 
   # query HMIP-RFUSB parameters if used
   if [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
+
+    # perform a coprocessor factory reset if selected
+    if [[ -r /usr/local/.doCoproFactoryReset ]]; then
+      /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -r >/dev/null 2>&1
+    fi
+
     # run hmip-copro-update to query info and get copro into app mode
     RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v -a 2>&1)
     RF_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
@@ -300,6 +311,9 @@ query_rf_parameters() {
       HM_HMIP_SGTIN=
     fi
   fi
+
+  # make sure there is no /usr/local/.doCoproFactoryReset file anymore
+  rm -f /usr/local/.doCoproFactoryReset
 
   # save all info about the RF module
   if [[ -n "${HM_HMRF_SERIAL}" ]]; then

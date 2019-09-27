@@ -1,6 +1,5 @@
 var util = require('util')
 var bl = require('bl')
-var xtend = require('xtend')
 var headers = require('./headers')
 
 var Writable = require('readable-stream').Writable
@@ -98,7 +97,7 @@ var Extract = function (opts) {
   var onpaxheader = function () {
     var size = self._header.size
     self._pax = headers.decodePax(b.slice(0, size))
-    if (self._paxGlobal) self._pax = xtend(self._paxGlobal, self._pax)
+    if (self._paxGlobal) self._pax = Object.assign({}, self._paxGlobal, self._pax)
     b.consume(size)
     onstreamend()
   }

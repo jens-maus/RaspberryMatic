@@ -52,6 +52,14 @@ declare class StorageGateway extends Service {
    */
   addWorkingStorage(callback?: (err: AWSError, data: StorageGateway.Types.AddWorkingStorageOutput) => void): Request<StorageGateway.Types.AddWorkingStorageOutput, AWSError>;
   /**
+   * Assigns a tape to a tape pool for archiving. The tape assigned to a pool is archived in the S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the S3 storage class (Glacier or Deep Archive) that corresponds to the pool. Valid values: "GLACIER", "DEEP_ARCHIVE"
+   */
+  assignTapePool(params: StorageGateway.Types.AssignTapePoolInput, callback?: (err: AWSError, data: StorageGateway.Types.AssignTapePoolOutput) => void): Request<StorageGateway.Types.AssignTapePoolOutput, AWSError>;
+  /**
+   * Assigns a tape to a tape pool for archiving. The tape assigned to a pool is archived in the S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the S3 storage class (Glacier or Deep Archive) that corresponds to the pool. Valid values: "GLACIER", "DEEP_ARCHIVE"
+   */
+  assignTapePool(callback?: (err: AWSError, data: StorageGateway.Types.AssignTapePoolOutput) => void): Request<StorageGateway.Types.AssignTapePoolOutput, AWSError>;
+  /**
    * Connects a volume to an iSCSI connection and then attaches the volume to the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.
    */
   attachVolume(params: StorageGateway.Types.AttachVolumeInput, callback?: (err: AWSError, data: StorageGateway.Types.AttachVolumeOutput) => void): Request<StorageGateway.Types.AttachVolumeOutput, AWSError>;
@@ -564,6 +572,14 @@ declare class StorageGateway extends Service {
    */
   updateSMBFileShare(callback?: (err: AWSError, data: StorageGateway.Types.UpdateSMBFileShareOutput) => void): Request<StorageGateway.Types.UpdateSMBFileShareOutput, AWSError>;
   /**
+   * Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.
+   */
+  updateSMBSecurityStrategy(params: StorageGateway.Types.UpdateSMBSecurityStrategyInput, callback?: (err: AWSError, data: StorageGateway.Types.UpdateSMBSecurityStrategyOutput) => void): Request<StorageGateway.Types.UpdateSMBSecurityStrategyOutput, AWSError>;
+  /**
+   * Updates the SMB security strategy on a file gateway. This action is only supported in file gateways.
+   */
+  updateSMBSecurityStrategy(callback?: (err: AWSError, data: StorageGateway.Types.UpdateSMBSecurityStrategyOutput) => void): Request<StorageGateway.Types.UpdateSMBSecurityStrategyOutput, AWSError>;
+  /**
    * Updates a snapshot schedule configured for a gateway volume. This operation is only supported in the cached volume and stored volume gateway types. The default snapshot schedule for volume is once every 24 hours, starting at the creation time of the volume. You can use this API to change the snapshot schedule configured for the volume. In the request you must identify the gateway volume whose snapshot schedule you want to update, and the schedule information, including when you want the snapshot to begin on a day and the frequency (in hours) of snapshots.
    */
   updateSnapshotSchedule(params: StorageGateway.Types.UpdateSnapshotScheduleInput, callback?: (err: AWSError, data: StorageGateway.Types.UpdateSnapshotScheduleOutput) => void): Request<StorageGateway.Types.UpdateSnapshotScheduleOutput, AWSError>;
@@ -664,6 +680,22 @@ declare namespace StorageGateway {
   }
   export interface AddWorkingStorageOutput {
     GatewayARN?: GatewayARN;
+  }
+  export interface AssignTapePoolInput {
+    /**
+     * The unique Amazon Resource Name (ARN) of the virtual tape that you want to add to the tape pool.
+     */
+    TapeARN: TapeARN;
+    /**
+     * The ID of the pool that you want to add your tape to for archiving. The tape in this pool is archived in the S3 storage class that is associated with the pool. When you use your backup application to eject the tape, the tape is archived directly into the storage class (Glacier or Deep Archive) that corresponds to the pool. Valid values: "GLACIER", "DEEP_ARCHIVE"
+     */
+    PoolId: PoolId;
+  }
+  export interface AssignTapePoolOutput {
+    /**
+     * The unique Amazon Resource Names (ARN) of the virtual tape that was added to the tape pool.
+     */
+    TapeARN?: TapeARN;
   }
   export interface AttachVolumeInput {
     /**
@@ -1395,6 +1427,10 @@ declare namespace StorageGateway {
      * A list of up to 50 tags assigned to the gateway, sorted alphabetically by key name. Each tag is a key-value pair. For a gateway with more than 10 tags assigned, you can view all tags using the ListTagsForResource API operation.
      */
     Tags?: Tags;
+    /**
+     * The configuration settings for the virtual private cloud (VPC) endpoint for your gateway. 
+     */
+    VPCEndpoint?: string;
   }
   export interface DescribeMaintenanceStartTimeInput {
     GatewayARN: GatewayARN;
@@ -1459,6 +1495,10 @@ declare namespace StorageGateway {
      * This value is true if a password for the guest user “smbguest” is set, and otherwise false.
      */
     SMBGuestPasswordSet?: Boolean;
+    /**
+     * The type of security strategy that was specified for file gateway. ClientSpecified: SMBv1 is enabled, SMB signing is offered but not required, SMB encryption is offered but not required. MandatorySigning: SMBv1 is disabled, SMB signing is required, SMB encryption is offered but not required. MandatoryEncryption: SMBv1 is disabled, SMB signing is offered but not required, SMB encryption is required.
+     */
+    SMBSecurityStrategy?: SMBSecurityStrategy;
   }
   export interface DescribeSnapshotScheduleInput {
     /**
@@ -2188,6 +2228,7 @@ declare namespace StorageGateway {
   }
   export type SMBFileShareInfoList = SMBFileShareInfo[];
   export type SMBGuestPassword = string;
+  export type SMBSecurityStrategy = "ClientSpecified"|"MandatorySigning"|"MandatoryEncryption"|string;
   export interface SetLocalConsolePasswordInput {
     GatewayARN: GatewayARN;
     /**
@@ -2632,6 +2673,16 @@ declare namespace StorageGateway {
      * The Amazon Resource Name (ARN) of the updated SMB file share. 
      */
     FileShareARN?: FileShareARN;
+  }
+  export interface UpdateSMBSecurityStrategyInput {
+    GatewayARN: GatewayARN;
+    /**
+     * Specifies the type of security strategy. ClientSpecified: SMBv1 is enabled, SMB signing is offered but not required, SMB encryption is offered but not required. MandatorySigning: SMBv1 is disabled, SMB signing is required, SMB encryption is offered but not required. MandatoryEncryption: SMBv1 is disabled, SMB signing is offered but not required, SMB encryption is required.
+     */
+    SMBSecurityStrategy: SMBSecurityStrategy;
+  }
+  export interface UpdateSMBSecurityStrategyOutput {
+    GatewayARN?: GatewayARN;
   }
   export interface UpdateSnapshotScheduleInput {
     /**

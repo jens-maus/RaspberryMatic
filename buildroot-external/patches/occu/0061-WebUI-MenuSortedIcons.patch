@@ -8,13 +8,195 @@
            puts "<li><a target='_blank' href=\"$HOMEMATIC_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
            puts "<li><a target='_blank' href=\"$HOMEMATIC_IP_URL/start.html\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
            puts "<li style='padding-top:25px;'><img src='/ise/img/homematic_logo_small.png'/></li>"
+--- occu/WebUI/www/rega/pages/tabs/admin/linkprog.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/linkprog.htm
+@@ -1,109 +1,66 @@
+ <%
+   system.SetSessionVar("sessionTAB", "linkprog");
+ %>
++
+ <script type="text/javascript">
+   setPath(translateKey("menuProgramsLinksPage"));
+ </script>
+ 
+-<table class="StdTable j_translate" cellspacing="20">
+-<colgroup>
+-  <col width="50%" />
+-  <col width="50%" />
+-</colgroup>
+-<tr>
+-  <td>
+-    <div onclick="WebUI.enter(LinkListPage);" class="StdTableBtn">${btnDirectDeviceLinks}</div>
+-    <table>
+-      <tr>
+-        <td>
+-          <ul class='CLASS05400'>
+-            <li>${lblDirectDeviceLinks1}</li>
+-            <li>${lblDirectDeviceLinks2}</li>
+-            <li>${lblDirectDeviceLinks3}</li>
+-            <li>${lblDirectDeviceLinks4}</li>
+-          </ul>
+-        </td>
+-      </tr>
+-      <tr>
+-        <td>
+-         <div class="CLASS05401">
+-          <table>
+-            <tr>
+-              <td><b>${hintDirectDeviceLinks1}</b></td>
+-            </tr>
+-            <tr>
+-              <td><b>${hintDirectDeviceLinks2}</b></td>
+-            </tr>
+-            <!--
+-            <tr>
+-              <td>${hintDirectDeviceLinks3}</td>
+-            </tr>
+-            -->
+-           </table>
+-          </div>
+-          <!--
+-           <table class="CLASS05402">
+-            <tr>
+-              <td class="CLASS05403">
+-                <img id="Img1" src="/ise/img/proglink1_small.jpg" alt="" />    
+-              </td>
+-            </tr>
+-          </table>
+-          -->
+-        </td>
+-      </tr>
+-    </table>
+-  </td>
++<div id="subOffsetDiv"></div>
++
++<div id="tblProgramsLinks" class="StdTable CLASS05404 j_translate">
++
++  <div id="statusRow2" class="CLASS05405">
++
++    <div id="btnDirectDeviceLinks_container" class="sysConfigHeight">
++      <div class="StdTableBtn" onclick="WebUI.enter(LinkListPage);">${btnDirectDeviceLinks}</div>
++      <ul class='CLASS05400'>
++        <li>${lblDirectDeviceLinks1}</li>
++        <li>${lblDirectDeviceLinks2}</li>
++        <li>${lblDirectDeviceLinks3}</li>
++        <li>${lblDirectDeviceLinks4}</li>
++      </ul>
++      <div class="CLASS05401">
++        <span><b>${hintDirectDeviceLinks1}</b></span>
++        <span><b>${hintDirectDeviceLinks2}</b></span>
++        <!-- <span>${hintDirectDeviceLinks3}</span> -->
++      </div>
++      <!--
++      <div class="CLASS05402">
++        <div class="CLASS05403">
++          <img id="Img1" src="/ise/img/proglink1_small.jpg" alt="" />    
++        </div>
++      </div>
++         -->
++    </div>
+   
+-  <td>
+-    <div onclick="WebUI.enter(ProgramListPage);" class="StdTableBtn">${btnCreateProgramsAndLinks}</div>
+-    <table>
+-      <tr valign="top">
+-        <td>
+-          <ul class='CLASS05400'>
+-              <li>${lblCreateProgramsAndLinks1}</li>
+-              <li>${lblCreateProgramsAndLinks2}</li>
+-              <li>${lblCreateProgramsAndLinks3}</li>
+-              <li>${lblCreateProgramsAndLinks4}</li>
+-              <li>${lblCreateProgramsAndLinks5}</li>
+-              <li>${lblCreateProgramsAndLinks6}</li>
+-              <li>${lblCreateProgramsAndLinks7}</li>
+-              <li>${lblCreateProgramsAndLinks8}</li>
+-          </ul>
+-        </td>
+-      </tr>
+-      <tr>
+-        <td>
+-         <div class="CLASS05401">
+-          <table>
+-            <tr>
+-              <td><b>${hintCreateProgramsAndLinks1}</b></td>
+-            </tr>
+-            <tr>
+-              <td><b>${hintCreateProgramsAndLinks2}</b></td>
+-            </tr>
+-            <!--
+-            <tr>
+-              <td>${hintCreateProgramsAndLinks3}</td>
+-            </tr>
+-            -->
+-          </table>
+-          </div>
+-          <!--
+-           <table class="CLASS05402">
+-            <tr>
+-              <td class="CLASS05403">
+-                <img id="pl2" src="/ise/img/proglink2_small.jpg" alt="" />
+-              </td>
+-            </tr>
+-          </table>
+-          -->
+-        </td>
+-      </tr>
+-    </table>
+-  </td>
+-</tr>
+-</table>
++    <div id="btnCreateProgramsAndLinks_container" class="sysConfigHeight">
++      <div onclick="WebUI.enter(ProgramListPage);" class="StdTableBtn">${btnCreateProgramsAndLinks}</div>
++      <ul class='CLASS05400'>
++        <li>${lblCreateProgramsAndLinks1}</li>
++        <li>${lblCreateProgramsAndLinks2}</li>
++        <li>${lblCreateProgramsAndLinks3}</li>
++        <li>${lblCreateProgramsAndLinks4}</li>
++        <li>${lblCreateProgramsAndLinks5}</li>
++        <li>${lblCreateProgramsAndLinks6}</li>
++        <li>${lblCreateProgramsAndLinks7}</li>
++        <li>${lblCreateProgramsAndLinks8}</li>
++      </ul>
++      <div class="CLASS05401">
++        <span><b>${hintCreateProgramsAndLinks1}</b></span>
++        <span><b>${hintCreateProgramsAndLinks2}</b></span>
++        <!-- <span>${hintCreateProgramsAndLinks3}</span> -->
++      </div>
++      <!--
++      <div class="CLASS05402">
++        <div class="CLASS05403">
++          <img id="pl2" src="/ise/img/proglink2_small.jpg" alt="" />
++        </div>
++      </div>
++         -->
++    </div>
++  </div>
++</div>
+ 
+ <script type="text/javascript">
+   //translateAndSetImage("#Img1", "proglink1_small.jpg");
 --- occu/WebUI/www/rega/pages/tabs/admin/systemconfig.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/systemconfig.htm
-@@ -15,18 +15,38 @@
-   </colgroup>
-   <tr class="CLASS05500">
-     <td class="sysConfigHeight">
+@@ -6,31 +6,48 @@
+ </script>
+ 
+ <div id="subOffsetDiv"></div>
+-<table class="StdTable j_translate" cellspacing="20">
+-  <colgroup>
+-    <col width="25%"/>
+-    <col width="25%"/>
+-    <col width="25%"/>
+-    <col width="25%"/>
+-  </colgroup>
+-  <tr class="CLASS05500">
+-    <td class="sysConfigHeight">
 -      <div class="StdTableBtn" onclick="WebUI.enter(NewDeviceListPage);">${btnSettingsDeviceInBox}</div>
++
++<div id="tblSettings" class="StdTable CLASS05500 j_translate">
++
++  <div id="statusRow2" class="CLASS05502">
++
++    <div id="btnSettingsUserAdministration_container" class="sysConfigHeight">
 +      <div class="StdTableBtn" onclick="WebUI.enter(UserAdminPageAdmin);">${btnSettingsUserAdministration}</div>
        <ul>
 -        <li>${lblSettingsDeviceInBox1}</li>
@@ -23,9 +205,9 @@
 +        <li>${lblSettingsUserAdministration3}</li>
 +        <li>${lblSettingsUserAdministration4}</li>
 +      </ul>
-+    </td>
-+  
-+    <td class="sysConfigHeight">
++    </div>
++
++    <div id="btnSettingsDiagrams_container" class="sysConfigHeight">
 +      <div class="StdTableBtn" onclick="WebUI.enter(CreateDiagramPage);">${btnSettingsDiagrams}</div>
 +      <ul>
 +        <li>${lblSettingsDiagrams1}</li>
@@ -33,9 +215,9 @@
 +        <li>${lblSettingsDiagrams3}</li>
 +        <li>${lblSettingsDiagrams4}</li>
 +      </ul>
-+    </td>
++    </div>
 +
-+    <td class="sysConfigHeight">
++    <div id="btnSettingsFavorites_container" class="sysConfigHeight">
 +      <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
 +      <ul>
 +        <li>${lblSettingsFavorites1}</li>
@@ -54,13 +236,21 @@
 -        <li>${lblSettingsDeviceInBox3}</li>
 +        <li>${lblSettingsFavorites3}</li>
        </ul>
-     </td>
+-    </td>
++    </div>
  
-@@ -54,52 +74,9 @@
+-    <td class="sysConfigHeight">
++    <div id="btnSettingsDevices_container" class="sysConfigHeight">
+       <div class="StdTableBtn" onclick="WebUI.enter(DeviceListPage);">${btnSettingsDevices}</div>
+       <ul>
+         <li>
+@@ -53,54 +70,9 @@
+         <li>${lblSettingsDevices3}</li>
          <li>${lblSettingsDevices4}</li>
        </ul>
-     </td>
--
+-    </td>
++    </div>
+ 
 -    <td class="sysConfigHeight">
 -      <div class="StdTableBtn" onclick="WebUI.enter(RoomListPage);">${btnSettingsRooms}</div>
 -      <ul>
@@ -106,17 +296,21 @@
 -      </ul>
 -    </td>
 -
-+ </tr>
-+ <tr>
-+ 
-     <td class="sysConfigHeight">
+-    <td class="sysConfigHeight">
++    <div id="submenuDeviceFirmwareInformation_container" class="sysConfigHeight">
        <div class="StdTableBtn" onclick="WebUI.enter(DeviceFirmwareInformation);">${submenuDeviceFirmwareInformation}</div>
        <ul>
-@@ -121,40 +98,53 @@
-     </td>
+         <li>${lblSettingsDeviceFirmwareMain0}
+@@ -118,47 +90,58 @@
+           </ul>
+         </li>
+       </ul>
+-    </td>
++    </div>
  
-     <td class="sysConfigHeight">
+-    <td class="sysConfigHeight">
 -      <div class="StdTableBtn" onclick="WebUI.enter(UserAdminPageAdmin);">${btnSettingsUserAdministration}</div>
++    <div id="btnSettingsDeviceInBox_container" class="sysConfigHeight">
 +      <div class="StdTableBtn" onclick="WebUI.enter(NewDeviceListPage);">${btnSettingsDeviceInBox}</div>
        <ul>
 -        <li>${lblSettingsUserAdministration1}</li>
@@ -134,12 +328,14 @@
 +        </li>
 +        <li>${lblSettingsDeviceInBox3}</li>
        </ul>
-     </td>
+-    </td>
 -  </tr>
++    </div>
  
 -  <tr>
-     <td class="sysConfigHeight">
+-    <td class="sysConfigHeight">
 -      <div class="StdTableBtn" onclick="loadSystemVars();">${btnSettingsSysVar}</div>
++    <div id="btnSettingsFunctions_container" class="sysConfigHeight">
 +      <div class="StdTableBtn" onclick="WebUI.enter(FunctionListPage);">${btnSettingsFunctions}</div>
        <ul>
 -        <li>${lblSettingsSysVar1}</li>
@@ -152,10 +348,12 @@
 +        <li>${lblSettingsFunctions4}</li>
 +        <li>${lblSettingsFunctions5}</li>
        </ul>
-     </td>
+-    </td>
++    </div>
  
-     <td class="sysConfigHeight">
+-    <td class="sysConfigHeight">
 -      <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
++    <div id="btnSettingsGroups_container" class="sysConfigHeight">
 +      <div class="StdTableBtn" onclick="WebUI.enter(CreateGroupPage);">${btnSettingsGroups}</div>
        <ul>
 -        <li>${lblSettingsFavorites1}</li>
@@ -174,11 +372,9 @@
 +        <li>${lblSettingsGroups4}</li>
 +        <li>${lblSettingsGroups5}</li>
 +      </ul>
-+    </td>
-+  </tr>
++    </div>
 +
-+  <tr>
-+    <td class="sysConfigHeight">
++    <div id="btnSettingsRooms_container" class="sysConfigHeight">
 +      <div class="StdTableBtn" onclick="WebUI.enter(RoomListPage);">${btnSettingsRooms}</div>
 +      <ul>
 +        <li>${lblSettingsRooms1}</li>
@@ -187,14 +383,26 @@
 +        <li>${lblSettingsRooms4}</li>
 +        <li>${lblSettingsRooms5}</li>
        </ul>
-     </td>
+-    </td>
++    </div>
  
-@@ -171,6 +161,16 @@
+-    <td class="sysConfigHeight">
++    <div id="btnSettingsSystemConfig_container" class="sysConfigHeight">
+       <div class="StdTableBtn" onclick="WebUI.enter(SystemControlPage);">${btnSettingsSystemConfig}</div>
+       <ul>
+         <li>${lblSettingsSystemConfig1}</li>
+@@ -170,13 +153,23 @@
+         <li>${lblSettingsSystemConfig7}</li>
          <li>${lblSettingsSystemConfig8}</li>
        </ul>
-     </td>
+-    </td>
+-    <td class="CLASS05501" style="background-color: white;"></td>
+-    <td class="CLASS05501" style="background-color: white;"></td>
+-  </tr>
+-</table>
++    </div>
 +    
-+    <td class="sysConfigHeight">
++    <div id="btnSettingsSysVar_container" class="sysConfigHeight">
 +      <div class="StdTableBtn" onclick="loadSystemVars();">${btnSettingsSysVar}</div>
 +      <ul>
 +        <li>${lblSettingsSysVar1}</li>
@@ -202,145 +410,310 @@
 +        <li>${lblSettingsSysVar3}</li>
 +        <li>${lblSettingsSysVar4}</li>
 +      </ul>
-+    </td>
-     <td class="CLASS05501" style="background-color: white;"></td>
-     <td class="CLASS05501" style="background-color: white;"></td>
-   </tr>
++    </div>
++    <div class="CLASS05501" style="background-color: white;"></div>
++    <div class="CLASS05501" style="background-color: white;"></div>
++  </div>
++</div>
+ 
+ <script type="text/javascript">
+   setFooter("");
+   translatePage("#content");
+-</script>
+\ No newline at end of file
++</script>
 --- occu/WebUI/www/rega/pages/tabs/control.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control.htm
-@@ -20,54 +20,47 @@
-   <tr  id="statusRow2" class="CLASS05701">
+@@ -9,80 +9,74 @@
  
-     <td>
+ <div id="subOffsetDiv"></div>
+ 
+-<table id="tblStatus" class="StdTable CLASS05700 j_translate" cellspacing="20" >
+-  <colgroup>
+-    <col width="25%" />
+-    <col width="25%" />
+-    <col width="25%" />
+-    <col width="25%" />
+-  </colgroup>
++<div id="tblStatus" class="StdTable CLASS05700 j_translate">
+   
+-  <tr  id="statusRow2" class="CLASS05701">
++  <div id="statusRow2" class="CLASS05701">
+ 
+-    <td>
 -      <div id="btnChns" class="StdTableBtn" onclick="WebUI.enter(ControlDevicesPage);">${btnMenuStatusControlDevices}</div>
++    <div id="btnDiagramList_container" class="sysConfigHeight">
 +      <!--<div  class="StdTableBtn" id="btnDiagramList" onclick="WebUI.enter(DiagramListPage);">${btnMenuStatusControlDiagramList}</div>-->
-+      <div  class="StdTableBtn" id="btnDiagramList" onclick="jQuery('#submenuDiagramListPage').click();">${submenuDiagramListPage}</div>
++      <div id="btnDiagramList" class="StdTableBtn" onclick="jQuery('#submenuDiagramListPage').click();">${submenuDiagramListPage}</div>
        <ul>
 -        <li>${lblMenuStatusControlDevices1}</li>
 +        <li>${lblMenuStatusControlDiagramList1}</li>
        </ul>
-     </td>
+-    </td>
++    </div>
  
-     <td>
+-    <td>
 -      <div class="StdTableBtn" onclick="WebUI.enter(ControlRoomsPage);" id="btnRooms">${btnMenuStatusControlRooms}</div>
-+      <div id="btnChns" class="StdTableBtn" onclick="WebUI.enter(ControlFavoritesPage);">${btnMenuStatusControlFavorites}</div>
++    <div id="btnFavs_container" class="sysConfigHeight">
++      <div id="btnFavs" class="StdTableBtn" onclick="WebUI.enter(ControlFavoritesPage);">${btnMenuStatusControlFavorites}</div>
        <ul>
 -        <li>${lblMenuStatusControlRooms1}</li>
 +        <li>${lblMenuStatusControlFavorites1}</li>
        </ul>
-     </td>
+-    </td>
++    </div>
  
-     <td>
+-    <td>
 -      <div  class="StdTableBtn" id="btnFunctions" onclick="WebUI.enter(ControlFunctionsPage);">${btnMenuStatusControlFunctions}</div>
++    <div id="btnChns_container" class="sysConfigHeight">
 +      <div id="btnChns" class="StdTableBtn" onclick="WebUI.enter(ControlDevicesPage);">${btnMenuStatusControlDevices}</div>
-       <ul>
--        <li>${lblMenuStatusControlFunctions1}</li>
--      </ul>      
++      <ul>
 +        <li>${lblMenuStatusControlDevices1}</li>
 +      </ul>
-     </td>
++    </div>
++
++    <div id="btnFunctions_container" class="sysConfigHeight">
++      <div id="btnFunctions" class="StdTableBtn" onclick="WebUI.enter(ControlFunctionsPage);">${btnMenuStatusControlFunctions}</div>
+       <ul>
+         <li>${lblMenuStatusControlFunctions1}</li>
+       </ul>      
+-    </td>
++    </div>
++<!--</div>
  
-     <td>
+-    <td>
 -      <!--<div  class="StdTableBtn" id="btnDiagramList" onclick="WebUI.enter(DiagramListPage);">${btnMenuStatusControlDiagramList}</div>-->
 -      <div  class="StdTableBtn" id="btnDiagramList" onclick="jQuery('#submenuDiagramListPage').click();">${submenuDiagramListPage}</div>
-+      <div  class="StdTableBtn" id="btnFunctions" onclick="WebUI.enter(ControlFunctionsPage);">${btnMenuStatusControlFunctions}</div>
++  <div id="statusRow1" class="CLASS05701">-->
++    <div id="btnProgs_container" class="sysConfigHeight">
++      <div id="btnProgs" class="StdTableBtn" onclick="WebUI.enter(ControlProgramsPage);">${btnMenuStatusControlPrograms}</div>
        <ul>
 -        <li>${lblMenuStatusControlDiagramList1}</li>
--      </ul>
-+        <li>${lblMenuStatusControlFunctions1}</li>
-+      </ul>      
-     </td>
-   </tr>
++        <li>${lblMenuStatusControlPrograms1}</li>
+       </ul>
+-    </td>
+-  </tr>
 -	
 -  <tr id="statusRow1" class="CLASS05701">
 -    <td>
 -      <div id="btnChns" class="StdTableBtn" onclick="WebUI.enter(ControlFavoritesPage);">${btnMenuStatusControlFavorites}</div>
--      <ul>
--        <li>${lblMenuStatusControlFavorites1}</li>
--      </ul>
--    </td>
- 
-+  <tr id="statusRow1" class="CLASS05701">
-     <td>
-       <div class="StdTableBtn" onclick="WebUI.enter(ControlProgramsPage);" id="btnProgs">${btnMenuStatusControlPrograms}</div>
-       <ul>
-         <li>${lblMenuStatusControlPrograms1}</li>
-       </ul>
-      </td>
--		
++     </div>
 +
-     <td>
--      <div id="btnSysVar" class="StdTableBtn" onclick="WebUI.enter(ControlVariablesPage);">${btnMenuStatusControlSysVars}</div>
-+      <div class="StdTableBtn" onclick="WebUI.enter(ControlRoomsPage);" id="btnRooms">${btnMenuStatusControlRooms}</div>
++    <div id="btnRooms_container" class="sysConfigHeight">
++      <div id="btnRooms" class="StdTableBtn" onclick="WebUI.enter(ControlRoomsPage);">${btnMenuStatusControlRooms}</div>
        <ul>
--        <li>${lblMenuStatusControlSysVars1}</li>
+-        <li>${lblMenuStatusControlFavorites1}</li>
 +        <li>${lblMenuStatusControlRooms1}</li>
        </ul>
-     </td>
+-    </td>
++    </div>
  
-@@ -77,7 +70,14 @@
-         <li>${lblMenuStatusControlSysProtocol}</li>
+-    <td>
+-      <div class="StdTableBtn" onclick="WebUI.enter(ControlProgramsPage);" id="btnProgs">${btnMenuStatusControlPrograms}</div>
++    <div id="tdSysProc_container" class="sysConfigHeight">
++      <div id="tdSysProc" class="StdTableBtn" onclick="WebUI.enter(ControlProtocolPage);">${btnMenuStatusControlSysProtocol}</div>
+       <ul>
+-        <li>${lblMenuStatusControlPrograms1}</li>
++        <li>${lblMenuStatusControlSysProtocol}</li>
        </ul>
-     </td>
--     
-+		
-+    <td>
-+      <div id="btnSysVar" class="StdTableBtn" onclick="WebUI.enter(ControlVariablesPage);">${btnMenuStatusControlSysVars}</div>
-+      <ul>
-+        <li>${lblMenuStatusControlSysVars1}</li>
-+      </ul>
-+    </td>
+-     </td>
+-		
+-    <td>
++    </div>
 +
-   </tr>
++    <div id="btnSysVar_container" class="sysConfigHeight">
+       <div id="btnSysVar" class="StdTableBtn" onclick="WebUI.enter(ControlVariablesPage);">${btnMenuStatusControlSysVars}</div>
+       <ul>
+         <li>${lblMenuStatusControlSysVars1}</li>
+       </ul>
+-    </td>
++    </div>
+ 
+-    <td>
+-      <div id="tdSysProc" class="StdTableBtn" onclick="WebUI.enter(ControlProtocolPage);">${btnMenuStatusControlSysProtocol}</div>
+-      <ul>
+-        <li>${lblMenuStatusControlSysProtocol}</li>
+-      </ul>
+-    </td>
+-     
+-  </tr>
++</div>
  
    <!--
+-  <tr>
+-    <td colspan="2" id="tdSysProc">
++  <div>
++    <div id="tdSysProc">
+       <div class="CLASS05703">
+         <div>
+           <div onclick="WebUI.enter(ControlProtocolPage);" class="CLASS05704 StdTableBtn">${btnMenuStatusControlSysProtocol}</div>
+@@ -110,10 +104,10 @@
+           <tbody id="sysprotopreview"></tbody>
+         </table>
+       </div>
+-    </td>
+-  </tr>
++    </div>
++</div>
+   -->
+-</table>
++</div>
+ 
+ <script type="text/javascript">
+  
 --- occu/WebUI/www/rega/pages/tabs/user/systemConfigUser.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/user/systemConfigUser.htm
-@@ -13,25 +13,35 @@
-     <col width="25%" />
-   </colgroup>
-   <tr class="CLASS06100">
--    <!-- Favoriten -->
+@@ -5,41 +5,47 @@
+   setPath(translateKey("menuSettingsPage"));
+ </script>
+ 
+-<table class="StdTable" cellspacing="20">
+-  <colgroup>
+-    <col width="25%" />
+-    <col width="25%" />
+-    <col width="25%" />
+-    <col width="25%" />
+-  </colgroup>
+-  <tr class="CLASS06100">
++<div id="subOffsetDiv"></div>
++
++<div id="tblSettings" class="StdTable CLASS06100 j_translate">
++
++  <div id="statusRow2" class="CLASS06102">
++
 +    <!-- Benutzerverwaltung -->
-     <td>
--      <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
-+      <div  class="StdTableBtn" onclick="WebUI.enter(UserAdminPageUser);">${btnSettingsUserAdministration}</div>
-       <ul>
--        <li>${lblSettingsFavorites1User}</li>
--        <li>${lblSettingsFavorites2User}</li>
--        <li>${lblSettingsFavorites3}</li>
++    <div id="btnSettingsUserAdministration_container" class="sysConfigHeight">
++      <div class="StdTableBtn" onclick="WebUI.enter(UserAdminPageUser);">${btnSettingsUserAdministration}</div>
++      <ul>
 +        <li>${lblSettingsUserAdministrationUser}</li>
 +      </ul>
-+    </td>
++    </div>
 +
 +    <!-- Diagramme -->
-+    <td>
++    <div id="btnSettingsDiagrams_container" class="sysConfigHeight">
 +      <div class="StdTableBtn" onclick="WebUI.enter(CreateDiagramPage);">${btnSettingsDiagrams}</div>
 +      <ul>
 +        <li>${lblSettingsDiagrams1}</li>
 +        <li>${lblSettingsDiagrams2}</li>
 +        <li>${lblSettingsDiagrams3}</li>
 +        <li>${lblSettingsDiagrams4}</li>
-       </ul>
-     </td>
-     
--    <!-- Benutzerverwaltung -->
-+    <!-- Favoriten -->
-     <td>
--      <div  class="StdTableBtn" onclick="WebUI.enter(UserAdminPageUser);">${btnSettingsUserAdministration}</div>
-+      <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
++      </ul>
++    </div>
++    
+     <!-- Favoriten -->
+-    <td>
++    <div id="btnSettingsFavorites_container" class="sysConfigHeight">
+       <div class="StdTableBtn" onclick="WebUI.enter(FavoriteListPage);">${btnSettingsFavorites}</div>
        <ul>
--        <li>${lblSettingsUserAdministrationUser}</li>
-+        <li>${lblSettingsFavorites1User}</li>
-+        <li>${lblSettingsFavorites2User}</li>
-+        <li>${lblSettingsFavorites3}</li>
+         <li>${lblSettingsFavorites1User}</li>
+         <li>${lblSettingsFavorites2User}</li>
+         <li>${lblSettingsFavorites3}</li>
        </ul>
-     </td>
-     <td class="CLASS06101"></td>
+-    </td>
+-    
+-    <!-- Benutzerverwaltung -->
+-    <td>
+-      <div  class="StdTableBtn" onclick="WebUI.enter(UserAdminPageUser);">${btnSettingsUserAdministration}</div>
+-      <ul>
+-        <li>${lblSettingsUserAdministrationUser}</li>
+-      </ul>
+-    </td>
 -    <td class="CLASS06101"></td>
-   </tr>
-   <tr>
-     <td class="CLASS06101"></td>
+-    <td class="CLASS06101"></td>
+-  </tr>
+-  <tr>
+-    <td class="CLASS06101"></td>
+-    <td class="CLASS06101"></td>
+-    <td class="CLASS06101"></td>
+-    <td class="CLASS06101"></td>
+-  </tr>
+-</table>
++    </div>
++    <div class="CLASS06101"></div>
++    <div class="CLASS06101"></div>
++    <div class="CLASS06101"></div>
++    <div class="CLASS06101"></div>
++    <div class="CLASS06101"></div>
++  </div>
++</div>
+ 
+ <script type="text/javascript">
+   setFooter("");
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -62,10 +62,10 @@
+     "submenuFavorites" : "Favoriten",
+     "submenuCreateFavorite" : "Favoriten erstellen",
+     "submenuPrograms" : "Programme",
+-    "submenuSysVar" : "Systemvariable",
++    "submenuSysVar" : "Systemvariablen",
+     "submenuSysProtocol" : "Systemprotokoll",
+     "submenuDirectLinks" : "Direkte Verkn%FCpfungen",
+-    "submenuProgramsLinks" : "Programme & Zentralenverkn%FCpfung",
++    "submenuProgramsLinks" : "Programme & Zentralenverkn%FCpfungen",
+     "submenuDeviceInbox" : "Ger%E4te - Posteingang",
+     "submenuUserManagement" : "Benutzerverwaltung",
+     "submenuSysControl" : "Systemsteuerung",
+@@ -109,7 +109,7 @@
+     "thValues" : "Werte",
+     "thUnit" : "Ma%DFeinheit",
+     "thLastUpdate" : "Letzte<br/>Aktualisierung",
+-    "thControl" : "Control",
++    "thControl" : "Bedienung",
+     "thFilter" : "Filter",
+     "thDescription" : "Beschreibung",
+     "thActivity" : "Aktivit%E4t",
+@@ -319,7 +319,7 @@
+     "lblSettingsFunctions5" : "Gewerkeigenschaften bearbeiten",
+     "commentSettingsBtnFunctionsEnd" : "***********************************************",
+     "commentSettingsBtnSysVar" : "***********************************************",
+-    "btnSettingsSysVar" : "Systemvariable",
++    "btnSettingsSysVar" : "Systemvariablen",
+     "lblSettingsSysVar1" : "%DCbersicht aller Systemvariablen",
+     "lblSettingsSysVar2" : "Bestehende Systemvariablen bearbeiten",
+     "lblSettingsSysVar3" : "Neue Systemvariablen anlegen",
+@@ -440,7 +440,7 @@
+     "lblMenuStatusControlFavorites1" : "%DCbersicht aller verf%FCgbaren Favoriten",
+     "btnMenuStatusControlPrograms" : "Programme",
+     "lblMenuStatusControlPrograms1" : "Direkter Zugriff auf alle Programme",
+-    "btnMenuStatusControlSysVars" : "Systemvariable",
++    "btnMenuStatusControlSysVars" : "Systemvariablen",
+     "lblMenuStatusControlSysVars1" : "Status%FCbersicht aller verwendeten Systemvariablen ohne Kanalzuordnung",
+     "btnMenuStatusControlSysProtocol" : "Systemprotokoll",
+     "lblMenuStatusControlSysProtocolTime" : "Zeit",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -61,10 +61,10 @@
+     "submenuFavorites" : "Favourites",
+     "submenuCreateFavorite" : "Create favourites",
+     "submenuPrograms" : "Programs",
+-    "submenuSysVar" : "System variable",
++    "submenuSysVar" : "System variables",
+     "submenuSysProtocol" : "System log",
+     "submenuDirectLinks" : "Direct device connections",
+-    "submenuProgramsLinks" : "Programs & "+ HMIdentifier.en.CCUShortName +" connection",
++    "submenuProgramsLinks" : "Programs & "+ HMIdentifier.en.CCUShortName +" connections",
+     "submenuDeviceInbox" : "Device inbox",
+     "submenuUserManagement" : "User management",
+     "submenuSysControl" : "Control panel",
+@@ -318,7 +318,7 @@
+     "lblSettingsFunctions5" : "Edit function properties",
+     "commentSettingsBtnFunctionsEnd" : "***********************************************",
+     "commentSettingsBtnSysVar" : "***********************************************",
+-    "btnSettingsSysVar" : "System variable",
++    "btnSettingsSysVar" : "System variables",
+     "lblSettingsSysVar1" : "Overview of all system variables",
+     "lblSettingsSysVar2" : "Edit existing system variables",
+     "lblSettingsSysVar3" : "Create new system variables",
+@@ -439,7 +439,7 @@
+     "lblMenuStatusControlFavorites1" : "Overview of all functions available",
+     "btnMenuStatusControlPrograms" : "Programs",
+     "lblMenuStatusControlPrograms1" : "Direct access to all programs",
+-    "btnMenuStatusControlSysVars" : "System variable",
++    "btnMenuStatusControlSysVars" : "System variables",
+     "lblMenuStatusControlSysVars1" : "Status overview of all used system variables without assignment to channel",
+     "btnMenuStatusControlSysProtocol" : "System log",
+     "lblMenuStatusControlSysProtocolTime" : "Time",
 --- occu/WebUI/www/webui/js/mainmenu/admin.js.orig
 +++ occu/WebUI/www/webui/js/mainmenu/admin.js
 @@ -7,14 +7,14 @@
@@ -363,7 +736,7 @@
  
  	]},
    {id: "menuProgramsLinksPage", align: "left", action: function() { ConfigData.check(function() { WebUI.enter(LinksAndProgramsPage); }); }, submenu:
-@@ -24,19 +24,19 @@
+@@ -24,20 +24,20 @@
    ]},
    {id: "menuSettingsPage", align: "left", action: function() { ConfigData.check(function() { WebUI.enter(SystemConfigPage); }); }, submenu:
    [ 
@@ -385,11 +758,14 @@
 -    {id: "submenuDeviceFirmwareInformation"     , action: function() { ConfigData.check(function() { WebUI.enter(DeviceFirmwareInformation); } );  } },
 -
 -    {id: "submenuUserManagement"  , action: function() { WebUI.enter(UserAdminPageAdmin); }},
-     {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  },
+-    {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  },
 -    {id: "submenuFavorites"           , action: function() { ConfigData.check(function() { WebUI.enter(FavoriteListPage); } ); } },
-     {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } }
+-    {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } }
++    {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } },
++    {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  }
  
    ]},
+   {id: "menuHelpPage"          , align: "right", action: function() { WebUI.enter(HelpPage); }, submenu: [ ]},
 --- occu/WebUI/www/webui/js/mainmenu/user.js.orig
 +++ occu/WebUI/www/webui/js/mainmenu/user.js
 @@ -7,14 +7,14 @@
@@ -412,15 +788,194 @@
  	]},
    {id: "menuSettingsPage", align: "left", action: function() { ConfigData.check(function() { WebUI.enter(SystemConfigPageUser); }); }, submenu:
    [ 
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -239,7 +239,7 @@
+ 
+ /* Grundlegende Tabelle auf der Statusanzeige-Seite */
+ #tblStatus {
+-  width:1200px; 
++  /* width:1200px; */
+   height:100%;
+   table-layout: fixed;
+ }
+@@ -1365,7 +1365,7 @@
+ 
+ .sysConfigHeight
+ {
+-  height: 263px;
++  min-height: 263px;
+ }
+ 
+ .posPreBtn
+@@ -2516,8 +2516,8 @@
+ 
+   background-color: $_(subMenuBackground);
+   font-weight: bold;
+-  padding-left: 5px;
+-  padding-right: 5px; 
++  /* padding-left: 5px; */
++  padding: 2px 5px; 
+   text-align:left;
+   vertical-align:middle;
+   color: $_(textColorB); /* black */
+@@ -2532,6 +2532,12 @@
+   /* border: 2px solid $_(subMenuHighlight); */
+   /* line-height: 30px; */
+ }
++
++.MainMenuSubItem > img {
++  vertical-align: middle;
++  width: 16px;
++}
++
+ #webuiloader_wrapper {
+   width: 100%;
+   height: 100%;
+@@ -6847,11 +6853,12 @@
+ /* rega\pages\tabs\admin\linkprog.htm */
+ 
+ .CLASS05400 {
+-	height:130px;
++	/* height:130px; */
+ }
+ 
+ .CLASS05401 {
+ 	height:160px;
++	margin-left: 10px;
+ }
+ 
+ .CLASS05402 {
+@@ -6862,16 +6869,54 @@
+ 	text-align:center ! important;
+ }
+ 
++.CLASS05405 {
++	min-height:50%;
++	display: flex;
++	flex-flow: row wrap;
++	margin: 10px;
++}
++
++.CLASS05405 > div {
++	margin: 10px;
++	padding: 1px;
++	flex: 0 1 calc(50% - 22px);
++	overflow: hidden;
++	/* copied from .StdTable td */
++	background-color: $_(inactiveBackground);
++	text-align:left;
++	vertical-align: top;
++	color: $_(textColorB); /* black */
++}
++
+ /* rega\pages\tabs\admin\systemconfig.htm */
+ 
+ .CLASS05500 {
+-	height:50%;
++	/* height:50%; */
+ }
+ 
+ .CLASS05501 {
+ 	background-color:$_(background); /* #183473 */
+ }
+ 
++.CLASS05502 {
++	height:50%;
++	display: flex;
++	flex-flow: row wrap;
++	margin: 10px;
++}
++
++.CLASS05502 > div {
++	margin: 10px;
++	padding: 1px;
++	flex: 0 1 calc(25% - 22px);
++	overflow: hidden;
++	/* copied from .StdTable td */
++	background-color: $_(inactiveBackground);
++	text-align:left;
++	vertical-align: top;
++	color: $_(textColorB); /* black */
++}
++
+ /* rega\pages\tabs\favorites.htm */
+ 
+ .CLASS05600 {
+@@ -6951,11 +6996,26 @@
+ /* pages\tabs\statusview.htm */
+ 
+ .CLASS05700 {
+-	width:1257px ! important;
++	/* width:1257px ! important; */
+ }
+ 
+ .CLASS05701 {
+ 	height:50%;
++	display: flex;
++	flex-flow: row wrap;
++	margin: 10px;
++}
++
++.CLASS05701 > div {
++	margin: 10px;
++        padding: 1px;
++	flex: 0 1 calc(25% - 22px);
++        overflow: hidden;
++	/* copied from .StdTable td */
++	background-color: $_(inactiveBackground);
++	text-align:left;
++	vertical-align: top;
++	color: $_(textColorB); /* black */
+ }
+ 
+ .CLASS05702 {
+@@ -7089,13 +7149,32 @@
+ /* rega\pages\tabs\user\systemConfigUser.htm */
+ 
+ .CLASS06100 {
+-	height:50%;
++	/* height:50%; */
+ }
+ 
+ .CLASS06101 {
+ 	background-color: $_(background) ! important; /* #183473 */
+ }
+ 
++.CLASS06102 {
++	height:50%;
++	display: flex;
++	flex-flow: row wrap;
++	margin: 10px;
++}
++
++.CLASS06102 > div {
++	margin: 10px;
++        padding: 1px;
++	flex: 0 1 calc(25% - 22px);
++        overflow: hidden;
++	/* copied from .StdTable td */
++	background-color: $_(inactiveBackground);
++	text-align:left;
++	vertical-align: top;
++	color: $_(textColorB); /* black */
++}
++
+ /* rega\pages\tabs\user\userAdministrationUser.htm */
+ 
+ .CLASS06200 {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -17699,10 +17699,14 @@
-     var row = document.createElement("tr");
- 
-     var cell = document.createElement("td");
+@@ -17696,19 +17696,19 @@
+     var _submenuItem_ = submenuItem;
+     var _menuItem_ = menuItem;
+     
+-    var row = document.createElement("tr");
+-
+-    var cell = document.createElement("td");
++    var cell = document.createElement("div");
 +    var img = document.createElement("img");
 +    img.src="../ise/img/menuicons/"+submenuItem.id+".png";
-+    img.style.cssText = "vertical-align: middle;"  
 +    cell.appendChild(img);
      cell.className = "MainMenuSubItem";
      cell.id = submenuItem.id;
@@ -430,3 +985,27 @@
      Event.observe(cell, "mouseover", function() { MainMenu.highlightOn(this); });
      Event.observe(cell, "mouseout", function()  { MainMenu.highlightOff(this); });
      Event.observe(cell, "click", function() { MainMenu.beginHideSubmenu(_menuItem_); _submenuItem_.action.defer(); });
+-    row.appendChild(cell);
+     
+-    return row;
++    return cell;
+   },
+   
+   /**
+@@ -17744,12 +17744,11 @@
+       submenuElement.className = "MainMenuSubMenu";
+       Element.setStyle(submenuElement, {display: "none"});
+       
+-      var table = document.createElement("table");
+-      table.border = "0";
+-      submenuElement.appendChild(table);
+       
+-      var tbody =  document.createElement("tbody");
+-      table.appendChild(tbody);
++      var tbody =  document.createElement("div");
++      Element.setStyle(tbody, {"display": "flex"});
++      Element.setStyle(tbody, {"flex-direction": "column"});
++      submenuElement.appendChild(tbody);
+       
+       for (var i = 0, len = submenu.length; i < len; i++)
+       {

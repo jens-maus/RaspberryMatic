@@ -36,8 +36,8 @@
 
     //{id: "submenuCreateTestPage"     , action: function() { ConfigData.check(function() { WebUI.enter(CreateTestPage); } );  } },
     //{id: "submenuDeviceFirmware"     , action: function() { ConfigData.check(function() { WebUI.enter(DeviceFirmware); } );  } },
-    {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  },
-    {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } }
+    {id: "submenuSysControl"     , action: function() { WebUI.enter(SystemControlPage);  } },
+    {id: "submenuSysVar"      , action: function() { ConfigData.check(function() { WebUI.enter(VariableListPage); }); }  }
 
   ]},
   {id: "menuHelpPage"          , align: "right", action: function() { WebUI.enter(HelpPage); }, submenu: [ ]},

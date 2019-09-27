@@ -10,7 +10,7 @@ var path = require('path');
 var nutil = require('util');
 var lazystream = require('lazystream');
 var normalizePath = require('normalize-path');
-var _ = { defaults: require('lodash.defaults') };
+var defaults = require('lodash.defaults');
 
 var Stream = require('stream').Stream;
 var PassThrough = require('readable-stream').PassThrough;
@@ -67,7 +67,7 @@ utils.defaults = function(object, source, guard) {
   var args = arguments;
   args[0] = args[0] || {};
 
-  return _.defaults.apply(_, args);
+  return defaults(...args);
 };
 
 utils.isStream = function(source) {

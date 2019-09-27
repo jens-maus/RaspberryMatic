@@ -1740,6 +1740,7 @@
 			"name": "Ukraine",
 			"abbr": "UA",
 			"zones": [
+				"Europe/Simferopol",
 				"Europe/Kiev",
 				"Europe/Uzhgorod",
 				"Europe/Zaporozhye"
@@ -4280,7 +4281,8 @@
 			"lat": 44.95,
 			"long": 34.1,
 			"countries": [
-				"RU"
+				"RU",
+				"UA"
 			],
 			"comments": "MSK+00 - Crimea"
 		},

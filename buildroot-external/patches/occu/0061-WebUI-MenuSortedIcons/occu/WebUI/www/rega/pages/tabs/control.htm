@@ -9,80 +9,74 @@
 
 <div id="subOffsetDiv"></div>
 
-<table id="tblStatus" class="StdTable CLASS05700 j_translate" cellspacing="20" >
-  <colgroup>
-    <col width="25%" />
-    <col width="25%" />
-    <col width="25%" />
-    <col width="25%" />
-  </colgroup>
+<div id="tblStatus" class="StdTable CLASS05700 j_translate">
   
-  <tr  id="statusRow2" class="CLASS05701">
+  <div id="statusRow2" class="CLASS05701">
 
-    <td>
+    <div id="btnDiagramList_container" class="sysConfigHeight">
       <!--<div  class="StdTableBtn" id="btnDiagramList" onclick="WebUI.enter(DiagramListPage);">${btnMenuStatusControlDiagramList}</div>-->
-      <div  class="StdTableBtn" id="btnDiagramList" onclick="jQuery('#submenuDiagramListPage').click();">${submenuDiagramListPage}</div>
+      <div id="btnDiagramList" class="StdTableBtn" onclick="jQuery('#submenuDiagramListPage').click();">${submenuDiagramListPage}</div>
       <ul>
         <li>${lblMenuStatusControlDiagramList1}</li>
       </ul>
-    </td>
+    </div>
 
-    <td>
-      <div id="btnChns" class="StdTableBtn" onclick="WebUI.enter(ControlFavoritesPage);">${btnMenuStatusControlFavorites}</div>
+    <div id="btnFavs_container" class="sysConfigHeight">
+      <div id="btnFavs" class="StdTableBtn" onclick="WebUI.enter(ControlFavoritesPage);">${btnMenuStatusControlFavorites}</div>
       <ul>
         <li>${lblMenuStatusControlFavorites1}</li>
       </ul>
-    </td>
+    </div>
 
-    <td>
+    <div id="btnChns_container" class="sysConfigHeight">
       <div id="btnChns" class="StdTableBtn" onclick="WebUI.enter(ControlDevicesPage);">${btnMenuStatusControlDevices}</div>
       <ul>
         <li>${lblMenuStatusControlDevices1}</li>
       </ul>
-    </td>
+    </div>
 
-    <td>
-      <div  class="StdTableBtn" id="btnFunctions" onclick="WebUI.enter(ControlFunctionsPage);">${btnMenuStatusControlFunctions}</div>
+    <div id="btnFunctions_container" class="sysConfigHeight">
+      <div id="btnFunctions" class="StdTableBtn" onclick="WebUI.enter(ControlFunctionsPage);">${btnMenuStatusControlFunctions}</div>
       <ul>
         <li>${lblMenuStatusControlFunctions1}</li>
       </ul>      
-    </td>
-  </tr>
+    </div>
+<!--</div>
 
-  <tr id="statusRow1" class="CLASS05701">
-    <td>
-      <div class="StdTableBtn" onclick="WebUI.enter(ControlProgramsPage);" id="btnProgs">${btnMenuStatusControlPrograms}</div>
+  <div id="statusRow1" class="CLASS05701">-->
+    <div id="btnProgs_container" class="sysConfigHeight">
+      <div id="btnProgs" class="StdTableBtn" onclick="WebUI.enter(ControlProgramsPage);">${btnMenuStatusControlPrograms}</div>
       <ul>
         <li>${lblMenuStatusControlPrograms1}</li>
       </ul>
-     </td>
+     </div>
 
-    <td>
-      <div class="StdTableBtn" onclick="WebUI.enter(ControlRoomsPage);" id="btnRooms">${btnMenuStatusControlRooms}</div>
+    <div id="btnRooms_container" class="sysConfigHeight">
+      <div id="btnRooms" class="StdTableBtn" onclick="WebUI.enter(ControlRoomsPage);">${btnMenuStatusControlRooms}</div>
       <ul>
         <li>${lblMenuStatusControlRooms1}</li>
       </ul>
-    </td>
+    </div>
 
-    <td>
+    <div id="tdSysProc_container" class="sysConfigHeight">
       <div id="tdSysProc" class="StdTableBtn" onclick="WebUI.enter(ControlProtocolPage);">${btnMenuStatusControlSysProtocol}</div>
       <ul>
         <li>${lblMenuStatusControlSysProtocol}</li>
       </ul>
-    </td>
-		
-    <td>
+    </div>
+
+    <div id="btnSysVar_container" class="sysConfigHeight">
       <div id="btnSysVar" class="StdTableBtn" onclick="WebUI.enter(ControlVariablesPage);">${btnMenuStatusControlSysVars}</div>
       <ul>
         <li>${lblMenuStatusControlSysVars1}</li>
       </ul>
-    </td>
+    </div>
 
-  </tr>
+</div>
 
   <!--
-  <tr>
-    <td colspan="2" id="tdSysProc">
+  <div>
+    <div id="tdSysProc">
       <div class="CLASS05703">
         <div>
           <div onclick="WebUI.enter(ControlProtocolPage);" class="CLASS05704 StdTableBtn">${btnMenuStatusControlSysProtocol}</div>
@@ -110,10 +104,10 @@
           <tbody id="sysprotopreview"></tbody>
         </table>
       </div>
-    </td>
-  </tr>
+    </div>
+</div>
   -->
-</table>
+</div>
 
 <script type="text/javascript">
  

@@ -81,11 +81,12 @@ The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [
 * Support to be used as a pure HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html)) only
 * Support to be used without any GPIO RF module HAT when just connecting to a HomeMatic LAN Gateway ([HM-LGW-O-TW-W-EU](https://www.elv.de/homematic-funk-lan-gateway.html))
 * Self-contained disk image targeted for lightweight embedded devices (e.g. RaspberryPi, ASUS Tinkerboard)
-* Based on latest [Buildroot 2019.05.1](http://buildroot.org/) lightweight Linux operating system
-* Latest Linux kernel (RaspberryPi: [4.19.58](https://github.com/raspberrypi/linux/tree/rpi-4.19.y), Tinkerboard: [4.19.63](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
+* Based on latest [Buildroot 2019.05.2](http://buildroot.org/) lightweight Linux operating system
+* Latest Linux kernel (RaspberryPi: [4.19.68](https://github.com/raspberrypi/linux/tree/rpi-4.19.y), Tinkerboard: [4.19.69](https://github.com/armbian/build/tree/master/patch/kernel/rockchip-next)) with hard-float (ARMv7) support
 * Support to boot system using an external USB memory stick or hard disk (RaspberryPi3 only) or from internal eMMC storage (ASUS Tinkerboard S)
-* Supports onboard WiFi of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
-* Supports onboard Bluetooth of RaspberryPi3, Raspberry Pi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks
+* Supports onboard WiFi of RaspberryPi3, RaspberryPi Zero W or ASUS Tinkerboard as well as various third-party USB WiFi sticks
+* Supports USB Gadget Mode for RaspberryPi Zero and RaspberryPi Zero W to connect the USB port to another system (Linux/macOS/Windows) and use it for a routed ethernet connection (requires `/etc/config/usbGadgetModeEnabled`)
+* Supports onboard Bluetooth of RaspberryPi3, RaspberryPi Zero W or ASUS Tinkerboard as well as various third-party USB Bluetooth sticks
 * Supports [Network UPS Tools](http://networkupstools.org) (NUT) setups including USB connection to uninterruptible power supply (UPS) as well as remote NUT server use (e.g. via Synology NAS Network UPS functionality)
 * Support for the following third-party *Hardware Attached on Top* (HAT) boards:
   * [S.USV](http://www.s-usv.de/) – UPS including alarm notification upon power loss and automatic system shutdown.
@@ -122,17 +123,20 @@ You can use one of the following existing ready-to-go products:
 <img src="https://files.elv.com/bilder/artikel/Produkte/25/2502/250297/Internet/normalneu/250297_w01_charly.jpg" alt="ELV Charly with RaspberryPi+RPI-RF-MOD" width=200 align=right>
 
 1. One of the following hardware boards:
+   * [RaspberryPi4 Model B](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/)
    * [RaspberryPi3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
    * [RaspberryPi3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b/)
    * [RaspberryPi3 Model A+](https://www.raspberrypi.org/products/raspberry-pi-3-model-a-plus/)
    * [RaspberryPi2 Model B](https://www.raspberrypi.org/products/raspberry-pi-2-model-b)
    * [RaspberryPi Compute Module 3](https://www.raspberrypi.org/products/compute-module-3/)
    * [RaspberryPi Compute Module 3 lite](https://www.raspberrypi.org/products/compute-module-3-lite/)
-   * [RaspberryPi Zero W](https://www.raspberrypi.org/products/pi-zero-w/)  
-   * [RaspberryPi Zero](https://www.raspberrypi.org/products/pi-zero/)
-   * [RaspberryPi Compute Module 1](https://www.raspberrypi.org/products/compute-module/)  
-   * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/model-b-plus/) or [Model B, 512MB](https://www.adafruit.com/product/998)
-   * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/model-a-plus/) or [Model A, 256MB](https://www.adafruit.com/product/1344)
+   * [RaspberryPi Zero W](https://www.raspberrypi.org/products/raspberry-pi-zero-w/)
+   * [RaspberryPi Zero](https://www.raspberrypi.org/products/raspberry-pi-zero/)
+   * [RaspberryPi Compute Module 1](https://www.raspberrypi.org/products/compute-module-1/)
+   * [RaspberryPi1 Model B+](https://www.raspberrypi.org/products/raspberry-pi-1-model-b-plus/)
+   * [RaspberryPi1 Model B, 512MB](https://www.adafruit.com/product/998)
+   * [RaspberryPi1 Model A+](https://www.raspberrypi.org/products/raspberry-pi-1-model-a-plus/)
+   * [RaspberryPi1 Model A, 256MB](https://www.adafruit.com/product/1344)
    * [Tinker Board S](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
    * [Tinker Board](https://www.asus.com/en/Single-Board-Computer/Tinker-Board/)
 2. A minimum 4 GB sized microSD card or USB device (memory stick, SSD, hard disk)

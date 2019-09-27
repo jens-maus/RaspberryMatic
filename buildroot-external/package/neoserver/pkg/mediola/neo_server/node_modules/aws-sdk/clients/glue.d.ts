@@ -60,11 +60,11 @@ declare class Glue extends Service {
    */
   batchGetCrawlers(callback?: (err: AWSError, data: Glue.Types.BatchGetCrawlersResponse) => void): Request<Glue.Types.BatchGetCrawlersResponse, AWSError>;
   /**
-   * Returns a list of resource metadata for a given list of DevEndpoint names. After calling the ListDevEndpoints operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.
+   * Returns a list of resource metadata for a given list of development endpoint names. After calling the ListDevEndpoints operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.
    */
   batchGetDevEndpoints(params: Glue.Types.BatchGetDevEndpointsRequest, callback?: (err: AWSError, data: Glue.Types.BatchGetDevEndpointsResponse) => void): Request<Glue.Types.BatchGetDevEndpointsResponse, AWSError>;
   /**
-   * Returns a list of resource metadata for a given list of DevEndpoint names. After calling the ListDevEndpoints operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.
+   * Returns a list of resource metadata for a given list of development endpoint names. After calling the ListDevEndpoints operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.
    */
   batchGetDevEndpoints(callback?: (err: AWSError, data: Glue.Types.BatchGetDevEndpointsResponse) => void): Request<Glue.Types.BatchGetDevEndpointsResponse, AWSError>;
   /**
@@ -91,6 +91,14 @@ declare class Glue extends Service {
    * Returns a list of resource metadata for a given list of trigger names. After calling the ListTriggers operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.
    */
   batchGetTriggers(callback?: (err: AWSError, data: Glue.Types.BatchGetTriggersResponse) => void): Request<Glue.Types.BatchGetTriggersResponse, AWSError>;
+  /**
+   * Returns a list of resource metadata for a given list of workflow names. After calling the ListWorkflows operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.
+   */
+  batchGetWorkflows(params: Glue.Types.BatchGetWorkflowsRequest, callback?: (err: AWSError, data: Glue.Types.BatchGetWorkflowsResponse) => void): Request<Glue.Types.BatchGetWorkflowsResponse, AWSError>;
+  /**
+   * Returns a list of resource metadata for a given list of workflow names. After calling the ListWorkflows operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.
+   */
+  batchGetWorkflows(callback?: (err: AWSError, data: Glue.Types.BatchGetWorkflowsResponse) => void): Request<Glue.Types.BatchGetWorkflowsResponse, AWSError>;
   /**
    * Stops one or more job runs for a specified job definition.
    */
@@ -132,11 +140,11 @@ declare class Glue extends Service {
    */
   createDatabase(callback?: (err: AWSError, data: Glue.Types.CreateDatabaseResponse) => void): Request<Glue.Types.CreateDatabaseResponse, AWSError>;
   /**
-   * Creates a new DevEndpoint.
+   * Creates a new development endpoint.
    */
   createDevEndpoint(params: Glue.Types.CreateDevEndpointRequest, callback?: (err: AWSError, data: Glue.Types.CreateDevEndpointResponse) => void): Request<Glue.Types.CreateDevEndpointResponse, AWSError>;
   /**
-   * Creates a new DevEndpoint.
+   * Creates a new development endpoint.
    */
   createDevEndpoint(callback?: (err: AWSError, data: Glue.Types.CreateDevEndpointResponse) => void): Request<Glue.Types.CreateDevEndpointResponse, AWSError>;
   /**
@@ -164,11 +172,11 @@ declare class Glue extends Service {
    */
   createScript(callback?: (err: AWSError, data: Glue.Types.CreateScriptResponse) => void): Request<Glue.Types.CreateScriptResponse, AWSError>;
   /**
-   * Creates a new security configuration.
+   * Creates a new security configuration. A security configuration is a set of security properties that can be used by AWS Glue. You can use a security configuration to encrypt data at rest. For information about using security configurations in AWS Glue, see Encrypting Data Written by Crawlers, Jobs, and Development Endpoints.
    */
   createSecurityConfiguration(params: Glue.Types.CreateSecurityConfigurationRequest, callback?: (err: AWSError, data: Glue.Types.CreateSecurityConfigurationResponse) => void): Request<Glue.Types.CreateSecurityConfigurationResponse, AWSError>;
   /**
-   * Creates a new security configuration.
+   * Creates a new security configuration. A security configuration is a set of security properties that can be used by AWS Glue. You can use a security configuration to encrypt data at rest. For information about using security configurations in AWS Glue, see Encrypting Data Written by Crawlers, Jobs, and Development Endpoints.
    */
   createSecurityConfiguration(callback?: (err: AWSError, data: Glue.Types.CreateSecurityConfigurationResponse) => void): Request<Glue.Types.CreateSecurityConfigurationResponse, AWSError>;
   /**
@@ -195,6 +203,14 @@ declare class Glue extends Service {
    * Creates a new function definition in the Data Catalog.
    */
   createUserDefinedFunction(callback?: (err: AWSError, data: Glue.Types.CreateUserDefinedFunctionResponse) => void): Request<Glue.Types.CreateUserDefinedFunctionResponse, AWSError>;
+  /**
+   * Creates a new workflow.
+   */
+  createWorkflow(params: Glue.Types.CreateWorkflowRequest, callback?: (err: AWSError, data: Glue.Types.CreateWorkflowResponse) => void): Request<Glue.Types.CreateWorkflowResponse, AWSError>;
+  /**
+   * Creates a new workflow.
+   */
+  createWorkflow(callback?: (err: AWSError, data: Glue.Types.CreateWorkflowResponse) => void): Request<Glue.Types.CreateWorkflowResponse, AWSError>;
   /**
    * Removes a classifier from the Data Catalog.
    */
@@ -228,11 +244,11 @@ declare class Glue extends Service {
    */
   deleteDatabase(callback?: (err: AWSError, data: Glue.Types.DeleteDatabaseResponse) => void): Request<Glue.Types.DeleteDatabaseResponse, AWSError>;
   /**
-   * Deletes a specified DevEndpoint.
+   * Deletes a specified development endpoint.
    */
   deleteDevEndpoint(params: Glue.Types.DeleteDevEndpointRequest, callback?: (err: AWSError, data: Glue.Types.DeleteDevEndpointResponse) => void): Request<Glue.Types.DeleteDevEndpointResponse, AWSError>;
   /**
-   * Deletes a specified DevEndpoint.
+   * Deletes a specified development endpoint.
    */
   deleteDevEndpoint(callback?: (err: AWSError, data: Glue.Types.DeleteDevEndpointResponse) => void): Request<Glue.Types.DeleteDevEndpointResponse, AWSError>;
   /**
@@ -299,6 +315,14 @@ declare class Glue extends Service {
    * Deletes an existing function definition from the Data Catalog.
    */
   deleteUserDefinedFunction(callback?: (err: AWSError, data: Glue.Types.DeleteUserDefinedFunctionResponse) => void): Request<Glue.Types.DeleteUserDefinedFunctionResponse, AWSError>;
+  /**
+   * Deletes a workflow.
+   */
+  deleteWorkflow(params: Glue.Types.DeleteWorkflowRequest, callback?: (err: AWSError, data: Glue.Types.DeleteWorkflowResponse) => void): Request<Glue.Types.DeleteWorkflowResponse, AWSError>;
+  /**
+   * Deletes a workflow.
+   */
+  deleteWorkflow(callback?: (err: AWSError, data: Glue.Types.DeleteWorkflowResponse) => void): Request<Glue.Types.DeleteWorkflowResponse, AWSError>;
   /**
    * Retrieves the status of a migration operation.
    */
@@ -396,19 +420,19 @@ declare class Glue extends Service {
    */
   getDataflowGraph(callback?: (err: AWSError, data: Glue.Types.GetDataflowGraphResponse) => void): Request<Glue.Types.GetDataflowGraphResponse, AWSError>;
   /**
-   * Retrieves information about a specified DevEndpoint.  When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address. 
+   * Retrieves information about a specified development endpoint.  When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address. 
    */
   getDevEndpoint(params: Glue.Types.GetDevEndpointRequest, callback?: (err: AWSError, data: Glue.Types.GetDevEndpointResponse) => void): Request<Glue.Types.GetDevEndpointResponse, AWSError>;
   /**
-   * Retrieves information about a specified DevEndpoint.  When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address. 
+   * Retrieves information about a specified development endpoint.  When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address. 
    */
   getDevEndpoint(callback?: (err: AWSError, data: Glue.Types.GetDevEndpointResponse) => void): Request<Glue.Types.GetDevEndpointResponse, AWSError>;
   /**
-   * Retrieves all the DevEndpoints in this AWS account.  When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address. 
+   * Retrieves all the development endpoints in this AWS account.  When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address. 
    */
   getDevEndpoints(params: Glue.Types.GetDevEndpointsRequest, callback?: (err: AWSError, data: Glue.Types.GetDevEndpointsResponse) => void): Request<Glue.Types.GetDevEndpointsResponse, AWSError>;
   /**
-   * Retrieves all the DevEndpoints in this AWS account.  When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address. 
+   * Retrieves all the development endpoints in this AWS account.  When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address. 
    */
   getDevEndpoints(callback?: (err: AWSError, data: Glue.Types.GetDevEndpointsResponse) => void): Request<Glue.Types.GetDevEndpointsResponse, AWSError>;
   /**
@@ -419,6 +443,22 @@ declare class Glue extends Service {
    * Retrieves an existing job definition.
    */
   getJob(callback?: (err: AWSError, data: Glue.Types.GetJobResponse) => void): Request<Glue.Types.GetJobResponse, AWSError>;
+  /**
+   * Returns information on a job bookmark entry.
+   */
+  getJobBookmark(params: Glue.Types.GetJobBookmarkRequest, callback?: (err: AWSError, data: Glue.Types.GetJobBookmarkResponse) => void): Request<Glue.Types.GetJobBookmarkResponse, AWSError>;
+  /**
+   * Returns information on a job bookmark entry.
+   */
+  getJobBookmark(callback?: (err: AWSError, data: Glue.Types.GetJobBookmarkResponse) => void): Request<Glue.Types.GetJobBookmarkResponse, AWSError>;
+  /**
+   * Returns information on the job bookmark entries. The list is ordered on decreasing version numbers.
+   */
+  getJobBookmarks(params: Glue.Types.GetJobBookmarksRequest, callback?: (err: AWSError, data: Glue.Types.GetJobBookmarksResponse) => void): Request<Glue.Types.GetJobBookmarksResponse, AWSError>;
+  /**
+   * Returns information on the job bookmark entries. The list is ordered on decreasing version numbers.
+   */
+  getJobBookmarks(callback?: (err: AWSError, data: Glue.Types.GetJobBookmarksResponse) => void): Request<Glue.Types.GetJobBookmarksResponse, AWSError>;
   /**
    * Retrieves the metadata for a given job run.
    */
@@ -572,6 +612,38 @@ declare class Glue extends Service {
    */
   getUserDefinedFunctions(callback?: (err: AWSError, data: Glue.Types.GetUserDefinedFunctionsResponse) => void): Request<Glue.Types.GetUserDefinedFunctionsResponse, AWSError>;
   /**
+   * Retrieves resource metadata for a workflow.
+   */
+  getWorkflow(params: Glue.Types.GetWorkflowRequest, callback?: (err: AWSError, data: Glue.Types.GetWorkflowResponse) => void): Request<Glue.Types.GetWorkflowResponse, AWSError>;
+  /**
+   * Retrieves resource metadata for a workflow.
+   */
+  getWorkflow(callback?: (err: AWSError, data: Glue.Types.GetWorkflowResponse) => void): Request<Glue.Types.GetWorkflowResponse, AWSError>;
+  /**
+   * Retrieves the metadata for a given workflow run. 
+   */
+  getWorkflowRun(params: Glue.Types.GetWorkflowRunRequest, callback?: (err: AWSError, data: Glue.Types.GetWorkflowRunResponse) => void): Request<Glue.Types.GetWorkflowRunResponse, AWSError>;
+  /**
+   * Retrieves the metadata for a given workflow run. 
+   */
+  getWorkflowRun(callback?: (err: AWSError, data: Glue.Types.GetWorkflowRunResponse) => void): Request<Glue.Types.GetWorkflowRunResponse, AWSError>;
+  /**
+   * Retrieves the workflow run properties which were set during the run.
+   */
+  getWorkflowRunProperties(params: Glue.Types.GetWorkflowRunPropertiesRequest, callback?: (err: AWSError, data: Glue.Types.GetWorkflowRunPropertiesResponse) => void): Request<Glue.Types.GetWorkflowRunPropertiesResponse, AWSError>;
+  /**
+   * Retrieves the workflow run properties which were set during the run.
+   */
+  getWorkflowRunProperties(callback?: (err: AWSError, data: Glue.Types.GetWorkflowRunPropertiesResponse) => void): Request<Glue.Types.GetWorkflowRunPropertiesResponse, AWSError>;
+  /**
+   * Retrieves metadata for all runs of a given workflow.
+   */
+  getWorkflowRuns(params: Glue.Types.GetWorkflowRunsRequest, callback?: (err: AWSError, data: Glue.Types.GetWorkflowRunsResponse) => void): Request<Glue.Types.GetWorkflowRunsResponse, AWSError>;
+  /**
+   * Retrieves metadata for all runs of a given workflow.
+   */
+  getWorkflowRuns(callback?: (err: AWSError, data: Glue.Types.GetWorkflowRunsResponse) => void): Request<Glue.Types.GetWorkflowRunsResponse, AWSError>;
+  /**
    * Imports an existing Athena Data Catalog to AWS Glue
    */
   importCatalogToGlue(params: Glue.Types.ImportCatalogToGlueRequest, callback?: (err: AWSError, data: Glue.Types.ImportCatalogToGlueResponse) => void): Request<Glue.Types.ImportCatalogToGlueResponse, AWSError>;
@@ -580,37 +652,45 @@ declare class Glue extends Service {
    */
   importCatalogToGlue(callback?: (err: AWSError, data: Glue.Types.ImportCatalogToGlueResponse) => void): Request<Glue.Types.ImportCatalogToGlueResponse, AWSError>;
   /**
-   * Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.
+   * Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.
    */
   listCrawlers(params: Glue.Types.ListCrawlersRequest, callback?: (err: AWSError, data: Glue.Types.ListCrawlersResponse) => void): Request<Glue.Types.ListCrawlersResponse, AWSError>;
   /**
-   * Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.
+   * Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.
    */
   listCrawlers(callback?: (err: AWSError, data: Glue.Types.ListCrawlersResponse) => void): Request<Glue.Types.ListCrawlersResponse, AWSError>;
   /**
-   * Retrieves the names of all DevEndpoint resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.
+   * Retrieves the names of all DevEndpoint resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.
    */
   listDevEndpoints(params: Glue.Types.ListDevEndpointsRequest, callback?: (err: AWSError, data: Glue.Types.ListDevEndpointsResponse) => void): Request<Glue.Types.ListDevEndpointsResponse, AWSError>;
   /**
-   * Retrieves the names of all DevEndpoint resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.
+   * Retrieves the names of all DevEndpoint resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.
    */
   listDevEndpoints(callback?: (err: AWSError, data: Glue.Types.ListDevEndpointsResponse) => void): Request<Glue.Types.ListDevEndpointsResponse, AWSError>;
   /**
-   * Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.
+   * Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.
    */
   listJobs(params: Glue.Types.ListJobsRequest, callback?: (err: AWSError, data: Glue.Types.ListJobsResponse) => void): Request<Glue.Types.ListJobsResponse, AWSError>;
   /**
-   * Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.
+   * Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.
    */
   listJobs(callback?: (err: AWSError, data: Glue.Types.ListJobsResponse) => void): Request<Glue.Types.ListJobsResponse, AWSError>;
   /**
-   * Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.
+   * Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.
    */
   listTriggers(params: Glue.Types.ListTriggersRequest, callback?: (err: AWSError, data: Glue.Types.ListTriggersResponse) => void): Request<Glue.Types.ListTriggersResponse, AWSError>;
   /**
-   * Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.
+   * Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names. This operation takes the optional Tags field, which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag are retrieved.
    */
   listTriggers(callback?: (err: AWSError, data: Glue.Types.ListTriggersResponse) => void): Request<Glue.Types.ListTriggersResponse, AWSError>;
+  /**
+   * Lists names of workflows created in the account.
+   */
+  listWorkflows(params: Glue.Types.ListWorkflowsRequest, callback?: (err: AWSError, data: Glue.Types.ListWorkflowsResponse) => void): Request<Glue.Types.ListWorkflowsResponse, AWSError>;
+  /**
+   * Lists names of workflows created in the account.
+   */
+  listWorkflows(callback?: (err: AWSError, data: Glue.Types.ListWorkflowsResponse) => void): Request<Glue.Types.ListWorkflowsResponse, AWSError>;
   /**
    * Sets the security configuration for a specified catalog. After the configuration has been set, the specified encryption is applied to every catalog write thereafter.
    */
@@ -627,6 +707,14 @@ declare class Glue extends Service {
    * Sets the Data Catalog resource policy for access control.
    */
   putResourcePolicy(callback?: (err: AWSError, data: Glue.Types.PutResourcePolicyResponse) => void): Request<Glue.Types.PutResourcePolicyResponse, AWSError>;
+  /**
+   * Puts the specified workflow run properties for the given workflow run. If a property already exists for the specified run, then it overrides the value otherwise adds the property to existing properties.
+   */
+  putWorkflowRunProperties(params: Glue.Types.PutWorkflowRunPropertiesRequest, callback?: (err: AWSError, data: Glue.Types.PutWorkflowRunPropertiesResponse) => void): Request<Glue.Types.PutWorkflowRunPropertiesResponse, AWSError>;
+  /**
+   * Puts the specified workflow run properties for the given workflow run. If a property already exists for the specified run, then it overrides the value otherwise adds the property to existing properties.
+   */
+  putWorkflowRunProperties(callback?: (err: AWSError, data: Glue.Types.PutWorkflowRunPropertiesResponse) => void): Request<Glue.Types.PutWorkflowRunPropertiesResponse, AWSError>;
   /**
    * Resets a bookmark entry.
    */
@@ -667,6 +755,14 @@ declare class Glue extends Service {
    * Starts an existing trigger. See Triggering Jobs for information about how different types of trigger are started.
    */
   startTrigger(callback?: (err: AWSError, data: Glue.Types.StartTriggerResponse) => void): Request<Glue.Types.StartTriggerResponse, AWSError>;
+  /**
+   * Starts a new run of the specified workflow.
+   */
+  startWorkflowRun(params: Glue.Types.StartWorkflowRunRequest, callback?: (err: AWSError, data: Glue.Types.StartWorkflowRunResponse) => void): Request<Glue.Types.StartWorkflowRunResponse, AWSError>;
+  /**
+   * Starts a new run of the specified workflow.
+   */
+  startWorkflowRun(callback?: (err: AWSError, data: Glue.Types.StartWorkflowRunResponse) => void): Request<Glue.Types.StartWorkflowRunResponse, AWSError>;
   /**
    * If the specified crawler is running, stops the crawl.
    */
@@ -748,11 +844,11 @@ declare class Glue extends Service {
    */
   updateDatabase(callback?: (err: AWSError, data: Glue.Types.UpdateDatabaseResponse) => void): Request<Glue.Types.UpdateDatabaseResponse, AWSError>;
   /**
-   * Updates a specified DevEndpoint.
+   * Updates a specified development endpoint.
    */
   updateDevEndpoint(params: Glue.Types.UpdateDevEndpointRequest, callback?: (err: AWSError, data: Glue.Types.UpdateDevEndpointResponse) => void): Request<Glue.Types.UpdateDevEndpointResponse, AWSError>;
   /**
-   * Updates a specified DevEndpoint.
+   * Updates a specified development endpoint.
    */
   updateDevEndpoint(callback?: (err: AWSError, data: Glue.Types.UpdateDevEndpointResponse) => void): Request<Glue.Types.UpdateDevEndpointResponse, AWSError>;
   /**
@@ -795,6 +891,14 @@ declare class Glue extends Service {
    * Updates an existing function definition in the Data Catalog.
    */
   updateUserDefinedFunction(callback?: (err: AWSError, data: Glue.Types.UpdateUserDefinedFunctionResponse) => void): Request<Glue.Types.UpdateUserDefinedFunctionResponse, AWSError>;
+  /**
+   * Updates an existing workflow.
+   */
+  updateWorkflow(params: Glue.Types.UpdateWorkflowRequest, callback?: (err: AWSError, data: Glue.Types.UpdateWorkflowResponse) => void): Request<Glue.Types.UpdateWorkflowResponse, AWSError>;
+  /**
+   * Updates an existing workflow.
+   */
+  updateWorkflow(callback?: (err: AWSError, data: Glue.Types.UpdateWorkflowResponse) => void): Request<Glue.Types.UpdateWorkflowResponse, AWSError>;
 }
 declare namespace Glue {
   export interface Action {
@@ -811,13 +915,17 @@ declare namespace Glue {
      */
     Timeout?: Timeout;
     /**
+     * The name of the SecurityConfiguration structure to be used with this action.
+     */
+    SecurityConfiguration?: NameString;
+    /**
      * Specifies configuration properties of a job run notification.
      */
     NotificationProperty?: NotificationProperty;
     /**
-     * The name of the SecurityConfiguration structure to be used with this action.
+     * The name of the crawler to be used with this action.
      */
-    SecurityConfiguration?: NameString;
+    CrawlerName?: NameString;
   }
   export type ActionList = Action[];
   export type AttemptCount = number;
@@ -954,7 +1062,7 @@ declare namespace Glue {
   }
   export interface BatchGetDevEndpointsRequest {
     /**
-     * The list of DevEndpoint names, which may be the names returned from the ListDevEndpoint operation.
+     * The list of DevEndpoint names, which might be the names returned from the ListDevEndpoint operation.
      */
     DevEndpointNames: DevEndpointNames;
   }
@@ -970,7 +1078,7 @@ declare namespace Glue {
   }
   export interface BatchGetJobsRequest {
     /**
-     * A list of job names, which may be the names returned from the ListJobs operation.
+     * A list of job names, which might be the names returned from the ListJobs operation.
      */
     JobNames: JobNameList;
   }
@@ -1029,9 +1137,29 @@ declare namespace Glue {
      */
     TriggersNotFound?: TriggerNameList;
   }
+  export interface BatchGetWorkflowsRequest {
+    /**
+     * A list of workflow names, which may be the names returned from the ListWorkflows operation.
+     */
+    Names: WorkflowNames;
+    /**
+     * Specifies whether to include a graph when returning the workflow resource metadata.
+     */
+    IncludeGraph?: NullableBoolean;
+  }
+  export interface BatchGetWorkflowsResponse {
+    /**
+     * A list of workflow resource metadata.
+     */
+    Workflows?: Workflows;
+    /**
+     * A list of names of workflows not found.
+     */
+    MissingWorkflows?: WorkflowNames;
+  }
   export interface BatchStopJobRunError {
     /**
-     * The name of the job definition used in the job run in question.
+     * The name of the job definition that is used in the job run in question.
      */
     JobName?: NameString;
     /**
@@ -1061,7 +1189,7 @@ declare namespace Glue {
      */
     SuccessfulSubmissions?: BatchStopJobRunSuccessfulSubmissionList;
     /**
-     * A list of the errors that were encountered in tryng to stop JobRuns, including the JobRunId for which each error was encountered and details about the error.
+     * A list of the errors that were encountered in trying to stop JobRuns, including the JobRunId for which each error was encountered and details about the error.
      */
     Errors?: BatchStopJobRunErrorList;
   }
@@ -1146,7 +1274,7 @@ declare namespace Glue {
      */
     CloudWatchEncryptionMode?: CloudWatchEncryptionMode;
     /**
-     * The AWS ARN of the KMS key to be used to encrypt the data.
+     * The Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.
      */
     KmsKeyArn?: KmsKeyArn;
   }
@@ -1227,13 +1355,21 @@ declare namespace Glue {
      */
     LogicalOperator?: LogicalOperator;
     /**
-     * The name of the Job to whose JobRuns this condition applies and on which this trigger waits.
+     * The name of the job whose JobRuns this condition applies to, and on which this trigger waits.
      */
     JobName?: NameString;
     /**
-     * The condition state. Currently, the values supported are SUCCEEDED, STOPPED, TIMEOUT and FAILED.
+     * The condition state. Currently, the values supported are SUCCEEDED, STOPPED, TIMEOUT, and FAILED.
      */
     State?: JobRunState;
+    /**
+     * The name of the crawler to which this condition applies.
+     */
+    CrawlerName?: NameString;
+    /**
+     * The state of the crawler to which this condition applies.
+     */
+    CrawlState?: CrawlState;
   }
   export type ConditionList = Condition[];
   export interface Connection {
@@ -1319,8 +1455,36 @@ declare namespace Glue {
     /**
      * A list of connections used by the job.
      */
-    Connections?: StringList;
+    Connections?: OrchestrationStringList;
   }
+  export interface Crawl {
+    /**
+     * The state of the crawler.
+     */
+    State?: CrawlState;
+    /**
+     * The date and time on which the crawl started.
+     */
+    StartedOn?: TimestampValue;
+    /**
+     * The date and time on which the crawl completed.
+     */
+    CompletedOn?: TimestampValue;
+    /**
+     * The error message associated with the crawl.
+     */
+    ErrorMessage?: DescriptionString;
+    /**
+     * The log group associated with the crawl.
+     */
+    LogGroup?: LogGroup;
+    /**
+     * The log stream associated with the crawl.
+     */
+    LogStream?: LogStream;
+  }
+  export type CrawlList = Crawl[];
+  export type CrawlState = "RUNNING"|"SUCCEEDED"|"CANCELLED"|"FAILED"|string;
   export interface Crawler {
     /**
      * The name of the crawler.
@@ -1429,6 +1593,12 @@ declare namespace Glue {
   }
   export type CrawlerMetricsList = CrawlerMetrics[];
   export type CrawlerNameList = NameString[];
+  export interface CrawlerNodeDetails {
+    /**
+     * A list of crawls represented by the crawl node.
+     */
+    Crawls?: CrawlList;
+  }
   export type CrawlerSecurityConfiguration = string;
   export type CrawlerState = "READY"|"RUNNING"|"STOPPING"|string;
   export interface CrawlerTargets {
@@ -1593,11 +1763,11 @@ declare namespace Glue {
      */
     SubnetId?: GenericString;
     /**
-     * The public key to be used by this DevEndpoint for authentication. This attribute is provided for backward compatibility, as the recommended attribute to use is public keys.
+     * The public key to be used by this DevEndpoint for authentication. This attribute is provided for backward compatibility because the recommended attribute to use is public keys.
      */
     PublicKey?: GenericString;
     /**
-     * A list of public keys to be used by the DevEndpoints for authentication. The use of this attribute is preferred over a single public key because the public keys allow you to have a different private key per client.  If you previously created an endpoint with a public key, you must remove that key to be able to set a list of public keys: call the UpdateDevEndpoint API with the public key content in the deletePublicKeys attribute, and the list of new keys in the addPublicKeys attribute. 
+     * A list of public keys to be used by the development endpoints for authentication. The use of this attribute is preferred over a single public key because the public keys allow you to have a different private key per client.  If you previously created an endpoint with a public key, you must remove that key to be able to set a list of public keys. Call the UpdateDevEndpoint API with the public key content in the deletePublicKeys attribute, and the list of new keys in the addPublicKeys attribute. 
      */
     PublicKeys?: PublicKeysList;
     /**
@@ -1605,11 +1775,19 @@ declare namespace Glue {
      */
     NumberOfNodes?: IntegerValue;
     /**
-     * Path(s) to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma. Please note that only pure Python libraries can currently be used on a DevEndpoint. Libraries that rely on C extensions, such as the pandas Python data analysis library, are not yet supported.
+     * The type of predefined worker that is allocated to the development endpoint. Accepts a value of Standard, G.1X, or G.2X.   For the Standard worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.   For the G.1X worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.   For the G.2X worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.  
+     */
+    WorkerType?: WorkerType;
+    /**
+     * The number of workers of a defined workerType that are allocated to the development endpoint. The maximum number of workers you can define are 299 for G.1X, and 149 for G.2X. 
+     */
+    NumberOfWorkers?: NullableInteger;
+    /**
+     * The paths to one or more Python libraries in an Amazon S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma.  You can only use pure Python libraries with a DevEndpoint. Libraries that rely on C extensions, such as the pandas Python data analysis library, are not yet supported. 
      */
     ExtraPythonLibsS3Path?: GenericString;
     /**
-     * Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.
+     * The path to one or more Java .jar files in an S3 bucket that should be loaded in your DevEndpoint.
      */
     ExtraJarsS3Path?: GenericString;
     /**
@@ -1643,7 +1821,7 @@ declare namespace Glue {
      */
     SubnetId?: GenericString;
     /**
-     * The AWS ARN of the role assigned to the new DevEndpoint.
+     * The Amazon Resource Name (ARN) of the role assigned to the new DevEndpoint.
      */
     RoleArn?: RoleArn;
     /**
@@ -1659,19 +1837,27 @@ declare namespace Glue {
      */
     NumberOfNodes?: IntegerValue;
     /**
-     * The AWS availability zone where this DevEndpoint is located.
+     * The type of predefined worker that is allocated to the development endpoint. May be a value of Standard, G.1X, or G.2X.
+     */
+    WorkerType?: WorkerType;
+    /**
+     * The number of workers of a defined workerType that are allocated to the development endpoint.
+     */
+    NumberOfWorkers?: NullableInteger;
+    /**
+     * The AWS Availability Zone where this DevEndpoint is located.
      */
     AvailabilityZone?: GenericString;
     /**
-     * The ID of the VPC used by this DevEndpoint.
+     * The ID of the virtual private cloud (VPC) used by this DevEndpoint.
      */
     VpcId?: GenericString;
     /**
-     * Path(s) to one or more Python libraries in an S3 bucket that will be loaded in your DevEndpoint.
+     * The paths to one or more Python libraries in an S3 bucket that will be loaded in your DevEndpoint.
      */
     ExtraPythonLibsS3Path?: GenericString;
     /**
-     * Path to one or more Java Jars in an S3 bucket that will be loaded in your DevEndpoint.
+     * Path to one or more Java .jar files in an S3 bucket that will be loaded in your DevEndpoint.
      */
     ExtraJarsS3Path?: GenericString;
     /**
@@ -1723,7 +1909,7 @@ declare namespace Glue {
      */
     LogUri?: UriString;
     /**
-     * The name or ARN of the IAM role associated with this job.
+     * The name or Amazon Resource Name (ARN) of the IAM role associated with this job.
      */
     Role: RoleString;
     /**
@@ -1747,7 +1933,7 @@ declare namespace Glue {
      */
     MaxRetries?: MaxRetries;
     /**
-     * This parameter is deprecated. Use MaxCapacity instead. The number of AWS Glue data processing units (DPUs) to allocate to this Job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page.
+     * This parameter is deprecated. Use MaxCapacity instead. The number of AWS Glue data processing units (DPUs) to allocate to this Job. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page.
      */
     AllocatedCapacity?: IntegerValue;
     /**
@@ -1755,21 +1941,9 @@ declare namespace Glue {
      */
     Timeout?: Timeout;
     /**
-     * The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page. Do not set Max Capacity if using WorkerType and NumberOfWorkers. The value that can be allocated for MaxCapacity depends on whether you are running a python shell job, or an Apache Spark ETL job:   When you specify a python shell job (JobCommand.Name="pythonshell"), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.   When you specify an Apache Spark ETL job (JobCommand.Name="glueetl"), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.  
+     * The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page. Do not set Max Capacity if using WorkerType and NumberOfWorkers. The value that can be allocated for MaxCapacity depends on whether you are running a Python shell job or an Apache Spark ETL job:   When you specify a Python shell job (JobCommand.Name="pythonshell"), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.   When you specify an Apache Spark ETL job (JobCommand.Name="glueetl"), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.  
      */
     MaxCapacity?: NullableDouble;
-    /**
-     * Specifies configuration properties of a job notification.
-     */
-    NotificationProperty?: NotificationProperty;
-    /**
-     * The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.   For the Standard worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.   For the G.1X worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.   For the G.2X worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.  
-     */
-    WorkerType?: WorkerType;
-    /**
-     * The number of workers of a defined workerType that are allocated when a job runs. The maximum number of workers you can define are 299 for G.1X, and 149 for G.2X. 
-     */
-    NumberOfWorkers?: NullableInteger;
     /**
      * The name of the SecurityConfiguration structure to be used with this job.
      */
@@ -1778,6 +1952,22 @@ declare namespace Glue {
      * The tags to use with this job. You may use tags to limit access to the job. For more information about tags in AWS Glue, see AWS Tags in AWS Glue in the developer guide.
      */
     Tags?: TagsMap;
+    /**
+     * Specifies configuration properties of a job notification.
+     */
+    NotificationProperty?: NotificationProperty;
+    /**
+     * Glue version determines the versions of Apache Spark and Python that AWS Glue supports. The Python version indicates the version supported for jobs of type Spark.  For more information about the available AWS Glue versions and corresponding Spark and Python versions, see Glue version in the developer guide. Jobs that are created without specifying a Glue version default to Glue 0.9.
+     */
+    GlueVersion?: GlueVersionString;
+    /**
+     * The number of workers of a defined workerType that are allocated when a job runs. The maximum number of workers you can define are 299 for G.1X, and 149 for G.2X. 
+     */
+    NumberOfWorkers?: NullableInteger;
+    /**
+     * The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.   For the Standard worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.   For the G.1X worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.   For the G.2X worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.  
+     */
+    WorkerType?: WorkerType;
   }
   export interface CreateJobResponse {
     /**
@@ -1881,6 +2071,10 @@ declare namespace Glue {
      */
     Name: NameString;
     /**
+     * The name of the workflow associated with the trigger.
+     */
+    WorkflowName?: NameString;
+    /**
      * The type of the new trigger.
      */
     Type: TriggerType;
@@ -1901,7 +2095,7 @@ declare namespace Glue {
      */
     Description?: DescriptionString;
     /**
-     * Set to true to start SCHEDULED and CONDITIONAL triggers when created. True not supported for ON_DEMAND triggers.
+     * Set to true to start SCHEDULED and CONDITIONAL triggers when created. True is not supported for ON_DEMAND triggers.
      */
     StartOnCreation?: BooleanValue;
     /**
@@ -1930,6 +2124,30 @@ declare namespace Glue {
     FunctionInput: UserDefinedFunctionInput;
   }
   export interface CreateUserDefinedFunctionResponse {
+  }
+  export interface CreateWorkflowRequest {
+    /**
+     * The name to be assigned to the workflow. It should be unique within your account.
+     */
+    Name: NameString;
+    /**
+     * A description of the workflow.
+     */
+    Description?: GenericString;
+    /**
+     * A collection of properties to be used as part of each execution of the workflow.
+     */
+    DefaultRunProperties?: WorkflowRunProperties;
+    /**
+     * The tags to be used with this workflow.
+     */
+    Tags?: TagsMap;
+  }
+  export interface CreateWorkflowResponse {
+    /**
+     * The name of the workflow which was provided as part of the request.
+     */
+    Name?: NameString;
   }
   export interface CreateXMLClassifierRequest {
     /**
@@ -2209,6 +2427,18 @@ declare namespace Glue {
   }
   export interface DeleteUserDefinedFunctionResponse {
   }
+  export interface DeleteWorkflowRequest {
+    /**
+     * Name of the workflow to be deleted.
+     */
+    Name: NameString;
+  }
+  export interface DeleteWorkflowResponse {
+    /**
+     * Name of the workflow specified in input.
+     */
+    Name?: NameString;
+  }
   export type DescriptionString = string;
   export type DescriptionStringRemovable = string;
   export interface DevEndpoint {
@@ -2217,7 +2447,7 @@ declare namespace Glue {
      */
     EndpointName?: GenericString;
     /**
-     * The AWS ARN of the IAM role used in this DevEndpoint.
+     * The Amazon Resource Name (ARN) of the IAM role used in this DevEndpoint.
      */
     RoleArn?: RoleArn;
     /**
@@ -2233,7 +2463,7 @@ declare namespace Glue {
      */
     YarnEndpointAddress?: GenericString;
     /**
-     * A private IP address to access the DevEndpoint within a VPC, if the DevEndpoint is created within one. The PrivateAddress field is present only when you create the DevEndpoint within your virtual private cloud (VPC).
+     * A private IP address to access the DevEndpoint within a VPC if the DevEndpoint is created within one. The PrivateAddress field is present only when you create the DevEndpoint within your VPC.
      */
     PrivateAddress?: GenericString;
     /**
@@ -2241,7 +2471,7 @@ declare namespace Glue {
      */
     ZeppelinRemoteSparkInterpreterPort?: IntegerValue;
     /**
-     * The public IP address used by this DevEndpoint. The PublicAddress field is present only when you create a non-VPC (virtual private cloud) DevEndpoint.
+     * The public IP address used by this DevEndpoint. The PublicAddress field is present only when you create a non-virtual private cloud (VPC) DevEndpoint.
      */
     PublicAddress?: GenericString;
     /**
@@ -2249,11 +2479,19 @@ declare namespace Glue {
      */
     Status?: GenericString;
     /**
+     * The type of predefined worker that is allocated to the development endpoint. Accepts a value of Standard, G.1X, or G.2X.   For the Standard worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.   For the G.1X worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.   For the G.2X worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.  
+     */
+    WorkerType?: WorkerType;
+    /**
+     * The number of workers of a defined workerType that are allocated to the development endpoint. The maximum number of workers you can define are 299 for G.1X, and 149 for G.2X. 
+     */
+    NumberOfWorkers?: NullableInteger;
+    /**
      * The number of AWS Glue Data Processing Units (DPUs) allocated to this DevEndpoint.
      */
     NumberOfNodes?: IntegerValue;
     /**
-     * The AWS availability zone where this DevEndpoint is located.
+     * The AWS Availability Zone where this DevEndpoint is located.
      */
     AvailabilityZone?: GenericString;
     /**
@@ -2261,11 +2499,11 @@ declare namespace Glue {
      */
     VpcId?: GenericString;
     /**
-     * Path(s) to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma. Please note that only pure Python libraries can currently be used on a DevEndpoint. Libraries that rely on C extensions, such as the pandas Python data analysis library, are not yet supported.
+     * The paths to one or more Python libraries in an Amazon S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma.  You can only use pure Python libraries with a DevEndpoint. Libraries that rely on C extensions, such as the pandas Python data analysis library, are not currently supported. 
      */
     ExtraPythonLibsS3Path?: GenericString;
     /**
-     * Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint. Please note that only pure Java/Scala libraries can currently be used on a DevEndpoint.
+     * The path to one or more Java .jar files in an S3 bucket that should be loaded in your DevEndpoint.  You can only use pure Java/Scala libraries with a DevEndpoint. 
      */
     ExtraJarsS3Path?: GenericString;
     /**
@@ -2285,11 +2523,11 @@ declare namespace Glue {
      */
     LastModifiedTimestamp?: TimestampValue;
     /**
-     * The public key to be used by this DevEndpoint for authentication. This attribute is provided for backward compatibility, as the recommended attribute to use is public keys.
+     * The public key to be used by this DevEndpoint for authentication. This attribute is provided for backward compatibility because the recommended attribute to use is public keys.
      */
     PublicKey?: GenericString;
     /**
-     * A list of public keys to be used by the DevEndpoints for authentication. The use of this attribute is preferred over a single public key because the public keys allow you to have a different private key per client.  If you previously created an endpoint with a public key, you must remove that key to be able to set a list of public keys: call the UpdateDevEndpoint API with the public key content in the deletePublicKeys attribute, and the list of new keys in the addPublicKeys attribute. 
+     * A list of public keys to be used by the DevEndpoints for authentication. Using this attribute is preferred over a single public key because the public keys allow you to have a different private key per client.  If you previously created an endpoint with a public key, you must remove that key to be able to set a list of public keys. Call the UpdateDevEndpoint API operation with the public key content in the deletePublicKeys attribute, and the list of new keys in the addPublicKeys attribute. 
      */
     PublicKeys?: PublicKeysList;
     /**
@@ -2297,17 +2535,17 @@ declare namespace Glue {
      */
     SecurityConfiguration?: NameString;
     /**
-     * A map of arguments used to configure the DevEndpoint. Note that currently, we only support "--enable-glue-datacatalog": "" as a valid argument.
+     * A map of arguments used to configure the DevEndpoint. Currently, only "--enable-glue-datacatalog": "" is supported as a valid argument.
      */
     Arguments?: MapValue;
   }
   export interface DevEndpointCustomLibraries {
     /**
-     * Path(s) to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma. Please note that only pure Python libraries can currently be used on a DevEndpoint. Libraries that rely on C extensions, such as the pandas Python data analysis library, are not yet supported.
+     * The paths to one or more Python libraries in an Amazon Simple Storage Service (Amazon S3) bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma.  You can only use pure Python libraries with a DevEndpoint. Libraries that rely on C extensions, such as the pandas Python data analysis library, are not currently supported. 
      */
     ExtraPythonLibsS3Path?: GenericString;
     /**
-     * Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint. Please note that only pure Java/Scala libraries can currently be used on a DevEndpoint.
+     * The path to one or more Java .jar files in an S3 bucket that should be loaded in your DevEndpoint.  You can only use pure Java/Scala libraries with a DevEndpoint. 
      */
     ExtraJarsS3Path?: GenericString;
   }
@@ -2321,6 +2559,17 @@ declare namespace Glue {
     Path?: Path;
   }
   export type DynamoDBTargetList = DynamoDBTarget[];
+  export interface Edge {
+    /**
+     * The unique of the node within the workflow where the edge starts.
+     */
+    SourceId?: NameString;
+    /**
+     * The unique of the node within the workflow where the edge ends.
+     */
+    DestinationId?: NameString;
+  }
+  export type EdgeList = Edge[];
   export interface EncryptionAtRest {
     /**
      * The encryption-at-rest mode for encrypting Data Catalog data.
@@ -2333,15 +2582,15 @@ declare namespace Glue {
   }
   export interface EncryptionConfiguration {
     /**
-     * The encryption configuration for S3 data.
+     * The encryption configuration for Amazon Simple Storage Service (Amazon S3) data.
      */
     S3Encryption?: S3EncryptionList;
     /**
-     * The encryption configuration for CloudWatch.
+     * The encryption configuration for Amazon CloudWatch.
      */
     CloudWatchEncryption?: CloudWatchEncryption;
     /**
-     * The encryption configuration for Job Bookmarks.
+     * The encryption configuration for job bookmarks.
      */
     JobBookmarksEncryption?: JobBookmarksEncryption;
   }
@@ -2602,7 +2851,7 @@ declare namespace Glue {
   }
   export interface GetDevEndpointRequest {
     /**
-     * Name of the DevEndpoint for which to retrieve information.
+     * Name of the DevEndpoint to retrieve information for.
      */
     EndpointName: GenericString;
   }
@@ -2631,6 +2880,46 @@ declare namespace Glue {
      * A continuation token, if not all DevEndpoint definitions have yet been returned.
      */
     NextToken?: GenericString;
+  }
+  export interface GetJobBookmarkRequest {
+    /**
+     * The name of the job in question.
+     */
+    JobName: JobName;
+    /**
+     * The unique run identifier associated with this job run.
+     */
+    RunId?: RunId;
+  }
+  export interface GetJobBookmarkResponse {
+    /**
+     * A structure that defines a point that a job can resume processing.
+     */
+    JobBookmarkEntry?: JobBookmarkEntry;
+  }
+  export interface GetJobBookmarksRequest {
+    /**
+     * The name of the job in question.
+     */
+    JobName: JobName;
+    /**
+     * The maximum size of the response.
+     */
+    MaxResults?: IntegerValue;
+    /**
+     * A continuation token, if this is a continuation call.
+     */
+    NextToken?: IntegerValue;
+  }
+  export interface GetJobBookmarksResponse {
+    /**
+     * A list of job bookmark entries that defines a point that a job can resume processing.
+     */
+    JobBookmarkEntries?: JobBookmarkEntryList;
+    /**
+     * A continuation token, which has a value of 1 if all the entries are returned, or &gt; 1 if not all requested job runs have been returned.
+     */
+    NextToken?: IntegerValue;
   }
   export interface GetJobRequest {
     /**
@@ -2680,11 +2969,11 @@ declare namespace Glue {
   }
   export interface GetJobRunsResponse {
     /**
-     * A list of job-run metatdata objects.
+     * A list of job-run metadata objects.
      */
     JobRuns?: JobRunList;
     /**
-     * A continuation token, if not all reequested job runs have been returned.
+     * A continuation token, if not all requested job runs have been returned.
      */
     NextToken?: GenericString;
   }
@@ -2852,7 +3141,7 @@ declare namespace Glue {
   }
   export interface GetSecurityConfigurationResponse {
     /**
-     * The requested security configuration
+     * The requested security configuration.
      */
     SecurityConfiguration?: SecurityConfiguration;
   }
@@ -2987,7 +3276,7 @@ declare namespace Glue {
   }
   export interface GetTagsRequest {
     /**
-     * The Amazon ARN of the resource for which to retrieve tags.
+     * The Amazon Resource Name (ARN) of the resource for which to retrieve tags.
      */
     ResourceArn: GlueResourceArn;
   }
@@ -3015,7 +3304,7 @@ declare namespace Glue {
      */
     NextToken?: GenericString;
     /**
-     * The name of the job for which to retrieve triggers. The trigger that can start this job will be returned, and if there is no such trigger, all triggers will be returned.
+     * The name of the job to retrieve triggers for. The trigger that can start this job is returned, and if there is no such trigger, all triggers are returned.
      */
     DependentJobName?: NameString;
     /**
@@ -3085,7 +3374,88 @@ declare namespace Glue {
      */
     NextToken?: Token;
   }
+  export interface GetWorkflowRequest {
+    /**
+     * The name of the workflow to retrieve.
+     */
+    Name: NameString;
+    /**
+     * Specifies whether to include a graph when returning the workflow resource metadata.
+     */
+    IncludeGraph?: NullableBoolean;
+  }
+  export interface GetWorkflowResponse {
+    /**
+     * The resource metadata for the workflow.
+     */
+    Workflow?: Workflow;
+  }
+  export interface GetWorkflowRunPropertiesRequest {
+    /**
+     * Name of the workflow which was run.
+     */
+    Name: NameString;
+    /**
+     * The ID of the workflow run whose run properties should be returned.
+     */
+    RunId: IdString;
+  }
+  export interface GetWorkflowRunPropertiesResponse {
+    /**
+     * The workflow run properties which were set during the specified run.
+     */
+    RunProperties?: WorkflowRunProperties;
+  }
+  export interface GetWorkflowRunRequest {
+    /**
+     * Name of the workflow being run.
+     */
+    Name: NameString;
+    /**
+     * The ID of the workflow run.
+     */
+    RunId: IdString;
+    /**
+     * Specifies whether to include the workflow graph in response or not.
+     */
+    IncludeGraph?: NullableBoolean;
+  }
+  export interface GetWorkflowRunResponse {
+    /**
+     * The requested workflow run metadata.
+     */
+    Run?: WorkflowRun;
+  }
+  export interface GetWorkflowRunsRequest {
+    /**
+     * Name of the workflow whose metadata of runs should be returned.
+     */
+    Name: NameString;
+    /**
+     * Specifies whether to include the workflow graph in response or not.
+     */
+    IncludeGraph?: NullableBoolean;
+    /**
+     * The maximum size of the response.
+     */
+    NextToken?: GenericString;
+    /**
+     * The maximum number of workflow runs to be included in the response.
+     */
+    MaxResults?: PageSize;
+  }
+  export interface GetWorkflowRunsResponse {
+    /**
+     * A list of workflow run metadata objects.
+     */
+    Runs?: WorkflowRuns;
+    /**
+     * A continuation token, if not all requested workflow runs have been returned.
+     */
+    NextToken?: GenericString;
+  }
   export type GlueResourceArn = string;
+  export type GlueVersionString = string;
   export interface GrokClassifier {
     /**
      * The name of the classifier.
@@ -3151,7 +3521,7 @@ declare namespace Glue {
      */
     Name?: NameString;
     /**
-     * Description of the job being defined.
+     * A description of the job.
      */
     Description?: DescriptionString;
     /**
@@ -3159,7 +3529,7 @@ declare namespace Glue {
      */
     LogUri?: UriString;
     /**
-     * The name or ARN of the IAM role associated with this job.
+     * The name or Amazon Resource Name (ARN) of the IAM role associated with this job.
      */
     Role?: RoleString;
     /**
@@ -3191,7 +3561,7 @@ declare namespace Glue {
      */
     MaxRetries?: MaxRetries;
     /**
-     * This field is deprecated, use MaxCapacity instead. The number of AWS Glue data processing units (DPUs) allocated to runs of this job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page. 
+     * This field is deprecated. Use MaxCapacity instead. The number of AWS Glue data processing units (DPUs) allocated to runs of this job. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page. 
      */
     AllocatedCapacity?: IntegerValue;
     /**
@@ -3199,11 +3569,11 @@ declare namespace Glue {
      */
     Timeout?: Timeout;
     /**
-     * The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page. Do not set Max Capacity if using WorkerType and NumberOfWorkers. The value that can be allocated for MaxCapacity depends on whether you are running a python shell job, or an Apache Spark ETL job:   When you specify a python shell job (JobCommand.Name="pythonshell"), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.   When you specify an Apache Spark ETL job (JobCommand.Name="glueetl"), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.  
+     * The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page. Do not set Max Capacity if using WorkerType and NumberOfWorkers. The value that can be allocated for MaxCapacity depends on whether you are running a Python shell job or an Apache Spark ETL job:   When you specify a Python shell job (JobCommand.Name="pythonshell"), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.   When you specify an Apache Spark ETL job (JobCommand.Name="glueetl"), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.  
      */
     MaxCapacity?: NullableDouble;
     /**
-     * The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.   For the Standard worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.   For the G.1X worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.   For the G.2X worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.  
+     * The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.   For the Standard worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.   For the G.1X worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.   For the G.2X worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.  
      */
     WorkerType?: WorkerType;
     /**
@@ -3218,14 +3588,18 @@ declare namespace Glue {
      * Specifies configuration properties of a job notification.
      */
     NotificationProperty?: NotificationProperty;
+    /**
+     * Glue version determines the versions of Apache Spark and Python that AWS Glue supports. The Python version indicates the version supported for jobs of type Spark.  For more information about the available AWS Glue versions and corresponding Spark and Python versions, see Glue version in the developer guide. Jobs that are created without specifying a Glue version default to Glue 0.9.
+     */
+    GlueVersion?: GlueVersionString;
   }
   export interface JobBookmarkEntry {
     /**
-     * Name of the job in question.
+     * The name of the job in question.
      */
     JobName?: JobName;
     /**
-     * Version of the job.
+     * The version of the job.
      */
     Version?: IntegerValue;
     /**
@@ -3237,34 +3611,53 @@ declare namespace Glue {
      */
     Attempt?: IntegerValue;
     /**
+     * The unique run identifier associated with the previous job run..
+     */
+    PreviousRunId?: RunId;
+    /**
+     * The unique run identifier associated with this job run.
+     */
+    RunId?: RunId;
+    /**
      * The bookmark itself.
      */
     JobBookmark?: JsonValue;
   }
+  export type JobBookmarkEntryList = JobBookmarkEntry[];
   export interface JobBookmarksEncryption {
     /**
-     * The encryption mode to use for Job bookmarks data.
+     * The encryption mode to use for job bookmarks data.
      */
     JobBookmarksEncryptionMode?: JobBookmarksEncryptionMode;
     /**
-     * The AWS ARN of the KMS key to be used to encrypt the data.
+     * The Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.
      */
     KmsKeyArn?: KmsKeyArn;
   }
   export type JobBookmarksEncryptionMode = "DISABLED"|"CSE-KMS"|string;
   export interface JobCommand {
     /**
-     * The name of the job command: this must be glueetl, for an Apache Spark ETL job, or pythonshell, for a Python shell job.
+     * The name of the job command. For an Apache Spark ETL job, this must be glueetl. For a Python shell job, it must be pythonshell.
      */
     Name?: GenericString;
     /**
-     * Specifies the S3 path to a script that executes a job (required).
+     * Specifies the Amazon Simple Storage Service (Amazon S3) path to a script that executes a job.
      */
     ScriptLocation?: ScriptLocationString;
+    /**
+     * The Python version being used to execute a Python shell job. Allowed values are 2 or 3.
+     */
+    PythonVersion?: PythonVersionString;
   }
   export type JobList = Job[];
   export type JobName = string;
   export type JobNameList = NameString[];
+  export interface JobNodeDetails {
+    /**
+     * The information for the job runs represented by the job node.
+     */
+    JobRuns?: JobRunList;
+  }
   export interface JobRun {
     /**
      * The ID of this job run.
@@ -3291,11 +3684,11 @@ declare namespace Glue {
      */
     StartedOn?: TimestampValue;
     /**
-     * The last time this job run was modified.
+     * The last time that this job run was modified.
      */
     LastModifiedOn?: TimestampValue;
     /**
-     * The date and time this job run completed.
+     * The date and time that this job run completed.
      */
     CompletedOn?: TimestampValue;
     /**
@@ -3315,7 +3708,7 @@ declare namespace Glue {
      */
     PredecessorRuns?: PredecessorList;
     /**
-     * This field is deprecated, use MaxCapacity instead. The number of AWS Glue data processing units (DPUs) allocated to this JobRun. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page.
+     * This field is deprecated. Use MaxCapacity instead. The number of AWS Glue data processing units (DPUs) allocated to this JobRun. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page.
      */
     AllocatedCapacity?: IntegerValue;
     /**
@@ -3327,13 +3720,9 @@ declare namespace Glue {
      */
     Timeout?: Timeout;
     /**
-     * The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page. Do not set Max Capacity if using WorkerType and NumberOfWorkers. The value that can be allocated for MaxCapacity depends on whether you are running a python shell job, or an Apache Spark ETL job:   When you specify a python shell job (JobCommand.Name="pythonshell"), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.   When you specify an Apache Spark ETL job (JobCommand.Name="glueetl"), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.  
+     * The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page. Do not set Max Capacity if using WorkerType and NumberOfWorkers. The value that can be allocated for MaxCapacity depends on whether you are running a Python shell job or an Apache Spark ETL job:   When you specify a Python shell job (JobCommand.Name="pythonshell"), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.   When you specify an Apache Spark ETL job (JobCommand.Name="glueetl"), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.  
      */
     MaxCapacity?: NullableDouble;
-    /**
-     * Specifies configuration properties of a job run notification.
-     */
-    NotificationProperty?: NotificationProperty;
     /**
      * The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.   For the Standard worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.   For the G.1X worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.   For the G.2X worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.  
      */
@@ -3347,9 +3736,17 @@ declare namespace Glue {
      */
     SecurityConfiguration?: NameString;
     /**
-     * The name of the log group for secure logging, that can be server-side encrypted in CloudWatch using KMS. This name can be /aws-glue/jobs/, in which case the default encryption is NONE. If you add a role name and SecurityConfiguration name (in other words, /aws-glue/jobs-yourRoleName-yourSecurityConfigurationName/), then that security configuration will be used to encrypt the log group.
+     * The name of the log group for secure logging that can be server-side encrypted in Amazon CloudWatch using AWS KMS. This name can be /aws-glue/jobs/, in which case the default encryption is NONE. If you add a role name and SecurityConfiguration name (in other words, /aws-glue/jobs-yourRoleName-yourSecurityConfigurationName/), then that security configuration is used to encrypt the log group.
      */
     LogGroupName?: GenericString;
+    /**
+     * Specifies configuration properties of a job run notification.
+     */
+    NotificationProperty?: NotificationProperty;
+    /**
+     * Glue version determines the versions of Apache Spark and Python that AWS Glue supports. The Python version indicates the version supported for jobs of type Spark.  For more information about the available AWS Glue versions and corresponding Spark and Python versions, see Glue version in the developer guide. Jobs that are created without specifying a Glue version default to Glue 0.9.
+     */
+    GlueVersion?: GlueVersionString;
   }
   export type JobRunList = JobRun[];
   export type JobRunState = "STARTING"|"RUNNING"|"STOPPING"|"STOPPED"|"SUCCEEDED"|"FAILED"|"TIMEOUT"|string;
@@ -3363,7 +3760,7 @@ declare namespace Glue {
      */
     LogUri?: UriString;
     /**
-     * The name or ARN of the IAM role associated with this job (required).
+     * The name or Amazon Resource Name (ARN) of the IAM role associated with this job (required).
      */
     Role?: RoleString;
     /**
@@ -3387,7 +3784,7 @@ declare namespace Glue {
      */
     MaxRetries?: MaxRetries;
     /**
-     * This field is deprecated. Use MaxCapacity instead. The number of AWS Glue data processing units (DPUs) to allocate to this Job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page.
+     * This field is deprecated. Use MaxCapacity instead. The number of AWS Glue data processing units (DPUs) to allocate to this job. You can allocate from 2 to 100 DPUs; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page.
      */
     AllocatedCapacity?: IntegerValue;
     /**
@@ -3395,11 +3792,11 @@ declare namespace Glue {
      */
     Timeout?: Timeout;
     /**
-     * The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page. Do not set Max Capacity if using WorkerType and NumberOfWorkers. The value that can be allocated for MaxCapacity depends on whether you are running a python shell job, or an Apache Spark ETL job:   When you specify a python shell job (JobCommand.Name="pythonshell"), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.   When you specify an Apache Spark ETL job (JobCommand.Name="glueetl"), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.  
+     * The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page. Do not set Max Capacity if using WorkerType and NumberOfWorkers. The value that can be allocated for MaxCapacity depends on whether you are running a Python shell job or an Apache Spark ETL job:   When you specify a Python shell job (JobCommand.Name="pythonshell"), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.   When you specify an Apache Spark ETL job (JobCommand.Name="glueetl"), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.  
      */
     MaxCapacity?: NullableDouble;
     /**
-     * The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.   For the Standard worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.   For the G.1X worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.   For the G.2X worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.  
+     * The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.   For the Standard worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.   For the G.1X worker type, each worker maps to 1 DPU (4 vCPU, 16 GB of memory, 64 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.   For the G.2X worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of memory, 128 GB disk), and provides 1 executor per worker. We recommend this worker type for memory-intensive jobs.  
      */
     WorkerType?: WorkerType;
     /**
@@ -3411,9 +3808,13 @@ declare namespace Glue {
      */
     SecurityConfiguration?: NameString;
     /**
-     * Specifies configuration properties of a job notification.
+     * Specifies the configuration properties of a job notification.
      */
     NotificationProperty?: NotificationProperty;
+    /**
+     * Glue version determines the versions of Apache Spark and Python that AWS Glue supports. The Python version indicates the version supported for jobs of type Spark.  For more information about the available AWS Glue versions and corresponding Spark and Python versions, see Glue version in the developer guide.
+     */
+    GlueVersion?: GlueVersionString;
   }
   export interface JsonClassifier {
     /**
@@ -3509,7 +3910,7 @@ declare namespace Glue {
   }
   export interface ListDevEndpointsResponse {
     /**
-     * The names of all DevEndpoints in the account, or the DevEndpoints with the specified tags.
+     * The names of all the DevEndpoints in the account, or the DevEndpoints with the specified tags.
      */
     DevEndpointNames?: DevEndpointNameList;
     /**
@@ -3547,7 +3948,7 @@ declare namespace Glue {
      */
     NextToken?: GenericString;
     /**
-     *  The name of the job for which to retrieve triggers. The trigger that can start this job will be returned, and if there is no such trigger, all triggers will be returned.
+     *  The name of the job for which to retrieve triggers. The trigger that can start this job is returned. If there is no such trigger, all triggers are returned.
      */
     DependentJobName?: NameString;
     /**
@@ -3566,6 +3967,26 @@ declare namespace Glue {
     TriggerNames?: TriggerNameList;
     /**
      * A continuation token, if the returned list does not contain the last metric available.
+     */
+    NextToken?: GenericString;
+  }
+  export interface ListWorkflowsRequest {
+    /**
+     * A continuation token, if this is a continuation request.
+     */
+    NextToken?: GenericString;
+    /**
+     * The maximum size of a list to return.
+     */
+    MaxResults?: PageSize;
+  }
+  export interface ListWorkflowsResponse {
+    /**
+     * List of names of workflows in the account.
+     */
+    Workflows?: WorkflowNames;
+    /**
+     * A continuation token, if not all workflow names have been returned.
      */
     NextToken?: GenericString;
   }
@@ -3624,6 +4045,34 @@ declare namespace Glue {
   export type MillisecondsCount = number;
   export type NameString = string;
   export type NameStringList = NameString[];
+  export interface Node {
+    /**
+     * The type of AWS Glue component represented by the node.
+     */
+    Type?: NodeType;
+    /**
+     * The name of the AWS Glue component represented by the node.
+     */
+    Name?: NameString;
+    /**
+     * The unique Id assigned to the node within the workflow.
+     */
+    UniqueId?: NameString;
+    /**
+     * Details of the Trigger when the node represents a Trigger.
+     */
+    TriggerDetails?: TriggerNodeDetails;
+    /**
+     * Details of the Job when the node represents a Job.
+     */
+    JobDetails?: JobNodeDetails;
+    /**
+     * Details of the crawler when the node represents a crawler.
+     */
+    CrawlerDetails?: CrawlerNodeDetails;
+  }
+  export type NodeList = Node[];
+  export type NodeType = "CRAWLER"|"JOB"|"TRIGGER"|string;
   export type NonNegativeDouble = number;
   export type NonNegativeInteger = number;
   export interface NotificationProperty {
@@ -3636,6 +4085,7 @@ declare namespace Glue {
   export type NullableBoolean = boolean;
   export type NullableDouble = number;
   export type NullableInteger = number;
+  export type OrchestrationStringList = GenericString[];
   export interface Order {
     /**
      * The name of the column.
@@ -3755,7 +4205,7 @@ declare namespace Glue {
   export type PredecessorList = Predecessor[];
   export interface Predicate {
     /**
-     * Optional field if only one condition is listed. If multiple conditions are listed, then this field is required.
+     * An optional field if only one condition is listed. If multiple conditions are listed, then this field is required.
      */
     Logical?: Logical;
     /**
@@ -3798,12 +4248,33 @@ declare namespace Glue {
      */
     PolicyHash?: HashString;
   }
+  export interface PutWorkflowRunPropertiesRequest {
+    /**
+     * Name of the workflow which was run.
+     */
+    Name: NameString;
+    /**
+     * The ID of the workflow run for which the run properties should be updated.
+     */
+    RunId: IdString;
+    /**
+     * The properties to put for the specified run.
+     */
+    RunProperties: WorkflowRunProperties;
+  }
+  export interface PutWorkflowRunPropertiesResponse {
+  }
   export type PythonScript = string;
+  export type PythonVersionString = string;
   export interface ResetJobBookmarkRequest {
     /**
      * The name of the job in question.
      */
     JobName: JobName;
+    /**
+     * The unique run identifier associated with this job run.
+     */
+    RunId?: RunId;
   }
   export interface ResetJobBookmarkResponse {
     /**
@@ -3827,13 +4298,14 @@ declare namespace Glue {
   export type RoleArn = string;
   export type RoleString = string;
   export type RowTag = string;
+  export type RunId = string;
   export interface S3Encryption {
     /**
-     * The encryption mode to use for S3 data.
+     * The encryption mode to use for Amazon S3 data.
      */
     S3EncryptionMode?: S3EncryptionMode;
     /**
-     * The AWS ARN of the KMS key to be used to encrypt the data.
+     * The Amazon Resource Name (ARN) of the KMS key to be used to encrypt the data.
      */
     KmsKeyArn?: KmsKeyArn;
   }
@@ -3958,7 +4430,7 @@ declare namespace Glue {
      */
     Arguments?: GenericMap;
     /**
-     * This field is deprecated, use MaxCapacity instead. The number of AWS Glue data processing units (DPUs) to allocate to this JobRun. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page.
+     * This field is deprecated. Use MaxCapacity instead. The number of AWS Glue data processing units (DPUs) to allocate to this JobRun. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page.
      */
     AllocatedCapacity?: IntegerValue;
     /**
@@ -3966,17 +4438,9 @@ declare namespace Glue {
      */
     Timeout?: Timeout;
     /**
-     * The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page. Do not set Max Capacity if using WorkerType and NumberOfWorkers. The value that can be allocated for MaxCapacity depends on whether you are running a python shell job, or an Apache Spark ETL job:   When you specify a python shell job (JobCommand.Name="pythonshell"), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.   When you specify an Apache Spark ETL job (JobCommand.Name="glueetl"), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.  
+     * The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the AWS Glue pricing page. Do not set Max Capacity if using WorkerType and NumberOfWorkers. The value that can be allocated for MaxCapacity depends on whether you are running a Python shell job, or an Apache Spark ETL job:   When you specify a Python shell job (JobCommand.Name="pythonshell"), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.   When you specify an Apache Spark ETL job (JobCommand.Name="glueetl"), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.  
      */
     MaxCapacity?: NullableDouble;
-    /**
-     * The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.   For the Standard worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.   For the G.1X worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.   For the G.2X worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.  
-     */
-    WorkerType?: WorkerType;
-    /**
-     * The number of workers of a defined workerType that are allocated when a job runs. The maximum number of workers you can define are 299 for G.1X, and 149 for G.2X. 
-     */
-    NumberOfWorkers?: NullableInteger;
     /**
      * The name of the SecurityConfiguration structure to be used with this job run.
      */
@@ -3985,6 +4449,14 @@ declare namespace Glue {
      * Specifies configuration properties of a job run notification.
      */
     NotificationProperty?: NotificationProperty;
+    /**
+     * The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.   For the Standard worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.   For the G.1X worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.   For the G.2X worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.  
+     */
+    WorkerType?: WorkerType;
+    /**
+     * The number of workers of a defined workerType that are allocated when a job runs. The maximum number of workers you can define are 299 for G.1X, and 149 for G.2X. 
+     */
+    NumberOfWorkers?: NullableInteger;
   }
   export interface StartJobRunResponse {
     /**
@@ -4003,6 +4475,18 @@ declare namespace Glue {
      * The name of the trigger that was started.
      */
     Name?: NameString;
+  }
+  export interface StartWorkflowRunRequest {
+    /**
+     * The name of the workflow to start.
+     */
+    Name: NameString;
+  }
+  export interface StartWorkflowRunResponse {
+    /**
+     * An Id for the new run.
+     */
+    RunId?: IdString;
   }
   export interface StopCrawlerRequest {
     /**
@@ -4262,9 +4746,13 @@ declare namespace Glue {
   export type TotalSegmentsInteger = number;
   export interface Trigger {
     /**
-     * Name of the trigger.
+     * The name of the trigger.
      */
     Name?: NameString;
+    /**
+     * The name of the workflow associated with the trigger.
+     */
+    WorkflowName?: NameString;
     /**
      * Reserved for future use.
      */
@@ -4296,6 +4784,12 @@ declare namespace Glue {
   }
   export type TriggerList = Trigger[];
   export type TriggerNameList = NameString[];
+  export interface TriggerNodeDetails {
+    /**
+     * The information of the trigger represented by the trigger node.
+     */
+    Trigger?: Trigger;
+  }
   export type TriggerState = "CREATING"|"CREATED"|"ACTIVATING"|"ACTIVATED"|"DEACTIVATING"|"DEACTIVATED"|"DELETING"|"UPDATING"|string;
   export type TriggerType = "SCHEDULED"|"CONDITIONAL"|"ON_DEMAND"|string;
   export interface TriggerUpdate {
@@ -4323,7 +4817,7 @@ declare namespace Glue {
   export type URI = string;
   export interface UntagResourceRequest {
     /**
-     * The ARN of the resource from which to remove the tags.
+     * The Amazon Resource Name (ARN) of the resource from which to remove the tags.
      */
     ResourceArn: GlueResourceArn;
     /**
@@ -4498,7 +4992,7 @@ declare namespace Glue {
      */
     CustomLibraries?: DevEndpointCustomLibraries;
     /**
-     * True if the list of custom libraries to be loaded in the development endpoint needs to be updated, or False otherwise.
+     *  True if the list of custom libraries to be loaded in the development endpoint needs to be updated, or False if otherwise.
      */
     UpdateEtlLibraries?: BooleanValue;
     /**
@@ -4532,7 +5026,7 @@ declare namespace Glue {
   }
   export interface UpdateJobRequest {
     /**
-     * Name of the job definition to update.
+     * The name of the job definition to update.
      */
     JobName: NameString;
     /**
@@ -4636,6 +5130,26 @@ declare namespace Glue {
   }
   export interface UpdateUserDefinedFunctionResponse {
   }
+  export interface UpdateWorkflowRequest {
+    /**
+     * Name of the workflow to be updated.
+     */
+    Name: NameString;
+    /**
+     * The description of the workflow.
+     */
+    Description?: GenericString;
+    /**
+     * A collection of properties to be used as part of each execution of the workflow.
+     */
+    DefaultRunProperties?: WorkflowRunProperties;
+  }
+  export interface UpdateWorkflowResponse {
+    /**
+     * The name of the workflow which was specified in input.
+     */
+    Name?: NameString;
+  }
   export interface UpdateXMLClassifierRequest {
     /**
      * The name of the classifier.
@@ -4706,6 +5220,111 @@ declare namespace Glue {
   export type VersionString = string;
   export type ViewTextString = string;
   export type WorkerType = "Standard"|"G.1X"|"G.2X"|string;
+  export interface Workflow {
+    /**
+     * The name of the workflow representing the flow.
+     */
+    Name?: NameString;
+    /**
+     * A description of the workflow.
+     */
+    Description?: GenericString;
+    /**
+     * A collection of properties to be used as part of each execution of the workflow.
+     */
+    DefaultRunProperties?: WorkflowRunProperties;
+    /**
+     * The date and time when the workflow was created.
+     */
+    CreatedOn?: TimestampValue;
+    /**
+     * The date and time when the workflow was last modified.
+     */
+    LastModifiedOn?: TimestampValue;
+    /**
+     * The information about the last execution of the workflow.
+     */
+    LastRun?: WorkflowRun;
+    /**
+     * The graph representing all the AWS Glue components that belong to the workflow as nodes and directed connections between them as edges.
+     */
+    Graph?: WorkflowGraph;
+  }
+  export interface WorkflowGraph {
+    /**
+     * A list of the the AWS Glue components belong to the workflow represented as nodes.
+     */
+    Nodes?: NodeList;
+    /**
+     * A list of all the directed connections between the nodes belonging to the workflow.
+     */
+    Edges?: EdgeList;
+  }
+  export type WorkflowNames = NameString[];
+  export interface WorkflowRun {
+    /**
+     * Name of the workflow which was executed.
+     */
+    Name?: NameString;
+    /**
+     * The ID of this workflow run.
+     */
+    WorkflowRunId?: IdString;
+    /**
+     * The workflow run properties which were set during the run.
+     */
+    WorkflowRunProperties?: WorkflowRunProperties;
+    /**
+     * The date and time when the workflow run was started.
+     */
+    StartedOn?: TimestampValue;
+    /**
+     * The date and time when the workflow run completed.
+     */
+    CompletedOn?: TimestampValue;
+    /**
+     * The status of the workflow run.
+     */
+    Status?: WorkflowRunStatus;
+    /**
+     * The statistics of the run.
+     */
+    Statistics?: WorkflowRunStatistics;
+    /**
+     * The graph representing all the AWS Glue components that belong to the workflow as nodes and directed connections between them as edges.
+     */
+    Graph?: WorkflowGraph;
+  }
+  export type WorkflowRunProperties = {[key: string]: GenericString};
+  export interface WorkflowRunStatistics {
+    /**
+     * Total number of Actions in the workflow run.
+     */
+    TotalActions?: IntegerValue;
+    /**
+     * Total number of Actions which timed out.
+     */
+    TimeoutActions?: IntegerValue;
+    /**
+     * Total number of Actions which have failed.
+     */
+    FailedActions?: IntegerValue;
+    /**
+     * Total number of Actions which have stopped.
+     */
+    StoppedActions?: IntegerValue;
+    /**
+     * Total number of Actions which have succeeded.
+     */
+    SucceededActions?: IntegerValue;
+    /**
+     * Total number Actions in running state.
+     */
+    RunningActions?: IntegerValue;
+  }
+  export type WorkflowRunStatus = "RUNNING"|"COMPLETED"|string;
+  export type WorkflowRuns = WorkflowRun[];
+  export type Workflows = Workflow[];
   export interface XMLClassifier {
     /**
      * The name of the classifier.

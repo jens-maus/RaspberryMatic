@@ -46,6 +46,11 @@ dtparam=pwr_led_trigger=timer,act_led_trigger=mmc0
 # add device tree overlay for RPI-RF-MOD
 dtoverlay=rpi-rf-mod
 
+# enable usb gadget mode for the pi zero/pi zero w
+[pi0]
+dtoverlay=dwc2
+[all]
+
 # make sure gpio12 and gpio24 is set as input and pull_up
 gpio=12,24=ip,pu
 

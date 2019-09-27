@@ -259,7 +259,7 @@
  }
 --- occu/WebUI/www/config/fileupload.ccc.orig
 +++ occu/WebUI/www/config/fileupload.ccc
-@@ -0,0 +1,47 @@
+@@ -0,0 +1,49 @@
 +#!/bin/sh
 +
 +echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
@@ -285,7 +285,7 @@
 +# write out the data
 +SIZE=$((HTTP_CONTENT_LENGTH-a))
 +filename=$(mktemp -p /usr/local/tmp)
-+head -c $SIZE >${filename}
++/usr/bin/head -q -c ${SIZE} >${filename}
 +if [ $? -ne 0 ]; then
 +  echo "ERROR (head)"
 +fi
@@ -307,6 +307,8 @@
 +echo "  </script>"
 +echo " </head>"
 +echo "</html>"
++
++exit 0
 --- occu/WebUI/www/tcl/extern/cgi.tcl.orig
 +++ occu/WebUI/www/tcl/extern/cgi.tcl
 @@ -3,15 +3,11 @@

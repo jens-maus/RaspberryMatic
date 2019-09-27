@@ -372,6 +372,30 @@ declare class ApiGatewayV2 extends Service {
    */
   getStages(callback?: (err: AWSError, data: ApiGatewayV2.Types.GetStagesResponse) => void): Request<ApiGatewayV2.Types.GetStagesResponse, AWSError>;
   /**
+   * Gets the Tags for an API.
+   */
+  getTags(params: ApiGatewayV2.Types.GetTagsRequest, callback?: (err: AWSError, data: ApiGatewayV2.Types.GetTagsResponse) => void): Request<ApiGatewayV2.Types.GetTagsResponse, AWSError>;
+  /**
+   * Gets the Tags for an API.
+   */
+  getTags(callback?: (err: AWSError, data: ApiGatewayV2.Types.GetTagsResponse) => void): Request<ApiGatewayV2.Types.GetTagsResponse, AWSError>;
+  /**
+   * Tag an APIGW resource
+   */
+  tagResource(params: ApiGatewayV2.Types.TagResourceRequest, callback?: (err: AWSError, data: ApiGatewayV2.Types.TagResourceResponse) => void): Request<ApiGatewayV2.Types.TagResourceResponse, AWSError>;
+  /**
+   * Tag an APIGW resource
+   */
+  tagResource(callback?: (err: AWSError, data: ApiGatewayV2.Types.TagResourceResponse) => void): Request<ApiGatewayV2.Types.TagResourceResponse, AWSError>;
+  /**
+   * Untag an APIGW resource
+   */
+  untagResource(params: ApiGatewayV2.Types.UntagResourceRequest, callback?: (err: AWSError, data: {}) => void): Request<{}, AWSError>;
+  /**
+   * Untag an APIGW resource
+   */
+  untagResource(callback?: (err: AWSError, data: {}) => void): Request<{}, AWSError>;
+  /**
    * Updates an Api resource.
    */
   updateApi(params: ApiGatewayV2.Types.UpdateApiRequest, callback?: (err: AWSError, data: ApiGatewayV2.Types.UpdateApiResponse) => void): Request<ApiGatewayV2.Types.UpdateApiResponse, AWSError>;
@@ -520,6 +544,10 @@ declare namespace ApiGatewayV2 {
  API import.
      */
     Warnings?: __listOf__string;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface ApiMapping {
     /**
@@ -678,6 +706,10 @@ declare namespace ApiGatewayV2 {
      * A version identifier for the API.
      */
     Version?: StringWithLengthBetween1And64;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface CreateApiResponse {
     /**
@@ -727,6 +759,10 @@ declare namespace ApiGatewayV2 {
  API import.
      */
     Warnings?: __listOf__string;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface CreateAuthorizerRequest {
     /**
@@ -917,6 +953,10 @@ declare namespace ApiGatewayV2 {
      * The domain name configurations.
      */
     DomainNameConfigurations?: DomainNameConfigurations;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface CreateDomainNameResponse {
     /**
@@ -931,6 +971,10 @@ declare namespace ApiGatewayV2 {
      * The domain name configurations.
      */
     DomainNameConfigurations?: DomainNameConfigurations;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface CreateIntegrationRequest {
     /**
@@ -1512,6 +1556,10 @@ declare namespace ApiGatewayV2 {
  [A-Za-z0-9-._~:/?#&=,]+.
      */
     StageVariables?: StageVariablesMap;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface CreateStageResponse {
     /**
@@ -1557,6 +1605,10 @@ declare namespace ApiGatewayV2 {
  [A-Za-z0-9-._~:/?#&=,]+.
      */
     StageVariables?: StageVariablesMap;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface DeleteApiMappingRequest {
     /**
@@ -1705,6 +1757,10 @@ declare namespace ApiGatewayV2 {
      * The domain name configurations.
      */
     DomainNameConfigurations?: DomainNameConfigurations;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface DomainNameConfiguration {
     /**
@@ -1734,9 +1790,23 @@ declare namespace ApiGatewayV2 {
      * The Amazon Route 53 Hosted Zone ID of the endpoint.
      */
     HostedZoneId?: __string;
+    /**
+     * The Transport Layer Security (TLS) version of the security policy for this domain name. The valid values are TLS_1_0 and TLS_1_2.
+     */
+    SecurityPolicy?: SecurityPolicy;
+    /**
+     * The status of the domain name migration. The valid values are AVAILABLE and UPDATING. If the status is UPDATING, the domain cannot be modified further until the existing operation is complete. If it is AVAILABLE, the domain can be updated.
+     */
+    DomainNameStatus?: DomainNameStatus;
+    /**
+     * An optional text message containing detailed information about status of the domain name migration.
+     */
+    DomainNameStatusMessage?: __string;
   }
   export type DomainNameConfigurations = DomainNameConfiguration[];
   export type EndpointType = "REGIONAL"|"EDGE"|string;
+  export type SecurityPolicy = "TLS_1_0"|"TLS_1_2"|string;
+  export type DomainNameStatus = "AVAILABLE"|"UPDATING"|string;
   export interface GetApiMappingRequest {
     /**
      * The API mapping identifier.
@@ -1845,6 +1915,10 @@ declare namespace ApiGatewayV2 {
  API import.
      */
     Warnings?: __listOf__string;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface GetApisRequest {
     /**
@@ -2053,6 +2127,10 @@ declare namespace ApiGatewayV2 {
      * The domain name configurations.
      */
     DomainNameConfigurations?: DomainNameConfigurations;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface GetDomainNamesRequest {
     /**
@@ -2612,6 +2690,10 @@ declare namespace ApiGatewayV2 {
  [A-Za-z0-9-._~:/?#&=,]+.
      */
     StageVariables?: StageVariablesMap;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface GetStagesRequest {
     /**
@@ -2808,6 +2890,12 @@ declare namespace ApiGatewayV2 {
     TemplateSelectionExpression?: SelectionExpression;
   }
   export type IntegrationType = "AWS"|"HTTP"|"MOCK"|"HTTP_PROXY"|"AWS_PROXY"|string;
+  export interface GetTagsRequest {
+    ResourceArn: __string;
+  }
+  export interface GetTagsResponse {
+    Tags?: __mapOf__string;
+  }
   export type LoggingLevel = "ERROR"|"INFO"|"false"|string;
   export interface Model {
     /**
@@ -3001,6 +3089,10 @@ declare namespace ApiGatewayV2 {
  [A-Za-z0-9-._~:/?#&=,]+.
      */
     StageVariables?: StageVariablesMap;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export type StageVariablesMap = {[key: string]: StringWithLengthBetween0And2048};
   export type StringWithLengthBetween0And1024 = string;
@@ -3011,6 +3103,30 @@ declare namespace ApiGatewayV2 {
   export type StringWithLengthBetween1And256 = string;
   export type StringWithLengthBetween1And512 = string;
   export type StringWithLengthBetween1And64 = string;
+  export type StringWithLengthBetween1And1600 = string;
+  export interface TagResourceRequest {
+    /**
+     * AWS resource arn 
+     */
+    ResourceArn: __string;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
+  }
+  export interface TagResourceResponse {
+  }
+  export type Tags = {[key: string]: StringWithLengthBetween1And1600};
+  export interface UntagResourceRequest {
+    /**
+     * AWS resource arn 
+     */
+    ResourceArn: __string;
+    /**
+     * The Tag keys to delete
+     */
+    TagKeys: __listOf__string;
+  }
   export type TemplateMap = {[key: string]: StringWithLengthBetween0And32K};
   export interface UpdateApiMappingRequest {
     /**
@@ -3130,6 +3246,10 @@ declare namespace ApiGatewayV2 {
  API import.
      */
     Warnings?: __listOf__string;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface UpdateAuthorizerRequest {
     /**
@@ -3336,6 +3456,10 @@ declare namespace ApiGatewayV2 {
      * The domain name configurations.
      */
     DomainNameConfigurations?: DomainNameConfigurations;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export interface UpdateIntegrationRequest {
     /**
@@ -3987,6 +4111,10 @@ declare namespace ApiGatewayV2 {
  [A-Za-z0-9-._~:/?#&=,]+.
      */
     StageVariables?: StageVariablesMap;
+    /**
+     * The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with aws:. The tag value can be up to 256 characters..
+     */
+    Tags?: Tags;
   }
   export type UriWithLengthBetween1And2048 = string;
   export type __boolean = boolean;
@@ -4005,6 +4133,7 @@ declare namespace ApiGatewayV2 {
   export type __listOfStage = Stage[];
   export type __listOf__string = __string[];
   export type __string = string;
+  export type __mapOf__string = {[key: string]: __string};
   export type __timestampIso8601 = Date;
   /**
    * A string in YYYY-MM-DD format that represents the latest possible API version that can be used in this service. Specify 'latest' to use the latest possible version.

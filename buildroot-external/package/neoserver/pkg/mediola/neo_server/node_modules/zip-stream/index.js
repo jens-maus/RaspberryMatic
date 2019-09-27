@@ -151,7 +151,7 @@ ZipStream.prototype.entry = function(source, data, callback) {
   }
 
   if (data.type === 'symlink' && typeof data.linkname === 'string') {
-    source = new Buffer(data.linkname);
+    source = Buffer.from(data.linkname);
   }
 
   return ZipArchiveOutputStream.prototype.entry.call(this, entry, source, callback);

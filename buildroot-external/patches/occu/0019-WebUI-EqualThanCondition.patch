@@ -21,13 +21,6 @@
                      sRet = sRet#' '#sCT;
                    }
                    boolean bAction = ( oLV.ValueSubType() == istAction );
-@@ -1219,4 +1224,4 @@
-   {
-     system.SetSessionVar("sessionSNVPRG","1");
-   }
--}
-\ No newline at end of file
-+}
 --- occu/WebUI/www/rega/esp/sico.inc.orig
 +++ occu/WebUI/www/rega/esp/sico.inc
 @@ -324,7 +324,7 @@

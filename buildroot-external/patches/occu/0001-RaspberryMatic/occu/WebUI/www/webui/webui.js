@@ -19359,7 +19359,7 @@ homematic.com =
     var script = document.createElement("script");
     script.id = "homematic_com_script";
     script.type = "text/javascript";
-    script.src = "https://raspberrymatic.de/LATEST-VERSION.js?v=" + WEBUI_VERSION + "&ts=" + Date.now();
+    script.src = "https://raspberrymatic.de/LATEST-VERSION.js?v=" + WEBUI_VERSION;
     $("body").appendChild(script);
   },
 

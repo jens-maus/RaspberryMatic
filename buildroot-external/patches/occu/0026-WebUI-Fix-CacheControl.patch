@@ -17,6 +17,115 @@
    } "_empty_"  
    puts ""
    cgi_javascript {
+--- occu/WebUI/www/config/ic_common.tcl.orig
++++ occu/WebUI/www/config/ic_common.tcl
+@@ -473,7 +473,6 @@
+ 
+   html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"de\" lang=\"de\" {
+     head {
+-      put_meta_nocache
+       puts "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" />"
+       title "$HTMLTITLE - Geräteparameter"
+ 
+@@ -567,7 +566,6 @@
+ 
+   html {
+     head {
+-      put_meta_nocache
+     }
+     body {
+       if { ![catch { xmlrpc $url activateLinkParamset [list string $address] [list string $ps_id] [list bool $long_push] } ] } then {
+@@ -692,7 +690,6 @@
+ 
+     html {
+       head {
+-        put_meta_nocache
+       }
+       body {
+         if {$ret == "1"} then {
+@@ -710,7 +707,6 @@
+ 
+     html {
+       head {
+-        put_meta_nocache
+       }
+       body {
+         if {$ret == "1"} then {
+@@ -731,7 +727,6 @@
+ 
+   html {
+     head {
+-      put_meta_nocache
+       puts "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">"
+       title "$HTMLTITLE - Profil nicht gefunden"
+     }
+@@ -749,7 +744,6 @@
+ 
+   html {
+     head {
+-      put_meta_nocache
+       puts "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">"
+       title "$HTMLTITLE - Profil nicht gefunden"
+     }
+@@ -1722,12 +1716,6 @@
+   return [get_Pulse2 arr $id $ps($pname) $dev_address pulse $extraparam]
+ }
+ 
+-proc put_meta_nocache {} {
+-  puts "<meta http-equiv=\"cache-control\" content=\"no-cache\" />"
+-  puts "<meta http-equiv=\"pragma\"        content=\"no-cache\" />"
+-  puts "<meta http-equiv=\"expires\"       content=\"0\" />"
+-}
+-
+ proc get_InputElem {name id ps_arr pname {extraparam ""}} {
+   
+   upvar $ps_arr ps
+--- occu/WebUI/www/config/ic_ifacecmd.cgi.orig
++++ occu/WebUI/www/config/ic_ifacecmd.cgi
+@@ -718,7 +718,6 @@
+ 
+     html {
+       head {
+-        put_meta_nocache
+         puts "<title>response of request with command: $cmd</title>"
+       }
+       body {
+--- occu/WebUI/www/rega/index.htm.orig
++++ occu/WebUI/www/rega/index.htm
+@@ -4,9 +4,6 @@
+ 
+   <meta http-equiv="Content-Language" content="de">
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+-  <meta http-equiv="cache-control" content="no-cache">
+-  <meta http-equiv="pragma"        content="no-cache">
+-  <meta http-equiv="expires"       content="0">
+ 
+ <%
+ 
+--- occu/WebUI/www/rega/pages/index.htm.orig
++++ occu/WebUI/www/rega/pages/index.htm
+@@ -6,9 +6,6 @@
+   <% Call("/esp/system.fn::CheckUserFavorite()"); %>
+   <meta http-equiv="Content-Language" content="de">
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+-  <meta http-equiv="cache-control" content="no-cache">
+-  <meta http-equiv="pragma"        content="no-cache">
+-  <meta http-equiv="expires"       content="0">
+ 
+   <link rel="shortcut icon" href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon"/>
+   <link rel="icon"          href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon" />
+--- occu/WebUI/www/tools/designer.html.orig
++++ occu/WebUI/www/tools/designer.html
+@@ -2,9 +2,6 @@
+ <html>
+ <head>
+ <title>HomeMatic-Highlighting-Editor</title>
+-<meta http-equiv="cache-control" content="no-cache" />
+-<meta http-equiv="pragma"        content="no-cache" />
+-<meta http-equiv="expires"       content="0" />
+ <script type="text/javascript" src="/webui/js/extern/prototype.js"></script>
+ <script type="text/javascript" src="/webui/js/extern/wz_jsgraphics.js"></script>
+ <script type="text/javascript" src="/tools/js/ic_gd.js"></script>
 --- occu/WebUI/www/tools/js/common/httploader.js.orig
 +++ occu/WebUI/www/tools/js/common/httploader.js
 @@ -12,21 +12,10 @@

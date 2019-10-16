@@ -45,6 +45,9 @@ install_lighttpd_arch:
 	cp -R $(OCCU_ARCH)/packages/lighttpd/etc/lighttpd/conf.d $(TARGET_DIR)/etc/lighttpd/
 	cp -a $(OCCU_ARCH)/packages/lighttpd/etc/lighttpd/lighttpd.conf $(TARGET_DIR)/etc/lighttpd/
 	cp -a $(OCCU_ARCH)/packages/lighttpd/etc/lighttpd/modules.conf $(TARGET_DIR)/etc/lighttpd/
+	rm -f $(TARGET_DIR)/etc/lighttpd/conf.d/global.conf
+	rm -f $(TARGET_DIR)/etc/lighttpd/conf.d/headers.conf
+	chmod 644 $(TARGET_DIR)/etc/lighttpd/conf.d/*
 
 install_hmserver:
 	mkdir -p $(TARGET_DIR)/opt/HMServer

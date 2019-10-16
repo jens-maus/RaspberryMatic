@@ -1,207 +1,88 @@
---- occu/WebUI/www/error/error-500.html.orig
-+++ occu/WebUI/www/error/error-500.html
-@@ -9,10 +9,10 @@
-     }
-       
-   </style>
--    <script type="text/javascript" src="/webui/js/extern/jquery.js?_version_=2.0pre1"></script>
--    <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js?_version_=2.0pre1"></script>
--    <script type="text/javascript" src="/webui/js/lang/loadTextResource.js"></script>
--    <script type="text/javascript" src="/webui/js/lang/translate.js"></script>
-+    <script type="text/javascript" src="/webui/js/extern/jquery.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/lang/loadTextResource.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/lang/translate.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
- 
-     <!--
-     <script type="text/javascript" src="/webui/js/lang/translate.lang.js?_version_=2.0pre1"></script>
---- occu/WebUI/www/error/error-503.html.orig
-+++ occu/WebUI/www/error/error-503.html
-@@ -9,10 +9,10 @@
-     }
-       
-   </style>
--    <script type="text/javascript" src="/webui/js/extern/jquery.js?_version_=2.0pre1"></script>
--    <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js?_version_=2.0pre1"></script>
--    <script type="text/javascript" src="/webui/js/lang/loadTextResource.js"></script>
--    <script type="text/javascript" src="/webui/js/lang/translate.js"></script>
-+    <script type="text/javascript" src="/webui/js/extern/jquery.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/lang/loadTextResource.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/lang/translate.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-   <script type="text/javascript">
- 
-     CHECK_INTERVAL = 3000;  // Intervall, in dem geprüft wird, ob der ReGa Webserver aktiv ist
---- occu/WebUI/www/rega/login.htm.orig
-+++ occu/WebUI/www/rega/login.htm
-@@ -2,13 +2,13 @@
- <html xmlns="http://www.w3.org/1999/xhtml">
- <head>
+--- occu/WebUI/www/config/cp_maintenance.cgi.orig
++++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -250,16 +250,6 @@
+     <p class="CLASS20914">
+     ${dialogSettingsCMDialogPerformSoftwareUpdateP1}
+     </p>
+-    <p class="CLASS20914">
+-      ${dialogSettingsCMDialogPerformSoftwareUpdateP2}
+-      <ol class="CLASS20915">
+-        <li>${dialogSettingsCMDialogPerformSoftwareUpdateLi1}</li>
+-        <li>
+-        ${dialogSettingsCMDialogPerformSoftwareUpdateLi2}
+-        </li>
+-        <li>${dialogSettingsCMDialogPerformSoftwareUpdateLi3}</li>
+-      </ol>
+-    </p>
+   } "_empty_"  
+   puts ""
+   cgi_javascript {
+--- occu/WebUI/www/tools/js/common/httploader.js.orig
++++ occu/WebUI/www/tools/js/common/httploader.js
+@@ -12,21 +12,10 @@
+   /*####################*/
    
--<link rel="stylesheet" type="text/css" href="/webui/style.cgi?_version_=1.509pre1" />
--    <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
--    <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js"></script>
--    <script type="text/javascript" src="/webui/js/extern/prototype.js"></script>
-+<link rel="stylesheet" type="text/css" href="/webui/style.cgi?_version_=XXX-WEBUI-VERSION-XXX" />
-+    <script type="text/javascript" src="/webui/js/extern/jquery.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/extern/prototype.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
- 
--    <script type="text/javascript" src="/webui/js/lang/loadTextResource.js"></script>
--    <script type="text/javascript" src="/webui/js/lang/translate.js"></script>
-+    <script type="text/javascript" src="/webui/js/lang/loadTextResource.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/lang/translate.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
- 
-   <!--
-     <script type="text/javascript" src="/webui/js/lang/translate.lang.js"></script>
---- occu/WebUI/www/rega/logout.htm.orig
-+++ occu/WebUI/www/rega/logout.htm
-@@ -1,13 +1,13 @@
- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
- <html xmlns="http://www.w3.org/1999/xhtml">
- <head>
--  <link rel="stylesheet" type="text/css" href="/webui/style.cgi?_version_=1.509pre1" />
-+  <link rel="stylesheet" type="text/css" href="/webui/style.cgi?_version_=XXX-WEBUI-VERSION-XXX" />
- 
--    <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
--    <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js"></script>
--    <script type="text/javascript" src="/webui/js/extern/prototype.js"></script>
--    <script type="text/javascript" src="/webui/js/lang/loadTextResource.js"></script>
--    <script type="text/javascript" src="/webui/js/lang/translate.js"></script>
-+    <script type="text/javascript" src="/webui/js/extern/jquery.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/extern/prototype.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/lang/loadTextResource.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+    <script type="text/javascript" src="/webui/js/lang/translate.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
- 
-   <!--
-     <script type="text/javascript" src="/webui/js/lang/translate.lang.js"></script>
---- occu/WebUI/www/rega/pages/index.htm.orig
-+++ occu/WebUI/www/rega/pages/index.htm
-@@ -15,54 +15,54 @@
-   <link rel="shortcut icon" href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon"/>
-   <link rel="icon"          href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon" />
-   
--  <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css" />
--  <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css" />
--  <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.jqplot.css" />
--  <link rel="stylesheet" type="text/css" href="/webui/css/extern/msdropdown/dd.css" />
--  <link rel="stylesheet" type="text/css" href="/webui/css/extern/spectrum.css" />
--  <link id="idCss" rel="stylesheet" type="text/css" href="/webui/style.cgi" />
-+  <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css?_version_=XXX-WEBUI-VERSION-XXX" />
-+  <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css?_version_=XXX-WEBUI-VERSION-XXX" />
-+  <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.jqplot.css?_version_=XXX-WEBUI-VERSION-XXX" />
-+  <link rel="stylesheet" type="text/css" href="/webui/css/extern/msdropdown/dd.css?_version_=XXX-WEBUI-VERSION-XXX" />
-+  <link rel="stylesheet" type="text/css" href="/webui/css/extern/spectrum.css?_version_=XXX-WEBUI-VERSION-XXX" />
-+  <link id="idCss" rel="stylesheet" type="text/css" href="/webui/style.cgi?_version_=XXX-WEBUI-VERSION-XXX" />
- 
-   <title>HomeMatic WebUI</title>
- 
-   
--  <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/jquery.powertip.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/jquery.blockUI.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/jquery.form.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/prototype.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/scriptaculous.js?load=builder,effects,dragdrop,slider"></script>
--  <script type="text/javascript" src="/webui/js/extern/wz_jsgraphics.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/template.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/nfs_datepicker.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/sliderControl.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/jquery.jqplot.min.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/jquery.dd.min.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/jqplot.barRenderer.min.js"></script>  
--  <script type="text/javascript" src="/webui/js/extern/jqplot.dateAxisRenderer.min.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/jqplot.categoryAxisRenderer.min.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/jqplot.canvasAxisTickRenderer.min.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/jqplot.canvasTextRenderer.min.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/jqplot.cursor.min.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/jqplot.enhancedLegendRenderer.min.js"></script>
--  <script type="text/javascript" src="/webui/js/lang/loadTextResource.js"></script>
--  <script type="text/javascript" src="/webui/js/lang/translate.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/knockout.js"></script>
--  <script type="text/javascript" src="/webui/js/common/viewmodels.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/json2min.js"></script>
--  <script type="text/javascript" src="/webui/js/extern/spectrum.js"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jquery.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jquery.powertip.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jquery.blockUI.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jquery.form.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/prototype.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/scriptaculous.js?load=builder,effects,dragdrop,slider&_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/wz_jsgraphics.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/template.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/nfs_datepicker.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/sliderControl.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jquery.jqplot.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jquery.dd.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jqplot.barRenderer.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>  
-+  <script type="text/javascript" src="/webui/js/extern/jqplot.dateAxisRenderer.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jqplot.categoryAxisRenderer.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jqplot.canvasAxisTickRenderer.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jqplot.canvasTextRenderer.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jqplot.cursor.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/jqplot.enhancedLegendRenderer.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/lang/loadTextResource.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/lang/translate.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/knockout.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/common/viewmodels.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/json2min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script type="text/javascript" src="/webui/js/extern/spectrum.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
- 
- 
- 
- 
--  <link href="/webui/css/extern/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css">
--  <link href="/webui/css/extern/smoothness/jquery.ui.timepicker.css?v=0.3.2" rel="stylesheet" type="text/css" />
--  <script src="/webui/js/extern/jquery-ui.min.js"></script>
--  <script src="/webui/js/extern/jquery.ui.timepicker.js"></script>
-+  <link href="/webui/css/extern/smoothness/jquery-ui.min.css?_version_=XXX-WEBUI-VERSION-XXX" rel="stylesheet" type="text/css">
-+  <link href="/webui/css/extern/smoothness/jquery.ui.timepicker.css??_version_=XXX-WEBUI-VERSION-XXX" rel="stylesheet" type="text/css" />
-+  <script src="/webui/js/extern/jquery-ui.min.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-+  <script src="/webui/js/extern/jquery.ui.timepicker.js?_version_=XXX-WEBUI-VERSION-XXX"></script>
-   
-   
-   <!--[if IE 9]><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" /><![endif]-->
--  <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="/webui/js/extern/excanvas.js"></script><![endif]-->
-+  <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="/webui/js/extern/excanvas.js?_version_=XXX-WEBUI-VERSION-XXX"></script><![endif]-->
-   
-   <script type="text/javascript">
-   
-@@ -71,7 +71,7 @@
-     /*########################################################################*/
- 
-     PLATFORM = "Central";
--    WEBUI_VERSION = "3.45.7"
-+    WEBUI_VERSION = "XXX-WEBUI-VERSION-XXX";
-   
-     /**
-      * Flags
-@@ -202,6 +202,6 @@
-       </div>
-     </div>
-   </div>
--  <script type="text/javascript" src="/webui/webui.js?_version_=2.0pre1" ></script>
-+  <script type="text/javascript" src="/webui/webui.js?_version_=XXX-WEBUI-VERSION-XXX" ></script>
- </body>
- </html>
+   /**
+-   * Hängt die Version der HomeMatic WebUI an eine URL an,
+-   * um Probleme mit dem Browsercache zu umgehen.
+-   **/
+-  var addVersion = function(url)
+-  {
+-    if (0 <= url.indexOf("?")) { return url + "&_version_=" + WEBUI_VERSION; }
+-    else                       { return url + "?_version_=" + WEBUI_VERSION; }
+-  };
+-  
+-  /**
+    * Lädt synchron Daten und gibt das XMLHttpRequest-Objekt zurück.
+    **/
+   var load = function(method, url, data)
+   {
+-    url = addVersion(url);
+     var xhr = XMLHttpRequest_create();
+     
+     if (null !== xhr)
 --- occu/WebUI/www/webui/js/lang/loadTextResource.js.orig
 +++ occu/WebUI/www/webui/js/lang/loadTextResource.js
-@@ -120,7 +120,7 @@
- 
-   jQuery.each(arResource, function(index, res){
-     var request = jQuery.ajax({
--      url: url + res,
-+      url: url + res + "?_version_=XXX-WEBUI-VERSION-XXX",
+@@ -123,9 +123,7 @@
+       url: url + res,
        type:  "GET",
        async: false,
-       contentType: "application/x-www-form-urlencoded;charset=ISO-8859-1",
-@@ -137,4 +137,4 @@
-   });
- };
+-      contentType: "application/x-www-form-urlencoded;charset=ISO-8859-1",
+-      dataType: "script",
+-      cache: false
++      contentType: "application/x-www-form-urlencoded;charset=ISO-8859-1"
+     });
  
--loadTextResource();
-\ No newline at end of file
-+loadTextResource();
+     request.done(function(result) {
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -5782,21 +5782,10 @@
+   /*####################*/
+   
+   /**
+-   * Hängt die Version der HomeMatic WebUI an eine URL an,
+-   * um Probleme mit dem Browsercache zu umgehen.
+-   **/
+-  var addVersion = function(url)
+-  {
+-    if (0 <= url.indexOf("?")) { return url + "&_version_=" + WEBUI_VERSION; }
+-    else                       { return url + "?_version_=" + WEBUI_VERSION; }
+-  };
+-  
+-  /**
+    * Lädt synchron Daten und gibt das XMLHttpRequest-Objekt zurück.
+    **/
+   var load = function(method, url, data)
+   {
+-    url = addVersion(url);
+     var xhr = XMLHttpRequest_create();
+     
+     if (null !== xhr)
+@@ -17643,7 +17632,6 @@
+     url: "/ise/htm/header.htm",
+     dataType: "html",
+     async: false,
+-    cache: false,
+     context: document.body
+     }).done(function(response) {
+       jQuery("#header").html(response);

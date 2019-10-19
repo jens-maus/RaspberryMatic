@@ -271,7 +271,7 @@ fwinstall()
       echo -ne "found ($(basename ${ext4_file})), "
 
       # find out the rootfs device node
-      ROOTFS_DEV=$(/sbin/blkid | grep rootfs | cut -f1 -d:)
+      ROOTFS_DEV=$(/sbin/blkid --label rootfs)
       if [[ -z "${ROOTFS_DEV}" ]]; then
         echo "ERROR: (blkid)<br/>"
         exit 1
@@ -375,7 +375,7 @@ fwinstall()
       echo -ne "found ($(basename ${vfat_file})), "
 
       # find out the bootfs device node
-      BOOTFS_DEV=$(/sbin/blkid | grep bootfs | cut -f1 -d:)
+      BOOTFS_DEV=$(/sbin/blkid --label bootfs)
       if [[ -z "${BOOTFS_DEV}" ]]; then
         echo "ERROR: (blkid)<br/>"
         exit 1
@@ -596,9 +596,9 @@ fwinstall()
       # on the tinkerboard platform we have to check if we can
       # update U-Boot as well.
       if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]]; then
-        BOOTFS_ROOTDEV=$(/sbin/blkid | grep -v "${LOFS_DEV}" | grep PTTYPE | cut -f1 -d:)
+        BOOTFS_ROOTDEV="/dev/$(basename $(dirname $(readlink /sys/class/block/${BOOTFS_DEV#/dev/})))"
         BOOTFS_START=$(/sbin/fdisk -l ${BOOTFS_ROOTDEV} | grep FAT32 | head -1 | awk '{ printf $3 }')
-        BOOTFS_LOOPROOTDEV=$(/sbin/blkid | egrep "${LOFS_DEV}.*PTTYPE" | cut -f1 -d:)
+        BOOTFS_LOOPROOTDEV=${LOFS_DEV}
         BOOTFS_LOOPSTART=$(/sbin/fdisk -l ${BOOTFS_LOOPROOTDEV} | grep FAT32 | head -1 | awk '{ printf $3 }')
         echo -ne "updating U-Boot..."
         if [[ "${BOOTFS_START}" == "${BOOTFS_LOOPSTART}" ]] && [[ "${BOOTFS_LOOPSTART}" == "2048" ]]; then

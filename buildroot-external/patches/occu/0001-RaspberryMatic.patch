@@ -492,9 +492,9 @@
              <td style="padding-right:63px;"><div class="clickable" onclick="loadHelp();"><img id="idHelp" src="/ise/img/help.png" width="48px" height="48px" alt="Hilfe" title="Hilfe"/></div></td>
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
-@@ -12,8 +12,8 @@
-   <meta http-equiv="Expires" content="01 Jan 2015 00:00:00 GMT" />
-   <!-- <meta http-equiv="X-UA-Compatible" content="IE=8"> -->
+@@ -10,8 +10,8 @@
+   <meta http-equiv="pragma"        content="no-cache">
+   <meta http-equiv="expires"       content="0">
  
 -  <link rel="shortcut icon" href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon"/>
 -  <link rel="icon"          href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon" />
@@ -503,7 +503,16 @@
    
    <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css" />
    <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css" />
-@@ -195,7 +195,7 @@
+@@ -69,7 +69,7 @@
+     /*########################################################################*/
+ 
+     PLATFORM = "Central";
+-    WEBUI_VERSION = "3.45.7"
++    WEBUI_VERSION = "XXX-WEBUI-VERSION-XXX";
+   
+     /**
+      * Flags
+@@ -193,7 +193,7 @@
    <div id="webuiloader_wrapper">
      <div id="webuiloader_background">
        <div id="webuiloader">
@@ -586,7 +595,7 @@
      script.id = "homematic_com_script";
      script.type = "text/javascript";
 -    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product="+this.m_product+"&serial=" + serial;
-+    script.src = "https://raspberrymatic.de/LATEST-VERSION.js?v=" + WEBUI_VERSION + "&ts=" + Date.now();
++    script.src = "https://raspberrymatic.de/LATEST-VERSION.js?v=" + WEBUI_VERSION;
      $("body").appendChild(script);
    },
  

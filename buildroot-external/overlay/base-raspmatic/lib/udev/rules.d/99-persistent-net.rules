@@ -1,0 +1,2 @@
+# 03:00.0 Ethernet controller: VMware VMXNET3 Ethernet Controller (rev 01)
+ACTION=="add", SUBSYSTEM=="net", KERNELS=="0000:03:00.0", NAME:="eth0"

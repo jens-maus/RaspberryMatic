@@ -46,8 +46,9 @@ init_system() {
     /sbin/loadkmap </etc/de.kmap
   fi
 
-  # load watchdog kernel module
-  if [[ "${HM_HOST}" != "tinkerboard" ]]; then
+  # load bcm2835 watchdog kernel module if this is
+  # a raspberrypi
+  if echo "${HM_HOST}" | grep -q rpi; then
     modprobe bcm2835_wdt nowayout=1 heartbeat=15
   fi
 }

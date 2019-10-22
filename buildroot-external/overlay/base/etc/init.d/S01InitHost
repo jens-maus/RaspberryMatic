@@ -53,6 +53,15 @@ identify_host() {
     ;;
   esac
 
+  # find out if we are in a virtual environment so that
+  # we can identify the ova platform
+  if [[ -z "${HM_HOST}" ]]; then
+    hypervisor=$(/usr/bin/lscpu | grep 'Hypervisor vendor:' | awk '{print $3}')
+    if [[ -n "${hypervisor}" ]]; then
+      HM_HOST="ova-${hypervisor}"
+    fi
+  fi
+
   # if HOST is still empty we fall back to RaspberryPi3
   if [[ -z "${HM_HOST}" ]]; then
     HM_HOST="rpi3"
@@ -89,6 +98,11 @@ identify_host() {
       HM_LED_GREEN="/sys/class/leds/act-led"
       HM_LED_RED="/sys/class/leds/pwr-led"
       HM_LED_YELLOW="/sys/class/leds/heartbeat-led"
+    ;;
+
+    # Open Virtual Appliance (ova)
+    ova*)
+      # fine
     ;;
 
     *)

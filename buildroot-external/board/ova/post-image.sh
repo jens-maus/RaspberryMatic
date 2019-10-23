@@ -20,13 +20,8 @@ cp ${TARGET_DIR}/boot/VERSION ${BINARIES_DIR}
 
 # prepare grub config and bootloader
 mkdir -p ${BINARIES_DIR}/boot/grub
-cat <<EOT >${BINARIES_DIR}/boot/grub/grub.cfg
-set default="0"
-set timeout="5"
-menuentry "RaspberryMatic" {
-  linux /bzImage console=tty2 root=PARTUUID=deedbeef-02 ro noswap rootfstype=ext4 elevator=deadline fsck.repair=yes vga=792 quiet loglevel=0 usb-storage.quirks=
-}
-EOT
+cp -a ${HOST_DIR}/lib/grub/i386-pc ${BINARIES_DIR}/boot/grub/
+cp -a ${BOARD_DIR}/grub.cfg ${BINARIES_DIR}/boot/grub/
 
 # create *.img file using genimage
 support/scripts/genimage.sh -c "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/genimage.cfg"

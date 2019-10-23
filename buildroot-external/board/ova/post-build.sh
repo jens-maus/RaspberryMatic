@@ -1,13 +1,13 @@
 #!/bin/sh
 
 # copy the kernel image to rootfs
-cp -a ${BINARIES_DIR}/zImage ${TARGET_DIR}/
+cp -a ${BINARIES_DIR}/bzImage ${TARGET_DIR}/zImage
 
 # create VERSION file
 VERSION=$(cat ${BR2_EXTERNAL_EQ3_PATH}/../VERSION)
 echo "VERSION=${VERSION}" >${TARGET_DIR}/VERSION
 echo "PRODUCT=${PRODUCT}" >>${TARGET_DIR}/VERSION
-echo "PLATFORM=tinkerboard" >>${TARGET_DIR}/VERSION
+echo "PLATFORM=ova" >>${TARGET_DIR}/VERSION
 
 # fix some permissions
 [ -e ${TARGET_DIR}/etc/monitrc ] && chmod 600 ${TARGET_DIR}/etc/monitrc

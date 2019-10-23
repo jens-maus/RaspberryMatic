@@ -23,8 +23,9 @@ define RECOVERY_SYSTEM_BUILD_CMDS
 endef
 
 define RECOVERY_SYSTEM_INSTALL_TARGET_CMDS
-	cp -a $(@D)/output/images/rootfs.cpio.uboot $(BINARIES_DIR)/recoveryfs-initrd
-	cp -a $(@D)/output/images/zImage $(BINARIES_DIR)/recoveryfs-zImage
+	test -f $(@D)/output/images/rootfs.cpio.uboot && cp -a $(@D)/output/images/rootfs.cpio.uboot $(BINARIES_DIR)/recoveryfs-initrd || cp -a $(@D)/output/images/rootfs.cpio.lz4 $(BINARIES_DIR)/recoveryfs-initrd
+	test -f $(@D)/output/images/bzImage && cp -a $(@D)/output/images/bzImage $(BINARIES_DIR)/recoveryfs-zImage || true
+	test -f $(@D)/output/images/zImage && cp -a $(@D)/output/images/zImage $(BINARIES_DIR)/recoveryfs-zImage || true
 endef
 
 $(eval $(generic-package))

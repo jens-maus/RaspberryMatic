@@ -20,7 +20,6 @@ cp ${TARGET_DIR}/boot/VERSION ${BINARIES_DIR}
 
 # prepare grub config and bootloader
 mkdir -p ${BINARIES_DIR}/boot/grub
-cp -a ${HOST_DIR}/lib/grub/i386-pc ${BINARIES_DIR}/boot/grub/
 cp -a ${BOARD_DIR}/grub.cfg ${BINARIES_DIR}/boot/grub/
 
 # create *.img file using genimage

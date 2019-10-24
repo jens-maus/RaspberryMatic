@@ -82,7 +82,12 @@ identify_rf_hardware() {
   if lsusb | grep -q 0403:6f70; then
     if [[ -c /dev/raw-uart1 ]]; then
       HM_HOST_GPIO_UART="/dev/raw-uart1"
+    elif [[ -c /dev/raw-uart ]]; then
+      HM_HOST_GPIO_UART="/dev/raw-uart"
     fi
+    echo -n "HB-RF-USB, "
+    HM_HMRF_DEV="RPI-RF-MOD"
+    HM_HMIP_DEV="RPI-RF-MOD"
   fi
 
   # check if we should boot in LAN gateway mode
@@ -116,8 +121,11 @@ init_rf_hardware() {
 
     # if we are using a HB-RF-USB with raw uart we make sure to
     # reset the rf module using the provided sysfs link.
-    if [[ "${HM_HOST_GPIO_UART}" == "/dev/raw-uart1" ]]; then
-      echo 1 >/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module
+    if lsusb | grep -q 0403:6f70; then
+      # only reset if we are not in an ova environment
+      if ! echo "${HM_HOST}" | grep -q ova-; then
+        echo 1 >/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module
+      fi
     else
       # identify which GPIO reset pin to drive
       if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||

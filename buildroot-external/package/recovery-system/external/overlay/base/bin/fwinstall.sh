@@ -95,7 +95,7 @@ fwprepare()
 
   # check for .img
   if [ -z "${FILETYPE}" ]; then
-    /usr/bin/file -b ${filename} | egrep -q "DOS/MBR boot sector.*partition 3"
+    /usr/bin/file -b ${filename} | egrep -q "DOS/MBR boot sector.*"
     if [ $? -eq 0 ]; then
       echo -ne "sdcard img identified, validating, "
 

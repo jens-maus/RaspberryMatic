@@ -37,7 +37,7 @@
 +
 +    # check for .img
 +    if {$file_invalid != 0} {
-+      set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*partition 3"} result]
++      set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*"} result]
 +      if {$file_invalid == 0} {
 +        # the file seems to be a full-fledged SD card image with MBR boot sector, etc. so lets
 +        # check if we have exactly 3 partitions

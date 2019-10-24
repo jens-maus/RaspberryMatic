@@ -81,7 +81,7 @@ start() {
   # to ensure that others are killed first in case of low memory situations
   echo -900 >/proc/$$/oom_score_adj
 
-  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Xmx128m -Dos.arch=arm -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts=${HM_SERVER_DEVNODE} -jar ${HM_SERVER} ${HM_SERVER_ARGS}
+  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Xmx128m -Dos.arch=$(uname -m) -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts=${HM_SERVER_DEVNODE} -jar ${HM_SERVER} ${HM_SERVER_ARGS}
   echo -n "."
   waitStartupComplete
 }

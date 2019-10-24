@@ -10,7 +10,7 @@ JAVA_AZUL_VERSION = 8.40.0.178-ca-jdk1.8.0_222
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_aarch32hf.tar.gz
 JAVA_AZUL_SITE = http://cdn.azul.com/zulu-embedded/bin
 else ifeq ($(call qstrip,$(BR2_ARCH)),i686)
-JAVA_AZUL_VERSION = 8.40.0.25-ca-jdk8.0.222
+JAVA_AZUL_VERSION = 8.42.0.21-ca-jdk8.0.232
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_i686.tar.gz
 JAVA_AZUL_SITE = http://cdn.azul.com/zulu/bin
 endif

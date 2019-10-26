@@ -86,8 +86,6 @@ identify_rf_hardware() {
       HM_HOST_GPIO_UART="/dev/raw-uart"
     fi
     echo -n "HB-RF-USB, "
-    HM_HMRF_DEV="RPI-RF-MOD"
-    HM_HMIP_DEV="RPI-RF-MOD"
   fi
 
   # check if we should boot in LAN gateway mode
@@ -190,6 +188,11 @@ query_rf_parameters() {
     # use eq3configcmd to query for the default rf address and if it is empty
     # or 0x00ffff there is either no HM-MOD-RPI-PCB or it is a RPI-RF-MOD
     RF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+    if [[ -z "${RF_ADDRESS}" ]]; then
+      # sometimes we have to do a second iteration to read the default rf address as
+      # the rf module has to properly initialize first
+      RF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+    fi
     if [[ -n "${RF_ADDRESS}" ]] && [[ "${RF_ADDRESS}" != "0x00ffff" ]]; then
       RF_SGTIN=$(/bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -sg 2>&1 | sed -n 's/.*SGTIN: \([0-9A-Fa-f]\{24\}\).*/\1/p')
       RF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
@@ -211,7 +214,7 @@ query_rf_parameters() {
       # if we haven't identified a HM-MOD-RPI-PCB we try to find
       # a RPI-RF-MOD next
       if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-        if [[ "${RF_ADDRESS}" == "0x00ffff" ]]; then
+        if [[ "${RF_ADDRESS}" == "0x00ffff" ]] || lsusb | grep -q 0403:6f70; then
           HM_HMRF_DEV="RPI-RF-MOD"
         else
           HM_HMRF_DEV=
@@ -222,7 +225,7 @@ query_rf_parameters() {
       fi
 
       if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-        if [[ "${RF_ADDRESS}" == "0x00ffff" ]]; then
+        if [[ "${RF_ADDRESS}" == "0x00ffff" ]] || lsusb | grep -q 0403:6f70; then
           HM_HMIP_DEV="RPI-RF-MOD"
         else
           HM_HMIP_DEV=

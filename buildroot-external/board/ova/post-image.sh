@@ -26,7 +26,7 @@ cp -a ${BOARD_DIR}/grub.cfg ${BINARIES_DIR}/boot/grub/
 support/scripts/genimage.sh -c "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/genimage.cfg"
 
 # lets create vmdk/vhdx/vdi files
-${HOST_DIR}/bin/qemu-img convert -O vmdk ${BINARIES_DIR}/sdcard.img ${BINARIES_DIR}/sdcard.vmdk
+${HOST_DIR}/bin/qemu-img convert -O vmdk -o subformat=streamOptimized ${BINARIES_DIR}/sdcard.img ${BINARIES_DIR}/sdcard.vmdk
 ${HOST_DIR}/bin/qemu-img convert -O vhdx ${BINARIES_DIR}/sdcard.img ${BINARIES_DIR}/sdcard.vhdx
 ${HOST_DIR}/bin/qemu-img convert -O vdi ${BINARIES_DIR}/sdcard.img ${BINARIES_DIR}/sdcard.vdi
 

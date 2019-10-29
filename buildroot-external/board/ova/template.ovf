@@ -76,11 +76,20 @@
             <ovf:Info>Extra Virtual Machine Configuration in VirtualBoxFormat</ovf:Info>
             <Hardware>
                 <CPU count="2"></CPU>
-                <BIOS></BIOS>
+                <BIOS>
+                  <IOAPIC enabled="true"/>
+                </BIOS>
                 <Memory RAMSize="2048" />
+                <Display VRAMSize="10"/>
+                <USB>
+                  <Controllers>
+                    <Controller name="OHCI" type="OHCI"/>
+                    <Controller name="EHCI" type="EHCI"/>
+                  </Controllers>
+                </USB>
                 <Network>
-                    <Adapter slot="0" enabled="true" type="82540EM">
-                        <NAT />
+                    <Adapter slot="0" enabled="true" cable="true" type="82540EM">
+                        <BridgedInterface />
                     </Adapter>
                     <Adapter slot="1" type="82540EM" />
                     <Adapter slot="2" type="82540EM" />
@@ -89,7 +98,9 @@
                     <Adapter slot="5" type="82540EM" />
                     <Adapter slot="6" type="82540EM" />
                     <Adapter slot="7" type="82540EM" />
-                </Network>
+                 </Network>
+                 <AudioAdapter driver="Null" enabled="false"/>
+                 <RTC localOrUTC="UTC"/>
             </Hardware>
             <StorageControllers>
                 <StorageController name="SATA Controller" type="AHCI" PortCount="1">
@@ -97,7 +108,6 @@
                         <Image uuid="{ac5660a0-9300-457e-a3e1-fd2cc60830f1}" />
                     </AttachedDevice>
                 </StorageController>
-                <StorageController name="Floppy Controller Controller" type="I82078" PortCount="1" />
             </StorageControllers>
         </vbox:Machine>
     </VirtualSystem>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ovf:Envelope ovf:version="1.0" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1" xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:vbox="http://www.virtualbox.org/ovf/machine" xmlns:vssd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData" xmlns:vmw="http://www.vmware.com/schema/ovf">
     <References>
-        <File ovf:href="sdcard.vmdk" ovf:id="RaspberryMatic" ovf:description="main vmdk disk"></File>
+        <File ovf:href="RaspberryMatic.vmdk" ovf:id="RaspberryMatic" ovf:description="main vmdk disk"></File>
     </References>
     <NetworkSection>
         <Info>List of networks</Info>
-        <Network ovf:name="NAT">
-            <Description>NAT network used by this VM</Description>
+        <Network ovf:name="Bridged">
+            <Description>Logical network used by this appliance.</Description>
         </Network>
     </NetworkSection>
     <DiskSection>
@@ -48,9 +48,9 @@
             </Item>
             <Item>
                 <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
-                <rasd:Caption>Ethernet adapter on 'NAT'</rasd:Caption>
-                <rasd:Connection>NAT</rasd:Connection>
-                <rasd:ElementName>Ethernet Adapter on 'NAT'</rasd:ElementName>
+                <rasd:Caption>Ethernet adapter</rasd:Caption>
+                <rasd:Connection>Bridged</rasd:Connection>
+                <rasd:ElementName>Ethernet Adapter</rasd:ElementName>
                 <rasd:InstanceID>4</rasd:InstanceID>
                 <rasd:ResourceSubType>E1000</rasd:ResourceSubType>
                 <rasd:ResourceType>10</rasd:ResourceType>

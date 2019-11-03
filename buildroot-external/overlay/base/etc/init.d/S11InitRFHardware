@@ -86,6 +86,27 @@ identify_rf_hardware() {
       HM_HOST_GPIO_UART="/dev/raw-uart"
     fi
     echo -n "HB-RF-USB, "
+
+    # get the RED/GREEN/BLUE pin ids
+    RED_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/$(basename ${HM_HOST_GPIO_UART})/red_gpio_pin)
+    GREEN_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/$(basename ${HM_HOST_GPIO_UART})/green_gpio_pin)
+    BLUE_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/$(basename ${HM_HOST_GPIO_UART})/blue_gpio_pin)
+
+    # load the rpi_rf_mod_led kernel module
+    modprobe rpi_rf_mod_led red_gpio_pin=${RED_GPIO_PIN} green_gpio_pin=${GREEN_GPIO_PIN} blue_gpio_pin=${BLUE_GPIO_PIN}
+
+    # load the dummy rx8130 kernel module because an RPI-RF-MOD
+    # is identified by having a rx8130 module loaded
+    modprobe dummy_rx8130
+
+    # now we have to restart hss_led because hss_led is usually started earlier
+    if [[ -f /var/run/hss_led.pid ]]; then
+      start-stop-daemon -K -q -p /var/run/hss_led.pid
+      if [[ -x /bin/hss_led ]]; then
+        sleep 2
+        start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
+      fi
+    fi
   fi
 
   # check if we should boot in LAN gateway mode

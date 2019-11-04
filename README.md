@@ -179,6 +179,7 @@ The CCU platform allows to enhance the functionality of a CCU by installing so-c
 * [Mosquitto](https://github.com/hobbyquaker/ccu-addon-mosquitto)
 * [Redis](https://github.com/hobbyquaker/ccu-addon-redis)
 * [HomeMatic Virtual Interface](https://github.com/thkl/Homematic-Virtual-Interface)
+* [ioBroker CCU Addon](https://github.com/zautrix/hm-iobroker)
 
 ## :cloud: Installation
 The installation of RaspberryMatic is quite straight forward as it is delivered as a full system image that can be directly flashed onto a microSD / eMMC and put into the corresponding SBC. As such the installation consists of the following basic steps:

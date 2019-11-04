@@ -36,7 +36,7 @@ OVADIR=$(mktemp -d)
 cp -a ${BINARIES_DIR}/sdcard.vmdk ${OVADIR}/RaspberryMatic.vmdk
 cp -a ${BOARD_DIR}/template.ovf ${OVADIR}/RaspberryMatic.ovf
 (cd ${OVADIR}; sha1sum --tag RaspberryMatic.* >RaspberryMatic.mf)
-tar -C ${OVADIR} --owner=root --group=root -cf ${BINARIES_DIR}/RaspberryMatic.ova RaspberryMatic.vmdk RaspberryMatic.ovf RaspberryMatic.mf
+tar -C ${OVADIR} --owner=root --group=root -cf ${BINARIES_DIR}/RaspberryMatic.ova RaspberryMatic.ovf RaspberryMatic.vmdk RaspberryMatic.mf
 #rm -rf ${OVADIR}
 
 exit $?

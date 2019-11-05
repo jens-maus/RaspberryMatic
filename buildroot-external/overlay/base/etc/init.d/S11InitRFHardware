@@ -94,15 +94,21 @@ identify_rf_hardware() {
 
     # make sure to unbind the gpio-leds driver first
     if [[ -e /sys/class/leds/rpi_rf_mod\:blue ]]; then
-      echo gpio-leds >/sys/bus/platform/drivers/leds-gpio/unbind
+      if [[ -e /sys/bus/platform/drivers/leds-gpio/gpio-leds ]]; then
+        GPIO_LEDS=gpio-leds
+      else
+        GPIO_LEDS=leds
+      fi
+
+      echo ${GPIO_LEDS} >/sys/bus/platform/drivers/leds-gpio/unbind
     fi
 
     # load the rpi_rf_mod_led kernel module
     modprobe rpi_rf_mod_led red_gpio_pin=${RED_GPIO_PIN} green_gpio_pin=${GREEN_GPIO_PIN} blue_gpio_pin=${BLUE_GPIO_PIN}
 
     # rebind the gpio-leds so that numeration of the rpi-rf-mod leds are correct
-    if [[ ! -e /sys/bus/platform/drivers/leds-gpio/gpio-leds ]]; then
-      echo gpio-leds >/sys/bus/platform/drivers/leds-gpio/bind
+    if [[ ! -e /sys/bus/platform/drivers/leds-gpio/${GPIO_LEDS} ]]; then
+      echo ${GPIO_LEDS} >/sys/bus/platform/drivers/leds-gpio/bind
     fi
 
     # load the dummy rx8130 kernel module because an RPI-RF-MOD

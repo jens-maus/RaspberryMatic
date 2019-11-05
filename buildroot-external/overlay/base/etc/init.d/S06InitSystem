@@ -89,6 +89,21 @@ init_system() {
 
   # load tunneling interface support
   modprobe tun
+
+  # on a virtual ova platform system we put diagrams on the
+  # same disk in the old /usr/local/sdcard directory path and
+  # don't force to use an external USB thumb drive.
+  if echo "${HM_HOST}" | grep -q ova-; then
+    if [[ ! -e /usr/local/sdcard/.nobackup ]]; then
+      mkdir -p /usr/local/sdcard
+      touch /usr/local/sdcard/.nobackup
+    fi
+    ln -sf /usr/local/sdcard /media/usb0
+    touch /var/status/USBinitialised
+    touch /var/status/hasUSB
+    touch /var/status/SDinitialised
+    touch /var/status/hasSD
+  fi
 }
 
 start() {

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ovf:Envelope ovf:version="1.0" xmlns:ovf="http://schemas.dmtf.org/ovf/envelope/1" xmlns:rasd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_ResourceAllocationSettingData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:vbox="http://www.virtualbox.org/ovf/machine" xmlns:vssd="http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_VirtualSystemSettingData" xmlns:vmw="http://www.vmware.com/schema/ovf">
+    <References>
+        <File ovf:href="RaspberryMatic.vmdk" ovf:id="RaspberryMatic" ovf:description="main vmdk disk"></File>
+    </References>
+    <NetworkSection>
+        <Info>List of networks</Info>
+        <Network ovf:name="Bridged">
+            <Description>Logical network used by this appliance.</Description>
+        </Network>
+    </NetworkSection>
+    <DiskSection>
+        <Info>List of Virtual Disks</Info>
+        <Disk ovf:diskId="vmdisk0" ovf:capacity="64" ovf:capacityAllocationUnits="byte * 2^30" ovf:fileRef="RaspberryMatic" ovf:format="http://www.vmware.com/interfaces/specifications/vmdk.html#streamOptimized" ovf:disk-type="System" ovf:boot="True" vbox:uuid="ac5660a0-9300-457e-a3e1-fd2cc60830f1"></Disk>
+    </DiskSection>
+    <VirtualSystem ovf:id="RaspberryMatic">
+        <Info>RaspberryMatic</Info>
+        <Name>RaspberryMatic</Name>
+        <OperatingSystemSection ovf:id="36" vmw:osType="other4xLinuxGuest" ovf:required="false">
+            <Info>The kind of operating system contained in this VM</Info>
+            <Description>Linux</Description>
+        </OperatingSystemSection>
+        <VirtualHardwareSection>
+            <Info>2 CPU, 2048 Memory</Info>
+            <Item>
+                <rasd:Caption>2 virtual cpu</rasd:Caption>
+                <rasd:Description>Number of virtual CPU</rasd:Description>
+                <rasd:InstanceID>1</rasd:InstanceID>
+                <rasd:ResourceType>3</rasd:ResourceType>
+                <rasd:VirtualQuantity>2</rasd:VirtualQuantity>
+            </Item>
+            <Item>
+                <rasd:AllocationUnits>byte * 2^20</rasd:AllocationUnits>
+                <rasd:Caption>2048 MB of memory</rasd:Caption>
+                <rasd:Description>Memory Size</rasd:Description>
+                <rasd:InstanceID>2</rasd:InstanceID>
+                <rasd:ResourceType>4</rasd:ResourceType>
+                <rasd:VirtualQuantity>2048</rasd:VirtualQuantity>
+            </Item>
+            <Item>
+                <rasd:Address>0</rasd:Address>
+                <rasd:Caption>sataController0</rasd:Caption>
+                <rasd:Description>SATA Controller</rasd:Description>
+                <rasd:ElementName>sataController0</rasd:ElementName>
+                <rasd:InstanceID>3</rasd:InstanceID>
+                <rasd:ResourceSubType>AHCI</rasd:ResourceSubType>
+                <rasd:ResourceType>20</rasd:ResourceType>
+            </Item>
+            <Item>
+                <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+                <rasd:Caption>Ethernet adapter</rasd:Caption>
+                <rasd:Connection>Bridged</rasd:Connection>
+                <rasd:ElementName>Ethernet Adapter</rasd:ElementName>
+                <rasd:InstanceID>4</rasd:InstanceID>
+                <rasd:ResourceSubType>E1000</rasd:ResourceSubType>
+                <rasd:ResourceType>10</rasd:ResourceType>
+            </Item>
+            <Item>
+                <rasd:AddressOnParent>0</rasd:AddressOnParent>
+                <rasd:ElementName>Drive 0</rasd:ElementName>
+                <rasd:HostResource>ovf:/disk/vmdisk0</rasd:HostResource>
+                <rasd:InstanceID>5</rasd:InstanceID>
+                <rasd:Parent>3</rasd:Parent>
+                <rasd:ResourceType>17</rasd:ResourceType>
+            </Item>
+            <Item>
+                <rasd:Address>0</rasd:Address>
+                <rasd:Caption>usb</rasd:Caption>
+                <rasd:Description>USB Controller</rasd:Description>
+                <rasd:ElementName>usb</rasd:ElementName>
+                <rasd:InstanceID>6</rasd:InstanceID>
+                <rasd:ResourceType>23</rasd:ResourceType>
+            </Item>
+        </VirtualHardwareSection>
+        <vbox:Machine ovf:required="false" version="1.16-linux" uuid="{d7163d15-ef82-445f-9451-437c9067928a}" name="RaspberryMatic">
+            <ovf:Info>Extra Virtual Machine Configuration in VirtualBoxFormat</ovf:Info>
+            <Hardware>
+                <CPU count="2"></CPU>
+                <BIOS>
+                  <IOAPIC enabled="true"/>
+                </BIOS>
+                <Memory RAMSize="2048" />
+                <Display VRAMSize="10"/>
+                <USB>
+                  <Controllers>
+                    <Controller name="OHCI" type="OHCI"/>
+                    <Controller name="EHCI" type="EHCI"/>
+                  </Controllers>
+                </USB>
+                <Network>
+                    <Adapter slot="0" enabled="true" cable="true" type="82540EM">
+                        <BridgedInterface />
+                    </Adapter>
+                    <Adapter slot="1" type="82540EM" />
+                    <Adapter slot="2" type="82540EM" />
+                    <Adapter slot="3" type="82540EM" />
+                    <Adapter slot="4" type="82540EM" />
+                    <Adapter slot="5" type="82540EM" />
+                    <Adapter slot="6" type="82540EM" />
+                    <Adapter slot="7" type="82540EM" />
+                 </Network>
+                 <AudioAdapter driver="Null" enabled="false"/>
+                 <RTC localOrUTC="UTC"/>
+            </Hardware>
+            <StorageControllers>
+                <StorageController name="SATA Controller" type="AHCI" PortCount="1">
+                    <AttachedDevice type="HardDisk" hotpluggable="false" port="0" device="0">
+                        <Image uuid="{ac5660a0-9300-457e-a3e1-fd2cc60830f1}" />
+                    </AttachedDevice>
+                </StorageController>
+            </StorageControllers>
+        </vbox:Machine>
+    </VirtualSystem>
+</ovf:Envelope>

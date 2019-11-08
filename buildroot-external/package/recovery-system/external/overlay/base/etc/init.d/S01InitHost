@@ -92,7 +92,7 @@ identify_host() {
 
     # Open Virtual Appliance (ova)
     ova*)
-      # fine
+      HM_HOST_GPIO_UART="/dev/raw-uart"
     ;;
 
     *)

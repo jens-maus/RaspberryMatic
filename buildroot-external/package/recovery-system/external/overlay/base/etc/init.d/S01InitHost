@@ -62,6 +62,15 @@ identify_host() {
     fi
   fi
 
+  # find out via dmidecode (if it exists) the product name
+  # and extract the host type from that
+  if [[ -z "${HM_HOST}" ]] && [[ -e /usr/sbin/dmidecode ]]; then
+   product_name=$(/usr/sbin/dmidecode -s system-product-name)
+    case "${product_name}" in
+      NUC*) HM_HOST="nuc-${product_name}";; # Intel NUC
+    esac
+  fi
+
   # if HOST is still empty we fall back to RaspberryPi3
   if [[ -z "${HM_HOST}" ]]; then
     HM_HOST="rpi3"
@@ -92,6 +101,11 @@ identify_host() {
 
     # Open Virtual Appliance (ova)
     ova*)
+      # fine
+    ;;
+
+    # Intel NUC hardware (intelnuc)
+    nuc*)
       # fine
     ;;
 

@@ -5,7 +5,7 @@
     </References>
     <NetworkSection>
         <Info>List of networks</Info>
-        <Network ovf:name="Bridged">
+        <Network ovf:name="bridged">
             <Description>Logical network used by this appliance.</Description>
         </Network>
     </NetworkSection>
@@ -72,7 +72,7 @@
                 <rasd:ResourceType>23</rasd:ResourceType>
             </Item>
         </VirtualHardwareSection>
-        <vbox:Machine ovf:required="false" version="1.16-linux" uuid="{d7163d15-ef82-445f-9451-437c9067928a}" name="RaspberryMatic">
+        <vbox:Machine ovf:required="false" name="RaspberryMatic" uuid="{d7163d15-ef82-445f-9451-437c9067928a}" OSType="Other">
             <ovf:Info>Extra Virtual Machine Configuration in VirtualBoxFormat</ovf:Info>
             <Hardware>
                 <CPU count="2"></CPU>

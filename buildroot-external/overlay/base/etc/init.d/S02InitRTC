@@ -14,7 +14,7 @@ init_rtc_device() {
 
   # load the i2c_dev module if this is not a virtual
   # applicance but a real rpi/tinkerboard
-  if ! echo "${HM_HOST}" | grep -q ova-; then
+  if ! echo "${HM_HOST}" | egrep -q "ova-|nuc"; then
     modprobe i2c_dev
   fi
 

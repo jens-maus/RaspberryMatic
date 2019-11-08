@@ -107,7 +107,6 @@
         <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true"/>
       </Item>
       <vmw:Config ovf:required="false" vmw:key="firmware" vmw:value="bios"/>
-      <vmw:ExtraConfig ovf:required="false" vmw:key="usb.autoConnect.device0" vmw:value="vid:0403 pid:6f70 path:0/1/2 autoclean:1"/>
       <vmw:ExtraConfig ovf:required="false" vmw:key="cpuid.coresPerSocket" vmw:value="2"/>
       <vmw:ExtraConfig ovf:required="false" vmw:key="svga.present" vmw:value="TRUE"/>
       <vmw:ExtraConfig ovf:required="false" vmw:key="usb:1.speed" vmw:value="2"/>

@@ -19,9 +19,11 @@ start() {
   if ! /usr/bin/openssl x509 -checkend 86400 -noout -in /etc/config/server.pem 2>/dev/null >/dev/null; then
     [[ -f /etc/config/server.pem ]] && mv -f /etc/config/server.pem /etc/config/server.pem_$(date +'%Y%m%d')
     echo -n "creating new SSL cert... "
+    IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
     /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
                                            -out /etc/config/server.pem \
                                            -days 3650 \
+                                           -addext "subjectAltName = DNS:$(hostname),IP:${IP}" \
                                            -subj "/C=DE/O=HomeMatic/OU=$(cat /var/board_serial)/CN=$(hostname)" 2>/dev/null >/dev/null
   fi
 

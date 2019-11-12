@@ -65,9 +65,9 @@ identify_host() {
   # find out via dmidecode (if it exists) the product name
   # and extract the host type from that
   if [[ -z "${HM_HOST}" ]] && [[ -e /usr/sbin/dmidecode ]]; then
-    product_name=$(/usr/sbin/dmidecode -s system-product-name)
+    product_name=$(/usr/sbin/dmidecode -s baseboard-manufacturer)
     case "${product_name}" in
-      NUC*) HM_HOST="nuc-${product_name}";; # Intel NUC
+      *Intel*) HM_HOST="nuc";; # Intel NUC
     esac
   fi
 

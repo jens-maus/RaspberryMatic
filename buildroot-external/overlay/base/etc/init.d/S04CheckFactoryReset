@@ -16,7 +16,7 @@ check_factory_reset() {
   # extract partition number and device name
   DEVNODE=$(mountpoint -d /usr/local)
   DEVNAME=$(mountpoint -n /usr/local | cut -d' ' -f1)
-  PARTNUM=$(echo ${DEVNODE} | cut -d':' -f2)
+  PARTNUM=$(echo -n ${DEVNAME} | tail -c 1)
   DEV="/dev/$(readlink /sys/dev/block/${DEVNODE} | awk -F/ '{print $(NF-1)}')"
 
   # find out maximum SD card size (in cylinders)

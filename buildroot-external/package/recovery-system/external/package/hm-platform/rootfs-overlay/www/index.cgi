@@ -41,27 +41,37 @@ cat <<EOF
       </tr>
 
       <tr>
-        <td><div><input id="btnRecoveryUpdate" class="NavButton" type="button" onclick="showRecoveryUpdate();" value="Recovery/Update File"></div></td>
+        <td><div><input id="btnRecoveryUpdate" class="NavButton" type="button" onclick="showRecoveryUpdate();" value="Recovery/Update Firmware"></div></td>
       </tr>
 
       <tr>
-        <td><div><input id="btnRestoreBackupConfig" class="NavButton" type="button" onclick="showRestoreBackupConfig();" value="Create Backup"></div></td>
+        <td><div><input id="btnBackupConfig" class="NavButton" type="button" onclick="showBackupConfig();" value="Create Backup"></div></td>
+      </tr>
+
+      <tr>
+        <td><div><input id="btnRestoreConfig" class="NavButton" type="button" onclick="showRestoreConfig();" value="Restore Backup"></div></td>
       </tr>
       <tr><td><hr noshade size="4" color="white"></td></tr>
     </table>
 
     <table name="mainMenu" align="center">
       <tr>
-        <td id="tdRestoreBackupConfig" style="display: none;">
+        <td id="tdBackupConfig" style="display: none;">
+          <p style="text-align: center">Backup Configuration</p>
+          <p style="text-align: center"><input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/create_backup.cgi';" value="Create Backup"></p>
+        </td>
+      </tr>
+      <tr align="center">
+        <td id="tdRestoreConfig" style="display: none;">
           <form name="bakUpload" action="cgi-bin/restore_backup.cgi" method="post" enctype="multipart/form-data">
-            <p style="text-align: center">Backup Configuration</p>
+            <p>Restore Configuration
               <div name='wrapper_'>
-                <!-- <div>Security Key (optional): <input type="text" id="seckey" name="seckey"></div><br/> -->
-                <!-- <div>Backup File: <input type="file" name="Datei" ></div> -->
+                <div>Security Key (optional): <input type="text" id="seckey" name="seckey"></div><br/>
+                <div>Backup File (*.sbk): <input type="file" name="Datei" ></div>
               </div>
-              <!-- <input class="NavButton" type="submit" value="Restore Backup" >-->
-            <p style="text-align: center"><input class="NavButton" type="button" onclick="window.location.href = 'cgi-bin/create_backup.cgi';" value="Create Backup"></p>
-
+              <br/>
+              <input class="NavButton" type="submit" value="Restore Backup" >
+            </p>
           </form>
         </td>
       </tr>
@@ -139,10 +149,12 @@ cat <<EOF
 
 
     <script type="text/javascript">
-      var elmBtnRestoreBackupConfig = document.getElementById("btnRestoreBackupConfig"),
+      var elmBtnBackupConfig = document.getElementById("btnBackupConfig"),
+        elmBtnRestoreConfig = document.getElementById("btnRestoreConfig"),
         elmBtnRecoveryUpdate = document.getElementById("btnRecoveryUpdate"),
         elmTDRecoveryUpdate = document.getElementById("tdRecoveryUpdate"),
-        elmTDRestoreBackupConfig = document.getElementById("tdRestoreBackupConfig"),
+        elmTDBackupConfig = document.getElementById("tdBackupConfig"),
+        elmTDRestoreConfig = document.getElementById("tdRestoreConfig"),
         elmTblBtnPanel = document.getElementById("tblBtnPanel"),
         elmBtnBack = document.getElementById("btnBack"),
         btnInfoPanel = document.getElementById("btnInfoPanel"),
@@ -157,7 +169,8 @@ cat <<EOF
       }
 
       function showOnlyRelevantElems() {
-        elmBtnRestoreBackupConfig.style.display = "none";
+        elmBtnBackupConfig.style.display = "none";
+        elmBtnRestoreConfig.style.display = "none";
         elmBtnRecoveryUpdate.style.display = "none";
         elmTblBtnPanel.style.display = "none";
         btnInfoPanel.style.display = "none";
@@ -168,13 +181,22 @@ cat <<EOF
       function showRecoveryUpdate() {
         showOnlyRelevantElems();
         elmTDRecoveryUpdate.style.display = "block";
-        elmTDRestoreBackupConfig.style.display = "none";
+        elmTDBackupConfig.style.display = "none";
+        elmTDRestoreConfig.style.display = "none";
       }
 
-      function showRestoreBackupConfig() {
+      function showBackupConfig() {
         showOnlyRelevantElems();
         elmTDRecoveryUpdate.style.display = "none";
-        elmTDRestoreBackupConfig.style.display = "block";
+        elmTDBackupConfig.style.display = "block";
+        elmTDRestoreConfig.style.display = "none";
+      }
+
+      function showRestoreConfig() {
+        showOnlyRelevantElems();
+        elmTDRecoveryUpdate.style.display = "none";
+        elmTDBackupConfig.style.display = "none";
+        elmTDRestoreConfig.style.display = "block";
       }
 
       function showInfoPanel () {

@@ -32,7 +32,7 @@ p {
   /* For Internet Explorer 8 */
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr= #d0d0d0, endColorstr=#ffffff)";
 
-  width: 180px;
+  width: 200px;
   text-align: center;
   border: solid 1px;
   cursor: pointer;

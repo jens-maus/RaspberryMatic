@@ -68,14 +68,14 @@ identify_rf_hardware() {
     # is identified by having a rx8130 module loaded
     modprobe dummy_rx8130
 
-    # now we have to restart hss_led because hss_led is usually started earlier
-    if [[ -f /var/run/hss_led.pid ]]; then
-      start-stop-daemon -K -q -p /var/run/hss_led.pid
-      if [[ -x /bin/hss_led ]]; then
-        sleep 2
-        start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
-      fi
-    fi
+    # setup the LEDs to show a slowly blinking magenta light
+    echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
+    echo timer >/sys/class/leds/rpi_rf_mod\:red/trigger
+    echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
+    echo 499 >/sys/class/leds/rpi_rf_mod\:red/delay_on
+    echo 499 >/sys/class/leds/rpi_rf_mod\:red/delay_off
+    echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_on
+    echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_off
   fi
 }
 

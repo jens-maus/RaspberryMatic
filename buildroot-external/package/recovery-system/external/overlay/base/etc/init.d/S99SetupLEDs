@@ -11,7 +11,9 @@ start() {
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
   # signal that the system is successfully started
-  if [[ "${HM_RTC}" == "rx8130" ]]; then
+  # by also changing the LED on a RPI-RF-MOD on a GPIO
+  # or connected to a HB-RF-USB
+  if [[ "${HM_RTC}" == "rx8130" ]] || lsusb | grep -q 0403:6f70; then
 
     if [[ -L /usr/local/.firmwareUpdate ]]; then
       # fast blink magenta

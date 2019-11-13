@@ -1,0 +1,120 @@
+#!/bin/sh
+#
+# Startup script checking for RF capabale hardware
+#
+
+# function to identify rf hardware
+identify_rf_hardware() {
+
+  # setup default HM RF variables
+  HM_MODE="NORMAL"
+  HM_HMRF_DEV=""
+  HM_HMRF_DEVNODE=""
+  HM_HMIP_DEV=""
+  HM_HMIP_DEVNODE=""
+
+  # until we have a proper tool to identify the
+  # type of the GPIO rf module we assume a RPI-RF-MOD
+  # as soon as we have found a rx8130 RTC clock
+  if [[ "${HM_RTC}" == "rx8130" ]]; then
+    HM_HMRF_DEV="RPI-RF-MOD"
+    HM_HMIP_DEV="RPI-RF-MOD"
+  else
+    HM_HMRF_DEV="HM-MOD-RPI-PCB"
+    HM_HMIP_DEV="HM-MOD-RPI-PCB"
+  fi
+
+  # check if a HB-RF-USB (https://github.com/alexreinert/PCB/tree/master/HB-RF-USB)
+  # is present and if yes, use /dev/raw-uart1 instead.
+  if lsusb | grep -q 0403:6f70; then
+    if [[ -c /dev/raw-uart1 ]]; then
+      HM_HOST_GPIO_UART="/dev/raw-uart1"
+    elif [[ -c /dev/raw-uart ]]; then
+      HM_HOST_GPIO_UART="/dev/raw-uart"
+    fi
+    echo -n "HB-RF-USB, "
+
+    # only reset if we are not in an ova environment
+    #if ! echo "${HM_HOST}" | grep -q ova-; then
+      echo 1 >/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module
+      sleep 5
+    #fi
+ 
+    # get the RED/GREEN/BLUE pin ids
+    RED_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/$(basename ${HM_HOST_GPIO_UART})/red_gpio_pin)
+    GREEN_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/$(basename ${HM_HOST_GPIO_UART})/green_gpio_pin)
+    BLUE_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/$(basename ${HM_HOST_GPIO_UART})/blue_gpio_pin)
+
+    # make sure to unbind the gpio-leds driver first
+    if [[ -e /sys/class/leds/rpi_rf_mod\:blue ]]; then
+      if [[ -e /sys/bus/platform/drivers/leds-gpio/gpio-leds ]]; then
+        GPIO_LEDS=gpio-leds
+      else
+        GPIO_LEDS=leds
+      fi
+
+      echo ${GPIO_LEDS} >/sys/bus/platform/drivers/leds-gpio/unbind
+    fi
+
+    # load the rpi_rf_mod_led kernel module
+    modprobe rpi_rf_mod_led red_gpio_pin=${RED_GPIO_PIN} green_gpio_pin=${GREEN_GPIO_PIN} blue_gpio_pin=${BLUE_GPIO_PIN}
+
+    # rebind the gpio-leds so that numeration of the rpi-rf-mod leds are correct
+    if [[ ! -e /sys/bus/platform/drivers/leds-gpio/${GPIO_LEDS} ]]; then
+      echo ${GPIO_LEDS} >/sys/bus/platform/drivers/leds-gpio/bind
+    fi
+
+    # load the dummy rx8130 kernel module because an RPI-RF-MOD
+    # is identified by having a rx8130 module loaded
+    modprobe dummy_rx8130
+
+    # now we have to restart hss_led because hss_led is usually started earlier
+    if [[ -f /var/run/hss_led.pid ]]; then
+      start-stop-daemon -K -q -p /var/run/hss_led.pid
+      if [[ -x /bin/hss_led ]]; then
+        sleep 2
+        start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
+      fi
+    fi
+  fi
+}
+
+start() {
+  echo -n "Identifying Homematic RF-Hardware: "
+
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  identify_rf_hardware
+
+  # save all HM_ env variables
+  set | grep '^HM_' >/var/hm_mode
+
+  # output some status information
+  echo -n "BidCos-RF: "
+  [[ -n "${HM_HMRF_DEV}" ]] && echo -n "${HM_HMRF_DEV}, " || echo -n "none, "
+  echo -n "HmIP: "
+  [[ -n "${HM_HMIP_DEV}" ]] && echo -n "${HM_HMIP_DEV}, " || echo -n "none, "
+  echo "OK"
+}
+
+restart() {
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

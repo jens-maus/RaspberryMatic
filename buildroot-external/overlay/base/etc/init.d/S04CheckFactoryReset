@@ -29,10 +29,9 @@ check_factory_reset() {
 
   # only resize the partition if END_CHS != MAX_CHS
   if [[ -n "${START_CHS}" && -n "${END_CHS}" && -n "${MAX_CHS}" && "${END_CHS}" != "${MAX_CHS}" ]]; then
-    # remove the third partition (/usr/local) and recreate it with
-    # MAX_CHS
-    parted -s ${DEV} rm ${PARTNUM}
-    parted -s ${DEV} mkpart primary ${START_CHS} ${MAX_CHS}
+    # use resizepart to resize the /usr/local partition to the maximum size of
+    # the disk
+    parted -s ${DEV} resizepart ${PARTNUM} 100%
 
     # force PARTUUID to 0xDEEDBEEF (because parted changes partuuid)
     echo -en '\xEF\xBE\xED\xDE' | dd of=${DEV} conv=notrunc bs=1 seek=$((0x1B8)) 2>/dev/null

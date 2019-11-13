@@ -51,7 +51,11 @@ cat <<EOF
       <tr>
         <td><div><input id="btnRestoreConfig" class="NavButton" type="button" onclick="showRestoreConfig();" value="Restore Backup"></div></td>
       </tr>
-      <tr><td><hr noshade size="4" color="white"></td></tr>
+      <tr><td><hr noshade size="4" color="white" id="bar1"></td></tr>
+      <tr>
+        <td><div><input id="btnCloneSystem" class="NavButton" type="button" onclick="showCloneSystem();" value="Clone System"></div></td>
+      </tr>
+      <tr><td><hr noshade size="4" color="white" id="bar2"></td></tr>
     </table>
 
     <table name="mainMenu" align="center">
@@ -76,6 +80,46 @@ cat <<EOF
         </td>
       </tr>
       <tr align="center">
+        <td id="tdCloneSystem" style="display: none;">
+          <form name="cloneDeviceSelect" action="cgi-bin/clone_system.cgi" method="post" enctype="multipart/form-data" onsubmit="return confirm('WARNING: The selected target device will be ERASED! Do you really want to continue?');">
+            <p>Select target device to clone the existing system to:
+              <div name='wrapper_'>
+                <div>
+                  <select name="targetDevice" id="targetDevice">
+EOF
+
+# find out the rootfs device and get a
+# device list
+ROOTFS_DEV=$(mountpoint -n /rootfs | cut -d' ' -f1)
+DEVICE_LIST=$(/bin/lsblk -d -n -i -o PATH,TYPE | awk '{ print $1 }')
+
+# output the option list
+i=0
+for dev in ${DEVICE_LIST}; do
+  if ! echo "${ROOTFS_DEV}" | grep "${dev}"; then
+    echo -n "<option value=\"${dev}\">"
+    details=$(lsblk -d -n -i -o SIZE,MODEL ${dev} | head -1)
+    echo -n "${dev}: ${details}"
+    echo "</option>"
+    i=$(expr $i + 1)
+  fi
+done
+
+if [[ $i -eq 0 ]]; then
+  echo "<option id=\"invalid\">No additional/valid target devices found</option>"
+fi
+
+cat <<EOF
+                  </select>
+                </div>
+              </div>
+              <br/>
+              <input class="NavButton" type="submit" value="Clone System">
+            </p>
+          </form>
+        </td>
+      </tr>
+      <tr align="center">
         <td id="tdRecoveryUpdate" style="display: none;">
           <form name="frmUpload" action="cgi-bin/firmware_update.cgi" method="post" enctype="multipart/form-data">
             <p>Recovery/Update File
@@ -88,9 +132,7 @@ cat <<EOF
           </form>
         </td>
       </tr>
-
     </table>
-
 
     <table name="mainMenu" id="tblBtnPanel" align="center">
       <tr>
@@ -151,10 +193,14 @@ cat <<EOF
     <script type="text/javascript">
       var elmBtnBackupConfig = document.getElementById("btnBackupConfig"),
         elmBtnRestoreConfig = document.getElementById("btnRestoreConfig"),
+        elmBtnCloneSystem = document.getElementById("btnCloneSystem"),
         elmBtnRecoveryUpdate = document.getElementById("btnRecoveryUpdate"),
         elmTDRecoveryUpdate = document.getElementById("tdRecoveryUpdate"),
         elmTDBackupConfig = document.getElementById("tdBackupConfig"),
         elmTDRestoreConfig = document.getElementById("tdRestoreConfig"),
+        elmTDCloneSystem = document.getElementById("tdCloneSystem"),
+        elmBar1 = document.getElementById("bar1"),
+        elmBar2 = document.getElementById("bar2"),
         elmTblBtnPanel = document.getElementById("tblBtnPanel"),
         elmBtnBack = document.getElementById("btnBack"),
         btnInfoPanel = document.getElementById("btnInfoPanel"),
@@ -171,10 +217,13 @@ cat <<EOF
       function showOnlyRelevantElems() {
         elmBtnBackupConfig.style.display = "none";
         elmBtnRestoreConfig.style.display = "none";
+        elmBtnCloneSystem.style.display = "none";
         elmBtnRecoveryUpdate.style.display = "none";
         elmTblBtnPanel.style.display = "none";
         btnInfoPanel.style.display = "none";
         elmInfoPanel.style.display = "none";
+	elmBar1.style.display = "none";
+	elmBar2.style.display = "none";
         elmBtnBack.style.display = "block";
       }
 
@@ -183,6 +232,7 @@ cat <<EOF
         elmTDRecoveryUpdate.style.display = "block";
         elmTDBackupConfig.style.display = "none";
         elmTDRestoreConfig.style.display = "none";
+        elmTDCloneSystem.style.display = "none";
       }
 
       function showBackupConfig() {
@@ -190,6 +240,7 @@ cat <<EOF
         elmTDRecoveryUpdate.style.display = "none";
         elmTDBackupConfig.style.display = "block";
         elmTDRestoreConfig.style.display = "none";
+        elmTDCloneSystem.style.display = "none";
       }
 
       function showRestoreConfig() {
@@ -197,6 +248,15 @@ cat <<EOF
         elmTDRecoveryUpdate.style.display = "none";
         elmTDBackupConfig.style.display = "none";
         elmTDRestoreConfig.style.display = "block";
+        elmTDCloneSystem.style.display = "none";
+      }
+
+      function showCloneSystem() {
+        showOnlyRelevantElems();
+        elmTDRecoveryUpdate.style.display = "none";
+        elmTDBackupConfig.style.display = "none";
+        elmTDRestoreConfig.style.display = "none";
+        elmTDCloneSystem.style.display = "block";
       }
 
       function showInfoPanel () {

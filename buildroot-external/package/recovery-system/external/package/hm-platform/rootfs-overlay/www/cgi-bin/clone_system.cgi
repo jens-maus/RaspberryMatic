@@ -65,6 +65,13 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
+# call partprobe to check for changed partitions on target device
+/usr/sbin/partprobe ${TARGET_DEV}
+if [[ $? -ne 0 ]]; then
+  echo "ERROR: couldn't probe for new partitions<br/>"
+  exit 1
+fi
+
 # check the device nodes of each new partition
 TARGET_BOOTFS=$(/sbin/blkid | grep ${TARGET_DEV} | grep deedbeef-01 | cut -d: -f1)
 if [[ -z "${TARGET_BOOTFS}" ]]; then

@@ -603,7 +603,7 @@ fwinstall()
         if [[ "${BOOTFS_START}" == "${BOOTFS_LOOPSTART}" ]] && [[ "${BOOTFS_LOOPSTART}" == "2048" ]]; then
           if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]]; then
             # Tinkerboard version has U-Boot in seperate boot sector
-            echo -ne "(U-Noot)... "
+            echo -ne "(U-Boot)... "
             /bin/dd if=${BOOTFS_LOOPROOTDEV} of=${BOOTFS_ROOTDEV} bs=32K count=31 seek=1 skip=1 conv=fsync status=none
             result=$?
           else

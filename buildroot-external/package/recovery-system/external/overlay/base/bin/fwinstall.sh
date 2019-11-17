@@ -4,7 +4,7 @@
 # either archived or unarchived, verifies its validity and installs it
 # unattended accordingly.
 #
-# Copyright (c) 2018 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2018-2019 Jens Maus <mail@jens-maus.de>
 # Apache 2.0 License applies
 #
 
@@ -593,17 +593,27 @@ fwinstall()
 
       echo -ne "OK, "
 
-      # on the tinkerboard platform we have to check if we can
-      # update U-Boot as well.
-      if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]]; then
+      # on platforms with dedicated boot loaders we have to update them as well.
+      if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]] || [[ "${BOOTFS_PLATFORM}" == "ova" ]] || [[ "${BOOTFS_PLATFORM}" == "nuc" ]]; then
         BOOTFS_ROOTDEV="/dev/$(basename $(dirname $(readlink /sys/class/block/${BOOTFS_DEV#/dev/})))"
         BOOTFS_START=$(/sbin/fdisk -l ${BOOTFS_ROOTDEV} | grep FAT32 | head -1 | awk '{ printf $3 }')
         BOOTFS_LOOPROOTDEV=${LOFS_DEV}
         BOOTFS_LOOPSTART=$(/sbin/fdisk -l ${BOOTFS_LOOPROOTDEV} | grep FAT32 | head -1 | awk '{ printf $3 }')
-        echo -ne "updating U-Boot..."
+        echo -ne "updating bootloader "
         if [[ "${BOOTFS_START}" == "${BOOTFS_LOOPSTART}" ]] && [[ "${BOOTFS_LOOPSTART}" == "2048" ]]; then
-          /bin/dd if=${BOOTFS_LOOPROOTDEV} of=${BOOTFS_ROOTDEV} bs=32K count=31 seek=1 skip=1 conv=fsync status=none
-          if [[ $? -ne 0 ]]; then
+          if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]]; then
+            # Tinkerboard version has U-Boot in seperate boot sector
+            echo -ne "(U-Noot)... "
+            /bin/dd if=${BOOTFS_LOOPROOTDEV} of=${BOOTFS_ROOTDEV} bs=32K count=31 seek=1 skip=1 conv=fsync status=none
+            result=$?
+          else
+            # x86 RaspberryMatic with GRUB
+            echo -ne "(GRUB)... "
+            /bin/dd if=${BOOTFS_LOOPROOTDEV} of=${BOOTFS_ROOTDEV} bs=512 count=2047 seek=1 skip=1 conv=fsync status=none
+            result=$?
+          fi
+
+          if [[ ${result} -ne 0 ]]; then
             echo "ERROR: (dd)<br/>"
             exit 1
           fi

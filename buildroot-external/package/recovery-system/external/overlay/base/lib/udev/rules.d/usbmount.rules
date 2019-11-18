@@ -1,0 +1,14 @@
+# Rules for USBmount -*- conf -*-
+
+# Do not auto mount our own (deedbeef) system partitions
+ENV{ID_PART_TABLE_UUID}=="deedbeef", GOTO="END"
+
+KERNEL=="sd*", DRIVERS=="sbp2",		ACTION=="add",	RUN+="/usr/share/usbmount/usbmount add"
+KERNEL=="sd*", SUBSYSTEM=="block",	ACTION=="add",	RUN+="/usr/share/usbmount/usbmount add"
+KERNEL=="ub*", SUBSYSTEM=="block",	ACTION=="add",	RUN+="/usr/share/usbmount/usbmount add"
+KERNEL=="mmcblk*", SUBSYSTEM=="block",	ACTION=="add",	RUN+="/usr/share/usbmount/usbmount add"
+KERNEL=="sd*",				ACTION=="remove",	RUN+="/usr/share/usbmount/usbmount remove"
+KERNEL=="ub*",				ACTION=="remove",	RUN+="/usr/share/usbmount/usbmount remove"
+KERNEL=="mmcblk*",				ACTION=="remove",	RUN+="/usr/share/usbmount/usbmount remove"
+
+LABEL="END"

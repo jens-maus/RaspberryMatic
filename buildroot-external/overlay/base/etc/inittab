@@ -19,6 +19,7 @@ null::sysinit:/bin/mkdir -p /dev/pts
 null::sysinit:/bin/mkdir -p /dev/shm
 tty2::sysinit:/sbin/fsck -A -R -p
 tty2::sysinit:/bin/mount -a
+tty2::sysinit:/bin/mkdir -p /var/run
 null::sysinit:/bin/hostname -F /etc/hostname
 null::sysinit:/usr/bin/psplash -n &
 # now run any rc scripts

@@ -28,8 +28,8 @@ typedef struct {
     plugin_config conf;
 } plugin_data;
 
-int checkAuth(int port, const char* user, const char* pass);
-void sendMsg(const char* msg, const int msgLength, const int regaPort, char* answer, int* answerLength);
+int checkAuth(server *srv, int port, const char* user, const char* pass);
+void sendMsg(server *srv, const char* msg, const int msgLength, const int regaPort, char* answer, int* answerLength);
 
 #define PATCH(x) \
     p->conf.x = s->x;
@@ -68,7 +68,7 @@ static handler_t mod_authn_rega_basic(server *srv, connection *con, void *p_d, c
 
    mod_authn_rega_patch_connection(srv, con, p);
 
-   if(1 == checkAuth(p->conf.rega_port, username->ptr, pw)) {
+   if(1 == checkAuth(srv, p->conf.rega_port, username->ptr, pw)) {
      //auth ok
      return HANDLER_GO_ON;
    }
@@ -78,7 +78,7 @@ static handler_t mod_authn_rega_basic(server *srv, connection *con, void *p_d, c
 
 }
 
-int checkAuth(int port, const char* user, const char* pass) {
+int checkAuth(server *srv, int port, const char* user, const char* pass) {
 
   //assemble message
 
@@ -137,7 +137,7 @@ int checkAuth(int port, const char* user, const char* pass) {
   int answerLength = 128;
   char answer[answerLength];
   memset(answer, 0 ,sizeof(char)*answerLength);
-  sendMsg(msg, m, port, answer, &answerLength);
+  sendMsg(srv, msg, m, port, answer, &answerLength);
   if(strcmp("1", answer) == 0) {
     return 1;
   }
@@ -145,13 +145,24 @@ int checkAuth(int port, const char* user, const char* pass) {
   return 0;
 }
 
-void sendMsg(const char* msg, const int msgLength, const int regaPort, char* answer, int* answerLength) {
+void sendMsg(server *srv, const char* msg, const int msgLength, const int regaPort, char* answer, int* answerLength) {
   const int answerBufferLength = *answerLength;
   *answerLength = 0;
 
   //create socket
   int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
   if(sock == -1) {
+    return;
+  }
+
+  // define a timeout for recvfrom()/send() or otherwise these calls
+  // can block
+  struct timeval tv;
+  tv.tv_sec = 1;
+  tv.tv_usec = 0;
+  if(setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0 ||
+     setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof(tv)) < 0) {
+    close(sock);
     return;
   }
 
@@ -167,18 +178,29 @@ void sendMsg(const char* msg, const int msgLength, const int regaPort, char* ans
   //addrMe.sin_port = htons(0);
 
   if(bind(sock, &addrMe, sizeof(addrMe)) == -1) {
+    close(sock);
     return;
   }
 
   //send msg
   if(sendto(sock, msg, msgLength, 0, &addrRega, sizeof(addrRega)) == -1 ) {
+    log_error_write(srv, __FILE__, __LINE__, "s", "could not send auth request to rega");
+    close(sock);
     return;
   }
 
   //receive answer
   memset(&addrRega, 0, sizeof(addrRega));
   unsigned int sLength = 0;
-  *answerLength = recvfrom(sock, answer, answerBufferLength, 0, &addrRega, &sLength);
+  int result = -1;
+  if((result = recvfrom(sock, answer, answerBufferLength, 0, &addrRega, &sLength)) == -1) {
+    log_error_write(srv, __FILE__, __LINE__, "s", "could not receive auth answer from rega");
+    close(sock);
+    return;
+  }
+
+  *answerLength = result;
+
   //check if the answer comes from correct port....
   if(sLength != 0) {
     char* name = inet_ntoa(addrRega.sin_addr);

@@ -56,7 +56,7 @@ set LOCATIONS {
   {- "Algiers" "36.75" "3.06" "Africa/Algiers" default}
 
   {"Andorra"}
-  {- "Andorra" "42.50" "1.52" "Europe/Andorra" default}
+  {- "Andorra la Vella" "42.50" "1.52" "Europe/Andorra" default}
 
   {"Antarctica"}
   {- "Casey" "-66.28" "110.53" "Antarctica/Casey" default}
@@ -107,7 +107,7 @@ set LOCATIONS {
   {- "Sydney" "-33.87" "151.21" "Australia/Sydney" default}
 
   {"Austria" "Europe/Vienna"}
-  {- "Vienna" "48.20" "16.37" default}
+  {- "Vienna" "48.21" "16.37" default}
   {- "Salzburg" "47.80" "13.03"}
 
   {"Azerbaijan"}
@@ -123,10 +123,10 @@ set LOCATIONS {
   {- "Barbados" "13.16" "-59.55" "America/Barbados" default}
 
   {"Belarus"}
-  {- "Minsk" "53.90" "27.57" "Europe/Minsk" default}
+  {- "Minsk" "53.90" "27.55" "Europe/Minsk" default}
 
   {"Belgium"}
-  {- "Bruxelles" "50.85" "4.35" "Europe/Brussels" default}
+  {- "Brussels" "50.85" "4.35" "Europe/Brussels" default}
 
   {"Belize"}
   {- "Belize" "17.07" "-88.70" "America/Belize" default}
@@ -139,6 +139,9 @@ set LOCATIONS {
 
   {"Bolivia"}
   {- "La Paz" "-16.50" "-68.15" "America/La_Paz" default}
+
+  {"Bosnia and Herzegovina"}
+  {- "Sarajevo" "43.86" "18.43" "Europe/Sarajevo" default}
 
   {"Bougainville"}
   {- "Bougainville" "-6.00" "155.00" "Pacific/Bougainville" default}
@@ -165,7 +168,7 @@ set LOCATIONS {
   {- "Brunei" "4.50" "114.67" "Asia/Brunei" default }
 
   {"Bulgaria"}
-  {- "Sofia" "42.70" "23.33" "Europe/Sofia" default}
+  {- "Sofia" "42.70" "23.32" "Europe/Sofia" default}
 
   {"Canada"}
   {- "Atikokan" "48.75" "-91.62" "America/Atikokan" }
@@ -224,15 +227,18 @@ set LOCATIONS {
   {"Costa Rica"}
   {- "Costa Rica" "10.00" "-84.00" "America/Costa_Rica" default}
 
+  {"Croatia"}
+  {- "Zagreb" "45.81" "15.98" "Europe/Zagreb" default}
+
   {"Cuba"}
   {- "Havana" "23.14" "-82.36" "America/Havana" default}
 
   {"Cyprus"}
   {- "Famagusta" "35.13" "33.94" "Asia/Famagusta" }
-  {- "Nicosia" "35.17" "33.37" "Asia/Nicosia" default}
+  {- "Nicosia" "35.17" "33.35" "Europe/Nicosia" default}
 
-  {"CzechRepublic"}
-  {- "Prague" "50.08" "14.42" "Europe/Prague" default}
+  {"Czech Republic"}
+  {- "Prague" "50.09" "14.42" "Europe/Prague" default}
 
   {"Denmark"}
   {- "Copenhagen" "55.68" "12.57" "Europe/Copenhagen" default}
@@ -323,7 +329,7 @@ set LOCATIONS {
   {"Ghana"}
   {- "Accra" "5.55" "-0.20" "Africa/Accra" default}
 
-  {"GreatBritain"}
+  {"Great Britain"}
   {- "Chagos" "-6.28" "72.08" "Indian/Chagos" }
   {- "Gibraltar" "36.13" "-5.36" "Europe/Gibraltar" }
   {- "Grand Turk" "21.47" "-71.14" "America/Grand_Turk" }
@@ -360,7 +366,7 @@ set LOCATIONS {
   {- "Budapest" "47.29" "19.05" "Europe/Budapest" default}
 
   {"Iceland"}
-  {- "Reykjavik" "64.13" "-21.93" "Atlantic/Reykjavik" default}
+  {- "Reykjavik" "64.15" "-21.93" "Atlantic/Reykjavik" default}
 
   {"India"}
   {- "Kolkata" "22.57" "88.36" "Asia/Kolkata" default}
@@ -379,13 +385,13 @@ set LOCATIONS {
   {- "Baghdad" "33.33" "44.38" "Asia/Baghdad" default}
 
   {"Ireland"}
-  {- "Dublin" "53.35" "-6.27" "Europe/Dublin" default}
+  {- "Dublin" "53.34" "-6.27" "Europe/Dublin" default}
 
   {"Israel"}
   {- "Jerusalem" "31.78" "35.22" "Asia/Jerusalem" default}
 
   {"Italy"}
-  {- "Rome" "41.90" "12.50" "Europe/Rome" default}
+  {- "Rome" "41.88" "12.48" "Europe/Rome" default}
 
   {"Ivory Coast"}
   {- "Abidjan" "5.19" "-4.02" "Africa/Abidjan" default}
@@ -419,7 +425,7 @@ set LOCATIONS {
   {- "Bishkek" "42.87" "74.61" "Asia/Bishkek" default}
 
   {"Latvia"}
-  {- "Riga" "56.95" "24.11" "Europe/Riga" default}
+  {- "Riga" "56.95" "24.10" "Europe/Riga" default}
 
   {"Lebanon"}
   {- "Beirut" "33.89" "35.51" "Asia/Beirut" default}
@@ -430,11 +436,14 @@ set LOCATIONS {
   {"Libya"}
   {- "Tripoli" "32.88" "13.19" "Africa/Tripoli" default}
 
+  {"Liechtenstein"}
+  {- "Vaduz" "47.14" "9.52" "Europe/Vaduz" default}
+
   {"Lithuania"}
-  {- "Vilnius" "54.68" "25.28" "Europe/Vilnius" default}
+  {- "Vilnius" "54.68" "25.27" "Europe/Vilnius" default}
 
   {"Luxembourg"}
-  {- "Luxembourg" "49.81" "6.13" "Europe/Luxembourg" default}
+  {- "Luxembourg" "49.61" "6.13" "Europe/Luxembourg" default}
 
   {"Korea"}
   {- "Pyongyang" "39.02" "125.74" "Asia/Pyongyang" }
@@ -448,7 +457,7 @@ set LOCATIONS {
   {- "Male" "4.18" "73.51" "Indian/Maldives" default}
 
   {"Malta"}
-  {- "Malta" "35.88" "14.50" "Europe/Malta" default}
+  {- "Valletta" "35.88" "14.51" "Europe/Malta" default}
 
   {"Marshall Islands"}
   {- "Kwajalein" "8.72" "167.73" "Pacific/Kwajalein" }
@@ -476,7 +485,7 @@ set LOCATIONS {
   {- "Kosrae" "5.32" "162.98" "Pacific/Kosrae" }
 
   {"Moldova"}
-  {- "Chisinau" "47.02" "28.84" "Europe/Chisinau" default}
+  {- "Chisinau" "47.01" "28.85" "Europe/Chisinau" default}
 
   {"Monaco"}
   {- "Monaco" "43.73" "7.42" "Europe/Monaco" default}
@@ -485,6 +494,9 @@ set LOCATIONS {
   {- "Choibalsan" "48.08" "114.54" "Asia/Choibalsan" }
   {- "Hovd" "48.00" "91.64" "Asia/Hovd" }
   {- "Ulaanbaatar" "47.92" "106.92" "Asia/Ulaanbaatar" default}
+
+  {"Montenegro"}
+  {- "Podgorica" "42.44" "19.27" "Europe/Podgorica" default}
 
   {"Morocco"}
   {- "Casablanca" "33.53" "-7.58" "Africa/Casablanca" default}
@@ -503,7 +515,7 @@ set LOCATIONS {
   {- "Nauru" "-0.53" "166.93" "Pacific/Nauru" default}
 
   {"Netherland"}
-  {- "Amsterdam" "52.37" "4.90" "Europe/Amsterdam" default}
+  {- "Amsterdam" "52.37" "4.89" "Europe/Amsterdam" default}
   {- "Curacao" "12.18" "-69.00" "America/Curacao" }
 
   {"Nepal"}
@@ -521,8 +533,11 @@ set LOCATIONS {
   {"Nigeria"}
   {- "Lagos" "6.46" "3.38" "Africa/Lagos" default}
 
+  {"North Macedonia"}
+  {- "Skopje" "41.99" "21.43" "Europe/Skopje" default}
+
   {"Norway"}
-  {- "Oslo" "59.92" "10.73" "Europe/Oslo" default}
+  {- "Oslo" "59.91" "10.75" "Europe/Oslo" default}
 
   {"Pakistan"}
   {- "Karachi" "24.86" "67.01" "Asia/Karachi" default}
@@ -547,7 +562,7 @@ set LOCATIONS {
   {- "Manila" "14.60" "121.00" "Asia/Manila" default}
 
   {"Poland"}
-  {- "Warsaw" "52.23" "21.02" "Europe/Warsaw" default}
+  {- "Warsaw" "52.22" "21.03" "Europe/Warsaw" default}
 
   {"Portugal"}
   {- "Azores" "38.60" "-28.00" "Atlantic/Azores" }
@@ -592,6 +607,9 @@ set LOCATIONS {
   {- "Yakutsk" "62.03" "129.73" "Asia/Yakutsk" }
   {- "Yekaterinburg" "56.83" "60.58" "Asia/Yekaterinburg" }
 
+  {"San Marino"}
+  {- "San Marino" "43.94" "12.45" "Europe/San_Marino" default}
+
   {"Samoa"}
   {- "Apia" "-13.83" "-171.75" "Pacific/Apia" default}
 
@@ -610,6 +628,12 @@ set LOCATIONS {
   {"Singapore"}
   {- "Singapore" "1.30" "103.80" "Asia/Singapore" default}
 
+  {"Slovakia"}
+  {- "Bratislava" "48.15" "17.15" "Europe/Bratislava" default}
+
+  {"Slovenia"}
+  {- "Ljubljana" "46.06" "14.51" "Europe/Ljubljana" default}
+
   {"Solomon Islands"}
   {- "Guadalcanal" "-9.62" "160.18" "Pacific/Guadalcanal" default}
 
@@ -623,7 +647,7 @@ set LOCATIONS {
   {- "Barcelona" "41.38" "2.18" }
   {- "Canary" "28.15" "-15.42" "Atlantic/Canary" }
   {- "Ceuta" "35.89" "-5.32" "Africa/Ceuta" }
-  {- "Madrid" "40.38" "-3.72" "Europe/Madrid" default}
+  {- "Madrid" "40.41" "-3.70" "Europe/Madrid" default}
 
   {"Sri Lanka"}
   {- "Colombo" "6.93" "79.84" "Asia/Colombo" default}
@@ -635,7 +659,7 @@ set LOCATIONS {
   {- "Paramaribo" "5.85" "-55.20" "America/Paramaribo" default}
 
   {"Sweden"}
-  {- "Stockholm" "59.33" "18.07" "Europe/Stockholm" default}
+  {- "Stockholm" "59.32" "18.05" "Europe/Stockholm" default}
 
   {"Switzerland" "Europe/Zurich"}
   {- "Bern" "46.95" "7.45"}
@@ -730,6 +754,9 @@ set LOCATIONS {
   {"Usbekistan"}
   {- "Samarkand" "39.70" "66.98" "Asia/Samarkand" default}
   {- "Tashkent" "41.30" "69.27" "Asia/Tashkent" }
+
+  {"Vatican"}
+  {- "Vatican City" "41.90" "12.45" "Europe/Vatican" default}
 
   {"Venezuela"}
   {- "Caracas" "10.48" "-66.90" "America/Caracas" default}

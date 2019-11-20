@@ -38,8 +38,8 @@ array set TIMEZONES {
 }
 
 # read additional timezones from iana zone file
-if { [file exists /usr/share/zoneinfo/zone1970.tab] == 1 } {
-  set f [open /usr/share/zoneinfo/zone1970.tab]
+if { [file exists /usr/share/zoneinfo/zone.tab] == 1 } {
+  set f [open /usr/share/zoneinfo/zone.tab]
   while {[gets $f line] > -1} {
     if {[regexp {^[^#]\S+\t\S+\t(\S+)} $line -> tz]} {
       append TIMEZONES($tz) "$tz"

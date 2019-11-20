@@ -594,7 +594,7 @@ fwinstall()
       echo -ne "OK, "
 
       # on platforms with dedicated boot loaders we have to update them as well.
-      if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]] || [[ "${BOOTFS_PLATFORM}" == "ova" ]] || [[ "${BOOTFS_PLATFORM}" == "nuc" ]]; then
+      if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]] || [[ "${BOOTFS_PLATFORM}" == "ova" ]] || [[ "${BOOTFS_PLATFORM}" == "intelnuc" ]]; then
         BOOTFS_ROOTDEV="/dev/$(basename $(dirname $(readlink /sys/class/block/${BOOTFS_DEV#/dev/})))"
         BOOTFS_START=$(/sbin/fdisk -l ${BOOTFS_ROOTDEV} | grep FAT32 | head -1 | awk '{ printf $3 }')
         BOOTFS_LOOPROOTDEV=${LOFS_DEV}

@@ -114,6 +114,8 @@
       <vmw:ExtraConfig ovf:required="false" vmw:key="usb:1.deviceType" vmw:value="hub"/>
       <vmw:ExtraConfig ovf:required="false" vmw:key="usb:1.port" vmw:value="1"/>
       <vmw:ExtraConfig ovf:required="false" vmw:key="usb:1.parent" vmw:value="-1"/>
+      <vmw:ExtraConfig ovf:required="false" vmw:key="ctkEnabled" vmw:value="TRUE"/>
+      <vmw:ExtraConfig ovf:required="false" vmw:key="sata0:0.ctkEnabled" vmw:value="TRUE"/>
       <vmw:ExtraConfig ovf:required="false" vmw:key="usb:0.present" vmw:value="TRUE"/>
       <vmw:ExtraConfig ovf:required="false" vmw:key="usb:0.deviceType" vmw:value="hid"/>
       <vmw:ExtraConfig ovf:required="false" vmw:key="usb:0.port" vmw:value="0"/>

@@ -8,13 +8,18 @@ set httpd unixsocket /var/run/monit.sock
     allow localhost
 
 # hardware watchdog monitoring
-check process watchdog with matching /dev/watchdog
+check process watchdog with matching /sbin/watchdog
     group system
     start = "/etc/init.d/S00watchdog start"
     stop = "/etc/init.d/S00watchdog stop"
     if not exist for 1 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'hardware watchdog restarted' WatchDog-Alarm"
+    depends on watchdogEnabled
+
+check program watchdogEnabled with path "/usr/bin/test -c /dev/watchdog"
+    group system
+    if status != 0 for 1 cycles then unmonitor
 
 # hss_led service monitoring
 check process hss_led with pidfile /var/run/hss_led.pid

@@ -1,0 +1,59 @@
+#!/bin/sh
+#
+# PiDesktop Daemon starting and stopping
+#
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DESC=pidesktopd
+
+DAEMON=/opt/pidesktopd/pidesktopd.sh
+PIDFILE=/var/run/pidesktopd.pid
+
+test -x $DAEMON || exit 0
+
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+case $1 in
+  start)
+    echo -n "Starting PiDesktop daemon: "
+
+    # find out if a PiDesktop board is installed at all. We check
+    # for a pcf8563 and 0x18 i2c address
+    i2cget -y 1 0x18 2>/dev/null >/dev/null
+    if [[ $? -eq 0 ]] && [[ "${HM_RTC}" == "pcf8563" ]]; then
+
+      start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec ${DAEMON} 2>/dev/null >/dev/null
+      [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+
+    else
+      echo "no hardware found"
+    fi
+  ;;
+
+  stop)
+    echo -n "Stopping PiDesktop daemon: "
+    if [[ -f ${PIDFILE} ]]; then
+      start-stop-daemon -K -q -p ${PIDFILE}
+      rm -f ${PIDFILE}
+    fi
+    [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+  ;;
+
+  restart|force-reload)
+    $0 stop
+    sleep 1
+    $0 start
+  ;;
+
+  status)
+    ${DAEMON} --status
+  ;;
+
+  *)
+    echo "Usage: $0 {start|stop|restart|force-reload|status}" >&2
+    exit 1
+  ;;
+esac
+
+exit 0

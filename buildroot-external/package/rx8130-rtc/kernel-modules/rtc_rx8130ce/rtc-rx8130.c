@@ -28,12 +28,7 @@
 // this program. If not, see <http://www.gnu.org/licenses/>.
 //======================================================================
 
-#if 0
-#define DEBUG
 #include <linux/device.h>
-#undef DEBUG
-#endif 
-
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/slab.h>
@@ -102,12 +97,20 @@
 #define RX8130_BIT_CTRL_SMPTSEL0	(1 << 6)
 #define RX8130_BIT_CTRL_SMPTSEL1	(1 << 7)
 
-
 static const struct i2c_device_id rx8130_id[] = {
 	{ "rx8130", 0 },
+	{ "rx8130-legacy", 0 },
 	{ }
 };
 MODULE_DEVICE_TABLE(i2c, rx8130_id);
+
+static const struct of_device_id rx8130_of_match[] = {
+	{
+		.compatible = "epson,rx8130-legacy",
+	},
+	{ }
+};
+MODULE_DEVICE_TABLE(of, rx8130_of_match);
 
 struct rx8130_data {
 	struct i2c_client *client;
@@ -115,6 +118,7 @@ struct rx8130_data {
 	struct work_struct work;
 	u8 ctrlreg;
 	unsigned exiting:1;
+	bool enable_external_capacitor;
 };
 
 typedef struct {
@@ -368,8 +372,6 @@ static int rx8130_init_client(struct i2c_client *client, int *need_reset)
 	int need_clear = 0;
 	int err;	
 
-	dev_dbg(&client->dev, "rx8130_init_client()\n");
-
 	//get current extension, flag, control register values
 	dev_dbg(&client->dev, "Trying to read RX8130_REG_EXT\n");
 	err = rx8130_read_regs(rx8130->client, RX8130_REG_EXT, 3, ctrl);
@@ -384,18 +386,19 @@ static int rx8130_init_client(struct i2c_client *client, int *need_reset)
 	if (err)
 		goto out;
 
-	// enable charging of external capacitor
-	dev_dbg(&client->dev, "rx8130: enable charging of external capacitor\n");
-	ctrl[2] |= RX8130_BIT_CTRL_CHGEN;
-	ctrl[2] |= RX8130_BIT_CTRL_INIEN;
-	ctrl[2] |= RX8130_BIT_CTRL_BFVSEL0;
-	err = rx8130_write_reg(client, RX8130_REG_CTRL1, ctrl[2]);
-	if (err)
-		goto out;
-
-
 	//clear "test bit"
 	rx8130->ctrlreg = (ctrl[2] & ~RX8130_BIT_CTRL_TEST);
+
+	if (rx8130->enable_external_capacitor) {
+		// enable charging of external capacitor
+		dev_info(&client->dev, "Enabling charging of external capacitor\n");
+		ctrl[2] |= RX8130_BIT_CTRL_CHGEN;
+		ctrl[2] |= RX8130_BIT_CTRL_INIEN;
+		ctrl[2] |= RX8130_BIT_CTRL_BFVSEL0;
+		err = rx8130_write_reg(client, RX8130_REG_CTRL1, ctrl[2]);
+		if (err)
+			goto out;
+	}
 	
 	//check for VLF Flag (set at power-on)
 	if ((ctrl[1] & RX8130_BIT_FLAG_VLF)) {
@@ -721,9 +724,6 @@ static int rx8130_probe(struct i2c_client *client, const struct i2c_device_id *i
 	struct rx8130_data *rx8130;
 	int err, need_reset = 0;
 
-
-	printk(KERN_WARNING "rx8130_probe()");
-
 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE_DATA | I2C_FUNC_SMBUS_I2C_BLOCK)) {
 		dev_err(&adapter->dev, "doesn't support required functionality\n");
 		err = -EIO;
@@ -741,6 +741,10 @@ static int rx8130_probe(struct i2c_client *client, const struct i2c_device_id *i
 	i2c_set_clientdata(client, rx8130);
 	INIT_WORK(&rx8130->work, rx8130_work);
 
+#ifdef CONFIG_OF
+	rx8130->enable_external_capacitor = of_property_read_bool(client->dev.of_node, "enable-external-capacitor");
+#endif
+
 	err = rx8130_init_client(client, &need_reset);
 	if (err)
 		goto errout_free;
@@ -752,7 +756,7 @@ static int rx8130_probe(struct i2c_client *client, const struct i2c_device_id *i
 		rx8130_set_time(&client->dev, &tm);
 	}
 
-	rx8130->rtc = rtc_device_register(client->name, &client->dev, &rx8130_rtc_ops, THIS_MODULE);
+	rx8130->rtc = devm_rtc_device_register(&client->dev, client->name, &rx8130_rtc_ops, THIS_MODULE);
 	
 	if (IS_ERR(rx8130->rtc)) {
 		err = PTR_ERR(rx8130->rtc);
@@ -777,8 +781,6 @@ static int rx8130_probe(struct i2c_client *client, const struct i2c_device_id *i
 	return 0;
 
 errout_reg:
-	rtc_device_unregister(rx8130->rtc);
-
 errout_free:
 	kfree(rx8130);
 
@@ -799,8 +801,6 @@ static int rx8130_remove(struct i2c_client *client)
 	struct rx8130_data *rx8130 = i2c_get_clientdata(client);
 	struct mutex *lock = &rx8130->rtc->ops_lock;
 
-	printk( KERN_WARNING "rx8130_remove()");
-
 	if (client->irq > 0) {
 		mutex_lock(lock);
 		rx8130->exiting = 1;
@@ -810,7 +810,6 @@ static int rx8130_remove(struct i2c_client *client)
 		cancel_work_sync(&rx8130->work);
 	}
 
-	rtc_device_unregister(rx8130->rtc);
 	kfree(rx8130);
 	return 0;
 }
@@ -818,6 +817,7 @@ static int rx8130_remove(struct i2c_client *client)
 static struct i2c_driver rx8130_driver = {
 	.driver = {
 		.name = "rtc-rx8130",
+		.of_match_table = of_match_ptr(rx8130_of_match),
 		.owner = THIS_MODULE,
 	},
 	.probe		= rx8130_probe,
@@ -830,3 +830,5 @@ module_i2c_driver(rx8130_driver);
 MODULE_AUTHOR("Val Krutov <vkrutov@eea.epson.com>");
 MODULE_DESCRIPTION("RX8130CE RTC driver");
 MODULE_LICENSE("GPL");
+MODULE_VERSION("1.2");
+

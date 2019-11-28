@@ -1,13 +1,14 @@
 #!/bin/sh
 
-source /var/hm_mode 2>/dev/null
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
 
 # Command run on power loss
 #: ${POWER_LOSS_CMD:='/sbin/poweroff'}
-: ${POWER_LOSS_CMD:='/bin/triggerAlarm.tcl "PIco UPS: Power Loss"'}
+: ${POWER_LOSS_CMD:='/bin/triggerAlarm.tcl "Power Loss" "PIcoUPS-Alarm"'}
 
 # File descriptors
-if [[ ${HOST} != "tinkerboard" ]]; then
+if [[ ${HM_HOST} != "tinkerboard" ]]; then
   : ${GPIO_PULSE:=22}
   : ${GPIO_CLOCK:=27}
 else

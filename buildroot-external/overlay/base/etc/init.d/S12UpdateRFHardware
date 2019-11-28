@@ -19,13 +19,15 @@ update_rf_hardware() {
 
       # identify which firmware file to take for a potential coprocessor
       # firmware update
-      if [[ "${HM_MODE}" == "HM-LGW" ]]; then
-        FW_FILE=coprocessor_update.eq3
-      elif [[ ! -e /etc/config/enable-debug-coprocessor ]]; then
-        FW_FILE=dualcopro_si1002_update_blhm.eq3
+      if [[ "${HM_MODE}" == "NORMAL" ]]; then
+        if [[ ! -e /etc/config/enable-debug-coprocessor ]]; then
+          FW_FILE=dualcopro_si1002_update_blhm.eq3
+        else
+          NEW_VERSION=2.2.1
+          FW_FILE=dualcopro_si1002_update_blhm-2.2.1.eq3
+        fi
       else
-        NEW_VERSION=2.2.1
-        FW_FILE=dualcopro_si1002_update_blhm-2.2.1.eq3
+        FW_FILE=coprocessor_update.eq3
       fi
 
       # identify the copro firmware version to be flashed
@@ -33,9 +35,15 @@ update_rf_hardware() {
         NEW_VERSION=$(cat ${FW_DIRECTORY}/fwmap | grep "${FW_FILE}" | awk '{ print $3 }')
       fi
 
+      # get OLD_VERSION from var tmp file
+      if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+        OLD_VERSION=$(cat /var/rf_firmware_version 2>/dev/null)
+      else
+        OLD_VERSION=$(cat /var/hmip_firmware_version 2>/dev/null)
+      fi
+
       # if NEW_VERSION is not empty we go ahead and perform the
       # update operation
-      OLD_VERSION=$(cat /var/rf_firmware_version 2>/dev/null)
       if [[ -n "${NEW_VERSION}" ]] && [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
         # we always perform the firmware update in /tmp
         # so lets copy the whole firmware directory to tmp
@@ -87,20 +95,22 @@ update_rf_hardware() {
 
       echo -n "RPI-RF-MOD: "
 
-      # identify which firmware (hmip-only or dualcopro) we should use
+      NEW_VERSION=$(ls /firmware/RPI-RF-MOD/dualcopro_update_blhmip-*.eq3 | sed 's/.*-\(.*\)\.eq3/\1/')
+
+      # get OLD_VERSION from var tmp file
       if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
-        FW_TYPE=dualcopro_cc1310_update_blhmip
+        OLD_VERSION=$(cat /var/rf_firmware_version 2>/dev/null)
       else
-        FW_TYPE=hmip_coprocessor_update
+        OLD_VERSION=$(cat /var/hmip_firmware_version 2>/dev/null)
       fi
 
-      NEW_VERSION=$(ls /firmware/RPI-RF-MOD/${FW_TYPE}-*.eq3 | sed 's/.*-\(.*\)\.eq3/\1/')
-      OLD_VERSION=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v 2>/dev/null | grep "Application version =" | cut -d' ' -f5)
+      # if NEW_VERSION is not empty we go ahead and perform the
+      # update operation
       if [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
         # run firmware update
-        HM_HMIP_VERSION=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -o -f /firmware/RPI-RF-MOD/${FW_TYPE}-*.eq3 2>/dev/null | grep "Version:" | cut -d' ' -f5)
+        HM_HMIP_VERSION=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -o -f /firmware/RPI-RF-MOD/dualcopro_update_blhmip-*.eq3 2>/dev/null | grep "Version:" | cut -d' ' -f5)
 
         echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
         if [[ -z "${HM_HMRF_DEV}" ]]; then
@@ -127,7 +137,12 @@ update_rf_hardware() {
       echo -n "HMIP-RFUSB: "
 
       NEW_VERSION=$(ls /firmware/HmIP-RFUSB/hmip_coprocessor_update-*.eq3 | sed 's/.*hmip_coprocessor_update-\(.*\)\.eq3/\1/')
-      OLD_VERSION=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v 2>/dev/null | grep "Application version =" | cut -d' ' -f5)
+
+      # get OLD_VERSION from var tmp file
+      OLD_VERSION=$(cat /var/hmip_firmware_version 2>/dev/null)
+
+      # if NEW_VERSION is not empty we go ahead and perform the
+      # update operation
       if [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 

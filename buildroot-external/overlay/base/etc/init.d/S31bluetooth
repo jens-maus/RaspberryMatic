@@ -10,7 +10,7 @@ DAEMON=/usr/libexec/bluetooth/bluetoothd
 HCIATTACH=/usr/bin/hciattach
 HCICONFIG=/usr/bin/hciconfig
 RFKILL=/usr/sbin/rfkill
-DEVICE=/dev/ttyS1
+DEVICE=/dev/ttyS0
 
 SSD_OPTIONS="--oknodo --quiet --exec $DAEMON -- --compat"
 

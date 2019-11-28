@@ -8,17 +8,27 @@ identify_host() {
   # default/fallback values
   HM_HOST=""
   HM_MODE="NORMAL"
-  HM_LED_GREEN="/sys/class/leds/led0"
-  HM_LED_RED="/sys/class/leds/led1"
+  HM_LED_GREEN=""
+  HM_LED_GREEN_MODE1="mmc0"
+  HM_LED_GREEN_MODE2="heartbeat"
+  HM_LED_RED=""
+  HM_LED_RED_MODE1="timer"
+  HM_LED_RED_MODE2="mmc0"
   HM_LED_YELLOW=""
+  HM_LED_YELLOW_MODE1="none"
+  HM_LED_YELLOW_MODE2="none"
 
   # identify the RaspberryPi version used
   # http://elinux.org/RPi_HardwareHistory
   # https://github.com/MilhouseVH/bcmstat/blob/master/bcmstat.sh#L67
   hostid=$(cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}')
   case "${hostid}" in
+    *c03111)                                         HM_HOST="rpi4b4g"    ;; # Raspberry Pi 4 Model B/4GB
+    *b03111)                                         HM_HOST="rpi4b2g"    ;; # Raspberry Pi 4 Model B/2GB
+    *a03111)                                         HM_HOST="rpi4b1g"    ;; # Raspberry Pi 4 Model B/1GB
     *a020d3)                                         HM_HOST="rpi3p"      ;; # Raspberry Pi 3 Model B+
     *a02080|*a02082|*a22082|*a32082)                 HM_HOST="rpi3"       ;; # Raspberry Pi 3 Model B
+    *9020e0)                                         HM_HOST="rpi3ap"     ;; # Raspberry Pi 3 Model A+
     *a020a0)                                         HM_HOST="rpi3cm"     ;; # Raspberry Pi Compute Module 3
     *a01040|*a01041|*a02041|*a02042|*a21041|*a22042) HM_HOST="rpi2"       ;; # Raspberry Pi 2 Model B
     *9000c?)                                         HM_HOST="rpi0w"      ;; # Raspberry Pi Zero W
@@ -38,13 +48,28 @@ identify_host() {
         # ASUS Tinkerboard
         Rockchip)
           HM_HOST="tinkerboard"
-          HM_LED_GREEN="/sys/class/leds/act-led"
-          HM_LED_RED="/sys/class/leds/pwr-led"
-          HM_LED_YELLOW="/sys/class/leds/led1-led"
         ;;
       esac
     ;;
   esac
+
+  # find out if we are in a virtual environment so that
+  # we can identify the ova platform
+  if [[ -z "${HM_HOST}" ]]; then
+    hypervisor=$(/usr/bin/lscpu | grep 'Hypervisor vendor:' | awk '{print $3}')
+    if [[ -n "${hypervisor}" ]]; then
+      HM_HOST="ova-${hypervisor}"
+    fi
+  fi
+
+  # find out via dmidecode (if it exists) the product name
+  # and extract the host type from that
+  if [[ -z "${HM_HOST}" ]] && [[ -e /usr/sbin/dmidecode ]]; then
+    product_name=$(/usr/sbin/dmidecode -s baseboard-manufacturer)
+    case "${product_name}" in
+      *Intel*) HM_HOST="nuc";; # Intel NUC
+    esac
+  fi
 
   # if HOST is still empty we fall back to RaspberryPi3
   if [[ -z "${HM_HOST}" ]]; then
@@ -52,15 +77,63 @@ identify_host() {
     echo "couldn't identify hardware platform (${hostid}). Using RaspberryPi3 as fallback"
   fi
 
+  # depending on the host hardware we have to define different
+  # HM settings
+  case "${HM_HOST}" in
+
+    # RaspberryPi
+    rpi*)
+      HM_LED_GREEN="/sys/class/leds/led0"
+      HM_LED_RED="/sys/class/leds/led1"
+      HM_LED_YELLOW=""
+
+      # if we are running on a raspberrypi we
+      # disable the HDMI port in case no cable is
+      # connected. This is to save power, but also
+      # to reduce potential interferences with the
+      # GPIO-based RF modules
+      hdmi_state=$(/usr/bin/tvservice -s | cut -d' ' -f2)
+
+      # if the least significant bit is set the
+      # HDMI cable seems to be unplugged
+      if [[ $(((${hdmi_state} & 0x01) == 1)) -eq 1 ]]; then
+        /usr/bin/tvservice --off
+        /usr/bin/vcgencmd display_power 0
+      fi
+    ;;
+
+    # ASUS Tinkerboard
+    tinkerboard*)
+      HM_LED_GREEN="/sys/class/leds/act-led"
+      HM_LED_RED="/sys/class/leds/pwr-led"
+      HM_LED_YELLOW="/sys/class/leds/heartbeat-led"
+    ;;
+
+    # Open Virtual Appliance (ova)
+    ova*)
+      # fine
+    ;;
+
+    # Intel NUC hardware (intelnuc)
+    nuc*)
+      # fine
+    ;;
+
+    *)
+      echo "ERROR: couldn't identify host hardware: ${hostid}"
+    ;;
+
+  esac
+
   # make sure the LEDs are actually setup correctly
   if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
-    echo "mmc0" >${HM_LED_GREEN}/trigger
+    echo ${HM_LED_GREEN_MODE1} >${HM_LED_GREEN}/trigger
   fi
   if [[ -f "${HM_LED_RED}/trigger" ]]; then
-    echo "timer" >${HM_LED_RED}/trigger
+    echo ${HM_LED_RED_MODE1} >${HM_LED_RED}/trigger
   fi
   if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
-    echo "none" >${HM_LED_YELLOW}/trigger
+    echo ${HM_LED_YELLOW_MODE1} >${HM_LED_YELLOW}/trigger
   fi
 }
 

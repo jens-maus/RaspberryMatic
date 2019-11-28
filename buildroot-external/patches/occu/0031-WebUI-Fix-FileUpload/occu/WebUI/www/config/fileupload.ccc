@@ -23,7 +23,7 @@ eval $(echo ${QUERY_STRING//&/;})
 # write out the data
 SIZE=$((HTTP_CONTENT_LENGTH-a))
 filename=$(mktemp -p /usr/local/tmp)
-head -c $SIZE >${filename}
+/usr/bin/head -q -c ${SIZE} >${filename}
 if [ $? -ne 0 ]; then
   echo "ERROR (head)"
 fi
@@ -45,3 +45,5 @@ echo "   // End hiding -->"
 echo "  </script>"
 echo " </head>"
 echo "</html>"
+
+exit 0

@@ -5,8 +5,8 @@
 
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-# skip this startup in LAN Gateway mode
-[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
+# skip this startup if not in normal mode
+[[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
 start() {
   waitForIP
@@ -35,18 +35,24 @@ waitForIP() {
 }
 
 updateCopro() {
-  echo "Updating RF Lan Gateway Coprocessor Firmware" | logger -p user.info
-  /bin/eq3configcmd update-coprocessor -lgw -u -rfdconf /etc/config/rfd.conf -l 1
+  if grep -q "^\[Interface .\]" /etc/config/rfd.conf 2>/dev/null; then
+    echo "Updating RF Lan Gateway Coprocessor Firmware" | logger -p user.info
+    /bin/eq3configcmd update-coprocessor -lgw -u -rfdconf /etc/config/rfd.conf -l 1
+  fi
 }
 
 updateRFFirmware() {
-  echo "Updating RF Lan Gateway Firmware" | logger -p user.info
-  /bin/eq3configcmd update-lgw-firmware -m /firmware/fwmap -c /etc/config/rfd.conf -l 1 
+  if grep -q "^\[Interface .\]" /etc/config/rfd.conf 2>/dev/null; then
+    echo "Updating RF Lan Gateway Firmware" | logger -p user.info
+    /bin/eq3configcmd update-lgw-firmware -m /firmware/fwmap -c /etc/config/rfd.conf -l 1
+  fi
 }
 
 updateWiredFirmware() {
-  echo "Updating Wired Lan Gateway Firmware" | logger -p user.info
-  /bin/eq3configcmd update-lgw-firmware -m /firmware/fwmap -c /etc/config/hs485d.conf -l 1
+  if grep -q "^\[Interface .\]" /etc/config/hs485d.conf 2>/dev/null; then
+    echo "Updating Wired Lan Gateway Firmware" | logger -p user.info
+    /bin/eq3configcmd update-lgw-firmware -m /firmware/fwmap -c /etc/config/hs485d.conf -l 1
+  fi
 }
 
 restart() {

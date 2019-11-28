@@ -5,7 +5,7 @@
 #############################################################
 
 BLUETOOTH_TINKER_VERSION = 1.0.0
-BLUETOOTH_TINKER_SITE = $(BR2_EXTERNAL)/package/bluetooth-tinker
+BLUETOOTH_TINKER_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/bluetooth-tinker
 BLUETOOTH_TINKER_SITE_METHOD = local
 
 define BLUETOOTH_TINKER_INSTALL_TARGET_CMDS

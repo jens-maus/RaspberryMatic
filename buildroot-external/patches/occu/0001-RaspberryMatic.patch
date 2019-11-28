@@ -1,0 +1,660 @@
+--- occu/WebUI/www/api/backup/version.cgi.orig
++++ occu/WebUI/www/api/backup/version.cgi
+@@ -1 +1,11 @@
+-### rfd-config##source common.tclproc main { } {	puts "Content-Type: text/plain"	puts ""	puts -nonewline [loadFile /boot/VERSION]}startup
+\ No newline at end of file
++##
++# rfd-config
++##
++source common.tcl
++proc main { } {
++ puts "Content-Type: text/plain"
++ puts ""
++ puts -nonewline [loadFile /VERSION]
++}
++
++startup
+--- occu/WebUI/www/config/cp_maintenance.cgi.orig
++++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -394,7 +394,7 @@
+                     table_row {
+                       table_data {
+                         division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU3';\"" {}
+-                        division {class="CLASS20908"}  "onClick=\"showCCULicense();\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
++                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+                       }
+                     }
+                   }
+@@ -446,27 +446,7 @@
+           }
+         }
+         table_data {align="left"} {class="CLASS20921"} {
+-          puts "\${dialogSettingsCMHintSoftwareUpdate1}"
+-          number_list {class="j_noForcedUpdate"} {
+-            li {
+-              ${dialogSettingsCMHintSoftwareUpdate2}            }
+-            li {
+-               ${dialogSettingsCMHintSoftwareUpdate3}
+-            }
+-            li {
+-               ${dialogSettingsCMHintSoftwareUpdate3a}
+-            }
+-            set bat_level [get_bat_level]
+-            if {$bat_level < 50} {
+-              set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
+-              append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
+-              li $msg
+-            }
+-          }
+-
+-          division {class="j_forcedUpdate" style="padding:10px;"} {
+-            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate2}"
+-          }
++          puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
+         }
+       }
+       table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
+--- occu/WebUI/www/config/cp_security.cgi.orig
++++ occu/WebUI/www/config/cp_security.cgi
+@@ -77,8 +77,8 @@
+ proc getSGTIN_Backup {migrationMode} {
+ 
+   switch $migrationMode {
+-    "CCU2_CCU2" {set path_crRFD "/tmp/backup/usr/local/etc/config/crRFD/data"}
+-    "CCU2_CCU3" {set path_crRFD "/tmp/backup/usr/local/etc/config/crRFD/data"}
++    "CCU2_CCU2" {set path_crRFD "/usr/local/tmp/backup/usr/local/etc/config/crRFD/data"}
++    "CCU2_CCU3" {set path_crRFD "/usr/local/tmp/backup/usr/local/etc/config/crRFD/data"}
+     "CCU3_CCU3" {set path_crRFD "/usr/local/eQ-3-Backup/restore/etc/config/crRFD/data"}
+   }
+ 
+@@ -135,8 +135,8 @@
+ proc checkUserBackupValidility {migrationMode} {
+ 
+   switch $migrationMode {
+-    "CCU2_CCU2" {set pathBackup "/tmp/backup/usr/local/"}
+-    "CCU2_CCU3" {set pathBackup "/tmp/backup/usr/local/"}
++    "CCU2_CCU2" {set pathBackup "/usr/local/tmp/backup/usr/local/"}
++    "CCU2_CCU3" {set pathBackup "/usr/local/tmp/backup/usr/local/"}
+     "CCU3_CCU3" {set pathBackup "/usr/local/eQ-3-Backup/restore/"}
+   }
+ 
+@@ -296,7 +296,7 @@
+     } else {
+       exec touch /usr/local/.doFactoryReset
+     }
+-    exec kill -SIGQUIT 1
++    exec /sbin/reboot
+   }]} {
+ 
+     # TWIST-22
+@@ -371,13 +371,13 @@
+ 
+ proc action_backup_restore_check {} {
+   global env
+-  cd /tmp/
++  cd /usr/local/tmp/
+   
+   http_head
+   set i 0
+   if { [catch {
+-    exec tar xf new_config.tar
+-    file delete -force /tmp/new_config.tar
++    exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/new_config.tar 2>/dev/null
++    file delete -force /usr/local/tmp/new_config.tar
+   
+   set config_version [read_version "firmware_version"]
+   set ccu1_backup false
+@@ -509,10 +509,10 @@
+ 
+ proc action_backup_restore_go {} {
+   global env
+-  cd /tmp/
++  cd /usr/local/tmp/
+   http_head
+     
+-  set system_version [read_version "/boot/VERSION"]
++  set system_version [read_version "/VERSION"]
+   set config_version [read_version "firmware_version"]
+   set ccu1_backup false
+   if { [version_compare $config_version 2.0.0] < 0 } {
+@@ -595,20 +595,20 @@
+     if { "CCU2_CCU2" == $migration_mode } {
+       # CCU2 ==> CCU2
+       set backuperror false
+-      set source_version [read_version "/tmp/firmware_version"]
++      set source_version [read_version "/usr/local/tmp/firmware_version"]
+       set source_version [split $source_version .]
+       set source_major [lindex $source_version 0]
+       set source_minor [lindex $source_version 1]
+       set source_patch [lindex $source_version 2]
+       if { (($source_major == 2)  && ($source_minor > 17)) || (($source_major == 2) && ($source_minor == 17) && ($source_patch >= 14))} {
+-        # extract backup to /tmp to enable checkUsrBackup.sh to validate backup
+-        file delete -force /tmp/backup
+-        file mkdir /tmp/backup
+-        cd /tmp/backup
+-        if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
++        # extract backup to /usr/local/tmp to enable checkUsrBackup.sh to validate backup
++        file delete -force /usr/local/tmp/backup
++        file mkdir /usr/local/tmp/backup
++        cd /usr/local/tmp/backup
++        if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+           cgi_javascript {puts "MessageBox.close();"}
+           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+-          file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
++          file delete -force /usr/local/tmp/firmware_version /usr/local/tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
+           return
+           #set backuperror true
+         } else {
+@@ -621,7 +621,7 @@
+             # Start /etc/init.d/S62HMServer start
+             cgi_javascript {puts "MessageBox.close();"}
+             put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} [getBackupErrorMessage $checkBackupState $migration_mode]"
+-            file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
++            file delete -force /usr/local/tmp/firmware_version /usr/local/tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
+             cgi_javascript {puts "homematic('User.restartHmIPServer');"}
+             return
+           } 
+@@ -645,7 +645,7 @@
+           # append msg $errorMessage
+           cgi_javascript {puts "MessageBox.close();"}
+           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+-          file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
++          file delete -force /usr/local/tmp/firmware_version /usr/local/tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
+           return
+         } else {
+           set backuperror false
+@@ -657,24 +657,25 @@
+     file delete -force /usr/local/eQ-3-Backup/restore
+     file mkdir /usr/local/eQ-3-Backup/restore
+     cd /usr/local/eQ-3-Backup/restore
+-      if { [catch {exec tar xzf /tmp/usr_local.tar.gz --strip 2} errorMessage] } {
++      if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz --strip 2} errorMessage] } {
+           # show message "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
+           cgi_javascript {puts "MessageBox.close();"}
+           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+           set backuperror true
+         } else {
+           set backuperror false
++          exec touch /usr/local/.doBackupRestore
+         }
+     } elseif { "CCU2_CCU3" == $migration_mode } {
+           # CCU2 ==> CCU3
+-        # be sure /tmp/backup is empty
+-        file delete -force /tmp/backup
++        # be sure /usr/local/tmp/backup is empty
++        file delete -force /usr/local/tmp/backup
+         # be sure restore directory is empty
+         file delete -force /usr/local/eQ-3-Backup/restore
+-        file mkdir /tmp/backup
++        file mkdir /usr/local/tmp/backup
+ 
+-        cd /tmp/backup
+-        if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
++        cd /usr/local/tmp/backup
++        if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+           cgi_javascript {puts "MessageBox.close();"}
+           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+           set backuperror true
+@@ -682,8 +683,8 @@
+           # only do this when the compatibility check says ok:
+           #copy old files
+           file mkdir /usr/local/eQ-3-Backup/restore/etc/config
+-          if { [file exists /tmp/backup/usr/local/etc/config] } {
+-            cd /tmp/backup/usr/local/etc/config
++          if { [file exists /usr/local/tmp/backup/usr/local/etc/config] } {
++            cd /usr/local/tmp/backup/usr/local/etc/config
+           }
+ 
+           if { [file exists InterfacesList.xml] } { file copy InterfacesList.xml /usr/local/eQ-3-Backup/restore/etc/config/InterfacesList.xml }
+@@ -716,26 +717,31 @@
+ 
+           set backuperror false
+           cd /
++          exec touch /usr/local/.doBackupRestore
+         }
+       }
+     } else {  # backup for version < 2
++      catch {
++        exec pkill ReGaHss
++        exec sleep 5
++      }
+       #delete existing files
+-      file delete -force /tmp/backup
++      file delete -force /usr/local/tmp/backup
+       file delete -force /etc/config/hs485d /etc/config/hs485types /etc/config/rfd /etc/config/userprofiles
+       file delete -force /etc/config/homematic.regadom /etc/config/homematic.regadom.bak
+       file delete -force /etc/config/ids /etc/config/ntpclient /etc/config/rega.conf /etc/config/syslog
+       file delete -force /etc/config/tweaks /etc/config/TZ /etc/config/server.pem /etc/config/keys
+       file delete -force /etc/config/time.conf
+ 
+-      file mkdir /tmp/backup
+-      cd /tmp/backup
+-      if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
++      file mkdir /usr/local/tmp/backup
++      cd /usr/local/tmp/backup
++      if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
+         put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
+         set backuperror true
+       } else {
+         #copy old files
+-        if { [file exists /tmp/backup/usr/local/etc/config] } {
+-          cd /tmp/backup/usr/local/etc/config
++        if { [file exists /usr/local/tmp/backup/usr/local/etc/config] } {
++          cd /usr/local/tmp/backup/usr/local/etc/config
+         }
+ 
+         if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }
+@@ -789,11 +795,13 @@
+         catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
+ 
+         set backuperror false
++        exec /sbin/reboot
++        return
+       }
+     cd /
+   }
+ 
+-  set source_version [read_version "/tmp/firmware_version"]
++  set source_version [read_version "/usr/local/tmp/firmware_version"]
+ 
+   set source_version [split $source_version .]
+   set source_major [lindex $source_version 0]
+@@ -817,8 +825,7 @@
+   cgi_javascript {puts "MessageBox.close();"}
+ 
+   if { "false" == $backuperror } {
+-    exec mount -o remount,ro /usr/local
+-    exec mount -o remount,rw /usr/local
++    exec sync
+     division {class="popupTitle"} {
+       puts "\${dialogSettingsSecurityMessageSysBackupRestartSystemTitle}"
+     }
+@@ -859,8 +866,6 @@
+   cgi_javascript {
+     puts "translatePage('#messagebox');"
+   }
+-
+-  file delete -force /tmp/new_config.tar /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
+ }
+ 
+ proc put_message {title msg args} {
+@@ -1465,30 +1470,27 @@
+ 
+ proc action_create_backup {} {
+   set HOSTNAME [exec hostname]
++  set system_version [read_version "/VERSION"]
+   set iso8601_date [exec date -Iseconds]
++  set tmpdir [exec mktemp -d -p /usr/local/tmp]
+   regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
++  set backupfile [set HOSTNAME]-$system_version-$year-$month-$day-$hour$minute.sbk
+   #save DOM
+   rega system.Save()
+   cd /
+-  exec tar czf /tmp/usr_local.tar.gz usr/local
+-  cd /tmp/
++  catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
++  cd $tmpdir/
+   #sign the configuration with the current key
+   exec crypttool -s -t 1 <usr_local.tar.gz >signature
+   #store the current key index
+   exec crypttool -g -t 1 >key_index
+-  file copy -force /boot/VERSION firmware_version
+-  set fd [open "|tar c usr_local.tar.gz signature firmware_version key_index"]
+-  catch {fconfigure $fd -translation binary}
+-  catch {fconfigure $fd -encoding binary}
+-  puts "Content-Type:application/x-download"
+-  puts "Content-Disposition:attachment;filename=[set HOSTNAME]-$year-$month-$day.sbk\n"
+-  catch {fconfigure stdout -translation binary}
+-  catch {fconfigure stdout -encoding binary}
+-  while { ! [eof $fd]} {
+-    puts -nonewline [read $fd 65536]
+-  }
+-  close $fd
+-  file delete -force /tmp/usr_local.tar.gz /tmp/firmware_version /tmp/signature
++  file copy -force /VERSION firmware_version
++  catch { exec tar --owner=root --group=root -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index }
++  cd /
++  exec rm -rf $tmpdir
++  puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"
++  puts "Content-Type: application/octet-stream"
++  puts "Content-Disposition: attachment; filename=\"$backupfile\"\n"
+ }
+ 
+ proc action_backup_upload {} {
+--- occu/WebUI/www/config/cp_time.cgi.orig
++++ occu/WebUI/www/config/cp_time.cgi
+@@ -681,6 +681,8 @@
+   puts $fd "$TIMEZONES($timezone)"
+   close $fd
+   
++  catch {exec /bin/updateTZ.sh}
++
+   rega_script "var x=system.Longitude($lon);var y=system.Latitude($lat);var a=dom.ChangedTimeManually();"
+   
+   catch {exec /sbin/hwclock -wu}
+--- occu/WebUI/www/config/help.cgi.orig
++++ occu/WebUI/www/config/help.cgi
+@@ -3,8 +3,8 @@
+ source common.tcl
+ load tclrega.so
+ 
+-set PRODUCT_NAME "Zentrale"
+-set PRODUCT_ID "CCU[getProduct]"
++set PRODUCT_NAME "RaspberryMatic"
++set PRODUCT_ID "CCU"
+ set HOMEMATIC_URL "http://www.homematic.com"
+ set HOMEMATIC_IP_URL "https://www.homematic-ip.com"
+ 
+@@ -18,8 +18,16 @@
+ proc action_put_page {} {
+   global PRODUCT_NAME PRODUCT_ID HOMEMATIC_URL HOMEMATIC_IP_URL HELP_URL HELP_IP_URL LANGUAGE CUR_YEAR env
+ 
+-  set SERIAL [read_var /var/ids SerialNumber]
+-  set VERSION [read_var /boot/VERSION VERSION]
++  if {[file exist /var/board_sgtin]} {
++    set SERIAL [exec cat /var/board_sgtin]
++  } elseif {[file exist /var/board_serial]} {
++    set SERIAL [exec cat /var/board_serial]
++  } elseif {[file exist /sys/module/plat_eq3ccu2/parameters/board_serial]} {
++    set SERIAL [exec cat /sys/module/plat_eq3ccu2/parameters/board_serial]
++  } else {
++    set SERIAL "n/a"
++  }
++  set VERSION [read_var /VERSION VERSION]
+   set HELP_ARGUMENTS "lang=$LANGUAGE&vers=$VERSION&serial=$SERIAL"
+ 
+ 
+@@ -57,6 +65,7 @@
+                 puts "<li><h1 class='helpTitle'><u>\${menuHelpPage}</u></h1></li>"
+                 puts "<li><a target='_blank' href=\'$HELP_URL\'>\${dialogHelpLinkOnlineHelpA}</a></li>"
+                 puts "<li><a target='_blank' href=\'$HELP_IP_URL\'>\${dialogHelpLinkOnlineHelpB}</a></li>"
++                puts "<li><a target='_blank' href='https://raspberrymatic.de/#memo-documentation'>RaspberryMatic</a></li>"
+                 puts "<li><a target='_blank' href='/licenseinfo.htm'>\${lblLicenseInformation}</a></li>"
+               puts "</ul>"
+       puts "</td>"
+@@ -75,7 +84,12 @@
+           # puts "<li>DOM [rega dom.BuildLabel()]</li>"
+           puts "<li><a target='_blank' href=\"$HOMEMATIC_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
+           puts "<li><a target='_blank' href=\"$HOMEMATIC_IP_URL/start.html\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
+-          puts "<li style='padding-top:25px;'><img src='/ise/img/homematic_logo_small.png'/></li>"
++          puts "<li style='padding-top:25px;'><img src='/ise/img/rm-logo_small.png'/></li>"
++          puts "<li>\${dialogHelpInfoLblCopyright} &copy; 2016 - $CUR_YEAR</li>"
++          puts "<li>RaspberryMatic Contributors (<a target='_blank' href='https://github.com/jens-maus/RaspberryMatic/graphs/contributors'>see here</a>)</li>"
++          puts "<li>Licensed under Apache 2.0 OpenSource license</li>"
++          puts "<li><a target='_blank' href=\"https://raspberrymatic.de/\">\${homepage} RaspberryMatic</a></li>"
++          puts "<li><br/>\${dialogSettingsCMHintSoftwareUpdateRaspMatic}</a></li>"
+         puts "</ul>"
+ 
+       puts "</td>"
+--- occu/WebUI/www/error/error-500.html.orig
++++ occu/WebUI/www/error/error-500.html
+@@ -100,7 +100,7 @@
+     <p>${ccuNotReadyHint}</p>
+   </div>
+   <div align="center" style="padding-top:250px;">
+-    <img id="imgLogo" src="/ise/img/hm-logo.png" alt=""/>
++    <img id="imgLogo" src="/ise/img/rm-logo.png" alt=""/>
+   </div>
+ </div>
+ 
+--- occu/WebUI/www/error/error-503.html.orig
++++ occu/WebUI/www/error/error-503.html
+@@ -94,7 +94,7 @@
+     <p>${ccuNotReadyHint}</p>
+   </div>
+   <div align="center" style="padding-top:250px;">
+-    <img id="imgLogo" src="/ise/img/hm-logo.png" alt=""/>
++    <img id="imgLogo" src="/ise/img/rm-logo.png" alt=""/>
+   </div>
+ </div>
+ 
+--- occu/WebUI/www/ise/htm/header.htm.orig
++++ occu/WebUI/www/ise/htm/header.htm
+@@ -7,7 +7,7 @@
+ </colgroup>
+ <tr>
+   <!-- Logo -->
+-          <td class="CLASS11100"><img id="headerLogo" src="/ise/img/homematic_logo_small.png" onclick="LogoClick();" class="SmallLogo" alt="" /></td>
++          <td class="CLASS11100"><img id="headerLogo" src="/ise/img/rm-logo_small.png" onclick="LogoClick();" class="SmallLogo" alt="" /></td>
+   <!-- Username und Pfad-->
+   <td class="CLASS11101">
+     <table class="CLASS11102">
+--- occu/WebUI/www/ise/js/functions.j_.orig
++++ occu/WebUI/www/ise/js/functions.j_
+@@ -1904,11 +1904,11 @@
+       {
+         if( $("headerLogo").src.indexOf("_red") >= 0 )
+         {
+-          $("headerLogo").src = "/ise/img/homematic_logo_small.png";
++          $("headerLogo").src = "/ise/img/rm-logo_small.png";
+         }
+         else
+         {
+-          $("headerLogo").src = "/ise/img/homematic_logo_small_red.png";
++          $("headerLogo").src = "/ise/img/rm-logo_small_red.png";
+         }
+       }
+     },
+@@ -1923,12 +1923,12 @@
+ 
+ SwitchOnFlashLight = function()
+ {
+-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small_red.png"; }
++  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small_red.png"; }
+ };
+ 
+ SwitchOffFlashLight = function()
+ {
+-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small.png"; }
++  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small.png"; }
+ };
+ 
+ ShowAjaxLoad = function()
+--- occu/WebUI/www/rega/help.htm.orig
++++ occu/WebUI/www/rega/help.htm
+@@ -53,7 +53,7 @@
+           <td>http://www.homematic.com </td>
+         </tr>
+         <tr>
+-          <td><img src="/ise/img/homematic_logo_small_gray.png" /></td>
++          <td><img src="/ise/img/rm-logo_small_gray.png" /></td>
+         </tr>
+     </table>
+     </td>
+--- occu/WebUI/www/rega/login.htm.orig
++++ occu/WebUI/www/rega/login.htm
+@@ -73,7 +73,7 @@
+     <td id="navbar">
+       <table cellpadding="0" cellspacing="0">
+         <tr>
+-          <td style="text-align: center;"><div style="width: 180px;"><img src="/ise/img/homematic_logo_small.png" alt="HomeMatic Logo" /></div></td>
++          <td style="text-align: center;"><div style="width: 180px;"><img src="/ise/img/rm-logo_small.png" alt="RaspberryMatic Logo" /></div></td>
+           <td><span class="HeaderTitle" style="cursor: pointer;" onclick="gotoLoginPage();">${lblUsrLogin}</span></td>
+           <td style="width: 100%;"></td>
+           <!-- <td><a href="/pda/index.cgi" target="_blank"><img id="WebUIorPDA" src="/ise/img/mobile_device.png" width="48px;" height="48px" alt="WebUI PDA" title="WebUI PDA"/></a></td> -->
+@@ -199,4 +199,4 @@
+ </script>
+ 
+ </body>
+-</html>
+\ No newline at end of file
++</html>
+--- occu/WebUI/www/rega/logout.htm.orig
++++ occu/WebUI/www/rega/logout.htm
+@@ -44,7 +44,7 @@
+       <td id="navbar">
+         <table cellpadding="0" cellspacing="0">
+         <tr>
+-          <td style="text-align: center;"><div style="width: 180px;" ><img src="/ise/img/homematic_logo_small.png" alt="HomeMatic Logo" /></div></td>
++          <td style="text-align: center;"><div style="width: 180px;" ><img src="/ise/img/rm-logo_small.png" alt="RaspberryMatic Logo" /></div></td>
+           <td><span class="HeaderTitle" style="cursor: pointer;" onclick="gotoLoginPage();">${lblUsrLogin}</span></td>
+             <td style="width: 100%;"></td>
+             <td style="padding-right:63px;"><div class="clickable" onclick="loadHelp();"><img id="idHelp" src="/ise/img/help.png" width="48px" height="48px" alt="Hilfe" title="Hilfe"/></div></td>
+--- occu/WebUI/www/rega/pages/index.htm.orig
++++ occu/WebUI/www/rega/pages/index.htm
+@@ -10,8 +10,8 @@
+   <meta http-equiv="pragma"        content="no-cache">
+   <meta http-equiv="expires"       content="0">
+ 
+-  <link rel="shortcut icon" href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon"/>
+-  <link rel="icon"          href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon" />
++  <link rel="shortcut icon" href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon"/>
++  <link rel="icon"          href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon" />
+   
+   <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css" />
+   <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css" />
+@@ -69,7 +69,7 @@
+     /*########################################################################*/
+ 
+     PLATFORM = "Central";
+-    WEBUI_VERSION = "3.45.7"
++    WEBUI_VERSION = "XXX-WEBUI-VERSION-XXX";
+   
+     /**
+      * Flags
+@@ -193,7 +193,7 @@
+   <div id="webuiloader_wrapper">
+     <div id="webuiloader_background">
+       <div id="webuiloader">
+-        <div id="webuiloader_icon"><img src="/ise/img/homematic_logo_small_gray.png" /></div>
++        <div id="webuiloader_icon"><img src="/ise/img/rm-logo_small_gray.png" /></div>
+         <!-- div id="webuiloader_caption">HomeMatic WebUI wird geladen...</div-->
+         <div id="webuiloader_caption"></div>
+         <script type="text/javascript">jQuery("#webuiloader_caption").html(translateKey("loadWebUI"));</script>
+--- occu/WebUI/www/webui/error/notready.html.orig
++++ occu/WebUI/www/webui/error/notready.html
+@@ -12,8 +12,8 @@
+     <p>Bitte warten Sie. Sie werden automatisch auf die Startseite weitergeleitet.</p>
+   </div>
+   <div align="center" style="padding-top:250px;">
+-    <img id="imgLogo" src="/ise/img/hm-logo.png" alt=""/>
++    <img id="imgLogo" src="/ise/img/rm-logo.png" alt=""/>
+   </div>
+ </body>
+ 
+-</html>
+\ No newline at end of file
++</html>
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -1,8 +1,8 @@
+ jQuery.extend(true,HMIdentifier , {
+   "de" : {
+-    "CCUFullNameHeader" : "Homematic CCU",
+-    "CCUFullNameText" : "Homematic CCU",
+-    "CCUShortName" : "CCU",
++    "CCUFullNameHeader" : "RaspberryMatic",
++    "CCUFullNameText" : "RaspberryMatic",
++    "CCUShortName" : "RaspMatic",
+     "BidCosRF" : "Homematic Funk",
+     "BidCosWired" : "Homematic Wired",
+     "VirtualDevices" : "VirtualDevices",
+@@ -483,6 +483,7 @@
+     "dialogSettingsCMHintSoftwareUpdate3" : "F%FChren Sie vor dem Update eine Datensicherung durch.",
+     "dialogSettingsCMHintSoftwareUpdate4a" : "Der Ladezustand der Batterien betr%E4gt nur noch ",
+     "dialogSettingsCMHintSoftwareUpdate4b" : "Um einem Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Update zu erneuern.",
++    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic ist ein gemeinschaftliches Projekt. Wenn Sie die Weiterentwicklung gerne in Form einer Geldspende unterst%FCtzen wollen k%F6nen Sie das gerne mittels einer <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal Spende</a> tun.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='/ise/img/paypal-donate.gif'></a>",
+     "dialogSettingsCMHintRestart" : "Zentrale neu starten. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintShutdown" : "Zentrale herunterfahren. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintRestartSafeMode" : "Homematic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -1,8 +1,8 @@
+ jQuery.extend(true,HMIdentifier , {
+   "en" : {
+-    "CCUFullNameHeader" : "Homematic CCU",
+-    "CCUFullNameText" : "Homematic CCU",
+-    "CCUShortName" : "CCU",
++    "CCUFullNameHeader" : "RaspberryMatic",
++    "CCUFullNameText" : "RaspberryMatic",
++    "CCUShortName" : "RaspMatic",
+     "BidCosRF" : "Homematic RF",
+     "BidCosWired" : "BidCos-Wired",
+     "HmIPRF" : "HmIP-RF",
+@@ -477,6 +477,7 @@
+     "dialogSettingsCMHintSoftwareUpdate3" : "Please perform a data backup before starting the update.",
+     "dialogSettingsCMHintSoftwareUpdate4a" : "The charging status the batteries is only at ",
+     "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",
++    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='/ise/img/paypal-donate.gif'></a>",
+     "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
+     "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
+     "dialogSettingsCMHintRestartSafeMode" : "Start Homematic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -19349,7 +19349,7 @@
+   {
+     this.m_ccuProduct = getProduct();
+     this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
+-    this.m_product ="HM-CCU" + this.m_ccuProduct;
++    this.m_product = "HM-RASPBERRYMATIC";
+     this.m_URLServer = (isHTTPS) ? "https://"+this.preURL+"update.homematic.com:8443" : "http://"+this.preURL+"update.homematic.com";
+ 
+     var serial = homematic("CCU.getSerial");
+@@ -19359,7 +19359,7 @@
+     var script = document.createElement("script");
+     script.id = "homematic_com_script";
+     script.type = "text/javascript";
+-    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product="+this.m_product+"&serial=" + serial;
++    script.src = "https://raspberrymatic.de/LATEST-VERSION.js?v=" + WEBUI_VERSION;
+     $("body").appendChild(script);
+   },
+ 
+@@ -19411,7 +19411,7 @@
+       var script = document.createElement("script");
+       script.id = "homematic_com_script_" + index;
+       script.type = "text/javascript";
+-      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0";
++      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0" + "&ts=" + Date.now();
+       $("body").appendChild(script);
+       homematic.com.callback = callback;
+   },
+@@ -19421,7 +19421,7 @@
+       var script = document.createElement("script");
+       script.id = "homematic_com_script_fw";
+       script.type = "text/javascript";
+-      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE";
++      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE?ts=" + Date.now();
+       $("body").appendChild(script);
+       homematic.com.callback = callback;
+   },
+@@ -24695,11 +24695,11 @@
+       {
+         if( $("headerLogo").src.indexOf("_red") >= 0 )
+         {
+-          $("headerLogo").src = "/ise/img/homematic_logo_small.png";
++          $("headerLogo").src = "/ise/img/rm-logo_small.png";
+         }
+         else
+         {
+-          $("headerLogo").src = "/ise/img/homematic_logo_small_red.png";
++          $("headerLogo").src = "/ise/img/rm-logo_small_red.png";
+         }
+       }
+     },
+@@ -24714,12 +24714,12 @@
+ 
+ SwitchOnFlashLight = function()
+ {
+-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small_red.png"; }
++  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small_red.png"; }
+ };
+ 
+ SwitchOffFlashLight = function()
+ {
+-  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small.png"; }
++  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small.png"; }
+ };
+ 
+ getAjaxLoadElem = function() {
+--- occu/firmware/HM-MOD-UART/fwmap.orig
++++ occu/firmware/HM-MOD-UART/fwmap
+@@ -1,7 +1,7 @@
+ #Type           Filename                Version
+ 
+ #Coprozessor
+-CCU2                    coprocessor_update.eq3                         	1.4.1		# CoProzessor HM-MOD-UART
++#CCU2                    coprocessor_update.eq3                         	1.4.1		# CoProzessor HM-MOD-UART
+ 
+-#CCU2			dualcopro_si1002_update_blhm.eq3		2.8.6		# Dual CoProzessor HM-MOD-UART
++CCU2			dualcopro_si1002_update_blhm.eq3		2.8.6		# Dual CoProzessor HM-MOD-UART
+ 

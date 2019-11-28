@@ -40,7 +40,13 @@ case $(cat /etc/config/TZ) in
   ULAT-8ULAST-9*)       TZ=Asia/Ulan_Bator ;;
   WET-0WEST-1*)         TZ=WET ;;
   WIB-7)                TZ=Asia/Jakarta ;;
-  *)                    TZ=Europe/Berlin ;;
+  *)
+    if [[ -e /usr/share/zoneinfo/$(cat /etc/config/TZ) ]]; then
+      TZ=$(cat /etc/config/TZ)
+    else
+      TZ=Europe/Berlin
+    fi
+  ;;
 esac
 
 if [[ -e /usr/share/zoneinfo/${TZ} ]]; then

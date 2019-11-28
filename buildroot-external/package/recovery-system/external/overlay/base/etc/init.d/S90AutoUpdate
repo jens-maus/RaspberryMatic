@@ -1,0 +1,121 @@
+#!/bin/sh
+#
+# start script to check if there are any update jobs
+# waiting which we can perform during bootup automatically.
+#
+
+start() {
+  echo -n "Checking for Auto-Update Jobs: "
+
+  # check if there is something mounted at /media/usbX
+  USB_DIR=$(mount | grep "/media/usb" | cut -f3 -d" ")
+  if [[ -n "${USB_DIR}" ]]; then
+    # if dir /media/usbX/ccu-update.bin exists we copy
+    # all data to /usr/local/tmp
+    if [[ -f "${USB_DIR}/ccu-update.bin" ]]; then
+      echo "found USB update file (${USB_DIR}/ccu-update.bin)... "
+
+      # remount usb disk read-only for safety reasons
+      mount -o ro,remount ${USB_DIR}
+
+      # remounte userfs as read-write so that we can start the firmware
+      # update
+      mount -o rw,remount /userfs
+      filename=$(mktemp -p /usr/local/tmp)
+      cp -a ${USB_DIR}/ccu-update.bin ${filename}
+      if [[ $? -eq 0 ]]; then
+        # run unattended firmware update
+        ( set -o pipefail; /bin/fwinstall.sh ${filename} 2>&1 | tee /tmp/fwinstall.log )
+        if [[ $? -ne 0 ]]; then
+          [ -f /tmp/fwinstall.pid ] && kill $(cat /tmp/fwinstall.pid) 2>/dev/null
+          # firmware update failed, lets change to
+          # interactive mode
+          echo "ERROR!"
+        else
+          [ -f /tmp/fwinstall.pid ] && kill $(cat /tmp/fwinstall.pid) 2>/dev/null
+
+          # firmware update succeeded, lets reboot!
+          rm -f /usr/local/.firmwareUpdate
+          mount -o ro,remount /userfs
+
+          echo "OK, rebooting"
+          /sbin/reboot
+          exit 1
+        fi
+      else
+        echo "ERROR: copy failed"
+      fi
+    fi
+  fi
+
+  # if /usr/local/.firmwareUpdate exists we perform an
+  # unattended firmware update
+  if [[ -L /usr/local/.firmwareUpdate ]]; then
+    echo "found waiting firmware update... "
+
+    # if only one compressed file is present,
+    # run fwinstall.h with filename to make it extract the file
+    FWINSTALL_PARAM=""
+    if [ $(ls -1 /usr/local/.firmwareUpdate | wc -l)  -eq 1 ]; then
+      # read link to avoid circular reference
+      FILEPATH="$(readlink -f /usr/local/.firmwareUpdate)/$(ls -1 /usr/local/.firmwareUpdate)"
+      if file -b $FILEPATH | egrep -q "(gzip compressed|tar archive)"; then
+        echo "Found compressed update file ${FILEPATH}"
+        FWINSTALL_PARAM=$FILEPATH
+      fi
+    fi
+
+    # run unattended firmware update
+    # (remount userfs in rw mode so that
+    #  fwinstall.sh can extract data if necessary)
+    mount -o rw,remount /userfs
+    ( set -o pipefail; /bin/fwinstall.sh $FWINSTALL_PARAM 2>&1 | tee /tmp/fwinstall.log )
+    if [[ $? -ne 0 ]]; then
+      [ -f /tmp/fwinstall.pid ] && kill $(cat /tmp/fwinstall.pid) 2>/dev/null
+      # firmware update failed, lets change to
+      # interactive mode
+      echo "ERROR!"
+    else
+      [ -f /tmp/fwinstall.pid ] && kill $(cat /tmp/fwinstall.pid) 2>/dev/null
+
+      # firmware update succeeded, lets reboot!
+      mount -o rw,remount /userfs
+      rm -f /usr/local/.firmwareUpdate
+      mount -o ro,remount /userfs
+
+      echo "OK, rebooting"
+
+      /sbin/reboot
+      exit 1
+    fi
+
+  else
+    echo "not found, OK"
+  fi
+
+  # remount userfs in rw mode so that lighttpd
+  # can upload data
+  mount -o rw,remount /userfs
+  rm -f /usr/local/.firmwareUpdate 2>/dev/null
+}
+
+restart() {
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

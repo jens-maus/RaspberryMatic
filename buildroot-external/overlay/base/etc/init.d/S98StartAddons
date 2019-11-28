@@ -5,8 +5,8 @@
 
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-# skip this startup in LAN Gateway mode
-[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
+# skip this startup if not in normal mode
+[[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
 start() {
   echo -n "Starting Third-Party Addons: "
@@ -30,6 +30,10 @@ start() {
         unset i
       done
     fi
+
+    # adjust the oom score (which is inherited by run-parts)
+    # to ensure that others are killed first in case of low memory situations
+    echo 100 >/proc/$$/oom_score_adj
 
     # start third-party addons one after another
     /bin/run-parts -a start /etc/config/rc.d >/dev/null 2>&1

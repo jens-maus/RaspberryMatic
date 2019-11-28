@@ -1,0 +1,2028 @@
+{
+  "version": "2.0",
+  "metadata": {
+    "apiVersion": "2015-04-13",
+    "endpointPrefix": "codecommit",
+    "jsonVersion": "1.1",
+    "protocol": "json",
+    "serviceAbbreviation": "CodeCommit",
+    "serviceFullName": "AWS CodeCommit",
+    "serviceId": "CodeCommit",
+    "signatureVersion": "v4",
+    "targetPrefix": "CodeCommit_20150413",
+    "uid": "codecommit-2015-04-13"
+  },
+  "operations": {
+    "BatchDescribeMergeConflicts": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "destinationCommitSpecifier",
+          "sourceCommitSpecifier",
+          "mergeOption"
+        ],
+        "members": {
+          "repositoryName": {},
+          "destinationCommitSpecifier": {},
+          "sourceCommitSpecifier": {},
+          "mergeOption": {},
+          "maxMergeHunks": {
+            "type": "integer"
+          },
+          "maxConflictFiles": {
+            "type": "integer"
+          },
+          "filePaths": {
+            "type": "list",
+            "member": {}
+          },
+          "conflictDetailLevel": {},
+          "conflictResolutionStrategy": {},
+          "nextToken": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "conflicts",
+          "destinationCommitId",
+          "sourceCommitId"
+        ],
+        "members": {
+          "conflicts": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "members": {
+                "conflictMetadata": {
+                  "shape": "Se"
+                },
+                "mergeHunks": {
+                  "shape": "St"
+                }
+              }
+            }
+          },
+          "nextToken": {},
+          "errors": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "required": [
+                "filePath",
+                "exceptionName",
+                "message"
+              ],
+              "members": {
+                "filePath": {},
+                "exceptionName": {},
+                "message": {}
+              }
+            }
+          },
+          "destinationCommitId": {},
+          "sourceCommitId": {},
+          "baseCommitId": {}
+        }
+      }
+    },
+    "BatchGetCommits": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "commitIds",
+          "repositoryName"
+        ],
+        "members": {
+          "commitIds": {
+            "type": "list",
+            "member": {}
+          },
+          "repositoryName": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "commits": {
+            "type": "list",
+            "member": {
+              "shape": "S18"
+            }
+          },
+          "errors": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "members": {
+                "commitId": {},
+                "errorCode": {},
+                "errorMessage": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "BatchGetRepositories": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryNames"
+        ],
+        "members": {
+          "repositoryNames": {
+            "type": "list",
+            "member": {}
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "repositories": {
+            "type": "list",
+            "member": {
+              "shape": "S1n"
+            }
+          },
+          "repositoriesNotFound": {
+            "type": "list",
+            "member": {}
+          }
+        }
+      }
+    },
+    "CreateBranch": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "branchName",
+          "commitId"
+        ],
+        "members": {
+          "repositoryName": {},
+          "branchName": {},
+          "commitId": {}
+        }
+      }
+    },
+    "CreateCommit": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "branchName"
+        ],
+        "members": {
+          "repositoryName": {},
+          "branchName": {},
+          "parentCommitId": {},
+          "authorName": {},
+          "email": {},
+          "commitMessage": {},
+          "keepEmptyFolders": {
+            "type": "boolean"
+          },
+          "putFiles": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "required": [
+                "filePath"
+              ],
+              "members": {
+                "filePath": {},
+                "fileMode": {},
+                "fileContent": {
+                  "type": "blob"
+                },
+                "sourceFile": {
+                  "type": "structure",
+                  "required": [
+                    "filePath"
+                  ],
+                  "members": {
+                    "filePath": {},
+                    "isMove": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "deleteFiles": {
+            "shape": "S27"
+          },
+          "setFileModes": {
+            "shape": "S29"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "commitId": {},
+          "treeId": {},
+          "filesAdded": {
+            "shape": "S2c"
+          },
+          "filesUpdated": {
+            "shape": "S2c"
+          },
+          "filesDeleted": {
+            "shape": "S2c"
+          }
+        }
+      }
+    },
+    "CreatePullRequest": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "title",
+          "targets"
+        ],
+        "members": {
+          "title": {},
+          "description": {},
+          "targets": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "required": [
+                "repositoryName",
+                "sourceReference"
+              ],
+              "members": {
+                "repositoryName": {},
+                "sourceReference": {},
+                "destinationReference": {}
+              }
+            }
+          },
+          "clientRequestToken": {
+            "idempotencyToken": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "pullRequest"
+        ],
+        "members": {
+          "pullRequest": {
+            "shape": "S2m"
+          }
+        }
+      }
+    },
+    "CreateRepository": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName"
+        ],
+        "members": {
+          "repositoryName": {},
+          "repositoryDescription": {},
+          "tags": {
+            "shape": "S2u"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "repositoryMetadata": {
+            "shape": "S1n"
+          }
+        }
+      }
+    },
+    "CreateUnreferencedMergeCommit": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "sourceCommitSpecifier",
+          "destinationCommitSpecifier",
+          "mergeOption"
+        ],
+        "members": {
+          "repositoryName": {},
+          "sourceCommitSpecifier": {},
+          "destinationCommitSpecifier": {},
+          "mergeOption": {},
+          "conflictDetailLevel": {},
+          "conflictResolutionStrategy": {},
+          "authorName": {},
+          "email": {},
+          "commitMessage": {},
+          "keepEmptyFolders": {
+            "type": "boolean"
+          },
+          "conflictResolution": {
+            "shape": "S2z"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "commitId": {},
+          "treeId": {}
+        }
+      }
+    },
+    "DeleteBranch": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "branchName"
+        ],
+        "members": {
+          "repositoryName": {},
+          "branchName": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "deletedBranch": {
+            "shape": "S36"
+          }
+        }
+      }
+    },
+    "DeleteCommentContent": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "commentId"
+        ],
+        "members": {
+          "commentId": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "comment": {
+            "shape": "S3a"
+          }
+        }
+      }
+    },
+    "DeleteFile": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "branchName",
+          "filePath",
+          "parentCommitId"
+        ],
+        "members": {
+          "repositoryName": {},
+          "branchName": {},
+          "filePath": {},
+          "parentCommitId": {},
+          "keepEmptyFolders": {
+            "type": "boolean"
+          },
+          "commitMessage": {},
+          "name": {},
+          "email": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "commitId",
+          "blobId",
+          "treeId",
+          "filePath"
+        ],
+        "members": {
+          "commitId": {},
+          "blobId": {},
+          "treeId": {},
+          "filePath": {}
+        }
+      }
+    },
+    "DeleteRepository": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName"
+        ],
+        "members": {
+          "repositoryName": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "repositoryId": {}
+        }
+      }
+    },
+    "DescribeMergeConflicts": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "destinationCommitSpecifier",
+          "sourceCommitSpecifier",
+          "mergeOption",
+          "filePath"
+        ],
+        "members": {
+          "repositoryName": {},
+          "destinationCommitSpecifier": {},
+          "sourceCommitSpecifier": {},
+          "mergeOption": {},
+          "maxMergeHunks": {
+            "type": "integer"
+          },
+          "filePath": {},
+          "conflictDetailLevel": {},
+          "conflictResolutionStrategy": {},
+          "nextToken": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "conflictMetadata",
+          "mergeHunks",
+          "destinationCommitId",
+          "sourceCommitId"
+        ],
+        "members": {
+          "conflictMetadata": {
+            "shape": "Se"
+          },
+          "mergeHunks": {
+            "shape": "St"
+          },
+          "nextToken": {},
+          "destinationCommitId": {},
+          "sourceCommitId": {},
+          "baseCommitId": {}
+        }
+      }
+    },
+    "DescribePullRequestEvents": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "pullRequestId"
+        ],
+        "members": {
+          "pullRequestId": {},
+          "pullRequestEventType": {},
+          "actorArn": {},
+          "nextToken": {},
+          "maxResults": {
+            "type": "integer"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "pullRequestEvents"
+        ],
+        "members": {
+          "pullRequestEvents": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "members": {
+                "pullRequestId": {},
+                "eventDate": {
+                  "type": "timestamp"
+                },
+                "pullRequestEventType": {},
+                "actorArn": {},
+                "pullRequestCreatedEventMetadata": {
+                  "type": "structure",
+                  "members": {
+                    "repositoryName": {},
+                    "sourceCommitId": {},
+                    "destinationCommitId": {},
+                    "mergeBase": {}
+                  }
+                },
+                "pullRequestStatusChangedEventMetadata": {
+                  "type": "structure",
+                  "members": {
+                    "pullRequestStatus": {}
+                  }
+                },
+                "pullRequestSourceReferenceUpdatedEventMetadata": {
+                  "type": "structure",
+                  "members": {
+                    "repositoryName": {},
+                    "beforeCommitId": {},
+                    "afterCommitId": {},
+                    "mergeBase": {}
+                  }
+                },
+                "pullRequestMergedStateChangedEventMetadata": {
+                  "type": "structure",
+                  "members": {
+                    "repositoryName": {},
+                    "destinationReference": {},
+                    "mergeMetadata": {
+                      "shape": "S2r"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "nextToken": {}
+        }
+      }
+    },
+    "GetBlob": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "blobId"
+        ],
+        "members": {
+          "repositoryName": {},
+          "blobId": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "content"
+        ],
+        "members": {
+          "content": {
+            "type": "blob"
+          }
+        }
+      }
+    },
+    "GetBranch": {
+      "input": {
+        "type": "structure",
+        "members": {
+          "repositoryName": {},
+          "branchName": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "branch": {
+            "shape": "S36"
+          }
+        }
+      }
+    },
+    "GetComment": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "commentId"
+        ],
+        "members": {
+          "commentId": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "comment": {
+            "shape": "S3a"
+          }
+        }
+      }
+    },
+    "GetCommentsForComparedCommit": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "afterCommitId"
+        ],
+        "members": {
+          "repositoryName": {},
+          "beforeCommitId": {},
+          "afterCommitId": {},
+          "nextToken": {},
+          "maxResults": {
+            "type": "integer"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "commentsForComparedCommitData": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "members": {
+                "repositoryName": {},
+                "beforeCommitId": {},
+                "afterCommitId": {},
+                "beforeBlobId": {},
+                "afterBlobId": {},
+                "location": {
+                  "shape": "S44"
+                },
+                "comments": {
+                  "shape": "S47"
+                }
+              }
+            }
+          },
+          "nextToken": {}
+        }
+      }
+    },
+    "GetCommentsForPullRequest": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "pullRequestId"
+        ],
+        "members": {
+          "pullRequestId": {},
+          "repositoryName": {},
+          "beforeCommitId": {},
+          "afterCommitId": {},
+          "nextToken": {},
+          "maxResults": {
+            "type": "integer"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "commentsForPullRequestData": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "members": {
+                "pullRequestId": {},
+                "repositoryName": {},
+                "beforeCommitId": {},
+                "afterCommitId": {},
+                "beforeBlobId": {},
+                "afterBlobId": {},
+                "location": {
+                  "shape": "S44"
+                },
+                "comments": {
+                  "shape": "S47"
+                }
+              }
+            }
+          },
+          "nextToken": {}
+        }
+      }
+    },
+    "GetCommit": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "commitId"
+        ],
+        "members": {
+          "repositoryName": {},
+          "commitId": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "commit"
+        ],
+        "members": {
+          "commit": {
+            "shape": "S18"
+          }
+        }
+      }
+    },
+    "GetDifferences": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "afterCommitSpecifier"
+        ],
+        "members": {
+          "repositoryName": {},
+          "beforeCommitSpecifier": {},
+          "afterCommitSpecifier": {},
+          "beforePath": {},
+          "afterPath": {},
+          "MaxResults": {
+            "type": "integer"
+          },
+          "NextToken": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "differences": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "members": {
+                "beforeBlob": {
+                  "shape": "S4j"
+                },
+                "afterBlob": {
+                  "shape": "S4j"
+                },
+                "changeType": {}
+              }
+            }
+          },
+          "NextToken": {}
+        }
+      }
+    },
+    "GetFile": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "filePath"
+        ],
+        "members": {
+          "repositoryName": {},
+          "commitSpecifier": {},
+          "filePath": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "commitId",
+          "blobId",
+          "filePath",
+          "fileMode",
+          "fileSize",
+          "fileContent"
+        ],
+        "members": {
+          "commitId": {},
+          "blobId": {},
+          "filePath": {},
+          "fileMode": {},
+          "fileSize": {
+            "type": "long"
+          },
+          "fileContent": {
+            "type": "blob"
+          }
+        }
+      }
+    },
+    "GetFolder": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "folderPath"
+        ],
+        "members": {
+          "repositoryName": {},
+          "commitSpecifier": {},
+          "folderPath": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "commitId",
+          "folderPath"
+        ],
+        "members": {
+          "commitId": {},
+          "folderPath": {},
+          "treeId": {},
+          "subFolders": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "members": {
+                "treeId": {},
+                "absolutePath": {},
+                "relativePath": {}
+              }
+            }
+          },
+          "files": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "members": {
+                "blobId": {},
+                "absolutePath": {},
+                "relativePath": {},
+                "fileMode": {}
+              }
+            }
+          },
+          "symbolicLinks": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "members": {
+                "blobId": {},
+                "absolutePath": {},
+                "relativePath": {},
+                "fileMode": {}
+              }
+            }
+          },
+          "subModules": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "members": {
+                "commitId": {},
+                "absolutePath": {},
+                "relativePath": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetMergeCommit": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "sourceCommitSpecifier",
+          "destinationCommitSpecifier"
+        ],
+        "members": {
+          "repositoryName": {},
+          "sourceCommitSpecifier": {},
+          "destinationCommitSpecifier": {},
+          "conflictDetailLevel": {},
+          "conflictResolutionStrategy": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "sourceCommitId": {},
+          "destinationCommitId": {},
+          "baseCommitId": {},
+          "mergedCommitId": {}
+        }
+      }
+    },
+    "GetMergeConflicts": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "destinationCommitSpecifier",
+          "sourceCommitSpecifier",
+          "mergeOption"
+        ],
+        "members": {
+          "repositoryName": {},
+          "destinationCommitSpecifier": {},
+          "sourceCommitSpecifier": {},
+          "mergeOption": {},
+          "conflictDetailLevel": {},
+          "maxConflictFiles": {
+            "type": "integer"
+          },
+          "conflictResolutionStrategy": {},
+          "nextToken": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "mergeable",
+          "destinationCommitId",
+          "sourceCommitId",
+          "conflictMetadataList"
+        ],
+        "members": {
+          "mergeable": {
+            "type": "boolean"
+          },
+          "destinationCommitId": {},
+          "sourceCommitId": {},
+          "baseCommitId": {},
+          "conflictMetadataList": {
+            "type": "list",
+            "member": {
+              "shape": "Se"
+            }
+          },
+          "nextToken": {}
+        }
+      }
+    },
+    "GetMergeOptions": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "sourceCommitSpecifier",
+          "destinationCommitSpecifier"
+        ],
+        "members": {
+          "repositoryName": {},
+          "sourceCommitSpecifier": {},
+          "destinationCommitSpecifier": {},
+          "conflictDetailLevel": {},
+          "conflictResolutionStrategy": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "mergeOptions",
+          "sourceCommitId",
+          "destinationCommitId",
+          "baseCommitId"
+        ],
+        "members": {
+          "mergeOptions": {
+            "type": "list",
+            "member": {}
+          },
+          "sourceCommitId": {},
+          "destinationCommitId": {},
+          "baseCommitId": {}
+        }
+      }
+    },
+    "GetPullRequest": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "pullRequestId"
+        ],
+        "members": {
+          "pullRequestId": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "pullRequest"
+        ],
+        "members": {
+          "pullRequest": {
+            "shape": "S2m"
+          }
+        }
+      }
+    },
+    "GetRepository": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName"
+        ],
+        "members": {
+          "repositoryName": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "repositoryMetadata": {
+            "shape": "S1n"
+          }
+        }
+      }
+    },
+    "GetRepositoryTriggers": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName"
+        ],
+        "members": {
+          "repositoryName": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "configurationId": {},
+          "triggers": {
+            "shape": "S5e"
+          }
+        }
+      }
+    },
+    "ListBranches": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName"
+        ],
+        "members": {
+          "repositoryName": {},
+          "nextToken": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "branches": {
+            "shape": "S5i"
+          },
+          "nextToken": {}
+        }
+      }
+    },
+    "ListPullRequests": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName"
+        ],
+        "members": {
+          "repositoryName": {},
+          "authorArn": {},
+          "pullRequestStatus": {},
+          "nextToken": {},
+          "maxResults": {
+            "type": "integer"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "pullRequestIds"
+        ],
+        "members": {
+          "pullRequestIds": {
+            "type": "list",
+            "member": {}
+          },
+          "nextToken": {}
+        }
+      }
+    },
+    "ListRepositories": {
+      "input": {
+        "type": "structure",
+        "members": {
+          "nextToken": {},
+          "sortBy": {},
+          "order": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "repositories": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "members": {
+                "repositoryName": {},
+                "repositoryId": {}
+              }
+            }
+          },
+          "nextToken": {}
+        }
+      }
+    },
+    "ListTagsForResource": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "resourceArn"
+        ],
+        "members": {
+          "resourceArn": {},
+          "nextToken": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "tags": {
+            "shape": "S2u"
+          },
+          "nextToken": {}
+        }
+      }
+    },
+    "MergeBranchesByFastForward": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "sourceCommitSpecifier",
+          "destinationCommitSpecifier"
+        ],
+        "members": {
+          "repositoryName": {},
+          "sourceCommitSpecifier": {},
+          "destinationCommitSpecifier": {},
+          "targetBranch": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "commitId": {},
+          "treeId": {}
+        }
+      }
+    },
+    "MergeBranchesBySquash": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "sourceCommitSpecifier",
+          "destinationCommitSpecifier"
+        ],
+        "members": {
+          "repositoryName": {},
+          "sourceCommitSpecifier": {},
+          "destinationCommitSpecifier": {},
+          "targetBranch": {},
+          "conflictDetailLevel": {},
+          "conflictResolutionStrategy": {},
+          "authorName": {},
+          "email": {},
+          "commitMessage": {},
+          "keepEmptyFolders": {
+            "type": "boolean"
+          },
+          "conflictResolution": {
+            "shape": "S2z"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "commitId": {},
+          "treeId": {}
+        }
+      }
+    },
+    "MergeBranchesByThreeWay": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "sourceCommitSpecifier",
+          "destinationCommitSpecifier"
+        ],
+        "members": {
+          "repositoryName": {},
+          "sourceCommitSpecifier": {},
+          "destinationCommitSpecifier": {},
+          "targetBranch": {},
+          "conflictDetailLevel": {},
+          "conflictResolutionStrategy": {},
+          "authorName": {},
+          "email": {},
+          "commitMessage": {},
+          "keepEmptyFolders": {
+            "type": "boolean"
+          },
+          "conflictResolution": {
+            "shape": "S2z"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "commitId": {},
+          "treeId": {}
+        }
+      }
+    },
+    "MergePullRequestByFastForward": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "pullRequestId",
+          "repositoryName"
+        ],
+        "members": {
+          "pullRequestId": {},
+          "repositoryName": {},
+          "sourceCommitId": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "pullRequest": {
+            "shape": "S2m"
+          }
+        }
+      }
+    },
+    "MergePullRequestBySquash": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "pullRequestId",
+          "repositoryName"
+        ],
+        "members": {
+          "pullRequestId": {},
+          "repositoryName": {},
+          "sourceCommitId": {},
+          "conflictDetailLevel": {},
+          "conflictResolutionStrategy": {},
+          "commitMessage": {},
+          "authorName": {},
+          "email": {},
+          "keepEmptyFolders": {
+            "type": "boolean"
+          },
+          "conflictResolution": {
+            "shape": "S2z"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "pullRequest": {
+            "shape": "S2m"
+          }
+        }
+      }
+    },
+    "MergePullRequestByThreeWay": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "pullRequestId",
+          "repositoryName"
+        ],
+        "members": {
+          "pullRequestId": {},
+          "repositoryName": {},
+          "sourceCommitId": {},
+          "conflictDetailLevel": {},
+          "conflictResolutionStrategy": {},
+          "commitMessage": {},
+          "authorName": {},
+          "email": {},
+          "keepEmptyFolders": {
+            "type": "boolean"
+          },
+          "conflictResolution": {
+            "shape": "S2z"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "pullRequest": {
+            "shape": "S2m"
+          }
+        }
+      }
+    },
+    "PostCommentForComparedCommit": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "afterCommitId",
+          "content"
+        ],
+        "members": {
+          "repositoryName": {},
+          "beforeCommitId": {},
+          "afterCommitId": {},
+          "location": {
+            "shape": "S44"
+          },
+          "content": {},
+          "clientRequestToken": {
+            "idempotencyToken": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "repositoryName": {},
+          "beforeCommitId": {},
+          "afterCommitId": {},
+          "beforeBlobId": {},
+          "afterBlobId": {},
+          "location": {
+            "shape": "S44"
+          },
+          "comment": {
+            "shape": "S3a"
+          }
+        }
+      },
+      "idempotent": true
+    },
+    "PostCommentForPullRequest": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "pullRequestId",
+          "repositoryName",
+          "beforeCommitId",
+          "afterCommitId",
+          "content"
+        ],
+        "members": {
+          "pullRequestId": {},
+          "repositoryName": {},
+          "beforeCommitId": {},
+          "afterCommitId": {},
+          "location": {
+            "shape": "S44"
+          },
+          "content": {},
+          "clientRequestToken": {
+            "idempotencyToken": true
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "repositoryName": {},
+          "pullRequestId": {},
+          "beforeCommitId": {},
+          "afterCommitId": {},
+          "beforeBlobId": {},
+          "afterBlobId": {},
+          "location": {
+            "shape": "S44"
+          },
+          "comment": {
+            "shape": "S3a"
+          }
+        }
+      },
+      "idempotent": true
+    },
+    "PostCommentReply": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "inReplyTo",
+          "content"
+        ],
+        "members": {
+          "inReplyTo": {},
+          "clientRequestToken": {
+            "idempotencyToken": true
+          },
+          "content": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "comment": {
+            "shape": "S3a"
+          }
+        }
+      },
+      "idempotent": true
+    },
+    "PutFile": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "branchName",
+          "fileContent",
+          "filePath"
+        ],
+        "members": {
+          "repositoryName": {},
+          "branchName": {},
+          "fileContent": {
+            "type": "blob"
+          },
+          "filePath": {},
+          "fileMode": {},
+          "parentCommitId": {},
+          "commitMessage": {},
+          "name": {},
+          "email": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "commitId",
+          "blobId",
+          "treeId"
+        ],
+        "members": {
+          "commitId": {},
+          "blobId": {},
+          "treeId": {}
+        }
+      }
+    },
+    "PutRepositoryTriggers": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "triggers"
+        ],
+        "members": {
+          "repositoryName": {},
+          "triggers": {
+            "shape": "S5e"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "configurationId": {}
+        }
+      }
+    },
+    "TagResource": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "resourceArn",
+          "tags"
+        ],
+        "members": {
+          "resourceArn": {},
+          "tags": {
+            "shape": "S2u"
+          }
+        }
+      }
+    },
+    "TestRepositoryTriggers": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "triggers"
+        ],
+        "members": {
+          "repositoryName": {},
+          "triggers": {
+            "shape": "S5e"
+          }
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "successfulExecutions": {
+            "type": "list",
+            "member": {}
+          },
+          "failedExecutions": {
+            "type": "list",
+            "member": {
+              "type": "structure",
+              "members": {
+                "trigger": {},
+                "failureMessage": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "UntagResource": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "resourceArn",
+          "tagKeys"
+        ],
+        "members": {
+          "resourceArn": {},
+          "tagKeys": {
+            "type": "list",
+            "member": {}
+          }
+        }
+      }
+    },
+    "UpdateComment": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "commentId",
+          "content"
+        ],
+        "members": {
+          "commentId": {},
+          "content": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "members": {
+          "comment": {
+            "shape": "S3a"
+          }
+        }
+      }
+    },
+    "UpdateDefaultBranch": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName",
+          "defaultBranchName"
+        ],
+        "members": {
+          "repositoryName": {},
+          "defaultBranchName": {}
+        }
+      }
+    },
+    "UpdatePullRequestDescription": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "pullRequestId",
+          "description"
+        ],
+        "members": {
+          "pullRequestId": {},
+          "description": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "pullRequest"
+        ],
+        "members": {
+          "pullRequest": {
+            "shape": "S2m"
+          }
+        }
+      }
+    },
+    "UpdatePullRequestStatus": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "pullRequestId",
+          "pullRequestStatus"
+        ],
+        "members": {
+          "pullRequestId": {},
+          "pullRequestStatus": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "pullRequest"
+        ],
+        "members": {
+          "pullRequest": {
+            "shape": "S2m"
+          }
+        }
+      }
+    },
+    "UpdatePullRequestTitle": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "pullRequestId",
+          "title"
+        ],
+        "members": {
+          "pullRequestId": {},
+          "title": {}
+        }
+      },
+      "output": {
+        "type": "structure",
+        "required": [
+          "pullRequest"
+        ],
+        "members": {
+          "pullRequest": {
+            "shape": "S2m"
+          }
+        }
+      }
+    },
+    "UpdateRepositoryDescription": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "repositoryName"
+        ],
+        "members": {
+          "repositoryName": {},
+          "repositoryDescription": {}
+        }
+      }
+    },
+    "UpdateRepositoryName": {
+      "input": {
+        "type": "structure",
+        "required": [
+          "oldName",
+          "newName"
+        ],
+        "members": {
+          "oldName": {},
+          "newName": {}
+        }
+      }
+    }
+  },
+  "shapes": {
+    "Se": {
+      "type": "structure",
+      "members": {
+        "filePath": {},
+        "fileSizes": {
+          "type": "structure",
+          "members": {
+            "source": {
+              "type": "long"
+            },
+            "destination": {
+              "type": "long"
+            },
+            "base": {
+              "type": "long"
+            }
+          }
+        },
+        "fileModes": {
+          "type": "structure",
+          "members": {
+            "source": {},
+            "destination": {},
+            "base": {}
+          }
+        },
+        "objectTypes": {
+          "type": "structure",
+          "members": {
+            "source": {},
+            "destination": {},
+            "base": {}
+          }
+        },
+        "numberOfConflicts": {
+          "type": "integer"
+        },
+        "isBinaryFile": {
+          "type": "structure",
+          "members": {
+            "source": {
+              "type": "boolean"
+            },
+            "destination": {
+              "type": "boolean"
+            },
+            "base": {
+              "type": "boolean"
+            }
+          }
+        },
+        "contentConflict": {
+          "type": "boolean"
+        },
+        "fileModeConflict": {
+          "type": "boolean"
+        },
+        "objectTypeConflict": {
+          "type": "boolean"
+        },
+        "mergeOperations": {
+          "type": "structure",
+          "members": {
+            "source": {},
+            "destination": {}
+          }
+        }
+      }
+    },
+    "St": {
+      "type": "list",
+      "member": {
+        "type": "structure",
+        "members": {
+          "isConflict": {
+            "type": "boolean"
+          },
+          "source": {
+            "shape": "Sw"
+          },
+          "destination": {
+            "shape": "Sw"
+          },
+          "base": {
+            "shape": "Sw"
+          }
+        }
+      }
+    },
+    "Sw": {
+      "type": "structure",
+      "members": {
+        "startLine": {
+          "type": "integer"
+        },
+        "endLine": {
+          "type": "integer"
+        },
+        "hunkContent": {}
+      }
+    },
+    "S18": {
+      "type": "structure",
+      "members": {
+        "commitId": {},
+        "treeId": {},
+        "parents": {
+          "type": "list",
+          "member": {}
+        },
+        "message": {},
+        "author": {
+          "shape": "S1a"
+        },
+        "committer": {
+          "shape": "S1a"
+        },
+        "additionalData": {}
+      }
+    },
+    "S1a": {
+      "type": "structure",
+      "members": {
+        "name": {},
+        "email": {},
+        "date": {}
+      }
+    },
+    "S1n": {
+      "type": "structure",
+      "members": {
+        "accountId": {},
+        "repositoryId": {},
+        "repositoryName": {},
+        "repositoryDescription": {},
+        "defaultBranch": {},
+        "lastModifiedDate": {
+          "type": "timestamp"
+        },
+        "creationDate": {
+          "type": "timestamp"
+        },
+        "cloneUrlHttp": {},
+        "cloneUrlSsh": {},
+        "Arn": {}
+      }
+    },
+    "S27": {
+      "type": "list",
+      "member": {
+        "type": "structure",
+        "required": [
+          "filePath"
+        ],
+        "members": {
+          "filePath": {}
+        }
+      }
+    },
+    "S29": {
+      "type": "list",
+      "member": {
+        "type": "structure",
+        "required": [
+          "filePath",
+          "fileMode"
+        ],
+        "members": {
+          "filePath": {},
+          "fileMode": {}
+        }
+      }
+    },
+    "S2c": {
+      "type": "list",
+      "member": {
+        "type": "structure",
+        "members": {
+          "absolutePath": {},
+          "blobId": {},
+          "fileMode": {}
+        }
+      }
+    },
+    "S2m": {
+      "type": "structure",
+      "members": {
+        "pullRequestId": {},
+        "title": {},
+        "description": {},
+        "lastActivityDate": {
+          "type": "timestamp"
+        },
+        "creationDate": {
+          "type": "timestamp"
+        },
+        "pullRequestStatus": {},
+        "authorArn": {},
+        "pullRequestTargets": {
+          "type": "list",
+          "member": {
+            "type": "structure",
+            "members": {
+              "repositoryName": {},
+              "sourceReference": {},
+              "destinationReference": {},
+              "destinationCommit": {},
+              "sourceCommit": {},
+              "mergeBase": {},
+              "mergeMetadata": {
+                "shape": "S2r"
+              }
+            }
+          }
+        },
+        "clientRequestToken": {}
+      }
+    },
+    "S2r": {
+      "type": "structure",
+      "members": {
+        "isMerged": {
+          "type": "boolean"
+        },
+        "mergedBy": {},
+        "mergeCommitId": {},
+        "mergeOption": {}
+      }
+    },
+    "S2u": {
+      "type": "map",
+      "key": {},
+      "value": {}
+    },
+    "S2z": {
+      "type": "structure",
+      "members": {
+        "replaceContents": {
+          "type": "list",
+          "member": {
+            "type": "structure",
+            "required": [
+              "filePath",
+              "replacementType"
+            ],
+            "members": {
+              "filePath": {},
+              "replacementType": {},
+              "content": {
+                "type": "blob"
+              },
+              "fileMode": {}
+            }
+          }
+        },
+        "deleteFiles": {
+          "shape": "S27"
+        },
+        "setFileModes": {
+          "shape": "S29"
+        }
+      }
+    },
+    "S36": {
+      "type": "structure",
+      "members": {
+        "branchName": {},
+        "commitId": {}
+      }
+    },
+    "S3a": {
+      "type": "structure",
+      "members": {
+        "commentId": {},
+        "content": {},
+        "inReplyTo": {},
+        "creationDate": {
+          "type": "timestamp"
+        },
+        "lastModifiedDate": {
+          "type": "timestamp"
+        },
+        "authorArn": {},
+        "deleted": {
+          "type": "boolean"
+        },
+        "clientRequestToken": {}
+      }
+    },
+    "S44": {
+      "type": "structure",
+      "members": {
+        "filePath": {},
+        "filePosition": {
+          "type": "long"
+        },
+        "relativeFileVersion": {}
+      }
+    },
+    "S47": {
+      "type": "list",
+      "member": {
+        "shape": "S3a"
+      }
+    },
+    "S4j": {
+      "type": "structure",
+      "members": {
+        "blobId": {},
+        "path": {},
+        "mode": {}
+      }
+    },
+    "S5e": {
+      "type": "list",
+      "member": {
+        "type": "structure",
+        "required": [
+          "name",
+          "destinationArn",
+          "events"
+        ],
+        "members": {
+          "name": {},
+          "destinationArn": {},
+          "customData": {},
+          "branches": {
+            "shape": "S5i"
+          },
+          "events": {
+            "type": "list",
+            "member": {}
+          }
+        }
+      }
+    },
+    "S5i": {
+      "type": "list",
+      "member": {}
+    }
+  }
+}

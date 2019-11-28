@@ -1,6 +1,7 @@
-# setup HDMI output no matter if a HDMI
-# monitor is connected or not
-hdmi_force_hotplug=1
+# disable HDMI port on blanking
+hdmi_blanking=1
+
+# disable HDMI audio
 hdmi_drive=1
 
 # make sure to use less memory for the GPU and
@@ -42,11 +43,16 @@ dtparam=watchdog=on
 # start with heartbeat on PWR led and mmc0 on ACT led
 dtparam=pwr_led_trigger=timer,act_led_trigger=mmc0
 
-# setup led device nodes for the rpi-rf-mod leds
-dtoverlay=rpi-rf-mod-leds
+# add device tree overlay for RPI-RF-MOD
+dtoverlay=rpi-rf-mod
 
-# make sure gpio24 is set as input and pull_up
-gpio=24=ip,pu
+# enable usb gadget mode for the pi zero/pi zero w
+[pi0]
+dtoverlay=dwc2
+[all]
+
+# make sure gpio12 and gpio24 is set as input and pull_up
+gpio=12,24=ip,pu
 
 # start device tree at 0x2008000 to have
 # space for the u-boot boot script

@@ -20,9 +20,9 @@ test -x /usr/sbin/snmptrapd || exit 0
 # Defaults
 export MIBDIRS=/usr/share/snmp/mibs
 SNMPDRUN=yes
-SNMPDOPTS='-Lsd -Lf /dev/null -c /etc/config/snmp/snmpd.conf -I -smux,mteTrigger,mteTriggerConf -p /run/snmpd.pid'
+SNMPDOPTS='-Lsd -Lf /dev/null -c /etc/snmp/snmpd-global.conf -I -smux,mteTrigger,mteTriggerConf -p /var/run/snmpd.pid'
 TRAPDRUN=no
-TRAPDOPTS='-Lsd -c /etc/config/snmp/snmptrapd.conf -p /run/snmptrapd.pid'
+TRAPDOPTS='-Lsd -c /etc/snmp/snmptrapd-global.conf -p /var/run/snmptrapd.pid'
 
 # Reads config file (will override defaults above)
 [ -r /etc/default/snmpd ] && . /etc/default/snmpd
@@ -40,11 +40,11 @@ fi
 start() {
     # copy the SNMP config files in place in
     # case they don't exist yet
-    if [[ ! -e /etc/config/snmp ]]; then
+    if [[ ! -e /etc/config/snmp/snmpd-user.conf ]]; then
       cp -Rp /etc/config_templates/snmp /etc/config/
     fi
 
-    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd.conf ]; then
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd-ccu3.conf ]; then
         printf "Starting SNMP daemon: "
         start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
         [ $? = 0 ] && echo "OK" || echo "FAIL"
@@ -58,7 +58,7 @@ start() {
 }
 
 stop() {
-    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd.conf ]; then
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd-ccu3.conf ]; then
         printf "Stopping SNMP daemon: "
         start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmpd
         [ $? = 0 ] && echo "OK" || echo "FAIL"
@@ -72,7 +72,7 @@ stop() {
 }
 
 reload() {
-    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd.conf ]; then
+    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd-ccu3.conf ]; then
         printf "Reloading SNMP daemon: "
         start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd
         [ $? = 0 ] && echo "OK" || echo "FAIL"

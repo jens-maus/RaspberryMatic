@@ -1,0 +1,10 @@
+--- buildroot/package/lighttpd/lighttpd.mk.orig
++++ buildroot/package/lighttpd/lighttpd.mk
+@@ -11,6 +11,7 @@
+ LIGHTTPD_LICENSE = BSD-3-Clause
+ LIGHTTPD_LICENSE_FILES = COPYING
+ LIGHTTPD_DEPENDENCIES = host-pkgconf
++LIGHTTPD_AUTORECONF = YES
+ LIGHTTPD_CONF_OPTS = \
+ 	--without-wolfssl \
+ 	--libdir=/usr/lib/lighttpd \

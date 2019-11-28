@@ -1,0 +1,7 @@
+#!/bin/sh
+mount | grep -q /media/usb
+if [ $? -ne 0 ]; then
+  rm -f /var/status/hasUSB
+  # CCU2 compatibility 
+  rm -f /var/status/hasSD
+fi

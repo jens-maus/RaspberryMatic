@@ -1,0 +1,170 @@
+#!/bin/sh
+#
+# Startup script to identify and setup RTC clocks
+#
+
+# initialize a potentially existing RTC clock
+init_rtc_device() {
+
+  # load the bcm2835 i2c kernel module if the host is
+  # a raspberrypi
+  if echo "${HM_HOST}" | grep -q rpi; then
+    modprobe i2c_bcm2835
+  fi
+
+  # load the i2c_dev module if this is not a virtual
+  # applicance but a real rpi/tinkerboard
+  if ! echo "${HM_HOST}" | egrep -q "ova-|nuc"; then
+    modprobe i2c_dev
+  fi
+
+  # check for RX8130-CE RTC clock at 0x32 (Epson RX8130CE) which
+  # is the RPI-RF-MOD onboard RTC.
+  i2cget -y 1 0x32 0x32 2>/dev/null >/dev/null
+  if [[ $? -eq 0 ]]; then
+    modprobe rtc-rx8130
+    if [[ $? -eq 0 ]]; then
+      HM_RTC="rx8130"
+
+      # we found a RX8130, thus we assume the RPI-RF-MOD to
+      # be present, thus we setup the LED GPIOs to OUT
+      if [[ -c /dev/rtc0 ]]; then
+
+        # setup the LEDs to show a slowly blinking magenta light
+        echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
+        echo timer >/sys/class/leds/rpi_rf_mod\:red/trigger
+        echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
+        echo 499 >/sys/class/leds/rpi_rf_mod\:red/delay_on
+        echo 499 >/sys/class/leds/rpi_rf_mod\:red/delay_off
+        echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_on
+        echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_off
+
+        return 0
+      fi
+    fi
+  fi
+
+  # make sure we load the RTC kernel module for
+  # the tinkerboard
+  if [[ "${HM_HOST}" == "tinkerboard" ]]; then
+    modprobe rtc_rk808
+  fi
+
+  # only continue if we don't have a valid rtc yet or otherwise
+  # this must be an onboard RTC (e.g. tinkerboard)
+  HM_RTC="onboard"
+  [[ -c /dev/rtc0 ]] && return 0
+
+  HM_RTC=""
+  # check for MCP7940N RTC clock at 0x6f (PiFace Shim RTC)
+  i2cget -y 1 0x6f 0x00 2>/dev/null >/dev/null
+  if [[ $? -eq 0 ]]; then
+    # calibrate MCP7940N
+    i2cset -y 1 0x6f 0x08 0x47 2>/dev/null >/dev/null
+    if [[ $? -eq 0 ]]; then
+      modprobe i2c:mcp7941x
+      if [[ $? -eq 0 ]]; then
+        HM_RTC="mcp7941x"
+        [[ -c /dev/rtc0 ]] && return 0
+        echo mcp7941x 0x6f >/sys/class/i2c-dev/i2c-1/device/new_device
+        [[ -c /dev/rtc0 ]] && return 0
+        echo 0x6f >/sys/class/i2c-dev/i2c-1/device/delete_device
+      fi
+    fi
+  fi
+
+  HM_RTC=""
+  # check for DS3231/DS1307 RTC clock at 0x68
+  i2cget -y 1 0x68 0x00 2>/dev/null >/dev/null
+  if [[ $? -eq 0 ]]; then
+    # check for DS3231
+    modprobe i2c:ds3231
+    if [[ $? -eq 0 ]]; then
+      HM_RTC="mcp7941x"
+      [[ -c /dev/rtc0 ]] && return 0
+      echo ds3231 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
+      [[ -c /dev/rtc0 ]] && return 0
+      echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
+    fi
+
+    # check for DS1307
+    modprobe i2c:ds1307
+    if [[ $? -eq 0 ]]; then
+      HM_RTC="ds1307"
+      [[ -c /dev/rtc0 ]] && return 0
+      echo ds1307 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
+      [[ -c /dev/rtc0 ]] && return 0
+      echo 0x68 >/sys/class/i2c-dev/i2c-1/device/delete_device
+    fi
+  fi
+
+  HM_RTC=""
+  # check for PCF8563 RTC clock at 0x51
+  i2cget -y 1 0x51 0x00 2>/dev/null >/dev/null
+  if [[ $? -eq 0 ]]; then
+    # check for PCF8563
+    modprobe i2c:pcf8563
+    if [[ $? -eq 0 ]]; then
+      HM_RTC="pcf8563"
+      [[ -c /dev/rtc0 ]] && return 0
+      echo pcf8563 0x51 >/sys/class/i2c-adapter/i2c-1/new_device
+      [[ -c /dev/rtc0 ]] && return 0
+      echo 0x51 >/sys/class/i2c-dev/i2c-1/device/delete_device
+    fi
+  fi
+
+  HM_RTC=""
+  return 1
+}
+
+start() {
+  echo -n "Initializing RTC Clock: "
+
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  init_rtc_device
+
+  # save all HM_ env variables
+  set | grep '^HM_' >/var/hm_mode
+
+  if [[ -c /dev/rtc0 ]]; then
+    hwclock --hctosys --utc
+    echo "${HM_RTC}, OK"
+  else
+    echo "no hardware found"
+  fi
+}
+
+stop() {
+  echo -n "Cleaning up RTC Clock: "
+
+  if [[ -c /dev/rtc0 ]]; then
+    hwclock --systohc --utc
+    echo "OK"
+  else
+    echo "no hardware found"
+  fi
+}
+
+restart() {
+  stop
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    stop
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

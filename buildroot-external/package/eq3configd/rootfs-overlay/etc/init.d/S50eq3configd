@@ -22,6 +22,11 @@ init () {
 start() {
   echo -n "Starting eq3configd: "
   init
+
+  # adjust the oom score (which is inherited by start-stop-daemon)
+  # to ensure that others are killed first in case of low memory situations
+  echo -900 >/proc/$$/oom_score_adj
+
   start-stop-daemon -S -q -b -m -p /var/run/eq3configd.pid --exec /bin/eq3configd
   echo "OK"
 }

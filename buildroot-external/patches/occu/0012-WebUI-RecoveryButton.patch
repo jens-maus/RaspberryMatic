@@ -1,0 +1,193 @@
+--- occu/WebUI/www/api/methods.conf.orig
++++ occu/WebUI/www/api/methods.conf
+@@ -875,6 +875,13 @@
+   ARGUMENTS {_session_id_}
+ }
+ 
++RecoveryMode.enter {
++  LEVEL ADMIN
++  SCRIPT_FILE recoverymode/enter.tcl
++  INFO {Startet die HomeMatic Zentrale im Recovery Modus}
++  ARGUMENTS {_session_id_}
++}
++
+ CCU.getSerial {
+   LEVEL ADMIN
+   SCRIPT_FILE ccu/getserial.tcl
+--- occu/WebUI/www/api/methods/recoverymode/enter.tcl.orig
++++ occu/WebUI/www/api/methods/recoverymode/enter.tcl
+@@ -0,0 +1,23 @@
++##
++# RecoveryMode.enter
++# Startet die HomeMatic Zentrale im Recovery Modus
++#
++# Parameter:
++#   paasword: [string] Passwort für den Recovery Modus
++#
++# Rückgabewert: [bool]
++#   true
++##
++
++set FLAG_FILE "/usr/local/.recoveryMode"
++
++# Flag-Datei erzeugen
++set fd [open $FLAG_FILE w]
++puts $fd 1
++close $fd
++
++# Neustart
++rega system.Save()
++exec /sbin/reboot
++
++jsonrpc_response true
+--- occu/WebUI/www/config/cp_maintenance.cgi.orig
++++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -595,6 +595,25 @@
+         }
+       }
+ 
++      # Recovery Modus
++      table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
++          table_data {class="CLASS20903"} $styleMaxWidth {
++              #puts "Abgesicherter<br>"
++              #puts "Modus"
++              puts "\${dialogSettingsCMTDCCURecoveryMode}"
++          }
++          table_data {class="CLASS20904"} {
++              division {class="popupControls CLASS20905"} {
++                  division {class="CLASS20910 colorGradient50px"} {onClick="OnEnterRecoveryMode();"} {
++                      puts "\${dialogSettingsCMBtnCCURestartRecovery}"
++                  }
++              }
++          }
++          table_data {align="left"} {class="CLASS20904"} {
++              puts "\${dialogSettingsCMHintRestartRecoveryMode}"
++          }
++      }
++
+       table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
+         table_data {class="CLASS20903"} $styleMaxWidth  {
+           #puts "Fehler-<br>"
+@@ -772,6 +791,18 @@
+         }
+         });
+       }
++
++      OnEnterRecoveryMode = function() {
++        new YesNoDialog(translateKey("dialogRecoveryCheck"), translateKey("dialogQuestionRestartRecoveryMode"), function(result) {
++          if (result == YesNoDialog.RESULT_YES)
++          {
++            MessageBox.show(translateKey("dialogRestartRecoveryModeTitle"), translateKey("dialogRestartRecoveryModeContent"), function() {
++              window.location.href = "/";
++            });
++            homematic("RecoveryMode.enter");
++          }
++        });
++      }
+     }
+ 
+ 
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -382,6 +382,7 @@
+     "dialogNo" : "Nein",
+     "dialogBack" : "Zur%FCck",
+     "dialogSafetyCheck" : "Sicherheitsabfrage",
++    "dialogRecoveryCheck" : "Sicherheitsabfrage",
+     "dialogInfo" : "Info",
+     "dialogHint" : "Hinweis",
+     "dialogQuestionRemoveProgram" : "M%F6chten Sie das Programm wirklich l%F6schen?",
+@@ -394,6 +395,7 @@
+     "dialogQuestionRestart" : "Best%E4tigen Sie hier, um den Neustart durchzuf%FChren.",
+     "dialogQuestionShutdown" : "Best%E4tigen Sie hier, um das Herunterfahren durchzuf%FChren.",
+     "dialogQuestionRestartSafeMode" : "M%F6chten Sie die " + HMIdentifier.de.CCUFullNameText + " wirklich im abgesicherten Modus starten?",
++    "dialogQuestionRestartRecoveryMode" : "M%F6chten Sie die " + HMIdentifier.de.CCUFullNameText + " wirklich im Recovery Modus starten?",
+     "dialogUserAccountTitle" : "Benutzerkonto - Konfiguration",
+     "dialogProgChoseSysVar" : "Programme - Systemvariablenauswahl",
+     "dialogEditRoom" : "Raum bearbeiten",
+@@ -416,7 +418,9 @@
+     "dialogChooseBidCosInterface" : "Auswahl BidCos-Interface",
+     "dialogChooseChannel" : "Kanalauswahl",
+     "dialogRestartSafeModeTitle" : "Neustart",
++    "dialogRestartRecoveryModeTitle" : "Neustart",
+     "dialogRestartSafeModeContent" : "Die Zentrale startet nun im abgesicherten Modus. Klicken Sie auf \"OK\", um sich neu anzumelden.",
++    "dialogRestartRecoveryModeContent" : "Die Zentrale startet nun im Recovery Modus. Klicken Sie auf \"OK\", um sich neu anzumelden.",
+     "dialogBtnPerformRestart" : "Neustart ",
+     "dialogBtnPerformShutdown" : "Herunterfahren",
+     "dialogEditRoomBtnClose" : "Schliessen",
+@@ -451,6 +455,7 @@
+     "dialogSettingsCMTDCCURestart" : HMIdentifier.de.CCUShortName + "<br/>Neustart",
+     "dialogSettingsCMTDCCUShutdown" : "Herunterfahren",
+     "dialogSettingsCMTDCCUSafeMode" : "Abgesicherter<br/>Modus",
++    "dialogSettingsCMTDCCURecoveryMode" : "Recovery<br/>Modus",
+     "dialogSettingsCMTDErrorProtocol" : "Fehler-<br/>protokoll",
+     "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
+     "dialogSettingsCMLblAvailableSoftwareVersion" : "Verf%FCgbare Software-Version:",
+@@ -469,6 +474,7 @@
+     "dialogSettingsCMBtnCCURestart" : "Neustart",
+     "dialogSettingsCMBtnCCUShutdown" : "Herunterfahren",
+     "dialogSettingsCMBtnCCURestartSafe" : "Neustart im abgesicherten Modus",
++    "dialogSettingsCMBtnCCURestartRecovery" : "Neustart im Recovery Modus",
+     "dialogSettingsCMBtnLogSysLogServerAddress" : "Einstellungen %FCbernehmen",
+     "dialogSettingsCMBtnLogLoadLogFile" : "Logdatei herunterladen",
+     "dialogSettingsCMErrorTitle" : "Softwareupdate - Fehler",
+@@ -481,6 +487,7 @@
+     "dialogSettingsCMHintRestart" : "Zentrale neu starten. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintShutdown" : "Zentrale herunterfahren. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintRestartSafeMode" : "Homematic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
++    "dialogSettingsCMHintRestartRecoveryMode" : "HomeMatic Zentrale einmalig im Recovery Modus starten. Im Recovery Modus werden administrative Werkzeuge zur Verf%FCgung gestellt. Ver%E4nderte Einstellungen werden vorher gespeichert.",
+     "dialogSettingsCMHintErrorLog" : "Stellen Sie die Anzahl der Logmeldungen ein, die von der Zentrale generiert werden sollen.<br>Sie k%F6nnen zus%E4tzlich einen Rechner angeben, dem die Zentrale ihre Logmeldungen per Syslog schickt. Auf diesem Rechner mu%DF entsprechende Software installiert sein, die die Meldungen entgegennimmt.<br>Zu Diagnosezwecken k%F6nnen die aktuellen Logmeldungen der Zentrale in einer Textdatei heruntergeladen werden.",
+     "dialogSettingsCMLogLevel0" : "Alles loggen",
+     "dialogSettingsCMLogLevel1" : "Information",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -381,6 +381,7 @@
+     "dialogNo" : "No",
+     "dialogBack" : "Back",
+     "dialogSafetyCheck" : "Confirmation prompt",
++    "dialogRecoveryCheck" : "Confirmation prompt",
+     "dialogInfo" : "Info",
+     "dialogHint" : "Please note",
+     "dialogQuestionRemoveProgram" : "Do you really want to delete the program?",
+@@ -393,6 +394,7 @@
+     "dialogQuestionRestart" : "Please click here to perform the restart?",
+     "dialogQuestionShutdown" : "Please click here to perform the shutdown?",
+     "dialogQuestionRestartSafeMode" : "Do you really want to start the " + HMIdentifier.en.CCUFullNameText + " in the safe mode?",
++    "dialogQuestionRestartRecoveryMode" : "Do you really want to start the " + HMIdentifier.en.CCUFullNameText + " in the recovery mode?",
+     "dialogUserAccountTitle" : "User account configuration",
+     "dialogProgChoseSysVar" : "Programs - system variable selection",
+     "dialogEditRoom" : "Edit room",
+@@ -415,7 +417,9 @@
+     "dialogChooseBidCosInterface" : "Selection BidCos-Interface",
+     "dialogChooseChannel" : "Channel selection",
+     "dialogRestartSafeModeTitle" : "Restart",
++    "dialogRestartRecoveryModeTitle" : "Restart",
+     "dialogRestartSafeModeContent" : "The Central Control Unit will now start in safe mode. Please click \"OK\" to log in again.",
++    "dialogRestartRecoveryModeContent" : "The Central Control Unit will now start in recovery mode. Please click \"OK\" to log in again.",
+     "dialogBtnPerformRestart" : "Restart ",
+     "dialogBtnPerformShutdown" : "Shutdown",
+     "dialogEditRoomBtnClose" : "Close",
+@@ -450,6 +454,7 @@
+     "dialogSettingsCMTDCCURestart" : HMIdentifier.en.CCUShortName + "<br/>restart",
+     "dialogSettingsCMTDCCUShutdown" : "Shutdown",
+     "dialogSettingsCMTDCCUSafeMode" : "Safe<br/>mode",
++    "dialogSettingsCMTDCCURecoveryMode" : "Recovery<br/>mode",
+     "dialogSettingsCMTDErrorProtocol" : "Error<br/>log",
+     "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
+     "dialogSettingsCMLblAvailableSoftwareVersion" : "Available software version:",
+@@ -468,6 +473,7 @@
+     "dialogSettingsCMBtnCCURestart" : "Restart",
+     "dialogSettingsCMBtnCCUShutdown" : "Shutdown",
+     "dialogSettingsCMBtnCCURestartSafe" : "Restart in safe mode",
++    "dialogSettingsCMBtnCCURestartRecovery" : "Restart in recovery mode",
+     "dialogSettingsCMBtnLogSysLogServerAddress" : "Apply settings",
+     "dialogSettingsCMBtnLogLoadLogFile" : "Download log file",
+     "dialogSettingsCMErrorTitle" : "Software update - error",
+@@ -480,6 +486,7 @@
+     "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
+     "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
+     "dialogSettingsCMHintRestartSafeMode" : "Start Homematic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
++    "dialogSettingsCMHintRestartRecoveryMode" : "Start HomeMatic Central Control Unit in recovery mode once. In recovery mode, maintenance tasks can be performed. The changed settings will be saved before.",
+     "dialogSettingsCMHintErrorLog" : "Please set the number of log messages to be generated by the CCU.<br>You can also specify a computer that will receive the log messages from the CCU via syslog. An additional software that will be able to receive this messages has to be installed on the computer.<br>To analyse the results, the current log messages of the CCU can be downloaded in a text file.",
+     "dialogSettingsCMLogLevel0" : "Log all",
+     "dialogSettingsCMLogLevel1" : "Information",

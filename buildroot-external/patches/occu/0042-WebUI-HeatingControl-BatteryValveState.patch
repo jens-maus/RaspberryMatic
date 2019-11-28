@@ -1,0 +1,229 @@
+--- occu/WebUI/www/rega/esp/controls/heating_control.fn.orig
++++ occu/WebUI/www/rega/esp/controls/heating_control.fn
+@@ -4,11 +4,17 @@
+   real rMin = 4.5;
+   real rMax = 30.5;
+   string sUnit = "&deg;<i>C</i>";
++  string bUnit = "V";
++  string vUnit = "%";
+   integer iReadOnlyState = 0;
+ 
+   object oControlMode = cObj.DPByControl("HEATING_CONTROL.CONTROL_MODE");
+   object oLevel = cObj.DPByControl("HEATING_CONTROL.SETPOINT");
+   object oTemperature = cObj.DPByControl("HEATING_CONTROL.TEMPERATURE");
++
++  object oBatteryState = cObj.DPByHssDP("BATTERY_STATE");
++  object oValveState = cObj.DPByHssDP("VALVE_STATE");  
++
+   object oModeAuto = cObj.DPByControl("HEATING_CONTROL.AUTO");
+   object oModeManu = cObj.DPByControl("HEATING_CONTROL.MANU");
+   object oModeBoost = cObj.DPByControl("HEATING_CONTROL.BOOST");
+@@ -28,12 +34,6 @@
+ 
+   ! WriteLine(' <script>conInfo("oControlMode: '#oControlMode.Value()#'");</script> ');
+ 
+-  if ( oTemperature )
+-  {
+-    ! WriteLine(' <script>conInfo("oTemperature: '#oTemperature.Value()#'");</script> ');
+-    actTemp = oTemperature.Value();
+-  }
+-
+   if( oLevel )
+   {
+     iLvlDpId = oLevel.ID();
+@@ -47,13 +47,14 @@
+     ! rMax = oLevel.MetaData("MAX").ToFloat();
+   }
+   string sReadOnly = "";
+-
++  string cssDisplay = "; display: table;";
+   integer iInvalidState = 0;
+ 
+   if( ( system.GetVar("iStatusOnly" ) == 1) || iInvalidState )
+   {
+     sReadOnly = "disabled";
+     iReadOnlyState = 1;
++    cssDisplay = "";
+   }
+ 
+   WriteLine("<tr>");
+@@ -67,6 +68,34 @@
+       !WriteLine("<div class='ControlBtnInfo _CLASS02550' style='line-height:15px; min-width:200px' id='"#chnId#"actualTemp' ><span>${stringTableWeatherTemperature}</span><span id='actTemp'"#sUnit#"></span></div>");
+     WriteLine("</td>");
+   WriteLine("</tr>");
++ 
++  if ( oBatteryState )
++  { 
++   WriteLine("<tr>");
++     WriteLine("<td>");
++       WriteLine("<table id='"#chnId#"tblShowBatteryState' class='ControlBtnInfo hidden' style='width:200px"#cssDisplay#"'>");
++         WriteLine("<tr>");
++           WriteLine("<td>${stringTableClimateControlRTTransceiverBatteryState}</td>");
++           WriteLine("<td><span id='"#chnId#"actBatteryState'></span><span><b>"#bUnit#"</b></span></td>");
++        WriteLine("</tr>");
++       WriteLine("</table>");
++     WriteLine("</td>");
++   WriteLine("</tr>");
++  }
++
++  if ( oValveState )
++  {  
++   WriteLine("<tr>");
++     WriteLine("<td>");
++       WriteLine("<table id='"#chnId#"tblShowValveState' class='ControlBtnInfo hidden' style='width:200px"#cssDisplay#"'>");
++         WriteLine("<tr>");
++           WriteLine("<td>${stringTableHeatingLevel}</td>");
++           WriteLine("<td><span id='"#chnId#"actValveState'></span><span><b>"#vUnit#"</b></span></td>");
++         WriteLine("</tr>");
++       WriteLine("</table>");
++     WriteLine("</td>");
++   WriteLine("</tr>");
++  }
+ 
+   WriteLine("<tr>");
+     WriteLine("<td colspan='1' id='slidCtrl"#cObj.ID()#"' class='CLASS02529'></td>");
+@@ -179,6 +208,18 @@
+       WriteLine("opts.stTemp = "#oTemperature.Value()#";");
+       WriteLine("opts.stUnit = '"#sUnit#"';");
+     }
++    
++    if (oBatteryState)
++    {
++      WriteLine("opts.stBat = "#oBatteryState.Value()#";");
++      WriteLine("opts.stbUnit = '"#bUnit#"';");
++    }
++    
++    if (oValveState)
++    {
++      WriteLine("opts.stValve = "#oValveState.Value()#";");
++      WriteLine("opts.stvUnit = '"#vUnit#"';");
++    }
+ 
+     WriteLine("its"#chnId#" = new iseThermostat_2ndGen("#chnId#", "#rState#", "#iLvlDpId#", "#rMin#", "#rMax#", " #system.GetVar("iReadOnlyState")#", "#system.GetVar('bSliderFlag')#", opts);");
+   WriteLine("</script>");
+@@ -203,12 +244,17 @@
+ 
+   string tUnit = "&deg;<i>C</i>";
+   string hUnit = "&#37;";
++  string bUnit = "V";
++  string vUnit = "%";
+   real rState = 0;
+ 
+   object oTemperature = cObj.DPByControl("HEATING_CONTROL_HMIP.TEMPERATURE");
+   object oSetPoint = cObj.DPByControl("HEATING_CONTROL_HMIP.SETPOINT");
+   object oWindowState = cObj.DPByControl("HEATING_CONTROL_HMIP.WINDOW_STATE");
+ 
++  object oBatteryState = cObj.DPByHssDP("BATTERY_STATE");
++  object oValveLevel = cObj.DPByHssDP("LEVEL");
++
+   object oActiveProfile = cObj.DPByControl("HEATING_CONTROL_HMIP.ACTIVE_PROFILE");
+   object oHumidity = cObj.DPByControl("HEATING_CONTROL_HMIP.HUMIDITY");
+   object oSetPointMode = cObj.DPByControl("HEATING_CONTROL_HMIP.SETPOINT_MODE");
+@@ -222,11 +268,6 @@
+   string sReadOnly = "";
+   rState = oSetPoint.Value();
+ 
+-  if ( oTemperature )
+-  {
+-    ! WriteLine(' <script>conInfo("oTemperature: '#oTemperature.Value()#'");</script> ');
+-    actTemp = oTemperature.Value();
+-  }
+   WriteLine("<tr>");
+     WriteLine("<td id='"#chnId#"tdACTUAL_TEMPERATURE'>");
+       WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+@@ -261,6 +302,30 @@
+       WriteLine("</td>");
+     WriteLine("</tr>");
+ 
++  WriteLine("<tr>");
++    if (oBatteryState) {
++      WriteLine("<td id='"#chnId#"tdBATTERY_STATE'>");
++        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
++          WriteLine("<tr>");
++            WriteLine("<td>${stringTableClimateControlRTTransceiverBatteryState}</td>");
++            WriteLine("<td><span id='"#chnId#"valBATTERY_STATE'></span><span><b>"#bUnit#"</b></span></td>");
++          WriteLine("</tr>");
++        WriteLine("</table>");
++      WriteLine("</td>");
++    }
++
++    if (oValveLevel) {
++      WriteLine("<td id='"#chnId#"tdLEVEL'>");
++        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
++          WriteLine("<tr>");
++            WriteLine("<td id='"#chnId#"LEVEL'>${stringTableHeatingLevel}</td>");
++            WriteLine("<td><span id='"#chnId#"valLEVEL'></span><span><b>"#vUnit#"</b></span></td>");
++          WriteLine("</tr>");
++        WriteLine("</table>");
++      WriteLine("</td>");
++    }
++  WriteLine("</tr>");
++
+  ! SLIDER
+ 
+   WriteLine("<tr>");
+@@ -395,6 +460,14 @@
+       WriteLine("opts.humidityID = '"#oHumidity.ID()#"';");
+       WriteLine("opts.HUMIDITY = '"#oHumidity.Value()#"';");
+     }
++    if (oBatteryState) {
++      WriteLine("opts.batteryStateID = '"#oBatteryState.ID()#"';");
++      WriteLine("opts.BATTERY_STATE = '"#oBatteryState.Value()#"';");
++    }
++    if (oValveLevel) {
++      WriteLine("opts.levelID = '"#oValveLevel.ID()#"';");
++      WriteLine("opts.LEVEL = '" # (oValveLevel.Value()*100).ToInteger() # "';");
++    }
+     if (oWindowState) {
+       WriteLine("opts.windowStateID = '"#oWindowState.ID()#"';");
+       WriteLine("opts.WINDOW_STATE = '"#oWindowState.Value()#"';");
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -25374,6 +25374,12 @@
+     if (this.opts.stTemp) {
+       this.showActualTemp();
+     }
++    if (this.opts.stBat) {
++      this.showActualBat();
++    }
++    if (this.opts.stValve !== null) {
++      this.showActualValve();
++    }
+     if (this.opts.idComfort && this.opts.idLowering) {
+       this.showComfortEco();
+     }
+@@ -25565,6 +25571,16 @@
+     jQuery("#"+this.id +"tblShowTemp").show();
+   },
+ 
++  showActualBat: function() {
++    jQuery("#"+this.id +"actBatteryState").text(this.opts.stBat);
++    jQuery("#"+this.id +"tblShowBatteryState").show();
++  },
++  
++  showActualValve: function() {
++    jQuery("#"+this.id +"actValveState").text(this.opts.stValve);
++    jQuery("#"+this.id +"tblShowValveState").show();
++  },
++  
+   showHolidayEndTime: function() {
+     var stopTime = this.getHolidayEndTime();
+     if (stopTime) {
+@@ -25667,6 +25683,8 @@
+       self.setSControl("ACTUAL_TEMPERATURE", self.ACTUAL_TEMPERATURE);
+       self.setSControl("HUMIDITY", self.HUMIDITY);
+       self.setSControl("WINDOW_STATE", self.WINDOW_STATE);
++      self.setSControl("BATTERY_STATE", self.BATTERY_STATE);
++      self.setSControl("LEVEL", self.LEVEL);
+       self.setSlider();
+       self.initElements();
+       self.bindEvents();
+@@ -25681,6 +25699,8 @@
+     this.BOOST_MODE = (this.checkBool(opts.BOOST_MODE, false) == "true") ? true : false;
+     //this.FROST_PROTECTION = opts.FROST_PROTECTION;
+     this.HUMIDITY = this.checkValue(opts.HUMIDITY, this.unknownState);
++    this.BATTERY_STATE = this.checkValue(opts.BATTERY_STATE, this.unknownState);
++    this.LEVEL = this.checkValue(opts.LEVEL, this.unknownState);
+     //this.PARTY_MODE = opts.PARTY_MODE;
+     this.SET_POINT_MODE = this.checkValue(opts.SET_POINT_MODE, 0);
+     this.SET_POINT_TEMPERATURE = this.checkValue(opts.SET_POINT_TEMPERATURE, 4.5);

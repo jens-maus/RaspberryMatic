@@ -7,7 +7,6 @@
 #
 # Rückgabewert: true
 
-
 exec /etc/init.d/S50lighttpd reload &
 
 jsonrpc_response true

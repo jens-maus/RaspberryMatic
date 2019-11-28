@@ -43,7 +43,7 @@ case $1 in
             ;;
 
             # v2.4x should be a S.USV with HW Version 2
-            2.4*)
+            2.4*|2.5*|2.6*)
               DAEMON=/opt/susvd/susvd
             ;;
           esac

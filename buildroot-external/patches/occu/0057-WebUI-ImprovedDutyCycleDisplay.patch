@@ -1,0 +1,182 @@
+--- occu/WebUI/www/api/methods.conf.orig
++++ occu/WebUI/www/api/methods.conf
+@@ -199,6 +199,13 @@
+   ARGUMENTS {_session_id_ interface address valueKey}
+ }
+ 
++Interface.getDutyCycle {
++  LEVEL USER
++  SCRIPT_FILE interface/getdutycycle.tcl
++  INFO {Gibt ein Array mit den DutyCycle Werten alle Interfaces zurueck}
++  ARGUMENTS {_session_id_}
++}
++
+ Interface.init {
+   LEVEL ADMIN
+   SCRIPT_FILE interface/dispatch.tcl
+--- occu/WebUI/www/api/methods/interface/getdutycycle.tcl.orig
++++ occu/WebUI/www/api/methods/interface/getdutycycle.tcl
+@@ -0,0 +1,24 @@
++##
++# Interface.getDutyCycle
++# Gibt ein JSON array mit den DutyCycle Werten aller interfaces zurueck.
++#
++# Parameter: 
++#   keine
++#
++# Rückgabewert: [array]
++#   Jedes Element ist ein Objekt mit den folgenden Elementen:
++#   sysvar:      [string]  Name der Systemvariable
++#   address:     [string]  Seriennummer
++#   dutyCycle:   [integer] Duty Cycle (0 - 100)
++#   type:        [string]  Typ ("CCU2") des interfaces
++##
++
++set result ""
++
++if { [file exists /tmp/dutycycle.json] } {
++  set file [open /tmp/dutycycle.json r]
++  set result [gets $file]
++  close $file
++}
++
++jsonrpc_response "$result"
+--- occu/WebUI/www/rega/pages/tabs/startpage.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/startpage.htm
+@@ -250,13 +250,38 @@
+               }
+              %>
+ 
+-            <tr id="partingLine1" class="hidden"><td colspan="2" style="height: 50px"><hr></td></tr>
++            <tr id="partingLine1" class="hidden"><td colspan="3" style="height: 50px"><hr></td></tr>
+ 
+             <!-- DutyCycle -->
+-            <tr name="trDutyCycle" style="visibility: hidden"><td></td><td><div id="dutyCycleVal" style="width:75%; text-align:center"></div></td></tr>
+-            <tr name="trDutyCycle" style="visibility: hidden">
+-              <td>${lblDutyCycle}</td>
+-              <td> <div id="dutyCycleProgress"  align="right"><div id="dutyCycleProgressBar"></div></div> </td>
++            <tr name="trDutyCycle0" style="display: none">
++              <td id="dutyCycleAddr0" align="left"</td>
++              <td><div id="dutyCycleProgress0" align="right"><div id="dutyCycleProgressBar0"></div></div></td>
++              <td style="white-space: nowrap"><div id="dutyCycleVal0" style="width:75%; text-align:left"></div></td>
++            </tr>
++            <tr name="trDutyCycle1" style="display: none">
++              <td id="dutyCycleAddr1" align="left"</td>
++              <td><div id="dutyCycleProgress1" align="right"><div id="dutyCycleProgressBar1"></div></div></td>
++              <td style="white-space: nowrap"><div id="dutyCycleVal1" style="width:75%; text-align:left"></div></td>
++            </tr>
++            <tr name="trDutyCycle2" style="display: none">
++              <td id="dutyCycleAddr2" align="left"</td>
++              <td><div id="dutyCycleProgress2" align="right"><div id="dutyCycleProgressBar2"></div></div></td>
++              <td style="white-space: nowrap"><div id="dutyCycleVal2" style="width:75%; text-align:left"></div></td>
++            </tr>
++            <tr name="trDutyCycle3" style="display: none">
++              <td id="dutyCycleAddr3" align="left"</td>
++              <td><div id="dutyCycleProgress3" align="right"><div id="dutyCycleProgressBar3"></div></div></td>
++              <td style="white-space: nowrap"><div id="dutyCycleVal3" style="width:75%; text-align:left"></div></td>
++            </tr>
++            <tr name="trDutyCycle4" style="display: none">
++              <td id="dutyCycleAddr4" align="left"</td>
++              <td><div id="dutyCycleProgress4" align="right"><div id="dutyCycleProgressBar4"></div></div></td>
++              <td style="white-space: nowrap"><div id="dutyCycleVal4" style="width:75%; text-align:left"></div></td>
++            </tr>
++            <tr name="trDutyCycle5" style="display: none">
++              <td id="dutyCycleAddr5" align="left"</td>
++              <td><div id="dutyCycleProgress5" align="right"><div id="dutyCycleProgressBar5"></div></div></td>
++              <td style="white-space: nowrap"><div id="dutyCycleVal5" style="width:75%; text-align:left"></div></td>
+             </tr>
+ 
+           </table>
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -2221,7 +2221,7 @@
+ progress::-moz-progress-bar { background: #3678c9; }
+ progress::-webkit-progress-value { background: #3678c9; }
+ 
+-#dutyCycleProgress {
++#dutyCycleProgress0, #dutyCycleProgress1, #dutyCycleProgress2, #dutyCycleProgress3, #dutyCycleProgress4, #dutyCycleProgress5 {
+   width: 75%;
+ 
+   background: -moz-linear-gradient(0deg, rgba(13,255,0,1) 0%, rgba(255,255,0,1) 63%, rgba(255,0,0,1) 100%); /* ff3.6+ */
+@@ -2235,7 +2235,7 @@
+ 
+ }
+ 
+-#dutyCycleProgressBar {
++#dutyCycleProgressBar0, #dutyCycleProgressBar1, #dutyCycleProgressBar2, #dutyCycleProgressBar3, #dutyCycleProgressBar4, #dutyCycleProgressBar5 {
+   width: 1%;
+   height: 12px;
+   background-color: #d9d9d9;
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -27866,21 +27866,21 @@
+       dcNotAvailable = -1,
+       dcAlarm = 89;  // Attention when dc >= 90%
+ 
+-    homematic("Interface.listBidcosInterfaces", {"interface": ifaceBidCosRF}, function (interfaceStatus) {
+-
+-      jQuery.each(interfaceStatus, function(index, iFace) {
+-        if (iFace.type == "CCU2") {
+-          var dutyCycleProgressElem = jQuery("#dutyCycleProgress"),
+-            dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"),
+-            dutyCycleValElm = jQuery("#dutyCycleVal"),
+-            trDutyCycle = jQuery("[name='trDutyCycle']"),
++    homematic("Interface.getDutyCycle", {}, function(dcArray) {
++      if(jQuery.isArray(dcArray)) {
++        jQuery.each(dcArray, function(index, iface) {
++          var dutyCycleProgressElem = jQuery("#dutyCycleProgress"+index),
++            dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"+index),
++            dutyCycleValElm = jQuery("#dutyCycleVal"+index),
++            dutyCycleAddrElm = jQuery("#dutyCycleAddr"+index),
++            trDutyCycle = jQuery("[name='trDutyCycle"+index+"']"),
+             trPartingLineElm = jQuery("#partingLine1"),
+             dcVal,
+             width, value;
+ 
+-          if (typeof iFace.dutyCycle != "undefined") {
+-            dcVal = parseInt(iFace.dutyCycle);
+-            conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + dcUnit);
++          if (typeof iface.dutyCycle !== "undefined") {
++            dcVal = Math.floor(iface.dutyCycle);
++            conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + " " + dcUnit);
+             arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
+           } else {
+             conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
+@@ -27888,7 +27888,14 @@
+           }
+ 
+           if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
+-            dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + dcUnit);
++            dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
++            if (iface.type === "CCU2") {
++              dutyCycleAddrElm.text("DutyCycle CCU:");
++            } else if(iface.name !== "") {
++              dutyCycleAddrElm.text("DutyCycle LGW ("+iface.name+"):");
++            } else {
++              dutyCycleAddrElm.text("DutyCycle LGW ("+iface.address+"):");
++            }
+ 
+             width = parseInt(dutyCycleProgressElem.css("width"));
+             value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
+@@ -27902,17 +27909,16 @@
+             }
+             trPartingLineElm.show();
+             showPartingLine = true;
+-            trDutyCycle.css("visibility", "visible");
++            trDutyCycle.css("display", "table-row");
+           } else {
+-            trDutyCycle.css("visibility", "hidden");
++            trDutyCycle.css("display", "none");
+           }
+ 
+           if (!showPartingLine) {
+             trPartingLineElm.hide();
+           }
+-          return false; // Leave each loop
+-        }
+-      });
++        });
++      }
+     });
+   }
+ };

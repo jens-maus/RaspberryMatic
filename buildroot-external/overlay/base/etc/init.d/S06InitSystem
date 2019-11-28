@@ -36,15 +36,9 @@ init_system() {
   chmod 775 /var/etc
   mkdir -p /var/status
   chmod 775 /var/status
-  touch /var/status/SDinitialised
-
-  # create pathes for recording data
-  mkdir -p /usr/local/sdcard/measurement
-  mkdir -p /media/sd-mmcblk0
-  ln -sf /usr/local/sdcard/measurement /media/sd-mmcblk0/measurement
 
   # create /media/usbX directories for automounting USB devices
-  for i in $(seq 0 7); do
+  for i in $(seq 1 8); do
     mkdir -p /media/usb${i}
   done
 
@@ -87,18 +81,26 @@ init_system() {
     cp -a ${CFG_TEMPLATE_DIR}/shadow /etc/config/
   fi
 
-  # load watchdog kernel module
-  if [[ "${HM_HOST}" != "tinkerboard" ]]; then
+  # load bcm2835 watchdog kernel module if this is
+  # a raspberrypi
+  if echo "${HM_HOST}" | grep -q rpi; then
     modprobe bcm2835_wdt nowayout=1 heartbeat=15
   fi
 
   # load tunneling interface support
   modprobe tun
 
-  # if /dev/ttyS0 is present move it to ttyS1 for
-  # potentiall later use (e.g. bluetooth)
-  if [[ -c /dev/ttyS0 ]]; then
-    mv /dev/ttyS0 /dev/ttyS1
+  # on a virtual ova platform system we put diagrams on the
+  # same disk in the old /usr/local/sdcard directory path and
+  # don't force to use an external USB thumb drive.
+  if echo "${HM_HOST}" | grep -q ova-; then
+    if [[ ! -e /usr/local/sdcard/.nobackup ]]; then
+      mkdir -p /usr/local/sdcard
+      touch /usr/local/sdcard/.nobackup
+    fi
+    ln -sf /usr/local/sdcard /media/usb0
+    touch /var/status/SDinitialised
+    touch /var/status/hasSD
   fi
 }
 

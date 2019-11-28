@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+# Starts hs485d.
+#
+
+LOGLEVEL_HS485D=5
+
+CFG_TEMPLATE_DIR=/etc/config_templates
+
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# skip this startup if not in normal mode
+[[ "${HM_MODE}" != "NORMAL" ]] && exit 0
+
+start() {
+  echo -n "Starting hs485d: "
+  if grep -q "^\[Interface .\]" /var/etc/hs485d.conf 2>/dev/null; then
+    # get the current syslog settings
+    [[ -r /etc/config/syslog ]] && . /etc/config/syslog
+
+    # adjust the oom score (which is inherited by start-stop-daemon)
+    # to ensure that others are killed first in case of low memory situations
+    echo -900 >/proc/$$/oom_score_adj
+
+    start-stop-daemon -S -q --exec /bin/hs485dLoader -- -l ${LOGLEVEL_HS485D} -dw /var/etc/hs485d.conf
+    echo "OK"
+  else
+    echo "no Hm-Wired hardware found"
+  fi
+}
+
+stop() {
+  echo -n "Stopping hs485d: "
+  start-stop-daemon -K -q -p /var/run/hs485dLoader.pid
+  killall hs485d
+  rm -f /var/run/hs485dLoader.pid
+  echo "OK"
+}
+
+restart() {
+  stop
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    stop
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

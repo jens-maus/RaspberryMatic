@@ -1,0 +1,82 @@
+#!/bin/sh
+#
+# init script to start/stop the Mediola NEOServer Addon
+#
+
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# skip this startup in LAN Gateway mode
+[[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
+
+# disable the watchdog if NEOServer is disabled
+if [[ -e /etc/config/neoDisabled ]] || [[ -e /usr/local/addons/mediola/Disabled ]]; then
+  # make sure the watchdog is disabled
+  if grep -q "/usr/local/addons/mediola/bin/watchdog" /usr/local/crontabs/root 2>/dev/null; then
+    sed -i '/\/usr\/local\/addons\/mediola\/bin\/watchdog/d' /usr/local/crontabs/root
+  fi
+fi
+
+# if NEOServer is permanently disabled exit immediately
+[[ -e /etc/config/neoDisabled ]] && exit 0
+
+start() {
+  echo -n "Starting NeoServer: "
+
+  if [[ ! -e /etc/config/safemode ]]; then
+
+    # perform an automatic update of the neo server addon
+    # if outdated.
+    if [[ -d /usr/local/addons/mediola ]]; then
+      function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+      if [[ $(version $(cat /opt/mediola/VERSION )) -gt $(version $(cat /usr/local/addons/mediola/VERSION )) ]]; then
+        DISABLED=0
+        [[ -f /usr/local/addons/mediola/Disabled ]] && DISABLED=1
+
+        rm -rf /usr/local/addons/mediola
+        /opt/mediola/startup.sh 2>/dev/null
+
+        [[ ${DISABLED} -eq 0 ]] && rm -f /usr/local/addons/mediola/Disabled
+      fi
+    fi
+
+    if [[ ! -e /usr/local/addons/mediola/Disabled ]]; then
+      /opt/mediola/startup.sh 2>/dev/null >/dev/null
+      /usr/local/addons/mediola/bin/watchdog
+      echo "OK"
+    else
+      echo "disabled"
+    fi
+  else
+    echo "skipping (safemode)"
+  fi
+}
+
+stop() {
+  if [[ -f /usr/local/addons/mediola/rc.d/97NeoServer ]]; then
+    /usr/local/addons/mediola/rc.d/97NeoServer stop
+  fi
+}
+
+restart() {
+  stop
+  sleep 2
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    stop
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|restart}"
+    exit 1
+esac
+
+exit $?

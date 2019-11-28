@@ -16,8 +16,10 @@ menu "Hardware Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/rpi-rf-mod/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/rx8130-rtc/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/susvd/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/piusvd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/picod/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/strompi2d/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/pidesktopd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/bluetooth-tinker/Config.in"
 endmenu
 
@@ -26,6 +28,8 @@ menu "Software Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/ssdpd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/eq3configd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/wiringpi-tinker/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/neoserver/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/rndaddtoentcnt/Config.in"
 endmenu
 
 menu "Java Runtime Environment"

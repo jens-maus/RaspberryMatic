@@ -1,0 +1,52 @@
+body {
+  background-color:#192c6e;
+  color:white
+}
+
+h1 {
+  margin-top:1em;
+  font-weight: bold;
+  padding-top:8px;
+}
+
+p {
+  font-weight: bold;
+}
+
+.NavButton 	{
+  background-color:#ebf1f2;
+
+  /* Safari 4-5, Chrome 1-9 */
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#ffffff), to(#89989b));
+
+  /* Safari 5.1, Chrome 10+ */
+  background: -webkit-linear-gradient(top, #ffffff, #89989b);
+
+  /* Firefox 3.6+ */
+  background: -moz-linear-gradient(bottom, #89989b, #ffffff);
+
+  /* IE 10 */
+  background: -ms-linear-gradient(top, #89989b, #ffffff);
+  overflow: auto;
+
+  /* For Internet Explorer 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr= #d0d0d0, endColorstr=#ffffff)";
+
+  width: 200px;
+  text-align: center;
+  border: solid 1px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 15px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.infoPanel {
+  border: 1px solid white;
+  padding: 10px;
+}
+
+.hidden {
+    display:none;
+}

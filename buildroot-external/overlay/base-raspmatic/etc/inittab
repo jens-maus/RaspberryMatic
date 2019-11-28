@@ -1,0 +1,40 @@
+# /etc/inittab
+#
+# Copyright (C) 2001 Erik Andersen <andersen@codepoet.org>
+#
+# Note: BusyBox init doesn't support runlevels.  The runlevels field is
+# completely ignored by BusyBox init. If you want runlevels, use
+# sysvinit.
+#
+# Format for each entry: <id>:<runlevels>:<action>:<process>
+#
+# id        == tty to run on, or empty for /dev/console
+# runlevels == ignored
+# action    == one of sysinit, respawn, askfirst, wait, and once
+# process   == program to run
+
+# Startup the system
+null::sysinit:/bin/mount -t proc proc /proc
+null::sysinit:/bin/mkdir -p /dev/pts
+null::sysinit:/bin/mkdir -p /dev/shm
+tty2::sysinit:/sbin/fsck -A -R -p
+tty2::sysinit:/bin/mount -a
+tty2::sysinit:/bin/mkdir -p /var/run
+null::sysinit:/bin/hostname -F /etc/hostname
+null::sysinit:/usr/bin/psplash -n &
+# now run any rc scripts
+::sysinit:/etc/init.d/rcS
+# run monit to monitor our important services
+null::respawn:/usr/bin/monit -Ic /etc/monitrc
+
+# Put a getty on tty2
+tty2::askfirst:/sbin/getty -L tty2 0 vt100
+
+# Stuff to do for the 3-finger salute
+::ctrlaltdel:/sbin/reboot
+
+# Stuff to do before rebooting
+null::shutdown:/usr/bin/monit unmonitor all
+::shutdown:/etc/init.d/rcK
+tty2::shutdown:/bin/umount -a -r
+null::shutdown:/sbin/swapoff -a

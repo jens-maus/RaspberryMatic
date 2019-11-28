@@ -1,0 +1,27 @@
+--- buildroot/package/rpi-wifi-firmware/rpi-wifi-firmware.hash.orig
++++ buildroot/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 51a33d23127300dffd6ac088f372b83ab862053f5e4dc7130676ebaaa824e626  rpi-wifi-firmware-688531da4bcf802a814d9cb0c8b6d62e3b8a3327.tar.gz
++sha256 0b2bbf0bcdb7eabc488cc96e418ee17efcd9803590abc64d055ea3b762e2411b  rpi-wifi-firmware-130cb86fa30cafbd575d38865fa546350d4c5f9c.tar.gz
+ sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
+--- buildroot/package/rpi-wifi-firmware/rpi-wifi-firmware.mk.orig
++++ buildroot/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
+ 
+-RPI_WIFI_FIRMWARE_VERSION = 688531da4bcf802a814d9cb0c8b6d62e3b8a3327
+-RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
++RPI_WIFI_FIRMWARE_VERSION = 130cb86fa30cafbd575d38865fa546350d4c5f9c
++RPI_WIFI_FIRMWARE_SITE = $(call github,RPi-Distro,firmware-nonfree,$(RPI_WIFI_FIRMWARE_VERSION))
+ RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
+ RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
+ 
+ define RPI_WIFI_FIRMWARE_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d $(TARGET_DIR)/lib/firmware/brcm
+-	$(INSTALL) -m 0644 $(@D)/firmware/brcm/brcmfmac* $(TARGET_DIR)/lib/firmware/brcm
++	$(INSTALL) -m 0644 $(@D)/brcm/brcmfmac434* $(TARGET_DIR)/lib/firmware/brcm
+ endef
+ 
+ $(eval $(generic-package))

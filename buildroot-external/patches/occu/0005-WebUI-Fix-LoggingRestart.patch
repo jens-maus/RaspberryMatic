@@ -1,0 +1,19 @@
+--- occu/WebUI/www/config/cp_maintenance.cgi.orig
++++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -1187,9 +1187,13 @@
+     puts "Failure"
+     return
+   }
+-  catch {exec killall syslogd}
+-  catch {exec killall klogd}
+-  exec /etc/init.d/S07logging start
++  if {[getProduct] < 3 } {
++    catch {exec killall syslogd}
++    catch {exec killall klogd}
++    exec /etc/init.d/S01logging start
++  } else {
++    exec /etc/init.d/S07logging restart
++  }
+   puts "Success -confirm"
+ }
+ 

@@ -3,7 +3,7 @@
 # S.USV Support (www.s-usv.de)
 #
 #############################################################
-SUSVD_VERSION = 2.33
+SUSVD_VERSION = 2.40
 SUSVD_SOURCE =
 SUSVD_SITE =
 SUSVD_LICENSE = PROPERITARY

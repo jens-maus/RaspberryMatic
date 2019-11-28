@@ -1,0 +1,33 @@
+#!/bin/sh
+#
+# Enable USB Gadget mode
+#
+
+case "$1" in
+  start)
+    if [[ -f /etc/config/usbGadgetModeEnabled ]]; then
+      printf "Starting usb gadget mode: "
+      /sbin/modprobe dwc2
+      /sbin/modprobe g_ether host_addr=00:11:22:33:44:55 dev_addr=00:55:66:77:88:99
+      echo "OK"
+    fi
+    ;;
+  stop)
+    if [[ -f /etc/config/usbGadgetModeEnabled ]]; then
+      printf "Stopping usb gadget mode: "
+      /sbin/rmmod g_ether
+      /sbin/rmmod dwc2
+      echo "OK"
+    fi
+    ;;
+  restart|reload)
+    "$0" stop
+    sleep 1
+    "$0" start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

@@ -1,0 +1,52 @@
+#!/bin/sh
+#
+# Startup script to mount all filesystems
+#
+
+start() {
+  echo -n "Mounting Filesystems: "
+
+  # wait until bootfs is actually ready to be mounted
+  MAXSTEPS=10
+  for i in $(seq 1 ${MAXSTEPS}); do
+    if /sbin/blkid | grep -q deedbeef-01; then
+      break
+    fi
+    sleep 2
+    echo -n "."
+  done
+
+  # mount all relevant filesystems (read-only first)
+  mount -a
+
+  # make sure we remove the .recoveryMode file
+  # now so that upon hard reset the system cancels pending changes
+  if [[ -f /usr/local/.recoveryMode ]]; then
+    mount -o rw,remount /userfs
+    rm -rf /usr/local/.recoveryMode
+    mount -o ro,remount /userfs
+  fi
+
+  echo "OK"
+}
+
+restart() {
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|restart}"
+    exit 1
+esac
+
+exit $?

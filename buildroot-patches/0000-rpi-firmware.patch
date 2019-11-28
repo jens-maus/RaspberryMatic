@@ -1,0 +1,31 @@
+--- buildroot/package/rpi-firmware/Config.in.orig
++++ buildroot/package/rpi-firmware/Config.in
+@@ -11,6 +11,10 @@
+ 
+ if BR2_PACKAGE_RPI_FIRMWARE
+ 
++config BR2_PACKAGE_RPI_FIRMWARE_VERSION
++	string "Custom firmware version"
++	default "1.20190718"
++
+ choice
+ 	bool "rpi variant"
+ 	help
+--- buildroot/package/rpi-firmware/rpi-firmware.mk.orig
++++ buildroot/package/rpi-firmware/rpi-firmware.mk
+@@ -4,12 +4,14 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = bcf40b5c2b94178c7564fb451098d44968e44af5
++RPI_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+ RPI_FIRMWARE_INSTALL_IMAGES = YES
+ 
++BR_NO_CHECK_HASH_FOR += $(RPI_FIRMWARE_SOURCE)
++
+ ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
+ define RPI_FIRMWARE_INSTALL_DTB
+ 	$(foreach dtb,$(wildcard $(@D)/boot/*.dtb), \

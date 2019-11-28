@@ -5,9 +5,15 @@
 # http://www.azul.com/downloads/zulu-embedded/
 #
 #############################################################
-JAVA_AZUL_VERSION = 1.8.0_162-8.27.0.91
-JAVA_AZUL_SOURCE=ezdk-$(JAVA_AZUL_VERSION)-eval-linux_aarch32hf.tar.gz
+ifeq ($(call qstrip,$(BR2_ARCH)),arm)
+JAVA_AZUL_VERSION = 8.42.0.195-ca-jdk1.8.0_232
+JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_aarch32hf.tar.gz
 JAVA_AZUL_SITE = http://cdn.azul.com/zulu-embedded/bin
+else ifeq ($(call qstrip,$(BR2_ARCH)),i686)
+JAVA_AZUL_VERSION = 8.42.0.23-ca-jdk8.0.232
+JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_i686.tar.gz
+JAVA_AZUL_SITE = http://cdn.azul.com/zulu/bin
+endif
 JAVA_AZUL_DEPENDENCIES = fontconfig dejavu liberation
 
 define JAVA_AZUL_PRE_PATCH

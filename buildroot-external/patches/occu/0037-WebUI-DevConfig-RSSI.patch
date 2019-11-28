@@ -1,0 +1,39 @@
+--- occu/WebUI/www/tools/devconfig.cgi.orig
++++ occu/WebUI/www/tools/devconfig.cgi
+@@ -357,7 +357,26 @@
+                           xmlrpc $url system.methodHelp rssiInfo
+                       } ] } { continue }
+                       array_clear rssi_map
+-                      set rssi_list [xmlrpc $url rssiInfo ]
++                      if { [catch {
++                        set rssi_list [xmlrpc $url rssiInfo ]
++                      } ] } {
++                        if { "$iface" == "HmIP-RF" } {
++                          set rssi_list ""
++                          set devlist [xmlrpc $url listDevices [list bool 0]]
++                          foreach dev $devlist {
++                            array_clear dev_descr
++                            array set dev_descr $dev
++                            if { "$dev_descr(PARENT)" == "" } {
++                              set rssi_device 65536
++                              set rssi_peer 65536
++                              catch { set rssi_device [xmlrpc $url getValue "$dev_descr(ADDRESS):0" "RSSI_DEVICE"] }
++                              catch { set rssi_peer [xmlrpc $url getValue "$dev_descr(ADDRESS):0" "RSSI_PEER"] }
++                              set rssi_list "\"$devnames($dev_descr(ADDRESS)) $dev_descr(ADDRESS)\" { $dev_descr(ADDRESS) { $rssi_device $rssi_peer }} $rssi_list"
++                            }
++                          }
++                        } else { continue }
++                      }
++                      table_data colspan=100 { puts "<hr/><h3><u>$iface:</u></h3>" }
+                       array set rssi_map $rssi_list
+                       foreach dev [lsort [array names rssi_map]] {
+                           puts ""
+@@ -522,7 +541,7 @@
+     set green [rssi_color $RSSI_BAD $RSSI_MEDIUM $rssi]
+     set color [format "#%02X%02X00" $red $green]
+     table_data "bgcolor=\"$color\"" {
+-        puts "[set rssi]dBm"
++        puts "[set rssi]&nbsp;dBm"
+     }
+ }
+ 

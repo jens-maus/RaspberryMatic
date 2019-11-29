@@ -1,0 +1,17 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        platform: [raspmatic_rpi0, raspmatic_rpi3]
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: build ${{ matrix.platform }}
+      run: make ${{ matrix.platform }}

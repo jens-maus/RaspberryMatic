@@ -1,0 +1,14 @@
+--- buildroot/package/openvmtools/S10vmtoolsd.orig
++++ buildroot/package/openvmtools/S10vmtoolsd
+@@ -7,6 +7,11 @@
+ ARGS="-b"
+ PID="/var/run/vmtoolsd.pid"
+ 
++# only continue if VMware Hypervisor found
++if /usr/bin/lscpu | grep "Hypervisor vendor:" | grep -qv VMware; then
++  exit 0
++fi
++
+ [ -r /etc/default/vmtoolsd ] && . /etc/default/vmtoolsd
+ 
+ case "$1" in

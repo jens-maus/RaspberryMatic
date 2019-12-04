@@ -30,6 +30,7 @@ menu "Software Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/wiringpi-tinker/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/neoserver/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/rndaddtoentcnt/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/qemu-guest-agent/Config.in"
 endmenu
 
 menu "Java Runtime Environment"

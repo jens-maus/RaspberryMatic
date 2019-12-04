@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        platform: [raspmatic_rpi0, raspmatic_rpi3, raspmatic_rpi4, raspmatic_tinkerboard, raspmatic_intelnuc, raspmatic_ova]
+        platform: [raspmatic_rpi0, raspmatic_rpi3, raspmatic_rpi4, raspmatic_tinkerboard, raspmatic_intelnuc]
     
     steps:
     - uses: actions/checkout@v1

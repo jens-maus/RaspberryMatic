@@ -1,14 +1,14 @@
 --- buildroot/package/openvmtools/S10vmtoolsd.orig
 +++ buildroot/package/openvmtools/S10vmtoolsd
-@@ -7,6 +7,11 @@
- ARGS="-b"
- PID="/var/run/vmtoolsd.pid"
+@@ -11,6 +11,11 @@
+ # shellcheck source=/dev/null
+ [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
  
 +# only continue if VMware Hypervisor found
 +if /usr/bin/lscpu | grep "Hypervisor vendor:" | grep -qv VMware; then
 +  exit 0
 +fi
 +
- [ -r /etc/default/vmtoolsd ] && . /etc/default/vmtoolsd
- 
- case "$1" in
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+ 	# shellcheck disable=SC2086 # we need the word splitting

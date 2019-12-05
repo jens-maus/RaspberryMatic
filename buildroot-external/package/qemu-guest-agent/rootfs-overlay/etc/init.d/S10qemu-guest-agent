@@ -6,7 +6,7 @@
 EXEC="/usr/bin/qemu-ga"
 METHOD="virtio-serial"
 METHOD_PATH="/dev/virtio-ports/org.qemu.guest_agent.0"
-ARGS="--daemonize"
+ARGS=""
 PID="/var/run/qemu-ga.pid"
 
 [ -e "${METHOD_PATH}" ] || exit 0

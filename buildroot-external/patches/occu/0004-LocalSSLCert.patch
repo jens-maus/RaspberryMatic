@@ -16,7 +16,7 @@
          SCRIPT_FILE user/restartlighttpd.tcl
 --- occu/WebUI/www/api/methods/user/createcertificate.tcl.orig
 +++ occu/WebUI/www/api/methods/user/createcertificate.tcl
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,27 @@
 +##
 +# User.createCertificate
 +# Erstellt ein neues Zertifikat unter /etc/config/server.pem
@@ -36,7 +36,8 @@
 +  exec /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
 +                                              -out /etc/config/server.pem \
 +                                              -days 3650 \
-+                                              -addext "extendedKeyUsage = serverAuth\nsubjectAltName = DNS:$args(hostname),IP:$ip" \
++                                              -addext "extendedKeyUsage = serverAuth" \
++                                              -addext "subjectAltName = DNS:$args(hostname),IP:$ip" \
 +                                              -subj "/C=$args(country)/emailAddress=$args(email)/O=HomeMatic/OU=$args(serial)/CN=$args(hostname)" 2>/dev/null >/dev/null
 +
 +  jsonrpc_response true

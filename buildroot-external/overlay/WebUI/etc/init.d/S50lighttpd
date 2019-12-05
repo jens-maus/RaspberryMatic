@@ -23,7 +23,8 @@ start() {
     /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
                                            -out /etc/config/server.pem \
                                            -days 3650 \
-                                           -addext "extendedKeyUsage = serverAuth\nsubjectAltName = DNS:$(hostname),IP:${IP}" \
+                                           -addext "extendedKeyUsage = serverAuth" \
+                                           -addext "subjectAltName = DNS:$(hostname),IP:${IP}" \
                                            -subj "/C=DE/O=HomeMatic/OU=$(cat /var/board_serial)/CN=$(hostname)" 2>/dev/null >/dev/null
   fi
 

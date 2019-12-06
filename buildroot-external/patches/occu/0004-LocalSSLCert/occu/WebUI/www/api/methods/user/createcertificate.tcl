@@ -17,8 +17,10 @@ if { $args(hostname) != "" } then {
   exec /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
                                               -out /etc/config/server.pem \
                                               -days 3650 \
-                                              -addext "extendedKeyUsage = serverAuth" \
                                               -addext "subjectAltName = DNS:$args(hostname),IP:$ip" \
+                                              -addext "keyUsage = keyCertSign,digitalSignature,keyEncipherment" \
+                                              -addext "extendedKeyUsage = serverAuth" \
+                                              -addext "nsCertType = server,sslCA" \
                                               -subj "/C=$args(country)/emailAddress=$args(email)/O=HomeMatic/OU=$args(serial)/CN=$args(hostname)" 2>/dev/null >/dev/null
 
   jsonrpc_response true

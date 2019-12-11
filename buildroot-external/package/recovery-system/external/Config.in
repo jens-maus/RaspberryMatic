@@ -9,6 +9,7 @@ endmenu
 menu "Software Support"
   source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/package/hm-platform/Config.in"
   source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/../../../package/wiringpi-tinker/Config.in"
+  source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/../../../package/qemu-guest-agent/Config.in"
 endmenu
 
 # External packages

@@ -503,16 +503,17 @@
    
    <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css" />
    <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css" />
-@@ -69,7 +69,7 @@
+@@ -69,7 +69,8 @@
      /*########################################################################*/
  
      PLATFORM = "Central";
 -    WEBUI_VERSION = "3.45.7"
 +    WEBUI_VERSION = "XXX-WEBUI-VERSION-XXX";
++    PRODUCT = "XXX-PRODUCT-XXX";
    
      /**
       * Flags
-@@ -193,7 +193,7 @@
+@@ -193,7 +194,7 @@
    <div id="webuiloader_wrapper">
      <div id="webuiloader_background">
        <div id="webuiloader">
@@ -595,7 +596,7 @@
      script.id = "homematic_com_script";
      script.type = "text/javascript";
 -    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product="+this.m_product+"&serial=" + serial;
-+    script.src = "https://raspberrymatic.de/LATEST-VERSION.js?v=" + WEBUI_VERSION;
++    script.src = "https://raspberrymatic.de/LATEST-VERSION.js?v=" + WEBUI_VERSION + "&p=" + PRODUCT;
      $("body").appendChild(script);
    },
  

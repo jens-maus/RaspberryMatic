@@ -4,7 +4,7 @@
 #
 #############################################################
 
-OCCU_VERSION = 3.47.22-3
+OCCU_VERSION = 3.49.17-1
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 
 ifeq ($(BR2_PACKAGE_OCCU),y)
@@ -88,7 +88,7 @@ ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_HMIP),y)
 endif
 
 ifeq ($(BR2_arm),y)
-	OCCU_ARCH=arm-gnueabihf
+	OCCU_ARCH=arm-gnueabihf-gcc8
 endif
 
 ifeq ($(BR2_i386),y)

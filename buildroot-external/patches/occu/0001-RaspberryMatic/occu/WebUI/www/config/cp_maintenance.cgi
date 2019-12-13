@@ -21,8 +21,20 @@ array set REGA_LOGLEVELS {
   3 "\${dialogSettingsCMLogLevel4}"
 }
 
-set RFD_URL "bin://127.0.0.1:2001"
-set HS485D_URL "bin://127.0.0.1:2000"
+set portnumber 2001
+catch { source "/etc/eq3services.ports.tcl" }
+if { [info exists EQ3_SERVICE_RFD_PORT] } {
+  set portnumber $EQ3_SERVICE_RFD_PORT
+}
+
+set RFD_URL "bin://127.0.0.1:$portnumber"
+
+set portnumber 2000
+catch { source "/etc/eq3services.ports.tcl" }
+if { [info exists EQ3_SERVICE_HS485D_PORT] } {
+  set portnumber $EQ3_SERVICE_HS485D_PORT
+}
+set HS485D_URL "bin://127.0.0.1:$portnumber"
 # set PFMD_URL "bin://127.0.0.1:2002" - not necessary with the ccu2
 
 
@@ -274,6 +286,12 @@ proc action_firmware_update_cancel {} {
   if {[getProduct] < 3} {
     catch {exec rm /var/new_firmware.tar.gz}
     catch { exec /bin/sh -c "rm /var/EULA.*"}
+    cgi_javascript {
+      puts {
+        homematic('User.startHmIPServer',{});
+        InterfaceMonitor.start();
+      }
+    }
   } else {
    catch { exec /bin/sh -c "rm -rf `readlink -f /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
    catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*"}
@@ -373,7 +391,7 @@ proc action_put_page {} {
               }
               table_data {id="availableSWVersion"} {
                 # This doesn´t work properly
-                # puts [iframe "$REMOTE_FIRMWARE_SCRIPT?cmd=check_version&version=$cur_version&serial=$serial&lang=de&product=HM-CCU3" marginheight=0 marginwidth=0 frameborder=0 width=100 height=20 {scrolling="no"} ]
+                # puts [iframe "$REMOTE_FIRMWARE_SCRIPT?cmd=check_version&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2" marginheight=0 marginwidth=0 frameborder=0 width=100 height=20 {scrolling="no"} ]
                 # The available version will be set further down with "jQuery('#availableSWVersion').html(homematic.com.getLatestVersion());"
               }
             }
@@ -393,7 +411,7 @@ proc action_put_page {} {
                   table {
                     table_row {
                       table_data {
-                        division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU3';\"" {}
+                        division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU[getProduct]';\"" {}
                         division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
                       }
                     }
@@ -428,7 +446,7 @@ proc action_put_page {} {
                   table {
                     table_row {
                       table_data {
-                        division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
+                        division {class="CLASS20919"} {onClick="stopHmIPServer();document.firmware_form.submit();showUserHint();"} {
                           puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
                         }
                       }
@@ -541,9 +559,9 @@ proc action_put_page {} {
         }
         }
 
-        table_data {align="center"} {class="CLASS20904"} {
-        # puts "\${lblTDReGaVersionHelp}"
-        division {Class="StdTableBtnHelp"} {puts "<img id='showReGaVersionHelp' src='/ise/img/help.png'>"}
+        table_data {align="left"} {class="CLASS20904"} {
+        # division {Class="StdTableBtnHelp"} {puts "<img id='showReGaVersionHelp' src='/ise/img/help.png'>"}
+        division {Class="StdTableBtnHelp"} {puts "\${lblTDReGaVersionHelp}"}
         }
       }
 
@@ -767,16 +785,23 @@ proc action_put_page {} {
     puts {
 
       showUserHint = function() {
-      var elem = jQuery('#fwUpload');
-      if (elem.length == 0) {
-        MessageBox.show(
-        translateKey('dialogSettingsCMDialogHintPerformFirmwareUploadTitle'),
-        translateKey('dialogSettingsCMDialogHintPerformFirmwareUploadContent')+
-        ' <br/><br/><img id="msgBoxBarGraph" src="/ise/img/anim_bargraph.gif"><br/>',
-        '','320','105','fwUpload', 'msgBoxBarGraph');
-      } else {
-        elem.show();
+        var elem = jQuery('#fwUpload');
+        if (elem.length == 0) {
+          MessageBox.show(
+          translateKey('dialogSettingsCMDialogHintPerformFirmwareUploadTitle'),
+          translateKey('dialogSettingsCMDialogHintPerformFirmwareUploadContent')+
+          ' <br/><br/><img id="msgBoxBarGraph" src="/ise/img/anim_bargraph.gif"><br/>',
+          '','320','105','fwUpload', 'msgBoxBarGraph');
+        } else {
+          elem.show();
+        }
       }
+
+      stopHmIPServer = function() {
+        if( getProduct() < 3 ) {
+          InterfaceMonitor.stop();
+          homematic('User.stopHmIPServer' , {} );
+        }
       }
     }
 
@@ -858,7 +883,7 @@ proc action_firmware_upload {} {
     # check if the uploaded file looks like a firmware file
     set file_valid 0
     catch {
-      exec tar zxvf $filename update_script EULA.en EULA.de EULA.tr -C /var/
+      exec tar zxvf $filename update_script EULA.en EULA.de -C /var/
     }
     set file_valid [file exists "/var/update_script"]
 
@@ -868,26 +893,28 @@ proc action_firmware_upload {} {
       set action "acceptEula"
     } else {
       file delete -force -- [lindex $firmware_file 0]
+      cgi_javascript {
+        puts {
+          homematic('User.startHmIPServer',{});
+          InterfaceMonitor.start();
+        }
+      }
       set action "firmware_update_invalid"
     }
   } else {
 
     cd /usr/local/tmp/
     set TMPDIR "[file tail $filename-dir]"
-
     exec mkdir -p $TMPDIR
-    set file_invalid 1
-
-    catch {
-      exec tar zxvf $filename update_script EULA.en EULA.de EULA.tr -C /usr/local/
-    }
 
     #
     # check if the uploaded file is a valid firmware update file
     #
 
+    set file_invalid [catch {exec tar zxvf $filename update_script EULA.en EULA.de -C /usr/local/}]
+
     # check for .tar.gz or .tar
-    if {$file_invalid != 0} {
+    if {$file_invalid == 0} {
       set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
       if {$file_invalid == 0} {
         # the file seems to be a tar archive (perhaps with gzip compression)
@@ -1112,6 +1139,7 @@ proc action_reboot {} {
   catch { exec lcdtool {Saving   Data...  } }
   rega system.Save()
   catch { exec lcdtool {Reboot...       } }
+  exec sleep 5
   exec /sbin/reboot
 }
 proc action_shutdown {} {

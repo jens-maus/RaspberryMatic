@@ -25,7 +25,7 @@
 +jsonrpc_response true
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -6621,9 +6621,23 @@
+@@ -6699,9 +6699,23 @@
            });
          }
  
@@ -44,21 +44,21 @@
 +                      });
 +
          var usrPwd = homematic('User.hasUserPWD', {'userID': userId});
-         if ( usrPwd == false ) {
--            var result = homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + userName.replace(" ", ";")});
-+            var result = homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + usrName});
-             if (!result) {
-               var checkUpdateContentRunning = window.setInterval(function () {
-                 if (!bUpdateContentRunning) {
-@@ -6643,9 +6657,9 @@
+         if (usrPwd == false) {
+-          var result = homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + userName.replace(" ", ";")});
++          var result = homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + usrName});
+           if (!result) {
+             var checkUpdateContentRunning = window.setInterval(function () {
+               if (!bUpdateContentRunning) {
+@@ -6721,9 +6735,9 @@
  
            // User password set
            // The User will see a hint that new firewall settings are active
--          if ((getUPL() == UPL_USER) && (! homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + userName.replace(" ", ";")}))) {
-+          if ((getUPL() == UPL_USER) && (! homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + usrName}))) {
-             new MessageBox.show(translateKey("dglUserNewFwSettingsTitle"),translateKey("dglUserNewFwSettingsContent"));
--            homematic("CCU.setUserAckInstallWizard", {'userName' : userName});
-+            homematic("CCU.setUserAckInstallWizard", {'userName' : usrName});
+-          if ((getUPL() == UPL_USER) && (!homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + userName.replace(" ", ";")}))) {
++          if ((getUPL() == UPL_USER) && (!homematic('CCU.existsFile', {'file': "/etc/config/userprofiles/userAckInstallWizard_" + usrName}))) {
+             new MessageBox.show(translateKey("dglUserNewFwSettingsTitle"), translateKey("dglUserNewFwSettingsContent"));
+-            homematic("CCU.setUserAckInstallWizard", {'userName': userName});
++            homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
            }
          }
        }

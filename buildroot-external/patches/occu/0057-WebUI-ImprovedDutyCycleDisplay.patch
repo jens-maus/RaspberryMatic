@@ -43,7 +43,7 @@
 +jsonrpc_response "$result"
 --- occu/WebUI/www/rega/pages/tabs/startpage.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/startpage.htm
-@@ -250,13 +250,38 @@
+@@ -250,14 +250,38 @@
                }
               %>
  
@@ -53,8 +53,9 @@
              <!-- DutyCycle -->
 -            <tr name="trDutyCycle" style="visibility: hidden"><td></td><td><div id="dutyCycleVal" style="width:75%; text-align:center"></div></td></tr>
 -            <tr name="trDutyCycle" style="visibility: hidden">
--              <td>${lblDutyCycle}</td>
--              <td> <div id="dutyCycleProgress"  align="right"><div id="dutyCycleProgressBar"></div></div> </td>
+-
+-              <td id="iFaceShowAll">${lblDutyCycle}</td>
+-              <td> <div id="dutyCycleProgress" class="dutyCycleProgress" align="right"><div id="dutyCycleProgressBar" class="dutyCycleProgressBar" style='width:100%;'></div></div> </td>
 +            <tr name="trDutyCycle0" style="display: none">
 +              <td id="dutyCycleAddr0" align="left"</td>
 +              <td><div id="dutyCycleProgress0" align="right"><div id="dutyCycleProgressBar0"></div></div></td>
@@ -89,94 +90,103 @@
            </table>
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -2221,7 +2221,7 @@
+@@ -2234,7 +2234,7 @@
  progress::-moz-progress-bar { background: #3678c9; }
  progress::-webkit-progress-value { background: #3678c9; }
  
--#dutyCycleProgress {
-+#dutyCycleProgress0, #dutyCycleProgress1, #dutyCycleProgress2, #dutyCycleProgress3, #dutyCycleProgress4, #dutyCycleProgress5 {
+-.dutyCycleProgress {
++.dutyCycleProgress0, .dutyCycleProgress1, .dutyCycleProgress2, .dutyCycleProgress3, .dutyCycleProgress4, .dutyCycleProgress5 {
    width: 75%;
  
    background: -moz-linear-gradient(0deg, rgba(13,255,0,1) 0%, rgba(255,255,0,1) 63%, rgba(255,0,0,1) 100%); /* ff3.6+ */
-@@ -2235,7 +2235,7 @@
+@@ -2248,7 +2248,7 @@
  
  }
  
--#dutyCycleProgressBar {
-+#dutyCycleProgressBar0, #dutyCycleProgressBar1, #dutyCycleProgressBar2, #dutyCycleProgressBar3, #dutyCycleProgressBar4, #dutyCycleProgressBar5 {
+-.dutyCycleProgressBar {
++.dutyCycleProgressBar0, .dutyCycleProgressBar1, .dutyCycleProgressBar2, .dutyCycleProgressBar3, .dutyCycleProgressBar4, .dutyCycleProgressBar5 {
    width: 1%;
    height: 12px;
    background-color: #d9d9d9;
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -27866,21 +27866,21 @@
+@@ -28906,30 +28906,21 @@
        dcNotAvailable = -1,
        dcAlarm = 89;  // Attention when dc >= 90%
  
--    homematic("Interface.listBidcosInterfaces", {"interface": ifaceBidCosRF}, function (interfaceStatus) {
--
--      jQuery.each(interfaceStatus, function(index, iFace) {
--        if (iFace.type == "CCU2") {
--          var dutyCycleProgressElem = jQuery("#dutyCycleProgress"),
--            dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"),
--            dutyCycleValElm = jQuery("#dutyCycleVal"),
--            trDutyCycle = jQuery("[name='trDutyCycle']"),
-+    homematic("Interface.getDutyCycle", {}, function(dcArray) {
-+      if(jQuery.isArray(dcArray)) {
-+        jQuery.each(dcArray, function(index, iface) {
-+          var dutyCycleProgressElem = jQuery("#dutyCycleProgress"+index),
-+            dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"+index),
-+            dutyCycleValElm = jQuery("#dutyCycleVal"+index),
-+            dutyCycleAddrElm = jQuery("#dutyCycleAddr"+index),
-+            trDutyCycle = jQuery("[name='trDutyCycle"+index+"']"),
-             trPartingLineElm = jQuery("#partingLine1"),
-             dcVal,
-             width, value;
- 
--          if (typeof iFace.dutyCycle != "undefined") {
--            dcVal = parseInt(iFace.dutyCycle);
--            conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + dcUnit);
-+          if (typeof iface.dutyCycle !== "undefined") {
-+            dcVal = Math.floor(iface.dutyCycle);
-+            conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + " " + dcUnit);
-             arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
-           } else {
-             conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
-@@ -27888,7 +27888,14 @@
-           }
- 
-           if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
--            dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + dcUnit);
-+            dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
-+            if (iface.type === "CCU2") {
-+              dutyCycleAddrElm.text("DutyCycle CCU:");
-+            } else if(iface.name !== "") {
-+              dutyCycleAddrElm.text("DutyCycle LGW ("+iface.name+"):");
-+            } else {
-+              dutyCycleAddrElm.text("DutyCycle LGW ("+iface.address+"):");
-+            }
- 
-             width = parseInt(dutyCycleProgressElem.css("width"));
-             value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
-@@ -27902,17 +27909,16 @@
-             }
-             trPartingLineElm.show();
-             showPartingLine = true;
--            trDutyCycle.css("visibility", "visible");
-+            trDutyCycle.css("display", "table-row");
-           } else {
--            trDutyCycle.css("visibility", "hidden");
-+            trDutyCycle.css("display", "none");
-           }
- 
-           if (!showPartingLine) {
-             trPartingLineElm.hide();
-           }
--          return false; // Leave each loop
+-    homematic("Interface.listBidcosInterfaces", {"interface": ifaceBidCosRF}, function (BidCosIFaces) {
+-      if (BidCosIFaces) {
+-        var linkElem = jQuery("#iFaceShowAll");
+-        if ((BidCosIFaces.length > 1) && (!linkElem.hasClass("UILink"))) {
+-          linkElem
+-            .addClass("UILink")
+-            .on("click", function () {
+-              showDCAllInterfaces();
+-            });
 -        }
--      });
-+        });
-+      }
+-
+-        jQuery.each(BidCosIFaces, function (index, iFace) {
+-          if (iFace.type == "CCU2") {
+-            var dutyCycleProgressElem = jQuery("#dutyCycleProgress"),
+-              dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"),
+-              dutyCycleValElm = jQuery("#dutyCycleVal"),
+-              trDutyCycle = jQuery("[name='trDutyCycle']"),
++      homematic("Interface.getDutyCycle", {}, function(dcArray) {
++        if(jQuery.isArray(dcArray)) {
++          jQuery.each(dcArray, function(index, iface) {
++            var dutyCycleProgressElem = jQuery("#dutyCycleProgress"+index),
++              dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"+index),
++              dutyCycleValElm = jQuery("#dutyCycleVal"+index),
++              dutyCycleAddrElm = jQuery("#dutyCycleAddr"+index),
++              trDutyCycle = jQuery("[name='trDutyCycle"+index+"']"),
+               trPartingLineElm = jQuery("#partingLine1"),
+               dcVal,
+               width, value;
+ 
+-            if (typeof iFace.dutyCycle != "undefined") {
+-              dcVal = parseInt(iFace.dutyCycle);
+-              conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + dcUnit);
++            if (typeof iface.dutyCycle !== "undefined") {
++              dcVal = Math.floor(iface.dutyCycle);
++              conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + " " + dcUnit);
+               arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
+             } else {
+               conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
+@@ -28937,7 +28928,14 @@
+             }
+ 
+             if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
+-              dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + dcUnit);
++              dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
++              if (iface.type === "CCU2") {
++                dutyCycleAddrElm.text("DutyCycle CCU:");
++              } else if(iface.name !== "") {
++                dutyCycleAddrElm.text("DutyCycle LGW ("+iface.name+"):");
++              } else {
++                dutyCycleAddrElm.text("DutyCycle LGW ("+iface.address+"):");
++              }
+ 
+               width = parseInt(dutyCycleProgressElem.css("width"));
+               value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
+@@ -28953,17 +28951,16 @@
+               }
+               trPartingLineElm.show();
+               showPartingLine = true;
+-              trDutyCycle.css("visibility", "visible");
++              trDutyCycle.css("display", "table-row");
+             } else {
+-              trDutyCycle.css("visibility", "hidden");
++              trDutyCycle.css("display", "none");
+             }
+ 
+             if (!showPartingLine) {
+               trPartingLineElm.hide();
+             }
+-            return false; // Leave each loop
+-          }
+-        });
++          });
++        }
+       }
      });
    }
- };

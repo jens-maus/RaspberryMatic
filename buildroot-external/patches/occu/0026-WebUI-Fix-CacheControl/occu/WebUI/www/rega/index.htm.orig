@@ -1,123 +1,122 @@
 <!DOCTYPE html">
-<html>
-<head>
+<html lang="de">
+  <head>
 
-  <meta http-equiv="Content-Language" content="de">
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta http-equiv="cache-control" content="no-cache">
-  <meta http-equiv="pragma"        content="no-cache">
-  <meta http-equiv="expires"       content="0">
+    <title>HomeMatic WebUI</title>
+    <meta http-equiv="Content-Language" content="de">
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="pragma"        content="no-cache">
+    <meta http-equiv="expires"       content="0">
 
-<%
+    <%
+      string devtype = "pc";
+      system.LoginPage("/login.htm");
+    %>
 
-  string devtype = "pc";
-  system.LoginPage("/login.htm");
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 
-%>
+    <script type="text/javascript">
 
-  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+      STARTPAGE_ERROR = "NoAjaxBrowser.htm";
+      STARTPAGE_PC    = "pages/index.htm";
 
-  <script type="text/javascript">
-  
-    STARTPAGE_ERROR = "NoAjaxBrowser.htm";
-    STARTPAGE_PC    = "pages/index.htm";
+      USERCLIENT_PC  = 0;
 
-    USERCLIENT_PC  = 0;
-    
-    /**
-     * Erstellt eine Instanz des XMLHttpRequest-Objekts.
-     */
-    createXMLHttpRequest = function()
-    {
-      var xmlHttp = null;
-      
-      if ( window.XMLHttpRequest )
+      /**
+       * Erstellt eine Instanz des XMLHttpRequest-Objekts.
+       */
+      createXMLHttpRequest = function()
       {
-        xmlHttp = new XMLHttpRequest();
-      }
-      else if ( window.ActiveXObject )
-      {
-        try
+        var xmlHttp = null;
+
+        if ( window.XMLHttpRequest )
         {
-          xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+          xmlHttp = new XMLHttpRequest();
         }
-        catch (ex)
+        else if ( window.ActiveXObject )
         {
-          try 
+          try
           {
-            xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+            xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
           }
           catch (ex)
           {
-            // leer
+            try
+            {
+              xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            catch (ex)
+            {
+              // leer
+            }
           }
         }
-      }
-      
-      return xmlHttp;
-    };  
-  
-    /**
-     * Prüft, ob der Browser die Anforderungen für die HomeMatic WebUI erfüllt.
-     */
-    checkBrowser = function()
-    {
-      // Test auf AJAX-Unterstützung
-      var xmlHttp = createXMLHttpRequest();
-      if ( !xmlHttp ) 
-      { 
-        xmlHttp = null;
-        return false; 
-      }
-      
-      return true;
-    };
-    
-    /**
-     * Leitet den Anwender auf die enstprechende Startseite weiter.
-     * Die Startseite ist abhängig vom gewählten Endgerät.
-     *
-     * Anmerkung:
-     * Falls der Anwender nicht automatisch angemeldet wird, leitet der ReGa
-     * Webserver die Anfrage auf die Loginseite um. Auch die Loginseite ist
-     * vom jeweiligen Endgerät abhängig.
-     */
-    onLoad = function()
-    {
-      var sStartPage = STARTPAGE_ERROR;
-    
-      if (true == checkBrowser())
+
+        return xmlHttp;
+      };
+
+      /**
+       * Prüft, ob der Browser die Anforderungen für die HomeMatic WebUI erfüllt.
+       */
+      checkBrowser = function()
       {
-        if(typeof(SessionId) === 'undefined') {
-          sStartPage = STARTPAGE_PC;
-        } else {
-          sStartPage = STARTPAGE_PC + "?sid=" + SessionId;
+        // Test auf AJAX-Unterstützung
+        var xmlHttp = createXMLHttpRequest();
+        if ( !xmlHttp )
+        {
+          xmlHttp = null;
+          return false;
         }
-        <%
-          if ( (false == system.IsVar("NoAutoLogin")) || (false == system.GetVar("NoAutoLogin")) )
-          {
-            var oUsers = dom.GetObject(ID_USERS);
-            var id     = oUsers.UsersDefaultLogin(dwcPC);
-            if ( (id) && (dom.GetObject(id)) ) 
+
+        return true;
+      };
+
+      /**
+       * Leitet den Anwender auf die enstprechende Startseite weiter.
+       * Die Startseite ist abhängig vom gewählten Endgerät.
+       *
+       * Anmerkung:
+       * Falls der Anwender nicht automatisch angemeldet wird, leitet der ReGa
+       * Webserver die Anfrage auf die Loginseite um. Auch die Loginseite ist
+       * vom jeweiligen Endgerät abhängig.
+       */
+      onLoad = function()
+      {
+        var sStartPage = STARTPAGE_ERROR;
+
+        if (true == checkBrowser())
+        {
+          if(typeof(SessionId) === 'undefined') {
+            sStartPage = STARTPAGE_PC;
+          } else {
+            sStartPage = STARTPAGE_PC + "?sid=" + SessionId;
+          }
+          <%
+            if ( (false == system.IsVar("NoAutoLogin")) || (false == system.GetVar("NoAutoLogin")) )
             {
-              WriteLine("sStartPage += '&client=" # dwcPC # "';");
+              var oUsers = dom.GetObject(ID_USERS);
+              var id     = oUsers.UsersDefaultLogin(dwcPC);
+              if ( (id) && (dom.GetObject(id)) )
+              {
+                WriteLine("sStartPage += '&client=" # dwcPC # "';");
+              }
             }
-          }            
-        %>
-      }
-    
-      top.window.location.href = sStartPage;
-    };
-    
-  </script>
-</head>
-<body onload="onLoad();">
+          %>
+        }
 
-<noscript>
-  <div align="center">
-    <p>Um die HomeMatic WebUI nutzen zu k&ouml;nnen, muss JavaScript in Ihrem Browser aktiviert sein.</p>
-  </div>
-</noscript>
+        top.window.location.href = sStartPage;
+      };
 
-</body>
+    </script>
+  </head>
+  <body onload="onLoad();">
+
+    <noscript>
+      <div align="center">
+        <p>Um die HomeMatic WebUI nutzen zu k&ouml;nnen, muss JavaScript in Ihrem Browser aktiviert sein.</p>
+      </div>
+    </noscript>
+
+  </body>
 </html>

@@ -16,16 +16,16 @@
 +startup
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -394,7 +394,7 @@
+@@ -412,7 +412,7 @@
                      table_row {
                        table_data {
-                         division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU3';\"" {}
+                         division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU[getProduct]';\"" {}
 -                        division {class="CLASS20908"}  "onClick=\"showCCULicense();\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
 +                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
                        }
                      }
                    }
-@@ -446,27 +446,7 @@
+@@ -464,27 +464,7 @@
            }
          }
          table_data {align="left"} {class="CLASS20921"} {
@@ -342,12 +342,12 @@
 -set PRODUCT_ID "CCU[getProduct]"
 +set PRODUCT_NAME "RaspberryMatic"
 +set PRODUCT_ID "CCU"
- set HOMEMATIC_URL "http://www.homematic.com"
+ # set HOMEMATIC_URL "http://www.homematic.com"
+ set HOMEMATIC_URL "http://www.eq-3.de"
  set HOMEMATIC_IP_URL "https://www.homematic-ip.com"
- 
-@@ -18,8 +18,16 @@
+@@ -22,8 +22,16 @@
  proc action_put_page {} {
-   global PRODUCT_NAME PRODUCT_ID HOMEMATIC_URL HOMEMATIC_IP_URL HELP_URL HELP_IP_URL LANGUAGE CUR_YEAR env
+   global PRODUCT_NAME PRODUCT_ID HOMEMATIC_URL HOMEMATIC_IP_URL HM_HELP_URL IP_HELP_URL HM_INFO_URL IP_INFO_URL LANGUAGE CUR_YEAR env
  
 -  set SERIAL [read_var /var/ids SerialNumber]
 -  set VERSION [read_var /boot/VERSION VERSION]
@@ -364,18 +364,18 @@
    set HELP_ARGUMENTS "lang=$LANGUAGE&vers=$VERSION&serial=$SERIAL"
  
  
-@@ -57,6 +65,7 @@
+@@ -59,6 +67,7 @@
                  puts "<li><h1 class='helpTitle'><u>\${menuHelpPage}</u></h1></li>"
-                 puts "<li><a target='_blank' href=\'$HELP_URL\'>\${dialogHelpLinkOnlineHelpA}</a></li>"
-                 puts "<li><a target='_blank' href=\'$HELP_IP_URL\'>\${dialogHelpLinkOnlineHelpB}</a></li>"
+                 puts "<li><a target='_blank' href=\'$HM_HELP_URL\'>\${dialogHelpLinkOnlineHelpA}</a></li>"
+                 puts "<li><a target='_blank' href=\'$IP_HELP_URL\'>\${dialogHelpLinkOnlineHelpB}</a></li>"
 +                puts "<li><a target='_blank' href='https://raspberrymatic.de/#memo-documentation'>RaspberryMatic</a></li>"
                  puts "<li><a target='_blank' href='/licenseinfo.htm'>\${lblLicenseInformation}</a></li>"
                puts "</ul>"
        puts "</td>"
-@@ -75,7 +84,12 @@
+@@ -77,7 +86,12 @@
            # puts "<li>DOM [rega dom.BuildLabel()]</li>"
-           puts "<li><a target='_blank' href=\"$HOMEMATIC_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
-           puts "<li><a target='_blank' href=\"$HOMEMATIC_IP_URL/start.html\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
+           puts "<li><a target='_blank' href=\"$HM_INFO_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
+           puts "<li><a target='_blank' href=\"$IP_INFO_URL\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
 -          puts "<li style='padding-top:25px;'><img src='/ise/img/homematic_logo_small.png'/></li>"
 +          puts "<li style='padding-top:25px;'><img src='/ise/img/rm-logo_small.png'/></li>"
 +          puts "<li>\${dialogHelpInfoLblCopyright} &copy; 2016 - $CUR_YEAR</li>"
@@ -388,25 +388,25 @@
        puts "</td>"
 --- occu/WebUI/www/error/error-500.html.orig
 +++ occu/WebUI/www/error/error-500.html
-@@ -100,7 +100,7 @@
-     <p>${ccuNotReadyHint}</p>
-   </div>
-   <div align="center" style="padding-top:250px;">
--    <img id="imgLogo" src="/ise/img/hm-logo.png" alt=""/>
-+    <img id="imgLogo" src="/ise/img/rm-logo.png" alt=""/>
-   </div>
- </div>
+@@ -95,7 +95,7 @@
+         <p>${ccuNotReadyHint}</p>
+       </div>
+       <div align="center" style="padding-top:250px;">
+-        <img id="imgLogo" src="/ise/img/hm-logo.png" alt=""/>
++        <img id="imgLogo" src="/ise/img/rm-logo.png" alt=""/>
+       </div>
+     </div>
  
 --- occu/WebUI/www/error/error-503.html.orig
 +++ occu/WebUI/www/error/error-503.html
-@@ -94,7 +94,7 @@
-     <p>${ccuNotReadyHint}</p>
-   </div>
-   <div align="center" style="padding-top:250px;">
--    <img id="imgLogo" src="/ise/img/hm-logo.png" alt=""/>
-+    <img id="imgLogo" src="/ise/img/rm-logo.png" alt=""/>
-   </div>
- </div>
+@@ -96,7 +96,7 @@
+         <p>${ccuNotReadyHint}</p>
+       </div>
+       <div align="center" style="padding-top:250px;">
+-        <img id="imgLogo" src="/ise/img/hm-logo.png" alt=""/>
++        <img id="imgLogo" src="/ise/img/rm-logo.png" alt=""/>
+       </div>
+     </div>
  
 --- occu/WebUI/www/ise/htm/header.htm.orig
 +++ occu/WebUI/www/ise/htm/header.htm
@@ -463,65 +463,58 @@
      </td>
 --- occu/WebUI/www/rega/login.htm.orig
 +++ occu/WebUI/www/rega/login.htm
-@@ -73,7 +73,7 @@
-     <td id="navbar">
-       <table cellpadding="0" cellspacing="0">
-         <tr>
--          <td style="text-align: center;"><div style="width: 180px;"><img src="/ise/img/homematic_logo_small.png" alt="HomeMatic Logo" /></div></td>
-+          <td style="text-align: center;"><div style="width: 180px;"><img src="/ise/img/rm-logo_small.png" alt="RaspberryMatic Logo" /></div></td>
-           <td><span class="HeaderTitle" style="cursor: pointer;" onclick="gotoLoginPage();">${lblUsrLogin}</span></td>
-           <td style="width: 100%;"></td>
-           <!-- <td><a href="/pda/index.cgi" target="_blank"><img id="WebUIorPDA" src="/ise/img/mobile_device.png" width="48px;" height="48px" alt="WebUI PDA" title="WebUI PDA"/></a></td> -->
-@@ -199,4 +199,4 @@
- </script>
- 
- </body>
--</html>
-\ No newline at end of file
-+</html>
+@@ -69,7 +69,7 @@
+         <td id="navbar">
+           <table cellpadding="0" cellspacing="0">
+             <tr>
+-              <td style="text-align: center;"><div style="width: 180px;"><img src="/ise/img/homematic_logo_small.png" alt="HomeMatic Logo" /></div></td>
++              <td style="text-align: center;"><div style="width: 180px;"><img src="/ise/img/rm-logo_small.png" alt="RaspberryMatic Logo" /></div></td>
+               <td><span class="HeaderTitle" style="cursor: pointer;" onclick="gotoLoginPage();">${lblUsrLogin}</span></td>
+               <td style="width: 100%;"></td>
+               <!-- <td><a href="/pda/index.cgi" target="_blank"><img id="WebUIorPDA" src="/ise/img/mobile_device.png" width="48px;" height="48px" alt="WebUI PDA" title="WebUI PDA"/></a></td> -->
 --- occu/WebUI/www/rega/logout.htm.orig
 +++ occu/WebUI/www/rega/logout.htm
-@@ -44,7 +44,7 @@
-       <td id="navbar">
-         <table cellpadding="0" cellspacing="0">
-         <tr>
--          <td style="text-align: center;"><div style="width: 180px;" ><img src="/ise/img/homematic_logo_small.png" alt="HomeMatic Logo" /></div></td>
-+          <td style="text-align: center;"><div style="width: 180px;" ><img src="/ise/img/rm-logo_small.png" alt="RaspberryMatic Logo" /></div></td>
-           <td><span class="HeaderTitle" style="cursor: pointer;" onclick="gotoLoginPage();">${lblUsrLogin}</span></td>
-             <td style="width: 100%;"></td>
-             <td style="padding-right:63px;"><div class="clickable" onclick="loadHelp();"><img id="idHelp" src="/ise/img/help.png" width="48px" height="48px" alt="Hilfe" title="Hilfe"/></div></td>
+@@ -37,7 +37,7 @@
+         <td id="navbar">
+           <table cellpadding="0" cellspacing="0">
+           <tr>
+-            <td style="text-align: center;"><div style="width: 180px;" ><img src="/ise/img/homematic_logo_small.png" alt="HomeMatic Logo" /></div></td>
++            <td style="text-align: center;"><div style="width: 180px;" ><img src="/ise/img/rm-logo_small.png" alt="RaspberryMatic Logo" /></div></td>
+             <td><span class="HeaderTitle" style="cursor: pointer;" onclick="gotoLoginPage();">${lblUsrLogin}</span></td>
+               <td style="width: 100%;"></td>
+               <td style="padding-right:63px;"><div class="clickable" onclick="loadHelp();"><img id="idHelp" src="/ise/img/help.png" width="48px" height="48px" alt="Hilfe" title="Hilfe"/></div></td>
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
 @@ -10,8 +10,8 @@
-   <meta http-equiv="pragma"        content="no-cache">
-   <meta http-equiv="expires"       content="0">
+     <meta http-equiv="pragma"        content="no-cache">
+     <meta http-equiv="expires"       content="0">
  
--  <link rel="shortcut icon" href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon"/>
--  <link rel="icon"          href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon" />
-+  <link rel="shortcut icon" href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon"/>
-+  <link rel="icon"          href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon" />
-   
-   <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css" />
-   <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css" />
+-    <link rel="shortcut icon" href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon"/>
+-    <link rel="icon"          href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon" />
++    <link rel="shortcut icon" href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon"/>
++    <link rel="icon"          href="/ise/img/rm-favicon.ico" type="image/vnd.microsoft.icon" />
+ 
+     <link rel="stylesheet" type="text/css" href="/webui/css/extern/nfs_datepicker.css" />
+     <link rel="stylesheet" type="text/css" href="/webui/css/extern/jquery.powertip.css" />
 @@ -69,7 +69,8 @@
-     /*########################################################################*/
+       /*########################################################################*/
  
-     PLATFORM = "Central";
--    WEBUI_VERSION = "3.45.7"
-+    WEBUI_VERSION = "XXX-WEBUI-VERSION-XXX";
-+    PRODUCT = "XXX-PRODUCT-XXX";
-   
-     /**
-      * Flags
+       PLATFORM = "Central";
+-      WEBUI_VERSION = "2.40.0-TRUNK";
++      WEBUI_VERSION = "XXX-WEBUI-VERSION-XXX";
++      PRODUCT = "XXX-PRODUCT-XXX";
+ 
+       /**
+        * Flags
 @@ -193,7 +194,7 @@
-   <div id="webuiloader_wrapper">
-     <div id="webuiloader_background">
-       <div id="webuiloader">
--        <div id="webuiloader_icon"><img src="/ise/img/homematic_logo_small_gray.png" /></div>
-+        <div id="webuiloader_icon"><img src="/ise/img/rm-logo_small_gray.png" /></div>
-         <!-- div id="webuiloader_caption">HomeMatic WebUI wird geladen...</div-->
-         <div id="webuiloader_caption"></div>
-         <script type="text/javascript">jQuery("#webuiloader_caption").html(translateKey("loadWebUI"));</script>
+     <div id="webuiloader_wrapper">
+       <div id="webuiloader_background">
+         <div id="webuiloader">
+-          <div id="webuiloader_icon"><img src="/ise/img/homematic_logo_small_gray.png" alt="" /></div>
++          <div id="webuiloader_icon"><img src="/ise/img/rm-logo_small_gray.png" /></div>
+           <!-- div id="webuiloader_caption">HomeMatic WebUI wird geladen...</div-->
+           <div id="webuiloader_caption"></div>
+           <script type="text/javascript">jQuery("#webuiloader_caption").html(translateKey("loadWebUI"));</script>
 --- occu/WebUI/www/webui/error/notready.html.orig
 +++ occu/WebUI/www/webui/error/notready.html
 @@ -12,8 +12,8 @@
@@ -582,7 +575,7 @@
      "dialogSettingsCMHintRestartSafeMode" : "Start Homematic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -19349,7 +19349,7 @@
+@@ -23214,7 +23214,7 @@
    {
      this.m_ccuProduct = getProduct();
      this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
@@ -591,7 +584,7 @@
      this.m_URLServer = (isHTTPS) ? "https://"+this.preURL+"update.homematic.com:8443" : "http://"+this.preURL+"update.homematic.com";
  
      var serial = homematic("CCU.getSerial");
-@@ -19359,7 +19359,7 @@
+@@ -23224,7 +23224,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
@@ -600,50 +593,32 @@
      $("body").appendChild(script);
    },
  
-@@ -19411,7 +19411,7 @@
-       var script = document.createElement("script");
-       script.id = "homematic_com_script_" + index;
-       script.type = "text/javascript";
--      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0";
-+      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0" + "&ts=" + Date.now();
-       $("body").appendChild(script);
-       homematic.com.callback = callback;
-   },
-@@ -19421,7 +19421,7 @@
-       var script = document.createElement("script");
-       script.id = "homematic_com_script_fw";
-       script.type = "text/javascript";
--      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE";
-+      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE?ts=" + Date.now();
-       $("body").appendChild(script);
-       homematic.com.callback = callback;
-   },
-@@ -24695,11 +24695,11 @@
+@@ -28570,11 +28570,11 @@
        {
          if( $("headerLogo").src.indexOf("_red") >= 0 )
          {
 -          $("headerLogo").src = "/ise/img/homematic_logo_small.png";
-+          $("headerLogo").src = "/ise/img/rm-logo_small.png";
++          $("headerLogo").src = "/ise/img/rm_logo_small.png";
          }
          else
          {
 -          $("headerLogo").src = "/ise/img/homematic_logo_small_red.png";
-+          $("headerLogo").src = "/ise/img/rm-logo_small_red.png";
++          $("headerLogo").src = "/ise/img/rm_logo_small_red.png";
          }
        }
      },
-@@ -24714,12 +24714,12 @@
+@@ -28589,12 +28589,12 @@
  
  SwitchOnFlashLight = function()
  {
 -  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small_red.png"; }
-+  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small_red.png"; }
++  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm_logo_small_red.png"; }
  };
  
  SwitchOffFlashLight = function()
  {
 -  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/homematic_logo_small.png"; }
-+  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm-logo_small.png"; }
++  if ($("headerLogo")) { $("headerLogo").src = "/ise/img/rm_logo_small.png"; }
  };
  
  getAjaxLoadElem = function() {

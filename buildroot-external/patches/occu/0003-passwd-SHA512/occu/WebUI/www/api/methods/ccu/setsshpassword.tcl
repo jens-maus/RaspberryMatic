@@ -8,7 +8,6 @@
 # Rückgabewert: "noError" oder sed-Fehlermeldung
 ##
 
-
   set digest [exec echo "$args(passwd)" | mkpasswd -m sha512]
   set command "s%^root:\\(\[^:\]*:\\)%root:$digest:%"
   set rc [catch {exec sed -i "$command" /etc/config/shadow} msg]

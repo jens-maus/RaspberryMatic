@@ -4,7 +4,7 @@
 #
 #############################################################
 
-OCCU_VERSION = 3.49.17-1
+OCCU_VERSION = 3.49.17-2
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 
 ifeq ($(BR2_PACKAGE_OCCU),y)
@@ -85,6 +85,10 @@ endif
 
 ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_HMIP),y)
 	OCCU_RF_PROTOCOL=HM_HMIP
+endif
+
+ifeq ($(BR2_PACKAGE_OCCU_WEBUI_REGAHSS_BETA),y)
+	OCCU_WEBUI_REGAHSS_BETA=y
 endif
 
 ifeq ($(BR2_arm),y)

@@ -28961,8 +28961,7 @@ showDutyCycle = function() {
             }
           });
         }
-      }
-    });
+      });
   }
 };
 

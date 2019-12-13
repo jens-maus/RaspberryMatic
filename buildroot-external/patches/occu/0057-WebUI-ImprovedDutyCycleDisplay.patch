@@ -168,7 +168,7 @@
  
                width = parseInt(dutyCycleProgressElem.css("width"));
                value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
-@@ -28953,17 +28951,16 @@
+@@ -28953,19 +28951,17 @@
                }
                trPartingLineElm.show();
                showPartingLine = true;
@@ -185,8 +185,11 @@
 -            return false; // Leave each loop
 -          }
 -        });
+-      }
+-    });
 +          });
 +        }
-       }
-     });
++      });
    }
+ };
+ 

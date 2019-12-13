@@ -28,11 +28,11 @@ install_hs485d_arch:
 
 install_webui_arch:
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/config
-	rm -r $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
+	rm -rf $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/* $(TARGET_DIR)/
 	cp -R WebUI/* $(TARGET_DIR)/
 	mv $(TARGET_DIR)/bin/ReGaHss.community $(TARGET_DIR)/bin/ReGaHss
-ifeq (,$(filter $(BR2_PACKAGE_OCCU_WEBUI_REGAHSS_BETA), y))
+ifeq ($(OCCU_WEBUI_REGAHSS_BETA), y)
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
 endif
 

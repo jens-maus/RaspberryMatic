@@ -4,7 +4,7 @@
 #
 #############################################################
 
-OCCU_VERSION = 3.49.17-2
+OCCU_VERSION = 3.49.17-4
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 
 ifeq ($(BR2_PACKAGE_OCCU),y)
@@ -96,7 +96,7 @@ ifeq ($(BR2_arm),y)
 endif
 
 ifeq ($(BR2_i386),y)
-	OCCU_ARCH=X86_32_Debian_Wheezy
+	OCCU_ARCH=X86_32_GCC8
 endif
 
 define OCCU_INSTALL_TARGET_CMDS

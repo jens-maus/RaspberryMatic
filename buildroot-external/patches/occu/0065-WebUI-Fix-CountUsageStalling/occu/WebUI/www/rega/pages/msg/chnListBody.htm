@@ -108,9 +108,6 @@ if ( obj )
       integer iLinkCount = channel.ChnLinkCount();
       if( iLinkCount == ID_ERROR ) { iLinkCount = 0; }
       Write("tmp['devC'] = "#iLinkCount#";");
-      integer iProgCount = channel.ChnDPUsageCount();
-      if( iProgCount == ID_ERROR ) { iProgCount = 0; }
-      Write("tmp['progC'] = "#iProgCount#";");
       
       Write("tmp['enumprgfilter'] = '"#channel.ChnEnumDPUsagePrograms()#"';");
       

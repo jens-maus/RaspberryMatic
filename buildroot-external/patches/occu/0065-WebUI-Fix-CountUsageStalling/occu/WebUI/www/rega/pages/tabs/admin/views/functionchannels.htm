@@ -104,12 +104,6 @@
         Write("tmp['iface'] = '"#category#"';");
         Write("tmp['chnnr'] = '"#chn.ChnNumber()#"';");
         Write("tmp['trans'] = ("#chn.ChnAESActive()#" ? translateKey('lblSecured') : translateKey('lblStandard') );");
-        integer iProgCount = chn.ChnDPUsageCount();
-        if( iProgCount == ID_ERROR ) { iProgCount = 0; }
-        Write("tmp['progC'] = "#iProgCount#";");
-        integer iLinkCount = chn.ChnLinkCount();
-        if( iLinkCount == ID_ERROR ) { iLinkCount = 0; }
-        Write("tmp['devC'] = "#iLinkCount#";");
         Write("tmp['desc'] = DEV_getDescription('"#sDevLbl#"');");
         Write("tmp['devlbl'] = '"#sDevLbl#"';");
         

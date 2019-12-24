@@ -2,7 +2,7 @@
 
 NAME="rngd"
 DAEMON="/usr/sbin/${NAME}"
-DAEMON_ARGS=""
+DAEMON_ARGS="-q"
 CFG_FILE="/etc/default/${NAME}"
 PID_FILE="/var/run/${NAME}.pid"
 

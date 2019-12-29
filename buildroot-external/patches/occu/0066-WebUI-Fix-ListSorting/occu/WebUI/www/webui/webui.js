@@ -11285,8 +11285,7 @@ ChannelChooser = Singleton.create({
       addressFilter    : this.AddressFilter,
       roomFilter       : this.RoomFilter,
       funcFilter       : this.FuncFilter,
-      //channels         : this.sort(this.filter(this.channels))
-      channels         : this.filter(this.channels)
+      channels         : this.sort(this.filter(this.channels))
     });
 
     if (! userIsNoExpert) {

@@ -1,0 +1,21 @@
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -11285,8 +11285,7 @@
+       addressFilter    : this.AddressFilter,
+       roomFilter       : this.RoomFilter,
+       funcFilter       : this.FuncFilter,
+-      //channels         : this.sort(this.filter(this.channels))
+-      channels         : this.filter(this.channels)
++      channels         : this.sort(this.filter(this.channels))
+     });
+ 
+     if (! userIsNoExpert) {
+@@ -38121,7 +38120,7 @@
+     valueMap[value].push(tr_list[i]); //Liste gleicher values nimmt Zeile auf
+   }
+ 
+-  //valueList.sort(compareStrings_globalsettings); //Liste sortieren
++  valueList.sort(compareStrings_globalsettings); //Liste sortieren
+ 
+   var rowList;
+   var headerlen = tr_list[0].rowIndex;

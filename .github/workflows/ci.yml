@@ -15,3 +15,14 @@ jobs:
     - uses: actions/checkout@v1
     - name: build ${{ matrix.platform }}
       run: make ${{ matrix.platform }}-release
+    - name: upload nightly build to bintray
+      uses: bpicode/github-action-upload-bintray@master
+      with:
+        file: ./release/RaspberryMatic-3.*.zip
+        api_user: jens-maus
+        api_key: ${{ secrets.BINTRAY_API_KEY }}
+        repository: RaspberryMatic
+        package: NightlyBuilds
+        version: ${{ matrix.platform }}
+        upload_path: /
+        publish: 0

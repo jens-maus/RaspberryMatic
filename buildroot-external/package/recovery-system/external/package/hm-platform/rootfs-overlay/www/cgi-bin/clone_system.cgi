@@ -7,7 +7,7 @@ if [ -f /tmp/.runningFirmwareUpdate ]; then
   exit 1
 fi
 
-echo -ne "[1/10] Checking source device... "
+echo -ne "[1/11] Checking source device... "
 
 SOURCE_BOOTFS=$(/bin/mountpoint -n /bootfs | cut -d" " -f1)
 if [[ -z "${SOURCE_BOOTFS}" ]]; then
@@ -21,7 +21,7 @@ if [[ -z "${SOURCE_ROOTFS}" ]]; then
   exit 1
 fi
 
-SOURCE_USERFS=$(/bin/mountpoint /userfs | cut -d" " -f1)
+SOURCE_USERFS=$(/bin/mountpoint -n /userfs | cut -d" " -f1)
 if [[ -z "${SOURCE_USERFS}" ]]; then
   echo "ERROR: /userfs not found"
   exit 1
@@ -32,7 +32,7 @@ SOURCE_DEV="/dev/$(readlink /sys/dev/block/${DEVNODE} | awk -F/ '{print $(NF-1)}
 
 echo "${SOURCE_DEV}. done.<br/>"
 
-echo -ne "[2/10] Checking target device... "
+echo -ne "[2/11] Checking target device... "
 
 #####
 # read target device name
@@ -47,7 +47,16 @@ read targetDevice
 TARGET_DEV=$(echo -e ${targetDevice} | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
 echo "${TARGET_DEV}. done.<br/>"
 
-echo -ne "[3/10] Cloning boot sector... "
+echo -ne "[3/11] Unmounting filesystems from target device... "
+for mp in $(lsblk -r -p -n -o MOUNTPOINT ${TARGET_DEV}); do
+  if [[ -n "${mp}" ]]; then
+    umount -f ${mp}
+  fi
+done
+
+echo "done.<br/>"
+
+echo -ne "[4/11] Cloning boot sector... "
 
 /bin/dd if=${SOURCE_DEV} of=${TARGET_DEV} bs=1M count=1 conv=fsync status=none 2>&1 >/dev/null
 if [[ $? -ne 0 ]]; then
@@ -57,9 +66,9 @@ fi
 
 echo "done.<br/>"
 
-echo -ne "[4/10] Cloning partition table... "
+echo -ne "[5/11] Cloning partition table... "
 
-/sbin/sfdisk -q -d ${SOURCE_DEV} | sfdisk -q ${TARGET_DEV} 2>&1 >/dev/null
+/sbin/sfdisk -q -d ${SOURCE_DEV} | sfdisk --no-reread --force -q ${TARGET_DEV} 2>&1 >/dev/null
 if [[ $? -ne 0 ]]; then
   echo "ERROR: cloning partition table failed (enough space on target device?)<br/>"
   exit 1
@@ -93,7 +102,7 @@ fi
 
 echo "done.<br/>"
 
-echo -ne "[5/10] Cloning partition 1 (bootfs)... "
+echo -ne "[6/11] Cloning partition 1 (bootfs)... "
 
 umount -f ${SOURCE_BOOTFS}
 /bin/dd if=${SOURCE_BOOTFS} of=${TARGET_BOOTFS} bs=4M conv=fsync status=none 2>&1 >/dev/null
@@ -105,7 +114,7 @@ mount -o ro ${SOURCE_BOOTFS} /bootfs
 
 echo "done.<br/>"
 
-echo -ne "[6/10] Cloning partition 2 (rootfs)... "
+echo -ne "[7/11] Cloning partition 2 (rootfs)... "
 
 umount -f ${SOURCE_ROOTFS}
 /bin/dd if=${SOURCE_ROOTFS} of=${TARGET_ROOTFS} bs=4M conv=fsync status=none 2>&1 >/dev/null
@@ -117,7 +126,7 @@ mount -o ro ${SOURCE_ROOTFS} /rootfs
 
 echo "done.<br/>"
 
-echo -ne "[7/10] Check for resizing userfs partition... "
+echo -ne "[8/11] Check for resizing userfs partition... "
 PARTNUM=3
 START_CHS=$(parted -s ${TARGET_DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
 END_CHS=$(parted -s ${TARGET_DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
@@ -141,7 +150,7 @@ else
 fi
 echo "done.<br/>"
 
-echo -ne "[8/10] Re-creating partition 3 (userfs)... "
+echo -ne "[9/11] Re-creating partition 3 (userfs)... "
 
 # recreate userfs on target device
 mkfs.ext4 -q -F -L userfs "${TARGET_USERFS}" 2>&1 >/dev/null
@@ -164,7 +173,7 @@ fi
 
 echo "done.<br/>"
 
-echo -ne "[9/10] Copying partition 3 (userfs)... "
+echo -ne "[10/11] Copying partition 3 (userfs)... "
 
 /bin/mount ${TARGET_USERFS} /mnt
 if [[ $? -ne 0 ]]; then
@@ -186,7 +195,7 @@ fi
 
 echo "done.<br/>"
 
-echo -ne "[10/10] Unmounting all devices now... "
+echo -ne "[11/11] Unmounting all devices now... "
 
 umount -f /mnt
 if [[ $? -ne 0 ]]; then

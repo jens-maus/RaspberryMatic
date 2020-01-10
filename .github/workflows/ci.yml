@@ -20,7 +20,7 @@ jobs:
     - name: upload snapshot
       uses: WebFreak001/deploy-nightly@master
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592

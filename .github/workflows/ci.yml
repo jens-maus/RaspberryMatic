@@ -1,6 +1,5 @@
 name: CI
-
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -8,21 +7,24 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         platform: [raspmatic_rpi0, raspmatic_rpi3, raspmatic_rpi4, raspmatic_tinkerboard, raspmatic_intelnuc]
     
     steps:
     - uses: actions/checkout@v1
+
     - name: build ${{ matrix.platform }}
       run: make ${{ matrix.platform }}-release
-    - name: upload nightly build to bintray
-      uses: bpicode/github-action-upload-bintray@master
+
+    - name: upload snapshot
+      uses: WebFreak001/deploy-nightly@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        file: ./release/RaspberryMatic-3.*.zip
-        api_user: jens-maus
-        api_key: ${{ secrets.BINTRAY_API_KEY }}
-        repository: RaspberryMatic
-        package: NightlyBuilds
-        version: ${{ matrix.platform }}
-        upload_path: /
-        publish: 0
+        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+        release_id: 22744592
+        asset_path: ./release/RaspberryMatic-3.*.zip
+        asset_name: RaspberryMatic-nightly-$$.zip
+        asset_content_type: application/zip
+        max_releases: 5

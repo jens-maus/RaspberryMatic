@@ -18,12 +18,12 @@ jobs:
       run: echo ::set-env name=VERSION::$(cat VERSION)
 
     - name: build raspmatic_${{ matrix.platform }}
-      #run: make raspmatic_${{ matrix.platform }}-release
-      run: |
-        ls -la .
-        echo ${{ env.VERSION }}
-        echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-        ls -la release/
+      run: make raspmatic_${{ matrix.platform }}-release
+      #run: |
+      #  ls -la .
+      #  echo ${{ env.VERSION }}
+      #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
+      #  ls -la release/
 
     - name: upload snapshot
       uses: WebFreak001/deploy-nightly@master

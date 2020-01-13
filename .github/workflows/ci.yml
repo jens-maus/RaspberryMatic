@@ -9,13 +9,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [raspmatic_rpi0, raspmatic_rpi3, raspmatic_rpi4, raspmatic_tinkerboard, raspmatic_intelnuc]
+        platform: [rpi0, rpi3, rpi4, tinkerboard, intelnuc]
     
     steps:
     - uses: actions/checkout@v1
 
-    - name: build ${{ matrix.platform }}
-      run: make ${{ matrix.platform }}-release
+    - name: build raspmatic_${{ matrix.platform }}
+      #run: make raspmatic_${{ matrix.platform }}-release
+      run: |
+        ls -la .
+        touch RaspberryMatic/release/RaspberryMatic-3.49.17.20191225-${{ matrix.platform }}.zip
+        ls -la RaspberryMatic/release/
 
     - name: upload snapshot
       uses: WebFreak001/deploy-nightly@master
@@ -24,7 +28,7 @@ jobs:
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
-        asset_path: ./release/RaspberryMatic-3.*.zip
-        asset_name: RaspberryMatic-nightly-$$.zip
+        asset_path: ./RaspberryMatic/release/RaspberryMatic-3.*.zip
+        asset_name: RaspberryMatic-$$.zip
         asset_content_type: application/zip
         max_releases: 5

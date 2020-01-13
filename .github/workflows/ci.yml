@@ -14,10 +14,12 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - name: set env
+      run: echo ::set-env name=VERSION::$(cat VERSION)
+
     - name: build raspmatic_${{ matrix.platform }}
       #run: make raspmatic_${{ matrix.platform }}-release
       run: |
-        echo ::set-env name=VERSION::$(cat VERSION)
         ls -la .
         echo ${{ env.VERSION }}
         echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip

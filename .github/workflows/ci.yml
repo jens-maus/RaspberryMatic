@@ -18,8 +18,8 @@ jobs:
       #run: make raspmatic_${{ matrix.platform }}-release
       run: |
         ls -la .
-        touch RaspberryMatic/release/RaspberryMatic-3.49.17.20191225-${{ matrix.platform }}.zip
-        ls -la RaspberryMatic/release/
+        touch release/RaspberryMatic-3.49.17.20191225-${{ matrix.platform }}.zip
+        ls -la release/
 
     - name: upload snapshot
       uses: WebFreak001/deploy-nightly@master

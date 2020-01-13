@@ -19,8 +19,8 @@ jobs:
       run: |
         echo ::set-env name=VERSION::$(cat VERSION)
         ls -la .
-        echo $VERSION
-        echo "TEST" >release/RaspberryMatic-$VERSION-${{ matrix.platform }}.zip
+        echo ${{ env.VERSION }}
+        echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
         ls -la release/
 
     - name: upload snapshot

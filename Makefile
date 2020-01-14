@@ -1,4 +1,4 @@
-BUILDROOT_VERSION=2019.11
+BUILDROOT_VERSION=2019.11.1
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
 VERSION=$(shell cat ./VERSION)
@@ -104,7 +104,7 @@ linux-menuconfig linux-update-defconfig busybox-menuconfig busybox-update-config
 	@$(MAKE) -C build-$(PRODUCT) PRODUCT=$(PRODUCT) $@
 
 help:
-	@echo "HomeMatic Build Environment"
+	@echo "HomeMatic/CCU Build Environment"
 	@echo
 	@echo "Usage:"
 	@echo "  $(MAKE) <product>: build+create image for selected product"

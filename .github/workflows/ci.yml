@@ -18,14 +18,15 @@ jobs:
       run: echo ::set-env name=VERSION::$(cat VERSION)
 
     - name: build raspmatic_${{ matrix.platform }}
-      run: make raspmatic_${{ matrix.platform }}-release
-      #run: |
-      #  ls -la .
-      #  echo ${{ env.VERSION }}
-      #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-      #  ls -la release/
+      #run: make raspmatic_${{ matrix.platform }}-release
+      run: |
+        ls -la .
+        echo ${{ env.VERSION }}
+        echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
+        sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
+        ls -la release/
 
-    - name: upload snapshot
+    - name: upload snapshot archive
       uses: WebFreak001/deploy-nightly@master
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -35,4 +36,16 @@ jobs:
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
         asset_name: RaspberryMatic-$$-${{ matrix.platform }}.zip
         asset_content_type: application/zip
+        max_releases: 5
+
+    - name: upload snapshot checksum
+      uses: WebFreak001/deploy-nightly@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+        release_id: 22744592
+        asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
+        asset_name: RaspberryMatic-$$-${{ matrix.platform }}.zip.sha256
+        asset_content_type: text/plain
         max_releases: 5

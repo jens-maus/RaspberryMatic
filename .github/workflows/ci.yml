@@ -17,6 +17,10 @@ jobs:
     - name: set env
       run: echo ::set-env name=VERSION::$(cat VERSION)
 
+    - name: remote debug tmate session
+      uses: mxschmitt/action-tmate@v1
+      if: matrix.platform == 'ova'
+
     - name: build raspmatic_${{ matrix.platform }}
       run: make raspmatic_${{ matrix.platform }}-release
       #run: |

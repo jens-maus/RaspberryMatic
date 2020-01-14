@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [rpi0, rpi3, rpi4, tinkerboard, intelnuc]
+        platform: [rpi0, rpi3, rpi4, tinkerboard, intelnuc, ova]
     
     steps:
     - uses: actions/checkout@v1
@@ -18,13 +18,13 @@ jobs:
       run: echo ::set-env name=VERSION::$(cat VERSION)
 
     - name: build raspmatic_${{ matrix.platform }}
-      #run: make raspmatic_${{ matrix.platform }}-release
-      run: |
-        ls -la .
-        echo ${{ env.VERSION }}
-        echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-        sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-        ls -la release/
+      run: make raspmatic_${{ matrix.platform }}-release
+      #run: |
+      #  ls -la .
+      #  echo ${{ env.VERSION }}
+      #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
+      #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
+      #  ls -la release/
 
     - name: upload snapshot archive
       uses: WebFreak001/deploy-nightly@master

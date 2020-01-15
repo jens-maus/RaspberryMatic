@@ -4,7 +4,7 @@ on: [push, pull_request]
 jobs:
   build:
 
-    runs-on: ubuntu-19.10
+    runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
@@ -13,15 +13,19 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-      with:
-        path: 'r'
+
+    - name: rename worker directory
+      working-directory: ../
+      run: |
+        mv RaspberryMatic b
+        ln -s b RaspberryMatic
 
     - name: set env
       run: echo ::set-env name=VERSION::$(cat VERSION)
 
-    #- name: remote debug tmate session
-    #  uses: mxschmitt/action-tmate@v1
-    #  if: matrix.platform == 'ova'
+    - name: remote debug tmate session
+      uses: mxschmitt/action-tmate@v1
+      if: matrix.platform == 'ova'
 
     - name: build raspmatic_${{ matrix.platform }}
       run: make raspmatic_${{ matrix.platform }}-release

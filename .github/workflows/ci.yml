@@ -37,6 +37,7 @@ jobs:
       #  ls -la release/
 
     - name: upload snapshot archive
+      if: github.event_name != 'pull_request'
       uses: WebFreak001/deploy-nightly@master
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -49,6 +50,7 @@ jobs:
         max_releases: 5
 
     - name: upload snapshot checksum
+      if: github.event_name != 'pull_request'
       uses: WebFreak001/deploy-nightly@master
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}

@@ -29,9 +29,9 @@ jobs:
         echo ::set-env name=VERSION::$(cat VERSION)
         echo ::set-env name=GITHUB_SHA8::$(echo ${GITHUB_SHA::8})
 
-    - name: remote debug tmate session
-      uses: mxschmitt/action-tmate@v1
-      if: matrix.platform == 'ova'
+    #- name: remote debug tmate session
+    #  uses: mxschmitt/action-tmate@v1
+    #  if: matrix.platform == 'ova'
 
     - name: build raspmatic_${{ matrix.platform }}
       run: make raspmatic_${{ matrix.platform }}-release

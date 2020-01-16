@@ -1,5 +1,9 @@
 name: CI
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 2 * * *' # run at 2 AM UTC
 
 jobs:
   build:
@@ -36,8 +40,8 @@ jobs:
       #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
       #  ls -la release/
 
-    - name: upload snapshot archive
-      if: github.event_name != 'pull_request'
+    - name: upload nightly build archive
+      if: github.event_name == 'schedule'
       uses: WebFreak001/deploy-nightly@master
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -49,8 +53,8 @@ jobs:
         asset_content_type: application/zip
         max_releases: 5
 
-    - name: upload snapshot checksum
-      if: github.event_name != 'pull_request'
+    - name: upload nightly build checksum
+      if: github.event_name == 'schedule'
       uses: WebFreak001/deploy-nightly@master
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}

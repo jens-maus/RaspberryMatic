@@ -10,6 +10,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      GITHUB_SHA8: ${GITHUB_SHA::8}
+
     strategy:
       fail-fast: false
       matrix:
@@ -43,7 +46,7 @@ jobs:
     - name: upload build as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: RaspberryMatic-${{ matrix.platform }}.zip
+        name: ${{ env.GITHUB_SHA8 }}-${{ matrix.platform }}
         path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
 
     - name: upload nightly build archive

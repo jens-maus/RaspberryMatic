@@ -27,7 +27,7 @@ jobs:
     - name: setup env
       run: |
         echo ::set-env name=VERSION::$(cat VERSION)
-        echo ::set-env name=GITHUB_SHA8::$(echo ${GITHUB_SHA::8})
+        echo ::set-env name=GITHUB_SHA7::$(echo ${GITHUB_SHA::7})
 
     #- name: remote debug tmate session
     #  uses: mxschmitt/action-tmate@v1
@@ -45,7 +45,7 @@ jobs:
     - name: upload build as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: ${{ env.GITHUB_SHA8 }}-${{ matrix.platform }}
+        name: rm-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}
         path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
 
     - name: upload nightly build archive

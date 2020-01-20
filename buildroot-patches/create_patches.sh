@@ -11,7 +11,7 @@ patchdirs=$(find buildroot/package -maxdepth 1 -type d | sort)
 #rm *.patch
 
 COUNTER=1
-for dir in ${patchdirs}; do
+for dir in ${patchdirs} buildroot/toolchain; do
   package=$(basename ${dir})
   [[ "${package}" == "package" ]] && continue
   count=$(printf %04d ${COUNTER})

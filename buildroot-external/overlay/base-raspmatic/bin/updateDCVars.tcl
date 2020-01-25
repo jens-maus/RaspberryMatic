@@ -204,9 +204,19 @@ proc setDutyCycleSV {name desc value serial} {
 # XMLRPC query
 cfg::parse_file /var/etc/rfd.conf
 if {[llength [cfg::sections]] > 1} {
-  set port [cfg::getvar "Listen Port"]
-  set result [catch {set gateways [xmlrpc http://127.0.0.1:$port/ listBidcosInterfaces]}]
-  if {$result == 0} {
+  set portFound [catch {set port [cfg::getvar "Listen Port"]}]
+} else {
+  # if we have no BidCos-RF interface we have to check if there
+  # is a HmIP interface (e.g. HmIP-RFUSB) from which we can query
+  # duty cycles values as well.
+  cfg::parse_file /var/etc/crRFD.conf
+  set portFound [catch {set port [cfg::getvar "Legacy.Port"]}]
+}
+
+if {$portFound == 0} {
+
+  set gwFound [catch {set gateways [xmlrpc http://127.0.0.1:$port/ listBidcosInterfaces]}]
+  if {$gwFound == 0} {
 
     # catch all dutyCycle values in an additional JSON array
     set jsonResult "\["
@@ -225,8 +235,9 @@ if {[llength [cfg::sections]] > 1} {
         }
 
         set name ""
-        if {$gateway(TYPE) == "CCU2"} {
+        if {$gateway(TYPE) == "CCU2" || $gateway(TYPE) == "HMIP_CCU2"} {
           set sysVarName [setDutyCycleSV "" "DutyCycle CCU" $dutycycle ""]
+          set gateway(TYPE) "CCU2"
         } else {
           # get the cleartext name a user assigned for that gateway
           # we try to find it based on the defined serial number

@@ -1,7 +1,7 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.4
-# Copyright (c) 2018-2019 Andreas Buenting, Jens Maus
+# DutyCycle Script v3.5
+# Copyright (c) 2018-2020 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -270,6 +270,8 @@ if {[llength [cfg::sections]] > 1} {
     puts $jsonOutputFile $jsonResult
     close $jsonOutputFile
   }
+} else {
+  setDutyCycleSV "" "DutyCycle CCU" -1 ""
 }
 
 ###################################################################

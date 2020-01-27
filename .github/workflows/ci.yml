@@ -50,7 +50,7 @@ jobs:
     - name: upload nightly build archive
       #if: github.event_name == 'schedule'
       #uses: WebFreak001/deploy-nightly@master
-      uses: jens-maus/deploy-nightly@master
+      uses: jens-maus/deploy-nightly@per_page
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
@@ -64,7 +64,7 @@ jobs:
     - name: upload nightly build checksum
       #if: github.event_name == 'schedule'
       #uses: WebFreak001/deploy-nightly@master
-      uses: jens-maus/deploy-nightly@master
+      uses: jens-maus/deploy-nightly@per_page
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:

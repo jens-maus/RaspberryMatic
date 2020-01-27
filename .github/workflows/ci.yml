@@ -34,12 +34,12 @@ jobs:
     #  if: matrix.platform == 'ova'
 
     - name: build raspmatic_${{ matrix.platform }}
-      #run: make raspmatic_${{ matrix.platform }}-release
-      run: |
-        echo ${{ env.VERSION }}
-        echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-        sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-        ls -la release/
+      run: make raspmatic_${{ matrix.platform }}-release
+      #run: |
+      #  echo ${{ env.VERSION }}
+      #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
+      #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
+      #  ls -la release/
 
     - name: upload build as artifact
       uses: actions/upload-artifact@v1
@@ -48,7 +48,7 @@ jobs:
         path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
 
     - name: upload nightly build archive
-      #if: github.event_name == 'schedule'
+      if: github.event_name == 'schedule'
       #uses: WebFreak001/deploy-nightly@master
       uses: jens-maus/deploy-nightly@per-page
       env:
@@ -62,7 +62,7 @@ jobs:
         max_releases: 5
 
     - name: upload nightly build checksum
-      #if: github.event_name == 'schedule'
+      if: github.event_name == 'schedule'
       #uses: WebFreak001/deploy-nightly@master
       uses: jens-maus/deploy-nightly@per-page
       env:

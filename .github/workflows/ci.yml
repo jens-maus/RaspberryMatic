@@ -36,7 +36,6 @@ jobs:
     - name: build raspmatic_${{ matrix.platform }}
       run: make raspmatic_${{ matrix.platform }}-release
       #run: |
-      #  ls -la .
       #  echo ${{ env.VERSION }}
       #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
       #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
@@ -50,7 +49,8 @@ jobs:
 
     - name: upload nightly build archive
       if: github.event_name == 'schedule'
-      uses: WebFreak001/deploy-nightly@master
+      #uses: WebFreak001/deploy-nightly@master
+      uses: jens-maus/deploy-nightly@per-page
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
@@ -63,7 +63,8 @@ jobs:
 
     - name: upload nightly build checksum
       if: github.event_name == 'schedule'
-      uses: WebFreak001/deploy-nightly@master
+      #uses: WebFreak001/deploy-nightly@master
+      uses: jens-maus/deploy-nightly@per-page
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:

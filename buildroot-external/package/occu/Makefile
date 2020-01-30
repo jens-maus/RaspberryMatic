@@ -3,7 +3,6 @@
 #
 
 OCCU_ROOT=
-RASPMATIC_VERSION=$(shell cat ../../../VERSION)
 
 install_rfd_arch:
 	mkdir -p $(TARGET_DIR)/bin
@@ -100,7 +99,7 @@ update_webui:
 
 	chmod a+rx $(TARGET_DIR)/www/config/fileupload.ccc
 
-	grep -rl 'XXX-WEBUI-VERSION-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-WEBUI-VERSION-XXX/$(RASPMATIC_VERSION)/g'
+	grep -rl 'XXX-WEBUI-VERSION-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-WEBUI-VERSION-XXX/$(PRODUCT_VERSION)/g'
 	grep -rl 'XXX-PRODUCT-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-PRODUCT-XXX/$(PRODUCT)/g'
 
 install:

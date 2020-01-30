@@ -26,7 +26,8 @@ jobs:
 
     - name: setup env
       run: |
-        echo ::set-env name=VERSION::$(cat VERSION)
+        echo ::set-env name=DATE::$(date +%Y%m%d)
+        echo ::set-env name=VERSION::$(grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)
         echo ::set-env name=GITHUB_SHA7::$(echo ${GITHUB_SHA::7})
 
     #- name: remote debug tmate session
@@ -34,7 +35,7 @@ jobs:
     #  if: matrix.platform == 'ova'
 
     - name: build raspmatic_${{ matrix.platform }}
-      run: make raspmatic_${{ matrix.platform }}-release
+      run: make DATE=${{ env.DATE }} raspmatic_${{ matrix.platform }}-release
       #run: |
       #  echo ${{ env.VERSION }}
       #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
@@ -44,33 +45,31 @@ jobs:
     - name: upload build as artifact
       uses: actions/upload-artifact@v1
       with:
-        name: rm-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}
         path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}
 
     - name: upload nightly build archive
       if: github.event_name == 'schedule'
-      #uses: WebFreak001/deploy-nightly@master
-      uses: jens-maus/deploy-nightly@per-page
+      uses: WebFreak001/deploy-nightly@v1.0.3
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-        asset_name: RaspberryMatic-$$-${{ matrix.platform }}.zip
+        asset_name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.zip
         asset_content_type: application/zip
         max_releases: 5
 
     - name: upload nightly build checksum
       if: github.event_name == 'schedule'
-      #uses: WebFreak001/deploy-nightly@master
-      uses: jens-maus/deploy-nightly@per-page
+      uses: WebFreak001/deploy-nightly@v1.0.3
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-        asset_name: RaspberryMatic-$$-${{ matrix.platform }}.zip.sha256
+        asset_name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.zip.sha256
         asset_content_type: text/plain
         max_releases: 5

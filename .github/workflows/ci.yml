@@ -26,7 +26,8 @@ jobs:
 
     - name: setup env
       run: |
-        echo ::set-env name=VERSION::$(cat VERSION)
+        echo ::set-env name=DATE::$(date +%Y%m%d)
+        echo ::set-env name=VERSION::$(grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).${DATE}
         echo ::set-env name=GITHUB_SHA7::$(echo ${GITHUB_SHA::7})
 
     #- name: remote debug tmate session
@@ -34,12 +35,12 @@ jobs:
     #  if: matrix.platform == 'ova'
 
     - name: build raspmatic_${{ matrix.platform }}
-      run: make raspmatic_${{ matrix.platform }}-release
-      #run: |
-      #  echo ${{ env.VERSION }}
-      #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-      #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-      #  ls -la release/
+      #run: make DATE=${{ env.DATE}} raspmatic_${{ matrix.platform }}-release
+      run: |
+        echo ${{ env.VERSION }}
+        echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
+        sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
+        ls -la release/
 
     - name: upload build as artifact
       uses: actions/upload-artifact@v1

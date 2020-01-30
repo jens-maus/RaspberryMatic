@@ -27,7 +27,7 @@ jobs:
     - name: setup env
       run: |
         echo ::set-env name=DATE::$(date +%Y%m%d)
-        echo ::set-env name=VERSION::$(grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).${DATE}
+        echo ::set-env name=VERSION::$(grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)
         echo ::set-env name=GITHUB_SHA7::$(echo ${GITHUB_SHA::7})
 
     #- name: remote debug tmate session

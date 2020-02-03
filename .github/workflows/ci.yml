@@ -27,6 +27,7 @@ jobs:
     - name: setup env
       run: |
         echo ::set-env name=DATE::$(date +%Y%m%d)
+        echo ::set-env name=OCCU_VERSION::$(grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
         echo ::set-env name=VERSION::$(grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)
         echo ::set-env name=GITHUB_SHA7::$(echo ${GITHUB_SHA::7})
 
@@ -57,7 +58,7 @@ jobs:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-        asset_name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.zip
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip
         asset_content_type: application/zip
         max_releases: 5
 
@@ -70,6 +71,6 @@ jobs:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-        asset_name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.zip.sha256
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip.sha256
         asset_content_type: text/plain
         max_releases: 5

@@ -400,5 +400,12 @@ check program internetCheckEnabled with path "/usr/bin/test -e /etc/config/inter
     group system
     if status == 0 for 1 cycles then unmonitor
 
+# check for a non-empty /tmp/badblocks.txt file and warn the user accordingly
+check program badblocksCheck with path "/usr/bin/test -s /tmp/badblocks.txt"
+    group systen
+    if status = 0 for 1 cycles then
+      exec "/bin/triggerAlarm.tcl 'Bad Blocks detected on main disk device' WatchDog-Alarm"
+    depends on crond
+
 # include user-defined configuration files
 include /usr/local/etc/monit*.cfg

@@ -3,3 +3,4 @@
 0 4 * * * /usr/sbin/logrotate /etc/logrotate.conf || logger -p error -t "logrotate" "logrotate aborted with error $?"
 */1 * * * * /bin/updateDCVars.tcl >/dev/null 2>/dev/null
 7 0 * * * /bin/nice /bin/cronBackup.sh >/dev/null 2>/dev/null
+0 2 * * * /bin/nice /bin/checkBadBlocks.sh >/dev/null 2>/dev/null

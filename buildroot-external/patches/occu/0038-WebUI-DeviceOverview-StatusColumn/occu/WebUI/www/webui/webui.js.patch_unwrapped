@@ -1,5 +1,5 @@
---- webui.js.orig_unwrapped	2019-12-13 14:15:03.375601925 +0100
-+++ webui.js_unwrapped	2019-12-13 14:15:16.223852090 +0100
+--- webui_unwrapped.js.orig	2020-02-10 10:16:40.141395514 +0100
++++ webui_unwrapped.js	2020-02-10 10:18:55.809562650 +0100
 @@ -392,6 +392,7 @@
      <col width=\"25px\" \/>\n
      <col width=\"25px\" \/>\n
@@ -64,11 +64,11 @@
        <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
      <\/tr>  \n
    <\/tfoot>\n
-@@ -10278,6 +10286,156 @@
+@@ -10310,6 +10318,156 @@
    },
    
    /**
-+   * Startet die Akualisierung der Werte des GerÃtestatus
++   * Startet die Aktualisierung der Werte des Gerätestatus
 +   **/
 +  updateStatus:function(deviceStatus, rssiListHmRF)
 +  {
@@ -183,7 +183,7 @@
 +  },
 +
 +  /**
-+   * Startet die Akualisierung der RSSI Werte
++   * Startet die Aktualisierung der RSSI Werte
 +   **/
 +  updateRssiColors:function()
 +  {
@@ -221,11 +221,11 @@
     * Legt den Namen des Geräts fest.
     **/
    setName: function(name)
-@@ -10665,6 +10823,36 @@
+@@ -10697,6 +10855,36 @@
    },
    
    /**
-+   * Startet die Akualisierung des Status aller GerÃte.
++   * Startet die Aktualisierung des Status aller Geräte.
 +   **/
 +  updateDeviceStatus:function()
 +  {
@@ -258,7 +258,7 @@
     * Startet die Akualisierung eines Geräts.
     **/
    beginUpdateDevice:function(id, callback)
-@@ -12069,6 +12257,8 @@
+@@ -12101,6 +12289,8 @@
          conInfo(e);
        }
      });
@@ -267,7 +267,7 @@
    }
  });
  /**
-@@ -12360,6 +12550,8 @@
+@@ -12392,6 +12582,8 @@
  
      translateJSTemplate("#MultiChannelChooserDialog");
      translatePage(".MultiChannelChooserRow");
@@ -276,10 +276,10 @@
    }
      
  });
-@@ -21114,6 +21306,8 @@
+@@ -21137,6 +21329,8 @@
      translateJSTemplate("#DeviceListTable");
      translatePage(".j_rooms, .j_functions"); // this translates the room name as well the function name within the main devicelist (Settings > Devices)
-     translateFilter(); // this translates the filter in the header of the page
+     //translateFilter(); // this translates the filter in the header of the page
 +
 +    DeviceList.updateDeviceStatus();
    },

@@ -43,12 +43,6 @@ jobs:
       #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
       #  ls -la release/
 
-    - name: upload build as artifact
-      uses: actions/upload-artifact@v1
-      with:
-        path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}
-
     - name: upload nightly build archive
       if: github.event_name == 'schedule'
       uses: WebFreak001/deploy-nightly@v1.0.3
@@ -74,3 +68,9 @@ jobs:
         asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip.sha256
         asset_content_type: text/plain
         max_releases: 5
+
+    - name: upload build as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}

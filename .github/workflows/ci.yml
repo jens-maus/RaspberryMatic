@@ -77,3 +77,4 @@ jobs:
       with:
         path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}
+      continue-on-error: true

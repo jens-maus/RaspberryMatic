@@ -31,20 +31,20 @@ jobs:
         echo ::set-env name=VERSION::$(grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)
         echo ::set-env name=GITHUB_SHA7::$(echo ${GITHUB_SHA::7})
 
-    #- name: remote debug tmate session
-    #  uses: mxschmitt/action-tmate@v1
-    #  if: matrix.platform == 'ova'
+    - name: remote debug tmate session
+      uses: mxschmitt/action-tmate@v1
+      if: matrix.platform == 'ova'
 
     - name: cleanup old action artifacts
       run: .github/workflows/purge_artifacts.sh ${{ secrets.REPO_ACCESS_TOKEN }}
 
     - name: build raspmatic_${{ matrix.platform }}
-      run: make DATE=${{ env.DATE }} raspmatic_${{ matrix.platform }}-release
-      #run: |
-      #  echo ${{ env.VERSION }}
-      #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-      #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-      #  ls -la release/
+      #run: make DATE=${{ env.DATE }} raspmatic_${{ matrix.platform }}-release
+      run: |
+        echo ${{ env.VERSION }}
+        echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
+        sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
+        ls -la release/
 
     - name: upload nightly build archive
       if: github.event_name == 'schedule'

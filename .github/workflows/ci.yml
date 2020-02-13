@@ -44,7 +44,9 @@ jobs:
         mv -f release/updatepkg/raspmatic_rpi3/EULA.en_nightly release/updatepkg/raspmatic_rpi3/EULA.en
 
     - name: build raspmatic_${{ matrix.platform }}
-      run: make DATE=${{ env.DATE }} raspmatic_${{ matrix.platform }}-release
+      run: |
+        make DATE=${{ env.DATE }} raspmatic_${{ matrix.platform }}-release
+        make raspmatic_${{ matrix.platform }}-clean
       #run: |
       #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img
       #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img.sha256
@@ -80,14 +82,14 @@ jobs:
 
     - name: prepare artifact upload
       run: |
-        mkdir -p /tmp/artifact-upload
-        unzip -d /tmp/artifact-upload release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
+        mkdir -p /mnt/upload-${{ matrix.platform }}
+        unzip -d /mnt/upload-${{ matrix.platform }} release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
       continue-on-error: true
 
     - name: upload build as artifact
       if: matrix.platform != 'ova'
       uses: actions/upload-artifact@v1
       with:
-        path: /tmp/artifact-upload
+        path: /mnt/upload-${{ matrix.platform }}
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}
       continue-on-error: true

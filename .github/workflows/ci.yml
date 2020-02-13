@@ -38,6 +38,11 @@ jobs:
     - name: cleanup old action artifacts
       run: .github/workflows/purge_artifacts.sh ${{ secrets.REPO_ACCESS_TOKEN }}
 
+    - name: switch to experimental EULA files
+      run: |
+        mv -f release/updatepkg/raspmatic_rpi3/EULA.de_nightly release/updatepkg/raspmatic_rpi3/EULA.de
+        mv -f release/updatepkg/raspmatic_rpi3/EULA.en_nightly release/updatepkg/raspmatic_rpi3/EULA.en
+
     - name: build raspmatic_${{ matrix.platform }}
       #run: make DATE=${{ env.DATE }} raspmatic_${{ matrix.platform }}-release
       run: |

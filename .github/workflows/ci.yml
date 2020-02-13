@@ -45,13 +45,13 @@ jobs:
         mv -f release/updatepkg/raspmatic_rpi3/EULA.en_nightly release/updatepkg/raspmatic_rpi3/EULA.en
 
     - name: build raspmatic_${{ matrix.platform }}
-      #run: make DATE=${{ env.DATE }} raspmatic_${{ matrix.platform }}-release
-      run: |
-        echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img
-        sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img.sha256
-        (cd release; zip RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.*)
-        sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-        ls -la release/
+      run: make DATE=${{ env.DATE }} raspmatic_${{ matrix.platform }}-release
+      #run: |
+      #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img
+      #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img.sha256
+      #  (cd release; zip RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.*)
+      #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
+      #  ls -la release/
 
     - name: upload nightly build archive
       if: github.event_name == 'schedule'

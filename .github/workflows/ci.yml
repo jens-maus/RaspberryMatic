@@ -13,8 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ova]
-        #platform: [rpi0, rpi3, rpi4, tinkerboard, intelnuc, ova]
+        platform: [rpi0, rpi3, rpi4, tinkerboard, intelnuc, ova]
     
     steps:
     - uses: actions/checkout@v2
@@ -86,6 +85,7 @@ jobs:
       continue-on-error: true
 
     - name: upload build as artifact
+      if: matrix.platform != 'ova'
       uses: actions/upload-artifact@v1
       with:
         path: /tmp/artifact-upload

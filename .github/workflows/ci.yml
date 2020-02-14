@@ -87,7 +87,6 @@ jobs:
       continue-on-error: true
 
     - name: upload build as artifact
-      if: matrix.platform != 'ova'
       uses: actions/upload-artifact@v1
       with:
         path: /tmp/upload-${{ matrix.platform }}

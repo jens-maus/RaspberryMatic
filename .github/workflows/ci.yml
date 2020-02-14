@@ -82,14 +82,14 @@ jobs:
 
     - name: prepare artifact upload
       run: |
-        mkdir -p /mnt/upload-${{ matrix.platform }}
-        unzip -d /mnt/upload-${{ matrix.platform }} release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
+        mkdir -p /tmp/upload-${{ matrix.platform }}
+        unzip -d /tmp/upload-${{ matrix.platform }} release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
       continue-on-error: true
 
     - name: upload build as artifact
       if: matrix.platform != 'ova'
       uses: actions/upload-artifact@v1
       with:
-        path: /mnt/upload-${{ matrix.platform }}
+        path: /tmp/upload-${{ matrix.platform }}
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}
       continue-on-error: true

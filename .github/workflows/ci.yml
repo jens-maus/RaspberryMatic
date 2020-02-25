@@ -13,8 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        #platform: [rpi0, rpi3, rpi4, tinkerboard, intelnuc, ova]
-        platform: [ova]
+        platform: [rpi0, rpi3, rpi4, tinkerboard, intelnuc, ova]
     
     steps:
     - uses: actions/checkout@v2
@@ -32,6 +31,14 @@ jobs:
         echo ::set-env name=VERSION::$(grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)
         echo ::set-env name=GITHUB_SHA7::$(echo ${GITHUB_SHA::7})
 
+    - name: free disk space
+      run: |
+        sudo swapoff -a
+        sudo rm -f /swapfile
+        sudo apt clean
+        docker rmi $(docker image ls -aq)
+        df -h
+
     - name: cleanup old action artifacts
       run: .github/workflows/purge_artifacts.sh ${{ secrets.REPO_ACCESS_TOKEN }}
 
@@ -46,14 +53,8 @@ jobs:
 
     - name: build raspmatic_${{ matrix.platform }}
       run: |
-        sudo swapoff -a
-        sudo rm -f /swapfile
-        sudo apt clean
-        docker rmi $(docker image ls -aq)
-        df -h
         sudo mkdir -p /mnt/download
         sudo chown runner /mnt/download
-        ls -la /mnt/
         make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download raspmatic_${{ matrix.platform }}-release
         make distclean
       #run: |

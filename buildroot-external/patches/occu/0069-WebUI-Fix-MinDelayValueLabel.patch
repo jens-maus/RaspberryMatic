@@ -1,0 +1,11 @@
+--- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
+@@ -2289,7 +2289,7 @@
+     incr prn
+     set param TX_MINDELAY_VALUE
+     append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
+-    append html "<td>\${stringTableRamdomTimeValue}</td>"
++    append html "<td>\${stringTableTxMinDelayValue}</td>"
+ 
+     append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
+ 

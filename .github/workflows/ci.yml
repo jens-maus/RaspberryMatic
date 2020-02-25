@@ -40,14 +40,20 @@ jobs:
         mv -f release/updatepkg/raspmatic_rpi3/EULA.de_nightly release/updatepkg/raspmatic_rpi3/EULA.de
         mv -f release/updatepkg/raspmatic_rpi3/EULA.en_nightly release/updatepkg/raspmatic_rpi3/EULA.en
 
-    - name: remote debug tmate session
-      uses: mxschmitt/action-tmate@v1
-      if: matrix.platform == 'ova'
+    #- name: remote debug tmate session
+    #  uses: mxschmitt/action-tmate@v1
+    #  if: matrix.platform == 'ova'
 
     - name: build raspmatic_${{ matrix.platform }}
       run: |
+        sudo swapoff -a
+        sudo rm -f /swapfile
+        sudo apt clean
+        docker rmi $(docker image ls -aq)
+        df -h
         sudo mkdir -p /mnt/download
         sudo chown runner /mnt/download
+        ls -la /mnt/
         make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download raspmatic_${{ matrix.platform }}-release
         make distclean
       #run: |

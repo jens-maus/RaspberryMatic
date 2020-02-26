@@ -1,0 +1,116 @@
+--- occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm
+@@ -122,27 +122,28 @@
+             {
+               string trId = "program"#o.ID();
+               WriteLine( '<tr id="'#trId#'" class="CLASS04901">' );
+-              WriteLine( '<td class="tBodyCell">'#o.Name()#'</td>' );
+-              WriteLine( '<td class="tBodyCell">'#o.PrgInfo()#'</td>' );
+-              WriteLine( '<td class="tBodyCell">' );
++              string sInactive = ""; if( !o.Active() ) { sInactive = "Inactive"; }
++              WriteLine( '<td class="tBodyCell'#sInactive#'">'#o.Name()#'</td>' );
++              WriteLine( '<td class="tBodyCell'#sInactive#'">'#o.PrgInfo()#'</td>' );
++              WriteLine( '<td class="tBodyCell'#sInactive#'">' );
+               object oPrgID = o.ID();
+               string sRet = "";
+               Call( "/esp/programs.fn::WriteConditionText()" );
+               Write (sRet);
+               WriteLine( '</td>' );
+-              WriteLine( '<td class="tBodyCell">' );
++              WriteLine( '<td class="tBodyCell'#sInactive#'">' );
+               string sRet = "";
+               Call( "/esp/programs.fn::WriteDestinationText()" );
+               Write(sRet);
+               WriteLine( '</td>' );
+-              WriteLine( '<td class="tBodyCell CLASS04902" >' );
++              WriteLine( '<td class="tBodyCell'#sInactive#' CLASS04902" >' );
+                 WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
+                   WriteLine( '<tr>' );
+                     WriteLine( '<td>' );
+                       WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
+                         WriteLine( '<tr>' );
+                           WriteLine( '<td class="CLASS04903">' );
+-                            WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#');" />' );
++                            WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#',\''#o.Name()#'\');" />' );
+                           WriteLine( '</td>' );
+                         WriteLine( '</tr>' );
+                         WriteLine( '<tr>' );
+@@ -215,16 +216,17 @@
+               if( (o.IsTypeOf( OT_PROGRAM )) && (o.ProgramCopyID()==ID_ERROR) )
+               {
+                 string trId = "program"#o.ID();
++                string sInactive = ""; if( !o.Active() ) { sInactive = "Inactive"; }
+                 WriteLine( '<tr id="'#trId#'" class="CLASS04901">' );
+-                WriteLine( '<td class="tBodyCell">'#o.Name()#'</td>' );
+-                WriteLine( '<td class="tBodyCell">'#o.PrgInfo()#'</td>' );
+-                WriteLine( '<td class="tBodyCell">' );
++                WriteLine( '<td class="tBodyCell'#sInactive#'">'#o.Name()#'</td>' );
++                WriteLine( '<td class="tBodyCell'#sInactive#'">'#o.PrgInfo()#'</td>' );
++                WriteLine( '<td class="tBodyCell'#sInactive#'">' );
+                 object oPrgID = o.ID();
+                 string sRet = "";
+                 Call( "/esp/programs.fn::WriteConditionText()" );
+                 Write (sRet);
+                 WriteLine( '</td>' );
+-                WriteLine( '<td class="tBodyCell">' );
++                WriteLine( '<td class="tBodyCell'#sInactive#'">' );
+                 string sRet = "";
+                 Call( "/esp/programs.fn::WriteDestinationText()" );
+                 Write(sRet);
+@@ -236,7 +238,7 @@
+                         WriteLine( '<table cellpadding="0" cellspacing="0" border="0">' );
+                           WriteLine( '<tr>' );
+                             WriteLine( '<td class="CLASS04903">' );
+-                              WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#');" />' );
++                              WriteLine( '<input type="button" name="btnRemove" value="btnRemove" class="StdButton CLASS04907" onclick="DeleteProgram('#o.ID()#',\''#o.Name()#'\');" />' );
+                             WriteLine( '</td>' );
+                           WriteLine( '</tr>' );
+                           WriteLine( '<tr>' );
+@@ -296,11 +298,12 @@
+ </div>
+ 
+ <script type="text/javascript">
+-  DeleteProgram = function(id)
++  DeleteProgram = function(id,name)
+   {
+     var _id_ = id;
++    var _name_ = name;
+     //new YesNoDialog("Sicherheitsabfrage", "Möchten Sie das Programm wirklich löschen?", function(result) {
+-      new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionRemoveProgram'), function(result) {
++      new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionRemoveProgram')+' - '+translateKey(_name_), function(result) {
+       if (result == YesNoDialog.RESULT_YES)
+       {
+         var url = '/esp/programs.htm?sid='+SessionId;
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -1201,6 +1201,16 @@
+   text-align: left;
+ }
+ 
++.tBodyCellInactive
++{
++  background-color: $_(activeBackground); /* #f0f0f0 */
++  height: 40px;
++  border: solid 1px $_(black); /* black */
++  color: $_(inactiveBackground); /* #bcc7cb */
++  padding: 4px;
++  text-align: left;
++}
++
+ .tBodyCellCenter
+ {
+   background-color: $_(activeBackground); /* #f0f0f0 */
+@@ -6587,6 +6597,13 @@
+ 	height: 40px;
+ }
+ 
++input[name='active']:checked ~ label .rotate {
++    transform: rotate(45deg);
++    -o-transform: rotate(45deg);
++    -ms-transform: rotate(45deg);
++    -webkit-transform: rotate(45deg);
++}
++
+ .CLASS04902 {
+ 	background-color:$_(activeBackground);
+ 	width:220px;

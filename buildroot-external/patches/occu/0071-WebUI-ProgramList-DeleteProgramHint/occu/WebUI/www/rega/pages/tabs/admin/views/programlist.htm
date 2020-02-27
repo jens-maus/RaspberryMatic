@@ -301,7 +301,7 @@
     var _id_ = id;
     var _name_ = name;
     //new YesNoDialog("Sicherheitsabfrage", "Möchten Sie das Programm wirklich löschen?", function(result) {
-      new YesNoDialog(translateKey('dialogSafetyCheck'), '"'+translateKey(_name_)+'" - '+translateKey('dialogQuestionRemoveProgram'), function(result) {
+      new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionRemoveProgram').replace(/%s/, _name_), function(result) {
       if (result == YesNoDialog.RESULT_YES)
       {
         var url = '/esp/programs.htm?sid='+SessionId;

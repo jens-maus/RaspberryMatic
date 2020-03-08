@@ -76,6 +76,18 @@
    translatePage("#ProgramListTable");
    jQuery("#ProgramListTable").removeClass("hidden");
  </script>
+--- occu/WebUI/www/webui/color.map.orig
++++ occu/WebUI/www/webui/color.map
+@@ -41,6 +41,9 @@
+ textColorA              white
+ textColorB              black
+ 
++pgmTextColorInactive    #606060
++pgmBackColorInactive    #f0f0f0
++
+ navBarSeparator         #bcc7cb
+ 
+ mainMenuBackground      #ebf1f2
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
 @@ -1201,6 +1201,16 @@
@@ -84,10 +96,10 @@
  
 +.tBodyCellInactive
 +{
-+  background-color: $_(activeBackground); /* #f0f0f0 */
++  background-color: $_(pgmBackColorInactive); /* #f0f0f0 */
 +  height: 40px;
 +  border: solid 1px $_(black); /* black */
-+  color: $_(inactiveBackground); /* #bcc7cb */
++  color: $_(pgmTextColorInactive); /* #606060 */
 +  padding: 4px;
 +  text-align: left;
 +}

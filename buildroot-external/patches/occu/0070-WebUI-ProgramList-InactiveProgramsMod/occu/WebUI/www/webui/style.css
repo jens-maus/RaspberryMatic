@@ -1203,10 +1203,10 @@ a img {
 
 .tBodyCellInactive
 {
-  background-color: $_(activeBackground); /* #f0f0f0 */
+  background-color: $_(pgmBackColorInactive); /* #f0f0f0 */
   height: 40px;
   border: solid 1px $_(black); /* black */
-  color: $_(inactiveBackground); /* #bcc7cb */
+  color: $_(pgmTextColorInactive); /* #606060 */
   padding: 4px;
   text-align: left;
 }

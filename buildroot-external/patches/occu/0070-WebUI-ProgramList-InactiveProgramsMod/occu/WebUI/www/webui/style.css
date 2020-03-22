@@ -1206,7 +1206,7 @@ a img {
   background-color: $_(pgmBackColorInactive); /* #f0f0f0 */
   height: 40px;
   border: solid 1px $_(black); /* black */
-  color: $_(pgmTextColorInactive); /* #606060 */
+  color: $_(pgmTextColorInactive); /* #bcc7cb */
   padding: 4px;
   text-align: left;
 }

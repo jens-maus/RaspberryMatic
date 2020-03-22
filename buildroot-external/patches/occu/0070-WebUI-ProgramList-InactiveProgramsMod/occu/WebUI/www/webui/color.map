@@ -41,7 +41,7 @@ grayText                GrayText
 textColorA              white
 textColorB              black
 
-pgmTextColorInactive    #606060
+pgmTextColorInactive    #bcc7cb
 pgmBackColorInactive    #f0f0f0
 
 navBarSeparator         #bcc7cb

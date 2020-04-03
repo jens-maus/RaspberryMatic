@@ -13,7 +13,7 @@ STARTWAITFILE=/var/status/HMServerStarted
 [[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
 HM_SERVER=/opt/HMServer/HMIPServer.jar
-HM_SERVER_ARGS="/var/etc/crRFD.conf /etc/HMServer.conf"
+HM_SERVER_ARGS="/var/etc/crRFD.conf /var/etc/HMServer.conf"
 HM_SERVER_DEVNODE=/dev/mmd_hmip
 PIDFILE=/var/run/HMIPServer.pid
 
@@ -31,6 +31,10 @@ init() {
     fi
   fi
 
+  # lets build HMServer.conf with own diagram path
+  sed "s|^diagramDatabasePath=.*$|diagramDatabasePath=/tmp/measurement|" /etc/HMServer.conf >/var/etc/HMServer.conf
+  mkdir -p /tmp/measurement
+
   if [[ -n "${HM_HMIP_DEV}" ]]; then
 
     # if no uart is used to connect to the rf module (e.g. HmIP-RFUSB)
@@ -47,7 +51,7 @@ init() {
 
   else
     HM_SERVER=/opt/HMServer/HMServer.jar
-    HM_SERVER_ARGS="/etc/HMServer.conf"
+    HM_SERVER_ARGS="/var/etc/HMServer.conf"
     HM_SERVER_DEVNODE=""
   fi
 
@@ -91,6 +95,13 @@ stop() {
   rm -f ${STARTWAITFILE}
   start-stop-daemon -K -q -p ${PIDFILE}
   rm -f ${PIDFILE}
+
+  # copy over the diagram measurement data from /tmp/measurement to a
+  # connected usb stick, if present
+  if [[ -d /media/usb0/measurement ]]; then
+    /usr/bin/rsync -aogX --delete-after --no-whole-file --checksum /tmp/measurement/ /media/usb0/measurement/
+  fi
+
   echo "OK"
 }
 

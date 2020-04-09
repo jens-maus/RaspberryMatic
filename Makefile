@@ -6,6 +6,7 @@ DATE=$(shell date +%Y%m%d)
 PRODUCT=
 PRODUCT_VERSION=${OCCU_VERSION}.${DATE}
 PRODUCTS:=$(sort $(notdir $(patsubst %_defconfig,%,$(wildcard $(DEFCONFIG_DIR)/*_defconfig))))
+BR2_DL_DIR="../download"
 
 ifneq ($(PRODUCT),)
 	PRODUCTS:=$(PRODUCT)

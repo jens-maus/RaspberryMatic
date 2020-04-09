@@ -13,15 +13,23 @@ test -x $DAEMON || exit 0
 
 case $1 in
   start)
-    echo -n "Starting FanShim daemon: "
+    echo -n "Starting Fan SHIM daemon: "
 
-    # now start the daemon
-    start-stop-daemon --start --background --pidfile ${PIDFILE} --make-pidfile --quiet --exec ${DAEMON}
-    [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+    # source all data from /var/hm_mode
+    [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+    if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
+       [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
+      echo "ERROR: parallel use of Fan SHIM + HM-MOD-RPI-PCB not possible!"
+    else
+      # now start the daemon
+      start-stop-daemon --start --background --pidfile ${PIDFILE} --make-pidfile --quiet --exec ${DAEMON}
+      [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+    fi
   ;;
 
   stop)
-    echo -n "Stopping FanShim daemon: "
+    echo -n "Stopping Fan SHIM daemon: "
     if [[ -f ${PIDFILE} ]]; then
       start-stop-daemon --stop --quiet --pidfile ${PIDFILE}
       [[ $? = 0 ]] && echo "OK" || echo "FAIL"

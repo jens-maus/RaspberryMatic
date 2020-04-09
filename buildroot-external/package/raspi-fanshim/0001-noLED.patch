@@ -1,0 +1,34 @@
+--- a/src/Fanshim.c.orig	2019-10-02 15:23:32.000000000 +0200
++++ a/src/Fanshim.c	2020-04-09 22:39:49.644290789 +0200
+@@ -32,7 +32,7 @@
+ /* Statics                                                                                        */
+ /* ============================================================================================== */
+ 
+-static RaspiAPA102Device G_FANSHIM_LED;
++//static RaspiAPA102Device G_FANSHIM_LED;
+ 
+ /* ============================================================================================== */
+ /* Constants                                                                                      */
+@@ -55,8 +55,8 @@
+     wiringPiSetupGpio();
+     pinMode(RASPI_FANSHIM_PIN_FAN, OUTPUT);
+ 
+-    RaspiAPA102DeviceInitSoftware(&G_FANSHIM_LED, RASPI_FANSHIM_PIN_SPI_SCLK, 
+-        RASPI_FANSHIM_PIN_SPI_MOSI, -1);
++    //RaspiAPA102DeviceInitSoftware(&G_FANSHIM_LED, RASPI_FANSHIM_PIN_SPI_SCLK, 
++    //    RASPI_FANSHIM_PIN_SPI_MOSI, -1);
+ }
+ 
+ /* ---------------------------------------------------------------------------------------------- */
+@@ -86,9 +86,9 @@
+ 
+ void RaspiFanshimUpdateLED(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
+ {
+-    const RaspiAPA102ColorQuad color = RASPI_APA102_COLOR_QUAD_INITIALIZER(r, g, b, brightness);
++    //const RaspiAPA102ColorQuad color = RASPI_APA102_COLOR_QUAD_INITIALIZER(r, g, b, brightness);
+ 
+-    RaspiAPA102DeviceUpdate(&G_FANSHIM_LED, &color, 1);
++    //RaspiAPA102DeviceUpdate(&G_FANSHIM_LED, &color, 1);
+ }
+ 
+ /* ---------------------------------------------------------------------------------------------- */

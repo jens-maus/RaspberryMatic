@@ -1,5 +1,9 @@
 ## Changelog
 
+**2.1.3** — <small> January 8, 2020 </small> — [Diff](https://github.com/archiverjs/node-zip-stream/compare/2.1.0...2.1.3)
+
+- allow zip64 for no compression (#40)
+
 **2.1.2** — <small> August 2, 2019 </small> — [Diff](https://github.com/archiverjs/node-zip-stream/compare/2.1.0...2.1.2)
 
 - update compress-commons to v2.1.1

@@ -38,7 +38,7 @@ var ZipStream = module.exports = function(options) {
     delete options.level;
   }
 
-  if (typeof options.zlib.level === 'number' && options.zlib.level === 0) {
+  if (!options.forceZip64 && typeof options.zlib.level === 'number' && options.zlib.level === 0) {
     options.store = true;
   }
 

@@ -6,6 +6,12 @@
     "cn-*/*": {
       "endpoint": "{service}.{region}.amazonaws.com.cn"
     },
+    "us-iso-*/*": {
+      "endpoint": "{service}.{region}.c2s.ic.gov"
+    },
+    "us-isob-*/*": {
+      "endpoint": "{service}.{region}.sc2s.sgov.gov"
+    },
     "*/budgets": "globalSSL",
     "*/cloudfront": "globalSSL",
     "*/iam": "globalSSL",

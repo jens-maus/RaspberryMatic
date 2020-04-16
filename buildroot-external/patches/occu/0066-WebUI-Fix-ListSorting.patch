@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -11285,8 +11285,7 @@
+@@ -11285,13 +11285,12 @@
        addressFilter    : this.AddressFilter,
        roomFilter       : this.RoomFilter,
        funcFilter       : this.FuncFilter,
@@ -9,8 +9,32 @@
 +      channels         : this.sort(this.filter(this.channels))
      });
  
-     if (! userIsNoExpert) {
-@@ -38121,7 +38120,7 @@
+-    if (! userIsNoExpert) {
++    //if (! userIsNoExpert) {
+       jQuery(".j_expertChannel").show();
+-    }
++    //}
+ 
+     translateJSTemplate("#ChannelChooserDialog");
+     translatePage(".j_rooms, .j_functions");
+@@ -11602,13 +11601,12 @@
+       addressFilter    : this.AddressFilter,
+       roomFilter       : this.RoomFilter,
+       funcFilter       : this.FuncFilter,
+-      //channels         : this.sort(this.filter(this.channels))
+-      channels         : this.filter(this.channels)
++      channels         : this.sort(this.filter(this.channels))
+     });
+ 
+-    if (! userIsNoExpert) {
++    //if (! userIsNoExpert) {
+       jQuery(".j_expertChannel").show();
+-    }
++    //}
+ 
+     translateJSTemplate("#MultiChannelChooserDialog");
+     translatePage(".MultiChannelChooserRow");
+@@ -38121,7 +38119,7 @@
      valueMap[value].push(tr_list[i]); //Liste gleicher values nimmt Zeile auf
    }
  

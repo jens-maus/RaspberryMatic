@@ -29,7 +29,7 @@ case $1 in
           HCIATTACH_OPT="-s 115200 ${DEVICE} rtk_h5"
         else
           HCIATTACH=/usr/bin/hciattach
-          HCIATTACH_OPT="${DEVICE} bcm43xx 921600 noflow -"
+          HCIATTACH_OPT="${DEVICE} bcm43xx 460800 noflow -"
         fi
 
         # first call will flash the firmware

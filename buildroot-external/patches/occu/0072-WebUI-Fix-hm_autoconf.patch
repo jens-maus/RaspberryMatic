@@ -1,0 +1,13 @@
+--- occu/WebUI/bin/hm_autoconf.orig
++++ occu/WebUI/bin/hm_autoconf
+@@ -499,7 +499,9 @@
+         string ifaces;
+         foreach(if_id, dom.GetObject(ID_INTERFACES).EnumUsedIDs()){
+             object o=dom.GetObject(if_id);
+-            ifaces = ifaces # if_id # " {" # o.InterfaceUrl() # " " # o.Name() # "} ";
++            if(o.InterfaceUrl() != "") {
++                ifaces = ifaces # if_id # " {" # o.InterfaceUrl() # " " # o.Name() # "} ";
++            }
+         }
+         string dev_id;
+         string devs;

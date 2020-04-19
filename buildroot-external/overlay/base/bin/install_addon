@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # simple install_addon script that will install CCU addons
 # and return either codes >= 10 to signal errors or lower

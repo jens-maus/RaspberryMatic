@@ -13,7 +13,7 @@ start()
 {
 	printf "Starting ${NAME}: "
 	if ! head -c 1 /dev/hwrng >/dev/null 2>&1; then
-		DAEMON_ARGS="-r /dev/urandom"
+		DAEMON_ARGS="${DAEMON_ARGS} -r /dev/urandom"
 	fi
 	start-stop-daemon -S -q -x "${DAEMON}" -- ${DAEMON_ARGS}
 	[ $? = 0 ] && echo "OK" || echo "FAIL"

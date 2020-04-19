@@ -33,7 +33,15 @@ init() {
 
   # lets build HMServer.conf with own diagram path
   sed "s|^diagramDatabasePath=.*$|diagramDatabasePath=/tmp/measurement|" /etc/HMServer.conf >/var/etc/HMServer.conf
-  mkdir -p /tmp/measurement
+
+  # copy over the diagram measurement data from /media/usb0/measurement to
+  # /tmp/measurement so that we have the rrd data to start with
+  if [[ -d /media/usb0/measurement ]]; then
+    rm -rf /tmp/measurement
+    cp -a /media/usb0/measurement /tmp/
+  else
+    mkdir -p /tmp/measurement
+  fi
 
   if [[ -n "${HM_HMIP_DEV}" ]]; then
 

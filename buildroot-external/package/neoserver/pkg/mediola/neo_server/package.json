@@ -35,6 +35,6 @@
         "suncalc": "*",
         "unorm": "*",
         "winreg": "1.2.2",
-        "node-localstorage": "*"
+        "node-localstorage": "2.1.6"
     }
 }

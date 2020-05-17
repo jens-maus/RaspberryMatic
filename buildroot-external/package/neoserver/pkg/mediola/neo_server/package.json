@@ -34,7 +34,7 @@
         "node-dir": "*",
         "suncalc": "*",
         "unorm": "*",
-        "winreg": "1.2.2",
+        "winreg": "1.2.4",
         "node-localstorage": "*"
     }
 }

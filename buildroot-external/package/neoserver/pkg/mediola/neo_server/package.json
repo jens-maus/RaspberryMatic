@@ -23,7 +23,7 @@
         "archiver": "*",
         "async": "*",
         "aws-sdk": "*",
-        "big-integer": "1.3.18",
+        "big-integer": "1.6.48",
         "body-parser": "*",
         "cron": "*",
         "express": "*",

@@ -1,78 +1,90 @@
 #!/bin/sh
 export NODE_PATH=/usr/lib/node_modules
-HOMEPATH=/usr/local/addons/mediola/neo_server/
+ADDONDIR=/usr/local/addons/mediola
+ADDONNAME=neo_server
+CONFIGDIR=/usr/local/etc/config
+HOMEPATH=$ADDONDIR/neo_server/
 DAEMON=node
 DAEMON_ARGS=${HOMEPATH}/automation.js
 PIDFILE=/var/run/neo_server.pid
 
-ADDONNAME=neo_server
-CONFIGDIR=/usr/local/etc/config
-ADDONDIR=/usr/local/addons/mediola
 
+log() {
+  local now=$(date) 
+  echo "[$now] $CONFIGDIR/rc.d/97NeoServer $@"
+  echo "[$now] $CONFIGDIR/rc.d/97NeoServer $@" >> /var/log/neo_server_boot.log 
+}
+
+if [ "$(cat /usr/local/crontabs/root | grep $ADDONDIR/bin/watchdog)" == "" ] ;then
+  echo "*/5 * * * * $ADDONDIR/bin/watchdog" >> /usr/local/crontabs/root
+fi
+  
 # change to addon directory
 cd ${HOMEPATH}
 
 do_start()
 {
-	start-stop-daemon --start --quiet --make-pidfile --background --nicelevel -10 --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
+  log "starting neo_server ..."
+  start-stop-daemon --start --quiet --make-pidfile --background --nicelevel -10 --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
+  sleep 1
+  if [ -f "$PIDFILE" ]; then
+    PID=$(cat $PIDFILE)
+    log "neo_server started (pid=$PID)"
+  else
+    log "neo_server started failed"
+  fi	
 }
 
 do_stop()
 {
+  log "stopping neo server ..."
 	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE
-	if [ -e $PIDFILE ];then
+	if [ -f "$PIDFILE" ]; then
 		rm $PIDFILE
 	fi		
+  log "neo_server stopped"
 }
 
 case "$1" in
   ""|start)
-	if [ -e /usr/local/addons/mediola/Disabled ];then
-		echo "Neo Disabled"
-	else
+    log "start"
+	  if [ -f $ADDONDIR/Disabled ];then
+		  log "neo server disabled"
+	  else
    		do_start
-   		echo "OK"
-	fi
+	  fi
     ;;
-
   info)
-    VER=$(cat ${ADDONDIR}/VERSION)
-    echo "Version: ${VER}"
-    echo "Info: <b>mediola NEO SERVER CCU Addon</b><br>"
-    echo "Info: Copyright (c) 2014-2018 mediola connected living AG<br>"
-    echo "Info: <a href='http://www.mediola.com'>mediola connected living AG</a>"
-    echo "Name: NEO SERVER"
-    echo "Operations: uninstall restart"
-    echo "Config-Url: /addons/mediola/index.html"
-    echo "Update: /addons/mediola/update-check.cgi"
+    if [ -d $ADDONDIR ]; then
+      VER=$(cat $ADDONDIR/VERSION)
+      echo "Version: $VER"
+      echo "Info: <b>mediola NEO SERVER CCU Addon</b><br>"
+      echo "Info: Copyright (c) 2014-2020 mediola connected living AG<br>"
+      echo "Info: <a href='http://www.mediola.com'>mediola connected living AG</a>"
+      echo "Name: NEO SERVER"
+      echo "Operations: uninstall restart"
+      echo "Config-Url: /addons/mediola/index.html"
+      echo "Update: /addons/mediola/update-check.cgi"
+    fi
     ;;
-
   stop)
- 	echo -n "Stopping neo_server: "
-	do_stop
-	echo "OK"
+	  do_stop
     ;;
-    
   restart)
 		do_stop
+    sleep 1
 		do_start
-    ;;
-    
+    ;;  
   uninstall)
-	do_stop
-	touch /etc/config/neoDisabled
-	${ADDONDIR}/update_addon mediola
-    rm -rf ${ADDONDIR}
-    rm -rf ${CONFIGDIR}/addons/mediola
-    rm -rf ${CONFIGDIR}/addons/www/mediola
-    rm /etc/config/rc.d/97NeoServer 
-    echo "OK"
+    do_stop
+    rm -rf $ADDONDIR
+    rm -rf $CONFIGDIR/addons/mediola
+    rm -rf $CONFIGDIR/addons/www/mediola
+    rm -f $CONFIGDIR/rc.d/97NeoServer
     ;;
-
   *)
-    	echo "usage:"
-    	echo "  ${ADDONNAME} [info|start|stop|restart|uninstall]"
-	exit 1
+    echo "usage: $ADDONNAME [info|start|stop|restart|uninstall]"
+	  exit 1
     ;;
 esac
 

@@ -12,6 +12,7 @@ patchdirs=$(find buildroot/ -maxdepth 2 -type d | sort)
 
 COUNTER=1
 for dir in ${patchdirs} buildroot/toolchain; do
+  [[ ! -d "${dir}" ]] && continue
   package=$(basename ${dir})
   [[ "${package}" == "package" ]] && continue
   [[ "${package}" == "buildroot" ]] && continue

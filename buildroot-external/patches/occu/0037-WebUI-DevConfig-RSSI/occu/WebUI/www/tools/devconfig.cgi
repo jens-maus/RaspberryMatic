@@ -371,7 +371,9 @@ proc cmd_show_rssi {} {
                               set rssi_peer 65536
                               catch { set rssi_device [xmlrpc $url getValue "$dev_descr(ADDRESS):0" "RSSI_DEVICE"] }
                               catch { set rssi_peer [xmlrpc $url getValue "$dev_descr(ADDRESS):0" "RSSI_PEER"] }
-                              set rssi_list "\"$devnames($dev_descr(ADDRESS)) $dev_descr(ADDRESS)\" { $dev_descr(ADDRESS) { $rssi_device $rssi_peer }} $rssi_list"
+                              set name ""
+                              catch { set name $devnames($dev_descr(ADDRESS)) }
+                              set rssi_list "\"$name $dev_descr(ADDRESS)\" { $dev_descr(ADDRESS) { $rssi_device $rssi_peer }} $rssi_list"
                             }
                           }
                         } else { continue }

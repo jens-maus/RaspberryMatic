@@ -1,6 +1,6 @@
 --- occu/WebUI/www/tools/devconfig.cgi.orig
 +++ occu/WebUI/www/tools/devconfig.cgi
-@@ -357,7 +357,26 @@
+@@ -357,7 +357,28 @@
                            xmlrpc $url system.methodHelp rssiInfo
                        } ] } { continue }
                        array_clear rssi_map
@@ -19,7 +19,9 @@
 +                              set rssi_peer 65536
 +                              catch { set rssi_device [xmlrpc $url getValue "$dev_descr(ADDRESS):0" "RSSI_DEVICE"] }
 +                              catch { set rssi_peer [xmlrpc $url getValue "$dev_descr(ADDRESS):0" "RSSI_PEER"] }
-+                              set rssi_list "\"$devnames($dev_descr(ADDRESS)) $dev_descr(ADDRESS)\" { $dev_descr(ADDRESS) { $rssi_device $rssi_peer }} $rssi_list"
++                              set name ""
++                              catch { set name $devnames($dev_descr(ADDRESS)) }
++                              set rssi_list "\"$name $dev_descr(ADDRESS)\" { $dev_descr(ADDRESS) { $rssi_device $rssi_peer }} $rssi_list"
 +                            }
 +                          }
 +                        } else { continue }
@@ -28,7 +30,7 @@
                        array set rssi_map $rssi_list
                        foreach dev [lsort [array names rssi_map]] {
                            puts ""
-@@ -522,7 +541,7 @@
+@@ -522,7 +543,7 @@
      set green [rssi_color $RSSI_BAD $RSSI_MEDIUM $rssi]
      set color [format "#%02X%02X00" $red $green]
      table_data "bgcolor=\"$color\"" {

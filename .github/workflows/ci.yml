@@ -75,7 +75,7 @@ jobs:
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
         asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip
         asset_content_type: application/zip
-        max_releases: 5
+        max_releases: 1
 
     - name: upload nightly build checksum
       if: github.event_name == 'schedule'
@@ -88,7 +88,7 @@ jobs:
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
         asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip.sha256
         asset_content_type: text/plain
-        max_releases: 5
+        max_releases: 1
 
     - name: prepare artifact upload
       run: |

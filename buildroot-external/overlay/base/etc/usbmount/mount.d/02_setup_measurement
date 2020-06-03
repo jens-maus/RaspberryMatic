@@ -1,5 +1,5 @@
 #!/bin/sh
-mountpoint -q ${UM_MOUNTPOINT}
+/bin/mountpoint -q ${UM_MOUNTPOINT}
 if [ $? -eq 0 ]; then
   if [ ! -L /media/usb0 ]; then
     RET=0
@@ -26,6 +26,11 @@ if [ $? -eq 0 ]; then
         fi
       fi
     fi
+
+    # copy all diagram data from the usb stick to the
+    # /tmp/measurement path where HMIPServer will store its data
+    rm -rf /tmp/measurement
+    cp -a ${UM_MOUNTPOINT}/measurement /tmp/
 
     if [ ${RET} -eq 1 ]; then
       touch "/var/status/USBinitialised"

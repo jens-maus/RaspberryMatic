@@ -1,6 +1,10 @@
 --- psplash/psplash-poky-img.h.orig
 +++ psplash/psplash-poky-img.h
-@@ -1,1021 +1,1055 @@
+@@ -1,1026 +1,1055 @@
+-/*
+- *  SPDX-License-Identifier: GPL-2.0-or-later
+- */
+-
  /* GdkPixbuf RGBA C-Source image dump 1-byte-run-length-encoded */
  
 -#define POKY_IMG_ROWSTRIDE (1708)
@@ -2070,5 +2074,5 @@
 +  "\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377" \
 +  "\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0" \
 +  "\377\0\0\0\0\377\0\0\0\0\225\0\0\0\0")
-+
+ 
  

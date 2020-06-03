@@ -1,6 +1,6 @@
 {
     "name": "neo_server",
-    "version": "2.4.8",
+    "version": "2.5.2",
     "main": "index.html",
     "config": {
         "WEB_SERVER_PORT": 8088,
@@ -27,7 +27,7 @@
         "body-parser": "*",
         "cron": "*",
         "express": "*",
-        "fs-extra": "*",
+        "fs-extra": "8.1.0",
         "loop-protect": "*",
         "md5": "*",
         "moment-timezone": "*",

@@ -27,10 +27,12 @@ menu "Software Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/daemonize/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/ssdpd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/eq3configd/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/wiringpi-rpi/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/wiringpi-tinker/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/neoserver/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/rndaddtoentcnt/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/qemu-guest-agent/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/raspi-fanshim/Config.in"
 endmenu
 
 menu "Java Runtime Environment"

@@ -11288,9 +11288,9 @@ ChannelChooser = Singleton.create({
       channels         : this.sort(this.filter(this.channels))
     });
 
-    if (! userIsNoExpert) {
+    //if (! userIsNoExpert) {
       jQuery(".j_expertChannel").show();
-    }
+    //}
 
     translateJSTemplate("#ChannelChooserDialog");
     translatePage(".j_rooms, .j_functions");
@@ -11601,13 +11601,12 @@ MultiChannelChooser = Singleton.create({
       addressFilter    : this.AddressFilter,
       roomFilter       : this.RoomFilter,
       funcFilter       : this.FuncFilter,
-      //channels         : this.sort(this.filter(this.channels))
-      channels         : this.filter(this.channels)
+      channels         : this.sort(this.filter(this.channels))
     });
 
-    if (! userIsNoExpert) {
+    //if (! userIsNoExpert) {
       jQuery(".j_expertChannel").show();
-    }
+    //}
 
     translateJSTemplate("#MultiChannelChooserDialog");
     translatePage(".MultiChannelChooserRow");

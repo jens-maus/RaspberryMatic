@@ -1,6 +1,6 @@
 config BR2_PACKAGE_RASPI_FANSHIM
   bool "raspi-fanshim"
-  depends on BR2_PACKAGE_WIRINGPI
+  depends on BR2_PACKAGE_WIRINGPI_RPI
   help
     Lightwight library to control the pimoroni Fan SHIM device on a Raspberry Pi
 

@@ -1,6 +1,6 @@
---- ./kernel/Makefile.orig	2019-07-04 13:54:53.271472462 +0200
-+++ ./kernel/Makefile	2019-11-03 14:58:07.739951219 +0100
-@@ -1,27 +1,13 @@
+--- ./kernel/Makefile.orig	2020-06-05 13:06:06.868091168 +0200
++++ ./kernel/Makefile	2020-06-05 13:07:43.213915660 +0200
+@@ -1,28 +1,14 @@
 -obj-m += eq3_char_loop.o
 -obj-m += plat_eq3ccu2.o
  obj-m += generic_raw_uart.o
@@ -14,12 +14,12 @@
  obj-m += meson_raw_uart.o
 -obj-m += fake_hmrf.o
 +endif
-+obj-m += hb_rf_usb.o
  obj-m += rpi_rf_mod_led.o
  obj-m += dummy_rx8130.o
 -obj-m += led_trigger_timer.o
--obj-m += hb_rf_usb.o
+ obj-m += hb_rf_usb.o
 -obj-m += rtc-rx8130.o
+ obj-m += hb_rf_usb-2.o
 -
 -ifeq ($(KERNELRELEASE),)
 -  KERNELRELEASE := $(shell uname -r)

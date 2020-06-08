@@ -90,12 +90,11 @@
     </tr>
     <tr>
     <td></td>
-    <td colspan="2">
+    <td colspan="3">
       <input type="radio" name="timespan" id="tsDay" />${timeModuleLblAllDay}<br />
-      <input type="radio" name="timespan" id="tsDaytime" />${timeModuleLblAstroDay}, Offset: <input type="text" id="tsDaytimeOffset" size="3" />&nbsp;s, Duration: <input type="text" id="tsDaytimeDuration" size="3" />&nbsp;s<br />
-      <input type="radio" name="timespan" id="tsNighttime" />${timeModuleLblAstroNight}, Offset: <input type="text" id="tsNighttimeOffset" size="3" />&nbsp;s, Duration: <input type="text" id="tsNighttimeDuration" size="3" />&nbsp;s
+      <input type="radio" name="timespan" id="tsDaytime" />${timeModuleLblAstroDay}, Offset: <input type="text" id="tsDaytimeOffset" size="3" />&nbsp;min, Duration: <input type="text" id="tsDaytimeDuration" size="3" />&nbsp;min<br />
+      <input type="radio" name="timespan" id="tsNighttime" />${timeModuleLblAstroNight}, Offset: <input type="text" id="tsNighttimeOffset" size="3" />&nbsp;min, Duration: <input type="text" id="tsNighttimeDuration" size="3" />&nbsp;min
     </td>
-    <td></td>
     </tr>
     
     <tr class="CLASS05107">
@@ -640,6 +639,8 @@
         if(isNaN(tm.caldur) || tm.caldur < 0) {
           tm.caldur = 0;
         }
+        tm.time *= 60
+        tm.caldur *= 60
       }
       else if ($("tsNighttime").checked) {
         tm.time = parseInt($("tsNighttimeOffset").value,10);
@@ -656,6 +657,8 @@
         if(isNaN(tm.caldur) || tm.caldur < 0) {
           tm.caldur = 0;
         }
+        tm.time *= 60
+        tm.caldur *= 60
       }
     }
     if( $("tmPoint").checked )
@@ -1019,27 +1022,27 @@
       elseif (tmObj.SunOffsetType() == sotSunrise) {
         WriteLine("$('tsDaytime').checked = true;");
         WriteLine("$('tsDaytimeOffset').value = '';");
-        WriteLine("$('tsDaytimeDuration').value = '"#tmObj.CalDuration()#"';");
+        WriteLine("$('tsDaytimeDuration').value = '"#(tmObj.CalDuration()/60)#"';");
       } elseif (tmObj.SunOffsetType() == sotBeforeSunrise) {
         WriteLine("$('tsDaytime').checked = true;");
-        WriteLine("$('tsDaytimeOffset').value = '-"#tmObj.TimeSeconds()#"';");
-        WriteLine("$('tsDaytimeDuration').value = '"#tmObj.CalDuration()#"';");
+        WriteLine("$('tsDaytimeOffset').value = '-"#(tmObj.TimeSeconds()/60)#"';");
+        WriteLine("$('tsDaytimeDuration').value = '"#(tmObj.CalDuration()/60)#"';");
       } elseif (tmObj.SunOffsetType() == sotAfterSunrise) {
         WriteLine("$('tsDaytime').checked = true;");
-        WriteLine("$('tsDaytimeOffset').value = '"#tmObj.TimeSeconds()#"';");
-        WriteLine("$('tsDaytimeDuration').value = '"#tmObj.CalDuration()#"';");
+        WriteLine("$('tsDaytimeOffset').value = '"#(tmObj.TimeSeconds()/60)#"';");
+        WriteLine("$('tsDaytimeDuration').value = '"#(tmObj.CalDuration()/60)#"';");
       } elseif (tmObj.SunOffsetType() == sotSunset) {
         WriteLine("$('tsNighttime').checked = true;");
         WriteLine("$('tsNighttimeOffset').value = '';");
-        WriteLine("$('tsNighttimeDuration').value = '"#tmObj.CalDuration()#"';");
+        WriteLine("$('tsNighttimeDuration').value = '"#(tmObj.CalDuration()/60)#"';");
       } elseif (tmObj.SunOffsetType() == sotBeforeSunset) {
         WriteLine("$('tsNighttime').checked = true;");
-        WriteLine("$('tsNighttimeOffset').value = '-"#tmObj.TimeSeconds()#"';");
-        WriteLine("$('tsNighttimeDuration').value = '"#tmObj.CalDuration()#"';");
+        WriteLine("$('tsNighttimeOffset').value = '-"#(tmObj.TimeSeconds()/60)#"';");
+        WriteLine("$('tsNighttimeDuration').value = '"#(tmObj.CalDuration()/60)#"';");
       } elseif (tmObj.SunOffsetType() == sotAfterSunset) {
         WriteLine("$('tsNighttime').checked = true;");
-        WriteLine("$('tsNighttimeOffset').value = '"#tmObj.TimeSeconds()#"';");
-        WriteLine("$('tsNighttimeDuration').value = '"#tmObj.CalDuration()#"';");
+        WriteLine("$('tsNighttimeOffset').value = '"#(tmObj.TimeSeconds()/60)#"';");
+        WriteLine("$('tsNighttimeDuration').value = '"#(tmObj.CalDuration()/60)#"';");
       }
     
       string sCalRep = tmObj.CalRepeatTime();  

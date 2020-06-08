@@ -38,18 +38,23 @@
        sTm = sTm # " ${ruleConditionLblTimeClock} ";
 --- occu/WebUI/www/rega/pages/tabs/admin/msg/timemodule.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/msg/timemodule.htm
-@@ -92,8 +92,8 @@
+@@ -90,12 +90,11 @@
+     </tr>
+     <tr>
      <td></td>
-     <td colspan="2">
+-    <td colspan="2">
++    <td colspan="3">
        <input type="radio" name="timespan" id="tsDay" />${timeModuleLblAllDay}<br />
 -      <input type="radio" name="timespan" id="tsDaytime" />${timeModuleLblAstroDay}<br />
 -      <input type="radio" name="timespan" id="tsNighttime" />${timeModuleLblAstroNight}
-+      <input type="radio" name="timespan" id="tsDaytime" />${timeModuleLblAstroDay}, Offset: <input type="text" id="tsDaytimeOffset" size="3" />&nbsp;s, Duration: <input type="text" id="tsDaytimeDuration" size="3" />&nbsp;s<br />
-+      <input type="radio" name="timespan" id="tsNighttime" />${timeModuleLblAstroNight}, Offset: <input type="text" id="tsNighttimeOffset" size="3" />&nbsp;s, Duration: <input type="text" id="tsNighttimeDuration" size="3" />&nbsp;s
++      <input type="radio" name="timespan" id="tsDaytime" />${timeModuleLblAstroDay}, Offset: <input type="text" id="tsDaytimeOffset" size="3" />&nbsp;min, Duration: <input type="text" id="tsDaytimeDuration" size="3" />&nbsp;min<br />
++      <input type="radio" name="timespan" id="tsNighttime" />${timeModuleLblAstroNight}, Offset: <input type="text" id="tsNighttimeOffset" size="3" />&nbsp;min, Duration: <input type="text" id="tsNighttimeDuration" size="3" />&nbsp;min
      </td>
-     <td></td>
+-    <td></td>
      </tr>
-@@ -538,8 +538,8 @@
+     
+     <tr class="CLASS05107">
+@@ -538,8 +537,8 @@
      tm.begin    = "";
      tm.calcount = 0;
      tm.end      = "0";
@@ -60,7 +65,7 @@
      if( $("tmRange").checked )
      {
        if( $("tsRange").checked )
-@@ -624,12 +624,38 @@
+@@ -624,12 +623,42 @@
            tm.caldur = secEnd - secStart;
          }
        }
@@ -86,6 +91,8 @@
 +        if(isNaN(tm.caldur) || tm.caldur < 0) {
 +          tm.caldur = 0;
 +        }
++        tm.time *= 60
++        tm.caldur *= 60
 +      }
 +      else if ($("tsNighttime").checked) {
 +        tm.time = parseInt($("tsNighttimeOffset").value,10);
@@ -102,10 +109,12 @@
 +        if(isNaN(tm.caldur) || tm.caldur < 0) {
 +          tm.caldur = 0;
 +        }
++        tm.time *= 60
++        tm.caldur *= 60
        }
      }
      if( $("tmPoint").checked )
-@@ -959,7 +985,11 @@
+@@ -959,7 +988,11 @@
      $("btnRangeEnd").disabled = bDisabled;
      $("tsDay").disabled = bDisabled;
      $("tsDaytime").disabled = bDisabled;
@@ -117,7 +126,7 @@
      $("timebegin").disabled = !bDisabled;
      $("btntimebegin").disabled = !bDisabled;
    };
-@@ -986,13 +1016,30 @@
+@@ -986,13 +1019,30 @@
            }
          }
        }
@@ -131,27 +140,27 @@
 +      elseif (tmObj.SunOffsetType() == sotSunrise) {
 +        WriteLine("$('tsDaytime').checked = true;");
 +        WriteLine("$('tsDaytimeOffset').value = '';");
-+        WriteLine("$('tsDaytimeDuration').value = '"#tmObj.CalDuration()#"';");
++        WriteLine("$('tsDaytimeDuration').value = '"#(tmObj.CalDuration()/60)#"';");
 +      } elseif (tmObj.SunOffsetType() == sotBeforeSunrise) {
 +        WriteLine("$('tsDaytime').checked = true;");
-+        WriteLine("$('tsDaytimeOffset').value = '-"#tmObj.TimeSeconds()#"';");
-+        WriteLine("$('tsDaytimeDuration').value = '"#tmObj.CalDuration()#"';");
++        WriteLine("$('tsDaytimeOffset').value = '-"#(tmObj.TimeSeconds()/60)#"';");
++        WriteLine("$('tsDaytimeDuration').value = '"#(tmObj.CalDuration()/60)#"';");
 +      } elseif (tmObj.SunOffsetType() == sotAfterSunrise) {
 +        WriteLine("$('tsDaytime').checked = true;");
-+        WriteLine("$('tsDaytimeOffset').value = '"#tmObj.TimeSeconds()#"';");
-+        WriteLine("$('tsDaytimeDuration').value = '"#tmObj.CalDuration()#"';");
++        WriteLine("$('tsDaytimeOffset').value = '"#(tmObj.TimeSeconds()/60)#"';");
++        WriteLine("$('tsDaytimeDuration').value = '"#(tmObj.CalDuration()/60)#"';");
 +      } elseif (tmObj.SunOffsetType() == sotSunset) {
 +        WriteLine("$('tsNighttime').checked = true;");
 +        WriteLine("$('tsNighttimeOffset').value = '';");
-+        WriteLine("$('tsNighttimeDuration').value = '"#tmObj.CalDuration()#"';");
++        WriteLine("$('tsNighttimeDuration').value = '"#(tmObj.CalDuration()/60)#"';");
 +      } elseif (tmObj.SunOffsetType() == sotBeforeSunset) {
 +        WriteLine("$('tsNighttime').checked = true;");
-+        WriteLine("$('tsNighttimeOffset').value = '-"#tmObj.TimeSeconds()#"';");
-+        WriteLine("$('tsNighttimeDuration').value = '"#tmObj.CalDuration()#"';");
++        WriteLine("$('tsNighttimeOffset').value = '-"#(tmObj.TimeSeconds()/60)#"';");
++        WriteLine("$('tsNighttimeDuration').value = '"#(tmObj.CalDuration()/60)#"';");
 +      } elseif (tmObj.SunOffsetType() == sotAfterSunset) {
 +        WriteLine("$('tsNighttime').checked = true;");
-+        WriteLine("$('tsNighttimeOffset').value = '"#tmObj.TimeSeconds()#"';");
-+        WriteLine("$('tsNighttimeDuration').value = '"#tmObj.CalDuration()#"';");
++        WriteLine("$('tsNighttimeOffset').value = '"#(tmObj.TimeSeconds()/60)#"';");
++        WriteLine("$('tsNighttimeDuration').value = '"#(tmObj.CalDuration()/60)#"';");
        }
      
        string sCalRep = tmObj.CalRepeatTime();  

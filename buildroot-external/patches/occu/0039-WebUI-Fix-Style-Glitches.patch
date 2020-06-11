@@ -126,8 +126,22 @@
  <tr>
 --- occu/WebUI/www/rega/pages/tabs/statusviews/serviceMessages.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/statusviews/serviceMessages.htm
-@@ -71,21 +71,21 @@
+@@ -69,23 +69,35 @@
+   Cursor.set(Cursor.NORMAL);
+ </script>
  <table id="tblServices" class="filterTable tTable CLASS02601" border="0" cellpadding="0" cellspacing="0" style="display:none;">
++<colgroup>
++  <col width="auto">
++  <col width="auto">
++  <col width="auto">
++  <col width="55px">
++  <col width="auto">
++  <col width="auto">
++  <col width="auto">
++  <col width="auto">
++  <col width="auto">
++  <col width="100px">
++</colgroup>
  <tr>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="first"){sCssName="SortSelected";} %>
 -  <th class="CLASS02602"><div id="_first" class="_pt11 <%Write(sCssName);%>" style="height:auto;" onclick="IseSort(arServices,'first',true);">${thFirstMessageDateTime}</div></th>
@@ -158,15 +172,22 @@
  </tr>
  <tr id="trFlt">
    <td align="center" valign="middle" class="CLASS02603"></td>
-@@ -289,7 +289,7 @@
+@@ -289,13 +301,13 @@
              Write( '<td align="center" valign="middle" class="CLASS02605">'#sFirstTimestamp#'</td>' );
              Write( '<td id="sla'#sAID#'" align="center" valign="middle" class="CLASS02605">'#sLastTimestamp#'</td>' );
              Write( '<td id="n'#oAlarm.ID()#'" align="center" valign="middle" class="CLASS02606">'#sAlarmName#'</td>' );
 -            Write( '<td align="center" valign="top" class="CLASS02607">');
-+            Write( '<td align="center" valign="top" class="DeviceListThumbnail">');
++            Write( '<td class="DeviceListThumbnail">');
              if (oLastTriggerChannel)
              {
                object devId = oLastTriggerChannel.Device();
+               object dev = dom.GetObject(devId);
+               string sPicDivId = "picDiv"#oAlarm.ID();
+-              Write("<div id='"#sPicDivId#"' class='CLASS02608'");
++              Write("<div id='"#sPicDivId#"' class='thumbnail'");
+               Write(" onmouseover='picDivShow(jg_250, \""#dev.Label()#"\", 250, -1, this);'");
+               Write(" onmouseout='picDivHide(jg_250);'");
+               Write("></div>");
 --- occu/WebUI/www/rega/pages/tabs/user/favOverview.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/user/favOverview.htm
 @@ -76,17 +76,17 @@
@@ -263,7 +284,7 @@
  }
  
  .CLASS02603 {
-@@ -5409,14 +5413,6 @@
+@@ -5409,21 +5413,6 @@
  	padding: 4px;
  }
  
@@ -275,10 +296,17 @@
 -	padding: 4px;
 -}
 -
- .CLASS02608 {
- 	position:relative;
- 	text-align:left;
-@@ -5560,10 +5556,12 @@
+-.CLASS02608 {
+-	position:relative;
+-	text-align:left;
+-	width:50px;
+-	height:50px;
+-}
+-
+ .CLASS02609 {
+ 	width: 140px;
+ 	background-color: $_(activeBackground);
+@@ -5560,10 +5549,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;

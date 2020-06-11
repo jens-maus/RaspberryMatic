@@ -21,6 +21,7 @@ case "$1" in
     else
       mkdir -p /usr/local/tmp
       touch /usr/local/tmp/.watchdog
+      sync
     fi
   ;;
   stop)

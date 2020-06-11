@@ -158,6 +158,15 @@
  </tr>
  <tr id="trFlt">
    <td align="center" valign="middle" class="CLASS02603"></td>
+@@ -289,7 +289,7 @@
+             Write( '<td align="center" valign="middle" class="CLASS02605">'#sFirstTimestamp#'</td>' );
+             Write( '<td id="sla'#sAID#'" align="center" valign="middle" class="CLASS02605">'#sLastTimestamp#'</td>' );
+             Write( '<td id="n'#oAlarm.ID()#'" align="center" valign="middle" class="CLASS02606">'#sAlarmName#'</td>' );
+-            Write( '<td align="center" valign="top" class="CLASS02607">');
++            Write( '<td align="center" valign="top" class="DeviceListThumbnail">');
+             if (oLastTriggerChannel)
+             {
+               object devId = oLastTriggerChannel.Device();
 --- occu/WebUI/www/rega/pages/tabs/user/favOverview.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/user/favOverview.htm
 @@ -76,17 +76,17 @@
@@ -254,7 +263,22 @@
  }
  
  .CLASS02603 {
-@@ -5560,10 +5564,12 @@
+@@ -5409,14 +5413,6 @@
+ 	padding: 4px;
+ }
+ 
+-.CLASS02607 {
+-	width:55px;
+-	background-color: $_(activeBackground);
+-	border: solid 1px $_(black); /* black */
+-	color: $_(textColorB); /* black */
+-	padding: 4px;
+-}
+-
+ .CLASS02608 {
+ 	position:relative;
+ 	text-align:left;
+@@ -5560,10 +5556,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;

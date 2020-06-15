@@ -39,11 +39,9 @@ identify_rf_hardware() {
       echo -n "HB-RF-USB, "
     fi
 
-    # only reset if we are not in an ova environment
-    #if ! echo "${HM_HOST}" | grep -q ova-; then
-      echo 1 >/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module
-      sleep 5
-    #fi
+    # reset rf-module using generic_raw_uart
+    echo 1 >/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module
+    sleep 5
  
     # get the RED/GREEN/BLUE pin ids
     RED_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/$(basename ${HM_HOST_GPIO_UART})/red_gpio_pin)

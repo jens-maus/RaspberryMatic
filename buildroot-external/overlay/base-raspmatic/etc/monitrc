@@ -344,7 +344,7 @@ check program hasUSB with path "/usr/bin/test -e /var/status/hasUSB"
     if status != 0 for 5 cycles then unmonitor
 
 # check system temperature limits
-check program temperature with path /bin/sh -c "([[ -f /sys/class/thermal/thermal_zone0/temp ]] || echo 0 && cat /sys/class/thermal/thermal_zone0/temp) | awk '{ print $1/1000; if($1/1000 < 80.0) { exit 10 } else { exit 20 } }';"
+check program temperature with path /bin/sh -c "(cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null || echo 0) | awk '{ print $1/1000; if($1/1000 < 80.0) { exit 10 } else { exit 20 } }';"
     group system
     if status != 10 for 5 cycles then
       exec "/bin/triggerAlarm.tcl 'high system temperature (> 80 deg) detected' WatchDog-Alarm"

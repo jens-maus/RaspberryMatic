@@ -98,10 +98,11 @@ identify_host() {
       hdmi_state=$(/usr/bin/tvservice -s | cut -d' ' -f2)
 
       # if the least significant bit is set the
-      # HDMI cable seems to be unplugged
-      if [[ $(((${hdmi_state} & 0x01) == 1)) -eq 1 ]]; then
-        /usr/bin/tvservice --off
-        /usr/bin/vcgencmd display_power 0
+      # HDMI cable seems to be unplugged or if
+      # no HDMI display is listed using tvservice
+      if [[ $(((${hdmi_state} & 0x01) == 1)) -eq 1 ]] || ! /usr/bin/tvservice -l | grep -q "type HDMI"; then
+        /usr/bin/tvservice --off >/dev/null
+        /usr/bin/vcgencmd display_power 0 >/dev/null
       fi
     ;;
 

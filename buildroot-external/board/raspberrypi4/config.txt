@@ -4,10 +4,6 @@ hdmi_blanking=1
 # disable HDMI audio
 hdmi_drive=1
 
-# pretend hdmi is connected so that the system
-# starts booting even if the system is headless
-hdmi_force_hotplug=1
-
 # make sure to use less memory for the GPU and
 # all total memory available
 gpu_mem=32

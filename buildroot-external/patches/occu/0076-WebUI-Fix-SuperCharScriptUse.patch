@@ -1,0 +1,51 @@
+--- occu/WebUI/www/rega/esp/side.fn.orig
++++ occu/WebUI/www/rega/esp/side.fn
+@@ -198,7 +198,7 @@
+     if( oTmp )
+     {
+       oTmp.DestinationValueType( ivtString );
+-      Write( oTmp.DestinationValue( system.GetVar("value") ) );
++      Write( oTmp.DestinationValue( system.GetVar("value").Replace("@$@%", "^") ) );
+     }
+   }
+ }
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -101,7 +101,7 @@
+ {
+   if( system.IsVar("code") && system.IsVar("val") && system.IsVar("ths") && system.IsVar("src") )
+   {
+-    Write( system.SyntaxCheck( system.GetVar("code"), system.GetVar("val"), system.GetVar("ths"), system.GetVar("src") ) );
++    Write( system.SyntaxCheck( system.GetVar("code").Replace("@$@%", "^"), system.GetVar("val"), system.GetVar("ths"), system.GetVar("src") ) );
+   }
+   else
+   {
+--- occu/WebUI/www/rega/pages/msg/editScript.htm.orig
++++ occu/WebUI/www/rega/pages/msg/editScript.htm
+@@ -66,7 +66,7 @@
+     var url = '/esp/system.htm?sid='+SessionId;
+     var pb = "";
+     pb += 'string action = "SyntaxCheck";';
+-    pb += 'string code = ^'+code+'^;';
++    pb += 'string code = ^'+code.replace(/\^/g, '@$@%')+'^;';
+     pb += 'string val = "'+val+'";';
+     pb += 'string ths = "'+ths+'";';
+     pb += 'string src = "'+src+'";';
+@@ -88,4 +88,4 @@
+     }
+     new Ajax.Request(url,opt);
+   }
+-</script>
+\ No newline at end of file
++</script>
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -25244,7 +25244,7 @@
+     var pb = '';
+     pb += 'string action = "SetScript";';
+     pb += 'string id = "'+id+'";';
+-    pb += 'string value = ^'+script+'^;';
++    pb += 'string value = ^'+script.replace(/\^/g, '@$@%')+'^;';
+     var opts =
+     {
+       postBody: ReGa.encode(pb),

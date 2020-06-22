@@ -47,8 +47,8 @@
        <input type="radio" name="timespan" id="tsDay" />${timeModuleLblAllDay}<br />
 -      <input type="radio" name="timespan" id="tsDaytime" />${timeModuleLblAstroDay}<br />
 -      <input type="radio" name="timespan" id="tsNighttime" />${timeModuleLblAstroNight}
-+      <input type="radio" name="timespan" id="tsDaytime" />${timeModuleLblAstroDay}, Offset: <input type="text" id="tsDaytimeOffset" size="3" />&nbsp;min, Duration: <input type="text" id="tsDaytimeDuration" size="3" />&nbsp;min<br />
-+      <input type="radio" name="timespan" id="tsNighttime" />${timeModuleLblAstroNight}, Offset: <input type="text" id="tsNighttimeOffset" size="3" />&nbsp;min, Duration: <input type="text" id="tsNighttimeDuration" size="3" />&nbsp;min
++      <input type="radio" name="timespan" id="tsDaytime" />${timeModuleLblAstroDay}&nbsp;<input type="text" id="tsDaytimeOffset" size="3" />&nbsp;min,&nbsp;${timeModuleLblAstroDayTill}&nbsp;<input type="text" id="tsDaytimeDuration" size="3" />&nbsp;min<br />
++      <input type="radio" name="timespan" id="tsNighttime" />${timeModuleLblAstroNight}&nbsp;<input type="text" id="tsNighttimeOffset" size="3" />&nbsp;min,&nbsp;${timeModuleLblAstroNightTill}&nbsp;<input type="text" id="tsNighttimeDuration" size="3" />&nbsp;min
      </td>
 -    <td></td>
      </tr>
@@ -164,3 +164,33 @@
        }
      
        string sCalRep = tmObj.CalRepeatTime();  
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -845,8 +845,10 @@
+     "timeModuleLblStart" : "Beginn:",
+     "timeModuleLblEnd" : "Ende:",
+     "timeModuleLblAllDay" : "Ganzt%E4gig",
+-    "timeModuleLblAstroDay" : "Astrofunktion tags%FCber",
+-    "timeModuleLblAstroNight" : "Astrofunktion nachts",
++    "timeModuleLblAstroDay" : "Von Sonnenaufgang, versetzt um",
++    "timeModuleLblAstroDayTill" : "bis Sonnenuntergang, oder f%FCr",
++    "timeModuleLblAstroNight" : "Von Sonnenuntergang, versetzt um",
++    "timeModuleLblAstroNightTill" : "bis Sonnenuntergang, oder f%FCr",
+     "timeModuleLblPointOfTime" : "Zeitpunkt",
+     "timeModuleLblSerialPatternTitle" : "Serienmuster",
+     "timeModuleLblSerialPatternOnce" : "Einmalig",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -891,8 +891,10 @@
+     "timeModuleLblStart" : "Beginning:",
+     "timeModuleLblEnd" : "End:",
+     "timeModuleLblAllDay" : "All-day",
+-    "timeModuleLblAstroDay" : "Astro function day",
+-    "timeModuleLblAstroNight" : "Astro function night",
++    "timeModuleLblAstroDay" : "From sunrise, shifted by",
++    "timeModuleLblAstroDayTill" : "until sunset or for",
++    "timeModuleLblAstroNight" : "From sunset, shifted by",
++    "timeModuleLblAstroNightTill" : "until sunrise or for",
+     "timeModuleLblPointOfTime" : "Time",
+ 
+     "timeModuleLblSerialPatternTitle" : "Serial pattern",

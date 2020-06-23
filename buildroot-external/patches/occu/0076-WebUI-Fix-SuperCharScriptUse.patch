@@ -5,7 +5,7 @@
      var pb = "";
      pb += 'string action = "SyntaxCheck";';
 -    pb += 'string code = ^'+code+'^;';
-+    pb += 'string code = ^'+script.replace(/\^/g, '^#\'^\'#^')+'^;';
++    pb += 'string code = ^'+code.replace(/\^/g, '^#\'^\'#^')+'^;';
      pb += 'string val = "'+val+'";';
      pb += 'string ths = "'+ths+'";';
      pb += 'string src = "'+src+'";';

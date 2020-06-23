@@ -9,13 +9,6 @@
      pb += 'string val = "'+val+'";';
      pb += 'string ths = "'+ths+'";';
      pb += 'string src = "'+src+'";';
-@@ -88,4 +88,4 @@
-     }
-     new Ajax.Request(url,opt);
-   }
--</script>
-\ No newline at end of file
-+</script>
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -25244,7 +25244,7 @@

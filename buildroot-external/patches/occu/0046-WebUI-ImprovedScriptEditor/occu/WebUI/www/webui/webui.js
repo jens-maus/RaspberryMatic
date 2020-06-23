@@ -12404,7 +12404,7 @@ HMScriptExecutor = Class.create({
     var url = '/esp/system.htm?sid='+SessionId;
     var pb = "";
     pb += 'string action = "SyntaxCheck";';
-    pb += 'string code = ^'+code.replace(/\^/g, '@$@%')+'^;';
+    pb += 'string code = ^'+code.replace(/\^/g, '^#\'^\'#^')+'^;';
     pb += 'string val = "'+val+'";';
     pb += 'string ths = "'+ths+'";';
     pb += 'string src = "'+src+'";';

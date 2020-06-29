@@ -55,3 +55,7 @@ device_tree_address=0x2008000
 
 # lets u-boot take over the boot process
 kernel=u-boot.bin
+
+# user config options shoule be put in
+# /boot/extraconfig.txt
+include extraconfig.txt

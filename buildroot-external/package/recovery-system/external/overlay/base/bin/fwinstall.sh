@@ -759,8 +759,8 @@ touch /tmp/.runningFirmwareUpdate
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-# fast blink magenta on RPI-RF-MOD or HB-RF-USB
-if [[ "${HM_RTC}" == "rx8130" ]] || lsusb | grep -q 0403:6f70; then
+# fast blink magenta on RPI-RF-MOD or HB-RF-USB/HB-RF-USB-2
+if [[ "${HM_RTC}" == "rx8130" ]] || lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
   echo none  >/sys/class/leds/rpi_rf_mod\:green/trigger
   echo timer >/sys/class/leds/rpi_rf_mod\:red/trigger
   echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger

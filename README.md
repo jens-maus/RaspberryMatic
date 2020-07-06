@@ -1,8 +1,12 @@
-<img src="release/logo.png" width="250px" align="left">
+<img height="60px" src="release/logo.png" align="left">
 
-<br/><br/>
+<br/>
+
+**– The alternative operating system for your HomeMatic CCU**
+
 [![Current Release](https://img.shields.io/github/release/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/latest/total.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
+[![Build](https://github.com/jens-maus/RaspberryMatic/workflows/CI/badge.svg)](https://github.com/jens-maus/RaspberryMatic/actions)
 [![Contributors](https://img.shields.io/github/contributors/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/graphs/contributors)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/issues)
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/issues)
@@ -12,6 +16,9 @@
 [![Twitter](https://img.shields.io/twitter/follow/RaspberryMatic.svg?style=social&label=Follow)](https://twitter.com/RaspberryMatic)
 [![GitHub stars](https://img.shields.io/github/stars/jens-maus/RaspberryMatic.svg?style=social&label=Star)](https://github.com/jens-maus/RaspberryMatic/stargazers/)
 
+<sub>[Click here for 🇬🇧🇺🇸 english readme](README.en.md)</sub>
+### [🚀 Quick Start](#cookie-features)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📚 Documentation](https://github.com/jens-maus/RaspberryMatic/wiki)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📦 Download](https://github.com/jens-maus/RaspberryMatic/releases/latest)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[🚑 Support](#yum-how-to-contribute)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[👮 License](#scroll-license)
+___
 The _RaspberryMatic_ project is a collaborate effort to provide a lightweight, [Linux/buildroot](http://buildroot.org/)-based HomeMatic compatible operating system for embedded single board computers (SBC) like the [RaspberryPi](https://www.raspberrypi.org/) or [Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/). It is meant to provide a an alternative operating system for [CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html) or [ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html) systems. It is based on the **O**pen-**C**entral-**C**ontrol-**U**nit-SDK ([OCCU](https://github.com/eq-3/occu)) provided by [eQ-3](http://eq-3.de) as part of the [HomeMatic](http://homematic.com/) home automation platform. The RaspberryMatic distribution is provided as a full operating system image that can be flashed and then used in a RaspberryPi/Tinkerboard as the main operating system for controlling all HomeMatic compatible devices with full compatibility to a CCU device directly sold by eQ-3.
 
 ## :cookie: Features

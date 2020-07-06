@@ -1,0 +1,104 @@
+name: CI
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 2 * * *' # run at 2 AM UTC
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [rpi0, rpi3, rpi4, tinkerboard, intelnuc, ova]
+    
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: rename worker directory
+      working-directory: ../
+      run: |
+        mv RaspberryMatic b
+        ln -s b RaspberryMatic
+
+    - name: setup env
+      run: |
+        echo ::set-env name=DATE::$(date +%Y%m%d)
+        echo ::set-env name=OCCU_VERSION::$(grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
+        echo ::set-env name=VERSION::$(grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)
+        echo ::set-env name=GITHUB_SHA7::$(echo ${GITHUB_SHA::7})
+
+    - name: free disk space
+      run: |
+        sudo swapoff -a
+        sudo rm -f /swapfile
+        sudo apt clean
+        docker rmi $(docker image ls -aq)
+        df -h
+
+    - name: cleanup old action artifacts
+      run: .github/workflows/purge_artifacts.sh ${{ secrets.REPO_ACCESS_TOKEN }}
+
+    - name: switch to experimental EULA files
+      run: |
+        mv -f release/updatepkg/raspmatic_rpi3/EULA.de_nightly release/updatepkg/raspmatic_rpi3/EULA.de
+        mv -f release/updatepkg/raspmatic_rpi3/EULA.en_nightly release/updatepkg/raspmatic_rpi3/EULA.en
+
+    #- name: remote debug tmate session
+    #  uses: mxschmitt/action-tmate@v1
+    #  if: matrix.platform == 'ova'
+
+    - name: build raspmatic_${{ matrix.platform }}
+      run: |
+        sudo mkdir -p /mnt/download
+        sudo chown runner /mnt/download
+        make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download raspmatic_${{ matrix.platform }}-release
+        make distclean
+      #run: |
+      #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img
+      #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img.sha256
+      #  (cd release; zip RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.*)
+      #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
+      #  ls -la release/
+
+    - name: upload nightly build archive
+      if: github.event_name == 'schedule'
+      uses: WebFreak001/deploy-nightly@v1.0.3
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+        release_id: 22744592
+        asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip
+        asset_content_type: application/zip
+        max_releases: 1
+
+    - name: upload nightly build checksum
+      if: github.event_name == 'schedule'
+      uses: WebFreak001/deploy-nightly@v1.0.3
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+        release_id: 22744592
+        asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip.sha256
+        asset_content_type: text/plain
+        max_releases: 1
+
+    - name: prepare artifact upload
+      run: |
+        mkdir -p /tmp/upload-${{ matrix.platform }}
+        unzip -d /tmp/upload-${{ matrix.platform }} release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
+      continue-on-error: true
+
+    - name: upload build as artifact
+      uses: actions/upload-artifact@v1
+      with:
+        path: /tmp/upload-${{ matrix.platform }}
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}
+      continue-on-error: true

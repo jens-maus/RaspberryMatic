@@ -2145,6 +2145,11 @@ html, body {
   vertical-align: middle;
 }
 
+table.center {
+  margin-left:auto;
+  margin-right:auto;
+}
+
 .borderWidth2Px {
   border-width: 2px !important;
 }
@@ -2156,6 +2161,14 @@ html, body {
 .firmwareAvailable {
     cursor: pointer;
     color: $_(clickable);
+}
+
+.virtualChannelBckGnd {
+  background-color: #BCC3C1 !important;
+}
+
+.virtualChannelBckGndA {
+  background-color: #E0E0E0 !important;
 }
 
 .noBorder {
@@ -2221,7 +2234,7 @@ progress[value] {
 progress::-moz-progress-bar { background: #3678c9; }
 progress::-webkit-progress-value { background: #3678c9; }
 
-#dutyCycleProgress {
+.dutyCycleProgress {
   width: 75%;
 
   background: -moz-linear-gradient(0deg, rgba(13,255,0,1) 0%, rgba(255,255,0,1) 63%, rgba(255,0,0,1) 100%); /* ff3.6+ */
@@ -2235,7 +2248,7 @@ progress::-webkit-progress-value { background: #3678c9; }
 
 }
 
-#dutyCycleProgressBar {
+.dutyCycleProgressBar {
   width: 1%;
   height: 12px;
   background-color: #d9d9d9;
@@ -5379,6 +5392,13 @@ application {
 	width:50px;
 }
 
+.CLASS02550c {
+	cursor:pointer;
+	line-height:35px;
+	height:35px;
+	width:100%;
+}
+
 .CLASS02551 {
 	cursor:pointer;
 	height:35px;
@@ -7767,6 +7787,17 @@ color: $_(textColorA); /* white */
   color: $_(textColorA); /* white */
 }
 
+.CLASS20009a {
+	padding: 5px;
+	text-align:center;
+	vertical-align:middle;
+	margin:2px;
+	cursor: default;
+	border: 1px solid $_(black); /* black */
+	background-color: $_(gray); /* rgb(153, 153, 153) */
+  color: $_(inactiveButton);
+}
+
 .CLASS20010 {
 	width:150px;
 }
@@ -8297,6 +8328,11 @@ color: $_(textColorA); /* white */
   vertical-align:top;
 }
 
+.CLASS21301a {
+  background-color:$_(inactiveBackground);
+  vertical-align:middle;
+}
+
 .CLASS21302 {
  	color: $_(textColorB); /* black */
   font-size: 20px;
@@ -8318,6 +8354,12 @@ color: $_(textColorA); /* white */
   background-color:$_(inactiveBackground);
   text-align:center;
   vertical-align:top;
+}
+
+.CLASS21305a {
+  background-color:$_(inactiveBackground);
+  text-align:center;
+  vertical-align:middle;
 }
 
 .CLASS21306 {

@@ -4,17 +4,38 @@
 #
 
 case "$1" in
- start)
-	echo "Starting watchdog..."
-	watchdog -t 5 /dev/watchdog
-	;;
+  start)
+    # no /dev/watchdog device, no watchdog daemon startup
+    if [[ -c /dev/watchdog ]]; then
+      echo "Starting watchdog..."
+      /sbin/watchdog -T 300 -t 5 /dev/watchdog
+    fi
+
+    # to identify unexpected crashes/shutdowns we check
+    # for a /usr/local/tmp/.watchdog file to be
+    # present and if so we set /var/status/uncleanShutdown
+    # to signal this to others.
+    if [[ -f /usr/local/tmp/.watchdog ]]; then
+      mkdir -p /var/status
+      touch /var/status/uncleanShutdown
+    else
+      mkdir -p /usr/local/tmp
+      touch /usr/local/tmp/.watchdog
+      sync
+    fi
+  ;;
   stop)
-	;;
+    # remove /usr/local/tmp/.watchdog
+    # to make sure the next boot is identified as a
+    # clean boot.
+    rm -f /usr/local/tmp/.watchdog
+    sync
+  ;;
   restart|reload)
-	;;
+  ;;
   *)
-	echo "Usage: $0 {start|stop|restart}"
-	exit 1
+  echo "Usage: $0 {start|stop|restart}"
+  exit 1
 esac
 
 exit $?

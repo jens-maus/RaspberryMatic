@@ -1,16 +1,18 @@
 #!/bin/sh
-if ! ping -q -W 3 -c 1 google.com >/dev/null 2>/dev/null; then
-  if ! nc -z -w 3 google.com 80 >/dev/null 2>/dev/null; then
-    if grep -q nfsroot /proc/cmdline ; then
-      if ! ping -q -W 3 -c 1 8.8.8.8 >/dev/null 2>/dev/null; then
-        if ! nc -z -w 3 108.177.126.100 80 >/dev/null 2>/dev/null; then
-          [ -f /var/status/hasInternet ] && rm -f /var/status/hasInternet
-          exit 1
+if [ ! -e /etc/config/internetCheckDisabled ]; then
+  if ! ping -q -W 3 -c 1 google.com >/dev/null 2>/dev/null; then
+    if ! nc -z -w 3 google.com 80 >/dev/null 2>/dev/null; then
+      if grep -q nfsroot /proc/cmdline ; then
+        if ! ping -q -W 3 -c 1 8.8.8.8 >/dev/null 2>/dev/null; then
+          if ! nc -z -w 3 108.177.126.100 80 >/dev/null 2>/dev/null; then
+            [ -f /var/status/hasInternet ] && rm -f /var/status/hasInternet
+            exit 1
+          fi
         fi
+      else
+        [ -f /var/status/hasInternet ] && rm -f /var/status/hasInternet
+        exit 1
       fi
-    else
-      [ -f /var/status/hasInternet ] && rm -f /var/status/hasInternet
-      exit 1
     fi
   fi
 fi

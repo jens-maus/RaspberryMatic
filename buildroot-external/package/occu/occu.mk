@@ -4,7 +4,7 @@
 #
 #############################################################
 
-OCCU_VERSION = 3.47.22-3
+OCCU_VERSION = 3.51.6-9
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 
 ifeq ($(BR2_PACKAGE_OCCU),y)
@@ -87,17 +87,22 @@ ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_HMIP),y)
 	OCCU_RF_PROTOCOL=HM_HMIP
 endif
 
+ifeq ($(BR2_PACKAGE_OCCU_WEBUI_REGAHSS_BETA),y)
+	OCCU_WEBUI_REGAHSS_BETA=y
+endif
+
 ifeq ($(BR2_arm),y)
-	OCCU_ARCH=arm-gnueabihf
+	OCCU_ARCH=arm-gnueabihf-gcc8
 endif
 
 ifeq ($(BR2_i386),y)
-	OCCU_ARCH=X86_32_Debian_Wheezy
+	OCCU_ARCH=X86_32_GCC8
 endif
 
 define OCCU_INSTALL_TARGET_CMDS
 		$(MAKE) OCCU_RF_PROTOCOL=$(OCCU_RF_PROTOCOL) \
 			OCCU_ARCH=$(OCCU_ARCH) \
+			OCCU_WEBUI_REGAHSS_BETA=$(OCCU_WEBUI_REGAHSS_BETA) \
 			-C $(@D) install 
 endef
 

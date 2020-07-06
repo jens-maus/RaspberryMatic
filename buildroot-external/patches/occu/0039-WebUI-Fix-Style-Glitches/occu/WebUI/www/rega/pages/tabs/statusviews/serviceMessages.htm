@@ -69,6 +69,18 @@ iseInitUpdateArrays();
   Cursor.set(Cursor.NORMAL);
 </script>
 <table id="tblServices" class="filterTable tTable CLASS02601" border="0" cellpadding="0" cellspacing="0" style="display:none;">
+<colgroup>
+  <col width="auto">
+  <col width="auto">
+  <col width="auto">
+  <col width="55px">
+  <col width="auto">
+  <col width="auto">
+  <col width="auto">
+  <col width="auto">
+  <col width="auto">
+  <col width="100px">
+</colgroup>
 <tr>
  <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="first"){sCssName="SortSelected";} %>
   <th class="thCell CLASS02603"><div id="_first" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'first',true);">${thFirstMessageDateTime}</div></th>
@@ -289,13 +301,13 @@ iseInitUpdateArrays();
             Write( '<td align="center" valign="middle" class="CLASS02605">'#sFirstTimestamp#'</td>' );
             Write( '<td id="sla'#sAID#'" align="center" valign="middle" class="CLASS02605">'#sLastTimestamp#'</td>' );
             Write( '<td id="n'#oAlarm.ID()#'" align="center" valign="middle" class="CLASS02606">'#sAlarmName#'</td>' );
-            Write( '<td align="center" valign="top" class="CLASS02607">');
+            Write( '<td class="DeviceListThumbnail">');
             if (oLastTriggerChannel)
             {
               object devId = oLastTriggerChannel.Device();
               object dev = dom.GetObject(devId);
               string sPicDivId = "picDiv"#oAlarm.ID();
-              Write("<div id='"#sPicDivId#"' class='CLASS02608'");
+              Write("<div id='"#sPicDivId#"' class='thumbnail'");
               Write(" onmouseover='picDivShow(jg_250, \""#dev.Label()#"\", 250, -1, this);'");
               Write(" onmouseout='picDivHide(jg_250);'");
               Write("></div>");

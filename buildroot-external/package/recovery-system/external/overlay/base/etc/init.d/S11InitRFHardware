@@ -25,20 +25,23 @@ identify_rf_hardware() {
   fi
 
   # check if a HB-RF-USB (https://github.com/alexreinert/PCB/tree/master/HB-RF-USB)
+  # or HB-RF-USB-2 (https://github.com/alexreinert/PCB/tree/master/HB-RF-USB-2)
   # is present and if yes, use /dev/raw-uart1 instead.
-  if lsusb | grep -q 0403:6f70; then
+  if lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
     if [[ -c /dev/raw-uart1 ]]; then
       HM_HOST_GPIO_UART="/dev/raw-uart1"
     elif [[ -c /dev/raw-uart ]]; then
       HM_HOST_GPIO_UART="/dev/raw-uart"
     fi
-    echo -n "HB-RF-USB, "
+    if lsusb | grep -q 10c4:8c07; then
+      echo -n "HB-RF-USB-2, "
+    else
+      echo -n "HB-RF-USB, "
+    fi
 
-    # only reset if we are not in an ova environment
-    #if ! echo "${HM_HOST}" | grep -q ova-; then
-      echo 1 >/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module
-      sleep 5
-    #fi
+    # reset rf-module using generic_raw_uart
+    echo 1 >/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module
+    sleep 5
  
     # get the RED/GREEN/BLUE pin ids
     RED_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/$(basename ${HM_HOST_GPIO_UART})/red_gpio_pin)

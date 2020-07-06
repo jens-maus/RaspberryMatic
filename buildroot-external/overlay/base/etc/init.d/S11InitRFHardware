@@ -78,14 +78,19 @@ identify_rf_hardware() {
   fi
 
   # check if a HB-RF-USB (https://github.com/alexreinert/PCB/tree/master/HB-RF-USB)
+  # or HB-RF-USB-2 (https://github.com/alexreinert/PCB/tree/master/HB-RF-USB-2)
   # is present and if yes, use /dev/raw-uart1 instead.
-  if lsusb | grep -q 0403:6f70; then
+  if lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
     if [[ -c /dev/raw-uart1 ]]; then
       HM_HOST_GPIO_UART="/dev/raw-uart1"
     elif [[ -c /dev/raw-uart ]]; then
       HM_HOST_GPIO_UART="/dev/raw-uart"
     fi
-    echo -n "HB-RF-USB, "
+    if lsusb | grep -q 10c4:8c07; then
+      echo -n "HB-RF-USB-2, "
+    else
+      echo -n "HB-RF-USB, "
+    fi
 
     # get the RED/GREEN/BLUE pin ids
     RED_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/$(basename ${HM_HOST_GPIO_UART})/red_gpio_pin)
@@ -154,13 +159,10 @@ init_rf_hardware() {
       fi
     fi
 
-    # if we are using a HB-RF-USB with raw uart we make sure to
+    # if we are using a HB-RF-USB/HB-RF-USB-2 with raw uart we make sure to
     # reset the rf module using the provided sysfs link.
-    if lsusb | grep -q 0403:6f70; then
-      # only reset if we are not in an ova environment
-      if ! echo "${HM_HOST}" | grep -q ova-; then
-        echo 1 >/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module
-      fi
+    if lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
+      echo 1 >/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module
     else
       # identify which GPIO reset pin to drive
       if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
@@ -223,17 +225,18 @@ query_rf_parameters() {
      [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
 
     # use eq3configcmd to query for the default rf address and if it is empty
-    # or 0x00ffff there is either no HM-MOD-RPI-PCB or it is a RPI-RF-MOD
-    RF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+    # or 0x..ffff there is either no HM-MOD-RPI-PCB or it is a RPI-RF-MOD connected
+    # to a HB-RF-USB.
+    RF_ADDRESS=$(/usr/bin/timeout 20 /bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
     if [[ -z "${RF_ADDRESS}" ]]; then
       # sometimes we have to do a second iteration to read the default rf address as
       # the rf module has to properly initialize first
-      RF_ADDRESS=$(/bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+      RF_ADDRESS=$(/usr/bin/timeout 20 /bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
     fi
-    if [[ -n "${RF_ADDRESS}" ]] && [[ "${RF_ADDRESS}" != "0x00ffff" ]]; then
-      RF_SGTIN=$(/bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -sg 2>&1 | sed -n 's/.*SGTIN: \([0-9A-Fa-f]\{24\}\).*/\1/p')
-      RF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
-      RF_VERSION=$(/bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
+    if [[ -n "${RF_ADDRESS}" ]] && ! echo ${RF_ADDRESS} | grep -qe 0x..ffff; then
+      RF_SGTIN=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -sg 2>&1 | sed -n 's/.*SGTIN: \([0-9A-Fa-f]\{24\}\).*/\1/p')
+      RF_SERIAL=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
+      RF_VERSION=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
 
       if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
         HM_HMRF_SERIAL=${RF_SERIAL}
@@ -251,7 +254,7 @@ query_rf_parameters() {
       # if we haven't identified a HM-MOD-RPI-PCB we try to find
       # a RPI-RF-MOD next
       if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-        if [[ "${RF_ADDRESS}" == "0x00ffff" ]] || lsusb | grep -q 0403:6f70; then
+        if echo ${RF_ADDRESS} | grep -qe 0x..ffff || lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
           HM_HMRF_DEV="RPI-RF-MOD"
         else
           HM_HMRF_DEV=
@@ -262,7 +265,7 @@ query_rf_parameters() {
       fi
 
       if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-        if [[ "${RF_ADDRESS}" == "0x00ffff" ]] || lsusb | grep -q 0403:6f70; then
+        if echo ${RF_ADDRESS} | grep -qe 0x..ffff || lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
           HM_HMIP_DEV="RPI-RF-MOD"
         else
           HM_HMIP_DEV=
@@ -282,11 +285,11 @@ query_rf_parameters() {
 
     # perform a coprocessor factory reset if selected
     if [[ -r /usr/local/.doCoproFactoryReset ]]; then
-      /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -r >/dev/null 2>&1
+      /usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -r >/dev/null 2>&1
     fi
 
     # use hmip-copro-update only to query all rf module related info (eq3configcmd is not supported for RPI-RF-MOD)
-    RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -v -a 2>&1)
+    RF_INFO=$(/usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -v -a 2>&1)
     RF_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
     RF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
     RF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
@@ -330,11 +333,11 @@ query_rf_parameters() {
 
     # perform a coprocessor factory reset if selected
     if [[ -r /usr/local/.doCoproFactoryReset ]]; then
-      /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -r >/dev/null 2>&1
+      /usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -r >/dev/null 2>&1
     fi
 
     # run hmip-copro-update to query info and get copro into app mode
-    RF_INFO=$(/opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v -a 2>&1)
+    RF_INFO=$(/usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v -a 2>&1)
     RF_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
 
     # use the last 10 chars of the SGTIN as the serial number of the rf module

@@ -3,10 +3,12 @@
 # Start watchdog
 #
 
+[[ -c /dev/watchdog ]] || exit 0
+
 case "$1" in
  start)
 	echo "Starting watchdog..."
-	watchdog -t 5 /dev/watchdog
+	/sbin/watchdog -T 300 -t 5 /dev/watchdog
 	;;
   stop)
 	;;

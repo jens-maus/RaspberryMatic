@@ -255,8 +255,9 @@
             <!-- DutyCycle -->
             <tr name="trDutyCycle" style="visibility: hidden"><td></td><td><div id="dutyCycleVal" style="width:75%; text-align:center"></div></td></tr>
             <tr name="trDutyCycle" style="visibility: hidden">
-              <td>${lblDutyCycle}</td>
-              <td> <div id="dutyCycleProgress"  align="right"><div id="dutyCycleProgressBar"></div></div> </td>
+
+              <td id="iFaceShowAll">${lblDutyCycle}</td>
+              <td> <div id="dutyCycleProgress" class="dutyCycleProgress" align="right"><div id="dutyCycleProgressBar" class="dutyCycleProgressBar" style='width:100%;'></div></div> </td>
             </tr>
 
           </table>
@@ -286,6 +287,7 @@
       StartPage.showAllDeviceFirmware();
       jQuery("#forceUpdate").remove();
   }
+  jQuery("#iFaceShowAll").text(translateKey("lblDutyCycleA") + getProduct()+ ":");
   translatePage();
   jQuery("#loadingGif").hide();
   jQuery("#tblStartpageInfo").show();

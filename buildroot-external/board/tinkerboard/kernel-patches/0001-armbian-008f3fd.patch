@@ -1,0 +1,3584 @@
+Patches act8846 regulator providing the proper reset handle and exploit
+the SIPC bit in GLB_POWER_OFF register. Mainly used to reset some rockchip
+boards.
+
+Origin: <https://patchwork.kernel.org/patch/6409521/>
+
+diff --git a/drivers/regulator/act8865-regulator.c b/drivers/regulator/act8865-regulator.c
+index 2ff73d7..836d10b 100644
+--- a/drivers/regulator/act8865-regulator.c
++++ b/drivers/regulator/act8865-regulator.c
+@@ -27,6 +27,7 @@
+ #include <linux/regulator/of_regulator.h>
+ #include <linux/regmap.h>
+ #include <dt-bindings/regulator/active-semi,8865-regulator.h>
++#include <linux/reboot.h>
+ 
+ /*
+  * ACT8600 Global Register Map.
+@@ -133,6 +134,8 @@
+ #define	ACT8865_VOLTAGE_NUM	64
+ #define ACT8600_SUDCDC_VOLTAGE_NUM	255
+ 
++#define ACT8846_SIPC_MASK 0x01
++
+ struct act8865 {
+ 	struct regmap *regmap;
+ 	int off_reg;
+@@ -402,6 +405,22 @@ static void act8865_power_off(void)
+ 	while (1);
+ }
+ 
++static int act8846_power_cycle(struct notifier_block *this,
++	unsigned long code, void *unused)
++{
++	struct act8865 *act8846;
++
++	act8846 = i2c_get_clientdata(act8865_i2c_client);
++	regmap_write(act8846->regmap, ACT8846_GLB_OFF_CTRL, ACT8846_SIPC_MASK);
++
++	return NOTIFY_DONE;
++}
++
++static struct notifier_block act8846_restart_handler = {
++	.notifier_call = act8846_power_cycle,
++	.priority = 129,
++};
++
+ static int act8865_pmic_probe(struct i2c_client *client,
+ 			      const struct i2c_device_id *i2c_id)
+ {
+@@ -484,6 +503,8 @@ static int act8865_pmic_probe(struct i2c_client *client,
+ 	}
+ 
+ 	if (of_device_is_system_power_controller(dev->of_node)) {
++		int ret;
++
+ 		if (!pm_power_off && (off_reg > 0)) {
+ 			act8865_i2c_client = client;
+ 			act8865->off_reg = off_reg;
+@@ -492,6 +513,14 @@ static int act8865_pmic_probe(struct i2c_client *client,
+ 		} else {
+ 			dev_err(dev, "Failed to set poweroff capability, already defined\n");
+ 		}
++
++		if (type == ACT8846) {
++			act8865_i2c_client = client;
++			ret = register_restart_handler(&act8846_restart_handler);
++			if (ret)
++				pr_err("%s: cannot register restart handler, %d\n",
++					__func__, ret);
++		}
+ 	}
+ 
+ 	/* Finally register devices */
+From 604ea7fc311af2b3a41e7fe3b4fbde0ee03dfb9c Mon Sep 17 00:00:00 2001
+From: Myy Miouyouyou <myy@miouyouyou.fr>
+Date: Thu, 19 Oct 2017 21:09:50 +0200
+Subject: [PATCH 04/28] dts: rk3288: miqi: Enabling the Mali GPU node
+
+Why is the MiQi the only one left without a working mali GPU node ?
+
+Seriously, is there a rk3288 chipset WITHOUT a mali GPU ? Couldn't
+they enable it once in the DTSI, instead of defining it as "disabled"
+and enabling it in every DTS file ?
+
+Signed-off-by: Myy Miouyouyou <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-miqi.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-miqi.dts b/arch/arm/boot/dts/rk3288-miqi.dts
+index 4d923aa6..3cd60674 100644
+--- a/arch/arm/boot/dts/rk3288-miqi.dts
++++ b/arch/arm/boot/dts/rk3288-miqi.dts
+@@ -149,6 +149,11 @@
+ 	status = "ok";
+ };
+ 
++&gpu {
++	mali-supply = <&vdd_gpu>;
++	status = "okay";
++};
++
+ &hdmi {
+ 	ddc-i2c-bus = <&i2c5>;
+ 	status = "okay";
+-- 
+2.11.0
+
+From 89e5763110ca77d68a4be00cd97a638adc2401d5 Mon Sep 17 00:00:00 2001
+From: Willy Tarreau <w@1wt.eu>
+Date: Tue, 2 Aug 2016 08:31:00 +0200
+Subject: [PATCH 05/28] ARM: dts: rockchip: fix the regulator's voltage range
+ on MiQi board
+
+The board declared too narrow a voltage range for the CPU and GPU
+regulators, preventing it from using the full CPU frequency range.
+The regulators support 712500 to 1500000 microvolts.
+
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+(cherry picked from commit 95330e63a9295a2632cee8cce5db80677f01857a)
+---
+ arch/arm/boot/dts/rk3288-miqi.dts | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm/boot/dts/rk3288-miqi.dts b/arch/arm/boot/dts/rk3288-miqi.dts
+index 3cd60674..a1c3cdaa 100644
+--- a/arch/arm/boot/dts/rk3288-miqi.dts
++++ b/arch/arm/boot/dts/rk3288-miqi.dts
+@@ -168,8 +168,8 @@
+ 		fcs,suspend-voltage-selector = <1>;
+ 		reg = <0x40>;
+ 		regulator-name = "vdd_cpu";
+-		regulator-min-microvolt = <850000>;
+-		regulator-max-microvolt = <1350000>;
++		regulator-min-microvolt = <712500>;
++		regulator-max-microvolt = <1500000>;
+ 		regulator-always-on;
+ 		regulator-boot-on;
+ 		regulator-enable-ramp-delay = <300>;
+@@ -182,8 +182,8 @@
+ 		fcs,suspend-voltage-selector = <1>;
+ 		reg = <0x41>;
+ 		regulator-name = "vdd_gpu";
+-		regulator-min-microvolt = <850000>;
+-		regulator-max-microvolt = <1350000>;
++		regulator-min-microvolt = <712500>;
++		regulator-max-microvolt = <1500000>;
+ 		regulator-always-on;
+ 		vin-supply = <&vcc_sys>;
+ 	};
+-- 
+2.11.0
+
+From c27e445527e949f3ef46d5326066196969c17d23 Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Sun, 12 Mar 2017 19:43:15 +0000
+Subject: [PATCH 06/28] ARM: dts: rockchip: add the MiQi board's fan definition
+
+The MiQi board is sold with an enclosure in which a fan is connected
+to the second LED output, and configured by default in "heartbeat"
+mode so that it rotates slowly and increases when the CPU load
+increases, ensuring appropriate cooling by default. This LED output
+is called "Fan" in the original kernel and connected to GPIO18
+(gpiochip 0, pin 18). Here we called it "miqi:green:fan" to stay
+consistent with the kernel's naming conventions.
+
+It's worth noting that without this patch the fan doesn't work at
+all, risking to make the board overheat.
+
+Fixes: 162718c (v4.7)
+Cc: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-miqi.dts | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-miqi.dts b/arch/arm/boot/dts/rk3288-miqi.dts
+index a1c3cdaa..0e383595 100644
+--- a/arch/arm/boot/dts/rk3288-miqi.dts
++++ b/arch/arm/boot/dts/rk3288-miqi.dts
+@@ -67,6 +67,13 @@
+ 	leds {
+ 		compatible = "gpio-leds";
+ 
++		fan {
++			gpios = <&gpio0 RK_PC2 GPIO_ACTIVE_HIGH>;
++			label = "miqi:green:fan";
++			linux,default-trigger = "heartbeat";
++		};
++
++
+ 		work {
+ 			gpios = <&gpio7 RK_PA2 GPIO_ACTIVE_HIGH>;
+ 			label = "miqi:green:user";
+-- 
+2.11.0
+
+From 062488e4b8fd552c01e1104b3bc91a6f7ffe6c41 Mon Sep 17 00:00:00 2001
+From: Myy Miouyouyou <myy@miouyouyou.fr>
+Date: Thu, 19 Oct 2017 21:24:47 +0200
+Subject: [PATCH 10/28] RK3288: DTSI: rk3288.dtsi: Add missing SPI2 pinctrl
+
+The spi2_cs1 pin reference is missing in the spi2 first pin control
+definition.
+
+This patch is taken from the patches provided by the ARMbian team.
+
+Signed-off-by: Myy Miouyouyou <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 5b789528..9ed532cc 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -334,7 +334,7 @@
+ 		dma-names = "tx", "rx";
+ 		interrupts = <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&spi2_clk &spi2_tx &spi2_rx &spi2_cs0>;
++		pinctrl-0 = <&spi2_clk &spi2_tx &spi2_rx &spi2_cs0 &spi2_cs1>;
+ 		reg = <0x0 0xff130000 0x0 0x1000>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+-- 
+2.11.0
+
+From ac220d592aa38b9b717d36f7bb93f7be5a08f6b3 Mon Sep 17 00:00:00 2001
+From: Myy Miouyouyou <myy@miouyouyou.fr>
+Date: Thu, 19 Oct 2017 21:43:51 +0200
+Subject: [PATCH 14/28] ARM: DTSI: rk3288.dtsi: Adding missing EDP power domain
+
+Imported from Rockchip 4.4 kernel patches.
+
+Signed-off-by: Myy Miouyouyou <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 14ef8202..10ecebb4 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -1105,6 +1105,7 @@
+ 		interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
+ 		clocks = <&cru SCLK_EDP>, <&cru PCLK_EDP_CTRL>;
+ 		clock-names = "dp", "pclk";
++		power-domains = <&power RK3288_PD_VIO>;
+ 		phys = <&edp_phy>;
+ 		phy-names = "dp";
+ 		resets = <&cru SRST_EDP>;
+-- 
+2.11.0
+
+From c5af6798c9a411b3f550f463182a4b4904a21ec2 Mon Sep 17 00:00:00 2001
+From: Myy Miouyouyou <myy@miouyouyou.fr>
+Date: Thu, 19 Oct 2017 21:51:14 +0200
+Subject: [PATCH 16/28] ARM: DTSI: rk3288.dtsi: Adding missing VOPB registers
+
+Imported from @wzyy2 patches... I think...
+
+Signed-off-by: Myy Miouyouyou <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 455446f6..125f8835 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -987,7 +987,7 @@
+ 
+ 	vopb: vop@ff930000 {
+ 		compatible = "rockchip,rk3288-vop";
+-		reg = <0x0 0xff930000 0x0 0x19c>;
++		reg = <0x0 0xff930000 0x0 0x19c>, <0x0 0xff931000 0x0 0x1000>;
+ 		interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
+ 		clocks = <&cru ACLK_VOP0>, <&cru DCLK_VOP0>, <&cru HCLK_VOP0>;
+ 		clock-names = "aclk_vop", "dclk_vop", "hclk_vop";
+-- 
+2.11.0
+
+From a0602b2724893de7ac9b4190a7a6bb66458da2d5 Mon Sep 17 00:00:00 2001
+From: Myy Miouyouyou <myy@miouyouyou.fr>
+Date: Thu, 19 Oct 2017 21:54:37 +0200
+Subject: [PATCH 17/28] ARM: DTSI: rk3288.dtsi: Fixed the SPDIF node address
+
+Now, the typo is only in the name of the node itself, not in the
+actual registers addresses definition.
+
+Still, this ought to be fixed one day !
+
+Signed-off-by: Myy Miouyouyou <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 125f8835..e5d3d3c9 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -922,7 +922,7 @@
+ 		status = "disabled";
+ 	};
+ 
+-	spdif: sound@ff88b0000 {
++	spdif: sound@ff8b0000 {
+ 		compatible = "rockchip,rk3288-spdif", "rockchip,rk3066-spdif";
+ 		reg = <0x0 0xff8b0000 0x0 0x10000>;
+ 		#sound-dai-cells = <0>;
+-- 
+2.11.0
+
+From d5d5c53173c484a13cda62a537cbf75a5df4b0e4 Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Mon, 5 Nov 2018 21:58:56 +0100
+Subject: [PATCH] ARM: DTS: rk3288-tinker: Enabling SDIO and Wifi
+
+Adding the appropriate nodes in order to exploit the WiFi capabilities
+of the board.
+Since these capabilities are provided through SDIO, and the SDIO
+nodes were not defined, these were added too.
+
+These seems to depend on each other so they are added in one big
+patch.
+
+Split if necessary.
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-tinker.dts | 62 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dts b/arch/arm/boot/dts/rk3288-tinker.dts
+index 1e43527aa..d4df13bed 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dts
++++ b/arch/arm/boot/dts/rk3288-tinker.dts
+@@ -6,8 +6,70 @@
+ /dts-v1/;
+ 
+ #include "rk3288-tinker.dtsi"
++#include <dt-bindings/clock/rockchip,rk808.h>
+ 
+ / {
+ 	model = "Rockchip RK3288 Asus Tinker Board";
+ 	compatible = "asus,rk3288-tinker", "rockchip,rk3288";
++
++	/* This is essential to get SDIO devices working.
++	   The Wifi depends on SDIO ! */
++	sdio_pwrseq: sdio-pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		clocks = <&rk808 RK808_CLKOUT1>;
++		clock-names = "ext_clock";
++		pinctrl-names = "default";
++		pinctrl-0 = <&chip_enable_h>, <&wifi_enable_h>;
++
++		/*
++		 * On the module itself this is one of these (depending
++		 * on the actual card populated):
++		 * - SDIO_RESET_L_WL_REG_ON
++		 * - PDN (power down when low)
++		 */
++		reset-gpios = <&gpio4 28 GPIO_ACTIVE_LOW>, <&gpio4 27 GPIO_ACTIVE_LOW>;
++	};
++
++	wireless-wlan {
++		compatible = "wlan-platdata";
++		rockchip,grf = <&grf>;
++		sdio_vref = <1800>;
++		status = "okay";
++		wifi_chip_type = "8723bs";
++		WIFI,host_wake_irq = <&gpio4 30 GPIO_ACTIVE_HIGH>;
++	};
++};
++
++&io_domains {
++	wifi-supply = <&vcc_18>;
++};
++
++&pinctrl {
++	sdio-pwrseq {
++		wifi_enable_h: wifienable-h {
++			rockchip,pins = <4 28 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++
++		chip_enable_h: chip-enable-h {
++			rockchip,pins = <4 27 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++};
++
++&sdio0 {
++	bus-width = <4>;
++	cap-sd-highspeed;
++	cap-sdio-irq;
++	clock-frequency = <50000000>;
++	clock-freq-min-max = <200000 50000000>;
++	disable-wp;
++	keep-power-in-suspend;
++	mmc-pwrseq = <&sdio_pwrseq>;
++	non-removable;
++	num-slots = <1>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&sdio0_bus4 &sdio0_cmd &sdio0_clk>;
++	sd-uhs-sdr104;
++	status = "okay";
++	supports-sdio;
+ };
+-- 
+2.16.4
+
+From 2c2e60256f2cbb2fce50a6317f85b1500efd1a6c Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Mon, 5 Nov 2018 22:03:26 +0100
+Subject: [PATCH] ARM: DTS: rk3288-tinker: Setup the Bluetooth UART pins
+
+The most essential being the RTS pin, which is clearly needed to
+upload the initial configuration into the Realtek Bluetooth
+chip, and make the Bluetooth chip work.
+
+Now, the Bluetooth chip also needs 3 other GPIOS to be enabled.
+I'll see how I do that through the DTS file in a near future.
+
+The 3 GPIOS being :
+Bluetooth Reset : <&gpio4 29 GPIO_ACTIVE_HIGH>
+Bluetooth Wake  : <&gpio4 26 GPIO_ACTIVE_HIGH>
+Bluetooth Wake_Host_IRQ : <&gpio4 31 GPIO_ACTIVE_HIGH>
+
+These are currently setup manually, through scripts. But it seems that
+GPIO handling through /sys entries might not be possible in the long
+term, the replacement being libgpio.
+Anyway, if you're interesting in enabling the Bluetooth GPIO by hand,
+here are the commands :
+
+cd /sys/class/gpio &&
+echo 146 > export &&
+echo 149 > export &&
+echo 151 > export &&
+echo high > gpio146/direction &&
+echo high > gpio149/direction &&
+echo high > gpio151/direction
+
+Resetting the chip is done like this :
+
+echo "Resetting the Bluetooth chip"
+cd /sys/class/gpio/gpio149 &&
+echo 0 > value &&
+sleep 1 &&
+echo 1 > value &&
+sleep 1
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-tinker.dts | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dts b/arch/arm/boot/dts/rk3288-tinker.dts
+index d4df13bed..b92e59c1e 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dts
++++ b/arch/arm/boot/dts/rk3288-tinker.dts
+@@ -73,3 +73,9 @@
+ 	status = "okay";
+ 	supports-sdio;
+ };
++
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_xfer>, <&uart0_cts>, <&uart0_rts>;
++};
++
+-- 
+2.16.4
+
+From ebc29962ac27264772a4227f5abd6900cb72fa79 Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Mon, 5 Nov 2018 20:16:05 +0100
+Subject: [PATCH] ARM: DTSI: rk3288-tinker: Improving the CPU max voltage
+
+Taken from the various patches provided by @TonyMac32 .
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-tinker.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dtsi b/arch/arm/boot/dts/rk3288-tinker.dtsi
+index aa107ee41..3da1c830f 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dtsi
++++ b/arch/arm/boot/dts/rk3288-tinker.dtsi
+@@ -164,7 +164,7 @@
+ 				regulator-always-on;
+ 				regulator-boot-on;
+ 				regulator-min-microvolt = <750000>;
+-				regulator-max-microvolt = <1350000>;
++				regulator-max-microvolt = <1450000>;
+ 				regulator-name = "vdd_arm";
+ 				regulator-ramp-delay = <6000>;
+ 				regulator-state-mem {
+-- 
+2.16.4
+
+From 3dacea70a8e434008f5b1f119a7f7da9aebc772c Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Mon, 5 Nov 2018 20:18:58 +0100
+Subject: [PATCH] ARM: DTSI: rk3288-tinker: Setting up the SD regulators
+
+Some are needed and some are not. Playing with these parameters is
+required to get reboot working on these boards.
+
+I still can't believe that these boards can't soft reset correctly.
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-tinker.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dtsi b/arch/arm/boot/dts/rk3288-tinker.dtsi
+index 3da1c830f..dd1090728 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dtsi
++++ b/arch/arm/boot/dts/rk3288-tinker.dtsi
+@@ -254,7 +254,8 @@
+ 			};
+ 
+ 			vccio_sd: LDO_REG5 {
++				regulator-always-on;
+ 				regulator-boot-on;
+ 				regulator-min-microvolt = <1800000>;
+ 				regulator-max-microvolt = <3300000>;
+ 				regulator-name = "vccio_sd";
+-- 
+2.16.4
+
+From a72e0749acad92df7b854e38e97e1dc7b4799abe Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Mon, 5 Nov 2018 22:11:24 +0100
+Subject: [PATCH] ARM: DTS: rk3288-tinker: Defined the I2C interfaces
+
+And all the hardware behind.
+
+Taken from @TonyMac32, Butchered by @Miouyouyou .
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-tinker.dts | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dts b/arch/arm/boot/dts/rk3288-tinker.dts
+index b92e59c1e..96d05fc6b 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dts
++++ b/arch/arm/boot/dts/rk3288-tinker.dts
+@@ -40,6 +40,31 @@
+ 	};
+ };
+ 
++&i2c1 {
++	status = "okay";
++};
++
++&i2c2 {
++	afc0:af-controller@0 {
++		status = "okay";
++		compatible = "silicon touch,vm149C-v4l2-i2c-subdev";
++		reg = <0x0 0x0c>;
++	};
++
++	eeprom:m24c08@50 {
++		compatible = "at,24c08";
++		reg = <0x50>;
++	};
++};
++
++&i2c3 {
++	status = "okay";
++};
++
++&i2c4 {
++	status = "okay";
++};
++
+ &io_domains {
+ 	wifi-supply = <&vcc_18>;
+ };
+-- 
+2.16.4
+
+From b24b8f83e150811ad54ee2a4843e44cd1421fafa Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Mon, 5 Nov 2018 22:15:14 +0100
+Subject: [PATCH] ARM: DTS: rk3288-tinker: Defining the SPI interface
+
+Taken from, and tested by @TonyMac32 .
+
+Well, the original one was tested by him but I had to adapt the
+registers definitions to the new 64-bits LPAE-compliant syntax.
+
+Therefore that *might* break, along with a few other patches.
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-tinker.dts | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dts b/arch/arm/boot/dts/rk3288-tinker.dts
+index 96d05fc6b..17bfea298 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dts
++++ b/arch/arm/boot/dts/rk3288-tinker.dts
+@@ -99,6 +99,25 @@
+ 	supports-sdio;
+ };
+ 
++&spi2 {
++	max-freq = <50000000>;
++	status = "okay";
++
++	spidev@0 {
++		compatible = "rockchip,spi_tinker";
++		reg = <0x0 0>;
++		spi-max-frequency = <50000000>;
++		spi-cpha = <1>;
++	};
++
++	spidev@1 {
++		compatible = "rockchip,spi_tinker";
++		reg = <0x1>;
++		spi-max-frequency = <50000000>;
++		spi-cpha = <1>;
++	};
++};
++
+ &uart0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&uart0_xfer>, <&uart0_cts>, <&uart0_rts>;
+-- 
+2.16.4
+
+From 487db7cefc9861fdaf30579c378a98f0360690ae Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Mon, 5 Nov 2018 20:27:14 +0100
+Subject: [PATCH] ARM: DTSI: rk3288-tinker: Defining SDMMC properties
+
+I never knew if these properties were required to fix the dreaded
+reboot issue...
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-tinker.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dtsi b/arch/arm/boot/dts/rk3288-tinker.dtsi
+index dd1090728..8edd6f681 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dtsi
++++ b/arch/arm/boot/dts/rk3288-tinker.dtsi
+@@ -436,7 +436,12 @@
+ 	disable-wp;			/* wp not hooked up */
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&sdmmc_clk &sdmmc_cmd &sdmmc_cd &sdmmc_bus4>;
++	sd-uhs-sdr12;
++	sd-uhs-sdr25;
++	sd-uhs-sdr50;
++	sd-uhs-sdr104;
+ 	status = "okay";
++	supports-sd;
+ 	vmmc-supply = <&vcc33_sd>;
+ 	vqmmc-supply = <&vccio_sd>;
+ };
+-- 
+2.16.4
+
+From d3d3fe433d9038dcd1a98f4d6711c0777ed06703 Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Mon, 25 Jun 2018 17:08:32 +0200
+Subject: [PATCH 26/26] ARM: DTSI: rk3288: Set the VPU MMU power domains
+
+Without that, the auto-activation of the VPU hardware IOMMU fails
+when enabling the hardware, before the "probe" phase of its device
+driver.
+
+Basically, when loading a "of_platform" device driver targeting
+the VPU devices, you'll get these errors without this patch :
+
+[12753.996950] rk_iommu ff9c0440.iommu: Error during raw reset. MMU_DTE_ADDR is not functioning
+[12754.007483] rk_iommu ff9c0440.iommu: Disable stall request timed out, status: 0xffffffff
+[12754.026652] rk_iommu ff9c0440.iommu: Disable paging request timed out, status: 0xffffffff
+[12754.045975] rk_iommu ff9c0440.iommu: Disable stall request timed out, status: 0xffffffff
+
+When using this patch, the errors disappear.
+
+This seems to be due to the IOMMU device sharing the same power domain
+than the device.
+When loading an "of_platform" driver, the kernel logic seems to try
+enabling the associated IOMMU device before letting the driver handles
+anything with the actual VPU hardware.
+It appears that setting the power domain of the VPU IOMMU nodes let the
+IOMMU driver enable the IOMMU shared power domain, and make the IOMMU
+device useable.
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 45ec4e89..46e1b8e2 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -1262,6 +1263,7 @@
+ 		interrupt-names = "hevc_mmu";
+ 		clocks = <&cru ACLK_HEVC>, <&cru HCLK_HEVC>;
+ 		clock-names = "aclk", "iface";
++		power-domains = <&power RK3288_PD_HEVC>;
+ 		#iommu-cells = <0>;
+ 		status = "disabled";
+ 	};
+-- 
+2.16.4
+
+From 4ab4f88649468dada5d609e1a6f8a71a7d5610c9 Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Sat, 29 Sep 2018 02:48:59 +0200
+Subject: [PATCH 4/6] dts: rk3288: support for dedicating npll to a vop
+
+This patch is taken from Urja Rannikko ( @urjaman ) patchset here :
+https://github.com/urjaman/arch-c201/blob/master/linux-c201/0020-RK3288-HDMI-clock-hacks-combined.patch
+https://www.spinics.net/lists/arm-kernel/msg673156.html
+
+The original description was :
+
+    Add the VOP DCLKs to the assigned clocks list so their
+    parents can be set in the dts include files for
+    devices that do dedicate npll to a vop.
+
+https://www.spinics.net/lists/arm-kernel/msg673162.html
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288.dtsi | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index d23c7fa55..ff04aab5e 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -867,12 +867,14 @@
+ 		rockchip,grf = <&grf>;
+ 		#clock-cells = <1>;
+ 		#reset-cells = <1>;
+-		assigned-clocks = <&cru PLL_GPLL>, <&cru PLL_CPLL>,
++		assigned-clocks = <&cru DCLK_VOP0>, <&cru DCLK_VOP1>,
++				  <&cru PLL_GPLL>, <&cru PLL_CPLL>,
+ 				  <&cru PLL_NPLL>, <&cru ACLK_CPU>,
+ 				  <&cru HCLK_CPU>, <&cru PCLK_CPU>,
+ 				  <&cru ACLK_PERI>, <&cru HCLK_PERI>,
+ 				  <&cru PCLK_PERI>;
+-		assigned-clock-rates = <594000000>, <400000000>,
++		assigned-clock-rates = <0>, <0>,
++				       <594000000>, <400000000>,
+ 				       <500000000>, <300000000>,
+ 				       <150000000>, <75000000>,
+ 				       <300000000>, <150000000>,
+-- 
+2.16.4
+
+From 9177b30ab083dbda2bede3b3d61ef71ad4b1ffe0 Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Thu, 1 Nov 2018 21:31:26 +0100
+Subject: [PATCH 2/2] arm: dts: veyron: Added a flag to disable cache flush
+ during reset
+
+Flushing the MMC cache of ASUS Chromebooks during initialization or
+"recovery" generates 10 minutes hangup, according to @SolidHal.
+
+This is an adaptation of @SolidHal, in order to pinpoint the fix to
+Veyron Chromebooks, and avoiding issues other RK3288 boards.
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+ arch/arm/boot/dts/rk3288-veyron.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm/boot/dts/rk3288-veyron.dtsi b/arch/arm/boot/dts/rk3288-veyron.dtsi
+index 2075120cf..fa4951fd7 100644
+--- a/arch/arm/boot/dts/rk3288-veyron.dtsi
++++ b/arch/arm/boot/dts/rk3288-veyron.dtsi
+@@ -123,6 +123,7 @@
+ 	mmc-hs200-1_8v;
+ 	mmc-pwrseq = <&emmc_pwrseq>;
+ 	non-removable;
++	no-recovery-cache-flush;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&emmc_clk &emmc_cmd &emmc_bus8>;
+ };
+-- 
+2.16.4
+
+From e0c5a419cf5464cd02996431afa98e3b22dc6801 Mon Sep 17 00:00:00 2001
+From: Myy <myy@miouyouyou.fr>
+Date: Mon, 17 Jul 2017 23:14:48 +0000
+Subject: [PATCH] clk: rockchip: add all known operating points to the allowed
+ CPU freqs
+
+Patch from Willy Tarreau
+
+Original commit message :
+At least 1920 MHz runs stable on the MiQi even on openssl speed -multi 4,
+which is by far the most intensive workload, and 1992/2016 work fine on
+the CS-008 until it starts to heat too much. So add all of them so that
+the device tree can simply manipulate them.
+
+Signed-off-by: Myy <myy@miouyouyou.fr>
+---
+ drivers/clk/rockchip/clk-rk3288.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/drivers/clk/rockchip/clk-rk3288.c b/drivers/clk/rockchip/clk-rk3288.c
+index 753c649..fd2058f 100644
+--- a/drivers/clk/rockchip/clk-rk3288.c
++++ b/drivers/clk/rockchip/clk-rk3288.c
+@@ -145,6 +145,23 @@ static struct rockchip_pll_rate_table rk3288_pll_rates[] = {
+ 	}
+ 
+ static struct rockchip_cpuclk_rate_table rk3288_cpuclk_rates[] __initdata = {
++	RK3288_CPUCLK_RATE(2208000000U, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(2184000000U, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(2160000000U, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(2136000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(2112000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(2088000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(2064000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(2040000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(2016000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(1992000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(1968000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(1944000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(1920000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(1896000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(1872000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(1848000000, 1, 3, 1, 3, 3),
++	RK3288_CPUCLK_RATE(1824000000, 1, 3, 1, 3, 3),
+ 	RK3288_CPUCLK_RATE(1800000000, 1, 3, 1, 3, 3),
+ 	RK3288_CPUCLK_RATE(1704000000, 1, 3, 1, 3, 3),
+ 	RK3288_CPUCLK_RATE(1608000000, 1, 3, 1, 3, 3),
+-- 
+2.10.2
+
+From 302cd9b8a9f1f8a7735fabea3b9a7645dc40f9cc Mon Sep 17 00:00:00 2001
+From: Myy Miouyouyou <myy@miouyouyou.fr>
+Date: Sun, 7 Jan 2018 01:52:44 +0100
+Subject: [PATCH] drivers: mmc: dw-mci-rockchip: Handle ASUS Tinkerboard reboot
+
+On ASUS Tinkerboard systems, if the SDMMC hardware is shutdown before
+rebooting, the system will be dead, as the SDMMC is the only way to
+boot anything, and the hardware doesn't power up the SDMMC hardware
+automatically when rebooting.
+
+So, when using an ASUS Tinkerboard system, a new reboot handler is
+installed. This reboot handler takes care of powering the SDMMC
+hardware again before restarting the system, resolving the issue.
+
+The code was inspired by the pwrseq_emmc.c, which seems to overcome
+similar effects with eMMC hardware.
+
+Signed-off-by: Myy Miouyouyou <myy@miouyouyou.fr>
+---
+ drivers/mmc/host/dw_mmc-rockchip.c | 66 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+
+diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
+index a3f1c2b30..7eac1f221 100644
+--- a/drivers/mmc/host/dw_mmc-rockchip.c
++++ b/drivers/mmc/host/dw_mmc-rockchip.c
+@@ -16,6 +16,11 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/slab.h>
+ 
++#include <linux/regulator/consumer.h>
++#include <linux/reboot.h>
++#include <linux/delay.h>
++#include "../core/core.h"
++
+ #include "dw_mmc.h"
+ #include "dw_mmc-pltfm.h"
+ 
+@@ -334,6 +339,66 @@ static const struct of_device_id dw_mci_rockchip_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, dw_mci_rockchip_match);
+ 
++struct dw_mci_rockchip_broken_boards_data {
++	struct notifier_block reset_nb;
++	struct platform_device *pdev;
++};
++
++/* This reboot handler handles cases where disabling the SDMMC on
++ * reboot will cause the hardware to be unable to start correctly
++ * after rebooting.
++ * 
++ * This happens with Tinkerboard systems...
++ */
++static int dw_mci_rockchip_broken_boards_reset_nb(
++	struct notifier_block *this,
++	unsigned long mode, void *cmd)
++{
++	struct dw_mci_rockchip_broken_boards_data const *data =
++		container_of(this,
++			struct dw_mci_rockchip_broken_boards_data,
++			reset_nb);
++	struct dw_mci *host = platform_get_drvdata(data->pdev);
++	struct mmc_host *mmc = host->slot->mmc;
++
++	printk(KERN_ERR "Meow.\n");
++
++	mmc_power_off(mmc);
++
++	mdelay(20);
++
++	if (!IS_ERR(mmc->supply.vmmc))
++		regulator_enable(mmc->supply.vmmc);
++
++	if (!IS_ERR(mmc->supply.vqmmc))
++		regulator_set_voltage(mmc->supply.vqmmc, 3000000, 3300000);
++
++	printk(KERN_ERR "woeM.\n");
++
++	return NOTIFY_DONE;
++}
++
++static void dw_mci_rockchip_register_broken_boards_reboot_handler(
++	struct platform_device *pdev)
++{
++	struct dw_mci_rockchip_broken_boards_data *data;
++
++	if (!of_machine_is_compatible("asus,rk3288-tinker"))
++		return;
++
++	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
++
++	if (!data)
++		return;
++
++	data->reset_nb.notifier_call =
++		dw_mci_rockchip_broken_boards_reset_nb;
++	data->reset_nb.priority = 255;
++	register_restart_handler(&data->reset_nb);
++
++	data->pdev = pdev;
++}
++
+ static int dw_mci_rockchip_probe(struct platform_device *pdev)
+ {
+ 	const struct dw_mci_drv_data *drv_data;
+@@ -361,6 +426,7 @@ static int dw_mci_rockchip_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	pm_runtime_put_autosuspend(&pdev->dev);
++	dw_mci_rockchip_register_broken_boards_reboot_handler(pdev);
+ 
+ 	return 0;
+ }
+-- 
+2.14.1
+
+From e7b60b10cf3fd2f4374ab26c314383121c27fe82 Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Tue, 22 Jan 2019 21:24:37 +0100
+Subject: [PATCH] soc: rockchip: power-domain: export idle request for RKMPP
+
+This function, and the added header, are required by the RKMPP driver,
+provided by Randy Li. However, I can't attest that the provided code
+is correct.
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+ drivers/soc/rockchip/pm_domains.c | 23 +++++++++++++++++++++++
+ include/soc/rockchip/pm_domains.h | 15 +++++++++++++++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 include/soc/rockchip/pm_domains.h
+
+diff --git a/drivers/soc/rockchip/pm_domains.c b/drivers/soc/rockchip/pm_domains.c
+index 847c7c482..3e2e252cb 100644
+--- a/drivers/soc/rockchip/pm_domains.c
++++ b/drivers/soc/rockchip/pm_domains.c
+@@ -199,6 +199,29 @@ static int rockchip_pmu_set_idle_request(struct rockchip_pm_domain *pd,
+ 	return 0;
+ }
+ 
++int rockchip_pmu_idle_request(struct device *dev, bool idle)
++{
++	struct generic_pm_domain *genpd;
++	struct rockchip_pm_domain *pd;
++	int ret;
++
++	if (IS_ERR_OR_NULL(dev))
++		return -EINVAL;
++
++	if (IS_ERR_OR_NULL(dev->pm_domain))
++		return -EINVAL;
++
++	genpd = pd_to_genpd(dev->pm_domain);
++	pd = to_rockchip_pd(genpd);
++
++	mutex_lock(&pd->pmu->mutex);
++	ret = rockchip_pmu_set_idle_request(pd, idle);
++	mutex_unlock(&pd->pmu->mutex);
++
++	return ret;
++}
++EXPORT_SYMBOL(rockchip_pmu_idle_request);
++
+ static int rockchip_pmu_save_qos(struct rockchip_pm_domain *pd)
+ {
+ 	int i;
+diff --git a/include/soc/rockchip/pm_domains.h b/include/soc/rockchip/pm_domains.h
+new file mode 100644
+index 000000000..720b3314e
+--- /dev/null
++++ b/include/soc/rockchip/pm_domains.h
+@@ -0,0 +1,15 @@
++/*
++ * pm_domain.h - Definitions and headers related to device power domains.
++ *
++ * Copyright (C) 2017 Randy Li <ayaka@soulik.info>.
++ *
++ * This file is released under the GPLv2.
++ */
++
++#ifndef _LINUX_ROCKCHIP_PM_H
++#define _LINUX_ROCKCHIP_PM_H
++#include <linux/device.h>
++
++int rockchip_pmu_idle_request(struct device *dev, bool idle);
++
++#endif /* _LINUX_ROCKCHIP_PM_H */
+-- 
+2.16.4
+
+FROM: Solidhal <hal@halemmerich.com>
+
+This patch reverses commit 2b721118b7821107757eb1d37af4b60e877b27e7, as can bee seen here:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2b721118b7821107757eb1d37af4b60e877b27e7
+
+This commit caused issues on veyron speedy with ath9k and dwc2 drivers. Any ath9k device (ar9271) 
+would intermittently work, most of the time ending in errors as can bee seen here:
+https://github.com/SolidHal/PrawnOS/issues/38
+This commit fixes that issue.
+This is only a temporary work around while a permenant fix is found, as this commit seems to only cause issues
+with dwc2
+
+diff --git a/drivers/net/wireless/ath/ath9k/hif_usb.c b/drivers/net/wireless/ath/ath9k/hif_usb.c
+--- b/drivers/net/wireless/ath/ath9k/hif_usb.c
++++ a/drivers/net/wireless/ath/ath9k/hif_usb.c
+@@ -115,10 +115,10 @@
+ 	cmd->skb = skb;
+ 	cmd->hif_dev = hif_dev;
+ 
++	usb_fill_bulk_urb(urb, hif_dev->udev,
++			 usb_sndbulkpipe(hif_dev->udev, USB_REG_OUT_PIPE),
+-	usb_fill_int_urb(urb, hif_dev->udev,
+-			 usb_sndintpipe(hif_dev->udev, USB_REG_OUT_PIPE),
+ 			 skb->data, skb->len,
++			 hif_usb_regout_cb, cmd);
+-			 hif_usb_regout_cb, cmd, 1);
+ 
+ 	usb_anchor_urb(urb, &hif_dev->regout_submitted);
+ 	ret = usb_submit_urb(urb, GFP_KERNEL);
+@@ -723,11 +723,11 @@
+ 			return;
+ 		}
+ 
++		usb_fill_bulk_urb(urb, hif_dev->udev,
++				 usb_rcvbulkpipe(hif_dev->udev,
+-		usb_fill_int_urb(urb, hif_dev->udev,
+-				 usb_rcvintpipe(hif_dev->udev,
+ 						 USB_REG_IN_PIPE),
+ 				 nskb->data, MAX_REG_IN_BUF_SIZE,
++				 ath9k_hif_usb_reg_in_cb, nskb);
+-				 ath9k_hif_usb_reg_in_cb, nskb, 1);
+ 	}
+ 
+ resubmit:
+@@ -909,11 +909,11 @@
+ 			goto err_skb;
+ 		}
+ 
++		usb_fill_bulk_urb(urb, hif_dev->udev,
++				  usb_rcvbulkpipe(hif_dev->udev,
+-		usb_fill_int_urb(urb, hif_dev->udev,
+-				  usb_rcvintpipe(hif_dev->udev,
+ 						  USB_REG_IN_PIPE),
+ 				  skb->data, MAX_REG_IN_BUF_SIZE,
++				  ath9k_hif_usb_reg_in_cb, skb);
+-				  ath9k_hif_usb_reg_in_cb, skb, 1);
+ 
+ 		/* Anchor URB */
+ 		usb_anchor_urb(urb, &hif_dev->reg_in_submitted);
+@@ -1031,7 +1031,9 @@
+ 
+ static int ath9k_hif_usb_dev_init(struct hif_device_usb *hif_dev)
+ {
++	struct usb_host_interface *alt = &hif_dev->interface->altsetting[0];
++	struct usb_endpoint_descriptor *endp;
++	int ret, idx;
+-	int ret;
+ 
+ 	ret = ath9k_hif_usb_download_fw(hif_dev);
+ 	if (ret) {
+@@ -1041,6 +1043,20 @@
+ 		return ret;
+ 	}
+ 
++	/* On downloading the firmware to the target, the USB descriptor of EP4
++	 * is 'patched' to change the type of the endpoint to Bulk. This will
++	 * bring down CPU usage during the scan period.
++	 */
++	for (idx = 0; idx < alt->desc.bNumEndpoints; idx++) {
++		endp = &alt->endpoint[idx].desc;
++		if ((endp->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK)
++				== USB_ENDPOINT_XFER_INT) {
++			endp->bmAttributes &= ~USB_ENDPOINT_XFERTYPE_MASK;
++			endp->bmAttributes |= USB_ENDPOINT_XFER_BULK;
++			endp->bInterval = 0;
++		}
++	}
++
+ 	/* Alloc URBs */
+ 	ret = ath9k_hif_usb_alloc_urbs(hif_dev);
+ 	if (ret) {
+@@ -1252,7 +1268,7 @@
+ 	if (!buf)
+ 		return;
+ 
++	ret = usb_bulk_msg(udev, usb_sndbulkpipe(udev, USB_REG_OUT_PIPE),
+-	ret = usb_interrupt_msg(udev, usb_sndintpipe(udev, USB_REG_OUT_PIPE),
+ 			   buf, 4, NULL, USB_MSG_TIMEOUT);
+ 	if (ret)
+ 		dev_err(&udev->dev, "ath9k_htc: USB reboot failed\n");
+
+From e03d074b8ec00718337e7373e991912f6b6f9a52 Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Mon, 5 Nov 2018 19:53:43 +0100
+Subject: [PATCH] clk: rockchip: rk3288: Support for dedicating NPLL to a VOP
+
+This patch is taken from Urja Rannikko ( @urjaman ) patchset here :
+https://github.com/urjaman/arch-c201/blob/master/linux-c201/0020-RK3288-HDMI-clock-hacks-combined.patch
+https://www.spinics.net/lists/arm-kernel/msg673156.html
+
+I'm not really sure what this does exactly. It basically sets the
+parent clock of the newly added clocks, if the newly added property
+"rockchip,npll-for-vop" is detected and set.
+
+I have no clear idea how HDMI Neuronal PLL (and PLL in general) work,
+so I cannot comment on what it's doing and if it's a good idea in
+general.
+
+Now, I still have to test if that patch does anything useful on
+RK3288 boards. If it doesn't, I might just throw it away on next
+versions.
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+ drivers/clk/rockchip/clk-rk3288.c | 68 ++++++++++++++++++++++++++++++++-------
+ drivers/clk/rockchip/clk.h        |  3 ++
+ 2 files changed, 59 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/clk/rockchip/clk-rk3288.c b/drivers/clk/rockchip/clk-rk3288.c
+index 13b38cb89..0d8b99b6b 100644
+--- a/drivers/clk/rockchip/clk-rk3288.c
++++ b/drivers/clk/rockchip/clk-rk3288.c
+@@ -215,10 +215,13 @@ PNAME(mux_ddrphy_p)		= { "dpll_ddr", "gpll_ddr" };
+ PNAME(mux_aclk_cpu_src_p)	= { "cpll_aclk_cpu", "gpll_aclk_cpu" };
+ 
+ PNAME(mux_pll_src_cpll_gpll_p)		= { "cpll", "gpll" };
+-PNAME(mux_pll_src_npll_cpll_gpll_p)	= { "npll", "cpll", "gpll" };
+-PNAME(mux_pll_src_cpll_gpll_npll_p)	= { "cpll", "gpll", "npll" };
++PNAME_ED(mux_pll_src_npll_cpll_gpll_p)	= { "npll", "cpll", "gpll" };
++
++PNAME_ED(mux_pll_src_cgn_pll_nonvop_p)	= { "cpll", "gpll", "npll" };
++PNAME_ED(mux_pll_src_cgn_pll_vop0_p) = { "cpll", "gpll", "npll" };
++PNAME_ED(mux_pll_src_cgn_pll_vop1_p) = { "cpll", "gpll", "npll" };
+ PNAME(mux_pll_src_cpll_gpll_usb480m_p)	= { "cpll", "gpll", "unstable:usbphy480m_src" };
+-PNAME(mux_pll_src_cpll_gll_usb_npll_p)	= { "cpll", "gpll", "unstable:usbphy480m_src", "npll" };
++PNAME_ED(mux_pll_src_cpll_gll_usb_npll_p) = { "cpll", "gpll", "usbphy480m_src", "npll" };
+ 
+ PNAME(mux_mmc_src_p)	= { "cpll", "gpll", "xin24m", "xin24m" };
+ PNAME(mux_i2s_pre_p)	= { "i2s_src", "i2s_frac", "ext_i2s", "xin12m" };
+@@ -464,24 +467,24 @@ static struct rockchip_clk_branch rk3288_clk_branches[] __initdata = {
+ 			RK3288_CLKSEL_CON(30), 14, 2, MFLAGS, 8, 5, DFLAGS,
+ 			RK3288_CLKGATE_CON(3), 4, GFLAGS),
+ 
+-	COMPOSITE(DCLK_VOP0, "dclk_vop0", mux_pll_src_cpll_gpll_npll_p, 0,
++	COMPOSITE(DCLK_VOP0, "dclk_vop0", mux_pll_src_cgn_pll_vop0_p, 0,
+ 			RK3288_CLKSEL_CON(27), 0, 2, MFLAGS, 8, 8, DFLAGS,
+ 			RK3288_CLKGATE_CON(3), 1, GFLAGS),
+-	COMPOSITE(DCLK_VOP1, "dclk_vop1", mux_pll_src_cpll_gpll_npll_p, 0,
++	COMPOSITE(DCLK_VOP1, "dclk_vop1", mux_pll_src_cgn_pll_vop1_p, 0,
+ 			RK3288_CLKSEL_CON(29), 6, 2, MFLAGS, 8, 8, DFLAGS,
+ 			RK3288_CLKGATE_CON(3), 3, GFLAGS),
+ 
+ 	COMPOSITE_NODIV(SCLK_EDP_24M, "sclk_edp_24m", mux_edp_24m_p, 0,
+ 			RK3288_CLKSEL_CON(28), 15, 1, MFLAGS,
+ 			RK3288_CLKGATE_CON(3), 12, GFLAGS),
+-	COMPOSITE(SCLK_EDP, "sclk_edp", mux_pll_src_cpll_gpll_npll_p, 0,
++	COMPOSITE(SCLK_EDP, "sclk_edp", mux_pll_src_cgn_pll_nonvop_p, 0,
+ 			RK3288_CLKSEL_CON(28), 6, 2, MFLAGS, 0, 6, DFLAGS,
+ 			RK3288_CLKGATE_CON(3), 13, GFLAGS),
+ 
+-	COMPOSITE(SCLK_ISP, "sclk_isp", mux_pll_src_cpll_gpll_npll_p, 0,
++	COMPOSITE(SCLK_ISP, "sclk_isp", mux_pll_src_cgn_pll_nonvop_p, 0,
+ 			RK3288_CLKSEL_CON(6), 6, 2, MFLAGS, 0, 6, DFLAGS,
+ 			RK3288_CLKGATE_CON(3), 14, GFLAGS),
+-	COMPOSITE(SCLK_ISP_JPE, "sclk_isp_jpe", mux_pll_src_cpll_gpll_npll_p, 0,
++	COMPOSITE(SCLK_ISP_JPE, "sclk_isp_jpe", mux_pll_src_cgn_pll_nonvop_p, 0,
+ 			RK3288_CLKSEL_CON(6), 14, 2, MFLAGS, 8, 6, DFLAGS,
+ 			RK3288_CLKGATE_CON(3), 15, GFLAGS),
+ 
+@@ -490,16 +493,16 @@ static struct rockchip_clk_branch rk3288_clk_branches[] __initdata = {
+ 	GATE(SCLK_HDMI_CEC, "sclk_hdmi_cec", "xin32k", 0,
+ 			RK3288_CLKGATE_CON(5), 11, GFLAGS),
+ 
+-	COMPOSITE(ACLK_HEVC, "aclk_hevc", mux_pll_src_cpll_gpll_npll_p, 0,
++	COMPOSITE(ACLK_HEVC, "aclk_hevc", mux_pll_src_cgn_pll_nonvop_p, 0,
+ 			RK3288_CLKSEL_CON(39), 14, 2, MFLAGS, 8, 5, DFLAGS,
+ 			RK3288_CLKGATE_CON(13), 13, GFLAGS),
+ 	DIV(HCLK_HEVC, "hclk_hevc", "aclk_hevc", 0,
+ 			RK3288_CLKSEL_CON(40), 12, 2, DFLAGS),
+ 
+-	COMPOSITE(SCLK_HEVC_CABAC, "sclk_hevc_cabac", mux_pll_src_cpll_gpll_npll_p, 0,
++	COMPOSITE(SCLK_HEVC_CABAC, "sclk_hevc_cabac", mux_pll_src_cgn_pll_nonvop_p, 0,
+ 			RK3288_CLKSEL_CON(42), 6, 2, MFLAGS, 0, 5, DFLAGS,
+ 			RK3288_CLKGATE_CON(13), 14, GFLAGS),
+-	COMPOSITE(SCLK_HEVC_CORE, "sclk_hevc_core", mux_pll_src_cpll_gpll_npll_p, 0,
++	COMPOSITE(SCLK_HEVC_CORE, "sclk_hevc_core", mux_pll_src_cgn_pll_nonvop_p, 0,
+ 			RK3288_CLKSEL_CON(42), 14, 2, MFLAGS, 8, 5, DFLAGS,
+ 			RK3288_CLKGATE_CON(13), 15, GFLAGS),
+ 
+@@ -573,7 +576,7 @@ static struct rockchip_clk_branch rk3288_clk_branches[] __initdata = {
+ 	COMPOSITE(0, "sclk_tspout", mux_tspout_p, 0,
+ 			RK3288_CLKSEL_CON(35), 14, 2, MFLAGS, 8, 5, DFLAGS,
+ 			RK3288_CLKGATE_CON(4), 11, GFLAGS),
+-	COMPOSITE(0, "sclk_tsp", mux_pll_src_cpll_gpll_npll_p, 0,
++	COMPOSITE(0, "sclk_tsp", mux_pll_src_cgn_pll_nonvop_p, 0,
+ 			RK3288_CLKSEL_CON(35), 6, 2, MFLAGS, 0, 5, DFLAGS,
+ 			RK3288_CLKGATE_CON(4), 10, GFLAGS),
+ 
+@@ -933,5 +936,6 @@ static void __init rk3288_clk_init(struct device_node *np)
+ {
+ 	struct rockchip_clk_provider *ctx;
++	s32 npll_vop = -1;
+ 
+ 	rk3288_cru_base = of_iomap(np, 0);
+ 	if (!rk3288_cru_base) {
+@@ -940,6 +944,46 @@ static void __init rk3288_clk_init(struct device_node *np)
+ 		return;
+ 	}
+ 
++	if (!of_property_read_s32(np, "rockchip,npll-for-vop", &npll_vop)) {
++		if ((npll_vop < -1) || (npll_vop > 1)) {
++			pr_warn("%s: invalid VOP to dedicate NPLL to: %d\n",
++				__func__, npll_vop);
++		} else if (npll_vop >= 0) {
++			unsigned int vop_clk_id;
++			const char ** npll_names;
++			const char ** non_npll_names;
++			int i;
++
++			/* Firstly, not-VOP needs to not use npll */
++			mux_pll_src_npll_cpll_gpll_p[0] = "dummy_npll";
++			mux_pll_src_cgn_pll_nonvop_p[2] = "dummy_npll";
++			mux_pll_src_cpll_gll_usb_npll_p[3] = "dummy_npll";
++
++			/* Then the npll VOP needs to only use npll, and the other one not use npll. */
++			if (npll_vop) {
++				vop_clk_id = DCLK_VOP1;
++				npll_names = mux_pll_src_cgn_pll_vop1_p;
++				non_npll_names = mux_pll_src_cgn_pll_vop0_p;
++			} else {
++				vop_clk_id = DCLK_VOP0;
++				npll_names = mux_pll_src_cgn_pll_vop0_p;
++				non_npll_names = mux_pll_src_cgn_pll_vop1_p;
++			}
++			npll_names[0] = "dummy_cpll";
++			npll_names[1] = "dummy_gpll";
++			non_npll_names[2] = "dummy_npll";
++
++			/* Lastly the npll-dedicated-VOP needs to be able to control npll. */
++			for (i = 0; i < ARRAY_SIZE(rk3288_clk_branches); i++) {
++				if (rk3288_clk_branches[i].id == vop_clk_id) {
++					rk3288_clk_branches[i].flags |= CLK_SET_RATE_PARENT;
++					break;
++				}
++			}
++			pr_debug("%s: npll dedicated for VOP %d\n", __func__, npll_vop);
++		}
++	}
++
+ 	ctx = rockchip_clk_init(np, rk3288_cru_base, CLK_NR_CLKS);
+ 	if (IS_ERR(ctx)) {
+ 		pr_err("%s: rockchip clk init failed\n", __func__);
+diff --git a/drivers/clk/rockchip/clk.h b/drivers/clk/rockchip/clk.h
+index 6b53fff4c..dbda9d281 100644
+--- a/drivers/clk/rockchip/clk.h
++++ b/drivers/clk/rockchip/clk.h
+@@ -382,6 +382,9 @@ struct clk *rockchip_clk_register_muxgrf(const char *name,
+ 
+ #define PNAME(x) static const char *const x[] __initconst
+ 
++/* For when you want to be able to modify the pointers. */
++#define PNAME_ED(x) static const char * x[] __initdata
++
+ enum rockchip_clk_branch_type {
+ 	branch_composite,
+ 	branch_mux,
+-- 
+2.16.4
+
+From 6c86916e81fa18394d9b57b4af44f9948e100e96 Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Sat, 29 Sep 2018 03:02:10 +0200
+Subject: [PATCH 6/6] drm: dw_hdmi-rockchip: better clock selection logic and
+ dts-based rate list
+
+This patch is taken from Urja Rannikko ( @urjaman ) patchset here :
+https://github.com/urjaman/arch-c201/blob/master/linux-c201/0020-RK3288-HDMI-clock-hacks-combined.patch
+https://www.spinics.net/lists/arm-kernel/msg673156.html
+
+The original description was :
+    This contains traces of the following commits from the ChromeOS 3.14
+    tree, which improve RF/EMI performance and detach the clock selection
+    logic from the HDMI PHY configurations, plus support for configuring
+    the allowed clock rates via device tree as they are dependent on
+    PLL configuration and maybe even the PCB layout and other hardware things,
+    eg. interference to wifi or such (EMI).
+
+    Rates that were allowed previous to this patch are added as the fallback
+    list if no dts configuration exists.
+
+    CHROMIUM: drm: rockchip/dw_hdmi-rockchip: Adjust rockchip_mpll_cfg for 146.25
+    CHROMIUM: drm: rockchip/dw_hdmi-rockchip: expand the informal mpll config
+    CHROMIUM: drm: rockchip/dw_hdmi-rockchip: add slop to more tables
+    CHROMIUM: drm: rockchip/dw_hdmi-rockchip: redo rockchip hdmi to allow slop
+    CHROMIUM: drm: rockchip/dw_hdmi-rockchip: Use auto-generated tables
+    CHROMIUM: drm: rockchip/dw_hdmi-rockchip: Fixup the clock to be what we expect
+    CHROMIUM: drm/rockchip: hdmi: adjust cklvl & txlvl for RF/EMI
+    CHROMIUM: drm: rockchip/dw_hdmi-rockchip: Set cur_ctr to 0 always
+    CHROMIUM: drm: rockchip/dw_hdmi-rockchip: Decrease slop
+
+https://www.spinics.net/lists/arm-kernel/msg673163.html
+
+This is the patch that takes into account the new property
+"rockchip,hdmi-rates-hz" that allows the definition of the HDMI
+frequencies in the DTS file.
+This also change a lot of HDMI frequencies definition, so that
+*will* require some extensive testing.
+
+Still, if it works fine, this should make tinkering the HDMI
+frequencies easier, in case you have a very special HDMI screen.
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+diff --git a/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c b/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
+index cdc304d4c..91c7dc07b 100644
+--- a/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
++++ b/drivers/gpu/drm/rockchip/dw_hdmi-rockchip.c
+@@ -73,122 +73,141 @@ struct rockchip_hdmi {
+ 	struct clk *grf_clk;
+ 	struct dw_hdmi *hdmi;
+ 	struct phy *phy;
++	u32* rates;
++	u32 rates_cnt;
+ };
+ 
++#define CLK_SLOP(clk)		((clk) / 1000)
++#define CLK_PLUS_SLOP(clk)	((clk) + CLK_SLOP(clk))
++
+ #define to_rockchip_hdmi(x)	container_of(x, struct rockchip_hdmi, x)
+ 
++/* These were the rates allowed by the driver before rates list in device tree,
++ * so keep them around as a fallback */
++static const u32 dw_hdmi_fallback_rates[] = {
++	27000000,
++	36000000,
++	40000000,
++	54000000,
++	65000000,
++	66000000,
++	74250000,
++	83500000,
++	106500000,
++	108000000,
++	146250000,
++	148500000
++};
++
+ static const struct dw_hdmi_mpll_config rockchip_mpll_cfg[] = {
+ 	{
+-		27000000, {
+-			{ 0x00b3, 0x0000},
+-			{ 0x2153, 0x0000},
+-			{ 0x40f3, 0x0000}
++		30666000, {
++			{ 0x00b3, 0x0000 },
++			{ 0x2153, 0x0000 },
++			{ 0x40f3, 0x0000 },
++		},
++	},  {
++		36800000, {
++			{ 0x00b3, 0x0000 },
++			{ 0x2153, 0x0000 },
++			{ 0x40a2, 0x0001 },
+ 		},
+-	}, {
+-		36000000, {
+-			{ 0x00b3, 0x0000},
+-			{ 0x2153, 0x0000},
+-			{ 0x40f3, 0x0000}
++	},  {
++		46000000, {
++			{ 0x00b3, 0x0000 },
++			{ 0x2142, 0x0001 },
++			{ 0x40a2, 0x0001 },
+ 		},
+-	}, {
+-		40000000, {
+-			{ 0x00b3, 0x0000},
+-			{ 0x2153, 0x0000},
+-			{ 0x40f3, 0x0000}
++	},  {
++		61333000, {
++			{ 0x0072, 0x0001 },
++			{ 0x2142, 0x0001 },
++			{ 0x40a2, 0x0001 },
+ 		},
+-	}, {
+-		54000000, {
+-			{ 0x0072, 0x0001},
+-			{ 0x2142, 0x0001},
+-			{ 0x40a2, 0x0001},
++	},  {
++		73600000, {
++			{ 0x0072, 0x0001 },
++			{ 0x2142, 0x0001 },
++			{ 0x4061, 0x0002 },
+ 		},
+-	}, {
+-		65000000, {
+-			{ 0x0072, 0x0001},
+-			{ 0x2142, 0x0001},
+-			{ 0x40a2, 0x0001},
++	},  {
++		92000000, {
++			{ 0x0072, 0x0001 },
++			{ 0x2145, 0x0002 },
++			{ 0x4061, 0x0002 },
+ 		},
+-	}, {
+-		66000000, {
+-			{ 0x013e, 0x0003},
+-			{ 0x217e, 0x0002},
+-			{ 0x4061, 0x0002}
++	},  {
++		122666000, {
++			{ 0x0051, 0x0002 },
++			{ 0x2145, 0x0002 },
++			{ 0x4061, 0x0002 },
+ 		},
+-	}, {
+-		74250000, {
+-			{ 0x0072, 0x0001},
+-			{ 0x2145, 0x0002},
+-			{ 0x4061, 0x0002}
++	},  {
++		147200000, {
++			{ 0x0051, 0x0002 },
++			{ 0x2145, 0x0002 },
++			{ 0x4064, 0x0003 },
+ 		},
+-	}, {
+-		83500000, {
+-			{ 0x0072, 0x0001},
++	},  {
++		184000000, {
++			{ 0x0051, 0x0002 },
++			{ 0x214c, 0x0003 },
++			{ 0x4064, 0x0003 },
+ 		},
+-	}, {
+-		108000000, {
+-			{ 0x0051, 0x0002},
+-			{ 0x2145, 0x0002},
+-			{ 0x4061, 0x0002}
++	},  {
++		226666000, {
++			{ 0x0040, 0x0003 },
++			{ 0x214c, 0x0003 },
++			{ 0x4064, 0x0003 },
+ 		},
+-	}, {
+-		106500000, {
+-			{ 0x0051, 0x0002},
+-			{ 0x2145, 0x0002},
+-			{ 0x4061, 0x0002}
++	},  {
++		272000000, {
++			{ 0x0040, 0x0003 },
++			{ 0x214c, 0x0003 },
++			{ 0x5a64, 0x0003 },
+ 		},
+-	}, {
+-		146250000, {
+-			{ 0x0051, 0x0002},
+-			{ 0x2145, 0x0002},
+-			{ 0x4061, 0x0002}
++	},  {
++		340000000, {
++			{ 0x0040, 0x0003 },
++			{ 0x3b4c, 0x0003 },
++			{ 0x5a64, 0x0003 },
+ 		},
+-	}, {
+-		148500000, {
+-			{ 0x0051, 0x0003},
+-			{ 0x214c, 0x0003},
+-			{ 0x4064, 0x0003}
++	},  {
++		600000000, {
++			{ 0x1a40, 0x0003 },
++			{ 0x3b4c, 0x0003 },
++			{ 0x5a64, 0x0003 },
+ 		},
+-	}, {
++	},  {
+ 		~0UL, {
+-			{ 0x00a0, 0x000a },
+-			{ 0x2001, 0x000f },
+-			{ 0x4002, 0x000f },
++			{ 0x0000, 0x0000 },
++			{ 0x0000, 0x0000 },
++			{ 0x0000, 0x0000 },
+ 		},
+ 	}
+ };
+ 
+ static const struct dw_hdmi_curr_ctrl rockchip_cur_ctr[] = {
+-	/*      pixelclk    bpp8    bpp10   bpp12 */
++	/*      pixelclk     bpp8    bpp10   bpp12 */
+ 	{
+-		40000000,  { 0x0018, 0x0018, 0x0018 },
+-	}, {
+-		65000000,  { 0x0028, 0x0028, 0x0028 },
+-	}, {
+-		66000000,  { 0x0038, 0x0038, 0x0038 },
+-	}, {
+-		74250000,  { 0x0028, 0x0038, 0x0038 },
+-	}, {
+-		83500000,  { 0x0028, 0x0038, 0x0038 },
+-	}, {
+-		146250000, { 0x0038, 0x0038, 0x0038 },
+-	}, {
+-		148500000, { 0x0000, 0x0038, 0x0038 },
+-	}, {
+-		~0UL,      { 0x0000, 0x0000, 0x0000},
+-	}
++		600000000, { 0x0000, 0x0000, 0x0000 },
++	},  {
++		~0UL,      { 0x0000, 0x0000, 0x0000 },
++	},
+ };
+ 
+ static const struct dw_hdmi_phy_config rockchip_phy_config[] = {
+ 	/*pixelclk   symbol   term   vlev*/
+-	{ 74250000,  0x8009, 0x0004, 0x0272},
+-	{ 148500000, 0x802b, 0x0004, 0x028d},
+-	{ 297000000, 0x8039, 0x0005, 0x028d},
+-	{ ~0UL,	     0x0000, 0x0000, 0x0000}
++	{ CLK_PLUS_SLOP(74250000),  0x8009, 0x0004, 0x0272},
++	{ CLK_PLUS_SLOP(165000000), 0x802b, 0x0004, 0x0209},
++	{ CLK_PLUS_SLOP(297000000), 0x8039, 0x0005, 0x028d},
++	{ ~0UL,	                    0x0000, 0x0000, 0x0000}
+ };
+ 
+ static int rockchip_hdmi_parse_dt(struct rockchip_hdmi *hdmi)
+ {
+ 	struct device_node *np = hdmi->dev->of_node;
++	int rates_cnt;
+ 
+ 	hdmi->regmap = syscon_regmap_lookup_by_phandle(np, "rockchip,grf");
+ 	if (IS_ERR(hdmi->regmap)) {
+@@ -216,26 +235,55 @@ static int rockchip_hdmi_parse_dt(struct rockchip_hdmi *hdmi)
+ 		return PTR_ERR(hdmi->grf_clk);
+ 	}
+ 
++	if ((rates_cnt = of_property_count_u32_elems(np, "rockchip,hdmi-rates-hz")) > 0) {
++		int rv;
++		u32 *rates = devm_kmalloc_array(hdmi->dev, rates_cnt, sizeof(u32), GFP_KERNEL);
++		if (!rates)
++			return -ENOMEM;
++		rv = of_property_read_u32_array(np, "rockchip,hdmi-rates-hz", rates, rates_cnt);
++		if (rv)
++			return rv;
++		hdmi->rates = rates;
++		hdmi->rates_cnt = rates_cnt;
++	} else {
++		rates_cnt = ARRAY_SIZE(dw_hdmi_fallback_rates);
++		hdmi->rates = devm_kmalloc_array(hdmi->dev, rates_cnt, sizeof(u32), GFP_KERNEL);
++		if (!hdmi->rates)
++			return -ENOMEM;
++		memcpy(hdmi->rates, dw_hdmi_fallback_rates, rates_cnt * sizeof(u32));
++		hdmi->rates_cnt = rates_cnt;
++	}
++
++
+ 	return 0;
+ }
+ 
+ static enum drm_mode_status
+-dw_hdmi_rockchip_mode_valid(struct drm_connector *connector,
++dw_hdmi_rockchip_encoder_mode_valid(struct drm_encoder *encoder,
+ 			    const struct drm_display_mode *mode)
+ {
+-	const struct dw_hdmi_mpll_config *mpll_cfg = rockchip_mpll_cfg;
++	struct rockchip_hdmi *hdmi = to_rockchip_hdmi(encoder);
+ 	int pclk = mode->clock * 1000;
+-	bool valid = false;
++	int num_rates = hdmi->rates_cnt;
+ 	int i;
+ 
+-	for (i = 0; mpll_cfg[i].mpixelclock != (~0UL); i++) {
+-		if (pclk == mpll_cfg[i].mpixelclock) {
+-			valid = true;
+-			break;
+-		}
++	/*
++	 * Pixel clocks we support are always < 2GHz and so fit in an
++	 * int.  We should make sure source rate does too so we don't get
++	 * overflow when we multiply by 1000.
++	 */
++	if (mode->clock > INT_MAX / 1000)
++		return MODE_BAD;
++
++	for (i = 0; i < num_rates; i++) {
++		int slop = CLK_SLOP(pclk);
++
++		if ((pclk >= hdmi->rates[i] - slop) &&
++		    (pclk <= hdmi->rates[i] + slop))
++			return MODE_OK;
+ 	}
+ 
+-	return (valid) ? MODE_OK : MODE_BAD;
++	return MODE_BAD;
+ }
+ 
+ static const struct drm_encoder_funcs dw_hdmi_rockchip_encoder_funcs = {
+@@ -251,7 +299,39 @@ dw_hdmi_rockchip_encoder_mode_fixup(struct drm_encoder *encoder,
+ 				    const struct drm_display_mode *mode,
+ 				    struct drm_display_mode *adj_mode)
+ {
+-	return true;
++	struct rockchip_hdmi *hdmi = to_rockchip_hdmi(encoder);
++	int pclk = adj_mode->clock * 1000;
++	int best_diff = INT_MAX;
++	int best_clock = 0;
++	int slop;
++	int i;
++
++	/* Pick the best clock */
++	for (i = 0; i < hdmi->rates_cnt; i++) {
++		int diff = hdmi->rates[i] - pclk;
++
++		if (diff < 0)
++			diff = -diff;
++		if (diff < best_diff) {
++			best_diff = diff;
++			best_clock = hdmi->rates[i];
++
++			/* Bail early if we're exact */
++			if (best_diff == 0)
++				return true;
++		}
++	}
++
++	/* Double check that it's OK */
++	slop = CLK_SLOP(pclk);
++	if ((pclk >= best_clock - slop) && (pclk <= best_clock + slop)) {
++		adj_mode->clock = DIV_ROUND_UP(best_clock, 1000);
++		return true;
++	}
++
++	/* Shoudn't be here; we should have said rate wasn't valid */
++	dev_warn(hdmi->dev, "tried to set invalid rate %d\n", adj_mode->clock);
++	return false;
+ }
+ 
+ static void dw_hdmi_rockchip_encoder_mode_set(struct drm_encoder *encoder,
+@@ -307,6 +387,7 @@ dw_hdmi_rockchip_encoder_atomic_check(struct drm_encoder *encoder,
+ }
+ 
+ static const struct drm_encoder_helper_funcs dw_hdmi_rockchip_encoder_helper_funcs = {
++	.mode_valid = dw_hdmi_rockchip_encoder_mode_valid,
+ 	.mode_fixup = dw_hdmi_rockchip_encoder_mode_fixup,
+ 	.mode_set   = dw_hdmi_rockchip_encoder_mode_set,
+ 	.enable     = dw_hdmi_rockchip_encoder_enable,
+@@ -406,7 +487,6 @@ static struct rockchip_hdmi_chip_data rk3228_chip_data = {
+ };
+ 
+ static const struct dw_hdmi_plat_data rk3228_hdmi_drv_data = {
+-	.mode_valid = dw_hdmi_rockchip_mode_valid,
+ 	.mpll_cfg = rockchip_mpll_cfg,
+ 	.cur_ctr = rockchip_cur_ctr,
+ 	.phy_config = rockchip_phy_config,
+@@ -423,7 +503,6 @@ static struct rockchip_hdmi_chip_data rk3288_chip_data = {
+ };
+ 
+ static const struct dw_hdmi_plat_data rk3288_hdmi_drv_data = {
+-	.mode_valid = dw_hdmi_rockchip_mode_valid,
+ 	.mpll_cfg   = rockchip_mpll_cfg,
+ 	.cur_ctr    = rockchip_cur_ctr,
+ 	.phy_config = rockchip_phy_config,
+@@ -443,7 +522,6 @@ static struct rockchip_hdmi_chip_data rk3328_chip_data = {
+ };
+ 
+ static const struct dw_hdmi_plat_data rk3328_hdmi_drv_data = {
+-	.mode_valid = dw_hdmi_rockchip_mode_valid,
+ 	.mpll_cfg = rockchip_mpll_cfg,
+ 	.cur_ctr = rockchip_cur_ctr,
+ 	.phy_config = rockchip_phy_config,
+@@ -460,7 +538,6 @@ static struct rockchip_hdmi_chip_data rk3399_chip_data = {
+ };
+ 
+ static const struct dw_hdmi_plat_data rk3399_hdmi_drv_data = {
+-	.mode_valid = dw_hdmi_rockchip_mode_valid,
+ 	.mpll_cfg   = rockchip_mpll_cfg,
+ 	.cur_ctr    = rockchip_cur_ctr,
+ 	.phy_config = rockchip_phy_config,
+@@ -558,6 +635,7 @@ static int dw_hdmi_rockchip_bind(struct device *dev, struct device *master,
+ 	 */
+ 	if (IS_ERR(hdmi->hdmi)) {
+ 		ret = PTR_ERR(hdmi->hdmi);
++		devm_kfree(hdmi->dev, hdmi->rates);
+ 		drm_encoder_cleanup(encoder);
+ 		clk_disable_unprepare(hdmi->vpll_clk);
+ 	}
+@@ -570,6 +648,7 @@ static void dw_hdmi_rockchip_unbind(struct device *dev, struct device *master,
+ {
+ 	struct rockchip_hdmi *hdmi = dev_get_drvdata(dev);
+ 
++	devm_kfree(hdmi->dev, hdmi->rates);
+ 	dw_hdmi_unbind(hdmi->hdmi);
+ 	clk_disable_unprepare(hdmi->vpll_clk);
+ }
+From d4d128324b8f8a9f5c441203d94703e41fa07df3 Mon Sep 17 00:00:00 2001
+From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
+Date: Mon, 5 Nov 2018 19:57:56 +0100
+Subject: [PATCH] spi: Added support for Tinkerboard's SPI interface
+
+Imported from ARMbian
+
+Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+---
+
+diff --git a/drivers/spi/spidev.c b/drivers/spi/spidev.c
+index 255786f2e..3a3f2e6fd 100644
+--- a/drivers/spi/spidev.c
++++ b/drivers/spi/spidev.c
+@@ -665,6 +665,7 @@ static const struct of_device_id spidev_dt_ids[] = {
+ 	{ .compatible = "lwn,bk4" },
+ 	{ .compatible = "dh,dhcom-board" },
+ 	{ .compatible = "menlo,m53cpld" },
++	{ .compatible = "rockchip,spi_tinker" },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, spidev_dt_ids);
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dtsi b/arch/arm/boot/dts/rk3288-tinker.dtsi
+index e5b7ef1a5..f88c913ff 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dtsi
++++ b/arch/arm/boot/dts/rk3288-tinker.dtsi
+@@ -544,3 +544,6 @@
+ &wdt {
+ 	status = "okay";
+ };
++&gpiomem {
++    status = "okay";
++};
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index f3ca55496..14bbcb192 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -1418,6 +1418,12 @@
+ 		interrupts = <GIC_PPI 9 0xf04>;
+ 	};
+ 
++	gpiomem: rk3288-gpiomem@ff750000 {
++		compatible = "rockchip,rk3288-gpiomem";
++		reg = <0x0 0xff750000 0x0 0x1000>;
++		status = "disabled";
++	};
++
+ 	pinctrl: pinctrl {
+ 		compatible = "rockchip,rk3288-pinctrl";
+ 		rockchip,grf = <&grf>;
+
+diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+index 3143db5..9c18b74 100644
+--- a/drivers/char/Kconfig
++++ b/drivers/char/Kconfig
+@@ -5,6 +5,7 @@
+ menu "Character devices"
+ 
+ source "drivers/tty/Kconfig"
++source "drivers/char/rockchip/Kconfig"
+ 
+ config DEVMEM
+ 	bool "/dev/mem virtual device support"
+diff --git a/drivers/char/Makefile b/drivers/char/Makefile
+index d8a7579..290cb32 100644
+--- a/drivers/char/Makefile
++++ b/drivers/char/Makefile
+@@ -51,6 +51,8 @@ obj-$(CONFIG_PS3_FLASH)		+= ps3flash.o
+ obj-$(CONFIG_JS_RTC)		+= js-rtc.o
+ js-rtc-y = rtc.o
+ 
++obj-$(CONFIG_ARCH_ROCKCHIP)	+= rockchip/
++
+ obj-$(CONFIG_XILLYBUS)		+= xillybus/
+ obj-$(CONFIG_POWERNV_OP_PANEL)	+= powernv-op-panel.o
+ obj-$(CONFIG_ADI)		+= adi.o
+diff --git a/drivers/char/rockchip/Kconfig b/drivers/char/rockchip/Kconfig
+new file mode 100644
+index 0000000..6e97486
+--- /dev/null
++++ b/drivers/char/rockchip/Kconfig
+@@ -0,0 +1,16 @@
++#
++# Broadcom char driver config
++#
++
++menuconfig RK_CHAR_DRIVERS
++	bool "Rockchip Char Drivers"
++	help
++	  Rockchip's char drivers
++
++config RK3288_DEVGPIOMEM
++	tristate "/dev/gpiomem rootless GPIO access via mmap() on the RK3288"
++	default y
++	help
++		Provides users with root-free access to the GPIO registers
++		on the 3288. Calling mmap(/dev/gpiomem) will map the GPIO
++		register page to the user's pointer.
+\ No newline at end of file
+diff --git a/drivers/char/rockchip/Makefile b/drivers/char/rockchip/Makefile
+new file mode 100644
+index 0000000..2287ec2
+--- /dev/null
++++ b/drivers/char/rockchip/Makefile
+@@ -0,0 +1 @@
++obj-$(CONFIG_RK3288_DEVGPIOMEM)+= rk3288-gpiomem.o
+\ No newline at end of file
+diff --git a/drivers/char/rockchip/rk3288-gpiomem.c b/drivers/char/rockchip/rk3288-gpiomem.c
+new file mode 100644
+index 0000000..984471c
+--- /dev/null
++++ b/drivers/char/rockchip/rk3288-gpiomem.c
+@@ -0,0 +1,303 @@
++/**
++ * GPIO memory device driver
++ *
++ * Creates a chardev /dev/gpiomem which will provide user access to
++ * the rk3288's GPIO registers when it is mmap()'d.
++ * No longer need root for user GPIO access, but without relaxing permissions
++ * on /dev/mem.
++ *
++ * Written by Luke Wren <luke@raspberrypi.org>
++ * Copyright (c) 2015, Raspberry Pi (Trading) Ltd.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ * 1. Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions, and the following disclaimer,
++ *    without modification.
++ * 2. Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in the
++ *    documentation and/or other materials provided with the distribution.
++ * 3. The names of the above-listed copyright holders may not be used
++ *    to endorse or promote products derived from this software without
++ *    specific prior written permission.
++ *
++ * ALTERNATIVELY, this software may be distributed under the terms of the
++ * GNU General Public License ("GPL") version 2, as published by the Free
++ * Software Foundation.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
++ * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
++ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
++ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
++ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
++ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
++ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
++ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
++ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/mm.h>
++#include <linux/slab.h>
++#include <linux/cdev.h>
++#include <linux/pagemap.h>
++#include <linux/io.h>
++
++#define DEVICE_NAME "rk3288-gpiomem"
++#define DRIVER_NAME "gpiomem-rk3288"
++#define DEVICE_MINOR 0
++
++struct rk3288_gpiomem_instance {
++	unsigned long gpio_regs_phys;
++	struct device *dev;
++};
++
++static struct cdev rk3288_gpiomem_cdev;
++static dev_t rk3288_gpiomem_devid;
++static struct class *rk3288_gpiomem_class;
++static struct device *rk3288_gpiomem_dev;
++static struct rk3288_gpiomem_instance *inst;
++
++
++/****************************************************************************
++*
++*   GPIO mem chardev file ops
++*
++***************************************************************************/
++
++static int rk3288_gpiomem_open(struct inode *inode, struct file *file)
++{
++	int dev = iminor(inode);
++	int ret = 0;
++
++	if (dev != DEVICE_MINOR) {
++		dev_err(inst->dev, "Unknown minor device: %d", dev);
++		ret = -ENXIO;
++	}
++	return ret;
++}
++
++static int rk3288_gpiomem_release(struct inode *inode, struct file *file)
++{
++	int dev = iminor(inode);
++	int ret = 0;
++
++	if (dev != DEVICE_MINOR) {
++		dev_err(inst->dev, "Unknown minor device %d", dev);
++		ret = -ENXIO;
++	}
++	return ret;
++}
++
++static const struct vm_operations_struct rk3288_gpiomem_vm_ops = {
++#ifdef CONFIG_HAVE_IOREMAP_PROT
++	.access = generic_access_phys
++#endif
++};
++static int address_is_allowed(unsigned long pfn, unsigned long size)
++{
++    unsigned long address = pfn << PAGE_SHIFT;
++
++    dev_info(inst->dev, "address_is_allowed.pfn: 0x%08lx", address);
++
++    switch(address) {
++
++        case 0xff750000:
++        case 0xff760000:
++        case 0xff780000:
++        case 0xff790000:
++        case 0xff7a0000:
++        case 0xff7b0000:
++        case 0xff7c0000:
++        case 0xff7d0000:
++        case 0xff7e0000:
++        case 0xff7f0000:
++        case 0xff7f2000:
++        case 0xff770000:
++        case 0xff730000:
++        case 0xff680000:
++            dev_info(inst->dev, "address_is_allowed.return 1");
++            return 1;
++            break; 
++        default :
++            dev_info(inst->dev, "address_is_allowed.return 0");
++	        return 0;
++    }
++}
++
++static int rk3288_gpiomem_mmap(struct file *file, struct vm_area_struct *vma)
++{
++
++    size_t size;
++
++	size = vma->vm_end - vma->vm_start;
++
++
++	if (!address_is_allowed(vma->vm_pgoff, size))
++		return -EPERM;
++
++	vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
++						 size,
++						 vma->vm_page_prot);
++
++	vma->vm_ops =  &rk3288_gpiomem_vm_ops;
++
++	/* Remap-pfn-range will mark the range VM_IO */
++	if (remap_pfn_range(vma,
++			    vma->vm_start,
++			    vma->vm_pgoff,
++			    size,
++			    vma->vm_page_prot)) {
++		return -EAGAIN;
++	}
++
++	return 0;
++}
++
++static const struct file_operations
++rk3288_gpiomem_fops = {
++	.owner = THIS_MODULE,
++	.open = rk3288_gpiomem_open,
++	.release = rk3288_gpiomem_release,
++	.mmap = rk3288_gpiomem_mmap,
++};
++
++static int rk3288_gpiomem_dev_uevent(struct device *dev, struct kobj_uevent_env *env)
++{
++    add_uevent_var(env, "DEVMODE=%#o", 0666);
++    return 0;
++}
++
++ /****************************************************************************
++*
++*   Probe and remove functions
++*
++***************************************************************************/
++
++
++static int rk3288_gpiomem_probe(struct platform_device *pdev)
++{
++	int err;
++	void *ptr_err;
++	struct device *dev = &pdev->dev;
++	struct resource *ioresource;
++
++	/* Allocate buffers and instance data */
++
++	inst = kzalloc(sizeof(struct rk3288_gpiomem_instance), GFP_KERNEL);
++
++	if (!inst) {
++		err = -ENOMEM;
++		goto failed_inst_alloc;
++	}
++
++	inst->dev = dev;
++
++	ioresource = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (ioresource) {
++		inst->gpio_regs_phys = ioresource->start;
++	} else {
++		dev_err(inst->dev, "failed to get IO resource");
++		err = -ENOENT;
++		goto failed_get_resource;
++	}
++
++	/* Create character device entries */
++
++	err = alloc_chrdev_region(&rk3288_gpiomem_devid,
++				  DEVICE_MINOR, 1, DEVICE_NAME);
++	if (err != 0) {
++		dev_err(inst->dev, "unable to allocate device number");
++		goto failed_alloc_chrdev;
++	}
++	cdev_init(&rk3288_gpiomem_cdev, &rk3288_gpiomem_fops);
++	rk3288_gpiomem_cdev.owner = THIS_MODULE;
++	err = cdev_add(&rk3288_gpiomem_cdev, rk3288_gpiomem_devid, 1);
++	if (err != 0) {
++		dev_err(inst->dev, "unable to register device");
++		goto failed_cdev_add;
++	}
++
++	/* Create sysfs entries */
++
++	rk3288_gpiomem_class = class_create(THIS_MODULE, DEVICE_NAME);
++	ptr_err = rk3288_gpiomem_class;
++	if (IS_ERR(ptr_err))
++		goto failed_class_create;
++	rk3288_gpiomem_class->dev_uevent = rk3288_gpiomem_dev_uevent;
++	rk3288_gpiomem_dev = device_create(rk3288_gpiomem_class, NULL,
++					rk3288_gpiomem_devid, NULL,
++					"gpiomem");
++	ptr_err = rk3288_gpiomem_dev;
++	if (IS_ERR(ptr_err))
++		goto failed_device_create;
++
++	dev_info(inst->dev, "Initialised: Registers at 0x%08lx",
++		inst->gpio_regs_phys);
++
++	return 0;
++
++failed_device_create:
++	class_destroy(rk3288_gpiomem_class);
++failed_class_create:
++	cdev_del(&rk3288_gpiomem_cdev);
++	err = PTR_ERR(ptr_err);
++failed_cdev_add:
++	unregister_chrdev_region(rk3288_gpiomem_devid, 1);
++failed_alloc_chrdev:
++failed_get_resource:
++	kfree(inst);
++failed_inst_alloc:
++	dev_err(inst->dev, "could not load rk3288_gpiomem");
++	return err;
++}
++
++static int rk3288_gpiomem_remove(struct platform_device *pdev)
++{
++	struct device *dev = inst->dev;
++
++	kfree(inst);
++	device_destroy(rk3288_gpiomem_class, rk3288_gpiomem_devid);
++	class_destroy(rk3288_gpiomem_class);
++	cdev_del(&rk3288_gpiomem_cdev);
++	unregister_chrdev_region(rk3288_gpiomem_devid, 1);
++
++	dev_info(dev, "GPIO mem driver removed - OK");
++	return 0;
++}
++
++ /****************************************************************************
++*
++*   Register the driver with device tree
++*
++***************************************************************************/
++
++static const struct of_device_id rk3288_gpiomem_of_match[] = {
++	{.compatible = "rockchip,rk3288-gpiomem",},
++	{ /* sentinel */ },
++};
++
++MODULE_DEVICE_TABLE(of, rk3288_gpiomem_of_match);
++
++static struct platform_driver rk3288_gpiomem_driver = {
++	.probe = rk3288_gpiomem_probe,
++	.remove = rk3288_gpiomem_remove,
++	.driver = {
++		   .name = DRIVER_NAME,
++		   .owner = THIS_MODULE,
++		   .of_match_table = rk3288_gpiomem_of_match,
++		   },
++};
++
++module_platform_driver(rk3288_gpiomem_driver);
++
++MODULE_ALIAS("platform:gpiomem-rk3288");
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("gpiomem driver for accessing GPIO from userspace");
++MODULE_AUTHOR("Luke Wren <luke@raspberrypi.org>");
+\ No newline at end of file
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index bc3601a..37ae378 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -467,13 +467,6 @@
+ 	};
+ 
+ 	thermal-zones {
+-		reserve_thermal: reserve_thermal {
+-			polling-delay-passive = <1000>; /* milliseconds */
+-			polling-delay = <5000>; /* milliseconds */
+-
+-			thermal-sensors = <&tsadc 0>;
+-		};
+-
+ 		cpu_thermal: cpu_thermal {
+ 			polling-delay-passive = <100>; /* milliseconds */
+ 			polling-delay = <5000>; /* milliseconds */
+@@ -539,6 +532,13 @@
+ 				};
+ 			};
+ 		};
++
++		reserve_thermal: reserve_thermal {
++			polling-delay-passive = <1000>; /* milliseconds */
++			polling-delay = <5000>; /* milliseconds */
++
++			thermal-sensors = <&tsadc 0>;
++		};
+ 	};
+ 
+ 	tsadc: tsadc@ff280000 {
+diff --git a/sound/usb/card.c b/sound/usb/card.c
+index 2bfe4e80a..cea93aaf5 100644
+--- a/sound/usb/card.c
++++ b/sound/usb/card.c
+@@ -382,6 +382,14 @@ static void usb_audio_make_shortname(struct usb_device *dev,
+ 	}
+ 
+ 	strim(card->shortname);
++
++	/* Tinker Board ALC4040 CODEC	*/
++
++	if(USB_ID_VENDOR(chip->usb_id) == 0x0bda &&
++		USB_ID_PRODUCT(chip->usb_id) == 0x481a) {
++			strlcat(card->shortname, " OnBoard", sizeof(card->shortname));
++	}
++	
+ }
+ 
+ static void usb_audio_make_longname(struct usb_device *dev,
+diff --git a/arch/arm/boot/dts/rk3288.dtsi b/arch/arm/boot/dts/rk3288.dtsi
+index 58bd91539..9c0dac199 100644
+--- a/arch/arm/boot/dts/rk3288.dtsi
++++ b/arch/arm/boot/dts/rk3288.dtsi
+@@ -153,6 +153,75 @@
+ 			opp-hz = /bits/ 64 <1608000000>;
+ 			opp-microvolt = <1350000>;
+ 		};
++		opp@1704000000 {
++			opp-hz = /bits/ 64 <1704000000>;
++			opp-microvolt = <1350000>;
++		};
++		opp@1800000000 {
++			opp-hz = /bits/ 64 <1800000000>;
++			opp-microvolt = <1400000>;
++		};
++		/* boot-only frequencies below */
++		opp@1896000000 {
++			opp-hz = /bits/ 64 <1896000000>;
++			opp-microvolt = <1425000>;
++			turbo-mode;
++		};
++		opp@1920000000 {
++			opp-hz = /bits/ 64 <1920000000>;
++			opp-microvolt = <1425000>;
++			turbo-mode;
++		};
++		opp@1992000000 {
++			opp-hz = /bits/ 64 <1992000000>;
++			opp-microvolt = <1450000>;
++			turbo-mode;
++		};
++		opp@2016000000 {
++			opp-hz = /bits/ 64 <2016000000>;
++			opp-microvolt = <1475000>;
++			turbo-mode;
++		};
++		opp@2040000000 {
++			opp-hz = /bits/ 64 <2040000000>;
++			opp-microvolt = <1475000>;
++			turbo-mode;
++		};
++		opp@2064000000 {
++			opp-hz = /bits/ 64 <2064000000>;
++			opp-microvolt = <1475000>;
++			turbo-mode;
++		};
++		opp@2088000000 {
++			opp-hz = /bits/ 64 <2088000000>;
++			opp-microvolt = <1500000>;
++			turbo-mode;
++		};
++		opp@2112000000 {
++			opp-hz = /bits/ 64 <2112000000>;
++			opp-microvolt = <1500000>;
++			turbo-mode;
++		};
++		opp@2136000000 {
++			opp-hz = /bits/ 64 <2136000000>;
++			opp-microvolt = <1500000>;
++			turbo-mode;
++		};
++		opp@2160000000 {
++			opp-hz = /bits/ 64 <2160000000>;
++			opp-microvolt = <1500000>;
++			turbo-mode;
++		};
++		opp@2184000000 {
++			opp-hz = /bits/ 64 <2184000000>;
++			opp-microvolt = <1500000>;
++			turbo-mode;
++		};
++		opp@2208000000 {
++			opp-hz = /bits/ 64 <2208000000>;
++			opp-microvolt = <1500000>;
++			turbo-mode;
++		};
+ 	};
+ 
+ 	amba {
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dtsi b/arch/arm/boot/dts/rk3288-tinker.dtsi
+index f88c913ff..7f04ccbdf 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dtsi
++++ b/arch/arm/boot/dts/rk3288-tinker.dtsi
+@@ -547,3 +547,20 @@
+ &gpiomem {
+     status = "okay";
+ };
++
++&emmc {
++    bus-width = <8>;
++    cap-mmc-highspeed;
++    non-removable;
++    pinctrl-names = "default";
++    pinctrl-0 = <&emmc_clk &emmc_cmd &emmc_pwr &emmc_bus8>;
++    max-frequency = <150000000>;
++    mmc-hs200-1_8v;
++    mmc-ddr-1_8v;
++    status = "okay";
++};
++
++&hdmi {
++    pinctrl-names = "default";
++    pinctrl-0 = <&hdmi_cec_c0>;
++};
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+index a907d7b06..ec71996c7 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+@@ -619,13 +619,17 @@ BRCMF_FW_DEF(4354, "brcmfmac4354-sdio");
+ BRCMF_FW_DEF(4356, "brcmfmac4356-sdio");
+ BRCMF_FW_DEF(4373, "brcmfmac4373-sdio");
+ 
++/* AMPAK */
++BRCMF_FW_DEF(AP6330, "brcmfmac-ap6330-sdio");
++
+ static const struct brcmf_firmware_mapping brcmf_sdio_fwnames[] = {
+ 	BRCMF_FW_ENTRY(BRCM_CC_43143_CHIP_ID, 0xFFFFFFFF, 43143),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43241_CHIP_ID, 0x0000001F, 43241B0),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43241_CHIP_ID, 0x00000020, 43241B4),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43241_CHIP_ID, 0xFFFFFFC0, 43241B5),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4329_CHIP_ID, 0xFFFFFFFF, 4329),
+-	BRCMF_FW_ENTRY(BRCM_CC_4330_CHIP_ID, 0xFFFFFFFF, 4330),
++	BRCMF_FW_ENTRY(BRCM_CC_4330_CHIP_ID, 0xFFFFFFEF, 4330),
++	BRCMF_FW_ENTRY(BRCM_CC_4330_CHIP_ID, 0x10, AP6330),
+ 	BRCMF_FW_ENTRY(BRCM_CC_4334_CHIP_ID, 0xFFFFFFFF, 4334),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43340_CHIP_ID, 0xFFFFFFFF, 43340),
+ 	BRCMF_FW_ENTRY(BRCM_CC_43341_CHIP_ID, 0xFFFFFFFF, 43340),
+diff --git a/arch/arm/boot/dts/rk3288-tinker.dtsi b/arch/arm/boot/dts/rk3288-tinker.dtsi
+index 01be2bca9..5439e29e0 100644
+--- a/arch/arm/boot/dts/rk3288-tinker.dtsi
++++ b/arch/arm/boot/dts/rk3288-tinker.dtsi
+@@ -64,7 +64,7 @@
+ 	sound {
+ 		compatible = "simple-audio-card";
+ 		simple-audio-card,format = "i2s";
+-		simple-audio-card,name = "rockchip,tinker-codec";
++		simple-audio-card,name = "DW-I2S-HDMI";
+ 		simple-audio-card,mclk-fs = <512>;
+ 
+ 		simple-audio-card,codec {
+diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
+index 5bd58b95d..48ebe081f 100644
+--- a/drivers/mmc/core/core.c
++++ b/drivers/mmc/core/core.c
+@@ -1684,6 +1684,14 @@ void mmc_power_off(struct mmc_host *host)
+ 	if (host->ios.power_mode == MMC_POWER_OFF)
+ 		return;
+ 
++        mmc_set_initial_signal_voltage(host);
++
++        /*
++         * This delay should be sufficient to allow the power supply
++         * to reach the minimum voltage.
++         */
++        mmc_delay(host->ios.power_delay_ms);
++
+ 	mmc_pwrseq_power_off(host);
+ 
+ 	host->ios.clock = 0;
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index a98dee2ae..d3cef7033 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -916,17 +916,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += \
+ 	rk3288-rock2-square.dtb \
+ 	rk3288-tinker.dtb \
+ 	rk3288-tinker-s.dtb \
+-	rk3288-veyron-brain.dtb \
+-	rk3288-veyron-fievel.dtb \
+-	rk3288-veyron-jaq.dtb \
+-	rk3288-veyron-jerry.dtb \
+-	rk3288-veyron-mickey.dtb \
+-	rk3288-veyron-mighty.dtb \
+-	rk3288-veyron-minnie.dtb \
+-	rk3288-veyron-pinky.dtb \
+-	rk3288-veyron-speedy.dtb \
+-	rk3288-veyron-tiger.dtb \
+ 	rk3288-vyasa.dtb
+ dtb-$(CONFIG_ARCH_S3C24XX) += \
+ 	s3c2416-smdk2416.dtb
+ dtb-$(CONFIG_ARCH_S3C64XX) += \
+diff --git a/arch/arm/boot/dts/rk3288-xt-q8l-v10.dts b/arch/arm/boot/dts/rk3288-xt-q8l-v10.dts
+new file mode 100644
+index 000000000..539e445b4
+--- /dev/null
++++ b/arch/arm/boot/dts/rk3288-xt-q8l-v10.dts
+@@ -0,0 +1,1061 @@
++/*
++ * Copyright (c) 2014, 2015 FUKAUMI Naoki <naobsd@gmail.com>
++ * 					   2018 Paolo Sabatino <paolo.sabatino@gm**l.com>
++ *
++ * This file is dual-licensed: you can use it either under the terms
++ * of the GPL or the X11 license, at your option. Note that this dual
++ * licensing only applies to this file, and not this project as a
++ * whole.
++ *
++ *  a) This file is free software; you can redistribute it and/or
++ *     modify it under the terms of the GNU General Public License as
++ *     published by the Free Software Foundation; either version 2 of the
++ *     License, or (at your option) any later version.
++ *
++ *     This file is distributed in the hope that it will be useful,
++ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *     GNU General Public License for more details.
++ *
++ * Or, alternatively,
++ *
++ *  b) Permission is hereby granted, free of charge, to any person
++ *     obtaining a copy of this software and associated documentation
++ *     files (the "Software"), to deal in the Software without
++ *     restriction, including without limitation the rights to use,
++ *     copy, modify, merge, publish, distribute, sublicense, and/or
++ *     sell copies of the Software, and to permit persons to whom the
++ *     Software is furnished to do so, subject to the following
++ *     conditions:
++ *
++ *     The above copyright notice and this permission notice shall be
++ *     included in all copies or substantial portions of the Software.
++ *
++ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++ *     EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
++ *     OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++ *     NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
++ *     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
++ *     WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
++ *     FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
++ *     OTHER DEALINGS IN THE SOFTWARE.
++ */
++
++/dts-v1/;
++
++#include "rk3288.dtsi"
++#include <dt-bindings/input/input.h>
++
++/ {
++	model = "XT-Q8L-V10-RK3288";
++	compatible = "generic,xt-q8l-v10-rk3288", "rockchip,rk3288";
++
++	memory@0 {
++		reg = <0x0 0x0 0x0 0x80000000>;
++		device_type = "memory";
++	};
++
++	/*
++	 * Peripheral from original q8 device tree, currently no references
++	 * for drivers in linux kernel.
++	rockchip-hsadc@ff080000 {
++		compatible = "rockchip-hsadc";
++		reg = <0xff080000 0x4000>;
++		interrupts = <0x0 0x1f 0x4>;
++		#address-cells = <0x1>;
++		#size-cells = <0x0>;
++		pinctrl-names = "default";
++		pinctrl-0 = <0x9a>;
++		clocks = <0x79 0x7 0x8 0x39>;
++		clock-names = "hclk_hsadc", "clk_hsadc_out", "clk_hsadc_ext";
++		dmas = <0x9b 0x0>;
++		dma-names = "data";
++		status = "disabled";
++	};
++	*/
++
++	ext_gmac: external-gmac-clock {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <125000000>;
++		clock-output-names = "ext_gmac";
++	};
++
++	/*
++	 * Handle the IR receiver using the gpio-ir-receiver kernel module.
++	 * This works flawlessy, the original xt-q8l-v10 remote uses a NEC
++	 * protocol and the keymap rc-xt-q8l-v10 has to be compiled in the
++	 * kernel for the remote to work as an input device
++	 */
++	ir: ir-receiver {
++		compatible = "gpio-ir-receiver";
++		gpios = <&gpio7 RK_PA0 GPIO_ACTIVE_LOW>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&ir_int>;
++		linux,rc-map-name = "rc-xt-q8l-v10";
++		wakeup-source;
++	};
++
++	keys: gpio-keys {
++		compatible = "gpio-keys";
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&pwr_key>;
++
++		button@0 {
++			gpio-key,wakeup = <1>;
++			gpios = <&gpio0 5 GPIO_ACTIVE_HIGH>;
++			label = "GPIO Power";
++			linux,code = <KEY_POWER>;
++			wakeup-source;
++			debounce-interval = <100>;
++		};
++
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		power {
++			/*
++				Power led is active high, but we set it here active low
++				so while there is mass storage access it turns red and
++				when it is idle is blue
++			*/
++			gpios = <&gpio7 2 GPIO_ACTIVE_LOW>;
++			label = "power";
++			linux,default-trigger = "mmc0";
++			pinctrl-names = "default";
++			pinctrl-0 = <&power_led>;
++		};
++
++	};
++
++	vcc_sys: vsys-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc_sys";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		regulator-always-on;
++		regulator-boot-on;
++	};
++
++	vcc_sd: sdmmc-regulator {
++		compatible = "regulator-fixed";
++		gpio = <&gpio7 11 GPIO_ACTIVE_LOW>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&sdmmc_pwr>;
++		regulator-name = "vcc_sd";
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++		startup-delay-us = <100000>;
++		vin-supply = <&vcc_io>;
++	};
++
++	vcc_flash: flash-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vcc_flash";
++		regulator-min-microvolt = <1800000>;
++		regulator-max-microvolt = <1800000>;
++		/*gpios = <&gpio3 RK_PC3 GPIO_ACTIVE_LOW>;
++		states = <1800000 0>,
++				 <3300000 1>;
++				 */
++		vin-supply = <&vcc_io>;
++		startup-delay-us = <100000>;
++	};
++
++	vcc_host_5v: usb-host-regulator {
++		compatible = "regulator-fixed";
++		gpio = <&gpio0 14 GPIO_ACTIVE_HIGH>;
++		regulator-name = "vcc_host_5v";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		regulator-boot-on;
++		enable-active-high;
++		vin-supply = <&vcc_sys>;
++	};
++
++
++	vcc_otg_5v: usb-otg-regulator {
++		compatible = "regulator-fixed";
++		gpio = <&gpio0 12 GPIO_ACTIVE_HIGH>;
++		regulator-name = "vcc_otg_5v";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		regulator-boot-on;
++		enable-active-high;
++		vin-supply = <&vcc_sys>;
++	};
++
++	/*
++	 * Required power sequence to properly enable the wireless/bluetooth
++	 * module connected to sdio0
++	 */
++	sdio0_pwrseq: sdio0_pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		pinctrl-names = "default";
++		pinctrl-0 = <&wifi_enable_h>, <&bt_enable_h>;
++		reset-gpios = <&gpio4 28 GPIO_ACTIVE_LOW>, <&gpio4 29 GPIO_ACTIVE_LOW>;
++		post-power-on-delay-ms = <100>;
++	};
++
++	emmc_pwrseq: emmc-pwrseq {
++		compatible = "mmc-pwrseq-emmc";
++		pinctrl-0 = <&emmc_reset>;
++		pinctrl-names = "default";
++		reset-gpios = <&gpio3 RK_PB1 GPIO_ACTIVE_LOW>;
++	};
++
++	/*
++	 * Sound taken from tinkerboard device tree, adapted to q8.
++	 */
++	soundcard-hdmi {
++		compatible = "simple-audio-card";
++		simple-audio-card,format = "i2s";
++		simple-audio-card,name = "DW-I2S-HDMI";
++		simple-audio-card,mclk-fs = <512>;
++
++		simple-audio-card,codec {
++			sound-dai = <&hdmi>;
++		};
++
++		simple-audio-card,cpu {
++			sound-dai = <&i2s>;
++		};
++	};
++
++	soundcard-spdif {
++		compatible = "simple-audio-card";
++		simple-audio-card,name = "SPDIF";
++		simple-audio-card,dai-link@1 {
++
++			cpu {
++				sound-dai = <&spdif>;
++			};
++
++			codec {
++				sound-dai = <&spdif_out>;
++			};
++
++		};
++	};
++
++	spdif_out: spdif-out {
++		compatible = "linux,spdif-dit";
++		#sound-dai-cells = <0>;
++	};
++
++};
++
++
++&io_domains {
++	status = "okay";
++
++	audio-supply = <&vcca_33>;
++	bb-supply = <&vcc_io>;
++	dvp-supply = <&vcc_18>;
++	flash0-supply = <&vcc_flash>;
++	flash1-supply = <&vcc_lan>;
++	gpio30-supply = <&vcc_io>;
++	gpio1830-supply = <&vcc_io>;
++	lcdc-supply = <&vcc_io>;
++	sdcard-supply = <&vccio_sd>;
++	wifi-supply = <&vcc_18>;
++};
++
++&cpu0 {
++	cpu0-supply = <&vdd_cpu>;
++};
++
++&gmac {
++	assigned-clocks = <&cru SCLK_MAC>;
++	assigned-clock-parents = <&ext_gmac>;
++	clock_in_out = "input";
++	pinctrl-names = "default";
++	pinctrl-0 = <&rgmii_pins>, <&phy_rst>, <&phy_pmeb>, <&phy_int>;
++	phy-supply = <&vcc_lan>;
++	phy-mode = "rgmii";
++	snps,reset-active-low;
++	snps,reset-delays-us = <0 10000 1000000>;
++	snps,reset-gpio = <&gpio4 8 GPIO_ACTIVE_LOW>;
++	tx_delay = <0x30>;
++	rx_delay = <0x10>;
++	status = "ok";
++};
++
++&hdmi {
++	ddc-i2c-bus = <&i2c5>;
++	status = "okay";
++};
++
++&gpu {
++	mali-supply = <&vdd_gpu>;
++	status = "okay";
++};
++
++&i2c0 {
++	clock-frequency = <400000>;
++	status = "okay";
++
++	vdd_cpu: syr827@40 {
++		compatible = "silergy,syr827";
++		fcs,suspend-voltage-selector = <1>;
++		reg = <0x40>;
++		regulator-name = "vdd_cpu";
++		regulator-min-microvolt = <850000>;
++		regulator-max-microvolt = <1350000>;
++		regulator-ramp-delay = <8000>;
++		regulator-always-on;
++		regulator-boot-on;
++		vin-supply = <&vcc_sys>;
++		regulator-state-mem {
++			regulator-off-in-suspend;
++		};
++	};
++
++	vdd_gpu: syr828@41 {
++		compatible = "silergy,syr828";
++		fcs,suspend-voltage-selector = <1>;
++		reg = <0x41>;
++		regulator-name = "vdd_gpu";
++		regulator-min-microvolt = <850000>;
++		regulator-max-microvolt = <1350000>;
++		regulator-ramp-delay = <8000>;
++		regulator-always-on;
++		vin-supply = <&vcc_sys>;
++		regulator-state-mem {
++			regulator-off-in-suspend;
++		};
++	};
++
++	hym8563: hym8563@51 {
++		compatible = "haoyu,hym8563";
++		reg = <0x51>;
++		#clock-cells = <0>;
++		clock-frequency = <32768>;
++		clock-output-names = "xin32k";
++		interrupt-parent = <&gpio0>;
++		interrupts = <4 IRQ_TYPE_EDGE_FALLING>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&rtc_int>;
++	};
++
++	act8846: act8846@5a {
++		compatible = "active-semi,act8846";
++		reg = <0x5a>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pmic_vsel>;
++		system-power-controller;
++
++		vp1-supply = <&vcc_sys>;
++		vp2-supply = <&vcc_sys>;
++		vp3-supply = <&vcc_sys>;
++		vp4-supply = <&vcc_sys>;
++		inl1-supply = <&vcc_sys>;
++		inl2-supply = <&vcc_sys>;
++		inl3-supply = <&vcc_20>;
++		wakeup-source;
++
++		regulators {
++
++			/*
++			 * Regulator controlling DDR memory - always on
++			 */
++			vcc_ddr: REG1 {
++				regulator-name = "vcc_ddr";
++				regulator-min-microvolt = <1200000>;
++				regulator-max-microvolt = <1200000>;
++				regulator-always-on;
++				/*
++				 * Broken in kernel 5.4
++				regulator-state-mem {
++					regulator-on-in-suspend;
++				};
++				*/
++			};
++
++			/*
++			 * Regulator controlling various IO functions of the rk3288.
++			 * Always on
++			 */
++			vcc_io: REG2 {
++				regulator-name = "vcc_io";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++				/*
++				 * Broken in kernel 5.4
++				regulator-state-mem {
++					regulator-on-in-suspend;
++				};
++				*/
++			};
++
++			/*
++			 * Regulator controlling various board logic.
++			 * Always on.
++			 * rk3288 electrical datasheet says it should have variable
++			 * voltage depending upon dvfs
++			 */
++			vdd_log: REG3 {
++				regulator-name = "vdd_log";
++				regulator-min-microvolt = <1100000>;
++				regulator-max-microvolt = <1100000>;
++				regulator-always-on;
++				/*
++				 * Broken in kernel 5.4
++				regulator-state-mem {
++					regulator-on-in-suspend;
++				};
++				*/
++			};
++
++			/*
++			 * No reference for this on electrical datasheet. Maybe this
++			 * is vcc_18? Maybe this is vcc18_flash on electrical datasheet.
++			 * So far we disable it.
++			 */
++			vcc_20: REG4 {
++				regulator-name = "vcc_20";
++				regulator-min-microvolt = <2000000>;
++				regulator-max-microvolt = <2000000>;
++				regulator-always-on;
++				/*
++				 * Broken in kernel 5.4
++				regulator-state-mem {
++					regulator-on-in-suspend;
++				};
++				*/
++			};
++
++			/*
++			 * This regulator controls SDIO. Electrical datasheet says
++			 * this regulator can be operated between 1.8 and 3.3 volts
++			 */
++			vccio_sd: REG5 {
++				regulator-name = "vccio_sd";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on;
++				/*
++				 * Broken in kernel 5.4
++				regulator-state-mem {
++					regulator-on-in-suspend;
++					regulator-suspend-microvolt = <3300000>;
++				};
++				*/
++			};
++
++			/*
++			 * Controlling HDMI and LCD controller on rk3288. 1.0 volts
++			 * by reference
++			 */
++			vdd10_lcd: REG6 {
++				regulator-name = "vdd10_lcd";
++				regulator-min-microvolt = <1000000>;
++				regulator-max-microvolt = <1000000>;
++				regulator-always-on;
++				/*
++				 * Broken in kernel 5.4
++				regulator-state-mem {
++					regulator-on-in-suspend;
++				};
++				*/
++			};
++
++			/*
++			 * From the rk3288 electrical datasheet, this regulator powers
++			 * the rk1000 chip, which is absent in our device, but it
++			 * is also supplying bluetooth, so we enable it.
++			 */
++			vcca_18: REG7 {
++				regulator-name = "vcca_18";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-always-on;
++
++				/*
++					The regulator can be set off in suspend, but kernel 5.4 modifications
++					to enable suspend for ACT8865 device break the ACT8846
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++				*/
++			};
++
++			/*
++			 * This regulator controls, among other things, the SPDIF
++			 * interface, so we enable it
++			 */
++			vcca_33: REG8 {
++				regulator-name = "vcca_33";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-always-on; // Turn this on to get SPDIF!
++
++				/*
++					The regulator can be set off in suspend, but kernel 5.4 modifications
++					to enable suspend for ACT8865 device break the ACT8846
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++				*/
++			};
++
++			/*
++			 * LAN regulator
++			 */
++			vcc_lan: REG9 {
++				regulator-name = "vcc_lan";
++				regulator-min-microvolt = <3300000>;
++				regulator-max-microvolt = <3300000>;
++
++				/*
++				 * 	Broken in kernel 5.4
++				regulator-state-mem {
++					regulator-on-in-suspend;
++				};
++				*/
++			};
++
++			/*
++			 * Regulator controlling PMU, USB PHY and rk3288 PLLs.
++			 * 1.0 volts by reference
++			 */
++			vdd_10: REG10 {
++				regulator-name = "vdd_10";
++				regulator-min-microvolt = <1000000>;
++				regulator-max-microvolt = <1000000>;
++				regulator-always-on;
++
++				/*
++				 * Broken in kernel 5.4
++				regulator-state-mem {
++					regulator-on-in-suspend;
++				};
++				*/
++			};
++
++			/*
++			 * Regulator controlling Wifi over SDIO, SARADC and USB PHY.
++			 * Better turn this on
++			 */
++			vccio_wl: vcc_18: REG11 {
++				regulator-name = "vcc_18";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-always-on;
++
++				/*
++				 * Broken in kernel 5.4
++				regulator-state-mem {
++					regulator-on-in-suspend;
++				};
++				*/
++			};
++
++			/*
++			 * Not clear: apparently this controls HDMI and LCD controller
++			 * on rk3368 devices.
++			 * 1.8 volts by reference
++			 */
++			vcc18_lcd: REG12 {
++				regulator-name = "vcc18_lcd";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <1800000>;
++				regulator-always-on;
++
++				/*
++					The regulator can be set off in suspend, but kernel 5.4 modifications
++					to enable suspend for ACT8865 device break the ACT8846
++				regulator-state-mem {
++					regulator-off-in-suspend;
++				};
++				*/
++			};
++		};
++	};
++};
++
++&i2c1 {
++	status = "okay";
++};
++
++&i2c2 {
++	status = "okay";
++};
++
++&i2c4 {
++
++	/*
++	 * Here should go the RK1000 audio codec parts, but seems that
++	 * there is no driver in linux kernel at the moment, so we can't
++	 * describe it.
++	 * Also, most important, there is no RK1000 on our board :)
++	 * Datasheet is available here:
++	 * http://dl.radxa.com/rock/docs/hw/ds/RK1000-S%20DATASHEET%20V14.pdf
++	 */
++	status = "okay";
++
++};
++
++&i2c5 {
++	status = "okay";
++};
++
++&pinctrl {
++
++	/*
++		These two lines here, these must be commented out! Otherwise for some reason the kernel
++		does not see the boot device anymore and will stay stuck in initramfs!
++		On the contrary, these are required by u-boot to keep the power holding so the device does not
++		automatically turns off after a small timeout
++	*/
++	/*pinctrl-names = "default";*/
++	/*pinctrl-0 = <&pwr_hold>;*/
++
++	pcfg_output_high: pcfg-output-high {
++		output-high;
++	};
++
++	pcfg_output_low: pcfg-output-low {
++		output-low;
++	};
++
++	pcfg_wl: pcfg-wl {
++		bias-pull-up;
++		drive-strength = <8>;
++	};
++
++	pcfg_pull_up_drv_8ma: pcfg-pull-up-drv-8ma {
++		bias-pull-up;
++		drive-strength = <8>;
++	};
++
++	pcfg_pull_none_8ma: pcfg-pull-none-8ma {
++		bias-disable;
++		drive-strength = <8>;
++	};
++
++	pcfg_wl_clk: pcfg-wl-clk {
++		bias-disable;
++		drive-strength = <12>;
++	};
++
++	pcfg_wl_int: pcfg-wl-int {
++		bias-pull-up;
++	};
++
++	act8846 {
++
++		/*
++		 * Original q8 device tree says:
++		 *  - gpio0 11 HIGH -> power hold
++		 *  - gpio7 1 LOW -> possibly pmic-vsel, we don't care
++		 */
++		pmic_vsel: pmic-vsel {
++			rockchip,pins = <7 1 RK_FUNC_GPIO &pcfg_output_low>;
++		};
++
++		pwr_hold: pwr-hold {
++			rockchip,pins = <0 11 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++	};
++
++	gmac {
++		phy_int: phy-int {
++			rockchip,pins = <0 9 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++
++		phy_pmeb: phy-pmeb {
++			rockchip,pins = <0 8 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++
++		phy_rst: phy-rst {
++			rockchip,pins = <4 8 RK_FUNC_GPIO &pcfg_output_high>;
++		};
++	};
++
++	hym8563 {
++		rtc_int: rtc-int {
++			rockchip,pins = <0 4 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++	};
++
++	keys {
++		pwr_key: pwr-key {
++			rockchip,pins = <0 5 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	leds {
++		power_led: power-led {
++			rockchip,pins = <7 2 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	ir {
++		ir_int: ir-int {
++			rockchip,pins = <7 0 RK_FUNC_GPIO &pcfg_pull_up>;
++		};
++	};
++
++	sdmmc {
++
++		/*
++		 * Copied from firefly board definition to give more drive to
++		 * the sdmmc pins. The Q8 seems to be quite able to drive
++		 * ultra high speed uSD cards, so we give a bit more energy
++		 * to the gpio pins
++		 */
++		sdmmc_bus4: sdmmc-bus4 {
++			rockchip,pins = <6 16 RK_FUNC_1 &pcfg_pull_up_drv_8ma>,
++					<6 17 RK_FUNC_1 &pcfg_pull_up_drv_8ma>,
++					<6 18 RK_FUNC_1 &pcfg_pull_up_drv_8ma>,
++					<6 19 RK_FUNC_1 &pcfg_pull_up_drv_8ma>;
++		};
++
++		sdmmc_clk: sdmmc-clk {
++			rockchip,pins = <6 20 RK_FUNC_1 &pcfg_pull_none_8ma>;
++		};
++
++		sdmmc_cmd: sdmmc-cmd {
++			rockchip,pins = <6 21 RK_FUNC_1 &pcfg_pull_up_drv_8ma>;
++		};
++
++		sdmmc_pwr: sdmmc-pwr {
++			rockchip,pins = <7 11 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++
++	};
++
++	usb_host1 {
++		host_vbus_drv: host-vbus-drv {
++			rockchip,pins = <0 14 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++
++	};
++
++	usb_otg {
++		otg_vbus_drv: otg-vbus-drv {
++			rockchip,pins = <0 12 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	sdio0 {
++		wifi_enable_h: wifienable-h {
++			rockchip,pins = <4 28 RK_FUNC_GPIO &pcfg_output_high>;
++		};
++
++		bt_enable_h: bt-enable-h {
++			rockchip,pins = <4 27 RK_FUNC_GPIO &pcfg_output_high>;
++		};
++
++	};
++
++
++	wireless-bluetooth {
++		uart0_gpios: uart0-gpios {
++			rockchip,pins = <4 19 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++	};
++
++	emmc {
++
++		emmc_reset: emmc-reset {
++			rockchip,pins = <3 RK_PB1 RK_FUNC_GPIO &pcfg_pull_none>;
++		};
++
++	};
++
++};
++
++&saradc {
++	vref-supply = <&vcc_18>;
++	status = "okay";
++};
++
++&emmc {
++
++	/*
++	 * eMMC is a 52Mhz DDR device on q8 devices, so set it here.
++	 * Setting default-sample-rate to 180 degrees is very important,
++	 * otherwise the eMMC is not stable and may not be able to negotiate
++	 * the right clock.
++	 * Despite the code already seems to use 180 degree phase when
++	 * MMC + 8bit bus is set, we need to set default phase here too.
++	 *
++	 * Huge hint came from this patch:
++	 * https://patchwork.kernel.org/patch/11129183/
++	 *
++	 */
++	broken-cd;
++	bus-width = <8>;
++	cap-mmc-highspeed;
++
++	disable-wp;
++	non-removable;
++	pinctrl-names = "default";
++	pinctrl-0 = <&emmc_clk>, <&emmc_cmd>, <&emmc_bus8>;
++
++	vmmc-supply = <&vcc_io>;
++	vqmmc-supply = <&vcc_flash>;
++
++	mmc-pwrseq = <&emmc_pwrseq>;
++	mmc-ddr-1_8v;
++	rockchip,default-sample-phase = <180>;
++
++	status = "okay";
++};
++
++&sdmmc {
++	supports-sd;
++
++	bus-width = <4>;
++	cap-mmc-highspeed;
++	cap-sd-highspeed;
++	cd-gpios = <&gpio6 RK_PC6 GPIO_ACTIVE_LOW>;
++	cd-debounce-delay-ms = <500>;
++	disable-wp;
++	pinctrl-names = "default";
++	pinctrl-0 = <&sdmmc_clk>, <&sdmmc_cmd>, <&sdmmc_cd>, <&sdmmc_bus4>;
++	vmmc-supply = <&vcc_sd>;
++	vqmmc-supply = <&vccio_sd>;
++	sd-uhs-sdr12;
++	sd-uhs-sdr25;
++	sd-uhs-sdr50;
++	sd-uhs-sdr104;
++	sd-uhs-ddr50;
++
++	status = "okay";
++};
++
++&sdio0 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	bus-width = <4>;
++	mmc-pwrseq = <&sdio0_pwrseq>;
++
++	vmmc-supply = <&vcc_io>;
++	vqmmc-supply = <&vcc_18>; // This must be the same as in io_domains,
++		// otherwise the mmc1 device won't be detected properly
++
++	// clock-frequency = <50000000>;
++	// max-frequency = <50000000>;
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&sdio0_bus4>, <&sdio0_cmd>, <&sdio0_clk>, <&sdio0_int>;
++
++	cap-sdio-irq;
++	no-mmc;
++	no-sd;
++	cap-sd-highspeed; // required, otherwise does not work!
++	supports-sdio;
++	non-removable;
++
++	keep-power-in-suspend;
++	disable-wp;
++
++
++	status = "okay";
++
++	brcmf: bcrmf@1 {
++		reg = <1>;
++		compatible = "brcm,bcm4329-fmac";
++		interrupt-parent = <&gpio4>;
++		interrupts = <30 IRQ_TYPE_LEVEL_LOW>;
++		interrupt-names = "host-wake";
++		status = "okay";
++	};
++
++	//sd-uhs-sdr104; // required to be disabled, otherwise the device get
++		// detected, but there is no communication
++
++};
++
++&spi0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&spi0_clk>, <&spi0_cs0>, <&spi0_tx>, <&spi0_rx>, <&spi0_cs1>;
++	status = "okay";
++};
++
++&tsadc {
++	rockchip,hw-tshut-mode = <0>;
++	rockchip,hw-tshut-polarity = <0>;
++	status = "okay";
++};
++
++/*
++ * These dmas described here for uarts are present in original q8 board
++ * dts, so I replicate them here because documentation says that serial
++ * ports can have dmas.
++ * note:
++ *  - uart0 is the serial port connected to the bluetooth module
++ *  - uart2 is the onboard serial port
++ *
++ * As ok kernel 4.19 DMA for serial ports is disabled because it makes
++ * the ports unusable
++ *
++ */
++&uart0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&uart0_xfer>, <&uart0_cts>, <&uart0_rts>;
++	//dmas = <&dmac_peri 1 &dmac_peri 2>;
++	//dma-names = "tx", "rx";
++	status = "okay";
++};
++
++&uart1 {
++	//dmas = <&dmac_peri 3 &dmac_peri 4>;
++	//dma-names = "tx", "rx";
++	status = "okay";
++};
++
++&uart2 {
++	//dmas = <&dmac_bus_s 4 &dmac_bus_s 5>;
++	//dma-names = "tx", "rx";
++	status = "okay";
++};
++
++&uart3 {
++	//dmas = <&dmac_peri 7 &dmac_peri 8>;
++	//dma-names = "tx", "rx";
++	status = "okay";
++};
++
++&uart4 {
++	//dmas = <&dmac_peri 9 &dmac_peri 10>;
++	//dma-names = "tx", "rx";
++	status = "disabled";
++};
++
++/*
++ * Here usbphy* should have their proper reset lines described in rk3288.dtsi
++ * Describing resets for usb phy is important because otherwise the USB
++ * port gets stuck in case it goes into autosuspend: plugging any device
++ * when the port is autosuspended will actually kill the port itself and
++ * require a power cycle.
++ * This is required for the usbphy1 phy, nonetheless it is a good idea to
++ * specify the proper resources for all the phys though.
++ * The reference patch which works in conjuction with the reset lines:
++ * https://patchwork.kernel.org/patch/9469811/
++ *
++ */
++&usbphy {
++	status = "okay";
++};
++
++&usb_host0_ehci {
++	dr_mode = "host";
++	reg = <0x0 0xff500000 0x0 0x20000>;
++	status = "disable";
++};
++
++&usb_host1 {
++	vbus-supply = <&vcc_host_5v>;
++	status = "okay";
++};
++
++&usb_otg {
++	vbus-supply = <&vcc_otg_5v>;
++	status = "okay";
++};
++
++/*
++ * Enable VPU services and complete the relative IOMMU configurations
++ */
++&vopb {
++	status = "okay";
++};
++
++&vopb_mmu {
++	status = "okay";
++};
++
++&vopl {
++	status = "okay";
++};
++
++&vopl_mmu {
++	status = "okay";
++};
++
++&vpu_mmu {
++	status = "okay";
++};
++
++&hevc_mmu {
++	status = "okay";
++};
++
++&wdt {
++	status = "okay";
++};
++
++// i2s bus is present on q8 device, enable it
++&i2s {
++	#sound-dai-cells = <0>;
++	status = "okay";
++};
++
++// spdif is present on q8 device, enable it
++&spdif {
++	status = "okay";
++};
++
++/*
++ * Redefine some thermals to give a bit more headroom (+5°C)
++ */
++&cpu_alert0 {
++	temperature = <75000>;
++};
++
++&cpu_alert1 {
++	temperature = <80000>;
++};
++
++&gpu_alert0 {
++	temperature = <75000>;
++};
++
++/*
++ * Retouch the operating points for higher frequencies to reduce
++ * the voltage required
++ */
++&cpu_opp_table {
++	opp-1512000000 {
++		opp-microvolt = <1250000>;
++	};
++
++	opp-1608000000 {
++		opp-microvolt = <1300000>;
++	};
++
++	/*
++		Remove the overclocking/turbo frequencies
++	*/
++	/delete-node/ opp@1704000000;
++	/delete-node/ opp@1800000000;
++	/delete-node/ opp@1896000000;
++	/delete-node/ opp@1920000000;
++	/delete-node/ opp@1992000000;
++	/delete-node/ opp@2016000000;
++	/delete-node/ opp@2040000000;
++	/delete-node/ opp@2064000000;
++	/delete-node/ opp@2088000000;
++	/delete-node/ opp@2112000000;
++	/delete-node/ opp@2136000000;
++	/delete-node/ opp@2160000000;
++	/delete-node/ opp@2184000000;
++	/delete-node/ opp@2208000000;
++
++
++};
++
++&gpiomem {
++	status = "okay";
++};
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 37a3de760..6bcfceede 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -832,6 +832,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += \
+ 	rk3188-radxarock.dtb \
+ 	rk3228-evb.dtb \
+ 	rk3229-evb.dtb \
++	rk3288-xt-q8l-v10.dtb \
+ 	rk3229-xms6.dtb \
+ 	rk3288-evb-act8846.dtb \
+ 	rk3288-evb-rk808.dtb \
+
+diff --git a/drivers/media/rc/keymaps/rc-xt-q8l-v10.c b/drivers/media/rc/keymaps/rc-xt-q8l-v10.c
+index e69de29..19c7d9e 100644
+--- /dev/null
++++ b/drivers/media/rc/keymaps/rc-xt-q8l-v10.c
+@@ -0,0 +1,76 @@
++// SPDX-License-Identifier: GPL-2.0+
++// rc-xt-q8l-v10.c - Keytable for xt-q8l-v10 tv box remote controller
++//
++// keymap imported from ir-keymaps.c
++//
++// Copyright (c) 2018 Paolo Sabatino
++
++#include <media/rc-map.h>
++#include <linux/module.h>
++
++/*
++
++*/
++
++static struct rc_map_table xt_q8l_v10[] = {
++	
++	{ 0xcc1d11, KEY_ENTER },
++	{ 0xcc1d00, KEY_POWER },
++	{ 0xcc1d15, KEY_PLAYPAUSE },
++	{ 0xcc1d16, KEY_STOP },
++	{ 0xcc1d06, KEY_PREVIOUSSONG },
++	{ 0xcc1d0a, KEY_NEXTSONG },
++	{ 0xcc1d41, KEY_1 },
++	{ 0xcc1d45, KEY_2 },
++	{ 0xcc1d4d, KEY_3 },
++	{ 0xcc1d42, KEY_4 },
++	{ 0xcc1d46, KEY_5 },
++	{ 0xcc1d4e, KEY_6 },
++	{ 0xcc1d43, KEY_7 },
++	{ 0xcc1d47, KEY_8 },
++	{ 0xcc1d4f, KEY_9 },
++	{ 0xcc1d49, KEY_0 },
++	{ 0xcc1d4a, KEY_BACKSPACE },
++	{ 0xcc1d48, KEY_F6 },
++	{ 0xcc1d03, KEY_HOME },
++	{ 0xcc1d0f, KEY_BACK },
++	{ 0xcc1d40, KEY_MENU },
++	{ 0xcc1d4c, KEY_TEXT },
++	{ 0xcc1d10, KEY_LEFT },
++	{ 0xcc1d12, KEY_RIGHT },
++	{ 0xcc1d44, KEY_DOWN },
++	{ 0xcc1d07, KEY_UP },
++	{ 0xcc1d02, KEY_VOLUMEDOWN },
++	{ 0xcc1d0c, KEY_MUTE },
++	{ 0xcc1d0e, KEY_VOLUMEUP },
++	{ 0xcc1d01, KEY_F1 },
++	{ 0xcc1d05, KEY_F2 },
++	{ 0xcc1d09, KEY_F3 },
++	{ 0xcc1d0d, KEY_F4 },
++	
++};
++
++static struct rc_map_list xt_q8l_v10_map = {
++	.map = {
++		.scan     = xt_q8l_v10,
++		.size     = ARRAY_SIZE(xt_q8l_v10),
++		.rc_proto = RC_PROTO_NEC,	/* Legacy IR type */
++		.name     = RC_MAP_XT_Q8L_V10,
++	}
++};
++
++static int __init init_rc_map_xt_q8l_v10(void)
++{
++	return rc_map_register(&xt_q8l_v10_map);
++}
++
++static void __exit exit_rc_map_xt_q8l_v10(void)
++{
++	rc_map_unregister(&xt_q8l_v10_map);
++}
++
++module_init(init_rc_map_xt_q8l_v10)
++module_exit(exit_rc_map_xt_q8l_v10)
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Paolo Sabatino");
+diff --git a/include/media/rc-map.h b/include/media/rc-map.h
+index d621acadf..ad7abdb97 100644
+--- a/include/media/rc-map.h
++++ b/include/media/rc-map.h
+@@ -278,6 +278,7 @@ struct rc_map *rc_map_get(const char *name);
+ #define RC_MAP_WINFAST_USBII_DELUXE      "rc-winfast-usbii-deluxe"
+ #define RC_MAP_SU3000                    "rc-su3000"
+ #define RC_MAP_XBOX_DVD                  "rc-xbox-dvd"
++#define RC_MAP_XT_Q8L_V10                "rc-xt-q8l-v10"
+ #define RC_MAP_X96MAX                    "rc-x96max"
+ 
+ /*
+diff --git a/drivers/media/rc/keymaps/Makefile b/drivers/media/rc/keymaps/Makefile
+index 5b1399af6..ec9ce1206 100644
+--- a/drivers/media/rc/keymaps/Makefile
++++ b/drivers/media/rc/keymaps/Makefile
+@@ -117,4 +117,5 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
+ 			rc-winfast-usbii-deluxe.o \
+ 			rc-su3000.o \
+ 			rc-xbox-dvd.o \
++			rc-xt-q8l-v10.o \
+ 			rc-x96max.o \

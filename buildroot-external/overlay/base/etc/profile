@@ -2,13 +2,13 @@ export PATH=/bin:/sbin:/usr/bin:/usr/sbin
 
 if [ "$PS1" ]; then
 	if [ "`id -u`" -eq 0 ]; then
-		export PS1='# '
+		export PS1='\u@\h:\w# '
 	else
-		export PS1='$ '
+		export PS1='\u@\h:\w$ '
 	fi
 fi
 
-export PAGER='/bin/more '
+export PAGER='/usr/bin/less'
 export EDITOR='/bin/vi'
 
 # Source configuration files from /etc/profile.d

@@ -92,28 +92,28 @@
        body {
 --- occu/WebUI/www/rega/index.htm.orig
 +++ occu/WebUI/www/rega/index.htm
-@@ -4,9 +4,6 @@
+@@ -5,9 +5,6 @@
+     <title>HomeMatic WebUI</title>
+     <meta http-equiv="Content-Language" content="de">
+     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+-    <meta http-equiv="cache-control" content="no-cache">
+-    <meta http-equiv="pragma"        content="no-cache">
+-    <meta http-equiv="expires"       content="0">
  
-   <meta http-equiv="Content-Language" content="de">
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
--  <meta http-equiv="cache-control" content="no-cache">
--  <meta http-equiv="pragma"        content="no-cache">
--  <meta http-equiv="expires"       content="0">
- 
- <%
- 
+     <%
+       string devtype = "pc";
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
 @@ -6,9 +6,6 @@
-   <% Call("/esp/system.fn::CheckUserFavorite()"); %>
-   <meta http-equiv="Content-Language" content="de">
-   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
--  <meta http-equiv="cache-control" content="no-cache">
--  <meta http-equiv="pragma"        content="no-cache">
--  <meta http-equiv="expires"       content="0">
+     <% Call("/esp/system.fn::CheckUserFavorite()"); %>
+     <meta http-equiv="Content-Language" content="de">
+     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+-    <meta http-equiv="cache-control" content="no-cache">
+-    <meta http-equiv="pragma"        content="no-cache">
+-    <meta http-equiv="expires"       content="0">
  
-   <link rel="shortcut icon" href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon"/>
-   <link rel="icon"          href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon" />
+     <link rel="shortcut icon" href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon"/>
+     <link rel="icon"          href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon" />
 --- occu/WebUI/www/tools/designer.html.orig
 +++ occu/WebUI/www/tools/designer.html
 @@ -2,9 +2,6 @@
@@ -165,7 +165,7 @@
      request.done(function(result) {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -5782,21 +5782,10 @@
+@@ -5850,21 +5850,10 @@
    /*####################*/
    
    /**
@@ -187,7 +187,7 @@
      var xhr = XMLHttpRequest_create();
      
      if (null !== xhr)
-@@ -17643,7 +17632,6 @@
+@@ -18724,7 +18713,6 @@
      url: "/ise/htm/header.htm",
      dataType: "html",
      async: false,
@@ -195,3 +195,21 @@
      context: document.body
      }).done(function(response) {
        jQuery("#header").html(response);
+@@ -23277,7 +23265,7 @@
+       var script = document.createElement("script");
+       script.id = "homematic_com_script_" + index;
+       script.type = "text/javascript";
+-      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0";
++      script.src =  this.m_URLServer + "/firmware/download?cmd=js_check_version&product=" + product + "&serial=0" + "&ts=" + Date.now();
+       $("body").appendChild(script);
+       homematic.com.callback = callback;
+   },
+@@ -23288,7 +23276,7 @@
+       script.id = "homematic_com_script_fw";
+       script.type = "text/javascript";
+       // script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE";
+-      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU"+getProduct()+"&version="+WEBUI_VERSION;
++      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU"+getProduct()+"&version="+WEBUI_VERSION+"&ts=" + Date.now();
+       $("body").appendChild(script);
+       homematic.com.callback = callback;
+   },

@@ -5,8 +5,8 @@
 
 init () {
 
-  HM_HMRF_SERIAL=$(/bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
-  HM_HMRF_SGTIN=$(/bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -c -sg 2>&1 | grep "SGTIN:" | cut -d' ' -f5 | tr -d '[:space:]')
+  HM_HMRF_SERIAL=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
+  HM_HMRF_SGTIN=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -c -sg 2>&1 | grep "SGTIN:" | cut -d' ' -f5 | tr -d '[:space:]')
   echo $HM_HMRF_SERIAL > /var/board_serial
   echo $HM_HMRF_SGTIN > /var/board_sgtin
 

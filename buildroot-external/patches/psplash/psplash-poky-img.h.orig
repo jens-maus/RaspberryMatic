@@ -1,3 +1,7 @@
+/*
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 /* GdkPixbuf RGBA C-Source image dump 1-byte-run-length-encoded */
 
 #define POKY_IMG_ROWSTRIDE (1708)
@@ -1018,4 +1022,5 @@
   "\203\371\313^\377\202\370\313e\377\4\373\320w\377\372\332\221\377\375" \
   "\337\243\377\371\346\264\377\377\363ZE\0\377\363ZE\0\377\363ZE\0\377" \
   "\363ZE\0\377\363ZE\0\377\363ZE\0\377\363ZE\0\217\363ZE\0")
+
 

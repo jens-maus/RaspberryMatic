@@ -9,8 +9,8 @@ identify_host() {
   HM_HOST=""
   HM_MODE="NORMAL"
   HM_LED_GREEN=""
-  HM_LED_GREEN_MODE1="mmc0"
-  HM_LED_GREEN_MODE2="mmc0"
+  HM_LED_GREEN_MODE1="$(lsblk -r -n -o pkname,partuuid,label,mountpoint | sed -n 's/mmc.*\([[:digit:]]\) deedbeef-02 rootfs .*/mmc\1/p')"
+  HM_LED_GREEN_MODE2=${HM_LED_GREEN_MODE1}
   HM_LED_RED=""
   HM_LED_RED_MODE1="timer"
   HM_LED_RED_MODE2="heartbeat"
@@ -21,25 +21,28 @@ identify_host() {
   # identify the RaspberryPi version used
   # http://elinux.org/RPi_HardwareHistory
   # https://github.com/MilhouseVH/bcmstat/blob/master/bcmstat.sh#L67
+  # https://www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
   hostid=$(cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}')
   case "${hostid}" in
-    *c03111)                                         HM_HOST="rpi4b4g"    ;; # Raspberry Pi 4 Model B/4GB
-    *b03111)                                         HM_HOST="rpi4b2g"    ;; # Raspberry Pi 4 Model B/2GB
-    *a03111)                                         HM_HOST="rpi4b1g"    ;; # Raspberry Pi 4 Model B/1GB
-    *a020d3)                                         HM_HOST="rpi3p"      ;; # Raspberry Pi 3 Model B+
-    *a02080|*a02082|*a22082|*a32082)                 HM_HOST="rpi3"       ;; # Raspberry Pi 3 Model B
-    *9020e0)                                         HM_HOST="rpi3ap"     ;; # Raspberry Pi 3 Model A+
-    *a020a0)                                         HM_HOST="rpi3cm"     ;; # Raspberry Pi Compute Module 3
-    *a01040|*a01041|*a02041|*a02042|*a21041|*a22042) HM_HOST="rpi2"       ;; # Raspberry Pi 2 Model B
-    *9000c?)                                         HM_HOST="rpi0w"      ;; # Raspberry Pi Zero W
-    *90009?|*920093)                                 HM_HOST="rpi0"       ;; # Raspberry Pi Zero
-    *0011|*0014)                                     HM_HOST="rpi1cm"     ;; # Raspberry Pi Compute Module 1
-    *0010|*0013|*900032|*90003f)                     HM_HOST="rpi1bp"     ;; # Raspberry Pi B+/512MB
-    *0015|*900021|*900012)                           HM_HOST="rpi1ap512"  ;; # Raspberry Pi A+/512MB
-    *0012)                                           HM_HOST="rpi1ap256"  ;; # Raspberry Pi A+/256MB
-    *000d|*000e|*000f)                               HM_HOST="rpi1b512"   ;; # Raspberry Pi B/512MB
-    *0002|*0003|*0004|*0005|*0006)                   HM_HOST="rpi1b256"   ;; # Raspberry Pi B/256MB
-    *0007|*0008|*0009)                               HM_HOST="rpi1a"      ;; # Raspberry Pi A/256MB
+    *d?311?)                       HM_HOST="rpi4b8g"    ;; # Raspberry Pi 4 Model B/8GB
+    *c?311?)                       HM_HOST="rpi4b4g"    ;; # Raspberry Pi 4 Model B/4GB
+    *b?311?)                       HM_HOST="rpi4b2g"    ;; # Raspberry Pi 4 Model B/2GB
+    *a?311?)                       HM_HOST="rpi4b1g"    ;; # Raspberry Pi 4 Model B/1GB
+    *a?210?)                       HM_HOST="rpi3cmp"    ;; # Raspberry Pi Compute Module 3+
+    *a?20d?)                       HM_HOST="rpi3p"      ;; # Raspberry Pi 3 Model B+
+    *a?208?)                       HM_HOST="rpi3"       ;; # Raspberry Pi 3 Model B
+    *9?20e?)                       HM_HOST="rpi3ap"     ;; # Raspberry Pi 3 Model A+
+    *a?20a?)                       HM_HOST="rpi3cm"     ;; # Raspberry Pi Compute Module 3
+    *a?104?|*a?204?)               HM_HOST="rpi2"       ;; # Raspberry Pi 2 Model B
+    *9?00c?)                       HM_HOST="rpi0w"      ;; # Raspberry Pi Zero W
+    *9?009?)                       HM_HOST="rpi0"       ;; # Raspberry Pi Zero
+    *9?006?|*0011|*0014)           HM_HOST="rpi1cm"     ;; # Raspberry Pi Compute Module 1
+    *9?003?|*0010|*0013)           HM_HOST="rpi1bp"     ;; # Raspberry Pi B+/512MB
+    *9?001?|*9?002?|*0015)         HM_HOST="rpi1ap512"  ;; # Raspberry Pi A+/512MB
+    *0012)                         HM_HOST="rpi1ap256"  ;; # Raspberry Pi A+/256MB
+    *000d|*000e|*000f)             HM_HOST="rpi1b512"   ;; # Raspberry Pi B/512MB
+    *0002|*0003|*0004|*0005|*0006) HM_HOST="rpi1b256"   ;; # Raspberry Pi B/256MB
+    *0007|*0008|*0009)             HM_HOST="rpi1a"      ;; # Raspberry Pi A/256MB
 
     # No RaspberryPi identified, try other boards
     *)

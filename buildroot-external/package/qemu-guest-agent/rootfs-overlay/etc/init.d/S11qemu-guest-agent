@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# Starts qemu-guest-agent
+#
+
+EXEC="/usr/bin/qemu-ga"
+METHOD="virtio-serial"
+METHOD_PATH="/dev/virtio-ports/org.qemu.guest_agent.0"
+ARGS=""
+PID="/var/run/qemu-ga.pid"
+
+[ -e "${METHOD_PATH}" ] || exit 0
+[ -r /etc/default/qemu-guest-agent ] && . /etc/default/qemu-guest-agent
+
+case "$1" in
+  start)
+    printf "Starting qemu-guest-agent: "
+    start-stop-daemon -S -q -x $EXEC -- --daemonize $ARGS -m "${METHOD}" -p "${METHOD_PATH}" -f ${PID}
+    if [ $? != 0 ]; then
+      echo "FAILED"
+      exit 1
+    else
+      echo "OK"
+    fi
+  ;;
+  stop)
+    printf "Stopping qemu-guest-agent: "
+    start-stop-daemon -K -q -p $PID
+    echo "OK"
+  ;;
+  restart|reload)
+    $0 stop
+    $0 start
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac

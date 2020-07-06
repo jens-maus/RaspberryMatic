@@ -27,7 +27,7 @@ define CLOUDMATIC_INSTALL_TARGET_CMDS
   cp -a $(@D)/www $(TARGET_DIR)/opt/mh/
   rm -f $(TARGET_DIR)/opt/mh/user/nginx.pi $(TARGET_DIR)/opt/mh/user/nginx $(TARGET_DIR)/opt/mh/user/nginx.i686 $(TARGET_DIR)/opt/mh/user/zabbix_agentd $(TARGET_DIR)/opt/mh/user/zabbix_agentd.i686
   [[ -n "$(NGINX_BIN)" ]] && $(INSTALL) -m 0755 $(@D)/user/$(NGINX_BIN) $(TARGET_DIR)/opt/mh/user/nginx || true
-  [[ -n "$(ZABBIX_BIN)" ]] && $(INSTALL) -m 0755 $(@D)/user/$(ZABBIX_BIN) $(TARGET_DIR)/opt/mh/user/zabbix_agend || true
+  [[ -n "$(ZABBIX_BIN)" ]] && $(INSTALL) -m 0755 $(@D)/user/$(ZABBIX_BIN) $(TARGET_DIR)/opt/mh/user/zabbix_agentd || true
   $(INSTALL) -D -m 0755 $(CLOUDMATIC_PKGDIR)/S97CloudMatic $(TARGET_DIR)/etc/init.d
 endef
 

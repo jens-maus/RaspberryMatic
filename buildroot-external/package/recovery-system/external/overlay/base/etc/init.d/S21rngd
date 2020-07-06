@@ -2,7 +2,7 @@
 
 NAME="rngd"
 DAEMON="/usr/sbin/${NAME}"
-DAEMON_ARGS=""
+DAEMON_ARGS="-q"
 CFG_FILE="/etc/default/${NAME}"
 PID_FILE="/var/run/${NAME}.pid"
 
@@ -12,8 +12,8 @@ PID_FILE="/var/run/${NAME}.pid"
 start()
 {
 	printf "Starting ${NAME}: "
-	if ! head -c 1 /dev/hwrng >/dev/null 2>&1; then
-		DAEMON_ARGS="-r /dev/urandom"
+	if ! timeout 5 head -c 1 /dev/hwrng >/dev/null 2>&1; then
+		DAEMON_ARGS="${DAEMON_ARGS} -r /dev/urandom"
 	fi
 	start-stop-daemon -S -q -x "${DAEMON}" -- ${DAEMON_ARGS}
 	[ $? = 0 ] && echo "OK" || echo "FAIL"

@@ -6,14 +6,16 @@
 
 export LC_ALL=C
 
-patchdirs=$(find buildroot/package -maxdepth 1 -type d | sort)
+patchdirs=$(find buildroot/ -maxdepth 2 -type d | sort)
 
 #rm *.patch
 
 COUNTER=1
-for dir in ${patchdirs}; do
+for dir in ${patchdirs} buildroot/toolchain; do
+  [[ ! -d "${dir}" ]] && continue
   package=$(basename ${dir})
   [[ "${package}" == "package" ]] && continue
+  [[ "${package}" == "buildroot" ]] && continue
   count=$(printf %04d ${COUNTER})
   patchfile=0000-${package}.patch
   echo ${patchfile}

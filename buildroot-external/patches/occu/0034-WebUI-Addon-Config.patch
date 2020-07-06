@@ -1,3 +1,96 @@
+--- occu/X86_32_Debian_Wheezy/packages-eQ-3/WebUI/lib/tcl8.2/homematic/homematic.tcl.orig
++++ occu/X86_32_Debian_Wheezy/packages-eQ-3/WebUI/lib/tcl8.2/homematic/homematic.tcl
+@@ -85,7 +85,7 @@
+ namespace eval ::HomeMatic::Addon {
+   global ::HomeMatic::Addon::_CONFIG_FILE_
+   
+-  namespace export GetAll AddConfigPage
++  namespace export GetAll AddConfigPage RemoveConfigPage
+   
+   set ::HomeMatic::Addon::_CONFIG_FILE_ "/etc/config/hm_addons.cfg"
+ }
+@@ -105,6 +105,19 @@
+   ::HomeMatic::Util::SaveFile $filename [array get addons]
+ }
+ 
++# removes an addon configuration page
++proc ::HomeMatic::Addon::RemoveConfigPage { id } {
++  global ::HomeMatic::Addon::_CONFIG_FILE_
++  set filename $::HomeMatic::Addon::_CONFIG_FILE_
++  
++  array set addons [::HomeMatic::Util::LoadFile $filename]
++  # remove addon config, if present
++  if {[info exists addons($id)]} { 
++    unset addons($id)
++  }  
++  ::HomeMatic::Util::SaveFile $filename [array get addons]
++}
++
+ proc ::HomeMatic::Addon::GetAll { } {
+   global ::HomeMatic::Addon::_CONFIG_FILE_
+   set filename $::HomeMatic::Addon::_CONFIG_FILE_
+--- occu/X86_32_GCC8/packages-eQ-3/WebUI/lib/tcl8.2/homematic/homematic.tcl.orig
++++ occu/X86_32_GCC8/packages-eQ-3/WebUI/lib/tcl8.2/homematic/homematic.tcl
+@@ -85,7 +85,7 @@
+ namespace eval ::HomeMatic::Addon {
+   global ::HomeMatic::Addon::_CONFIG_FILE_
+   
+-  namespace export GetAll AddConfigPage
++  namespace export GetAll AddConfigPage RemoveConfigPage
+   
+   set ::HomeMatic::Addon::_CONFIG_FILE_ "/etc/config/hm_addons.cfg"
+ }
+@@ -105,6 +105,19 @@
+   ::HomeMatic::Util::SaveFile $filename [array get addons]
+ }
+ 
++# removes an addon configuration page
++proc ::HomeMatic::Addon::RemoveConfigPage { id } {
++  global ::HomeMatic::Addon::_CONFIG_FILE_
++  set filename $::HomeMatic::Addon::_CONFIG_FILE_
++  
++  array set addons [::HomeMatic::Util::LoadFile $filename]
++  # remove addon config, if present
++  if {[info exists addons($id)]} { 
++    unset addons($id)
++  }  
++  ::HomeMatic::Util::SaveFile $filename [array get addons]
++}
++
+ proc ::HomeMatic::Addon::GetAll { } {
+   global ::HomeMatic::Addon::_CONFIG_FILE_
+   set filename $::HomeMatic::Addon::_CONFIG_FILE_
+--- occu/arm-gnueabihf-gcc8/packages-eQ-3/WebUI/lib/tcl8.2/homematic/homematic.tcl.orig
++++ occu/arm-gnueabihf-gcc8/packages-eQ-3/WebUI/lib/tcl8.2/homematic/homematic.tcl
+@@ -85,7 +85,7 @@
+ namespace eval ::HomeMatic::Addon {
+   global ::HomeMatic::Addon::_CONFIG_FILE_
+   
+-  namespace export GetAll AddConfigPage
++  namespace export GetAll AddConfigPage RemoveConfigPage
+   
+   set ::HomeMatic::Addon::_CONFIG_FILE_ "/etc/config/hm_addons.cfg"
+ }
+@@ -105,6 +105,19 @@
+   ::HomeMatic::Util::SaveFile $filename [array get addons]
+ }
+ 
++# removes an addon configuration page
++proc ::HomeMatic::Addon::RemoveConfigPage { id } {
++  global ::HomeMatic::Addon::_CONFIG_FILE_
++  set filename $::HomeMatic::Addon::_CONFIG_FILE_
++  
++  array set addons [::HomeMatic::Util::LoadFile $filename]
++  # remove addon config, if present
++  if {[info exists addons($id)]} { 
++    unset addons($id)
++  }  
++  ::HomeMatic::Util::SaveFile $filename [array get addons]
++}
++
+ proc ::HomeMatic::Addon::GetAll { } {
+   global ::HomeMatic::Addon::_CONFIG_FILE_
+   set filename $::HomeMatic::Addon::_CONFIG_FILE_
 --- occu/arm-gnueabihf/packages-eQ-3/WebUI/lib/tcl8.2/homematic/homematic.tcl.orig
 +++ occu/arm-gnueabihf/packages-eQ-3/WebUI/lib/tcl8.2/homematic/homematic.tcl
 @@ -85,7 +85,7 @@

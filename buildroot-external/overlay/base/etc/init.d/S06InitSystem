@@ -47,7 +47,11 @@ init_system() {
 
   # create a /usr/local/tmp directory for creating things like backup files, etc.
   # (we need it on-disk or /tmp will be not enough in case of a filled up /usr/local)
-  mkdir -p /usr/local/tmp
+  if [[ ! -f /usr/local/tmp/.nobackup ]]; then
+    mkdir -p /usr/local/tmp
+    touch /usr/local/tmp/.nobackup
+  fi
+  # remove everything but keep dotfiles (e.g. '.nobackup')
   rm -rf /usr/local/tmp/*
 
   # make sure /usr/local/etc/config exists and has

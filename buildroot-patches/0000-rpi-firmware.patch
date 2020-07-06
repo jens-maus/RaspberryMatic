@@ -6,7 +6,7 @@
  
 +config BR2_PACKAGE_RPI_FIRMWARE_VERSION
 +	string "Custom firmware version"
-+	default "1.20190718"
++	default "01ecfd2ba2b7cf3a2f4aa75ada895ee4a3e729f5"
 +
  choice
  	bool "rpi variant"
@@ -17,7 +17,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = bcf40b5c2b94178c7564fb451098d44968e44af5
+-RPI_FIRMWARE_VERSION = 5574077183389cd4c65077ba18b59144ed6ccd6d
 +RPI_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_RPI_FIRMWARE_VERSION))
  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
  RPI_FIRMWARE_LICENSE = BSD-3-Clause

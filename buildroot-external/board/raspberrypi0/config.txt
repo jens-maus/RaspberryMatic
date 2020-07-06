@@ -23,12 +23,12 @@ init_uart_clock=48000000
 
 # switch the bluetooth UART to the miniuart
 # for basic bluetooth support and fix core_freq
-dtoverlay=pi3-miniuart-bt
+dtoverlay=miniuart-bt
 core_freq=250
 
 # for disabling bluetooth alltogether
 # you can uncomment the following two lines
-#dtoverlay=pi3-disable-bt
+#dtoverlay=disable-bt
 #dtparam=uart1=off
 
 # load dtoverlay for raw-uart
@@ -60,3 +60,7 @@ device_tree_address=0x2008000
 
 # lets u-boot take over the boot process
 kernel=u-boot.bin
+
+# user config options shoule be put in
+# /boot/extraconfig.txt
+include extraconfig.txt

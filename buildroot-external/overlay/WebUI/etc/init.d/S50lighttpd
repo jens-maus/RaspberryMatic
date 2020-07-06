@@ -24,6 +24,9 @@ start() {
                                            -out /etc/config/server.pem \
                                            -days 3650 \
                                            -addext "subjectAltName = DNS:$(hostname),IP:${IP}" \
+                                           -addext "keyUsage = keyCertSign,digitalSignature,keyEncipherment" \
+                                           -addext "extendedKeyUsage = serverAuth" \
+                                           -addext "nsCertType = server,sslCA" \
                                            -subj "/C=DE/O=HomeMatic/OU=$(cat /var/board_serial)/CN=$(hostname)" 2>/dev/null >/dev/null
   fi
 

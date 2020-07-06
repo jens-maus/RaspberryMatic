@@ -3,7 +3,6 @@
 #
 
 OCCU_ROOT=
-RASPMATIC_VERSION=$(shell cat ../../../VERSION)
 
 install_rfd_arch:
 	mkdir -p $(TARGET_DIR)/bin
@@ -28,12 +27,12 @@ install_hs485d_arch:
 
 install_webui_arch:
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/config
-	rm -r $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
+	rm -rf $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/* $(TARGET_DIR)/
 	cp -R WebUI/* $(TARGET_DIR)/
 	mv $(TARGET_DIR)/bin/ReGaHss.community $(TARGET_DIR)/bin/ReGaHss
-ifeq (,$(filter $(BR2_PACKAGE_OCCU_WEBUI_REGAHSS_BETA), y))
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
+ifeq ($(OCCU_WEBUI_REGAHSS_BETA), y)
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/* $(TARGET_DIR)/
 endif
 
 install_linuxbasis_arch:
@@ -100,7 +99,8 @@ update_webui:
 
 	chmod a+rx $(TARGET_DIR)/www/config/fileupload.ccc
 
-	grep -rl 'XXX-WEBUI-VERSION-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-WEBUI-VERSION-XXX/$(RASPMATIC_VERSION)/g'
+	grep -rl 'XXX-WEBUI-VERSION-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-WEBUI-VERSION-XXX/$(PRODUCT_VERSION)/g'
+	grep -rl 'XXX-PRODUCT-XXX' $(TARGET_DIR)/www | xargs sed -i 's/XXX-PRODUCT-XXX/$(PRODUCT)/g'
 
 install:
 	make install_rfd_arch OCCU_ARCH=$(OCCU_ARCH)

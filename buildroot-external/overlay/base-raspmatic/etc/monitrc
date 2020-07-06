@@ -8,13 +8,18 @@ set httpd unixsocket /var/run/monit.sock
     allow localhost
 
 # hardware watchdog monitoring
-check process watchdog with matching /dev/watchdog
+check process watchdog with matching /sbin/watchdog
     group system
     start = "/etc/init.d/S00watchdog start"
     stop = "/etc/init.d/S00watchdog stop"
     if not exist for 1 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'hardware watchdog restarted' WatchDog-Alarm"
+    depends on watchdogEnabled
+
+check program watchdogEnabled with path "/usr/bin/test -c /dev/watchdog"
+    group system
+    if status != 0 for 1 cycles then unmonitor
 
 # hss_led service monitoring
 check process hss_led with pidfile /var/run/hss_led.pid
@@ -339,7 +344,7 @@ check program hasUSB with path "/usr/bin/test -e /var/status/hasUSB"
     if status != 0 for 5 cycles then unmonitor
 
 # check system temperature limits
-check program temperature with path /bin/sh -c "([[ -f /sys/class/thermal/thermal_zone0/temp ]] || echo 0 && cat /sys/class/thermal/thermal_zone0/temp) | awk '{ print $1/1000; if($1/1000 < 80.0) { exit 10 } else { exit 20 } }';"
+check program temperature with path /bin/sh -c "(cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null || echo 0) | awk '{ print $1/1000; if($1/1000 < 80.0) { exit 10 } else { exit 20 } }';"
     group system
     if status != 10 for 5 cycles then
       exec "/bin/triggerAlarm.tcl 'high system temperature (> 80 deg) detected' WatchDog-Alarm"
@@ -394,6 +399,19 @@ check program internetCheck with path "/usr/bin/test -e /var/status/hasInternet"
 check program internetCheckEnabled with path "/usr/bin/test -e /etc/config/internetCheckDisabled"
     group system
     if status == 0 for 1 cycles then unmonitor
+
+# check for a non-empty /tmp/badblocks.txt file and warn the user accordingly
+check program badblocksCheck with path "/usr/bin/test -s /tmp/badblocks.txt"
+    group systen
+    if status = 0 for 1 cycles then
+      exec "/bin/triggerAlarm.tcl 'Bad blocks on main disk device detected' WatchDog-Alarm"
+    depends on crond
+
+# check for an unclean shutdown by checking for /var/status/uncleanShutdown
+check program uncleanShutdownCheck with path "/usr/bin/test -e /var/status/uncleanShutdown"
+    group systen
+    if status = 0 for 1 cycles then
+      exec "/bin/triggerAlarm.tcl 'Unclean shutdown or system crash identified' WatchDog-Alarm"
 
 # include user-defined configuration files
 include /usr/local/etc/monit*.cfg

@@ -45,6 +45,25 @@ do_stop()
   log "neo_server stopped"
 }
 
+check_status()
+{
+  if [ ! -f "$PIDFILE" ]; then
+    log "no pid file $PIDFILE"
+    return -1
+  fi
+  local ps=$(cat $PIDFILE)
+  if [ -z "$ps" ]; then
+    log "pid file $PIDFILE empty"
+    return -2
+  fi
+  if [ ! -d "/proc/$ps" ]; then
+    log "no running process with pid $ps"
+    return -3
+  fi
+  log "neo_server is running (pid=$ps)"
+  return 0
+}
+
 case "$1" in
   ""|start)
     log "start"
@@ -82,8 +101,12 @@ case "$1" in
     rm -rf $CONFIGDIR/addons/www/mediola
     rm -f $CONFIGDIR/rc.d/97NeoServer
     ;;
+  status)
+    check_status
+    exit $?
+    ;;
   *)
-    echo "usage: $ADDONNAME [info|start|stop|restart|uninstall]"
+    echo "usage: $ADDONNAME [info|start|stop|restart|uninstall|status]"
 	  exit 1
     ;;
 esac

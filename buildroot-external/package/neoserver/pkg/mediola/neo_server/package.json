@@ -1,11 +1,11 @@
 {
     "name": "neo_server",
-    "version": "2.5.3",
+    "version": "2.5.5",
     "main": "index.html",
     "config": {
         "WEB_SERVER_PORT": 8088,
         "DATA_FOLDER": "/etc/config/addons/mediola",
-        "APP_FOLDER": "/etc/config/addons/mediola",
+        "APP_FOLDER": "/usr/local/addons/mediola/neo_server",
         "LOG_ROOT": "/var/log/neo_server"
     },
     "window": {

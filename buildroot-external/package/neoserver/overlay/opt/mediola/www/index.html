@@ -182,7 +182,7 @@
 	<center>
 		<div class="row">
 			<div class="col-10 col-md">
-				<img class="mb-1" src="images/mediola-logo-trans.png" alt="" width="120"> <small class="d-block mb-2 text-muted">&copy; 2017-2018</small>
+				<img class="mb-1" src="images/mediola-logo-trans.png" alt="" width="120"> <small class="d-block mb-2 text-muted">&copy; 2017-2020</small> 
 			</div>
 		</div>
 	</center>
@@ -202,9 +202,7 @@
             </div>
 <!--   ================================================== -->
 <script src="js/jquery-1.12.4.min.js"></script>
-<!-- <script src="../../assets/js/vendor/popper.min.js"></script> -->
 <script src="js/bootstrap.min.js"></script>
-<!-- <script src="../../assets/js/vendor/holder.min.js"></script> -->
 <script src="js/jquery.simple-popup.js"></script>
 <script src="js/x.crypt.md5.js"></script>
 <script>
@@ -228,7 +226,7 @@ function getUrlVars() {
 }
   
   var fType = getUrlVars()["sid"];
-  
+
   if(self.location.protocol === "https:") {
     window.location.href="http://"+self.location.host+"/addons/mediola/index.html?sid="+fType;
   }
@@ -288,13 +286,17 @@ function getUrlVars() {
     	}   	
 		function urlExists(){
   			$.ajax({
-    			type: 'HEAD',
-    			url: self.location.protocol+"//"+self.location.host+":8088",
-    			success: function(){
-      				$("#onlinecheck").html("Status: <span style='font-weight:bold;color:#00FF00;'>online</span>");
-      				$("#con_online").show();
-      				$("#con_online2").show();
-
+    			type: 'GET',
+    			url: self.location.protocol+"//"+self.location.host+"/addons/mediola/bin/checkServer.cgi?sid="+fType,
+    			success: function(data){
+					if (data && data.running) {
+						$("#onlinecheck").html("Status: <span style='font-weight:bold;color:#00FF00;'>online</span>");
+      					$("#con_online").show();
+      					$("#con_online2").show();
+					} else {
+						$("#con_offline").show();
+      					$("#onlinecheck").html("Status: <span style='font-weight:bold;color:#FF0000;'>offline</span>");	
+					}
     			},
     			error: function() {
      				$("#con_offline").show();

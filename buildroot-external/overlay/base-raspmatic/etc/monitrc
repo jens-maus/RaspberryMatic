@@ -411,7 +411,7 @@ check program badblocksCheck with path "/usr/bin/test -s /tmp/badblocks.txt"
 check program uncleanShutdownCheck with path "/usr/bin/test -e /var/status/uncleanShutdown"
     group systen
     if status = 0 for 1 cycles then
-      exec "/bin/triggerAlarm.tcl 'Unclean shutdown or system crash identified' WatchDog-Alarm"
+      exec "/bin/triggerAlarm.tcl 'Unclean shutdown or system crash identified' WatchDog-Alarm ; rm -f /var/status/uncleanShutdown"
 
 # include user-defined configuration files
 include /usr/local/etc/monit*.cfg

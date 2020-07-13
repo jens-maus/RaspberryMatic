@@ -1,0 +1,7 @@
+config BR2_PACKAGE_ARGONONED
+	bool "ArgonONE/FAN HAT Support Daemon"
+	help
+	  Adds support for ArgonONE/FAN HAT Support Daemon
+
+	  https://www.argon40.com/argon-one-raspberry-pi-4-case.html
+	  https://www.argon40.com/argon-fan-hat-for-raspberry-pi-4-raspberry-pi-3b-and-raspberry-pi-3-b.html

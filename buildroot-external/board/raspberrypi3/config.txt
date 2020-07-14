@@ -12,8 +12,10 @@ gpu_mem=32
 # If the text shown on the screen disappears off the edge, comment this out
 disable_overscan=1
 
-# enable i2c,i2s and spi
-dtparam=i2c_arm=on,i2s=on,spi=on
+# enable i2c and spi
+dtparam=i2c_arm=on
+dtparam=i2c1=on
+dtparam=spi=on
 
 # enable the UART
 enable_uart=1

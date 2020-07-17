@@ -28,12 +28,6 @@ install_hs485d_arch:
 install_webui_arch:
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/config
 	rm -rf $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2/homematic $(TARGET_DIR)/usr/lib/tcl8.6/
-	rm -rf $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libtcl8.2.so
-	ln -sf libtcl8.6.so $(TARGET_DIR)/usr/lib/libtcl8.2.so
-	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/tclsh
-	ln -sf /usr/bin/tclsh $(TARGET_DIR)/bin/tclsh
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/* $(TARGET_DIR)/
 	cp -R WebUI/* $(TARGET_DIR)/
 	mv $(TARGET_DIR)/bin/ReGaHss.community $(TARGET_DIR)/bin/ReGaHss

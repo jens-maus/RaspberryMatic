@@ -40,11 +40,31 @@
  
 +      string sChecked = "";
 +      if( oSC.NegateCondition() ) { sChecked = "checked"; }
-+      Write( '&nbsp;nicht<input type="checkbox" '#sChecked#' class="SelectBox"  onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.checked);" >' );
++      Write( '&nbsp;${ruleConditionLblNot}<input type="checkbox" '#sChecked#' class="SelectBox"  onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.checked);" >' );
 +      
        if (bSysVarString)
        {
          !Write("<i>bei</i>");
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -777,6 +777,7 @@
+     "ruleCondition" : "Bedingung:",
+     "ruleConditionIf" : "Wenn...",
+     "ruleConditionSelectDeviceList" : "Ger%E4teauswahl",
++    "ruleConditionLblNot" : "nicht",
+     "ruleConditionLblWhen" : "bei",
+     "ruleConditionSelectSystemState" : "Systemzustand",
+     "ruleConditionLblWithinValueRange" : "im Wertebereich",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -809,6 +809,7 @@
+     "ruleConditionIf" : "If...",
+ 
+     "ruleConditionSelectDeviceList" : "Device selection",
++    "ruleConditionLblNot" : "not",
+     "ruleConditionLblWhen" : "when",
+ 
+     "ruleConditionSelectSystemState" : "System state",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -24823,6 +24823,24 @@

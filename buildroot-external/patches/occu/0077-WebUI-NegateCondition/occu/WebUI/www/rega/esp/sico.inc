@@ -68,7 +68,7 @@
 
       string sChecked = "";
       if( oSC.NegateCondition() ) { sChecked = "checked"; }
-      Write( '&nbsp;nicht<input type="checkbox" '#sChecked#' class="SelectBox"  onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.checked);" >' );
+      Write( '&nbsp;${ruleConditionLblNot}<input type="checkbox" '#sChecked#' class="SelectBox"  onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.checked);" >' );
       
       if (bSysVarString)
       {

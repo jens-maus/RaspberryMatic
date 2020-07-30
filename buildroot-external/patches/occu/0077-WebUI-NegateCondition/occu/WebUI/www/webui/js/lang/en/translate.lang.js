@@ -809,7 +809,6 @@ jQuery.extend(true,langJSON, {
     "ruleConditionIf" : "If...",
 
     "ruleConditionSelectDeviceList" : "Device selection",
-    "ruleConditionLblNot" : "not",
     "ruleConditionLblWhen" : "when",
 
     "ruleConditionSelectSystemState" : "System state",
@@ -838,6 +837,7 @@ jQuery.extend(true,langJSON, {
     "ruleConditionLblTimeDuringNight" : "at night",
     "ruleConditionLblTimeClock" : "o'clock",
     "ruleConditionLblTimeIteration" : "repetitions",
+    "ruleConditionLblNot" : "not",
 
     "ruleConditionSelectTriggerWhenUpdated" : "trigger when updated",
     "ruleConditionSelectCheckOnly" : "check only",

@@ -47,24 +47,24 @@
          !Write("<i>bei</i>");
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -777,6 +777,7 @@
-     "ruleCondition" : "Bedingung:",
-     "ruleConditionIf" : "Wenn...",
-     "ruleConditionSelectDeviceList" : "Ger%E4teauswahl",
+@@ -803,6 +803,7 @@
+     "ruleConditionLblTimeDuringNight" : "nachts",
+     "ruleConditionLblTimeClock" : "Uhr",
+     "ruleConditionLblTimeIteration" : "Wiederholungen",
 +    "ruleConditionLblNot" : "nicht",
-     "ruleConditionLblWhen" : "bei",
-     "ruleConditionSelectSystemState" : "Systemzustand",
-     "ruleConditionLblWithinValueRange" : "im Wertebereich",
+     "ruleConditionSelectTriggerWhenUpdated" : "bei Aktualisierung ausl%F6sen",
+     "ruleConditionSelectCheckOnly" : "nur pr%FCfen",
+     "ruleConditionSelectWhenChanged" : "bei %C4nderung ausl%F6sen",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -809,6 +809,7 @@
-     "ruleConditionIf" : "If...",
- 
-     "ruleConditionSelectDeviceList" : "Device selection",
+@@ -837,6 +837,7 @@
+     "ruleConditionLblTimeDuringNight" : "at night",
+     "ruleConditionLblTimeClock" : "o'clock",
+     "ruleConditionLblTimeIteration" : "repetitions",
 +    "ruleConditionLblNot" : "not",
-     "ruleConditionLblWhen" : "when",
  
-     "ruleConditionSelectSystemState" : "System state",
+     "ruleConditionSelectTriggerWhenUpdated" : "trigger when updated",
+     "ruleConditionSelectCheckOnly" : "check only",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -24823,6 +24823,24 @@

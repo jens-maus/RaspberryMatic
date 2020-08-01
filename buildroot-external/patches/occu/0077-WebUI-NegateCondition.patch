@@ -34,14 +34,17 @@
 \ No newline at end of file
 --- occu/WebUI/www/rega/esp/sico.inc.orig
 +++ occu/WebUI/www/rega/esp/sico.inc
-@@ -66,6 +66,10 @@
+@@ -66,6 +66,13 @@
        boolean bSysVarGeneric = ( (iLVT == ivtSystemId) && (isGenericValueType)  && (oLV.ValueSubType() == istGeneric ) );
        boolean bSysVarString  = ( (iLVT == ivtSystemId) && (oLV.ValueType() == ivtString) && (oLV.ValueSubType() == istChar8859) );
  
-+      string sChecked = "";
-+      if( oSC.NegateCondition() ) { sChecked = "checked"; }
-+      Write( '&nbsp;${ruleConditionLblNot}<input type="checkbox" '#sChecked#' class="SelectBox"  onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.checked);" >' );
-+      
++      string sNotSelectedFalse = "selected";string sNotSelectedTrue = "";
++      if( oSC.NegateCondition() ) { sNotSelectedTrue = "selected"; sNotSelectedFalse = ""; }
++      Write( ' <select id="selectConditionNot'#oSC.ID()#'" name="selectConditionNot" onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.value);" class="SelectBox">' );
++        Write( '<option value="false"'#sNotSelectedFalse#' />');
++        Write( '<option value="true"'#sNotSelectedTrue#'>${ruleConditionLblNot}</option>' );
++      Write( '</select> ');
++
        if (bSysVarString)
        {
          !Write("<i>bei</i>");

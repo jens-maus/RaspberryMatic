@@ -1,0 +1,97 @@
+--- occu/WebUI/www/rega/esp/sico.fn.orig
++++ occu/WebUI/www/rega/esp/sico.fn
+@@ -13,6 +13,22 @@
+   return;
+ }
+ 
++function ::SetNegateCondition() {
++  if( system.IsVar("scid") && system.IsVar("nc") )
++  {
++    object oTmp = dom.GetObject( system.GetVar("scid") );
++    if( oTmp )
++    {
++      string sNC = system.GetVar("nc");
++      if (sNC == "false") {
++        oTmp.NegateCondition(false);
++      } else {
++        oTmp.NegateCondition(true);
++      }
++    }
++  }
++}
++
+ function ::SetOperatorType()
+ {
+   string sCI = "SetOperatorType[SICO]: ";
+--- occu/WebUI/www/rega/esp/sico.htm.orig
++++ occu/WebUI/www/rega/esp/sico.htm
+@@ -9,4 +9,5 @@
+   if( action == "SetLeftAndRightValue" ) { Call("sico.fn::SetLeftAndRightValue()"); }
+   if( action == "SetValueRange" ) { Call("sico.fn::SetValueRange()"); }
+   if( action == "ReloadSiCo" ) { Call("sico.fn::ReloadSiCo()"); }
++  if( action == "SetNegateCondition" ) { Call("sico.fn::SetNegateCondition()"); }
+ %>
+\ No newline at end of file
+--- occu/WebUI/www/rega/esp/sico.inc.orig
++++ occu/WebUI/www/rega/esp/sico.inc
+@@ -66,6 +66,13 @@
+       boolean bSysVarGeneric = ( (iLVT == ivtSystemId) && (isGenericValueType)  && (oLV.ValueSubType() == istGeneric ) );
+       boolean bSysVarString  = ( (iLVT == ivtSystemId) && (oLV.ValueType() == ivtString) && (oLV.ValueSubType() == istChar8859) );
+ 
++      string sNotSelectedFalse = "selected";string sNotSelectedTrue = "";
++      if( oSC.NegateCondition() ) { sNotSelectedTrue = "selected"; sNotSelectedFalse = ""; }
++      Write( ' <select id="selectConditionNot'#oSC.ID()#'" name="selectConditionNot" onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.value);" class="SelectBox">' );
++        Write( '<option value="false"'#sNotSelectedFalse#' />');
++        Write( '<option value="true"'#sNotSelectedTrue#'>${ruleConditionLblNot}</option>' );
++      Write( '</select> ');
++
+       if (bSysVarString)
+       {
+         !Write("<i>bei</i>");
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -803,6 +803,7 @@
+     "ruleConditionLblTimeDuringNight" : "nachts",
+     "ruleConditionLblTimeClock" : "Uhr",
+     "ruleConditionLblTimeIteration" : "Wiederholungen",
++    "ruleConditionLblNot" : "nicht",
+     "ruleConditionSelectTriggerWhenUpdated" : "bei Aktualisierung ausl%F6sen",
+     "ruleConditionSelectCheckOnly" : "nur pr%FCfen",
+     "ruleConditionSelectWhenChanged" : "bei %C4nderung ausl%F6sen",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -837,6 +837,7 @@
+     "ruleConditionLblTimeDuringNight" : "at night",
+     "ruleConditionLblTimeClock" : "o'clock",
+     "ruleConditionLblTimeIteration" : "repetitions",
++    "ruleConditionLblNot" : "not",
+ 
+     "ruleConditionSelectTriggerWhenUpdated" : "trigger when updated",
+     "ruleConditionSelectCheckOnly" : "check only",
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -24823,6 +24823,24 @@
+     new Ajax.Request(url,opts);        
+   },
+ 
++  SetNegateCondition: function(scid,nc) {                                                          
++    var url = "/esp/sico.htm?sid="+SessionId;            
++    var pb = '';                          
++    pb += 'string action = "SetNegateCondition";';                                     
++    pb += 'string scid = "'+scid+'";';               
++    pb += 'string nc = "'+nc+'";';                                                                     
++    var opts =                                                                                     
++    {                                                
++      postBody: ReGa.encode(pb),      
++      onComplete:function(t)                                    
++      {                                          
++        if(dbg){alert( t.responseText );}                                                      
++        ReloadSingleCondition(scid);                                                       
++      }                                              
++    };                                
++    new Ajax.Request(url,opts);                                  
++  },
++  
+   SetLeftValue: function(scid,lv)
+   {
+     var url = "/esp/sico.htm?sid="+SessionId;

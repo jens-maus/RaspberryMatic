@@ -22,6 +22,7 @@ menu "Hardware Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/pidesktopd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/argononed/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/bluetooth-tinker/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/intel-e1000e/Config.in"
 endmenu
 
 menu "Software Support"

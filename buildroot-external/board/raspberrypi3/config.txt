@@ -55,6 +55,10 @@ gpio=12=ip,pu
 # space for the u-boot boot script
 device_tree_address=0x2008000
 
+# use fixed names for start.elf/fixup.dat
+start_file=start.elf
+fixup_file=fixup.dat
+
 # lets u-boot take over the boot process
 kernel=u-boot.bin
 

@@ -62,6 +62,11 @@ cleanup()
 # install exit traps
 trap cleanup EXIT INT TERM
 
+# switch ArgonONE case to "always on"
+# see https://github.com/Argon40Tech/Argon-ONE-i2c-Codes
+# NOTE: This seems to require newer ArgonONE firmwares/hardware revisions
+/usr/sbin/i2cset -y 1 0x1a 0xfe
+
 # start fancontrol sub-process
 fancontrol &
 fancontrolPID=$!

@@ -40,9 +40,9 @@
       cm.removeKeyMap("autoCloseTags");
     if (!val) return;
     var map = {name: "autoCloseTags"};
-    if (typeof val != "object" || val.whenClosing)
+    if (typeof val != "object" || val.whenClosing !== false)
       map["'/'"] = function(cm) { return autoCloseSlash(cm); };
-    if (typeof val != "object" || val.whenOpening)
+    if (typeof val != "object" || val.whenOpening !== false)
       map["'>'"] = function(cm) { return autoCloseGT(cm); };
     cm.addKeyMap(map);
   });
@@ -74,7 +74,7 @@
       if (!tagName ||
           tok.type == "string" && (tok.end != pos.ch || !/[\"\']/.test(tok.string.charAt(tok.string.length - 1)) || tok.string.length == 1) ||
           tok.type == "tag" && tagInfo.close ||
-          tok.string.indexOf("/") == (tok.string.length - 1) || // match something like <someTagName />
+          tok.string.indexOf("/") == (pos.ch - tok.start - 1) || // match something like <someTagName />
           dontCloseTags && indexOf(dontCloseTags, lowerTagName) > -1 ||
           closingTagExists(cm, inner.mode.xmlCurrentContext && inner.mode.xmlCurrentContext(state) || [], tagName, pos, true))
         return CodeMirror.Pass;

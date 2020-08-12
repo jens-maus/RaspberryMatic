@@ -1065,9 +1065,9 @@ diff --git a/drivers/net/wireless/ath/ath9k/hif_usb.c b/drivers/net/wireless/ath
  
  	usb_anchor_urb(urb, &hif_dev->regout_submitted);
  	ret = usb_submit_urb(urb, GFP_KERNEL);
-@@ -723,11 +723,11 @@
- 			return;
- 		}
+@@ -735,11 +735,11 @@
+ 
+ 		rx_buf->skb = nskb;
  
 +		usb_fill_bulk_urb(urb, hif_dev->udev,
 +				 usb_rcvbulkpipe(hif_dev->udev,
@@ -1076,7 +1076,7 @@ diff --git a/drivers/net/wireless/ath/ath9k/hif_usb.c b/drivers/net/wireless/ath
  						 USB_REG_IN_PIPE),
  				 nskb->data, MAX_REG_IN_BUF_SIZE,
 +				 ath9k_hif_usb_reg_in_cb, nskb);
--				 ath9k_hif_usb_reg_in_cb, nskb, 1);
+-				 ath9k_hif_usb_reg_in_cb, rx_buf, 1);
  	}
  
  resubmit:
@@ -2377,18 +2377,6 @@ index 5bd58b95d..48ebe081f 100644
  	mmc_pwrseq_power_off(host);
  
  	host->ios.clock = 0;
-diff --git a/arch/arm/kernel/vdso.c b/arch/arm/kernel/vdso.c
-index e0330a25e1..28cfe7bad1 100644
---- a/arch/arm/kernel/vdso.c
-+++ b/arch/arm/kernel/vdso.c
-@@ -184,6 +184,7 @@ static void __init patch_vdso(void *ehdr)
- 	if (!cntvct_ok) {
- 		vdso_nullpatch_one(&einfo, "__vdso_gettimeofday");
- 		vdso_nullpatch_one(&einfo, "__vdso_clock_gettime");
-+		vdso_nullpatch_one(&einfo, "__vdso_clock_gettime64");
- 	}
- }
- 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
 index a98dee2ae..d3cef7033 100644
 --- a/arch/arm/boot/dts/Makefile
@@ -2413,7 +2401,7 @@ index a98dee2ae..d3cef7033 100644
  dtb-$(CONFIG_ARCH_S3C64XX) += \
 diff --git a/arch/arm/boot/dts/rk3288-xt-q8l-v10.dts b/arch/arm/boot/dts/rk3288-xt-q8l-v10.dts
 new file mode 100644
-index 000000000..da7f70757
+index 000000000..539e445b4
 --- /dev/null
 +++ b/arch/arm/boot/dts/rk3288-xt-q8l-v10.dts
 @@ -0,0 +1,1061 @@
@@ -2702,7 +2690,7 @@ index 000000000..da7f70757
 +	snps,reset-gpio = <&gpio4 8 GPIO_ACTIVE_LOW>;
 +	tx_delay = <0x30>;
 +	rx_delay = <0x10>;
-+	status = "okay";
++	status = "ok";
 +};
 +
 +&hdmi {

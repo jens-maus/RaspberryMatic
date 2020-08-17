@@ -79,7 +79,7 @@ clean:
 distclean: clean-all
 	@echo "[distclean]"
 	@rm -rf buildroot-$(BUILDROOT_VERSION)
-	@rm -f buildroot-$(BUILDROOT_VERSION).tar.bz2
+	@rm -f buildroot-$(BUILDROOT_VERSION).tar.bz2 buildroot-$(BUILDROOT_VERSION).tar.bz2.sign
 	@rm -rf download
 
 .PHONY: menuconfig

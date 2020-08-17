@@ -4,17 +4,8 @@ BOARD_DIR="$(dirname $0)"
 BOARD_NAME="$(basename ${BOARD_DIR})"
 
 # Use our own cmdline.txt+config.txt
-cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/cmdline.txt" "${BINARIES_DIR}/rpi-firmware/"
-cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/config.txt" "${BINARIES_DIR}/rpi-firmware/"
-
-# select device tree overlay files to be installed in the image
-DTOVERLAYS="rpi-rf-mod.dtbo pivccu-raspberrypi.dtbo bcm2835-raw-uart.dtbo"
-mkdir -p "${BINARIES_DIR}/overlays"
-for overlay in ${DTOVERLAYS}; do
-  if [ -f "${BINARIES_DIR}/${overlay}" ]; then
-    cp -a "${BINARIES_DIR}/${overlay}" "${BINARIES_DIR}/overlays/"
-  fi
-done
+cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/cmdline.txt" "${BINARIES_DIR}/"
+cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/config.txt" "${BINARIES_DIR}/"
 
 #
 # Create user filesystem

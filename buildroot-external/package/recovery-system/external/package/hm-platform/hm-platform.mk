@@ -9,11 +9,15 @@ HM_PLATFORM_VERSION = $(OCCU_VERSION)
 HM_PLATFORM_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 
 ifeq ($(BR2_arm),y)
-	HM_PLATFORM_ARCH=arm-gnueabihf
+	HM_PLATFORM_ARCH=arm-gnueabihf-gcc8
 endif
 
 ifeq ($(BR2_i386),y)
-	HM_PLATFORM_ARCH=X86_32_Debian_Wheezy
+	HM_PLATFORM_ARCH=X86_32_GCC8
+endif
+
+ifeq ($(BR2_x86_64),y)
+	HM_PLATFORM_ARCH=X86_32_GCC8
 endif
 
 define HM_PLATFORM_INSTALL_TARGET_CMDS

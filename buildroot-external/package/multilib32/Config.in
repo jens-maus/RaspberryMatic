@@ -1,0 +1,6 @@
+config BR2_PACKAGE_MULTILIB32
+	bool "On a 64bit systems this package allows recompile the used toolchain for 32bit systems and stores the created libraries to /lib32,/usr/lib32 accordingly"
+
+config BR2_PACKAGE_MULTILIB32_DEFCONFIG
+	string "defconfig filename"
+	depends on BR2_PACKAGE_MULTILIB32

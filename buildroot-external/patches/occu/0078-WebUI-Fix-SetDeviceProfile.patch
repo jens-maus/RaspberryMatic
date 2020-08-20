@@ -1,10 +1,20 @@
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
-@@ -595,7 +595,11 @@
+@@ -586,7 +586,7 @@
+   global env
+   upvar $pPROFILE PROFILE_TMP
+ 
+-  set params [split [cgi_unquote_input $env(QUERY_STRING)] &]
++  set params [split $env(QUERY_STRING) &]
+ 
+ 
+   #Parametername eines evtl. Subsets auf den URL-Parametern generieren. z.B. subset_4_1
+@@ -595,7 +595,12 @@
  
    foreach p $params {
  
 -    if { [regexp {^(.*)=(.*)$} $p dummy name value] } then {
++    set p [cgi_unquote_input $p]
 +    set pos [string first = $p]
 +    set name [string range $p 0 [expr $pos-1]]
 +    set value [string range $p [expr $pos+1] end]

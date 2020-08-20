@@ -586,7 +586,7 @@ proc modify_easymode_ui {IGNORE_PARAMS profile pPROFILE} {
   global env
   upvar $pPROFILE PROFILE_TMP
 
-  set params [split [cgi_unquote_input $env(QUERY_STRING)] &]
+  set params [split $env(QUERY_STRING) &]
 
 
   #Parametername eines evtl. Subsets auf den URL-Parametern generieren. z.B. subset_4_1
@@ -595,6 +595,7 @@ proc modify_easymode_ui {IGNORE_PARAMS profile pPROFILE} {
 
   foreach p $params {
 
+    set p [cgi_unquote_input $p]
     set pos [string first = $p]
     set name [string range $p 0 [expr $pos-1]]
     set value [string range $p [expr $pos+1] end]

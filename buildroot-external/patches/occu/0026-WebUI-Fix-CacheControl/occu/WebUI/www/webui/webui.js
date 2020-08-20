@@ -36160,9 +36160,6 @@ SendRequest = function(scriptname, html_container_id, callback)
   scriptname = Get_ReGa_Path(scriptname);
   var params = poststr;
 
-  if (params === "") { params += "?AvoidBrowserCache=" + Math.random(); }
-  else               { params += "&AvoidBrowserCache=" + Math.random(); }
-
   if ((html_container_id) && (html_container_id !== "")) { id = html_container_id; }
   else                                                   { id = Get_UI_CONTENTBOX_ID(); }
 

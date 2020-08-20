@@ -35,6 +35,15 @@
      }
      body {
        if { ![catch { xmlrpc $url activateLinkParamset [list string $address] [list string $ps_id] [list bool $long_push] } ] } then {
+@@ -648,7 +646,7 @@
+ 
+   global HTMLTITLE env
+ 
+-  set IGNORE_PARAMS {AvoidBrowserCache address cmd iface paramid peer pnr ps_id ps_type sid SUBSET_OPTION_VALUE NAME}
++  set IGNORE_PARAMS {address cmd iface paramid peer pnr ps_id ps_type sid SUBSET_OPTION_VALUE NAME}
+ 
+   if { $profile != "" } then {
+     
 @@ -692,7 +690,6 @@
  
      html {
@@ -90,6 +99,17 @@
          puts "<title>response of request with command: $cmd</title>"
        }
        body {
+--- occu/WebUI/www/config/ic_neweasymode.cgi.orig
++++ occu/WebUI/www/config/ic_neweasymode.cgi
+@@ -13,7 +13,7 @@
+ 
+   global env base_pnr
+ 
+-  set IGNORE_PARAMS {AvoidBrowserCache EasyModeName base_pnr cmd ps_id ps_ids sensor actor}
++  set IGNORE_PARAMS {EasyModeName base_pnr cmd ps_id ps_ids sensor actor}
+ 
+   upvar $pBASEPROFILE BASEPROFILE
+   upvar $pNEWPROFILE  PROFILE_TMP
 --- occu/WebUI/www/rega/index.htm.orig
 +++ occu/WebUI/www/rega/index.htm
 @@ -5,9 +5,6 @@
@@ -213,3 +233,13 @@
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
+@@ -36172,9 +36160,6 @@
+   scriptname = Get_ReGa_Path(scriptname);
+   var params = poststr;
+ 
+-  if (params === "") { params += "?AvoidBrowserCache=" + Math.random(); }
+-  else               { params += "&AvoidBrowserCache=" + Math.random(); }
+-
+   if ((html_container_id) && (html_container_id !== "")) { id = html_container_id; }
+   else                                                   { id = Get_UI_CONTENTBOX_ID(); }
+ 

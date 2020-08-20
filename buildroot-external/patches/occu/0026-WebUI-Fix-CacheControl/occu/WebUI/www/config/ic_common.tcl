@@ -646,7 +646,7 @@ proc base_put_profile {iface address profile peer ps_type {html_response 1}} {
 
   global HTMLTITLE env
 
-  set IGNORE_PARAMS {AvoidBrowserCache address cmd iface paramid peer pnr ps_id ps_type sid SUBSET_OPTION_VALUE NAME}
+  set IGNORE_PARAMS {address cmd iface paramid peer pnr ps_id ps_type sid SUBSET_OPTION_VALUE NAME}
 
   if { $profile != "" } then {
     

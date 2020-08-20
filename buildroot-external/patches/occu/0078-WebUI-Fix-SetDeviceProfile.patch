@@ -1,0 +1,15 @@
+--- occu/WebUI/www/config/ic_common.tcl.orig
++++ occu/WebUI/www/config/ic_common.tcl
+@@ -595,7 +595,11 @@
+ 
+   foreach p $params {
+ 
+-    if { [regexp {^(.*)=(.*)$} $p dummy name value] } then {
++    set pos [string first = $p]
++    set name [string range $p 0 [expr $pos-1]]
++    set value [string range $p [expr $pos+1] end]
++
++    if { $name != "" } then {
+ 
+       if { [lsearch -exact $IGNORE_PARAMS $name] >= 0} then {
+ 

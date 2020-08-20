@@ -23,3 +23,12 @@
  
        if { [lsearch -exact $IGNORE_PARAMS $name] >= 0} then {
  
+@@ -1128,7 +1133,7 @@
+     set idval "separate_${pnr}_$j"
+ 
+     if { ! ($operations & 3) } then { continue }
+-    if {    $operations & 1  } then { set value $ps($param_id) }
++    if {    $operations & 1  } then { set value [cgi_quote_html $ps($param_id)] }
+     if {    $operations & 2  } then { set access "" } else { set access "disabled=\"disabled\"" }
+         
+     append s "<tr>"

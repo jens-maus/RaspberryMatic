@@ -1,5 +1,5 @@
 BR2_x86_i686=y
-BR2_DL_DIR="$(TOPDIR)/../../../download"
+BR2_DL_DIR="$(TOPDIR)/../download"
 BR2_KERNEL_MIRROR="https://www.kernel.org/pub"
 BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
 BR2_OPTIMIZE_2=y

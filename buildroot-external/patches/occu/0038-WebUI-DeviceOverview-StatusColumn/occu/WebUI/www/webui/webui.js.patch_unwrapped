@@ -1,14 +1,14 @@
---- webui_unwrapped.js.orig	2020-02-10 10:16:40.141395514 +0100
-+++ webui_unwrapped.js	2020-02-10 10:18:55.809562650 +0100
-@@ -392,6 +392,7 @@
-     <col width=\"25px\" \/>\n
-     <col width=\"25px\" \/>\n
-     <col width=\"25px\" \/>\n
-+    <col width=\"25px\" \/>\n
-     <col width=\"11%\" \/>\n
+--- webui_unwrapped.js.orig	2020-08-31 22:18:02.276744623 +0200
++++ webui_unwrapped.js	2020-08-31 22:21:59.698264758 +0200
+@@ -394,6 +394,7 @@
+     <col style=\"width:25px;\"\/>\n
+     <col style=\"width:25px;\"\/>\n
+     <col style=\"width:25px;\"\/>\n
++    <col style=\"width:25px;\"\/>\n
+     <col style=\"width:11%;\"\/>\n
    <\/colgroup>\n
    <thead>\n
-@@ -407,6 +408,7 @@
+@@ -409,6 +410,7 @@
        <th class=\"DeviceListHead clickable\" name=\"thTransmitMode\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">&Uuml;bertragungsmodus<\/th>\n
        <th class=\"DeviceListHead clickable\" name=\"thFuncs\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">Gewerke<\/th>\n
        <th class=\"DeviceListHead clickable\" name=\"thRooms\" onclick=\"DeviceListPage.sortBy(\'NAME\');\">R&auml;ume<\/th>\n
@@ -16,7 +16,7 @@
        <th class=\"DeviceListHead\"><img name=\"lblVisible\" src=\"\/ise\/img\/visible.png\" width=\"24px\" height=\"24px\" alt=\"sichtbar\" title=\"sichtbar\"\/><\/th>\n
        <th class=\"DeviceListHead\"><img name=\"lblUsable\" src=\"\/ise\/img\/usable.png\" width=\"24px\" height=\"24px\" alt=\"bedienbar\" title=\"bedienbar\"\/><\/th>\n
        <th class=\"DeviceListHead\"><img name=\"lblRecorded\" src=\"\/ise\/img\/logged.png\" width=\"24px\" height=\"24px\" alt=\"protokolliert\" title=\"protokolliert\"\/><\/th>\n
-@@ -427,6 +429,7 @@
+@@ -429,6 +431,7 @@
        <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n
        <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n
        <th class=\"Filter CLASS10901\">&nbsp;<\/th>\n
@@ -24,7 +24,7 @@
      <\/tr>\n
    <\/thead>\n
    <tbody>\n
-@@ -446,6 +449,7 @@
+@@ -452,6 +455,7 @@
            <td class=\"DeviceListCell j_chMode\" >{for name in device.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n
            <td class=\"DeviceListCell j_functions\" >{for subsection in device.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
            <td class=\"DeviceListCell j_rooms\" >{for room in device.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
@@ -32,7 +32,7 @@
            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isVisible}checked=\"checked\"{\/if}\/><\/td>\n
            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isUsable}checked=\"checked\"{\/if}\/><\/td>\n
            <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if device.isLogged}checked=\"checked\"{\/if}\/><\/td>\n
-@@ -476,6 +480,7 @@
+@@ -482,6 +486,7 @@
              <td class=\"DeviceListCell j_chMode\" >{for name in group.modes}${name}<br \/>{forelse}&#160;{\/for}<\/td>\n
              <td class=\"DeviceListCell\" >{for subsection in group.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
              <td class=\"DeviceListCell\" >{for room in group.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
@@ -40,7 +40,7 @@
              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isVisible}checked=\"checked\"{\/if}\/><\/td>\n
              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isUsable}checked=\"checked\"{\/if}\/><\/td>\n
              <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if group.isLogged}checked=\"checked\"{\/if}\/><\/td>\n
-@@ -497,6 +502,7 @@
+@@ -503,6 +508,7 @@
                <td class=\"DeviceListCell j_chMode\" >${channel.mode}<\/td>\n
                <td class=\"DeviceListCell\" >{for subsection in channel.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
                <td class=\"DeviceListCell\" >{for room in channel.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
@@ -48,7 +48,7 @@
                <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n
                <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n
                <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n
-@@ -527,6 +533,7 @@
+@@ -533,6 +539,7 @@
                <td class=\"DeviceListCell j_chMode\" >${channel.mode}<\/td>\n
                <td class=\"DeviceListCell\" >{for subsection in channel.subsections}${subsection.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
                <td class=\"DeviceListCell\" >{for room in channel.rooms}${room.name}<br \/>{forelse}&#160;{\/for}<\/td>\n
@@ -56,7 +56,16 @@
                <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isVisible}checked=\"checked\"{\/if} \/><\/td>\n
                <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isUsable}checked=\"checked\"{\/if} \/><\/td>\n
                <td class=\"DeviceListCell\"><input type=\"checkbox\" disabled=\"disabled\" readonly=\"readyonly\" {if channel.isLogged}checked=\"checked\"{\/if} \/><\/td>\n
-@@ -563,6 +570,7 @@
+@@ -548,7 +555,7 @@
+     {forelse}\n
+       <tr class=\"DeviceListRow\">\n
+         <td class=\"DeviceListCell_Invisible\">&#160;<\/td>\n
+-        <td class=\"DeviceListCell\" name=\"noDevicesAvailable\" colspan=\"15\">Keine Ger&auml;te verf&uuml;gbar<\/td>\n
++        <td class=\"DeviceListCell\" name=\"noDevicesAvailable\" colspan=\"16\">Keine Ger&auml;te verf&uuml;gbar<\/td>\n
+       <\/tr>\n
+     {\/for}\n
+   <\/tbody>\n
+@@ -569,6 +576,7 @@
        <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n
        <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n
        <td class=\"DeviceListFoot\"><div class=\"CLASS10904\" \/><\/td>\n
@@ -64,7 +73,7 @@
        <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
      <\/tr>  \n
    <\/tfoot>\n
-@@ -10310,6 +10318,156 @@
+@@ -10486,6 +10494,159 @@
    },
    
    /**
@@ -148,6 +157,9 @@
 +    {
 +      var html = '';
 +
++      if (this.enabledServiceMsg === false)
++        html += '<span style="background-color: #FFFF00;">NO&nbsp;SERVICEMSG</span><br/>';
++
 +      if (this.CONFIG_PENDING === true)
 +        html += '<span style="background-color: #FFFF00;">CONFIG</span><br/>';
 +
@@ -221,7 +233,7 @@
     * Legt den Namen des Geräts fest.
     **/
    setName: function(name)
-@@ -10697,6 +10855,36 @@
+@@ -10873,6 +11034,36 @@
    },
    
    /**
@@ -258,7 +270,7 @@
     * Startet die Akualisierung eines Geräts.
     **/
    beginUpdateDevice:function(id, callback)
-@@ -12101,6 +12289,8 @@
+@@ -12277,6 +12468,8 @@
          conInfo(e);
        }
      });
@@ -267,7 +279,7 @@
    }
  });
  /**
-@@ -12392,6 +12582,8 @@
+@@ -12568,6 +12761,8 @@
  
      translateJSTemplate("#MultiChannelChooserDialog");
      translatePage(".MultiChannelChooserRow");
@@ -276,10 +288,10 @@
    }
      
  });
-@@ -21137,6 +21329,8 @@
-     translateJSTemplate("#DeviceListTable");
+@@ -21479,6 +21674,8 @@
      translatePage(".j_rooms, .j_functions"); // this translates the room name as well the function name within the main devicelist (Settings > Devices)
-     //translateFilter(); // this translates the filter in the header of the page
+     jQuery("#DeviceListPage_RoomFilter").draggable();
+     jQuery("#DeviceListPage_FuncFilter").draggable();
 +
 +    DeviceList.updateDeviceStatus();
    },

@@ -7,8 +7,8 @@
 
 <table class="StdTable j_translate" cellspacing="20">
 <colgroup>
-  <col width="50%" />
-  <col width="50%" />
+  <col style="width:50%;" />
+  <col style="width:50%;" />
 </colgroup>
 <tr>
   <td>
@@ -58,7 +58,7 @@
   <td>
     <div onclick="WebUI.enter(ProgramListPage);" class="StdTableBtn">${btnCreateProgramsAndLinks}</div>
     <table>
-      <tr valign="top">
+      <tr style="vertical-align:top;">
         <td>
           <ul class='CLASS05400'>
               <li>${lblCreateProgramsAndLinks1}</li>

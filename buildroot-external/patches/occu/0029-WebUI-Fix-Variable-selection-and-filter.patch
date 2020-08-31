@@ -1,17 +1,14 @@
 --- occu/WebUI/www/rega/pages/msg/sysVarsSelection.htm.orig
 +++ occu/WebUI/www/rega/pages/msg/sysVarsSelection.htm
-@@ -70,9 +70,8 @@
-       <col width="10%" />
-       <col width="20%" />
-       <col width="15%" />
--      <col width="20%" />
-+      <col width="35%" />
-       <col width="10%" />
--      <col width="15%" />
+@@ -71,6 +71,7 @@
+       <col style="width:20%;"/>
+       <col style="width:15%;"/>
+       <col style="width:20%;"/>
++      <col style="width:35%;"/>
+       <col style="width:10%;"/>
+       <col style="width:15%;"/>
      </colgroup>
-     <thead id="svsBody">
-     <tr id="rowhead">
-@@ -84,7 +83,6 @@
+@@ -84,7 +85,6 @@
        <th class="CLASS00302">${thValues}</th>
        <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="unit"){sCssName="SortSelected";} %>
        <th class="CLASS00302"><div id="unit" class="pt11 <%Write(sCssName); %>" onclick="DivSort('unit');">${thUnit}</div></th>
@@ -19,7 +16,7 @@
      </tr>
      
      <tr id="rowflt">
-@@ -117,6 +115,10 @@
+@@ -117,6 +117,10 @@
                  <td>${lblAlarm}</td>
                  <td><input type="checkbox" id="cbAlarm" /></td>
                </tr>
@@ -30,7 +27,7 @@
              </table>
              <div class='FilterSetButton' onclick='setAFilter(fltSVS, "vartypes");updateTable();$("btnFilterVarTypeSub").hide();'>${filterSet}</div>
              <div class='FilterSetButton' onclick="$('btnFilterVarTypeSub').hide();">${filterClose}</div>
-@@ -131,7 +133,6 @@
+@@ -131,7 +135,6 @@
              <div id="ftCancelUnitBtn" class='FilterSetButton' onclick="$('btnFilterUnitSub').hide();">${filterClose}</div>
          </div>
        </td>

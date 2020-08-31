@@ -56,10 +56,10 @@ puts {
 
   <table id="mainTable" cellspacing="20" style="display:none">
     <colgroup>
-      <col width="25%" />
-      <col width="25%" />
-      <col width="25%" />
-      <col width="20%" />
+      <col style="width:25%;"/>
+      <col style="width:25%;"/>
+      <col style="width:25%;"/>
+      <col style="width:20%;"/>
     </colgroup>
     <tr class="CLASS21700">
     
@@ -118,35 +118,47 @@ if {![isOldCCU]} {
     <tr>
   }
 }
-puts {
-    <!-- Firewall Konfiguration -->
+
+
+if {[getProduct] >= 3} {
+  puts {
     <td>
       <div class="cpButton">
         <div class="StdTableBtn CLASS21701" onclick="new FirewallConfigDialog();">${btnSysConfFirewallConfig}</div>
         <div class="StdTableBtnHelp"><img id="newFirewallConfigDialogHelp" src="/ise/img/help.png"></div>
       </div>
     </td>
-
-    <!-- BidCoS-RF Konfiguration -->
-    <td>
-}
-if {[isOldCCU]} {
-  puts {
-        <div class="StdTableBtn CLASS21701" onclick="ConfigData.check(function() { WebUI.enter(BidcosRfPage); });">${btnSysConfBidCosConfig}</div>
-        <ul>
-          <li>${lblSysConfBidCosConfig1}</li> <!-- interne Antenne konfigurieren -->
-          <li>${lblSysConfBidCosConfig2}</li> <!-- HomeMatic Funk-LAN-Gateways verwalten -->
-        </ul>
   }
 } else {
   puts {
-        <div class="cpButton">
-          <div class="StdTableBtn CLASS21701" onclick="ConfigData.check(function() { WebUI.enter(BidcosRfPage); });">${btnSysConfLANGateway}</div>
+    <td>
+      <div class="cpButton">
+        <div class="StdTableBtn CLASS21701" onclick="new FirewallConfigDialog_CCU2();">${btnSysConfFirewallConfig}</div>
+        <div class="StdTableBtnHelp"><img id="newFirewallConfigDialogHelp" src="/ise/img/help.png"></div>
+      </div>
+    </td>
+  }
+}
+
+if {[isOldCCU]} {
+  puts {
+    <td>
+      <div class="StdTableBtn CLASS21701" onclick="ConfigData.check(function() { WebUI.enter(BidcosRfPage); });">${btnSysConfBidCosConfig}</div>
+      <ul>
+        <li>${lblSysConfBidCosConfig1}</li> <!-- interne Antenne konfigurieren -->
+        <li>${lblSysConfBidCosConfig2}</li> <!-- HomeMatic Funk-LAN-Gateways verwalten -->
+      </ul>
+  }
+} else {
+  puts {
+    <td>
+      <div class="cpButton">
+        <div class="StdTableBtn CLASS21701" onclick="ConfigData.check(function() { WebUI.enter(BidcosRfPage); });">${btnSysConfLANGateway}</div>
   }
 }
 
   puts {
-    <div class="StdTableBtnHelp"><img id="showBidCosConfigHelp" src="/ise/img/help.png"></div>
+        <div class="StdTableBtnHelp"><img id="showBidCosConfigHelp" src="/ise/img/help.png"></div>
       </div>
     </td>
 
@@ -171,17 +183,7 @@ if {[isOldCCU]} {
     <tr>
   }
 
- set i 0
-
-  if {[showHmIPWired]} {
-    puts {
-      <td>
-        <div  class="StdTableBtn CLASS21701" onclick="WebUI.enter(CreateAccessPointSettings)">${btnAccessPointSettings}</div>
-        <div class="StdTableBtnHelp"><img id="showAccessPointSettingsCPHelp" src="/ise/img/help.png"></div>
-      </td>
-    }
-    incr i
-  }
+  set i 0
 
   if {[getProduct] >= 3} {
     puts {
@@ -206,6 +208,13 @@ if {[isOldCCU]} {
   }
   incr i
 
+  if { [getProduct] >= 3} {
+    puts "<td><div class=\"cpButton\">"
+    puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"showAccessPoint();\">\${btnAccessPoints}</div>"
+    puts "<div class=\"StdTableBtnHelp\"><img id=\"showAccessPointCPHelp\" src=\"/ise/img/help.png\"></div>"
+    incr i
+  }
+
 set COL_COUNT 4
 
 if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
@@ -224,6 +233,7 @@ if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
   }
 
 }
+
 
 array set addons [::HomeMatic::Addon::GetAll]
 foreach addonId [array names addons] {
@@ -324,7 +334,7 @@ puts {
     };
 
     function setTooltips() {
-      var helpContainer = ["#showMaintenanceCPHelp","#showSecurityCPHelp","#showTimeCPHelp","#showNetworkCPHelp","#newFirewallConfigDialogHelp","#showBidCosConfigHelp","#showSoftwareCPHelp", "#showCouplingCPHelp", "#showGeneralSettingsCPHelp", "#showAccessPointSettingsCPHelp", "#showSecuritySettingsCPHelp"];
+      var helpContainer = ["#showMaintenanceCPHelp","#showSecurityCPHelp","#showTimeCPHelp","#showNetworkCPHelp","#newFirewallConfigDialogHelp","#showBidCosConfigHelp","#showSoftwareCPHelp", "#showCouplingCPHelp", "#showGeneralSettingsCPHelp", "#showAccessPointSettingsCPHelp", "#showSecuritySettingsCPHelp", "#showAccessPointCPHelp"];
       var help = [
         "<h1>"+translateKey("btnSysConfCentralMaintenace")+"</h1><ul><li>"+translateKey("lblSysConfCentralMaintenance1")+"</li><li>"+translateKey("lblSysConfCentralMaintenance2")+"</li><li>"+translateKey("lblSysConfCentralMaintenance3")+"</li></ul>",
         "<h1>"+translateKey("btnSysConfSecurity")+"</h1><ul><li>"+translateKey("lblSysConfSecurity1")+"</li><li>"+translateKey("lblSysConfSecurity2")+"</li><li>"+translateKey("lblSysConfSecurity3")+"</li><li>"+translateKey("lblSysConfSecurity4")+"</li><li>"+translateKey("lblSysConfSecurity5")+"</li></ul>",
@@ -336,7 +346,8 @@ puts {
         "<h1>"+translateKey("btnSysConfCoupling")+"</h1><ul><li>OSRAM Lightify</li><li>Philips Hue</li></ul>",
         "<h1>"+translateKey("btnSysConfGeneralSettings")+"</h1><ul><li>"+translateKey("lblSysConfStorage")+"</li><li>"+translateKey("lblSysConfSetPowerCost")+"</li></ul>",
         "<h1>"+translateKey("btnAccessPointSettings")+"</h1><ul><li>"+translateKey("lblAccessPointSettings1")+"</li></ul>",
-        "<h1>"+translateKey("btnSecuritySettings")+"</h1><ul><li>"+translateKey("lblSecuritySettings1")+"</li><li>"+translateKey("lblSecuritySettings2")+"</li></ul>"
+        "<h1>"+translateKey("btnSecuritySettings")+"</h1><ul><li>"+translateKey("lblSecuritySettings1")+"</li><li>"+translateKey("lblSecuritySettings2")+"</li></ul>",
+        "<h1>"+translateKey("btnAccessPoints")+"</h1><ul><li>"+translateKey("lblShowAllAPs")+"</li></ul>"
         ];
 
        jQuery.each(helpContainer, function(index, container){

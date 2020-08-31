@@ -1,7 +1,7 @@
 --- occu/WebUI/www/api/methods.conf.orig
 +++ occu/WebUI/www/api/methods.conf
-@@ -875,6 +875,13 @@
-   ARGUMENTS {_session_id_}
+@@ -953,6 +953,13 @@
+   ARGUMENTS {_session_id_ level}
  }
  
 +RecoveryMode.enter {

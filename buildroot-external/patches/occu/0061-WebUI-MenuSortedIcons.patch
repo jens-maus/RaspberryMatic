@@ -10,19 +10,14 @@
            puts "<li style='padding-top:25px;'><img src='/ise/img/homematic_logo_small.png'/></li>"
 --- occu/WebUI/www/rega/pages/tabs/admin/linkprog.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/linkprog.htm
-@@ -1,109 +1,66 @@
- <%
-   system.SetSessionVar("sessionTAB", "linkprog");
- %>
-+
- <script type="text/javascript">
+@@ -5,105 +5,61 @@
    setPath(translateKey("menuProgramsLinksPage"));
  </script>
  
 -<table class="StdTable j_translate" cellspacing="20">
 -<colgroup>
--  <col width="50%" />
--  <col width="50%" />
+-  <col style="width:50%;" />
+-  <col style="width:50%;" />
 -</colgroup>
 -<tr>
 -  <td>
@@ -99,7 +94,7 @@
 -  <td>
 -    <div onclick="WebUI.enter(ProgramListPage);" class="StdTableBtn">${btnCreateProgramsAndLinks}</div>
 -    <table>
--      <tr valign="top">
+-      <tr style="vertical-align:top;">
 -        <td>
 -          <ul class='CLASS05400'>
 -              <li>${lblCreateProgramsAndLinks1}</li>
@@ -183,10 +178,10 @@
  <div id="subOffsetDiv"></div>
 -<table class="StdTable j_translate" cellspacing="20">
 -  <colgroup>
--    <col width="25%"/>
--    <col width="25%"/>
--    <col width="25%"/>
--    <col width="25%"/>
+-    <col style="width:25%;"/>
+-    <col style="width:25%;"/>
+-    <col style="width:25%;"/>
+-    <col style="width:25%;"/>
 -  </colgroup>
 -  <tr class="CLASS05500">
 -    <td class="sysConfigHeight">
@@ -430,10 +425,10 @@
  
 -<table id="tblStatus" class="StdTable CLASS05700 j_translate" cellspacing="20" >
 -  <colgroup>
--    <col width="25%" />
--    <col width="25%" />
--    <col width="25%" />
--    <col width="25%" />
+-    <col style="width:25%;"/>
+-    <col style="width:25%;"/>
+-    <col style="width:25%;"/>
+-    <col style="width:25%;"/>
 -  </colgroup>
 +<div id="tblStatus" class="StdTable CLASS05700 j_translate">
    
@@ -569,10 +564,10 @@
  
 -<table class="StdTable" cellspacing="20">
 -  <colgroup>
--    <col width="25%" />
--    <col width="25%" />
--    <col width="25%" />
--    <col width="25%" />
+-    <col style="width:25%;"/>
+-    <col style="width:25%;"/>
+-    <col style="width:25%;"/>
+-    <col style="width:25%;"/>
 -  </colgroup>
 -  <tr class="CLASS06100">
 +<div id="subOffsetDiv"></div>

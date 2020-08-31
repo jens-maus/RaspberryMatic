@@ -43,8 +43,9 @@ set deviceDescrScript {
       Write(device.MetaData("enabledServiceMsg"));
     }
     Write("}");
-
+ 
     Write(" CHANNELS {");
+
     var first = true;
     string channelId;
     foreach(channelId, device.Channels())
@@ -98,11 +99,12 @@ set deviceDescrScript {
         }
 
         var isVirtual = false;
-        if (channel.ChannelType() == 29)
+        if ((channel.ChannelType() == 29) || (channel.Label() == "HmIP-RCV-50"))
         {
           isVirtual = true;
         }
 
+        string chnType = channel.HssType();
         Write("ID {" # channelId # "}");
         Write(" NAME {" # channel.Name() # "}");
         Write(" ADDRESS {" # channel.Address() # "}");
@@ -121,7 +123,29 @@ set deviceDescrScript {
         Write(" EVENTABLE {" # eventable # "}");
         Write(" AES_AVAILABLE {" # isAesAvailable # "}");
         Write(" VIRTUAL {" # isVirtual # "}");
-        Write(" CHANNEL_TYPE {" # channel.HssType() # "}");
+        Write(" CHANNEL_TYPE {" # chnType # "}");
+
+        ! BLIND_* is necessary e. g. the HmIPW-DRBL4, which can be used as a BLIND or a SHUTTER. The metadata channelMode determines the current state.
+
+        if ( (chnType == "MULTI_MODE_INPUT_TRANSMITTER") || (chnType == "BLIND_TRANSMITTER") || (chnType == "BLIND_VIRTUAL_RECEIVER") ) {
+          object chnAddress = dom.GetObject(channel.Address());
+          if (chnAddress) {
+            string modeMultiChannel = chnAddress.MetaData('channelMode');
+            if (modeMultiChannel) {
+              Write(" MODE_MULTI_MODE_CHANNEL {" # modeMultiChannel # "}");
+            } else {
+              Write(" MODE_MULTI_MODE_CHANNEL {--}");
+            }
+          } else {
+            string modeMultiChannel = channel.MetaData('channelMode');
+            if (modeMultiChannel) {
+              Write(" MODE_MULTI_MODE_CHANNEL {" # modeMultiChannel # "}");
+            } else {
+              Write(" MODE_MULTI_MODE_CHANNEL {--}");
+            }
+          }
+        }
+
         Write("}");
       }
     }
@@ -217,6 +241,12 @@ foreach id $deviceIds {
     append result ",\"isAesAvailable\":$channel(AES_AVAILABLE)"
     append result ",\"isVirtual\":$channel(VIRTUAL)"
     append result ",\"channelType\":[json_toString $channel(CHANNEL_TYPE)]"
+
+    if {[info exists channel(MODE_MULTI_MODE_CHANNEL)] == 1} {
+     append result ",\"mode_multi_mode\":[json_toString $channel(MODE_MULTI_MODE_CHANNEL)]"
+    }
+
+
     append result "\}"
 
     array_clear channel

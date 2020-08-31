@@ -55,7 +55,7 @@
    color: $_(textColorA); /* white */
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -6925,10 +6925,10 @@
+@@ -7164,10 +7164,10 @@
    
    
    var m_name     = name;
@@ -65,17 +65,17 @@
    var m_id     = name.replace(/\,/g, "_");
 +  var m_value    = localStorage.getItem(m_id) || "";
    var m_textId = m_id + "Text";
-     
+ 
    var isSet = function()
-@@ -6999,6 +6999,7 @@
-   {
-     if ($(m_textId)) { m_value = $(m_textId).value;}
+@@ -7272,6 +7272,7 @@
+       }
+     }
      if ($(m_id))     { $(m_id).hide(); }
 +    localStorage.setItem(m_id, $(m_textId).value);
      if (m_callback)  { m_callback(); }
    };
    
-@@ -7017,6 +7018,7 @@
+@@ -7290,6 +7291,7 @@
    this.reset = function()
    {
      m_value = "";
@@ -83,7 +83,7 @@
      this.close();
    };
  
-@@ -7039,7 +7041,6 @@
+@@ -7312,7 +7314,6 @@
    /*# Initialisierung #*/
    /*###################*/
    
@@ -91,7 +91,7 @@
    
  };
  
-@@ -7063,7 +7064,28 @@
+@@ -7336,7 +7337,28 @@
      this.callback = callback;
      this.id       = name.replace(/\./g, "_");
      this.formId   = this.id + "Form";
@@ -121,7 +121,7 @@
    },
  
    /**
-@@ -7174,13 +7196,17 @@
+@@ -7447,16 +7469,20 @@
      if ($(this.formId))
      {
        var values = $(this.formId).values;
@@ -130,16 +130,19 @@
        for (var i = 0, len = values.length; i < len; i++)
        {
          this.select(values[i].value, values[i].checked);
-+         if(values[i].checked) filterValues.push(values[i].value);
++        if(values[i].checked) filterValues.push(values[i].value);
        }
-       
-       if ($(this.id))    { $(this.id).hide(); }
+ 
+       if ($(this.id))    {
+         $(this.id).hide();
+         try {jQuery("#"+ this.id).draggable("destroy");} catch (e) {}
+       }
 +      // JSON.stringify encodes an array twice???
 +      localStorage.setItem(this.id, JSON.parse(JSON.stringify(filterValues)));
        if (this.callback) { this.callback(); }
      }
    },
-@@ -7212,7 +7238,8 @@
+@@ -7492,7 +7518,8 @@
      {
        this.list[i]._selected = false;
      }
@@ -149,15 +152,15 @@
      this.close();
    }
    
-@@ -18891,6 +18918,7 @@
-     translateFilter(); // this translates the filter in the header of the page
+@@ -20914,6 +20941,7 @@
+     jQuery("#DeviceListPage_FuncFilter").draggable();
  
      DeviceList.updateDeviceStatus();
 +    eQ3.HomeMatic.Event.fire({type: 'DeviceListPageLoaded'});
    },
    
    onRemoveDevice: function(whatEver)
-@@ -25327,11 +25355,31 @@
+@@ -27244,11 +27272,31 @@
      if (file.substring(0, UI_PATH.length) == UI_PATH)
      {
        //method: 'get' ist für die ELV-CGIs notwendig.
@@ -191,7 +194,7 @@
      }
      /* ELV --> */
      
-@@ -28212,6 +28260,26 @@
+@@ -30583,6 +30631,26 @@
      this.fltObjType = 0;
      if (fltObjType)
        this.fltObjType = fltObjType;
@@ -218,7 +221,7 @@
    },
    
  
-@@ -28583,6 +28651,15 @@
+@@ -30947,6 +31015,15 @@
      this.bTypeNumber = false;
      this.bTypeAlarm = false;
      this.bTypeString = false;
@@ -234,7 +237,7 @@
      conInfo("Alle Filter wurden zurückgesetzt.");
    }
  };
-@@ -28692,6 +28769,12 @@
+@@ -31055,6 +31132,12 @@
  {
    //conInfo("iseFilter: setSFilter "+fId+" to "+$(ctrlId).value);
    fltObj.addStringFilter(fId, $(ctrlId).value);

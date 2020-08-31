@@ -13,15 +13,15 @@
 
 <table width="100%" class="CLASS04000" cellpadding="0" cellspacing="0">
   <colgroup>
-    <col width="20%" />
-    <col width="80%" />
+    <col style="width:20%;"/>
+    <col style="width:80%;"/>
   </colgroup>
   <tr>
     <!-- Linke Spalte -->
     <td id="contentLeft">
       <table class="CLASS04001"> 
         <tr>
-          <td valign="top">
+          <td style="vertical-align: top;">
             <div id="divRL" class="CLASS04002">
             <script type="text/javascript">
               var contHeight = $("content").style.height;
@@ -30,8 +30,8 @@
             </script>
             <table id="tblRoomNames" class="StatViewTbl CLASS04006 j_translate"  cellpadding="5" cellspacing="0" >
               <colgroup>
-                <col width="50%" />
-                <col width="50%" />
+                <col style="width:50%;"/>
+                <col style="width:50%;"/>
               </colgroup>
               <%
                 string sEnumRoomIds = "";
@@ -81,7 +81,7 @@
         </script>
        <table id="tblRightContent" class="CLASS04003">
         <tr class="CLASS04004">
-          <td valign="top" id="chnList">
+          <td style="vertical-align: top;" id="chnList">
        
           </td>
         </tr>
@@ -166,8 +166,8 @@
   
   s += "<table cellspacing='8'>";
   s += "<tr>";
-    s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey('footerBtnPageBack')+"</div></td>";
-    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltHR.clearFilters();updateTable();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey('footerBtnPageBack')+"</div></td>";
+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04005' onclick='fltHR.clearFilters();updateTable();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
   s += "</tr>";
   s += "</table>";
   

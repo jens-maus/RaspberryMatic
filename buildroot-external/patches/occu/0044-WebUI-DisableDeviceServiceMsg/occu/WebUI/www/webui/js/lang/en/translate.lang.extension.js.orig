@@ -33,6 +33,11 @@ jQuery.extend(true, langJSON, {
     "lblLinkNameWith": "with",
     "lblUnknownDevice": "Unknown device",
     "lblSelectLanguage": "Language:",
+    "lblText" : "Text",
+    "lblAlign" : "Alignment",
+    "lblBGColorBR" : "Background-<br/>Colour",
+    "lblTextColorBR" : "Text-<br/>Colour",
+    "lblIcon" : "Icon",
     "selectLangAuto": "Auto",
     "selectLangDE": "German",
     "selectLangUK": "English",
@@ -104,7 +109,7 @@ jQuery.extend(true, langJSON, {
     "dialogActivateLinkParamsetSuccess": "The profile has been triggered successfully.",
     "dialogActivateLinkParamsetError": "The profile could not be triggered. Please make sure that the device is located within the wireless range and active.",
     "dialogFirmwareUpdateCheckSuccess": "Firmware update completed. Checking if successful...",
-    "dialogFirmwareUpdateSuccess": "Firmware update successful.",
+    "dialogFirmwareUpdateSuccess": "Firmware update is being carried out.",
     "dialogFirmwareUpdateFailed": "Firmware update failed.",
     "dialogSetProfileProgressBarSendProfile": "Profile settings will be transmitted to devices.",
     "dialogSetProfileErrorProgressBarA": "Error during saving of profile ",
@@ -227,6 +232,7 @@ jQuery.extend(true, langJSON, {
     "Oct": "October",
     "Nov": "November",
     "Dec": "December",
+    "Sec" : "Second",
     "Hou": "Hour",
     "Min": "Minute",
     "btnDatePickerThisMonth": "Current month",
@@ -295,9 +301,9 @@ jQuery.extend(true, langJSON, {
     "ErrorOnDeleteWindowDeferDescription" : "Device will be deleted as soon as it can be accessed again",
     "ErrorOnDeleteWindowForce" : "Delete from Homematic CCU",
     "ErrorOnDeleteWindowForceDescription" : "Device will be deleted from Homematic CCU, even if it can not be accessed.",
-    "ErrorOnDeleteWindowDeviceNotReachable" : "<b>The device '${device.name}' can not be accessed.</b><p>Please make sure that your device is located within the radio range and press the teach-in button again if necessary.<br />Then try again to delete your device.</p>",
+    "ErrorOnDeleteWindowDeviceNotReachable" : "<b>The device '${device.name}' can not be accessed.</b><p>Please make sure that your device is accessible and press the teach-in button again if necessary.<br /><br />Then try again to delete your device.</p>",
     "ErrorOnDeleteWindowUnknownDevice" : "<b>The HomeMatc CCU does not know the device '${device.name}'</b><p>It may have been deleted already.</p>",
-    "ErrorOnDeleteWindowUnknownError" : "<b>The device '${device.name}' could not be deleted.</b><p>Please make sure that your device is located within the radio range and press the teach-in button again if necessary.<br />Then try again to delete your device.</p>",
+    "ErrorOnDeleteWindowUnknownError" : "<b>The device '${device.name}' could not be deleted.</b><p>Please make sure that your device is accessible and press the teach-in button again if necessary.<br /><br />Then try again to delete your device.</p>",
     "ErrorOnDeleteWindowAbortButton" : "Cancel",
     "ErrorOnDeleteWindowDeleteButton" : "Delete again",
     "sysVarAlarmZone1" : "Alarm zone 1",
@@ -403,7 +409,7 @@ jQuery.extend(true, langJSON, {
     "alertUseOnlySpecialChars" : "Please do only use the allowed special characters ., !, $, (, ), :, ;, #, %DF, %C4, %E4, %D6, %F6, %DC, %FC, -",
     "alertCharsNotAllowed" : "Descriptions may not contain any of the following characters: <, >, ', \", &, $, [, ], {, } and \\",
     "alertErrorDeleteObject" : "Object could not be deleted.",
-    "dialogAllRFInterfacesTitle" : "All known Interfaces",
+    "dialogAllRFInterfacesTitle" : "All known RF-Interfaces",
     "dialogSettingsSecurityMessageSysBackupFWUpdateNecessaryContentA" : "Import of backup not possible. The backup available is based on the CCU firmware ",
     "dialogSettingsSecurityMessageSysBackupFWUpdateNecessaryContentB" : "<br>\nThis is a later version than the current version installed on the CCU. ",
     "dialogSettingsSecurityMessageSysBackupFWUpdateNecessaryContentC" : ".<br>\nPlease perform an update of your CCU firmware first. Then, please start to import the system backup.",
@@ -507,6 +513,7 @@ jQuery.extend(true, langJSON, {
     "stringTableRS485IdleTime" : "Bus idle time after service access",
     "stringTableEnterValue" : "Enter value",
     "stringTableEventFilterTime" : "Filter time",
+    "stringTableEventFilterTimeA" : "Event filter time",
     "stringTableRainDetectorHeatingOn" : "Heating On",
     "stringTableRainDetectorHeatingOff" : "Heating Off",
     "lblMinutes" : "minutes",
@@ -614,12 +621,42 @@ jQuery.extend(true, langJSON, {
     "iconClosed":"Closed",
     "iconError":"Error",
     "iconOK":"All right",
-    "iconInfo":"Information",
     "iconNewMessage":"New message",
     "iconServiceMessage":"Service message",
     "iconSignalGreen":"Signal green",
     "iconSignalYellow":"Signal yellow",
     "iconSignalRed":"Signal red",
+    "iconLampOff" : "Lamp OFF",
+    "iconLampOn" : "Lamp ON",
+    "iconPadlockOpen" : "Lock OPEN",
+    "iconPadlockClosed" : "Lock CLOSED",
+    "iconX" : "X",
+    "iconTick" : "Checkmark",
+    "iconInfo" : "Info",
+    "iconEnvelope" : "Envelope",
+    "iconWrench" : "Spanner",
+    "iconSun" : "Sun",
+    "iconMoon" : "Moon",
+    "iconWind" : "Wind",
+    "iconCloud" : "Cloud",
+    "iconCloudBolt" : "Cloud/lightening",
+    "iconCloudLightRain" : "Cloud/light rain",
+    "iconCloudMoon" : "Cloud/moon",
+    "iconCloudRain" : "Cloud/rain",
+    "iconCloudSnow" : "Cloud/snow",
+    "iconCloudSun" : "Cloud/sun",
+    "iconCloundSunRain" : "Cloud/sun/rain",
+    "iconSnowFlake" : "Cloud/snowflake",
+    "iconRainDrop" : "Cloud/raindrop",
+    "iconFlame" : "Flame",
+    "iconWindowOpen" : "Window open",
+    "iconShutter" : "Shutter",
+    "iconEco" : "Eco",
+    "iconProtectionOff" : "Protection deactivated",
+    "iconProtectionExternal" : "Presence mode",
+    "iconProtectionInternal" : "Absence mode",
+    "iconBell" : "Notification",
+    "iconClock" : "Clock",
     "statusDisplayDialogTitle" : "Display configuration",
     "statusDisplayOptionText" : "Text",
     "statusDisplayOptionWhite" : "white",
@@ -658,8 +695,10 @@ jQuery.extend(true, langJSON, {
     "lblColorValue" : "Color",
     "lblColorValueBR" : "Color",
     "lblBrightnessLevel" : "Brightness",
+    "lblSwitchingState" : "Switching state",
     "lblRampTime" : "Ramp time",
     "lblOnTime" : "Switch-on time",
+    "lblOnTimeLimited" : "Switch-on time limited",
     "lblColorValueMin" : "Color value start",
     "lblcolorValueMax" : "Color value end",
     "lblAllowOnlyGroupOperation": "Deactivate single device operation",
@@ -692,12 +731,15 @@ jQuery.extend(true, langJSON, {
          "</li>" +
       "</ul>" +
       "<div>This setting only effects larger time periods (week/month/year).</div>",
+
+    "lblSettingsDeviceFirmwareMain0" : "Device firmware overview",
+    "lblSettingsDeviceFirmwareMain1" : "Perform device firmware update",
     "lblSettingsDeviceFirmware0" : "Overview of the installed device firmware files",
     "lblSettingsDeviceFirmware1" : "Add device firmware",
     "lblSettingsDeviceFirmware2" : "Delete device firmware",
     "lblSettingsDeviceFirmware3" : "View changelog of the firmware",
     "hintDevFwAlreadyUploaded" : "" +
-      "The latest firmware version of the device is alreay installed on the  " + HMIdentifier.de.CCUShortName + ".\n"+
+      "The latest firmware version of the device is alreay installed on the  " + HMIdentifier.en.CCUShortName + ".\n"+
           "Please perform the firmware update on the configuration page.\n\n",
     "deviceUpdate" : "Device update:",
     "weeklyProfile1" : "1",
@@ -713,6 +755,7 @@ jQuery.extend(true, langJSON, {
     "optionUnit1D" : "1 day",
     "optionUnit7D" : "7 days",
     "optionUnit14D" : "14 days",
+    "optionUnit24D" : "24 days",
     "optionUnit28D" : "28 days",
     "optionUnit30D" : "30 days",
     "optionUnit10MS" : "10ms",
@@ -734,8 +777,10 @@ jQuery.extend(true, langJSON, {
     "optionUnit45S" : "45 seconds",
     "optionUnit60S" : "60 seconds",
     "optionUnit90S" : "90 seconds",
+    "optionUnit105S" : "105 seconds",
     "optionUnit1M": "1 minute",
     "optionUnit2M": "2 minutes",
+    "optionUnit3M": "3 minutes",
     "optionUnit4M": "4 minutes",
     "optionUnit5M": "5 minutes",
     "optionUnit6M": "6 minutes",
@@ -758,10 +803,19 @@ jQuery.extend(true, langJSON, {
     "optionUnit8H" : "8 hours",
     "optionUnit12H" : "12 hours",
     "optionUnit24H" : "24 hours",
+    "optionUnit10SShort" : "10 s",
+    "optionUnit30SShort" : "30 s",
+    "optionUnit1MShort" : "1 min",
+    "optionUnit5MSShort" : "5 min",
+    "optionUnit10MShort" : "10 min",
+    "optionUnit30MShort" : "30 min",
+
     "optionOnWithDelay" : "On with switch on delay",
     "optionOnWithoutDelay" : "On without switch on delay",
     "optionInactiv" : "Inactive",
     "optionActiv" : "Active",
+    "optionNoRepetition" : "No repetition",
+    "optionInfiniteRepetition" : "Permanent",
     "optionNormalLength" : "Normal length",
     "optionFileLength" : "File length",
     "optionSetLength" : "Specify length",
@@ -771,6 +825,8 @@ jQuery.extend(true, langJSON, {
     "optionPassageCounterDeltaLR" : "Difference of passages left/right",
     "optionPassageCounterDeltaL" : "Difference of passages left",
     "optionPassageCounterDeltaR" : "Difference of passages right",
+    "optionRingMode" : "Ring topology",
+    "optionTwoSeparateBusSystems" : "Two separate bus strings",
     "lblDeviceFwPerformUpdate" : "The device update is carried out",
     "lblDeviceFwDeliverFwImage" : "The update file will be transferred to the device",
     "lblGenericLinkPartner" : "Connection partner",
@@ -828,10 +884,25 @@ jQuery.extend(true, langJSON, {
     "controlChannelHasNoFunction" : "The channel has no function here",
     "weeklyProfileLbl" : "Week profile",
     "_tooltipHmIPDeliverFirmwareImage" : "* old Version *Transferring the update file to the device is performed <br/>in the background and takes longer time.<br/><br/>After the file has been transferred successfully,<br/>the button for activating the<br/>device firmware update will appear here.",
+
     "tooltipHmIPDeliverFirmwareImage" :
       "Please note: New firmware files for Homematic IP devices are currently transferred in the background.<br/>" +
       "Depending on the device, this procedure can take between 8 and 42 hours.<br/>" +
-       "After the firmware files have been transferred, an update button for executing the update of the device will be displayed.",
+      "After the firmware files have been transferred, an update button for executing the update of the device will be displayed.",
+
+    "tooltipHmIPDeliverFirmwareImageA" :
+      "Please note: New firmware files for Homematic IP devices are currently transferred in the background.<br/>" +
+      "Depending on the device, this procedure can take between 8 and 42 hours.<br/>" ,
+
+    "tooltipHmIPWDeliverFirmwareImage" :
+      "Please note: New firmware files for Homematic IP devices are currently transferred in the background.<br/>" +
+      "Depending on the device, this procedure can take between 15 and 30 minutes.<br/>" +
+      "After the firmware files have been transferred, an update button for executing the update of the device will be displayed.",
+
+    "tooltipHmIPWDeliverFirmwareImageA" :
+      "Please note: New firmware files for Homematic IP devices are currently transferred in the background.<br/>" +
+      "Depending on the device, this procedure can take between 15 and 30 minutes.<br/>" ,
+
     "selectFlashSequence" : "Definition of flashing sequence",
     "stringTableButtonLock" : "Local operating lock",
     "stringTableGlobalButtonLock" : "Global operating lock",
@@ -928,6 +999,7 @@ jQuery.extend(true, langJSON, {
     "lblIPAddress" :  "IP address",
     "enterIPAddress" :  "Manual IP input",
     "invalidIP" : "Invalid IP adress",
+    "invalidNetMask" : "Invalid Subnet mask",
     "btnScanGateway" :  "Search gateway",
     "btnScanDevices" :  "Search devices",
     "timeoutAddNewDevices" : "Timeout addNewDevices",
@@ -1030,6 +1102,7 @@ jQuery.extend(true, langJSON, {
 
     "lblPassageDetectorNoParams" : "No parameters available.<br/>Please use channel 2 for status display.",
 
+    "lblExternal" : "External",
     "lblNormal" : "Normal",
     "lblOverflow" : "Overflow",
     "lblUnderflow" : "Underflow",
@@ -1046,6 +1119,7 @@ jQuery.extend(true, langJSON, {
     "deviceFirmwareInformation" : "Overview",
 
     "colorBLACK" : "Color off",
+    "colorBLACK_A" : "Black",
     "colorBLUE" : "Blue",
     "colorGREEN" : "Green",
     "colorTURQUOISE" : "Turquoise",
@@ -1103,7 +1177,7 @@ jQuery.extend(true, langJSON, {
     "AccessPointAssignmentGetConfigurationParameter" : "The configuration of the Access Point cannot be requested. Check the connection and try again.",
     "AccessPointAssignmentConfigurationParameterNotSupported" : "The firmware of your Access Point does not support this function. Please update the firmware to the latest version. ",
     "AccessPointAssignmentConfigurationParameterCouldNotBeSaved" : "The configuration of the Access Point cannot be saved. Check the connection and try again.",
-    "AccessPointAssignmentNotFinished" : "Connection is established.",
+    "AccessPointAssignmentNotFinished" : "The connection could not be established successfully.",
     "AccessPointAssignmentInProgress" : "Connection is established.",
     "accessPointPrimaryNotKnown" : "The internal Access Point could not be found. Check the configuration of your CCU.",
     "accessPointNotKnown" : "The Access Point could not be found. Update the list and try again.",
@@ -1158,7 +1232,7 @@ jQuery.extend(true, langJSON, {
     "backupBackupImperfectMissingFile" : "Incorrect/incomplete backup (e.g. *.apkx file is missing).",
     "backupNoInternet_KeyserverTimeout" : "No Internet / key server time-out.",
     "backupKeyServer_NAK" : "CCU unknown to key server.",
-    "backupErrorDevicePersistence_TypesNotCompatibel" : "Reading of devices failed (<br/>Device types not compatible).",
+    "backupErrorDevicePersistence_TypesNotCompatibel" : "Reading of devices failed!<br/>(Device types not compatible).",
     "backupMigrationFailed" : "Unknown error.",
     "backupCoProcessor_not_availabel" : "No co-processor is available.",
     "backupCoProcessor_NotInitialized" : "The co-processor cannot be initiated.",
@@ -1170,6 +1244,252 @@ jQuery.extend(true, langJSON, {
 
     "lblSettingsUserAdministrationUser" : "Edit your own user account including changing the password",
 
+    "dlgAdminPasswdHint1" :
+      "Before you put your CCU into operation, you need to enter an administrator password. " +
+        "Be sure to choose a password that you can easily remember and do not share it with anyone else.<br/><br/>" +
+        "Additional users with restricted rights can be set up in the CCU user management area.",
+
+    "dlgUserPasswdHint1" :
+    "Before you put your CCU into operation, you need to enter a password. " +
+      "Be sure to choose a password that you can easily remember and do not share it with anyone else.<br/><br/>",
+
+    "showHelpSecurityHigh" : "<h1><h1>Maximum security level</h1><p><ul><li>Firewall ports: Closed as standard (incoming connections)</li></ul></p>",
+    "showHelpSecurityMid" : "<h1>Standard security level</h1> <p><ul><li>Firewall ports: Closed as standard (incoming connections)</li><li>Authentication for Homematic XML-RPC API and Remote Homematic Script API: Activated</li><li>Remote access to Homematic XML-RPC API: Restricted</li><li>Remote access to Homematic Script API: Restricted</li></ul></p>",
+    "showHelpSecurityLow" : "<h1>Minimum security level</h1> <p><ul><li>Firewall ports: Open as standard</li><li>Authentication for Homematic XML-RPC API and Remote Homematic Script API: Deactivated</li><li>Remote access to Homematic XML-RPC API: Full access</li><li>Remote access to Homematic Script API: Restricted</li></ul></p>",
+    "showHelpSecurityCustom": "<h1>Custom security level</h1> <p>One or more settings deviate from the default settings for the security levels.<br>If &quot;Custom&quot; is retained here, no settings are changed.</p>",
+
+    "secLevelHigh" : "Maximum security",
+    "secLevelMid" : "Restricted",
+    "secLevelLow" : "Relaxed",
+    "secLevelCustom" : "Custom",
+    "secLevelHighCaptionA" : "I am familiar with how to set individual services (such as programming interfaces) via the CCU security options. This setting only permits access to the online interface.",
+    "secLevelHighCaptionB" : "This security level does not permit access to the Mediola software. This can be modified via the CCU firewall settings.",
+    "secLevelMidCaption" : "This safety level permits access to interfaces, additional software and the Mediola software.",
+    "secLevelLowCaptionA" : "I am familiar with how to protect the CCU against unauthorised access.",
+    "secLevelUserHint" : "A security level does not prevent subsequent opening of ports, for example, in the firewall setting. The security level would then switch, for example, from 'Maximum security' to 'Custom'.",
+
+    "dialogSetSecurityLevelExpress"  : "Express",
+    "dialogSetSecurityLevelUserDefined"  : "Custom",
+    "dlgSecurityLevelHeader" : "Security level",
+    "noPasswdSet" : "No password set!",
+    "passwdNotIdentical" : "Passwords do not match!",
+
+    "adminPasswordTitle" : "<u>Administrator password</u>",
+    "userPasswordTitle" : "<u>User password</u>",
+    "portEnablingTitle" : "<b>Port opening:</b>",
+    "portEnablingCaption" : "This is where required ports can be opened. Enter the ports in a list separated by ';'.",
+
+    "securitySettingsTitle" : HMIdentifier.en.CCUShortName + " Security setting",
+    "btnSecuritySettings" : "Security<br/>wizard",
+    "lblSecuritySettings1" : "Express",
+    "lblSecuritySettings2" : "Custom",
+
+    "dialogSettingsFirewallLblFWPolicy" : "<b>Firewall policy:</b>",
+    "dialogSettingsFirewallLblPortAccess" : "<b>Port access:</b>",
+    "dialogSettingsFirewallLblPortsRestricted" : "Ports blocked",
+    "dialogSettingsFirewallLblPortsOpen" : "Ports open",
+    "dialogSettingsFirewallLblHintPortAccess" : "Port access settings",
+
+    "lblSetting" : "Setting",
+
+    "dialogSettingsFirewallLblMediola" : "<b>Mediola access:</b>",
+    "dialogSettingsFirewallLblHintMediola" : "Enables access to the Mediola service",
+
+    "toolTipFirewallAccessModes" : "<ul>" +
+      "<li>Full access: Remote and local access granted</li>" +
+      "<li>Restricted: Local access only</li>" +
+      "<li>No access: Access not granted</li>" +
+    "<ul>",
+
+    "dialogSettingsFirewallLblHintIPAddresses" : "You can enable access for individual IP addresses or entire address ranges for both IPv4 and IPv6. Enter the addresses in a list separated by ';'.",
+    "dialogSettingsFirewallLblHintIPAddressesWithoutIPv6" : "You can enable access for individual IP addresses (e. g. 192.168.0.1) or entire address ranges (e. g. 192.168.0.0/16) for IPv4. Enter the addresses in a list separated by ';'.",
+
+    "dglUserNewFwSettingsTitle" : "Please note!",
+    "dglUserNewFwSettingsContent" : "The firewall settings have changed. In case of problems, e.g. with additional software, please contact the admin.",
+
+    "stringTableContactBoost" : "Corrosion protection",
+    "lblJalousieBlind" : "Operating mode blind / shutter",
+    "optionBlind" : "Blind",
+    "optionShutter" : "Shutter",
+    "hintBlindModeChanged" : "Transfer the configuration before you continue.",
+
+    "dialogSettingsStorageTitleLEDS" : "Info LED",
+    "dialogSettingsStorageSettingsLblServiceLed" : "Service messages:",
+    "dialogSettingsStorageSettingsLblAlarmLed" : "Alarm messages:",
+    "dialogSettingsStorageHintLEDS" : "Switching the Info LED flashing on or off in case of service and alarm messages",
+
+    "HmIPWPSlatPosHelpTitle" : "Information about slats position",
+    "HmIPWPSlatPosHelp" : "Please note that the slats position can be used only for blind actuators and not for shutter actuators.",
+
+    "dialogSettingsSecurityTDSNMP" : "SNMP",
+    "dialogSettingsSecurityLblActivateSNMP" : "SNMP active:",
+    "dialogSettingsSecurityTDSNMPExplanation" : "After activation, the SNMP service is active. Only SNMPv3 with SHA and AES is supported.",
+    "dialogSettingsSecurityPasswordHint" : "Please note that the password must contain at least 8 characters.",
+    "dialogSettingsSecurityUserHint" : "Please enter a user name.",
+
+    "hintWiredBlindLinksAvailable" : "Please note: Connections have been found. The operation mode can therefore not be changed.",
+    "hintWiredBlindProgramsAvailable" : "Please note: Programs have been found. The operation mode can therefore not be changed.",
+    "hintWiredBlindLinksAndProgramsAvailable" : "Please note: Connections and programs have been found. The operation mode can therefore not be changed.",
+    "hintCheckChannels" : "<br/>Check the following channels:  ",
+
+    "lblSoundFileNr" : "MP3 file",
+    "lblColorNr" : "Colour",
+    "lblColorSongNr" : "MP3 file<br/>colour",
+    "internalSystemSound" : "Internal sound",
+    "randomPlayback" : "Shuffle",
+    "soundOldValue" : "Last MP3 file played",
+    "colorOldValue" : "Last colour selected",
+    "soundColorOldValue" : "MP3 file/colour = last value",
+    "soundColorRandomPlayback" : "MP3 file/colour = shuffle",
+    "soundColorInternal" : "Internal sound/no colour",
+    "hintSoundFileRandom20" : "Random playback of one of the first 20 MP3 files.",
+
+    "***"  : "***",
+
+    "checkSmokeDetectorSelfTest" : "To make sure the smoke detector is working properly, please  perform a self-test by pressing the operating key.",
+    "hintActivateDetectorSelfTest" : "The firmware update was successful. ",
+    "hintReInclusionDetectorFailed" : "A problem occurred while updating the firmware. ",
+
+    "lblRename" : "Rename",
+    "askRenameAllChannels" : "Automatically assign standard channel names?",
+    "lblDeviceName" : "Device description",
+    "lblChannelNames" : "Preview of channel names",
+
+    "dialogFirmwareUpdateUnknownError" : "An unknown error has occurred<br/><br/>Please check whether the device can be accessed.",
+
+    "lblHmIPWIdentification" : "Identification",
+    "lbDisplayBacklight" : "Lighting<br/>Display",
+    "lblLightingKeyVisual" : "Lighting<br/>System key",
+
+    "helpAccessPointOffline" :
+    "An internet connection is needed to <u>commission</u> the Homematic IP Wired Access Point.<br/><br/>" +
+    "Following successful commissioning (the system key is lit turquoise) the system can be operated offline. Operation then no longer requires an internet connection.<br/><br/>" +
+    "If you would like to use offline operation and train additional wired devices, use the training dialogue in the field <b>" + langJSON.en.dialogNewDevicesHmIPWithoutInternet + "</b>" +
+    "Enter the KEY and the SGTIN from the device label.",
+
+    "drapMaxCurrentBus" : "Maximum current consumption by the bus",
+
+    "drapHelpMaxCurrentBus" :
+      "This value must be configured depending on the power supply unit used. " +
+      "The value depends on the output current of the power supply unit. It is necessary for a correct start of the bus system.",
+
+    "drapBusConfig" : "Bus configuration",
+
+    "drapHelpBusConfig" : "Select the bus topology you have installed here.",
+
+    "AccessPointConfigurationFinished" : "Settings successfully saved.",
+    "dialogMigrationRCV50Title" : langJSON.en.dialogHint,
+    "dialogMigrationRCV50" : "Starting with this release, 50 virtual remote operation channels can also be used for Homematic IP for the first time.<br/><br/>" +
+    "To enable them to be used in full, trained Homematic IP sensors already set in the programs will need to be reconfigured. " +
+    "This configuration runs automatically in the background, with appropriate service messages displayed (\"Configuration data ready for transfer\"). " +
+    "Please do not use the virtual remote operation channels until the configuration data has been transferred.<br/><br/>" +
+    "The changes do not impact existing programs and links.",
+    "btnAccessPointConfig" : "Configuration",
+    "lblQueryConfig" : "Query configuration",
+    "lblSetConfig" : "Save configuration",
+    "lblConfigNotChanged" : "No changes were made to the configuration.",
+
+    "configureDisplay" : "Display configuration",
+    "resetDisplay" : "Display reset",
+    "resetDevice" : "Device reset",
+
+    "hintLinkParamOnOffNotActive" : "Note!<br/><br/>The 'ON and OFF time' parameters must not both be set to 'Not active'.",
+
+    "dialogHelpAcousticDisplayReceiverTitle" : "Note on text entry",
+    "dialogHelpAcousticDisplayReceiverContent" :
+      "Depending on the character width (e.g. an 'I' takes up less space than a 'W'), up to 15 characters can be displayed in one line.<br/><br/>" +
+      "To delete a text line, please enter a space.<br/><br/>" +
+      "Since only a limited character set is available, some characters cannot be used and are replaced by other characters.<br/><br/>" +
+      "<table style=\"margin-left:auto; margin-right:auto\">" +
+      "<tr><th align='center'>Zeichen</th><th align='center'>ersetzt durch</th></tr>" +
+      "<tr><td  style='text-align:center;'><span>[</span></td><td  style='text-align:center;'><span>%C4</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span>#</span></td><td  style='text-align:center;'><span>%D6</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span>$</span></td><td  style='text-align:center;'><span>%DC</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span>{</span></td><td  style='text-align:center;'><span>%E4</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span>|</span></td><td  style='text-align:center;'><span>%F6</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span>}</span></td><td  style='text-align:center;'><span>%FC</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span>_</span></td><td  style='text-align:center;'><span>%DF</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span>]</span></td><td  style='text-align:center;'><span>&</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span>'</span></td><td  style='text-align:center;'><span>=</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span> ; </span></td><td  style='text-align:center;'><span>Sanduhr</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span> < </span></td><td  style='text-align:center;'><span>Arrow down</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span> = </span></td><td  style='text-align:center;'><span>Arrow up</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span> > </span></td><td  style='text-align:center;'><span>Arrow up to right</span></td></tr>" +
+      "<tr><td  style='text-align:center;'><span> @ </span></td><td  style='text-align:center;'><span>Arrow down to right</span></td></tr>" +
+       "</table>",
+
+    "lblVibration" : "Vibration",
+    "lblPosition" : "Position",
+    "lblHorizontal" : "Horizontal",
+    "lblVertical" : "Vertical",
+    "lblNonHorizontal" : "Tilted",
+    "lblYes" : "Yes",
+    "lblNo" : "No",
+
+    "setAllHmIPDevices" :
+      "Do you want to transfer this position to the corresponding HmIP devices?\n\n"  +
+        "Please bear in mind that this may result in communication problems due to the increased radio traffic.",
+    "dialogSettingsTimePositionMessageSetPositionSucceedIncludingAllDevices" :
+      "Position information was saved.<br/><br/>" +
+        "The location data of the corresponding HmIP devices will be adjusted.",
+    "lblDutyCycleBidCosRF" : "Duty Cycle BidCos:",
+    "lblDutyCycleHmIP" : "Duty Cycle HmIP: ",
+    "lblDutyCycle" : "Duty Cycle CCU: ",
+    "lblDutyCycleA" : "Duty Cycle CCU",
+    "PowerMeterProtocolModeModeOptionSML" : "SML protocol",
+    "lblRepetitions" : "Repetitions",
+    "optionRepetition" : "repetition",
+    "optionRepetitions" : "repetitions",
+    "lblSoundfileList" : "Title list",
+    "btnChooseSongs"  : "Title selection",
+    "lblPlaylist" : "Playlist",
+    "drapFwNotCompatWithCCUFW" : "The Access Point firmware is not compatible to the CCU.\n\nPlease update your CCU!",
+    "lblBrightnessLuxA" : "Enter brightness in lux",
+    "lblBrightnessLuxB" : "and confirm",
+    "hintInternalLinkExists" :
+      "If the channel behaviour changes, the internal connection of the device should be deleted and recreated.<br/> " +
+      " Otherwise the internal connection will no longer behave as expected.",
+    "hintDevFwUpdateDCHigh" :
+      "<b><span class='attention'>Please note: The duty cycle of the "+HMIdentifier.en.CCUShortName+" is currently very high!</span></b><br/><br/>" +
+      "A device firmware update is therefore currently not possible.<br/><br/>"+
+      "Wait until the duty cycle has fallen below 80% and then try again.",
+    "lblSelectTargetChannels" : "Select<br /> target channels",
+    "btnSelect1stVirTargetChannels" : "1. Virt",
+    "btnSelectAllTargetChannels" : "All",
+    "btnSelectNoTargetChannels" : "None",
+    "hintWeeklyProgramActiveExpertChannel" :
+      "The expert mode is not active. However, since at least one expert target channel is activated for at least one switching time, " +
+      "the target channels are still displayed in expert mode.",
+    "helpBlindParamLevel2" :
+      "In order for a change in the slat position to take effect at this point, <u>also</u> the shutter height must be defined as the second parameter.<br/><br/>" +
+      "If you only want to change the slat position, use the parameter 'Channel action' and select the value 'Ignore' for the shutter height.",
+    "alertUsernameForbiddenChars" : "The user name shall not contain a space character.",
+    "addFirmwareFailedMinCCUVersion" : "This device-firmware update is not supported by the firmware of your CCU. Please update the CCU firmware first.",
+    "lblStopRunningLink" : "Cancel old transmissions<br/>of this buttons",
+    "addFirmwareFailedNotValidatable" : "The compatibility of this device-firmware update is not validatable. Please download the device-firmware one more time and try again.",
+    "hintVirtualChannelChanged" : "Attention! Important note!",
+    "hintVirtualChannelChangedMsg" :
+      "In simplified mode the channel is switched by the 1st virtual channel. The 2nd and 3rd virtual channel is not displayed. If these do not correspond to the default state, " +
+      "the status displayed in the WebUI does eventually not correspond to the actual value. This seems to be the case here.<br/><br/>" +
+      "You can check this by deactivating the simplified connection configuration in the user administration and then coming back here.",
+    "lblLowBattery" : "Battery empty",
+    "lblDisarmed" : "Alarm deactivated",
+    "lblExternallyArmed" : "External alarm activated",
+    "lblInternallyArmed" : "Internal alarm activated",
+    "lblDelayExternalArming" : "External alarm activated with delay",
+    "lblDelayInternalArming" : "Internal alarm activated with delay",
+    "lblEvent" : "Event",
+    "dlgLoadLicense" : "Loading the license",
+    "dlgErrorLoadLicense" : "The software license cannot be loaded Please check the Internet connection of the CCU.",
+    "rotationDirLeftFast" : "Quick anti-clockwise rotation",
+    "rotationDirRightFast" : "Quick clockwise rotation",
+    "rotationDirLeftSlow" : "Slow anti-clockwise rotation",
+    "rotationDirRightSlow" : "Slow clockwise rotation",
+    "rainDetectorSampleInterval" : "Time between the single measurements<br/>(rain detection interval)",
+
     "theEnd" : ""
   }
 });
+
+langJSON.en.hintActivateDetectorSelfTest += langJSON.en.checkSmokeDetectorSelfTest;
+langJSON.en.hintReInclusionDetectorFailed += langJSON.en.checkSmokeDetectorSelfTest;

@@ -1,23 +1,15 @@
 --- occu/WebUI/www/config/control_panel.cgi.orig
 +++ occu/WebUI/www/config/control_panel.cgi
-@@ -171,6 +171,8 @@
+@@ -183,6 +183,8 @@
      <tr>
    }
  
-+ set i 0
++  set i 0
 +
-   if {[showHmIPWired]} {
-     puts {
-       <td>
-@@ -178,6 +180,7 @@
-         <div class="StdTableBtnHelp"><img id="showAccessPointSettingsCPHelp" src="/ise/img/help.png"></div>
-       </td>
-     }
-+    incr i
-   }
- 
    if {[getProduct] >= 3} {
-@@ -189,6 +192,7 @@
+     puts {
+       <!-- Button Security Wizard - slimmed down InstallWizard without the admin password dialog -->
+@@ -192,6 +194,7 @@
          <div class="StdTableBtnHelp"><img id="showSecuritySettingsCPHelp" src="/ise/img/help.png"></div>
        </td>
      }
@@ -25,11 +17,18 @@
    }
  
    puts {
-@@ -200,13 +204,13 @@
+@@ -203,19 +206,20 @@
        </div>
      </td>
    }
 +  incr i
+ 
+   if { [getProduct] >= 3} {
+     puts "<td><div class=\"cpButton\">"
+     puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"showAccessPoint();\">\${btnAccessPoints}</div>"
+     puts "<div class=\"StdTableBtnHelp\"><img id=\"showAccessPointCPHelp\" src=\"/ise/img/help.png\"></div>"
++    incr i
+   }
  
  set COL_COUNT 4
 -set i 3

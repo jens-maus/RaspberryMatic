@@ -27,8 +27,8 @@ dieses Firmware-Update Ihre sämtlichen Einstellungen übernommen. Wir
 raten Ihnen jedoch trotzdem dazu ein separates Backup vor dem Update auf
 diese Firmware durchzuführen und an einem sicheren Ort aufzubewahren.</p>
 <hr/>
-<p>Bei der "RaspberryMatic" Software/Firmware handelt es sich um ein freies
-Open Source Projekt (<a href=https://raspberrymatic.de/>https://raspberrymatic.de/</a>)
+<p>Bei der "RaspberryMatic" Software/Firmware handelt es sich um ein freies,
+nicht-kommerzielles Open Source Projekt (<a href=https://raspberrymatic.de/>https://raspberrymatic.de/</a>)
 das selbst unter der <a href=https://www.apache.org/licenses/LICENSE-2.0>Apache 2.0 Lizenz</a>
 frei zur Verfügung gestellt wird und von einer ausgewählten Community
 unabhängig entwickelt wird. Es enthält selbst freie Software Dritter,
@@ -40,11 +40,10 @@ Sie auf der oben genannten Projekthomepage.</p>
 <a href=https://homematic-forum.de/forum/viewforum.php?f=65>RaspberryMatic-Diskussionsforum</a>
 oder im Falle von reproduzierbaren Fehlern bitte diese mittels direkter
 "Issue"-Meldung auf der Projekthomepage melden.</p>
-<p>Wenn Sie die Weiterentwicklung des RaspberryMatic Projekt entweder
-mit eigener Entwicklungsarbeit oder einfach mit Sach- oder Geldspenden
-unterstützen wollen besuchen Sie bitte die entsprechende Homepage oder
-nutzen Sie die Möglichkeit einer <a href=https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL>PayPal-Spende</a>
-um auch in Zukunft die Veröffentlichung weiterer Updates sicherzustellen.</p>
+<p>Wenn Sie sich an der Weiterentwicklung des RaspberryMatic Projekt gerne
+direkt durch eigene Softwareentwicklung beteiligen wollen oder aber
+indirekt (z.B. durch das Schreiben von Dokumentation) so erhalten Sie
+auf unserer <a href=https://github.com/jens-maus/RaspberryMatic>Projekt Homepage</a> weitere Informationen.
 <hr/>
 <p>Die Veröffentlichung dieser Software erfolgt, WIE BESEHEN OHNE
 GEWÄHR ODER VORBEHALTE - ganz gleich, ob ausdrücklich oder stillschweigend -

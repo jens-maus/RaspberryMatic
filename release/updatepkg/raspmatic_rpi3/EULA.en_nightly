@@ -27,8 +27,8 @@ converted to be usable with the RaspberryMatic firmware. We do,
 however, suggest that you create a fresh backup before actually
 installing this firmware on your CCU device.</p>
 <hr/>
-<p>The "RaspberryMatic" software/firmware is a free open source
-software project (<a href=https://raspberrymatic.de/>https://raspberrymatic.de/</a>)
+<p>The "RaspberryMatic" software/firmware is a free and non-commercial
+open source software project (<a href=https://raspberrymatic.de/>https://raspberrymatic.de/</a>)
 which is distributed under the terms and conditions of the
 <a href=https://www.apache.org/licenses/LICENSE-2.0>Apache 2.0 license</a>.
 It is developed by a free independent open source community. It comes
@@ -40,12 +40,10 @@ of the incorporated software products in RaspberryMatic.</p>
 <a href=https://homematic-forum.de/forum/viewforum.php?f=65>RaspberryMatic discussion platform</a>
 or in case of reproducible issues please use the issue-tracker on the
 project homepage itself.</p>
-<p>If you want to support the development of RaspberryMatic either
-by own software development or by donations in kind or money, please
-visit our project homepage or directly use the possibility to send
-us some money via <a href=https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL>PayPal</a>.
-This will assure that we can continue to provide further updates
-of RaspberryMatic.
+<p>If you want to support the development of RaspberryMatic by contributing
+your own software skills or want to contribute in other way (e.g.
+writing documentation, etc.) please visit our <a href=https://github.com/jens-maus/RaspberryMatic>project homepage</a>
+for more information how to contribute.
 <hr/>
 <p>Unless required by applicable law or agreed to in writing, we
 provide RaspberryMatic (and each Contributor provides its Contributions) on

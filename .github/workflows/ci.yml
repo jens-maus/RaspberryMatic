@@ -33,11 +33,12 @@ jobs:
 
     - name: free disk space
       run: |
+        df -h /
         sudo swapoff -a
-        sudo rm -f /swapfile
+        sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo apt clean
         docker rmi $(docker image ls -aq)
-        df -h
+        df -h /
 
     - name: cleanup old action artifacts
       run: .github/workflows/purge_artifacts.sh ${{ secrets.REPO_ACCESS_TOKEN }}

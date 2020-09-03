@@ -547,7 +547,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "F%FChren Sie vor dem Update eine Datensicherung durch.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Der Ladezustand der Batterien betr%E4gt nur noch ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Um einem Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Update zu erneuern.",
-+    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic ist ein gemeinschaftliches Projekt. Wenn Sie die Weiterentwicklung gerne in Form einer Geldspende unterst%FCtzen wollen k%F6nen Sie das gerne mittels einer <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal Spende</a> tun.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='/ise/img/paypal-donate.gif'></a>",
++    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic ist ein freies, nicht kommerzielles und gemeinschaftlich entwickeltes OpenSource Projekt. Wenn Sie sich gerne an der Weiterentwicklung beteiligen oder es auf anderem Wege gerne unterst%FCtzen wollen so schauen Sie doch einmal auf unserer <a href='https://github.com/jens-maus/RaspberryMatic'>Projekt Homepage</a> vorbei.",
      "dialogSettingsCMHintRestart" : "Zentrale neu starten. Ver%E4nderte Einstellungen werden vorher gespeichert.",
      "dialogSettingsCMHintShutdown" : "Zentrale herunterfahren. Ver%E4nderte Einstellungen werden vorher gespeichert.",
      "dialogSettingsCMHintRestartSafeMode" : "Homematic Zentrale einmalig im abgesicherten Modus starten. Im abgesicherten Modus wird die installierte Zusatzsoftware nicht gestartet. Ver%E4nderte Einstellungen werden vorher gespeichert.",
@@ -569,13 +569,31 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "Please perform a data backup before starting the update.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "The charging status the batteries is only at ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",
-+    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='/ise/img/paypal-donate.gif'></a>",
++    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a free, non-commercial and community driven OpenSource project. If you want to contribute to the project yourself or want to support it, please consider visiting our <a href='https://github.com/jens-maus/RaspberryMatic'>project homepage</a>.",
      "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
      "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
      "dialogSettingsCMHintRestartSafeMode" : "Start Homematic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -23214,7 +23214,7 @@
+@@ -19466,12 +19466,12 @@
+ 
+    // WebUI-Version
+   showCurrentFirmware: function() {
+-    //jQuery("#currentFirmware").text(WEBUI_VERSION);
++    jQuery("#currentFirmware").text(WEBUI_VERSION);
+ 
+-    homematic("Interface.getDeviceDescription", {"interface": "BidCos-RF", "address": "BidCoS-RF"}, function(result) {
+-      WEBUI_VERSION = result.firmware;
+-      jQuery("#currentFirmware").text(WEBUI_VERSION);
+-    });
++    //homematic("Interface.getDeviceDescription", {"interface": "BidCos-RF", "address": "BidCoS-RF"}, function(result) {
++    //  WEBUI_VERSION = result.firmware;
++    //  jQuery("#currentFirmware").text(WEBUI_VERSION);
++    //});
+ 
+   },
+ 
+@@ -23555,7 +23555,7 @@
    {
      this.m_ccuProduct = getProduct();
      this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
@@ -584,7 +602,7 @@
      this.m_URLServer = (isHTTPS) ? "https://"+this.preURL+"update.homematic.com:8443" : "http://"+this.preURL+"update.homematic.com";
  
      var serial = homematic("CCU.getSerial");
-@@ -23224,7 +23224,7 @@
+@@ -23565,7 +23565,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
@@ -593,7 +611,7 @@
      $("body").appendChild(script);
    },
  
-@@ -28570,11 +28570,11 @@
+@@ -28924,11 +28924,11 @@
        {
          if( $("headerLogo").src.indexOf("_red") >= 0 )
          {
@@ -607,7 +625,7 @@
          }
        }
      },
-@@ -28589,12 +28589,12 @@
+@@ -28943,12 +28943,12 @@
  
  SwitchOnFlashLight = function()
  {
@@ -622,15 +640,3 @@
  };
  
  getAjaxLoadElem = function() {
---- occu/firmware/HM-MOD-UART/fwmap.orig
-+++ occu/firmware/HM-MOD-UART/fwmap
-@@ -1,7 +1,7 @@
- #Type           Filename                Version
- 
- #Coprozessor
--CCU2                    coprocessor_update.eq3                         	1.4.1		# CoProzessor HM-MOD-UART
-+#CCU2                    coprocessor_update.eq3                         	1.4.1		# CoProzessor HM-MOD-UART
- 
--#CCU2			dualcopro_si1002_update_blhm.eq3		2.8.6		# Dual CoProzessor HM-MOD-UART
-+CCU2			dualcopro_si1002_update_blhm.eq3		2.8.6		# Dual CoProzessor HM-MOD-UART
- 

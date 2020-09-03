@@ -13,15 +13,15 @@
 
 <table width="100%" class="CLASS03900" cellpadding="0" cellspacing="0">
   <colgroup>
-    <col width="260px" />
-    <col width="*" />
+    <col style="width:260px;"/>
+    <col style="width:auto;"/>
   </colgroup>
   <tr>
     <!-- Linke Spalte -->
     <td id="contentLeft">
       <table class="CLASS03901">  
         <tr>
-          <td valign="top">
+          <td style="vertical-align: top;">
             <div id="divDL" class="CLASS03902">
               <script type="text/javascript">
                 var contHeight = $("content").style.height;
@@ -30,8 +30,8 @@
               </script>
               <table id="tblFunctionNames" class="StatViewTbl CLASS03903" cellpadding="4" cellspacing="0" >
                 <colgroup>
-                  <col width="100px" />
-                  <col width="100px" />
+                  <col style="width:100px;"/>
+                  <col style="width:100px;"/>
                 </colgroup>
                 <%
                   object obj = dom.GetObject(ID_DEVICES);
@@ -105,25 +105,24 @@
        </tr> 
      </table>
    </td>
-   
-   <!-- Rechte Spalte -->
-   <td id="contentRight">
-     <div id="divRTD" class="CLASS03908">
-      <script type="text/javascript">
-        var contHeight = $("content").style.height;
-        contHeight = contHeight.replace(/px/, "");
-        $("divRTD").style.height = Math.floor((contHeight * 0.98)) + "px";
-      </script>
-     <table id="tblRightContent" class="CLASS03909">
-       <tr class="CLASS03910">
-         <td valign="top" id="chnList"></td>
-       </tr>
-     </table>
-     </div>
-   </td>
+
+    <!-- Rechte Spalte -->
+    <td id="contentRight">
+      <div id="divRTD" class="CLASS03908">
+        <script type="text/javascript">
+          var contHeight = $("content").style.height;
+          contHeight = contHeight.replace(/px/, "");
+          $("divRTD").style.height = Math.floor((contHeight * 0.98)) + "px";
+        </script>
+        <table id="tblRightContent" class="CLASS03909">
+         <tr class="CLASS03910">
+           <td style="vertical-align: top;" id="chnList"></td>
+         </tr>
+        </table>
+      </div>
+    </td>
   </tr>
 </table>
-
 <script type="text/javascript">
        
   loadChannels = function(id, specialFlag)
@@ -141,8 +140,8 @@
       var tdlist = $("tblFunctionNames").getElementsByTagName('td');
       for (var i = 0; i < tdlist.length; i++)
       {
-				$(tdlist[i]).removeClassName("ButtonStatusRoomsSelected");
-				$(tdlist[i]).removeClassName("ButtonStatusRoomsPicSelected");
+        $(tdlist[i]).removeClassName("ButtonStatusRoomsSelected");
+        $(tdlist[i]).removeClassName("ButtonStatusRoomsPicSelected");
       }
       
       // Markierung setzen
@@ -182,8 +181,8 @@
   
   s += "<table cellspacing='8'>";
   s += "<tr>";
-  s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
-  s += "<td align='center' valign='middle'><div class='FooterButton CLASS03911' onclick='fltHD.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
+  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
+  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltHD.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
   s += "</tr>";
   s += "</table>";
   

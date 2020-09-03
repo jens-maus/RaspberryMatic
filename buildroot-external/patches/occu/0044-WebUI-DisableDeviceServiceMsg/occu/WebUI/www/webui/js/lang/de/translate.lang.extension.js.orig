@@ -33,6 +33,11 @@ jQuery.extend(true,langJSON, {
     "lblLinkNameWith" : "mit",
     "lblUnknownDevice" : "Unbekanntes Ger%E4t",
     "lblSelectLanguage" : "Sprache:",
+    "lblText" : "Text",
+    "lblAlign" : "Ausrichtung",
+    "lblBGColorBR" : "Hintergrund-<br/>Farbe",
+    "lblTextColorBR" : "Text-<br/>Farbe",
+    "lblIcon" : "Icon",
     "selectLangAuto" : "Auto",
     "selectLangDE" : "Deutsch",
     "selectLangUK" : "Englisch",
@@ -104,7 +109,7 @@ jQuery.extend(true,langJSON, {
     "dialogActivateLinkParamsetSuccess" : "Das Profil wurde erfolgreich ausgel%F6st.",
     "dialogActivateLinkParamsetError" : "Das Profil konnte nicht ausgel%F6st werden. Bitte stellen Sie sicher, dass sich das Ger%E4t innerhalb der Funkreichweite befindet und aktiv ist.",
     "dialogFirmwareUpdateCheckSuccess" : "Firmware-Update abgeschlossen. Erfolg wird gepr%FCft.",
-    "dialogFirmwareUpdateSuccess" : "Firmware-Update erfolgreich.",
+    "dialogFirmwareUpdateSuccess" : "Firmware-Update wird durchgef%FChrt.",
     "dialogFirmwareUpdateFailed" : "Firmware-Update fehlgeschlagen.",
     "dialogSetProfileProgressBarSendProfile" : "Profileinstellungen werden an Komponenten %FCbertragen.",
     "dialogSetProfileErrorProgressBarA" : "Fehler beim Speichern des Profils ",
@@ -227,6 +232,7 @@ jQuery.extend(true,langJSON, {
     "Oct" : "Oktober",
     "Nov" : "November",
     "Dec" : "Dezember",
+    "Sec" : "Sekunde",
 	  "Hou" : "Stunde",
 	  "Min" : "Minute",
     "btnDatePickerThisMonth" : "Dieser Monat",
@@ -295,9 +301,9 @@ jQuery.extend(true,langJSON, {
     "ErrorOnDeleteWindowDeferDescription" : "L%F6scht das Ger%E4t, sobald es wieder erreichbar ist",
     "ErrorOnDeleteWindowForce" : "Aus Homematic Zentrale l%F6schen",
     "ErrorOnDeleteWindowForceDescription" : "L%F6scht das Ger%E4t aus der Homematic Zentrale, auch wenn es nicht erreichbar ist.",
-    "ErrorOnDeleteWindowDeviceNotReachable" : "<b>Das Ger%E4t '${device.name}' ist nicht erreichbar.</b><p>Stellen Sie sicher, dass das Ger%E4t sich in Funk-Reichweite befindet und bet%E4tigen Sie ggf. die Anlerntaste.<br />Wiederholen Sie anschlie%DFend den L%F6schvorgang.</p>",
+    "ErrorOnDeleteWindowDeviceNotReachable" : "<b>Das Ger%E4t '${device.name}' ist nicht erreichbar.</b><p>Stellen Sie sicher, dass das Ger%E4t sich in Reichweite befindet und bet%E4tigen Sie ggf. die Anlerntaste.<br /><br />Wiederholen Sie anschlie%DFend den L%F6schvorgang.</p>",
     "ErrorOnDeleteWindowUnknownDevice" : "<b>Das Ger%E4t '${device.name}' ist der Homematic Zentrale nicht bekannt.</b><p>Eventuell wurde es bereits gel%F6scht.</p>",
-    "ErrorOnDeleteWindowUnknownError" : "<b>Das Ger%E4t '${device.name}' konnte nicht gel%F6scht werden.</b><p>Stellen Sie sicher, dass das Ger%E4t sich in Funk-Reichweite befindet und bet%E4tigen Sie ggf. die Anlerntaste.<br />Wiederholen Sie anschlie%DFend den L%F6schvorgang.</p>",
+    "ErrorOnDeleteWindowUnknownError" : "<b>Das Ger%E4t '${device.name}' konnte nicht gel%F6scht werden.</b><p>Stellen Sie sicher, dass das Ger%E4t sich in Reichweite befindet und bet%E4tigen Sie ggf. die Anlerntaste.<br /><br />Wiederholen Sie anschlie%DFend den L%F6schvorgang.</p>",
     "ErrorOnDeleteWindowAbortButton" : "Abbrechen",
     "ErrorOnDeleteWindowDeleteButton" : "Erneut l%F6schen",
     "sysVarAlarmZone1" : "Alarmzone 1",
@@ -405,7 +411,7 @@ jQuery.extend(true,langJSON, {
     "alertUseOnlySpecialChars" : "Bitte verwenden Sie nur die erlaubten Sonderzeichen ., !, $, (, ), :, ;, #, %DF, %C4, %E4, %D6, %F6, %DC, %FC, -",
     "alertCharsNotAllowed" : "Bezeichnungen d%FCrfen keines der folgenden Zeichen enthalten: <, >, ', \", &, $, [, ], {, } und \\",
     "alertErrorDeleteObject" : "Objekt konnte nicht gel%F6scht werden.",
-    "dialogAllRFInterfacesTitle" : "Alle bekannten Interfaces",
+    "dialogAllRFInterfacesTitle" : "Alle bekannten Funk-Interfaces",
     "dialogSettingsSecurityMessageSysBackupFWUpdateNecessaryContentA" : "Einspielen des Backups nicht m%F6glich. Das vorliegende Backup basiert auf der Zentralen-Firmware ",
     "dialogSettingsSecurityMessageSysBackupFWUpdateNecessaryContentB" : "<br>\nDiese ist aktueller, als die derzeit auf der Zentrale installierte Version ",
     "dialogSettingsSecurityMessageSysBackupFWUpdateNecessaryContentC" : ".<br>\nF&uuml;hren Sie zun&auml;chst ein Update der Zentralen-Firmware durch und starten Sie dann das Einspielen des Systembackups erneut.",
@@ -509,6 +515,7 @@ jQuery.extend(true,langJSON, {
     "stringTableRS485IdleTime" : "Bus-Ruhezeit bei Serviceeingriff",
     "stringTableEnterValue" : "Wert eingeben",
     "stringTableEventFilterTime" : "Filterzeit",
+    "stringTableEventFilterTimeA" : "Event-Filterzeit",
     "stringTableRainDetectorHeatingOn" : "Heizung Ein",
     "stringTableRainDetectorHeatingOff" : "Heizung Aus",
     "lblMinutes" : "Minuten",
@@ -577,7 +584,7 @@ jQuery.extend(true,langJSON, {
       "Bringen Sie das Ger%E4t in Funkreichweite der "+HMIdentifier.de.CCUShortName+" und dr%FCcken Sie die Konfigurations-Taste. "+
       "Anschlie%DFend startet das Firmwareupdate.",
     "fwUpdatePressSystemKey" :
-      "Bringen Sie das Ger%E4t in Funkreichweite der "+HMIdentifier.de.CCUShortName+" und dr%FCcken Sie die System-Taste. "+
+      "Bringen Sie das Ger%E4t in Funkreichweite der "+HMIdentifier.de.CCUShortName+" und dr%FCcken Sie die Bedientaste. "+
       "Anschlie%DFend startet das Firmwareupdate.",
     "partyModeDialogTitle" : "Hier k%F6nnen Sie den Party-/Urlaubsmodus einstellen.",
     "partyStart" : "Startzeit",
@@ -608,18 +615,49 @@ jQuery.extend(true,langJSON, {
     "diagramPeriodThisWeek" : "Diese Woche",
     "diagramPeriodThisMonth" : "Dieser Monat",
     "diagramPeriodThisYear" : "Dieses Jahr",
+
     "iconOff":"Aus",
     "iconOn":"An",
     "iconOpen":"Offen",
     "iconClosed":"Geschlossen",
     "iconError":"Fehler",
     "iconOK":"Alles okay",
-    "iconInfo":"Information",
     "iconNewMessage":"Neue Nachricht",
     "iconServiceMessage":"Servicemeldung",
     "iconSignalGreen":"Signal gr%FCn",
     "iconSignalYellow":"Signal gelb",
     "iconSignalRed":"Signal rot",
+    "iconLampOff" : "Lampe aus",
+    "iconLampOn" : "Lampe ein",
+    "iconPadlockOpen" : "Schloss auf",
+    "iconPadlockClosed" : "Schloss zu",
+    "iconX" : "X",
+    "iconTick" : "H%E4ckchen",
+    "iconInfo" : "Info",
+    "iconEnvelope" : "Briefumschlag",
+    "iconWrench" : "Schraubenschl%FCssel",
+    "iconSun" : "Sonne",
+    "iconMoon" : "Mond",
+    "iconWind" : "Wind",
+    "iconCloud" : "Wolke",
+    "iconCloudBolt" : "Wolke/Blitz",
+    "iconCloudLightRain" : "Wolke/leichter Regen",
+    "iconCloudMoon" : "Wolke/Mond",
+    "iconCloudRain" : "Wolke/Regen",
+    "iconCloudSnow" : "Wolke/Schnee",
+    "iconCloudSun" : "Wolke/Sonne",
+    "iconCloundSunRain" : "Wolke/Sonne/Regen",
+    "iconSnowFlake" : "Wolke/Schneeflocke",
+    "iconRainDrop" : "Wolke/Regentropfen",
+    "iconFlame" : "Flamme",
+    "iconWindowOpen" : "Fenster auf",
+    "iconShutter" : "Rollladen",
+    "iconEco" : "Eco",
+    "iconProtectionOff" : "Unscharf",
+    "iconProtectionExternal" : "H%FCllschutz",
+    "iconProtectionInternal" : "Vollschutz",
+    "iconBell" : "Benachrichtigung",
+    "iconClock" : "Uhr",
     "statusDisplayDialogTitle" : "Display Konfiguration",
     "statusDisplayOptionText" : "Text",
     "statusDisplayOptionWhite" : "Wei%DF",
@@ -658,8 +696,10 @@ jQuery.extend(true,langJSON, {
     "lblColorValue" : "Farbwert",
     "lblColorValueBR" : "Farb-<br/>wert",
     "lblBrightnessLevel" : "Helligkeitswert",
+    "lblSwitchingState" : "Schaltzustand",
     "lblRampTime" : "Rampenzeit",
     "lblOnTime" : "Einschaltdauer",
+    "lblOnTimeLimited" : "Einschaltdauer begrenzt",
     "lblColorValueMin" : "Farbwert Start",
     "lblcolorValueMax" : "Farbwert Ende",
     "lblAllowOnlyGroupOperation": "Einzelne Ger&auml;tebedienung deaktivieren",
@@ -692,9 +732,12 @@ jQuery.extend(true,langJSON, {
          "</li>" +
       "</ul>" +
       "<div>Diese Einstellung hat nur Auswirkungen auf gro&szlig;e Zeitr%E4ume (Woche/Monat/Jahr)</div>",
+
+    "lblSettingsDeviceFirmwareMain0" : "Ger%E4te-Firmware %DCbersicht",
+    "lblSettingsDeviceFirmwareMain1" : "Firmware Update durchf%FChren",
     "lblSettingsDeviceFirmware0" : "%DCbersicht installierter Ger%E4te-Firmware-Dateien",
     "lblSettingsDeviceFirmware1" : "Ger%E4te-Firmware hinzuf%FCgen",
-    "lblSettingsDeviceFirmware2" : "Ger%E4te-Firmware enfernen",
+    "lblSettingsDeviceFirmware2" : "Ger%E4te-Firmware entfernen",
     "lblSettingsDeviceFirmware3" : "Changelog der Ger%E4te-Firmware betrachten",
     "hintDevFwAlreadyUploaded" : "" +
       "Die aktuellste Firmware des Ger%E4tes befindet sich bereits auf der " + HMIdentifier.de.CCUShortName + ".\n"+
@@ -713,6 +756,7 @@ jQuery.extend(true,langJSON, {
     "optionUnit1D" : "1 Tag",
     "optionUnit7D" : "7 Tage",
     "optionUnit14D" : "14 Tage",
+    "optionUnit24D" : "24 Tage",
     "optionUnit28D" : "28 Tage",
     "optionUnit30D" : "30 Tage",
     "optionUnit10MS" : "10ms",
@@ -734,8 +778,10 @@ jQuery.extend(true,langJSON, {
     "optionUnit45S" : "45 Sekunden",
     "optionUnit60S" : "60 Sekunden",
     "optionUnit90S" : "90 Sekunden",
+    "optionUnit105S" : "105 Sekunden",
     "optionUnit1M": "1 Minute",
     "optionUnit2M": "2 Minuten",
+    "optionUnit3M": "3 Minuten",
     "optionUnit4M": "4 Minuten",
     "optionUnit5M": "5 Minuten",
     "optionUnit6M": "6 Minuten",
@@ -758,10 +804,19 @@ jQuery.extend(true,langJSON, {
     "optionUnit8H" : "8 Stunden",
     "optionUnit12H" : "12 Stunden",
     "optionUnit24H" : "24 Stunden",
+    "optionUnit10SShort" : "10 s",
+    "optionUnit30SShort" : "30 s",
+    "optionUnit1MShort" : "1 min",
+    "optionUnit5MSShort" : "5 min",
+    "optionUnit10MShort" : "10 min",
+    "optionUnit30MShort" : "30 min",
+
     "optionOnWithDelay" : "Ein mit Einschaltverz%F6gerung",
     "optionOnWithoutDelay" : "Ein ohne Einschaltverz%F6gerung",
     "optionInactiv" : "Inaktiv",
     "optionActiv" : "Aktiv",
+    "optionNoRepetition" : "Keine Wiederholung",
+    "optionInfiniteRepetition" : "Dauerhaft",
     "optionNormalLength" : "Normale L&auml;nge",
     "optionFileLength" : "Dateil%E4nge",
     "optionSetLength" : "L&auml;nge angeben",
@@ -771,6 +826,8 @@ jQuery.extend(true,langJSON, {
     "optionPassageCounterDeltaLR" : "Differenz der Durchg%E4nge links/rechts",
     "optionPassageCounterDeltaL" : "Differenz der Durchg%E4nge links",
     "optionPassageCounterDeltaR" : "Differenz der Durchg%E4nge rechts",
+    "optionRingMode" : "Ringtopologie",
+    "optionTwoSeparateBusSystems" : "Zwei getrennte Busstr%E4nge",
     "lblDeviceFwPerformUpdate" : "Das Update des Ger%E4tes wird durchgef%FChrt",
     "lblDeviceFwDeliverFwImage" : "Die Updatedatei wird zum Ger%E4t %FCbertragen",
     "lblGenericLinkPartner" : "Verkn%FCpfungspartner",
@@ -828,10 +885,25 @@ jQuery.extend(true,langJSON, {
     "controlChannelHasNoFunction" : "Der Kanal hat hier keine Funktion",
     "weeklyProfileLbl" : "Wochenprofil",
     "_tooltipHmIPDeliverFirmwareImage" : "* old Version * Das %DCbertragen der Updatedatei zum Ger%E4t geschieht<br/>im Hintergrund und nimmt erhebliche Zeit in Anspruch.<br/><br/>Nachdem die Datei erfolgreich %FCbertragen wurde,<br/>erscheint hier der Update-Button, mit dem Sie die<br/>Ger%E4tefirmware dann aktualisieren k%F6nnen.",
+
     "tooltipHmIPDeliverFirmwareImage" :
         "Beachten Sie, dass neue Firmware-Dateien f%FCr Homematic IP Ger%E4te im Hintergrund %FCbertragen werden.<br/>" +
         "Dieser Vorgang kann je nach Ger%E4t zwischen 8 und 42 Stunden dauern.<br/>" +
         "Sobald die Firmware-Dateien %FCbertragen wurden, erscheint hier der Update-Button, um das Ger%E4teupdate durchzuf%FChren.",
+
+    "tooltipHmIPDeliverFirmwareImageA" :
+        "Beachten Sie, dass neue Firmware-Dateien f%FCr Homematic IP Ger%E4te im Hintergrund %FCbertragen werden.<br/>" +
+        "Dieser Vorgang kann je nach Ger%E4t zwischen 8 und 42 Stunden dauern.<br/>",
+
+    "tooltipHmIPWDeliverFirmwareImage" :
+        "Beachten Sie, dass neue Firmware-Dateien f%FCr Homematic IP Ger%E4te im Hintergrund %FCbertragen werden.<br/>" +
+        "Dieser Vorgang kann je nach Ger%E4t zwischen 15 und 30 Minuten dauern.<br/>" +
+        "Sobald die Firmware-Dateien %FCbertragen wurden, erscheint hier der Update-Button, um das Ger%E4teupdate durchzuf%FChren.",
+
+    "tooltipHmIPWDeliverFirmwareImageA" :
+        "Beachten Sie, dass neue Firmware-Dateien f%FCr Homematic IP Ger%E4te im Hintergrund %FCbertragen werden.<br/>" +
+        "Dieser Vorgang kann je nach Ger%E4t zwischen 15 und 30 Minuten dauern.<br/>" ,
+
     "selectFlashSequence" : "Wahl der Blinkfolge",
     "stringTableButtonLock" : "Lokale Bediensperre",
     "stringTableGlobalButtonLock" : "Globale Bediensperre",
@@ -928,6 +1000,7 @@ jQuery.extend(true,langJSON, {
     "lblIPAddress" :  "IP-Adresse",
     "enterIPAddress" :  "Manuelle IP-Eingabe",
     "invalidIP" : "Ung%FCltige IP-Adresse",
+    "invalidNetMask" : "Ung%FCltige Subnetmaske",
     "btnScanGateway" :  "Suche Gateway",
     "btnScanDevices" :  "Suche Ger%E4te",
     "timeoutAddNewDevices" : "Timeout addNewDevices",
@@ -1032,6 +1105,7 @@ jQuery.extend(true,langJSON, {
 
     "lblPassageDetectorNoParams" : "Es sind keine Parameter vorhanden.<br/>Zur Statusanzeige bitte Kanal 2 verwenden.",
 
+    "lblExternal" : "Extern",
     "lblNormal" : "Normal",
     "lblOverflow" : "%DCberlauf",
     "lblUnderflow" : "Unterlauf",
@@ -1049,6 +1123,7 @@ jQuery.extend(true,langJSON, {
 
 
     "colorBLACK" : "Farbe Aus",
+    "colorBLACK_A" : "Schwarz",
     "colorBLUE" : "Blau",
     "colorGREEN" : "Gr%FCn",
     "colorTURQUOISE" : "T%FCrkis",
@@ -1059,7 +1134,7 @@ jQuery.extend(true,langJSON, {
     "colorStateNormal" : "Farbstatus normal",
     "colorStateUnknown" : "Farbstatus unbekannt",
 
-    "lblPressSystemButton" : "Bitte bet%E4tigen Sie die System-Taste und bringen das Ger%E4t in Funkreichweite.",
+    "lblPressSystemButton" : "Bitte bet%E4tigen Sie die Bedientaste und bringen das Ger%E4t in Funkreichweite.",
 
     "btnAccessPointSettings" : "Homematic IP<br/>Access Points",
     "lblAccessPointSettings1" : "Verwaltung der Homematic IPAccess Points",
@@ -1103,16 +1178,16 @@ jQuery.extend(true,langJSON, {
 
     "AccessPointAssignmentFailedNotKnown" : "Der Access Point konnte nicht hinzugef%FCgt werden. F%FChren Sie die Suche erneut durch.",
     "AccessPointAssignmentFailedPassphraseCouldNotChecked" : "Die Konfiguration des Access Points konnte nicht abgefragt werden. Kontrollieren Sie die Verbindung und versuchen es erneut.",
-    "AccessPointAssignmentFailedPassphraseInvalidValue" : "Das Passwort des Access Points ist ungültig.",
+    "AccessPointAssignmentFailedPassphraseInvalidValue" : "Das Passwort des Access Points ist ung%FCltig.",
     "AccessPointAssignmentGetConfigurationParameterDescription" : "Die Konfiguration des Access Points konnte nicht abgefragt werden. Kontrollieren Sie die Verbindung und versuchen es erneut.",
     "AccessPointAssignmentGetConfigurationParameter" : "Die Konfiguration des Access Points konnte nicht abgefragt werden. Kontrollieren Sie die Verbindung und versuchen es erneut.",
     "AccessPointAssignmentConfigurationParameterNotSupported" : "Die Firmware Ihres Access Points unterst%FCtzt diese Funktion nicht. Aktualisieren Sie die Firmware auf die neuste Version.",
     "AccessPointAssignmentConfigurationParameterCouldNotBeSaved" : "Die Konfiguration des Access Points konnte nicht gespeichert werden. Kontrollieren Sie die Verbindung und versuchen Sie es erneut.",
-    "AccessPointAssignmentNotFinished" : "Die Verbindung wird hergestellt.",
+    "AccessPointAssignmentNotFinished" : "Die Verbindung konnte nicht erfolgreich erstellt werden.",
     "AccessPointAssignmentInProgress" : "Die Verbindung wird hergestellt.",
     "accessPointPrimaryNotKnown" : "Der interne Access Point konnte nicht gefunden werden. Pr%FCfen Sie die Konfiguration der Zentrale.",
     "accessPointNotKnown" : "Der Access Point konnte nicht gefunden werden. Aktualisieren Sie die Liste und f%FChren die Aktion erneut durch.",
-    "accessPointLocalKeyNotSupported" : "Die Konfiguration der Zentrale ist nicht im Offlinebetrieb möglich. Deaktivieren Sie diese Funktion.",
+    "accessPointLocalKeyNotSupported" : "Die Konfiguration der Zentrale ist nicht im Offlinebetrieb m%F6glich. Deaktivieren Sie diese Funktion.",
     "AccessPointAssignmentFinished" : "Der Access Point wurde zum LAN-Router umkonfiguriert und sollte jetzt t%FCrkis leuchten.",
     "accessPointDeleteHint" : "Wollen Sie den Access Point wirklich aus dem System entfernen? " +
       "Sollte im System kein Access Point mehr vorhanden sein, k%F6nnen die entsprechenden Ger%E4te nicht vollst%E4ndig verwendet werden, bis wieder ein Access Point hinzugef%FCgt wurde.",
@@ -1121,7 +1196,7 @@ jQuery.extend(true,langJSON, {
     "AccessPointDeletionFailedPassphraseInvalidFormat" : "Das Passwort des Access Points ist nicht korrekt. Kontrollieren Sie die korrekte Eingabe des Passwortes. Bei Verwendung eines der folgenden Sonderzeichen, muss das Passwort %FCber NetFinder angepasst werden: <, >, ', \u0022, &amp;, $, ?, #, [, ], {, } oder \\",
     "AccessPointDeletionFailedNotKnown" : "Der Access Point konnte nicht gel%F6scht werden. Pr%FCfen Sie die Verbindung des Access Points oder erzwingen Sie das L%F6schen.",
     "AccessPointDeletionFailedPassphraseCouldNotChecked" : "Die Konfiguration des Access Points konnte nicht abgefragt werden. Kontrollieren Sie die Verbindung und versuchen es erneut.",
-    "AccessPointDeletionFailedPassphraseInvalidValue" : "Das Passwort des Access Points ist ungültig.",
+    "AccessPointDeletionFailedPassphraseInvalidValue" : "Das Passwort des Access Points ist ung%FCltig.",
     "AccessPointDeletionFailedFactoryReset" : "Der Werksreset des Access Points konnte nicht durchgef%FChrt werden. %FCberpr%FCfen Sie die Verbindung und versuchen Sie es erneut.",
     "AccessPointDeletionNotFinished" : "Konfiguration und Werksreset des Access Points wird durchgef%FChrt.",
     "AccessPointDeletionInProgress" : "Konfiguration und Werksreset des Access Points wird durchgef%FChrt.",
@@ -1163,7 +1238,7 @@ jQuery.extend(true,langJSON, {
     "backupBackupImperfectMissingFile" : "Backup fehlerhaft/unvollst%E4ndig (z. B. *.apkx Datei fehlt).",
     "backupNoInternet_KeyserverTimeout" : "Kein Internet / Keyserver Timeout.",
     "backupKeyServer_NAK" : "Zentrale dem Keyserver unbekannt.",
-    "backupErrorDevicePersistence_TypesNotCompatibel" : "Einlesen der Ger%E4te fehlgeschlagen (<br/>Gerätetypen nicht kompatibel).",
+    "backupErrorDevicePersistence_TypesNotCompatibel" : "Einlesen der Ger%E4te fehlgeschlagen!<br/>(Ger%E4tetypen nicht kompatibel).",
     "backupMigrationFailed" : "Unbekannter Fehler.",
     "backupCoProcessor_not_availabel" : "Es ist kein Coprozessor verf%FCgbar.",
     "backupCoProcessor_NotInitialized" : "Der Coprozessor kann nicht initialisiert werden.",
@@ -1175,6 +1250,253 @@ jQuery.extend(true,langJSON, {
 
     "lblSettingsUserAdministrationUser" : "Bearbeiten des eigenen Benutzerkontos mit %C4ndern des Kennwortes",
 
+    "dlgAdminPasswdHint1" :
+      "Bevor Sie Ihre CCU in Betrieb nehmen, vergeben Sie ein Administrator-Passwort. " +
+        "Merken Sie sich das Passwort gut und geben es nicht weiter!<br/><br/>" +
+        "Weitere Benutzer mit eingeschr%E4nkten Rechten k%F6nnen %FCber die Benutzerverwaltung der CCU eingerichtet werden.",
+
+    "dlgUserPasswdHint1" :
+      "Bevor Sie Ihre CCU in Betrieb nehmen, vergeben Sie bitte ein Passwort. " +
+        "Merken Sie sich das Passwort gut und geben es nicht weiter!<br/><br/>",
+
+    "showHelpSecurityHigh" : "<h1>H%F6chste Sicherheitsstufe</h1> <p><ul><li>Firewall Ports: Standardm%E4%DFig geschlossen (eingehende Verbindungen)</li></ul></p>",
+    "showHelpSecurityMid" : "<h1>Mittlere Sicherheitsstufe</h1> <p><ul><li>Firewall Ports: Standardm%E4%DFig geschlossen (eingehende Verbindungen)</li><li>Authentifizierung f%FCr Homematic XML-RPC API und Remote Homematic Script API: Aktiviert</li><li>Remote Zugriff auf Homematic XML-RPC API: Eingeschr%E4nkt</li><li>Remote Zugriff auf Homematic-Script API: Eingeschr%E4nkt</li></ul></p>",
+    "showHelpSecurityLow" : "<h1>Geringste Sicherheitsstufe</h1> <p><ul><li>Firewall Ports: Standardm%E4%DFig offen</li><li>Authentifizierung f%FCr Homematic XMLRPC-API und Remote Homematic Script API: Deaktiviert</li><li>Remote Zugriff auf Homematic XML-RPC API: Vollzugriff</li><li>Remote Zugriff auf Homematic Script API: Eingeschr%E4nkt</li></ul></p>",
+    "showHelpSecurityCustom": "<h1>Benutzerdefinierte Sicherheitsstufe</h1><p>Eine oder mehrere Einstellungen weichen von denen der Voreinstellungen der Sicherheitsstufen ab.<br>Wird &quot;Benutzerdefiniert&quot; hier beibehalten, werden keine Einstellungen ver%E4ndert.</p>",
+
+    "secLevelHigh" : "Maximal gesichert",
+    "secLevelMid" : "Restriktiv",
+    "secLevelLow" : "Relaxed",
+    "secLevelCustom" : "Benutzerdefiniert",
+    "secLevelHighCaptionA" : "Ich kenne mich gut damit aus, einzelne Dienste (wie z. B. Programmierschnittstellen) &uuml;ber die Sicherheitsoptionen der CCU einstellen zu k&ouml;nnen. In dieser Einstellung ist ausschlie%DFlich der Zugriff auf die Web Oberfl%E4che m%F6glich.",
+    "secLevelHighCaptionB" : "Bei dieser Sicherheitsstufe ist der Zugriff auf die Mediola-Software nicht verf%FCgbar. Sie k&ouml;nnen dies &uuml;ber die Firewall-Einstellungen der CCU anpassen.",
+    "secLevelMidCaption" : "Bei dieser Sicherheitsstufe ist der Zugriff auf Schnittstellen, Zusatzsoftware und die Mediola-Software verf%FCgbar. ",
+    "secLevelLowCaptionA" : "Ich kenne mich gut genug damit aus, die CCU gegen Zugriff Unbefugter sch&uuml;tzen zu k&ouml;nnen.",
+    "secLevelUserHint" : "Eine Sicherheitsstufe verhindert nicht das nachtr&auml;gliche %D6ffnen von z. B. Ports in der Firewall-Einstellung. Die Sicherheitsstufe springt dann z. B. von 'Maximal gesichert' auf 'Benutzerdefiniert'.",
+
+    "dialogSetSecurityLevelExpress"  : "Express",
+    "dialogSetSecurityLevelUserDefined"  : "Benutzerdefiniert",
+    "dlgSecurityLevelHeader" : "Sicherheitsstufe",
+    "noPasswdSet" : "Kein Passwort gesetzt!",
+    "passwdNotIdentical" : "Passw%F6rter nicht identisch!",
+
+    "adminPasswordTitle" : "<u>Administrator Passwort</u>",
+    "userPasswordTitle" : "<u>Benutzer Passwort</u>",
+    "portEnablingTitle" : "<b>Port-Freigabe:</b>",
+    "portEnablingCaption" : "Hier k%F6nnen ben%F6tigte Ports freigegeben werden. Geben Sie die Ports durch ein ';' getrennt ein.",
+
+    "securitySettingsTitle" : HMIdentifier.de.CCUShortName + " Sicherheitseinstellung",
+    "btnSecuritySettings" : "Sicherheits-<br/>Assistent",
+    "lblSecuritySettings1" : "Express",
+    "lblSecuritySettings2" : "Benutzerdefiniert",
+
+    "dialogSettingsFirewallLblFWPolicy" : "<b>Firewall-Richtlinie:</b>",
+    "dialogSettingsFirewallLblPortAccess" : "<b>Port Zugriff:</b>",
+    "dialogSettingsFirewallLblPortsRestricted" : "Ports blockiert",
+    "dialogSettingsFirewallLblPortsOpen" : "Ports offen",
+    "dialogSettingsFirewallLblHintPortAccess" : "Zugriffseinstellungen der Ports",
+
+    "lblSetting" : "Einstellung",
+
+    "dialogSettingsFirewallLblMediola" : "<b>Mediola-Zugriff:</b>",
+    "dialogSettingsFirewallLblHintMediola" : "Erm%F6glicht den Zugriff auf den Mediola-Service",
+
+    "toolTipFirewallAccessModes" : "<ul>" +
+      "<li>Vollzugriff: Remote und lokaler Zugriff erlaubt</li>" +
+      "<li>Eingeschr%E4nkt: Nur lokaler Zugriff erlaubt</li>" +
+      "<li>Kein Zugriff: Zugriff nicht gestattet</li>" +
+    "<ul>",
+
+    "dialogSettingsFirewallLblHintIPAddresses" : "Sie k%F6nnen den Zugriff f%FCr einzelne IP-Adressen oder ganze Adressbereiche sowohl f%FCr IPv4 als auch f%FCr IPv6 freigeben. Geben Sie die Adressen durch ein ';' getrennt ein.",
+    "dialogSettingsFirewallLblHintIPAddressesWithoutIPv6" : "Sie k%F6nnen den Zugriff f%FCr einzelne IP-Adressen (z. B. 192.168.0.1) oder ganze Adressbereiche (z. B. 192.168.0.0/16) f%FCr IPv4 freigeben. Geben Sie die Adressen durch ein ';' getrennt ein.",
+
+    "dglUserNewFwSettingsTitle" : "Bitte beachten!",
+    "dglUserNewFwSettingsContent" : "Die Firewalleinstellungen wurden ge%E4ndert. Bei Problemen, z. B. mit Zusatzsoftware, wenden Sie sich bitte an den Administrator.",
+
+    "stringTableContactBoost" : "Korrosionsschutz",
+    "lblJalousieBlind" : "Betriebsmodus Jalousie / Rolllade",
+    "optionBlind" : "Jalousie",
+    "optionShutter" : "Rolllade",
+     "hintBlindModeChanged" : "%DCbertragen Sie die Konfiguration, bevor Sie fortfahren.",
+
+    "dialogSettingsStorageTitleLEDS" : "Info-LED",
+    "dialogSettingsStorageSettingsLblServiceLed" : "Servicemeldungen:",
+    "dialogSettingsStorageSettingsLblAlarmLed" : "Alarmmeldungen:",
+    "dialogSettingsStorageHintLEDS" : "Ein- bzw. Ausschalten des Blinkens der Info-LED bei Service- und Alarmmeldungen",
+
+    "HmIPWPSlatPosHelpTitle" : "Hinweis zur Lamellenposition",
+    "HmIPWPSlatPosHelp" : "Bitte beachten Sie, dass die Lamellenposition nur f%FCr Jalousieaktoren und nicht f%FCr Rollladenaktoren genutzt werden kann.",
+
+    "dialogSettingsSecurityTDSNMP" : "SNMP",
+    "dialogSettingsSecurityLblActivateSNMP" : "SNMP aktiv:",
+    "dialogSettingsSecurityTDSNMPExplanation" : "Bei Aktivierung ist der SNMP Dienst aktiv. Unterst%FCtzt wird ausschlie%DFlich SNMPv3 mit SHA und AES.",
+    "dialogSettingsSecurityPasswordHint" : "Bitte beachten Sie, dass das Passwort mindestens 8 Zeichen lang sein muss.",
+    "dialogSettingsSecurityUserHint" : "Bitte geben Sie einen Benutzernamen ein.",
+
+    "hintWiredBlindLinksAvailable" : "Achtung: Es bestehen Verkn%Fcpfungen. Der Betriebsmodus kann daher nicht ge%E4ndert werden.",
+    "hintWiredBlindProgramsAvailable" : "Achtung: Es bestehen Programme. Der Betriebsmodus kann daher nicht ge%E4ndert werden.",
+    "hintWiredBlindLinksAndProgramsAvailable" : "Achtung: Es bestehen Verkn%FCpfungen und Programme. Der Betriebsmodus kann daher nicht ge%E4ndert werden.",
+    "hintCheckChannels" : "<br/>Pr%FCfen Sie bitte folgende Kan%E4le: ",
+
+    "lblSoundFileNr" : "MP3-Datei",
+    "lblColorNr" : "Farbe",
+    "lblColorSongNr" : "MP3-Datei<br/>Farbe",
+    "internalSystemSound" : "Interner Sound",
+    "randomPlayback" : "Zufallswiedergabe",
+    "soundOldValue" : "Zuletzt gespielte MP3-Datei",
+    "colorOldValue" : "Zuletzt gew%E4hlte Farbe",
+    "soundColorOldValue" : "MP3-Datei/Farbe = letzter Wert",
+    "soundColorRandomPlayback" : "MP3-Datei/Farbe = Zufallswiedergabe",
+    "soundColorInternal" : "Interner Sound/keine Farbe",
+    "hintSoundFileRandom20" : "Zuf%E4llige Wiedergabe einer der ersten 20 MP3-Dateien.",
+
+    "***"  : "***",
+
+    "checkSmokeDetectorSelfTest" : "Bitte vergewissern Sie sich, dass der Rauchmelder korrekt arbeitet, indem Sie einen Selbsttest durch Druck auf die Bedientaste durchf%FChren!",
+    "hintActivateDetectorSelfTest" : "Das Firmware-Update wurde erfolgreich aufgespielt. ",
+    "hintReInclusionDetectorFailed" : "Beim Firmware-Update ist ein Problem aufgetreten.  ",
+
+    "lblRename" : "Umbenennen",
+    "askRenameAllChannels" : "Standard-Kanalnamen automatisiert vergeben?",
+    "lblDeviceName" : "Ger%E4tename",
+    "lblChannelNames" : "Vorschau Kanalnamen",
+
+    "dialogFirmwareUpdateUnknownError" : "Es ist ein unbekannter Fehler aufgetreten<br/><br/>Bitte %FCberpr%FCfen Sie, ob das Ger%E4t erreichbar ist.",
+
+    "lblHmIPWIdentification" : "Identifizierung",
+    "lbDisplayBacklight" : "Beleuchtung<br/>Display",
+    "lblLightingKeyVisual" : "Beleuchtung<br/>Systemtaste",
+
+    "helpAccessPointOffline" :
+      "F%FCr die <u>Inbetriebnahme</u> des Homematic IP Access Points wird eine Internetverbindung ben%F6tigt.<br/><br/>" +
+      "Nach erfolgreicher Inbetriebnahme (die Systemtaste leuchtet t%FCrkis), kann der Offlinebetrieb genutzt werden. " +
+      "F%FCr den weiteren Betrieb wird nun keine Internetverbindung mehr ben%F6tigt.<br/><br/>" +
+      "Wenn Sie den Offlinebetrieb nutzen und weitere Wired Ger%E4te anlernen m%F6chten, verwenden Sie im Anlerndialog das Feld <b>" + langJSON.de.dialogNewDevicesHmIPWithoutInternet +"</b>" +
+      "Geben Sie den KEY und die SGTIN des Ger%E4teaufklebers ein.",
+
+    "drapMaxCurrentBus" : "Maximale Stromaufnahme<br/>des Bus",
+
+    "drapHelpMaxCurrentBus" :
+      "Dieser Wert muss in Abh%E4ngigkeit des verwendeten Netzteils konfiguriert werden. " +
+      "Der Wert richtet sich nach dem Ausgangsstrom des verwendeten Netzteils. Dies ist f%FCr einen reibungslosen Start des Bussystem erforderlich.",
+
+    "drapBusConfig" : "Buskonfiguration",
+    "drapHelpBusConfig" : "W%E4hlen Sie hier die von Ihnen installierte Bustopologie aus.",
+
+    "AccessPointConfigurationFinished" : "Die Einstellungen wurden erfolgreich %FCbernommen.",
+    "dialogMigrationRCV50Title" : langJSON.de.dialogHint,
+    "dialogMigrationRCV50" : "Ab diesem Release ist es erstmals m%F6glich, auch f%FCr Homematic IP 50 virtuelle Fernbedienungskan%E4le zu nutzen.<br/><br/>" +
+    "Damit diese vollumf%E4nglich genutzt werden k%F6nnen, m%FCssen angelernte Homematic IP Sensoren, welche in Programmen eingebunden sind, umkonfiguriert werden. " +
+    "Diese Konfiguration wird automatisch im Hintergrund durchgef%FChrt und durch entsprechende Service-Mitteilungen (\"Konfigurationsdaten stehen zur %DCbertragung an\") angezeigt. " +
+    "Bitte nutzen sie die virtuellen Fernbedienungskan%E4le erst, nachdem die Konfigurationsdaten %FCbertragen wurden. " +
+    "Bestehende Programme und Verkn%FCpfungen werden von den %C4nderungen nicht beeinflusst.",
+    "btnAccessPointConfig" : "Konfiguration",
+    "lblQueryConfig" : "Konfiguration abfragen",
+    "lblSetConfig" : "Konfiguration speichern",
+    "lblConfigNotChanged" : "Es wurde keine %C4nderung an der Konfiguration vorgenommen.",
+
+    "configureDisplay" : "Display-Konfiguration",
+    "resetDisplay" : "Display-Reset",
+    "resetDevice" : "Ger%E4te-Reset",
+
+    "hintLinkParamOnOffNotActive" : "Hinweis!<br/><br/>Die Parameter Ein- und Ausschaltdauer d%FCrfen nicht gemeinsam auf 'Nicht aktiv' gestellt werden.",
+
+    "dialogHelpAcousticDisplayReceiverTitle" : "Hinweis zur Texteingabe",
+    "dialogHelpAcousticDisplayReceiverContent" :
+      "Abh%E4ngig von der Zeichenbreite (ein 'I' nimmt z. B. weniger Platz ein, als ein 'W'), k%F6nnen bis zu 15 Zeichen in einer Zeile dargestellt werden.<br/><br/>" +
+      "Um eine Textzeile zu l%F6schen, geben Sie f%FCr die Zeile bitte ein Leerzeichen ein.<br/><br/>" +
+      "Da nur ein eingeschr%E4nkter Zeichensatz zur Verf%FCgung steht, k%F6nnen einige Zeichen nicht verwendet werden " +
+      "und werden durch andere Zeichen ausgetauscht.<br/><br/>" +
+        "<table style=\"margin-left:auto; margin-right:auto\">" +
+        "<tr><th align='center'>Zeichen</th><th align='center'>ersetzt durch</th></tr>" +
+        "<tr><td  style='text-align:center;'><span>[</span></td><td  style='text-align:center;'><span>%C4</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span>#</span></td><td  style='text-align:center;'><span>%D6</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span>$</span></td><td  style='text-align:center;'><span>%DC</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span>{</span></td><td  style='text-align:center;'><span>%E4</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span>|</span></td><td  style='text-align:center;'><span>%F6</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span>}</span></td><td  style='text-align:center;'><span>%FC</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span>_</span></td><td  style='text-align:center;'><span>%DF</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span>]</span></td><td  style='text-align:center;'><span>&</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span>'</span></td><td  style='text-align:center;'><span>=</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span> ; </span></td><td  style='text-align:center;'><span>Sanduhr</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span> < </span></td><td  style='text-align:center;'><span>Pfeil nach unten</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span> = </span></td><td  style='text-align:center;'><span>Pfeil nach oben</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span> > </span></td><td  style='text-align:center;'><span>Pfeil nach oben rechts</span></td></tr>" +
+        "<tr><td  style='text-align:center;'><span> @ </span></td><td  style='text-align:center;'><span>Pfeil nach unten rechts</span></td></tr>" +
+        "</table>",
+
+    "lblVibration" : "Ersch%FCtterung",
+    "lblPosition" : "Lage",
+    "lblHorizontal" : "Waagerecht",
+    "lblVertical" : "Senkrecht",
+    "lblNonHorizontal" : "Geneigt",
+    "lblYes" : "Ja",
+    "lblNo" : "Nein",
+
+    "setAllHmIPDevices" :
+       "Soll diese Position auf die entsprechenden HmIP-Ger%E4te %FCbertragen werden?\n\n"  +
+         "Bedenken Sie, dass es dann wegen des erh%F6hten Funkaufkommens eventuell zu Kommunikationsst%F6rungen kommen kann.",
+     "dialogSettingsTimePositionMessageSetPositionSucceedIncludingAllDevices" :
+       "Positionsangabe wurde gespeichert.<br/><br/>" +
+         "Die Standortdaten der enstprechenden HmIP-Ger%E4te werden angepasst.",
+     "lblDutyCycleBidCosRF" : "Duty Cycle BidCos:",
+     "lblDutyCycleHmIP" : "Duty Cycle HmIP: ",
+     "lblDutyCycle" : "Duty Cycle CCU: ",
+     "lblDutyCycleA" : "Duty Cycle CCU",
+     "PowerMeterProtocolModeModeOptionSML" : "SML-Protokoll",
+     "lblRepetitions" : "Wiederholungen",
+     "optionRepetition" : "Wiederholung",
+     "optionRepetitions" : "Wiederholungen",
+     "lblSoundfileList" : "Titel",
+     "btnChooseSongs"  : "Titelauswahl",
+     "lblPlaylist" : "Wiedergabeliste",
+     "drapFwNotCompatWithCCUFW" : "Die Accesspoint-Firmware ist nicht kompatibel mit der CCU.\n\nBitte aktualisieren Sie Ihre CCU!",
+     "lblBrightnessLuxA" : "Helligkeit in Lux",
+     "lblBrightnessLuxB" : "eingeben und %FCbernehmen",
+     "hintInternalLinkExists" :
+       "Bei %C4nderung des Kanalverhaltens, sollte die interne Verkn%FCpfung des Ger%E4tes gel%F6scht und neu erstellt werden.<br/>" +
+       "Andernfalls wird die interne Verkn%FCpfung sich nicht mehr erwartungsgem%E4%DF verhalten.",
+     "hintDevFwUpdateDCHigh" :
+       "<b><span class='attention'>Achtung: Der Duty Cycle der "+HMIdentifier.de.CCUShortName+" ist derzeit sehr hoch!</span></b><br/><br/>" +
+       "Ein Ger%E4tefirmwareupdate ist daher im Moment nicht m%F6glich.<br/><br/>"+
+       "Warten Sie, bis der Duty Cycle unter 80% gesunken ist und versuchen Sie es dann erneut.",
+     "lblSelectTargetChannels" : "Zielkan%E4le<br /> w%E4hlen",
+     "btnSelect1stVirTargetChannels" : "1. Virt",
+     "btnSelectAllTargetChannels" : "Alle",
+     "btnSelectNoTargetChannels" : "Keine",
+     "hintWeeklyProgramActiveExpertChannel" :
+       "Der Expertenmodus ist nicht aktiv. Da jedoch bei mindestens einem Schaltzeitpunkt zumindest ein Experten-Zielkanal aktiviert ist, " +
+       "werden die Zielkan%E4le dennoch im Expertenmodus dargestellt.",
+     "helpBlindParamLevel2" :
+       "Damit eine %C4nderung der Lamellenposition an dieser Stelle wirksam wird, muss <u>zus%E4tzlich</u> als zweiter Parameter die Behangh%F6he festgelegt werden.<br/><br/>" +
+       "M%F6chten Sie nur die Lamellenposition %E4ndern, verwenden Sie den Parameter Kanalaktion und w%E4hlen f%FCr die Behangh%F6he den Wert 'Ignorieren'.",
+     "alertUsernameForbiddenChars" : "Der Benutzername darf kein Leerzeichen enthalten.",
+     "addFirmwareFailedMinCCUVersion" : "Dieses Ger%E4te-Firmware Update wird von der Firmware Ihrer CCU nicht unterst%FCtzt. Bitte aktualisieren Sie zun%E4chst Ihre CCU Firmware.",
+     "lblStopRunningLink" : "Alte Sendevorg%E4nge<br/>dieser Tasten abbrechen",
+     "addFirmwareFailedNotValidatable" : "Die Kompatibil%E4t dieses Ger%E4te-Firmware Updates kann nicht %FCberpr%FCft werden. Bitte laden Sie die Firmware erneut herunter und versuchen sie noch einmal.",
+     "hintVirtualChannelChanged" : "Achtung! Wichtiger Hinweis!",
+     "hintVirtualChannelChangedMsg" :
+       "Im vereinfachten Modus wird der Kanal mittels des 1. virtuellen Kanal geschaltet. Der  2. und 3. virtuelle Kanal wird nicht angezeigt. Wenn diese nicht dem Default-Zustand entsprechen, " +
+       "entspricht der in der WebUI angezeigte Status unter Umst%E4nden nicht dem tats%E4chlichen Wert. Das scheint hier der Fall zu sein.<br/><br/>" +
+       "Sie k%F6nnen das %FCberpr%FCfen, indem Sie in der Benutzerverwaltung die vereinfachte Verkn%FCpfungskonfiguration deaktivieren und anschlie%DFend hierher zur%FCckkommen. ",
+     "lblLowBattery" : "Batterie leer",
+     "lblDisarmed" : "Alarm aus",
+     "lblExternallyArmed" : "Externer Alarm aktiviert",
+     "lblInternallyArmed" : "Interner Alarm aktiviert",
+     "lblDelayExternalArming" : "Externer Alarm verz%F6gert aktiviert",
+     "lblDelayInternalArming" : "Interner Alarm verz%F6gert aktiviert",
+     "lblEvent" : "Event",
+     "dlgLoadLicense" : "Laden der Lizenz",
+     "dlgErrorLoadLicense" : "Die Software-Lizenz kann nicht geladen werden. Pr%FCfen Sie bitte die Internetverbindung der CCU.",
+     "rotationDirLeftFast" : "Schnelles Drehen nach links",
+     "rotationDirRightFast" : "Schnelles Drehen nach rechts",
+     "rotationDirLeftSlow" : "Langsames Drehen nach links",
+     "rotationDirRightSlow" : "Langsames Drehen nach rechts",
+     "rainDetectorSampleInterval" : "Zeitspanne zwischen den einzelnen Messungen<br/>(Regenerkennungsintervall)",
+
     "theEnd" : ""
   }
 });
+
+langJSON.de.hintActivateDetectorSelfTest += langJSON.de.checkSmokeDetectorSelfTest;
+langJSON.de.hintReInclusionDetectorFailed += langJSON.de.checkSmokeDetectorSelfTest;

@@ -131,28 +131,28 @@
  </script>
  <table id="tblServices" class="filterTable tTable CLASS02601" border="0" cellpadding="0" cellspacing="0" style="display:none;">
 +<colgroup>
-+  <col width="auto">
-+  <col width="auto">
-+  <col width="auto">
-+  <col width="55px">
-+  <col width="auto">
-+  <col width="auto">
-+  <col width="auto">
-+  <col width="auto">
-+  <col width="auto">
-+  <col width="100px">
++  <col style="width: auto;">
++  <col style="width: auto;">
++  <col style="width: auto;">
++  <col style="width: 55px;">
++  <col style="width: auto;">
++  <col style="width: auto;">
++  <col style="width: auto;">
++  <col style="width: auto;">
++  <col style="width: auto;">
++  <col style="width: 100px;">
 +</colgroup>
  <tr>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="first"){sCssName="SortSelected";} %>
 -  <th class="CLASS02602"><div id="_first" class="_pt11 <%Write(sCssName);%>" style="height:auto;" onclick="IseSort(arServices,'first',true);">${thFirstMessageDateTime}</div></th>
 -  <th align="center" valign="middle">${thLastMessageDateTime}</th>
 +  <th class="thCell CLASS02603"><div id="_first" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'first',true);">${thFirstMessageDateTime}</div></th>
-+  <th class="thCell CLASS02603" align="center" valign="middle">${thLastMessageDateTime}</th>
++  <th class="thCell CLASS02603" style='text-align:center; vertical-align: middle;'>${thLastMessageDateTime}</th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
 -  <th class="CLASS02602"><div id="name" class="pt11 <%Write(sCssName);%> " onclick="IseSort(arServices,'name',true);">${thName}</div></th>
 -  <th align="center" valign="middle"><div class="pt11 Sort">${thPicture}</div></th>
 +  <th class="thCell CLASS02603"><div id="name" class="pt11 <%Write(sCssName);%> " onclick="IseSort(arServices,'name',true);">${thName}</div></th>
-+  <th class="thCell CLASS02603" align="center" valign="middle"><div>${thPicture}</div></th>
++  <th class="thCell CLASS02603" style='text-align:center; vertical-align: middle;'><div>${thPicture}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="sn"){sCssName="SortSelected";} %>
 -  <th class="CLASS02602"><div id="sn" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'sn',true);">${thSerialNumber}</div></th>
 +  <th class="thCell CLASS02603"><div id="sn" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'sn',true);">${thSerialNumber}</div></th>
@@ -163,20 +163,20 @@
 -  <th class="CLASS02602"><div id="room" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'room',true);">${thRoom}</div></th>
 -  <th align="center" valign="middle">${thLastChange}</th>
 +  <th class="thCell CLASS02603"><div id="room" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'room',true);">${thRoom}</div></th>
-+  <th class="thCell CLASS02603" align="center" valign="middle">${thLastChange}</th>
++  <th class="thCell CLASS02603" style='text-align:center; vertical-align: middle;'>${thLastChange}</th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="desc"){sCssName="SortSelected";} %>
 -  <th class="CLASS02602"><div id="desc" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'desc',true);">${thServiceMessage}</div></th>
 -  <th align="center" valign="middle"><div class="pt11 Sort">${thAction}</div></th>
 +  <th class="thCell CLASS02603"><div id="desc" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'desc',true);">${thServiceMessage}</div></th>
-+  <th class="thCell CLASS02603" align="center" valign="middle"><div>${thAction}</div></th>
++  <th class="thCell CLASS02603" style='text-align:center; vertical-align: middle;'><div>${thAction}</div></th>
  </tr>
  <tr id="trFlt">
-   <td align="center" valign="middle" class="CLASS02603"></td>
-@@ -289,13 +301,13 @@
-             Write( '<td align="center" valign="middle" class="CLASS02605">'#sFirstTimestamp#'</td>' );
-             Write( '<td id="sla'#sAID#'" align="center" valign="middle" class="CLASS02605">'#sLastTimestamp#'</td>' );
-             Write( '<td id="n'#oAlarm.ID()#'" align="center" valign="middle" class="CLASS02606">'#sAlarmName#'</td>' );
--            Write( '<td align="center" valign="top" class="CLASS02607">');
+   <td style="text-align:center; vertical-align: middle;" class="CLASS02603"></td>
+@@ -294,13 +306,13 @@
+             Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02605">'#sFirstTimestamp#'</td>' );
+             Write( '<td id="sla'#sAID#'"  style="text-align:center; vertical-align: middle;" class="CLASS02605">'#sLastTimestamp#'</td>' );
+             Write( '<td id="n'#oAlarm.ID()#'"  style="text-align:center; vertical-align: middle;"class="CLASS02606">'#sAlarmName#'</td>' );
+-            Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02607; background-color:white;">');
 +            Write( '<td class="DeviceListThumbnail">');
              if (oLastTriggerChannel)
              {

@@ -1,4 +1,4 @@
-BUILDROOT_VERSION=2020.05.1
+BUILDROOT_VERSION=2020.05.2
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
 OCCU_VERSION=$(shell grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
@@ -58,7 +58,7 @@ release: build
 	cp -a build-$(PRODUCT)/images/sdcard.img ./release/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img
 	cd ./release && sha256sum RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img >RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img.sha256
 	rm -f ./release/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip
-	cd ./release && zip --junk-paths ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img.sha256 ../LICENSE ./updatepkg/$(PRODUCT)/EULA.*
+	cd ./release && zip --junk-paths ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img.sha256 ../LICENSE ./updatepkg/$(PRODUCT)/EULA.de ./updatepkg/$(PRODUCT)/EULA.en
 	cd ./release && sha256sum RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip >RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip.sha256
 
 updatePkg:

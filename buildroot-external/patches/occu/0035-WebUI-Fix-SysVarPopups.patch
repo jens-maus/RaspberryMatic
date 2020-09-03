@@ -65,12 +65,12 @@
 @@ -143,7 +143,7 @@
      Write("</td>");
      
-     Write("<td align='center' class='GrayBkg CLASS05206' >");
+     Write("<td  style='text-align:center;' class='GrayBkg CLASS05206' >");
 -      Write(sv.DPInfo());
 +      Write(sv.DPInfo().Replace('\r\n', '<br/>').Replace('\r', '<br/>').Replace('\n', '<br/>'));
      Write("</td>");
      
-     Write("<td align='center' class='GrayBkg CLASS05206' >");
+     Write("<td  style='text-align:center;' class='GrayBkg CLASS05206' >");
 @@ -258,7 +258,7 @@
        Write("tmp['id'] = '"#sv.ID()#"';");
        Write("tmp['unit'] = '"#sv.ValueUnit()#"';");

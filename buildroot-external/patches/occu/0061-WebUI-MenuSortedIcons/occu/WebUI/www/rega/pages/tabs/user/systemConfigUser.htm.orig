@@ -7,10 +7,10 @@
 
 <table class="StdTable" cellspacing="20">
   <colgroup>
-    <col width="25%" />
-    <col width="25%" />
-    <col width="25%" />
-    <col width="25%" />
+    <col style="width:25%;"/>
+    <col style="width:25%;"/>
+    <col style="width:25%;"/>
+    <col style="width:25%;"/>
   </colgroup>
   <tr class="CLASS06100">
     <!-- Favoriten -->

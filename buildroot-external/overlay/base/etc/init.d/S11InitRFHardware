@@ -200,7 +200,9 @@ init_rf_hardware() {
       # reset the GPIO rf module by switching its reset pin
       # and reset it to an input pin to get it floating again.
       if [[ -n "${HM_HOST_GPIO_RESET}" ]]; then
-        echo ${HM_HOST_GPIO_RESET} >/sys/class/gpio/export
+        if [[ ! -e /sys/class/gpio/gpio${HM_HOST_GPIO_RESET} ]]; then
+          echo ${HM_HOST_GPIO_RESET} >/sys/class/gpio/export
+        fi
         echo out >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/direction
         echo 0 >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/value
         sleep 0.1
@@ -293,6 +295,13 @@ query_rf_parameters() {
     RF_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
     RF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
     RF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+
+    # with copro firmware 4.2.6 the above command seem to return an error and omits the bidcos
+    # radio address completly. Thus, we use a second "-t -a" command to workaround this issue.
+    if [[ -z ${RF_ADDRESS} ]]; then
+      RF_INFO=$(/usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -t -a 2>&1)
+      RF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+    fi
 
     if [[ -n "${RF_ADDRESS}" ]] || [[ -n "${RF_SGTIN}" ]]; then
       # use the last 10 chars of the SGTIN as the serial number of the rf module

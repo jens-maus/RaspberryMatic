@@ -86,13 +86,13 @@ check process rngd with pidfile /var/run/rngd.pid
       exec "/bin/triggerAlarm.tcl 'rngd restarted' WatchDog-Alarm"
 
 # dbus daemon monitoring
-check process dbus with pidfile /var/run/messagebus.pid
+check process dbus with pidfile /run/messagebus.pid
     group system
     start = "/etc/init.d/S30dbus start"
     stop = "/etc/init.d/S30dbus stop"
     restart = "/etc/init.d/S30dbus restart"
     if not exist for 1 cycles then restart
-    if failed unixsocket /var/run/dbus/system_bus_socket for 5 cycles then restart
+    if failed unixsocket /run/dbus/system_bus_socket for 5 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'dbus restarted' WatchDog-Alarm"
 

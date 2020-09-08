@@ -25,10 +25,11 @@
                        }
                      }
                    }
-@@ -464,27 +464,7 @@
+@@ -463,28 +463,9 @@
+             }
            }
          }
-         table_data {align="left"} {class="CLASS20921"} {
+-        table_data {align="left"} {class="CLASS20921"} {
 -          puts "\${dialogSettingsCMHintSoftwareUpdate1}"
 -          number_list {class="j_noForcedUpdate"} {
 -            li {
@@ -50,6 +51,8 @@
 -          division {class="j_forcedUpdate" style="padding:10px;"} {
 -            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate2}"
 -          }
++        table_data {align="center"} {class="CLASS20921"} {
++          puts "<img src='/ise/img/rm-logo_small_gray.png' alt='RaspberryMatic'><br/>"
 +          puts "\${dialogSettingsCMHintSoftwareUpdateRaspMatic}"
          }
        }

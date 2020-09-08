@@ -1,7 +1,7 @@
 #!/bin/sh
 #
-# crRFD device check script v1.3
-# Copyright (c) 2019 Jens Maus <mail@jens-maus.de>
+# crRFD device check script v1.4
+# Copyright (c) 2019-2020 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# This script checks all *.dev,*.ap,*.apkx files in /etc/config/crRFD/data
+# This script checks all *.dev,*.ap,*.apkx,*.bbkx files in /etc/config/crRFD/data
 # and moves files to a backup directory for which the SGTIN cannot be found
 # in the homematic.regadom file of ReGaHss
 #
@@ -26,17 +26,24 @@
 # do not continue if /etc/config/crRFD/data does not exist
 [[ -d /etc/config/crRFD/data ]] || exit 1
 
+# soure /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# continue only if HM_HMIP_SGTIN is not empty
+[[ -n "${HM_HMIP_SGTIN}" ]] || exit 1
+
 # check for "-f" option to start fixing operation
 [[ "${1}" == "-f" ]] && FIX=1 || FIX=0
 
 # check if regadom contains HmIP-RCV already and if not we don't
-# move away any ap + apkx files
+# move away any ap,apkx,bbkx files
 if grep -q -m1 "<devlabel>HmIP-RCV-" /etc/config/homematic.regadom; then
-  FILE_PATTERN="[0-9A-F]{24}\.(dev|ap|apkx)$"
+  FILE_PATTERN="[0-9A-F]{24}\.(dev|ap|apkx|bbkx)$"
 else
   FILE_PATTERN="[0-9A-F]{24}\.dev$"
 fi
 
+OLDPATH=$(echo /etc/config/crRFD/data/old_$(date +'%Y%m%d-%H%M%S'))
 FILES=$(ls /etc/config/crRFD/data | egrep ${FILE_PATTERN} | cut -d. -f1 | uniq)
 for sgtin in ${FILES}; do
 
@@ -46,15 +53,21 @@ for sgtin in ${FILES}; do
     continue
   fi
 
+  # check if this SGTIN belongs to our currently active RF-module and
+  # if so we ignore it
+  if [[ ${HM_HMIP_SGTIN} == ${sgtin} ]]; then
+    continue
+  fi
+
   DEVADR=${sgtin:(-14)}
   if [[ -n "${DEVADR}" ]]; then
     grep -iq -m1 "<devadr>${DEVADR}" /etc/config/homematic.regadom
     if [[ $? -ne 0 ]]; then
       echo -n "WARNING: SGTIN ${DEVADR} not found in regadom"
       if [[ ${FIX} -eq 1 ]]; then
-        [[ -d /etc/config/crRFD/data/old ]] || mkdir -p /etc/config/crRFD/data/old
-        mv /etc/config/crRFD/data/${sgtin}.* /etc/config/crRFD/data/old/
-        echo "... moved ${sgtin}.* to /etc/config/crRFD/data/old/"
+        [[ -d ${OLDPATH} ]] || mkdir -p ${OLDPATH}
+        echo mv /etc/config/crRFD/data/${sgtin}.* ${OLDPATH}/
+        echo "... moved ${sgtin}.* to ${OLDPATH}/"
       else
         echo "."
       fi

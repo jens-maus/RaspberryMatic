@@ -16,7 +16,8 @@ endef
 define MULTILIB32_INSTALL_TARGET_CMDS
 	tar xvf $(@D)/output/images/rootfs.tar --transform='s/.\/lib\//lib32\//' -C $(TARGET_DIR)/ --wildcards --show-transformed-names "./lib/*.so*"
 	tar xvf $(@D)/output/images/rootfs.tar --transform='s/.\/usr\/lib\//usr\/lib32\//' -C $(TARGET_DIR)/ --wildcards --show-transformed-names "./usr/lib/*.so*"
-	echo "export LD_LIBRARY_PATH=/lib32:/usr/lib32:${LD_LIBRARY_PATH}" >$(TARGET_DIR)/etc/profile.d/multilib32.sh
+	mkdir -p $(TARGET_DIR)/etc/ld.so.conf.d
+	echo -e "/lib32\n/usr/lib32\n/usr/local/lib32" >$(TARGET_DIR)/etc/ld.so.conf.d/lib32.conf
 	ln -sf /lib32/ld-linux.so.2 $(TARGET_DIR)/lib/
 endef
 

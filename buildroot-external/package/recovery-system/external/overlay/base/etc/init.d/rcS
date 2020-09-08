@@ -3,8 +3,6 @@
 # Start all init scripts in /etc/init.d
 # executing them in numerical order.
 
-. /etc/profile
-
 # Parameters (default values)
 RECOVERY_SPLASHSCREEN_TITLE="CCU Recovery"
 

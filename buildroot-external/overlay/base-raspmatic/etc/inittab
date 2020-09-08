@@ -20,6 +20,8 @@ null::sysinit:/bin/mkdir -p /dev/shm
 tty2::sysinit:/sbin/fsck -A -R -p
 tty2::sysinit:/bin/mount -a
 tty2::sysinit:/bin/mkdir -p /var/run
+tty2::sysinit:/bin/mkdir -p /var/cache
+tty2::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
 null::sysinit:/bin/hostname -F /etc/hostname
 null::sysinit:/usr/bin/psplash -n &
 # now run any rc scripts

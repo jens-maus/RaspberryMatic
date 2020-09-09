@@ -355,7 +355,8 @@ query_rf_parameters() {
       RF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
       RF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
 
-      if echo "${RF_SGTIN}" | grep -q "3014f5ac94"; then
+      # lets identify the telekom version of the HMIP-RFUSB stick
+      if echo "${RF_SGTIN}" | grep -qi "3014f5ac94"; then
         HM_HMIP_DEV="HMIP-RFUSB-TK"
       fi
 

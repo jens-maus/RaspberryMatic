@@ -379,13 +379,6 @@ query_rf_parameters() {
       HMIP_VERSION=$(echo ${HMIP_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
       HMIP_ADDRESS=$(echo ${HMIP_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
 
-      # due to a bug in hmip-copro-update.jar we may have to run it twice to get a valid hmip rf address
-      # Thus, we use a second "-t -a" command to workaround this issue.
-      if ! echo ${HMIP_ADDRESS} | egrep -q '0x......'; then
-        HMIP_INFO=$(/usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -t -a 2>&1)
-        HMIP_ADDRESS=$(echo ${HMIP_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
-      fi
-
       # check if main info could be retrieved
       if [[ -n "${HMIP_ADDRESS}" ]] && [[ -n "${HMIP_SGTIN}" ]]; then
         # use the last 10 chars of the SGTIN as the serial number of the rf module

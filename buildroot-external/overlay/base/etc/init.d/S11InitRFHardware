@@ -234,9 +234,9 @@ query_rf_parameters() {
       HMRF_ADDRESS=$(/usr/bin/timeout 20 /bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
     fi
 
-    # if HMRF_ADDRESS is empty, 0x000000 or 0x..ffff this is either no HM-MOD-RPI-PCB
+    # if HMRF_ADDRESS is empty or 0x000000 this is either no HM-MOD-RPI-PCB
     # or it is a RPI-RF-MOD connected to a HB-RF-USB/HB-RF-USB-2
-    if [[ -n "${HMRF_ADDRESS}" ]] && ! echo ${HMRF_ADDRESS} | egrep -q '0x000000|0x..ffff'; then
+    if [[ -n "${HMRF_ADDRESS}" ]] && ! echo ${HMRF_ADDRESS} | grep -q '0x000000'; then
       HMIP_SGTIN=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -sg 2>&1 | sed -n 's/.*SGTIN: \([0-9A-Fa-f]\{24\}\).*/\1/p')
       HMRF_SERIAL=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
       HMRF_VERSION=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
@@ -278,7 +278,7 @@ query_rf_parameters() {
       # if we haven't identified a HM-MOD-RPI-PCB we try to find
       # a RPI-RF-MOD next
       if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-        if echo ${HMRF_ADDRESS} | egrep -q '0x000000|0x..ffff' || lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
+        if echo ${HMRF_ADDRESS} | grep -q '0x000000' || lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
           HM_HMRF_DEV="RPI-RF-MOD"
         else
           HM_HMRF_DEV=
@@ -289,7 +289,7 @@ query_rf_parameters() {
       fi
 
       if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-        if echo ${HMRF_ADDRESS} | egrep -q '0x000000|0x..ffff' || lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
+        if echo ${HMRF_ADDRESS} | grep -q '0x000000' || lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
           HM_HMIP_DEV="RPI-RF-MOD"
         else
           HM_HMIP_DEV=
@@ -324,12 +324,12 @@ query_rf_parameters() {
         HMRF_ADDRESS=$(/usr/bin/timeout 20 /bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
       fi
 
-      # if HMRF_ADDRESS is 0x000000 or 0x..ffff we have to check for a
+      # if HMRF_ADDRESS is 0x000000 we have to check for a
       # already retrieved BidCos RF-address from /etc/config/ids or
       # otherwise generate a new random one in the range of 0xFF0000
       # till 0xFFFFFE because this should be a range that no BidCos device
       # should have hardcoded.
-      if echo ${HMRF_ADDRESS} | egrep -q '0x000000|0x..ffff'; then
+      if echo ${HMRF_ADDRESS} | grep -q '0x000000'; then
         if [[ -f /etc/config/ids ]]; then
           HMRF_ADDRESS=$(grep -i BidCoS-Address /etc/config/ids | tr -d '[:space:]' | cut -d= -f2)
         else

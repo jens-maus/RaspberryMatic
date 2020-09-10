@@ -335,11 +335,6 @@ query_rf_parameters() {
         else
           HMRF_ADDRESS=
         fi
-
-        # as a fallback, generate a random BidCos rf-adress in the range of 0xFFFFFE-0xFF0000
-        if [[ -z "${HMRF_ADDRESS}" ]]; then
-          HMRF_ADDRESS=$(awk -v r=${RANDOM} 'BEGIN{srand(r);printf("0x%X", int(rand()*(0xFFFFFE-0xFF0000))+0xFF0000) }')
-        fi
       fi
 
       # use eq3configcmd to query the BidCos-RF serial number + version
@@ -347,7 +342,7 @@ query_rf_parameters() {
       HMRF_VERSION=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
 
       # check if main info could be retrieved
-      if [[ -n "${HMRF_ADDRESS}" ]] && [[ -n "${HMRF_SERIAL}" ]]; then
+      if [[ -n "${HMRF_VERSION}" ]] && [[ -n "${HMRF_SERIAL}" ]]; then
         HM_HMRF_SERIAL=${HMRF_SERIAL}
         HM_HMRF_VERSION=${HMRF_VERSION}
         HM_HMRF_ADDRESS=${HMRF_ADDRESS}
@@ -446,30 +441,44 @@ query_rf_parameters() {
   # make sure there is no /usr/local/.doCoproFactoryReset file anymore
   rm -f /usr/local/.doCoproFactoryReset
 
-  # save all info about the RF module
-  if [[ -n "${HM_HMRF_SERIAL}" ]]; then
-    echo "${HM_HMRF_SERIAL}" >/var/board_serial
-    echo "${HM_HMRF_VERSION}" >/var/rf_firmware_version
-    echo "${HM_HMRF_ADDRESS}" >/var/rf_address
-  elif [[ -n "${HM_HMIP_SERIAL}" ]]; then
-    echo "${HM_HMIP_SERIAL}" >/var/board_serial
-    echo "${HM_HMIP_VERSION}" >/var/rf_firmware_version
-    echo "${HM_HMIP_ADDRESS}" >/var/rf_address
-  else
-    echo "" >/var/board_serial
-    echo "" >/var/rf_firmware_version
-    echo "" >/var/rf_address
-  fi
-
-  if [[ -n "${HM_HMIP_SERIAL}" ]]; then
-    echo "${HM_HMIP_SERIAL}" >/var/hmip_board_serial
-    echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
-    echo "${HM_HMIP_ADDRESS}" >/var/hmip_address
+  # there are cases where the BidCos rf address might not be valid or known but in case
+  # BidCos-RF is enabled we have to generate a dedicated BidCos address
+  if [[ -n "${HM_HMRF_DEV}" ]] && [[ -z "${HM_HMRF_ADDRESS}" ]]; then
+    # first try to reuse the HmIP SGTIN
     if [[ -n "${HM_HMIP_SGTIN}" ]]; then
-      echo "${HM_HMIP_SGTIN}" >/var/board_sgtin
-      echo "${HM_HMIP_SGTIN}" >/var/hmip_board_sgtin
+      SGTIN4=$(echo -n ${HM_HMIP_SGTIN} | tail -c 4)
+      [[ "${SGTIN4}" == "FFFF" ]] && SGTIN4=FFFE
+      HM_HMRF_ADDRESS=0xFF$(echo -n ${HM_HMIP_SGTIN} | tail -c 4)
+    else
+      # as a fallback, use a random number between 0xFF0000-0xFFFFFE
+      HM_HMRF_ADDRESS=$(awk -v r=${RANDOM} 'BEGIN{srand(r);printf("0x%X", int(rand()*(0xFFFFFE-0xFF0000))+0xFF0000) }')
     fi
   fi
+
+  #####################################
+  # save all main info about the RF module
+
+  # prefer to use a HM_HMIP_SERIAL with the last
+  # 10 chars of the SGTIN because that is the serial
+  # of the RF module registered at eQ3
+  if [[ -n "${HM_HMIP_SERIAL}" ]]; then
+    echo -n "${HM_HMIP_SERIAL}" >/var/board_serial
+  else
+    echo -n "${HM_HMRF_SERIAL}" >/var/board_serial
+  fi
+
+  if [[ -n "${HM_HMIP_SGTIN}" ]]; then
+    echo -n "${HM_HMIP_SGTIN}" >/var/board_sgtin
+  fi
+
+  # output BidCos/HmIP specific infos
+  echo -n "${HM_HMRF_SERIAL}" >/var/rf_board_serial
+  echo -n "${HM_HMRF_ADDRESS}" >/var/rf_address
+  echo -n "${HM_HMRF_VERSION}" >/var/rf_firmware_version
+  echo -n "${HM_HMIP_SERIAL}" >/var/hmip_board_serial
+  echo -n "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
+  echo -n "${HM_HMIP_ADDRESS}" >/var/hmip_address
+  echo -n "${HM_HMIP_SGTIN}" >/var/hmip_board_sgtin
 }
 
 start() {

@@ -1,0 +1,33 @@
+--- buildroot/package/busybox/0008-fix-hwclock-settimeofday.patch.orig
++++ buildroot/package/busybox/0008-fix-hwclock-settimeofday.patch
+@@ -0,0 +1,30 @@
++--- a/util-linux/hwclock.c	2020-09-10 22:07:51.223228010 +0200
+++++ b/util-linux/hwclock.c	2020-09-10 22:19:22.583962136 +0200
++@@ -129,9 +129,13 @@
++ 	 */
++ 	tz.tz_dsttime = 0;
++ 
+++	/* glibc v2.31+ returns an error if both args are non-NULL */
+++	if (settimeofday(NULL, &tz))
+++		bb_perror_msg_and_die("settimeofday");
+++
++ 	tv.tv_sec = read_rtc(pp_rtcname, NULL, utc);
++ 	tv.tv_usec = 0;
++-	if (settimeofday(&tv, &tz))
+++	if (settimeofday(&tv, NULL))
++ 		bb_perror_msg_and_die("settimeofday");
++ }
++ 
++@@ -283,7 +287,11 @@
++ 	gettimeofday(&tv, NULL);
++ 	if (!utc)
++ 		tv.tv_sec += tz.tz_minuteswest * 60;
++-	if (settimeofday(&tv, &tz))
+++
+++	/* glibc v2.31+ returns an error if both args are non-NULL */
+++	if (settimeofday(NULL, &tz))
+++		bb_perror_msg_and_die("settimeofday");
+++	if (settimeofday(&tv, NULL))
++ 		bb_perror_msg_and_die("settimeofday");
++ }
++ 

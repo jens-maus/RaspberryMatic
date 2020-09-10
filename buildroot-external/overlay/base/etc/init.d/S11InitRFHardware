@@ -254,9 +254,14 @@ query_rf_parameters() {
           HM_HMRF_ADDRESS=
         fi
 
-        # if HM_HMRF_ADDRESS is empty we use HMRF_ADDRESS as fallback
-        if [[ -z "${HM_HMRF_ADDRESS}" ]]; then
+        # if HM_HMRF_ADDRESS is empty or 0 (0x000000) we use HMRF_ADDRESS as fallback
+        # and also remove /etc/config/ids because it might contain an invalid
+        # rf address
+        if [[ -z "${HM_HMRF_ADDRESS}" ]] ||
+           [[ "${HM_HMRF_ADDRESS}" == "0" ]] ||
+           [[ "${HM_HMRF_ADDRESS}" == "0x000000" ]]; then
           HM_HMRF_ADDRESS=${HMRF_ADDRESS}
+          rm -f /etc/config/ids
         fi
       fi
 
@@ -334,6 +339,16 @@ query_rf_parameters() {
           HMRF_ADDRESS=$(grep -i BidCoS-Address /etc/config/ids | tr -d '[:space:]' | cut -d= -f2)
         else
           HMRF_ADDRESS=
+        fi
+
+        # if HM_HMRF_ADDRESS is empty or 0 (0x000000) we use HMRF_ADDRESS as fallback
+        # and also remove /etc/config/ids because it might contain an invalid
+        # rf address
+        if [[ -z "${HMRF_ADDRESS}" ]] ||
+           [[ "${HMRF_ADDRESS}" == "0" ]] ||
+           [[ "${HMRF_ADDRESS}" == "0x000000" ]]; then
+          HMRF_ADDRESS=
+          rm -f /etc/config/ids
         fi
       fi
 

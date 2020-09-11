@@ -95,7 +95,8 @@ update_rf_hardware() {
 
       echo -n "RPI-RF-MOD: "
 
-      NEW_VERSION=$(ls /firmware/RPI-RF-MOD/dualcopro_update_blhmip-*.eq3 | sed 's/.*-\(.*\)\.eq3/\1/')
+      LATEST_FIRMWARE=$(ls /firmware/RPI-RF-MOD/dualcopro_update_blhmip-*.eq3 | tail -1)
+      NEW_VERSION=$(echo ${LATEST_FIRMWARE} | tail -1 | sed 's/.*-\(.*\)\.eq3/\1/')
 
       # get OLD_VERSION from var tmp file
       if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
@@ -110,7 +111,7 @@ update_rf_hardware() {
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
         # run firmware update
-        HM_HMIP_VERSION=$(/usr/bin/timeout 30 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -o -f /firmware/RPI-RF-MOD/dualcopro_update_blhmip-*.eq3 2>/dev/null | grep "Version:" | cut -d' ' -f5)
+        HM_HMIP_VERSION=$(/usr/bin/timeout 30 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -o -f ${LATEST_FIRMWARE} 2>/dev/null | grep "Version:" | cut -d' ' -f5)
 
         echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
         if [[ -z "${HM_HMRF_DEV}" ]]; then

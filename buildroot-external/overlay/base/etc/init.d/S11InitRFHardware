@@ -226,37 +226,67 @@ query_rf_parameters() {
   if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
      [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
 
-    # use eq3configcmd to query for the default rf address and if it is empty
-    # 0x000000 or 0x..ffff there is either no HM-MOD-RPI-PCB or it is a RPI-RF-MOD connected
-    # to a HB-RF-USB.
-    RF_ADDRESS=$(/usr/bin/timeout 20 /bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
-    if [[ -z "${RF_ADDRESS}" ]]; then
+    # use eq3configcmd to query for the default rf address (BidCos-RF)
+    HMRF_ADDRESS=$(/usr/bin/timeout 20 /bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+    if [[ -z "${HMRF_ADDRESS}" ]]; then
       # sometimes we have to do a second iteration to read the default rf address as
       # the rf module has to properly initialize first
-      RF_ADDRESS=$(/usr/bin/timeout 20 /bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
+      HMRF_ADDRESS=$(/usr/bin/timeout 20 /bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
     fi
-    if [[ -n "${RF_ADDRESS}" ]] && ! echo ${RF_ADDRESS} | egrep -q '0x000000|0x..ffff'; then
-      RF_SGTIN=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -sg 2>&1 | sed -n 's/.*SGTIN: \([0-9A-Fa-f]\{24\}\).*/\1/p')
-      RF_SERIAL=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
-      RF_VERSION=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
+
+    # if HMRF_ADDRESS is empty, 0x000000 or 0x00ffff this is either no HM-MOD-RPI-PCB
+    # or it is a RPI-RF-MOD connected to a HB-RF-USB/HB-RF-USB-2
+    if [[ -n "${HMRF_ADDRESS}" ]] && ! echo ${HMRF_ADDRESS} | egrep -qi '0x000000|0x00ffff'; then
+      HMRF_VERSION=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
 
       if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-        HM_HMRF_SERIAL=${RF_SERIAL}
-        HM_HMRF_VERSION=${RF_VERSION}
-        HM_HMRF_ADDRESS=${RF_ADDRESS}
+        HMRF_SERIAL=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
+        HM_HMRF_SERIAL=${HMRF_SERIAL}
+        HM_HMRF_VERSION=${HMRF_VERSION}
+
+        # if the /etc/config/ids file exists we use the rf address that
+        # is saved in that file instead of the one within the rf module
+        # because rfd will anyway prefer/use the one from /etc/config/ids
+        if [[ -f /etc/config/ids ]]; then
+          HM_HMRF_ADDRESS=$(grep -i BidCoS-Address /etc/config/ids | tr -d '[:space:]' | cut -d= -f2)
+        else
+          HM_HMRF_ADDRESS=
+        fi
+
+        # if HM_HMRF_ADDRESS is empty or 0 (0x000000) we use HMRF_ADDRESS as fallback
+        # and also remove /etc/config/ids because it might contain an invalid
+        # rf address
+        if [[ -z "${HM_HMRF_ADDRESS}" ]] ||
+           [[ "${HM_HMRF_ADDRESS}" == "0" ]] ||
+           [[ "${HM_HMRF_ADDRESS}" == "0x000000" ]]; then
+          HM_HMRF_ADDRESS=${HMRF_ADDRESS}
+          if [[ -e /etc/config/ids ]]; then
+            mv -f /etc/config/ids /etc/config/ids_old-$(date +'%Y%m%d-%H%M%S')
+          fi
+        fi
       fi
 
       if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-        HM_HMIP_SERIAL=${RF_SERIAL}
-        HM_HMIP_VERSION=${RF_VERSION}
-        HM_HMIP_ADDRESS=${RF_ADDRESS}
-        HM_HMIP_SGTIN=${RF_SGTIN}
+        HMIP_SGTIN=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -sg 2>&1 | sed -n 's/.*SGTIN: \([0-9A-Fa-f]\{24\}\).*/\1/p')
+
+        HM_HMIP_SERIAL=$(echo -n ${HMIP_SGTIN} | tail -c 10)
+        HM_HMIP_VERSION=${HMRF_VERSION}
+        HM_HMIP_SGTIN=${HMIP_SGTIN}
+
+        # we cannot use eq3configcmd to query for the copro hmip rf address
+        # of the HM-MOD-RPI-PCB, thus we extract it from the hmip_address.conf
+        # file which HMIPServer generates on first start.
+        if [[ -f /etc/config/hmip_address.conf ]]; then
+          HM_HMIP_ADDRESS="0x$(grep -i Adapter.1.Address /etc/config/hmip_address.conf | tr -d '[:space:]' | cut -d= -f2)"
+        else
+          HM_HMIP_ADDRESS=${HMRF_ADDRESS}
+        fi
       fi
     else
       # if we haven't identified a HM-MOD-RPI-PCB we try to find
       # a RPI-RF-MOD next
       if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-        if echo ${RF_ADDRESS} | egrep -q '0x000000|0x..ffff' || lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
+        if echo ${HMRF_ADDRESS} | egrep -qi '0x000000|0x00ffff' || lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
           HM_HMRF_DEV="RPI-RF-MOD"
         else
           HM_HMRF_DEV=
@@ -267,7 +297,7 @@ query_rf_parameters() {
       fi
 
       if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
-        if echo ${RF_ADDRESS} | egrep -q '0x000000|0x..ffff' || lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
+        if echo ${HMRF_ADDRESS} | egrep -qi '0x000000|0x00ffff' || lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
           HM_HMIP_DEV="RPI-RF-MOD"
         else
           HM_HMIP_DEV=
@@ -290,49 +320,91 @@ query_rf_parameters() {
       /usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -r >/dev/null 2>&1
     fi
 
-    # use hmip-copro-update only to query all rf module related info (eq3configcmd is not supported for RPI-RF-MOD)
-    RF_INFO=$(/usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -v -a 2>&1)
-    RF_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
-    RF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
-    RF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+    ###########################################
+    # homematicIP (HmIP) info retrieval
 
-    # with copro firmware 4.2.6 the above command seem to return an error and omits the bidcos
-    # radio address completly. Thus, we use a second "-t -a" command to workaround this issue.
-    if [[ -z ${RF_ADDRESS} ]]; then
-      RF_INFO=$(/usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -t -a 2>&1)
-      RF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+    if [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
+      # use hmip-copro-update.jar to query all homematicIP rf module related infos
+      HMIP_INFO=$(/usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -v -a 2>&1)
+      HMIP_SGTIN=$(echo ${HMIP_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
+      HMIP_VERSION=$(echo ${HMIP_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
+      HMIP_ADDRESS=$(echo ${HMIP_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
+
+      # check if main info could be retrieved
+      if [[ -n "${HMIP_ADDRESS}" ]] && [[ -n "${HMIP_SGTIN}" ]]; then
+        # use the last 10 chars of the SGTIN as the serial number of the rf module
+        HM_HMIP_SERIAL=$(echo -n ${HMIP_SGTIN} | tail -c 10)
+        HM_HMIP_VERSION=${HMIP_VERSION}
+        HM_HMIP_SGTIN=${HMIP_SGTIN}
+
+        # if the /etc/config/hmip_address.conf file exists we use the rf address that
+        # is saved in that file instead of the one within the rf module
+        # because HMIPServer will anyway prefer/use the one from /etc/config/hmip_address.conf
+        if [[ -f /etc/config/hmip_address.conf ]]; then
+          HM_HMIP_ADDRESS="0x$(grep -i Adapter.1.Address /etc/config/hmip_address.conf | tr -d '[:space:]' | cut -d= -f2)"
+        else
+          HM_HMIP_ADDRESS=${HMIP_ADDRESS}
+        fi
+      else
+        HM_HMIP_DEV=
+        HM_HMIP_SERIAL=
+        HM_HMIP_VERSION=
+        HM_HMIP_SGTIN=
+        HM_HMIP_ADDRESS=
+      fi
     fi
 
-    if [[ -n "${RF_ADDRESS}" ]] || [[ -n "${RF_SGTIN}" ]]; then
-      # use the last 10 chars of the SGTIN as the serial number of the rf module
-      RF_SERIAL=$(echo -n ${RF_SGTIN} | tail -c 10)
+    ###########################################
+    # homematic (BidCos-RF/HmRF) info retrieval
 
-      if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
-        HM_HMRF_SERIAL=${RF_SERIAL}
-        HM_HMRF_VERSION=${RF_VERSION}
-        HM_HMRF_ADDRESS=${RF_ADDRESS}
+    if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+
+      # use eq3configcmd to query for the default rf address (BidCos-RF)
+      # if we don't have it already from a previous call
+      if [[ -z "${HMRF_ADDRESS}" ]]; then
+        # use eq3configcmd to query for the default rf address (BidCos-RF)
+        HMRF_ADDRESS=$(/usr/bin/timeout 20 /bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
       fi
 
-      if [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
-        HM_HMIP_SERIAL=${RF_SERIAL}
-        HM_HMIP_VERSION=${RF_VERSION}
-        HM_HMIP_ADDRESS=${RF_ADDRESS}
-        HM_HMIP_SGTIN=${RF_SGTIN}
+      # if HMRF_ADDRESS is 0x000000 or 0x00ffff we have to check for a
+      # already retrieved BidCos RF-address from /etc/config/ids or
+      # otherwise generate a new random one in the range of 0xFF0000
+      # till 0xFFFFFE because this should be a range that no BidCos device
+      # should have hardcoded.
+      if echo ${HMRF_ADDRESS} | egrep -qi '0x000000|0x00ffff'; then
+        if [[ -f /etc/config/ids ]]; then
+          HMRF_ADDRESS=$(grep -i BidCoS-Address /etc/config/ids | tr -d '[:space:]' | cut -d= -f2)
+        else
+          HMRF_ADDRESS=
+        fi
+
+        # if HM_HMRF_ADDRESS is empty or 0 (0x000000) we use HMRF_ADDRESS as fallback
+        # and also remove /etc/config/ids because it might contain an invalid
+        # rf address
+        if [[ -z "${HMRF_ADDRESS}" ]] ||
+           [[ "${HMRF_ADDRESS}" == "0" ]] ||
+           [[ "${HMRF_ADDRESS}" == "0x000000" ]]; then
+          HMRF_ADDRESS=
+          if [[ -e /etc/config/ids ]]; then
+            mv -f /etc/config/ids /etc/config/ids_old-$(date +'%Y%m%d-%H%M%S')
+          fi
+        fi
       fi
-    else
-      if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+
+      # use eq3configcmd to query the BidCos-RF serial number + version
+      HMRF_SERIAL=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
+      HMRF_VERSION=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
+
+      # check if main info could be retrieved
+      if [[ -n "${HMRF_VERSION}" ]] && [[ -n "${HMRF_SERIAL}" ]]; then
+        HM_HMRF_SERIAL=${HMRF_SERIAL}
+        HM_HMRF_VERSION=${HMRF_VERSION}
+        HM_HMRF_ADDRESS=${HMRF_ADDRESS}
+      else
         HM_HMRF_DEV=
         HM_HMRF_SERIAL=
         HM_HMRF_VERSION=
         HM_HMRF_ADDRESS=
-      fi
-
-      if [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
-        HM_HMIP_DEV=
-        HM_HMIP_SERIAL=
-        HM_HMIP_VERSION=
-        HM_HMIP_ADDRESS=
-        HM_HMIP_SGTIN=
       fi
     fi
   fi
@@ -346,59 +418,80 @@ query_rf_parameters() {
     fi
 
     # run hmip-copro-update to query info and get copro into app mode
-    RF_INFO=$(/usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v -a 2>&1)
-    RF_SGTIN=$(echo ${RF_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
+    HMIP_INFO=$(/usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -v -a 2>&1)
+    HMIP_SGTIN=$(echo ${HMIP_INFO} | sed -n 's/.*SGTIN = \([0-9A-Fa-f]\{24\}\).*/\1/p')
+    HMIP_VERSION=$(echo ${HMIP_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
+    HMIP_ADDRESS=$(echo ${HMIP_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
 
-    # use the last 10 chars of the SGTIN as the serial number of the rf module
-    RF_SERIAL=$(echo -n ${RF_SGTIN} | tail -c 10)
-    if [[ -n "${RF_SERIAL}" ]]; then
-      RF_VERSION=$(echo ${RF_INFO} | sed -n 's/.*Application version = \([0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
-      RF_ADDRESS=$(echo ${RF_INFO} | sed -n 's/.*Radio address = \([0-9A-F]\{6\}\).*/0x\1/p')
-
-      if echo "${RF_SGTIN}" | grep -q "3014f5ac94"; then
+    if [[ -n "${HMIP_ADDRESS}" ]] && [[ -n "${HMIP_SGTIN}" ]]; then
+      # lets identify the telekom version of the HMIP-RFUSB stick
+      if echo "${HMIP_SGTIN}" | grep -qi "3014f5ac94"; then
         HM_HMIP_DEV="HMIP-RFUSB-TK"
       fi
 
-      HM_HMIP_SERIAL=${RF_SERIAL}
-      HM_HMIP_VERSION=${RF_VERSION}
-      HM_HMIP_ADDRESS=${RF_ADDRESS}
-      HM_HMIP_SGTIN=${RF_SGTIN}
+      # use the last 10 chars of the SGTIN as the serial number of the rf module
+      HM_HMIP_SERIAL=$(echo -n ${HMIP_SGTIN} | tail -c 10)
+      HM_HMIP_VERSION=${HMIP_VERSION}
+      HM_HMIP_SGTIN=${HMIP_SGTIN}
+
+      # if the /etc/config/hmip_address.conf file exists we use the rf address that
+      # is saved in that file instead of the one within the rf module
+      # because HMIPServer will anyway prefer/use the one from /etc/config/hmip_address.conf
+      if [[ -f /etc/config/hmip_address.conf ]]; then
+        HM_HMIP_ADDRESS="0x$(grep -i Adapter.1.Address /etc/config/hmip_address.conf | tr -d '[:space:]' | cut -d= -f2)"
+      else
+        HM_HMIP_ADDRESS=${HMIP_ADDRESS}
+      fi
     else
       HM_HMIP_DEV=
       HM_HMIP_SERIAL=
       HM_HMIP_VERSION=
-      HM_HMIP_ADDRESS=
       HM_HMIP_SGTIN=
+      HM_HMIP_ADDRESS=
     fi
   fi
 
   # make sure there is no /usr/local/.doCoproFactoryReset file anymore
   rm -f /usr/local/.doCoproFactoryReset
 
-  # save all info about the RF module
-  if [[ -n "${HM_HMRF_SERIAL}" ]]; then
-    echo "${HM_HMRF_SERIAL}" >/var/board_serial
-    echo "${HM_HMRF_VERSION}" >/var/rf_firmware_version
-    echo "${HM_HMRF_ADDRESS}" >/var/rf_address
-  elif [[ -n "${HM_HMIP_SERIAL}" ]]; then
-    echo "${HM_HMIP_SERIAL}" >/var/board_serial
-    echo "${HM_HMIP_VERSION}" >/var/rf_firmware_version
-    echo "${HM_HMIP_ADDRESS}" >/var/rf_address
-  else
-    echo "" >/var/board_serial
-    echo "" >/var/rf_firmware_version
-    echo "" >/var/rf_address
-  fi
-
-  if [[ -n "${HM_HMIP_SERIAL}" ]]; then
-    echo "${HM_HMIP_SERIAL}" >/var/hmip_board_serial
-    echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
-    echo "${HM_HMIP_ADDRESS}" >/var/hmip_address
+  # there are cases where the BidCos rf address might not be valid or known but in case
+  # BidCos-RF is enabled we have to generate a dedicated BidCos address
+  if [[ -n "${HM_HMRF_DEV}" ]] && [[ -z "${HM_HMRF_ADDRESS}" ]]; then
+    # first try to reuse the HmIP SGTIN
     if [[ -n "${HM_HMIP_SGTIN}" ]]; then
-      echo "${HM_HMIP_SGTIN}" >/var/board_sgtin
-      echo "${HM_HMIP_SGTIN}" >/var/hmip_board_sgtin
+      SGTIN4=$(echo -n ${HM_HMIP_SGTIN} | tail -c 4)
+      [[ "${SGTIN4}" == "FFFF" ]] && SGTIN4=FFFE
+      HM_HMRF_ADDRESS=0xFF$(echo -n ${HM_HMIP_SGTIN} | tail -c 4)
+    else
+      # as a fallback, use a random number between 0xFF0000-0xFFFFFE
+      HM_HMRF_ADDRESS=$(awk -v r=${RANDOM} 'BEGIN{srand(r);printf("0x%X", int(rand()*(0xFFFFFE-0xFF0000))+0xFF0000) }')
     fi
   fi
+
+  #####################################
+  # save all main info about the RF module
+
+  # prefer to use a HM_HMIP_SERIAL with the last
+  # 10 chars of the SGTIN because that is the serial
+  # of the RF module registered at eQ3
+  if [[ -n "${HM_HMIP_SERIAL}" ]]; then
+    echo -n "${HM_HMIP_SERIAL}" >/var/board_serial
+  else
+    echo -n "${HM_HMRF_SERIAL}" >/var/board_serial
+  fi
+
+  if [[ -n "${HM_HMIP_SGTIN}" ]]; then
+    echo -n "${HM_HMIP_SGTIN}" >/var/board_sgtin
+  fi
+
+  # output BidCos/HmIP specific infos
+  echo -n "${HM_HMRF_SERIAL}" >/var/rf_board_serial
+  echo -n "${HM_HMRF_ADDRESS}" >/var/rf_address
+  echo -n "${HM_HMRF_VERSION}" >/var/rf_firmware_version
+  echo -n "${HM_HMIP_SERIAL}" >/var/hmip_board_serial
+  echo -n "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
+  echo -n "${HM_HMIP_ADDRESS}" >/var/hmip_address
+  echo -n "${HM_HMIP_SGTIN}" >/var/hmip_board_sgtin
 }
 
 start() {

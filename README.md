@@ -92,24 +92,28 @@ Unter [Releases](https://github.com/jens-maus/RaspberryMatic/releases) steht fü
      * [Umstieg zu virtuellem RaspberryMatic](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-zu-virtuellem-raspberrymatic)
    * [Deinstallation](https://github.com/jens-maus/RaspberryMatic/wiki/Deinstallation)
 3. [Administration](https://github.com/jens-maus/RaspberryMatic/wiki/Administration)
-   * [Firmware Update via WebUI](https://github.com/jens-maus/RaspberryMatic/wiki/Update)
-   * [Backup/Restore](https://github.com/jens-maus/RaspberryMatic/wiki/BackupRestore)
-   * [Sicherheitshinweise](https://github.com/jens-maus/RaspberryMatic/wiki/Sicherheit)
-   * [Erweiterungen/CCU-Addons](https://github.com/jens-maus/RaspberryMatic/wiki/Administration#ccu-addons)
+   * [Firmware Update/Upgrade](https://github.com/jens-maus/RaspberryMatic/wiki/Administration#firmware-updateupgrade)
+   * [Backup/Restore](https://github.com/jens-maus/RaspberryMatic/wiki/Administration#backup--restore)
+   * [Sicherheitshinweise](https://github.com/jens-maus/RaspberryMatic/wiki/Administration#sicherheitshinweise)
+   * [CCU-Addons / Zusatzsoftware](https://github.com/jens-maus/RaspberryMatic/wiki/Administration#ccu-addons--zusatzsoftware)
 4. Nutzung
    * [WebUI Benutzung](https://github.com/jens-maus/RaspberryMatic/wiki/WebUI-Benutzung)
+     * [Log-Level erhöhen für Fehleranalyse](https://github.com/jens-maus/RaspberryMatic/wiki/WebUI-Benutzung#log-daten-und-log-level)
    * [Tipps&Tricks](https://github.com/jens-maus/RaspberryMatic/wiki/Tipps)
-   * Experten-Features
-     * [WLAN/WiFi Unterstützung](https://github.com/jens-maus/RaspberryMatic/wiki/WLAN-Nutzung)
-     * [Bluetooth Unterstützung](https://github.com/jens-maus/RaspberryMatic/wiki/Bluetooth-Nutzung)
-     * [LAN-Gateway Betrieb](https://github.com/jens-maus/RaspberryMatic/wiki/LAN-Gateway-Betrieb)
-     * [Log-Level erhöhen für Fehleranalyse](https://github.com/jens-maus/RaspberryMatic/wiki/Loglevel)
-5. Support, Mitarbeit
-   * [Hilfe suchen](https://github.com/jens-maus/RaspberryMatic/wiki/Hilfe-suchen)
-   * [FAQ - Häufig gestellte Fragen](https://github.com/jens-maus/RaspberryMatic/wiki/Faq)
-   * [Fehler melden](https://github.com/jens-maus/RaspberryMatic/wiki/Bugreports)
-   * [Features wünschen](https://github.com/jens-maus/RaspberryMatic/wiki/FeatureRequests)
-
+   * [Experten-Features](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features)
+     * [WLAN/WiFi Unterstützung](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#wlanwifi-nutzung)
+     * [Bluetooth Unterstützung](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#bluetooth-nutzung)
+     * [LAN-Gateway Betrieb](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#lan-gateway-betrieb)
+     * [USV Client/Server Betrieb](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#usv-clientserver-nut)
+     * [USB-Boot](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#usb-boot)
+5. [Support, Mitarbeit](https://github.com/jens-maus/RaspberryMatic/wiki/Support)
+   * [Bekannte Probleme](https://github.com/jens-maus/RaspberryMatic/wiki/Support#bekannte-probleme)
+   * [Hilfe suchen](https://github.com/jens-maus/RaspberryMatic/wiki/Support#hilfe-suchen)
+   * [FAQ - Häufig gestellte Fragen](https://github.com/jens-maus/RaspberryMatic/wiki/Support#faq)
+   * [Fehler melden](https://github.com/jens-maus/RaspberryMatic/wiki/Support#bugreports)
+   * [Features wünschen](https://github.com/jens-maus/RaspberryMatic/wiki/Support#featurerequests)
+   * [Mitarbeit / Weiterentwicklung](https://github.com/jens-maus/RaspberryMatic/wiki/Support#mitarbeit--weiterentwicklung)
+   
 ## :yum: Support, Mitarbeit
 Für Feedback jeglicher Art, Fragen, Vorschläge, Wünsche und Fehlerberichte wird darum gebeten bitte zuerst im jeweiligen RaspberryMatic Teil des HomeMatic-Forum (https://homematic-forum.de/forum/viewforum.php?f=65) einen entsprechenden Beitrag zu erstellen oder an bereits existierenden Beiträgen dort sich zu beteiligen. Sollte aus den Diskussionen dort sich dann ein spezieller Feature-Wunsch oder von anderen Personen bestätigter Bug in RaspberryMatic herauskristallieren wird darum gebeten diesen Bug bzw. diesen Feature-Request im [Issue Tracker](https://github.com/jens-maus/RaspberryMatic/issues) von RaspberryMatic entsprechend einzutragen bzw. zu melden.
 
@@ -127,6 +131,19 @@ RASPBERRMATIC WIRD OHNE JEDE AUSDRÜCKLICHE ODER IMPLIZIERTE GARANTIE BEREITGEST
 
 [mehr...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#lizenz--haftung)
 
+## :book: Literatur
+Wenn der Eine oder Andere bzgl. Einsatz von RaspberryMatic noch unentschlossen ist oder die Vor-/Nachteile abwägen will so soll die folgende Literaturliste eine Hilfestellung geben:
+
+<a href="https://www.youtube.com/watch?v=regDw7rcIb0"><img alt="Usertreffen Kassel 2019 – RaspberryMatic" src="https://img.youtube.com/vi/regDw7rcIb0/hqdefault.jpg" width=320></a>
+<a href="https://www.youtube.com/watch?v=hSmDcrkHb7M"><img alt="Usertreffen Kassel 2018 – RaspberryMatic" src="https://img.youtube.com/vi/hSmDcrkHb7M/hqdefault.jpg" width=320></a>
+<a href="https://www.youtube.com/watch?v=LQrzittdEGg"><img alt="Usertreffen Kassel 2017 – RaspberryMatic (Teil 1)" src="https://img.youtube.com/vi/LQrzittdEGg/hqdefault.jpg" width=320></a>
+<a href="https://www.youtube.com/watch?v=duSTLdVKSeM"><img alt="Usertreffen Kassel 2017 - RaspberryMatic (Teil 2)" src="https://img.youtube.com/vi/duSTLdVKSeM/hqdefault.jpg" width=320></a>
+
+* [Vortragsfolien HomeMatic-Usertreffen 2019](https://homematic-forum.de/forum/download/file.php?id=59500)
+* [Vortragsfolien HomeMatic-Usertreffen 2018](https://homematic-forum.de/forum/download/file.php?id=48428)
+* [Vortragsfolien HomeMatic-Usertreffen 2017](https://homematic-forum.de/forum/download/file.php?id=40869)
+* [Vortragsfolien HomeMatic-Usertreffen 2016](https://homematic-forum.de/forum/download/file.php?id=40868)
+
 ## :clap: Danksagungen
 Zusätzlich zu den Personen die sich als [Contributors](https://github.com/jens-maus/RaspberryMatic/graphs/contributors) im Rahmen des RaspberryMatic OpenSource Projekte indirekt oder direkt beteiligt haben, soll hier natürlich folgenden Personen ausdrücklich gedankt werden:
 * _Alexander Reinert_ – für das [generic_raw_uart kernel module](https://github.com/alexreinert/piVCCU/tree/master/kernel) zur Anbindung der von eQ3 vertriebenen Funkmodule, sowie für die Entwicklung der [HB-RF-USB](https://github.com/alexreinert/PCB/tree/master/HB-RF-USB) und [HB-RF-USB-2](https://github.com/alexreinert/PCB/tree/master/HB-RF-USB-2) Adapterplatinen um diese Funkmodule auch via USB an RaspberryMatic anbinden zu können.
@@ -134,3 +151,5 @@ Zusätzlich zu den Personen die sich als [Contributors](https://github.com/jens-
 ## :family: Autoren
 Da eine Vielzahl von Personen bereits sich an RaspberryMatic beteiligt haben sei hier auf die [Contributors](https://github.com/jens-maus/RaspberryMatic/graphs/contributors) Liste verwiesen.
 
+## :construction: Änderungshistorie / ChangeLog
+Eine detaillierte Liste aller bisherigen Änderungen zwischen den individuellen RaspberryMatic-Versionen erhält man über die [Release-Seite](https://github.com/jens-maus/RaspberryMatic/releases/) bei GitHub.

@@ -10,12 +10,15 @@ init () {
   echo "BidCoS-Address=$(cat /var/rf_address)" >/var/ids
   echo "SerialNumber=$(cat /var/board_serial)" >>/var/ids
 
-  if [[ ! -e /etc/config/ids ]] ; then
+  # in case we have a BidCos-RF device (no empty /var/rf_address)
+  # and there is no already existing /etc/config/ids we have to
+  # copy it over
+  if [[ -s /var/rf_address ]] && [[ ! -e /etc/config/ids ]] ; then
     cp /var/ids /etc/config/
   fi
 
   if [[ ! -e /etc/config/crypttool.cfg ]] ; then
-      touch /etc/config/crypttool.cfg
+    touch /etc/config/crypttool.cfg
   fi
 }
 

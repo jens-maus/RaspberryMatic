@@ -23,7 +23,7 @@ NUT_CONF_OPTS = \
 	--with-altpidpath=/var/run/upsd \
 	--without-hal \
 	--with-user=nobody \
-	--with-group=nogroup
+	--with-group=nobody
 
 # For uClibc-based toolchains, nut forgets to link with -lm
 ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)

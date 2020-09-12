@@ -1,0 +1,10 @@
+--- buildroot/package/qemu/qemu.mk.orig
++++ buildroot/package/qemu/qemu.mk
+@@ -335,6 +335,7 @@
+ 		--disable-vnc-jpeg \
+ 		--disable-vnc-png \
+ 		--disable-vnc-sasl \
++		--enable-tools \
+ 		$(HOST_QEMU_OPTS)
+ endef
+ 

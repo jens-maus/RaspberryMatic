@@ -239,48 +239,24 @@ query_rf_parameters() {
     if [[ -n "${HMRF_ADDRESS}" ]] && ! echo ${HMRF_ADDRESS} | egrep -qi '0x000000|0x00ffff'; then
       HMRF_VERSION=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5 | tr -d '[:space:]')
 
+      ###########################################
+      # homematic (BidCos-RF/HmRF) info retrieval
       if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]]; then
         HMRF_SERIAL=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
         HM_HMRF_SERIAL=${HMRF_SERIAL}
         HM_HMRF_VERSION=${HMRF_VERSION}
-
-        # if the /etc/config/ids file exists we use the rf address that
-        # is saved in that file instead of the one within the rf module
-        # because rfd will anyway prefer/use the one from /etc/config/ids
-        if [[ -f /etc/config/ids ]]; then
-          HM_HMRF_ADDRESS=$(grep -i BidCoS-Address /etc/config/ids | tr -d '[:space:]' | cut -d= -f2)
-        else
-          HM_HMRF_ADDRESS=
-        fi
-
-        # if HM_HMRF_ADDRESS is empty or 0 (0x000000) we use HMRF_ADDRESS as fallback
-        # and also remove /etc/config/ids because it might contain an invalid
-        # rf address
-        if [[ -z "${HM_HMRF_ADDRESS}" ]] ||
-           [[ "${HM_HMRF_ADDRESS}" == "0" ]] ||
-           [[ "${HM_HMRF_ADDRESS}" == "0x000000" ]]; then
-          HM_HMRF_ADDRESS=${HMRF_ADDRESS}
-          if [[ -e /etc/config/ids ]]; then
-            mv -f /etc/config/ids /etc/config/ids_old-$(date +'%Y%m%d-%H%M%S')
-          fi
-        fi
+        HM_HMRF_ADDRESS=${HMRF_ADDRESS}
       fi
 
+      ###########################################
+      # homematicIP (HmIP) info retrieval
       if [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; then
         HMIP_SGTIN=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -t HM-MOD-UART -c -sg 2>&1 | sed -n 's/.*SGTIN: \([0-9A-Fa-f]\{24\}\).*/\1/p')
 
         HM_HMIP_SERIAL=$(echo -n ${HMIP_SGTIN} | tail -c 10)
         HM_HMIP_VERSION=${HMRF_VERSION}
         HM_HMIP_SGTIN=${HMIP_SGTIN}
-
-        # we cannot use eq3configcmd to query for the copro hmip rf address
-        # of the HM-MOD-RPI-PCB, thus we extract it from the hmip_address.conf
-        # file which HMIPServer generates on first start.
-        if [[ -f /etc/config/hmip_address.conf ]]; then
-          HM_HMIP_ADDRESS="0x$(grep -i Adapter.1.Address /etc/config/hmip_address.conf | tr -d '[:space:]' | cut -d= -f2)"
-        else
-          HM_HMIP_ADDRESS=${HMRF_ADDRESS}
-        fi
+        HM_HMIP_ADDRESS=${HMRF_ADDRESS}
       fi
     else
       # if we haven't identified a HM-MOD-RPI-PCB we try to find
@@ -336,15 +312,7 @@ query_rf_parameters() {
         HM_HMIP_SERIAL=$(echo -n ${HMIP_SGTIN} | tail -c 10)
         HM_HMIP_VERSION=${HMIP_VERSION}
         HM_HMIP_SGTIN=${HMIP_SGTIN}
-
-        # if the /etc/config/hmip_address.conf file exists we use the rf address that
-        # is saved in that file instead of the one within the rf module
-        # because HMIPServer will anyway prefer/use the one from /etc/config/hmip_address.conf
-        if [[ -f /etc/config/hmip_address.conf ]]; then
-          HM_HMIP_ADDRESS="0x$(grep -i Adapter.1.Address /etc/config/hmip_address.conf | tr -d '[:space:]' | cut -d= -f2)"
-        else
-          HM_HMIP_ADDRESS=${HMIP_ADDRESS}
-        fi
+        HM_HMIP_ADDRESS=${HMIP_ADDRESS}
       else
         HM_HMIP_DEV=
         HM_HMIP_SERIAL=
@@ -366,29 +334,12 @@ query_rf_parameters() {
         HMRF_ADDRESS=$(/usr/bin/timeout 20 /bin/eq3configcmd read-default-rf-address -f ${HM_HOST_GPIO_UART} -h 2>&1 | grep "^0x" | tr -d '[:space:]')
       fi
 
-      # if HMRF_ADDRESS is 0x000000 or 0x00ffff we have to check for a
-      # already retrieved BidCos RF-address from /etc/config/ids or
-      # otherwise generate a new random one in the range of 0xFF0000
-      # till 0xFFFFFE because this should be a range that no BidCos device
-      # should have hardcoded.
+      # if HMRF_ADDRESS is 0x000000 or 0x00ffff we reset it to an empty
+      # variable so that later a valid bidcos rf address is either taken
+      # from /etc/config/ids or a new unique random one is generated within
+      # the private range between 0xFF0000-0xFFFFFE.
       if echo ${HMRF_ADDRESS} | egrep -qi '0x000000|0x00ffff'; then
-        if [[ -f /etc/config/ids ]]; then
-          HMRF_ADDRESS=$(grep -i BidCoS-Address /etc/config/ids | tr -d '[:space:]' | cut -d= -f2)
-        else
-          HMRF_ADDRESS=
-        fi
-
-        # if HM_HMRF_ADDRESS is empty or 0 (0x000000) we use HMRF_ADDRESS as fallback
-        # and also remove /etc/config/ids because it might contain an invalid
-        # rf address
-        if [[ -z "${HMRF_ADDRESS}" ]] ||
-           [[ "${HMRF_ADDRESS}" == "0" ]] ||
-           [[ "${HMRF_ADDRESS}" == "0x000000" ]]; then
-          HMRF_ADDRESS=
-          if [[ -e /etc/config/ids ]]; then
-            mv -f /etc/config/ids /etc/config/ids_old-$(date +'%Y%m%d-%H%M%S')
-          fi
-        fi
+        HMRF_ADDRESS=
       fi
 
       # use eq3configcmd to query the BidCos-RF serial number + version
@@ -433,15 +384,7 @@ query_rf_parameters() {
       HM_HMIP_SERIAL=$(echo -n ${HMIP_SGTIN} | tail -c 10)
       HM_HMIP_VERSION=${HMIP_VERSION}
       HM_HMIP_SGTIN=${HMIP_SGTIN}
-
-      # if the /etc/config/hmip_address.conf file exists we use the rf address that
-      # is saved in that file instead of the one within the rf module
-      # because HMIPServer will anyway prefer/use the one from /etc/config/hmip_address.conf
-      if [[ -f /etc/config/hmip_address.conf ]]; then
-        HM_HMIP_ADDRESS="0x$(grep -i Adapter.1.Address /etc/config/hmip_address.conf | tr -d '[:space:]' | cut -d= -f2)"
-      else
-        HM_HMIP_ADDRESS=${HMIP_ADDRESS}
-      fi
+      HM_HMIP_ADDRESS=${HMIP_ADDRESS}
     else
       HM_HMIP_DEV=
       HM_HMIP_SERIAL=
@@ -466,6 +409,38 @@ query_rf_parameters() {
       # as a fallback, use a random number between 0xFF0000-0xFFFFFE
       HM_HMRF_ADDRESS=$(awk -v r=${RANDOM} 'BEGIN{srand(r);printf("0x%X", int(rand()*(0xFFFFFE-0xFF0000))+0xFF0000) }')
     fi
+  fi
+
+  #####################################
+  # we check if there are already some active bidcos rf address
+  # or hmip address defined in /etc/config/ids and /etc/config/hmip_address.conf
+  # or if this is a fresh installation and we have to use the default rf addresses
+  # we queried above
+
+  # get/set active bidcos rf address
+  if [[ -f /etc/config/ids ]]; then
+    HM_HMRF_ADDRESS_ACTIVE=$(grep -i BidCoS-Address /etc/config/ids 2>/dev/null | tr -d '[:space:]' | cut -d= -f2)
+
+    # if HM_HMRF_ADDRESS_ACTIVE is empty or 0 (0x000000) we use HM_HMRF_ADDRESS as fallback
+    # and also remove /etc/config/ids because it might contain an invalid
+    # rf address
+    if [[ -z "${HM_HMRF_ADDRESS_ACTIVE}" ]] ||
+       [[ "${HM_HMRF_ADDRESS_ACTIVE}" == "0" ]] ||
+       [[ "${HM_HMRF_ADDRESS_ACTIVE}" == "0x000000" ]]; then
+      HM_HMRF_ADDRESS_ACTIVE=${HM_HMRF_ADDRESS}
+      if [[ -e /etc/config/ids ]]; then
+        mv -f /etc/config/ids /etc/config/ids_old-$(date +'%Y%m%d-%H%M%S')
+      fi
+    fi
+  else
+    HM_HMRF_ADDRESS_ACTIVE=${HM_HMRF_ADDRESS}
+  fi
+
+  # get/set active hmip rf address
+  if [[ -f /etc/config/hmip_address.conf ]]; then
+    HM_HMIP_ADDRESS_ACTIVE="0x$(grep -i Adapter.1.Address /etc/config/hmip_address.conf 2>/dev/null | tr -d '[:space:]' | cut -d= -f2)"
+  else
+    HM_HMIP_ADDRESS_ACTIVE=${HMIP_ADDRESS}
   fi
 
   #####################################

@@ -7,11 +7,13 @@ OCCU_ROOT=
 install_rfd_arch:
 	mkdir -p $(TARGET_DIR)/bin
 	mkdir -p $(TARGET_DIR)/lib
+	mkdir -p $(TARGET_DIR)/$(OCCU_LIBDIR)
 	mkdir -p $(TARGET_DIR)/etc/config_templates
 	mkdir -p $(TARGET_DIR)/www/config
 	mkdir -p $(TARGET_DIR)/firmware
+	rm -f $(OCCU_ARCH)/packages-eQ-3/RFD/bin/avrprog
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/bin/* $(TARGET_DIR)/bin/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/lib/* $(TARGET_DIR)/lib/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S61rfd $(TARGET_DIR)/etc/init.d/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/etc/config_templates/* $(TARGET_DIR)/etc/config_templates/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/www/config/* $(TARGET_DIR)/www/config/
@@ -23,21 +25,33 @@ ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
 endif
 
 install_hs485d_arch:
-	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/* $(TARGET_DIR)/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/bin/* $(TARGET_DIR)/bin/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/etc/* $(TARGET_DIR)/etc/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
 
 install_webui_arch:
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/config
+	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/ReGaHss.normal
+	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/eq3-uds-services
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/* $(TARGET_DIR)/bin/
 	rm -rf $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/* $(TARGET_DIR)/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/* $(TARGET_DIR)/etc/
+	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libeq3udss.so
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/*.so $(TARGET_DIR)/$(OCCU_LIBDIR)/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2 $(TARGET_DIR)/lib/
+	ln -sf /lib32/tclrega.so $(TARGET_DIR)/lib/
+	ln -sf /lib32/tclrpc.so $(TARGET_DIR)/lib/
+	ln -sf /lib32/tclticks.so $(TARGET_DIR)/lib/
 	cp -R WebUI/* $(TARGET_DIR)/
 	mv $(TARGET_DIR)/bin/ReGaHss.community $(TARGET_DIR)/bin/ReGaHss
 ifeq ($(OCCU_WEBUI_REGAHSS_BETA), y)
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/* $(TARGET_DIR)/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
 endif
 
 install_linuxbasis_arch:
 	cp -av $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/bin/* $(TARGET_DIR)/bin/
-	cp -av $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/lib/* $(TARGET_DIR)/lib/
+	cp -av $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
 
 install_lighttpd_arch:
 	mkdir -p $(TARGET_DIR)/etc/lighttpd

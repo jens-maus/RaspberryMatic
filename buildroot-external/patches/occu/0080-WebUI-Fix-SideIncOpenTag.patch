@@ -1,0 +1,11 @@
+--- occu/WebUI/www/rega/esp/side.inc.orig
++++ occu/WebUI/www/rega/esp/side.inc
+@@ -628,7 +628,7 @@
+               }
+ 
+             } else {
+-              Write('<input id="prgStringOptionValue'#oSD.ID()#'" type="text" class="SelectBox" size="10" value="'#iV#'" onchange="iseSingleDestination.SetValue('#oSD.ID()#',this.value,\'STRING\');" />< ' );
++              Write( '<input id="prgStringOptionValue'#oSD.ID()#'" type="text" class="SelectBox" size="10" value="'#iV#'" onchange="iseSingleDestination.SetValue('#oSD.ID()#',this.value,\'STRING\');" /> ' );
+             }
+ 
+             if((ouled16 == -1)

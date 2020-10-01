@@ -1,0 +1,22 @@
+--- occu/WebUI/www/config/easymodes/cc_rt_dev_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/cc_rt_dev_master.tcl
+@@ -396,7 +396,7 @@
+           append HTML_PARAMS(separate_1) "</select> : "
+         # Decalcification minute
+           append HTML_PARAMS(separate_1) "<select id='decalcMin' onChange='setDecalcTime($prn);'>"
+-              append HTML_PARAMS(separate_1) "<option value='00'>00</option>"
++              append HTML_PARAMS(separate_1) "<option value='0'>00</option>"
+               append HTML_PARAMS(separate_1) "<option value='30'>30</option>"
+           append HTML_PARAMS(separate_1) "</select>"
+           append HTML_PARAMS(separate_1) "[getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]"
+--- occu/WebUI/www/config/easymodes/hm-cc-vg-1_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/hm-cc-vg-1_master.tcl
+@@ -454,7 +454,7 @@
+           append HTML_PARAMS(separate_1) "</select> : "
+       	# Decalcification minute
+           append HTML_PARAMS(separate_1) "<select id='decalcMin' onChange='setDecalcTime($prn);'>"
+-              append HTML_PARAMS(separate_1) "<option value='00'>00</option>"
++              append HTML_PARAMS(separate_1) "<option value='0'>00</option>"
+               append HTML_PARAMS(separate_1) "<option value='30'>30</option>"
+           append HTML_PARAMS(separate_1) "</select>"
+           append HTML_PARAMS(separate_1) "[getHelpIcon $param $hlpBoxWidth $hlpBoxHeight]"

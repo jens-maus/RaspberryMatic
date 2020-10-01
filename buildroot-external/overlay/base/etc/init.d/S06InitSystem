@@ -98,8 +98,10 @@ init_system() {
   # same disk in the old /usr/local/sdcard directory path and
   # don't force to use an external USB thumb drive.
   if echo "${HM_HOST}" | grep -q ova-; then
+    if [[ ! -d /usr/local/sdcard/measurement ]]; then
+      mkdir -p /usr/local/sdcard/measurement
+    fi
     if [[ ! -e /usr/local/sdcard/.nobackup ]]; then
-      mkdir -p /usr/local/sdcard
       touch /usr/local/sdcard/.nobackup
     fi
     ln -sf /usr/local/sdcard /media/usb0

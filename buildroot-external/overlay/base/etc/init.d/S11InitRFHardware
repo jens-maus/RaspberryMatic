@@ -211,6 +211,9 @@ init_rf_hardware() {
         echo in >/sys/class/gpio/gpio${HM_HOST_GPIO_RESET}/direction
       fi
     fi
+
+    # give the RF module some time to stabilize after the reset
+    sleep 2
   fi
 }
 

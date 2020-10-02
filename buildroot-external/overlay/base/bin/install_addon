@@ -55,6 +55,12 @@ mount -o ro,remount /boot
 # cleanup UPDATEDIR
 rm -rf ${UPDATEDIR}
 
+# run ldconfig if present because an addon
+# could have installed a new shared library
+if [[ -x /sbin/ldconfig ]]; then
+  /sbin/ldconfig -C /var/cache/ld.so.cache
+fi
+
 # make sure all data is written to disk
 sync
 

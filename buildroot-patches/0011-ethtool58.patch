@@ -1,0 +1,20 @@
+--- buildroot/package/ethtool/ethtool.hash.orig
++++ buildroot/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  724eb8bd3c3a389fe285735959a1902fbd9310624656ad3220c5f23df1053c39  ethtool-5.7.tar.xz
++sha256  91e8bbda48a7fd5d374efacca542364ceb3a6c1f286f024b64ec40ccc799e125  ethtool-5.8.tar.xz
+ # Locally calculated
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256	5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+--- buildroot/package/ethtool/ethtool.mk.orig
++++ buildroot/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ETHTOOL_VERSION = 5.7
++ETHTOOL_VERSION = 5.8
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0

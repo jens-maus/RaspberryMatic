@@ -46,6 +46,9 @@ disable_splash=1
 # activating the hardware watchdog
 dtparam=watchdog=on
 
+# Uncomment to disable continous SD-card poll (for USB SSD)
+#dtparam=sd_poll_once=on
+
 # start with heartbeat on PWR led and mmc0 on ACT led
 dtparam=pwr_led_trigger=timer,act_led_trigger=mmc0
 

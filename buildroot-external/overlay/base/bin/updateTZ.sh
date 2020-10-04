@@ -5,7 +5,7 @@
 # content of /etc/config/TZ
 #
 
-if [[ ! -f /etc/config/TZ ]]; then
+if [[ ! -s /etc/config/TZ ]]; then
   cp /etc/config_templates/TZ /etc/config/
 fi
 
@@ -41,7 +41,7 @@ case $(cat /etc/config/TZ) in
   WET-0WEST-1*)         TZ=WET ;;
   WIB-7)                TZ=Asia/Jakarta ;;
   *)
-    if [[ -e /usr/share/zoneinfo/$(cat /etc/config/TZ) ]]; then
+    if [[ -e "/usr/share/zoneinfo/$(cat /etc/config/TZ)" ]]; then
       TZ=$(cat /etc/config/TZ)
     else
       TZ=Europe/Berlin
@@ -49,7 +49,11 @@ case $(cat /etc/config/TZ) in
   ;;
 esac
 
-if [[ -e /usr/share/zoneinfo/${TZ} ]]; then
-  ln -sf /usr/share/zoneinfo/${TZ} /etc/config/localtime
-  echo ${TZ} >/etc/config/timezone
+if [[ -n "${TZ}" ]] && [[ -e "/usr/share/zoneinfo/${TZ}" ]]; then
+  if [[ "$(readlink /etc/config/localtime)" != "/usr/share/zoneinfo/${TZ}" ]] ||
+     [[ "$(cat /etc/config/timezone 2>/dev/null)" != "${TZ}" ]]; then
+    rm -f /etc/config/localtime
+    ln -s /usr/share/zoneinfo/${TZ} /etc/config/localtime
+    echo ${TZ} >/etc/config/timezone
+  fi
 fi

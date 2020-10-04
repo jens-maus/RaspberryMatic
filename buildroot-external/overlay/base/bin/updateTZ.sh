@@ -9,9 +9,9 @@ if [[ ! -s /etc/config/TZ ]]; then
   cp /etc/config_templates/TZ /etc/config/
 fi
 
-TZ=CET
+TZ=$(cat /etc/config/TZ)
 
-case $(cat /etc/config/TZ) in
+case "${TZ}" in
   ACST-9:30)            TZ=Australia/North ;;
   ACST-9:30ACDT-10:30*) TZ=Australia/South ;;
   AEST-10)              TZ=Australia/Queensland ;;
@@ -40,20 +40,19 @@ case $(cat /etc/config/TZ) in
   ULAT-8ULAST-9*)       TZ=Asia/Ulan_Bator ;;
   WET-0WEST-1*)         TZ=WET ;;
   WIB-7)                TZ=Asia/Jakarta ;;
-  *)
-    if [[ -e "/usr/share/zoneinfo/$(cat /etc/config/TZ)" ]]; then
-      TZ=$(cat /etc/config/TZ)
-    else
-      TZ=Europe/Berlin
-    fi
-  ;;
 esac
 
-if [[ -n "${TZ}" ]] && [[ -e "/usr/share/zoneinfo/${TZ}" ]]; then
-  if [[ "$(readlink /etc/config/localtime)" != "/usr/share/zoneinfo/${TZ}" ]] ||
-     [[ "$(cat /etc/config/timezone 2>/dev/null)" != "${TZ}" ]]; then
-    rm -f /etc/config/localtime
-    ln -s /usr/share/zoneinfo/${TZ} /etc/config/localtime
-    echo ${TZ} >/etc/config/timezone
-  fi
+# fallback to Europe/Berlin
+if [[ -z "${TZ}" ]] ||
+   [[ ! -e "/usr/share/zoneinfo/${TZ}" ]]; then
+  TZ=Europe/Berlin
+  cp /etc/config_templates/TZ /etc/config/TZ
+fi
+
+# update /etc/config/localtime and /etc/config/timezone
+if [[ "$(readlink /etc/config/localtime)" != "/usr/share/zoneinfo/${TZ}" ]] ||
+   [[ "$(cat /etc/config/timezone 2>/dev/null)" != "${TZ}" ]]; then
+  rm -f /etc/config/localtime
+  ln -s /usr/share/zoneinfo/${TZ} /etc/config/localtime
+  echo ${TZ} >/etc/config/timezone
 fi

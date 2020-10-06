@@ -45,9 +45,10 @@ init() {
 
   if [[ -n "${HM_HMIP_DEV}" ]]; then
 
-    # if no uart is used to connect to the rf module (e.g. HmIP-RFUSB)
+    # if no raw uart is used to connect to the rf module (e.g. HmIP-RFUSB)
     # we have to set the device node
-    if [[ "${HM_HMIP_DEVNODE}" != "${HM_HOST_GPIO_UART}" ]]; then
+    if [[ "${HM_HMIP_DEVNODE}" != "${HM_HMRF_DEVNODE}" ]] ||
+       ! echo -n "${HM_HMIP_DEVNODE}" | grep -q raw-uart; then
       HM_SERVER_DEVNODE=${HM_HMIP_DEVNODE}
     else
       HM_SERVER_DEVNODE=/dev/mmd_hmip

@@ -15,7 +15,7 @@ PIDFILE=/var/run/multimacd.pid
 init() {
   # make sure /var/etc/multimacd.conf contains the correct
   # coprocessor device path
-  sed "s|^Coprocessor Device Path = /dev/.*$|Coprocessor Device Path = ${HM_HOST_GPIO_UART}|" ${CFG_TEMPLATE_DIR}/multimacd.conf >/var/etc/multimacd.conf
+  sed "s|^Coprocessor Device Path = /dev/.*$|Coprocessor Device Path = ${HM_HMRF_DEVNODE}|" ${CFG_TEMPLATE_DIR}/multimacd.conf >/var/etc/multimacd.conf
 
   # make sure /dev/eq3loop exists
   if [[ ! -c /dev/eq3loop ]]; then
@@ -43,9 +43,15 @@ waitStartupComplete() {
 
 start() {
   echo -n "Starting multimacd: "
+
+  # we only need multimacd+eq3loop if HMIP+HMRF is using the same device
   if [[ -n "${HM_HMIP_DEV}" ]] && [[ -n "${HM_HMRF_DEV}" ]] &&
      ( ( ! echo "${HM_HMIP_DEV}" | grep -q "HMIP-RFUSB" ) || [[ "${HM_HMRF_DEV}" != "HM-CFG-USB-2" ]] ); then
+
+    # run init function
     init
+
+    # check if eq3loop is present
     if [[ -c /dev/eq3loop ]]; then
       # get the current syslog settings
       [[ -r /etc/config/syslog ]] && . /etc/config/syslog

@@ -54,20 +54,20 @@ update_rf_hardware() {
         echo "CCU2 ${FW_FILE} ${NEW_VERSION}" >${TMPDIR_FW}/fwmap
 
         if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HM_HMRF_DEVNODE}" ]]; then
-          RPI_PCB_DEVNODE=${HM_HMRF_DEVNODE}
+          DEVNODE=${HM_HMRF_DEVNODE}
         elif [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HM_HMIP_DEVNODE}" ]]; then
-          RPI_PCB_DEVNODE=${HM_HMIP_DEVNODE}
+          DEVNODE=${HM_HMIP_DEVNODE}
         fi
 
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
         # perform the coprocessor update
-        /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -u -d ${TMPDIR_FW}
+        /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p ${DEVNODE} -t HM-MOD-UART -u -d ${TMPDIR_FW}
         if [[ $? -ne 0 ]]; then
           echo -n "forcing, "
-          /usr/bin/timeout 240 /bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -u -f -d ${TMPDIR_FW}
+          /usr/bin/timeout 240 /bin/eq3configcmd update-coprocessor -p ${DEVNODE} -t HM-MOD-UART -u -f -d ${TMPDIR_FW}
         fi
-        HM_HMRF_VERSION=$(/usr/bin/timeout 30 /bin/eq3configcmd update-coprocessor -p ${RPI_PCB_DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
+        HM_HMRF_VERSION=$(/usr/bin/timeout 30 /bin/eq3configcmd update-coprocessor -p ${DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
         echo "${HM_HMRF_VERSION}" >/var/rf_firmware_version
 
         if [[ "${NEW_VERSION}" == "${HM_HMRF_VERSION}" ]]; then
@@ -101,8 +101,10 @@ update_rf_hardware() {
       # get OLD_VERSION from var tmp file
       if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
         OLD_VERSION=$(cat /var/rf_firmware_version 2>/dev/null)
+        DEVNODE=${HM_HMRF_DEVNODE}
       else
         OLD_VERSION=$(cat /var/hmip_firmware_version 2>/dev/null)
+        DEVNODE=${HM_HMIP_DEVNODE}
       fi
 
       # if NEW_VERSION is not empty we go ahead and perform the
@@ -111,7 +113,7 @@ update_rf_hardware() {
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
         # run firmware update
-        HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HOST_GPIO_UART} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HOST_GPIO_UART} -o -f ${LATEST_FIRMWARE} 2>/dev/null | grep "Version:" | cut -d' ' -f5)
+        HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${DEVNODE} -o -f ${LATEST_FIRMWARE} 2>/dev/null | grep "Version:" | cut -d' ' -f5)
 
         echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
         if [[ -z "${HM_HMRF_DEV}" ]]; then

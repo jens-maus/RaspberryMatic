@@ -39,9 +39,12 @@ install_webui_arch:
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libeq3udss.so
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/*.so $(TARGET_DIR)/$(OCCU_LIBDIR)/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2 $(TARGET_DIR)/lib/
-	ln -sf /lib32/tclrega.so $(TARGET_DIR)/lib/
-	ln -sf /lib32/tclrpc.so $(TARGET_DIR)/lib/
-	ln -sf /lib32/tclticks.so $(TARGET_DIR)/lib/
+	rm -f $(TARGET_DIR)/lib/tclrega.so
+	ln -s ../lib32/tclrega.so $(TARGET_DIR)/lib/
+	rm -f $(TARGET_DIR)/lib/tclrpc.so
+	ln -s ../lib32/tclrpc.so $(TARGET_DIR)/lib/
+	rm -f $(TARGET_DIR)/lib/tclticks.so
+	ln -s ../lib32/tclticks.so $(TARGET_DIR)/lib/
 	cp -R WebUI/* $(TARGET_DIR)/
 	mv $(TARGET_DIR)/bin/ReGaHss.community $(TARGET_DIR)/bin/ReGaHss
 ifeq ($(OCCU_WEBUI_REGAHSS_BETA), y)

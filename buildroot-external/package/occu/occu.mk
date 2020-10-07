@@ -96,6 +96,11 @@ ifeq ($(BR2_arm),y)
 	OCCU_LIBDIR=lib
 endif
 
+ifeq ($(BR2_aarch64),y)
+	OCCU_ARCH=arm-gnueabihf-gcc8
+	OCCU_LIBDIR=$(BR2_ROOTFS_LIB32_DIR)
+endif
+
 ifeq ($(BR2_i386),y)
 	OCCU_ARCH=X86_32_GCC8
 	OCCU_LIBDIR=lib

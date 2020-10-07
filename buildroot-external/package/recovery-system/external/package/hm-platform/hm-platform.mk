@@ -12,6 +12,10 @@ ifeq ($(BR2_arm),y)
 	HM_PLATFORM_ARCH=arm-gnueabihf-gcc8
 endif
 
+ifeq ($(BR2_aarch64),y)
+	HM_PLATFORM_ARCH=arm-gnueabihf-gcc8
+endif
+
 ifeq ($(BR2_i386),y)
 	HM_PLATFORM_ARCH=X86_32_GCC8
 endif

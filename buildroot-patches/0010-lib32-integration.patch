@@ -13,7 +13,7 @@
  		echo "NAME=Buildroot"; \
 --- buildroot/support/scripts/check-bin-arch.orig
 +++ buildroot/support/scripts/check-bin-arch
-@@ -84,6 +84,19 @@
+@@ -84,6 +84,22 @@
  		continue
  	fi
  
@@ -22,6 +22,9 @@
 +  if [[ "${arch_name}" =~ 64$ ]]; then
 +    if [[ ${arch_name} = "Advanced Micro Devices X86-64" ]]; then
 +      arch32='Intel 80386'
++    fi
++    if [[ ${arch_name} = "AArch64" ]]; then
++      arch32='ARM'
 +    fi
 +
 +    if [ "${arch}" = "${arch32}" ]; then

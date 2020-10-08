@@ -285,9 +285,6 @@ query_rf_parameters() {
             fi
           fi
         fi
-      else
-        echo -n "ERROR: /dev/${dev}: "
-        break
       fi
     fi
 

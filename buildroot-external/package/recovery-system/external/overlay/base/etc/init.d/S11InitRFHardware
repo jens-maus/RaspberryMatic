@@ -10,43 +10,275 @@ identify_rf_hardware() {
   HM_MODE="NORMAL"
   HM_HMRF_DEV=""
   HM_HMRF_DEVNODE=""
+  HM_HMRF_DEVTYPE=""
+  HM_HMRF_ADDRESS=""
+  HM_HMRF_ADDRESS_ACTIVE=""
+  HM_HMRF_SERIAL=""
+  HM_HMRF_VERSION=""
   HM_HMIP_DEV=""
   HM_HMIP_DEVNODE=""
+  HM_HMIP_DEVTYPE=""
+  HM_HMIP_ADDRESS=""
+  HM_HMIP_ADDRESS_ACTIVE=""
+  HM_HMIP_SERIAL=""
+  HM_HMIP_SGTIN=""
+  HM_HMIP_VERSION=""
 
-  # until we have a proper tool to identify the
-  # type of the GPIO rf module we assume a RPI-RF-MOD
-  # as soon as we have found a rx8130 RTC clock
-  if [[ "${HM_RTC}" == "rx8130" ]]; then
-    HM_HMRF_DEV="RPI-RF-MOD"
-    HM_HMIP_DEV="RPI-RF-MOD"
-  else
-    HM_HMRF_DEV="HM-MOD-RPI-PCB"
-    HM_HMIP_DEV="HM-MOD-RPI-PCB"
+  RF_DEVNODES=
+  # identify which raw-uart devices we have
+  for dev in $(ls /sys/class/raw-uart/ 2>/dev/null); do
+    if [[ -c "/dev/${dev}" ]]; then
+      echo -n "."
+      RF_DEVNODES="${RF_DEVNODES} ${dev}"
+    fi
+  done
+
+  # if we don't have any raw-uart device we add the boards'
+  # own serial devices
+  if [[ -z "${RF_DEVNODES}" ]]; then
+
+    case "${HM_HOST}" in
+      # RaspberryPi
+      rpi*)
+        [[ -c /dev/ttyAMA0 ]] && RF_DEVNODES="ttyAMA0"
+      ;;
+
+      # ASUS Tinkerboard
+      tinkerboard*)
+        [[ -c /dev/ttyS1 ]] && RF_DEVNODES="ttyS1"
+      ;;
+    esac
+
+    # also set tty device to low_latency mode (if possible)
+    if [[ -n "${RF_DEVNODES}" ]]; then
+      echo -n "."
+      /bin/setserial /dev/${RF_DEVNODES} low_latency >/dev/null 2>&1
+    fi
   fi
 
-  # check if a HB-RF-USB (https://github.com/alexreinert/PCB/tree/master/HB-RF-USB)
-  # or HB-RF-USB-2 (https://github.com/alexreinert/PCB/tree/master/HB-RF-USB-2)
-  # is present and if yes, use /dev/raw-uart1 instead.
-  if lsusb | grep -q 0403:6f70 || lsusb | grep -q 10c4:8c07; then
-    if [[ -c /dev/raw-uart1 ]]; then
-      HM_HOST_GPIO_UART="/dev/raw-uart1"
-    elif [[ -c /dev/raw-uart ]]; then
-      HM_HOST_GPIO_UART="/dev/raw-uart"
-    fi
-    if lsusb | grep -q 10c4:8c07; then
-      echo -n "HB-RF-USB-2, "
+  # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
+  if lsusb | grep -q 1b1f:c020; then
+    modprobe cp210x
+    echo 1b1f c020 >/sys/bus/usb-serial/drivers/cp210x/new_id
+    for i in $(find /sys/bus/usb/devices/usb*/ -name "ttyUSB*" -maxdepth 4); do
+      DEVDIR=$(dirname $i)
+      if [[ -f "${DEVDIR}/uevent" ]]; then
+        if grep -q PRODUCT=1b1f/c020 ${DEVDIR}/uevent; then
+          # add with preference
+          echo -n "."
+          RF_DEVNODES="$(basename $i) ${RF_DEVNODES}"
+          break
+        fi
+      fi
+    done
+  fi
+
+  # check if a HM-CFG-USB-2 (1b1f:c00f) USB stick is connected
+  # and HMRF_DEV accordingly
+  if lsusb | grep -q 1b1f:c00f; then
+    HM_HMRF_DEV="HM-CFG-USB-2"
+    HM_HMRF_SERIAL=$(cat /sys/bus/usb/devices/*/serial | grep -E '^[A-Z]{3}[0-9]{7}.*')
+    HM_HMRF_DEVNODE=""
+    HM_HMRF_DEVTYPE="USB"
+    echo -n "."
+  fi
+
+  # check if we should boot in LAN gateway mode
+  if [[ -e /usr/local/HMLGW ]]; then
+    HM_MODE="HM-LGW"
+  fi
+
+  # strip leading/trailing spaces from RF_DEVNODES
+  RF_DEVNODES=$(echo ${RF_DEVNODES} | xargs)
+}
+
+# function to reset rf hardware
+reset_rf_hardware() {
+
+  # walk through our recognized device nodes and perform a
+  # rf module reset
+  for dev in ${RF_DEVNODES}; do
+
+    echo -n "."
+    # check if this is NOT a raw-uart device or NOT a HB-RF-USB but
+    # a GPIO based raw-uart and if so we reset the rf-module on our own.
+    if [[ ! -e "/sys/class/raw-uart/${dev}/device_type" ]] ||
+          grep -q GPIO /sys/class/raw-uart/${dev}/device_type; then
+
+      # only perform GPIO reset if this is no USB device (HmIP-RFUSB)
+      if ! echo ${dev} | grep -q ttyUSB; then
+
+        # clear GPIO reset pin definition variable
+        GPIO_RESET=
+
+        # reset the rf module using gpio up/down and use different gpios
+        # for the RPI-RF-MOD or HM-MOD-RPI-PCB
+        if [[ "${HM_RTC}" == "rx8130" ]]; then
+          # this is a RPI-RF-MOD because a rx8130 RTC was identified previously
+          # depending on the host hardware we have to define different
+          # reset pins
+          case "${HM_HOST}" in
+            # RaspberryPi
+            rpi*)
+              GPIO_RESET=19  # GPIO19/GPIO.24 (pin 35)
+            ;;
+
+            # ASUS Tinkerboard
+            tinkerboard*)
+              GPIO_RESET=185 # GPIO185/GPIO6A1 (pin 35)
+            ;;
+          esac
+        else
+          # this is probably a HM-MOD-RPI-PCB
+          # depending on the host hardware we have to define different
+          # reset pins
+          case "${HM_HOST}" in
+            # RaspberryPi
+            rpi*)
+              GPIO_RESET=18  # GPIO18/GPIO.1 (pin 12)
+            ;;
+
+            # ASUS Tinkerboard
+            tinkerboard*)
+              GPIO_RESET=184 # GPIO184/GPIO6A0 (pin 12)
+            ;;
+          esac
+        fi
+
+        # reset the GPIO rf module by switching its reset pin
+        # and reset it to an input pin to get it floating again.
+        if [[ -n "${GPIO_RESET}" ]]; then
+          if [[ ! -e /sys/class/gpio/gpio${GPIO_RESET} ]]; then
+            echo ${GPIO_RESET} >/sys/class/gpio/export
+          fi
+          echo out >/sys/class/gpio/gpio${GPIO_RESET}/direction
+          echo 0 >/sys/class/gpio/gpio${GPIO_RESET}/value
+          sleep 0.1
+          echo 1 >/sys/class/gpio/gpio${GPIO_RESET}/value
+          sleep 0.1
+          echo in >/sys/class/gpio/gpio${GPIO_RESET}/direction
+        fi
+      fi
+
     else
-      echo -n "HB-RF-USB, "
+      # this is a raw-uart and connected to a HB-RF-USB/HB-RF-USB-2 so lets
+      # use the reset_radio_module sysfs entry to reset the rf module
+      echo 1 >/sys/class/raw-uart/${dev}/reset_radio_module
+      echo -n "."
     fi
 
-    # reset rf-module using generic_raw_uart
-    echo 1 >/sys/class/raw-uart/$(basename ${HM_HOST_GPIO_UART})/reset_radio_module
-    sleep 5
- 
+  done
+
+  # give the RF module some time to stabilize after the reset
+  sleep 2
+}
+
+# function to read out all relevant rf module parameters (serial, firmware
+# version, rf-addresses, sgtin, etc.)
+query_rf_parameters() {
+
+  # status for copro reset
+  RF_COPRO_RESET_PERFORMED=false
+
+  # walk through our recognized device nodes and query for
+  # all rf module relevant parameters
+  for dev in ${RF_DEVNODES}; do
+
+    echo -n "."
+
+    # use detect_radio_module to retrieve all relevant info from
+    # the rf-module
+    if [[ -c /dev/${dev} ]]; then
+      RF_INFO=$(/bin/detect_radio_module /dev/${dev})
+      if [[ $? -eq 0 ]]; then
+
+        echo -n "."
+
+        RF_HARDWARE=$(echo -n ${RF_INFO} | cut -d' ' -f1 | tr '[:lower:]' '[:upper:]')
+
+        # get all RF parameters
+        RF_SERIAL=$(echo -n ${RF_INFO} | cut -d' ' -f2)
+        RF_HMIP_SGTIN=$(echo -n ${RF_INFO} | cut -d' ' -f3)
+        RF_HMRF_ADDRESS=$(echo -n ${RF_INFO} | cut -d' ' -f4)
+        RF_HMIP_ADDRESS=$(echo -n ${RF_INFO} | cut -d' ' -f5)
+        RF_VERSION=$(echo -n ${RF_INFO} | cut -d' ' -f6)
+
+        # now check if we have a BidCos-RF/HmRF device already
+        # set and if not use this device for BidCos-RF/HmRF
+        if [[ -n "${RF_HMRF_ADDRESS}" ]] &&
+           [[ "${RF_HMRF_ADDRESS}" != "0x000000" ]] &&
+           [[ -n "${RF_SERIAL}" ]]; then
+
+          # prefer a HM-MOD-RPI-PCB for HmRF stuff in case
+          # we already have a setup HMRF device
+          if [[ -z "${HM_HMRF_DEV}" ]] ||
+             ( [[ "${RF_HARDWARE}" == "HM-MOD-RPI-PCB" ]] &&
+               [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ); then
+
+            HM_HMRF_DEV=${RF_HARDWARE}
+            HM_HMRF_DEVNODE="/dev/${dev}"
+            HM_HMRF_ADDRESS=${RF_HMRF_ADDRESS}
+            HM_HMRF_SERIAL=${RF_SERIAL}
+            HM_HMRF_VERSION=${RF_VERSION}
+
+            if [[ -e /sys/class/raw-uart/${dev}/device_type ]]; then
+              HM_HMRF_DEVTYPE=$(cat /sys/class/raw-uart/${dev}/device_type)
+            else
+              HM_HMRF_DEVTYPE=GPIO
+            fi
+          fi
+        fi
+
+        # now check if we have a HmIP device already
+        # set and if not use this device for HmIP
+        if [[ -n "${RF_HMIP_ADDRESS}" ]] &&
+           [[ "${RF_HMIP_ADDRESS}" != "0x000000" ]] &&
+           [[ -n "${RF_SERIAL}" ]]; then
+
+          # prefer a RPI-RF-MOD / HmIP-RFUSB for HmIP stuff in case
+          # we already have a setup HMIP device
+          if [[ -z "${HM_HMIP_DEV}" ]] ||
+             ( [[ "${RF_HARDWARE}" == "RPI-RF-MOD" ]] &&
+               [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] ); then
+
+            HM_HMIP_DEV=${RF_HARDWARE}
+            HM_HMIP_DEVNODE="/dev/${dev}"
+            HM_HMIP_ADDRESS=${RF_HMIP_ADDRESS}
+            HM_HMIP_SERIAL=${RF_SERIAL}
+            HM_HMIP_SGTIN=${RF_HMIP_SGTIN}
+            HM_HMIP_VERSION=${RF_VERSION}
+
+            if [[ -e /sys/class/raw-uart/${dev}/device_type ]]; then
+              HM_HMIP_DEVTYPE=$(cat /sys/class/raw-uart/${dev}/device_type)
+            elif [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
+              HM_HMIP_DEVTYPE=USB
+            else
+              HM_HMIP_DEVTYPE=GPIO
+            fi
+          fi
+        fi
+      fi
+    fi
+
+  done
+
+  #####################################
+  # now we check if we have a RPI-RF-MOD connected to
+  # a HB-RF-USB/HB-RF-USB-2 and if so we have to setup its
+  # led driver correctly.
+  if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] &&
+     echo "${HM_HMRF_DEVTYPE}" | grep -qi HB-RF-USB; then
+    HBRF_DEVNODE=$(basename ${HM_HMRF_DEVNODE})
+  elif [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]] &&
+       echo "${HM_HMIP_DEVTYPE}" | grep -qi HB-RF-USB; then
+    HBRF_DEVNODE=$(basename ${HM_HMIP_DEVNODE})
+  fi
+
+  if [[ -n "${HBRF_DEVNODE}" ]]; then
     # get the RED/GREEN/BLUE pin ids
-    RED_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/$(basename ${HM_HOST_GPIO_UART})/red_gpio_pin)
-    GREEN_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/$(basename ${HM_HOST_GPIO_UART})/green_gpio_pin)
-    BLUE_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/$(basename ${HM_HOST_GPIO_UART})/blue_gpio_pin)
+    RED_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/red_gpio_pin)
+    GREEN_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/green_gpio_pin)
+    BLUE_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/blue_gpio_pin)
 
     # make sure to unbind the gpio-leds driver first
     if [[ -e /sys/class/leds/rpi_rf_mod\:blue ]]; then
@@ -56,20 +288,17 @@ identify_rf_hardware() {
         GPIO_LEDS=leds
       fi
 
-      echo ${GPIO_LEDS} >/sys/bus/platform/drivers/leds-gpio/unbind
+      echo ${GPIO_LEDS} >/sys/bus/platform/drivers/leds-gpio/unbind 2>/dev/null
     fi
 
     # load the rpi_rf_mod_led kernel module
     modprobe rpi_rf_mod_led red_gpio_pin=${RED_GPIO_PIN} green_gpio_pin=${GREEN_GPIO_PIN} blue_gpio_pin=${BLUE_GPIO_PIN}
 
     # rebind the gpio-leds so that numeration of the rpi-rf-mod leds are correct
-    if [[ ! -e /sys/bus/platform/drivers/leds-gpio/${GPIO_LEDS} ]]; then
-      echo ${GPIO_LEDS} >/sys/bus/platform/drivers/leds-gpio/bind
+    if [[ -n "${GPIO_LEDS}" ]] &&
+       [[ ! -e /sys/bus/platform/drivers/leds-gpio/${GPIO_LEDS} ]]; then
+      echo ${GPIO_LEDS} >/sys/bus/platform/drivers/leds-gpio/bind 2>/dev/null
     fi
-
-    # load the dummy rx8130 kernel module because an RPI-RF-MOD
-    # is identified by having a rx8130 module loaded
-    modprobe dummy_rx8130
 
     # setup the LEDs to show a slowly blinking magenta light
     echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
@@ -80,6 +309,63 @@ identify_rf_hardware() {
     echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_on
     echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_off
   fi
+
+  #####################################
+  # we check if there are already some active bidcos rf address
+  # or hmip address defined in /etc/config/ids and /etc/config/hmip_address.conf
+  # or if this is a fresh installation and we have to use the default rf addresses
+  # we queried above
+
+  # get/set active bidcos rf address
+  if [[ -f /etc/config/ids ]]; then
+    HM_HMRF_ADDRESS_ACTIVE=$(grep -i BidCoS-Address /etc/config/ids 2>/dev/null | tr -d '[:space:]' | cut -d= -f2)
+
+    # if HM_HMRF_ADDRESS_ACTIVE is empty or 0 (0x000000) we use HM_HMRF_ADDRESS as fallback
+    # and also remove /etc/config/ids because it might contain an invalid
+    # rf address
+    if [[ -z "${HM_HMRF_ADDRESS_ACTIVE}" ]] ||
+       [[ "${HM_HMRF_ADDRESS_ACTIVE}" == "0" ]] ||
+       [[ "${HM_HMRF_ADDRESS_ACTIVE}" == "0x000000" ]]; then
+      HM_HMRF_ADDRESS_ACTIVE=${HM_HMRF_ADDRESS}
+      if [[ -e /etc/config/ids ]]; then
+        mv -f /etc/config/ids /etc/config/ids_old-$(date +'%Y%m%d-%H%M%S')
+      fi
+    fi
+  else
+    HM_HMRF_ADDRESS_ACTIVE=${HM_HMRF_ADDRESS}
+  fi
+
+  # get/set active hmip rf address
+  if [[ -f /etc/config/hmip_address.conf ]]; then
+    HM_HMIP_ADDRESS_ACTIVE="0x$(grep -i Adapter.1.Address /etc/config/hmip_address.conf 2>/dev/null | tr -d '[:space:]' | cut -d= -f2)"
+  else
+    HM_HMIP_ADDRESS_ACTIVE=${HMIP_ADDRESS}
+  fi
+
+  #####################################
+  # save all main info about the RF module
+
+  # prefer to use a HM_HMIP_SERIAL with the last
+  # 10 chars of the SGTIN because that is the serial
+  # of the RF module registered at eQ3
+  if [[ -n "${HM_HMIP_SERIAL}" ]]; then
+    echo -n "${HM_HMIP_SERIAL}" >/var/board_serial
+  else
+    echo -n "${HM_HMRF_SERIAL}" >/var/board_serial
+  fi
+
+  if [[ -n "${HM_HMIP_SGTIN}" ]]; then
+    echo -n "${HM_HMIP_SGTIN}" >/var/board_sgtin
+  fi
+
+  # output BidCos/HmIP specific infos
+  echo -n "${HM_HMRF_SERIAL}" >/var/rf_board_serial
+  echo -n "${HM_HMRF_ADDRESS}" >/var/rf_address
+  echo -n "${HM_HMRF_VERSION}" >/var/rf_firmware_version
+  echo -n "${HM_HMIP_SERIAL}" >/var/hmip_board_serial
+  echo -n "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
+  echo -n "${HM_HMIP_ADDRESS}" >/var/hmip_address
+  echo -n "${HM_HMIP_SGTIN}" >/var/hmip_board_sgtin
 }
 
 start() {
@@ -89,15 +375,17 @@ start() {
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
   identify_rf_hardware
+  reset_rf_hardware
+  query_rf_parameters
 
   # save all HM_ env variables
   set | grep '^HM_' >/var/hm_mode
 
   # output some status information
-  echo -n "BidCos-RF: "
-  [[ -n "${HM_HMRF_DEV}" ]] && echo -n "${HM_HMRF_DEV}, " || echo -n "none, "
+  echo -n "HmRF: "
+  [[ -n "${HM_HMRF_DEV}" ]] && echo -n "${HM_HMRF_DEV}/${HM_HMRF_DEVTYPE}, " || echo -n "none, "
   echo -n "HmIP: "
-  [[ -n "${HM_HMIP_DEV}" ]] && echo -n "${HM_HMIP_DEV}, " || echo -n "none, "
+  [[ -n "${HM_HMIP_DEV}" ]] && echo -n "${HM_HMIP_DEV}/${HM_HMIP_DEVTYPE}, " || echo -n "none, "
   echo "OK"
 }
 

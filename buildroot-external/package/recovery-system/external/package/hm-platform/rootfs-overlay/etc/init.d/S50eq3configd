@@ -5,23 +5,16 @@
 
 init () {
 
-  HM_HMRF_SERIAL=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -c -se 2>&1 | grep "SerialNumber:" | cut -d' ' -f5 | tr -d '[:space:]')
-  HM_HMRF_SGTIN=$(/usr/bin/timeout 20 /bin/eq3configcmd update-coprocessor -p ${HM_HOST_GPIO_UART} -c -sg 2>&1 | grep "SGTIN:" | cut -d' ' -f5 | tr -d '[:space:]')
-  echo $HM_HMRF_SERIAL > /var/board_serial
-  echo $HM_HMRF_SGTIN > /var/board_sgtin
+  # we output the BidCos-Address and the
+  # SerialNumber to /var/ids
+  echo "BidCoS-Address=$(cat /var/rf_address)" >/var/ids
+  echo "SerialNumber=$(cat /var/board_serial)" >>/var/ids
 
 }
 
 start() {
   echo -n "Starting eq3configd: "
-
-  # source all data from /var/hm_mode
-  [[ -r /var/hm_mode ]] && . /var/hm_mode
-
   init
-
-  # save all HM_ env variables
-  set | grep '^HM_' >/var/hm_mode
 
   start-stop-daemon -S -q -b -m -p /var/run/eq3configd.pid --exec /bin/eq3configd
 

@@ -1,3 +1,6 @@
+# enable aarch64 bit support
+arm_64bit=1
+
 # disable HDMI port on blanking
 hdmi_blanking=1
 

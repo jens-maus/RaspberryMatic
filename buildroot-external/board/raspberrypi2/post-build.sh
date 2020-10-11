@@ -6,7 +6,7 @@ cp -a ${BINARIES_DIR}/zImage ${TARGET_DIR}/
 # create VERSION file
 echo "VERSION=${PRODUCT_VERSION}" >${TARGET_DIR}/VERSION
 echo "PRODUCT=${PRODUCT}" >>${TARGET_DIR}/VERSION
-echo "PLATFORM=rpi3" >>${TARGET_DIR}/VERSION
+echo "PLATFORM=rpi2" >>${TARGET_DIR}/VERSION
 
 # fix some permissions
 [ -e ${TARGET_DIR}/etc/monitrc ] && chmod 600 ${TARGET_DIR}/etc/monitrc

@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [rpi0, rpi3, rpi4, tinkerboard, intelnuc, ova]
+        platform: [rpi0, rpi2, rpi3, rpi4, tinkerboard, intelnuc, ova]
     
     steps:
     - uses: actions/checkout@v2

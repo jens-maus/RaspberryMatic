@@ -7,7 +7,7 @@ setenv bootfs 1
 setenv rootfs 2
 setenv userfs 3
 setenv gpio_button "GPIO12"
-setenv kernel_img "zImage"
+setenv kernel_img "Image"
 setenv recoveryfs_initrd "recoveryfs-initrd"
 
 # output where we are booting from
@@ -21,7 +21,7 @@ if test -e ${devtype} ${devnum}:${bootfs} bootEnv.txt; then
 fi
 
 # test if the gpio button is 0 (pressed) or if .recoveryMode exists in userfs
-# or if zImage doesn't exist in the root partition
+# or if Image doesn't exist in the root partition
 gpio input ${gpio_button}
 if test $? -eq 0 -o -e ${devtype} ${devnum}:${userfs} /.recoveryMode -o ! -e ${devtype} ${devnum}:${rootfs} ${kernel_img}; then
   echo "==== STARTING RECOVERY SYSTEM ===="
@@ -29,7 +29,7 @@ if test $? -eq 0 -o -e ${devtype} ${devnum}:${userfs} /.recoveryMode -o ! -e ${d
   load ${devtype} ${devnum}:${bootfs} ${load_addr} ${recoveryfs_initrd}
   setenv rootfs_str "/dev/ram0"
   setenv initrd_addr_r ${load_addr}
-  setenv kernel_img "recoveryfs-zImage"
+  setenv kernel_img "recoveryfs-Image"
   setenv kernelfs ${bootfs}
 else
   echo "==== NORMAL BOOT ===="
@@ -51,4 +51,4 @@ setenv bootargs "dwc_otg.lpm_enable=0 sdhci_bcm2708.enable_llm=0 console=${conso
 load ${devtype} ${devnum}:${kernelfs} ${kernel_addr_r} ${kernel_img}
 
 # boot kernel
-bootz ${kernel_addr_r} ${initrd_addr_r} ${fdt_addr}
+booti ${kernel_addr_r} ${initrd_addr_r} ${fdt_addr}

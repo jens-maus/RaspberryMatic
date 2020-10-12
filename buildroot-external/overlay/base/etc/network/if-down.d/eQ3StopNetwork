@@ -5,7 +5,6 @@ mkdir -p /var/status
 rm -f /var/status/hasLink
 rm -f /var/status/hasIP
 rm -f /var/status/hasInternet
-rm -f /var/status/hasNTP
 
 # stop WPA Supplicant if this is a WiFi connection
 case ${IFACE} in

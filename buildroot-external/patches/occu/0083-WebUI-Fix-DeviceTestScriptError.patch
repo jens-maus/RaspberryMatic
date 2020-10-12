@@ -1,0 +1,11 @@
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -534,7 +534,7 @@
+   foreach( s, dom.TestRunningIDs().EnumIDs() )
+   {
+     object oTestChannel = dom.GetObject( s );
+-    if( oTestChannel )
++    if( (oTestChannel) && (oTestChannel.IsTypeOf( OT_CHANNEL )) )
+     {
+       Write("if($('TestButtonCH"#s#"'))$('TestButtonCH"#s#"').className = 'TestButtonDisabled';" );
+       Write("if($('OkButtonCH"#s#"'))$('OkButtonCH"#s#"').className = 'OkButtonRunning';" );

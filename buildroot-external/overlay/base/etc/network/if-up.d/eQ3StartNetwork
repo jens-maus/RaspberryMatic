@@ -105,6 +105,9 @@ hostname "${HOSTNAME}"
 # setup /etc/hosts
 echo "127.0.0.1 localhost" >/etc/hosts
 echo "127.0.1.1 ${HOSTNAME}" >>/etc/hosts
+echo "::1 ip6-localhost ip6-loopback" >>/etc/hosts
+echo "ff02::1 ip6-allnodes" >>/etc/hosts
+echo "ff02::2 ip6-allrouters" >>/etc/hosts
 
 # restart syslogd to update hostname
 /etc/init.d/S07logging restart 2>/dev/null >/dev/null

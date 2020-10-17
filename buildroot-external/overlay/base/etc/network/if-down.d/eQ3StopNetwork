@@ -1,16 +1,26 @@
 #!/bin/sh
 
-mkdir -p /var/status
-
-rm -f /var/status/hasLink
-rm -f /var/status/hasIP
-rm -f /var/status/hasInternet
-
-# stop WPA Supplicant if this is a WiFi connection
+# check if we have to stop wpa supplicant in case this
+# is a wlan connection to be stopped
 case ${IFACE} in
   wlan*)
+    # stop WPA Supplicant if this is a WiFi connection
     killall -q wpa_supplicant
   ;;
 esac
+
+# if a link down has been identified we remove the hasLink
+# status file
+if [[ "$(cat /sys/class/net/${IFACE}/carrier 2>/dev/null)" != "1" ]]; then
+  rm -f /var/status/hasLink
+  rm -f /var/status/hasInternet
+fi
+
+# if the interface lost its IP we remove hasIP
+IP=$(ip -4 addr show dev ${IFACE} | sed -En -e 's/.*inet ([0-9.]+).*/\1/p')
+if [[ -z "${IP}" ]]; then
+  rm -f /var/status/hasIP
+  rm -f /var/status/hasInternet
+fi
 
 exit 0

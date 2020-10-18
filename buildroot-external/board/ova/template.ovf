@@ -16,7 +16,7 @@
   <VirtualSystem ovf:id="RaspberryMatic">
     <Info>A virtual machine</Info>
     <Name>RaspberryMatic</Name>
-    <OperatingSystemSection ovf:id="36" vmw:osType="other4xLinuxGuest" ovf:required="false">
+    <OperatingSystemSection ovf:id="99" vmw:osType="other4xLinuxGuest" ovf:required="false">
       <Info>The kind of installed guest operating system</Info>
       <Description>Linux</Description>
     </OperatingSystemSection>

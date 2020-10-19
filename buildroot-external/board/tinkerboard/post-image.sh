@@ -4,10 +4,6 @@ MKIMAGE=${HOST_DIR}/usr/bin/mkimage
 BOARD_DIR="$(dirname $0)"
 BOARD_NAME="$(basename ${BOARD_DIR})"
 
-# prepare the uboot image to be flashed
-${MKIMAGE} -n rk3288 -T rksd -d ${BINARIES_DIR}/u-boot-spl-dtb.bin ${BINARIES_DIR}/u-boot.bin
-cat ${BINARIES_DIR}/u-boot-dtb.bin >>${BINARIES_DIR}/u-boot.bin
-
 #
 # Create user filesystem
 #

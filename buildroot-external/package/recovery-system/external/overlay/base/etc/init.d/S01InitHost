@@ -9,7 +9,7 @@ identify_host() {
   HM_HOST=""
   HM_MODE="NORMAL"
   HM_LED_GREEN=""
-  HM_LED_GREEN_MODE1="$(lsblk -r -n -o pkname,partuuid,label,mountpoint | sed -n 's/mmc.*\([[:digit:]]\) deedbeef-02 rootfs .*/mmc\1/p')"
+  HM_LED_GREEN_MODE1="$(lsblk -r -n -o pkname,partuuid,label,mountpoint | sed -n 's/mmc.*\([[:digit:]]\).*rootfs.*/mmc\1/p')"
   HM_LED_GREEN_MODE2=${HM_LED_GREEN_MODE1}
   HM_LED_RED=""
   HM_LED_RED_MODE1="timer"

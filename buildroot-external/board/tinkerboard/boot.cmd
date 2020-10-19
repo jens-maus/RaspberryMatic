@@ -40,7 +40,13 @@ else
   setenv kernelfs ${rootfs}
 fi
 
-# load devicetree
+# Load device tree
+if test "${devnum}" = "0"; then
+  setenv fdtfile "rk3288-tinker-s.dtb"
+else
+  setenv fdtfile "rk3288-tinker.dtb"
+fi
+
 echo "Loading standard device tree ${fdtfile}"
 load ${devtype} ${devnum}:${bootfs} ${fdt_addr_r} ${fdtfile}
 fdt addr ${fdt_addr_r}

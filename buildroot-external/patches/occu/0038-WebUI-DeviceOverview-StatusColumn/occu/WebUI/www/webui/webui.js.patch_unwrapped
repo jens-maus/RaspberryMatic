@@ -1,5 +1,5 @@
---- webui_unwrapped.js.orig	2020-08-31 22:18:02.276744623 +0200
-+++ webui_unwrapped.js	2020-08-31 22:21:59.698264758 +0200
+--- webui_unwrapped.js.orig	2020-10-19 18:27:05.583710875 +0200
++++ webui_unwrapped.js	2020-10-19 18:26:52.655503635 +0200
 @@ -394,6 +394,7 @@
      <col style=\"width:25px;\"\/>\n
      <col style=\"width:25px;\"\/>\n
@@ -73,7 +73,7 @@
        <td class=\"DeviceListFoot\"><div class=\"CLASS10905\" \/><\/td>\n
      <\/tr>  \n
    <\/tfoot>\n
-@@ -10486,6 +10494,159 @@
+@@ -10486,6 +10494,162 @@
    },
    
    /**
@@ -122,19 +122,22 @@
 +    // values fron the supplied rssiListHmRF
 +    if (this.interfaceName === 'BidCos-RF')
 +    {
-+      var address = this.address;
-+      var rssiInfo = rssiListHmRF.find(function(x) { return x.name === address });
-+
-+      if (rssiInfo !== null && typeof(rssiInfo) !== 'undefined' &&
-+          rssiInfo.partner !== null && typeof(rssiInfo.partner) !== 'undefined')
++      if (rssiListHmRF !== null)
 +      {
-+        var rssiData = rssiInfo.partner[0].rssiData;
-+        this.RSSI_DEVICE = rssiData[0];
-+        this.RSSI_PEER = rssiData[1];
-+        if(this.RSSI_DEVICE === 65536)
-+          this.RSSI_DEVICE = -65535;
-+        if(this.RSSI_PEER === 65536)
-+          this.RSSI_PEER = -65535;
++        var address = this.address;
++        var rssiInfo = rssiListHmRF.find(function(x) { return x.name === address });
++
++        if (rssiInfo !== null && typeof(rssiInfo) !== 'undefined' &&
++            rssiInfo.partner !== null && typeof(rssiInfo.partner) !== 'undefined')
++        {
++          var rssiData = rssiInfo.partner[0].rssiData;
++          this.RSSI_DEVICE = rssiData[0];
++          this.RSSI_PEER = rssiData[1];
++          if(this.RSSI_DEVICE === 65536)
++            this.RSSI_DEVICE = -65535;
++          if(this.RSSI_PEER === 65536)
++            this.RSSI_PEER = -65535;
++        }
 +      }
 +    }
 +    else
@@ -233,7 +236,7 @@
     * Legt den Namen des Geräts fest.
     **/
    setName: function(name)
-@@ -10873,6 +11034,36 @@
+@@ -10873,6 +11037,36 @@
    },
    
    /**
@@ -270,7 +273,7 @@
     * Startet die Akualisierung eines Geräts.
     **/
    beginUpdateDevice:function(id, callback)
-@@ -12277,6 +12468,8 @@
+@@ -12277,6 +12471,8 @@
          conInfo(e);
        }
      });
@@ -279,7 +282,7 @@
    }
  });
  /**
-@@ -12568,6 +12761,8 @@
+@@ -12568,6 +12764,8 @@
  
      translateJSTemplate("#MultiChannelChooserDialog");
      translatePage(".MultiChannelChooserRow");
@@ -288,7 +291,7 @@
    }
      
  });
-@@ -21479,6 +21674,8 @@
+@@ -21479,6 +21677,8 @@
      translatePage(".j_rooms, .j_functions"); // this translates the room name as well the function name within the main devicelist (Settings > Devices)
      jQuery("#DeviceListPage_RoomFilter").draggable();
      jQuery("#DeviceListPage_FuncFilter").draggable();

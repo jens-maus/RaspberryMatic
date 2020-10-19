@@ -9777,19 +9777,22 @@ Device = Class.create({
     // values fron the supplied rssiListHmRF
     if (this.interfaceName === 'BidCos-RF')
     {
-      var address = this.address;
-      var rssiInfo = rssiListHmRF.find(function(x) { return x.name === address });
-
-      if (rssiInfo !== null && typeof(rssiInfo) !== 'undefined' &&
-          rssiInfo.partner !== null && typeof(rssiInfo.partner) !== 'undefined')
+      if (rssiListHmRF !== null)
       {
-        var rssiData = rssiInfo.partner[0].rssiData;
-        this.RSSI_DEVICE = rssiData[0];
-        this.RSSI_PEER = rssiData[1];
-        if(this.RSSI_DEVICE === 65536)
-          this.RSSI_DEVICE = -65535;
-        if(this.RSSI_PEER === 65536)
-          this.RSSI_PEER = -65535;
+        var address = this.address;
+        var rssiInfo = rssiListHmRF.find(function(x) { return x.name === address });
+
+        if (rssiInfo !== null && typeof(rssiInfo) !== 'undefined' &&
+            rssiInfo.partner !== null && typeof(rssiInfo.partner) !== 'undefined')
+        {
+          var rssiData = rssiInfo.partner[0].rssiData;
+          this.RSSI_DEVICE = rssiData[0];
+          this.RSSI_PEER = rssiData[1];
+          if(this.RSSI_DEVICE === 65536)
+            this.RSSI_DEVICE = -65535;
+          if(this.RSSI_PEER === 65536)
+            this.RSSI_PEER = -65535;
+        }
       }
     }
     else

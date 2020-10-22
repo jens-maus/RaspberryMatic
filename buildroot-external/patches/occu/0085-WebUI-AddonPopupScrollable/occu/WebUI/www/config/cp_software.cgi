@@ -243,7 +243,7 @@ proc action_put_page {} {
     puts "\${dialogSettingsExtraSoftwareTitle}"
   }
   division {class="CLASS21406"} {
-    division {style="height:50vh;max-height:400px;width:100%;overflow:scroll;"} {
+    division {style="height:65vh;max-height:400px;width:100%;overflow:scroll;"} {
     table {class="popupTable"} {border="1"} {
       set scripts ""
       set loop -1

@@ -243,7 +243,7 @@ proc action_put_page {} {
     puts "\${dialogSettingsExtraSoftwareTitle}"
   }
   division {class="CLASS21406"} {
-    puts "<div style='height:400px;width:100%;overflow:scroll;'>"
+    division {style="height:50vh;max-height:400px;width:100%;overflow:scroll;"} {
     table {class="popupTable"} {border="1"} {
       set scripts ""
       set loop -1
@@ -385,8 +385,8 @@ proc action_put_page {} {
         }
       }
     }
+    }
   }
-  puts "</div>"
   division {class="popupControls"} {
     table {
       table_row {

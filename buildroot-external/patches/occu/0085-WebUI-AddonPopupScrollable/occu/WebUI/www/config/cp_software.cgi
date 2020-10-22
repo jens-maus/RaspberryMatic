@@ -243,8 +243,8 @@ proc action_put_page {} {
     puts "\${dialogSettingsExtraSoftwareTitle}"
   }
   division {class="CLASS21406"} {
-    division {style="height:65vh;max-height:400px;width:100%;overflow:scroll;"} {
-    table {class="popupTable"} {border="1"} {
+    division {style="height:65vh;width:100%;overflow:scroll;"} {
+    table {class="popupTable"} {border="1"} {height="100%"} {
       set scripts ""
       set loop -1
       catch { set scripts [glob /etc/config/rc.d/*] }

@@ -386,7 +386,7 @@ proc action_put_page {} {
       }
     }
   }
-  puts "<div>"
+  puts "</div>"
   division {class="popupControls"} {
     table {
       table_row {

@@ -534,6 +534,7 @@ proc action_image_upload {} {
 }
 
 proc action_install_start {} {
+  puts ""
 }
 
 cgi_eval {

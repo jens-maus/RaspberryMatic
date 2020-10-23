@@ -1,18 +1,20 @@
 --- occu/WebUI/www/config/cp_software.cgi.orig
 +++ occu/WebUI/www/config/cp_software.cgi
-@@ -243,6 +243,7 @@
+@@ -243,7 +243,8 @@
      puts "\${dialogSettingsExtraSoftwareTitle}"
    }
    division {class="CLASS21406"} {
-+    puts "<div style='height:400px;width:100%;overflow:scroll;'>"
-     table {class="popupTable"} {border="1"} {
+-    table {class="popupTable"} {border="1"} {
++    division {style="height:80vh;width:100%;overflow:auto;"} {
++    table {class="popupTable"} {border="1"} {height="100%"} {
        set scripts ""
        set loop -1
-@@ -385,6 +386,7 @@
+       catch { set scripts [glob /etc/config/rc.d/*] }
+@@ -384,6 +385,7 @@
+         }
        }
      }
++    }
    }
-+  puts "</div>"
    division {class="popupControls"} {
      table {
-       table_row {

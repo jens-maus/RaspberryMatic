@@ -40,17 +40,15 @@ start() {
       fi
     fi
 
+    # migration for existing installations: check for .nobackup file and create it if it does not exists
+    if [[ -d /usr/local/addons/mediola ]] &&
+       [[ ! -f /usr/local/addons/mediola/.nobackup ]]; then
+      touch /usr/local/addons/mediola/.nobackup
+    fi
+
     if [[ ! -e /usr/local/addons/mediola/Disabled ]]; then
       /opt/mediola/startup.sh 2>/dev/null >/dev/null
       /usr/local/addons/mediola/bin/watchdog
-
-      # migration for existing installations: check for .nobackup file and create it if it does not exists
-      if [[ -d /usr/local/addons/mediola ]]; then
-        if [[ ! -f /usr/local/addons/mediola/.nobackup ]]; then
-          touch /usr/local/addons/mediola/.nobackup
-        fi
-      fi
-
       echo "OK"
     else
       echo "disabled"

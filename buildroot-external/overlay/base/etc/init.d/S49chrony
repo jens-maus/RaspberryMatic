@@ -23,16 +23,23 @@ init() {
     . /etc/config/ntpclient
   fi
 
+  # add the DHCP queried NTP servers at the beginning of NTPSERVERS
+  if [[ -s /var/etc/ntp-dhcp.conf ]] &&
+     [[ ! -f /etc/config/noDHCPNTP ]]; then
+    . /var/etc/ntp-dhcp.conf
+    NTPSERVERS="${NTPSERVERS_DHCP} ${NTPSERVERS}"
+  fi
+
+  # if still empty we add the default gateway as a potential NTP
+  # source
   if [[ -z "${NTPSERVERS}" ]]; then
     # try the gateway
-    NTPSERVERS=$(route -n | awk '{if ($1 == "0.0.0.0") print $2}')
+    NTPSERVERS=$(/sbin/ip route | grep default | head -1 | cut -d' ' -f3)
   fi
 
   # make sure /var/lib/chrony exists so that the drift file
   # can be saved later on
-  if [[ ! -e /var/lib/${NAME} ]]; then
-    mkdir -p /var/lib/${NAME}
-  fi
+  mkdir -p /var/lib/${NAME}
 }
 
 case "$1" in
@@ -41,14 +48,14 @@ case "$1" in
     printf "Starting $NAME: "
 
     # call ntpdate to perform a single sync to the servers
-    /usr/bin/ntpdate -b -s -u ${NTPSERVERS}
+    /usr/bin/ntpdate -b -s -u ${NTPSERVERS} 2>/dev/null
     if [[ $? -ne 0 ]]; then
       # use default NTP servers because the user selected
       # ones didn't work out
       echo -n "using default NTPs, "
       . ${CFG_TEMPLATE_DIR}/ntpclient
 
-      /usr/bin/ntpdate -b -s -u ${NTPSERVERS}
+      /usr/bin/ntpdate -b -s -u ${NTPSERVERS} 2>/dev/null
       if [[ $? -ne 0 ]]; then
         echo -n "could not sync to '${NTPSERVERS}', FAIL"
         exit 0
@@ -70,6 +77,9 @@ case "$1" in
       echo "OK"
     else
       echo "FAIL"
+
+      # make sure chronyd is stopped
+      start-stop-daemon -K -q -p /var/run/chrony/chronyd.pid
     fi
     ;;
   stop)
@@ -79,7 +89,6 @@ case "$1" in
     rm -f /var/status/hasNTP
     ;;
   restart|reload)
-    echo "Restarting $NAME: "
     $0 stop
     sleep 1
     $0 start

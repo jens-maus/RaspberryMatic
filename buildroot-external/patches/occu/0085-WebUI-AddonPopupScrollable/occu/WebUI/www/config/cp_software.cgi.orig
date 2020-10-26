@@ -117,31 +117,7 @@ proc action_install_go {} {
   #  Nach der Installation wird die Zentrale automatisch neu gestartet. Sie k&ouml;nnen sich dann &uuml;ber die Schaltfl&auml;che unten neu anmelden.
   #} {"Neu anmelden" "window.location.href='/';"}
 
-  if {[getProduct] == 3} {
-    set result 0
-    if { [catch {exec /bin/install_addon 2>/dev/null} results] } {
-      if { [lindex $::errorCode 0] == "CHILDSTATUS" } {
-        set result [lindex $::errorCode 2]
-      } else {
-        # Some kind of unexpected failure
-        set result 100
-      }
-    } else {
-      set result 0
-    }
-
-    if { $result == 0 } {
-      put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContentNoReboot}" {"\${btnOk}" "window.location.href='/';"}
-    } elseif { $result == 10 } {
-      put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContent}" {"\${btnNewLogin}" "window.location.href='/';"}
-      exec /sbin/reboot
-    } else {
-      put_message "Error ($result)" "\${dialogSettingsExtraSoftwareHintPerformInstallationFailure}"
-    }
-  } else {
-    put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContent}" {"\${btnNewLogin}" "window.location.href='/';"}
-    exec /sbin/reboot
-  }
+  put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContent}" {"\${btnNewLogin}" "window.location.href='/';"}
 
   puts ""
   cgi_javascript {
@@ -476,18 +452,21 @@ proc translatePage {loop} {
   puts "<script type=\"text/javascript\">translatePage('#messagebox')</script>"
   global swVersion swUpdate
   cgi_javascript {
+    puts "function getVersion(url, callback) {"
+    puts "  var xhr = new XMLHttpRequest();"
+    puts "  xhr.onreadystatechange = function () {"
+    puts "    if (xhr.readyState === 4 && xhr.status === 200) callback(xhr.responseText);"
+    puts "  };"
+    puts "  xhr.open(\"GET\", url, true);"
+    puts "  xhr.overrideMimeType(\"text/plain; charset=iso-8859-1\");"
+    puts "  xhr.send();"
+    puts "}"
     for {set i 0} {$i <= $loop} {incr i} {
       if { [info exists swUpdate($i)] } {
-        puts "var anchor = document.getElementById(\"availableSWVersion_$i\");"
-        puts "var iframe = document.createElement(\"iframe\");"
-        puts "iframe.src = \"$swUpdate($i)?cmd=check_version&version=$swVersion($i)\";"
-        puts "iframe.frameBorder=0;"
-        puts "iframe.marginHeight=0;"
-        puts "iframe.marginWidth=0;"
-        puts "iframe.width=100;"
-        puts "iframe.height=20;"
-        puts "iframe.scrolling='no';"
-        puts "anchor.appendChild(iframe);"
+        puts "getVersion(\"$swUpdate($i)?cmd=check_version&version=$swVersion($i)\", function(contents) {"
+        puts "  document.getElementById(\"availableSWVersion_$i\").innerHTML = contents;"
+        puts "});"
+        puts "document.getElementById(\"availableSWVersion_$i\").innerHTML = \"n/a\";"
       }
     }
   }
@@ -534,7 +513,14 @@ proc action_image_upload {} {
 }
 
 proc action_install_start {} {
-  puts ""
+  if {[getProduct] == 3} {
+     exec touch /usr/local/.doAddonInstall
+     exec /sbin/reboot
+  } else {
+    # CCU 2
+    exec /bin/kill -SIGQUIT 1
+  }
+  
 }
 
 cgi_eval {

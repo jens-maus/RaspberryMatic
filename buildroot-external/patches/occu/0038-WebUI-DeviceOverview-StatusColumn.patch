@@ -65,7 +65,7 @@
 +jsonrpc_response $result
 --- occu/WebUI/www/api/methods/interface/rssiinfo.tcl.orig
 +++ occu/WebUI/www/api/methods/interface/rssiinfo.tcl
-@@ -16,8 +16,27 @@
+@@ -16,8 +16,29 @@
  #                           Der Wert 65536 bedeutet, dass keine Informationen vorliegen.
  ##
  
@@ -84,6 +84,8 @@
 +        set rssi_peer 65536
 +        catch { set rssi_device [xmlrpc $interface(URL) getValue "$dev_descr(ADDRESS):0" "RSSI_DEVICE"] }
 +        catch { set rssi_peer [xmlrpc $interface(URL) getValue "$dev_descr(ADDRESS):0" "RSSI_PEER"] }
++        if { "$rssi_device" == "" } { set rssi_device 65536 }
++        if { "$rssi_peer" == "" } { set rssi_peer 65536 }
 +        set rssi_list "$dev_descr(ADDRESS) { $dev_descr(ADDRESS) { $rssi_device $rssi_peer }} $rssi_list"
 +      }
 +    }
@@ -94,7 +96,7 @@
  set result "\["
  set first 1
  
-@@ -51,4 +70,4 @@
+@@ -51,4 +72,4 @@
  
  
  

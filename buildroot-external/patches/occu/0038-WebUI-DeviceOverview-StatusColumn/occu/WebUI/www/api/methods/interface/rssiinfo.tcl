@@ -30,6 +30,8 @@ if { [catch {
         set rssi_peer 65536
         catch { set rssi_device [xmlrpc $interface(URL) getValue "$dev_descr(ADDRESS):0" "RSSI_DEVICE"] }
         catch { set rssi_peer [xmlrpc $interface(URL) getValue "$dev_descr(ADDRESS):0" "RSSI_PEER"] }
+        if { "$rssi_device" == "" } { set rssi_device 65536 }
+        if { "$rssi_peer" == "" } { set rssi_peer 65536 }
         set rssi_list "$dev_descr(ADDRESS) { $dev_descr(ADDRESS) { $rssi_device $rssi_peer }} $rssi_list"
       }
     }

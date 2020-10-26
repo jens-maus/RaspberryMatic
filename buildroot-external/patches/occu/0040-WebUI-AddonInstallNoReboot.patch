@@ -33,7 +33,7 @@
  
    puts ""
    cgi_javascript {
-@@ -510,14 +534,6 @@
+@@ -510,14 +534,7 @@
  }
  
  proc action_install_start {} {
@@ -45,6 +45,7 @@
 -    exec /bin/kill -SIGQUIT 1
 -  }
 -  
++  puts ""
  }
  
  cgi_eval {

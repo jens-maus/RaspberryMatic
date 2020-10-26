@@ -1,0 +1,80 @@
+--- occu/WebUI/www/config/cp_maintenance.cgi.orig
++++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -366,7 +366,8 @@
+     set styleMaxWidth ""
+     #set styleMaxWidth "style=max-width:70px;"
+ 
+-    table {class="popupTable CLASS20901 j_translate"} {border="1"} {
++    division {style="height:80vh;width:100%;overflow:auto;"} {
++    table {class="popupTable CLASS20901 j_translate"} {border="1"} {height="100%"} {
+       table_row {class="CLASS20902"} {
+         table_data {class="CLASS20903"} $styleMaxWidth {
+           #puts "Zentralen-<br>"
+@@ -736,6 +737,7 @@
+         }
+       }
+     }
++    }
+     checkIfFwOnly
+   }
+   division {class="popupControls"} {
+--- occu/WebUI/www/config/cp_network.cgi.orig
++++ occu/WebUI/www/config/cp_network.cgi
+@@ -305,7 +305,8 @@
+     puts "\${dialogSettingsNetworkTitle}"
+   }
+   division {class="CLASS21114 j_translate"} {
+-    table {class="popupTable"} {border=1} {width="100%"} {
++    division {style="height:80vh;width:100%;overflow:auto;"} {
++    table {class="popupTable"} {border=1} {width="100%"} {height="100%"} {
+       table_row {class="CLASS21115"} {
+         table_data {class="CLASS21116"} {
+           #puts "IP-<br/>Einstellungen"
+@@ -576,6 +577,7 @@
+         }
+       }
+     }
++    }
+   }
+   division {class="popupControls"} {
+     table {
+--- occu/WebUI/www/config/cp_security.cgi.orig
++++ occu/WebUI/www/config/cp_security.cgi
+@@ -936,7 +936,8 @@
+   }
+ 
+   division {class="CLASS20815"} {
+-    table {class="popupTable j_translate"} {border="1"} {
++    division {style="height:80vh;width:100%;overflow:auto;"} {
++    table {class="popupTable j_translate"} {border="1"} {height="100%"} {
+       table_row {class="CLASS20806"} {
+         table_data {class="CLASS20807"} {
+           puts "\${dialogSettingsSecurityTDKey}"
+@@ -1276,6 +1277,7 @@
+         }
+       }
+     }
++    }
+   }
+   division {class="popupControls"} {
+     table {
+--- occu/WebUI/www/config/cp_software.cgi.orig
++++ occu/WebUI/www/config/cp_software.cgi
+@@ -243,7 +243,8 @@
+     puts "\${dialogSettingsExtraSoftwareTitle}"
+   }
+   division {class="CLASS21406"} {
+-    table {class="popupTable"} {border="1"} {
++    division {style="height:80vh;width:100%;overflow:auto;"} {
++    table {class="popupTable"} {border="1"} {height="100%"} {
+       set scripts ""
+       set loop -1
+       catch { set scripts [glob /etc/config/rc.d/*] }
+@@ -384,6 +385,7 @@
+         }
+       }
+     }
++    }
+   }
+   division {class="popupControls"} {
+     table {

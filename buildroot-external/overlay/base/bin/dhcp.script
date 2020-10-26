@@ -62,6 +62,9 @@ handle_renew() {
     done
   fi
 
+  # query for NTP server information
+  [[ -n "${ntpsrv}" ]] && echo "NTPSERVERS_DHCP='${ntpsrv}'" >/var/etc/ntp-dhcp.conf
+
   # check for boot file
   [[ -n "${boot_file}" ]] && echo ${boot_file} >${CONFIGURL}
 

@@ -1,0 +1,41 @@
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -26107,7 +26107,11 @@
+     this.removeMessagebox();
+   },
+   LoadFromFile: function(fn,pb) {
+-    var url = fn+'?sid='+SessionId;
++    var url = fn;
++    if(url.indexOf('?sid=') === -1)
++    {                                                                                 
++      url = url+'?sid='+SessionId;                                                  
++    }                                                                 
+     var t = this;
+     var opt = 
+     {
+@@ -41251,7 +41255,11 @@
+   },
+   
+   LoadFromFile: function(src, pb) {
+-    var url = src+'?sid='+SessionId;
++    var url = src;
++    if(url.indexOf('?sid=') === -1)
++    {                                                                                 
++      url = url+'?sid='+SessionId;                                                  
++    }                                                                 
+     var t = this;
+     var opt = 
+     {
+@@ -41377,7 +41385,11 @@
+   
+   LoadFromFile: function(src, pb)
+   {
+-    var url = src+'?sid='+SessionId;
++    var url = src;
++    if(url.indexOf('?sid=') === -1)
++    {                                                                                 
++      url = url+'?sid='+SessionId;                                                  
++    }                                                                 
+     var t = this;
+     var opt = 
+     {

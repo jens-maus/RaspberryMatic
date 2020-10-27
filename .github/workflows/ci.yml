@@ -58,13 +58,23 @@ jobs:
         sudo mkdir -p /mnt/download
         sudo chown runner /mnt/download
         make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download raspmatic_${{ matrix.platform }}-release
+
+    - name: ccu3 updatePkg generation
+      if: matrix.platform == 'rpi3'
+      run: |
+        make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download PRODUCT=raspmatic_${{ matrix.platform }} updatePkg
+        mv release/raspmatic_${{ matrix.platform }}-${{ env.VERSION }}.tgz release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz
+        ( cd release; sha256sum RaspberryMatic-${{ env.VERSION }}-ccu3.tgz >RaspberryMatic-${{ env.VERSION }}-ccu3.tgz.sha256 )
+
+    - name: .ova copying
+      if: matrix.platform == 'ova'
+      run: |
+        cp raspmatic_${{ matrix.platform }}/images/RaspberryMatic.ova release/RaspberryMatic-${{ env.VERSION }}.ova
+        ( cd release; sha256sum RaspberryMatic-${{ env.VERSION }}.ova >RaspberryMatic-${{ env.VERSION }}.ova.sha256 )
+
+    - name: cleanup raspmatic_${{ matrix.platform }}
+      run: |
         make distclean
-      #run: |
-      #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img
-      #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img.sha256
-      #  (cd release; zip RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.*)
-      #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-      #  ls -la release/
 
     - name: upload nightly build archive
       if: github.event_name == 'schedule'
@@ -92,15 +102,83 @@ jobs:
         asset_content_type: text/plain
         max_releases: 1
 
+    - name: upload nightly build archive (ccu3)
+      if: github.event_name == 'schedule' && matrix.platform == 'rpi3'
+      uses: WebFreak001/deploy-nightly@v1.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+        release_id: 22744592
+        asset_path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-ccu3.tgz
+        asset_content_type: application/gzip
+        max_releases: 1
+
+    - name: upload nightly build checksum (ccu3)
+      if: github.event_name == 'schedule' && matrix.platform == 'rpi3'
+      uses: WebFreak001/deploy-nightly@v1.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+        release_id: 22744592
+        asset_path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz.sha256
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-ccu3.tgz.sha256
+        asset_content_type: text/plain
+        max_releases: 1
+
+    - name: upload nightly build archive (.ova)
+      if: github.event_name == 'schedule' && matrix.platform == 'ova'
+      uses: WebFreak001/deploy-nightly@v1.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+        release_id: 22744592
+        asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$.ova
+        asset_content_type: application/gzip
+        max_releases: 1
+
+    - name: upload nightly build checksum (.ova)
+      if: github.event_name == 'schedule' && matrix.platform == 'rpi3'
+      uses: WebFreak001/deploy-nightly@v1.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+        release_id: 22744592
+        asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova.sha256
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$.ova.sha256
+        asset_content_type: text/plain
+        max_releases: 1
+
     - name: prepare artifact upload
       run: |
         mkdir -p /tmp/upload-${{ matrix.platform }}
         unzip -d /tmp/upload-${{ matrix.platform }} release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
       continue-on-error: true
 
-    - name: upload build as artifact
-      uses: actions/upload-artifact@v1
+    - name: upload build as workflow artifact
+      uses: actions/upload-artifact@v2
       with:
         path: /tmp/upload-${{ matrix.platform }}
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}
+      continue-on-error: true
+
+    - name: upload build as workflow artifact (ccu3)
+      if: matrix.platform == 'rpi3'
+      uses: actions/upload-artifact@v2
+      with:
+        path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-ccu3.tgz
+      continue-on-error: true
+
+    - name: upload build as workflow artifact (.ova)
+      if: matrix.platform == 'ova'
+      uses: actions/upload-artifact@v2
+      with:
+        path: release/RaspberryMatic-${{ env.VERSION }}.ova
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}.ova
       continue-on-error: true

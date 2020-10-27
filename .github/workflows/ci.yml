@@ -68,7 +68,7 @@ jobs:
 
     - name: upload nightly build archive
       if: github.event_name == 'schedule'
-      uses: WebFreak001/deploy-nightly@v1.0.3
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
@@ -81,7 +81,7 @@ jobs:
 
     - name: upload nightly build checksum
       if: github.event_name == 'schedule'
-      uses: WebFreak001/deploy-nightly@v1.0.3
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:

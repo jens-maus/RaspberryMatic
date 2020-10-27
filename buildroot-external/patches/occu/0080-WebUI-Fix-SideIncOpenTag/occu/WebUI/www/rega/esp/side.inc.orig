@@ -461,8 +461,8 @@
                 } else {
                   Write( '<input id="valSD_'#oSD.ID()#'" type="text" class="SelectBox" size="6" value="'#iV#'" onchange="iseSingleDestination.SetValueMinMax('#oSD.ID()#',this.value,\''#sUnit#'\','#oDP.ValueMin()#','#oDP.ValueMax()#');" />' );
                   Write( sUnit );
-                  ! Write( '<span class="CLASS02401" onclick="ChangeDestinationValue('#oSD.ID()#');"><img src="/ise/img/notepad.png" /></span>' );
-                  Write( '<span class="CLASS02401" onclick="ChangeDestinationValue('#oSD.ID()#');"></span>' );
+                  Write( '<span class="CLASS02401" onclick="ChangeDestinationValue('#oSD.ID()#');"><img src="/ise/img/notepad.png" /></span>' );
+                  ! See SPHM-692 Write( '<span class="CLASS02401" onclick="ChangeDestinationValue('#oSD.ID()#');"></span>' );
 
                   ! SPHM-365 - Help for the LEVEL_2 parameter of blind actors
                   if ((oCH.HssType().Find(blindVirtualReceiver) != -1) && (oDP.HSSID().Find("LEVEL_2") != -1)) {

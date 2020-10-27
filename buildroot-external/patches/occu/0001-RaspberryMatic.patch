@@ -281,7 +281,7 @@
  }
  
  proc put_message {title msg args} {
-@@ -1465,30 +1470,27 @@
+@@ -1465,35 +1470,32 @@
  
  proc action_create_backup {} {
    set HOSTNAME [exec hostname]
@@ -293,9 +293,14 @@
    #save DOM
    rega system.Save()
    cd /
--  exec tar czf /tmp/usr_local.tar.gz usr/local
+   if {[getProduct] < 3 } {
+     catch { exec tar czf /tmp/usr_local.tar.gz usr/local }
+   } else {
+-    catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude=usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf /tmp/usr_local.tar.gz usr/local }
++    catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude=usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
+   }
+   
 -  cd /tmp/
-+  catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude=usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
 +  cd $tmpdir/
    #sign the configuration with the current key
    exec crypttool -s -t 1 <usr_local.tar.gz >signature

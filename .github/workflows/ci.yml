@@ -69,7 +69,7 @@ jobs:
     - name: .ova copying
       if: matrix.platform == 'ova'
       run: |
-        cp raspmatic_${{ matrix.platform }}/images/RaspberryMatic.ova release/RaspberryMatic-${{ env.VERSION }}.ova
+        cp build-raspmatic_${{ matrix.platform }}/images/RaspberryMatic.ova release/RaspberryMatic-${{ env.VERSION }}.ova
         ( cd release; sha256sum RaspberryMatic-${{ env.VERSION }}.ova >RaspberryMatic-${{ env.VERSION }}.ova.sha256 )
 
     - name: cleanup raspmatic_${{ matrix.platform }}
@@ -142,7 +142,7 @@ jobs:
         max_releases: 1
 
     - name: upload nightly build checksum (.ova)
-      if: github.event_name == 'schedule' && matrix.platform == 'rpi3'
+      if: github.event_name == 'schedule' && matrix.platform == 'ova'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}

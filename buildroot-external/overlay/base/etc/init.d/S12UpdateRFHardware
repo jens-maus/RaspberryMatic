@@ -8,6 +8,12 @@ update_rf_hardware() {
   if [[ ! -e /etc/config/no-coprocessor-update ]]; then
     FOUND=0
 
+    ARCH=$(uname -m)
+    JAVAOPT=
+    if [[ "${ARCH}" == "aarch64" ]]; then
+      JAVAOPT="-DlibNRJavaSerial.userlib=/opt/HMServer/libNRJavaSerialv8.so"
+    fi
+
     # check if user has a HM-MOD-RPI-PCB installed (GPIO) and
     # perform a firmware update if necessary
     if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
@@ -113,7 +119,7 @@ update_rf_hardware() {
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
         # run firmware update
-        HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${DEVNODE} -o -f ${LATEST_FIRMWARE} 2>/dev/null | grep "Version:" | cut -d' ' -f5)
+        HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts=${DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${DEVNODE} -o -f ${LATEST_FIRMWARE} 2>/dev/null | grep "Version:" | cut -d' ' -f5)
 
         echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
         if [[ -z "${HM_HMRF_DEV}" ]]; then
@@ -150,7 +156,7 @@ update_rf_hardware() {
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
         # run firmware update
-        HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -o -f /firmware/HmIP-RFUSB/hmip_coprocessor_update-*.eq3 2>/dev/null | grep "Version:" | cut -d' ' -f5)
+        HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -o -f /firmware/HmIP-RFUSB/hmip_coprocessor_update-*.eq3 2>/dev/null | grep "Version:" | cut -d' ' -f5)
 
         echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
         if [[ -z "${HM_HMRF_DEV}" ]]; then

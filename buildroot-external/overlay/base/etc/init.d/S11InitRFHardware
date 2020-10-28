@@ -211,7 +211,13 @@ query_rf_parameters() {
         if [[ -r /usr/local/.doCoproFactoryReset ]]; then
           if [[ "${RF_HARDWARE}" == "RPI-RF-MOD" ]] ||
              [[ "${RF_HARDWARE}" == "HMIP-RFUSB" ]]; then
-            /usr/bin/timeout 20 /opt/java/bin/java -Dgnu.io.rxtx.SerialPorts=/dev/${dev} -jar /opt/HmIP/hmip-copro-update.jar -p /dev/${dev} -r >/dev/null 2>&1
+            ARCH=$(uname -m)
+            JAVAOPT=
+            if [[ "${ARCH}" == "aarch64" ]]; then
+              JAVAOPT="-DlibNRJavaSerial.userlib=/opt/HMServer/libNRJavaSerialv8.so"
+            fi
+
+            /usr/bin/timeout 20 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts=/dev/${dev} -jar /opt/HmIP/hmip-copro-update.jar -p /dev/${dev} -r >/dev/null 2>&1
             sleep 2
             # reload RF_INFO
             RF_INFO=$(/bin/detect_radio_module /dev/${dev})

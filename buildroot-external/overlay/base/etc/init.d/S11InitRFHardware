@@ -221,6 +221,8 @@ query_rf_parameters() {
             fi
 
             RF_COPRO_RESET_PERFORMED=true
+          elif [[ "${RF_HARDWARE}" == "HM-MOD-RPI-PCB" ]]; then
+            RF_COPRO_RESET_PERFORMED=true
           fi
         fi
 

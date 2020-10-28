@@ -7,35 +7,26 @@ init_system() {
 
   CFG_TEMPLATE_DIR=/etc/config_templates
 
+  # general umask so that we will have rwrw--
+  umask 0002
+
   # ensure some pathes are there and have
   # correct permissions
-  chmod 775 /var
   mkdir -p /var/log
-  chmod 775 /var/log
   mkdir -p /var/tmp
-  chmod 775 /var/tmp
   mkdir -p /var/rega
-  chmod 775 /var/rega
   mkdir -p /var/run
-  chmod 775 /var/run
   mkdir -p /var/spool
-  chmod 775 /var/spool
   mkdir -p /var/lock
-  chmod 775 /var/lock
   mkdir -p /var/cache
-  chmod 775 /var/cache
   mkdir -p /var/lib
-  chmod 775 /var/lib
   mkdir -p /var/lib/misc
-  chmod 775 /var/lib/misc
   mkdir -p /var/lib/dbus
-  chmod 775 /var/lib/dbus
+  mkdir -p /var/empty
+  mkdir -p /var/etc
+  mkdir -p /var/status
   mkdir -p /var/empty
   chmod 600 /var/empty
-  mkdir -p /var/etc
-  chmod 775 /var/etc
-  mkdir -p /var/status
-  chmod 775 /var/status
 
   # create /media/usbX directories for automounting USB devices
   for i in $(seq 1 8); do
@@ -54,9 +45,9 @@ init_system() {
   # remove everything but keep dotfiles (e.g. '.nobackup')
   rm -rf /usr/local/tmp/*
 
-  # make sure /usr/local/etc/config exists and has
-  # correct permissions
-  mkdir -p /usr/local/etc/config
+  # make sure /usr/local/etc/config and
+  # /usr/local/etc/config/firmware exists
+  mkdir -p /usr/local/etc/config/firmware
   chmod 775 /usr/local/etc/config
 
   # make sure the timezone setup is fine

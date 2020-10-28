@@ -110,6 +110,32 @@
  
    upvar $pBASEPROFILE BASEPROFILE
    upvar $pNEWPROFILE  PROFILE_TMP
+--- occu/WebUI/www/error/error-500.html.orig
++++ occu/WebUI/www/error/error-500.html
+@@ -10,8 +10,8 @@
+       }
+ 
+     </style>
+-    <script type="text/javascript" src="/webui/js/extern/jquery.js?_version_=2.0pre1"></script>
+-    <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js?_version_=2.0pre1"></script>
++    <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
++    <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js"></script>
+     <script type="text/javascript" src="/webui/js/lang/loadTextResource.js"></script>
+     <script type="text/javascript" src="/webui/js/lang/translate.js"></script>
+     <script type="text/javascript">
+--- occu/WebUI/www/error/error-503.html.orig
++++ occu/WebUI/www/error/error-503.html
+@@ -11,8 +11,8 @@
+       }
+ 
+     </style>
+-      <script type="text/javascript" src="/webui/js/extern/jquery.js?_version_=2.0pre1"></script>
+-      <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js?_version_=2.0pre1"></script>
++      <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
++      <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js"></script>
+       <script type="text/javascript" src="/webui/js/lang/loadTextResource.js"></script>
+       <script type="text/javascript" src="/webui/js/lang/translate.js"></script>
+     <script type="text/javascript">
 --- occu/WebUI/www/rega/index.htm.orig
 +++ occu/WebUI/www/rega/index.htm
 @@ -5,9 +5,6 @@
@@ -122,6 +148,35 @@
  
      <%
        string devtype = "pc";
+--- occu/WebUI/www/rega/login.htm.orig
++++ occu/WebUI/www/rega/login.htm
+@@ -4,7 +4,7 @@
+   <head>
+     <title>HomeMatic WebUI</title>
+ 
+-    <link rel="stylesheet" type="text/css" href="/webui/style.cgi?_version_=1.509pre1" />
++    <link rel="stylesheet" type="text/css" href="/webui/style.cgi" />
+     <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
+     <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js"></script>
+     <script type="text/javascript" src="/webui/js/extern/prototype.js"></script>
+@@ -191,4 +191,4 @@
+       translateAttribute("#WebUIorPDA", "title", "tooltipWebUIorPDA");
+     </script>
+   </body>
+-</html>
+\ No newline at end of file
++</html>
+--- occu/WebUI/www/rega/logout.htm.orig
++++ occu/WebUI/www/rega/logout.htm
+@@ -2,7 +2,7 @@
+ <html lang="de">
+   <head>
+     <title>HomeMatic WebUI</title>
+-    <link rel="stylesheet" type="text/css" href="/webui/style.cgi?_version_=1.509pre1" />
++    <link rel="stylesheet" type="text/css" href="/webui/style.cgi" />
+ 
+     <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
+     <script type="text/javascript" src="/webui/js/extern/jqueryURLPlugin.js"></script>
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
 @@ -6,9 +6,6 @@
@@ -134,6 +189,14 @@
  
      <link rel="shortcut icon" href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon"/>
      <link rel="icon"          href="/ise/img/favicon.ico" type="image/vnd.microsoft.icon" />
+@@ -200,6 +197,6 @@
+         </div>
+       </div>
+     </div>
+-    <script type="text/javascript" src="/webui/webui.js?_version_=2.0pre1" ></script>
++    <script type="text/javascript" src="/webui/webui.js" ></script>
+   </body>
+ </html>
 --- occu/WebUI/www/tools/designer.html.orig
 +++ occu/WebUI/www/tools/designer.html
 @@ -2,9 +2,6 @@

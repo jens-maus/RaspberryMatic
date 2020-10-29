@@ -5,7 +5,7 @@
 
 update_rf_hardware() {
 
-  if [[ ! -e /etc/config/no-coprocessor-update ]]; then
+  if [[ ! -r /etc/config/force-no-coprocessor-update ]]; then
     FOUND=0
 
     # check if user has a HM-MOD-RPI-PCB installed (GPIO) and

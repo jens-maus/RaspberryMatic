@@ -1,0 +1,24 @@
+--- occu/WebUI/www/api/methods/interface/reportvalueusage.tcl.orig
++++ occu/WebUI/www/api/methods/interface/reportvalueusage.tcl
+@@ -0,0 +1,21 @@
++##
++# Interface.reportValueUsage
++# Teilt der Schnittstelle mit, wie häufig die Logikschicht einen Wert verwendet
++#
++# Parameter:
++#   interface : [string] Bezeichnung der Schnittstelle
++#   address   : [string] Adresse des logischen Geräts
++#   valueId   : [string] Wert des logischen Geräts
++#   refCounter: [integer] Anzahl der verwendungen des Wertes
++#
++# Rückgabewert: [boolean]
++#   true
++##
++
++set address $args(address)
++set valueId $args(valueId)
++set refCounter $args(refCounter)
++
++checkXmlRpcStatus [catch {xmlrpc $interface(URL) reportValueUsage [list string $address] [list string $valueId] [list int $refCounter] }]
++
++jsonrpc_response true

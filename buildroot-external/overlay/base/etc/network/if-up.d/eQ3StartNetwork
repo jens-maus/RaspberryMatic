@@ -87,6 +87,24 @@ case "${IFACE}" in
 
   # start WPA Supplicant if this is a WiFi connection
   wlan*)
+    # check if /boot/setupWiFi exists and contains the necessary
+    # data to generate /etc/config/wpa_supplicant.conf automatically
+    if [[ -s /boot/SetupWIFI ]]; then
+      SSID=$(head -1 /boot/SetupWIFI | dos2unix)
+      PWD=$(tail -1 /boot/SetupWIFI | dos2unix)
+      if [[ -n "${SSID}" ]] && [[ -n "${PWD}" ]]; then
+        cp /etc/config_templates/wpa_supplicant.conf >/etc/config/wpa_supplicant.conf
+        /usr/sbin/wpa_passphrase "${SSID}" "${PWD}" >>/etc/config/wpa_supplicant.conf
+        if [[ $? -eq 0 ]]; then
+          mount -o rw,remount /boot
+          rm -f /boot/SetupWIFI
+          mount -o ro,remount /boot
+        fi
+      fi
+    fi
+
+    # if /etc/config/wpa_supplicant.conf exists, bring up
+    # the WiFi connection.
     if [[ -s /etc/config/wpa_supplicant.conf ]]; then
       /sbin/ip link set ${IFACE} up
       sleep 5

@@ -42,7 +42,7 @@
 +      if( oSC.NegateCondition() ) { sNotSelectedTrue = "selected"; sNotSelectedFalse = ""; }
 +
 +      if ( (!bSysVarGeneric) || (bSysVarString) ) {
-+        Write( '<select id="selectConditionNot'#oSC.ID()#'" name="selectConditionNot" onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.value);" class="SelectBox">' );
++        Write( '&nbsp;<select id="selectConditionNot'#oSC.ID()#'" name="selectConditionNot" onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.value);" class="SelectBox">' );
 +        Write( '<option value="false"'#sNotSelectedFalse#' >${ruleConditionLblWhen}</option>');
 +        Write( '<option value="true"'#sNotSelectedTrue#'>${ruleConditionLblNot} ${ruleConditionLblWhen}</option>' );
 +        Write( '</select> ');

@@ -58,6 +58,13 @@ init() {
     # when generating /var/etc/crRFD.conf
     sed "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_SERVER_DEVNODE}|" ${CFG_TEMPLATE_DIR}/crRFD.conf >/var/etc/crRFD.conf
 
+    # we disable Advanced HmIP Routing (Lan.Routing.Enabled) in crRFD.conf
+    # if the used HmIP RF module doesn't support it
+    # (which only the RPI-RF-MOD support)
+    if [[ "${HM_HMIP_DEV}" != "RPI-RF-MOD" ]]; then
+      sed -i "s|^Lan\.Routing\.Enabled=.*$|Lan.Routing.Enabled=false|" /var/etc/crRFD.conf
+    fi
+
   else
     HM_SERVER=/opt/HMServer/HMServer.jar
     HM_SERVER_ARGS="/var/etc/HMServer.conf"

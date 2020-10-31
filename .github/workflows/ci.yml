@@ -154,31 +154,26 @@ jobs:
         asset_content_type: text/plain
         max_releases: 1
 
-    - name: prepare artifact upload
-      run: |
-        mkdir -p /tmp/upload-${{ matrix.platform }}
-        unzip -d /tmp/upload-${{ matrix.platform }} release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-      continue-on-error: true
-
     - name: upload build as workflow artifact
+      if: github.event_name != 'schedule'
       uses: actions/upload-artifact@v2
       with:
-        path: /tmp/upload-${{ matrix.platform }}
-        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}
+        path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip*
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.zip
       continue-on-error: true
 
     - name: upload build as workflow artifact (ccu3)
-      if: matrix.platform == 'rpi3'
+      if: github.event_name != 'schedule' && matrix.platform == 'rpi3'
       uses: actions/upload-artifact@v2
       with:
-        path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz
+        path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz*
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-ccu3.tgz
       continue-on-error: true
 
     - name: upload build as workflow artifact (.ova)
-      if: matrix.platform == 'ova'
+      if: github.event_name != 'schedule' && matrix.platform == 'ova'
       uses: actions/upload-artifact@v2
       with:
-        path: release/RaspberryMatic-${{ env.VERSION }}.ova
+        path: release/RaspberryMatic-${{ env.VERSION }}.ova*
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}.ova
       continue-on-error: true

@@ -35,6 +35,6 @@ BLOCKSIZE=$(/sbin/blockdev --getbsz ${DISKDEV})
 # execute /sbin/badblocks to search for bad blocks
 rm -f ${LOGFILE}
 echo checking for bad blocks on ${DISKDEV}
-/sbin/badblocks -b ${BLOCKSIZE} ${DISKDEV} -o ${LOGFILE}
+/sbin/badblocks -b ${BLOCKSIZE} -o ${LOGFILE} -e 1 ${DISKDEV}
 
 exit 0

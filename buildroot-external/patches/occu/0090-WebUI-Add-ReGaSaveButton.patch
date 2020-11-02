@@ -4,7 +4,7 @@
            <!-- Servicemeldungen -->
          <td class="CLASS11106"><img id="imgServices" src="/ise/img/dot/grey.png" alt="" /></td>
          <td class="CLASS11107"><div id="msgServices" class="CLASS11108 Messages " onclick="WebUI.enter(ServiceMessagesPage);" >&nbsp;</div></td>
-+        <td class="CLASS11109"><div id="btnReGaSave" class="NavButton">&nbsp;</div></td>
++        <td class="CLASS11109"><div id="btnReGaSave" class="NavButton" onclick="ReGaSave();">&nbsp;</div></td>
        </tr>
      </table>
    </td>
@@ -18,12 +18,11 @@
        jQuery("#btnLogOutGuest > div").text(translateKey("logout"));
 --- occu/WebUI/www/rega/esp/system.fn.orig
 +++ occu/WebUI/www/rega/esp/system.fn
-@@ -309,6 +309,9 @@
+@@ -309,6 +309,8 @@
      Write( 'if( $("presence") ) $("presence").innerHTML = "'#oPresence.ValueName()#'";' );
    }
    
-+  boolean dom_modified = dom.IsDOMModified();
-+  WriteLine("setReGaSaveButton(" # dom_modified  # ");");
++  WriteLine("resetReGaSaveButton();");
 +  
    integer iAlCount = 0;
    object svCollection = dom.GetObject( ID_SYSTEM_VARIABLES );
@@ -51,7 +50,7 @@
    text-align: center;
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -26853,6 +26853,23 @@
+@@ -26853,6 +26853,21 @@
    if ($("maindate")) { $("maindate").innerHTML = date; }
  };
  
@@ -62,14 +61,12 @@
 +    var opts = { postBody: ReGa.encode(pb) };     
 +    document.getElementById("btnReGaSave").style.color=WebUI.getColor("grayText");               
 +    document.getElementById("btnReGaSave").onclick="";                     
-+    new Ajax.Updater("dummy",url,opts);                                                                
++    new Ajax.Updater("dummy",url,opts);                                                                  
 +};
 +
-+setReGaSaveButton = function (ismodified) {
-+  if (ismodified === true) {                                                                          
++resetReGaSaveButton = function () {
 +   document.getElementById("btnReGaSave").style.color=WebUI.getColor("textColorB");   
 +   document.getElementById("btnReGaSave").onclick=function() { ReGaSave(); };                                                       
-+  }                                                                                        
 +};
 +
  setAlarmMessageCount = function (count) {

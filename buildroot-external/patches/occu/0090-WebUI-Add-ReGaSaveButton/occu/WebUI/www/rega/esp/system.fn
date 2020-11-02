@@ -309,8 +309,7 @@ function ::UpdateUI()
     Write( 'if( $("presence") ) $("presence").innerHTML = "'#oPresence.ValueName()#'";' );
   }
   
-  boolean dom_modified = dom.IsDOMModified();
-  WriteLine("setReGaSaveButton(" # dom_modified  # ");");
+  WriteLine("resetReGaSaveButton();");
   
   integer iAlCount = 0;
   object svCollection = dom.GetObject( ID_SYSTEM_VARIABLES );

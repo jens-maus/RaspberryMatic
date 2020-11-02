@@ -26860,14 +26860,12 @@ ReGaSave = function() {
     var opts = { postBody: ReGa.encode(pb) };     
     document.getElementById("btnReGaSave").style.color=WebUI.getColor("grayText");               
     document.getElementById("btnReGaSave").onclick="";                     
-    new Ajax.Updater("dummy",url,opts);                                                                
+    new Ajax.Updater("dummy",url,opts);                                                                  
 };
 
-setReGaSaveButton = function (ismodified) {
-  if (ismodified === true) {                                                                          
+resetReGaSaveButton = function () {
    document.getElementById("btnReGaSave").style.color=WebUI.getColor("textColorB");   
    document.getElementById("btnReGaSave").onclick=function() { ReGaSave(); };                                                       
-  }                                                                                        
 };
 
 setAlarmMessageCount = function (count) {

@@ -1,0 +1,74 @@
+--- occu/WebUI/www/ise/htm/header.htm.orig
++++ occu/WebUI/www/ise/htm/header.htm
+@@ -63,6 +63,7 @@
+           <!-- Servicemeldungen -->
+         <td class="CLASS11106"><img id="imgServices" src="/ise/img/dot/grey.png" alt="" /></td>
+         <td class="CLASS11107"><div id="msgServices" class="CLASS11108 Messages " onclick="WebUI.enter(ServiceMessagesPage);" >&nbsp;</div></td>
++        <td class="CLASS11109"><div id="btnReGaSave" class="NavButton" onclick="ReGaSave();">&nbsp;</div></td>
+       </tr>
+     </table>
+   </td>
+@@ -84,6 +85,7 @@
+       jQuery("#msgAlarms").text(translateKey("alarmMsg"));
+       jQuery("#msgServices").text(translateKey("serviceMsg"));
+       jQuery("#btnLogOut > div").text(translateKey("logout"));
++      jQuery("#btnReGaSave").text(translateKey("regasave"));
+   } else {
+       jQuery("#AlarmServiceMsg").remove();
+       jQuery("#btnLogOutGuest > div").text(translateKey("logout"));
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -309,6 +309,8 @@
+     Write( 'if( $("presence") ) $("presence").innerHTML = "'#oPresence.ValueName()#'";' );
+   }
+   
++  WriteLine("resetReGaSaveButton();");
++  
+   integer iAlCount = 0;
+   object svCollection = dom.GetObject( ID_SYSTEM_VARIABLES );
+   string sSVID;
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -50,6 +50,7 @@
+     "alarmMsg" : "Alarmmeldungen",
+     "serviceMsg" : "Servicemeldungen",
+     "logout" : "Abmelden",
++    "regasave" : "%C4nderungen festschreiben",
+     "noPasswd" : "Kein Kennwort gesetzt",
+     "menuStartPage" : "Startseite",
+     "menuControlPage" : "Status und Bedienung",
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -412,7 +412,7 @@
+ 
+   color: $_(textColorB); /* black */
+   font-weight: bold;
+-  width: 165px;
++  width: 190px;
+   /* height: 52px; */
+   /* line-height: 52px; */
+   text-align: center;
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -26853,6 +26853,21 @@
+   if ($("maindate")) { $("maindate").innerHTML = date; }
+ };
+ 
++ReGaSave = function() {                                                                            
++    var url = "/esp/exec.htm?sid="+SessionId;            
++    var pb = '';                           
++    pb += 'system.Save()';                                                                   
++    var opts = { postBody: ReGa.encode(pb) };     
++    document.getElementById("btnReGaSave").style.color=WebUI.getColor("grayText");               
++    document.getElementById("btnReGaSave").onclick="";                     
++    new Ajax.Updater("dummy",url,opts);                                                                  
++};
++
++resetReGaSaveButton = function () {
++   document.getElementById("btnReGaSave").style.color=WebUI.getColor("textColorB");   
++   document.getElementById("btnReGaSave").onclick=function() { ReGaSave(); };                                                       
++};
++
+ setAlarmMessageCount = function (count) {
+ 
+   if ($("msgAlarms")) {

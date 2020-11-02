@@ -4,7 +4,7 @@
            <!-- Servicemeldungen -->
          <td class="CLASS11106"><img id="imgServices" src="/ise/img/dot/grey.png" alt="" /></td>
          <td class="CLASS11107"><div id="msgServices" class="CLASS11108 Messages " onclick="WebUI.enter(ServiceMessagesPage);" >&nbsp;</div></td>
-+        <td class="CLASS11109"><div id="btnReGaSave" class="NavButton" onclick="ReGaSave();">&nbsp;</div></td>
++        <td class="CLASS11109"><div id="btnReGaSave" class="NavButton" onclick="LogoClick();">&nbsp;</div></td>
        </tr>
      </table>
    </td>
@@ -33,10 +33,20 @@
      "alarmMsg" : "Alarmmeldungen",
      "serviceMsg" : "Servicemeldungen",
      "logout" : "Abmelden",
-+    "regasave" : "%C4nderungen festschreiben",
++    "regasave" : "%C4nderungen speichern",
      "noPasswd" : "Kein Kennwort gesetzt",
      "menuStartPage" : "Startseite",
      "menuControlPage" : "Status und Bedienung",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -49,6 +49,7 @@
+     "alarmMsg" : "Alarm messages",
+     "serviceMsg" : "Service messages",
+     "logout" : "Logout",
++    "regasave" : "Save changes",
+     "noPasswd" : "No password set",
+     "menuStartPage" : "Home page",
+     "menuControlPage" : "Status and control",
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
 @@ -412,7 +412,7 @@
@@ -50,25 +60,25 @@
    text-align: center;
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -26853,6 +26853,21 @@
+@@ -26853,6 +26853,11 @@
    if ($("maindate")) { $("maindate").innerHTML = date; }
  };
  
-+ReGaSave = function() {                                                                            
-+    var url = "/esp/exec.htm?sid="+SessionId;            
-+    var pb = '';                           
-+    pb += 'system.Save()';                                                                   
-+    var opts = { postBody: ReGa.encode(pb) };     
-+    document.getElementById("btnReGaSave").style.color=WebUI.getColor("grayText");               
-+    document.getElementById("btnReGaSave").onclick="";                     
-+    new Ajax.Updater("dummy",url,opts);                                                                  
-+};
-+
 +resetReGaSaveButton = function () {
-+   document.getElementById("btnReGaSave").style.color=WebUI.getColor("textColorB");   
-+   document.getElementById("btnReGaSave").onclick=function() { ReGaSave(); };                                                       
++  document.getElementById("btnReGaSave").style.color=WebUI.getColor("textColorB");
++  document.getElementById("btnReGaSave").onclick=function() { LogoClick(); };
 +};
 +
  setAlarmMessageCount = function (count) {
  
    if ($("msgAlarms")) {
+@@ -28877,6 +28882,9 @@
+ 
+ LogoClick = function()
+ {
++  document.getElementById("btnReGaSave").style.color=WebUI.getColor("grayText");
++  document.getElementById("btnReGaSave").onclick="";
++
+   //alert( iseUpdateIDArray.join("_") );
+   //alert( iseUpdateTMArray.join("_") );
+   //loadLinkList();

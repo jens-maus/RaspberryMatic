@@ -50,7 +50,7 @@ jQuery.extend(true,langJSON, {
     "alarmMsg" : "Alarmmeldungen",
     "serviceMsg" : "Servicemeldungen",
     "logout" : "Abmelden",
-    "regasave" : "%C4nderungen festschreiben",
+    "regasave" : "%C4nderungen speichern",
     "noPasswd" : "Kein Kennwort gesetzt",
     "menuStartPage" : "Startseite",
     "menuControlPage" : "Status und Bedienung",

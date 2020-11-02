@@ -106,3 +106,18 @@
  
  SYSTEM_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
  SYSTEM_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
+--- buildroot/toolchain/toolchain-external/pkg-toolchain-external.mk.orig
++++ buildroot/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -504,6 +504,12 @@
+ 		$(INSTALL) -D $(STAGING_DIR)/usr/bin/ldd $(TARGET_DIR)/usr/bin/ldd ; \
+ 		$(SED) 's:.*/bin/bash:#!/bin/sh:' $(TARGET_DIR)/usr/bin/ldd ; \
+ 	fi
++	$(Q)if test -f $(STAGING_DIR)/sbin/ldconfig ; then \
++		$(INSTALL) -D $(STAGING_DIR)/sbin/ldconfig $(TARGET_DIR)/sbin/ldconfig ; \
++	fi
++	$(Q)if test -f $(STAGING_DIR)/usr/bin/getconf ; then \
++		$(INSTALL) -D $(STAGING_DIR)/usr/bin/getconf $(TARGET_DIR)/usr/bin/getconf ; \
++	fi
+ endef
+ 
+ ################################################################################

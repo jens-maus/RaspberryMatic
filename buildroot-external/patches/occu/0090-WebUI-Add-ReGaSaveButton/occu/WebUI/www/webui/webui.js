@@ -26853,19 +26853,9 @@ setDate = function(date)
   if ($("maindate")) { $("maindate").innerHTML = date; }
 };
 
-ReGaSave = function() {                                                                            
-    var url = "/esp/exec.htm?sid="+SessionId;            
-    var pb = '';                           
-    pb += 'system.Save()';                                                                   
-    var opts = { postBody: ReGa.encode(pb) };     
-    document.getElementById("btnReGaSave").style.color=WebUI.getColor("grayText");               
-    document.getElementById("btnReGaSave").onclick="";                     
-    new Ajax.Updater("dummy",url,opts);                                                                  
-};
-
 resetReGaSaveButton = function () {
-   document.getElementById("btnReGaSave").style.color=WebUI.getColor("textColorB");   
-   document.getElementById("btnReGaSave").onclick=function() { ReGaSave(); };                                                       
+  document.getElementById("btnReGaSave").style.color=WebUI.getColor("textColorB");
+  document.getElementById("btnReGaSave").onclick=function() { LogoClick(); };
 };
 
 setAlarmMessageCount = function (count) {
@@ -28892,6 +28882,9 @@ recreateControl = function(chnId,sTimeStamp)
 
 LogoClick = function()
 {
+  document.getElementById("btnReGaSave").style.color=WebUI.getColor("grayText");
+  document.getElementById("btnReGaSave").onclick="";
+
   //alert( iseUpdateIDArray.join("_") );
   //alert( iseUpdateTMArray.join("_") );
   //loadLinkList();

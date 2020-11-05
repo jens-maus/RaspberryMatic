@@ -111,7 +111,16 @@ start() {
     JAVAOPT="-DlibNRJavaSerial.userlib=/opt/HMServer/libNRJavaSerialv8.so"
   fi
 
-  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Xmx128m -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts=${HM_SERVER_DEVNODE} -jar ${HM_SERVER} ${HM_SERVER_ARGS}
+  # calculate the maximum used heap size (-Xmx) depending on the
+  # total amount of RAM we have (use max. 25%) - use multiple of 128MB
+  MAXHEAP=$(free -m | grep Mem: | awk '{print int($2*0.25/128)*128}')
+  if [[ -n "${MAXHEAP}" ]] && [[ "${MAXHEAP}" -gt 128 ]]; then
+    JAVAOPT="-Xmx${MAXHEAP}m ${JAVAOPT}"
+  else
+    JAVAOPT="-Xmx128m ${JAVAOPT}"
+  fi
+
+  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts=${HM_SERVER_DEVNODE} -jar ${HM_SERVER} ${HM_SERVER_ARGS}
   echo -n "."
   waitStartupComplete
 }

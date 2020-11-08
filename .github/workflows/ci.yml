@@ -6,10 +6,22 @@ on:
     - cron: '0 0 * * *' # run at 0 AM UTC
 
 jobs:
-  build:
-
+  repo-check:
+    name: Repository commit check
     runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v2
+      - id: commit-check
+        run: 'echo ::set-output name=has-commits::$(git --no-pager log --pretty=oneline --since="24 hours ago" | wc -l)'
+    outputs:
+      has-commits: ${{ steps.commit-check.outputs.has-commits }}
+
+  build:
+    runs-on: ubuntu-latest
+    needs: repo-check
     timeout-minutes: 480
+    if: github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0
 
     strategy:
       fail-fast: false

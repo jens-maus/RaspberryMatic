@@ -7,7 +7,7 @@ on:
 
 jobs:
   repo-check:
-    name: Repository commit check
+    name: repository commit check
     runs-on: ubuntu-latest
     if: github.event_name == 'schedule'
     steps:
@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: repo-check
     timeout-minutes: 480
-    if: github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0
+    if: always() && github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0
 
     strategy:
       fail-fast: false

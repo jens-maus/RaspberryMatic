@@ -66,6 +66,7 @@ jobs:
     #  if: matrix.platform == 'ova'
 
     - name: build raspmatic_${{ matrix.platform }}
+      timeout-minutes: 480
       run: |
         sudo mkdir -p /mnt/download
         sudo chown runner /mnt/download

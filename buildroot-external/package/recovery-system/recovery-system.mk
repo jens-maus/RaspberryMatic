@@ -14,6 +14,7 @@ define RECOVERY_SYSTEM_CONFIGURE_CMDS
 	rsync -a --delete-after --exclude '.stamp_target_installed' --exclude ".stamp_staging_installed" --exclude '.stamp_images_installed' --exclude '.stamp_installed' --exclude 'recovery-system-*' $(@D)/../ $(@D)/output/build/
 	mkdir -p $(@D)/output/host
 	rsync -a --delete-after $(@D)/../../host/ $(@D)/output/host/
+	PER_PACKAGE_DIR=`realpath $(@D)/../../../` HOST_DIR=$(@D)/output/host $(TOPDIR)/support/scripts/fix-rpath host
 endef
 
 define RECOVERY_SYSTEM_BUILD_CMDS

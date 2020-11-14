@@ -11,7 +11,7 @@ RECOVERY_SYSTEM_LICENSE = Apache-2.0
 
 define RECOVERY_SYSTEM_CONFIGURE_CMDS
 	mkdir -p $(@D)/output/build
-	rsync -a --delete-after --exclude '.stamp_target_installed' --exclude ".stamp_staging_installed" --exclude '.stamp_images_installed' --exclude '.stamp_installed' --exclude 'recovery-system-*' $(@D)/../ $(@D)/output/build/
+	rsync -a --delete-after --exclude '.stamp_target_installed' --exclude ".stamp_staging_installed" --exclude '.stamp_images_installed' --exclude '.stamp_installed' --exclude 'recovery-system-*' --exclude 'qemu-guest-agent-*' $(@D)/../ $(@D)/output/build/
 	mkdir -p $(@D)/output/host
 	rsync -a --delete-after $(@D)/../../host/ $(@D)/output/host/
 	PER_PACKAGE_DIR=`realpath $(@D)/../../../` HOST_DIR=$(@D)/output/host $(TOPDIR)/support/scripts/fix-rpath host

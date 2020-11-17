@@ -9,7 +9,6 @@ jobs:
   repo-check:
     name: repository commit check
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'
     steps:
       - uses: actions/checkout@v2
       - id: commit-check

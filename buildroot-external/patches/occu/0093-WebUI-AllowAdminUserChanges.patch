@@ -5,7 +5,7 @@
      if( oUser )
      {
 -      if( !oUser.Unerasable() )
-+      if( !oUser.Unerasable() || oUser.ID() == 1004 )
++      if( (!oUser.Unerasable()) || (oUser.ID() == 1004) )
        {
          object oFavorites = dom.GetObject( ID_FAVORITES );
          if( oFavorites )

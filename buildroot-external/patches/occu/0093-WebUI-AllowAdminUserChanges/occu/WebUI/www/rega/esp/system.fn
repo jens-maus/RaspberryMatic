@@ -1164,7 +1164,7 @@ function ::deleteUser()
     oUser = dom.GetObject( system.GetVar("userid") );
     if( oUser )
     {
-      if( !oUser.Unerasable() || oUser.ID() == 1004 )
+      if( (!oUser.Unerasable()) || (oUser.ID() == 1004) )
       {
         object oFavorites = dom.GetObject( ID_FAVORITES );
         if( oFavorites )

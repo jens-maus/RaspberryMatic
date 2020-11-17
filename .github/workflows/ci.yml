@@ -8,7 +8,7 @@ on:
 jobs:
   repo-check:
     name: repository commit check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
       - id: commit-check
@@ -17,7 +17,7 @@ jobs:
       has-commits: ${{ steps.commit-check.outputs.has-commits }}
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: repo-check
     timeout-minutes: 480
     if: always() && github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0

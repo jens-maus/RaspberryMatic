@@ -4958,9 +4958,6 @@ application {
 .CLASS02105 {
 	text-align:center;
 	background-color: $_(black); /* #000000 */
-}
-
-.CLASS02105_RM {
 	table-layout: fixed;
 }
 
@@ -4985,14 +4982,12 @@ application {
 
 .CLASS02109 {
 	height:30px;
+	word-wrap:break-word;
 }
 
 .CLASS02110 {
 	text-align:left;
 	padding-left:5px;
-}
-
-.CLASS02110_RM  {
 	word-wrap:break-word;
 }
 

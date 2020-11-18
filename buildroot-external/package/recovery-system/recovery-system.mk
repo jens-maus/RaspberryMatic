@@ -11,7 +11,7 @@ RECOVERY_SYSTEM_LICENSE = Apache-2.0
 
 define RECOVERY_SYSTEM_CONFIGURE_CMDS
 	mkdir -p $(@D)/output/build
-	rsync -a --exclude '.stamp_target_installed' --exclude ".stamp_staging_installed" --exclude '.stamp_images_installed' --exclude '.stamp_installed' $(@D)/../linux-* $(@D)/output/build/
+	rsync -a --exclude '.stamp_target_installed' --exclude ".stamp_staging_installed" --exclude '.stamp_images_installed' --exclude '.stamp_installed' $(@D)/../linux-* $(@D)/../multilib32-* $(@D)/output/build/
 endef
 
 define RECOVERY_SYSTEM_BUILD_CMDS

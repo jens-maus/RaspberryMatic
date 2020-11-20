@@ -1,0 +1,4 @@
+# From https://mmonit.com/monit/dist/monit-5.27.1.tar.gz.sha256:
+sha256  f57408d16185687513a3c4eb3f2bb72eef76331ac16210e9652e846e5c84ed51  monit-5.27.1.tar.gz
+# Locally computed
+sha256  d5a4f52b1a5e1e7fe14e01a76aac8b08dc6bbea15466058f271456c97aac1ada  COPYING

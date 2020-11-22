@@ -4,7 +4,7 @@
 # directory with taking care of keeping a certain amount of
 # backups and deleting old ones.
 #
-# Copyright (c) 2018 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2018-2020 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,6 +61,12 @@ if [ ! -e ${BACKUPDIR} ]; then
   if [ $? -ne 0 ]; then
     exit 1
   fi
+fi
+
+# make sure .nobackup exists in BACKUPDIR so
+# that this dir won't be part of the backup itself
+if [ ! -f ${BACKUPDIR}/.nobackup ]; then
+  touch ${BACKUPDIR}/.nobackup
 fi
 
 # create the backup in BACKUPDIR now

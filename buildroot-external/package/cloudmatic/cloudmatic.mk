@@ -12,7 +12,17 @@ ifeq ($(BR2_arm),y)
 	ZABBIX_BIN=zabbix_agentd
 endif
 
+ifeq ($(BR2_aarch64),y)
+	NGINX_BIN=nginx.pi
+	ZABBIX_BIN=zabbix_agentd
+endif
+
 ifeq ($(BR2_i386),y)
+	NGINX_BIN=nginx.i686
+	ZABBIX_BIN=zabbix_agentd.i686
+endif
+
+ifeq ($(BR2_x86_64),y)
 	NGINX_BIN=nginx.i686
 	ZABBIX_BIN=zabbix_agentd.i686
 endif

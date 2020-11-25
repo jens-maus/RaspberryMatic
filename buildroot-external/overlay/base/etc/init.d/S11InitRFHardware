@@ -434,7 +434,23 @@ start() {
   echo "OK"
 }
 
+stop() {
+  # send the coprocessor into the bootloader mode to stop it from
+  # receiving any further events
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  if [[ -n "${HM_HMRF_DEVNODE}" ]]; then
+    /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -bl -l 1
+  fi
+
+  if [[ -n "${HM_HMIP_DEVNODE}" ]] &&
+     [[ "${HM_HMIP_DEVNODE}" != "${HM_HMRF_DEVNODE}" ]]; then
+    /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p ${HM_HMIP_DEVNODE} -bl -l 1
+  fi
+}
+
 restart() {
+  stop
   start
 }
 
@@ -443,7 +459,7 @@ case "$1" in
     start
   ;;
   stop)
-    # nothing
+    stop
   ;;
   restart|reload)
     restart

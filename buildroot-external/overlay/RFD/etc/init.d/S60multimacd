@@ -72,11 +72,13 @@ start() {
 
 stop() {
   echo -n "Stopping multimacd: "
-  if [[ -n "${HM_HMIP_DEV}" ]]; then
+  if [[ -f "${PIDFILE}" ]]; then
     start-stop-daemon -K -q -p ${PIDFILE}
     rm -f ${PIDFILE}
+    echo "OK"
+  else
+    echo "not started"
   fi
-  echo "OK"
 }
 
 restart() {

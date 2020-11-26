@@ -1,6 +1,6 @@
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -69,7 +69,6 @@
+@@ -86,7 +86,6 @@
  
  proc action_firmware_update_confirm {} {
    global env
@@ -8,7 +8,7 @@
    http_head
    division {class="popupTitle"} {
      #puts "Softwareupdate - Best&auml;tigung"
-@@ -264,7 +263,7 @@
+@@ -281,7 +280,7 @@
  }
  
  proc action_firmware_update_cancel {} {
@@ -17,7 +17,7 @@
  
    if {[getProduct] < 3} {
      catch {exec rm /var/new_firmware.tar.gz}
-@@ -403,9 +402,7 @@
+@@ -447,9 +446,7 @@
              table_row {
                td {width="20"} {}
                table_data {colspan="2"} {
@@ -28,21 +28,29 @@
                    file_button firmware_file size=30 maxlength=1000000
                  }
                  puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
-@@ -857,12 +854,7 @@
+@@ -959,19 +956,14 @@
  }
  
  proc action_firmware_upload {} {
 -  global env sid downloadOnly
--
--  http_head
--  import_file -client firmware_file
--
--  set filename [lindex $firmware_file 0]
 +  global env sid downloadOnly filename
  
+   if { [catch { import directDownload } error] } {
+     set directDownload false
+   }
+   
+-  http_head
+-  
+   if { $directDownload } {
+-    set filename "/tmp/fup.tgz"
+-  } else {
+-    import_file -client firmware_file
+-    set filename [lindex $firmware_file 0]
++    set filename "/usr/local/tmp/firmwareUpdateFile"
+   }
+ 
    if {[getProduct] < 3} {
-     cd /tmp/
-@@ -902,7 +894,7 @@
+@@ -1013,7 +1005,7 @@
        set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
        if {$file_invalid == 0} {
          # the file seems to be a tar archive (perhaps with gzip compression)
@@ -51,7 +59,7 @@
          file delete -force -- $filename
        }
      }
-@@ -1208,10 +1200,10 @@
+@@ -1328,10 +1320,10 @@
  cgi_eval {
    #cgi_debug -on
    cgi_input

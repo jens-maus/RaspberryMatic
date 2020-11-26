@@ -14,18 +14,55 @@
 +}
 +
 +startup
+--- occu/WebUI/www/api/methods/ccu/downloadFirmware.tcl.orig
++++ occu/WebUI/www/api/methods/ccu/downloadFirmware.tcl
+@@ -8,20 +8,12 @@
+ # Rueckgabewert: True wenn eine Firmware erfolgreich herunterladen wurde, ansonsten False.
+ ##
+ 
+-set result [catch {exec cat /VERSION | grep VERSION | sed s/VERSION=//} version]
+-set result [catch {exec cat /VERSION | grep VERSION | sed s/VERSION=// | sed s/\\..*//} major]
+-if { [string compare $major "3"] == 0 } {
+-  set result [catch {exec cat /var/board_serial} serial]
+-  set url "https://ccu3-update.homematic.com/firmware/download?cmd=download&version=$version&serial=$serial&lang=de&product=HM-CCU3"
+-} elseif { [string compare $major "2"] == 0 } {
+-  set result [catch {exec cat /sys/module/plat_eq3ccu2/parameters/board_serial} serial]
+-  set url "https://update.homematic.com/firmware/download?cmd=download&version=$version&serial=$serial&lang=de&product=HM-CCU2"
+-} else {
+-  set result [catch {exec echo "nomatch" >> /tmp/test} msg]
+-  jsonrpc_response false
+-}
++set result [catch {exec curl -s https://raspberrymatic.de/LATEST-VERSION.js} verstring]
++set result [regexp {homematic\.com\.setLatestVersion\('(.+)', 'HM-RASPBERRYMATIC'\);} $verstring match latest ]
++set result [catch {exec grep PLATFORM /VERSION | cut -d= -f2} platform]
++set url "https://github.com/jens-maus/RaspberryMatic/releases/download/$latest/RaspberryMatic-$latest-$platform.zip"
+ 
+-set result [catch {exec wget -q --https-only -O /tmp/fup.tgz $url} error]
++set result [catch {exec wget -q --https-only -O /usr/local/tmp/firmwareUpdateFile $url} error]
+ if { $result != 0 } {
+   exec echo $error > /tmp/dwnld.error
+ }
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -412,7 +412,7 @@
+@@ -407,7 +407,7 @@
                      table_row {
                        table_data {
-                         division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU[getProduct]';\"" {}
--                        division {class="CLASS20908"}  "onClick=\"showCCULicense();\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
-+                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+                         division {class="CLASS20905" style="display: none"} {id="btnFwDirectDownload"} {} "onClick=\"performDirectDownload();\"" {}
+-                        division {class="CLASS20905"}  "onClick=\"showCCULicense(true);\"" {puts "\${btnDirectFwUpload}"}
++                        division {class="CLASS20905"}  "onClick=\"performDirectDownload();\"" {puts "\${btnDirectFwUpload}"}
                        }
                      }
                    }
-@@ -463,28 +463,9 @@
+@@ -431,7 +431,7 @@
+                     table_row {
+                       table_data {
+                         division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU[getProduct]';\"" {}
+-                        division {class="CLASS20908"}  "onClick=\"showCCULicense(false);\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
++                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases/latest','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+                       }
+                     }
+                   }
+@@ -482,28 +482,9 @@
              }
            }
          }

@@ -21,11 +21,28 @@ array set REGA_LOGLEVELS {
   3 "\${dialogSettingsCMLogLevel4}"
 }
 
-set RFD_URL "bin://127.0.0.1:2001"
-set HS485D_URL "bin://127.0.0.1:2000"
+set portnumber 2001
+catch { source "/etc/eq3services.ports.tcl" }
+if { [info exists EQ3_SERVICE_RFD_PORT] } {
+  set portnumber $EQ3_SERVICE_RFD_PORT
+}
+
+set RFD_URL "bin://127.0.0.1:$portnumber"
+
+set portnumber 2000
+catch { source "/etc/eq3services.ports.tcl" }
+if { [info exists EQ3_SERVICE_HS485D_PORT] } {
+  set portnumber $EQ3_SERVICE_HS485D_PORT
+}
+set HS485D_URL "bin://127.0.0.1:$portnumber"
 # set PFMD_URL "bin://127.0.0.1:2002" - not necessary with the ccu2
 
-set REMOTE_FIRMWARE_SCRIPT "http://update.homematic.com/firmware/download"
+
+if {[getProduct] < 3} {
+  set REMOTE_FIRMWARE_SCRIPT "http://update.homematic.com/firmware/download"
+} else {
+  set REMOTE_FIRMWARE_SCRIPT "http://ccu3-update.homematic.com/firmware/download"
+}
 
 proc action_acceptEula {} {
   global env sid
@@ -268,8 +285,15 @@ proc action_firmware_update_cancel {} {
   if {[getProduct] < 3} {
     catch {exec rm /var/new_firmware.tar.gz}
     catch { exec /bin/sh -c "rm /var/EULA.*"}
+    cgi_javascript {
+      puts {
+        startHmIPServer();
+      }
+    }
   } else {
-   catch { exec /bin/sh -c "rm -rf `readlink /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
+   catch { exec /bin/sh -c "rm -rf `readlink -f /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
+   catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*"}
+   catch { exec /bin/sh -c "rm -f /usr/local/tmp/update_script"}
   }
 
   cgi_javascript {
@@ -376,6 +400,26 @@ proc action_put_page {} {
               }
             }
             table_row {
+              table_data {align="left"} {colspan="3"} {
+                  division {class="popupControls CLASS20905"} {
+                  table {
+                    table_row {
+                      table_data {
+                        division {class="CLASS20905" style="display: none"} {id="btnFwDirectDownload"} {} "onClick=\"performDirectDownload();\"" {}
+                        division {class="CLASS20905"}  "onClick=\"showCCULicense(true);\"" {puts "\${btnDirectFwUpload}"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            table_row {
+              table_data {align="left"} {colspan="3"} {
+                #puts "[bold "i18n: Alternative Vorgehensweise:"]"
+                puts "<b>\${dialogSettingsCMLblAlternateSoftwareUpdate}</b>"
+              }
+            }
+            table_row {
               td {width="20"} {}
               table_data {align="left"} {
                 puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep1}"
@@ -385,8 +429,8 @@ proc action_put_page {} {
                   table {
                     table_row {
                       table_data {
-                        division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2';\"" {}
-                        division {class="CLASS20908"}  "onClick=\"showCCULicense();\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+                        division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU[getProduct]';\"" {}
+                        division {class="CLASS20908"}  "onClick=\"showCCULicense(false);\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
                       }
                     }
                   }
@@ -418,7 +462,7 @@ proc action_put_page {} {
                   table {
                     table_row {
                       table_data {
-                        division {class="CLASS20919"} {onClick="document.firmware_form.submit();showUserHint();"} {
+                        division {class="CLASS20919"} {onClick="stopHmIPServer();document.firmware_form.submit();showUserHint();"} {
                           puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
                         }
                       }
@@ -455,7 +499,7 @@ proc action_put_page {} {
           }
 
           division {class="j_forcedUpdate" style="padding:10px;"} {
-            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate3}"
+            puts "<br/>\${dialogSettingsCMHintSoftwareUpdate2}"
           }
         }
       }
@@ -477,23 +521,25 @@ proc action_put_page {} {
           puts "\${dialogSettingsCMHintRestart}"
         }
       }
-set comment {
-      table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-        table_data {class="CLASS20903"} $styleMaxWidth {
-          puts "\${dialogSettingsCMTDCCUShutdown}"
-        }
-        table_data {class="CLASS20904"} {
-          division {class="popupControls CLASS20905"} {
-            division {class="CLASS20910"} {onClick="OnShutdown();"} {
-              puts "\${dialogSettingsCMBtnCCUShutdown}"
+
+      if {[getProduct] >= 3} {
+        table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
+          table_data {class="CLASS20903"} $styleMaxWidth {
+            puts "\${dialogSettingsCMTDCCUShutdown}"
+          }
+          table_data {class="CLASS20904"} {
+            division {class="popupControls CLASS20905"} {
+              division {class="CLASS20910"} {onClick="OnShutdown();"} {
+                puts "\${dialogSettingsCMBtnCCUShutdown}"
+              }
             }
           }
-        }
-        table_data {align="left"} {class="CLASS20904"} {
-          puts "\${dialogSettingsCMHintShutdown}"
+          table_data {align="left"} {class="CLASS20904"} {
+            puts "\${dialogSettingsCMHintShutdown}"
+          }
         }
       }
-}
+
       # Abgesicherter Modus
       table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
         table_data {class="CLASS20903"} $styleMaxWidth {
@@ -530,7 +576,7 @@ set comment {
           table_data {align="left"} {
             puts "<select id='selectedReGaVersion'>"
             puts "<option value='NORMAL'>\${optionReGaNORMAL}</option>"
-            puts "<option value='LEGACY'>\${optionReGaLEGACY}</option>"
+            # puts "<option value='LEGACY'>\${optionReGaLEGACY}</option>"
             puts "<option value='COMMUNITY'>\${optionReGaCOMMUNITY}</option>"
             puts "</select>"
           }
@@ -549,9 +595,9 @@ set comment {
         }
         }
 
-        table_data {align="center"} {class="CLASS20904"} {
-        # puts "\${lblTDReGaVersionHelp}"
-        division {Class="StdTableBtnHelp"} {puts "<img id='showReGaVersionHelp' src='/ise/img/help.png'>"}
+        table_data {align="left"} {class="CLASS20904"} {
+        # division {Class="StdTableBtnHelp"} {puts "<img id='showReGaVersionHelp' src='/ise/img/help.png'>"}
+        division {Class="StdTableBtnHelp"} {puts "\${lblTDReGaVersionHelp}"}
         }
       }
 
@@ -775,21 +821,45 @@ set comment {
     puts {
 
       showUserHint = function() {
-      var elem = jQuery('#fwUpload');
-      if (elem.length == 0) {
-        MessageBox.show(
-        translateKey('dialogSettingsCMDialogHintPerformFirmwareUploadTitle'),
-        translateKey('dialogSettingsCMDialogHintPerformFirmwareUploadContent')+
-        ' <br/><br/><img id="msgBoxBarGraph" src="/ise/img/anim_bargraph.gif"><br/>',
-        '','320','100','fwUpload', 'msgBoxBarGraph');
-      } else {
-        elem.show();
+        var elem = jQuery('#fwUpload');
+        if (elem.length == 0) {
+          MessageBox.show(
+          translateKey('dialogSettingsCMDialogHintPerformFirmwareUploadTitle'),
+          translateKey('dialogSettingsCMDialogHintPerformFirmwareUploadContent')+
+          ' <br/><br/><img id="msgBoxBarGraph" src="/ise/img/anim_bargraph.gif"><br/>',
+          '','320','105','fwUpload', 'msgBoxBarGraph');
+        } else {
+          elem.show();
+        }
       }
+
+      
+      hideUserHint = function() {
+        var elem = jQuery('#fwUpload');
+        if (elem.length == 0) {
+        } else {
+          elem.hide();
+          elem.remove();
+        }
+      }
+
+      stopHmIPServer = function() {
+        if( getProduct() < 3 ) {
+          InterfaceMonitor.stop();
+          homematic('User.stopHmIPServer' , {} );
+        }
+      }
+
+      startHmIPServer = function() {
+        if( getProduct() < 3 ) {
+          homematic('User.startHmIPServer',{});
+          InterfaceMonitor.start();
+        }
       }
     }
 
     puts {
-      showCCULicense = function() {
+      showCCULicense = function(directDownload) {
       ShowWaitAnim();
       HideWaitAnimAutomatically(60);
       if (showDummyLicense == "true") {
@@ -797,17 +867,27 @@ set comment {
         HideWaitAnim();
         var dlg = new EulaDialog(translateKey('dialogEulaTitle'), result ,function(userAction) {
           if (userAction == 1) {
-          jQuery("#btnFwDownload").click();
+            if(directDownload) {
+              jQuery("#btnFwDirectDownload").click();
+            } else {
+              jQuery("#btnFwDownload").click();
+            }
           }
         }, "html");
         });
       } else {
         homematic.com.showCCULicense(function (result) {
+        window.clearTimeout(timeoutBargraph);
+        MessageBox.close();
         HideWaitAnim();
         jQuery("#homematic_license_script").remove();
         var dlg = new EulaDialog(translateKey('dialogEulaTitle'), result ,function(userAction) {
           if (userAction == 1) {
-          jQuery("#btnFwDownload").click();
+            if(directDownload) {
+              jQuery("#btnFwDirectDownload").click();
+            } else {
+              jQuery("#btnFwDownload").click();
+            }
           }
         }, "html");
         });
@@ -816,6 +896,28 @@ set comment {
       }
     }
   }
+
+  cgi_javascript {
+
+    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
+    puts {
+      performDirectDownload = function(result) {
+        showUserHint();
+        ShowWaitAnim();
+        HideWaitAnimAutomatically(60);
+        stopHmIPServer();
+        homematic('CCU.downloadFirmware' , {}, function(result) {
+          if(result === true) {
+              dlgPopup.LoadFromFile(url, "action=firmware_upload&directDownload=true");
+          } else {
+              console.log(result);
+              startHmIPServer();
+          }
+        });
+      }
+    }
+  }
+
   cgi_javascript {
     puts "translatePage('#messagebox');"
     puts "jQuery('#messagebox').show();"
@@ -856,12 +958,20 @@ proc get_serial { } {
 proc action_firmware_upload {} {
   global env sid downloadOnly filename
 
+  if { [catch { import directDownload } error] } {
+    set directDownload false
+  }
+  
+  if { $directDownload } {
+    set filename "/usr/local/tmp/firmwareUpdateFile"
+  }
+
   if {[getProduct] < 3} {
     cd /tmp/
     # check if the uploaded file looks like a firmware file
     set file_valid 0
     catch {
-      exec tar zxvf $filename update_script EULA.en EULA.de EULA.tr -C /var/
+      exec tar zxvf $filename update_script EULA.en EULA.de -C /var/
     }
     set file_valid [file exists "/var/update_script"]
 
@@ -871,26 +981,27 @@ proc action_firmware_upload {} {
       set action "acceptEula"
     } else {
       file delete -force -- [lindex $firmware_file 0]
+      cgi_javascript {
+        puts {
+          startHmIPServer();
+        }
+      }
       set action "firmware_update_invalid"
     }
   } else {
 
     cd /usr/local/tmp/
     set TMPDIR "[file tail $filename-dir]"
-
     exec mkdir -p $TMPDIR
-    set file_invalid 1
-
-    catch {
-      exec tar zxvf $filename update_script EULA.en EULA.de EULA.tr -C /usr/local/
-    }
 
     #
     # check if the uploaded file is a valid firmware update file
     #
 
+    set file_invalid [catch {exec tar zxvf $filename update_script EULA.en EULA.de -C /usr/local/}]
+
     # check for .tar.gz or .tar
-    if {$file_invalid != 0} {
+    if {$file_invalid == 0} {
       set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
       if {$file_invalid == 0} {
         # the file seems to be a tar archive (perhaps with gzip compression)
@@ -911,6 +1022,13 @@ proc action_firmware_upload {} {
       set action "firmware_update_invalid"
     }
 
+  }
+
+  if { $directDownload } {
+    
+    cgi_javascript {
+      puts "hideUserHint();"
+    }
   }
 
   cgi_javascript {
@@ -1115,6 +1233,7 @@ proc action_reboot {} {
   catch { exec lcdtool {Saving   Data...  } }
   rega system.Save()
   catch { exec lcdtool {Reboot...       } }
+  exec sleep 5
   exec /sbin/reboot
 }
 proc action_shutdown {} {
@@ -1123,6 +1242,7 @@ proc action_shutdown {} {
   rega system.Save()
   catch { exec lcdtool {Shutdown...       } }
   exec sleep 5
+  catch { exec touch /tmp/shutdown }
   exec /sbin/poweroff
 }
 
@@ -1172,7 +1292,7 @@ proc action_apply_logging {} {
   }
   catch {exec killall syslogd}
   catch {exec killall klogd}
-  exec /etc/init.d/S01logging start
+  exec /etc/init.d/S07logging start
   puts "Success -confirm"
 }
 

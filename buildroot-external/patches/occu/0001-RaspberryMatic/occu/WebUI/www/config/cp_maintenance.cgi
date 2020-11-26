@@ -288,8 +288,7 @@ proc action_firmware_update_cancel {} {
     catch { exec /bin/sh -c "rm /var/EULA.*"}
     cgi_javascript {
       puts {
-        homematic('User.startHmIPServer',{});
-        InterfaceMonitor.start();
+        startHmIPServer();
       }
     }
   } else {
@@ -402,6 +401,26 @@ proc action_put_page {} {
               }
             }
             table_row {
+              table_data {align="left"} {colspan="3"} {
+                  division {class="popupControls CLASS20905"} {
+                  table {
+                    table_row {
+                      table_data {
+                        division {class="CLASS20905" style="display: none"} {id="btnFwDirectDownload"} {} "onClick=\"performDirectDownload();\"" {}
+                        division {class="CLASS20905"}  "onClick=\"performDirectDownload();\"" {puts "\${btnDirectFwUpload}"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            table_row {
+              table_data {align="left"} {colspan="3"} {
+                #puts "[bold "i18n: Alternative Vorgehensweise:"]"
+                puts "<b>\${dialogSettingsCMLblAlternateSoftwareUpdate}</b>"
+              }
+            }
+            table_row {
               td {width="20"} {}
               table_data {align="left"} {
                 puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep1}"
@@ -412,7 +431,7 @@ proc action_put_page {} {
                     table_row {
                       table_data {
                         division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU[getProduct]';\"" {}
-                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases/latest','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
                       }
                     }
                   }
@@ -798,16 +817,33 @@ proc action_put_page {} {
         }
       }
 
+      
+      hideUserHint = function() {
+        var elem = jQuery('#fwUpload');
+        if (elem.length == 0) {
+        } else {
+          elem.hide();
+          elem.remove();
+        }
+      }
+
       stopHmIPServer = function() {
         if( getProduct() < 3 ) {
           InterfaceMonitor.stop();
           homematic('User.stopHmIPServer' , {} );
         }
       }
+
+      startHmIPServer = function() {
+        if( getProduct() < 3 ) {
+          homematic('User.startHmIPServer',{});
+          InterfaceMonitor.start();
+        }
+      }
     }
 
     puts {
-      showCCULicense = function() {
+      showCCULicense = function(directDownload) {
       ShowWaitAnim();
       HideWaitAnimAutomatically(60);
       if (showDummyLicense == "true") {
@@ -815,17 +851,27 @@ proc action_put_page {} {
         HideWaitAnim();
         var dlg = new EulaDialog(translateKey('dialogEulaTitle'), result ,function(userAction) {
           if (userAction == 1) {
-          jQuery("#btnFwDownload").click();
+            if(directDownload) {
+              jQuery("#btnFwDirectDownload").click();
+            } else {
+              jQuery("#btnFwDownload").click();
+            }
           }
         }, "html");
         });
       } else {
         homematic.com.showCCULicense(function (result) {
+        window.clearTimeout(timeoutBargraph);
+        MessageBox.close();
         HideWaitAnim();
         jQuery("#homematic_license_script").remove();
         var dlg = new EulaDialog(translateKey('dialogEulaTitle'), result ,function(userAction) {
           if (userAction == 1) {
-          jQuery("#btnFwDownload").click();
+            if(directDownload) {
+              jQuery("#btnFwDirectDownload").click();
+            } else {
+              jQuery("#btnFwDownload").click();
+            }
           }
         }, "html");
         });
@@ -834,6 +880,28 @@ proc action_put_page {} {
       }
     }
   }
+
+  cgi_javascript {
+
+    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
+    puts {
+      performDirectDownload = function(result) {
+        showUserHint();
+        ShowWaitAnim();
+        HideWaitAnimAutomatically(60);
+        stopHmIPServer();
+        homematic('CCU.downloadFirmware' , {}, function(result) {
+          if(result === true) {
+              dlgPopup.LoadFromFile(url, "action=firmware_upload&directDownload=true");
+          } else {
+              console.log(result);
+              startHmIPServer();
+          }
+        });
+      }
+    }
+  }
+
   cgi_javascript {
     puts "translatePage('#messagebox');"
     puts "jQuery('#messagebox').show();"
@@ -874,10 +942,18 @@ proc get_serial { } {
 proc action_firmware_upload {} {
   global env sid downloadOnly
 
+  if { [catch { import directDownload } error] } {
+    set directDownload false
+  }
+  
   http_head
-  import_file -client firmware_file
-
-  set filename [lindex $firmware_file 0]
+  
+  if { $directDownload } {
+    set filename "/tmp/fup.tgz"
+  } else {
+    import_file -client firmware_file
+    set filename [lindex $firmware_file 0]
+  }
 
   if {[getProduct] < 3} {
     cd /tmp/
@@ -896,8 +972,7 @@ proc action_firmware_upload {} {
       file delete -force -- [lindex $firmware_file 0]
       cgi_javascript {
         puts {
-          homematic('User.startHmIPServer',{});
-          InterfaceMonitor.start();
+          startHmIPServer();
         }
       }
       set action "firmware_update_invalid"
@@ -936,6 +1011,13 @@ proc action_firmware_upload {} {
       set action "firmware_update_invalid"
     }
 
+  }
+
+  if { $directDownload } {
+    
+    cgi_javascript {
+      puts "hideUserHint();"
+    }
   }
 
   cgi_javascript {
@@ -1149,6 +1231,7 @@ proc action_shutdown {} {
   rega system.Save()
   catch { exec lcdtool {Shutdown...       } }
   exec sleep 5
+  catch { exec touch /tmp/shutdown }
   exec /sbin/poweroff
 }
 

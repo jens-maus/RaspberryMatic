@@ -65,24 +65,24 @@
 <table id="newDevTbl" class="tblList CLASS04303" cellpadding="0" cellspacing="0"
        style="display:none; width:97%; margin:1%;">
 <colgroup>
-  <col width="2%"/>
+  <col style="width:2%;"  width="2%"/>
   <!-- Plus/Minus Device-->
-  <col width="2%"/>
+  <col style="width:2%;"/>
   <!-- Plus/Minus Group -->
-  <col width="2%"/>
+  <col style="width:2%;"/>
   <!-- Leere Zelle vor GroupMember -->
-  <col width="1%"/>
-  <col width="3%"/>
-  <col width="7%"/>
-  <col width="7%"/>
-  <col width="9%"/>
-  <col width="7%"/>
-  <col width="7%"/>
-  <col width="7%"/>
-  <col width="7%"/>
-  <col width="7%"/>
-  <col width="15%"/>
-  <col width="7%"/>
+  <col style="width:1%;"/>
+  <col style="width:3%;"/>
+  <col style="width:7%;"/>
+  <col style="width:7%;"/>
+  <col style="width:9%;"/>
+  <col style="width:7%;"/>
+  <col style="width:7%;"/>
+  <col style="width:7%;"/>
+  <col style="width:7%;"/>
+  <col style="width:7%;"/>
+  <col style="width:15%;"/>
+  <col style="width:7%;"/>
 </colgroup>
 <tbody id="tblNewDevices">
 <tr id="tblNewDevicesHeader">
@@ -130,6 +130,8 @@ foreach(devId, oUser.UserTempViewIDs().EnumEnabledIDs())
     Write("deviceData['desc'] = DEV_getDescription('"#dev.Label()#"');");
     Write("deviceData['sn'] = '"#dev.Address()#"';");
     Write("var chnTypes = new Array();");
+
+    Write("setNewDevicePos2SystemPos(deviceData);");
 
     string
     chnId;
@@ -396,13 +398,28 @@ for (var i = 0; i < arDevices.length; i++) {
   td = Builder.node('td', {id: "transParent" + arDevices[i]['id'], className: 'GrayBkg border1px'}, spaceCut(arDevices[i]['trans']));
   tr.appendChild(td);
 
+
   if (NAV_IE) {
     td = Builder.node('td', {className: 'WhiteBkg border1px'},
       [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true)) ]);
     tr.appendChild(td);
   }
   else {
-    td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true));
+    if (isDevTypeHmIPW(arDevices[i]['type'])) {
+      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px'});
+      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, strCut(arDevices[i]['name'].replace(/:/g, ":<br/>"), false));
+      divB = Builder.node('div', {
+        id: 'btnRename_' + arDevices[i]["id"],
+        className: 'TestButton colorGradient borderRadius2px hidden',
+        style: 'min-width:7em',
+        onclick: 'renameAllNamesDialog(' + arDevices[i]["id"] + ')'
+      }, translateKey("lblRename"));
+      td.appendChild(divA);
+      td.appendChild(divB);
+    } else {
+      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true));
+    }
+
     tr.appendChild(td);
   }
   td = Builder.node('td', {id: "funcs" + arDevices[i]['id'], className: 'GrayBkg border1px'}, semCut(arDevices[i]['func']));
@@ -431,6 +448,11 @@ for (var i = 0; i < arDevices.length; i++) {
   Draw(jg_0, arDevices[i]['type'], 50, '-1');
 
   arDevPosis[arDevPosis.length] = i + 2;
+
+  // Zeilenumbruch im Gerätenamen
+  var devNameElm = jQuery("#tdn" + arDevices[i]['id']);
+  devNameElm.html(devNameElm.text());
+
 }
 
 
@@ -618,6 +640,116 @@ editFuncs = function () {
   dlgPopup.ShowPopup();
 };
 
+renameAllNamesDialog = function(devId) {
+
+  var url = '/pages/msg/askRenameAllChannels.htm?sid=' + SessionId;
+  var opt =
+  {
+    onComplete: function (t) {
+      var selectedVal = "";
+      var dlg = new YesNoDialog("", t.responseText, function(result) {
+
+        if (result) {
+            //var val = jQuery("input[name='allChannels']:checked").val();
+            renameDeviceDialog(devId, selectedVal);
+        }
+      }, "html");
+
+      selectedVal = jQuery("input[name='allChannels']:checked").val();
+      jQuery("input[name='allChannels']").change(function() {selectedVal = this.value;});
+
+      dlg.setWidth(400);
+      dlg.btnTextYes(translateKey("btnNext"));
+      dlg.btnTextNo(translateKey("btnCancel"));
+    }
+  };
+  new Ajax.Request(url, opt);
+};
+
+showBtnYes = function(value) {
+  if (value == "") {
+    renameDeviceDlg.btnYesHide();
+  } else {
+    renameDeviceDlg.btnYesShow();
+  }
+
+};
+
+actualizePreviewChannelNames = function(value) {
+
+  if (typeof  actualizeChannelTimer != "undefined") {
+    clearTimeout(actualizeChannelTimer);
+  }
+
+  actualizeChannelTimer = setTimeout(function() {
+    var channelRows = jQuery("[name='previewChannelName']"),
+      basisName = renameDeviceDlg.convertToValidBasicName(value);
+
+    jQuery("#deviceBasisName").val(basisName);
+
+    if (basisName == "") {
+      renameDeviceDlg.btnYesHide();
+    } else {
+      renameDeviceDlg.btnYesShow();
+    }
+
+    channelRows.each(function(index, elm) {
+      var arChannelName = jQuery(elm).html().split(":"),
+      newName = "";
+      // Set the new basis name
+      arChannelName[0] = value;
+      // Build the new name
+      arChannelName.each(function(val) {
+        newName += val +":";
+      });
+      jQuery(elm).html(renameDeviceDlg.convertToValidBasicName(newName.slice(0,-1))); // slice removes the unnecessary ':' at the end of the new name
+    });
+  },1000);
+};
+
+renameDeviceDialog = function(devId, allChannels) {
+  var url = '/pages/msg/renameDevice.htm?sid=' + SessionId;
+  var opt =
+  {
+    onComplete: function (t) {
+      renameDeviceDlg = new RenameDeviceDialog("", t.responseText, devId, allChannels, function(result) {
+        var self = this;
+        // Yes pressed
+        if (result) {
+
+          var newName = this.getNewDeviceName();
+          conInfo("renameDeviceDialog - Try to save the new name!");
+          homematic("Device.setName", {id: devId, name: newName.replace(/<[^>]*>/g, " ")}, function(result) {
+            conInfo("Device name successfully set to " + result);
+            //WebUI.enter(NewDeviceListPage);
+            jQuery("#tdn" + devId).html(result.replace(/:/g,":<br/>"));
+
+            if (allChannels == "true") {
+              conInfo("Now we should rename all available channels.");
+              var arChnObj = self.getNewChannelNames();
+
+              conInfo(arChnObj);
+
+              jQuery.each(arChnObj, function(index, chnObj) {
+                homematic("Channel.setName", {id: chnObj.id, name: chnObj.name.replace(/<[^>]*>/g, " ")},function(result) {
+                  conInfo("Channel "+chnObj.id+": name successfully set to " + result.replace(/:/g,":<br/>"));
+                  jQuery("#tdn" + chnObj.id).html(result.replace(/:/g,":<br/>"));
+                });
+              });
+
+            }
+          });
+        }
+      }, "html");
+      renameDeviceDlg.resetHeight();
+      renameDeviceDlg.setWidth(600);
+      renameDeviceDlg.btnTextNo(translateKey("btnCancel"));
+      renameDeviceDlg.btnTextYes(translateKey("btnOk"));
+    }
+  };
+  new Ajax.Request(url, opt);
+};
+
 refreshFooterButton = function () {
   if (iDevicesExpanded == 0) {
     $("btnStructure").innerHTML = translateKey('footerBtnOpenTree'); //"Baumstruktur<br />&ouml;ffnen";
@@ -631,8 +763,8 @@ var s = "";
 
 s += "<table cellspacing='8'>";
 s += "<tr>";
-s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>" + translateKey('footerBtnPageBack') + "</div></td>";
-s += "<td align='center' valign='middle'><div id='btnStructure' class='FooterButton CLASS04312' onclick='collapseAll()'>" + translateKey('footerBtnOpenTree') + "</div></td>";
+s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>" + translateKey('footerBtnPageBack') + "</div></td>";
+s += "<td style='text-align:center; vertical-align: middle;'><div id='btnStructure' class='FooterButton CLASS04312' onclick='collapseAll()'>" + translateKey('footerBtnOpenTree') + "</div></td>";
 s += "</tr>";
 s += "</table>";
 
@@ -940,8 +1072,10 @@ CreateSysVarEnergyCounterScriptPSM = function(chn) {
     "}\n" +
   "}\n" +
 
-  "oSysVarEnergyCounterOldVal.State(devVal);\n" +
-  "oSysVarEnergyCounter.State(sysVarVal + diffVal);\n";
+  "if (tmp_devVal != 0) {" +
+    "oSysVarEnergyCounterOldVal.State(devVal);\n" +
+    "oSysVarEnergyCounter.State(sysVarVal + diffVal);\n" +
+  "}";
 
   var script =
   "var sysVarId = '"+sysVarId+"';\n" +
@@ -1021,8 +1155,10 @@ CreateSysVarEnergyCounterScriptIEC = function(chn) {
       "diffVal = devVal - oldDevVal;\n" +
     "}\n" +
 
-  "oSysVarEnergyCounterOldVal.State(devVal);\n" +
-  "oSysVarEnergyCounter.State(sysVarVal + diffVal);\n";
+  "if (tmp_devVal != 0) {" +
+    "oSysVarEnergyCounterOldVal.State(devVal);\n" +
+    "oSysVarEnergyCounter.State(sysVarVal + diffVal);\n" +
+  "}";
 
   var script =
   "var sysVarId = '"+sysVarId+"';\n" +
@@ -1136,8 +1272,11 @@ CreateHmIPSunshineCounterScript = function(chn) {
     "}\n" +
   "}\n" +
 
-  "oSysVarSunshineOldVal.State(devVal);\n" +
-  "oSysVarSunshine.State(sysVarVal + diffVal);\n"+
+  "if (tmp_devVal != 0) {\n" +
+    "oSysVarSunshineOldVal.State(devVal);\n" +
+    "oSysVarSunshine.State(sysVarVal + diffVal);\n"+
+  "}\n" +
+
   "todayTotal = sysVarTodayVal + diffVal;\n" +
   "if (todayTotal >= 1440.0) {todayTotal = 0.0;}\n" +
   "oSysVarCounterToday.State(todayTotal);\n";
@@ -1247,8 +1386,11 @@ CreateHmIPRainCounterScript = function(chn) {
     "}\n" +
   "}\n" +
 
-  "oSysVarRainOldVal.State(devVal);\n" +
-  "oSysVarRain.State(sysVarVal + diffVal);\n"+
+  "if (tmp_devVal != 0) {\n" +
+    "oSysVarRainOldVal.State(devVal);\n" +
+    "oSysVarRain.State(sysVarVal + diffVal);\n"+
+  "}\n" +
+
   "todayTotal = sysVarTodayVal + diffVal;\n" +
   "if (todayTotal >= 1440.0) {todayTotal = 0.0;}\n" +
   "oSysVarCounterToday.State(todayTotal);\n";
@@ -1568,8 +1710,7 @@ CreateSysVarHmIPModRC8 = function(channel) {
   CreateSysVar(sysVarID, "enum", "1", channel.id);
 };
 
-createNecessarySysVarsAndPrograms = function (devId) {
-  var oDevice = homematic("Device.get", {"id": devId});
+createNecessarySysVarsAndPrograms = function (oDevice) {
   if (oDevice) {
     ShowWaitAnim();
     jQuery.each(oDevice.channels, function (index, channel) {
@@ -1612,10 +1753,50 @@ createNecessarySysVarsAndPrograms = function (devId) {
   }
 };
 
+changeBlind2Shutter = function(oDevice) {
+  ShowWaitAnim();
+  HideWaitAnimAutomatically();
+  if (oDevice.type == "HmIPW-DRBL4" || oDevice.type == "HmIP-DRBLI4") {
+    var hasChannelOperationMode,
+    devMode = "--";
+    jQuery.each(oDevice.channels, function (index, channel) {
+      if ((channel.channelType == "BLIND_TRANSMITTER") || (channel.channelType == "BLIND_VIRTUAL_RECEIVER")) {
+        if (typeof hasChannelOperationMode == "undefined") {
+          hasChannelOperationMode = homematic("Interface.getMasterValue", {"interface": "HmIP-RF", "address": channel.address, "valueKey": "CHANNEL_OPERATION_MODE"});
+        }
+        devMode =  (hasChannelOperationMode) ? "shutter" : "blind";
+
+        homematic("Interface.setMetadata_crRFD", {
+          "interface" : "HmIP-RF",
+          "objectId" : channel.address,
+          "dataId" :  "channelMode",
+          "value" : devMode
+        });
+
+        homematic("Interface.setMetadata", {
+          "objectId" : channel.address,
+          "dataId" : "channelMode",
+          "value" : devMode
+        });
+      }
+    });
+  }
+  HideWaitAnim();
+};
+
 SetReadyConfigAndHideImgs = function (devId) {
   var _devId_ = devId;
 
-  createNecessarySysVarsAndPrograms(_devId_);
+  var oDevice = homematic("Device.get", {"id": devId});
+
+  //setDevicePos2SystemPos(oDevice);
+  createNecessarySysVarsAndPrograms(oDevice);
+
+  // This is necessary for HmIPW-Blindactors and the HmIP-DRBLI4 with a firmware version >= 1.6
+  // These devices are coming in with the channel type of BLIND_ but are by default acting as SHUTTER
+  changeBlind2Shutter(oDevice);
+
+
 
   var doSetReady = function () {
     iNewDevCount--;

@@ -37,6 +37,13 @@ start() {
     echo "" >/var/etc/lighttpd_auth.conf
   fi
 
+  # activate/deactivate automatic https redirect
+  if [[ -f /etc/config/httpsRedirectEnabled ]]; then
+    echo "include \"/etc/lighttpd/conf.d/proxy_httpsredirect.conf\"" >/var/etc/lighttpd_proxy.conf
+  else
+    echo "include \"/etc/lighttpd/conf.d/proxy_normal.conf\"" >/var/etc/lighttpd_proxy.conf
+  fi
+
   # adjust the oom score (which is inherited by start-stop-daemon)
   # to ensure that others are killed first in case of low memory situations
   echo -900 >/proc/$$/oom_score_adj
@@ -62,6 +69,13 @@ reload() {
     echo "include \"/etc/lighttpd/conf.d/auth.conf\"" >/var/etc/lighttpd_auth.conf
   else
     echo "" >/var/etc/lighttpd_auth.conf
+  fi
+
+  # activate/deactivate automatic https redirect
+  if [[ -f /etc/config/httpsRedirectEnabled ]]; then
+    echo "include \"/etc/lighttpd/conf.d/proxy_httpsredirect.conf\"" >/var/etc/lighttpd_proxy.conf
+  else
+    echo "include \"/etc/lighttpd/conf.d/proxy_normal.conf\"" >/var/etc/lighttpd_proxy.conf
   fi
 
   start-stop-daemon -K -s HUP -q -p ${PIDFILE_ANGEL}

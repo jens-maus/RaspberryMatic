@@ -217,7 +217,14 @@
      <td class="CLASS06405">
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -376,7 +376,7 @@
+@@ -1,5 +1,5 @@
+ :root {
+-  --btnGradient: linear-gradient(to bottom, white 30%, gray);
++  --btnGradient: linear-gradient(to bottom, #ffffff, #a1a1a1);
+ }
+ 
+ * {
+@@ -391,7 +391,7 @@
    text-align:center;
    border:solid 1px $_(black); /* black */
    background-color:$_(clickable);
@@ -226,7 +233,7 @@
  }
  
  .filterTable td
-@@ -587,23 +587,25 @@
+@@ -608,23 +608,25 @@
  .Sort
  {
    cursor: pointer;
@@ -259,7 +266,7 @@
  }
  
  .tblList td {
-@@ -5204,6 +5206,7 @@
+@@ -5359,6 +5361,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -267,7 +274,7 @@
  }
  
  .CLASS02536 {
-@@ -5226,6 +5229,7 @@
+@@ -5381,6 +5384,7 @@
  	max-width: 480px;
  	clear: both;
  	display: inline-block;
@@ -275,7 +282,7 @@
  }
  
  .CLASS02539 {
-@@ -5378,7 +5382,7 @@
+@@ -5553,7 +5557,7 @@
  }
  
  .CLASS02602 {
@@ -284,7 +291,7 @@
  }
  
  .CLASS02603 {
-@@ -5409,21 +5413,6 @@
+@@ -5584,21 +5588,6 @@
  	padding: 4px;
  }
  
@@ -306,7 +313,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5560,10 +5549,12 @@
+@@ -5735,10 +5724,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;

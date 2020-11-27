@@ -1,3 +1,7 @@
+:root {
+  --btnGradient: linear-gradient(to bottom, white 30%, gray);
+}
+
 * {
 	font-family:Verdana,Tahoma,Arial,Helvetica,sans-serif ! important;
 	font-size: 12px ! important;
@@ -41,6 +45,10 @@
 	width:160px;
 }
 
+.minWidth210px {
+  min-width: 210px;
+}
+
 .minWidth230px {
   min-width: 230px;
 }
@@ -62,11 +70,15 @@
 }
 
 .colorGradient {
-  background-image:url(/ise/img/gradientButton25px.png) !important;
+  /*background-image:url(/ise/img/gradientButton25px.png) !important;*/
+  /*background-image: linear-gradient(to bottom, white 40%, gray) !important;*/
+  background-image: var(--btnGradient) !important;
 }
 
 .colorGradient50px {
-  background-image:url(/ise/img/gradientButton50px.png) !important;
+  /*background-image:url(/ise/img/gradientButton50px.png) !important;*/
+  /*(to bottom, white 40%, gray) !important;*/
+  background-image: var(--btnGradient) !important;
 }
 
 .startPageInfo {
@@ -200,7 +212,8 @@ a img {
 
 /* Pfadangabe im Seiten-Header */
 #PagePath {
-  color: $_(textColorA); /* #ffffff */
+  /*color: $_(textColorA);  #ffffff */
+  color: #afafaf; /* #ffffff */
   vertical-align: bottom;
 }
 #PagePath span {
@@ -258,11 +271,11 @@ a img {
 }
 
 #chnListBody td {
-  /*border: solid 1px $_(black); /* black */*/
+  /*border: solid 1px $_(black); /* black */
   text-align: center;  
 }
 #chnListBody th {
-  /*border: solid 1px $_(black); /* black */*/
+  /*border: solid 1px $_(black); /* black */
   text-align: center;  
 }
 
@@ -315,7 +328,9 @@ a img {
 /* Standard-Button (z.B. Benutzernamen bei Login) */
 .Button {
   background-color: $_(clickable);
-  background-image:url(/ise/img/gradientButton50px.png) !important;
+  /*background-image:url(/ise/img/gradientButton50px.png) !important;*/
+  /*background-image: linear-gradient(to bottom, white 40%, gray) !important;*/
+  background-image: var(--btnGradient) !important;
   color: $_(textColorB); /* black */
   font-weight: bold;
   width: 200px;
@@ -408,6 +423,8 @@ a img {
 {
   background-color: $_(logoutButton);
   background-image:url(/ise/img/gradientButton25px.png);
+  /*background-image: linear-gradient(to bottom, white 40%, gray);*/
+  background-image: var(--btnGradient);
 
   color: $_(textColorB); /* black */
   font-weight: bold;
@@ -470,6 +487,8 @@ a img {
 .Messages {
   background-color: $_(messagesBackground);
   background-image:url(/ise/img/gradientButton25px.png);
+  /*background-image: linear-gradient(to bottom, white 40%, gray);*/
+  background-image: var(--btnGradient);
 
   overflow: auto;
 
@@ -482,7 +501,7 @@ a img {
 
 .Messages_Selected {
   background-color: $_(active); /* #565657 */
-};
+}
 
 /* Kopfzeile der Alarm-/Servicemeldungen */
 .MsgTblHeader {
@@ -527,7 +546,9 @@ a img {
   overflow: hidden;
   border-radius: 10px;
   margin-left: 10px;
-  background-image:url(/ise/img/gradientButton50px.png);
+  /*background-image:url(/ise/img/gradientButton50px.png);*/
+  background-image: linear-gradient(to bottom, white 40%, gray);
+  background-image: var(--btnGradient);
 }
 
 .StdTableBtnHelp {
@@ -692,6 +713,8 @@ a img {
 .popupControls div {
   background-color: $_(clickable);
   background-image:url(/ise/img/gradientButton25px.png);
+  /*background-image: linear-gradient(to bottom, white 40%, gray);*/
+  background-image: var(--btnGradient);
 
   color: $_(textColorB); /* black */
   text-align: center;
@@ -738,7 +761,8 @@ a img {
 
 .FilterBtn {
   background-image:url(/ise/img/gradientButton25px.png);
-
+  /*background-image: linear-gradient(to bottom, white 40%, gray);*/
+  background-image: var(--btnGradient);
   color: $_(textColorB); /* black */
 
   cursor: pointer;
@@ -773,6 +797,8 @@ a img {
 .FilterSetButton {
   background-color: $_(clickable);
   background-image:url(/ise/img/gradientButton25px.png);
+  /*background-image: linear-gradient(to bottom, white 40%, gray);*/
+  background-image: var(--btnGradient);
 
   color: $_(textColorB); /* black */
   border: solid 1px $_(black); /* black */
@@ -884,6 +910,8 @@ a img {
 {
   background-color: $_(clickable);
   background-image:url(/ise/img/gradientButton25px.png);
+  /*background-image: linear-gradient(to bottom, white 40%, gray);*/
+  background-image: var(--btnGradient);
 
   color: $_(textColorB); /* white */
   border: solid 1px $_(black); /* black */
@@ -894,6 +922,8 @@ a img {
 .StdButton {
     background-color: $_(clickable);
     background-image:url(/ise/img/gradientButton25px.png);
+    /*background-image: linear-gradient(to bottom, white 40%, gray);*/
+    background-image: var(--btnGradient);
     margin:2%;
     border:1px solid $_(black); /* black */
     /* width:95%; */
@@ -911,7 +941,9 @@ a img {
 
 .StdButtonBig {
     background-color: $_(clickable);
-    background-image:url(/ise/img/gradientButton50px.png);
+    /*background-image:url(/ise/img/gradientButton50px.png);*/
+    background-image: linear-gradient(to bottom, white 40%, gray);
+    background-image: var(--btnGradient);
     margin:2%;
     border:1px solid $_(black); /* black */
     /* width:95%; */
@@ -933,6 +965,8 @@ a img {
 {
   background-color: $_(activeBackground); /* #dddddd */
   background-image:url(/ise/img/gradientButton25px.png);
+  /*background-image: linear-gradient(to bottom, white 40%, gray);*/
+  background-image: var(--btnGradient);
   color: $_(textColorA); /* #ffffff */
   border: solid 1px $_(gray); /* silver */
   border-radius: 5px;
@@ -991,7 +1025,9 @@ a img {
 .FooterButton {
 
   background-color: $_(clickable);
-  background-image:url(/ise/img/gradientButton50px.png);
+  /*background-image:url(/ise/img/gradientButton50px.png);*/
+  background-image: linear-gradient(to bottom, white 40%, gray);
+  background-image: var(--btnGradient);
 
   overflow: auto;
 
@@ -1091,10 +1127,6 @@ a img {
   color: $_(textColorB); /* black */
   height:60px;
   text-align:center;
-  max-width: 215.333px;
-  -ms-word-break: break-all;
-  word-break: break-all;
-  word-break: break-word;
 }
 .WhiteBkgChannelPopup {
   background-color: $_(white); /* white */
@@ -1200,6 +1232,16 @@ a img {
   text-align: left;
 }
 
+.tBodyCellCenter
+{
+  background-color: $_(activeBackground); /* #f0f0f0 */
+  height: 40px;
+  border: solid 1px $_(black); /* black */
+  color: $_(textColorB); /* black */
+  padding: 4px;
+  text-align: center;
+}
+
 .tTable
 {
   text-align:center;
@@ -1219,9 +1261,10 @@ a img {
 
 .tTable td
 {
-  color: $_(textColorB); /* black */
+  color: $_(textColorB);
 }
 */
+
 .bgWhite
 {
   background-color: $_(white); /* white */
@@ -1444,6 +1487,8 @@ div.caption  { display: table-caption; }
 
 #_body {
   background-image:url(/ise/img/gradientButton25px.png);
+  /*background-image: linear-gradient(to bottom, white 40%, gray);*/
+  background-image: var(--btnGradient);
 
 }
 
@@ -2133,6 +2178,16 @@ html, body {
   text-align: center;
 }
 
+.divAlignCenter {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+table.center {
+  margin-left:auto;
+  margin-right:auto;
+}
+
 .borderWidth2Px {
   border-width: 2px !important;
 }
@@ -2144,6 +2199,14 @@ html, body {
 .firmwareAvailable {
     cursor: pointer;
     color: $_(clickable);
+}
+
+.virtualChannelBckGnd {
+  background-color: #BCC3C1 !important;
+}
+
+.virtualChannelBckGndA {
+  background-color: #E0E0E0 !important;
 }
 
 .noBorder {
@@ -2175,7 +2238,7 @@ html, body {
 
 .RFConfig_InterfacesTable_tr_hover {
   background-color: $_(inactiveBackground);
-	cursor:pointer;
+  cursor:pointer;
 }
 
 .RFConfig_InterfacesTable td {
@@ -2183,6 +2246,63 @@ html, body {
   text-align: center;
   vertical-align: middle;
 }
+
+.centerSelect {
+   text-align-last: center;
+   text-align: center;
+   -ms-text-align-last: center;
+   -moz-text-align-last: center;
+}
+
+.controlHeader {
+  text-align:center;
+  background-color:#89989b;
+  color:white;
+  font-weight: bold;
+}
+
+.controlRedBorder {
+  border: 1px solid red !important;
+}
+
+progress[value] {
+
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+   appearance: none;
+
+  /* Remove the default border in Firefox. */
+  border: none;
+
+  /* For IE10 */
+  color: #3678c9;
+  width: 75%;
+  height: 100%;
+}
+progress::-moz-progress-bar { background: #3678c9; }
+progress::-webkit-progress-value { background: #3678c9; }
+
+.dutyCycleProgress {
+  width: 75%;
+
+  background: -moz-linear-gradient(0deg, rgba(13,255,0,1) 0%, rgba(255,255,0,1) 63%, rgba(255,0,0,1) 100%); /* ff3.6+ */
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(13,255,0,1)), color-stop(63%, rgba(255,255,0,1)), color-stop(100%, rgba(255,0,0,1))); /* safari4+,chrome */
+  background: -webkit-linear-gradient(0deg, rgba(13,255,0,1) 0%, rgba(255,255,0,1) 63%, rgba(255,0,0,1) 100%); /* safari5.1+,chrome10+ */
+  background: -o-linear-gradient(0deg, rgba(13,255,0,1) 0%, rgba(255,255,0,1) 63%, rgba(255,0,0,1) 100%); /* opera 11.10+ */
+  background: -ms-linear-gradient(0deg, rgba(13,255,0,1) 0%, rgba(255,255,0,1) 63%, rgba(255,0,0,1) 100%); /* ie10+ */
+  background: linear-gradient(90deg, rgba(13,255,0,1) 0%, rgba(255,255,0,1) 63%, rgba(255,0,0,1) 100%); /* w3c */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0DFF00', endColorstr='#ff0000',GradientType=1 ); /* ie6-9 */
+
+
+}
+
+.dutyCycleProgressBar {
+  width: 1%;
+  height: 12px;
+  background-color: #d9d9d9;
+}
+
 
 .Filter {
   margin:0;
@@ -2214,6 +2334,8 @@ html, body {
 
   background-color:$_(clickable);
   background-image:url(/ise/img/gradientButton25px.png);
+  /*background-image: linear-gradient(to bottom, white 40%, gray );*/
+  background-image: var(--btnGradient);
 
   color: $_(textColorB); /* black */
 
@@ -2257,6 +2379,8 @@ html, body {
 
   background-color:$_(clickable);
   background-image:url(/ise/img/gradientButton25px.png);
+  /*background-image: linear-gradient(to bottom, white 40%, gray );*/
+  background-image: var(--btnGradient);
 
   width:96%;
   margin:3px 2% 3px 2%;
@@ -2406,6 +2530,8 @@ html, body {
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr= #ffffff, endColorstr=#d0d0d0)";*/
 
   background-image:url(/ise/img/gradientButton25px.png);
+  /*background-image: linear-gradient(to bottom, white 40%, gray );*/
+  background-image: var(--btnGradient);
 
   overflow: auto;
 
@@ -2428,6 +2554,8 @@ html, body {
 .MainMenuItemCaption {
   background-color: $_(mainMenuBackground);
   background-image:url(/ise/img/gradientButton25px.png);
+  /*background-image: linear-gradient(to bottom, white 40%, gray );*/
+  background-image: var(--btnGradient);
 
   border: 1px solid $_(black);
   /* padding-left: 5px;
@@ -2513,7 +2641,7 @@ html, body {
   left: 200px;
   height: 50px;
   line-height:50px;
-  text-align: middle;
+  text-align: center;
   color: $_(textColorB); /* #000000 */
 }
 
@@ -2728,12 +2856,12 @@ html, body {
 }
 
 #MultiChannelChooserOkButton {
-  left: 4px;
+  left: 109px;
   width: 100px;
 }
 
 #MultiChannelChooserAbortButton {
-  left: 109px;
+  left: 4px;
   width: 100px;
 }
 
@@ -2896,13 +3024,12 @@ html, body {
 }
 
 .DeviceListButton {
-
   background-color: $_(clickable);
   background-image:url(/ise/img/gradientButton25px.png);
-
+  /*background-image: linear-gradient(to bottom, white 40%, gray );*/
+  background-image: var(--btnGradient);
   margin:2%;
   border:1px solid $_(black); /* black */
-  border-radius: 3px;
   width:95%;
   text-align:center;
   height:20px;
@@ -2981,12 +3108,12 @@ html, body {
 }
 
 #ChannelConfigDialogOkButton {
-  left: 4px;
+  left: 691px;
   width: 100px;
 }
 
 #ChannelConfigDialogAbortButton {
-  left: 691px;
+  left: 4px;
   width: 100px;
 }
 
@@ -2996,7 +3123,7 @@ html, body {
   padding:5px;
   top:0;
   left:0;
-  width:260;
+  width:260px;
   overflow:hidden;
 }
 
@@ -3104,12 +3231,12 @@ html, body {
 }
 
 #DeviceConfigDialogOkButton {
-  left: 4px;
+  left: 691px;
   width: 100px;
 }
 
 #DeviceConfigDialogAbortButton {
-  left: 691px;
+  left: 4px;
   width: 100px;
 }
 
@@ -3119,7 +3246,7 @@ html, body {
   padding:5px;
   top:0;
   left:0;
-  width:260;
+  width: 260px;
   overflow:hidden;
 }
 
@@ -3157,7 +3284,7 @@ html, body {
   height:20px;
   text-align:center;
   line-height:20px;
-}.YesNoDialogLayer {
+}.YesNoDialogLayer, .YesNoDialogLayerA {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -3165,7 +3292,7 @@ html, body {
   background-image: url(/ise/img/tr50.gif);
 }
 
-.YesNoDialog {
+.YesNoDialog, .YesNoDialogA {
   position: relative;
   top: 50%;
   left: 50%;
@@ -3176,7 +3303,8 @@ html, body {
   background-color: $_(black); /* black */
 }
 
-.YesNoDialogTitle {
+
+.YesNoDialogTitle, .YesNoDialogTitleA {
   position: absolute;
   top: 2px;
   left: 2px;
@@ -3191,7 +3319,7 @@ html, body {
   cursor: pointer;
 }
 
-.YesNoDialogContentWrapper {
+.YesNoDialogContentWrapper, .YesNoDialogContentWrapperA {
   position: absolute;
   top: 24px;
   left: 2px;
@@ -3202,14 +3330,14 @@ html, body {
   overflow: hidden;  
 }
 
-.YesNoDialogContent {
+.YesNoDialogContent, .YesNoDialogContentA {
   padding:5px;
   font-weight: bold;
   color: $_(textColorB); /* black */
 }
 
 
-.YesNoDialogFooter {
+.YesNoDialogFooter, .YesNoDialogFooterA {
   position: absolute;
   top: 98px;
   left: 2px;
@@ -3218,7 +3346,7 @@ html, body {
   background-color: $_(white); /* white */
 }
 
-.YesNoDialog_yesButton {
+.YesNoDialog_yesButton, .YesNoDialogA_yesButton {
   position: absolute;
   border: 1px solid $_(black); /* black */
   top: 4px;
@@ -3234,7 +3362,7 @@ html, body {
   width: 100px;  
 }
 
-.YesNoDialog_noButton {
+.YesNoDialog_noButton, .YesNoDialogA_noButton {
   position: absolute;
   border: 1px solid $_(black); /* black */
   top: 4px;
@@ -3528,6 +3656,7 @@ application {
 .UIButton {
   position: absolute;
   border: 1px solid $_(black); /* black */
+  border-radius: 5px;
   background-color:$_(clickable);
   margin: 0;
   padding: 0;
@@ -5000,8 +5129,8 @@ application {
 
 .CLASS02508 {
 	background-color:$_(activeBackground);
-	width:520px;
-	max-width:502px;
+	width:100%;
+	/*max-width:502px;*/
 	/*height:120px;*/
 	height:auto;
 	border:solid 1px $_(black); /* black */
@@ -5030,7 +5159,7 @@ application {
 }
 
 .CLASS02513 {
-	width:96;
+	width:96px;
 	background-color:$_(white); /* white */
 	border:1px solid $_(black); /* black */
 }
@@ -5188,6 +5317,17 @@ application {
   color: $_(white) ! important;
 }
 
+.CLASS02532c {
+	font-size: 10px;
+	width:220px;
+	/*height:25px;*/
+	height:auto;
+	min-height: 32px;
+	clear: both;
+	display: inline-block;
+  line-height:25px;
+}
+
 .CLASS02533 {
 	white-space:nowrap;
 }
@@ -5201,6 +5341,21 @@ application {
 	float: right;
 	text-align: right;
 	width: 98%;
+	word-wrap: break-word;
+	max-width: 480px;
+	display: inline-block;
+}
+
+.CLASS02535A {
+	float: right;
+	text-align: right;
+	word-wrap: break-word;
+	max-width: 480px;
+	display: inline-block;
+}
+
+.CLASS02535B {
+	text-align: center;
 	word-wrap: break-word;
 	max-width: 480px;
 	display: inline-block;
@@ -5305,6 +5460,20 @@ application {
 	width:150px;
 }
 
+.CLASS02550b {
+	cursor:pointer;
+	line-height:35px;
+	height:35px;
+	width:50px;
+}
+
+.CLASS02550c {
+	cursor:pointer;
+	line-height:35px;
+	height:35px;
+	width:100%;
+}
+
 .CLASS02551 {
 	cursor:pointer;
 	height:35px;
@@ -5315,6 +5484,12 @@ application {
 	cursor:pointer;
 	height:35px;
 	width:150px;
+}
+
+.CLASS02551b {
+	cursor:pointer;
+	height:35px;
+	width:98%;
 }
 
 .CLASS02552 {
@@ -6080,6 +6255,8 @@ color: $_(textColorA); /* white */
 
 .CLASS03903 {
 	border:solid 1px $_(black); /* black */
+	margin-top:0px;
+	width:235px;
 	margin-top:27px;
 }
 
@@ -6570,7 +6747,9 @@ color: $_(textColorA); /* white */
 
 .CLASS05008 {
     background-color:$_(clickable);
-    background-image:url(/ise/img/gradientButton50px.png);
+    /*background-image:url(/ise/img/gradientButton50px.png);*/
+		/*background-image: linear-gradient(to bottom, white 40%, gray );*/
+		background-image: var(--btnGradient);
 
 	color: $_(textColorB); /* black */
 	border:solid 1px $_(black); /* black */
@@ -6674,6 +6853,7 @@ color: $_(textColorA); /* white */
 	text-align:center;
 	vertical-align:middle;
 	font-weight:bold;
+	height: auto;
 }
 
 .CLASS05201 {
@@ -6716,6 +6896,9 @@ color: $_(textColorA); /* white */
 	text-align:left;
 	padding-left:5px;
 	border:solid 1px $_(black); /* black */
+-ms-word-break: break-all;
+	word-break: break-all;
+	word-break: break-word;
 }
 
 .CLASS05210 {
@@ -6970,7 +7153,8 @@ color: $_(textColorA); /* white */
 	background-color:$_(inactiveBackground);
 	border:solid 1px $_(black); /* black */
 	width:170px;
-	padding: 6px	color: $_(textColorB); /* black */
+	padding: 6px;
+	color: $_(textColorB); /* black */
 }
 
 .CLASS05907 {
@@ -7681,6 +7865,17 @@ color: $_(textColorA); /* white */
   color: $_(textColorA); /* white */
 }
 
+.CLASS20009a {
+	padding: 5px;
+	text-align:center;
+	vertical-align:middle;
+	margin:2px;
+	cursor: default;
+	border: 1px solid $_(black); /* black */
+	background-color: $_(gray); /* rgb(153, 153, 153) */
+  color: $_(inactiveButton);
+}
+
 .CLASS20010 {
 	width:150px;
 }
@@ -7741,7 +7936,7 @@ color: $_(textColorA); /* white */
 /* config\ic_ifacecmd.cgi */
 
 .CLASS20700 {
-  padding:10;
+  padding: 10px;
   text-align:center
 }
 
@@ -7977,7 +8172,9 @@ color: $_(textColorA); /* white */
 .CLASS21000 {
 
   background-color: $_(gray); /* rgb(153, 153, 153) */
-  background-image:url(/ise/img/gradientButton50px.png);
+  /*background-image:url(/ise/img/gradientButton50px.png);*/
+	/*background-image: linear-gradient(to bottom, white 40%, gray );*/
+	background-image: var(--btnGradient);
 
   padding: 3px;
   text-align:center;
@@ -8037,6 +8234,12 @@ color: $_(textColorA); /* white */
 .CLASS21108 {
   width:100px;
   margin: 5px;
+}
+
+.CLASS21108A {
+	width: 100px;
+	margin: 5px;
+	line-height: 100%
 }
 
 .CLASS21109 {
@@ -8211,6 +8414,11 @@ color: $_(textColorA); /* white */
   vertical-align:top;
 }
 
+.CLASS21301a {
+  background-color:$_(inactiveBackground);
+  vertical-align:middle;
+}
+
 .CLASS21302 {
  	color: $_(textColorB); /* black */
   font-size: 20px;
@@ -8232,6 +8440,12 @@ color: $_(textColorA); /* white */
   background-color:$_(inactiveBackground);
   text-align:center;
   vertical-align:top;
+}
+
+.CLASS21305a {
+  background-color:$_(inactiveBackground);
+  text-align:center;
+  vertical-align:middle;
 }
 
 .CLASS21306 {
@@ -8510,6 +8724,8 @@ color: $_(textColorA); /* white */
 
   background-color: $_(clickable);
   background-image:url(/ise/img/gradientButton25px.png);
+	/*background-image: linear-gradient(to bottom, white 40%, gray );*/
+	background-image: var(--btnGradient);
 
   color: $_(textColorB); /* black */
   border: 1px solid $_(black); /* black */
@@ -8581,6 +8797,8 @@ color: $_(textColorA); /* white */
 
   background-color: $_(clickable);
   background-image:url(/ise/img/gradientButton25px.png);
+	/*background-image: linear-gradient(to bottom, white 40%, gray );*/
+	background-image: var(--btnGradient);
 
   text-align:center;
   width:30px;

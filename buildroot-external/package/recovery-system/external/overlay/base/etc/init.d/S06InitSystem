@@ -24,7 +24,7 @@ init_system() {
   mkdir -p /var/etc
   mkdir -p /var/status
   mkdir -p /var/empty
-  chmod 600 /var/empty
+  chmod 700 /var/empty
 
   # create /media/usbX directories for automounting USB devices
   for i in $(seq 1 8); do

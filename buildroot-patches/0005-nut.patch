@@ -1,9 +1,9 @@
 --- buildroot/package/nut/nut.mk.orig
 +++ buildroot/package/nut/nut.mk
-@@ -21,7 +21,9 @@
- # since the default location (/var/state/ups) maybe readonly.
+@@ -23,7 +23,9 @@
  NUT_CONF_OPTS = \
  	--with-altpidpath=/var/run/upsd \
+ 	--with-dev \
 -	--without-hal
 +	--without-hal \
 +	--with-user=nobody \

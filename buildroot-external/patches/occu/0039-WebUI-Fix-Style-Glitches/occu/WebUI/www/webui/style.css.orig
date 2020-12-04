@@ -1,5 +1,5 @@
 :root {
-  --btnGradient: linear-gradient(to bottom, white 30%, gray);
+  --btnGradient: linear-gradient(to bottom, #ffffff, #a1a1a1);
 }
 
 * {

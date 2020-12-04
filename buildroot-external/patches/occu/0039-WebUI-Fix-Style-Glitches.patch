@@ -217,13 +217,6 @@
      <td class="CLASS06405">
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -1,5 +1,5 @@
- :root {
--  --btnGradient: linear-gradient(to bottom, white 30%, gray);
-+  --btnGradient: linear-gradient(to bottom, #ffffff, #a1a1a1);
- }
- 
- * {
 @@ -391,7 +391,7 @@
    text-align:center;
    border:solid 1px $_(black); /* black */

@@ -3,7 +3,7 @@
 # Neo Server
 #
 #############################################################
-NEOSERVER_VERSION = 2.5.6
+NEOSERVER_VERSION = 2.6.0
 NEOSERVER_SOURCE =
 NEOSERVER_LICENSE = PROPERITARY
 

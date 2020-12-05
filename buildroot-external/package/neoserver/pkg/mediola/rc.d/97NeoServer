@@ -101,6 +101,7 @@ case "$1" in
     rm -rf $CONFIGDIR/addons/www/mediola
     rm -f $CONFIGDIR/rc.d/97NeoServer
     /bin/updateAddonConfig.tcl -d mediola
+    # do not install the neo server after user uninstall
     touch /etc/config/neoDisabled
     ;;
   status)

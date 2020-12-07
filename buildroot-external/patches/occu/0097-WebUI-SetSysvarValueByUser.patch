@@ -225,7 +225,7 @@
 +        Write("loadIntEdit('"#sv.ValueMin()#"', '"#sv.ValueMax()#"', '"#sv.Value()#"');");
        }
        if (sv.ValueSubType() == istEnum) {
--        Write("loadValueEdit('"#sv.ValueList()#"');");
+-        Write("loadValueEdit('"#sv.ValueList().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"');");
 +        integer iVLCount = web.webGetValueListCount( sv.ValueList() );
 +        iVLCount = iVLCount - 1;
 +        string sVLKey;

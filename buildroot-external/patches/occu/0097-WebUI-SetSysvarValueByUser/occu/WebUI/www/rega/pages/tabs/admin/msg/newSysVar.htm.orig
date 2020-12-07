@@ -378,7 +378,7 @@
         Write("loadIntEdit('"#sv.ValueMin()#"', '"#sv.ValueMax()#"');");
       }
       if (sv.ValueSubType() == istEnum) {
-        Write("loadValueEdit('"#sv.ValueList()#"');");
+        Write("loadValueEdit('"#sv.ValueList().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"');");
       }
       if (sv.ValueSubType() == istBool) {
         Write("loadLogicEdit('"#sv.ValueName1()#"', '"#sv.ValueName0()#"');");

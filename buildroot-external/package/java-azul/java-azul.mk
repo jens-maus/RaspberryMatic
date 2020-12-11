@@ -6,7 +6,7 @@
 #
 #############################################################
 ifeq ($(call qstrip,$(BR2_ARCH)),arm)
-JAVA_AZUL_VERSION = 8.50.0.259-ca-jdk8.0.272
+JAVA_AZUL_VERSION = 8.50.51.263-ca-jdk8.0.275
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_aarch32hf.tar.gz
 JAVA_AZUL_SITE = https://cdn.azul.com/zulu-embedded/bin
 else ifeq ($(call qstrip,$(BR2_ARCH)),aarch64)

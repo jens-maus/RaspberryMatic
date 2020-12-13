@@ -1,0 +1,287 @@
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -860,6 +860,7 @@
+     }
+     sv.Channel( ID_ERROR );
+   }
++  sv.State(system.GetVar("sValue"));
+   dom.RTUpdate(0);
+   }
+   return;
+--- occu/WebUI/www/rega/pages/tabs/admin/msg/newSysVar.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/msg/newSysVar.htm
+@@ -13,7 +13,8 @@
+       <col style="width:10%;"/>
+       <col style="width:23%;"/>
+       <col style="width:10%;"/>
+-      <col style="width:23%;"/>
++      <col style="width:10%;"/>
++      <col style="width:13%;"/>
+     </colgroup>
+     <tr class="CLASS05001">
+       <th>${thName}</th>
+@@ -21,6 +22,7 @@
+       <th>${thTypeOfVariable}</th>
+       <th>${thValues}</th>
+       <th>${thUnit}</th>
++      <th>${thValue}</th>
+       <th>${thCannelMapping}</th>
+     </tr>
+     <tr class="CLASS05002">
+@@ -78,6 +80,9 @@
+       </td>
+       <td id="tdEdit" class="CLASS05004">
+       </td>
++
++           
++    
+       <td class="CLASS05004">
+         <% 
+           string sUnit = "";
+@@ -87,6 +92,11 @@
+           Write("<input type='text' id='txtUnit' class='CLASS05011' value='"#sUnit#"' onblur='stringRemoveNonPrintableChars(this);'/>");
+         %>
+       </td>
++      
++            
++      <td id="tdValueEdit" class="CLASS05004">
++      </td>
++      
+       <td class="CLASS05004">
+         <table width="100%" class="CLASS05005">
+           <colgroup>
+@@ -190,10 +200,12 @@
+           iSubType = SYSVAR_BOOL;
+           pb += "string sTrue = '"+$("inpLTrue").value+"';";
+           pb += "string sFalse = '"+$("inpLFalse").value+"';";
++          pb += "string sValue = '"+$("selValue").value+"';";
+           break;
+         case 1:
+           iSubType = SYSVAR_ENUM;
+           pb += "string sValList = '"+$("txVals").value.replace(/(?:\r\n|\r|\n)/g,';')+"';";
++          pb += "string sValue = '"+$("selEnum").value+"';";
+           break;
+         case 2:
+           iSubType = SYSVAR_GENERIC;
+@@ -215,14 +227,26 @@
+           if( isNaN(itmpMaxVal) ) itmpMaxVal = 0;
+           pb += "integer iMinVal = '"+itmpMinVal+"';";
+           pb += "integer iMaxVal = '"+itmpMaxVal+"';";
++          
++          if (isNaN($("inpValue").value)) 
++          {
++            alert(translateKey("alertValOutOfRange"));
++            return;
++          }
++          var value = $("inpValue").value;
++          if (value > itmpMaxVal) value = itmpMaxVal;
++          if (value < itmpMinVal) value = itmpMinVal;
++          pb += "string sValue = '"+value+"';";
+           break;
+         case 3: 
+           iSubType = SYSVAR_ALARM;
+           pb += "string sTrue = '"+$("inpLTrue").value+"';";
+           pb += "string sFalse = '"+$("inpLFalse").value+"';";
++          pb += "string sValue = '"+$("selValue").value+"';";
+           break;
+         case 4:
+           iSubType = SYSVAR_STRING;
++          pb += "string sValue = '"+$("txValue").value+"';";
+           break;
+       }
+       pb += "string sUnit = '"+$("txtUnit").value+"';";
+@@ -293,7 +317,7 @@
+         loadLogicEdit(translateKey("lblTriggered"), translateKey("lblNotTriggered"));
+         break;
+       case 4:
+-        loadNoneEdit();
++        loadChar8859Edit("");
+         break;
+     }
+   };
+@@ -303,13 +327,29 @@
+     //elm.value = elmVal.replace(/\\n|\\r|\\t/g, "");
+     elm.value = elmVal.replace(/\\/g, "");
+   };
++  
++  checkInpValue = function() {
++   var itmpValue = parseFloat( $("inpValue").value );
+ 
++   var itmpMinVal = parseFloat( $("inpMin").value );
++   var itmpMaxVal = parseFloat( $("inpMax").value );
++   
++   if (isNaN(itmpValue)) {
++     // Popup erscheint beim Speichern; doppeltes alert() ist nervig
++     // alert(translateKey("alertValOutOfRange"));
++   } else {
++     if (itmpValue > itmpMaxVal) document.getElementById('inpValue').value = itmpMaxVal;
++     if (itmpValue < itmpMinVal) document.getElementById('inpValue').value = itmpMinVal;
++   }
++  }
++  
+   loadNoneEdit = function()
+   {
+     $("tdEdit").innerHTML = "";
++    $("tdValueEdit").innerHTML = "";
+   };
+   
+-  loadLogicEdit = function(sTrue, sFalse) 
++  loadLogicEdit = function(sTrue, sFalse, sValue) 
+   {
+     var s = "";
+     s += "<table class='CLASS05010'>";
+@@ -322,9 +362,25 @@
+     s += "</tr>";
+     s += "</table>";
+     $("tdEdit").innerHTML = s;
++    
++    
++    s = "";
++    var isSelFalse = "selected";
++    var isSelTrue = "";
++    if (sValue === "true") {
++      isSelFalse = "";
++      isSelTrue = "selected";
++    } 
++    s += "<table class='CLASS05010'>";
++    s += "<tr>";
++      s += "<td class='CLASS05011'><select id='selValue'><option "+isSelFalse+" value='0'>"+translateKey("lblFalse")+"</option><option "+isSelTrue+" value='1'>"+translateKey("lblTrue")+"</option></select> </td>";
++    s += "</tr>";
++    s += "</table>";   
++
++    $("tdValueEdit").innerHTML = s
+   };
+   
+-  loadValueEdit = function(vals) 
++  loadValueEdit = function(vals, sValue, optionList) 
+   {
+     if( vals == "" )
+     {
+@@ -336,9 +392,23 @@
+     s += "<tr><td> <textarea id='txVals' rows='2'>"+vals+"</textarea> </td></tr>";
+     s += "</table>";
+     $("tdEdit").innerHTML = s;
++    
++    s = "";
++    var hidden = (sValue) ? "" : "style='display: none;'";
++    s += "<table class='CLASS05010' "+hidden+">";
++    s += "<tr>";
++    s += "<td class='CLASS05011'><select id='selEnum'>";
++    s+=optionList;
++    s+="</select> </td>";
++    s += "</tr>";
++    s += "</table>";   
++
++    $("tdValueEdit").innerHTML = s
++    
++    if (sValue) document.getElementById("selEnum").options[sValue].selected=true;
+   };
+   
+-  loadIntEdit = function(val1, val2) 
++  loadIntEdit = function(val1, val2, sValue) 
+   {
+     var s = "";
+     s += "<table class='CLASS05010'>";
+@@ -351,7 +421,27 @@
+     s += "</tr>";
+     s += "</table>";
+     $("tdEdit").innerHTML = s;
++    
++    s = "";
++    var val = val1;
++    if (sValue) val = sValue;
++    s += "<table class='CLASS05012'>";
++    s += "<tr><td> <input id='inpValue' type='text' size='12' value='"+translateString(val.toString())+"'  onblur='checkInpValue();'/></td></tr>";
++    s += "</table>";
++    $("tdValueEdit").innerHTML = s;
++    
+   }
++  
++    
++  loadChar8859Edit = function(sValue) 
++  {
++    var s = "";
++    s += "<table class='CLASS05012'>";
++    s += "<tr><td> <textarea id='txValue' rows='1'>"+sValue+"</textarea> </td></tr>";
++    s += "</table>";
++    $("tdValueEdit").innerHTML = s;
++    $("tdEdit").innerHTML = "";
++  };
+ 
+   <% 
+     if (system.GetVar("createNew") == 1) {
+@@ -370,18 +460,31 @@
+       if (sv.ValueSubType() == istPresent) {
+       }
+       if (sv.ValueSubType() == istChar8859) {
++        Write("loadChar8859Edit('"#sv.Value()#"');");
+       }
+       if (sv.ValueSubType() == istAlarm) {
+-        Write("loadLogicEdit('"#sv.ValueName1()#"', '"#sv.ValueName0()#"');");
++        Write("loadLogicEdit('"#sv.ValueName1()#"', '"#sv.ValueName0()#"', '"#sv.Value()#"');");
+       }
+       if (sv.ValueSubType() == istGeneric) {
+-        Write("loadIntEdit('"#sv.ValueMin()#"', '"#sv.ValueMax()#"');");
++        Write("loadIntEdit('"#sv.ValueMin()#"', '"#sv.ValueMax()#"', '"#sv.Value()#"');");
+       }
+       if (sv.ValueSubType() == istEnum) {
+-        Write("loadValueEdit('"#sv.ValueList().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"');");
++        integer iVLCount = web.webGetValueListCount( sv.ValueList() );
++        iVLCount = iVLCount - 1;
++        string sVLKey;
++        string optionList = "";
++        string oVal = "";
++        integer count = 0;
++        foreach( sVLKey, system.GenerateEnum(0,iVLCount) )
++        {
++         oVal = count.ToString(0);
++         optionList = optionList # "<option value=\""#oVal#"\">"#web.webGetValueFromList( sv.ValueList(), sVLKey )#"</option>"; 
++         count = count+1;
++        }
++        Write("loadValueEdit('"#sv.ValueList().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"', '"#sv.Value()#"', '"#optionList#"');");
+       }
+       if (sv.ValueSubType() == istBool) {
+-        Write("loadLogicEdit('"#sv.ValueName1()#"', '"#sv.ValueName0()#"');");
++        Write("loadLogicEdit('"#sv.ValueName1()#"', '"#sv.ValueName0()#"', '"#sv.Value()#"');");
+       }
+     }
+   %>
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -109,6 +109,7 @@
+     "thFirmware" : "Firmware",
+     "thTypeOfVariable" : "Variablentyp",
+     "thValues" : "Werte",
++    "thValue" : "Wert",
+     "thUnit" : "Ma%DFeinheit",
+     "thLastUpdate" : "Letzte<br/>Aktualisierung",
+     "thControl" : "Bedienung",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -107,6 +107,7 @@
+     "thFirmware" : "Firmware",
+     "thTypeOfVariable" : "Variable type",
+     "thValues" : "Values",
++    "thValue" : "Value",
+     "thUnit" : "Unit of measurement",
+     "thLastUpdate" : "Last<br/>update",
+     "thControl" : "Control",
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -26133,14 +26133,14 @@
+         this.setTitle( translateKey("dialogCreateNewSysVar") /*"Systemvariable neu anlegen"*/ );
+         this.addToPostBody( 'integer varid = 0;' );
+         this.addToPostBody( 'integer createNew = 1;' );
+-        this.setWidth(900);
++        this.setWidth(1000);
+         this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
+         break;
+       case ID_EDIT_SYSVAR:
+         this.setTitle( translateKey("dialogEditSysVar") /*"Systemvariable bearbeiten"*/ );
+         this.addToPostBody( 'integer varid = '+this.type+';' );
+         this.addToPostBody( 'integer createNew = 0;' );
+-        this.setWidth(900);
++        this.setWidth(1000);
+         this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
+         break;
+       case ID_CREATE_SCRIPT:

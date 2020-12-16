@@ -13194,7 +13194,9 @@ DeviceConfigDialog = Singleton.create({
      	var i = 0;
 	    this.device.channels.each(function(channel) {
 	      i = i + 1;
-	      homematic("Channel.setName", {id: channel.id, name: $(this.NAME_ID).value+ $(this.SEPARATOR_ID).value + i});
+	      var chName = $(this.NAME_ID).value+ $(this.SEPARATOR_ID).value + i;
+	      homematic("Channel.setName", {id: channel.id, name: chName});
+	      channel.setName(chName);
 	    }, this);
 		
 	    DeviceList.reload(this);

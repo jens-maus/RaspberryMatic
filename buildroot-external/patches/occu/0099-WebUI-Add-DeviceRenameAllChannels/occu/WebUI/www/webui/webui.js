@@ -13198,7 +13198,7 @@ DeviceConfigDialog = Singleton.create({
 	      homematic("Channel.setName", {id: channel.id, name: chName});
 	      channel.setName(chName);
 	    }, this);
-		
+		DeviceListPage.updateView(true);
 	    DeviceList.reload(this);
     }		
   },

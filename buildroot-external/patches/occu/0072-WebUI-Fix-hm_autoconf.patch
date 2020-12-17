@@ -157,7 +157,18 @@
      proc create_sysvar_to_value_prg {ch_id value sv_id prg_name} {
          set script "string ch_id=\"$ch_id\";\nstring value_name=\"$value\";\nstring sv_id=$sv_id;\nstring prg_name=\"$prg_name\";\n"
          append script {
-@@ -516,35 +431,22 @@
+@@ -499,7 +414,9 @@
+         string ifaces;
+         foreach(if_id, dom.GetObject(ID_INTERFACES).EnumUsedIDs()){
+             object o=dom.GetObject(if_id);
+-            ifaces = ifaces # if_id # " {" # o.InterfaceUrl() # " " # o.Name() # "} ";
++            if(o.InterfaceUrl() != "") {
++              ifaces = ifaces # if_id # " {" # o.InterfaceUrl() # " " # o.Name() # "} ";
++            }
+         }
+         string dev_id;
+         string devs;
+@@ -516,35 +433,22 @@
                  }
              }
          }
@@ -205,7 +216,7 @@
      }
  
      # We need a catch because OSRAM Lightify causes an error (/tmp/hm_autoconf_xxx.log) because a list must have an even number of elements.
-@@ -577,13 +479,24 @@
+@@ -577,13 +481,24 @@
                array_clear ch_descr
                array set ch_descr [xmlrpc $url getDeviceDescription $ch_address]
                if [info exist DEVICE_FUNCTIONS($dev_descr(TYPE))] {

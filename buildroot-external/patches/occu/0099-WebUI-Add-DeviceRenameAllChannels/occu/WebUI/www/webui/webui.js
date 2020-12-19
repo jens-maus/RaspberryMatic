@@ -12427,14 +12427,13 @@ DeviceConfigDialog = Singleton.create({
   
   renameChannels: function() {
     if (confirm("Alle Kanäle umbenennen?")) {	  
-     	var i = 0;
 	    this.device.channels.each(function(channel) {
-	      i = i + 1;
-	      var chName = $(this.NAME_ID).value+ $(this.SEPARATOR_ID).value + i;
+	      var chNumber = channel.address.split(':')[1];
+	      var chName = $(this.NAME_ID).value+ $(this.SEPARATOR_ID).value + chNumber;
 	      homematic("Channel.setName", {id: channel.id, name: chName});
 	      channel.setName(chName);
 	    }, this);
-		DeviceListPage.updateView(true);
+	    DeviceListPage.updateView(true);
 	    DeviceList.reload(this);
     }		
   },

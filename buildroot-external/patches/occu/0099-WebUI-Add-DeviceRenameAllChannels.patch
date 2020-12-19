@@ -63,7 +63,7 @@
    USABLE_ID: "DeviceConfigDialog_isUsable",
    VISIBLE_ID: "DeviceConfigDialog_isVisible",
    LOGGED_ID: "DeviceConfigDialog_isLogged",
-@@ -12416,6 +12417,29 @@
+@@ -12416,6 +12417,28 @@
    },
    
    /**
@@ -77,14 +77,13 @@
 +  
 +  renameChannels: function() {
 +    if (confirm("Alle Kanäle umbenennen?")) {	  
-+     	var i = 0;
 +	    this.device.channels.each(function(channel) {
-+	      i = i + 1;
-+	      var chName = $(this.NAME_ID).value+ $(this.SEPARATOR_ID).value + i;
++	      var chNumber = channel.address.split(':')[1];
++	      var chName = $(this.NAME_ID).value+ $(this.SEPARATOR_ID).value + chNumber;
 +	      homematic("Channel.setName", {id: channel.id, name: chName});
 +	      channel.setName(chName);
 +	    }, this);
-+		DeviceListPage.updateView(true);
++	    DeviceListPage.updateView(true);
 +	    DeviceList.reload(this);
 +    }		
 +  },

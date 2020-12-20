@@ -90,7 +90,7 @@ jQuery.extend(true,langJSON, {
     "generalChannelConfigLblNone" : "nicht verkn%FCpfbar",
     "generalDeviceChannelConfigBtnFuncTest" : "Test starten",
     "generalDeviceChannelRenameBtn" : "Kan%E4le umbenennen",
-    "generalDeviceRenameChannelHint" : "Benennt alle Kan%E4le des Ger%E4ts um.<br/>Die Kanalnamen lauten anschlie%DFend Ger%E4tename%26lt;Trennzeichen%26gt;Kanalnummer",
+    "generalDeviceRenameChannelHint" : "Benennt alle Kan%E4le des Ger%E4ts um. Die Kanalnamen lauten anschlie%DFend <i>Ger%E4tename%26lt;Trennzeichen%26gt;Kanalnummer</i>",
     "generalDeviceConfigHint" : "Im Rahmen des Funktionstests wird gepr%FCft, ob die Kommunikation mit dem Ger%E4t fehlerfrei funktioniert.<br /> Dazu werden an alle mit dem Ger%E4t verkn%FCpften Aktoren Schaltbefehle gesendet, die deren Zustand %E4ndern. Sensoren, wie z.B. Fernbedienungen, melden sich im Allgemeinen erst dann, wenn sie manuell bet%E4tigt werden. Der Test gilt als bestanden, sobald die erste R%FCckmeldung von dem Ger%E4t empfangen wurde.",
     "generalChannelConfigHint" : "<p>Im Rahmen des Funktionstests wird gepr%FCft, ob die Kommunikation mit dem Kanal fehlerfrei funktioniert.</p>",
     "generalChannelConfigHintSender" : "<p>Bei Sensoren wartet die Homematic Zentrale, bis diese sich melden. Eine Fernbedienung meldet sich z.B. erst dann, wenn sie manuell bet%E4tigt wird.</p>",

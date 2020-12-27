@@ -1,0 +1,79 @@
+! Create a special channel description for certain channels
+function ::ShowExtDesc() {
+
+  if ((chn.HssType() == "SWITCH_TRANSMITTER") && (chn.Label() == "HmIP-MOD-OC8") ) {
+    Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_"#chn.HssType()#"_OC}</span>");
+    showExtDesc = true;
+  }
+
+  if ((chn.HssType() == "DOOR_RECEIVER") && (chn.Label() == "HmIP-MOD-HO") ) {
+    Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_"#chn.HssType()#"_MOD_HO}</span>");
+    showExtDesc = true;
+  }
+
+  if ((chn.HssType() == "SIMPLE_SWITCH_RECEIVER") && (chn.Label() == "HmIP-MOD-HO") ) {
+    Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_"#chn.HssType()#"_MOD_HO}</span>");
+    showExtDesc = true;
+  }
+
+  if ((chn.HssType() == "DOOR_RECEIVER") && (chn.Label() == "HmIP-MOD-TM") ) {
+    Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_"#chn.HssType()#"_MOD_TM}</span>");
+    showExtDesc = true;
+  }
+
+  if ((chn.HssType() == "SIMPLE_SWITCH_RECEIVER") && (chn.Label() == "HmIP-MOD-TM") ) {
+    Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_"#chn.HssType()#"_MOD_TM}</span>");
+    showExtDesc = true;
+  }
+
+  if ((chn.HssType() == "PASSAGE_DETECTOR_DIRECTION_TRANSMITTER") && (chn.Label() == "HmIP-SPDR")) {
+    ! Show the device address instead of the channel address because channel 2 and 3 are summarized together in channel 2.
+    ! Channel 3 is not visible.
+    Write(chn.Label()#"<br/>&nbsp;"#oDev.Address()#"&nbsp;");
+    showExtDesc = true;
+  }
+
+  if (chn.HssType() == "MULTI_MODE_INPUT_TRANSMITTER") {
+    string mode = chn.MetaData("channelMode");
+    if (mode == null) {mode = "1";}
+    Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_"#chn.HssType()#"_"#mode#"}</span>");
+    showExtDesc = true;
+  }
+
+  if (chn.HssType() == "BLIND_TRANSMITTER") {
+    if ((chn.Label().Substr(0,6) == "HmIPW-") || (chn.Label() == "HmIP-DRBLI4")) {
+      object mode = dom.GetObject(chn.Address());
+      if (mode.MetaData("channelMode") == "shutter") {
+        Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_SHUTTER_TRANSMITTER}</span>");
+        showExtDesc = true;
+      }
+    }
+  }
+
+  if (chn.HssType() == "BLIND_VIRTUAL_RECEIVER") {
+    if ((chn.Label().Substr(0,6) == "HmIPW-") || (chn.Label() == "HmIP-DRBLI4")) {
+      object mode = dom.GetObject(chn.Address());
+      if (mode.MetaData("channelMode") == "shutter") {
+        Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_SHUTTER_VIRTUAL_RECEIVER}</span>");
+        showExtDesc = true;
+      }
+    }
+  }
+
+  if ((chn.HssType() == "ROTARY_CONTROL_TRANSCEIVER") && (chn.Label() == "HmIP-WRCR") ) {
+    if (chNumber == 2) {
+      Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_"#chn.HssType()#"_TR}</span>");
+      showExtDesc = true;
+    }
+    if (chNumber == 3) {
+      Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_"#chn.HssType()#"_TL}</span>");
+      showExtDesc = true;
+    }
+  }
+
+  if ( (chn.HssType() == "COND_SWITCH_TRANSMITTER_TEMPERATURE") && (chn.Label() == "HmIP-STE2-PCB") && (chNumber == 3) ) {
+    Write(chn.Name()#"<br/><br><span name='hssType' class='hidden'>${chType_COND_SWITCH_TRANSMITTER_TEMPERATURE_DIFF}</span>");
+    showExtDesc = true;
+  }
+
+}

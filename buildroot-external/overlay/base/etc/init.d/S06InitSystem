@@ -36,6 +36,7 @@ init_system() {
   # /usr/local/etc setup
   mkdir -p /usr/local/etc
   chmod 0755 /usr/local/etc
+  chown root:root /usr/local/etc
 
   # create a /usr/local/tmp directory for creating things like backup files, etc.
   # (we need it on-disk or /tmp will be not enough in case of a filled up /usr/local)

@@ -9421,7 +9421,7 @@ Channel = Class.create({
       this.isReadable = data["isReadable"];      
       this.isWritable = data["isWritable"];      
       this.isEventable = data["isEventable"];
-	  this.isInternal = data["isInternal"]
+      this.isInternal = data["isInternal"]
 
       if (typeof data["mode_multi_mode"] != "undefined") {
         this.multiMode = data["mode_multi_mode"];

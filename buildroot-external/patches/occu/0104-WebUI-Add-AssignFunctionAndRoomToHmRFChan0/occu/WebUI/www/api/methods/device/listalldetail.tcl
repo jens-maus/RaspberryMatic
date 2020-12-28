@@ -51,107 +51,113 @@ set deviceDescrScript {
     foreach(channelId, device.Channels())
     {
       var channel = dom.GetObject(channelId);
-	  var internal = channel.Internal();
-      if (true != first) { Write(" "); } else { first = false; }
-      Write("{");
-
-      var readable  = false;
-      var writable  = false;
-      var eventable = false;
-      var logable   = false;
-
-      string dpId;
-      foreach (dpId, channel.DPs())
+      if (channel)
       {
-        var dp         = dom.GetObject(dpId);
-        var operations = dp.Operations();
+        if (true != first) { Write(" "); } else { first = false; }
+        Write("{");
 
-        if (!dp.Internal())
+        var readable  = false;
+        var writable  = false;
+        var eventable = false;
+        var logable   = false;
+
+        string dpId;
+        foreach (dpId, channel.DPs())
         {
-          logable = true;
-          if (OPERATION_READ  & operations) { readable  = true; }
-          if (OPERATION_WRITE & operations) { writable  = true; }
-          if (OPERATION_EVENT & operations) { eventable = true; }
-        }
-      }
-      
-      if (channel.Internal()) { writable = false; }
+          var dp         = dom.GetObject(dpId);
+          var operations = dp.Operations();
 
-      var isUsable = false;
-      if (channel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess)
-      {
-        isUsable = true;
-      }
-
-      var category = CATEGORY_NONE;
-      if (channel.ChnDirection() == 1) { category = CATEGORY_SENDER; }
-      if (channel.ChnDirection() == 2) { category = CATEGORY_RECEIVER; }
-
-      var mode = MODE_DEFAULT;
-      if (channel.ChnAESActive())
-      {
-        mode = MODE_AES;
-      }
-
-      var isAesAvailable = false;
-      if (channel.ChnAESOperation() > 0)
-      {
-        isAesAvailable = true;
-      }
-
-      var isVirtual = false;
-      if ((channel.ChannelType() == 29) || (channel.Label() == "HmIP-RCV-50"))
-      {
-        isVirtual = true;
-      }
-
-      string chnType = channel.HssType();
-      Write("ID {" # channelId # "}");
-      Write(" NAME {" # channel.Name() # "}");
-      Write(" ADDRESS {" # channel.Address() # "}");
-      Write(" DEVICE {" # channel.Device() # "}");
-      Write(" INDEX {" # channel.ChnNumber() # "}");
-      Write(" GROUP_PARTNER_ID {" # channel.ChnGroupPartnerId() # "}");
-      Write(" READY_CONFIG {" # channel.ReadyConfig() # "}");
-      Write(" MODE {" # mode # "}");
-      Write(" CATEGORY {" # category # "}");
-      Write(" USABLE {" # isUsable # "}");
-      Write(" LOGGED {" # channel.ChnArchive() # "}");
-      Write(" VISIBLE {" # channel.Visible() # "}");
-      Write(" LOGABLE {" # logable # "}");
-      Write(" READABLE {" # readable # "}");
-      Write(" WRITABLE {" # writable # "}");
-      Write(" EVENTABLE {" # eventable # "}");
-      Write(" AES_AVAILABLE {" # isAesAvailable # "}");
-      Write(" VIRTUAL {" # isVirtual # "}");
-      Write(" CHANNEL_TYPE {" # chnType # "}");
-      Write(" INTERNAL {" # internal # "}");
-
-      ! BLIND_* is necessary e. g. the HmIPW-DRBL4, which can be used as a BLIND or a SHUTTER. The metadata channelMode determines the current state.
-
-      if ( (chnType == "MULTI_MODE_INPUT_TRANSMITTER") || (chnType == "BLIND_TRANSMITTER") || (chnType == "BLIND_VIRTUAL_RECEIVER") ) {
-        object chnAddress = dom.GetObject(channel.Address());
-        if (chnAddress) {
-          string modeMultiChannel = chnAddress.MetaData('channelMode');
-          if (modeMultiChannel) {
-            Write(" MODE_MULTI_MODE_CHANNEL {" # modeMultiChannel # "}");
-          } else {
-            Write(" MODE_MULTI_MODE_CHANNEL {--}");
-          }
-        } else {
-          string modeMultiChannel = channel.MetaData('channelMode');
-          if (modeMultiChannel) {
-            Write(" MODE_MULTI_MODE_CHANNEL {" # modeMultiChannel # "}");
-          } else {
-            Write(" MODE_MULTI_MODE_CHANNEL {--}");
+          if (!dp.Internal())
+          {
+            logable = true;
+            if (OPERATION_READ  & operations) { readable  = true; }
+            if (OPERATION_WRITE & operations) { writable  = true; }
+            if (OPERATION_EVENT & operations) { eventable = true; }
           }
         }
-      }
 
-      Write("}");
+        var isInternal = channel.Internal();
+        if(isInternal)
+        {
+          writeable = false;
+        }
+
+        var isUsable = false;
+        if (channel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess)
+        {
+          isUsable = true;
+        }
+
+        var category = CATEGORY_NONE;
+        if (channel.ChnDirection() == 1) { category = CATEGORY_SENDER; }
+        if (channel.ChnDirection() == 2) { category = CATEGORY_RECEIVER; }
+
+        var mode = MODE_DEFAULT;
+        if (channel.ChnAESActive())
+        {
+          mode = MODE_AES;
+        }
+
+        var isAesAvailable = false;
+        if (channel.ChnAESOperation() > 0)
+        {
+          isAesAvailable = true;
+        }
+
+        var isVirtual = false;
+        if ((channel.ChannelType() == 29) || (channel.Label() == "HmIP-RCV-50"))
+        {
+          isVirtual = true;
+        }
+
+        string chnType = channel.HssType();
+        Write("ID {" # channelId # "}");
+        Write(" NAME {" # channel.Name() # "}");
+        Write(" ADDRESS {" # channel.Address() # "}");
+        Write(" DEVICE {" # channel.Device() # "}");
+        Write(" INDEX {" # channel.ChnNumber() # "}");
+        Write(" GROUP_PARTNER_ID {" # channel.ChnGroupPartnerId() # "}");
+        Write(" READY_CONFIG {" # channel.ReadyConfig() # "}");
+        Write(" MODE {" # mode # "}");
+        Write(" CATEGORY {" # category # "}");
+        Write(" USABLE {" # isUsable # "}");
+        Write(" LOGGED {" # channel.ChnArchive() # "}");
+        Write(" VISIBLE {" # channel.Visible() # "}");
+        Write(" LOGABLE {" # logable # "}");
+        Write(" READABLE {" # readable # "}");
+        Write(" WRITABLE {" # writable # "}");
+        Write(" EVENTABLE {" # eventable # "}");
+        Write(" AES_AVAILABLE {" # isAesAvailable # "}");
+        Write(" VIRTUAL {" # isVirtual # "}");
+        Write(" INTERNAL {" # isInternal # "}");
+        Write(" CHANNEL_TYPE {" # chnType # "}");
+
+        ! BLIND_* is necessary e. g. the HmIPW-DRBL4, which can be used as a BLIND or a SHUTTER. The metadata channelMode determines the current state.
+
+        if ( (chnType == "MULTI_MODE_INPUT_TRANSMITTER") || (chnType == "BLIND_TRANSMITTER") || (chnType == "BLIND_VIRTUAL_RECEIVER") ) {
+          object chnAddress = dom.GetObject(channel.Address());
+          if (chnAddress) {
+            string modeMultiChannel = chnAddress.MetaData('channelMode');
+            if (modeMultiChannel) {
+              Write(" MODE_MULTI_MODE_CHANNEL {" # modeMultiChannel # "}");
+            } else {
+              Write(" MODE_MULTI_MODE_CHANNEL {--}");
+            }
+          } else {
+            string modeMultiChannel = channel.MetaData('channelMode');
+            if (modeMultiChannel) {
+              Write(" MODE_MULTI_MODE_CHANNEL {" # modeMultiChannel # "}");
+            } else {
+              Write(" MODE_MULTI_MODE_CHANNEL {--}");
+            }
+          }
+        }
+
+        Write("}");
+      }
     }
+    Write("}");
   }
-  Write("}");
 }
 
 set deviceIdsScript {

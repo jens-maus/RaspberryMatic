@@ -21002,7 +21002,7 @@ if (PLATFORM == "Central") {
     var result = true;
     switch (channel.channelType) {
       case "ALARM_COND_SWITCH_TRANSMITTER":
-      case "MAINTENANCE":
+      //case "MAINTENANCE":
       case "WEEK_PROGRAM":
         result = false;
         break;

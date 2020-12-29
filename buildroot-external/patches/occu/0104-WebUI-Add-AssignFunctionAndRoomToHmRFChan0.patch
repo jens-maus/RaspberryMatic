@@ -195,3 +195,12 @@
          } else {
            result.push(channel);
          }
+@@ -20999,7 +21002,7 @@
+     var result = true;
+     switch (channel.channelType) {
+       case "ALARM_COND_SWITCH_TRANSMITTER":
+-      case "MAINTENANCE":
++      //case "MAINTENANCE":
+       case "WEEK_PROGRAM":
+         result = false;
+         break;

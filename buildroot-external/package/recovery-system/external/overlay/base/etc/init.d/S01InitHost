@@ -9,14 +9,22 @@ identify_host() {
   HM_HOST=""
   HM_MODE="NORMAL"
   HM_LED_GREEN=""
-  HM_LED_GREEN_MODE1="$(/sbin/blkid --label rootfs | head -1 | sed -n 's/\/dev\/mmc.*\([[:digit:]]\)p[[:digit:]]$/mmc\1/p')"
-  HM_LED_GREEN_MODE2=${HM_LED_GREEN_MODE1}
+  HM_LED_GREEN_MODE1="none"
+  HM_LED_GREEN_MODE2="none"
   HM_LED_RED=""
   HM_LED_RED_MODE1="timer"
   HM_LED_RED_MODE2="heartbeat"
   HM_LED_YELLOW=""
   HM_LED_YELLOW_MODE1="timer"
   HM_LED_YELLOW_MODE2="default-on"
+
+  # set GREEN_MODE1 and GREEN_MODE2 to the rootfs
+  # device led trigger
+  rootfs_trigger="$(/sbin/blkid --label rootfs | head -1 | sed -n 's/\/dev\/mmc.*\([[:digit:]]\)p  [[:digit:]]$/mmc\1/p')"
+  if [[ -n "${rootfs_trigger}" ]]; then
+    HM_LED_GREEN_MODE1=${rootfs_trigger}
+    HM_LED_GREEN_MODE2=${rootfs_trigger}
+  fi
 
   # identify the RaspberryPi version used
   # http://elinux.org/RPi_HardwareHistory

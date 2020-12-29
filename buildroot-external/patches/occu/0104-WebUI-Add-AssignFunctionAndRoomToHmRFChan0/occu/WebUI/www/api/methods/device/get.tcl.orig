@@ -52,8 +52,8 @@ set script {
       foreach(channelId, device.Channels())
       {
         var channel = dom.GetObject(channelId);
-!        if (false == channel.Internal())
-!        {
+        if (false == channel.Internal())
+        {
           if (true != first) { Write(" "); } else { first = false; }
           Write("{");
           
@@ -126,7 +126,7 @@ set script {
           Write(" CHANNEL_TYPE {" # channel.HssType() # "}");
           Write("}");
         }
-!      }
+      }
     }
     Write("}");
   }

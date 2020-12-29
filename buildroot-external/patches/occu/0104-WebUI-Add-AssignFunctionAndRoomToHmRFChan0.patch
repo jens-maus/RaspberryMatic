@@ -1,162 +1,40 @@
 --- occu/WebUI/www/api/methods/device/get.tcl.orig
 +++ occu/WebUI/www/api/methods/device/get.tcl
-@@ -52,81 +52,85 @@
+@@ -52,7 +52,7 @@
        foreach(channelId, device.Channels())
        {
          var channel = dom.GetObject(channelId);
--!        if (false == channel.Internal())
--!        {
--          if (true != first) { Write(" "); } else { first = false; }
--          Write("{");
--          
--          var readable  = false;
--          var writable  = false;
--          var eventable = false;
--          var logable   = false;
-+        if (true != first) { Write(" "); } else { first = false; }
-+        Write("{");
-+        
-+        var readable  = false;
-+        var writable  = false;
-+        var eventable = false;
-+        var logable   = false;
-       
--          string dpId;
--          foreach (dpId, channel.DPs())
--          {
--            var dp         = dom.GetObject(dpId);
--            var operations = dp.Operations();
-+        string dpId;
-+        foreach (dpId, channel.DPs())
-+        {
-+          var dp         = dom.GetObject(dpId);
-+          var operations = dp.Operations();
-         
--            if (!dp.Internal())
--            {
--              logable = true;
--              if (OPERATION_READ  & operations) { readable  = true; }
--              if (OPERATION_WRITE & operations) { writable  = true; }
--              if (OPERATION_EVENT & operations) { eventable = true; }
--            }
--          }
--          
--          var isUsable = false;
--          if (channel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess)
-+          if (!dp.Internal())
-           {
--            isUsable = true;
-+            logable = true;
-+            if (OPERATION_READ  & operations) { readable  = true; }
-+            if (OPERATION_WRITE & operations) { writable  = true; }
-+            if (OPERATION_EVENT & operations) { eventable = true; }
+-        if (false == channel.Internal())
++        if (channel)
+         {
+           if (true != first) { Write(" "); } else { first = false; }
+           Write("{");
+@@ -76,6 +76,12 @@
+               if (OPERATION_EVENT & operations) { eventable = true; }
+             }
            }
-+        }
 +
-+        var isInternal = channel.Internal();
-+        if(isInternal)
-+        {
-+          writeable = false;
-+        }
-         
--          var category = CATEGORY_NONE;
--          if (channel.ChnDirection() == 1) { category = CATEGORY_SENDER; }
--          if (channel.ChnDirection() == 2) { category = CATEGORY_RECEIVER; }
-+        var isUsable = false;
-+        if (channel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess)
-+        {
-+          isUsable = true;
-+        }
-         
--          var mode = MODE_DEFAULT;
--          if (channel.ChnAESActive())
--          {
--            mode = MODE_AES;
--          }
--              
--          var isAesAvailable = false;
--          if (channel.ChnAESOperation() > 0)
--          {
--            isAesAvailable = true;
--          }
-+        var category = CATEGORY_NONE;
-+        if (channel.ChnDirection() == 1) { category = CATEGORY_SENDER; }
-+        if (channel.ChnDirection() == 2) { category = CATEGORY_RECEIVER; }
-         
--          var isVirtual = false;
--          if (channel.ChannelType() == 29)
--          {
--            isVirtual = true;
--          }
-+        var mode = MODE_DEFAULT;
-+        if (channel.ChnAESActive())
-+        {
-+          mode = MODE_AES;
-+        }
-+            
-+        var isAesAvailable = false;
-+        if (channel.ChnAESOperation() > 0)
-+        {
-+          isAesAvailable = true;
-+        }
-         
--          Write("ID {" # channelId # "}");
--          Write(" NAME {" # channel.Name() # "}");
--          Write(" ADDRESS {" # channel.Address() # "}");
--          Write(" DEVICE {" # channel.Device() # "}");
--          Write(" INDEX {" # channel.ChnNumber() # "}");
--          Write(" GROUP_PARTNER_ID {" # channel.ChnGroupPartnerId() # "}");
--          Write(" READY_CONFIG {" # channel.ReadyConfig() # "}");
--          Write(" MODE {" # mode # "}");
--          Write(" CATEGORY {" # category # "}");
--          Write(" USABLE {" # isUsable # "}");
--          Write(" LOGGED {" # channel.ChnArchive() # "}");
--          Write(" VISIBLE {" # channel.Visible() # "}");
--          Write(" LOGABLE {" # logable # "}");
--          Write(" READABLE {" # readable # "}");
--          Write(" WRITABLE {" # writable # "}");
--          Write(" EVENTABLE {" # eventable # "}");
--          Write(" AES_AVAILABLE {" # isAesAvailable # "}");
--          Write(" VIRTUAL {" # isVirtual # "}");
--          Write(" CHANNEL_TYPE {" # channel.HssType() # "}");
--          Write("}");
-+        var isVirtual = false;
-+        if (channel.ChannelType() == 29)
-+        {
-+          isVirtual = true;
++          var isInternal = channel.Internal();
++          if(isInternal)
++          {
++            writeable = false;
++          }
+           
+           var isUsable = false;
+           if (channel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess)
+@@ -123,6 +129,7 @@
+           Write(" EVENTABLE {" # eventable # "}");
+           Write(" AES_AVAILABLE {" # isAesAvailable # "}");
+           Write(" VIRTUAL {" # isVirtual # "}");
++          Write(" INTERNAL {" # isInternal # "}");
+           Write(" CHANNEL_TYPE {" # channel.HssType() # "}");
+           Write("}");
          }
--!      }
-+        
-+        Write("ID {" # channelId # "}");
-+        Write(" NAME {" # channel.Name() # "}");
-+        Write(" ADDRESS {" # channel.Address() # "}");
-+        Write(" DEVICE {" # channel.Device() # "}");
-+        Write(" INDEX {" # channel.ChnNumber() # "}");
-+        Write(" GROUP_PARTNER_ID {" # channel.ChnGroupPartnerId() # "}");
-+        Write(" READY_CONFIG {" # channel.ReadyConfig() # "}");
-+        Write(" MODE {" # mode # "}");
-+        Write(" CATEGORY {" # category # "}");
-+        Write(" USABLE {" # isUsable # "}");
-+        Write(" LOGGED {" # channel.ChnArchive() # "}");
-+        Write(" VISIBLE {" # channel.Visible() # "}");
-+        Write(" LOGABLE {" # logable # "}");
-+        Write(" READABLE {" # readable # "}");
-+        Write(" WRITABLE {" # writable # "}");
-+        Write(" EVENTABLE {" # eventable # "}");
-+        Write(" AES_AVAILABLE {" # isAesAvailable # "}");
-+        Write(" VIRTUAL {" # isVirtual # "}");
-+        Write(" INTERNAL {" # isInternal # "}");
-+        Write(" CHANNEL_TYPE {" # channel.HssType() # "}");
-+        Write("}");
-+      }
-     }
-     Write("}");
-   }
-@@ -176,6 +180,7 @@
+@@ -176,6 +183,7 @@
  	append result ",\"isEventable\":$channel(EVENTABLE)"
  	append result ",\"isAesAvailable\":$channel(AES_AVAILABLE)"
  	append result ",\"isVirtual\":$channel(VIRTUAL)"
-+    append result ",\"isInternal\":$channel(INTERNAL)"
++	append result ",\"isInternal\":$channel(INTERNAL)"
  	append result ",\"channelType\":[json_toString $channel(CHANNEL_TYPE)]"
  	append result "\}"
  	
@@ -202,25 +80,15 @@
      if {[info exists channel(MODE_MULTI_MODE_CHANNEL)] == 1} {
 --- occu/WebUI/www/api/methods/device/listprogramids.tcl.orig
 +++ occu/WebUI/www/api/methods/device/listprogramids.tcl
-@@ -18,14 +18,11 @@
+@@ -18,7 +18,7 @@
    foreach(channelId, device.Channels())
    {
      var channel = dom.GetObject(channelId);
 -    if (false == channel.Internal())
-+    string programId;
-+    foreach(programId, channel.ChnEnumDPUsagePrograms())
++    if (channel)
      {
--      string programId;
--      foreach(programId, channel.ChnEnumDPUsagePrograms())
--      {
--        if (true != first) { Write(" "); } else { first = false; }
--        Write("{" # programId # "}");
--      }
-+      if (true != first) { Write(" "); } else { first = false; }
-+      Write("{" # programId # "}");
-     }
-   }
- }
+       string programId;
+       foreach(programId, channel.ChnEnumDPUsagePrograms())
 --- occu/WebUI/www/config/stringtable_de.txt.orig
 +++ occu/WebUI/www/config/stringtable_de.txt
 @@ -443,6 +443,8 @@
@@ -366,24 +234,22 @@
  
        if (typeof data["mode_multi_mode"] != "undefined") {
          this.multiMode = data["mode_multi_mode"];
-@@ -12051,9 +12054,9 @@
+@@ -12051,9 +12054,7 @@
        var self = this;
        if (this.match(channel)) {
          if (channel.device.interfaceName == this.HmIPIdentifier || channel.device.interfaceName == this.HmIPWIdentifier) {
 -          if (channel.index > 0) {
-+          //if (channel.index > 0) {
-             this.filterHmIPChannels(channel, result);
+-            this.filterHmIPChannels(channel, result);
 -          }
-+          //}
++          this.filterHmIPChannels(channel, result);
          } else {
            result.push(channel);
          }
-@@ -20999,7 +21002,7 @@
+@@ -20999,7 +21000,6 @@
      var result = true;
      switch (channel.channelType) {
        case "ALARM_COND_SWITCH_TRANSMITTER":
 -      case "MAINTENANCE":
-+      //case "MAINTENANCE":
        case "WEEK_PROGRAM":
          result = false;
          break;

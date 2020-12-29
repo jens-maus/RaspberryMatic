@@ -52,84 +52,87 @@ set script {
       foreach(channelId, device.Channels())
       {
         var channel = dom.GetObject(channelId);
-        if (true != first) { Write(" "); } else { first = false; }
-        Write("{");
-        
-        var readable  = false;
-        var writable  = false;
-        var eventable = false;
-        var logable   = false;
+        if (channel)
+        {
+          if (true != first) { Write(" "); } else { first = false; }
+          Write("{");
+          
+          var readable  = false;
+          var writable  = false;
+          var eventable = false;
+          var logable   = false;
       
-        string dpId;
-        foreach (dpId, channel.DPs())
-        {
-          var dp         = dom.GetObject(dpId);
-          var operations = dp.Operations();
-        
-          if (!dp.Internal())
+          string dpId;
+          foreach (dpId, channel.DPs())
           {
-            logable = true;
-            if (OPERATION_READ  & operations) { readable  = true; }
-            if (OPERATION_WRITE & operations) { writable  = true; }
-            if (OPERATION_EVENT & operations) { eventable = true; }
+            var dp         = dom.GetObject(dpId);
+            var operations = dp.Operations();
+        
+            if (!dp.Internal())
+            {
+              logable = true;
+              if (OPERATION_READ  & operations) { readable  = true; }
+              if (OPERATION_WRITE & operations) { writable  = true; }
+              if (OPERATION_EVENT & operations) { eventable = true; }
+            }
           }
-        }
 
-        var isInternal = channel.Internal();
-        if(isInternal)
-        {
-          writeable = false;
-        }
+          var isInternal = channel.Internal();
+          if(isInternal)
+          {
+            writeable = false;
+          }
+          
+          var isUsable = false;
+          if (channel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess)
+          {
+            isUsable = true;
+          }
         
-        var isUsable = false;
-        if (channel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess)
-        {
-          isUsable = true;
-        }
+          var category = CATEGORY_NONE;
+          if (channel.ChnDirection() == 1) { category = CATEGORY_SENDER; }
+          if (channel.ChnDirection() == 2) { category = CATEGORY_RECEIVER; }
         
-        var category = CATEGORY_NONE;
-        if (channel.ChnDirection() == 1) { category = CATEGORY_SENDER; }
-        if (channel.ChnDirection() == 2) { category = CATEGORY_RECEIVER; }
+          var mode = MODE_DEFAULT;
+          if (channel.ChnAESActive())
+          {
+            mode = MODE_AES;
+          }
+              
+          var isAesAvailable = false;
+          if (channel.ChnAESOperation() > 0)
+          {
+            isAesAvailable = true;
+          }
         
-        var mode = MODE_DEFAULT;
-        if (channel.ChnAESActive())
-        {
-          mode = MODE_AES;
-        }
-            
-        var isAesAvailable = false;
-        if (channel.ChnAESOperation() > 0)
-        {
-          isAesAvailable = true;
-        }
+          var isVirtual = false;
+          if (channel.ChannelType() == 29)
+          {
+            isVirtual = true;
+          }
         
-        var isVirtual = false;
-        if (channel.ChannelType() == 29)
-        {
-          isVirtual = true;
+          Write("ID {" # channelId # "}");
+          Write(" NAME {" # channel.Name() # "}");
+          Write(" ADDRESS {" # channel.Address() # "}");
+          Write(" DEVICE {" # channel.Device() # "}");
+          Write(" INDEX {" # channel.ChnNumber() # "}");
+          Write(" GROUP_PARTNER_ID {" # channel.ChnGroupPartnerId() # "}");
+          Write(" READY_CONFIG {" # channel.ReadyConfig() # "}");
+          Write(" MODE {" # mode # "}");
+          Write(" CATEGORY {" # category # "}");
+          Write(" USABLE {" # isUsable # "}");
+          Write(" LOGGED {" # channel.ChnArchive() # "}");
+          Write(" VISIBLE {" # channel.Visible() # "}");
+          Write(" LOGABLE {" # logable # "}");
+          Write(" READABLE {" # readable # "}");
+          Write(" WRITABLE {" # writable # "}");
+          Write(" EVENTABLE {" # eventable # "}");
+          Write(" AES_AVAILABLE {" # isAesAvailable # "}");
+          Write(" VIRTUAL {" # isVirtual # "}");
+          Write(" INTERNAL {" # isInternal # "}");
+          Write(" CHANNEL_TYPE {" # channel.HssType() # "}");
+          Write("}");
         }
-        
-        Write("ID {" # channelId # "}");
-        Write(" NAME {" # channel.Name() # "}");
-        Write(" ADDRESS {" # channel.Address() # "}");
-        Write(" DEVICE {" # channel.Device() # "}");
-        Write(" INDEX {" # channel.ChnNumber() # "}");
-        Write(" GROUP_PARTNER_ID {" # channel.ChnGroupPartnerId() # "}");
-        Write(" READY_CONFIG {" # channel.ReadyConfig() # "}");
-        Write(" MODE {" # mode # "}");
-        Write(" CATEGORY {" # category # "}");
-        Write(" USABLE {" # isUsable # "}");
-        Write(" LOGGED {" # channel.ChnArchive() # "}");
-        Write(" VISIBLE {" # channel.Visible() # "}");
-        Write(" LOGABLE {" # logable # "}");
-        Write(" READABLE {" # readable # "}");
-        Write(" WRITABLE {" # writable # "}");
-        Write(" EVENTABLE {" # eventable # "}");
-        Write(" AES_AVAILABLE {" # isAesAvailable # "}");
-        Write(" VIRTUAL {" # isVirtual # "}");
-        Write(" INTERNAL {" # isInternal # "}");
-        Write(" CHANNEL_TYPE {" # channel.HssType() # "}");
-        Write("}");
       }
     }
     Write("}");
@@ -180,7 +183,7 @@ foreach _channel $device(CHANNELS) {
 	append result ",\"isEventable\":$channel(EVENTABLE)"
 	append result ",\"isAesAvailable\":$channel(AES_AVAILABLE)"
 	append result ",\"isVirtual\":$channel(VIRTUAL)"
-    append result ",\"isInternal\":$channel(INTERNAL)"
+	append result ",\"isInternal\":$channel(INTERNAL)"
 	append result ",\"channelType\":[json_toString $channel(CHANNEL_TYPE)]"
 	append result "\}"
 	

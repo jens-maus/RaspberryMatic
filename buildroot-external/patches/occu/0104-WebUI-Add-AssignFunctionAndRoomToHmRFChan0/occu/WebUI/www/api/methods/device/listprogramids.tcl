@@ -18,11 +18,14 @@ set script {
   foreach(channelId, device.Channels())
   {
     var channel = dom.GetObject(channelId);
-    string programId;
-    foreach(programId, channel.ChnEnumDPUsagePrograms())
+    if (channel)
     {
-      if (true != first) { Write(" "); } else { first = false; }
-      Write("{" # programId # "}");
+      string programId;
+      foreach(programId, channel.ChnEnumDPUsagePrograms())
+      {
+        if (true != first) { Write(" "); } else { first = false; }
+        Write("{" # programId # "}");
+      }
     }
   }
 }

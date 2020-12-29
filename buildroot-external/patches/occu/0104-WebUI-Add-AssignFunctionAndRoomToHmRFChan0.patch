@@ -183,3 +183,15 @@
  
        if (typeof data["mode_multi_mode"] != "undefined") {
          this.multiMode = data["mode_multi_mode"];
+@@ -12051,9 +12054,9 @@
+       var self = this;
+       if (this.match(channel)) {
+         if (channel.device.interfaceName == this.HmIPIdentifier || channel.device.interfaceName == this.HmIPWIdentifier) {
+-          if (channel.index > 0) {
++          //if (channel.index > 0) {
+             this.filterHmIPChannels(channel, result);
+-          }
++          //}
+         } else {
+           result.push(channel);
+         }

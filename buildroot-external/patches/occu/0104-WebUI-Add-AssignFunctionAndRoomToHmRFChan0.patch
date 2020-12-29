@@ -1,3 +1,49 @@
+--- occu/WebUI/www/api/methods/device/get.tcl.orig
++++ occu/WebUI/www/api/methods/device/get.tcl
+@@ -44,8 +44,8 @@
+       foreach(channelId, device.Channels())
+       {
+         var channel = dom.GetObject(channelId);
+-        if (false == channel.Internal())
+-        {
++!        if (false == channel.Internal())
++!        {
+           if (true != first) { Write(" "); } else { first = false; }
+           Write("{");
+           
+@@ -69,6 +69,12 @@
+             }
+           }
+           
++          var isInternal = channel.Internal();
++          if(isInternal)
++          {
++            writeable = false;
++          }
++          
+           var isUsable = false;
+           if (channel.UserAccessRights(iulOtherThanAdmin) == iarFullAccess)
+           {
+@@ -115,9 +121,10 @@
+           Write(" EVENTABLE {" # eventable # "}");
+           Write(" AES_AVAILABLE {" # isAesAvailable # "}");
+           Write(" VIRTUAL {" # isVirtual # "}");
++          Write(" INTERNAL {" # isInternal # "}");
+           Write(" CHANNEL_TYPE {" # channel.HssType() # "}");
+           Write("}");
+-        }
++!        }
+       }
+     }
+     Write("}");
+@@ -167,6 +174,7 @@
+ 	append result ",\"isEventable\":$channel(EVENTABLE)"
+ 	append result ",\"isAesAvailable\":$channel(AES_AVAILABLE)"
+ 	append result ",\"isVirtual\":$channel(VIRTUAL)"
++    append result ",\"isInternal\":$channel(INTERNAL)"
+ 	append result ",\"channelType\":[json_toString $channel(CHANNEL_TYPE)]"
+ 	append result "\}"
+ 	
 --- occu/WebUI/www/api/methods/device/listalldetail.tcl.orig
 +++ occu/WebUI/www/api/methods/device/listalldetail.tcl
 @@ -51,7 +51,7 @@

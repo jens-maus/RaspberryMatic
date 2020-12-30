@@ -87,10 +87,10 @@ init_system() {
   # load tunneling interface support
   modprobe tun
 
-  # on a virtual ova platform system we put diagrams on the
-  # same disk in the old /usr/local/sdcard directory path and
-  # don't force to use an external USB thumb drive.
-  if echo "${HM_HOST}" | grep -q ova-; then
+  # if the userfs is located on a non-mmc device (not on a SD card)
+  # we can safely use the old /usr/local/sdcard directory path to
+  # safe diagrams and daily backups
+  if grep " /usr/local " /proc/mounts | grep -qv "^/dev/mmc"; then
     if [[ ! -d /usr/local/sdcard/measurement ]]; then
       mkdir -p /usr/local/sdcard/measurement
     fi

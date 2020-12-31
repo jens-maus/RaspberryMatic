@@ -1,4 +1,4 @@
-BUILDROOT_VERSION=2020.11
+BUILDROOT_VERSION=2020.11.1
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
 OCCU_VERSION=$(shell grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)

@@ -12,7 +12,7 @@ onlyLabels: []
 
 # Issues or Pull Requests with these labels will never be considered stale. Set to `[]` to disable
 exemptLabels:
-  - undecided
+  - :question: undecided
 
 # Set to true to ignore issues in a project (defaults to false)
 exemptProjects: true
@@ -24,23 +24,26 @@ exemptMilestones: true
 exemptAssignees: false
 
 # Label to use when marking as stale
-staleLabel: wontfix
+staleLabel: :thumbsdown: wontfix
 
 # Comment to post when marking as stale. Set to `false` to disable
 markComment: >
+  Thanks for your contribution!
+   
   This issue has been automatically marked as stale because it has not had
-  recent activity. It will be closed if no further activity occurs within the next 7 days.
-  Please check if the issue is still relevant in the most current version of RaspberryMatic
-  and tell us. Also check that all relevant details, logs and reproduction steps
-  are included and update them if needed.
-  Thank you for your contributions.
-  ---
-  Dieses Problem wurde automatisch als veraltet markiert, da es in letzter Zeit keine Aktivitäten gab.
-  Es wird geschlossen, wenn nicht innerhalb der nächsten 7 Tage weitere Aktivitäten stattfinden.
-  Bitte überprüft, ob das Problem auch in der aktuellsten Version von RaspberryMatic noch relevant ist,
-  und teilt uns dies mit. Überprüft auch, ob alle relevanten Details, Logs und Reproduktionsschritte
-  enthalten sind bzw. aktualisiert diese.
-  Vielen Dank für die Unterstützung.
+  recent activity. It will be closed if no further activity occurs within the
+  next 7 days. Please check if the issue is still relevant in the most current
+  version of RaspberryMatic and tell us. Also check that all relevant details,
+  <hr/>
+  Vielen Dank für die Unterstützung!
+
+  Dieses Problem wurde automatisch als veraltet markiert, da es in letzter
+  Zeit keine Aktivitäten gab. Es wird geschlossen, wenn nicht innerhalb der
+  nächsten 7 Tage weitere Aktivitäten stattfinden. Bitte überprüfen Sie, ob
+  das Problem auch in der aktuellsten Version von RaspberryMatic noch relevant
+  ist, und teilen Sie uns dies mit. Überprüfen Sie auch, ob alle relevanten
+  Details, Logs und Reproduktionsschritte enthalten sind oder aktualisiert
+  werden müssen.
 
 # Comment to post when removing the stale label.
 # unmarkComment: >
@@ -48,15 +51,14 @@ markComment: >
 
 # Comment to post when closing a stale Issue or Pull Request.
 closeComment: >
-  This issue has been automatically closed because of inactivity. Please open a new
-  issue if still relevant and make sure to include all relevant details, logs and
-  reproduction steps.
-  Thank you for your contributions.
-  ---
-  Dieses Problem wurde aufgrund von Inaktivität automatisch geschlossen. Bitte öffnen Sie
-  ein neues Issue, falls dies noch relevant ist und stellt sicher das alle relevanten
-  Details, Logs und Reproduktionsschritte enthalten sind.
-  Vielen Dank für die Unterstützung.
+  This issue has been automatically closed because of inactivity. Please
+  open a new issue if still relevant and make sure to include all relevant
+  details, logs and reproduction steps.
+  <hr/>
+  Dieses Problem wurde aufgrund von Inaktivität automatisch geschlossen.
+  Bitte öffnen Sie ein neues Issue, falls dies noch relevant ist und stellen
+  Sie sicher das alle relevanten Details, Logs und Reproduktionsschritte
+  enthalten sind.
 
 # Limit the number of actions per hour, from 1-30. Default is 30
 limitPerRun: 30

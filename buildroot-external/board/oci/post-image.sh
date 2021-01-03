@@ -1,10 +1,23 @@
-#!/bin/sh
+#!/bin/bash
 
 BOARD_DIR="$(dirname $0)"
 BOARD_NAME="$(basename ${BOARD_DIR})"
+. ${BR2_CONFIG}
+if [[ -n "${BR2_x86_64}" ]]; then
+  DOCKER_ARCH=amd64
+elif [[ -n "${BR2_i386}" ]]; then
+  DOCKER_ARCH=i386
+elif [[ -n "${BR2_aarch64}" ]]; then
+  DOCKER_ARCH=arm64
+elif [[ -n "${BR2_arm}" ]]; then
+  DOCKER_ARCH=arm
+else
+  echo "Unknown architecture"
+  exit 1
+fi
 
 #Create docker image
-docker build -f "${BOARD_DIR}/Dockerfile" -t raspbian:${PRODUCT_VERSION} ${BINARIES_DIR}
-docker tag raspbian:${PRODUCT_VERSION} raspbian:latest
+docker build -f "${BOARD_DIR}/Dockerfile" -t raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION} ${BINARIES_DIR}
+docker tag raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION} raspberrymatic:${DOCKER_ARCH}-latest
 
 exit $?

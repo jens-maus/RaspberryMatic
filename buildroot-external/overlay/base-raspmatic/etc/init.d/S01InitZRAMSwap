@@ -6,6 +6,12 @@
 # Based on https://github.com/StuartIanNaylor/zram-swap-config
 #
 
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# oci platform does not require own urandom
+[[ "${HM_HOST}" == "oci" ]] && exit 0
+
 # Percentage of available ram to allocate to all zram swap devices
 # (divided equally by swap_devices number)
 MEM_FACTOR=50
@@ -85,15 +91,9 @@ case "$1" in
   start)
     echo -n "Initializing ZRAM Swap: "
 
-    # source all data from /var/hm_mode
-    [[ -r /var/hm_mode ]] && . /var/hm_mode
-  
-    if [[ "${HM_HOST}" != "oci" ]]; then
-      createZramSwaps
-      echo "OK"
-    else
-      echo "SKIP"
-    fi
+    createZramSwaps
+
+    echo "OK"
   ;;
 
   stop)

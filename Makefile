@@ -83,11 +83,11 @@ distclean: clean-all
 	@rm -rf download
 
 .PHONY: menuconfig
-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
+menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) menuconfig
 
 .PHONY: xconfig
-xconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
+xconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) xconfig
 
 .PHONY: savedefconfig

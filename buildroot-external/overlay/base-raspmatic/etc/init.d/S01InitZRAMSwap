@@ -9,7 +9,7 @@
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-# oci platform does not require own urandom
+# skip on oci/container platform
 [[ "${HM_HOST}" == "oci" ]] && exit 0
 
 # Percentage of available ram to allocate to all zram swap devices

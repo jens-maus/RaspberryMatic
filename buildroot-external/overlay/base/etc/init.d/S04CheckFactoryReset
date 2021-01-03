@@ -15,7 +15,7 @@ check_factory_reset() {
 
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode
-  
+
   if [[ "${HM_HOST}" != "oci" ]]; then
 
     # extract partition number and device name
@@ -51,7 +51,9 @@ check_factory_reset() {
     # mount /usr/local again
     mount /usr/local
   else
+    # clean whole /usr/local on oci platform
     rm -rf /usr/local
+    mkdir -p /usr/local
   fi
 
   # make sure a potential rf copro is factory

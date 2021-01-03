@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# oci platform does not require own urandom
+[[ "${HM_HOST}" == "oci" ]] && exit 0
+
 NAME=chrony
 DAEMON=/usr/sbin/chronyd
 CLIENT=/usr/bin/chronyc
@@ -44,14 +50,6 @@ init() {
 
 case "$1" in
   start)
-    # source all data from /var/hm_mode
-    [[ -r /var/hm_mode ]] && . /var/hm_mode
-  
-    if [[ "${HM_HOST}" == "oci" ]]; then
-      echo "Starting $NAME: SKIP"
-      return
-    fi
-  
     init
     printf "Starting $NAME: "
 

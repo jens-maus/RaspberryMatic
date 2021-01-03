@@ -85,9 +85,15 @@ case "$1" in
   start)
     echo -n "Initializing ZRAM Swap: "
 
-    createZramSwaps
-
-    echo "OK"
+    # source all data from /var/hm_mode
+    [[ -r /var/hm_mode ]] && . /var/hm_mode
+  
+    if [[ "${HM_HOST}" != "oci" ]]; then
+      createZramSwaps
+      echo "OK"
+    else
+      echo "SKIP"
+    fi
   ;;
 
   stop)

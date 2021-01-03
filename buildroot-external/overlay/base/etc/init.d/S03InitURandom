@@ -32,11 +32,16 @@ init_urandom() {
 }
 
 start() {
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
   echo -n "Initializing urandom: "
-
-  init_urandom
-
-  echo "OK"
+  if [[ "${HM_HOST}" != "oci" ]]; then
+    init_urandom
+    echo "OK"
+  else
+    echo "SKIP"
+  fi
 }
 
 stop() {

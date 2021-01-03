@@ -9,8 +9,15 @@ mkdir -p /run/network
 case "$1" in
   start)
 	printf "Starting network: "
-	/sbin/ifup -a 2>/dev/null
-	echo "OK"
+	# source all data from /var/hm_mode
+    [[ -r /var/hm_mode ]] && . /var/hm_mode
+  
+    if [[ "${HM_HOST}" != "oci" ]]; then
+	  /sbin/ifup -a 2>/dev/null
+	  echo "OK"
+	else
+	  echo "SKIP"
+	fi
 	;;
   stop)
 	printf "Stopping network: "

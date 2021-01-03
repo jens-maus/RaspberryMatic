@@ -2,14 +2,15 @@
 
 BOARD_DIR="$(dirname $0)"
 BOARD_NAME="$(basename ${BOARD_DIR})"
-. ${BR2_CONFIG}
-if [[ -n "${BR2_x86_64}" ]]; then
+
+# define DOCKER_ARCH on the BR2_CONFIG setup
+if grep -Eq "^BR2_x86_64=y$" ${BR2_CONFIG}; then
   DOCKER_ARCH=amd64
-elif [[ -n "${BR2_i386}" ]]; then
+elif grep -Eq "^BR2_i386=y$" ${BR2_CONFIG}; then
   DOCKER_ARCH=i386
-elif [[ -n "${BR2_aarch64}" ]]; then
+elif grep -Eq "^BR2_aarch64=y$" ${BR2_CONFIG}; then
   DOCKER_ARCH=arm64
-elif [[ -n "${BR2_arm}" ]]; then
+elif grep -Eq "^BR2_arm=y$" ${BR2_CONFIG}; then
   DOCKER_ARCH=arm
 else
   echo "Unknown architecture"

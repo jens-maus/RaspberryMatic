@@ -64,9 +64,8 @@ identify_host() {
     ;;
   esac
 
-  # find out if we are in a container
-  # This is inconditional since we might be in a container in a Raspberry
-  if ! egrep -q '.*:cpu:/$' /proc/1/cgroup; then
+  # find out if we are in a container environment
+  if [[ -f /.dockerenv ]] || grep -Eq '(docker|lxc|containerd)' /proc/1/cgroup; then
     HM_HOST="oci"
   fi
 

@@ -14,16 +14,19 @@
 # process   == program to run
 
 # Startup the system
-::sysinit:/bin/mkdir -p /var/run
-::sysinit:/bin/mkdir -p /var/cache
-::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
+null::sysinit:/bin/mkdir -p /var/run
+null::sysinit:/bin/mkdir -p /var/cache
+null::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
 #null::sysinit:/bin/hostname -F /etc/hostname
 #::sysinit:/usr/bin/psplash -n &
 # now run any rc scripts
 ::sysinit:/etc/init.d/rcS
+# run monit to monitor our important services
+null::respawn:/usr/bin/monit -Ic /etc/monitrc
 
 # Stuff to do for the 3-finger salute
 ::ctrlaltdel:/sbin/reboot
 
 # Stuff to do before rebooting
+null::shutdown:/usr/bin/monit unmonitor all
 ::shutdown:/etc/init.d/rcK

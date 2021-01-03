@@ -13,38 +13,46 @@ check_factory_reset() {
     return 1
   fi
 
-  # extract partition number and device name
-  DEVNODE=$(mountpoint -d /usr/local)
-  DEVNAME=$(mountpoint -n /usr/local | cut -d' ' -f1)
-  PARTNUM=$(echo -n ${DEVNAME} | tail -c 1)
-  DEV="/dev/$(readlink /sys/dev/block/${DEVNODE} | awk -F/ '{print $(NF-1)}')"
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+  
+  if [[ "${HM_HOST}" != "oci" ]]; then
 
-  # find out maximum SD card size (in cylinders)
-  START_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
-  END_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
-  MAX_CHS=$(parted -s ${DEV} unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
+    # extract partition number and device name
+    DEVNODE=$(mountpoint -d /usr/local)
+    DEVNAME=$(mountpoint -n /usr/local | cut -d' ' -f1)
+    PARTNUM=$(echo -n ${DEVNAME} | tail -c 1)
+    DEV="/dev/$(readlink /sys/dev/block/${DEVNODE} | awk -F/ '{print $(NF-1)}')"
 
-  # umount /usr/local to regenerate it
-  umount -f /usr/local
+    # find out maximum SD card size (in cylinders)
+    START_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
+    END_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
+    MAX_CHS=$(parted -s ${DEV} unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
 
-  # only resize the partition if END_CHS != MAX_CHS
-  if [[ -n "${START_CHS}" && -n "${END_CHS}" && -n "${MAX_CHS}" && "${END_CHS}" != "${MAX_CHS}" ]]; then
-    # use resizepart to resize the /usr/local partition to the maximum size of
-    # the disk
-    parted -s ${DEV} resizepart ${PARTNUM} 100%
+    # umount /usr/local to regenerate it
+    umount -f /usr/local
+
+    # only resize the partition if END_CHS != MAX_CHS
+    if [[ -n "${START_CHS}" && -n "${END_CHS}" && -n "${MAX_CHS}" && "${END_CHS}" != "${MAX_CHS}" ]]; then
+      # use resizepart to resize the /usr/local partition to the maximum size of
+      # the disk
+      parted -s ${DEV} resizepart ${PARTNUM} 100%
+    fi
+
+    # force PARTUUID to 0xDEEDBEEF (because parted changes partuuid) even
+    # if no repartitioning was performed.
+    echo -en '\xEF\xBE\xED\xDE' | dd of=${DEV} conv=notrunc bs=1 seek=$((0x1B8)) 2>/dev/null
+
+    # we create a clean ext4 partition now
+    mkfs.ext4 -F -L userfs "${DEVNAME}"
+    tune2fs -c 0 -i 0 "${DEVNAME}"
+    e2fsck -pDf "${DEVNAME}"
+
+    # mount /usr/local again
+    mount /usr/local
+  else
+    rm -rf /usr/local
   fi
-
-  # force PARTUUID to 0xDEEDBEEF (because parted changes partuuid) even
-  # if no repartitioning was performed.
-  echo -en '\xEF\xBE\xED\xDE' | dd of=${DEV} conv=notrunc bs=1 seek=$((0x1B8)) 2>/dev/null
-
-  # we create a clean ext4 partition now
-  mkfs.ext4 -F -L userfs "${DEVNAME}"
-  tune2fs -c 0 -i 0 "${DEVNAME}"
-  e2fsck -pDf "${DEVNAME}"
-
-  # mount /usr/local again
-  mount /usr/local
 
   # make sure a potential rf copro is factory
   # reset as well

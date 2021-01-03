@@ -46,7 +46,7 @@ start() {
 
   # adjust the oom score (which is inherited by start-stop-daemon)
   # to ensure that others are killed first in case of low memory situations
-  echo -900 >/proc/$$/oom_score_adj
+  echo -900 >/proc/$$/oom_score_adj 2>/dev/null
 
   start-stop-daemon -S -q -b -m -p ${PIDFILE_ANGEL} --exec /usr/sbin/lighttpd-angel -- -f /etc/lighttpd/lighttpd.conf -D
   [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"

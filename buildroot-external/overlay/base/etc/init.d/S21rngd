@@ -35,7 +35,12 @@ stop()
 
 case "$1" in
 	start)
-		start
+		 # source all data from /var/hm_mode
+        [[ -r /var/hm_mode ]] && . /var/hm_mode
+  
+        if [[ "${HM_HOST}" != "oci" ]]; then
+          start
+		fi
 		;;
 	stop)
 		stop

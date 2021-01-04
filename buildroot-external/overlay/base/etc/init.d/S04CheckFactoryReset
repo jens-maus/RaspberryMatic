@@ -51,9 +51,8 @@ check_factory_reset() {
     # mount /usr/local again
     mount /usr/local
   else
-    # clean whole /usr/local on oci platform
-    rm -rf /usr/local
-    mkdir -p /usr/local
+    # clean whole /usr/local on oci platform (usually a volume so cannot delete folder)
+    find /usr/local -not -name "lost+found" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
   fi
 
   # make sure a potential rf copro is factory

@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-20.04
     needs: repo-check
     timeout-minutes: 480
-    if: always() && github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0
+    if: github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0
 
     strategy:
       fail-fast: false

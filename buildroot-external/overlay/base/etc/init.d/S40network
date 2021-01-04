@@ -6,10 +6,10 @@
 # Debian ifupdown needs the /run/network lock directory
 mkdir -p /run/network
 
-# skip on oci/container platform
+# source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-# oci platform does not require own rngd
+# skip on oci/container platform
 [[ "${HM_HOST}" == "oci" ]] && exit 0
 
 case "$1" in

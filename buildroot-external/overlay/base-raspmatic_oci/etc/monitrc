@@ -153,7 +153,7 @@ check process multimacd with pidfile /var/run/multimacd.pid
       exec "/bin/triggerAlarm.tcl 'multimacd restarted' WatchDog-Alarm"
     depends on multimacdEnabled, hmlangwDisabled
 
-check program multimacdEnabled with path "/usr/bin/test -c /dev/eq3loop"
+check program multimacdEnabled with path "/usr/bin/test -f /var/etc/multimacd.conf"
     group homematic
     if status != 0 for 1 cycles then unmonitor
 

@@ -3,12 +3,6 @@
 # Startup script to init the random number generator interface (urandom)
 #
 
-# source all data from /var/hm_mode
-[[ -r /var/hm_mode ]] && . /var/hm_mode
-
-# skip on oci/container platform
-[[ "${HM_HOST}" == "oci" ]] && exit 0
-
 save_urandom() {
   if [[ ! -c /dev/urandom ]]; then
     return

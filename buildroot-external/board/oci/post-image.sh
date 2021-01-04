@@ -17,6 +17,9 @@ else
   exit 1
 fi
 
+# make sure a factory reset is performed upon fresh start
+touch "${TARGET_DIR}/usr/local/.doFactoryReset"
+
 #Create docker image
 docker build -f "${BOARD_DIR}/Dockerfile" -t raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION} ${BINARIES_DIR}
 docker tag raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION} raspberrymatic:${DOCKER_ARCH}-latest

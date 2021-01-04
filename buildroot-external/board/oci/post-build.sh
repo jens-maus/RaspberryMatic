@@ -8,6 +8,13 @@ echo "PLATFORM=oci" >>${TARGET_DIR}/VERSION
 # fix some permissions
 [ -e ${TARGET_DIR}/etc/monitrc ] && chmod 600 ${TARGET_DIR}/etc/monitrc
 
+# remove unnecessary stuff from TARGET_DIR
+rm -f ${TARGET_DIR}/etc/init.d/S01InitZRAMSwap
+rm -f ${TARGET_DIR}/etc/init.d/S03InitURandom
+rm -f ${TARGET_DIR}/etc/init.d/S21rngd
+rm -f ${TARGET_DIR}/etc/init.d/S40network
+rm -f ${TARGET_DIR}/etc/init.d/S49chrony
+
 # link VERSION in /boot on rootfs
 mkdir -p ${TARGET_DIR}/boot
 ln -sf ../VERSION ${TARGET_DIR}/boot/VERSION

@@ -15,6 +15,7 @@
 
 # Startup the system
 ::sysinit:/bin/mount -a
+null::sysinit:/bin/mount -o ro,remount /
 null::sysinit:/bin/mkdir -p /var/run
 null::sysinit:/bin/mkdir -p /var/cache
 null::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
@@ -24,6 +25,9 @@ null::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
 ::sysinit:/etc/init.d/rcS
 # run monit to monitor our important services
 null::respawn:/usr/bin/monit -Ic /etc/monitrc
+
+# put a login prompt on start console
+::askfirst:/bin/login
 
 # Stuff to do for the 3-finger salute
 ::ctrlaltdel:/sbin/reboot

@@ -192,7 +192,7 @@ jobs:
   oci-multiarch-build-push:
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name != 'schedule' #Cannot enable for scheduled nightly since the tarballs are not upload ^^^
+    if: github.event_name != 'pull_request' #Cannot enable for PRs since secrets are not available ^^^
 
     steps:
     - uses: actions/checkout@v2

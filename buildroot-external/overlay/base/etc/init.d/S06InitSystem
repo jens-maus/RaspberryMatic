@@ -28,6 +28,15 @@ init_system() {
   mkdir -p /var/empty
   chmod 0700 /var/empty
 
+  DEV_HOST="/dev_host"
+  if [ -d "${DEV_HOST}" ]; then
+    # To avoid sharing the whole host /dev with container it is mounted in a /dev_host
+    # This means we have to manually symlink the dynamic devices
+    for device in mmd_bidcos mmd_hmip usb; do
+      ln -s "${DEV_HOST}/${device}" "/dev/${device}" 
+    done
+  fi
+
   # create /media/usbX directories for automounting USB devices
   for i in $(seq 1 8); do
     mkdir -p /media/usb${i}

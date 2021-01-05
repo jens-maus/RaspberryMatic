@@ -1,6 +1,7 @@
 # /etc/fstab: static file system information.
 #
 # <file system> <mount pt>     <type>   <options>                                <dump> <pass>
+devtmpfs        /dev_host      devtmpfs defaults,noatime                         0      0
 tmpfs           /tmp           tmpfs    defaults,noatime,mode=1777               0      0
 tmpfs           /run           tmpfs    defaults,noatime,mode=0755,nosuid,nodev  0      0
 tmpfs           /var           tmpfs    defaults,noatime,size=50%                0      0

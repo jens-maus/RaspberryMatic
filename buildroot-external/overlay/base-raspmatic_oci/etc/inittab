@@ -14,6 +14,7 @@
 # process   == program to run
 
 # Startup the system
+null::sysinit:/bin/mkdir -p /dev_host
 ::sysinit:/bin/mount -a
 null::sysinit:/bin/mount -o ro,remount /
 null::sysinit:/bin/mkdir -p /var/run

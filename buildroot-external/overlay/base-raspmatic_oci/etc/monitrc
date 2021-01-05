@@ -18,16 +18,7 @@ check process hss_led with pidfile /var/run/hss_led.pid
       exec "/bin/triggerAlarm.tcl 'hss_led restarted' WatchDog-Alarm"
     depends on hmlangwDisabled
 
-# syslog/klog daemons monitoring
-check process klogd with pidfile /var/run/klogd.pid
-    group system
-    start = "/etc/init.d/S07logging start"
-    stop = "/etc/init.d/S07logging stop"
-    restart = "/etc/init.d/S07logging restart"
-    if not exist for 1 cycles then restart
-    if 1 restart within 1 cycles then
-      exec "/bin/triggerAlarm.tcl 'klogd restarted' WatchDog-Alarm"
-
+# syslog daemon monitoring
 check process syslogd with pidfile /var/run/syslogd.pid
     group system
     start = "/etc/init.d/S07logging start"

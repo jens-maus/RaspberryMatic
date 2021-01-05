@@ -1,6 +1,9 @@
 FROM scratch
 
-ADD rootfs.tar /
+ARG TARGETARCH
+ARG tar_prefix rootfs
+
+ADD $tar_prefix$TARGETARCH.tar /
 
 CMD ["/sbin/init"]
 VOLUME /usr/local

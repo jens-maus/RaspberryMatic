@@ -5,4 +5,5 @@
 /download
 /release/*.zip
 /release/*.img
+/release/*.tar
 /release/*.sha256

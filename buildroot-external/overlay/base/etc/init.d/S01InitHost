@@ -64,6 +64,11 @@ identify_host() {
     ;;
   esac
 
+  # find out if we are in a container environment
+  if [[ -f /.dockerenv ]] || grep -Eq '(docker|lxc|containerd)' /proc/1/cgroup; then
+    HM_HOST="oci"
+  fi
+
   # find out if we are in a virtual environment so that
   # we can identify the ova platform
   if [[ -z "${HM_HOST}" ]]; then
@@ -123,6 +128,11 @@ identify_host() {
 
     # Open Virtual Appliance (ova)
     ova*)
+      # fine
+    ;;
+
+    # Open Container Initiative (oci)
+    oci*)
       # fine
     ;;
 

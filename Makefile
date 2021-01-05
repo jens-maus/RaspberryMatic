@@ -46,7 +46,17 @@ $(PRODUCTS): %:
 
 build: | buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[build: $(PRODUCT)]"
+ifeq (,$(wildcard ./DUMMY_BUILD))
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION)
+else
+	#Dummy build - mainly for testing CI
+	echo -n "DO NOT MERGE THIS CHANGE - FOR CI test only!!!!"
+	mkdir -p build-$(PRODUCT)/images
+	tar -cf build-$(PRODUCT)/images/rootfs.tar LICENSE
+	touch build-$(PRODUCT)/images/sdcard.img
+	touch build-$(PRODUCT)/images/RaspberryMatic.ova
+	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do touch build-$(PRODUCT)/images/$${f}; done
+endif
 
 release-all: $(addsuffix -release, $(PRODUCTS))
 $(addsuffix -release, $(PRODUCTS)): %:
@@ -54,11 +64,19 @@ $(addsuffix -release, $(PRODUCTS)): %:
 
 release: build
 	@echo "[creating release: $(PRODUCT)]"
-	$(eval BOARD := $(shell echo $(PRODUCT) | cut -d'_' -f2))
+	$(eval BOARD := $(shell echo $(PRODUCT) | cut -d'_' -f2-))
+ifeq ($(findstring _oci_,$(PRODUCT)),_oci_)
+	#container images
+	$(eval IMG_EXT := 'tar')
+	cp -a build-$(PRODUCT)/images/rootfs.tar ./release/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar
+else
+	#regular images
+	$(eval IMG_EXT := 'img')
 	cp -a build-$(PRODUCT)/images/sdcard.img ./release/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img
-	cd ./release && sha256sum RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img >RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img.sha256
+endif
+	cd ./release && sha256sum RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).$(IMG_EXT) >RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).$(IMG_EXT).sha256
 	rm -f ./release/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip
-	cd ./release && zip --junk-paths ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img.sha256 ../LICENSE ./updatepkg/$(PRODUCT)/EULA.de ./updatepkg/$(PRODUCT)/EULA.en
+	cd ./release && zip --junk-paths ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).$(IMG_EXT) ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).$(IMG_EXT).sha256 ../LICENSE ./updatepkg/$(PRODUCT)/EULA.de ./updatepkg/$(PRODUCT)/EULA.en
 	cd ./release && sha256sum RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip >RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip.sha256
 
 updatePkg:
@@ -83,11 +101,11 @@ distclean: clean-all
 	@rm -rf download
 
 .PHONY: menuconfig
-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
+menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) menuconfig
 
 .PHONY: xconfig
-xconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
+xconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) xconfig
 
 .PHONY: savedefconfig

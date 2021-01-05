@@ -21,12 +21,21 @@ init_system() {
   mkdir -p /var/cache
   mkdir -p /var/lib
   mkdir -p /var/lib/misc
-  mkdir -p /var/lib/dbus
+  mkdir -p /var/lib/dbus 2>/dev/null
   mkdir -p /var/empty
   mkdir -p /var/etc
   mkdir -p /var/status
   mkdir -p /var/empty
   chmod 0700 /var/empty
+
+  DEV_HOST="/dev_host"
+  if [ -d "${DEV_HOST}" ]; then
+    # To avoid sharing the whole host /dev with container it is mounted in a /dev_host
+    # This means we have to manually symlink the dynamic devices
+    for device in mmd_bidcos mmd_hmip usb; do
+      ln -s "${DEV_HOST}/${device}" "/dev/${device}" 
+    done
+  fi
 
   # create /media/usbX directories for automounting USB devices
   for i in $(seq 1 8); do
@@ -60,10 +69,12 @@ init_system() {
   # update /etc/config/localtime and /etc/config/timezone
   /bin/updateTZ.sh
 
-  # if /etc/config/timezone is set to Europe/Berlin we
-  # assume a german keyboard layout
-  if [[ $(cat /etc/config/timezone) == "Europe/Berlin" ]]; then
-    /sbin/loadkmap </etc/de.kmap
+  if [[ "${HM_HOST}" != "oci" ]]; then
+    # if /etc/config/timezone is set to Europe/Berlin we
+    # assume a german keyboard layout
+    if [[ $(cat /etc/config/timezone) == "Europe/Berlin" ]]; then
+      /sbin/loadkmap </etc/de.kmap
+    fi
   fi
 
   # if no network config is present we make sure to put a template file
@@ -84,8 +95,10 @@ init_system() {
     modprobe bcm2835_wdt nowayout=1 heartbeat=15
   fi
 
-  # load tunneling interface support
-  modprobe tun
+  if [[ "${HM_HOST}" != "oci" ]]; then
+    # load tunneling interface support
+    modprobe tun
+  fi
 
   # if the userfs is located on a non-mmc device (not on a SD card)
   # we can safely use the old /usr/local/sdcard directory path as

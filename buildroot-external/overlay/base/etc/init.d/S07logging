@@ -15,8 +15,14 @@ fi
 
 start() {
   echo -n "Starting logging: "
+  
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
   start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- $SYSLOGD_ARGS
-  start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- $KLOGD_ARGS
+  if [[ "${HM_HOST}" != "oci" ]]; then
+    start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- $KLOGD_ARGS
+  fi
   echo "OK"
 }
 

@@ -1,7 +1,7 @@
 FROM scratch
 
 ARG TARGETARCH
-ARG tar_prefix rootfs
+ARG tar_prefix=rootfs
 
 ADD $tar_prefix$TARGETARCH.tar /
 

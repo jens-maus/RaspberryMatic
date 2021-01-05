@@ -21,6 +21,6 @@ fi
 touch "${TARGET_DIR}/usr/local/.doFactoryReset"
 
 #Create docker image
-docker build -f "${BOARD_DIR}/Dockerfile" --build-args tar_prefix=rootfs -t raspberrymatic:${DOCKER_ARCH}-latest ${BINARIES_DIR}
+docker build --file="${BOARD_DIR}/Dockerfile" --build-arg=tar_prefix=rootfs --tag=raspberrymatic:${DOCKER_ARCH}-latest ${BINARIES_DIR}
 
 exit $?

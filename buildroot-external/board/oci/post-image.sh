@@ -20,7 +20,16 @@ fi
 # make sure a factory reset is performed upon fresh start
 touch "${TARGET_DIR}/usr/local/.doFactoryReset"
 
-#Create docker image
-docker build --file="${BOARD_DIR}/Dockerfile" --build-arg=tar_prefix=rootfs --tag=raspberrymatic:${DOCKER_ARCH}-latest ${BINARIES_DIR}
+# build docker image
+docker build --file="${BOARD_DIR}/Dockerfile" --build-arg=tar_prefix=rootfs --tag=raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION} --tag=raspberrymatic:${DOCKER_ARCH}-latest ${BINARIES_DIR}
+if [[ $? -ne 0 ]]; then
+  exit 1
+fi
+
+# save docker image
+docker save raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION} >${BINARIES_DIR}/RaspberryMatic-${PRODUCT_VERSION}-${BOARD_NAME}_${DOCKER_ARCH}.tar
+if [[ $? -ne 0 ]]; then
+  exit 1
+fi
 
 exit $?

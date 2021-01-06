@@ -1,7 +1,7 @@
 BUILDROOT_VERSION=2020.11.1
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
-OCCU_VERSION=$(shell grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
+OCCU_VERSION=$(shell grep "OCCU_VERSION =" $(BUILDROOT_EXTERNAL)/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
 DATE=$(shell date +%Y%m%d)
 PRODUCT=
 PRODUCT_VERSION=${OCCU_VERSION}.${DATE}
@@ -64,27 +64,8 @@ $(addsuffix -release, $(PRODUCTS)): %:
 
 release: build
 	@echo "[creating release: $(PRODUCT)]"
-	$(eval BOARD := $(shell echo $(PRODUCT) | cut -d'_' -f2-))
-ifeq ($(findstring _oci_,$(PRODUCT)),_oci_)
-	#container images
-	$(eval IMG_EXT := 'tar')
-	cp -a build-$(PRODUCT)/images/rootfs.tar ./release/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar
-else
-	#regular images
-	$(eval IMG_EXT := 'img')
-	cp -a build-$(PRODUCT)/images/sdcard.img ./release/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img
-endif
-	cd ./release && sha256sum RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).$(IMG_EXT) >RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).$(IMG_EXT).sha256
-	rm -f ./release/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip
-	cd ./release && zip --junk-paths ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).$(IMG_EXT) ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).$(IMG_EXT).sha256 ../LICENSE ./updatepkg/$(PRODUCT)/EULA.de ./updatepkg/$(PRODUCT)/EULA.en
-	cd ./release && sha256sum RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip >RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip.sha256
-
-updatePkg:
-	rm -rf /tmp/$(PRODUCT)-$(PRODUCT_VERSION) 2>/dev/null; mkdir -p /tmp/$(PRODUCT)-$(PRODUCT_VERSION)
-	for f in `cat release/updatepkg/$(PRODUCT)/files-package.txt`; do ln -s $(shell pwd)/release/updatepkg/$(PRODUCT)/$${f} /tmp/$(PRODUCT)-$(PRODUCT_VERSION)/; done
-	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do gzip -c $(shell pwd)/build-$(PRODUCT)/images/$${f} >/tmp/$(PRODUCT)-$(PRODUCT_VERSION)/$${f}.gz; done
-	cd /tmp/$(PRODUCT)-$(PRODUCT_VERSION); sha256sum * >$(PRODUCT)-$(PRODUCT_VERSION).sha256
-	cd ./release; tar -C /tmp/$(PRODUCT)-$(PRODUCT_VERSION) --owner=root --group=root -cvzhf $(PRODUCT)-$(PRODUCT_VERSION).tgz `ls /tmp/$(PRODUCT)-$(PRODUCT_VERSION)`
+	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | cut -d'_' -f2))
+	if [ -x $(BOARD_DIR)/post-release.sh ]; then $(BOARD_DIR)/post-release.sh $(BOARD_DIR) ${PRODUCT} ${PRODUCT_VERSION}; fi
 
 clean-all: $(addsuffix -clean, $(PRODUCTS))
 $(addsuffix -clean, $(PRODUCTS)): %:

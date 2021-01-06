@@ -1,14 +1,14 @@
 #!/bin/sh
 
 STARTPWD=$(pwd)
-ROOT_FS=rootfs.tar
+ROOT_FS=$(cat repositories | cut -d'"' -f6)/layer.tar
 
 RC=1
 
 if [ -f ${STARTPWD}/${ROOT_FS} ]; then
   echo -ne "Overriding container files in / ... "
   rm -rf --one-file-system /
-  tar -xf ${ROOT_FS}
+  tar -C / --warning=no-timestamp --no-same-owner -xf ${ROOT_FS}
   if [ $? -ne 0 ]; then
     echo "ERROR: (tar)"
     RC=1

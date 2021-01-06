@@ -82,7 +82,7 @@ if which dpkg>/dev/null && ! modinfo eq3_char_loop >/dev/null 2>&1 ; then
   #Install & Build kernel modules
   echo "Install & Build kernel modules"
   apt install -y pivccu-modules-dkms
-  service pivccu-dkms
+  service pivccu-dkms start
 fi
 
 echo "Load eq3_char_loop module"

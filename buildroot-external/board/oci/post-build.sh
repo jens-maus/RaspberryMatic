@@ -17,6 +17,10 @@ rm -f ${TARGET_DIR}/etc/init.d/S31bluetooth
 rm -f ${TARGET_DIR}/etc/init.d/S49chrony
 rm -f ${TARGET_DIR}/bin/dhcp.script
 
+#Remove files managed by docker
+rm ${TARGET_DIR}/etc/hosts
+rm ${TARGET_DIR}/etc/resolv.conf
+
 # link VERSION in /boot on rootfs
 mkdir -p ${TARGET_DIR}/boot
 ln -sf ../VERSION ${TARGET_DIR}/boot/VERSION

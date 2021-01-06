@@ -15,6 +15,8 @@
 
 # Startup the system
 null::sysinit:/bin/mkdir -p /dev_host
+#Bug in Kubernetes -> sys is mounted RO even for privileged -> https://github.com/kubernetes/kubernetes/pull/96877
+null::sysinit:/bin/mount -o rw,remount /sys
 ::sysinit:/bin/mount -a
 null::sysinit:/bin/mount -o ro,remount /
 null::sysinit:/bin/mkdir -p /var/run
@@ -28,7 +30,9 @@ null::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
 null::respawn:/usr/bin/monit -Ic /etc/monitrc
 
 # put a login prompt on start console
-::askfirst:/bin/login
+#Disabled because it fill the log messages and does not work with running container as daemon
+#You shoud use "docker exec -ti ccu sh" instead
+#::askfirst:/bin/login
 
 # Stuff to do for the 3-finger salute
 ::ctrlaltdel:/sbin/reboot

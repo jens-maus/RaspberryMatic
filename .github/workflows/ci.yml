@@ -4,6 +4,13 @@ on:
   pull_request:
   schedule:
     - cron: '0 0 * * *' # run at 0 AM UTC
+  workflow_dispatch:
+    inputs:
+      skip_build:
+        description: 'Skip build (mainly for CI testing)?'
+        required: true
+        default: "false"
+
 
 jobs:
   repo-check:
@@ -42,6 +49,7 @@ jobs:
         echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
         echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
         echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
+        echo "FAKE_BUILDROOT_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
 
     - name: free disk space
       run: |
@@ -89,7 +97,7 @@ jobs:
         make distclean
 
     - name: upload nightly build archive
-      if: github.event_name == 'schedule'
+      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -102,7 +110,7 @@ jobs:
         max_releases: 1
 
     - name: upload nightly build checksum
-      if: github.event_name == 'schedule'
+      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -115,7 +123,7 @@ jobs:
         max_releases: 1
 
     - name: upload nightly build archive (ccu3)
-      if: github.event_name == 'schedule' && matrix.platform == 'rpi3'
+      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus' && matrix.platform == 'rpi3'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -128,7 +136,7 @@ jobs:
         max_releases: 1
 
     - name: upload nightly build checksum (ccu3)
-      if: github.event_name == 'schedule' && matrix.platform == 'rpi3'
+      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus' && matrix.platform == 'rpi3'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -141,7 +149,7 @@ jobs:
         max_releases: 1
 
     - name: upload nightly build archive (.ova)
-      if: github.event_name == 'schedule' && matrix.platform == 'ova'
+      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus' && matrix.platform == 'ova'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -154,7 +162,7 @@ jobs:
         max_releases: 1
 
     - name: upload nightly build checksum (.ova)
-      if: github.event_name == 'schedule' && matrix.platform == 'ova'
+      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus' && matrix.platform == 'ova'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -163,6 +171,19 @@ jobs:
         release_id: 22744592
         asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova.sha256
         asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$.ova.sha256
+        asset_content_type: text/plain
+        max_releases: 1
+
+    - name: upload nightly build checksum (oci deploy)
+      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus' && matrix.platform == 'oci_amd64'
+      uses: WebFreak001/deploy-nightly@v1.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+        release_id: 22744592
+        asset_path: buildroot-external/board/oci/deploy.sh
+        asset_name: RaspberryMatic-deploy-container-${{ env.OCCU_VERSION }}.sh
         asset_content_type: text/plain
         max_releases: 1
 
@@ -187,6 +208,14 @@ jobs:
       with:
         path: release/RaspberryMatic-${{ env.VERSION }}.ova*
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}.ova
+      continue-on-error: true
+
+    - name: upload build as workflow artifact (oci deploy)
+      if: github.event_name != 'schedule' && matrix.platform == 'ova'
+      uses: actions/upload-artifact@v2
+      with:
+        path: buildroot-external/board/oci/deploy.sh
+        name: RaspberryMatic-deploy-container-${{ env.OCCU_VERSION }}.sh
       continue-on-error: true
 
   oci-multiarch-build-push:

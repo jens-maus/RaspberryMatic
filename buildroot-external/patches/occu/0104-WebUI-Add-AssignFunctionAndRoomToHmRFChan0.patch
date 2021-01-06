@@ -89,6 +89,28 @@
      {
        string programId;
        foreach(programId, channel.ChnEnumDPUsagePrograms())
+--- occu/WebUI/www/api/methods/room/getall.tcl.orig
++++ occu/WebUI/www/api/methods/room/getall.tcl
+@@ -28,7 +28,7 @@
+     
+       Write("CHANNELS {");
+       string channelId;
+-      foreach(channelId, room.EnumUsedIDs())
++      foreach(channelId, room.EnumIDs())
+       {
+         Write("{" # channelId # "} ");
+       }
+--- occu/WebUI/www/api/methods/subsection/getall.tcl.orig
++++ occu/WebUI/www/api/methods/subsection/getall.tcl
+@@ -28,7 +28,7 @@
+     
+       Write("CHANNELS {");
+       string channelId;
+-      foreach(channelId, subsection.EnumUsedIDs())
++      foreach(channelId, subsection.EnumIDs())
+       {
+         Write("{" # channelId # "} ");
+       }
 --- occu/WebUI/www/config/stringtable_de.txt.orig
 +++ occu/WebUI/www/config/stringtable_de.txt
 @@ -443,6 +443,8 @@

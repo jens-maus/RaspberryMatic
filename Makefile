@@ -46,7 +46,7 @@ $(PRODUCTS): %:
 
 build: | buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[build: $(PRODUCT)]"
-ifeq (,$(wildcard ./DUMMY_BUILD))
+ifneq ($(FAKE_BUILDROOT_BUILD),true)
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION)
 else
 	#Dummy build - mainly for testing CI

@@ -56,7 +56,8 @@ else
 	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do echo DUMMY >build-$(PRODUCT)/images/$${f}; done
 	mkdir -p /tmp/oci
 	tar -cf /tmp/oci/layer.tar LICENSE
-	tar -cvf build-$(PRODUCT)/images/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar /tmp/oci
+	tar -C /tmp -cvf RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar oci
+	mv RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar build-$(PRODUCT)/images/
 	rm -rf /tmp/oci
 	echo DUMMY >build-$(PRODUCT)/images/sdcard.img
 	echo DUMMY >build-$(PRODUCT)/images/RaspberryMatic.ova

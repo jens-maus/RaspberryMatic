@@ -20,7 +20,7 @@ set -e
 : ${CCU_SSH_PORT:=2222}
 
 #Other ports to open
-: ${CCU_RFD_PORTS_TO_OPEN:="2001 2010" }
+: ${CCU_PORTS_TO_OPEN:="2001 2010 8181"}
 
 #Name of the docker volume where CCU data will persist
 #It can be a local location as well such as a mounted NAS folder, cluster fs (glusterfs), etc.
@@ -96,10 +96,9 @@ EOF
 udevadm control --reload-rules
 udevadm trigger --action=add
 
-
-echo "Enable realtime"
-echo 'kernel.sched_rt_runtime_us=-1' > /etc/sysctl.d/10-ccu.conf || true
-sysctl -w kernel.sched_rt_runtime_us=-1 > /dev/null || true
+#echo "Enable realtime"
+#echo 'kernel.sched_rt_runtime_us=-1' > /etc/sysctl.d/10-ccu.conf || true
+#sysctl -w kernel.sched_rt_runtime_us=-1 > /dev/null || true
 
 echo "Remove old container if it exists"
 docker stop ${CCU_CONTAINER_NAME} || true
@@ -117,7 +116,7 @@ DOCKER_COMMAND="${DOCKER_COMMAND} ${CCU_DATA_VOLUMEN}:/usr/local"
 DOCKER_COMMAND="${DOCKER_COMMAND} --hostname ${CCU_CONTAINER_NAME} --name ${CCU_CONTAINER_NAME}"
 #Add extra ports
 DOCKER_COMMAND="${DOCKER_COMMAND} -p ${CCU_SSH_PORT}:22 -p ${CCU_REGA_HTTP_PORT}:80 -p ${CCU_REGA_HTTPS_PORT}:443"
-for extra_port in ${CCU_RFD_PORTS_TO_OPEN}; do
+for extra_port in ${CCU_PORTS_TO_OPEN}; do
   DOCKER_COMMAND="${DOCKER_COMMAND} -p ${extra_port}:${extra_port}"
 done
 #Add extra user options

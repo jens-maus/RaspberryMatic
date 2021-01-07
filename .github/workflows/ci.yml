@@ -11,7 +11,6 @@ on:
         required: true
         default: "false"
 
-
 jobs:
   repo-check:
     name: repository commit check
@@ -80,13 +79,19 @@ jobs:
         sudo chown runner /mnt/download
         make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download raspmatic_${{ matrix.platform }}-release
 
+    # cleanup
     - name: cleanup raspmatic_${{ matrix.platform }}
       run: |
+        rm -f release/*.img*
         make distclean
 
+    #######################
     # nightly build uploads
-    - name: upload nightly build archive
-      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus'
+    - name: upload nightly build archive [rpi*, tinkerboard, intelnuc, ova]
+      if: |
+        github.event_name == 'schedule' &&
+        github.repository_owner == 'jens-maus' &&
+        ${{ !startsWith(matrix.platform, 'oci_') }}
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -98,8 +103,11 @@ jobs:
         asset_content_type: application/zip
         max_releases: 1
 
-    - name: upload nightly build checksum
-      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus'
+    - name: upload nightly build checksum [rpi*, tinkerboard, intelnuc, ova]
+      if: |
+        github.event_name == 'schedule' &&
+        github.repository_owner == 'jens-maus' &&
+        ${{ !startsWith(matrix.platform, 'oci_') }}
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -112,7 +120,10 @@ jobs:
         max_releases: 1
 
     - name: upload nightly build archive [ccu3]
-      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus' && matrix.platform == 'rpi3'
+      if: |
+        github.event_name == 'schedule' &&
+        github.repository_owner == 'jens-maus' &&
+        matrix.platform == 'rpi3'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -125,7 +136,10 @@ jobs:
         max_releases: 1
 
     - name: upload nightly build checksum [ccu3]
-      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus' && matrix.platform == 'rpi3'
+      if: |
+        github.event_name == 'schedule' &&
+        github.repository_owner == 'jens-maus' &&
+        matrix.platform == 'rpi3'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -138,7 +152,10 @@ jobs:
         max_releases: 1
 
     - name: upload nightly build archive [ova]
-      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus' && matrix.platform == 'ova'
+      if: |
+        github.event_name == 'schedule' &&
+        github.repository_owner == 'jens-maus' &&
+        matrix.platform == 'ova'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -151,7 +168,10 @@ jobs:
         max_releases: 1
 
     - name: upload nightly build checksum [ova]
-      if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus' && matrix.platform == 'ova'
+      if: |
+        github.event_name == 'schedule' &&
+        github.repository_owner == 'jens-maus' &&
+        matrix.platform == 'ova'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -160,6 +180,38 @@ jobs:
         release_id: 22744592
         asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova.sha256
         asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$.ova.sha256
+        asset_content_type: text/plain
+        max_releases: 1
+
+    - name: upload nightly build archive [oci]
+      if: |
+        github.event_name == 'schedule' &&
+        github.repository_owner == 'jens-maus' &&
+        ${{ startsWith(matrix.platform, 'oci_') }}
+      uses: WebFreak001/deploy-nightly@v1.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+        release_id: 22744592
+        asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz
+        asset_content_type: application/gzip
+        max_releases: 1
+
+    - name: upload nightly build checksum [oci]
+      if: |
+        github.event_name == 'schedule' &&
+        github.repository_owner == 'jens-maus' &&
+        ${{ startsWith(matrix.platform, 'oci_') }}
+      uses: WebFreak001/deploy-nightly@v1.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+        release_id: 22744592
+        asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz.sha256
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz.sha256
         asset_content_type: text/plain
         max_releases: 1
 
@@ -176,11 +228,12 @@ jobs:
     #     asset_content_type: text/plain
     #     max_releases: 1
 
+    #########################
     # build artifacts uploads
-    - name: upload build as workflow artifact
+    - name: upload build as workflow artifact [ALL]
       uses: actions/upload-artifact@v2
       with:
-        path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip*
+        path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.*
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.zip
       continue-on-error: true
 
@@ -243,10 +296,15 @@ jobs:
     
     - name: extract artifacts
       run: |
+        for f in ./*-oci_*.zip; do
+          unzip -o $f
+          rm -f $f
+        done
         mkdir -p oci_build
         cd oci_build
-        for f in ../*.zip; do
-          unzip -o $f
+        for f in ../*-oci_*.tgz; do
+          tar --wildcards --strip-components 1 -xf $f "*/layer.tar"
+          mv -f layer.tar $(basename $f .tgz).tar
           rm -f $f
         done
 

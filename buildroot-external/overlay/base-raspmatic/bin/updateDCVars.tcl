@@ -328,6 +328,61 @@ if {$portFound == 0} {
 }
 
 ###################################################################
+# HmIP-WIRED
+#
+
+# check for any HmIP-DRAP LAN gateway so that we can check for
+# certain error conditions
+# (currently this can only be done via rega scripting)
+set script "
+  string s;
+  foreach(s, channels.Get().EnumUsedIDs()) {
+    object oChn = dom.GetObject(s);
+    if((oChn.Label() == 'HmIPW-DRAP') && (oChn.Address().Contains(':0'))) {
+      integer connected = 0;
+      integer overheat = 0;
+      integer undervoltage = 0;
+      if(oChn.DPByControl(\"MAINTENANCE.UNREACH\").Value() == false) {
+        connected = 1;
+        temp = oChn.DPByControl(\"MAINTENANCE.ERROR_OVERHEAT\").Value().ToInteger();
+        undervoltage = oChn.DPByControl(\"MAINTENANCE.ERROR_UNDERVOLTAGE\").Value().ToInteger();
+      }
+      Write('ADDRESS '#oChn.Address());
+      Write(' NAME {'#oChn.Name()#'}');
+      Write(' IP {'#oChn.DPByControl(\"MAINTENANCE.IP_ADDRESS\").Value()#'}');
+      Write(' CONNECTED '#connected);
+      Write(' OVERHEAT '#overheat);
+      Write(' UNDERVOLTAGE '#undervoltage);
+      Write(' TYPE HMIPW-DRAP');
+    }
+  }
+"
+set gateways {}
+
+catch {
+  array set response [rega_script $script]
+  lappend gateways $response(STDOUT)
+}
+if { [llength $gateways] > 0 } {
+  foreach _gateway $gateways {
+    array set gateway $_gateway
+    set infoTxt "HmIPW-DRAP-Status: $gateway(CONNECTED) ($gateway(ADDRESS), IP: $gateway(IP))"
+    if {$gateway(CONNECTED) == 0} {
+      exec /bin/triggerAlarm.tcl "HmIPW-DRAP ($gateway(ADDRESS), IP: $gateway(IP)) not connected" "HmIP-DRAP-Alarm"
+      exec logger -t dutycycle -p error "$infoTxt"
+    } elseif {$gateway(OVERHEAT) == 1} {
+      exec /bin/triggerAlarm.tcl "HmIPW-DRAP ($gateway(ADDRESS), IP: $gateway(IP)) overheated" "HmIP-DRAP-Alarm"
+      exec logger -t dutycycle -p error "$infoTxt"
+    } elseif {$gateway(UNDERVOLTAGE) == 1} {
+      exec /bin/triggerAlarm.tcl "HmIPW-DRAP ($gateway(ADDRESS), IP: $gateway(IP)) undervoltaged" "HmIP-DRAP-Alarm"
+      exec logger -t dutycycle -p error "$infoTxt"
+    }
+
+    puts $infoTxt
+  }
+}
+
+###################################################################
 # BidCos-WIRED
 #
 

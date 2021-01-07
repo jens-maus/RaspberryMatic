@@ -49,13 +49,17 @@ build: | buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 ifneq ($(FAKE_BUILDROOT_BUILD),true)
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION)
 else
+	$(eval BOARD := $(shell echo $(PRODUCT) | cut -d'_' -f2-))
 	# Dummy build - mainly for testing CI
-	echo -n "DO NOT MERGE THIS CHANGE - FOR CI test only!!!!"
+	echo -n "FAKE_BUILDROOT_BUILD - generating fake release archives..."
 	mkdir -p build-$(PRODUCT)/images
-	tar -cf build-$(PRODUCT)/images/rootfs.tar LICENSE
+	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do echo DUMMY >build-$(PRODUCT)/images/$${f}; done
+	mkdir -p /tmp/oci
+	tar -cf /tmp/oci/layer.tar LICENSE
+	tar -cvf build-$(PRODUCT)/images/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar /tmp/oci
+	rm -rf /tmp/oci
 	echo DUMMY >build-$(PRODUCT)/images/sdcard.img
 	echo DUMMY >build-$(PRODUCT)/images/RaspberryMatic.ova
-	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do echo DUMMY >build-$(PRODUCT)/images/$${f}; done
 endif
 
 release-all: $(addsuffix -release, $(PRODUCTS))

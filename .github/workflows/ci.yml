@@ -230,10 +230,11 @@ jobs:
 
     #########################
     # build artifacts uploads
-    - name: upload build as workflow artifact [ALL]
+    - name: upload build as workflow artifact [rpi*, tinkerboard, intelnuc, ova]
+      if: !startsWith(matrix.platform, 'oci_')
       uses: actions/upload-artifact@v2
       with:
-        path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.*
+        path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip*
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.zip
       continue-on-error: true
 
@@ -251,6 +252,14 @@ jobs:
       with:
         path: release/RaspberryMatic-${{ env.VERSION }}.ova*
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}.ova
+      continue-on-error: true
+
+    - name: upload build as workflow artifact [oci]
+      if: startsWith(matrix.platform, 'oci_')
+      uses: actions/upload-artifact@v2
+      with:
+        path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz*
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
       continue-on-error: true
 
     #- name: upload build as workflow artifact [oci deploy]
@@ -281,25 +290,21 @@ jobs:
         echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
 
     # download OCI platform artifacts
-    - name: download oci_amd64.zip
+    - name: download oci_amd64.tgz
       uses: actions/download-artifact@v2
       with:
-        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-oci_amd64.zip
-    - name: download oci_arm64.zip
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-oci_amd64.tgz
+    - name: download oci_arm64.tgz
       uses: actions/download-artifact@v2
       with:
-        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm64.zip
-    - name: download oci_arm.zip
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm64.tgz
+    - name: download oci_arm.tgz
       uses: actions/download-artifact@v2
       with:
-        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm.zip
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm.tgz
     
     - name: extract artifacts
       run: |
-        for f in ./*-oci_*.zip; do
-          unzip -o $f
-          rm -f $f
-        done
         mkdir -p oci_build
         cd oci_build
         for f in ../*-oci_*.tgz; do

@@ -91,7 +91,7 @@ jobs:
       if: |
         github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
-        "!startsWith(matrix.platform, 'oci_')"
+        !startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
@@ -107,7 +107,7 @@ jobs:
       if: |
         github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
-        "!startsWith(matrix.platform, 'oci_')"
+        !startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}

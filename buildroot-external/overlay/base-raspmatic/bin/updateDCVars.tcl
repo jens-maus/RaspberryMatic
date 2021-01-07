@@ -1,7 +1,7 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.5
-# Copyright (c) 2018-2020 Andreas Buenting, Jens Maus
+# DutyCycle Script v3.6
+# Copyright (c) 2018-2021 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -218,6 +218,42 @@ if {$portFound == 0} {
   set gwFound [catch {set gateways [xmlrpc http://127.0.0.1:$port/ listBidcosInterfaces]}]
   if {$gwFound == 0} {
 
+    # check for any HmIP-HAP LAN gateway first so that
+    # we can add them to the gateway list as well
+    # (currently this can only be done via rega scripting)
+    set script "
+      string s;
+      foreach(s, channels.Get().EnumUsedIDs()) {
+        object oChn = dom.GetObject(s);
+        if(oChn.Label() == \"HmIP-HAP\") {
+          integer dcValue = -1;
+          integer csValue = -1;
+          integer connected = 0;
+          if(oChn.DPByControl(\"MAINTENANCE.UNREACH\").Value() == false) {
+            connected = 1;
+            dcValue = oChn.DPByControl(\"MAINTENANCE.DUTY_CYCLE_LEVEL\").Value().ToInteger();
+            csValue = oChn.DPByControl(\"MAINTENANCE.CARRIER_SENSE_LEVEL\").Value().ToInteger();
+          }
+          Write('ADDRESS '#oChn.Address());
+          Write(' NAME {'#oChn.Name()#'}');
+          Write(' IP '#oChn.DPByControl(\"MAINTENANCE.IP_ADDRESS\").Value());
+          Write(' CONNECTED '#connected);
+          Write(' DEFAULT 1');
+          Write(' DESCRIPTION {}');
+          Write(' CARRIER_SENSE '#dcValue);
+          Write(' DUTY_CYCLE '#dcValue);
+          Write(' FIRMWARE_VERSION 0.0.0');
+          Write(' TYPE HMIP-HAP');
+        }
+      }
+    "
+    catch {
+      array set response [rega_script $script]
+      if {[string trim $response(STDOUT)] != ""} {
+        lappend gateways $response(STDOUT)
+      }
+    }
+
     # catch all dutyCycle values in an additional JSON array
     set jsonResult "\["
     set first 1
@@ -238,6 +274,9 @@ if {$portFound == 0} {
         if {$gateway(TYPE) == "CCU2" || $gateway(TYPE) == "HMIP_CCU2"} {
           set sysVarName [setDutyCycleSV "" "DutyCycle CCU" $dutycycle ""]
           set gateway(TYPE) "CCU2"
+        } elseif {$gateway(TYPE) == "HMIP-HAP"} {
+          set name $gateway(NAME)
+          set sysVarName [setDutyCycleSV $name "DutyCycle HAP ($gateway(ADDRESS))" $dutycycle $gateway(ADDRESS)]
         } else {
           # get the cleartext name a user assigned for that gateway
           # we try to find it based on the defined serial number

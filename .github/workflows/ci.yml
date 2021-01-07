@@ -231,7 +231,8 @@ jobs:
     #########################
     # build artifacts uploads
     - name: upload build as workflow artifact [rpi*, tinkerboard, intelnuc, ova]
-      if: !startsWith(matrix.platform, 'oci_')
+      if: |
+        !startsWith(matrix.platform, 'oci_')
       uses: actions/upload-artifact@v2
       with:
         path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip*
@@ -239,7 +240,9 @@ jobs:
       continue-on-error: true
 
     - name: upload build as workflow artifact [ccu3]
-      if: github.event_name != 'schedule' && matrix.platform == 'rpi3'
+      if: |
+        github.event_name != 'schedule' &&
+        matrix.platform == 'rpi3'
       uses: actions/upload-artifact@v2
       with:
         path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz*
@@ -247,7 +250,9 @@ jobs:
       continue-on-error: true
 
     - name: upload build as workflow artifact [ova]
-      if: github.event_name != 'schedule' && matrix.platform == 'ova'
+      if: |
+        github.event_name != 'schedule' &&
+        matrix.platform == 'ova'
       uses: actions/upload-artifact@v2
       with:
         path: release/RaspberryMatic-${{ env.VERSION }}.ova*
@@ -255,7 +260,8 @@ jobs:
       continue-on-error: true
 
     - name: upload build as workflow artifact [oci]
-      if: startsWith(matrix.platform, 'oci_')
+      if: |
+        startsWith(matrix.platform, 'oci_')
       uses: actions/upload-artifact@v2
       with:
         path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz*

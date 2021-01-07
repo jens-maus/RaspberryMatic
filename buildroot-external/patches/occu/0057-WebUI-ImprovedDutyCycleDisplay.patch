@@ -152,7 +152,7 @@
                arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
              } else {
                conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
-@@ -28937,7 +28928,14 @@
+@@ -28937,7 +28928,20 @@
              }
  
              if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
@@ -160,6 +160,12 @@
 +              dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
 +              if (iface.type === "CCU2") {
 +                dutyCycleAddrElm.text("DutyCycle CCU:");
++              } else if(iface.type === "HMIP-HAP") {
++                if(iface.name !== "") {
++                  dutyCycleAddrElm.text("DutyCycle HAP ("+iface.name+"):");
++                } else {
++                  dutyCycleAddrElm.text("DutyCycle HAP ("+iface.address+"):");
++                }
 +              } else if(iface.name !== "") {
 +                dutyCycleAddrElm.text("DutyCycle LGW ("+iface.name+"):");
 +              } else {
@@ -168,7 +174,7 @@
  
                width = parseInt(dutyCycleProgressElem.css("width"));
                value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
-@@ -28953,19 +28951,17 @@
+@@ -28953,19 +28957,17 @@
                }
                trPartingLineElm.show();
                showPartingLine = true;

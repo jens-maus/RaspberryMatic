@@ -28931,6 +28931,12 @@ showDutyCycle = function() {
               dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
               if (iface.type === "CCU2") {
                 dutyCycleAddrElm.text("DutyCycle CCU:");
+              } else if(iface.type === "HMIP-HAP") {
+                if(iface.name !== "") {
+                  dutyCycleAddrElm.text("DutyCycle HAP ("+iface.name+"):");
+                } else {
+                  dutyCycleAddrElm.text("DutyCycle HAP ("+iface.address+"):");
+                }
               } else if(iface.name !== "") {
                 dutyCycleAddrElm.text("DutyCycle LGW ("+iface.name+"):");
               } else {

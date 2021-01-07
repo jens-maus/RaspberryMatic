@@ -226,8 +226,8 @@ if {$portFound == 0} {
       foreach(s, channels.Get().EnumUsedIDs()) {
         object oChn = dom.GetObject(s);
         if(oChn.Label() == \"HmIP-HAP\") {
-          integer dcValue = -1;
-          integer csValue = -1;
+          integer dcValue = 0;
+          integer csValue = 0;
           integer connected = 0;
           if(oChn.DPByControl(\"MAINTENANCE.UNREACH\").Value() == false) {
             connected = 1;
@@ -236,11 +236,11 @@ if {$portFound == 0} {
           }
           Write('ADDRESS '#oChn.Address());
           Write(' NAME {'#oChn.Name()#'}');
-          Write(' IP '#oChn.DPByControl(\"MAINTENANCE.IP_ADDRESS\").Value());
+          Write(' IP {'#oChn.DPByControl(\"MAINTENANCE.IP_ADDRESS\").Value()#'}');
           Write(' CONNECTED '#connected);
           Write(' DEFAULT 1');
           Write(' DESCRIPTION {}');
-          Write(' CARRIER_SENSE '#dcValue);
+          Write(' CARRIER_SENSE '#csValue);
           Write(' DUTY_CYCLE '#dcValue);
           Write(' FIRMWARE_VERSION 0.0.0');
           Write(' TYPE HMIP-HAP');
@@ -301,8 +301,11 @@ if {$portFound == 0} {
         append jsonResult ",\"type\":[json_toString $gateway(TYPE)]"
         append jsonResult "\}"
 
-        set infoTxt "DutyCycle-$gateway(ADDRESS) / $gateway(TYPE) / FW: $gateway(FIRMWARE_VERSION) / DC: $dutycycle%"
-        if {$dutycycle >= 98} {
+        set infoTxt "DutyCycle-$gateway(ADDRESS), NAME: '$name', TYPE: $gateway(TYPE), FW: $gateway(FIRMWARE_VERSION), CONNECTED: $gateway(CONNECTED), DC: $dutycycle %"
+        if {$gateway(CONNECTED) == 0} {
+          exec /bin/triggerAlarm.tcl "RF-Gateway $name ($gateway(ADDRESS)) not connected" "RF-Gateway-Alarm"
+          exec logger -t dutycycle -p error "$infoTxt"
+        } elseif {$dutycycle >= 98} {
           exec /bin/triggerAlarm.tcl "DutyCycle $dutycycle% ($gateway(ADDRESS))" "DutyCycle-Alarm"
           exec logger -t dutycycle -p error "$infoTxt"
         } elseif {$dutycycle >= 80} {
@@ -376,7 +379,8 @@ if {[llength [cfg::sections]] > 1} {
 
   set infoTxt "Wired-LGW-Status: $connected"
   if {$connected == "false"} {
-    exec logger -t dutycycle -p info "$infoTxt"
+    exec /bin/triggerAlarm.tcl "Wired-Gateway ($gateway(ADDRESS)) not connected" "Wired-Gateway-Alarm"
+    exec logger -t dutycycle -p error "$infoTxt"
   }
   puts $infoTxt
 }

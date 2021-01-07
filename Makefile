@@ -49,13 +49,13 @@ build: | buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 ifneq ($(FAKE_BUILDROOT_BUILD),true)
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION)
 else
-	#Dummy build - mainly for testing CI
+	# Dummy build - mainly for testing CI
 	echo -n "DO NOT MERGE THIS CHANGE - FOR CI test only!!!!"
 	mkdir -p build-$(PRODUCT)/images
 	tar -cf build-$(PRODUCT)/images/rootfs.tar LICENSE
-	touch build-$(PRODUCT)/images/sdcard.img
-	touch build-$(PRODUCT)/images/RaspberryMatic.ova
-	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do touch build-$(PRODUCT)/images/$${f}; done
+	echo DUMMY >build-$(PRODUCT)/images/sdcard.img
+	echo DUMMY >build-$(PRODUCT)/images/RaspberryMatic.ova
+	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do echo DUMMY >build-$(PRODUCT)/images/$${f}; done
 endif
 
 release-all: $(addsuffix -release, $(PRODUCTS))

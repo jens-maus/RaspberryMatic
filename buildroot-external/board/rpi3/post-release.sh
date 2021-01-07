@@ -29,5 +29,6 @@ done
 (cd /tmp/${PRODUCT}-${PRODUCT_VERSION} && sha256sum * >${PRODUCT}-${PRODUCT_VERSION}.sha256)
 tar -C /tmp/${PRODUCT}-${PRODUCT_VERSION} --owner=root --group=root -cvzhf ./RaspberryMatic-${PRODUCT_VERSION}-ccu3.tgz
 sha256sum RaspberryMatic-${PRODUCT_VERSION}-ccu3.tgz >RaspberryMatic-${PRODUCT_VERSION}-ccu3.tgz.sha256
+rm -rf /tmp/${PRODUCT}-${PRODUCT_VERSION} 2>/dev/null
 
 exit $?

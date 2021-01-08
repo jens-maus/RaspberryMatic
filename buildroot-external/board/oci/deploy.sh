@@ -20,7 +20,7 @@ set -e
 : ${CCU_SSH_PORT:=2222}
 
 #Other ports to open
-: ${CCU_PORTS_TO_OPEN:="2001 2010 8181"}
+: ${CCU_PORTS_TO_OPEN:="2001 2010 8181 9292"}
 
 #Name of the docker volume where CCU data will persist
 #It can be a local location as well such as a mounted NAS folder, cluster fs (glusterfs), etc.
@@ -109,7 +109,7 @@ DOCKER_IMAGE="${CCU_OCI_REPO}:${CCU_OCI_TAG}"
 docker pull ${DOCKER_IMAGE}
 
 echo "Start container"
-DOCKER_COMMAND="docker run -d -ti --privileged --restart=always -v"
+DOCKER_COMMAND="docker run -d -ti --privileged --restart=always --stop-timeout=30 -v"
 #Persistent volume
 DOCKER_COMMAND="${DOCKER_COMMAND} ${CCU_DATA_VOLUMEN}:/usr/local"
 #Container and host names

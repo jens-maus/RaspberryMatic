@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Stop on error
+set -e
+
 BOARD_DIR=${1}
 PRODUCT=${2}
 PRODUCT_VERSION=${3}
@@ -24,10 +27,10 @@ for f in $(cat updatepkg/${PRODUCT}/files-package.txt); do
   ln -s $(pwd)/updatepkg/${PRODUCT}/${f} /tmp/${PRODUCT}-${PRODUCT_VERSION}/
 done
 for f in $(cat updatepkg/${PRODUCT}/files-images.txt); do
-  gzip -c $(pwd)/../build-${PRODUCT}/images/${f} /tmp/${PRODUCT}-${PRODUCT_VERSION}/${f}.gz
+  gzip -c $(pwd)/../build-${PRODUCT}/images/${f} >/tmp/${PRODUCT}-${PRODUCT_VERSION}/${f}.gz
 done
 (cd /tmp/${PRODUCT}-${PRODUCT_VERSION} && sha256sum * >${PRODUCT}-${PRODUCT_VERSION}.sha256)
-tar -C /tmp/${PRODUCT}-${PRODUCT_VERSION} --owner=root --group=root -cvzhf ./RaspberryMatic-${PRODUCT_VERSION}-ccu3.tgz
+tar -C /tmp/${PRODUCT}-${PRODUCT_VERSION} --owner=root --group=root -cvzhf ./RaspberryMatic-${PRODUCT_VERSION}-ccu3.tgz $(ls /tmp/${PRODUCT}-${PRODUCT_VERSION})
 sha256sum RaspberryMatic-${PRODUCT_VERSION}-ccu3.tgz >RaspberryMatic-${PRODUCT_VERSION}-ccu3.tgz.sha256
 rm -rf /tmp/${PRODUCT}-${PRODUCT_VERSION} 2>/dev/null
 

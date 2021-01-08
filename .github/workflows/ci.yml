@@ -27,6 +27,9 @@ jobs:
     needs: repo-check
     timeout-minutes: 480
     if: github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0
+    outputs:
+      build_datetime: ${{ steps.env.outputs.build_datetime }}
+      build_version: ${{ steps.env.outputs.build_version }}
 
     strategy:
       fail-fast: false
@@ -43,12 +46,15 @@ jobs:
         ln -s b RaspberryMatic
 
     - name: setup env
+      id: env
       run: |
         echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
         echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
         echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
         echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
-        echo "FAKE_BUILDROOT_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
+        echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
+        echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
+        echo "::set-output name=build_version::$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)"
 
     - name: free disk space
       run: |
@@ -288,10 +294,8 @@ jobs:
 
     - name: setup env
       run: |
-        echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
-        echo "BUILD_DATE=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
-        echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
-        echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo "BUILD_DATETIME=${{ needs.build.outputs.build_datetime }}" >> $GITHUB_ENV
+        echo "BUILD_VERSION=${{ needs.build.outputs.build_version }}" >> $GITHUB_ENV
         echo "GIT_REF=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)" >> $GITHUB_ENV
         echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
 
@@ -299,15 +303,15 @@ jobs:
     - name: download oci_amd64.tgz
       uses: actions/download-artifact@v2
       with:
-        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-oci_amd64.tgz
+        name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_amd64.tgz
     - name: download oci_arm64.tgz
       uses: actions/download-artifact@v2
       with:
-        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm64.tgz
+        name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm64.tgz
     - name: download oci_arm.tgz
       uses: actions/download-artifact@v2
       with:
-        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm.tgz
+        name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm.tgz
     
     - name: extract artifacts
       run: |
@@ -323,7 +327,7 @@ jobs:
       shell: bash
       run: |
         BASE_TAG="ghcr.io/${{ github.repository_owner }}/raspberrymatic"
-        UNIQUE_TAG="${BASE_TAG}:${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}"
+        UNIQUE_TAG="${BASE_TAG}:${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}"
         if [[ ${GITHUB_EVENT_NAME} = 'schedule' || ${GITHUB_EVENT_NAME} = 'push' ]]; then
           BRANCH="${GITHUB_REF##*/}"
           if [[ $BRANCH = master ]]; then
@@ -359,15 +363,15 @@ jobs:
         platforms: linux/amd64,linux/arm64,linux/arm
         push: true
         build-args: |
-          tar_prefix=RaspberryMatic-${{ env.VERSION }}-oci_
+          tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
         labels: |
           org.opencontainers.image.authors=${{ github.repository_owner }}
-          org.opencontainers.image.created=${{ env.BUILD_DATE }}
+          org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
           org.opencontainers.image.description=Created from commit ${{ env.GITHUB_SHA7 }} and ref ${{ env.GIT_REF }}
           org.opencontainers.image.ref.name=${{ env.GIT_REF }}
           org.opencontainers.image.revision=${{ github.sha }}
           org.opencontainers.image.source=https://github.com/${{ github.repository }}
-          org.opencontainers.image.version=${{ env.VERSION }}
+          org.opencontainers.image.version=${{ env.BUILD_VERSION }}
         tags: |
           ${{ steps.extract_branch.outputs.unique_tag }}
           ${{ steps.extract_branch.outputs.branch_tag }}

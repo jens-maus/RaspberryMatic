@@ -35,8 +35,11 @@ set -e
 #Name of the container instance (by default use same as angelnu/ccu for easier migration)
 : ${CCU_CONTAINER_NAME:="ccu"}
 
-#Additional options for docker create service / docker run
-: ${CCU_DOCKER_OPTIONS:=""}
+#Additional options for docker run
+: ${CCU_DOCKER_RUN_OPTIONS:=""}
+
+#Additional options for docker pull
+: ${CCU_DOCKER_PULL_OPTIONS:=""}
 
 #Time for a clean container stop before it gets killed
 : ${CCU_DOCKER_STOP_TIMEOUT:="30"}
@@ -106,9 +109,9 @@ echo "Remove old container if it exists"
 docker stop ${CCU_CONTAINER_NAME} || true
 docker rm ${CCU_CONTAINER_NAME} || true
 
-echo "Pull/Update OCI image"
 DOCKER_IMAGE="${CCU_OCI_REPO}:${CCU_OCI_TAG}"
-docker pull ${DOCKER_IMAGE}
+echo "Pull/Update OCI image ${DOCKER_IMAGE}"
+docker pull ${CCU_DOCKER_PULL_OPTIONS} ${DOCKER_IMAGE}
 
 echo "Start container"
 DOCKER_COMMAND="docker run -d -ti --privileged --restart=always -v"

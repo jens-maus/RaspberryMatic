@@ -228,3 +228,59 @@ jobs:
     
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
+  
+  ##########################################
+  # Test
+  test:
+    runs-on: ubuntu-20.04
+    needs: oci-multiarch-build-push
+    if: github.event_name != 'pull_request'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [linux/amd64, linux/arm64, linux/arm]
+    
+    steps:
+
+    - run: docker run --rm --privileged multiarch/qemu-user-static:register --reset
+
+    - uses: actions/checkout@v2
+
+    - name: setup env
+      run: |
+        echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo "BUILD_DATE=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+        echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
+        echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo "GIT_REF=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)" >> $GITHUB_ENV
+        echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
+        echo "CCU_OCI_REPO=ghcr.io/${{ github.repository_owner }}/raspberrymatic" >> $GITHUB_ENV
+    
+    
+    - name: Enable experimental features for the Docker daemon and CLI
+      run: |
+        echo $'{\n  "experimental": true\n}' | sudo tee /etc/docker/daemon.json
+        mkdir -p ~/.docker
+        echo $'{\n  "experimental": "enabled"\n}' | sudo tee ~/.docker/config.json
+        sudo service docker restart
+        docker version -f '{{.Client.Experimental}}'
+        docker version -f '{{.Server.Experimental}}'
+
+    - name: deploy container
+      run: |
+        PLATFORM_FLAG="--platform ${{ matrix.platform }}" 
+        export CCU_DOCKER_RUN_OPTIONS="$PLATFORM_FLAG"
+        export CCU_DOCKER_PULL_OPTIONS="$PLATFORM_FLAG"
+        export CCU_OCI_TAG="${VERSION}-${GITHUB_SHA7}"
+        
+        sudo -E ./buildroot-external/board/oci/deploy.sh
+    
+    - name: test web
+      timeout-minutes: 2
+      run: |
+        while ! curl localhost:8080 2>/dev/null|grep "HomeMatic WebUI"; do echo "."; sleep 1; done 
+
+
+
+  

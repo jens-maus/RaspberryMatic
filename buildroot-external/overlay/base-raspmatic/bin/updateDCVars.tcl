@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.6
+# DutyCycle Script v3.7
 # Copyright (c) 2018-2021 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -222,35 +222,43 @@ if {$portFound == 0} {
     # we can add them to the gateway list as well
     # (currently this can only be done via rega scripting)
     set script "
-      string s;
-      foreach(s, channels.Get().EnumUsedIDs()) {
-        object oChn = dom.GetObject(s);
-        if(oChn.Label() == \"HmIP-HAP\") {
-          integer dcValue = 0;
-          integer csValue = 0;
-          integer connected = 0;
-          if(oChn.DPByControl(\"MAINTENANCE.UNREACH\").Value() == false) {
-            connected = 1;
-            dcValue = oChn.DPByControl(\"MAINTENANCE.DUTY_CYCLE_LEVEL\").Value().ToInteger();
-            csValue = oChn.DPByControl(\"MAINTENANCE.CARRIER_SENSE_LEVEL\").Value().ToInteger();
+      string dev;
+      foreach(dev, devices.Get().EnumUsedIDs()) {
+        object oDev = dom.GetObject(dev);
+        if(oDev.Label() == 'HmIP-HAP') {
+          string name = oDev.Name();
+          string chn;
+          foreach(chn, oDev.Channels()) {
+            object oChn = dom.GetObject(chn);
+            if(oChn.Address().Contains(':0')) {
+              integer dcValue = 0;
+              integer csValue = 0;
+              integer connected = 0;
+              if(oChn.DPByControl('MAINTENANCE.UNREACH').Value() == false) {
+                connected = 1;
+                dcValue = oChn.DPByControl('MAINTENANCE.DUTY_CYCLE_LEVEL').Value().ToInteger();
+                csValue = oChn.DPByControl('MAINTENANCE.CARRIER_SENSE_LEVEL').Value().ToInteger();
+              }
+              Write('{ADDRESS '#oDev.Address());
+              Write(' NAME {'#oDev.Name()#'}');
+              Write(' IP {'#oChn.DPByControl(\"MAINTENANCE.IP_ADDRESS\").Value()#'}');
+              Write(' CONNECTED '#connected);
+              Write(' DEFAULT 1');
+              Write(' DESCRIPTION {}');
+              Write(' CARRIER_SENSE '#csValue);
+              Write(' DUTY_CYCLE '#dcValue);
+              Write(' FIRMWARE_VERSION 0.0.0');
+              Write(' TYPE HMIP-HAP} ');
+              break;
+            }
           }
-          Write('ADDRESS '#oChn.Address());
-          Write(' NAME {'#oChn.Name()#'}');
-          Write(' IP {'#oChn.DPByControl(\"MAINTENANCE.IP_ADDRESS\").Value()#'}');
-          Write(' CONNECTED '#connected);
-          Write(' DEFAULT 1');
-          Write(' DESCRIPTION {}');
-          Write(' CARRIER_SENSE '#csValue);
-          Write(' DUTY_CYCLE '#dcValue);
-          Write(' FIRMWARE_VERSION 0.0.0');
-          Write(' TYPE HMIP-HAP');
         }
       }
     "
     catch {
       array set response [rega_script $script]
       if {[string trim $response(STDOUT)] != ""} {
-        lappend gateways $response(STDOUT)
+        set gateways [concat $gateways $response(STDOUT)]
       }
     }
 
@@ -335,25 +343,32 @@ if {$portFound == 0} {
 # certain error conditions
 # (currently this can only be done via rega scripting)
 set script "
-  string s;
-  foreach(s, channels.Get().EnumUsedIDs()) {
-    object oChn = dom.GetObject(s);
-    if((oChn.Label() == 'HmIPW-DRAP') && (oChn.Address().Contains(':0'))) {
-      integer connected = 0;
-      integer overheat = 0;
-      integer undervoltage = 0;
-      if(oChn.DPByControl(\"MAINTENANCE.UNREACH\").Value() == false) {
-        connected = 1;
-        temp = oChn.DPByControl(\"MAINTENANCE.ERROR_OVERHEAT\").Value().ToInteger();
-        undervoltage = oChn.DPByControl(\"MAINTENANCE.ERROR_UNDERVOLTAGE\").Value().ToInteger();
+ string dev;
+  foreach(dev, devices.Get().EnumUsedIDs()) {
+    object oDev = dom.GetObject(dev);
+    if(oDev.Label() == 'HmIPW-DRAP') {
+      string name = oDev.Name();
+      string chn;
+      foreach(chn, oDev.Channels()) {
+        object oChn = dom.GetObject(chn);
+        if(oChn.Address().Contains(':0')) {
+          integer connected = 0;
+          integer overheat = 0;
+          integer undervoltage = 0;
+          if(oChn.DPByControl('MAINTENANCE.UNREACH').Value() == false) {
+            connected = 1;
+            temp = oChn.DPByControl('MAINTENANCE.ERROR_OVERHEAT').Value().ToInteger();
+            undervoltage = oChn.DPByControl('MAINTENANCE.ERROR_UNDERVOLTAGE').Value().ToInteger();
+          }
+          Write('{ADDRESS '#oDev.Address());
+          Write(' NAME {'#oDev.Name()#'}');
+          Write(' IP {'#oChn.DPByControl('MAINTENANCE.IP_ADDRESS').Value()#'}');
+          Write(' CONNECTED '#connected);
+          Write(' OVERHEAT '#overheat);
+          Write(' UNDERVOLTAGE '#undervoltage);
+          Write(' TYPE HMIPW-DRAP} ');
+        }
       }
-      Write('ADDRESS '#oChn.Address());
-      Write(' NAME {'#oChn.Name()#'}');
-      Write(' IP {'#oChn.DPByControl(\"MAINTENANCE.IP_ADDRESS\").Value()#'}');
-      Write(' CONNECTED '#connected);
-      Write(' OVERHEAT '#overheat);
-      Write(' UNDERVOLTAGE '#undervoltage);
-      Write(' TYPE HMIPW-DRAP');
     }
   }
 "
@@ -361,7 +376,9 @@ set gateways {}
 
 catch {
   array set response [rega_script $script]
-  lappend gateways $response(STDOUT)
+  if {[string trim $response(STDOUT)] != ""} {
+    set gateways [concat $gateways $response(STDOUT)]
+  }
 }
 if { [llength $gateways] > 0 } {
   foreach _gateway $gateways {

@@ -111,7 +111,7 @@ DOCKER_IMAGE="${CCU_OCI_REPO}:${CCU_OCI_TAG}"
 docker pull ${DOCKER_IMAGE}
 
 echo "Start container"
-DOCKER_COMMAND="docker run -d -ti --privileged --restart=always --stop-timeout=30 -v"
+DOCKER_COMMAND="docker run -d -ti --privileged --restart=always -v"
 #Persistent volume
 DOCKER_COMMAND="${DOCKER_COMMAND} ${CCU_DATA_VOLUMEN}:/usr/local"
 #Container and host names

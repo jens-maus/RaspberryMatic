@@ -49,6 +49,7 @@ jobs:
       id: env
       run: |
         echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo "DATETIME=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
         echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
         echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
         echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
@@ -77,7 +78,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.buildroot-ccache
-        key: ${{ matrix.platform }}-ccache-${{ github.sha }}
+        key: ${{ matrix.platform }}-ccache-${{ env.DATETIME }}
         restore-keys: |
           ${{ matrix.platform }}-ccache-
 

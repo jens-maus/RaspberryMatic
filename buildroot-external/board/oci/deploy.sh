@@ -38,6 +38,8 @@ set -e
 #Additional options for docker create service / docker run
 : ${CCU_DOCKER_OPTIONS:=""}
 
+#Time for a clean container stop before it gets killed
+: ${CCU_DOCKER_STOP_TIMEOUT:="30"}
 
 
 #############################################################
@@ -119,6 +121,8 @@ DOCKER_COMMAND="${DOCKER_COMMAND} -p ${CCU_SSH_PORT}:22 -p ${CCU_REGA_HTTP_PORT}
 for extra_port in ${CCU_PORTS_TO_OPEN}; do
   DOCKER_COMMAND="${DOCKER_COMMAND} -p ${extra_port}:${extra_port}"
 done
+#Add timeout
+DOCKER_COMMAND="${DOCKER_COMMAND} --stop-timeout ${CCU_DOCKER_STOP_TIMEOUT}"
 #Add extra user options
 DOCKER_COMMAND="${DOCKER_COMMAND} ${CCU_DOCKER_OPTIONS}"
 #Add container repo

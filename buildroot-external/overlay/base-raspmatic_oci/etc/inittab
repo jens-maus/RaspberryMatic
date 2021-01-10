@@ -23,7 +23,6 @@ null::sysinit:/bin/mkdir -p /var/run
 null::sysinit:/bin/mkdir -p /var/cache
 null::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
 #null::sysinit:/bin/hostname -F /etc/hostname
-#::sysinit:/usr/bin/psplash -n &
 # now run any rc scripts
 ::sysinit:/etc/init.d/rcS
 # run monit to monitor our important services

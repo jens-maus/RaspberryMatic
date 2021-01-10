@@ -5197,7 +5197,7 @@
 }
 #hmBootstrap .progress {
   position: relative;
-  height: 20px;
+  height: 14px;
   overflow: hidden;
   background-color: #f5f5f5;
   border-radius: 4px;
@@ -5214,8 +5214,8 @@
   float: left;
   width: 0%;
   height: 100%;
-  font-size: 12px;
-  line-height: 20px;
+  font-size: 11px;
+  line-height: 14px;
   color: #fff;
   text-align: center;
   background-color: #337ab7;

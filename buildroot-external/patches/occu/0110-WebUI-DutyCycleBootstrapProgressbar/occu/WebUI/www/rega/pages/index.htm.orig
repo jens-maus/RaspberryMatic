@@ -20,7 +20,7 @@
     <link rel="apple-touch-icon" href="/ise/img/rm-touch-icon-iphone.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/ise/img/rm-touch-icon-iphone-retina.png" />
 
-    <title>Produktivsystem HomeMatic</title>
+    <title>HomeMatic WebUI</title>
 
 
     <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>

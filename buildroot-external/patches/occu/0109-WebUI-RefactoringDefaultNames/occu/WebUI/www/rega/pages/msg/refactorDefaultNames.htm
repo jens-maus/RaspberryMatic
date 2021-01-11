@@ -29,7 +29,7 @@
     <td class="CLASS01406" colspan="3">
       <table>
       <tr>
-       <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="PopupClose();">${footerBtnCancel}</div></td>
+       <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="cancelRefactorDefaultNames();">${footerBtnCancel}</div></td>
 	   <td width="80%"></td>
        <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="doRefactorDefaultNames();">${footerBtnOk}</div></td>
       </tr>
@@ -44,4 +44,9 @@
     iseSystem.refactorDefaultNames(selValue);
     homematic("CCU.setSystemLanguageConfigured", {'lang': selValue});	
   };
+  cancelRefactorDefaultNames = function() {
+    homematic("CCU.setSystemLanguageConfigured", {'lang': 'NONE'});	
+    PopupClose();
+  };
+  
 </script>

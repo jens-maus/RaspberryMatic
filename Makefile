@@ -46,12 +46,12 @@ $(PRODUCTS): %:
 
 build: | buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[build: $(PRODUCT)]"
-ifneq ($(FAKE_BUILDROOT_BUILD),true)
+ifneq ($(FAKE_BUILD),true)
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION)
 else
 	$(eval BOARD := $(shell echo $(PRODUCT) | cut -d'_' -f2-))
 	# Dummy build - mainly for testing CI
-	echo -n "FAKE_BUILDROOT_BUILD - generating fake release archives..."
+	echo -n "FAKE_BUILD - generating fake release archives..."
 	mkdir -p build-$(PRODUCT)/images
 	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do echo DUMMY >build-$(PRODUCT)/images/$${f}; done
 	mkdir -p /tmp/oci

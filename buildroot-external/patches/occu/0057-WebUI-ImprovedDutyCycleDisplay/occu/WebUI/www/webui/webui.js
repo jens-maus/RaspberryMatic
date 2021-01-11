@@ -28904,19 +28904,18 @@ showDutyCycle = function() {
       showPartingLine = false,
       dcUnit = "%",
       dcNotAvailable = -1,
+      dcWarn  = 69;  // Warning when dc >= 70%
       dcAlarm = 89;  // Attention when dc >= 90%
 
       homematic("Interface.getDutyCycle", {}, function(dcArray) {
         if(jQuery.isArray(dcArray)) {
           jQuery.each(dcArray, function(index, iface) {
-            var dutyCycleProgressElem = jQuery("#dutyCycleProgress"+index),
-              dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"+index),
-              dutyCycleValElm = jQuery("#dutyCycleVal"+index),
+            var dutyCycleValElm = jQuery("#dutyCycleVal"+index),
               dutyCycleAddrElm = jQuery("#dutyCycleAddr"+index),
               trDutyCycle = jQuery("[name='trDutyCycle"+index+"']"),
+              dutyCycleBar = jQuery("[name='dutyCycleBar"+index+"']"),
               trPartingLineElm = jQuery("#partingLine1"),
-              dcVal,
-              width, value;
+              dcVal;
 
             if (typeof iface.dutyCycle !== "undefined") {
               dcVal = Math.floor(iface.dutyCycle);
@@ -28943,17 +28942,17 @@ showDutyCycle = function() {
                 dutyCycleAddrElm.text("DutyCycle LGW ("+iface.address+"):");
               }
 
-              width = parseInt(dutyCycleProgressElem.css("width"));
-              value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
-
-              window.setTimeout(function () {
-                dutyCycleProgressBarElm.css("width", value + "px");
-              }, 25);
+              dutyCycleBar.css("width", arInterfaceDutyCycle[ifaceBidCosRF]+"%");
+              dutyCycleBar.removeClass("progress-bar-success");
+              dutyCycleBar.removeClass("progress-bar-warning");
+              dutyCycleBar.removeClass("progress-bar-danger");
 
               if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
-                trDutyCycle.addClass("attention");
+                dutyCycleBar.addClass("progress-bar-danger");
+              } else if (arInterfaceDutyCycle[ifaceBidCosRF] > dcWarn) {
+                dutyCycleBar.addClass("progress-bar-warning");
               } else {
-                trDutyCycle.removeClass("attention");
+                dutyCycleBar.addClass("progress-bar-success");
               }
               trPartingLineElm.show();
               showPartingLine = true;

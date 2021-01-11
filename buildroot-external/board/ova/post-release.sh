@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Stop on error
+set -e
+
 BOARD_DIR=${1}
 PRODUCT=${2}
 PRODUCT_VERSION=${3}

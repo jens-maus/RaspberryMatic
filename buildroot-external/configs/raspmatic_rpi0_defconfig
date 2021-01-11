@@ -4,6 +4,7 @@ BR2_ARM_EABIHF=y
 BR2_DL_DIR="$(TOPDIR)/../download"
 BR2_KERNEL_MIRROR="https://www.kernel.org/pub"
 BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
+BR2_CCACHE=y
 BR2_OPTIMIZE_2=y
 BR2_GLOBAL_PATCH_DIR="$(BR2_EXTERNAL_EQ3_PATH)/patches"
 # BR2_COMPILER_PARANOID_UNSAFE_PATH is not set

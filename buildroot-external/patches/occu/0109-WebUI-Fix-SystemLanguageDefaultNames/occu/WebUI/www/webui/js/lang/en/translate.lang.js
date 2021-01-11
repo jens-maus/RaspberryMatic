@@ -90,7 +90,7 @@ jQuery.extend(true,langJSON, {
     "footerBtnCloseTree" : "Close tree structure",
     "footerBtnEdit" : "Edit",
     "footerBtnAutoLogin" : "Log in<br/>automatically",
-    "footerBtnRefactorDefaultNames" : "Set system<br/>language",
+    "footerBtnSystemLanguage" : "Set system<br/>language",
     "footerBtnVirtualChannelsShow" : "Show virtual channels",
     "footerBtnVirtualChannelsHide" : "Hide virtual channels",
     "footerBtnSaveNewFav" : "Save selection as new<br/>favourites page",
@@ -161,7 +161,7 @@ jQuery.extend(true,langJSON, {
     "thPhoneNumber" : "Phone number",
     "thAutomaticLogin" : "Log in<br/>automatically",
     "thChooseUser" : "User selection",
-    "thChooseLanguage" : "Language selection",
+    "thChooseSystemLanguage" : "Choose system language",
     "thSafetyNote" : "Security alert",
     "thGateway" : "Gateway",
     "thAccessCode" : "Access code",
@@ -247,8 +247,6 @@ jQuery.extend(true,langJSON, {
     "hintUsrAutoLoginRow2" : "If automatic login is activated you will be logged-in to the system without entering your user name or password.<br/>",
     "hintUsrAutoLoginRow3" : "The selected user will be logged-in automatically without further validation. The system is no longer protected against external influences.<br />",
     "hintUsrAutoLoginRow4" : "You can access other user accounts with click on \"Login\". Afterwards, please login with the user name and password again.",
-    "hintRefactorDefaultNamesRow1" : "Attention!",
-    "hintRefactorDefaultNamesRow1" : "jp112sdl: not translated yet<br/>",
     "profileSettings" : "Profile setting",
     "profileSettingsSender" : "Profile settings - transmitter",
     "profileSettingsReceiver" : "Profile settings - receiver",
@@ -258,7 +256,6 @@ jQuery.extend(true,langJSON, {
     "easyModeOptionUnknownProfile" : "Unknown profile",
     "easyModeHintUseExpertMode" : "Please use the expert mode here",
     "btnDirectDeviceLinks" : "Direct device connections",
-    "btnRefactorRollback" : "Rollback",
     "lblDirectDeviceLinks1" : "Overview of all direct connections to devices or channels",
     "lblDirectDeviceLinks2" : "Edit direct device / channel connections",
     "lblDirectDeviceLinks3" : "Delete direct device / channel connections",
@@ -429,7 +426,7 @@ jQuery.extend(true,langJSON, {
     "dialogStateInfoDataTransferToDeviceSuccess" : "Status info: Data transfer successful",
     "dialogWarningDataTransferToDeviceNotPossible" : "Attention! Unable to transfer data",
     "dialogConfigAutomaticLogin" : "Configuration - automatic login",
-    "dialogRefactorDefaultNames" : "Rename pre-defined object names (rooms, functions, system variables)",
+    "dialogConfigSystemLanguage" : "Configuration - system language",
     "dialogChooseBidCosInterface" : "Selection BidCos-Interface",
     "dialogChooseChannel" : "Channel selection",
     "dialogRestartSafeModeTitle" : "Restart",
@@ -1107,7 +1104,7 @@ jQuery.extend(true,langJSON, {
     "optionNoModification" : "No change",
     "optionNone" : "None",
     "optionNotActive" : "Not active",
-    
+
     "HelpTitle" : "Help"
   }
 });

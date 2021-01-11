@@ -7012,9 +7012,8 @@ WebUI = Singleton.create({
             homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
           }
         }
-        if (!homematic('CCU.existsFile', {'file': "/etc/config/systemLanguageConfigured"})) {
-          CreatePopup(ID_REFACTOR_DEFAULT_NAMES);
-          //homematic("CCU.setSystemLanguageConfigured");
+        if (!homematic('CCU.existsFile', {'file': "/etc/config/systemLanguage"})) {
+          CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
         }		
       }
     } else {
@@ -25420,10 +25419,10 @@ ise.System.prototype = {
     new Ajax.Request(url, {postBody: ReGa.encode(pb)});  
   },
   
-  refactorDefaultNames: function(lng) {
+  setSystemLanguage: function(lang) {
     var url = "/esp/system.htm?sid="+SessionId;
-    var pb = "string action = 'refactorDefaultNames';";
-    pb += "string refactorLanguage = '" + lng + "';";   
+    var pb = "string action = 'setSystemLanguage';";
+    pb += "string systemLanguage = '" + lang + "';";
     var opts =
     {
       postBody: ReGa.encode(pb),
@@ -25434,23 +25433,8 @@ ise.System.prototype = {
       }
     };
     new Ajax.Request(url,opts);     
-   },
+  },
    
-   refactorDefaultNamesRollback: function() {
-    var url = "/esp/system.htm?sid="+SessionId;
-    var pb = "string action = 'refactorDefaultNamesRollback';";
-    var opts =
-    {
-      postBody: ReGa.encode(pb),
-      onComplete:function(t)
-      {
-        PopupClose();
-        reloadPage();
-      }
-    };
-    new Ajax.Request(url,opts);     
-   },
-    
   ClearHistoryData: function()
   {
     var url = "/esp/system.htm?sid="+SessionId;
@@ -26767,10 +26751,10 @@ iseMessageBox.prototype =
         this.setWidth(800);
         this.setFile( "/pages/msg/autoLoginConfig.htm" );
         break;
-      case ID_REFACTOR_DEFAULT_NAMES:
-        this.setTitle( translateKey("dialogRefactorDefaultNames") /*"Umbenennen der Standard-Objekte" */);
+      case ID_SYSTEM_LANGUAGE_CONFIG:
+        this.setTitle( translateKey("dialogConfigSystemLanguage") /*"Systemsprache waehlen - Konfiguration" */);
         this.setWidth(400);
-        this.setFile( "/pages/msg/refactorDefaultNames.htm" );
+        this.setFile( "/pages/msg/systemLanguageConfig.htm" );
         break;
         case ID_CHOOSE_LED:
         this.setTitle( translateKey("dialogEnterValue") /*"Wert eingeben" */);
@@ -27591,7 +27575,7 @@ ID_CHOOSE_LED            = 1022;
 ID_SET_OUCFM_MODE        = 1023;
 ID_SET_STATUS_DISPLAY    = 1024;
 ID_BIDCOS_INTERFACE = 1025;
-ID_REFACTOR_DEFAULT_NAMES = 2001;
+ID_SYSTEM_LANGUAGE_CONFIG = 2001;
 
 nUA = navigator.userAgent;
 NAV_IE = false;

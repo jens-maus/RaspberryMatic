@@ -1581,11 +1581,11 @@ function ::keepAlive()
 {
 }
 
-function ::refactorDefaultNames()
+function ::setSystemLanguage()
 {
-  string lang = system.GetVar("refactorLanguage");
+  string lang = system.GetVar("systemLanguage");
   
-  Call("system.fn::refactorDefaultNamesRollback()");
+  Call("system.fn::resetSystemLanguage()");
 
   string funcDefault    = "funcLight;funcHeating;funcClimateControl;funcWeather;funcEnvironment;funcSecurity;funcLock;funcButton;funcCentral;funcEnergy";
   string funcTranslated = "Licht;Heizung;Klima;Wetter;Umwelt;Sicherheit;Verschluss;Taster;Zentrale;Energiemanagement";
@@ -1596,9 +1596,9 @@ function ::refactorDefaultNames()
   string svDefault   = "sysVarAlarmZone1;sysVarAlarmZone1Msg;sysVarAlarmZone1Triggered;sysVarAlarmZone1NotTriggered;sysVarPresence;sysVarPresenceMsg;sysVarPresencePresent;sysVarPresenceNotPresent;sysVarAlarmMessages;sysVarAlarmMessagesCount;sysVarServiceMessages;sysVarServiceMessagesCount;sysVarRainToday;sysVarRainTodayDescr;sysVarRainYesterday;sysVarRainYesterdayDescr";
   string svTranslated   = "Alarmzone 1;Alarmmeldung Alarmzone 1;ausgelöst;nicht ausgelöst;Anwesenheit;Anwesenheit;anwesend;nicht anwesend;Alarmmeldungen;Anzahl Alarmmeldungen;Servicemeldungen;Anzahl Servicemeldungen;Regen heute;Regenmenge aktueller Tag;Regen gestern;Regenmenge vorheriger Tag";
 
-  if (lang == "EN") {
+  if (lang == "en") {
     funcTranslated = "Light;Heating;Climatic conditions;Weather;Environment;Security;Lock;Button;Central;Energy management";
-    roomTranslated = "Livin room;Kitchen;Bed room;Children's room 1;Children's room 2;Home office;Bathroom;Garage;Utility room;Garden;Terrace";
+    roomTranslated = "Living room;Kitchen;Bed room;Childrens room 1;Childrens room 2;Home office;Bathroom;Garage;Utility room;Garden;Terrace";
     svTranslated   = "Alarm zone 1;Alarm message alarm zone 1;triggered;not triggered;Presence;Presence;present;absent;Alarm messages;Number alarm messages;Service messages;Number service messages;Rain today;Rainfall current day;Rainfall yesterday;Rainfall previous day";
   }
   
@@ -1631,7 +1631,7 @@ function ::refactorDefaultNames()
     }
   }
   
-  !Rooms
+  ! Rooms
   foreach(oID, rooms.EnumIDs()) {
     var oObj = dom.GetObject(oID);
     string listEntry;
@@ -1707,7 +1707,7 @@ function ::refactorDefaultNames()
 
 }
 
-function ::refactorDefaultNamesRollback()
+function ::resetSystemLanguage()
 {
   string oID;
   string metaDataFactoryName = "FACTORY_NAME";

@@ -173,7 +173,7 @@
     s += "<td style='text-align: center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
     s += "<td style='text-align: center; vertical-align: middle;'><div class='FooterButton' onclick='newUser();'>${footerBtnNew}</div></td>";
     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05305' onclick='showAutoLogin()'>${footerBtnAutoLogin}</div></td>";
-    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05305' onclick='showRefactorDefaultNames()'>${footerBtnRefactorDefaultNames}</div></td>";
+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05305' onclick='showSystemLanguage()'>${footerBtnSystemLanguage}</div></td>";
   s += "</tr>";
   s += "</table>";
 
@@ -211,8 +211,8 @@
     CreatePopup(ID_AUTO_LOGIN_CONFIG);
   }
 
-  showRefactorDefaultNames = function() {
-    CreatePopup(ID_REFACTOR_DEFAULT_NAMES);
+  showSystemLanguage = function() {
+    CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
   }
   
   translatePage("#userAdmin");

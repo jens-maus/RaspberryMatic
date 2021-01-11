@@ -7,7 +7,7 @@
 <div class="CLASS01400">
   <table class="popupTableScript CLASS01401" cellpadding="0" cellspacing="0">
     <tr>
-    <th class="TblHeaderUserConfig">${thChooseLanguage}</th>
+    <th class="TblHeaderUserConfig">${thChooseSystemLanguage}</th>
     </tr>
     
     <tr>
@@ -16,8 +16,8 @@
     <table style="margin:auto;">
     <tr><td style='text-align: center; vertical-align:middle;'><div>
       <select id="cbLang">
-        <option value="DE">${selectLangDE}</option>
-        <option value="EN">${selectLangUK}</option>
+        <option value="de">${selectLangDE}</option>
+        <option value="en">${selectLangUK}</option>
        </select></div></td>
        </tr>
        </table>
@@ -29,9 +29,9 @@
     <td class="CLASS01406" colspan="3">
       <table>
       <tr>
-       <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="cancelRefactorDefaultNames();">${footerBtnCancel}</div></td>
+       <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="cancelSystemLanguageConfig();">${footerBtnCancel}</div></td>
 	   <td width="80%"></td>
-       <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="doRefactorDefaultNames();">${footerBtnOk}</div></td>
+       <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="doSystemLanguageConfig();">${footerBtnOk}</div></td>
       </tr>
       </table>
     </td>
@@ -39,14 +39,12 @@
   </table>
 </div>
 <script type="text/javascript">
-  doRefactorDefaultNames = function() {
+  doSystemLanguageConfig = function() {
     var selValue = $("cbLang")[$("cbLang").selectedIndex].value;
-    iseSystem.refactorDefaultNames(selValue);
-    homematic("CCU.setSystemLanguageConfigured", {'lang': selValue});	
+    iseSystem.setSystemLanguage(selValue);
+    homematic("CCU.setSystemLanguage", {'lang': selValue});
   };
-  cancelRefactorDefaultNames = function() {
-    //homematic("CCU.setSystemLanguageConfigured", {'lang': 'NONE'});	
+  cancelSystemLanguageConfig = function() {
     PopupClose();
   };
-  
 </script>

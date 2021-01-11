@@ -4,16 +4,32 @@
    ARGUMENTS {_session_id_}
  }
  
-+CCU.setSystemLanguageConfigured {
++CCU.setSystemLanguage {
 +  LEVEL ADMIN
-+  SCRIPT_FILE ccu/setsystemlanguageconfigured.tcl
-+  INFO {Legt die Datei /etc/config/systemLanguageConfigured an}
-+  ARGUMENTS {_session_id_}
++  SCRIPT_FILE ccu/setsystemlanguage.tcl
++  INFO {Setzt die Systemsprache in /etc/config/systemLanguage}
++  ARGUMENTS {_session_id_ lang}
 +}
 +
  CCU.restartSSHDaemon {
    LEVEL ADMIN
    SCRIPT_FILE ccu/restartsshdaemon.tcl
+--- occu/WebUI/www/api/methods/ccu/setsystemlanguage.tcl.orig
++++ occu/WebUI/www/api/methods/ccu/setsystemlanguage.tcl
+@@ -0,0 +1,13 @@
++##
++# CCU.systemLanguage
++# Setzt die Systemsprache der CCU in /etc/config/systemLanguage
++#
++# Parameter:
++#  lang         : [string] Die gewaehlte Systemsprache (de, en)
++#
++# Rückgabewert: immer true
++##
++
++catch {exec echo $args(lang) > /etc/config/systemLanguage}
++
++jsonrpc_response true
 --- occu/WebUI/www/rega/esp/system.fn.orig
 +++ occu/WebUI/www/rega/esp/system.fn
 @@ -1580,3 +1580,188 @@
@@ -21,11 +37,11 @@
  {
  }
 +
-+function ::refactorDefaultNames()
++function ::setSystemLanguage()
 +{
-+  string lang = system.GetVar("refactorLanguage");
++  string lang = system.GetVar("systemLanguage");
 +  
-+  Call("system.fn::refactorDefaultNamesRollback()");
++  Call("system.fn::resetSystemLanguage()");
 +
 +  string funcDefault    = "funcLight;funcHeating;funcClimateControl;funcWeather;funcEnvironment;funcSecurity;funcLock;funcButton;funcCentral;funcEnergy";
 +  string funcTranslated = "Licht;Heizung;Klima;Wetter;Umwelt;Sicherheit;Verschluss;Taster;Zentrale;Energiemanagement";
@@ -36,9 +52,9 @@
 +  string svDefault   = "sysVarAlarmZone1;sysVarAlarmZone1Msg;sysVarAlarmZone1Triggered;sysVarAlarmZone1NotTriggered;sysVarPresence;sysVarPresenceMsg;sysVarPresencePresent;sysVarPresenceNotPresent;sysVarAlarmMessages;sysVarAlarmMessagesCount;sysVarServiceMessages;sysVarServiceMessagesCount;sysVarRainToday;sysVarRainTodayDescr;sysVarRainYesterday;sysVarRainYesterdayDescr";
 +  string svTranslated   = "Alarmzone 1;Alarmmeldung Alarmzone 1;ausgelöst;nicht ausgelöst;Anwesenheit;Anwesenheit;anwesend;nicht anwesend;Alarmmeldungen;Anzahl Alarmmeldungen;Servicemeldungen;Anzahl Servicemeldungen;Regen heute;Regenmenge aktueller Tag;Regen gestern;Regenmenge vorheriger Tag";
 +
-+  if (lang == "EN") {
++  if (lang == "en") {
 +    funcTranslated = "Light;Heating;Climatic conditions;Weather;Environment;Security;Lock;Button;Central;Energy management";
-+    roomTranslated = "Livin room;Kitchen;Bed room;Children's room 1;Children's room 2;Home office;Bathroom;Garage;Utility room;Garden;Terrace";
++    roomTranslated = "Living room;Kitchen;Bed room;Childrens room 1;Childrens room 2;Home office;Bathroom;Garage;Utility room;Garden;Terrace";
 +    svTranslated   = "Alarm zone 1;Alarm message alarm zone 1;triggered;not triggered;Presence;Presence;present;absent;Alarm messages;Number alarm messages;Service messages;Number service messages;Rain today;Rainfall current day;Rainfall yesterday;Rainfall previous day";
 +  }
 +  
@@ -71,7 +87,7 @@
 +    }
 +  }
 +  
-+  !Rooms
++  ! Rooms
 +  foreach(oID, rooms.EnumIDs()) {
 +    var oObj = dom.GetObject(oID);
 +    string listEntry;
@@ -147,7 +163,7 @@
 +
 +}
 +
-+function ::refactorDefaultNamesRollback()
++function ::resetSystemLanguage()
 +{
 +  string oID;
 +  string metaDataFactoryName = "FACTORY_NAME";
@@ -207,16 +223,15 @@
 +}
 --- occu/WebUI/www/rega/esp/system.htm.orig
 +++ occu/WebUI/www/rega/esp/system.htm
-@@ -34,4 +34,6 @@
+@@ -34,4 +34,5 @@
    if( action == "getLastTimeOfChn"           ) { Call( "system.fn::getLastTimeOfChn()" );           }
    if( action == "checkName"                  ) { Call( "system.fn::checkName()");                   }
    if( action == "keepAlive"                  ) { Call( "system.fn::keepAlive()");                   }
-+  if( action == "refactorDefaultNames"       ) { Call( "system.fn::refactorDefaultNames()");        }
-+  if( action == "refactorDefaultNamesRollback") { Call( "system.fn::refactorDefaultNamesRollback()");}
++  if( action == "setSystemLanguage"          ) { Call( "system.fn::setSystemLanguage()");           }
  %>
---- occu/WebUI/www/rega/pages/msg/refactorDefaultNames.htm.orig
-+++ occu/WebUI/www/rega/pages/msg/refactorDefaultNames.htm
-@@ -0,0 +1,52 @@
+--- occu/WebUI/www/rega/pages/msg/systemLanguageConfig.htm.orig
++++ occu/WebUI/www/rega/pages/msg/systemLanguageConfig.htm
+@@ -0,0 +1,50 @@
 +<div class="popupTitle" style='width: 98.5%;'>
 +  <%
 +  Write(system.GetVar("title"));
@@ -226,7 +241,7 @@
 +<div class="CLASS01400">
 +  <table class="popupTableScript CLASS01401" cellpadding="0" cellspacing="0">
 +    <tr>
-+    <th class="TblHeaderUserConfig">${thChooseLanguage}</th>
++    <th class="TblHeaderUserConfig">${thChooseSystemLanguage}</th>
 +    </tr>
 +    
 +    <tr>
@@ -235,8 +250,8 @@
 +    <table style="margin:auto;">
 +    <tr><td style='text-align: center; vertical-align:middle;'><div>
 +      <select id="cbLang">
-+        <option value="DE">${selectLangDE}</option>
-+        <option value="EN">${selectLangUK}</option>
++        <option value="de">${selectLangDE}</option>
++        <option value="en">${selectLangUK}</option>
 +       </select></div></td>
 +       </tr>
 +       </table>
@@ -248,9 +263,9 @@
 +    <td class="CLASS01406" colspan="3">
 +      <table>
 +      <tr>
-+       <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="cancelRefactorDefaultNames();">${footerBtnCancel}</div></td>
++       <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="cancelSystemLanguageConfig();">${footerBtnCancel}</div></td>
 +	   <td width="80%"></td>
-+       <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="doRefactorDefaultNames();">${footerBtnOk}</div></td>
++       <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="doSystemLanguageConfig();">${footerBtnOk}</div></td>
 +      </tr>
 +      </table>
 +    </td>
@@ -258,25 +273,22 @@
 +  </table>
 +</div>
 +<script type="text/javascript">
-+  doRefactorDefaultNames = function() {
++  doSystemLanguageConfig = function() {
 +    var selValue = $("cbLang")[$("cbLang").selectedIndex].value;
-+    iseSystem.refactorDefaultNames(selValue);
-+    homematic("CCU.setSystemLanguageConfigured", {'lang': selValue});	
++    iseSystem.setSystemLanguage(selValue);
++    homematic("CCU.setSystemLanguage", {'lang': selValue});
 +  };
-+  cancelRefactorDefaultNames = function() {
-+    //homematic("CCU.setSystemLanguageConfigured", {'lang': 'NONE'});	
++  cancelSystemLanguageConfig = function() {
 +    PopupClose();
 +  };
-+  
 +</script>
-\ No newline at end of file
 --- occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm
 @@ -173,6 +173,7 @@
      s += "<td style='text-align: center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
      s += "<td style='text-align: center; vertical-align: middle;'><div class='FooterButton' onclick='newUser();'>${footerBtnNew}</div></td>";
      s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05305' onclick='showAutoLogin()'>${footerBtnAutoLogin}</div></td>";
-+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05305' onclick='showRefactorDefaultNames()'>${footerBtnRefactorDefaultNames}</div></td>";
++    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05305' onclick='showSystemLanguage()'>${footerBtnSystemLanguage}</div></td>";
    s += "</tr>";
    s += "</table>";
  
@@ -284,8 +296,8 @@
      CreatePopup(ID_AUTO_LOGIN_CONFIG);
    }
  
-+  showRefactorDefaultNames = function() {
-+    CreatePopup(ID_REFACTOR_DEFAULT_NAMES);
++  showSystemLanguage = function() {
++    CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
 +  }
 +  
    translatePage("#userAdmin");
@@ -297,7 +309,7 @@
      "footerBtnCloseTree" : "Baumstruktur schlie%DFen",
      "footerBtnEdit" : "Bearbeiten",
      "footerBtnAutoLogin" : "Automatisches<br/>Anmelden",
-+    "footerBtnRefactorDefaultNames" : "Systemsprache<br />festlegen",
++    "footerBtnSystemLanguage" : "Systemsprache<br />festlegen",
      "footerBtnVirtualChannelsShow" : "Virtuelle Kan%E4le anzeigen",
      "footerBtnVirtualChannelsHide" : "Virtuelle Kan%E4le ausblenden",
      "footerBtnSaveNewFav" : "Auswahl als neue<br />Favoritenseite speichern",
@@ -305,23 +317,15 @@
      "thPhoneNumber" : "Telefonnummer",
      "thAutomaticLogin" : "Automatisches<br/>Anmelden",
      "thChooseUser" : "Benutzerauswahl",
-+    "thChooseLanguage" : "Sprachauswahl",
++    "thChooseSystemLanguage" : "Systemsprache ausw%E4hlen",
      "thSafetyNote" : "Sicherheitshinweis",
      "thGateway" : "Gateway",
      "thAccessCode" : "Zugriffscode",
-@@ -255,6 +257,7 @@
-     "easyModeOptionUnknownProfile" : "Unbekanntes Profil not in use",
-     "easyModeHintUseExpertMode" : "Bitte verwenden Sie hier den Expertenmodus not in use",
-     "btnDirectDeviceLinks" : "Direkte Ger%E4teverkn%FCpfungen",
-+    "btnRefactorRollback" : "R%FCckg%E4ngig",
-     "lblDirectDeviceLinks1" : "%DCbersicht aller bestehenden direkten Ger%E4te-/ Kanalverkn%FCpfungen",
-     "lblDirectDeviceLinks2" : "Direkte Ger%E4te-/ Kanalverkn%FCpfungen bearbeiten",
-     "lblDirectDeviceLinks3" : "Direkte Ger%E4te-/ Kanalverkn%FCpfungen l%F6schen",
-@@ -425,6 +428,7 @@
+@@ -425,6 +427,7 @@
      "dialogStateInfoDataTransferToDeviceSuccess" : "Statusinfo: Daten%FCbertragung erfolgreich",
      "dialogWarningDataTransferToDeviceNotPossible" : "Achtung! Daten%FCbertragung nicht m%F6glich",
      "dialogConfigAutomaticLogin" : "Konfiguration - Automatisches Anmelden",
-+    "dialogRefactorDefaultNames" : "Sprache der Werks- R%E4ume/Gewerke/Systemvariablen",
++    "dialogConfigSystemLanguage" : "Konfiguration - Systemsprache",
      "dialogChooseBidCosInterface" : "Auswahl BidCos-Interface",
      "dialogChooseChannel" : "Kanalauswahl",
      "dialogRestartSafeModeTitle" : "Neustart",
@@ -331,7 +335,7 @@
      "footerBtnCloseTree" : "Close tree structure",
      "footerBtnEdit" : "Edit",
      "footerBtnAutoLogin" : "Log in<br/>automatically",
-+    "footerBtnRefactorDefaultNames" : "Set system<br/>language",
++    "footerBtnSystemLanguage" : "Set system<br/>language",
      "footerBtnVirtualChannelsShow" : "Show virtual channels",
      "footerBtnVirtualChannelsHide" : "Hide virtual channels",
      "footerBtnSaveNewFav" : "Save selection as new<br/>favourites page",
@@ -339,65 +343,38 @@
      "thPhoneNumber" : "Phone number",
      "thAutomaticLogin" : "Log in<br/>automatically",
      "thChooseUser" : "User selection",
-+    "thChooseLanguage" : "Language selection",
++    "thChooseSystemLanguage" : "Choose system language",
      "thSafetyNote" : "Security alert",
      "thGateway" : "Gateway",
      "thAccessCode" : "Access code",
-@@ -245,6 +247,8 @@
-     "hintUsrAutoLoginRow2" : "If automatic login is activated you will be logged-in to the system without entering your user name or password.<br/>",
-     "hintUsrAutoLoginRow3" : "The selected user will be logged-in automatically without further validation. The system is no longer protected against external influences.<br />",
-     "hintUsrAutoLoginRow4" : "You can access other user accounts with click on \"Login\". Afterwards, please login with the user name and password again.",
-+    "hintRefactorDefaultNamesRow1" : "Attention!",
-+    "hintRefactorDefaultNamesRow1" : "jp112sdl: not translated yet<br/>",
-     "profileSettings" : "Profile setting",
-     "profileSettingsSender" : "Profile settings - transmitter",
-     "profileSettingsReceiver" : "Profile settings - receiver",
-@@ -254,6 +258,7 @@
-     "easyModeOptionUnknownProfile" : "Unknown profile",
-     "easyModeHintUseExpertMode" : "Please use the expert mode here",
-     "btnDirectDeviceLinks" : "Direct device connections",
-+    "btnRefactorRollback" : "Rollback",
-     "lblDirectDeviceLinks1" : "Overview of all direct connections to devices or channels",
-     "lblDirectDeviceLinks2" : "Edit direct device / channel connections",
-     "lblDirectDeviceLinks3" : "Delete direct device / channel connections",
-@@ -424,6 +429,7 @@
+@@ -424,6 +426,7 @@
      "dialogStateInfoDataTransferToDeviceSuccess" : "Status info: Data transfer successful",
      "dialogWarningDataTransferToDeviceNotPossible" : "Attention! Unable to transfer data",
      "dialogConfigAutomaticLogin" : "Configuration - automatic login",
-+    "dialogRefactorDefaultNames" : "Rename pre-defined object names (rooms, functions, system variables)",
++    "dialogConfigSystemLanguage" : "Configuration - system language",
      "dialogChooseBidCosInterface" : "Selection BidCos-Interface",
      "dialogChooseChannel" : "Channel selection",
      "dialogRestartSafeModeTitle" : "Restart",
-@@ -1101,7 +1107,7 @@
-     "optionNoModification" : "No change",
-     "optionNone" : "None",
-     "optionNotActive" : "Not active",
--
-+    
-     "HelpTitle" : "Help"
-   }
- });
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -7012,6 +7012,10 @@
+@@ -7012,6 +7012,9 @@
              homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
            }
          }
-+        if (!homematic('CCU.existsFile', {'file': "/etc/config/systemLanguageConfigured"})) {
-+          CreatePopup(ID_REFACTOR_DEFAULT_NAMES);
-+          //homematic("CCU.setSystemLanguageConfigured");
++        if (!homematic('CCU.existsFile', {'file': "/etc/config/systemLanguage"})) {
++          CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
 +        }		
        }
      } else {
        WebUI.serviceMessageCount = setServiceMessage();
-@@ -25416,6 +25420,37 @@
+@@ -25416,6 +25419,22 @@
      new Ajax.Request(url, {postBody: ReGa.encode(pb)});  
    },
    
-+  refactorDefaultNames: function(lng) {
++  setSystemLanguage: function(lang) {
 +    var url = "/esp/system.htm?sid="+SessionId;
-+    var pb = "string action = 'refactorDefaultNames';";
-+    pb += "string refactorLanguage = '" + lng + "';";   
++    var pb = "string action = 'setSystemLanguage';";
++    pb += "string systemLanguage = '" + lang + "';";
 +    var opts =
 +    {
 +      postBody: ReGa.encode(pb),
@@ -408,45 +385,30 @@
 +      }
 +    };
 +    new Ajax.Request(url,opts);     
-+   },
++  },
 +   
-+   refactorDefaultNamesRollback: function() {
-+    var url = "/esp/system.htm?sid="+SessionId;
-+    var pb = "string action = 'refactorDefaultNamesRollback';";
-+    var opts =
-+    {
-+      postBody: ReGa.encode(pb),
-+      onComplete:function(t)
-+      {
-+        PopupClose();
-+        reloadPage();
-+      }
-+    };
-+    new Ajax.Request(url,opts);     
-+   },
-+    
    ClearHistoryData: function()
    {
      var url = "/esp/system.htm?sid="+SessionId;
-@@ -26732,7 +26767,12 @@
+@@ -26732,7 +26751,12 @@
          this.setWidth(800);
          this.setFile( "/pages/msg/autoLoginConfig.htm" );
          break;
 -       case ID_CHOOSE_LED:
-+      case ID_REFACTOR_DEFAULT_NAMES:
-+        this.setTitle( translateKey("dialogRefactorDefaultNames") /*"Umbenennen der Standard-Objekte" */);
++      case ID_SYSTEM_LANGUAGE_CONFIG:
++        this.setTitle( translateKey("dialogConfigSystemLanguage") /*"Systemsprache waehlen - Konfiguration" */);
 +        this.setWidth(400);
-+        this.setFile( "/pages/msg/refactorDefaultNames.htm" );
++        this.setFile( "/pages/msg/systemLanguageConfig.htm" );
 +        break;
 +        case ID_CHOOSE_LED:
          this.setTitle( translateKey("dialogEnterValue") /*"Wert eingeben" */);
          this.addToPostBody( 'string type = "'+this.type+'";' );
          this.setWidth(800);
-@@ -27551,6 +27591,7 @@
+@@ -27551,6 +27575,7 @@
  ID_SET_OUCFM_MODE        = 1023;
  ID_SET_STATUS_DISPLAY    = 1024;
  ID_BIDCOS_INTERFACE = 1025;
-+ID_REFACTOR_DEFAULT_NAMES = 2001;
++ID_SYSTEM_LANGUAGE_CONFIG = 2001;
  
  nUA = navigator.userAgent;
  NAV_IE = false;

@@ -90,7 +90,7 @@ jQuery.extend(true,langJSON, {
     "footerBtnCloseTree" : "Close tree structure",
     "footerBtnEdit" : "Edit",
     "footerBtnAutoLogin" : "Log in<br/>automatically",
-    "footerBtnRefactorDefaultNames" : "Assign language values<br/>to internal ...",
+    "footerBtnRefactorDefaultNames" : "Set system<br/>language",
     "footerBtnVirtualChannelsShow" : "Show virtual channels",
     "footerBtnVirtualChannelsHide" : "Hide virtual channels",
     "footerBtnSaveNewFav" : "Save selection as new<br/>favourites page",

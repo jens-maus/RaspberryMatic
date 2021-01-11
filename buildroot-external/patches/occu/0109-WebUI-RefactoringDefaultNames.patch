@@ -214,13 +214,34 @@
 +  if( action == "refactorDefaultNames"       ) { Call( "system.fn::refactorDefaultNames()");        }
 +  if( action == "refactorDefaultNamesRollback") { Call( "system.fn::refactorDefaultNamesRollback()");}
  %>
+--- occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm
+@@ -173,6 +173,7 @@
+     s += "<td style='text-align: center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
+     s += "<td style='text-align: center; vertical-align: middle;'><div class='FooterButton' onclick='newUser();'>${footerBtnNew}</div></td>";
+     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05305' onclick='showAutoLogin()'>${footerBtnAutoLogin}</div></td>";
++    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05305' onclick='showRefactorDefaultNames()'>${footerBtnRefactorDefaultNames}</div></td>";
+   s += "</tr>";
+   s += "</table>";
+ 
+@@ -210,6 +211,10 @@
+     CreatePopup(ID_AUTO_LOGIN_CONFIG);
+   }
+ 
++  showRefactorDefaultNames = function() {
++    CreatePopup(ID_REFACTOR_DEFAULT_NAMES);
++  }
++  
+   translatePage("#userAdmin");
+   jQuery("#userAdmin").show();
+ 
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -91,6 +91,7 @@
      "footerBtnCloseTree" : "Baumstruktur schlie%DFen",
      "footerBtnEdit" : "Bearbeiten",
      "footerBtnAutoLogin" : "Automatisches<br/>Anmelden",
-+    "footerBtnRefactorDefaultNames" : "Defaults<br />umbenennen",
++    "footerBtnRefactorDefaultNames" : "Systemsprache<br />festlegen",
      "footerBtnVirtualChannelsShow" : "Virtuelle Kan%E4le anzeigen",
      "footerBtnVirtualChannelsHide" : "Virtuelle Kan%E4le ausblenden",
      "footerBtnSaveNewFav" : "Auswahl als neue<br />Favoritenseite speichern",
@@ -254,7 +275,7 @@
      "footerBtnCloseTree" : "Close tree structure",
      "footerBtnEdit" : "Edit",
      "footerBtnAutoLogin" : "Log in<br/>automatically",
-+    "footerBtnRefactorDefaultNames" : "Assign language values<br/>to internal ...",
++    "footerBtnRefactorDefaultNames" : "Set system<br/>language",
      "footerBtnVirtualChannelsShow" : "Show virtual channels",
      "footerBtnVirtualChannelsHide" : "Hide virtual channels",
      "footerBtnSaveNewFav" : "Save selection as new<br/>favourites page",

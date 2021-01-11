@@ -91,7 +91,7 @@ jQuery.extend(true,langJSON, {
     "footerBtnCloseTree" : "Baumstruktur schlie%DFen",
     "footerBtnEdit" : "Bearbeiten",
     "footerBtnAutoLogin" : "Automatisches<br/>Anmelden",
-    "footerBtnRefactorDefaultNames" : "Defaults<br />umbenennen",
+    "footerBtnRefactorDefaultNames" : "Systemsprache<br />festlegen",
     "footerBtnVirtualChannelsShow" : "Virtuelle Kan%E4le anzeigen",
     "footerBtnVirtualChannelsHide" : "Virtuelle Kan%E4le ausblenden",
     "footerBtnSaveNewFav" : "Auswahl als neue<br />Favoritenseite speichern",

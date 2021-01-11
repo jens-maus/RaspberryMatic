@@ -1585,6 +1585,8 @@ function ::refactorDefaultNames()
 {
   string lang = system.GetVar("refactorLanguage");
   
+  Call("system.fn::refactorDefaultNamesRollback()");
+
   string funcDefault    = "funcLight;funcHeating;funcClimateControl;funcWeather;funcEnvironment;funcSecurity;funcLock;funcButton;funcCentral;funcEnergy";
   string funcTranslated = "Licht;Heizung;Klima;Wetter;Umwelt;Sicherheit;Verschluss;Taster;Zentrale;Energiemanagement";
   

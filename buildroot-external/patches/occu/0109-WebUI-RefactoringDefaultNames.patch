@@ -16,7 +16,7 @@
    SCRIPT_FILE ccu/restartsshdaemon.tcl
 --- occu/WebUI/www/rega/esp/system.fn.orig
 +++ occu/WebUI/www/rega/esp/system.fn
-@@ -1580,3 +1580,186 @@
+@@ -1580,3 +1580,188 @@
  function ::keepAlive()
  {
  }
@@ -25,6 +25,8 @@
 +{
 +  string lang = system.GetVar("refactorLanguage");
 +  
++  Call("system.fn::refactorDefaultNamesRollback()");
++
 +  string funcDefault    = "funcLight;funcHeating;funcClimateControl;funcWeather;funcEnvironment;funcSecurity;funcLock;funcButton;funcCentral;funcEnergy";
 +  string funcTranslated = "Licht;Heizung;Klima;Wetter;Umwelt;Sicherheit;Verschluss;Taster;Zentrale;Energiemanagement";
 +  
@@ -203,7 +205,6 @@
 +    }
 +  }
 +}
-\ No newline at end of file
 --- occu/WebUI/www/rega/esp/system.htm.orig
 +++ occu/WebUI/www/rega/esp/system.htm
 @@ -34,4 +34,6 @@

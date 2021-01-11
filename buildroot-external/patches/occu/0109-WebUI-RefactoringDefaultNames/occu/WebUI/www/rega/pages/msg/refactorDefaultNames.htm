@@ -1,5 +1,4 @@
-<div class="popupTitle">
-  &nbsp;&nbsp;
+<div class="popupTitle" style='width: 98.5%;'>
   <%
   Write(system.GetVar("title"));
   %>
@@ -9,7 +8,6 @@
   <table class="popupTableScript CLASS01401" cellpadding="0" cellspacing="0">
     <tr>
     <th class="TblHeaderUserConfig">${thChooseLanguage}</th>
-    <th class="TblHeaderUserConfig">${thNote}</th>
     </tr>
     
     <tr>
@@ -22,16 +20,7 @@
         <option value="EN">${selectLangUK}</option>
        </select></div></td>
        </tr>
-       <tr><td style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01407" onclick="doRefactorDefaultNames();" >${btnRefactorGo}</div></td></tr>
-       <tr><td style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01407" onclick="iseSystem.refactorDefaultNamesRollback();" >${btnRefactorRollback}</div></td></tr>
        </table>
-    </td>
-
-    <td class="CLASS01403">
-
-    <span class="CLASS01404">${hintRefactorDefaultNamesRow1}</span> <br />
-    <span class="CLASS01405">${hintRefactorDefaultNamesRow2}</span>
-
     </td>
     
     </tr>
@@ -40,8 +29,9 @@
     <td class="CLASS01406" colspan="3">
       <table>
       <tr>
-
-        <td style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="PopupClose();">${footerBtnPageBack}</div></td>
+       <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01408" onclick="PopupClose();">${footerBtnCancel}</div></td>
+	   <td width="80%"></td>
+       <td width="10%" style='text-align: center; vertical-align:middle;'><div class="FooterButton CLASS01407" onclick="doRefactorDefaultNames();" >${footerBtnOk}</div></td>
       </tr>
       </table>
     </td>
@@ -52,5 +42,6 @@
   doRefactorDefaultNames = function() {
     var selValue = $("cbLang")[$("cbLang").selectedIndex].value;
     iseSystem.refactorDefaultNames(selValue);
+    homematic("CCU.setSystemLanguageConfigured");	
   };
 </script>

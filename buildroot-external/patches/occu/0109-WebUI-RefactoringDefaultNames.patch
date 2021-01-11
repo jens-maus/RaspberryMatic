@@ -1,3 +1,19 @@
+--- occu/WebUI/www/api/methods.conf.orig
++++ occu/WebUI/www/api/methods.conf
+@@ -1062,6 +1062,13 @@
+   ARGUMENTS {_session_id_}
+ }
+ 
++CCU.setSystemLanguageConfigured {
++  LEVEL ADMIN
++  SCRIPT_FILE ccu/setsystemlanguageconfigured.tcl
++  INFO {Legt die Datei /etc/config/systemLanguageConfigured an}
++  ARGUMENTS {_session_id_}
++}
++
+ CCU.restartSSHDaemon {
+   LEVEL ADMIN
+   SCRIPT_FILE ccu/restartsshdaemon.tcl
 --- occu/WebUI/www/rega/esp/system.fn.orig
 +++ occu/WebUI/www/rega/esp/system.fn
 @@ -1580,3 +1580,186 @@
@@ -197,27 +213,6 @@
 +  if( action == "refactorDefaultNames"       ) { Call( "system.fn::refactorDefaultNames()");        }
 +  if( action == "refactorDefaultNamesRollback") { Call( "system.fn::refactorDefaultNamesRollback()");}
  %>
---- occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm.orig
-+++ occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm
-@@ -173,6 +173,7 @@
-     s += "<td style='text-align: center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
-     s += "<td style='text-align: center; vertical-align: middle;'><div class='FooterButton' onclick='newUser();'>${footerBtnNew}</div></td>";
-     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05305' onclick='showAutoLogin()'>${footerBtnAutoLogin}</div></td>";
-+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05305' onclick='showRefactorDefaultNames()'>${footerBtnRefactorDefaultNames}</div></td>";
-   s += "</tr>";
-   s += "</table>";
- 
-@@ -210,6 +211,10 @@
-     CreatePopup(ID_AUTO_LOGIN_CONFIG);
-   }
- 
-+  showRefactorDefaultNames = function() {
-+    CreatePopup(ID_REFACTOR_DEFAULT_NAMES);
-+  }
-+  
-   translatePage("#userAdmin");
-   jQuery("#userAdmin").show();
- 
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -91,6 +91,7 @@
@@ -228,39 +223,27 @@
      "footerBtnVirtualChannelsShow" : "Virtuelle Kan%E4le anzeigen",
      "footerBtnVirtualChannelsHide" : "Virtuelle Kan%E4le ausblenden",
      "footerBtnSaveNewFav" : "Auswahl als neue<br />Favoritenseite speichern",
-@@ -161,7 +162,9 @@
+@@ -161,6 +162,7 @@
      "thPhoneNumber" : "Telefonnummer",
      "thAutomaticLogin" : "Automatisches<br/>Anmelden",
      "thChooseUser" : "Benutzerauswahl",
 +    "thChooseLanguage" : "Sprachauswahl",
      "thSafetyNote" : "Sicherheitshinweis",
-+    "thNote" : "Hinweis",
      "thGateway" : "Gateway",
      "thAccessCode" : "Zugriffscode",
-     "thIPAddress" : "IP-Adresse",
-@@ -246,6 +249,8 @@
-     "hintUsrAutoLoginRow2" : "Eine automatische Anmeldung erm%F6glicht die Systemanmeldung ohne Eingabe von Benutzernamen und Passwort.<br/>",
-     "hintUsrAutoLoginRow3" : "Der ausgew%E4hlte Benutzer wird automatisch ohne weitere Pr%FCfung angemeldet. Das System ist somit nicht mehr gegen externen Zugriff gesch%FCtzt.<br />",
-     "hintUsrAutoLoginRow4" : "Der Zugriff auf andere Benutzerkonten erfolgt %FCber 'Abmelden' und entsprechender Neuanmeldung.<br />",
-+    "hintRefactorDefaultNamesRow1" : "Achtung!",
-+    "hintRefactorDefaultNamesRow2" : "Standard-Namen \${...} werden in die ausgew%E4hlte Sprache %FCbersetzt.<br/>",
-     "profileSettings" : "Profileinstellung",
-     "profileSettingsSender" : "Profileinstellung - Sender",
-     "profileSettingsReceiver" : "Profileinstellung - Empf%E4nger",
-@@ -255,6 +260,8 @@
+@@ -255,6 +257,7 @@
      "easyModeOptionUnknownProfile" : "Unbekanntes Profil not in use",
      "easyModeHintUseExpertMode" : "Bitte verwenden Sie hier den Expertenmodus not in use",
      "btnDirectDeviceLinks" : "Direkte Ger%E4teverkn%FCpfungen",
-+    "btnRefactorGo" : "Umbenennen",
 +    "btnRefactorRollback" : "R%FCckg%E4ngig",
      "lblDirectDeviceLinks1" : "%DCbersicht aller bestehenden direkten Ger%E4te-/ Kanalverkn%FCpfungen",
      "lblDirectDeviceLinks2" : "Direkte Ger%E4te-/ Kanalverkn%FCpfungen bearbeiten",
      "lblDirectDeviceLinks3" : "Direkte Ger%E4te-/ Kanalverkn%FCpfungen l%F6schen",
-@@ -425,6 +432,7 @@
+@@ -425,6 +428,7 @@
      "dialogStateInfoDataTransferToDeviceSuccess" : "Statusinfo: Daten%FCbertragung erfolgreich",
      "dialogWarningDataTransferToDeviceNotPossible" : "Achtung! Daten%FCbertragung nicht m%F6glich",
      "dialogConfigAutomaticLogin" : "Konfiguration - Automatisches Anmelden",
-+    "dialogRefactorDefaultNames" : "automatisches Umbenennen vordefinierter Objektbezeichnungen",
++    "dialogRefactorDefaultNames" : "Sprache der Werks- R%E4ume/Gewerke/Systemvariablen",
      "dialogChooseBidCosInterface" : "Auswahl BidCos-Interface",
      "dialogChooseChannel" : "Kanalauswahl",
      "dialogRestartSafeModeTitle" : "Neustart",
@@ -274,17 +257,15 @@
      "footerBtnVirtualChannelsShow" : "Show virtual channels",
      "footerBtnVirtualChannelsHide" : "Hide virtual channels",
      "footerBtnSaveNewFav" : "Save selection as new<br/>favourites page",
-@@ -160,7 +161,9 @@
+@@ -160,6 +161,7 @@
      "thPhoneNumber" : "Phone number",
      "thAutomaticLogin" : "Log in<br/>automatically",
      "thChooseUser" : "User selection",
 +    "thChooseLanguage" : "Language selection",
      "thSafetyNote" : "Security alert",
-+    "thNote" : "Note",
      "thGateway" : "Gateway",
      "thAccessCode" : "Access code",
-     "thIPAddress" : "IP address",
-@@ -245,6 +248,8 @@
+@@ -245,6 +247,8 @@
      "hintUsrAutoLoginRow2" : "If automatic login is activated you will be logged-in to the system without entering your user name or password.<br/>",
      "hintUsrAutoLoginRow3" : "The selected user will be logged-in automatically without further validation. The system is no longer protected against external influences.<br />",
      "hintUsrAutoLoginRow4" : "You can access other user accounts with click on \"Login\". Afterwards, please login with the user name and password again.",
@@ -293,24 +274,23 @@
      "profileSettings" : "Profile setting",
      "profileSettingsSender" : "Profile settings - transmitter",
      "profileSettingsReceiver" : "Profile settings - receiver",
-@@ -254,6 +259,8 @@
+@@ -254,6 +258,7 @@
      "easyModeOptionUnknownProfile" : "Unknown profile",
      "easyModeHintUseExpertMode" : "Please use the expert mode here",
      "btnDirectDeviceLinks" : "Direct device connections",
-+    "btnRefactorGo" : "Go",
 +    "btnRefactorRollback" : "Rollback",
      "lblDirectDeviceLinks1" : "Overview of all direct connections to devices or channels",
      "lblDirectDeviceLinks2" : "Edit direct device / channel connections",
      "lblDirectDeviceLinks3" : "Delete direct device / channel connections",
-@@ -424,6 +431,7 @@
+@@ -424,6 +429,7 @@
      "dialogStateInfoDataTransferToDeviceSuccess" : "Status info: Data transfer successful",
      "dialogWarningDataTransferToDeviceNotPossible" : "Attention! Unable to transfer data",
      "dialogConfigAutomaticLogin" : "Configuration - automatic login",
-+    "dialogRefactorDefaultNames" : "Rename pre-defined object names",
++    "dialogRefactorDefaultNames" : "Rename pre-defined object names (rooms, functions, system variables)",
      "dialogChooseBidCosInterface" : "Selection BidCos-Interface",
      "dialogChooseChannel" : "Channel selection",
      "dialogRestartSafeModeTitle" : "Restart",
-@@ -1101,7 +1109,7 @@
+@@ -1101,7 +1107,7 @@
      "optionNoModification" : "No change",
      "optionNone" : "None",
      "optionNotActive" : "Not active",
@@ -321,7 +301,19 @@
  });
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -25416,6 +25416,37 @@
+@@ -7012,6 +7012,11 @@
+             homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
+           }
+         }
++        if (!homematic('CCU.existsFile', {'file': "/etc/config/systemLanguageConfigured"})) {
++          console.log("lang");
++          CreatePopup(ID_REFACTOR_DEFAULT_NAMES);
++          homematic("CCU.setSystemLanguageConfigured");
++        }		
+       }
+     } else {
+       WebUI.serviceMessageCount = setServiceMessage();
+@@ -25416,6 +25421,37 @@
      new Ajax.Request(url, {postBody: ReGa.encode(pb)});  
    },
    
@@ -359,21 +351,21 @@
    ClearHistoryData: function()
    {
      var url = "/esp/system.htm?sid="+SessionId;
-@@ -26732,7 +26763,12 @@
+@@ -26732,7 +26768,12 @@
          this.setWidth(800);
          this.setFile( "/pages/msg/autoLoginConfig.htm" );
          break;
 -       case ID_CHOOSE_LED:
 +      case ID_REFACTOR_DEFAULT_NAMES:
 +        this.setTitle( translateKey("dialogRefactorDefaultNames") /*"Umbenennen der Standard-Objekte" */);
-+        this.setWidth(800);
++        this.setWidth(400);
 +        this.setFile( "/pages/msg/refactorDefaultNames.htm" );
 +        break;
 +        case ID_CHOOSE_LED:
          this.setTitle( translateKey("dialogEnterValue") /*"Wert eingeben" */);
          this.addToPostBody( 'string type = "'+this.type+'";' );
          this.setWidth(800);
-@@ -27551,6 +27587,7 @@
+@@ -27551,6 +27592,7 @@
  ID_SET_OUCFM_MODE        = 1023;
  ID_SET_STATUS_DISPLAY    = 1024;
  ID_BIDCOS_INTERFACE = 1025;

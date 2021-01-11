@@ -7012,6 +7012,11 @@ WebUI = Singleton.create({
             homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
           }
         }
+        if (!homematic('CCU.existsFile', {'file': "/etc/config/systemLanguageConfigured"})) {
+          console.log("lang");
+          CreatePopup(ID_REFACTOR_DEFAULT_NAMES);
+          homematic("CCU.setSystemLanguageConfigured");
+        }		
       }
     } else {
       WebUI.serviceMessageCount = setServiceMessage();
@@ -26765,7 +26770,7 @@ iseMessageBox.prototype =
         break;
       case ID_REFACTOR_DEFAULT_NAMES:
         this.setTitle( translateKey("dialogRefactorDefaultNames") /*"Umbenennen der Standard-Objekte" */);
-        this.setWidth(800);
+        this.setWidth(400);
         this.setFile( "/pages/msg/refactorDefaultNames.htm" );
         break;
         case ID_CHOOSE_LED:

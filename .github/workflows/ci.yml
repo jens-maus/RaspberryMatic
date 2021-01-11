@@ -1,32 +1,20 @@
+# RaspberryMatic Continious Integration Check Workflow
+
 name: CI
 on:
   push:
-  pull_request:
-  schedule:
-    - cron: '0 0 * * *' # run at 0 AM UTC
   workflow_dispatch:
     inputs:
       skip_build:
-        description: 'Skip build (mainly for CI testing)?'
+        description: 'Skip build (for testing workflow)?'
         required: true
         default: "false"
 
 jobs:
-  repo-check:
-    name: repository commit check
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
-      - id: commit-check
-        run: 'echo ::set-output name=has-commits::$(git --no-pager log --pretty=oneline --since="24 hours ago" | wc -l)'
-    outputs:
-      has-commits: ${{ steps.commit-check.outputs.has-commits }}
-
   build:
+    name: Check build [${{ matrix.platform }}]
     runs-on: ubuntu-20.04
-    needs: repo-check
     timeout-minutes: 480
-    if: github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0
     outputs:
       build_datetime: ${{ steps.env.outputs.build_datetime }}
       build_version: ${{ steps.env.outputs.build_version }}
@@ -39,13 +27,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: rename worker directory
+    - name: Rename worker directory
       working-directory: ../
       run: |
         mv RaspberryMatic b
         ln -s b RaspberryMatic
 
-    - name: setup env
+    - name: Setup Environment
       id: env
       run: |
         echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
@@ -56,7 +44,7 @@ jobs:
         echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
         echo "::set-output name=build_version::$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)"
 
-    - name: free disk space
+    - name: Free runner disk space
       run: |
         df -h /
         sudo swapoff -a
@@ -65,15 +53,15 @@ jobs:
         docker rmi $(docker image ls -aq)
         df -h /
 
-    - name: cleanup old action artifacts
+    - name: Cleanup old workflow artifacts
       run: .github/workflows/purge_artifacts.sh ${{ secrets.REPO_ACCESS_TOKEN }}
 
-    - name: switch to experimental EULA files
+    - name: Switch to experimental EULA files
       run: |
         mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de
         mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en
 
-    - name: setup ccache
+    - name: Setup ccache
       uses: actions/cache@v2
       with:
         path: ~/.buildroot-ccache
@@ -86,7 +74,7 @@ jobs:
     #  if: matrix.platform == 'ova'
 
     # major build step
-    - name: build raspmatic_${{ matrix.platform }}
+    - name: Build
       timeout-minutes: 480
       run: |
         sudo mkdir -p /mnt/download
@@ -94,157 +82,14 @@ jobs:
         make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download raspmatic_${{ matrix.platform }}-release
 
     # cleanup
-    - name: cleanup raspmatic_${{ matrix.platform }}
+    - name: Cleanup
       run: |
         rm -f release/*.img*
         make distclean
 
-    #######################
-    # nightly build uploads
-    - name: upload nightly build archive [rpi*, tinkerboard, intelnuc, ova]
-      if: |
-        github.event_name == 'schedule' &&
-        github.repository_owner == 'jens-maus' &&
-        !startsWith(matrix.platform, 'oci_')
-      uses: WebFreak001/deploy-nightly@v1.1.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-      with:
-        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
-        release_id: 22744592
-        asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip
-        asset_content_type: application/zip
-        max_releases: 1
-
-    - name: upload nightly build checksum [rpi*, tinkerboard, intelnuc, ova]
-      if: |
-        github.event_name == 'schedule' &&
-        github.repository_owner == 'jens-maus' &&
-        !startsWith(matrix.platform, 'oci_')
-      uses: WebFreak001/deploy-nightly@v1.1.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-      with:
-        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
-        release_id: 22744592
-        asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip.sha256
-        asset_content_type: text/plain
-        max_releases: 1
-
-    - name: upload nightly build archive [ccu3]
-      if: |
-        github.event_name == 'schedule' &&
-        github.repository_owner == 'jens-maus' &&
-        matrix.platform == 'rpi3'
-      uses: WebFreak001/deploy-nightly@v1.1.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-      with:
-        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
-        release_id: 22744592
-        asset_path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-ccu3.tgz
-        asset_content_type: application/gzip
-        max_releases: 1
-
-    - name: upload nightly build checksum [ccu3]
-      if: |
-        github.event_name == 'schedule' &&
-        github.repository_owner == 'jens-maus' &&
-        matrix.platform == 'rpi3'
-      uses: WebFreak001/deploy-nightly@v1.1.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-      with:
-        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
-        release_id: 22744592
-        asset_path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-ccu3.tgz.sha256
-        asset_content_type: text/plain
-        max_releases: 1
-
-    - name: upload nightly build archive [ova]
-      if: |
-        github.event_name == 'schedule' &&
-        github.repository_owner == 'jens-maus' &&
-        matrix.platform == 'ova'
-      uses: WebFreak001/deploy-nightly@v1.1.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-      with:
-        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
-        release_id: 22744592
-        asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$.ova
-        asset_content_type: application/gzip
-        max_releases: 1
-
-    - name: upload nightly build checksum [ova]
-      if: |
-        github.event_name == 'schedule' &&
-        github.repository_owner == 'jens-maus' &&
-        matrix.platform == 'ova'
-      uses: WebFreak001/deploy-nightly@v1.1.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-      with:
-        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
-        release_id: 22744592
-        asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$.ova.sha256
-        asset_content_type: text/plain
-        max_releases: 1
-
-    - name: upload nightly build archive [oci]
-      if: |
-        github.event_name == 'schedule' &&
-        github.repository_owner == 'jens-maus' &&
-        startsWith(matrix.platform, 'oci_')
-      uses: WebFreak001/deploy-nightly@v1.1.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-      with:
-        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
-        release_id: 22744592
-        asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz
-        asset_content_type: application/gzip
-        max_releases: 1
-
-    - name: upload nightly build checksum [oci]
-      if: |
-        github.event_name == 'schedule' &&
-        github.repository_owner == 'jens-maus' &&
-        startsWith(matrix.platform, 'oci_')
-      uses: WebFreak001/deploy-nightly@v1.1.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-      with:
-        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
-        release_id: 22744592
-        asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz.sha256
-        asset_content_type: text/plain
-        max_releases: 1
-
-    #- name: upload nightly build [oci deploy]
-    #   if: github.event_name == 'schedule' && github.repository_owner == 'jens-maus' && matrix.platform == 'oci_amd64'
-    #   uses: WebFreak001/deploy-nightly@v1.1.0
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-    #   with:
-    #     upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
-    #     release_id: 22744592
-    #     asset_path: buildroot-external/board/oci/deploy.sh
-    #     asset_name: RaspberryMatic-deploy-container-${{ env.OCCU_VERSION }}.sh
-    #     asset_content_type: text/plain
-    #     max_releases: 1
-
     #########################
-    # build artifacts uploads
-    - name: upload build as workflow artifact [rpi*, tinkerboard, intelnuc, ova]
+    # upload build artifacts
+    - name: Upload build artifact [rpi*, tinkerboard, intelnuc, ova]
       if: |
         !startsWith(matrix.platform, 'oci_')
       uses: actions/upload-artifact@v2
@@ -253,9 +98,8 @@ jobs:
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.zip
       continue-on-error: true
 
-    - name: upload build as workflow artifact [ccu3]
+    - name: Upload build artifact [ccu3]
       if: |
-        github.event_name != 'schedule' &&
         matrix.platform == 'rpi3'
       uses: actions/upload-artifact@v2
       with:
@@ -263,9 +107,8 @@ jobs:
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-ccu3.tgz
       continue-on-error: true
 
-    - name: upload build as workflow artifact [ova]
+    - name: Upload build artifact [ova]
       if: |
-        github.event_name != 'schedule' &&
         matrix.platform == 'ova'
       uses: actions/upload-artifact@v2
       with:
@@ -273,7 +116,7 @@ jobs:
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}.ova
       continue-on-error: true
 
-    - name: upload build as workflow artifact [oci]
+    - name: Upload build artifact [oci]
       if: |
         startsWith(matrix.platform, 'oci_')
       uses: actions/upload-artifact@v2
@@ -282,17 +125,10 @@ jobs:
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
       continue-on-error: true
 
-    #- name: upload build as workflow artifact [oci deploy]
-    #  if: github.event_name != 'schedule' && matrix.platform == 'ova'
-    #  uses: actions/upload-artifact@v2
-    #  with:
-    #    path: buildroot-external/board/oci/deploy.sh
-    #    name: RaspberryMatic-deploy-container-${{ env.OCCU_VERSION }}.sh
-    #  continue-on-error: true
-
   ##########################################
   # OCI/Docker build and registry push step
   oci-multiarch-build-push:
+    name: OCI/Docker Build+Push
     runs-on: ubuntu-20.04
     needs: build
     if: github.event_name != 'pull_request'
@@ -300,7 +136,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: setup env
+    - name: Setup Environment
       run: |
         echo "BUILD_DATETIME=${{ needs.build.outputs.build_datetime }}" >> $GITHUB_ENV
         echo "BUILD_VERSION=${{ needs.build.outputs.build_version }}" >> $GITHUB_ENV
@@ -308,20 +144,20 @@ jobs:
         echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
 
     # download OCI platform artifacts
-    - name: download oci_amd64.tgz
+    - name: Download oci_amd64 artifact
       uses: actions/download-artifact@v2
       with:
         name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_amd64.tgz
-    - name: download oci_arm64.tgz
+    - name: Download oci_arm64 artifact
       uses: actions/download-artifact@v2
       with:
         name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm64.tgz
-    - name: download oci_arm.tgz
+    - name: Download oci_arm artifact
       uses: actions/download-artifact@v2
       with:
         name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm.tgz
     
-    - name: extract artifacts
+    - name: Extract OCI artifacts
       run: |
         mkdir -p oci_build
         cd oci_build
@@ -330,23 +166,6 @@ jobs:
           mv -f layer.tar $(basename $f .tgz).tar
           rm -f $f
         done
-
-    - name: Build tags
-      shell: bash
-      run: |
-        BASE_TAG="ghcr.io/${{ github.repository_owner }}/raspberrymatic"
-        UNIQUE_TAG="${BASE_TAG}:${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}"
-        if [[ ${GITHUB_EVENT_NAME} = 'schedule' || ${GITHUB_EVENT_NAME} = 'push' ]]; then
-          BRANCH="${GITHUB_REF##*/}"
-          if [[ $BRANCH = master ]]; then
-            BRANCH_TAG="${BASE_TAG}:snapshot"
-          else
-            BRANCH_TAG="${BASE_TAG}:snapshot-${BRANCH}"
-          fi
-        fi
-        echo "##[set-output name=unique_tag;]${UNIQUE_TAG}"
-        echo "##[set-output name=branch_tag;]${BRANCH_TAG}"
-      id: extract_branch
 
     - name: Set up Docker Buildx
       id: buildx
@@ -362,7 +181,7 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.CR_PAT }}
     
-    - name: build and push container image
+    - name: Build and push container image
       uses: docker/build-push-action@v2
       id: docker_build
       with:
@@ -373,16 +192,20 @@ jobs:
         build-args: |
           tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
         labels: |
+          org.opencontainers.image.title="RaspberryMatic"
+          org.opencontainers.image.description="Alternative OS for your HomeMatic CCU"
+          org.opencontainers.image.vendor="RasperryMatic OpenSource Project"
           org.opencontainers.image.authors=${{ github.repository_owner }}
+          org.opencontainers.image.licenses="Apache-2.0"
+          org.opencontainers.image.url=https://raspberrymatic.de
+          org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          org.opencontainers.image.documentation=https://github.com/jens-maus/RaspberryMatic/wiki
           org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
-          org.opencontainers.image.description=Created from commit ${{ env.GITHUB_SHA7 }} and ref ${{ env.GIT_REF }}
           org.opencontainers.image.ref.name=${{ env.GIT_REF }}
           org.opencontainers.image.revision=${{ github.sha }}
-          org.opencontainers.image.source=https://github.com/${{ github.repository }}
           org.opencontainers.image.version=${{ env.BUILD_VERSION }}
         tags: |
-          ${{ steps.extract_branch.outputs.unique_tag }}
-          ${{ steps.extract_branch.outputs.branch_tag }}
+          ghcr.io/${{ github.repository_owner }}/raspberrymatic:${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
     
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}

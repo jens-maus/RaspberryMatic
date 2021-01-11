@@ -1589,10 +1589,10 @@ function ::refactorDefaultNames()
   string funcTranslated = "Licht;Heizung;Klima;Wetter;Umwelt;Sicherheit;Verschluss;Taster;Zentrale;Energiemanagement";
   
   string roomDefault = "roomLivingRoom;roomKitchen;roomBedroom;roomChildrensRoom1;roomChildrensRoom2;roomOffice;roomBathroom;roomGarage;roomHWR;roomGarden;roomTerrace";
-  string roomTranslated = "Wohnzimmer;KÃ¼che;Schlafzimmer;Kinderzimmer 1;Kinderzimmer 2;BÃ¼ro;Badezimmer;Garage;Hauswirtschaftsraum;Garten;Terrasse";
+  string roomTranslated = "Wohnzimmer;Küche;Schlafzimmer;Kinderzimmer 1;Kinderzimmer 2;Büro;Badezimmer;Garage;Hauswirtschaftsraum;Garten;Terrasse";
   
   string svDefault   = "sysVarAlarmZone1;sysVarAlarmZone1Msg;sysVarAlarmZone1Triggered;sysVarAlarmZone1NotTriggered;sysVarPresence;sysVarPresenceMsg;sysVarPresencePresent;sysVarPresenceNotPresent;sysVarAlarmMessages;sysVarAlarmMessagesCount;sysVarServiceMessages;sysVarServiceMessagesCount;sysVarRainToday;sysVarRainTodayDescr;sysVarRainYesterday;sysVarRainYesterdayDescr";
-  string svTranslated   = "Alarmzone 1;Alarmmeldung Alarmzone 1;ausgelÃ¶st;nicht ausgelÃ¶st;Anwesenheit;Anwesenheit;anwesend;nicht anwesend;Alarmmeldungen;Anzahl Alarmmeldungen;Servicemeldungen;Anzahl Servicemeldungen;Regen heute;Regenmenge aktueller Tag;Regen gestern;Regenmenge vorheriger Tag";
+  string svTranslated   = "Alarmzone 1;Alarmmeldung Alarmzone 1;ausgelöst;nicht ausgelöst;Anwesenheit;Anwesenheit;anwesend;nicht anwesend;Alarmmeldungen;Anzahl Alarmmeldungen;Servicemeldungen;Anzahl Servicemeldungen;Regen heute;Regenmenge aktueller Tag;Regen gestern;Regenmenge vorheriger Tag";
 
   if (lang == "EN") {
     funcTranslated = "Light;Heating;Climatic conditions;Weather;Environment;Security;Lock;Button;Central;Energy management";

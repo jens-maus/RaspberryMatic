@@ -7013,7 +7013,6 @@ WebUI = Singleton.create({
           }
         }
         if (!homematic('CCU.existsFile', {'file': "/etc/config/systemLanguageConfigured"})) {
-          console.log("lang");
           CreatePopup(ID_REFACTOR_DEFAULT_NAMES);
           //homematic("CCU.setSystemLanguageConfigured");
         }		

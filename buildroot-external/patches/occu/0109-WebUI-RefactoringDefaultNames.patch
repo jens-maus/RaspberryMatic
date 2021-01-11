@@ -301,19 +301,18 @@
  });
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -7012,6 +7012,11 @@
+@@ -7012,6 +7012,10 @@
              homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
            }
          }
 +        if (!homematic('CCU.existsFile', {'file': "/etc/config/systemLanguageConfigured"})) {
-+          console.log("lang");
 +          CreatePopup(ID_REFACTOR_DEFAULT_NAMES);
 +          //homematic("CCU.setSystemLanguageConfigured");
 +        }		
        }
      } else {
        WebUI.serviceMessageCount = setServiceMessage();
-@@ -25416,6 +25421,37 @@
+@@ -25416,6 +25420,37 @@
      new Ajax.Request(url, {postBody: ReGa.encode(pb)});  
    },
    
@@ -351,7 +350,7 @@
    ClearHistoryData: function()
    {
      var url = "/esp/system.htm?sid="+SessionId;
-@@ -26732,7 +26768,12 @@
+@@ -26732,7 +26767,12 @@
          this.setWidth(800);
          this.setFile( "/pages/msg/autoLoginConfig.htm" );
          break;
@@ -365,7 +364,7 @@
          this.setTitle( translateKey("dialogEnterValue") /*"Wert eingeben" */);
          this.addToPostBody( 'string type = "'+this.type+'";' );
          this.setWidth(800);
-@@ -27551,6 +27592,7 @@
+@@ -27551,6 +27591,7 @@
  ID_SET_OUCFM_MODE        = 1023;
  ID_SET_STATUS_DISPLAY    = 1024;
  ID_BIDCOS_INTERFACE = 1025;

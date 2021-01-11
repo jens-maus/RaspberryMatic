@@ -21,10 +21,12 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Check Dockerfile
-      uses: reviewdog/action-hadolint@v1
+      uses: brpaz/hadolint-action@v1
+      with:
+        dockerfile: ./buildroot-external/board/oci/Dockerfile
 
     - name: Check shell scripts
-      uses: reviewdog/action-shellcheck@v1
+      uses: ludeeus/action-shellcheck@1.0.0
 
   build:
     name: Build Check [${{ matrix.platform }}]

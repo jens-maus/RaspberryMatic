@@ -42,6 +42,6 @@
   doRefactorDefaultNames = function() {
     var selValue = $("cbLang")[$("cbLang").selectedIndex].value;
     iseSystem.refactorDefaultNames(selValue);
-    homematic("CCU.setSystemLanguageConfigured");	
+    homematic("CCU.setSystemLanguageConfigured", {'lang': selValue});	
   };
 </script>

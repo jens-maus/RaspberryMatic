@@ -1,14 +1,14 @@
 ##
-# CCU.setFirewallConfigured
-#Legt die Datei /etc/config/firewallConfigured an
+# CCU.systemLanguageConfigured
+#Legt die Datei /etc/config/systemLanguageConfigured an
 #
 # Parameter:
-#  userName
+#  lang
 #
 # Rückgabewert: immer true
 ##
 
-catch {exec touch /etc/config/systemLanguageConfigured}
+catch {exec echo $args(lang) > /etc/config/systemLanguageConfigured}
 
 jsonrpc_response true
 

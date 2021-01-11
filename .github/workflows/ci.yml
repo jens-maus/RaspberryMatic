@@ -276,11 +276,30 @@ jobs:
         
         sudo -E ./buildroot-external/board/oci/deploy.sh
     
-    - name: test web
-      timeout-minutes: 2
+    - name: test init
       run: |
-        while ! curl localhost:8080 2>/dev/null|grep "HomeMatic WebUI"; do echo "."; sleep 1; done 
+        error=0
+        n=1
+        while ! curl localhost:8080 2>/dev/null|grep "HomeMatic WebUI"; do
+          if [ "$n" -ge 120 ]
+            echo "Still not up - aborting";
+            error=1
+          fi
+          sleep 1;
+          n=$((n+1)) 
+        done 
 
+        docker logs ccu
+        docker exec ccu tar czf - /tmp /usr/local > debug_output.tgz
 
+        exit $error
+
+    - name: upload debug information
+      uses: actions/upload-artifact@v2
+      with:
+        path: debug_output.tgz
+        name: RaspberryMatic-debug_output-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
+      if: ${{ success() }} || ${{ failure() }}
+      
 
   

@@ -108,7 +108,7 @@ jobs:
         github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         !startsWith(matrix.platform, 'oci_')
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
@@ -124,7 +124,7 @@ jobs:
         github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         !startsWith(matrix.platform, 'oci_')
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
@@ -140,7 +140,7 @@ jobs:
         github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         matrix.platform == 'rpi3'
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
@@ -156,7 +156,7 @@ jobs:
         github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         matrix.platform == 'rpi3'
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
@@ -172,7 +172,7 @@ jobs:
         github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         matrix.platform == 'ova'
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
@@ -188,7 +188,7 @@ jobs:
         github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         matrix.platform == 'ova'
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
@@ -204,7 +204,7 @@ jobs:
         github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         startsWith(matrix.platform, 'oci_')
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:
@@ -220,7 +220,7 @@ jobs:
         github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         startsWith(matrix.platform, 'oci_')
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
         GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
       with:

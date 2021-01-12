@@ -27,6 +27,8 @@ jobs:
 
     - name: Check shell scripts
       uses: ludeeus/action-shellcheck@1.0.0
+      with:
+        ignore: ./buildroot-external/package/neoserver/pkg/mediola/neo_server
 
   build:
     name: Build Check [${{ matrix.platform }}]
@@ -73,7 +75,7 @@ jobs:
         df -h /
 
     - name: Cleanup old workflow artifacts
-      run: .github/workflows/purge_artifacts.sh ${{ secrets.REPO_ACCESS_TOKEN }}
+      run: .github/workflows/purge_artifacts.sh ${{ secrets.GITHUB_TOKEN }}
 
     - name: Switch to experimental EULA files
       run: |

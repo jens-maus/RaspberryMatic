@@ -1,6 +1,5 @@
 #!/bin/sh
-/bin/mountpoint -q ${UM_MOUNTPOINT}
-if [ $? -eq 0 ]; then
+if /bin/mountpoint -q "${UM_MOUNTPOINT}"; then
   if [ ! -L /media/usb0 ]; then
     RET=0
     if [ -d "${UM_MOUNTPOINT}/measurement" ]; then
@@ -11,14 +10,12 @@ if [ $? -eq 0 ]; then
       # check if /usr/local/sdcard/measurement exists
       # and if so, move it to the usb stick
       if [ -d /usr/local/sdcard/measurement ]; then
-        cp -a /usr/local/sdcard/measurement ${UM_MOUNTPOINT}/
-        if [ $? -eq 0 ]; then
+        if cp -a /usr/local/sdcard/measurement "${UM_MOUNTPOINT}/"; then
           mv /usr/local/sdcard/measurement /usr/local/sdcard/measurement_bak
           RET=1
         fi
       else
-        mkdir ${UM_MOUNTPOINT}/measurement
-        if [ $? -ne 0 ]; then
+        if ! mkdir "${UM_MOUNTPOINT}/measurement"; then
           echo "error creating measurement directory"
         else 
           echo "measurement directory created successfully"
@@ -30,14 +27,14 @@ if [ $? -eq 0 ]; then
     # copy all diagram data from the usb stick to the
     # /tmp/measurement path where HMIPServer will store its data
     rm -rf /tmp/measurement
-    cp -a ${UM_MOUNTPOINT}/measurement /tmp/
+    cp -a "${UM_MOUNTPOINT}/measurement" /tmp/
 
     if [ ${RET} -eq 1 ]; then
       touch "/var/status/USBinitialised"
       # CCU2 compatibility
       touch "/var/status/SDinitialised"
       # link /media/usb0 to the active usb mountpoint
-      ln -sf ${UM_MOUNTPOINT} /media/usb0
+      ln -sf "${UM_MOUNTPOINT}" /media/usb0
     fi
   fi
 fi

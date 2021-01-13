@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # startup script to start/stop third-party addons
 #
@@ -16,7 +17,7 @@ start() {
     # source /etc/profile.d profiles
     for i in /etc/profile.d/*.sh ; do
       if [[ -r "$i" ]]; then
-        . $i
+        . "$i"
       fi
       unset i
     done
@@ -25,7 +26,7 @@ start() {
     if [[ -d /usr/local/etc/profile.d ]]; then
       for i in /usr/local/etc/profile.d/*.sh ; do
         if [[ -r "$i" ]]; then
-          . $i
+          . "$i"
         fi
         unset i
       done

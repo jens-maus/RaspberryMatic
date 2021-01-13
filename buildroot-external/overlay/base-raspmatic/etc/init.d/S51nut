@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # init script for starting NUT (UPS) services
 #
@@ -44,8 +45,7 @@ case $1 in
     case "${MODE}" in
       standalone|netserver)
         # First, start UPS drivers
-        ${UPSDRVCTRL} start 2>&1 >/dev/null
-        if [ $? -ne 0 ]; then
+        if ! "${UPSDRVCTRL}" start >/dev/null 2>&1; then
           echo -n "WARNING: UPS driver startup failed"
         fi
         # Start data server (upsd)
@@ -101,8 +101,7 @@ case $1 in
     case "${MODE}" in
       standalone|netserver)
         echo -n "Shutting down UPS: "
-        ${UPSDRVCTL} shutdown 2>&1 >/dev/null
-        if [ $? -eq 0 ]; then
+        if "${UPSDRVCTRL}" shutdown >/dev/null 2>&1; then
           echo -n "waiting for UPS to cut power... "
         else
           echo -n "shutdown failed. waiting for UPS to run down... "

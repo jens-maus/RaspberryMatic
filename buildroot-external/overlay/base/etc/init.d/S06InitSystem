@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Startup script to ensure we have a valid filesystem
 #
@@ -39,7 +40,7 @@ init_system() {
 
   # create /media/usbX directories for automounting USB devices
   for i in $(seq 1 8); do
-    mkdir -p /media/usb${i}
+    mkdir -p "/media/usb${i}"
   done
 
   # /usr/local/etc setup

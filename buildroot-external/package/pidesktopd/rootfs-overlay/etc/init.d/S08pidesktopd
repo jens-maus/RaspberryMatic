@@ -1,10 +1,11 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # PiDesktop Daemon starting and stopping
 #
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-DESC=pidesktopd
+#DESC=pidesktopd
 
 DAEMON=/opt/pidesktopd/pidesktopd.sh
 PIDFILE=/var/run/pidesktopd.pid
@@ -20,11 +21,13 @@ case $1 in
 
     # find out if a PiDesktop board is installed at all. We check
     # for a pcf8563 and 0x18 i2c address
-    i2cget -y 1 0x18 2>/dev/null >/dev/null
-    if [[ $? -eq 0 ]] && [[ "${HM_RTC}" == "pcf8563" ]]; then
+    if i2cget -y 1 0x18 2>/dev/null >/dev/null && [[ "${HM_RTC}" == "pcf8563" ]]; then
 
-      start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec ${DAEMON} 2>/dev/null >/dev/null
-      [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+      if start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec ${DAEMON} 2>/dev/null >/dev/null; then
+        echo "OK"
+      else
+        echo "FAIL"
+      fi
 
     else
       echo "no hardware found"
@@ -34,10 +37,15 @@ case $1 in
   stop)
     echo -n "Stopping PiDesktop daemon: "
     if [[ -f ${PIDFILE} ]]; then
-      start-stop-daemon -K -q -p ${PIDFILE}
+      if start-stop-daemon -K -q -p ${PIDFILE}; then
+        echo "OK"
+      else
+        echo "FAIL"
+      fi
       rm -f ${PIDFILE}
+    else
+      echo "FAIL"
     fi
-    [[ $? = 0 ]] && echo "OK" || echo "FAIL"
   ;;
 
   restart|force-reload)

@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
 # This script updates the /etc/config/localtime
 # and /etc/timezone files according to the

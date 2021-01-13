@@ -1,7 +1,8 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
-# bad blocks check script v1.0
-# Copyright (c) 2020 Jens Maus <mail@jens-maus.de>
+# bad blocks check script v1.1
+# Copyright (c) 2020-2021 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,15 +27,15 @@
 ROOTDEV=$(mountpoint -n / | cut -d" " -f1)
 [[ -b ${ROOTDEV} ]] || exit 1
 
-DISKDEV=$(/bin/lsblk -s -p -d -r -n -o NAME ${ROOTDEV} | tail -1)
+DISKDEV=$(/bin/lsblk -s -p -d -r -n -o NAME "${ROOTDEV}" | tail -1)
 [[ -b ${DISKDEV} ]] || exit 1
 
 LOGFILE=/tmp/badblocks.txt
-BLOCKSIZE=$(/sbin/blockdev --getbsz ${DISKDEV})
+BLOCKSIZE=$(/sbin/blockdev --getbsz "${DISKDEV}")
 
 # execute /sbin/badblocks to search for bad blocks
 rm -f ${LOGFILE}
-echo checking for bad blocks on ${DISKDEV}
-/sbin/badblocks -b ${BLOCKSIZE} -o ${LOGFILE} -e 1 ${DISKDEV}
+echo "checking for bad blocks on ${DISKDEV}"
+/sbin/badblocks -b "${BLOCKSIZE}" -o "${LOGFILE}" -e 1 "${DISKDEV}"
 
 exit 0

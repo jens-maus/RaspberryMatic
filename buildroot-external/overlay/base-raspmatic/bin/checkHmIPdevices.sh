@@ -1,7 +1,8 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
-# crRFD device check script v1.4
-# Copyright (c) 2019-2020 Jens Maus <mail@jens-maus.de>
+# crRFD device check script v1.5
+# Copyright (c) 2019-2021 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,8 +44,9 @@ else
   FILE_PATTERN="[0-9A-F]{24}\.dev$"
 fi
 
-OLDPATH=$(echo /etc/config/crRFD/data/old_$(date +'%Y%m%d-%H%M%S'))
-FILES=$(ls /etc/config/crRFD/data | egrep ${FILE_PATTERN} | cut -d. -f1 | uniq)
+OLDPATH=/etc/config/crRFD/data/old_$(date +%Y%m%d-%H%M%S)
+# shellcheck disable=SC2010
+FILES=$(ls /etc/config/crRFD/data | grep -E "${FILE_PATTERN}" | cut -d. -f1 | uniq)
 for sgtin in ${FILES}; do
 
   # check if this SGTIN belongs to a HmIPW-DRAP by checking if it is
@@ -55,18 +57,17 @@ for sgtin in ${FILES}; do
 
   # check if this SGTIN belongs to our currently active RF-module and
   # if so we ignore it
-  if [[ ${HM_HMIP_SGTIN} == ${sgtin} ]]; then
+  if [[ "${HM_HMIP_SGTIN}" == "${sgtin}" ]]; then
     continue
   fi
 
   DEVADR=${sgtin:(-14)}
   if [[ -n "${DEVADR}" ]]; then
-    grep -iq -m1 "<devadr>${DEVADR}" /etc/config/homematic.regadom
-    if [[ $? -ne 0 ]]; then
+    if ! grep -iq -m1 "<devadr>${DEVADR}" /etc/config/homematic.regadom; then
       echo -n "WARNING: SGTIN ${DEVADR} not found in regadom"
       if [[ ${FIX} -eq 1 ]]; then
-        [[ -d ${OLDPATH} ]] || mkdir -p ${OLDPATH}
-        echo mv /etc/config/crRFD/data/${sgtin}.* ${OLDPATH}/
+        [[ -d ${OLDPATH} ]] || mkdir -p "${OLDPATH}"
+        mv "/etc/config/crRFD/data/${sgtin}".* "${OLDPATH}/"
         echo "... moved ${sgtin}.* to ${OLDPATH}/"
       else
         echo "."

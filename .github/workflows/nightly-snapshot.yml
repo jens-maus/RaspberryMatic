@@ -67,9 +67,6 @@ jobs:
         docker rmi $(docker image ls -aq)
         df -h /
 
-    - name: Cleanup old workflow artifacts
-      run: .github/workflows/purge_artifacts.sh ${{ secrets.GITHUB_TOKEN }}
-
     - name: Switch to experimental EULA files
       run: |
         mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de
@@ -344,3 +341,20 @@ jobs:
 
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
+
+  cleanup:
+    name: Cleanup artifacts/packages
+    runs-on: ubuntu-20.04
+    - name: Remove old artifacts
+      uses: c-hive/gha-remove-artifacts@v1
+      with:
+        age: '2 months'
+        skip-tags: true
+        skip-recent: 15
+
+    - name: Remove old packages
+      uses: smartsquaregmbh/delete-old-packages@v0.2.0
+      with:
+        keep: 5
+        names: |
+          raspberrymatic

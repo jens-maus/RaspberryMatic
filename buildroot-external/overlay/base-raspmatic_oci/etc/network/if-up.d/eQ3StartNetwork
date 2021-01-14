@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
@@ -10,11 +11,11 @@
 # connection using a slow blinking blue LED
 if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
    [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
-  echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
-  echo none >/sys/class/leds/rpi_rf_mod\:red/trigger
-  echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
-  echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_on
-  echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_off
+  echo none >/sys/class/leds/rpi_rf_mod:green/trigger
+  echo none >/sys/class/leds/rpi_rf_mod:red/trigger
+  echo timer >/sys/class/leds/rpi_rf_mod:blue/trigger
+  echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_on
+  echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_off
 fi
 
 # performance tuning to reduce TCP performance spikes
@@ -38,7 +39,7 @@ fi
 if [[ -f /var/status/hasIP ]] &&
    [[ -f /var/status/hasLink ]]; then
 
-  /sbin/ip link set ${IFACE} down
+  /sbin/ip link set "${IFACE}" down
   echo -n " disabled, "
 
   exit 0
@@ -50,11 +51,11 @@ case "${IFACE}" in
 
   *)
     # wait until the link is up
-    /sbin/ip link set ${IFACE} up
+    /sbin/ip link set "${IFACE}" up
     i=0
-    while [[ "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; do
+    while [[ "$(cat "/sys/class/net/${IFACE}/carrier")" == "0" ]]; do
       sleep 2
-      i=$(($i+1))
+      i=$((i+1))
       if [[ $i -ge 6 ]]; then
         break
       fi
@@ -63,9 +64,9 @@ case "${IFACE}" in
 
     # if the link is not up we continue only if this is a
     # static connectin and no wifi config is present
-    if [[ "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; then
+    if [[ "$(cat "/sys/class/net/${IFACE}/carrier")" == "0" ]]; then
       echo -n " link down, "
-      /sbin/ip link set ${IFACE} down
+      /sbin/ip link set "${IFACE}" down
     else
       echo -n " link up, "
     fi
@@ -87,23 +88,23 @@ case "${MODE}" in
     # get IP data within container environment
     IP=$(/sbin/ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
     GATEWAY=$(/sbin/ip -4 route | grep default | awk '{print $3}')
-    NETMASK=$(/sbin/ifconfig ${IFACE} | grep "inet addr" | cut -d: -f4)
+    NETMASK=$(/sbin/ifconfig "${IFACE}" | grep "inet addr" | cut -d: -f4)
     NAMESERVER1=$(grep -E "^nameserver [[:digit:]]" /etc/resolv.conf | awk 'FNR==1{print $2}')
     NAMESERVER2=$(grep -E "^nameserver [[:digit:]]" /etc/resolv.conf | awk 'FNR==2{print $2}')
 
     # update CURRENT_XYZ in /etc/config/netconfig
 
     # update /etc/config/netconfig
-    eq3configcmd netconfigcmd -i ${IP} -g ${GATEWAY} -n ${NETMASK}
+    eq3configcmd netconfigcmd -i "${IP}" -g "${GATEWAY}" -n "${NETMASK}"
 
     if [[ -n "${NAMESERVER1}" ]]; then
-      eq3configcmd netconfigcmd -d1 ${NAMESERVER1}
+      eq3configcmd netconfigcmd -d1 "${NAMESERVER1}"
     else
       eq3configcmd netconfigcmd -d1 ""
     fi
 
     if [[ -n "${NAMESERVER2}" ]]; then
-      eq3configcmd netconfigcmd -d2 ${NAMESERVER2}
+      eq3configcmd netconfigcmd -d2 "${NAMESERVER2}"
     else
       eq3configcmd netconfigcmd -d2 ""
     fi
@@ -113,7 +114,7 @@ case "${MODE}" in
     # we checked the link state already way earlier
     case "${IFACE}" in
       eth*)
-        if [[ "$(cat /sys/class/net/${IFACE}/carrier)" != "0" ]]; then
+        if [[ "$(cat "/sys/class/net/${IFACE}/carrier")" != "0" ]]; then
           touch /var/status/hasLink
         else
           RET=1

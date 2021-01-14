@@ -1,28 +1,29 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
 # Command run on power loss
 #: ${POWER_LOSS_CMD:='/sbin/poweroff'}
-: ${POWER_LOSS_CMD:='/bin/triggerAlarm.tcl "Power Loss" "PIcoUPS-Alarm"'}
+: "${POWER_LOSS_CMD:='/bin/triggerAlarm.tcl "Power Loss" "PIcoUPS-Alarm"'}"
 
 # File descriptors
 if [[ ${HM_HOST} != "tinkerboard" ]]; then
-  : ${GPIO_PULSE:=22}
-  : ${GPIO_CLOCK:=27}
+  : "${GPIO_PULSE:=22}"
+  : "${GPIO_CLOCK:=27}"
 else
-  : ${GPIO_PULSE:=167}
-  : ${GPIO_CLOCK:=166}
+  : "${GPIO_PULSE:=167}"
+  : "${GPIO_CLOCK:=166}"
 fi
 
 # Debounce time in while loop
-: ${DEBOUNCE_TIME:='0.3s'}
+: "${DEBOUNCE_TIME:='0.3s'}"
 
 ## Initialize GPIO file descriptor
 # $1: File descriptor Value: decimal
 # $2: Direction       Value: in|out
-function initFD() {
+initFD() {
     eval "[ -e /sys/class/gpio/gpio\$$1/direction ]" || {
         eval "echo \$$1 > /sys/class/gpio/export || exit 1"
         sleep 0.1s
@@ -33,14 +34,14 @@ function initFD() {
 ## Set GPIO Value
 # $1: File descriptor Value: decimal
 # $2: Value           Value: 0|1
-function setFDvalue() {
+setFDvalue() {
     eval "echo $2 > /sys/class/gpio/gpio\$$1/value || exit 1"
 }
 
 ## get GPIO Value
 # $1: File descriptor       Value: decimal
 # $2: Target variable name  Value: 0|1
-function getFDvalue() {
+getFDvalue() {
     eval "read $2 < /sys/class/gpio/gpio\$$1/value || exit 1"
 }
 
@@ -55,8 +56,7 @@ setFDvalue GPIO_PULSE 1
 getFDvalue GPIO_CLOCK GPIO_CLOCK_VALUE
 
 while getFDvalue GPIO_CLOCK GPIO_CLOCK_VALUE_NEW; do
-    if [ $GPIO_CLOCK_VALUE_NEW -lt $GPIO_CLOCK_VALUE ];
-    then
+    if [[ ${GPIO_CLOCK_VALUE_NEW} -lt ${GPIO_CLOCK_VALUE} ]]; then
 
         # Debouncing in software
         sleep $DEBOUNCE_TIME
@@ -65,7 +65,7 @@ while getFDvalue GPIO_CLOCK GPIO_CLOCK_VALUE_NEW; do
         getFDvalue GPIO_PULSE GPIO_PULSE_VALUE
 
         # Invert GPIO_PULSE_VALUE
-        [ ${GPIO_PULSE_VALUE:-0} == 0 ] && GPIO_PULSE_VALUE=1 || GPIO_PULSE_VALUE=0
+        [[ ${GPIO_PULSE_VALUE:-0} == 0 ]] && GPIO_PULSE_VALUE=1 || GPIO_PULSE_VALUE=0
 
         # Set GPIO_PULSE_VALUE to low before switching to input mode
         setFDvalue GPIO_PULSE 0
@@ -75,7 +75,7 @@ while getFDvalue GPIO_CLOCK GPIO_CLOCK_VALUE_NEW; do
 
         # Check for power loss (=0)
         getFDvalue GPIO_PULSE POWER_STATE
-        [ 0 -eq $POWER_STATE ] && eval $POWER_LOSS_CMD &
+        [[ 0 -eq "${POWER_STATE}" ]] && eval "${POWER_LOSS_CMD}" &
 
         # Set GPIO_PULSE to flipped state
         initFD GPIO_PULSE out

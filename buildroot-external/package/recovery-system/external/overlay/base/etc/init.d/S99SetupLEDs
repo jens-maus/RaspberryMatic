@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # start script to setup the board leds correctly once the
 # system finished booting
@@ -31,36 +32,36 @@ start() {
     fi
 
     # setup the LEDs of the RPI-RF-MOD
-    echo ${GREEN} >/sys/class/leds/rpi_rf_mod\:green/trigger
-    echo ${RED}   >/sys/class/leds/rpi_rf_mod\:red/trigger
-    echo ${BLUE}  >/sys/class/leds/rpi_rf_mod\:blue/trigger
+    echo ${GREEN} >/sys/class/leds/rpi_rf_mod:green/trigger
+    echo ${RED}   >/sys/class/leds/rpi_rf_mod:red/trigger
+    echo ${BLUE}  >/sys/class/leds/rpi_rf_mod:blue/trigger
 
     # setup blink speed
     if [[ -n "${SPEED}" ]]; then
       if [[ "${GREEN}" == "timer" ]]; then
-        echo ${SPEED} >/sys/class/leds/rpi_rf_mod\:green/delay_on
-        echo ${SPEED} >/sys/class/leds/rpi_rf_mod\:green/delay_off
+        echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:green/delay_on
+        echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:green/delay_off
       fi
       if [[ "${RED}" == "timer" ]]; then
-        echo ${SPEED} >/sys/class/leds/rpi_rf_mod\:red/delay_on
-        echo ${SPEED} >/sys/class/leds/rpi_rf_mod\:red/delay_off
+        echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:red/delay_on
+        echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:red/delay_off
       fi
       if [[ "${BLUE}" == "timer" ]]; then
-        echo ${SPEED} >/sys/class/leds/rpi_rf_mod\:blue/delay_on
-        echo ${SPEED} >/sys/class/leds/rpi_rf_mod\:blue/delay_off
+        echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:blue/delay_on
+        echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:blue/delay_off
       fi
     fi
   fi
 
   # start is finished lets set the LEDs
   if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
-    echo ${HM_LED_GREEN_MODE2} >${HM_LED_GREEN}/trigger
+    echo "${HM_LED_GREEN_MODE2}" >"${HM_LED_GREEN}/trigger"
   fi
   if [[ -f "${HM_LED_RED}/trigger" ]]; then
-    echo ${HM_LED_RED_MODE2} >${HM_LED_RED}/trigger
+    echo "${HM_LED_RED_MODE2}" >"${HM_LED_RED}/trigger"
   fi
   if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
-    echo ${HM_LED_YELLOW_MODE2} >${HM_LED_YELLOW}/trigger
+    echo "${HM_LED_YELLOW_MODE2}" >"${HM_LED_YELLOW}/trigger"
   fi
 
   # signal that the system startup is finished
@@ -82,13 +83,13 @@ stop() {
 
   # stop starts, lets set the LEDs
   if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
-    echo ${HM_LED_GREEN_MODE1} >${HM_LED_GREEN}/trigger
+    echo "${HM_LED_GREEN_MODE1}" >"${HM_LED_GREEN}/trigger"
   fi
   if [[ -f "${HM_LED_RED}/trigger" ]]; then
-    echo ${HM_LED_RED_MODE1} >${HM_LED_RED}/trigger
+    echo "${HM_LED_RED_MODE1}" >"${HM_LED_RED}/trigger"
   fi
   if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
-    echo ${HM_LED_YELLOW_MODE1} >${HM_LED_YELLOW}/trigger
+    echo "${HM_LED_YELLOW_MODE1}" >"${HM_LED_YELLOW}/trigger"
   fi
 
   echo "shutdown, OK"

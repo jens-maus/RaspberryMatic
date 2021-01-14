@@ -1,10 +1,11 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
 # StromPi2 UPS Daemon starting and stopping
 #
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-DESC=strompi2d
+#DESC=strompi2d
 
 DAEMON=/opt/strompi2d/strompi2d.sh
 PIDFILE=/var/run/strompi2d.pid
@@ -21,9 +22,11 @@ case $1 in
     if [[ -f /etc/config/strompi2 ]]; then
 
       # now start the daemon
-      start-stop-daemon --start --background --pidfile ${PIDFILE} --make-pidfile --quiet --exec ${DAEMON}
-      [[ $? = 0 ]] && echo "OK" || echo "FAIL"
-
+      if start-stop-daemon --start --background --pidfile "${PIDFILE}" --make-pidfile --quiet --exec "${DAEMON}"; then
+        echo "OK"
+      else
+        echo "FAIL"
+      fi
     else
       echo "disabled"
     fi
@@ -32,8 +35,11 @@ case $1 in
   stop)
     echo -n "Stopping StromPi2 UPS daemon: "
     if [[ -f ${PIDFILE} ]]; then
-      start-stop-daemon --stop --quiet --pidfile ${PIDFILE}
-      [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+      if start-stop-daemon --stop --quiet --pidfile "${PIDFILE}"; then
+        echo "OK"
+      else
+        echo "FAIL"
+      fi
       rm -f ${PIDFILE}
     else
       echo "OK"

@@ -21,10 +21,14 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Check Dockerfile
-      uses: reviewdog/action-hadolint@v1
+      uses: brpaz/hadolint-action@v1.3.1
+      with:
+        dockerfile: ./buildroot-external/board/oci/Dockerfile
 
     - name: Check shell scripts
-      uses: reviewdog/action-shellcheck@v1
+      uses: ludeeus/action-shellcheck@1.0.0
+      with:
+        ignore: buildroot-external/package/neoserver/pkg/mediola/neo_server buildroot-patches/0010-lib32-integration/buildroot/support/scripts
 
   build:
     name: Build Check [${{ matrix.platform }}]
@@ -71,7 +75,7 @@ jobs:
         df -h /
 
     - name: Cleanup old workflow artifacts
-      run: .github/workflows/purge_artifacts.sh ${{ secrets.REPO_ACCESS_TOKEN }}
+      run: .github/workflows/purge_artifacts.sh ${{ secrets.GITHUB_TOKEN }}
 
     - name: Switch to experimental EULA files
       run: |

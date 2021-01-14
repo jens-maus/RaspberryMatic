@@ -1,3 +1,4 @@
+# shellcheck shell=ash
 alias ls='ls --color=auto'
 alias ll='ls -alF'
 alias la='ls -A'

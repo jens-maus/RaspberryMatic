@@ -11,42 +11,40 @@ set -e
 #############################################################
 
 #Rega Port
-: ${CCU_REGA_HTTPS_PORT:=8443}
+: "${CCU_REGA_HTTPS_PORT:=8443}"
 
 #Rega Port
-: ${CCU_REGA_HTTP_PORT:=8080}
+: "${CCU_REGA_HTTP_PORT:=8080}"
 
 #ssh Port
-: ${CCU_SSH_PORT:=2222}
+: "${CCU_SSH_PORT:=2222}"
 
 #Other ports to open
-: ${CCU_PORTS_TO_OPEN:="2001 2010 8181 9292"}
+: "${CCU_PORTS_TO_OPEN:="2001 2010 8181 9292"}"
 
 #Name of the docker volume where CCU data will persist
 #It can be a local location as well such as a mounted NAS folder, cluster fs (glusterfs), etc.
-: ${CCU_DATA_VOLUMEN:="ccu_data"}
+: "${CCU_DATA_VOLUMEN:="ccu_data"}"
 
 # Container repository to use
-: ${CCU_OCI_REPO:="ghcr.io/jens-maus/raspberrymatic"}
+: "${CCU_OCI_REPO:="ghcr.io/jens-maus/raspberrymatic"}"
 
 #CCU version to use
-: ${CCU_OCI_TAG:="latest"}
+: "${CCU_OCI_TAG:="latest"}"
 
 #Name of the container instance (by default use same as angelnu/ccu for easier migration)
-: ${CCU_CONTAINER_NAME:="ccu"}
+: "${CCU_CONTAINER_NAME:="ccu"}"
 
 #Additional options for docker create service / docker run
-: ${CCU_DOCKER_OPTIONS:=""}
+: "${CCU_DOCKER_OPTIONS:=""}"
 
 #Time for a clean container stop before it gets killed
-: ${CCU_DOCKER_STOP_TIMEOUT:="30"}
+: "${CCU_DOCKER_STOP_TIMEOUT:="30"}"
 
 
 #############################################################
 #                           SCRIPT                          #
 #############################################################
-
-CWD=$(pwd)
 
 # Make sure only root can run our script
 if [[ $EUID -ne 0 ]]; then
@@ -55,7 +53,7 @@ fi
 
 
 #This only works on Debian/Ubuntu based OSes such as Armbian and Raspbian
-if which dpkg>/dev/null && ! modinfo eq3_char_loop >/dev/null 2>&1 ; then
+if command -v dpkg >/dev/null && ! modinfo eq3_char_loop >/dev/null 2>&1 ; then
   echo "Installing pivcpu kernel modules"
 
   #Add repository
@@ -66,9 +64,9 @@ if which dpkg>/dev/null && ! modinfo eq3_char_loop >/dev/null 2>&1 ; then
   apt update
 
   #Install kernel headers
-  if which armbian-config>/dev/null; then
+  if command -v armbian-config >/dev/null; then
     echo "Detected Armbian - install kernel sources and device tree"
-    apt install -y `dpkg --get-selections | grep 'linux-image-' | grep '\sinstall' | sed -e 's/linux-image-\([a-z0-9-]\+\).*/linux-headers-\1/'`
+    apt install -y "$(dpkg --get-selections | grep 'linux-image-' | grep '\sinstall' | sed -e 's/linux-image-\([a-z0-9-]\+\).*/linux-headers-\1/')"
     apt install -y pivccu-devicetree-armbian
   elif grep -q Raspbian /etc/os-release; then
     echo "Detected Raspbian - install kernel sources and raspberry modules"
@@ -78,7 +76,7 @@ if which dpkg>/dev/null && ! modinfo eq3_char_loop >/dev/null 2>&1 ; then
     echo "See step 5 and 6 at https://github.com/alexreinert/piVCCU/blob/master/docs/setup/raspberrypi.md"
   else
     echo "Uknown platform - trying generic way to install kernel headers"
-    apt install -y linux-headers-$(uname -r)
+    apt install -y "linux-headers-$(uname -r)"
   fi
 
   #Install & Build kernel modules

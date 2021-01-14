@@ -1,5 +1,5 @@
 --- ./kernel/Makefile.orig	2020-12-14 13:09:44.406823210 +0100
-+++ ./kernel/Makefile	2020-12-14 13:12:55.875433577 +0100
++++ ./kernel/Makefile	2021-01-14 11:37:37.524474444 +0100
 @@ -1,17 +1,26 @@
 -obj-m += eq3_char_loop.o
 -obj-m += plat_eq3ccu2.o
@@ -23,9 +23,8 @@
 +#obj-m += led_trigger_timer.o
  obj-m += hb_rf_usb.o
  obj-m += hb_rf_usb-2.o
--obj-m += hb_rf_eth.o
+ obj-m += hb_rf_eth.o
 -obj-m += rtc-rx8130.o
-+#obj-m += hb_rf_eth.o
 +#obj-m += rtc-rx8130.o
 +
 +# disable

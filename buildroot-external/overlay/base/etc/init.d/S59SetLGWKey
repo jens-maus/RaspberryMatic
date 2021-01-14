@@ -1,9 +1,8 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Starts eq3configcmd setlgwkey.
 #
-
-CFG_DIR=/etc/config
 
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 

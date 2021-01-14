@@ -1,11 +1,13 @@
+# shellcheck shell=dash disable=SC2169 source=/dev/null
+
 export PATH=/bin:/sbin:/usr/bin:/usr/sbin
 
 if [ "$PS1" ]; then
-	if [ "`id -u`" -eq 0 ]; then
-		export PS1='\u@\h:\w# '
-	else
-		export PS1='\u@\h:\w$ '
-	fi
+  if [ "$(id -u)" -eq 0 ]; then
+    export PS1='\u@\h:\w# '
+  else
+    export PS1='\u@\h:\w$ '
+  fi
 fi
 
 export PAGER='/usr/bin/less'
@@ -13,18 +15,18 @@ export EDITOR='/bin/vi'
 
 # Source configuration files from /etc/profile.d
 for i in /etc/profile.d/*.sh ; do
-	if [ -r "$i" ]; then
-		. $i
-	fi
-	unset i
+  if [ -r "$i" ]; then
+    . "$i"
+  fi
+  unset i
 done
 
 # Source configuration files from /usr/local/etc/profile.d
 if [[ -d /usr/local/etc/profile.d ]]; then
   for i in /usr/local/etc/profile.d/*.sh ; do
-	  if [ -r "$i" ]; then
-		  . $i
-	  fi
-	  unset i
+    if [ -r "$i" ]; then
+      . "$i"
+    fi
+    unset i
   done
 fi

@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Starts eq3configcmd update-lgw-firmware for RF- and Wired-Gateways
 #
@@ -10,7 +11,7 @@
 
 start() {
   waitForIP
-  if [ $? -eq 0 ]; then
+  if waitForIP; then
     echo -n "."
     updateCopro
     echo -n "."
@@ -23,9 +24,10 @@ start() {
 }
 
 waitForIP() {
+  # shellcheck disable=SC2034
   for i in $(seq 1 5); do
     gw=$(ip -4 route get 1 2>/dev/null | head -1 | cut -d' ' -f3 | tr -d '\n')
-    if [[ ! ${gw} == "" ]] && [[ ! $(ping -W 5 -c 1 ${gw} 2>/dev/null >/dev/null) ]]; then
+    if [[ ! ${gw} == "" ]] && [[ ! $(ping -W 5 -c 1 "${gw}" 2>/dev/null >/dev/null) ]]; then
       return 0
     fi
     echo -n "."
@@ -62,8 +64,11 @@ restart() {
 case "$1" in
   start)
     echo -n "Starting LGWFirmwareUpdate: "
-    start
-    [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
+    if start; then
+      echo "OK"
+    else
+      echo "FAIL"
+    fi
   ;;
   stop)
     # nothing

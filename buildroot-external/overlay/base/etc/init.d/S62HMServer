@@ -1,9 +1,9 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Starts HMServer.
 #
 
-LOGLEVEL_HMServer=5
 CFG_TEMPLATE_DIR=/etc/config_templates
 STARTWAITFILE=/var/status/HMServerStarted
 
@@ -120,7 +120,8 @@ start() {
     JAVAOPT="-Xmx128m ${JAVAOPT}"
   fi
 
-  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts=${HM_SERVER_DEVNODE} -jar ${HM_SERVER} ${HM_SERVER_ARGS}
+  # shellcheck disable=SC2086
+  start-stop-daemon -b -S -q -m -p "${PIDFILE}" --exec java -- -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts="${HM_SERVER_DEVNODE}" -jar "${HM_SERVER}" ${HM_SERVER_ARGS}
   echo -n "."
   waitStartupComplete
 }

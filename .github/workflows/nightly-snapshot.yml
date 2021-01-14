@@ -345,16 +345,17 @@ jobs:
   cleanup:
     name: Cleanup artifacts/packages
     runs-on: ubuntu-20.04
-    - name: Remove old artifacts
-      uses: c-hive/gha-remove-artifacts@v1
-      with:
-        age: '2 months'
-        skip-tags: true
-        skip-recent: 15
+    steps:
+      - name: Remove old artifacts
+        uses: c-hive/gha-remove-artifacts@v1
+        with:
+          age: '2 months'
+          skip-tags: true
+          skip-recent: 15
 
-    - name: Remove old packages
-      uses: smartsquaregmbh/delete-old-packages@v0.2.0
-      with:
-        keep: 5
-        names: |
-          raspberrymatic
+      - name: Remove old packages
+        uses: smartsquaregmbh/delete-old-packages@v0.2.0
+        with:
+          keep: 5
+          names: |
+            raspberrymatic

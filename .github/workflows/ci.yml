@@ -74,9 +74,6 @@ jobs:
         docker rmi $(docker image ls -aq)
         df -h /
 
-    - name: Cleanup old workflow artifacts
-      run: .github/workflows/purge_artifacts.sh ${{ secrets.GITHUB_TOKEN }}
-
     - name: Switch to experimental EULA files
       run: |
         mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de

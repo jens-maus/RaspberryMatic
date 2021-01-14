@@ -13,7 +13,7 @@ cd ./release
 
 # copy the *.img and create checksum
 cp -a "../build-${PRODUCT}/images/sdcard.img" "./RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.img"
-sha256sum "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.imag" >"RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.img.sha256"
+sha256sum "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.img" >"RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.img.sha256"
 
 # prepare the release *.zip
 rm -f "./RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.zip"

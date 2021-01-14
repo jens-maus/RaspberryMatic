@@ -64,9 +64,10 @@ identify_rf_hardware() {
   RF_DEVNODES=
   # identify which raw-uart devices we have
   for dev in /sys/class/raw-uart/*; do
-    if [[ -c "${dev}" ]]; then
+    dev="$(basename "${dev}")"
+    if [[ -c "/dev/${dev}" ]]; then
       echo -n "."
-      RF_DEVNODES="${RF_DEVNODES} $(basename "${dev}")"
+      RF_DEVNODES="${RF_DEVNODES} ${dev}"
     fi
   done
 

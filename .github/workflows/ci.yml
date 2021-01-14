@@ -28,7 +28,7 @@ jobs:
     - name: Check shell scripts
       uses: ludeeus/action-shellcheck@1.0.0
       with:
-        ignore: buildroot-external/package/neoserver/pkg/mediola/neo_server buildroot-patches/0010-lib32-integration/buildroot/support/scripts/check-bin-arch
+        ignore: buildroot-external/package/neoserver/pkg/mediola/neo_server buildroot-patches/0010-lib32-integration/buildroot/support/scripts
 
   build:
     name: Build Check [${{ matrix.platform }}]

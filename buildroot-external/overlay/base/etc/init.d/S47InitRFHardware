@@ -25,14 +25,40 @@ identify_rf_hardware() {
   HM_HMIP_SGTIN=""
   HM_HMIP_VERSION=""
 
-  # to drive the LEDs of a RPI-RF-MOD on a GPIO as early as
-  # possible we check for a rx8130 and the set the LEDs
-  # accordingly.
-  if [[ "${HM_RTC}" == "rx8130" ]]; then
-    # setup the LEDs to show a constant yellow light
-    echo default-on >/sys/class/leds/rpi_rf_mod:green/trigger
-    echo default-on >/sys/class/leds/rpi_rf_mod:red/trigger
-    echo none >/sys/class/leds/rpi_rf_mod:blue/trigger
+  # if the user has configured a HB-RF-ETH ip address
+  # in /etc/config/hb_rf_eth we try to load the corresponding
+  # kernel module
+  HB_RF_ETH_ADDRESS=$(cat /etc/config/hb_rf_eth 2>/dev/null)
+  if [[ -n "${HB_RF_ETH_ADDRESS}" ]]; then
+    if [[ ! -e /sys/module/hb_rf_eth/parameters/connect ]]; then
+
+      # load the hb_rf_eth kernel module
+      if ! modinfo hb_rf_eth >/dev/null 2>&1; then
+        modprobe -q hb_rf_eth
+      fi
+
+      # wait until kernel module is loaded
+      for try in $(seq 1 30); do
+        echo -n "."
+
+        if [[ -e /sys/module/hb_rf_eth/parameters/connect ]]; then
+          break
+        fi
+        sleep 1
+      done
+    fi
+
+    # try to connect to the HB-RF-ETH
+    for try in $(seq 1 30); do
+      echo -n "."
+
+      if [[ -e /sys/class/hb-rf-eth/hb-rf-eth/connect ]]; then
+        echo "${HB_RF_ETH_ADDRESS}" >/sys/class/hb-rf-eth/hb-rf-eth/connect && break
+      else
+        echo "${HB_RF_ETH_ADDRESS}" >/sys/module/hb_rf_eth/parameters/connect && break
+      fi
+      sleep 1
+    done
   fi
 
   RF_DEVNODES=
@@ -176,8 +202,8 @@ reset_rf_hardware() {
       fi
 
     else
-      # this is a raw-uart and connected to a HB-RF-USB/HB-RF-USB-2 so lets
-      # use the reset_radio_module sysfs entry to reset the rf module
+      # this is a raw-uart and connected to a HB-RF-USB/HB-RF-USB-2/HB-RF-ETH
+      # so lets use the reset_radio_module sysfs entry to reset the rf module
       echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module"
       echo -n "."
     fi
@@ -309,13 +335,13 @@ query_rf_parameters() {
 
   #####################################
   # now we check if we have a RPI-RF-MOD connected to
-  # a HB-RF-USB/HB-RF-USB-2 and if so we have to setup its
+  # a HB-RF-USB/HB-RF-USB-2/HB-RF-ETH and if so we have to setup its
   # led driver correctly.
   if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] &&
-     echo "${HM_HMRF_DEVTYPE}" | grep -qi HB-RF-USB; then
+     echo "${HM_HMRF_DEVTYPE}" | grep -qi HB-RF-; then
     HBRF_DEVNODE=$(basename "${HM_HMRF_DEVNODE}")
   elif [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]] &&
-       echo "${HM_HMIP_DEVTYPE}" | grep -qi HB-RF-USB; then
+       echo "${HM_HMIP_DEVTYPE}" | grep -qi HB-RF-; then
     HBRF_DEVNODE=$(basename "${HM_HMIP_DEVNODE}")
   fi
 

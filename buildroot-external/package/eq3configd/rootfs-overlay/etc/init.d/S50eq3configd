@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
 # Starts eq3configd.
 #

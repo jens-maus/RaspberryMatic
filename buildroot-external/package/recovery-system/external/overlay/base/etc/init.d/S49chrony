@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 
 NAME=chrony
 DAEMON=/usr/sbin/chronyd
@@ -24,30 +25,30 @@ init() {
 case "$1" in
   start)
     init
-    printf "Starting $NAME: "
+    echo -n "Starting $NAME: "
 
     # call ntpdate to perform a single sync to the servers
-    /usr/bin/ntpdate -b -s -u ${NTPSERVERS}
-    if [[ $? -ne 0 ]]; then
+    # shellcheck disable=SC2086
+    if ! /usr/bin/ntpdate -b -s -u ${NTPSERVERS} 2>/dev/null; then
       # use default NTP servers because the user selected
       # ones didn't work out
       echo -n "using default NTPs, "
       NTPSERVERS='0.de.pool.ntp.org 1.de.pool.ntp.org 2.de.pool.ntp.org 3.de.pool.ntp.org'
 
-      /usr/bin/ntpdate -b -s -u ${NTPSERVERS}
-      if [[ $? -ne 0 ]]; then
+      # shellcheck disable=SC2086
+      if ! /usr/bin/ntpdate -b -s -u ${NTPSERVERS} 2>/dev/null; then
         echo -n "could not sync to '${NTPSERVERS}', FAIL"
         exit 0
       fi
     fi
 
     # start daemon
-    start-stop-daemon -S -q -x ${DAEMON}
-    if [[ $? -eq 0 ]]; then
+    if start-stop-daemon -S -q -x ${DAEMON}; then
       # use client to add ntp servers
       for server in ${NTPSERVERS}; do
-        ${CLIENT} add server ${server} >/dev/null 2>&1
-        [ $? = 0 ] && touch /var/status/hasNTP
+        if ${CLIENT} add server "${server}" >/dev/null 2>&1; then
+          touch /var/status/hasNTP
+        fi
       done
     fi
 
@@ -56,16 +57,21 @@ case "$1" in
       echo "OK"
     else
       echo "FAIL"
+
+      # make sure chronyd is stopped
+      start-stop-daemon -K -q -p /var/run/chrony/chronyd.pid
     fi
     ;;
   stop)
-    printf "Stopping $NAME: "
-    start-stop-daemon -K -q -p /var/run/chrony/chronyd.pid
-    [ $? = 0 ] && echo "OK" || echo "FAIL"
+    echo -n "Stopping $NAME: "
+    if start-stop-daemon -K -q -p /var/run/chrony/chronyd.pid; then
+      echo "OK"
+    else
+      echo "FAIL"
+    fi
     rm -f /var/status/hasNTP
     ;;
   restart|reload)
-    echo "Restarting $NAME: "
     $0 stop
     sleep 1
     $0 start

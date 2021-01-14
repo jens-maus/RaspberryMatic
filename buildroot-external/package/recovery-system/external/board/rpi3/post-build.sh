@@ -12,7 +12,7 @@ DHCP_VENDOR_ID=eQ3-CCU3
  
 # Load product specific parameters
 if [ -r "${TARGET_DIR}/etc/product" ]; then
-  . ${TARGET_DIR}/etc/product
+  . "${TARGET_DIR}/etc/product"
 
   # Replace vendor ID in interfaces
   sed -i "s/eQ3-CCU3/${DHCP_VENDOR_ID}/g" "${TARGET_DIR}/etc/network/interfaces"

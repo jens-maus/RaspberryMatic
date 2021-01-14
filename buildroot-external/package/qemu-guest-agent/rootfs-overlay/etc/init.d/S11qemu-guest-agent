@@ -17,6 +17,7 @@ PID="/var/run/qemu-ga.pid"
 case "$1" in
   start)
     printf "Starting qemu-guest-agent: "
+    # shellcheck disable=SC2086
     if ! start-stop-daemon -S -q -x $EXEC -- --daemonize $ARGS -m "${METHOD}" -p "${METHOD_PATH}" -f "${PID}"; then
       echo "FAILED"
       exit 1

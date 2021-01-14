@@ -18,6 +18,7 @@ PID="/var/run/irqbalance.pid"
 case "$1" in
     start)
 	printf "Starting irqbalance: "
+	# shellcheck disable=SC2086
 	if ! start-stop-daemon -S -q -x $EXEC -- $ARGS; then
 	    echo "FAILED"
 	    exit 1

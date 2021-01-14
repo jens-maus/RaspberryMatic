@@ -49,6 +49,7 @@ case $1 in
           echo -n "WARNING: UPS driver startup failed"
         fi
         # Start data server (upsd)
+        # shellcheck disable=SC2086
         start-stop-daemon -S -q -p ${UPSD_PID} -x ${UPSD} -- ${UPSD_OPTIONS} 2>/dev/null >/dev/null
         echo -n "."
       ;;
@@ -58,6 +59,7 @@ case $1 in
     if [[ -r ${UPSMON_CONF} ]]; then
       case "${MODE}" in
         standalone|netserver|netclient)
+          # shellcheck disable=SC2086
           start-stop-daemon -S -q -p ${UPSMON_PID} -x ${UPSMON} -- ${UPSMON_OPTIONS} 2>/dev/null >/dev/null
           echo "OK"
           exit 0

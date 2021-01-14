@@ -11,6 +11,7 @@ test -x "$DAEMON" || exit 0
 case "$1" in
     start)
         echo -n "Starting xinetd: "
+        # shellcheck disable=SC2086
         start-stop-daemon --pidfile "$PIDFILE" --start --quiet --background --exec "$DAEMON" -- -pidfile "$PIDFILE" $XINETD_OPTS
         echo "OK"
         ;;

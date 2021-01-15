@@ -26753,7 +26753,7 @@ iseMessageBox.prototype =
         break;
       case ID_SYSTEM_LANGUAGE_CONFIG:
         this.setTitle( translateKey("dialogConfigSystemLanguage") /*"Systemsprache waehlen - Konfiguration" */);
-        this.setWidth(400);
+        this.setWidth(800);
         this.setFile( "/pages/msg/systemLanguageConfig.htm" );
         break;
         case ID_CHOOSE_LED:

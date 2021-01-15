@@ -96,11 +96,15 @@ identify_rf_hardware() {
 
   # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
   if lsusb 2>/dev/null | grep -q 1b1f:c020; then
-    # Load module if not in a container
-    if [[ "${HM_HOST}" != "oci" ]]; then
-      modprobe cp210x
-      echo 1b1f c020 >/sys/bus/usb-serial/drivers/cp210x/new_id
+
+    # Load module if not present
+    if ! modinfo cp210x >/dev/null 2>&1; then
+      modprobe -q cp210x
     fi
+
+    # register new cp210x device
+    echo "1b1f c020" >/sys/bus/usb-serial/drivers/cp210x/new_id
+
     # shellcheck disable=SC2044
     for i in $(find /sys/bus/usb/devices/usb*/ -name "ttyUSB*" -maxdepth 4); do
       DEVDIR=$(dirname "$i")
@@ -364,7 +368,9 @@ query_rf_parameters() {
     fi
 
     # load the rpi_rf_mod_led kernel module
-    modprobe rpi_rf_mod_led red_gpio_pin="${RED_GPIO_PIN}" green_gpio_pin="${GREEN_GPIO_PIN}" blue_gpio_pin="${BLUE_GPIO_PIN}"
+    if ! modinfo rpi_rf_mod_led >/dev/null 2>&1; then
+      modprobe -q rpi_rf_mod_led red_gpio_pin="${RED_GPIO_PIN}" green_gpio_pin="${GREEN_GPIO_PIN}" blue_gpio_pin="${BLUE_GPIO_PIN}"
+    fi
 
     # rebind the gpio-leds so that numeration of the rpi-rf-mod leds are correct
     if [[ -n "${GPIO_LEDS}" ]] &&
@@ -374,7 +380,9 @@ query_rf_parameters() {
 
     # load the dummy rx8130 kernel module because an RPI-RF-MOD
     # is identified by having a rx8130 module loaded
-    modprobe dummy_rx8130
+    if ! modinfo dummy_rx8130 >/dev/null 2>&1; then
+      modprobe -q dummy_rx8130
+    fi
 
     # now we have to restart hss_led because hss_led is usually started earlier
     if [[ -f /var/run/hss_led.pid ]]; then

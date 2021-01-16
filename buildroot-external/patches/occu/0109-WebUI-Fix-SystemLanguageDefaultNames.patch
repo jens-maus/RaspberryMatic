@@ -1,9 +1,16 @@
 --- occu/WebUI/www/api/methods.conf.orig
 +++ occu/WebUI/www/api/methods.conf
-@@ -1062,6 +1062,13 @@
+@@ -1062,6 +1062,20 @@
    ARGUMENTS {_session_id_}
  }
  
++CCU.getSystemLanguage {
++  LEVEL ADMIN
++  SCRIPT_FILE ccu/getsystemlanguage.tcl
++  INFO {Gibt die eingestellte Systemsprache zurueck}
++  ARGUMENTS {_session_id_}
++}
++
 +CCU.setSystemLanguage {
 +  LEVEL ADMIN
 +  SCRIPT_FILE ccu/setsystemlanguage.tcl
@@ -14,12 +21,38 @@
  CCU.restartSSHDaemon {
    LEVEL ADMIN
    SCRIPT_FILE ccu/restartsshdaemon.tcl
+--- occu/WebUI/www/api/methods/ccu/getsystemlanguage.tcl.orig
++++ occu/WebUI/www/api/methods/ccu/getsystemlanguage.tcl
+@@ -0,0 +1,21 @@
++##
++# CCU.getSystemLanguage
++# Gibt die momentan eingestellte Systemsprache der CCU aus der
++# /etc/config/systemLanguage Datei zurueck.
++#
++# Parameter:
++#  keine
++#
++# Rückgabewert: [string]
++#  Kuerzel der Systemsprache (de, en) oder none
++##
++
++set lang "none"
++if {[catch {set fp [open /etc/config/systemLanguage r]}] == 0} {
++  if { $fp >= 0 } {
++    set lang [string trim [read $fp]]
++    close $fp
++  }
++}
++
++jsonrpc_response [json_toString $lang]
 --- occu/WebUI/www/api/methods/ccu/setsystemlanguage.tcl.orig
 +++ occu/WebUI/www/api/methods/ccu/setsystemlanguage.tcl
-@@ -0,0 +1,13 @@
+@@ -0,0 +1,207 @@
 +##
-+# CCU.systemLanguage
++# CCU.setSystemLanguage
 +# Setzt die Systemsprache der CCU in /etc/config/systemLanguage
++# und benennt die Namen aller Gewerke, Raeume und Standard-Systemvariablen
++# in die jeweilige Sprache um.
 +#
 +# Parameter:
 +#  lang         : [string] Die gewaehlte Systemsprache (de, en)
@@ -27,211 +60,204 @@
 +# Rückgabewert: immer true
 +##
 +
-+catch {exec echo $args(lang) > /etc/config/systemLanguage}
++proc resetSystemLanguage {a} {
 +
-+jsonrpc_response true
---- occu/WebUI/www/rega/esp/system.fn.orig
-+++ occu/WebUI/www/rega/esp/system.fn
-@@ -1580,3 +1580,188 @@
- function ::keepAlive()
- {
- }
++  array set args $a
 +
-+function ::setSystemLanguage()
-+{
-+  string lang = system.GetVar("systemLanguage");
-+  
-+  Call("system.fn::resetSystemLanguage()");
++  # define rega script
++  set script {
 +
-+  string funcDefault    = "funcLight;funcHeating;funcClimateControl;funcWeather;funcEnvironment;funcSecurity;funcLock;funcButton;funcCentral;funcEnergy";
-+  string funcTranslated = "Licht;Heizung;Klima;Wetter;Umwelt;Sicherheit;Verschluss;Taster;Zentrale;Energiemanagement";
++    string oID;
++    string metaDataFactoryName = "FACTORY_NAME";
 +  
-+  string roomDefault = "roomLivingRoom;roomKitchen;roomBedroom;roomChildrensRoom1;roomChildrensRoom2;roomOffice;roomBathroom;roomGarage;roomHWR;roomGarden;roomTerrace";
-+  string roomTranslated = "Wohnzimmer;Küche;Schlafzimmer;Kinderzimmer 1;Kinderzimmer 2;Büro;Badezimmer;Garage;Hauswirtschaftsraum;Garten;Terrasse";
++    object funcs = dom.GetObject(ID_FUNCTIONS);
++    object rooms = dom.GetObject(ID_ROOMS);
++    object sv    = dom.GetObject(ID_SYSTEM_VARIABLES);
 +  
-+  string svDefault   = "sysVarAlarmZone1;sysVarAlarmZone1Msg;sysVarAlarmZone1Triggered;sysVarAlarmZone1NotTriggered;sysVarPresence;sysVarPresenceMsg;sysVarPresencePresent;sysVarPresenceNotPresent;sysVarAlarmMessages;sysVarAlarmMessagesCount;sysVarServiceMessages;sysVarServiceMessagesCount;sysVarRainToday;sysVarRainTodayDescr;sysVarRainYesterday;sysVarRainYesterdayDescr";
-+  string svTranslated   = "Alarmzone 1;Alarmmeldung Alarmzone 1;ausgelöst;nicht ausgelöst;Anwesenheit;Anwesenheit;anwesend;nicht anwesend;Alarmmeldungen;Anzahl Alarmmeldungen;Servicemeldungen;Anzahl Servicemeldungen;Regen heute;Regenmenge aktueller Tag;Regen gestern;Regenmenge vorheriger Tag";
-+
-+  if (lang == "en") {
-+    funcTranslated = "Light;Heating;Climatic conditions;Weather;Environment;Security;Lock;Button;Central;Energy management";
-+    roomTranslated = "Living room;Kitchen;Bed room;Childrens room 1;Childrens room 2;Home office;Bathroom;Garage;Utility room;Garden;Terrace";
-+    svTranslated   = "Alarm zone 1;Alarm message alarm zone 1;triggered;not triggered;Presence;Presence;present;absent;Alarm messages;Number alarm messages;Service messages;Number service messages;Rain today;Rainfall current day;Rainfall yesterday;Rainfall previous day";
-+  }
-+  
-+  string oID;
-+  string metaDataFactoryName = "FACTORY_NAME";
-+  
-+  var funcs = dom.GetObject(ID_FUNCTIONS);
-+  var rooms = dom.GetObject(ID_ROOMS);
-+  var sv    = dom.GetObject(ID_SYSTEM_VARIABLES);
-+  
-+  ! Functions
-+  foreach(oID, funcs.EnumIDs()) {
-+    var oObj = dom.GetObject(oID);
-+    string listEntry;
-+    integer idx = 0;
-+    foreach(listEntry, funcDefault.Split(";")) {
-+      if ((oObj.Name() == listEntry) || (oObj.Name() == "${"#listEntry#"}")) {
-+        var meta = oObj.MetaData(metaDataFactoryName);
-+        if (!meta) {
-+          string newName = funcTranslated.StrValueByIndex(";", idx);
-+          oObj.RemoveMetaData(metaDataFactoryName);
-+          oObj.AddMetaData(metaDataFactoryName, oObj.Name());
-+          oObj.Name(newName);
-+          WriteLine("old = "#oObj.Name()#", new = "#newName);
-+        } else {
-+          WriteLine(oObj.Name()#" already renamed");
-+        }
++    foreach(oID, funcs.EnumIDs()) {
++      object oObj = dom.GetObject(oID);
++      var meta = oObj.MetaData(metaDataFactoryName);
++      if (meta) {
++        string newName = meta;
++        oObj.Name(newName);
++        oObj.RemoveMetaData(metaDataFactoryName);
 +      }
-+      idx = idx + 1;
 +    }
-+  }
-+  
-+  ! Rooms
-+  foreach(oID, rooms.EnumIDs()) {
-+    var oObj = dom.GetObject(oID);
-+    string listEntry;
-+    integer idx = 0;
-+    foreach(listEntry, roomDefault.Split(";")) {
-+      if ((oObj.Name() == listEntry) || (oObj.Name() == "${"#listEntry#"}")) {
-+        var meta = oObj.MetaData(metaDataFactoryName);
-+        if (!meta) {
-+          string newName = roomTranslated.StrValueByIndex(";", idx);
-+          oObj.RemoveMetaData(metaDataFactoryName);
-+          oObj.AddMetaData(metaDataFactoryName, oObj.Name());
-+          oObj.Name(newName);
-+          WriteLine("old = "#oObj.Name()#", new = "#newName);
-+        } else {
-+          WriteLine(oObj.Name()#" already renamed");
-+        }
-+      }
-+      idx = idx + 1;
-+    }
-+  }
-+  
-+  !Sysvars
-+  foreach(oID, sv.EnumIDs()) {
-+    var oObj = dom.GetObject(oID);
-+    string listEntry;
-+    integer idx = 0;
-+    foreach(listEntry, svDefault.Split(";")) {
-+      if ((oObj.Name() == listEntry) || (oObj.Name() == "${"#listEntry#"}")) {
-+        var meta = oObj.MetaData(metaDataFactoryName);
-+        if (!meta) {
-+          string newName = svTranslated.StrValueByIndex(";", idx);
-+          oObj.RemoveMetaData(metaDataFactoryName);
-+          oObj.AddMetaData(metaDataFactoryName, oObj.Name());
-+          oObj.Name(newName);
-+          
-+          WriteLine("old = "#oObj.Name()#", new = "#newName);
-+        } else {
-+          WriteLine(oObj.Name()#" already renamed");
-+        }
-+      }
-+      
-+      if ((oObj.ValueName0() == listEntry) || (oObj.ValueName0() == "${"#listEntry#"}")) {
-+        var meta = oObj.MetaData(metaDataFactoryName#"_VALUE_NAME_0");
-+        if (!meta) {
-+          string newValueName0 = svTranslated.StrValueByIndex(";", idx);
-+          oObj.RemoveMetaData(metaDataFactoryName#"_VALUE_NAME_0");
-+          oObj.AddMetaData(metaDataFactoryName#"_VALUE_NAME_0", oObj.ValueName0());
-+          oObj.ValueName0(newValueName0);
-+          
-+          WriteLine("old ValueName0 = "#oObj.ValueName0()#", new = "#newValueName0);
-+        } else {
-+          WriteLine(oObj.ValueName0()#" already renamed");
-+        }
-+      }
-+      
-+      if ((oObj.ValueName1() == listEntry) || (oObj.ValueName1() == "${"#listEntry#"}")) {
-+        var meta = oObj.MetaData(metaDataFactoryName#"_VALUE_NAME_1");
-+        if (!meta) {
-+          string newValueName1 = svTranslated.StrValueByIndex(";", idx);
-+          oObj.RemoveMetaData(metaDataFactoryName#"_VALUE_NAME_1");
-+          oObj.AddMetaData(metaDataFactoryName#"_VALUE_NAME_1", oObj.ValueName1());
-+          oObj.ValueName1(newValueName1);
-+          
-+          WriteLine("old ValueName1 = "#oObj.ValueName1()#", new = "#newValueName1);
-+        } else {
-+          WriteLine(oObj.ValueName1()#" already renamed");
-+        }
-+      }
-+      
-+      idx = idx + 1;
-+    }
-+  }
 +
-+}
++    foreach(oID, rooms.EnumIDs()) {
++      object oObj = dom.GetObject(oID);
++      var meta = oObj.MetaData(metaDataFactoryName);
++      if (meta) {
++        string newName = meta;
++        oObj.Name(newName);
++        oObj.RemoveMetaData(metaDataFactoryName);
++      }
++    }
 +
-+function ::resetSystemLanguage()
-+{
-+  string oID;
-+  string metaDataFactoryName = "FACTORY_NAME";
++    foreach(oID, sv.EnumIDs()) {
++      object oObj = dom.GetObject(oID);
++      var meta = oObj.MetaData(metaDataFactoryName);
++      if (meta) {
++        string newName = meta;
++        oObj.Name(newName);
++        oObj.RemoveMetaData(metaDataFactoryName);
++      }
 +  
-+  var funcs = dom.GetObject(ID_FUNCTIONS);
-+  var rooms = dom.GetObject(ID_ROOMS);
-+  var sv    = dom.GetObject(ID_SYSTEM_VARIABLES);
++      var metaValueName0 = oObj.MetaData(metaDataFactoryName#"_VALUE_NAME_0");
++      if (metaValueName0) {
++        string newName = metaValueName0;
++        oObj.ValueName0(newName);
++        oObj.RemoveMetaData(metaDataFactoryName#"_VALUE_NAME_0");
++      }
 +  
-+  foreach(oID, funcs.EnumIDs()) {
-+    var oObj = dom.GetObject(oID);
-+    var meta = oObj.MetaData(metaDataFactoryName);
-+    if (meta) {
-+      string newName = meta;
-+      WriteLine("rollback "#oObj.Name()#" to "#newName);
-+      oObj.Name(newName);
-+      oObj.RemoveMetaData(metaDataFactoryName);
-+    }
-+  }
-+  
-+  foreach(oID, rooms.EnumIDs()) {
-+    var oObj = dom.GetObject(oID);
-+    var meta = oObj.MetaData(metaDataFactoryName);
-+    if (meta) {
-+      string newName = meta;
-+      WriteLine("rollback "#oObj.Name()#" to "#newName);
-+      oObj.Name(newName);
-+      oObj.RemoveMetaData(metaDataFactoryName);
-+    }
-+  }
-+  
-+  foreach(oID, sv.EnumIDs()) {
-+    var oObj = dom.GetObject(oID);
-+    var meta = oObj.MetaData(metaDataFactoryName);
-+    if (meta) {
-+      string newName = meta;
-+      WriteLine("rollback "#oObj.Name()#" to "#newName);
-+      oObj.Name(newName);
-+      oObj.RemoveMetaData(metaDataFactoryName);
++      var metaValueName1 = oObj.MetaData(metaDataFactoryName#"_VALUE_NAME_1");
++      if (metaValueName1) {
++        string newName = metaValueName1;
++        oObj.ValueName1(newName);
++        oObj.RemoveMetaData(metaDataFactoryName#"_VALUE_NAME_1");
++      }
 +    }
 +    
-+    var metaValueName0 = oObj.MetaData(metaDataFactoryName#"_VALUE_NAME_0");
-+    if (metaValueName0) {
-+      string newName = metaValueName0;
-+      WriteLine("rollback "#oObj.ValueName0()#" to "#newName);
-+      oObj.ValueName0(newName);
-+      oObj.RemoveMetaData(metaDataFactoryName#"_VALUE_NAME_0");
++    Write("true");
++  }
++
++  set result [hmscript $script args]
++  return $result
++}
++
++proc setSystemLanguage {a} {
++
++  array set args $a
++
++  # define rega script
++  set script {
++    string funcDefault    = "funcLight;funcHeating;funcClimateControl;funcWeather;funcEnvironment;funcSecurity;funcLock;funcButton;funcCentral;funcEnergy";
++    string funcTranslated = "Licht;Heizung;Klima;Wetter;Umwelt;Sicherheit;Verschluss;Taster;Zentrale;Energiemanagement";
++
++    string roomDefault = "roomLivingRoom;roomKitchen;roomBedroom;roomChildrensRoom1;roomChildrensRoom2;roomOffice;roomBathroom;roomGarage;roomHWR;roomGarden;roomTerrace";
++    string roomTranslated = "Wohnzimmer;Küche;Schlafzimmer;Kinderzimmer 1;Kinderzimmer 2;Büro;Badezimmer;Garage;Hauswirtschaftsraum;Garten;Terrasse";
++	
++    string svDefault   = "sysVarAlarmZone1;sysVarAlarmZone1Msg;sysVarAlarmZone1Triggered;sysVarAlarmZone1NotTriggered;sysVarPresence;sysVarPresenceMsg;sysVarPresencePresent;sysVarPresenceNotPresent;sysVarAlarmMessages;sysVarAlarmMessagesCount;sysVarServiceMessages;sysVarServiceMessagesCount;sysVarRainToday;sysVarRainTodayDescr;sysVarRainYesterday;sysVarRainYesterdayDescr";
++    string svTranslated   = "Alarmzone 1;Alarmmeldung Alarmzone 1;ausgelöst;nicht ausgelöst;Anwesenheit;Anwesenheit;anwesend;nicht anwesend;Alarmmeldungen;Anzahl Alarmmeldungen;Servicemeldungen;Anzahl Servicemeldungen;Regen heute;Regenmenge aktueller Tag;Regen gestern;Regenmenge vorheriger Tag";
++
++    if (lang == "en") {
++      funcTranslated = "Light;Heating;Climatic conditions;Weather;Environment;Security;Lock;Button;Central;Energy management";
++      roomTranslated = "Living room;Kitchen;Bed room;Childrens room 1;Childrens room 2;Home office;Bathroom;Garage;Utility room;Garden;Terrace";
++      svTranslated   = "Alarm zone 1;Alarm message alarm zone 1;triggered;not triggered;Presence;Presence;present;absent;Alarm messages;Number alarm messages;Service messages;Number service messages;Rain today;Rainfall current day;Rainfall yesterday;Rainfall previous day";
 +    }
++
++    string oID;
++    string metaDataFactoryName = "FACTORY_NAME";
++  
++    object funcs = dom.GetObject(ID_FUNCTIONS);
++    object rooms = dom.GetObject(ID_ROOMS);
++    object sv    = dom.GetObject(ID_SYSTEM_VARIABLES);
++  
++    ! Functions
++    foreach(oID, funcs.EnumIDs()) {
++      object oObj = dom.GetObject(oID);
++      string listEntry;
++      integer idx = 0;
++      foreach(listEntry, funcDefault.Split(";")) {
++        if ((oObj.Name() == listEntry) || (oObj.Name() == "${"#listEntry#"}")) {
++          var meta = oObj.MetaData(metaDataFactoryName);
++          if (!meta) {
++            string newName = funcTranslated.StrValueByIndex(";", idx);
++            oObj.RemoveMetaData(metaDataFactoryName);
++            oObj.AddMetaData(metaDataFactoryName, oObj.Name());
++            oObj.Name(newName);
++          }
++        }
++        idx = idx + 1;
++      }
++    }
++  
++    ! Rooms
++    foreach(oID, rooms.EnumIDs()) {
++      object oObj = dom.GetObject(oID);
++      string listEntry;
++      integer idx = 0;
++      foreach(listEntry, roomDefault.Split(";")) {
++        if ((oObj.Name() == listEntry) || (oObj.Name() == "${"#listEntry#"}")) {
++          var meta = oObj.MetaData(metaDataFactoryName);
++          if (!meta) {
++            string newName = roomTranslated.StrValueByIndex(";", idx);
++            oObj.RemoveMetaData(metaDataFactoryName);
++            oObj.AddMetaData(metaDataFactoryName, oObj.Name());
++            oObj.Name(newName);
++          }
++        }
++        idx = idx + 1;
++      }
++    }
++
++    !Sysvars
++    foreach(oID, sv.EnumIDs()) {
++      object oObj = dom.GetObject(oID);
++      string listEntry;
++      integer idx = 0;
++      foreach(listEntry, svDefault.Split(";")) {
++        if ((oObj.Name() == listEntry) || (oObj.Name() == "${"#listEntry#"}")) {
++          var meta = oObj.MetaData(metaDataFactoryName);
++          if (!meta) {
++            string newName = svTranslated.StrValueByIndex(";", idx);
++            oObj.RemoveMetaData(metaDataFactoryName);
++            oObj.AddMetaData(metaDataFactoryName, oObj.Name());
++            oObj.Name(newName);
++          }
++        }
++  
++        if ((oObj.ValueName0() == listEntry) || (oObj.ValueName0() == "${"#listEntry#"}")) {
++          var meta = oObj.MetaData(metaDataFactoryName#"_VALUE_NAME_0");
++          if (!meta) {
++            string newValueName0 = svTranslated.StrValueByIndex(";", idx);
++            oObj.RemoveMetaData(metaDataFactoryName#"_VALUE_NAME_0");
++            oObj.AddMetaData(metaDataFactoryName#"_VALUE_NAME_0", oObj.ValueName0());
++            oObj.ValueName0(newValueName0);
++          }
++        }
++  
++        if ((oObj.ValueName1() == listEntry) || (oObj.ValueName1() == "${"#listEntry#"}")) {
++          var meta = oObj.MetaData(metaDataFactoryName#"_VALUE_NAME_1");
++          if (!meta) {
++            string newValueName1 = svTranslated.StrValueByIndex(";", idx);
++            oObj.RemoveMetaData(metaDataFactoryName#"_VALUE_NAME_1");
++            oObj.AddMetaData(metaDataFactoryName#"_VALUE_NAME_1", oObj.ValueName1());
++            oObj.ValueName1(newValueName1);
++          }
++        }
 +    
-+    var metaValueName1 = oObj.MetaData(metaDataFactoryName#"_VALUE_NAME_1");
-+    if (metaValueName1) {
-+      string newName = metaValueName1;
-+      WriteLine("rollback "#oObj.ValueName1()#" to "#newName);
-+      oObj.ValueName1(newName);
-+      oObj.RemoveMetaData(metaDataFactoryName#"_VALUE_NAME_1");
++       idx = idx + 1;
++      }
 +    }
++
++    Write("true");
++  }
++
++  set result [hmscript $script args]
++  return $result
++}
++
++# reset the system language change
++set result [resetSystemLanguage [array get args]]
++
++# set the system language to lang
++if { $result == "true" } {
++  set result [setSystemLanguage [array get args]]
++
++  if { $result == "true" } {
++    # create /etc/config/systemLanguage with the
++    # language as a content
++    set fd [open /etc/config/systemLanguage w]
++    puts -nonewline $fd $args(lang)
++    close $fd
 +  }
 +}
---- occu/WebUI/www/rega/esp/system.htm.orig
-+++ occu/WebUI/www/rega/esp/system.htm
-@@ -34,4 +34,5 @@
-   if( action == "getLastTimeOfChn"           ) { Call( "system.fn::getLastTimeOfChn()" );           }
-   if( action == "checkName"                  ) { Call( "system.fn::checkName()");                   }
-   if( action == "keepAlive"                  ) { Call( "system.fn::keepAlive()");                   }
-+  if( action == "setSystemLanguage"          ) { Call( "system.fn::setSystemLanguage()");           }
- %>
++
++jsonrpc_response $result
 --- occu/WebUI/www/rega/pages/msg/systemLanguageConfig.htm.orig
 +++ occu/WebUI/www/rega/pages/msg/systemLanguageConfig.htm
-@@ -0,0 +1,58 @@
+@@ -0,0 +1,62 @@
 +<div class="popupTitle" style='width: 98.5%;'>
 +  <%
 +  Write(system.GetVar("title"));
@@ -281,10 +307,14 @@
 +  </table>
 +</div>
 +<script type="text/javascript">
++  var lang = homematic('CCU.getSystemLanguage');
++  if(lang === 'de' || lang === 'en') {
++    $('cbLang').value = lang;
++  }
 +  doSystemLanguageConfig = function() {
 +    var selValue = $("cbLang")[$("cbLang").selectedIndex].value;
-+    iseSystem.setSystemLanguage(selValue);
 +    homematic("CCU.setSystemLanguage", {'lang': selValue});
++    PopupClose();
 +  };
 +  cancelSystemLanguageConfig = function() {
 +    PopupClose();
@@ -385,40 +415,19 @@
      "dialogRestartSafeModeTitle" : "Restart",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -7012,6 +7012,9 @@
+@@ -7012,6 +7012,11 @@
              homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
            }
          }
-+        if (!homematic('CCU.existsFile', {'file': "/etc/config/systemLanguage"})) {
++
++        // open the systemLanguage config dialog if no systemLanguage was selected yet
++        if (homematic('CCU.getSystemLanguage') === 'none') {
 +          CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
 +        }		
        }
      } else {
        WebUI.serviceMessageCount = setServiceMessage();
-@@ -25416,6 +25419,22 @@
-     new Ajax.Request(url, {postBody: ReGa.encode(pb)});  
-   },
-   
-+  setSystemLanguage: function(lang) {
-+    var url = "/esp/system.htm?sid="+SessionId;
-+    var pb = "string action = 'setSystemLanguage';";
-+    pb += "string systemLanguage = '" + lang + "';";
-+    var opts =
-+    {
-+      postBody: ReGa.encode(pb),
-+      onComplete:function(t)
-+      {
-+        PopupClose();
-+        reloadPage();
-+      }
-+    };
-+    new Ajax.Request(url,opts);     
-+  },
-+   
-   ClearHistoryData: function()
-   {
-     var url = "/esp/system.htm?sid="+SessionId;
-@@ -26732,7 +26751,12 @@
+@@ -26732,7 +26737,12 @@
          this.setWidth(800);
          this.setFile( "/pages/msg/autoLoginConfig.htm" );
          break;
@@ -432,7 +441,7 @@
          this.setTitle( translateKey("dialogEnterValue") /*"Wert eingeben" */);
          this.addToPostBody( 'string type = "'+this.type+'";' );
          this.setWidth(800);
-@@ -27551,6 +27575,7 @@
+@@ -27551,6 +27561,7 @@
  ID_SET_OUCFM_MODE        = 1023;
  ID_SET_STATUS_DISPLAY    = 1024;
  ID_BIDCOS_INTERFACE = 1025;

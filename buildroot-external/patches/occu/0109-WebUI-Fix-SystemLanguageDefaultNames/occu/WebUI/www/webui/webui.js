@@ -7012,7 +7012,9 @@ WebUI = Singleton.create({
             homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
           }
         }
-        if (!homematic('CCU.existsFile', {'file': "/etc/config/systemLanguage"})) {
+
+        // open the systemLanguage config dialog if no systemLanguage was selected yet
+        if (homematic('CCU.getSystemLanguage') === 'none') {
           CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
         }		
       }
@@ -25419,22 +25421,6 @@ ise.System.prototype = {
     new Ajax.Request(url, {postBody: ReGa.encode(pb)});  
   },
   
-  setSystemLanguage: function(lang) {
-    var url = "/esp/system.htm?sid="+SessionId;
-    var pb = "string action = 'setSystemLanguage';";
-    pb += "string systemLanguage = '" + lang + "';";
-    var opts =
-    {
-      postBody: ReGa.encode(pb),
-      onComplete:function(t)
-      {
-        PopupClose();
-        reloadPage();
-      }
-    };
-    new Ajax.Request(url,opts);     
-  },
-   
   ClearHistoryData: function()
   {
     var url = "/esp/system.htm?sid="+SessionId;

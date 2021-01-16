@@ -47,10 +47,14 @@
   </table>
 </div>
 <script type="text/javascript">
+  var lang = homematic('CCU.getSystemLanguage');
+  if(lang === 'de' || lang === 'en') {
+    $('cbLang').value = lang;
+  }
   doSystemLanguageConfig = function() {
     var selValue = $("cbLang")[$("cbLang").selectedIndex].value;
-    iseSystem.setSystemLanguage(selValue);
     homematic("CCU.setSystemLanguage", {'lang': selValue});
+    PopupClose();
   };
   cancelSystemLanguageConfig = function() {
     PopupClose();

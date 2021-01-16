@@ -16,8 +16,19 @@ fwprepare()
 {
   filename=${1}
 
-  # output the number of bytes received
-  echo "$(stat -c%s "${filename}") bytes received.<br/>"
+  # check if filename exists
+  if [[ ! -f "${filename}" ]]; then
+    echo "ERROR ('${filename}' exists)"
+    exit 1
+  fi
+
+  # check file size to be > 0
+  FILESIZE=$(stat -c%s "${filename}" 2>/dev/null)
+  if [[ -z "${FILESIZE}" ]] || [[ "${FILESIZE}" -le 0 ]]; then
+    echo "ERROR (filesize: ${FILESIZE})"
+    exit 1
+  fi
+  echo "${FILESIZE} bytes received.<br/>"
 
   echo -ne "[2/5] Calculating SHA256 checksum: "
   CHKSUM=$(/usr/bin/sha256sum "${filename}" 2>/dev/null)
@@ -40,7 +51,7 @@ fwprepare()
   FILETYPE=""
 
   # check for tar.gz or .tar
-  if [ -z "${FILETYPE}" ]; then
+  if [[ -z "${FILETYPE}" ]]; then
     if /usr/bin/file -b "${filename}" | grep -E -q "(gzip compressed|tar archive)"; then
       echo -ne "tar identified, unarchiving.."
 
@@ -66,7 +77,7 @@ fwprepare()
   fi
 
   # check for .zip
-  if [ -z "${FILETYPE}" ]; then
+  if [[ -z "${FILETYPE}" ]]; then
     if /usr/bin/file -b "${filename}" | grep -q "Zip archive data"; then
       echo -ne "zip identified, unarchiving.."
 
@@ -92,7 +103,7 @@ fwprepare()
   fi
 
   # check for .img
-  if [ -z "${FILETYPE}" ]; then
+  if [[ -z "${FILETYPE}" ]]; then
     if /usr/bin/file -b "${filename}" | grep -E -q "DOS/MBR boot sector.*"; then
       echo -ne "sdcard img identified, validating, "
 
@@ -110,7 +121,7 @@ fwprepare()
   fi
 
   # check for ext4 rootfs filesystem
-  if [ -z "${FILETYPE}" ]; then
+  if [[ -z "${FILETYPE}" ]]; then
     if /usr/bin/file -b "${filename}" | grep -E -q "ext4 filesystem.*rootfs"; then
       echo -ne "rootfs ext4 identified, validating, "
 
@@ -127,7 +138,7 @@ fwprepare()
   fi
 
   # check for vfat bootfs filesystem
-  if [ -z "${FILETYPE}" ]; then
+  if [[ -z "${FILETYPE}" ]]; then
     if /usr/bin/file -b "${filename}" | grep -E -q "DOS/MBR boot sector.*bootfs.*FAT"; then
       echo -ne "bootfs vfat identified, validating, "
 
@@ -144,7 +155,7 @@ fwprepare()
     fi
   fi
 
-  if [ -z "${FILETYPE}" ]; then
+  if [[ -z "${FILETYPE}" ]]; then
     echo "ERROR: no valid filetype found"
     exit 1
   else
@@ -158,7 +169,7 @@ fwprepare()
   # check for sha256 checksums
   (cd "${TMPDIR}";
     for chk_file in *.sha256; do
-      [ -f "${chk_file}" ] || break
+      [[ -f "${chk_file}" ]] || break
       if ! /usr/bin/sha256sum -sc "${chk_file}"; then
         echo "ERROR: (sha256sum)"
         exit 1
@@ -171,7 +182,7 @@ fwprepare()
   # check for md5 checksums
   (cd "${TMPDIR}";
     for chk_file in *.md5; do
-      [ -f "${chk_file}" ] || break
+      [[ -f "${chk_file}" ]] || break
       if ! /usr/bin/md5sum -sc "${chk_file}"; then
         echo "ERROR: (md5sum)"
         exit 1
@@ -191,7 +202,7 @@ fwprepare()
   if ! ls "${TMPDIR}"/*.img >/dev/null 2>&1 &&
      ! ls "${TMPDIR}"/*.ext4 >/dev/null 2>&1 &&
      ! ls "${TMPDIR}"/*.vfat >/dev/null 2>&1; then
-    if [ ! -x "${TMPDIR}/update_script" ]; then
+    if [[ ! -x "${TMPDIR}/update_script" ]]; then
       echo "ERROR: (update_script)"
       exit 1
     fi
@@ -744,7 +755,7 @@ fi
 
 # if an argument was given (filename of the update file/data)
 # we run fwprepare to verify its validity
-if [[ "$#" -eq 1 ]]; then
+if [[ "$#" -eq 1 ]] && [[ -n "${1}" ]]; then
   fwprepare "${1}"
 fi
 

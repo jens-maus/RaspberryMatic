@@ -26,12 +26,12 @@ start() {
       if cp -a "${USB_DIR}/ccu-update.bin" "${filename}"; then
         # run unattended firmware update
         if ! ( set -o pipefail; /bin/fwinstall.sh "${filename}" 2>&1 | tee /tmp/fwinstall.log ); then
-          [ -f /tmp/fwinstall.pid ] && kill "$(cat /tmp/fwinstall.pid)" 2>/dev/null
+          [[ -f /tmp/fwinstall.pid ]] && kill "$(cat /tmp/fwinstall.pid)" 2>/dev/null
           # firmware update failed, lets change to
           # interactive mode
           echo "ERROR!"
         else
-          [ -f /tmp/fwinstall.pid ] && kill "$(cat /tmp/fwinstall.pid)" 2>/dev/null
+          [[ -f /tmp/fwinstall.pid ]] && kill "$(cat /tmp/fwinstall.pid)" 2>/dev/null
 
           # firmware update succeeded, lets reboot!
           rm -f /usr/local/.firmwareUpdate
@@ -56,12 +56,12 @@ start() {
     # run fwinstall.sh with filename to make it extract the file
     FWINSTALL_PARAM=""
     # shellcheck disable=SC2012
-    if [ "$(ls -1 /usr/local/.firmwareUpdate | wc -l)" -eq 1 ]; then
+    if [[ "$(ls -1 /usr/local/.firmwareUpdate | wc -l)" -eq 1 ]]; then
       # read link to avoid circular reference
       FILEPATH="$(readlink -f /usr/local/.firmwareUpdate)/$(ls -1 /usr/local/.firmwareUpdate)"
-      if file -b "$FILEPATH" | grep -E -q "(gzip compressed|tar archive)"; then
+      if file -b "${FILEPATH}" | grep -E -q "(gzip compressed|tar archive)"; then
         echo "Found compressed update file ${FILEPATH}"
-        FWINSTALL_PARAM=$FILEPATH
+        FWINSTALL_PARAM=${FILEPATH}
       fi
     fi
 
@@ -69,13 +69,13 @@ start() {
     # (remount userfs in rw mode so that
     #  fwinstall.sh can extract data if necessary)
     mount -o rw,remount /userfs
-    if ! ( set -o pipefail; /bin/fwinstall.sh "$FWINSTALL_PARAM" 2>&1 | tee /tmp/fwinstall.log ); then
-      [ -f /tmp/fwinstall.pid ] && kill "$(cat /tmp/fwinstall.pid)" 2>/dev/null
+    if ! ( set -o pipefail; /bin/fwinstall.sh "${FWINSTALL_PARAM}" 2>&1 | tee /tmp/fwinstall.log ); then
+      [[ -f /tmp/fwinstall.pid ]] && kill "$(cat /tmp/fwinstall.pid)" 2>/dev/null
       # firmware update failed, lets change to
       # interactive mode
       echo "ERROR!"
     else
-      [ -f /tmp/fwinstall.pid ] && kill "$(cat /tmp/fwinstall.pid)" 2>/dev/null
+      [[ -f /tmp/fwinstall.pid ]] && kill "$(cat /tmp/fwinstall.pid)" 2>/dev/null
 
       # firmware update succeeded, lets reboot!
       mount -o rw,remount /userfs

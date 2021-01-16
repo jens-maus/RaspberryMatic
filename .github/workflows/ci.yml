@@ -149,7 +149,9 @@ jobs:
     name: OCI/Docker Build+Push
     runs-on: ubuntu-20.04
     needs: build
-    if: github.event_name != 'pull_request'
+    if: |
+      github.event_name != 'pull_request' &&
+      github.repository_owner == 'jens-maus'
 
     steps:
     - uses: actions/checkout@v2

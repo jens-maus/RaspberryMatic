@@ -33,7 +33,7 @@ identify_rf_hardware() {
     if [[ ! -e /sys/module/hb_rf_eth/parameters/connect ]]; then
 
       # load the hb_rf_eth kernel module
-      if ! modinfo hb_rf_eth >/dev/null 2>&1; then
+      if ! grep -Eq "^hb_rf_eth " /proc/modules; then
         modprobe -q hb_rf_eth
       fi
 
@@ -98,7 +98,7 @@ identify_rf_hardware() {
   if lsusb 2>/dev/null | grep -q 1b1f:c020; then
 
     # Load module if not present
-    if ! modinfo cp210x >/dev/null 2>&1; then
+    if ! grep -Eq "^cp210x " /proc/modules; then
       modprobe -q cp210x
     fi
 
@@ -368,7 +368,7 @@ query_rf_parameters() {
     fi
 
     # load the rpi_rf_mod_led kernel module
-    if ! modinfo rpi_rf_mod_led >/dev/null 2>&1; then
+    if ! grep -Eq "^rpi_rf_mod_led " /proc/modules; then
       modprobe -q rpi_rf_mod_led red_gpio_pin="${RED_GPIO_PIN}" green_gpio_pin="${GREEN_GPIO_PIN}" blue_gpio_pin="${BLUE_GPIO_PIN}"
     fi
 
@@ -380,7 +380,7 @@ query_rf_parameters() {
 
     # load the dummy rx8130 kernel module because an RPI-RF-MOD
     # is identified by having a rx8130 module loaded
-    if ! modinfo dummy_rx8130 >/dev/null 2>&1; then
+    if ! grep -Eq "^dummy_rx8130 " /proc/modules; then
       modprobe -q dummy_rx8130
     fi
 

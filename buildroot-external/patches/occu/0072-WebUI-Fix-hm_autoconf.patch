@@ -157,6 +157,42 @@
      proc create_sysvar_to_value_prg {ch_id value sv_id prg_name} {
          set script "string ch_id=\"$ch_id\";\nstring value_name=\"$value\";\nstring sv_id=$sv_id;\nstring prg_name=\"$prg_name\";\n"
          append script {
+@@ -279,7 +194,7 @@
+     proc create_rain_calculation {ch_id} {
+     
+       ##
+-      # FÃ¼hrt ein HomeMatic Script (ise Script, ReGa Script) aus und liefert dessen Ausgabe zurÃ¼ck
++      # Führt ein HomeMatic Script (ise Script, ReGa Script) aus und liefert dessen Ausgabe zurück
+       ##
+       proc _rega_exec_ { script } {
+         set result {}
+@@ -308,7 +223,7 @@
+       }
+     
+       ##
+-      # Erzeugt eine Systemvariable, bindet diese an einen Kanal und liefert ihre Id zurÃ¼ck
++      # Erzeugt eine Systemvariable, bindet diese an einen Kanal und liefert ihre Id zurück
+       ##
+       proc _create_sv_ {name info channelId} {
+         set    script "var name = \"$name\";\n"
+@@ -336,7 +251,7 @@
+       }
+     
+       ##
+-      # Erstellt das Programm "Regentagesmenge zurÃ¼cksetzen"
++      # Erstellt das Programm "Regentagesmenge zurücksetzen"
+       ##
+       proc _create_reset_program_ { rainTodayId rainYesterdayId } {
+   
+@@ -358,7 +273,7 @@
+ 
+           var programs = dom.GetObject(ID_PROGRAMS);
+           var program  = dom.CreateObject(OT_PROGRAM);
+-          program.Name("Regentagesmenge zurÃ¼cksetzen");
++          program.Name("Regentagesmenge zurücksetzen");
+           program.Internal(true);
+           programs.Add(program.ID());
+ 
 @@ -499,7 +414,9 @@
          string ifaces;
          foreach(if_id, dom.GetObject(ID_INTERFACES).EnumUsedIDs()){

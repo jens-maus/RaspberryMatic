@@ -1,3 +1,63 @@
+--- occu/WebUI/bin/hm_autoconf.orig
++++ occu/WebUI/bin/hm_autoconf
+@@ -316,14 +316,57 @@
+       # Erzeugt eine Systemvariable, bindet diese an einen Kanal und liefert ihre Id zurück
+       ##
+       proc _create_sv_ {name info channelId} {
++        # get selected systemLanguage from /etc/config/systemLanguage
++        set lang "none"
++        if {[catch {set fp [open /etc/config/systemLanguage r]}] == 0} {
++          if { $fp >= 0 } {
++            set lang [string trim [read $fp]]
++            close $fp
++          }
++        }
++
++        set trName ""
++        set trMsg ""
++        if { $name == "\${sysVarRainToday}" } {
++          set trName "sysVarRainToday"
++          set trMsg "sysVarRainTodayDescr"
++          if { $lang == "de" } {
++            set name "Regen heute"
++            set info "Regenmenge aktueller Tag"
++          } elseif { $lang == "en" } {
++            set name "Rain today"
++            set info "Rainfall current day"
++          } else {
++            set trName ""
++            set trMsg ""
++          }
++        } elseif { $name == "\${sysVarRainYesterday}" } {
++          set trName "sysVarRainYesterday"
++          set trMsg "sysVarRainYesterdayDescr"
++          if { $lang == "de" } {
++            set name "Regen gestern"
++            set info "Regenmenge vorheriger Tag"
++          } elseif { $lang == "en" } {
++            set name "Rain yesterday"
++            set info "Rainfall previous day"
++          } else {
++            set trName ""
++            set trMsg ""
++          }
++        }
++
+         set    script "var name = \"$name\";\n"
+         append script "var info = \"$info\";\n"
+         append script "var channelId = \"$channelId\";\n"
++        append script "var trName = \"$trName\";\n"
++        append script "var trMsg = \"$trMsg\";\n"
+         append script {
+           var channel = dom.GetObject(channelId);
+           var sv = dom.CreateObject(OT_VARDP, name);
+           dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
++          if(trName != "") { sv.AddMetaData("trID", trName); }
+           sv.DPInfo(info);
++          if(trMsg != "") { sv.AddMetaData("trIDMsg", trMsg); }
+           sv.ValueUnit("mm");
+           sv.ValueType( ivtFloat );
+           sv.ValueSubType( istGeneric );
 --- occu/WebUI/www/api/methods.conf.orig
 +++ occu/WebUI/www/api/methods.conf
 @@ -1062,6 +1062,20 @@

@@ -523,19 +523,30 @@
      "dialogRestartSafeModeTitle" : "Restart",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -7012,6 +7012,11 @@
+@@ -7011,6 +7011,11 @@
+             new MessageBox.show(translateKey("dglUserNewFwSettingsTitle"), translateKey("dglUserNewFwSettingsContent"));
              homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
            }
-         }
 +
-+        // open the systemLanguage config dialog if no systemLanguage was selected yet
-+        if (homematic('CCU.getSystemLanguage') === 'none') {
-+          CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
-+        }		
++          // open the systemLanguage config dialog if no systemLanguage was selected yet
++          if (homematic('CCU.getSystemLanguage') === 'none') {
++            CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
++          }
+         }
        }
      } else {
-       WebUI.serviceMessageCount = setServiceMessage();
-@@ -26732,7 +26737,12 @@
+@@ -20669,6 +20674,10 @@
+   
+   this.leave = function()
+   {
++    // open the systemLanguage config dialog if no systemLanguage was selected yet
++    if (homematic('CCU.getSystemLanguage') === 'none') {
++      CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
++    }
+   };
+ 
+   this.resize = function()
+@@ -26732,7 +26741,12 @@
          this.setWidth(800);
          this.setFile( "/pages/msg/autoLoginConfig.htm" );
          break;
@@ -549,7 +560,7 @@
          this.setTitle( translateKey("dialogEnterValue") /*"Wert eingeben" */);
          this.addToPostBody( 'string type = "'+this.type+'";' );
          this.setWidth(800);
-@@ -27551,6 +27561,7 @@
+@@ -27551,6 +27565,7 @@
  ID_SET_OUCFM_MODE        = 1023;
  ID_SET_STATUS_DISPLAY    = 1024;
  ID_BIDCOS_INTERFACE = 1025;

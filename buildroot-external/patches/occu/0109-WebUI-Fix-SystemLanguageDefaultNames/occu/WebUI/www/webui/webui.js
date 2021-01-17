@@ -7011,12 +7011,12 @@ WebUI = Singleton.create({
             new MessageBox.show(translateKey("dglUserNewFwSettingsTitle"), translateKey("dglUserNewFwSettingsContent"));
             homematic("CCU.setUserAckInstallWizard", {'userName': usrName});
           }
-        }
 
-        // open the systemLanguage config dialog if no systemLanguage was selected yet
-        if (homematic('CCU.getSystemLanguage') === 'none') {
-          CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
-        }		
+          // open the systemLanguage config dialog if no systemLanguage was selected yet
+          if (homematic('CCU.getSystemLanguage') === 'none') {
+            CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
+          }
+        }
       }
     } else {
       WebUI.serviceMessageCount = setServiceMessage();
@@ -20674,6 +20674,10 @@ adminFirstStartup = new function()
   
   this.leave = function()
   {
+    // open the systemLanguage config dialog if no systemLanguage was selected yet
+    if (homematic('CCU.getSystemLanguage') === 'none') {
+      CreatePopup(ID_SYSTEM_LANGUAGE_CONFIG);
+    }
   };
 
   this.resize = function()

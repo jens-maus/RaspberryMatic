@@ -102,7 +102,6 @@ jobs:
     # nightly snapshot uploads
     - name: Upload build snapshot [rpi*, tinkerboard, intelnuc, ova]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         !startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/deploy-nightly@v1.1.0
@@ -118,7 +117,6 @@ jobs:
 
     - name: Upload build snapshot checksum [rpi*, tinkerboard, intelnuc, ova]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         !startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/deploy-nightly@v1.1.0
@@ -134,7 +132,6 @@ jobs:
 
     - name: Upload build snapshot [ccu3]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         matrix.platform == 'rpi3'
       uses: WebFreak001/deploy-nightly@v1.1.0
@@ -150,7 +147,6 @@ jobs:
 
     - name: Upload build snapshot checksum [ccu3]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         matrix.platform == 'rpi3'
       uses: WebFreak001/deploy-nightly@v1.1.0
@@ -166,7 +162,6 @@ jobs:
 
     - name: Upload build snapshot [ova]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         matrix.platform == 'ova'
       uses: WebFreak001/deploy-nightly@v1.1.0
@@ -182,7 +177,6 @@ jobs:
 
     - name: Upload build snapshot checksum [ova]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         matrix.platform == 'ova'
       uses: WebFreak001/deploy-nightly@v1.1.0
@@ -198,7 +192,6 @@ jobs:
 
     - name: Upload build snapshot [oci]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/deploy-nightly@v1.1.0
@@ -214,7 +207,6 @@ jobs:
 
     - name: Upload build snapshot checksum [oci]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/deploy-nightly@v1.1.0
@@ -286,7 +278,7 @@ jobs:
       run: |
         BASE_TAG="ghcr.io/${{ github.repository_owner }}/raspberrymatic"
         UNIQUE_TAG="${BASE_TAG}:${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}"
-        if [[ ${GITHUB_EVENT_NAME} == 'schedule' || ${GITHUB_EVENT_NAME} == 'push' ]]; then
+        if [[ ${GITHUB_EVENT_NAME} == 'schedule' || ${GITHUB_EVENT_NAME} == 'workflow_dispatch' ]]; then
           BRANCH="${GITHUB_REF##*/}"
           if [[ ${BRANCH} == 'master' ]]; then
             BRANCH_TAG="${BASE_TAG}:snapshot"

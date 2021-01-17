@@ -107,7 +107,7 @@ jobs:
         !startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -123,7 +123,7 @@ jobs:
         !startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -139,7 +139,7 @@ jobs:
         matrix.platform == 'rpi3'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -155,7 +155,7 @@ jobs:
         matrix.platform == 'rpi3'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -171,7 +171,7 @@ jobs:
         matrix.platform == 'ova'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -187,7 +187,7 @@ jobs:
         matrix.platform == 'ova'
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -203,7 +203,7 @@ jobs:
         startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -219,7 +219,7 @@ jobs:
         startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592

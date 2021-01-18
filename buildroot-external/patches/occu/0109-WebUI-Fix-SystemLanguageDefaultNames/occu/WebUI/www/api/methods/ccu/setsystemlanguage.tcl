@@ -64,7 +64,7 @@ proc setSystemLanguage {a} {
     ! Rooms
     string roomDefault      = "roomLivingRoom;roomKitchen;roomBedroom;roomChildrensRoom1;roomChildrensRoom2;roomOffice;roomBathroom;roomGarage;roomHWR;roomGarden;roomTerrace";
     string roomTranslatedDE = "Wohnzimmer;Küche;Schlafzimmer;Kinderzimmer 1;Kinderzimmer 2;Büro;Badezimmer;Garage;Hauswirtschaftsraum;Garten;Terrasse";
-    string roomTranslatedEN = "Living room;Kitchen;Bed room;Childrens room 1;Childrens room 2;Home office;Bathroom;Garage;Utility room;Garden;Terrace";
+    string roomTranslatedEN = "Living room;Kitchen;Bed room;Children`s room 1;Children`s room 2;Home office;Bathroom;Garage;Utility room;Garden;Terrace";
 
     string roomTranslatedNew;
     string roomTranslatedOld;

@@ -31,8 +31,7 @@ fwprepare()
   echo "${FILESIZE} bytes received.<br/>"
 
   echo -ne "[2/5] Calculating SHA256 checksum: "
-  CHKSUM=$(/usr/bin/sha256sum "${filename}" 2>/dev/null)
-  if [[ -n "${CHKSUM}" ]]; then
+  if ! CHKSUM=$(/usr/bin/sha256sum "${filename}" 2>/dev/null) || [[ -z "${CHKSUM}" ]]; then
     echo "ERROR (sha256sum)"
     exit 1
   fi

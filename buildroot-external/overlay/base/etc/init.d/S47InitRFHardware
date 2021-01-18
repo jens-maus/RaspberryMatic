@@ -28,7 +28,7 @@ identify_rf_hardware() {
   # if the user has configured a HB-RF-ETH ip address
   # in /etc/config/hb_rf_eth we try to load the corresponding
   # kernel module
-  HB_RF_ETH_ADDRESS=$(cat /etc/config/hb_rf_eth 2>/dev/null | head -1 | tr -d '[:space:]')
+  HB_RF_ETH_ADDRESS=$(head -1 /etc/config/hb_rf_eth 2>/dev/null | tr -d '[:space:]')
   if [[ -n "${HB_RF_ETH_ADDRESS}" ]]; then
     if [[ ! -e /sys/module/hb_rf_eth/parameters/connect ]]; then
 

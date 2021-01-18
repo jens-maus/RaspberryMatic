@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 
 echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
 
@@ -20,16 +21,13 @@ fi
 
 echo -ne "[2/3] Factory Reset: Creating new user filesystem... "
 
-mkfs.ext4 -q -F -L userfs "${DEVNAME}"
-if [ $? -ne 0 ]; then
+if ! mkfs.ext4 -q -F -L userfs "${DEVNAME}"; then
   echo "ERROR: mkfs.ext4 failed. Please contact support hotline.<br>"
 else
-  tune2fs -c 0 -i 0 "${DEVNAME}" >/dev/null
-  if [ $? -ne 0 ]; then
+  if ! tune2fs -c 0 -i 0 "${DEVNAME}" >/dev/null; then
     echo "ERROR: tune2fs failed. Please contact support hotline.<br>"
   else
-    e2fsck -pDf "${DEVNAME}" >/dev/null
-    if [ $? -ne 0 ]; then
+    if ! e2fsck -pDf "${DEVNAME}" >/dev/null; then
       echo "ERROR: e2fsck failed. Please contact support hotline.<br>"
     fi
   fi

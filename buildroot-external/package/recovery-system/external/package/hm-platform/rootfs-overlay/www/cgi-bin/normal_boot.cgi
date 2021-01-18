@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 
 echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
 
@@ -9,20 +10,17 @@ fi
 
 echo -ne "[1/2] Setting normal boot... "
 
-mount -o rw,remount /userfs
-if [ $? -ne 0 ]; then
+if ! mount -o rw,remount /userfs; then
 	echo "ERROR (rw remount)"
 	exit 1
 fi
 
-rm -rf /usr/local/etc/config/safemode
-if [ $? -ne 0 ]; then
+if ! rm -rf /usr/local/etc/config/safemode; then
 	echo "ERROR (touch)"
 	exit 1
 fi
 
-mount -o ro,remount /userfs
-if [ $? -ne 0 ]; then
+if ! mount -o ro,remount /userfs; then
 	echo "ERROR (ro remount)"
 	exit 1
 fi

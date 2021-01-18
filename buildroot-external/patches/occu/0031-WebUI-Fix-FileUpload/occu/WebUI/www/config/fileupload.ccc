@@ -1,30 +1,32 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169,SC2034,SC2154
 
 echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
 
 # fake read boundary+disposition, etc.
-read boundary
-read disposition
-read ctype
-read junk
+read -r boundary
+read -r disposition
+read -r ctype
+read -r junk
 
 # get length
 a=${#boundary}
 b=${#disposition}
 c=${#ctype}
+d=0
 
 # Due to \n\r line breaks we have 2 extra bytes per line read,
 # 6 + 2 newlines == 10 junk bytes
 a=$((a*2+b+c+d+10))
 
 # extract all params from QUERY_STRING
+# shellcheck disable=SC2046,SC2116,SC2086
 eval $(echo ${QUERY_STRING//&/;})
 
 # write out the data
 SIZE=$((HTTP_CONTENT_LENGTH-a))
 filename=$(mktemp -p /usr/local/tmp)
-/usr/bin/head -q -c ${SIZE} >${filename}
-if [ $? -ne 0 ]; then
+if ! /usr/bin/head -q -c ${SIZE} >"${filename}"; then
   echo "ERROR (head)"
 fi
 

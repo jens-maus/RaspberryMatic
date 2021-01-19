@@ -254,30 +254,26 @@ check program temperature with path /bin/sh -c "(cat /sys/class/thermal/thermal_
     group system
     if status != 10 for 5 cycles then
       exec "/bin/triggerAlarm.tcl 'high system temperature (> 80 deg) detected' WatchDog-Alarm"
+      repeat every 24 cycles
 
 # internet connectivity monitoring
 check program internetCheck with path "/usr/bin/test -e /var/status/hasInternet"
     group system
     if status != 0 for 24 cycles then
       exec "/bin/triggerAlarm.tcl 'No internet connection detected' WatchDog-Alarm"
+      repeat every 24 cycles
     depends on internetCheckEnabled
 
 check program internetCheckEnabled with path "/usr/bin/test -e /etc/config/internetCheckDisabled"
     group system
-    if status == 0 for 1 cycles then unmonitor
-
-# check for a non-empty /tmp/badblocks.txt file and warn the user accordingly
-check program badblocksCheck with path "/usr/bin/test -s /tmp/badblocks.txt"
-    group systen
-    if status = 0 for 1 cycles then
-      exec "/bin/triggerAlarm.tcl 'Bad blocks on main disk device detected' WatchDog-Alarm"
-    depends on crond
+    if status = 0 for 1 cycles then unmonitor
 
 # check for an unclean shutdown by checking for /var/status/uncleanShutdown
 check program uncleanShutdownCheck with path "/usr/bin/test -e /var/status/uncleanShutdown"
     group systen
     if status = 0 for 1 cycles then
       exec /bin/sh -c "/bin/triggerAlarm.tcl 'Unclean shutdown or system crash identified' WatchDog-Alarm ; rm -f /var/status/uncleanShutdown"
+      repeat every 24 cycles
 
 # check if a HB-RF-ETH is supposed to be connected and if it is not rais an alarm
 check program hb_rf_eth-Check with path "/bin/grep -q 1 /sys/class/hb-rf-eth/hb-rf-eth/is_connected"

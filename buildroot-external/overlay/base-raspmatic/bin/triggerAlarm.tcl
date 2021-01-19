@@ -3,8 +3,8 @@
 # Simple tclsh script for triggering an alarm message with DPInfo
 # <msg> to alarm variable <var> with eventually creating it.
 #
-# triggerAlarm.ctl v2.1
-# Copyright (c) 2017-2019 Jens Maus <mail@jens-maus.de>
+# triggerAlarm.ctl v2.2
+# Copyright (c) 2017-2021 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,11 +40,16 @@ if { $var == "" } {
   set script "
     object alObj = null;
     string sSysVarId;
-    foreach(sSysVarId, dom.GetObject(ID_SYSTEM_VARIABLES).EnumUsedIDs()) {
+    foreach(sSysVarId, dom.GetObject(ID_SYSTEM_VARIABLES).EnumIDs()) {
       object oSysVar = dom.GetObject(sSysVarId);
-      if((alObj == null) &&
-        ((oSysVar.Name() == \"\${sysVarAlarmZone1}\") || (oSysVar.Name() == \"Alarmzone 1\"))) {
+      string sysVarName = oSysVar.Name();
+      string trName = oSysVar.MetaData('trID');
+      if(((trName) && (trName == 'sysVarAlarmZone1')) ||
+         (sysVarName.Contains('sysVarAlarmZone1')) ||
+         (sysVarName == 'Alarmzone 1') ||
+         (sysVarName == 'Alarm zone 1')) {
         alObj=oSysVar;
+        break;
       }
     }
   "
@@ -55,12 +60,32 @@ if { $var == "" } {
     string sSysVarId;
     foreach(sSysVarId, dom.GetObject(ID_SYSTEM_VARIABLES).EnumUsedIDs()) {
       object oSysVar = dom.GetObject(sSysVarId);
-      if((alObj == null) &&
-         (oSysVar.Name() == \"$var\")) {
+      if(oSysVar.Name() == \"$var\") {
         alObj=oSysVar;
+        break;
       }
     }
   "
+}
+
+# get selected systemLanguage from /etc/config/systemLanguage
+set lang "none"
+if {[catch {set fp [open /etc/config/systemLanguage r]}] == 0} {
+  if { $fp >= 0 } {
+    set lang [string trim [read $fp]]
+    close $fp
+  }
+}
+
+if { $lang == "de" } {
+  set valueName0 "nicht ausgelöst"
+  set valueName1 "ausgelöst"
+} elseif { $lang == "en" } {
+  set valueName0 "not triggered"
+  set valueName1 "triggered"
+} else {
+  set valueName0 "\${sysVarAlarmZone1NotTriggered}"
+  set valueName1 "\${sysVarAlarmZone1Triggered}"
 }
 
 # try to get an alarm variable with name $var
@@ -79,9 +104,11 @@ append script "
       alObj.Name(\"$var\");
       alObj.ValueType(ivtBinary);
       alObj.ValueSubType(istAlarm);
-      alObj.ValueName0(\"\${sysVarAlarmZone1NotTriggered}\");
-      alObj.ValueName1(\"\${sysVarAlarmZone1Triggered}\");
-      alObj.ValueUnit(\"\");
+      alObj.ValueName0(\"$valueName0\");
+      alObj.AddMetaData('trIDValue0', 'sysVarAlarmZone1NotTriggered');
+      alObj.ValueName1(\"$valueName1\");
+      alObj.AddMetaData('trIDValue1', 'sysVarAlarmZone1Triggered');
+      alObj.ValueUnit('');
       alObj.AlType(atSystem);
       alObj.AlArm(true);
       alObj.AlSetBinaryCondition();

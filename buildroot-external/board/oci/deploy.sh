@@ -36,10 +36,10 @@ set -e
 : "${CCU_CONTAINER_NAME:="ccu"}"
 
 #Additional options for docker run
-: ${CCU_DOCKER_RUN_OPTIONS:=""}
+: "${CCU_DOCKER_RUN_OPTIONS:=""}"
 
 #Additional options for docker pull
-: ${CCU_DOCKER_PULL_OPTIONS:=""}
+: "${CCU_DOCKER_PULL_OPTIONS:=""}"
 
 #Time for a clean container stop before it gets killed
 : "${CCU_DOCKER_STOP_TIMEOUT:="30"}"

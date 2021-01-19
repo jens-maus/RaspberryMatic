@@ -1,10 +1,11 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
 # A shell script variant of a control daemon to
 # control the fan and power buttons of a ArgonONE case
 # or Argon FAN HAT
 #
-# Copyright (c) 2020 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2020-2021 Jens Maus <mail@jens-maus.de>
 #
 
 fancontrol()
@@ -40,7 +41,7 @@ powercontrol()
     # and catch the timestamp output to check if we
     # need to reboot or shutdown
     output=$(/usr/bin/gpiomon -r -f -n 2 -F %s.%n gpiochip0 4)
-    pulsetime=$(echo ${output} | awk '{ print int(($2-$1)/0.01) }')
+    pulsetime=$(echo "${output}" | awk '{ print int(($2-$1)/0.01) }')
 
     # depending on the pulsetime length we either reboot
     # or shutdown
@@ -54,8 +55,8 @@ powercontrol()
 
 cleanup()
 {
-  kill -9 ${fancontrolPID} 2>/dev/null
-  kill -9 ${powercontrolPID} 2>/dev/null
+  kill -9 "${fancontrolPID}" 2>/dev/null
+  kill -9 "${powercontrolPID}" 2>/dev/null
   pkill -f gpiomon.*gpiochip0.4
 }
 

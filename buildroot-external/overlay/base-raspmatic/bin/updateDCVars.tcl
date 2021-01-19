@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.7
+# DutyCycle Script v3.8
 # Copyright (c) 2018-2021 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -247,7 +247,6 @@ if {$portFound == 0} {
               Write(' DESCRIPTION {}');
               Write(' CARRIER_SENSE '#csValue);
               Write(' DUTY_CYCLE '#dcValue);
-              Write(' FIRMWARE_VERSION 0.0.0');
               Write(' TYPE HMIP-HAP} ');
               break;
             }
@@ -309,7 +308,7 @@ if {$portFound == 0} {
         append jsonResult ",\"type\":[json_toString $gateway(TYPE)]"
         append jsonResult "\}"
 
-        set infoTxt "DutyCycle-$gateway(ADDRESS), NAME: '$name', TYPE: $gateway(TYPE), FW: $gateway(FIRMWARE_VERSION), CONNECTED: $gateway(CONNECTED), DC: $dutycycle %"
+        set infoTxt "DutyCycle-$gateway(ADDRESS), NAME: '$name', TYPE: $gateway(TYPE), CONNECTED: $gateway(CONNECTED), DC: $dutycycle %"
         if {$gateway(CONNECTED) == 0} {
           exec /bin/triggerAlarm.tcl "RF-Gateway $name ($gateway(ADDRESS)) not connected" "RF-Gateway-Alarm"
           exec logger -t dutycycle -p error "$infoTxt"

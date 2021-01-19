@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 
 echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
 
@@ -6,7 +7,7 @@ if [ -f /tmp/.runningFirmwareUpdate ]; then
   echo "Displaying running firmware update output:<br/>"
   echo "==========================================<br/>"
 
-  [ -f /tmp/fwinstall.pid ] && kill $(cat /tmp/fwinstall.pid)
+  [ -f /tmp/fwinstall.pid ] && kill "$(cat /tmp/fwinstall.pid)"
   /usr/bin/tail -F /tmp/fwinstall.log &
   echo $! >/tmp/fwinstall.pid
   wait $!
@@ -98,10 +99,10 @@ i=0
 for dev in ${DEVICE_LIST}; do
   if ! echo "${ROOTFS_DEV}" | grep "${dev}"; then
     echo -n "<option value=\"${dev}\">"
-    details=$(lsblk -d -n -i -o SIZE,MODEL ${dev} | head -1)
+    details=$(lsblk -d -n -i -o SIZE,MODEL "${dev}" | head -1)
     echo -n "${dev}: ${details}"
     echo "</option>"
-    i=$(expr $i + 1)
+    i=$((i + 1))
   fi
 done
 
@@ -163,9 +164,9 @@ cat <<EOF
       <tr>
         <td>
           <p id="infoPanel" class="infoPanel" style="color:lightgrey; display: none;">
-            recoveryfs: $(cat /VERSION | grep "VERSION=" | cut -f2 -d=)<br/>
-            bootfs: $(cat /bootfs/VERSION | grep "VERSION=" | cut -f2 -d=)<br/>
-            rootfs: $(cat /rootfs/VERSION | grep "VERSION=" | cut -f2 -d=)
+            recoveryfs: $(grep "VERSION=" /VERSION | cut -f2 -d=)<br/>
+            bootfs: $(grep "VERSION=" /bootfs/VERSION | cut -f2 -d=)<br/>
+            rootfs: $(grep "VERSION=" /rootfs/VERSION | cut -f2 -d=)
           </p>
         </td>
       </tr>

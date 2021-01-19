@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
 # start/stop cron daemon
 #
@@ -35,8 +36,7 @@ init() {
   grep -viE "${EXCLUDE_PATTERN}" /usr/local/crontabs/root 2>/dev/null >>/var/spool/cron/crontabs/root
 
   # now we cleanup the user modified crontab
-  grep -qiE "${EXCLUDE_PATTERN}" /usr/local/crontabs/root
-  if [ $? -eq 0 ]; then
+  if grep -qiE "${EXCLUDE_PATTERN}" /usr/local/crontabs/root; then
     grep -viE "${EXCLUDE_PATTERN}" /usr/local/crontabs/root 2>/dev/null >/tmp/cron.root
     mv -f /tmp/cron.root /usr/local/crontabs/root
   fi

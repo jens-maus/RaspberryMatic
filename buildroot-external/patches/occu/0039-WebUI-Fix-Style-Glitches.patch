@@ -215,6 +215,19 @@
    </tr>
    <tr>
      <td class="CLASS06405">
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -86,8 +86,8 @@
+     "footerBtnTransfer" : "%DCbernehmen",
+     "footerBtnOk" : "OK",
+     "footerBtnSaveNewProgram" : "Einstellungen als neues<br/>Programm speichern",
+-    "footerBtnOpenTree" : "Baumstruktur %F6ffnen",
+-    "footerBtnCloseTree" : "Baumstruktur schlie%DFen",
++    "footerBtnOpenTree" : "Baumstruktur<br/>%F6ffnen",
++    "footerBtnCloseTree" : "Baumstruktur<br/>schlie%DFen",
+     "footerBtnEdit" : "Bearbeiten",
+     "footerBtnAutoLogin" : "Automatisches<br/>Anmelden",
+     "footerBtnVirtualChannelsShow" : "Virtuelle Kan%E4le anzeigen",
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
 @@ -391,7 +391,7 @@

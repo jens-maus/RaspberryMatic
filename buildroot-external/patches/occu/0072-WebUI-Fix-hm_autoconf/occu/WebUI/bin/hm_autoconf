@@ -194,7 +194,7 @@ if { [catch {
     proc create_rain_calculation {ch_id} {
     
       ##
-      # FÃ¼hrt ein HomeMatic Script (ise Script, ReGa Script) aus und liefert dessen Ausgabe zurÃ¼ck
+      # Führt ein HomeMatic Script (ise Script, ReGa Script) aus und liefert dessen Ausgabe zurück
       ##
       proc _rega_exec_ { script } {
         set result {}
@@ -223,7 +223,7 @@ if { [catch {
       }
     
       ##
-      # Erzeugt eine Systemvariable, bindet diese an einen Kanal und liefert ihre Id zurÃ¼ck
+      # Erzeugt eine Systemvariable, bindet diese an einen Kanal und liefert ihre Id zurück
       ##
       proc _create_sv_ {name info channelId} {
         set    script "var name = \"$name\";\n"
@@ -251,7 +251,7 @@ if { [catch {
       }
     
       ##
-      # Erstellt das Programm "Regentagesmenge zurÃ¼cksetzen"
+      # Erstellt das Programm "Regentagesmenge zurücksetzen"
       ##
       proc _create_reset_program_ { rainTodayId rainYesterdayId } {
   
@@ -273,7 +273,7 @@ if { [catch {
 
           var programs = dom.GetObject(ID_PROGRAMS);
           var program  = dom.CreateObject(OT_PROGRAM);
-          program.Name("Regentagesmenge zurÃ¼cksetzen");
+          program.Name("Regentagesmenge zurücksetzen");
           program.Internal(true);
           programs.Add(program.ID());
 

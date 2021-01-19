@@ -1,15 +1,16 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 
 STARTPWD=$(pwd)
-ROOT_FS=$(cat repositories | cut -d'"' -f6)/layer.tar
+ROOT_FS=$(cut -d'"' -f6 ./repositories)/layer.tar
 
 RC=1
 
-if [ -f ${STARTPWD}/${ROOT_FS} ]; then
+if [ -f "${STARTPWD}/${ROOT_FS}" ]; then
   echo -ne "Overriding container files in / ... "
+  # shellcheck disable=SC2114
   rm -rf --one-file-system /
-  tar -C / --warning=no-timestamp --no-same-owner -xf ${ROOT_FS}
-  if [ $? -ne 0 ]; then
+  if ! tar -C / --warning=no-timestamp --no-same-owner -xf "${ROOT_FS}"; then
     echo "ERROR: (tar)"
     RC=1
   else

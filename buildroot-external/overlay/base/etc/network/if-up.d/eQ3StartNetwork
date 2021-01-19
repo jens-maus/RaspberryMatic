@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
@@ -10,11 +11,11 @@
 # connection using a slow blinking blue LED
 if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
    [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
-  echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
-  echo none >/sys/class/leds/rpi_rf_mod\:red/trigger
-  echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
-  echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_on
-  echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_off
+  echo none >/sys/class/leds/rpi_rf_mod:green/trigger
+  echo none >/sys/class/leds/rpi_rf_mod:red/trigger
+  echo timer >/sys/class/leds/rpi_rf_mod:blue/trigger
+  echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_on
+  echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_off
 fi
 
 # performance tuning to reduce TCP performance spikes
@@ -38,7 +39,7 @@ fi
 if [[ -f /var/status/hasIP ]] &&
    [[ -f /var/status/hasLink ]]; then
 
-  /sbin/ip link set ${IFACE} down
+  /sbin/ip link set "${IFACE}" down
   echo -n " disabled, "
 
   # make sure that the wifi power is disabled
@@ -56,11 +57,11 @@ fi
 case "${IFACE}" in
   eth*)
     # wait until the link is up
-    /sbin/ip link set ${IFACE} up
+    /sbin/ip link set "${IFACE}" up
     i=0
-    while [[ "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; do
+    while [[ "$(cat "/sys/class/net/${IFACE}/carrier")" == "0" ]]; do
       sleep 2
-      i=$(($i+1))
+      i=$((i+1))
       if [[ $i -ge 6 ]]; then
         break
       fi
@@ -69,9 +70,9 @@ case "${IFACE}" in
 
     # if the link is not up we continue only if this is a
     # static connectin and no wifi config is present
-    if [[ "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; then
+    if [[ "$(cat "/sys/class/net/${IFACE}/carrier")" == "0" ]]; then
       echo -n " link down, "
-      /sbin/ip link set ${IFACE} down
+      /sbin/ip link set "${IFACE}" down
 
       # if this is a DHCP setup we stop here. For static
       # connections we can still setup the ip but only if
@@ -93,9 +94,8 @@ case "${IFACE}" in
       SSID=$(head -1 /boot/SetupWIFI | dos2unix)
       PWD=$(tail -1 /boot/SetupWIFI | dos2unix)
       if [[ -n "${SSID}" ]] && [[ -n "${PWD}" ]]; then
-        cp /etc/config_templates/wpa_supplicant.conf >/etc/config/wpa_supplicant.conf
-        /usr/sbin/wpa_passphrase "${SSID}" "${PWD}" >>/etc/config/wpa_supplicant.conf
-        if [[ $? -eq 0 ]]; then
+        cp /etc/config_templates/wpa_supplicant.conf /etc/config/wpa_supplicant.conf
+        if /usr/sbin/wpa_passphrase "${SSID}" "${PWD}" >>/etc/config/wpa_supplicant.conf; then
           mount -o rw,remount /boot
           rm -f /boot/SetupWIFI
           mount -o ro,remount /boot
@@ -106,10 +106,10 @@ case "${IFACE}" in
     # if /etc/config/wpa_supplicant.conf exists, bring up
     # the WiFi connection.
     if [[ -s /etc/config/wpa_supplicant.conf ]]; then
-      /sbin/ip link set ${IFACE} up
+      /sbin/ip link set "${IFACE}" up
       sleep 5
       /usr/sbin/rfkill unblock wlan
-      /usr/sbin/wpa_supplicant -B w -i ${IFACE} -c /etc/config/wpa_supplicant.conf -s
+      /usr/sbin/wpa_supplicant -B w -i "${IFACE}" -c /etc/config/wpa_supplicant.conf -s
       echo -n " up, "
     else
       echo -n " no config, "
@@ -134,11 +134,13 @@ echo "${HOSTNAME}" >/etc/hostname
 hostname "${HOSTNAME}"
 
 # setup /etc/hosts
-echo "127.0.0.1 localhost" >/etc/hosts
-echo "127.0.1.1 ${HOSTNAME}" >>/etc/hosts
-echo "::1 ip6-localhost ip6-loopback" >>/etc/hosts
-echo "ff02::1 ip6-allnodes" >>/etc/hosts
-echo "ff02::2 ip6-allrouters" >>/etc/hosts
+{
+  echo "127.0.0.1 localhost"
+  echo "127.0.1.1 ${HOSTNAME}"
+  echo "::1 ip6-localhost ip6-loopback"
+  echo "ff02::1 ip6-allnodes"
+  echo "ff02::2 ip6-allrouters"
+} > /etc/hosts
 
 # restart syslogd to update hostname
 /etc/init.d/S07logging restart 2>/dev/null >/dev/null
@@ -168,10 +170,10 @@ case "${MODE}" in
   DHCP)
     echo -n "dhcp, "
 
-    /sbin/udhcpc -b -t 100 -T 3 -S -x hostname:${HOSTNAME} -i ${IFACE} -F ${HOSTNAME} -V eQ3-CCU3 -s /bin/dhcp.script -p /var/run/udhcpc_${IFACE}.pid 2>/dev/null >/dev/null
+    /sbin/udhcpc -b -t 100 -T 3 -S -x "hostname:${HOSTNAME}" -i "${IFACE}" -F "${HOSTNAME}" -V eQ3-CCU3 -s /bin/dhcp.script -p "/var/run/udhcpc_${IFACE}.pid" 2>/dev/null >/dev/null
     if [[ ! -f "/var/run/udhcpc_${IFACE}.pid" ]]; then
       killall checkDHCP
-      /bin/checkDHCP ${IFACE} &
+      /bin/checkDHCP "${IFACE}" &
     fi
   ;;
 
@@ -180,11 +182,11 @@ case "${MODE}" in
     echo -n "static, "
 
     # use ifconfig so that broadcast address is correctly calculated
-    /sbin/ifconfig ${IFACE} ${IP} netmask ${NETMASK}
+    /sbin/ifconfig "${IFACE}" "${IP}" netmask "${NETMASK}"
 
     # reset default gateway
     /sbin/ip route del default 2>/dev/null
-    /sbin/ip route add default via ${GATEWAY}
+    /sbin/ip route add default via "${GATEWAY}"
 
     if [[ -n "${NAMESERVER1}" ]]; then
       echo nameserver "${NAMESERVER1}" >>${RESOLV_CONF}
@@ -197,16 +199,16 @@ case "${MODE}" in
     # update CURRENT_XYZ in /etc/config/netconfig
 
     # update /etc/config/netconfig
-    eq3configcmd netconfigcmd -i ${IP} -g ${GATEWAY} -n ${NETMASK}
+    eq3configcmd netconfigcmd -i "${IP}" -g "${GATEWAY}" -n "${NETMASK}"
 
     if [[ -n "${NAMESERVER1}" ]]; then
-      eq3configcmd netconfigcmd -d1 ${NAMESERVER1}
+      eq3configcmd netconfigcmd -d1 "${NAMESERVER1}"
     else
       eq3configcmd netconfigcmd -d1 ""
     fi
 
     if [[ -n "${NAMESERVER2}" ]]; then
-      eq3configcmd netconfigcmd -d2 ${NAMESERVER2}
+      eq3configcmd netconfigcmd -d2 "${NAMESERVER2}"
     else
       eq3configcmd netconfigcmd -d2 ""
     fi
@@ -216,7 +218,7 @@ case "${MODE}" in
     # we checked the link state already way earlier
     case "${IFACE}" in
       eth*)
-        if [[ "$(cat /sys/class/net/${IFACE}/carrier)" != "0" ]]; then
+        if [[ "$(cat "/sys/class/net/${IFACE}/carrier")" != "0" ]]; then
           touch /var/status/hasLink
         else
           RET=1

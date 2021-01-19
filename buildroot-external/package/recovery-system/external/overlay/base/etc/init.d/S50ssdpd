@@ -1,17 +1,25 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
 # Starts ssdpd
 #
 
 start() {
   echo -n "Starting ssdpd: "
-  start-stop-daemon -S -q -b -m -p /var/run/ssdpd.pid --exec /bin/ssdpd
-  [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
+  if start-stop-daemon -S -q -b -m -p /var/run/ssdpd.pid --exec /bin/ssdpd; then
+    echo "OK"
+  else
+    echo "FAIL"
+  fi
 }
 stop() {
   echo -n "Stopping ssdpd: "
-  start-stop-daemon -K -q -p /var/run/ssdpd.pid
-  [[ $? -eq 0 ]] && ( rm -f /var/run/ssdpd.pid && echo "OK" ) || echo "ERROR"
+  if start-stop-daemon -K -q -p /var/run/ssdpd.pid; then
+    echo "OK"
+  else
+    echo "FAIL"
+  fi
+  rm -f /var/run/ssdpd.pid
 }
 restart() {
   stop

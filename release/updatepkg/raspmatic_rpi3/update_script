@@ -1,17 +1,17 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 
 STARTPWD=$(pwd)
 BOOT_FS=boot.vfat.gz
 ROOT_FS=rootfs.ext4.gz
 
 RC=1
-if [ -f ${STARTPWD}/${BOOT_FS} ]; then
+if [ -f "${STARTPWD}/${BOOT_FS}" ]; then
   BOOT_DEV=$(/bin/mount | grep "/bootfs" | cut -f1 -d" ")
   if [ -n "${BOOT_DEV}" ]; then
     echo -ne "Writing bootfs to ${BOOT_DEV}... "
     /bin/umount -f /bootfs
-    zcat ${STARTPWD}/${BOOT_FS} | /bin/dd of=${BOOT_DEV} bs=1M conv=fsync
-    if [ $? -ne 0 ]; then
+    if ! zcat "${STARTPWD}/${BOOT_FS}" | /bin/dd of="${BOOT_DEV}" bs=1M conv=fsync; then
       echo "ERROR: (dd)"
       RC=1
     else
@@ -27,13 +27,12 @@ else
   echo "INFO: no boofs update found, OK<br>"
 fi
 
-if [ -f ${STARTPWD}/${ROOT_FS} ]; then
+if [ -f "${STARTPWD}/${ROOT_FS}" ]; then
   ROOT_DEV=$(/bin/mount | grep "/rootfs" | cut -f1 -d" ")
   if [ -n "${ROOT_DEV}" ]; then
     echo -ne "Writing rootfs to ${ROOT_DEV}... "
     /bin/umount -f /rootfs
-    zcat ${STARTPWD}/${ROOT_FS} | /bin/dd of=${ROOT_DEV} bs=1M conv=fsync
-    if [ $? -ne 0 ]; then
+    if ! zcat "${STARTPWD}/${ROOT_FS}" | /bin/dd of="${ROOT_DEV}" bs=1M conv=fsync; then
       echo "ERROR: (dd)"
       RC=1
     else

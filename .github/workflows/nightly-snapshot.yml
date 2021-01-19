@@ -67,9 +67,6 @@ jobs:
         docker rmi $(docker image ls -aq)
         df -h /
 
-    - name: Cleanup old workflow artifacts
-      run: .github/workflows/purge_artifacts.sh ${{ secrets.REPO_ACCESS_TOKEN }}
-
     - name: Switch to experimental EULA files
       run: |
         mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de
@@ -105,12 +102,11 @@ jobs:
     # nightly snapshot uploads
     - name: Upload build snapshot [rpi*, tinkerboard, intelnuc, ova]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         !startsWith(matrix.platform, 'oci_')
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -121,12 +117,11 @@ jobs:
 
     - name: Upload build snapshot checksum [rpi*, tinkerboard, intelnuc, ova]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         !startsWith(matrix.platform, 'oci_')
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -137,12 +132,11 @@ jobs:
 
     - name: Upload build snapshot [ccu3]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         matrix.platform == 'rpi3'
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -153,12 +147,11 @@ jobs:
 
     - name: Upload build snapshot checksum [ccu3]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         matrix.platform == 'rpi3'
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -169,12 +162,11 @@ jobs:
 
     - name: Upload build snapshot [ova]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         matrix.platform == 'ova'
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -185,12 +177,11 @@ jobs:
 
     - name: Upload build snapshot checksum [ova]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         matrix.platform == 'ova'
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -201,12 +192,11 @@ jobs:
 
     - name: Upload build snapshot [oci]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         startsWith(matrix.platform, 'oci_')
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -217,12 +207,11 @@ jobs:
 
     - name: Upload build snapshot checksum [oci]
       if: |
-        github.event_name == 'schedule' &&
         github.repository_owner == 'jens-maus' &&
         startsWith(matrix.platform, 'oci_')
-      uses: WebFreak001/deploy-nightly@v1
+      uses: WebFreak001/deploy-nightly@v1.1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
       with:
         upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
         release_id: 22744592
@@ -289,7 +278,7 @@ jobs:
       run: |
         BASE_TAG="ghcr.io/${{ github.repository_owner }}/raspberrymatic"
         UNIQUE_TAG="${BASE_TAG}:${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}"
-        if [[ ${GITHUB_EVENT_NAME} == 'schedule' || ${GITHUB_EVENT_NAME} == 'push' ]]; then
+        if [[ ${GITHUB_EVENT_NAME} == 'schedule' || ${GITHUB_EVENT_NAME} == 'workflow_dispatch' ]]; then
           BRANCH="${GITHUB_REF##*/}"
           if [[ ${BRANCH} == 'master' ]]; then
             BRANCH_TAG="${BASE_TAG}:snapshot"
@@ -344,3 +333,21 @@ jobs:
 
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
+
+  cleanup:
+    name: Cleanup artifacts/packages
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Remove old artifacts
+        uses: c-hive/gha-remove-artifacts@v1
+        with:
+          age: '2 months'
+          skip-tags: true
+          skip-recent: 15
+
+      - name: Remove old packages
+        uses: smartsquaregmbh/delete-old-packages@v0.2.0
+        with:
+          keep: 5
+          names: |
+            raspberrymatic

@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169,SC2034 source=/dev/null
 #
 # Startup script checking for RF capabale hardware
 #
@@ -26,7 +27,8 @@ identify_rf_hardware() {
 
   RF_DEVNODES=
   # identify which raw-uart devices we have
-  for dev in $(ls /sys/class/raw-uart/ 2>/dev/null); do
+  for dev in /sys/class/raw-uart/*; do
+    dev="$(basename "${dev}")"
     if [[ -c "/dev/${dev}" ]]; then
       echo -n "."
       RF_DEVNODES="${RF_DEVNODES} ${dev}"
@@ -57,16 +59,17 @@ identify_rf_hardware() {
   fi
 
   # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
-  if lsusb | grep -q 1b1f:c020; then
+  if lsusb 2>/dev/null | grep -q 1b1f:c020; then
     modprobe cp210x
     echo 1b1f c020 >/sys/bus/usb-serial/drivers/cp210x/new_id
+    # shellcheck disable=SC2044
     for i in $(find /sys/bus/usb/devices/usb*/ -name "ttyUSB*" -maxdepth 4); do
-      DEVDIR=$(dirname $i)
+      DEVDIR=$(dirname "$i")
       if [[ -f "${DEVDIR}/uevent" ]]; then
-        if grep -q PRODUCT=1b1f/c020 ${DEVDIR}/uevent; then
+        if grep -q PRODUCT=1b1f/c020 "${DEVDIR}/uevent"; then
           # add with preference
           echo -n "."
-          RF_DEVNODES="$(basename $i) ${RF_DEVNODES}"
+          RF_DEVNODES="$(basename "$i") ${RF_DEVNODES}"
           break
         fi
       fi
@@ -75,7 +78,7 @@ identify_rf_hardware() {
 
   # check if a HM-CFG-USB-2 (1b1f:c00f) USB stick is connected
   # and HMRF_DEV accordingly
-  if lsusb | grep -q 1b1f:c00f; then
+  if lsusb 2>/dev/null | grep -q 1b1f:c00f; then
     HM_HMRF_DEV="HM-CFG-USB-2"
     HM_HMRF_SERIAL=$(cat /sys/bus/usb/devices/*/serial | grep -E '^[A-Z]{3}[0-9]{7}.*')
     HM_HMRF_DEVNODE=""
@@ -89,7 +92,7 @@ identify_rf_hardware() {
   fi
 
   # strip leading/trailing spaces from RF_DEVNODES
-  RF_DEVNODES=$(echo ${RF_DEVNODES} | xargs)
+  RF_DEVNODES=$(echo "${RF_DEVNODES}" | xargs)
 }
 
 # function to reset rf hardware
@@ -103,10 +106,10 @@ reset_rf_hardware() {
     # check if this is NOT a raw-uart device or NOT a HB-RF-USB but
     # a GPIO based raw-uart and if so we reset the rf-module on our own.
     if [[ ! -e "/sys/class/raw-uart/${dev}/device_type" ]] ||
-          grep -q GPIO /sys/class/raw-uart/${dev}/device_type; then
+          grep -q GPIO "/sys/class/raw-uart/${dev}/device_type"; then
 
       # only perform GPIO reset if this is no USB device (HmIP-RFUSB)
-      if ! echo ${dev} | grep -q ttyUSB; then
+      if ! echo "${dev}" | grep -q ttyUSB; then
 
         # clear GPIO reset pin definition variable
         GPIO_RESET=
@@ -163,7 +166,7 @@ reset_rf_hardware() {
     else
       # this is a raw-uart and connected to a HB-RF-USB/HB-RF-USB-2 so lets
       # use the reset_radio_module sysfs entry to reset the rf module
-      echo 1 >/sys/class/raw-uart/${dev}/reset_radio_module
+      echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module"
       echo -n "."
     fi
 
@@ -189,19 +192,18 @@ query_rf_parameters() {
     # use detect_radio_module to retrieve all relevant info from
     # the rf-module
     if [[ -c /dev/${dev} ]]; then
-      RF_INFO=$(/bin/detect_radio_module /dev/${dev})
-      if [[ $? -eq 0 ]]; then
+      if RF_INFO=$(/bin/detect_radio_module "/dev/${dev}"); then
 
         echo -n "."
 
-        RF_HARDWARE=$(echo -n ${RF_INFO} | cut -d' ' -f1 | tr '[:lower:]' '[:upper:]')
+        RF_HARDWARE=$(echo -n "${RF_INFO}" | cut -d' ' -f1 | tr '[:lower:]' '[:upper:]')
 
         # get all RF parameters
-        RF_SERIAL=$(echo -n ${RF_INFO} | cut -d' ' -f2)
-        RF_HMIP_SGTIN=$(echo -n ${RF_INFO} | cut -d' ' -f3)
-        RF_HMRF_ADDRESS=$(echo -n ${RF_INFO} | cut -d' ' -f4)
-        RF_HMIP_ADDRESS=$(echo -n ${RF_INFO} | cut -d' ' -f5)
-        RF_VERSION=$(echo -n ${RF_INFO} | cut -d' ' -f6)
+        RF_SERIAL=$(echo -n "${RF_INFO}" | cut -d' ' -f2)
+        RF_HMIP_SGTIN=$(echo -n "${RF_INFO}" | cut -d' ' -f3)
+        RF_HMRF_ADDRESS=$(echo -n "${RF_INFO}" | cut -d' ' -f4)
+        RF_HMIP_ADDRESS=$(echo -n "${RF_INFO}" | cut -d' ' -f5)
+        RF_VERSION=$(echo -n "${RF_INFO}" | cut -d' ' -f6)
 
         # now check if we have a BidCos-RF/HmRF device already
         # set and if not use this device for BidCos-RF/HmRF
@@ -212,8 +214,8 @@ query_rf_parameters() {
           # prefer a HM-MOD-RPI-PCB for HmRF stuff in case
           # we already have a setup HMRF device
           if [[ -z "${HM_HMRF_DEV}" ]] ||
-             ( [[ "${RF_HARDWARE}" == "HM-MOD-RPI-PCB" ]] &&
-               [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ); then
+             { [[ "${RF_HARDWARE}" == "HM-MOD-RPI-PCB" ]] &&
+               [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; }; then
 
             HM_HMRF_DEV=${RF_HARDWARE}
             HM_HMRF_DEVNODE="/dev/${dev}"
@@ -222,7 +224,7 @@ query_rf_parameters() {
             HM_HMRF_VERSION=${RF_VERSION}
 
             if [[ -e /sys/class/raw-uart/${dev}/device_type ]]; then
-              HM_HMRF_DEVTYPE=$(cat /sys/class/raw-uart/${dev}/device_type)
+              HM_HMRF_DEVTYPE=$(cat "/sys/class/raw-uart/${dev}/device_type")
             else
               HM_HMRF_DEVTYPE=GPIO
             fi
@@ -238,8 +240,8 @@ query_rf_parameters() {
           # prefer a RPI-RF-MOD / HmIP-RFUSB for HmIP stuff in case
           # we already have a setup HMIP device
           if [[ -z "${HM_HMIP_DEV}" ]] ||
-             ( [[ "${RF_HARDWARE}" == "RPI-RF-MOD" ]] &&
-               [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]] ); then
+             { [[ "${RF_HARDWARE}" == "RPI-RF-MOD" ]] &&
+               [[ "${HM_HMIP_DEV}" == "HM-MOD-RPI-PCB" ]]; }; then
 
             HM_HMIP_DEV=${RF_HARDWARE}
             HM_HMIP_DEVNODE="/dev/${dev}"
@@ -249,7 +251,7 @@ query_rf_parameters() {
             HM_HMIP_VERSION=${RF_VERSION}
 
             if [[ -e /sys/class/raw-uart/${dev}/device_type ]]; then
-              HM_HMIP_DEVTYPE=$(cat /sys/class/raw-uart/${dev}/device_type)
+              HM_HMIP_DEVTYPE=$(cat "/sys/class/raw-uart/${dev}/device_type")
             elif [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
               HM_HMIP_DEVTYPE=USB
             else
@@ -268,20 +270,20 @@ query_rf_parameters() {
   # led driver correctly.
   if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] &&
      echo "${HM_HMRF_DEVTYPE}" | grep -qi HB-RF-USB; then
-    HBRF_DEVNODE=$(basename ${HM_HMRF_DEVNODE})
+    HBRF_DEVNODE=$(basename "${HM_HMRF_DEVNODE}")
   elif [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]] &&
        echo "${HM_HMIP_DEVTYPE}" | grep -qi HB-RF-USB; then
-    HBRF_DEVNODE=$(basename ${HM_HMIP_DEVNODE})
+    HBRF_DEVNODE=$(basename "${HM_HMIP_DEVNODE}")
   fi
 
   if [[ -n "${HBRF_DEVNODE}" ]]; then
     # get the RED/GREEN/BLUE pin ids
-    RED_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/red_gpio_pin)
-    GREEN_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/green_gpio_pin)
-    BLUE_GPIO_PIN=$(cat /sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/blue_gpio_pin)
+    RED_GPIO_PIN=$(cat "/sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/red_gpio_pin")
+    GREEN_GPIO_PIN=$(cat "/sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/green_gpio_pin")
+    BLUE_GPIO_PIN=$(cat "/sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/blue_gpio_pin")
 
     # make sure to unbind the gpio-leds driver first
-    if [[ -e /sys/class/leds/rpi_rf_mod\:blue ]]; then
+    if [[ -e /sys/class/leds/rpi_rf_mod:blue ]]; then
       if [[ -e /sys/bus/platform/drivers/leds-gpio/gpio-leds ]]; then
         GPIO_LEDS=gpio-leds
       else
@@ -292,7 +294,7 @@ query_rf_parameters() {
     fi
 
     # load the rpi_rf_mod_led kernel module
-    modprobe rpi_rf_mod_led red_gpio_pin=${RED_GPIO_PIN} green_gpio_pin=${GREEN_GPIO_PIN} blue_gpio_pin=${BLUE_GPIO_PIN}
+    modprobe rpi_rf_mod_led red_gpio_pin="${RED_GPIO_PIN}" green_gpio_pin="${GREEN_GPIO_PIN}" blue_gpio_pin="${BLUE_GPIO_PIN}"
 
     # rebind the gpio-leds so that numeration of the rpi-rf-mod leds are correct
     if [[ -n "${GPIO_LEDS}" ]] &&
@@ -301,13 +303,13 @@ query_rf_parameters() {
     fi
 
     # setup the LEDs to show a slowly blinking magenta light
-    echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
-    echo timer >/sys/class/leds/rpi_rf_mod\:red/trigger
-    echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
-    echo 499 >/sys/class/leds/rpi_rf_mod\:red/delay_on
-    echo 499 >/sys/class/leds/rpi_rf_mod\:red/delay_off
-    echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_on
-    echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_off
+    echo none >/sys/class/leds/rpi_rf_mod:green/trigger
+    echo timer >/sys/class/leds/rpi_rf_mod:red/trigger
+    echo timer >/sys/class/leds/rpi_rf_mod:blue/trigger
+    echo 499 >/sys/class/leds/rpi_rf_mod:red/delay_on
+    echo 499 >/sys/class/leds/rpi_rf_mod:red/delay_off
+    echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_on
+    echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_off
   fi
 
   #####################################
@@ -328,7 +330,7 @@ query_rf_parameters() {
        [[ "${HM_HMRF_ADDRESS_ACTIVE}" == "0x000000" ]]; then
       HM_HMRF_ADDRESS_ACTIVE=${HM_HMRF_ADDRESS}
       if [[ -e /etc/config/ids ]]; then
-        mv -f /etc/config/ids /etc/config/ids_old-$(date +'%Y%m%d-%H%M%S')
+        mv -f /etc/config/ids "/etc/config/ids_old-$(date +%Y%m%d-%H%M%S)"
       fi
     fi
   else
@@ -395,12 +397,12 @@ stop() {
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
   if [[ -n "${HM_HMRF_DEVNODE}" ]]; then
-    /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p ${HM_HMRF_DEVNODE} -bl -l 1
+    /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p "${HM_HMRF_DEVNODE}" -bl -l 1
   fi
 
   if [[ -n "${HM_HMIP_DEVNODE}" ]] &&
      [[ "${HM_HMIP_DEVNODE}" != "${HM_HMRF_DEVNODE}" ]]; then
-    /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p ${HM_HMIP_DEVNODE} -bl -l 1
+    /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p "${HM_HMIP_DEVNODE}" -bl -l 1
   fi
 }
 

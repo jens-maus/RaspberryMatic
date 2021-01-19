@@ -14,8 +14,11 @@ case "$1" in
 	;;
   stop)
 	printf "Stopping network: "
-	/sbin/ifdown -a
-	[ $? = 0 ] && echo "OK" || echo "FAIL"
+	if /sbin/ifdown -a; then
+		echo "OK"
+	else
+		echo "FAIL"
+	fi
 	;;
   restart|reload)
 	"$0" stop

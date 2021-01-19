@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 
 # In case we have a slow-to-appear interface (e.g. eth-over-USB),
 # and we need to configure it, wait until it appears, but not too
@@ -6,10 +7,10 @@
 
 if [[ -n "${IF_WAIT_DELAY}" ]]; then
     printf "Waiting for interface %s to appear" "${IFACE}"
-    while [ ${IF_WAIT_DELAY} -gt 0 ]; do
+    while [ "${IF_WAIT_DELAY}" -gt 0 ]; do
         if [[ -d "/sys/class/net/${IFACE}" ]]; then
-            /sbin/ip link set ${IFACE} up
-            CARRIER=$(cat /sys/class/net/${IFACE}/carrier)
+            /sbin/ip link set "${IFACE}" up
+            CARRIER=$(cat "/sys/class/net/${IFACE}/carrier")
             if [[ -n "${CARRIER}" ]] && [[ ${CARRIER} -eq 1 ]]; then
                 printf "\n"
                 exit 0

@@ -42,33 +42,35 @@
 +jsonrpc_response true
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -595,6 +595,25 @@
+@@ -595,6 +595,27 @@
          }
        }
  
 +      # Recovery Modus
-+      table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
-+          table_data {class="CLASS20903"} $styleMaxWidth {
-+              #puts "Abgesicherter<br>"
-+              #puts "Modus"
-+              puts "\${dialogSettingsCMTDCCURecoveryMode}"
-+          }
-+          table_data {class="CLASS20904"} {
-+              division {class="popupControls CLASS20905"} {
-+                  division {class="CLASS20910 colorGradient50px"} {onClick="OnEnterRecoveryMode();"} {
-+                      puts "\${dialogSettingsCMBtnCCURestartRecovery}"
-+                  }
-+              }
-+          }
-+          table_data {align="left"} {class="CLASS20904"} {
-+              puts "\${dialogSettingsCMHintRestartRecoveryMode}"
-+          }
++      if {[get_platform] != "oci"} {
++        table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
++            table_data {class="CLASS20903"} $styleMaxWidth {
++                #puts "Recovery<br>"
++                #puts "Modus"
++                puts "\${dialogSettingsCMTDCCURecoveryMode}"
++            }
++            table_data {class="CLASS20904"} {
++                division {class="popupControls CLASS20905"} {
++                    division {class="CLASS20910 colorGradient50px"} {onClick="OnEnterRecoveryMode();"} {
++                        puts "\${dialogSettingsCMBtnCCURestartRecovery}"
++                    }
++                }
++            }
++            table_data {align="left"} {class="CLASS20904"} {
++                puts "\${dialogSettingsCMHintRestartRecoveryMode}"
++            }
++        }
 +      }
 +
        table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
          table_data {class="CLASS20903"} $styleMaxWidth  {
            #puts "Fehler-<br>"
-@@ -772,6 +791,18 @@
+@@ -772,6 +793,18 @@
          }
          });
        }

@@ -27,6 +27,8 @@ jobs:
 
     - name: Check shell scripts
       uses: ludeeus/action-shellcheck@1.0.0
+      with:
+        ignore: buildroot-external/package/neoserver/pkg/mediola/neo_server buildroot-patches/0010-lib32-integration/buildroot/support/scripts
 
   build:
     name: Build Check [${{ matrix.platform }}]
@@ -71,9 +73,6 @@ jobs:
         sudo apt clean
         docker rmi $(docker image ls -aq)
         df -h /
-
-    - name: Cleanup old workflow artifacts
-      run: .github/workflows/purge_artifacts.sh ${{ secrets.REPO_ACCESS_TOKEN }}
 
     - name: Switch to experimental EULA files
       run: |
@@ -150,7 +149,9 @@ jobs:
     name: OCI/Docker Build+Push
     runs-on: ubuntu-20.04
     needs: build
-    if: github.event_name != 'pull_request'
+    if: |
+      github.event_name != 'pull_request' &&
+      github.repository_owner == 'jens-maus'
 
     steps:
     - uses: actions/checkout@v2

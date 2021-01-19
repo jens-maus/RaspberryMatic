@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Starts rfd.
 #
@@ -47,13 +48,15 @@ init() {
 
   if [[ "${HM_HMRF_DEV}" == "HM-CFG-USB-2" ]]; then
     if ! grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
-      inum=$(grep "^\[Interface .*\]" /etc/config/rfd.conf | wc -l)
-      echo >>/etc/config/rfd.conf
-      echo "[Interface ${inum+1}]" >>/etc/config/rfd.conf
-      echo "Type = USB Interface" >>/etc/config/rfd.conf
-      echo "Name = HM-CFG-USB" >>/etc/config/rfd.conf
-      echo "Serial Number = ${HM_HMRF_SERIAL}" >>/etc/config/rfd.conf
-      echo "Encryption Key =" >>/etc/config/rfd.conf
+      inum=$(grep -c "^\[Interface .*\]" /etc/config/rfd.conf)
+      {
+        echo ""
+        echo "[Interface ${inum+1}]"
+        echo "Type = USB Interface"
+        echo "Name = HM-CFG-USB"
+        echo "Serial Number = ${HM_HMRF_SERIAL}"
+        echo "Encryption Key ="
+      } >>/etc/config/rfd.conf
     fi
   elif grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
     # otherwise disable the whole [Interface x] part
@@ -72,8 +75,8 @@ waitStartupComplete() {
   for i in $(seq 1 ${STEPS}); do
     sleep 2
     echo -n "."
-    RFDSTATUSPID=`cat /var/status/rfd.status 2>&1`
-    RFDPID=`pidof rfd`
+    RFDSTATUSPID=$(cat /var/status/rfd.status 2>&1)
+    RFDPID=$(pidof rfd)
     if [[ "${RFDSTATUSPID}" == "${RFDPID}" ]]; then
       echo "OK"
       break

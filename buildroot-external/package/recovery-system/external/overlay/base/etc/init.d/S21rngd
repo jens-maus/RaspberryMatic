@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash source=/dev/null
 
 NAME="rngd"
 DAEMON="/usr/sbin/${NAME}"
@@ -11,17 +12,23 @@ PID_FILE="/var/run/${NAME}.pid"
 
 start()
 {
-	printf "Starting ${NAME}: "
+	echo -n "Starting ${NAME}: "
 	if ! timeout 5 head -c 1 /dev/hwrng >/dev/null 2>&1; then
 		DAEMON_ARGS="${DAEMON_ARGS} -r /dev/urandom"
 	fi
-	start-stop-daemon -S -q -x "${DAEMON}" -- ${DAEMON_ARGS}
-	[ $? = 0 ] && echo "OK" || echo "FAIL"
+
+	# shellcheck disable=SC2086
+	if start-stop-daemon -S -q -x "${DAEMON}" -- ${DAEMON_ARGS}; then
+		echo "OK"
+	else
+		echo "FAIL"
+	fi
 }
 
 stop()
 {
-	printf "Stopping ${NAME}: "
+	echo -n "Stopping ${NAME}: "
+
 	# This daemon does not exit properly with the default TERM signal unless
 	# it's forced to work by something reading /dev/random. Killing it and
 	# removing its PID file is more straightforward.

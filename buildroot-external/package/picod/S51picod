@@ -1,10 +1,11 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
 # Pico UPS Daemon starting and stopping
 #
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-DESC=picod
+#DESC=picod
 
 DAEMON=/opt/picod/picod.sh
 PIDFILE=/var/run/picod.pid
@@ -16,16 +17,17 @@ case $1 in
     echo -n "Starting PIco UPS daemon: "
 
     # find out if a PIco UPS unit is installed at all
-    i2cget -y 1 0x69 0x26 2>/dev/null >/dev/null
-    if [[ $? -eq 0 ]]; then
+    if i2cget -y 1 0x69 0x26 2>/dev/null >/dev/null; then
 
       # lets set the battery runtime to 0xff (until 3.5v)
       i2cget -y 1 0x6b 0x09 0xff 2>/dev/null >/dev/null
 
       # now start the daemon
-      start-stop-daemon --start --background --pidfile ${PIDFILE} --make-pidfile --quiet --exec ${DAEMON}
-      [[ $? = 0 ]] && echo "OK" || echo "FAIL"
-
+      if start-stop-daemon --start --background --pidfile "${PIDFILE}" --make-pidfile --quiet --exec "${DAEMON}"; then
+        echo "OK"
+      else
+        echo "FAIL"
+      fi
     else
       echo "no hardware found"
     fi
@@ -34,8 +36,11 @@ case $1 in
   stop)
     echo -n "Stopping PIco UPS daemon: "
     if [[ -f ${PIDFILE} ]]; then
-      start-stop-daemon --stop --quiet --pidfile ${PIDFILE}
-      [[ $? = 0 ]] && echo "OK" || echo "FAIL"
+      if start-stop-daemon --stop --quiet --pidfile "${PIDFILE}"; then
+        echo "OK"
+      else
+        echo "FAIL"
+      fi
       rm -f ${PIDFILE}
     else
       echo "OK"

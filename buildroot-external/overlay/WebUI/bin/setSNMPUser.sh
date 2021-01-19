@@ -44,7 +44,7 @@ echo "createUser $U SHA \"$P\" AES \"$P\"" >> $CFGFILE
 $DAEMON start >/dev/null 2>&1 || exit 10
 for i in 1 2 3 4 5 6 7 8 9 10; 
 do
-    wfs_X=$(cat /var/lib/snmp/snmpd.conf | grep usmUser)
+    wfs_X=$(grep usmUser /var/lib/snmp/snmpd.conf)
     if [ "$wfs_X" != "" ]; then
         break
     fi

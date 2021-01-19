@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # startup script that updates HomeMatic-RF devices, if necessary.
 #
@@ -38,7 +39,7 @@ update_rf_hardware() {
 
       # identify the copro firmware version to be flashed
       if [[ -z "${NEW_VERSION}" ]]; then
-        NEW_VERSION=$(cat ${FW_DIRECTORY}/fwmap | grep "${FW_FILE}" | awk '{ print $3 }')
+        NEW_VERSION=$(grep "${FW_FILE}" "${FW_DIRECTORY}/fwmap" | awk '{ print $3 }')
       fi
 
       # get OLD_VERSION from var tmp file
@@ -54,10 +55,10 @@ update_rf_hardware() {
         # we always perform the firmware update in /tmp
         # so lets copy the whole firmware directory to tmp
         TMPDIR_FW=$(mktemp -d)
-        cp -a ${FW_DIRECTORY}/${FW_FILE} ${TMPDIR_FW}
+        cp -a "${FW_DIRECTORY}/${FW_FILE}" "${TMPDIR_FW}"
 
         # create artifical fwmap file
-        echo "CCU2 ${FW_FILE} ${NEW_VERSION}" >${TMPDIR_FW}/fwmap
+        echo "CCU2 ${FW_FILE} ${NEW_VERSION}" >"${TMPDIR_FW}/fwmap"
 
         if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] && [[ -n "${HM_HMRF_DEVNODE}" ]]; then
           DEVNODE=${HM_HMRF_DEVNODE}
@@ -68,12 +69,11 @@ update_rf_hardware() {
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
         # perform the coprocessor update
-        /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p ${DEVNODE} -t HM-MOD-UART -u -d ${TMPDIR_FW}
-        if [[ $? -ne 0 ]]; then
+        if ! /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p "${DEVNODE}" -t HM-MOD-UART -u -d "${TMPDIR_FW}"; then
           echo -n "forcing, "
-          /usr/bin/timeout 240 /bin/eq3configcmd update-coprocessor -p ${DEVNODE} -t HM-MOD-UART -u -f -d ${TMPDIR_FW}
+          /usr/bin/timeout 240 /bin/eq3configcmd update-coprocessor -p "${DEVNODE}" -t HM-MOD-UART -u -f -d "${TMPDIR_FW}"
         fi
-        HM_HMRF_VERSION=$(/usr/bin/timeout 30 /bin/eq3configcmd update-coprocessor -p ${DEVNODE} -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
+        HM_HMRF_VERSION=$(/usr/bin/timeout 30 /bin/eq3configcmd update-coprocessor -p "${DEVNODE}" -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
         echo "${HM_HMRF_VERSION}" >/var/rf_firmware_version
 
         if [[ "${NEW_VERSION}" == "${HM_HMRF_VERSION}" ]]; then
@@ -83,7 +83,7 @@ update_rf_hardware() {
         fi
 
         # remove the temporary directory again
-        rm -rf ${TMPDIR_FW}
+        rm -rf "${TMPDIR_FW}"
       else
         echo -n "${OLD_VERSION}, OK"
       fi
@@ -101,8 +101,8 @@ update_rf_hardware() {
 
       echo -n "RPI-RF-MOD: "
 
-      LATEST_FIRMWARE=$(ls /firmware/RPI-RF-MOD/dualcopro_update_blhmip-*.eq3 | tail -1)
-      NEW_VERSION=$(echo ${LATEST_FIRMWARE} | tail -1 | sed 's/.*-\(.*\)\.eq3/\1/')
+      LATEST_FIRMWARE=$(find /firmware/RPI-RF-MOD -name "dualcopro_update_blhmip-*.eq3" -maxdepth 1 | sort | tail -1)
+      NEW_VERSION=$(echo "${LATEST_FIRMWARE}" | sed 's/.*-\(.*\)\.eq3/\1/')
 
       # get OLD_VERSION from var tmp file
       if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
@@ -119,7 +119,8 @@ update_rf_hardware() {
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
         # run firmware update
-        HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts=${DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${DEVNODE} -o -f ${LATEST_FIRMWARE} 2>/dev/null | grep "Version:" | cut -d' ' -f5)
+        # shellcheck disable=SC2086
+        HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts="${DEVNODE}" -jar /opt/HmIP/hmip-copro-update.jar -p "${DEVNODE}" -o -f "${LATEST_FIRMWARE}" 2>/dev/null | grep "Version:" | cut -d' ' -f5)
 
         echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
         if [[ -z "${HM_HMRF_DEV}" ]]; then
@@ -145,10 +146,12 @@ update_rf_hardware() {
       fi
       echo -n "HMIP-RFUSB: "
 
-      NEW_VERSION=$(ls /firmware/HmIP-RFUSB/hmip_coprocessor_update-*.eq3 | sed 's/.*hmip_coprocessor_update-\(.*\)\.eq3/\1/')
+      # check for new firmware file in /firmware/HmIP-RFUSB
+      LATEST_FIRMWARE=$(find /firmware/HmIP-RFUSB -name "hmip_coprocessor_update-*.eq3" -maxdepth 1 | sort | tail -1)
 
       # get OLD_VERSION from var tmp file
       OLD_VERSION=$(cat /var/hmip_firmware_version 2>/dev/null)
+      NEW_VERSION=$(echo "${LATEST_FIRMWARE}" | sed 's/.*hmip_coprocessor_update-\(.*\)\.eq3/\1/')
 
       # if NEW_VERSION is not empty we go ahead and perform the
       # update operation
@@ -156,7 +159,8 @@ update_rf_hardware() {
         echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
         # run firmware update
-        HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts=${HM_HMIP_DEVNODE} -jar /opt/HmIP/hmip-copro-update.jar -p ${HM_HMIP_DEVNODE} -o -f /firmware/HmIP-RFUSB/hmip_coprocessor_update-*.eq3 2>/dev/null | grep "Version:" | cut -d' ' -f5)
+        # shellcheck disable=SC2086
+        HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts="${HM_HMIP_DEVNODE}" -jar /opt/HmIP/hmip-copro-update.jar -p "${HM_HMIP_DEVNODE}" -o -f "${NEW_VERSION_FILE}" 2>/dev/null | grep "Version:" | cut -d' ' -f5)
 
         echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
         if [[ -z "${HM_HMRF_DEV}" ]]; then

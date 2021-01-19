@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 
 # check if we have to stop wpa supplicant in case this
 # is a wlan connection to be stopped
@@ -11,13 +12,13 @@ esac
 
 # if a link down has been identified we remove the hasLink
 # status file
-if [[ "$(cat /sys/class/net/${IFACE}/carrier 2>/dev/null)" != "1" ]]; then
+if [[ "$(cat "/sys/class/net/${IFACE}/carrier" 2>/dev/null)" != "1" ]]; then
   rm -f /var/status/hasLink
   rm -f /var/status/hasInternet
 fi
 
 # if the interface lost its IP we remove hasIP
-IP=$(ip -4 addr show dev ${IFACE} | sed -En -e 's/.*inet ([0-9.]+).*/\1/p')
+IP=$(ip -4 addr show dev "${IFACE}" | sed -En -e 's/.*inet ([0-9.]+).*/\1/p')
 if [[ -z "${IP}" ]]; then
   rm -f /var/status/hasIP
   rm -f /var/status/hasInternet

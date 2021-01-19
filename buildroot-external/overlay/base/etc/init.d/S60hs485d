@@ -1,11 +1,10 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Starts hs485d.
 #
 
 LOGLEVEL_HS485D=5
-
-CFG_TEMPLATE_DIR=/etc/config_templates
 
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 

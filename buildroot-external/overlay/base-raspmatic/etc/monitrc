@@ -131,9 +131,9 @@ check program wlan0Exists with path "/usr/bin/test -d /sys/class/net/wlan0"
 # chrony/ntp daemon/status monitoring
 check process chronyd with pidfile /var/run/chrony/chronyd.pid
     group system
-    start = "/etc/init.d/S49chrony start"
-    stop = "/etc/init.d/S49chrony stop"
-    restart = "/etc/init.d/S49chrony restart"
+    start = "/etc/init.d/S46chrony start"
+    stop = "/etc/init.d/S46chrony stop"
+    restart = "/etc/init.d/S46chrony restart"
     if not exist for 1 cycles then restart
     if failed port 323 type udp for 5 cycles then restart
     if failed unixsocket /var/run/chrony/chronyd.sock type udp for 5 cycles then restart

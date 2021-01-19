@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
 # Startup script to mount all filesystems
 #
@@ -8,6 +9,7 @@ start() {
 
   # wait until bootfs is actually ready to be mounted
   MAXSTEPS=10
+  # shellcheck disable=SC2034
   for i in $(seq 1 ${MAXSTEPS}); do
     if /sbin/blkid | grep -q deedbeef-01; then
       break

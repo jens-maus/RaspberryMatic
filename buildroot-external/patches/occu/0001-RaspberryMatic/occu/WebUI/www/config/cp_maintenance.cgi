@@ -394,6 +394,7 @@ proc action_put_page {} {
                 # The available version will be set further down with "jQuery('#availableSWVersion').html(homematic.com.getLatestVersion());"
               }
             }
+            if {[get_platform] != "oci"} {
             table_row {
               table_data {align="left"} {colspan="3"} {
                 #puts "[bold "Software-Update durchführen"]"
@@ -479,6 +480,7 @@ proc action_put_page {} {
               table_data {align="left"} {colspan="2"} {class="CLASS20920"} {
                 puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
               }
+            }
             }
           }
         }

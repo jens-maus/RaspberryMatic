@@ -15,7 +15,7 @@ start() {
 
 	# set the root password to the
 	# password specified in /bootfs/recoveryfs-sshpwd
-	PASSWD=$(cat /bootfs/recoveryfs-sshpwd | /usr/bin/mkpasswd)
+	PASSWD=$(/usr/bin/mkpasswd </bootfs/recoveryfs-sshpwd)
 	/bin/sed -i "s#^root::\(.*$\)#root:${PASSWD}:\1#" /etc/shadow
 
 	# Create any missing keys

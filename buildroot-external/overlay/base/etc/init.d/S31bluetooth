@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Bluetooth subsystem starting and stopping
 #
@@ -34,6 +35,7 @@ case $1 in
 
         # first call will flash the firmware
         ${RFKILL} unblock bluetooth
+        # shellcheck disable=SC2086
         ${HCIATTACH} ${HCIATTACH_OPT} 2>/dev/null >/dev/null
         echo -n "."
 
@@ -41,10 +43,10 @@ case $1 in
         sleep 2
 
         # bring hci0 up
-        ${HCICONFIG} dev 2>/dev/null >/dev/null
-        if [ $? -eq 0 ]; then
+        if ${HCICONFIG} dev 2>/dev/null >/dev/null; then
           ${HCICONFIG} hci0 up
 
+          # shellcheck disable=SC2086
           start-stop-daemon --start --background ${SSD_OPTIONS}
           echo "OK"
 
@@ -64,6 +66,7 @@ case $1 in
 
   stop)
     echo -n "Stopping bluetooth: "
+    # shellcheck disable=SC2086
     start-stop-daemon --stop ${SSD_OPTIONS}
     pkill ".*hciattach"
     ${RFKILL} block bluetooth 2>/dev/null

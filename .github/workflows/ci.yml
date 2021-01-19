@@ -149,9 +149,11 @@ jobs:
     name: OCI/Docker Build+Push
     runs-on: ubuntu-20.04
     needs: build
+    #PRs have no access to secrets so disabling this job
+    #Allow test builds on test forks IF the CR_PATH is properly set
     if: |
       github.event_name != 'pull_request' &&
-      github.repository_owner == 'jens-maus'
+      secrets.CR_PAT
 
     steps:
     - uses: actions/checkout@v2

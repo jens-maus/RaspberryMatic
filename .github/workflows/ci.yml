@@ -11,6 +11,11 @@ on:
         required: true
         default: "false"
 
+env:
+  # NOTE: the following does not copy the actual secret but just * so
+  # we can later check the present of the required secret
+  # https://github.com/actions/runner/issues/520
+  SECRETS_ARE_AVAILABLE: ${{ secrets.CR_PAT }}
 jobs:
   linter:
     name: Linter Check
@@ -153,7 +158,7 @@ jobs:
     #Allow test builds on test forks IF the CR_PATH is properly set
     if: |
       github.event_name != 'pull_request' &&
-      secrets.CR_PAT
+      ${{ env.SECRETS_ARE_AVAILABLE }}
 
     steps:
     - uses: actions/checkout@v2

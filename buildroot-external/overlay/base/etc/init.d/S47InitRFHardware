@@ -53,9 +53,9 @@ identify_rf_hardware() {
       echo -n "."
 
       if [[ -e /sys/class/hb-rf-eth/hb-rf-eth/connect ]]; then
-        echo "${HB_RF_ETH_ADDRESS}" >/sys/class/hb-rf-eth/hb-rf-eth/connect && break
+        echo -n "${HB_RF_ETH_ADDRESS}" >/sys/class/hb-rf-eth/hb-rf-eth/connect 2>/dev/null && break
       else
-        echo "${HB_RF_ETH_ADDRESS}" >/sys/module/hb_rf_eth/parameters/connect && break
+        echo -n "${HB_RF_ETH_ADDRESS}" >/sys/module/hb_rf_eth/parameters/connect 2>/dev/null && break
       fi
       sleep 1
     done

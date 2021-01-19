@@ -413,5 +413,17 @@ check program uncleanShutdownCheck with path "/usr/bin/test -e /var/status/uncle
     if status = 0 for 1 cycles then
       exec /bin/sh -c "/bin/triggerAlarm.tcl 'Unclean shutdown or system crash identified' WatchDog-Alarm ; rm -f /var/status/uncleanShutdown"
 
+# check if a HB-RF-ETH is supposed to be connected and if it is not rais an alarm
+check program hb_rf_eth-Check with path "/bin/grep -q 1 /sys/class/hb-rf-eth/hb-rf-eth/is_connected"
+    group homematic
+    if status != 0 then
+      exec /bin/sh -c "/bin/triggerAlarm.tcl 'HB-RF-ETH: no connection' 'HB-RF-ETH Connection';"
+      repeat every 5 cycles
+    depends on hb_rf_eth-CheckEnabled
+
+check program hb_rf_eth-CheckEnabled with path "/usr/bin/test -e /etc/config/hb_rf_eth"
+    group homematic
+    if status != 0 for 1 cycles then unmonitor
+
 # include user-defined configuration files
 include /usr/local/etc/monit*.cfg

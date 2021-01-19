@@ -11,6 +11,10 @@ on:
         required: true
         default: "false"
 
+env:
+  # NOTE: secrets cannot be access directly in conditions
+  # https://github.com/actions/runner/issues/520
+  SECRETS_ARE_AVAILABLE: ${{ secrets.CR_PAT != '' }}
 jobs:
   linter:
     name: Linter Check
@@ -149,11 +153,6 @@ jobs:
     name: OCI/Docker Build+Push
     runs-on: ubuntu-20.04
     needs: build
-    #PRs have no access to secrets so disabling this job
-    #Allow test builds on test forks IF the CR_PATH is properly set
-    if: |
-      github.event_name != 'pull_request' &&
-      secrets.CR_PAT
 
     steps:
     - uses: actions/checkout@v2
@@ -202,6 +201,8 @@ jobs:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.CR_PAT }}
+      if: env.SECRETS_ARE_AVAILABLE
+
     
     - name: Build and push container image
       uses: docker/build-push-action@v2
@@ -210,7 +211,8 @@ jobs:
         context: oci_build
         file: buildroot-external/board/oci/Dockerfile
         platforms: linux/amd64,linux/arm64,linux/arm
-        push: true
+        push: ${{ env.SECRETS_ARE_AVAILABLE }}
+
         build-args: |
           tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
         labels: |
@@ -237,20 +239,26 @@ jobs:
   test:
     runs-on: ubuntu-20.04
     needs: oci-multiarch-build-push
-    if: github.event_name != 'pull_request'
+    # This does not work: https://github.community/t/how-to-set-and-access-a-workflow-variable/17335/17
+    # Need to check each step
+    # if: env.SECRETS_ARE_AVAILABLE
+
 
     strategy:
       fail-fast: false
       matrix:
-        platform: [linux/amd64, linux/arm64, linux/arm]
+        platform: [amd64, arm64, arm]
     
     steps:
 
-    - run: docker run --rm --privileged multiarch/qemu-user-static:register --reset
+    - if: env.SECRETS_ARE_AVAILABLE
+      run: docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
-    - uses: actions/checkout@v2
+    - if: env.SECRETS_ARE_AVAILABLE
+      uses: actions/checkout@v2
 
     - name: setup env
+      if: env.SECRETS_ARE_AVAILABLE
       run: |
         echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
         echo "BUILD_DATE=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
@@ -262,6 +270,7 @@ jobs:
     
     
     - name: Enable experimental features for the Docker daemon and CLI
+      if: env.SECRETS_ARE_AVAILABLE
       run: |
         echo $'{\n  "experimental": true\n}' | sudo tee /etc/docker/daemon.json
         mkdir -p ~/.docker
@@ -271,8 +280,9 @@ jobs:
         docker version -f '{{.Server.Experimental}}'
 
     - name: deploy container
+      if: env.SECRETS_ARE_AVAILABLE
       run: |
-        PLATFORM_FLAG="--platform ${{ matrix.platform }}" 
+        PLATFORM_FLAG="--platform linux/${{ matrix.platform }}" 
         export CCU_DOCKER_RUN_OPTIONS="$PLATFORM_FLAG"
         export CCU_DOCKER_PULL_OPTIONS="$PLATFORM_FLAG"
         export CCU_OCI_TAG="${VERSION}-${GITHUB_SHA7}"
@@ -280,15 +290,17 @@ jobs:
         sudo -E ./buildroot-external/board/oci/deploy.sh
     
     - name: test init
+      if: env.SECRETS_ARE_AVAILABLE
       run: |
         error=0
         n=1
         while ! curl localhost:8080 2>/dev/null|grep "HomeMatic WebUI"; do
-          if [ "$n" -ge 120 ]
-            echo "Still not up - aborting";
+          if [ "$n" -ge 120 ]; then
+            echo "Still not up - aborting"
             error=1
+            break
           fi
-          sleep 1;
+          sleep 1
           n=$((n+1)) 
         done 
 
@@ -298,11 +310,11 @@ jobs:
         exit $error
 
     - name: upload debug information
+      if: env.SECRETS_ARE_AVAILABLE && ( ${{ success() }} || ${{ failure() }} )
       uses: actions/upload-artifact@v2
       with:
         path: debug_output.tgz
         name: RaspberryMatic-debug_output-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
-      if: ${{ success() }} || ${{ failure() }}
       
 
   

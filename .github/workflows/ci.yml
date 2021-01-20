@@ -247,7 +247,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [amd64, arm64, arm]
+        # GitHub does not offer yet arm or arm64 native HW and Raspberrymatic does not seem to run well
+        # on emulated (qemu) HW.
+        #platform: [amd64, arm64, arm]
+        platform: [amd64]
     
     steps:
 

@@ -19,7 +19,7 @@
 <sub>[Click here for 🇬🇧🇺🇸 english readme](README.en.md)</sub>
 ### [🚀 Schnellstart](#cloud-schnellstart)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📚 Dokumentation](https://github.com/jens-maus/RaspberryMatic/wiki)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📦 Download](https://github.com/jens-maus/RaspberryMatic/releases/latest)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[🚑 Support](#yum-support-mitarbeit)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[👮 Lizenzen](#scroll-lizenzen)
 ___
-Bei _RaspberryMatic_ handelt es sich um ein alternatives, freies und nicht-kommerziell vertriebenes OpenSource Betriebssystem für die kommerziell erhältlichen _[CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html)_ bzw. _[ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)_ SmartHome-Zentralen zur Nutzung von [HomeMatic](http://homematic.com/)/BidCos-RF bzw. [homematicIP](https://www.homematic-ip.com/) Hardware der Firmengruppe [eQ-3](https://eq-3.de)/[ELV](https://elv.de/). RaspberryMatic hat sich zum Ziel gesetzt nicht nur den kompletten Funktionsumfang einer sogn. _HomeMatic CCU SmartHome-Zentrale_ für eine Cloudfreie Nutzung von HomeMatic Geräten für frei erhältliche Single-Board-Computern (SBC) wie z.B. den [RaspberryPi](https://www.raspberrypi.org/), [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/) oder aber auch als virtualisierte Variante für moderne Virtualisierungsumgebungen (z.B. vmWare ESXi, Proxmox, VirtualBox) nutzbar zu machen. Es hat sich auch zum Ziel gesetzt auf verschiedenen Ebenen (WebUI, Linux-Betriebsystem, etc.) Verbesserungen bzw. Bugfixes mitzubringen die in der originalen CCU Firmware von eQ3/ELV (noch) nicht vorhanden sind.
+Bei _RaspberryMatic_ handelt es sich um ein alternatives, freies und nicht-kommerziell vertriebenes OpenSource Betriebssystem für die kommerziell erhältlichen _[CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html)_ bzw. _[ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)_ SmartHome-Zentralen zur Nutzung von [HomeMatic](http://homematic.com/)/BidCos-RF bzw. [homematicIP](https://www.homematic-ip.com/) Hardware der Firmengruppe [eQ-3](https://eq-3.de)/[ELV](https://elv.de/). RaspberryMatic hat sich zum Ziel gesetzt nicht nur den kompletten Funktionsumfang einer sogn. _HomeMatic CCU SmartHome-Zentrale_ für eine Cloudfreie Nutzung von HomeMatic Geräten für frei erhältliche Single-Board-Computern (SBC) wie z.B. den [RaspberryPi](https://www.raspberrypi.org/), [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/) oder aber auch als virtualisierte Variante für moderne Virtualisierungsumgebungen (z.B. vmWare ESXi, Proxmox, VirtualBox, Docker/OCI, Kubernetes/K8s, etc.) nutzbar zu machen. Es hat sich auch zum Ziel gesetzt auf verschiedenen Ebenen (WebUI, Linux-Betriebsystem, etc.) Verbesserungen bzw. Bugfixes mitzubringen die in der originalen CCU Firmware von eQ3/ELV (noch) nicht vorhanden sind.
 
 [mehr...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung)
 
@@ -53,6 +53,8 @@ bzw. unter folgenden Virtualisierungsumgebungen installieren:
    * [vmWare Workstation Player](https://www.vmware.com/de/products/workstation-player/workstation-player-evaluation.html)
    * [QEmu/KVM](https://www.qemu.org/)
    * [HyperV](https://docs.microsoft.com/de-de/virtualization/hyper-v-on-windows/)
+   * [Docker/OCI](https://www.docker.com/)
+   * [Kubernetes/K8s](https://kubernetes.io/)
    
 [mehr...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen)      
 
@@ -85,6 +87,8 @@ Unter [Releases](https://github.com/jens-maus/RaspberryMatic/releases) steht fü
      * [vmWare Workstation Player](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-Workstation-Player)
      * [QEmu/KVM](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-QEmu)
      * [HyperV](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HyperV)
+     * [Docker/OCI](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Docker-OCI)
+     * [Kubernetes/K8s](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Kubernetes)
    * [Konfigurationsübernahme](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#konfigurationsübernahme)
      * [Umstieg von CCU3](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-von-ccu3)
      * [Umstieg von CCU2](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-von-ccu2)

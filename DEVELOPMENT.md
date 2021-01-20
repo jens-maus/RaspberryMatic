@@ -23,5 +23,8 @@ This short documentation serves as a quick-guide to which and from where compone
 - S.USV Support-Tools:
   https://s-usv.de/downloads/
 
-- generic_raw_uart/HB-RF-USB/HB-RF-USB-2 driver:
+- generic_raw_uart/HB-RF-USB/HB-RF-USB-2/HB-RF-ETH driver:
   https://github.com/alexreinert/piVCCU/tree/master/kernel
+
+- detect_radio_module tool:
+  https://github.com/alexreinert/piVCCU/tree/master/detect_radio_module

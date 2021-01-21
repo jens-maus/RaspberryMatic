@@ -11,6 +11,10 @@ on:
         required: true
         default: "false"
 
+env:
+  # NOTE: secrets cannot be access directly in conditions
+  # https://github.com/actions/runner/issues/520
+  SECRETS_ARE_AVAILABLE: ${{ secrets.CR_PAT != '' }}
 jobs:
   linter:
     name: Linter Check
@@ -149,9 +153,6 @@ jobs:
     name: OCI/Docker Build+Push
     runs-on: ubuntu-20.04
     needs: build
-    if: |
-      github.event_name != 'pull_request' &&
-      github.repository_owner == 'jens-maus'
 
     steps:
     - uses: actions/checkout@v2
@@ -200,6 +201,8 @@ jobs:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.CR_PAT }}
+      if: env.SECRETS_ARE_AVAILABLE == 'true'
+
     
     - name: Build and push container image
       uses: docker/build-push-action@v2
@@ -208,7 +211,8 @@ jobs:
         context: oci_build
         file: buildroot-external/board/oci/Dockerfile
         platforms: linux/amd64,linux/arm64,linux/arm
-        push: true
+        push: ${{ env.SECRETS_ARE_AVAILABLE }}
+
         build-args: |
           tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
         labels: |
@@ -229,3 +233,91 @@ jobs:
     
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
+  
+  ##########################################
+  # Test
+  test:
+    runs-on: ubuntu-20.04
+    needs: oci-multiarch-build-push
+    # This does not work: https://github.community/t/how-to-set-and-access-a-workflow-variable/17335/17
+    # Need to check each step
+    # if: env.SECRETS_ARE_AVAILABLE == 'true'
+
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # GitHub does not offer yet arm or arm64 native HW and Raspberrymatic does not seem to run well
+        # on emulated (qemu) HW.
+        #platform: [amd64, arm64, arm]
+        platform: [amd64]
+    
+    steps:
+
+    - if: env.SECRETS_ARE_AVAILABLE == 'true'
+      run: docker run --rm --privileged multiarch/qemu-user-static:register --reset
+
+    - if: env.SECRETS_ARE_AVAILABLE == 'true'
+      uses: actions/checkout@v2
+
+    - name: setup env
+      if: env.SECRETS_ARE_AVAILABLE == 'true'
+      run: |
+        echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo "BUILD_DATE=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+        echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
+        echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo "GIT_REF=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)" >> $GITHUB_ENV
+        echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
+        echo "CCU_OCI_REPO=ghcr.io/${{ github.repository_owner }}/raspberrymatic" >> $GITHUB_ENV
+    
+    
+    - name: Enable experimental features for the Docker daemon and CLI
+      if: env.SECRETS_ARE_AVAILABLE == 'true'
+      run: |
+        echo $'{\n  "experimental": true\n}' | sudo tee /etc/docker/daemon.json
+        mkdir -p ~/.docker
+        echo $'{\n  "experimental": "enabled"\n}' | sudo tee ~/.docker/config.json
+        sudo service docker restart
+        docker version -f '{{.Client.Experimental}}'
+        docker version -f '{{.Server.Experimental}}'
+
+    - name: deploy container
+      if: env.SECRETS_ARE_AVAILABLE == 'true'
+      run: |
+        PLATFORM_FLAG="--platform linux/${{ matrix.platform }}" 
+        export CCU_DOCKER_RUN_OPTIONS="$PLATFORM_FLAG"
+        export CCU_DOCKER_PULL_OPTIONS="$PLATFORM_FLAG"
+        export CCU_OCI_TAG="${VERSION}-${GITHUB_SHA7}"
+        
+        sudo -E ./buildroot-external/board/oci/deploy.sh
+    
+    - name: test init
+      if: env.SECRETS_ARE_AVAILABLE == 'true'
+      run: |
+        error=0
+        n=1
+        while ! curl localhost:8080 2>/dev/null|grep "HomeMatic WebUI"; do
+          if [ "$n" -ge 120 ]; then
+            echo "Still not up - aborting"
+            error=1
+            break
+          fi
+          sleep 1
+          n=$((n+1)) 
+        done 
+
+        docker logs ccu
+        docker exec ccu tar czf - /tmp /usr/local > debug_output.tgz
+
+        exit $error
+
+    - name: upload debug information
+      if: env.SECRETS_ARE_AVAILABLE == 'true' && ( ${{ success() }} || ${{ failure() }} )
+      uses: actions/upload-artifact@v2
+      with:
+        path: debug_output.tgz
+        name: RaspberryMatic-debug_output-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
+      
+
+  

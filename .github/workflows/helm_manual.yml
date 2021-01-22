@@ -1,0 +1,30 @@
+name: Helm chart - workflow dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      chart_version:
+        description: 'Helm Chart version (must be semantic version)'
+        required: true
+        default: "0.1"
+      app_version:
+        description: 'Container image tag to use'
+        required: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Publish Helm chart
+      uses: stefanprodan/helm-gh-pages@master
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        charts_dir: helm
+        chart_version: ${{ github.event.inputs.chart_version }}
+        app_version: ${{ github.event.inputs.app_version }}

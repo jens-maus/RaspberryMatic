@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "raspberrymatic.fullname" . }}
+  labels:
+    {{- include "raspberrymatic.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+  ports:
+  {{- range $port_type, $port_cat := .Values.service.ports -}}
+  {{- range $port_name, $port_number := $port_cat }}
+  - name: {{ $port_name }}
+    port: {{ $port_number }}
+    targetPort: {{ $port_number }}
+    protocol: {{ $port_type }}
+  {{- end }}
+  {{- end }}
+  selector:
+    {{- include "raspberrymatic.selectorLabels" . | nindent 4 }}

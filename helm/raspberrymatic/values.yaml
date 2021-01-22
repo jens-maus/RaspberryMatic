@@ -1,0 +1,146 @@
+# Default values for raspberrymatic.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+persistence:
+  enabled: true
+  ## RaspberryMatic data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  ##
+  ## If you want to reuse an existing claim, you can pass the name of the PVC using
+  ## the existingClaim variable
+  # existingClaim: your-claim
+  ##
+  ## If you want to use a volume on the host machine instead of a PVC:
+  # hostPath: /path/to/the/config/folder
+  accessMode: ReadWriteOnce
+  size: 1Gi
+
+image:
+  repository: ghcr.io/jens-maus/raspberrymatic
+  pullPolicy: Always #IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext:
+  privileged: true
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+  
+livenessProbe: 
+  tcpSocket:
+    port: http
+  initialDelaySeconds: 60 # 1 minute
+  timeoutSeconds: 5
+  periodSeconds: 60
+  failureThreshold: 5 # 5 minutes
+readinessProbe:
+  tcpSocket:
+    port: http
+  timeoutSeconds: 4
+  periodSeconds: 5
+  failureThreshold: 60 # 5 minutes
+
+service:
+  type: ClusterIP
+  loadBalancerIP: ""
+  ports:
+    TCP:
+      ssh: 22
+      http: 80
+      https: 443
+      # ReGaHss XmlRpc
+      xmlrpc: 1999
+      # ReGaHss XmlRpc proxy
+      xmlrpc-proxy: 31999
+      # ReGaHss XmlRpc TLS
+      xmlrpc-tls: 41999
+      # wired Homematic (HS485D XmlRpc)
+      wired: 2000
+      # wired Homematic (HS485D XmlRpc) proxy
+      wired-proxy: 32000
+      # wired Homematic (HS485D XmlRpc) TLS
+      wired-tls: 42000
+      # wireless Homematic (rfd)
+      rfd: 2001
+      # wireless Homematic (rfd) proxy
+      rfd-proxy: 32001
+      # wireless Homematic (rfd) TLS
+      rfd-tls: 42001
+      # crRFD Legacy XmlRpc - Homematic IP
+      hmip: 2010
+      # crRFD Legacy XmlRpc - Homematic IP proxy
+      hmip-proxy: 32010
+      # crRFD Legacy XmlRpc - Homematic IP TLS
+      hmip-tls: 42010
+      # Rega
+      rega: 8181
+      # Rega proxy
+      rega-proxy: 8183
+      # Rega TLS
+      rega-tls: 48181
+      # HMServer - Virtual Devices
+      virt-dev: 9292
+      # HMServer - Virtual Devices
+      virt-dev-proxy: 39292
+      # HMServer - Virtual Devices TLS
+      virt-dev-tls: 49292
+    UDP:
+      snmp: 161
+      # uPnP/ssdp
+      upnp: 1900
+      eq3configd: 43439
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - chart-example.local
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+annotations: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

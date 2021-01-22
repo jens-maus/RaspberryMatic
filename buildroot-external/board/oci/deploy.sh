@@ -52,7 +52,6 @@ set -e
 FORCE=
 if [[ "${1}" == "-f" ]]; then
   FORCE="--assume-yes"
-  echo jo
 fi
 
 check_sudo() {
@@ -76,11 +75,11 @@ pkg_installed() {
 if command -v dpkg >/dev/null; then
 
   # check for docker installation
-  if ! pkg_installed docker; then
-    echo "Installing docker"
-    check_sudo
-    apt install "${FORCE}" docker
-  fi
+  #if ! pkg_installed docker; then
+  #  echo "Installing docker"
+  #  check_sudo
+  #  apt install "${FORCE}" docker
+  #fi
 
   # Add repository
   if [[ ! -e /etc/apt/sources.list.d/pivccu.list ]]; then
@@ -165,7 +164,7 @@ fi
 
 DOCKER_IMAGE="${CCU_OCI_REPO}:${CCU_OCI_TAG}"
 echo "Pull/Update OCI image ${DOCKER_IMAGE}"
-docker pull ${CCU_DOCKER_PULL_OPTIONS} "${DOCKER_IMAGE}"
+docker pull ${CCU_DOCKER_PULL_OPTIONS} ${DOCKER_IMAGE}
 
 #############################################################
 #                      DOCKER STARTUP                       #

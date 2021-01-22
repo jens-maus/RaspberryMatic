@@ -236,16 +236,16 @@ jobs:
     
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
-  
+
   ##########################################
-  # Test
-  test:
+  # OCI/Docker ReGaHss/WebUI startup test
+  oci-multiarch-test:
+    name: OCI/Docker WebUI Test
     runs-on: ubuntu-20.04
     needs: oci-multiarch-build-push
     # This does not work: https://github.community/t/how-to-set-and-access-a-workflow-variable/17335/17
     # Need to check each step
     # if: env.SECRETS_ARE_AVAILABLE == 'true'
-
 
     strategy:
       fail-fast: false
@@ -293,7 +293,7 @@ jobs:
         export CCU_DOCKER_PULL_OPTIONS="$PLATFORM_FLAG"
         export CCU_OCI_TAG="${VERSION}-${GITHUB_SHA7}"
         
-        sudo -E ./buildroot-external/board/oci/deploy.sh
+        sudo -E ./buildroot-external/board/oci/deploy.sh -f
     
     - name: test init
       if: env.SECRETS_ARE_AVAILABLE == 'true'
@@ -321,6 +321,3 @@ jobs:
       with:
         path: debug_output.tgz
         name: RaspberryMatic-debug_output-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
-      
-
-  

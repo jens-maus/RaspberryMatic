@@ -1,0 +1,35 @@
+{
+  "name": "RaspberryMatic",
+  "version": "snapshot",
+  "slug": "raspberrymatic",
+  "image": "ghcr.io/jens-maus/raspberrymatic",
+  "arch": ["armhf", "aarch64", "amd64"],
+  "description": "Alternative OS for your HomeMatic CCU",
+  "url": "https://github.com/jens-maus/RaspberryMatic/",
+  "webui": "http://[HOST]:[PORT:80]",
+  "watchdog": "tcp://[HOST]:[PORT:80]",
+  "ingress": true,
+  "ingress_port": 80,
+  "panel_title": "RaspberryMatic",
+  "panel_icon": "mdi:router-wireless",
+  "startup": "services",
+  "boot": "auto",
+  "init": false,
+  "timeout": 120,
+  "ports": {
+    "80/tcp": null,
+    "2001/tcp": null,
+    "2000/tcp": null,
+    "2010/tcp": null
+  },
+  "ports_description": {
+    "80/tcp": "ReGaHss Webinterface (Not required for Ingress)",
+    "2001/tcp": "Homematic xmlrpc (Extern)",
+    "2000/tcp": "HomematicWire xmlrpc (Extern)",
+    "2010/tcp": "HomematicIP xmlrpc (Extern)"
+  },
+  "environment": {
+    "RUNNING_IN_HA": "1"
+  },
+  "full_access": true
+}

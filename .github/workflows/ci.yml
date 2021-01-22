@@ -228,6 +228,9 @@ jobs:
           org.opencontainers.image.ref.name=${{ env.GIT_REF }}
           org.opencontainers.image.revision=${{ github.sha }}
           org.opencontainers.image.version=${{ env.BUILD_VERSION }}
+          io.hass.version=${{ env.BUILD_VERSION }}
+          io.hass.type=addon
+          io.hass.arch=armhf|aarch64|amd64
         tags: |
           ghcr.io/${{ github.repository_owner }}/raspberrymatic:${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
     

@@ -38,6 +38,13 @@ init_system() {
     done
   fi
 
+  HOME_ASSISTANT_ADDON_DATA="/data"
+  if [ -f "${HOME_ASSISTANT_ADDON_DATA}/options.json" ]; then
+    # Home Assistant expects persinstent data to be stored in /data
+    echo "Storing user data in ${HOME_ASSISTANT_ADDON_DATA} (Home Assistant Add-On)"
+    mount -o bind ${HOME_ASSISTANT_ADDON_DATA} /usr/local
+  fi
+
   # create /media/usbX directories for automounting USB devices
   for i in $(seq 1 8); do
     mkdir -p "/media/usb${i}"

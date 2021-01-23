@@ -1,5 +1,5 @@
 {
-  "name": "RaspberryMatic",
+  "name": "RaspberryMatic CCU",
   "version": "snapshot",
   "slug": "raspberrymatic",
   "image": "ghcr.io/jens-maus/raspberrymatic",
@@ -16,17 +16,26 @@
   "boot": "auto",
   "init": false,
   "timeout": 120,
+  "auto_uart": true,
+  "gpio": true,
+  "apparmor": false,
   "ports": {
     "80/tcp": null,
     "2001/tcp": null,
     "2000/tcp": null,
-    "2010/tcp": null
+    "2010/tcp": null,
+    "8181/tcp": null,
+    "8701/tcp": null,
+    "9292/tcp": null
   },
   "ports_description": {
-    "80/tcp": "ReGaHss Webinterface (Not required for Ingress)",
-    "2001/tcp": "Homematic xmlrpc (Extern)",
-    "2000/tcp": "HomematicWire xmlrpc (Extern)",
-    "2010/tcp": "HomematicIP xmlrpc (Extern)"
+    "80/tcp": "WebUI (Not required for Ingress)",
+    "2001/tcp": "HomeMatic XMLRPC (Extern)",
+    "2000/tcp": "HomeMatic-Wired XMLRPC (Extern)",
+    "2010/tcp": "homematicIP XMLRPC (Extern)",
+    "8181/tcp": "ReGa scripting (Extern)",
+    "8701/tcp": "CUxD BINRPC (Extern)",
+    "9292/tcp": "VirtualDevices XMLRPC (Extern)"
   },
   "environment": {
     "RUNNING_IN_HA": "1"

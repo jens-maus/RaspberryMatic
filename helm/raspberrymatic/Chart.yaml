@@ -1,6 +1,15 @@
 apiVersion: v2
 name: raspberrymatic
 description: HomeMatic central based on RaspberryMatic
+home: https://raspberrymatic.de/
+icon: https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/home-assistant-addon/icon.png
+maintainers:
+  - name: Jens Maus
+    email: mail@jens-maus.de
+    url: https://github.com/jens-maus
+  - name: Angel Nunez Mencias
+    email: helm@angelnu.com
+    url: https://github.com/jens-maus
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -19,4 +28,8 @@ version: 0.1.0
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
 appVersion: snapshot
-  
+
+annotations:
+  artifacthub.io/changes: |
+    - Initial Chart release
+  artifacthub.io/license: Apache-2.0

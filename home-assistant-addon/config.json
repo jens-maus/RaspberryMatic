@@ -4,7 +4,7 @@
   "slug": "raspberrymatic",
   "image": "ghcr.io/jens-maus/raspberrymatic",
   "arch": ["armhf", "aarch64", "amd64"],
-  "description": "Alternative OS for your HomeMatic CCU",
+  "description": "HomeMatic central based on RaspberryMatic",
   "url": "https://github.com/jens-maus/RaspberryMatic/",
   "webui": "http://[HOST]:[PORT:80]",
   "watchdog": "tcp://[HOST]:[PORT:80]",

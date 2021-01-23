@@ -157,6 +157,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    # In this step, this action saves a list of existing images,
+    # the cache is created without them in the post run.
+    # It also restores the cache if it exists.
+    - uses: satackey/action-docker-layer-caching@v0.0.11
+      # Ignore the failure of a step and avoid terminating the job.
+      continue-on-error: true
+    
     - name: Setup Environment
       run: |
         echo "BUILD_DATETIME=${{ needs.build.outputs.build_datetime }}" >> $GITHUB_ENV
@@ -243,10 +250,7 @@ jobs:
     name: OCI/Docker WebUI Test
     runs-on: ubuntu-20.04
     needs: oci-multiarch-build-push
-    # This does not work: https://github.community/t/how-to-set-and-access-a-workflow-variable/17335/17
-    # Need to check each step
-    # if: env.SECRETS_ARE_AVAILABLE == 'true'
-
+    
     strategy:
       fail-fast: false
       matrix:
@@ -257,14 +261,18 @@ jobs:
     
     steps:
 
-    - if: env.SECRETS_ARE_AVAILABLE == 'true'
-      run: docker run --rm --privileged multiarch/qemu-user-static:register --reset
+    - run: docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
-    - if: env.SECRETS_ARE_AVAILABLE == 'true'
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+
+    # In this step, this action saves a list of existing images,
+    # the cache is created without them in the post run.
+    # It also restores the cache if it exists.
+    - uses: satackey/action-docker-layer-caching@v0.0.11
+      # Ignore the failure of a step and avoid terminating the job.
+      continue-on-error: true
 
     - name: setup env
-      if: env.SECRETS_ARE_AVAILABLE == 'true'
       run: |
         echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
         echo "BUILD_DATE=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
@@ -276,7 +284,6 @@ jobs:
     
     
     - name: Enable experimental features for the Docker daemon and CLI
-      if: env.SECRETS_ARE_AVAILABLE == 'true'
       run: |
         echo $'{\n  "experimental": true\n}' | sudo tee /etc/docker/daemon.json
         mkdir -p ~/.docker
@@ -286,7 +293,6 @@ jobs:
         docker version -f '{{.Server.Experimental}}'
 
     - name: deploy container
-      if: env.SECRETS_ARE_AVAILABLE == 'true'
       run: |
         PLATFORM_FLAG="--platform linux/${{ matrix.platform }}" 
         export CCU_DOCKER_RUN_OPTIONS="$PLATFORM_FLAG"
@@ -296,7 +302,6 @@ jobs:
         sudo -E ./buildroot-external/board/oci/deploy.sh -f
     
     - name: test init
-      if: env.SECRETS_ARE_AVAILABLE == 'true'
       run: |
         error=0
         n=1
@@ -316,7 +321,6 @@ jobs:
         exit $error
 
     - name: upload debug information
-      if: env.SECRETS_ARE_AVAILABLE == 'true' && ( ${{ success() }} || ${{ failure() }} )
       uses: actions/upload-artifact@v2
       with:
         path: debug_output.tgz

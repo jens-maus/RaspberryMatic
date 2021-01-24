@@ -297,6 +297,7 @@ jobs:
         PLATFORM_FLAG="--platform linux/${{ matrix.platform }}" 
         export CCU_DOCKER_RUN_OPTIONS="$PLATFORM_FLAG"
         export CCU_DOCKER_PULL_OPTIONS="$PLATFORM_FLAG"
+        export CCU_DOCKER_PULL_REFRESH="false"
         export CCU_OCI_TAG="${VERSION}-${GITHUB_SHA7}"
         
         sudo -E ./buildroot-external/board/oci/deploy.sh -f

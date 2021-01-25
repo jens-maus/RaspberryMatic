@@ -91,14 +91,24 @@ case "${IFACE}" in
     # check if /boot/setupWiFi exists and contains the necessary
     # data to generate /etc/config/wpa_supplicant.conf automatically
     if [[ -s /boot/SetupWIFI ]]; then
-      SSID=$(head -1 /boot/SetupWIFI | dos2unix)
-      PWD=$(tail -1 /boot/SetupWIFI | dos2unix)
+      SETUPWIFI=/boot/SetupWIFI
+    elif [[ -s /etc/config/SetupWIFI ]]; then
+      SETUPWIFI=/etc/config/SetupWIFI
+    fi
+
+    if [[ -n "${SETUPWIFI}" ]]; then
+      SSID=$(head -1 "${SETUPWIFI}" | dos2unix)
+      PWD=$(tail -1 "${SETUPWIFI}" | dos2unix)
       if [[ -n "${SSID}" ]] && [[ -n "${PWD}" ]]; then
         cp /etc/config_templates/wpa_supplicant.conf /etc/config/wpa_supplicant.conf
         if /usr/sbin/wpa_passphrase "${SSID}" "${PWD}" >>/etc/config/wpa_supplicant.conf; then
-          mount -o rw,remount /boot
-          rm -f /boot/SetupWIFI
-          mount -o ro,remount /boot
+          if [[ "$(dirname "${SETUPWIFI}")" == "/boot" ]]; then
+            mount -o rw,remount /boot
+            rm -f "${SETUPWIFI}"
+            mount -o ro,remount /boot
+          else
+            rm -f "${SETUPWIFI}"
+          fi
         fi
       fi
     fi

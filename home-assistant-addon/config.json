@@ -10,7 +10,6 @@
   "webui": "http://[HOST]:[PORT:80]",
   "watchdog": "tcp://[HOST]:[PORT:80]",
   "ingress": true,
-  "ingress_port": 80,
   "panel_title": "RaspberryMatic",
   "panel_icon": "mdi:router-wireless",
   "startup": "services",
@@ -47,7 +46,8 @@
     "9292/tcp": "VirtualDevices XMLRPC (Extern)"
   },
   "environment": {
-    "RUNNING_IN_HA": "1"
+    "RUNNING_IN_HA": "1",
+    "RUNNING_IN_HA2": "1"
   },
   "full_access": true,
   "privileged": [

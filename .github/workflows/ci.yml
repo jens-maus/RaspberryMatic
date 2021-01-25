@@ -213,6 +213,7 @@ jobs:
         context: oci_build
         file: buildroot-external/board/oci/Dockerfile
         platforms: linux/amd64,linux/arm64,linux/arm
+        load: true #load in docker - needed for testing later on
         push: ${{ env.SECRETS_ARE_AVAILABLE }}
 
         build-args: |

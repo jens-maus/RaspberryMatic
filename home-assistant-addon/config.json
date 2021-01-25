@@ -1,6 +1,7 @@
 {
   "name": "RaspberryMatic CCU",
   "version": "snapshot",
+  "stage": "experimental",
   "slug": "raspberrymatic",
   "image": "ghcr.io/jens-maus/raspberrymatic",
   "arch": ["armhf", "aarch64", "amd64"],
@@ -16,10 +17,17 @@
   "boot": "auto",
   "init": false,
   "timeout": 120,
+  "devices": [
+    "/dev/raw-uart:/dev/raw-uart:rwm",
+    "/dev/raw-uart1:/dev/raw-uart1:rwm",
+    "/dev/mmd_hmip:/dev/mmd_hmip:rwm",
+    "/dev/mmd_bidcos:/dev/mmd_bidcos:rwm",
+    "/dev/eq3loop:/dev/eq3loop:rwm"
+  ],
   "udev": true,
   "auto_uart": true,
   "gpio": true,
-  "apparmor": false,
+  "apparmor": true,
   "ports": {
     "80/tcp": null,
     "2001/tcp": null,

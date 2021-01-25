@@ -16,6 +16,7 @@
   "boot": "auto",
   "init": false,
   "timeout": 120,
+  "udev": true,
   "auto_uart": true,
   "gpio": true,
   "apparmor": false,

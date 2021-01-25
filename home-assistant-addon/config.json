@@ -40,5 +40,8 @@
   "environment": {
     "RUNNING_IN_HA": "1"
   },
-  "full_access": true
+  "full_access": true,
+  "privileged": [
+    "SYS_ADMIN"
+  ]
 }

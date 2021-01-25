@@ -29,13 +29,24 @@ init_system() {
   mkdir -p /var/empty
   chmod 0700 /var/empty
 
-  DEV_HOST="/dev_host"
-  if [ -d "${DEV_HOST}" ]; then
-    # To avoid sharing the whole host /dev with container it is mounted in a /dev_host
-    # This means we have to manually symlink the dynamic devices
-    for device in mmd_bidcos mmd_hmip usb; do
-      ln -s "${DEV_HOST}/${device}" "/dev/${device}" 
-    done
+  if [[ "${HM_HOST}" == "oci" ]]; then
+
+    DEV_HOST="/dev_host"
+    if [ -d "${DEV_HOST}" ]; then
+      # To avoid sharing the whole host /dev with container it is mounted in a /dev_host
+      # This means we have to manually symlink the dynamic devices
+      for device in mmd_bidcos mmd_hmip usb; do
+        ln -s "${DEV_HOST}/${device}" "/dev/${device}" 
+      done
+    fi
+
+    HOME_ASSISTANT_ADDON_DATA="/data"
+    if [ -n "${RUNNING_IN_HA}" ] && [ -f "${HOME_ASSISTANT_ADDON_DATA}/options.json" ]; then
+      # Home Assistant expects persinstent data to be stored in /data
+      echo "Storing user data in ${HOME_ASSISTANT_ADDON_DATA} (Home Assistant Add-On)"
+      mount -o bind ${HOME_ASSISTANT_ADDON_DATA} /usr/local
+    fi
+
   fi
 
   # create /media/usbX directories for automounting USB devices

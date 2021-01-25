@@ -165,8 +165,8 @@ if docker container inspect "${CCU_CONTAINER_NAME}" >/dev/null 2>&1; then
   docker rm "${CCU_CONTAINER_NAME}" >/dev/null || true
 fi
 
+DOCKER_IMAGE="${CCU_OCI_REPO}:${CCU_OCI_TAG}"
 if [[ "${CCU_DOCKER_PULL_REFRESH}" == "true" ]]; then
-  DOCKER_IMAGE="${CCU_OCI_REPO}:${CCU_OCI_TAG}"
   echo "Pull/Update OCI image ${DOCKER_IMAGE}"
   docker pull ${CCU_DOCKER_PULL_OPTIONS} ${DOCKER_IMAGE}
 fi

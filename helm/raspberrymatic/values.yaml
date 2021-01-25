@@ -2,25 +2,25 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+
+
 persistence:
+  # -- enabling persistent data. Dissable for demos
   enabled: true
-  ## RaspberryMatic data Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  # storageClass: "-"
-  ##
-  ## If you want to reuse an existing claim, you can pass the name of the PVC using
-  ## the existingClaim variable
-  # existingClaim: your-claim
-  ##
-  ## If you want to use a volume on the host machine instead of a PVC:
-  # hostPath: /path/to/the/config/folder
-  accessMode: ReadWriteOnce
+  # -- Size for storage claim
   size: 1Gi
+  # -- Use a particular class instead of the default
+  # @default -- the default storageClassName is used
+  storageClass:
+  # -- How to access the storage claim
+  accessMode: ReadWriteOnce
+  # -- Reuse an existing claim
+  # @default -- RELEASE-NAME-raspberrymatic
+  existingClaim:
+  # -- 
+  # Use a particular volume on the host machine
+  # @default -- use storage claim
+  hostPath: 
 
 image:
   repository: ghcr.io/jens-maus/raspberrymatic
@@ -31,9 +31,9 @@ nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
-  # Specifies whether a service account should be created
+  # -- Specifies whether a service account should be created
   create: true
-  # The name of the service account to use.
+  # --The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name:
 
@@ -41,6 +41,7 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 securityContext:
+  # -- Use privileged to access the Homematic HW 
   privileged: true
   # capabilities:
   #   drop:
@@ -48,7 +49,8 @@ securityContext:
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-  
+
+# -- livenessProbe settings
 livenessProbe: 
   tcpSocket:
     port: http
@@ -56,6 +58,7 @@ livenessProbe:
   timeoutSeconds: 5
   periodSeconds: 60
   failureThreshold: 5 # 5 minutes
+# -- readinessProbe settings
 readinessProbe:
   tcpSocket:
     port: http
@@ -71,46 +74,47 @@ service:
       ssh: 22
       http: 80
       https: 443
-      # ReGaHss XmlRpc
+      # -- ReGaHss XmlRpc
       xmlrpc: 1999
-      # ReGaHss XmlRpc proxy
+      # -- ReGaHss XmlRpc proxy
       xmlrpc-proxy: 31999
-      # ReGaHss XmlRpc TLS
+      # -- ReGaHss XmlRpc TLS
       xmlrpc-tls: 41999
-      # wired Homematic (HS485D XmlRpc)
+      # -- wired Homematic (HS485D XmlRpc)
       wired: 2000
-      # wired Homematic (HS485D XmlRpc) proxy
+      # -- wired Homematic (HS485D XmlRpc) proxy
       wired-proxy: 32000
-      # wired Homematic (HS485D XmlRpc) TLS
+      # -- wired Homematic (HS485D XmlRpc) TLS
       wired-tls: 42000
-      # wireless Homematic (rfd)
+      # -- wireless Homematic (rfd)
       rfd: 2001
-      # wireless Homematic (rfd) proxy
+      # -- wireless Homematic (rfd) proxy
       rfd-proxy: 32001
-      # wireless Homematic (rfd) TLS
+      # -- wireless Homematic (rfd) TLS
       rfd-tls: 42001
-      # crRFD Legacy XmlRpc - Homematic IP
+      # -- crRFD Legacy XmlRpc - Homematic IP
       hmip: 2010
-      # crRFD Legacy XmlRpc - Homematic IP proxy
+      # -- crRFD Legacy XmlRpc - Homematic IP proxy
       hmip-proxy: 32010
-      # crRFD Legacy XmlRpc - Homematic IP TLS
+      # -- crRFD Legacy XmlRpc - Homematic IP TLS
       hmip-tls: 42010
-      # Rega
+      # -- Rega
       rega: 8181
-      # Rega proxy
+      # -- Rega proxy
       rega-proxy: 8183
-      # Rega TLS
+      # -- Rega TLS
       rega-tls: 48181
-      # HMServer - Virtual Devices
+      # -- HMServer - Virtual Devices
       virt-dev: 9292
-      # HMServer - Virtual Devices
+      # -- HMServer - Virtual Devices
       virt-dev-proxy: 39292
-      # HMServer - Virtual Devices TLS
+      # -- HMServer - Virtual Devices TLS
       virt-dev-tls: 49292
     UDP:
       snmp: 161
-      # uPnP/ssdp
+      # -- uPnP/ssdp
       upnp: 1900
+      # -- eq3configd
       eq3configd: 43439
 
 ingress:

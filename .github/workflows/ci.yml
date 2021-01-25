@@ -163,6 +163,8 @@ jobs:
         echo "BUILD_VERSION=${{ needs.build.outputs.build_version }}" >> $GITHUB_ENV
         echo "GIT_REF=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)" >> $GITHUB_ENV
         echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
+        echo "CCU_OCI_REPO=ghcr.io/${{ github.repository_owner }}/raspberrymatic" >> $GITHUB_ENV
+        echo "CCU_OCI_TAG=${{ needs.build.outputs.build_version }}-$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
 
     # download OCI platform artifacts
     - name: Download oci_amd64 artifact
@@ -232,7 +234,7 @@ jobs:
           io.hass.type=addon
           io.hass.arch=armhf|aarch64|amd64
         tags: |
-          ghcr.io/${{ github.repository_owner }}/raspberrymatic:${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+          ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}
     
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
@@ -251,8 +253,6 @@ jobs:
     - name: deploy container
       run: |
         export CCU_DOCKER_PULL_REFRESH="false"
-        export CCU_OCI_REPO="ghcr.io/${{ github.repository_owner }}/raspberrymatic"
-        export CCU_OCI_TAG="${BUILD_VERSION}-${GITHUB_SHA7}"
         
         sudo -E ./buildroot-external/board/oci/deploy.sh -f
     

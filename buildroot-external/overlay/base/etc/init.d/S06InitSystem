@@ -29,10 +29,11 @@ init_system() {
   mkdir -p /var/empty
   chmod 0700 /var/empty
 
+  # setup for OCI/Docker environments only
   if [[ "${HM_HOST}" == "oci" ]]; then
 
     DEV_HOST="/dev_host"
-    if [ -d "${DEV_HOST}" ]; then
+    if [[ -d "${DEV_HOST}" ]]; then
       # To avoid sharing the whole host /dev with container it is mounted in a /dev_host
       # This means we have to manually symlink the dynamic devices
       for device in mmd_bidcos mmd_hmip usb; do
@@ -40,11 +41,11 @@ init_system() {
       done
     fi
 
+    # Home Assistant Add-on expects persistent data to be stored in /data
     HOME_ASSISTANT_ADDON_DATA="/data"
-    if [ -n "${RUNNING_IN_HA}" ] && [ -f "${HOME_ASSISTANT_ADDON_DATA}/options.json" ]; then
-      # Home Assistant expects persinstent data to be stored in /data
+    if [[ -n "${RUNNING_IN_HA}" ]] && [[ -f "${HOME_ASSISTANT_ADDON_DATA}/options.json" ]]; then
       echo "Storing user data in ${HOME_ASSISTANT_ADDON_DATA} (Home Assistant Add-On)"
-      mount -o bind ${HOME_ASSISTANT_ADDON_DATA} /usr/local
+      mount -o bind "${HOME_ASSISTANT_ADDON_DATA}" /usr/local
     fi
 
   fi

@@ -1,0 +1,5 @@
+# Artifact Hub repository metadata file
+repositoryID: 1460c186-bc83-4448-8a19-b98eff3aa768
+owners: # (optional, used to claim repository ownership)
+  - name: Jens Maus
+    email: mail@jens-maus.de

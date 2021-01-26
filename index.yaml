@@ -7,9 +7,9 @@ entries:
       artifacthub.io/license: Apache-2.0
     apiVersion: v2
     appVersion: 3.55.10.20210126
-    created: "2021-01-26T09:40:50.249961173Z"
+    created: "2021-01-26T13:00:43.21943082Z"
     description: HomeMatic central based on RaspberryMatic
-    digest: 56253efd63a594affa65625a4623d7c73d8ed2a1445b21621fe398af6351dba0
+    digest: d8a49b5289ed29ebe357a745f23479cb6067f7112e8bb83b70604ed6b8708609
     home: https://raspberrymatic.de/
     icon: https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/home-assistant-addon/icon.png
     maintainers:
@@ -24,4 +24,4 @@ entries:
     urls:
     - https://jens-maus.github.io/RaspberryMatic/raspberrymatic-0.1.tgz
     version: "0.1"
-generated: "2021-01-26T09:40:50.248856672Z"
+generated: "2021-01-26T13:00:43.217990704Z"

@@ -19,7 +19,7 @@ You can then run `helm search repo raspberrymatic` to see the charts.
 
 ## Contributing
 
-The source code of all [RaspberryMatic](https://raspberrymatic.de) [Helm](https://helm.sh) charts can be found on Github: <https://github.com/prometheus-community/helm-charts/>
+The source code of all [RaspberryMatic](https://raspberrymatic.de) [Helm](https://helm.sh) charts can be found on Github: <https://github.com/jens-maus/RaspberryMatic/tree/gh-pages>
 
 <!-- Keep full URL links to repo files because this README syncs from main to gh-pages.  -->
 We'd love to have you contribute! Please refer to our [contribution guidelines](https://github.com/jens-maus/RaspberryMatic/blob/master/CONTRIBUTING.md) for details.

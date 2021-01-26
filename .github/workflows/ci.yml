@@ -213,7 +213,8 @@ jobs:
         context: oci_build
         file: buildroot-external/board/oci/Dockerfile
         platforms: linux/amd64,linux/arm64,linux/arm
-        load: true #load in docker - needed for testing later on
+        # load not supported -> https://github.com/docker/buildx/issues/290
+        #load: true #load in docker - needed for testing later on
         push: ${{ env.SECRETS_ARE_AVAILABLE }}
 
         build-args: |
@@ -242,6 +243,37 @@ jobs:
 
     
     #Testing
+    - name: Build and load container image for test
+      uses: docker/build-push-action@v2
+      id: docker_build_test
+      with:
+        context: oci_build
+        file: buildroot-external/board/oci/Dockerfile
+        platforms: linux/amd64 #load does not support muti-arch https://github.com/docker/buildx/issues/290
+        load: true #load in docker - needed for testing later on
+        push: false
+
+        build-args: |
+          tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
+        labels: |
+          org.opencontainers.image.title=RaspberryMatic
+          org.opencontainers.image.description=Alternative OS for your HomeMatic CCU
+          org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+          org.opencontainers.image.authors=${{ github.repository_owner }}
+          org.opencontainers.image.licenses=Apache-2.0
+          org.opencontainers.image.url=https://raspberrymatic.de
+          org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          org.opencontainers.image.documentation=https://github.com/jens-maus/RaspberryMatic/wiki
+          org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
+          org.opencontainers.image.ref.name=${{ env.GIT_REF }}
+          org.opencontainers.image.revision=${{ github.sha }}
+          org.opencontainers.image.version=${{ env.BUILD_VERSION }}
+          io.hass.version=${{ env.BUILD_VERSION }}
+          io.hass.type=addon
+          io.hass.arch=armhf|aarch64|amd64
+        tags: |
+          ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}
+
     - name: Enable experimental features for the Docker daemon and CLI
       run: |
         echo $'{\n  "experimental": true\n}' | sudo tee /etc/docker/daemon.json

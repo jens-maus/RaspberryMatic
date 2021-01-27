@@ -39,12 +39,6 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2
 
-    - name: Rename worker directory
-      working-directory: ../
-      run: |
-        mv RaspberryMatic b
-        ln -s b RaspberryMatic
-
     - name: Setup Environment
       id: env
       run: |
@@ -56,27 +50,10 @@ jobs:
         echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
         echo "::set-output name=build_version::$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)"
 
-    - name: Free runner disk space
-      run: |
-        df -h /
-        sudo swapoff -a
-        sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android /opt/ghc
-        sudo apt clean
-        docker rmi $(docker image ls -aq)
-        df -h /
-
     - name: Switch to experimental EULA files
       run: |
         mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de
         mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en
-
-    - name: Setup ccache
-      uses: actions/cache@v2
-      with:
-        path: ~/.buildroot-ccache
-        key: ${{ matrix.platform }}-ccache-${{ env.GITHUB_SHA7}}
-        restore-keys: |
-          ${{ matrix.platform }}-ccache-
 
     #- name: remote debug tmate session
     #  uses: mxschmitt/action-tmate@v1
@@ -86,9 +63,7 @@ jobs:
     - name: Build
       timeout-minutes: 480
       run: |
-        sudo mkdir -p /mnt/download
-        sudo chown runner /mnt/download
-        make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download raspmatic_${{ matrix.platform }}-release
+        make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache raspmatic_${{ matrix.platform }}-release
 
     # cleanup
     - name: Cleanup

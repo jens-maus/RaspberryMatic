@@ -42,7 +42,7 @@ jobs:
     - name: Install Dependencies
       run: |
         apt update
-        apt install -y wget
+        apt install -y wget bc cpio rsync
 
     - name: Setup Environment
       id: env

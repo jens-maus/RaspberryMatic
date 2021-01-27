@@ -39,6 +39,11 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2
 
+    - name: Install Dependencies
+      run: |
+        apt update
+        apt install -y wget
+
     - name: Setup Environment
       id: env
       run: |

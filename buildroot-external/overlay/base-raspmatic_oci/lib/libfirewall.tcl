@@ -454,7 +454,7 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 443 -m state --state NEW -j ACCEPT"
   # ha-proxy
   if { [file exists "/var/run/ha-proxy.pid"] } {
-    try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 8099 -m state --state NEW -j ACCEPT"
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 8099 -s 172.30.32.2 -m state --state NEW -j ACCEPT"
   }
 
   # udp port for eq3configd
@@ -488,10 +488,6 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
     # http(s)
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 80 -m state --state NEW -j ACCEPT"
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p tcp --dport 443 -m state --state NEW -j ACCEPT" 
-    # ha-proxy
-    if { [file exists "/var/run/ha-proxy.pid")] } {
-      try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 8099 -m state --state NEW -j ACCEPT"
-    }
     # udp port for eq3configd
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --sport 43439 -j ACCEPT"
     try_exec_cmd "/usr/sbin/ip6tables -A INPUT -p udp --dport 43439 -j ACCEPT"

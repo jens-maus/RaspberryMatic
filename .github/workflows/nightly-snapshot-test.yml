@@ -43,7 +43,7 @@ jobs:
       run: |
         apt update
         apt install -y --no-install-recommends wget bc cpio rsync
-        if ! id -u builder &>/dev/null; then useradd -m -u 1000 -U -G sudo builder && echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers; fi
+        if ! id -u builder &>/dev/null; then groupadd -u 1002 builder && useradd -m -u 1002 -U -G sudo builder && echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers; fi
         chown -R builder .
 
     - name: Setup Environment

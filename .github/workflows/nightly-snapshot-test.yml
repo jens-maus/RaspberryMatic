@@ -43,7 +43,7 @@ jobs:
       run: |
         apt update
         apt install -y --no-install-recommends wget bc cpio rsync
-        useradd -m -u 1000 -g 1000 -G sudo builder
+        useradd -m -u 1000 -U -G sudo builder
         echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers
 
     - name: Setup Environment

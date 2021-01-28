@@ -45,6 +45,7 @@ jobs:
         apt install -y --no-install-recommends wget bc cpio rsync
         useradd -m -u 1000 -U -G sudo builder
         echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers
+        chown -R builder .
 
     - name: Setup Environment
       id: env

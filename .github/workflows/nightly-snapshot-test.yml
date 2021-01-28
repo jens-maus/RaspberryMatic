@@ -42,7 +42,9 @@ jobs:
     - name: Install Dependencies
       run: |
         apt update
-        apt install -y wget bc cpio rsync
+        apt install -y --no-install-recommends wget bc cpio rsync
+        useradd -m -u 1000 -g 1000 -G sudo builder
+        echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers
 
     - name: Setup Environment
       id: env
@@ -68,7 +70,7 @@ jobs:
     - name: Build
       timeout-minutes: 480
       run: |
-        make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache raspmatic_${{ matrix.platform }}-release
+        sudo -H -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} raspmatic_${{ matrix.platform }}-release
 
     # cleanup
     - name: Cleanup

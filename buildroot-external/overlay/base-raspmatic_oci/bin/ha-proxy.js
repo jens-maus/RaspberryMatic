@@ -77,5 +77,16 @@ const apiProxy = createProxyMiddleware('/', {
 });
 
 const app = express();
-app.use(apiProxy);
+app.use((req, res, next) => {
+  // Home-Assistant will always process from
+  // 172.30.32.2 via ingress, so secure the rest
+  let ip = req.ip.split(':').pop();
+  if(ip === '172.30.32.2') {
+    // allowed, forward to next middleware (proxy)
+    next();
+  } else {
+    // abort request with "403 Forbidden"
+    res.status(403).end();
+  }
+}, apiProxy);
 app.listen(8099);

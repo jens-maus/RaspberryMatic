@@ -9,7 +9,6 @@ jobs:
   build:
     name: Release build [${{ matrix.platform }}]
     runs-on: ubuntu-20.04
-    needs: repo-check
     timeout-minutes: 480
     if: github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0
     outputs:
@@ -290,7 +289,9 @@ jobs:
 
 
   helm:
+    name: Builds Helm chart for Kubernetes
     runs-on: ubuntu-latest
+    needs: oci-multiarch-build-push
     steps:
     
     - name: Checkout

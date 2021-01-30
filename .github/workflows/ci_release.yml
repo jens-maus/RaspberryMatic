@@ -3,7 +3,8 @@ name: Release CI
 
 on:
   release:
-    types: [published]
+    # While testing also build after edit
+    #types: [published]
 
 jobs:
   build:

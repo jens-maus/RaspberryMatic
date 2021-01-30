@@ -44,7 +44,7 @@ jobs:
         #DELETE THE LINE BELLOW BEFORE MERGING
         echo "FAKE_BUILD=true" >> $GITHUB_ENV
 
-        
+
         echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
         echo "::set-output name=build_version::$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)"
 
@@ -95,7 +95,7 @@ jobs:
         !startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/upload-asset@v1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         file: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
         name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip
@@ -107,7 +107,7 @@ jobs:
         !startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/upload-asset@v1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         file: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
         name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip.sha256
@@ -118,7 +118,7 @@ jobs:
         matrix.platform == 'rpi3'
       uses: WebFreak001/upload-asset@v1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         file: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz
         name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-ccu3.tgz
@@ -129,7 +129,7 @@ jobs:
         matrix.platform == 'rpi3'
       uses: WebFreak001/upload-asset@v1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         file: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz.sha256
         name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-ccu3.tgz.sha256
@@ -141,7 +141,7 @@ jobs:
         matrix.platform == 'ova'
       uses: WebFreak001/upload-asset@v1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         file: release/RaspberryMatic-${{ env.VERSION }}.ova
         name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$.ova
@@ -152,7 +152,7 @@ jobs:
         matrix.platform == 'ova'
       uses: WebFreak001/upload-asset@v1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         file: release/RaspberryMatic-${{ env.VERSION }}.ova.sha256
         name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$.ova.sha256
@@ -163,7 +163,7 @@ jobs:
         startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/upload-asset@v1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         file: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz
         name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz
@@ -174,7 +174,7 @@ jobs:
         startsWith(matrix.platform, 'oci_')
       uses: WebFreak001/upload-asset@v1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         file: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz.sha256
         name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz.sha256

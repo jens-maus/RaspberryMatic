@@ -334,6 +334,31 @@ jobs:
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
 
+  helm:
+    runs-on: ubuntu-latest
+    needs:
+    - build
+    - oci-multiarch-build-push
+    steps:
+
+    - name: Setup Environment
+      run: |
+        echo "BUILD_VERSION=${{ needs.build.outputs.build_version }}" >> $GITHUB_ENV
+    
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Publish testing Helm chart after sucesfull 
+      if: env.SECRETS_ARE_AVAILABLE == 'true'
+      uses: stefanprodan/helm-gh-pages@master
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        charts_dir: helm
+        chart_version: 0.1 #Latest snapshot
+        app_version: ${{ env.BUILD_VERSION }}
+
   cleanup:
     name: Cleanup artifacts/packages
     runs-on: ubuntu-20.04

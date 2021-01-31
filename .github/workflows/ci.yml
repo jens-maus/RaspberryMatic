@@ -313,27 +313,5 @@ jobs:
       with:
         path: debug_output.tgz
         name: RaspberryMatic-debug_output-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}.tgz
-    
-  helm:
-    runs-on: ubuntu-latest
-    needs: oci-multiarch-build-push
-    steps:
 
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
 
-    - name: Get Version
-      id: env
-      run: |
-        echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
-
-    - name: Publish testing Helm chart after sucesfull 
-      if: env.SECRETS_ARE_AVAILABLE == 'true'
-      uses: stefanprodan/helm-gh-pages@master
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        charts_dir: helm
-        chart_version: 0.0.1 #Latest push/PR
-        app_version: ${{ env.VERSION }}

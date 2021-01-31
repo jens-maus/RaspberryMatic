@@ -21,6 +21,35 @@ The fastest and recommended way to develop is using a local [Visual Studio Code]
 5. Once installed you need to start the adapter.
 6. It is usefull to enable the `Show in sidebar` so you can open the Raspberrymatic UI (NOTE: you might need to wait some seconds until it is available).
 
+## Continous integration
+
+RaspberryMatic uses GitHub Workflows for Continous Integrations. The actions tab shows available workflows.
+
+## Requirements
+
+OCI packages require a secret to be uploaded `CR_PAT`. See GitHub [instructions(https://docs.github.com/en/packages/guides/migrating-to-github-container-registry-for-docker-images#authenticating-with-the-container-registry)] on how to create a Personal Access Token to upload to the GitHub Container Registry.
+
+## Workflows
+
+- **ci**: on each push, pull request or manual - builds all artefacts (dev versions)
+- **ci_release**: manually triggered - builds a draft release and attach official builds. Updates OCI and Helm latest tags.
+- **nightly-snapshot**: cronjob - only works on official repo (dummy in fork) - uploads all snapshot versions
+- **nightly-snapshot**: ??
+
+## How to draft a release
+
+1. Go to _Actions_ -> _Release CI_
+2. Click on _Run Workflow_
+3. Select the branch. Usually `master`
+3. Let the skip build to `false` at least you are testing the CI
+4. Click on _Run Workflow_ to start CI. The CI does the following
+   - creates a new release draft with the VERSION used as name, tag and version. If the release draft already exists then it is not modified.
+   - builds all binaries and upload them to the draft release
+   - uploads the container with `latest` as tag - NOTE: after this step OCI users using latest will get the update
+   - uploads a new release HElm chart using the OCCU_VERSION as version. NOTE: after this point the Kubernetes users will get presented with the update
+5. While the draft is being built, the release readme can be updated from the UI
+6. Once the CI has completed and all binaries are uploaded to the release the release can be published
+
 ## Components Update Guide
 
 This short documentation serves as a quick-guide to which and from where components should be update on a regular basis.

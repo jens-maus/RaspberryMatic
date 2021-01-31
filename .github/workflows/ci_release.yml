@@ -166,7 +166,6 @@ jobs:
 
     - name: Upload build release [ova]
       if: |
-        github.repository_owner == 'jens-maus' &&
         matrix.platform == 'ova'
       uses: actions/upload-release-asset@v1
       env:

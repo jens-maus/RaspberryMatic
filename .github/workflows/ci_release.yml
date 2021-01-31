@@ -71,7 +71,6 @@ jobs:
         echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
         echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
         echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
-
         echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
         echo "::set-output name=build_version::$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)"
 
@@ -126,7 +125,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}-${{ matrix.platform }}.zip
         asset_content_type: application/zip
 
     - name: Upload build release checksum [rpi*, tinkerboard, intelnuc, ova]
@@ -138,7 +137,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip.sha256
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}-${{ matrix.platform }}.zip.sha256
         asset_content_type: text/plain
 
     - name: Upload build release [ccu3]
@@ -150,7 +149,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-ccu3.tgz
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}-ccu3.tgz
         asset_content_type: application/gzip
 
     - name: Upload build release checksum [ccu3]
@@ -162,7 +161,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-ccu3.tgz.sha256
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}-ccu3.tgz.sha256
         asset_content_type: text/plain
 
     - name: Upload build release [ova]
@@ -175,7 +174,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$.ova
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.ova
         asset_content_type: application/gzip
 
     - name: Upload build release checksum [ova]
@@ -187,7 +186,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$.ova.sha256
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.ova.sha256
         asset_content_type: text/plain
 
     - name: Upload build release [oci]
@@ -199,7 +198,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}-${{ matrix.platform }}.tgz
         asset_content_type: application/gzip
 
     - name: Upload build release checksum [oci]
@@ -211,7 +210,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz.sha256
+        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}-${{ matrix.platform }}.tgz.sha256
         asset_content_type: text/plain
 
     ########################

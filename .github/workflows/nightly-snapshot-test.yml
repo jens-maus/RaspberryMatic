@@ -42,7 +42,7 @@ jobs:
     - name: Install Dependencies
       run: |
         apt update
-        apt install -y --no-install-recommends wget bc cpio rsync
+        apt install -y --no-install-recommends wget bc cpio rsync zip
         if ! getent group | grep -q ^builder:; then groupadd -g 48 builder; fi
         if ! getent passwd | grep -q ^builder:; then useradd -m -u 1003 -g 48 -G sudo builder;fi
         if ! grep -q ^builder; then echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers; fi
@@ -71,8 +71,15 @@ jobs:
     # major build step
     - name: Build
       timeout-minutes: 480
+      shell: bash
       run: |
-        sudo -H -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=5 raspmatic_${{ matrix.platform }}-release
+        CPU_QUOTA=$(cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us)
+        JLEVEL=0
+        if [[ "${CPU_QUOTA}" != "-1" ]]; then
+          CPU_PERIOD=$(cat /sys/fs/cgroup/cpu/cpu.cfs_period_us)
+          JLEVEL=$((CPU_QUOTA / CPU_PERIOD + 1))
+        fi
+        sudo -H -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${JLEVEL} raspmatic_${{ matrix.platform }}-release
 
     # cleanup
     - name: Cleanup

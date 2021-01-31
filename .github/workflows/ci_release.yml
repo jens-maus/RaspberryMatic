@@ -13,31 +13,33 @@ jobs:
   
   release_draft:
     name: Release draft
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     outputs:
       upload_url: ${{ steps.release_drafter.outputs.upload_url }}
 
     steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
 
-      - name: Setup Environment
-        id: env
-        run: |
-          echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
-          echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
-          echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
+    - name: Setup Environment
+      id: env
+      run: |
+        echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
+        echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
 
-      # Drafts your next Release notes as Pull Requests are merged into "master"
-      - name: Release draft
-        id: release_drafter
-        uses: release-drafter/release-drafter@v5
-        with:
-          # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
-          # config-name: my-config.yml
-          name: ${{ github.env.OCCU_VERSION }}
-          version: ${{ github.env.OCCU_VERSION }}
-          tag: ${{ github.env.OCCU_VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # Drafts your next Release notes as Pull Requests are merged into "master"
+    - name: Release draft
+      id: release_drafter
+      uses: release-drafter/release-drafter@v5
+      with:
+        # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
+        # config-name: my-config.yml
+        name: ${{ github.env.OCCU_VERSION }}
+        version: ${{ github.env.OCCU_VERSION }}
+        tag: ${{ github.env.OCCU_VERSION }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
     name: Release build [${{ matrix.platform }}]
@@ -318,6 +320,9 @@ jobs:
           org.opencontainers.image.ref.name=${{ env.GIT_REF }}
           org.opencontainers.image.revision=${{ github.sha }}
           org.opencontainers.image.version=${{ env.BUILD_VERSION }}
+          io.hass.version=${{ env.BUILD_VERSION }}
+          io.hass.type=addon
+          io.hass.arch=armhf|aarch64|amd64
         tags: |
           ${{ steps.extract_branch.outputs.unique_tag }}
           ${{ steps.extract_branch.outputs.branch_tag }}
@@ -328,7 +333,7 @@ jobs:
 
   helm:
     name: Builds Helm chart for Kubernetes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: oci-multiarch-build-push
     steps:
     

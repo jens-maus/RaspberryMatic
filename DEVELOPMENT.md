@@ -44,6 +44,7 @@ OCI packages require a secret to be uploaded `CR_PAT`. See GitHub [instructions(
 3. Let the skip build to `false` at least you are testing the CI
 4. Click on _Run Workflow_ to start CI. The CI does the following
    - creates a new release draft with the VERSION used as name, tag and version. If the release draft already exists then it is not modified.
+     **NOTE**: if binaries were already uploaded to the draft release you need to delete them before re-triggering the CI or the upload will fail
    - builds all binaries and upload them to the draft release
    - uploads the container with `latest` as tag - NOTE: after this step OCI users using latest will get the update
    - uploads a new release HElm chart using the OCCU_VERSION as version. NOTE: after this point the Kubernetes users will get presented with the update

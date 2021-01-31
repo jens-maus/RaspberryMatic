@@ -2,16 +2,46 @@
 name: Release CI
 
 on:
+  workflow_dispatch:
+    inputs:
+      skip_build:
+        description: 'Skip build (for testing workflow)?'
+        required: true
+        default: "false"
+        
   release:
-    # While testing also build after edit
-    #types: [published]
+    types: [published]
 
 jobs:
+  
+  update_release_draft:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+
+    steps:
+    
+      - name: Setup Environment
+        id: env
+        run: |
+          echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+          echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
+          echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
+
+      # Drafts your next Release notes as Pull Requests are merged into "master"
+      - uses: release-drafter/release-drafter@v5
+        with:
+          # (Optional) specify config name to use, relative to .github/. Default: release-drafter.yml
+          # config-name: my-config.yml
+          name: ${{ github.event.OCCU_VERSION }}
+          version: ${{ github.env.OCCU_VERSION }}
+          tag: ${{ github.event.OCCU_VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   build:
     name: Release build [${{ matrix.platform }}]
     runs-on: ubuntu-20.04
     timeout-minutes: 480
-    if: github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0
     outputs:
       build_datetime: ${{ steps.env.outputs.build_datetime }}
       build_version: ${{ steps.env.outputs.build_version }}
@@ -39,11 +69,6 @@ jobs:
         echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
         echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
         echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
-
-
-        #DELETE THE LINE BELLOW BEFORE MERGING
-        echo "FAKE_BUILD=true" >> $GITHUB_ENV
-
 
         echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
         echo "::set-output name=build_version::$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)"
@@ -197,7 +222,8 @@ jobs:
     name: OCI/Docker Build+Push
     runs-on: ubuntu-20.04
     needs: build
-    if: github.event_name != 'pull_request'
+    # Only when publishing official release
+    if: github.event_name == 'release'
 
     steps:
     - uses: actions/checkout@v2
@@ -319,22 +345,3 @@ jobs:
         charts_dir: helm
         chart_version: ${{ env.OCCU_VERSION }}
         app_version: ${{ env.VERSION }}
-
-
-  cleanup:
-    name: Cleanup artifacts/packages
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Remove old artifacts
-        uses: c-hive/gha-remove-artifacts@v1
-        with:
-          age: '2 months'
-          skip-tags: true
-          skip-recent: 15
-
-      - name: Remove old packages
-        uses: smartsquaregmbh/delete-old-packages@v0.2.0
-        with:
-          keep: 5
-          names: |
-            raspberrymatic

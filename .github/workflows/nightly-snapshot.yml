@@ -24,7 +24,7 @@ jobs:
 
   build:
     name: Snapshot build [${{ matrix.platform }}]
-    runs-on: ubuntu-20.04
+    runs-on: self-hosted
     needs: repo-check
     timeout-minutes: 480
     if: github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0
@@ -41,11 +41,14 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2
 
-    - name: Rename worker directory
-      working-directory: ../
+    - name: Install Dependencies
       run: |
-        mv RaspberryMatic b
-        ln -s b RaspberryMatic
+        apt update
+        apt install -y --no-install-recommends wget bc cpio rsync zip python
+        if ! getent group | grep -q ^builder:; then groupadd -g 48 builder; fi
+        if ! getent passwd | grep -q ^builder:; then useradd -m -u 1003 -g 48 -G sudo builder;fi
+        if ! grep -q ^builder; then echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers; fi
+        chown -R builder .
 
     - name: Setup Environment
       id: env
@@ -58,27 +61,10 @@ jobs:
         echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
         echo "::set-output name=build_version::$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)"
 
-    - name: Free runner disk space
-      run: |
-        df -h /
-        sudo swapoff -a
-        sudo rm -rf /swapfile /usr/share/dotnet /usr/local/lib/android /opt/ghc
-        sudo apt clean
-        docker rmi $(docker image ls -aq)
-        df -h /
-
     - name: Switch to experimental EULA files
       run: |
         mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de
         mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en
-
-    - name: Setup ccache
-      uses: actions/cache@v2
-      with:
-        path: ~/.buildroot-ccache
-        key: ${{ matrix.platform }}-ccache-${{ env.GITHUB_SHA7}}
-        restore-keys: |
-          ${{ matrix.platform }}-ccache-
 
     #- name: remote debug tmate session
     #  uses: mxschmitt/action-tmate@v1
@@ -87,10 +73,15 @@ jobs:
     # major build step
     - name: Build
       timeout-minutes: 480
+      shell: bash
       run: |
-        sudo mkdir -p /mnt/download
-        sudo chown runner /mnt/download
-        make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download raspmatic_${{ matrix.platform }}-release
+        CPU_QUOTA=$(cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us)
+        JLEVEL=0
+        if [[ "${CPU_QUOTA}" != "-1" ]]; then
+          CPU_PERIOD=$(cat /sys/fs/cgroup/cpu/cpu.cfs_period_us)
+          JLEVEL=$((CPU_QUOTA / CPU_PERIOD + 1))
+        fi
+        sudo -H -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${JLEVEL} raspmatic_${{ matrix.platform }}-release
 
     # cleanup
     - name: Cleanup

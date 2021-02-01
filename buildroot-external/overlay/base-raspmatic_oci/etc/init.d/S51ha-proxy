@@ -10,6 +10,7 @@
 start() {
   printf  "Starting ha-proxy: "
 
+  export NODE_PATH=/usr/lib/node_modules
   if start-stop-daemon -S -q -m -b -p /var/run/ha-proxy.pid --exec /bin/ha-proxy.js; then
     echo "OK"
   else

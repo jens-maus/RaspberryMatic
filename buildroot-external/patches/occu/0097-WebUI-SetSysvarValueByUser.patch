@@ -86,7 +86,7 @@
            break;
          case 4:
            iSubType = SYSVAR_STRING;
-+          pb += "string sValue = '"+$("txValue").value+"';";
++          pb += "string sValue = '"+$("txValue").value.replaceAll("'","\\'")+"';";
            break;
        }
        pb += "string sUnit = '"+$("txtUnit").value+"';";
@@ -210,11 +210,14 @@
  
    <% 
      if (system.GetVar("createNew") == 1) {
-@@ -370,18 +460,31 @@
+@@ -370,18 +460,34 @@
        if (sv.ValueSubType() == istPresent) {
        }
        if (sv.ValueSubType() == istChar8859) {
-+        Write("loadChar8859Edit('"#sv.Value()#"');");
++        string sval = sv.Value();
++        sval = sval.Replace(^\^,^\\^);
++        sval = sval.Replace(^'^,^\'^);
++        Write("loadChar8859Edit('"#sval#"');");
        }
        if (sv.ValueSubType() == istAlarm) {
 -        Write("loadLogicEdit('"#sv.ValueName1()#"', '"#sv.ValueName0()#"');");

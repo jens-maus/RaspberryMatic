@@ -77,13 +77,6 @@ pkg_installed() {
 # This only works on Debian/Ubuntu based OSes including Armbian and Raspbian
 if command -v dpkg >/dev/null; then
 
-  # check for docker installation
-  #if ! pkg_installed docker; then
-  #  echo "Installing docker"
-  #  check_sudo
-  #  apt install "${FORCE}" docker
-  #fi
-
   # Add repository
   if [[ ! -e /etc/apt/sources.list.d/pivccu.list ]]; then
     echo "Adding piVCCU apt repository"

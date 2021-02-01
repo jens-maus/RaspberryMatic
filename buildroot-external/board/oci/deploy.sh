@@ -25,7 +25,7 @@ set -e
 
 # Name of the docker volume where CCU data will persist
 # It can be a local location as well such as a mounted NAS folder, cluster fs (glusterfs), etc.
-: "${CCU_DATA_VOLUMEN:="ccu_data"}"
+: "${CCU_DATA_VOLUME:="ccu_data"}"
 
 # Container repository to use
 : "${CCU_OCI_REPO:="ghcr.io/jens-maus/raspberrymatic"}"
@@ -169,9 +169,9 @@ fi
 #############################################################
 
 echo "Starting container:"
-DOCKER_COMMAND="docker run -d -ti --privileged --restart=always -v"
+DOCKER_COMMAND="docker run -d -ti --privileged --restart=always"
 # Persistent volume
-DOCKER_COMMAND="${DOCKER_COMMAND} ${CCU_DATA_VOLUMEN}:/usr/local"
+DOCKER_COMMAND="${DOCKER_COMMAND} --volume=${CCU_DATA_VOLUME}:/usr/local:rw --volume=/lib/modules:/lib/modules:ro"
 # Container and host names
 DOCKER_COMMAND="${DOCKER_COMMAND} --hostname ${CCU_CONTAINER_NAME} --name ${CCU_CONTAINER_NAME}"
 # Add extra ports

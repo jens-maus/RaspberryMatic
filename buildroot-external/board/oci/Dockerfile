@@ -5,7 +5,14 @@ ARG tar_prefix=rootfs
 
 ADD $tar_prefix$TARGETARCH.tar /
 
-LABEL org.opencontainers.image.source https://github.com/jens-maus/RaspberyMatic
+LABEL org.opencontainers.image.title=RaspberryMatic \
+      org.opencontainers.image.description="Alternative OS for your HomeMatic CCU" \
+      org.opencontainers.image.vendor="RasperryMatic OpenSource Project" \
+      org.opencontainers.image.authors="RaspberryMatic OpenSource Team" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.url="https://raspberrymatic.de" \
+      org.opencontainers.image.source="https://github.com/jens-maus/RaspberyMatic" \
+      org.opencontainers.image.documentation="https://github.com/jens-maus/RaspberryMatic/wiki"
 
 CMD ["/sbin/init"]
 VOLUME /usr/local

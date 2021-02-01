@@ -326,10 +326,11 @@ jobs:
       run: echo ${{ steps.docker_build.outputs.digest }}
 
   helm:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs:
     - build
     - oci-multiarch-build-push
+
     steps:
 
     - name: Setup Environment

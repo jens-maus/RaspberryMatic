@@ -33,6 +33,7 @@ env:
   # NOTE: secrets cannot be access directly in conditions
   # https://github.com/actions/runner/issues/520
   SECRETS_ARE_AVAILABLE: ${{ secrets.CR_PAT != '' }}
+
 jobs:
   linter:
     name: Linter Check

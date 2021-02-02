@@ -30,9 +30,9 @@ jobs:
       id: release_drafter
       uses: release-drafter/release-drafter@v5
       with:
-        name: 'RaspberryMatic ${{ github.env.VERSION }}'
-        version: ${{ github.env.VERSION }}
-        tag: ${{ github.env.VERSION }}
+        name: 'RaspberryMatic ${{ env.VERSION }}'
+        version: '${{ env.VERSION }}'
+        tag: '${{ env.VERSION }}'
         publish: false
         prerelease: false
       env:
@@ -91,7 +91,7 @@ jobs:
           CPU_PERIOD=$(cat /sys/fs/cgroup/cpu/cpu.cfs_period_us)
           JLEVEL=$((CPU_QUOTA / CPU_PERIOD + 1))
         fi
-        sudo -H -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${JLEVEL} raspmatic_${{ matrix.platform }}-release
+        sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${JLEVEL} raspmatic_${{ matrix.platform }}-release
 
     # cleanup
     - name: Cleanup
@@ -110,7 +110,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}-${{ matrix.platform }}.zip
+        asset_name: RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
         asset_content_type: application/zip
 
     - name: Upload build release checksum [rpi*, tinkerboard, intelnuc, ova]
@@ -122,7 +122,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}-${{ matrix.platform }}.zip.sha256
+        asset_name: RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
         asset_content_type: text/plain
 
     - name: Upload build release [ccu3]
@@ -134,7 +134,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}-ccu3.tgz
+        asset_name: RaspberryMatic-${{ env.VERSION }}-ccu3.tgz
         asset_content_type: application/gzip
 
     - name: Upload build release checksum [ccu3]
@@ -146,7 +146,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}-ccu3.tgz.sha256
+        asset_name: RaspberryMatic-${{ env.VERSION }}-ccu3.tgz.sha256
         asset_content_type: text/plain
 
     - name: Upload build release [ova]
@@ -158,7 +158,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.ova
+        asset_name: RaspberryMatic-${{ env.VERSION }}.ova
         asset_content_type: application/gzip
 
     - name: Upload build release checksum [ova]
@@ -170,7 +170,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.ova.sha256
+        asset_name: RaspberryMatic-${{ env.VERSION }}.ova.sha256
         asset_content_type: text/plain
 
     - name: Upload build release [oci]
@@ -182,7 +182,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}-${{ matrix.platform }}.tgz
+        asset_name: RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz
         asset_content_type: application/gzip
 
     - name: Upload build release checksum [oci]
@@ -194,7 +194,7 @@ jobs:
       with:
         upload_url: ${{ needs.release_draft.outputs.upload_url }}
         asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}-${{ matrix.platform }}.tgz.sha256
+        asset_name: RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz.sha256
         asset_content_type: text/plain
 
     ########################
@@ -207,8 +207,6 @@ jobs:
         path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz*
         name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
       continue-on-error: true
-
-      
 
   ##########################################
   # OCI/Docker build and registry push step
@@ -231,15 +229,15 @@ jobs:
     - name: Download oci_amd64 artifact
       uses: actions/download-artifact@v2
       with:
-        name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_amd64.tgz
+        name: RaspberryMatic-${{ env.BUILD_VERSION }}-oci_amd64.tgz
     - name: Download oci_arm64 artifact
       uses: actions/download-artifact@v2
       with:
-        name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm64.tgz
+        name: RaspberryMatic-${{ env.BUILD_VERSION }}-oci_arm64.tgz
     - name: Download oci_arm artifact
       uses: actions/download-artifact@v2
       with:
-        name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm.tgz
+        name: RaspberryMatic-${{ env.BUILD_VERSION }}-oci_arm.tgz
 
     - name: Extract OCI artifacts
       run: |
@@ -255,7 +253,7 @@ jobs:
       shell: bash
       run: |
         BASE_TAG="ghcr.io/${{ github.repository_owner }}/raspberrymatic"
-        UNIQUE_TAG="${BASE_TAG}:${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}"
+        UNIQUE_TAG="${BASE_TAG}:${{ env.BUILD_VERSION }}"
         BRANCH="${GITHUB_REF##*/}"
         if [[ ${BRANCH} == 'master' ]]; then
           BRANCH_TAG="${BASE_TAG}:latest"

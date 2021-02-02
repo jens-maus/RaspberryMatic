@@ -11,7 +11,7 @@ on:
       skip_build:
         description: 'Skip build (for testing workflow)?'
         required: true
-        default: "false"
+        default: "true"
 
 jobs:
   
@@ -39,7 +39,7 @@ jobs:
         else
           BUILD_DATE=${{ github.event.inputs.release_date }}
         fi
-        OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1))
+        OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
         echo "::set-output name=occu_version::${OCCU_VERSION}"
         echo "::set-output name=version::${OCCU_VERSION}.${BUILD_DATE}"
         echo "::set-output name=date::${BUILD_DATE}"

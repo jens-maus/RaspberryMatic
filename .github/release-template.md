@@ -4,7 +4,7 @@ This is release ${VERSION} of RaspberryMatic which is a **XXXXX** release with b
 
 <sub>[Hier klicken für deutsche 🇩🇪 Version des ChangeLogs/Diskussionsbeitrag](https://homematic-forum.de/forum/viewtopic.php?f=65&t=63915)</sub>
 
-## :construction: Changes <sub>([full changes](https://github.com/jens-maus/RaspberryMati/compare/${PREVIOUS_TAG}...${VERSION}))</sub>:
+## :construction: Changes:
 
 #### CCU/HomeMatic service changes:
 - XXXXX
@@ -13,11 +13,13 @@ This is release ${VERSION} of RaspberryMatic which is a **XXXXX** release with b
 - XXXXX
 
 #### Operating system changes:
-- XXXX
+- XXXXX
 
 ** RAW CHANGELOG **
 ${CHANGELOG}
 ** RAW CHANGELOG **
+
+For full changes, see the [full commit log](https://github.com/jens-maus/RaspberryMati/compare/${PREVIOUS_TAG}...${VERSION}).
 
 ## :family: Contributors (alphabetically):
 - @jens-maus

@@ -315,7 +315,7 @@ jobs:
 
 
   helm:
-    name: Builds Helm chart for Kubernetes
+    name: Build K8s Helm chart
     runs-on: ubuntu-20.04
     needs: oci-multiarch-build-push
     steps:

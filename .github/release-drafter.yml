@@ -1,5 +1,5 @@
 template: |
-  This is release $RESOLVED_VERSION.XXXXX $VERSION of RaspberryMatic which is a **XXXXX** release with bugfixes and feature changes including the following changes:
+  This is release $RESOLVED_VERSION.XXXXX $INPUT_VERSION of RaspberryMatic which is a **XXXXX** release with bugfixes and feature changes including the following changes:
   
   [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/$RESOLVED_VERSION/total.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/releases/$RESOLVED_VERSION) ![License](https://img.shields.io/github/license/jens-maus/RaspberryMatic.svg?style=flat-square) [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
   
@@ -17,7 +17,7 @@ template: |
   - XXXXX
   
   ## :family: Contributors (alphabetically):
-  - @jens-maus
+  - $CONTRIBUTORS
   
   ## :memo: Support:
   For support on installation and help please visit the following (german speaking) help fora:

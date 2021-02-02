@@ -248,7 +248,7 @@ jQuery.extend(true,langJSON, {
     "hintUsrAutoLoginRow3" : "Der ausgew%E4hlte Benutzer wird automatisch ohne weitere Pr%FCfung angemeldet. Das System ist somit nicht mehr gegen externen Zugriff gesch%FCtzt.<br />",
     "hintUsrAutoLoginRow4" : "Der Zugriff auf andere Benutzerkonten erfolgt %FCber 'Abmelden' und entsprechender Neuanmeldung.<br />",
     "hintSetSystemLanguageNoteRow1" : "Bitte beachten:",
-    "hintSetSystemLanguageNoteRow2" : "Durch setzen der Systemsprache der CCU werden interne Standardbezeichnungen von R%E4umen, Gewerken, Standard-Systemvariablen, usw. auf die ausgew%E4hlte Sprache gesetzt. Bereits manuell angepasste Bezeichnungen werden von dieser %C4nderung jedoch nicht erfasst und behalten Ihre jetzigen Bezeichnungen. Eine sp%E4tere Anpassung der Systemsprache ist weiterhin jederzeit m%F6glich.",
+    "hintSetSystemLanguageNoteRow2" : "Durch setzen der Systemsprache der CCU werden interne Standardbezeichnungen von R%E4umen, Gewerken, Standard-Systemvariablen, usw. auf die ausgew%E4hlte Sprache gesetzt. Bereits manuell angepasste Bezeichnungen werden von dieser %C4nderung jedoch nicht erfasst und behalten Ihre Namensgebung. Eine sp%E4tere Anpassung der Systemsprache ist weiterhin jederzeit m%F6glich.",
     "profileSettings" : "Profileinstellung",
     "profileSettingsSender" : "Profileinstellung - Sender",
     "profileSettingsReceiver" : "Profileinstellung - Empf%E4nger",

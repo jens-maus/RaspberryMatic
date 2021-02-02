@@ -205,7 +205,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz*
-        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
+        name: RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz
       continue-on-error: true
 
   ##########################################

@@ -8,7 +8,7 @@ persistence:
   # -- enabling persistent data. Dissable for demos
   enabled: true
   # -- Size for storage claim
-  size: 1Gi
+  size: 4Gi
   # -- Use a particular class instead of the default
   # @default -- the default storageClassName is used
   storageClass:

@@ -26,6 +26,10 @@ jobs:
       run: |
         echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
 
+    - name: Get previous tag
+      id: previoustag
+      uses: WyriHaximus/github-action-get-previous-tag@v1.0.1
+
     - name: Generate changelog
       id: changelog
       uses: metcalfc/changelog-generator@v0.4.4
@@ -39,6 +43,7 @@ jobs:
         EOF
         export VERSION=${{ env.VERSION }}
         export CHANGELOG=$(cat /tmp/changelog.txt)
+        export PREVIOUS_TAG=${{ steps.previoustag.outputs.tag }}
         envsubst <.github/release-template.md >/tmp/release-template.md
 
     - name: Create release draft
@@ -52,18 +57,6 @@ jobs:
         prerelease: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-        #- name: Create release draft
-        #  id: release_drafter
-        #  uses: release-drafter/release-drafter@v5
-        #  with:
-        #    name: 'RaspberryMatic ${{ env.VERSION }}'
-        #    version: '${{ env.VERSION }}'
-        #    tag: '${{ env.VERSION }}'
-        #    publish: false
-        #    prerelease: false
-        #  env:
-        #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build:
     name: Release build [${{ matrix.platform }}]

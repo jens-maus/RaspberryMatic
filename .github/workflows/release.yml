@@ -55,8 +55,9 @@ jobs:
         myToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Generate release notes
+      shell: bash
       run: |
-        export CHANGELOG="$(tac <<'EOF' >/tmp/changelog.txt
+        export CHANGELOG="$(tac <<'EOF'
         ${{ steps.changelog.outputs.changelog }}
         EOF
         )"
@@ -245,7 +246,7 @@ jobs:
   oci-multiarch-build-push:
     name: OCI/Docker Build+Push
     runs-on: ubuntu-20.04
-    needs: build
+    needs: [release_draft, build]
 
     steps:
     - name: Checkout Code
@@ -347,7 +348,7 @@ jobs:
   helm:
     name: Build K8s Helm chart
     runs-on: ubuntu-20.04
-    needs: oci-multiarch-build-push
+    needs: [release_draft, oci-multiarch-build-push]
 
     steps:
     - name: Checkout Code

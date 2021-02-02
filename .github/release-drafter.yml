@@ -1,11 +1,11 @@
 template: |
-  This is release $RESOLVED_VERSION.XXXXX $INPUT_VERSION of RaspberryMatic which is a **XXXXX** release with bugfixes and feature changes including the following changes:
+  This is release $INPUT_VERSION.YYYYMMDD of RaspberryMatic which is a **XXXXX** release with bugfixes and feature changes including the following changes:
   
-  [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/$RESOLVED_VERSION/total.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/releases/$RESOLVED_VERSION) ![License](https://img.shields.io/github/license/jens-maus/RaspberryMatic.svg?style=flat-square) [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
+  [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/$INPUT_VERSION.YYYYMMDD/total.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/releases/$INPUT_VERSION.YYYYMMDD) ![License](https://img.shields.io/github/license/jens-maus/RaspberryMatic.svg?style=flat-square) [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
   
   <sub>[Hier klicken für deutsche 🇩🇪 Version des ChangeLogs/Diskussionsbeitrag](https://homematic-forum.de/forum/viewtopic.php?f=65&t=63915)</sub>
   
-  ## :construction: Changes:
+  ## :construction: Changes ([full changes](https://github.com/jens-maus/RaspberryMati/compare/$PREVIOUS_TAG...$INPUT_VERSION.YYYYMMDD)):
   
   #### CCU/HomeMatic service changes:
   - XXXXX
@@ -29,24 +29,24 @@ template: |
   The following installation archives (`*.zip` files) can be downloaded for selected hardware platforms (including a `*.tgz` update archive to upgrade from a CCU3 firmware to RaspberryMatic). To verify their integrity a `sha256` checksum is listed as well. Please upload these zip files using the WebUI-based update mechanism available:
   
   - RaspberryPi4 Model B, RaspberryPi4 Compute Module, RaspberryPi 400:
-  <sub>:package: [RaspberryMatic-$RESOLVED_VERSION-rpi4.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$RESOLVED_VERSION/RaspberryMatic-$RESOLVED_VERSION-rpi4.zip)<br/>SHA256: XXXXX</sub>
+  <sub>:package: [RaspberryMatic-$INPUT_VERSION.YYYYMMDD-rpi4.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$INPUT_VERSION.YYYYMMDD/RaspberryMatic-$INPUT_VERSION.YYYYMMDD-rpi4.zip)<br/>SHA256: XXXXX</sub>
   
   - CCU3, ELV-Charly, RaspberryPi3 Model B+, RaspberryPi3 Model B, RaspberryPi3 Model A+, RaspberryPi Compute Module 3, RaspberryPi Compute Module 3 lite:
-  <sub>:package: [RaspberryMatic-$RESOLVED_VERSION-rpi3.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$RESOLVED_VERSION/RaspberryMatic-$RESOLVED_VERSION-rpi3.zip)<br/>SHA256: XXXXX</sub>
-  <sub>:package: [RaspberryMatic-$RESOLVED_VERSION-ccu3.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/$RESOLVED_VERSION/RaspberryMatic-$RESOLVED_VERSION-ccu3.tgz) (only for initial CCU3 Firmware -> RaspberryMatic Upgrade)<br/> SHA256: XXXXX</sub>
+  <sub>:package: [RaspberryMatic-$INPUT_VERSION.YYYYMMDD-rpi3.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$INPUT_VERSION.YYYYMMDD/RaspberryMatic-$INPUT_VERSION.YYYYMMDD-rpi3.zip)<br/>SHA256: XXXXX</sub>
+  <sub>:package: [RaspberryMatic-$INPUT_VERSION.YYYYMMDD-ccu3.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/$INPUT_VERSION.YYYYMMDD/RaspberryMatic-$INPUT_VERSION.YYYYMMDD-ccu3.tgz) (only for initial CCU3 Firmware -> RaspberryMatic Upgrade)<br/> SHA256: XXXXX</sub>
   
   - RaspberryPi2 Model B:
-  <sub>:package: [RaspberryMatic-$RESOLVED_VERSION-rpi2.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$RESOLVED_VERSION/RaspberryMatic-$RESOLVED_VERSION-rpi2.zip)<br/>SHA256: XXXXX</sub>
+  <sub>:package: [RaspberryMatic-$INPUT_VERSION.YYYYMMDD-rpi2.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$INPUT_VERSION.YYYYMMDD/RaspberryMatic-$INPUT_VERSION.YYYYMMDD-rpi2.zip)<br/>SHA256: XXXXX</sub>
   
   - RaspberryPi Zero W, RaspberryPi Zero, RaspberryPi Compute Module 1, RaspberryPi1 (A+/B+):
-  <sub>:package: [RaspberryMatic-$RESOLVED_VERSION-rpi0.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$RESOLVED_VERSION/RaspberryMatic-$RESOLVED_VERSION-rpi0.zip)<br/>SHA256: XXXXX</sub>
+  <sub>:package: [RaspberryMatic-$INPUT_VERSION.YYYYMMDD-rpi0.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$INPUT_VERSION.YYYYMMDD/RaspberryMatic-$INPUT_VERSION.YYYYMMDD-rpi0.zip)<br/>SHA256: XXXXX</sub>
   
   - TinkerBoard S, TinkerBoard:
-  <sub>:package: [RaspberryMatic-$RESOLVED_VERSION-tinkerboard.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$RESOLVED_VERSION/RaspberryMatic-$RESOLVED_VERSION-tinkerboard.zip)<br/>SHA256: XXXXX</sub>
+  <sub>:package: [RaspberryMatic-$INPUT_VERSION.YYYYMMDD-tinkerboard.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$INPUT_VERSION.YYYYMMDD/RaspberryMatic-$INPUT_VERSION.YYYYMMDD-tinkerboard.zip)<br/>SHA256: XXXXX</sub>
   
   - Intel NUC:
-  <sub>:package: [RaspberryMatic-$RESOLVED_VERSION-intelnuc.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$RESOLVED_VERSION/RaspberryMatic-$RESOLVED_VERSION-intelnuc.zip)<br/>SHA256: XXXXX</sub>
+  <sub>:package: [RaspberryMatic-$INPUT_VERSION.YYYYMMDD-intelnuc.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$INPUT_VERSION.YYYYMMDD/RaspberryMatic-$INPUT_VERSION.YYYYMMDD-intelnuc.zip)<br/>SHA256: XXXXX</sub>
   
   - Open Virtual Appliance (OVA) – (ESXi, VirtualBox, Proxmox, Synology, QNAP, QEmu, HyperV)</sub>:
-  <sub>:package: [RaspberryMatic-$RESOLVED_VERSION-ova.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$RESOLVED_VERSION/RaspberryMatic-$RESOLVED_VERSION-ova.zip)<br/>SHA256: XXXXX</sub>
-  <sub>:package: [RaspberryMatic-$RESOLVED_VERSION.ova](https://github.com/jens-maus/RaspberryMatic/releases/download/$RESOLVED_VERSION/RaspberryMatic-$RESOLVED_VERSION.ova) (only for initial OVA installation)<br/>SHA256: XXXXX</sub>
+  <sub>:package: [RaspberryMatic-$INPUT_VERSION.YYYYMMDD-ova.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/$INPUT_VERSION.YYYYMMDD/RaspberryMatic-$INPUT_VERSION.YYYYMMDD-ova.zip)<br/>SHA256: XXXXX</sub>
+  <sub>:package: [RaspberryMatic-$INPUT_VERSION.YYYYMMDD.ova](https://github.com/jens-maus/RaspberryMatic/releases/download/$INPUT_VERSION.YYYYMMDD/RaspberryMatic-$INPUT_VERSION.YYYYMMDD.ova) (only for initial OVA installation)<br/>SHA256: XXXXX</sub>

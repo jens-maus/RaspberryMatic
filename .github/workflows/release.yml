@@ -34,7 +34,9 @@ jobs:
 
     - name: Generate release notes
       run: |
-        echo ${{ steps.changelog.outputs.changelog }} >/tmp/changelog.txt
+        cat <<EOF >/tmp/changelog.txt
+        ${{ steps.changelog.outputs.changelog }}
+        EOF
         export VERSION=${{ env.VERSION }}
         export CHANGELOG=$(cat /tmp/changelog.txt)
         envsubst <.github/release-template.md >/tmp/release-template.md

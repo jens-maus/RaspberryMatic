@@ -40,11 +40,11 @@ jobs:
 
     - name: Generate release notes
       run: |
-        cat <<EOF >/tmp/changelog.txt
+        cat <<'EOF' >/tmp/changelog.txt
         ${{ steps.changelog.outputs.changelog }}
         EOF
         export VERSION=${{ env.VERSION }}
-        export CHANGELOG=$(cat /tmp/changelog.txt)
+        export CHANGELOG="$(cat /tmp/changelog.txt)"
         export PREVIOUS_TAG=${{ steps.previoustag.outputs.tag }}
         envsubst <.github/release-template.md >/tmp/release-template.md
 

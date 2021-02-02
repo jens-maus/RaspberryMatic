@@ -1,20 +1,40 @@
 # Home Assistant Add-on: RaspberryMatic CCU
 
-HomeMatic CCU central based on [RaspberryMatic](raspberrymatic).
+HomeMatic/homematicIP CCU central based on [RaspberryMatic](raspberrymatic).
 
 ![Supports aarch64 Architecture][aarch64-shield] ![Supports amd64 Architecture][amd64-shield] ![Supports armhf Architecture][armhf-shield] ![Supports armv7 Architecture][armv7-shield] ![Supports i386 Architecture][i386-shield]
+[![License](https://img.shields.io/github/license/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/blob/master/LICENSE)
+[![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
+[![Twitter](https://img.shields.io/twitter/follow/RaspberryMatic.svg?style=social&label=Follow)](https://twitter.com/RaspberryMatic)
+[![GitHub stars](https://img.shields.io/github/stars/jens-maus/RaspberryMatic.svg?style=social&label=Star)](https://github.com/jens-maus/RaspberryMatic/stargazers/)
 
 ## About
 
-!WORK-IN-PROGRESS!
+This add-on allows to run a [HomeMatic/homematicIP][homematic] control center (CCU) on
+your Home Assistant. It is based on [RaspberryMatic][raspberrymatic] which
+is open-source and 100% compatible with the homematic vendor ([eQ3][eq3]) own CCU
+system (CCU3) to connect to HomeMatic/homematicIP devices cloudless. Furthermore,
+it is based on [OCCU][occu] while providing additional exclusive features in the WebUI and
+underlying operating system for an improved user experience.
 
-This add-on allows you to control your HomeMatic/homematicIP devices so they
-can be integrated into Home Assistant. It is based on the
-[RaspberryMatic][raspberrymatic] project which itself is based on [OCCU][occu].
+**! WORK-IN-PROGRESS !**
+
+This add-on tries to provide all features of a standard, e.g. RaspberryPi or OVA-based
+RaspberryMatic CCU system. Please note: due to the partly restrictive docker-based nature of
+Home Assistant some of the features require additional operating system modules which
+are **not yet** available (e.g. use of the GPIO-based RF modules - RPI-RF-MOD/HM-MOD-RPI-PCB).
 
 ## Features
 
-- Your Home Assistant central can be used as a HomeMatic control center (CCU).
+- Use your Home Assistant central as a full-fledged HomeMatic/homematicIP control center (CCU).
+- Access the CCU WebUI from your Home Assistant user interface.
+- Provides all features of a RaspberryMatic system within your Home Assistant environment.
+- Interconnect to HomeMatic/homematicIP devices using the standard, vendor-provided GPIO-based RF modules (RPI-RF-MOD, HM-MOD-RPI-PCB).
+- Supports additional open-hardware based USB/Ethernet adapter devices (HB-RF-USB-2, HB-RF-ETH).
+
+## License
+
+This Home Assistant add-on as well as the RaspberryMatic base system is licensed under the Apache-2.0 open-source license.
 
 [aarch64-shield]: https://img.shields.io/badge/aarch64-yes-green.svg
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
@@ -23,3 +43,5 @@ can be integrated into Home Assistant. It is based on the
 [i386-shield]: https://img.shields.io/badge/i386-no-red.svg
 [raspberrymatic]: https://github.com/jens-maus/RaspberryMatic
 [occu]: https://github.com/eq-3/occu
+[eq3]: https://www.eq-3.com/
+[homematic]: https://www.homematic-ip.com/en/start.html

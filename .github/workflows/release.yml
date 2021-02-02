@@ -7,7 +7,7 @@ on:
       release_date:
         description: 'Release date override (YYYYMMDD)'
         required: true
-        default: ""
+        default: "YYYYMMDD"
       skip_build:
         description: 'Skip build (for testing workflow)?'
         required: true
@@ -17,7 +17,6 @@ jobs:
   
   release_draft:
     name: Release draft
-    id: release
     runs-on: ubuntu-20.04
     outputs:
       upload_url: ${{ steps.release_drafter.outputs.upload_url }}
@@ -35,10 +34,10 @@ jobs:
       id: env
       shell: bash
       run: |
-        if [[ -n "${{ github.event.inputs.release_date}}" ]]; then
-          BUILD_DATE=${{ github.event.inputs.release_date }}
-        else
+        if [[ "${{ github.event.inputs.release_date}}" == "YYYYMMDD" ]]; then
           BUILD_DATE=$(date +%Y%m%d)
+        else
+          BUILD_DATE=${{ github.event.inputs.release_date }}
         fi
         OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1))
         echo "::set-output name=occu_version::${OCCU_VERSION}"
@@ -124,7 +123,7 @@ jobs:
           CPU_PERIOD=$(cat /sys/fs/cgroup/cpu/cpu.cfs_period_us)
           JLEVEL=$((CPU_QUOTA / CPU_PERIOD + 1))
         fi
-        sudo -H -E -u builder nice -n 19 make DATE=${{ needs.release.outputs.date }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${JLEVEL} raspmatic_${{ matrix.platform }}-release
+        sudo -H -E -u builder nice -n 19 make DATE=${{ needs.release_draft.outputs.date }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${JLEVEL} raspmatic_${{ matrix.platform }}-release
 
     # cleanup
     - name: Cleanup
@@ -141,9 +140,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ needs.release.outputs.upload_url }}
-        asset_path: release/RaspberryMatic-${{ needs.release.outputs.version }}-${{ matrix.platform }}.zip
-        asset_name: RaspberryMatic-${{ needs.release.outputs.version }}-${{ matrix.platform }}.zip
+        upload_url: ${{ needs.release_draft.outputs.upload_url }}
+        asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.zip
+        asset_name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.zip
         asset_content_type: application/zip
 
     - name: Upload build release checksum [rpi*, tinkerboard, intelnuc, ova]
@@ -153,9 +152,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ needs.release.outputs.upload_url }}
-        asset_path: release/RaspberryMatic-${{ needs.release.outputs.version }}-${{ matrix.platform }}.zip.sha256
-        asset_name: RaspberryMatic-${{ needs.release.outputs.version }}-${{ matrix.platform }}.zip.sha256
+        upload_url: ${{ needs.release_draft.outputs.upload_url }}
+        asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.zip.sha256
+        asset_name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.zip.sha256
         asset_content_type: text/plain
 
     - name: Upload build release [ccu3]
@@ -165,9 +164,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ needs.release.outputs.upload_url }}
-        asset_path: release/RaspberryMatic-${{ needs.release.outputs.version }}-ccu3.tgz
-        asset_name: RaspberryMatic-${{ needs.release.outputs.version }}-ccu3.tgz
+        upload_url: ${{ needs.release_draft.outputs.upload_url }}
+        asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-ccu3.tgz
+        asset_name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-ccu3.tgz
         asset_content_type: application/gzip
 
     - name: Upload build release checksum [ccu3]
@@ -177,9 +176,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ needs.release.outputs.upload_url }}
-        asset_path: release/RaspberryMatic-${{ needs.release.outputs.version }}-ccu3.tgz.sha256
-        asset_name: RaspberryMatic-${{ needs.release.outputs.version }}-ccu3.tgz.sha256
+        upload_url: ${{ needs.release_draft.outputs.upload_url }}
+        asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-ccu3.tgz.sha256
+        asset_name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-ccu3.tgz.sha256
         asset_content_type: text/plain
 
     - name: Upload build release [ova]
@@ -189,9 +188,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ needs.release.outputs.upload_url }}
-        asset_path: release/RaspberryMatic-${{ needs.release.outputs.version }}.ova
-        asset_name: RaspberryMatic-${{ needs.release.outputs.version }}.ova
+        upload_url: ${{ needs.release_draft.outputs.upload_url }}
+        asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}.ova
+        asset_name: RaspberryMatic-${{ needs.release_draft.outputs.version }}.ova
         asset_content_type: application/gzip
 
     - name: Upload build release checksum [ova]
@@ -201,9 +200,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ needs.release.outputs.upload_url }}
-        asset_path: release/RaspberryMatic-${{ needs.release.outputs.version }}.ova.sha256
-        asset_name: RaspberryMatic-${{ needs.release.outputs.version }}.ova.sha256
+        upload_url: ${{ needs.release_draft.outputs.upload_url }}
+        asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}.ova.sha256
+        asset_name: RaspberryMatic-${{ needs.release_draft.outputs.version }}.ova.sha256
         asset_content_type: text/plain
 
     - name: Upload build release [oci]
@@ -213,9 +212,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ needs.release.outputs.upload_url }}
-        asset_path: release/RaspberryMatic-${{ needs.release.outputs.version }}-${{ matrix.platform }}.tgz
-        asset_name: RaspberryMatic-${{ needs.release.outputs.version }}-${{ matrix.platform }}.tgz
+        upload_url: ${{ needs.release_draft.outputs.upload_url }}
+        asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
+        asset_name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
         asset_content_type: application/gzip
 
     - name: Upload build release checksum [oci]
@@ -225,9 +224,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ needs.release.outputs.upload_url }}
-        asset_path: release/RaspberryMatic-${{ needs.release.outputs.version }}-${{ matrix.platform }}.tgz.sha256
-        asset_name: RaspberryMatic-${{ needs.release.outputs.version }}-${{ matrix.platform }}.tgz.sha256
+        upload_url: ${{ needs.release_draft.outputs.upload_url }}
+        asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz.sha256
+        asset_name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz.sha256
         asset_content_type: text/plain
 
     ########################
@@ -237,8 +236,8 @@ jobs:
         startsWith(matrix.platform, 'oci_')
       uses: actions/upload-artifact@v2
       with:
-        path: release/RaspberryMatic-${{ needs.release.outputs.version }}-${{ matrix.platform }}.tgz*
-        name: RaspberryMatic-${{ needs.release.outputs.version }}-${{ matrix.platform }}.tgz
+        path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz*
+        name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
       continue-on-error: true
 
   ##########################################
@@ -260,15 +259,15 @@ jobs:
     - name: Download oci_amd64 artifact
       uses: actions/download-artifact@v2
       with:
-        name: RaspberryMatic-${{ needs.release.outputs.version }}-oci_amd64.tgz
+        name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_amd64.tgz
     - name: Download oci_arm64 artifact
       uses: actions/download-artifact@v2
       with:
-        name: RaspberryMatic-${{ needs.release.outputs.version }}-oci_arm64.tgz
+        name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_arm64.tgz
     - name: Download oci_arm artifact
       uses: actions/download-artifact@v2
       with:
-        name: RaspberryMatic-${{ needs.release.outputs.version }}-oci_arm.tgz
+        name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_arm.tgz
 
     - name: Extract OCI artifacts
       run: |
@@ -284,7 +283,7 @@ jobs:
       shell: bash
       run: |
         BASE_TAG="ghcr.io/${{ github.repository_owner }}/raspberrymatic"
-        UNIQUE_TAG="${BASE_TAG}:${{ needs.release.outputs.version }}"
+        UNIQUE_TAG="${BASE_TAG}:${{ needs.release_draft.outputs.version }}"
         BRANCH="${GITHUB_REF##*/}"
         if [[ ${BRANCH} == 'master' ]]; then
           BRANCH_TAG="${BASE_TAG}:latest"
@@ -320,7 +319,7 @@ jobs:
         platforms: linux/amd64,linux/arm64,linux/arm
         push: true
         build-args: |
-          tar_prefix=RaspberryMatic-${{ needs.release.outputs.version }}-oci_
+          tar_prefix=RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_
         labels: |
           org.opencontainers.image.title=RaspberryMatic
           org.opencontainers.image.description=Alternative OS for your HomeMatic CCU
@@ -333,8 +332,8 @@ jobs:
           org.opencontainers.image.created=${{ needs.build.outputs.build_datetime }}
           org.opencontainers.image.ref.name=${{ env.GIT_REF }}
           org.opencontainers.image.revision=${{ github.sha }}
-          org.opencontainers.image.version=${{ needs.release.outputs.version }}
-          io.hass.version=${{ needs.release.outputs.version }}
+          org.opencontainers.image.version=${{ needs.release_draft.outputs.version }}
+          io.hass.version=${{ needs.release_draft.outputs.version }}
           io.hass.type=addon
           io.hass.arch=armhf|aarch64|amd64
         tags: |
@@ -362,5 +361,5 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         charts_dir: helm
-        chart_version: ${{ needs.release.outputs.occu_version }}
-        app_version: ${{ needs.release.outputs.version }}
+        chart_version: ${{ needs.release_draft.outputs.occu_version }}
+        app_version: ${{ needs.release_draft.outputs.version }}

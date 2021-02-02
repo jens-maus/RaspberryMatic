@@ -1,5 +1,5 @@
-# RaspberryMatic Nightly Snapshot build
-name: Nightly Snaphot
+# RaspberryMatic Snapshot build
+name: Snaphot Build
 
 on:
   schedule:

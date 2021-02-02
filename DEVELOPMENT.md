@@ -32,24 +32,24 @@ OCI packages require a secret to be uploaded `CR_PAT`. See GitHub [instructions(
 ## Workflows
 
 - **ci**: on each push, pull request or manual - builds all artefacts (dev versions)
-- **ci_release**: manually triggered - builds a draft release and attach official builds. Updates OCI and Helm latest tags.
-- **nightly-snapshot**: cronjob - only works on official repo (dummy in fork) - uploads all snapshot versions
-- **nightly-snapshot**: ??
+- **release**: manually triggered - builds a draft release and attach official builds. Updates OCI and Helm latest tags.
+- **snapshot**: cronjob - only works on official repo (dummy in fork) - uploads all snapshot versions
 
 ## How to draft a release
 
-1. Go to _Actions_ -> _Release CI_
+1. Go to _Actions_ -> _Release Build_
 2. Click on _Run Workflow_
 3. Select the branch. Usually `master`
 3. Let the skip build to `false` at least you are testing the CI
-4. Click on _Run Workflow_ to start CI. The CI does the following
+4. Click on _Run Workflow_ to start the build. The build does the following
    - creates a new release draft with the VERSION used as name, tag and version. If the release draft already exists then it is not modified.
      **NOTE**: if binaries were already uploaded to the draft release you need to delete them before re-triggering the CI or the upload will fail
    - builds all binaries and upload them to the draft release
    - uploads the container with `latest` as tag - NOTE: after this step OCI users using latest will get the update
-   - uploads a new release HElm chart using the OCCU_VERSION as version. NOTE: after this point the Kubernetes users will get presented with the update
+   - uploads a new release Helm chart using the OCCU_VERSION as version. NOTE: after this point the Kubernetes users will get presented with the update
 5. While the draft is being built, the release readme can be updated from the UI
-6. Once the CI has completed and all binaries are uploaded to the release the release can be published
+6. Once the build run has completed and all binaries are uploaded to the release draft.
+7. Verify everything and click "Publish" to finally publish the release
 
 ## Components Update Guide
 

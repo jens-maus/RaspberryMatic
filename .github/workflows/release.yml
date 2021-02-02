@@ -81,7 +81,7 @@ jobs:
     if: github.repository_owner == 'jens-maus'
     runs-on: self-hosted
     timeout-minutes: 480
-    needs: release
+    needs: release_draft
     outputs:
       build_datetime: ${{ steps.env.outputs.build_datetime }}
 

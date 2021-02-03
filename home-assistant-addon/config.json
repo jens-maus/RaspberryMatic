@@ -47,8 +47,8 @@
     "9292/tcp": "VirtualDevices XMLRPC (Extern)"
   },
   "environment": {
-    "RUNNING_IN_HA": "1",
-    "WEBUI_PROXY_ALLOWED_CIDR": "172.30.32.2/32"
+    "HM_RUNNING_IN_HA": "1",
+    "HM_HAPROXY_SRC": "172.30.32.2/32"
   },
   "full_access": true,
   "privileged": [

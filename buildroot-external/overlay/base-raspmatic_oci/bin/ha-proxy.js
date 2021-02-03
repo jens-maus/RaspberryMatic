@@ -80,7 +80,7 @@ const apiProxy = createProxyMiddleware('/', {
 const app = express();
 app.use((req, res, next) => {
   //Get whitelisted range
-  let whitelisted_range = ipaddr.parseCIDR(process.env.WEBUI_PROXY_ALLOWED_CIDR);
+  let whitelisted_range = ipaddr.parseCIDR(process.env.HM_HAPROXY_SRC);
   //Get source IP
   let source_ip = ipaddr.parse(req.ip.split(':').pop());
   //Check if source IP in whitelisted range

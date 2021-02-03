@@ -43,7 +43,7 @@ init_system() {
 
     # Home Assistant Add-on expects persistent data to be stored in /data
     HOME_ASSISTANT_ADDON_DATA="/data"
-    if [[ -n "${RUNNING_IN_HA}" ]] && [[ -f "${HOME_ASSISTANT_ADDON_DATA}/options.json" ]]; then
+    if [[ -n "${HM_RUNNING_IN_HA}" ]] && [[ -f "${HOME_ASSISTANT_ADDON_DATA}/options.json" ]]; then
       echo "Storing user data in ${HOME_ASSISTANT_ADDON_DATA} (Home Assistant Add-On)"
       mount -o bind "${HOME_ASSISTANT_ADDON_DATA}" /usr/local
     fi

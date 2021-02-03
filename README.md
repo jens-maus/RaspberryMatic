@@ -17,7 +17,7 @@
 [![Twitter](https://img.shields.io/twitter/follow/RaspberryMatic.svg?style=social&label=Follow)](https://twitter.com/RaspberryMatic)
 [![GitHub stars](https://img.shields.io/github/stars/jens-maus/RaspberryMatic.svg?style=social&label=Star)](https://github.com/jens-maus/RaspberryMatic/stargazers/)
 
-<sub>[Hier drücken für 🇬🇧🇺🇸 deutsches ReadMe](README.de.md)</sub>
+<sub>[Hier drücken für 🇩🇪🇦🇹🇨🇭 deutschsprachiges ReadMe](README.de.md)</sub>
 ### [🚀 Quick-Start](#cloud-schnellstart)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📚 Documentation](https://github.com/jens-maus/RaspberryMatic/wiki)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📦 Download](https://github.com/jens-maus/RaspberryMatic/releases/latest)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[🚑 Support](#yum-support-mitarbeit)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[👮 Licenses](#scroll-lizenzen)
 
 ___

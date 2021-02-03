@@ -5,7 +5,7 @@
 # requests from the HomeAssistant UI to the HomeMatic WebUI
 #
 
-[[ -z "${RUNNING_IN_HA}" ]] && exit 0
+[[ -z "${WEBUI_PROXY_ALLOWED_CIDR}" ]] && exit 0
 
 start() {
   printf  "Starting ha-proxy: "

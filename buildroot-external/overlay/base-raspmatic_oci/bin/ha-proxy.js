@@ -12,6 +12,7 @@
 
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const ipaddr = require('ipaddr.js');
 
 const apiProxy = createProxyMiddleware('/', {
   target: 'http://127.0.0.1:80',
@@ -78,10 +79,12 @@ const apiProxy = createProxyMiddleware('/', {
 
 const app = express();
 app.use((req, res, next) => {
-  // Home-Assistant will always process from
-  // 172.30.32.2 via ingress, so secure the rest
-  let ip = req.ip.split(':').pop();
-  if(ip === '172.30.32.2') {
+  //Get whitelisted range
+  let whitelisted_range = ipaddr.parseCIDR(process.env.WEBUI_PROXY_ALLOWED_CIDR);
+  //Get source IP
+  let source_ip = ipaddr.parse(req.ip.split(':').pop());
+  //Check if source IP in whitelisted range
+  if(addr.match(whitelisted_range)) {
     // allowed, forward to next middleware (proxy)
     next();
   } else {

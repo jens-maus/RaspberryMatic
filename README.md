@@ -2,7 +2,7 @@
 
 <br/>
 
-**– Das alternative/freie Betriebssystem für Ihre HomeMatic CCU**
+**– The alternative/free operating system for your HomeMatic CCU**
 
 [![Current Release](https://img.shields.io/github/release/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/latest/total.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
@@ -17,35 +17,36 @@
 [![Twitter](https://img.shields.io/twitter/follow/RaspberryMatic.svg?style=social&label=Follow)](https://twitter.com/RaspberryMatic)
 [![GitHub stars](https://img.shields.io/github/stars/jens-maus/RaspberryMatic.svg?style=social&label=Star)](https://github.com/jens-maus/RaspberryMatic/stargazers/)
 
-<sub>[Click here for 🇬🇧🇺🇸 english readme](README.en.md)</sub>
-### [🚀 Schnellstart](#cloud-schnellstart)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📚 Dokumentation](https://github.com/jens-maus/RaspberryMatic/wiki)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📦 Download](https://github.com/jens-maus/RaspberryMatic/releases/latest)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[🚑 Support](#yum-support-mitarbeit)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[👮 Lizenzen](#scroll-lizenzen)
-___
-Bei _RaspberryMatic_ handelt es sich um ein alternatives, freies und nicht-kommerziell vertriebenes OpenSource Betriebssystem für die kommerziell erhältlichen _[CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html)_ bzw. _[ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)_ SmartHome-Zentralen zur Nutzung von [HomeMatic](http://homematic.com/)/BidCos-RF bzw. [homematicIP](https://www.homematic-ip.com/) Hardware der Firmengruppe [eQ-3](https://eq-3.de)/[ELV](https://elv.de/). RaspberryMatic hat sich zum Ziel gesetzt nicht nur den kompletten Funktionsumfang einer sogn. _HomeMatic CCU SmartHome-Zentrale_ für eine Cloudfreie Nutzung von HomeMatic Geräten für frei erhältliche Single-Board-Computern (SBC) wie z.B. den [RaspberryPi](https://www.raspberrypi.org/), [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/) oder aber auch als virtualisierte Variante für moderne Virtualisierungsumgebungen (z.B. vmWare ESXi, Proxmox, VirtualBox, Docker/OCI, Kubernetes/K8s, etc.) nutzbar zu machen. Es hat sich auch zum Ziel gesetzt auf verschiedenen Ebenen (WebUI, Linux-Betriebsystem, etc.) Verbesserungen bzw. Bugfixes mitzubringen die in der originalen CCU Firmware von eQ3/ELV (noch) nicht vorhanden sind.
+<sub>[Hier drücken für 🇬🇧🇺🇸 deutsches ReadMe](README.de.md)</sub>
+### [🚀 Quick-Start](#cloud-schnellstart)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📚 Documentation](https://github.com/jens-maus/RaspberryMatic/wiki)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📦 Download](https://github.com/jens-maus/RaspberryMatic/releases/latest)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[🚑 Support](#yum-support-mitarbeit)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[👮 Licenses](#scroll-lizenzen)
 
-[mehr...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung)
+___
+RaspberryMatic is a free and non-commercial OpenSource operating system alternative for the _[CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html)_ or  _[ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)_ smart home central systems to configure and use [HomeMatic](http://homematic.com/)/BidCos-RF or [homematicIP](https://www.homematic-ip.com/) IoT hardware distributed by [eQ-3](https://eq-3.de)/[ELV](https://elv.de/). RaspberryMatic has the aim to be 100% compatible to a standard _HomeMatic CCU control central_ for a cloud-free use of HomeMatic IoT hardware on freely available single-board-computers (SBC) like a [RaspberryPi](https://www.raspberrypi.org/), [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/) or even as a virtual appliance on modern virtual environments (e.g. vmWare ESXi, Proxmox, VirtualBox, Docker/OCI, Kubernetes/K8s, etc.). On top of that, it provides additional exclusive features on different levels (WebUI, Linux-OS, etc.) to provide users with an enhanced user experience compared to the standard vendor-provided CCU firmware from eQ3/ELV.
+
+[more...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung)
 
 ## :cookie: Features
-RaspberryMatic ist systembedingt zu der Betriebssystemsoftware einer CCU-Zentrale der Firma eQ3/ELV (CCU2/CCU3) (die den gleichen Versionsstand hat) 100% kompatibel. Dies bedeutet, das nicht nur die selben HomeMatic/homematicIP Geräte angelernt/genutzt werden können, auch verhält sich RaspberryMatic in Punkto Funktionalität und WebUI vollkommen kompatibel. Des Weiteren kann die komplette Konfiguration zwischen der Standard Betriebssystemsoftware von eQ3/ELV und RaspberryMatic ausgetauscht werden und ein Wechsel zwischen den beiden Betriebssystemen ist jederzeit möglich.
+Due to the used base components, RaspberryMatic is 100% compatibile to the standard CCU control center distributed by eQ3/ELV (CCU2/CCU3). This means, that not only it can use the same HomeMatic/homematicIP IoT hardware like a CCU3 central with the same base version. It also provides the same level of functionality in areas like the WebUI or Add-on compatibility. Furthermore, even system backups are compatible between the two CCU variants, which allows to easily switch between the vendor-provided CCU firmware and this free open-source based CCU system software.
 
-Darüber hinaus bringt RaspberryMatic jedoch eine ganze Reihe von Verbesserungen/Erweiterungen, neuen Features und teilweise bereits integrierten Bugfixes mit sich die entweder _noch_ nicht in der originalen CCU Firmware von der Firma eQ3/ELV übernommen wurde oder aus kommerzieller Sicht nicht übernommen werden soll.
+On top of that, RaspberryMatic provides a whole bunch of enhancements or even bugfixes in the WebUI or underlying Linux operating system which are either not _yet_ integrated in the official eQ3 CCU firmware or will never be integrated due to the functionality not being commercially interesting enough for eQ3/ELV.
 
-[mehr...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#features)
+[more...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#features)
 
-## :computer: Voraussetzungen
-RaspberryMatic lässt sich auf folgender, kommerziell erhältlicher Kompletthardware (Rechner + HomeMatic-Kommunikationsmodul) installieren:
+## :computer: Requirements
+RaspberryMatic can be directly installed on the following, commercially distributed CCU hardware:
 
 * [CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html), [ELV-Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)
 
-...oder auf folgender selbst zusammengestellter Hardware:
+...or on the following self-made hardware systems:
 
 * _Hardware_:
    * [RaspberryPi](https://www.raspberrypi.org/)
    * [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
    * [Intel NUC](https://www.intel.de/content/www/de/de/products/boards-kits/nuc.html)
 
-bzw. unter folgenden Virtualisierungsumgebungen installieren:
+...or even as a virtual appliance on the following virtualization environments:
 
-* _Virtualisierungsumgebung_:
+* _Virtualization Environment_:
    * [vmWare ESXi](https://www.vmware.com/de/products/esxi-and-esx.html)
    * [Proxmox Virtual Environment](https://www.proxmox.com/de/)
    * [Oracle VirtualBox](https://www.virtualbox.org/)
@@ -57,29 +58,29 @@ bzw. unter folgenden Virtualisierungsumgebungen installieren:
    * [Docker/OCI](https://www.docker.com/)
    * [Kubernetes/K8s](https://kubernetes.io/)
    
-[mehr...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen)      
+[more...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen)
 
-## :cloud: Schnellstart
-Unter [Releases](https://github.com/jens-maus/RaspberryMatic/releases) steht für die jeweilige Target-Hardware Dateien im Format `RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.zip` als Download zur Verfügung. Nach Entpacken dieser Datei erhält man eine `*.img` Imagedatei die man auf ein geeignetes Medium (SD-Karte, USB-Stick, SSD oder als virtuelle Disk) mit z.B. dem Imaging-Tool [Etcher](https://etcher.io) "flashen" lassen kann. Danach legt man z.B. die SD Karte in den jeweiligen RaspberryPi ein und startet diesen. Danach sollte dann RaspberryMatic starten und versuchen im Laufe des Startes das passende HomeMatic/homematicIP Funkmodul zu initialisieren (das man vorher installiert hat). Ist dies erfolgt kann man mittels Webbrowser in seinem lokalen Netzwerk unter Nutzung der Adresse `http://homematic-raspi/` auf die Weboberfläche (WebUI) von RaspberryMatic normal zugreifen und HomeMatic/homematicIP Geräte anlernen, konfigurieren oder bedienen.
+## :cloud: Quick-Start
+Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will find dedicated images/files for each supported target hardware. Such an image is e.g. available as an `RaspberryMatic-X.XX.XX.YYYYMMDD-XXX.zip` download file. After having unarchived this file you should identify a `*.img` file which can be "flashed" to an adequate target media (sd card, usb-stick, ssd or virtual disk, etc.) using e.g. an imaging tool like [Etcher](https://etcher.io). After having flashed this image on the target media you can then put it into your SBC or CCU3 hardware and boot the system. Depending on the used hardware, RaspberryMatic should then boot-up and try to identify the used HomeMatic/homematicIP RF-Module hardware potentially installed on the GPIO bus of your SBC. If this boot-up is finished, you should be able to access the standard WebUI in your local network by using the address `http://homematic-raspi/` in your web browser. Afterwards you should then find yourself in then normal CCU WebUI where you can start configuring/using your HomeMatic/homematicIP IoT hardware.
 
-[mehr...](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#schnellstart)
+[more...](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#schnellstart)
 
-## :memo: Dokumentation
-1. [Einleitung](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung)
-   * [Vorraussetzungen](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen)
+## :memo: Documentation
+1. [Introduction](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung)
+   * [Requirements](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen)
    * [Features](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#features)
-   * [Limitationen/Einschränkungen](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#limitationeneinschränkungen)
-   * [Lizenzbedingungen & Haftung](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#lizenz--haftung)
-   * [Kommerzieller Vertrieb](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#kommerzieller-vertrieb)
+   * [Limitations](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#limitationeneinschränkungen)
+   * [License and Warranty](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#lizenz--haftung)
+   * [Commercial Distribution](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#kommerzieller-vertrieb)
 2. [Installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation)
-   * [Schnellstart](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#schnellstart)
-   * [Grundinstallation (Hardware)](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#grundinstallation-hardware)
+   * [Quick-Start](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#schnellstart)
+   * [Basic Installation (Hardware)](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#grundinstallation-hardware)
      * [CCU3](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-CCU3)
      * [ELV-Charly](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ELV-Charly)
      * [RaspberryPi](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)
      * [ASUS Tinkerboard](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Tinkerboard)
      * [Intel NUC](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-IntelNUC)
-   * [Grundinstallation (Virtuell)](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#grundinstallation-virtuell)
+   * [Basic Installation (Virtual)](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#grundinstallation-virtuell)
      * [vmWare ESXi](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-ESXi)
      * [Proxmox Virtual Environment](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Proxmox-VE)
      * [Oracle VirtualBox](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-VirtualBox)
@@ -90,54 +91,54 @@ Unter [Releases](https://github.com/jens-maus/RaspberryMatic/releases) steht fü
      * [HyperV](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HyperV)
      * [Docker/OCI](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Docker-OCI)
      * [Kubernetes/K8s](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Kubernetes)
-   * [Konfigurationsübernahme](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#konfigurationsübernahme)
-     * [Umstieg von CCU3](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-von-ccu3)
-     * [Umstieg von CCU2](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-von-ccu2)
-     * [Umstieg von CCU1](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-von-ccu1)
-     * [Umstieg zu virtuellem RaspberryMatic](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-zu-virtuellem-raspberrymatic)
+   * [Configuration Upgrade](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#konfigurationsübernahme)
+     * [Upgrade from CCU3](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-von-ccu3)
+     * [Upgrade from CCU2](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-von-ccu2)
+     * [Upgrade from CCU1](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-von-ccu1)
+     * [Upgrade to virtual RaspberryMatic](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-zu-virtuellem-raspberrymatic)
    * [Deinstallation](https://github.com/jens-maus/RaspberryMatic/wiki/Deinstallation)
 3. [Administration](https://github.com/jens-maus/RaspberryMatic/wiki/Administration)
    * [Firmware Update/Upgrade](https://github.com/jens-maus/RaspberryMatic/wiki/Administration#firmware-updateupgrade)
    * [Backup/Restore](https://github.com/jens-maus/RaspberryMatic/wiki/Administration#backup--restore)
-   * [Sicherheitshinweise](https://github.com/jens-maus/RaspberryMatic/wiki/Administration#sicherheitshinweise)
-   * [CCU-Addons / Zusatzsoftware](https://github.com/jens-maus/RaspberryMatic/wiki/Administration#ccu-addons--zusatzsoftware)
-4. Nutzung
-   * [WebUI Benutzung](https://github.com/jens-maus/RaspberryMatic/wiki/WebUI-Benutzung)
-     * [Log-Level erhöhen für Fehleranalyse](https://github.com/jens-maus/RaspberryMatic/wiki/WebUI-Benutzung#log-daten-und-log-level)
-   * [Tipps&Tricks](https://github.com/jens-maus/RaspberryMatic/wiki/Tipps)
-   * [Experten-Features](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features)
-     * [WLAN/WiFi Unterstützung](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#wlanwifi-nutzung)
-     * [Bluetooth Unterstützung](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#bluetooth-nutzung)
-     * [LAN-Gateway Betrieb](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#lan-gateway-betrieb)
-     * [USV Client/Server Betrieb](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#usv-clientserver-nut)
-     * [USB-Boot](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#usb-boot)
-5. [Support, Mitarbeit](https://github.com/jens-maus/RaspberryMatic/wiki/Support)
-   * [Bekannte Probleme](https://github.com/jens-maus/RaspberryMatic/wiki/Support#bekannte-probleme)
-   * [Hilfe suchen](https://github.com/jens-maus/RaspberryMatic/wiki/Support#hilfe-suchen)
-   * [FAQ - Häufig gestellte Fragen](https://github.com/jens-maus/RaspberryMatic/wiki/Support#faq)
-   * [Fehler melden](https://github.com/jens-maus/RaspberryMatic/wiki/Support#bugreports)
-   * [Features wünschen](https://github.com/jens-maus/RaspberryMatic/wiki/Support#featurerequests)
-   * [Mitarbeit / Weiterentwicklung](https://github.com/jens-maus/RaspberryMatic/wiki/Support#mitarbeit--weiterentwicklung)
-   
-## :yum: Support, Mitarbeit
-Für Feedback jeglicher Art, Fragen, Vorschläge, Wünsche und Fehlerberichte wird darum gebeten bitte zuerst im jeweiligen RaspberryMatic Teil des HomeMatic-Forum (https://homematic-forum.de/forum/viewforum.php?f=65) einen entsprechenden Beitrag zu erstellen oder an bereits existierenden Beiträgen dort sich zu beteiligen. Sollte aus den Diskussionen dort sich dann ein spezieller Feature-Wunsch oder von anderen Personen bestätigter Bug in RaspberryMatic herauskristallieren wird darum gebeten diesen Bug bzw. diesen Feature-Request im [Issue Tracker](https://github.com/jens-maus/RaspberryMatic/issues) von RaspberryMatic entsprechend einzutragen bzw. zu melden.
+   * [Security Advices](https://github.com/jens-maus/RaspberryMatic/wiki/Administration#sicherheitshinweise)
+   * [CCU-Addon Software](https://github.com/jens-maus/RaspberryMatic/wiki/Administration#ccu-addons--zusatzsoftware)
+4. Usage
+   * [WebUI Usage](https://github.com/jens-maus/RaspberryMatic/wiki/WebUI-Benutzung)
+     * [Log-Level setup](https://github.com/jens-maus/RaspberryMatic/wiki/WebUI-Benutzung#log-daten-und-log-level)
+   * [Tips&Tricks](https://github.com/jens-maus/RaspberryMatic/wiki/Tipps)
+   * [Expert-Features](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features)
+     * [WLAN/WiFi Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#wlanwifi-nutzung)
+     * [Bluetooth Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#bluetooth-nutzung)
+     * [LAN-Gateway Mode](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#lan-gateway-betrieb)
+     * [USV Client/Server Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#usv-clientserver-nut)
+     * [USB-Boot Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#usb-boot)
+5. [Support, Contributions](https://github.com/jens-maus/RaspberryMatic/wiki/Support)
+   * [Known Issues](https://github.com/jens-maus/RaspberryMatic/wiki/Support#bekannte-probleme)
+   * [Request Help](https://github.com/jens-maus/RaspberryMatic/wiki/Support#hilfe-suchen)
+   * [FAQ - Frequently Asked Questions](https://github.com/jens-maus/RaspberryMatic/wiki/Support#faq)
+   * [Report Issues](https://github.com/jens-maus/RaspberryMatic/wiki/Support#bugreports)
+   * [Request Features](https://github.com/jens-maus/RaspberryMatic/wiki/Support#featurerequests)
+   * [Contributions / Development](https://github.com/jens-maus/RaspberryMatic/wiki/Support#mitarbeit--weiterentwicklung)
 
-Beteiligung in jeder Form ist willkommen und ausdrücklich gewünscht, insbesondere sind alle Nutzer aufgefordert etwaige Probleme so früh wie möglich zu melden damit diese in zukünftigen Versionen entsprechend repariert werden können. Auch wäre es schön wenn noch offene Issues im  [Issue Tracker](https://github.com/jens-maus/RaspberryMatic/issues) von vielen Nutzern reproduziert werden könnte und man sich dort an etwaigen Diskussionen zur Lösungsfindung beteiligen würde. Ausdrücklich erwünscht ist auch an der permanenten Verbesserung und Erweiterung der [Dokumentation](https://github.com/jens-maus/RaspberryMatic/wiki) mitzuarbeiten. Deshalb sind die Schreibrechte für die Dokumentation auch so gesetzt das dort Korrekturen/Änderungen von jedem GitHub Nutzer sofort durchgeführt werden können.
+## :yum: Support, Contributions
+To provide general feedback or start discussions, please use either the [Discussion fora](https://github.com/jens-maus/RaspberryMatic/discussions) in this GitHub project or (if you are german speaking) please contribute to the RaspberryMatic fora of the [HomeMatic-Forum](https://homematic-forum.de/forum/viewforum.php?f=65). If during discussions in these fora a definite and unique feature request or bug has been acknowledged by other RaspberryMatic users, please feel free to open a dedicated feature or bug fixing request in the [issue tracker](https://github.com/jens-maus/RaspberryMatic/issues).
 
-Erwünscht sind natürlich auch direkte Entwicklungsbeteiligungen in Form von PullRequests und Source Code submissions (Bugs, Features). Falls hier jemand also gerne ein Feature umsetzen oder einen Bug selbst ausmerzen will, so wird darum gebeten hierfür die unter Git/GitHub zur Verfügung stehenden Mechanismen zu verwenden. Hierbei gilt jedoch die Lizenzierung von RaspberryMatic und dessen genutzter Drittpakete (z.B. OCCU von eQ3) zu beachten und entsprechend zu akzeptieren. Mehr Informationen dazu kann man unter [CONTRIBUTING.md](CONTRIBUTING.md) nachlesen. Zusätzlich dazu wird darum gebeten für jegliche Beteiligung an diesem Projekt zuerst unseren [CODE OF CONDUCT](CODE_OF_CONDUCT.md) zu studieren und erst dann Beteiligungen in Betracht zu ziehen wenn dieser vollumfänglich akzeptiert werden kann.
+Any contribution in any way is highly welcome. Please feel free to contribute not only by using the official releases. If you have some time and free resources, we welcome any contributing to help to reproduce and perhaps even fixing any [open issues](https://github.com/jens-maus/RaspberryMatic/issues) in our issue tracker. Also participating in enhancing or fixing the official wiki-based [documentation](https://github.com/jens-maus/RaspberryMatic/wiki) is appreciated. That's why any logged-in GitHub user can directly add and modify any documentation pages in this wiki.
 
-[mehr...](https://github.com/jens-maus/RaspberryMatic/wiki/Support)
+On top of that, direct contributions by sending in PullRequests and source code contributions (Bugs, Features, etc.) are welcome. So if someone would like to see a certain feature implemented or bug fixed and has enough free resources and knowhow, please feel free to directly send in PullRequests using Git/GitHub. Please note, however, that any contribution to this open source project have to be in accordance to the Apache-2.0 open source license under which RaspberryMatic itself is developed and distributed. So by sending in PullRequests you will have to acknowledge that you are fine with the license implications of your contributions. Therefore, please refer to [CONTRIBUTING](CONTRIBUTING.md) as well as reading our [CODE OF CONDUCT](CODE_OF_CONDUCT.md) before you consider contributing to this project in any form.
 
-## :scroll: Lizenzen
-Die RaspberryMatic Buildumgebung selbst – die Dateien die hier in diesem Git Repository zu finden sind – sowie die frei herunterladbaren RaspberryMatic Images sind unter der OpenSource [Apache License 2.0](https://opensource.org/licenses/Apache-2.0) lizenziert. RaspberryMatic wird selbst komplett kostenfrei und ohne jeglichen kommerziellen Intensionen entwickelt und zur komplett kostenfreien Nutzung bereit gestellt. Hierbei gilt zu beachten, dass die Komponenten der genutzten Buildroot/Linux Umgebung jeweils anderen Lizenzen stehen können wobei Buildroot/Linux hier selbst unter der [GPLv2](http://www.gnu.org/licenses/gpl-2.0.html) lizenziert ist. Des Weiteren stehen die mit RaspberryMatic mitgelieferten [eQ-3 OCCU](https://github.com/eq-3/occu) Komponenten (Binär+Textdateien), die zur Nutzung der HomeMatic/homematicIP Interoperabilität notwendig sind, unter der sogenannten [HMSL](https://github.com/eq-3/occu/blob/master/LicenseDE.txt) Lizenz.
+[more...](https://github.com/jens-maus/RaspberryMatic/wiki/Support)
 
-### Haftungsausschluss
-RASPBERRMATIC WIRD OHNE JEDE AUSDRÜCKLICHE ODER IMPLIZIERTE GARANTIE BEREITGESTELLT, EINSCHLIEẞLICH DER GARANTIE ZUR BENUTZUNG FÜR DEN VORGESEHENEN ODER EINEM BESTIMMTEN ZWECK SOWIE JEGLICHER RECHTSVERLETZUNG, JEDOCH NICHT DARAUF BESCHRÄNKT. IN KEINEM FALL SIND DIE AUTOREN ODER COPYRIGHTINHABER FÜR JEGLICHEN SCHADEN ODER SONSTIGE ANSPRÜCHE HAFTBAR ZU MACHEN, OB INFOLGE DER ERFÜLLUNG EINES VERTRAGES, EINES DELIKTES ODER ANDERS IM ZUSAMMENHANG MIT DER SOFTWARE ODER SONSTIGER VERWENDUNG DER SOFTWARE ENTSTANDEN.
+## :scroll: Licenses
+The RaspberryMatic  build enviroment itself – the files in this git repository – as well as the downloadable images in the Releases section are distributed under the open source [Apache License 2.0](https://opensource.org/licenses/Apache-2.0) license. RaspberryMatic itself is distributed completly free of charge and without any commercial intension whatsoever. Please note, that on top of the Apache-2.0 license RaspberryMatic itself is distributed, some components (e.g. the underlying Buildroot/Linux System) can be distributed under different licenses. E.g. Buildroot/Linux itself is distributed under the [GPLv2](http://www.gnu.org/licenses/gpl-2.0.html) which could have other implications when changing source parts of these components. Furthermore, the [eQ-3 OCCU](https://github.com/eq-3/occu) components RaspberryMatic uses to provide the HomeMatic/homematicIP interconnectivity are distributed under the [HMSL](https://github.com/eq-3/occu/blob/master/LicenseEN.txt) license terms.
 
-[mehr...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#lizenz--haftung)
+### Disclaimer of Warranty
+All project contributors provide RaspberryMatic (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing RaspberryMatic and assume any risks associated with Your exercise of permissions under this License.
 
-## :book: Literatur
-Wenn der Eine oder Andere bzgl. Einsatz von RaspberryMatic noch unentschlossen ist oder die Vor-/Nachteile abwägen will so soll die folgende Literaturliste eine Hilfestellung geben:
+[more...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#lizenz--haftung)
+
+## :book: Literature
+If after reading through this documentatin anyone is still unsure regarding the pros and cons of using RaspberryMatic rather than the standard vendor-provided CCU firmware or if someone would like to read / see more on which additional features RaspberryMatic provides, please see the following list of (mostly german speaking) literature:
 
 <a href="https://www.youtube.com/watch?v=regDw7rcIb0"><img alt="Usertreffen Kassel 2019 – RaspberryMatic" src="https://img.youtube.com/vi/regDw7rcIb0/hqdefault.jpg" width=320></a>
 <a href="https://www.youtube.com/watch?v=hSmDcrkHb7M"><img alt="Usertreffen Kassel 2018 – RaspberryMatic" src="https://img.youtube.com/vi/hSmDcrkHb7M/hqdefault.jpg" width=320></a>
@@ -149,12 +150,12 @@ Wenn der Eine oder Andere bzgl. Einsatz von RaspberryMatic noch unentschlossen i
 * [Vortragsfolien HomeMatic-Usertreffen 2017](https://homematic-forum.de/forum/download/file.php?id=40869)
 * [Vortragsfolien HomeMatic-Usertreffen 2016](https://homematic-forum.de/forum/download/file.php?id=40868)
 
-## :clap: Danksagungen
-Zusätzlich zu den Personen die sich als [Contributors](https://github.com/jens-maus/RaspberryMatic/graphs/contributors) im Rahmen des RaspberryMatic OpenSource Projekte indirekt oder direkt beteiligt haben, soll hier natürlich folgenden Personen ausdrücklich gedankt werden:
-* _Alexander Reinert_ – für das [generic_raw_uart kernel module](https://github.com/alexreinert/piVCCU/tree/master/kernel) zur Anbindung der von eQ3 vertriebenen Funkmodule, sowie für die Entwicklung der [HB-RF-USB](https://github.com/alexreinert/PCB/tree/master/HB-RF-USB) und [HB-RF-USB-2](https://github.com/alexreinert/PCB/tree/master/HB-RF-USB-2) Adapterplatinen um diese Funkmodule auch via USB an RaspberryMatic anbinden zu können.
+## :clap: Acknowledgements
+In addition to the whole list of [Contributors](https://github.com/jens-maus/RaspberryMatic/graphs/contributors) which have contributed to the success of RaspberryMatic, we would like to explicitly thank the following list of people for their third-party contributions:
+* _Alexander Reinert (@alexreinert)_ – for his low-latency [generic_raw_uart kernel module](https://github.com/alexreinert/piVCCU/tree/master/kernel) which allows to use the eQ3 distributed RF modules (RPI-RF-MOD, HM-MOD-RPI-PCB) as well as for his [HB-RF-USB](https://github.com/alexreinert/PCB/tree/master/HB-RF-USB), [HB-RF-USB-2](https://github.com/alexreinert/PCB/tree/master/HB-RF-USB-2) and [HB-RF-ETH](https://github.com/alexreinert/PCB/tree/master/HB-RF-ETH) open hardware projects providing USB and Ethernet based adapter PCBs to use the eQ3 RF modules with other base interfaces.
 
-## :family: Autoren
-Da eine Vielzahl von Personen bereits sich an RaspberryMatic beteiligt haben sei hier auf die [Contributors](https://github.com/jens-maus/RaspberryMatic/graphs/contributors) Liste verwiesen.
+## :family: Authors
+Due to the large number of existing people having contributed to the success of RaspberryMatic, please refer to the [Contributors](https://github.com/jens-maus/RaspberryMatic/graphs/contributors) accordingly.
 
-## :construction: Änderungshistorie / ChangeLog
-Eine detaillierte Liste aller bisherigen Änderungen zwischen den individuellen RaspberryMatic-Versionen erhält man über die [Release-Seite](https://github.com/jens-maus/RaspberryMatic/releases/) bei GitHub.
+## :construction: ChangeLog
+A detailed list of Changes between individual released versions can be reviewed through the [Releases](https://github.com/jens-maus/RaspberryMatic/releases/) section of this GitHub project.

@@ -84,7 +84,12 @@ if command -v dpkg >/dev/null; then
     if ! pkg_installed wget; then
       apt install "${FORCE}" wget
     fi
-    wget -q -O - https://www.pivccu.de/piVCCU/public.key | apt-key add -
+    if ! pkg_installed ca-certificates; then
+      apt install "${FORCE}" ca-certificates
+    fi
+    wget -O /tmp/pivccu.key https://www.pivccu.de/piVCCU/public.key
+    APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn apt-key add /tmp/pivccu.key
+    rm -f /tmp/pivccu.key
     bash -c 'echo "deb https://www.pivccu.de/piVCCU stable main" >/etc/apt/sources.list.d/pivccu.list'
     apt update
   fi

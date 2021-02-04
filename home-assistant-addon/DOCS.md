@@ -1,6 +1,6 @@
 # Home Assistant Add-on: RaspberryMatic CCU
 
-**! WORK-IN-PROGRESS !**
+🚧 **WORK-IN-PROGRESS** 🚧<br/>
 This add-on tries to provide all features of a standard, e.g. RaspberryPi or OVA-based
 RaspberryMatic CCU system. Please note: due to the partly restrictive docker-based nature of
 Home Assistant some of the features require additional operating system modules which
@@ -22,3 +22,5 @@ After installation you can configure the add-on to add a "RaspberryMatic" link
 to the sidebar of your Home Assistant user interface. After having done so, this link can
 be used to access the standard RaspberryMatic/CCU WebUI to configure/setup your
 HomeMatic/homematicIP devices.
+
+More detailed documentation can be found [here](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HomeAssistant)

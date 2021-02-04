@@ -17,8 +17,7 @@ system (CCU3) to connect to HomeMatic/homematicIP devices cloudless. Furthermore
 it is based on [OCCU][occu] while providing additional exclusive features in the WebUI and
 underlying operating system for an improved user experience.
 
-**! WORK-IN-PROGRESS !**
-
+🚧 **WORK-IN-PROGRESS** 🚧<br/>
 This add-on tries to provide all features of a standard, e.g. RaspberryPi or OVA-based
 RaspberryMatic CCU system. Please note: due to the partly restrictive docker-based nature of
 Home Assistant some of the features require additional operating system modules which

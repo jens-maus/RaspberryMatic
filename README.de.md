@@ -56,6 +56,7 @@ bzw. unter folgenden Virtualisierungsumgebungen installieren:
    * [HyperV](https://docs.microsoft.com/de-de/virtualization/hyper-v-on-windows/)
    * [Docker/OCI](https://www.docker.com/)
    * [Kubernetes/K8s](https://kubernetes.io/)
+   * [Home Assistant](https://homeassistant.io/)
    
 [mehr...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen)
 
@@ -90,6 +91,7 @@ Unter [Releases](https://github.com/jens-maus/RaspberryMatic/releases) steht fü
      * [HyperV](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HyperV)
      * [Docker/OCI](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Docker-OCI)
      * [Kubernetes/K8s](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Kubernetes)
+     * [Home Assistant Add-on](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HomeAssistant)
    * [Konfigurationsübernahme](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#konfigurationsübernahme)
      * [Umstieg von CCU3](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-von-ccu3)
      * [Umstieg von CCU2](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-von-ccu2)

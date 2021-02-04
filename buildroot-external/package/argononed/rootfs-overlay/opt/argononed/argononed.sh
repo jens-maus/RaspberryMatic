@@ -10,17 +10,19 @@
 
 fancontrol()
 {
-  curspeed=0
+  curspeed=-1
   dstspeed=0
 
   while true; do
     curtemp=$( (cat /sys/class/thermal/thermal_zone0/temp 2>/dev/null || echo 0) | awk '{printf "%.0f\n", $1/1000}' )
-    if [[ ${curtemp} -ge 65 ]]; then
-      dstspeed=100
-    elif [[ ${curtemp} -ge 60 ]]; then
-      dstspeed=55
-    elif [[ ${curtemp} -ge 55 ]]; then
+    if [[ ${curtemp} -ge 75 ]]; then
+      dstspeed=50
+    elif [[ ${curtemp} -ge 70 ]]; then
       dstspeed=10
+    elif [[ ${curtemp} -ge 65 ]]; then
+      dstspeed=3
+    elif [[ ${curtemp} -ge 55 ]]; then
+      dstspeed=1
     else
       dstspeed=0
     fi

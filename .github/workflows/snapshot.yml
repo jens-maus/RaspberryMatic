@@ -336,13 +336,18 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Setup Environment
+      id: env
+      run: |
+        echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
+
     - name: Publish Helm chart
       uses: stefanprodan/helm-gh-pages@master
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         charts_dir: helm
         chart_version: 0.1 # Latest snapshot
-        app_version: ${{ needs.build.outputs.build_version }}
+        app_version: ${{ needs.build.outputs.build_version }}-${{ env.GITHUB_SHA7 }}
 
   cleanup:
     name: Cleanup artifacts/packages

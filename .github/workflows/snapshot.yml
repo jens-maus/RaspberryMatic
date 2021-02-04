@@ -326,30 +326,23 @@ jobs:
       run: echo ${{ steps.docker_build.outputs.digest }}
 
   helm:
+    name: Build K8s Helm chart
     runs-on: ubuntu-20.04
-    needs:
-    - build
-    - oci-multiarch-build-push
+    needs: [build, oci-multiarch-build-push]
 
     steps:
-
-    - name: Setup Environment
-      run: |
-        echo "BUILD_VERSION=${{ needs.build.outputs.build_version }}" >> $GITHUB_ENV
-    
     - name: Checkout
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
 
-    - name: Publish testing Helm chart after sucesfull 
-      if: env.SECRETS_ARE_AVAILABLE == 'true'
+    - name: Publish Helm chart
       uses: stefanprodan/helm-gh-pages@master
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         charts_dir: helm
-        chart_version: 0.1 #Latest snapshot
-        app_version: ${{ env.BUILD_VERSION }}
+        chart_version: 0.1 # Latest snapshot
+        app_version: ${{ needs.build.outputs.build_version }}
 
   cleanup:
     name: Cleanup artifacts/packages

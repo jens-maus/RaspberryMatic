@@ -84,7 +84,7 @@ app.use((req, res, next) => {
   //Get source IP
   let source_ip = ipaddr.parse(req.ip.split(':').pop());
   //Check if source IP in whitelisted range
-  if(addr.match(whitelisted_range)) {
+  if(source_ip.match(whitelisted_range)) {
     // allowed, forward to next middleware (proxy)
     next();
   } else {

@@ -57,6 +57,7 @@ RaspberryMatic can be directly installed on the following, commercially distribu
    * [HyperV](https://docs.microsoft.com/de-de/virtualization/hyper-v-on-windows/)
    * [Docker/OCI](https://www.docker.com/)
    * [Kubernetes/K8s](https://kubernetes.io/)
+   * [Home Assistant](https://home-assistant.io/)
    
 [more...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen)
 
@@ -91,6 +92,7 @@ Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will 
      * [HyperV](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HyperV)
      * [Docker/OCI](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Docker-OCI)
      * [Kubernetes/K8s](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Kubernetes)
+     * [Home Assistant Add-on](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HomeAssistant)
    * [Configuration Upgrade](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#konfigurationsübernahme)
      * [Upgrade from CCU3](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-von-ccu3)
      * [Upgrade from CCU2](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#umstieg-von-ccu2)

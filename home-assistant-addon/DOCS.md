@@ -28,7 +28,7 @@ to the sidebar of your Home Assistant user interface. After having done so, this
 be used to access the standard RaspberryMatic/CCU WebUI to configure/setup your
 HomeMatic/homematicIP devices.
 
-## Setup HomeMatic integration in Home Assistant
+### Setup HomeMatic integration in Home Assistant
 
 After the RaspberryMatic Add-on has been correctly installed and your embedded RaspberryMatic WebUI shows existing HomeMatic/homematicIP devices, you still have to setup the general [HomeMatic integration](https://www.home-assistant.io/integrations/homematic/). Only this step will then bring up/integrate the HomeMatic/homematicIP devices (which the RaspberryMatic Add-on shows) in the general Home Assistant user interface, thus making them usable within Home Assistant.
 

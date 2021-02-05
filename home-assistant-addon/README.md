@@ -31,6 +31,12 @@ are **not yet** available (e.g. use of the GPIO-based RF modules - RPI-RF-MOD/HM
 - Interconnect to HomeMatic/homematicIP devices using the standard, vendor-provided GPIO-based RF modules (RPI-RF-MOD, HM-MOD-RPI-PCB).
 - Supports additional open-hardware based USB/Ethernet adapter devices (HB-RF-USB-2, HB-RF-ETH).
 
+## Documentation
+
+For a detailed documentation please refer either to the "Documentation" tab of the installed Add-on or
+consult the [online documentation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HomeAssistant)
+available in the RaspberryMatic GitHub project.
+
 ## License
 
 This Home Assistant add-on as well as the RaspberryMatic base system is licensed under the Apache-2.0 open-source license.

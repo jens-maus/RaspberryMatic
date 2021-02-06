@@ -37,7 +37,7 @@ OCI packages require a secret to be uploaded `CR_PAT`. See GitHub [instructions(
 
 ## How to draft a release
 
-1. Before running the "Release Build" workflow action in the next steps, you have to modify the following files in the repo and change the 3.XX.YY.YYYYMMMDD version string accordingly:
+1. Before running the "Release Build" workflow action in the next steps, you have to modify the following files in the repo and change the version string accordingly:
    - (3.XX.YY.YYYYMMDD) - https://github.com/jens-maus/RaspberryMatic/blob/master/release/LATEST-VERSION.js
    - (3.XX.YY.YYYYMMDD) - https://github.com/jens-maus/RaspberryMatic/blob/master/home-assistant-addon/config.json#L3
    - (3.XX.YY) - https://github.com/jens-maus/RaspberryMatic/blob/master/helm/raspberrymatic/Chart.yaml#L31

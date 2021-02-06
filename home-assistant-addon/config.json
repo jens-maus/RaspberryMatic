@@ -27,7 +27,7 @@
     "/dev/eq3loop:/dev/eq3loop:rwm"
   ],
   "devicetree": true,
-  "tmpfs": ["/tmp", "/run", "/var", "/media"],
+  "tmpfs": "size=50%",
   "udev": true,
   "auto_uart": true,
   "gpio": true,

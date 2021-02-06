@@ -14,7 +14,10 @@
   "panel_icon": "mdi:router-wireless",
   "startup": "services",
   "boot": "auto",
-  "map": ["config:rw", "ssl:ro"],
+  "map": [
+    "config:rw",
+    "ssl:ro"
+  ],
   "audio": false,
   "video": false,
   "init": false,
@@ -26,7 +29,6 @@
     "/dev/mmd_bidcos:/dev/mmd_bidcos:rwm",
     "/dev/eq3loop:/dev/eq3loop:rwm"
   ],
-  "devicetree": true,
   "tmpfs": "size=100m",
   "udev": true,
   "auto_uart": true,

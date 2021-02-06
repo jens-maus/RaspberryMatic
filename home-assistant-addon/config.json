@@ -29,7 +29,6 @@
     "/dev/mmd_bidcos:/dev/mmd_bidcos:rwm",
     "/dev/eq3loop:/dev/eq3loop:rwm"
   ],
-  "tmpfs": "size=100m",
   "udev": true,
   "auto_uart": true,
   "gpio": true,

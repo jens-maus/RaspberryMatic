@@ -19,17 +19,20 @@ underlying operating system for an improved user experience.
 
 🚧 **WORK-IN-PROGRESS** 🚧<br/>
 This add-on tries to provide all features of a standard, e.g. RaspberryPi or OVA-based
-RaspberryMatic CCU system. Please note: due to the partly restrictive docker-based nature of
-Home Assistant some of the features require additional operating system modules which
-are **not yet** available (e.g. use of the GPIO-based RF modules - RPI-RF-MOD/HM-MOD-RPI-PCB).
+RaspberryMatic CCU system. **Please note:** due to the restrictive docker-based nature of
+Home Assistant, some of the features require additional operating system modules which
+are **not yet** available. This currently limits the HomeMatic/homematicIP connectivity to
+the use of the HmIP-RFUSB, HM-LGW-O-TW-W-EU, HM-CFG-USB-2, HM-CFG-LAN and HMW-LGW-O-DR-GS-EU.
+Support for e.g. the GPIO-based RF modules (RPI-RF-MOD, HM-MOD-RPI-PCB) is currently under
+development.
 
 ## Features
 
 - Use your Home Assistant central as a full-fledged HomeMatic/homematicIP control center (CCU).
 - Access the CCU WebUI from your Home Assistant user interface.
 - Provides all features of a RaspberryMatic system within your Home Assistant environment.
-- Interconnect to HomeMatic/homematicIP devices using the standard, vendor-provided GPIO-based RF modules (RPI-RF-MOD, HM-MOD-RPI-PCB).
-- Supports additional open-hardware based USB/Ethernet adapter devices (HB-RF-USB-2, HB-RF-ETH).
+- Interconnect to HomeMatic/homematicIP devices using the standard, vendor-provided RF modules (RPI-RF-MOD, HM-MOD-RPI-PCB, HmIP-RFUSB, HM-CFG-USB-2, HM-CFG-LAN), Wired gateways (HmIPW-DRAP, HMW-LGW-O-DR-GS-EU) or LAN gateway solutions (HmIP-HAP, HM-LGW-O-TW-W-EU) – see [Requirements](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen).
+- Supports additional open-hardware based USB/Ethernet adapter devices (HB-RF-USB, HB-RF-USB-2, HB-RF-ETH).
 
 ## Documentation
 

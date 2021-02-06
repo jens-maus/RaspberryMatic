@@ -14,7 +14,7 @@
   "panel_icon": "mdi:router-wireless",
   "startup": "services",
   "boot": "auto",
-  "map": ["config:rw", "ssl:rw"],
+  "map": ["config:rw"],
   "audio": false,
   "video": false,
   "init": false,

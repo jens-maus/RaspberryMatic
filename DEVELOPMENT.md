@@ -76,6 +76,9 @@ This short documentation serves as a quick-guide to which and from where compone
 - RaspberryPi rpi-eeprom:
   https://github.com/raspberrypi/rpi-eeprom/commits/master/firmware/stable
 
+- Intel e1000e network driver (for OVA):
+  https://sourceforge.net/projects/e1000/files/e1000e%20stable/
+
 - ASUS Tinkerboard Kernel Patches (Armbian):
   https://github.com/armbian/build/tree/master/patch/kernel/rockchip-current
   

@@ -19,11 +19,11 @@
   "init": false,
   "timeout": 120,
   "devices": [
-    "/dev/raw-uart:rwm",
-    "/dev/raw-uart1:rwm",
-    "/dev/mmd_hmip:rwm",
-    "/dev/mmd_bidcos:rwm",
-    "/dev/eq3loop:rwm"
+    "/dev/raw-uart:rw",
+    "/dev/raw-uart1:rw",
+    "/dev/mmd_hmip:rw",
+    "/dev/mmd_bidcos:rw",
+    "/dev/eq3loop:rw"
   ],
   "udev": true,
   "uart": true,

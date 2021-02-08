@@ -7,32 +7,27 @@
   "arch": ["armhf", "aarch64", "amd64"],
   "description": "HomeMatic/homematicIP CCU central based on RaspberryMatic",
   "url": "https://github.com/jens-maus/RaspberryMatic/",
-  "webui": "http://[HOST]:[PORT:80]",
   "watchdog": "tcp://[HOST]:[PORT:80]",
   "ingress": true,
   "panel_title": "RaspberryMatic",
   "panel_icon": "mdi:router-wireless",
   "startup": "services",
-  "boot": "auto",
   "map": [
     "config:rw",
     "ssl:ro"
   ],
-  "audio": false,
-  "video": false,
   "init": false,
   "timeout": 120,
   "devices": [
-    "/dev/raw-uart:/dev/raw-uart:rwm",
-    "/dev/raw-uart1:/dev/raw-uart1:rwm",
-    "/dev/mmd_hmip:/dev/mmd_hmip:rwm",
-    "/dev/mmd_bidcos:/dev/mmd_bidcos:rwm",
-    "/dev/eq3loop:/dev/eq3loop:rwm"
+    "/dev/raw-uart:rwm",
+    "/dev/raw-uart1:rwm",
+    "/dev/mmd_hmip:rwm",
+    "/dev/mmd_bidcos:rwm",
+    "/dev/eq3loop:rwm"
   ],
   "udev": true,
-  "auto_uart": true,
+  "uart": true,
   "gpio": true,
-  "apparmor": true,
   "kernel_modules": true,
   "ports": {
     "22/tcp": null,

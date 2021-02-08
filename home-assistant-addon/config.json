@@ -19,6 +19,7 @@
   "init": false,
   "timeout": 120,
   "devices": [
+    "/dev/log",
     "/dev/raw-uart",
     "/dev/raw-uart1",
     "/dev/mmd_hmip",

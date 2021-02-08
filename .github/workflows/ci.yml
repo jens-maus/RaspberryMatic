@@ -9,7 +9,6 @@ on:
       - '3.*'
     paths-ignore:
       - '**.md'
-      - 'home-assistant-addon/**'
       - 'helm/**'
       - 'release/LATEST-VERSION.js'
   pull_request:
@@ -19,7 +18,6 @@ on:
       - '3.*'
     paths-ignore:
       - '**.md'
-      - 'home-assistant-addon/**'
       - 'helm/**'
       - 'release/LATEST-VERSION.js'
   workflow_dispatch:
@@ -36,7 +34,7 @@ env:
 
 jobs:
   linter:
-    name: Linter Check
+    name: Linter Checks
     runs-on: ubuntu-20.04
 
     steps:
@@ -52,6 +50,11 @@ jobs:
       uses: ludeeus/action-shellcheck@1.0.0
       with:
         ignore: buildroot-external/package/neoserver/pkg/mediola/neo_server buildroot-patches/0010-lib32-integration/buildroot/support/scripts
+
+    - name: Check Home Assistant Add-on Lint
+      uses: frenck/action-addon-linter@v2
+      with:
+        path: "./home-assistant-addon"
 
   build:
     name: CI build [${{ matrix.platform }}]

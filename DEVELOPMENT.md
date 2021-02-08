@@ -73,6 +73,9 @@ This short documentation serves as a quick-guide to which and from where compone
 - RaspberryPi Linux Kernel:
   https://github.com/raspberrypi/linux/
 
+- RaspberryPi rpi-eeprom:
+  https://github.com/raspberrypi/rpi-eeprom/commits/master/firmware/stable
+
 - ASUS Tinkerboard Kernel Patches (Armbian):
   https://github.com/armbian/build/tree/master/patch/kernel/rockchip-current
   

@@ -313,11 +313,17 @@ jobs:
           org.opencontainers.image.licenses=Apache-2.0
           org.opencontainers.image.url=https://raspberrymatic.de
           org.opencontainers.image.source=https://github.com/${{ github.repository }}
-          org.opencontainers.image.documentation=https://github.com/jens-maus/RaspberryMatic/wiki
+          org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/wiki
           org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
           org.opencontainers.image.ref.name=${{ env.GIT_REF }}
           org.opencontainers.image.revision=${{ github.sha }}
           org.opencontainers.image.version=${{ env.BUILD_VERSION }}
+          io.hass.name=RaspberryMatic CCU
+          io.hass.description=HomeMatic/homematicIP CCU central based on RaspberryMatic
+          io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon
+          io.hass.version=${{ env.BUILD_VERSION }}
+          io.hass.type=addon
+          io.hass.arch=armhf|aarch64|amd64
         tags: |
           ${{ steps.extract_branch.outputs.unique_tag }}
           ${{ steps.extract_branch.outputs.branch_tag }}

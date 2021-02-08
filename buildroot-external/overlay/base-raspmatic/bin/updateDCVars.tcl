@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.8
+# DutyCycle Script v3.9
 # Copyright (c) 2018-2021 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -218,10 +218,13 @@ if {$portFound == 0} {
   set gwFound [catch {set gateways [xmlrpc http://127.0.0.1:$port/ listBidcosInterfaces]}]
   if {$gwFound == 0} {
 
+    set ccuCarrierSense -1
+
     # check for any HmIP-HAP LAN gateway first so that
     # we can add them to the gateway list as well
     # (currently this can only be done via rega scripting)
     set script "
+      integer ccuCarrierSense = -1;
       string dev;
       foreach(dev, devices.Get().EnumUsedIDs()) {
         object oDev = dom.GetObject(dev);
@@ -251,6 +254,15 @@ if {$portFound == 0} {
               break;
             }
           }
+        } elseif(oDev.Label() == 'RPI-RF-MOD') {
+          string chn;
+          foreach(chn, oDev.Channels()) {
+            object oChn = dom.GetObject(chn);
+            if(oChn.Address().Contains(':0')) {
+              ccuCarrierSense =  oChn.DPByControl('MAINTENANCE.CARRIER_SENSE_LEVEL').Value().ToInteger();
+              break;
+            }
+          }
         }
       }
     "
@@ -259,6 +271,7 @@ if {$portFound == 0} {
       if {[string trim $response(STDOUT)] != ""} {
         set gateways [concat $gateways $response(STDOUT)]
       }
+      set ccuCarrierSense $response(ccuCarrierSense)
     }
 
     # catch all dutyCycle values in an additional JSON array
@@ -281,6 +294,7 @@ if {$portFound == 0} {
         if {$gateway(TYPE) == "CCU2" || $gateway(TYPE) == "HMIP_CCU2"} {
           set sysVarName [setDutyCycleSV "" "DutyCycle CCU" $dutycycle ""]
           set gateway(TYPE) "CCU2"
+          set gateway(CARRIER_SENSE) $ccuCarrierSense
         } elseif {$gateway(TYPE) == "HMIP-HAP"} {
           set name $gateway(NAME)
           set sysVarName [setDutyCycleSV $name "DutyCycle HAP ($gateway(ADDRESS))" $dutycycle $gateway(ADDRESS)]
@@ -298,6 +312,13 @@ if {$portFound == 0} {
           set sysVarName [setDutyCycleSV $name "DutyCycle LGW ($gateway(ADDRESS))" $dutycycle $gateway(ADDRESS)]
         }
 
+        # set carrier sense
+        if {[info exists gateway(CARRIER_SENSE)]} {
+          set carriersense $gateway(CARRIER_SENSE)
+        } else {
+          set carriersense -1
+        }
+
         # add the dutyCycle to our jsonResult array
         if { 1 != $first } then { append jsonResult "," } else { set first 0 }
         append jsonResult "\{"
@@ -308,7 +329,7 @@ if {$portFound == 0} {
         append jsonResult ",\"type\":[json_toString $gateway(TYPE)]"
         append jsonResult "\}"
 
-        set infoTxt "DutyCycle-$gateway(ADDRESS), NAME: '$name', TYPE: $gateway(TYPE), CONNECTED: $gateway(CONNECTED), DC: $dutycycle %"
+        set infoTxt "DutyCycle-$gateway(ADDRESS), NAME: '$name', TYPE: $gateway(TYPE), CONNECTED: $gateway(CONNECTED), DC: $dutycycle %, CS: $carriersense %"
         if {$gateway(CONNECTED) == 0} {
           exec /bin/triggerAlarm.tcl "RF-Gateway $name ($gateway(ADDRESS)) not connected" "RF-Gateway-Alarm"
           exec logger -t dutycycle -p error "$infoTxt"
@@ -316,8 +337,17 @@ if {$portFound == 0} {
           exec /bin/triggerAlarm.tcl "DutyCycle $dutycycle% ($gateway(ADDRESS))" "DutyCycle-Alarm"
           exec logger -t dutycycle -p error "$infoTxt"
         } elseif {$dutycycle >= 80} {
-          exec logger -t dutycycle -p info "$infoTxt"
+          exec logger -t dutycycle -p warn "$infoTxt"
         }
+
+        # check carrier sense level
+        if {$carriersense >= 98} {
+          exec /bin/triggerAlarm.tcl "CarrierSense $carriersense% ($gateway(ADDRESS))" "CarrierSense-Alarm"
+          exec logger -t carriersense -p error "$infoTxt"
+        } elseif {$carriersense >= 80} {
+          exec logger -t carriersense -p warn "$infoTxt"
+        }
+
         puts "$infoTxt"
       }
     }

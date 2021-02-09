@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.9
+# DutyCycle Script v3.10
 # Copyright (c) 2018-2021 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -254,7 +254,7 @@ if {$portFound == 0} {
               break;
             }
           }
-        } elseif(oDev.Label() == 'RPI-RF-MOD') {
+        } elseif((oDev.Label() == 'RPI-RF-MOD') || (oDev.Label() == 'HmIP-CCU3')) {
           string chn;
           foreach(chn, oDev.Channels()) {
             object oChn = dom.GetObject(chn);

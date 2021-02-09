@@ -317,11 +317,11 @@ jobs:
           org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
           org.opencontainers.image.ref.name=${{ env.GIT_REF }}
           org.opencontainers.image.revision=${{ github.sha }}
-          org.opencontainers.image.version=${{ env.BUILD_VERSION }}
+          org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
           io.hass.name=RaspberryMatic CCU
           io.hass.description=HomeMatic/homematicIP CCU central based on RaspberryMatic
           io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon
-          io.hass.version=${{ env.BUILD_VERSION }}
+          io.hass.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
           io.hass.type=addon
           io.hass.arch=armhf|aarch64|amd64
         tags: |

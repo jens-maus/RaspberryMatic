@@ -431,5 +431,15 @@ check program hb_rf_eth-CheckEnabled with path "/usr/bin/test -e /etc/config/hb_
     group homematic
     if status != 0 for 1 cycles then unmonitor
 
+# check remaining eMMC life-time
+check program eMMCLifeTimeCheck with path "/bin/checkEMMCLifeTime.sh"
+    group system
+    if status == 2 for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'eMMC life time >90% exceeded' WatchDog-Alarm"
+      repeat every 280 cycles
+    if status == 3 for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'eMMC life time 100% exceeded' WatchDog-Alarm"
+      repeat every 280 cycles
+
 # include user-defined configuration files
 include /usr/local/etc/monit*.cfg

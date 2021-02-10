@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.10
+# DutyCycle Script v3.11
 # Copyright (c) 2018-2021 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -259,7 +259,7 @@ if {$portFound == 0} {
           foreach(chn, oDev.Channels()) {
             object oChn = dom.GetObject(chn);
             if(oChn.Address().Contains(':0')) {
-              ccuCarrierSense =  oChn.DPByControl('MAINTENANCE.CARRIER_SENSE_LEVEL').Value().ToInteger();
+              ccuCarrierSense = oChn.DPByControl('MAINTENANCE.CARRIER_SENSE_LEVEL').Value().ToInteger();
               break;
             }
           }
@@ -295,6 +295,15 @@ if {$portFound == 0} {
           set sysVarName [setDutyCycleSV "" "DutyCycle CCU" $dutycycle ""]
           set gateway(TYPE) "CCU2"
           set gateway(CARRIER_SENSE) $ccuCarrierSense
+
+          # overwrite the address with board_serial to match
+          # serial number expectations in DC/CS alarms.
+          set fp [open "/var/board_serial" r]
+          set fileData [read $fp]
+          close $fp
+          if {$fileData != "" } {
+            set gateway(ADDRESS) $fileData
+          }
         } elseif {$gateway(TYPE) == "HMIP-HAP"} {
           set name $gateway(NAME)
           set sysVarName [setDutyCycleSV $name "DutyCycle HAP ($gateway(ADDRESS))" $dutycycle $gateway(ADDRESS)]

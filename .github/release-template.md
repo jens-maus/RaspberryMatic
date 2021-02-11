@@ -53,7 +53,7 @@ The following installation archives can be downloaded for different hardware pla
 - Intel NUC – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-IntelNUC)):<br/>
 <sub>:package: [RaspberryMatic-${VERSION}-intelnuc.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-intelnuc.zip)<br/>SHA256: XXXXX</sub>
 
-- Open Virtual Appliance (OVA) – (ESXi, VirtualBox, Proxmox, Synology, QNAP, QEmu, HyperV):<br/>
+- Open Virtual Appliance (OVA) – ([ESXi](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-ESXi), [Proxmox](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Proxmox-VE), [VirtualBox](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-VirtualBox), [Synology](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Synology-VMM), [QNAP](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-QNAP-VirtualizationStation), [Workstation Player](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-Workstation-Player), [QEmu](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-QEmu), [HyperV](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HyperV)):<br/>
 <sub>:package: [RaspberryMatic-${VERSION}-ova.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-ova.zip)<br/>SHA256: XXXXX</sub><br/>
 <sub>:package: [RaspberryMatic-${VERSION}.ova](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}.ova) (only for initial OVA installation)<br/>SHA256: XXXXX</sub>
 

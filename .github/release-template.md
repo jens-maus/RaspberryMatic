@@ -2,7 +2,7 @@ This is release ${VERSION} of RaspberryMatic which is a **XXXXX** release with b
 
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/${VERSION}/total.svg?style=flat-square)](https://github.com/jens-maus/RaspberryMatic/releases/${VERSION}) ![License](https://img.shields.io/github/license/jens-maus/RaspberryMatic.svg?style=flat-square) [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
 
-<sub>[Hier klicken für deutsche 🇩🇪 Version des ChangeLogs/Diskussionsbeitrag](https://homematic-forum.de/forum/viewtopic.php?f=65&t=63915)</sub>
+<sub>[Hier klicken für deutsche :de: Version des ChangeLogs/Diskussionsbeitrag](https://homematic-forum.de/forum/viewtopic.php?f=65&t=XXXXX)</sub>
 
 ## :construction: Changes:
 

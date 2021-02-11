@@ -28,7 +28,7 @@ For full changes, see the [full commit log](https://github.com/jens-maus/Raspber
 For support on installation and help please visit the following web pages:
 
 [RaspberryMatic - Documentation](https://github.com/jens-maus/RaspberryMatic/wiki)<br/>
-[RaspberryMatic - Discussions :en:](https://github.com/jens-maus/RaspberryMatic/discussions)<br/>
+[RaspberryMatic - Discussions :us:](https://github.com/jens-maus/RaspberryMatic/discussions)<br/>
 [RaspberryMatic - Forum :de:](https://homematic-forum.de/forum/viewforum.php?f=65)
 
 ## :package:  Download:
@@ -37,27 +37,27 @@ The following installation archives can be downloaded for different hardware pla
 - RaspberryPi4 Model B, RaspberryPi4 Compute Module, RaspberryPi 400 – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):<br/>
 <sub>:package: [RaspberryMatic-${VERSION}-rpi4.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi4.zip)<br/>SHA256: XXXXX</sub>
 
-- CCU3, ELV-Charly, RaspberryPi3 Model B+, RaspberryPi3 Model B, RaspberryPi3 Model A+, RaspberryPi Compute Module 3, RaspberryPi Compute Module 3 lite – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ELV-Charly)):
+- CCU3, ELV-Charly, RaspberryPi3 Model B+, RaspberryPi3 Model B, RaspberryPi3 Model A+, RaspberryPi Compute Module 3, RaspberryPi Compute Module 3 lite – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ELV-Charly)):<br/>
 <sub>:package: [RaspberryMatic-${VERSION}-rpi3.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi3.zip)<br/>SHA256: XXXXX</sub>
 <sub>:package: [RaspberryMatic-${VERSION}-ccu3.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-ccu3.tgz) (only for initial CCU3 Firmware -> RaspberryMatic Upgrade)<br/> SHA256: XXXXX</sub>
 
-- RaspberryPi2 Model B – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):
+- RaspberryPi2 Model B – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):<br/>
 <sub>:package: [RaspberryMatic-${VERSION}-rpi2.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi2.zip)<br/>SHA256: XXXXX</sub>
 
-- RaspberryPi Zero W, RaspberryPi Zero, RaspberryPi Compute Module 1, RaspberryPi1 (A+/B+) – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):
+- RaspberryPi Zero W, RaspberryPi Zero, RaspberryPi Compute Module 1, RaspberryPi1 (A+/B+) – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):<br/>
 <sub>:package: [RaspberryMatic-${VERSION}-rpi0.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi0.zip)<br/>SHA256: XXXXX</sub>
 
-- TinkerBoard S, TinkerBoard – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Tinkerboard)):
+- TinkerBoard S, TinkerBoard – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Tinkerboard)):<br/>
 <sub>:package: [RaspberryMatic-${VERSION}-tinkerboard.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-tinkerboard.zip)<br/>SHA256: XXXXX</sub>
 
-- Intel NUC – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-IntelNUC)):
+- Intel NUC – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-IntelNUC)):<br/>
 <sub>:package: [RaspberryMatic-${VERSION}-intelnuc.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-intelnuc.zip)<br/>SHA256: XXXXX</sub>
 
-- Open Virtual Appliance (OVA) – (ESXi, VirtualBox, Proxmox, Synology, QNAP, QEmu, HyperV):
+- Open Virtual Appliance (OVA) – (ESXi, VirtualBox, Proxmox, Synology, QNAP, QEmu, HyperV):<br/>
 <sub>:package: [RaspberryMatic-${VERSION}-ova.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-ova.zip)<br/>SHA256: XXXXX</sub>
 <sub>:package: [RaspberryMatic-${VERSION}.ova](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}.ova) (only for initial OVA installation)<br/>SHA256: XXXXX</sub>
 
-- Docker / Open Container Initiative (OCI) – virtual appliance ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Docker-OCI)):
+- Docker / Open Container Initiative (OCI) – virtual appliance ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Docker-OCI)):<br/>
 <sub>:package: [RaspberryMatic-${VERSION}-oci_amd64.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_amd64.tgz) (amd64/x86_64)<br/>SHA256: XXXXX</sub>
 <sub>:package: [RaspberryMatic-${VERSION}-oci_arm64.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_arm64.tgz) (arm64/aarch64)<br/>SHA256: XXXXX</sub>
 <sub>:package: [RaspberryMatic-${VERSION}-oci_arm.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_arm.tgz) (arm/armhf)<br/>SHA256: XXXXX</sub>

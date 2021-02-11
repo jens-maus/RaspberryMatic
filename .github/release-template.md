@@ -54,12 +54,12 @@ The following installation archives can be downloaded for different hardware pla
 <sub>:package: [RaspberryMatic-${VERSION}-intelnuc.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-intelnuc.zip)<br/>SHA256: XXXXX</sub>
 
 - Open Virtual Appliance (OVA) – (ESXi, VirtualBox, Proxmox, Synology, QNAP, QEmu, HyperV):<br/>
-<sub>:package: [RaspberryMatic-${VERSION}-ova.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-ova.zip)<br/>SHA256: XXXXX</sub>
+<sub>:package: [RaspberryMatic-${VERSION}-ova.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-ova.zip)<br/>SHA256: XXXXX</sub><br/>
 <sub>:package: [RaspberryMatic-${VERSION}.ova](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}.ova) (only for initial OVA installation)<br/>SHA256: XXXXX</sub>
 
 - Docker / Open Container Initiative (OCI) – virtual appliance ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Docker-OCI)):<br/>
-<sub>:package: [RaspberryMatic-${VERSION}-oci_amd64.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_amd64.tgz) (amd64/x86_64)<br/>SHA256: XXXXX</sub>
-<sub>:package: [RaspberryMatic-${VERSION}-oci_arm64.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_arm64.tgz) (arm64/aarch64)<br/>SHA256: XXXXX</sub>
+<sub>:package: [RaspberryMatic-${VERSION}-oci_amd64.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_amd64.tgz) (amd64/x86_64)<br/>SHA256: XXXXX</sub><br/>
+<sub>:package: [RaspberryMatic-${VERSION}-oci_arm64.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_arm64.tgz) (arm64/aarch64)<br/>SHA256: XXXXX</sub><br/>
 <sub>:package: [RaspberryMatic-${VERSION}-oci_arm.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_arm.tgz) (arm/armhf)<br/>SHA256: XXXXX</sub>
 
 - Kubernetes / K8s – virtual appliance ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Kubernetes))

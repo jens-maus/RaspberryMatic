@@ -3,6 +3,39 @@ entries:
   raspberrymatic:
   - annotations:
       artifacthub.io/changes: |
+        - Release of 3.55.10.20210213
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Webpage
+          url: https://raspberrymatic.de/
+        - name: Documentation
+          url: https://github.com/jens-maus/RaspberryMatic/wiki
+    apiVersion: v2
+    appVersion: 3.55.10.20210213
+    created: "2021-02-13T13:25:03.431119994Z"
+    description: HomeMatic/homematicIP CCU central based on RaspberryMatic
+    digest: 3525517abfff3a2e90edf72acfa5ca98209f06e35864817c920ab29e534ce937
+    home: https://github.com/jens-maus/RaspberryMatic
+    icon: https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/home-assistant-addon/icon.png
+    keywords:
+    - smarthome
+    - iot
+    - homematic
+    - central
+    maintainers:
+    - email: mail@jens-maus.de
+      name: Jens Maus
+      url: https://github.com/jens-maus
+    - email: helm@angelnu.com
+      name: Angel Nunez Mencias
+      url: https://github.com/angelnu
+    name: raspberrymatic
+    type: application
+    urls:
+    - https://jens-maus.github.io/RaspberryMatic/raspberrymatic-3.55.10.tgz
+    version: 3.55.10
+  - annotations:
+      artifacthub.io/changes: |
         - Initial Chart release
       artifacthub.io/license: Apache-2.0
       artifacthub.io/links: |
@@ -12,7 +45,7 @@ entries:
           url: https://github.com/jens-maus/RaspberryMatic/wiki
     apiVersion: v2
     appVersion: 3.55.10.20210213-3e87e95
-    created: "2021-02-13T03:54:57.330747145Z"
+    created: "2021-02-13T13:25:03.430105804Z"
     description: HomeMatic/homematicIP CCU central based on RaspberryMatic
     digest: bce3f8d0a13d45690219b829ee0537a09c4398a2456509688c3d778e607ba3d2
     home: https://github.com/jens-maus/RaspberryMatic
@@ -34,4 +67,4 @@ entries:
     urls:
     - https://jens-maus.github.io/RaspberryMatic/raspberrymatic-0.1.tgz
     version: "0.1"
-generated: "2021-02-13T03:54:57.329589544Z"
+generated: "2021-02-13T13:25:03.428971403Z"

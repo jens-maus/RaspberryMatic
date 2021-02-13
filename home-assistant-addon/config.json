@@ -1,6 +1,6 @@
 {
   "name": "RaspberryMatic CCU",
-  "version": "snapshot",
+  "version": "3.55.10.20210213",
   "stage": "experimental",
   "slug": "raspberrymatic",
   "image": "ghcr.io/jens-maus/raspberrymatic",

@@ -434,6 +434,7 @@ check program hb_rf_eth-CheckEnabled with path "/usr/bin/test -e /etc/config/hb_
 # check remaining eMMC life-time
 check program eMMCLifeTimeCheck with path "/bin/checkEMMCLifeTime.sh"
     group system
+    if status == 1 for 3 cycles then unmonitor
     if status == 2 for 5 cycles then
       exec "/bin/triggerAlarm.tcl 'eMMC life time >90% exceeded' WatchDog-Alarm"
       repeat every 280 cycles

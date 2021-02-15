@@ -107,7 +107,7 @@
 +jsonrpc_response [json_toString $lang]
 --- occu/WebUI/www/api/methods/ccu/setsystemlanguage.tcl.orig
 +++ occu/WebUI/www/api/methods/ccu/setsystemlanguage.tcl
-@@ -0,0 +1,255 @@
+@@ -0,0 +1,259 @@
 +##
 +# CCU.setSystemLanguage
 +# Setzt die Systemsprache der CCU in /etc/config/systemLanguage
@@ -149,24 +149,26 @@
 +    object funcs = dom.GetObject(ID_FUNCTIONS);
 +    foreach(oID, funcs.EnumIDs()) {
 +      object oObj = dom.GetObject(oID);
-+      string objName = oObj.Name();
-+      string trName = oObj.MetaData(metaDataID);
++      if(oObj) {
++        string objName = oObj.Name();
++        string trName = oObj.MetaData(metaDataID);
 +
-+      integer idx = 0;
-+      string listEntry;
-+      foreach(listEntry, funcDefault.Split(";")) {
-+        if(trName && (trName == listEntry)) {
-+          string oldName = funcTranslatedOld.StrValueByIndex(";", idx);
-+          if(objName == oldName) {
++        integer idx = 0;
++        string listEntry;
++        foreach(listEntry, funcDefault.Split(";")) {
++          if(trName && (trName == listEntry)) {
++            string oldName = funcTranslatedOld.StrValueByIndex(";", idx);
++            if(objName == oldName) {
++              string newName = funcTranslatedNew.StrValueByIndex(";", idx);
++              oObj.Name(newName);
++            }
++          } elseif((objName == listEntry) || (objName == "${"#listEntry#"}")) {
 +            string newName = funcTranslatedNew.StrValueByIndex(";", idx);
 +            oObj.Name(newName);
++            oObj.AddMetaData(metaDataID, listEntry);
 +          }
-+        } elseif((objName == listEntry) || (objName == "${"#listEntry#"}")) {
-+          string newName = funcTranslatedNew.StrValueByIndex(";", idx);
-+          oObj.Name(newName);
-+          oObj.AddMetaData(metaDataID, listEntry);
++          idx = idx + 1;
 +        }
-+        idx = idx + 1;
 +      }
 +    }
 +
@@ -189,24 +191,26 @@
 +    object rooms = dom.GetObject(ID_ROOMS);
 +    foreach(oID, rooms.EnumIDs()) {
 +      object oObj = dom.GetObject(oID);
-+      string objName = oObj.Name();
-+      string trName = oObj.MetaData(metaDataID);
++      if(oObj) {
++        string objName = oObj.Name();
++        string trName = oObj.MetaData(metaDataID);
 +
-+      integer idx = 0;
-+      string listEntry;
-+      foreach(listEntry, roomDefault.Split(";")) {
-+        if(trName && (trName == listEntry)) {
-+          string oldName = roomTranslatedOld.StrValueByIndex(";", idx);
-+          if(objName == oldName) {
++        integer idx = 0;
++        string listEntry;
++        foreach(listEntry, roomDefault.Split(";")) {
++          if(trName && (trName == listEntry)) {
++            string oldName = roomTranslatedOld.StrValueByIndex(";", idx);
++            if(objName == oldName) {
++              string newName = roomTranslatedNew.StrValueByIndex(";", idx);
++              oObj.Name(newName);
++            }
++          } elseif((objName == listEntry) || (objName == "${"#listEntry#"}")) {
 +            string newName = roomTranslatedNew.StrValueByIndex(";", idx);
 +            oObj.Name(newName);
++            oObj.AddMetaData(metaDataID, listEntry);
 +          }
-+        } elseif((objName == listEntry) || (objName == "${"#listEntry#"}")) {
-+          string newName = roomTranslatedNew.StrValueByIndex(";", idx);
-+          oObj.Name(newName);
-+          oObj.AddMetaData(metaDataID, listEntry);
++          idx = idx + 1;
 +        }
-+        idx = idx + 1;
 +      }
 +    }
 +
@@ -258,87 +262,87 @@
 +    object svs = dom.GetObject(ID_SYSTEM_VARIABLES);
 +    foreach(oID, svs.EnumIDs()) {
 +      object oObj = dom.GetObject(oID);
-+
-+      ! Name
-+      string objName = oObj.Name();
-+      string trName = oObj.MetaData(metaDataID);
-+      integer idx = 0;
-+      string listEntry;
-+      foreach(listEntry, svDefault.Split(";")) {
-+        if(trName && (trName == listEntry)) {
-+          string oldName = svTranslatedOld.StrValueByIndex(";", idx);
-+          if(objName == oldName) {
++      if(oObj) {
++        ! Name
++        string objName = oObj.Name();
++        string trName = oObj.MetaData(metaDataID);
++        integer idx = 0;
++        string listEntry;
++        foreach(listEntry, svDefault.Split(";")) {
++          if(trName && (trName == listEntry)) {
++            string oldName = svTranslatedOld.StrValueByIndex(";", idx);
++            if(objName == oldName) {
++              string newName = svTranslatedNew.StrValueByIndex(";", idx);
++              oObj.Name(newName);
++            }
++          } elseif((objName == listEntry) || (objName == "${"#listEntry#"}")) {
 +            string newName = svTranslatedNew.StrValueByIndex(";", idx);
 +            oObj.Name(newName);
++            oObj.AddMetaData(metaDataID, listEntry);
 +          }
-+        } elseif((objName == listEntry) || (objName == "${"#listEntry#"}")) {
-+          string newName = svTranslatedNew.StrValueByIndex(";", idx);
-+          oObj.Name(newName);
-+          oObj.AddMetaData(metaDataID, listEntry);
++          idx = idx + 1;
 +        }
-+        idx = idx + 1;
-+      }
 +
-+      ! DPInfo
-+      string objMsg = oObj.DPInfo();
-+      string trNameMsg = oObj.MetaData(metaDataID # "Msg");
-+      integer idx = 0;
-+      string listEntry;
-+      foreach(listEntry, svDefaultMsg.Split(";")) {
-+        if(trNameMsg && (trNameMsg == listEntry)) {
-+          string oldMsg = svTranslatedMsgOld.StrValueByIndex(";", idx);
-+          if(objMsg == oldMsg) {
++        ! DPInfo
++        string objMsg = oObj.DPInfo();
++        string trNameMsg = oObj.MetaData(metaDataID # "Msg");
++        integer idx = 0;
++        string listEntry;
++        foreach(listEntry, svDefaultMsg.Split(";")) {
++          if(trNameMsg && (trNameMsg == listEntry)) {
++            string oldMsg = svTranslatedMsgOld.StrValueByIndex(";", idx);
++            if(objMsg == oldMsg) {
++              string newMsg = svTranslatedMsgNew.StrValueByIndex(";", idx);
++              oObj.DPInfo(newMsg);
++            }
++          } elseif((objMsg == listEntry) || (objMsg == "${"#listEntry#"}")) {
 +            string newMsg = svTranslatedMsgNew.StrValueByIndex(";", idx);
 +            oObj.DPInfo(newMsg);
++            oObj.AddMetaData(metaDataID # "Msg", listEntry);
 +          }
-+        } elseif((objMsg == listEntry) || (objMsg == "${"#listEntry#"}")) {
-+          string newMsg = svTranslatedMsgNew.StrValueByIndex(";", idx);
-+          oObj.DPInfo(newMsg);
-+          oObj.AddMetaData(metaDataID # "Msg", listEntry);
++          idx = idx + 1;
 +        }
-+        idx = idx + 1;
-+      }
 +
-+      ! ValueName0
-+      string objValue0 = oObj.ValueName0();
-+      string trNameValue0 = oObj.MetaData(metaDataID # "Value0");
-+      integer idx = 0;
-+      string listEntry;
-+      foreach(listEntry, svDefaultValue0.Split(";")) {
-+        if(trNameValue0 && (trNameValue0 == listEntry)) {
-+          string oldValue0 = svTranslatedValue0Old.StrValueByIndex(";", idx);
-+          if(objValue0 == oldValue0) {
++        ! ValueName0
++        string objValue0 = oObj.ValueName0();
++        string trNameValue0 = oObj.MetaData(metaDataID # "Value0");
++        integer idx = 0;
++        string listEntry;
++        foreach(listEntry, svDefaultValue0.Split(";")) {
++          if(trNameValue0 && (trNameValue0 == listEntry)) {
++            string oldValue0 = svTranslatedValue0Old.StrValueByIndex(";", idx);
++            if(objValue0 == oldValue0) {
++              string newValue0 = svTranslatedValue0New.StrValueByIndex(";", idx);
++              oObj.ValueName0(newValue0);
++            }
++          } elseif((objValue0 == listEntry) || (objValue0 == "${"#listEntry#"}")) {
 +            string newValue0 = svTranslatedValue0New.StrValueByIndex(";", idx);
 +            oObj.ValueName0(newValue0);
++            oObj.AddMetaData(metaDataID # "Value0", listEntry);
 +          }
-+        } elseif((objValue0 == listEntry) || (objValue0 == "${"#listEntry#"}")) {
-+          string newValue0 = svTranslatedValue0New.StrValueByIndex(";", idx);
-+          oObj.ValueName0(newValue0);
-+          oObj.AddMetaData(metaDataID # "Value0", listEntry);
++          idx = idx + 1;
 +        }
-+        idx = idx + 1;
-+      }
 +
-+      ! ValueName1
-+      string objValue1 = oObj.ValueName1();
-+      string trNameValue1 = oObj.MetaData(metaDataID # "Value1");
-+      integer idx = 0;
-+      string listEntry;
-+      foreach(listEntry, svDefaultValue1.Split(";")) {
-+        if(trNameValue1 && (trNameValue1 == listEntry)) {
-+          string oldValue1 = svTranslatedValue1Old.StrValueByIndex(";", idx);
-+          if(objValue1 == oldValue1) {
++        ! ValueName1
++        string objValue1 = oObj.ValueName1();
++        string trNameValue1 = oObj.MetaData(metaDataID # "Value1");
++        integer idx = 0;
++        string listEntry;
++        foreach(listEntry, svDefaultValue1.Split(";")) {
++          if(trNameValue1 && (trNameValue1 == listEntry)) {
++            string oldValue1 = svTranslatedValue1Old.StrValueByIndex(";", idx);
++            if(objValue1 == oldValue1) {
++              string newValue1 = svTranslatedValue1New.StrValueByIndex(";", idx);
++              oObj.ValueName1(newValue1);
++            }
++          } elseif((objValue1 == listEntry) || (objValue1 == "${"#listEntry#"}")) {
 +            string newValue1 = svTranslatedValue1New.StrValueByIndex(";", idx);
 +            oObj.ValueName1(newValue1);
++            oObj.AddMetaData(metaDataID # "Value1", listEntry);
 +          }
-+        } elseif((objValue1 == listEntry) || (objValue1 == "${"#listEntry#"}")) {
-+          string newValue1 = svTranslatedValue1New.StrValueByIndex(";", idx);
-+          oObj.ValueName1(newValue1);
-+          oObj.AddMetaData(metaDataID # "Value1", listEntry);
++          idx = idx + 1;
 +        }
-+        idx = idx + 1;
 +      }
-+
 +    }
 +
 +    ! make sure the changes are saved immediately

@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.11
+# DutyCycle Script v3.12
 # Copyright (c) 2018-2021 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -237,10 +237,19 @@ if {$portFound == 0} {
               integer dcValue = 0;
               integer csValue = 0;
               integer connected = 0;
-              if(oChn.DPByControl('MAINTENANCE.UNREACH').Value() == false) {
-                connected = 1;
-                dcValue = oChn.DPByControl('MAINTENANCE.DUTY_CYCLE_LEVEL').Value().ToInteger();
-                csValue = oChn.DPByControl('MAINTENANCE.CARRIER_SENSE_LEVEL').Value().ToInteger();
+              object dp = oChn.DPByControl('MAINTENANCE.UNREACH');
+              if(dp) {
+                if(dp.Value() == false) {
+                  connected = 1;
+                  object dp = oChn.DPByControl('MAINTENANCE.DUTY_CYCLE_LEVEL');
+                  if(dp) {
+                    dcValue = dp.Value().ToInteger();
+                  }
+                  object dp = oChn.DPByControl('MAINTENANCE.CARRIER_SENSE_LEVEL');
+                  if(dp) {
+                    csValue = dp.Value().ToInteger();
+                  }
+                }
               }
               Write('{ADDRESS '#oDev.Address());
               Write(' NAME {'#oDev.Name()#'}');
@@ -259,7 +268,10 @@ if {$portFound == 0} {
           foreach(chn, oDev.Channels()) {
             object oChn = dom.GetObject(chn);
             if(oChn.Address().Contains(':0')) {
-              ccuCarrierSense = oChn.DPByControl('MAINTENANCE.CARRIER_SENSE_LEVEL').Value().ToInteger();
+              object dp = oChn.DPByControl('MAINTENANCE.CARRIER_SENSE_LEVEL');
+              if(dp) {
+                ccuCarrierSense = dp.Value().ToInteger();
+              }
               break;
             }
           }

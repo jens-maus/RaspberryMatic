@@ -61,8 +61,8 @@ const apiProxy = createProxyMiddleware('/', {
           body = body.toString('latin1');
           body = body.replace(/(?<=["'= \\])\/(api|webui|ise|pda|config|pages|jpages|esp|upnp|tools|addons)(\\?\/)/g,
                               req.headers['x-ingress-path']+'/$1$2');
-          body = body.replace(/(?<=["'])(\/index\.htm)/g,
-                              req.headers['x-ingress-path']+'$1');
+          body = body.replace(/(?<=["'])\/(index|login|logout)\.htm/g,
+                              req.headers['x-ingress-path']+'/$1.htm');
 
         if(proxyRes.headers['transfer-encoding'] == 'chunked') {
           res.end(new Buffer.from(body));

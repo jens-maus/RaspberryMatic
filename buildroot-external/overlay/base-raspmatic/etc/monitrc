@@ -381,9 +381,9 @@ check program wlan0CheckEnabled with path /bin/sh -c "[[ -e /etc/config/wpa_supp
     depends on wlan0Exists
 
 # monitor under-voltage using vcgencmd (RaspberryPi only)
-check program voltageCheck with path /bin/sh -c "[ $(( $(/usr/bin/vcgencmd get_throttled | cut -f2 -d=) & 0x10000 )) -eq $(( 0x10000 )) ]"
+check program voltageCheck with path /bin/sh -c "[ $(( $(/usr/bin/vcgencmd get_throttled | cut -f2 -d=) & 0x1 )) -eq $(( 0x1 )) ]"
     group system
-    if status = 0 for 5 cycles then
+    if status = 0 for 2 cycles then
       exec "/bin/triggerAlarm.tcl 'under-voltage detected' WatchDog-Alarm"
       repeat every 24 cycles
     depends on voltageCheckEnabled

@@ -74,7 +74,7 @@ service:
       ssh: 22
       http: 80
       # -- WebUI access via proxy
-      http_proxy: 8099
+      http-proxy: 8099
       https: 443
       # -- ReGaHss XmlRpc
       xmlrpc: 1999

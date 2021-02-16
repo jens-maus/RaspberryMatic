@@ -122,9 +122,9 @@ identify_host() {
 
     # ASUS Tinkerboard
     tinkerboard*)
-      HM_LED_GREEN="/sys/class/leds/act-led"
-      HM_LED_RED="/sys/class/leds/pwr-led"
-      HM_LED_YELLOW="/sys/class/leds/heartbeat-led"
+      HM_LED_GREEN="/sys/class/leds/led-0"
+      HM_LED_RED="/sys/class/leds/led-2"
+      HM_LED_YELLOW="/sys/class/leds/led-1"
     ;;
 
     # Open Virtual Appliance (ova)

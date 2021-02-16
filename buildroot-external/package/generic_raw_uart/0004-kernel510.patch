@@ -11,29 +11,25 @@ index dd019bf..baa6e5b 100644
  #include <linux/slab.h>
  #include <linux/io.h>
 diff --git a/kernel/hb_rf_eth.c b/kernel/hb_rf_eth.c
-index aa9f0c0..76ac861 100644
+index aa9f0c0..531ddfe 100644
 --- a/kernel/hb_rf_eth.c
 +++ b/kernel/hb_rf_eth.c
-@@ -183,8 +183,12 @@ static void hb_rf_eth_set_timeout(struct socket *sock)
+@@ -183,8 +183,10 @@ static void hb_rf_eth_set_timeout(struct socket *sock)
    struct timeval tv = { .tv_sec = 0, .tv_usec = 100000 };
  #endif
  
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0)
-+  mm_segment_t fs = force_uaccess_begin();
-+#else
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
    mm_segment_t fs = get_fs();
    set_fs(KERNEL_DS);
 +#endif
  
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 9, 0)
    sock_setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO_NEW, KERNEL_SOCKPTR((char *)&tv), sizeof(tv));
-@@ -194,7 +198,11 @@ static void hb_rf_eth_set_timeout(struct socket *sock)
+@@ -194,7 +196,9 @@ static void hb_rf_eth_set_timeout(struct socket *sock)
    sock_setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tv, sizeof(tv));
  #endif
  
-+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0)
-+  force_uaccess_end(fs);
-+#else
++#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 10, 0)
    set_fs(fs);
 +#endif
  }

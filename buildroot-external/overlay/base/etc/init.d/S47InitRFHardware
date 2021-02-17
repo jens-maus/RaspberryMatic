@@ -495,7 +495,7 @@ stop() {
      [[ -f "/sys/class/hb-rf-eth/hb-rf-eth/connect" ]]; then
     # since the hb-rf-eth does not have a disconnect we
     # send an empty string which should disconnect it.
-    echo "" >/sys/class/hb-rf-eth/hb-rf-eth/connect
+    echo "" >/sys/class/hb-rf-eth/hb-rf-eth/connect 2>/dev/null
   fi
 }
 

@@ -117,7 +117,9 @@ start() {
   set | grep '^HM_' >/var/hm_mode
 
   if [[ -c /dev/rtc0 ]]; then
-    hwclock --hctosys --utc
+    if [[ "${HM_HOST}" != "oci" ]]; then
+      hwclock --hctosys --utc
+    fi
     echo "${HM_RTC}, OK"
   else
     echo "no hardware found"
@@ -128,7 +130,9 @@ stop() {
   echo -n "Cleaning up RTC Clock: "
 
   if [[ -c /dev/rtc0 ]]; then
-    hwclock --systohc --utc
+    if [[ "${HM_HOST}" != "oci" ]]; then
+      hwclock --systohc --utc
+    fi
     echo "OK"
   else
     echo "no hardware found"

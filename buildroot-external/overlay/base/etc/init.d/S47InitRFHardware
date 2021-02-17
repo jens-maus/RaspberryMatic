@@ -486,6 +486,17 @@ stop() {
      [[ "${HM_HMIP_DEVNODE}" != "${HM_HMRF_DEVNODE}" ]]; then
     /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p "${HM_HMIP_DEVNODE}" -bl -l 1
   fi
+
+  # make sure the hb-rf-eth kernel module will stop trying to connect
+  # to an associated HB-RF-ETH or otherwise a host machine (in case of
+  # a docker environment) will continue to connect to the HB-RF-ETH
+  # even thought e.g. the docker is stopped.
+  if [[ -f "/etc/config/hb_rf_eth" ]] &&
+     [[ -f "/sys/class/hb-rf-eth/hb-rf-eth/connect" ]]; then
+    # since the hb-rf-eth does not have a disconnect we
+    # send an empty string which should disconnect it.
+    echo "" >/sys/class/hb-rf-eth/hb-rf-eth/connect
+  fi
 }
 
 restart() {

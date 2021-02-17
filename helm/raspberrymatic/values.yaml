@@ -24,7 +24,8 @@ persistence:
 
 image:
   repository: ghcr.io/jens-maus/raspberrymatic
-  pullPolicy: Always #IfNotPresent
+  #tag: Uses chart appVersion when this is not set
+  pullPolicy: IfNotPresent
 
 imagePullSecrets: []
 nameOverride: ""
@@ -69,12 +70,13 @@ readinessProbe:
 service:
   type: ClusterIP
   loadBalancerIP: ""
+  annotations : {}
   ports:
     TCP:
       ssh: 22
       http: 80
       # -- WebUI access via proxy
-      http_proxy: 8099
+      http-proxy: 8099
       https: 443
       # -- ReGaHss XmlRpc
       xmlrpc: 1999

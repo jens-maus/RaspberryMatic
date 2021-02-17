@@ -98,6 +98,8 @@
   },
   "full_access": true,
   "privileged": [
-    "SYS_ADMIN"
+    "SYS_ADMIN",
+    "SYS_MODULE",
+    "SYS_NICE"
   ]
 }

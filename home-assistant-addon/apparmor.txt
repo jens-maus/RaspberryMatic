@@ -12,6 +12,8 @@ profile hassos_ssh_configurator_addon flags=(attach_disconnected,mediate_deleted
   capability setgid,
   capability setuid,
   capability dac_override,
+  capability sys_admin,
+  capability sys_nice
 
   # S6-Overlay
   /bin/** ix,

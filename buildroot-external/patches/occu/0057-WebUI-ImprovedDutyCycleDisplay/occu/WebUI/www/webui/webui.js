@@ -28901,11 +28901,15 @@ showDutyCycle = function() {
     var ifaceBidCosRF = "BidCos-RF",
       ifaceHmIPRF = "HmIP-RF",
       arInterfaceDutyCycle = {},
+      arInterfaceCarrierSense = {},
       showPartingLine = false,
       dcUnit = "%",
       dcNotAvailable = -1,
+      csNotAvailable = -1,
       dcWarn  = 69;  // Warning when dc >= 70%
       dcAlarm = 89;  // Attention when dc >= 90%
+      csWarn  = 80;  // Warning when cs >= 80%
+      csAlarm = 98;  // Attention when cs >= 98%
 
       homematic("Interface.getDutyCycle", {}, function(dcArray) {
         if(jQuery.isArray(dcArray)) {
@@ -28914,32 +28918,39 @@ showDutyCycle = function() {
               dutyCycleAddrElm = jQuery("#dutyCycleAddr"+index),
               trDutyCycle = jQuery("[name='trDutyCycle"+index+"']"),
               dutyCycleBar = jQuery("[name='dutyCycleBar"+index+"']"),
+              carrierSenseValElm = jQuery("#carrierSenseVal"+index),
+              carrierSenseBar = jQuery("[name='carrierSenseBar"+index+"']"),
+              carrierSenseCol = jQuery("[name='carrierSenseCol"+index+"']"),
               trPartingLineElm = jQuery("#partingLine1"),
+              csVal,
               dcVal;
 
             if (typeof iface.dutyCycle !== "undefined") {
               dcVal = Math.floor(iface.dutyCycle);
+              csVal = Math.floor(iface.carrierSense);
               conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + " " + dcUnit);
+              conInfo("carrierSense - " + ifaceBidCosRF + ": " + csVal + " " + dcUnit);
               arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
+              arInterfaceCarrierSense[ifaceBidCosRF] = ((csVal >= 0) && (csVal <= 100)) ? csVal : csNotAvailable;
             } else {
               conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
               arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
             }
 
             if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
-              dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
+              dutyCycleValElm.text("DC: "+arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
               if (iface.type === "CCU2") {
-                dutyCycleAddrElm.text("DutyCycle CCU:");
+                dutyCycleAddrElm.text("CCU:");
               } else if(iface.type === "HMIP-HAP") {
                 if(iface.name !== "") {
-                  dutyCycleAddrElm.text("DutyCycle HAP ("+iface.name+"):");
+                  dutyCycleAddrElm.text("HAP ("+iface.name+"):");
                 } else {
-                  dutyCycleAddrElm.text("DutyCycle HAP ("+iface.address+"):");
+                  dutyCycleAddrElm.text("HAP ("+iface.address+"):");
                 }
               } else if(iface.name !== "") {
-                dutyCycleAddrElm.text("DutyCycle LGW ("+iface.name+"):");
+                dutyCycleAddrElm.text("LGW ("+iface.name+"):");
               } else {
-                dutyCycleAddrElm.text("DutyCycle LGW ("+iface.address+"):");
+                dutyCycleAddrElm.text("LGW ("+iface.address+"):");
               }
 
               dutyCycleBar.css("width", arInterfaceDutyCycle[ifaceBidCosRF]+"%");
@@ -28953,6 +28964,26 @@ showDutyCycle = function() {
                 dutyCycleBar.addClass("progress-bar-warning");
               } else {
                 dutyCycleBar.addClass("progress-bar-success");
+              }
+              
+              if (arInterfaceCarrierSense[ifaceBidCosRF] != csNotAvailable) {
+                carrierSenseValElm.text("CS: "+arInterfaceCarrierSense[ifaceBidCosRF] + " " + dcUnit);
+                carrierSenseBar.css("width", arInterfaceCarrierSense[ifaceBidCosRF]+"%");
+                
+                carrierSenseBar.removeClass("progress-bar-info");
+                carrierSenseBar.removeClass("progress-bar-warning");
+                carrierSenseBar.removeClass("progress-bar-danger");
+  
+                if (arInterfaceCarrierSense[ifaceBidCosRF] > csAlarm) {
+                  carrierSenseBar.addClass("progress-bar-danger");
+                } else if (arInterfaceCarrierSense[ifaceBidCosRF] > csWarn) {
+                  carrierSenseBar.addClass("progress-bar-warning");
+                } else {
+                  carrierSenseBar.addClass("progress-bar-info");
+                }
+
+              } else {
+                carrierSenseCol.css({"display":"none"});  
               }
               trPartingLineElm.show();
               showPartingLine = true;

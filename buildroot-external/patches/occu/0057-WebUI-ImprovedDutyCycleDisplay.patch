@@ -1,12 +1,3 @@
---- bin/updateDCVars.tcl.orig
-+++ bin/updateDCVars.tcl
-@@ -347,6 +347,7 @@
-         append jsonResult ",\"name\":[json_toString $name]"
-         append jsonResult ",\"sysVar\":[json_toString $sysVarName]"
-         append jsonResult ",\"dutyCycle\":[json_toString $gateway(DUTY_CYCLE)]"
-+        append jsonResult ",\"carrierSense\":[json_toString $carriersense]"
-         append jsonResult ",\"type\":[json_toString $gateway(TYPE)]"
-         append jsonResult "\}
 --- occu/WebUI/www/api/methods.conf.orig
 +++ occu/WebUI/www/api/methods.conf
 @@ -199,6 +199,13 @@
@@ -7177,7 +7168,8 @@
 +                dutyCycleBar.addClass("progress-bar-danger");
 +              } else if (arInterfaceDutyCycle[ifaceBidCosRF] > dcWarn) {
 +                dutyCycleBar.addClass("progress-bar-warning");
-+              } else {
+               } else {
+-                trDutyCycle.removeClass("attention");
 +                dutyCycleBar.addClass("progress-bar-success");
 +              }
 +              
@@ -7197,8 +7189,7 @@
 +                  carrierSenseBar.addClass("progress-bar-info");
 +                }
 +
-               } else {
--                trDutyCycle.removeClass("attention");
++              } else {
 +                carrierSenseCol.css({"display":"none"});  
                }
                trPartingLineElm.show();

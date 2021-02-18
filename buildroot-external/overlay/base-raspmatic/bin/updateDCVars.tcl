@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.12
+# DutyCycle Script v3.13
 # Copyright (c) 2018-2021 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -347,6 +347,7 @@ if {$portFound == 0} {
         append jsonResult ",\"name\":[json_toString $name]"
         append jsonResult ",\"sysVar\":[json_toString $sysVarName]"
         append jsonResult ",\"dutyCycle\":[json_toString $gateway(DUTY_CYCLE)]"
+        append jsonResult ",\"carrierSense\":[json_toString $carriersense]"
         append jsonResult ",\"type\":[json_toString $gateway(TYPE)]"
         append jsonResult "\}"
 

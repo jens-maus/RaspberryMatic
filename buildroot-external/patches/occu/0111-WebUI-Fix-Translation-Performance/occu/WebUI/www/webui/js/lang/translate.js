@@ -2,6 +2,7 @@
 // This one should not be initialized for each lang, 
 // as that is lateron used for indication of loaded Ressources
 var EscapedLangDict = {};
+
 function isNoProgramScript(cont) {
   if ((cont == "#prgrulecontent") || (jQuery("#scrinp").length > 0)) {
     return false;
@@ -74,11 +75,10 @@ function translatePage(container, callback) {
  */
 function translateKey(key, lang) {
   lang = lang ?? getLang();
-  // TH 2021-02-17: This check is more performant then always processing all Keys.
+  // This check is more performant then always processing all Keys.
   if(EscapedLangDict[lang] === undefined) {
     if (Object.keys(HMIdentifier[lang]).length === 0 ||
-    Object.keys(langJSON[lang]).length === 0
-    ) {
+        Object.keys(langJSON[lang]).length === 0) {
       loadTextResource();
     } else {
       EscapedLangDict[lang] = {};
@@ -133,8 +133,9 @@ function translateJSTemplate(container) {
           e.setAttribute("title", translatedKey);
           break;
         default:
-          // All other elements are getting the innerHTML replaced
-          // TH: 2021-02-17 Replacing textContent with translation is faster
+          // Replacing textContent with translation is faster
+          // but elements with html tags <..> have to be stored
+          // using innerHTML
           if(translatedKey.indexOf("<") >= 0) {
             e.innerHTML = translatedKey;
           } else {

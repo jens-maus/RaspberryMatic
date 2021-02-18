@@ -1,3 +1,12 @@
+--- bin/updateDCVars.tcl.orig
++++ bin/updateDCVars.tcl
+@@ -347,6 +347,7 @@
+         append jsonResult ",\"name\":[json_toString $name]"
+         append jsonResult ",\"sysVar\":[json_toString $sysVarName]"
+         append jsonResult ",\"dutyCycle\":[json_toString $gateway(DUTY_CYCLE)]"
++        append jsonResult ",\"carrierSense\":[json_toString $carriersense]"
+         append jsonResult ",\"type\":[json_toString $gateway(TYPE)]"
+         append jsonResult "\}
 --- occu/WebUI/www/api/methods.conf.orig
 +++ occu/WebUI/www/api/methods.conf
 @@ -199,6 +199,13 @@
@@ -61,7 +70,7 @@
      <script type="text/javascript" src="/webui/js/extern/jquery.blockUI.js"></script>
 --- occu/WebUI/www/rega/pages/tabs/startpage.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/startpage.htm
-@@ -250,14 +250,104 @@
+@@ -250,14 +250,120 @@
                }
               %>
  
@@ -76,99 +85,115 @@
 -              <td> <div id="dutyCycleProgress" class="dutyCycleProgress" align="right"><div id="dutyCycleProgressBar" class="dutyCycleProgressBar" style='width:100%;'></div></div> </td>
 +            <tr name="trDutyCycle0" style="display: none">
 +              <td id="dutyCycleAddr0" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar0" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal0"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar0" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal0"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol0"><div name="carrierSenseBar0" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal0"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle1" style="display: none">
 +              <td id="dutyCycleAddr1" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar1" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal1"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar1" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal1"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol1"><div name="carrierSenseBar1" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal1"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle2" style="display: none">
 +              <td id="dutyCycleAddr2" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar2" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal2"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar2" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal2"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol2"><div name="carrierSenseBar2" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal2"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle3" style="display: none">
 +              <td id="dutyCycleAddr3" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar3" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal3"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar3" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal3"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol3"><div name="carrierSenseBar3" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal3"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle4" style="display: none">
 +              <td id="dutyCycleAddr4" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar4" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal4"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar4" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal4"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol4"><div name="carrierSenseBar4" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal4"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle5" style="display: none">
 +              <td id="dutyCycleAddr5" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar5" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal5"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar5" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal5"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol5"><div name="carrierSenseBar5" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal5"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle6" style="display: none">
 +              <td id="dutyCycleAddr6" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar6" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal6"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar6" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal6"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol6"><div name="carrierSenseBar6" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal6"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle7" style="display: none">
 +              <td id="dutyCycleAddr7" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar7" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal7"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar7" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal7"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol7"><div name="carrierSenseBar7" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal7"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle8" style="display: none">
 +              <td id="dutyCycleAddr8" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar8" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal8"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar8" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal8"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol8"><div name="carrierSenseBar8" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal8"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle9" style="display: none">
 +              <td id="dutyCycleAddr9" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar9" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal9"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar9" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal9"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol9"><div name="carrierSenseBar9" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal9"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle10" style="display: none">
 +              <td id="dutyCycleAddr10" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar10" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal10"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar10" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal10"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol10"><div name="carrierSenseBar10" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal10"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle11" style="display: none">
 +              <td id="dutyCycleAddr11" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar11" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal11"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar11" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal11"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol11"><div name="carrierSenseBar11" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal11"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle12" style="display: none">
 +              <td id="dutyCycleAddr12" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar12" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal12"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar12" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal12"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol12"><div name="carrierSenseBar12" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal12"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle13" style="display: none">
 +              <td id="dutyCycleAddr13" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar13" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal13"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar13" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal13"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol13"><div name="carrierSenseBar13" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal13"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle14" style="display: none">
 +              <td id="dutyCycleAddr14" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar14" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal14"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar14" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal14"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol14"><div name="carrierSenseBar14" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal14"></span></div></div></td> 
++              </tr></table></td>
 +            </tr>
 +            <tr name="trDutyCycle15" style="display: none">
 +              <td id="dutyCycleAddr15" style="vertical-align: top;text-align: left;"</td>
-+              <td id="hmBootstrap">
-+                <div class="progress"><div name="dutyCycleBar15" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal15"></span></div>
-+              </td>
++              <td><table style="width:100%"><tr>
++                <td id="hmBootstrap" style="width:70%;margin-right: 0px;padding-right: 0px;"><div class="progress"><div name="dutyCycleBar15" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="dutyCycleVal15"></span></div></div></td>
++                <td id="hmBootstrap" style="width:30%"><div class="progress" name="carrierSenseCol15"><div name="carrierSenseBar15" class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%"><span id="carrierSenseVal15"></span></div></div></td> 
++              </tr></table></td>
              </tr>
  
            </table>
@@ -7057,12 +7082,19 @@
    border:1px solid $_(black); /* black */
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -28904,32 +28904,22 @@
+@@ -28901,71 +28901,103 @@
+     var ifaceBidCosRF = "BidCos-RF",
+       ifaceHmIPRF = "HmIP-RF",
+       arInterfaceDutyCycle = {},
++      arInterfaceCarrierSense = {},
        showPartingLine = false,
        dcUnit = "%",
        dcNotAvailable = -1,
++      csNotAvailable = -1,
 +      dcWarn  = 69;  // Warning when dc >= 70%
        dcAlarm = 89;  // Attention when dc >= 90%
++      csWarn  = 80;  // Warning when cs >= 80%
++      csAlarm = 98;  // Attention when cs >= 98%
  
 -    homematic("Interface.listBidcosInterfaces", {"interface": ifaceBidCosRF}, function (BidCosIFaces) {
 -      if (BidCosIFaces) {
@@ -7088,9 +7120,13 @@
 +              dutyCycleAddrElm = jQuery("#dutyCycleAddr"+index),
 +              trDutyCycle = jQuery("[name='trDutyCycle"+index+"']"),
 +              dutyCycleBar = jQuery("[name='dutyCycleBar"+index+"']"),
++              carrierSenseValElm = jQuery("#carrierSenseVal"+index),
++              carrierSenseBar = jQuery("[name='carrierSenseBar"+index+"']"),
++              carrierSenseCol = jQuery("[name='carrierSenseCol"+index+"']"),
                trPartingLineElm = jQuery("#partingLine1"),
 -              dcVal,
 -              width, value;
++              csVal,
 +              dcVal;
  
 -            if (typeof iFace.dutyCycle != "undefined") {
@@ -7098,11 +7134,14 @@
 -              conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + dcUnit);
 +            if (typeof iface.dutyCycle !== "undefined") {
 +              dcVal = Math.floor(iface.dutyCycle);
++              csVal = Math.floor(iface.carrierSense);
 +              conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + " " + dcUnit);
++              conInfo("carrierSense - " + ifaceBidCosRF + ": " + csVal + " " + dcUnit);
                arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
++              arInterfaceCarrierSense[ifaceBidCosRF] = ((csVal >= 0) && (csVal <= 100)) ? csVal : csNotAvailable;
              } else {
                conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
-@@ -28937,35 +28927,46 @@
+               arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
              }
  
              if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
@@ -7110,19 +7149,19 @@
 -
 -              width = parseInt(dutyCycleProgressElem.css("width"));
 -              value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
-+              dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
++              dutyCycleValElm.text("DC: "+arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
 +              if (iface.type === "CCU2") {
-+                dutyCycleAddrElm.text("DutyCycle CCU:");
++                dutyCycleAddrElm.text("CCU:");
 +              } else if(iface.type === "HMIP-HAP") {
 +                if(iface.name !== "") {
-+                  dutyCycleAddrElm.text("DutyCycle HAP ("+iface.name+"):");
++                  dutyCycleAddrElm.text("HAP ("+iface.name+"):");
 +                } else {
-+                  dutyCycleAddrElm.text("DutyCycle HAP ("+iface.address+"):");
++                  dutyCycleAddrElm.text("HAP ("+iface.address+"):");
 +                }
 +              } else if(iface.name !== "") {
-+                dutyCycleAddrElm.text("DutyCycle LGW ("+iface.name+"):");
++                dutyCycleAddrElm.text("LGW ("+iface.name+"):");
 +              } else {
-+                dutyCycleAddrElm.text("DutyCycle LGW ("+iface.address+"):");
++                dutyCycleAddrElm.text("LGW ("+iface.address+"):");
 +              }
  
 -              window.setTimeout(function () {
@@ -7138,9 +7177,29 @@
 +                dutyCycleBar.addClass("progress-bar-danger");
 +              } else if (arInterfaceDutyCycle[ifaceBidCosRF] > dcWarn) {
 +                dutyCycleBar.addClass("progress-bar-warning");
++              } else {
++                dutyCycleBar.addClass("progress-bar-success");
++              }
++              
++              if (arInterfaceCarrierSense[ifaceBidCosRF] != csNotAvailable) {
++                carrierSenseValElm.text("CS: "+arInterfaceCarrierSense[ifaceBidCosRF] + " " + dcUnit);
++                carrierSenseBar.css("width", arInterfaceCarrierSense[ifaceBidCosRF]+"%");
++                
++                carrierSenseBar.removeClass("progress-bar-info");
++                carrierSenseBar.removeClass("progress-bar-warning");
++                carrierSenseBar.removeClass("progress-bar-danger");
++  
++                if (arInterfaceCarrierSense[ifaceBidCosRF] > csAlarm) {
++                  carrierSenseBar.addClass("progress-bar-danger");
++                } else if (arInterfaceCarrierSense[ifaceBidCosRF] > csWarn) {
++                  carrierSenseBar.addClass("progress-bar-warning");
++                } else {
++                  carrierSenseBar.addClass("progress-bar-info");
++                }
++
                } else {
 -                trDutyCycle.removeClass("attention");
-+                dutyCycleBar.addClass("progress-bar-success");
++                carrierSenseCol.css({"display":"none"});  
                }
                trPartingLineElm.show();
                showPartingLine = true;

@@ -58,7 +58,7 @@
  
      // Set the html of an element or the title of an image only if a valid translation is available.
      if (origKey != translatedKey) {
-@@ -109,11 +130,12 @@
+@@ -109,11 +130,16 @@
        switch (this.tagName) {
          case "IMG":
            // An image gets the tooltip translated.
@@ -69,7 +69,11 @@
            // All other elements are getting the innerHTML replaced
 -          jQuery(this).html(translatedKey);
 +          // TH: 2021-02-17 Replacing textContent with translation is faster
-+          e.textContent = translatedKey;
++          if(translatedKey.indexOf("<") >= 0) {
++            e.innerHTML = translatedKey;
++          } else {
++            e.textContent = translatedKey;
++          }
            break;
        }
      }

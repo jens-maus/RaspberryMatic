@@ -135,7 +135,11 @@ function translateJSTemplate(container) {
         default:
           // All other elements are getting the innerHTML replaced
           // TH: 2021-02-17 Replacing textContent with translation is faster
-          e.textContent = translatedKey;
+          if(translatedKey.indexOf("<") >= 0) {
+            e.innerHTML = translatedKey;
+          } else {
+            e.textContent = translatedKey;
+          }
           break;
       }
     }

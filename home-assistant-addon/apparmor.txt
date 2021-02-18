@@ -13,6 +13,7 @@ profile hassos_raspberrymatic_addon flags=(attach_disconnected,mediate_deleted) 
   capability setuid,
   capability dac_override,
   capability sys_admin,
+  capability sys_module,
   capability sys_nice,
 
   # S6-Overlay

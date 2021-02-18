@@ -7168,8 +7168,7 @@
 +                dutyCycleBar.addClass("progress-bar-danger");
 +              } else if (arInterfaceDutyCycle[ifaceBidCosRF] > dcWarn) {
 +                dutyCycleBar.addClass("progress-bar-warning");
-               } else {
--                trDutyCycle.removeClass("attention");
++              } else {
 +                dutyCycleBar.addClass("progress-bar-success");
 +              }
 +              
@@ -7189,7 +7188,8 @@
 +                  carrierSenseBar.addClass("progress-bar-info");
 +                }
 +
-+              } else {
+               } else {
+-                trDutyCycle.removeClass("attention");
 +                carrierSenseCol.css({"display":"none"});  
                }
                trPartingLineElm.show();

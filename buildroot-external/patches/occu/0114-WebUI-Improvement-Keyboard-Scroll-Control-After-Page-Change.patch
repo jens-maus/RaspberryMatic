@@ -1,0 +1,35 @@
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -156,6 +156,8 @@
+ {
+     background-color: $_(contentBackground);
+     overflow: auto;
++    /* Prevent chrome from outlining this by focus */
++    outline: none;
+ }
+ 
+ /* Kopfzeile */
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -6867,6 +6867,7 @@
+ 
+       var content = document.createElement("div");
+       content.id = "content";
++      content.tabIndex = 1;
+       Element.setStyle(content, {cursor: "wait"});
+       layer0.appendChild(content);
+ 
+@@ -7115,7 +7116,12 @@
+     this.currentPage         = page;
+     this.currentPageOptions  = options;
+     
+-    this.currentPage.enter(options);
++    this.currentPage.enter(options); 
++    window.setTimeout(() => {
++      if(jQuery(':focus').length === 0) {
++        jQuery('#content')[0].focus();
++      }
++    }, 200);
+   },
+   
+   reload: function()

@@ -77,6 +77,13 @@ stop() {
     start-stop-daemon -K -q -p ${PIDFILE}
     rm -f ${PIDFILE}
     echo "OK"
+
+    # make sure to unload eq3_char_loop which
+    # is necessary for docker-based environments
+    if [[ -c /dev/eq3loop ]]; then
+      # load eq3_char_loop kernel module
+      rmmod eq3_char_loop 2>/dev/null
+    fi
   else
     echo "not started"
   fi

@@ -487,6 +487,26 @@ stop() {
     /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p "${HM_HMIP_DEVNODE}" -bl -l 1
   fi
 
+  # for the docker/OCI based platforms it might be a good
+  # idea to try to unload the kernel modules which we
+  # loaded ourself here so that everything is cleared once
+  # the docker container stopped.
+
+  # unload dummy_rx8130 kernel module
+  if grep -Eq "^dummy_rx8130 " /proc/modules; then
+    rmmod dummy_rx8130 2>/dev/null
+  fi
+
+  # unload rpi_rf_mod_led kernel module
+  if grep -Eq "^rpi_rf_mod_led " /proc/modules; then
+    rmmod rpi_rf_mod_led 2>/dev/null
+  fi
+
+  # unload cp210x kernel module
+  if grep -Eq "^cp210x " /proc/modules; then
+    rmmod cp210x 2>/dev/null
+  fi
+
   # make sure the hb-rf-eth kernel module will stop trying to connect
   # to an associated HB-RF-ETH or otherwise a host machine (in case of
   # a docker environment) will continue to connect to the HB-RF-ETH
@@ -496,6 +516,8 @@ stop() {
     # since the hb-rf-eth does not have a disconnect parameter
     # we send a simple '-' which should disconnect it.
     echo - >/sys/module/hb_rf_eth/parameters/connect 2>/dev/null
+
+    # unload hb-rf-eth module as well
     rmmod hb-rf-eth 2>/dev/null
   fi
 }

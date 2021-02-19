@@ -1,5 +1,5 @@
---- occu/WebUI/www/config/easymodes/hmipChannelConfigDialogs.tcl.orig
-+++ occu/WebUI/www/config/easymodes/hmipChannelConfigDialogs.tcl
+--- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
 @@ -1979,7 +1979,7 @@
          append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]<input id=\"comfortOld\" type=\"hidden\" value=\"$ps($param)\"</td>"
  

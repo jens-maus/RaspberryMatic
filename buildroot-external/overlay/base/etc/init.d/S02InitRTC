@@ -129,6 +129,9 @@ start() {
 stop() {
   echo -n "Cleaning up RTC Clock: "
 
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
   if [[ -c /dev/rtc0 ]]; then
     if [[ "${HM_HOST}" != "oci" ]]; then
       hwclock --systohc --utc

@@ -19,12 +19,10 @@
        Element.setStyle(content, {cursor: "wait"});
        layer0.appendChild(content);
  
-@@ -7115,7 +7116,12 @@
-     this.currentPage         = page;
+@@ -7116,6 +7117,11 @@
      this.currentPageOptions  = options;
      
--    this.currentPage.enter(options);
-+    this.currentPage.enter(options); 
+     this.currentPage.enter(options);
 +    window.setTimeout(() => {
 +      if(jQuery(':focus').length === 0) {
 +        jQuery('#content')[0].focus();

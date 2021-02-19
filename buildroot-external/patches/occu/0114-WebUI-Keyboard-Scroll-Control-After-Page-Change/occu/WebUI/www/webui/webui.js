@@ -7116,7 +7116,7 @@ WebUI = Singleton.create({
     this.currentPage         = page;
     this.currentPageOptions  = options;
     
-    this.currentPage.enter(options); 
+    this.currentPage.enter(options);
     window.setTimeout(() => {
       if(jQuery(':focus').length === 0) {
         jQuery('#content')[0].focus();

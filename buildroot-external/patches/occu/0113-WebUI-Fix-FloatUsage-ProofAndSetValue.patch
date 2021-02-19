@@ -1,0 +1,47 @@
+--- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
+@@ -1979,7 +1979,7 @@
+         append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]<input id=\"comfortOld\" type=\"hidden\" value=\"$ps($param)\"</td>"
+ 
+         append html "<script type=\"text/javascript\">"
+-          append html "jQuery(\"#separate_$CHANNEL\_$prn\").bind(\"blur\",function() {ProofAndSetValue(this.id, this.id, [getMinValue $param], [getMaxValue $param], 1);isEcoLTComfort(this.name);});"
++          append html "jQuery(\"#separate_$CHANNEL\_$prn\").bind(\"blur\",function() {ProofAndSetValue(this.id, this.id, \"[getMinValue $param]\", \"[getMaxValue $param]\", 1);isEcoLTComfort(this.name);});"
+         append html "</script>"
+ 
+         # right
+@@ -1990,7 +1990,7 @@
+         append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
+ 
+         append html "<script type=\"text/javascript\">"
+-          append html "jQuery(\"#separate_$CHANNEL\_$prn\").bind(\"blur\",function() {ProofAndSetValue(this.id, this.id, [getMinValue $param], [getMaxValue $param], 1);isEcoLTComfort(this.name);});"
++          append html "jQuery(\"#separate_$CHANNEL\_$prn\").bind(\"blur\",function() {ProofAndSetValue(this.id, this.id, \"[getMinValue $param]\", \"[getMaxValue $param]\", 1);isEcoLTComfort(this.name);});"
+         append html "</script>"
+         append html "</tr>"
+ 
+@@ -2095,7 +2095,7 @@
+         append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]<input id=\"comfortOld\" type=\"hidden\" value=\"$ps($param)\"</td>"
+ 
+         append html "<script type=\"text/javascript\">"
+-          append html "jQuery(\"#separate_$CHANNEL\_$prn\").bind(\"blur\",function() {ProofAndSetValue(this.id, this.id, [getMinValue $param], [getMaxValue $param], 1);isEcoLTComfort(this.name);});"
++          append html "jQuery(\"#separate_$CHANNEL\_$prn\").bind(\"blur\",function() {ProofAndSetValue(this.id, this.id, \"[getMinValue $param]\", \"[getMaxValue $param]\", 1);isEcoLTComfort(this.name);});"
+         append html "</script>"
+       append html "</tr>"
+     }
+@@ -2486,7 +2486,7 @@
+         append html "<td>\${stringTableCondThresholdLo}</td>"
+         append html "<td>"
+ 
+-          append html "<input id=\"thresLo_$chn\_$prn\" type=\"text\" size=\"5\" value=\"[expr $ps($param). / 100]\" onblur=\"ProofAndSetValue(this.id, this.id, 0, [getUserDefinedMaxValue $devType], 1); jQuery(this).next().val(this.value * 100)\"/>&nbsp;[getUserDefinedCondTXThresholdUnitMinMaxDescr $devType $chn]"
++          append html "<input id=\"thresLo_$chn\_$prn\" type=\"text\" size=\"5\" value=\"[expr $ps($param). / 100]\" onblur=\"ProofAndSetValue(this.id, this.id, 0, \"[getUserDefinedMaxValue $devType]\", 1); jQuery(this).next().val(this.value * 100)\"/>&nbsp;[getUserDefinedCondTXThresholdUnitMinMaxDescr $devType $chn]"
+           append html "[getTextField $param $ps($param) $chn $prn class=\"hidden\"]"
+ 
+         append html "</td>"
+@@ -2500,7 +2500,7 @@
+         append html "<td>\${stringTableCondThresholdHi}</td>"
+         append html "<td>"
+ 
+-          append html "<input id=\"thresHi_$chn\_$prn\" type=\"text\" size=\"5\" value=\"[expr $ps($param). / 100]\" onblur=\"ProofAndSetValue(this.id, this.id, 0, [getUserDefinedMaxValue $devType], 1); jQuery(this).next().val(this.value * 100)\"/>&nbsp;[getUserDefinedCondTXThresholdUnitMinMaxDescr $devType $chn]"
++          append html "<input id=\"thresHi_$chn\_$prn\" type=\"text\" size=\"5\" value=\"[expr $ps($param). / 100]\" onblur=\"ProofAndSetValue(this.id, this.id, 0, \"[getUserDefinedMaxValue $devType]\", 1); jQuery(this).next().val(this.value * 100)\"/>&nbsp;[getUserDefinedCondTXThresholdUnitMinMaxDescr $devType $chn]"
+           append html "[getTextField $param $ps($param) $chn $prn class=\"hidden\"]"
+ 
+        append html "</td>"

@@ -117,11 +117,6 @@ init_system() {
     modprobe bcm2835_wdt nowayout=1 heartbeat=15
   fi
 
-  if [[ "${HM_HOST}" != "oci" ]]; then
-    # load tunneling interface support
-    modprobe tun
-  fi
-
   # if the userfs is located on a non-mmc device (not on a SD card)
   # we can safely use the old /usr/local/sdcard directory path as
   # the general storagePath for diagrams and daily backups

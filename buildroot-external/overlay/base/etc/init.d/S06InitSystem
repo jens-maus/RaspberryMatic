@@ -36,25 +36,18 @@ init_system() {
     if [[ -n "${HM_RUNNING_IN_HA}" ]]; then
       HOME_ASSISTANT_ADDON_DATA="/data"
       if [[ -f "${HOME_ASSISTANT_ADDON_DATA}/options.json" ]]; then
-        echo "Storing user data in ${HOME_ASSISTANT_ADDON_DATA} (Home Assistant Add-On)"
+        echo -n "storing user data in ${HOME_ASSISTANT_ADDON_DATA} (Home Assistant Add-On), "
         mount -o bind "${HOME_ASSISTANT_ADDON_DATA}" /usr/local
       fi
+    fi
 
-      # remount /dev as rw to allow multimacd to create mmd_bidcos/mmd_hmip
-      # later on and unmount /dev_host on HA because not required.
-      mount -o rw,remount /dev
-      umount /dev_host
-    else
-      # in a standard docker/OCI environment we have an exposed /dev_host path
-      # which links to the /dev of the host, thus we relink it accordingly.
-      DEV_HOST="/dev_host"
-      if [[ -d "${DEV_HOST}" ]]; then
-        # To avoid sharing the whole host /dev with container it is mounted in a /dev_host
-        # This means we have to manually symlink the dynamic devices
-        for device in mmd_bidcos mmd_hmip usb; do
-          ln -s "${DEV_HOST}/${device}" "/dev/${device}"
-        done
-      fi
+    # To avoid sharing the whole host /dev with the container we
+    # mount devtmps in /dev_host and symlink the necessary devices
+    mount -o noatime -t devtmpfs devtmpfs /dev_host
+    if [[ -d "/dev_host" ]]; then
+      for device in raw-uart raw-uart1 eq3loop mmd_bidcos mmd_hmip usb; do
+        ln -s "/dev_host/${device}" "/dev/${device}"
+      done
     fi
 
   fi

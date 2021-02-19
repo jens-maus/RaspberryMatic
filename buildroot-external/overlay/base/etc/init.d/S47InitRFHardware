@@ -97,7 +97,7 @@ identify_rf_hardware() {
   # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
   if lsusb 2>/dev/null | grep -q 1b1f:c020; then
 
-    # Load module if not present
+    # Load module if not present (usually loaded by udev)
     if ! grep -Eq "^cp210x " /proc/modules; then
       modprobe -q cp210x
     fi
@@ -492,19 +492,24 @@ stop() {
   # loaded ourself here so that everything is cleared once
   # the docker container stopped.
 
-  # unload dummy_rx8130 kernel module
-  if grep -Eq "^dummy_rx8130 " /proc/modules; then
-    rmmod dummy_rx8130 2>/dev/null
+  if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] &&
+     echo "${HM_HMRF_DEVTYPE}" | grep -qi HB-RF-; then
+    HBRF_DEVNODE=$(basename "${HM_HMRF_DEVNODE}")
+  elif [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]] &&
+       echo "${HM_HMIP_DEVTYPE}" | grep -qi HB-RF-; then
+    HBRF_DEVNODE=$(basename "${HM_HMIP_DEVNODE}")
   fi
 
-  # unload rpi_rf_mod_led kernel module
-  if grep -Eq "^rpi_rf_mod_led " /proc/modules; then
-    rmmod rpi_rf_mod_led 2>/dev/null
-  fi
+  if [[ -n "${HBRF_DEVNODE}" ]]; then
+    # unload dummy_rx8130 kernel module
+    if grep -Eq "^dummy_rx8130 " /proc/modules; then
+      rmmod dummy_rx8130 2>/dev/null
+    fi
 
-  # unload cp210x kernel module
-  if grep -Eq "^cp210x " /proc/modules; then
-    rmmod cp210x 2>/dev/null
+    # unload rpi_rf_mod_led kernel module
+    if grep -Eq "^rpi_rf_mod_led " /proc/modules; then
+      rmmod rpi_rf_mod_led 2>/dev/null
+    fi
   fi
 
   # make sure the hb-rf-eth kernel module will stop trying to connect

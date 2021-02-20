@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.14
+# DutyCycle Script v3.15
 # Copyright (c) 2018-2021 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -284,6 +284,7 @@ if {$portFound == 0} {
         set gateways [concat $gateways $response(STDOUT)]
       }
       set ccuCarrierSense $response(ccuCarrierSense)
+      unset response
     }
 
     # catch all dutyCycle values in an additional JSON array
@@ -372,6 +373,7 @@ if {$portFound == 0} {
 
         puts "$infoTxt"
       }
+      unset gateway
     }
 
     # finish jsonResult array
@@ -430,6 +432,7 @@ catch {
   if {[string trim $response(STDOUT)] != ""} {
     set gateways [concat $gateways $response(STDOUT)]
   }
+  unset response
 }
 if { [llength $gateways] > 0 } {
   foreach _gateway $gateways {
@@ -447,6 +450,7 @@ if { [llength $gateways] > 0 } {
     }
 
     puts $infoTxt
+    unset gateway
   }
 }
 
@@ -472,6 +476,7 @@ if {[llength [cfg::sections]] > 1} {
 
         break
       }
+      unset gateway
     }
   }
 

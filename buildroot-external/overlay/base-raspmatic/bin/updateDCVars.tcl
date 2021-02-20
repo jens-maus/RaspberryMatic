@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.13
+# DutyCycle Script v3.14
 # Copyright (c) 2018-2021 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -234,8 +234,8 @@ if {$portFound == 0} {
           foreach(chn, oDev.Channels()) {
             object oChn = dom.GetObject(chn);
             if(oChn.Address().Contains(':0')) {
-              integer dcValue = 0;
-              integer csValue = 0;
+              integer dcValue = -1;
+              integer csValue = -1;
               integer connected = 0;
               object dp = oChn.DPByControl('MAINTENANCE.UNREACH');
               if(dp) {

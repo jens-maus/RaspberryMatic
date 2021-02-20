@@ -49,22 +49,32 @@ start() {
   if [[ -n "${HM_HMIP_DEV}" ]] && [[ -n "${HM_HMRF_DEV}" ]] &&
      ( ( ! echo "${HM_HMIP_DEV}" | grep -q "HMIP-RFUSB" ) || [[ "${HM_HMRF_DEV}" != "HM-CFG-USB-2" ]] ); then
 
-    # run init function
-    init
+    # we need to check if the system has CONFIG_RT_GROUP_SCHED enabled
+    # and enough cpu.rt_runtime_us shares assigned or otherwise
+    # multimacd startup will fail as it uses sched_setscheduler() to
+    # raise the real-time priority for processing things with low latency
+    if [[ ! -e /sys/fs/cgroup/cpu/cpu.rt_runtime_us ]] ||
+       [[ $(cat /sys/fs/cgroup/cpu/cpu.rt_runtime_us) -gt 0 ]]; then
 
-    # check if eq3loop is present
-    if [[ -c /dev/eq3loop ]]; then
-      # get the current syslog settings
-      [[ -r /etc/config/syslog ]] && . /etc/config/syslog
+      # run init function
+      init
 
-      # adjust the oom score (which is inherited by start-stop-daemon)
-      # to ensure that others are killed first in case of low memory situations
-      echo -900 >/proc/$$/oom_score_adj 2>/dev/null
+      # check if eq3loop is present
+      if [[ -c /dev/eq3loop ]]; then
+        # get the current syslog settings
+        [[ -r /etc/config/syslog ]] && . /etc/config/syslog
 
-      start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
-      waitStartupComplete
+        # adjust the oom score (which is inherited by start-stop-daemon)
+        # to ensure that others are killed first in case of low memory situations
+        echo -900 >/proc/$$/oom_score_adj 2>/dev/null
+
+        start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
+        waitStartupComplete
+      else
+        echo "ERROR: /dev/eq3loop missing"
+      fi
     else
-      echo "/dev/eq3loop missing"
+      echo "ERROR: not enough real-time shares (cpu.rt_runtime_us == 0)"
     fi
   else
     echo "not required"

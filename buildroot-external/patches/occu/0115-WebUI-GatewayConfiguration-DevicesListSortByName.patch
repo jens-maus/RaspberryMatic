@@ -1,0 +1,11 @@
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -22613,7 +22613,7 @@
+     var i, len, device;
+     this.m_devices = [];
+     
+-    var devices = DeviceList.listDevices();
++    var devices = DeviceList.listDevices().ex_sortBy("name");
+     
+     for (i = 0, len = devices.length; i < len; i++)
+     {

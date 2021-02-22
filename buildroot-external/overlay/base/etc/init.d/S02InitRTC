@@ -21,21 +21,25 @@ init_rtc_device() {
 
   # check for RX8130-CE RTC clock at 0x32 (Epson RX8130CE) which
   # is the RPI-RF-MOD onboard RTC.
-  if i2cget -y 1 0x32 0x32 2>/dev/null >/dev/null; then
-    if modprobe rtc-rx8130; then
-      HM_RTC="rx8130"
+  if [[ ! -e /sys/module/rtc_rx8130 ]]; then
+    if i2cget -y 1 0x32 0x32 2>/dev/null >/dev/null; then
+      modprobe rtc_rx8130
+    fi
+  fi
 
-      # we found a RX8130, thus we assume the RPI-RF-MOD to
-      # be present, thus we setup the LED GPIOs to OUT
-      if [[ -c /dev/rtc0 ]]; then
+  if [[ -e /sys/module/rtc_rx8130/drivers/i2c:rtc-rx8130/1-0032 ]]; then
+    HM_RTC="rx8130"
 
-        # setup the LEDs to show a constant yellow light
-        echo default-on >/sys/class/leds/rpi_rf_mod:green/trigger
-        echo default-on >/sys/class/leds/rpi_rf_mod:red/trigger
-        echo none >/sys/class/leds/rpi_rf_mod:blue/trigger
+    # we found a RX8130, thus we assume the RPI-RF-MOD to
+    # be present, thus we setup the LED GPIOs to OUT
+    if [[ -c /dev/rtc0 ]]; then
 
-        return 0
-      fi
+      # setup the LEDs to show a constant yellow light
+      echo default-on >/sys/class/leds/rpi_rf_mod:green/trigger
+      echo default-on >/sys/class/leds/rpi_rf_mod:red/trigger
+      echo none >/sys/class/leds/rpi_rf_mod:blue/trigger
+
+      return 0
     fi
   fi
 

@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC1090
 #
 # udev	This is a minimal non-LSB version of a UDEV startup script.  It
 #	was derived by stripping down the udev-058 LSB version for use

@@ -8,26 +8,32 @@
 # in addition to /usr/local/.doBackupRestore being present and empty
 check_backup_restore() {
 
+  LOCAL_DATA=/usr/local
+  # Home Assistant Add-on expects persistent data to be stored in /data
+  if [[ -n "${HM_RUNNING_IN_HA}" ]]; then
+      LOCAL_DATA="/data"
+  fi
+
   # only continue if .doBackupRestore file exists
-  if [[ ! -r /usr/local/.doBackupRestore ]]; then
+  if [[ ! -r "${LOCAL_DATA}/.doBackupRestore" ]]; then
     return 1
   fi
 
-  if [[ -f /usr/local/tmp/usr_local.tar.gz ]]; then
+  if [[ -f "${LOCAL_DATA}/tmp/usr_local.tar.gz" ]]; then
     # now remove the whole /usr/local, but keep /usr/local/tmp
-    find /usr/local -not -name tmp -not -name "lost+found" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
+    find "${LOCAL_DATA}" -not -name tmp -not -name "lost+found" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
 
     # unarchive the backup archive to restore everything
-    tar -C / --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz
+    tar -C / --warning=no-timestamp --no-same-owner -xf "${LOCAL_DATA}/tmp/usr_local.tar.gz"
 
-    rm -f /usr/local/.doBackupRestore
+    rm -f "${LOCAL_DATA}/.doBackupRestore"
 
     # make sure everything is written to disk
     sync
 
   else
 
-    rm -f /usr/local/.doBackupRestore
+    rm -f "${LOCAL_DATA}/.doBackupRestore"
     return 1
 
   fi

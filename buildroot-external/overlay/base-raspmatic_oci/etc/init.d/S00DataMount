@@ -11,12 +11,10 @@ start() {
   echo -n "Mounting /data as /usr/local (Home Assistant Add-On): "
 
   # Home Assistant Add-on expects persistent data to be stored in /data
-  if [[ -f "/data/options.json" ]]; then
-    mount -o bind /data /usr/local
-  fi
+  mount -o bind /data /usr/local
 
   # remount /dev as rw to allow multimacd to create mmd_bidcos/mmd_hmip
-  # later on and unmount /dev_host on HA because not required.
+  # later on
   mount -o rw,remount /dev
 
   echo "OK"

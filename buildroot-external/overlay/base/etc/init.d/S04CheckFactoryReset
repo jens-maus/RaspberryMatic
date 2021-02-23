@@ -54,10 +54,6 @@ check_factory_reset() {
   else
     # clean whole /usr/local on oci platform (usually a volume so cannot delete folder)
     find /usr/local -not -name "lost+found" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
-    # Home Assistant Add-on expects persistent data to be stored in /data
-    if [[ -n "${HM_RUNNING_IN_HA}" ]]; then
-      find /data -not -name "lost+found" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
-    fi
   fi
 
   # make sure a potential rf copro is factory

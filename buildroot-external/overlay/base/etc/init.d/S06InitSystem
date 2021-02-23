@@ -31,31 +31,14 @@ init_system() {
 
   # setup for OCI/Docker environments only
   if [[ "${HM_HOST}" == "oci" ]]; then
-
-    # Home Assistant Add-on expects persistent data to be stored in /data
-    if [[ -n "${HM_RUNNING_IN_HA}" ]]; then
-      HOME_ASSISTANT_ADDON_DATA="/data"
-      if [[ -f "${HOME_ASSISTANT_ADDON_DATA}/options.json" ]]; then
-        echo -n "storing user data in ${HOME_ASSISTANT_ADDON_DATA} (Home Assistant Add-On), "
-        mount -o bind "${HOME_ASSISTANT_ADDON_DATA}" /usr/local
-      fi
-
-      # remount /dev as rw to allow multimacd to create mmd_bidcos/mmd_hmip
-      # later on and unmount /dev_host on HA because not required.
-      mount -o rw,remount /dev
-    else
-      # docker/OCI environments
-      #
-      # To avoid sharing the whole host /dev with the container we
-      # mount devtmps in /dev_host and symlink the necessary devices
-      mount -o noatime -t devtmpfs devtmpfs /dev_host
-      if [[ -d "/dev_host" ]]; then
-        for device in raw-uart raw-uart1 eq3loop mmd_bidcos mmd_hmip usb; do
-          ln -s "/dev_host/${device}" "/dev/${device}"
-        done
-      fi
+    # To avoid sharing the whole host /dev with the container we
+    # mount devtmps in /dev_host and symlink the necessary devices
+    mount -o noatime -t devtmpfs devtmpfs /dev_host
+    if [[ -d "/dev_host" ]]; then
+      for device in raw-uart raw-uart1 eq3loop mmd_bidcos mmd_hmip usb; do
+        ln -s "/dev_host/${device}" "/dev/${device}"
+      done
     fi
-
   fi
 
   # create /media/usbX directories for automounting USB devices

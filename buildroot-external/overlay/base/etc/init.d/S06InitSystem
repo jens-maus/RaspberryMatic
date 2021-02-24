@@ -29,10 +29,10 @@ init_system() {
   mkdir -p /var/empty
   chmod 0700 /var/empty
 
-  # setup for OCI/Docker environments only
-  if [[ "${HM_HOST}" == "oci" ]]; then
+  # setup /dev_host for OCI/Docker environments (excluding HA)
+  if [[ "${HM_HOST}" == "oci" ]] && [[ -z "${HM_RUNNING_IN_HA}" ]]; then
     # To avoid sharing the whole host /dev with the container we
-    # mount devtmps in /dev_host and symlink the necessary devices
+    # mount devtmps in /dev_host and symlink the required devices
     mount -o noatime -t devtmpfs devtmpfs /dev_host
     if [[ -d "/dev_host" ]]; then
       for device in raw-uart raw-uart1 eq3loop mmd_bidcos mmd_hmip usb; do

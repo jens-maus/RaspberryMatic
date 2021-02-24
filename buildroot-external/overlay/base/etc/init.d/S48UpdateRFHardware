@@ -74,7 +74,12 @@ update_rf_hardware() {
           /usr/bin/timeout 240 /bin/eq3configcmd update-coprocessor -p "${DEVNODE}" -t HM-MOD-UART -u -f -d "${TMPDIR_FW}"
         fi
         HM_HMRF_VERSION=$(/usr/bin/timeout 30 /bin/eq3configcmd update-coprocessor -p "${DEVNODE}" -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
+
         echo "${HM_HMRF_VERSION}" >/var/rf_firmware_version
+        if [[ "${HM_HMRF_DEVNODE}" == "${HM_HMIP_DEVNODE}" ]]; then
+          HM_HMIP_VERSION=${HM_HMRF_VERSION}
+          echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
+        fi
 
         if [[ "${NEW_VERSION}" == "${HM_HMRF_VERSION}" ]]; then
           echo -n "OK"
@@ -123,8 +128,9 @@ update_rf_hardware() {
         HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts="${DEVNODE}" -jar /opt/HmIP/hmip-copro-update.jar -p "${DEVNODE}" -o -f "${LATEST_FIRMWARE}" 2>/dev/null | grep "Version:" | cut -d' ' -f5)
 
         echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
-        if [[ -z "${HM_HMRF_DEV}" ]]; then
-          echo "${HM_HMIP_VERSION}" >/var/rf_firmware_version
+        if [[ "${HM_HMRF_DEVNODE}" == "${HM_HMIP_DEVNODE}" ]]; then
+          HM_HMRF_VERSION=${HM_HMIP_VERSION}
+          echo "${HM_HMRF_VERSION}" >/var/rf_firmware_version
         fi
 
         if [[ "${NEW_VERSION}" == "${HM_HMIP_VERSION}" ]]; then

@@ -86,7 +86,7 @@
            break;
          case 4:
            iSubType = SYSVAR_STRING;
-+          pb += "string sValue = '"+$("txValue").value.replaceAll("'","\\'")+"';";
++          pb += "string sValue = '"+$("txValue").value.replace(/'/g,"\\'")+"';";
            break;
        }
        pb += "string sUnit = '"+$("txtUnit").value+"';";

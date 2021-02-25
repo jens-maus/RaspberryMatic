@@ -74,7 +74,7 @@ function translatePage(container, callback) {
  * @return {*} The translated key
  */
 function translateKey(key, lang) {
-  lang = lang ?? getLang();
+  if(null == lang) lang = getLang();
   // This check is more performant then always processing all Keys.
   if(EscapedLangDict[lang] === undefined) {
     if (Object.keys(HMIdentifier[lang]).length === 0 ||
@@ -83,7 +83,9 @@ function translateKey(key, lang) {
     } else {
       EscapedLangDict[lang] = {};
     }
-    return unescape(langJSON[lang][key] ?? key);
+    var text = langJSON[lang][key];
+    if(!text) text = key;
+    return unescape(text);
   }
   
   // Check if we already have an escaped variant of the ressource
@@ -92,7 +94,9 @@ function translateKey(key, lang) {
   }
 
   // Get ressource, escape and cach it
-  var result = unescape(langJSON[lang][key] ?? key);
+  var keyText = langJSON[lang][key];
+  if(!keyText) keyText = key;
+  var result = unescape(keyText);
   EscapedLangDict[lang][key] = result;
   return result;
 }

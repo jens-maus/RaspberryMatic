@@ -1,33 +1,26 @@
 --- occu/WebUI/www/config/easymodes/CC.js.orig
 +++ occu/WebUI/www/config/easymodes/CC.js
-@@ -292,17 +292,17 @@
- };
- 
- 
--isEcoLTComfort = function(elmName) {
-+isEcoLTComfort = function (elmName) {
+@@ -295,14 +295,14 @@
+ isEcoLTComfort = function(elmName) {
    // elmName should be e. g. TEMPERATURE_COMFORT
    var arName = elmName.split("_"),
 -  elmType = arName[1], // e.g.COMFORT
 -  isComfort = (elmType == "COMFORT") ? true : false,
 -  comfElm = jQuery("input[name='"+arName[0]+"_COMFORT']"),
--  comfValIsValid = (comfElm.attr("valvalid") == "true") ? true : false,
--  ecoElm = jQuery("input[name='"+arName[0]+"_LOWERING']"),
--  ecoValIsValid = (ecoElm.attr("valvalid") == "true") ? true : false,
++  elmType = elmName.replace(`${arName[0]}_`, ""), // e.g.LOWERING_COOLING
++  isComfort = (elmType == "LOWERING_COOLING") ? true : false,
++  comfElm = jQuery("input[name='"+arName[0]+"_LOWERING_COOLING']"),
+   comfValIsValid = (comfElm.attr("valvalid") == "true") ? true : false,
+   ecoElm = jQuery("input[name='"+arName[0]+"_LOWERING']"),
+   ecoValIsValid = (ecoElm.attr("valvalid") == "true") ? true : false,
 -  comfVal = parseInt(jQuery(comfElm[0]).val()),
 -  ecoVal = parseInt(jQuery(ecoElm[0]).val()),
-+  elmType = elmName.replace(`${arName[0]}_`, ""), // e.g.LOWERING_COOLING
-+  isComfort = elmType == "LOWERING_COOLING" ? true : false,
-+  comfElm = jQuery("input[name='" + arName[0] + "_LOWERING_COOLING']"),
-+  comfValIsValid = comfElm.attr("valvalid") == "true" ? true : false,
-+  ecoElm = jQuery("input[name='" + arName[0] + "_LOWERING']"),
-+  ecoValIsValid = ecoElm.attr("valvalid") == "true" ? true : false,
 +  comfVal = parseFloat(jQuery(comfElm[0]).val()),
 +  ecoVal = parseFloat(jQuery(ecoElm[0]).val()),
    comfOldElm = jQuery("#comfortOld"),
    ecoOldElm = jQuery("#ecoOld"),
    errorRow = jQuery("#errorRow"),
-@@ -314,37 +314,36 @@
+@@ -314,37 +314,37 @@
    //console.log("comfValIsValid: " + comfValIsValid + " - ecoValIsValid: " + ecoValIsValid);
  
    switch (elmType) {
@@ -48,9 +41,8 @@
        break;
      case "LOWERING":
        if (ecoValIsValid) {
--        if (ecoValIsValid && (ecoVal > comfVal)) {
+         if (ecoValIsValid && (ecoVal > comfVal)) {
 -          jQuery(ecoElm[0]).val(parseFloat(jQuery(ecoOldElm).val()).toFixed(2));
-+        if (ecoValIsValid && ecoVal > comfVal) {
 +          ecoVal = parseFloat(jQuery(ecoOldElm).val());
            errorRow.show();
            errorEcoElm.html(errorMsg).show();
@@ -71,8 +63,7 @@
  
 -  jQuery(comfOldElm).val(jQuery(comfElm[0]).val());
 -  jQuery(ecoOldElm).val(jQuery(ecoElm[0]).val());
--
 +  jQuery(comfOldElm).val(comfVal);
 +  jQuery(ecoOldElm).val(ecoVal);
+ 
  };
-\ No newline at end of file

@@ -292,15 +292,15 @@ setMinMaxTemp = function(optionElemId, tmpElemId) {
 };
 
 
-isEcoLTComfort = function (elmName) {
+isEcoLTComfort = function(elmName) {
   // elmName should be e. g. TEMPERATURE_COMFORT
   var arName = elmName.split("_"),
   elmType = elmName.replace(`${arName[0]}_`, ""), // e.g.LOWERING_COOLING
-  isComfort = elmType == "LOWERING_COOLING" ? true : false,
-  comfElm = jQuery("input[name='" + arName[0] + "_LOWERING_COOLING']"),
-  comfValIsValid = comfElm.attr("valvalid") == "true" ? true : false,
-  ecoElm = jQuery("input[name='" + arName[0] + "_LOWERING']"),
-  ecoValIsValid = ecoElm.attr("valvalid") == "true" ? true : false,
+  isComfort = (elmType == "LOWERING_COOLING") ? true : false,
+  comfElm = jQuery("input[name='"+arName[0]+"_LOWERING_COOLING']"),
+  comfValIsValid = (comfElm.attr("valvalid") == "true") ? true : false,
+  ecoElm = jQuery("input[name='"+arName[0]+"_LOWERING']"),
+  ecoValIsValid = (ecoElm.attr("valvalid") == "true") ? true : false,
   comfVal = parseFloat(jQuery(comfElm[0]).val()),
   ecoVal = parseFloat(jQuery(ecoElm[0]).val()),
   comfOldElm = jQuery("#comfortOld"),
@@ -328,7 +328,7 @@ isEcoLTComfort = function (elmName) {
       break;
     case "LOWERING":
       if (ecoValIsValid) {
-        if (ecoValIsValid && ecoVal > comfVal) {
+        if (ecoValIsValid && (ecoVal > comfVal)) {
           ecoVal = parseFloat(jQuery(ecoOldElm).val());
           errorRow.show();
           errorEcoElm.html(errorMsg).show();
@@ -346,4 +346,5 @@ isEcoLTComfort = function (elmName) {
 
   jQuery(comfOldElm).val(comfVal);
   jQuery(ecoOldElm).val(ecoVal);
+
 };

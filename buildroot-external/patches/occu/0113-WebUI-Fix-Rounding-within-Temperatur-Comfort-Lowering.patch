@@ -1,5 +1,5 @@
---- occu/WebUI/www/config/easymodes/CC.js.orig
-+++ occu/WebUI/www/config/easymodes/CC.js
+--- occu/WebUI/www/config/easymodes/js/CC.js.orig
++++ occu/WebUI/www/config/easymodes/js/CC.js
 @@ -295,14 +295,14 @@
  isEcoLTComfort = function(elmName) {
    // elmName should be e. g. TEMPERATURE_COMFORT

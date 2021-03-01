@@ -28953,7 +28953,7 @@ showDutyCycle = function() {
                 dutyCycleAddrElm.text("LGW ("+iface.address+"):");
               }
 
-              dutyCycleBar.css("width", arInterfaceDutyCycle[ifaceBidCosRF]+"%");
+              dutyCycleBar.css("width", arInterfaceDutyCycle[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceDutyCycle[ifaceBidCosRF]);
               dutyCycleBar.removeClass("progress-bar-success");
               dutyCycleBar.removeClass("progress-bar-warning");
               dutyCycleBar.removeClass("progress-bar-danger");
@@ -28968,7 +28968,7 @@ showDutyCycle = function() {
               
               if (arInterfaceCarrierSense[ifaceBidCosRF] != csNotAvailable) {
                 carrierSenseValElm.text("CS: "+arInterfaceCarrierSense[ifaceBidCosRF] + " " + dcUnit);
-                carrierSenseBar.css("width", arInterfaceCarrierSense[ifaceBidCosRF]+"%");
+                carrierSenseBar.css("width", arInterfaceCarrierSense[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceCarrierSense[ifaceBidCosRF]);
                 
                 carrierSenseBar.removeClass("progress-bar-info");
                 carrierSenseBar.removeClass("progress-bar-warning");

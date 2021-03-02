@@ -19,7 +19,7 @@ LABEL org.opencontainers.image.title=RaspberryMatic \
       io.hass.type=addon
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=120s --retries=3 \
-  CMD /bin/sh -c 'if [[ ! -S /var/run/monit.sock ]] || [[ $(/usr/bin/monit report initialising) != 0 ]]; then exit 2; fi; if [[ $(/usr/bin/monit report down) != 0 ]]; then exit 1; else exit 0; fi'
+  CMD /bin/sh -c 'if [[ ! -S /var/run/monit.sock ]] || [[ $(/usr/bin/monit report initialising) != 0 ]]; then exit 2; fi; if [[ $(/usr/bin/monit report down) != 0 ]] && [[ ! -e /usr/local/HMLGW ]]; then exit 1; else exit 0; fi'
 
 CMD ["/sbin/init"]
 VOLUME /usr/local

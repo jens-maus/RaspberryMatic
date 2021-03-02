@@ -1,3 +1,13 @@
+--- occu/WebUI/www/rega/esp/programs.fn.orig
++++ occu/WebUI/www/rega/esp/programs.fn
+@@ -73,6 +73,7 @@
+                   if( !bSysVarGeneric )
+                   {
+                     !sRet = sRet#" bei";
++                    if (oSC.NegateCondition()) { sRet = sRet#" ${ruleConditionLblNot} ";}
+                     sRet = sRet#" ${ruleConditionLblWhen}";
+                   }
+ 
 --- occu/WebUI/www/rega/esp/sico.fn.orig
 +++ occu/WebUI/www/rega/esp/sico.fn
 @@ -13,6 +13,22 @@

@@ -1,0 +1,19 @@
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -39037,12 +39037,13 @@
+     } else {
+       min = parseFloat(min).toFixed(1);
+       max = parseFloat(max).toFixed(1);
+-      value = parseFloat(value);
+-      srcElm.value = parseFloat(value);
++      value = parseFloat(value).toFixed(1);
++      srcElm.value = value;
+     }
+   } catch(e) {conInfo(e);}
+ 
+-  if (! value)
++  // !0 would result in true so explicitly check if it is not 0
++  if (!value && value !== 0)
+   {
+     finalVal = min;
+     ok = false;

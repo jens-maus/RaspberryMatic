@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169
+# shellcheck shell=dash disable=SC2169,SC1091
 #
 # Startup script for ha-proxy which proxies HTTP
 # requests from the HomeAssistant UI to the HomeMatic WebUI

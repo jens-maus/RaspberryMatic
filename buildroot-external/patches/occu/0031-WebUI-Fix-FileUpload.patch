@@ -1,6 +1,39 @@
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -86,7 +86,6 @@
+@@ -62,9 +62,13 @@
+       puts "jQuery('#fwUpload').hide();"
+       puts "var dlg = new EulaDialog(translateKey('dialogEulaTitle'), data, function(result) {"
+         puts "if (result == 1) {"
+-          puts "parent.top.dlgPopup.hide();"
+-          puts "parent.top.dlgPopup.setWidth(450);"
+-          puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
++          puts "var dlgPopup = parent.top.dlgPopup;"
++          puts "if (dlgPopup === undefined) {"
++            puts "dlgPopup = window.open('', 'resize').dlgPopup;"
++          puts "}"
++          puts "dlgPopup.hide();"
++          puts "dlgPopup.setWidth(450);"
++          puts "dlgPopup.LoadFromFile(url, \"action=$action\");"
+         puts "} else {"
+           puts "jQuery('#fwUpload').hide();"
+           puts "dlgPopup.hide();"
+@@ -77,16 +81,19 @@
+ 
+     puts "req.fail(function(data) {"
+       puts "conInfo(\"EULA not available\");"
+-      puts "parent.top.dlgPopup.hide();"
+-      puts "parent.top.dlgPopup.setWidth(450);"
+-      puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
++      puts "var dlgPopup = parent.top.dlgPopup;"
++      puts "if (dlgPopup === undefined) {"
++        puts "dlgPopup = window.open('', 'resize').dlgPopup;"
++      puts "}"
++      puts "dlgPopup.hide();"
++      puts "dlgPopup.setWidth(450);"
++      puts "dlgPopup.LoadFromFile(url, \"action=$action\");"
+     puts "});"
+   }
+ }
  
  proc action_firmware_update_confirm {} {
    global env
@@ -8,7 +41,7 @@
    http_head
    division {class="popupTitle"} {
      #puts "Softwareupdate - Best&auml;tigung"
-@@ -281,7 +280,7 @@
+@@ -281,7 +288,7 @@
  }
  
  proc action_firmware_update_cancel {} {
@@ -17,7 +50,7 @@
  
    if {[getProduct] < 3} {
      catch {exec rm /var/new_firmware.tar.gz}
-@@ -447,9 +446,7 @@
+@@ -447,9 +454,7 @@
              table_row {
                td {width="20"} {}
                table_data {colspan="2"} {
@@ -28,7 +61,7 @@
                    file_button firmware_file size=30 maxlength=1000000
                  }
                  puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
-@@ -959,19 +956,14 @@
+@@ -959,19 +964,16 @@
  }
  
  proc action_firmware_upload {} {
@@ -38,9 +71,11 @@
    if { [catch { import directDownload } error] } {
      set directDownload false
    }
-   
--  http_head
 -  
++
+   http_head
+-  
++
    if { $directDownload } {
 -    set filename "/tmp/fup.tgz"
 -  } else {
@@ -50,7 +85,7 @@
    }
  
    if {[getProduct] < 3} {
-@@ -1013,7 +1005,7 @@
+@@ -1013,7 +1015,7 @@
        set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
        if {$file_invalid == 0} {
          # the file seems to be a tar archive (perhaps with gzip compression)
@@ -59,7 +94,26 @@
          file delete -force -- $filename
        }
      }
-@@ -1328,10 +1320,10 @@
+@@ -1041,10 +1043,14 @@
+ 
+   cgi_javascript {
+     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+-    puts "parent.top.dlgPopup.hide();"
+-    puts "parent.top.dlgPopup.setWidth(450);"
+-    puts "parent.top.dlgPopup.downloadOnly = $downloadOnly;"
+-    puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
++    puts "var dlgPopup = parent.top.dlgPopup;"
++    puts "if (dlgPopup === undefined) {"
++      puts "dlgPopup = window.open('', 'resize').dlgPopup;"
++    puts "}"
++    puts "dlgPopup.hide();"
++    puts "dlgPopup.setWidth(450);"
++    puts "dlgPopup.downloadOnly = $downloadOnly;"
++    puts "dlgPopup.LoadFromFile(url, \"action=$action\");"
+   }
+ }
+ 
+@@ -1328,10 +1334,10 @@
  cgi_eval {
    #cgi_debug -on
    cgi_input
@@ -85,19 +139,19 @@
    put_message "\${dialogSettingsNetworkMessageCertificateTitle}" "\${dialogSettingsNetworkMessageCertificateCCURestart}" {\${btnNewLogin} "window.location.href='/';"}
    
    #save DOM
-@@ -245,20 +247,15 @@
+@@ -245,37 +247,43 @@
  }
  
  proc action_cert_upload {} {
 -  global env sid
 -  cd /tmp/
--  
--  http_head
--  import_file -client cert_file
--  file rename -force -- [lindex $cert_file 0] "/var/server.pem"
 +  global env sid filename
 +  cd /usr/local/tmp/
    
+   http_head
+-  import_file -client cert_file
+-  file rename -force -- [lindex $cert_file 0] "/var/server.pem"
+-  
 -  set filename [open "/var/server.pem" r]
 -  gets $filename line
 -  close $filename
@@ -112,16 +166,43 @@
      
      cgi_javascript {
        puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-@@ -269,6 +266,8 @@
+       puts {
+-        parent.top.dlgPopup.hide();
+-        parent.top.dlgPopup.setWidth(600);
+-        parent.top.dlgPopup.LoadFromFile(url, "action=cert_update_confirm");
++        var dlgPopup = parent.top.dlgPopup;
++        if (dlgPopup === undefined) {
++          dlgPopup = window.open('', 'resize').dlgPopup;
++        }
++        dlgPopup.hide();
++        dlgPopup.setWidth(600);
++        dlgPopup.LoadFromFile(url, "action=cert_update_confirm");
        }
      }
    } else {
 +    file delete -force -- $filename
 +
      cgi_javascript {
-     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-     puts {
-@@ -459,8 +458,7 @@
+-    puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+-    puts {
+-      parent.top.dlgPopup.hide();
+-      parent.top.dlgPopup.setWidth(600);
+-      parent.top.dlgPopup.LoadFromFile(url, "action=cert_update_failed");
+-    }
++      puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
++      puts {
++        var dlgPopup = parent.top.dlgPopup;
++        if (dlgPopup === undefined) {
++          dlgPopup = window.open('', 'resize').dlgPopup;
++        }
++        dlgPopup.hide();
++        dlgPopup.setWidth(600);
++        dlgPopup.LoadFromFile(url, "action=cert_update_failed");
++      }
+     }
+   }
+ }
+@@ -459,8 +467,7 @@
              table_row {
                table_data {width="20"} {}
                table_data {colspan="2"} {
@@ -131,7 +212,7 @@
                    file_button cert_file size=30 maxlength=1000000
                  }
                  puts {<iframe name="cert_upload_iframe" style="display: none;"></iframe>}
-@@ -774,13 +772,16 @@
+@@ -774,13 +781,16 @@
  cgi_eval {
    #cgi_debug -on
    cgi_input
@@ -154,7 +235,7 @@
  
 --- occu/WebUI/www/config/cp_security.cgi.orig
 +++ occu/WebUI/www/config/cp_security.cgi
-@@ -891,8 +891,6 @@
+@@ -928,8 +928,6 @@
  proc action_put_page {} {
    global env sid
  
@@ -163,7 +244,7 @@
    http_head
    division {class="popupTitle j_translate"} {
      puts "\${dialogSettingsSecurityTitle}"
-@@ -985,8 +983,7 @@
+@@ -1022,8 +1020,7 @@
              table_row {
                td {width="20"} {}
                table_data {align="left"} {colspan="2"} {
@@ -173,7 +254,7 @@
                    file_button backup_file size=20 maxlength=1000000
                  }
                  puts {<iframe name="config_upload_iframe" class="CLASS20820" style="display: none;"></iframe>}
-@@ -1455,12 +1452,10 @@
+@@ -1536,19 +1533,21 @@
  }
  
  proc action_backup_upload {} {
@@ -182,14 +263,28 @@
 +  global env sid filename
 +  cd /usr/local/tmp/
  
--  http_head
++  file rename -force -- $filename "/usr/local/tmp/new_config.tar"
+   http_head
 -  import_file -client backup_file
 -  file rename -force -- [lindex $backup_file 0] "/tmp/new_config.tar"
-+  file rename -force -- $filename "/usr/local/tmp/new_config.tar"
    cgi_javascript {
      puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
      puts {
-@@ -1536,14 +1531,16 @@
+-      //parent.top.ProgressBar.IncCounter("Backup wurde �bertragen.");
+-      parent.top.dlgPopup.hide();
+-      parent.top.dlgPopup.setWidth(400);
+-      parent.top.dlgPopup.LoadFromFile(url, "action=backup_restore_check");
++      var dlgPopup = parent.top.dlgPopup;
++      if (dlgPopup === undefined) {
++        dlgPopup = window.open('', 'resize').dlgPopup;
++      }
++      dlgPopup.hide();
++      dlgPopup.setWidth(400);
++      dlgPopup.LoadFromFile(url, "action=backup_restore_check");
+     }
+   }
+ }
+@@ -1617,14 +1616,16 @@
  cgi_eval {
    #cgi_debug -on
    cgi_input
@@ -222,7 +317,7 @@
                    file_button firmware_file size=30 maxlength=1000000
                  }
                  puts {<iframe name="image_upload_iframe" style="display: none;"></iframe>}
-@@ -487,17 +486,15 @@
+@@ -487,24 +486,27 @@
  }
  
  proc action_image_upload {} {
@@ -231,7 +326,7 @@
 +  global env sid filename
 +  cd /usr/local/tmp/
    
--  http_head
+   http_head
 -  import_file -client firmware_file
    if {[getProduct] < 3} {
      # CCU2
@@ -244,7 +339,21 @@
    }
    cgi_javascript {
      puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-@@ -519,14 +516,16 @@
+     puts {
+-      parent.top.dlgPopup.hide();
+-      parent.top.dlgPopup.setWidth(600);
+-      parent.top.dlgPopup.LoadFromFile(url, "action=install_confirm");
++      var dlgPopup = parent.top.dlgPopup;
++      if (dlgPopup === undefined) {
++        dlgPopup = window.open('', 'resize').dlgPopup;
++      }
++      dlgPopup.hide();
++      dlgPopup.setWidth(600);
++      dlgPopup.LoadFromFile(url, "action=install_confirm");
+     }
+   }
+ }
+@@ -519,14 +521,16 @@
  cgi_eval {
    #cgi_debug -on
    cgi_input
@@ -267,7 +376,7 @@
  }
 --- occu/WebUI/www/config/fileupload.ccc.orig
 +++ occu/WebUI/www/config/fileupload.ccc
-@@ -0,0 +1,51 @@
+@@ -0,0 +1,55 @@
 +#!/bin/sh
 +# shellcheck shell=dash disable=SC2169,SC2034,SC2154
 +
@@ -305,13 +414,17 @@
 +echo "  <script>"
 +echo "   <!--- Hide script from browsers that don't understand JavaScript"
 +echo "   var url = '${url}?sid=${sid}';"
-+echo "   if (parent.top.dlgPopup !== undefined) {"
-+echo "     parent.top.dlgPopup.hide();"
-+echo "     parent.top.dlgPopup.setWidth(450);"
++echo "   var dlgPopup = parent.top.dlgPopup;"
++echo "   if (dlgPopup === undefined) {"
++echo "     dlgPopup = window.open('', 'resize').dlgPopup;"
++echo "   }"
++echo "   if (dlgPopup !== undefined) {"
++echo "     dlgPopup.hide();"
++echo "     dlgPopup.setWidth(450);"
 +if [[ -n "${downloadOnly}" ]]; then
-+  echo "     parent.top.dlgPopup.downloadOnly=${downloadOnly};"
++  echo "     dlgPopup.downloadOnly=${downloadOnly};"
 +fi
-+echo "     parent.top.dlgPopup.LoadFromFile(url, 'action=${action}&filename=${filename}');"
++echo "     dlgPopup.LoadFromFile(url, 'action=${action}&filename=${filename}');"
 +echo "   }"
 +echo "   // End hiding -->"
 +echo "  </script>"

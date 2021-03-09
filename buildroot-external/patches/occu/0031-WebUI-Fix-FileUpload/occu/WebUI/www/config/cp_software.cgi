@@ -489,6 +489,7 @@ proc action_image_upload {} {
   global env sid filename
   cd /usr/local/tmp/
   
+  http_head
   if {[getProduct] < 3} {
     # CCU2
     file rename -force -- $filename "/var/new_firmware.tar.gz"
@@ -499,9 +500,13 @@ proc action_image_upload {} {
   cgi_javascript {
     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
     puts {
-      parent.top.dlgPopup.hide();
-      parent.top.dlgPopup.setWidth(600);
-      parent.top.dlgPopup.LoadFromFile(url, "action=install_confirm");
+      var dlgPopup = parent.top.dlgPopup;
+      if (dlgPopup === undefined) {
+        dlgPopup = window.open('', 'resize').dlgPopup;
+      }
+      dlgPopup.hide();
+      dlgPopup.setWidth(600);
+      dlgPopup.LoadFromFile(url, "action=install_confirm");
     }
   }
 }

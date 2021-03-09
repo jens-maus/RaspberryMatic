@@ -62,9 +62,13 @@ proc action_acceptEula {} {
       puts "jQuery('#fwUpload').hide();"
       puts "var dlg = new EulaDialog(translateKey('dialogEulaTitle'), data, function(result) {"
         puts "if (result == 1) {"
-          puts "parent.top.dlgPopup.hide();"
-          puts "parent.top.dlgPopup.setWidth(450);"
-          puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
+          puts "var dlgPopup = parent.top.dlgPopup;"
+          puts "if (dlgPopup === undefined) {"
+            puts "dlgPopup = window.open('', 'resize').dlgPopup;"
+          puts "}"
+          puts "dlgPopup.hide();"
+          puts "dlgPopup.setWidth(450);"
+          puts "dlgPopup.LoadFromFile(url, \"action=$action\");"
         puts "} else {"
           puts "jQuery('#fwUpload').hide();"
           puts "dlgPopup.hide();"
@@ -77,9 +81,13 @@ proc action_acceptEula {} {
 
     puts "req.fail(function(data) {"
       puts "conInfo(\"EULA not available\");"
-      puts "parent.top.dlgPopup.hide();"
-      puts "parent.top.dlgPopup.setWidth(450);"
-      puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
+      puts "var dlgPopup = parent.top.dlgPopup;"
+      puts "if (dlgPopup === undefined) {"
+        puts "dlgPopup = window.open('', 'resize').dlgPopup;"
+      puts "}"
+      puts "dlgPopup.hide();"
+      puts "dlgPopup.setWidth(450);"
+      puts "dlgPopup.LoadFromFile(url, \"action=$action\");"
     puts "});"
   }
 }
@@ -961,7 +969,9 @@ proc action_firmware_upload {} {
   if { [catch { import directDownload } error] } {
     set directDownload false
   }
-  
+
+  http_head
+
   if { $directDownload } {
     set filename "/usr/local/tmp/firmwareUpdateFile"
   }
@@ -1033,10 +1043,14 @@ proc action_firmware_upload {} {
 
   cgi_javascript {
     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-    puts "parent.top.dlgPopup.hide();"
-    puts "parent.top.dlgPopup.setWidth(450);"
-    puts "parent.top.dlgPopup.downloadOnly = $downloadOnly;"
-    puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
+    puts "var dlgPopup = parent.top.dlgPopup;"
+    puts "if (dlgPopup === undefined) {"
+      puts "dlgPopup = window.open('', 'resize').dlgPopup;"
+    puts "}"
+    puts "dlgPopup.hide();"
+    puts "dlgPopup.setWidth(450);"
+    puts "dlgPopup.downloadOnly = $downloadOnly;"
+    puts "dlgPopup.LoadFromFile(url, \"action=$action\");"
   }
 }
 

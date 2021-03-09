@@ -1,6 +1,6 @@
 {
     "name": "neo_server",
-    "version": "2.6.1",
+    "version": "2.6.2",
     "main": "index.html",
     "config": {
         "WEB_SERVER_PORT": 8088,

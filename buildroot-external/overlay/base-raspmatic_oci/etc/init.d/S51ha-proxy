@@ -5,11 +5,16 @@
 # requests from the HomeAssistant UI to the HomeMatic WebUI
 #
 
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# only continue if HAPROXY is defined
 [[ -z "${HM_HAPROXY_SRC}" ]] && exit 0
 
 start() {
   printf  "Starting ha-proxy: "
 
+  export HM_HAPROXY_SRC
   export NODE_PATH=/usr/lib/node_modules
   if start-stop-daemon -S -q -m -b -p /var/run/ha-proxy.pid --exec /bin/ha-proxy.js; then
     echo "OK"

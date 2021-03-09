@@ -20,6 +20,11 @@ start() {
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
+  # make sure /run/systemd/journal exists if running the HomeAssistant add-on
+  if [[ -n "${HM_RUNNING_IN_HA}" ]] && [[ ! -d /run/systemd/journal ]]; then
+    mkdir -p /run/systemd/journal
+  fi
+
   # shellcheck disable=SC2086
   start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- $SYSLOGD_ARGS
   if [[ "${HM_HOST}" != "oci" ]]; then

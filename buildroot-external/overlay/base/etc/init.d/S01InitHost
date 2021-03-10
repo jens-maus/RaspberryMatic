@@ -68,6 +68,11 @@ identify_host() {
   # find out if we are in a container environment
   if [[ -f /.dockerenv ]] || grep -Eq '(docker|lxc|containerd)' /proc/1/cgroup; then
     HM_HOST="oci"
+
+    # save the HA supervisor token for later use
+    if [[ -n ${HM_RUNNING_IN_HA} ]]; then
+      HM_SUPERVISOR_TOKEN=${SUPERVISOR_TOKEN}
+    fi
   fi
 
   # find out if we are in a virtual environment so that

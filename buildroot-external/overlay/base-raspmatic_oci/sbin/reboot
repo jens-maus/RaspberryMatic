@@ -1,3 +1,11 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169,SC1091
+
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
 echo "Rebooting container"
-kill 1
+if [[ -n "${HM_RUNNING_IN_HA}" ]]; then
+  curl -X POST -H "Authorization: Bearer ${HM_SUPERVISOR_TOKEN}" -H "Content-Type: application/json" http://supervisor/addons/self/restart
+else
+  kill 1
+fi

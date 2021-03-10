@@ -7,5 +7,5 @@ echo "Rebooting container"
 if [[ -n "${HM_RUNNING_IN_HA}" ]]; then
   curl -X POST -H "Authorization: Bearer ${HM_SUPERVISOR_TOKEN}" -H "Content-Type: application/json" http://supervisor/addons/self/restart
 else
-  kill 1
+  kill -TERM 1
 fi

@@ -39027,47 +39027,62 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, event)
     if (tokens[1]) value += tokens[1];
     srcElm.value = value;
   }
+  
+  var parsedValue;
+  var parsedMin = parseFloat(min);
+  var parsedMax = parseFloat(max);
 
+  var minSplit = min.toString().split(".");
+  var maxSplit = max.toString().split(".");
+  var digits = 0;
+
+  if(minSplit.length === 2) {
+    digits = Math.max(digits, minSplit[1].length);
+  }
+  if(maxSplit.length === 2) {
+    digits = Math.max(digits, maxSplit[1].length);
+  }
   // Check if float is allowed
   try {
     if (min.toString().indexOf(".") == -1 && max.toString().indexOf(".") == -1) {
       min = parseInt(min);
       max = parseInt(max);
-      value = (roundValue05(parseInt(value)));
+      value = Math.round(parseFloat(value));
     } else {
-      min = parseFloat(min).toFixed(1);
-      max = parseFloat(max).toFixed(1);
-      value = parseFloat(value).toFixed(1);
-      srcElm.value = value;
+      min = parseFloat(min).toFixed(digits);
+      max = parseFloat(max).toFixed(digits);
+      var roundFactor = Math.pow(10, digits);
+      value = Math.round(parseFloat(value) * roundFactor) / roundFactor;
     }
+    parsedValue = parseFloat(value);
   } catch(e) {conInfo(e);}
 
   // !0 would result in true so explicitly check if it is not 0
   if (!value && value !== 0)
   {
-    finalVal = min;
+    finalVal = parsedMin;
     ok = false;
   }
   else if (isNaN(value))
   {
-    finalVal = min;
+    finalVal = parsedMin;
     ok = false;
   }
-  else if (value < min)
+  else if (parsedValue < parsedMin)
   {
-    finalVal = min;
+    finalVal = parsedMin;
     ok = false;
   }
-  else if (value > max)
+  else if (parsedValue > parsedMax)
   {
-    finalVal = max;
+    finalVal = parsedMax;
     ok = false;
   }
 
   if (ok)
   {
     srcElm.style.backgroundColor = "#fffffe";
-    dstElm.value = value * dstValueFactor;
+    dstElm.value = (parsedValue * dstValueFactor).toFixed(digits);
     srcElm.value = dstElm.value;
     srcElm.setAttribute("valvalid", "true");
   }
@@ -39075,7 +39090,7 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, event)
   {
     srcElm.setAttribute("valvalid", "false");
     srcElm.style.backgroundColor = "red";
-    dstElm.value = finalVal * dstValueFactor;
+    dstElm.value = (finalVal * dstValueFactor).toFixed(digits);
     srcElm.value = dstElm.value;
     window.setTimeout(function(){srcElm.style.backgroundColor = "white";},1000);
   }

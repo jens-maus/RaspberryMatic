@@ -66,7 +66,7 @@ init() {
 }
 
 start() {
-  echo -n "Preparing start of hs485d: "
+  echo -n "Starting hs485dLoader: "
   init
   if grep -q "^\[Interface .\]" /var/etc/hs485d.conf 2>/dev/null; then
     # get the current syslog settings
@@ -79,7 +79,7 @@ start() {
     /bin/hs485dLoader -l ${LOGLEVEL_HS485D} -ds -dd /var/etc/hs485d.conf
     echo "OK"
   else
-    echo "no Hm-Wired hardware found"
+    echo "disabled"
   fi
 }
 

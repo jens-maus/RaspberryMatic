@@ -24,8 +24,7 @@ start() {
     start-stop-daemon -S -q --exec /bin/hs485dLoader -- -l ${LOGLEVEL_HS485D} -dw /var/etc/hs485d.conf
     echo "OK"
   else
-    echo "no Hm-Wired hardware found"
-  fi
+    echo "disabled"
 }
 
 stop() {

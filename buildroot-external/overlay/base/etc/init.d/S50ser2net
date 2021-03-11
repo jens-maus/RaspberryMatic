@@ -6,7 +6,7 @@
 start() {
     printf  "Starting ser2net: "
     if [ ! -f /usr/local/etc/ser2net.conf ] ; then
-      echo "no configuration file"
+      echo "disabled"
       exit 1
     fi
 
@@ -19,6 +19,11 @@ start() {
 
 stop() {
     printf "Shutting down ser2net: "
+    if [ ! -f /var/run/ser2net.pid ] ; then
+      echo "OK"
+      exit 0
+    fi
+
     if start-stop-daemon -K -q -p /var/run/ser2net.pid; then
       echo "OK"
     else

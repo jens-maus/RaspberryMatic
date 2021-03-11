@@ -63,6 +63,10 @@ const apiProxy = createProxyMiddleware('/', {
                               req.headers['x-ingress-path']+'/$1$2');
           body = body.replace(/(?<=["'])\/(index|login|logout)\.htm/g,
                               req.headers['x-ingress-path']+'/$1.htm');
+          body = body.replace(/window\.location\.href='\/'/g,
+                              'window.location.href=\'' + req.headers['x-ingress-path'] + '/\'');
+          body = body.replace(/window\.location\.href='\/index\.htm'/g,
+                              'window.location.href=\'' + req.headers['x-ingress-path'] + '/index.htm\'');
 
         if(proxyRes.headers['transfer-encoding'] == 'chunked') {
           res.end(new Buffer.from(body));

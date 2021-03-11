@@ -25,6 +25,7 @@ start() {
     echo "OK"
   else
     echo "disabled"
+  fi
 }
 
 stop() {

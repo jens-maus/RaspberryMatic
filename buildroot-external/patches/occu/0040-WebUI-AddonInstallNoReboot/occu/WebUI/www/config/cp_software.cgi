@@ -424,6 +424,15 @@ proc action_put_page {} {
   
   puts ""
   cgi_javascript {
+
+    puts "installAddon = function() {"
+      puts "var dlg = new YesNoDialog(translateKey('dialogHint'), translateKey('dialogSettingsExtraSoftwareHintSelectExtraSoftware'), function(result) {"
+        puts "if (result == 1) \{document.upload_form.submit();\}"
+      puts "},'html');"
+      puts "dlg.btnTextNo(translateKey('btnCancel'));"
+      puts "dlg.btnTextYes(translateKey('btnOk'));"
+    puts "}"
+
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
       operation = function(op, script, op_name) {
@@ -446,9 +455,10 @@ proc action_put_page {} {
         {
           new YesNoDialog(translateKey("dialogSafetyCheck"), translateKey("dialogQuestionRemoveExtraSoftware"), function(result) {
           if (result == YesNoDialog.RESULT_YES)
-          {
-            new Ajax.Request(url, opts);
-          }
+            {
+              addOnUninstall = true;
+              new Ajax.Request(url, opts);
+            }
           });
         }
         else
@@ -476,18 +486,21 @@ proc translatePage {loop} {
   puts "<script type=\"text/javascript\">translatePage('#messagebox')</script>"
   global swVersion swUpdate
   cgi_javascript {
+    puts "function getVersion(url, callback) {"
+    puts "  var xhr = new XMLHttpRequest();"
+    puts "  xhr.onreadystatechange = function () {"
+    puts "    if (xhr.readyState === 4 && xhr.status === 200) callback(xhr.responseText);"
+    puts "  };"
+    puts "  xhr.open(\"GET\", url, true);"
+    puts "  xhr.overrideMimeType(\"text/plain; charset=iso-8859-1\");"
+    puts "  xhr.send();"
+    puts "}"
     for {set i 0} {$i <= $loop} {incr i} {
       if { [info exists swUpdate($i)] } {
-        puts "var anchor = document.getElementById(\"availableSWVersion_$i\");"
-        puts "var iframe = document.createElement(\"iframe\");"
-        puts "iframe.src = \"$swUpdate($i)?cmd=check_version&version=$swVersion($i)\";"
-        puts "iframe.frameBorder=0;"
-        puts "iframe.marginHeight=0;"
-        puts "iframe.marginWidth=0;"
-        puts "iframe.width=100;"
-        puts "iframe.height=20;"
-        puts "iframe.scrolling='no';"
-        puts "anchor.appendChild(iframe);"
+        puts "getVersion(\"$swUpdate($i)?cmd=check_version&version=$swVersion($i)\", function(contents) {"
+        puts "  document.getElementById(\"availableSWVersion_$i\").innerHTML = contents;"
+        puts "});"
+        puts "document.getElementById(\"availableSWVersion_$i\").innerHTML = \"n/a\";"
       }
     }
   }

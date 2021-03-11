@@ -5,6 +5,8 @@ jQuery.extend(true,HMIdentifier , {
     "CCUShortName" : "CCU",
     "BidCosRF" : "Homematic RF",
     "BidCosWired" : "BidCos-Wired",
+    "BidCosRF-Filter" : "BidCos-RF",
+    "BidCosWired-Filter" : "BidCos-Wired",
     "HmIPRF" : "HmIP-RF",
     "VirtualDevices" : "VirtualDevices",
     "HomeMaticCFGAdapter" : "Homematic Configuration-Adapter",
@@ -22,10 +24,13 @@ jQuery.extend(true,langJSON, {
     "TEST" : "Well, it runs like a clockwork...",
     "BidCosRF" : HMIdentifier.en.BidCosRF,
     "BidCosWired" : HMIdentifier.en.BidCosWired,
+    "BidCosRF-Filter" : HMIdentifier.en.BidCosRFFilter,
+    "BidCosWired-Filter" : HMIdentifier.en.BidCosWiredFilter,
     "HmIPRF" : HMIdentifier.en.HmIPRF,
     "VirtualDevices" : HMIdentifier.en.VirtualDevices,
-    "LabelHomematicIPHeader" : HMIdentifier.de.LabelHomematicIPHeader,
-    "LabelHomeMatic" : HMIdentifier.de.LabelHomeMatic,
+    "LabelHomematicIPHeader" : HMIdentifier.en.LabelHomematicIPHeader,
+    "LabelHomeMatic" : HMIdentifier.en.LabelHomeMatic,
+    "LabelCCU" : HMIdentifier.en.CCUShortName,
     "ccuNotReady" : "The " + HMIdentifier.en.CCUFullNameText + " is not yet ready",
     "ccuNotReadyHint" : "Please wait. You will automatically be redirected to the home page.",
     "loadWebUI" : "Loading...",
@@ -216,6 +221,7 @@ jQuery.extend(true,langJSON, {
     "lblValueRange" : "Value range",
     "lblSystemVariable" : "System variable",
     "lblLeft" : "Left",
+    "lblRight" : "Right",
     "lblCenter" : "Centre",
     "lblTop" : "Up",
     "lblAuto" : "Auto",
@@ -224,6 +230,7 @@ jQuery.extend(true,langJSON, {
     "lblFavDescription" : "Favourite description",
     "lblControl" : "Control",
     "lblStatus" : "Status",
+    "lblSensorStatus" : "Sensor status",
     "lblChannelsAndSysVarOnFavPage" : "Channels and system variables in favourite page",
     "lblEnterUserName" : "Please enter your <br/>user name.",
     "lblEnterPassWord" : "Please enter your password.",
@@ -643,7 +650,6 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsFirewallLblScriptAPI" : "<b>Remote Homematic script API:</b>",
     "dialogSettingsFirewallLblHintScriptAPI" : "Enables access to the logic tier of the Homematic CCU",
     "dialogSettingsFirewallLblIPAddresses" : "<b>IP addresses for restricted access</b>",
-    "dialogSettingsFirewallLblHintIPAddresses" : "You can enable access for single IP addresses (e.g. 192.168.0.1) or entire address ranges (e.g. 192.168.0.0/16).",
     "dialogSettingsFirewallLblFullAccess" : "Full access",
     "dialogSettingsFirewallLblRestrictedAccess" : "Restricted access",
     "dialogSettingsFirewallLblNoAccess" : "No access",
@@ -687,7 +693,7 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsExtraSoftwareBtnStartInstallSoftware" : "Start installation",
     "dialogSettingsExtraSoftwareLblSelectExtraSoftware" : "Select additional software:",
 
-    "dialogSettingsExtraSoftwareHintSelectExtraSoftware" : "<b>Please note:</b><br/>Additional software installed by the user can lead to unexpected results, data loss or even system instability.<br/>eQ-3 AG does not assume any liability for additional software installed by the user.<br/><br/>To finish installation, the CCU will be restarted automatically.",
+    "dialogSettingsExtraSoftwareHintSelectExtraSoftware" : "<b>Please note:</b><br/>Additional software installed by the user can lead to unexpected results, data loss or even system instability.<br/><br/><b><u>eQ-3 AG does not assume any liability for additional software installed by the user.</u></b><br/><br/>To finish installation, the CCU might have to be restarted.",
 
     "dialogSettingsExtraSoftwareInstallMessageBoxTitle" : "Firmware update - confirmation",
     "dialogSettingsExtraSoftwareInstallMessageBoxContent" : "The additional software has been uploaded. You can now start the installation by click on the button below.",
@@ -1077,7 +1083,9 @@ jQuery.extend(true,langJSON, {
     "optionLastValue" : "Last value",
     "optionNoModification" : "No change",
     "optionNone" : "None",
-    "optionNotActive" : "Not active"
+    "optionNotActive" : "Not active",
+
+    "HelpTitle" : "Help"
   }
 });
 

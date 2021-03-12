@@ -41763,7 +41763,7 @@ cpMessageBox.prototype =
         $('centerbox').hide();
         $('trlayer').hide();
         if(typeof msg != 'undefined') {
-          MessageBox.show('Funktionalität nicht verfügbar', msg, '', 480,120);
+          MessageBox.show('Funktionalitaet nicht verfuegbar', msg, '', 480,120);
         } else {
           Ajax_failure(url, response.statusText);
         }

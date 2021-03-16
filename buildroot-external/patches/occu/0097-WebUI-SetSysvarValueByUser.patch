@@ -202,7 +202,7 @@
 +  {
 +    var s = "";
 +    s += "<table class='CLASS05012'>";
-+    s += "<tr><td> <textarea id='txValue' rows='1'>"+sValue+"</textarea> </td></tr>";
++    s += "<tr><td> <textarea id='txValue' rows='5'>"+sValue.replace(/<CR>/g,"\r").replace(/<LF>/g,"\n")+"</textarea> </td></tr>";
 +    s += "</table>";
 +    $("tdValueEdit").innerHTML = s;
 +    $("tdEdit").innerHTML = "";
@@ -210,13 +210,15 @@
  
    <% 
      if (system.GetVar("createNew") == 1) {
-@@ -370,18 +460,34 @@
+@@ -370,18 +460,36 @@
        if (sv.ValueSubType() == istPresent) {
        }
        if (sv.ValueSubType() == istChar8859) {
 +        string sval = sv.Value();
 +        sval = sval.Replace(^\^,^\\^);
 +        sval = sval.Replace(^'^,^\'^);
++        sval = sval.Replace("\r",^<CR>^);
++        sval = sval.Replace("\n",^<LF>^);
 +        Write("loadChar8859Edit('"#sval#"');");
        }
        if (sv.ValueSubType() == istAlarm) {

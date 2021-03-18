@@ -15,7 +15,6 @@ endmenu
 
 menu "Hardware Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/rpi-rf-mod/Config.in"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/rx8130-rtc/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/susvd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/piusvd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/picod/Config.in"

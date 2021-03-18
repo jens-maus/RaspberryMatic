@@ -21,7 +21,7 @@ identify_host() {
 
   # set GREEN_MODE1 and RED_MODE2 to the rootfs
   # device led trigger
-  rootfs_trigger="$(/sbin/blkid --label rootfs | head -1 | sed -n 's/\/dev\/mmc.*\([[:digit:]]\)p  [[:digit:]]$/mmc\1/p')"
+  rootfs_trigger="$(/sbin/blkid --label rootfs | head -1 | sed -n 's/\/dev\/mmc.*\([[:digit:]]\)p[[:digit:]]$/mmc\1/p')"
   if [[ -n "${rootfs_trigger}" ]]; then
     HM_LED_GREEN_MODE1=${rootfs_trigger}
     HM_LED_RED_MODE2=${rootfs_trigger}

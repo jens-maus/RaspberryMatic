@@ -1,7 +1,6 @@
 source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/../../../package/multilib32/Config.in"
 
 menu "Hardware Support"
-  source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/../../../package/rx8130-rtc/Config.in"
   source "$BR2_EXTERNAL_RECOVERY_SYSTEM_PATH/../../../package/intel-e1000e/Config.in"
 endmenu
 

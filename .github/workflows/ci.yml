@@ -51,10 +51,10 @@ jobs:
       with:
         ignore: buildroot-external/package/neoserver/pkg/mediola/neo_server buildroot-patches/0010-lib32-integration/buildroot/support/scripts
 
-    - name: Check Home Assistant Add-on Lint
-      uses: frenck/action-addon-linter@main
-      with:
-        path: "./home-assistant-addon"
+   # - name: Check Home Assistant Add-on Lint
+   #   uses: frenck/action-addon-linter@main
+   #   with:
+   #     path: "./home-assistant-addon"
 
   build:
     name: CI build [${{ matrix.platform }}]

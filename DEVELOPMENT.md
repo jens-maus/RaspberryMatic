@@ -37,25 +37,27 @@ OCI packages require a secret to be uploaded `CR_PAT`. See GitHub [instructions(
 
 ## How to draft a release
 
-1. Before running the "Release Build" workflow action in the next steps, you have to modify the following files in the repo and change the version string accordingly:
+1. As a first step and to prepare a draft release in which a raw ChangeLog will be added, go into the [Release Build](https://github.com/jens-maus/RaspberryMatic/actions?query=workflow%3A%22Release+Build%22) action and run it, but make sure "Skip build" is set to true and you are using the upcoming release date in the "Release date override" setting
+2. After this draft release build is done you should see a new draft release in the releases section with the raw changelog listing all changes. Make sure to edit them and sort them into the corresponding group and explaining in less technical details what was changed.
+3. If you are done with finetuning the ChangeLog and Release draft make sure that you finally bump the version number in the following files in the repository:
    - (3.XX.YY.YYYYMMDD) - https://github.com/jens-maus/RaspberryMatic/blob/master/release/LATEST-VERSION.js
    - (3.XX.YY.YYYYMMDD) - https://github.com/jens-maus/RaspberryMatic/blob/master/home-assistant-addon/config.json#L3
    - (3.XX.YY) - https://github.com/jens-maus/RaspberryMatic/blob/master/helm/raspberrymatic/Chart.yaml#L31
-2. Go to [_Actions_ -> _Release Build_](https://github.com/jens-maus/RaspberryMatic/actions?query=workflow%3A%22Release+Build%22)
-3. Click on _Run Workflow_
-4. Select the branch. Usually `master`
-5. Set the "Release date override" to the actual date (YYYYMMDD) you would like to append to the OCCU (3.XX.YY) version string.
-6. Set the "Skip build" to `false` or otherwise the workflow will just be tested without actually running the time consuming build job or releasing the helm charts, docker, etc.
-7. Click on _Run Workflow_ to start the build. The build does the following
+4. Go to [_Actions_ -> _Release Build_](https://github.com/jens-maus/RaspberryMatic/actions?query=workflow%3A%22Release+Build%22)
+5. Click on _Run Workflow_
+6. Select the branch. Usually `master`
+7. Set the "Release date override" to the actual date (YYYYMMDD) you would like to append to the OCCU (3.XX.YY) version string.
+8. Set the "Skip build" to `false` or otherwise the workflow will just be tested without actually running the time consuming build job or releasing the helm charts, docker, etc.
+9. Click on _Run Workflow_ to start the build. The build does the following
    - creates a new release draft with the 3.XX.YY.YYYYMMDD used as name, tag and version. If the release draft already exists then it is **not modified**.
      **NOTE**: if binaries were already uploaded to the draft release you need to delete them before re-triggering the CI or the upload will fail
    - builds all binaries and upload them to the draft release
    - uploads the container with `latest` as tag - NOTE: after this step OCI users using latest will get the update right away!
-   - uploads a new release Helm chart using the OCCU_VERSION (3.XX.YY) as version. NOTE: after this point the Kubernetes users will get the update right away!
-8. While the draft is being built, the release readme can be updated from the GitHub WebUI
-9. Once the build run has completed and all binaries are uploaded to the release draft the typical release archives + images should appear in the release draft assets section.
-10. Verify everything and click "Publish" to finally publish the release
-11. Update raspberrymatic.de and make sure to set the new released version in the update server on raspberrymatic.de so that every existing user will get a notification.
+   - uploads a new release Helm chart using the `OCCU_VERSION` (3.XX.YY) as version. NOTE: after this point the Kubernetes users will get the update right away!
+10. While the draft is being built, the release readme can be updated from the GitHub WebUI
+11. Once the build run has completed and all binaries are uploaded to the release draft the typical release archives + images should appear in the release draft assets section.
+12. Verify everything and click "Publish" to finally publish the release
+13. Update raspberrymatic.de and make sure to set the new released version in the update server on raspberrymatic.de so that every existing user will get a notification.
 
 ## Components Update Guide
 

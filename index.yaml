@@ -12,7 +12,7 @@ entries:
           url: https://github.com/jens-maus/RaspberryMatic/wiki
     apiVersion: v2
     appVersion: 3.57.4.20210320
-    created: "2021-03-20T13:35:56.323329828Z"
+    created: "2021-03-21T04:41:39.171711683Z"
     description: HomeMatic/homematicIP CCU central based on RaspberryMatic
     digest: 4a768bc2aae80ab5a04bf4ac188820fb18f1f63ce648b3fdb400d776fd025b5a
     home: https://github.com/jens-maus/RaspberryMatic
@@ -45,7 +45,7 @@ entries:
           url: https://github.com/jens-maus/RaspberryMatic/wiki
     apiVersion: v2
     appVersion: 3.55.10.20210213
-    created: "2021-03-20T13:35:56.322223776Z"
+    created: "2021-03-21T04:41:39.170494329Z"
     description: HomeMatic/homematicIP CCU central based on RaspberryMatic
     digest: 3525517abfff3a2e90edf72acfa5ca98209f06e35864817c920ab29e534ce937
     home: https://github.com/jens-maus/RaspberryMatic
@@ -69,7 +69,7 @@ entries:
     version: 3.55.10
   - annotations:
       artifacthub.io/changes: |
-        - Release of 3.55.10.20210213
+        - Release of 3.57.4.20210320
       artifacthub.io/license: Apache-2.0
       artifacthub.io/links: |
         - name: Webpage
@@ -77,10 +77,10 @@ entries:
         - name: Documentation
           url: https://github.com/jens-maus/RaspberryMatic/wiki
     apiVersion: v2
-    appVersion: 3.57.4.20210320-c557a76
-    created: "2021-03-20T13:35:56.321078823Z"
+    appVersion: 3.57.4.20210321-82e476a
+    created: "2021-03-21T04:41:39.169367378Z"
     description: HomeMatic/homematicIP CCU central based on RaspberryMatic
-    digest: bb8b2fce5d153c9dc29f46a6262ab0db6761b8c9a13e0f81c9de80b310d6089c
+    digest: 54fc4b7070f72e7f5ab2815a6880893fa3c88002821e7a94f902b851060a0cc4
     home: https://github.com/jens-maus/RaspberryMatic
     icon: https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/home-assistant-addon/icon.png
     keywords:
@@ -100,4 +100,4 @@ entries:
     urls:
     - https://jens-maus.github.io/RaspberryMatic/raspberrymatic-0.1.tgz
     version: "0.1"
-generated: "2021-03-20T13:35:56.319652356Z"
+generated: "2021-03-21T04:41:39.168027418Z"

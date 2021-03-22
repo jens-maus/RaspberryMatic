@@ -111,12 +111,13 @@ reset_rf_hardware() {
       # only perform GPIO reset if this is no USB device (HmIP-RFUSB)
       if ! echo "${dev}" | grep -q ttyUSB; then
 
-        # clear GPIO reset pin definition variable
-        GPIO_RESET=
-
-        # reset the rf module using gpio up/down and use different gpios
-        # for the RPI-RF-MOD or HM-MOD-RPI-PCB
+        # we either reset the rf module using gpio up/down (if this is
+        # a RPI-RF-MOD) or use the reset_radio_module sysfs entry of
+        # generic_raw_uart if we think this is an HM-MOD-RPI-PCB
         if [[ "${HM_RTC}" == "rx8130" ]]; then
+          # clear GPIO reset pin definition variable
+          GPIO_RESET=
+
           # this is a RPI-RF-MOD because a rx8130 RTC was identified previously
           # depending on the host hardware we have to define different
           # reset pins
@@ -131,35 +132,25 @@ reset_rf_hardware() {
               GPIO_RESET=185 # GPIO185/GPIO6A1 (pin 35)
             ;;
           esac
-        else
-          # this is probably a HM-MOD-RPI-PCB
-          # depending on the host hardware we have to define different
-          # reset pins
-          case "${HM_HOST}" in
-            # RaspberryPi
-            rpi*)
-              GPIO_RESET=18  # GPIO18/GPIO.1 (pin 12)
-            ;;
 
-            # ASUS Tinkerboard
-            tinkerboard*)
-              GPIO_RESET=184 # GPIO184/GPIO6A0 (pin 12)
-            ;;
-          esac
-        fi
-
-        # reset the GPIO rf module by switching its reset pin
-        # and reset it to an input pin to get it floating again.
-        if [[ -n "${GPIO_RESET}" ]]; then
-          if [[ ! -e /sys/class/gpio/gpio${GPIO_RESET} ]]; then
-            echo ${GPIO_RESET} >/sys/class/gpio/export
+          # reset the GPIO rf module by switching its reset pin
+          # and reset it to an input pin to get it floating again.
+          if [[ -n "${GPIO_RESET}" ]]; then
+            if [[ ! -e /sys/class/gpio/gpio${GPIO_RESET} ]]; then
+              echo ${GPIO_RESET} >/sys/class/gpio/export
+            fi
+            echo out >/sys/class/gpio/gpio${GPIO_RESET}/direction
+            echo 0 >/sys/class/gpio/gpio${GPIO_RESET}/value
+            sleep 0.1
+            echo 1 >/sys/class/gpio/gpio${GPIO_RESET}/value
+            sleep 0.1
+            echo in >/sys/class/gpio/gpio${GPIO_RESET}/direction
           fi
-          echo out >/sys/class/gpio/gpio${GPIO_RESET}/direction
-          echo 0 >/sys/class/gpio/gpio${GPIO_RESET}/value
-          sleep 0.1
-          echo 1 >/sys/class/gpio/gpio${GPIO_RESET}/value
-          sleep 0.1
-          echo in >/sys/class/gpio/gpio${GPIO_RESET}/direction
+        else
+          # this is probably a HM-MOD-RPI-PCB, so we use the
+          # reset_radio_module sysfs entry to reset the RF module
+          # accordingly.
+          echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module"
         fi
       fi
 

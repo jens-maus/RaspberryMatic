@@ -9,7 +9,7 @@ setenv userfs 3
 setenv gpio_button "H23" # matches GPIO239
 setenv kernel_img "zImage"
 setenv recoveryfs_initrd "recoveryfs-initrd"
-setenv overlays "pivccu-tinkerboard rpi-rf-mod-tinker"
+setenv overlays "rpi-rf-mod"
 setenv usbstoragequirks "0x2537:0x1066:u,0x2537:0x1068:u"
 
 echo "Boot script loaded from ${devtype} ${devnum}"

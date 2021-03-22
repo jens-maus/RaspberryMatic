@@ -1,23 +1,41 @@
 #############################################################
 #
-# Support for RPI-RF-MOD / HM-MOD-RPI-PCB RF-Module
+# Meta package for RPI-RF-MOD/HM-MOD-RPI-PCB device support
+# for HomeMatic/homematicIP connectivity.
+#
+# This includes compiling of required device tree overlays for
+# selected platforms
+#
+# Copyright (c) 2018-2021 Jens Maus <mail@jens-maus.de>
+# https://github.com/jens-maus/RaspberryMatic/tree/master/buildroot-external/package/rpi-rf-mod
 #
 #############################################################
 
-RPI_RF_MOD_VERSION = 1.4.0
+RPI_RF_MOD_VERSION = 1.5.0
 RPI_RF_MOD_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/rpi-rf-mod
 RPI_RF_MOD_SITE_METHOD = local
+RPI_RF_MOD_LICENSE = Apache-2.0
+RPI_RF_MOD_DEPENDENCIES = host-dtc
+#RPI_RF_MOD_LICENSE_FILES = LICENSE
+
+ifeq ($(BR2_PACKAGE_RPI_RF_MOD_DTS_RPI),y)
+  # RaspberryPi DTS file
+  RPI_RF_MOD_DTS_FILE = rpi-rf-mod
+else ifeq ($(BR2_PACKAGE_RPI_RF_MOD_DTS_TINKER),y)
+  # ASUS Tinkerboard DTS file
+  RPI_RF_MOD_DTS_FILE = rpi-rf-mod-tinker
+endif
 
 define RPI_RF_MOD_BUILD_CMDS
-  for dts in $(@D)/dts/*.dts; do \
-    $(HOST_DIR)/bin/dtc -@ -I dts -O dtb -W no-unit_address_vs_reg -o $${dts%.dts}.dtbo $${dts}; \
-  done
+  if [[ -n "$(RPI_RF_MOD_DTS_FILE)" ]]; then \
+    $(HOST_DIR)/bin/dtc -@ -I dts -O dtb -W no-unit_address_vs_reg -o $(@D)/dts/rpi-rf-mod.dtbo $(@D)/dts/$(RPI_RF_MOD_DTS_FILE).dts; \
+  fi
 endef
 
 define RPI_RF_MOD_INSTALL_TARGET_CMDS
-  for dtbo in $(@D)/dts/*.dtbo; do \
-    $(INSTALL) -D -m 0644 $${dtbo} $(BINARIES_DIR)/; \
-  done
+  if [[ -n "$(RPI_RF_MOD_DTS_FILE)" ]]; then \
+    $(INSTALL) -D -m 0644 $(@D)/dts/rpi-rf-mod.dtbo $(BINARIES_DIR)/; \
+  fi
 endef
 
 $(eval $(generic-package))

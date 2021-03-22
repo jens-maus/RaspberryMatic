@@ -36,9 +36,6 @@ core_freq=250
 #dtoverlay=disable-bt
 #dtparam=uart1=off
 
-# load dtoverlay for raw-uart
-dtoverlay=pivccu-raspberrypi
-
 # disable the splash screen
 disable_splash=1
 

@@ -1,33 +1,14 @@
---- occu/WebUI/www/api/methods/session/logout.tcl.orig
-+++ occu/WebUI/www/api/methods/session/logout.tcl
-@@ -9,6 +9,6 @@
- #   true
- ##
- 
--hmscript {system.ClearSessionID(_session_id_);} args
-+hmscript {system.ClearSession(_session_id_);} args
- 
- jsonrpc_response true
---- occu/WebUI/www/tcl/eq3/session.tcl.orig
-+++ occu/WebUI/www/tcl/eq3/session.tcl
-@@ -129,6 +129,6 @@
- ##
- proc session_logout { sid } {
-   if {[session_isValid $sid] == true} {
--    rega_exec "system.ClearSessionID(\"$sid\");"
-+    rega_exec "system.ClearSession(\"$sid\");"
-   }
- }
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -25972,7 +25972,9 @@
+@@ -25971,8 +25971,9 @@
+ logout = function() {
    regaMonitor.stop();
    InterfaceMonitor.stop();
-   // The second url-param has to be appended by a '?' instead of a '&'
+-  // The second url-param has to be appended by a '?' instead of a '&'
 -  location.href = "/logout.htm?sid=" + SessionId+"?lang="+getLang();
-+  //location.href = "/logout.htm?sid=" + SessionId+"?lang="+getLang();
 +  location.href = "/logout.htm?lang="+getLang();
 +  homematic('Session.logout', {});
++  homematic('system.saveObjectModel', {});
  };
  
  

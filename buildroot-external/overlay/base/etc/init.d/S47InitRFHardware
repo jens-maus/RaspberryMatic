@@ -146,62 +146,11 @@ reset_rf_hardware() {
   for dev in ${RF_DEVNODES}; do
 
     echo -n "."
-    # check if this is NOT a raw-uart device or NOT a HB-RF-USB but
-    # a GPIO based raw-uart and if so we reset the rf-module on our own.
-    if [[ ! -e "/sys/class/raw-uart/${dev}/device_type" ]] ||
-          grep -q GPIO "/sys/class/raw-uart/${dev}/device_type"; then
 
-      # only perform GPIO reset if this is no USB device (HmIP-RFUSB)
-      if ! echo "${dev}" | grep -q ttyUSB; then
-
-        # we either reset the rf module using gpio up/down (if this is
-        # a RPI-RF-MOD) or use the reset_radio_module sysfs entry of
-        # generic_raw_uart if we think this is an HM-MOD-RPI-PCB
-        if [[ "${HM_RTC}" == "rx8130" ]]; then
-          # clear GPIO reset pin definition variable
-          GPIO_RESET=
-
-          # this is a RPI-RF-MOD because a rx8130 RTC was identified previously
-          # depending on the host hardware we have to define different
-          # reset pins
-          case "${HM_HOST}" in
-            # RaspberryPi
-            rpi*)
-              GPIO_RESET=19  # GPIO19/GPIO.24 (pin 35)
-            ;;
-
-            # ASUS Tinkerboard
-            tinkerboard*)
-              GPIO_RESET=185 # GPIO185/GPIO6A1 (pin 35)
-            ;;
-          esac
-
-          # reset the GPIO rf module by switching its reset pin
-          # and reset it to an input pin to get it floating again.
-          if [[ -n "${GPIO_RESET}" ]]; then
-            if [[ ! -e /sys/class/gpio/gpio${GPIO_RESET} ]]; then
-              echo ${GPIO_RESET} >/sys/class/gpio/export
-            fi
-            echo out >/sys/class/gpio/gpio${GPIO_RESET}/direction
-            echo 0 >/sys/class/gpio/gpio${GPIO_RESET}/value
-            sleep 0.1
-            echo 1 >/sys/class/gpio/gpio${GPIO_RESET}/value
-            sleep 0.1
-            echo in >/sys/class/gpio/gpio${GPIO_RESET}/direction
-          fi
-        else
-          # this is probably a HM-MOD-RPI-PCB, so we use the
-          # reset_radio_module sysfs entry to reset the RF module
-          # accordingly.
-          echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module"
-        fi
-      fi
-
-    else
-      # this is a raw-uart and connected to a HB-RF-USB/HB-RF-USB-2/HB-RF-ETH
-      # so lets use the reset_radio_module sysfs entry to reset the rf module
+    # check if this is a raw-uart device and if so we use
+    # the reset_radio_module sysfs node for the module reset
+    if [[ -e "/sys/class/raw-uart/${dev}/reset_radio_module" ]]; then
       echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module"
-      echo -n "."
     fi
 
   done

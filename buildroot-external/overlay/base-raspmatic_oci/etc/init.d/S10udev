@@ -19,7 +19,7 @@
 
 # don't use own udev daemon when running as 
 # a home assistant add-on
-[[ -n "${HM_RUNNING_IN_HA}" ]] && exit 0
+[ -n "${HM_RUNNING_IN_HA}" ] && exit 0
 
 # Check for config file and read it
 UDEV_CONFIG=/etc/udev/udev.conf

@@ -36,6 +36,11 @@ check process udevd with matching /sbin/udevd
     if not exist for 1 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'udevd restarted' WatchDog-Alarm"
+    depends on udevdEnabled
+
+check program udevdEnabled with path "/bin/grep -q 'HM_RUNNING_IN_HA=' /var/hm_mode"
+    group system
+    if status = 0 for 1 cycles then unmonitor
 
 # irqbalance daemon monitoring
 check process irqbalance with pidfile /var/run/irqbalance.pid

@@ -367,7 +367,7 @@ jobs:
           skip-recent: 15
 
       - name: Remove old packages
-        uses: smartsquaregmbh/delete-old-packages@v0.2.0
+        uses: smartsquaregmbh/delete-old-packages@v0.3.0
         with:
           keep: 5
           names: |

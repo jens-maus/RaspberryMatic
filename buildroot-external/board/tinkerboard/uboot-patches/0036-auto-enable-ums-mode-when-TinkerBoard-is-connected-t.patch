@@ -1,7 +1,7 @@
-diff -ruN uboot-2020.10.orig/arch/arm/mach-rockchip/rk3288/rk3288.c uboot-2020.10/arch/arm/mach-rockchip/rk3288/rk3288.c
---- uboot-2020.10.orig/arch/arm/mach-rockchip/rk3288/rk3288.c	2020-10-05 17:15:32.000000000 +0200
-+++ uboot-2020.10/arch/arm/mach-rockchip/rk3288/rk3288.c	2020-10-19 14:47:07.164925337 +0200
-@@ -21,9 +21,45 @@
+diff -ruN u-boot-2021.04-rc4.orig/arch/arm/mach-rockchip/rk3288/rk3288.c u-boot-2021.04-rc4/arch/arm/mach-rockchip/rk3288/rk3288.c
+--- u-boot-2021.04-rc4.orig/arch/arm/mach-rockchip/rk3288/rk3288.c	2021-03-15 17:06:41.000000000 +0100
++++ u-boot-2021.04-rc4/arch/arm/mach-rockchip/rk3288/rk3288.c	2021-03-28 22:37:12.919110399 +0200
+@@ -22,9 +22,45 @@
  #include <asm/arch-rockchip/qos_rk3288.h>
  #include <asm/arch-rockchip/sdram.h>
  #include <linux/err.h>
@@ -47,7 +47,7 @@ diff -ruN uboot-2020.10.orig/arch/arm/mach-rockchip/rk3288/rk3288.c uboot-2020.1
  #define GRF_BASE	0xff770000
  
  const char * const boot_devices[BROM_LAST_BOOTSOURCE + 1] = {
-@@ -116,6 +152,55 @@
+@@ -117,6 +153,55 @@
  	return rk3288_board_late_init();
  }
  
@@ -103,9 +103,9 @@ diff -ruN uboot-2020.10.orig/arch/arm/mach-rockchip/rk3288/rk3288.c uboot-2020.1
  static int ft_rk3288w_setup(void *blob)
  {
  	const char *path;
-diff -ruN uboot-2020.10.orig/cmd/usb_mass_storage.c uboot-2020.10/cmd/usb_mass_storage.c
---- uboot-2020.10.orig/cmd/usb_mass_storage.c	2020-10-19 14:45:18.063093784 +0200
-+++ uboot-2020.10/cmd/usb_mass_storage.c	2020-10-19 14:46:14.764045648 +0200
+diff -ruN u-boot-2021.04-rc4.orig/cmd/usb_mass_storage.c u-boot-2021.04-rc4/cmd/usb_mass_storage.c
+--- u-boot-2021.04-rc4.orig/cmd/usb_mass_storage.c	2021-03-15 17:06:41.000000000 +0100
++++ u-boot-2021.04-rc4/cmd/usb_mass_storage.c	2021-03-28 22:37:12.919110399 +0200
 @@ -136,7 +136,7 @@
  	return ret;
  }
@@ -115,10 +115,10 @@ diff -ruN uboot-2020.10.orig/cmd/usb_mass_storage.c uboot-2020.10/cmd/usb_mass_s
  			       int argc, char *const argv[])
  {
  	const char *usb_controller;
-diff -ruN uboot-2020.10.orig/common/autoboot.c uboot-2020.10/common/autoboot.c
---- uboot-2020.10.orig/common/autoboot.c	2020-10-05 17:15:32.000000000 +0200
-+++ uboot-2020.10/common/autoboot.c	2020-10-19 14:46:14.764045648 +0200
-@@ -37,6 +37,8 @@
+diff -ruN u-boot-2021.04-rc4.orig/common/autoboot.c u-boot-2021.04-rc4/common/autoboot.c
+--- u-boot-2021.04-rc4.orig/common/autoboot.c	2021-03-15 17:06:41.000000000 +0100
++++ u-boot-2021.04-rc4/common/autoboot.c	2021-03-28 22:39:35.533904675 +0200
+@@ -38,6 +38,8 @@
  static int stored_bootdelay;
  static int menukey;
  
@@ -127,7 +127,7 @@ diff -ruN uboot-2020.10.orig/common/autoboot.c uboot-2020.10/common/autoboot.c
  #ifdef CONFIG_AUTOBOOT_ENCRYPTION
  #define AUTOBOOT_STOP_STR_SHA256 CONFIG_AUTOBOOT_STOP_STR_SHA256
  #else
-@@ -359,10 +361,25 @@
+@@ -368,10 +370,25 @@
  	return s;
  }
  
@@ -150,13 +150,13 @@ diff -ruN uboot-2020.10.orig/common/autoboot.c uboot-2020.10/common/autoboot.c
 +    return;
 +  }
 +
- 	if (stored_bootdelay != -1 && s && !abortboot(stored_bootdelay)) {
+ 	if (s && (stored_bootdelay == -2 ||
+ 		 (stored_bootdelay != -1 && !abortboot(stored_bootdelay)))) {
  		bool lock;
- 		int prev;
-diff -ruN uboot-2020.10.orig/common/board_r.c uboot-2020.10/common/board_r.c
---- uboot-2020.10.orig/common/board_r.c	2020-10-05 17:15:32.000000000 +0200
-+++ uboot-2020.10/common/board_r.c	2020-10-19 14:46:14.764045648 +0200
-@@ -780,6 +780,7 @@
+diff -ruN u-boot-2021.04-rc4.orig/common/board_r.c u-boot-2021.04-rc4/common/board_r.c
+--- u-boot-2021.04-rc4.orig/common/board_r.c	2021-03-15 17:06:41.000000000 +0100
++++ u-boot-2021.04-rc4/common/board_r.c	2021-03-28 22:37:12.919110399 +0200
+@@ -697,6 +697,7 @@
  #ifdef CONFIG_CMD_ONENAND
  	initr_onenand,
  #endif
@@ -164,10 +164,10 @@ diff -ruN uboot-2020.10.orig/common/board_r.c uboot-2020.10/common/board_r.c
  #ifdef CONFIG_MMC
  	initr_mmc,
  #endif
-diff -ruN uboot-2020.10.orig/include/init.h uboot-2020.10/include/init.h
---- uboot-2020.10.orig/include/init.h	2020-10-05 17:15:32.000000000 +0200
-+++ uboot-2020.10/include/init.h	2020-10-19 14:46:14.764045648 +0200
-@@ -261,6 +261,7 @@
+diff -ruN u-boot-2021.04-rc4.orig/include/init.h u-boot-2021.04-rc4/include/init.h
+--- u-boot-2021.04-rc4.orig/include/init.h	2021-03-15 17:06:41.000000000 +0100
++++ u-boot-2021.04-rc4/include/init.h	2021-03-28 22:37:12.919110399 +0200
+@@ -294,6 +294,7 @@
  /* manipulate the U-Boot fdt before its relocation */
  int board_fix_fdt(void *rw_fdt_blob);
  int board_late_init(void);

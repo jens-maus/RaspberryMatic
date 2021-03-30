@@ -52,3 +52,6 @@ load ${devtype} ${devnum}:${kernelfs} ${kernel_addr_r} ${kernel_img}
 
 # boot kernel
 booti ${kernel_addr_r} ${initrd_addr_r} ${fdt_addr}
+
+echo "Boot failed, resetting..."
+reset

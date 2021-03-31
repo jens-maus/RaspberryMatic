@@ -4,6 +4,9 @@
 BOARD_DIR="$(dirname "$0")"
 BOARD_NAME="$(basename "${BOARD_DIR}")"
 
+# Use our own bootEnv.txt
+cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/bootEnv.txt" "${BINARIES_DIR}/"
+
 #
 # Create user filesystem
 #

@@ -39042,7 +39042,7 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, event)
     }
   } catch(e) {conInfo(e);}
 
-  if (! value)
+  if (typeof value == "undefined")
   {
     finalVal = min;
     ok = false;

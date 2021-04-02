@@ -39057,8 +39057,7 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, event)
     parsedValue = parseFloat(value);
   } catch(e) {conInfo(e);}
 
-  // !0 would result in true so explicitly check if it is not 0
-  if (!value && value !== 0)
+  if (typeof value == "undefined")
   {
     finalVal = parsedMin;
     ok = false;

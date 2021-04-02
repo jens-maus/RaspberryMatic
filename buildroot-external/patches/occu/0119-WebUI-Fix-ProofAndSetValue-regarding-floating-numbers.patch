@@ -1,6 +1,6 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -39027,46 +39027,62 @@
+@@ -39027,46 +39027,61 @@
      if (tokens[1]) value += tokens[1];
      srcElm.value = value;
    }
@@ -39,9 +39,7 @@
 +    parsedValue = parseFloat(value);
    } catch(e) {conInfo(e);}
  
--  if (! value)
-+  // !0 would result in true so explicitly check if it is not 0
-+  if (!value && value !== 0)
+   if (typeof value == "undefined")
    {
 -    finalVal = min;
 +    finalVal = parsedMin;
@@ -76,7 +74,7 @@
      srcElm.value = dstElm.value;
      srcElm.setAttribute("valvalid", "true");
    }
-@@ -39074,7 +39090,7 @@
+@@ -39074,7 +39089,7 @@
    {
      srcElm.setAttribute("valvalid", "false");
      srcElm.style.backgroundColor = "red";

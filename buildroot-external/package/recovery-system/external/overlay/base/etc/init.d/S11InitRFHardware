@@ -281,7 +281,7 @@ query_rf_parameters() {
   if [[ -f /etc/config/hmip_address.conf ]]; then
     HM_HMIP_ADDRESS_ACTIVE="0x$(grep -i Adapter.1.Address /etc/config/hmip_address.conf 2>/dev/null | tr -d '[:space:]' | cut -d= -f2)"
   else
-    HM_HMIP_ADDRESS_ACTIVE=${HMIP_ADDRESS}
+    HM_HMIP_ADDRESS_ACTIVE=${HM_HMIP_ADDRESS}
   fi
 
   #####################################

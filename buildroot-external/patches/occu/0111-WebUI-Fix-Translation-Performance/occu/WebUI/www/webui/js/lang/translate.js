@@ -84,7 +84,7 @@ function translateKey(key, lang) {
       EscapedLangDict[lang] = {};
     }
     var text = langJSON[lang][key];
-    if(!text) text = key;
+    if(text === undefined) text = key;
     return unescape(text);
   }
   

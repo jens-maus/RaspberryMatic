@@ -24,6 +24,7 @@ menu "Hardware Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/bluetooth-tinker/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/intel-e1000e/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/rpi-eeprom/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/hardkernel-boot/Config.in"
 endmenu
 
 menu "Software Support"

@@ -1,0 +1,39 @@
+config BR2_PACKAGE_HARDKERNEL_BOOT
+	bool "Hardkernel Secure Boot Loader"
+	depends on BR2_TARGET_UBOOT
+	help
+	  Augment uboot for secure loading on hardkernel targets.
+
+if BR2_PACKAGE_HARDKERNEL_BOOT
+choice
+	prompt "Target"
+	default BR2_PACKAGE_HARDKERNEL_BOOT_ODROID_C2
+
+config BR2_PACKAGE_HARDKERNEL_BOOT_ODROID_C2
+	bool "Odroid-C2"
+	help
+	  For the Odroid-C2
+
+config BR2_PACKAGE_HARDKERNEL_BOOT_ODROID_C4
+	bool "Odroid-C4"
+	help
+	  For the Odroid-C4
+
+config BR2_PACKAGE_HARDKERNEL_BOOT_ODROID_XU4
+	bool "Odroid-XU4"
+	help
+	  For the Odroid-XU4
+
+config BR2_PACKAGE_HARDKERNEL_BOOT_ODROID_N2
+	bool "Odroid-N2"
+	help
+	  For the Odroid-N2
+
+endchoice
+
+config BR2_PACKAGE_HARDKERNEL_BOOT_FIX_MAC
+	bool "Hardkernel fix mac"
+	help
+	  Install script to fix the mac address.
+
+endif

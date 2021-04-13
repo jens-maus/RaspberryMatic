@@ -580,7 +580,7 @@ fwinstall()
       echo -ne "OK, "
 
       # on platforms with dedicated boot loaders we have to update them as well.
-      if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]] || [[ "${BOOTFS_PLATFORM}" == "ova" ]] || [[ "${BOOTFS_PLATFORM}" == "intelnuc" ]]; then
+      if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]] || [[ "${BOOTFS_PLATFORM}" == "ova" ]] || [[ "${BOOTFS_PLATFORM}" == "intelnuc" ]] || [[ "${BOOTFS_PLATFORM}" == "odroid-c4" ]]; then
         BOOTFS_ROOTDEV="/dev/$(basename "$(dirname "$(readlink "/sys/class/block/${BOOTFS_DEV#/dev/}")")")"
         BOOTFS_START=$(/sbin/fdisk -l "${BOOTFS_ROOTDEV}" | grep FAT32 | head -1 | awk '{ printf $3 }')
         BOOTFS_LOOPROOTDEV=${LOFS_DEV}
@@ -591,6 +591,11 @@ fwinstall()
             # Tinkerboard version has U-Boot in seperate boot sector
             echo -ne "(U-Boot)... "
             /bin/dd if="${BOOTFS_LOOPROOTDEV}" of="${BOOTFS_ROOTDEV}" bs=32K count=31 seek=1 skip=1 conv=fsync status=none
+            result=$?
+          elif [[ "${BOOTFS_PLATFORM}" == "odroid-c4" ]]; then
+            # ODroid-C4 has U-Boot in seperate boot sector
+            echo -ne "(U-Boot)... "
+            /bin/dd if="${BOOTFS_LOOPROOTDEV}" of="${BOOTFS_ROOTDEV}" bs=32K count=159 seek=1 skip=1 conv=fsync status=none
             result=$?
           else
             # x86 RaspberryMatic with GRUB

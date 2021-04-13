@@ -32,23 +32,25 @@ start() {
     fi
 
     # setup the LEDs of the RPI-RF-MOD
-    echo ${GREEN} >/sys/class/leds/rpi_rf_mod:green/trigger
-    echo ${RED}   >/sys/class/leds/rpi_rf_mod:red/trigger
-    echo ${BLUE}  >/sys/class/leds/rpi_rf_mod:blue/trigger
+    if [[ -e /sys/class/leds/rpi_rf_mod:green/trigger ]]; then
+      echo ${GREEN} >/sys/class/leds/rpi_rf_mod:green/trigger
+      echo ${RED}   >/sys/class/leds/rpi_rf_mod:red/trigger
+      echo ${BLUE}  >/sys/class/leds/rpi_rf_mod:blue/trigger
 
-    # setup blink speed
-    if [[ -n "${SPEED}" ]]; then
-      if [[ "${GREEN}" == "timer" ]]; then
-        echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:green/delay_on
-        echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:green/delay_off
-      fi
-      if [[ "${RED}" == "timer" ]]; then
-        echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:red/delay_on
-        echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:red/delay_off
-      fi
-      if [[ "${BLUE}" == "timer" ]]; then
-        echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:blue/delay_on
-        echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:blue/delay_off
+      # setup blink speed
+      if [[ -n "${SPEED}" ]]; then
+        if [[ "${GREEN}" == "timer" ]]; then
+          echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:green/delay_on
+          echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:green/delay_off
+        fi
+        if [[ "${RED}" == "timer" ]]; then
+          echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:red/delay_on
+          echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:red/delay_off
+        fi
+        if [[ "${BLUE}" == "timer" ]]; then
+          echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:blue/delay_on
+          echo "${SPEED}" >/sys/class/leds/rpi_rf_mod:blue/delay_off
+        fi
       fi
     fi
   fi

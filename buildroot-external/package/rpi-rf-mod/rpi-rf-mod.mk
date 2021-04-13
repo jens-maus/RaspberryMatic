@@ -11,7 +11,7 @@
 #
 #############################################################
 
-RPI_RF_MOD_VERSION = 1.6.0
+RPI_RF_MOD_VERSION = 1.7.0
 RPI_RF_MOD_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/rpi-rf-mod
 RPI_RF_MOD_SITE_METHOD = local
 RPI_RF_MOD_LICENSE = Apache-2.0
@@ -24,6 +24,9 @@ ifeq ($(BR2_PACKAGE_RPI_RF_MOD_DTS_RPI),y)
 else ifeq ($(BR2_PACKAGE_RPI_RF_MOD_DTS_TINKER),y)
   # ASUS Tinkerboard DTS file
   RPI_RF_MOD_DTS_FILE = rpi-rf-mod-tinker
+else ifeq ($(BR2_PACKAGE_RPI_RF_MOD_DTS_ODROID-C4),y)
+  # Odroid C4 DTS file
+  RPI_RF_MOD_DTS_FILE = rpi-rf-mod-odroid-c4
 endif
 
 define RPI_RF_MOD_BUILD_CMDS

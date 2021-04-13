@@ -25,6 +25,7 @@ rm -rf "${TARGET_DIR}/etc/usbmount"
 rm -rf "${TARGET_DIR}/etc/usb_modeswitch.d"
 rm -f "${TARGET_DIR}/bin/dhcp.script"
 rm -f "${TARGET_DIR}/bin/checkBadBlocks.sh"
+rm -f "${TARGET_DIR}/etc/sysctl.conf"
 
 #Remove files managed by docker
 rm "${TARGET_DIR}/etc/hosts"

@@ -108,11 +108,6 @@ identify_host() {
     echo "couldn't identify hardware platform (${hostid}). Using RaspberryPi3 as fallback"
   fi
 
-  # disable "deprecated CP15 Barrier instruction" warnings
-  if [[ -e /proc/sys/abi/cp15_barrier ]]; then
-    echo 2 >/proc/sys/abi/cp15_barrier
-  fi
-
   # depending on the host hardware we have to define different
   # HM settings
   case "${HM_HOST}" in
@@ -188,6 +183,9 @@ identify_host() {
 
 start() {
   echo -n "Identifying onboard hardware: "
+
+  # make sure to load sysctl defaults from /etc/sysctl.conf
+  [[ -f /etc/sysctl.conf ]] && /sbin/sysctl -p -q
 
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode

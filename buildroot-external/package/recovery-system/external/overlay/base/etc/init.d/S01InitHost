@@ -160,7 +160,7 @@ start() {
   echo -n "Identifying onboard hardware: "
 
   # make sure to load sysctl defaults from /etc/sysctl.conf
-  [[ -f /etc/sysctl.conf ]] && /sbin/sysctl -p -q
+  [[ -f /etc/sysctl.conf ]] && /sbin/sysctl -p -q -e
 
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode

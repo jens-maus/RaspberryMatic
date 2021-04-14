@@ -22,7 +22,7 @@
 ### [🚀 Quick-Start](#cloud-schnellstart)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📚 Documentation](https://github.com/jens-maus/RaspberryMatic/wiki)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📦 Download](https://github.com/jens-maus/RaspberryMatic/releases/latest)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[🚑 Support](#yum-support-mitarbeit)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[👮 Licenses](#scroll-lizenzen)
 
 ___
-RaspberryMatic is a free and non-commercial OpenSource operating system alternative for the _[CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html)_ or  _[ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)_ smart home central systems to configure and use [HomeMatic](http://homematic.com/)/BidCos-RF or [homematicIP](https://www.homematic-ip.com/) IoT hardware distributed by [eQ-3](https://eq-3.de)/[ELV](https://elv.de/). RaspberryMatic has the aim to be 100% compatible to a standard _HomeMatic CCU control central_ for a cloud-free use of HomeMatic IoT hardware on freely available single-board-computers (SBC) like a [RaspberryPi](https://www.raspberrypi.org/), [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/) or even as a virtual appliance on modern virtual environments (e.g. vmWare ESXi, Proxmox, VirtualBox, Docker/OCI, Kubernetes/K8s, etc.). On top of that, it provides additional exclusive features on different levels (WebUI, Linux-OS, etc.) to provide users with an enhanced user experience compared to the standard vendor-provided CCU firmware from eQ3/ELV.
+RaspberryMatic is a free and non-commercial OpenSource operating system alternative for the _[CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html)_ or  _[ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)_ smart home central systems to configure and use [HomeMatic](http://homematic.com/)/BidCos-RF or [homematicIP](https://www.homematic-ip.com/) IoT hardware distributed by [eQ-3](https://eq-3.de)/[ELV](https://elv.de/). RaspberryMatic has the aim to be 100% compatible to a standard _HomeMatic CCU control central_ for a cloud-free use of HomeMatic IoT hardware on freely available single-board-computers (SBC) like a [RaspberryPi](https://www.raspberrypi.org/), [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/), [Hardkernel ODROID](https://www.hardkernel.com/shop/odroid-c4/) or even as a virtual appliance on modern virtual environments (e.g. vmWare ESXi, Proxmox, VirtualBox, Docker/OCI, Kubernetes/K8s, etc.). On top of that, it provides additional exclusive features on different levels (WebUI, Linux-OS, etc.) to provide users with an enhanced user experience compared to the standard vendor-provided CCU firmware from eQ3/ELV.
 
 [more...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung)
 
@@ -43,6 +43,7 @@ RaspberryMatic can be directly installed on the following, commercially distribu
 * _Hardware_:
    * [RaspberryPi](https://www.raspberrypi.org/)
    * [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
+   * [Hardkernel ODROID](https://www.hardkernel.com/shop/odroid-c4/)
    * [Intel NUC](https://www.intel.de/content/www/de/de/products/boards-kits/nuc.html)
 
 ...or even as a virtual appliance on the following virtualization environments:
@@ -81,6 +82,7 @@ Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will 
      * [ELV-Charly](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ELV-Charly)
      * [RaspberryPi](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)
      * [ASUS Tinkerboard](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Tinkerboard)
+     * [Hardkernel ODROID](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ODROID)
      * [Intel NUC](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-IntelNUC)
    * [Basic Installation (Virtual)](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#grundinstallation-virtuell)
      * [vmWare ESXi](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-ESXi)

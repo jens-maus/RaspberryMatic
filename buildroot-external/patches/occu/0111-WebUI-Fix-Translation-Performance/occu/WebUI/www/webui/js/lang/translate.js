@@ -95,7 +95,7 @@ function translateKey(key, lang) {
 
   // Get ressource, escape and cach it
   var keyText = langJSON[lang][key];
-  if(!keyText) keyText = key;
+  if(keyText === undefined) keyText = key;
   var result = unescape(keyText);
   EscapedLangDict[lang][key] = result;
   return result;

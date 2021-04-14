@@ -1,0 +1,12 @@
+config BR2_PACKAGE_WIRINGPI_ODROID
+  bool "wiringpi-odroid"
+  depends on BR2_USE_MMU # fork()
+  depends on BR2_TOOLCHAIN_HAS_THREADS
+  help
+    wiringPi libraries (and gpio command) for ODROID
+
+    https://github.com/hardkernel/wiringPi
+
+comment "wiringpi needs a toolchain w/ threads"
+  depends on BR2_USE_MMU
+  depends on !BR2_TOOLCHAIN_HAS_THREADS

@@ -69,6 +69,10 @@ identify_host() {
           *ODROID-C4*)
             HM_HOST="odroid-c4"
           ;;
+          # Hardkernel ODROID-N2
+          *ODROID-N2*)
+            HM_HOST="odroid-n2"
+          ;;
         esac
       fi
     ;;
@@ -141,8 +145,8 @@ identify_host() {
       HM_LED_YELLOW="/sys/class/leds/led-1"
     ;;
 
-    # Hardkernel ODROID-C4
-    odroid-c4*)
+    # Hardkernel ODROID-C4/N2
+    odroid-*)
       HM_LED_GREEN="/sys/class/leds/blue:status"
       HM_LED_RED=""
       HM_LED_YELLOW=""

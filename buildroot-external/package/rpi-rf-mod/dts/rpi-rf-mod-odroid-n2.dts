@@ -3,7 +3,7 @@
 
 /*
 ** Device Tree Overlay for eQ-3 RPI-RF-MOD and
-** HM-MOD-RPI-PCB for ODROID-C4
+** HM-MOD-RPI-PCB for ODROID-N2/N2+
 **
 ** Copyright (c) 2021 Jens Maus <mail@jens-maus.de>
 ** Licensed under Apache 2.0
@@ -11,7 +11,7 @@
 */
 
 / {
-    compatible = "hardkernel,odroid-c4", "amlogic,sm1";
+    compatible = "hardkernel,odroid-n2-plus", "hardkernel,odroid-n2", "amlogic,s922x", "amlogic,g12b";
 
     // fragment to define settings for the rx8130 RTC clock
     // of the RPI-RF-MOD

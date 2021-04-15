@@ -50,6 +50,10 @@ The following installation archives can be downloaded for different hardware pla
 - TinkerBoard S, TinkerBoard – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Tinkerboard)):
 <sub>:package: [RaspberryMatic-${VERSION}-tinkerboard.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-tinkerboard.zip)<br/>SHA256: XXXXX</sub>
 
+- ODROID-N2/N2+, ODROID-C4 – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Odroid)):
+<sub>:package: [RaspberryMatic-${VERSION}-odroid-n2.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-odroid-n2.zip)<br/>SHA256: XXXXX</sub>
+<sub>:package: [RaspberryMatic-${VERSION}-odroid-c4.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-odroid-c4.zip)<br/>SHA256: XXXXX</sub>
+
 - Intel NUC – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-IntelNUC)):
 <sub>:package: [RaspberryMatic-${VERSION}-intelnuc.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-intelnuc.zip)<br/>SHA256: XXXXX</sub>
 

@@ -66,9 +66,9 @@ fi
 
 echo "done.<br/>"
 
-echo -ne "[5/11] Cloning partition table... "
+echo -ne "[5/11] Cloning partition table (bootfs, rootfs)... "
 
-if ! /sbin/sfdisk -q -d "${SOURCE_DEV}" | sfdisk --no-reread --force -q "${TARGET_DEV}" >/dev/null 2>&1; then
+if ! /sbin/sfdisk -q -d "${SOURCE_DEV}" | head -n -1 | sfdisk --no-reread --force -q "${TARGET_DEV}" >/dev/null 2>&1; then
   echo "ERROR: cloning partition table failed (enough space on target device?)<br/>"
   exit 1
 fi
@@ -89,12 +89,6 @@ fi
 TARGET_ROOTFS=$(/sbin/blkid | grep "${TARGET_DEV}" | grep deedbeef-02 | cut -d: -f1)
 if [[ -z "${TARGET_ROOTFS}" ]]; then
   echo "ERROR: target rootfs missing<br/>"
-  exit 1
-fi
-
-TARGET_USERFS=$(/sbin/blkid | grep "${TARGET_DEV}" | grep deedbeef-03 | cut -d: -f1)
-if [[ -z "${TARGET_USERFS}" ]]; then
-  echo "ERROR: target userfs missing<br/>"
   exit 1
 fi
 
@@ -122,30 +116,28 @@ mount -o ro "${SOURCE_ROOTFS}" /rootfs
 
 echo "done.<br/>"
 
-echo -ne "[8/11] Check for resizing userfs partition... "
-PARTNUM=3
-START_CHS=$(parted -s "${TARGET_DEV}" unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
-END_CHS=$(parted -s "${TARGET_DEV}" unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
-MAX_CHS=$(parted -s "${TARGET_DEV}" unit chs print | grep "^Disk ${TARGET_DEV}:" | cut -d' ' -f3)
+echo -ne "[8/11] Creating target userfs partition... "
+PARTNUM=2
+END_S=$(parted -s "${TARGET_DEV}" unit s print | grep "^ ${PARTNUM} " | awk '{print $3}' | tr -d 's')
 
-if [[ -n "${START_CHS}" && -n "${END_CHS}" && -n "${MAX_CHS}" && "${END_CHS}" != "${MAX_CHS}" ]]; then
-  echo -ne "resizing... "
+# use mkpart to create the /usr/local partition with the maximum available
+if ! parted -s "${TARGET_DEV}" mkpart primary ext4 "$((END_S+1))s" 100%; then
+  echo "ERROR: mkpart failed<br/>"
+  exit 1
+fi
 
-  # use resizepart to resize the /usr/local partition to the maximum size of
-  # the disk
-  if ! parted -s "${TARGET_DEV}" resizepart ${PARTNUM} 100%; then
-    echo "ERROR: resizepart failed<br/>"
-    exit 1
-  fi
+# force PARTUUID to 0xDEEDBEEF (because parted changes partuuid)
+echo -en '\xEF\xBE\xED\xDE' | dd of="${TARGET_DEV}" conv=notrunc bs=1 seek=$((0x1B8)) 2>/dev/null
 
-  # force PARTUUID to 0xDEEDBEEF (because parted changes partuuid)
-  echo -en '\xEF\xBE\xED\xDE' | dd of="${TARGET_DEV}" conv=notrunc bs=1 seek=$((0x1B8)) 2>/dev/null
-else
-  echo -ne "not required... "
+# check if parted could create the partition correctly.
+TARGET_USERFS=$(/sbin/blkid | grep "${TARGET_DEV}" | grep deedbeef-03 | cut -d: -f1)
+if [[ -z "${TARGET_USERFS}" ]]; then
+  echo "ERROR: target userfs missing<br/>"
+  exit 1
 fi
 echo "done.<br/>"
 
-echo -ne "[9/11] Re-creating partition 3 (userfs)... "
+echo -ne "[9/11] Creating userfs filesystem... "
 
 # recreate userfs on target device
 if ! mkfs.ext4 -q -F -L userfs "${TARGET_USERFS}" >/dev/null 2>&1; then

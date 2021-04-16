@@ -590,7 +590,7 @@ fwinstall()
         BOOTFS_LOOPROOTDEV=${LOFS_DEV}
         BOOTFS_LOOPSTART=$(/sbin/fdisk -l "${BOOTFS_LOOPROOTDEV}" | grep FAT32 | head -1 | awk '{ printf $3 }')
         echo -ne "updating bootloader "
-        if [[ "${BOOTFS_START}" == "${BOOTFS_LOOPSTART}" ]] && [[ "${BOOTFS_LOOPSTART}" == "2048" ]]; then
+        if [[ "${BOOTFS_START}" == "${BOOTFS_LOOPSTART}" ]] && [[ "${BOOTFS_LOOPSTART}" -ge 2048 ]]; then
           if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]]; then
             # Tinkerboard version has U-Boot in seperate boot sector
             echo -ne "(U-Boot)... "

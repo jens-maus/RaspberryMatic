@@ -42,7 +42,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Check Dockerfile
-      uses: brpaz/hadolint-action@v1.3.1
+      uses: brpaz/hadolint-action@v1.4.0
       with:
         dockerfile: ./buildroot-external/board/oci/Dockerfile
 

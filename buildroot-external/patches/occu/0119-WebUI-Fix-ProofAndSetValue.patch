@@ -1,3 +1,14 @@
+--- occu/WebUI/www/config/ic_common.tcl.orig
++++ occu/WebUI/www/config/ic_common.tcl
+@@ -1383,7 +1383,7 @@
+ 
+           append s "<input type=\"hidden\" name=\"$param_id\"   value=\"$value_orig\" $id                 $access style=\"visibility:hidden;display:none;\" />"
+           append s "<input type=\"text\"   name=\"__$param_id\" value=\"$value\"       id=\"$input_idval\" $access $hidden"
+-          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', parseFloat($min), parseFloat($max), parseFloat([expr 1 / $factor]));\" /></td>"
++          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', '$min', '$max', parseFloat([expr 1 / $factor]));\" /></td>"
+           append s "<td><div id=\"${input_idval}_unit\" $hidden>$unit ($min-$max)</div></td>"
+       }
+       "ENUM" {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -39027,46 +39027,61 @@

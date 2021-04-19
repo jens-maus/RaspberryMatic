@@ -46,12 +46,10 @@
 
     // swap i2c2 and i2c3 so that we have the i2c1 alias mapped to i2c3 instead
     fragment@2 {
-        target-path = "/";
+        target-path = "/aliases";
         __overlay__ {
-            aliases {
-                i2c0 = <&i2c3>;
-                i2c1 = <&i2c2>;
-            };
+            i2c0 = <&i2c3>;
+            i2c1 = <&i2c2>;
         };
     };
 };

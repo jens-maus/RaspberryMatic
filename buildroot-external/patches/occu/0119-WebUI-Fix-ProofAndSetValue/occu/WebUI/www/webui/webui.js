@@ -39081,16 +39081,16 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, event)
   if (ok)
   {
     srcElm.style.backgroundColor = "#fffffe";
-    dstElm.value = (parsedValue * dstValueFactor).toFixed(digits);
-    srcElm.value = dstElm.value;
+    dstElm.value = (parsedValue.toFixed(digits) * dstValueFactor);
+    srcElm.value = parsedValue.toFixed(digits);
     srcElm.setAttribute("valvalid", "true");
   }
   else
   {
     srcElm.setAttribute("valvalid", "false");
     srcElm.style.backgroundColor = "red";
-    dstElm.value = (finalVal * dstValueFactor).toFixed(digits);
-    srcElm.value = dstElm.value;
+    dstElm.value = (finalVal.toFixed(digits) * dstValueFactor);
+    srcElm.value = finalVal.toFixed(digits);
     window.setTimeout(function(){srcElm.style.backgroundColor = "white";},1000);
   }
 };

@@ -11,7 +11,7 @@
        "ENUM" {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -39027,46 +39027,61 @@
+@@ -39027,55 +39027,70 @@
      if (tokens[1]) value += tokens[1];
      srcElm.value = value;
    }
@@ -81,16 +81,19 @@
    {
      srcElm.style.backgroundColor = "#fffffe";
 -    dstElm.value = value * dstValueFactor;
-+    dstElm.value = (parsedValue * dstValueFactor).toFixed(digits);
-     srcElm.value = dstElm.value;
+-    srcElm.value = dstElm.value;
++    dstElm.value = (parsedValue.toFixed(digits) * dstValueFactor);
++    srcElm.value = parsedValue.toFixed(digits);
      srcElm.setAttribute("valvalid", "true");
    }
-@@ -39074,7 +39089,7 @@
+   else
    {
      srcElm.setAttribute("valvalid", "false");
      srcElm.style.backgroundColor = "red";
 -    dstElm.value = finalVal * dstValueFactor;
-+    dstElm.value = (finalVal * dstValueFactor).toFixed(digits);
-     srcElm.value = dstElm.value;
+-    srcElm.value = dstElm.value;
++    dstElm.value = (finalVal.toFixed(digits) * dstValueFactor);
++    srcElm.value = finalVal.toFixed(digits);
      window.setTimeout(function(){srcElm.style.backgroundColor = "white";},1000);
    }
+ };

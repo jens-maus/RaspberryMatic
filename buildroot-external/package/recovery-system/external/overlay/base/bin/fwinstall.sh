@@ -584,7 +584,8 @@ fwinstall()
          [[ "${BOOTFS_PLATFORM}" == "ova" ]] ||
          [[ "${BOOTFS_PLATFORM}" == "intelnuc" ]] ||
          [[ "${BOOTFS_PLATFORM}" == "odroid-c4" ]] ||
-         [[ "${BOOTFS_PLATFORM}" == "odroid-n2" ]]; then
+         [[ "${BOOTFS_PLATFORM}" == "odroid-n2" ]] ||
+         [[ "${BOOTFS_PLATFORM}" == "odroid-c2" ]]; then
         BOOTFS_ROOTDEV="/dev/$(basename "$(dirname "$(readlink "/sys/class/block/${BOOTFS_DEV#/dev/}")")")"
         BOOTFS_START=$(/sbin/fdisk -l "${BOOTFS_ROOTDEV}" | grep FAT32 | head -1 | awk '{ printf $3 }')
         BOOTFS_LOOPROOTDEV=${LOFS_DEV}
@@ -596,8 +597,10 @@ fwinstall()
             echo -ne "(U-Boot)... "
             /bin/dd if="${BOOTFS_LOOPROOTDEV}" of="${BOOTFS_ROOTDEV}" bs=32K count=31 seek=1 skip=1 conv=fsync status=none
             result=$?
-          elif [[ "${BOOTFS_PLATFORM}" == "odroid-c4" ]] || [[ "${BOOTFS_PLATFORM}" == "odroid-n2" ]]; then
-            # ODroid-C4/N2 has U-Boot in seperate boot sector
+          elif [[ "${BOOTFS_PLATFORM}" == "odroid-c4" ]] ||
+               [[ "${BOOTFS_PLATFORM}" == "odroid-n2" ]] ||
+               [[ "${BOOTFS_PLATFORM}" == "odroid-c2" ]]; then
+            # ODroid-C4/N2/C2 has U-Boot in seperate boot sector
             echo -ne "(U-Boot)... "
             /bin/dd if="${BOOTFS_LOOPROOTDEV}" of="${BOOTFS_ROOTDEV}" bs=512 count=10239 seek=1 skip=1 conv=fsync status=none
             result=$?

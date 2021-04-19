@@ -35,7 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [rpi0, rpi2, rpi3, rpi4, tinkerboard, odroid-c4, odroid-n2, intelnuc, ova, oci_amd64, oci_arm64, oci_arm]
+        platform: [rpi0, rpi2, rpi3, rpi4, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, oci_amd64, oci_arm64, oci_arm]
 
     steps:
     - name: Checkout Code
@@ -91,7 +91,7 @@ jobs:
 
     #######################
     # nightly snapshot uploads
-    - name: Upload build snapshot [rpi*, tinkerboard, odroid-c4, intelnuc, ova]
+    - name: Upload build snapshot [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova]
       if: |
         github.repository_owner == 'jens-maus' &&
         !startsWith(matrix.platform, 'oci_')
@@ -106,7 +106,7 @@ jobs:
         asset_content_type: application/zip
         max_releases: 1
 
-    - name: Upload build snapshot checksum [rpi*, tinkerboard, odroid-c4, intelnuc, ova]
+    - name: Upload build snapshot checksum [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova]
       if: |
         github.repository_owner == 'jens-maus' &&
         !startsWith(matrix.platform, 'oci_')

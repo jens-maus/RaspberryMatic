@@ -28,8 +28,11 @@ else ifeq ($(BR2_PACKAGE_RPI_RF_MOD_DTS_ODROID-C4),y)
   # Odroid C4 DTS file
   RPI_RF_MOD_DTS_FILE = rpi-rf-mod-odroid-c4
 else ifeq ($(BR2_PACKAGE_RPI_RF_MOD_DTS_ODROID-N2),y)
-  # Odroid C4 DTS file
+  # Odroid N2/N2+ DTS file
   RPI_RF_MOD_DTS_FILE = rpi-rf-mod-odroid-n2
+else ifeq ($(BR2_PACKAGE_RPI_RF_MOD_DTS_ODROID-C2),y)
+  # Odroid C2 DTS file
+  RPI_RF_MOD_DTS_FILE = rpi-rf-mod-odroid-c2
 endif
 
 define RPI_RF_MOD_BUILD_CMDS

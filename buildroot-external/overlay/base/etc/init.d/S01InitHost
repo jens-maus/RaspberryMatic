@@ -73,6 +73,10 @@ identify_host() {
           *ODROID-N2*)
             HM_HOST="odroid-n2"
           ;;
+          # Hardkernel ODROID-C2
+          *ODROID-C2*)
+            HM_HOST="odroid-c2"
+          ;;
         esac
       fi
     ;;

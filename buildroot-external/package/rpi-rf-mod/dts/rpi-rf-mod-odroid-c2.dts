@@ -1,0 +1,54 @@
+/dts-v1/;
+/plugin/;
+
+/*
+** Device Tree Overlay for eQ-3 RPI-RF-MOD and
+** HM-MOD-RPI-PCB for ODROID-C2
+**
+** Copyright (c) 2021 Jens Maus <mail@jens-maus.de>
+** Licensed under Apache 2.0
+**
+*/
+
+/ {
+    compatible = "hardkernel,odroid-c2", "amlogic,meson-gxbb";
+
+    // fragment to define settings for the rx8130 RTC clock
+    // of the RPI-RF-MOD
+    fragment@0 {
+        target = <&i2c_A>;
+        __overlay__ {
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+
+            rpi_rf_mod_rtc: rx8130@32 {
+                compatible = "epson,rx8130";
+                reg = <0x32>;
+                status = "okay";
+                aux-voltage-chargeable = <1>;
+            };
+        };
+    };
+
+    // fragment to define uart/serial dependencies for
+    // generic_raw_uart
+    fragment@1 {
+        target = <&uart_A>;
+        __overlay__ {
+            compatible = "pivccu,meson";
+            status = "okay";
+            pivccu,reset_pin = <&gpio 102 0>;   // HM-MOD-RPI-PCB
+            pivccu,alt_reset_pin = <&gpio 78 0>;// RPI-RF-MOD
+            pivccu,rtc = <&rpi_rf_mod_rtc>;     // RPI-RF-MOD
+        };
+    };
+
+    // switch i2c@8500 to i2c1
+    fragment@2 {
+        target-path = "/aliases";
+        __overlay__ {
+            i2c1 = "/soc/bus@c1100000/i2c@8500";
+        };
+    };
+};

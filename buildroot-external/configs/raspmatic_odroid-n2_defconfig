@@ -1,5 +1,5 @@
 BR2_aarch64=y
-BR2_cortex_a72=y
+BR2_cortex_a73_a53=y
 BR2_ARM_FPU_VFPV4=y
 BR2_DL_DIR="$(TOPDIR)/../download"
 BR2_KERNEL_MIRROR="https://www.kernel.org/pub"

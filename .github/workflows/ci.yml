@@ -51,7 +51,7 @@ jobs:
       with:
         ignore: buildroot-external/package/neoserver/pkg/mediola/neo_server buildroot-patches/0010-lib32-integration/buildroot/support/scripts
       env:
-        SHELLCHECK_OPTS: -e SC3010 -e SC3014 -e SC3057 -e SC3036 -e SC3028
+        SHELLCHECK_OPTS: -e SC3010 -e SC3014 -e SC3057 -e SC3036 -e SC3028 -e SC3020
 
     - name: Check Home Assistant Add-on Lint
       uses: frenck/action-addon-linter@main

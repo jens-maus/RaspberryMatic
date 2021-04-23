@@ -32,7 +32,7 @@ else
 fi
 
 # get running firmware version
-source /VERSION 2>/dev/null
+. /VERSION 2>/dev/null
 
 # check if specified path is a directory or file
 if [[ -d "${BACKUPPATH}" ]]; then

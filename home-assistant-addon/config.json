@@ -1,7 +1,6 @@
 {
   "name": "RaspberryMatic CCU",
-  "version": "3.57.4.20210320",
-  "stage": "experimental",
+  "version": "3.57.5.20210424",
   "slug": "raspberrymatic",
   "image": "ghcr.io/jens-maus/raspberrymatic",
   "arch": ["armhf", "aarch64", "amd64"],

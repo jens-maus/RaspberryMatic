@@ -28,15 +28,15 @@ type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 3.57.4
+version: 3.57.5
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 3.57.4.20210320
+appVersion: 3.57.5.20210424
 
 annotations:
   artifacthub.io/changes: |
-    - Release of 3.57.4.20210320
+    - Release of 3.57.5.20210424
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: Webpage

@@ -13,32 +13,22 @@ HomeMatic/homematicIP CCU central based on [RaspberryMatic](raspberrymatic).
 This add-on allows to run a [HomeMatic/homematicIP][homematic] control center (CCU) on
 your Home Assistant. It is based on [RaspberryMatic][raspberrymatic] which
 is open-source and 100% compatible with the homematic vendor ([eQ3][eq3]) own CCU
-system (CCU3) to connect to HomeMatic/homematicIP devices cloudless. Furthermore,
-it is based on [OCCU][occu] while providing additional exclusive features in the WebUI and
-underlying operating system for an improved user experience.
-
-🚧 **WORK-IN-PROGRESS** 🚧<br/>
-This add-on tries to provide all features of a standard, e.g. RaspberryPi or OVA-based
-RaspberryMatic CCU system. **Please note:** due to the restrictive docker-based nature of
-Home Assistant, some of the features require additional operating system modules which
-are **not yet** available. This currently limits the HomeMatic/homematicIP connectivity to
-the use of the HmIP-RFUSB, HM-LGW-O-TW-W-EU, HM-CFG-USB-2, HM-CFG-LAN and HMW-LGW-O-DR-GS-EU.
-Support for e.g. the GPIO-based RF modules (RPI-RF-MOD, HM-MOD-RPI-PCB) is currently under
-development.
+system (CCU3) to connect to HomeMatic/homematicIP devices without any cloud connection.
+Furthermore, it is based on [OCCU][occu] while providing additional exclusive features in
+the WebUI and underlying operating system for an improved user experience.
 
 ## Features
 
 - Use your Home Assistant central as a full-fledged HomeMatic/homematicIP control center (CCU).
 - Access the CCU WebUI from your Home Assistant user interface.
 - Provides all features of a RaspberryMatic system within your Home Assistant environment.
-- Interconnect to HomeMatic/homematicIP devices using the standard, vendor-provided RF modules (RPI-RF-MOD, HM-MOD-RPI-PCB, HmIP-RFUSB, HM-CFG-USB-2, HM-CFG-LAN), Wired gateways (HmIPW-DRAP, HMW-LGW-O-DR-GS-EU) or LAN gateway solutions (HmIP-HAP, HM-LGW-O-TW-W-EU) – see [Requirements](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen).
-- Supports additional open-hardware based USB/Ethernet adapter devices (HB-RF-USB, HB-RF-USB-2, HB-RF-ETH).
+- Interconnect to HomeMatic/homematicIP devices using the standard, vendor-provided RF modules (`RPI-RF-MOD`, `HM-MOD-RPI-PCB`, `HmIP-RFUSB`, `HM-CFG-USB-2`, `HM-CFG-LAN`), Wired gateways (`HmIPW-DRAP`, `HMW-LGW-O-DR-GS-EU`) or LAN gateway solutions (`HmIP-HAP`, `HM-LGW-O-TW-W-EU`) – see [Requirements](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen).
+- Supports additional open-hardware based USB/Ethernet adapter devices (`HB-RF-USB`, `HB-RF-USB-2`, `HB-RF-ETH`).
 
-## Documentation
+## Documentation / Installation
 
-For a detailed documentation please refer either to the "Documentation" tab of the installed Add-on or
-consult the [online documentation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HomeAssistant)
-available in the RaspberryMatic GitHub project.
+For a detailed documentation please refer to the "Documentation" tab of the installed Add-on or
+consult the [online documentation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HomeAssistant) available in the RaspberryMatic GitHub project. Also note, that after having installed the Add-on you also have to setup the HomeMatic integration part in Home Assistant itself so that your Home Assistant is able to see and use the HomeMatic/homematicIP devices in your RaspberryMatic central.
 
 ## License
 

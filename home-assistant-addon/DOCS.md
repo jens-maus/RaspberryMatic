@@ -1,13 +1,7 @@
 # Home Assistant Add-on: RaspberryMatic CCU
 
-🚧 **WORK-IN-PROGRESS** 🚧<br/>
-This add-on tries to provide all features of a standard, e.g. RaspberryPi or OVA-based
-RaspberryMatic CCU system. **Please note:** due to the restrictive docker-based nature of
-Home Assistant, some of the features require additional operating system modules which
-are **not yet** available. This currently limits the HomeMatic/homematicIP connectivity to
-the use of the HmIP-RFUSB, HM-LGW-O-TW-W-EU, HM-CFG-USB-2, HM-CFG-LAN and HMW-LGW-O-DR-GS-EU.
-Support for e.g. the GPIO-based RF modules (RPI-RF-MOD, HM-MOD-RPI-PCB) is currently under
-development.
+This add-on provides all features of a standard, e.g. RaspberryPi or OVA-based
+RaspberryMatic CCU system.
 
 ## Installation
 
@@ -18,9 +12,10 @@ Follow these steps to get the add-on installed on your system:
 3. Add the URL https://github.com/jens-maus/RaspberryMatic as a new add-on repository and click **Close**.
 4. Find the "RaspberryMatic CCU" add-on at the bottom and click it.
 5. Click on the `INSTALL` button.
-6. Install to the sidebar by clicking on `Show in sidebar`
-7. Start add-on by clicking on `START`
-8. Click on the `RaspberryMatic` sidebar link to switch into the RaspberryMatic WebUI.
+6. Install to the sidebar by clicking on `Show in sidebar`.
+7. Disable `protection-mode` as the add-on required elevated access rights.
+8. Start add-on by clicking on `START`
+9. Click on the `RaspberryMatic` sidebar link to switch into the RaspberryMatic WebUI.
 
 More detailed documentation on the installation can be found [here](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HomeAssistant)
 

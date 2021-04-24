@@ -1,4 +1,5 @@
-# Changelog
+# ChangeLog
 
-- [releases](https://github.com/jens-maus/RaspberryMatic/releases)
-- [Development commits](https://github.com/jens-maus/RaspberryMatic/commits/master)
+For a recent ChangeLog please review the following information:
+
+- [RaspberryMatic Releases](https://github.com/jens-maus/RaspberryMatic/releases)

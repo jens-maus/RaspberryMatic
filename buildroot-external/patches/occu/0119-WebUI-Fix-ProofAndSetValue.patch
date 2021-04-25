@@ -1,3 +1,58 @@
+--- occu/WebUI/www/config/easymodes/cc_rt_dev_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/cc_rt_dev_master.tcl
+@@ -21,7 +21,12 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set min [format {%1.1f} $param_descr(MIN)]
++  set min $param_descr(MIN)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.1f} $min]
++  }
+   return "$min"
+ }
+ 
+@@ -30,16 +35,21 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set max [format {%1.1f} $param_descr(MAX)]
++  set max $param_descr(MAX)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.1f} $max]
++  }
+   return "$max"
+ }
+ 
+ proc getTextField {type param value prn} {
+   global psDescr
+   set elemId 'separate_$type\_$prn'
+-  # Limit float to 2 decimal places
++  # Limit float to 1 decimal places
+   if {[llength [split $value "."]] == 2} {
+-    set value [format {%1.2f} $value]
++    set value [format {%1.1f} $value]
+   }
+   set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=\"$param\" onblur=\"ProofAndSetValue(this.id, this.id, '[getMinValue $param]', '[getMaxValue $param]', 1)\"/>"
+ 
+@@ -73,10 +83,10 @@
+   set min $param_descr(MIN)
+   set max $param_descr(MAX)
+ 
+-  # Limit float to 2 decimal places
++  # Limit float to 1 decimal places
+   if {[llength [split $min "."]] == 2} {
+-    set min [format {%1.2f} $min]
+-    set max [format {%1.2f} $max]
++    set min [format {%1.1f} $min]
++    set max [format {%1.1f} $max]
+   }
+   return "($min - $max)"
+ }
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
 @@ -1383,7 +1383,7 @@

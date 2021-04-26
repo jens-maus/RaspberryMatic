@@ -258,7 +258,6 @@ jobs:
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
 
-    
     #Testing
     - name: Build and load container image for test
       uses: docker/build-push-action@v2
@@ -303,19 +302,18 @@ jobs:
         docker version -f '{{.Client.Experimental}}'
         docker version -f '{{.Server.Experimental}}'
 
-    - name: deploy container
+    - name: Test container deploy
       run: |
         export CCU_DOCKER_PULL_REFRESH="false"
-        
         sudo -E ./buildroot-external/board/oci/deploy.sh -f
     
-    - name: test init
+    - name: Test WebUI init
       run: |
         error=0
         n=1
-        while ! curl localhost:8080 2>/dev/null|grep "HomeMatic WebUI"; do
+        while ! curl localhost:8080 2>/dev/null | grep "STARTPAGE_PC"; do
           if [ "$n" -ge 120 ]; then
-            echo "Still not up - aborting"
+            echo "ERROR: ReGaHss/WebUI still not up. aborting."
             error=1
             break
           fi
@@ -324,14 +322,11 @@ jobs:
         done 
 
         docker logs ccu
-        docker exec ccu tar czf - /tmp /usr/local > debug_output.tgz
-
+        docker exec ccu tar --owner=root --group=root --one-file-system --ignore-failed-read -czf - /tmp /usr/local > debug_output.tgz
         exit $error
 
-    - name: upload debug information
+    - name: Upload debug information
       uses: actions/upload-artifact@v2
       with:
         path: debug_output.tgz
-        name: RaspberryMatic-debug_output-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}.tgz
-
-
+        name: RaspberryMatic-debug_output-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}.tgz

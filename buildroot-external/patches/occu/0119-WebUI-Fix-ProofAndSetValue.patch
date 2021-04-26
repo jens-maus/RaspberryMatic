@@ -53,6 +53,151 @@
    }
    return "($min - $max)"
  }
+--- occu/WebUI/www/config/easymodes/etc/profile_cond_x_ch_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/profile_cond_x_ch_master.tcl
+@@ -98,6 +98,11 @@
+ 	if {![catch {array set param_descr $psDescr($param)}]} {
+     set min $param_descr(MIN)
+   }
++
++  # Limit float to 2 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.2f} $min]
++  }
+   return $min
+ }
+ 
+@@ -108,6 +113,11 @@
+ 	if {![catch {array set param_descr $psDescr($param)}]} {
+     set max $param_descr(MAX)
+   }
++
++  # Limit float to 2 decimal places
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.2f} $max]
++  }
+   return $max
+ }
+ 
+@@ -164,7 +174,7 @@
+     if {[string first "lowerVal_" $param 0] != -1 || [string first "upperVal_" $param 0] != -1} {
+       append s "<td class='$class'><input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur='setVal(this)'>&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
+     } else {
+-      append s "<td class='$class'><input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur='ProofAndSetValue(this.id, this.id, [getMinValue $param], [getMaxValue $param], 1);'>&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
++      append s "<td class='$class'><input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur='ProofAndSetValue(this.id, this.id, '[getMinValue $param]', '[getMaxValue $param]', 1);'>&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
+     }
+   }
+   append s "</tr>"
+--- occu/WebUI/www/config/easymodes/hm-cc-vg-1_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/hm-cc-vg-1_master.tcl
+@@ -24,7 +24,12 @@
+ 
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set min [format {%1.1f} $param_descr(MIN)]
++  set min $param_descr(MIN)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.1f} $min]
++  }
+   return "$min"
+ }
+ 
+@@ -33,7 +38,12 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set max [format {%1.1f} $param_descr(MAX)]
++  set max $param_descr(MAX)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.1f} $max]
++  }
+   return "$max"
+ }
+ 
+@@ -41,9 +51,9 @@
+   global psDescr
+ 
+   set elemId 'separate_$type\_$prn'
+-  # Limit float to 2 decimal places
++  # Limit float to 1 decimal places
+   if {[llength [split $value "."]] == 2} {
+-    set value [format {%1.2f} $value]
++    set value [format {%1.1f} $value]
+   }
+   set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=\"$param\" onblur=\"ProofAndSetValue(this.id, this.id, '[getMinValue $param]', '[getMaxValue $param]', 1)\"/>"
+   return $s
+@@ -75,10 +85,10 @@
+   set min $param_descr(MIN)
+   set max $param_descr(MAX)
+ 
+-  # Limit float to 2 decimal places
++  # Limit float to 1 decimal places
+   if {[llength [split $min "."]] == 2} {
+-    set min [format {%1.2f} $min]
+-    set max [format {%1.2f} $max]
++    set min [format {%1.1f} $min]
++    set max [format {%1.1f} $max]
+   }
+   return "($min - $max)"
+ }
+--- occu/WebUI/www/config/easymodes/tc_it_dev_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/tc_it_dev_master.tcl
+@@ -20,7 +20,12 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set min [format {%1.1f} $param_descr(MIN)]
++  set min $param_descr(MIN)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.1f} $min]
++  }
+   return "$min"
+ }
+ 
+@@ -28,15 +33,20 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set max [format {%1.1f} $param_descr(MAX)]
++  set max $param_descr(MAX)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.1f} $max]
++  }
+   return "$max"
+ }
+ 
+ proc getTextField {type param value prn} {
+   set elemId 'separate_$type\_$prn'
+-  # Limit float to 2 decimal places
++  # Limit float to 1 decimal places
+   if {[llength [split $value "."]] == 2} {
+-    set value [format {%1.2f} $value]
++    set value [format {%1.1f} $value]
+   }
+ 
+   set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=$param>"
+@@ -67,10 +77,10 @@
+   set min $param_descr(MIN)
+   set max $param_descr(MAX)
+ 
+-  # Limit float to 2 decimal places
++  # Limit float to 1 decimal places
+   if {[llength [split $min "."]] == 2} {
+-    set min [format {%1.2f} $min]
+-    set max [format {%1.2f} $max]
++    set min [format {%1.1f} $min]
++    set max [format {%1.1f} $max]
+   }
+   return "($min - $max)"
+ }
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
 @@ -1383,7 +1383,7 @@

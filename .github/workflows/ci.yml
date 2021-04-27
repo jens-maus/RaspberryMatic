@@ -307,13 +307,13 @@ jobs:
         export CCU_DOCKER_PULL_REFRESH="false"
         sudo -E ./buildroot-external/board/oci/deploy.sh -f
     
-    - name: Test WebUI init
+    - name: Test container startup+stop
       run: |
         error=0
         n=1
-        while ! curl localhost:8080 2>/dev/null | grep "STARTPAGE_PC"; do
+        while ! docker exec ccu test -e /var/status/startupFinished ; do
           if [ "$n" -ge 120 ]; then
-            echo "ERROR: ReGaHss/WebUI still not up. aborting."
+            echo "ERROR: container not started after 120s. aborting."
             error=1
             break
           fi
@@ -321,8 +321,9 @@ jobs:
           n=$((n+1)) 
         done 
 
-        docker logs ccu
         docker exec ccu tar --owner=root --group=root --one-file-system --ignore-failed-read -czf - /tmp /usr/local > debug_output.tgz
+        docker stop ccu
+        docker logs ccu
         exit $error
 
     - name: Upload debug information

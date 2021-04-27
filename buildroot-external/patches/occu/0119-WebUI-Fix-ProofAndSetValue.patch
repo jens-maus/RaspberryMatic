@@ -88,6 +88,45 @@
      }
    }
    append s "</tr>"
+--- occu/WebUI/www/config/easymodes/etc/uiElements.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/uiElements.tcl
+@@ -5,7 +5,12 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set min [format {%1.1f} $param_descr(MIN)]
++  set min $param_descr(MIN)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.1f} $min]
++  }
+   return "$min"
+ }
+ 
+@@ -14,7 +19,12 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set max [format {%1.1f} $param_descr(MAX)]
++  set max $param_descr(MAX)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.1f} $max]
++  }
+   return "$max"
+ }
+ 
+@@ -264,7 +274,7 @@
+   }
+ 
+   set s "<input id=$elemIdTmp type=\"text\" size=\"5\" value=[format %.0f [expr $value * 100]] name=$param\_tmp onblur="
+-  append s "\"ProofAndSetValue(this.id, this.id, $minValue, $maxValue, 1);"
++  append s "\"ProofAndSetValue(this.id, this.id, parseInt($minValue), parseInt($maxValue), 1);"
+   append s "jQuery('#separate_CHANNEL\_$chn\_$prn').val(this.value / 100);\">"
+ 
+   append s "<input id=$elemId type=\"text\" size=\"5\" class=\"hidden\" value=$value name=$param>"
 --- occu/WebUI/www/config/easymodes/hm-cc-vg-1_master.tcl.orig
 +++ occu/WebUI/www/config/easymodes/hm-cc-vg-1_master.tcl
 @@ -24,7 +24,12 @@
@@ -198,6 +237,46 @@
    }
    return "($min - $max)"
  }
+--- occu/WebUI/www/config/easymodes/wa_od_ch_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/wa_od_ch_master.tcl
+@@ -10,14 +10,26 @@
+   upvar ps_descr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  return $param_descr(MIN)
++  set min $param_descr(MIN)
++
++  # Limit float to 2 decimal places
++  if {$param == "LED_ONTIME"} {
++    set min [format {%1.2f} $min]
++  }
++  return "$min"
+ }
+ 
+ proc getMaxValue {ps_descr param} {
+   upvar ps_descr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  return $param_descr(MAX)
++  set max $param_descr(MAX)
++
++  # Limit float to 2 decimal places
++  if {$param == "LED_ONTIME"} {
++    set max [format {%1.2f} $max]
++  }
++  return "$max"
+ }
+ 
+ proc getMinMaxValueDescr {ps_descr param} {
+@@ -183,7 +195,7 @@
+     set max [getMaxValue ps_descr $param]
+     append HTML_PARAMS(separate_1) "<tr class=\"j_custom\">"
+       append HTML_PARAMS(separate_1) "<td class=\"stringtable_value\">$devType|$param</td>"
+-      append HTML_PARAMS(separate_1) "<td> <input type=\"text\" id=\"separate_CHANNEL_1_$paramNr\" name=\"$param\" value=\"[format {%1.2f} $ps($param)]\" onblur=\"ProofAndSetValue('separate_CHANNEL_1_$paramNr', 'separate_CHANNEL_1_$paramNr', parseFloat($min), parseFloat($max), parseFloat(1));\"> </td>"
++      append HTML_PARAMS(separate_1) "<td> <input type=\"text\" id=\"separate_CHANNEL_1_$paramNr\" name=\"$param\" value=\"[format {%1.2f} $ps($param)]\" onblur=\"ProofAndSetValue('separate_CHANNEL_1_$paramNr', 'separate_CHANNEL_1_$paramNr', '$min', '$max', parseFloat(1));\"> </td>"
+       append HTML_PARAMS(separate_1) "<td>[getUnit ps_descr $param] [getMinMaxValueDescr ps_descr $param] </td>"
+     append HTML_PARAMS(separate_1) "</tr>"
+ 
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
 @@ -1383,7 +1383,7 @@

@@ -54,7 +54,7 @@ restart() {
 reload() {
   # send HUP to let the sshd daemon reload
   if [[ -f /var/run/sshd.pid ]]; then
-    /bin/kill -HUP $(cat /var/run/sshd.pid)
+    /bin/kill -HUP "$(cat /var/run/sshd.pid)"
   fi
 }
 

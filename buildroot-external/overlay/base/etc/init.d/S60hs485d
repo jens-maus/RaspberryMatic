@@ -31,7 +31,7 @@ start() {
 stop() {
   echo -n "Stopping hs485d: "
   start-stop-daemon -K -q -p /var/run/hs485dLoader.pid
-  killall hs485d
+  killall -q hs485d
   rm -f /var/run/hs485dLoader.pid
   echo "OK"
 }

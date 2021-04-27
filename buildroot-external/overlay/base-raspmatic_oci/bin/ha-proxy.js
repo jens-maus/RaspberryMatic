@@ -59,7 +59,7 @@ const apiProxy = createProxyMiddleware('/', {
 
           // if this a textual response body we make sure to prepend the ingress path
           body = body.toString('latin1');
-          body = body.replace(/(?<=["'= \(\\])\/(api|webui|ise|pda|config|pages|jpages|esp|upnp|tools|addons)(\\?\/)(?!hassio_ingress)/g,
+          body = body.replace(/(?<=["'=\\u0027 \(\\])\/(api|webui|ise|pda|config|pages|jpages|esp|upnp|tools|addons)(\\?\/)(?!hassio_ingress)/g,
                               req.headers['x-ingress-path']+'/$1$2');
           body = body.replace(/(?<=["'])\/(index|login|logout)\.htm/g,
                               req.headers['x-ingress-path']+'/$1.htm');

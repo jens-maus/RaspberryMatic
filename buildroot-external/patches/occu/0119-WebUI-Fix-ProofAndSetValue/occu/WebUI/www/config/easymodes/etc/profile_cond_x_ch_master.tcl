@@ -174,7 +174,7 @@ proc getTextField {param value prn special_input_id class} {
     if {[string first "lowerVal_" $param 0] != -1 || [string first "upperVal_" $param 0] != -1} {
       append s "<td class='$class'><input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur='setVal(this)'>&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
     } else {
-      append s "<td class='$class'><input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur='ProofAndSetValue(this.id, this.id, '[getMinValue $param]', '[getMaxValue $param]', 1);'>&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
+      append s "<td class='$class'><input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '[getMinValue $param]', '[getMaxValue $param]', 1);\">&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
     }
   }
   append s "</tr>"

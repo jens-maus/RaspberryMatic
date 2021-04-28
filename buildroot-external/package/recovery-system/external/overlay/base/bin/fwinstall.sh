@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010,SC3036 source=/dev/null
 #
 # General purpose shell script to prepare and install a firmware update
 # either archived or unarchived, verifies its validity and installs it
@@ -30,7 +30,7 @@ fwprepare()
   fi
   echo "${FILESIZE} bytes received.<br/>"
 
-  echo -ne "[2/5] Calculating SHA256 checksum: "
+  echo -ne "[2/6] Calculating SHA256 checksum: "
   if ! CHKSUM=$(/usr/bin/sha256sum "${filename}" 2>/dev/null) || [[ -z "${CHKSUM}" ]]; then
     echo "ERROR (sha256sum)"
     exit 1
@@ -38,21 +38,45 @@ fwprepare()
   echo "$(echo "${CHKSUM}" | awk '{ print $1 }')<br/>"
 
   ########
-  # check if file is a valid firmware update/recovery file
-  echo -ne "[3/5] Checking uploaded data... "
-
+  # create tmpdir and output available disk space
+  echo -ne "[3/6] Checking free disk space... "
   TMPDIR="${filename}-dir"
   if ! mkdir -p "${TMPDIR}"; then
     echo "ERROR: (mkdir tmpdir)"
     exit 1
   fi
 
+  # output
+  AVAILSPACE=$(/bin/df -B1 "${TMPDIR}" | tail -1 | awk '{ print $4 }')
+  echo -ne "${AVAILSPACE} bytes free, "
+
+  # check if > 0 bytes available
+  if [[ -z "${AVAILSPACE}" ]] || [[ "${AVAILSPACE}" -le 0 ]]; then
+    echo "ERROR: not enough disk space available!"
+    exit 1
+  fi
+  echo "OK<br/>"
+
+  ########
+  # check if file is a valid firmware update/recovery file
+  echo -ne "[4/6] Checking uploaded data... "
+
   FILETYPE=""
 
   # check for tar.gz or .tar
   if [[ -z "${FILETYPE}" ]]; then
     if /usr/bin/file -b "${filename}" | grep -E -q "(gzip compressed|tar archive)"; then
-      echo -ne "tar identified, unarchiving.."
+      echo -ne "tar identified, "
+
+      # check if unarchived size is < available space or we abort right away!
+      REQSIZE=$(/bin/tar -tvzf "${filename}" | awk '{s+=$3} END{print s}')
+      if [[ -z "${REQSIZE}" ]] || [[ "${REQSIZE}" -ge "${AVAILSPACE}" ]]; then
+        echo "ERROR: ${REQSIZE} bytes required!"
+        exit 1
+      fi
+
+      # start unarchiving
+      echo -ne "unarchiving.."
 
       # start a progress bar outputing dots every few seconds
       while :;do echo -n .;sleep 3;done &
@@ -78,7 +102,17 @@ fwprepare()
   # check for .zip
   if [[ -z "${FILETYPE}" ]]; then
     if /usr/bin/file -b "${filename}" | grep -q "Zip archive data"; then
-      echo -ne "zip identified, unarchiving.."
+      echo -ne "zip identified, "
+
+      # check if unarchived size is < available space or we abort right away!
+      REQSIZE=$(/usr/bin/unzip -v "${filename}" | tail -1 | cut -d" " -f1)
+      if [[ -z "${REQSIZE}" ]] || [[ "${REQSIZE}" -ge "${AVAILSPACE}" ]]; then
+        echo "ERROR: ${REQSIZE} bytes required!"
+        exit 1
+      fi
+
+      # start unarchiving
+      echo -ne "unarchiving.."
 
       # start a progress bar outputing dots every few seconds
       while :;do echo -n .;sleep 3;done &
@@ -163,7 +197,7 @@ fwprepare()
 
   ######
   # now we have unarchived everyting to TMPDIR, so lets check if it is valid
-  echo -ne "[4/5] Verifying checksums... "
+  echo -ne "[5/6] Verifying checksums... "
 
   # check for sha256 checksums
   (cd "${TMPDIR}";
@@ -196,7 +230,7 @@ fwprepare()
   ######
   # now we check if update_script is required and found and if so we
   # flag this firmware update accordingly
-  echo -ne "[5/5] Preparing firmware update... "
+  echo -ne "[6/6] Preparing firmware update... "
 
   if ! ls "${TMPDIR}"/*.img >/dev/null 2>&1 &&
      ! ls "${TMPDIR}"/*.ext4 >/dev/null 2>&1 &&

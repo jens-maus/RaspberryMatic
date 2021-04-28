@@ -12,7 +12,7 @@ fi
 rm -f /usr/local/.firmwareUpdate
 
 # process data upload
-echo -ne "[1/5] Processing uploaded data.."
+echo -ne "[1/6] Processing uploaded data.."
 
 # fake read boundary+disposition, etc.
 read -r boundary

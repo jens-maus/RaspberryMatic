@@ -16925,7 +16925,7 @@ DialogUserPassword = Class.create({
           html += translateKey("lblUserPassword");
         html += "</td>";
         html += "<td>";
-          html += "<input id='pwd_1' onchange='onPw1Change()' type='password' value="+passWord+" autocomplete='new-password'>";
+          html += "<input id='pwd_1' onchange='onPw1Change()' type='password' autocomplete='new-password' value="+passWord+">";
         html += "</td>";
       html += "</tr>";
       html += "<tr>";
@@ -16933,7 +16933,7 @@ DialogUserPassword = Class.create({
           html += translateKey("lblUserPasswordRepeat");
         html += "</td>";
         html += "<td>";
-         html += "<input id='pwd_2' type='password' value="+passWord+" autocomplete='new-password'>";
+         html += "<input id='pwd_2' type='password' autocomplete='new-password' value="+passWord+">";
         html += "</td>";
 
       html += "</tr>";

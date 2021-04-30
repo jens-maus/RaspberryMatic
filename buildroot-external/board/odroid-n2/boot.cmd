@@ -41,7 +41,7 @@ else
 fi
 
 # load devicetree
-if test "${board_rev}" = "c"; then
+if test "${soc_rev}" = "c"; then
   setenv fdtfile "meson-g12b-odroid-n2-plus.dtb"
 else
   setenv fdtfile "meson-g12b-odroid-n2.dtb"

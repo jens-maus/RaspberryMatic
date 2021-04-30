@@ -44,11 +44,15 @@
         };
     };
 
-    // switch i2c@8500 to i2c1
+    // modify /aliases path to make i2c0=i2c_B and i2c1=i2c_A
+    // as well as using the rtc of the RPI-RF-MOD as the primary
+    // (rtc0) one
     fragment@2 {
         target-path = "/aliases";
         __overlay__ {
-            i2c1 = "/soc/bus@c1100000/i2c@8500";
+            i2c0 = "/soc/bus@c1100000/i2c@87c0";           // @i2c_B
+            i2c1 = "/soc/bus@c1100000/i2c@8500";           // @i2c_A
+            rtc0 = "/soc/bus@c1100000/i2c@8500/rx8130@32"; // @rpi_rf_mod_rtc
         };
     };
 };

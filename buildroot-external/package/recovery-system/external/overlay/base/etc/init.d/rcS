@@ -43,8 +43,12 @@ IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
 
 [[ -r /VERSION ]] && . /VERSION
 
+MSG="${RECOVERY_SPLASHSCREEN_TITLE} ${VERSION} --"
 if [[ -z "${IP}" ]]; then
-  /usr/bin/psplash-write "MSG ${RECOVERY_SPLASHSCREEN_TITLE} ${VERSION} -- ERROR: No IP address set"
+  MSG="${MSG} ERROR: No IP address set"
 else
-  /usr/bin/psplash-write "MSG ${RECOVERY_SPLASHSCREEN_TITLE} ${VERSION} -- Open http://${IP}/ in browser"
+  MSG="${MSG} Open http://${IP}/ in browser"
 fi
+MSG=$(echo -en "${MSG}\n\n-- Press ALT+F2 for service console")
+
+/usr/bin/psplash-write "MSG ${MSG}"

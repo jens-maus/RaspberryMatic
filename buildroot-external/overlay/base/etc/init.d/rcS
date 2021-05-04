@@ -38,16 +38,20 @@ IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
 [[ -r /VERSION ]] && . /VERSION
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
+MSG="${VERSION} --"
 if [[ "${HM_MODE}" == "NORMAL" ]]; then
   if [[ -z "${IP}" ]]; then
-    /usr/bin/psplash-write "MSG ${VERSION} -- ERROR: No IP address set"
+    MSG="${MSG} ERROR: No IP address set"
   else
-    /usr/bin/psplash-write "MSG ${VERSION} -- http://${IP}/"
+    MSG="${MSG} http://${IP}/"
   fi
 else
   if [[ -z "${IP}" ]]; then
-    /usr/bin/psplash-write "MSG ${VERSION} -- LAN-Gateway Mode (ERROR: No IP address set)"
+    MSG="${MSG} LAN-Gateway Mode (ERROR: No IP address set)"
   else
-    /usr/bin/psplash-write "MSG ${VERSION} -- LAN-Gateway Mode (IP: ${IP}, Serial: ${HM_HMRF_SERIAL})"
+    MSG="${MSG} LAN-Gateway Mode (IP: ${IP}, Serial: ${HM_HMRF_SERIAL})"
   fi
 fi
+MSG=$(echo -en "${MSG}\n\n-- Press ALT+F2 for service console")
+
+/usr/bin/psplash-write "MSG ${MSG}"

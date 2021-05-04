@@ -1,0 +1,11 @@
+--- psplash.orig/psplash.c	2020-01-22 00:23:44.000000000 +0100
++++ psplash/psplash.c	2021-05-04 13:49:10.412613144 +0200
+@@ -176,7 +176,7 @@
+       cmd = command;
+       do {
+ 	int cmdlen;
+-        char *cmdend = memchr(cmd, '\n', length);
++        char *cmdend = memchr(cmd, '\t', length);
+ 
+         /* Replace newlines with string termination */
+         if (cmdend)

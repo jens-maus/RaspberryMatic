@@ -65,7 +65,7 @@ if test "${overlay_error}" = "true"; then
 fi
 
 # set bootargs
-setenv bootargs "console=${console} kgdboc=${console} scandelay=5 root=${rootfs_str} ro rootfstype=ext4 elevator=deadline fsck.repair=yes lapic rootwait rootdelay=5 consoleblank=120 quiet loglevel=${loglevel} net.ifnames=0 usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
+setenv bootargs "console=${console} kgdboc=${console} scandelay=5 root=${rootfs_str} ro rootfstype=ext4 elevator=deadline fsck.repair=yes init_on_alloc=1 init_on_free=1 slab_nomerge pti=on lapic rootwait rootdelay=5 consoleblank=120 quiet loglevel=${loglevel} net.ifnames=0 usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
 
 # load kernel
 load ${devtype} ${devnum}:${kernelfs} ${kernel_addr_r} ${kernel_img}

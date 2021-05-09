@@ -15,13 +15,11 @@
 [![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/raspberrymatic)](https://artifacthub.io/packages/search?repo=raspberrymatic)
 [![License](https://img.shields.io/github/license/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/blob/master/LICENSE)
 [![Donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL)
+[![GitHub sponsors](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&link=https://github.com/sponsors/jens-maus)](https://github.com/sponsors/jens-maus)
 [![Twitter](https://img.shields.io/twitter/follow/RaspberryMatic.svg?style=social&label=Follow)](https://twitter.com/RaspberryMatic)
 [![GitHub stars](https://img.shields.io/github/stars/jens-maus/RaspberryMatic.svg?style=social&label=Star)](https://github.com/jens-maus/RaspberryMatic/stargazers/)
-[![GitHub sponsors](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&link=https://github.com/sponsors/jens-maus)](https://github.com/sponsors/jens-maus)
 
-<sub>[Hier drücken für 🇩🇪🇦🇹🇨🇭 deutschsprachiges ReadMe](README.de.md)</sub>
-### [🚀 Quick-Start](#cloud-schnellstart)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📚 Documentation](https://github.com/jens-maus/RaspberryMatic/wiki)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[📦 Download](https://github.com/jens-maus/RaspberryMatic/releases/latest)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[🚑 Support](#yum-support-mitarbeit)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[👮 Licenses](#scroll-lizenzen)
-
+<sub>[Deutschsprachiges 🇩🇪🇦🇹🇨🇭 ReadMe](README.de.md)</sub>
 ___
 RaspberryMatic is a free and non-commercial OpenSource operating system alternative for the _[CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html)_ or  _[ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)_ smart home central systems to configure and use [HomeMatic](http://homematic.com/)/BidCos-RF or [homematicIP](https://www.homematic-ip.com/) IoT hardware distributed by [eQ-3](https://eq-3.de)/[ELV](https://elv.de/). RaspberryMatic has the aim to be 100% compatible to a standard _HomeMatic CCU control central_ for a cloud-free use of HomeMatic IoT hardware on freely available single-board-computers (SBC) like a [RaspberryPi](https://www.raspberrypi.org/), [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/), [Hardkernel ODROID](https://www.hardkernel.com/shop/odroid-c4/) or even as a virtual appliance on modern virtual environments (e.g. vmWare ESXi, Proxmox, VirtualBox, Docker/OCI, Kubernetes/K8s, etc.). On top of that, it provides additional exclusive features on different levels (WebUI, Linux-OS, etc.) to provide users with an enhanced user experience compared to the standard vendor-provided CCU firmware from eQ3/ELV.
 

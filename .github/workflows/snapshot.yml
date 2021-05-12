@@ -360,7 +360,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Remove old artifacts
-        uses: c-hive/gha-remove-artifacts@v1
+        uses: c-hive/gha-remove-artifacts@v1.2.0
         with:
           age: '2 months'
           skip-tags: true

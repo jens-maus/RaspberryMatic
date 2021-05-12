@@ -134,10 +134,10 @@ jobs:
 
     #######################
     # release uploads
-    - name: Upload release snapshot [rpi*, tinkerboard, intelnuc, ova]
+    - name: Upload release snapshot [rpi*, tinkerboard, odroid-*, intelnuc, ova]
       if: |
         !startsWith(matrix.platform, 'oci_')
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -149,7 +149,7 @@ jobs:
     - name: Upload build release checksum [rpi*, tinkerboard, intelnuc, ova]
       if: |
         !startsWith(matrix.platform, 'oci_')
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -161,7 +161,7 @@ jobs:
     - name: Upload build release [ccu3]
       if: |
         matrix.platform == 'rpi3'
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -173,7 +173,7 @@ jobs:
     - name: Upload build release checksum [ccu3]
       if: |
         matrix.platform == 'rpi3'
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -185,7 +185,7 @@ jobs:
     - name: Upload build release [ova]
       if: |
         matrix.platform == 'ova'
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -197,7 +197,7 @@ jobs:
     - name: Upload build release checksum [ova]
       if: |
         matrix.platform == 'ova'
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -209,7 +209,7 @@ jobs:
     - name: Upload build release [oci]
       if: |
         startsWith(matrix.platform, 'oci_')
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -221,7 +221,7 @@ jobs:
     - name: Upload build release checksum [oci]
       if: |
         startsWith(matrix.platform, 'oci_')
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -312,7 +312,7 @@ jobs:
 
     - name: Build and push container image
       if: github.event.inputs.skip_build == 'false'
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v2.4.0
       id: docker_build
       with:
         context: oci_build

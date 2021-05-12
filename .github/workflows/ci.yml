@@ -60,7 +60,7 @@ jobs:
 
   build:
     name: CI build [${{ matrix.platform }}]
-    if: ${{ github.event_name != 'pull_request' || (github.event.pull_request.user.login == 'jens-maus' && github.actor != 'dependabot[bot]') }}
+    if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.user.login == 'jens-maus') && github.actor != 'dependabot[bot]' }}
     needs: linter
     runs-on: self-hosted
     timeout-minutes: 480

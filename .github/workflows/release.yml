@@ -63,15 +63,15 @@ jobs:
         )"
         export VERSION=${{ steps.env.outputs.version }}
         export PREVIOUS_TAG=${{ steps.previoustag.outputs.tag }}
-        envsubst <.github/release-template.md >/tmp/release-template.md
+        envsubst <.github/release-template.md >${{ github.workflow }}-release-template.md
 
     - name: Create release draft
       id: release_drafter
-      uses: softprops/action-gh-release@v1
+      uses: actions/create-release@v1.1.4
       with:
         tag_name: ${{ steps.env.outputs.version }}
-        name: 'RaspberryMatic ${{ steps.env.outputs.version }}'
-        body_path: /tmp/release-template.md
+        release_name: 'RaspberryMatic ${{ steps.env.outputs.version }}'
+        body_path: ${{ github.workflow }}-release-template.md
         draft: true
         prerelease: false
       env:

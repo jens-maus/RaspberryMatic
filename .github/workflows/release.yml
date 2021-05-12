@@ -312,7 +312,7 @@ jobs:
 
     - name: Build and push container image
       if: github.event.inputs.skip_build == 'false'
-      uses: docker/build-push-action@v2
+      uses: docker/build-push-action@v2.4.0
       id: docker_build
       with:
         context: oci_build

@@ -67,15 +67,15 @@ jobs:
 
     - name: Create release draft
       id: release_drafter
-      uses: actions/create-release@v1.1.4
+      uses: ncipollo/release-action@v1.8.5
       with:
-        tag_name: ${{ steps.env.outputs.version }}
-        release_name: 'RaspberryMatic ${{ steps.env.outputs.version }}'
-        body_path: /tmp/release-template.md
+        tag: ${{ steps.env.outputs.version }}
+        name: 'RaspberryMatic ${{ steps.env.outputs.version }}'
+        bodyFile: /tmp/release-template.md
         draft: true
         prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        allowUpdates: true
+        token: ${{ secrets.GITHUB_TOKEN }}
 
   build:
     name: Release build [${{ matrix.platform }}]

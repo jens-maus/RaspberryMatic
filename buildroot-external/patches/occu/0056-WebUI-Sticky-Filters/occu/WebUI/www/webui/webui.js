@@ -30645,8 +30645,10 @@ iseFilter.prototype = {
       var iseSFilters = JSON.parse(localStorage.getItem('iseSFilters_' + this.pageID));
       Object.keys(iseSFilters).forEach(function(id) {
         var val = iseSFilters[id];
-        $(id).value = val;
-        $(id).nextSiblings()[0].click();
+        if ($(id)) {
+          $(id).value = val;
+          $(id).nextSiblings()[0].click();
+        }
       });
     } catch(e) {
       console.error(e);

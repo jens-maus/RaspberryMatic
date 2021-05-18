@@ -194,7 +194,7 @@
      }
      /* ELV --> */
      
-@@ -30583,6 +30631,26 @@
+@@ -30583,6 +30631,28 @@
      this.fltObjType = 0;
      if (fltObjType)
        this.fltObjType = fltObjType;
@@ -212,8 +212,10 @@
 +      var iseSFilters = JSON.parse(localStorage.getItem('iseSFilters_' + this.pageID));
 +      Object.keys(iseSFilters).forEach(function(id) {
 +        var val = iseSFilters[id];
-+        $(id).value = val;
-+        $(id).nextSiblings()[0].click();
++        if ($(id)) {
++          $(id).value = val;
++          $(id).nextSiblings()[0].click();
++        }
 +      });
 +    } catch(e) {
 +      console.error(e);
@@ -221,7 +223,7 @@
    },
    
  
-@@ -30947,6 +31015,15 @@
+@@ -30947,6 +31017,15 @@
      this.bTypeNumber = false;
      this.bTypeAlarm = false;
      this.bTypeString = false;
@@ -237,7 +239,7 @@
      conInfo("Alle Filter wurden zurückgesetzt.");
    }
  };
-@@ -31055,6 +31132,12 @@
+@@ -31055,6 +31134,12 @@
  {
    //conInfo("iseFilter: setSFilter "+fId+" to "+$(ctrlId).value);
    fltObj.addStringFilter(fId, $(ctrlId).value);

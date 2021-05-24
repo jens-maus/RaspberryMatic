@@ -365,6 +365,7 @@ jobs:
           age: '2 months'
           skip-tags: true
           skip-recent: 15
+        continue-on-error: true
 
       - name: Remove old packages
         uses: smartsquaregmbh/delete-old-packages@v0.3.1
@@ -372,3 +373,4 @@ jobs:
           keep: 5
           names: |
             raspberrymatic
+        continue-on-error: true

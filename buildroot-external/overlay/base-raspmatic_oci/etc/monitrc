@@ -275,7 +275,7 @@ check program internetCheckEnabled with path "/usr/bin/test -e /etc/config/inter
 
 # check for an unclean shutdown by checking for /var/status/uncleanShutdown
 check program uncleanShutdownCheck with path "/usr/bin/test -e /var/status/uncleanShutdown"
-    group systen
+    group system
     if status = 0 for 1 cycles then
       exec /bin/sh -c "/bin/triggerAlarm.tcl 'Unclean shutdown or system crash identified' WatchDog-Alarm ; rm -f /var/status/uncleanShutdown"
       repeat every 24 cycles

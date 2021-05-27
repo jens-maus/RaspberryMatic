@@ -21,6 +21,7 @@ fi
 touch "${TARGET_DIR}/usr/local/.doFactoryReset"
 
 # build docker image
+id ; ls -la /var/run/docker.sock
 if ! docker build --file="${BOARD_DIR}/Dockerfile" --build-arg=tar_prefix=rootfs --tag="raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION}" --tag="raspberrymatic:${DOCKER_ARCH}-latest" "${BINARIES_DIR}"; then
   exit 1
 fi

@@ -174,20 +174,36 @@ fi
 #############################################################
 
 echo "Starting container:"
-DOCKER_COMMAND="docker run -d -ti --privileged --restart=always"
+DOCKER_COMMAND="docker run -d -ti"
+
+# system capabilities additions
+#DOCKER_COMMAND="${DOCKER_COMMAND} --cap-add SYS_ADMIN --cap-add SYS_MODULE --cap-add SYS_NICE --cap-add SYS_RAWIO --security-opt seccomp=unconfined --security-opt apparmor:unconfined"
+DOCKER_COMMAND="${DOCKER_COMMAND} --privileged"
+
+# check for CONFIG_RT_GROUP_SCHED in kernel and if so
+# add options to provide enough cpu shares to the ccu container
+if [[ -e /sys/fs/cgroup/cpu/cpu.rt_runtime_us ]]; then
+  DOCKER_COMMAND="${DOCKER_COMMAND} --cpu-rt-runtime 950000 --ulimit rtprio=99"
+fi
+
 # Persistent volume
-DOCKER_COMMAND="${DOCKER_COMMAND} --volume=${CCU_DATA_VOLUME}:/usr/local:rw --volume=/lib/modules:/lib/modules:ro"
+DOCKER_COMMAND="${DOCKER_COMMAND} --volume ${CCU_DATA_VOLUME}:/usr/local:rw --volume /lib/modules:/lib/modules:ro"
+
 # Container and host names
 DOCKER_COMMAND="${DOCKER_COMMAND} --hostname ${CCU_CONTAINER_NAME} --name ${CCU_CONTAINER_NAME}"
+
 # Add extra ports
 DOCKER_COMMAND="${DOCKER_COMMAND} -p ${CCU_SSH_PORT}:22 -p ${CCU_REGA_HTTP_PORT}:80 -p ${CCU_REGA_HTTPS_PORT}:443"
 for extra_port in ${CCU_PORTS_TO_OPEN}; do
   DOCKER_COMMAND="${DOCKER_COMMAND} -p ${extra_port}:${extra_port}"
 done
+
 # Add timeout
-DOCKER_COMMAND="${DOCKER_COMMAND} --stop-timeout ${CCU_DOCKER_STOP_TIMEOUT}"
+DOCKER_COMMAND="${DOCKER_COMMAND} --stop-timeout ${CCU_DOCKER_STOP_TIMEOUT} --restart always"
+
 # Add extra user options
 DOCKER_COMMAND="${DOCKER_COMMAND} ${CCU_DOCKER_RUN_OPTIONS}"
+
 # Add container repo
 DOCKER_COMMAND="${DOCKER_COMMAND} ${DOCKER_IMAGE}"
 

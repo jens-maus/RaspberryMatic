@@ -1,0 +1,105 @@
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -1292,15 +1292,17 @@
+     !Write("<div id='"#pid#"Start' class='ControlBtnOff CLASS02104'>Start</div>");
+     Write("<div id='"#pid#"Start' class='ControlBtnOff CLASS02104'>${actionStatusControlLblStart}</div>");
+     Write("<script type='text/javascript'>");
+-    Write("new iseButtonProg("#pid#", "#objProg.Active()#");");
++    Write("new iseButtonProg("#pid#", "#objProg.Active()#", false);");
+     Write("</script>");
+     Write("</td>");
++    Write("<td><div id='"#pid#"StartwCC' class='ControlBtnOff CLASS02104a'>${actionStatusControlLblStartWithConditionCheck}</div>");
++    Write("<script type='text/javascript'> new iseButtonProg("#pid#", "#objProg.Active()#", true);</script></td>");
+   }
+   else
+   {
+-    Write("<td></td>");
++    Write("<td></td><td></td>");
+   }
+-  Write("<td></td><td></td><td></td>");
++  Write("<td></td><td></td>");
+   
+   Write("</tr>");
+   Write("</table>");
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -766,6 +766,7 @@
+     "commentActionStatusControl" : "***********************************************",
+     "actionStatusControlLblActive" : "Aktiv",
+     "actionStatusControlLblStart" : "Start",
++    "actionStatusControlLblStartWithConditionCheck" : "Start mit Bedingungs-pr%FCfung",
+     "actionStatusControlLblOn" : "Ein",
+     "actionStatusControlLblOff" : "Aus",
+     "actionStatusControlLblShortKeyPress" : "Kurzer<br/>Tastendruck",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -793,6 +793,7 @@
+ 
+     "actionStatusControlLblActive" : "Active",
+     "actionStatusControlLblStart" : "Start",
++    "actionStatusControlLblStartWithConditionCheck" : "Start with condition check",
+     "actionStatusControlLblOn" : "On",
+     "actionStatusControlLblOff" : "Off",
+     "actionStatusControlLblShortKeyPress" : "Short<br/>button press",
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -5020,6 +5020,13 @@
+ 	width:100px;
+ }
+ 
++.CLASS02104a {
++	cursor:pointer;
++	line-height: 33px;
++	height:100px;
++	width:100px;
++}
++
+ .CLASS02105 {
+ 	text-align:center;
+ 	background-color: $_(black); /* #000000 */
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -28969,14 +28969,14 @@
+   return arTmp[0]+':'+arTmp[1];
+ };
+ 
+-ExecuteProgram = function(dpid)
++ExecuteProgram = function(dpid, checkCondition)
+ {
+   var url = "/esp/exec.htm?sid=" + SessionId;
+   var pb = "";
+   pb += "object o = dom.GetObject( "+dpid+" );";
+   pb += "if( o )";
+   pb += "{";
+-  pb += "  o.ProgramExecute();";
++  pb += (checkCondition === true) ? "  o.State(1);" : "  o.ProgramExecute();";
+   pb += "}";
+   var opts = {postBody: ReGa.encode(pb)};
+   if(dbg)alert(pb);
+@@ -31741,13 +31741,15 @@
+  **/
+ iseButtonProg = Class.create();
+ iseButtonProg.prototype = {
+-  initialize: function(id, progActive) {
++  initialize: function(id, progActive, checkCondition) {
+     this.id = id;
+     this.progActive = progActive;
+     
+-    this.startBtn = $(id + "Start");
++    this.startBtn = (checkCondition === true) ? $(id + "StartwCC") : $(id + "Start");
+     this.actBtn = $(id + "Act");
+     
++    this.checkCondition = checkCondition;
++    
+     if ( progActive ) { ControlBtn.on(this.actBtn); }
+     
+     // Add event handlers
+@@ -31758,7 +31760,7 @@
+   onClickStart: function() 
+   {
+     ControlBtn.pushed(this.startBtn);
+-    ExecuteProgram(this.id);
++    ExecuteProgram(this.id, this.checkCondition);
+     var t = this;
+     new PeriodicalExecuter(function(pe)
+     {

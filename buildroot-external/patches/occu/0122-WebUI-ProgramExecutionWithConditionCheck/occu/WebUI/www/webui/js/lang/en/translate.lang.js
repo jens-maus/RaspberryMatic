@@ -792,8 +792,8 @@ jQuery.extend(true,langJSON, {
     "commentActionStatusControl" : "***********************************************",
 
     "actionStatusControlLblActive" : "Active",
-    "actionStatusControlLblStart" : "Start",
-    "actionStatusControlLblStartWithConditionCheck" : "Start with condition check",
+    "actionStatusControlLblStart" : "Run",
+    "actionStatusControlLblStartWithoutConditionCheck" : "Run (only 1st THEN)",
     "actionStatusControlLblOn" : "On",
     "actionStatusControlLblOff" : "Off",
     "actionStatusControlLblShortKeyPress" : "Short<br/>button press",

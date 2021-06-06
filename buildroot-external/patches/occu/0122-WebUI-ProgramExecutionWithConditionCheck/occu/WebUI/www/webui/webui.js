@@ -31745,7 +31745,7 @@ iseButtonProg.prototype = {
     this.id = id;
     this.progActive = progActive;
     
-    this.startBtn = (checkCondition === true) ? $(id + "StartwCC") : $(id + "Start");
+    this.startBtn = (checkCondition === false) ? $(id + "StartNoCC") : $(id + "Start");
     this.actBtn = $(id + "Act");
     
     this.checkCondition = checkCondition;

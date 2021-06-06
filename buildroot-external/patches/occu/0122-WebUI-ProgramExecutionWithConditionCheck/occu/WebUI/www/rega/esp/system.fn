@@ -1292,11 +1292,11 @@ function ::writeProgCtrl()
     !Write("<div id='"#pid#"Start' class='ControlBtnOff CLASS02104'>Start</div>");
     Write("<div id='"#pid#"Start' class='ControlBtnOff CLASS02104'>${actionStatusControlLblStart}</div>");
     Write("<script type='text/javascript'>");
-    Write("new iseButtonProg("#pid#", "#objProg.Active()#", false);");
+    Write("new iseButtonProg("#pid#", "#objProg.Active()#", true);");
     Write("</script>");
     Write("</td>");
-    Write("<td><div id='"#pid#"StartwCC' class='ControlBtnOff CLASS02104a'>${actionStatusControlLblStartWithConditionCheck}</div>");
-    Write("<script type='text/javascript'> new iseButtonProg("#pid#", "#objProg.Active()#", true);</script></td>");
+    Write("<td><div id='"#pid#"StartNoCC' class='ControlBtnOff CLASS02104a'>${actionStatusControlLblStartWithoutConditionCheck}</div>");
+    Write("<script type='text/javascript'> new iseButtonProg("#pid#", "#objProg.Active()#", false);</script></td>");
   }
   else
   {

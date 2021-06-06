@@ -5,11 +5,11 @@
      Write("<div id='"#pid#"Start' class='ControlBtnOff CLASS02104'>${actionStatusControlLblStart}</div>");
      Write("<script type='text/javascript'>");
 -    Write("new iseButtonProg("#pid#", "#objProg.Active()#");");
-+    Write("new iseButtonProg("#pid#", "#objProg.Active()#", false);");
++    Write("new iseButtonProg("#pid#", "#objProg.Active()#", true);");
      Write("</script>");
      Write("</td>");
-+    Write("<td><div id='"#pid#"StartwCC' class='ControlBtnOff CLASS02104a'>${actionStatusControlLblStartWithConditionCheck}</div>");
-+    Write("<script type='text/javascript'> new iseButtonProg("#pid#", "#objProg.Active()#", true);</script></td>");
++    Write("<td><div id='"#pid#"StartNoCC' class='ControlBtnOff CLASS02104a'>${actionStatusControlLblStartWithoutConditionCheck}</div>");
++    Write("<script type='text/javascript'> new iseButtonProg("#pid#", "#objProg.Active()#", false);</script></td>");
    }
    else
    {
@@ -21,23 +21,62 @@
    
    Write("</tr>");
    Write("</table>");
+--- occu/WebUI/www/rega/pages/tabs/control/programs.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/programs.htm
+@@ -51,7 +51,7 @@
+         <th class="tHeaderCell CLASS03303" >${thDescription}</th>
+         <th class="tHeaderCell CLASS03303" >${thActivity}</th>
+         <th class="tHeaderCell CLASS03303" >${thLastExecution}</th>
+-        <th class="tHeaderCell CLASS03303" >${thAction}</th>
++        <th class="tHeaderCell CLASS03303" ><div><span>${thAction}&nbsp;</span><img src="/ise/img/help.png" style="cursor: pointer; width:24px; height:24px;vertical-align:middle; " onclick="MessageBox.show(translateKey('HelpTitle'), translateKey('ProgramRunHelp'), '', 400,250);"></div></th>
+       </tr>
+     </thead>
+       <tbody>
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.help.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.help.js
+@@ -1,6 +1,8 @@
+ jQuery.extend(true, langJSON, {
+   "de": {
+-
++    "ProgramRunHelp" : 
++      "Button - Ausf%FChren:<br/><br/>Trigger für das zugeh%F6rige Programm.<br/>Es werden alle Bedingungen gepr%FCft.<br/>Es wird das DANN ausgef%FChrt dessen<br/>Bedingungsblock &quot;WAHR&quot; ergab. <br/>Andernfalls wird SONST ausgef%FChrt.<br/><br/><br/>"+
++      "Button - Ausf%FChren (nur 1.DANN):<br/><br/>Trigger für das zugeh%F6rige Programm.<br>Es werden keine Bedingungen gepr%FCft.<br>Es wird immer das erste DANN ausgef%FChrt.",
+     "END" : ""
+   }
+ });
+\ No newline at end of file
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -766,6 +766,7 @@
+@@ -765,7 +765,8 @@
+     "commentDialogNewHelpEnd" : "***********************************************",
      "commentActionStatusControl" : "***********************************************",
      "actionStatusControlLblActive" : "Aktiv",
-     "actionStatusControlLblStart" : "Start",
-+    "actionStatusControlLblStartWithConditionCheck" : "Start mit Bedingungs-pr%FCfung",
+-    "actionStatusControlLblStart" : "Start",
++    "actionStatusControlLblStart" : "Ausf%FChren",
++    "actionStatusControlLblStartWithoutConditionCheck" : "Ausf%FChren (nur 1.DANN)",
      "actionStatusControlLblOn" : "Ein",
      "actionStatusControlLblOff" : "Aus",
      "actionStatusControlLblShortKeyPress" : "Kurzer<br/>Tastendruck",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.help.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.help.js
+@@ -1,6 +1,6 @@
+ jQuery.extend(true, langJSON, {
+   "en": {
+-
++    "ProgramRunHelp" : "TBD",
+     "END" : ""
+   }
+ });
+\ No newline at end of file
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -793,6 +793,7 @@
+@@ -792,7 +792,8 @@
+     "commentActionStatusControl" : "***********************************************",
  
      "actionStatusControlLblActive" : "Active",
-     "actionStatusControlLblStart" : "Start",
-+    "actionStatusControlLblStartWithConditionCheck" : "Start with condition check",
+-    "actionStatusControlLblStart" : "Start",
++    "actionStatusControlLblStart" : "Run",
++    "actionStatusControlLblStartWithoutConditionCheck" : "Run (only 1st THEN)",
      "actionStatusControlLblOn" : "On",
      "actionStatusControlLblOff" : "Off",
      "actionStatusControlLblShortKeyPress" : "Short<br/>button press",
@@ -49,7 +88,7 @@
  
 +.CLASS02104a {
 +	cursor:pointer;
-+	line-height: 33px;
++	line-height: 50px;
 +	height:100px;
 +	width:100px;
 +}
@@ -86,7 +125,7 @@
      this.progActive = progActive;
      
 -    this.startBtn = $(id + "Start");
-+    this.startBtn = (checkCondition === true) ? $(id + "StartwCC") : $(id + "Start");
++    this.startBtn = (checkCondition === false) ? $(id + "StartNoCC") : $(id + "Start");
      this.actBtn = $(id + "Act");
      
 +    this.checkCondition = checkCondition;

@@ -10,32 +10,6 @@ proc getUnit {psDescr param} {
   return "$unit"
 }
 
-proc getMinValue {param} {
-  upvar psDescr descr
-  array_clear param_descr
-  array set param_descr $descr($param)
-  set min $param_descr(MIN)
-
-  # Limit float to 3 decimal places
-  if {[llength [split $min "."]] == 2} {
-    set min [format {%1.3f} $min]
-  }
-  return "$min"
-}
-
-proc getMaxValue {param} {
-  upvar psDescr descr
-  array_clear param_descr
-  array set param_descr $descr($param)
-  set max $param_descr(MAX)
-
-  # Limit float to 3 decimal places
-  if {[llength [split $max "."]] == 2} {
-    set max [format {%1.3f} $max]
-  }
-  return "$max"
-}
-
 proc getMinMaxValueDescr {psDescr param} {
 	upvar psDescr descr
   array_clear param_descr
@@ -53,10 +27,22 @@ proc getMinMaxValueDescr {psDescr param} {
 
 proc getTextField {psDescr type param value inputId} {
   upvar psDescr descr
+  array_clear param_descr
+  array set param_descr $descr($param)
 
   set elemId '$inputId'
+  set min $param_descr(MIN)
+  set max $param_descr(MAX)
 
-  set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=\"$param\" onblur=\"ProofAndSetValue($elemId, $elemId, '[getMinValue $param]', '[getMaxValue $param]', 1)\"/>"
+  # Limit min/max to 3 decimal places
+  if {[llength [split $min "."]] == 2} {
+    set min [format {%1.3f} $min]
+  }
+  if {[llength [split $max "."]] == 2} {
+    set max [format {%1.3f} $max]
+  }
+
+  set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=\"$param\" onblur=\"ProofAndSetValue($elemId, $elemId, '$min', '$max', 1)\"/>"
   return $s
 }
 

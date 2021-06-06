@@ -1,0 +1,142 @@
+--- occu/WebUI/www/tcl/eq3_old/session.tcl.orig
++++ occu/WebUI/www/tcl/eq3_old/session.tcl
+@@ -24,7 +24,6 @@
+ #=======================================================================
+ #proc session_requestisvalid {needed_upl} {
+ #proc session_upl {} {
+-#proc session_putloginpage {sid {extramsg ""}} {
+ #proc session_putsessiontimedout {url} {
+ #proc session_putinsufficientrights {url} {
+ #proc session_puttoomuchsessions {} {
+@@ -677,46 +676,6 @@
+ 	}
+ }
+ 
+-proc session_putloginpage {sid {extramsg ""}} {
+-
+-	global sidname
+-
+-	html {
+-		head {
+-    		title "HomeMatic Konfiguration - Anmeldung"
+-    		puts "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">"
+-  		}
+-  		body {
+-			if {$extramsg != ""} then { h2 $extramsg }
+-    		puts "<div id=\"loginBox\">"
+-      		puts "  <form id=\"gwlogin\" method=\"post\" action=\"./verifysid.cgi\">"
+-			puts "    <input name=\"$sidname\" type=\"hidden\" value=\"$sid\">"
+-        	puts "    <div id=\"loginHeaderBox\">"
+-          	puts "      <span id=\"loginHeaderTitle\">HomeMatic Konfiguration - Anmeldung</span>"
+-        	puts "    </div>"
+-        	puts "    <div id=\"loginUserBox\">"
+-          	puts "      <span id=\"loginUserTitle\">Benutzername: </span>"
+-          	puts "      <br />"
+-          	puts "      <input id=\"loginUserText\" name=\"tbUsername\" type=\"text\" tabindex=\"1\" />"
+-        	puts "    </div>"
+-        	puts "    <div id=\"loginPassBox\">"
+-          	puts "      <span id=\"loginPassTitle\">Passwort: </span>"
+-          	puts "      <br />"
+-          	puts "      <input id=\"loginPassText\" name=\"tbPassword\" type=\"password\" tabindex=\"2\" />"
+-        	puts "    </div>"
+-        	puts "    <div id=\"loginSubmitBox\">"
+-          	puts "      <input id=\"loginSubmitButton\" name=\"btnSubmitNAME\" type=\"submit\" value=\"Anmelden\" tabindex=\"3\" />"
+-        	puts "    </div>"
+-      		puts "  </form>"
+-    		puts "</div>"
+-    		puts "<script language=\"javascript\" type=\"text/javascript\">"
+-      		puts "  document.getElementById('loginUserText').focus();"
+-      		puts "  document.getElementById('loginUserText').select();"
+-    		puts "</script>"
+-		}
+-	}
+-}
+-
+ #   -2: uid konnte nicht bestimmt werden zur aktuellen Session
+ #   -1: upl nicht gefunden
+ #>=  0: upl des users
+@@ -749,26 +708,8 @@
+ 	set uid [session_isvalid]
+ 	set upl [session_upl]
+ 
+-	if {$uid == -3} then {
++	if {$uid == -3 || $uid == -2 || $uid == -1 || $uid == 0} then {
+ 		#-3: "keine sid in der url"
+-	
+-		set newsid [session_generatesession]
+-
+-		if { [string equal $newsid "-1"] } then {
+-			
+-			session_puttoomuchsessions
+-
+-		} else {
+-		
+-			set url [session_geturlnewsid $newsid] 
+-
+-			session_setredirect_sid $url $newsid
+-			write_sessions
+-	
+-			session_putloginpage $newsid
+-		}
+-	
+-	} elseif {$uid == -2 || $uid == -1 || $uid == 0} then {
+ 		#-2: "session ist nicht existent"
+ 		#-1: "session timed out"
+ 		# 0: "user nicht gesetzt"
+--- occu/WebUI/www/tcl/eq3_old/verifysid.cgi.orig
++++ occu/WebUI/www/tcl/eq3_old/verifysid.cgi
+@@ -1,54 +0,0 @@
+-#!/bin/tclsh
+-source once.tcl
+-sourceOnce cgi.tcl
+-sourceOnce session.tcl
+-
+-cgi_eval {
+-
+-	#cgi_debug -on
+-	cgi_input
+-	catch {
+-	    import debug
+-    	#cgi_debug -on
+-	}
+-
+-	set sid ""
+-	set tbUsername ""
+-	set tbPassword ""
+-	catch { import_as $sidname sid }
+-	catch { import tbUsername }
+-	catch { import tbPassword }
+-
+-	if {$sidname == "sid"} then {
+-		set tbUid [user_uid_ise $tbUsername]
+-	} else {
+-		#uid des Benutzers oder negativ:
+-		set tbUid [user_verify $tbUsername $tbPassword]
+-	}
+-
+-	#uid der gewünschten Session:
+-	set s_uid [session_uid_sid $sid]
+-
+-	if {$tbUid > 0 && ($s_uid == 0 || ($tbUid == $s_uid))} then {
+-		session_setuid_sid $tbUid $sid
+-		session_ResetTimeOut_sid $sid
+-		write_sessions
+-
+-		#Hole redirect mit sid
+-		session_redirecturl_sid redirect $sid
+-		redirect $redirect
+-			
+-	} else {
+-
+-		session_putloginpage $sid "Anmeldung abgewiesen."
+-	}	
+-
+-	#title "Params"
+-	#body {
+-		#puts "sid:$sid"
+-		#puts "user:$tbUsername"
+-		#puts "pwd:$tbPassword"
+-		#puts "tbUid:$tbUid"
+-		#puts "s_uid:$s_uid"
+-	#}
+-}

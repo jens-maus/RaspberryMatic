@@ -5,11 +5,11 @@
      Write("<div id='"#pid#"Start' class='ControlBtnOff CLASS02104'>${actionStatusControlLblStart}</div>");
      Write("<script type='text/javascript'>");
 -    Write("new iseButtonProg("#pid#", "#objProg.Active()#");");
-+    Write("new iseButtonProg("#pid#", "#objProg.Active()#", true);");
++    Write("new iseButtonProg("#pid#", "#objProg.Active()#", false);");
      Write("</script>");
      Write("</td>");
-+    Write("<td><div id='"#pid#"StartNoCC' class='ControlBtnOff CLASS02104a'>${actionStatusControlLblStartWithoutConditionCheck}</div>");
-+    Write("<script type='text/javascript'> new iseButtonProg("#pid#", "#objProg.Active()#", false);</script></td>");
++    Write("<td><div id='"#pid#"StartThenOnly' class='ControlBtnOff CLASS02104'>${actionStatusControlLblStartThenOnly}</div>");
++    Write("<script type='text/javascript'> new iseButtonProg("#pid#", "#objProg.Active()#", true);</script></td>");
    }
    else
    {
@@ -28,74 +28,51 @@
          <th class="tHeaderCell CLASS03303" >${thActivity}</th>
          <th class="tHeaderCell CLASS03303" >${thLastExecution}</th>
 -        <th class="tHeaderCell CLASS03303" >${thAction}</th>
-+        <th class="tHeaderCell CLASS03303" ><div><span>${thAction}&nbsp;</span><img src="/ise/img/help.png" style="cursor: pointer; width:24px; height:24px;vertical-align:middle; " onclick="MessageBox.show(translateKey('HelpTitle'), translateKey('ProgramRunHelp'), '', 400,250);"></div></th>
++        <th class="tHeaderCell CLASS03303" ><div><span>${thAction}</span><img src="/ise/img/help.png" style="cursor: pointer; width:24px; height:24px; vertical-align:middle;" onclick="MessageBox.show(translateKey('HelpTitle'), translateKey('actionStatusControlLblStartHelp'), '', 400, 250);"></div></th>
        </tr>
      </thead>
        <tbody>
---- occu/WebUI/www/webui/js/lang/de/translate.lang.help.js.orig
-+++ occu/WebUI/www/webui/js/lang/de/translate.lang.help.js
-@@ -1,6 +1,8 @@
- jQuery.extend(true, langJSON, {
-   "de": {
--
-+    "ProgramRunHelp" : 
-+      "Button - Ausf%FChren:<br/><br/>Trigger für das zugeh%F6rige Programm.<br/>Es werden alle Bedingungen gepr%FCft.<br/>Es wird das DANN ausgef%FChrt dessen<br/>Bedingungsblock &quot;WAHR&quot; ergab. <br/>Andernfalls wird SONST ausgef%FChrt.<br/><br/><br/>"+
-+      "Button - Ausf%FChren (nur 1.DANN):<br/><br/>Trigger für das zugeh%F6rige Programm.<br>Es werden keine Bedingungen gepr%FCft.<br>Es wird immer das erste DANN ausgef%FChrt.",
-     "END" : ""
-   }
- });
-\ No newline at end of file
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -765,7 +765,8 @@
+@@ -765,7 +765,9 @@
      "commentDialogNewHelpEnd" : "***********************************************",
      "commentActionStatusControl" : "***********************************************",
      "actionStatusControlLblActive" : "Aktiv",
 -    "actionStatusControlLblStart" : "Start",
 +    "actionStatusControlLblStart" : "Ausf%FChren",
-+    "actionStatusControlLblStartWithoutConditionCheck" : "Ausf%FChren (nur 1.DANN)",
++    "actionStatusControlLblStartThenOnly" : "Ausf%FChren<br/>(nur 1. DANN)",
++    "actionStatusControlLblStartHelp" : "<b>Ausf%FChren:</b><br/><br/>Führt das Programm inkl. aller Bedingungspr%FCfungen aus. Es werden die Aktionen des &quot;DANN&quot; Teiles des Programmes ausgef%FChrt dessen Bedingungsblock &quot;WAHR&quot; ergibt. Andernfalls werden die Aktionen des &quot;SONST&quot; Teiles ausgef%FChrt.<br/><br/><b>Ausf%FChren (nur 1. DANN):</b><br/><br/>F%FChrt lediglich die Aktionen innerhalb des ersten &quot;DANN&quot; Teiles des Programmes - ohne jegliche Bedingungspr%FCfungen - aus.",
      "actionStatusControlLblOn" : "Ein",
      "actionStatusControlLblOff" : "Aus",
      "actionStatusControlLblShortKeyPress" : "Kurzer<br/>Tastendruck",
---- occu/WebUI/www/webui/js/lang/en/translate.lang.help.js.orig
-+++ occu/WebUI/www/webui/js/lang/en/translate.lang.help.js
-@@ -1,6 +1,6 @@
- jQuery.extend(true, langJSON, {
-   "en": {
--
-+    "ProgramRunHelp" : "TBD",
-     "END" : ""
-   }
- });
-\ No newline at end of file
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -792,7 +792,8 @@
+@@ -792,7 +792,9 @@
      "commentActionStatusControl" : "***********************************************",
  
      "actionStatusControlLblActive" : "Active",
 -    "actionStatusControlLblStart" : "Start",
-+    "actionStatusControlLblStart" : "Run",
-+    "actionStatusControlLblStartWithoutConditionCheck" : "Run (only 1st THEN)",
++    "actionStatusControlLblStart" : "Execute",
++    "actionStatusControlLblStartThenOnly" : "Execute<br/>(only 1st THEN)",
++    "actionStatusControlLblStartHelp" : "<b>Execute:</b><br/><br/>Executes the program including all condition checks. The actions within the &quot;THEN&quot; part of the program will be executed if a condition block becomes &quot;TRUE&quot;. Otherwise the actions within the &quot;ELSE&quot; part will be executed accordingly.<br/><br/><b>Execute (only 1st THEN):</b><br/><br/>Executes only the actions of the first &quot;THEN&quot; part of the program without considering any condition check whatsoever.",
      "actionStatusControlLblOn" : "On",
      "actionStatusControlLblOff" : "Off",
      "actionStatusControlLblShortKeyPress" : "Short<br/>button press",
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -5020,6 +5020,13 @@
+@@ -5015,9 +5015,11 @@
+ 
+ .CLASS02104 {
+ 	cursor:pointer;
+-	line-height: 100px;
+ 	height:100px;
  	width:100px;
++	display: flex;
++	align-items: center;
++	justify-content: center;
  }
  
-+.CLASS02104a {
-+	cursor:pointer;
-+	line-height: 50px;
-+	height:100px;
-+	width:100px;
-+}
-+
  .CLASS02105 {
- 	text-align:center;
- 	background-color: $_(black); /* #000000 */
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -28969,14 +28969,14 @@
@@ -103,7 +80,7 @@
  };
  
 -ExecuteProgram = function(dpid)
-+ExecuteProgram = function(dpid, checkCondition)
++ExecuteProgram = function(dpid, thenOnly)
  {
    var url = "/esp/exec.htm?sid=" + SessionId;
    var pb = "";
@@ -111,7 +88,7 @@
    pb += "if( o )";
    pb += "{";
 -  pb += "  o.ProgramExecute();";
-+  pb += (checkCondition === true) ? "  o.State(1);" : "  o.ProgramExecute();";
++  pb += (thenOnly === true) ? "  o.ProgramExecute();" : "  o.State(1);";
    pb += "}";
    var opts = {postBody: ReGa.encode(pb)};
    if(dbg)alert(pb);
@@ -120,15 +97,15 @@
  iseButtonProg = Class.create();
  iseButtonProg.prototype = {
 -  initialize: function(id, progActive) {
-+  initialize: function(id, progActive, checkCondition) {
++  initialize: function(id, progActive, thenOnly) {
      this.id = id;
      this.progActive = progActive;
      
 -    this.startBtn = $(id + "Start");
-+    this.startBtn = (checkCondition === false) ? $(id + "StartNoCC") : $(id + "Start");
++    this.startBtn = (thenOnly === true) ? $(id + "StartThenOnly") : $(id + "Start");
      this.actBtn = $(id + "Act");
      
-+    this.checkCondition = checkCondition;
++    this.thenOnly = thenOnly;
 +    
      if ( progActive ) { ControlBtn.on(this.actBtn); }
      
@@ -138,7 +115,7 @@
    {
      ControlBtn.pushed(this.startBtn);
 -    ExecuteProgram(this.id);
-+    ExecuteProgram(this.id, this.checkCondition);
++    ExecuteProgram(this.id, this.thenOnly);
      var t = this;
      new PeriodicalExecuter(function(pe)
      {

@@ -792,8 +792,9 @@ jQuery.extend(true,langJSON, {
     "commentActionStatusControl" : "***********************************************",
 
     "actionStatusControlLblActive" : "Active",
-    "actionStatusControlLblStart" : "Run",
-    "actionStatusControlLblStartWithoutConditionCheck" : "Run (only 1st THEN)",
+    "actionStatusControlLblStart" : "Execute",
+    "actionStatusControlLblStartThenOnly" : "Execute<br/>(only 1st THEN)",
+    "actionStatusControlLblStartHelp" : "<b>Execute:</b><br/><br/>Executes the program including all condition checks. The actions within the &quot;THEN&quot; part of the program will be executed if a condition block becomes &quot;TRUE&quot;. Otherwise the actions within the &quot;ELSE&quot; part will be executed accordingly.<br/><br/><b>Execute (only 1st THEN):</b><br/><br/>Executes only the actions of the first &quot;THEN&quot; part of the program without considering any condition check whatsoever.",
     "actionStatusControlLblOn" : "On",
     "actionStatusControlLblOff" : "Off",
     "actionStatusControlLblShortKeyPress" : "Short<br/>button press",

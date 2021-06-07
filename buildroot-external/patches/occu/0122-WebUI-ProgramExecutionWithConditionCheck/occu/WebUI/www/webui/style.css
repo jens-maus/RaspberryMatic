@@ -5015,16 +5015,11 @@ application {
 
 .CLASS02104 {
 	cursor:pointer;
-	line-height: 100px;
 	height:100px;
 	width:100px;
-}
-
-.CLASS02104a {
-	cursor:pointer;
-	line-height: 50px;
-	height:100px;
-	width:100px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .CLASS02105 {

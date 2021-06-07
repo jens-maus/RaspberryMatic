@@ -90,14 +90,12 @@ update_webui:
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/session.tcl       $(TARGET_DIR)/www/session.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/once.tcl          $(TARGET_DIR)/www/once.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/user.tcl          $(TARGET_DIR)/www/user.tcl
-	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/verifysid.cgi     $(TARGET_DIR)/www/verifysid.cgi
 
 	ln -sf ${OCCU_ROOT}/www/tcl/extern/cgi.tcl            $(TARGET_DIR)/www/config/cgi.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/common.tcl        $(TARGET_DIR)/www/config/common.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/session.tcl       $(TARGET_DIR)/www/config/session.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/once.tcl          $(TARGET_DIR)/www/config/once.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/user.tcl          $(TARGET_DIR)/www/config/user.tcl
-	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/verifysid.cgi     $(TARGET_DIR)/www/config/verifysid.cgi
 
 	ln -sf ${OCCU_ROOT}/www/tcl/extern/cgi.tcl            $(TARGET_DIR)/www/config/display/cgi.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/once.tcl          $(TARGET_DIR)/www/config/display/once.tcl

@@ -79,7 +79,7 @@ jobs:
 
   build:
     name: Release build [${{ matrix.platform }}]
-    if: github.repository_owner == 'jens-maus'
+    if: github.repository == 'jens-maus/RaspberryMatic'
     runs-on: self-hosted
     timeout-minutes: 480
     needs: release_draft

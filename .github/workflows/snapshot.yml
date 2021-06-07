@@ -24,6 +24,7 @@ jobs:
 
   build:
     name: Snapshot build [${{ matrix.platform }}]
+    if: github.repository == 'jens-maus/RaspberryMatic'
     runs-on: self-hosted
     needs: repo-check
     timeout-minutes: 480

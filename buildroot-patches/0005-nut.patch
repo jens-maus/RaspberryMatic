@@ -1,13 +1,13 @@
 --- buildroot/package/nut/nut.mk.orig
 +++ buildroot/package/nut/nut.mk
-@@ -23,7 +23,9 @@
+@@ -30,7 +30,9 @@
+ # since the default location (/var/state/ups) maybe readonly.
  NUT_CONF_OPTS = \
  	--with-altpidpath=/var/run/upsd \
- 	--with-dev \
--	--without-hal
-+	--without-hal \
-+	--with-user=nobody \
+-	--with-dev
++	--with-dev \
++	--with-user=nobody
 +	--with-group=nobody
  
- # For uClibc-based toolchains, nut forgets to link with -lm
- ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ NUT_CONF_ENV = ax_cv__printf_string_null=yes
+ 

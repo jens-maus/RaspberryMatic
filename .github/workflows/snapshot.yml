@@ -24,11 +24,10 @@ jobs:
 
   build:
     name: Snapshot build [${{ matrix.platform }}]
-    if: github.repository == 'jens-maus/RaspberryMatic'
+    if: ${{ github.repository == 'jens-maus/RaspberryMatic' && (github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0) }}
     runs-on: self-hosted
     needs: repo-check
     timeout-minutes: 480
-    if: github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0
     outputs:
       build_datetime: ${{ steps.env.outputs.build_datetime }}
       build_version: ${{ steps.env.outputs.build_version }}

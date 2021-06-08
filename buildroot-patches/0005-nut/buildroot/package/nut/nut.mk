@@ -31,7 +31,7 @@ NUT_MAKE = $(MAKE1)
 NUT_CONF_OPTS = \
 	--with-altpidpath=/var/run/upsd \
 	--with-dev \
-	--with-user=nobody
+	--with-user=nobody \
 	--with-group=nobody
 
 NUT_CONF_ENV = ax_cv__printf_string_null=yes

@@ -11,10 +11,10 @@
  
  <table width="100%" class="CLASS03900" cellpadding="0" cellspacing="0">
    <colgroup>
--    <col width="260px" />
--    <col width="*" />
-+    <col width="20%" />
-+    <col width="80%" />
+-    <col style="width:260px;"/>
+-    <col style="width:auto;"/>
++    <col style="width:20%;"/>
++    <col style="width:80%;"/>
    </colgroup>
    <tr>
      <!-- Linke Spalte -->
@@ -23,8 +23,8 @@
 +    <td id="contentLeft" class="hidden">
 +      <table class="filterTable CLASS03901 j_translate">
          <tr>
--          <td valign="top">
-+          <td valign="top" style="border: 0px">
+-          <td style="vertical-align: top;">
++          <td style="vertical-align: top; border: 0px">
              <div id="divDL" class="CLASS03902">
                <script type="text/javascript">
                  var contHeight = $("content").style.height;
@@ -32,12 +32,12 @@
                  $("divDL").style.height = Math.floor((contHeight * 0.98)) + "px";
                </script>
 -              <table id="tblFunctionNames" class="StatViewTbl CLASS03903" cellpadding="4" cellspacing="0" >
-+              <table id="tblFunctionNames" class="StatViewTbl CLASS03903 j_translate" cellpadding="0" cellspacing="0" width="100%">
++              <table id="tblFunctionNames" class="StatViewTbl CLASS03903 j_translate" cellpadding="0" cellspacing="0" style="width:100%;">
                  <colgroup>
--                  <col width="100px" />
--                  <col width="100px" />
-+                  <col width="80%" />
-+                  <col width="20%" />
+-                  <col style="width:100px;"/>
+-                  <col style="width:100px;"/>
++                  <col style="width:80%;"/>
++                  <col style="width:20%;"/>
                  </colgroup>
 +                <tr>
 +                  <th>${thName}</th>
@@ -69,7 +69,7 @@
 -                          Call("/esp/datapointconfigurator.fn::StringCut()");
 -                          Write(sName);
 +                        string trId = "devices"#devs.ID();
-+                        WriteLine( '<tr id="'#trId#'" class="CLASS03904">' );
++                        WriteLine('<tr id="'#trId#'" class="CLASS03904">');
 +                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")'>");
 +                          Write(devs.Name());
                            Write("</td>");
@@ -87,10 +87,12 @@
                            Write("</script>");
                            
                            Write("</td>");
-@@ -180,10 +201,24 @@
+@@ -178,11 +199,25 @@
+ 
  <script type="text/javascript">
    var s = "";
-   
+-  
++
 +  var mouseOpts =
 +  {
 +    onTopOver: function(divToShow)
@@ -104,16 +106,16 @@
 +  jQuery("#btnFilterDevName").click(function(){
 +    jQuery("#ftDevName").focus();
 +  });
-+  
++
    s += "<table cellspacing='8'>";
    s += "<tr>";
-   s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
--  s += "<td align='center' valign='middle'><div class='FooterButton CLASS03911' onclick='fltHD.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
-+  s += "<td align='center' valign='middle'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
+   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
+-  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltHD.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
++  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
    s += "</tr>";
    s += "</table>";
    
-@@ -205,5 +240,28 @@
+@@ -204,5 +239,28 @@
          if (arChns[i]['ctrlId']) show(arChns[i]['ctrlId']);
        }
      }
@@ -164,8 +166,8 @@
 +    <td id="contentLeft" class="hidden">
 +      <table class="filterTable CLASS04001 j_translate">
          <tr>
--          <td valign="top">
-+          <td valign="top" style="border: 0px">
+-          <td style="vertical-align: top;">
++          <td style="vertical-align: top; border: 0px;">
              <div id="divFL" class="CLASS04002">
                <script type="text/javascript">
                  var contHeight = $("content").style.height;
@@ -174,10 +176,10 @@
                </script>
 -              <table id="tblFunctionNames" class="StatViewTbl CLASS04006 j_translate" cellpadding="5" cellspacing="0" >
 -                <colgroup>
--                  <col width="50%" />
--                  <col width="50%" />
+-                  <col style="width:50%;"/>
+-                  <col style="width:50%;"/>
 -                </colgroup>
-+              <table id="tblFunctionNames" class="StatViewTbl CLASS04006 j_translate" cellpadding="0" cellspacing="0" width="100%">
++              <table id="tblFunctionNames" class="StatViewTbl CLASS04006 j_translate" cellpadding="0" cellspacing="0" style="width: 100%;">
 +                <tr>
 +                  <th>${thFunc}</th>
 +                </tr>
@@ -238,6 +240,7 @@
  
  <script type="text/javascript">
    var s = "";
+-  
 +  var mouseOpts =
 +  {
 +    onTopOver: function(divToShow)
@@ -248,15 +251,15 @@
 +
 +  new iseSubMenuControl("btnFilterFunc", "btnFilterFuncSub", "contentLeft", {d:28, r:18}, mouseOpts, false, true);
 +
-+  jQuery("#btnFilterFunc").click(function(){
++  jQuery("#btnFilterFunc").click(function() {
 +    jQuery("#ftFunc").focus();
 +  });
-   
++
    s += "<table cellspacing='8'>";
    s += "<tr>";
-     s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey('footerBtnPageBack')+"</div></td>";
--    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltHF.clearFilters();updateTable();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
-+    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltFN.clearFilters();updateFuncTable();fltHF.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
+     s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey('footerBtnPageBack')+"</div></td>";
+-    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04005' onclick='fltHF.clearFilters();updateTable();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
++    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04005' onclick='fltFN.clearFilters();updateFuncTable();fltHF.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
    s += "</tr>";
    s += "</table>";
    
@@ -321,8 +324,8 @@
 +    <td id="contentLeft" class="hidden">
 +      <table class="filterTable CLASS04001 j_translate">
          <tr>
--          <td valign="top">
-+          <td valign="top" style="border: 0px">
+-          <td style="vertical-align: top;">
++          <td style="vertical-align: top; border: 0px">
              <div id="divRL" class="CLASS04002">
              <script type="text/javascript">
                var contHeight = $("content").style.height;
@@ -331,8 +334,8 @@
              </script>
 -            <table id="tblRoomNames" class="StatViewTbl CLASS04006 j_translate"  cellpadding="5" cellspacing="0" >
 -              <colgroup>
--                <col width="50%" />
--                <col width="50%" />
+-                <col style="width:50%;"/>
+-                <col style="width:50%;"/>
 -              </colgroup>
 +            <table id="tblRoomNames" class="StatViewTbl CLASS04006 j_translate"  cellpadding="0" cellspacing="0" width="100%">
 +              <tr>
@@ -404,15 +407,15 @@
 +
 +  new iseSubMenuControl("btnFilterRoom", "btnFilterRoomSub", "contentLeft", {d:28, r:18}, mouseOpts, false, true);
 +
-+  jQuery("#btnFilterRoom").click(function(){
++  jQuery("#btnFilterRoom").click(function() {
 +    jQuery("#ftRoom").focus();
 +  });
    
    s += "<table cellspacing='8'>";
    s += "<tr>";
-     s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey('footerBtnPageBack')+"</div></td>";
--    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltHR.clearFilters();updateTable();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
-+    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04005' onclick='fltRM.clearFilters();updateRoomTable();fltHR.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
+     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey('footerBtnPageBack')+"</div></td>";
+-    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04005' onclick='fltHR.clearFilters();updateTable();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
++    s += "<td style='text-align: center; vertical-align: middle;'><div class='FooterButton CLASS04005' onclick='fltRM.clearFilters();updateRoomTable();fltHR.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
    s += "</tr>";
    s += "</table>";
    

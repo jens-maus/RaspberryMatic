@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Start RaspberryMatic in LAN Gateway Mode
 #
@@ -11,8 +12,11 @@
 start() {
   echo -n "Starting LAN Gateway Daemon: "
   if [[ -c ${HM_HMRF_DEVNODE} ]]; then
-    start-stop-daemon -S -b -m -p /var/run/hmlangw.pid --startas /bin/sh -- -c "exec /bin/hmlangw -n ${HM_HMRF_SERIAL} -s ${HM_HMRF_DEVNODE} -r -1 >/var/log/hmlangw.log 2>&1"
-    [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
+    if start-stop-daemon -S -b -m -p /var/run/hmlangw.pid --startas /bin/sh -- -c "exec /bin/hmlangw -n ${HM_HMRF_SERIAL} -s ${HM_HMRF_DEVNODE} -r -1 >/var/log/hmlangw.log 2>&1"; then
+      echo "OK"
+    else
+      echo "FAIL"
+    fi
   else
     echo "ERROR: no BidCos-RF hardware found"
   fi
@@ -20,8 +24,12 @@ start() {
 
 stop() {
   echo -n "Stopping LAN Gateway Daemon: "
-  start-stop-daemon -K -q -o -p /var/run/hmlangw.pid
-  [[ $? -eq 0 ]] && ( rm -f /var/run/hmlangw.pid && echo "OK" ) || echo "ERROR"
+  if start-stop-daemon -K -q -o -p /var/run/hmlangw.pid; then
+    echo "OK"
+  else
+    echo "FAIL"
+  fi
+  rm -f /var/run/hmlangw.pid
 }
 
 restart() {

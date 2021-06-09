@@ -2,6 +2,9 @@
 
 # Do not auto mount our own (deedbeef) system partitions
 ENV{ID_PART_TABLE_UUID}=="deedbeef", GOTO="END"
+ENV{ID_FS_LABEL}=="bootfs", GOTO="END"
+ENV{ID_FS_LABEL}=="rootfs", GOTO="END"
+ENV{ID_FS_LABEL}=="userfs", GOTO="END"
 
 KERNEL=="sd*", DRIVERS=="sbp2",		ACTION=="add",	RUN+="/usr/share/usbmount/usbmount add"
 KERNEL=="sd*", SUBSYSTEM=="block",	ACTION=="add",	RUN+="/usr/share/usbmount/usbmount add"

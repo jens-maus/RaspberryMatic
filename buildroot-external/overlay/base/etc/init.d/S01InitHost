@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169,SC2034 source=/dev/null
 #
 # startup script to identify the host hardware
 #
@@ -9,20 +10,28 @@ identify_host() {
   HM_HOST=""
   HM_MODE="NORMAL"
   HM_LED_GREEN=""
-  HM_LED_GREEN_MODE1="$(lsblk -r -n -o pkname,partuuid,label,mountpoint | sed -n 's/mmc.*\([[:digit:]]\) deedbeef-02 rootfs \/$/mmc\1/p')"
+  HM_LED_GREEN_MODE1="none"
   HM_LED_GREEN_MODE2="heartbeat"
   HM_LED_RED=""
   HM_LED_RED_MODE1="timer"
-  HM_LED_RED_MODE2=${HM_LED_GREEN_MODE1}
+  HM_LED_RED_MODE2="none"
   HM_LED_YELLOW=""
   HM_LED_YELLOW_MODE1="none"
   HM_LED_YELLOW_MODE2="none"
+
+  # set GREEN_MODE1 and RED_MODE2 to the rootfs
+  # device led trigger
+  rootfs_trigger="$(/sbin/blkid --label rootfs | head -1 | sed -n 's/\/dev\/mmc.*\([[:digit:]]\)p[[:digit:]]$/mmc\1/p')"
+  if [[ -n "${rootfs_trigger}" ]]; then
+    HM_LED_GREEN_MODE1=${rootfs_trigger}
+    HM_LED_RED_MODE2=${rootfs_trigger}
+  fi
 
   # identify the RaspberryPi version used
   # http://elinux.org/RPi_HardwareHistory
   # https://github.com/MilhouseVH/bcmstat/blob/master/bcmstat.sh#L67
   # https://www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
-  hostid=$(cat /proc/cpuinfo | grep 'Revision' | awk '{print $3}')
+  hostid=$(grep Revision /proc/cpuinfo| awk '{print $3}')
   case "${hostid}" in
     *d?311?)                       HM_HOST="rpi4b8g"    ;; # Raspberry Pi 4 Model B/8GB
     *c?311?)                       HM_HOST="rpi4b4g"    ;; # Raspberry Pi 4 Model B/4GB
@@ -46,15 +55,42 @@ identify_host() {
 
     # No RaspberryPi identified, try other boards
     *)
-      hardware=$(cat /proc/cpuinfo | grep 'Hardware' | awk '{print $3}')
+      hardware=$(grep Hardware /proc/cpuinfo | awk '{print $3}')
       case "${hardware}" in
         # ASUS Tinkerboard
         Rockchip)
           HM_HOST="tinkerboard"
         ;;
       esac
+
+      if [[ -z "${HM_HOST}" ]] && [[ -e /sys/firmware/devicetree/base/model ]]; then
+        case "$(cat /sys/firmware/devicetree/base/model)" in
+          # Hardkernel ODROID-C4
+          *ODROID-C4*)
+            HM_HOST="odroid-c4"
+          ;;
+          # Hardkernel ODROID-N2
+          *ODROID-N2*)
+            HM_HOST="odroid-n2"
+          ;;
+          # Hardkernel ODROID-C2
+          *ODROID-C2*)
+            HM_HOST="odroid-c2"
+          ;;
+        esac
+      fi
     ;;
   esac
+
+  # find out if we are in a container environment
+  if [[ -f /.dockerenv ]] || grep -Eq '(docker|lxc|containerd)' /proc/1/cgroup; then
+    HM_HOST="oci"
+
+    # save the HA supervisor token for later use
+    if [[ -n ${HM_RUNNING_IN_HA} ]]; then
+      HM_SUPERVISOR_TOKEN=${SUPERVISOR_TOKEN}
+    fi
+  fi
 
   # find out if we are in a virtual environment so that
   # we can identify the ova platform
@@ -100,7 +136,7 @@ identify_host() {
       # if the least significant bit is set the
       # HDMI cable seems to be unplugged or if
       # no HDMI display is listed using tvservice
-      if [[ $(((${hdmi_state} & 0x01) == 1)) -eq 1 ]] || ! /usr/bin/tvservice -l | grep -q "type HDMI"; then
+      if [[ $(((hdmi_state & 0x01) == 1)) -eq 1 ]] || ! /usr/bin/tvservice -l | grep -q "type HDMI"; then
         /usr/bin/tvservice --off >/dev/null
         /usr/bin/vcgencmd display_power 0 >/dev/null
       fi
@@ -108,13 +144,25 @@ identify_host() {
 
     # ASUS Tinkerboard
     tinkerboard*)
-      HM_LED_GREEN="/sys/class/leds/act-led"
-      HM_LED_RED="/sys/class/leds/pwr-led"
-      HM_LED_YELLOW="/sys/class/leds/heartbeat-led"
+      HM_LED_GREEN="/sys/class/leds/led-0"
+      HM_LED_RED="/sys/class/leds/led-2"
+      HM_LED_YELLOW="/sys/class/leds/led-1"
+    ;;
+
+    # Hardkernel ODROID-C4/N2
+    odroid-*)
+      HM_LED_GREEN="/sys/class/leds/blue:status"
+      HM_LED_RED=""
+      HM_LED_YELLOW=""
     ;;
 
     # Open Virtual Appliance (ova)
     ova*)
+      # fine
+    ;;
+
+    # Open Container Initiative (oci)
+    oci*)
       # fine
     ;;
 
@@ -131,18 +179,21 @@ identify_host() {
 
   # make sure the LEDs are actually setup correctly
   if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
-    echo ${HM_LED_GREEN_MODE1} >${HM_LED_GREEN}/trigger
+    echo "${HM_LED_GREEN_MODE1}" >"${HM_LED_GREEN}/trigger"
   fi
   if [[ -f "${HM_LED_RED}/trigger" ]]; then
-    echo ${HM_LED_RED_MODE1} >${HM_LED_RED}/trigger
+    echo "${HM_LED_RED_MODE1}" >"${HM_LED_RED}/trigger"
   fi
   if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
-    echo ${HM_LED_YELLOW_MODE1} >${HM_LED_YELLOW}/trigger
+    echo "${HM_LED_YELLOW_MODE1}" >"${HM_LED_YELLOW}/trigger"
   fi
 }
 
 start() {
   echo -n "Identifying onboard hardware: "
+
+  # make sure to load sysctl defaults from /etc/sysctl.conf
+  [[ -f /etc/sysctl.conf ]] && /sbin/sysctl -p -q -e
 
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode

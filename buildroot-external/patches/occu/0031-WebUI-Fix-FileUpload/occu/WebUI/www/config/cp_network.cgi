@@ -250,6 +250,7 @@ proc action_cert_upload {} {
   global env sid filename
   cd /usr/local/tmp/
   
+  http_head
   set fp [open "$filename" r]
   gets $fp line
   close $fp
@@ -260,21 +261,29 @@ proc action_cert_upload {} {
     cgi_javascript {
       puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
       puts {
-        parent.top.dlgPopup.hide();
-        parent.top.dlgPopup.setWidth(600);
-        parent.top.dlgPopup.LoadFromFile(url, "action=cert_update_confirm");
+        var dlgPopup = parent.top.dlgPopup;
+        if (dlgPopup === undefined) {
+          dlgPopup = window.open('', 'resize').dlgPopup;
+        }
+        dlgPopup.hide();
+        dlgPopup.setWidth(600);
+        dlgPopup.LoadFromFile(url, "action=cert_update_confirm");
       }
     }
   } else {
     file delete -force -- $filename
 
     cgi_javascript {
-    puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-    puts {
-      parent.top.dlgPopup.hide();
-      parent.top.dlgPopup.setWidth(600);
-      parent.top.dlgPopup.LoadFromFile(url, "action=cert_update_failed");
-    }
+      puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+      puts {
+        var dlgPopup = parent.top.dlgPopup;
+        if (dlgPopup === undefined) {
+          dlgPopup = window.open('', 'resize').dlgPopup;
+        }
+        dlgPopup.hide();
+        dlgPopup.setWidth(600);
+        dlgPopup.LoadFromFile(url, "action=cert_update_failed");
+      }
     }
   }
 }

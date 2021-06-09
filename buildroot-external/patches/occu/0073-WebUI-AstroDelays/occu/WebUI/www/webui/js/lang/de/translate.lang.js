@@ -848,7 +848,7 @@ jQuery.extend(true,langJSON, {
     "timeModuleLblAstroDay" : "Von Sonnenaufgang, versetzt um",
     "timeModuleLblAstroDayTill" : "bis Sonnenuntergang, oder f%FCr",
     "timeModuleLblAstroNight" : "Von Sonnenuntergang, versetzt um",
-    "timeModuleLblAstroNightTill" : "bis Sonnenuntergang, oder f%FCr",
+    "timeModuleLblAstroNightTill" : "bis Sonnenaufgang, oder f%FCr",
     "timeModuleLblPointOfTime" : "Zeitpunkt",
     "timeModuleLblSerialPatternTitle" : "Serienmuster",
     "timeModuleLblSerialPatternOnce" : "Einmalig",

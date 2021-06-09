@@ -1,0 +1,42 @@
+#!/bin/sh
+# shellcheck shell=dash disable=SC2169
+#
+# Starts irqbalance
+#
+
+# skip irqbalance use for systems with less than
+# 2 cpus/cores
+[[ $(nproc) -lt 2 ]] && exit 0
+
+# irqbalance requires /run/irqbalance
+mkdir -p /run/irqbalance
+
+EXEC="/usr/sbin/irqbalance"
+ARGS=""
+PID="/var/run/irqbalance.pid"
+
+case "$1" in
+    start)
+	printf "Starting irqbalance: "
+	# shellcheck disable=SC2086
+	if ! start-stop-daemon -S -q -x $EXEC -- $ARGS; then
+	    echo "FAILED"
+	    exit 1
+	else
+	    echo "OK"
+	fi
+	pidof irqbalance > $PID
+	;;
+    stop)
+	printf "Stopping irqbalance: "
+	start-stop-daemon -K -q -p $PID
+	echo "OK"
+	;;
+    restart|reload)
+	$0 stop
+	$0 start
+	;;
+    *)
+	echo "Usage: $0 {start|stop|restart}"
+	exit 1
+esac

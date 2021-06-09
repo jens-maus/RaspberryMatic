@@ -1,0 +1,44 @@
+#!/bin/tclsh
+
+#*******************************************************************************
+#* hm_startup
+#* Wird beim Starten von ise ReGa ausgeführt. 
+#*
+#* Aufgaben:
+#*   - sucht fertig konfigurierte Geräte und setzt deren Kanäle ebenfalls auf 
+#*     "fertig konfiguriert"
+#*
+#* Autor      : Falk Werner
+#* Erstellt am: 23.07.2008
+#*******************************************************************************
+
+################################################################################
+# Module                                                                       #
+################################################################################
+
+load tclrega.so
+
+################################################################################
+# Prozeduren                                                                   #
+################################################################################
+
+#*******************************************************************************
+#* Sucht fertig konfigurierte Geräte und setzt deren Kanäle auf "fertig 
+#* konfiguriert".
+#*******************************************************************************
+proc checkDevices { } {
+  rega_script {
+    string sId;
+    foreach(sId, root.Devices().EnumUsedIDs())
+    {
+      var oDevice = dom.GetObject(sId);
+      if (oDevice.ReadyConfig()) { oDevice.ReadyConfigChns(true); }
+    }
+  }
+}
+
+################################################################################
+# Einsprungpunkt                                                               #
+################################################################################
+
+checkDevices

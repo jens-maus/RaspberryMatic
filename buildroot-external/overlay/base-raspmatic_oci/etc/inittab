@@ -1,0 +1,41 @@
+# /etc/inittab
+#
+# Copyright (C) 2001 Erik Andersen <andersen@codepoet.org>
+#
+# Note: BusyBox init doesn't support runlevels.  The runlevels field is
+# completely ignored by BusyBox init. If you want runlevels, use
+# sysvinit.
+#
+# Format for each entry: <id>:<runlevels>:<action>:<process>
+#
+# id        == tty to run on, or empty for /dev/console
+# runlevels == ignored
+# action    == one of sysinit, respawn, askfirst, wait, and once
+# process   == program to run
+
+# Startup the system
+null::sysinit:/bin/mkdir -p /dev_host
+#Bug in Kubernetes -> sys is mounted RO even for privileged -> https://github.com/kubernetes/kubernetes/pull/96877
+null::sysinit:/bin/mount -o rw,remount /sys
+::sysinit:/bin/mount -a
+null::sysinit:/bin/mount -o ro,remount /
+null::sysinit:/bin/mkdir -p /var/run
+null::sysinit:/bin/mkdir -p /var/cache
+null::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
+#null::sysinit:/bin/hostname -F /etc/hostname
+# now run any rc scripts
+::sysinit:/etc/init.d/rcS
+# run monit to monitor our important services
+null::respawn:/usr/bin/monit -Ic /etc/monitrc
+
+# put a login prompt on start console
+#Disabled because it fill the log messages and does not work with running container as daemon
+#You shoud use "docker exec -ti ccu sh" instead
+#::askfirst:/bin/login
+
+# Stuff to do for the 3-finger salute
+::ctrlaltdel:/sbin/reboot
+
+# Stuff to do before rebooting
+null::shutdown:/usr/bin/monit unmonitor all
+::shutdown:/etc/init.d/rcK

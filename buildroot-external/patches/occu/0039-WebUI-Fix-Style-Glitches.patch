@@ -131,28 +131,28 @@
  </script>
  <table id="tblServices" class="filterTable tTable CLASS02601" border="0" cellpadding="0" cellspacing="0" style="display:none;">
 +<colgroup>
-+  <col width="auto">
-+  <col width="auto">
-+  <col width="auto">
-+  <col width="55px">
-+  <col width="auto">
-+  <col width="auto">
-+  <col width="auto">
-+  <col width="auto">
-+  <col width="auto">
-+  <col width="100px">
++  <col style="width: auto;">
++  <col style="width: auto;">
++  <col style="width: auto;">
++  <col style="width: 55px;">
++  <col style="width: auto;">
++  <col style="width: auto;">
++  <col style="width: auto;">
++  <col style="width: auto;">
++  <col style="width: auto;">
++  <col style="width: 100px;">
 +</colgroup>
  <tr>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="first"){sCssName="SortSelected";} %>
 -  <th class="CLASS02602"><div id="_first" class="_pt11 <%Write(sCssName);%>" style="height:auto;" onclick="IseSort(arServices,'first',true);">${thFirstMessageDateTime}</div></th>
 -  <th align="center" valign="middle">${thLastMessageDateTime}</th>
 +  <th class="thCell CLASS02603"><div id="_first" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'first',true);">${thFirstMessageDateTime}</div></th>
-+  <th class="thCell CLASS02603" align="center" valign="middle">${thLastMessageDateTime}</th>
++  <th class="thCell CLASS02603" style='text-align:center; vertical-align: middle;'>${thLastMessageDateTime}</th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
 -  <th class="CLASS02602"><div id="name" class="pt11 <%Write(sCssName);%> " onclick="IseSort(arServices,'name',true);">${thName}</div></th>
 -  <th align="center" valign="middle"><div class="pt11 Sort">${thPicture}</div></th>
 +  <th class="thCell CLASS02603"><div id="name" class="pt11 <%Write(sCssName);%> " onclick="IseSort(arServices,'name',true);">${thName}</div></th>
-+  <th class="thCell CLASS02603" align="center" valign="middle"><div>${thPicture}</div></th>
++  <th class="thCell CLASS02603" style='text-align:center; vertical-align: middle;'><div>${thPicture}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="sn"){sCssName="SortSelected";} %>
 -  <th class="CLASS02602"><div id="sn" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'sn',true);">${thSerialNumber}</div></th>
 +  <th class="thCell CLASS02603"><div id="sn" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'sn',true);">${thSerialNumber}</div></th>
@@ -163,20 +163,20 @@
 -  <th class="CLASS02602"><div id="room" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'room',true);">${thRoom}</div></th>
 -  <th align="center" valign="middle">${thLastChange}</th>
 +  <th class="thCell CLASS02603"><div id="room" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'room',true);">${thRoom}</div></th>
-+  <th class="thCell CLASS02603" align="center" valign="middle">${thLastChange}</th>
++  <th class="thCell CLASS02603" style='text-align:center; vertical-align: middle;'>${thLastChange}</th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="desc"){sCssName="SortSelected";} %>
 -  <th class="CLASS02602"><div id="desc" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'desc',true);">${thServiceMessage}</div></th>
 -  <th align="center" valign="middle"><div class="pt11 Sort">${thAction}</div></th>
 +  <th class="thCell CLASS02603"><div id="desc" class="pt11 <%Write(sCssName);%>" onclick="IseSort(arServices,'desc',true);">${thServiceMessage}</div></th>
-+  <th class="thCell CLASS02603" align="center" valign="middle"><div>${thAction}</div></th>
++  <th class="thCell CLASS02603" style='text-align:center; vertical-align: middle;'><div>${thAction}</div></th>
  </tr>
  <tr id="trFlt">
-   <td align="center" valign="middle" class="CLASS02603"></td>
-@@ -289,13 +301,13 @@
-             Write( '<td align="center" valign="middle" class="CLASS02605">'#sFirstTimestamp#'</td>' );
-             Write( '<td id="sla'#sAID#'" align="center" valign="middle" class="CLASS02605">'#sLastTimestamp#'</td>' );
-             Write( '<td id="n'#oAlarm.ID()#'" align="center" valign="middle" class="CLASS02606">'#sAlarmName#'</td>' );
--            Write( '<td align="center" valign="top" class="CLASS02607">');
+   <td style="text-align:center; vertical-align: middle;" class="CLASS02603"></td>
+@@ -294,13 +306,13 @@
+             Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02605">'#sFirstTimestamp#'</td>' );
+             Write( '<td id="sla'#sAID#'"  style="text-align:center; vertical-align: middle;" class="CLASS02605">'#sLastTimestamp#'</td>' );
+             Write( '<td id="n'#oAlarm.ID()#'"  style="text-align:center; vertical-align: middle;"class="CLASS02606">'#sAlarmName#'</td>' );
+-            Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02607; background-color:white;">');
 +            Write( '<td class="DeviceListThumbnail">');
              if (oLastTriggerChannel)
              {
@@ -215,9 +215,22 @@
    </tr>
    <tr>
      <td class="CLASS06405">
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -86,8 +86,8 @@
+     "footerBtnTransfer" : "%DCbernehmen",
+     "footerBtnOk" : "OK",
+     "footerBtnSaveNewProgram" : "Einstellungen als neues<br/>Programm speichern",
+-    "footerBtnOpenTree" : "Baumstruktur %F6ffnen",
+-    "footerBtnCloseTree" : "Baumstruktur schlie%DFen",
++    "footerBtnOpenTree" : "Baumstruktur<br/>%F6ffnen",
++    "footerBtnCloseTree" : "Baumstruktur<br/>schlie%DFen",
+     "footerBtnEdit" : "Bearbeiten",
+     "footerBtnAutoLogin" : "Automatisches<br/>Anmelden",
+     "footerBtnVirtualChannelsShow" : "Virtuelle Kan%E4le anzeigen",
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -376,7 +376,7 @@
+@@ -391,7 +391,7 @@
    text-align:center;
    border:solid 1px $_(black); /* black */
    background-color:$_(clickable);
@@ -226,7 +239,7 @@
  }
  
  .filterTable td
-@@ -587,23 +587,25 @@
+@@ -608,23 +608,25 @@
  .Sort
  {
    cursor: pointer;
@@ -259,7 +272,7 @@
  }
  
  .tblList td {
-@@ -5204,6 +5206,7 @@
+@@ -5359,6 +5361,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -267,7 +280,7 @@
  }
  
  .CLASS02536 {
-@@ -5226,6 +5229,7 @@
+@@ -5381,6 +5384,7 @@
  	max-width: 480px;
  	clear: both;
  	display: inline-block;
@@ -275,7 +288,7 @@
  }
  
  .CLASS02539 {
-@@ -5378,7 +5382,7 @@
+@@ -5553,7 +5557,7 @@
  }
  
  .CLASS02602 {
@@ -284,7 +297,7 @@
  }
  
  .CLASS02603 {
-@@ -5409,21 +5413,6 @@
+@@ -5584,21 +5588,6 @@
  	padding: 4px;
  }
  
@@ -306,7 +319,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5560,10 +5549,12 @@
+@@ -5735,10 +5724,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;

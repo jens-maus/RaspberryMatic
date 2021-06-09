@@ -3,8 +3,8 @@
 # CloudMatic/meine-homematic.de support
 #
 #############################################################
-CLOUDMATIC_VERSION = 4216d1955a288d34c9d1a9dad861da3165eedc24
-CLOUDMATIC_SITE = $(call github,jens-maus,CloudMatic-CCUAddon,$(CLOUDMATIC_VERSION))
+CLOUDMATIC_VERSION = f5bfea6625a026d648ab5c322f7026c966046153
+CLOUDMATIC_SITE = $(call github,EasySmartHome,CloudMatic-CCUAddon,$(CLOUDMATIC_VERSION))
 CLOUDMATIC_LICENSE = PROPERITARY
 
 ifeq ($(BR2_arm),y)
@@ -12,7 +12,17 @@ ifeq ($(BR2_arm),y)
 	ZABBIX_BIN=zabbix_agentd
 endif
 
+ifeq ($(BR2_aarch64),y)
+	NGINX_BIN=nginx.pi
+	ZABBIX_BIN=zabbix_agentd
+endif
+
 ifeq ($(BR2_i386),y)
+	NGINX_BIN=nginx.i686
+	ZABBIX_BIN=zabbix_agentd.i686
+endif
+
+ifeq ($(BR2_x86_64),y)
 	NGINX_BIN=nginx.i686
 	ZABBIX_BIN=zabbix_agentd.i686
 endif
@@ -25,7 +35,7 @@ define CLOUDMATIC_INSTALL_TARGET_CMDS
   ln -s /usr/sbin/openvpn $(TARGET_DIR)/opt/mh/
   cp -a $(@D)/user $(TARGET_DIR)/opt/mh/
   cp -a $(@D)/www $(TARGET_DIR)/opt/mh/
-  rm -f $(TARGET_DIR)/opt/mh/user/nginx.pi $(TARGET_DIR)/opt/mh/user/nginx $(TARGET_DIR)/opt/mh/user/nginx.i686 $(TARGET_DIR)/opt/mh/user/zabbix_agentd $(TARGET_DIR)/opt/mh/user/zabbix_agentd.i686
+  rm -f $(TARGET_DIR)/opt/mh/user/nginx.ccu? $(TARGET_DIR)/opt/mh/user/nginx.pi $(TARGET_DIR)/opt/mh/user/nginx $(TARGET_DIR)/opt/mh/user/nginx.i686 $(TARGET_DIR)/opt/mh/user/zabbix_agentd $(TARGET_DIR)/opt/mh/user/zabbix_agentd.i686
   [[ -n "$(NGINX_BIN)" ]] && $(INSTALL) -m 0755 $(@D)/user/$(NGINX_BIN) $(TARGET_DIR)/opt/mh/user/nginx || true
   [[ -n "$(ZABBIX_BIN)" ]] && $(INSTALL) -m 0755 $(@D)/user/$(ZABBIX_BIN) $(TARGET_DIR)/opt/mh/user/zabbix_agentd || true
   $(INSTALL) -D -m 0755 $(CLOUDMATIC_PKGDIR)/S97CloudMatic $(TARGET_DIR)/etc/init.d

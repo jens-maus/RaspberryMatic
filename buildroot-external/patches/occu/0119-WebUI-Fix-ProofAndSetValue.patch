@@ -1,0 +1,488 @@
+--- occu/WebUI/www/config/easymodes/cc_rt_dev_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/cc_rt_dev_master.tcl
+@@ -21,7 +21,12 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set min [format {%1.1f} $param_descr(MIN)]
++  set min $param_descr(MIN)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.1f} $min]
++  }
+   return "$min"
+ }
+ 
+@@ -30,16 +35,21 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set max [format {%1.1f} $param_descr(MAX)]
++  set max $param_descr(MAX)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.1f} $max]
++  }
+   return "$max"
+ }
+ 
+ proc getTextField {type param value prn} {
+   global psDescr
+   set elemId 'separate_$type\_$prn'
+-  # Limit float to 2 decimal places
++  # Limit float to 1 decimal places
+   if {[llength [split $value "."]] == 2} {
+-    set value [format {%1.2f} $value]
++    set value [format {%1.1f} $value]
+   }
+   set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=\"$param\" onblur=\"ProofAndSetValue(this.id, this.id, '[getMinValue $param]', '[getMaxValue $param]', 1)\"/>"
+ 
+@@ -73,10 +83,10 @@
+   set min $param_descr(MIN)
+   set max $param_descr(MAX)
+ 
+-  # Limit float to 2 decimal places
++  # Limit float to 1 decimal places
+   if {[llength [split $min "."]] == 2} {
+-    set min [format {%1.2f} $min]
+-    set max [format {%1.2f} $max]
++    set min [format {%1.1f} $min]
++    set max [format {%1.1f} $max]
+   }
+   return "($min - $max)"
+ }
+--- occu/WebUI/www/config/easymodes/etc/profile_cond_x_ch_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/profile_cond_x_ch_master.tcl
+@@ -98,6 +98,11 @@
+ 	if {![catch {array set param_descr $psDescr($param)}]} {
+     set min $param_descr(MIN)
+   }
++
++  # Limit float to 2 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.2f} $min]
++  }
+   return $min
+ }
+ 
+@@ -108,6 +113,11 @@
+ 	if {![catch {array set param_descr $psDescr($param)}]} {
+     set max $param_descr(MAX)
+   }
++
++  # Limit float to 2 decimal places
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.2f} $max]
++  }
+   return $max
+ }
+ 
+@@ -164,7 +174,7 @@
+     if {[string first "lowerVal_" $param 0] != -1 || [string first "upperVal_" $param 0] != -1} {
+       append s "<td class='$class'><input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur='setVal(this)'>&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
+     } else {
+-      append s "<td class='$class'><input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur='ProofAndSetValue(this.id, this.id, [getMinValue $param], [getMaxValue $param], 1);'>&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
++      append s "<td class='$class'><input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '[getMinValue $param]', '[getMaxValue $param]', 1);\">&nbsp;[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
+     }
+   }
+   append s "</tr>"
+--- occu/WebUI/www/config/easymodes/etc/uiElements.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/uiElements.tcl
+@@ -5,7 +5,12 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set min [format {%1.1f} $param_descr(MIN)]
++  set min $param_descr(MIN)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.1f} $min]
++  }
+   return "$min"
+ }
+ 
+@@ -14,7 +19,12 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set max [format {%1.1f} $param_descr(MAX)]
++  set max $param_descr(MAX)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.1f} $max]
++  }
+   return "$max"
+ }
+ 
+@@ -264,7 +274,7 @@
+   }
+ 
+   set s "<input id=$elemIdTmp type=\"text\" size=\"5\" value=[format %.0f [expr $value * 100]] name=$param\_tmp onblur="
+-  append s "\"ProofAndSetValue(this.id, this.id, $minValue, $maxValue, 1);"
++  append s "\"ProofAndSetValue(this.id, this.id, parseInt($minValue), parseInt($maxValue), 1);"
+   append s "jQuery('#separate_CHANNEL\_$chn\_$prn').val(this.value / 100);\">"
+ 
+   append s "<input id=$elemId type=\"text\" size=\"5\" class=\"hidden\" value=$value name=$param>"
+--- occu/WebUI/www/config/easymodes/hm-cc-vg-1_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/hm-cc-vg-1_master.tcl
+@@ -24,7 +24,12 @@
+ 
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set min [format {%1.1f} $param_descr(MIN)]
++  set min $param_descr(MIN)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.1f} $min]
++  }
+   return "$min"
+ }
+ 
+@@ -33,7 +38,12 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set max [format {%1.1f} $param_descr(MAX)]
++  set max $param_descr(MAX)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.1f} $max]
++  }
+   return "$max"
+ }
+ 
+@@ -41,9 +51,9 @@
+   global psDescr
+ 
+   set elemId 'separate_$type\_$prn'
+-  # Limit float to 2 decimal places
++  # Limit float to 1 decimal places
+   if {[llength [split $value "."]] == 2} {
+-    set value [format {%1.2f} $value]
++    set value [format {%1.1f} $value]
+   }
+   set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=\"$param\" onblur=\"ProofAndSetValue(this.id, this.id, '[getMinValue $param]', '[getMaxValue $param]', 1)\"/>"
+   return $s
+@@ -75,10 +85,10 @@
+   set min $param_descr(MIN)
+   set max $param_descr(MAX)
+ 
+-  # Limit float to 2 decimal places
++  # Limit float to 1 decimal places
+   if {[llength [split $min "."]] == 2} {
+-    set min [format {%1.2f} $min]
+-    set max [format {%1.2f} $max]
++    set min [format {%1.1f} $min]
++    set max [format {%1.1f} $max]
+   }
+   return "($min - $max)"
+ }
+--- occu/WebUI/www/config/easymodes/powermeter_iec_ch1_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/powermeter_iec_ch1_master.tcl
+@@ -44,8 +44,18 @@
+   array set param_descr $descr($param)
+ 
+   set elemId '$inputId'
++  set min $param_descr(MIN)
++  set max $param_descr(MAX)
+ 
+-  set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=\"$param\" onblur=\"ProofAndSetValue($elemId, $elemId,$param_descr(MIN), $param_descr(MAX), parseFloat(1))\"/>"
++  # Limit min/max to 3 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.3f} $min]
++  }
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.3f} $max]
++  }
++
++  set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=\"$param\" onblur=\"ProofAndSetValue($elemId, $elemId, '$min', '$max', 1)\"/>"
+   return $s
+ }
+ 
+--- occu/WebUI/www/config/easymodes/powermeter_iec_ch2_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/powermeter_iec_ch2_master.tcl
+@@ -44,8 +44,18 @@
+   array set param_descr $descr($param)
+ 
+   set elemId '$inputId'
++  set min $param_descr(MIN)
++  set max $param_descr(MAX)
+ 
+-  set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=\"$param\" onblur=\"ProofAndSetValue($elemId, $elemId,$param_descr(MIN), $param_descr(MAX), parseFloat(1))\"/>"
++  # Limit min/max to 3 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.3f} $min]
++  }
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.3f} $max]
++  }
++
++  set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=\"$param\" onblur=\"ProofAndSetValue($elemId, $elemId, '$min', '$max', 1)\"/>"
+   return $s
+ }
+ 
+--- occu/WebUI/www/config/easymodes/powermeter_igl_ch_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/powermeter_igl_ch_master.tcl
+@@ -31,8 +31,18 @@
+   array set param_descr $descr($param)
+ 
+   set elemId '$inputId'
++  set min $param_descr(MIN)
++  set max $param_descr(MAX)
+ 
+-  set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=\"$param\" onblur=\"ProofAndSetValue($elemId, $elemId,$param_descr(MIN), $param_descr(MAX), parseFloat(1))\"/>"
++  # Limit min/max to 3 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.3f} $min]
++  }
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.3f} $max]
++  }
++
++  set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=\"$param\" onblur=\"ProofAndSetValue($elemId, $elemId, '$min', '$max', 1)\"/>"
+   return $s
+ }
+ 
+--- occu/WebUI/www/config/easymodes/powermeter_v2_iec_ch1_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/powermeter_v2_iec_ch1_master.tcl
+@@ -44,8 +44,18 @@
+   array set param_descr $descr($param)
+ 
+   set elemId '$inputId'
++  set min $param_descr(MIN)
++  set max $param_descr(MAX)
+ 
+-  set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=\"$param\" onblur=\"ProofAndSetValue($elemId, $elemId,$param_descr(MIN), $param_descr(MAX), parseFloat(1))\"/>"
++  # Limit min/max to 3 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.3f} $min]
++  }
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.3f} $max]
++  }
++
++  set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=\"$param\" onblur=\"ProofAndSetValue($elemId, $elemId, '$min', '$max', 1)\"/>"
+   return $s
+ }
+ 
+--- occu/WebUI/www/config/easymodes/powermeter_v2_iec_ch2_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/powermeter_v2_iec_ch2_master.tcl
+@@ -44,8 +44,18 @@
+   array set param_descr $descr($param)
+ 
+   set elemId '$inputId'
++  set min $param_descr(MIN)
++  set max $param_descr(MAX)
+ 
+-  set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=\"$param\" onblur=\"ProofAndSetValue($elemId, $elemId,$param_descr(MIN), $param_descr(MAX), parseFloat(1))\"/>"
++  # Limit min/max to 3 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.3f} $min]
++  }
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.3f} $max]
++  }
++
++  set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=\"$param\" onblur=\"ProofAndSetValue($elemId, $elemId, '$min', '$max', 1)\"/>"
+   return $s
+ }
+ 
+--- occu/WebUI/www/config/easymodes/tc_it_dev_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/tc_it_dev_master.tcl
+@@ -20,7 +20,12 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set min [format {%1.1f} $param_descr(MIN)]
++  set min $param_descr(MIN)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $min "."]] == 2} {
++    set min [format {%1.1f} $min]
++  }
+   return "$min"
+ }
+ 
+@@ -28,15 +33,20 @@
+   upvar psDescr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  set max [format {%1.1f} $param_descr(MAX)]
++  set max $param_descr(MAX)
++
++  # Limit float to 1 decimal places
++  if {[llength [split $max "."]] == 2} {
++    set max [format {%1.1f} $max]
++  }
+   return "$max"
+ }
+ 
+ proc getTextField {type param value prn} {
+   set elemId 'separate_$type\_$prn'
+-  # Limit float to 2 decimal places
++  # Limit float to 1 decimal places
+   if {[llength [split $value "."]] == 2} {
+-    set value [format {%1.2f} $value]
++    set value [format {%1.1f} $value]
+   }
+ 
+   set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=$param>"
+@@ -67,10 +77,10 @@
+   set min $param_descr(MIN)
+   set max $param_descr(MAX)
+ 
+-  # Limit float to 2 decimal places
++  # Limit float to 1 decimal places
+   if {[llength [split $min "."]] == 2} {
+-    set min [format {%1.2f} $min]
+-    set max [format {%1.2f} $max]
++    set min [format {%1.1f} $min]
++    set max [format {%1.1f} $max]
+   }
+   return "($min - $max)"
+ }
+--- occu/WebUI/www/config/easymodes/wa_od_ch_master.tcl.orig
++++ occu/WebUI/www/config/easymodes/wa_od_ch_master.tcl
+@@ -10,14 +10,26 @@
+   upvar ps_descr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  return $param_descr(MIN)
++  set min $param_descr(MIN)
++
++  # Limit float to 2 decimal places
++  if {$param == "LED_ONTIME"} {
++    set min [format {%1.2f} $min]
++  }
++  return "$min"
+ }
+ 
+ proc getMaxValue {ps_descr param} {
+   upvar ps_descr descr
+   array_clear param_descr
+   array set param_descr $descr($param)
+-  return $param_descr(MAX)
++  set max $param_descr(MAX)
++
++  # Limit float to 2 decimal places
++  if {$param == "LED_ONTIME"} {
++    set max [format {%1.2f} $max]
++  }
++  return "$max"
+ }
+ 
+ proc getMinMaxValueDescr {ps_descr param} {
+@@ -183,7 +195,7 @@
+     set max [getMaxValue ps_descr $param]
+     append HTML_PARAMS(separate_1) "<tr class=\"j_custom\">"
+       append HTML_PARAMS(separate_1) "<td class=\"stringtable_value\">$devType|$param</td>"
+-      append HTML_PARAMS(separate_1) "<td> <input type=\"text\" id=\"separate_CHANNEL_1_$paramNr\" name=\"$param\" value=\"[format {%1.2f} $ps($param)]\" onblur=\"ProofAndSetValue('separate_CHANNEL_1_$paramNr', 'separate_CHANNEL_1_$paramNr', parseFloat($min), parseFloat($max), parseFloat(1));\"> </td>"
++      append HTML_PARAMS(separate_1) "<td> <input type=\"text\" id=\"separate_CHANNEL_1_$paramNr\" name=\"$param\" value=\"[format {%1.2f} $ps($param)]\" onblur=\"ProofAndSetValue('separate_CHANNEL_1_$paramNr', 'separate_CHANNEL_1_$paramNr', '$min', '$max', parseFloat(1));\"> </td>"
+       append HTML_PARAMS(separate_1) "<td>[getUnit ps_descr $param] [getMinMaxValueDescr ps_descr $param] </td>"
+     append HTML_PARAMS(separate_1) "</tr>"
+ 
+--- occu/WebUI/www/config/ic_common.tcl.orig
++++ occu/WebUI/www/config/ic_common.tcl
+@@ -1383,7 +1383,7 @@
+ 
+           append s "<input type=\"hidden\" name=\"$param_id\"   value=\"$value_orig\" $id                 $access style=\"visibility:hidden;display:none;\" />"
+           append s "<input type=\"text\"   name=\"__$param_id\" value=\"$value\"       id=\"$input_idval\" $access $hidden"
+-          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', parseFloat($min), parseFloat($max), parseFloat([expr 1 / $factor]));\" /></td>"
++          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', '$min', '$max', parseFloat([expr 1 / $factor]));\" /></td>"
+           append s "<td><div id=\"${input_idval}_unit\" $hidden>$unit ($min-$max)</div></td>"
+       }
+       "ENUM" {
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -39027,55 +39027,70 @@
+     if (tokens[1]) value += tokens[1];
+     srcElm.value = value;
+   }
++  
++  var parsedValue;
++  var parsedMin = parseFloat(min);
++  var parsedMax = parseFloat(max);
+ 
++  var minSplit = min.toString().split(".");
++  var maxSplit = max.toString().split(".");
++  var digits = 0;
++
++  if(minSplit.length === 2) {
++    digits = Math.max(digits, minSplit[1].length);
++  }
++  if(maxSplit.length === 2) {
++    digits = Math.max(digits, maxSplit[1].length);
++  }
+   // Check if float is allowed
+   try {
+     if (min.toString().indexOf(".") == -1 && max.toString().indexOf(".") == -1) {
+       min = parseInt(min);
+       max = parseInt(max);
+-      value = (roundValue05(parseInt(value)));
++      value = Math.round(parseFloat(value));
+     } else {
+-      min = parseFloat(min).toFixed(1);
+-      max = parseFloat(max).toFixed(1);
+-      value = parseFloat(value);
+-      srcElm.value = parseFloat(value);
++      min = parseFloat(min).toFixed(digits);
++      max = parseFloat(max).toFixed(digits);
++      var roundFactor = Math.pow(10, digits);
++      value = Math.round(parseFloat(value) * roundFactor) / roundFactor;
+     }
++    parsedValue = parseFloat(value);
+   } catch(e) {conInfo(e);}
+ 
+   if (typeof value == "undefined")
+   {
+-    finalVal = min;
++    finalVal = parsedMin;
+     ok = false;
+   }
+   else if (isNaN(value))
+   {
+-    finalVal = min;
++    finalVal = parsedMin;
+     ok = false;
+   }
+-  else if (value < min)
++  else if (parsedValue < parsedMin)
+   {
+-    finalVal = min;
++    finalVal = parsedMin;
+     ok = false;
+   }
+-  else if (value > max)
++  else if (parsedValue > parsedMax)
+   {
+-    finalVal = max;
++    finalVal = parsedMax;
+     ok = false;
+   }
+ 
+   if (ok)
+   {
+     srcElm.style.backgroundColor = "#fffffe";
+-    dstElm.value = value * dstValueFactor;
+-    srcElm.value = dstElm.value;
++    dstElm.value = (parsedValue.toFixed(digits) * dstValueFactor);
++    srcElm.value = parsedValue.toFixed(digits);
+     srcElm.setAttribute("valvalid", "true");
+   }
+   else
+   {
+     srcElm.setAttribute("valvalid", "false");
+     srcElm.style.backgroundColor = "red";
+-    dstElm.value = finalVal * dstValueFactor;
+-    srcElm.value = dstElm.value;
++    dstElm.value = (finalVal.toFixed(digits) * dstValueFactor);
++    srcElm.value = finalVal.toFixed(digits);
+     window.setTimeout(function(){srcElm.style.backgroundColor = "white";},1000);
+   }
+ };

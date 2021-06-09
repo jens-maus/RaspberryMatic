@@ -1478,7 +1478,12 @@ proc action_create_backup {} {
   #save DOM
   rega system.Save()
   cd /
-  catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
+  if {[getProduct] < 3 } {
+    catch { exec tar czf /tmp/usr_local.tar.gz usr/local }
+  } else {
+    catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude=usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
+  }
+  
   cd $tmpdir/
   #sign the configuration with the current key
   exec crypttool -s -t 1 <usr_local.tar.gz >signature

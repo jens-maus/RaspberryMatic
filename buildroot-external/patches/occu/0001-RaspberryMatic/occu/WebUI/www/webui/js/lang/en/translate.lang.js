@@ -477,7 +477,7 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsCMHintSoftwareUpdate3" : "Please perform a data backup before starting the update.",
     "dialogSettingsCMHintSoftwareUpdate4a" : "The charging status the batteries is only at ",
     "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",
-    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a community driven project. If you want to support it, please consider a <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'>PayPal donation</a> to support further development.<br><br><a href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RAQSDY9YNZVCL' target='_blank'><img alt='PayPal' border=0 src='/ise/img/paypal-donate.gif'></a>",
+    "dialogSettingsCMHintSoftwareUpdateRaspMatic" : "RaspberryMatic is a free, non-commercial and community driven OpenSource project. If you want to contribute to the project yourself or want to support it, please consider visiting our <a href='https://github.com/jens-maus/RaspberryMatic'>project homepage</a>.",
     "dialogSettingsCMHintRestart" : "Restart CCU. The changed settings will be saved before.",
     "dialogSettingsCMHintShutdown" : "Shutdown CCU. The changed settings will be saved before.",
     "dialogSettingsCMHintRestartSafeMode" : "Start Homematic Central Control Unit in safe mode once. In safe mode, the installed additional software will not be started. The changed settings will be saved before.",

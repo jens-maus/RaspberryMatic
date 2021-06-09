@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
 # Startup script to check for a backup restore
 #
@@ -37,9 +38,7 @@ check_backup_restore() {
 start() {
   echo -n "Checking for Backup Restore: "
 
-  check_backup_restore
-
-  if [[ $? -eq 0 ]]; then
+  if check_backup_restore; then
     echo "OK: backup successfully restored"
   else
     echo "not required"

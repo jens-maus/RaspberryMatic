@@ -1,9 +1,9 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Starts HMServer.
 #
 
-LOGLEVEL_HMServer=5
 CFG_TEMPLATE_DIR=/etc/config_templates
 STARTWAITFILE=/var/status/HMServerStarted
 
@@ -45,9 +45,10 @@ init() {
 
   if [[ -n "${HM_HMIP_DEV}" ]]; then
 
-    # if no uart is used to connect to the rf module (e.g. HmIP-RFUSB)
+    # if no raw uart is used to connect to the rf module (e.g. HmIP-RFUSB)
     # we have to set the device node
-    if [[ "${HM_HMIP_DEVNODE}" != "${HM_HOST_GPIO_UART}" ]]; then
+    if [[ "${HM_HMIP_DEVNODE}" != "${HM_HMRF_DEVNODE}" ]] ||
+       ! echo -n "${HM_HMIP_DEVNODE}" | grep -q raw-uart; then
       HM_SERVER_DEVNODE=${HM_HMIP_DEVNODE}
     else
       HM_SERVER_DEVNODE=/dev/mmd_hmip
@@ -57,16 +58,22 @@ init() {
     # when generating /var/etc/crRFD.conf
     sed "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_SERVER_DEVNODE}|" ${CFG_TEMPLATE_DIR}/crRFD.conf >/var/etc/crRFD.conf
 
+    # we disable Advanced HmIP Routing (Lan.Routing.Enabled) in crRFD.conf
+    # if the used HmIP RF module doesn't support it
+    # (which only the RPI-RF-MOD support)
+    if [[ "${HM_HMIP_DEV}" != "RPI-RF-MOD" ]]; then
+      sed -i "s|^Lan\.Routing\.Enabled=.*$|Lan.Routing.Enabled=false|" /var/etc/crRFD.conf
+    else
+      # enable Adapter.Local.Device.Enabled in case a RPI-RF-MOD is used. This
+      # will bring up the additional CO-PROCESSOR device which will allow to show
+      # up the DutyCycle and CarrierSense parameters.
+      sed -i "s|^Adapter\.Local\.Device\.Enabled=.*$|Adapter.Local.Device.Enabled=true|" /var/etc/crRFD.conf
+    fi
+
   else
     HM_SERVER=/opt/HMServer/HMServer.jar
     HM_SERVER_ARGS="/var/etc/HMServer.conf"
     HM_SERVER_DEVNODE=""
-  fi
-
-  # use checkHmIPdevices.sh to find obsolete devices files
-  # and move them to a backup folder
-  if [[ -x /bin/checkHmIPdevices.sh ]]; then
-    /bin/checkHmIPdevices.sh -f
   fi
 }
 
@@ -91,9 +98,29 @@ start() {
 
   # adjust the oom score (which is inherited by start-stop-daemon)
   # to ensure that others are killed first in case of low memory situations
-  echo -900 >/proc/$$/oom_score_adj
+  echo -900 >/proc/$$/oom_score_adj 2>/dev/null
 
-  start-stop-daemon -b -S -q -m -p ${PIDFILE} --exec java -- -Xmx128m -Dos.arch=$(uname -m) -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts=${HM_SERVER_DEVNODE} -jar ${HM_SERVER} ${HM_SERVER_ARGS}
+  # get the architecture
+  ARCH=$(uname -m)
+
+  # if we run on aarch64 we have to override the libNRJavaSerial definition
+  # so that the aarch64 (v8) version is used we supply our own
+  JAVAOPT=
+  if [[ "${ARCH}" == "aarch64" ]];then
+    JAVAOPT="-DlibNRJavaSerial.userlib=/opt/HMServer/libNRJavaSerialv8.so"
+  fi
+
+  # calculate the maximum used heap size (-Xmx) depending on the
+  # total amount of RAM we have (use max. 25%) - use multiple of 128MB
+  MAXHEAP=$(free -m | grep Mem: | awk '{print int($2*0.25/128)*128}')
+  if [[ -n "${MAXHEAP}" ]] && [[ "${MAXHEAP}" -gt 128 ]]; then
+    JAVAOPT="-Xmx${MAXHEAP}m ${JAVAOPT}"
+  else
+    JAVAOPT="-Xmx128m ${JAVAOPT}"
+  fi
+
+  # shellcheck disable=SC2086
+  start-stop-daemon -b -S -q -m -p "${PIDFILE}" --exec java -- -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts="${HM_SERVER_DEVNODE}" -jar "${HM_SERVER}" ${HM_SERVER_ARGS}
   echo -n "."
   waitStartupComplete
 }

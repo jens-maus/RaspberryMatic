@@ -1,0 +1,2 @@
+# External packages
+source "$BR2_EXTERNAL_MULTILIB32_PATH/Config.ext.in"

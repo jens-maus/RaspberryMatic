@@ -11,10 +11,10 @@
 
 <table id="tblStatus" class="StdTable CLASS05700 j_translate" cellspacing="20" >
   <colgroup>
-    <col width="25%" />
-    <col width="25%" />
-    <col width="25%" />
-    <col width="25%" />
+    <col style="width:25%;"/>
+    <col style="width:25%;"/>
+    <col style="width:25%;"/>
+    <col style="width:25%;"/>
   </colgroup>
   
   <tr  id="statusRow2" class="CLASS05701">
@@ -89,9 +89,9 @@
         </div>
         <table class="CLASS05705">
           <colgroup>
-            <col width="30%" />
-            <col width="35%" />
-            <col width="35%" />
+            <col style="width:30%;" />
+            <col style="width:35%;" />
+            <col style="width:35%;" />
           </colgroup>
           <tr>
             <td><b>${lblMenuStatusControlSysProtocolTime}</b></td>
@@ -103,9 +103,9 @@
       <div id='divSysProc' class="CLASS05706">
         <table class="CLASS05707">
           <colgroup>
-            <col width="30%" />
-            <col width="35%" />
-            <col width="35%" />
+            <col style="width:30%;"/>
+            <col style="width:35%;"/>
+            <col style="width:35%;"/>
           </colgroup>
           <tbody id="sysprotopreview"></tbody>
         </table>

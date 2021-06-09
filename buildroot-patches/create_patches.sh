@@ -6,23 +6,17 @@
 
 export LC_ALL=C
 
-patchdirs=$(find buildroot/ -maxdepth 2 -type d | sort)
+patchdirs=$(find . -maxdepth 1 -type d -regex "\\./[0-9][0-9][0-9][0-9]-.*" | sort)
 
-#rm *.patch
+rm -f ./*.patch
 
-COUNTER=1
-for dir in ${patchdirs} buildroot/toolchain; do
-  [[ ! -d "${dir}" ]] && continue
-  package=$(basename ${dir})
-  [[ "${package}" == "package" ]] && continue
-  [[ "${package}" == "buildroot" ]] && continue
-  count=$(printf %04d ${COUNTER})
-  patchfile=0000-${package}.patch
-  echo ${patchfile}
-  origfiles=$(find ${dir} -name "*.orig" -type f -print | sort)
-  rm -f ${patchfile}
-  for file in ${origfiles}; do
-    diff -u --label=${file} --label=${file%.orig} ${file} ${file%.orig} >>${patchfile}
-  done
-  COUNTER=$((COUNTER+1))
+for dir in ${patchdirs}; do
+  (
+    cd "${dir}" || exit 1
+    origfiles=$(find buildroot -name "*.orig" -type f -print | sort)
+    rm -f "../${dir}.patch"
+    for file in ${origfiles}; do
+      diff -u --label="${file}" --label="${file%.orig}" "${file}" "${file%.orig}" >>"../${dir}.patch"
+    done
+  )
 done

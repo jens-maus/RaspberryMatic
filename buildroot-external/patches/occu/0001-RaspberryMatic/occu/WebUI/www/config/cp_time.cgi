@@ -190,6 +190,7 @@ proc action_put_page {} {
                       puts "."
                       cgi_text year=$year {size="4"} {maxlength="4"} {id="text_year"}
                     }
+                    if {[get_platform] != "oci"} {
                     table_data {align="left"} {
                       division {class="popupControls CLASS21506"} {
                         division {class="CLASS21507"} {onClick="apply_time()"} {
@@ -198,7 +199,9 @@ proc action_put_page {} {
                         }
                       }
                     }
+                    }
                   }
+                  if {[get_platform] != "oci"} {
                   table_row {
                     table_data {colspan="2"} {}
                     table_data {align="left"} {class="CLASS21510"} {
@@ -210,12 +213,14 @@ proc action_put_page {} {
                       }
                     }
                   }
+                  }
                 }
               }
             }
           }
         }
       }
+      if {[get_platform] != "oci"} {
       table_row {class="CLASS21502"} {
         table_data {class="CLASS21503"} {
           #puts "NTP-Server"
@@ -248,6 +253,7 @@ proc action_put_page {} {
             }
           }
         }
+      }
       }
       set country ""
       foreach location $LOCATIONS {

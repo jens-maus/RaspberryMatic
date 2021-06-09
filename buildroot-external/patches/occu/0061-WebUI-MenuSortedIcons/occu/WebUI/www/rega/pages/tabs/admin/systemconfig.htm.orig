@@ -8,10 +8,10 @@ system.SetSessionVar("sessionTAB", "systemconfig");
 <div id="subOffsetDiv"></div>
 <table class="StdTable j_translate" cellspacing="20">
   <colgroup>
-    <col width="25%"/>
-    <col width="25%"/>
-    <col width="25%"/>
-    <col width="25%"/>
+    <col style="width:25%;"/>
+    <col style="width:25%;"/>
+    <col style="width:25%;"/>
+    <col style="width:25%;"/>
   </colgroup>
   <tr class="CLASS05500">
     <td class="sysConfigHeight">

@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
 # Starts eq3configd.
 #
@@ -10,12 +11,15 @@ init () {
   echo "BidCoS-Address=$(cat /var/rf_address)" >/var/ids
   echo "SerialNumber=$(cat /var/board_serial)" >>/var/ids
 
-  if [[ ! -e /etc/config/ids ]] ; then
+  # in case we have a BidCos-RF device (no empty /var/rf_address)
+  # and there is no already existing /etc/config/ids we have to
+  # copy it over
+  if [[ -s /var/rf_address ]] && [[ ! -e /etc/config/ids ]] ; then
     cp /var/ids /etc/config/
   fi
 
   if [[ ! -e /etc/config/crypttool.cfg ]] ; then
-      touch /etc/config/crypttool.cfg
+    touch /etc/config/crypttool.cfg
   fi
 }
 
@@ -25,7 +29,7 @@ start() {
 
   # adjust the oom score (which is inherited by start-stop-daemon)
   # to ensure that others are killed first in case of low memory situations
-  echo -900 >/proc/$$/oom_score_adj
+  echo -900 >/proc/$$/oom_score_adj 2> /dev/null
 
   start-stop-daemon -S -q -b -m -p /var/run/eq3configd.pid --exec /bin/eq3configd
   echo "OK"

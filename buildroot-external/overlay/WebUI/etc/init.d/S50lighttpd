@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Starts lighttpd.
 #
@@ -17,7 +18,7 @@ start() {
   # check if a valid/non-expired SSL cert exists and if
   # not we regenerate it.
   if ! /usr/bin/openssl x509 -checkend 86400 -noout -in /etc/config/server.pem 2>/dev/null >/dev/null; then
-    [[ -f /etc/config/server.pem ]] && mv -f /etc/config/server.pem /etc/config/server.pem_$(date +'%Y%m%d')
+    [[ -f /etc/config/server.pem ]] && mv -f /etc/config/server.pem "/etc/config/server.pem_$(date +%Y%m%d)"
     echo -n "creating new SSL cert... "
     IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
     /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
@@ -37,12 +38,22 @@ start() {
     echo "" >/var/etc/lighttpd_auth.conf
   fi
 
+  # activate/deactivate automatic https redirect
+  if [[ -f /etc/config/httpsRedirectEnabled ]]; then
+    echo "include \"/etc/lighttpd/conf.d/proxy_httpsredirect.conf\"" >/var/etc/lighttpd_proxy.conf
+  else
+    echo "include \"/etc/lighttpd/conf.d/proxy_normal.conf\"" >/var/etc/lighttpd_proxy.conf
+  fi
+
   # adjust the oom score (which is inherited by start-stop-daemon)
   # to ensure that others are killed first in case of low memory situations
-  echo -900 >/proc/$$/oom_score_adj
+  echo -900 >/proc/$$/oom_score_adj 2>/dev/null
 
-  start-stop-daemon -S -q -b -m -p ${PIDFILE_ANGEL} --exec /usr/sbin/lighttpd-angel -- -f /etc/lighttpd/lighttpd.conf -D
-  [[ $? -eq 0 ]] && echo "OK" || echo "ERROR"
+  if start-stop-daemon -S -q -b -m -p ${PIDFILE_ANGEL} --exec /usr/sbin/lighttpd-angel -- -f /etc/lighttpd/lighttpd.conf -D; then
+    echo "OK"
+  else
+    echo "ERROR"
+  fi
 }
 stop() {
   echo -n "Stopping lighttpd: "
@@ -62,6 +73,13 @@ reload() {
     echo "include \"/etc/lighttpd/conf.d/auth.conf\"" >/var/etc/lighttpd_auth.conf
   else
     echo "" >/var/etc/lighttpd_auth.conf
+  fi
+
+  # activate/deactivate automatic https redirect
+  if [[ -f /etc/config/httpsRedirectEnabled ]]; then
+    echo "include \"/etc/lighttpd/conf.d/proxy_httpsredirect.conf\"" >/var/etc/lighttpd_proxy.conf
+  else
+    echo "include \"/etc/lighttpd/conf.d/proxy_normal.conf\"" >/var/etc/lighttpd_proxy.conf
   fi
 
   start-stop-daemon -K -s HUP -q -p ${PIDFILE_ANGEL}

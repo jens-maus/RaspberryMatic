@@ -1,7 +1,9 @@
 .DS_Store
+.*.swp
 /build-*/
 /buildroot-????.??*
 /download
 /release/*.zip
 /release/*.img
+/release/*.tar
 /release/*.sha256

@@ -7,11 +7,13 @@ OCCU_ROOT=
 install_rfd_arch:
 	mkdir -p $(TARGET_DIR)/bin
 	mkdir -p $(TARGET_DIR)/lib
+	mkdir -p $(TARGET_DIR)/$(OCCU_LIBDIR)
 	mkdir -p $(TARGET_DIR)/etc/config_templates
 	mkdir -p $(TARGET_DIR)/www/config
 	mkdir -p $(TARGET_DIR)/firmware
+	rm -f $(OCCU_ARCH)/packages-eQ-3/RFD/bin/avrprog
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/bin/* $(TARGET_DIR)/bin/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/lib/* $(TARGET_DIR)/lib/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S61rfd $(TARGET_DIR)/etc/init.d/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/etc/config_templates/* $(TARGET_DIR)/etc/config_templates/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/www/config/* $(TARGET_DIR)/www/config/
@@ -23,27 +25,49 @@ ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
 endif
 
 install_hs485d_arch:
-	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/* $(TARGET_DIR)/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/bin/* $(TARGET_DIR)/bin/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/etc/* $(TARGET_DIR)/etc/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
 
 install_webui_arch:
+	# remove unnecessary stuff
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/config
+	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/ReGaHss.normal
+	mv -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/ReGaHss.community $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/ReGaHss
+	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/eq3-uds-services
 	rm -rf $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
+	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libeq3udss.so
+	# TCL 8.6 tuning
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2/homematic $(TARGET_DIR)/usr/lib/tcl8.6/
 	rm -rf $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libtcl8.2.so
 	ln -sf libtcl8.6.so $(TARGET_DIR)/usr/lib/libtcl8.2.so
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/tclsh
 	ln -sf /usr/bin/tclsh $(TARGET_DIR)/bin/tclsh
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/* $(TARGET_DIR)/
+	# copy WebUI stuff to target dir
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/* $(TARGET_DIR)/bin/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/* $(TARGET_DIR)/etc/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/*.so $(TARGET_DIR)/$(OCCU_LIBDIR)/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2 $(TARGET_DIR)/lib/
 	cp -R WebUI/* $(TARGET_DIR)/
-	mv $(TARGET_DIR)/bin/ReGaHss.community $(TARGET_DIR)/bin/ReGaHss
+	# copy ReGaHss beta to target dir
 ifeq ($(OCCU_WEBUI_REGAHSS_BETA), y)
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/* $(TARGET_DIR)/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
+endif
+	# link 32bit tcl libraries for 64bit archs
+ifneq ($(OCCU_LIBDIR), lib)
+	rm -f $(TARGET_DIR)/lib/tclrega.so
+	ln -s ../$(OCCU_LIBDIR)/tclrega.so $(TARGET_DIR)/lib/
+	rm -f $(TARGET_DIR)/lib/tclrpc.so
+	ln -s ../$(OCCU_LIBDIR)/tclrpc.so $(TARGET_DIR)/lib/
+	rm -f $(TARGET_DIR)/lib/tclticks.so
+	ln -s ../$(OCCU_LIBDIR)/tclticks.so $(TARGET_DIR)/lib/
 endif
 
 install_linuxbasis_arch:
 	cp -av $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/bin/* $(TARGET_DIR)/bin/
-	cp -av $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/lib/* $(TARGET_DIR)/lib/
+	cp -av $(OCCU_ARCH)/packages-eQ-3/LinuxBasis/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
 
 install_lighttpd_arch:
 	mkdir -p $(TARGET_DIR)/etc/lighttpd
@@ -77,14 +101,12 @@ update_webui:
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/session.tcl       $(TARGET_DIR)/www/session.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/once.tcl          $(TARGET_DIR)/www/once.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/user.tcl          $(TARGET_DIR)/www/user.tcl
-	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/verifysid.cgi     $(TARGET_DIR)/www/verifysid.cgi
 
 	ln -sf ${OCCU_ROOT}/www/tcl/extern/cgi.tcl            $(TARGET_DIR)/www/config/cgi.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/common.tcl        $(TARGET_DIR)/www/config/common.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/session.tcl       $(TARGET_DIR)/www/config/session.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/once.tcl          $(TARGET_DIR)/www/config/once.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/user.tcl          $(TARGET_DIR)/www/config/user.tcl
-	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/verifysid.cgi     $(TARGET_DIR)/www/config/verifysid.cgi
 
 	ln -sf ${OCCU_ROOT}/www/tcl/extern/cgi.tcl            $(TARGET_DIR)/www/config/display/cgi.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/once.tcl          $(TARGET_DIR)/www/config/display/once.tcl

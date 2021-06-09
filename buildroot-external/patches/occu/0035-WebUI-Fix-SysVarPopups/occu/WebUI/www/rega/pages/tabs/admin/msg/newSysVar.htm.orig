@@ -8,12 +8,12 @@
 <div class="CLASS05000">
   <table class="popupTable hidden"  border="1">
     <colgroup>
-      <col width="10%" />
-      <col width="23%" />
-      <col width="10%" />
-      <col width="23%" />
-      <col width="10%" />
-      <col width="23%" />
+      <col style="width:10%;"/>
+      <col style="width:23%;"/>
+      <col style="width:10%;"/>
+      <col style="width:23%;"/>
+      <col style="width:10%;"/>
+      <col style="width:23%;"/>
     </colgroup>
     <tr class="CLASS05001">
       <th>${thName}</th>
@@ -90,8 +90,8 @@
       <td class="CLASS05004">
         <table width="100%" class="CLASS05005">
           <colgroup>
-            <col width="50%" />
-            <col width="50%" />
+            <col style="width:50%;"/>
+            <col style="width:50%;"/>
           </colgroup>
         <tr>
           <td class="CLASS05006">

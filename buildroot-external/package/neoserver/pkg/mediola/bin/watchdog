@@ -11,7 +11,7 @@ fi
 
 
 
-PIDOFD=`ps ax |grep node |grep automation.js |awk '{print $1}'` 
+PIDOFD=$(pgrep -f "neo_server.*automation.js")
 
 if [ -z "$PIDOFD" ]; then
 		/usr/local/etc/config/rc.d/97NeoServer start		

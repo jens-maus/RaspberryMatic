@@ -1,11 +1,10 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Starts hs485d.
 #
 
 LOGLEVEL_HS485D=5
-
-CFG_TEMPLATE_DIR=/etc/config_templates
 
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
@@ -20,19 +19,19 @@ start() {
 
     # adjust the oom score (which is inherited by start-stop-daemon)
     # to ensure that others are killed first in case of low memory situations
-    echo -900 >/proc/$$/oom_score_adj
+    echo -900 >/proc/$$/oom_score_adj 2>/dev/null
 
     start-stop-daemon -S -q --exec /bin/hs485dLoader -- -l ${LOGLEVEL_HS485D} -dw /var/etc/hs485d.conf
     echo "OK"
   else
-    echo "no Hm-Wired hardware found"
+    echo "disabled"
   fi
 }
 
 stop() {
   echo -n "Stopping hs485d: "
   start-stop-daemon -K -q -p /var/run/hs485dLoader.pid
-  killall hs485d
+  killall -q hs485d
   rm -f /var/run/hs485dLoader.pid
   echo "OK"
 }

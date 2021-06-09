@@ -6,18 +6,29 @@
 start() {
     printf  "Starting ser2net: "
     if [ ! -f /usr/local/etc/ser2net.conf ] ; then
-      echo "no configuration file"
+      echo "disabled"
       exit 1
     fi
 
-    start-stop-daemon -S -q --exec /usr/sbin/ser2net -- -c /usr/local/etc/ser2net.conf -P /var/run/ser2net.pid
-    [ $? = 0 ] && echo "OK" || echo "FAIL"
+    if start-stop-daemon -S -q --exec /usr/sbin/ser2net -- -c /usr/local/etc/ser2net.conf -P /var/run/ser2net.pid; then
+      echo "OK"
+    else
+      echo "FAIL"
+    fi
 }
 
 stop() {
     printf "Shutting down ser2net: "
-    start-stop-daemon -K -q -p /var/run/ser2net.pid
-    [ $? = 0 ] && echo "OK" || echo "FAIL"
+    if [ ! -f /var/run/ser2net.pid ] ; then
+      echo "OK"
+      exit 0
+    fi
+
+    if start-stop-daemon -K -q -p /var/run/ser2net.pid; then
+      echo "OK"
+    else
+      echo "FAIL"
+    fi
 }
 
 restart() {

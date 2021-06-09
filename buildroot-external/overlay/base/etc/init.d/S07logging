@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Start logging
 #
@@ -15,8 +16,21 @@ fi
 
 start() {
   echo -n "Starting logging: "
+  
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  # make sure /run/systemd/journal exists if running the HomeAssistant add-on
+  if [[ -n "${HM_RUNNING_IN_HA}" ]] && [[ ! -d /run/systemd/journal ]]; then
+    mkdir -p /run/systemd/journal
+  fi
+
+  # shellcheck disable=SC2086
   start-stop-daemon -b -S -q -m -p /var/run/syslogd.pid --exec /sbin/syslogd -- $SYSLOGD_ARGS
-  start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- $KLOGD_ARGS
+  if [[ "${HM_HOST}" != "oci" ]]; then
+    # shellcheck disable=SC2086
+    start-stop-daemon -b -S -q -m -p /var/run/klogd.pid --exec /sbin/klogd -- $KLOGD_ARGS
+  fi
   echo "OK"
 }
 

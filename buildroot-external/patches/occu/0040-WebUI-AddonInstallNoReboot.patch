@@ -33,7 +33,16 @@
  
    puts ""
    cgi_javascript {
-@@ -510,14 +534,6 @@
+@@ -367,7 +391,7 @@
+                   table {
+                     table_row {
+                       table_data {
+-                        division {class="CLASS21412"} {onClick="installAddon();"} {
++                        division {class="CLASS21412"} {onClick="document.upload_form.submit();"} {
+                           #puts "Installieren"
+                           puts "\${dialogSettingsExtraSoftwareBtnInstallSoftware}"
+                         }
+@@ -523,14 +547,7 @@
  }
  
  proc action_install_start {} {
@@ -45,12 +54,21 @@
 -    exec /bin/kill -SIGQUIT 1
 -  }
 -  
++  puts ""
  }
  
  cgi_eval {
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -689,6 +689,8 @@
+@@ -688,13 +688,15 @@
+     "dialogSettingsExtraSoftwareBtnInstallSoftware" : "Installieren",
+     "dialogSettingsExtraSoftwareBtnStartInstallSoftware" : "Installation starten",
+     "dialogSettingsExtraSoftwareLblSelectExtraSoftware" : "Zusatzsoftware ausw%E4hlen:",
+-    "dialogSettingsExtraSoftwareHintSelectExtraSoftware" : "<b>Hinweis:</b><br/>Vom Anwender installierte Zusatzsoftware kann zu unerw%FCnschten Ergebnissen bis hin zu Datenverlust und Systeminstabilit%E4ten f%FChren.<br/><br/><b><u>F%FCr vom Anwender installierte Zusatzsoftware %FCbernimmt die eQ-3 AG keine Haftung.</u></b><br/><br/>Zum Abschlu%DF der Installation wird die Zentrale automatisch neu gestartet.",
++    "dialogSettingsExtraSoftwareHintSelectExtraSoftware" : "<b>Hinweis:</b><br/>Vom Anwender installierte Zusatzsoftware kann zu unerw%FCnschten Ergebnissen bis hin zu Datenverlust und Systeminstabilit%E4ten f%FChren.<br/><br/><b><u>F%FCr vom Anwender installierte Zusatzsoftware %FCbernimmt die eQ-3 AG keine Haftung.</u></b><br/><br/>Zum Abschlu%DF der Installation muss die Zentrale mitunter neu gestartet werden.",
+     "dialogSettingsExtraSoftwareInstallMessageBoxTitle" : "Firmware-Update - Best%E4tigung",
+     "dialogSettingsExtraSoftwareInstallMessageBoxContent" : "Die Zusatzsoftware wurde hochgeladen. Sie k%F6nnen jetzt durch Klick auf die Schaltfl%E4che unten die Installation starten.",
+     "dialogSettingsExtraSoftwareInstallMessageBoxHintLowBat_a" : "Achtung!<br/>Der Ladezustand der Batterien betr%E4gt nur noch ",
      "dialogSettingsExtraSoftwareInstallMessageBoxHintLowBat_b" : "Um einen Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Einspielen der Software zu erneuern.",
      "dialogSettingsExtraSoftwareHintPerformInstallationTitle" : "Software installieren",
      "dialogSettingsExtraSoftwareHintPerformInstallationContent" : "Die Software wird installiert. Nach der Installation wird die Zentrale automatisch neu gestartet. Sie k%F6nnen sich dann neu anmelden.",
@@ -61,7 +79,16 @@
      "dialogNewDevicesTitle" : "Ger%E4te anlernen",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -698,6 +698,8 @@
+@@ -693,7 +693,7 @@
+     "dialogSettingsExtraSoftwareBtnStartInstallSoftware" : "Start installation",
+     "dialogSettingsExtraSoftwareLblSelectExtraSoftware" : "Select additional software:",
+ 
+-    "dialogSettingsExtraSoftwareHintSelectExtraSoftware" : "<b>Please note:</b><br/>Additional software installed by the user can lead to unexpected results, data loss or even system instability.<br/><br/><b><u>eQ-3 AG does not assume any liability for additional software installed by the user.</u></b><br/><br/>To finish installation, the CCU will be restarted automatically.",
++    "dialogSettingsExtraSoftwareHintSelectExtraSoftware" : "<b>Please note:</b><br/>Additional software installed by the user can lead to unexpected results, data loss or even system instability.<br/><br/><b><u>eQ-3 AG does not assume any liability for additional software installed by the user.</u></b><br/><br/>To finish installation, the CCU might have to be restarted.",
+ 
+     "dialogSettingsExtraSoftwareInstallMessageBoxTitle" : "Firmware update - confirmation",
+     "dialogSettingsExtraSoftwareInstallMessageBoxContent" : "The additional software has been uploaded. You can now start the installation by click on the button below.",
+@@ -704,6 +704,8 @@
  
      "dialogSettingsExtraSoftwareHintPerformInstallationTitle" : "Install software",
      "dialogSettingsExtraSoftwareHintPerformInstallationContent" : "The software is being installed. After installation, the CCU will be restarted automatically. You can log in again afterwards.",

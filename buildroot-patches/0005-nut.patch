@@ -1,0 +1,13 @@
+--- buildroot/package/nut/nut.mk.orig
++++ buildroot/package/nut/nut.mk
+@@ -30,7 +30,9 @@
+ # since the default location (/var/state/ups) maybe readonly.
+ NUT_CONF_OPTS = \
+ 	--with-altpidpath=/var/run/upsd \
+-	--with-dev
++	--with-dev \
++	--with-user=nobody \
++	--with-group=nobody
+ 
+ NUT_CONF_ENV = ax_cv__printf_string_null=yes
+ 

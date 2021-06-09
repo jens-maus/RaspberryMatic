@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # init script for starting NUT (UPS) services
 #
@@ -34,21 +35,21 @@ case $1 in
 
     # make sure some necessary state dirs exist
     mkdir -p /var/state/ups
-    chown root:nogroup /var/state/ups
+    chown root:nobody /var/state/ups
     chmod 770 /var/state/ups
     mkdir -p /var/run/upsd
-    chown root:nogroup /var/run/upsd
+    chown root:nobody /var/run/upsd
     chmod 770 /var/run/upsd
 
     # start the server (upsdrvctl/upsd)
     case "${MODE}" in
       standalone|netserver)
         # First, start UPS drivers
-        ${UPSDRVCTRL} start 2>&1 >/dev/null
-        if [ $? -ne 0 ]; then
+        if ! "${UPSDRVCTRL}" start >/dev/null 2>&1; then
           echo -n "WARNING: UPS driver startup failed"
         fi
         # Start data server (upsd)
+        # shellcheck disable=SC2086
         start-stop-daemon -S -q -p ${UPSD_PID} -x ${UPSD} -- ${UPSD_OPTIONS} 2>/dev/null >/dev/null
         echo -n "."
       ;;
@@ -58,6 +59,7 @@ case $1 in
     if [[ -r ${UPSMON_CONF} ]]; then
       case "${MODE}" in
         standalone|netserver|netclient)
+          # shellcheck disable=SC2086
           start-stop-daemon -S -q -p ${UPSMON_PID} -x ${UPSMON} -- ${UPSMON_OPTIONS} 2>/dev/null >/dev/null
           echo "OK"
           exit 0
@@ -101,8 +103,7 @@ case $1 in
     case "${MODE}" in
       standalone|netserver)
         echo -n "Shutting down UPS: "
-        ${UPSDRVCTL} shutdown 2>&1 >/dev/null
-        if [ $? -eq 0 ]; then
+        if "${UPSDRVCTRL}" shutdown >/dev/null 2>&1; then
           echo -n "waiting for UPS to cut power... "
         else
           echo -n "shutdown failed. waiting for UPS to run down... "

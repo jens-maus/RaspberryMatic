@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
 # monitor GPIO to detect power key press from Power MCU (PCU)
 #
@@ -14,9 +15,7 @@ sleep 0.5
 /usr/bin/gpio write 22 0  # clear timer we really are alive
 
 # wait for power key press
-/usr/bin/gpio wfi 23 rising
-
 # pidesktop: power button press detected, initiating shutdown
-if [[ $? -eq 0 ]]; then
+if /usr/bin/gpio wfi 23 rising; then
   /sbin/poweroff
 fi

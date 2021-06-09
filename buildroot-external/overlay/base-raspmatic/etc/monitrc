@@ -86,13 +86,13 @@ check process rngd with pidfile /var/run/rngd.pid
       exec "/bin/triggerAlarm.tcl 'rngd restarted' WatchDog-Alarm"
 
 # dbus daemon monitoring
-check process dbus with pidfile /var/run/messagebus.pid
+check process dbus with pidfile /run/messagebus.pid
     group system
     start = "/etc/init.d/S30dbus start"
     stop = "/etc/init.d/S30dbus stop"
     restart = "/etc/init.d/S30dbus restart"
     if not exist for 1 cycles then restart
-    if failed unixsocket /var/run/dbus/system_bus_socket for 5 cycles then restart
+    if failed unixsocket /run/dbus/system_bus_socket for 5 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'dbus restarted' WatchDog-Alarm"
 
@@ -131,9 +131,9 @@ check program wlan0Exists with path "/usr/bin/test -d /sys/class/net/wlan0"
 # chrony/ntp daemon/status monitoring
 check process chronyd with pidfile /var/run/chrony/chronyd.pid
     group system
-    start = "/etc/init.d/S49chrony start"
-    stop = "/etc/init.d/S49chrony stop"
-    restart = "/etc/init.d/S49chrony restart"
+    start = "/etc/init.d/S46chrony start"
+    stop = "/etc/init.d/S46chrony stop"
+    restart = "/etc/init.d/S46chrony restart"
     if not exist for 1 cycles then restart
     if failed port 323 type udp for 5 cycles then restart
     if failed unixsocket /var/run/chrony/chronyd.sock type udp for 5 cycles then restart
@@ -144,6 +144,7 @@ check program ntpOffsetCheck with path /bin/sh -c "/usr/bin/chronyc -n tracking 
     group system
     if status != 10 for 3 cycles then
       exec "/bin/triggerAlarm.tcl 'NTP offset > 1 second' WatchDog-Alarm"
+      repeat every 24 cycles
     depends on chronyd
 
 # eq3config daemon monitoring
@@ -238,7 +239,7 @@ check process multimacd with pidfile /var/run/multimacd.pid
       exec "/bin/triggerAlarm.tcl 'multimacd restarted' WatchDog-Alarm"
     depends on multimacdEnabled, hmlangwDisabled
 
-check program multimacdEnabled with path "/usr/bin/test -c /dev/eq3loop"
+check program multimacdEnabled with path "/usr/bin/test -f /var/etc/multimacd.conf"
     group homematic
     if status != 0 for 1 cycles then unmonitor
 
@@ -348,6 +349,7 @@ check program temperature with path /bin/sh -c "(cat /sys/class/thermal/thermal_
     group system
     if status != 10 for 5 cycles then
       exec "/bin/triggerAlarm.tcl 'high system temperature (> 80 deg) detected' WatchDog-Alarm"
+      repeat every 24 cycles
 
 # network interface (eth0) monitoring
 check network eth0 interface eth0
@@ -379,10 +381,11 @@ check program wlan0CheckEnabled with path /bin/sh -c "[[ -e /etc/config/wpa_supp
     depends on wlan0Exists
 
 # monitor under-voltage using vcgencmd (RaspberryPi only)
-check program voltageCheck with path /bin/sh -c "[ $(( $(/usr/bin/vcgencmd get_throttled | cut -f2 -d=) & 0x10000 )) -eq $(( 0x10000 )) ]"
+check program voltageCheck with path /bin/sh -c "[ $(( $(/usr/bin/vcgencmd get_throttled | cut -f2 -d=) & 0x1 )) -eq $(( 0x1 )) ]"
     group system
-    if status = 0 for 5 cycles then
+    if status = 0 for 2 cycles then
       exec "/bin/triggerAlarm.tcl 'under-voltage detected' WatchDog-Alarm"
+      repeat every 24 cycles
     depends on voltageCheckEnabled
 
 check program voltageCheckEnabled with path "/usr/bin/test -e /usr/bin/vcgencmd"
@@ -394,24 +397,50 @@ check program internetCheck with path "/usr/bin/test -e /var/status/hasInternet"
     group system
     if status != 0 for 24 cycles then
       exec "/bin/triggerAlarm.tcl 'No internet connection detected' WatchDog-Alarm"
+      repeat every 24 cycles
     depends on internetCheckEnabled
 
 check program internetCheckEnabled with path "/usr/bin/test -e /etc/config/internetCheckDisabled"
     group system
-    if status == 0 for 1 cycles then unmonitor
+    if status = 0 for 1 cycles then unmonitor
 
 # check for a non-empty /tmp/badblocks.txt file and warn the user accordingly
 check program badblocksCheck with path "/usr/bin/test -s /tmp/badblocks.txt"
-    group systen
+    group system
     if status = 0 for 1 cycles then
       exec "/bin/triggerAlarm.tcl 'Bad blocks on main disk device detected' WatchDog-Alarm"
+      repeat every 6700 cycles
     depends on crond
 
 # check for an unclean shutdown by checking for /var/status/uncleanShutdown
 check program uncleanShutdownCheck with path "/usr/bin/test -e /var/status/uncleanShutdown"
-    group systen
+    group system
     if status = 0 for 1 cycles then
-      exec "/bin/triggerAlarm.tcl 'Unclean shutdown or system crash identified' WatchDog-Alarm ; rm -f /var/status/uncleanShutdown"
+      exec /bin/sh -c "/bin/triggerAlarm.tcl 'Unclean shutdown or system crash identified' WatchDog-Alarm ; rm -f /var/status/uncleanShutdown"
+      repeat every 24 cycles
+
+# check if a HB-RF-ETH is supposed to be connected and if it is not rais an alarm
+check program hb_rf_eth-Check with path "/bin/grep -q 1 /sys/class/hb-rf-eth/hb-rf-eth/is_connected"
+    group homematic
+    if status != 0 then
+      exec /bin/sh -c "/bin/triggerAlarm.tcl 'HB-RF-ETH: no connection' 'HB-RF-ETH Connection';"
+      repeat every 5 cycles
+    depends on hb_rf_eth-CheckEnabled
+
+check program hb_rf_eth-CheckEnabled with path "/usr/bin/test -e /etc/config/hb_rf_eth"
+    group homematic
+    if status != 0 for 1 cycles then unmonitor
+
+# check remaining eMMC life-time
+check program eMMCLifeTimeCheck with path "/bin/checkEMMCLifeTime.sh"
+    group system
+    if status == 1 for 3 cycles then unmonitor
+    if status == 2 for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'eMMC life time >90% exceeded' WatchDog-Alarm"
+      repeat every 280 cycles
+    if status == 3 for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'eMMC life time 100% exceeded' WatchDog-Alarm"
+      repeat every 280 cycles
 
 # include user-defined configuration files
 include /usr/local/etc/monit*.cfg

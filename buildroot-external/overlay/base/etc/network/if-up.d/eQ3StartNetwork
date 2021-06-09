@@ -1,17 +1,21 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+# source in the network config
+[[ -r /etc/config/netconfig ]] && . /etc/config/netconfig
 
 # signal that we are about to setup the network
 # connection using a slow blinking blue LED
 if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
    [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
-  echo none >/sys/class/leds/rpi_rf_mod\:green/trigger
-  echo none >/sys/class/leds/rpi_rf_mod\:red/trigger
-  echo timer >/sys/class/leds/rpi_rf_mod\:blue/trigger
-  echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_on
-  echo 499 >/sys/class/leds/rpi_rf_mod\:blue/delay_off
+  echo none >/sys/class/leds/rpi_rf_mod:green/trigger
+  echo none >/sys/class/leds/rpi_rf_mod:red/trigger
+  echo timer >/sys/class/leds/rpi_rf_mod:blue/trigger
+  echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_on
+  echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_off
 fi
 
 # performance tuning to reduce TCP performance spikes
@@ -32,8 +36,10 @@ fi
 
 # only continue if another interface hasn't
 # setup everything correctly already
-if [[ -e /var/status/hasIP ]]; then
-  /sbin/ip link set ${IFACE} down
+if [[ -f /var/status/hasIP ]] &&
+   [[ -f /var/status/hasLink ]]; then
+
+  /sbin/ip link set "${IFACE}" down
   echo -n " disabled, "
 
   # make sure that the wifi power is disabled
@@ -46,35 +52,75 @@ if [[ -e /var/status/hasIP ]]; then
   exit 0
 fi
 
-# start WPA Supplicant if this is a WiFi connection
+# depending on the interface we have to either setup
+# a ethernet interface or wifi
 case "${IFACE}" in
   eth*)
     # wait until the link is up
-    /sbin/ip link set ${IFACE} up
+    /sbin/ip link set "${IFACE}" up
     i=0
-    while [[ "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; do
+    while [[ "$(cat "/sys/class/net/${IFACE}/carrier")" == "0" ]]; do
       sleep 2
-      i=$(($i+1))
+      i=$((i+1))
       if [[ $i -ge 6 ]]; then
         break
       fi
       echo -n "."
     done
 
-    # if the link is not up we don't continue
-    if [[ "$(cat /sys/class/net/${IFACE}/carrier)" == "0" ]]; then
-      /sbin/ip link set ${IFACE} down
-      echo -n ", no link, "
-      exit 1
+    # if the link is not up we continue only if this is a
+    # static connectin and no wifi config is present
+    if [[ "$(cat "/sys/class/net/${IFACE}/carrier")" == "0" ]]; then
+      echo -n " link down, "
+      /sbin/ip link set "${IFACE}" down
+
+      # if this is a DHCP setup we stop here. For static
+      # connections we can still setup the ip but only if
+      # no wifi setup follows
+      if [[ "${MODE}" == "DHCP" ]] ||
+         [[ -s /etc/config/wpa_supplicant.conf ]]; then
+        exit 1
+      fi
+    else
+      echo -n " link up, "
     fi
   ;;
 
+  # start WPA Supplicant if this is a WiFi connection
   wlan*)
-    if [[ -e /etc/config/wpa_supplicant.conf ]]; then
-      /sbin/ip link set ${IFACE} up
+    # check if /boot/setupWiFi exists and contains the necessary
+    # data to generate /etc/config/wpa_supplicant.conf automatically
+    if [[ -s /boot/SetupWIFI ]]; then
+      SETUPWIFI=/boot/SetupWIFI
+    elif [[ -s /etc/config/SetupWIFI ]]; then
+      SETUPWIFI=/etc/config/SetupWIFI
+    fi
+
+    if [[ -n "${SETUPWIFI}" ]]; then
+      SSID=$(head -1 "${SETUPWIFI}" | dos2unix)
+      PWD=$(tail -1 "${SETUPWIFI}" | dos2unix)
+      if [[ -n "${SSID}" ]] && [[ -n "${PWD}" ]]; then
+        cp /etc/config_templates/wpa_supplicant.conf /etc/config/wpa_supplicant.conf
+        if /usr/sbin/wpa_passphrase "${SSID}" "${PWD}" >>/etc/config/wpa_supplicant.conf; then
+          if [[ "$(dirname "${SETUPWIFI}")" == "/boot" ]]; then
+            mount -o rw,remount /boot
+            rm -f "${SETUPWIFI}"
+            mount -o ro,remount /boot
+          else
+            rm -f "${SETUPWIFI}"
+          fi
+        fi
+      fi
+    fi
+
+    # if /etc/config/wpa_supplicant.conf exists, bring up
+    # the WiFi connection.
+    if [[ -s /etc/config/wpa_supplicant.conf ]]; then
+      /sbin/ip link set "${IFACE}" up
       sleep 5
       /usr/sbin/rfkill unblock wlan
-      /usr/sbin/wpa_supplicant -B w -i ${IFACE} -c /etc/config/wpa_supplicant.conf -s
+      /usr/sbin/wpa_supplicant -B w -i "${IFACE}" -c /etc/config/wpa_supplicant.conf -s
+      echo -n " up, "
     else
       echo -n " no config, "
       # make sure that the wifi power is disabled
@@ -85,8 +131,6 @@ case "${IFACE}" in
   ;;
 esac
 
-echo -n " up, "
-
 # cleanup first
 RESOLV_CONF=/var/etc/resolv.conf
 rm -f "${RESOLV_CONF}"
@@ -95,16 +139,18 @@ rm -f /var/status/hasLink
 rm -f /var/status/hasIP
 rm -f /var/status/hasInternet
 
-# source in the network config
-[[ -r /etc/config/netconfig ]] && . /etc/config/netconfig
-
 # setup the hostname
 echo "${HOSTNAME}" >/etc/hostname
 hostname "${HOSTNAME}"
 
 # setup /etc/hosts
-echo "127.0.0.1 localhost" >/etc/hosts
-echo "127.0.1.1 ${HOSTNAME}" >>/etc/hosts
+{
+  echo "127.0.0.1 localhost"
+  echo "127.0.1.1 ${HOSTNAME}"
+  echo "::1 ip6-localhost ip6-loopback"
+  echo "ff02::1 ip6-allnodes"
+  echo "ff02::2 ip6-allrouters"
+} > /etc/hosts
 
 # restart syslogd to update hostname
 /etc/init.d/S07logging restart 2>/dev/null >/dev/null
@@ -127,16 +173,17 @@ fi
 killall -q udhcpc
 
 # if DHCP is enabled we run udhcpc
+RET=0
 case "${MODE}" in
 
   # if DHCP is enabled we "only" run udhcpc
   DHCP)
     echo -n "dhcp, "
 
-    /sbin/udhcpc -b -t 100 -T 3 -S -x hostname:${HOSTNAME} -i ${IFACE} -F ${HOSTNAME} -V eQ3-CCU3 -s /bin/dhcp.script -p /var/run/udhcpc_${IFACE}.pid 2>/dev/null >/dev/null
+    /sbin/udhcpc -b -t 100 -T 3 -S -x "hostname:${HOSTNAME}" -i "${IFACE}" -F "${HOSTNAME}" -V eQ3-CCU3 -s /bin/dhcp.script -p "/var/run/udhcpc_${IFACE}.pid" 2>/dev/null >/dev/null
     if [[ ! -f "/var/run/udhcpc_${IFACE}.pid" ]]; then
-      killall checkDHCP
-      /bin/checkDHCP ${IFACE} &
+      killall -q checkDHCP
+      /bin/checkDHCP "${IFACE}" &
     fi
   ;;
 
@@ -144,15 +191,12 @@ case "${MODE}" in
   *)
     echo -n "static, "
 
-    # we checked the link state already way earlier
-    touch /var/status/hasLink
-
     # use ifconfig so that broadcast address is correctly calculated
-    /sbin/ifconfig ${IFACE} ${IP} netmask ${NETMASK}
+    /sbin/ifconfig "${IFACE}" "${IP}" netmask "${NETMASK}"
 
     # reset default gateway
     /sbin/ip route del default 2>/dev/null
-    /sbin/ip route add default via ${GATEWAY}
+    /sbin/ip route add default via "${GATEWAY}"
 
     if [[ -n "${NAMESERVER1}" ]]; then
       echo nameserver "${NAMESERVER1}" >>${RESOLV_CONF}
@@ -165,24 +209,35 @@ case "${MODE}" in
     # update CURRENT_XYZ in /etc/config/netconfig
 
     # update /etc/config/netconfig
-    eq3configcmd netconfigcmd -i ${IP} -g ${GATEWAY} -n ${NETMASK}
+    eq3configcmd netconfigcmd -i "${IP}" -g "${GATEWAY}" -n "${NETMASK}"
 
     if [[ -n "${NAMESERVER1}" ]]; then
-      eq3configcmd netconfigcmd -d1 ${NAMESERVER1}
+      eq3configcmd netconfigcmd -d1 "${NAMESERVER1}"
     else
       eq3configcmd netconfigcmd -d1 ""
     fi
 
     if [[ -n "${NAMESERVER2}" ]]; then
-      eq3configcmd netconfigcmd -d2 ${NAMESERVER2}
+      eq3configcmd netconfigcmd -d2 "${NAMESERVER2}"
     else
       eq3configcmd netconfigcmd -d2 ""
     fi
 
     touch /var/status/hasIP
 
-    # check internet connection
-    /bin/checkInternet
+    # we checked the link state already way earlier
+    case "${IFACE}" in
+      eth*)
+        if [[ "$(cat "/sys/class/net/${IFACE}/carrier")" != "0" ]]; then
+          touch /var/status/hasLink
+        else
+          RET=1
+        fi
+      ;;
+      *)
+        touch /var/status/hasLink
+      ;;
+    esac
   ;;
 
 esac
@@ -195,7 +250,15 @@ if [[ "${HM_MODE}" == "NORMAL" ]]; then
   echo -n "firewall, "
 fi
 
+# check internet connection
+/bin/checkInternet
+if [[ -f /var/status/hasInternet ]]; then
+  echo -n "inet up, "
+else
+  echo -n "inet down, "
+fi
+
 IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
 echo -n "${IP}, "
 
-exit 0
+exit ${RET}

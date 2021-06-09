@@ -1,0 +1,17 @@
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -6401,10 +6401,10 @@
+     this.callback = callback;
+     if (this.isPresent === false)
+     {
+-      //this.isPresent = true;
+-      //new ConfigDataLoader(callback);
+-      this.configDataLoader.showMessage();
+-      this.showMessage = true;
++      this.isPresent = true;
++      new ConfigDataLoader(callback);
++      //this.configDataLoader.showMessage();
++      //this.showMessage = true;
+     }
+     else
+     {

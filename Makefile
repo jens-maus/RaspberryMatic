@@ -1,12 +1,14 @@
-BUILDROOT_VERSION=2020.05
+BUILDROOT_VERSION=2021.05
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
-OCCU_VERSION=$(shell grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
+OCCU_VERSION=$(shell grep "OCCU_VERSION =" $(BUILDROOT_EXTERNAL)/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
 DATE=$(shell date +%Y%m%d)
 PRODUCT=
 PRODUCT_VERSION=${OCCU_VERSION}.${DATE}
 PRODUCTS:=$(sort $(notdir $(patsubst %_defconfig,%,$(wildcard $(DEFCONFIG_DIR)/*_defconfig))))
 BR2_DL_DIR="../download"
+BR2_CCACHE_DIR="${HOME}/.buildroot-ccache"
+BR2_JLEVEL=0
 
 ifneq ($(PRODUCT),)
 	PRODUCTS:=$(PRODUCT)
@@ -27,7 +29,7 @@ buildroot-$(BUILDROOT_VERSION).tar.bz2:
 
 buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.bz2
 	@echo "[patching buildroot-$(BUILDROOT_VERSION)]"
-	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; for p in $(wildcard buildroot-patches/*.patch); do patch -d buildroot-$(BUILDROOT_VERSION) -p1 < $${p}; done; fi
+	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
 
 build-$(PRODUCT): | buildroot-$(BUILDROOT_VERSION) download
 	mkdir -p build-$(PRODUCT)
@@ -37,7 +39,7 @@ download: buildroot-$(BUILDROOT_VERSION)
 
 build-$(PRODUCT)/.config: | build-$(PRODUCT)
 	@echo "[config $@]"
-	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) $(PRODUCT)_defconfig
+	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) $(PRODUCT)_defconfig
 
 build-all: $(PRODUCTS)
 $(PRODUCTS): %:
@@ -46,7 +48,22 @@ $(PRODUCTS): %:
 
 build: | buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[build: $(PRODUCT)]"
-	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION)
+ifneq ($(FAKE_BUILD),true)
+	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION)
+else
+	$(eval BOARD := $(shell echo $(PRODUCT) | cut -d'_' -f2-))
+	# Dummy build - mainly for testing CI
+	echo -n "FAKE_BUILD - generating fake release archives..."
+	mkdir -p build-$(PRODUCT)/images
+	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do echo DUMMY >build-$(PRODUCT)/images/$${f}; done
+	mkdir -p /tmp/oci
+	tar -cf /tmp/oci/layer.tar LICENSE
+	tar -C /tmp -cvf RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar oci
+	mv RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar build-$(PRODUCT)/images/
+	rm -rf /tmp/oci
+	echo DUMMY >build-$(PRODUCT)/images/sdcard.img
+	echo DUMMY >build-$(PRODUCT)/images/RaspberryMatic.ova
+endif
 
 release-all: $(addsuffix -release, $(PRODUCTS))
 $(addsuffix -release, $(PRODUCTS)): %:
@@ -54,19 +71,8 @@ $(addsuffix -release, $(PRODUCTS)): %:
 
 release: build
 	@echo "[creating release: $(PRODUCT)]"
-	$(eval BOARD := $(shell echo $(PRODUCT) | cut -d'_' -f2))
-	cp -a build-$(PRODUCT)/images/sdcard.img ./release/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img
-	cd ./release && sha256sum RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img >RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img.sha256
-	rm -f ./release/RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip
-	cd ./release && zip --junk-paths ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img ./RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).img.sha256 ../LICENSE ./updatepkg/$(PRODUCT)/EULA.*
-	cd ./release && sha256sum RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip >RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).zip.sha256
-
-updatePkg:
-	rm -rf /tmp/$(PRODUCT)-$(PRODUCT_VERSION) 2>/dev/null; mkdir -p /tmp/$(PRODUCT)-$(PRODUCT_VERSION)
-	for f in `cat release/updatepkg/$(PRODUCT)/files-package.txt`; do ln -s $(shell pwd)/release/updatepkg/$(PRODUCT)/$${f} /tmp/$(PRODUCT)-$(PRODUCT_VERSION)/; done
-	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do gzip -c $(shell pwd)/build-$(PRODUCT)/images/$${f} >/tmp/$(PRODUCT)-$(PRODUCT_VERSION)/$${f}.gz; done
-	cd /tmp/$(PRODUCT)-$(PRODUCT_VERSION); sha256sum * >$(PRODUCT)-$(PRODUCT_VERSION).sha256
-	cd ./release; tar -C /tmp/$(PRODUCT)-$(PRODUCT_VERSION) --owner=root --group=root -cvzhf $(PRODUCT)-$(PRODUCT_VERSION).tgz `ls /tmp/$(PRODUCT)-$(PRODUCT_VERSION)`
+	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | cut -d'_' -f2))
+	if [ -x $(BOARD_DIR)/post-release.sh ]; then $(BOARD_DIR)/post-release.sh $(BOARD_DIR) ${PRODUCT} ${PRODUCT_VERSION}; fi
 
 clean-all: $(addsuffix -clean, $(PRODUCTS))
 $(addsuffix -clean, $(PRODUCTS)): %:
@@ -79,20 +85,20 @@ clean:
 distclean: clean-all
 	@echo "[distclean]"
 	@rm -rf buildroot-$(BUILDROOT_VERSION)
-	@rm -f buildroot-$(BUILDROOT_VERSION).tar.bz2
+	@rm -f buildroot-$(BUILDROOT_VERSION).tar.bz2 buildroot-$(BUILDROOT_VERSION).tar.bz2.sign
 	@rm -rf download
 
 .PHONY: menuconfig
-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
-	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) menuconfig
+menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
+	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) menuconfig
 
 .PHONY: xconfig
-xconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
-	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) xconfig
+xconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
+	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) xconfig
 
 .PHONY: savedefconfig
 savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
-	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) savedefconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT)_defconfig
+	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) savedefconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT)_defconfig
 
 # Create a fallback target (%) to forward all unknown target calls to the build Makefile.
 # This includes:

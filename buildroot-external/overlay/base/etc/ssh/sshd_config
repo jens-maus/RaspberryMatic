@@ -120,3 +120,6 @@ Subsystem	sftp	/usr/libexec/sftp-server
 #	AllowTcpForwarding no
 #	PermitTTY no
 #	ForceCommand cvs server
+
+# include user configuration (if it exists)
+Include /usr/local/etc/ssh/sshd_config

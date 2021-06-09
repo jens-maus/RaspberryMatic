@@ -1,0 +1,142 @@
+--- occu/WebUI/www/rega/esp/programs.fn.orig
++++ occu/WebUI/www/rega/esp/programs.fn
+@@ -73,6 +73,7 @@
+                   if( !bSysVarGeneric )
+                   {
+                     !sRet = sRet#" bei";
++                    if (oSC.NegateCondition()) { sRet = sRet#" ${ruleConditionLblNot} ";}
+                     sRet = sRet#" ${ruleConditionLblWhen}";
+                   }
+ 
+--- occu/WebUI/www/rega/esp/sico.fn.orig
++++ occu/WebUI/www/rega/esp/sico.fn
+@@ -13,6 +13,22 @@
+   return;
+ }
+ 
++function ::SetNegateCondition() {
++  if( system.IsVar("scid") && system.IsVar("nc") )
++  {
++    object oTmp = dom.GetObject( system.GetVar("scid") );
++    if( oTmp )
++    {
++      string sNC = system.GetVar("nc");
++      if (sNC == "false") {
++        oTmp.NegateCondition(false);
++      } else {
++        oTmp.NegateCondition(true);
++      }
++    }
++  }
++}
++
+ function ::SetOperatorType()
+ {
+   string sCI = "SetOperatorType[SICO]: ";
+--- occu/WebUI/www/rega/esp/sico.htm.orig
++++ occu/WebUI/www/rega/esp/sico.htm
+@@ -9,4 +9,5 @@
+   if( action == "SetLeftAndRightValue" ) { Call("sico.fn::SetLeftAndRightValue()"); }
+   if( action == "SetValueRange" ) { Call("sico.fn::SetValueRange()"); }
+   if( action == "ReloadSiCo" ) { Call("sico.fn::ReloadSiCo()"); }
++  if( action == "SetNegateCondition" ) { Call("sico.fn::SetNegateCondition()"); }
+ %>
+\ No newline at end of file
+--- occu/WebUI/www/rega/esp/sico.inc.orig
++++ occu/WebUI/www/rega/esp/sico.inc
+@@ -65,11 +65,20 @@
+       boolean isGenericValueType = ((oLV.ValueType() == ivtFloat) || (oLV.ValueType() == ivtInteger));
+       boolean bSysVarGeneric = ( (iLVT == ivtSystemId) && (isGenericValueType)  && (oLV.ValueSubType() == istGeneric ) );
+       boolean bSysVarString  = ( (iLVT == ivtSystemId) && (oLV.ValueType() == ivtString) && (oLV.ValueSubType() == istChar8859) );
++      string  sNotSelectedFalse = "selected";string sNotSelectedTrue = "";
++      if( oSC.NegateCondition() ) { sNotSelectedTrue = "selected"; sNotSelectedFalse = ""; }
++
++      if ( (!bSysVarGeneric) || (bSysVarString) ) {
++        Write( '&nbsp;<select id="selectConditionNot'#oSC.ID()#'" name="selectConditionNot" onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.value);" class="SelectBox">' );
++        Write( '<option value="false"'#sNotSelectedFalse#' >${ruleConditionLblWhen}</option>');
++        Write( '<option value="true"'#sNotSelectedTrue#'>${ruleConditionLblNot} ${ruleConditionLblWhen}</option>' );
++        Write( '</select> ');
++      }
+ 
+       if (bSysVarString)
+       {
+         !Write("<i>bei</i>");
+-        Write("<i>${ruleConditionLblWhen}</i>");
++        !Write("<i>${ruleConditionLblWhen}</i>");
+ !        Write("<input type='text' onblur='javascript:alert(\"blur\");' class='SelectBox' />");
+         Write("<input type='text' onblur='iseSingleCondition.SetRightValue(" # oSC.ID() # ",this.value);' value='" # iRV1 # "' class='SelectBox' />");
+ 
+@@ -78,7 +87,7 @@
+       if( (!bSysVarGeneric) && (!bSysVarString) )
+       {
+         !Write( ' <i>bei</i> ' );
+-        Write( ' <i>${ruleConditionLblWhen}</i> ' );
++        !Write( ' <i>${ruleConditionLblWhen}</i> ' );
+         Write( '<select id="selectConditionWhen'#oSC.ID()#'" name="selectConditionWhen" onchange="SetLeftValue('#oSC.ID()#',this.value); setOptionWidthSelectConditionWhen();" class="SelectBox">' );
+       }
+ 
+@@ -300,7 +309,16 @@
+       if( (!bOptionList) && (!bBinary) && (!bSpecial) && (!bSysVarString) )
+       {
+         !Write( ' <i>im Wertebereich</i> ' );
+-        Write( ' <i>${ruleConditionLblWithinValueRange}</i> ' );
++        
++        if ( (!bSysVarGeneric) && (!bSysVarString) ) {
++          Write( ' <i>${ruleConditionLblWithinValueRange}</i> ' );
++        } else {
++          Write( ' <select id="selectConditionNot'#oSC.ID()#'" name="selectConditionNot" onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.value);" class="SelectBox">' );
++          Write( '<option value="false"'#sNotSelectedFalse#' >${ruleConditionLblWithinValueRange}</option>');
++          Write( '<option value="true"'#sNotSelectedTrue#'>${ruleConditionLblNot} ${ruleConditionLblWithinValueRange}</option>' );
++          Write( '</select> ');
++        }
++      
+         string sCT = "";
+         string sValueUnit = oLV.ValueUnit();
+         if( sValueUnit == "100%" )
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -803,6 +803,7 @@
+     "ruleConditionLblTimeDuringNight" : "nachts",
+     "ruleConditionLblTimeClock" : "Uhr",
+     "ruleConditionLblTimeIteration" : "Wiederholungen",
++    "ruleConditionLblNot" : "nicht",
+     "ruleConditionSelectTriggerWhenUpdated" : "bei Aktualisierung ausl%F6sen",
+     "ruleConditionSelectCheckOnly" : "nur pr%FCfen",
+     "ruleConditionSelectWhenChanged" : "bei %C4nderung ausl%F6sen",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -837,6 +837,7 @@
+     "ruleConditionLblTimeDuringNight" : "at night",
+     "ruleConditionLblTimeClock" : "o'clock",
+     "ruleConditionLblTimeIteration" : "repetitions",
++    "ruleConditionLblNot" : "not",
+ 
+     "ruleConditionSelectTriggerWhenUpdated" : "trigger when updated",
+     "ruleConditionSelectCheckOnly" : "check only",
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -24823,6 +24823,24 @@
+     new Ajax.Request(url,opts);        
+   },
+ 
++  SetNegateCondition: function(scid,nc) {                                                          
++    var url = "/esp/sico.htm?sid="+SessionId;            
++    var pb = '';                          
++    pb += 'string action = "SetNegateCondition";';                                     
++    pb += 'string scid = "'+scid+'";';               
++    pb += 'string nc = "'+nc+'";';                                                                     
++    var opts =                                                                                     
++    {                                                
++      postBody: ReGa.encode(pb),      
++      onComplete:function(t)                                    
++      {                                          
++        if(dbg){alert( t.responseText );}                                                      
++        ReloadSingleCondition(scid);                                                       
++      }                                              
++    };                                
++    new Ajax.Request(url,opts);                                  
++  },
++  
+   SetLeftValue: function(scid,lv)
+   {
+     var url = "/esp/sico.htm?sid="+SessionId;

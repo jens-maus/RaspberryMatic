@@ -88,9 +88,9 @@ iseInitUpdateArrays();
   <th align="center" valign="middle"><div class="pt11 Sort">${thAction}</div></th>
 </tr>
 <tr id="trFlt">
-  <td align="center" valign="middle" class="CLASS02603"></td>
-  <td align="center" valign="middle" class="CLASS02603"></td>
-  <td align="center" valign="middle" class="CLASS02603">
+  <td style="text-align:center; vertical-align: middle;" class="CLASS02603"></td>
+  <td style="text-align:center; vertical-align: middle;" class="CLASS02603"></td>
+  <td style="text-align:center; vertical-align: middle;" class="CLASS02603">
     <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
     <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
         <input id="ftName" type="text" size="15" class="CLASS02616" />
@@ -98,8 +98,8 @@ iseInitUpdateArrays();
         <div class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
     </div>
   </td>
-  <td align="center" valign="middle" class="CLASS02603"></td>
-  <td align="center" valign="middle" class="CLASS02603">
+  <td style="text-align:center; vertical-align: middle;" class="CLASS02603"></td>
+  <td style="text-align:center; vertical-align: middle;" class="CLASS02603">
     <div id="btnFilterSN" class="FilterBtn">${thFilter}</div>
     <div class="FilterSubMenu" id="btnFilterSNSub" style="display:none">
         <input id="ftSN" type="text" size="15" class="CLASS02616" />
@@ -107,7 +107,7 @@ iseInitUpdateArrays();
         <div class='FilterSetButton' onclick="$('btnFilterSNSub').hide();">${filterClose}</div>
     </div>
   </td>
-  <td align="center" valign="middle" class="CLASS02603">
+  <td style="text-align:center; vertical-align: middle;" class="CLASS02603">
     <div id="btnFilterFunc" class="FilterBtn">${thFilter}</div>
   <div class="FilterSubMenu" id="btnFilterFuncSub" style="display:none">
     <% 
@@ -132,7 +132,7 @@ iseInitUpdateArrays();
     %>
   </div>
   </td>
-  <td align="center" valign="middle" class="CLASS02603">
+  <td style="text-align:center; vertical-align: middle;" class="CLASS02603">
     <div id="btnFilterRoom" class="FilterBtn">${thFilter}</div>
     <div class="FilterSubMenu" id="btnFilterRoomSub" style="display:none">
       <% 
@@ -157,8 +157,8 @@ iseInitUpdateArrays();
       %>
     </div>
   </td>
-  <td align="center" valign="middle" class="CLASS02603"></td>
-  <td align="center" valign="middle" class="CLASS02603">
+  <td style="text-align:center; vertical-align: middle;" class="CLASS02603"></td>
+  <td style="text-align:center; vertical-align: middle;" class="CLASS02603">
     <div id="btnFilterDesc" class="FilterBtn">${thFilter}</div>
     <div class="FilterSubMenu" id="btnFilterDescSub" style="display:none">
       <input id="ftDesc" type="text" size="15" class="CLASS02616" />
@@ -166,7 +166,7 @@ iseInitUpdateArrays();
       <div class='FilterSetButton' onclick="$('btnFilterDescSub').hide()">${filterClose}</div>
     </div>
   </td>
-  <td align="center" valign="middle" class="CLASS02603"></td>
+  <td style="text-align:center; vertical-align: middle;" class="CLASS02603"></td>
 </tr>
 <%
   integer iSvcCount = 0;
@@ -267,8 +267,13 @@ iseInitUpdateArrays();
                 }
                 if( (oLastTrigger.ValueType() == ivtBinary ) && (oLastTrigger.ValueSubType() == istGeneric) )
                 {
-                  sLongKey = sLongKey#"=TRUE";
-                  sShortKey = sShortKey#"=FALSE";
+                  if (oLastTrigger.Value() == true) {
+                    sLongKey = sLongKey#"=TRUE";
+                    sShortKey = sShortKey#"=TRUE";
+                  } else {
+                    sLongKey = sLongKey#"=FALSE";
+                    sShortKey = sShortKey#"=FALSE";
+                  }
                 }
                 sServiceMessage = web.webKeyFromStringTable( sLongKey );
                 if( !sServiceMessage.Length() )
@@ -286,10 +291,10 @@ iseInitUpdateArrays();
     
           string sTrId = "al"#oAlarm.ID();
           Write( '<tr id="'#sTrId#'" class="CLASS02604">' );
-            Write( '<td align="center" valign="middle" class="CLASS02605">'#sFirstTimestamp#'</td>' );
-            Write( '<td id="sla'#sAID#'" align="center" valign="middle" class="CLASS02605">'#sLastTimestamp#'</td>' );
-            Write( '<td id="n'#oAlarm.ID()#'" align="center" valign="middle" class="CLASS02606">'#sAlarmName#'</td>' );
-            Write( '<td align="center" valign="top" class="CLASS02607">');
+            Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02605">'#sFirstTimestamp#'</td>' );
+            Write( '<td id="sla'#sAID#'"  style="text-align:center; vertical-align: middle;" class="CLASS02605">'#sLastTimestamp#'</td>' );
+            Write( '<td id="n'#oAlarm.ID()#'"  style="text-align:center; vertical-align: middle;"class="CLASS02606">'#sAlarmName#'</td>' );
+            Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02607; background-color:white;">');
             if (oLastTriggerChannel)
             {
               object devId = oLastTriggerChannel.Device();
@@ -309,15 +314,15 @@ iseInitUpdateArrays();
             {
               Write('ohne Bild</td>' );
             }
-            Write( '<td align="center" valign="middle" class="CLASS02609">'#sSerialNumber#'</td>' );
-            Write( '<td align="center" valign="middle" class="CLASS02610">'#sFunction#'</td>' );
-            Write( '<td align="center" valign="middle" class="CLASS02610">'#sRoom#'</td>' );
-            Write( '<td id="sgu'#sAID#'" align="center" valign="middle" class="CLASS02609">'#sLastUse#'</td>' );
-            Write( '<td id="m'#oAlarm.ID()#'" align="center" valign="middle" class="CLASS02611">'#sServiceMessage#'</td>' );
+            Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02609">'#sSerialNumber#'</td>' );
+            Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02610">'#sFunction#'</td>' );
+            Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02610">'#sRoom#'</td>' );
+            Write( '<td id="sgu'#sAID#'"  style="text-align:center; vertical-align: middle;" class="CLASS02609">'#sLastUse#'</td>' );
+            Write( '<td id="m'#oAlarm.ID()#'"  style="text-align:center; vertical-align: middle;" class="CLASS02611">'#sServiceMessage#'</td>' );
             boolean bWrite = (oLastTrigger.Operations() & OPERATION_WRITE);
             if( oLastTrigger.Operations() & OPERATION_WRITE )
             {
-              Write( '<td align="center" valign="middle" class="CLASS02612"><input  type="button" name="btnConfirm" value="btnConfirm" onclick="ReceiptAlarm('#oAlarm.ID()#');" class="CLASS02613"/></td>' );
+              Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02612"><input  type="button" name="btnConfirm" value="btnConfirm" onclick="ReceiptAlarm('#oAlarm.ID()#');" class="CLASS02613"/></td>' );
 
               if (oLastTrigger.HSSID() == "STICKY_UNREACH") {
                   Write( '<script type="text/javascript">' );
@@ -328,7 +333,7 @@ iseInitUpdateArrays();
             }
             else
             {
-               Write( '<td align="center" valign="middle" class="CLASS02612"><input type="button" name="btnConfirm" value="btnConfirm" disabled="disabled" class="CLASS02614"/></td>' );
+               Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02612"><input type="button" name="btnConfirm" value="btnConfirm" disabled="disabled" class="CLASS02614"/></td>' );
             }
           Write( '</tr>' );
           Write( '<script type="text/javascript">');
@@ -426,9 +431,9 @@ iseInitUpdateArrays();
   
   s += "<table cellspacing='8'>";
   s += "<tr>";
-    s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack();'>"+ translateKey('footerBtnPageBack') +"</div></td>";
-    s += "<td align='center' valign='middle'><div class='FooterButton CLASS02615' onclick='fltSM.clearFilters();updateTable();' >"+ translateKey('footerBtnResetFilter') +"</div></td>";
-    s += "<td align='center' valign='middle'><div class='FooterButton CLASS02615' onclick='ackAll();' >"+ translateKey('footerBtnConfirmAll') +"</div></td>";
+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>"+ translateKey('footerBtnPageBack') +"</div></td>";
+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS02615' onclick='fltSM.clearFilters();updateTable();' >"+ translateKey('footerBtnResetFilter') +"</div></td>";
+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS02615' onclick='ackAll();' >"+ translateKey('footerBtnConfirmAll') +"</div></td>";
   s += "</tr>";
   s += "</table>";
   

@@ -1,3 +1,4 @@
+source "$BR2_EXTERNAL_EQ3_PATH/package/multilib32/Config.in"
 source "$BR2_EXTERNAL_EQ3_PATH/package/recovery-system/Config.in"
 
 menu "eQ-3 HomeMatic Services"
@@ -14,7 +15,6 @@ endmenu
 
 menu "Hardware Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/rpi-rf-mod/Config.in"
-  source "$BR2_EXTERNAL_EQ3_PATH/package/rx8130-rtc/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/susvd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/piusvd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/picod/Config.in"
@@ -22,14 +22,19 @@ menu "Hardware Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/pidesktopd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/argononed/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/bluetooth-tinker/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/intel-e1000e/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/rpi-eeprom/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/hardkernel-boot/Config.in"
 endmenu
 
 menu "Software Support"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/detect_radio_module/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/daemonize/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/ssdpd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/eq3configd/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/wiringpi-rpi/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/wiringpi-tinker/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/wiringpi-odroid/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/neoserver/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/rndaddtoentcnt/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/qemu-guest-agent/Config.in"

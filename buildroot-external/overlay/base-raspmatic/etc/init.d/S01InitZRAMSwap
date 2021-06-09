@@ -1,0 +1,118 @@
+#!/bin/sh
+# shellcheck shell=dash
+#
+# Initializes ZRAM as a compressible swap device to increase
+# general performance and memory management
+#
+# Based on https://github.com/StuartIanNaylor/zram-swap-config
+#
+
+# Percentage of available ram to allocate to all zram swap devices
+# (divided equally by swap_devices number)
+MEM_FACTOR=50
+
+# Virtual uncompressed zram drive size = estimate approx alg
+# compression ratio an result and is the % of the Memfactor
+DRIVE_FACTOR=210
+
+# compression algorithm used (lz4 is faster than lzo)
+COMP_ALG=lz4
+
+# number of indivial drives sharing memeory provided by MEM_FACTOR
+# each device support multiple streams 1 large drive is generally better 
+SWAP_DEVICES=1
+
+# swap_priority for each drive 75 is a hig order preference
+# and should be well above other swap drives
+SWAP_PRI=75
+
+# default page cluster is 3 which caches fetches in batches of 8
+# and helps with HDD paging, with zram mem 0 forces single page fetches
+# This can help reduce latency and increase performance
+PAGE_CLUSTER=0
+
+# default swappiness is 60 but with increased performance of zram swap 80
+# garners overall performance gain without excessive load.
+# Because zram uses compression load is created and even if minimal at
+# intense load periods such as boot any extra load is unwanted
+# Unfortunately there is no dynamic load balancing of swappiness
+# as with zram in general operation SWAPINESS=100 will garner performance
+# benefit. If the overall load is reasonable at high load it will cause
+# load to accumulate.
+SWAPPINESS=80
+
+# function to actually create the zram
+# swap devices dynamically
+createZramSwaps () {
+
+  totalmem=$(free|awk '/^Mem:/{print $2}')
+  mem=$((( totalmem * MEM_FACTOR / 100 / SWAP_DEVICES ) * 1024 ))
+  drive_size=$((( mem * DRIVE_FACTOR ) /100 ))
+
+  # Check Zram Class created
+  if modprobe --verbose --first-time zram >/dev/null 2>&1; then
+    DEV_NUM='0'
+    echo ${COMP_ALG} >"/sys/block/zram${DEV_NUM}/comp_algorithm"
+    echo ${drive_size} >"/sys/block/zram${DEV_NUM}/disksize"
+    echo ${mem} >"/sys/block/zram${DEV_NUM}/mem_limit"
+    mkswap /dev/zram${DEV_NUM} >/dev/null
+    swapon -v -p ${SWAP_PRI} "/dev/zram${DEV_NUM}" >/dev/null 2>&1
+  else
+    DEV_NUM=$(cat /sys/class/zram-control/hot_add)
+    echo ${COMP_ALG} >"/sys/block/zram${DEV_NUM}/comp_algorithm"
+    echo ${drive_size} >"/sys/block/zram${DEV_NUM}/disksize"
+    echo ${mem} >"/sys/block/zram${DEV_NUM}/mem_limit"
+    mkswap "/dev/zram${DEV_NUM}" >/dev/null
+    swapon -v -p ${SWAP_PRI} "/dev/zram${DEV_NUM}" >/dev/null 2>&1
+  fi
+  
+  if [ "$SWAP_DEVICES" -gt 1 ];then
+    for i in $(seq $((SWAP_DEVICES - 1))); do
+      DEV_NUM=$(cat /sys/class/zram-control/hot_add)
+      echo ${COMP_ALG} >"/sys/block/zram${DEV_NUM}/comp_algorithm"
+      echo ${drive_size} >"/sys/block/zram${DEV_NUM}/disksize"
+      echo ${mem} >"/sys/block/zram${DEV_NUM}/mem_limit"
+      mkswap "/dev/zram${DEV_NUM}" >/dev/null
+      swapon -v -p ${SWAP_PRI} "/dev/zram${DEV_NUM}" >/dev/null 2>&1
+    done
+  fi
+
+  # Enable page-cluster tweak 0 pages=1
+  sysctl -q vm.page-cluster=${PAGE_CLUSTER}
+  sysctl -q vm.swappiness=${SWAPPINESS}
+}
+
+case "$1" in
+  start)
+    echo -n "Initializing ZRAM Swap: "
+
+    createZramSwaps
+
+    echo "OK"
+  ;;
+
+  stop)
+    echo -n "Removing ZRAM Swap: "
+
+    if DEVICES=$(grep zram /proc/swaps | awk '{print $1}'); then
+      for i in $DEVICES; do
+        swapoff "$i"
+        DEV_NUM=$(echo "$i" | tr -dc '0-9')
+        echo "$DEV_NUM" > /sys/class/zram-control/hot_remove
+      done
+    fi
+
+    echo "OK"
+  ;;
+
+  restart|force-reload)
+    $0 stop
+    sleep 1
+    $0 start
+  ;;
+
+  *)
+    echo "Usage: $0 {start|stop|restart}" >&2
+    exit 1
+    ;;
+esac

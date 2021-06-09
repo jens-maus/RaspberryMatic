@@ -1,0 +1,63 @@
+--- buildroot/package/monit/0002-configure-fixes.patch.orig
++++ buildroot/package/monit/0002-configure-fixes.patch
+@@ -0,0 +1,22 @@
++diff -ruN monit-5.27.1.orig/configure.ac monit-5.27.1/configure.ac
++--- monit-5.27.1.orig/configure.ac	2020-10-24 20:26:57.000000000 +0200
+++++ monit-5.27.1/configure.ac	2020-11-19 17:31:30.656661653 +0100
++@@ -9,6 +9,7 @@
++ AC_INIT([monit], [5.27.1], [monit-general@nongnu.org])
++ AC_CONFIG_AUX_DIR(config)
++ AC_CONFIG_MACRO_DIR([m4])
+++AC_CONFIG_MACRO_DIR([config])
++ AM_INIT_AUTOMAKE
++ AC_CONFIG_SRCDIR([src/monit.c])
++ AC_CONFIG_SUBDIRS([libmonit])
++diff -ruN monit-5.27.1.orig/libmonit/configure.ac monit-5.27.1/libmonit/configure.ac
++--- monit-5.27.1.orig/libmonit/configure.ac	2020-10-24 20:26:57.000000000 +0200
+++++ monit-5.27.1/libmonit/configure.ac	2020-11-19 17:31:44.220707976 +0100
++@@ -5,6 +5,7 @@
++ AC_INIT([libmonit], [1.0], [monit-dev@tildeslash.com])
++ AC_CONFIG_AUX_DIR(config)
++ AC_CONFIG_MACRO_DIR([m4])
+++AC_CONFIG_MACRO_DIR([config])
++ AM_INIT_AUTOMAKE
++ AC_CONFIG_SRCDIR([src])
++ 
+--- buildroot/package/monit/monit.hash.orig
++++ buildroot/package/monit/monit.hash
+@@ -1,4 +1,4 @@
+-# From https://mmonit.com/monit/dist/monit-5.26.0.tar.gz.sha256:
+-sha256  87fc4568a3af9a2be89040efb169e3a2e47b262f99e78d5ddde99dd89f02f3c2  monit-5.26.0.tar.gz
++# From https://mmonit.com/monit/dist/monit-5.27.2.tar.gz.sha256:
++sha256  d8809c78d5dc1ed7a7ba32a5a55c5114855132cc4da4805f8d3aaf8cf46eaa4c  monit-5.27.2.tar.gz
+ # Locally computed
+ sha256  d5a4f52b1a5e1e7fe14e01a76aac8b08dc6bbea15466058f271456c97aac1ada  COPYING
+--- buildroot/package/monit/monit.mk.orig
++++ buildroot/package/monit/monit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONIT_VERSION = 5.26.0
++MONIT_VERSION = 5.27.2
+ MONIT_SITE = http://mmonit.com/monit/dist
+ MONIT_LICENSE = AGPL-3.0 with OpenSSL exception
+ MONIT_LICENSE_FILES = COPYING
+@@ -14,14 +14,15 @@
+ 
+ MONIT_CONF_ENV = \
+ 	libmonit_cv_setjmp_available=yes \
+-	libmonit_cv_vsnprintf_c99_conformant=yes
++	libmonit_cv_vsnprintf_c99_conformant=yes \
++	ac_cv_ipv6=yes
+ 
+ MONIT_CONF_OPTS += \
+ 	--without-pam \
+ 	--with-largefiles
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-MONIT_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
++MONIT_CONF_OPTS += --with-ssl --with-ssl-dir=$(STAGING_DIR)/usr
+ MONIT_DEPENDENCIES += openssl
+ else
+ MONIT_CONF_OPTS += --without-ssl

@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Startup script to check for a factory reset
 #
@@ -13,37 +14,47 @@ check_factory_reset() {
     return 1
   fi
 
-  # extract partition number and device name
-  DEVNODE=$(mountpoint -d /usr/local)
-  DEVNAME=$(mountpoint -n /usr/local | cut -d' ' -f1)
-  PARTNUM=$(echo -n ${DEVNAME} | tail -c 1)
-  DEV="/dev/$(readlink /sys/dev/block/${DEVNODE} | awk -F/ '{print $(NF-1)}')"
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-  # find out maximum SD card size (in cylinders)
-  START_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
-  END_CHS=$(parted -s ${DEV} unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
-  MAX_CHS=$(parted -s ${DEV} unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
+  if [[ "${HM_HOST}" != "oci" ]]; then
 
-  # umount /usr/local to regenerate it
-  umount -f /usr/local
+    # extract partition number and device name
+    DEVNODE=$(mountpoint -d /usr/local)
+    DEVNAME=$(mountpoint -n /usr/local | cut -d' ' -f1)
+    PARTNUM=$(echo -n "${DEVNAME}" | tail -c 1)
+    DEV="/dev/$(readlink "/sys/dev/block/${DEVNODE}" | awk -F/ '{print $(NF-1)}')"
 
-  # only resize the partition if END_CHS != MAX_CHS
-  if [[ -n "${START_CHS}" && -n "${END_CHS}" && -n "${MAX_CHS}" && "${END_CHS}" != "${MAX_CHS}" ]]; then
-    # use resizepart to resize the /usr/local partition to the maximum size of
-    # the disk
-    parted -s ${DEV} resizepart ${PARTNUM} 100%
+    # find out maximum SD card size (in cylinders)
+    START_CHS=$(parted -s "${DEV}" unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
+    END_CHS=$(parted -s "${DEV}" unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
+    MAX_CHS=$(parted -s "${DEV}" unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
 
-    # force PARTUUID to 0xDEEDBEEF (because parted changes partuuid)
-    echo -en '\xEF\xBE\xED\xDE' | dd of=${DEV} conv=notrunc bs=1 seek=$((0x1B8)) 2>/dev/null
+    # umount /usr/local to regenerate it
+    umount -f /usr/local
+
+    # only resize the partition if END_CHS != MAX_CHS
+    if [[ -n "${START_CHS}" && -n "${END_CHS}" && -n "${MAX_CHS}" && "${END_CHS}" != "${MAX_CHS}" ]]; then
+      # use resizepart to resize the /usr/local partition to the maximum size of
+      # the disk
+      parted -s "${DEV}" resizepart "${PARTNUM}" 100%
+    fi
+
+    # force PARTUUID to 0xDEEDBEEF (because parted changes partuuid) even
+    # if no repartitioning was performed.
+    echo -en '\xEF\xBE\xED\xDE' | dd of="${DEV}" conv=notrunc bs=1 seek=$((0x1B8)) 2>/dev/null
+
+    # we create a clean ext4 partition now
+    mkfs.ext4 -F -L userfs "${DEVNAME}"
+    tune2fs -c 0 -i 0 "${DEVNAME}"
+    e2fsck -pDf "${DEVNAME}"
+
+    # mount /usr/local again
+    mount /usr/local
+  else
+    # clean whole /usr/local on oci platform (usually a volume so cannot delete folder)
+    find /usr/local -not -name "lost+found" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
   fi
-
-  # we create a clean ext4 partition now
-  mkfs.ext4 -F -L userfs "${DEVNAME}"
-  tune2fs -c 0 -i 0 "${DEVNAME}"
-  e2fsck -pDf "${DEVNAME}"
-
-  # mount /usr/local again
-  mount /usr/local
 
   # make sure a potential rf copro is factory
   # reset as well
@@ -55,9 +66,7 @@ check_factory_reset() {
 start() {
   echo -n "Checking for Factory Reset: "
 
-  check_factory_reset
-
-  if [[ $? -eq 0 ]]; then
+  if check_factory_reset; then
     echo "cleared, OK"
   else
     echo "not required"

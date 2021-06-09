@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Starts ReGaHss.
 #
@@ -28,7 +29,7 @@ fi
 
 init() {
   for i in ${CREATE_DIRS}; do
-    [[ ! -e ${i} ]] && mkdir -p ${i}
+    [[ ! -e ${i} ]] && mkdir -p "${i}"
   done
        
   if [[ ! -d /etc/config/userprofiles ]]; then
@@ -44,7 +45,7 @@ init() {
     # source from /etc/profile.d
     for i in /etc/profile.d/*.sh ; do
       if [[ -r "$i" ]]; then
-        . $i
+        . "$i"
       fi
       unset i
     done
@@ -53,7 +54,7 @@ init() {
     if [[ -d /usr/local/etc/profile.d ]]; then
       for i in /usr/local/etc/profile.d/*.sh ; do
         if [[ -r "$i" ]]; then
-          . $i
+          . "$i"
         fi
         unset i
       done
@@ -97,7 +98,7 @@ start() {
 
   # adjust the oom score (which is inherited by start-stop-daemon)
   # to ensure that others are killed first in case of low memory situations
-  echo -900 >/proc/$$/oom_score_adj
+  echo -900 >/proc/$$/oom_score_adj 2>/dev/null
 
   start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec /bin/${REGA_BIN_FILE} -- -f /etc/rega.conf -l ${LOGLEVEL_REGA}
   waitStartupComplete

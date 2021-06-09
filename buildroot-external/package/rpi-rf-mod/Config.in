@@ -1,3 +1,46 @@
 config BR2_PACKAGE_RPI_RF_MOD
-  select BR2_PACKAGE_RX8130_RTC
-	bool "Support for RPI-RF-MOD GPIO HAT"
+  select BR2_PACKAGE_EQ3_CHAR_LOOP
+  select BR2_PACKAGE_GENERIC_RAW_UART
+  bool "Support for RPI-RF-MOD/HM-MOD-RPI-PCB GPIO HAT"
+
+if BR2_PACKAGE_RPI_RF_MOD
+
+config BR2_PACKAGE_RPI_RF_MOD_DTS
+  bool "Compile Device Tree Overlay"
+
+if BR2_PACKAGE_RPI_RF_MOD_DTS
+
+choice
+  prompt "For Target"
+  default BR2_PACKAGE_RPI_RF_MOD_DTS_RPI
+
+config BR2_PACKAGE_RPI_RF_MOD_DTS_RPI
+  bool "RaspberryPi"
+  help
+    For the RaspberryPi
+
+config BR2_PACKAGE_RPI_RF_MOD_DTS_TINKER
+  bool "ASUS Tinkerboard"
+  help
+    For the ASUS Tinkerboard
+
+config BR2_PACKAGE_RPI_RF_MOD_DTS_ODROID-C4
+  bool "Odroid-C4"
+  help
+    For the Odroid-C4
+
+config BR2_PACKAGE_RPI_RF_MOD_DTS_ODROID-N2
+  bool "Odroid-N2"
+  help
+    For the Odroid-N2
+
+config BR2_PACKAGE_RPI_RF_MOD_DTS_ODROID-C2
+  bool "Odroid-C2"
+  help
+    For the Odroid-C2
+
+endchoice
+
+endif
+
+endif

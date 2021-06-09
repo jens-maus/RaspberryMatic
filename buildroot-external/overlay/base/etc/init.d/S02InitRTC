@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Startup script to identify and setup RTC clocks
 #
@@ -14,30 +15,36 @@ init_rtc_device() {
 
   # load the i2c_dev module if this is not a virtual
   # applicance but a real rpi/tinkerboard
-  if ! echo "${HM_HOST}" | egrep -q "ova-|nuc"; then
+  if ! echo "${HM_HOST}" | grep -E -q "oci|ova-|nuc"; then
     modprobe i2c_dev
   fi
 
   # check for RX8130-CE RTC clock at 0x32 (Epson RX8130CE) which
   # is the RPI-RF-MOD onboard RTC.
-  i2cget -y 1 0x32 0x32 2>/dev/null >/dev/null
-  if [[ $? -eq 0 ]]; then
-    modprobe rtc-rx8130
-    if [[ $? -eq 0 ]]; then
-      HM_RTC="rx8130"
-
-      # we found a RX8130, thus we assume the RPI-RF-MOD to
-      # be present, thus we setup the LED GPIOs to OUT
-      if [[ -c /dev/rtc0 ]]; then
-
-        # setup the LEDs to show a constant yellow light
-        echo default-on >/sys/class/leds/rpi_rf_mod\:green/trigger
-        echo default-on >/sys/class/leds/rpi_rf_mod\:red/trigger
-        echo none >/sys/class/leds/rpi_rf_mod\:blue/trigger
-
-        return 0
-      fi
+  if [[ ! -e /sys/module/rtc_ds1307/drivers/i2c:rtc-ds1307/1-0032 ]]; then
+    if i2cget -y 1 0x32 0x32 2>/dev/null >/dev/null; then
+      modprobe i2c:rx8130
     fi
+  fi
+
+  if [[ -e /sys/module/rtc_ds1307/drivers/i2c:rtc-ds1307/1-0032/name ]] &&
+     [[ $(cat /sys/module/rtc_ds1307/drivers/i2c:rtc-ds1307/1-0032/name) == "rx8130" ]]; then
+    HM_RTC="rx8130"
+
+    # we found a RX8130, thus we assume the RPI-RF-MOD to
+    # be present, thus we setup the LED GPIOs to show a
+    # constant yellow light
+    if [[ -e /sys/class/leds/rpi_rf_mod:green/trigger ]]; then
+      echo default-on >/sys/class/leds/rpi_rf_mod:green/trigger
+      echo default-on >/sys/class/leds/rpi_rf_mod:red/trigger
+      echo none >/sys/class/leds/rpi_rf_mod:blue/trigger
+    fi
+
+    # in addition, we load the dummy_rx8130 kernel module so
+    # that the hss_led process assumes a RPI-RF-MOD present
+    modprobe dummy_rx8130
+
+    return 0
   fi
 
   # make sure we load the RTC kernel module for
@@ -53,13 +60,10 @@ init_rtc_device() {
 
   HM_RTC=""
   # check for MCP7940N RTC clock at 0x6f (PiFace Shim RTC)
-  i2cget -y 1 0x6f 0x00 2>/dev/null >/dev/null
-  if [[ $? -eq 0 ]]; then
+  if i2cget -y 1 0x6f 0x00 2>/dev/null >/dev/null; then
     # calibrate MCP7940N
-    i2cset -y 1 0x6f 0x08 0x47 2>/dev/null >/dev/null
-    if [[ $? -eq 0 ]]; then
-      modprobe i2c:mcp7941x
-      if [[ $? -eq 0 ]]; then
+    if i2cset -y 1 0x6f 0x08 0x47 2>/dev/null >/dev/null; then
+      if modprobe i2c:mcp7941x; then
         HM_RTC="mcp7941x"
         [[ -c /dev/rtc0 ]] && return 0
         echo mcp7941x 0x6f >/sys/class/i2c-dev/i2c-1/device/new_device
@@ -71,11 +75,10 @@ init_rtc_device() {
 
   HM_RTC=""
   # check for DS3231/DS1307 RTC clock at 0x68
-  i2cget -y 1 0x68 0x00 2>/dev/null >/dev/null
-  if [[ $? -eq 0 ]]; then
+  if i2cget -y 1 0x68 0x00 2>/dev/null >/dev/null; then
     # check for DS3231
     modprobe i2c:ds3231
-    if [[ $? -eq 0 ]]; then
+    if modprobe i2c:ds3231; then
       HM_RTC="mcp7941x"
       [[ -c /dev/rtc0 ]] && return 0
       echo ds3231 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
@@ -84,8 +87,7 @@ init_rtc_device() {
     fi
 
     # check for DS1307
-    modprobe i2c:ds1307
-    if [[ $? -eq 0 ]]; then
+    if modprobe i2c:ds1307; then
       HM_RTC="ds1307"
       [[ -c /dev/rtc0 ]] && return 0
       echo ds1307 0x68 >/sys/class/i2c-adapter/i2c-1/new_device
@@ -96,11 +98,9 @@ init_rtc_device() {
 
   HM_RTC=""
   # check for PCF8563 RTC clock at 0x51
-  i2cget -y 1 0x51 0x00 2>/dev/null >/dev/null
-  if [[ $? -eq 0 ]]; then
+  if i2cget -y 1 0x51 0x00 2>/dev/null >/dev/null; then
     # check for PCF8563
-    modprobe i2c:pcf8563
-    if [[ $? -eq 0 ]]; then
+    if modprobe i2c:pcf8563; then
       HM_RTC="pcf8563"
       [[ -c /dev/rtc0 ]] && return 0
       echo pcf8563 0x51 >/sys/class/i2c-adapter/i2c-1/new_device
@@ -125,7 +125,9 @@ start() {
   set | grep '^HM_' >/var/hm_mode
 
   if [[ -c /dev/rtc0 ]]; then
-    hwclock --hctosys --utc
+    if [[ "${HM_HOST}" != "oci" ]]; then
+      hwclock --hctosys --utc
+    fi
     echo "${HM_RTC}, OK"
   else
     echo "no hardware found"
@@ -135,8 +137,13 @@ start() {
 stop() {
   echo -n "Cleaning up RTC Clock: "
 
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
   if [[ -c /dev/rtc0 ]]; then
-    hwclock --systohc --utc
+    if [[ "${HM_HOST}" != "oci" ]]; then
+      hwclock --systohc --utc
+    fi
     echo "OK"
   else
     echo "no hardware found"

@@ -25971,10 +25971,9 @@ setPath = function (path) {
 logout = function() {
   regaMonitor.stop();
   InterfaceMonitor.stop();
-  // The second url-param has to be appended by a '?' instead of a '&'
-  //location.href = "/logout.htm?sid=" + SessionId+"?lang="+getLang();
   location.href = "/logout.htm?lang="+getLang();
   homematic('Session.logout', {});
+  homematic('system.saveObjectModel', {});
 };
 
 

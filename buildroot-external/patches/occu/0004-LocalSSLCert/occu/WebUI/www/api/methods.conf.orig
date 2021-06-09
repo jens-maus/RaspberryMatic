@@ -25,6 +25,13 @@ system.saveObjectModel {
   ARGUMENTS {}
 }
 
+system.getPositionData {
+  LEVEL USER
+  SCRIPT_FILE system/getpositiondata.tcl
+  INFO  {Gibt die gespreicherten Positionsdaten Longitude und Latitude zurück}
+  ARGUMENTS {_session_id_}
+}
+
 system.getEnergyPrice {
   LEVEL NONE
   SCRIPT_FILE system/getenergyprice.tcl
@@ -157,7 +164,7 @@ Interface.getParamsetDescription {
   SCRIPT_FILE interface/dispatch.tcl
   METHOD_FILE interface/getparamsetdescription.tcl
   INFO {Liefert die Beschreibung eines Parametersets}
-  ARGUMENTS {_session_id_ interface address paramsetType}
+  ARGUMENTS {_session_id_ interface address paramsetKey}
 }
 
 Interface.getParamsetId {
@@ -376,7 +383,7 @@ Interface.changeDevice {
 }
 
 Interface.listBidcosInterfaces {
-  LEVEL ADMIN
+  LEVEL USER
   SCRIPT_FILE interface/dispatch.tcl
   METHOD_FILE interface/listbidcosinterfaces.tcl
   INFO {Listet die verfügbaren BidCoS-RF Interfaces auf}
@@ -392,19 +399,40 @@ Interface.setBidcosInterface {
 }
 
 Interface.setMetadata {
-  LEVEL NONE
-  SCRIPT_FILE interface/dispatch.tcl
-  METHOD_FILE interface/setmetadata.tcl
+  LEVEL ADMIN
+  SCRIPT_FILE interface/setmetadata.tcl
   INFO {Setzt ein Metadatum zu einem Object}
-  ARGUMENTS {_session_id_ interface objectId dataId value}
+  ARGUMENTS {_session_id_ objectId dataId value}
 }
 
 Interface.getMetadata {
-  LEVEL NONE
-  SCRIPT_FILE interface/dispatch.tcl
-  METHOD_FILE interface/getmetadata.tcl
+  LEVEL GUEST
+  SCRIPT_FILE interface/getmetadata.tcl
   INFO {Gibt ein Metadatum zu einem Object zurück}
+  ARGUMENTS {_session_id_ objectId dataId}
+}
+
+Interface.setMetadata_crRFD {
+  LEVEL ADMIN
+  SCRIPT_FILE interface/dispatch.tcl
+  METHOD_FILE interface/setmetadata_crRFD.tcl
+  INFO {Setzt ein Metadatum zu einem Object, welches vom crRFD gespeichert wird}
   ARGUMENTS {_session_id_ interface objectId dataId value}
+}
+
+Interface.getMetadata_crRFD {
+  LEVEL GUEST
+  SCRIPT_FILE interface/dispatch.tcl
+  METHOD_FILE interface/getmetadata_crRFD.tcl
+  INFO { Liest Metadaten eines Datenobjects, welche vom crRFD gespeichert wurden}
+  ARGUMENTS {_session_id_ interface objectId dataId}
+}
+
+Interface.removeMetadata {
+  LEVEL ADMIN
+  SCRIPT_FILE interface/removemetadata.tcl
+  INFO {Entfernt ein Metadatum eines Objects}
+  ARGUMENTS {_session_id_ objectId dataId}
 }
 
 ReGa.isPresent {
@@ -419,6 +447,13 @@ ReGa.runScript {
   SCRIPT_FILE rega/runscript.tcl
   INFO {Führt ein HomeMatic Script aus}
   ARGUMENTS {_session_id_ script}
+}
+
+ReGa.getAllDatapoints {
+  LEVEL ADMIN
+  SCRIPT_FILE rega/getalldatapoints.tcl
+  INFO {Gibt eine List aller DPs inkl. Namen zurück.}
+  ARGUMENTS {}
 }
 
 Device.getNewDeviceCount {
@@ -460,6 +495,20 @@ Device.getReGaIDByAddress {
   SCRIPT_FILE device/getregaidbyaddress.tcl
   INFO {Ermittelt die ReGa-ID eines Gerätes aufgrund der Seriennummer}
   ARGUMENTS {_session_id_ address}
+}
+
+Device.getRFAddressByAddress {
+  LEVEL ADMIN
+  SCRIPT_FILE device/getrfaddressbyaddress.tcl
+  INFO {Ermittelt die Funk-Addresse eines Gerätes aufgrund der Seriennummer}
+  ARGUMENTS {_session_id_ address}
+}
+
+Device.getRFAddressOfAllDevices {
+  LEVEL ADMIN
+  SCRIPT_FILE device/getrfaddressofalldevices.tcl
+  INFO {Ermittelt die Funkaddresse aller Geräte}
+  ARGUMENTS {_session_id_}
 }
 
 Device.hasLinksOrPrograms {
@@ -624,6 +673,13 @@ Channel.listProgramIds {
   ARGUMENTS {_session_id_ id}
 }
 
+Channel.hasProgramIds {
+  LEVEL GUEST
+  SCRIPT_FILE channel/hasprogramids.tcl
+  INFO {Prüft, ob der Kanal in Programmen verwendet wird}
+  ARGUMENTS {_session_id_ id}
+}
+
 Channel.setName {
   LEVEL ADMIN
   SCRIPT_FILE channel/setname.tcl
@@ -643,6 +699,14 @@ Channel.getValue {
   INFO {Liefert den Wert des Kanals}
   ARGUMENTS {_session_id_ id}
 }
+
+Channel.getChannelType {
+  LEVEL ADMIN
+  SCRIPT_FILE channel/getchanneltype.tcl
+  INFO {Liefert den Kanaltyp }
+  ARGUMENTS {_session_id_ id}
+}
+
 Channel.setUsability {
   LEVEL ADMIN
   SCRIPT_FILE channel/setusability.tcl
@@ -858,7 +922,7 @@ Firewall.setConfiguration {
   LEVEL ADMIN
   SCRIPT_FILE firewall/setconfiguration.tcl
   INFO {Setzt die Konfiguration der Firewall}
-  ARGUMENTS {_session_id_ services ips}
+  ARGUMENTS {_session_id_ services ips userports mode}
 }
 
 WebUI.getColors {
@@ -875,12 +939,48 @@ SafeMode.enter {
   ARGUMENTS {_session_id_}
 }
 
+CCU.getSecurityLevel {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/getsecuritylevel.tcl
+  INFO {Liefert die gewählte Sicherheitsstufe}
+  ARGUMENTS {_session_id_}
+}
+
+CCU.setSecurityLevel {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/setsecuritylevel.tcl
+  INFO {Setzt die gewählte Sicherheitsstufe}
+  ARGUMENTS {_session_id_ level}
+}
+
 CCU.getSerial {
   LEVEL ADMIN
   SCRIPT_FILE ccu/getserial.tcl
   INFO {Liefert die Seriennummer der HomeMatic Zentrale}
   ARGUMENTS {_session_id_}
 }
+
+CCU.getListOfDraps {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/getlistofdraps.tcl
+  INFO {Liefert die angelernten DRAPs der HomeMatic Zentrale}
+  ARGUMENTS {_session_id_ pathOfFile}
+}
+
+CCU.getHeatingGroupList {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/getheatinggrouplist.tcl
+  INFO {Liefert die Liste der Heizungsgruppen}
+  ARGUMENTS {_session_id_}
+}
+
+CCU.getAddress {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/getaddress.tcl
+  INFO {Liefert die Adresse der HomeMatic Zentrale}
+  ARGUMENTS {_session_id_}
+}
+
 CCU.getVersion {
   LEVEL ADMIN
   SCRIPT_FILE ccu/getversion.tcl
@@ -909,7 +1009,21 @@ CCU.setSSHPassword {
 CCU.setSecurityHint {
   LEVEL USER
   SCRIPT_FILE ccu/setsecurityhint.tcl
-  INFO {Die Datei wird beim ersten Start der CCU2 angelegt, wenn der User bestätigt, dass er ihn gelesen hat.}
+  INFO {Legt die Datei /etc/config/userAckSecurityHint an}
+  ARGUMENTS {_session_id_}
+}
+
+CCU.setUserAckInstallWizard {
+  LEVEL GUEST
+  SCRIPT_FILE ccu/setuserackinstallwizard.tcl
+  INFO {Legt die Datei/etc/config/userprofiles/userAckInstallWizard_USERNAME an}
+  ARGUMENTS {_session_id_ userName}
+}
+
+CCU.setFirewallConfigured {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/setfirewallconfigured.tcl
+  INFO {Legt die Datei /etc/config/firewallConfigured an}
   ARGUMENTS {_session_id_}
 }
 
@@ -932,11 +1046,60 @@ CCU.getStickyUnreachState {
   ARGUMENTS {_session_id_}
 }
 
+CCU.createFile {
+  LEVEL GUEST
+  SCRIPT_FILE ccu/createfile.tcl
+  INFO {Legt eine Datei an, der Pfad muss mit angegeben werden}
+  ARGUMENTS {_session_id_ file}
+}
+
 CCU.existsFile {
-  LEVEL USER
+  LEVEL GUEST
   SCRIPT_FILE ccu/existsfile.tcl
   INFO {Prüft, ob eine Datei oder ein Verzeichniss vorhanden ist}
   ARGUMENTS {_session_id_ file}
+}
+
+CCU.getAuthEnabled {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/getauthenabled.tcl
+  INFO {Prüft, ob die Datei /etc/config/authEnabled vorhanden ist}
+  ARGUMENTS {_session_id_}
+}
+
+CCU.setAuthEnabled {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/setauthenabled.tcl
+  INFO {Aktiviert/deaktiviert Dienst Authentifizierung. Argument enabled darf 0 (deaktiviert) oder 1 (aktiviert) annehmen.}
+  ARGUMENTS {_session_id_ enabled}
+}
+
+CCU.getInfoLedConfig {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/getinfoledconfig.tcl
+  INFO {Gibt die Konfiguration der Info LED zurueck (Signalisierung von Service- und Alarm Nachrichten).}
+  ARGUMENTS {_session_id_}
+}
+
+CCU.setInfoLedConfig {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/setinfoledconfig.tcl
+  INFO {Setzt die Konfiguration der Info LED zurueck (Signalisierung von Service- und Alarm Nachrichten).}
+  ARGUMENTS {_session_id_ serviceLedOn alarmLedOn}
+}
+
+CCU.getSNMPEnabled {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/getsnmpenabled.tcl
+  INFO {Gibt zurück, ob SNMP konfiguriert/aktiviert wurde.}
+  ARGUMENTS {_session_id_}
+}
+
+CCU.setSNMPEnabled {
+  LEVEL ADMIN
+  SCRIPT_FILE ccu/setsnmpenabled.tcl
+  INFO {Konfiguriert/Aktivert oder Deaktiviert SNMP.}
+  ARGUMENTS {_session_id_ enabled usr pass}
 }
 
 BidCoS_Wired.getConfigurationWired {
@@ -958,36 +1121,44 @@ BidCoS.changeLanGatewayKey {
   INFO {Bereitet das Setzen eines LAN Gateway Schlüssels vor.}
   ARGUMENTS {_session_id_ lgwclass lgwserial lgwip newkey curkey}
 }
+User.getUserFirstName {
+        LEVEL USER
+        SCRIPT_FILE user/getuserfirstname.tcl
+        INFO {Gibt den Username zurück}
+        ARGUMENTS {_session_id_ userID}
+}
+
 User.getUserName {
-        LEVEL NONE
+        LEVEL USER
         SCRIPT_FILE user/getusername.tcl
         INFO {Gibt den Username zurück}
         ARGUMENTS {_session_id_ userID}
 }
-User.getUserPWD {
-        LEVEL NONE
-        SCRIPT_FILE user/getuserpwd.tcl
-        INFO {Gibt UserPWD zurück}
+
+User.hasUserPWD {
+        LEVEL USER
+        SCRIPT_FILE user/hasuserpwd.tcl
+        INFO {Gibt true zurueck, wenn fuer den Benutzer ein Passwort gesetzt ist, sonst false.}
         ARGUMENTS {_session_id_ userID}
 }
 
 User.isNoExpert {
-        LEVEL NONE
+        LEVEL USER
         SCRIPT_FILE user/isnoexpert.tcl
         INFO {Ermittelt, ob ein Benutzer Experte ist}
         ARGUMENTS {_session_id_ id}
 }
 User.getLanguage {
-        LEVEL NONE 
+        LEVEL USER
         SCRIPT_FILE user/getlanguage.tcl
         INFO {Ermittelt die gewählte Sprache des Benutzers}
-        ARGUMENTS {userName}
+        ARGUMENTS {_session_id_ userID}
 }
 User.setLanguage {
-        LEVEL NONE 
+        LEVEL USER 
         SCRIPT_FILE user/setlanguage.tcl
         INFO {Setzt die gewählte Sprache des Benutzers}
-        ARGUMENTS {userName userLang}
+        ARGUMENTS {_session_id_ userName userLang}
 }
 
 User.getReGaVersion {
@@ -998,10 +1169,10 @@ User.getReGaVersion {
 }
 
 User.setReGaVersion {
-        LEVEL NONE
+        LEVEL USER
         SCRIPT_FILE user/setregaversion.tcl
         INFO {Speichert die gewählte ReGaVersion}
-        ARGUMENTS {ReGaVersion}
+        ARGUMENTS {_session_id_ ReGaVersion}
 }
 
 User.existsCertificate {
@@ -1025,15 +1196,23 @@ User.restartLighttpd {
         ARGUMENTS {_session_id_}
 }
 
-Diagram.getDiagrams {
-        LEVEL NONE
-        SCRIPT_FILE diagram/getDiagrams.tcl
-        INFO {Ermittelt die zur Verfügung stehenden Messwert-Diagramme}
-        ARGUMENTS {}
+User.restartHmIPServer {
+        LEVEL ADMIN
+        SCRIPT_FILE user/restarthmipserver.tcl
+        INFO {Restartet den HmIPServer}
+        ARGUMENTS {_session_id_}
 }
-Diagram.getDataSourceGroups {
-        LEVEL NONE
-        SCRIPT_FILE diagram/getDataSourceGroups.tcl
-        INFO {Ermittelt alle bekannten Gruppen von Datenquellen}
-        ARGUMENTS {}
+
+User.stopHmIPServer {
+        LEVEL ADMIN
+        SCRIPT_FILE user/stophmipserver.tcl
+        INFO {Stoppt den HmIPServer}
+        ARGUMENTS {_session_id_}
+}
+
+User.startHmIPServer {
+        LEVEL ADMIN
+        SCRIPT_FILE user/starthmipserver.tcl
+        INFO {Startet den HmIPServer}
+        ARGUMENTS {_session_id_}
 }

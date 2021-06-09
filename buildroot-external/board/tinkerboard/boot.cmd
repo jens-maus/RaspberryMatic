@@ -9,7 +9,7 @@ setenv userfs 3
 setenv gpio_button "H23" # matches GPIO239
 setenv kernel_img "zImage"
 setenv recoveryfs_initrd "recoveryfs-initrd"
-setenv overlays "pivccu-tinkerboard rpi-rf-mod-tinker"
+setenv overlays ""
 setenv usbstoragequirks "0x2537:0x1066:u,0x2537:0x1068:u"
 
 echo "Boot script loaded from ${devtype} ${devnum}"
@@ -40,7 +40,13 @@ else
   setenv kernelfs ${rootfs}
 fi
 
-# load devicetree
+# Load device tree
+if test "${devnum}" = "0"; then
+  setenv fdtfile "rk3288-tinker-s.dtb"
+else
+  setenv fdtfile "rk3288-tinker.dtb"
+fi
+
 echo "Loading standard device tree ${fdtfile}"
 load ${devtype} ${devnum}:${bootfs} ${fdt_addr_r} ${fdtfile}
 fdt addr ${fdt_addr_r}
@@ -59,10 +65,13 @@ if test "${overlay_error}" = "true"; then
 fi
 
 # set bootargs
-setenv bootargs "console=${console} kgdboc=${console} scandelay=5 root=${rootfs_str} ro noswap rootfstype=ext4 elevator=deadline fsck.repair=yes lapic rootwait rootdelay=5 consoleblank=120 quiet loglevel=${loglevel} net.ifnames=0 usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
+setenv bootargs "console=${console} kgdboc=${console} scandelay=5 root=${rootfs_str} ro rootfstype=ext4 elevator=deadline fsck.repair=yes lapic rootwait rootdelay=5 consoleblank=120 quiet loglevel=${loglevel} slub_debug=P page_poison=1 slab_nomerge iomem=relaxed net.ifnames=0 usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
 
 # load kernel
 load ${devtype} ${devnum}:${kernelfs} ${kernel_addr_r} ${kernel_img}
 
 # boot kernel
 bootz ${kernel_addr_r} ${initrd_addr_r} ${fdt_addr_r}
+
+echo "Boot failed, resetting..."
+reset

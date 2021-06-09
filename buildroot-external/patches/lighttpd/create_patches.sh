@@ -6,14 +6,15 @@
 
 patchdirs=$(find . -maxdepth 1 -type d -regex "\\./[0-9][0-9][0-9][0-9]-.*" | sort)
 
-rm *.patch
+rm -f ./*.patch
 
 for dir in ${patchdirs}; do
-  cd ${dir}
-  origfiles=$(find lighttpd -name "*.orig" -type f -print | sort)
-  rm -f ../${dir}.patch
-  for file in ${origfiles}; do
-    diff -u --label=${file} --label=${file%.orig} ${file} ${file%.orig} >>../${dir}.patch
-  done
-  cd ..
+  (
+    cd "${dir}" || exit 1
+    origfiles=$(find lighttpd -name "*.orig" -type f -print | sort)
+    rm -f "../${dir}.patch"
+    for file in ${origfiles}; do
+      diff -u --label="${file}" --label="${file%.orig}" "${file}" "${file%.orig}" >>"../${dir}.patch"
+    done
+  )
 done

@@ -1,0 +1,50 @@
+#!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
+#
+# start script to setup the board leds correctly once the
+# system started booting
+#
+
+start() {
+  echo -n "Init onboard LEDs: "
+
+  # source all data from /var/hm_mode
+  [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  # to drive the LEDs of a RPI-RF-MOD on a GPIO as early as
+  # possible we check for a rx8130 and the set the LEDs
+  # accordingly.
+  if [[ "${HM_RTC}" == "rx8130" ]] &&
+     [[ -e /sys/class/leds/rpi_rf_mod:green/trigger ]]; then
+
+    # setup the LEDs to show a constant yellow light
+    echo default-on >/sys/class/leds/rpi_rf_mod:green/trigger
+    echo default-on >/sys/class/leds/rpi_rf_mod:red/trigger
+    echo none >/sys/class/leds/rpi_rf_mod:blue/trigger
+
+  fi
+
+  echo "init, OK"
+}
+
+restart() {
+  stop
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

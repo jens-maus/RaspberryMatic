@@ -1,0 +1,92 @@
+#!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
+#
+# Bluetooth subsystem starting and stopping
+#
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DESC=bluetooth
+
+DAEMON=/usr/libexec/bluetooth/bluetoothd
+HCIATTACH=/usr/bin/hciattach
+HCICONFIG=/usr/bin/hciconfig
+RFKILL=/usr/sbin/rfkill
+DEVICE=/dev/ttyS0
+
+SSD_OPTIONS="--oknodo --quiet --exec $DAEMON -- --compat"
+
+test -f $DAEMON || exit 0
+
+case $1 in
+  start)
+    echo -n "Starting bluetooth: "
+    if [[ -f /etc/config/enableBluetooth ]]; then
+      if [[ -c ${DEVICE} ]]; then
+
+        [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+        if [[ "${HM_HOST}" == "tinkerboard" ]]; then
+          HCIATTACH=/usr/bin/rtk_hciattach
+          HCIATTACH_OPT="-s 115200 ${DEVICE} rtk_h5 115200 flow"
+        else
+          HCIATTACH=/usr/bin/hciattach
+          HCIATTACH_OPT="${DEVICE} bcm43xx 460800 noflow -"
+        fi
+
+        # first call will flash the firmware
+        ${RFKILL} unblock bluetooth
+        # shellcheck disable=SC2086
+        ${HCIATTACH} ${HCIATTACH_OPT} 2>/dev/null >/dev/null
+        echo -n "."
+
+        # wait for hciattach
+        sleep 2
+
+        # bring hci0 up
+        if ${HCICONFIG} dev 2>/dev/null >/dev/null; then
+          ${HCICONFIG} hci0 up
+
+          # shellcheck disable=SC2086
+          start-stop-daemon --start --background ${SSD_OPTIONS}
+          echo "OK"
+
+          exit 0
+        fi
+
+        echo "WARNING: bluetooth setup failed"
+      else
+        echo "not required"
+      fi
+    else
+      echo "disabled"
+    fi
+
+    ${RFKILL} block bluetooth 2>/dev/null
+  ;;
+
+  stop)
+    echo -n "Stopping bluetooth: "
+    # shellcheck disable=SC2086
+    start-stop-daemon --stop ${SSD_OPTIONS}
+    pkill ".*hciattach"
+    ${RFKILL} block bluetooth 2>/dev/null
+    echo "OK"
+  ;;
+
+  restart|force-reload)
+    $0 stop
+    sleep 1
+    $0 start
+  ;;
+
+  status)
+    echo "$DAEMON" "$DESC" && exit 0 || exit $?
+  ;;
+
+  *)
+    echo "Usage: $0 {start|stop|restart|force-reload|status}" >&2
+    exit 1
+  ;;
+esac
+
+exit 0

@@ -1,4 +1,6 @@
 #!/bin/sh
+# shellcheck shell=dash source=/dev/null
+#
 # This script mounts USB mass storage devices when they are plugged in
 # and unmounts them when they are removed.
 # Copyright © 2004, 2005 Martin Dickopp
@@ -22,8 +24,8 @@ exec > /dev/null 2>&1
 # Log a string via the syslog facility.
 log()
 {
-    if [ $1 != debug ] || expr "$VERBOSE" : "[yY]" > /dev/null; then
-	logger -p user.$1 -t "usbmount[$$]" -- "$2"
+    if [ "$1" != "debug" ] || expr "$VERBOSE" : "[yY]" > /dev/null; then
+	logger -p "user.$1" -t "usbmount[$$]" -- "$2"
     fi
 }
 
@@ -78,19 +80,19 @@ if [ "$1" = add ]; then
     trap '( lockfile-remove /var/run/usbmount/.mount )' 0
     log debug "acquired lock /var/run/usbmount/.mount.lock"
 
-    if ! echo $ID_FS_USAGE | egrep -q "(filesystem|disklabel)"; then
+    if ! echo "$ID_FS_USAGE" | grep -E -q "(filesystem|disklabel)"; then
 	log info "$DEVNAME does not contain a filesystem or disklabel"
 	exit 1
     fi
 
     # Try to use specifications in /etc/fstab first.
-    if egrep -q "^[[:blank:]]*$DEVNAME" /etc/fstab; then
+    if grep -E -q "^[[:blank:]]*$DEVNAME" /etc/fstab; then
 	log info "executing command: mount $DEVNAME"
-	mount $DEVNAME || log err "mount by DEVNAME with $DEVNAME wasn't successful; return code $?"
+	mount "$DEVNAME" || log err "mount by DEVNAME with $DEVNAME wasn't successful; return code $?"
 
-    elif grep -q "^[[:blank:]]*UUID=$ID_FS_UUID" /etc/fstab; then
+    elif grep -E -q "^[[:blank:]]*UUID=$ID_FS_UUID" /etc/fstab; then
         log info "executing command: mount -U $ID_FS_UUID"
-	mount -U $ID_FS_UUID || log err "mount by UUID with $ID_FS_UUID wasn't successful; return code $?"
+	mount -U "$ID_FS_UUID" || log err "mount by UUID with $ID_FS_UUID wasn't successful; return code $?"
 
     else
 	log debug "$DEVNAME contains filesystem type $ID_FS_TYPE"
@@ -135,25 +137,25 @@ if [ "$1" = add ]; then
 		# Determine vendor and model.
 		vendor=
 		if [ -r "/sys$DEVPATH/device/vendor" ]; then
-		    vendor="`cat \"/sys$DEVPATH/device/vendor\"`"
+			vendor="$(cat "/sys$DEVPATH/device/vendor")"
 		elif [ -r "/sys$DEVPATH/../device/vendor" ]; then
-		    vendor="`cat \"/sys$DEVPATH/../device/vendor\"`"
+			vendor="$(cat "/sys$DEVPATH/../device/vendor")"
 		elif [ -r "/sys$DEVPATH/device/../manufacturer" ]; then
-		    vendor="`cat \"/sys$DEVPATH/device/../manufacturer\"`"
+			vendor="$(cat "/sys$DEVPATH/device/../manufacturer")"
 		elif [ -r "/sys$DEVPATH/../device/../manufacturer" ]; then
-		    vendor="`cat \"/sys$DEVPATH/../device/../manufacturer\"`"
+		vendor="$(cat "/sys$DEVPATH/../device/../manufacturer")"
 		fi
 		vendor="$(echo "$vendor" | sed 's/^[[:blank:]]\+//; s/[[:blank:]]\+$//')"
 
 		model=
 		if [ -r "/sys$DEVPATH/device/model" ]; then
-		    model="`cat \"/sys$DEVPATH/device/model\"`"
+			model="$(cat "/sys$DEVPATH/device/model")"
 		elif [ -r "/sys$DEVPATH/../device/model" ]; then
-		    model="`cat \"/sys$DEVPATH/../device/model\"`"
+			model="$(cat "/sys$DEVPATH/../device/model")"
 		elif [ -r "/sys$DEVPATH/device/../product" ]; then
-		    model="`cat \"/sys$DEVPATH/device/../product\"`"
+			model="$(cat "/sys$DEVPATH/device/../product")"
 		elif [ -r "/sys$DEVPATH/../device/../product" ]; then
-		    model="`cat \"/sys$DEVPATH/../device/../product\"`"
+			model="$(cat "/sys$DEVPATH/../device/../product")"
 		fi
 		model="$(echo "$model" | sed 's/^[[:blank:]]\+//; s/[[:blank:]]\+$//')"
 
@@ -179,7 +181,8 @@ elif [ "$1" = remove ]; then
 
     # A block or partition device has been removed.
     # Test if it is mounted.
-    while read device mountpoint fstype remainder; do
+    # shellcheck disable=SC2034
+    while read -r device mountpoint fstype remainder; do
 	if [ "$DEVNAME" = "$device" ]; then
 	    # If the mountpoint and filesystem type are maintained by
 	    # this script, unmount the filesystem.

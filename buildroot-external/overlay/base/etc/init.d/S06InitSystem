@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Startup script to ensure we have a valid filesystem
 #
@@ -7,43 +8,50 @@ init_system() {
 
   CFG_TEMPLATE_DIR=/etc/config_templates
 
+  # general umask so that we will have rwrw--
+  umask 0002
+
   # ensure some pathes are there and have
   # correct permissions
-  chmod 775 /var
   mkdir -p /var/log
-  chmod 775 /var/log
   mkdir -p /var/tmp
-  chmod 775 /var/tmp
   mkdir -p /var/rega
-  chmod 775 /var/rega
   mkdir -p /var/run
-  chmod 775 /var/run
   mkdir -p /var/spool
-  chmod 775 /var/spool
   mkdir -p /var/lock
-  chmod 775 /var/lock
   mkdir -p /var/cache
-  chmod 775 /var/cache
   mkdir -p /var/lib
-  chmod 775 /var/lib
   mkdir -p /var/lib/misc
-  chmod 775 /var/lib/misc
-  mkdir -p /var/lib/dbus
-  chmod 775 /var/lib/dbus
+  mkdir -p /var/lib/dbus 2>/dev/null
   mkdir -p /var/empty
-  chmod 600 /var/empty
   mkdir -p /var/etc
-  chmod 775 /var/etc
   mkdir -p /var/status
-  chmod 775 /var/status
+  mkdir -p /var/empty
+  chmod 0700 /var/empty
+
+  # setup /dev_host for OCI/Docker environments (excluding HA)
+  if [[ "${HM_HOST}" == "oci" ]] && [[ -z "${HM_RUNNING_IN_HA}" ]]; then
+    # To avoid sharing the whole host /dev with the container we
+    # mount devtmps in /dev_host and symlink the required devices
+    mount -o noatime -t devtmpfs devtmpfs /dev_host
+    if [[ -d "/dev_host" ]]; then
+      for device in raw-uart raw-uart1 eq3loop mmd_bidcos mmd_hmip usb; do
+        if [[ ! -e "/dev/${device}" ]]; then
+          ln -s "/dev_host/${device}" "/dev/${device}"
+        fi
+      done
+    fi
+  fi
 
   # create /media/usbX directories for automounting USB devices
   for i in $(seq 1 8); do
-    mkdir -p /media/usb${i}
+    mkdir -p "/media/usb${i}"
   done
 
-  # SSH dir setup (/root/.ssh is linked to /usr/local/etc/ssh)
-  mkdir -p /usr/local/etc/ssh
+  # /usr/local/etc setup
+  mkdir -p /usr/local/etc
+  chmod 0755 /usr/local/etc
+  chown root:root /usr/local/etc
 
   # create a /usr/local/tmp directory for creating things like backup files, etc.
   # (we need it on-disk or /tmp will be not enough in case of a filled up /usr/local)
@@ -54,10 +62,10 @@ init_system() {
   # remove everything but keep dotfiles (e.g. '.nobackup')
   rm -rf /usr/local/tmp/*
 
-  # make sure /usr/local/etc/config exists and has
-  # correct permissions
-  mkdir -p /usr/local/etc/config
-  chmod 775 /usr/local/etc/config
+  # make sure /usr/local/etc/config and
+  # /usr/local/etc/config/firmware exists
+  mkdir -p /usr/local/etc/config/firmware
+  chmod 0775 /usr/local/etc/config
 
   # make sure the timezone setup is fine
   if [[ ! -e /etc/config/TZ ]]; then
@@ -67,10 +75,12 @@ init_system() {
   # update /etc/config/localtime and /etc/config/timezone
   /bin/updateTZ.sh
 
-  # if /etc/config/timezone is set to Europe/Berlin we
-  # assume a german keyboard layout
-  if [[ $(cat /etc/config/timezone) == "Europe/Berlin" ]]; then
-    /sbin/loadkmap </etc/de.kmap
+  if [[ "${HM_HOST}" != "oci" ]]; then
+    # if /etc/config/timezone is set to Europe/Berlin we
+    # assume a german keyboard layout
+    if [[ $(cat /etc/config/timezone) == "Europe/Berlin" ]]; then
+      /sbin/loadkmap </etc/de.kmap
+    fi
   fi
 
   # if no network config is present we make sure to put a template file
@@ -91,18 +101,33 @@ init_system() {
     modprobe bcm2835_wdt nowayout=1 heartbeat=15
   fi
 
-  # load tunneling interface support
-  modprobe tun
+  # if the userfs is located on a non-mmc device (not on a SD card)
+  # we can safely use the old /usr/local/sdcard directory path as
+  # the general storagePath for diagrams and daily backups
+  storagePath=""
+  if grep " /usr/local " /proc/mounts | grep -qv "^/dev/mmc"; then
+    storagePath="/usr/local/sdcard"
+    mkdir -p ${storagePath}
+  fi
 
-  # on a virtual ova platform system we put diagrams on the
-  # same disk in the old /usr/local/sdcard directory path and
-  # don't force to use an external USB thumb drive.
-  if echo "${HM_HOST}" | grep -q ova-; then
-    if [[ ! -e /usr/local/sdcard/.nobackup ]]; then
-      mkdir -p /usr/local/sdcard
-      touch /usr/local/sdcard/.nobackup
+  # users can override the storagePath by specifying an own storage
+  # path in /etc/config/CustomStoragePath
+  if [[ -f /etc/config/CustomStoragePath ]]; then
+    storagePath=$(cat /etc/config/CustomStoragePath)
+  fi
+
+  # in case a storagePath is specified we make sure it is setup
+  # correct and in case it is empty or does not exist we skip this
+  # so that the WebUI will remind users to insert an USB drive for
+  # storing diagrams+backups
+  if [[ -n "${storagePath}" ]] && [[ -d "${storagePath}" ]]; then
+    if [[ ! -d "${storagePath}/measurement" ]]; then
+      mkdir -p "${storagePath}/measurement"
     fi
-    ln -sf /usr/local/sdcard /media/usb0
+    if [[ ! -e "${storagePath}/.nobackup" ]]; then
+      touch "${storagePath}/.nobackup"
+    fi
+    ln -sf "${storagePath}" /media/usb0
     touch /var/status/SDinitialised
     touch /var/status/hasSD
   fi

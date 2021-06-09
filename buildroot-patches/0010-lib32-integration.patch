@@ -1,0 +1,123 @@
+--- buildroot/Makefile.orig
++++ buildroot/Makefile
+@@ -778,10 +778,6 @@
+ 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
+ 	$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 -r $(STRIPCMD) $(STRIP_STRIP_DEBUG) 2>/dev/null || true
+ 
+-	test -f $(TARGET_DIR)/etc/ld.so.conf && \
+-		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
+-	test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
+-		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf.d directory"; exit 1; } || true
+ 	mkdir -p $(TARGET_DIR)/etc
+ 	( \
+ 		echo "NAME=Buildroot"; \
+--- buildroot/support/scripts/check-bin-arch.orig
++++ buildroot/support/scripts/check-bin-arch
+@@ -84,6 +84,22 @@
+ 		continue
+ 	fi
+ 
++  # Didn't find a straight match. See if we are on a 64-bit architecture
++  # and our binary is a 32-bit binary of the same architecture.
++  if [[ "${arch_name}" =~ 64$ ]]; then
++    if [[ ${arch_name} = "Advanced Micro Devices X86-64" ]]; then
++      arch32='Intel 80386'
++    fi
++    if [[ ${arch_name} = "AArch64" ]]; then
++      arch32='ARM'
++    fi
++
++    if [ "${arch}" = "${arch32}" ]; then
++      echo "Accepting ${arch32} binary on ${arch_name} ($f)"
++      continue
++    fi
++  fi
++
+ 	printf 'ERROR: architecture for "%s" is "%s", should be "%s"\n' \
+ 	       "${f}" "${arch}" "${arch_name}"
+ 
+--- buildroot/system/Config.in.orig
++++ buildroot/system/Config.in
+@@ -25,6 +25,40 @@
+ 
+ endchoice
+ 
++config BR2_ROOTFS_LIB_DIR
++	string "Name of system library directories (e.g. lib or lib64)"
++	default "lib64" if BR2_ARCH_IS_64
++	default "lib"
++	help
++	  The name of the directories where system libraries live. This will
++	  most often be "lib", "lib32" or "lib64". This name will be used in
++	  the root directory (e.g. /lib64) as well as the /usr directory (e.g.
++	  /usr/lib64).
++
++if BR2_ARCH_IS_64
++
++config BR2_ROOTFS_LIB32_DIR
++	string "Name of directory for 32-bit libraries (e.g. lib or lib32)"
++	default "lib"
++	help
++	  The name of the directories where 32-bit libraries live. This will
++	  most often be "lib" or "lib32". This name will be used in the root
++	  directory (e.g. /lib) as well as the /usr directory (e.g. /usr/lib).
++
++config BR2_ROOTFS_RUNTIME32
++	bool "Install 32-bit runtime on 64-bit system"
++	help
++	  Install 32-bit libraries and the 32-bit shared library loader on a
++	  64-bit system, so it is possible to execute 32-bit applications.
++
++config BR2_ROOTFS_RUNTIME32_PATH
++	string "Path to the 32-bit run-time"
++	help
++	  Specifies the path to the 32-bit run-time that should be copied into
++	  the root file system.
++
++endif
++
+ if BR2_ROOTFS_SKELETON_CUSTOM
+ 
+ config BR2_ROOTFS_SKELETON_CUSTOM_PATH
+--- buildroot/system/system.mk.orig
++++ buildroot/system/system.mk
+@@ -55,6 +55,14 @@
+ 		$(1)/ $(2)/
+ endef
+ 
++ifeq ($(BR2_ROOTFS_RUNTIME32),y)
++
++define SYSTEM_LIB_SYMLINK
++	@echo "SYSTEM_LIB_SYMLINK: nothing to do"
++endef
++
++else
++
+ # Make a symlink lib32->lib or lib64->lib as appropriate.
+ # MIPS64/n32 requires lib32 even though it's a 64-bit arch. However, since gcc
+ # 5.1.0 internal compiler paths in sysroot are relative to lib64, so we must
+@@ -77,7 +85,8 @@
+ 	ln -snf lib $(1)/lib32
+ 	ln -snf lib $(1)/usr/lib32
+ endef
+-endif
++endif # BR2_ARCH_IS_64
++endif # BR2_ROOTFS_RUNTIME32
+ 
+ SYSTEM_GETTY_PORT = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT))
+ SYSTEM_GETTY_BAUDRATE = $(call qstrip,$(BR2_TARGET_GENERIC_GETTY_BAUDRATE))
+--- buildroot/toolchain/toolchain-external/pkg-toolchain-external.mk.orig
++++ buildroot/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -504,6 +504,12 @@
+ 		$(INSTALL) -D $(STAGING_DIR)/usr/bin/ldd $(TARGET_DIR)/usr/bin/ldd ; \
+ 		$(SED) 's:.*/bin/bash:#!/bin/sh:' $(TARGET_DIR)/usr/bin/ldd ; \
+ 	fi
++	$(Q)if test -f $(STAGING_DIR)/sbin/ldconfig ; then \
++		$(INSTALL) -D $(STAGING_DIR)/sbin/ldconfig $(TARGET_DIR)/sbin/ldconfig ; \
++	fi
++	$(Q)if test -f $(STAGING_DIR)/usr/bin/getconf ; then \
++		$(INSTALL) -D $(STAGING_DIR)/usr/bin/getconf $(TARGET_DIR)/usr/bin/getconf ; \
++	fi
+ endef
+ 
+ ################################################################################

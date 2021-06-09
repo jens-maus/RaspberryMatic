@@ -1,0 +1,9 @@
+config BR2_PACKAGE_DETECT_RADIO_MODULE
+  bool "detect_radio_module"
+  help
+    Adds support for detect_radio_module tool to detect all
+    relevant parameters of a HM-MOD-RPI-PCB, RPI-RF-MOD and
+    HMIP-RFUSB rf module from eQ3.
+
+    Alexander Reinert <alex@areinert.de>
+    https://github.com/alexreinert/piVCCU/tree/master/detect_radio_module

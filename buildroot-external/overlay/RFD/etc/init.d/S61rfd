@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # Starts rfd.
 #
@@ -34,10 +35,9 @@ init() {
     # make sure [Interface 0] is uncommented
     sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
 
-    # patch some settings to match what this hardware expects.
-    sed -i 's|^ComPortFile = /dev/.*$|ComPortFile = /dev/mmd_bidcos|' /etc/config/rfd.conf
-    sed -i 's|^#*AccessFile = /dev/.*$|AccessFile = /dev/null|' /etc/config/rfd.conf
-    sed -i 's|^#*ResetFile = /dev/.*$|ResetFile = /dev/null|' /etc/config/rfd.conf
+    sed -i 's|^ComPortFile =.*$|ComPortFile = /dev/mmd_bidcos|' /etc/config/rfd.conf
+    sed -i 's|^#*AccessFile =.*$|AccessFile = /dev/null|' /etc/config/rfd.conf
+    sed -i 's|^#*ResetFile =.*$|ResetFile = /dev/null|' /etc/config/rfd.conf
     if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
       sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
     fi
@@ -48,13 +48,15 @@ init() {
 
   if [[ "${HM_HMRF_DEV}" == "HM-CFG-USB-2" ]]; then
     if ! grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
-      inum=$(grep "^\[Interface .*\]" /etc/config/rfd.conf | wc -l)
-      echo >>/etc/config/rfd.conf
-      echo "[Interface ${inum+1}]" >>/etc/config/rfd.conf
-      echo "Type = USB Interface" >>/etc/config/rfd.conf
-      echo "Name = HM-CFG-USB" >>/etc/config/rfd.conf
-      echo "Serial Number = ${HM_HMRF_SERIAL}" >>/etc/config/rfd.conf
-      echo "Encryption Key =" >>/etc/config/rfd.conf
+      inum=$(grep -c "^\[Interface .*\]" /etc/config/rfd.conf)
+      {
+        echo ""
+        echo "[Interface ${inum+1}]"
+        echo "Type = USB Interface"
+        echo "Name = HM-CFG-USB"
+        echo "Serial Number = ${HM_HMRF_SERIAL}"
+        echo "Encryption Key ="
+      } >>/etc/config/rfd.conf
     fi
   elif grep -q "^Name.*HM-CFG-USB" /etc/config/rfd.conf; then
     # otherwise disable the whole [Interface x] part
@@ -73,8 +75,8 @@ waitStartupComplete() {
   for i in $(seq 1 ${STEPS}); do
     sleep 2
     echo -n "."
-    RFDSTATUSPID=`cat /var/status/rfd.status 2>&1`
-    RFDPID=`pidof rfd`
+    RFDSTATUSPID=$(cat /var/status/rfd.status 2>&1)
+    RFDPID=$(pidof rfd)
     if [[ "${RFDSTATUSPID}" == "${RFDPID}" ]]; then
       echo "OK"
       break
@@ -94,7 +96,7 @@ start() {
 
     # adjust the oom score (which is inherited by start-stop-daemon)
     # to ensure that others are killed first in case of low memory situations
-    echo -900 >/proc/$$/oom_score_adj
+    echo -900 >/proc/$$/oom_score_adj 2>/dev/null
 
     start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec /bin/rfd -- -f /var/etc/rfd.conf -l ${LOGLEVEL_RFD}
     waitStartupComplete

@@ -1,31 +1,23 @@
 #############################################################
 #
-# Generic RAW UART kernel module
+# Generic raw uart kernel module for low-latency uart
+# communication with a RPI-RF-MOD/HM-MOD-RPI-PCB
 #
-# Alexander Reinert <alex@areinert.de>
+# Copyright (c) 2021 Alexander Reinert
 # https://github.com/alexreinert/piVCCU/tree/master/kernel
+#
+# Uses parts of bcm2835_raw_uart.c
+# Copyright (c) 2015 eQ-3 Entwicklung GmbH
+# https://github.com/eq-3/occu/tree/master/KernelDrivers
+# https://github.com/jens-maus/RaspberryMatic/tree/master/buildroot-external/package/bcm2835_raw_uart
 #
 #############################################################
 
-GENERIC_RAW_UART_VERSION = adf04fe7caef013b6c4d1f908e1fb19ff23ffbb8
+GENERIC_RAW_UART_VERSION = dab76ddd1d568cc4925dc778e43d70fccffdc0e8
 GENERIC_RAW_UART_SITE = $(call github,alexreinert,piVCCU,$(GENERIC_RAW_UART_VERSION))
-GENERIC_RAW_UART_LICENSE = GPL
-GENERIC_RAW_UART_DEPENDENCIES = host-dtc
+GENERIC_RAW_UART_LICENSE = GPL2
 #GENERIC_RAW_UART_LICENSE_FILES = LICENSE
 GENERIC_RAW_UART_MODULE_SUBDIRS = kernel
-GENERIC_RAW_UART_INSTALL_IMAGES = YES
-
-define GENERIC_RAW_UART_BUILD_CMDS
-  for dts in $(@D)/dts/*.dts; do \
-    $(HOST_DIR)/bin/dtc -@ -I dts -O dtb -W no-unit_address_vs_reg -o $${dts%.dts}.dtbo $${dts}; \
-  done
-endef
-
-define GENERIC_RAW_UART_INSTALL_IMAGES_CMDS
-  for dtbo in $(@D)/dts/*.dtbo; do \
-    $(INSTALL) -D -m 0644 $${dtbo} $(BINARIES_DIR)/; \
-  done
-endef
 
 $(eval $(kernel-module))
 $(eval $(generic-package))

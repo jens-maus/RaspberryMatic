@@ -1,4 +1,6 @@
 #!/bin/sh
+# shellcheck shell=dash
+
 export NODE_PATH=/usr/lib/node_modules
 ADDONDIR=/usr/local/addons/mediola
 ADDONNAME=neo_server
@@ -10,17 +12,17 @@ PIDFILE=/var/run/neo_server.pid
 
 
 log() {
-  local now=$(date) 
-  echo "[$now] $CONFIGDIR/rc.d/97NeoServer $@"
-  echo "[$now] $CONFIGDIR/rc.d/97NeoServer $@" >> /var/log/neo_server_boot.log 
+  now=$(date)
+  echo "[$now] $CONFIGDIR/rc.d/97NeoServer $*"
+  echo "[$now] $CONFIGDIR/rc.d/97NeoServer $*" >> /var/log/neo_server_boot.log
 }
 
-if [ "$(cat /usr/local/crontabs/root | grep $ADDONDIR/bin/watchdog)" == "" ] ;then
+if ! grep -q "${ADDONDIR}/bin/watchdog" /usr/local/crontabs/root; then
   echo "*/5 * * * * $ADDONDIR/bin/watchdog" >> /usr/local/crontabs/root
 fi
   
 # change to addon directory
-cd ${HOMEPATH}
+cd ${HOMEPATH} || exit 1
 
 do_start()
 {
@@ -49,16 +51,16 @@ check_status()
 {
   if [ ! -f "$PIDFILE" ]; then
     log "no pid file $PIDFILE"
-    return -1
+    return 1
   fi
-  local ps=$(cat $PIDFILE)
+  ps=$(cat $PIDFILE)
   if [ -z "$ps" ]; then
     log "pid file $PIDFILE empty"
-    return -2
+    return 2
   fi
   if [ ! -d "/proc/$ps" ]; then
     log "no running process with pid $ps"
-    return -3
+    return 3
   fi
   log "neo_server is running (pid=$ps)"
   return 0
@@ -100,6 +102,9 @@ case "$1" in
     rm -rf $CONFIGDIR/addons/mediola
     rm -rf $CONFIGDIR/addons/www/mediola
     rm -f $CONFIGDIR/rc.d/97NeoServer
+    /bin/updateAddonConfig.tcl -d mediola
+    # do not install the neo server after user uninstall
+    touch /etc/config/neoDisabled
     ;;
   status)
     check_status

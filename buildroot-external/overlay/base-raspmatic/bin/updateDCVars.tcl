@@ -1,7 +1,7 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.5
-# Copyright (c) 2018-2020 Andreas Buenting, Jens Maus
+# DutyCycle Script v3.15
+# Copyright (c) 2018-2021 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -218,6 +218,75 @@ if {$portFound == 0} {
   set gwFound [catch {set gateways [xmlrpc http://127.0.0.1:$port/ listBidcosInterfaces]}]
   if {$gwFound == 0} {
 
+    set ccuCarrierSense -1
+
+    # check for any HmIP-HAP LAN gateway first so that
+    # we can add them to the gateway list as well
+    # (currently this can only be done via rega scripting)
+    set script "
+      integer ccuCarrierSense = -1;
+      string dev;
+      foreach(dev, devices.Get().EnumUsedIDs()) {
+        object oDev = dom.GetObject(dev);
+        if(oDev.Label() == 'HmIP-HAP') {
+          string name = oDev.Name();
+          string chn;
+          foreach(chn, oDev.Channels()) {
+            object oChn = dom.GetObject(chn);
+            if(oChn.Address().Contains(':0')) {
+              integer dcValue = -1;
+              integer csValue = -1;
+              integer connected = 0;
+              object dp = oChn.DPByControl('MAINTENANCE.UNREACH');
+              if(dp) {
+                if(dp.Value() == false) {
+                  connected = 1;
+                  object dp = oChn.DPByControl('MAINTENANCE.DUTY_CYCLE_LEVEL');
+                  if(dp) {
+                    dcValue = dp.Value().ToInteger();
+                  }
+                  object dp = oChn.DPByControl('MAINTENANCE.CARRIER_SENSE_LEVEL');
+                  if(dp) {
+                    csValue = dp.Value().ToInteger();
+                  }
+                }
+              }
+              Write('{ADDRESS '#oDev.Address());
+              Write(' NAME {'#oDev.Name()#'}');
+              Write(' IP {'#oChn.DPByControl(\"MAINTENANCE.IP_ADDRESS\").Value()#'}');
+              Write(' CONNECTED '#connected);
+              Write(' DEFAULT 1');
+              Write(' DESCRIPTION {}');
+              Write(' CARRIER_SENSE '#csValue);
+              Write(' DUTY_CYCLE '#dcValue);
+              Write(' TYPE HMIP-HAP} ');
+              break;
+            }
+          }
+        } elseif((oDev.Label() == 'RPI-RF-MOD') || (oDev.Label() == 'HmIP-CCU3')) {
+          string chn;
+          foreach(chn, oDev.Channels()) {
+            object oChn = dom.GetObject(chn);
+            if(oChn.Address().Contains(':0')) {
+              object dp = oChn.DPByControl('MAINTENANCE.CARRIER_SENSE_LEVEL');
+              if(dp) {
+                ccuCarrierSense = dp.Value().ToInteger();
+              }
+              break;
+            }
+          }
+        }
+      }
+    "
+    catch {
+      array set response [rega_script $script]
+      if {[string trim $response(STDOUT)] != ""} {
+        set gateways [concat $gateways $response(STDOUT)]
+      }
+      set ccuCarrierSense $response(ccuCarrierSense)
+      unset response
+    }
+
     # catch all dutyCycle values in an additional JSON array
     set jsonResult "\["
     set first 1
@@ -238,6 +307,19 @@ if {$portFound == 0} {
         if {$gateway(TYPE) == "CCU2" || $gateway(TYPE) == "HMIP_CCU2"} {
           set sysVarName [setDutyCycleSV "" "DutyCycle CCU" $dutycycle ""]
           set gateway(TYPE) "CCU2"
+          set gateway(CARRIER_SENSE) $ccuCarrierSense
+
+          # overwrite the address with board_serial to match
+          # serial number expectations in DC/CS alarms.
+          set fp [open "/var/board_serial" r]
+          set fileData [read $fp]
+          close $fp
+          if {$fileData != "" } {
+            set gateway(ADDRESS) $fileData
+          }
+        } elseif {$gateway(TYPE) == "HMIP-HAP"} {
+          set name $gateway(NAME)
+          set sysVarName [setDutyCycleSV $name "DutyCycle HAP ($gateway(ADDRESS))" $dutycycle $gateway(ADDRESS)]
         } else {
           # get the cleartext name a user assigned for that gateway
           # we try to find it based on the defined serial number
@@ -252,6 +334,13 @@ if {$portFound == 0} {
           set sysVarName [setDutyCycleSV $name "DutyCycle LGW ($gateway(ADDRESS))" $dutycycle $gateway(ADDRESS)]
         }
 
+        # set carrier sense
+        if {[info exists gateway(CARRIER_SENSE)]} {
+          set carriersense $gateway(CARRIER_SENSE)
+        } else {
+          set carriersense -1
+        }
+
         # add the dutyCycle to our jsonResult array
         if { 1 != $first } then { append jsonResult "," } else { set first 0 }
         append jsonResult "\{"
@@ -259,18 +348,32 @@ if {$portFound == 0} {
         append jsonResult ",\"name\":[json_toString $name]"
         append jsonResult ",\"sysVar\":[json_toString $sysVarName]"
         append jsonResult ",\"dutyCycle\":[json_toString $gateway(DUTY_CYCLE)]"
+        append jsonResult ",\"carrierSense\":[json_toString $carriersense]"
         append jsonResult ",\"type\":[json_toString $gateway(TYPE)]"
         append jsonResult "\}"
 
-        set infoTxt "DutyCycle-$gateway(ADDRESS) / $gateway(TYPE) / FW: $gateway(FIRMWARE_VERSION) / DC: $dutycycle%"
-        if {$dutycycle >= 98} {
+        set infoTxt "DutyCycle-$gateway(ADDRESS), NAME: '$name', TYPE: $gateway(TYPE), CONNECTED: $gateway(CONNECTED), DC: $dutycycle %, CS: $carriersense %"
+        if {$gateway(CONNECTED) == 0} {
+          exec /bin/triggerAlarm.tcl "RF-Gateway $name ($gateway(ADDRESS)) not connected" "RF-Gateway-Alarm"
+          exec logger -t dutycycle -p error "$infoTxt"
+        } elseif {$dutycycle >= 98} {
           exec /bin/triggerAlarm.tcl "DutyCycle $dutycycle% ($gateway(ADDRESS))" "DutyCycle-Alarm"
           exec logger -t dutycycle -p error "$infoTxt"
         } elseif {$dutycycle >= 80} {
-          exec logger -t dutycycle -p info "$infoTxt"
+          exec logger -t dutycycle -p warn "$infoTxt"
         }
+
+        # check carrier sense level
+        if {$carriersense >= 98} {
+          exec /bin/triggerAlarm.tcl "CarrierSense $carriersense% ($gateway(ADDRESS))" "CarrierSense-Alarm"
+          exec logger -t carriersense -p error "$infoTxt"
+        } elseif {$carriersense >= 80} {
+          exec logger -t carriersense -p warn "$infoTxt"
+        }
+
         puts "$infoTxt"
       }
+      unset gateway
     }
 
     # finish jsonResult array
@@ -283,6 +386,72 @@ if {$portFound == 0} {
   }
 } else {
   setDutyCycleSV "" "DutyCycle CCU" -1 ""
+}
+
+###################################################################
+# HmIP-WIRED
+#
+
+# check for any HmIP-DRAP LAN gateway so that we can check for
+# certain error conditions
+# (currently this can only be done via rega scripting)
+set script "
+ string dev;
+  foreach(dev, devices.Get().EnumUsedIDs()) {
+    object oDev = dom.GetObject(dev);
+    if(oDev.Label() == 'HmIPW-DRAP') {
+      string name = oDev.Name();
+      string chn;
+      foreach(chn, oDev.Channels()) {
+        object oChn = dom.GetObject(chn);
+        if(oChn.Address().Contains(':0')) {
+          integer connected = 0;
+          integer overheat = 0;
+          integer undervoltage = 0;
+          if(oChn.DPByControl('MAINTENANCE.UNREACH').Value() == false) {
+            connected = 1;
+            temp = oChn.DPByControl('MAINTENANCE.ERROR_OVERHEAT').Value().ToInteger();
+            undervoltage = oChn.DPByControl('MAINTENANCE.ERROR_UNDERVOLTAGE').Value().ToInteger();
+          }
+          Write('{ADDRESS '#oDev.Address());
+          Write(' NAME {'#oDev.Name()#'}');
+          Write(' IP {'#oChn.DPByControl('MAINTENANCE.IP_ADDRESS').Value()#'}');
+          Write(' CONNECTED '#connected);
+          Write(' OVERHEAT '#overheat);
+          Write(' UNDERVOLTAGE '#undervoltage);
+          Write(' TYPE HMIPW-DRAP} ');
+        }
+      }
+    }
+  }
+"
+set gateways {}
+
+catch {
+  array set response [rega_script $script]
+  if {[string trim $response(STDOUT)] != ""} {
+    set gateways [concat $gateways $response(STDOUT)]
+  }
+  unset response
+}
+if { [llength $gateways] > 0 } {
+  foreach _gateway $gateways {
+    array set gateway $_gateway
+    set infoTxt "HmIPW-DRAP-Status: $gateway(CONNECTED) ($gateway(ADDRESS), IP: $gateway(IP))"
+    if {$gateway(CONNECTED) == 0} {
+      exec /bin/triggerAlarm.tcl "HmIPW-DRAP ($gateway(ADDRESS), IP: $gateway(IP)) not connected" "HmIP-DRAP-Alarm"
+      exec logger -t dutycycle -p error "$infoTxt"
+    } elseif {$gateway(OVERHEAT) == 1} {
+      exec /bin/triggerAlarm.tcl "HmIPW-DRAP ($gateway(ADDRESS), IP: $gateway(IP)) overheated" "HmIP-DRAP-Alarm"
+      exec logger -t dutycycle -p error "$infoTxt"
+    } elseif {$gateway(UNDERVOLTAGE) == 1} {
+      exec /bin/triggerAlarm.tcl "HmIPW-DRAP ($gateway(ADDRESS), IP: $gateway(IP)) undervoltaged" "HmIP-DRAP-Alarm"
+      exec logger -t dutycycle -p error "$infoTxt"
+    }
+
+    puts $infoTxt
+    unset gateway
+  }
 }
 
 ###################################################################
@@ -307,6 +476,7 @@ if {[llength [cfg::sections]] > 1} {
 
         break
       }
+      unset gateway
     }
   }
 
@@ -337,7 +507,8 @@ if {[llength [cfg::sections]] > 1} {
 
   set infoTxt "Wired-LGW-Status: $connected"
   if {$connected == "false"} {
-    exec logger -t dutycycle -p info "$infoTxt"
+    exec /bin/triggerAlarm.tcl "Wired-Gateway ($gateway(ADDRESS)) not connected" "Wired-Gateway-Alarm"
+    exec logger -t dutycycle -p error "$infoTxt"
   }
   puts $infoTxt
 }

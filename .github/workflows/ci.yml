@@ -1,104 +1,333 @@
-name: CI
+# RaspberryMatic Continious Integration Check Workflow
+name: CI Build
+
 on:
   push:
+    branches-ignore:
+      - 'gh-pages'
+    tags-ignore:
+      - '3.*'
+    paths-ignore:
+      - '**.md'
+      - 'helm/**'
+      - 'release/LATEST-VERSION.js'
   pull_request:
-  schedule:
-    - cron: '0 2 * * *' # run at 2 AM UTC
+    branches-ignore:
+      - 'gh-pages'
+    tags-ignore:
+      - '3.*'
+    paths-ignore:
+      - '**.md'
+      - 'helm/**'
+      - 'release/LATEST-VERSION.js'
+  workflow_dispatch:
+    inputs:
+      skip_build:
+        description: 'Skip build (for testing workflow)?'
+        required: true
+        default: "false"
+
+env:
+  # NOTE: secrets cannot be access directly in conditions
+  # https://github.com/actions/runner/issues/520
+  SECRETS_ARE_AVAILABLE: ${{ secrets.CR_PAT != '' }}
 
 jobs:
-  build:
+  linter:
+    name: Linter Checks
+    runs-on: ubuntu-20.04
 
-    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2.3.4
+
+    - name: Check Dockerfile
+      uses: brpaz/hadolint-action@v1.5.0
+      with:
+        dockerfile: ./buildroot-external/board/oci/Dockerfile
+
+    - name: Check shell scripts
+      uses: ludeeus/action-shellcheck@1.1.0
+      with:
+        ignore: buildroot-external/package/neoserver/pkg/mediola/neo_server buildroot-patches/0010-lib32-integration/buildroot/support/scripts
+      env:
+        SHELLCHECK_OPTS: -e SC3010 -e SC3014 -e SC3057 -e SC3036 -e SC3028 -e SC3020
+
+    - name: Check Home Assistant Add-on Lint
+      uses: frenck/action-addon-linter@main
+      with:
+        path: "./home-assistant-addon"
+
+  build:
+    name: CI build [${{ matrix.platform }}]
+    if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.user.login == 'jens-maus') && github.actor != 'dependabot[bot]' && github.repository == 'jens-maus/RaspberryMatic' }}
+    needs: linter
+    runs-on: self-hosted
+    timeout-minutes: 480
+    outputs:
+      build_datetime: ${{ steps.env.outputs.build_datetime }}
+      build_version: ${{ steps.env.outputs.build_version }}
 
     strategy:
       fail-fast: false
       matrix:
-        platform: [rpi0, rpi3, rpi4, tinkerboard, intelnuc, ova]
+        platform: [rpi0, rpi2, rpi3, rpi4, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, oci_amd64, oci_arm64, oci_arm]
     
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout Code
+      uses: actions/checkout@v2.3.4
 
-    - name: rename worker directory
-      working-directory: ../
+    - name: Install Dependencies
       run: |
-        mv RaspberryMatic b
-        ln -s b RaspberryMatic
+        apt update
+        apt install -y --no-install-recommends wget bc cpio rsync zip python
+        if ! getent group | grep -q ^builder:; then groupadd -g 48 builder; fi
+        if ! getent passwd | grep -q ^builder:; then useradd -m -u 1003 -g 48 -G sudo builder;fi
+        if ! grep -q ^builder; then echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers; fi
+        chown -R builder .
 
-    - name: setup env
+    - name: Setup Environment
+      id: env
       run: |
-        echo ::set-env name=DATE::$(date +%Y%m%d)
-        echo ::set-env name=OCCU_VERSION::$(grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
-        echo ::set-env name=VERSION::$(grep "OCCU_VERSION =" buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)
-        echo ::set-env name=GITHUB_SHA7::$(echo ${GITHUB_SHA::7})
+        echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
+        echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
+        echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
+        echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
+        echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
+        echo "::set-output name=build_version::$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)"
 
-    - name: free disk space
+    - name: Switch to experimental EULA files
       run: |
-        sudo swapoff -a
-        sudo rm -f /swapfile
-        sudo apt clean
-        docker rmi $(docker image ls -aq)
-        df -h
-
-    - name: cleanup old action artifacts
-      run: .github/workflows/purge_artifacts.sh ${{ secrets.REPO_ACCESS_TOKEN }}
-
-    - name: switch to experimental EULA files
-      run: |
-        mv -f release/updatepkg/raspmatic_rpi3/EULA.de_nightly release/updatepkg/raspmatic_rpi3/EULA.de
-        mv -f release/updatepkg/raspmatic_rpi3/EULA.en_nightly release/updatepkg/raspmatic_rpi3/EULA.en
+        mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de
+        mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en
 
     #- name: remote debug tmate session
     #  uses: mxschmitt/action-tmate@v1
     #  if: matrix.platform == 'ova'
 
-    - name: build raspmatic_${{ matrix.platform }}
+    # major build step
+    - name: Build
+      timeout-minutes: 480
       run: |
-        sudo mkdir -p /mnt/download
-        sudo chown runner /mnt/download
-        make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download raspmatic_${{ matrix.platform }}-release
+        CPU_QUOTA=$(cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us)
+        JLEVEL=0
+        if [[ "${CPU_QUOTA}" != "-1" ]]; then
+          CPU_PERIOD=$(cat /sys/fs/cgroup/cpu/cpu.cfs_period_us)
+          JLEVEL=$((CPU_QUOTA / CPU_PERIOD + 1))
+        fi
+        sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${JLEVEL} raspmatic_${{ matrix.platform }}-release
+
+    # cleanup
+    - name: Cleanup
+      run: |
+        rm -f release/*.img*
         make distclean
-      #run: |
-      #  echo "TEST" >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img
-      #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.img.sha256
-      #  (cd release; zip RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.*)
-      #  sha256sum release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip >release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-      #  ls -la release/
 
-    - name: upload nightly build archive
-      if: github.event_name == 'schedule'
-      uses: WebFreak001/deploy-nightly@v1.0.3
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+    #########################
+    # upload build artifacts
+    - name: Upload build artifact [rpi*, tinkerboard, intelnuc, ova]
+      if: |
+        !startsWith(matrix.platform, 'oci_')
+      uses: actions/upload-artifact@v2
       with:
-        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
-        release_id: 22744592
-        asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip
-        asset_content_type: application/zip
-        max_releases: 1
+        path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip*
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.zip
+      continue-on-error: true
 
-    - name: upload nightly build checksum
-      if: github.event_name == 'schedule'
-      uses: WebFreak001/deploy-nightly@v1.0.3
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+    - name: Upload build artifact [ccu3]
+      if: |
+        matrix.platform == 'rpi3'
+      uses: actions/upload-artifact@v2
       with:
-        upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
-        release_id: 22744592
-        asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
-        asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.zip.sha256
-        asset_content_type: text/plain
-        max_releases: 1
+        path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz*
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-ccu3.tgz
+      continue-on-error: true
 
-    - name: prepare artifact upload
+    - name: Upload build artifact [ova]
+      if: |
+        matrix.platform == 'ova'
+      uses: actions/upload-artifact@v2
+      with:
+        path: release/RaspberryMatic-${{ env.VERSION }}.ova*
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}.ova
+      continue-on-error: true
+
+    - name: Upload build artifact [oci]
+      if: |
+        startsWith(matrix.platform, 'oci_')
+      uses: actions/upload-artifact@v2
+      with:
+        path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz*
+        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
+      continue-on-error: true
+
+  ##########################################
+  # OCI/Docker build and registry push step
+  oci-multiarch-build-push:
+    name: OCI/Docker Build+Push
+    runs-on: ubuntu-20.04
+    needs: build
+
+    steps:
+    - uses: actions/checkout@v2.3.4
+
+    - name: Setup Environment
       run: |
-        mkdir -p /tmp/upload-${{ matrix.platform }}
-        unzip -d /tmp/upload-${{ matrix.platform }} release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
-      continue-on-error: true
+        echo "BUILD_DATETIME=${{ needs.build.outputs.build_datetime }}" >> $GITHUB_ENV
+        echo "BUILD_VERSION=${{ needs.build.outputs.build_version }}" >> $GITHUB_ENV
+        echo "GIT_REF=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)" >> $GITHUB_ENV
+        echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
+        echo "CCU_OCI_REPO=ghcr.io/${{ github.repository_owner }}/raspberrymatic" >> $GITHUB_ENV
+        echo "CCU_OCI_TAG=${{ needs.build.outputs.build_version }}-$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
 
-    - name: upload build as artifact
-      uses: actions/upload-artifact@v1
+    # download OCI platform artifacts
+    - name: Download oci_amd64 artifact
+      uses: actions/download-artifact@v2
       with:
-        path: /tmp/upload-${{ matrix.platform }}
-        name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}
-      continue-on-error: true
+        name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_amd64.tgz
+    - name: Download oci_arm64 artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm64.tgz
+    - name: Download oci_arm artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-oci_arm.tgz
+    
+    - name: Extract OCI artifacts
+      run: |
+        mkdir -p oci_build
+        cd oci_build
+        for f in ../*-oci_*.tgz; do
+          tar --wildcards --strip-components 1 -xf $f "*/layer.tar"
+          mv -f layer.tar $(basename $f .tgz).tar
+          rm -f $f
+        done
+
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v1.3.0
+      with:
+        version: latest
+        install: true
+    
+    - name: Login to GitHub Container Registry
+      if: env.SECRETS_ARE_AVAILABLE == 'true'
+      uses: docker/login-action@v1.9.0
+      with:
+        registry: ghcr.io
+        username: ${{ github.repository_owner }}
+        password: ${{ secrets.CR_PAT }}
+    
+    - name: Build and push container image
+      uses: docker/build-push-action@v2.5.0
+      id: docker_build
+      with:
+        context: oci_build
+        file: buildroot-external/board/oci/Dockerfile
+        platforms: linux/amd64,linux/arm64,linux/arm
+        # load not supported -> https://github.com/docker/buildx/issues/290
+        #load: true #load in docker - needed for testing later on
+        push: ${{ env.SECRETS_ARE_AVAILABLE }}
+
+        build-args: |
+          tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
+        labels: |
+          org.opencontainers.image.title=RaspberryMatic
+          org.opencontainers.image.description=Alternative OS for your HomeMatic CCU
+          org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+          org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+          org.opencontainers.image.licenses=Apache-2.0
+          org.opencontainers.image.url=https://raspberrymatic.de
+          org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/wiki
+          org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
+          org.opencontainers.image.ref.name=${{ env.GIT_REF }}
+          org.opencontainers.image.revision=${{ github.sha }}
+          org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+          io.hass.name=RaspberryMatic CCU
+          io.hass.description=HomeMatic/homematicIP CCU central based on RaspberryMatic
+          io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon
+          io.hass.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+          io.hass.type=addon
+          io.hass.arch=armhf|aarch64|amd64
+        tags: |
+          ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}
+    
+    - name: Image digest
+      run: echo ${{ steps.docker_build.outputs.digest }}
+
+    #Testing
+    - name: Build and load container image for test
+      uses: docker/build-push-action@v2.5.0
+      id: docker_build_test
+      with:
+        context: oci_build
+        file: buildroot-external/board/oci/Dockerfile
+        platforms: linux/amd64 #load does not support muti-arch https://github.com/docker/buildx/issues/290
+        load: true #load in docker - needed for testing later on
+        push: false
+
+        build-args: |
+          tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
+        labels: |
+          org.opencontainers.image.title=RaspberryMatic
+          org.opencontainers.image.description=Alternative OS for your HomeMatic CCU
+          org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+          org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+          org.opencontainers.image.licenses=Apache-2.0
+          org.opencontainers.image.url=https://raspberrymatic.de
+          org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          org.opencontainers.image.documentation=https://github.com/${{ github.repository }}/wiki
+          org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
+          org.opencontainers.image.ref.name=${{ env.GIT_REF }}
+          org.opencontainers.image.revision=${{ github.sha }}
+          org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+          io.hass.name=RaspberryMatic CCU
+          io.hass.description=HomeMatic/homematicIP CCU central based on RaspberryMatic
+          io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon
+          io.hass.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+          io.hass.type=addon
+          io.hass.arch=armhf|aarch64|amd64
+        tags: |
+          ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}
+
+    - name: Enable experimental features for the Docker daemon and CLI
+      run: |
+        echo $'{\n  "experimental": true\n}' | sudo tee /etc/docker/daemon.json
+        mkdir -p ~/.docker
+        echo $'{\n  "experimental": "enabled"\n}' | sudo tee ~/.docker/config.json
+        sudo service docker restart
+        docker version -f '{{.Client.Experimental}}'
+        docker version -f '{{.Server.Experimental}}'
+
+    - name: Test container deploy
+      run: |
+        export CCU_DOCKER_PULL_REFRESH="false"
+        sudo -E ./buildroot-external/board/oci/deploy.sh -f
+    
+    - name: Test container startup+stop
+      run: |
+        error=0
+        n=1
+        while ! docker exec ccu test -e /var/status/startupFinished ; do
+          if [ "$n" -ge 120 ]; then
+            echo "ERROR: container not started after 120s. aborting."
+            error=1
+            break
+          fi
+          sleep 1
+          n=$((n+1)) 
+        done 
+
+        docker exec ccu tar --owner=root --group=root --one-file-system --ignore-failed-read -czf - /tmp /usr/local > debug_output.tgz
+        docker stop ccu
+        docker logs ccu
+        exit $error
+
+    - name: Upload debug information
+      uses: actions/upload-artifact@v2
+      with:
+        path: debug_output.tgz
+        name: RaspberryMatic-debug_output-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}.tgz

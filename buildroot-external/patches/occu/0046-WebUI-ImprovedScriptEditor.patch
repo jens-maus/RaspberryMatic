@@ -242,7 +242,10 @@
 +</script>
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -1,8 +1,3 @@
+@@ -2,11 +2,6 @@
+   --btnGradient: linear-gradient(to bottom, white 30%, gray);
+ }
+ 
 -* {
 -	font-family:Verdana,Tahoma,Arial,Helvetica,sans-serif ! important;
 -	font-size: 12px ! important;
@@ -251,7 +254,7 @@
  .j_translate, .j_startPage
  {
      display: none;
-@@ -418,7 +413,6 @@
+@@ -435,7 +430,6 @@
    border: solid 1px $_(black); /* black */
    cursor: pointer;
    border-radius: 5px;
@@ -259,7 +262,7 @@
    padding-top: 5px;
    padding-bottom: 5px;
  }
-@@ -3431,11 +3425,18 @@
+@@ -3548,11 +3542,18 @@
    width: 50px;
    height:80px;
  }
@@ -279,7 +282,7 @@
  }
  
  application {
-@@ -3633,11 +3634,6 @@
+@@ -3751,11 +3752,6 @@
  	cursor: pointer;
  }
  
@@ -291,7 +294,7 @@
  /* rega\pages\msg\editScript.htm */
  
  .CLASS00001 {
-@@ -3660,7 +3656,6 @@
+@@ -3778,7 +3774,6 @@
  
  .CLASS00004 {
  	width:75%;
@@ -299,7 +302,7 @@
  	background-color: $_(activeBackground); /* #dcdcdc */
  	text-align:left;
  }
-@@ -3699,7 +3694,6 @@
+@@ -3817,7 +3812,6 @@
  
  .CLASS00011 {
  	width:25%;
@@ -307,7 +310,7 @@
  	background-color: $_(white); /* white */
  }
  
-@@ -3931,7 +3925,6 @@
+@@ -4049,7 +4043,6 @@
  
  .CLASS00314 {
  	line-height:15px;
@@ -315,7 +318,7 @@
  	text-align:center
  }
  
-@@ -4121,7 +4114,6 @@
+@@ -4239,7 +4232,6 @@
  	text-align:left;
  	color: $_(textColorA) ! important; /* white */
  	font-weight:bold;
@@ -323,7 +326,7 @@
  }
  
  .CLASS00716 {
-@@ -4527,7 +4519,6 @@
+@@ -4645,7 +4637,6 @@
  	font-weight:bold;
  	color: $_(textColorB); /* black */
  	cursor:pointer;
@@ -331,7 +334,7 @@
  }
  
  .CLASS01217 {
-@@ -4928,7 +4919,6 @@
+@@ -5046,7 +5037,6 @@
  /* rega\esp\rule.inc */
  
  .CLASS02300 {
@@ -339,7 +342,7 @@
  	font-weight: bold;
  }
  
-@@ -4962,7 +4952,6 @@
+@@ -5080,7 +5070,6 @@
  
  .CLASS02501 {
  	background-color:$_(clickable);
@@ -347,7 +350,7 @@
  	padding:4px;
  	border:solid 1px $_(black); /* black */
  	text-align:center;
-@@ -5001,7 +4990,6 @@
+@@ -5119,7 +5108,6 @@
  
  .CLASS02507 {
  	background-color:$_(activeBackground);
@@ -355,7 +358,7 @@
  	padding:4px;
  	color: $_(textColorB); /* black */
  	height:30px;
-@@ -5175,7 +5163,6 @@
+@@ -5293,7 +5281,6 @@
  }
  
  .CLASS02532 {
@@ -363,7 +366,7 @@
  	width:220px;
  	/*height:25px;*/
  	height:auto;
-@@ -5186,14 +5173,12 @@
+@@ -5304,14 +5291,12 @@
  }
  
  .CLASS02532a {
@@ -378,7 +381,7 @@
  	width:220px;
  	height:30px;
    color: $_(white) ! important;
-@@ -5261,13 +5246,11 @@
+@@ -5405,13 +5390,11 @@
  
  .CLASS02542 {
  	border:solid 1px $_(black); /* black */
@@ -392,7 +395,7 @@
  	text-align:right;
  }
  
-@@ -5865,7 +5848,6 @@
+@@ -6023,7 +6006,6 @@
  
  .CLASS03306 {
  	line-height:15px;
@@ -400,7 +403,7 @@
  }
  
  .CLASS03307 {
-@@ -6003,7 +5985,6 @@
+@@ -6161,7 +6143,6 @@
  
  .CLASS03703 {
  	line-height:15px;
@@ -408,7 +411,7 @@
  }
  
  .CLASS03704 {
-@@ -6140,7 +6121,6 @@
+@@ -6298,7 +6279,6 @@
  
  .CLASS03911 {
  	line-height:15px;
@@ -416,7 +419,7 @@
  }
  
  /* rega\pages\tabs\handling\rooms.htm */
-@@ -6172,7 +6152,6 @@
+@@ -6330,7 +6310,6 @@
  
  .CLASS04005 {
  	line-height:15px;
@@ -424,7 +427,7 @@
  }
  
  .CLASS04006 {
-@@ -6222,7 +6201,6 @@
+@@ -6380,7 +6359,6 @@
  
  .CLASS04107 {
  	line-height:15px;
@@ -432,7 +435,7 @@
  }
  
  .CLASS04108 {
-@@ -6264,12 +6242,10 @@
+@@ -6422,12 +6400,10 @@
  }
  
  .CLASS04203 {
@@ -445,7 +448,7 @@
  }
  
  .CLASS04205 {
-@@ -6290,7 +6266,6 @@
+@@ -6448,7 +6424,6 @@
  
  .CLASS04209 {
  	line-height:15px;
@@ -453,7 +456,7 @@
  }
  
  .CLASS04210 {
-@@ -6342,7 +6317,6 @@
+@@ -6500,7 +6475,6 @@
  }
  
  .CLASS04304 {
@@ -461,7 +464,7 @@
  	height:40px;
  }
  
-@@ -6383,7 +6357,6 @@
+@@ -6541,7 +6515,6 @@
  
  .CLASS04312 {
  	line-height:15px;
@@ -469,7 +472,7 @@
  }
  
  .CLASS04313 {
-@@ -6484,7 +6457,6 @@
+@@ -6642,7 +6615,6 @@
  
  .CLASS04800 {
  	line-height:14px;
@@ -477,7 +480,7 @@
  	width:200px;
  }
  
-@@ -6525,12 +6497,10 @@
+@@ -6683,12 +6655,10 @@
  
  .CLASS04904 {
  	color: $_(textColorB); /* black */
@@ -490,7 +493,7 @@
  	width:220px;
  }
  
-@@ -6584,7 +6554,6 @@
+@@ -6742,7 +6712,6 @@
  
  .CLASS05007 {
  	color: $_(textColorB); /* black */
@@ -498,7 +501,7 @@
  }
  
  .CLASS05008 {
-@@ -6605,7 +6574,6 @@
+@@ -6765,7 +6734,6 @@
  
  .CLASS05010 {
  	color: $_(textColorB); /* black */
@@ -506,7 +509,7 @@
  	width:100%;
  }
  
-@@ -6615,7 +6583,6 @@
+@@ -6775,7 +6743,6 @@
  
  .CLASS05012 {
  	color: $_(textColorB); /* black */
@@ -514,7 +517,7 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -6725,7 +6692,6 @@
+@@ -6885,7 +6852,6 @@
  
  .CLASS05207 {
  	line-height:15px;
@@ -522,7 +525,7 @@
  }
  
  .CLASS05208 {
-@@ -6778,7 +6744,6 @@
+@@ -6938,7 +6904,6 @@
  
  .CLASS05305 {
  	line-height:15px;
@@ -530,7 +533,7 @@
  }
  
  /* rega\pages\tabs\admin\linkprog.htm */
-@@ -6916,7 +6881,6 @@
+@@ -7076,7 +7041,6 @@
  
  .CLASS05705 {
  	width:572px;
@@ -538,7 +541,7 @@
  }
  
  .CLASS05706 {
-@@ -6929,7 +6893,6 @@
+@@ -7089,7 +7053,6 @@
  
  .CLASS05707 {
  	width:570px;
@@ -546,7 +549,7 @@
  }
  
  /* rega\pages\tabs\favViewer.htm  */
-@@ -7373,7 +7336,6 @@
+@@ -7534,7 +7497,6 @@
  
  .CLASS06413 {
    line-height:15px;
@@ -554,7 +557,7 @@
  }
  
  .CLASS06414 {
-@@ -7777,7 +7739,6 @@
+@@ -7949,7 +7911,6 @@
  }
  
  .CLASS20801 {
@@ -562,7 +565,7 @@
   	color: $_(textColorB); /* black */
  }
  
-@@ -7798,7 +7759,6 @@
+@@ -7970,7 +7931,6 @@
  }
  
  .CLASS20805 {
@@ -570,7 +573,7 @@
  }
  
  .CLASS20806 {
-@@ -7809,7 +7769,6 @@
+@@ -7981,7 +7941,6 @@
    background-color:$_(clickable);
   color: $_(textColorA); /* white */
    vertical-align: middle;
@@ -578,7 +581,7 @@
  }
  
  .CLASS20808 {
-@@ -7825,7 +7784,6 @@
+@@ -7997,7 +7956,6 @@
  .CLASS20810 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -586,7 +589,7 @@
  }
  
  .CLASS20811 {
-@@ -7860,7 +7818,6 @@
+@@ -8032,7 +7990,6 @@
  .CLASS20817 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -594,7 +597,7 @@
  }
  
  .CLASS20818 {
-@@ -7886,7 +7843,6 @@
+@@ -8058,7 +8015,6 @@
  }
  
  .CLASS20901 {
@@ -602,7 +605,7 @@
  }
  
  .CLASS20902 {
-@@ -7928,7 +7884,6 @@
+@@ -8100,7 +8056,6 @@
    color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
    width: 100%;
@@ -610,7 +613,7 @@
  }
  
  .CLASS20910 {
-@@ -7948,7 +7903,6 @@
+@@ -8120,7 +8075,6 @@
  .CLASS20913 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -618,7 +621,7 @@
    width: 100%;
  }
  
-@@ -7961,7 +7915,6 @@
+@@ -8133,7 +8087,6 @@
  }
  
  .CLASS20916 {
@@ -626,7 +629,7 @@
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
  }
-@@ -8021,7 +7974,6 @@
+@@ -8195,7 +8148,6 @@
  }
  
  .CLASS21101 {
@@ -634,7 +637,7 @@
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
  }
-@@ -8043,13 +7995,11 @@
+@@ -8217,13 +8169,11 @@
  }
  
  .CLASS21105 {
@@ -648,7 +651,7 @@
    width: 100%;
  }
  
-@@ -8075,7 +8025,6 @@
+@@ -8255,7 +8205,6 @@
  .CLASS21111 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -656,7 +659,7 @@
  }
  
  .CLASS21112 {
-@@ -8130,7 +8079,6 @@
+@@ -8310,7 +8259,6 @@
  }
  
  .CLASS21201 {
@@ -664,7 +667,7 @@
  }
  
  .CLASS21202 {
-@@ -8144,7 +8092,6 @@
+@@ -8324,7 +8272,6 @@
  }
  
  .CLASS21204 {
@@ -672,7 +675,7 @@
   	color: $_(textColorB); /* black */
  }
  
-@@ -8236,7 +8183,6 @@
+@@ -8421,7 +8368,6 @@
  
  .CLASS21302 {
   	color: $_(textColorB); /* black */
@@ -680,7 +683,7 @@
    text-align:center;
    margin: 5px;
  }
-@@ -8270,7 +8216,6 @@
+@@ -8461,7 +8407,6 @@
  }
  
  .CLASS21401 {
@@ -688,7 +691,7 @@
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
  }
-@@ -8292,7 +8237,6 @@
+@@ -8483,7 +8428,6 @@
  }
  
  .CLASS21405 {
@@ -696,7 +699,7 @@
  }
  
  .CLASS21406 {
-@@ -8321,7 +8265,6 @@
+@@ -8512,7 +8456,6 @@
  .CLASS21410 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -704,7 +707,7 @@
  }
  
  .CLASS21411 {
-@@ -8348,7 +8291,6 @@
+@@ -8539,7 +8482,6 @@
  }
  
  .CLASS21501 {
@@ -712,7 +715,7 @@
  }
  
  .CLASS21502 {
-@@ -8370,7 +8312,6 @@
+@@ -8561,7 +8503,6 @@
  .CLASS21505 {
   	color: $_(textColorB); /* black */
    background-color: $_(white); /* white */
@@ -720,7 +723,7 @@
  }
  
  .CLASS21506 {
-@@ -8406,7 +8347,6 @@
+@@ -8597,7 +8538,6 @@
  }
  
  .CLASS21601 {
@@ -728,7 +731,7 @@
  }
  
  .CLASS21602 {
-@@ -8420,7 +8360,6 @@
+@@ -8611,7 +8551,6 @@
  }
  
  .CLASS21604 {
@@ -736,7 +739,7 @@
   	color: $_(textColorB); /* black */
  }
  
-@@ -8470,7 +8409,6 @@
+@@ -8661,7 +8600,6 @@
  .CLASS21800 {
    width: 100%;
    font-weight: bold;
@@ -744,7 +747,7 @@
    cursor: pointer;
  }
  
-@@ -8518,7 +8456,6 @@
+@@ -8709,7 +8647,6 @@
  
  .CLASS21901 {
    line-height:15px;
@@ -752,7 +755,7 @@
  }
  
  .CLASS21902 {
-@@ -8547,7 +8484,7 @@
+@@ -8740,7 +8677,7 @@
  
  .CLASS21906 {
    color: $_(red);
@@ -761,7 +764,7 @@
    font-weight: bold;
  }
  
-@@ -8690,7 +8627,6 @@
+@@ -8885,7 +8822,6 @@
  
  .CLASS22100 {
    line-height:14px;
@@ -769,7 +772,7 @@
  }
  
  .CLASS22101 {
-@@ -8882,3 +8818,13 @@
+@@ -9077,3 +9013,13 @@
    border:solid 1px $_(black);
  }
  

@@ -1,8 +1,9 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169
 #
 # simple wrapper script to restore a standard sbk file backup
 #
-# Copyright (c) 2016-2019 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2016-2021 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,8 +37,7 @@ if [[ -d "${TMPDIR}" ]]; then
 
   # check archive consistency using sha256
   if [[ -f "${TMPDIR}/signature.sha256" ]]; then
-    (cd "${TMPDIR}"; sha256sum -s -c signature.sha256)
-    if [[ $? -ne 0 ]]; then
+    if ! (cd "${TMPDIR}" && sha256sum -s -c signature.sha256); then
       echo "ERROR: inconsistent backup archive identified (sha256)."
       rm -rf "${TMPDIR}"
       exit 1

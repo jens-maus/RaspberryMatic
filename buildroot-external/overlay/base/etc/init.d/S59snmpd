@@ -1,4 +1,6 @@
-#! /bin/sh
+#!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
+#
 ### BEGIN INIT INFO
 # Provides:           snmpd snmptrapd
 # Required-Start:     $network $local_fs
@@ -44,44 +46,64 @@ start() {
       cp -Rp /etc/config_templates/snmp /etc/config/
     fi
 
-    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd-ccu3.conf ]; then
+    if [ "$SNMPDRUN" = "yes" ] && [ -f /etc/config/snmp/snmpd-ccu3.conf ]; then
         printf "Starting SNMP daemon: "
-        start-stop-daemon -q -S -x /usr/sbin/snmpd -- $SNMPDOPTS
-        [ $? = 0 ] && echo "OK" || echo "FAIL"
+        # shellcheck disable=SC2086
+        if start-stop-daemon -q -S -x /usr/sbin/snmpd -- ${SNMPDOPTS}; then
+          echo "OK"
+        else
+          echo "FAIL"
+        fi
     fi
 
-    if [ "$TRAPDRUN" = "yes" -a -f /etc/config/snmp/snmptrapd.conf ]; then
+    if [ "$TRAPDRUN" = "yes" ] && [ -f /etc/config/snmp/snmptrapd.conf ]; then
         printf "Starting SNMP trap daemon: "
-        start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- $TRAPDOPTS
-        [ $? = 0 ] && echo "OK" || echo "FAIL"
+        # shellcheck disable=SC2086
+        if start-stop-daemon -q -S -x /usr/sbin/snmptrapd -- ${TRAPDOPTS}; then
+          echo "OK"
+        else
+          echo "FAIL"
+        fi
     fi
 }
 
 stop() {
-    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd-ccu3.conf ]; then
+    if [ "$SNMPDRUN" = "yes" ] && [ -f /etc/config/snmp/snmpd-ccu3.conf ]; then
         printf "Stopping SNMP daemon: "
-        start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmpd
-        [ $? = 0 ] && echo "OK" || echo "FAIL"
+        if start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmpd; then
+          echo "OK"
+        else
+          echo "FAIL"
+        fi
     fi
 
-    if [ "$TRAPDRUN" = "yes" -a -f /etc/config/snmp/snmptrapd.conf ]; then
+    if [ "$TRAPDRUN" = "yes" ] && [ -f /etc/config/snmp/snmptrapd.conf ]; then
         printf "Stopping SNMP trap daemon: "
-        start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmptrapd
-        [ $? = 0 ] && echo "OK" || echo "FAIL"
+        if start-stop-daemon -q -K $ssd_oknodo -x /usr/sbin/snmptrapd; then
+          echo "OK"
+        else
+          echo "FAIL"
+        fi
     fi
 }
 
 reload() {
-    if [ "$SNMPDRUN" = "yes" -a -f /etc/config/snmp/snmpd-ccu3.conf ]; then
+    if [ "$SNMPDRUN" = "yes" ] && [ -f /etc/config/snmp/snmpd-ccu3.conf ]; then
         printf "Reloading SNMP daemon: "
-        start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd
-        [ $? = 0 ] && echo "OK" || echo "FAIL"
+        if start-stop-daemon -q -K -s 1 -p /var/run/snmpd.pid -x /usr/sbin/snmpd; then
+          echo "OK"
+        else
+          echo "FAIL"
+        fi
     fi
 
-    if [ "$TRAPDRUN" = "yes" -a -f /etc/config/snmp/snmptrapd.conf ]; then
+    if [ "$TRAPDRUN" = "yes" ] && [ -f /etc/config/snmp/snmptrapd.conf ]; then
         printf "Reloading SNMP trap daemon: "
-        start-stop-daemon -q -K -s 1 -p /var/run/snmptrapd.pid -x /usr/sbin/snmptrapd
-        [ $? = 0 ] && echo "OK" || echo "FAIL"
+        if start-stop-daemon -q -K -s 1 -p /var/run/snmptrapd.pid -x /usr/sbin/snmptrapd; then
+          echo "OK"
+        else
+          echo "FAIL"
+        fi
     fi
 }
 

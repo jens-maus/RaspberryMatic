@@ -4,7 +4,7 @@
 #
 #############################################################
 
-OCCU_VERSION = 3.51.6-10
+OCCU_VERSION = 3.57.5-1
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 
 ifeq ($(BR2_PACKAGE_OCCU),y)
@@ -58,6 +58,7 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 		rm -f $(TARGET_DIR)/etc/init.d/S20urandom
 		rm -f $(TARGET_DIR)/etc/init.d/S01syslogd
 		rm -f $(TARGET_DIR)/etc/init.d/S02klogd
+		rm -f $(TARGET_DIR)/etc/init.d/S49chrony
 
 		# remove obsolete config templates
 		rm -f $(TARGET_DIR)/etc/config_templates/hmip_networkkey.conf
@@ -93,15 +94,29 @@ endif
 
 ifeq ($(BR2_arm),y)
 	OCCU_ARCH=arm-gnueabihf-gcc8
+	OCCU_LIBDIR=lib
+endif
+
+ifeq ($(BR2_aarch64),y)
+	OCCU_ARCH=arm-gnueabihf-gcc8
+	OCCU_LIBDIR=$(BR2_ROOTFS_LIB32_DIR)
 endif
 
 ifeq ($(BR2_i386),y)
 	OCCU_ARCH=X86_32_GCC8
+	OCCU_LIBDIR=lib
+endif
+
+ifeq ($(BR2_x86_64),y)
+	OCCU_ARCH=X86_32_GCC8
+	OCCU_LIBDIR=$(BR2_ROOTFS_LIB32_DIR)
 endif
 
 define OCCU_INSTALL_TARGET_CMDS
 		$(MAKE) OCCU_RF_PROTOCOL=$(OCCU_RF_PROTOCOL) \
 			OCCU_ARCH=$(OCCU_ARCH) \
+			OCCU_LIBDIR=$(OCCU_LIBDIR) \
+			OCCU_WEBUI_REGAHSS_BETA=$(OCCU_WEBUI_REGAHSS_BETA) \
 			OCCU_WEBUI_REGAHSS_BETA=$(OCCU_WEBUI_REGAHSS_BETA) \
 			-C $(@D) install 
 endef

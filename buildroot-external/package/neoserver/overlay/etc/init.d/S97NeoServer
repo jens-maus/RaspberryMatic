@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2169 source=/dev/null
 #
 # init script to start/stop the Mediola NEOServer Addon
 #
@@ -28,21 +29,27 @@ start() {
     # perform an automatic update of the neo server addon
     # if outdated.
     if [[ -d /usr/local/addons/mediola ]]; then
-      function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
-      if [[ $(version $(cat /opt/mediola/VERSION )) -gt $(version $(cat /usr/local/addons/mediola/VERSION )) ]]; then
+      version() { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+      if [[ $(version "$(cat /opt/mediola/VERSION 2>/dev/null)") -gt $(version "$(cat /usr/local/addons/mediola/VERSION 2>/dev/null)") ]]; then
         DISABLED=0
         [[ -f /usr/local/addons/mediola/Disabled ]] && DISABLED=1
 
         rm -rf /usr/local/addons/mediola
-        /opt/mediola/startup.sh 2>/dev/null
+        /opt/mediola/startup.sh 2>/dev/null >/dev/null
 
         [[ ${DISABLED} -eq 0 ]] && rm -f /usr/local/addons/mediola/Disabled
       fi
     fi
 
+    # migration for existing installations: check for .nobackup file and create it if it does not exists
+    if [[ -d /usr/local/addons/mediola ]] &&
+       [[ ! -f /usr/local/addons/mediola/.nobackup ]]; then
+      touch /usr/local/addons/mediola/.nobackup
+    fi
+
     if [[ ! -e /usr/local/addons/mediola/Disabled ]]; then
       /opt/mediola/startup.sh 2>/dev/null >/dev/null
-      /usr/local/addons/mediola/bin/watchdog
+      /usr/local/addons/mediola/bin/watchdog 2>/dev/null >/dev/null
       echo "OK"
     else
       echo "disabled"
@@ -53,8 +60,12 @@ start() {
 }
 
 stop() {
+  echo -n "Stopping NeoServer: "
   if [[ -f /usr/local/addons/mediola/rc.d/97NeoServer ]]; then
-    /usr/local/addons/mediola/rc.d/97NeoServer stop
+    /usr/local/addons/mediola/rc.d/97NeoServer stop 2>/dev/null >/dev/null
+    echo "OK"
+  else
+    echo "disabled"
   fi
 }
 

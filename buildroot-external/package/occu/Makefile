@@ -48,7 +48,7 @@ install_webui_arch:
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/* $(TARGET_DIR)/bin/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/* $(TARGET_DIR)/etc/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/*.so $(TARGET_DIR)/$(OCCU_LIBDIR)/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2 $(TARGET_DIR)/lib/
+	test -e $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2 && cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2 $(TARGET_DIR)/lib/ || true
 	cp -R WebUI/* $(TARGET_DIR)/
 	# copy ReGaHss beta to target dir
 ifeq ($(OCCU_WEBUI_REGAHSS_BETA), y)

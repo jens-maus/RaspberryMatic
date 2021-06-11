@@ -121,4 +121,14 @@ define OCCU_INSTALL_TARGET_CMDS
 			-C $(@D) install 
 endef
 
+define OCCU_UNWRAP_WEBUI_JS
+		sed -i '1,10s/\\n/\\n\n/g' $(@D)/WebUI/www/webui/webui.js
+endef
+OCCU_PRE_PATCH_HOOKS += OCCU_UNWRAP_WEBUI_JS
+
+define OCCU_WRAP_WEBUI_JS
+		sed -i ':a;N;$$!ba;s/\\n\n/\\n/g' $(@D)/WebUI/www/webui/webui.js
+endef
+OCCU_POST_PATCH_HOOKS += OCCU_WRAP_WEBUI_JS
+
 $(eval $(generic-package))

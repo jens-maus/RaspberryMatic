@@ -105,9 +105,9 @@ function ::CreateHeatingControl() {
     WriteLine("    <tr class='CLASS02531'>");
     WriteLine("      <td colspan='2' class='CLASS02546'><input id='"#chnId#"Deg' type='text' value='"#rState.ToString(2)#"' size='4' class='CLASS02542' style='text-align:center' "#sReadOnly#" /><span id='"#chnId#"unitDegree'><b>"#sUnit#"</b></span></td></tr>");
     WriteLine("      <input id='"#chnId#"Perc' type='hidden' value='"#rState.ToString(2)#"' />");
-    WriteLine("      <td align='center' class='CLASS02548'>");
+    WriteLine("      <td style='text-align:center;' class='CLASS02548'>");
     WriteLine("      <table cellspacing='0' cellpadding='0'><tr><td><img id='"#chnId#"Up' height='12px' width='40px' src='/ise/img/up.png' class='CLASS02543' /></td></tr><tr><td><img id='"#chnId#"Down' height='12px' width='40px' src='/ise/img/down.png' class='CLASS02543' /></td></tr></table>");
-    WriteLine("      </td><td align='center' class='CLASS02548'><img src='/ise/img/enter.png' width='40px' height='25px' class='CLASS02543' /></td>");
+    WriteLine("      </td><td style='text-align:center;' class='CLASS02548'><img src='/ise/img/enter.png' width='40px' height='25px' class='CLASS02543' /></td>");
     WriteLine("    </tr>");
     WriteLine("  </table>");
     WriteLine("  </div>");
@@ -251,6 +251,7 @@ function ::CreateHeatingControlHmIP() {
   object oTemperature = cObj.DPByControl("HEATING_CONTROL_HMIP.TEMPERATURE");
   object oSetPoint = cObj.DPByControl("HEATING_CONTROL_HMIP.SETPOINT");
   object oWindowState = cObj.DPByControl("HEATING_CONTROL_HMIP.WINDOW_STATE");
+  object oLevel = cObj.DPByControl("HEATING_CONTROL_HMIP.LEVEL");
 
   object oBatteryState = cObj.DPByHssDP("BATTERY_STATE");
   object oValveLevel = cObj.DPByHssDP("LEVEL");
@@ -291,16 +292,29 @@ function ::CreateHeatingControlHmIP() {
 
   WriteLine("</tr>");
 
-    WriteLine("<tr>");
-      WriteLine("<td id='"#chnId#"tdWINDOW_STATE' >");
+  WriteLine("<tr>");
+
+    WriteLine("<td id='"#chnId#"tdWINDOW_STATE' >");
+      WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+        WriteLine("<tr>");
+          WriteLine("<td  id='"#chnId#"WINDOW_STATE'>${stringTableWindowState}: </td>");
+          WriteLine("<td><span id='"#chnId#"valWINDOW_STATE'></span></td>");
+        WriteLine("</tr>");
+      WriteLine("</table>");
+    WriteLine("</td>");
+
+    if ((oLevel) && (oLevel.State() >= 0)) {
+      var level = oLevel.Value() * 100;
+       WriteLine("<td id='"#chnId#"tdLEVEL' >");
         WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
           WriteLine("<tr>");
-            WriteLine("<td  id='"#chnId#"WINDOW_STATE'>${stringTableWindowState}: </td>");
-            WriteLine("<td><span id='"#chnId#"valWINDOW_STATE'></span></td>");
+            WriteLine("<td  >${diagramValueTypeLEVEL}: </td>");
+            WriteLine("<td><span>"#level.ToString(0)#" %</span></td>");
           WriteLine("</tr>");
         WriteLine("</table>");
       WriteLine("</td>");
-    WriteLine("</tr>");
+    }
+  WriteLine("</tr>");
 
   WriteLine("<tr>");
     if (oBatteryState) {
@@ -339,9 +353,9 @@ function ::CreateHeatingControlHmIP() {
     WriteLine("    <tr class='CLASS02531'>");
     WriteLine("      <td colspan='2' class='CLASS02546'><input id='"#chnId#"Deg' type='text' value='"#rState.ToString(2)#"' size='4' class='CLASS02542' style='text-align:center' "#sReadOnly#" /><span id='"#chnId#"unitDegree'><b>"#tUnit#"</b></span></td></tr>");
     WriteLine("      <input id='"#chnId#"Perc' type='hidden' value='"#rState.ToString(2)#"' />");
-    WriteLine("      <td align='center' class='CLASS02548'>");
+    WriteLine("      <td style='text-align:center;' class='CLASS02548'>");
     WriteLine("      <table cellspacing='0' cellpadding='0'><tr><td><img id='"#chnId#"Up' height='12px' width='40px' src='/ise/img/up.png' class='CLASS02543' /></td></tr><tr><td><img id='"#chnId#"Down' height='12px' width='40px' src='/ise/img/down.png' class='CLASS02543' /></td></tr></table>");
-    WriteLine("      </td><td align='center' class='CLASS02548'><img src='/ise/img/enter.png' width='40px' height='25px' class='CLASS02543' /></td>");
+    WriteLine("      </td><td style='text-align:center;' class='CLASS02548'><img src='/ise/img/enter.png' width='40px' height='25px' class='CLASS02543' /></td>");
     WriteLine("    </tr>");
     WriteLine("  </table>");
     WriteLine("  </div>");
@@ -408,17 +422,24 @@ function ::CreateHeatingControlHmIP() {
               WriteLine("<option value='2'>${weeklyProfile2}</option>");
               WriteLine("<option value='3'>${weeklyProfile3}</option>");
 
-              ! Some devices (eTRV and WTH with a firmware < 1.6) do have only 3 weekly programs while others have 6 of them.
+              ! Some devices (eTRV and WTH with a firmware < 1.6 and others) do have only 3 weekly programs while others have 6 of them.
               if (
-                ((chnLabel != "HMIP-eTRV")
-                && (chnLabel != "HmIP-eTRV")
-                && (chnLabel != "HMIP-eTRV-2")
-                && (chnLabel != "HmIP-eTRV-2")
-                && (chnLabel != "HmIP-eTRV-2-UK")
-                && (chnLabel != "HmIP-eTRV-B")
-                && (chnLabel != "HmIP-eTRV-B1")
-                && (chnLabel != "HmIP-WTH")
-                && (chnLabel != "HMIP-WTH"))
+                (
+                  (chnLabel != "HMIP-eTRV")
+                  && (chnLabel != "HmIP-eTRV")
+                  && (chnLabel != "HMIP-eTRV-2")
+                  && (chnLabel != "HmIP-eTRV-2")
+                  && (chnLabel != "HmIP-eTRV-2-UK")
+                  && (chnLabel != "HmIP-eTRV-B")
+                  && (chnLabel != "HmIP-eTRV-B-UK")
+                  && (chnLabel != "HmIP-eTRV-B1")
+                  && (chnLabel != "HmIP-WTH")
+                  && (chnLabel != "HMIP-WTH")
+                  && (chnLabel != "HmIP-eTRV-C")
+                  && (chnLabel != "HmIP-eTRV-C-2")
+                  && (chnLabel != "HmIP-eTRV-3")
+                  && (chnLabel != "HmIP-eTRV-E")
+                )
                 || (((chnLabel == "HmIP-WTH") || (chnLabel == "HMIP-WTH")) && ((devFwMajor > 1) || ((devFwMajor == 1) && (devFwMinor >= 6))))
                ) {
                   WriteLine("<option value='4'>${weeklyProfile4}</option>");

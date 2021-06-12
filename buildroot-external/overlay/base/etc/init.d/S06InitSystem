@@ -105,7 +105,7 @@ init_system() {
   # we can safely use the old /usr/local/sdcard directory path as
   # the general storagePath for diagrams and daily backups
   storagePath=""
-  if grep " /usr/local " /proc/mounts | grep -qv "^/dev/mmc"; then
+  if [[ "${HM_HOST}" == "oci" ]] || grep " /usr/local " /proc/mounts | grep -qv "^/dev/mmc"; then
     storagePath="/usr/local/sdcard"
     mkdir -p ${storagePath}
   fi

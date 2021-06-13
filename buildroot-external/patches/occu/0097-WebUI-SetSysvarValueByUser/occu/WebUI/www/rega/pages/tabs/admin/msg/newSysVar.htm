@@ -437,7 +437,7 @@
   {
     var s = "";
     s += "<table class='CLASS05012'>";
-    s += "<tr><td> <textarea id='txValue' rows='5'>"+decodeURIComponent(sValue)+"</textarea> </td></tr>";
+    s += "<tr><td> <textarea id='txValue' rows='5'>"+decodeURIComponent(unescape(sValue))+"</textarea> </td></tr>";
     s += "</table>";
     $("tdValueEdit").innerHTML = s;
     $("tdEdit").innerHTML = "";

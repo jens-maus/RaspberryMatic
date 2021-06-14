@@ -11,6 +11,7 @@ on:
       - '**.md'
       - 'helm/**'
       - 'release/LATEST-VERSION.js'
+      - 'home-assistant-addon-dev/config.json'
   pull_request:
     branches-ignore:
       - 'gh-pages'
@@ -20,6 +21,7 @@ on:
       - '**.md'
       - 'helm/**'
       - 'release/LATEST-VERSION.js'
+      - 'home-assistant-addon-dev/config.json'
   workflow_dispatch:
     inputs:
       skip_build:

@@ -5,11 +5,11 @@
   "slug": "raspberrymatic-dev",
   "image": "ghcr.io/jens-maus/raspberrymatic",
   "arch": ["armhf", "aarch64", "amd64"],
-  "description": "HomeMatic/homematicIP CCU central based on RaspberryMatic (Snapshot Build)",
+  "description": "HomeMatic/homematicIP CCU central based on RaspberryMatic (Snapshot)",
   "url": "https://github.com/jens-maus/RaspberryMatic/",
   "watchdog": "tcp://[HOST]:[PORT:80]",
   "ingress": true,
-  "panel_title": "RaspberryMatic",
+  "panel_title": "RaspberryMatic (snapshot)",
   "panel_icon": "mdi:router-wireless",
   "startup": "services",
   "map": [

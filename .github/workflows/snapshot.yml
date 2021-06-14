@@ -331,6 +331,15 @@ jobs:
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
 
+    - name: Bump HomeAssistat add-on snapshot
+      run: |
+        VERSION=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+        sed -i "s/^\(.*\"version\":\)\(.*\),/\1 \"${VERSION}\",/" home-assistant-addon-dev/config.json
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git commit -m "HA add-on snapshot bump [${VERSION}]" home-assistant-addon-dev/config.json
+        git push
+
   helm:
     name: Build K8s Helm chart
     runs-on: ubuntu-20.04

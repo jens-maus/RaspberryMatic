@@ -43,6 +43,18 @@ init() {
     mkdir -p /tmp/measurement
   fi
 
+  # sanitize the /etc/config/firmware path to make sure no directory without
+  # an 'info' file or info file without any "Name=" entry is located within
+  # (cf. https://github.com/jens-maus/RaspberryMatic/issues/1302)
+  for dir in $(ls -d /etc/config/firmware/* 2>/dev/null); do
+    if [[ -d "${dir}" ]]; then
+      if [[ ! -f "${dir}/info" ]] || ! grep -q -e "Name=." "${dir}/info"; then
+        echo -n "WARNING: removed invalid ${dir}, "
+        rm -rf "${dir}"
+      fi
+    fi
+  done
+
   if [[ -n "${HM_HMIP_DEV}" ]]; then
 
     # if no raw uart is used to connect to the rf module (e.g. HmIP-RFUSB)

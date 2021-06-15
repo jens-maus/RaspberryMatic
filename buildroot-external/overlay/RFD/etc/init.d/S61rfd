@@ -32,12 +32,21 @@ init() {
   # only modify if real rf module found
   if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
      [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
-    # make sure [Interface 0] is uncommented
-    sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
+    # check if commented out "#[Interface 0]" exists now and if not add it
+    if grep -q -e "^#\[Interface 0\]" /etc/config/rfd.conf; then
+      # commented "#[Interface 0]" section found, uncomment
+      sed -i -e '/^#\[Interface 0\]/,/^#\s*$/ s/^#//' /etc/config/rfd.conf
+    elif ! grep -q -e "^\[Interface 0\]" /etc/config/rfd.conf; then
+      # no uncommented "[Interface 0]" found, add fresh section from config_templates
+      sed -n '/^\[Interface 0\]/,/^\s*$/p' ${CFG_TEMPLATE_DIR}/rfd.conf >>/etc/config/rfd.conf
+    fi
 
+    # make sure Interface 0 parameters are setup correctly
     sed -i 's|^ComPortFile =.*$|ComPortFile = /dev/mmd_bidcos|' /etc/config/rfd.conf
     sed -i 's|^#*AccessFile =.*$|AccessFile = /dev/null|' /etc/config/rfd.conf
     sed -i 's|^#*ResetFile =.*$|ResetFile = /dev/null|' /etc/config/rfd.conf
+
+    # make sure "Improved Coprocessor Initialization" is set
     if ! grep -q "Improved Coprocessor Initialization" /etc/config/rfd.conf ; then
       sed -i 's/\[Interface 0\]/Improved\ Coprocessor\ Initialization\ =\ true\n\n&/' /etc/config/rfd.conf
     fi

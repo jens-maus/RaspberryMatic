@@ -46,7 +46,7 @@ init() {
   # sanitize the /etc/config/firmware path to make sure no directory without
   # an 'info' file or info file without any "Name=" entry is located within
   # (cf. https://github.com/jens-maus/RaspberryMatic/issues/1302)
-  for dir in $(ls -d /etc/config/firmware/* 2>/dev/null); do
+  for dir in /etc/config/firmware/*; do
     if [[ -d "${dir}" ]]; then
       if [[ ! -f "${dir}/info" ]] || ! grep -q -e "Name=." "${dir}/info"; then
         echo -n "WARNING: removed invalid ${dir}, "

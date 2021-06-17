@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2.3.4
       - id: commit-check
-        run: 'echo ::set-output name=has-commits::$(git --no-pager log --pretty=oneline --since="24 hours ago" | wc -l)'
+        run: 'echo ::set-output name=has-commits::$(git --no-pager log --pretty="format:%an" --since="24 hours ago" | grep -v github-actions | wc -l)'
     outputs:
       has-commits: ${{ steps.commit-check.outputs.has-commits }}
 

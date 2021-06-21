@@ -50,7 +50,13 @@
     "9099/tcp": null,
     "10000/udp": null,
     "48899/udp": null,
-    "49880/udp": null
+    "49880/udp": null,
+    "8082/tcp": null,
+    "2098/tcp": null,
+    "2099/tcp": null,
+    "8083/tcp": null,
+    "9092/tcp": null,
+    "5435/tcp": null
   },
   "ports_description": {
     "22/tcp": "SSH access (Extern)",
@@ -81,7 +87,13 @@
     "9099/tcp": "Mediola NeoServer (Extern)",
     "10000/udp": "Mediola NeoServer (Extern)",
     "48899/udp": "Mediola NeoServer (Extern)",
-    "49880/udp": "Mediola NeoServer (Extern)"  
+    "49880/udp": "Mediola NeoServer (Extern)",
+    "8082/tcp": "CCU-Historian WebUI (Extern)",
+    "2098/tcp": "CCU-Historian XMLRPC (Extern)",
+    "2099/tcp": "CCU-Historian BINRPC (Extern)",
+    "8083/tcp": "CCU-Historian DB-WebUI (Extern)",
+    "9092/tcp": "CCU-Historian DB-Port (Extern)",
+    "5435/tcp": "CCU-Historian DB-pgPort (Extern)"
   },
   "environment": {
     "HM_RUNNING_IN_HA": "1",

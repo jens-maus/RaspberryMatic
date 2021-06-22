@@ -33,6 +33,11 @@ identify_host() {
   # https://www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
   hostid=$(grep Revision /proc/cpuinfo | awk '{print $3}')
   case "${hostid}" in
+    *d?314?)                       HM_HOST="rpi4cm8g"   ;; # Raspberry Pi Compute Module 4/8GB
+    *c?314?)                       HM_HOST="rpi4cm4g"   ;; # Raspberry Pi Compute Module 4/4GB
+    *b?314?)                       HM_HOST="rpi4cm2g"   ;; # Raspberry Pi Compute Module 4/2GB
+    *a?314?)                       HM_HOST="rpi4cm1g"   ;; # Raspberry Pi Compute Module 4/1GB
+    *c?313?)                       HM_HOST="rpi400"     ;; # Raspberry Pi 400
     *d?311?)                       HM_HOST="rpi4b8g"    ;; # Raspberry Pi 4 Model B/8GB
     *c?311?)                       HM_HOST="rpi4b4g"    ;; # Raspberry Pi 4 Model B/4GB
     *b?311?)                       HM_HOST="rpi4b2g"    ;; # Raspberry Pi 4 Model B/2GB

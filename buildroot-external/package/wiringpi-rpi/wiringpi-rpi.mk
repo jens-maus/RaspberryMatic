@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WIRINGPI_RPI_VERSION = 50b7c5ed7d238a637db7d9c73978466eb022a8de
+WIRINGPI_RPI_VERSION = 6a17382a0ab40a9e36456e5a71bdce0a70421ffb
 WIRINGPI_RPI_SITE = git://github.com/wiringpi/wiringpi
 
 WIRINGPI_RPI_LICENSE = LGPL-3.0+

@@ -59,6 +59,7 @@ fi
 # if BACKUPDIR does not exist, create it
 if [ ! -e "${BACKUPDIR}" ]; then
   if ! mkdir "${BACKUPDIR}"; then
+    /bin/triggerAlarm.tcl "cronBackup: Could not create ${BACKUPDIR}" WatchDog-Alarm
     exit 1
   fi
 fi
@@ -70,7 +71,10 @@ if [ ! -f "${BACKUPDIR}/.nobackup" ]; then
 fi
 
 # create the backup in BACKUPDIR now
-/bin/createBackup.sh "${BACKUPDIR}"
+if ! /bin/createBackup.sh "${BACKUPDIR}"; then
+  /bin/triggerAlarm.tcl "cronBackup: Backup job failed" WatchDog-Alarm
+  exit 1
+fi
 
 # check how many backup files are actually in BACKUPDIR and cleanup
 # until we reach MAXBACKUPS

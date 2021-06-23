@@ -21,6 +21,9 @@
 # createBackup.sh <directory/file>
 #
 
+# Stop on error
+set -e
+
 # default backup destination directory
 BACKUPDIR=/usr/local/tmp
 

@@ -105,7 +105,8 @@ BR2_PACKAGE_LIGHTTPD_OPENSSL=y
 BR2_PACKAGE_LIGHTTPD_ZLIB=y
 BR2_PACKAGE_LIGHTTPD_PCRE=y
 BR2_PACKAGE_NETSNMP=y
-BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES="host ucd-snmp/dlmod ucd-snmp/diskio ucd-snmp/extensible ucd-snmp/pass mibII/mta_sendmail etherlike-mib/dot3StatsTable disman/event-mib agentx"
+BR2_PACKAGE_NETSNMP_WITH_MIB_MODULES="host ucd-snmp/dlmod ucd-snmp/diskio ucd-snmp/extensible ucd-snmp/pass mibII/mta_sendmail etherlike-mib/dot3StatsTable disman/event-mib disman/event disman/schedule agentx tunnel misc/ipfwacc utilities target notification agent_mibs agent/extend"
+BR2_PACKAGE_NETSNMP_WITHOUT_MIB_MODULES=""
 BR2_PACKAGE_NTP=y
 # BR2_PACKAGE_NTP_NTPD is not set
 BR2_PACKAGE_NTP_NTPDATE=y

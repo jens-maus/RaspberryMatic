@@ -34,7 +34,7 @@ For support on installation and help please visit the following web pages:
 ## :package:  Download:
 The following installation archives can be downloaded for different hardware platforms. To verify their integrity a `sha256` checksum is provided as well. You can either upload these files using the WebUI-based update mechanism or unarchive them to e.g. flash the included `*.img` files on a fresh installation media (e.g. microSD card):
 
-- RaspberryPi4 Model B, RaspberryPi4 Compute Module, RaspberryPi 400 – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):
+- RaspberryPi4 Model B, RaspberryPi Compute Module 4, RaspberryPi 400 – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):
 <sub>:package: [RaspberryMatic-${VERSION}-rpi4.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi4.zip)<br/>SHA256: XXXXX</sub>
 
 - [CCU3](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-CCU3), [ELV-Charly](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ELV-Charly), RaspberryPi3 Model B+, RaspberryPi3 Model B, RaspberryPi3 Model A+, RaspberryPi Compute Module 3, RaspberryPi Compute Module 3 lite – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):

@@ -16,6 +16,8 @@ check process hss_led with pidfile /var/run/hss_led.pid
     if not exist for 1 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'hss_led restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'hss_led: high filedescriptor usage (>95%)' WatchDog-Alarm"
     depends on hmlangwDisabled
 
 # syslog daemon monitoring
@@ -27,6 +29,8 @@ check process syslogd with pidfile /var/run/syslogd.pid
     if not exist for 1 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'syslogd restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'syslogd: high filedescriptor usage (>95%)' WatchDog-Alarm"
 
 # udev daemon monitoring
 check process udevd with matching /sbin/udevd
@@ -36,6 +40,8 @@ check process udevd with matching /sbin/udevd
     if not exist for 1 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'udevd restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'udevd: high filedescriptor usage (>95%)' WatchDog-Alarm"
     depends on udevdEnabled
 
 check program udevdEnabled with path "/bin/grep -q 'HM_RUNNING_IN_HA=' /var/hm_mode"
@@ -51,6 +57,8 @@ check process irqbalance with pidfile /var/run/irqbalance.pid
     if not exist for 1 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'irqbalance restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'irqbalance: high filedescriptor usage (>95%)' WatchDog-Alarm"
     depends on irqbalanceEnabled
 
 check program irqbalanceEnabled with path /bin/sh -c "/usr/bin/test $(nproc) -gt 1"
@@ -67,6 +75,8 @@ check process eq3configd with pidfile /var/run/eq3configd.pid
     if failed port 43439 type udp for 5 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'eq3configd restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'eq3configd: high filedescriptor usage (>95%)' WatchDog-Alarm"
 
 # lighttpd web server daemon monitoring
 check process lighttpd with pidfile /var/run/lighttpd-angel.pid
@@ -77,6 +87,8 @@ check process lighttpd with pidfile /var/run/lighttpd-angel.pid
     if not exist for 1 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'lighttpd restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'lighttpd: high filedescriptor usage (>95%)' WatchDog-Alarm"
     if failed port 443 and certificate valid > 30 days for 5 cycles then
       exec "/bin/triggerAlarm.tcl 'HTTPS certificate expiring in < 30 days' WatchDog-Alarm"
     if failed port 80 for 5 cycles then restart
@@ -105,6 +117,8 @@ check process ssdpd with pidfile /var/run/ssdpd.pid
     if failed port 1900 type udp for 5 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'ssdpd restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'ssdpd: high filedescriptor usage (>95%)' WatchDog-Alarm"
 
 # ssh daemon monitoring
 check process sshd with pidfile /var/run/sshd.pid
@@ -116,6 +130,8 @@ check process sshd with pidfile /var/run/sshd.pid
     #if failed port 22 for 5 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'sshd restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'sshd: high filedescriptor usage (>95%)' WatchDog-Alarm"
     depends on sshdEnabled
 
 check program sshdEnabled with path "/usr/bin/test -f /etc/config/sshEnabled"
@@ -132,6 +148,8 @@ check process hs485d with pidfile /var/run/hs485dLoader.pid
     if failed port 32000 for 5 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'hs485d restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'hs485d: high filedescriptor usage (>95%)' WatchDog-Alarm"
     depends on hs485dEnabled, hmlangwDisabled
 
 check program hs485dEnabled with path "/bin/grep -q '^\[Interface .\]' /var/etc/hs485d.conf"
@@ -147,6 +165,8 @@ check process multimacd with pidfile /var/run/multimacd.pid
     if not exist for 1 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'multimacd restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'multimacd: high filedescriptor usage (>95%)' WatchDog-Alarm"
     depends on multimacdEnabled, hmlangwDisabled
 
 check program multimacdEnabled with path "/usr/bin/test -f /var/etc/multimacd.conf"
@@ -180,6 +200,8 @@ check process rfd with pidfile /var/run/rfd.pid
     if failed port 32001 for 5 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'rfd restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'rfd: high filedescriptor usage (>95%)' WatchDog-Alarm"
     depends on rfdEnabled, hmlangwDisabled
 
 check program rfdEnabled with path "/bin/grep -q '^\[Interface .\]' /var/etc/rfd.conf"
@@ -199,6 +221,8 @@ check process HMIPServer with pidfile /var/run/HMIPServer.pid
     #if failed port 43438 type udp for 5 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'HMIPServer restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'HMIPServer: high filedescriptor usage (>95%)' WatchDog-Alarm"
     depends on hmlangwDisabled
 
 # ReGaHss logic engine daemon monitoring
@@ -213,6 +237,8 @@ check process ReGaHss with pidfile /var/run/ReGaHss.pid
     if failed port 1998 type udp for 5 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'ReGaHss restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'ReGaHss: high filedescriptor usage (>95%)' WatchDog-Alarm"
     depends on hmlangwDisabled
 
 # cronjob daemon monitoring
@@ -224,6 +250,8 @@ check process crond with pidfile /var/run/crond.pid
     if not exist for 1 cycles then restart
     if 1 restart within 1 cycles then
       exec "/bin/triggerAlarm.tcl 'crond restarted' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'crond: high filedescriptor usage (>95%)' WatchDog-Alarm"
 
 # system cpu/memory monitoring
 check system $HOST
@@ -232,6 +260,8 @@ check system $HOST
       exec "/bin/triggerAlarm.tcl 'high CPU usage (>95%) detected' WatchDog-Alarm"
     if memory usage > 95% for 24 cycles then
       exec "/bin/triggerAlarm.tcl 'high memory usage (>95%) detected' WatchDog-Alarm"
+    if filedescriptors > 95% for 5 cycles then
+      exec "/bin/triggerAlarm.tcl 'high filedescriptor usage (>95%) detected' WatchDog-Alarm"
 
 # filesystem space monitoring
 check filesystem rootfs with path /

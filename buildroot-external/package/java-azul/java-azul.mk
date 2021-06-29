@@ -22,6 +22,8 @@ JAVA_AZUL_VERSION = 8.54.0.21-ca-jdk8.0.292
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_x64.tar.gz
 JAVA_AZUL_SITE = https://cdn.azul.com/zulu/bin
 endif
+JAVA_AZUL_LICENSE = GPL
+JAVA_AZUL_LICENSE_FILES = LICENSE
 JAVA_AZUL_DEPENDENCIES = fontconfig dejavu liberation
 
 define JAVA_AZUL_PRE_PATCH

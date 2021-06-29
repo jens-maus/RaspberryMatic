@@ -6,6 +6,8 @@
 
 OCCU_VERSION = 3.59.6-1
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
+OCCU_LICENSE = HMSL
+OCCU_LICENSE_FILES = LicenseDE.txt
 
 ifeq ($(BR2_PACKAGE_OCCU),y)
 

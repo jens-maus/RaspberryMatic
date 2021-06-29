@@ -1,0 +1,6 @@
+# Locally computed
+sha256  5eb9a61c60e89d262167bf99855b79115ca8e16b1b8bdc1cd3ad1ed4f0d163ac  zulu8.54.0.21-ca-jdk8.0.292-linux_aarch64.tar.gz
+sha256  1a15b84a4d9dfb44a22c0335b36e4c1d9c860a0fa3aaa92f023543deaca25c10  zulu8.54.0.21-ca-jdk8.0.292-linux_x64.tar.gz
+sha256  6acae91a6a288558e8fdd064b6743f0a611ba3f7ceaabb51be216546dff295f1  zulu8.54.0.21-ca-jdk8.0.292-linux_aarch32hf.tar.gz
+sha256  088012d877f8d080d4e728df918ef16bc73a5aa89f6dee31c0d3ede21284dfe5  zulu8.54.0.21-ca-jdk8.0.292-linux_i686.tar.gz
+sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE

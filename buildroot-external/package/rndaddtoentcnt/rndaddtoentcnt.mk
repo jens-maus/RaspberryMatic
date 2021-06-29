@@ -6,7 +6,7 @@
 #
 #############################################################
 
-RNDADDTOENTCNT_VERSION = master
+RNDADDTOENTCNT_VERSION = 3cef9b224336ac4147aade20738420193e525fc5
 RNDADDTOENTCNT_SITE = $(call github,jumpnow,rndaddtoentcnt,$(RNDADDTOENTCNT_VERSION))
 RNDADDTOENTCNT_LICENSE = MIT
 RNDADDTOENTCNT_LICENSE_FILES = LICENSE

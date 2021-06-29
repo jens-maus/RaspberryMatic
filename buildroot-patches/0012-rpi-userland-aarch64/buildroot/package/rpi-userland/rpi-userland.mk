@@ -4,14 +4,16 @@
 #
 ################################################################################
 
-RPI_USERLAND_VERSION = 188d3bfe4a0ac36b119a2cee35a6be8d0c68e09e
+RPI_USERLAND_VERSION = 97bc8180ad682b004ea224d1db7b8e108eda4397
 RPI_USERLAND_SITE = $(call github,raspberrypi,userland,$(RPI_USERLAND_VERSION))
 RPI_USERLAND_LICENSE = BSD-3-Clause
 RPI_USERLAND_LICENSE_FILES = LICENCE
 RPI_USERLAND_INSTALL_STAGING = YES
 RPI_USERLAND_CONF_OPTS = -DVMCS_INSTALL_PREFIX=/usr
 
+ifeq ($(BR2_arm),y)
 RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
+endif
 
 ifeq ($(BR2_PACKAGE_RPI_USERLAND_HELLO),y)
 

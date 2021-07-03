@@ -23,7 +23,7 @@ if [[ -n "${HM_HMIP_DEV}" ]]; then
   # get the architecture
   ARCH=$(uname -m)
 
-  /opt/java/bin/java -Dos.arch="${ARCH}" ${JAVAOPT} -Dfile.encoding=ISO-8859-1 -Dvertx.cacheDirBase=/tmp/.vertx-backuprestore -Dgnu.io.rxtx.SerialPorts="${HM_SERVER_DEVNODE}" -cp "${HM_SERVER}" de.eq3.ccu.server.ip.validation.ValidateHmIPBackup ${HM_SERVER_ARGS} "${pathBackup}"
+  /opt/java/bin/java -Dos.arch="${ARCH}" -Dfile.encoding=ISO-8859-1 -Dvertx.cacheDirBase=/tmp/.vertx-backuprestore -Dgnu.io.rxtx.SerialPorts="${HM_SERVER_DEVNODE}" -cp "${HM_SERVER}" de.eq3.ccu.server.ip.validation.ValidateHmIPBackup ${HM_SERVER_ARGS} "${pathBackup}"
 
   case $? in
    -1) exitCode=9 ;;

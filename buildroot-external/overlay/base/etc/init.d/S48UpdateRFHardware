@@ -11,9 +11,6 @@ update_rf_hardware() {
 
     ARCH=$(uname -m)
     JAVAOPT=
-    if [[ "${ARCH}" == "aarch64" ]]; then
-      JAVAOPT="-DlibNRJavaSerial.userlib=/opt/HMServer/libNRJavaSerialv8.so"
-    fi
 
     # check if user has a HM-MOD-RPI-PCB installed (GPIO) and
     # perform a firmware update if necessary

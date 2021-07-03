@@ -188,9 +188,6 @@ query_rf_parameters() {
              [[ "${RF_HARDWARE}" == "HMIP-RFUSB" ]]; then
             ARCH=$(uname -m)
             JAVAOPT=
-            if [[ "${ARCH}" == "aarch64" ]]; then
-              JAVAOPT="-DlibNRJavaSerial.userlib=/opt/HMServer/libNRJavaSerialv8.so"
-            fi
 
             # shellcheck disable=SC2086
             /usr/bin/timeout 20 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts="/dev/${dev}" -jar /opt/HmIP/hmip-copro-update.jar -p "/dev/${dev}" -r >/dev/null 2>&1

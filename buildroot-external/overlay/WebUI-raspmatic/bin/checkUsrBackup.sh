@@ -23,13 +23,6 @@ if [[ -n "${HM_HMIP_DEV}" ]]; then
   # get the architecture
   ARCH=$(uname -m)
 
-  # if we run on aarch64 we have to override the libNRJavaSerial definition
-  # so that the aarch64 (v8) version is used we supply our own
-  JAVAOPT=
-  if [[ "${ARCH}" == "aarch64" ]];then
-    JAVAOPT="-DlibNRJavaSerial.userlib=/opt/HMServer/libNRJavaSerialv8.so"
-  fi
-
   /opt/java/bin/java -Dos.arch="${ARCH}" ${JAVAOPT} -Dfile.encoding=ISO-8859-1 -Dvertx.cacheDirBase=/tmp/.vertx-backuprestore -Dgnu.io.rxtx.SerialPorts="${HM_SERVER_DEVNODE}" -cp "${HM_SERVER}" de.eq3.ccu.server.ip.validation.ValidateHmIPBackup ${HM_SERVER_ARGS} "${pathBackup}"
 
   case $? in

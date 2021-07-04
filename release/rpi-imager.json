@@ -2,7 +2,7 @@
     "os_list": [
         {
             "name": "RaspberryMatic 3.59.6.20210703 (RPi 4/400)",
-            "description": "Lightweight Linux OS for running your HomeMatic/homematicIP central on your own hardware.",
+            "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
             "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.59.6.20210703/RaspberryMatic-3.59.6.20210703-rpi4.zip",
             "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager.png",
             "release_date": "2021-07-03",
@@ -13,7 +13,7 @@
         },
         {
             "name": "RaspberryMatic 3.59.6.20210703 (RPi 3, ELV-Charly, CCU3)",
-            "description": "Lightweight Linux OS for running your HomeMatic/homematicIP central on your own hardware.",
+            "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
             "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.59.6.20210703/RaspberryMatic-3.59.6.20210703-rpi3.zip",
             "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager.png",
             "release_date": "2021-07-03",
@@ -21,6 +21,28 @@
             "extract_sha256": "0be23b3eb8e3f1350dc10aceb7147828b1f727de437011ccde17c402853d709b",
             "image_download_size": 264364648,
             "image_download_sha256": "b5461200901820aed6028981b6d1b04594fbf931ecd87c0361ac328862b6cdce"
+        },
+        {
+            "name": "RaspberryMatic 3.59.6.20210703 (RPi 2)",
+            "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
+            "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.59.6.20210703/RaspberryMatic-3.59.6.20210703-rpi2.zip",
+            "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager.png",
+            "release_date": "2021-07-03",
+            "extract_size": 1345249792,
+            "extract_sha256": "cccf73fa5d731de9cbb2e20451d1a058f59d885a144081b91477375d6b5e82e7",
+            "image_download_size": 255526952,
+            "image_download_sha256": "c76ae37fd411d6220144773617179b58e9c264b9e9e61ab85d31c28a5a918250"
+        },
+        {
+            "name": "RaspberryMatic 3.59.6.20210703 (RPi Zero, RPi 1)",
+            "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
+            "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.59.6.20210703/RaspberryMatic-3.59.6.20210703-rpi0.zip",
+            "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager.png",
+            "release_date": "2021-07-03",
+            "extract_size": 1345249792,
+            "extract_sha256": "ac73ee1e26b9f351837b41819d887ba4b417b85bb6beff32d9a5911e1a973677",
+            "image_download_size": 254627180,
+            "image_download_sha256": "49c332966b47c649e77ede0fd907f339b3813dc80db27f1a48a44490c1ffe4c2"
         }
     ]
 }

@@ -11,6 +11,7 @@ on:
       - '**.md'
       - 'helm/**'
       - 'release/LATEST-VERSION.js'
+      - 'release/rpi-imager.json'
       - 'home-assistant-addon-dev/config.json'
   pull_request:
     branches-ignore:
@@ -21,6 +22,7 @@ on:
       - '**.md'
       - 'helm/**'
       - 'release/LATEST-VERSION.js'
+      - 'release/rpi-imager.json'
       - 'home-assistant-addon-dev/config.json'
   workflow_dispatch:
     inputs:

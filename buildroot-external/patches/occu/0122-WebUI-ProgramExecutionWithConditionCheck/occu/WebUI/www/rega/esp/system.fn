@@ -1274,7 +1274,13 @@ function ::writeProgCtrl()
   Write("<td>");
   string sClass = "ControlBtnOff";
   if( objProg.Active() ) { sClass = "ControlBtnOn"; }
-    Write("<table class='"#sClass#" CLASS02102' id='"#pid#"Act' >"); 
+  integer uid = system.GetSessionVar("sessionUserID");
+  object oUser = dom.GetObject(uid);
+  if(oUser.UserLevel() == iulAdmin) {
+    Write("<table class='"#sClass#" CLASS02102' id='"#pid#"Act' onclick='isePrograms.SetActive("#pid#",!" #objProg.Active() # ")'>");
+  } else {
+    Write("<table class='"#sClass#" CLASS02102' style='cursor: default; border-top: solid 1px black; border-right: solid 1px black;' id='"#pid#"Act' >");
+  }
     Write("<tr>");
     Write("<td  class='CLASS02103'>");
         Write("<div align='center'>");
@@ -1283,7 +1289,11 @@ function ::writeProgCtrl()
       Write("</td>");
     Write("</tr>");
     !Write("<tr><td>Aktiv</td></tr>");
-    Write("<tr><td>${actionStatusControlLblActive}</td></tr>");
+    if( objProg.Active() ) {
+      Write("<tr><td>${actionStatusControlLblActive}</td></tr>");
+    } else {
+      Write("<tr><td>${actionStatusControlLblNotActive}</td></tr>");
+    }
     Write("</table>");
   Write("</td>");
   if (system.GetVar("iStatusOnly") == 0)

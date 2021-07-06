@@ -143,10 +143,10 @@ entries:
         - name: Documentation
           url: https://github.com/jens-maus/RaspberryMatic/wiki
     apiVersion: v2
-    appVersion: 3.59.6.20210705-a1d09b4
-    created: "2021-07-05T05:12:27.744097697Z"
+    appVersion: 3.59.6.20210706-7c95e90
+    created: "2021-07-06T03:25:52.385615657Z"
     description: HomeMatic/homematicIP CCU central based on RaspberryMatic
-    digest: de9c9a5778ab5819f81af1a72c3198937c97de9a5d1745417bca19d4e11e1419
+    digest: 05dfe6f516d2ecd68c9130925f9867475fa07b0fbf5e6c2f5c5ad5c4809241c1
     home: https://github.com/jens-maus/RaspberryMatic
     icon: https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/home-assistant-addon/icon.png
     keywords:
@@ -166,4 +166,4 @@ entries:
     urls:
     - https://jens-maus.github.io/RaspberryMatic/raspberrymatic-0.1.tgz
     version: "0.1"
-generated: "2021-07-05T05:12:27.74234128Z"
+generated: "2021-07-06T03:25:52.384417637Z"

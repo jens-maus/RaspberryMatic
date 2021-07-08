@@ -8,7 +8,6 @@
   "url": "https://github.com/jens-maus/RaspberryMatic/",
   "watchdog": "tcp://[HOST]:[PORT:80]",
   "ingress": true,
-  "ingress_stream": true,
   "panel_title": "RaspberryMatic",
   "panel_icon": "mdi:router-wireless",
   "startup": "services",

@@ -19,6 +19,7 @@ const apiProxy = createProxyMiddleware('/', {
   changeOrigin: true, // for vhosted sites,
   //logLevel: 'debug',
   selfHandleResponse: true,
+  timeout: 1200000, // max 20 min
   onProxyRes: responseInterceptor(async (responseBody, proxyRes, req, res) => {
     // modify Location: response header if present
     if(typeof(proxyRes.headers.location) !== 'undefined') {

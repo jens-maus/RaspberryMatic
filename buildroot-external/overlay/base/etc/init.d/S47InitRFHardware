@@ -62,14 +62,18 @@ identify_rf_hardware() {
   fi
 
   RF_DEVNODES=
-  # identify which raw-uart devices we have
-  for dev in /sys/class/raw-uart/*; do
-    dev="$(basename "${dev}")"
-    if [[ -c "/dev/${dev}" ]]; then
-      echo -n "."
-      RF_DEVNODES="${RF_DEVNODES} ${dev}"
-    fi
-  done
+  # check for supported raw-uart hardware and add the
+  # corresponding raw-uart device to RF_DEVNODES
+  if ! grep -iq hmul /sys/bus/usb/devices/*/product 2>/dev/null; then
+    # identify which raw-uart devices we have
+    for dev in /sys/class/raw-uart/*; do
+      dev="$(basename "${dev}")"
+      if [[ -c "/dev/${dev}" ]]; then
+        echo -n "."
+        RF_DEVNODES="${RF_DEVNODES} ${dev}"
+      fi
+    done
+  fi
 
   # if we don't have any raw-uart device we add the boards'
   # own serial devices
@@ -280,10 +284,10 @@ query_rf_parameters() {
   # a HB-RF-USB/HB-RF-USB-2/HB-RF-ETH and if so we have to setup its
   # led driver correctly.
   if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] &&
-     echo "${HM_HMRF_DEVTYPE}" | grep -qi HB-RF-; then
+    echo "${HM_HMRF_DEVTYPE}" | grep -qi HB-RF-; then
     HBRF_DEVNODE=$(basename "${HM_HMRF_DEVNODE}")
   elif [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]] &&
-       echo "${HM_HMIP_DEVTYPE}" | grep -qi HB-RF-; then
+    echo "${HM_HMIP_DEVTYPE}" | grep -qi HB-RF-; then
     HBRF_DEVNODE=$(basename "${HM_HMIP_DEVNODE}")
   fi
 

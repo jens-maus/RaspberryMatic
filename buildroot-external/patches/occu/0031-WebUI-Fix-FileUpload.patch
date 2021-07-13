@@ -1,16 +1,17 @@
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -62,9 +62,13 @@
+@@ -61,10 +61,14 @@
+       puts "conInfo(\"EULA found\");"
        puts "jQuery('#fwUpload').hide();"
        puts "var dlg = new EulaDialog(translateKey('dialogEulaTitle'), data, function(result) {"
++        puts "var dlgPopup = parent.top.dlgPopup;"
++        puts "if (dlgPopup === undefined) {"
++          puts "dlgPopup = window.open('', 'resize').dlgPopup;"
++        puts "}"
          puts "if (result == 1) {"
 -          puts "parent.top.dlgPopup.hide();"
 -          puts "parent.top.dlgPopup.setWidth(450);"
 -          puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
-+          puts "var dlgPopup = parent.top.dlgPopup;"
-+          puts "if (dlgPopup === undefined) {"
-+            puts "dlgPopup = window.open('', 'resize').dlgPopup;"
-+          puts "}"
 +          puts "dlgPopup.hide();"
 +          puts "dlgPopup.setWidth(450);"
 +          puts "dlgPopup.LoadFromFile(url, \"action=$action\");"
@@ -85,15 +86,6 @@
    }
  
    if {[getProduct] < 3} {
-@@ -1013,7 +1015,7 @@
-       set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
-       if {$file_invalid == 0} {
-         # the file seems to be a tar archive (perhaps with gzip compression)
--        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xmf $filename} result]
-+        set file_invalid [catch {exec /bin/tar -C $TMPDIR --warning=no-timestamp --no-same-owner -xmf $filename} result]
-         file delete -force -- $filename
-       }
-     }
 @@ -1041,10 +1043,14 @@
  
    cgi_javascript {

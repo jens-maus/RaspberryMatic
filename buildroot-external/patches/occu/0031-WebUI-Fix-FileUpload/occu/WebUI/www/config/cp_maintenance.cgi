@@ -61,11 +61,11 @@ proc action_acceptEula {} {
       puts "conInfo(\"EULA found\");"
       puts "jQuery('#fwUpload').hide();"
       puts "var dlg = new EulaDialog(translateKey('dialogEulaTitle'), data, function(result) {"
+        puts "var dlgPopup = parent.top.dlgPopup;"
+        puts "if (dlgPopup === undefined) {"
+          puts "dlgPopup = window.open('', 'resize').dlgPopup;"
+        puts "}"
         puts "if (result == 1) {"
-          puts "var dlgPopup = parent.top.dlgPopup;"
-          puts "if (dlgPopup === undefined) {"
-            puts "dlgPopup = window.open('', 'resize').dlgPopup;"
-          puts "}"
           puts "dlgPopup.hide();"
           puts "dlgPopup.setWidth(450);"
           puts "dlgPopup.LoadFromFile(url, \"action=$action\");"
@@ -1015,7 +1015,7 @@ proc action_firmware_upload {} {
       set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
       if {$file_invalid == 0} {
         # the file seems to be a tar archive (perhaps with gzip compression)
-        set file_invalid [catch {exec /bin/tar -C $TMPDIR --warning=no-timestamp --no-same-owner -xmf $filename} result]
+        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xmf $filename} result]
         file delete -force -- $filename
       }
     }

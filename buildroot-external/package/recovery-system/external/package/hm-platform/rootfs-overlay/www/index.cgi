@@ -7,9 +7,9 @@ if [ -f /tmp/.runningFirmwareUpdate ]; then
   echo "Displaying running firmware update output:<br/>"
   echo "==========================================<br/>"
 
-  [ -f /tmp/fwinstall.pid ] && kill "$(cat /tmp/fwinstall.pid)"
+  [ -f /tmp/fwinstall$$.pid ] && kill "$(cat /tmp/fwinstall$$.pid)"
   /usr/bin/tail -F /tmp/fwinstall.log &
-  echo $! >/tmp/fwinstall.pid
+  echo $! >/tmp/fwinstall$$.pid
   wait $!
 
   echo "<br/>==========================================<br/>"

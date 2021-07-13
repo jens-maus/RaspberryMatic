@@ -1,18 +1,29 @@
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -905,17 +905,17 @@
+@@ -288,8 +288,8 @@
+     catch { exec /bin/sh -c "rm /var/EULA.*"}
+   } else {
+    catch { exec /bin/sh -c "rm -rf `readlink -f /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
+-   catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*"}
+-   catch { exec /bin/sh -c "rm -f /usr/local/tmp/update_script"}
++   catch { exec /bin/sh -c "rm -f /tmp/EULA.*"}
++   catch { exec /bin/sh -c "rm -f /usr/local/tmp/firmwareUpdateFile"}
+   }
+ 
+   cgi_javascript {
+@@ -905,34 +905,79 @@
    } else {
  
      cd /usr/local/tmp/
 -    set TMPDIR "[file tail $filename-dir]"
-+    set TMPDIR "$filename-dir"
-     exec mkdir -p $TMPDIR
+-    exec mkdir -p $TMPDIR
  
      #
      # check if the uploaded file is a valid firmware update file
      #
  
 -    set file_invalid [catch {exec tar zxvf $filename update_script EULA.en EULA.de -C /usr/local/}]
++    catch { exec rm -f /usr/local/.firmwareUpdate /tmp/EULA.* }
 +    set file_invalid 1
  
      # check for .tar.gz or .tar
@@ -21,17 +32,24 @@
        set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
        if {$file_invalid == 0} {
          # the file seems to be a tar archive (perhaps with gzip compression)
-@@ -924,11 +924,90 @@
-       }
-     }
- 
+-        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xmf $filename} result]
+-        file delete -force -- $filename
++        set file_invalid [catch {exec /bin/tar -C /tmp --warning=no-timestamp --no-same-owner --wildcards -xmf $filename "EULA.*"} result]
++        if {$file_invalid == 0} {
++          catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
++        }
++      }
++    }
++
 +    # check for .zip
 +    if {$file_invalid != 0} {
 +      set file_invalid [catch {exec file -b $filename | grep -q "Zip archive data"} result]
 +      if {$file_invalid == 0} {
 +        # the file seems to be a zip archive containing data
-+        set file_invalid [catch {exec /usr/bin/unzip -q -o -d $TMPDIR $filename 2>/dev/null} result]
-+        file delete -force -- $filename
++        set file_invalid [catch {exec /usr/bin/unzip -q -o -d /tmp $filename EULA.en EULA.de 2>/dev/null} result]
++        if {$file_invalid == 0} {
++          catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
++        }
 +      }
 +    }
 +
@@ -43,7 +61,7 @@
 +        # check if we have exactly 3 partitions
 +        set file_invalid [catch {exec /usr/sbin/parted -sm $filename print 2>/dev/null | tail -1 | egrep -q "3:.*:ext4:"} result]
 +        if {$file_invalid == 0} {
-+          file rename -force -- $filename "$TMPDIR/new_firmware.img"
++          catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
 +        }
 +      }
 +    }
@@ -55,7 +73,7 @@
 +        # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
 +        set file_invalid [catch {exec /sbin/e2fsck -nf $filename 2>/dev/null} result]
 +        if {$file_invalid == 0} {
-+          file rename -force -- $filename "$TMPDIR/rootfs.ext4"
++          catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
 +        }
 +      }
 +    }
@@ -64,52 +82,43 @@
 +    if {$file_invalid != 0} {
 +      set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*bootfs.*FAT"} result]
 +      if {$file_invalid == 0} {
-+        # the file seems to be an vfat fs of the bootfs
-+        file rename -force -- $filename "$TMPDIR/bootfs.vfat"
-+      }
-+    }
-+
-+    ######
-+    # check if there are checksum files in TMPDIR and if so check the checksum first
-+    if {$file_invalid == 0} {
-+      # check for sha256 checksums
-+      foreach chk_file [glob -nocomplain "$TMPDIR/*.sha256"] {
-+        set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/sha256sum -sc $chk_file"} result]
-+        if {$file_invalid != 0} {
-+          break
-+        }
-+      }
-+
-+      # check for md5 checksums
-+      if {$file_invalid == 0} {
-+        foreach chk_file [glob -nocomplain "$TMPDIR/*.md5"] {
-+          set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/md5sum -sc $chk_file"} result]
-+          if {$file_invalid != 0} {
-+            break
-+          }
-+        }
-+      }
-+
-+      # everything seems to be fine with the uploaded file so lets
-+      # do the final check
-+      if {$file_invalid == 0} {
-+        # if no *.img exists we have to check for "update_script"
-+        if {[glob -nocomplain "$TMPDIR/*.img"] == "" &&
-+            [glob -nocomplain "$TMPDIR/*.ext4"] == "" &&
-+            [glob -nocomplain "$TMPDIR/*.vfat"] == ""} {
-+          if {[file exists "$TMPDIR/update_script"] != 1} {
-+            set file_invalid 1
-+          }
-+        }
-+      }
-+    }
-+
++        catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
+       }
+     }
+ 
      #
      # test if the above checks were successfull or not
      #
-     if {$file_invalid == 0} {
+-    if {$file_invalid == 0} {
 -      catch { exec ln -sf tmp/$TMPDIR /usr/local/.firmwareUpdate }
-+      catch { exec ln -sf $TMPDIR /usr/local/.firmwareUpdate }
++    if { $file_invalid == 0 && [file exists /usr/local/.firmwareUpdate] } {
        set action "acceptEula"
      } else {
        file delete -force -- $filename
+-      file delete -force -- $filename-dir
++      catch { exec rm -f /usr/local/.firmwareUpdate /tmp/EULA.* }
+       set action "firmware_update_invalid"
+     }
+ 
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
+@@ -253,7 +253,7 @@
+     "lanGatewayLblStandard" : "(Standard)",
+     "commentSettingsDialogMaintenancePerformSoftwareUpdate" : "***********************************************",
+     "dialogSettingsCMDialogPerformSoftwareUpdateTitle" : "Software-Update",
+-    "dialogSettingsCMDialogPerformSoftwareUpdateP1" : "Das Software-Update wird jetzt durchgef%FChrt. Nach dem Update wird die " + HMIdentifier.de.CCUShortName + " automatisch neu gestartet.",
++    "dialogSettingsCMDialogPerformSoftwareUpdateP1" : HMIdentifier.de.CCUFullNameText + " wird nun neu gestartet und im Anschluss das Software-Update durchgef%FChrt. Dies kann je nach eingesetzter Hardware von wenigen Minuten bis zu einer halben Stunde dauern. Nach erfolgtem Software-Update wird die Zentrale ein zweites mal neu gestartet.<br/><br/>Zum %DCberwachen des Fortschrittes des Software-Updates k%F6nnen Sie nach dem ersten Neustart der Zentrale diese Seite in Ihrem Browser neu laden lassen und sollten daraufhin Ausgaben der Durchf%FChrung des Software-Updates angezeigt bekommen.",
+     "dialogSettingsCMDialogPerformSoftwareUpdateP2" : "Es wird dringend empfohlen, nach dem Update den Cache Ihres Webbrowsers zu l%F6schen. Gehen Sie dabei folgenderma%DFen vor:",
+     "dialogSettingsCMDialogPerformSoftwareUpdateLi1" : "Beenden Sie die aktuelle Browser-Sitzung.",
+     "dialogSettingsCMDialogPerformSoftwareUpdateLi2" : "L%F6schen Sie den Cache Ihres Webbrowsers.<br />Hinweise dazu erhalten Sie in dem Tutorial <a href='http://www.eq-3.de/service/faq.html?id=38' target='_blank'>WebUI Firmware Update: Browser-Cache leeren</a> auf http://www.eq-3.de",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
+@@ -253,7 +253,7 @@
+     "lanGatewayLblStandard" : "(Default)",
+     "commentSettingsDialogMaintenancePerformSoftwareUpdate" : "***********************************************",
+     "dialogSettingsCMDialogPerformSoftwareUpdateTitle" : "Software update",
+-    "dialogSettingsCMDialogPerformSoftwareUpdateP1" : "The software update is now in progress. After the update has been performed, the " + HMIdentifier.en.CCUShortName + " will be restarted automatically.",
++    "dialogSettingsCMDialogPerformSoftwareUpdateP1" : HMIdentifier.en.CCUFullNameText + " will be rebooted now and the software update applied accordingly. Depending on the used hardware the software update can take several minutes until half an hour. After the update has been finished the central will reboot a last time.<br/><br/>To monitor the software update process, you can refresh this web page after the first reboot so that output of the update process should be displayed accordingly.",
+     "dialogSettingsCMDialogPerformSoftwareUpdateP2" : "It is highly recommended to delete the cache of your browser, after the update has been performed. Therefore, please proceed as follows:",
+     "dialogSettingsCMDialogPerformSoftwareUpdateLi1" : "Close all browser windows.",
+     "dialogSettingsCMDialogPerformSoftwareUpdateLi2" : "Please delete the cache of your browser.<br />You will find further information in the tutorial <a href='http://www.eq-3.de/service/faq.html?id=38' target='_blank'>Web-UI Firmware Update: Browser-Cache leeren</a> on http://www.eq-3.de",

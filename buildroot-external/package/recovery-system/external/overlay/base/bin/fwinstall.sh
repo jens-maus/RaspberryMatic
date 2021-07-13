@@ -16,6 +16,7 @@ fwprepare()
 {
   filename=${1}
 
+  echo -ne "[1/6] Checking uploaded data... "
   # check if filename exists
   if [[ ! -f "${filename}" ]]; then
     echo "ERROR ('${filename}' exists)"
@@ -28,13 +29,25 @@ fwprepare()
     echo "ERROR (filesize: ${FILESIZE})"
     exit 1
   fi
-  echo "${FILESIZE} bytes received.<br/>"
+  echo "${FILESIZE} bytes received, OK<br/>"
 
-  echo -ne "[2/6] Calculating SHA256 checksum: "
+  ########
+  # calculate/output sha256 checksum of uploaded data
+  echo -ne "[2/6] Calculating SHA256 checksum..."
+
+  # start a progress bar outputing dots every few seconds
+  awk 'BEGIN{while(1){printf".";fflush();system("sleep 3");}}' &
+  PROGRESS_PID=$!
+  # shellcheck disable=SC2064
+  trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
+
   if ! CHKSUM=$(/usr/bin/sha256sum "${filename}" 2>/dev/null) || [[ -z "${CHKSUM}" ]]; then
     echo "ERROR (sha256sum)"
     exit 1
   fi
+  # stop the progress output
+  kill ${PROGRESS_PID} && trap "rm -f /tmp/.runningFirmwareUpdate" EXIT
+
   echo "$(echo "${CHKSUM}" | awk '{ print $1 }')<br/>"
 
   ########
@@ -48,7 +61,7 @@ fwprepare()
 
   # output
   AVAILSPACE=$(/bin/df -B1 "${TMPDIR}" | tail -1 | awk '{ print $4 }')
-  echo -ne "${AVAILSPACE} bytes free, "
+  echo -ne "${AVAILSPACE} bytes, "
 
   # check if > 0 bytes available
   if [[ -z "${AVAILSPACE}" ]] || [[ "${AVAILSPACE}" -le 0 ]]; then
@@ -59,7 +72,7 @@ fwprepare()
 
   ########
   # check if file is a valid firmware update/recovery file
-  echo -ne "[4/6] Checking uploaded data... "
+  echo -ne "[4/6] Preparing uploaded data... "
 
   FILETYPE=""
 
@@ -79,7 +92,7 @@ fwprepare()
       echo -ne "unarchiving.."
 
       # start a progress bar outputing dots every few seconds
-      while :;do echo -n .;sleep 3;done &
+      awk 'BEGIN{while(1){printf".";fflush();system("sleep 3");}}' &
       PROGRESS_PID=$!
       # shellcheck disable=SC2064
       trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
@@ -115,7 +128,7 @@ fwprepare()
       echo -ne "unarchiving.."
 
       # start a progress bar outputing dots every few seconds
-      while :;do echo -n .;sleep 3;done &
+      awk 'BEGIN{while(1){printf".";fflush();system("sleep 3");}}' &
       PROGRESS_PID=$!
       # shellcheck disable=SC2064
       trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
@@ -138,7 +151,7 @@ fwprepare()
   # check for .img
   if [[ -z "${FILETYPE}" ]]; then
     if /usr/bin/file -b "${filename}" | grep -E -q "DOS/MBR boot sector.*"; then
-      echo -ne "sdcard img identified, validating, "
+      echo -ne "img identified, validating, "
 
       # the file seems to be a full-fledged SD card image with MBR boot sector, etc. so lets
       # check if we have exactly 3 partitions
@@ -197,7 +210,13 @@ fwprepare()
 
   ######
   # now we have unarchived everyting to TMPDIR, so lets check if it is valid
-  echo -ne "[5/6] Verifying checksums... "
+  echo -ne "[5/6] Verifying uploaded data..."
+
+  # start a progress bar outputing dots every few seconds
+  awk 'BEGIN{while(1){printf".";fflush();system("sleep 3");}}' &
+  PROGRESS_PID=$!
+  # shellcheck disable=SC2064
+  trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
 
   # check for sha256 checksums
   (cd "${TMPDIR}";
@@ -225,6 +244,9 @@ fwprepare()
     done
   ) || exit 1
 
+  # stop the progress output
+  kill ${PROGRESS_PID} && trap "rm -f /tmp/.runningFirmwareUpdate" EXIT
+
   echo "DONE<br>"
 
   ######
@@ -240,7 +262,7 @@ fwprepare()
       exit 1
     fi
 
-    echo "OK (update_script found), "
+    echo "update_script found, "
   fi
 
   rm -rf /usr/local/.firmwareUpdate
@@ -249,8 +271,7 @@ fwprepare()
     exit 1
   fi
 
-  echo "DONE<br/>"
-  echo "<br/>"
+  echo "OK, DONE<br/>"
 }
 
 ######
@@ -362,7 +383,7 @@ fwinstall()
       umount -f "${ROOTFS_DEV}"
 
       # start a progress bar outputing dots every few seconds
-      while :;do echo -n .;sleep 3;done &
+      awk 'BEGIN{while(1){printf".";fflush();system("sleep 3");}}' &
       PROGRESS_PID=$!
       # shellcheck disable=SC2064
       trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
@@ -462,7 +483,7 @@ fwinstall()
       umount -f "${BOOTFS_DEV}"
 
       # start a progress bar outputing dots every few seconds
-      while :;do echo -n .;sleep 3;done &
+      awk 'BEGIN{while(1){printf".";fflush();system("sleep 3");}}' &
       PROGRESS_PID=$!
       # shellcheck disable=SC2064
       trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
@@ -492,8 +513,8 @@ fwinstall()
   fi
 
   ######
-  # check for a full-fledged sdcard image in update dir
-  echo -ne "[5/5] Checking for sdcard image... "
+  # check for a full-fledged image in update dir
+  echo -ne "[5/5] Checking for image file... "
 
   # if we flashed either rootfs or bootfs we are finished
   if [[ ${FLASHED_ROOTFS} -eq 1 ]] || [[ ${FLASHED_BOOTFS} -eq 1 ]]; then
@@ -592,7 +613,7 @@ fwinstall()
       umount -f "${BOOTFS_DEV}"
 
       # start a progress bar outputing dots every few seconds
-      while :;do echo -n .;sleep 3;done &
+      awk 'BEGIN{while(1){printf".";fflush();system("sleep 3");}}' &
       PROGRESS_PID=$!
       # shellcheck disable=SC2064
       trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
@@ -726,7 +747,7 @@ fwinstall()
       umount -f "${ROOTFS_DEV}"
 
       # start a progress bar outputing dots every few seconds
-      while :;do echo -n .;sleep 3;done &
+      awk 'BEGIN{while(1){printf".";fflush();system("sleep 3");}}' &
       PROGRESS_PID=$!
       # shellcheck disable=SC2064
       trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
@@ -803,7 +824,9 @@ fi
 # if an argument was given (filename of the update file/data)
 # we run fwprepare to verify its validity
 if [[ "$#" -eq 1 ]] && [[ -n "${1}" ]]; then
+  echo "Preparing firmware update:<br/>"
   fwprepare "${1}"
+  echo "Finished preparation successfully.<br/><br/>"
 fi
 
 # run the fwinstall function to actually

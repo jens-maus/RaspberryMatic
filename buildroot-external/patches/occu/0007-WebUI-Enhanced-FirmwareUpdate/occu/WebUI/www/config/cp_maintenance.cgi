@@ -288,8 +288,8 @@ proc action_firmware_update_cancel {} {
     catch { exec /bin/sh -c "rm /var/EULA.*"}
   } else {
    catch { exec /bin/sh -c "rm -rf `readlink -f /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
-   catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*"}
-   catch { exec /bin/sh -c "rm -f /usr/local/tmp/update_script"}
+   catch { exec /bin/sh -c "rm -f /tmp/EULA.*"}
+   catch { exec /bin/sh -c "rm -f /usr/local/tmp/firmwareUpdateFile"}
   }
 
   cgi_javascript {
@@ -905,13 +905,12 @@ proc action_firmware_upload {} {
   } else {
 
     cd /usr/local/tmp/
-    set TMPDIR "$filename-dir"
-    exec mkdir -p $TMPDIR
 
     #
     # check if the uploaded file is a valid firmware update file
     #
 
+    catch { exec rm -f /usr/local/.firmwareUpdate /tmp/EULA.* }
     set file_invalid 1
 
     # check for .tar.gz or .tar
@@ -919,8 +918,10 @@ proc action_firmware_upload {} {
       set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
       if {$file_invalid == 0} {
         # the file seems to be a tar archive (perhaps with gzip compression)
-        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xmf $filename} result]
-        file delete -force -- $filename
+        set file_invalid [catch {exec /bin/tar -C /tmp --warning=no-timestamp --no-same-owner --wildcards -xmf $filename "EULA.*"} result]
+        if {$file_invalid == 0} {
+          catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
+        }
       }
     }
 
@@ -929,8 +930,10 @@ proc action_firmware_upload {} {
       set file_invalid [catch {exec file -b $filename | grep -q "Zip archive data"} result]
       if {$file_invalid == 0} {
         # the file seems to be a zip archive containing data
-        set file_invalid [catch {exec /usr/bin/unzip -q -o -d $TMPDIR $filename 2>/dev/null} result]
-        file delete -force -- $filename
+        set file_invalid [catch {exec /usr/bin/unzip -q -o -d /tmp $filename EULA.en EULA.de 2>/dev/null} result]
+        if {$file_invalid == 0} {
+          catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
+        }
       }
     }
 
@@ -942,7 +945,7 @@ proc action_firmware_upload {} {
         # check if we have exactly 3 partitions
         set file_invalid [catch {exec /usr/sbin/parted -sm $filename print 2>/dev/null | tail -1 | egrep -q "3:.*:ext4:"} result]
         if {$file_invalid == 0} {
-          file rename -force -- $filename "$TMPDIR/new_firmware.img"
+          catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
         }
       }
     }
@@ -954,7 +957,7 @@ proc action_firmware_upload {} {
         # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
         set file_invalid [catch {exec /sbin/e2fsck -nf $filename 2>/dev/null} result]
         if {$file_invalid == 0} {
-          file rename -force -- $filename "$TMPDIR/rootfs.ext4"
+          catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
         }
       }
     }
@@ -963,55 +966,18 @@ proc action_firmware_upload {} {
     if {$file_invalid != 0} {
       set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*bootfs.*FAT"} result]
       if {$file_invalid == 0} {
-        # the file seems to be an vfat fs of the bootfs
-        file rename -force -- $filename "$TMPDIR/bootfs.vfat"
-      }
-    }
-
-    ######
-    # check if there are checksum files in TMPDIR and if so check the checksum first
-    if {$file_invalid == 0} {
-      # check for sha256 checksums
-      foreach chk_file [glob -nocomplain "$TMPDIR/*.sha256"] {
-        set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/sha256sum -sc $chk_file"} result]
-        if {$file_invalid != 0} {
-          break
-        }
-      }
-
-      # check for md5 checksums
-      if {$file_invalid == 0} {
-        foreach chk_file [glob -nocomplain "$TMPDIR/*.md5"] {
-          set file_invalid [catch {exec /bin/sh -c "cd $TMPDIR; /usr/bin/md5sum -sc $chk_file"} result]
-          if {$file_invalid != 0} {
-            break
-          }
-        }
-      }
-
-      # everything seems to be fine with the uploaded file so lets
-      # do the final check
-      if {$file_invalid == 0} {
-        # if no *.img exists we have to check for "update_script"
-        if {[glob -nocomplain "$TMPDIR/*.img"] == "" &&
-            [glob -nocomplain "$TMPDIR/*.ext4"] == "" &&
-            [glob -nocomplain "$TMPDIR/*.vfat"] == ""} {
-          if {[file exists "$TMPDIR/update_script"] != 1} {
-            set file_invalid 1
-          }
-        }
+        catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
       }
     }
 
     #
     # test if the above checks were successfull or not
     #
-    if {$file_invalid == 0} {
-      catch { exec ln -sf $TMPDIR /usr/local/.firmwareUpdate }
+    if { $file_invalid == 0 && [file exists /usr/local/.firmwareUpdate] } {
       set action "acceptEula"
     } else {
       file delete -force -- $filename
-      file delete -force -- $filename-dir
+      catch { exec rm -f /usr/local/.firmwareUpdate /tmp/EULA.* }
       set action "firmware_update_invalid"
     }
 

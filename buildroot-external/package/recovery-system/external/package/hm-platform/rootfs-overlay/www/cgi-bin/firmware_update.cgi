@@ -12,7 +12,7 @@ fi
 rm -f /usr/local/.firmwareUpdate
 
 # process data upload
-echo -ne "[1/6] Processing uploaded data.."
+echo -ne "Receiving uploaded data.."
 
 # fake read boundary+disposition, etc.
 read -r boundary
@@ -31,7 +31,7 @@ d=0
 a=$((a*2+b+c+d+10))
 
 # start a progress bar outputing dots every few seconds
-while :;do echo -n .;sleep 3;done &
+awk 'BEGIN{while(1){printf".";fflush();system("sleep 3");}}' &
 PROGRESS_PID=$!
 # shellcheck disable=SC2064
 trap "kill ${PROGRESS_PID}" EXIT
@@ -47,15 +47,24 @@ fi
 # stop the progress output
 kill ${PROGRESS_PID} && trap " " EXIT
 
+echo "OK, DONE<br/><br/>"
+
 ######
 # lets start the firmware update now using /bin/fwinstall.sh
 # and if it returns 0 everything was fine and we can reboot!
 if ! /bin/fwinstall.sh "${filename}"; then
-  exit 1
+  RET=1
+else
+  RET=0
 fi
 
 # cleanup
 rm -f /usr/local/.firmwareUpdate
+rm -f /tmp/.runningFirmwareUpdate
 
-echo "Rebooting..."
-/sbin/reboot
+if [ ${RET} -eq 0 ]; then
+  echo "Rebooting...<br/>"
+  /sbin/reboot
+fi
+
+exit ${RET}

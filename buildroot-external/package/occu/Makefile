@@ -82,9 +82,8 @@ ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
 endif
 
 update_webui:
-	ln -sf /usr/local/.firmwareUpdate/EULA.de             $(TARGET_DIR)/www/rega/EULA.de
-	ln -sf /usr/local/.firmwareUpdate/EULA.en             $(TARGET_DIR)/www/rega/EULA.en
-	ln -sf /usr/local/.firmwareUpdate/EULA.tr             $(TARGET_DIR)/www/rega/EULA.tr
+	ln -sf /tmp/EULA.de             											$(TARGET_DIR)/www/rega/EULA.de
+	ln -sf /tmp/EULA.en             											$(TARGET_DIR)/www/rega/EULA.en
 	ln -sf ${OCCU_ROOT}/www/tcl/extern/cgi.tcl            $(TARGET_DIR)/www/cgi.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/common.tcl        $(TARGET_DIR)/www/common.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/session.tcl       $(TARGET_DIR)/www/session.tcl

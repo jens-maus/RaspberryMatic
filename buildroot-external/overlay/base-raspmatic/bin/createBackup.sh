@@ -56,6 +56,7 @@ fi
 TMPDIR=$(mktemp -d -p "${BACKUPDIR}")
 if [[ -d "${TMPDIR}" ]]; then
   # make sure TMPDIR is removed under all circumstances
+  # shellcheck disable=SC2064
   trap "rm -rf ${TMPDIR}" EXIT
 
   # make sure ReGaHSS saves its current settings

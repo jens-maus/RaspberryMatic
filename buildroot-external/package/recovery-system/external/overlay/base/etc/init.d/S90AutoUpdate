@@ -26,13 +26,13 @@ start() {
       if cp -a "${USB_DIR}/ccu-update.bin" "${filename}"; then
         # run unattended firmware update
         if ! ( set -o pipefail; /bin/fwinstall.sh "${filename}" 2>&1 | tee /tmp/fwinstall.log ); then
-          kill $(cat /tmp/fwinstall*.pid) 2>/dev/null
+          cat /tmp/fwinstall*.pid | xargs kill 2>/dev/null
 
           # firmware update failed, lets change to
           # interactive mode
           echo "ERROR!"
         else
-          kill $(cat /tmp/fwinstall*.pid) 2>/dev/null
+          cat /tmp/fwinstall*.pid | xargs kill 2>/dev/null
 
           # firmware update succeeded, lets reboot!
           rm -f /usr/local/.firmwareUpdate
@@ -84,13 +84,13 @@ start() {
     #  fwinstall.sh can extract data if necessary)
     mount -o rw,remount /userfs
     if ! ( set -o pipefail; /bin/fwinstall.sh "${FWINSTALL_PARAM}" 2>&1 | tee /tmp/fwinstall.log ); then
-      kill $(cat /tmp/fwinstall*.pid) 2>/dev/null
+      cat /tmp/fwinstall*.pid | xargs kill 2>/dev/null
 
       # firmware update failed, lets change to
       # interactive mode
       echo "ERROR!"
     else
-      kill $(cat /tmp/fwinstall*.pid) 2>/dev/null
+      cat /tmp/fwinstall*.pid | xargs kill 2>/dev/null
 
       # firmware update succeeded, lets reboot!
       mount -o rw,remount /userfs

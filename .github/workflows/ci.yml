@@ -53,7 +53,7 @@ jobs:
     - name: Check shell scripts
       uses: ludeeus/action-shellcheck@1.1.0
       with:
-        ignore: buildroot-external/package/neoserver/pkg/mediola/neo_server buildroot-patches/0010-lib32-integration/buildroot/support/scripts xe-linux-distribution
+        ignore: buildroot-external/package/neoserver/pkg/mediola/neo_server buildroot-patches/0010-lib32-integration/buildroot/support/scripts buildroot-external/package/xe-guest-utilities
       env:
         SHELLCHECK_OPTS: -e SC3010 -e SC3014 -e SC3057 -e SC3036 -e SC3028 -e SC3020
 

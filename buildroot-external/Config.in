@@ -39,6 +39,7 @@ menu "Software Support"
   source "$BR2_EXTERNAL_EQ3_PATH/package/rndaddtoentcnt/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/qemu-guest-agent/Config.in"
   source "$BR2_EXTERNAL_EQ3_PATH/package/raspi-fanshim/Config.in"
+  source "$BR2_EXTERNAL_EQ3_PATH/package/xe-guest-utilities/Config.in"
 endmenu
 
 menu "Java Runtime Environment"

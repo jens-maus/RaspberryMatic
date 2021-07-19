@@ -92,7 +92,7 @@ fwprepare()
     rm -f /usr/local/tmp/sd.test.file
 
     swri=$(echo "${RES}" | head -n 2 | tail -n 1 | cut -d ";" -f 4)
-    swrimb=$(echo ${swri} | awk '{printf "%.2f",($1/1000)}')
+    swrimb=$(echo "${swri}" | awk '{printf "%.2f",($1/1000)}')
     rwri=$(echo "$RES" | head -n 3 | tail -n 1 | cut -d ";" -f 5)
     rrea=$(echo "$RES" | head -n 4 | tail -n 1 | cut -d ";" -f 3)
     pass=0

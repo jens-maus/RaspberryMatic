@@ -1,0 +1,12 @@
+--- occu/WebUI/www/webui/js/lang/translate.js.orig
++++ occu/WebUI/www/webui/js/lang/translate.js
+@@ -17,8 +17,8 @@
+   container = (cont == undefined) ? container : cont;
+ 
+   jQuery(container)
+-    .addBack()
+     .find("*")
++    .addBack()
+     .contents()
+     .filter(function () {
+       return this.nodeType === 3;

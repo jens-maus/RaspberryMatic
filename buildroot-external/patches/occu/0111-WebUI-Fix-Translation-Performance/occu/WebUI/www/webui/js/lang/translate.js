@@ -17,8 +17,8 @@ function setTextContent(cont, callback) {
   container = (cont == undefined) ? container : cont;
 
   jQuery(container)
-    .addBack()
     .find("*")
+    .addBack()
     .contents()
     .filter(function () {
       return this.nodeType === 3;

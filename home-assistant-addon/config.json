@@ -1,6 +1,6 @@
 {
   "name": "RaspberryMatic CCU",
-  "version": "3.59.6.20210703",
+  "version": "3.59.6.20210807",
   "slug": "raspberrymatic",
   "image": "ghcr.io/jens-maus/raspberrymatic",
   "arch": ["armhf", "aarch64", "amd64"],
@@ -8,6 +8,7 @@
   "url": "https://github.com/jens-maus/RaspberryMatic/",
   "watchdog": "tcp://[HOST]:[PORT:80]",
   "ingress": true,
+  "ingress_stream": true,
   "panel_title": "RaspberryMatic",
   "panel_icon": "mdi:router-wireless",
   "startup": "services",

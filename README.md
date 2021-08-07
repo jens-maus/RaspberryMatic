@@ -42,7 +42,7 @@ RaspberryMatic can be directly installed on the following, commercially distribu
 * _Hardware_:
    * [RaspberryPi](https://www.raspberrypi.org/)
    * [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
-   * [Hardkernel ODROID](https://www.hardkernel.com/shop/odroid-n2/)
+   * [Hardkernel ODROID](https://www.hardkernel.com/shop/odroid-n2-with-4gbyte-ram-2/)
    * [Intel NUC](https://www.intel.de/content/www/de/de/products/boards-kits/nuc.html)
 
 ...or even as a virtual appliance on the following virtualization environments:

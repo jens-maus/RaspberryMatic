@@ -42,6 +42,7 @@ RaspberryMatic lässt sich auf folgender, kommerziell erhältlicher Kompletthard
 * _Hardware_:
    * [RaspberryPi](https://www.raspberrypi.org/)
    * [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
+   * [ODROID](https://www.hardkernel.com/shop/odroid-n2-with-4gbyte-ram-2/)
    * [Intel NUC](https://www.intel.de/content/www/de/de/products/boards-kits/nuc.html)
 
 bzw. unter folgenden Virtualisierungsumgebungen installieren:
@@ -81,6 +82,7 @@ Unter [Releases](https://github.com/jens-maus/RaspberryMatic/releases) steht fü
      * [ELV-Charly](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ELV-Charly)
      * [RaspberryPi](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)
      * [ASUS Tinkerboard](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Tinkerboard)
+     * [ODROID](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ODROID)
      * [Intel NUC](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-IntelNUC)
    * [Grundinstallation (Virtuell)](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#grundinstallation-virtuell)
      * [vmWare ESXi](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-ESXi)

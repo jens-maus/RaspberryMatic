@@ -58,10 +58,16 @@ ctype_len=$((${#ctype}+1))
 junk_len=2
 sum_len=$((sum_len+boundary_len+disposition_len+ctype_len+junk_len))
 
-# write out the data
+# calculate the expected content length using
+# HTTP_CONTENT_LENGTH or CONTENT_LENGTH
+if [ -z "${HTTP_CONTENT_LENGTH}" ]; then
+  HTTP_CONTENT_LENGTH=${CONTENT_LENGTH}
+fi
 SIZE=$((HTTP_CONTENT_LENGTH-sum_len-boundary_len-4))
+
+# write out the data
 filename=$(mktemp -p /usr/local/tmp)
-if ! head -c $SIZE >"${filename}"; then
+if ! head -q -c $SIZE >"${filename}"; then
   echo "ERROR (head)"
   exit 1
 fi

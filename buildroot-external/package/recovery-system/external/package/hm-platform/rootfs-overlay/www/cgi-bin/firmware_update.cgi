@@ -36,10 +36,16 @@ PROGRESS_PID=$!
 # shellcheck disable=SC2064
 trap "kill ${PROGRESS_PID}" EXIT
 
-# write out the data
+# calculate the expected content length using
+# HTTP_CONTENT_LENGTH or CONTENT_LENGTH
+if [ -z "${HTTP_CONTENT_LENGTH}" ]; then
+  HTTP_CONTENT_LENGTH=${CONTENT_LENGTH}
+fi
 SIZE=$((HTTP_CONTENT_LENGTH-a))
+
+# write out the data
 filename=$(mktemp -p /usr/local/tmp)
-if ! head -c $SIZE >"${filename}"; then
+if ! head -q -c $SIZE >"${filename}"; then
   echo "ERROR (head)"
   exit 1
 fi

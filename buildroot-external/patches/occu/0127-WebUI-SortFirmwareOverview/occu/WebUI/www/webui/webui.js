@@ -20568,10 +20568,10 @@ StartPage = Singleton.create(Page, {
               }
               conInfo("Check firmware version of all devices - number of devices: " + self.devList.length);
               if (self.devList.length > 0) {
-                function sortorder_devList(a , b){
-                  if(a.type == b.type){
+                function sortorder_devList(a , b) {
+                  if (a.type == b.type) {
                     return (a.address < b.address) ? -1 : 1;
-                  }else{
+                  } else {
                     return (a.type < b.type) ? -1 : 1;
                   }
                 }

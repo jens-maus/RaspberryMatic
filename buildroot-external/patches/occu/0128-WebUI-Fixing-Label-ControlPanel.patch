@@ -1,0 +1,11 @@
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
+@@ -1465,7 +1465,7 @@
+     "thInstalledVersion": "Installed version",
+     "btnReload": "Reload",
+ 
+-    "btnAccessPoints": "Update Access Points with</br>incompatible FW",
++    "btnAccessPoints": "Update Access Points</br>with incompatible FW",
+     "lblShowAllAPs": "Update Access Points with incompatible FW",
+     "lblGotoUpdate" : "To the update",
+ 

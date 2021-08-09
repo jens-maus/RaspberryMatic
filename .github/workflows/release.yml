@@ -97,10 +97,12 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        apt update
-        apt install -y --no-install-recommends wget bc cpio rsync zip python
+        if ! dpkg-query -l wget bc cpio rsync zip python >/dev/null 2>&1; then
+          apt update
+          apt install -y --no-install-recommends wget bc cpio rsync zip python
+        fi
         if ! getent group | grep -q ^builder:; then groupadd -g 48 builder; fi
-        if ! getent passwd | grep -q ^builder:; then useradd -m -u 1003 -g 48 -G sudo builder;fi
+        if ! getent passwd | grep -q ^builder:; then useradd -m -u 1003 -g 48 -G sudo builder; fi
         if ! grep -q ^builder; then echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers; fi
         chown -R builder .
 

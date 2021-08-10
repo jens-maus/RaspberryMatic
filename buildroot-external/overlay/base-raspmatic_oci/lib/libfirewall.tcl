@@ -452,10 +452,11 @@ proc FirewallInternal::Firewall_configureFirewallRestrictive { } {
   # http(s)
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 80 -m state --state NEW -j ACCEPT"
   try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 443 -m state --state NEW -j ACCEPT"
+
   # ha-proxy
-  if { [file exists "/var/run/ha-proxy.pid"] } {
-    set src [exec grep HM_HAPROXY_SRC= /var/hm_mode | cut -d= -f2 | tr -d \']
-    try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 8099 -s $src -m state --state NEW -j ACCEPT"
+  set res [catch {exec grep HM_HAPROXY_SRC= /var/hm_mode | cut -d= -f2 | tr -d \'} haproxy_src]
+  if { $res == 0 } {
+    try_exec_cmd "/usr/sbin/iptables -A INPUT -p tcp --dport 8099 -s $haproxy_src -m state --state NEW -j ACCEPT"
   }
 
   # udp port for eq3configd

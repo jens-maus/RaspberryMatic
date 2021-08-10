@@ -107,6 +107,7 @@
     "SYS_MODULE",
     "SYS_NICE",
     "SYS_RAWIO",
-    "SYS_RESOURCE"
+    "SYS_RESOURCE",
+    "NET_ADMIN"
   ]
 }

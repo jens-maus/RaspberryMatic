@@ -1,0 +1,18 @@
+--- ./Makefile.orig	2021-05-18 04:14:26.000000000 +0200
++++ ./Makefile	2021-08-12 23:15:46.653605916 +0200
+@@ -83,10 +83,8 @@
+ 
+ $(GOBUILDDIR)/%: $(REPO)/%
+ 	mkdir -p $$(dirname $@)
+-	cat $< | \
+-	sed -e "s/@PRODUCT_MAJOR_VERSION@/$(PRODUCT_MAJOR_VERSION)/g" | \
+-	sed -e "s/@PRODUCT_MINOR_VERSION@/$(PRODUCT_MINOR_VERSION)/g" | \
+-	sed -e "s/@PRODUCT_MICRO_VERSION@/$(PRODUCT_MICRO_VERSION)/g" | \
+-	sed -e "s/@NUMERIC_BUILD_NUMBER@/$(RELEASE)/g" \
+-	> $@
+-
++	sed -i -e "s/@PRODUCT_MAJOR_VERSION@/$(PRODUCT_MAJOR_VERSION)/g" $<
++	sed -i -e "s/@PRODUCT_MINOR_VERSION@/$(PRODUCT_MINOR_VERSION)/g" $<
++	sed -i -e "s/@PRODUCT_MICRO_VERSION@/$(PRODUCT_MICRO_VERSION)/g" $<
++	sed -i -e "s/@NUMERIC_BUILD_NUMBER@/$(RELEASE)/g" $<
++	cp $< $@

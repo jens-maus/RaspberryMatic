@@ -14,7 +14,17 @@ start() {
 
   if [[ ! -e /etc/config/safemode ]]; then
 
-    # start third-party addons one after another
+    # adjust the oom score (which is inherited by run-parts)
+    # to ensure that others are killed first in case of low memory situations
+    echo 100 >/proc/$$/oom_score_adj
+
+    # call /usr/local/etc/rc.prelocal if it exists and is
+    # executable
+    if [[ -x /usr/local/etc/rc.prelocal ]]; then
+      /usr/local/etc/rc.prelocal
+    fi
+
+    # start init of third-party addons one after another
     /bin/run-parts -a init /etc/config/rc.d >/dev/null 2>&1
 
     echo "OK"

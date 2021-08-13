@@ -69,7 +69,7 @@ Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will 
 
 [more...](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#schnellstart)
 
-## :memo: Documentation ([🇩🇪](https://github.com/jens-maus/RaspberryMatic/wiki/Home.md)/[🇺🇸](https://github.com/jens-maus/RaspberryMatic/wiki/en.Home.md))
+## :memo: Documentation ([🇩🇪](https://github.com/jens-maus/RaspberryMatic/wiki/Home)/[🇺🇸](https://github.com/jens-maus/RaspberryMatic/wiki/en.Home))
 1. [Introduction](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung)
    * [Requirements](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen)
    * [Features](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#features)

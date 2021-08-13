@@ -69,7 +69,7 @@ Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will 
 
 [more...](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#schnellstart)
 
-## :memo: Documentation (🇩🇪/🇺🇸)
+## :memo: Documentation ([🇩🇪](https://github.com/jens-maus/RaspberryMatic/wiki/Home.md)/[🇺🇸](https://github.com/jens-maus/RaspberryMatic/wiki/en.Home.md))
 1. [Introduction](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung)
    * [Requirements](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen)
    * [Features](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#features)
@@ -120,10 +120,10 @@ Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will 
      * [LAN-Gateway Mode](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#lan-gateway-betrieb)
      * [USV Client/Server Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#usv-clientserver-nut)
      * [USB-Boot Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#usb-boot)
-     * [Monit-WatchDog WebUI](Experten-Features#monit-watchdog-weboberfl%C3%A4che)
-     * [HB-RF-ETH Setup](Experten-Features#hb-rf-eth-anbindung)
-     * [Individual Diagramm/Backup-Path](Experten-Features#individueller-diagrammbackup-speicherpfad)
-     * [Own commands during bootup](Experten-Features#eigene-aktionen-während-des-bootvorgangs)
+     * [Monit-WatchDog WebUI](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#monit-watchdog-weboberfl%C3%A4che)
+     * [HB-RF-ETH Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#hb-rf-eth-anbindung)
+     * [Individual Diagramm/Backup-Path](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#individueller-diagrammbackup-speicherpfad)
+     * [Own commands during bootup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#eigene-aktionen-während-des-bootvorgangs)
 5. [Support, Contributions](https://github.com/jens-maus/RaspberryMatic/wiki/Support)
    * [Known Issues](https://github.com/jens-maus/RaspberryMatic/wiki/Support#bekannte-probleme)
    * [Request Help](https://github.com/jens-maus/RaspberryMatic/wiki/Support#hilfe-suchen)

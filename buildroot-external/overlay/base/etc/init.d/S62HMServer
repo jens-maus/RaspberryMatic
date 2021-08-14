@@ -57,7 +57,7 @@ init() {
     if [[ ! -e "${storagePath}/.nobackup" ]]; then
       touch "${storagePath}/.nobackup"
     fi
-    ln -sf "${storagePath}" /media/usb0
+    ln -sfn "${storagePath}" /media/usb0
     touch /var/status/SDinitialised
     touch /var/status/hasSD
   fi

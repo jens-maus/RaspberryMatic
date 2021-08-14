@@ -920,7 +920,7 @@ proc action_firmware_upload {} {
         # the file seems to be a tar archive (perhaps with gzip compression)
         set file_invalid [catch {exec /bin/tar -C /tmp --warning=no-timestamp --no-same-owner --wildcards -xmf $filename "EULA.*"} result]
         if {$file_invalid == 0} {
-          catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
+          catch { exec ln -sfn $filename /usr/local/.firmwareUpdate }
         }
       }
     }
@@ -932,7 +932,7 @@ proc action_firmware_upload {} {
         # the file seems to be a zip archive containing data
         set file_invalid [catch {exec /usr/bin/unzip -q -o -d /tmp $filename EULA.en EULA.de 2>/dev/null} result]
         if {$file_invalid == 0} {
-          catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
+          catch { exec ln -sfn $filename /usr/local/.firmwareUpdate }
         }
       }
     }
@@ -945,7 +945,7 @@ proc action_firmware_upload {} {
         # check if we have exactly 3 partitions
         set file_invalid [catch {exec /usr/sbin/parted -sm $filename print 2>/dev/null | tail -1 | egrep -q "3:.*:ext4:"} result]
         if {$file_invalid == 0} {
-          catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
+          catch { exec ln -sfn $filename /usr/local/.firmwareUpdate }
         }
       }
     }
@@ -957,7 +957,7 @@ proc action_firmware_upload {} {
         # the file seems to be an ext4 fs of the rootfs lets check if the ext4 is valid
         set file_invalid [catch {exec /sbin/e2fsck -nf $filename 2>/dev/null} result]
         if {$file_invalid == 0} {
-          catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
+          catch { exec ln -sfn $filename /usr/local/.firmwareUpdate }
         }
       }
     }
@@ -966,7 +966,7 @@ proc action_firmware_upload {} {
     if {$file_invalid != 0} {
       set file_invalid [catch {exec file -b $filename | egrep -q "DOS/MBR boot sector.*bootfs.*FAT"} result]
       if {$file_invalid == 0} {
-        catch { exec ln -sf $filename /usr/local/.firmwareUpdate }
+        catch { exec ln -sfn $filename /usr/local/.firmwareUpdate }
       }
     }
 

@@ -398,6 +398,26 @@
            append s "<td><div id=\"${input_idval}_unit\" $hidden>$unit ($min-$max)</div></td>"
        }
        "ENUM" {
+--- occu/WebUI/www/config/ic_deviceparameters.cgi.orig
++++ occu/WebUI/www/config/ic_deviceparameters.cgi
+@@ -405,7 +405,7 @@
+       set PROFILE_PNAME(DESCRIPTION) $param
+       if {$param_descr(TYPE) != "ENUM" && $showOption == 0} {
+         append s1 "<tr><td><span class=\"stringtable_value\">$dev_descr_sender(TYPE)|$PROFILE_PNAME(DESCRIPTION)</span></td>"
+-        append s1 "<td><input type=\"text\" size=\"10\" value=\"$value\" id=\"separate_CHANNEL_$ch\_$i\_tmp\" name='__$param' onblur=\"ProofAndSetValue('separate_CHANNEL_$ch\_$i\_tmp', 'separate_CHANNEL_$ch\_$i', $min, $max, $factor, event)\"></td>"
++        append s1 "<td><input type=\"text\" size=\"10\" value=\"$value\" id=\"separate_CHANNEL_$ch\_$i\_tmp\" name='__$param' onblur=\"ProofAndSetValue('separate_CHANNEL_$ch\_$i\_tmp', 'separate_CHANNEL_$ch\_$i', '$min', '$max', $factor, event)\"></td>"
+         append s1 "<td>$unit&nbsp;($min-$max)</td>"
+         append s1 "<td><input type=\"text\"  value=\"$value_tmp\" id=\"separate_CHANNEL_$ch\_$i\" name='$param' style=\"display:none\";\"></td>"
+       } elseif {$showOption == 1} { 
+@@ -439,7 +439,7 @@
+             append s1 "<option>\${stringTableEnterValue}</option>"
+           append s1 "</select>"
+           
+-          append s1 "<input type=\"text\" value=\"$value\" id=\"separate_CHANNEL_$ch\_$i\_tmp\" name='__$param' onblur=\"ProofAndSetValue('separate_CHANNEL_$ch\_$i\_tmp', 'separate_CHANNEL_$ch\_$i', $min, $max, $factor, event)\">"
++          append s1 "<input type=\"text\" value=\"$value\" id=\"separate_CHANNEL_$ch\_$i\_tmp\" name='__$param' onblur=\"ProofAndSetValue('separate_CHANNEL_$ch\_$i\_tmp', 'separate_CHANNEL_$ch\_$i', '$min', '$max', $factor, event)\">"
+           append s1 "<td>$unit&nbsp;($min-$max)</td>"
+           append s1 "<input type=\"text\"  value=\"$value_tmp\" id=\"separate_CHANNEL_$ch\_$i\" name='$param' style=\"display:none\";\">"
+           append s1 "</td>"
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -39027,55 +39027,70 @@

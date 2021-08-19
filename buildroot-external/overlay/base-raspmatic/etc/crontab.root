@@ -6,3 +6,4 @@
 0 4 * * 6 [ ! -e /etc/config/NoFSTRIM ] && /bin/nice /sbin/fstrim --all --quiet >/dev/null 2>/dev/null
 59 1 * * * [ ! -e /etc/config/NoBadBlocksCheck ] && /bin/nice /bin/checkBadBlocks.sh >/dev/null 2>/dev/null
 */10 * * * * [ -d /media/usb0/measurement ] && /bin/nice /usr/bin/rsync -aogX --delete-after --no-whole-file --checksum /tmp/measurement/ /media/usb0/measurement/ >/dev/null 2>/dev/null
+10 12 * * * /bin/checkAddonUpdates.sh >/dev/null 2>/dev/null

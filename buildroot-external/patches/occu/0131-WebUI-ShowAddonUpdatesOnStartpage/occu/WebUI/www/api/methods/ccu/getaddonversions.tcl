@@ -33,14 +33,14 @@ set result false
 if { [file exists $file] == 1 } {
   catch {
     set result "{ \"online\":"
-    set fd [open $file r]          
-    while { ! [eof $fd] } {        
-      append result [gets $fd]     
-    }                              
-    close $fd                     
-  
+    set fd [open $file r]
+    while { ! [eof $fd] } {
+      append result [gets $fd]
+    }
+    close $fd
+
     append result ", \"local\": \["
-  
+
     set first 1
     set scripts ""
     catch { set scripts [glob /etc/config/rc.d/*] }

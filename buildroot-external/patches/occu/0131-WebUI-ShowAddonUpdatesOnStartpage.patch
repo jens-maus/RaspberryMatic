@@ -14,6 +14,76 @@
  CCU.getVersion {
    LEVEL ADMIN
    SCRIPT_FILE ccu/getversion.tcl
+--- occu/WebUI/www/api/methods/ccu/getaddonversions.tcl.orig
++++ occu/WebUI/www/api/methods/ccu/getaddonversions.tcl
+@@ -0,0 +1,67 @@
++proc get_info {script array_var} {
++  upvar $array_var arr
++  foreach key [array names arr] { unset arr($key) }
++  set lang "de"
++  catch {
++    set fd [open "|$script info.$lang" r]
++
++   while { ! [eof $fd] } {
++    set line [gets $fd]
++    if { [regexp {^([^:]+): (.*)$} $line dummy key value] } {
++      if { [info exists arr($key)] } {append arr($key) "\n"}
++      append arr($key) $value
++    }
++  }
++    close $fd
++  }
++
++  catch {
++   set fd [open "|$script info" r]
++   while { ! [eof $fd] } {
++    set line [gets $fd]
++    if { [regexp {^([^:]+): (.*)$} $line dummy key value] } {
++      if { [info exists arr($key)] } {append arr($key) "\n"}
++      append arr($key) $value
++    }
++  }
++    close $fd
++  }
++}
++
++set file "/tmp/addon_updates.json"
++set result false
++if { [file exists $file] == 1 } {
++  catch {
++    set result "{ \"online\":"
++    set fd [open $file r]
++    while { ! [eof $fd] } {
++      append result [gets $fd]
++    }
++    close $fd
++
++    append result ", \"local\": \["
++
++    set first 1
++    set scripts ""
++    catch { set scripts [glob /etc/config/rc.d/*] }
++    foreach s $scripts {
++      catch {
++        if { ! [file executable $s] } continue
++        array set sw_info ""
++        get_info $s sw_info
++        if { ![info exists sw_info(Name)] } continue
++        if { [info exists sw_info(Version) ] } {
++          if {1 != $first} then { append result "," } else { set first 0 }
++          append result "\{\"name\":"
++          append result "\"$sw_info(Name)\","
++          append result "\"localversion\":"
++          append result "\"$sw_info(Version)\""
++          append result "\}"
++        }
++      }
++    }
++    append result "\]}"
++  }
++}
++jsonrpc_response $result
++#puts "$result"
 --- occu/WebUI/www/rega/pages/tabs/startpage.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/startpage.htm
 @@ -213,6 +213,12 @@
@@ -43,8 +113,8 @@
      "ruleConditionSelectValue" : "Wert",
      "ruleConditionSelectText" : "Text",
      "btnChoice" : "Auswahl",
-+    "addonUpdate" : "Zusatzsoftware-Update:",
-+    "lblNewAddonUpdatesAvailable" : "aktualisierte Zusatzsoftware verf%FCgbar",    
++    "addonUpdate" : "Zusatzsoftware-Updates:",
++    "lblNewAddonUpdatesAvailable" : "Neue Zusatzsoftware verf%FCgbar",
      "btnAutoDetect" : "Automatisch ermitteln",
      "btnSelectRoomOrFunctionNew" : "Neu...",
      "btnSelectRoomOrFunctionClose" : "Schlie%DFen",
@@ -54,8 +124,8 @@
      "ruleConditionSelectValue": "Value",
      "ruleConditionSelectText": "Text",
      "btnChoice": "Selection",
-+     "addonUpdate" : "Addon-Update:",
-+    "lblNewAddonUpdatesAvailable" : "new addon software available",    
++    "addonUpdate" : "Addon-Updates:",
++    "lblNewAddonUpdatesAvailable" : "New addons available",
      "btnAutoDetect": "Auto discover",
      "btnSelectRoomOrFunctionNew": "New...",
      "btnSelectRoomOrFunctionClose": "Close",

@@ -1,0 +1,108 @@
+--- occu/WebUI/www/api/methods.conf.orig
++++ occu/WebUI/www/api/methods.conf
+@@ -1009,6 +1009,13 @@
+   ARGUMENTS {_session_id_}
+ }
+ 
++CCU.getAddonVersions {
++  LEVEL ADMIN
++  SCRIPT_FILE ccu/getaddonversions.tcl
++  INFO {Liefert die Firmware-Version der Zusatzsoftware}
++  ARGUMENTS {_session_id_}
++}
++
+ CCU.getVersion {
+   LEVEL ADMIN
+   SCRIPT_FILE ccu/getversion.tcl
+--- occu/WebUI/www/rega/pages/tabs/startpage.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/startpage.htm
+@@ -213,6 +213,12 @@
+               <td>${deviceUpdate}</td>
+               <td class="firmwareAvailable">${lblNewDeviceFirmwareAvailable}&nbsp;<span id="devFwAvailableCounter"></span></td>
+             </tr>
++            
++            <!-- Addons -->
++            <tr id="addonUpdatesAvailable" class="hidden">
++              <td>${addonUpdate}</td>
++              <td class="firmwareAvailable">${lblNewAddonUpdatesAvailable}&nbsp;<span id="addonUpdatesAvailableCounter"></span></td>                        
++            </tr>
+ 
+             <%
+               object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') );
+@@ -283,6 +289,7 @@
+       jQuery("#favSelector").show();
+       jQuery("#favView").show();
+       StartPage.showUpdate();
++      StartPage.showAddonUpdate();
+       StartPage.showCurrentFirmware();
+       StartPage.showAllDeviceFirmware();
+       jQuery("#forceUpdate").remove();
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
+@@ -7,6 +7,8 @@
+     "ruleConditionSelectValue" : "Wert",
+     "ruleConditionSelectText" : "Text",
+     "btnChoice" : "Auswahl",
++    "addonUpdate" : "Zusatzsoftware-Update:",
++    "lblNewAddonUpdatesAvailable" : "aktualisierte Zusatzsoftware verf%FCgbar",    
+     "btnAutoDetect" : "Automatisch ermitteln",
+     "btnSelectRoomOrFunctionNew" : "Neu...",
+     "btnSelectRoomOrFunctionClose" : "Schlie%DFen",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
+@@ -7,6 +7,8 @@
+     "ruleConditionSelectValue": "Value",
+     "ruleConditionSelectText": "Text",
+     "btnChoice": "Selection",
++     "addonUpdate" : "Addon-Update:",
++    "lblNewAddonUpdatesAvailable" : "new addon software available",    
+     "btnAutoDetect": "Auto discover",
+     "btnSelectRoomOrFunctionNew": "New...",
+     "btnSelectRoomOrFunctionClose": "Close",
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -20258,6 +20258,44 @@
+     msgBoxHeight
+     );
+   },
++  
++  showAddonUpdate: function() {
++    addonUpdateCounter = 0;
++    var addonversions = homematic('CCU.getAddonVersions');
++    if (addonversions && addonversions !== "false") {
++      var localaddonversions = addonversions.local;
++      var onlineaddonversions = addonversions.online;
++      for(var l_obj in localaddonversions) {
++        if (typeof localaddonversions[l_obj] === "object") {
++        
++           for(var o_obj in onlineaddonversions) {
++             if (typeof onlineaddonversions[o_obj] === "object") {
++             
++               if (onlineaddonversions[o_obj].name == localaddonversions[l_obj].name) {
++                  //console.log(onlineaddonversions[o_obj].name +" local: "+localaddonversions[l_obj].localversion+", online: "+onlineaddonversions[o_obj].webversion);
++                  if (localaddonversions[l_obj].localversion != onlineaddonversions[o_obj].webversion) {
++                    addonUpdateCounter++;
++                  }
++               }
++             
++             }
++           }
++        }
++      } 
++    }
++    
++    if (addonUpdateCounter > 0) {
++      var self = this,
++      rowShowAddonUpdates = jQuery("#addonUpdatesAvailable"),
++      btnShowAddonUpdates = jQuery("#addonUpdatesAvailable .firmwareAvailable");
++      btnShowAddonUpdates.click(function () {
++        showSoftwareCP();
++      });
++      jQuery("#addonUpdatesAvailableCounter").text("(" + addonUpdateCounter + ")");
++      rowShowAddonUpdates.show();
++    }
++  },
++  
+ 
+   showUpdate: function() {
+     var fn = function() {

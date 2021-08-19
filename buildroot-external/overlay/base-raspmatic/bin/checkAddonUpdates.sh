@@ -12,8 +12,7 @@ if [[ -n "$(ls -A /etc/config/rc.d)" ]]; then
       DVERSION=$(echo "$DINFO" | grep "Version:" | awk '{print $2}')
       DUPDATESCRIPT=$(echo "$DINFO" | grep "Update:" | awk '{print $2}')
       if [[ -n "${DUPDATESCRIPT}" ]]; then
-        QUERY_STRING="cmd=check_version\&version=${DVERSION}"
-        WEBRESULT=$(export QUERY_STRING=${QUERY_STRING}; tclsh "/www${DUPDATESCRIPT}" | grep "\.")
+        WEBRESULT=$(/usr/bin/curl -s "http://localhost${DUPDATESCRIPT}")
         if [[ "$first" -eq 1 ]]; then
           first=0
         else

@@ -13,7 +13,7 @@
 #
 #############################################################
 
-GENERIC_RAW_UART_VERSION = d1dddbeb32657da72845edd0e4a097fbce3a0ec6
+GENERIC_RAW_UART_VERSION = 9510818fa12e52baf40fe5ac84e58fd62db4f70e
 GENERIC_RAW_UART_SITE = $(call github,alexreinert,piVCCU,$(GENERIC_RAW_UART_VERSION))
 GENERIC_RAW_UART_LICENSE = GPL2
 GENERIC_RAW_UART_LICENSE_FILES = LICENSE

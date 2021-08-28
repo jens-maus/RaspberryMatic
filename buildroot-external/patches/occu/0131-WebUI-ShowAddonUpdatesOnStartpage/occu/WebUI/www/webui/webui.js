@@ -20273,7 +20273,7 @@ StartPage = Singleton.create(Page, {
              
                if (onlineaddonversions[o_obj].name == localaddonversions[l_obj].name) {
                   //console.log(onlineaddonversions[o_obj].name +" local: "+localaddonversions[l_obj].localversion+", online: "+onlineaddonversions[o_obj].webversion);
-                  if (localaddonversions[l_obj].localversion != onlineaddonversions[o_obj].webversion) {
+                  if (localaddonversions[l_obj].localversion != onlineaddonversions[o_obj].webversion && onlineaddonversions[o_obj].webversion != '' && onlineaddonversions[o_obj].webversion != 'n/a') {
                     addonUpdateCounter++;
                   }
                }

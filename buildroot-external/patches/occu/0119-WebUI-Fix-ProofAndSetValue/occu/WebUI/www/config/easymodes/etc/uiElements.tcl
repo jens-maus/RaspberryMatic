@@ -43,10 +43,10 @@ proc getUserDefinedMaxValue {devType {extraparam ""}} {
   if {([string equal $extraparam "COND_TX_THRESHOLD_LO"] == 1) || ([string equal $extraparam "COND_TX_THRESHOLD_HI"] == 1)} {
     switch [string tolower $devType] {
         hmip-psm -
-        hmip-fsm16 {return 3680}
+        hmip-fsm16 {return 3680.00}
         hmip-bsm -
-        hmip-fsm  {return 1150}
-        hmip-usbsm  {return 60}
+        hmip-fsm  {return 1150.00}
+        hmip-usbsm  {return 60.00}
        default {return "<span class=\"attention\">max value not available</span>"}
     }
   }
@@ -163,7 +163,7 @@ proc getUserDefinedCondTXThresholdUnitMinMaxDescr {devType param} {
       hmip-usbsm
        {
         if {$param == "TX_THRESHOLD_POWER"} {return "W (0.0 - [getUserDefinedMaxValue $devType $param])"}
-        if {($param == "COND_TX_THRESHOLD_LO") || ($param == "COND_TX_THRESHOLD_HI")} {return "W (0 - [getUserDefinedMaxValue $devType $param])"}
+        if {($param == "COND_TX_THRESHOLD_LO") || ($param == "COND_TX_THRESHOLD_HI")} {return "W (0.00 - [getUserDefinedMaxValue $devType $param])"}
       }
       default {return "<span class=\"attention\">missing description</span>"}
    }

@@ -118,7 +118,7 @@
    return "$max"
  }
  
-@@ -264,7 +274,7 @@
+@@ -268,7 +278,7 @@
    }
  
    set s "<input id=$elemIdTmp type=\"text\" size=\"5\" value=[format %.0f [expr $value * 100]] name=$param\_tmp onblur="

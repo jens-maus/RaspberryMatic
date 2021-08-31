@@ -106,7 +106,7 @@ proc getMinMaxValueDescr {param} {
 }
 
 proc getUnit {param} {
-  global psDescr
+  global psDescr dev_descr
   upvar psDescr descr
   array_clear param_descr
   array set param_descr $descr($param)
@@ -130,6 +130,10 @@ proc getUnit {param} {
   if {$unit == "_Grad_"} {
     set unit "&#176;"
   }
+  if {([string equal $dev_descr(TYPE) "HmIP-STI"] == 1) && ([string equal $param "REPEATED_LONG_PRESS_TIMEOUT_VALUE"] == 1)} {
+    set unit "s (0.0 - 6.0)"
+  }
+
   return "$unit"
 }
 
@@ -440,6 +444,7 @@ proc getHelpIcon {topic {x 0} {y 0}} {
    "COND_TX_DECISION_ABOVE_BELOW" {set x 450; set y 80}
    "CONTACT_BOOST" {set x 450; set y 180}
    "DELAY_COMPENSATION" {set x 450; set y 100}
+   "DEVICE_SENSOR_SENSITIVITY" {set x 450; set y 180}
    "DIM_STEP" {set x 500; set y 150}
    "DURATION_5MIN" {set x 500; set y 160}
    "ENABLE_ROUTING" {set x 500; set y 120}
@@ -452,10 +457,9 @@ proc getHelpIcon {topic {x 0} {y 0}} {
    "MOUNTING_ORIENTATION" {set x 450; set y 75}
    "ON_MIN_LEVEL" {set x 400; set y 80}
    "OPTIMUM_START_STOP" {set x 450; set y 80}
-
    "OUTPUT_SWAP" {set x 450; set y 100}
-
    "PERMANENT_FULL_RX" {set x 500; set y 160}
+   "PIR_SENSITIVITY" {set x 500; set y 210}
    "PWM_AT_LOW_VALVE_POSITION" {set x 500; set y 130}
    "ROUTER_MODULE_ENABLED" {set x 500; set y 120}
    "SPDR_CHANNEL_MODE" {set x 600; set y 600}
@@ -705,7 +709,11 @@ proc getPowerUpSelector {chn p special_input_id} {
       incr prn
       set powerUpLevelPRN $prn
       append html "<tr>"
+      if {[string equal $dev_descr(TYPE) HmIP-WSC] == 1} {
+        append html "<td>\${stringTableServoLevel}</td>"
+      } else {
         append html "<td>\${stringTableDimmerLevel}</td>"
+      }
         option RAW_0_100Percent
         append html  "<td>[getOptionBox '$param' options $ps($param) $chn $prn]</td>"
       append html "</tr>"
@@ -1418,31 +1426,6 @@ proc getPowerUpSelectorShutterBlind {chn p special_input_id model} {
        append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOption($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
     }
 
-set comment { NO ONTIME
-    ###
-    set param POWERUP_ONTIME_UNIT
-    if { [info exists ps($param)] == 1  } {
-      incr prn
-      append html "<tr>"
-      append html "<td>\${stringTableOnTime}</td>"
-      append html [getComboBox $chn $prn "$specialID" "timeOnOff"]
-      append html "</tr>"
-
-      append html [getTimeUnitComboBox $param $ps($param) $chn $prn $special_input_id]
-
-      incr prn
-      set param POWERUP_ONTIME_VALUE
-      append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
-      append html "<td>\${stringTableOnTimeValue}</td>"
-
-      append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
-
-      append html "</tr>"
-      append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-      append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentTimeOption($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
-    }
-}
-
     ###
     set param POWERUP_ON_LEVEL
     if { [info exists ps($param)] == 1  } {
@@ -1495,30 +1478,6 @@ set comment { NO ONTIME
         append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOption($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
       }
 
-set comment { No OFFTIME
-      ###
-      set param POWERUP_OFFTIME_UNIT
-      if { [info exists ps($param)] == 1  } {
-        incr prn
-        append html "<tr>"
-        append html "<td>\${stringTableOffTime}</td>"
-        append html [getComboBox $chn $prn "$specialID" "timeOnOff"]
-        append html "</tr>"
-
-        append html [getTimeUnitComboBox $param $ps($param) $chn $prn $special_input_id]
-
-        incr prn
-        set param POWERUP_OFFTIME_VALUE
-        append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
-        append html "<td>\${stringTableOffTimeValue}</td>"
-
-        append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
-
-        append html "</tr>"
-        append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-        append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentTimeOption($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
-      }
-}
       ###
       set param POWERUP_OFF_LEVEL
       if { [info exists ps($param)] == 1  } {

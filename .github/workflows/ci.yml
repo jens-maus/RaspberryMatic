@@ -62,6 +62,11 @@ jobs:
       with:
         path: "./home-assistant-addon"
 
+    - name: Buildroot check-package
+      run: |
+        make download
+        buildroot-2*/utils/check-package --exclude PackageHeader --br2-external buildroot-external/package/*/*
+
   build:
     name: CI build [${{ matrix.platform }}]
     if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.user.login == 'jens-maus') && github.actor != 'dependabot[bot]' && github.repository == 'jens-maus/RaspberryMatic' }}

@@ -42,7 +42,7 @@ RaspberryMatic can be directly installed on the following, commercially distribu
 * _Hardware_:
    * [RaspberryPi](https://www.raspberrypi.org/)
    * [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
-   * [Hardkernel ODROID](https://www.hardkernel.com/shop/odroid-c4/)
+   * [Hardkernel ODROID](https://www.hardkernel.com/shop/odroid-n2-with-4gbyte-ram-2/)
    * [Intel NUC](https://www.intel.de/content/www/de/de/products/boards-kits/nuc.html)
 
 ...or even as a virtual appliance on the following virtualization environments:
@@ -55,6 +55,8 @@ RaspberryMatic can be directly installed on the following, commercially distribu
    * [QNAP VirtualizationStation](https://www.qnap.com/event/station/de-de/virtualization.php)
    * [vmWare Workstation Player](https://www.vmware.com/de/products/workstation-player/workstation-player-evaluation.html)
    * [QEmu/KVM](https://www.qemu.org/)
+   * [UNRAID](https://unraid.net/)
+   * [XCP-ng/XenServer](https://xcp-ng.org/)
    * [HyperV](https://docs.microsoft.com/de-de/virtualization/hyper-v-on-windows/)
    * [Docker/OCI](https://www.docker.com/)
    * [Kubernetes/K8s](https://kubernetes.io/)
@@ -67,7 +69,7 @@ Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will 
 
 [more...](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#schnellstart)
 
-## :memo: Documentation
+## :memo: Documentation ([🇩🇪](https://github.com/jens-maus/RaspberryMatic/wiki/Home)/[🇺🇸](https://github.com/jens-maus/RaspberryMatic/wiki/en.Home))
 1. [Introduction](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung)
    * [Requirements](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen)
    * [Features](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#features)
@@ -91,6 +93,8 @@ Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will 
      * [QNAP VirtualizationStation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-QNAP-VirtualizationStation)
      * [vmWare Workstation Player](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-Workstation-Player)
      * [QEmu/KVM](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-QEmu)
+     * [UNRAID](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-UNRAID)
+     * [XCP-ng/XenServer](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-XCPng)
      * [HyperV](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HyperV)
      * [Docker/OCI](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Docker-OCI)
      * [Kubernetes/K8s](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Kubernetes)
@@ -116,6 +120,10 @@ Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will 
      * [LAN-Gateway Mode](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#lan-gateway-betrieb)
      * [USV Client/Server Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#usv-clientserver-nut)
      * [USB-Boot Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#usb-boot)
+     * [Monit-WatchDog WebUI](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#monit-watchdog-weboberfl%C3%A4che)
+     * [HB-RF-ETH Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#hb-rf-eth-anbindung)
+     * [Individual Diagramm/Backup-Path](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#individueller-diagrammbackup-speicherpfad)
+     * [Own commands during bootup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#eigene-aktionen-während-des-bootvorgangs)
 5. [Support, Contributions](https://github.com/jens-maus/RaspberryMatic/wiki/Support)
    * [Known Issues](https://github.com/jens-maus/RaspberryMatic/wiki/Support#bekannte-probleme)
    * [Request Help](https://github.com/jens-maus/RaspberryMatic/wiki/Support#hilfe-suchen)

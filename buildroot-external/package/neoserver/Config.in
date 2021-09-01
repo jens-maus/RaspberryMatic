@@ -2,5 +2,5 @@ config BR2_PACKAGE_NEOSERVER
 	bool "Neo Server"
 	help
 	  Adds support for mediola Neo Server
-	  
+
 	  http://www.mediola.com/

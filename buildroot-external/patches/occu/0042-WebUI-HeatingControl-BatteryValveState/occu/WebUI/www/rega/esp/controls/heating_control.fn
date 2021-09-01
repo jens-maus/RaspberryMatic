@@ -254,7 +254,10 @@ function ::CreateHeatingControlHmIP() {
   object oLevel = cObj.DPByControl("HEATING_CONTROL_HMIP.LEVEL");
 
   object oBatteryState = cObj.DPByHssDP("BATTERY_STATE");
-  object oValveLevel = cObj.DPByHssDP("LEVEL");
+  object oValveLevel = oLevel;
+  if (!oLevel) {
+    oValveLevel = cObj.DPByHssDP("LEVEL");
+  }
 
   object oActiveProfile = cObj.DPByControl("HEATING_CONTROL_HMIP.ACTIVE_PROFILE");
   object oHumidity = cObj.DPByControl("HEATING_CONTROL_HMIP.HUMIDITY");
@@ -303,13 +306,12 @@ function ::CreateHeatingControlHmIP() {
       WriteLine("</table>");
     WriteLine("</td>");
 
-    if ((oLevel) && (oLevel.State() >= 0)) {
-      var level = oLevel.Value() * 100;
-       WriteLine("<td id='"#chnId#"tdLEVEL' >");
+    if (oValveLevel) {
+      WriteLine("<td id='"#chnId#"tdLEVEL'>");
         WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
           WriteLine("<tr>");
-            WriteLine("<td  >${diagramValueTypeLEVEL}: </td>");
-            WriteLine("<td><span>"#level.ToString(0)#" %</span></td>");
+            WriteLine("<td id='"#chnId#"LEVEL'>${stringTableHeatingLevel}</td>");
+            WriteLine("<td><span id='"#chnId#"valLEVEL'></span><span><b>"#vUnit#"</b></span></td>");
           WriteLine("</tr>");
         WriteLine("</table>");
       WriteLine("</td>");
@@ -323,17 +325,6 @@ function ::CreateHeatingControlHmIP() {
           WriteLine("<tr>");
             WriteLine("<td>${stringTableClimateControlRTTransceiverBatteryState}</td>");
             WriteLine("<td><span id='"#chnId#"valBATTERY_STATE'></span><span><b>"#bUnit#"</b></span></td>");
-          WriteLine("</tr>");
-        WriteLine("</table>");
-      WriteLine("</td>");
-    }
-
-    if (oValveLevel) {
-      WriteLine("<td id='"#chnId#"tdLEVEL'>");
-        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
-          WriteLine("<tr>");
-            WriteLine("<td id='"#chnId#"LEVEL'>${stringTableHeatingLevel}</td>");
-            WriteLine("<td><span id='"#chnId#"valLEVEL'></span><span><b>"#vUnit#"</b></span></td>");
           WriteLine("</tr>");
         WriteLine("</table>");
       WriteLine("</td>");

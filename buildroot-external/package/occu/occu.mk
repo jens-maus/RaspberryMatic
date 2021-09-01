@@ -1,8 +1,8 @@
-#############################################################
+################################################################################
 #
 # OCCU by eQ-3
 #
-#############################################################
+################################################################################
 
 OCCU_VERSION = 3.59.6-2
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
@@ -14,7 +14,7 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 	define OCCU_PRE_PATCH
 		cp $(OCCU_PKGDIR)/Makefile $(@D)
   endef
-	OCCU_PRE_PATCH_HOOKS += OCCU_PRE_PATCH
+  OCCU_PRE_PATCH_HOOKS += OCCU_PRE_PATCH
 
 	define OCCU_FINALIZE_TARGET
 		# setup /usr/local/etc/config
@@ -74,44 +74,43 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 		# make sure no /etc/ntp.conf is there anymore (chrony used)
 		rm -f $(TARGET_DIR)/etc/ntp.conf
   endef
-	TARGET_FINALIZE_HOOKS += OCCU_FINALIZE_TARGET
-
+  TARGET_FINALIZE_HOOKS += OCCU_FINALIZE_TARGET
 endif
 
 ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_ONLY),y)
-	OCCU_RF_PROTOCOL=HM
+  OCCU_RF_PROTOCOL=HM
 endif
 
 ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HMIP_ONLY),y)
-	OCCU_RF_PROTOCOL=HMIP
+  OCCU_RF_PROTOCOL=HMIP
 endif
 
 ifeq ($(BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_HMIP),y)
-	OCCU_RF_PROTOCOL=HM_HMIP
+  OCCU_RF_PROTOCOL=HM_HMIP
 endif
 
 ifeq ($(BR2_PACKAGE_OCCU_WEBUI_REGAHSS_BETA),y)
-	OCCU_WEBUI_REGAHSS_BETA=y
+  OCCU_WEBUI_REGAHSS_BETA=y
 endif
 
 ifeq ($(BR2_arm),y)
-	OCCU_ARCH=arm-gnueabihf-gcc8
-	OCCU_LIBDIR=lib
+  OCCU_ARCH=arm-gnueabihf-gcc8
+  OCCU_LIBDIR=lib
 endif
 
 ifeq ($(BR2_aarch64),y)
-	OCCU_ARCH=arm-gnueabihf-gcc8
-	OCCU_LIBDIR=$(BR2_ROOTFS_LIB32_DIR)
+  OCCU_ARCH=arm-gnueabihf-gcc8
+  OCCU_LIBDIR=$(BR2_ROOTFS_LIB32_DIR)
 endif
 
 ifeq ($(BR2_i386),y)
-	OCCU_ARCH=X86_32_GCC8
-	OCCU_LIBDIR=lib
+  OCCU_ARCH=X86_32_GCC8
+  OCCU_LIBDIR=lib
 endif
 
 ifeq ($(BR2_x86_64),y)
-	OCCU_ARCH=X86_32_GCC8
-	OCCU_LIBDIR=$(BR2_ROOTFS_LIB32_DIR)
+  OCCU_ARCH=X86_32_GCC8
+  OCCU_LIBDIR=$(BR2_ROOTFS_LIB32_DIR)
 endif
 
 define OCCU_INSTALL_TARGET_CMDS
@@ -120,7 +119,7 @@ define OCCU_INSTALL_TARGET_CMDS
 			OCCU_LIBDIR=$(OCCU_LIBDIR) \
 			OCCU_WEBUI_REGAHSS_BETA=$(OCCU_WEBUI_REGAHSS_BETA) \
 			OCCU_WEBUI_REGAHSS_BETA=$(OCCU_WEBUI_REGAHSS_BETA) \
-			-C $(@D) install 
+			-C $(@D) install
 endef
 
 define OCCU_UNWRAP_WEBUI_JS

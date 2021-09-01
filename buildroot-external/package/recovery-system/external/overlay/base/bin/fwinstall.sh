@@ -16,7 +16,7 @@ fwprepare()
 {
   filename=${1}
 
-  echo -ne "[1/6] Checking uploaded data... "
+  echo -ne "[1/7] Checking uploaded data... "
   # check if filename exists
   if [[ ! -f "${filename}" ]]; then
     echo "ERROR ('${filename}' exists)"
@@ -33,7 +33,7 @@ fwprepare()
 
   ########
   # calculate/output sha256 checksum of uploaded data
-  echo -ne "[2/6] Calculating SHA256 checksum..."
+  echo -ne "[2/7] Calculating SHA256 checksum..."
 
   # start a progress bar outputing dots every few seconds
   awk 'BEGIN{while(1){printf".";fflush();system("sleep 3");}}' &
@@ -52,7 +52,7 @@ fwprepare()
 
   ########
   # create tmpdir and output available disk space
-  echo -ne "[3/6] Checking free disk space... "
+  echo -ne "[3/7] Checking free disk space... "
   TMPDIR="${filename}-dir"
   if ! mkdir -p "${TMPDIR}"; then
     echo "ERROR: (mkdir tmpdir)"
@@ -71,8 +71,71 @@ fwprepare()
   echo "OK<br/>"
 
   ########
+  # create tmpdir and output available disk space
+  echo -ne "[4/7] Checking storage performance..."
+
+  # start a progress bar outputing dots every few seconds
+  awk 'BEGIN{while(1){printf".";fflush();system("sleep 3");}}' &
+  PROGRESS_PID=$!
+  # shellcheck disable=SC2064
+  trap "kill ${PROGRESS_PID}; rm -f /tmp/.runningFirmwareUpdate" EXIT
+
+  # run the file i/o test using 'fio' which emulates a
+  # Apps Class A1 performance test
+  if ! RES=$(/usr/bin/fio --output-format=terse --max-jobs=4 /usr/share/agnostics/sd_bench.fio | cut -f 3,7,8,48,49 -d";" -) || [[ -z "${RES}" ]]; then
+    echo "WARNING: performance test failed"
+    # stop the progress output
+    kill ${PROGRESS_PID} && trap "rm -f /tmp/.runningFirmwareUpdate" EXIT
+  else
+    # stop the progress output
+    kill ${PROGRESS_PID} && trap "rm -f /tmp/.runningFirmwareUpdate" EXIT
+    rm -f /usr/local/tmp/sd.test.file
+
+    swri=$(echo "${RES}" | head -n 2 | tail -n 1 | cut -d ";" -f 4)
+    swrimb=$(echo "${swri}" | awk '{printf "%.2f",($1/1000)}')
+    rwri=$(echo "$RES" | head -n 3 | tail -n 1 | cut -d ";" -f 5)
+    rrea=$(echo "$RES" | head -n 4 | tail -n 1 | cut -d ";" -f 3)
+    pass=0
+
+    # sequential write check
+    echo -ne "sequential write: ${swrimb} MB/s"
+    if [[ "${swri}" -lt 10000 ]]; then
+      echo -ne " (WARN! < 10.0 MB/s), "
+      pass=1
+    else
+      echo -ne " (OK: > 10.0 MB/s), "
+    fi
+
+    # random write check
+    echo -ne "random write: ${rwri} IOPS"
+    if [[ "${rwri}" -lt 500 ]]; then
+      echo -ne " (WARN! < 500 IOPS), "
+      pass=1
+    else
+      echo -ne " (OK: > 500 IOPS), "
+    fi
+
+    # random read check
+    echo -ne "random read: ${rrea} IOPS"
+    if [[ "${rrea}" -lt 1500 ]]; then
+      echo -ne " (WARN! < 1500 IOPS), "
+      pass=1
+    else
+      echo -ne " (OK: > 1500 IOPS), "
+    fi
+
+    # final pass check
+    if [[ "${pass}" -eq 0 ]]; then
+      echo "PASSED<br/>"
+    else
+      echo "WARNING: Update process will take considerable time!<br/>"
+    fi
+
+  fi
+
+  ########
   # check if file is a valid firmware update/recovery file
-  echo -ne "[4/6] Preparing uploaded data... "
+  echo -ne "[5/7] Preparing uploaded data... "
 
   FILETYPE=""
 
@@ -210,7 +273,7 @@ fwprepare()
 
   ######
   # now we have unarchived everyting to TMPDIR, so lets check if it is valid
-  echo -ne "[5/6] Verifying uploaded data..."
+  echo -ne "[6/7] Verifying uploaded data..."
 
   # start a progress bar outputing dots every few seconds
   awk 'BEGIN{while(1){printf".";fflush();system("sleep 3");}}' &
@@ -252,7 +315,7 @@ fwprepare()
   ######
   # now we check if update_script is required and found and if so we
   # flag this firmware update accordingly
-  echo -ne "[6/6] Preparing firmware update... "
+  echo -ne "[7/7] Preparing firmware update... "
 
   if ! ls "${TMPDIR}"/*.img >/dev/null 2>&1 &&
      ! ls "${TMPDIR}"/*.ext4 >/dev/null 2>&1 &&
@@ -266,7 +329,7 @@ fwprepare()
   fi
 
   rm -rf /usr/local/.firmwareUpdate
-  if ! ln -sf "${TMPDIR}" /usr/local/.firmwareUpdate; then
+  if ! ln -sfn "${TMPDIR}" /usr/local/.firmwareUpdate; then
     echo "ERROR: (ln)"
     exit 1
   fi

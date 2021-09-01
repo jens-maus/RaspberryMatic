@@ -56,39 +56,39 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--disable-guest-agent \
 			--disable-nettle \
 			--disable-gcrypt \
-      --disable-curses \
-      --disable-vnc \
-      --disable-virtfs \
-      --disable-brlapi \
-      --disable-fdt \
-      --disable-bluez \
-      --disable-kvm \
-      --disable-rdma \
-      --disable-vde \
-      --disable-netmap \
-      --disable-cap-ng \
-      --disable-attr \
-      --disable-vhost-net \
-      --disable-spice \
-      --disable-rbd \
-      --disable-libiscsi \
-      --disable-libnfs \
-      --disable-smartcard \
-      --disable-libusb \
-      --disable-usb-redir \
-      --disable-lzo \
-      --disable-snappy \
-      --disable-bzip2 \
-      --disable-seccomp \
-      --disable-coroutine-pool \
-      --disable-glusterfs \
-      --disable-tpm \
-      --disable-numa \
-      --disable-blobs \
-      --disable-capstone \
-      --disable-tools \
-      --disable-tcg-interpreter \
-      --enable-guest-agent
+			--disable-curses \
+			--disable-vnc \
+			--disable-virtfs \
+			--disable-brlapi \
+			--disable-fdt \
+			--disable-bluez \
+			--disable-kvm \
+			--disable-rdma \
+			--disable-vde \
+			--disable-netmap \
+			--disable-cap-ng \
+			--disable-attr \
+			--disable-vhost-net \
+			--disable-spice \
+			--disable-rbd \
+			--disable-libiscsi \
+			--disable-libnfs \
+			--disable-smartcard \
+			--disable-libusb \
+			--disable-usb-redir \
+			--disable-lzo \
+			--disable-snappy \
+			--disable-bzip2 \
+			--disable-seccomp \
+			--disable-coroutine-pool \
+			--disable-glusterfs \
+			--disable-tpm \
+			--disable-numa \
+			--disable-blobs \
+			--disable-capstone \
+			--disable-tools \
+			--disable-tcg-interpreter \
+			--enable-guest-agent
 endef
 
 define QEMU_GUEST_AGENT_BUILD_CMDS

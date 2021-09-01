@@ -42,6 +42,7 @@ RaspberryMatic lässt sich auf folgender, kommerziell erhältlicher Kompletthard
 * _Hardware_:
    * [RaspberryPi](https://www.raspberrypi.org/)
    * [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
+   * [ODROID](https://www.hardkernel.com/shop/odroid-n2-with-4gbyte-ram-2/)
    * [Intel NUC](https://www.intel.de/content/www/de/de/products/boards-kits/nuc.html)
 
 bzw. unter folgenden Virtualisierungsumgebungen installieren:
@@ -54,6 +55,7 @@ bzw. unter folgenden Virtualisierungsumgebungen installieren:
    * [QNAP VirtualizationStation](https://www.qnap.com/event/station/de-de/virtualization.php)
    * [vmWare Workstation Player](https://www.vmware.com/de/products/workstation-player/workstation-player-evaluation.html)
    * [QEmu/KVM](https://www.qemu.org/)
+   * [UNRAID](https://unraid.net/)
    * [HyperV](https://docs.microsoft.com/de-de/virtualization/hyper-v-on-windows/)
    * [Docker/OCI](https://www.docker.com/)
    * [Kubernetes/K8s](https://kubernetes.io/)
@@ -80,6 +82,7 @@ Unter [Releases](https://github.com/jens-maus/RaspberryMatic/releases) steht fü
      * [ELV-Charly](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ELV-Charly)
      * [RaspberryPi](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)
      * [ASUS Tinkerboard](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Tinkerboard)
+     * [ODROID](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ODROID)
      * [Intel NUC](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-IntelNUC)
    * [Grundinstallation (Virtuell)](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#grundinstallation-virtuell)
      * [vmWare ESXi](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-ESXi)
@@ -89,6 +92,7 @@ Unter [Releases](https://github.com/jens-maus/RaspberryMatic/releases) steht fü
      * [QNAP VirtualizationStation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-QNAP-VirtualizationStation)
      * [vmWare Workstation Player](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-Workstation-Player)
      * [QEmu/KVM](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-QEmu)
+     * [UNRAID](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-UNRAID)
      * [HyperV](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HyperV)
      * [Docker/OCI](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Docker-OCI)
      * [Kubernetes/K8s](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Kubernetes)

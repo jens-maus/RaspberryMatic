@@ -3,7 +3,7 @@
 
 echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
 
-if [ -f /tmp/.runningFirmwareUpdate ]; then
+if [ -f /tmp/.runningFirmwareUpdate ] || [ -e /usr/local/.firmwareUpdate ]; then
   echo "Displaying running firmware update output:<br/>"
   echo "==========================================<br/>"
 

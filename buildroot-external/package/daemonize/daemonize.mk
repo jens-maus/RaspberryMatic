@@ -1,8 +1,8 @@
-#############################################################
+################################################################################
 #
-# daemonize from https://github.com/bmc/daemonize
+# daemonize - https://github.com/bmc/daemonize
 #
-#############################################################
+################################################################################
 
 DAEMONIZE_VERSION = 1.7.8
 DAEMONIZE_SITE = $(call github,bmc,daemonize,release-$(DAEMONIZE_VERSION))

@@ -2,5 +2,5 @@ config BR2_PACKAGE_JAVA_AZUL
 	bool "Azul Java Runtime"
 	help
 	  Azul Java Runtim
-	  
+
 	  https://www.azul.com/solutions/embedded-and-the-iot/

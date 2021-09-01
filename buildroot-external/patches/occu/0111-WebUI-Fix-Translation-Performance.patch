@@ -1,3 +1,14 @@
+--- occu/WebUI/www/config/cp_security.cgi.orig
++++ occu/WebUI/www/config/cp_security.cgi
+@@ -1497,7 +1497,7 @@
+         }
+       };
+     }
+-    puts "translatePage();"
++    puts "translatePage('#messagebox');"
+     puts "dlgPopup.readaptSize();"
+   }
+ }
 --- occu/WebUI/www/webui/js/lang/translate.js.orig
 +++ occu/WebUI/www/webui/js/lang/translate.js
 @@ -1,3 +1,8 @@
@@ -9,6 +20,16 @@
  function isNoProgramScript(cont) {
    if ((cont == "#prgrulecontent") || (jQuery("#scrinp").length > 0)) {
      return false;
+@@ -12,8 +17,8 @@
+   container = (cont == undefined) ? container : cont;
+ 
+   jQuery(container)
+-    .addBack()
+     .find("*")
++    .addBack()
+     .contents()
+     .filter(function () {
+       return this.nodeType === 3;
 @@ -68,12 +73,32 @@
   * @param {string} key The key to translate
   * @return {*} The translated key
@@ -30,13 +51,13 @@
 +    var text = langJSON[lang][key];
 +    if(text === undefined) text = key;
 +    return unescape(text);
-+  }
+   }
+-  return unescape((langJSON[getLang()][key] != undefined) ? langJSON[getLang()][key] : key);
 +  
 +  // Check if we already have an escaped variant of the ressource
 +  if(EscapedLangDict[lang][key] !== undefined) {
 +    return EscapedLangDict[lang][key];
-   }
--  return unescape((langJSON[getLang()][key] != undefined) ? langJSON[getLang()][key] : key);
++  }
 +
 +  // Get ressource, escape and cach it
 +  var keyText = langJSON[lang][key];

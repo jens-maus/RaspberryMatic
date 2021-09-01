@@ -515,7 +515,7 @@
                  puts "<li><h1 class='helpTitle'><u>\${menuHelpPage}</u></h1></li>"
                  puts "<li><a target='_blank' href=\'$HM_HELP_URL\'>\${dialogHelpLinkOnlineHelpA}</a></li>"
                  puts "<li><a target='_blank' href=\'$IP_HELP_URL\'>\${dialogHelpLinkOnlineHelpB}</a></li>"
-+                puts "<li><a target='_blank' href='https://raspberrymatic.de/#memo-documentation'>RaspberryMatic</a></li>"
++                puts "<li><a target='_blank' href='https://github.com/jens-maus/RaspberryMatic/wiki'>RaspberryMatic</a></li>"
                  puts "<li><a target='_blank' href='/licenseinfo.htm'>\${lblLicenseInformation}</a></li>"
                puts "</ul>"
        puts "</td>"

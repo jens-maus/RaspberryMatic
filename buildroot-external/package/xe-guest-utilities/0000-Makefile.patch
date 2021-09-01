@@ -1,3 +1,6 @@
+Makefile: integrated fix for PRODUCT_XXXX_VERSION use
+
+Signed-off-by: Jens Maus <mail@jens-maus.de>
 --- ./Makefile.orig	2021-05-18 04:14:26.000000000 +0200
 +++ ./Makefile	2021-08-12 23:15:46.653605916 +0200
 @@ -83,10 +83,8 @@

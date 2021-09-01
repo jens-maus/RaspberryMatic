@@ -1,3 +1,7 @@
+- integrated changes for building within buildroot env
+
+Signed-off-by: Jens Maus <mail@jens-maus.de>
+
 --- wiringpi-odroid-2f8842f1ff6a264a594a4fb8fd6d00bb9f6752bc.orig/devLib/Makefile	2021-03-12 09:57:33.000000000 +0100
 +++ wiringpi-odroid-2f8842f1ff6a264a594a4fb8fd6d00bb9f6752bc/devLib/Makefile	2021-04-14 15:41:27.706563664 +0200
 @@ -38,10 +38,10 @@

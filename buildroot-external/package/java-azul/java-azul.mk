@@ -1,10 +1,9 @@
-#############################################################
+################################################################################
 #
-# Azul java runtime
+# Azul java runtime - http://www.azul.com/downloads/zulu-embedded/
 #
-# http://www.azul.com/downloads/zulu-embedded/
-#
-#############################################################
+################################################################################
+
 ifeq ($(call qstrip,$(BR2_ARCH)),arm)
 JAVA_AZUL_VERSION = 8.56.0.21-ca-jdk8.0.302
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_aarch32hf.tar.gz
@@ -33,7 +32,7 @@ endef
 JAVA_AZUL_PRE_PATCH_HOOKS += JAVA_AZUL_PRE_PATCH
 
 define JAVA_AZUL_INSTALL_TARGET_CMDS
-	$(MAKE) -C $(@D) install 
+	$(MAKE) -C $(@D) install
 endef
 
 $(eval $(generic-package))

@@ -2,5 +2,5 @@ config BR2_PACKAGE_DAEMONIZE
 	bool "daemonize"
 	help
 	  daemonize: A tool to run a command as a daemon
-	  
+
 	  https://github.com/bmc/daemonize

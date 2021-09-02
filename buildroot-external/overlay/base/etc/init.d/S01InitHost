@@ -145,6 +145,10 @@ identify_host() {
         /usr/bin/tvservice --off >/dev/null
         /usr/bin/vcgencmd display_power 0 >/dev/null
       fi
+
+      # increase vm.min_free_kbytes to 16384 to increase stability
+      # in memory critical situations
+      sysctl -q vm.min_free_kbytes=16384
     ;;
 
     # ASUS Tinkerboard

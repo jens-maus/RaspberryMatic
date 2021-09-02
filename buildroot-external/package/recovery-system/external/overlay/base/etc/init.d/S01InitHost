@@ -122,6 +122,10 @@ identify_host() {
       HM_LED_GREEN="/sys/class/leds/led0"
       HM_LED_RED="/sys/class/leds/led1"
       HM_LED_YELLOW=""
+
+      # increase vm.min_free_kbytes to 16384 to increase stability
+      # in memory critical situations
+      sysctl -q vm.min_free_kbytes=16384
     ;;
 
     # ASUS Tinkerboard

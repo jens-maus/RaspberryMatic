@@ -1,0 +1,28 @@
+--- occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm
+@@ -117,9 +117,23 @@
+ </tr>
+ <%
+   integer iAlCount = 0;
+-    
++
++  string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++  string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++  if( sEnumUserInternalIDs != "" )
++  {
++    if( sEnumUserIDs != "" )
++    {
++      sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++    }
++    else
++    {
++      sEnumUserIDs = sEnumUserInternalIDs;
++    }
++  }
++
+   string sSVID;
+-  foreach( sSVID, oUser.UserTempViewIDs().EnumIDs() )
++  foreach( sSVID, sEnumUserIDs )
+   {
+     object oSV = dom.GetObject( sSVID );
+     if( oSV )

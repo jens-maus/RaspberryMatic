@@ -139,11 +139,11 @@ if { [catch {
     }
     
     proc conf_value_DISPLAY.SERVICE_COUNT { url ch_id ch_desc_var value_desc_var} {
-        create_sysvar_to_value_prg $ch_id SERVICE_COUNT 41 "Servicemeldungen anzeigen"
+        create_sysvar_to_value_prg $ch_id SERVICE_COUNT ID_GW_SYSSERVICE "Servicemeldungen anzeigen"
     }
     
     proc conf_value_DISPLAY.ALARM_COUNT { url ch_id ch_desc_var value_desc_var} {
-        create_sysvar_to_value_prg $ch_id ALARM_COUNT 40 "Alarmmeldungen anzeigen"
+        create_sysvar_to_value_prg $ch_id ALARM_COUNT ID_GW_SYSALARM "Alarmmeldungen anzeigen"
     }
     
     proc create_sysvar_to_value_prg {ch_id value sv_id prg_name} {

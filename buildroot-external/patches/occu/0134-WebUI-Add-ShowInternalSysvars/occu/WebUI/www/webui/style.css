@@ -6868,6 +6868,7 @@ color: $_(textColorA); /* white */
 	height:20px ! important;
 	background-color:$_(clickable);
 	color: $_(textColorA) ! important; /* white */
+	border: solid 1px $_(black); /* black */
 }
 
 .CLASS05203 {
@@ -6881,6 +6882,7 @@ color: $_(textColorA); /* white */
 .CLASS05205 {
 	height:20px ! important;
 	background-color:$_(clickable);
+	border: solid 1px $_(black); /* black */
 }
 
 .CLASS05206 {
@@ -6897,7 +6899,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS05209 {
-	text-align:left;
+	text-align: center;
 	padding-left:5px;
 	border:solid 1px $_(black); /* black */
 -ms-word-break: break-all;

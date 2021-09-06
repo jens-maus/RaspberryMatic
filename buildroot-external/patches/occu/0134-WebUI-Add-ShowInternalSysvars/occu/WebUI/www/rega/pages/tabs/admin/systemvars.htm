@@ -240,7 +240,14 @@
         Write("</td>");
         Write("</tr><tr>");
         Write("<td class='CLASS05210'>");
-          Write("<div class='StdButton' onclick='editSysVar("#sv.ID()#")'>${btnEdit}</div>");
+          string sClassName = "StdButton";
+          string sOnclick = "editSysVar("#sv.ID()#")";
+          if( (sv.Internal() == true) && (sv.Unerasable() == true) )
+          {
+            sClassName = sClassName#"Inactive";
+            sOnclick = "";
+          }
+          Write("<div onclick='"#sOnclick#"' class='"#sClassName#"'>${btnEdit}</div>");
         Write("</td>");
         Write("</tr></table>");
       Write("</td>");

@@ -147,13 +147,20 @@
          Write("<td class='CLASS05210'>");
            string sClassName = "StdButton";
            string sOnclick = "DeleteSysVar("#sv.ID()#");";
-@@ -222,6 +238,15 @@
+@@ -222,6 +238,22 @@
            }
            Write("<div onclick='"#sOnclick#"' class='"#sClassName#"'>${btnRemove}</div>");
          Write("</td>");
 +        Write("</tr><tr>");
 +        Write("<td class='CLASS05210'>");
-+          Write("<div class='StdButton' onclick='editSysVar("#sv.ID()#")'>${btnEdit}</div>");
++          string sClassName = "StdButton";
++          string sOnclick = "editSysVar("#sv.ID()#")";
++          if( (sv.Internal() == true) && (sv.Unerasable() == true) )
++          {
++            sClassName = sClassName#"Inactive";
++            sOnclick = "";
++          }
++          Write("<div onclick='"#sOnclick#"' class='"#sClassName#"'>${btnEdit}</div>");
 +        Write("</td>");
 +        Write("</tr></table>");
 +      Write("</td>");
@@ -163,7 +170,7 @@
          Write("<td class='CLASS05211'>");
            string sChecked = "";
            if (sv.Visible()) {
-@@ -229,24 +254,29 @@
+@@ -229,24 +261,29 @@
            }
            Write("<input id='svvis"#sv.ID()#"' type='checkbox' "#sChecked#" onclick='iseSystem.saveDpVisibility("#sv.ID()#", this)' />${lblVisible}");
          Write("</td>");
@@ -201,7 +208,7 @@
        string sJSTmp = "WebUI.enter(ProgramListPage, '"#sv.DPEnumUsagePrograms()#"');";
        Write( '<div class="StdButton" onclick="'#sJSTmp#'">${btnPrograms}</div>' );
      Write("</td>");
-@@ -302,7 +332,39 @@
+@@ -302,7 +339,39 @@
    new iseSubMenuControl("btnFilterVarType", "btnFilterVarTypeSub", "svOffset", {}, mouseOpts, false, true);  
    new iseSubMenuControl("btnFilterUnit", "btnFilterUnitSub", "svOffset", {}, mouseOpts, false, true);
    new iseSubMenuControl("btnFilterChn", "btnFilterChnSub", "svOffset", {}, mouseOpts, false, true);
@@ -242,7 +249,7 @@
    var s = "";
    
    s += "<table cellspacing='8'>";
-@@ -310,6 +372,7 @@
+@@ -310,6 +379,7 @@
      s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
      s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05207' onclick='fltSYV.clearFilters();reloadPage();' >${footerBtnResetFilter}</div></td>";
      s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='newSysVar()'>${footerBtnNew}</div></td>";

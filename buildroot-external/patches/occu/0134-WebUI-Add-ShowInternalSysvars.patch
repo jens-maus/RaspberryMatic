@@ -1,0 +1,262 @@
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -1580,3 +1580,40 @@
+ function ::keepAlive()
+ {
+ }
++
++function ::ShowInternalSystemVars()
++{
++  if( system.IsSessionVar("sessionSISV") )
++  {
++    string sEnable = system.GetSessionVar("sessionSISV");
++    if( sEnable == "1" )
++    {
++      system.SetSessionVar("sessionSISV","0");
++    }
++    else
++    {
++      system.SetSessionVar("sessionSISV","1");
++    }
++  }
++  else
++  {
++    system.SetSessionVar("sessionSISV","1");
++  }
++}
++
++! [id], [iInternal]                                 
++function ::saveDpInternal() {
++  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
++  if( oUser.UserLevel() == iulAdmin )           
++  {                                                   
++    object obj = dom.GetObject(system.GetVar("dpId"));
++    if (obj) {
++      boolean b = false;
++      if (system.GetVar("iInternal") == 1) {
++        b = true;         
++      }
++      obj.Internal(b);            
++    }
++  }                                                                        
++  return;
++}
+\ No newline at end of file
+--- occu/WebUI/www/rega/esp/system.htm.orig
++++ occu/WebUI/www/rega/esp/system.htm
+@@ -21,6 +21,7 @@
+   if( action == "saveSysVar"                 ) { Call( "system.fn::saveSysVar()" );                 }
+   if( action == "saveDpProto"                ) { Call( "system.fn::saveDpProto()" );                }
+   if( action == "saveDpVisibility"           ) { Call( "system.fn::saveDpVisibility()" );           }
++  if( action == "saveDpInternal"             ) { Call( "system.fn::saveDpInternal()" );             }
+   if( action == "saveTimeModule"             ) { Call( "system.fn::saveTimeModule()" );             }
+   if( action == "saveUser"                   ) { Call( "system.fn::saveUser()" );                   }
+   if( action == "saveUserPwd"                ) { Call( "system.fn::saveUserPwd()" );                }
+@@ -33,4 +34,5 @@
+   if( action == "getLastTimeOfChn"           ) { Call( "system.fn::getLastTimeOfChn()" );           }
+   if( action == "checkName"                  ) { Call( "system.fn::checkName()");                   }
+   if( action == "keepAlive"                  ) { Call( "system.fn::keepAlive()");                   }
++  if( action == "ShowInternalSystemVars"     ) { Call( "system.fn::ShowInternalSystemVars()");      }
+ %>
+--- occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm
+@@ -19,8 +19,20 @@
+     if( oSysVarArray )
+     {
+       oSysVarArray.SortByName();
++      
++      string sEnumSVIDs = oSysVarArray.EnumEnabledIDs();
++
++      if( system.IsSessionVar("sessionSISV") )
++      {
++        string sEnable = system.GetSessionVar("sessionSISV");
++        if( sEnable == "1" )
++        {
++          sEnumSVIDs = sEnumSVIDs#"\t"#oSysVarArray.EnumEnabledInternalIDs();
++        }
++      }
++      
+       string sTmp;
+-      foreach( sTmp, oSysVarArray.EnumEnabledIDs() )
++      foreach( sTmp, sEnumSVIDs )
+       {
+         object oTmp = dom.GetObject( sTmp );
+         if( oTmp )
+@@ -138,15 +150,17 @@
+     string sTrId = "sv"#sysvar;
+     Write("<tr id='"#sTrId#"'>");
+     object sv = dom.GetObject(sysvar);
+-    Write("<td style='text-align:center;' class='GrayBkg CLASS05206' >");
++    string CellBkg = "GrayBkg";
++    if (sv.Internal() == true) { CellBkg = "RedBkg"; }
++    Write("<td style='text-align:center;' class='"#CellBkg#" CLASS05206' >");
+       Write(sv.Name());
+     Write("</td>");
+     
+-    Write("<td  style='text-align:center;' class='GrayBkg CLASS05206' >");
++    Write("<td  style='text-align:center;' class='"#CellBkg#" CLASS05206' >");
+       Write(sv.DPInfo().Replace('\r\n', '<br/>').Replace('\r', '<br/>').Replace('\n', '<br/>'));
+     Write("</td>");
+     
+-    Write("<td  style='text-align:center;' class='GrayBkg CLASS05206' >");
++    Write("<td  style='text-align:center;' class='"#CellBkg#" CLASS05206' >");
+       string s = "Unbekannt: " # sv.ValueSubType();
+       if( sv.ValueSubType() == istPresent )
+       {
+@@ -175,7 +189,7 @@
+       Write(s);
+     Write("</td>");
+     
+-    Write("<td class='GrayBkg CLASS05209' >");
++    Write("<td class='"#CellBkg#" CLASS05209' >");
+       if (sv.ValueSubType() == istPresent) {
+       }
+       if (sv.ValueSubType() == istChar8859) {
+@@ -199,17 +213,17 @@
+     Write("</td>");
+     
+     
+-    Write("<td class='GrayBkg CLASS05206' >");
++    Write("<td class='"#CellBkg#" CLASS05206' >");
+       Write(sv.ValueUnit());
+     Write("</td>");
+     
+-    Write("<td class='GrayBkg CLASS05206' >");
++    Write("<td class='"#CellBkg#" CLASS05206' >");
+       object svCH = dom.GetObject( sv.Channel() );
+       if( svCH ) { Write( svCH.Name() ); }
+     Write("</td>");
+     
+    
+-    Write("<td class='WhiteBkg CLASS05206' >");
++    Write("<td class='"#CellBkg#" CLASS05206' >");
+       Write("<table>");
+       Write("<tr>");
+         Write("<td class='CLASS05210'>");
+@@ -232,6 +246,16 @@
+       Write("</tr>");
+       
+       Write("<tr>");
++      Write("<td style='visibility:hidden'></td>");
++        Write("<td class='CLASS05211'>");
++          sChecked = "";
++          if (sv.Internal()) {
++            sChecked = "checked";
++          }
++          Write("<input id='svinternal"#sv.ID()#"' type='checkbox' "#sChecked#" onclick='iseSystem.saveDpInternal("#sv.ID()#", this);reloadPage();' />${lblSystemIntern}");
++        Write("</td>");
++      Write("</tr>");
++      Write("<tr>");
+         Write("<td class='CLASS05210'>");
+           Write("<div class='StdButton' onclick='editSysVar("#sv.ID()#")'>${btnEdit}</div>");
+         Write("</td>");
+@@ -246,7 +270,7 @@
+       Write("</table>");
+     Write("</td>");
+     
+-    Write("<td class='GrayBkg CLASS05206' >");
++    Write("<td class='"#CellBkg#" CLASS05206' >");
+       string sJSTmp = "WebUI.enter(ProgramListPage, '"#sv.DPEnumUsagePrograms()#"');";
+       Write( '<div class="StdButton" onclick="'#sJSTmp#'">${btnPrograms}</div>' );
+     Write("</td>");
+@@ -302,7 +326,39 @@
+   new iseSubMenuControl("btnFilterVarType", "btnFilterVarTypeSub", "svOffset", {}, mouseOpts, false, true);  
+   new iseSubMenuControl("btnFilterUnit", "btnFilterUnitSub", "svOffset", {}, mouseOpts, false, true);
+   new iseSubMenuControl("btnFilterChn", "btnFilterChnSub", "svOffset", {}, mouseOpts, false, true);
+- 
++  
++  ShowInternalSysVars = function()
++  {
++    var url = '/esp/system.htm?sid='+SessionId;
++    var pb = "";
++    pb += 'string action = "ShowInternalSystemVars";';
++    var opt =
++    {
++      postBody: pb,
++      onComplete: function(t)
++      {
++        if(dbg){alert(t.responseText);}
++        reloadPage();
++      }
++    };
++    new Ajax.Request(url,opt);
++  };
++  
++  <%
++    string sInternalBtnText = "";
++    if( system.GetSessionVar("sessionSISV") == "1" )
++    {
++        !sInternalBtnText = "aus";
++        sInternalBtnText = "footerBtnHideInternalSystemVars";
++    }
++    else
++    {
++        !sInternalBtnText = "ein";
++        sInternalBtnText = "footerBtnShowInternalSystemVars";
++    }
++    Write("var internalBtnText = '"#sInternalBtnText#"';");
++  %>
++   
+   var s = "";
+   
+   s += "<table cellspacing='8'>";
+@@ -310,6 +366,7 @@
+     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
+     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05207' onclick='fltSYV.clearFilters();reloadPage();' >${footerBtnResetFilter}</div></td>";
+     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='newSysVar()'>${footerBtnNew}</div></td>";
++    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04905' onclick='ShowInternalSysVars()'>"+translateKey(internalBtnText)+"</div></td>";
+   s += "</tr>";
+   s += "</table>";
+ 
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -81,6 +81,8 @@
+     "footerBtnNewLink" : "Neue<br/>Verkn%FCpfung",
+     "footerBtnShowSystemPrograms" : "Systeminterne Programme<br/>einblenden",
+     "footerBtnHideSystemPrograms" : "Systeminterne Programme<br/>ausblenden",
++    "footerBtnShowInternalSystemVars" : "interne Systemvariablen<br/>einblenden",
++    "footerBtnHideInternalSystemVars" : "interne Systemvariablen<br/>ausblenden",
+     "footerBtnTestScript" : "Skript testen",
+     "footerBtnCancel" : "Abbrechen",
+     "footerBtnTransfer" : "%DCbernehmen",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -80,6 +80,8 @@
+     "footerBtnNewLink" : "New<br/>connection",
+     "footerBtnShowSystemPrograms" : "Show intrinsic <br/>programs",
+     "footerBtnHideSystemPrograms" : "Hide intrinsic<br/>programs",
++    "footerBtnShowInternalSystemVars" : "Show intrinsic <br/>system variables",
++    "footerBtnHideInternalSystemVars" : "Hide intrinsic<br/>system variables",
+     "footerBtnTestScript" : "Test script",
+     "footerBtnCancel" : "Cancel",
+     "footerBtnTransfer" : "Apply",
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -1473,6 +1473,10 @@
+   color: $_(textColorB); /* black */
+ }
+ 
++.RedBkg {
++  background-color: #FAA;
++  color: $_(textColorB); /* black */
++}
+ 
+ .OUCFMprop {
+   text-align:left;
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -25292,6 +25292,14 @@
+     new Ajax.Request(url, {postBody: ReGa.encode(pb)});  
+   },
+   
++  saveDpInternal: function(id, ctrlId) {                              
++    var url = "/esp/system.htm?sid="+SessionId;                       
++    var pb = "string action = 'saveDpInternal';";                     
++    pb += "integer dpId = " + id + ";";             
++    pb += "integer iInternal   = '"+($(ctrlId).checked ? 1 : 0)+"';";
++    new Ajax.Request(url, {postBody: ReGa.encode(pb)});
++  },
++  
+   ClearHistoryData: function()
+   {
+     var url = "/esp/system.htm?sid="+SessionId;

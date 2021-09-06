@@ -97,7 +97,7 @@
      object sv = dom.GetObject(sysvar);
 -    Write("<td style='text-align:center;' class='GrayBkg CLASS05206' >");
 +    string CellBkg = "GrayBkg";
-+    if (sv.Internal() == true) { CellBkg = "RedBkg"; }
++    if (sv.Internal() == true) { CellBkg = "LightGrayBkg"; }
 +    Write("<td style='text-align:center;' class='"#CellBkg#" CLASS05206' >");
        Write(sv.Name());
      Write("</td>");
@@ -278,8 +278,8 @@
    color: $_(textColorB); /* black */
  }
  
-+.RedBkg {
-+  background-color: #FAA;
++.LightGrayBkg {
++  background-color: #DDD;
 +  color: $_(textColorB); /* black */
 +}
  

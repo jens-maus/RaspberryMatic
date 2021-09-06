@@ -1473,8 +1473,8 @@ div.caption  { display: table-caption; }
   color: $_(textColorB); /* black */
 }
 
-.RedBkg {
-  background-color: #FAA;
+.LightGrayBkg {
+  background-color: #DDD;
   color: $_(textColorB); /* black */
 }
 

@@ -151,7 +151,7 @@
     Write("<tr id='"#sTrId#"'>");
     object sv = dom.GetObject(sysvar);
     string CellBkg = "GrayBkg";
-    if (sv.Internal() == true) { CellBkg = "RedBkg"; }
+    if (sv.Internal() == true) { CellBkg = "LightGrayBkg"; }
     Write("<td style='text-align:center;' class='"#CellBkg#" CLASS05206' >");
       Write(sv.Name());
     Write("</td>");

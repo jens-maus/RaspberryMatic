@@ -155,7 +155,7 @@
 +        Write("<td class='CLASS05210'>");
 +          string sClassName = "StdButton";
 +          string sOnclick = "editSysVar("#sv.ID()#")";
-+          if( (sv.Internal() == true) && (sv.Unerasable() == true) )
++          if( (sv.ID() == ID_GW_SYSALARM) || (sv.ID() == ID_GW_SYSSERVICE) )
 +          {
 +            sClassName = sClassName#"Inactive";
 +            sOnclick = "";

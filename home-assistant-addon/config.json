@@ -1,6 +1,6 @@
 {
   "name": "RaspberryMatic CCU",
-  "version": "3.59.6.20210807",
+  "version": "3.59.6.20210911",
   "slug": "raspberrymatic",
   "image": "ghcr.io/jens-maus/raspberrymatic",
   "arch": ["armhf", "aarch64", "amd64"],
@@ -106,6 +106,7 @@
     "SYS_MODULE",
     "SYS_NICE",
     "SYS_RAWIO",
-    "SYS_RESOURCE"
+    "SYS_RESOURCE",
+    "NET_ADMIN"
   ]
 }

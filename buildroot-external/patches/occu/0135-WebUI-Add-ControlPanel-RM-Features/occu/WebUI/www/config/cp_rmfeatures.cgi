@@ -526,6 +526,12 @@ proc action_save_settings {} {
     append errMsg [deletefile $TWEAKFILENAME]
   }
   
+  if { $cronBackupMaxBackups == "" || $cronBackupMaxBackups == "0" } {
+    append errMsg [deletefile $CRONBACKUPMAXBACKUPSFILENAME]
+  } else {
+    append errMsg [writefile $CRONBACKUPMAXBACKUPSFILENAME $cronBackupMaxBackups]
+  }
+  
   if { $cronBackupPath == "" } {
     append errMsg [deletefile $CRONBACKUPPATHFILENAME]
   } else {

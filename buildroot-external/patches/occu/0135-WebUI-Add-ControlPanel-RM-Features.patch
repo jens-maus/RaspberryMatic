@@ -49,7 +49,7 @@
         jQuery.each(helpContainer, function(index, container){
 --- occu/WebUI/www/config/cp_rmfeatures.cgi.orig
 +++ occu/WebUI/www/config/cp_rmfeatures.cgi
-@@ -0,0 +1,549 @@
+@@ -0,0 +1,555 @@
 +#!/bin/tclsh
 +source once.tcl
 +sourceOnce cgi.tcl
@@ -576,6 +576,12 @@
 +    append errMsg [writefile $TWEAKFILENAME "CP_DEVCONFIG=1"]
 +  } else {
 +    append errMsg [deletefile $TWEAKFILENAME]
++  }
++  
++  if { $cronBackupMaxBackups == "" || $cronBackupMaxBackups == "0" } {
++    append errMsg [deletefile $CRONBACKUPMAXBACKUPSFILENAME]
++  } else {
++    append errMsg [writefile $CRONBACKUPMAXBACKUPSFILENAME $cronBackupMaxBackups]
 +  }
 +  
 +  if { $cronBackupPath == "" } {

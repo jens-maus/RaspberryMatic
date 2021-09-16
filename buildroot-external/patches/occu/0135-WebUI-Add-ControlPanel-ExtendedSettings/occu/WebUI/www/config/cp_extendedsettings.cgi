@@ -14,7 +14,8 @@ set MEDIOLAFILENAME "/etc/config/neoDisabled"
 set NOUPDATEDCVARSFILENAME "/etc/config/NoUpdateDCVars"
 set NOBADBLOCKSCHECKFILENAME "/etc/config/NoBadBlocksCheck"
 set NOFSTRIMFILENAME "/etc/config/NoFSTRIM"
-set DISABLELEDSFILENAME "/etc/config/disableLED"
+set DISABLELEDFILENAME "/etc/config/disableLED"
+set DISABLEONBOARDLEDFILENAME "/etc/config/disableOnboardLED"
 set CUSTOMSTORAGEPATHFILENAME "/etc/config/CustomStoragePath"
 
 set NOCRONBACKUPFILENAME "/etc/config/NoCronBackup"
@@ -215,7 +216,7 @@ proc action_reboot {} {
 }
 
 proc action_put_page {} {
-  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOFSTRIMFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDSFILENAME
+  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOFSTRIMFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
    
   set inetcheckDisabled [file exists $INETCHECKFILENAME]
   set rpi4usb3CheckDisabled [file exists $RPI4USB3CHECKFILENAME]
@@ -224,8 +225,9 @@ proc action_put_page {} {
   set noDCVars [file exists $NOUPDATEDCVARSFILENAME]
   set noBadBlocksCheck [file exists $NOBADBLOCKSCHECKFILENAME]
   set noFSTRIM [file exists $NOFSTRIMFILENAME]
-  set disableLEDs [file exists $DISABLELEDSFILENAME]
-
+  set disableLED [file exists $DISABLELEDFILENAME]
+  set disableOnboardLED [file exists $DISABLEONBOARDLEDFILENAME]
+  
   set cronBackupMaxBackups [readfile $CRONBACKUPMAXBACKUPSFILENAME]
   set cronBackupPath [readfile $CRONBACKUPPATHFILENAME]
   set customStoragePath [readfile $CUSTOMSTORAGEPATHFILENAME]
@@ -322,10 +324,18 @@ proc action_put_page {} {
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
 			table_row {
               set checked ""
-              if {$disableLEDs} { set checked "checked=true" }
+              if {$disableLED} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
-			  cgi_checkbox mode=disableLEDs {id="cb_disableLEDs"} $checked
-			                  puts "\${dialogSettingsExtendedSettingsDisableLEDs}"
+			  cgi_checkbox mode=disableLED {id="cb_disableLED"} $checked
+			                  puts "\${dialogSettingsExtendedSettingsDisableLED}"
+              }
+            }
+			table_row {
+              set checked ""
+              if {$disableOnboardLED} { set checked "checked=true" }
+              table_data {class="CLASS21112"} {colspan="3"} {
+			  cgi_checkbox mode=disableOnboardLED {id="cb_disableOnboardLED"} $checked
+			                  puts "\${dialogSettingsExtendedSettingsDisableOnboardLED}"
               }
             }
 			table_row {
@@ -365,6 +375,7 @@ proc action_put_page {} {
           p { ${dialogSettingsExtendedSettingsHintSystem7} }
           p { ${dialogSettingsExtendedSettingsHintSystem8} }
           p { ${dialogSettingsExtendedSettingsHintSystem9} }
+          p { ${dialogSettingsExtendedSettingsHintSystem10} }
         }
       }
 	  
@@ -426,7 +437,8 @@ proc action_put_page {} {
         pb += "&noCronBackup="+(document.getElementById("cb_noCronBackup").checked?"0":"1");
         pb += "&noDCVars="+(document.getElementById("cb_noDCVars").checked?"0":"1");
         pb += "&noBadBlocksCheck="+(document.getElementById("cb_noBadBlocksCheck").checked?"0":"1");
-        pb += "&disableLEDs="+(document.getElementById("cb_disableLEDs").checked?"1":"0");
+        pb += "&disableLED="+(document.getElementById("cb_disableLED").checked?"1":"0");
+        pb += "&disableOnboardLED="+(document.getElementById("cb_disableOnboardLED").checked?"1":"0");
         pb += "&noFSTRIM="+(document.getElementById("cb_noFSTRIM").checked?"0":"1");
         pb += "&devConfig="+(document.getElementById("cb_devConfig").checked?"1":"0");
         pb += "&cronBackupPath="+document.getElementById("text_cronBackupPath").value;
@@ -494,7 +506,7 @@ proc action_put_page {} {
 }
 
 proc action_save_settings {} {
-  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOFSTRIMFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDSFILENAME
+  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOFSTRIMFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
   set errMsg ""
 
   import inetcheckDisabled
@@ -502,7 +514,8 @@ proc action_save_settings {} {
   import mediolaDisabled
   import noCronBackup
   import noDCVars
-  import disableLEDs
+  import disableLED
+  import disableOnboardLED
   import noBadBlocksCheck
   import noFSTRIM
   import devConfig
@@ -540,10 +553,16 @@ proc action_save_settings {} {
     append errMsg [deletefile $NOUPDATEDCVARSFILENAME]
   }
   
-  if {$disableLEDs} {
-    append errMsg [createfile $DISABLELEDSFILENAME]
+  if {$disableLED} {
+    append errMsg [createfile $DISABLELEDFILENAME]
   } else {
-    append errMsg [deletefile $DISABLELEDSFILENAME]
+    append errMsg [deletefile $DISABLELEDFILENAME]
+  }  
+
+  if {$disableOnboardLED} {
+    append errMsg [createfile $DISABLEONBOARDLEDFILENAME]
+  } else {
+    append errMsg [deletefile $DISABLEONBOARDLEDFILENAME]
   }  
   
   if {$noBadBlocksCheck} {

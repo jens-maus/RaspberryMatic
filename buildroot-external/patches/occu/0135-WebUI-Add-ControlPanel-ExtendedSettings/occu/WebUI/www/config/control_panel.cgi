@@ -218,8 +218,8 @@ if {[isOldCCU]} {
   puts {
     <td>
       <div class="cpButton">
-        <div class="StdTableBtn CLASS21701" onclick="showRMFeaturesCP()">${btnSysConfRMFeatures}</div>
-        <div class="StdTableBtnHelp"><img id="showRMFeaturesCPHelp" src="/ise/img/help.png"></div>
+        <div class="StdTableBtn CLASS21701" onclick="showExtendedSettingsCP()">${btnSysConfExtendedSettings}</div>
+        <div class="StdTableBtnHelp"><img id="showExtendedSettingsCPHelp" src="/ise/img/help.png"></div>
       </div>
     </td>
    }
@@ -355,7 +355,7 @@ puts {
     };
 
     function setTooltips() {
-      var helpContainer = ["#showMaintenanceCPHelp","#showSecurityCPHelp","#showTimeCPHelp","#showNetworkCPHelp","#newFirewallConfigDialogHelp","#showBidCosConfigHelp","#showSoftwareCPHelp", "#showCouplingCPHelp", "#showGeneralSettingsCPHelp", "#showAccessPointSettingsCPHelp", "#showSecuritySettingsCPHelp", "#showAccessPointCPHelp", "#showRMFeaturesCPHelp"];
+      var helpContainer = ["#showMaintenanceCPHelp","#showSecurityCPHelp","#showTimeCPHelp","#showNetworkCPHelp","#newFirewallConfigDialogHelp","#showBidCosConfigHelp","#showSoftwareCPHelp", "#showCouplingCPHelp", "#showGeneralSettingsCPHelp", "#showAccessPointSettingsCPHelp", "#showSecuritySettingsCPHelp", "#showAccessPointCPHelp", "#showExtendedSettingsCPHelp"];
       var help = [
         "<h1>"+translateKey("btnSysConfCentralMaintenace")+"</h1><ul><li>"+translateKey("lblSysConfCentralMaintenance1")+"</li><li>"+translateKey("lblSysConfCentralMaintenance2")+"</li><li>"+translateKey("lblSysConfCentralMaintenance3")+"</li></ul>",
         "<h1>"+translateKey("btnSysConfSecurity")+"</h1><ul><li>"+translateKey("lblSysConfSecurity1")+"</li><li>"+translateKey("lblSysConfSecurity2")+"</li><li>"+translateKey("lblSysConfSecurity3")+"</li><li>"+translateKey("lblSysConfSecurity4")+"</li><li>"+translateKey("lblSysConfSecurity5")+"</li><li>"+translateKey("lblSysConfSecurity6")+"</li><li>"+translateKey("lblSysConfSecurity7")+"</li><li>"+translateKey("lblSysConfSecurity8")+"</li></ul>",
@@ -369,7 +369,7 @@ puts {
         "<h1>"+translateKey("btnAccessPointSettings")+"</h1><ul><li>"+translateKey("lblAccessPointSettings1")+"</li></ul>",
         "<h1>"+translateKey("btnSecuritySettings")+"</h1><ul><li>"+translateKey("lblSecuritySettings1")+"</li><li>"+translateKey("lblSecuritySettings2")+"</li></ul>",
         "<h1>"+translateKey("btnAccessPoints")+"</h1><ul><li>"+translateKey("lblShowAllAPs")+"</li></ul>",
-        "<h1>"+translateKey("btnSysConfRMFeatures")+"</h1><ul><li>"+translateKey("lblSysConfRMFeatures1")+"</li></ul>"
+        "<h1>"+translateKey("btnSysConfExtendedSettings")+"</h1><ul><li>"+translateKey("lblSysConfExtendedSettings1")+"</li></ul>"
         ];
 
        jQuery.each(helpContainer, function(index, container){

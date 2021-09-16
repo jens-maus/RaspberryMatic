@@ -42912,9 +42912,9 @@ showMaintenanceCP = function()
   CreateCPPopup("/config/cp_maintenance.cgi");
 };
 
-showRMFeaturesCP= function()
+showExtendedSettingsCP= function()
 {
-  CreateCPPopup("/config/cp_rmfeatures.cgi");
+  CreateCPPopup("/config/cp_extendedsettings.cgi");
 };
 
 showNewFirmwareDownload = function() {

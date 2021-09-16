@@ -1,0 +1,167 @@
+--- occu/WebUI/www/config/control_panel.cgi.orig
++++ occu/WebUI/www/config/control_panel.cgi
+@@ -215,8 +215,27 @@
+     incr i
+   }
+ 
++  puts {
++    <td>
++      <div class="cpButton">
++        <div class="StdTableBtn CLASS21701" onclick="showExtendedSettingsCP()">${btnSysConfExtendedSettings}</div>
++        <div class="StdTableBtnHelp"><img id="showExtendedSettingsCPHelp" src="/ise/img/help.png"></div>
++      </div>
++    </td>
++   }
++   incr i
++
+ set COL_COUNT 4
+ 
++if { $i == $COL_COUNT } {
++  puts {
++    <td class="_CLASS21702"></td>
++    </tr>
++    <tr>
++  }
++  set i 0
++}
++
+ if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
+   puts "<td><div class=\"cpButton\">"
+   puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"window.open('/tools/devconfig.cgi?sid=$sid');\">DevConfig</div>"
+@@ -336,7 +355,7 @@
+     };
+ 
+     function setTooltips() {
+-      var helpContainer = ["#showMaintenanceCPHelp","#showSecurityCPHelp","#showTimeCPHelp","#showNetworkCPHelp","#newFirewallConfigDialogHelp","#showBidCosConfigHelp","#showSoftwareCPHelp", "#showCouplingCPHelp", "#showGeneralSettingsCPHelp", "#showAccessPointSettingsCPHelp", "#showSecuritySettingsCPHelp", "#showAccessPointCPHelp"];
++      var helpContainer = ["#showMaintenanceCPHelp","#showSecurityCPHelp","#showTimeCPHelp","#showNetworkCPHelp","#newFirewallConfigDialogHelp","#showBidCosConfigHelp","#showSoftwareCPHelp", "#showCouplingCPHelp", "#showGeneralSettingsCPHelp", "#showAccessPointSettingsCPHelp", "#showSecuritySettingsCPHelp", "#showAccessPointCPHelp", "#showExtendedSettingsCPHelp"];
+       var help = [
+         "<h1>"+translateKey("btnSysConfCentralMaintenace")+"</h1><ul><li>"+translateKey("lblSysConfCentralMaintenance1")+"</li><li>"+translateKey("lblSysConfCentralMaintenance2")+"</li><li>"+translateKey("lblSysConfCentralMaintenance3")+"</li></ul>",
+         "<h1>"+translateKey("btnSysConfSecurity")+"</h1><ul><li>"+translateKey("lblSysConfSecurity1")+"</li><li>"+translateKey("lblSysConfSecurity2")+"</li><li>"+translateKey("lblSysConfSecurity3")+"</li><li>"+translateKey("lblSysConfSecurity4")+"</li><li>"+translateKey("lblSysConfSecurity5")+"</li><li>"+translateKey("lblSysConfSecurity6")+"</li><li>"+translateKey("lblSysConfSecurity7")+"</li><li>"+translateKey("lblSysConfSecurity8")+"</li></ul>",
+@@ -349,7 +368,8 @@
+         "<h1>"+translateKey("btnSysConfGeneralSettings")+"</h1><ul><li>"+translateKey("lblSysConfStorage")+"</li><li>"+translateKey("lblSysConfSetPowerCost")+"</li></ul>",
+         "<h1>"+translateKey("btnAccessPointSettings")+"</h1><ul><li>"+translateKey("lblAccessPointSettings1")+"</li></ul>",
+         "<h1>"+translateKey("btnSecuritySettings")+"</h1><ul><li>"+translateKey("lblSecuritySettings1")+"</li><li>"+translateKey("lblSecuritySettings2")+"</li></ul>",
+-        "<h1>"+translateKey("btnAccessPoints")+"</h1><ul><li>"+translateKey("lblShowAllAPs")+"</li></ul>"
++        "<h1>"+translateKey("btnAccessPoints")+"</h1><ul><li>"+translateKey("lblShowAllAPs")+"</li></ul>",
++        "<h1>"+translateKey("btnSysConfExtendedSettings")+"</h1><ul><li>"+translateKey("lblSysConfExtendedSettings1")+"</li></ul>"
+         ];
+ 
+        jQuery.each(helpContainer, function(index, container){
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -463,6 +463,8 @@
+     "lblMenuStatusControlSysProtocolTime" : "Zeit",
+     "lblMenuStatusControlSysProtocolChannelSysvar" : "Kanal / Systemvariable",
+     "lblMenuStatusControlSysProtocolActivity" : "Aktivit%E4t",
++    "btnSysConfExtendedSettings" : "erweiterte<br/>Einstellungen",
++    "lblSysConfExtendedSettings1" : "konfiguriert WatchDog-, (Betrieb-)System- und Expertenoptionen",
+     "btnSysConfCentralMaintenace" : "Zentralen-<br/>Wartung",
+     "lblSysConfCentralMaintenance1" : "Software-Update der " + HMIdentifier.de.CCUFullNameText,
+     "lblSysConfCentralMaintenance2" : HMIdentifier.de.CCUFullNameText + " neu starten",
+@@ -624,6 +626,40 @@
+     "dialogSettingsCentralDisplayLblOptionHours" : "Stunden",
+     "dialogSettingsCentralDisplayLblOptionAlways" : "Immer an",
+     "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
++    "commentSettingsDialogExtendedSettings" : "***********************************************",
++    "dialogSettingsExtendedSettingsTitle" : "erweiterte Einstellungen",
++    "dialogSettingsExtendedSettingsRebootHint" : "Damit die %C4nderungen wirksam werden, muss die "+HMIdentifier.de.CCUShortName +" neu gestartet werden.",
++    "dialogSettingsExtendedSettingsWatchDog" : "WatchDog-%DCberwachung",
++    "dialogSettingsExtendedSettingsInternetCheck" : "Internet-Check",
++    "dialogSettingsExtendedSettingsRpi4usb3Check" : "RPI4-USB3-Check",
++    "dialogSettingsExtendedSettingsHintWatchDogCheck1" : "<b>Internet-Check:</b><br/>Es wird eine Alarmmeldung generiert, falls die Internet-Verbindung ausf%E4llt",
++    "dialogSettingsExtendedSettingsHintWatchDogCheck2" : "<b>RPI4-USB3-Check:</b><br/>Es wird eine Alarmmeldung generiert, wenn ein RaspberryPi 4 mit aufgestecktem Funkmodul und angeschlossenem USB-Ger%E4t am USB3 Port verwendet wird.",
++    "dialogSettingsExtendedSettingsSystem" : "allgemeine System-Optionen",
++    "dialogSettingsExtendedSettingsMediola" : "Mediola NEO-Server",
++    "dialogSettingsExtendedSettingsCronBackup" : "cron-geplante Backups",
++    "dialogSettingsExtendedSettingsCronBackupPath" : "Backup-Pfad",
++    "dialogSettingsExtendedSettingsCronBackupPathPlaceholder" : "<Systemvorgabe>",
++    "dialogSettingsExtendedSettingsCronBackupMaxBackups" : "max. Backup-Anzahl",
++    "dialogSettingsExtendedSettingsCustomStoragePath" : "Storage-Pfad",
++    "dialogSettingsExtendedSettingsCustomStoragePathPlaceholder" : "<Systemvorgabe>",
++    "dialogSettingsExtendedSettingsDCVars" : "Duty-Cycle Variablen anlegen",
++    "dialogSettingsExtendedSettingsDisableLEDs" : "LEDs deaktivieren",
++    "dialogSettingsExtendedSettingsBadBlocksCheck" : "Bad Blocks Check",
++    "dialogSettingsExtendedSettingsFSTRIM" : "FSTRIM",
++    "dialogSettingsExtendedSettingsHintSystem1" : "<b>Mediola:</b><br/>Ist die Option deaktiviert, wird die NEO-Server Instanz nicht automatisch gestartet",
++    "dialogSettingsExtendedSettingsHintSystem2" : "<b>cron-geplante Backups:</b><br/>automatische Backups werden t%E4glich erzeugt und auf ein angeschlossenes (USB-)Medium oder einem anderen konfigurierten Pfad gespeichert",
++    "dialogSettingsExtendedSettingsHintSystem3" : "<b>Backup-Pfad:</b><br/>Speicherort der Backups",
++    "dialogSettingsExtendedSettingsHintSystem4" : "<b>max. Backup-Anzahl:</b><br/>es wird nur die angegebene Anzahl an Backups aufbewahrt (leer lassen, um automatisches L%F6schen zu deaktivieren)",
++    "dialogSettingsExtendedSettingsHintSystem5" : "<b>Duty-Cycle Variablen anlegen:</b><br/>Es werden automatisch Systemvariablen mit den DutyCycle-Werten aller Funk-Interfaces angelegt und aktualisiert",
++    "dialogSettingsExtendedSettingsHintSystem6" : "<b>LEDs deaktivieren:</b><br/>Es werden die LEDs am RaspberryPi sowie dem RPI-RF-MOD deaktiviert",
++    "dialogSettingsExtendedSettingsHintSystem7" : "<b>Bad Blocks Check:</b><br/>Es wird t%E4glich nachts eine Block-%DCberpr%FCfung der SD-Karte durchgef%FChrt",
++    "dialogSettingsExtendedSettingsHintSystem8" : "<b>FSTRIM:</b><br/>Es wird t%E4glich nachts FSTRIM zum Freigeben nicht mehr genutzter Speicherbereiche ausgef%FChrt",
++    "dialogSettingsExtendedSettingsHintSystem9" : "<b>Storage-Pfad:</b><br/>Pfad f%FCr Diagramme",
++    "dialogSettingsExtendedSettingsExpert" : "Experte",
++    "dialogSettingsExtendedSettingsDevConfig" : "DevConfig-Button",
++    "dialogSettingsExtendedSettingsHintExpert1" : "<b>DevConfig-Button:</b><br/>aktiviert den DevConfig-Button in der Systemsteuerung",
++    "dialogSettingsExtendedSettingsMessageAlertMessageError1" : "Fehler beim Speichern",
++    "commentSettingsDialogExtendedSettingsEnd" : "***********************************************",
+     "commentSettingsDialogNetwork" : "***********************************************",
+     "dialogSettingsNetworkTitle" : HMIdentifier.de.CCUShortName + " - Netzwerkeinstellungen",
+     "dialogSettingsNetworkTDIPSettings" : "IP-Einstellungen",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -462,6 +462,8 @@
+     "lblMenuStatusControlSysProtocolTime" : "Time",
+     "lblMenuStatusControlSysProtocolChannelSysvar" : "Channel / system variable",
+     "lblMenuStatusControlSysProtocolActivity" : "Activity",
++    "btnSysConfExtendedSettings" : "extended settings",
++    "lblSysConfExtendedSettings1" : "configure watchdog settings, common (operating) system features and expert options",
+     "btnSysConfCentralMaintenace" : "CCU maintenance",
+     "lblSysConfCentralMaintenance1" : "Software update for " + HMIdentifier.en.CCUFullNameText,
+     "lblSysConfCentralMaintenance2" : "Restart " + HMIdentifier.en.CCUFullNameText,
+@@ -624,6 +626,40 @@
+     "dialogSettingsCentralDisplayLblOptionHours" : "Hours",
+     "dialogSettingsCentralDisplayLblOptionAlways" : "Always on",
+     "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
++    "commentSettingsDialogExtendedSettings" : "***********************************************",
++    "dialogSettingsExtendedSettingsTitle" : "extended settings",
++    "dialogSettingsExtendedSettingsRebootHint" : HMIdentifier.de.CCUShortName +" needs to be restartet in order to apply the changes.",
++    "dialogSettingsExtendedSettingsWatchDog" : "WatchDog-Monitoring",
++    "dialogSettingsExtendedSettingsInternetCheck" : "Internet-Check",
++    "dialogSettingsExtendedSettingsRpi4usb3Check" : "RPI4-USB3-Check",
++    "dialogSettingsExtendedSettingsHintWatchDogCheck1" : "<b>Internet-Check:</b><br/>an alarm is generated, if the internet connection fails",
++    "dialogSettingsExtendedSettingsHintWatchDogCheck2" : "<b>RPI4-USB3-Check:</b><br/>an alarm is generated when using a RaspberryPi 4 with stacked radio module and connected device(s) on usb3 port",
++    "dialogSettingsExtendedSettingsSystem" : "Common System Options",
++    "dialogSettingsExtendedSettingsMediola" : "Mediola NEO-Server",
++    "dialogSettingsExtendedSettingsCronBackup" : "cron-scheduled backups",
++    "dialogSettingsExtendedSettingsCronBackupPath" : "backup path",
++    "dialogSettingsExtendedSettingsCronBackupPathPlaceholder" : "<default>",
++    "dialogSettingsExtendedSettingsCronBackupMaxBackups" : "max. backup count",
++    "dialogSettingsExtendedSettingsCustomStoragePath" : "storage path",
++    "dialogSettingsExtendedSettingsCustomStoragePathPlaceholder" : "<default>",
++    "dialogSettingsExtendedSettingsDCVars" : "create Duty-Cycle variables",
++    "dialogSettingsExtendedSettingsDisableLEDs" : "disable leds",
++    "dialogSettingsExtendedSettingsBadBlocksCheck" : "Bad Blocks Check",
++    "dialogSettingsExtendedSettingsFSTRIM" : "FSTRIM",
++    "dialogSettingsExtendedSettingsHintSystem1" : "<b>Mediola:</b><br/>if deactivated, the NEO-Server instance will not start on boot",
++    "dialogSettingsExtendedSettingsHintSystem2" : "<b>cron-scheduled backup:</b><br/>create daily backups and save them to a connected external (usb) stick",
++    "dialogSettingsExtendedSettingsHintSystem3" : "<b>backup path:</b><br/>location, where backups are saved",
++    "dialogSettingsExtendedSettingsHintSystem4" : "<b>max. backup count:</b><br/>indicates how many backups should be kept (leave empty, for no automatic delete)",
++    "dialogSettingsExtendedSettingsHintSystem5" : "<b>create Duty-Cycle variables:</b><br/>system variables containing the duty cycle value for each rf interface are generated and updated periodically",
++    "dialogSettingsExtendedSettingsHintSystem6" : "<b>disable leds:</b><br/>disables all leds on a raspberry pi and RPI-RF-MOD",
++    "dialogSettingsExtendedSettingsHintSystem7" : "<b>Bad Blocks Check:</b><br/>nightly check for bad blocks (on SD cards)",
++    "dialogSettingsExtendedSettingsHintSystem8" : "<b>FSTRIM:</b><br/>nightly task to discard blocks which are not in use by the filesystem",
++    "dialogSettingsExtendedSettingsHintSystem9" : "<b>storage path:</b><br/>path for diagrams",
++    "dialogSettingsExtendedSettingsExpert" : "Expert",
++    "dialogSettingsExtendedSettingsDevConfig" : "DevConfig-Button",
++    "dialogSettingsExtendedSettingsHintExpert1" : "<b>DevConfig-Button:</b><br/>show the DevConfig button on the control panel",
++    "dialogSettingsExtendedSettingsMessageAlertMessageError1" : "error while saving",
++    "commentSettingsDialogExtendedSettingsEnd" : "***********************************************",
+     "commentSettingsDialogNetwork" : "***********************************************",
+     "dialogSettingsNetworkTitle" : HMIdentifier.en.CCUShortName + " network settings",
+     "dialogSettingsNetworkTDIPSettings" : "IP settings",
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -42912,6 +42912,11 @@
+   CreateCPPopup("/config/cp_maintenance.cgi");
+ };
+ 
++showExtendedSettingsCP= function()
++{
++  CreateCPPopup("/config/cp_extendedsettings.cgi");
++};
++
+ showNewFirmwareDownload = function() {
+   CreateCPPopup("/config/cp_maintenance.cgi", "downloadOnly=1");
+ };

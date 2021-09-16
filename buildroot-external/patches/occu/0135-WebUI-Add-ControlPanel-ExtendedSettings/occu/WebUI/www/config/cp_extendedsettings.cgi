@@ -235,14 +235,14 @@ proc action_put_page {} {
   http_head
   
   division {class="popupTitle"} {
-    puts "\${dialogSettingsRaspberryMaticFeaturesTitle}"
+    puts "\${dialogSettingsExtendedSettingsTitle}"
   }
   division {class="CLASS21114 j_translate"} {
     division {style="height:75vh;width:100%;overflow:auto;"} {
     table {class="popupTable"} {border=1} {width="100%"} {height="100%"} {
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
-          puts "\${dialogSettingsRaspberryMaticFeaturesWatchDog}"
+          puts "\${dialogSettingsExtendedSettingsWatchDog}"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
@@ -251,7 +251,7 @@ proc action_put_page {} {
               if {!$inetcheckDisabled} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=inetcheckDisabled {id="cb_inetcheckDisabled"} $checked
-			                  puts "\${dialogSettingsRaspberryMaticFeaturesInternetCheck}"
+			                  puts "\${dialogSettingsExtendedSettingsInternetCheck}"
               }
             }			
 			table_row {
@@ -259,19 +259,19 @@ proc action_put_page {} {
               if {!$rpi4usb3CheckDisabled} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=rpi4usb3CheckDisabled {id="cb_rpi4usb3CheckDisabled"} $checked
-			                  puts "\${dialogSettingsRaspberryMaticFeaturesRpi4usb3Check}"
+			                  puts "\${dialogSettingsExtendedSettingsRpi4usb3Check}"
               }
             }
           }
         }
         table_data {class="CLASS21113"} {align="left"} {
-          p { ${dialogSettingsRaspberryMaticFeaturesHintWatchDogCheck1} }
-          p { ${dialogSettingsRaspberryMaticFeaturesHintWatchDogCheck2} }
+          p { ${dialogSettingsExtendedSettingsHintWatchDogCheck1} }
+          p { ${dialogSettingsExtendedSettingsHintWatchDogCheck2} }
         }
       }
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
-          puts "\${dialogSettingsRaspberryMaticFeaturesSystem}"
+          puts "\${dialogSettingsExtendedSettingsSystem}"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
@@ -280,7 +280,7 @@ proc action_put_page {} {
               if {!$mediolaDisabled} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=mediolaDisabled {id="cb_mediolaDisabled"} $checked
-			                  puts "\${dialogSettingsRaspberryMaticFeaturesMediola}"
+			                  puts "\${dialogSettingsExtendedSettingsMediola}"
               }
             }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
@@ -289,12 +289,12 @@ proc action_put_page {} {
               if {!$noCronBackup} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=noCronBackup {id="cb_noCronBackup"} $checked
-			                  puts "\${dialogSettingsRaspberryMaticFeaturesCronBackup}"
+			                  puts "\${dialogSettingsExtendedSettingsCronBackup}"
               }
             }
             table_row {
               table_data {class="CLASS21112"} {
-                puts "\${dialogSettingsRaspberryMaticFeaturesCronBackupPath}"
+                puts "\${dialogSettingsExtendedSettingsCronBackupPath}"
               }
 
               table_data  {
@@ -303,7 +303,7 @@ proc action_put_page {} {
             }
             table_row {
               table_data {class="CLASS21112"} {
-                puts "\${dialogSettingsRaspberryMaticFeaturesCronBackupMaxBackups}"
+                puts "\${dialogSettingsExtendedSettingsCronBackupMaxBackups}"
               }
 
               table_data  {
@@ -316,7 +316,7 @@ proc action_put_page {} {
               if {!$noDCVars} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=noDCVars {id="cb_noDCVars"} $checked
-			                  puts "\${dialogSettingsRaspberryMaticFeaturesDCVars}"
+			                  puts "\${dialogSettingsExtendedSettingsDCVars}"
               }
             }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
@@ -325,7 +325,7 @@ proc action_put_page {} {
               if {$disableLEDs} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=disableLEDs {id="cb_disableLEDs"} $checked
-			                  puts "\${dialogSettingsRaspberryMaticFeaturesDisableLEDs}"
+			                  puts "\${dialogSettingsExtendedSettingsDisableLEDs}"
               }
             }
 			table_row {
@@ -333,7 +333,7 @@ proc action_put_page {} {
               if {!$noBadBlocksCheck} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=noBadBlocksCheck {id="cb_noBadBlocksCheck"} $checked
-			                  puts "\${dialogSettingsRaspberryMaticFeaturesBadBlocksCheck}"
+			                  puts "\${dialogSettingsExtendedSettingsBadBlocksCheck}"
               }
             }
 			table_row {
@@ -341,12 +341,12 @@ proc action_put_page {} {
               if {!$noFSTRIM} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=noFSTRIM {id="cb_noFSTRIM"} $checked
-			                  puts "\${dialogSettingsRaspberryMaticFeaturesFSTRIM}"
+			                  puts "\${dialogSettingsExtendedSettingsFSTRIM}"
               }
             }
             table_row {
               table_data {class="CLASS21112"} {
-                puts "\${dialogSettingsRaspberryMaticFeaturesCustomStoragePath}"
+                puts "\${dialogSettingsExtendedSettingsCustomStoragePath}"
               }
 
               table_data  {
@@ -356,21 +356,21 @@ proc action_put_page {} {
           }
         }
         table_data {class="CLASS21113"} {align="left"} {
-          p { ${dialogSettingsRaspberryMaticFeaturesHintSystem1} }
-          p { ${dialogSettingsRaspberryMaticFeaturesHintSystem2} }
-          p { ${dialogSettingsRaspberryMaticFeaturesHintSystem3} }
-          p { ${dialogSettingsRaspberryMaticFeaturesHintSystem4} }
-          p { ${dialogSettingsRaspberryMaticFeaturesHintSystem5} }
-          p { ${dialogSettingsRaspberryMaticFeaturesHintSystem6} }
-          p { ${dialogSettingsRaspberryMaticFeaturesHintSystem7} }
-          p { ${dialogSettingsRaspberryMaticFeaturesHintSystem8} }
-          p { ${dialogSettingsRaspberryMaticFeaturesHintSystem9} }
+          p { ${dialogSettingsExtendedSettingsHintSystem1} }
+          p { ${dialogSettingsExtendedSettingsHintSystem2} }
+          p { ${dialogSettingsExtendedSettingsHintSystem3} }
+          p { ${dialogSettingsExtendedSettingsHintSystem4} }
+          p { ${dialogSettingsExtendedSettingsHintSystem5} }
+          p { ${dialogSettingsExtendedSettingsHintSystem6} }
+          p { ${dialogSettingsExtendedSettingsHintSystem7} }
+          p { ${dialogSettingsExtendedSettingsHintSystem8} }
+          p { ${dialogSettingsExtendedSettingsHintSystem9} }
         }
       }
 	  
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
-          puts "\${dialogSettingsRaspberryMaticFeaturesExpert}"
+          puts "\${dialogSettingsExtendedSettingsExpert}"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
@@ -379,14 +379,14 @@ proc action_put_page {} {
               if {$tweaks != ""} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=devConfig {id="cb_devConfig"} $checked
-			                  puts "\${dialogSettingsRaspberryMaticFeaturesDevConfig}"
+			                  puts "\${dialogSettingsExtendedSettingsDevConfig}"
               }
             }
 
           }
         }
         table_data {class="CLASS21113"} {align="left"} {
-          p { ${dialogSettingsRaspberryMaticFeaturesHintExpert1} }
+          p { ${dialogSettingsExtendedSettingsHintExpert1} }
         }
       }
 
@@ -438,7 +438,7 @@ proc action_put_page {} {
           sendXML: false,
           onSuccess: function(transport) {
             if (transport.responseText === "") {   
-              var dlgYesNo = new YesNoDialog(translateKey("dialogPerformRebootTitle"), translateKey("dialogSettingsRaspberryMaticFeaturesRebootHint"), function(result) {
+              var dlgYesNo = new YesNoDialog(translateKey("dialogPerformRebootTitle"), translateKey("dialogSettingsExtendedSettingsRebootHint"), function(result) {
                 if (result == YesNoDialog.RESULT_YES) {
                   dlgPopup.hide();
                   dlgPopup.setWidth(400);
@@ -452,7 +452,7 @@ proc action_put_page {} {
         
               
             } else { 
-              alert(translateKey("dialogSettingsRaspberryMaticFeaturesMessageAlertMessageError1") + "\n" +transport.responseText); 
+              alert(translateKey("dialogSettingsExtendedSettingsMessageAlertMessageError1") + "\n" +transport.responseText); 
             }
           }
         };
@@ -462,8 +462,8 @@ proc action_put_page {} {
     
     puts {
       translatePlaceholder = function() {
-        document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsRaspberryMaticFeaturesCustomStoragePathPlaceholder");
-        document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsRaspberryMaticFeaturesCronBackupPathPlaceholder");
+        document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsExtendedSettingsCustomStoragePathPlaceholder");
+        document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsExtendedSettingsCronBackupPathPlaceholder");
       };
     }
     

@@ -305,7 +305,7 @@ proc action_put_page {} {
               }
 
               table_data  {
-                cgi_text cronBackupMaxBackups=$cronBackupMaxBackups {id="text_cronBackupMaxBackups"} {size=5}
+                cgi_text cronBackupMaxBackups=$cronBackupMaxBackups {id="text_cronBackupMaxBackups"} {size=5} {onpaste="isNumberValid(this.value, this.id, true);"} {onkeyup="isNumberValid(this.value, this.id);"}
               }
             }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
@@ -455,6 +455,38 @@ proc action_put_page {} {
       };
     }
     
+	puts {
+	  var timer_text_cronBackupMaxBackups;
+	  
+      checkNumber = function(num, elmId) {
+	    var validator = /^(\s*|\d+)$/;
+        var isValid = num.match(validator);
+        btnOKElm = jQuery("#btnOK"),
+		
+        inputElm = jQuery("#"+elmId);
+
+        if (isValid != null) {
+         inputElm.css('background-color', '');
+         btnOKElm.show();
+        } else {
+         inputElm.css('background-color', 'red');
+         btnOKElm.hide();
+        }
+      };
+	  
+      isNumberValid = function(num, elmId, isPaste) {
+        if (isPaste) { setTimeout(function() {num = jQuery("#"+elmId).val();},100);}
+
+        var timeDelay = 200;
+        switch(elmId) {
+          case "text_cronBackupMaxBackups":
+            clearTimeout(timer_text_cronBackupMaxBackups);
+            timer_text_cronBackupMaxBackups = setTimeout(function() {checkNumber(num, elmId)},timeDelay);
+            break;
+        }
+      };
+	}
+	
     puts "translatePlaceholder();"
     puts "translatePage('#messagebox');"
     puts "dlgPopup.readaptSize();"

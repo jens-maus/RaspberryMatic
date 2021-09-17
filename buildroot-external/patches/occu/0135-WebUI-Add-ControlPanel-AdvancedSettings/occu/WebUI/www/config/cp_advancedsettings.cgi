@@ -237,14 +237,14 @@ proc action_put_page {} {
   http_head
   
   division {class="popupTitle"} {
-    puts "\${dialogSettingsExtendedSettingsTitle}"
+    puts "\${dialogSettingsAdvancedSettingsTitle}"
   }
   division {class="CLASS21114 j_translate"} {
     division {style="height:75vh;width:100%;overflow:auto;"} {
     table {class="popupTable"} {border=1} {width="100%"} {height="100%"} {
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
-          puts "\${dialogSettingsExtendedSettingsWatchDog}"
+          puts "\${dialogSettingsAdvancedSettingsWatchDog}"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
@@ -253,7 +253,7 @@ proc action_put_page {} {
               if {!$inetcheckDisabled} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=inetcheckDisabled {id="cb_inetcheckDisabled"} $checked
-			                  puts "\${dialogSettingsExtendedSettingsInternetCheck}"
+			                  puts "\${dialogSettingsAdvancedSettingsInternetCheck}"
               }
             }			
 			table_row {
@@ -261,19 +261,19 @@ proc action_put_page {} {
               if {!$rpi4usb3CheckDisabled} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=rpi4usb3CheckDisabled {id="cb_rpi4usb3CheckDisabled"} $checked
-			                  puts "\${dialogSettingsExtendedSettingsRpi4usb3Check}"
+			                  puts "\${dialogSettingsAdvancedSettingsRpi4usb3Check}"
               }
             }
           }
         }
         table_data {class="CLASS21113"} {align="left"} {
-          p { ${dialogSettingsExtendedSettingsHintWatchDogCheck1} }
-          p { ${dialogSettingsExtendedSettingsHintWatchDogCheck2} }
+          p { ${dialogSettingsAdvancedSettingsHintWatchDogCheck1} }
+          p { ${dialogSettingsAdvancedSettingsHintWatchDogCheck2} }
         }
       }
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
-          puts "\${dialogSettingsExtendedSettingsSystem}"
+          puts "\${dialogSettingsAdvancedSettingsSystem}"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
@@ -282,7 +282,7 @@ proc action_put_page {} {
               if {!$mediolaDisabled} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=mediolaDisabled {id="cb_mediolaDisabled"} $checked
-			                  puts "\${dialogSettingsExtendedSettingsMediola}"
+			                  puts "\${dialogSettingsAdvancedSettingsMediola}"
               }
             }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
@@ -291,12 +291,12 @@ proc action_put_page {} {
               if {!$noCronBackup} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=noCronBackup {id="cb_noCronBackup"} $checked
-			                  puts "\${dialogSettingsExtendedSettingsCronBackup}"
+			                  puts "\${dialogSettingsAdvancedSettingsCronBackup}"
               }
             }
             table_row {
               table_data {class="CLASS21112"} {
-                puts "\${dialogSettingsExtendedSettingsCronBackupPath}"
+                puts "\${dialogSettingsAdvancedSettingsCronBackupPath}"
               }
 
               table_data  {
@@ -305,7 +305,7 @@ proc action_put_page {} {
             }
             table_row {
               table_data {class="CLASS21112"} {
-                puts "\${dialogSettingsExtendedSettingsCronBackupMaxBackups}"
+                puts "\${dialogSettingsAdvancedSettingsCronBackupMaxBackups}"
               }
 
               table_data  {
@@ -318,7 +318,7 @@ proc action_put_page {} {
               if {!$noDCVars} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=noDCVars {id="cb_noDCVars"} $checked
-			                  puts "\${dialogSettingsExtendedSettingsDCVars}"
+			                  puts "\${dialogSettingsAdvancedSettingsDCVars}"
               }
             }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
@@ -327,7 +327,7 @@ proc action_put_page {} {
               if {$disableLED} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=disableLED {id="cb_disableLED"} $checked
-			                  puts "\${dialogSettingsExtendedSettingsDisableLED}"
+			                  puts "\${dialogSettingsAdvancedSettingsDisableLED}"
               }
             }
 			table_row {
@@ -335,7 +335,7 @@ proc action_put_page {} {
               if {$disableOnboardLED} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=disableOnboardLED {id="cb_disableOnboardLED"} $checked
-			                  puts "\${dialogSettingsExtendedSettingsDisableOnboardLED}"
+			                  puts "\${dialogSettingsAdvancedSettingsDisableOnboardLED}"
               }
             }
 			table_row {
@@ -343,7 +343,7 @@ proc action_put_page {} {
               if {!$noBadBlocksCheck} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=noBadBlocksCheck {id="cb_noBadBlocksCheck"} $checked
-			                  puts "\${dialogSettingsExtendedSettingsBadBlocksCheck}"
+			                  puts "\${dialogSettingsAdvancedSettingsBadBlocksCheck}"
               }
             }
 			table_row {
@@ -351,12 +351,12 @@ proc action_put_page {} {
               if {!$noFSTRIM} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=noFSTRIM {id="cb_noFSTRIM"} $checked
-			                  puts "\${dialogSettingsExtendedSettingsFSTRIM}"
+			                  puts "\${dialogSettingsAdvancedSettingsFSTRIM}"
               }
             }
             table_row {
               table_data {class="CLASS21112"} {
-                puts "\${dialogSettingsExtendedSettingsCustomStoragePath}"
+                puts "\${dialogSettingsAdvancedSettingsCustomStoragePath}"
               }
 
               table_data  {
@@ -366,22 +366,22 @@ proc action_put_page {} {
           }
         }
         table_data {class="CLASS21113"} {align="left"} {
-          p { ${dialogSettingsExtendedSettingsHintSystem1} }
-          p { ${dialogSettingsExtendedSettingsHintSystem2} }
-          p { ${dialogSettingsExtendedSettingsHintSystem3} }
-          p { ${dialogSettingsExtendedSettingsHintSystem4} }
-          p { ${dialogSettingsExtendedSettingsHintSystem5} }
-          p { ${dialogSettingsExtendedSettingsHintSystem6} }
-          p { ${dialogSettingsExtendedSettingsHintSystem7} }
-          p { ${dialogSettingsExtendedSettingsHintSystem8} }
-          p { ${dialogSettingsExtendedSettingsHintSystem9} }
-          p { ${dialogSettingsExtendedSettingsHintSystem10} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem1} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem2} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem3} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem4} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem5} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem6} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem7} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem8} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem9} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem10} }
         }
       }
 	  
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
-          puts "\${dialogSettingsExtendedSettingsExpert}"
+          puts "\${dialogSettingsAdvancedSettingsExpert}"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
@@ -390,14 +390,14 @@ proc action_put_page {} {
               if {$tweaks != ""} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
 			  cgi_checkbox mode=devConfig {id="cb_devConfig"} $checked
-			                  puts "\${dialogSettingsExtendedSettingsDevConfig}"
+			                  puts "\${dialogSettingsAdvancedSettingsDevConfig}"
               }
             }
 
           }
         }
         table_data {class="CLASS21113"} {align="left"} {
-          p { ${dialogSettingsExtendedSettingsHintExpert1} }
+          p { ${dialogSettingsAdvancedSettingsHintExpert1} }
         }
       }
 
@@ -450,7 +450,7 @@ proc action_put_page {} {
           sendXML: false,
           onSuccess: function(transport) {
             if (transport.responseText === "") {   
-              var dlgYesNo = new YesNoDialog(translateKey("dialogPerformRebootTitle"), translateKey("dialogSettingsExtendedSettingsRebootHint"), function(result) {
+              var dlgYesNo = new YesNoDialog(translateKey("dialogPerformRebootTitle"), translateKey("dialogSettingsAdvancedSettingsRebootHint"), function(result) {
                 if (result == YesNoDialog.RESULT_YES) {
                   dlgPopup.hide();
                   dlgPopup.setWidth(400);
@@ -464,7 +464,7 @@ proc action_put_page {} {
         
               
             } else { 
-              alert(translateKey("dialogSettingsExtendedSettingsMessageAlertMessageError1") + "\n" +transport.responseText); 
+              alert(translateKey("dialogSettingsAdvancedSettingsMessageAlertMessageError1") + "\n" +transport.responseText); 
             }
           }
         };
@@ -474,8 +474,8 @@ proc action_put_page {} {
     
     puts {
       translatePlaceholder = function() {
-        document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsExtendedSettingsCustomStoragePathPlaceholder");
-        document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsExtendedSettingsCronBackupPathPlaceholder");
+        document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
+        document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
       };
     }
     

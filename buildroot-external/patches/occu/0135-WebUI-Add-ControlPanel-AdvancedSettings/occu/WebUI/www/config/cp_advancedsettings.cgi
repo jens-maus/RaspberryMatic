@@ -252,16 +252,16 @@ proc action_put_page {} {
               set checked ""
               if {!$inetcheckDisabled} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
-			  cgi_checkbox mode=inetcheckDisabled {id="cb_inetcheckDisabled"} $checked
-			                  puts "\${dialogSettingsAdvancedSettingsInternetCheck}"
+                cgi_checkbox mode=inetcheckDisabled {id="cb_inetcheckDisabled"} $checked
+                puts "\${dialogSettingsAdvancedSettingsInternetCheck}"
               }
-            }			
-			table_row {
+            }
+            table_row {
               set checked ""
               if {!$rpi4usb3CheckDisabled} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
-			  cgi_checkbox mode=rpi4usb3CheckDisabled {id="cb_rpi4usb3CheckDisabled"} $checked
-			                  puts "\${dialogSettingsAdvancedSettingsRpi4usb3Check}"
+                cgi_checkbox mode=rpi4usb3CheckDisabled {id="cb_rpi4usb3CheckDisabled"} $checked
+                puts "\${dialogSettingsAdvancedSettingsRpi4usb3Check}"
               }
             }
           }
@@ -277,21 +277,21 @@ proc action_put_page {} {
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
-            table_row {			  
+            table_row {
               set checked ""
               if {!$mediolaDisabled} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
-			  cgi_checkbox mode=mediolaDisabled {id="cb_mediolaDisabled"} $checked
-			                  puts "\${dialogSettingsAdvancedSettingsMediola}"
+                cgi_checkbox mode=mediolaDisabled {id="cb_mediolaDisabled"} $checked
+                puts "\${dialogSettingsAdvancedSettingsMediola}"
               }
             }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
-            table_row {			  
+            table_row {
               set checked ""
               if {!$noCronBackup} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
-			  cgi_checkbox mode=noCronBackup {id="cb_noCronBackup"} $checked
-			                  puts "\${dialogSettingsAdvancedSettingsCronBackup}"
+                cgi_checkbox mode=noCronBackup {id="cb_noCronBackup"} $checked
+                puts "\${dialogSettingsAdvancedSettingsCronBackup}"
               }
             }
             table_row {
@@ -313,45 +313,45 @@ proc action_put_page {} {
               }
             }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
-			table_row {
+            table_row {
               set checked ""
               if {!$noDCVars} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
-			  cgi_checkbox mode=noDCVars {id="cb_noDCVars"} $checked
-			                  puts "\${dialogSettingsAdvancedSettingsDCVars}"
+                cgi_checkbox mode=noDCVars {id="cb_noDCVars"} $checked
+                puts "\${dialogSettingsAdvancedSettingsDCVars}"
               }
             }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
-			table_row {
+            table_row {
               set checked ""
               if {$disableLED} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
-			  cgi_checkbox mode=disableLED {id="cb_disableLED"} $checked
-			                  puts "\${dialogSettingsAdvancedSettingsDisableLED}"
+                cgi_checkbox mode=disableLED {id="cb_disableLED"} $checked
+                puts "\${dialogSettingsAdvancedSettingsDisableLED}"
               }
             }
-			table_row {
+            table_row {
               set checked ""
               if {$disableOnboardLED} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
-			  cgi_checkbox mode=disableOnboardLED {id="cb_disableOnboardLED"} $checked
-			                  puts "\${dialogSettingsAdvancedSettingsDisableOnboardLED}"
+                cgi_checkbox mode=disableOnboardLED {id="cb_disableOnboardLED"} $checked
+                puts "\${dialogSettingsAdvancedSettingsDisableOnboardLED}"
               }
             }
-			table_row {
+            table_row {
               set checked ""
               if {!$noBadBlocksCheck} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
-			  cgi_checkbox mode=noBadBlocksCheck {id="cb_noBadBlocksCheck"} $checked
-			                  puts "\${dialogSettingsAdvancedSettingsBadBlocksCheck}"
+                cgi_checkbox mode=noBadBlocksCheck {id="cb_noBadBlocksCheck"} $checked
+                puts "\${dialogSettingsAdvancedSettingsBadBlocksCheck}"
               }
             }
-			table_row {
+            table_row {
               set checked ""
               if {!$noFSTRIM} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
-			  cgi_checkbox mode=noFSTRIM {id="cb_noFSTRIM"} $checked
-			                  puts "\${dialogSettingsAdvancedSettingsFSTRIM}"
+                cgi_checkbox mode=noFSTRIM {id="cb_noFSTRIM"} $checked
+                puts "\${dialogSettingsAdvancedSettingsFSTRIM}"
               }
             }
             table_row {
@@ -378,19 +378,19 @@ proc action_put_page {} {
           p { ${dialogSettingsAdvancedSettingsHintSystem10} }
         }
       }
-	  
+
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
           puts "\${dialogSettingsAdvancedSettingsExpert}"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
-            table_row {			  
+            table_row {
               set checked ""
               if {$tweaks != ""} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
-			  cgi_checkbox mode=devConfig {id="cb_devConfig"} $checked
-			                  puts "\${dialogSettingsAdvancedSettingsDevConfig}"
+                cgi_checkbox mode=devConfig {id="cb_devConfig"} $checked
+                puts "\${dialogSettingsAdvancedSettingsDevConfig}"
               }
             }
 
@@ -459,9 +459,9 @@ proc action_put_page {} {
                   PopupClose();
                 }
               });
-          dlgYesNo.btnTextYes(translateKey("dialogBtnPerformRestart"));
-          dlgYesNo.btnTextNo(translateKey("dialogBtnPerformLaterRestart"));
-        
+
+              dlgYesNo.btnTextYes(translateKey("dialogBtnPerformRestart"));
+              dlgYesNo.btnTextNo(translateKey("dialogBtnPerformLaterRestart"));
               
             } else { 
               alert(translateKey("dialogSettingsAdvancedSettingsMessageAlertMessageError1") + "\n" +transport.responseText); 
@@ -479,12 +479,11 @@ proc action_put_page {} {
       };
     }
     
-	puts {
+    puts {
       validateNumber = function(num, elmId) {
-	    var validator = /^(\s*|\d+)$/;
+        var validator = /^(\s*|\d+)$/;
         var isValid = num.match(validator);
         btnOKElm = jQuery("#btnOK"),
-		
         inputElm = jQuery("#"+elmId);
 
         if (isValid != null) {
@@ -495,9 +494,9 @@ proc action_put_page {} {
          btnOKElm.hide();
         }
       };
-	}
-	
-	puts "dlgPopup.setWidth(1020);";
+    }
+
+    puts "dlgPopup.setWidth(1020);";
     puts "translatePlaceholder();"
     puts "translatePage('#messagebox');"
     puts "dlgPopup.readaptSize();"

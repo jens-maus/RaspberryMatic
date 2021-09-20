@@ -272,7 +272,23 @@
  }
  
  .tblList td {
-@@ -5359,6 +5361,7 @@
+@@ -637,7 +639,6 @@
+ /* Kopfzeile eines Popup-Fenster */
+ .popupTitle {
+   color: $_(textColorB); /* black */
+-  width: 99.4%;
+   background-color: $_(white); /* white */
+   border: solid 1px $_(black); /* black */
+   padding-left: 4px;
+@@ -706,7 +707,6 @@
+ 
+ .popupControls {
+   background-color: $_(white); /* white */
+-  width: 100%;
+   border: solid 1px $_(black); /* black */
+ }
+ 
+@@ -5359,6 +5359,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -280,7 +296,7 @@
  }
  
  .CLASS02536 {
-@@ -5381,6 +5384,7 @@
+@@ -5381,6 +5382,7 @@
  	max-width: 480px;
  	clear: both;
  	display: inline-block;
@@ -288,7 +304,7 @@
  }
  
  .CLASS02539 {
-@@ -5553,7 +5557,7 @@
+@@ -5553,7 +5555,7 @@
  }
  
  .CLASS02602 {
@@ -297,7 +313,7 @@
  }
  
  .CLASS02603 {
-@@ -5584,21 +5588,6 @@
+@@ -5584,21 +5586,6 @@
  	padding: 4px;
  }
  
@@ -319,7 +335,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5735,10 +5724,12 @@
+@@ -5735,10 +5722,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;

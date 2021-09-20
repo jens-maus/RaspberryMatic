@@ -24,7 +24,6 @@ set CRONBACKUPPATHFILENAME "/etc/config/CronBackupPath"
 
 set TWEAKFILENAME "/etc/config/tweaks"
 
-
 proc createfile { filename } {
  set result ""
 
@@ -119,102 +118,6 @@ proc put_message {title msg args} {
   }
 }
 
-proc action_reboot_confirm {} {
-  global env
-   
-  http_head
-  division {class="popupTitle"} {
-    puts "\${dialogSafetyCheck}"
-  }
-  division {class="CLASS20900"} {
-    table {class="popupTable CLASS20901"} {border="1"} {
-      table_row {
-        table_data {
-          table {class="CLASS20909"} {width="100%"} {
-            table_row {
-              table_data {colspan="3"} {
-                puts "\${dialogQuestionRestart}"
-              }
-            }            
-            table_row {
-              table_data {align="right"} {class="CLASS20911"} {colspan="3"} {
-                division {class="popupControls CLASS20905"} {
-                  division {class="CLASS20910"} {onClick="OnNextStep()"} {
-                    puts "\${dialogBtnPerformRestart}"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  division {class="popupControls"} {
-    table {
-      table_row {
-        table_data {class="CLASS20907"} {
-          division {class="CLASS20908"} {onClick="dlgPopup.hide();showRMFeaturesCP();"} {
-            puts "\${btnCancel}"
-          }
-        }
-      }
-    }
-  }
-  puts ""
-  cgi_javascript {
-    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
-    puts {
-      OnNextStep = function() {
-        if (typeof regaMonitor != "undefined") {
-          regaMonitor.stop();
-          InterfaceMonitor.stop();
-        }
-        dlgPopup.hide();
-        dlgPopup.setWidth(400);
-        dlgPopup.LoadFromFile(url, "action=reboot_go");
-      }
-    }
-    puts "dlgPopup.readaptSize();"
-    puts "translatePage('#messagebox')"
-  }
-# Speichern wird beim Neustart durchgef�hrt, siehe action_reboot  
-#  rega system.Save()
-}
-
-proc action_reboot_go {} {
-  global env
-  cd /tmp/
-  
-  http_head
-
-  put_message "\${dialogPerformRebootTitle}" {
-    ${dialogPerformRebootContent}
-  } {"\${btnNewLogin}" "window.location.href='/';"}
-
-  puts ""
-  cgi_javascript {
-    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
-    puts {
-      var pb = "action=reboot";
-      var opts = {
-        postBody: pb,
-        sendXML: false
-      };
-      new Ajax.Request(url, opts);
-    }
-  }
-}
-
-proc action_reboot {} {
-  catch { exec killall hss_lcd }
-  catch { exec lcdtool {Saving   Data...  } }
-  rega system.Save()
-  catch { exec lcdtool {Reboot...       } }
-  exec sleep 5
-  exec /sbin/reboot
-}
-
 proc action_put_page {} {
   global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOFSTRIMFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
    
@@ -277,14 +180,6 @@ proc action_put_page {} {
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
-            table_row {
-              set checked ""
-              if {!$mediolaDisabled} { set checked "checked=true" }
-              table_data {class="CLASS21112"} {colspan="3"} {
-                cgi_checkbox mode=mediolaDisabled {id="cb_mediolaDisabled"} $checked
-                puts "\${dialogSettingsAdvancedSettingsMediola}"
-              }
-            }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
             table_row {
               set checked ""
@@ -324,7 +219,7 @@ proc action_put_page {} {
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
             table_row {
               set checked ""
-              if {$disableLED} { set checked "checked=true" }
+              if {!$disableLED} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
                 cgi_checkbox mode=disableLED {id="cb_disableLED"} $checked
                 puts "\${dialogSettingsAdvancedSettingsDisableLED}"
@@ -332,12 +227,13 @@ proc action_put_page {} {
             }
             table_row {
               set checked ""
-              if {$disableOnboardLED} { set checked "checked=true" }
+              if {!$disableOnboardLED} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
                 cgi_checkbox mode=disableOnboardLED {id="cb_disableOnboardLED"} $checked
                 puts "\${dialogSettingsAdvancedSettingsDisableOnboardLED}"
               }
             }
+            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
             table_row {
               set checked ""
               if {!$noBadBlocksCheck} { set checked "checked=true" }
@@ -354,6 +250,7 @@ proc action_put_page {} {
                 puts "\${dialogSettingsAdvancedSettingsFSTRIM}"
               }
             }
+            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
             table_row {
               table_data {class="CLASS21112"} {
                 puts "\${dialogSettingsAdvancedSettingsCustomStoragePath}"
@@ -363,6 +260,16 @@ proc action_put_page {} {
                 cgi_text customStoragePath=$customStoragePath {id="text_customStoragePath"} {size=30} 
               }
             }
+            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
+            table_row {
+              set checked ""
+              if {!$mediolaDisabled} { set checked "checked=true" }
+              table_data {class="CLASS21112"} {colspan="3"} {
+                cgi_checkbox mode=mediolaDisabled {id="cb_mediolaDisabled"} $checked
+                puts "\${dialogSettingsAdvancedSettingsMediola}"
+              }
+            }
+            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
           }
         }
         table_data {class="CLASS21113"} {align="left"} {
@@ -387,7 +294,7 @@ proc action_put_page {} {
           table {
             table_row {
               set checked ""
-              if {$tweaks != ""} { set checked "checked=true" }
+              if {$tweaks == ""} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
                 cgi_checkbox mode=devConfig {id="cb_devConfig"} $checked
                 puts "\${dialogSettingsAdvancedSettingsDevConfig}"
@@ -400,8 +307,6 @@ proc action_put_page {} {
           p { ${dialogSettingsAdvancedSettingsHintExpert1} }
         }
       }
-
-
     }
     }
   }
@@ -437,10 +342,10 @@ proc action_put_page {} {
         pb += "&noCronBackup="+(document.getElementById("cb_noCronBackup").checked?"0":"1");
         pb += "&noDCVars="+(document.getElementById("cb_noDCVars").checked?"0":"1");
         pb += "&noBadBlocksCheck="+(document.getElementById("cb_noBadBlocksCheck").checked?"0":"1");
-        pb += "&disableLED="+(document.getElementById("cb_disableLED").checked?"1":"0");
-        pb += "&disableOnboardLED="+(document.getElementById("cb_disableOnboardLED").checked?"1":"0");
+        pb += "&disableLED="+(document.getElementById("cb_disableLED").checked?"0":"1");
+        pb += "&disableOnboardLED="+(document.getElementById("cb_disableOnboardLED").checked?"0":"1");
         pb += "&noFSTRIM="+(document.getElementById("cb_noFSTRIM").checked?"0":"1");
-        pb += "&devConfig="+(document.getElementById("cb_devConfig").checked?"1":"0");
+        pb += "&devConfig="+(document.getElementById("cb_devConfig").checked?"0":"1");
         pb += "&cronBackupPath="+document.getElementById("text_cronBackupPath").value;
         pb += "&cronBackupMaxBackups="+document.getElementById("text_cronBackupMaxBackups").value;
         pb += "&customStoragePath="+document.getElementById("text_customStoragePath").value;
@@ -450,19 +355,9 @@ proc action_put_page {} {
           sendXML: false,
           onSuccess: function(transport) {
             if (transport.responseText === "") {   
-              var dlgYesNo = new YesNoDialog(translateKey("dialogPerformRebootTitle"), translateKey("dialogSettingsAdvancedSettingsRebootHint"), function(result) {
-                if (result == YesNoDialog.RESULT_YES) {
-                  dlgPopup.hide();
-                  dlgPopup.setWidth(400);
-                  dlgPopup.LoadFromFile(url, "action=reboot_confirm");
-                } else {
-                  PopupClose();
-                }
-              });
-
-              dlgYesNo.btnTextYes(translateKey("dialogBtnPerformRestart"));
-              dlgYesNo.btnTextNo(translateKey("dialogBtnPerformLaterRestart"));
-              
+              dlgPopup.hide();
+              dlgPopup.setWidth(400);
+              PopupClose();
             } else { 
               alert(translateKey("dialogSettingsAdvancedSettingsMessageAlertMessageError1") + "\n" +transport.responseText); 
             }
@@ -476,6 +371,7 @@ proc action_put_page {} {
       translatePlaceholder = function() {
         document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
         document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
+        document.getElementById("text_cronBackupMaxBackups").placeholder="30";
       };
     }
     
@@ -582,7 +478,7 @@ proc action_save_settings {} {
     append errMsg [deletefile $TWEAKFILENAME]
   }
   
-  if { $cronBackupMaxBackups == "" || $cronBackupMaxBackups == "0" } {
+  if { $cronBackupMaxBackups == "" } {
     append errMsg [deletefile $CRONBACKUPMAXBACKUPSFILENAME]
   } else {
     append errMsg [writefile $CRONBACKUPMAXBACKUPSFILENAME $cronBackupMaxBackups]
@@ -600,6 +496,9 @@ proc action_save_settings {} {
     append errMsg [writefile $CUSTOMSTORAGEPATHFILENAME $customStoragePath]
   }
   
+  # reload monit
+  catch { exec /usr/bin/monit reload }
+
   puts "$errMsg"
 }
 

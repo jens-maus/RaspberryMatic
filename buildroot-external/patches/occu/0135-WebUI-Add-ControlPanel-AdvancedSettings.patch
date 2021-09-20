@@ -49,7 +49,7 @@
         jQuery.each(helpContainer, function(index, container){
 --- occu/WebUI/www/config/cp_advancedsettings.cgi.orig
 +++ occu/WebUI/www/config/cp_advancedsettings.cgi
-@@ -0,0 +1,611 @@
+@@ -0,0 +1,510 @@
 +#!/bin/tclsh
 +source once.tcl
 +sourceOnce cgi.tcl
@@ -75,7 +75,6 @@
 +set CRONBACKUPPATHFILENAME "/etc/config/CronBackupPath"
 +
 +set TWEAKFILENAME "/etc/config/tweaks"
-+
 +
 +proc createfile { filename } {
 + set result ""
@@ -171,102 +170,6 @@
 +  }
 +}
 +
-+proc action_reboot_confirm {} {
-+  global env
-+   
-+  http_head
-+  division {class="popupTitle"} {
-+    puts "\${dialogSafetyCheck}"
-+  }
-+  division {class="CLASS20900"} {
-+    table {class="popupTable CLASS20901"} {border="1"} {
-+      table_row {
-+        table_data {
-+          table {class="CLASS20909"} {width="100%"} {
-+            table_row {
-+              table_data {colspan="3"} {
-+                puts "\${dialogQuestionRestart}"
-+              }
-+            }            
-+            table_row {
-+              table_data {align="right"} {class="CLASS20911"} {colspan="3"} {
-+                division {class="popupControls CLASS20905"} {
-+                  division {class="CLASS20910"} {onClick="OnNextStep()"} {
-+                    puts "\${dialogBtnPerformRestart}"
-+                  }
-+                }
-+              }
-+            }
-+          }
-+        }
-+      }
-+    }
-+  }
-+  division {class="popupControls"} {
-+    table {
-+      table_row {
-+        table_data {class="CLASS20907"} {
-+          division {class="CLASS20908"} {onClick="dlgPopup.hide();showRMFeaturesCP();"} {
-+            puts "\${btnCancel}"
-+          }
-+        }
-+      }
-+    }
-+  }
-+  puts ""
-+  cgi_javascript {
-+    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
-+    puts {
-+      OnNextStep = function() {
-+        if (typeof regaMonitor != "undefined") {
-+          regaMonitor.stop();
-+          InterfaceMonitor.stop();
-+        }
-+        dlgPopup.hide();
-+        dlgPopup.setWidth(400);
-+        dlgPopup.LoadFromFile(url, "action=reboot_go");
-+      }
-+    }
-+    puts "dlgPopup.readaptSize();"
-+    puts "translatePage('#messagebox')"
-+  }
-+# Speichern wird beim Neustart durchgef�hrt, siehe action_reboot  
-+#  rega system.Save()
-+}
-+
-+proc action_reboot_go {} {
-+  global env
-+  cd /tmp/
-+  
-+  http_head
-+
-+  put_message "\${dialogPerformRebootTitle}" {
-+    ${dialogPerformRebootContent}
-+  } {"\${btnNewLogin}" "window.location.href='/';"}
-+
-+  puts ""
-+  cgi_javascript {
-+    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
-+    puts {
-+      var pb = "action=reboot";
-+      var opts = {
-+        postBody: pb,
-+        sendXML: false
-+      };
-+      new Ajax.Request(url, opts);
-+    }
-+  }
-+}
-+
-+proc action_reboot {} {
-+  catch { exec killall hss_lcd }
-+  catch { exec lcdtool {Saving   Data...  } }
-+  rega system.Save()
-+  catch { exec lcdtool {Reboot...       } }
-+  exec sleep 5
-+  exec /sbin/reboot
-+}
-+
 +proc action_put_page {} {
 +  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOFSTRIMFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
 +   
@@ -329,14 +232,6 @@
 +        }
 +        table_data {align=left} {class="CLASS02533"} {
 +          table {
-+            table_row {
-+              set checked ""
-+              if {!$mediolaDisabled} { set checked "checked=true" }
-+              table_data {class="CLASS21112"} {colspan="3"} {
-+                cgi_checkbox mode=mediolaDisabled {id="cb_mediolaDisabled"} $checked
-+                puts "\${dialogSettingsAdvancedSettingsMediola}"
-+              }
-+            }
 +            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
 +            table_row {
 +              set checked ""
@@ -376,7 +271,7 @@
 +            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
 +            table_row {
 +              set checked ""
-+              if {$disableLED} { set checked "checked=true" }
++              if {!$disableLED} { set checked "checked=true" }
 +              table_data {class="CLASS21112"} {colspan="3"} {
 +                cgi_checkbox mode=disableLED {id="cb_disableLED"} $checked
 +                puts "\${dialogSettingsAdvancedSettingsDisableLED}"
@@ -384,12 +279,13 @@
 +            }
 +            table_row {
 +              set checked ""
-+              if {$disableOnboardLED} { set checked "checked=true" }
++              if {!$disableOnboardLED} { set checked "checked=true" }
 +              table_data {class="CLASS21112"} {colspan="3"} {
 +                cgi_checkbox mode=disableOnboardLED {id="cb_disableOnboardLED"} $checked
 +                puts "\${dialogSettingsAdvancedSettingsDisableOnboardLED}"
 +              }
 +            }
++            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
 +            table_row {
 +              set checked ""
 +              if {!$noBadBlocksCheck} { set checked "checked=true" }
@@ -406,6 +302,7 @@
 +                puts "\${dialogSettingsAdvancedSettingsFSTRIM}"
 +              }
 +            }
++            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
 +            table_row {
 +              table_data {class="CLASS21112"} {
 +                puts "\${dialogSettingsAdvancedSettingsCustomStoragePath}"
@@ -415,6 +312,16 @@
 +                cgi_text customStoragePath=$customStoragePath {id="text_customStoragePath"} {size=30} 
 +              }
 +            }
++            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
++            table_row {
++              set checked ""
++              if {!$mediolaDisabled} { set checked "checked=true" }
++              table_data {class="CLASS21112"} {colspan="3"} {
++                cgi_checkbox mode=mediolaDisabled {id="cb_mediolaDisabled"} $checked
++                puts "\${dialogSettingsAdvancedSettingsMediola}"
++              }
++            }
++            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
 +          }
 +        }
 +        table_data {class="CLASS21113"} {align="left"} {
@@ -439,7 +346,7 @@
 +          table {
 +            table_row {
 +              set checked ""
-+              if {$tweaks != ""} { set checked "checked=true" }
++              if {$tweaks == ""} { set checked "checked=true" }
 +              table_data {class="CLASS21112"} {colspan="3"} {
 +                cgi_checkbox mode=devConfig {id="cb_devConfig"} $checked
 +                puts "\${dialogSettingsAdvancedSettingsDevConfig}"
@@ -452,8 +359,6 @@
 +          p { ${dialogSettingsAdvancedSettingsHintExpert1} }
 +        }
 +      }
-+
-+
 +    }
 +    }
 +  }
@@ -489,10 +394,10 @@
 +        pb += "&noCronBackup="+(document.getElementById("cb_noCronBackup").checked?"0":"1");
 +        pb += "&noDCVars="+(document.getElementById("cb_noDCVars").checked?"0":"1");
 +        pb += "&noBadBlocksCheck="+(document.getElementById("cb_noBadBlocksCheck").checked?"0":"1");
-+        pb += "&disableLED="+(document.getElementById("cb_disableLED").checked?"1":"0");
-+        pb += "&disableOnboardLED="+(document.getElementById("cb_disableOnboardLED").checked?"1":"0");
++        pb += "&disableLED="+(document.getElementById("cb_disableLED").checked?"0":"1");
++        pb += "&disableOnboardLED="+(document.getElementById("cb_disableOnboardLED").checked?"0":"1");
 +        pb += "&noFSTRIM="+(document.getElementById("cb_noFSTRIM").checked?"0":"1");
-+        pb += "&devConfig="+(document.getElementById("cb_devConfig").checked?"1":"0");
++        pb += "&devConfig="+(document.getElementById("cb_devConfig").checked?"0":"1");
 +        pb += "&cronBackupPath="+document.getElementById("text_cronBackupPath").value;
 +        pb += "&cronBackupMaxBackups="+document.getElementById("text_cronBackupMaxBackups").value;
 +        pb += "&customStoragePath="+document.getElementById("text_customStoragePath").value;
@@ -502,19 +407,9 @@
 +          sendXML: false,
 +          onSuccess: function(transport) {
 +            if (transport.responseText === "") {   
-+              var dlgYesNo = new YesNoDialog(translateKey("dialogPerformRebootTitle"), translateKey("dialogSettingsAdvancedSettingsRebootHint"), function(result) {
-+                if (result == YesNoDialog.RESULT_YES) {
-+                  dlgPopup.hide();
-+                  dlgPopup.setWidth(400);
-+                  dlgPopup.LoadFromFile(url, "action=reboot_confirm");
-+                } else {
-+                  PopupClose();
-+                }
-+              });
-+
-+              dlgYesNo.btnTextYes(translateKey("dialogBtnPerformRestart"));
-+              dlgYesNo.btnTextNo(translateKey("dialogBtnPerformLaterRestart"));
-+              
++              dlgPopup.hide();
++              dlgPopup.setWidth(400);
++              PopupClose();
 +            } else { 
 +              alert(translateKey("dialogSettingsAdvancedSettingsMessageAlertMessageError1") + "\n" +transport.responseText); 
 +            }
@@ -528,6 +423,7 @@
 +      translatePlaceholder = function() {
 +        document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
 +        document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
++        document.getElementById("text_cronBackupMaxBackups").placeholder="30";
 +      };
 +    }
 +    
@@ -634,7 +530,7 @@
 +    append errMsg [deletefile $TWEAKFILENAME]
 +  }
 +  
-+  if { $cronBackupMaxBackups == "" || $cronBackupMaxBackups == "0" } {
++  if { $cronBackupMaxBackups == "" } {
 +    append errMsg [deletefile $CRONBACKUPMAXBACKUPSFILENAME]
 +  } else {
 +    append errMsg [writefile $CRONBACKUPMAXBACKUPSFILENAME $cronBackupMaxBackups]
@@ -652,6 +548,9 @@
 +    append errMsg [writefile $CUSTOMSTORAGEPATHFILENAME $customStoragePath]
 +  }
 +  
++  # reload monit
++  catch { exec /usr/bin/monit reload }
++
 +  puts "$errMsg"
 +}
 +
@@ -672,44 +571,43 @@
      "btnSysConfCentralMaintenace" : "Zentralen-<br/>Wartung",
      "lblSysConfCentralMaintenance1" : "Software-Update der " + HMIdentifier.de.CCUFullNameText,
      "lblSysConfCentralMaintenance2" : HMIdentifier.de.CCUFullNameText + " neu starten",
-@@ -624,6 +626,42 @@
+@@ -624,6 +626,41 @@
      "dialogSettingsCentralDisplayLblOptionHours" : "Stunden",
      "dialogSettingsCentralDisplayLblOptionAlways" : "Immer an",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
 +    "commentSettingsDialogAdvancedSettings" : "***********************************************",
-+    "dialogSettingsAdvancedSettingsTitle" : "Erweiterte Einstellungen",
-+    "dialogSettingsAdvancedSettingsRebootHint" : "Damit die %C4nderungen wirksam werden, muss die "+HMIdentifier.de.CCUShortName +" neu gestartet werden.",
-+    "dialogSettingsAdvancedSettingsWatchDog" : "WatchDog-%DCberwachung",
-+    "dialogSettingsAdvancedSettingsInternetCheck" : "Internet-Check",
-+    "dialogSettingsAdvancedSettingsRpi4usb3Check" : "RPI4-USB3-Check",
-+    "dialogSettingsAdvancedSettingsHintWatchDogCheck1" : "<b>Internet-Check:</b><br/>Es wird eine Alarmmeldung generiert, falls die Internet-Verbindung ausf%E4llt",
-+    "dialogSettingsAdvancedSettingsHintWatchDogCheck2" : "<b>RPI4-USB3-Check:</b><br/>Es wird eine Alarmmeldung generiert, wenn ein RaspberryPi 4 mit aufgestecktem Funkmodul und angeschlossenem USB-Ger%E4t am USB3 Port verwendet wird.",
-+    "dialogSettingsAdvancedSettingsSystem" : "allgemeine System-Optionen",
-+    "dialogSettingsAdvancedSettingsMediola" : "Mediola NEO-Server",
-+    "dialogSettingsAdvancedSettingsCronBackup" : "cron-geplante Backups",
-+    "dialogSettingsAdvancedSettingsCronBackupPath" : "Backup-Pfad",
++    "dialogSettingsAdvancedSettingsTitle" : HMIdentifier.de.CCUShortName + " - Erweiterte Einstellungen",
++    "dialogSettingsAdvancedSettingsWatchDog" : "WatchDog-Optionen",
++    "dialogSettingsAdvancedSettingsInternetCheck" : "Internet %DCberwachung",
++    "dialogSettingsAdvancedSettingsRpi4usb3Check" : "USB3 %DCberpr%FCfung (RaspberryPi4)",
++    "dialogSettingsAdvancedSettingsHintWatchDogCheck1" : "<b>Internet %DCberwachung:</b><br/>Die Internetverbindung wird in regelm%E4%DFigen Abst%E4nden kontrolliert und bei Ausfall eine WebUI Alarmmeldung erzeugt.",
++    "dialogSettingsAdvancedSettingsHintWatchDogCheck2" : "<b>USB3 %DCberpr%FCfung (RaspberryPi4):</b><br/>Bei Nutzung eines RaspberryPi4 wird eine WebUI Alarmmeldung erzeugt, wenn dort ein USB3 Anschluss (Blau) gleichzeitig mit einem Funkmodul auf dem GPIO Bus genutzt wird. Diese Nutzungskombination ist daf%FCr bekannt, das hierbei starke Funkst%F6rungen auftreten die die Kommunikation mit HomeMatic/homematicIP Ger%E4ten negativ beeintr%E4chtigt.",
++    "dialogSettingsAdvancedSettingsSystem" : "System-Optionen",
++    "dialogSettingsAdvancedSettingsMediola" : "Mediola NEO-Server Autostart",
++    "dialogSettingsAdvancedSettingsCronBackup" : "Automatische Backups",
++    "dialogSettingsAdvancedSettingsCronBackupPath" : "Backup-Speicherpfad",
 +    "dialogSettingsAdvancedSettingsCronBackupPathPlaceholder" : "<Systemvorgabe>",
-+    "dialogSettingsAdvancedSettingsCronBackupMaxBackups" : "max. Backup-Anzahl",
-+    "dialogSettingsAdvancedSettingsCustomStoragePath" : "Storage-Pfad",
++    "dialogSettingsAdvancedSettingsCronBackupMaxBackups" : "Backup-Anzahl (max.)",
++    "dialogSettingsAdvancedSettingsCustomStoragePath" : "Diagramm-Speicherpfad",
 +    "dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder" : "<Systemvorgabe>",
-+    "dialogSettingsAdvancedSettingsDCVars" : "Duty-Cycle Variablen anlegen",
-+    "dialogSettingsAdvancedSettingsDisableLED" : "RF-LED deaktivieren",
-+    "dialogSettingsAdvancedSettingsDisableOnboardLED" : "Onboard-LED deaktivieren",
-+    "dialogSettingsAdvancedSettingsBadBlocksCheck" : "Bad Blocks Check",
-+    "dialogSettingsAdvancedSettingsFSTRIM" : "FSTRIM",
-+    "dialogSettingsAdvancedSettingsHintSystem1" : "<b>Mediola:</b><br/>Ist die Option deaktiviert, wird die NEO-Server Instanz nicht automatisch gestartet",
-+    "dialogSettingsAdvancedSettingsHintSystem2" : "<b>cron-geplante Backups:</b><br/>automatische Backups werden t%E4glich erzeugt und auf ein angeschlossenes (USB-)Medium oder einem anderen konfigurierten Pfad gespeichert",
-+    "dialogSettingsAdvancedSettingsHintSystem3" : "<b>Backup-Pfad:</b><br/>Speicherort der Backups",
-+    "dialogSettingsAdvancedSettingsHintSystem4" : "<b>max. Backup-Anzahl:</b><br/>es wird nur die angegebene Anzahl an Backups aufbewahrt (leer lassen, um automatisches L%F6schen zu deaktivieren)",
-+    "dialogSettingsAdvancedSettingsHintSystem5" : "<b>Duty-Cycle Variablen anlegen:</b><br/>Es werden automatisch Systemvariablen mit den DutyCycle-Werten aller Funk-Interfaces angelegt und aktualisiert",
-+    "dialogSettingsAdvancedSettingsHintSystem6" : "<b>RF-LED deaktivieren:</b><br/>Es wird die LED am RPI-RF-MOD deaktiviert",
-+    "dialogSettingsAdvancedSettingsHintSystem7" : "<b>Onboard-LED deaktivieren:</b><br/>Es werden die LEDs am RaspberryPi-Systemboard deaktiviert",
-+    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Bad Blocks Check:</b><br/>Es wird t%E4glich nachts eine Block-%DCberpr%FCfung der SD-Karte durchgef%FChrt",
-+    "dialogSettingsAdvancedSettingsHintSystem9" : "<b>FSTRIM:</b><br/>Es wird t%E4glich nachts FSTRIM zum Freigeben nicht mehr genutzter Speicherbereiche ausgef%FChrt",
-+    "dialogSettingsAdvancedSettingsHintSystem10" : "<b>Storage-Pfad:</b><br/>Pfad f%FCr Diagramme",
-+    "dialogSettingsAdvancedSettingsExpert" : "Experte",
-+    "dialogSettingsAdvancedSettingsDevConfig" : "DevConfig-Button",
-+    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>DevConfig-Button:</b><br/>aktiviert den DevConfig-Button in der Systemsteuerung",
++    "dialogSettingsAdvancedSettingsDCVars" : "Duty-Cycle Systemvariablen",
++    "dialogSettingsAdvancedSettingsDisableLED" : "LED-Nutzung (Funkmodul)",
++    "dialogSettingsAdvancedSettingsDisableOnboardLED" : "LED-Nutzung (Onboard)",
++    "dialogSettingsAdvancedSettingsBadBlocksCheck" : "Speicher%FCberpr%FCfung (Bad-Blocks)",
++    "dialogSettingsAdvancedSettingsFSTRIM" : "Speicher%FCberpr%FCfung (FSTRIM)",
++    "dialogSettingsAdvancedSettingsHintSystem1" : "<b>Automatische Backups:</b><br/>Automatische Generierung von Backups (jede Nacht um 00:07).",
++    "dialogSettingsAdvancedSettingsHintSystem2" : "<b>Backup-Speicherpfad:</b><br/>Speicherpfad zur Ablage der automatischen Backups (*.sbk). Systemvorgabe: angeschlossenes USB-Medium (bei Nutzung einer SD-Karte als zentrales Speichermedium).",
++    "dialogSettingsAdvancedSettingsHintSystem3" : "<b>Backup-Anzahl (max.):</b><br/>Maximale Anzahl der im Speicherpfad aufzubewahrenden Backupdateien (Systemvorgabe: 30). Bei Eingabe von 0 findet keinerlei L%F6schung alter Backupdaten statt.",
++    "dialogSettingsAdvancedSettingsHintSystem4" : "<b>Duty-Cycle Systemvariablen:</b><br/>Es werden automatisch Systemvariablen mit den DutyCycle-Werten aller genutzen Funk-Interfaces angelegt und regelm%FC%DFig aktualisiert.",
++    "dialogSettingsAdvancedSettingsHintSystem5" : "<b>LED-Nutzung (Funkmodul):</b><br/>Bei Einsatz eines RPI-RF-MOD/HmIP-CCU3 Funkmodules oder eines HM-LGW-O-TW-W-EU wird die LED zur Statusanzeige von Alarm- und Servicemeldungen genutzt.",
++    "dialogSettingsAdvancedSettingsHintSystem6" : "<b>LED-Nutzung (Onboard):</b><br/>Bei Existenz von LEDs des genutzten Systemboards (z.B. RaspberryPi, CCU3) werden diese LEDs zur Darstellung des aktuellen Systemstatus verwendet.",
++    "dialogSettingsAdvancedSettingsHintSystem7" : "<b>Speicher%FCberpr%FCfung (Bad-Blocks):</b><br/>Zur %DCberpr%FCfung des Gesundheitsstatus des eingesetzten Systemspeichers wird jede Nacht um 01:59 ein sogn. 'Bad-Blocks' Check durchgef%FChrt und bei Auftreten eines Fehlers eine WebUI Alarmmeldung erzeugt.",
++    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Speicher%FCberpr%FCfung (FSTRIM):</b><br/>Wenn aktiviert wird jeden Samstag um 04:00 Uhr auf allen unterstützten Speichermedien (z.B. SSD) eventl. ungenutze Speicherbl%F6cke freigegeben.",
++    "dialogSettingsAdvancedSettingsHintSystem9" : "<b>Diagramm-Speicherpfad:</b><br/>Alternativ zur Systemvorgabe Diagramdaten, z.B. auf einem angeschlossenem USB Ger%E4t, zu speichern, kann hier ein eigener Speicherpfad angegeben werden (ben%F6tigt einen Neustart).",
++    "dialogSettingsAdvancedSettingsHintSystem10" : "<b>Mediola NEO-Server Autostart:</b><br/>Bei Hochfahren der Zentrale wird automatisch der Mediola NEO Server gestartet, wenn dieser in seiner Konfiguration aktiviert wurde.",
++    "dialogSettingsAdvancedSettingsExpert" : "Experten-Optionen",
++    "dialogSettingsAdvancedSettingsDevConfig" : "DevConfig-Button verbergen",
++    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>DevConfig-Button verbergen:</b><br/>Wenn aktiviert wird der 'DevConfig' Button unter Systemsteuerung <i>nicht</i> angezeigt.",
 +    "dialogSettingsAdvancedSettingsMessageAlertMessageError1" : "Fehler beim Speichern",
 +    "commentSettingsDialogAdvancedSettingsEnd" : "***********************************************",
      "commentSettingsDialogNetwork" : "***********************************************",
@@ -726,45 +624,44 @@
      "btnSysConfCentralMaintenace" : "CCU maintenance",
      "lblSysConfCentralMaintenance1" : "Software update for " + HMIdentifier.en.CCUFullNameText,
      "lblSysConfCentralMaintenance2" : "Restart " + HMIdentifier.en.CCUFullNameText,
-@@ -624,6 +626,42 @@
+@@ -624,6 +626,41 @@
      "dialogSettingsCentralDisplayLblOptionHours" : "Hours",
      "dialogSettingsCentralDisplayLblOptionAlways" : "Always on",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
 +    "commentSettingsDialogAdvancedSettings" : "***********************************************",
-+    "dialogSettingsAdvancedSettingsTitle" : "Advanced settings",
-+    "dialogSettingsAdvancedSettingsRebootHint" : HMIdentifier.de.CCUShortName +" needs to be restartet in order to apply the changes.",
-+    "dialogSettingsAdvancedSettingsWatchDog" : "WatchDog-Monitoring",
-+    "dialogSettingsAdvancedSettingsInternetCheck" : "Internet-Check",
-+    "dialogSettingsAdvancedSettingsRpi4usb3Check" : "RPI4-USB3-Check",
-+    "dialogSettingsAdvancedSettingsHintWatchDogCheck1" : "<b>Internet-Check:</b><br/>an alarm is generated, if the internet connection fails",
-+    "dialogSettingsAdvancedSettingsHintWatchDogCheck2" : "<b>RPI4-USB3-Check:</b><br/>an alarm is generated when using a RaspberryPi 4 with stacked radio module and connected device(s) on usb3 port",
-+    "dialogSettingsAdvancedSettingsSystem" : "Common System Options",
-+    "dialogSettingsAdvancedSettingsMediola" : "Mediola NEO-Server",
-+    "dialogSettingsAdvancedSettingsCronBackup" : "cron-scheduled backups",
-+    "dialogSettingsAdvancedSettingsCronBackupPath" : "backup path",
++    "dialogSettingsAdvancedSettingsTitle" : HMIdentifier.de.CCUShortName + " - Advanced settings",
++    "dialogSettingsAdvancedSettingsWatchDog" : "WatchDog Options",
++    "dialogSettingsAdvancedSettingsInternetCheck" : "Internet Monitoring",
++    "dialogSettingsAdvancedSettingsRpi4usb3Check" : "USB3 Monitoring (RaspberryPi4)",
++    "dialogSettingsAdvancedSettingsHintWatchDogCheck1" : "<b>Internet Monitoring:</b><br/>The internet connection will be regularly monitored and a WebUI alarm raised if an interruption is identified.",
++    "dialogSettingsAdvancedSettingsHintWatchDogCheck2" : "<b>USB3 Monitoring (RaspberryPi4):</b><br/>A WebUI alarm will be raised if the system board is a RaspberryPi4 and a USB3 port (blue) is used together with a rf module connected to the GPIO bus. This combination is known to produce severe rf interferences which negatively affects communication with HomeMatic/homematicIP devices.",
++    "dialogSettingsAdvancedSettingsSystem" : "System Options",
++    "dialogSettingsAdvancedSettingsMediola" : "Mediola NEO-Server Autostartup",
++    "dialogSettingsAdvancedSettingsCronBackup" : "Auto Backups",
++    "dialogSettingsAdvancedSettingsCronBackupPath" : "Backup Storage Path",
 +    "dialogSettingsAdvancedSettingsCronBackupPathPlaceholder" : "<default>",
-+    "dialogSettingsAdvancedSettingsCronBackupMaxBackups" : "max. backup count",
-+    "dialogSettingsAdvancedSettingsCustomStoragePath" : "storage path",
++    "dialogSettingsAdvancedSettingsCronBackupMaxBackups" : "Backup Quantity (max.)",
++    "dialogSettingsAdvancedSettingsCustomStoragePath" : "Diagram Storage Path",
 +    "dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder" : "<default>",
-+    "dialogSettingsAdvancedSettingsDCVars" : "create Duty-Cycle variables",
-+    "dialogSettingsAdvancedSettingsDisableLED" : "disable rf leds",
-+    "dialogSettingsAdvancedSettingsDisableOnboardLED" : "disable onboard leds",
-+    "dialogSettingsAdvancedSettingsBadBlocksCheck" : "Bad Blocks Check",
-+    "dialogSettingsAdvancedSettingsFSTRIM" : "FSTRIM",
-+    "dialogSettingsAdvancedSettingsHintSystem1" : "<b>Mediola:</b><br/>if deactivated, the NEO-Server instance will not start on boot",
-+    "dialogSettingsAdvancedSettingsHintSystem2" : "<b>cron-scheduled backup:</b><br/>create daily backups and save them to a connected external (usb) stick",
-+    "dialogSettingsAdvancedSettingsHintSystem3" : "<b>backup path:</b><br/>location, where backups are saved",
-+    "dialogSettingsAdvancedSettingsHintSystem4" : "<b>max. backup count:</b><br/>indicates how many backups should be kept (leave empty, for no automatic delete)",
-+    "dialogSettingsAdvancedSettingsHintSystem5" : "<b>create Duty-Cycle variables:</b><br/>system variables containing the duty cycle value for each rf interface are generated and updated periodically",
-+    "dialogSettingsAdvancedSettingsHintSystem6" : "<b>disable rf leds:</b><br/>disables the RPI-RF-MOD led",
-+    "dialogSettingsAdvancedSettingsHintSystem7" : "<b>disable onboard leds:</b><br/>disables the leds on the raspberry pi system board",
-+    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Bad Blocks Check:</b><br/>nightly check for bad blocks (on SD cards)",
-+    "dialogSettingsAdvancedSettingsHintSystem9" : "<b>FSTRIM:</b><br/>nightly task to discard blocks which are not in use by the filesystem",
-+    "dialogSettingsAdvancedSettingsHintSystem10" : "<b>storage path:</b><br/>path for diagrams",
-+    "dialogSettingsAdvancedSettingsExpert" : "Expert",
-+    "dialogSettingsAdvancedSettingsDevConfig" : "DevConfig-Button",
-+    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>DevConfig-Button:</b><br/>show the DevConfig button on the control panel",
-+    "dialogSettingsAdvancedSettingsMessageAlertMessageError1" : "error while saving",
++    "dialogSettingsAdvancedSettingsDCVars" : "Duty-Cycle system variables",
++    "dialogSettingsAdvancedSettingsDisableLED" : "LED use (RF module)",
++    "dialogSettingsAdvancedSettingsDisableOnboardLED" : "LED use (Onboard)",
++    "dialogSettingsAdvancedSettingsBadBlocksCheck" : "Storagecheck (Bad Blocks)",
++    "dialogSettingsAdvancedSettingsFSTRIM" : "Storagecheck (FSTRIM)",
++    "dialogSettingsAdvancedSettingsHintSystem1" : "<b>Auto Backups:</b><br/>Creates automatic daily backups (at 00:07 am).",
++    "dialogSettingsAdvancedSettingsHintSystem2" : "<b>Backup Storage Path:</b><br/>Storage location where automatic backups files (*.sbk) are stored. Default: connected USB media (when using a SD card as the central storage).",
++    "dialogSettingsAdvancedSettingsHintSystem3" : "<b>Backup Quantity (max.):</b><br/>Maximum number of backups to retain until older ones are purged (default: 30). Use 0 to disable automatic purge, keeping all backup data files.",
++    "dialogSettingsAdvancedSettingsHintSystem4" : "<b>Duty-Cycle system variables:</b><br/>System variables containing the duty cycle value for each rf interface are generated and updated periodically.",
++    "dialogSettingsAdvancedSettingsHintSystem5" : "<b>LED use (RF module):</b><br/>In case of using a RPI-RF-MOD/HmIP-CCU3 rf module or a HM-LGW-O-TW-W-EU the LED will be used to display alarm- oder service messages status.",
++    "dialogSettingsAdvancedSettingsHintSystem6" : "<b>LED use (Onboard):</b><br/>If the used system board (e.g. RaspberryPi, CCU3) comes with onboard LEDs they will be used to reflect the current system status.",
++    "dialogSettingsAdvancedSettingsHintSystem7" : "<b>Storagecheck (Bad Blocks):</b><br/>For checking the health status of the used system storage a check will be peformed each night at 01:59 am and in case bad blocks are found a WebUI alarm will be raised.",
++    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Storagecheck (FSTRIM):</b><br/>If activated, unused filesystem data will be freed each saturday at 04:00 am on supported system drives (e.g. SSD).",
++    "dialogSettingsAdvancedSettingsHintSystem9" : "<b>Diagram Storage Path:</b><br/>As an alternative to the default of saving diagram data to e.g. a connected USB drive, an own directory path can be entered here (requires reboot).",
++    "dialogSettingsAdvancedSettingsHintSystem10" : "<b>Mediola NEO-Server Autostartup:</b><br/>Upon startup of the CCU, the Mediola NEO server process will be automatically started if it has been activated in the configuration.",
++    "dialogSettingsAdvancedSettingsExpert" : "Expert Options",
++    "dialogSettingsAdvancedSettingsDevConfig" : "Hide DevConfig-Button",
++    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>Hide DevConfig-Button:</b><br/>If activated, the 'DevConfig' button will be <i>hided</i> under the control panel.",
++    "dialogSettingsAdvancedSettingsMessageAlertMessageError1" : "Error on save",
 +    "commentSettingsDialogAdvancedSettingsEnd" : "***********************************************",
      "commentSettingsDialogNetwork" : "***********************************************",
      "dialogSettingsNetworkTitle" : HMIdentifier.en.CCUShortName + " network settings",

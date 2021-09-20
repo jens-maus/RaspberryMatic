@@ -11,6 +11,14 @@ start() {
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
+  # if /etc/config/disableOnboardLED exists we
+  # make sure all trigger will be set to 'none'
+  if [[ -e /etc/config/disableOnboardLED ]]; then
+    HM_LED_GREEN_MODE2=none
+    HM_LED_RED_MODE2=none
+    HM_LED_YELLOW_MODE2=none
+  fi
+
   # start is finished lets set the LEDs
   if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
     echo "${HM_LED_GREEN_MODE2}" >"${HM_LED_GREEN}/trigger"

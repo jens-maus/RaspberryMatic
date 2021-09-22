@@ -3,4 +3,4 @@ config BR2_PACKAGE_STROMPI2D
 	help
 	  Adds support for StromPi2 UPS Support Daemon
 
-	  http://www.joy-it.net/strompi-2
+	  https://www.joy-it.net/de/products/RB-StromPi2

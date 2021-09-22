@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169
+# shellcheck shell=dash disable=SC2169,SC3010
 #
 # StromPi2 UPS Daemon starting and stopping
 #
@@ -23,7 +23,14 @@ case $1 in
 
       # now start the daemon
       if start-stop-daemon --start --background --pidfile "${PIDFILE}" --make-pidfile --quiet --exec "${DAEMON}"; then
-        echo "OK"
+        sleep 1
+
+        # check if pid exists after start
+        if [[ "$(/usr/bin/pgrep -f ${DAEMON})" == "$(cat ${PIDFILE})" ]]; then
+          echo "OK"
+        else
+          echo "FAIL"
+        fi
       else
         echo "FAIL"
       fi

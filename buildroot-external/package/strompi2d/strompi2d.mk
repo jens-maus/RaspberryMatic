@@ -1,10 +1,10 @@
 ################################################################################
 #
-# StromPi2 UPS Support (http://www.joy-it.net/strompi-2/)
+# StromPi2 UPS Support (https://www.joy-it.net/de/products/RB-StromPi2)
 #
 ################################################################################
 
-STROMPI2D_VERSION = 1.0
+STROMPI2D_VERSION = 1.1
 STROMPI2D_SOURCE =
 STROMPI2D_SITE =
 STROMPI2D_LICENSE = GPL3

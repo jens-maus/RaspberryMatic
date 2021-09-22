@@ -1,2 +1,2 @@
 #!/bin/sh
-/bin/triggerAlarm.tcl "Power Loss" "S.USV-Alarm"
+/bin/triggerAlarm.tcl "Power Loss" "WatchDog: susv-alarm" true

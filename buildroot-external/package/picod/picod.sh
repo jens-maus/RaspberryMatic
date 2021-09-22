@@ -1,12 +1,12 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
 # Command run on power loss
-#: ${POWER_LOSS_CMD:='/sbin/poweroff'}
-: "${POWER_LOSS_CMD:='/bin/triggerAlarm.tcl "Power Loss" "PIcoUPS-Alarm"'}"
+#: ${POWER_LOSS_CMD:=/sbin/poweroff}
+: "${POWER_LOSS_CMD:=/bin/triggerAlarm.tcl 'Power Loss' 'WatchDog: picoups-powerloss' true}"
 
 # File descriptors
 if [[ ${HM_HOST} != "tinkerboard" ]]; then
@@ -18,7 +18,7 @@ else
 fi
 
 # Debounce time in while loop
-: "${DEBOUNCE_TIME:='0.3s'}"
+: "${DEBOUNCE_TIME:=0.3s}"
 
 ## Initialize GPIO file descriptor
 # $1: File descriptor Value: decimal

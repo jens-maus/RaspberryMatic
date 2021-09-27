@@ -1,0 +1,5 @@
+# Locally computed
+sha256  e7f9f20b8d6ea2eab330dbb5234c7e1945c7870a3bc3099fa8953ddb2c2d89eb  tailscale_1.14.3_386.tgz
+sha256  f8b333406da6b84fb8f9db0c30a682ae0af0863bf157f0a80fc541cdb33ef60a  tailscale_1.14.3_amd64.tgz
+sha256  502f85d3224bc94c8e3f3dde26403fb3445bb9c7ed67f05dc7e6f58632f4bc67  tailscale_1.14.3_arm.tgz
+sha256  10bee8e74bfb62d2e4231ec4f6fa9692d88e2be9c24cf31f8f743b300d72acb5  tailscale_1.14.3_arm64.tgz

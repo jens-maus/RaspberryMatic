@@ -14132,7 +14132,7 @@ PartyModeDialog = Class.create({
     // Adds a selectbox for the temperature to the party mode dialog
     var selBox = "<select>";
     for (var loop = 5; loop <= 30; loop++) {
-      selBox += "<option value='"+loop+"'>"+loop+"°C</option>";
+      selBox += "<option value='"+loop+"'>"+loop+"&nbsp;&deg;C</option>";
     }
     selBox += "</select>";
 
@@ -26006,7 +26006,7 @@ ise.SingleDestination.prototype =
       value = min;
     }
 
-    if ((unit == "°C") && (value != min) && (value != max)) {
+    if ((unit == "°C" || unit == "&deg;C") && (value != min) && (value != max)) {
       value = roundValue05(value);
     }
 
@@ -32685,7 +32685,7 @@ iseThermostatHMIP.prototype = {
     this.max = 30;
     this.off = 4.5;
     this.on = 30.5;
-    this.unit = "°C";
+    this.unit = "&nbsp;&deg;C";
     this.factor = 100/(this.max-this.min);
     this.iViewOnly = false;
     this.bSliderPosFlag = false;
@@ -33166,7 +33166,7 @@ iseFrequency.prototype = {
     this.min = min;
     this.max = max;
     this.factor = 100/(max-min);
-    this.unit = " mHz";
+    this.unit = "&nbsp;mHz";
     if(bSliderPosFlag) 
     {
         this.bSliderPosFlag = bSliderPosFlag;
@@ -34854,11 +34854,18 @@ checkTemperatureMinMax = function(input, MinVal, MaxVal) {
   var isFarVal = false;
   if (!checkDecimal(tmpInput)) {
     // Zeichen für Temperaturangaben rausfiltern
+    if (tmpInput.indexOf('&deg;C') != -1) {
+      tmpInput = tmpInput.substr(0, tmpInput.indexOf('&deg;C'));
+    }
     if (tmpInput.indexOf('°C') != -1) {
       tmpInput = tmpInput.substr(0, tmpInput.indexOf('°C'));
     }
     if (tmpInput.indexOf('C') != -1) {
       tmpInput = tmpInput.substr(0, tmpInput.indexOf('C'));
+    }
+    if (tmpInput.indexOf('&deg;F') != -1) {
+      tmpInput = tmpInput.substr(0, tmpInput.indexOf('&deg;F'));
+      isFarVal = true;      
     }
     if (tmpInput.indexOf('°F') != -1) {
       tmpInput = tmpInput.substr(0, tmpInput.indexOf('°F'));

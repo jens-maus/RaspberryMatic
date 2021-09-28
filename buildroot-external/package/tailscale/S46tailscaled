@@ -4,10 +4,13 @@
 # Starts tailscaled
 #
 
-EXEC="/usr/sbin/tailscaled"
-ARGS="-state /etc/config/tailscaled.state -socket /var/run/tailscale/tailscaled.sock"
-PID="/var/run/tailscale/tailscaled.pid"
-PORT=41641
+TAILSCALED_EXEC="/usr/sbin/tailscaled"
+TAILSCALED_ARGS="-state /etc/config/tailscaled.state -socket /var/run/tailscale/tailscaled.sock"
+TAILSCALED_PID="/var/run/tailscale/tailscaled.pid"
+TAILSCALED_PORT=41641
+TAILSCALE_EXEC="/usr/bin/tailscale"
+TAILSCALE_ARGS="-listen 127.0.0.1:25899"
+TAILSCALE_PID="/var/run/tailscale/tailscale.pid"
 
 # only continue if tailscale is enabled
 [[ ! -e /etc/config/tailscaleEnabled ]] && exit 0
@@ -21,16 +24,22 @@ case "${1}" in
     mkdir -p /var/run/tailscale /var/lib/tailscale
 
     # shellcheck disable=SC2086
-    if ! start-stop-daemon -b -S -q -m -p "${PID}" -x ${EXEC} -- ${ARGS} -port ${PORT}; then
-      echo "FAILED"
+    if ! start-stop-daemon -b -S -q -m -p "${TAILSCALED_PID}" -x ${TAILSCALED_EXEC} -- ${TAILSCALED_ARGS} -port ${TAILSCALED_PORT}; then
+      echo "FAILED (${TAILSCALED_EXEC})"
       exit 1
+    fi
+
+    # shellcheck disable=SC2086
+    if ! start-stop-daemon -b -S -q -m -p "${TAILSCALE_PID}" -x ${TAILSCALE_EXEC} -- web ${TAILSCALE_ARGS}; then
+      echo "FAILED (${TAILSCALE_EXEC})"
     else
       echo "OK"
     fi
   ;;
   stop)
     echo -n "Stopping tailscaled: "
-    start-stop-daemon -K -q -p ${PID}
+    start-stop-daemon -K -q -p ${TAILSCALE_PID}
+    start-stop-daemon -K -q -p ${TAILSCALED_PID}
     echo "OK"
   ;;
   restart|reload)

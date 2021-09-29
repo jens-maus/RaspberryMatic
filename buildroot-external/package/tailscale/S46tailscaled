@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash source=/dev/null
+# shellcheck shell=dash disable=SC3010,SC3028 source=/dev/null
 #
 # Starts tailscaled
 #
@@ -13,7 +13,7 @@ TAILSCALED_PID="/var/run/tailscale/tailscaled.pid"
 TAILSCALED_PORT=41641
 TAILSCALE_EXEC="/usr/bin/tailscale"
 TAILSCALE_WEB_ARGS="-listen 127.0.0.1:25899"
-TAILSCALE_UP_ARGS="--hostname \"${HOSTNAME}\" --advertise-exit-node --accept-routes --advertise-routes $(/sbin/ip route | grep -v default | awk '{ print $1 }' | xargs | tr ' ' ',')"
+TAILSCALE_UP_ARGS="--hostname ${HOSTNAME} --advertise-exit-node --accept-routes --advertise-routes $(/sbin/ip route | grep -v default | awk '{ print $1 }' | xargs | tr ' ' ',')"
 TAILSCALE_PID="/var/run/tailscale/tailscale.pid"
 
 # allow to override the variables
@@ -46,6 +46,7 @@ case "${1}" in
     fi
 
     # make sure to set tailscale 'up' with the right cmdline args
+    # shellcheck disable=SC2086
     ${TAILSCALE_EXEC} up ${TAILSCALE_UP_ARGS} >/dev/null 2>&1 &
   ;;
   stop)

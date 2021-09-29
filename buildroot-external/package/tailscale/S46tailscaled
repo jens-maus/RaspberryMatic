@@ -4,16 +4,19 @@
 # Starts tailscaled
 #
 
+# only continue if tailscale is enabled
+[[ ! -e /etc/config/tailscaleEnabled ]] && exit 0
+
 TAILSCALED_EXEC="/usr/sbin/tailscaled"
 TAILSCALED_ARGS="-state /etc/config/tailscaled.state -socket /var/run/tailscale/tailscaled.sock"
 TAILSCALED_PID="/var/run/tailscale/tailscaled.pid"
 TAILSCALED_PORT=41641
 TAILSCALE_EXEC="/usr/bin/tailscale"
-TAILSCALE_ARGS="-listen 127.0.0.1:25899"
+TAILSCALE_WEB_ARGS="-listen 127.0.0.1:25899"
+TAILSCALE_UP_ARGS="--hostname \"${HOSTNAME}\" --advertise-exit-node --accept-routes --advertise-routes $(/sbin/ip route | grep -v default | awk '{ print $1 }' | xargs | tr ' ' ',')"
 TAILSCALE_PID="/var/run/tailscale/tailscale.pid"
 
-# only continue if tailscale is enabled
-[[ ! -e /etc/config/tailscaleEnabled ]] && exit 0
+# allow to override the variables
 [[ -r /etc/config/tailscaleEnabled ]] && . /etc/config/tailscaleEnabled
 
 case "${1}" in
@@ -36,11 +39,14 @@ case "${1}" in
     fi
 
     # shellcheck disable=SC2086
-    if ! start-stop-daemon -b -S -q -m -p "${TAILSCALE_PID}" -x ${TAILSCALE_EXEC} -- web ${TAILSCALE_ARGS}; then
+    if ! start-stop-daemon -b -S -q -m -p "${TAILSCALE_PID}" -x ${TAILSCALE_EXEC} -- web ${TAILSCALE_WEB_ARGS}; then
       echo "FAILED (${TAILSCALE_EXEC})"
     else
       echo "OK"
     fi
+
+    # make sure to set tailscale 'up' with the right cmdline args
+    ${TAILSCALE_EXEC} up ${TAILSCALE_UP_ARGS} >/dev/null 2>&1 &
   ;;
   stop)
     echo -n "Stopping tailscaled: "

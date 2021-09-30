@@ -452,8 +452,14 @@ proc action_put_page {} {
               table_data {width="10"} { }
               table_data {class="CLASS21112"} {
                 division {class="popupControls CLASS21107"} {
-                  division {class="CLASS21117"} {onClick="window.open('/tailscale', '_blank').focus();"} {
-                    puts "\${dialogSettingsNetworkVPNLblAuth}"
+                  if {$vpn == "1"} {
+                    division {class="CLASS21117"} {onClick="window.open('/tailscale', '_blank').focus();"} {
+                      puts "\${dialogSettingsNetworkVPNLblAuth}"
+                    }
+                  } else {
+                    division {class="CLASS21117"} {style="color:grey"} {
+                      puts "\${dialogSettingsNetworkVPNLblAuth}"
+                    }
                   }
                 }
               }

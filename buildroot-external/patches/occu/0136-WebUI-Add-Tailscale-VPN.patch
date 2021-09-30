@@ -11,7 +11,7 @@
    
    http_head
    
-@@ -433,6 +434,37 @@
+@@ -433,6 +434,43 @@
  
          }
        }
@@ -33,8 +33,14 @@
 +              table_data {width="10"} { }
 +              table_data {class="CLASS21112"} {
 +                division {class="popupControls CLASS21107"} {
-+                  division {class="CLASS21117"} {onClick="window.open('/tailscale', '_blank').focus();"} {
-+                    puts "\${dialogSettingsNetworkVPNLblAuth}"
++                  if {$vpn == "1"} {
++                    division {class="CLASS21117"} {onClick="window.open('/tailscale', '_blank').focus();"} {
++                      puts "\${dialogSettingsNetworkVPNLblAuth}"
++                    }
++                  } else {
++                    division {class="CLASS21117"} {style="color:grey"} {
++                      puts "\${dialogSettingsNetworkVPNLblAuth}"
++                    }
 +                  }
 +                }
 +              }
@@ -49,7 +55,7 @@
        table_row {class="CLASS21119"} {
          table_data {class="CLASS21116"} {
            #puts "Zertifikat<br />erstellen"
-@@ -632,6 +664,7 @@
+@@ -632,6 +670,7 @@
          pb += "&dns2=0.0.0.0";
          }
          
@@ -57,7 +63,7 @@
          var opts = {
            postBody: pb,
            sendXML: false,
-@@ -796,9 +829,9 @@
+@@ -796,9 +835,9 @@
      import dhcp
      import dns1
      import dns2
@@ -69,7 +75,7 @@
        puts "Success"
        # puts "\${dialogSettingsNetworkMessageSaveSettingsSucceed}"
        return
-@@ -832,8 +865,8 @@
+@@ -832,8 +871,8 @@
    return 0
  }
  
@@ -80,7 +86,7 @@
    set ifconfig_result [exec /sbin/ifconfig eth0]
    if {! [regexp -line {inet addr:([\d.]+).*Mask:([\d.]+)[^\d.]*$} $ifconfig_result dummy ip mask]} {return 0}
    set fd -1
-@@ -857,8 +890,8 @@
+@@ -857,8 +896,8 @@
    return 1
  }
  
@@ -91,7 +97,7 @@
    set fd -1
    catch {set fd [open "/etc/config/netconfig" r]}
    if { $fd <0 } { return 0 }
-@@ -872,10 +905,14 @@
+@@ -872,10 +911,14 @@
    if {! [get_property $netconfig "GATEWAY" gw] } {return 0}
    get_property $netconfig "NAMESERVER1" dns1
    get_property $netconfig "NAMESERVER2" dns2
@@ -107,7 +113,7 @@
    set fd -1
    catch {set fd [open "/etc/config/netconfig" r]}
    if { $fd <0 } { return 0 }
-@@ -902,6 +939,18 @@
+@@ -902,6 +945,18 @@
    puts -nonewline $fd $netconfig
    close $fd
  

@@ -453,7 +453,7 @@ proc action_put_page {} {
               table_data {class="CLASS21112"} {
                 division {class="popupControls CLASS21107"} {
                   if {$vpn == "1"} {
-                    division {class="CLASS21117"} {onClick="window.open('/tailscale', '_blank').focus();"} {
+                    division {class="CLASS21117"} {onClick="window.open('/tailscale/', '_blank').focus();"} {
                       puts "\${dialogSettingsNetworkVPNLblAuth}"
                     }
                   } else {

@@ -46,7 +46,7 @@ const apiProxy = createProxyMiddleware('/', {
         body = responseBody.toString('latin1');
       }
 
-      body = body.replace(/(?<=["'= \(\\]|\\u0027)\/(api|webui|ise|pda|config|pages|jpages|esp|upnp|tools|addons)(\\?\/)(?!hassio_ingress)/g,
+      body = body.replace(/(?<=["'= \(\\]|\\u0027)\/(api|webui|ise|pda|config|pages|jpages|esp|upnp|tools|addons|tailscale)(\\?\/)(?!hassio_ingress)/g,
                           req.headers['x-ingress-path']+'/$1$2');
       body = body.replace(/(?<=["'])\/(index|login|logout)\.htm/g,
                           req.headers['x-ingress-path']+'/$1.htm');

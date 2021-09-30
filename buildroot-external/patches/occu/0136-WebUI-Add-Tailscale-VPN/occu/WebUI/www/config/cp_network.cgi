@@ -944,9 +944,9 @@ proc write_config {dhcp hostname ip mask gw dns1 dns2 vpn} {
   if { $vpn != $cur_vpn } {
     if { $vpn == 1 } {
       exec touch /etc/config/tailscaleEnabled
-      exec /etc/init.d/S46tailscaled restart >/dev/null 2>&1
+      exec /etc/init.d/S46tailscaled restart >/dev/null 2>/dev/null
     } else {
-      exec /etc/init.d/S46tailscaled stop >/dev/null 2>&1
+      exec /etc/init.d/S46tailscaled stop >/dev/null 2>/dev/null
       exec rm -f /etc/config/tailscaleEnabled
     }
   }

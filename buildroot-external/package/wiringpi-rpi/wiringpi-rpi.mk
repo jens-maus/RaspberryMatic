@@ -1,10 +1,10 @@
 ################################################################################
 #
-# wiringpi
+# wiringpi (https://github.com/WiringPi/WiringPi)
 #
 ################################################################################
 
-WIRINGPI_RPI_VERSION = 6a17382a0ab40a9e36456e5a71bdce0a70421ffb
+WIRINGPI_RPI_VERSION = 7f8fe26e4f775abfced43c07657a353f03ddb2d0
 WIRINGPI_RPI_SITE = git://github.com/wiringpi/wiringpi
 
 WIRINGPI_RPI_LICENSE = LGPL-3.0+

@@ -12,7 +12,7 @@ if [[ -n "$(ls -A /etc/config/rc.d)" ]]; then
       DVERSION=$(echo "${DINFO}" | grep "Version:" | awk '{print $2}')
       DUPDATESCRIPT=$(echo "${DINFO}" | grep "Update:" | awk '{print $2}')
       if [[ -n "${DUPDATESCRIPT}" ]]; then
-        WEBRESULT=$(/usr/bin/curl -s "http://localhost${DUPDATESCRIPT}")
+        WEBRESULT=$(/usr/bin/curl -s "http://localhost${DUPDATESCRIPT}" | tr -d " ")
         if [[ ${first} -eq 1 ]]; then
           first=0
         else

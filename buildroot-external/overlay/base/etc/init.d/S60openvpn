@@ -28,8 +28,8 @@ start)
   printf "Starting openvpn:"
 
   if test -z "$2"; then
-    for CONFIG in $(cd "$CONFIG_DIR" || return; ls *.conf 2>/dev/null); do
-      NAME=${CONFIG%%.conf}
+    for CONFIG in $(cd "$CONFIG_DIR" || return; ls ./*.conf 2>/dev/null); do
+      NAME=$(basename "${CONFIG%%.conf}")
       start_vpn
     done
   else

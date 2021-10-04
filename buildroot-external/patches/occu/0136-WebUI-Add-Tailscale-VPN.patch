@@ -47,8 +47,8 @@
 +            }
 +          }
 +        }
-+        table_data {class="CLASS21113"} {align="left"} {style="display:flex; flex-wrap: nowrap; align-items: center" } {
-+          puts "<div>\${dialogSettingsNetworkVPNHelpP0} </div><div><img src=\"/ise/img/help.png\" size=\"24\" width=\"24\" onclick=\"MessageBox.show(translateKey('dialogSettingsNetworkVPNLblActivate')+' - '+translateKey('HelpTitle'), translateKey('dialogSettingsNetworkVPNHelpP1')+'<br/><br/>'+translateKey('dialogSettingsNetworkVPNHelpP2'), '', 450, 320) ;\"></div>"		 
++        table_data {class="CLASS21113"} {align="center"} {
++          puts "<img src=\"/ise/img/help.png\" onclick=\"MessageBox.show(translateKey('dialogSettingsNetworkVPNLblActivate')+' - '+translateKey('HelpTitle'), translateKey('dialogSettingsNetworkVPNHelpP1')+'<br/><br/>'+translateKey('dialogSettingsNetworkVPNHelpP2'), '', 450, 320) ;\">"
 +        }
 +      }
        table_row {class="CLASS21119"} {
@@ -141,13 +141,12 @@
      "dialogSettingsNetworkTDCreateCertificate" : "Zertifikat<br/>erstellen",
      "dialogSettingsNetworkIPSettingsLblHostname" : "Hostname: ",
      "dialogSettingsNetworkIPSettingsLblUseIPAdd" : "Folgende IP-Adresse verwenden: ",
-@@ -639,6 +640,11 @@
+@@ -639,6 +640,10 @@
      "dialogSettingsNetworkHintIPSettingsP1" : "Legen Sie die grundlegenden IP-Einstellungen Ihrer " + HMIdentifier.de.CCUFullNameText + " fest.",
      "dialogSettingsNetworkHintIPSettingsP2" : "%DCber den Hostnamen k%F6nnen Sie Ihrer " + HMIdentifier.de.CCUFullNameText + " einen Namen geben.",
      "dialogSettingsNetworkHintIPSettingsP3" : "Die " + HMIdentifier.de.CCUFullNameText + " bezieht ihre IP-Adresse und alle damit verbundenen Einstellungen von einem DHCP-Server. Falls sich in Ihrem Netzwerk kein solcher Server befindet, oder Sie aus anderen Gr%FCnden eigene Einstellungen verwenden m%F6chten, k%F6nnen Sie hier manuell eine IP-Adresse konfigurieren.",
 +    "dialogSettingsNetworkVPNLblActivate" : "Tailscale VPN-Funktion",
 +    "dialogSettingsNetworkVPNLblAuth" : "Authentifizierung",
-+    "dialogSettingsNetworkVPNHelpP0" : "Ausf%FChrliche Informationen erhalten Sie durch Klicken auf das ?-Symbol",
 +    "dialogSettingsNetworkVPNHelpP1" : "Die " + HMIdentifier.de.CCUFullNameText + " verf%FCgt %FCber eine interne VPN-Funktion, welche erlaubt die Zentrale %FCber einen sicheren Zugang f%FCr Zugriffe vom Internet aus (z.B. via Smartphone) verf%FCgbar zu machen. Hierf%FCr wird <a href='https://tailscale.com/'>Tailscale</a> als sichere VPN-L%F6sung eingesetzt, bei welcher es sich um ein Zeroconfig-VPN handelt das intern Wireguard einsetzt um somit ein dezentrales, privates und kostenfreies VPN zwischen Nutzerger%E4ten aufzubauen. Tailscale ist OpenSource, sicherheitsgepr%FCft und nutzt direkte Punkt-zu-Punkt Verbindungen, soda%DF gew%E4hrleistet ist, das keinerlei Nutzer-Traffic %FCber zentrale Server geleitet wird.",
 +    "dialogSettingsNetworkVPNHelpP2" : "F%FCr die Aufnahme der Zentrale in ein Tailscale-VPN Netzwerk, muss nach Aktivierung dieser Funktion im Anschluss der 'Authentifizierung'-Knopf bet%E4tigt werden, damit mit ggf. bereits bestehenden Zugangsdaten die Zentrale dann in das pers%F6nliche VPN-Netzwerk integriert werden kann und alle darin befindlichen Ger%E4te unmittelbar Zugriff erhalten.",
      "dialogSettingsNetworkCertificateLblStep1" : "Schritt 1: Daten eingeben",
@@ -163,13 +162,12 @@
      "dialogSettingsNetworkTDCreateCertificate" : "Create certificate",
      "dialogSettingsNetworkIPSettingsLblHostname" : "Host name: ",
      "dialogSettingsNetworkIPSettingsLblUseIPAdd" : "Use the following IP address: ",
-@@ -639,6 +640,11 @@
+@@ -639,6 +640,10 @@
      "dialogSettingsNetworkHintIPSettingsP1" : "Please define the basic IP settings of your " + HMIdentifier.en.CCUFullNameText + ".",
      "dialogSettingsNetworkHintIPSettingsP2" : "You can assign a name to your " + HMIdentifier.en.CCUFullNameText + " via the host name.",
      "dialogSettingsNetworkHintIPSettingsP3" : "The " + HMIdentifier.en.CCUFullNameText + " gets the IP address and all corresponding settings from a DHCP server. If your network does not have a DHCP server or if you would like to use your own settings, you can manually configure an own IP address here.",
 +    "dialogSettingsNetworkVPNLblActivate" : "Tailscale VPN functionality",
 +    "dialogSettingsNetworkVPNLblAuth" : "Authentification",
-+    "dialogSettingsNetworkVPNHelpP0" : "For detailed information click the ?-button"
 +    "dialogSettingsNetworkVPNHelpP1" : "The " + HMIdentifier.de.CCUFullNameText + " comes with internal VPN functionality which allows to make it accessible from the internet (e.g. via Smartphone) using a secure VPN solution fully under your control. For this functionality, the secure <a href='https://tailscale.com/'>Tailscale</a> VPN solution is used which provides a zeroconfig solution to easily integrate your devices in a wireguard-based, decentralized and cost-free user VPN. It is fully based on open source software, security proof and initiates point-to-point connections between your devices, thus no user traffic is routed over centralized server.",
 +    "dialogSettingsNetworkVPNHelpP2" : "For making your device available, you will have to switch on the Tailscale VPN functionality and use the 'Authentication' button to access the local authentication page. From there you can then login with your existing Tailscale login credentials and thus add this central to your private Tailscale VPN network so that any device in that network can directly access it.",
      "dialogSettingsNetworkCertificateLblStep1" : "Step 1: Enter data",

@@ -29,7 +29,7 @@ on:
       skip_build:
         description: 'Skip build (for testing workflow)?'
         required: true
-        default: "false"
+        default: "true"
 
 env:
   # NOTE: secrets cannot be access directly in conditions

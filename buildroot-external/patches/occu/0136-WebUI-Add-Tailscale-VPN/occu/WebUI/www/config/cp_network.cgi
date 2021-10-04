@@ -466,9 +466,8 @@ proc action_put_page {} {
             }
           }
         }
-        table_data {class="CLASS21113"} {align="left"} {
-          p { ${dialogSettingsNetworkVPNHelpP1} }
-          p { ${dialogSettingsNetworkVPNHelpP2} }
+        table_data {class="CLASS21113"} {align="left"} {style="display:flex; flex-wrap: nowrap; align-items: center" } {
+          puts "<div>\${dialogSettingsNetworkVPNHelpP0} </div><div><img src=\"/ise/img/help.png\" size=\"24\" width=\"24\" onclick=\"MessageBox.show(translateKey('dialogSettingsNetworkVPNLblActivate')+' - '+translateKey('HelpTitle'), translateKey('dialogSettingsNetworkVPNHelpP1')+'<br/><br/>'+translateKey('dialogSettingsNetworkVPNHelpP2'), '', 450, 320) ;\"></div>"		 
         }
       }
       table_row {class="CLASS21119"} {

@@ -57,7 +57,10 @@ else
 	mkdir -p build-$(PRODUCT)/images
 	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do echo DUMMY >build-$(PRODUCT)/images/$${f}; done
 	mkdir -p /tmp/oci
-	tar -cf /tmp/oci/layer.tar LICENSE
+	mkdir sbin
+	echo -e '#!/bin/sh\necho STARTUP\nexit 0' >sbin/init
+	chmod a+rx sbin/init
+	tar -cf /tmp/oci/layer.tar LICENSE sbin/init
 	tar -C /tmp -cvf RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar oci
 	mv RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar build-$(PRODUCT)/images/
 	rm -rf /tmp/oci

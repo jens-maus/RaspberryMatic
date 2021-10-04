@@ -104,7 +104,11 @@ jobs:
         echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
         echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
         echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
-        echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
+        if [[ -z "${{ github.event.inputs.skip_build }}" ]]; then
+          echo "FAKE_BUILD=true" >> $GITHUB_ENV
+        else
+          echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
+        fi
         echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
         echo "::set-output name=build_version::$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)"
 
@@ -232,6 +236,7 @@ jobs:
         password: ${{ secrets.CR_PAT }}
     
     - name: Build and push container image
+      if: github.event.inputs.skip_build == 'false'
       uses: docker/build-push-action@v2.7.0
       id: docker_build
       with:

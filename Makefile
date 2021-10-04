@@ -56,14 +56,18 @@ else
 	echo -n "FAKE_BUILD - generating fake release archives..."
 	mkdir -p build-$(PRODUCT)/images
 	for f in `cat release/updatepkg/$(PRODUCT)/files-images.txt`; do echo DUMMY >build-$(PRODUCT)/images/$${f}; done
+	# create fake OCI/Docker image
 	mkdir -p /tmp/oci
 	mkdir sbin
-	echo -e '#!/bin/sh\necho STARTUP\nexit 0' >sbin/init
+	echo -e '#!/bin/sh\nwhile true; do echo CONTINUE; sleep 5; done\nexit 0' >sbin/init
 	chmod a+rx sbin/init
-	tar -cf /tmp/oci/layer.tar LICENSE sbin/init
+	mkdir -p var/status
+	touch var/status/startupFinished
+	tar -cf /tmp/oci/layer.tar LICENSE sbin/init var/status/startupFinished
 	tar -C /tmp -cvf RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar oci
 	mv RaspberryMatic-$(PRODUCT_VERSION)-$(BOARD).tar build-$(PRODUCT)/images/
 	rm -rf /tmp/oci
+	# create fake sdcard.img and ova
 	echo DUMMY >build-$(PRODUCT)/images/sdcard.img
 	echo DUMMY >build-$(PRODUCT)/images/RaspberryMatic.ova
 endif

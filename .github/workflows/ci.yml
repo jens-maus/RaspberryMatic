@@ -324,6 +324,7 @@ jobs:
         sudo -E ./buildroot-external/board/oci/deploy.sh -f
     
     - name: Test container startup+stop
+      if: github.event.inputs.skip_build == 'false'
       run: |
         error=0
         n=1
@@ -343,6 +344,7 @@ jobs:
         exit $error
 
     - name: Upload debug information
+      if: github.event.inputs.skip_build == 'false'
       uses: actions/upload-artifact@v2
       with:
         path: debug_output.tgz

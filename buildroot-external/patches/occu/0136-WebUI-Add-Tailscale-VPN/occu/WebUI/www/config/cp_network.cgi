@@ -466,9 +466,8 @@ proc action_put_page {} {
             }
           }
         }
-        table_data {class="CLASS21113"} {align="left"} {
-          p { ${dialogSettingsNetworkVPNHelpP1} }
-          p { ${dialogSettingsNetworkVPNHelpP2} }
+        table_data {class="CLASS21113"} {align="center"} {
+          puts "<img src=\"/ise/img/help.png\" onclick=\"MessageBox.show(translateKey('dialogSettingsNetworkVPNLblActivate')+' - '+translateKey('HelpTitle'), translateKey('dialogSettingsNetworkVPNHelpP1')+'<br/><br/>'+translateKey('dialogSettingsNetworkVPNHelpP2'), '', 450, 320) ;\">"
         }
       }
       table_row {class="CLASS21119"} {

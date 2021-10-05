@@ -335,6 +335,15 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
+@@ -5639,7 +5626,7 @@
+ 
+ .CLASS02614 {
+ 	background-color: $_(inactiveButton); /* #dddddd */
+-color: $_(textColorA); /* white */
++	color: lightgray;
+ 	font-weight: bold;
+ 	border: solid 1px $_(gray); /* silver */
+ }
 @@ -5735,10 +5722,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
@@ -348,3 +357,12 @@
  }
  
  .CLASS02804 {
+@@ -7677,7 +7666,7 @@
+ 
+ .CLASS10902 {
+   border:1px solid $_(gray); /* #999999 */
+-  color: $_(activeBackground); /* rgb(224,224,224); */
++  color:$_(gray);
+   background-color:$_(inactiveButton); /* rgb(192,192,192) */
+   cursor:default;
+ }

@@ -30,7 +30,7 @@ case "${1}" in
     export PATH=/sbin:/usr/bin:/usr/sbin
 
     # make sure ip forwarding is turned on for v4/v6
-    /sbin/sysctl -q net.ipv4.ip_forward=1 net.ipv6.conf.all.forwarding=1
+    /sbin/sysctl -q net.ipv4.ip_forward=1 net.ipv6.conf.all.forwarding=1 2>/dev/null
 
     # shellcheck disable=SC2086
     if ! start-stop-daemon -b -S -q -m -p "${TAILSCALED_PID}" -x ${TAILSCALED_EXEC} -- ${TAILSCALED_ARGS} -port ${TAILSCALED_PORT}; then

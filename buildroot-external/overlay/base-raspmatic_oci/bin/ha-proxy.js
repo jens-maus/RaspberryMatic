@@ -23,7 +23,8 @@ const apiProxy = createProxyMiddleware('/', {
   onProxyRes: responseInterceptor(async (responseBody, proxyRes, req, res) => {
     // modify Location: response header if present
     if(typeof(proxyRes.headers.location) !== 'undefined') {
-      var redirect = proxyRes.headers.location;
+      // replace any absolute http/https path with a relative one
+      var redirect = proxyRes.headers.location.replace(/(http|https):\/\/(.*?)\//, '/');
       redirect = req.headers['x-ingress-path'] + redirect;
       res.append("location", redirect);
     }

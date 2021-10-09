@@ -32,11 +32,11 @@ version: 3.59.6
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 3.59.6.20210911
+appVersion: 3.59.6.20211009
 
 annotations:
   artifacthub.io/changes: |
-    - Release of 3.59.6.20210911 (https://github.com/jens-maus/RaspberryMatic/releases/tag/3.59.6.20210911)
+    - Release of 3.59.6.20211009 (https://github.com/jens-maus/RaspberryMatic/releases/tag/3.59.6.20211009)
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: Webpage

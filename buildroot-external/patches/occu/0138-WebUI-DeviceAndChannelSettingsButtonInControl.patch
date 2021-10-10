@@ -1,0 +1,160 @@
+--- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
+@@ -41,7 +41,8 @@
+      <col style="width:10%;"/>
+      <col style="width:10%;"/>
+      <col style="width:10%;"/>
+-     <col style="width:58%;"/>
++     <col style="width:48%;"/>
++     <col style="width:10%;"/>
+   </colgroup>
+   <tr>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+@@ -52,6 +53,7 @@
+   <th><div id="func" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'func',true);">${thFunc}</div></th>
+   <th>${thLastChange}</th>
+   <th>${thControl}</th>
++  <th><%object oUser=dom.GetObject(system.GetSessionVar("sessionUserID"));if(oUser && oUser.UserLevel() == iulAdmin) {Write("<div class='CLASS21000' style='border: none !important;' onclick='DeviceListPage.showConfiguration(event, \"DEVICE\", "# dom.GetObject(system.GetVar("id")).ID() #");'>${btnDeviceSettings}</div>");}%></th>
+   </tr>
+   <%
+     Write("<script type='text/javascript'>");
+@@ -121,6 +123,8 @@
+   </td>
+   <td class="CLASS03501">
+   </td>
++  <td class="CLASS03501">
++  </td>
+   </tr>
+    <%
+ 
+@@ -236,7 +240,11 @@
+             boolean bSliderFlag = true;
+             Call("/esp/datapointconfigurator.fn::dcCreate()");
+             
+-            Write("</td>");           
++            Write("</td>");  
++            Write("<td class='GrayBkg'>");   
++            object oUser = dom.GetObject(system.GetSessionVar("sessionUserID"));
++            if(oUser && oUser.UserLevel() == iulAdmin) { Write("<div class='CLASS21000' style='border: none !important;' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>${btnChannelSettings}</div>"); }  
++            Write("</td>");
+             Write("</tr>");
+             
+             Write("<script type='text/javascript'>");
+--- occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm
+@@ -54,7 +54,8 @@
+      <col style="width:15%;"/>
+      <col style="width:15%;"/>
+      <col style="width:15%;"/>
+-     <col style="width:55%;"/>
++     <col style="width:45%;"/>
++     <col style="width:10%;"/>
+   </colgroup>
+   
+   <tr>
+@@ -64,6 +65,7 @@
+   <th><div id="room" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'room',true);">${thRoom}</div></th>
+   <th>${thLastChange}</th>
+   <th>${thControl}</th>
++  <th/>
+   </tr>
+   
+   <tr>
+@@ -104,6 +106,8 @@
+   </td>
+   <td class="CLASS03801">
+   </td>
++  <td class="CLASS03801">
++  </td>
+   </tr>
+   <!-- script type="text/javascript">translatePage("#tblHFuncChannels");</script-->
+    <%
+@@ -191,6 +195,10 @@
+             Call("/esp/datapointconfigurator.fn::dcCreate()");
+             
+             Write("</td>");
++            Write("<td class='GrayBkg'>");   
++            object oUser = dom.GetObject(system.GetSessionVar("sessionUserID"));
++            if(oUser && oUser.UserLevel() == iulAdmin) { Write("<div class='CLASS21000' style='border: none !important;' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>${btnChannelSettings}</div>"); }  
++            Write("</td>");
+             Write("</tr>");
+             
+             Write("<script type='text/javascript'>");
+--- occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm
+@@ -54,7 +54,8 @@
+      <col style="width:15%;"/>
+      <col style="width:15%;"/>
+      <col style="width:15%;"/>
+-     <col style="width:55%;"/>
++     <col style="width:45%;"/>
++     <col style="width:10%;"/>
+   </colgroup>
+   <tr>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+@@ -63,6 +64,7 @@
+   <th><div id="func" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'func',true);">${thFunc}</div></th>
+   <th>${thLastChange}</th>
+   <th>${thControl}</th>
++  <th/>
+   </tr>
+   
+   <tr>
+@@ -106,6 +108,8 @@
+   </td>
+   <td class='CLASS03601'>
+   </td>
++  <td class="CLASS03601">
++  </td>
+   </tr>
+     <script type="text/javascript">translatePage("#tblHRoomChannels");</script>
+   
+@@ -195,6 +199,10 @@
+             Call("/esp/datapointconfigurator.fn::dcCreate()");
+             
+             Write("</td>");
++            Write("<td class='GrayBkg'>");   
++            object oUser = dom.GetObject(system.GetSessionVar("sessionUserID"));
++            if(oUser && oUser.UserLevel() == iulAdmin) { Write("<div class='CLASS21000' style='border: none !important;' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>${btnChannelSettings}</div>"); }  
++            Write("</td>");
+             Write("</tr>");
+             
+             Write("<script type='text/javascript'>");
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -97,7 +97,6 @@
+     "footerBtnVirtualChannelsShow" : "Virtuelle Kan%E4le anzeigen",
+     "footerBtnVirtualChannelsHide" : "Virtuelle Kan%E4le ausblenden",
+     "footerBtnSaveNewFav" : "Auswahl als neue<br />Favoritenseite speichern",
+-    "thIseID" : "ID",
+     "thSender" : "Sender",
+     "thLink" : "Verkn%FCpfung",
+     "thReceiver" : "Empf%E4nger",
+@@ -130,6 +129,8 @@
+     "thPosition" : "Position",
+     "thFunction" : "Funktion",
+     "thLastChange" : "Letzte<br/>%C4nderung",
++    "btnDeviceSettings" : "Ger%E4te-<br/>Einstellungen",
++    "btnChannelSettings" : "Kanal-<br/>Einstellungen",
+     "thState" : "Status",
+     "thTime" : "Zeit",
+     "thDate" : "Datum",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -96,7 +96,6 @@
+     "footerBtnVirtualChannelsShow" : "Show virtual channels",
+     "footerBtnVirtualChannelsHide" : "Hide virtual channels",
+     "footerBtnSaveNewFav" : "Save selection as new<br/>favourites page",
+-    "thIseID" : "ID",
+     "thSender" : "Transmitters",
+     "thLink" : "Connections",
+     "thReceiver" : "Receiver",
+@@ -129,6 +128,8 @@
+     "thPosition" : "Position",
+     "thFunction" : "Function",
+     "thLastChange" : "Last<br/>modified",
++    "btnDeviceSettings" : "Device-<br/>settings",
++    "btnChannelSettings" : "Channel-<br/>settings",
+     "thState" : "Status",
+     "thTime" : "Time",
+     "thDate" : "Date",

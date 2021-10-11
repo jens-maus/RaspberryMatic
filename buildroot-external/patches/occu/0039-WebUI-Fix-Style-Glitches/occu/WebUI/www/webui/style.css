@@ -2580,6 +2580,7 @@ html, body {
   background-color: $_(subMenuBackground);
   overflow:hidden;
   z-index:189;
+  margin-left: 5px;
 }
 
 .MainMenuSubItem {

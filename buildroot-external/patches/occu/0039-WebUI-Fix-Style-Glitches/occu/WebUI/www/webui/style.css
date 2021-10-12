@@ -2941,9 +2941,8 @@ html, body {
   height:80px;
 }
 #DeviceListTable {
-  width:97%;
   height:auto;
-  margin:1%;
+  margin:10px;
   border:0 none;
 /*  border:1px black solid; */
   padding:0;

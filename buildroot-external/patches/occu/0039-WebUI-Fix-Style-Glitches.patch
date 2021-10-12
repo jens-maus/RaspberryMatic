@@ -307,7 +307,18 @@
  }
  
  .MainMenuSubItem {
-@@ -5359,6 +5360,7 @@
+@@ -2940,9 +2941,8 @@
+   height:80px;
+ }
+ #DeviceListTable {
+-  width:97%;
+   height:auto;
+-  margin:1%;
++  margin:10px;
+   border:0 none;
+ /*  border:1px black solid; */
+   padding:0;
+@@ -5359,6 +5359,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -315,7 +326,7 @@
  }
  
  .CLASS02536 {
-@@ -5381,6 +5383,7 @@
+@@ -5381,6 +5382,7 @@
  	max-width: 480px;
  	clear: both;
  	display: inline-block;
@@ -323,7 +334,7 @@
  }
  
  .CLASS02539 {
-@@ -5553,7 +5556,7 @@
+@@ -5553,7 +5555,7 @@
  }
  
  .CLASS02602 {
@@ -332,7 +343,7 @@
  }
  
  .CLASS02603 {
-@@ -5584,21 +5587,6 @@
+@@ -5584,21 +5586,6 @@
  	padding: 4px;
  }
  
@@ -354,7 +365,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5639,7 +5627,7 @@
+@@ -5639,7 +5626,7 @@
  
  .CLASS02614 {
  	background-color: $_(inactiveButton); /* #dddddd */
@@ -363,7 +374,7 @@
  	font-weight: bold;
  	border: solid 1px $_(gray); /* silver */
  }
-@@ -5735,10 +5723,12 @@
+@@ -5735,10 +5722,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -376,7 +387,7 @@
  }
  
  .CLASS02804 {
-@@ -7677,7 +7667,7 @@
+@@ -7677,7 +7666,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -385,3 +396,23 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -328,7 +328,7 @@
+     <\/th>\n
+   {\/if}\n
+ {\/macro}\n
+-<table id=\"DeviceListTable\" width=\"97%\"  border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
++<table id=\"DeviceListTable\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
+   <colgroup>\n
+     <col style=\"width:11%;\"\/>\n
+     <col style=\"width:11%;\"\/>\n
+@@ -418,7 +418,7 @@
+ <\/table>\n
+ \n
+ ";
+-DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
++DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
+   <colgroup>\n
+     <col style=\"width:25px;\"\/>\n
+     <col style=\"width:25px;\"\/>\n

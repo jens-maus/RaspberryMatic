@@ -1,160 +1,74 @@
+--- occu/WebUI/www/config/ic_deviceparameters.cgi.orig
++++ occu/WebUI/www/config/ic_deviceparameters.cgi
+@@ -23,7 +23,7 @@
+       puts "  var s = \"\";"
+       puts "  s += \"<table cellspacing='8'>\";"
+       puts "  s += \"<tr>\";"
+-      puts "  s += \"<td style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='CloseDeviceParameters();'>Abbrechen</div></td>\";"
++      puts "  s += \"<td style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='CloseDeviceParameters();'>Zur%FCck</div></td>\";"
+       puts "  s += \"</tr>\";"
+       puts "  s += \"</table>\";"
+       puts "  setFooter(s);"
+@@ -62,7 +62,7 @@
+       puts "  var s = \"\";"
+       puts "  s += \"<table cellspacing='8'>\";"
+       puts "  s += \"<tr>\";"
+-      puts "  s += \"<td style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='CloseDeviceParameters();'>\"+translateKey('footerBtnCancel')+\"</div></td>\";"
++      puts "  s += \"<td style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='CloseDeviceParameters();'>\"+translateKey('footerBtnPageBack')+\"</div></td>\";"
+       puts "  s += \"<td style='text-align:center; vertical-align:middle;'><div id='footerButtonTake' class='FooterButton' onclick='goBack=true; SaveDeviceParameters();'>\"+translateKey('footerBtnTransfer')+\"</div></td>\";"
+       puts "  s += \"<td style='text-align:center; vertical-align:middle;'><div id='footerButtonOK' class='FooterButton' onclick='goBack=false; SaveDeviceParameters();'>\"+translateKey('footerBtnOk')+\"</div></td>\";"
+       puts "  s += \"</tr>\";"
+@@ -1326,7 +1326,7 @@
+   
+   puts "<TR>"
+   puts "<td class=\"CLASS22012\" onclick=\"SaveDeviceParameters();\"><div class=\"CLASS21000\">OK</div></td>"
+-  puts "<td class=\"CLASS22012\" onclick=\"CloseDeviceParameters();\"><div class=\"CLASS21000\">Abbrechen</div></td>"
++  puts "<td class=\"CLASS22012\" onclick=\"CloseDeviceParameters();\"><div class=\"CLASS21000\">Zur%FCck</div></td>"
+   puts "<td class=\"CLASS22013\">&nbsp;</td>"
+   puts "</TR>"
+ 
 --- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
-@@ -41,7 +41,8 @@
-      <col style="width:10%;"/>
-      <col style="width:10%;"/>
-      <col style="width:10%;"/>
--     <col style="width:58%;"/>
-+     <col style="width:48%;"/>
-+     <col style="width:10%;"/>
-   </colgroup>
-   <tr>
-   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
-@@ -52,6 +53,7 @@
-   <th><div id="func" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'func',true);">${thFunc}</div></th>
-   <th>${thLastChange}</th>
-   <th>${thControl}</th>
-+  <th><%object oUser=dom.GetObject(system.GetSessionVar("sessionUserID"));if(oUser && oUser.UserLevel() == iulAdmin) {Write("<div class='CLASS21000' style='border: none !important;' onclick='DeviceListPage.showConfiguration(event, \"DEVICE\", "# dom.GetObject(system.GetVar("id")).ID() #");'>${btnDeviceSettings}</div>");}%></th>
-   </tr>
-   <%
-     Write("<script type='text/javascript'>");
-@@ -121,6 +123,8 @@
-   </td>
-   <td class="CLASS03501">
-   </td>
-+  <td class="CLASS03501">
-+  </td>
-   </tr>
-    <%
+@@ -176,7 +176,11 @@
+             string trId = device.ID()#tmp;
+             boolean showExtDesc = false;
+             Write("<tr id='"#trId#"'>");
+-            Write("<td class='GrayBkg' name='devName'>");
++            if( oUser && oUser.UserLevel() == iulAdmin ) {
++              Write("<td class='GrayBkg CLASS03905' name='devName' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>");
++            } else {
++              Write("<td class='GrayBkg' name='devName'>");
++            }
  
-@@ -236,7 +240,11 @@
-             boolean bSliderFlag = true;
-             Call("/esp/datapointconfigurator.fn::dcCreate()");
-             
--            Write("</td>");           
-+            Write("</td>");  
-+            Write("<td class='GrayBkg'>");   
-+            object oUser = dom.GetObject(system.GetSessionVar("sessionUserID"));
-+            if(oUser && oUser.UserLevel() == iulAdmin) { Write("<div class='CLASS21000' style='border: none !important;' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>${btnChannelSettings}</div>"); }  
-+            Write("</td>");
-             Write("</tr>");
-             
-             Write("<script type='text/javascript'>");
+             Call("/pages/tabs/control/function.fn::ShowExtDesc()");
+ 
 --- occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm
-@@ -54,7 +54,8 @@
-      <col style="width:15%;"/>
-      <col style="width:15%;"/>
-      <col style="width:15%;"/>
--     <col style="width:55%;"/>
-+     <col style="width:45%;"/>
-+     <col style="width:10%;"/>
-   </colgroup>
-   
-   <tr>
-@@ -64,6 +65,7 @@
-   <th><div id="room" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'room',true);">${thRoom}</div></th>
-   <th>${thLastChange}</th>
-   <th>${thControl}</th>
-+  <th/>
-   </tr>
-   
-   <tr>
-@@ -104,6 +106,8 @@
-   </td>
-   <td class="CLASS03801">
-   </td>
-+  <td class="CLASS03801">
-+  </td>
-   </tr>
-   <!-- script type="text/javascript">translatePage("#tblHFuncChannels");</script-->
-    <%
-@@ -191,6 +195,10 @@
-             Call("/esp/datapointconfigurator.fn::dcCreate()");
-             
-             Write("</td>");
-+            Write("<td class='GrayBkg'>");   
-+            object oUser = dom.GetObject(system.GetSessionVar("sessionUserID"));
-+            if(oUser && oUser.UserLevel() == iulAdmin) { Write("<div class='CLASS21000' style='border: none !important;' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>${btnChannelSettings}</div>"); }  
-+            Write("</td>");
-             Write("</tr>");
-             
-             Write("<script type='text/javascript'>");
+@@ -140,7 +140,11 @@
+           if( bShow && chn.ReadyConfig() && oDev.ReadyConfig())
+           {
+             boolean showExtDesc = false;
+-            Write("<td class='GrayBkg'>");
++            if( oUser && oUser.UserLevel() == iulAdmin ) {
++              Write("<td class='GrayBkg CLASS04007' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>");
++            } else {
++              Write("<td class='GrayBkg'>");
++            }
+ 
+             Call("/pages/tabs/control/function.fn::ShowExtDesc()");
+ 
 --- occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm
-@@ -54,7 +54,8 @@
-      <col style="width:15%;"/>
-      <col style="width:15%;"/>
-      <col style="width:15%;"/>
--     <col style="width:55%;"/>
-+     <col style="width:45%;"/>
-+     <col style="width:10%;"/>
-   </colgroup>
-   <tr>
-   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
-@@ -63,6 +64,7 @@
-   <th><div id="func" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'func',true);">${thFunc}</div></th>
-   <th>${thLastChange}</th>
-   <th>${thControl}</th>
-+  <th/>
-   </tr>
-   
-   <tr>
-@@ -106,6 +108,8 @@
-   </td>
-   <td class='CLASS03601'>
-   </td>
-+  <td class="CLASS03601">
-+  </td>
-   </tr>
-     <script type="text/javascript">translatePage("#tblHRoomChannels");</script>
-   
-@@ -195,6 +199,10 @@
-             Call("/esp/datapointconfigurator.fn::dcCreate()");
-             
-             Write("</td>");
-+            Write("<td class='GrayBkg'>");   
-+            object oUser = dom.GetObject(system.GetSessionVar("sessionUserID"));
-+            if(oUser && oUser.UserLevel() == iulAdmin) { Write("<div class='CLASS21000' style='border: none !important;' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>${btnChannelSettings}</div>"); }  
-+            Write("</td>");
-             Write("</tr>");
-             
-             Write("<script type='text/javascript'>");
---- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
-+++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -97,7 +97,6 @@
-     "footerBtnVirtualChannelsShow" : "Virtuelle Kan%E4le anzeigen",
-     "footerBtnVirtualChannelsHide" : "Virtuelle Kan%E4le ausblenden",
-     "footerBtnSaveNewFav" : "Auswahl als neue<br />Favoritenseite speichern",
--    "thIseID" : "ID",
-     "thSender" : "Sender",
-     "thLink" : "Verkn%FCpfung",
-     "thReceiver" : "Empf%E4nger",
-@@ -130,6 +129,8 @@
-     "thPosition" : "Position",
-     "thFunction" : "Funktion",
-     "thLastChange" : "Letzte<br/>%C4nderung",
-+    "btnDeviceSettings" : "Ger%E4te-<br/>Einstellungen",
-+    "btnChannelSettings" : "Kanal-<br/>Einstellungen",
-     "thState" : "Status",
-     "thTime" : "Zeit",
-     "thDate" : "Datum",
---- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
-+++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -96,7 +96,6 @@
-     "footerBtnVirtualChannelsShow" : "Show virtual channels",
-     "footerBtnVirtualChannelsHide" : "Hide virtual channels",
-     "footerBtnSaveNewFav" : "Save selection as new<br/>favourites page",
--    "thIseID" : "ID",
-     "thSender" : "Transmitters",
-     "thLink" : "Connections",
-     "thReceiver" : "Receiver",
-@@ -129,6 +128,8 @@
-     "thPosition" : "Position",
-     "thFunction" : "Function",
-     "thLastChange" : "Last<br/>modified",
-+    "btnDeviceSettings" : "Device-<br/>settings",
-+    "btnChannelSettings" : "Channel-<br/>settings",
-     "thState" : "Status",
-     "thTime" : "Time",
-     "thDate" : "Date",
+@@ -144,7 +144,11 @@
+             string trId = room.ID()#tmp;
+             boolean showExtDesc = false;
+             Write("<tr id='"#trId#"'>");
+-            Write("<td class='GrayBkg'>");
++            if( oUser && oUser.UserLevel() == iulAdmin ) {
++              Write("<td class='GrayBkg CLASS04007' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>");
++            } else {
++              Write("<td class='GrayBkg'>");
++            }
+ 
+             Call("/pages/tabs/control/function.fn::ShowExtDesc()");
+ 

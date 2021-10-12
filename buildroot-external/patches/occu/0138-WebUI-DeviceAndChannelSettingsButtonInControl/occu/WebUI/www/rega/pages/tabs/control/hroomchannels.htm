@@ -54,8 +54,7 @@
      <col style="width:15%;"/>
      <col style="width:15%;"/>
      <col style="width:15%;"/>
-     <col style="width:45%;"/>
-     <col style="width:10%;"/>
+     <col style="width:55%;"/>
   </colgroup>
   <tr>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
@@ -64,7 +63,6 @@
   <th><div id="func" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'func',true);">${thFunc}</div></th>
   <th>${thLastChange}</th>
   <th>${thControl}</th>
-  <th/>
   </tr>
   
   <tr>
@@ -108,8 +106,6 @@
   </td>
   <td class='CLASS03601'>
   </td>
-  <td class="CLASS03601">
-  </td>
   </tr>
     <script type="text/javascript">translatePage("#tblHRoomChannels");</script>
   
@@ -148,7 +144,11 @@
             string trId = room.ID()#tmp;
             boolean showExtDesc = false;
             Write("<tr id='"#trId#"'>");
-            Write("<td class='GrayBkg'>");
+            if( oUser && oUser.UserLevel() == iulAdmin ) {
+              Write("<td class='GrayBkg CLASS04007' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>");
+            } else {
+              Write("<td class='GrayBkg'>");
+            }
 
             Call("/pages/tabs/control/function.fn::ShowExtDesc()");
 
@@ -198,10 +198,6 @@
             boolean bSliderFlag = true;            
             Call("/esp/datapointconfigurator.fn::dcCreate()");
             
-            Write("</td>");
-            Write("<td class='GrayBkg'>");   
-            object oUser = dom.GetObject(system.GetSessionVar("sessionUserID"));
-            if(oUser && oUser.UserLevel() == iulAdmin) { Write("<div class='CLASS21000' style='border: none !important;' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>${btnChannelSettings}</div>"); }  
             Write("</td>");
             Write("</tr>");
             

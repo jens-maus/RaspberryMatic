@@ -1,0 +1,92 @@
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -1307,6 +1307,10 @@
+     Write("</td>");
+     Write("<td><div id='"#pid#"StartThenOnly' class='ControlBtnOff CLASS02104'>${actionStatusControlLblStartThenOnly}</div>");
+     Write("<script type='text/javascript'> new iseButtonProg("#pid#", "#objProg.Active()#", true);</script></td>");
++    if (oUser.UserLevel() == iulAdmin) {
++      Write("<td onclick='EditProgram("#pid#");'><div id='"#pid#"EditProgram' class='ControlBtnOff CLASS02104'>${btnEdit}</div>");
++      Write("<script type='text/javascript'> new iseButtonProg("#pid#", false, true); EditProgram = function(id) { var opt ={postBody: 'string action = \"SetProgram\"; string id = \"'+id+'\";',onComplete: function(t){if(t.responseText=='true') { loadPrograms(); }}};new Ajax.Request('/esp/programs.htm?sid='+SessionId,opt);};</script></td>");
++    }  
+   }
+   else
+   {
+--- occu/WebUI/www/rega/pages/tabs/admin/views/programs.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/programs.htm
+@@ -1,6 +1,7 @@
+ <script type="text/javascript" language="javascript">
+ 
+   <%
++    string prevPage=system.GetSessionVar("sessionTAB");
+     system.SetSessionVar("sessionTAB", "programs");
+     object oOrigPrg = dom.GetObject( system.GetSessionVar("sessionORIGPRGID") );
+     object oPrg = dom.GetObject( system.GetSessionVar("sessionPRGID") );
+@@ -804,15 +805,15 @@
+   };
+   CancelProgramEdit = function(copy)
+   {
+-    isePrograms.Delete(copy);
++    isePrograms.Delete(copy, '<% Write(prevPage); %>');
+   };
+   SaveProgramEdit = function(orig,copy)
+   {
+-    setTimeout( "isePrograms.Restore("+orig+","+copy+")", 500 );
++    setTimeout( "isePrograms.Restore("+orig+","+copy+", '<% Write(prevPage); %>')", 500 );
+   };
+   CopyToNewProgram = function(copy)
+   {
+-    setTimeout( "isePrograms.CopyToNewProgram("+copy+")", 500 );
++    setTimeout( "isePrograms.CopyToNewProgram("+copy+", '<% Write(prevPage); %>')", 500 );
+   };
+   AddSubRuleSelectChange = function(idx,rid)
+   {
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -26219,7 +26219,7 @@
+     };
+     new Ajax.Request(url,opts);
+   },
+-  Delete: function(id)
++  Delete: function(id,prevPage)
+   {
+     var url = "/esp/programs.htm?sid="+SessionId;
+     var pb = '';
+@@ -26231,12 +26231,12 @@
+       onComplete:function(t)
+       {
+         if(dbg){alert( t.responseText );}
+-        WebUI.enter(ProgramListPage);
++        WebUI.enter(( prevPage && prevPage === 'control/programs' ) ? ControlProgramsPage : ProgramListPage);
+       }
+     };
+     new Ajax.Request(url,opts);
+   },
+-  Restore: function(orig,copy)
++  Restore: function(orig,copy,prevPage)
+   {
+     var url = "/esp/programs.htm?sid="+SessionId;
+     var pb = '';
+@@ -26249,12 +26249,12 @@
+       onComplete:function(t)
+       {
+         if(dbg){alert( t.responseText );}
+-        WebUI.enter(ProgramListPage);
++        WebUI.enter(( prevPage && prevPage === 'control/programs' ) ? ControlProgramsPage : ProgramListPage);
+       }
+     };
+     new Ajax.Request(url,opts);
+   },
+-  CopyToNewProgram: function(id)
++  CopyToNewProgram: function(id,prevPage)
+   {
+     var url = "/esp/programs.htm?sid="+SessionId;
+     var pb = '';
+@@ -26266,7 +26266,7 @@
+       onComplete:function(t)
+       {
+         if(dbg){alert( t.responseText );}
+-        WebUI.enter(ProgramListPage);        
++        WebUI.enter(( prevPage && prevPage === 'control/programs' ) ? ControlProgramsPage : ProgramListPage);
+       }
+     };
+     new Ajax.Request(url,opts);

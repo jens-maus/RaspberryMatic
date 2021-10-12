@@ -1,3 +1,14 @@
+--- occu/WebUI/www/rega/esp/controls/blind.fn.orig
++++ occu/WebUI/www/rega/esp/controls/blind.fn
+@@ -132,7 +132,7 @@
+ 
+   WriteLine("<td>");
+     WriteLine("<table>");
+-     WriteLine("<tr><td colspan='5'><div style='text-align:'center'; background-color:#89989b; color:black'>${stringTableBlindLevel}</div></td></tr>");
++     WriteLine("<tr><td colspan='5'><div style='text-align:center; background-color:#89989b; color:black'>${stringTableBlindLevel}</div></td></tr>");
+ 
+       WriteLine("<tr>");
+           WriteLine("<td colspan='2' id='shutter"#chnId#"' class='CLASS02549' >&nbsp;</td>");
 --- occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm
 @@ -58,16 +58,16 @@

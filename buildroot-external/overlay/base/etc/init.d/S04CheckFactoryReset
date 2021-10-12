@@ -45,7 +45,7 @@ check_factory_reset() {
     echo -en '\xEF\xBE\xED\xDE' | dd of="${DEV}" conv=notrunc bs=1 seek=$((0x1B8)) 2>/dev/null
 
     # we create a clean ext4 partition now
-    mkfs.ext4 -F -L userfs "${DEVNAME}"
+    mkfs.ext4 -F -L userfs -I 256 -E lazy_itable_init=0,lazy_journal_init=0 "${DEVNAME}"
     tune2fs -c 0 -i 0 "${DEVNAME}"
     e2fsck -pDf "${DEVNAME}"
 

@@ -35,7 +35,28 @@
  </tr>
 --- occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm
-@@ -52,7 +52,7 @@
+@@ -39,20 +39,20 @@
+ 
+ <table cellpadding="0" cellspacing="0" id="userAdmin" class="tTable" style="display:none">
+ <colgroup>
+-<col style="width:6%;" width="6%" />
+-<col style="width:6%;" />
+-<col style="width:6%;"/>
++<col style="width:10%;" />
++<col style="width:10%;" />
++<col style="width:10%;" />
+ <!-- <col style="width:6%;" /> -->
+-<col style="width:6%;"/>
+-<col style="width:8%;"/>
+-<col style="width:8%;"/>
+-<col style="width:6%;" />
+-<col style="width:6%;" />
++<col style="width:10%;" />
++<col style="width:20%;" />
++<col style="width:20%;" />
++<col style="width:25px;" />
++<col style="width:15%;" />
+ </colgroup>
  
  <tr class="CLASS05300">
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
@@ -299,7 +320,21 @@
    border: solid 1px $_(black); /* black */
  }
  
-@@ -2580,6 +2580,7 @@
+@@ -1245,12 +1245,8 @@
+ .tTable
+ {
+   text-align:center;
+-  margin-left:10px;
+-  margin-top:10px;
+-  margin-right:10px;
++  margin:10px;
+   empty-cells: show;
+-  width:97%;
+-  /*width:1200px;*/
+   border:solid 1px $_(black); /* black */
+ }
+ /*
+@@ -2580,6 +2576,7 @@
    background-color: $_(subMenuBackground);
    overflow:hidden;
    z-index:189;
@@ -307,18 +342,21 @@
  }
  
  .MainMenuSubItem {
-@@ -2940,9 +2941,8 @@
+@@ -2940,11 +2937,9 @@
    height:80px;
  }
  #DeviceListTable {
 -  width:97%;
    height:auto;
 -  margin:1%;
+-  border:0 none;
+-/*  border:1px black solid; */
 +  margin:10px;
-   border:0 none;
- /*  border:1px black solid; */
++  border:1px black solid;
    padding:0;
-@@ -5359,6 +5359,7 @@
+   empty-cells:show;
+ }
+@@ -5359,6 +5354,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -326,7 +364,7 @@
  }
  
  .CLASS02536 {
-@@ -5381,6 +5382,7 @@
+@@ -5381,6 +5377,7 @@
  	max-width: 480px;
  	clear: both;
  	display: inline-block;
@@ -334,7 +372,7 @@
  }
  
  .CLASS02539 {
-@@ -5553,7 +5555,7 @@
+@@ -5553,7 +5550,7 @@
  }
  
  .CLASS02602 {
@@ -343,7 +381,7 @@
  }
  
  .CLASS02603 {
-@@ -5584,21 +5586,6 @@
+@@ -5584,21 +5581,6 @@
  	padding: 4px;
  }
  
@@ -365,7 +403,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5639,7 +5626,7 @@
+@@ -5639,7 +5621,7 @@
  
  .CLASS02614 {
  	background-color: $_(inactiveButton); /* #dddddd */
@@ -374,7 +412,7 @@
  	font-weight: bold;
  	border: solid 1px $_(gray); /* silver */
  }
-@@ -5735,10 +5722,12 @@
+@@ -5735,10 +5717,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -387,7 +425,7 @@
  }
  
  .CLASS02804 {
-@@ -7677,7 +7666,7 @@
+@@ -7677,7 +7661,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */

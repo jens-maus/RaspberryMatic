@@ -1245,12 +1245,8 @@ a img {
 .tTable
 {
   text-align:center;
-  margin-left:10px;
-  margin-top:10px;
-  margin-right:10px;
+  margin:10px;
   empty-cells: show;
-  width:97%;
-  /*width:1200px;*/
   border:solid 1px $_(black); /* black */
 }
 /*
@@ -2943,8 +2939,7 @@ html, body {
 #DeviceListTable {
   height:auto;
   margin:10px;
-  border:0 none;
-/*  border:1px black solid; */
+  border:1px black solid;
   padding:0;
   empty-cells:show;
 }

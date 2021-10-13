@@ -129,6 +129,37 @@
 +</script>
 --- occu/WebUI/www/rega/pages/tabs/admin/views/functions.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/functions.htm
+@@ -171,18 +171,18 @@
+ 
+ <table id="tblFunctionList" class="tblList CLASS04200" style="display:none" cellspacing="0" cellpadding="0" >
+ <colgroup>
+-  <col style="width:4%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:12%;"/>
+-  <col style="width:12%;"/>
+-  <col style="width:4%;"/>
+-  <col style="width:16%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:4%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:8%;"/>
++  <col style="width:18px;">
++  <col style="width:10%;">
++  <col style="width:20%;">
++  <col style="width:10%;">
++  <col style="width:50px;">
++  <col style="width:20%;">
++  <col style="width:10%;">
++  <col style="width:50px;">
++  <col style="width:50px;">
++  <col style="width:10%;">
++  <col style="width:5%;">
++  <col style="width:25px;">
+ </colgroup>
+ <thead>
+ <tr class='CLASS04101'>
 @@ -193,7 +193,7 @@
    <td class='CLASS04102 DeviceListCell'><div id="name" class="pt11 <%Write(sCssName); %>" onclick="SortMe('name');"><b>${thName}</b></div></td>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="desc"){sCssName="SortSelected";} %>

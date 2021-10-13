@@ -171,18 +171,18 @@ arSortFObj[arSortFObj.length] = tmpFunction;
 
 <table id="tblFunctionList" class="tblList CLASS04200" style="display:none" cellspacing="0" cellpadding="0" >
 <colgroup>
-  <col width="4%" />
-  <col width="8%" />
-  <col width="12%" />
-  <col width="12%" />
-  <col width="4%" />
-  <col width="16%" />
-  <col width="8%" />
-  <col width="8%" />
-  <col width="4%" />
-  <col width="8%" />
-  <col width="8%" />
-  <col width="8%" />
+  <col style="width:18px;">
+  <col style="width:10%;">
+  <col style="width:20%;">
+  <col style="width:10%;">
+  <col style="width:50px;">
+  <col style="width:20%;">
+  <col style="width:10%;">
+  <col style="width:50px;">
+  <col style="width:50px;">
+  <col style="width:10%;">
+  <col style="width:5%;">
+  <col style="width:25px;">
 </colgroup>
 <thead>
 <tr class='CLASS04101'>
@@ -455,7 +455,7 @@ if ( oUser )
       $("funcF" + id).innerHTML = newVal;
       changeRoomOrSubsection.delay(1, id);
     }
-  }
+  };
   bEIP = false;
   hideGhostFunc();
   colorFilterBtns(fltSF);
@@ -493,7 +493,7 @@ if ( oUser )
 
   updateList = function() {
     WebUI.enter(FunctionListPage);
-  }
+  };
   
   expand = function(id, fTblPos) {
     // Ausklappen
@@ -514,7 +514,7 @@ if ( oUser )
       }
     }
     Cursor.set(Cursor.NORMAL);
-  }
+  };
   
   expandFunc = function(id, fTblPos) {
     if( $("img" + id) )
@@ -561,7 +561,7 @@ if ( oUser )
     }
     refreshFooterButton();
     }
-  }
+  };
   
   collapseFunc = function(id) {
     if ($("img" + id)) {
@@ -595,14 +595,14 @@ if ( oUser )
       }
       refreshFooterButton();
     }
-  }
+  };
   
   refreshFooterButton = function() {
     if (iExpFuncs == 0)
       $("btnExp").innerHTML = translateKey("footerBtnOpenTree"); //"Baumstruktur &ouml;ffnen";
     else
       $("btnExp").innerHTML = translateKey("footerBtnCloseTree"); //"Baumstruktur schlieﬂen";
-  }
+  };
   
   expandAll = function() {
     Cursor.set(Cursor.WAIT);
@@ -618,7 +618,7 @@ if ( oUser )
       }
     }
     Cursor.set(Cursor.NORMAL);
-  }
+  };
   
   collapseAll = function()
   { 
@@ -626,7 +626,7 @@ if ( oUser )
     {
       collapseFunc(arF[i]);
     }
-  }
+  };
   
   addChannels2 = function(id,ids)
   {
@@ -649,11 +649,11 @@ if ( oUser )
     var ops = { all: true };
     //MultiChannelChooser.show("Gewerke", ids.split("\t"), callback, MultiChannelChooser.SHOW_ALL);
     MultiChannelChooser.show(translateKey("submenuFunction"), ids.split("\t"), callback, MultiChannelChooser.SHOW_ALL);
-  }
+  };
   
   restoreFuncs = function() {    
     filterFunc();
-  }
+  };
   
   filterFunc= function() {
     var sTmp = "";
@@ -691,19 +691,19 @@ if ( oUser )
       }
     }
     hideGhostFunc();
-  }
+  };
 
   var s = "";
   s += "<table cellspacing='8'>";
-  s += "<colgroup> <col width='4%' /><col width='8%' /><col width='12%' /><col width='12%' /><col width='4%' /><col width='16%' />" +
-        "<col width='8%' /><col width='8%' /><col width='4%' /><col width='8%' /><col width='8%' /><col width='8%' /></colgroup>";
+  s += "<colgroup> <col style='width:4%;'/><col style='width:8%;'/><col style='width:12%;'/><col style='width:12%;'/><col style='width:4%;' width='4%' /><col style='width:16%;'/>" +
+        "<col style='width:8%;'/><col style='width:8%;'/><col style='width:4%;'/><col style='width:8%;'/><col style='width:8%;'/><col style='width:8%;'/></colgroup>";
   s += "<tr>";
-    s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
-    s += "<td align='center' valign='middle'><div class='FooterButton CLASS04209' onclick='fltSF.clearFilters();restoreFuncs();updateTable();' >${footerBtnResetFilter}</div></td>";
-    s += "<td align='center' valign='middle'><div id='btnExp' onclick='bFilterUsed=false;expandAll();' class='FooterButton CLASS04209' >${footerBtnOpenTree}</div></td>";
+    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
+    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04209' onclick='fltSF.clearFilters();restoreFuncs();updateTable();' >${footerBtnResetFilter}</div></td>";
+    s += "<td style='text-align:center; vertical-align: middle;'><div id='btnExp' onclick='bFilterUsed=false;expandAll();' class='FooterButton CLASS04209' >${footerBtnOpenTree}</div></td>";
     s += "<td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
-    s += "<td align='center' class='CLASS04210'>${lblFunctionList}</td>";
-    s += "<td align='center'><div class='FooterButton' onclick='editFuncs();'>${footerBtnEdit}</div></td>";
+    s += "<td style='text-align:center;' class='CLASS04210'>${lblFunctionList}</td>";
+    s += "<td style='text-align:center;'><div class='FooterButton' onclick='editFuncs();'>${footerBtnEdit}</div></td>";
   s += "</tr>";
   s += "</table>";
   setFooter(s);
@@ -713,9 +713,9 @@ if ( oUser )
     PopupClose = function() {
       dlgPopup.hide();
       reloadPage();
-    }
+    };
     dlgPopup.ShowPopup();
-  }
+  };
   
   specialReloadPage = function() 
   {
@@ -723,7 +723,7 @@ if ( oUser )
     {
       reloadPage();
     } 
-  }
+  };
   
   updateTable = function()
   {
@@ -783,7 +783,7 @@ if ( oUser )
    { 
      if (!(exceptGhostFunc == <%Write(iGhostFuncID);%>)) expandAll();
    }
-  }
+  };
   
   SortMe = function(colName)
   {
@@ -791,14 +791,14 @@ if ( oUser )
     HideFunctions();
     hide("btnExp");
     IseSort2(arCObj,colName,false,true);
-  }
+  };
   
   SortFuncs = function()
   {
     show("btnExp");
     IseSort(arSortFObj,'func', true);
-  }
-  
+  };
+
   HideFunctions = function()
   {
     var arrayCount = arF.length;
@@ -807,24 +807,24 @@ if ( oUser )
     {
       hide("r" + arF[i]);
     }  
-  }
-  
+  };
+
   GetAllChannels = function()
   {
     new Ajax.Updater("dummy", "/pages/tabs/admin/views/functionchannels.htm?sid=" + SessionId + "&id=<% Write(iGhostFuncID); %>&clearSel=false",{evalScripts:true});
-  }
-  
+  };
+
   function hideGhostFunc()
   {
     hide("r<%Write(iGhostFuncID);%>");
-  }
+  };
   
   decChnCount = function(funcId) {
     arFObj[funcId]['chncount']--;
     if (arFObj[funcId]['chncount'] == 0) {
       hide("img" + funcId);
     }
-  }
+  };
   
   isDeleted = function(funcId, id) {
     for (var i = 0; i < arDelChns.length; i++) {
@@ -833,7 +833,7 @@ if ( oUser )
       }
     }  
     return false;
-  }
+  };
   translatePage("#tblFunctionList");
   jQuery("#tblFunctionList").css("display", "table");
 </script>

@@ -349,6 +349,58 @@
  </tr>
  
  <script type="text/javascript">
+--- occu/WebUI/www/rega/pages/tabs/admin/views/roomchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/roomchannels.htm
+@@ -169,6 +169,7 @@
+     iInsIdx++;
+     iElemsAdded++;
+     tr.id = chnsTmp[i]['trid'];
++    tr.className = 'CLASS04103';
+     if (!fltSR.objPassFilter(chnsTmp[i]))
+       tr.style.display = "none";
+     else 
+--- occu/WebUI/www/rega/pages/tabs/admin/views/rooms.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/rooms.htm
+@@ -170,18 +170,18 @@
+ <table id="tblRoomList" class="tblList CLASS04100" style="display:none" cellpadding="0" cellspacing="0" >
+ 
+ <colgroup>
+-  <col style="width:4%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:12%;"/>
+-  <col style="width:12%;"/>
+-  <col style="width:4%;"/>
+-  <col style="width:16%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:4%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:8%;"/>
++  <col style="width:18px;">
++  <col style="width:10%;">
++  <col style="width:20%;">
++  <col style="width:10%;">
++  <col style="width:50px;">
++  <col style="width:20%;">
++  <col style="width:10%;">
++  <col style="width:50px;">
++  <col style="width:50px;">
++  <col style="width:10%;">
++  <col style="width:5%;">
++  <col style="width:25px;">
+ </colgroup>
+ 
+ <thead>
+@@ -324,7 +324,7 @@
+     object elem = dom.GetObject(tmp);
+     if (elem)
+     {
+-      WriteLine("<tr id='r"#tmp#"'>");
++      WriteLine("<tr id='r"#tmp#"' class='CLASS04103'>");
+       
+       Write("<td>"); !+ / -
+       string sStyle = "";
 --- occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm
 @@ -39,7 +39,7 @@
@@ -703,6 +755,22 @@
  }
  
  .CLASS02804 {
+@@ -6346,7 +6329,6 @@
+ 
+ .CLASS04100 {
+ 	text-align:center;
+-	width:95%;
+ 	empty-cells:show;
+ }
+ 
+@@ -6363,6 +6345,7 @@
+ 
+ .CLASS04103 {
+ 	height:auto;
++	background-color: $_(background); /* #183473 */
+ }
+ 
+ .CLASS04104 {
 @@ -6413,7 +6396,6 @@
  
  .CLASS04200 {

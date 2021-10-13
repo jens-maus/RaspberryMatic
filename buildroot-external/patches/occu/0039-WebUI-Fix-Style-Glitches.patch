@@ -1,3 +1,21 @@
+--- occu/HMserver/opt/HMServer/pages/GroupListPage.ftl.orig
++++ occu/HMserver/opt/HMServer/pages/GroupListPage.ftl
+@@ -10,6 +10,15 @@
+ <body>-->
+ <div id="GroupListBody" style="display: none">
+ <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
++    <colgroup>
++      <col style="width:25px;">
++      <col style="width:40%;">
++      <col style="width:20%;">
++      <col style="width:15%;">
++      <col style="width:15%;">
++      <col style="width:25px;">
++      <col style="width:25px;">
++    </colgroup>
+     <thead>
+     <tr data-bind="foreach: groupListHeaders">
+         <td style="height: 40px" class="thCell CLASS04900 clickable" data-bind="click: $parent.sortGroupList, text: title, css: headerClass, attr: {colspan: colspan}"></td>
 --- occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi.orig
 +++ occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi
 @@ -32,14 +32,14 @@
@@ -92,6 +110,23 @@
    <th class="thCell">${thPassword}</th>
    <th class="thCell">${thBtnForLogin}</th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="level"){sCssName="SortSelected";} %>
+--- occu/WebUI/www/rega/pages/tabs/admin/views/functionchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/functionchannels.htm
+@@ -176,6 +176,7 @@
+     iInsIdx++;
+     iElemsAdded++;
+     tr.id = chnsTmp[i]['trid'];
++    tr.className = 'CLASS04205';
+     if (!fltSF.objPassFilter(chnsTmp[i]))
+       tr.style.display = "none";
+     else
+@@ -284,4 +285,4 @@
+ bEIP = false;
+ Cursor.set(Cursor.NORMAL);
+ translatePage("#tblsvr");
+-</script>
+\ No newline at end of file
++</script>
 --- occu/WebUI/www/rega/pages/tabs/admin/views/functions.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/functions.htm
 @@ -193,7 +193,7 @@
@@ -116,6 +151,15 @@
  </tr>
  <tr class='CLASS04205'>
    <td style='height:20px'></td>
+@@ -322,7 +322,7 @@
+     object elem = dom.GetObject(tmp);
+     if (elem)
+     {
+-      WriteLine("<tr id='r"#tmp#"'>");
++      WriteLine("<tr id='r"#tmp#"' class='CLASS04205'>");
+       
+       Write("<td>"); !+ / -
+       string sStyle = "";
 --- occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm
 @@ -63,9 +63,9 @@
@@ -514,6 +558,22 @@
  }
  
  .CLASS02804 {
+@@ -6413,7 +6396,6 @@
+ 
+ .CLASS04200 {
+ 	text-align:center;
+-	width:95%;
+ 	empty-cells:show;
+ }
+ 
+@@ -6432,6 +6414,7 @@
+ 
+ .CLASS04205 {
+ 	height:auto;
++	background-color: $_(background); /* #183473 */
+ }
+ 
+ .CLASS04206 {
 @@ -6488,7 +6471,7 @@
  .CLASS04301 {
  	width:100%;

@@ -1,3 +1,30 @@
+--- occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi.orig
++++ occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi
+@@ -32,14 +32,14 @@
+ 
+   puts "<table id=\"devFwOverview\" cellspacing=\"0\" cellpadding=\"0\" class=\"tTable filterTable\">"
+    puts "<colgroup>"
+-    puts "<col style=\"width:35%;\"/>"
+-    puts "<col style=\"width:20%;\"/>"
++    puts "<col style=\"width:50%;\"/>"
++    puts "<col style=\"width:10%;\"/>"
+     puts "<col style=\"width:55px;\"/>"
+     puts "<col style=\"width:10%;\"/>"
+      puts "<col style=\"width:10%;\"/>"
+      puts "<col style=\"width:10%;\"/>"
+    #  puts "<col style=\"width:10%;\"/>"
+-     puts "<col style=\"width:auto;\"/>"
++     puts "<col style=\"width:10%;\"/>"
+    puts "</colgroup>"
+ 
+    puts "<th class=\"DeviceListHead\">\${thName}</th>"
+@@ -348,4 +348,4 @@
+     puts "</script>"
+ 
+   }
+-}
+\ No newline at end of file
++}
 --- occu/WebUI/www/rega/esp/controls/blind.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/blind.fn
 @@ -132,7 +132,7 @@

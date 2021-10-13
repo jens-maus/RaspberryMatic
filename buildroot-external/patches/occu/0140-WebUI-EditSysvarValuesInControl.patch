@@ -1,0 +1,162 @@
+--- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
++++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
+@@ -1558,7 +1558,12 @@
+       object cObjTmp = cObj;
+       Call( "/esp/system.fn::getSysVarValAsString()" );
+   
+-      WriteLine( '<span id="sysvs'#cObj.ID()#'" class="CLASS02535">'#sSysVarVal#'</span>' );
++      object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
++	  if( oUser && oUser.UserLevel() == iulAdmin ) {
++        WriteLine( '<span id="sysvs'#cObj.ID()#'" class="CLASS02535" onclick="{ reloadSysVars = function() { PopupClose(); reloadPage(); } } CreatePopup(ID_EDIT_SYSVAR_VALUE, '#cObj.ID()#');">'#sSysVarVal#'</span>' );
++      } else {
++        WriteLine( '<span id="sysvs'#cObj.ID()#'" class="CLASS02535">'#sSysVarVal#'</span>' );
++      }
+     WriteLine( '</div>' );
+   WriteLine( '</td>' );
+   return;
+--- occu/WebUI/www/rega/pages/tabs/admin/msg/newSysVar.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/msg/newSysVar.htm
+@@ -3,30 +3,37 @@
+   if (system.GetVar("createNew") == 0) {
+     object sv = dom.GetObject(system.GetVar("varid"));
+   }
++  string hidden = "";
++  if (system.GetVar("editValueOnly") == 1) {hidden="hidden";}
++  system.SetSessionVar("editValueOnly",0);
+ %></div>
+ 
+ <div class="CLASS05000">
+   <table class="popupTable hidden"  border="1">
+-    <colgroup>
+-      <col style="width:10%;"/>
+-      <col style="width:23%;"/>
+-      <col style="width:10%;"/>
+-      <col style="width:23%;"/>
+-      <col style="width:10%;"/>
+-      <col style="width:10%;"/>
+-      <col style="width:13%;"/>
+-    </colgroup>
+-    <tr class="CLASS05001">
+-      <th>${thName}</th>
+-      <th>${thDescription}</th>
+-      <th>${thTypeOfVariable}</th>
+-      <th>${thValues}</th>
+-      <th>${thUnit}</th>
+-      <th>${thValue}</th>
+-      <th>${thCannelMapping}</th>
+-    </tr>
++  <% 
++    if (hidden == "") {
++    Write('<colgroup>');
++      Write('<col style="width:10%;"/>');
++      Write('<col style="width:23%;"/>');
++      Write('<col style="width:10%;"/>');
++      Write('<col style="width:23%;"/>');
++      Write('<col style="width:10%;"/>');
++      Write('<col style="width:10%;"/>');
++      Write('<col style="width:13%;"/>');
++    Write('</colgroup>');
++    Write('<tr class="CLASS05001">');
++      Write('<th>${thName}</th>');
++      Write('<th>${thDescription}</th>');
++      Write('<th>${thTypeOfVariable}</th>');
++      Write('<th>${thValues}</th>');
++      Write('<th>${thUnit}</th>');
++      Write('<th>${thValue}</th>');
++      Write('<th>${thCannelMapping}</th>');
++    Write('</tr>');
++	}
++%>
+     <tr class="CLASS05002">
+-    <td id="tdName" class="CLASS05003" >
++    <td id="tdName" class="CLASS05003 "<%Write(hidden)%> >
+     <%
+       var svName = "";
+       if(system.GetVar("createNew") == 0)
+@@ -42,7 +49,7 @@
+     %>
+       <input id="inpName" type="text" value="<%Write(svName)%>" onblur="stringRemoveNonPrintableChars(this);" />
+     </td>
+-    <td id="tdDesc" class="CLASS05003" >
++    <td id="tdDesc" class="CLASS05003"<%Write(hidden)%> >
+       <%
+         var svDesc = "";
+         if (system.GetVar("createNew") == 0) 
+@@ -52,7 +59,7 @@
+       %>
+       <input id="inpDesc" type="text" value="<%Write(svDesc)%>" onblur="stringRemoveNonPrintableChars(this);"/>
+     </td>
+-      <td class="CLASS05004">
++      <td class="CLASS05004" <%Write(hidden)%> >
+         <select id="selType" onchange="onTypeChange()">
+         <% 
+           if (system.GetVar("createNew") == 1) {
+@@ -78,12 +85,12 @@
+         %>
+         </select>
+       </td>
+-      <td id="tdEdit" class="CLASS05004">
++      <td id="tdEdit" class="CLASS05004"<%Write(hidden)%>>
+       </td>
+ 
+            
+     
+-      <td class="CLASS05004">
++      <td class="CLASS05004"<%Write(hidden)%>>
+         <% 
+           string sUnit = "";
+           if (system.GetVar("createNew") == 0) {
+@@ -97,7 +104,7 @@
+       <td id="tdValueEdit" class="CLASS05004">
+       </td>
+       
+-      <td class="CLASS05004">
++      <td class="CLASS05004"<%Write(hidden)%>>
+         <table width="100%" class="CLASS05005">
+           <colgroup>
+             <col style="width:50%;"/>
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -409,6 +409,7 @@
+     "dialogChannelOverView" : "Kanal%FCbersicht",
+     "dialogCreateNewSysVar" : "Systemvariable neu anlegen",
+     "dialogEditSysVar" : "Systemvariable bearbeiten",
++    "dialogEditSysVarValue" : "Systemvariablenwert %E4ndern",
+     "dialogCreateScript" : "Skript erstellen",
+     "dialogEditScript" : "Skript bearbeiten",
+     "dialogEnterValue" : "Wert eingeben",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -408,6 +408,7 @@
+     "dialogChannelOverView" : "Channel overview",
+     "dialogCreateNewSysVar" : "Create new system variable",
+     "dialogEditSysVar" : "Edit system variable",
++    "dialogEditSysVarValue" : "Change system variable value",
+     "dialogCreateScript" : "Create script",
+     "dialogEditScript" : "Edit script",
+     "dialogEnterValue" : "Enter value",
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -27085,6 +27085,14 @@
+         this.setWidth(1000);
+         this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
+         break;
++      case ID_EDIT_SYSVAR_VALUE:
++        this.setTitle( translateKey("dialogEditSysVarValue") /*"Systemvariablenwert bearbeiten"*/ );
++        this.addToPostBody( 'integer varid = '+this.type+';' );
++        this.addToPostBody( 'integer createNew = 0;' );
++        this.addToPostBody( 'boolean editValueOnly = 1;' );
++        this.setWidth(240);
++        this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
++        break;
+       case ID_CREATE_SCRIPT:
+         this.setTitle( translateKey("dialogCreateScript") /*"Skript erstellen"*/ );
+         this.addToPostBody( 'string iSDID = "'+this.type+'";' );
+@@ -27992,6 +28000,7 @@
+ ID_AUTO_LOGIN_CONFIG     = 1018;
+ ID_PROGRAM_CHOOSER       = 1019;
+ ID_EDIT_SYSVAR           = 1021;
++ID_EDIT_SYSVAR_VALUE     = 9921;
+ ID_CHOOSE_LED            = 1022;
+ ID_SET_OUCFM_MODE        = 1023;
+ ID_SET_STATUS_DISPLAY    = 1024;

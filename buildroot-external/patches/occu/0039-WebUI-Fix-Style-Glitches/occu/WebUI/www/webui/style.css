@@ -967,7 +967,7 @@ a img {
   background-image:url(/ise/img/gradientButton25px.png);
   /*background-image: linear-gradient(to bottom, white 40%, gray);*/
   background-image: var(--btnGradient);
-  color: $_(textColorA); /* #ffffff */
+  color: $_(gray);
   border: solid 1px $_(gray); /* silver */
   border-radius: 5px;
   margin:2%;

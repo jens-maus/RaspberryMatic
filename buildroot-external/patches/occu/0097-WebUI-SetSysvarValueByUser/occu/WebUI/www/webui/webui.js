@@ -26143,6 +26143,14 @@ iseMessageBox.prototype =
         this.setWidth(1000);
         this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
         break;
+      case ID_EDIT_SYSVAR_VALUE:
+        this.setTitle( translateKey("dialogEditSysVarValue") /*"Systemvariablenwert bearbeiten"*/ );
+        this.addToPostBody( 'integer varid = '+this.type+';' );
+        this.addToPostBody( 'integer createNew = 0;' );
+        this.addToPostBody( 'boolean editValueOnly = 1;' );
+        this.setWidth(240);
+        this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
+        break;
       case ID_CREATE_SCRIPT:
         this.setTitle( translateKey("dialogCreateScript") /*"Skript erstellen"*/ );
         this.addToPostBody( 'string iSDID = "'+this.type+'";' );
@@ -27040,6 +27048,7 @@ ID_USER_ACCOUNT_CONFIG_USER  = 1017;
 ID_AUTO_LOGIN_CONFIG     = 1018;
 ID_PROGRAM_CHOOSER       = 1019;
 ID_EDIT_SYSVAR           = 1021;
+ID_EDIT_SYSVAR_VALUE     = 9921;
 ID_CHOOSE_LED            = 1022;
 ID_SET_OUCFM_MODE        = 1023;
 ID_SET_STATUS_DISPLAY    = 1024;

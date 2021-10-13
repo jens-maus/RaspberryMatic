@@ -63,16 +63,15 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
 <td class="CLASS06402"></td>
 </tr>
 </table>
-<table id="tblFavs" class="tMain filterTable" cellpadding="0" cellspacing="0" width="97%" style="display:none">
+<table id="tblFavs" class="tMain filterTable" cellpadding="0" cellspacing="0" style="display:none">
   <colgroup>
-  <col width="15" />
-  <col width="15" />
-  <col width="10" />
-  <col width="10" />
-  <col width="10" />
-<!--  <col width="10" /> -->
-  <col width="10" />
-  <col width="10" />
+  <col style="width:30%;"/>
+  <col style="width:30%;"/>
+  <col style="width:25px;"/>
+  <col style="width:25px;"/>
+  <col style="width:25px;"/>
+  <col style="width:10%;"/>
+  <col style="width:20%;"/>
   </colgroup>
   <tr>
     <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
@@ -218,7 +217,7 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
             string favUserIds = "";
             Call( '/esp/favorites.fn::WriteUsers()' );
           Write('</td>');
-          Write('<td class="tCell" align="center" valign="middle" class="TblUserAdministration bcWhite">');
+          Write('<td class="tCell"  style="text-align:center; vertical-align: middle;" class="TblUserAdministration bcWhite">');
             
             ! User darf Favoriten nur dann löschen wenn er "ihm alleine" gehört, und Favoriten anderer User nicht bearbeiten
             boolean bEditAllowed = false;
@@ -350,9 +349,9 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
 
   s += "<table cellspacing='8'>";
   s += "<tr>";
-    s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
-    s += "<td align='center' valign='middle'><div class='FooterButton CLASS06413' onclick='fltFO.clearFilters();updateTable();'>${footerBtnResetFilter}</div></td>";
-    s += "<td align='center' valign='middle'><div class='FooterButton' onclick='NewFavoriteList();'>${footerBtnNew}</div></td>";
+    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
+    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS06413' onclick='fltFO.clearFilters();updateTable();'>${footerBtnResetFilter}</div></td>";
+    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='NewFavoriteList();'>${footerBtnNew}</div></td>";
   s += "</tr>";
   s += "</table>";
   

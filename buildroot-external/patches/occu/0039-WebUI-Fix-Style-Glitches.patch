@@ -222,7 +222,27 @@
                Write("></div>");
 --- occu/WebUI/www/rega/pages/tabs/user/favOverview.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/user/favOverview.htm
-@@ -76,17 +76,17 @@
+@@ -63,30 +63,29 @@
+ <td class="CLASS06402"></td>
+ </tr>
+ </table>
+-<table id="tblFavs" class="tMain filterTable" cellpadding="0" cellspacing="0" width="97%" style="display:none">
++<table id="tblFavs" class="tMain filterTable" cellpadding="0" cellspacing="0" style="display:none">
+   <colgroup>
+-  <col style="width:15%;"/>
+-  <col style="width:15%;"/>
+-  <col style="width:10%;"/>
+-  <col style="width:10%;"/>
+-  <col style="width:10%;"/>
+-<!--  <col style="width:25%;" width="10" /> -->
+-  <col style="width:10%;"/>
++  <col style="width:30%;"/>
++  <col style="width:30%;"/>
++  <col style="width:25px;"/>
++  <col style="width:25px;"/>
++  <col style="width:25px;"/>
+   <col style="width:10%;"/>
++  <col style="width:20%;"/>
    </colgroup>
    <tr>
      <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
@@ -334,7 +354,17 @@
    border:solid 1px $_(black); /* black */
  }
  /*
-@@ -2580,6 +2576,7 @@
+@@ -1308,8 +1304,7 @@
+ .tMain
+ {
+   border:solid 1px $_(black); /* black */
+-  margin-left:20px;
+-  margin-top:20px;
++  margin:10px;
+ }
+ 
+ .tHeader
+@@ -2580,6 +2575,7 @@
    background-color: $_(subMenuBackground);
    overflow:hidden;
    z-index:189;
@@ -342,7 +372,7 @@
  }
  
  .MainMenuSubItem {
-@@ -2940,11 +2937,9 @@
+@@ -2940,11 +2936,9 @@
    height:80px;
  }
  #DeviceListTable {
@@ -356,7 +386,7 @@
    padding:0;
    empty-cells:show;
  }
-@@ -5359,6 +5354,7 @@
+@@ -5359,6 +5353,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -364,7 +394,7 @@
  }
  
  .CLASS02536 {
-@@ -5381,6 +5377,7 @@
+@@ -5381,6 +5376,7 @@
  	max-width: 480px;
  	clear: both;
  	display: inline-block;
@@ -372,7 +402,7 @@
  }
  
  .CLASS02539 {
-@@ -5553,7 +5550,7 @@
+@@ -5553,7 +5549,7 @@
  }
  
  .CLASS02602 {
@@ -381,7 +411,7 @@
  }
  
  .CLASS02603 {
-@@ -5584,21 +5581,6 @@
+@@ -5584,21 +5580,6 @@
  	padding: 4px;
  }
  
@@ -403,7 +433,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5639,7 +5621,7 @@
+@@ -5639,7 +5620,7 @@
  
  .CLASS02614 {
  	background-color: $_(inactiveButton); /* #dddddd */
@@ -412,7 +442,7 @@
  	font-weight: bold;
  	border: solid 1px $_(gray); /* silver */
  }
-@@ -5735,10 +5717,12 @@
+@@ -5735,10 +5716,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -425,7 +455,7 @@
  }
  
  .CLASS02804 {
-@@ -7677,7 +7661,7 @@
+@@ -7677,7 +7660,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */

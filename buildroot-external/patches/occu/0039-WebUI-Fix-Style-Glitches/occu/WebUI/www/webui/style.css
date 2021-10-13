@@ -1304,8 +1304,7 @@ div.caption  { display: table-caption; }
 .tMain
 {
   border:solid 1px $_(black); /* black */
-  margin-left:20px;
-  margin-top:20px;
+  margin:10px;
 }
 
 .tHeader

@@ -594,9 +594,9 @@ a img {
 
 /* Tabelle zur Listendarstellung von Elementen (z.B. Raumübersicht) */
 .tblList {
-  margin-top: 20px;
-  width: 100%;
+  margin: 10px;
   empty-cells: show;
+  border: solid 1px $_(black); /* black */
 }
 
 .tblList th {
@@ -6471,7 +6471,7 @@ color: $_(textColorA); /* white */
 .CLASS04301 {
 	width:100%;
 	height:100%;
-	overflow-y:scroll;
+	overflow-y:auto;
 }
 
 .CLASS04302 {

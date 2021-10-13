@@ -118,7 +118,27 @@
    <td style='height:20px'></td>
 --- occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm
-@@ -88,18 +88,18 @@
+@@ -63,9 +63,9 @@
+ <div class="CLASS04301">
+ <div id="noNewDevs" class="CLASS04302" style="display:none;">${noDeviceInPostBox}</div>
+ <table id="newDevTbl" class="tblList CLASS04303" cellpadding="0" cellspacing="0"
+-       style="display:none; width:97%; margin:1%;">
++       style="display:none;">
+ <colgroup>
+-  <col style="width:2%;"  width="2%"/>
++  <col style="width:2%;"/>
+   <!-- Plus/Minus Device-->
+   <col style="width:2%;"/>
+   <!-- Plus/Minus Group -->
+@@ -81,25 +81,25 @@
+   <col style="width:7%;"/>
+   <col style="width:7%;"/>
+   <col style="width:7%;"/>
+-  <col style="width:15%;"/>
++  <col style="width:10%;"/>
+   <col style="width:7%;"/>
+ </colgroup>
+ <tbody id="tblNewDevices">
  <tr id="tblNewDevicesHeader">
    <th id="tblListFold"></th>
  
@@ -318,6 +338,18 @@
  }
  
  .filterTable td
+@@ -594,9 +594,9 @@
+ 
+ /* Tabelle zur Listendarstellung von Elementen (z.B. Raumübersicht) */
+ .tblList {
+-  margin-top: 20px;
+-  width: 100%;
++  margin: 10px;
+   empty-cells: show;
++  border: solid 1px $_(black); /* black */
+ }
+ 
+ .tblList th {
 @@ -608,23 +608,25 @@
  .Sort
  {
@@ -482,6 +514,15 @@
  }
  
  .CLASS02804 {
+@@ -6488,7 +6471,7 @@
+ .CLASS04301 {
+ 	width:100%;
+ 	height:100%;
+-	overflow-y:scroll;
++	overflow-y:auto;
+ }
+ 
+ .CLASS04302 {
 @@ -7677,7 +7660,7 @@
  
  .CLASS10902 {

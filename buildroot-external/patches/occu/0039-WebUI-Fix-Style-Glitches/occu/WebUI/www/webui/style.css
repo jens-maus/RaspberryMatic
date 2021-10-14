@@ -735,8 +735,8 @@ a img {
 
 /* KanalListe */
 .ChnListTbl {
-  width: 100%;
   background-color: $_(black); /* black */
+  margin: 10px;
 }
 
 .ChnListTbl td {
@@ -1682,15 +1682,12 @@ div.caption  { display: table-caption; }
 #ic_linkpeerlist #body_wrapper {
   margin: 0;
   padding: 0;
-  width: 100%;
-  background-color: $_(background); /* #183473 */
 }
 
 #ic_linkpeerlist .LinkListTbl {
   empty-cells: show;
   padding:0;
-  margin: 20px 0 0 0;
-  width: 100%;
+  margin: 10px;
   height: auto;
   border: 1px solid $_(black); /* black */
 }
@@ -1959,14 +1956,7 @@ background-color: $_(inactiveBackground);
 {
 	visibility: hidden;
 }
-/*--------------------------------------------*/
 
-/*Tabellenkörper Virtuelle Tasten*/
-#ic_selchannel #body_wrapper
-{
-	background-color: $_(background); /* #183473 */
-	margin-top: 10px;
-}
 /*--------------------------------------------*/
 
 /*Tabellenkörper Virtuelle Tasten*/
@@ -8687,7 +8677,7 @@ color: $_(textColorA); /* white */
 /* config\ic_selchannel.cgi */
 
 .CLASS21900 {
-  padding: 4px;
+  padding: 0px;
 }
 
 .CLASS21901 {
@@ -8737,7 +8727,6 @@ color: $_(textColorA); /* white */
 
 .CLASS21908 {
   overflow: auto;
-  background-color: $_(background); /* #183473 */
   width:100%;
 }
 
@@ -8872,7 +8861,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS22101 {
-  padding:4px;
+  padding:0px;
 }
 
 .CLASS22102 {

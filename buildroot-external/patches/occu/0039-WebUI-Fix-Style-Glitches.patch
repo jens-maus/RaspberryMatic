@@ -148,6 +148,35 @@
 -}
 \ No newline at end of file
 +}
+--- occu/WebUI/www/config/ic_linkpeerlist.cgi.orig
++++ occu/WebUI/www/config/ic_linkpeerlist.cgi
+@@ -645,6 +645,15 @@
+ 
+   #cgi_debug -on
+ 
++  puts "<colgroup>"
++  puts "<col style='width:20%;'>"
++  puts "<col style='width:10%;'>"
++  puts "<col style='width:20%;'>"
++  puts "<col style='width:20%;'>"
++  puts "<col style='width:10%;'>"
++  puts "<col style='width:30%;'>"
++  puts "<col style='width:10%;'>"
++  puts "</colgroup>"
+   puts "<THEAD>"
+   puts "<TR>"
+ 
+--- occu/WebUI/www/config/ic_selchannel.cgi.orig
++++ occu/WebUI/www/config/ic_selchannel.cgi
+@@ -46,7 +46,7 @@
+       if {$step < 3} then {
+         # wegen dem IE muss das Style overflow:visible eingestellt sein
+         puts "<div id=\"ChnTblContentDiv\" class=\"CLASS21908\" style=\"overflow:visible\" >"
+-        puts "<table border=\"1\" id=\"ChnListTbl\" class=\"ChnListTbl\" width=\"100%\" cellspacing=\"0\">"
++        puts "<table border=\"1\" id=\"ChnListTbl\" class=\"ChnListTbl\" cellspacing=\"0\">"
+         put_colgroup
+         put_tableheader
+ 
 --- occu/WebUI/www/rega/esp/controls/blind.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/blind.fn
 @@ -132,7 +132,7 @@
@@ -631,6 +660,16 @@
    border: solid 1px $_(black); /* black */
  }
  
+@@ -735,8 +735,8 @@
+ 
+ /* KanalListe */
+ .ChnListTbl {
+-  width: 100%;
+   background-color: $_(black); /* black */
++  margin: 10px;
+ }
+ 
+ .ChnListTbl td {
 @@ -967,7 +967,7 @@
    background-image:url(/ise/img/gradientButton25px.png);
    /*background-image: linear-gradient(to bottom, white 40%, gray);*/
@@ -664,7 +703,39 @@
  }
  
  .tHeader
-@@ -2580,6 +2575,7 @@
+@@ -1687,15 +1682,12 @@
+ #ic_linkpeerlist #body_wrapper {
+   margin: 0;
+   padding: 0;
+-  width: 100%;
+-  background-color: $_(background); /* #183473 */
+ }
+ 
+ #ic_linkpeerlist .LinkListTbl {
+   empty-cells: show;
+   padding:0;
+-  margin: 20px 0 0 0;
+-  width: 100%;
++  margin: 10px;
+   height: auto;
+   border: 1px solid $_(black); /* black */
+ }
+@@ -1964,14 +1956,7 @@
+ {
+ 	visibility: hidden;
+ }
+-/*--------------------------------------------*/
+ 
+-/*Tabellenkörper Virtuelle Tasten*/
+-#ic_selchannel #body_wrapper
+-{
+-	background-color: $_(background); /* #183473 */
+-	margin-top: 10px;
+-}
+ /*--------------------------------------------*/
+ 
+ /*Tabellenkörper Virtuelle Tasten*/
+@@ -2580,6 +2565,7 @@
    background-color: $_(subMenuBackground);
    overflow:hidden;
    z-index:189;
@@ -672,7 +743,7 @@
  }
  
  .MainMenuSubItem {
-@@ -2940,11 +2936,9 @@
+@@ -2940,11 +2926,9 @@
    height:80px;
  }
  #DeviceListTable {
@@ -686,7 +757,7 @@
    padding:0;
    empty-cells:show;
  }
-@@ -5359,6 +5353,7 @@
+@@ -5359,6 +5343,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -694,7 +765,7 @@
  }
  
  .CLASS02536 {
-@@ -5381,6 +5376,7 @@
+@@ -5381,6 +5366,7 @@
  	max-width: 480px;
  	clear: both;
  	display: inline-block;
@@ -702,7 +773,7 @@
  }
  
  .CLASS02539 {
-@@ -5553,7 +5549,7 @@
+@@ -5553,7 +5539,7 @@
  }
  
  .CLASS02602 {
@@ -711,7 +782,7 @@
  }
  
  .CLASS02603 {
-@@ -5584,21 +5580,6 @@
+@@ -5584,21 +5570,6 @@
  	padding: 4px;
  }
  
@@ -733,7 +804,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5639,7 +5620,7 @@
+@@ -5639,7 +5610,7 @@
  
  .CLASS02614 {
  	background-color: $_(inactiveButton); /* #dddddd */
@@ -742,7 +813,7 @@
  	font-weight: bold;
  	border: solid 1px $_(gray); /* silver */
  }
-@@ -5735,10 +5716,12 @@
+@@ -5735,10 +5706,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -755,7 +826,7 @@
  }
  
  .CLASS02804 {
-@@ -6346,7 +6329,6 @@
+@@ -6346,7 +6319,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -763,7 +834,7 @@
  	empty-cells:show;
  }
  
-@@ -6363,6 +6345,7 @@
+@@ -6363,6 +6335,7 @@
  
  .CLASS04103 {
  	height:auto;
@@ -771,7 +842,7 @@
  }
  
  .CLASS04104 {
-@@ -6413,7 +6396,6 @@
+@@ -6413,7 +6386,6 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -779,7 +850,7 @@
  	empty-cells:show;
  }
  
-@@ -6432,6 +6414,7 @@
+@@ -6432,6 +6404,7 @@
  
  .CLASS04205 {
  	height:auto;
@@ -787,7 +858,7 @@
  }
  
  .CLASS04206 {
-@@ -6488,7 +6471,7 @@
+@@ -6488,7 +6461,7 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -796,7 +867,7 @@
  }
  
  .CLASS04302 {
-@@ -7677,7 +7660,7 @@
+@@ -7677,7 +7650,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -805,6 +876,32 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
+@@ -8704,7 +8677,7 @@
+ /* config\ic_selchannel.cgi */
+ 
+ .CLASS21900 {
+-  padding: 4px;
++  padding: 0px;
+ }
+ 
+ .CLASS21901 {
+@@ -8754,7 +8727,6 @@
+ 
+ .CLASS21908 {
+   overflow: auto;
+-  background-color: $_(background); /* #183473 */
+   width:100%;
+ }
+ 
+@@ -8889,7 +8861,7 @@
+ }
+ 
+ .CLASS22101 {
+-  padding:4px;
++  padding:0px;
+ }
+ 
+ .CLASS22102 {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -328,7 +328,7 @@

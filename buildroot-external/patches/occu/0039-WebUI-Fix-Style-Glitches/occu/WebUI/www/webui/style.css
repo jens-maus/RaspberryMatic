@@ -6051,9 +6051,6 @@ color: $_(textColorA); /* white */
 /* rega\pages\tabs\handling\hdevichannels.htm */
 
 .CLASS03500 {
-	border:solid 1px $_(black); /* black */
-	margin-left:10px;
-	margin-top:27px;
 }
 
 .CLASS03501 {
@@ -6220,17 +6217,13 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS03902 {
-	width:100%;
 	overflow:auto;
-	margin:0;
-	padding:0;
+	margin:10px;
+	margin-right:2px;
 }
 
 .CLASS03903 {
 	border:solid 1px $_(black); /* black */
-	margin-top:0px;
-	width:235px;
-	margin-top:27px;
 }
 
 .CLASS03904 {
@@ -6255,13 +6248,13 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS03908 {
-	width:100%;
 	overflow:auto;
+	margin:10px;
+	margin-left:2px;
 }
 
 .CLASS03909 {
-	width: 80%;
-	height: 96%;
+	width: 100%;
 }
 
 .CLASS03910 {

@@ -477,6 +477,26 @@
        
        Write("<td>"); !+ / -
        string sStyle = "";
+--- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
+@@ -21,7 +21,7 @@
+   <tr>
+     <!-- Linke Spalte -->
+     <td id="contentLeft" class="hidden">
+-      <table class="filterTable CLASS03901 j_translate">
++      <table class="filterTable CLASS03901 j_translate" cellpadding="0" cellspacing="0">
+         <tr>
+           <td style="vertical-align: top; border: 0px">
+             <div id="divDL" class="CLASS03902">
+@@ -135,7 +135,7 @@
+           contHeight = contHeight.replace(/px/, "");
+           $("divRTD").style.height = Math.floor((contHeight * 0.98)) + "px";
+         </script>
+-        <table id="tblRightContent" class="CLASS03909">
++        <table id="tblRightContent" class="CLASS03909" cellpadding="0" cellspacing="0">
+          <tr class="CLASS03910">
+            <td style="vertical-align: top;" id="chnList"></td>
+          </tr>
 --- occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm
 @@ -39,7 +39,7 @@
@@ -873,7 +893,52 @@
  }
  
  .CLASS02804 {
-@@ -6346,7 +6319,6 @@
+@@ -6078,9 +6051,6 @@
+ /* rega\pages\tabs\handling\hdevichannels.htm */
+ 
+ .CLASS03500 {
+-	border:solid 1px $_(black); /* black */
+-	margin-left:10px;
+-	margin-top:27px;
+ }
+ 
+ .CLASS03501 {
+@@ -6247,15 +6217,13 @@
+ }
+ 
+ .CLASS03902 {
+-	width:100%;
+ 	overflow:auto;
+-	margin:0;
+-	padding:0;
++	margin:10px;
++	margin-right:2px;
+ }
+ 
+ .CLASS03903 {
+ 	border:solid 1px $_(black); /* black */
+-	margin-top:27px;
+ }
+ 
+ .CLASS03904 {
+@@ -6280,13 +6248,13 @@
+ }
+ 
+ .CLASS03908 {
+-	width:100%;
+ 	overflow:auto;
++	margin:10px;
++	margin-left:2px;
+ }
+ 
+ .CLASS03909 {
+-	width: 80%;
+-	height: 96%;
++	width: 100%;
+ }
+ 
+ .CLASS03910 {
+@@ -6344,7 +6312,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -881,7 +946,7 @@
  	empty-cells:show;
  }
  
-@@ -6363,6 +6335,7 @@
+@@ -6361,6 +6328,7 @@
  
  .CLASS04103 {
  	height:auto;
@@ -889,7 +954,7 @@
  }
  
  .CLASS04104 {
-@@ -6413,7 +6386,6 @@
+@@ -6411,7 +6379,6 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -897,7 +962,7 @@
  	empty-cells:show;
  }
  
-@@ -6432,6 +6404,7 @@
+@@ -6430,6 +6397,7 @@
  
  .CLASS04205 {
  	height:auto;
@@ -905,7 +970,7 @@
  }
  
  .CLASS04206 {
-@@ -6488,7 +6461,7 @@
+@@ -6486,7 +6454,7 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -914,7 +979,7 @@
  }
  
  .CLASS04302 {
-@@ -7677,7 +7650,7 @@
+@@ -7675,7 +7643,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -923,7 +988,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -8704,7 +8677,7 @@
+@@ -8702,7 +8670,7 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -932,7 +997,7 @@
  }
  
  .CLASS21901 {
-@@ -8754,7 +8727,6 @@
+@@ -8752,7 +8720,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -940,7 +1005,7 @@
    width:100%;
  }
  
-@@ -8889,7 +8861,7 @@
+@@ -8887,7 +8854,7 @@
  }
  
  .CLASS22101 {

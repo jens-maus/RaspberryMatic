@@ -7,8 +7,8 @@
 </script>
 <!--</head>
 <body>-->
-<form id="groupEditForm" style="display: none">
- <table id="parameter" class="tTable"  border="0" cellpadding="0" cellspacing="0">
+<form id="groupEditForm" style="display: none; width: 100%;">
+ <table id="parameter" class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
   <colgroup>
     <col style="width:20%;"/>
     <col style="width:80%;"/>
@@ -52,7 +52,7 @@
 	
   </tbody>
  </table>
- <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
+ <table class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
  <colgroup>
    <col style="width:30%;"/>
    <col style="width:30%;"/>
@@ -95,7 +95,7 @@
  </tfoot>
  </table>
 
- <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
+ <table class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
  <colgroup>
    <col style="width:30%;"/>
    <col style="width:30%;"/>
@@ -145,7 +145,7 @@
   </tfoot>
  </table>
 
- <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
+ <table class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
  <colgroup>
    <col style="width:30%;"/>
    <col style="width:30%;"/>

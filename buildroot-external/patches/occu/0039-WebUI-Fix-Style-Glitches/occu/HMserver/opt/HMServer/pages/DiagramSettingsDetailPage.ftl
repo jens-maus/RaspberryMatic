@@ -149,8 +149,8 @@ background-color:#${colors[x]};
 </style>
 </head>
 <body>
-<form>
-<table id="parameterTable" class="tTable"  border="0" cellpadding="0" cellspacing="0">
+<form style="width:100%;">
+<table id="parameterTable" class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
   <colgroup>
     <col style="width:500px;"/>
     <col style="width:80%;"/>
@@ -252,7 +252,7 @@ background-color:#${colors[x]};
 	
   </tbody>
 </table>
-<table id="dataSourcesTable" class="tTable"  border="0" cellpadding="0" cellspacing="0">
+<table id="dataSourcesTable" class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
   <colgroup>
     <col style="width:30%;"/>
     <col style="width:10%;"/>

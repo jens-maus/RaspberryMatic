@@ -27,6 +27,51 @@
    puts "<td class=\"CLASS22013\">&nbsp;</td>"
    puts "</TR>"
  
+--- occu/WebUI/www/rega/pages/tabs/admin/views/programs.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/programs.htm
+@@ -1,6 +1,7 @@
+ <script type="text/javascript" language="javascript">
+ 
+   <%
++    string prevPage=system.GetSessionVar("sessionTAB");
+     system.SetSessionVar("sessionTAB", "programs");
+     object oOrigPrg = dom.GetObject( system.GetSessionVar("sessionORIGPRGID") );
+     object oPrg = dom.GetObject( system.GetSessionVar("sessionPRGID") );
+@@ -804,15 +805,15 @@
+   };
+   CancelProgramEdit = function(copy)
+   {
+-    isePrograms.Delete(copy);
++    isePrograms.Delete(copy, '<% Write(prevPage); %>');
+   };
+   SaveProgramEdit = function(orig,copy)
+   {
+-    setTimeout( "isePrograms.Restore("+orig+","+copy+")", 500 );
++    setTimeout( "isePrograms.Restore("+orig+","+copy+", '<% Write(prevPage); %>')", 500 );
+   };
+   CopyToNewProgram = function(copy)
+   {
+-    setTimeout( "isePrograms.CopyToNewProgram("+copy+")", 500 );
++    setTimeout( "isePrograms.CopyToNewProgram("+copy+", '<% Write(prevPage); %>')", 500 );
+   };
+   AddSubRuleSelectChange = function(idx,rid)
+   {
+@@ -943,7 +944,7 @@
+   var s = "";
+   s += "<table cellspacing='8'>";
+   s += "<tr>";
+-    s += "<td style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='CancelProgramEdit(<% Write(oPrg.ID()); %>);'>${footerBtnCancel}</div></td>";
++    s += "<td style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='CancelProgramEdit(<% Write(oPrg.ID()); %>);'>${footerBtnPageBack}</div></td>";
+     s += "<td style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='SaveProgramEdit(<% Write(oOrigPrg.ID()); %>,<% Write(oPrg.ID()); %>);'>${footerBtnOk}</div></td>";
+     s += "<td style='text-align:center; vertical-align:middle;'><div class='FooterButton CLASS04800' onclick='CopyToNewProgram(<% Write(oPrg.ID()); %>);' >${footerBtnSaveNewProgram}</div></td>";
+     s += "<td style='text-align:center; vertical-align:middle;'><div class='FooterButton CLASS04801' onclick='new HMScriptExecutor();'>${footerBtnTestScript}</div></td>";
+@@ -987,4 +988,4 @@
+   
+ </div>
+ 
+-<script>translatePage('#ProgramTable')</script>
+\ No newline at end of file
++<script>translatePage('#ProgramTable')</script>
 --- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
 @@ -176,7 +176,11 @@
@@ -35,7 +80,7 @@
              Write("<tr id='"#trId#"'>");
 -            Write("<td class='GrayBkg' name='devName'>");
 +            if( oUser && oUser.UserLevel() == iulAdmin ) {
-+              Write("<td class='GrayBkg CLASS03905' name='devName' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>");
++              Write("<td class='GrayBkg CLASS03905' name='devName' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");' onmouseover='this.className=\"DeviceListRow_Highlight\";' onmouseout='this.className=\"DeviceListRow\";'>");
 +            } else {
 +              Write("<td class='GrayBkg' name='devName'>");
 +            }
@@ -50,7 +95,7 @@
              boolean showExtDesc = false;
 -            Write("<td class='GrayBkg'>");
 +            if( oUser && oUser.UserLevel() == iulAdmin ) {
-+              Write("<td class='GrayBkg CLASS04007' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>");
++              Write("<td class='GrayBkg CLASS04007' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");' onmouseover='this.className=\"DeviceListRow_Highlight\";' onmouseout='this.className=\"DeviceListRow\";'>");
 +            } else {
 +              Write("<td class='GrayBkg'>");
 +            }
@@ -65,10 +110,85 @@
              Write("<tr id='"#trId#"'>");
 -            Write("<td class='GrayBkg'>");
 +            if( oUser && oUser.UserLevel() == iulAdmin ) {
-+              Write("<td class='GrayBkg CLASS04007' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>");
++              Write("<td class='GrayBkg CLASS04007' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");' onmouseover='this.className=\"DeviceListRow_Highlight\";' onmouseout='this.className=\"DeviceListRow\";'>");
 +            } else {
 +              Write("<td class='GrayBkg'>");
 +            }
  
              Call("/pages/tabs/control/function.fn::ShowExtDesc()");
  
+--- occu/WebUI/www/rega/pages/tabs/control/programs.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/programs.htm
+@@ -73,6 +73,9 @@
+           object oPrograms = dom.GetObject( ID_PROGRAMS );
+           if(oPrograms)
+           {
++            if (oUser.UserLevel() == iulAdmin) {
++              WriteLine("<script type='text/javascript'>EditProgram = function(id) { var opt={postBody: 'string action = \"SetProgram\"; string id = \"'+id+'\";',onComplete: function(t){if(t.responseText=='true') { loadPrograms(); }}};new Ajax.Request('/esp/programs.htm?sid='+SessionId,opt);};</script></td>");
++            }
+             string sPID;
+             foreach( sPID, oUser.UserTempViewIDs().EnumIDs() )
+             {
+@@ -83,7 +86,11 @@
+                 {
+                   string trId = "pr"#o.ID();
+                   WriteLine( '<tr id="'#trId#'" class="CLASS03702">' );
+-                  WriteLine( '<td class="tBodyCell">'#o.Name()#'</td>' );
++                  if (oUser.UserLevel() == iulAdmin) {
++                    WriteLine( '<td class="tBodyCell CLASS03905" onclick="EditProgram('#o.ID()#');" onmouseover="this.className=\'tBodyCell DeviceListRow_Highlight\';" onmouseout="this.className=\'tBodyCell CLASS03905\';">'#o.Name()#'</td>' );
++                  } else {
++                    WriteLine( '<td class="tBodyCell">'#o.Name()#'</td>' );
++                  }
+                   WriteLine( '<td class="tBodyCell">'#o.PrgInfo()#'</td>' );
+                   object oPrgID = o.ID();
+                   WriteLine( '<td class="tBodyCell">' );
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -25655,7 +25655,7 @@
+     };
+     new Ajax.Request(url,opts);
+   },
+-  Delete: function(id)
++  Delete: function(id,prevPage)
+   {
+     var url = "/esp/programs.htm?sid="+SessionId;
+     var pb = '';
+@@ -25667,12 +25667,12 @@
+       onComplete:function(t)
+       {
+         if(dbg){alert( t.responseText );}
+-        WebUI.enter(ProgramListPage);
++        WebUI.enter(( prevPage && prevPage === 'control/programs' ) ? ControlProgramsPage : ProgramListPage);
+       }
+     };
+     new Ajax.Request(url,opts);
+   },
+-  Restore: function(orig,copy)
++  Restore: function(orig,copy,prevPage)
+   {
+     var url = "/esp/programs.htm?sid="+SessionId;
+     var pb = '';
+@@ -25685,12 +25685,12 @@
+       onComplete:function(t)
+       {
+         if(dbg){alert( t.responseText );}
+-        WebUI.enter(ProgramListPage);
++        WebUI.enter(( prevPage && prevPage === 'control/programs' ) ? ControlProgramsPage : ProgramListPage);
+       }
+     };
+     new Ajax.Request(url,opts);
+   },
+-  CopyToNewProgram: function(id)
++  CopyToNewProgram: function(id,prevPage)
+   {
+     var url = "/esp/programs.htm?sid="+SessionId;
+     var pb = '';
+@@ -25702,7 +25702,7 @@
+       onComplete:function(t)
+       {
+         if(dbg){alert( t.responseText );}
+-        WebUI.enter(ProgramListPage);        
++        WebUI.enter(( prevPage && prevPage === 'control/programs' ) ? ControlProgramsPage : ProgramListPage);
+       }
+     };
+     new Ajax.Request(url,opts);

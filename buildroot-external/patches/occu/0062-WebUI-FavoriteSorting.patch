@@ -41,37 +41,35 @@
            {
              oUser.UserTempViewIDs().Add( oTmp.ID() );
            }
-@@ -63,18 +70,10 @@
+@@ -63,8 +70,9 @@
  <td class="CLASS06402"></td>
  </tr>
  </table>
--<table id="tblFavs" class="tMain filterTable" cellpadding="0" cellspacing="0" width="97%" style="display:none">
--  <colgroup>
--  <col style="width:15%;"/>
--  <col style="width:15%;"/>
--  <col style="width:10%;"/>
--  <col style="width:10%;"/>
--  <col style="width:10%;"/>
--<!--  <col style="width:25%;" width="10" /> -->
--  <col style="width:10%;"/>
--  <col style="width:10%;"/>
--  </colgroup>
-+<table id="tblFavs" class="tMain" cellpadding="0" cellspacing="0" width="97%" style="display:none">
+-<table id="tblFavs" class="tMain filterTable" cellpadding="0" cellspacing="0" style="display:none">
++<table id="tblFavs" class="tMain" cellpadding="0" cellspacing="0" style="display:none">
+   <colgroup>
++  <col style="width:10%;"/>
+   <col style="width:30%;"/>
+   <col style="width:30%;"/>
+   <col style="width:25px;"/>
+@@ -74,6 +82,8 @@
+   <col style="width:20%;"/>
+   </colgroup>
    <tr>
-+    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="pos"){sCssName="SortSelected";} %>
-+    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'pos',true);" >${thPosition}</div></th>
++    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="pos"){sCssName="SortSelected";} %>
++    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'pos',true);" >${thPosition}</div></th>
      <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
-     <th><div class="pt11 CLASS06404 <%Write(sCssName);%>" onclick="IseSort(arFavs,'name',true);" >${thName}</div></th>
-     <th><div class="pt11 Sort">${thDescription}</div></th>
-@@ -89,6 +88,7 @@
-     <th><div class="pt11 Sort">${thAction}</div></th>
+     <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'name',true);" >${thName}</div></th>
+     <th class="thCell CLASS02803"><div class="pt11">${thDescription}</div></th>
+@@ -88,6 +98,7 @@
+     <th class="thCell CLASS02803"><div class="pt11">${thAction}</div></th>
    </tr>
    <tr>
 +    <td class="CLASS06408">&nbsp;</td>
      <td class="CLASS06405">
        <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
        <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
-@@ -169,155 +169,199 @@
+@@ -168,155 +179,199 @@
    </tr>
    <%
      integer iCount =  0;
@@ -402,7 +400,7 @@
        }
      }
    %>
-@@ -391,6 +435,16 @@
+@@ -390,6 +445,16 @@
      }
    }
    

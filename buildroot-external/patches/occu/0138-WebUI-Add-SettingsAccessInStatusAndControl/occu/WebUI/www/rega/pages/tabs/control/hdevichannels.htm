@@ -177,7 +177,7 @@
             boolean showExtDesc = false;
             Write("<tr id='"#trId#"'>");
             if( oUser && oUser.UserLevel() == iulAdmin ) {
-              Write("<td class='GrayBkg CLASS03905' name='devName' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>");
+              Write("<td class='GrayBkg CLASS03905' name='devName' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");' onmouseover='this.className=\"DeviceListRow_Highlight\";' onmouseout='this.className=\"DeviceListRow\";'>");
             } else {
               Write("<td class='GrayBkg' name='devName'>");
             }

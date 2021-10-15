@@ -141,7 +141,7 @@
           {
             boolean showExtDesc = false;
             if( oUser && oUser.UserLevel() == iulAdmin ) {
-              Write("<td class='GrayBkg CLASS04007' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");'>");
+              Write("<td class='GrayBkg CLASS04007' onclick='DeviceListPage.showConfiguration(event, \"CHANNEL\", "#chn.ID()#");' onmouseover='this.className=\"DeviceListRow_Highlight\";' onmouseout='this.className=\"DeviceListRow\";'>");
             } else {
               Write("<td class='GrayBkg'>");
             }

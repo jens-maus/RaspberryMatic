@@ -6255,8 +6255,6 @@ color: $_(textColorA); /* white */
 
 .CLASS03903 {
 	border:solid 1px $_(black); /* black */
-	margin-top:0px;
-	width:235px;
 	margin-top:27px;
 }
 

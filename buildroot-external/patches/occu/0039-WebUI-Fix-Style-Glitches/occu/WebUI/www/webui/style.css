@@ -161,6 +161,18 @@ a img {
 {
     background-color: $_(contentBackground);
     overflow: auto;
+    display: flex;
+    align-items: flex-start;
+}
+
+#prgcontent
+{
+  display: contents;
+}
+
+#GroupListBody
+{
+  display: contents;
 }
 
 /* Kopfzeile */
@@ -391,7 +403,7 @@ a img {
   text-align:center;
   border:solid 1px $_(black); /* black */
   background-color:$_(clickable);
-  height: auto;
+  height:50px;
 }
 
 .filterTable td
@@ -594,9 +606,10 @@ a img {
 
 /* Tabelle zur Listendarstellung von Elementen (z.B. Raumübersicht) */
 .tblList {
-  margin-top: 20px;
-  width: 100%;
+  margin: 10px;
   empty-cells: show;
+  border: solid 1px $_(black); /* black */
+  width: 100%;
 }
 
 .tblList th {
@@ -735,8 +748,8 @@ a img {
 
 /* KanalListe */
 .ChnListTbl {
-  width: 100%;
   background-color: $_(black); /* black */
+  margin: 10px;
 }
 
 .ChnListTbl td {
@@ -967,7 +980,7 @@ a img {
   background-image:url(/ise/img/gradientButton25px.png);
   /*background-image: linear-gradient(to bottom, white 40%, gray);*/
   background-image: var(--btnGradient);
-  color: $_(textColorA); /* #ffffff */
+  color: $_(gray);
   border: solid 1px $_(gray); /* silver */
   border-radius: 5px;
   margin:2%;
@@ -1245,13 +1258,10 @@ a img {
 .tTable
 {
   text-align:center;
-  margin-left:10px;
-  margin-top:10px;
-  margin-right:10px;
+  margin:10px;
   empty-cells: show;
-  width:97%;
-  /*width:1200px;*/
   border:solid 1px $_(black); /* black */
+  width: 100%;
 }
 /*
 .tTable th
@@ -1308,8 +1318,8 @@ div.caption  { display: table-caption; }
 .tMain
 {
   border:solid 1px $_(black); /* black */
-  margin-left:20px;
-  margin-top:20px;
+  margin:10px;
+  width:100%;
 }
 
 .tHeader
@@ -1391,12 +1401,8 @@ div.caption  { display: table-caption; }
 
 .oLine
 {
-  background-color: $_(background); /* #183473 */
-  width: 90%;
+  width: 100%;
   height: 6px;
-  border-bottom-width: 5px;
-  border-bottom-style: solid;
-  border-bottom-color: $_(white); /* #ffffff */
 }
 
 .sysConfigHeight
@@ -1495,9 +1501,20 @@ div.caption  { display: table-caption; }
 /* Buttons incl. Hilfe-Img. */
 .cpButton {
     width:230px;
-}#ic_deviceparameters #id_body
+}
+
+#id_body
 {
-	margin-top: 10px;
+  display: inherit;
+}
+
+#ic_deviceparameters
+{
+  display: contents;
+}
+
+#ic_deviceparameters #id_body
+{
 	background-color: $_(background); /* #183473 */
 }
 
@@ -1513,7 +1530,7 @@ div.caption  { display: table-caption; }
 
 #ic_deviceparameters #DeviceInformation
 {
-	width: 99%;
+	width: 100%;
 	color: $_(textColorA); /* white */
 	border: 1px solid $_(black); /* black */
 }
@@ -1568,7 +1585,7 @@ div.caption  { display: table-caption; }
 
 #ic_deviceparameters .parameter_area .parameters_table 
 {
-	width: 99%;
+	width: 100%;
 	color: $_(textColorA); /* white */
 	border: 1px solid $_(black); /* black */
 }
@@ -1672,6 +1689,10 @@ div.caption  { display: table-caption; }
 	border: 0;
 }/*LinkList-Tabelle*/
 /*--------------------------------------------*/
+#ic_linkpeerlist {
+  display: contents;
+}
+
 #ic_linkpeerlist #head_wrapper {
   border-bottom: 0;
   margin: 0;
@@ -1687,17 +1708,16 @@ div.caption  { display: table-caption; }
 #ic_linkpeerlist #body_wrapper {
   margin: 0;
   padding: 0;
-  width: 100%;
-  background-color: $_(background); /* #183473 */
+  display: inherit;
 }
 
 #ic_linkpeerlist .LinkListTbl {
   empty-cells: show;
   padding:0;
-  margin: 20px 0 0 0;
-  width: 100%;
+  margin: 10px;
   height: auto;
   border: 1px solid $_(black); /* black */
+  width: 100%;
 }
 
 #ic_linkpeerlist .LinkListTbl td {
@@ -1798,7 +1818,17 @@ background-color: $_(inactiveBackground);
 {
   height: 40px;
   background-color: $_(activeBackground);
-}#ic_selchannel #previous_step_wrapper {
+}
+
+#ic_selchannel {
+  display: contents;
+}
+
+#ic_selchannel #body_wrapper {
+  display: inherit;
+}
+
+#ic_selchannel #previous_step_wrapper {
 	background-color: $_(background); /* #183473 */
 	margin: 20px;
 }
@@ -1964,14 +1994,7 @@ background-color: $_(inactiveBackground);
 {
 	visibility: hidden;
 }
-/*--------------------------------------------*/
 
-/*Tabellenkörper Virtuelle Tasten*/
-#ic_selchannel #body_wrapper
-{
-	background-color: $_(background); /* #183473 */
-	margin-top: 10px;
-}
 /*--------------------------------------------*/
 
 /*Tabellenkörper Virtuelle Tasten*/
@@ -2313,6 +2336,7 @@ progress::-webkit-progress-value { background: #3678c9; }
   /* font-weight:bold; */
   text-align:left;
   vertical-align:middle;  
+  height:20px !important;
 }
 
 .FilterHeight20 {
@@ -2943,10 +2967,10 @@ html, body {
 #DeviceListTable {
   height:auto;
   margin:10px;
-  border:0 none;
-/*  border:1px black solid; */
+  border:1px black solid;
   padding:0;
   empty-cells:show;
+  width:100%;
 }
 
 .DeviceListHead {
@@ -2988,8 +3012,7 @@ html, body {
 }
 
 .DeviceListRow_Highlight {
-  /* background-color: $_(inactiveBackground); */
-  background-color: $_(deviceListRowHighlight);
+  background-color: $_(inactiveBackground);
   cursor:pointer;
 }
 
@@ -5978,9 +6001,6 @@ color: $_(textColorA) ! important; /* white */
 }
 
 .CLASS03301 {
-	width:75%;
-	margin-left:20px;
-	margin-top:20px;
 	empty-cells:show;
 }
 
@@ -6068,8 +6088,7 @@ color: $_(textColorA); /* white */
 
 .CLASS03500 {
 	border:solid 1px $_(black); /* black */
-	margin-left:10px;
-	margin-top:27px;
+	width:100%;
 }
 
 .CLASS03501 {
@@ -6102,8 +6121,7 @@ color: $_(textColorA); /* white */
 
 .CLASS03600 {
 	border:solid 1px $_(black); /* black */
-	margin-left:50px;
-	margin-top:27px;
+	width:100%;
 }
 
 .CLASS03601 {
@@ -6192,8 +6210,7 @@ color: $_(textColorA); /* white */
 
 .CLASS03800 {
 	border:solid 1px $_(black); /* black */
-	margin-left:50px;
-	margin-top:27px;
+	width:100%;
 }
 
 .CLASS03801 {
@@ -6236,17 +6253,13 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS03902 {
-	width:100%;
 	overflow:auto;
-	margin:0;
-	padding:0;
+	margin:10px;
+	margin-right:2px;
 }
 
 .CLASS03903 {
 	border:solid 1px $_(black); /* black */
-	margin-top:0px;
-	width:235px;
-	margin-top:27px;
 }
 
 .CLASS03904 {
@@ -6271,13 +6284,13 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS03908 {
-	width:100%;
 	overflow:auto;
+	margin:10px;
+	margin-left:2px;
 }
 
 .CLASS03909 {
-	width: 80%;
-	height: 96%;
+	width: 100%;
 }
 
 .CLASS03910 {
@@ -6303,13 +6316,13 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS04002 {
-	width:100%;
 	overflow:auto;
+	margin:10px;
+	margin-left:2px;
 }
 
 .CLASS04003 {
-	width: 80%;
-	height: 96%;
+	width: 100%;
 }
 
 .CLASS04004 {
@@ -6324,7 +6337,6 @@ color: $_(textColorA); /* white */
 
 .CLASS04006 {
 	border:solid 1px $_(black); /* black */
-	margin-top:27px;
 }
 
 .CLASS04007 {
@@ -6335,7 +6347,6 @@ color: $_(textColorA); /* white */
 
 .CLASS04100 {
 	text-align:center;
-	width:95%;
 	empty-cells:show;
 }
 
@@ -6352,6 +6363,7 @@ color: $_(textColorA); /* white */
 
 .CLASS04103 {
 	height:auto;
+	background-color: $_(background); /* #183473 */
 }
 
 .CLASS04104 {
@@ -6402,8 +6414,13 @@ color: $_(textColorA); /* white */
 
 .CLASS04200 {
 	text-align:center;
-	width:95%;
 	empty-cells:show;
+}
+
+.CLASS04201 {
+	overflow:auto;
+	margin:10px;
+	margin-right:2px;
 }
 
 .CLASS04202 {
@@ -6421,6 +6438,7 @@ color: $_(textColorA); /* white */
 
 .CLASS04205 {
 	height:auto;
+	background-color: $_(background); /* #183473 */
 }
 
 .CLASS04206 {
@@ -6477,7 +6495,8 @@ color: $_(textColorA); /* white */
 .CLASS04301 {
 	width:100%;
 	height:100%;
-	overflow-y:scroll;
+	overflow-y:auto;
+	display:contents;
 }
 
 .CLASS04302 {
@@ -7211,11 +7230,12 @@ color: $_(textColorA); /* white */
 /* rega\pages\tabs\user\newFav.htm */
 
 .CLASS06300 {
-	margin:20px;
+	margin:10px;
+  width:100%;
 }
 
 .CLASS06301 {
-	color: $_(textColorA); /* white */
+	color: $_(textColorB); /* black */
 }
 
 .CLASS06302 {
@@ -8693,7 +8713,8 @@ color: $_(textColorA); /* white */
 /* config\ic_selchannel.cgi */
 
 .CLASS21900 {
-  padding: 4px;
+  padding: 0px;
+  display: inherit;
 }
 
 .CLASS21901 {
@@ -8743,7 +8764,6 @@ color: $_(textColorA); /* white */
 
 .CLASS21908 {
   overflow: auto;
-  background-color: $_(background); /* #183473 */
   width:100%;
 }
 
@@ -8800,8 +8820,8 @@ color: $_(textColorA); /* white */
 /* config\ic_deviceparameters.cgi */
 
 .CLASS22000 {
-  margin: 4px;
-  width: 99%;
+  margin: 10px;
+  width: 100%;
 }
 
 .CLASS22001 {
@@ -8878,7 +8898,8 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS22101 {
-  padding:4px;
+  padding:0px;
+  display:inherit;
 }
 
 .CLASS22102 {

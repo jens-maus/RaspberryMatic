@@ -70,22 +70,32 @@ Bitte w&auml;hlen Sie "Neu", um einen Favoriten anzulegen.</td>
 <td class="CLASS06402"></td>
 </tr>
 </table>
-<table id="tblFavs" class="tMain" cellpadding="0" cellspacing="0" width="97%" style="display:none">
+<table id="tblFavs" class="tMain" cellpadding="0" cellspacing="0" style="display:none">
+  <colgroup>
+  <col style="width:10%;"/>
+  <col style="width:30%;"/>
+  <col style="width:30%;"/>
+  <col style="width:25px;"/>
+  <col style="width:25px;"/>
+  <col style="width:25px;"/>
+  <col style="width:10%;"/>
+  <col style="width:20%;"/>
+  </colgroup>
   <tr>
-    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="pos"){sCssName="SortSelected";} %>
-    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'pos',true);" >${thPosition}</div></th>
+    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="pos"){sCssName="SortSelected";} %>
+    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'pos',true);" >${thPosition}</div></th>
     <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
-    <th><div class="pt11 CLASS06404 <%Write(sCssName);%>" onclick="IseSort(arFavs,'name',true);" >${thName}</div></th>
-    <th><div class="pt11 Sort">${thDescription}</div></th>
+    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'name',true);" >${thName}</div></th>
+    <th class="thCell CLASS02803"><div class="pt11">${thDescription}</div></th>
     <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="unit"){sCssName="SortSelected";} %>
-    <th><div class="pt11 CLASS06404 <%Write(sCssName);%>"  onclick="IseSort(arFavs,'unit',true);" >${thNumberOfColumns}</div></th>
+    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>"  onclick="IseSort(arFavs,'unit',true);" >${thNumberOfColumns}</div></th>
     <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="colpos"){sCssName="SortSelected";} %>
-    <th class="CLASS06414"><div class="CLASS06404 <%Write(sCssName);%>" onclick="IseSort(arFavs,'colpos',true);">${thAlignmentOfColumns}</div></th>
+    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'colpos',true);">${thAlignmentOfColumns}</div></th>
     <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="namepos"){sCssName="SortSelected";} %>
-    <th class="CLASS06414"><div class="CLASS06404 <%Write(sCssName);%>" onclick="IseSort(arFavs,'namepos',true);">${thPosOfNameField}</div></th>
+    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'namepos',true);">${thPosOfNameField}</div></th>
     <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="users"){sCssName="SortSelected";} %>
-    <th><div class="pt11 CLASS06404 <%Write(sCssName);%>" onclick="IseSort(arFavs,'users',true);">${thUser}</div></th>
-    <th><div class="pt11 Sort">${thAction}</div></th>
+    <th class="thCell CLASS02803"><div class="pt11 <%Write(sCssName);%>" onclick="IseSort(arFavs,'users',true);">${thUser}</div></th>
+    <th class="thCell CLASS02803"><div class="pt11">${thAction}</div></th>
   </tr>
   <tr>
     <td class="CLASS06408">&nbsp;</td>

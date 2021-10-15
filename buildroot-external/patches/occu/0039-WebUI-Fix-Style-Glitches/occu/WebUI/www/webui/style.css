@@ -391,7 +391,7 @@ a img {
   text-align:center;
   border:solid 1px $_(black); /* black */
   background-color:$_(clickable);
-  height: auto;
+  height:50px;
 }
 
 .filterTable td
@@ -2298,6 +2298,7 @@ progress::-webkit-progress-value { background: #3678c9; }
   /* font-weight:bold; */
   text-align:left;
   vertical-align:middle;  
+  height:20px !important;
 }
 
 .FilterHeight20 {

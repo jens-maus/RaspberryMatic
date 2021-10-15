@@ -161,6 +161,18 @@ a img {
 {
     background-color: $_(contentBackground);
     overflow: auto;
+    display: flex;
+    align-items: flex-start;
+}
+
+#prgcontent
+{
+  display: contents;
+}
+
+#GroupListBody
+{
+  display: contents;
 }
 
 /* Kopfzeile */
@@ -597,6 +609,7 @@ a img {
   margin: 10px;
   empty-cells: show;
   border: solid 1px $_(black); /* black */
+  width: 100%;
 }
 
 .tblList th {
@@ -1248,7 +1261,7 @@ a img {
   margin:10px;
   empty-cells: show;
   border:solid 1px $_(black); /* black */
-  width: -webkit-fill-available;
+  width: 100%;
 }
 /*
 .tTable th
@@ -1306,6 +1319,7 @@ div.caption  { display: table-caption; }
 {
   border:solid 1px $_(black); /* black */
   margin:10px;
+  width:100%;
 }
 
 .tHeader
@@ -1491,7 +1505,14 @@ div.caption  { display: table-caption; }
 /* Buttons incl. Hilfe-Img. */
 .cpButton {
     width:230px;
-}#ic_deviceparameters #id_body
+}
+
+#id_body
+{
+  display: inherit;
+}
+
+#ic_deviceparameters #id_body
 {
 	margin-top: 10px;
 	background-color: $_(background); /* #183473 */
@@ -1668,6 +1689,10 @@ div.caption  { display: table-caption; }
 	border: 0;
 }/*LinkList-Tabelle*/
 /*--------------------------------------------*/
+#ic_linkpeerlist {
+  display: contents;
+}
+
 #ic_linkpeerlist #head_wrapper {
   border-bottom: 0;
   margin: 0;
@@ -1683,6 +1708,7 @@ div.caption  { display: table-caption; }
 #ic_linkpeerlist #body_wrapper {
   margin: 0;
   padding: 0;
+  display: inherit;
 }
 
 #ic_linkpeerlist .LinkListTbl {
@@ -1691,6 +1717,7 @@ div.caption  { display: table-caption; }
   margin: 10px;
   height: auto;
   border: 1px solid $_(black); /* black */
+  width: 100%;
 }
 
 #ic_linkpeerlist .LinkListTbl td {
@@ -1791,7 +1818,17 @@ background-color: $_(inactiveBackground);
 {
   height: 40px;
   background-color: $_(activeBackground);
-}#ic_selchannel #previous_step_wrapper {
+}
+
+#ic_selchannel {
+  display: contents;
+}
+
+#ic_selchannel #body_wrapper {
+  display: inherit;
+}
+
+#ic_selchannel #previous_step_wrapper {
 	background-color: $_(background); /* #183473 */
 	margin: 20px;
 }
@@ -2933,6 +2970,7 @@ html, body {
   border:1px black solid;
   padding:0;
   empty-cells:show;
+  width:100%;
 }
 
 .DeviceListHead {
@@ -8675,6 +8713,7 @@ color: $_(textColorA); /* white */
 
 .CLASS21900 {
   padding: 0px;
+  display: inherit;
 }
 
 .CLASS21901 {
@@ -8859,6 +8898,7 @@ color: $_(textColorA); /* white */
 
 .CLASS22101 {
   padding:0px;
+  display:inherit;
 }
 
 .CLASS22102 {

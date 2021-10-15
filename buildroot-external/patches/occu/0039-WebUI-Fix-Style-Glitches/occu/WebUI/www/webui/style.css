@@ -6172,9 +6172,6 @@ color: $_(textColorA); /* white */
 /* rega\pages\tabs\handling\hfuncchannels.htm */
 
 .CLASS03800 {
-	border:solid 1px $_(black); /* black */
-	margin-left:50px;
-	margin-top:27px;
 }
 
 .CLASS03801 {
@@ -6280,13 +6277,13 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS04002 {
-	width:100%;
 	overflow:auto;
+	margin:10px;
+	margin-left:2px;
 }
 
 .CLASS04003 {
-	width: 80%;
-	height: 96%;
+	width: 100%;
 }
 
 .CLASS04004 {
@@ -6301,7 +6298,6 @@ color: $_(textColorA); /* white */
 
 .CLASS04006 {
 	border:solid 1px $_(black); /* black */
-	margin-top:27px;
 }
 
 .CLASS04007 {
@@ -6380,6 +6376,12 @@ color: $_(textColorA); /* white */
 .CLASS04200 {
 	text-align:center;
 	empty-cells:show;
+}
+
+.CLASS04201 {
+	overflow:auto;
+	margin:10px;
+	margin-right:2px;
 }
 
 .CLASS04202 {

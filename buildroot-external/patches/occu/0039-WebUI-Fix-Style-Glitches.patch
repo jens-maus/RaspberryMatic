@@ -508,6 +508,38 @@
           <tr class="CLASS03910">
             <td style="vertical-align: top;" id="chnList"></td>
           </tr>
+--- occu/WebUI/www/rega/pages/tabs/control/functions.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/functions.htm
+@@ -21,14 +21,14 @@
+   <tr>
+     <!-- Linke Spalte -->
+     <td id="contentLeft" class="hidden">
+-      <table class="filterTable CLASS04001 j_translate">
++      <table class="filterTable CLASS04001 j_translate" cellpadding="0" cellspacing="0">
+         <tr>
+           <td style="vertical-align: top; border: 0px;">
+-            <div id="divFL" class="CLASS04002">
++            <div id="divFL" class="CLASS04201">
+               <script type="text/javascript">
+                 var contHeight = $("content").style.height;
+                 contHeight = contHeight.replace(/px/, "");
+-                $("divFL").style.height = Math.floor((contHeight * 0.98)) + "px";
++                $("divFL").style.height = (contHeight - 20) + "px";
+               </script>
+               <table id="tblFunctionNames" class="StatViewTbl CLASS04006 j_translate" cellpadding="0" cellspacing="0" style="width: 100%;">
+                 <tr>
+@@ -92,9 +92,9 @@
+       <script type="text/javascript">
+         var contHeight = $("content").style.height;
+         contHeight = contHeight.replace(/px/, "");
+-        $("divHTF").style.height = Math.floor((contHeight * 0.97)) + "px";
++        $("divHTF").style.height = (contHeight - 20) + "px";
+       </script>
+-       <table id="tblRightContent" class="CLASS04003">
++       <table id="tblRightContent" class="CLASS04003" cellpadding="0" cellspacing="0">
+          <tr class="CLASS04004">
+            <td style="vertical-align: top;" id="chnList">
+            
 --- occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm
 @@ -39,7 +39,7 @@
@@ -914,7 +946,17 @@
  }
  
  .CLASS03501 {
-@@ -6247,15 +6217,13 @@
+@@ -6202,9 +6172,6 @@
+ /* rega\pages\tabs\handling\hfuncchannels.htm */
+ 
+ .CLASS03800 {
+-	border:solid 1px $_(black); /* black */
+-	margin-left:50px;
+-	margin-top:27px;
+ }
+ 
+ .CLASS03801 {
+@@ -6247,15 +6214,13 @@
  }
  
  .CLASS03902 {
@@ -932,7 +974,7 @@
  }
  
  .CLASS03904 {
-@@ -6280,13 +6248,13 @@
+@@ -6280,13 +6245,13 @@
  }
  
  .CLASS03908 {
@@ -949,7 +991,32 @@
  }
  
  .CLASS03910 {
-@@ -6344,7 +6312,6 @@
+@@ -6312,13 +6277,13 @@
+ }
+ 
+ .CLASS04002 {
+-	width:100%;
+ 	overflow:auto;
++	margin:10px;
++	margin-left:2px;
+ }
+ 
+ .CLASS04003 {
+-	width: 80%;
+-	height: 96%;
++	width: 100%;
+ }
+ 
+ .CLASS04004 {
+@@ -6333,7 +6298,6 @@
+ 
+ .CLASS04006 {
+ 	border:solid 1px $_(black); /* black */
+-	margin-top:27px;
+ }
+ 
+ .CLASS04007 {
+@@ -6344,7 +6308,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -957,7 +1024,7 @@
  	empty-cells:show;
  }
  
-@@ -6361,6 +6328,7 @@
+@@ -6361,6 +6324,7 @@
  
  .CLASS04103 {
  	height:auto;
@@ -965,7 +1032,7 @@
  }
  
  .CLASS04104 {
-@@ -6411,7 +6379,6 @@
+@@ -6411,10 +6375,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -973,7 +1040,16 @@
  	empty-cells:show;
  }
  
-@@ -6430,6 +6397,7 @@
++.CLASS04201 {
++	overflow:auto;
++	margin:10px;
++	margin-right:2px;
++}
++
+ .CLASS04202 {
+ 	height:40px;
+ }
+@@ -6430,6 +6399,7 @@
  
  .CLASS04205 {
  	height:auto;
@@ -981,7 +1057,7 @@
  }
  
  .CLASS04206 {
-@@ -6486,7 +6454,7 @@
+@@ -6486,7 +6456,7 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -990,7 +1066,7 @@
  }
  
  .CLASS04302 {
-@@ -7675,7 +7643,7 @@
+@@ -7675,7 +7645,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -999,7 +1075,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -8702,7 +8670,7 @@
+@@ -8702,7 +8672,7 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -1008,7 +1084,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8720,6 @@
+@@ -8752,7 +8722,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -1016,7 +1092,7 @@
    width:100%;
  }
  
-@@ -8887,7 +8854,7 @@
+@@ -8887,7 +8856,7 @@
  }
  
  .CLASS22101 {

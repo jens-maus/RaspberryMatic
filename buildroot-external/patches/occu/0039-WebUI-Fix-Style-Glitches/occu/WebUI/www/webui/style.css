@@ -3012,8 +3012,7 @@ html, body {
 }
 
 .DeviceListRow_Highlight {
-  /* background-color: $_(inactiveBackground); */
-  background-color: $_(deviceListRowHighlight);
+  background-color: $_(inactiveBackground);
   cursor:pointer;
 }
 

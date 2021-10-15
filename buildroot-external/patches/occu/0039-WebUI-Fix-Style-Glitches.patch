@@ -558,10 +558,12 @@
             
 --- occu/WebUI/www/rega/pages/tabs/control/programs.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/programs.htm
-@@ -44,6 +44,13 @@
+@@ -43,7 +43,14 @@
+ </script>
  
  <div id="prgcontent" class="j_translate">
-   <table id="ProgramListTable" class="tblList tTable CLASS03701" border="0" cellpadding="0" cellspacing="0" frame="void" rules="none" >
+-  <table id="ProgramListTable" class="tblList tTable CLASS03701" border="0" cellpadding="0" cellspacing="0" frame="void" rules="none" >
++  <table id="ProgramListTable" class="tblList tTable CLASS03701" border="0" cellpadding="0" cellspacing="0" >
 +    <colgroup>
 +      <col style="width:15%;">
 +      <col style="width:30%;">
@@ -1067,7 +1069,17 @@
  }
  
  .DeviceListHead {
-@@ -5359,6 +5383,7 @@
+@@ -2988,8 +3012,7 @@
+ }
+ 
+ .DeviceListRow_Highlight {
+-  /* background-color: $_(inactiveBackground); */
+-  background-color: $_(deviceListRowHighlight);
++  background-color: $_(inactiveBackground);
+   cursor:pointer;
+ }
+ 
+@@ -5359,6 +5382,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -1075,7 +1087,7 @@
  }
  
  .CLASS02536 {
-@@ -5381,6 +5406,7 @@
+@@ -5381,6 +5405,7 @@
  	max-width: 480px;
  	clear: both;
  	display: inline-block;
@@ -1083,7 +1095,7 @@
  }
  
  .CLASS02539 {
-@@ -5553,7 +5579,7 @@
+@@ -5553,7 +5578,7 @@
  }
  
  .CLASS02602 {
@@ -1092,7 +1104,7 @@
  }
  
  .CLASS02603 {
-@@ -5584,21 +5610,6 @@
+@@ -5584,21 +5609,6 @@
  	padding: 4px;
  }
  
@@ -1114,7 +1126,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5639,7 +5650,7 @@
+@@ -5639,7 +5649,7 @@
  
  .CLASS02614 {
  	background-color: $_(inactiveButton); /* #dddddd */
@@ -1123,7 +1135,7 @@
  	font-weight: bold;
  	border: solid 1px $_(gray); /* silver */
  }
-@@ -5735,10 +5746,12 @@
+@@ -5735,10 +5745,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -1136,7 +1148,7 @@
  }
  
  .CLASS02804 {
-@@ -5989,9 +6002,6 @@
+@@ -5989,9 +6001,6 @@
  }
  
  .CLASS03301 {
@@ -1146,7 +1158,7 @@
  	empty-cells:show;
  }
  
-@@ -6079,8 +6089,7 @@
+@@ -6079,8 +6088,7 @@
  
  .CLASS03500 {
  	border:solid 1px $_(black); /* black */
@@ -1156,7 +1168,7 @@
  }
  
  .CLASS03501 {
-@@ -6113,8 +6122,7 @@
+@@ -6113,8 +6121,7 @@
  
  .CLASS03600 {
  	border:solid 1px $_(black); /* black */
@@ -1166,7 +1178,7 @@
  }
  
  .CLASS03601 {
-@@ -6203,8 +6211,7 @@
+@@ -6203,8 +6210,7 @@
  
  .CLASS03800 {
  	border:solid 1px $_(black); /* black */
@@ -1176,7 +1188,7 @@
  }
  
  .CLASS03801 {
-@@ -6247,15 +6254,13 @@
+@@ -6247,15 +6253,13 @@
  }
  
  .CLASS03902 {
@@ -1194,7 +1206,7 @@
  }
  
  .CLASS03904 {
-@@ -6280,13 +6285,13 @@
+@@ -6280,13 +6284,13 @@
  }
  
  .CLASS03908 {
@@ -1211,7 +1223,7 @@
  }
  
  .CLASS03910 {
-@@ -6312,13 +6317,13 @@
+@@ -6312,13 +6316,13 @@
  }
  
  .CLASS04002 {
@@ -1228,7 +1240,7 @@
  }
  
  .CLASS04004 {
-@@ -6333,7 +6338,6 @@
+@@ -6333,7 +6337,6 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
@@ -1236,7 +1248,7 @@
  }
  
  .CLASS04007 {
-@@ -6344,7 +6348,6 @@
+@@ -6344,7 +6347,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -1244,7 +1256,7 @@
  	empty-cells:show;
  }
  
-@@ -6361,6 +6364,7 @@
+@@ -6361,6 +6363,7 @@
  
  .CLASS04103 {
  	height:auto;
@@ -1252,7 +1264,7 @@
  }
  
  .CLASS04104 {
-@@ -6411,10 +6415,15 @@
+@@ -6411,10 +6414,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -1269,7 +1281,7 @@
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,6 +6439,7 @@
+@@ -6430,6 +6438,7 @@
  
  .CLASS04205 {
  	height:auto;
@@ -1277,7 +1289,7 @@
  }
  
  .CLASS04206 {
-@@ -6486,7 +6496,8 @@
+@@ -6486,7 +6495,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -1287,7 +1299,7 @@
  }
  
  .CLASS04302 {
-@@ -7220,11 +7231,12 @@
+@@ -7220,11 +7230,12 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -1302,7 +1314,7 @@
  }
  
  .CLASS06302 {
-@@ -7675,7 +7687,7 @@
+@@ -7675,7 +7686,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -1311,7 +1323,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -8702,7 +8714,8 @@
+@@ -8702,7 +8713,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -1321,7 +1333,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8765,6 @@
+@@ -8752,7 +8764,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -1329,7 +1341,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8821,8 @@
+@@ -8809,8 +8820,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -1340,7 +1352,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8899,8 @@
+@@ -8887,7 +8898,8 @@
  }
  
  .CLASS22101 {

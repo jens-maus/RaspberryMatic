@@ -992,36 +992,37 @@
  }
  
  .CLASS02804 {
-@@ -6078,9 +6052,6 @@
- /* rega\pages\tabs\handling\hdevichannels.htm */
+@@ -6079,8 +6053,7 @@
  
  .CLASS03500 {
--	border:solid 1px $_(black); /* black */
+ 	border:solid 1px $_(black); /* black */
 -	margin-left:10px;
 -	margin-top:27px;
++	width:100%;
  }
  
  .CLASS03501 {
-@@ -6113,8 +6084,6 @@
+@@ -6113,8 +6086,7 @@
  
  .CLASS03600 {
  	border:solid 1px $_(black); /* black */
 -	margin-left:50px;
 -	margin-top:27px;
++	width:100%;
  }
  
  .CLASS03601 {
-@@ -6202,9 +6171,6 @@
- /* rega\pages\tabs\handling\hfuncchannels.htm */
+@@ -6203,8 +6175,7 @@
  
  .CLASS03800 {
--	border:solid 1px $_(black); /* black */
+ 	border:solid 1px $_(black); /* black */
 -	margin-left:50px;
 -	margin-top:27px;
++	width:100%;
  }
  
  .CLASS03801 {
-@@ -6247,15 +6213,13 @@
+@@ -6247,15 +6218,13 @@
  }
  
  .CLASS03902 {
@@ -1039,7 +1040,7 @@
  }
  
  .CLASS03904 {
-@@ -6280,13 +6244,13 @@
+@@ -6280,13 +6249,13 @@
  }
  
  .CLASS03908 {
@@ -1056,7 +1057,7 @@
  }
  
  .CLASS03910 {
-@@ -6312,13 +6276,13 @@
+@@ -6312,13 +6281,13 @@
  }
  
  .CLASS04002 {
@@ -1073,7 +1074,7 @@
  }
  
  .CLASS04004 {
-@@ -6333,7 +6297,6 @@
+@@ -6333,7 +6302,6 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
@@ -1081,7 +1082,7 @@
  }
  
  .CLASS04007 {
-@@ -6344,7 +6307,6 @@
+@@ -6344,7 +6312,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -1089,7 +1090,7 @@
  	empty-cells:show;
  }
  
-@@ -6361,6 +6323,7 @@
+@@ -6361,6 +6328,7 @@
  
  .CLASS04103 {
  	height:auto;
@@ -1097,7 +1098,7 @@
  }
  
  .CLASS04104 {
-@@ -6411,10 +6374,15 @@
+@@ -6411,10 +6379,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -1114,7 +1115,7 @@
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,6 +6398,7 @@
+@@ -6430,6 +6403,7 @@
  
  .CLASS04205 {
  	height:auto;
@@ -1122,7 +1123,7 @@
  }
  
  .CLASS04206 {
-@@ -6486,7 +6455,7 @@
+@@ -6486,7 +6460,7 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -1131,7 +1132,7 @@
  }
  
  .CLASS04302 {
-@@ -7675,7 +7644,7 @@
+@@ -7675,7 +7649,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -1140,7 +1141,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -8702,7 +8671,7 @@
+@@ -8702,7 +8676,7 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -1149,7 +1150,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8721,6 @@
+@@ -8752,7 +8726,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -1157,7 +1158,7 @@
    width:100%;
  }
  
-@@ -8887,7 +8855,7 @@
+@@ -8887,7 +8860,7 @@
  }
  
  .CLASS22101 {

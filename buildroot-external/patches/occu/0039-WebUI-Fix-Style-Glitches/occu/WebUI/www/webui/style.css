@@ -6052,6 +6052,8 @@ color: $_(textColorA); /* white */
 /* rega\pages\tabs\handling\hdevichannels.htm */
 
 .CLASS03500 {
+	border:solid 1px $_(black); /* black */
+	width:100%;
 }
 
 .CLASS03501 {
@@ -6084,6 +6086,7 @@ color: $_(textColorA); /* white */
 
 .CLASS03600 {
 	border:solid 1px $_(black); /* black */
+	width:100%;
 }
 
 .CLASS03601 {
@@ -6171,6 +6174,8 @@ color: $_(textColorA); /* white */
 /* rega\pages\tabs\handling\hfuncchannels.htm */
 
 .CLASS03800 {
+	border:solid 1px $_(black); /* black */
+	width:100%;
 }
 
 .CLASS03801 {

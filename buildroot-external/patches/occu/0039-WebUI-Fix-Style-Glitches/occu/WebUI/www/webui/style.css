@@ -1512,9 +1512,13 @@ div.caption  { display: table-caption; }
   display: inherit;
 }
 
+#ic_deviceparameters
+{
+  display: contents;
+}
+
 #ic_deviceparameters #id_body
 {
-	margin-top: 10px;
 	background-color: $_(background); /* #183473 */
 }
 
@@ -1530,7 +1534,7 @@ div.caption  { display: table-caption; }
 
 #ic_deviceparameters #DeviceInformation
 {
-	width: 99%;
+	width: 100%;
 	color: $_(textColorA); /* white */
 	border: 1px solid $_(black); /* black */
 }
@@ -1585,7 +1589,7 @@ div.caption  { display: table-caption; }
 
 #ic_deviceparameters .parameter_area .parameters_table 
 {
-	width: 99%;
+	width: 100%;
 	color: $_(textColorA); /* white */
 	border: 1px solid $_(black); /* black */
 }
@@ -8819,8 +8823,8 @@ color: $_(textColorA); /* white */
 /* config\ic_deviceparameters.cgi */
 
 .CLASS22000 {
-  margin: 4px;
-  width: 99%;
+  margin: 10px;
+  width: 100%;
 }
 
 .CLASS22001 {

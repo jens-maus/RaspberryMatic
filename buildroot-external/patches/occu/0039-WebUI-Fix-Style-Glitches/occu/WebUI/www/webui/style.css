@@ -1248,6 +1248,7 @@ a img {
   margin:10px;
   empty-cells: show;
   border:solid 1px $_(black); /* black */
+  width: -webkit-fill-available;
 }
 /*
 .tTable th

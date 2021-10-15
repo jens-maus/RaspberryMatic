@@ -913,7 +913,21 @@
  }
  
  .tHeader
-@@ -1495,9 +1505,20 @@
+@@ -1391,12 +1401,8 @@
+ 
+ .oLine
+ {
+-  background-color: $_(background); /* #183473 */
+-  width: 90%;
++  width: 100%;
+   height: 6px;
+-  border-bottom-width: 5px;
+-  border-bottom-style: solid;
+-  border-bottom-color: $_(white); /* #ffffff */
+ }
+ 
+ .sysConfigHeight
+@@ -1495,9 +1501,20 @@
  /* Buttons incl. Hilfe-Img. */
  .cpButton {
      width:230px;
@@ -936,7 +950,7 @@
  	background-color: $_(background); /* #183473 */
  }
  
-@@ -1513,7 +1534,7 @@
+@@ -1513,7 +1530,7 @@
  
  #ic_deviceparameters #DeviceInformation
  {
@@ -945,7 +959,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -1568,7 +1589,7 @@
+@@ -1568,7 +1585,7 @@
  
  #ic_deviceparameters .parameter_area .parameters_table 
  {
@@ -954,7 +968,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -1672,6 +1693,10 @@
+@@ -1672,6 +1689,10 @@
  	border: 0;
  }/*LinkList-Tabelle*/
  /*--------------------------------------------*/
@@ -965,7 +979,7 @@
  #ic_linkpeerlist #head_wrapper {
    border-bottom: 0;
    margin: 0;
-@@ -1687,17 +1712,16 @@
+@@ -1687,17 +1708,16 @@
  #ic_linkpeerlist #body_wrapper {
    margin: 0;
    padding: 0;
@@ -986,7 +1000,7 @@
  }
  
  #ic_linkpeerlist .LinkListTbl td {
-@@ -1798,7 +1822,17 @@
+@@ -1798,7 +1818,17 @@
  {
    height: 40px;
    background-color: $_(activeBackground);
@@ -1005,7 +1019,7 @@
  	background-color: $_(background); /* #183473 */
  	margin: 20px;
  }
-@@ -1964,14 +1998,7 @@
+@@ -1964,14 +1994,7 @@
  {
  	visibility: hidden;
  }
@@ -1020,7 +1034,7 @@
  /*--------------------------------------------*/
  
  /*Tabellenkörper Virtuelle Tasten*/
-@@ -2313,6 +2340,7 @@
+@@ -2313,6 +2336,7 @@
    /* font-weight:bold; */
    text-align:left;
    vertical-align:middle;  
@@ -1028,7 +1042,7 @@
  }
  
  .FilterHeight20 {
-@@ -2580,6 +2608,7 @@
+@@ -2580,6 +2604,7 @@
    background-color: $_(subMenuBackground);
    overflow:hidden;
    z-index:189;
@@ -1036,7 +1050,7 @@
  }
  
  .MainMenuSubItem {
-@@ -2940,13 +2969,12 @@
+@@ -2940,13 +2965,12 @@
    height:80px;
  }
  #DeviceListTable {
@@ -1053,7 +1067,7 @@
  }
  
  .DeviceListHead {
-@@ -5359,6 +5387,7 @@
+@@ -5359,6 +5383,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -1061,7 +1075,7 @@
  }
  
  .CLASS02536 {
-@@ -5381,6 +5410,7 @@
+@@ -5381,6 +5406,7 @@
  	max-width: 480px;
  	clear: both;
  	display: inline-block;
@@ -1069,7 +1083,7 @@
  }
  
  .CLASS02539 {
-@@ -5553,7 +5583,7 @@
+@@ -5553,7 +5579,7 @@
  }
  
  .CLASS02602 {
@@ -1078,7 +1092,7 @@
  }
  
  .CLASS02603 {
-@@ -5584,21 +5614,6 @@
+@@ -5584,21 +5610,6 @@
  	padding: 4px;
  }
  
@@ -1100,7 +1114,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5639,7 +5654,7 @@
+@@ -5639,7 +5650,7 @@
  
  .CLASS02614 {
  	background-color: $_(inactiveButton); /* #dddddd */
@@ -1109,7 +1123,7 @@
  	font-weight: bold;
  	border: solid 1px $_(gray); /* silver */
  }
-@@ -5735,10 +5750,12 @@
+@@ -5735,10 +5746,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -1122,7 +1136,7 @@
  }
  
  .CLASS02804 {
-@@ -5989,9 +6006,6 @@
+@@ -5989,9 +6002,6 @@
  }
  
  .CLASS03301 {
@@ -1132,7 +1146,7 @@
  	empty-cells:show;
  }
  
-@@ -6079,8 +6093,7 @@
+@@ -6079,8 +6089,7 @@
  
  .CLASS03500 {
  	border:solid 1px $_(black); /* black */
@@ -1142,7 +1156,7 @@
  }
  
  .CLASS03501 {
-@@ -6113,8 +6126,7 @@
+@@ -6113,8 +6122,7 @@
  
  .CLASS03600 {
  	border:solid 1px $_(black); /* black */
@@ -1152,7 +1166,7 @@
  }
  
  .CLASS03601 {
-@@ -6203,8 +6215,7 @@
+@@ -6203,8 +6211,7 @@
  
  .CLASS03800 {
  	border:solid 1px $_(black); /* black */
@@ -1162,7 +1176,7 @@
  }
  
  .CLASS03801 {
-@@ -6247,15 +6258,13 @@
+@@ -6247,15 +6254,13 @@
  }
  
  .CLASS03902 {
@@ -1180,7 +1194,7 @@
  }
  
  .CLASS03904 {
-@@ -6280,13 +6289,13 @@
+@@ -6280,13 +6285,13 @@
  }
  
  .CLASS03908 {
@@ -1197,7 +1211,7 @@
  }
  
  .CLASS03910 {
-@@ -6312,13 +6321,13 @@
+@@ -6312,13 +6317,13 @@
  }
  
  .CLASS04002 {
@@ -1214,7 +1228,7 @@
  }
  
  .CLASS04004 {
-@@ -6333,7 +6342,6 @@
+@@ -6333,7 +6338,6 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
@@ -1222,7 +1236,7 @@
  }
  
  .CLASS04007 {
-@@ -6344,7 +6352,6 @@
+@@ -6344,7 +6348,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -1230,7 +1244,7 @@
  	empty-cells:show;
  }
  
-@@ -6361,6 +6368,7 @@
+@@ -6361,6 +6364,7 @@
  
  .CLASS04103 {
  	height:auto;
@@ -1238,7 +1252,7 @@
  }
  
  .CLASS04104 {
-@@ -6411,10 +6419,15 @@
+@@ -6411,10 +6415,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -1255,7 +1269,7 @@
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,6 +6443,7 @@
+@@ -6430,6 +6439,7 @@
  
  .CLASS04205 {
  	height:auto;
@@ -1263,7 +1277,7 @@
  }
  
  .CLASS04206 {
-@@ -6486,7 +6500,8 @@
+@@ -6486,7 +6496,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -1273,7 +1287,22 @@
  }
  
  .CLASS04302 {
-@@ -7675,7 +7690,7 @@
+@@ -7220,11 +7231,12 @@
+ /* rega\pages\tabs\user\newFav.htm */
+ 
+ .CLASS06300 {
+-	margin:20px;
++	margin:10px;
++  width:100%;
+ }
+ 
+ .CLASS06301 {
+-	color: $_(textColorA); /* white */
++	color: $_(textColorB); /* black */
+ }
+ 
+ .CLASS06302 {
+@@ -7675,7 +7687,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -1282,7 +1311,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -8702,7 +8717,8 @@
+@@ -8702,7 +8714,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -1292,7 +1321,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8768,6 @@
+@@ -8752,7 +8765,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -1300,7 +1329,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8824,8 @@
+@@ -8809,8 +8821,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -1311,7 +1340,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8902,8 @@
+@@ -8887,7 +8899,8 @@
  }
  
  .CLASS22101 {

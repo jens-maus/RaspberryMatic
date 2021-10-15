@@ -1401,12 +1401,8 @@ div.caption  { display: table-caption; }
 
 .oLine
 {
-  background-color: $_(background); /* #183473 */
-  width: 90%;
+  width: 100%;
   height: 6px;
-  border-bottom-width: 5px;
-  border-bottom-style: solid;
-  border-bottom-color: $_(white); /* #ffffff */
 }
 
 .sysConfigHeight
@@ -7235,11 +7231,12 @@ color: $_(textColorA); /* white */
 /* rega\pages\tabs\user\newFav.htm */
 
 .CLASS06300 {
-	margin:20px;
+	margin:10px;
+  width:100%;
 }
 
 .CLASS06301 {
-	color: $_(textColorA); /* white */
+	color: $_(textColorB); /* black */
 }
 
 .CLASS06302 {

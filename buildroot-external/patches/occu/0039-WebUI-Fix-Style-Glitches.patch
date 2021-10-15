@@ -351,7 +351,7 @@
 +       style="display:none;">
  <colgroup>
 -  <col style="width:2%;"  width="2%"/>
-+  <col style="width:2%;"/>
++  <col style="width:1%;"/>
    <!-- Plus/Minus Device-->
    <col style="width:2%;"/>
    <!-- Plus/Minus Group -->
@@ -1263,16 +1263,17 @@
  }
  
  .CLASS04206 {
-@@ -6486,7 +6500,7 @@
+@@ -6486,7 +6500,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
 -	overflow-y:scroll;
 +	overflow-y:auto;
++	display:contents;
  }
  
  .CLASS04302 {
-@@ -7675,7 +7689,7 @@
+@@ -7675,7 +7690,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -1281,7 +1282,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -8702,7 +8716,8 @@
+@@ -8702,7 +8717,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -1291,7 +1292,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8767,6 @@
+@@ -8752,7 +8768,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -1299,7 +1300,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8823,8 @@
+@@ -8809,8 +8824,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -1310,7 +1311,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8901,8 @@
+@@ -8887,7 +8902,8 @@
  }
  
  .CLASS22101 {

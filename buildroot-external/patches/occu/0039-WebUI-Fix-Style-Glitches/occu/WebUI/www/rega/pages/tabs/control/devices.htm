@@ -25,11 +25,6 @@
         <tr>
           <td style="vertical-align: top; border: 0px">
             <div id="divDL" class="CLASS03902">
-              <script type="text/javascript">
-                var contHeight = $("content").style.height;
-                contHeight = contHeight.replace(/px/, "");
-                $("divDL").style.height = (contHeight - 20) + "px";
-              </script>
               <table id="tblFunctionNames" class="StatViewTbl CLASS03903 j_translate" cellpadding="0" cellspacing="0" style="width:100%;">
                 <colgroup>
                   <col style="width:80%;"/>
@@ -130,11 +125,6 @@
     <!-- Rechte Spalte -->
     <td id="contentRight">
       <div id="divRTD" class="CLASS03908">
-        <script type="text/javascript">
-          var contHeight = $("content").style.height;
-          contHeight = contHeight.replace(/px/, "");
-          $("divRTD").style.height = (contHeight - 20) + "px";
-        </script>
         <table id="tblRightContent" class="CLASS03909" cellpadding="0" cellspacing="0">
          <tr class="CLASS03910">
            <td style="vertical-align: top;" id="chnList"></td>
@@ -145,7 +135,16 @@
   </tr>
 </table>
 <script type="text/javascript">
-       
+  updateContHeight = function()
+  {
+    var contHeight = $("content").style.height;
+    contHeight = contHeight.replace(/px/, "");
+    $("divDL").style.height = (contHeight - 20) + "px";
+    $("divRTD").style.height = (contHeight - 20) + "px";
+  }
+  window.addEventListener('resize', updateContHeight);
+  updateContHeight();
+
   loadChannels = function(id, specialFlag)
   {
 

@@ -495,7 +495,7 @@
        string sStyle = "";
 --- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
-@@ -21,14 +21,14 @@
+@@ -21,15 +21,10 @@
    <tr>
      <!-- Linke Spalte -->
      <td id="contentLeft" class="hidden">
@@ -504,29 +504,49 @@
          <tr>
            <td style="vertical-align: top; border: 0px">
              <div id="divDL" class="CLASS03902">
-               <script type="text/javascript">
-                 var contHeight = $("content").style.height;
-                 contHeight = contHeight.replace(/px/, "");
+-              <script type="text/javascript">
+-                var contHeight = $("content").style.height;
+-                contHeight = contHeight.replace(/px/, "");
 -                $("divDL").style.height = Math.floor((contHeight * 0.98)) + "px";
-+                $("divDL").style.height = (contHeight - 20) + "px";
-               </script>
+-              </script>
                <table id="tblFunctionNames" class="StatViewTbl CLASS03903 j_translate" cellpadding="0" cellspacing="0" style="width:100%;">
                  <colgroup>
-@@ -133,9 +133,9 @@
-         <script type="text/javascript">
-           var contHeight = $("content").style.height;
-           contHeight = contHeight.replace(/px/, "");
+                   <col style="width:80%;"/>
+@@ -130,12 +125,7 @@
+     <!-- Rechte Spalte -->
+     <td id="contentRight">
+       <div id="divRTD" class="CLASS03908">
+-        <script type="text/javascript">
+-          var contHeight = $("content").style.height;
+-          contHeight = contHeight.replace(/px/, "");
 -          $("divRTD").style.height = Math.floor((contHeight * 0.98)) + "px";
-+          $("divRTD").style.height = (contHeight - 20) + "px";
-         </script>
+-        </script>
 -        <table id="tblRightContent" class="CLASS03909">
 +        <table id="tblRightContent" class="CLASS03909" cellpadding="0" cellspacing="0">
           <tr class="CLASS03910">
             <td style="vertical-align: top;" id="chnList"></td>
           </tr>
+@@ -145,7 +135,16 @@
+   </tr>
+ </table>
+ <script type="text/javascript">
+-       
++  updateContHeight = function()
++  {
++    var contHeight = $("content").style.height;
++    contHeight = contHeight.replace(/px/, "");
++    $("divDL").style.height = (contHeight - 20) + "px";
++    $("divRTD").style.height = (contHeight - 20) + "px";
++  }
++  window.addEventListener('resize', updateContHeight);
++  updateContHeight();
++
+   loadChannels = function(id, specialFlag)
+   {
+ 
 --- occu/WebUI/www/rega/pages/tabs/control/functions.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/functions.htm
-@@ -21,14 +21,14 @@
+@@ -21,15 +21,10 @@
    <tr>
      <!-- Linke Spalte -->
      <td id="contentLeft" class="hidden">
@@ -535,27 +555,47 @@
          <tr>
            <td style="vertical-align: top; border: 0px;">
 -            <div id="divFL" class="CLASS04002">
-+            <div id="divFL" class="CLASS04201">
-               <script type="text/javascript">
-                 var contHeight = $("content").style.height;
-                 contHeight = contHeight.replace(/px/, "");
+-              <script type="text/javascript">
+-                var contHeight = $("content").style.height;
+-                contHeight = contHeight.replace(/px/, "");
 -                $("divFL").style.height = Math.floor((contHeight * 0.98)) + "px";
-+                $("divFL").style.height = (contHeight - 20) + "px";
-               </script>
+-              </script>
++            <div id="divFL" class="CLASS04201">
                <table id="tblFunctionNames" class="StatViewTbl CLASS04006 j_translate" cellpadding="0" cellspacing="0" style="width: 100%;">
                  <tr>
-@@ -92,9 +92,9 @@
-       <script type="text/javascript">
-         var contHeight = $("content").style.height;
-         contHeight = contHeight.replace(/px/, "");
+                   <th>${thFunc}</th>
+@@ -89,12 +84,7 @@
+    <!-- Rechte Spalte -->
+    <td id="contentRight">
+      <div id="divHTF" class="CLASS04002">
+-      <script type="text/javascript">
+-        var contHeight = $("content").style.height;
+-        contHeight = contHeight.replace(/px/, "");
 -        $("divHTF").style.height = Math.floor((contHeight * 0.97)) + "px";
-+        $("divHTF").style.height = (contHeight - 20) + "px";
-       </script>
+-      </script>
 -       <table id="tblRightContent" class="CLASS04003">
 +       <table id="tblRightContent" class="CLASS04003" cellpadding="0" cellspacing="0">
           <tr class="CLASS04004">
             <td style="vertical-align: top;" id="chnList">
             
+@@ -107,7 +97,16 @@
+ </table>
+ 
+ <script type="text/javascript">
+-       
++  updateContHeight = function()
++  {
++    var contHeight = $("content").style.height;
++    contHeight = contHeight.replace(/px/, "");
++    $("divFL").style.height = (contHeight - 20) + "px";
++    $("divHTF").style.height = (contHeight - 20) + "px";
++  }
++  window.addEventListener('resize', updateContHeight);
++  updateContHeight();
++
+   loadChannels = function(id)
+   {
+     iseInitUpdateArrays();
 --- occu/WebUI/www/rega/pages/tabs/control/programs.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/programs.htm
 @@ -43,7 +43,14 @@
@@ -576,7 +616,7 @@
          <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
 --- occu/WebUI/www/rega/pages/tabs/control/rooms.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/rooms.htm
-@@ -21,14 +21,14 @@
+@@ -21,15 +21,10 @@
    <tr>
      <!-- Linke Spalte -->
      <td id="contentLeft" class="hidden">
@@ -585,27 +625,46 @@
          <tr>
            <td style="vertical-align: top; border: 0px">
 -            <div id="divRL" class="CLASS04002">
-+            <div id="divRL" class="CLASS04201">
-             <script type="text/javascript">
-               var contHeight = $("content").style.height;
-               contHeight = contHeight.replace(/px/, "");
+-            <script type="text/javascript">
+-              var contHeight = $("content").style.height;
+-              contHeight = contHeight.replace(/px/, "");
 -              $("divRL").style.height = Math.floor((contHeight * 0.98)) + "px";
-+              $("divRL").style.height = (contHeight - 20) + "px";
-             </script>
+-            </script>
++            <div id="divRL" class="CLASS04201">
              <table id="tblRoomNames" class="StatViewTbl CLASS04006 j_translate"  cellpadding="0" cellspacing="0" width="100%">
                <tr>
-@@ -95,9 +95,9 @@
-         <script type="text/javascript">
-           var contHeight = $("content").style.height;
-           contHeight = contHeight.replace(/px/, "");
+                 <th>${thRoom}</th>
+@@ -92,12 +87,7 @@
+      <!-- Rechte Spalte -->
+      <td id="contentRight">
+        <div id="divHTR" class="CLASS04002">
+-        <script type="text/javascript">
+-          var contHeight = $("content").style.height;
+-          contHeight = contHeight.replace(/px/, "");
 -          $("divHTR").style.height = Math.floor((contHeight * 0.98)) + "px";
-+          $("divHTR").style.height = (contHeight - 20) + "px";
-         </script>
+-        </script>
 -       <table id="tblRightContent" class="CLASS04003">
 +       <table id="tblRightContent" class="CLASS04003" cellpadding="0" cellspacing="0">
          <tr class="CLASS04004">
            <td style="vertical-align: top;" id="chnList">
         
+@@ -110,6 +100,16 @@
+ </table>
+ 
+ <script type="text/javascript">
++  updateContHeight = function()
++  {
++    var contHeight = $("content").style.height;
++    contHeight = contHeight.replace(/px/, "");
++    $("divRL").style.height = (contHeight - 20) + "px";
++    $("divHTR").style.height = (contHeight - 20) + "px";
++  }
++  window.addEventListener('resize', updateContHeight);
++  updateContHeight();
++
+   loadChannels = function(id)
+   {
+     iseInitUpdateArrays();
 --- occu/WebUI/www/rega/pages/tabs/control/sysvars.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/sysvars.htm
 @@ -48,8 +48,8 @@

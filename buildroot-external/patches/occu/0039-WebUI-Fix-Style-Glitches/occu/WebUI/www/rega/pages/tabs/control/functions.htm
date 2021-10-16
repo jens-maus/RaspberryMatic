@@ -25,11 +25,6 @@
         <tr>
           <td style="vertical-align: top; border: 0px;">
             <div id="divFL" class="CLASS04201">
-              <script type="text/javascript">
-                var contHeight = $("content").style.height;
-                contHeight = contHeight.replace(/px/, "");
-                $("divFL").style.height = (contHeight - 20) + "px";
-              </script>
               <table id="tblFunctionNames" class="StatViewTbl CLASS04006 j_translate" cellpadding="0" cellspacing="0" style="width: 100%;">
                 <tr>
                   <th>${thFunc}</th>
@@ -89,11 +84,6 @@
    <!-- Rechte Spalte -->
    <td id="contentRight">
      <div id="divHTF" class="CLASS04002">
-      <script type="text/javascript">
-        var contHeight = $("content").style.height;
-        contHeight = contHeight.replace(/px/, "");
-        $("divHTF").style.height = (contHeight - 20) + "px";
-      </script>
        <table id="tblRightContent" class="CLASS04003" cellpadding="0" cellspacing="0">
          <tr class="CLASS04004">
            <td style="vertical-align: top;" id="chnList">
@@ -107,7 +97,16 @@
 </table>
 
 <script type="text/javascript">
-       
+  updateContHeight = function()
+  {
+    var contHeight = $("content").style.height;
+    contHeight = contHeight.replace(/px/, "");
+    $("divFL").style.height = (contHeight - 20) + "px";
+    $("divHTF").style.height = (contHeight - 20) + "px";
+  }
+  window.addEventListener('resize', updateContHeight);
+  updateContHeight();
+
   loadChannels = function(id)
   {
     iseInitUpdateArrays();

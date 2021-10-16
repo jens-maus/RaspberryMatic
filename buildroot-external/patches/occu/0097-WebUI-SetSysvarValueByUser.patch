@@ -223,7 +223,7 @@
 +    } 
 +    s += "<table class='CLASS05010'>";
 +    s += "<tr>";
-+      s += "<td class='CLASS05011'><select id='selValue'><option "+isSelFalse+" value='0'>"+translateKey("lblFalse")+"</option><option "+isSelTrue+" value='1'>"+translateKey("lblTrue")+"</option></select> </td>";
++      s += "<td class='CLASS05011'><select id='selValue'><option "+isSelFalse+" value='0'>"+translateString(sFalse)+"</option><option "+isSelTrue+" value='1'>"+translateString(sTrue)+"</option></select> </td>";
 +    s += "</tr>";
 +    s += "</table>";   
 +

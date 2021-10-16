@@ -5362,12 +5362,11 @@ application {
 }
 
 .CLASS02535 {
-	float: right;
 	text-align: right;
-	width: 98%;
+	width: 100%;
 	word-wrap: break-word;
-	max-width: 480px;
 	display: inline-block;
+	padding: 2px;
 }
 
 .CLASS02535A {
@@ -5392,20 +5391,13 @@ application {
 
 .CLASS02537 {
 	text-align: center;
-	padding: 5px;
 	width: 100%;
 }
 
 .CLASS02538 {
-	/*width:220px;
-	height:25px;*/
-	width:98%;
 	height:100%;
 	min-height:1em;
-	max-width: 480px;
 	clear: both;
-	display: inline-block;
-  padding-right: initial;
 }
 
 .CLASS02539 {

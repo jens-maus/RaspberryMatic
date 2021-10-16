@@ -1079,7 +1079,15 @@
    cursor:pointer;
  }
  
-@@ -5359,6 +5382,7 @@
+@@ -5147,6 +5170,7 @@
+ 	color: $_(textColorB); /* black */
+ 	width:100%;
+ 	border:none;
++	background-color:inherit;
+ }
+ 
+ .CLASS02511 {
+@@ -5359,6 +5383,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -1087,6 +1095,14 @@
  }
  
  .CLASS02536 {
+@@ -5369,7 +5394,6 @@
+ 	text-align: center;
+ 	padding: 5px;
+ 	width: 100%;
+-	background-color: $_(activeBackground) ! important;
+ }
+ 
+ .CLASS02538 {
 @@ -5381,6 +5405,7 @@
  	max-width: 480px;
  	clear: both;

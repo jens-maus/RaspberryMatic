@@ -5170,6 +5170,7 @@ application {
 	color: $_(textColorB); /* black */
 	width:100%;
 	border:none;
+	background-color:inherit;
 }
 
 .CLASS02511 {
@@ -5393,7 +5394,6 @@ application {
 	text-align: center;
 	padding: 5px;
 	width: 100%;
-	background-color: $_(activeBackground) ! important;
 }
 
 .CLASS02538 {

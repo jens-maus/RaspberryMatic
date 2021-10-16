@@ -415,7 +415,7 @@
     if (sValue) document.getElementById("selEnum").options[sValue].selected=true;
   };
   
-  loadIntEdit = function(val1, val2, sValue) 
+  loadIntEdit = function(val1, val2, sValue, sUnit='')
   {
     var s = "";
     s += "<table class='CLASS05010'>";
@@ -433,7 +433,7 @@
     var val = val1;
     if (sValue) val = sValue;
     s += "<table class='CLASS05012'>";
-    s += "<tr><td> <input id='inpValue' type='text' size='12' value='"+translateString(val.toString())+"'  onblur='checkInpValue();'/></td></tr>";
+    s += "<tr><td style='white-space:nowrap;'><input id='inpValue' type='text' size='12' value='"+translateString(val.toString())+"'  onblur='checkInpValue();'/>&nbsp;" + sUnit + "</td></tr>";
     s += "</table>";
     $("tdValueEdit").innerHTML = s;
     
@@ -474,7 +474,7 @@
         Write("loadLogicEdit('"#sv.ValueName1()#"', '"#sv.ValueName0()#"', '"#sv.Value()#"');");
       }
       if (sv.ValueSubType() == istGeneric) {
-        Write("loadIntEdit('"#sv.ValueMin()#"', '"#sv.ValueMax()#"', '"#sv.Value()#"');");
+        Write("loadIntEdit('"#sv.ValueMin()#"', '"#sv.ValueMax()#"', '"#sv.Value()#"', '"#sv.ValueUnit()#"');");
       }
       if (sv.ValueSubType() == istEnum) {
         integer iVLCount = web.webGetValueListCount( sv.ValueList() );

@@ -1394,7 +1394,15 @@
  }
  
  .CLASS04302 {
-@@ -7220,11 +7222,12 @@
+@@ -6774,6 +6776,7 @@
+ .CLASS05012 {
+ 	color: $_(textColorB); /* black */
+ 	font-size:9pt;
++	width:100%;
+ }
+ 
+ /* rega\pages\tabs\admin\msg\timemodule.htm */
+@@ -7220,11 +7223,12 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -1409,7 +1417,7 @@
  }
  
  .CLASS06302 {
-@@ -7675,7 +7678,7 @@
+@@ -7675,7 +7679,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -1418,7 +1426,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -8702,7 +8705,8 @@
+@@ -8702,7 +8706,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -1428,7 +1436,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8756,6 @@
+@@ -8752,7 +8757,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -1436,7 +1444,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8812,8 @@
+@@ -8809,8 +8813,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -1447,7 +1455,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8890,8 @@
+@@ -8887,7 +8891,8 @@
  }
  
  .CLASS22101 {

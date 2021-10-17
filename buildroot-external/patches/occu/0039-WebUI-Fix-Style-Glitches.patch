@@ -512,6 +512,15 @@
                <table id="tblFunctionNames" class="StatViewTbl CLASS03903 j_translate" cellpadding="0" cellspacing="0" style="width:100%;">
                  <colgroup>
                    <col style="width:80%;"/>
+@@ -92,7 +87,7 @@
+                         }
+                         string trId = "devices"#devs.ID();
+                         WriteLine('<tr id="'#trId#'" class="CLASS03904">');
+-                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")'>");
++                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
+                           Write(devs.Name());
+                           Write("</td>");
+                           Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' >");
 @@ -130,12 +125,7 @@
      <!-- Rechte Spalte -->
      <td id="contentRight">
@@ -564,6 +573,15 @@
                <table id="tblFunctionNames" class="StatViewTbl CLASS04006 j_translate" cellpadding="0" cellspacing="0" style="width: 100%;">
                  <tr>
                    <th>${thFunc}</th>
+@@ -60,7 +55,7 @@
+                         }
+                         string trId = "funcs"#func.ID();
+                         Write("<tr id='"#trId#"'>");
+-                          Write("<td id='"#func.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHF.clearFilters();updateTable();loadChannels("#func.ID()#")'>");
++                          Write("<td id='"#func.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHF.clearFilters();updateTable();loadChannels("#func.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
+                             Write(func.Name());
+                           Write("</td>");
+                           Write("<script type='text/javascript'>");
 @@ -89,12 +84,7 @@
     <!-- Rechte Spalte -->
     <td id="contentRight">
@@ -634,6 +652,15 @@
              <table id="tblRoomNames" class="StatViewTbl CLASS04006 j_translate"  cellpadding="0" cellspacing="0" width="100%">
                <tr>
                  <th>${thRoom}</th>
+@@ -61,7 +56,7 @@
+                       }
+                       string trId = "rooms"#room.ID();
+                       Write("<tr id='"#trId#"'>");
+-                        Write("<td id='"#room.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHR.clearFilters();updateTable();loadChannels("#room.ID()#")'>");
++                        Write("<td id='"#room.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHR.clearFilters();updateTable();loadChannels("#room.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
+                           Write(room.Name());     
+                         Write("</td>");
+                         Write("<script type='text/javascript'>");
 @@ -92,12 +87,7 @@
       <!-- Rechte Spalte -->
       <td id="contentRight">

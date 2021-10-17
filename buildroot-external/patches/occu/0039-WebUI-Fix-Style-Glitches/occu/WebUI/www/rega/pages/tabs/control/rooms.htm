@@ -56,7 +56,7 @@
                       }
                       string trId = "rooms"#room.ID();
                       Write("<tr id='"#trId#"'>");
-                        Write("<td id='"#room.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHR.clearFilters();updateTable();loadChannels("#room.ID()#")'>");
+                        Write("<td id='"#room.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHR.clearFilters();updateTable();loadChannels("#room.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
                           Write(room.Name());     
                         Write("</td>");
                         Write("<script type='text/javascript'>");

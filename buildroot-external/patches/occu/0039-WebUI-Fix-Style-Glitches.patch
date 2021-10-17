@@ -535,20 +535,12 @@
           <tr class="CLASS03910">
             <td style="vertical-align: top;" id="chnList"></td>
           </tr>
-@@ -145,7 +135,16 @@
+@@ -145,7 +135,8 @@
    </tr>
  </table>
  <script type="text/javascript">
 -       
-+  updateContHeight = function()
-+  {
-+    var contHeight = $("content").style.height;
-+    contHeight = contHeight.replace(/px/, "");
-+    $("divDL").style.height = (contHeight - 20) + "px";
-+    $("divRTD").style.height = (contHeight - 20) + "px";
-+  }
-+  window.addEventListener('resize', updateContHeight);
-+  updateContHeight();
++  WebUI.onResize();
 +
    loadChannels = function(id, specialFlag)
    {
@@ -596,20 +588,12 @@
           <tr class="CLASS04004">
             <td style="vertical-align: top;" id="chnList">
             
-@@ -107,7 +97,16 @@
+@@ -107,7 +97,8 @@
  </table>
  
  <script type="text/javascript">
 -       
-+  updateContHeight = function()
-+  {
-+    var contHeight = $("content").style.height;
-+    contHeight = contHeight.replace(/px/, "");
-+    $("divFL").style.height = (contHeight - 20) + "px";
-+    $("divHTF").style.height = (contHeight - 20) + "px";
-+  }
-+  window.addEventListener('resize', updateContHeight);
-+  updateContHeight();
++  WebUI.onResize();
 +
    loadChannels = function(id)
    {
@@ -675,19 +659,11 @@
          <tr class="CLASS04004">
            <td style="vertical-align: top;" id="chnList">
         
-@@ -110,6 +100,16 @@
+@@ -110,6 +100,8 @@
  </table>
  
  <script type="text/javascript">
-+  updateContHeight = function()
-+  {
-+    var contHeight = $("content").style.height;
-+    contHeight = contHeight.replace(/px/, "");
-+    $("divRL").style.height = (contHeight - 20) + "px";
-+    $("divHTR").style.height = (contHeight - 20) + "px";
-+  }
-+  window.addEventListener('resize', updateContHeight);
-+  updateContHeight();
++  WebUI.onResize();
 +
    loadChannels = function(id)
    {
@@ -1512,3 +1488,16 @@
    <colgroup>\n
      <col style=\"width:25px;\"\/>\n
      <col style=\"width:25px;\"\/>\n
+@@ -7508,6 +7508,12 @@
+     if ($("menubar")) { Element.setStyle("menubar", {"height": this.MENUBAR_HEIGHT + "px", "width": width + "px"}); }
+     if ($("content")) { Element.setStyle("content", {"height": contentHeight       + "px", "width": width + "px"}); }
+     if ($("footer"))  { Element.setStyle("footer" , {"height": this.FOOTER_HEIGHT  + "px", "width": width + "px"}); }
++    if ($("divDL"))   { Element.setStyle("divDL", {"height": (contentHeight - 20)  + "px"}); }
++    if ($("divRTD"))  { Element.setStyle("divRTD", {"height": (contentHeight - 20)  + "px"}); }
++    if ($("divFL"))   { Element.setStyle("divFL", {"height": (contentHeight - 20)  + "px"}); }
++    if ($("divHTF"))  { Element.setStyle("divHTF", {"height": (contentHeight - 20)  + "px"}); }
++    if ($("divRL"))   { Element.setStyle("divRL", {"height": (contentHeight - 20)  + "px"}); }
++    if ($("divHTR"))  { Element.setStyle("divHTR", {"height": (contentHeight - 20)  + "px"}); }
+ 
+     if (this.currentPage) { this.currentPage.resize(); }
+ 

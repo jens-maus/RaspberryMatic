@@ -135,15 +135,7 @@
   </tr>
 </table>
 <script type="text/javascript">
-  updateContHeight = function()
-  {
-    var contHeight = $("content").style.height;
-    contHeight = contHeight.replace(/px/, "");
-    $("divDL").style.height = (contHeight - 20) + "px";
-    $("divRTD").style.height = (contHeight - 20) + "px";
-  }
-  window.addEventListener('resize', updateContHeight);
-  updateContHeight();
+  WebUI.onResize();
 
   loadChannels = function(id, specialFlag)
   {

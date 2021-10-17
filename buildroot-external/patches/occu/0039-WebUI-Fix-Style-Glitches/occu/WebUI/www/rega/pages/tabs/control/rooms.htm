@@ -100,15 +100,7 @@
 </table>
 
 <script type="text/javascript">
-  updateContHeight = function()
-  {
-    var contHeight = $("content").style.height;
-    contHeight = contHeight.replace(/px/, "");
-    $("divRL").style.height = (contHeight - 20) + "px";
-    $("divHTR").style.height = (contHeight - 20) + "px";
-  }
-  window.addEventListener('resize', updateContHeight);
-  updateContHeight();
+  WebUI.onResize();
 
   loadChannels = function(id)
   {

@@ -7508,6 +7508,12 @@ WebUI = Singleton.create({
     if ($("menubar")) { Element.setStyle("menubar", {"height": this.MENUBAR_HEIGHT + "px", "width": width + "px"}); }
     if ($("content")) { Element.setStyle("content", {"height": contentHeight       + "px", "width": width + "px"}); }
     if ($("footer"))  { Element.setStyle("footer" , {"height": this.FOOTER_HEIGHT  + "px", "width": width + "px"}); }
+    if ($("divDL"))   { Element.setStyle("divDL", {"height": (contentHeight - 20)  + "px"}); }
+    if ($("divRTD"))  { Element.setStyle("divRTD", {"height": (contentHeight - 20)  + "px"}); }
+    if ($("divFL"))   { Element.setStyle("divFL", {"height": (contentHeight - 20)  + "px"}); }
+    if ($("divHTF"))  { Element.setStyle("divHTF", {"height": (contentHeight - 20)  + "px"}); }
+    if ($("divRL"))   { Element.setStyle("divRL", {"height": (contentHeight - 20)  + "px"}); }
+    if ($("divHTR"))  { Element.setStyle("divHTR", {"height": (contentHeight - 20)  + "px"}); }
 
     if (this.currentPage) { this.currentPage.resize(); }
 

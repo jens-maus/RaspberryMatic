@@ -27025,6 +27025,8 @@ iseDOM_BuildLabel = "R1.00.0381.0100";
 dbg = false;
 rfr = true;
 
+ID_EDIT_SYSVAR_VALUE   = 9921;
+
 ID_ROOMS     = 101;  // Rooms collection ID.
 ID_FUNCTIONS = 151;  // Functions collection ID.
 ID_FAVORITES = 201;  // Favorites collection ID.
@@ -27048,7 +27050,6 @@ ID_USER_ACCOUNT_CONFIG_USER  = 1017;
 ID_AUTO_LOGIN_CONFIG     = 1018;
 ID_PROGRAM_CHOOSER       = 1019;
 ID_EDIT_SYSVAR           = 1021;
-ID_EDIT_SYSVAR_VALUE     = 9921;
 ID_CHOOSE_LED            = 1022;
 ID_SET_OUCFM_MODE        = 1023;
 ID_SET_STATUS_DISPLAY    = 1024;

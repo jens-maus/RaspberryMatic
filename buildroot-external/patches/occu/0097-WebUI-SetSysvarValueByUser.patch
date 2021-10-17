@@ -372,11 +372,12 @@
          this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
          break;
        case ID_CREATE_SCRIPT:
-@@ -27040,6 +27048,7 @@
- ID_AUTO_LOGIN_CONFIG     = 1018;
- ID_PROGRAM_CHOOSER       = 1019;
- ID_EDIT_SYSVAR           = 1021;
-+ID_EDIT_SYSVAR_VALUE     = 9921;
- ID_CHOOSE_LED            = 1022;
- ID_SET_OUCFM_MODE        = 1023;
- ID_SET_STATUS_DISPLAY    = 1024;
+@@ -27017,6 +27025,8 @@
+ dbg = false;
+ rfr = true;
+ 
++ID_EDIT_SYSVAR_VALUE   = 9921;
++
+ ID_ROOMS     = 101;  // Rooms collection ID.
+ ID_FUNCTIONS = 151;  // Functions collection ID.
+ ID_FAVORITES = 201;  // Favorites collection ID.

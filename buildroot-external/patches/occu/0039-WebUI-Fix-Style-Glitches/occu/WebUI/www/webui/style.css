@@ -5231,7 +5231,6 @@ application {
 
 .CLASS02520 {
 	color: $_(textColorB); /* black */
-	width:100%;
 	border:none;
 	background-color:$_(activeBackground);
 }

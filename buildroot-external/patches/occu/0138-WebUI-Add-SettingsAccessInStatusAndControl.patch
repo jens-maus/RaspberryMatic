@@ -72,6 +72,17 @@
 -<script>translatePage('#ProgramTable')</script>
 \ No newline at end of file
 +<script>translatePage('#ProgramTable')</script>
+--- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
+@@ -79,7 +79,7 @@
+                           Call("/esp/datapointconfigurator.fn::StringCut()");
+                           Write(sName);
+                           Write("</td>");
+-                          Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' >");
++                          Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' onclick='picDivHide(jg_250);DeviceListPage.showConfiguration(event, \"DEVICE\", "# devs.ID() #");' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")' >");
+                           
+                           string sPicDivId = "picDiv"#devs.ID();
+                           Write("<div id='"#sPicDivId#"' class='CLASS03907' style='margin:auto;' ");
 --- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
 @@ -176,7 +176,11 @@
@@ -158,6 +169,16 @@
                  
                  integer cId = o.ID();
                  integer iStatusOnly = 1;
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -6273,6 +6273,7 @@
+ 	vertical-align:middle;
+ 	text-align:left;
+ 	background-color:$_(white); /* white */
++	cursor:pointer;
+ }
+ 
+ .CLASS03907 {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -25655,7 +25655,7 @@

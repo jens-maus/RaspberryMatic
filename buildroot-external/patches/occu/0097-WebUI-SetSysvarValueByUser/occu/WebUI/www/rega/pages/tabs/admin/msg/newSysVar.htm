@@ -30,7 +30,7 @@
       Write('<th>${thValue}</th>');
       Write('<th>${thCannelMapping}</th>');
     Write('</tr>');
-	}
+    }
 %>
     <tr class="CLASS05002">
     <td id="tdName" class="CLASS05003 "<%Write(hidden)%> >
@@ -134,10 +134,10 @@
               Write('<div id="chnName">' #sChn # '</div>');
             %>
           </td>
-  	    <tr/>  
+        <tr/>  
         <tr>
           <td class="CLASS05006">
-		    <input id="ckAssignedChn" type="checkbox" name="chnMapping" checked onclick="channelChooser2()" />${lblChannelMappingNo}
+            <input id="ckAssignedChn" type="checkbox" name="chnMapping" checked onclick="channelChooser2()" />${lblChannelMappingNo}
           </td>
         </tr>
         </table>
@@ -172,7 +172,7 @@
   noChannel = function() {
     $("chnId").value = -1;
     $("chnName").innerHTML = "";
-	$("chnNameRow").hidden = true;
+    $("chnNameRow").hidden = true;
   };
   
   saveSysVars = function()
@@ -287,22 +287,22 @@
           };
           new Ajax.Updater("chnName", "/esp/system.htm?sid=" + SessionId, opts);
           $("ckAssignedChn").checked = false;
-		  $("chnNameRow").hidden = false;
+          $("chnNameRow").hidden = false;
         }
         else if ($(chnName).innerHTML != "")
         {
           $("ckAssignedChn").checked = false;
-		  $("chnNameRow").hidden = false;
+          $("chnNameRow").hidden = false;
         }
         else
         {
           $("ckAssignedChn").checked = true;
-		  $("chnNameRow").hidden = true;
+          $("chnNameRow").hidden = true;
         }
       }, ChannelChooser.SHOW_ALL);
-	} else {
-	  noChannel();
-	}
+    } else {
+      noChannel();
+    }
   };
   
   onTypeChange = function() 
@@ -463,7 +463,7 @@
       }
       else {
         Write("$('ckAssignedChn').checked = true;");
-		Write("$('chnNameRow').hidden = true;");
+        Write("$('chnNameRow').hidden = true;");
       }
       if (sv.ValueSubType() == istPresent) {
       }

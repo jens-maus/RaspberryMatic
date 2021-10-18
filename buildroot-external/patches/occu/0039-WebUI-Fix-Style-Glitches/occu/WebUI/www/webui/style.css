@@ -1357,7 +1357,6 @@ div.caption  { display: table-caption; }
 
 .bcWhitePic
 {
-  background-color: $_(white); /* #ffffff */
 }
 
 .bcWhite
@@ -1463,7 +1462,7 @@ div.caption  { display: table-caption; }
 
 /* Weisser Zellenhintergrund für Bilder (Geräteübersicht u.ä.) */
 .WhiteBkgPic {
-  background-color: $_(white); /* #ffffff */
+  background-color: $_(activeBackground); /* #f0f0f0 */
   color: $_(textColorB); /* black */
 }
 
@@ -1554,7 +1553,6 @@ div.caption  { display: table-caption; }
 
 #ic_deviceparameters #DeviceInformation #DeviceImage
 {
-	background-color: $_(white); /* white */
 	width: 52px;
 	height: 56px;
 	margin: 0;
@@ -2805,7 +2803,6 @@ html, body {
 
 .ChannelChooserThumbnail {
   border: 1px solid $_(black); /* black */
-  background-color:$_(white); /* white */
   text-align:left;
   height:80px;
 }
@@ -2960,7 +2957,6 @@ html, body {
 
 .MultiChannelChooserThumbnail {
   border: 1px solid $_(black); /* black */
-  background-color:$_(white); /* white */
   text-align:left;
   height:80px;
 }
@@ -3041,7 +3037,6 @@ html, body {
 
 .DeviceListThumbnail {
   border: 1px solid $_(black); /* black */
-  background-color:$_(white); /* white */
   text-align:left;
   height:80px;
 }
@@ -6266,7 +6261,6 @@ color: $_(textColorA); /* white */
 .CLASS03906 {
 	vertical-align:middle;
 	text-align:left;
-	background-color:$_(white); /* white */
 }
 
 .CLASS03907 {

@@ -5507,6 +5507,7 @@ application {
 
 .CLASS02552 {
 	border:solid 1px $_(black); /* black */
+	mix-blend-mode:multiply;
 }
 
 .CLASS02553 {

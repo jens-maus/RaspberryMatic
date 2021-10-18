@@ -204,6 +204,173 @@
  
        WriteLine("<tr>");
            WriteLine("<td colspan='2' id='shutter"#chnId#"' class='CLASS02549' >&nbsp;</td>");
+--- occu/WebUI/www/rega/esp/controls/button.fn.orig
++++ occu/WebUI/www/rega/esp/controls/button.fn
+@@ -14,7 +14,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02518'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img id='btn"#iShortId#"s' src='/ise/img/btn_no_press.png' width='80' height='80' />");
++          WriteLine("<img id='btn"#iShortId#"s' src='/ise/img/btn_no_press.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -50,7 +50,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02518'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img id='btn"#iShortId#"s' src='/ise/img/btn_no_press.png' width='80' height='80' />");
++          WriteLine("<img id='btn"#iShortId#"s' src='/ise/img/btn_no_press.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -67,7 +67,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td  class='CLASS02518'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img id='btn"#iLongId#"l' src='/ise/img/btn_no_press.png' width='80px' height='80px' />");
++          WriteLine("<img id='btn"#iLongId#"l' src='/ise/img/btn_no_press.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/door_opener.fn.orig
++++ occu/WebUI/www/rega/esp/controls/door_opener.fn
+@@ -9,7 +9,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td  class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -210,7 +210,7 @@
+               WriteLine("<tr>");
+                 WriteLine("<td  class='CLASS02513'>");
+                   WriteLine("<div align='center'>");
+-                    WriteLine("<img src='/ise/img/"#statePic#"' width='80' height='70' />");
++                    WriteLine("<img src='/ise/img/"#statePic#"' width='80' height='70' style='mix-blend-mode:multiply;' />");
+                   WriteLine("</div>");
+                 WriteLine("</td>");
+               WriteLine("</tr>");
+@@ -249,7 +249,7 @@
+               WriteLine("<tr>");
+                 WriteLine("<td  class='CLASS02513'>");
+                   WriteLine("<div align='center'>");
+-                    WriteLine("<img src='/ise/img/"#statePic#"' width='80' height='70' />");
++                    WriteLine("<img src='/ise/img/"#statePic#"' width='80' height='70' style='mix-blend-mode:multiply;' />");
+                   WriteLine("</div>");
+                 WriteLine("</td>");
+               WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/door_window_contact.fn.orig
++++ occu/WebUI/www/rega/esp/controls/door_window_contact.fn
+@@ -5,7 +5,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -18,7 +18,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td  class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/door/closed.png' width='80px' height='80px' />");
++          WriteLine("<img src='/ise/img/door/closed.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/key_switch_sc.fn.orig
++++ occu/WebUI/www/rega/esp/controls/key_switch_sc.fn
+@@ -5,7 +5,7 @@
+       WriteLine("<tr>");
+         WriteLine("<td class='CLASS02513'>");
+           WriteLine("<div align='center'>");
+-            WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' />");
++            WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+           WriteLine("</div>");
+         WriteLine("</td>");
+       WriteLine("</tr>");
+@@ -20,7 +20,7 @@
+       WriteLine("<tr>");
+         WriteLine("<td  class='CLASS02513'>");
+           WriteLine("<div align='center'>");
+-            WriteLine("<img src='/ise/img/door/closed.png' width='80px' height='80px' />");
++            WriteLine("<img src='/ise/img/door/closed.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+           WriteLine("</div>");
+         WriteLine("</td>");
+       WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/lock.fn.orig
++++ occu/WebUI/www/rega/esp/controls/lock.fn
+@@ -8,7 +8,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td  class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/lock/closed.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/lock/closed.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -20,7 +20,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/lock/open.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/lock/open.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -32,7 +32,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td  class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/rhs.fn.orig
++++ occu/WebUI/www/rega/esp/controls/rhs.fn
+@@ -4,7 +4,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/window/open_h.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/window/open_h.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -16,7 +16,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/window/open_v.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/window/open_v.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -28,7 +28,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/window/closed.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/window/closed.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -1262,7 +1262,7 @@
+     Write("<tr>");
+     Write("<td  class='CLASS02103'>");
+         Write("<div align='center'>");
+-          Write("<img src='/ise/img/cogs3.png' width='80px' height='75px' />");
++          Write("<img src='/ise/img/cogs3.png' width='80' height='75' style='mix-blend-mode:multiply;' />");
+         Write("</div>");
+       Write("</td>");
+     Write("</tr>");
 --- occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm
 @@ -58,16 +58,16 @@
@@ -1301,7 +1468,15 @@
  }
  
  .CLASS02539 {
-@@ -5553,7 +5566,7 @@
+@@ -5494,6 +5507,7 @@
+ 
+ .CLASS02552 {
+ 	border:solid 1px $_(black); /* black */
++	mix-blend-mode:multiply;
+ }
+ 
+ .CLASS02553 {
+@@ -5553,7 +5567,7 @@
  }
  
  .CLASS02602 {
@@ -1310,7 +1485,7 @@
  }
  
  .CLASS02603 {
-@@ -5584,21 +5597,6 @@
+@@ -5584,21 +5598,6 @@
  	padding: 4px;
  }
  
@@ -1332,7 +1507,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5639,7 +5637,7 @@
+@@ -5639,7 +5638,7 @@
  
  .CLASS02614 {
  	background-color: $_(inactiveButton); /* #dddddd */
@@ -1341,7 +1516,7 @@
  	font-weight: bold;
  	border: solid 1px $_(gray); /* silver */
  }
-@@ -5735,10 +5733,12 @@
+@@ -5735,10 +5734,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -1354,7 +1529,7 @@
  }
  
  .CLASS02804 {
-@@ -5989,9 +5989,6 @@
+@@ -5989,9 +5990,6 @@
  }
  
  .CLASS03301 {
@@ -1364,7 +1539,7 @@
  	empty-cells:show;
  }
  
-@@ -6079,8 +6076,7 @@
+@@ -6079,8 +6077,7 @@
  
  .CLASS03500 {
  	border:solid 1px $_(black); /* black */
@@ -1374,7 +1549,7 @@
  }
  
  .CLASS03501 {
-@@ -6113,8 +6109,7 @@
+@@ -6113,8 +6110,7 @@
  
  .CLASS03600 {
  	border:solid 1px $_(black); /* black */
@@ -1384,7 +1559,7 @@
  }
  
  .CLASS03601 {
-@@ -6203,8 +6198,7 @@
+@@ -6203,8 +6199,7 @@
  
  .CLASS03800 {
  	border:solid 1px $_(black); /* black */
@@ -1394,7 +1569,7 @@
  }
  
  .CLASS03801 {
-@@ -6247,15 +6241,13 @@
+@@ -6247,15 +6242,13 @@
  }
  
  .CLASS03902 {
@@ -1412,7 +1587,7 @@
  }
  
  .CLASS03904 {
-@@ -6270,7 +6262,6 @@
+@@ -6270,7 +6263,6 @@
  .CLASS03906 {
  	vertical-align:middle;
  	text-align:left;
@@ -1420,7 +1595,7 @@
  }
  
  .CLASS03907 {
-@@ -6280,13 +6271,13 @@
+@@ -6280,13 +6272,13 @@
  }
  
  .CLASS03908 {
@@ -1437,7 +1612,7 @@
  }
  
  .CLASS03910 {
-@@ -6312,13 +6303,13 @@
+@@ -6312,13 +6304,13 @@
  }
  
  .CLASS04002 {
@@ -1454,7 +1629,7 @@
  }
  
  .CLASS04004 {
-@@ -6333,7 +6324,6 @@
+@@ -6333,7 +6325,6 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
@@ -1462,7 +1637,7 @@
  }
  
  .CLASS04007 {
-@@ -6344,7 +6334,6 @@
+@@ -6344,7 +6335,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -1470,7 +1645,7 @@
  	empty-cells:show;
  }
  
-@@ -6361,6 +6350,7 @@
+@@ -6361,6 +6351,7 @@
  
  .CLASS04103 {
  	height:auto;
@@ -1478,7 +1653,7 @@
  }
  
  .CLASS04104 {
-@@ -6411,10 +6401,15 @@
+@@ -6411,10 +6402,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -1495,7 +1670,7 @@
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,6 +6425,7 @@
+@@ -6430,6 +6426,7 @@
  
  .CLASS04205 {
  	height:auto;
@@ -1503,7 +1678,7 @@
  }
  
  .CLASS04206 {
-@@ -6486,7 +6482,8 @@
+@@ -6486,7 +6483,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -1513,7 +1688,7 @@
  }
  
  .CLASS04302 {
-@@ -6774,6 +6771,7 @@
+@@ -6774,6 +6772,7 @@
  .CLASS05012 {
  	color: $_(textColorB); /* black */
  	font-size:9pt;
@@ -1521,7 +1696,7 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -7220,11 +7218,12 @@
+@@ -7220,11 +7219,12 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -1536,7 +1711,7 @@
  }
  
  .CLASS06302 {
-@@ -7675,7 +7674,7 @@
+@@ -7675,7 +7675,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -1545,7 +1720,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -8702,7 +8701,8 @@
+@@ -8702,7 +8702,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -1555,7 +1730,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8752,6 @@
+@@ -8752,7 +8753,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -1563,7 +1738,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8808,8 @@
+@@ -8809,8 +8809,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -1574,7 +1749,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8886,8 @@
+@@ -8887,7 +8887,8 @@
  }
  
  .CLASS22101 {

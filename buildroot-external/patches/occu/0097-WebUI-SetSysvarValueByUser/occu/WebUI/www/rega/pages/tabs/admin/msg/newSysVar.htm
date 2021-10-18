@@ -30,7 +30,7 @@
       Write('<th>${thValue}</th>');
       Write('<th>${thCannelMapping}</th>');
     Write('</tr>');
-	}
+    }
 %>
     <tr class="CLASS05002">
     <td id="tdName" class="CLASS05003 "<%Write(hidden)%> >
@@ -106,12 +106,13 @@
       
       <td class="CLASS05004"<%Write(hidden)%>>
         <table width="100%" class="CLASS05005">
-          <colgroup>
-            <col style="width:50%;"/>
-            <col style="width:50%;"/>
-          </colgroup>
         <tr>
           <td class="CLASS05006">
+            <input id="ckAssignedChn" type="checkbox" name="chnMapping" onclick="channelChooser2()" />
+          </td>
+        </tr>
+        <tr id="chnNameRow" hidden>
+          <td class="CLASS05006" onclick="channelChooser2()">
             <% 
               string sChn = "";
               if (system.GetVar("createNew") == 0) 
@@ -135,17 +136,10 @@
               else {
                 Write('<input id="chnId" type="hidden" value="0" />');
               }
-              Write('<div id="chnName">' #sChn # '</div>');
+              Write('<div style="cursor: pointer;" id="chnName">' #sChn # '</div>');
             %>
           </td>
-          <td>
-            <table class="CLASS05007">
-              <tr><td><input id="radNo" type="radio" name="chnMapping" checked onclick="noChannel()" />${lblChannelMappingNo}</td></tr>
-              <tr><td><input id="radYes" type="radio" name="chnMapping" onclick="channelChooser2()" />${lblChannelMappingYes}</td></tr>
-              <tr><td><div class="CLASS05008" onclick="channelChooser2()">${btnChooseChannel}</div></td></tr>
-            </table>
-          </td>
-        </tr>
+        <tr/>  
         </table>
       </td>
     </tr>
@@ -178,6 +172,7 @@
   noChannel = function() {
     $("chnId").value = -1;
     $("chnName").innerHTML = "";
+    $("chnNameRow").hidden = true;
   };
   
   saveSysVars = function()
@@ -279,31 +274,35 @@
 
   channelChooser2 = function()
   {
-    ChannelChooser.show(function(result) {
-      if (result)
-      {
-        $("chnId").value = result;
-        var pb = "string action = 'getChnNameById';";
-        pb += "integer id = '" + result + "';";
-        var opts =  
+    if ($("ckAssignedChn").checked == true) {
+      ChannelChooser.show(function(result) {
+        if (result)
         {
-          postBody: pb
-        };
-        new Ajax.Updater("chnName", "/esp/system.htm?sid=" + SessionId, opts);
-        $("radNo").checked = false;
-        $("radYes").checked = true;
-      }
-      else if ($(chnName).innerHTML != "")
-      {
-        $("radNo").checked = false;
-        $("radYes").checked = true;
-      }
-      else
-      {
-        $("radYes").checked = false;
-        $("radNo").checked = true;
-      }
-    }, ChannelChooser.SHOW_ALL);
+          $("chnId").value = result;
+          var pb = "string action = 'getChnNameById';";
+          pb += "integer id = '" + result + "';";
+          var opts =  
+          {
+            postBody: pb
+          };
+          new Ajax.Updater("chnName", "/esp/system.htm?sid=" + SessionId, opts);
+          $("ckAssignedChn").checked = true;
+          $("chnNameRow").hidden = false;
+        }
+        else if ($(chnName).innerHTML != "")
+        {
+          $("ckAssignedChn").checked = true;
+          $("chnNameRow").hidden = false;
+        }
+        else
+        {
+          $("ckAssignedChn").checked = true;
+          $("chnNameRow").hidden = false;
+        }
+      }, ChannelChooser.SHOW_ALL);
+    } else {
+      noChannel();
+    }
   };
   
   onTypeChange = function() 
@@ -458,11 +457,13 @@
       if ( (sv.Channel() != ID_ERROR) && (sv.Channel() != 0)) {
         object oChn = dom.GetObject(sv.Channel());
         if (oChn) {
-          Write("$('radYes').checked = true;");
+          Write("$('ckAssignedChn').checked = true;");
+          Write("$('chnNameRow').hidden = false;");
         }
       }
       else {
-        Write("$('radNo').checked = true;");
+        Write("$('ckAssignedChn').checked = false;");
+        Write("$('chnNameRow').hidden = true;");
       }
       if (sv.ValueSubType() == istPresent) {
       }

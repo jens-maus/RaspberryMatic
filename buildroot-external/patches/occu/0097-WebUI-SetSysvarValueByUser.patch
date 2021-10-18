@@ -57,7 +57,7 @@
 +      Write('<th>${thValue}</th>');
 +      Write('<th>${thCannelMapping}</th>');
 +    Write('</tr>');
-+	}
++    }
 +%>
      <tr class="CLASS05002">
 -    <td id="tdName" class="CLASS05003" >
@@ -98,7 +98,7 @@
          <% 
            string sUnit = "";
            if (system.GetVar("createNew") == 0) {
-@@ -87,7 +99,12 @@
+@@ -87,14 +99,20 @@
            Write("<input type='text' id='txtUnit' class='CLASS05011' value='"#sUnit#"' onblur='stringRemoveNonPrintableChars(this);'/>");
          %>
        </td>
@@ -110,9 +110,49 @@
 +      
 +      <td class="CLASS05004"<%Write(hidden)%>>
          <table width="100%" class="CLASS05005">
-           <colgroup>
-             <col style="width:50%;"/>
-@@ -190,10 +207,12 @@
+-          <colgroup>
+-            <col style="width:50%;"/>
+-            <col style="width:50%;"/>
+-          </colgroup>
+         <tr>
+           <td class="CLASS05006">
++            <input id="ckAssignedChn" type="checkbox" name="chnMapping" onclick="channelChooser2()" />
++          </td>
++        </tr>
++        <tr id="chnNameRow" hidden>
++          <td class="CLASS05006" onclick="channelChooser2()">
+             <% 
+               string sChn = "";
+               if (system.GetVar("createNew") == 0) 
+@@ -118,17 +136,10 @@
+               else {
+                 Write('<input id="chnId" type="hidden" value="0" />');
+               }
+-              Write('<div id="chnName">' #sChn # '</div>');
++              Write('<div style="cursor: pointer;" id="chnName">' #sChn # '</div>');
+             %>
+           </td>
+-          <td>
+-            <table class="CLASS05007">
+-              <tr><td><input id="radNo" type="radio" name="chnMapping" checked onclick="noChannel()" />${lblChannelMappingNo}</td></tr>
+-              <tr><td><input id="radYes" type="radio" name="chnMapping" onclick="channelChooser2()" />${lblChannelMappingYes}</td></tr>
+-              <tr><td><div class="CLASS05008" onclick="channelChooser2()">${btnChooseChannel}</div></td></tr>
+-            </table>
+-          </td>
+-        </tr>
++        <tr/>  
+         </table>
+       </td>
+     </tr>
+@@ -161,6 +172,7 @@
+   noChannel = function() {
+     $("chnId").value = -1;
+     $("chnName").innerHTML = "";
++    $("chnNameRow").hidden = true;
+   };
+   
+   saveSysVars = function()
+@@ -190,10 +202,12 @@
            iSubType = SYSVAR_BOOL;
            pb += "string sTrue = '"+$("inpLTrue").value+"';";
            pb += "string sFalse = '"+$("inpLFalse").value+"';";
@@ -125,7 +165,7 @@
            break;
          case 2:
            iSubType = SYSVAR_GENERIC;
-@@ -215,14 +234,26 @@
+@@ -215,14 +229,26 @@
            if( isNaN(itmpMaxVal) ) itmpMaxVal = 0;
            pb += "integer iMinVal = '"+itmpMinVal+"';";
            pb += "integer iMaxVal = '"+itmpMaxVal+"';";
@@ -152,7 +192,67 @@
            break;
        }
        pb += "string sUnit = '"+$("txtUnit").value+"';";
-@@ -293,7 +324,7 @@
+@@ -248,31 +274,35 @@
+ 
+   channelChooser2 = function()
+   {
+-    ChannelChooser.show(function(result) {
+-      if (result)
+-      {
+-        $("chnId").value = result;
+-        var pb = "string action = 'getChnNameById';";
+-        pb += "integer id = '" + result + "';";
+-        var opts =  
++    if ($("ckAssignedChn").checked == true) {
++      ChannelChooser.show(function(result) {
++        if (result)
+         {
+-          postBody: pb
+-        };
+-        new Ajax.Updater("chnName", "/esp/system.htm?sid=" + SessionId, opts);
+-        $("radNo").checked = false;
+-        $("radYes").checked = true;
+-      }
+-      else if ($(chnName).innerHTML != "")
+-      {
+-        $("radNo").checked = false;
+-        $("radYes").checked = true;
+-      }
+-      else
+-      {
+-        $("radYes").checked = false;
+-        $("radNo").checked = true;
+-      }
+-    }, ChannelChooser.SHOW_ALL);
++          $("chnId").value = result;
++          var pb = "string action = 'getChnNameById';";
++          pb += "integer id = '" + result + "';";
++          var opts =  
++          {
++            postBody: pb
++          };
++          new Ajax.Updater("chnName", "/esp/system.htm?sid=" + SessionId, opts);
++          $("ckAssignedChn").checked = true;
++          $("chnNameRow").hidden = false;
++        }
++        else if ($(chnName).innerHTML != "")
++        {
++          $("ckAssignedChn").checked = true;
++          $("chnNameRow").hidden = false;
++        }
++        else
++        {
++          $("ckAssignedChn").checked = true;
++          $("chnNameRow").hidden = false;
++        }
++      }, ChannelChooser.SHOW_ALL);
++    } else {
++      noChannel();
++    }
+   };
+   
+   onTypeChange = function() 
+@@ -293,7 +323,7 @@
          loadLogicEdit(translateKey("lblTriggered"), translateKey("lblNotTriggered"));
          break;
        case 4:
@@ -161,7 +261,7 @@
          break;
      }
    };
-@@ -303,13 +334,29 @@
+@@ -303,13 +333,29 @@
      //elm.value = elmVal.replace(/\\n|\\r|\\t/g, "");
      elm.value = elmVal.replace(/\\/g, "");
    };
@@ -192,7 +292,7 @@
    {
      var s = "";
      s += "<table class='CLASS05010'>";
-@@ -322,9 +369,25 @@
+@@ -322,9 +368,25 @@
      s += "</tr>";
      s += "</table>";
      $("tdEdit").innerHTML = s;
@@ -219,7 +319,7 @@
    {
      if( vals == "" )
      {
-@@ -336,9 +399,23 @@
+@@ -336,9 +398,23 @@
      s += "<tr><td> <textarea id='txVals' rows='2'>"+vals+"</textarea> </td></tr>";
      s += "</table>";
      $("tdEdit").innerHTML = s;
@@ -244,7 +344,7 @@
    {
      var s = "";
      s += "<table class='CLASS05010'>";
-@@ -351,7 +428,27 @@
+@@ -351,7 +427,27 @@
      s += "</tr>";
      s += "</table>";
      $("tdEdit").innerHTML = s;
@@ -272,7 +372,20 @@
  
    <% 
      if (system.GetVar("createNew") == 1) {
-@@ -370,18 +467,32 @@
+@@ -361,27 +457,43 @@
+       if ( (sv.Channel() != ID_ERROR) && (sv.Channel() != 0)) {
+         object oChn = dom.GetObject(sv.Channel());
+         if (oChn) {
+-          Write("$('radYes').checked = true;");
++          Write("$('ckAssignedChn').checked = true;");
++          Write("$('chnNameRow').hidden = false;");
+         }
+       }
+       else {
+-        Write("$('radNo').checked = true;");
++        Write("$('ckAssignedChn').checked = false;");
++        Write("$('chnNameRow').hidden = true;");
+       }
        if (sv.ValueSubType() == istPresent) {
        }
        if (sv.ValueSubType() == istChar8859) {
@@ -352,7 +465,7 @@
          this.addToPostBody( 'integer varid = 0;' );
          this.addToPostBody( 'integer createNew = 1;' );
 -        this.setWidth(900);
-+        this.setWidth(1000);
++        this.setWidth(1100);
          this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
          break;
        case ID_EDIT_SYSVAR:
@@ -360,7 +473,7 @@
          this.addToPostBody( 'integer varid = '+this.type+';' );
          this.addToPostBody( 'integer createNew = 0;' );
 -        this.setWidth(900);
-+        this.setWidth(1000);
++        this.setWidth(1100);
 +        this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
 +        break;
 +      case ID_EDIT_SYSVAR_VALUE:

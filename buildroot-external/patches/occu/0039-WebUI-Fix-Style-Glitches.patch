@@ -1215,7 +1215,25 @@
    text-align:left;
    height:80px;
  }
-@@ -5147,6 +5165,7 @@
+@@ -4902,13 +4920,14 @@
+ }
+ 
+ .CLASS01805 {
+-	margin-top:20px;
++	margin-top:10px;
++	margin-bottom:10px;
++	width: 100%;
+ }
+ 
+ .CLASS01806 {
+-	margin-left: 10px;
+-    margin-right: 10px;
+ 	border:solid 1px $_(black); /* black */
++	width: 100%;
+ }
+ 
+ .CLASS01807 {
+@@ -5147,6 +5166,7 @@
  	color: $_(textColorB); /* black */
  	width:100%;
  	border:none;
@@ -1223,7 +1241,15 @@
  }
  
  .CLASS02511 {
-@@ -5338,12 +5357,11 @@
+@@ -5168,6 +5188,7 @@
+ 	border:1px Solid $_(black); /* black */
+ 	height:96px;
+ 	width:96px;
++	cursor:initial;
+ }
+ 
+ .CLASS02515 {
+@@ -5338,12 +5359,11 @@
  }
  
  .CLASS02535 {
@@ -1238,7 +1264,7 @@
  }
  
  .CLASS02535A {
-@@ -5359,6 +5377,7 @@
+@@ -5359,6 +5379,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -1246,7 +1272,7 @@
  }
  
  .CLASS02536 {
-@@ -5367,20 +5386,13 @@
+@@ -5367,20 +5388,13 @@
  
  .CLASS02537 {
  	text-align: center;
@@ -1267,7 +1293,7 @@
  }
  
  .CLASS02539 {
-@@ -5553,7 +5565,7 @@
+@@ -5553,7 +5567,7 @@
  }
  
  .CLASS02602 {
@@ -1276,7 +1302,7 @@
  }
  
  .CLASS02603 {
-@@ -5584,21 +5596,6 @@
+@@ -5584,21 +5598,6 @@
  	padding: 4px;
  }
  
@@ -1298,7 +1324,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5639,7 +5636,7 @@
+@@ -5639,7 +5638,7 @@
  
  .CLASS02614 {
  	background-color: $_(inactiveButton); /* #dddddd */
@@ -1307,7 +1333,7 @@
  	font-weight: bold;
  	border: solid 1px $_(gray); /* silver */
  }
-@@ -5735,10 +5732,12 @@
+@@ -5735,10 +5734,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -1320,7 +1346,7 @@
  }
  
  .CLASS02804 {
-@@ -5989,9 +5988,6 @@
+@@ -5989,9 +5990,6 @@
  }
  
  .CLASS03301 {
@@ -1330,7 +1356,7 @@
  	empty-cells:show;
  }
  
-@@ -6079,8 +6075,7 @@
+@@ -6079,8 +6077,7 @@
  
  .CLASS03500 {
  	border:solid 1px $_(black); /* black */
@@ -1340,7 +1366,7 @@
  }
  
  .CLASS03501 {
-@@ -6113,8 +6108,7 @@
+@@ -6113,8 +6110,7 @@
  
  .CLASS03600 {
  	border:solid 1px $_(black); /* black */
@@ -1350,7 +1376,7 @@
  }
  
  .CLASS03601 {
-@@ -6203,8 +6197,7 @@
+@@ -6203,8 +6199,7 @@
  
  .CLASS03800 {
  	border:solid 1px $_(black); /* black */
@@ -1360,7 +1386,7 @@
  }
  
  .CLASS03801 {
-@@ -6247,15 +6240,13 @@
+@@ -6247,15 +6242,13 @@
  }
  
  .CLASS03902 {
@@ -1378,7 +1404,7 @@
  }
  
  .CLASS03904 {
-@@ -6270,7 +6261,6 @@
+@@ -6270,7 +6263,6 @@
  .CLASS03906 {
  	vertical-align:middle;
  	text-align:left;
@@ -1386,7 +1412,7 @@
  }
  
  .CLASS03907 {
-@@ -6280,13 +6270,13 @@
+@@ -6280,13 +6272,13 @@
  }
  
  .CLASS03908 {
@@ -1403,7 +1429,7 @@
  }
  
  .CLASS03910 {
-@@ -6312,13 +6302,13 @@
+@@ -6312,13 +6304,13 @@
  }
  
  .CLASS04002 {
@@ -1420,7 +1446,7 @@
  }
  
  .CLASS04004 {
-@@ -6333,7 +6323,6 @@
+@@ -6333,7 +6325,6 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
@@ -1428,7 +1454,7 @@
  }
  
  .CLASS04007 {
-@@ -6344,7 +6333,6 @@
+@@ -6344,7 +6335,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -1436,7 +1462,7 @@
  	empty-cells:show;
  }
  
-@@ -6361,6 +6349,7 @@
+@@ -6361,6 +6351,7 @@
  
  .CLASS04103 {
  	height:auto;
@@ -1444,7 +1470,7 @@
  }
  
  .CLASS04104 {
-@@ -6411,10 +6400,15 @@
+@@ -6411,10 +6402,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -1461,7 +1487,7 @@
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,6 +6424,7 @@
+@@ -6430,6 +6426,7 @@
  
  .CLASS04205 {
  	height:auto;
@@ -1469,7 +1495,7 @@
  }
  
  .CLASS04206 {
-@@ -6486,7 +6481,8 @@
+@@ -6486,7 +6483,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -1479,7 +1505,7 @@
  }
  
  .CLASS04302 {
-@@ -6774,6 +6770,7 @@
+@@ -6774,6 +6772,7 @@
  .CLASS05012 {
  	color: $_(textColorB); /* black */
  	font-size:9pt;
@@ -1487,7 +1513,7 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -7220,11 +7217,12 @@
+@@ -7220,11 +7219,12 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -1502,7 +1528,7 @@
  }
  
  .CLASS06302 {
-@@ -7675,7 +7673,7 @@
+@@ -7675,7 +7675,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -1511,7 +1537,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -8702,7 +8700,8 @@
+@@ -8702,7 +8702,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -1521,7 +1547,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8751,6 @@
+@@ -8752,7 +8753,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -1529,7 +1555,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8807,8 @@
+@@ -8809,8 +8809,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -1540,7 +1566,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8885,8 @@
+@@ -8887,7 +8887,8 @@
  }
  
  .CLASS22101 {

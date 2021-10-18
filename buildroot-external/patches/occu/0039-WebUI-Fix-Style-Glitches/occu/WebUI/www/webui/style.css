@@ -4920,13 +4920,14 @@ application {
 }
 
 .CLASS01805 {
-	margin-top:20px;
+	margin-top:10px;
+	margin-bottom:10px;
+	width: 100%;
 }
 
 .CLASS01806 {
-	margin-left: 10px;
-    margin-right: 10px;
 	border:solid 1px $_(black); /* black */
+	width: 100%;
 }
 
 .CLASS01807 {
@@ -5187,6 +5188,7 @@ application {
 	border:1px Solid $_(black); /* black */
 	height:96px;
 	width:96px;
+	cursor:initial;
 }
 
 .CLASS02515 {

@@ -1,6 +1,16 @@
+--- occu/WebUI/www/ise/htm/header.htm.orig
++++ occu/WebUI/www/ise/htm/header.htm
+@@ -78,6 +78,7 @@
+   if ($("UserName"))
+   {
+     $("UserName").appendChild(document.createTextNode(userName));
++    $("UserName").setAttribute('onClick', userLink);
+   }
+ 
+   if (getUPL() != UPL_GUEST) {
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
-@@ -131,7 +131,12 @@
+@@ -131,7 +131,13 @@
          object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') );
          string sUserFullName = oUser.UserFirstName()#' '#oUser.UserLastName();
          if( sUserFullName == ' ' ){ sUserFullName = oUser.Name(); }
@@ -11,6 +21,7 @@
 +        string sUserEasyMode = "${lblUIModeExpert}";
 +        if (oUser.UserEasyLinkMode()) { sUserEasyMode = "${lblUIModeEasy}"; }
 +        WriteLine('var userName = "' # sUserFullName # ' ('# sUserLevel #') | ${lblEasyModeActiveShort} '# sUserEasyMode #'";');
++        WriteLine('var userLink = "CreatePopup(ID_USER_ACCOUNT_CONFIG_ADMIN, '#oUser.ID()#')"');
        %>
  
  

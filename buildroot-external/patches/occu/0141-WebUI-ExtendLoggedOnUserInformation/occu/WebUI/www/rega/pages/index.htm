@@ -137,6 +137,7 @@
         string sUserEasyMode = "${lblUIModeExpert}";
         if (oUser.UserEasyLinkMode()) { sUserEasyMode = "${lblUIModeEasy}"; }
         WriteLine('var userName = "' # sUserFullName # ' ('# sUserLevel #') | ${lblEasyModeActiveShort} '# sUserEasyMode #'";');
+        WriteLine('var userLink = "CreatePopup(ID_USER_ACCOUNT_CONFIG_ADMIN, '#oUser.ID()#')"');
       %>
 
 

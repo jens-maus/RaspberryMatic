@@ -78,8 +78,10 @@
   if ($("UserName"))
   {
     $("UserName").appendChild(document.createTextNode(userName));
-    $("UserName").setAttribute('onClick', userLink);
-    $("UserName").setAttribute('style','cursor: pointer;');
+    if (getUPL() != UPL_GUEST) {
+      $("UserName").setAttribute('onClick', userLink);
+      $("UserName").setAttribute('style','cursor: pointer;');
+    }
   }
 
   if (getUPL() != UPL_GUEST) {

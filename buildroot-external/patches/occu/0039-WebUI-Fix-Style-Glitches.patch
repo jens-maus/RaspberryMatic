@@ -568,10 +568,10 @@
  <div id="prgcontent">
  <table id="ProgramListTable" class="tTable"  border="0" cellpadding="0" cellspacing="0" style="display:none">
 +  <colgroup>
-+    <col style="width:15%;">
-+    <col style="width:30%;">
-+    <col style="width:15%;">
-+    <col style="width:15%;">
++    <col>
++    <col>
++    <col>
++    <col>
 +    <col style="width:250px;">
 +  </colgroup>
      <tr>
@@ -774,10 +774,10 @@
 -  <table id="ProgramListTable" class="tblList tTable CLASS03701" border="0" cellpadding="0" cellspacing="0" frame="void" rules="none" >
 +  <table id="ProgramListTable" class="tblList tTable CLASS03701" border="0" cellpadding="0" cellspacing="0" >
 +    <colgroup>
-+      <col style="width:15%;">
-+      <col style="width:30%;">
-+      <col style="width:15%;">
-+      <col style="width:15%;">
++      <col>
++      <col>
++      <col>
++      <col>
 +      <col style="width:250px;">
 +    </colgroup>
      <thead>

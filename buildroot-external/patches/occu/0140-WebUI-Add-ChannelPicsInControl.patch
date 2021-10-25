@@ -10,10 +10,10 @@
 -     <col style="width:10%;"/>
 -     <col style="width:58%;"/>
 +     <col />
-+     <col style="width:55px;"/>
++     <col style="width:55px;" />
 +     <col />
 +     <col />
-+     <col />
++     <col style="width:100px;" />
 +     <col />
    </colgroup>
    <tr>
@@ -62,9 +62,9 @@
 -     <col style="width:15%;"/>
 -     <col style="width:55%;"/>
 +     <col />
-+     <col style="width:55px;"/>
++     <col style="width:55px;" />
 +     <col />
-+     <col />
++     <col style="width:100px;" />
 +     <col />
    </colgroup>
    
@@ -121,9 +121,9 @@
 -     <col style="width:15%;"/>
 -     <col style="width:55%;"/>
 +     <col />
-+     <col style="width:55px;"/>
++     <col style="width:55px;" />
 +     <col />
-+     <col />
++     <col style="width:100px;" />
 +     <col />
    </colgroup>
    <tr>

@@ -3554,7 +3554,7 @@ html, body {
   border: 1px solid $_(black);
   empty-cells: show;
   text-align: center;
-  width: 100px;
+  width: 200px;
 }
 
 .bidcosrf_imagesize {
@@ -7220,6 +7220,7 @@ color: $_(textColorA); /* white */
 
 .CLASS06301 {
 	color: $_(textColorB); /* black */
+	font-weight: bold;
 }
 
 .CLASS06302 {

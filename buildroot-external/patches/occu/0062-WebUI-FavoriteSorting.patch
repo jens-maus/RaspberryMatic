@@ -41,19 +41,21 @@
            {
              oUser.UserTempViewIDs().Add( oTmp.ID() );
            }
-@@ -63,8 +70,9 @@
+@@ -63,7 +70,7 @@
  <td class="CLASS06402"></td>
  </tr>
  </table>
 -<table id="tblFavs" class="tMain filterTable" cellpadding="0" cellspacing="0" style="display:none">
 +<table id="tblFavs" class="tMain" cellpadding="0" cellspacing="0" style="display:none">
    <colgroup>
-+  <col style="width:10%;"/>
-   <col style="width:30%;"/>
-   <col style="width:30%;"/>
-   <col style="width:25px;"/>
-@@ -74,6 +82,8 @@
-   <col style="width:20%;"/>
+   <col />
+   <col />
+@@ -71,9 +78,12 @@
+   <col />
+   <col />
+   <col />
++  <col />
+   <col style="width:100px;" />
    </colgroup>
    <tr>
 +    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="pos"){sCssName="SortSelected";} %>

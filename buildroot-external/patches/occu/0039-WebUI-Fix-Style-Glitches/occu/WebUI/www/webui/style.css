@@ -3037,7 +3037,7 @@ html, body {
 
 .DeviceListThumbnail {
   border: 1px solid $_(black); /* black */
-  text-align:left;
+  text-align:center;
   height:80px;
 }
 
@@ -3492,18 +3492,12 @@ html, body {
     position: absolute;
     left: 4px
 }.bidcosrf_page {
-  margin: 20px;
+  margin: 10px;
+  width: 100%;
 }
 
 
 .bidcosrf_footer {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 10%;
-  width: 80%;
-  background-color: $_(white);
-  height:2px;
-  overflow: hidden;
 }
 
 .bidcosrf_button {
@@ -3529,7 +3523,7 @@ html, body {
 .bidcosrf_table {
   border: 1px solid $_(black);
   border-spacing: 0px;
-  width: 95%;
+  width: 100%;
 }
 
 .bidcosrf_tableheader {
@@ -3549,7 +3543,7 @@ html, body {
 }
 
 .bidcosrf_imagecell {
-  background-color: $_(white);
+  background-color: $_(inactiveBackground);
   border: 1px solid $_(black);
   empty-cells: show;
   text-align: center;
@@ -3560,12 +3554,13 @@ html, body {
   border: 1px solid $_(black);
   empty-cells: show;
   text-align: center;
+  width: 100px;
 }
 
 .bidcosrf_imagesize {
-  width: 50px;
-  height:80px;
+  width: 55px;
 }
+
 html, body {
   border: 0 none;
   margin: 0;

@@ -1,3 +1,22 @@
+--- occu/HMserver/opt/HMServer/pages/AvailableFirmware.ftl.orig
++++ occu/HMserver/opt/HMServer/pages/AvailableFirmware.ftl
+@@ -6,11 +6,11 @@
+   <body>
+    <table id="DeviceListTable" cellpadding="0" cellspacing="0">
+     <colgroup>
+-      <col width="5%">
+-      <col width="30%">
+-      <col width="25%">
+-      <col width="25%">
+-      <col width="15%">
++      <col style="width:55px;" />
++      <col />
++      <col />
++      <col />
++      <col style="width:100px;" />
+     </colgroup>
+     <thead>
+       <tr>
 --- occu/HMserver/opt/HMServer/pages/DiagramSettingsDetailPage.ftl.orig
 +++ occu/HMserver/opt/HMServer/pages/DiagramSettingsDetailPage.ftl
 @@ -149,8 +149,12 @@
@@ -46,15 +65,22 @@
  
  <table id="${TableId}" class="tTable"  border="0" cellpadding="0" cellspacing="0">
 +  <colgroup>
-+    <col style="width:30%;"/>
-+    <col style="width:30%;"/>
-+    <col style="width:10%;"/>
-+    <col style="width:40%;"/>
-+    <col style="width:20%;"/>
++    <col />
++    <col />
++    <col />
++    <col />
++    <col />
 +  </colgroup>
    <thead>
      <tr>
        <td class="thCell CLASS04900" >${"$"}{thDiagramName}</td>
+@@ -291,4 +298,4 @@
+ 	};
+ </script>
+ </body>
+-</html>
+\ No newline at end of file
++</html>
 --- occu/HMserver/opt/HMServer/pages/GroupEditPage.ftl.orig
 +++ occu/HMserver/opt/HMServer/pages/GroupEditPage.ftl
 @@ -7,8 +7,12 @@
@@ -126,13 +152,13 @@
  <div id="GroupListBody" style="display: none">
  <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
 +    <colgroup>
-+      <col style="width:25px;">
-+      <col style="width:40%;">
-+      <col style="width:20%;">
-+      <col style="width:15%;">
-+      <col style="width:15%;">
-+      <col style="width:25px;">
-+      <col style="width:25px;">
++      <col />
++      <col />
++      <col />
++      <col />
++      <col />
++      <col />
++      <col style="width:100px;">
 +    </colgroup>
      <thead>
      <tr data-bind="foreach: groupListHeaders">
@@ -145,15 +171,20 @@
     puts "<colgroup>"
 -    puts "<col style=\"width:35%;\"/>"
 -    puts "<col style=\"width:20%;\"/>"
-+    puts "<col style=\"width:50%;\"/>"
-+    puts "<col style=\"width:10%;\"/>"
-     puts "<col style=\"width:55px;\"/>"
-     puts "<col style=\"width:10%;\"/>"
-      puts "<col style=\"width:10%;\"/>"
-      puts "<col style=\"width:10%;\"/>"
-    #  puts "<col style=\"width:10%;\"/>"
+-    puts "<col style=\"width:55px;\"/>"
+-    puts "<col style=\"width:10%;\"/>"
+-     puts "<col style=\"width:10%;\"/>"
+-     puts "<col style=\"width:10%;\"/>"
+-   #  puts "<col style=\"width:10%;\"/>"
 -     puts "<col style=\"width:auto;\"/>"
-+     puts "<col style=\"width:10%;\"/>"
++    puts "<col />"
++    puts "<col />"
++    puts "<col style=\"width:55px;\" />"
++    puts "<col />"
++    puts "<col />"
++    puts "<col />"
++   #puts "<col />"
++    puts "<col style=\"width:100px;\"/>"
     puts "</colgroup>"
  
     puts "<th class=\"DeviceListHead\">\${thName}</th>"
@@ -171,13 +202,13 @@
    #cgi_debug -on
  
 +  puts "<colgroup>"
-+  puts "<col style='width:20%;'>"
-+  puts "<col style='width:10%;'>"
-+  puts "<col style='width:20%;'>"
-+  puts "<col style='width:20%;'>"
-+  puts "<col style='width:10%;'>"
-+  puts "<col style='width:30%;'>"
-+  puts "<col style='width:10%;'>"
++  puts "<col />"
++  puts "<col />"
++  puts "<col />"
++  puts "<col />"
++  puts "<col style='width:100px;'>"
++  puts "<col />"
++  puts "<col />"
 +  puts "</colgroup>"
    puts "<THEAD>"
    puts "<TR>"
@@ -192,6 +223,41 @@
 +        puts "<table border=\"1\" id=\"ChnListTbl\" class=\"ChnListTbl\" cellspacing=\"0\">"
          put_colgroup
          put_tableheader
+ 
+@@ -121,25 +121,25 @@
+ proc put_colgroup {} {
+   puts "<colgroup>"
+ #Name
+-  puts "  <col style=\"width:21%;\"/>"
++  puts "  <col />"
+ #Typenbezeichnung
+-  puts "  <col style=\"width:10%;\"/>"
++  puts "  <col />"
+ #Bild
+-  puts "  <col style=\"width:4%;\"/>"
++  puts "  <col style=\"width:55px;\"/>"
+ #Bezeichnung
+-  puts "  <col style=\"width:18%;\"/>"
++  puts "  <col />"
+ #Seriennummer
+-  puts "  <col style=\"width:10%;\"/>"
++  puts "  <col />"
+ #Kategorie
+-  puts "  <col style=\"width:5%;\"/>"
++  puts "  <col />"
+ #Übertragungsmodus
+   puts "  <col style=\"width:5%;\"/>"
+ #Gewerk
+-  puts "  <col style=\"width:10%;\"/>"
++  puts "  <col />"
+ #Raum
+-  puts "  <col style=\"width:10%;\"/>"
++  puts "  <col />"
+ #Aktion
+-  puts "  <col style=\"width:7%;\"/>"
++  puts "  <col style=\"width:100px;\" />"
+   puts "</colgroup>"
+ }
  
 --- occu/WebUI/www/rega/esp/controls/blind.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/blind.fn
@@ -373,7 +439,26 @@
      Write("</tr>");
 --- occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm
-@@ -58,16 +58,16 @@
+@@ -47,27 +47,27 @@
+ <div id="svOffset" style="display:none"></div>
+ <table id="sysVars" cellspacing="0" cellpadding="0" class="tTable filterTable" style="display:none">
+ <colgroup>
+-  <col style="width:9%;"/>
+-  <col style="width:18%;"/>
+-  <col style="width:9%;"/>
+-  <col style="width:18%;"/>
+-  <col style="width:9%;"/>
+-  <col style="width:9%;"/>
+-  <col style="width:18%;"/>
+-  <col style="width:10%;"/>
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:200px;" />
++  <col style="width:100px;" />
  </colgroup>
  <tr>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
@@ -404,20 +489,21 @@
 -<col style="width:6%;" width="6%" />
 -<col style="width:6%;" />
 -<col style="width:6%;"/>
-+<col style="width:10%;" />
-+<col style="width:10%;" />
-+<col style="width:10%;" />
- <!-- <col style="width:6%;" /> -->
+-<!-- <col style="width:6%;" /> -->
 -<col style="width:6%;"/>
 -<col style="width:8%;"/>
 -<col style="width:8%;"/>
 -<col style="width:6%;" />
 -<col style="width:6%;" />
-+<col style="width:10%;" />
-+<col style="width:20%;" />
-+<col style="width:20%;" />
-+<col style="width:25px;" />
-+<col style="width:15%;" />
++  <col />
++  <col />
++  <col />
++  <!-- <col /> -->
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:100px;" />
  </colgroup>
  
  <tr class="CLASS05300">
@@ -462,18 +548,18 @@
 -  <col style="width:8%;"/>
 -  <col style="width:8%;"/>
 -  <col style="width:8%;"/>
-+  <col style="width:18px;">
-+  <col style="width:10%;">
-+  <col style="width:20%;">
-+  <col style="width:10%;">
-+  <col style="width:50px;">
-+  <col style="width:20%;">
-+  <col style="width:10%;">
-+  <col style="width:50px;">
-+  <col style="width:50px;">
-+  <col style="width:10%;">
-+  <col style="width:5%;">
-+  <col style="width:25px;">
++  <col style="width:25px;" />
++  <col />
++  <col />
++  <col />
++  <col style="width:55px;">
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:100px;">
++  <col style="width:100px;">
  </colgroup>
  <thead>
  <tr class='CLASS04101'>
@@ -510,7 +596,7 @@
        string sStyle = "";
 --- occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm
-@@ -63,9 +63,9 @@
+@@ -63,43 +63,43 @@
  <div class="CLASS04301">
  <div id="noNewDevs" class="CLASS04302" style="display:none;">${noDeviceInPostBox}</div>
  <table id="newDevTbl" class="tblList CLASS04303" cellpadding="0" cellspacing="0"
@@ -518,17 +604,38 @@
 +       style="display:none;">
  <colgroup>
 -  <col style="width:2%;"  width="2%"/>
-+  <col style="width:1%;"/>
++  <col style="width:25px;" />
    <!-- Plus/Minus Device-->
-   <col style="width:2%;"/>
+-  <col style="width:2%;"/>
++  <col style="width:25px;" />
    <!-- Plus/Minus Group -->
-@@ -81,25 +81,25 @@
-   <col style="width:7%;"/>
-   <col style="width:7%;"/>
-   <col style="width:7%;"/>
+-  <col style="width:2%;"/>
++  <col style="width:25px;" />
+   <!-- Leere Zelle vor GroupMember -->
+-  <col style="width:1%;"/>
+-  <col style="width:3%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:9%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:7%;"/>
 -  <col style="width:15%;"/>
-+  <col style="width:10%;"/>
-   <col style="width:7%;"/>
+-  <col style="width:7%;"/>
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:100px;"/>
++  <col style="width:100px;"/>
  </colgroup>
  <tbody id="tblNewDevices">
  <tr id="tblNewDevicesHeader">
@@ -568,11 +675,11 @@
  <div id="prgcontent">
  <table id="ProgramListTable" class="tTable"  border="0" cellpadding="0" cellspacing="0" style="display:none">
 +  <colgroup>
-+    <col>
-+    <col>
-+    <col>
-+    <col>
-+    <col style="width:250px;">
++    <col />
++    <col />
++    <col />
++    <col />
++    <col style="width:250px;" />
 +  </colgroup>
      <tr>
        <%string sCssName="Sort"; if(firstSort||(system.GetSessionVar("sessionLS")=="name")){sCssName="SortSelected";} %>
@@ -584,10 +691,10 @@
  <div id="prgcontent">
    <table id="ProgramTable" class="filterTable tTable j_translate" border="0" cellpadding="0" cellspacing="0">
 +    <colgroup>
-+      <col style="width:15%;">
-+      <col style="width:35%;">
-+      <col style="width:30%;">
-+      <col style="width:30%;">
++      <col />
++      <col />
++      <col />
++      <col />
 +      <col style="width:100px;">
 +    </colgroup>
      <thead>
@@ -636,18 +743,18 @@
 -  <col style="width:8%;"/>
 -  <col style="width:8%;"/>
 -  <col style="width:8%;"/>
-+  <col style="width:18px;">
-+  <col style="width:10%;">
-+  <col style="width:20%;">
-+  <col style="width:10%;">
-+  <col style="width:50px;">
-+  <col style="width:20%;">
-+  <col style="width:10%;">
-+  <col style="width:50px;">
-+  <col style="width:50px;">
-+  <col style="width:10%;">
-+  <col style="width:5%;">
-+  <col style="width:25px;">
++  <col style="width:25px;" />
++  <col />
++  <col />
++  <col />
++  <col style="width:55px;">
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:100px;">
++  <col style="width:100px;">
  </colgroup>
  
  <thead>
@@ -835,16 +942,37 @@
    loadChannels = function(id)
    {
      iseInitUpdateArrays();
+--- occu/WebUI/www/rega/pages/tabs/control/systemProtocol.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/systemProtocol.htm
+@@ -43,10 +43,10 @@
+ 
+ <table class="tTable filterTable" id="SysProtoList" cellspacing="0" cellpadding="0" style="display:none">
+   <colgroup>
+-    <col style="width:12%;"/>
+-    <col style="width:12%;"/>
+-    <col style="width:16%;"/>
+-    <col style="width:60%;"/>
++    <col />
++    <col />
++    <col />
++    <col />
+   </colgroup>
+   <thead id="histlistheader">
+       <tr>
 --- occu/WebUI/www/rega/pages/tabs/control/sysvars.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/sysvars.htm
-@@ -48,8 +48,8 @@
+@@ -46,10 +46,10 @@
+ <div id="prgcontent">
+   <table id="sysvarsListTable" class="tTable tblList CLASS03301 hidden" border="0" cellpadding="0" cellspacing="0" >
      <colgroup>
-       <col style="width:25%;"/>
-       <col style="width:25%;"/>
 -      <col style="width:25%;"/>
 -      <col style="width:25%;"/>
-+      <col style="width:15%;"/>
-+      <col style="width:35%;"/>
+-      <col style="width:25%;"/>
+-      <col style="width:25%;"/>
++      <col />
++      <col />
++      <col style="width:0px;"/>
++      <col />
      </colgroup>
        <tr>
          <%string sCssName="Sort"; if(firstSort||(system.GetSessionVar("sessionLS")=="name")){sCssName="SortSelected";} %>
@@ -962,13 +1090,14 @@
 -  <col style="width:10%;"/>
 -<!--  <col style="width:25%;" width="10" /> -->
 -  <col style="width:10%;"/>
-+  <col style="width:30%;"/>
-+  <col style="width:30%;"/>
-+  <col style="width:25px;"/>
-+  <col style="width:25px;"/>
-+  <col style="width:25px;"/>
-   <col style="width:10%;"/>
-+  <col style="width:20%;"/>
+-  <col style="width:10%;"/>
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:100px;" />
    </colgroup>
    <tr>
      <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
@@ -1009,7 +1138,7 @@
  	this.drawImage2 = function(imgSrc, x, y, w, h, imgw, imgh, a)
  	{
 -    this.htm += '<div style="position: relative; margin: 0; padding: 0; vertical-align: top; text-align: left; background-color: white;';
-+    this.htm += '<div style="position: relative; margin: 0; padding: 0; vertical-align: top; text-align: left; background-color: inherit;';
++    this.htm += '<div style="position: relative; margin: 0; padding: 0; vertical-align: middle; text-align: center; background-color: inherit;';
      // AG bei Problemen mit Grafiken kann es evtl. hilfreich sein, die obere Zeile aus- und die untere Zeile einzukommentieren.
      // Die Anwendung läuft jetzt nicht mehr im Quirks-Modus.....
      //this.htm += '<div style="position: absolute; margin: 0; padding: 0; vertical-align: top; text-align: left; background-color: white;';
@@ -1374,15 +1503,72 @@
    cursor:pointer;
  }
  
-@@ -3018,7 +3037,6 @@
+@@ -3018,8 +3037,7 @@
  
  .DeviceListThumbnail {
    border: 1px solid $_(black); /* black */
 -  background-color:$_(white); /* white */
-   text-align:left;
+-  text-align:left;
++  text-align:center;
    height:80px;
  }
-@@ -4902,13 +4920,14 @@
+ 
+@@ -3474,18 +3492,12 @@
+     position: absolute;
+     left: 4px
+ }.bidcosrf_page {
+-  margin: 20px;
++  margin: 10px;
++  width: 100%;
+ }
+ 
+ 
+ .bidcosrf_footer {
+-  margin-top: 20px;
+-  margin-bottom: 20px;
+-  margin-left: 10%;
+-  width: 80%;
+-  background-color: $_(white);
+-  height:2px;
+-  overflow: hidden;
+ }
+ 
+ .bidcosrf_button {
+@@ -3511,7 +3523,7 @@
+ .bidcosrf_table {
+   border: 1px solid $_(black);
+   border-spacing: 0px;
+-  width: 95%;
++  width: 100%;
+ }
+ 
+ .bidcosrf_tableheader {
+@@ -3531,7 +3543,7 @@
+ }
+ 
+ .bidcosrf_imagecell {
+-  background-color: $_(white);
++  background-color: $_(inactiveBackground);
+   border: 1px solid $_(black);
+   empty-cells: show;
+   text-align: center;
+@@ -3542,12 +3554,13 @@
+   border: 1px solid $_(black);
+   empty-cells: show;
+   text-align: center;
++  width: 100px;
+ }
+ 
+ .bidcosrf_imagesize {
+-  width: 50px;
+-  height:80px;
++  width: 55px;
+ }
++
+ html, body {
+   border: 0 none;
+   margin: 0;
+@@ -4902,13 +4915,14 @@
  }
  
  .CLASS01805 {
@@ -1400,7 +1586,7 @@
  }
  
  .CLASS01807 {
-@@ -5147,6 +5166,7 @@
+@@ -5147,6 +5161,7 @@
  	color: $_(textColorB); /* black */
  	width:100%;
  	border:none;
@@ -1408,7 +1594,7 @@
  }
  
  .CLASS02511 {
-@@ -5168,6 +5188,7 @@
+@@ -5168,6 +5183,7 @@
  	border:1px Solid $_(black); /* black */
  	height:96px;
  	width:96px;
@@ -1416,7 +1602,7 @@
  }
  
  .CLASS02515 {
-@@ -5210,7 +5231,6 @@
+@@ -5210,7 +5226,6 @@
  
  .CLASS02520 {
  	color: $_(textColorB); /* black */
@@ -1424,7 +1610,7 @@
  	border:none;
  	background-color:$_(activeBackground);
  }
-@@ -5338,12 +5358,11 @@
+@@ -5338,12 +5353,11 @@
  }
  
  .CLASS02535 {
@@ -1439,7 +1625,7 @@
  }
  
  .CLASS02535A {
-@@ -5359,6 +5378,7 @@
+@@ -5359,6 +5373,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -1447,7 +1633,7 @@
  }
  
  .CLASS02536 {
-@@ -5367,20 +5387,13 @@
+@@ -5367,20 +5382,13 @@
  
  .CLASS02537 {
  	text-align: center;
@@ -1468,7 +1654,7 @@
  }
  
  .CLASS02539 {
-@@ -5494,6 +5507,7 @@
+@@ -5494,6 +5502,7 @@
  
  .CLASS02552 {
  	border:solid 1px $_(black); /* black */
@@ -1476,7 +1662,7 @@
  }
  
  .CLASS02553 {
-@@ -5553,7 +5567,7 @@
+@@ -5553,7 +5562,7 @@
  }
  
  .CLASS02602 {
@@ -1485,7 +1671,7 @@
  }
  
  .CLASS02603 {
-@@ -5584,21 +5598,6 @@
+@@ -5584,21 +5593,6 @@
  	padding: 4px;
  }
  
@@ -1507,7 +1693,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5639,7 +5638,7 @@
+@@ -5639,7 +5633,7 @@
  
  .CLASS02614 {
  	background-color: $_(inactiveButton); /* #dddddd */
@@ -1516,7 +1702,7 @@
  	font-weight: bold;
  	border: solid 1px $_(gray); /* silver */
  }
-@@ -5735,10 +5734,12 @@
+@@ -5735,10 +5729,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -1529,7 +1715,7 @@
  }
  
  .CLASS02804 {
-@@ -5989,9 +5990,6 @@
+@@ -5989,9 +5985,6 @@
  }
  
  .CLASS03301 {
@@ -1539,7 +1725,7 @@
  	empty-cells:show;
  }
  
-@@ -6079,8 +6077,7 @@
+@@ -6079,8 +6072,7 @@
  
  .CLASS03500 {
  	border:solid 1px $_(black); /* black */
@@ -1549,7 +1735,7 @@
  }
  
  .CLASS03501 {
-@@ -6113,8 +6110,7 @@
+@@ -6113,8 +6105,7 @@
  
  .CLASS03600 {
  	border:solid 1px $_(black); /* black */
@@ -1559,7 +1745,7 @@
  }
  
  .CLASS03601 {
-@@ -6203,8 +6199,7 @@
+@@ -6203,8 +6194,7 @@
  
  .CLASS03800 {
  	border:solid 1px $_(black); /* black */
@@ -1569,7 +1755,7 @@
  }
  
  .CLASS03801 {
-@@ -6247,15 +6242,13 @@
+@@ -6247,15 +6237,13 @@
  }
  
  .CLASS03902 {
@@ -1587,7 +1773,7 @@
  }
  
  .CLASS03904 {
-@@ -6270,7 +6263,6 @@
+@@ -6270,7 +6258,6 @@
  .CLASS03906 {
  	vertical-align:middle;
  	text-align:left;
@@ -1595,7 +1781,7 @@
  }
  
  .CLASS03907 {
-@@ -6280,13 +6272,13 @@
+@@ -6280,13 +6267,13 @@
  }
  
  .CLASS03908 {
@@ -1612,7 +1798,7 @@
  }
  
  .CLASS03910 {
-@@ -6312,13 +6304,13 @@
+@@ -6312,13 +6299,13 @@
  }
  
  .CLASS04002 {
@@ -1629,7 +1815,7 @@
  }
  
  .CLASS04004 {
-@@ -6333,7 +6325,6 @@
+@@ -6333,7 +6320,6 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
@@ -1637,7 +1823,7 @@
  }
  
  .CLASS04007 {
-@@ -6344,7 +6335,6 @@
+@@ -6344,7 +6330,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -1645,7 +1831,7 @@
  	empty-cells:show;
  }
  
-@@ -6361,6 +6351,7 @@
+@@ -6361,6 +6346,7 @@
  
  .CLASS04103 {
  	height:auto;
@@ -1653,7 +1839,7 @@
  }
  
  .CLASS04104 {
-@@ -6411,10 +6402,15 @@
+@@ -6411,10 +6397,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -1670,7 +1856,7 @@
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,6 +6426,7 @@
+@@ -6430,6 +6421,7 @@
  
  .CLASS04205 {
  	height:auto;
@@ -1678,7 +1864,7 @@
  }
  
  .CLASS04206 {
-@@ -6486,7 +6483,8 @@
+@@ -6486,7 +6478,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -1688,7 +1874,7 @@
  }
  
  .CLASS04302 {
-@@ -6774,6 +6772,7 @@
+@@ -6774,6 +6767,7 @@
  .CLASS05012 {
  	color: $_(textColorB); /* black */
  	font-size:9pt;
@@ -1696,7 +1882,7 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -7220,11 +7219,12 @@
+@@ -7220,11 +7214,12 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -1711,7 +1897,7 @@
  }
  
  .CLASS06302 {
-@@ -7675,7 +7675,7 @@
+@@ -7675,7 +7670,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -1720,7 +1906,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -8702,7 +8702,8 @@
+@@ -8702,7 +8697,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -1730,7 +1916,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8753,6 @@
+@@ -8752,7 +8748,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -1738,7 +1924,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8809,8 @@
+@@ -8809,8 +8804,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -1749,7 +1935,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8887,8 @@
+@@ -8887,7 +8882,8 @@
  }
  
  .CLASS22101 {
@@ -1770,15 +1956,50 @@
    <colgroup>\n
      <col style=\"width:11%;\"\/>\n
      <col style=\"width:11%;\"\/>\n
-@@ -418,7 +418,7 @@
+@@ -418,25 +418,25 @@
  <\/table>\n
  \n
  ";
 -DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
 +DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
    <colgroup>\n
-     <col style=\"width:25px;\"\/>\n
-     <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:55px;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
++    <col style=\"width:25px;\" \/>\n
++    <col style=\"width:25px;\" \/>\n
++    <col style=\"width:25px;\" \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col style=\"width:55px;\" \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col style=\"width:100px;\" \/>\n
+   <\/colgroup>\n
+   <thead>\n
+     <tr>\n
 @@ -7508,6 +7508,12 @@
      if ($("menubar")) { Element.setStyle("menubar", {"height": this.MENUBAR_HEIGHT + "px", "width": width + "px"}); }
      if ($("content")) { Element.setStyle("content", {"height": contentHeight       + "px", "width": width + "px"}); }

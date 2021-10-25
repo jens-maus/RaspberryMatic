@@ -121,25 +121,25 @@ proc put_page {} {
 proc put_colgroup {} {
   puts "<colgroup>"
 #Name
-  puts "  <col style=\"width:21%;\"/>"
+  puts "  <col />"
 #Typenbezeichnung
-  puts "  <col style=\"width:10%;\"/>"
+  puts "  <col />"
 #Bild
-  puts "  <col style=\"width:4%;\"/>"
+  puts "  <col style=\"width:55px;\"/>"
 #Bezeichnung
-  puts "  <col style=\"width:18%;\"/>"
+  puts "  <col />"
 #Seriennummer
-  puts "  <col style=\"width:10%;\"/>"
+  puts "  <col />"
 #Kategorie
-  puts "  <col style=\"width:5%;\"/>"
+  puts "  <col />"
 #Übertragungsmodus
   puts "  <col style=\"width:5%;\"/>"
 #Gewerk
-  puts "  <col style=\"width:10%;\"/>"
+  puts "  <col />"
 #Raum
-  puts "  <col style=\"width:10%;\"/>"
+  puts "  <col />"
 #Aktion
-  puts "  <col style=\"width:7%;\"/>"
+  puts "  <col style=\"width:100px;\" />"
   puts "</colgroup>"
 }
 

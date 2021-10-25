@@ -420,23 +420,23 @@ DEVICELIST_FLAT_JST = "{macro printHead(name, id)}\n
 ";
 DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
   <colgroup>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:55px;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
+    <col style=\"width:25px;\" \/>\n
+    <col style=\"width:25px;\" \/>\n
+    <col style=\"width:25px;\" \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col style=\"width:55px;\" \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col style=\"width:100px;\" \/>\n
   <\/colgroup>\n
   <thead>\n
     <tr>\n

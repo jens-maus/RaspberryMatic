@@ -411,7 +411,6 @@ a img {
   text-align:center;
   border:solid 1px $_(black); /* black */
   color: $_(textColorB); /* black */
-  height: 40px;
 }
 
 .filterTable .leftAlign {
@@ -1108,6 +1107,7 @@ a img {
 
 .StatViewTbl td{
   border: solid 1px $_(black); /* black */
+  height: 50px;
 }
 
 
@@ -4917,7 +4917,6 @@ application {
 .CLASS01805 {
 	margin-top:10px;
 	margin-bottom:10px;
-	width: 100%;
 }
 
 .CLASS01806 {
@@ -5312,7 +5311,7 @@ application {
 	width:220px;
 	/*height:25px;*/
 	height:auto;
-	min-height: 32px;
+	min-height: 40px;
 	clear: both;
 	display: inline-block;
   /* line-height:25px; problem with controls with a long parameter name */

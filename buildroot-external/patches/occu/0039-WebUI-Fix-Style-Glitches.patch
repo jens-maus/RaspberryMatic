@@ -195,6 +195,48 @@
 -}
 \ No newline at end of file
 +}
+--- occu/WebUI/www/config/ic_deviceparameters.cgi.orig
++++ occu/WebUI/www/config/ic_deviceparameters.cgi
+@@ -785,9 +785,9 @@
+   puts "<table id=\"id_channel_parameters_table\" class=\"parameters_table\" cellspacing=\"0\">"
+   
+   puts "<colgroup>"
+-  puts "  <col style=\"width:20%;\"/>"
+-  puts "  <col style=\"width:5%;\" />"
+-  puts "  <col style=\"width:75%;\"/>"
++  puts "  <col />"
++  puts "  <col />"
++  puts "  <col />"
+   puts "</colgroup>"
+ 
+   puts "<THEAD>"
+@@ -1259,19 +1259,19 @@
+ 
+   puts "<colgroup>"
+   #Name
+-  puts "  <col style=\"width:29%;\"/>"
++  puts "  <col />"
+   #Typenbezeichnung
+-  puts "  <col style=\"width:10%;\"/>"
++  puts "  <col />"
+   #Bild
+-  puts "  <col style=\"width:1%;\"/>"
++  puts "  <col style=\"width:55px;\"/>"
+   #Bezeichnung
+-  puts "  <col style=\"width:30%;\"/>"
++  puts "  <col />"
+   #SN
+-  puts "  <col style=\"width:5%;\"/>"
++  puts "  <col />"
+   #Interface
+-  puts "  <col style=\"width:5%;\"/>"
++  puts "  <col />"
+   #Firmware
+-  puts "  <col style=\"width:15%;\"/>"
++  puts "  <col />"
+   puts "</colgroup>"
+   
+   puts "<THEAD>"
 --- occu/WebUI/www/config/ic_linkpeerlist.cgi.orig
 +++ occu/WebUI/www/config/ic_linkpeerlist.cgi
 @@ -645,6 +645,15 @@
@@ -259,6 +301,15 @@
    puts "</colgroup>"
  }
  
+@@ -516,7 +516,7 @@
+     puts "<div class=\"CLASS21915\">&nbsp;"
+   } else {
+     puts "<td id=\"id_filtertd_$colNr\" class=\"unfiltered\">"
+-    puts "<div onclick=\"ShowFilterControl($colNr);\">Filter</div>"
++    puts "<div class=\"FilterBtn\" onclick=\"ShowFilterControl($colNr);\">Filter</div>"
+     puts "<div class=\"CLASS21915\">"
+   }
+   
 --- occu/WebUI/www/rega/esp/controls/blind.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/blind.fn
 @@ -132,7 +132,7 @@
@@ -426,6 +477,17 @@
          WriteLine("</div>");
        WriteLine("</td>");
      WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
++++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
+@@ -1201,7 +1201,7 @@
+   string showParam = true;
+ 
+   WriteLine( '<td class="CLASS02519">' );
+-    WriteLine( '<table cellspacing="10" style="margin: 10px 10px 10px -8px;">' );
++    WriteLine( '<table cellspacing="0">' );
+     WriteLine( '<tr>');
+     integer i = 0;
+     string sEnum = "";
 --- occu/WebUI/www/rega/esp/system.fn.orig
 +++ occu/WebUI/www/rega/esp/system.fn
 @@ -1262,7 +1262,7 @@
@@ -1193,7 +1255,15 @@
  }
  
  .filterTable td
-@@ -594,9 +606,10 @@
+@@ -399,7 +411,6 @@
+   text-align:center;
+   border:solid 1px $_(black); /* black */
+   color: $_(textColorB); /* black */
+-  height: 40px;
+ }
+ 
+ .filterTable .leftAlign {
+@@ -594,9 +605,10 @@
  
  /* Tabelle zur Listendarstellung von Elementen (z.B. Raumübersicht) */
  .tblList {
@@ -1206,7 +1276,7 @@
  }
  
  .tblList th {
-@@ -608,23 +621,25 @@
+@@ -608,23 +620,25 @@
  .Sort
  {
    cursor: pointer;
@@ -1239,7 +1309,7 @@
  }
  
  .tblList td {
-@@ -637,7 +652,6 @@
+@@ -637,7 +651,6 @@
  /* Kopfzeile eines Popup-Fenster */
  .popupTitle {
    color: $_(textColorB); /* black */
@@ -1247,7 +1317,7 @@
    background-color: $_(white); /* white */
    border: solid 1px $_(black); /* black */
    padding-left: 4px;
-@@ -706,7 +720,6 @@
+@@ -706,7 +719,6 @@
  
  .popupControls {
    background-color: $_(white); /* white */
@@ -1255,7 +1325,7 @@
    border: solid 1px $_(black); /* black */
  }
  
-@@ -735,8 +748,8 @@
+@@ -735,8 +747,8 @@
  
  /* KanalListe */
  .ChnListTbl {
@@ -1265,7 +1335,7 @@
  }
  
  .ChnListTbl td {
-@@ -967,7 +980,7 @@
+@@ -967,7 +979,7 @@
    background-image:url(/ise/img/gradientButton25px.png);
    /*background-image: linear-gradient(to bottom, white 40%, gray);*/
    background-image: var(--btnGradient);
@@ -1274,6 +1344,14 @@
    border: solid 1px $_(gray); /* silver */
    border-radius: 5px;
    margin:2%;
+@@ -1095,6 +1107,7 @@
+ 
+ .StatViewTbl td{
+   border: solid 1px $_(black); /* black */
++  height: 50px;
+ }
+ 
+ 
 @@ -1245,13 +1258,10 @@
  .tTable
  {
@@ -1568,14 +1646,13 @@
  html, body {
    border: 0 none;
    margin: 0;
-@@ -4902,13 +4915,14 @@
+@@ -4902,13 +4915,13 @@
  }
  
  .CLASS01805 {
 -	margin-top:20px;
 +	margin-top:10px;
 +	margin-bottom:10px;
-+	width: 100%;
  }
  
  .CLASS01806 {
@@ -1586,7 +1663,7 @@
  }
  
  .CLASS01807 {
-@@ -5147,6 +5161,7 @@
+@@ -5147,6 +5160,7 @@
  	color: $_(textColorB); /* black */
  	width:100%;
  	border:none;
@@ -1594,7 +1671,7 @@
  }
  
  .CLASS02511 {
-@@ -5168,6 +5183,7 @@
+@@ -5168,6 +5182,7 @@
  	border:1px Solid $_(black); /* black */
  	height:96px;
  	width:96px;
@@ -1602,7 +1679,7 @@
  }
  
  .CLASS02515 {
-@@ -5210,7 +5226,6 @@
+@@ -5210,7 +5225,6 @@
  
  .CLASS02520 {
  	color: $_(textColorB); /* black */
@@ -1610,7 +1687,16 @@
  	border:none;
  	background-color:$_(activeBackground);
  }
-@@ -5338,12 +5353,11 @@
+@@ -5297,7 +5311,7 @@
+ 	width:220px;
+ 	/*height:25px;*/
+ 	height:auto;
+-	min-height: 32px;
++	min-height: 40px;
+ 	clear: both;
+ 	display: inline-block;
+   /* line-height:25px; problem with controls with a long parameter name */
+@@ -5338,12 +5352,11 @@
  }
  
  .CLASS02535 {
@@ -1625,7 +1711,7 @@
  }
  
  .CLASS02535A {
-@@ -5359,6 +5373,7 @@
+@@ -5359,6 +5372,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -1633,7 +1719,7 @@
  }
  
  .CLASS02536 {
-@@ -5367,20 +5382,13 @@
+@@ -5367,20 +5381,13 @@
  
  .CLASS02537 {
  	text-align: center;
@@ -1654,7 +1740,7 @@
  }
  
  .CLASS02539 {
-@@ -5494,6 +5502,7 @@
+@@ -5494,6 +5501,7 @@
  
  .CLASS02552 {
  	border:solid 1px $_(black); /* black */
@@ -1662,7 +1748,7 @@
  }
  
  .CLASS02553 {
-@@ -5553,7 +5562,7 @@
+@@ -5553,7 +5561,7 @@
  }
  
  .CLASS02602 {
@@ -1671,7 +1757,7 @@
  }
  
  .CLASS02603 {
-@@ -5584,21 +5593,6 @@
+@@ -5584,21 +5592,6 @@
  	padding: 4px;
  }
  
@@ -1693,7 +1779,7 @@
  .CLASS02609 {
  	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5639,7 +5633,7 @@
+@@ -5639,7 +5632,7 @@
  
  .CLASS02614 {
  	background-color: $_(inactiveButton); /* #dddddd */
@@ -1702,7 +1788,7 @@
  	font-weight: bold;
  	border: solid 1px $_(gray); /* silver */
  }
-@@ -5735,10 +5729,12 @@
+@@ -5735,10 +5728,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -1715,7 +1801,7 @@
  }
  
  .CLASS02804 {
-@@ -5989,9 +5985,6 @@
+@@ -5989,9 +5984,6 @@
  }
  
  .CLASS03301 {
@@ -1725,7 +1811,7 @@
  	empty-cells:show;
  }
  
-@@ -6079,8 +6072,7 @@
+@@ -6079,8 +6071,7 @@
  
  .CLASS03500 {
  	border:solid 1px $_(black); /* black */
@@ -1735,7 +1821,7 @@
  }
  
  .CLASS03501 {
-@@ -6113,8 +6105,7 @@
+@@ -6113,8 +6104,7 @@
  
  .CLASS03600 {
  	border:solid 1px $_(black); /* black */
@@ -1745,7 +1831,7 @@
  }
  
  .CLASS03601 {
-@@ -6203,8 +6194,7 @@
+@@ -6203,8 +6193,7 @@
  
  .CLASS03800 {
  	border:solid 1px $_(black); /* black */
@@ -1755,7 +1841,7 @@
  }
  
  .CLASS03801 {
-@@ -6247,15 +6237,13 @@
+@@ -6247,15 +6236,13 @@
  }
  
  .CLASS03902 {
@@ -1773,7 +1859,7 @@
  }
  
  .CLASS03904 {
-@@ -6270,7 +6258,6 @@
+@@ -6270,7 +6257,6 @@
  .CLASS03906 {
  	vertical-align:middle;
  	text-align:left;
@@ -1781,7 +1867,7 @@
  }
  
  .CLASS03907 {
-@@ -6280,13 +6267,13 @@
+@@ -6280,13 +6266,13 @@
  }
  
  .CLASS03908 {
@@ -1798,7 +1884,7 @@
  }
  
  .CLASS03910 {
-@@ -6312,13 +6299,13 @@
+@@ -6312,13 +6298,13 @@
  }
  
  .CLASS04002 {
@@ -1815,7 +1901,7 @@
  }
  
  .CLASS04004 {
-@@ -6333,7 +6320,6 @@
+@@ -6333,7 +6319,6 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
@@ -1823,7 +1909,7 @@
  }
  
  .CLASS04007 {
-@@ -6344,7 +6330,6 @@
+@@ -6344,7 +6329,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -1831,7 +1917,7 @@
  	empty-cells:show;
  }
  
-@@ -6361,6 +6346,7 @@
+@@ -6361,6 +6345,7 @@
  
  .CLASS04103 {
  	height:auto;
@@ -1839,7 +1925,7 @@
  }
  
  .CLASS04104 {
-@@ -6411,10 +6397,15 @@
+@@ -6411,10 +6396,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -1856,7 +1942,7 @@
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,6 +6421,7 @@
+@@ -6430,6 +6420,7 @@
  
  .CLASS04205 {
  	height:auto;
@@ -1864,7 +1950,7 @@
  }
  
  .CLASS04206 {
-@@ -6486,7 +6478,8 @@
+@@ -6486,7 +6477,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -1874,7 +1960,7 @@
  }
  
  .CLASS04302 {
-@@ -6774,6 +6767,7 @@
+@@ -6774,6 +6766,7 @@
  .CLASS05012 {
  	color: $_(textColorB); /* black */
  	font-size:9pt;
@@ -1882,7 +1968,7 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -7220,11 +7214,13 @@
+@@ -7220,11 +7213,13 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -1898,7 +1984,7 @@
  }
  
  .CLASS06302 {
-@@ -7675,7 +7671,7 @@
+@@ -7675,7 +7670,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -1907,7 +1993,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -8702,7 +8698,8 @@
+@@ -8702,7 +8697,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -1917,7 +2003,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8749,6 @@
+@@ -8752,7 +8748,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -1925,7 +2011,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8805,8 @@
+@@ -8809,8 +8804,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -1936,7 +2022,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8883,8 @@
+@@ -8887,7 +8882,8 @@
  }
  
  .CLASS22101 {

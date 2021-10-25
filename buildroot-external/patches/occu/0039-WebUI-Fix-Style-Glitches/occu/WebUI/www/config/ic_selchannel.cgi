@@ -516,7 +516,7 @@ proc put_FilterControl {control colNr {entrylist ""} } {
     puts "<div class=\"CLASS21915\">&nbsp;"
   } else {
     puts "<td id=\"id_filtertd_$colNr\" class=\"unfiltered\">"
-    puts "<div onclick=\"ShowFilterControl($colNr);\">Filter</div>"
+    puts "<div class=\"FilterBtn\" onclick=\"ShowFilterControl($colNr);\">Filter</div>"
     puts "<div class=\"CLASS21915\">"
   }
   

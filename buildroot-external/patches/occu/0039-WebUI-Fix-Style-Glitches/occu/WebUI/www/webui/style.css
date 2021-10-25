@@ -2025,10 +2025,12 @@ background-color: $_(inactiveBackground);
 	height: auto;
 }
 /*--------------------------------------------*/
+#ic_setprofiles {
+	width: 100%;
+}
+
 #ic_setprofiles .SetProfLinkTbl {
-	width: 99%;
-	margin-top: 0;
-	margin-bottom: 0;
+	width: 100%;
 	color: $_(textColorA); /* white */
 	border: 1px solid $_(black); /* black */
 }
@@ -2111,7 +2113,7 @@ background-color: $_(inactiveBackground);
 #ic_setprofiles #body_wrapper
 {
 	background-color: $_(background); /* #183473 */
-	margin-top: 10px;
+	margin: 10px;
 }
 
 #ic_setprofiles  #id_sender_group_receiver_profiles_wrapper
@@ -3038,7 +3040,6 @@ html, body {
 .DeviceListThumbnail {
   border: 1px solid $_(black); /* black */
   text-align:center;
-  height:80px;
 }
 
 .DeviceListButton {
@@ -5424,6 +5425,7 @@ application {
 
 .CLASS02543 {
 	border:1px solid $_(black); /* black */
+	cursor:pointer;
 }
 
 .CLASS02544 {
@@ -5556,8 +5558,6 @@ application {
 
 .CLASS02601 {
 	text-align:center;
-	margin-left:20px;
-	width:97%;
 }
 
 .CLASS02602 {
@@ -5573,6 +5573,7 @@ color: $_(textColorA) ! important; /* white */
 
 .CLASS02604 {
 	height: 58px;
+	background-color: $_(activeBackground);
 }
 
 .CLASS02605 {
@@ -5580,61 +5581,52 @@ color: $_(textColorA) ! important; /* white */
 	background-color: $_(activeBackground);
 	border: solid 1px $_(black); /* black */
 	color: $_(textColorB); /* black */
-	padding: 4px;
+	padding: 2px;
 	text-align: left;
 }
 
 .CLASS02606 {
-	width: 240px;
 	background-color: $_(activeBackground);
 	border: solid 1px $_(black); /* black */
 	color: $_(textColorB); /* black */
-	padding: 4px;
+	padding: 2px;
 }
 
 .CLASS02609 {
-	width: 140px;
 	background-color: $_(activeBackground);
 	border: solid 1px $_(black); /* black */
 	color: $_(textColorB); /* black */
-	padding: 4px;
+	padding: 2px;
 }
 
 .CLASS02610 {
-	width: 100px;
 	background-color: $_(activeBackground);
 	border: solid 1px $_(black); /* black */
 	color: $_(textColorB); /* black */
-	padding: 4px;
+	padding: 2px;
 }
 
 .CLASS02611 {
-	width: 200px;
 	background-color: $_(activeBackground);
 	border: solid 1px $_(black); /* black */
 	color: $_(textColorB); /* black */
-	padding: 4px;
+	padding: 2px;
 }
 
 .CLASS02612 {
 	background-color: $_(activeBackground);
 	border: solid 1px $_(black); /* black */
 	color: $_(textColorB); /* black */
-	padding: 4px;
+	padding: 2px;
 }
 
 .CLASS02613 {
-	background-color: $_(clickable);
-color: $_(textColorA); /* white */
-	font-weight: bold;
-	border: solid 1px $_(black); /* black */
+	width: 90px;
 }
 
 .CLASS02614 {
-	background-color: $_(inactiveButton); /* #dddddd */
-	color: lightgray;
-	font-weight: bold;
-	border: solid 1px $_(gray); /* silver */
+  color: $_(gray);
+	width: 90px;
 }
 
 .CLASS02615 {
@@ -5799,7 +5791,6 @@ color: $_(textColorA) ! important; /* white */
 }
 
 .CLASS02815 {
-	height:100%;
 }
 
 /* rega\pages\tabs\statusviews\svroomchannels.htm */
@@ -7507,7 +7498,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS06409 {
-  margin:5px;
 }
 
 .CLASS06410 {
@@ -7812,7 +7802,6 @@ color: $_(textColorA); /* white */
 /* config/ic_setprofiles */
 
 .CLASS20001 {
-	padding:4px;
 }
 
 .CLASS20002 {
@@ -7834,7 +7823,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS20006 {
-	width:85% !	important;
+	width:100%;
 }
 
 .CLASS20007 {
@@ -7870,7 +7859,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS20010 {
-	width:150px;
 }
 
 /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */

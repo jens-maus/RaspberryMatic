@@ -20901,10 +20901,10 @@ StartPage = Singleton.create(Page, {
       //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
       Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
     }
-    if ($("contentLeft"))
+    if ($("contentRight"))
     {
       //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
-      Element.setStyle("contentRight", {"height": contentHeight + "px", "width": "44%"});
+      Element.setStyle("contentRight", {"height": contentHeight + "px"});
     }
     
     if ($("favSelector"))

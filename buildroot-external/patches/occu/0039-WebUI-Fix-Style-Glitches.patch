@@ -1856,7 +1856,17 @@
  }
  
  .CLASS01807 {
-@@ -5147,6 +5158,7 @@
+@@ -4927,9 +4938,7 @@
+ }
+ 
+ .CLASS01809 {
+-	float:left;
+ 	top:0px;
+-	width:49%;
+ 	height:100%;
+ 	overflow:hidden;
+ }
+@@ -5147,6 +5156,7 @@
  	color: $_(textColorB); /* black */
  	width:100%;
  	border:none;
@@ -1864,7 +1874,7 @@
  }
  
  .CLASS02511 {
-@@ -5168,6 +5180,7 @@
+@@ -5168,6 +5178,7 @@
  	border:1px Solid $_(black); /* black */
  	height:96px;
  	width:96px;
@@ -1872,7 +1882,7 @@
  }
  
  .CLASS02515 {
-@@ -5210,7 +5223,6 @@
+@@ -5210,7 +5221,6 @@
  
  .CLASS02520 {
  	color: $_(textColorB); /* black */
@@ -1880,7 +1890,7 @@
  	border:none;
  	background-color:$_(activeBackground);
  }
-@@ -5297,7 +5309,7 @@
+@@ -5297,7 +5307,7 @@
  	width:220px;
  	/*height:25px;*/
  	height:auto;
@@ -1889,7 +1899,7 @@
  	clear: both;
  	display: inline-block;
    /* line-height:25px; problem with controls with a long parameter name */
-@@ -5338,12 +5350,11 @@
+@@ -5338,12 +5348,11 @@
  }
  
  .CLASS02535 {
@@ -1904,7 +1914,7 @@
  }
  
  .CLASS02535A {
-@@ -5359,6 +5370,7 @@
+@@ -5359,6 +5368,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -1912,7 +1922,7 @@
  }
  
  .CLASS02536 {
-@@ -5367,20 +5379,13 @@
+@@ -5367,20 +5377,13 @@
  
  .CLASS02537 {
  	text-align: center;
@@ -1933,7 +1943,7 @@
  }
  
  .CLASS02539 {
-@@ -5417,6 +5422,7 @@
+@@ -5417,6 +5420,7 @@
  
  .CLASS02543 {
  	border:1px solid $_(black); /* black */
@@ -1941,7 +1951,7 @@
  }
  
  .CLASS02544 {
-@@ -5494,6 +5500,7 @@
+@@ -5494,6 +5498,7 @@
  
  .CLASS02552 {
  	border:solid 1px $_(black); /* black */
@@ -1949,7 +1959,7 @@
  }
  
  .CLASS02553 {
-@@ -5548,12 +5555,10 @@
+@@ -5548,12 +5553,10 @@
  
  .CLASS02601 {
  	text-align:center;
@@ -1963,7 +1973,7 @@
  }
  
  .CLASS02603 {
-@@ -5565,6 +5570,7 @@
+@@ -5565,6 +5568,7 @@
  
  .CLASS02604 {
  	height: 58px;
@@ -1971,7 +1981,7 @@
  }
  
  .CLASS02605 {
-@@ -5572,76 +5578,52 @@
+@@ -5572,76 +5576,52 @@
  	background-color: $_(activeBackground);
  	border: solid 1px $_(black); /* black */
  	color: $_(textColorB); /* black */
@@ -2057,7 +2067,7 @@
  }
  
  .CLASS02615 {
-@@ -5735,10 +5717,12 @@
+@@ -5735,10 +5715,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -2070,7 +2080,7 @@
  }
  
  .CLASS02804 {
-@@ -5804,7 +5788,6 @@
+@@ -5804,7 +5786,6 @@
  }
  
  .CLASS02815 {
@@ -2078,7 +2088,7 @@
  }
  
  /* rega\pages\tabs\statusviews\svroomchannels.htm */
-@@ -5989,9 +5972,6 @@
+@@ -5989,9 +5970,6 @@
  }
  
  .CLASS03301 {
@@ -2088,7 +2098,7 @@
  	empty-cells:show;
  }
  
-@@ -6079,8 +6059,7 @@
+@@ -6079,8 +6057,7 @@
  
  .CLASS03500 {
  	border:solid 1px $_(black); /* black */
@@ -2098,7 +2108,7 @@
  }
  
  .CLASS03501 {
-@@ -6113,8 +6092,7 @@
+@@ -6113,8 +6090,7 @@
  
  .CLASS03600 {
  	border:solid 1px $_(black); /* black */
@@ -2108,7 +2118,7 @@
  }
  
  .CLASS03601 {
-@@ -6203,8 +6181,7 @@
+@@ -6203,8 +6179,7 @@
  
  .CLASS03800 {
  	border:solid 1px $_(black); /* black */
@@ -2118,7 +2128,7 @@
  }
  
  .CLASS03801 {
-@@ -6247,15 +6224,13 @@
+@@ -6247,15 +6222,13 @@
  }
  
  .CLASS03902 {
@@ -2136,7 +2146,7 @@
  }
  
  .CLASS03904 {
-@@ -6270,7 +6245,6 @@
+@@ -6270,7 +6243,6 @@
  .CLASS03906 {
  	vertical-align:middle;
  	text-align:left;
@@ -2144,7 +2154,7 @@
  }
  
  .CLASS03907 {
-@@ -6280,13 +6254,13 @@
+@@ -6280,13 +6252,13 @@
  }
  
  .CLASS03908 {
@@ -2161,7 +2171,7 @@
  }
  
  .CLASS03910 {
-@@ -6312,13 +6286,13 @@
+@@ -6312,13 +6284,13 @@
  }
  
  .CLASS04002 {
@@ -2178,7 +2188,7 @@
  }
  
  .CLASS04004 {
-@@ -6333,7 +6307,6 @@
+@@ -6333,7 +6305,6 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
@@ -2186,7 +2196,7 @@
  }
  
  .CLASS04007 {
-@@ -6344,7 +6317,6 @@
+@@ -6344,7 +6315,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -2194,7 +2204,7 @@
  	empty-cells:show;
  }
  
-@@ -6361,6 +6333,7 @@
+@@ -6361,6 +6331,7 @@
  
  .CLASS04103 {
  	height:auto;
@@ -2202,7 +2212,7 @@
  }
  
  .CLASS04104 {
-@@ -6411,10 +6384,15 @@
+@@ -6411,10 +6382,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -2219,7 +2229,7 @@
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,6 +6408,7 @@
+@@ -6430,6 +6406,7 @@
  
  .CLASS04205 {
  	height:auto;
@@ -2227,7 +2237,7 @@
  }
  
  .CLASS04206 {
-@@ -6486,7 +6465,8 @@
+@@ -6486,7 +6463,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -2237,7 +2247,7 @@
  }
  
  .CLASS04302 {
-@@ -6774,6 +6754,7 @@
+@@ -6774,6 +6752,7 @@
  .CLASS05012 {
  	color: $_(textColorB); /* black */
  	font-size:9pt;
@@ -2245,7 +2255,7 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -7220,11 +7201,13 @@
+@@ -7220,11 +7199,13 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -2261,7 +2271,7 @@
  }
  
  .CLASS06302 {
-@@ -7512,7 +7495,6 @@
+@@ -7512,7 +7493,6 @@
  }
  
  .CLASS06409 {
@@ -2269,7 +2279,7 @@
  }
  
  .CLASS06410 {
-@@ -7675,7 +7657,7 @@
+@@ -7675,7 +7655,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -2278,7 +2288,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -7817,7 +7799,6 @@
+@@ -7817,7 +7797,6 @@
  /* config/ic_setprofiles */
  
  .CLASS20001 {
@@ -2286,7 +2296,7 @@
  }
  
  .CLASS20002 {
-@@ -7839,7 +7820,7 @@
+@@ -7839,7 +7818,7 @@
  }
  
  .CLASS20006 {
@@ -2295,7 +2305,7 @@
  }
  
  .CLASS20007 {
-@@ -7875,7 +7856,6 @@
+@@ -7875,7 +7854,6 @@
  }
  
  .CLASS20010 {
@@ -2303,7 +2313,7 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8702,7 +8682,8 @@
+@@ -8702,7 +8680,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -2313,7 +2323,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8733,6 @@
+@@ -8752,7 +8731,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -2321,7 +2331,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8789,8 @@
+@@ -8809,8 +8787,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -2332,7 +2342,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8867,8 @@
+@@ -8887,7 +8865,8 @@
  }
  
  .CLASS22101 {
@@ -2342,7 +2352,7 @@
  }
  
  .CLASS22102 {
-@@ -8909,9 +8890,8 @@
+@@ -8909,9 +8888,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -2353,7 +2363,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8921,10 +8901,12 @@
+@@ -8921,10 +8899,12 @@
    position:relative;
    width:50px;
    height:50px;
@@ -2444,6 +2454,19 @@
      });
      bodyElem.appendChild(picDiv);
        jg_250 = new jsGraphics("picDiv");
+@@ -20894,10 +20901,10 @@
+       //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
+       Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
+     }
+-    if ($("contentLeft"))
++    if ($("contentRight"))
+     {
+       //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
+-      Element.setStyle("contentRight", {"height": contentHeight + "px", "width": "44%"});
++      Element.setStyle("contentRight", {"height": contentHeight + "px"});
+     }
+     
+     if ($("favSelector"))
 @@ -38181,7 +38188,7 @@
      previewPicTimer = window.setTimeout(function () {
        HideElement('picDiv');

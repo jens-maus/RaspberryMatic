@@ -222,20 +222,7 @@ arChSv = new Array();
               string sUsedIndex;
               integer iIndex = 0;
               integer iDoublePos = 0;
-              string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
-              string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
-              if( sEnumUserInternalIDs != "" )
-              {
-                if( sEnumUserIDs != "" )
-                {
-                  sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
-                }
-                else
-                {
-                  sEnumUserIDs = sEnumUserInternalIDs;
-                }
-              }
-              foreach(sID, sEnumUserIDs ) 
+              foreach( sID, oUser.UserTempViewIDs().EnumIDs() )
               {                 
                 iIndex = iIndex + 1;
 !               object oTmp = dom.GetObject( sID );
@@ -477,20 +464,7 @@ arChSv = new Array();
         WriteLine("Cursor.set(Cursor.NORMAL);");
         WriteLine("</script>");
       }  
-      string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
-      string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
-      if( sEnumUserInternalIDs != "" )
-      {
-        if( sEnumUserIDs != "" )
-        {
-          sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
-        }
-        else
-        {
-          sEnumUserIDs = sEnumUserInternalIDs;
-        }
-      }
-      foreach(sID, sEnumUserIDs ) 
+      foreach(sID, oUser.UserTempViewIDs().EnumIDs() )    
       {
         !Vars für Filterung
         string sName = "";

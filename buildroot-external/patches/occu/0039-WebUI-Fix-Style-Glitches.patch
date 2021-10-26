@@ -163,6 +163,26 @@
      <thead>
      <tr data-bind="foreach: groupListHeaders">
          <td style="height: 40px" class="thCell CLASS04900 clickable" data-bind="click: $parent.sortGroupList, text: title, css: headerClass, attr: {colspan: colspan}"></td>
+--- occu/WebUI/www/config/control_panel.cgi.orig
++++ occu/WebUI/www/config/control_panel.cgi
+@@ -54,12 +54,12 @@
+     setFooter("");
+   </script>
+ 
+-  <table id="mainTable" cellspacing="20" style="display:none">
++  <table id="mainTable" cellspacing="0" cellpadding="0" style="display:none">
+     <colgroup>
+-      <col style="width:25%;"/>
+-      <col style="width:25%;"/>
+-      <col style="width:25%;"/>
+-      <col style="width:20%;"/>
++      <col />
++      <col />
++      <col />
++      <col />
+     </colgroup>
+     <tr class="CLASS21700">
+     
 --- occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi.orig
 +++ occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi
 @@ -32,14 +32,14 @@
@@ -2010,17 +2030,17 @@
  
  .CLASS02606 {
 -	width: 240px;
- 	background-color: $_(activeBackground);
- 	border: solid 1px $_(black); /* black */
- 	color: $_(textColorB); /* black */
+-	background-color: $_(activeBackground);
+-	border: solid 1px $_(black); /* black */
+-	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
 -.CLASS02607 {
 -	width:55px;
--	background-color: $_(activeBackground);
--	border: solid 1px $_(black); /* black */
--	color: $_(textColorB); /* black */
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
@@ -2339,7 +2359,20 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8702,7 +8679,8 @@
+@@ -8630,8 +8607,11 @@
+ 
+ /* config\control_panel.cgi */
+ 
++#mainTable {
++  margin: 10px;
++}
++
+ .CLASS21700 {
+-  height:50%;
+ }
+ 
+ .CLASS21701 {
+@@ -8702,7 +8682,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -2349,7 +2382,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8730,6 @@
+@@ -8752,7 +8733,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -2357,7 +2390,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8786,8 @@
+@@ -8809,8 +8789,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -2368,7 +2401,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8864,8 @@
+@@ -8887,7 +8867,8 @@
  }
  
  .CLASS22101 {
@@ -2378,7 +2411,7 @@
  }
  
  .CLASS22102 {
-@@ -8909,9 +8887,8 @@
+@@ -8909,9 +8890,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -2389,7 +2422,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8921,10 +8898,12 @@
+@@ -8921,10 +8901,12 @@
    position:relative;
    width:50px;
    height:50px;

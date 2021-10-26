@@ -8607,8 +8607,11 @@ color: $_(textColorA); /* white */
 
 /* config\control_panel.cgi */
 
+#mainTable {
+  margin: 10px;
+}
+
 .CLASS21700 {
-  height:50%;
 }
 
 .CLASS21701 {

@@ -1136,6 +1136,37 @@
      </colgroup>
        <tr>
          <%string sCssName="Sort"; if(firstSort||(system.GetSessionVar("sessionLS")=="name")){sCssName="SortSelected";} %>
+--- occu/WebUI/www/rega/pages/tabs/favViewer.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/favViewer.htm
+@@ -69,17 +69,17 @@
+     {
+       WriteLine('<div class="CLASS05800">');
+       WriteLine('<div id="loadingGif"><img style="margin: 30px;" src="/ise/img/loading.gif" /></div>');
+-      WriteLine('<table id="tblfav" align="center" cellpadding="0" cellspacing="10" class="hidden">');
++      WriteLine('<table id="tblfavViewer" align="center" cellpadding="0" cellspacing="10" class="hidden">');
+     }
+     else
+     {
+       WriteLine('<div class="CLASS05801">');
+       WriteLine('<div id="loadingGif"><img style="margin: 30px;" src="/ise/img/loading.gif" /></div>');
+-      WriteLine('<table id="tblfav" cellpadding="0" cellspacing="10" class="hidden">');
++      WriteLine('<table id="tblfavViewer" cellpadding="0" cellspacing="10" class="hidden">');
+     }
+ 
+     WriteLine('<colgroup>');
+-    WriteLine('<col colspan="' # iFavColumnCount # '" width="' # FAV_COLWIDTH # '" />');
++    WriteLine('<col colspan="' # iFavColumnCount # '" />');
+     WriteLine('</colgroup>');  
+     WriteLine('<tr>');  
+ 
+@@ -273,6 +273,6 @@
+   setFooter(s);
+   translatePage();
+   jQuery("#loadingGif").hide();
+-  jQuery("#tblfav").show();
++  jQuery("#tblfavViewer").show();
+ </script>
+ 
 --- occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm
 @@ -39,31 +39,31 @@
@@ -2293,7 +2324,18 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -7220,11 +7199,13 @@
+@@ -7092,6 +7071,10 @@
+ 
+ /* rega\pages\tabs\favViewer.htm  */
+ 
++#tblfavViewer {
++  width: 100%;
++}
++
+ .CLASS05800 {
+ 	width:100%;
+ 	text-align:center;
+@@ -7220,11 +7203,13 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -2309,7 +2351,7 @@
  }
  
  .CLASS06302 {
-@@ -7512,7 +7493,6 @@
+@@ -7512,7 +7497,6 @@
  }
  
  .CLASS06409 {
@@ -2317,7 +2359,7 @@
  }
  
  .CLASS06410 {
-@@ -7675,7 +7655,7 @@
+@@ -7675,7 +7659,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -2326,7 +2368,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -7790,7 +7770,6 @@
+@@ -7790,7 +7774,6 @@
  }
  
  .CLASS11105 {
@@ -2334,7 +2376,7 @@
    padding-top: 7px;
  }
  
-@@ -7817,7 +7796,6 @@
+@@ -7817,7 +7800,6 @@
  /* config/ic_setprofiles */
  
  .CLASS20001 {
@@ -2342,7 +2384,7 @@
  }
  
  .CLASS20002 {
-@@ -7839,7 +7817,7 @@
+@@ -7839,7 +7821,7 @@
  }
  
  .CLASS20006 {
@@ -2351,7 +2393,7 @@
  }
  
  .CLASS20007 {
-@@ -7875,7 +7853,6 @@
+@@ -7875,7 +7857,6 @@
  }
  
  .CLASS20010 {
@@ -2359,7 +2401,7 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8630,8 +8607,11 @@
+@@ -8630,8 +8611,11 @@
  
  /* config\control_panel.cgi */
  
@@ -2372,7 +2414,7 @@
  }
  
  .CLASS21701 {
-@@ -8702,7 +8682,8 @@
+@@ -8702,7 +8686,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -2382,7 +2424,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8733,6 @@
+@@ -8752,7 +8737,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -2390,7 +2432,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8789,8 @@
+@@ -8809,8 +8793,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -2401,7 +2443,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8867,8 @@
+@@ -8887,7 +8871,8 @@
  }
  
  .CLASS22101 {
@@ -2411,7 +2453,7 @@
  }
  
  .CLASS22102 {
-@@ -8909,9 +8890,8 @@
+@@ -8909,9 +8894,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -2422,7 +2464,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8921,10 +8901,12 @@
+@@ -8921,10 +8905,12 @@
    position:relative;
    width:50px;
    height:50px;

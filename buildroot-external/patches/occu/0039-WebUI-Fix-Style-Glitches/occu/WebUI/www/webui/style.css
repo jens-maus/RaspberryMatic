@@ -7071,6 +7071,10 @@ color: $_(textColorA); /* white */
 
 /* rega\pages\tabs\favViewer.htm  */
 
+#tblfavViewer {
+  width: 100%;
+}
+
 .CLASS05800 {
 	width:100%;
 	text-align:center;

@@ -350,12 +350,12 @@ proc put_PreviousStep {} {
   puts "<table border=\"1\" id=\"createLinkStep1\" cellspacing=\"0\" class=\"j_translate\" >"
 
   puts "<colgroup>"
-  puts "  <col style=\"width:10%;\"/>"
-  puts "  <col style=\"width:10%;\"/>"
-  puts "  <col style=\"width:25%;\"/>"
-  puts "  <col style=\"width:25%;\"/>"
-  puts "  <col style=\"width:10%;\"/>"
-  puts "  <col style=\"width:10%;\"/>"
+  puts "  <col />"
+  puts "  <col style=\"width:150px;\"/>"
+  puts "  <col />"
+  puts "  <col />"
+  puts "  <col />"
+  puts "  <col style=\"width:150px;\"/>"
   puts "</colgroup>"
   
   puts "<THEAD>"

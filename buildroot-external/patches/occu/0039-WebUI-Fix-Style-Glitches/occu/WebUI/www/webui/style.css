@@ -1752,9 +1752,7 @@ div.caption  { display: table-caption; }
 
 #ic_linkpeerlist .LinkListTbl .LinkListTbl_img
 {
-	background-color: $_(white); /* white */
 	text-align: left;
-	height: 80px;  
 }
 /*--------------------------------------------*/
 #modalbox #id_messagebox
@@ -1819,7 +1817,8 @@ background-color: $_(inactiveBackground);
 }
 
 #ic_selchannel {
-  display: contents;
+  display: initial;
+  width: 100%;
 }
 
 #ic_selchannel #body_wrapper {
@@ -1828,13 +1827,13 @@ background-color: $_(inactiveBackground);
 
 #ic_selchannel #previous_step_wrapper {
 	background-color: $_(background); /* #183473 */
-	margin: 20px;
+	margin: 10px;
 }
 	
 #ic_selchannel #createLinkStep1 {
 	color: $_(textColorA); /* white */
 	border: 1px solid $_(black); /* black */
-	width: 90%;
+	width: 100%;
 }
 
 #ic_selchannel #createLinkStep1 thead {
@@ -1857,8 +1856,7 @@ background-color: $_(inactiveBackground);
 	background-color: $_(white); /* white */
 }
 #ic_selchannel #createLinkStep1 .WhiteHeader input {
-	width: 99%;
-
+	width: -webkit-fill-available;
 }
 
 #ic_selchannel .ChnListTbl {
@@ -2011,7 +2009,6 @@ background-color: $_(inactiveBackground);
 /*Tabellenkörper Bilderspalte*/
 #ic_selchannel .ChnListTbl .chnListTbl_dev_img 
 {
-	background-color: $_(white); /* white */
 	text-align: left;
 	height: 50px;  
 }
@@ -5625,7 +5622,7 @@ color: $_(textColorA) ! important; /* white */
 }
 
 .CLASS02614 {
-  color: $_(gray);
+	color: $_(gray);
 	width: 90px;
 }
 
@@ -8893,9 +8890,8 @@ color: $_(textColorA); /* white */
 .CLASS22104 {
   left:0px;
   top:0px;
-  margin: 0;
+  margin:auto;
   padding: 0;
-  background-color: $_(white); /* white */
   position:relative;
   width:50px;
   height:50px;
@@ -8905,10 +8901,12 @@ color: $_(textColorA); /* white */
   position:relative;
   width:50px;
   height:50px;
+  margin:auto;
 }
 
 .CLASS22106 {
   text-align: center;
+  padding: 2px;
 }
 
 .CLASS22107 {

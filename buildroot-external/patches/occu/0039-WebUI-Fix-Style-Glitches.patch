@@ -301,6 +301,25 @@
    puts "</colgroup>"
  }
  
+@@ -350,12 +350,12 @@
+   puts "<table border=\"1\" id=\"createLinkStep1\" cellspacing=\"0\" class=\"j_translate\" >"
+ 
+   puts "<colgroup>"
+-  puts "  <col style=\"width:10%;\"/>"
+-  puts "  <col style=\"width:10%;\"/>"
+-  puts "  <col style=\"width:25%;\"/>"
+-  puts "  <col style=\"width:25%;\"/>"
+-  puts "  <col style=\"width:10%;\"/>"
+-  puts "  <col style=\"width:10%;\"/>"
++  puts "  <col />"
++  puts "  <col style=\"width:150px;\"/>"
++  puts "  <col />"
++  puts "  <col />"
++  puts "  <col />"
++  puts "  <col style=\"width:150px;\"/>"
+   puts "</colgroup>"
+   
+   puts "<THEAD>"
 @@ -516,7 +516,7 @@
      puts "<div class=\"CLASS21915\">&nbsp;"
    } else {
@@ -1600,7 +1619,17 @@
  }
  
  #ic_linkpeerlist .LinkListTbl td {
-@@ -1798,7 +1816,17 @@
+@@ -1734,9 +1752,7 @@
+ 
+ #ic_linkpeerlist .LinkListTbl .LinkListTbl_img
+ {
+-	background-color: $_(white); /* white */
+ 	text-align: left;
+-	height: 80px;  
+ }
+ /*--------------------------------------------*/
+ #modalbox #id_messagebox
+@@ -1798,15 +1814,26 @@
  {
    height: 40px;
    background-color: $_(activeBackground);
@@ -1608,7 +1637,8 @@
 +}
 +
 +#ic_selchannel {
-+  display: contents;
++  display: initial;
++  width: 100%;
 +}
 +
 +#ic_selchannel #body_wrapper {
@@ -1617,9 +1647,29 @@
 +
 +#ic_selchannel #previous_step_wrapper {
  	background-color: $_(background); /* #183473 */
- 	margin: 20px;
+-	margin: 20px;
++	margin: 10px;
  }
-@@ -1964,14 +1992,7 @@
+ 	
+ #ic_selchannel #createLinkStep1 {
+ 	color: $_(textColorA); /* white */
+ 	border: 1px solid $_(black); /* black */
+-	width: 90%;
++	width: 100%;
+ }
+ 
+ #ic_selchannel #createLinkStep1 thead {
+@@ -1829,8 +1856,7 @@
+ 	background-color: $_(white); /* white */
+ }
+ #ic_selchannel #createLinkStep1 .WhiteHeader input {
+-	width: 99%;
+-
++	width: -webkit-fill-available;
+ }
+ 
+ #ic_selchannel .ChnListTbl {
+@@ -1964,14 +1990,7 @@
  {
  	visibility: hidden;
  }
@@ -1634,7 +1684,15 @@
  /*--------------------------------------------*/
  
  /*Tabellenkörper Virtuelle Tasten*/
-@@ -2004,10 +2025,12 @@
+@@ -1990,7 +2009,6 @@
+ /*Tabellenkörper Bilderspalte*/
+ #ic_selchannel .ChnListTbl .chnListTbl_dev_img 
+ {
+-	background-color: $_(white); /* white */
+ 	text-align: left;
+ 	height: 50px;  
+ }
+@@ -2004,10 +2022,12 @@
  	height: auto;
  }
  /*--------------------------------------------*/
@@ -1650,7 +1708,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -2090,7 +2113,7 @@
+@@ -2090,7 +2110,7 @@
  #ic_setprofiles #body_wrapper
  {
  	background-color: $_(background); /* #183473 */
@@ -1659,7 +1717,7 @@
  }
  
  #ic_setprofiles  #id_sender_group_receiver_profiles_wrapper
-@@ -2313,6 +2336,7 @@
+@@ -2313,6 +2333,7 @@
    /* font-weight:bold; */
    text-align:left;
    vertical-align:middle;  
@@ -1667,7 +1725,7 @@
  }
  
  .FilterHeight20 {
-@@ -2580,6 +2604,7 @@
+@@ -2580,6 +2601,7 @@
    background-color: $_(subMenuBackground);
    overflow:hidden;
    z-index:189;
@@ -1675,7 +1733,7 @@
  }
  
  .MainMenuSubItem {
-@@ -2780,7 +2805,6 @@
+@@ -2780,7 +2802,6 @@
  
  .ChannelChooserThumbnail {
    border: 1px solid $_(black); /* black */
@@ -1683,7 +1741,7 @@
    text-align:left;
    height:80px;
  }
-@@ -2935,18 +2959,16 @@
+@@ -2935,18 +2956,16 @@
  
  .MultiChannelChooserThumbnail {
    border: 1px solid $_(black); /* black */
@@ -1705,7 +1763,7 @@
  }
  
  .DeviceListHead {
-@@ -2988,8 +3010,7 @@
+@@ -2988,8 +3007,7 @@
  }
  
  .DeviceListRow_Highlight {
@@ -1715,7 +1773,7 @@
    cursor:pointer;
  }
  
-@@ -3018,9 +3039,7 @@
+@@ -3018,9 +3036,7 @@
  
  .DeviceListThumbnail {
    border: 1px solid $_(black); /* black */
@@ -1726,7 +1784,7 @@
  }
  
  .DeviceListButton {
-@@ -3474,18 +3493,12 @@
+@@ -3474,18 +3490,12 @@
      position: absolute;
      left: 4px
  }.bidcosrf_page {
@@ -1747,7 +1805,7 @@
  }
  
  .bidcosrf_button {
-@@ -3511,7 +3524,7 @@
+@@ -3511,7 +3521,7 @@
  .bidcosrf_table {
    border: 1px solid $_(black);
    border-spacing: 0px;
@@ -1756,7 +1814,7 @@
  }
  
  .bidcosrf_tableheader {
-@@ -3531,7 +3544,7 @@
+@@ -3531,7 +3541,7 @@
  }
  
  .bidcosrf_imagecell {
@@ -1765,7 +1823,7 @@
    border: 1px solid $_(black);
    empty-cells: show;
    text-align: center;
-@@ -3542,12 +3555,13 @@
+@@ -3542,12 +3552,13 @@
    border: 1px solid $_(black);
    empty-cells: show;
    text-align: center;
@@ -1781,7 +1839,7 @@
  html, body {
    border: 0 none;
    margin: 0;
-@@ -4902,13 +4916,13 @@
+@@ -4902,13 +4913,13 @@
  }
  
  .CLASS01805 {
@@ -1798,7 +1856,7 @@
  }
  
  .CLASS01807 {
-@@ -5147,6 +5161,7 @@
+@@ -5147,6 +5158,7 @@
  	color: $_(textColorB); /* black */
  	width:100%;
  	border:none;
@@ -1806,7 +1864,7 @@
  }
  
  .CLASS02511 {
-@@ -5168,6 +5183,7 @@
+@@ -5168,6 +5180,7 @@
  	border:1px Solid $_(black); /* black */
  	height:96px;
  	width:96px;
@@ -1814,7 +1872,7 @@
  }
  
  .CLASS02515 {
-@@ -5210,7 +5226,6 @@
+@@ -5210,7 +5223,6 @@
  
  .CLASS02520 {
  	color: $_(textColorB); /* black */
@@ -1822,7 +1880,7 @@
  	border:none;
  	background-color:$_(activeBackground);
  }
-@@ -5297,7 +5312,7 @@
+@@ -5297,7 +5309,7 @@
  	width:220px;
  	/*height:25px;*/
  	height:auto;
@@ -1831,7 +1889,7 @@
  	clear: both;
  	display: inline-block;
    /* line-height:25px; problem with controls with a long parameter name */
-@@ -5338,12 +5353,11 @@
+@@ -5338,12 +5350,11 @@
  }
  
  .CLASS02535 {
@@ -1846,7 +1904,7 @@
  }
  
  .CLASS02535A {
-@@ -5359,6 +5373,7 @@
+@@ -5359,6 +5370,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -1854,7 +1912,7 @@
  }
  
  .CLASS02536 {
-@@ -5367,20 +5382,13 @@
+@@ -5367,20 +5379,13 @@
  
  .CLASS02537 {
  	text-align: center;
@@ -1875,7 +1933,7 @@
  }
  
  .CLASS02539 {
-@@ -5417,6 +5425,7 @@
+@@ -5417,6 +5422,7 @@
  
  .CLASS02543 {
  	border:1px solid $_(black); /* black */
@@ -1883,7 +1941,7 @@
  }
  
  .CLASS02544 {
-@@ -5494,6 +5503,7 @@
+@@ -5494,6 +5500,7 @@
  
  .CLASS02552 {
  	border:solid 1px $_(black); /* black */
@@ -1891,7 +1949,7 @@
  }
  
  .CLASS02553 {
-@@ -5548,12 +5558,10 @@
+@@ -5548,12 +5555,10 @@
  
  .CLASS02601 {
  	text-align:center;
@@ -1905,7 +1963,7 @@
  }
  
  .CLASS02603 {
-@@ -5565,6 +5573,7 @@
+@@ -5565,6 +5570,7 @@
  
  .CLASS02604 {
  	height: 58px;
@@ -1913,7 +1971,7 @@
  }
  
  .CLASS02605 {
-@@ -5572,76 +5581,52 @@
+@@ -5572,76 +5578,52 @@
  	background-color: $_(activeBackground);
  	border: solid 1px $_(black); /* black */
  	color: $_(textColorB); /* black */
@@ -1924,17 +1982,17 @@
  
  .CLASS02606 {
 -	width: 240px;
- 	background-color: $_(activeBackground);
- 	border: solid 1px $_(black); /* black */
- 	color: $_(textColorB); /* black */
+-	background-color: $_(activeBackground);
+-	border: solid 1px $_(black); /* black */
+-	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
 -.CLASS02607 {
 -	width:55px;
--	background-color: $_(activeBackground);
--	border: solid 1px $_(black); /* black */
--	color: $_(textColorB); /* black */
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
@@ -1994,12 +2052,12 @@
 -color: $_(textColorA); /* white */
 -	font-weight: bold;
 -	border: solid 1px $_(gray); /* silver */
-+  color: $_(gray);
++	color: $_(gray);
 +	width: 90px;
  }
  
  .CLASS02615 {
-@@ -5735,10 +5720,12 @@
+@@ -5735,10 +5717,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -2012,7 +2070,7 @@
  }
  
  .CLASS02804 {
-@@ -5804,7 +5791,6 @@
+@@ -5804,7 +5788,6 @@
  }
  
  .CLASS02815 {
@@ -2020,7 +2078,7 @@
  }
  
  /* rega\pages\tabs\statusviews\svroomchannels.htm */
-@@ -5989,9 +5975,6 @@
+@@ -5989,9 +5972,6 @@
  }
  
  .CLASS03301 {
@@ -2030,7 +2088,7 @@
  	empty-cells:show;
  }
  
-@@ -6079,8 +6062,7 @@
+@@ -6079,8 +6059,7 @@
  
  .CLASS03500 {
  	border:solid 1px $_(black); /* black */
@@ -2040,7 +2098,7 @@
  }
  
  .CLASS03501 {
-@@ -6113,8 +6095,7 @@
+@@ -6113,8 +6092,7 @@
  
  .CLASS03600 {
  	border:solid 1px $_(black); /* black */
@@ -2050,7 +2108,7 @@
  }
  
  .CLASS03601 {
-@@ -6203,8 +6184,7 @@
+@@ -6203,8 +6181,7 @@
  
  .CLASS03800 {
  	border:solid 1px $_(black); /* black */
@@ -2060,7 +2118,7 @@
  }
  
  .CLASS03801 {
-@@ -6247,15 +6227,13 @@
+@@ -6247,15 +6224,13 @@
  }
  
  .CLASS03902 {
@@ -2078,7 +2136,7 @@
  }
  
  .CLASS03904 {
-@@ -6270,7 +6248,6 @@
+@@ -6270,7 +6245,6 @@
  .CLASS03906 {
  	vertical-align:middle;
  	text-align:left;
@@ -2086,7 +2144,7 @@
  }
  
  .CLASS03907 {
-@@ -6280,13 +6257,13 @@
+@@ -6280,13 +6254,13 @@
  }
  
  .CLASS03908 {
@@ -2103,7 +2161,7 @@
  }
  
  .CLASS03910 {
-@@ -6312,13 +6289,13 @@
+@@ -6312,13 +6286,13 @@
  }
  
  .CLASS04002 {
@@ -2120,7 +2178,7 @@
  }
  
  .CLASS04004 {
-@@ -6333,7 +6310,6 @@
+@@ -6333,7 +6307,6 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
@@ -2128,7 +2186,7 @@
  }
  
  .CLASS04007 {
-@@ -6344,7 +6320,6 @@
+@@ -6344,7 +6317,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -2136,7 +2194,7 @@
  	empty-cells:show;
  }
  
-@@ -6361,6 +6336,7 @@
+@@ -6361,6 +6333,7 @@
  
  .CLASS04103 {
  	height:auto;
@@ -2144,7 +2202,7 @@
  }
  
  .CLASS04104 {
-@@ -6411,10 +6387,15 @@
+@@ -6411,10 +6384,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -2161,7 +2219,7 @@
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,6 +6411,7 @@
+@@ -6430,6 +6408,7 @@
  
  .CLASS04205 {
  	height:auto;
@@ -2169,7 +2227,7 @@
  }
  
  .CLASS04206 {
-@@ -6486,7 +6468,8 @@
+@@ -6486,7 +6465,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -2179,7 +2237,7 @@
  }
  
  .CLASS04302 {
-@@ -6774,6 +6757,7 @@
+@@ -6774,6 +6754,7 @@
  .CLASS05012 {
  	color: $_(textColorB); /* black */
  	font-size:9pt;
@@ -2187,7 +2245,7 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -7220,11 +7204,13 @@
+@@ -7220,11 +7201,13 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -2203,7 +2261,7 @@
  }
  
  .CLASS06302 {
-@@ -7512,7 +7498,6 @@
+@@ -7512,7 +7495,6 @@
  }
  
  .CLASS06409 {
@@ -2211,7 +2269,7 @@
  }
  
  .CLASS06410 {
-@@ -7675,7 +7660,7 @@
+@@ -7675,7 +7657,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -2220,7 +2278,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -7817,7 +7802,6 @@
+@@ -7817,7 +7799,6 @@
  /* config/ic_setprofiles */
  
  .CLASS20001 {
@@ -2228,7 +2286,7 @@
  }
  
  .CLASS20002 {
-@@ -7839,7 +7823,7 @@
+@@ -7839,7 +7820,7 @@
  }
  
  .CLASS20006 {
@@ -2237,7 +2295,7 @@
  }
  
  .CLASS20007 {
-@@ -7875,7 +7859,6 @@
+@@ -7875,7 +7856,6 @@
  }
  
  .CLASS20010 {
@@ -2245,7 +2303,7 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8702,7 +8685,8 @@
+@@ -8702,7 +8682,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -2255,7 +2313,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8736,6 @@
+@@ -8752,7 +8733,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -2263,7 +2321,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8792,8 @@
+@@ -8809,8 +8789,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -2274,7 +2332,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8870,8 @@
+@@ -8887,7 +8867,8 @@
  }
  
  .CLASS22101 {
@@ -2284,6 +2342,30 @@
  }
  
  .CLASS22102 {
+@@ -8909,9 +8890,8 @@
+ .CLASS22104 {
+   left:0px;
+   top:0px;
+-  margin: 0;
++  margin:auto;
+   padding: 0;
+-  background-color: $_(white); /* white */
+   position:relative;
+   width:50px;
+   height:50px;
+@@ -8921,10 +8901,12 @@
+   position:relative;
+   width:50px;
+   height:50px;
++  margin:auto;
+ }
+ 
+ .CLASS22106 {
+   text-align: center;
++  padding: 2px;
+ }
+ 
+ .CLASS22107 {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -328,7 +328,7 @@
@@ -2351,4 +2433,23 @@
 +    if ($("divHTR"))  { Element.setStyle("divHTR", {"height": (contentHeight - 20)  + "px"}); }
  
      if (this.currentPage) { this.currentPage.resize(); }
+ 
+@@ -7592,7 +7598,8 @@
+       visibility: "hidden",
+       margin: "0",
+       padding: "0",
+-      backgroundColor: WebUI.getColor("white")
++      backgroundColor: WebUI.getColor("white"),
++      border: "4px solid " + WebUI.getColor("navBarSeparator")
+     });
+     bodyElem.appendChild(picDiv);
+       jg_250 = new jsGraphics("picDiv");
+@@ -38181,7 +38188,7 @@
+     previewPicTimer = window.setTimeout(function () {
+       HideElement('picDiv');
+       delete previewPicTimer;
+-    }, 10000);
++    }, 3000);
+   }
+ };
  

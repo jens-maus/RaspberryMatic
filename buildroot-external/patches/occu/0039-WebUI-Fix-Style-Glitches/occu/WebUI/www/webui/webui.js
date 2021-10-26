@@ -7598,7 +7598,8 @@ WebUI = Singleton.create({
       visibility: "hidden",
       margin: "0",
       padding: "0",
-      backgroundColor: WebUI.getColor("white")
+      backgroundColor: WebUI.getColor("white"),
+      border: "4px solid " + WebUI.getColor("navBarSeparator")
     });
     bodyElem.appendChild(picDiv);
       jg_250 = new jsGraphics("picDiv");
@@ -38187,7 +38188,7 @@ picDivShow = function(jg, devtype, size, formname, divelem)
     previewPicTimer = window.setTimeout(function () {
       HideElement('picDiv');
       delete previewPicTimer;
-    }, 10000);
+    }, 3000);
   }
 };
 

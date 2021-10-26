@@ -1975,9 +1975,10 @@
 -	float: right;
  	text-align: right;
 -	width: 98%;
-+	width: 100%;
- 	word-wrap: break-word;
+-	word-wrap: break-word;
 -	max-width: 480px;
++	width: 100%;
++	word-wrap: anywhere;
  	display: inline-block;
 +	padding: 2px;
  }

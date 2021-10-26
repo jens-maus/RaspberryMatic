@@ -1,0 +1,74 @@
+--- occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm
+@@ -117,9 +117,23 @@
+ </tr>
+ <%
+   integer iAlCount = 0;
+-    
++
++  string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++  string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++  if( sEnumUserInternalIDs != "" )
++  {
++    if( sEnumUserIDs != "" )
++    {
++      sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++    }
++    else
++    {
++      sEnumUserIDs = sEnumUserInternalIDs;
++    }
++  }
++
+   string sSVID;
+-  foreach( sSVID, oUser.UserTempViewIDs().EnumIDs() )
++  foreach( sSVID, sEnumUserIDs )
+   {
+     object oSV = dom.GetObject( sSVID );
+     if( oSV )
+--- occu/WebUI/www/rega/pages/tabs/user/newFav.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/user/newFav.htm
+@@ -222,7 +222,20 @@
+               string sUsedIndex;
+               integer iIndex = 0;
+               integer iDoublePos = 0;
+-              foreach( sID, oUser.UserTempViewIDs().EnumIDs() )
++              string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++              string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++              if( sEnumUserInternalIDs != "" )
++              {
++                if( sEnumUserIDs != "" )
++                {
++                  sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++                }
++                else
++                {
++                  sEnumUserIDs = sEnumUserInternalIDs;
++                }
++              }
++              foreach(sID, sEnumUserIDs )
+               {                 
+                 iIndex = iIndex + 1;
+ !               object oTmp = dom.GetObject( sID );
+@@ -464,7 +477,20 @@
+         WriteLine("Cursor.set(Cursor.NORMAL);");
+         WriteLine("</script>");
+       }  
+-      foreach(sID, oUser.UserTempViewIDs().EnumIDs() )    
++      string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++      string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++      if( sEnumUserInternalIDs != "" )
++      {
++        if( sEnumUserIDs != "" )
++        {
++          sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++        }
++        else
++        {
++          sEnumUserIDs = sEnumUserInternalIDs;
++        }
++      }
++      foreach(sID, sEnumUserIDs )
+       {
+         !Vars für Filterung
+         string sName = "";

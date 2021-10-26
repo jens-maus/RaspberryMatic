@@ -411,7 +411,6 @@ a img {
   text-align:center;
   border:solid 1px $_(black); /* black */
   color: $_(textColorB); /* black */
-  height: 40px;
 }
 
 .filterTable .leftAlign {
@@ -1108,6 +1107,7 @@ a img {
 
 .StatViewTbl td{
   border: solid 1px $_(black); /* black */
+  height: 50px;
 }
 
 
@@ -1752,9 +1752,7 @@ div.caption  { display: table-caption; }
 
 #ic_linkpeerlist .LinkListTbl .LinkListTbl_img
 {
-	background-color: $_(white); /* white */
 	text-align: left;
-	height: 80px;  
 }
 /*--------------------------------------------*/
 #modalbox #id_messagebox
@@ -1819,7 +1817,8 @@ background-color: $_(inactiveBackground);
 }
 
 #ic_selchannel {
-  display: contents;
+  display: initial;
+  width: 100%;
 }
 
 #ic_selchannel #body_wrapper {
@@ -1828,13 +1827,13 @@ background-color: $_(inactiveBackground);
 
 #ic_selchannel #previous_step_wrapper {
 	background-color: $_(background); /* #183473 */
-	margin: 20px;
+	margin: 10px;
 }
 	
 #ic_selchannel #createLinkStep1 {
 	color: $_(textColorA); /* white */
 	border: 1px solid $_(black); /* black */
-	width: 90%;
+	width: 100%;
 }
 
 #ic_selchannel #createLinkStep1 thead {
@@ -1857,8 +1856,7 @@ background-color: $_(inactiveBackground);
 	background-color: $_(white); /* white */
 }
 #ic_selchannel #createLinkStep1 .WhiteHeader input {
-	width: 99%;
-
+	width: -webkit-fill-available;
 }
 
 #ic_selchannel .ChnListTbl {
@@ -2011,7 +2009,6 @@ background-color: $_(inactiveBackground);
 /*Tabellenkörper Bilderspalte*/
 #ic_selchannel .ChnListTbl .chnListTbl_dev_img 
 {
-	background-color: $_(white); /* white */
 	text-align: left;
 	height: 50px;  
 }
@@ -2025,10 +2022,12 @@ background-color: $_(inactiveBackground);
 	height: auto;
 }
 /*--------------------------------------------*/
+#ic_setprofiles {
+	width: 100%;
+}
+
 #ic_setprofiles .SetProfLinkTbl {
-	width: 99%;
-	margin-top: 0;
-	margin-bottom: 0;
+	width: 100%;
 	color: $_(textColorA); /* white */
 	border: 1px solid $_(black); /* black */
 }
@@ -2111,7 +2110,7 @@ background-color: $_(inactiveBackground);
 #ic_setprofiles #body_wrapper
 {
 	background-color: $_(background); /* #183473 */
-	margin-top: 10px;
+	margin: 10px;
 }
 
 #ic_setprofiles  #id_sender_group_receiver_profiles_wrapper
@@ -3037,8 +3036,7 @@ html, body {
 
 .DeviceListThumbnail {
   border: 1px solid $_(black); /* black */
-  text-align:left;
-  height:80px;
+  text-align:center;
 }
 
 .DeviceListButton {
@@ -3492,18 +3490,12 @@ html, body {
     position: absolute;
     left: 4px
 }.bidcosrf_page {
-  margin: 20px;
+  margin: 10px;
+  width: 100%;
 }
 
 
 .bidcosrf_footer {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 10%;
-  width: 80%;
-  background-color: $_(white);
-  height:2px;
-  overflow: hidden;
 }
 
 .bidcosrf_button {
@@ -3529,7 +3521,7 @@ html, body {
 .bidcosrf_table {
   border: 1px solid $_(black);
   border-spacing: 0px;
-  width: 95%;
+  width: 100%;
 }
 
 .bidcosrf_tableheader {
@@ -3549,7 +3541,7 @@ html, body {
 }
 
 .bidcosrf_imagecell {
-  background-color: $_(white);
+  background-color: $_(inactiveBackground);
   border: 1px solid $_(black);
   empty-cells: show;
   text-align: center;
@@ -3560,12 +3552,13 @@ html, body {
   border: 1px solid $_(black);
   empty-cells: show;
   text-align: center;
+  width: 200px;
 }
 
 .bidcosrf_imagesize {
-  width: 50px;
-  height:80px;
+  width: 55px;
 }
+
 html, body {
   border: 0 none;
   margin: 0;
@@ -4922,7 +4915,6 @@ application {
 .CLASS01805 {
 	margin-top:10px;
 	margin-bottom:10px;
-	width: 100%;
 }
 
 .CLASS01806 {
@@ -5317,7 +5309,7 @@ application {
 	width:220px;
 	/*height:25px;*/
 	height:auto;
-	min-height: 32px;
+	min-height: 40px;
 	clear: both;
 	display: inline-block;
   /* line-height:25px; problem with controls with a long parameter name */
@@ -5430,6 +5422,7 @@ application {
 
 .CLASS02543 {
 	border:1px solid $_(black); /* black */
+	cursor:pointer;
 }
 
 .CLASS02544 {
@@ -5562,8 +5555,6 @@ application {
 
 .CLASS02601 {
 	text-align:center;
-	margin-left:20px;
-	width:97%;
 }
 
 .CLASS02602 {
@@ -5579,6 +5570,7 @@ color: $_(textColorA) ! important; /* white */
 
 .CLASS02604 {
 	height: 58px;
+	background-color: $_(activeBackground);
 }
 
 .CLASS02605 {
@@ -5586,61 +5578,52 @@ color: $_(textColorA) ! important; /* white */
 	background-color: $_(activeBackground);
 	border: solid 1px $_(black); /* black */
 	color: $_(textColorB); /* black */
-	padding: 4px;
+	padding: 2px;
 	text-align: left;
 }
 
 .CLASS02606 {
-	width: 240px;
 	background-color: $_(activeBackground);
 	border: solid 1px $_(black); /* black */
 	color: $_(textColorB); /* black */
-	padding: 4px;
+	padding: 2px;
 }
 
 .CLASS02609 {
-	width: 140px;
 	background-color: $_(activeBackground);
 	border: solid 1px $_(black); /* black */
 	color: $_(textColorB); /* black */
-	padding: 4px;
+	padding: 2px;
 }
 
 .CLASS02610 {
-	width: 100px;
 	background-color: $_(activeBackground);
 	border: solid 1px $_(black); /* black */
 	color: $_(textColorB); /* black */
-	padding: 4px;
+	padding: 2px;
 }
 
 .CLASS02611 {
-	width: 200px;
 	background-color: $_(activeBackground);
 	border: solid 1px $_(black); /* black */
 	color: $_(textColorB); /* black */
-	padding: 4px;
+	padding: 2px;
 }
 
 .CLASS02612 {
 	background-color: $_(activeBackground);
 	border: solid 1px $_(black); /* black */
 	color: $_(textColorB); /* black */
-	padding: 4px;
+	padding: 2px;
 }
 
 .CLASS02613 {
-	background-color: $_(clickable);
-color: $_(textColorA); /* white */
-	font-weight: bold;
-	border: solid 1px $_(black); /* black */
+	width: 90px;
 }
 
 .CLASS02614 {
-	background-color: $_(inactiveButton); /* #dddddd */
-	color: lightgray;
-	font-weight: bold;
-	border: solid 1px $_(gray); /* silver */
+	color: $_(gray);
+	width: 90px;
 }
 
 .CLASS02615 {
@@ -5805,7 +5788,6 @@ color: $_(textColorA) ! important; /* white */
 }
 
 .CLASS02815 {
-	height:100%;
 }
 
 /* rega\pages\tabs\statusviews\svroomchannels.htm */
@@ -7225,6 +7207,7 @@ color: $_(textColorA); /* white */
 
 .CLASS06301 {
 	color: $_(textColorB); /* black */
+	font-weight: bold;
 }
 
 .CLASS06302 {
@@ -7512,7 +7495,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS06409 {
-  margin:5px;
 }
 
 .CLASS06410 {
@@ -7817,7 +7799,6 @@ color: $_(textColorA); /* white */
 /* config/ic_setprofiles */
 
 .CLASS20001 {
-	padding:4px;
 }
 
 .CLASS20002 {
@@ -7839,7 +7820,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS20006 {
-	width:85% !	important;
+	width:100%;
 }
 
 .CLASS20007 {
@@ -7875,7 +7856,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS20010 {
-	width:150px;
 }
 
 /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
@@ -8910,9 +8890,8 @@ color: $_(textColorA); /* white */
 .CLASS22104 {
   left:0px;
   top:0px;
-  margin: 0;
+  margin:auto;
   padding: 0;
-  background-color: $_(white); /* white */
   position:relative;
   width:50px;
   height:50px;
@@ -8922,10 +8901,12 @@ color: $_(textColorA); /* white */
   position:relative;
   width:50px;
   height:50px;
+  margin:auto;
 }
 
 .CLASS22106 {
   text-align: center;
+  padding: 2px;
 }
 
 .CLASS22107 {

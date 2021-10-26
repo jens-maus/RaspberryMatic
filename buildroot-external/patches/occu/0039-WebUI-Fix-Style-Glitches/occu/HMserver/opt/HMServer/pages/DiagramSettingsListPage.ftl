@@ -55,11 +55,11 @@
 
 <table id="${TableId}" class="tTable"  border="0" cellpadding="0" cellspacing="0">
   <colgroup>
-    <col style="width:30%;"/>
-    <col style="width:30%;"/>
-    <col style="width:10%;"/>
-    <col style="width:40%;"/>
-    <col style="width:20%;"/>
+    <col />
+    <col />
+    <col />
+    <col />
+    <col />
   </colgroup>
   <thead>
     <tr>

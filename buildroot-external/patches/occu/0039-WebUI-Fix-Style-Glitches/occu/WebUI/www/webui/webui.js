@@ -420,23 +420,23 @@ DEVICELIST_FLAT_JST = "{macro printHead(name, id)}\n
 ";
 DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
   <colgroup>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:55px;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:25px;\"\/>\n
-    <col style=\"width:11%;\"\/>\n
+    <col style=\"width:25px;\" \/>\n
+    <col style=\"width:25px;\" \/>\n
+    <col style=\"width:25px;\" \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col style=\"width:55px;\" \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col \/>\n
+    <col style=\"width:100px;\" \/>\n
   <\/colgroup>\n
   <thead>\n
     <tr>\n
@@ -7598,7 +7598,8 @@ WebUI = Singleton.create({
       visibility: "hidden",
       margin: "0",
       padding: "0",
-      backgroundColor: WebUI.getColor("white")
+      backgroundColor: WebUI.getColor("white"),
+      border: "4px solid " + WebUI.getColor("navBarSeparator")
     });
     bodyElem.appendChild(picDiv);
       jg_250 = new jsGraphics("picDiv");
@@ -38187,7 +38188,7 @@ picDivShow = function(jg, devtype, size, formname, divelem)
     previewPicTimer = window.setTimeout(function () {
       HideElement('picDiv');
       delete previewPicTimer;
-    }, 10000);
+    }, 3000);
   }
 };
 

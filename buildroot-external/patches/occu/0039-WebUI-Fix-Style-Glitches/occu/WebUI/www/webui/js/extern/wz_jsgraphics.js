@@ -915,7 +915,7 @@ text both horizontally (e.g. right) and vertically within that rectangle */
 
 	this.drawImage2 = function(imgSrc, x, y, w, h, imgw, imgh, a)
 	{
-    this.htm += '<div style="position: relative; margin: 0; padding: 0; vertical-align: top; text-align: left; background-color: inherit;';
+    this.htm += '<div style="position: relative; margin: 0; padding: 0; vertical-align: middle; text-align: center; background-color: inherit;';
     // AG bei Problemen mit Grafiken kann es evtl. hilfreich sein, die obere Zeile aus- und die untere Zeile einzukommentieren.
     // Die Anwendung läuft jetzt nicht mehr im Quirks-Modus.....
     //this.htm += '<div style="position: absolute; margin: 0; padding: 0; vertical-align: top; text-align: left; background-color: white;';

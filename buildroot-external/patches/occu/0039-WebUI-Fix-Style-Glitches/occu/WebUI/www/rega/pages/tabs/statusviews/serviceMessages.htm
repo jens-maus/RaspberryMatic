@@ -329,12 +329,12 @@ iseInitUpdateArrays();
             Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02609">'#sSerialNumber#'</td>' );
             Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02610">'#sFunction#'</td>' );
             Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02610">'#sRoom#'</td>' );
-            Write( '<td id="sgu'#sAID#'"  style="text-align:center; vertical-align: middle;" class="CLASS02609">'#sLastUse#'</td>' );
+            Write( '<td id="sgu'#sAID#'"  style="text-align:center; vertical-align: middle;" class="CLASS02605">'#sLastUse#'</td>' );
             Write( '<td id="m'#oAlarm.ID()#'"  style="text-align:center; vertical-align: middle;" class="CLASS02611">'#sServiceMessage#'</td>' );
             boolean bWrite = (oLastTrigger.Operations() & OPERATION_WRITE);
             if( oLastTrigger.Operations() & OPERATION_WRITE )
             {
-              Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02612"><input  type="button" name="btnConfirm" value="btnConfirm" onclick="ReceiptAlarm('#oAlarm.ID()#');" class="CLASS02613"/></td>' );
+              Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02612"><input  type="button" name="btnConfirm" value="btnConfirm" onclick="ReceiptAlarm('#oAlarm.ID()#');" class="StdButton CLASS02613"/></td>' );
 
               if (oLastTrigger.HSSID() == "STICKY_UNREACH") {
                   Write( '<script type="text/javascript">' );
@@ -345,7 +345,7 @@ iseInitUpdateArrays();
             }
             else
             {
-               Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02612"><input type="button" name="btnConfirm" value="btnConfirm" disabled="disabled" class="CLASS02614"/></td>' );
+               Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02612"><input type="button" name="btnConfirm" value="btnConfirm" disabled="disabled" class="StdButton CLASS02614"/></td>' );
             }
           Write( '</tr>' );
           Write( '<script type="text/javascript">');

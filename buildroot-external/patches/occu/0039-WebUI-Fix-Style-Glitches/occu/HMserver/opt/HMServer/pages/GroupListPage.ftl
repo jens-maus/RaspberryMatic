@@ -11,13 +11,13 @@
 <div id="GroupListBody" style="display: none">
 <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
     <colgroup>
-      <col style="width:25px;">
-      <col style="width:40%;">
-      <col style="width:20%;">
-      <col style="width:15%;">
-      <col style="width:15%;">
-      <col style="width:25px;">
-      <col style="width:25px;">
+      <col />
+      <col />
+      <col />
+      <col />
+      <col />
+      <col />
+      <col style="width:100px;">
     </colgroup>
     <thead>
     <tr data-bind="foreach: groupListHeaders">

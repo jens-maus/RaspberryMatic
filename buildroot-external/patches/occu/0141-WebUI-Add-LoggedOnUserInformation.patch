@@ -18,12 +18,12 @@
          string sUserFullName = oUser.UserFirstName()#' '#oUser.UserLastName();
          if( sUserFullName == ' ' ){ sUserFullName = oUser.Name(); }
 -        WriteLine('var userName = "' # sUserFullName # '";');
-+        string sUserLevel ="${lblGuest}";
-+        if (oUser.UserLevel() == iulAdmin) { sUserLevel = "${lblAdmin}"; }
-+        elseif (oUser.UserLevel() == iulUser) { sUserLevel = "${lblUser}" ; }
-+        string sUserEasyMode = "${lblUIModeExpert}";
-+        if (oUser.UserEasyLinkMode()) { sUserEasyMode = "${lblUIModeEasy}"; }
-+        WriteLine('var userName = "' # sUserFullName # ' ('# sUserLevel #') | ${lblEasyModeActiveShort} '# sUserEasyMode #'";');
++        string sUserLevel = "lblGuest";
++        if (oUser.UserLevel() == iulAdmin) { sUserLevel = "lblAdmin"; }
++        elseif (oUser.UserLevel() == iulUser) { sUserLevel = "lblUser" ; }
++        string sUserEasyMode = "lblUIModeExpert";
++        if (oUser.UserEasyLinkMode()) { sUserEasyMode = "lblUIModeEasy"; }
++        WriteLine('var userName = "' # sUserFullName # ' (" + translateKey("' # sUserLevel # '") + ") | " + translateKey("lblEasyModeActiveShort") + " " + translateKey("' # sUserEasyMode # '");');
 +        WriteLine('var userLink = "CreatePopup(ID_USER_ACCOUNT_CONFIG_ADMIN, '#oUser.ID()#')"');
        %>
  

@@ -1725,6 +1725,24 @@
  }
  
  .FilterHeight20 {
+@@ -2479,7 +2500,7 @@
+   border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
+   background-color: $_(background); /* #183473 */
+   z-index: 189;
+-  padding: 2px;
++  padding-top: 2px;
+ }
+ 
+ .MainMenuItem_Left {
+@@ -2499,7 +2520,7 @@
+ }
+ 
+ .MainMenuItem_Help {
+-    margin-right: 18px;
++    margin-right: 10px;
+ }
+ 
+ .MainMenuItem_Highlight {
 @@ -2580,6 +2601,7 @@
    background-color: $_(subMenuBackground);
    overflow:hidden;
@@ -1992,17 +2010,17 @@
  
  .CLASS02606 {
 -	width: 240px;
--	background-color: $_(activeBackground);
--	border: solid 1px $_(black); /* black */
--	color: $_(textColorB); /* black */
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
 -.CLASS02607 {
 -	width:55px;
- 	background-color: $_(activeBackground);
- 	border: solid 1px $_(black); /* black */
- 	color: $_(textColorB); /* black */
+-	background-color: $_(activeBackground);
+-	border: solid 1px $_(black); /* black */
+-	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
@@ -2288,7 +2306,15 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -7817,7 +7797,6 @@
+@@ -7790,7 +7770,6 @@
+ }
+ 
+ .CLASS11105 {
+-  padding-right: 8px;
+   padding-top: 7px;
+ }
+ 
+@@ -7817,7 +7796,6 @@
  /* config/ic_setprofiles */
  
  .CLASS20001 {
@@ -2296,7 +2322,7 @@
  }
  
  .CLASS20002 {
-@@ -7839,7 +7818,7 @@
+@@ -7839,7 +7817,7 @@
  }
  
  .CLASS20006 {
@@ -2305,7 +2331,7 @@
  }
  
  .CLASS20007 {
-@@ -7875,7 +7854,6 @@
+@@ -7875,7 +7853,6 @@
  }
  
  .CLASS20010 {
@@ -2313,7 +2339,7 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8702,7 +8680,8 @@
+@@ -8702,7 +8679,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -2323,7 +2349,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8731,6 @@
+@@ -8752,7 +8730,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -2331,7 +2357,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8787,8 @@
+@@ -8809,8 +8786,8 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -2342,7 +2368,7 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8865,8 @@
+@@ -8887,7 +8864,8 @@
  }
  
  .CLASS22101 {
@@ -2352,7 +2378,7 @@
  }
  
  .CLASS22102 {
-@@ -8909,9 +8888,8 @@
+@@ -8909,9 +8887,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -2363,7 +2389,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8921,10 +8899,12 @@
+@@ -8921,10 +8898,12 @@
    position:relative;
    width:50px;
    height:50px;

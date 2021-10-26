@@ -2500,7 +2500,7 @@ html, body {
   border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
   background-color: $_(background); /* #183473 */
   z-index: 189;
-  padding: 2px;
+  padding-top: 2px;
 }
 
 .MainMenuItem_Left {
@@ -2520,7 +2520,7 @@ html, body {
 }
 
 .MainMenuItem_Help {
-    margin-right: 18px;
+    margin-right: 10px;
 }
 
 .MainMenuItem_Highlight {
@@ -7770,7 +7770,6 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS11105 {
-  padding-right: 8px;
   padding-top: 7px;
 }
 

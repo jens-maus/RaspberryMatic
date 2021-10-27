@@ -80,7 +80,7 @@
              <tr>
                  <!-- Uhrzeit -->
                <td>${time}:</td>
-@@ -250,14 +248,131 @@
+@@ -250,14 +248,134 @@
                }
               %>
  
@@ -92,6 +92,9 @@
 -
 -              <td id="iFaceShowAll">${lblDutyCycle}</td>
 -              <td> <div id="dutyCycleProgress" class="dutyCycleProgress" align="right"><div id="dutyCycleProgressBar" class="dutyCycleProgressBar" style='width:100%;'></div></div> </td>
++            <tr style="height:0.5em;">
++              <td colspan="3"></td>
++            </tr>
 +            <tr id="partingLine1" class="hidden" style="display:none;">
 +              <td></td>
 +              <td>

@@ -18,12 +18,12 @@ proc put_error {iface address} {
       puts "<div class=\"subOffsetDivPopup CLASS22000\">"
 
       puts "<script type=\"text/javascript\">"
-      puts "  setPath(\"<span onclick='WebUI.enter(LinksAndProgramsPage);'>Programme &amp; Verkn&uuml;pfungen</span> &gt; <span onclick='WebUI.enter(LinkListPage);'>Direkte Verkn&uuml;pfungen</span> &gt; Ger&auml;te- / Kanalparameter einstellen\");"
+      puts "  setPath(\"<span onclick='WebUI.enter(LinksAndProgramsPage);'>\${menuProgramsLinksPage}</span> &gt; <span onclick='WebUI.enter(LinkListPage);'>\${submenuDirectLinks}</span> &gt; \${setDeviceAndChannelParams}\");"
 
       puts "  var s = \"\";"
       puts "  s += \"<table cellspacing='8'>\";"
       puts "  s += \"<tr>\";"
-      puts "  s += \"<td style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='CloseDeviceParameters();'>Zur%FCck</div></td>\";"
+      puts "  s += \"<td style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='CloseDeviceParameters();'>\${footerBtnPageBack}</div></td>\";"
       puts "  s += \"</tr>\";"
       puts "  s += \"</table>\";"
       puts "  setFooter(s);"

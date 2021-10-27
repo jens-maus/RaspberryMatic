@@ -224,14 +224,10 @@ arChSv = new Array();
               integer iDoublePos = 0;
               string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
               string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
-              if( sEnumUserInternalIDs != "" )
-              {
-                if( sEnumUserIDs != "" )
-                {
+              if( sEnumUserInternalIDs != "" ) {
+                if( sEnumUserIDs != "" ) {
                   sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
-                }
-                else
-                {
+                } else {
                   sEnumUserIDs = sEnumUserInternalIDs;
                 }
               }
@@ -479,14 +475,10 @@ arChSv = new Array();
       }  
       string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
       string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
-      if( sEnumUserInternalIDs != "" )
-      {
-        if( sEnumUserIDs != "" )
-        {
+      if( sEnumUserInternalIDs != "" ) {
+        if( sEnumUserIDs != "" ) {
           sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
-        }
-        else
-        {
+        } else {
           sEnumUserIDs = sEnumUserInternalIDs;
         }
       }

@@ -124,21 +124,17 @@
     {
       if (room.Visible())
       {
-        string tmp;
         string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
         string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
-        if( sEnumUserInternalIDs != "" )
-        {
-          if( sEnumUserIDs != "" )
-          {
+        if( sEnumUserInternalIDs != "" ) {
+          if( sEnumUserIDs != "" ) {
             sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
-          }
-          else
-          {
+          } else {
             sEnumUserIDs = sEnumUserInternalIDs;
           }
         }
-        foreach(tmp, sEnumUserIDs) 
+        string tmp;
+        foreach(tmp, sEnumUserIDs)
         {
           object chn = dom.GetObject(tmp);
           object oDev = dom.GetObject(chn.Device());

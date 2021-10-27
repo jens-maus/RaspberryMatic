@@ -1,55 +1,48 @@
 --- occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm
-@@ -121,7 +121,21 @@
+@@ -120,8 +120,17 @@
+     object func = dom.GetObject(system.GetVar("id"));
      if (func) {
        if (func.Visible()) {
-         string tmp;
--        foreach(tmp, oUser.UserTempViewIDs().EnumEnabledIDs()) {
 +        string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
 +        string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
-+        if( sEnumUserInternalIDs != "" )
-+        {
-+          if( sEnumUserIDs != "" )
-+          {
++        if( sEnumUserInternalIDs != "" ) {
++          if( sEnumUserIDs != "" ) {
 +            sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
-+          }
-+          else
-+          {
++          } else {
 +            sEnumUserIDs = sEnumUserInternalIDs;
 +          }
 +        }
-+        foreach(tmp, sEnumUserIDs)
-+        {
+         string tmp;
+-        foreach(tmp, oUser.UserTempViewIDs().EnumEnabledIDs()) {
++        foreach(tmp, sEnumUserIDs) {
            string trId = func.ID()#tmp;
            Write("<tr id='"#trId#"'>");
            object chn = dom.GetObject(tmp);
 --- occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm
-@@ -125,7 +125,20 @@
+@@ -124,8 +124,17 @@
+     {
        if (room.Visible())
        {
-         string tmp;
--        foreach(tmp, oUser.UserTempViewIDs().EnumEnabledIDs()) 
 +        string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
 +        string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
-+        if( sEnumUserInternalIDs != "" )
-+        {
-+          if( sEnumUserIDs != "" )
-+          {
++        if( sEnumUserInternalIDs != "" ) {
++          if( sEnumUserIDs != "" ) {
 +            sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
-+          }
-+          else
-+          {
++          } else {
 +            sEnumUserIDs = sEnumUserInternalIDs;
 +          }
 +        }
-+        foreach(tmp, sEnumUserIDs) 
+         string tmp;
+-        foreach(tmp, oUser.UserTempViewIDs().EnumEnabledIDs()) 
++        foreach(tmp, sEnumUserIDs)
          {
            object chn = dom.GetObject(tmp);
            object oDev = dom.GetObject(chn.Device());
 --- occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm
-@@ -117,9 +117,23 @@
+@@ -117,9 +117,19 @@
  </tr>
  <%
    integer iAlCount = 0;
@@ -57,14 +50,10 @@
 +
 +  string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
 +  string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
-+  if( sEnumUserInternalIDs != "" )
-+  {
-+    if( sEnumUserIDs != "" )
-+    {
++  if( sEnumUserInternalIDs != "" ) {
++    if( sEnumUserIDs != "" ) {
 +      sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
-+    }
-+    else
-+    {
++    } else {
 +      sEnumUserIDs = sEnumUserInternalIDs;
 +    }
 +  }
@@ -77,21 +66,17 @@
      if( oSV )
 --- occu/WebUI/www/rega/pages/tabs/user/newFav.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/user/newFav.htm
-@@ -222,7 +222,20 @@
+@@ -222,7 +222,16 @@
                string sUsedIndex;
                integer iIndex = 0;
                integer iDoublePos = 0;
 -              foreach( sID, oUser.UserTempViewIDs().EnumIDs() )
 +              string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
 +              string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
-+              if( sEnumUserInternalIDs != "" )
-+              {
-+                if( sEnumUserIDs != "" )
-+                {
++              if( sEnumUserInternalIDs != "" ) {
++                if( sEnumUserIDs != "" ) {
 +                  sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
-+                }
-+                else
-+                {
++                } else {
 +                  sEnumUserIDs = sEnumUserInternalIDs;
 +                }
 +              }
@@ -99,21 +84,17 @@
                {                 
                  iIndex = iIndex + 1;
  !               object oTmp = dom.GetObject( sID );
-@@ -464,7 +477,20 @@
+@@ -464,7 +473,16 @@
          WriteLine("Cursor.set(Cursor.NORMAL);");
          WriteLine("</script>");
        }  
 -      foreach(sID, oUser.UserTempViewIDs().EnumIDs() )    
 +      string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
 +      string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
-+      if( sEnumUserInternalIDs != "" )
-+      {
-+        if( sEnumUserIDs != "" )
-+        {
++      if( sEnumUserInternalIDs != "" ) {
++        if( sEnumUserIDs != "" ) {
 +          sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
-+        }
-+        else
-+        {
++        } else {
 +          sEnumUserIDs = sEnumUserInternalIDs;
 +        }
 +      }

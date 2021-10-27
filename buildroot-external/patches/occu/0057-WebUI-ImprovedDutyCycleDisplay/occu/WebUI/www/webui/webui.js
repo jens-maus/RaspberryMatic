@@ -28981,9 +28981,9 @@ showDutyCycle = function() {
                 } else {
                   carrierSenseBar.addClass("progress-bar-info");
                 }
-
               } else {
-                carrierSenseCol.css({"display":"none"});  
+                carrierSenseValElm.text("n/a");
+                carrierSenseBar.css("width", "0%");
               }
               trPartingLineElm.show();
               showPartingLine = true;

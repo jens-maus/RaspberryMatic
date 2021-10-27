@@ -1,3 +1,24 @@
+--- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
+@@ -132,8 +132,17 @@
+     object device = dom.GetObject(system.GetVar("id"));
+     if (device) {
+       if (device.Visible()) {
++        string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++        string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++        if( sEnumUserInternalIDs != "" ) {
++          if( sEnumUserIDs != "" ) {
++            sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++          } else {
++            sEnumUserIDs = sEnumUserInternalIDs;
++          }
++        }
+         string tmp;
+-        foreach(tmp, oUser.UserTempViewIDs().EnumIDs()) {
++        foreach(tmp, sEnumUserIDs) {
+           object chn = dom.GetObject(tmp);
+           object oDev = dom.GetObject(chn.Device());
+           string oDevHssType = oDev.HssType();
 --- occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm
 @@ -120,8 +120,17 @@

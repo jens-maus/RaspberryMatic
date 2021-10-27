@@ -86,6 +86,14 @@
   padding: 4px;*/
 }
 
+.startPageInfo td:nth-child(1) {
+  white-space: nowrap;
+}
+
+.startPageInfo td {
+  word-wrap: anywhere;
+}
+
 html,body
 {
   margin:0;

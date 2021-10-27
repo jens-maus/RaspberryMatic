@@ -1,3 +1,52 @@
+--- occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm
+@@ -121,7 +121,21 @@
+     if (func) {
+       if (func.Visible()) {
+         string tmp;
+-        foreach(tmp, oUser.UserTempViewIDs().EnumEnabledIDs()) {
++        string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++        string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++        if( sEnumUserInternalIDs != "" )
++        {
++          if( sEnumUserIDs != "" )
++          {
++            sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++          }
++          else
++          {
++            sEnumUserIDs = sEnumUserInternalIDs;
++          }
++        }
++        foreach(tmp, sEnumUserIDs)
++        {
+           string trId = func.ID()#tmp;
+           Write("<tr id='"#trId#"'>");
+           object chn = dom.GetObject(tmp);
+--- occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm
+@@ -125,7 +125,20 @@
+       if (room.Visible())
+       {
+         string tmp;
+-        foreach(tmp, oUser.UserTempViewIDs().EnumEnabledIDs()) 
++        string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++        string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++        if( sEnumUserInternalIDs != "" )
++        {
++          if( sEnumUserIDs != "" )
++          {
++            sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++          }
++          else
++          {
++            sEnumUserIDs = sEnumUserInternalIDs;
++          }
++        }
++        foreach(tmp, sEnumUserIDs) 
+         {
+           object chn = dom.GetObject(tmp);
+           object oDev = dom.GetObject(chn.Device());
 --- occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm
 @@ -117,9 +117,23 @@

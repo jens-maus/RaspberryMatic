@@ -62,10 +62,9 @@ jobs:
       with:
         path: "./home-assistant-addon"
 
-    - name: Buildroot check-package
+    - name: Check Package consistency
       run: |
-        make download
-        buildroot-2*/utils/check-package --exclude PackageHeader --br2-external buildroot-external/package/*/*
+        make check
 
   build:
     name: CI build [${{ matrix.platform }}]

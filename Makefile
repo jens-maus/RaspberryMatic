@@ -81,6 +81,19 @@ release: build
 	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | cut -d'_' -f2))
 	if [ -x $(BOARD_DIR)/post-release.sh ]; then $(BOARD_DIR)/post-release.sh $(BOARD_DIR) ${PRODUCT} ${PRODUCT_VERSION}; fi
 
+check-all: $(addsuffix -check, $(PRODUCTS))
+$(addsuffix -check, $(PRODUCTS)): %:
+	@$(MAKE) PRODUCT=$(subst -check,,$@) PRODUCT_VERSION=$(PRODUCT_VERSION) check
+
+check: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
+	@echo "[checking: $(PRODUCT)]"
+	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | cut -d'_' -f2))
+	@echo "($(BUILDROOT_EXTERNAL))"
+	buildroot-$(BUILDROOT_VERSION)/utils/check-package --exclude PackageHeader --br2-external $(BUILDROOT_EXTERNAL)/package/*/*
+	@echo "(OCCU $(OCCU_VERSION))"
+	rm -rf build-$(PRODUCT)/build/occu-$(OCCU_VERSION)*
+	$(MAKE) -C build-$(PRODUCT) occu
+
 clean-all: $(addsuffix -clean, $(PRODUCTS))
 $(addsuffix -clean, $(PRODUCTS)): %:
 	@$(MAKE) PRODUCT=$(subst -clean,,$@) PRODUCT_VERSION=$(PRODUCT_VERSION) clean
@@ -129,8 +142,11 @@ help:
 	@echo "  $(MAKE) <product>-release: build+create release archive for product"
 	@echo "  $(MAKE) release-all: build+create release archive for all supported products"
 	@echo
+	@echo "  $(MAKE) <product>-check: run ci consistency check for product"
+	@echo "  $(MAKE) check-all: run ci consistency check all supported platforms"
+	@echo
 	@echo "  $(MAKE) <product>-clean: remove build directory for product"
-	@echo "  $(MAKE) clean-all: remove build directories for all supproted platforms"
+	@echo "  $(MAKE) clean-all: remove build directories for all supported platforms"
 	@echo
 	@echo "  $(MAKE) distclean: clean everything (all build dirs and buildroot sources)"
 	@echo

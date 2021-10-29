@@ -88,9 +88,12 @@ $(addsuffix -check, $(PRODUCTS)): %:
 check: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[checking: $(PRODUCT)]"
 	$(eval BOARD_DIR := $(BUILDROOT_EXTERNAL)/board/$(shell echo $(PRODUCT) | cut -d'_' -f2))
-	@echo "($(BUILDROOT_EXTERNAL))"
+	@echo "[checking status: $(BUILDROOT_EXTERNAL)]"
 	buildroot-$(BUILDROOT_VERSION)/utils/check-package --exclude PackageHeader --br2-external $(BUILDROOT_EXTERNAL)/package/*/*
-	@echo "(OCCU $(OCCU_VERSION))"
+	@echo "[checking clean patch status: OCCU $(OCCU_VERSION)]"
+	(cd $(BUILDROOT_EXTERNAL)/patches/occu ; ./create_patches.sh)
+	git diff --exit-code $(BUILDROOT_EXTERNAL)/patches/occu/*.patch
+	@echo "[checking apply patch status: OCCU $(OCCU_VERSION)]"
 	rm -rf build-$(PRODUCT)/build/occu-$(OCCU_VERSION)*
 	$(MAKE) -C build-$(PRODUCT) occu-patch
 

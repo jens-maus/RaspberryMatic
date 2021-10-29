@@ -20,3 +20,5 @@ for dir in ${patchdirs}; do
     done
   )
 done
+
+exit 0

@@ -92,7 +92,7 @@ check: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	buildroot-$(BUILDROOT_VERSION)/utils/check-package --exclude PackageHeader --br2-external $(BUILDROOT_EXTERNAL)/package/*/*
 	@echo "(OCCU $(OCCU_VERSION))"
 	rm -rf build-$(PRODUCT)/build/occu-$(OCCU_VERSION)*
-	$(MAKE) -C build-$(PRODUCT) occu
+	$(MAKE) -C build-$(PRODUCT) occu-patch
 
 clean-all: $(addsuffix -clean, $(PRODUCTS))
 $(addsuffix -clean, $(PRODUCTS)): %:

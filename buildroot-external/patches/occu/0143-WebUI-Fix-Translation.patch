@@ -9,10 +9,3 @@
  
      "dialogCreateLinkErrorUnknownDevice" : "%DCbertragung nicht erfolgt, weil das Ger%E4t unbekannt ist.",
      "dialogCreateLinkHintLinkExists" : "Achtung! Die Verkn%FCpfung existiert bereits und wird %FCberschrieben.",
-@@ -1553,4 +1553,4 @@
- });
- 
- langJSON.de.hintActivateDetectorSelfTest += langJSON.de.checkSmokeDetectorSelfTest;
--langJSON.de.hintReInclusionDetectorFailed += langJSON.de.checkSmokeDetectorSelfTest;
-\ No newline at end of file
-+langJSON.de.hintReInclusionDetectorFailed += langJSON.de.checkSmokeDetectorSelfTest;

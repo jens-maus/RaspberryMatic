@@ -1,0 +1,112 @@
+function ::CreateOperationVoltage()
+{
+  object objVoltage = cObj.DPByControl("MAINTENANCE.OPERATING_VOLTAGE");
+  object objVoltageStatus = cObj.DPByControl("MAINTENANCE.OPERATING_VOLTAGE_STATUS");
+
+  if (objVoltage || objVoltageStatus) {
+    WriteLine("<table style='margin: 0 auto;'>");
+      WriteLine("<td colspan='2'><hr></td>");
+      WriteLine("<tr>");
+        if (objVoltage) {
+          WriteLine("<td class='CLASS02518'>");
+            WriteLine("<div class='ControlBtnInfo CLASS02532'>${lblCurrentOperatingVoltage}<br/>"#objVoltage.Value().ToString(1)#" "#objVoltage.ValueUnit()#"</div>");
+          WriteLine("</td>");
+        }
+        if (objVoltageStatus) {
+          WriteLine("<td class='CLASS02518'>");
+            WriteLine("<div class='ControlBtnInfo CLASS02532'>${stringTableOperationVoltageState}<br/>${lblVoltageStatus_"#objVoltageStatus.Value()#"}</div>");
+          WriteLine("</td>");
+        }
+      WriteLine("</tr>");
+    WriteLine("</table>");
+  }
+}
+
+function ::CreateDeviceMaintenanceChannel()
+{
+  object objUnreach = cObj.DPByHssDP("UNREACH");
+  object objStickyUnreach = cObj.DPByHssDP("STICKY_UNREACH");
+  object objDeviceInBootloader = cObj.DPByHssDP("DEVICE_IN_BOOTLOADER");
+  object objUpdatePending = cObj.DPByHssDP("UPDATE_PENDING");
+  object objInhibit = cObj.DPByHssDP("INHIBIT");
+  object objRSSIPeer = cObj.DPByHssDP("RSSI_PEER");
+  object objRSSIDevice = cObj.DPByHssDP("RSSI_DEVICE");
+  object objLowBat = cObj.DPByHssDP("LOWBAT");
+  object objConfigPending = cObj.DPByHssDP("CONFIG_PENDING");
+  object objDutyCycle = cObj.DPByHssDP("DUTYCYCLE");
+  
+  WriteLine("<table>");
+  if (objUnreach || objStickyUnreach) {
+    WriteLine("<tr>");
+      if (objUnreach) {
+        WriteLine("<td class='CLASS02518'>");
+          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objUnreach.Value()) {Write("${stringTableUnreachTrue}");} else {Write("${stringTableUnreachFalse}");};   WriteLine("</div>");
+        WriteLine("</td>");
+      }
+      if (objStickyUnreach) {
+        WriteLine("<td class='CLASS02518'>");
+          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objStickyUnreach.Value()) {Write("${stringTableStickyUnreachTrue}");} else {Write("${stringTableStickyUnreachFalse}");};  WriteLine("</div>");
+        WriteLine("</td>");
+      }
+    WriteLine("</tr>");
+  }
+  if (objDeviceInBootloader || objUpdatePending) {                                                                                                                                                                   
+    WriteLine("<tr>");                                                                                                                                                                                  
+      if (objUpdatePending) {                                                                                                                                                                                
+        WriteLine("<td class='CLASS02518'>");                                                                                                                                                           
+          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objUpdatePending.Value()) {Write("${stringTableUpdatePendingTrue}");} else {Write("${stringTableUpdatePendingFalse}");};   WriteLine("</div>");                                                   
+        WriteLine("</td>");                                                                                                                                                                             
+      }                                                                                                                                                                                                 
+      if (objDeviceInBootloader) {                                                                                                                                                                              
+        WriteLine("<td class='CLASS02518'>");                                                                                                                                                           
+         Write("<div class='ControlBtnInfo CLASS02532'>${stringTableDeviceInBootloader}<br/>"); if(objDeviceInBootloader.Value()) {Write("${lblYes}");} else {Write("${lblNo}");};   WriteLine("</div>");
+        WriteLine("</td>");                                                                                                                                                                             
+      }                                                                                                                                                                                                 
+    WriteLine("</tr>");                                                                                                                                                                                 
+  }  
+  if (objLowBat || objConfigPending) {
+    WriteLine("<tr>");                                                                                                                                                                                                                         
+      if (objLowBat) {                                                                                                                                                                                                                         
+        WriteLine("<td class='CLASS02518'>");                                                                                                                                                                                                  
+          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objLowBat.Value()) {Write("${stringTableBatteryEmpty}");} else {Write("${stringTableBatteryOk}");};   WriteLine("</div>");                                                      
+        WriteLine("</td>");                                                                                                                                                                                                                    
+      }
+      if (objConfigPending) {                                                                                                                                                                                                                  
+        WriteLine("<td class='CLASS02518'>");                                                                                                                                                                                                  
+          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objConfigPending.Value()) {Write("${stringTableConfigPendingTrue}");} else {Write("${stringTableConfigPendingFalse}");};   WriteLine("</div>");                                 
+        WriteLine("</td>");                                                                                                                                                                                                                    
+      }                                                                                                                                                                                                                                        
+    WriteLine("</tr>"); 
+  }
+  if (objRSSIPeer || objRSSIDevice) {                                                                                                                                                                                                          
+    WriteLine("<tr>");                                                                                                                                                                                                                         
+      if (objRSSIPeer) {                                                                                                                                                                                                                       
+        WriteLine("<td class='CLASS02518'>");                                                                                                                                                                                                  
+          Write("<div class='ControlBtnInfo CLASS02532'>${stringTableRSSIPeer}<br/>"#objRSSIPeer.Value().ToString(0)#"</div>");                                                                                                                
+        WriteLine("</td>");                                                                                                                                                                                                                    
+      }                                                                                                                                                                                                                                        
+      if (objRSSIDevice) {                                                                                                                                                                                                                     
+        WriteLine("<td class='CLASS02518'>");                                                                                                                                                                                                  
+         Write("<div class='ControlBtnInfo CLASS02532'>${stringTableRSSIDevice}<br/>"#objRSSIDevice.Value().ToString(0)#"</div>");                                                                                                             
+        WriteLine("</td>");                                                                                                                                                                                                                    
+      }                                                                                                                                                                                                                                        
+    WriteLine("</tr>");                                                                                                                                                                                                                        
+  }   
+
+  if (objInhibit || objDutyCycle) {
+    WriteLine("<tr>");                                                                                                                                                                                                                         
+    if (objDutyCycle) {
+      WriteLine("<td class='CLASS02518'>");                                                                                                                                                                                                  
+          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objDutyCycle.Value()) {Write("${stringTableDutyCycleTrue}");} else {Write("${stringTableDutyCycleFalse}");};   WriteLine("</div>");                                 
+      WriteLine("</td>"); 
+    }
+    if (objInhibit) {
+      WriteLine("<td class='CLASS02518'>");                                                                                                                                                                                                  
+          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objInhibit.Value()) {Write("${stringTableStatusIndicatorInhibitTrue}");} else {Write("${stringTableStatusIndicatorInhibitFalse}");};   WriteLine("</div>");                                 
+      WriteLine("</td>"); 
+    }
+    WriteLine("</tr>");                                                                                                                                                                                                                        
+  }
+
+  WriteLine("</table>"); 
+}

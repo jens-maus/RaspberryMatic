@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/esp/system.fn.orig
 +++ occu/WebUI/www/rega/esp/system.fn
-@@ -1580,3 +1580,40 @@
+@@ -1580,3 +1580,60 @@
  function ::keepAlive()
  {
  }
@@ -22,6 +22,26 @@
 +  else
 +  {
 +    system.SetSessionVar("sessionSISV","1");
++  }
++}
++
++function ::ShowInternalDeviceChannels()
++{
++  if( system.IsSessionVar("sessionSIDC") )
++  {
++    string sEnable = system.GetSessionVar("sessionSIDC");
++    if( sEnable == "1" )
++    {
++      system.SetSessionVar("sessionSIDC","0");
++    }
++    else
++    {
++      system.SetSessionVar("sessionSIDC","1");
++    }
++  }
++  else
++  {
++    system.SetSessionVar("sessionSIDC","1");
 +  }
 +}
 +
@@ -52,11 +72,12 @@
    if( action == "saveTimeModule"             ) { Call( "system.fn::saveTimeModule()" );             }
    if( action == "saveUser"                   ) { Call( "system.fn::saveUser()" );                   }
    if( action == "saveUserPwd"                ) { Call( "system.fn::saveUserPwd()" );                }
-@@ -33,4 +34,5 @@
+@@ -33,4 +34,6 @@
    if( action == "getLastTimeOfChn"           ) { Call( "system.fn::getLastTimeOfChn()" );           }
    if( action == "checkName"                  ) { Call( "system.fn::checkName()");                   }
    if( action == "keepAlive"                  ) { Call( "system.fn::keepAlive()");                   }
 +  if( action == "ShowInternalSystemVars"     ) { Call( "system.fn::ShowInternalSystemVars()");      }
++  if( action == "ShowInternalDeviceChannels" ) { Call( "system.fn::ShowInternalDeviceChannels()");  }
  %>
 --- occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm
@@ -259,23 +280,27 @@
  
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -81,6 +81,8 @@
+@@ -81,6 +81,10 @@
      "footerBtnNewLink" : "Neue<br/>Verkn%FCpfung",
      "footerBtnShowSystemPrograms" : "Systeminterne Programme<br/>einblenden",
      "footerBtnHideSystemPrograms" : "Systeminterne Programme<br/>ausblenden",
 +    "footerBtnShowInternalSystemVars" : "Systeminterne Variablen<br/>einblenden",
 +    "footerBtnHideInternalSystemVars" : "Systeminterne Variablen<br/>ausblenden",
++    "footerBtnShowInternalDeviceChannels" : "Systeminterne Kan%E4le<br/>einblenden",
++    "footerBtnHideInternalDeviceChannels" : "Systeminterne Kan%E4le<br/>ausblenden",
      "footerBtnTestScript" : "Skript testen",
      "footerBtnCancel" : "Abbrechen",
      "footerBtnTransfer" : "%DCbernehmen",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -80,6 +80,8 @@
+@@ -80,6 +80,10 @@
      "footerBtnNewLink" : "New<br/>connection",
      "footerBtnShowSystemPrograms" : "Show intrinsic <br/>programs",
      "footerBtnHideSystemPrograms" : "Hide intrinsic<br/>programs",
 +    "footerBtnShowInternalSystemVars" : "Show intrinsic <br/>variables",
 +    "footerBtnHideInternalSystemVars" : "Hide intrinsic<br/>variables",
++    "footerBtnShowInternalDeviceChannels" : "Show intrinsic <br/>device channels",
++    "footerBtnHideInternalDeviceChannels" : "Hide intrinsic<br/>device channels",
      "footerBtnTestScript" : "Test script",
      "footerBtnCancel" : "Cancel",
      "footerBtnTransfer" : "Apply",

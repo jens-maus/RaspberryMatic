@@ -1,11 +1,63 @@
+--- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
+@@ -177,12 +177,44 @@
+ </script>
+ 
+ <script type="text/javascript">
++  ShowInternalDeviceChannels = function()
++  {
++    var url = '/esp/system.htm?sid='+SessionId;
++    var pb = "";
++    pb += 'string action = "ShowInternalDeviceChannels";';
++    var opt =
++    {
++      postBody: pb,
++      onComplete: function(t)
++      {
++        if(dbg){alert(t.responseText);}
++        reloadPage();
++      }
++    };
++    new Ajax.Request(url,opt);
++  };
++  
++  <%
++    string sInternalBtnText = "";
++    if( system.GetSessionVar("sessionSIDC") == "1" )
++    {
++        !sInternalBtnText = "aus";
++        sInternalBtnText = "footerBtnShowInternalDeviceChannels";
++    }
++    else
++    {
++        !sInternalBtnText = "ein";
++        sInternalBtnText = "footerBtnHideInternalDeviceChannels";
++    }
++    Write("var internalBtnText = '"#sInternalBtnText#"';");
++  %>
+   var s = "";
+   
+   s += "<table cellspacing='8'>";
+   s += "<tr>";
+   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
+   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltHD.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
++  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04905' onclick='ShowInternalDeviceChannels()'>"+translateKey(internalBtnText)+"</div></td>";
+   s += "</tr>";
+   s += "</table>";
+   
 --- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
-@@ -132,8 +132,17 @@
+@@ -132,8 +132,22 @@
      object device = dom.GetObject(system.GetVar("id"));
      if (device) {
        if (device.Visible()) {
 +        string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
-+        string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++        string sEnumUserInternalIDs = "";
++        if( system.IsSessionVar("sessionSIDC") ) {
++          if( system.GetSessionVar("sessionSIDC") == "1" ) {
++           sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++          }
++        }
 +        if( sEnumUserInternalIDs != "" ) {
 +          if( sEnumUserIDs != "" ) {
 +            sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;

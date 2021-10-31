@@ -1601,6 +1601,26 @@ function ::ShowInternalSystemVars()
   }
 }
 
+function ::ShowInternalDeviceChannels()
+{
+  if( system.IsSessionVar("sessionSIDC") )
+  {
+    string sEnable = system.GetSessionVar("sessionSIDC");
+    if( sEnable == "1" )
+    {
+      system.SetSessionVar("sessionSIDC","0");
+    }
+    else
+    {
+      system.SetSessionVar("sessionSIDC","1");
+    }
+  }
+  else
+  {
+    system.SetSessionVar("sessionSIDC","1");
+  }
+}
+
 ! [id], [iInternal]                                 
 function ::saveDpInternal() {
   object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );

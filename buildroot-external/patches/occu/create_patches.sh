@@ -15,7 +15,7 @@ rm -f ./*.patch
 for dir in ${patchdirs}; do
   (
     cd "${dir}" || exit 1
-    $(basename "${dir}")
+    basename "${dir}"
     origfiles=$(find occu -name "*.orig" -type f -print | sort)
     if [ -z "${origfiles}" ]; then
       exit 1

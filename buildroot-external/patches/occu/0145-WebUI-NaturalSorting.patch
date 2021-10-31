@@ -1,0 +1,70 @@
+--- webui/webui.js.orig
++++ webui/webui.js
+@@ -6078,7 +6078,8 @@
+  **/
+ Array.prototype.ex_sortBy = function(name, sortReverse)
+ {
+-  this.sort(function(a,b) { return Object.ex_compare(a[name], b[name]); });
++  const collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
++  this.sort( (x, y) => { return collator.compare(x[name], y[name]); } );
+   if (sortReverse) { this.reverse(); }
+   
+   return this;
+@@ -29864,52 +29865,12 @@
+ 
+ iseSortMultiArray = function(arr,dsc,dir,sln, sessionVar,popup)
+ {
+-  conInfo("Sort multi array.");
+-  do
+-  {
+-    var n = arr.length - 1;
+-    var bSwapped = false;
+-    for(var i=0;i<n;i++)
+-    {
+-      if( typeof arr[i][dsc] == "undefined" )
+-      {
+-        arr[i][dsc] = "";
+-      }
+-      if( typeof arr[i+1][dsc] == "undefined" )
+-      {
+-        arr[i+1][dsc] = "";
+-      }      
+-      var item = arr[i][dsc].toLowerCase();
+-      item = item.replace("ö", "o");
+-      item = item.replace("ä", "a");
+-      item = item.replace("ü", "u");
+-      item = item.replace("ß", "ss");
+-      var nextitem = arr[i+1][dsc].toLowerCase();
+-      nextitem = nextitem.replace("ö", "o");
+-      nextitem = nextitem.replace("ä", "a");
+-      nextitem = nextitem.replace("ü", "u");
+-      nextitem = nextitem.replace("ß", "ss");
+-      if( dir === 0 )
+-      {
+-        if( item > nextitem )
+-        {
+-          iseArraySwap(arr,i,i+1);
+-          bSwapped = true;
+-        }
+-      }
+-      else
+-      {
+-        if( item < nextitem )
+-        {
+-          iseArraySwap(arr,i,i+1);
+-          bSwapped = true;
+-        }
+-      }
+-    }
+-  } while( bSwapped );
+-    
++  conInfo("Sort multi array2.");
++  const collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
++  /* arr.forEach( x => { if( typeof x[dsc] == "undefined" ) { x[dsc] = ""; } } ); */
++  arr.sort( (x, y) => { return collator.compare(x[dsc], y[dsc]); } );
++  if( dir === 0 ) { arr.reverse(); }
+   if (!popup) iseTransferSortedArray(arr,dsc,sln, sessionVar);
+-  
+ };
+ 
+ iseTransferSortedArray = function(arr,dsc,sortListNumber, sessionVar)

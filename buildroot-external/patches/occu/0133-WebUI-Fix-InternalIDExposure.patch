@@ -1,3 +1,14 @@
+--- occu/WebUI/www/rega/esp/functions.fn.orig
++++ occu/WebUI/www/rega/esp/functions.fn
+@@ -384,7 +384,7 @@
+   if (bShowChannel == true) {
+ 
+     ! Interface HmIP-RF and HmIP-Wired
+-    if (chn.HssType().Find("MAINTENANCE") != -1) {
++    if ( ( system.IsSessionVar("sessionSIDC") ) && ( system.GetSessionVar("sessionSIDC") == "1" ) )
+       ! Don't show the maintenance channel of the new HmIP devices
+       ! This is necessary because the name of such a channel of an HmIP device
+       !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on
 --- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
 @@ -177,12 +177,44 @@

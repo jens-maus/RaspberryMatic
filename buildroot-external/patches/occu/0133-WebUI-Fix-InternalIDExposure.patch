@@ -11,7 +11,7 @@
        !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on
 --- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
-@@ -177,12 +177,44 @@
+@@ -198,6 +198,38 @@
  </script>
  
  <script type="text/javascript">
@@ -31,27 +31,29 @@
 +    };
 +    new Ajax.Request(url,opt);
 +  };
-+  
++
 +  <%
 +    string sInternalBtnText = "";
 +    if( system.GetSessionVar("sessionSIDC") == "1" )
 +    {
 +        !sInternalBtnText = "aus";
-+        sInternalBtnText = "footerBtnShowInternalDeviceChannels";
++        sInternalBtnText = "footerBtnHideInternalDeviceChannels";
 +    }
 +    else
 +    {
 +        !sInternalBtnText = "ein";
-+        sInternalBtnText = "footerBtnHideInternalDeviceChannels";
++        sInternalBtnText = "footerBtnShowInternalDeviceChannels";
 +    }
 +    Write("var internalBtnText = '"#sInternalBtnText#"';");
 +  %>
++
    var s = "";
-   
-   s += "<table cellspacing='8'>";
+ 
+   var mouseOpts =
+@@ -218,6 +250,7 @@
    s += "<tr>";
    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
-   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltHD.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
+   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
 +  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04905' onclick='ShowInternalDeviceChannels()'>"+translateKey(internalBtnText)+"</div></td>";
    s += "</tr>";
    s += "</table>";

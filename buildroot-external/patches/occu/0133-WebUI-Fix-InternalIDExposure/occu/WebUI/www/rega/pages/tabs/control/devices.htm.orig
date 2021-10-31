@@ -8,31 +8,49 @@
   %>
   //setPath("<span onclick='WebUI.enter(ControlPage);'>Status und Bedienung</span> &gt; Ger�te");
   setPath("<span onclick='WebUI.enter(ControlPage);'>"+translateKey('menuControlPage') +"</span> &gt; " +translateKey('submenuDevices'));
+  fltVR = new iseFilter('fltVR');
   fltHD = new iseFilter('fltHD');
+  arItems = new Array();
 </script>
 
 <table width="100%" class="CLASS03900" cellpadding="0" cellspacing="0">
   <colgroup>
-    <col style="width:260px;"/>
-    <col style="width:auto;"/>
+    <col style="width:20%;"/>
+    <col style="width:80%;"/>
   </colgroup>
   <tr>
     <!-- Linke Spalte -->
-    <td id="contentLeft">
-      <table class="CLASS03901">  
+    <td id="contentLeft" class="hidden">
+      <table class="filterTable CLASS03901 j_translate">
         <tr>
-          <td style="vertical-align: top;">
+          <td style="vertical-align: top; border: 0px">
             <div id="divDL" class="CLASS03902">
               <script type="text/javascript">
                 var contHeight = $("content").style.height;
                 contHeight = contHeight.replace(/px/, "");
                 $("divDL").style.height = Math.floor((contHeight * 0.98)) + "px";
               </script>
-              <table id="tblFunctionNames" class="StatViewTbl CLASS03903" cellpadding="4" cellspacing="0" >
+              <table id="tblFunctionNames" class="StatViewTbl CLASS03903 j_translate" cellpadding="0" cellspacing="0" style="width:100%;">
                 <colgroup>
-                  <col style="width:100px;"/>
-                  <col style="width:100px;"/>
+                  <col style="width:80%;"/>
+                  <col style="width:20%;"/>
                 </colgroup>
+                <tr>
+                  <th>${thName}</th>
+                  <th>${thPicture}</th>
+                </tr>
+                <tbody>
+                <tr>
+                  <td class="CLASS03501">
+                    <div id="btnFilterDevName" class="FilterBtn">${thFilter}</div>
+                    <div class="FilterSubMenu" id="btnFilterDevNameSub" style="display:none">
+                      <input id="ftDevName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetDevNameBtn', 'ftCancelDevNameBtn')" type="text" size="15" class="CLASS03307" />
+                      <div id="ftSetDevNameBtn" class='FilterSetButton CLASS03504' onclick="setSFilter(fltVR, 'ftDevName', FIL_NAME);updateDevTable();$('btnFilterDevNameSub').hide();" >${filterSet}</div>
+                      <div id="ftCancelDevNameBtn" class='FilterSetButton' onclick="$('btnFilterDevNameSub').hide();">${filterClose}</div>
+                    </div>
+                  </td>
+                  <td class="CLASS03304"></td>
+                </tr>
                 <%
                   object obj = dom.GetObject(ID_DEVICES);
                   if ( obj )
@@ -72,12 +90,10 @@
                         {
                           sFirstId = tmp;
                         }
-                        Write("<tr class='CLASS03904'>");
-                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='loadChannels("#devs.ID()#")'>");
-                          string sName = devs.Name();
-                          integer iLength = 12;
-                          Call("/esp/datapointconfigurator.fn::StringCut()");
-                          Write(sName);
+                        string trId = "devices"#devs.ID();
+                        WriteLine('<tr id="'#trId#'" class="CLASS03904">');
+                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")'>");
+                          Write(devs.Name());
                           Write("</td>");
                           Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' >");
                           
@@ -91,6 +107,11 @@
                           Write("var jg_0 = new jsGraphics('"#sPicDivId#"');");
                             Write("InitGD(jg_0, 50);");
                             Write("Draw(jg_0, '"#devs.Label()#"', 50, '-1');");
+                          Write("var tmp = new Object();");
+                          Write("tmp['name'] = '"#devs.Name()#"';");
+                          Write("tmp['trid'] = '"#trId#"';");
+                          Write("arItems[arItems.length] = tmp;");
+                          Write("Cursor.set(Cursor.NORMAL);");
                           Write("</script>");
                           
                           Write("</td>");
@@ -178,11 +199,25 @@
 
 <script type="text/javascript">
   var s = "";
-  
+
+  var mouseOpts =
+  {
+    onTopOver: function(divToShow)
+    {
+      selectFilters(fltVR, divToShow);
+    }
+  };
+
+  new iseSubMenuControl("btnFilterDevName", "btnFilterDevNameSub", "contentLeft", {d:28, r:18}, mouseOpts, false, true);
+
+  jQuery("#btnFilterDevName").click(function(){
+    jQuery("#ftDevName").focus();
+  });
+
   s += "<table cellspacing='8'>";
   s += "<tr>";
   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
-  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltHD.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
+  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
   s += "</tr>";
   s += "</table>";
   
@@ -204,5 +239,28 @@
         if (arChns[i]['ctrlId']) show(arChns[i]['ctrlId']);
       }
     }
-  }
+  };
+
+  updateDevTable = function()
+  {
+    colorFilterBtns(fltVR);
+    for (var i = 0; i < arItems.length; i++)
+    {
+      if (!fltVR.objPassFilter(arItems[i]))
+      {
+        hide(arItems[i]['trid']);
+      }
+      else
+      {
+        show(arItems[i]['trid']);
+      }
+    }
+  };
+
+  clearInputLeft = function()
+  {
+    document.getElementById("ftDevName").value = "";
+  };
+  translatePage("#contentLeft");
+  jQuery("#contentLeft").removeClass("hidden");
 </script> 

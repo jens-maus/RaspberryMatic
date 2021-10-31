@@ -1,0 +1,183 @@
+--- occu/WebUI/www/rega/esp/controls/maintenance.fn.orig
++++ occu/WebUI/www/rega/esp/controls/maintenance.fn
+@@ -20,4 +20,163 @@
+       WriteLine("</tr>");
+     WriteLine("</table>");
+   }
+-}
+\ No newline at end of file
++}
++
++function ::CreateDeviceMaintenanceChannel()
++{
++  object objUnreach = cObj.DPByHssDP("UNREACH");
++  object objStickyUnreach = cObj.DPByHssDP("STICKY_UNREACH");
++  object objDeviceInBootloader = cObj.DPByHssDP("DEVICE_IN_BOOTLOADER");
++  object objUpdatePending = cObj.DPByHssDP("UPDATE_PENDING");
++  object objInhibit = cObj.DPByHssDP("INHIBIT");
++  object objRSSIPeer = cObj.DPByHssDP("RSSI_PEER");
++  object objRSSIDevice = cObj.DPByHssDP("RSSI_DEVICE");
++  object objLowBat = cObj.DPByHssDP("LOWBAT");
++  object objConfigPending = cObj.DPByHssDP("CONFIG_PENDING");
++  object objDutyCycle = cObj.DPByHssDP("DUTYCYCLE");
++  integer level = 0;
++  
++  WriteLine("<td class='CLASS02519'>");
++  WriteLine("<table cellspacing='0'>");
++  WriteLine("<tr>");
++  if (objUnreach || objStickyUnreach) {
++    if (objUnreach) {
++      WriteLine("<td>");
++        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
++          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
++          Write("<span class='CLASS02535' style='color:white'>");
++            if(objUnreach.Value()) {Write("${stringTableUnreachTrue}");} else {Write("${stringTableUnreachFalse}");};
++          Write("</span></span>");
++        WriteLine("</span></div>");
++      WriteLine("</td>");
++      level=level+1;
++    }
++    if (objStickyUnreach) {
++      WriteLine("<td>");
++        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
++          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
++          Write("<span class='CLASS02535' style='color:white'>");
++            if(objStickyUnreach.Value()) {Write("${stringTableStickyUnreachTrue}");} else {Write("${stringTableStickyUnreachFalse}");};
++          Write("</span></span>");
++        WriteLine("</span></div>");
++      WriteLine("</td>");
++      level=level+1;
++    }
++  }
++  if (objDeviceInBootloader || objUpdatePending) {
++    if (objUpdatePending) {
++      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
++      WriteLine("<td>");
++        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
++          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
++          Write("<span class='CLASS02535' style='color:white'>");
++            if(objUpdatePending.Value()) {Write("${stringTableUpdatePendingTrue}");} else {Write("${stringTableUpdatePendingFalse}");};
++          Write("</span></span>");
++        WriteLine("</span></div>");
++      WriteLine("</td>");
++      level=level+1;
++    }
++
++    if (objDeviceInBootloader) {
++      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
++      WriteLine("<td>");
++       Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
++         Write("<span class='CLASS02534 j_translate' style='display: inline;'>");
++           Write("${stringTableDeviceInBootloader}:");
++         Write("</span>");
++         Write("<span class='CLASS02535' style='color:white'>");
++           if(objDeviceInBootloader.Value()) {Write("${lblYes}");} else {Write("${lblNo}");};
++         Write("</span>");
++         WriteLine("</span></div>");
++      WriteLine("</td>");
++      level=level+1;
++    }
++  }  
++  if (objLowBat || objConfigPending) {
++    if (objLowBat) {
++      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
++      WriteLine("<td>");
++        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
++          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
++          Write("<span class='CLASS02535' style='color:white'>");
++            if(objLowBat.Value()) {Write("${stringTableBatteryEmpty}");} else {Write("${stringTableBatteryOk}");};
++          Write("</span></span>");
++        WriteLine("</span></div>");
++      WriteLine("</td>");
++      level=level+1;
++    }
++    if (objConfigPending) {
++      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
++      WriteLine("<td>");
++        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
++          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
++          Write("<span class='CLASS02535' style='color:white'>");
++            if(objConfigPending.Value()) {Write("${stringTableConfigPendingTrue}");} else {Write("${stringTableConfigPendingFalse}");};
++          Write("</span></span>");
++        WriteLine("</span></div>");
++      WriteLine("</td>");
++      level=level+1;
++    }
++  }
++  if (objRSSIPeer || objRSSIDevice) {
++    if (objRSSIPeer) {
++      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
++      WriteLine("<td>");
++        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
++          Write("<span class='CLASS02534 j_translate' style='display: inline;'>");
++            Write("${stringTableRSSIPeer}:");
++          Write("</span>");
++          Write("<span class='CLASS02535' style='color:white'>");
++            Write(objRSSIPeer.Value().ToString(0));
++          Write("</span");
++        Write("</span></div>");
++      WriteLine("</td>");
++      level=level+1;
++    }
++    if (objRSSIDevice) {
++      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
++      WriteLine("<td>");
++       Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
++         Write("<span class='CLASS02534 j_translate' style='display: inline;'>");
++           Write("${stringTableRSSIDevice}:");
++         Write("</span>");
++         Write("<span class='CLASS02535' style='color:white'>");
++           Write(objRSSIDevice.Value().ToString(0));
++         Write("</span>");
++       Write("</span></div>");
++      WriteLine("</td>");
++      level=level+1;
++    }
++  }   
++
++  if (objInhibit || objDutyCycle) {
++    if (objDutyCycle) {
++      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
++      WriteLine("<td>");
++        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
++          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
++          Write("<span class='CLASS02535' style='color:white'>");
++            if(objDutyCycle.Value()) {Write("${stringTableDutyCycleTrue}");} else {Write("${stringTableDutyCycleFalse}");};
++          Write("</span></span>");
++        WriteLine("</span></div>");
++      WriteLine("</td>"); 
++      level=level+1;
++    }
++    if (objInhibit) {
++      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
++      WriteLine("<td>");
++        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
++          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
++          Write("<span class='CLASS02535' style='color:white'>");
++            if(objInhibit.Value()) {Write("${stringTableStatusIndicatorInhibitTrue}");} else {Write("${stringTableStatusIndicatorInhibitFalse}");};
++          Write("</span></span>");
++        WriteLine("</span></div>");
++      WriteLine("</td>");
++      level=level+1;
++    }
++  }
++
++  WriteLine("</tr>");
++  WriteLine("</table>");
++  WriteLine("</td>");
++}
+--- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
++++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
+@@ -1062,6 +1062,12 @@
+         }
+       }
+     }
++    ! create device maintenance channel information
++    if (ictCH == ictMaintenance) {
++      WriteLine( '</tr></table><table cellspacing="0" class="ctrlTbl CLASS02510" border="0" ><tr>' );
++      Call("/esp/controls/maintenance.fn::CreateDeviceMaintenanceChannel()");
++      isKnownControl = true;                                                       
++    } 
+     if (!isKnownControl)
+     {
+       WriteLine( '</tr></table><table cellspacing="0" class="ctrlTbl CLASS02510" border="0" ><tr>' );

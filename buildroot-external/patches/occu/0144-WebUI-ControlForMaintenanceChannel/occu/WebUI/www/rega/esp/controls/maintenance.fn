@@ -34,79 +34,149 @@ function ::CreateDeviceMaintenanceChannel()
   object objLowBat = cObj.DPByHssDP("LOWBAT");
   object objConfigPending = cObj.DPByHssDP("CONFIG_PENDING");
   object objDutyCycle = cObj.DPByHssDP("DUTYCYCLE");
+  integer level = 0;
   
-  WriteLine("<table>");
+  WriteLine("<td class='CLASS02519'>");
+  WriteLine("<table cellspacing='0'>");
+  WriteLine("<tr>");
   if (objUnreach || objStickyUnreach) {
-    WriteLine("<tr>");
-      if (objUnreach) {
-        WriteLine("<td class='CLASS02518'>");
-          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objUnreach.Value()) {Write("${stringTableUnreachTrue}");} else {Write("${stringTableUnreachFalse}");};   WriteLine("</div>");
-        WriteLine("</td>");
-      }
-      if (objStickyUnreach) {
-        WriteLine("<td class='CLASS02518'>");
-          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objStickyUnreach.Value()) {Write("${stringTableStickyUnreachTrue}");} else {Write("${stringTableStickyUnreachFalse}");};  WriteLine("</div>");
-        WriteLine("</td>");
-      }
-    WriteLine("</tr>");
+    if (objUnreach) {
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objUnreach.Value()) {Write("${stringTableUnreachTrue}");} else {Write("${stringTableUnreachFalse}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+    if (objStickyUnreach) {
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objStickyUnreach.Value()) {Write("${stringTableStickyUnreachTrue}");} else {Write("${stringTableStickyUnreachFalse}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
   }
-  if (objDeviceInBootloader || objUpdatePending) {                                                                                                                                                                   
-    WriteLine("<tr>");                                                                                                                                                                                  
-      if (objUpdatePending) {                                                                                                                                                                                
-        WriteLine("<td class='CLASS02518'>");                                                                                                                                                           
-          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objUpdatePending.Value()) {Write("${stringTableUpdatePendingTrue}");} else {Write("${stringTableUpdatePendingFalse}");};   WriteLine("</div>");                                                   
-        WriteLine("</td>");                                                                                                                                                                             
-      }                                                                                                                                                                                                 
-      if (objDeviceInBootloader) {                                                                                                                                                                              
-        WriteLine("<td class='CLASS02518'>");                                                                                                                                                           
-         Write("<div class='ControlBtnInfo CLASS02532'>${stringTableDeviceInBootloader}<br/>"); if(objDeviceInBootloader.Value()) {Write("${lblYes}");} else {Write("${lblNo}");};   WriteLine("</div>");
-        WriteLine("</td>");                                                                                                                                                                             
-      }                                                                                                                                                                                                 
-    WriteLine("</tr>");                                                                                                                                                                                 
+  if (objDeviceInBootloader || objUpdatePending) {
+    if (objUpdatePending) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objUpdatePending.Value()) {Write("${stringTableUpdatePendingTrue}");} else {Write("${stringTableUpdatePendingFalse}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+
+    if (objDeviceInBootloader) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+       Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+         Write("<span class='CLASS02534 j_translate' style='display: inline;'>");
+           Write("${stringTableDeviceInBootloader}:");
+         Write("</span>");
+         Write("<span class='CLASS02535' style='color:white'>");
+           if(objDeviceInBootloader.Value()) {Write("${lblYes}");} else {Write("${lblNo}");};
+         Write("</span>");
+         WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
   }  
   if (objLowBat || objConfigPending) {
-    WriteLine("<tr>");                                                                                                                                                                                                                         
-      if (objLowBat) {                                                                                                                                                                                                                         
-        WriteLine("<td class='CLASS02518'>");                                                                                                                                                                                                  
-          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objLowBat.Value()) {Write("${stringTableBatteryEmpty}");} else {Write("${stringTableBatteryOk}");};   WriteLine("</div>");                                                      
-        WriteLine("</td>");                                                                                                                                                                                                                    
-      }
-      if (objConfigPending) {                                                                                                                                                                                                                  
-        WriteLine("<td class='CLASS02518'>");                                                                                                                                                                                                  
-          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objConfigPending.Value()) {Write("${stringTableConfigPendingTrue}");} else {Write("${stringTableConfigPendingFalse}");};   WriteLine("</div>");                                 
-        WriteLine("</td>");                                                                                                                                                                                                                    
-      }                                                                                                                                                                                                                                        
-    WriteLine("</tr>"); 
+    if (objLowBat) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objLowBat.Value()) {Write("${stringTableBatteryEmpty}");} else {Write("${stringTableBatteryOk}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+    if (objConfigPending) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objConfigPending.Value()) {Write("${stringTableConfigPendingTrue}");} else {Write("${stringTableConfigPendingFalse}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
   }
-  if (objRSSIPeer || objRSSIDevice) {                                                                                                                                                                                                          
-    WriteLine("<tr>");                                                                                                                                                                                                                         
-      if (objRSSIPeer) {                                                                                                                                                                                                                       
-        WriteLine("<td class='CLASS02518'>");                                                                                                                                                                                                  
-          Write("<div class='ControlBtnInfo CLASS02532'>${stringTableRSSIPeer}<br/>"#objRSSIPeer.Value().ToString(0)#"</div>");                                                                                                                
-        WriteLine("</td>");                                                                                                                                                                                                                    
-      }                                                                                                                                                                                                                                        
-      if (objRSSIDevice) {                                                                                                                                                                                                                     
-        WriteLine("<td class='CLASS02518'>");                                                                                                                                                                                                  
-         Write("<div class='ControlBtnInfo CLASS02532'>${stringTableRSSIDevice}<br/>"#objRSSIDevice.Value().ToString(0)#"</div>");                                                                                                             
-        WriteLine("</td>");                                                                                                                                                                                                                    
-      }                                                                                                                                                                                                                                        
-    WriteLine("</tr>");                                                                                                                                                                                                                        
+  if (objRSSIPeer || objRSSIDevice) {
+    if (objRSSIPeer) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'>");
+            Write("${stringTableRSSIPeer}:");
+          Write("</span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            Write(objRSSIPeer.Value().ToString(0));
+          Write("</span");
+        Write("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+    if (objRSSIDevice) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+       Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+         Write("<span class='CLASS02534 j_translate' style='display: inline;'>");
+           Write("${stringTableRSSIDevice}:");
+         Write("</span>");
+         Write("<span class='CLASS02535' style='color:white'>");
+           Write(objRSSIDevice.Value().ToString(0));
+         Write("</span>");
+       Write("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
   }   
 
   if (objInhibit || objDutyCycle) {
-    WriteLine("<tr>");                                                                                                                                                                                                                         
     if (objDutyCycle) {
-      WriteLine("<td class='CLASS02518'>");                                                                                                                                                                                                  
-          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objDutyCycle.Value()) {Write("${stringTableDutyCycleTrue}");} else {Write("${stringTableDutyCycleFalse}");};   WriteLine("</div>");                                 
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objDutyCycle.Value()) {Write("${stringTableDutyCycleTrue}");} else {Write("${stringTableDutyCycleFalse}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
       WriteLine("</td>"); 
+      level=level+1;
     }
     if (objInhibit) {
-      WriteLine("<td class='CLASS02518'>");                                                                                                                                                                                                  
-          Write("<div class='ControlBtnInfo CLASS02532'>"); if(objInhibit.Value()) {Write("${stringTableStatusIndicatorInhibitTrue}");} else {Write("${stringTableStatusIndicatorInhibitFalse}");};   WriteLine("</div>");                                 
-      WriteLine("</td>"); 
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objInhibit.Value()) {Write("${stringTableStatusIndicatorInhibitTrue}");} else {Write("${stringTableStatusIndicatorInhibitFalse}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
     }
-    WriteLine("</tr>");                                                                                                                                                                                                                        
   }
 
-  WriteLine("</table>"); 
+  WriteLine("</tr>");
+  WriteLine("</table>");
+  WriteLine("</td>");
 }

@@ -1062,10 +1062,10 @@ function ::dcCreate()
         }
       }
     }
-    !# create device maintenance channel information
-    if (ictCH == ictMaintenance) {                  
-      WriteLine( "<script>conInfo('MAINTENANCE CHANNEL found');</script>" ); 
-      Call("/esp/controls/maintenance.fn::CreateDeviceMaintenanceChannel()");                                                                 
+    ! create device maintenance channel information
+    if (ictCH == ictMaintenance) {
+      WriteLine( '</tr></table><table cellspacing="0" class="ctrlTbl CLASS02510" border="0" ><tr>' );
+      Call("/esp/controls/maintenance.fn::CreateDeviceMaintenanceChannel()");
       isKnownControl = true;                                                       
     } 
     if (!isKnownControl)

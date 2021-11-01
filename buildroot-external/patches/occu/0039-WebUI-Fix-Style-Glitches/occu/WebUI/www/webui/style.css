@@ -87,11 +87,12 @@
 }
 
 .startPageInfo td:nth-child(1) {
-  white-space: nowrap;
+  word-wrap: break-word;
 }
 
 .startPageInfo td {
   word-wrap: anywhere;
+  vertical-align: bottom;
 }
 
 html,body

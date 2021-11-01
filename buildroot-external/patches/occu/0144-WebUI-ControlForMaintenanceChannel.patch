@@ -113,7 +113,7 @@
 +            Write("${stringTableRSSIPeer}:");
 +          Write("</span>");
 +          Write("<span class='CLASS02535' style='color:white'>");
-+            Write(objRSSIPeer.Value().ToString(0));
++            Write(objRSSIPeer.Value().ToString(0) # "&nbsp;dBm");
 +          Write("</span");
 +        Write("</span></div>");
 +      WriteLine("</td>");
@@ -127,7 +127,7 @@
 +           Write("${stringTableRSSIDevice}:");
 +         Write("</span>");
 +         Write("<span class='CLASS02535' style='color:white'>");
-+           Write(objRSSIDevice.Value().ToString(0));
++           Write(objRSSIDevice.Value().ToString(0) # "&nbsp;dBm");
 +         Write("</span>");
 +       Write("</span></div>");
 +      WriteLine("</td>");

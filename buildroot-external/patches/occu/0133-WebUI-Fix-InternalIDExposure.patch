@@ -5,7 +5,7 @@
  
      ! Interface HmIP-RF and HmIP-Wired
 -    if (chn.HssType().Find("MAINTENANCE") != -1) {
-+    if ( ( system.IsSessionVar("sessionSIDC") ) && ( system.GetSessionVar("sessionSIDC") == "1" ) ) {
++    if ( (chn.HssType().Find("MAINTENANCE") != -1) && ((system.IsSessionVar("sessionSIDC") == false) || (system.GetSessionVar("sessionSIDC") != "1")) ) {
        ! Don't show the maintenance channel of the new HmIP devices
        ! This is necessary because the name of such a channel of an HmIP device
        !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on
@@ -84,6 +84,15 @@
            object chn = dom.GetObject(tmp);
            object oDev = dom.GetObject(chn.Device());
            string oDevHssType = oDev.HssType();
+@@ -171,7 +185,7 @@
+           } else {
+             Call("/esp/functions.fn::showHideHmIPChannel()");
+           }
+-          if( bShow && chn.ReadyConfig() && oDev.ReadyConfig() && bShowChannel )
++          if( bShow && oDev.ReadyConfig() && bShowChannel )
+           {
+             string trId = device.ID()#tmp;
+             boolean showExtDesc = false;
 --- occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm
 @@ -120,8 +120,17 @@

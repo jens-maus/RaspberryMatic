@@ -185,7 +185,7 @@
           } else {
             Call("/esp/functions.fn::showHideHmIPChannel()");
           }
-          if( bShow && chn.ReadyConfig() && oDev.ReadyConfig() && bShowChannel )
+          if( bShow && oDev.ReadyConfig() && bShowChannel )
           {
             string trId = device.ID()#tmp;
             boolean showExtDesc = false;

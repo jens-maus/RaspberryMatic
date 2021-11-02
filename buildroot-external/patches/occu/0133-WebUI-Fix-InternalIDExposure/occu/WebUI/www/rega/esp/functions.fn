@@ -384,7 +384,7 @@ function ::showHideHmIPChannel() {
   if (bShowChannel == true) {
 
     ! Interface HmIP-RF and HmIP-Wired
-    if ( ( system.IsSessionVar("sessionSIDC") ) && ( system.GetSessionVar("sessionSIDC") == "1" ) ) {
+    if ( (chn.HssType().Find("MAINTENANCE") != -1) && ((system.IsSessionVar("sessionSIDC") == false) || (system.GetSessionVar("sessionSIDC") != "1")) ) {
       ! Don't show the maintenance channel of the new HmIP devices
       ! This is necessary because the name of such a channel of an HmIP device
       !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on

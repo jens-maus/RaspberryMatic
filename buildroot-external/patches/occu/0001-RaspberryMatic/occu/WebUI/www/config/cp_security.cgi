@@ -3,6 +3,7 @@ source once.tcl
 sourceOnce common.tcl
 sourceOnce session.tcl
 sourceOnce file_io.tcl
+sourceOnce backup.tcl
 load tclrpc.so
 load tclrega.so
 
@@ -29,7 +30,7 @@ proc get_current_key_index {} {
   set CURRENT_INDEX "Current user key"
   set PREVIOUS_INDEX "Previous user key"
 
-  # Schlüssel-Index ermitteln
+  # Schlï¿½ssel-Index ermitteln
   set fd [open "|crypttool -g" r]
   set content [read $fd]
   close $fd
@@ -93,14 +94,14 @@ proc getBackupErrorMessage {errorCode migration_mode} {
   # ERROR CODES:
   #  9 = Check the script /bin/checkUsrBackup.sh - the java call is wrong
   # 10 = OK
-  # 11 = Backup fehlerhaft / unvollständig (z.B. *.apkx Datei fehlt)
+  # 11 = Backup fehlerhaft / unvollstï¿½ndig (z.B. *.apkx Datei fehlt)
   # 12 = Internet fehlt / KeyServer Timeout
   # 13 = KeyServer NAK (eine oder beide sind nicht im KeyServer)
-  # 14 = Fehler bei Gerätepersistenz (einlesen fehlgeschlagen oder Versionen / Typen nicht kompatibel)
-  # 15 = Migration Fehlgeschlagen (nicht für die Backup Validierungs Main)
-  # 16 = Adapter (Coprozessor) nicht verfügbar (basierend auf den Konfigurationen aus dem Backup + Default aus /etc)
-  # 17 = Adapter konnte nicht initialisiert werden (beschädigte Application / Fehlerrückmeldungen)
-  # 18 = Adapter Version nicht unterstützt
+  # 14 = Fehler bei Gerï¿½tepersistenz (einlesen fehlgeschlagen oder Versionen / Typen nicht kompatibel)
+  # 15 = Migration Fehlgeschlagen (nicht fï¿½r die Backup Validierungs Main)
+  # 16 = Adapter (Coprozessor) nicht verfï¿½gbar (basierend auf den Konfigurationen aus dem Backup + Default aus /etc)
+  # 17 = Adapter konnte nicht initialisiert werden (beschï¿½digte Application / Fehlerrï¿½ckmeldungen)
+  # 18 = Adapter Version nicht unterstï¿½tzt
   # 99 = Unknown error
 
   if {$errorCode == 13} {
@@ -172,15 +173,15 @@ proc action_change_key {} {
   # check the entered key against our current system key
   if { ![catch {exec crypttool -v -t 3 -k "$key1"}]} {
 
-    # "Der eingegebene Schlüssel entspricht dem aktuellen Schlüssel der Zentrale. "
-    # "Der Schlüssel wird nicht geändert."
+    # "Der eingegebene Schlï¿½ssel entspricht dem aktuellen Schlï¿½ssel der Zentrale. "
+    # "Der Schlï¿½ssel wird nicht geï¿½ndert."
     put_message "\${dialogSettingsSecurityMessageHintSecKeyTitle}" \${dialogSettingsSecurityMessageErrorSecKeyContentKeysIsIdentical} {\${dialogBack} "showSecurityCP();"}
     return
   }
   
   if { [catch {set_key $key1}] } {
-    # "Der Schlüssel konnte nicht gesetzt werden. Das liegt vermutlich daran, daß "
-    # "der aktuelle Schlü;ssel noch nicht an alle Komponenten übertragen wurde. "
+    # "Der Schlï¿½ssel konnte nicht gesetzt werden. Das liegt vermutlich daran, daï¿½ "
+    # "der aktuelle Schlï¿½;ssel noch nicht an alle Komponenten ï¿½bertragen wurde. "
     # "Hinweise darauf finden Sie in den Servicemeldungen."
     put_message "\${dialogSettingsSecurityMessageErrorSecKeyTitle}" \${dialogSettingsSecurityMessageErrorSecKeyContentKeyNotAllDevices} {\${dialogBack} "showSecurityCP();"}
     return
@@ -324,7 +325,7 @@ proc action_factory_reset_go {} {
     ${dialogPerformRebootContent}
   } {"\${btnNewLogin}" "window.location.href='/';"}
 
-  # Nicht mehr nötig, siehe TWIST-22
+  # Nicht mehr nï¿½tig, siehe TWIST-22
   set comment {
     else {
       division {class="popupTitle"} {
@@ -391,12 +392,12 @@ proc action_backup_restore_check {} {
 
   if { "false" == $ccu1_backup } {
     set config_has_user_key [expr {"$stored_signature" != "$calculated_signature"} ]
-  } else {  #CCU1 used an other default key. So we can´t check with crypttool.
+  } else {  #CCU1 used an other default key. So we canï¿½t check with crypttool.
     set config_has_user_key [exec cat key_index]
   }  
   } errorMessage] } {
-    # "Die ausgewählte Datei enthält kein HomeMatic Systembackup. "
-    # "Bitte wählen Sie eine gültige Backup-Datei aus."
+    # "Die ausgewï¿½hlte Datei enthï¿½lt kein HomeMatic Systembackup. "
+    # "Bitte wï¿½hlen Sie eine gï¿½ltige Backup-Datei aus."
     put_message "\${dialogSettingsSecurityMessageSysBackupInvalidFileTitle}" \${dialogSettingsSecurityMessageSysBackupInvalidFileContent} {\${dialogBack} "showSecurityCP();"}
     return
   }
@@ -529,7 +530,7 @@ proc action_backup_restore_go {} {
 
   if { "false" == $ccu1_backup } {
     set config_has_user_key [expr {"$stored_signature" != "[exec crypttool -s -t 0 <usr_local.tar.gz]"} ]
-  } else {  #CCU1 used an other default key. So we can´t check with crypttool.
+  } else {  #CCU1 used an other default key. So we canï¿½t check with crypttool.
     set config_has_user_key [exec cat key_index]
   }
     catch { import key }
@@ -1218,6 +1219,33 @@ proc action_put_page {} {
           }
         }
       }
+      # automatic redirect to https
+      if { [getProduct]  >= 3 } {
+        table_row {class="CLASS20806"} {
+          table_data {class="CLASS20807"} {
+            puts "\${cpSecurityHttpsRedirectTitle}"
+          }
+          table_data {class="CLASS20808"} {
+            division {} {
+              table {
+                table_row {
+                  table_data {align="left"}  {
+                    puts "\${cpSecurityHttpsRedirectLabel}"
+                  }
+                  set checked ""
+                  #set checked "checked=true"
+                  table_data {class="CLASS21112"} {align="left"}  {
+                    cgi_checkbox httpsRedirectState=unknown {id="httpsRedirectActive"} {onClick=setHttpsRedirect();} $checked
+                  }
+                }
+              }
+            }
+          }
+          table_data {class="CLASS20808"} {
+            puts "\${cpSecurityHttpsRedirectDescription}"
+          }
+        }
+      }
       # SNMP <-- may if getProduct check if needed for ccu2 too
       if { [getProduct]  >= 3 } { 
         table_row {class="CLASS20806"} {
@@ -1309,7 +1337,7 @@ proc action_put_page {} {
         dlgPopup.LoadFromFile(url, "action=change_key&key1="+document.getElementById("text_key1").value+"&key2="+document.getElementById("text_key2").value);
       }
       OnBackupSubmit = function() {
-        //ProgressBar = new ProgressBarMsgBox("Systembackup wird übertragen...", 1);
+        //ProgressBar = new ProgressBarMsgBox("Systembackup wird ï¿½bertragen...", 1);
         //ProgressBar.show();
         //ProgressBar.StartKnightRiderLight();
 
@@ -1450,13 +1478,25 @@ proc action_put_page {} {
         hasAuthStatusChanged = (initialAuthStatus != newAuthState) ? true : false;
       };
 
+      // Set the checkbox for the https redirect according to its state
+      var hasHttpsRedirectStatusChanged = false;
+      var initialHttpsRedirectStatus = homematic("CCU.getHttpsRedirectEnabled", {});
+      jQuery("#httpsRedirectActive").prop("checked", initialHttpsRedirectStatus);
+
+      setHttpsRedirect = function(elm) {
+        var newHttpsRedirectState = jQuery("#httpsRedirectActive").prop("checked");
+        homematic("CCU.setHttpsRedirectEnabled", {"enabled": newHttpsRedirectState});
+        hasHttpsRedirectStatusChanged = (initialHttpsRedirectStatus != newHttpsRedirectState) ? true : false;
+      };
+
+
       //Set the checkbox for SNMP according to its state
       var hasSNMPStatusChanged = false;
       var initialSNMPStatus = homematic("CCU.getSNMPEnabled", {});
       jQuery("#snmpEnabled").prop("checked", initialSNMPStatus);
 
       restartLighttpd = function() {
-        if (hasAuthStatusChanged) {
+        if (hasAuthStatusChanged || hasHttpsRedirectStatusChanged) {
         homematic("User.restartLighttpd", {}, function () {
           conInfo("Lighttpd restarted");
         });
@@ -1469,33 +1509,7 @@ proc action_put_page {} {
 }
 
 proc action_create_backup {} {
-  set HOSTNAME [exec hostname]
-  set system_version [read_version "/VERSION"]
-  set iso8601_date [exec date -Iseconds]
-  set tmpdir [exec mktemp -d -p /usr/local/tmp]
-  regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
-  set backupfile [set HOSTNAME]-$system_version-$year-$month-$day-$hour$minute.sbk
-  #save DOM
-  rega system.Save()
-  cd /
-  if {[getProduct] < 3 } {
-    catch { exec tar czf /tmp/usr_local.tar.gz usr/local }
-  } else {
-    catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude=usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
-  }
-  
-  cd $tmpdir/
-  #sign the configuration with the current key
-  exec crypttool -s -t 1 <usr_local.tar.gz >signature
-  #store the current key index
-  exec crypttool -g -t 1 >key_index
-  file copy -force /VERSION firmware_version
-  catch { exec tar --owner=root --group=root -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index }
-  cd /
-  exec rm -rf $tmpdir
-  puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"
-  puts "Content-Type: application/octet-stream"
-  puts "Content-Disposition: attachment; filename=\"$backupfile\"\n"
+  [create_backup]
 }
 
 proc action_backup_upload {} {
@@ -1508,7 +1522,7 @@ proc action_backup_upload {} {
   cgi_javascript {
     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
     puts {
-      //parent.top.ProgressBar.IncCounter("Backup wurde übertragen.");
+      //parent.top.ProgressBar.IncCounter("Backup wurde ï¿½bertragen.");
       parent.top.dlgPopup.hide();
       parent.top.dlgPopup.setWidth(400);
       parent.top.dlgPopup.LoadFromFile(url, "action=backup_restore_check");

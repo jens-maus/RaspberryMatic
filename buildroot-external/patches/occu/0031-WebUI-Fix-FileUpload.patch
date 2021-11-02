@@ -42,7 +42,7 @@
    http_head
    division {class="popupTitle"} {
      #puts "Softwareupdate - Best&auml;tigung"
-@@ -281,7 +288,7 @@
+@@ -266,7 +273,7 @@
  }
  
  proc action_firmware_update_cancel {} {
@@ -51,7 +51,7 @@
  
    if {[getProduct] < 3} {
      catch {exec rm /var/new_firmware.tar.gz}
-@@ -447,9 +454,7 @@
+@@ -432,9 +439,7 @@
              table_row {
                td {width="20"} {}
                table_data {colspan="2"} {
@@ -62,21 +62,18 @@
                    file_button firmware_file size=30 maxlength=1000000
                  }
                  puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
-@@ -959,19 +964,16 @@
- }
+@@ -1020,7 +1025,7 @@
  
  proc action_firmware_upload {} {
+ 
 -  global env sid downloadOnly
 +  global env sid downloadOnly filename
  
    if { [catch { import directDownload } error] } {
      set directDownload false
-   }
--  
-+
+@@ -1029,10 +1034,7 @@
    http_head
--  
-+
+   
    if { $directDownload } {
 -    set filename "/tmp/fup.tgz"
 -  } else {
@@ -86,7 +83,7 @@
    }
  
    if {[getProduct] < 3} {
-@@ -1041,10 +1043,14 @@
+@@ -1102,10 +1104,14 @@
  
    cgi_javascript {
      puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
@@ -105,7 +102,7 @@
    }
  }
  
-@@ -1328,10 +1334,10 @@
+@@ -1393,10 +1399,10 @@
  cgi_eval {
    #cgi_debug -on
    cgi_input

@@ -12,7 +12,8 @@ STARTWAITFILE=/var/status/HMServerStarted
 # skip this startup if not in normal mode
 [[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
-HM_SERVER=/opt/HMServer/HMIPServer.jar
+HM_SERVER=/opt/HMServer/HMIPServer.jar:/opt/HMServer/coupling/ESHBridge.jar
+HM_SERVER_CLASS="de.eq3.ccu.server.ip.HMIPServer"
 HM_SERVER_ARGS="/var/etc/crRFD.conf /var/etc/HMServer.conf"
 HM_SERVER_DEVNODE=/dev/mmd_hmip
 PIDFILE=/var/run/HMIPServer.pid
@@ -114,7 +115,8 @@ init() {
     fi
 
   else
-    HM_SERVER=/opt/HMServer/HMServer.jar
+    HM_SERVER=/opt/HMServer/HMServer.jar:/opt/HMServer/coupling/ESHBridge.jar
+    HM_SERVER_CLASS="de.eq3.ccu.server.HMServer"
     HM_SERVER_ARGS="/var/etc/HMServer.conf"
     HM_SERVER_DEVNODE=""
   fi
@@ -157,7 +159,7 @@ start() {
   fi
 
   # shellcheck disable=SC2086
-  start-stop-daemon -b -S -q -m -p "${PIDFILE}" --exec java -- -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts="${HM_SERVER_DEVNODE}" -jar "${HM_SERVER}" ${HM_SERVER_ARGS}
+  start-stop-daemon -b -S -q -m -p "${PIDFILE}" --exec java -- -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts="${HM_SERVER_DEVNODE}" -cp "${HM_SERVER}" ${HM_SERVER_CLASS} ${HM_SERVER_ARGS}
   echo -n "."
   waitStartupComplete
 }

@@ -1,7 +1,7 @@
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -288,8 +288,8 @@
-     catch { exec /bin/sh -c "rm /var/EULA.*"}
+@@ -278,8 +278,8 @@
+     }
    } else {
     catch { exec /bin/sh -c "rm -rf `readlink -f /usr/local/.firmwareUpdate` /usr/local/.firmwareUpdate" }
 -   catch { exec /bin/sh -c "rm -f /usr/local/tmp/EULA.*"}
@@ -11,7 +11,7 @@
    }
  
    cgi_javascript {
-@@ -905,34 +905,79 @@
+@@ -1059,35 +1059,80 @@
    } else {
  
      cd /usr/local/tmp/
@@ -92,7 +92,8 @@
 -    if {$file_invalid == 0} {
 -      catch { exec ln -sf tmp/$TMPDIR /usr/local/.firmwareUpdate }
 +    if { $file_invalid == 0 && [file exists /usr/local/.firmwareUpdate] } {
-       set action "acceptEula"
+       #set action "acceptEula"
+       set action "askCreateBackup"
      } else {
        file delete -force -- $filename
 -      file delete -force -- $filename-dir

@@ -3,7 +3,7 @@ source once.tcl
 sourceOnce cgi.tcl
 sourceOnce session.tcl
 sourceOnce common.tcl
-
+sourceOnce backup.tcl
 load tclrega.so
 load tclrpc.so
 
@@ -39,9 +39,9 @@ set HS485D_URL "bin://127.0.0.1:$portnumber"
 
 
 if {[getProduct] < 3} {
-  set REMOTE_FIRMWARE_SCRIPT "http://update.homematic.com/firmware/download"
+  set REMOTE_FIRMWARE_SCRIPT "https://update.homematic.com/firmware/download"
 } else {
-  set REMOTE_FIRMWARE_SCRIPT "http://ccu3-update.homematic.com/firmware/download"
+  set REMOTE_FIRMWARE_SCRIPT "https://ccu3-update.homematic.com/firmware/download"
 }
 
 proc action_acceptEula {} {
@@ -101,22 +101,6 @@ proc action_firmware_update_confirm {} {
               table_data {colspan="2"} {
                 puts {
                   ${dialogSettingsCMDialogPerformSoftwareUpdateStart}
-                }
-
-                #set bat_level [get_bat_level]
-                # CCU 2 has no batteries
-                # Therefore this dialog should never be displayed
-                set bat_level 100
-                if {$bat_level < 50} {
-                  br
-                  division {class="CLASS20912"} {
-                    puts "Achtung!"
-                    br
-                    puts "Der Ladezustand der Batterien betr&auml;gt nur noch $bat_level%. Um einem Datenverlust oder "
-                    puts "einer Besch&auml;digung des Ger&auml;tes durch einen"
-                    puts "Ausfall der Stromversorgung vorzubeugen, empfehlen wir Ihnen, die Batterien vor dem Einspielen"
-                    puts "des Updates zu erneuern."
-                  }
                 }
               }
             }
@@ -270,12 +254,13 @@ proc action_firmware_update_go {} {
         regaMonitor.stop();
         InterfaceMonitor.stop();
       }
-      var pb = "action=update_start";
-      var opts = {
-        postBody: pb,
-        sendXML: false
-      };
-      new Ajax.Request(url, opts);
+      //var pb = "action=update_start";
+      //var opts = {
+      //  postBody: pb,
+      //  sendXML: false
+      //};
+      //new Ajax.Request(url, opts);
+      window.location.href=url+"&action=update_start"
     }
   }
 }
@@ -288,8 +273,7 @@ proc action_firmware_update_cancel {} {
     catch { exec /bin/sh -c "rm /var/EULA.*"}
     cgi_javascript {
       puts {
-        homematic('User.startHmIPServer',{});
-        InterfaceMonitor.start();
+        startHmIPServer();
       }
     }
   } else {
@@ -326,7 +310,7 @@ proc put_message {title msg args} {
         if { [llength $args] < 1 } { set args {{"Zur&uuml;ck" "PopupClose();"}}}
         # - - - wernerf - - -
         # Wenn die Liste leer ($args == "_empty_") ist, dann sollen keine Schalt-
-        # flächen ausgegeben werden
+        # flï¿½chen ausgegeben werden
         if {"_empty_" == $args} { set args "" }
         # - - - wernerf - - -
         foreach b $args {
@@ -390,15 +374,35 @@ proc action_put_page {} {
                 puts "\${dialogSettingsCMLblAvailableSoftwareVersion}"
               }
               table_data {id="availableSWVersion"} {
-                # This doesn´t work properly
+                # This doesnï¿½t work properly
                 # puts [iframe "$REMOTE_FIRMWARE_SCRIPT?cmd=check_version&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2" marginheight=0 marginwidth=0 frameborder=0 width=100 height=20 {scrolling="no"} ]
                 # The available version will be set further down with "jQuery('#availableSWVersion').html(homematic.com.getLatestVersion());"
               }
             }
             table_row {
               table_data {align="left"} {colspan="3"} {
-                #puts "[bold "Software-Update durchführen"]"
+                #puts "[bold "Software-Update durchfï¿½hren"]"
                 puts "<b>\${dialogSettingsCMLblPerformSoftwareUpdate}</b>"
+              }
+            }
+            table_row {
+              table_data {align="left"} {colspan="3"} {
+                  division {class="popupControls CLASS20905"} {
+                  table {
+                    table_row {
+                      table_data {
+                        division {class="CLASS20905" style="display: none"} {id="btnFwDirectDownload"} {} "onClick=\"performDirectDownload();\"" {}
+                        division {class="CLASS20905"}  "onClick=\"showCCULicense(true);\"" {puts "\${btnDirectFwUpload}"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            table_row {
+              table_data {align="left"} {colspan="3"} {
+                #puts "[bold "i18n: Alternative Vorgehensweise:"]"
+                puts "<b>\${dialogSettingsCMLblAlternateSoftwareUpdate}</b>"
               }
             }
             table_row {
@@ -412,7 +416,7 @@ proc action_put_page {} {
                     table_row {
                       table_data {
                         division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU[getProduct]';\"" {}
-                        division {class="CLASS20908"}  "onClick=\"showCCULicense();\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+                        division {class="CLASS20908"}  "onClick=\"showCCULicense(false);\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
                       }
                     }
                   }
@@ -817,16 +821,33 @@ proc action_put_page {} {
         }
       }
 
+      
+      hideUserHint = function() {
+        var elem = jQuery('#fwUpload');
+        if (elem.length == 0) {
+        } else {
+          elem.hide();
+          elem.remove();
+        }
+      }
+
       stopHmIPServer = function() {
         if( getProduct() < 3 ) {
           InterfaceMonitor.stop();
           homematic('User.stopHmIPServer' , {} );
         }
       }
+
+      startHmIPServer = function() {
+        if( getProduct() < 3 ) {
+          homematic('User.startHmIPServer',{});
+          InterfaceMonitor.start();
+        }
+      }
     }
 
     puts {
-      showCCULicense = function() {
+      showCCULicense = function(directDownload) {
       ShowWaitAnim();
       HideWaitAnimAutomatically(60);
       if (showDummyLicense == "true") {
@@ -834,7 +855,11 @@ proc action_put_page {} {
         HideWaitAnim();
         var dlg = new EulaDialog(translateKey('dialogEulaTitle'), result ,function(userAction) {
           if (userAction == 1) {
-          jQuery("#btnFwDownload").click();
+            if(directDownload) {
+              jQuery("#btnFwDirectDownload").click();
+            } else {
+              jQuery("#btnFwDownload").click();
+            }
           }
         }, "html");
         });
@@ -846,7 +871,11 @@ proc action_put_page {} {
         jQuery("#homematic_license_script").remove();
         var dlg = new EulaDialog(translateKey('dialogEulaTitle'), result ,function(userAction) {
           if (userAction == 1) {
-          jQuery("#btnFwDownload").click();
+            if(directDownload) {
+              jQuery("#btnFwDirectDownload").click();
+            } else {
+              jQuery("#btnFwDownload").click();
+            }
           }
         }, "html");
         });
@@ -855,6 +884,28 @@ proc action_put_page {} {
       }
     }
   }
+
+  cgi_javascript {
+
+    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
+    puts {
+      performDirectDownload = function(result) {
+        showUserHint();
+        ShowWaitAnim();
+        HideWaitAnimAutomatically(60);
+        stopHmIPServer();
+        homematic('CCU.downloadFirmware' , {}, function(result) {
+          if(result === true) {
+              dlgPopup.LoadFromFile(url, "action=firmware_upload&directDownload=true");
+          } else {
+              console.log(result);
+              startHmIPServer();
+          }
+        });
+      }
+    }
+  }
+
   cgi_javascript {
     puts "translatePage('#messagebox');"
     puts "jQuery('#messagebox').show();"
@@ -892,13 +943,97 @@ proc get_serial { } {
   return [read_var /var/ids SerialNumber]
 }
 
+proc action_askCreateBackup {} {
+  global env sid
+  
+  http_head
+  division {class="popupTitle"} {
+    puts "\${dialogSettingsSecurityMessageCreateSysBackupTitle}"
+  }
+  division {class="CLASS20900"} {
+    table {class="popupTable CLASS20901"} {border="1"} {
+      table_row {
+        table_data {
+          table {class="CLASS20913"} {
+            table_row {
+              table_data {
+                  puts {
+                    <div class="CLASS01805">
+                      <label for="accept">
+                        <input type="checkbox" id="accept" name="accept" value="yes" checked="true">${dialogAskCreateBakupCheckboxText}</label>
+                    </div>
+                    <div class="CLASS01805"><label>${dialogAskCreateBakupText}</label></div>
+                    <div class="CLASS01805"/>
+                  }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  division {class="popupControls"} {
+    table {
+      table_row {
+        table_data {class="CLASS20907"} {
+          division {class="CLASS20908"} {onClick="OnOk();"} {
+            puts "\${btnNext}"
+          }
+        }
+      }
+    }
+  }
+  puts ""
+  cgi_javascript {
+    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
+      puts {
+        OnOk = function() {
+          const cb = document.getElementById('accept');
+          const action = "acceptEula";
+          if(cb.checked) {
+            //window.location.href=url+"&action=createBackup";
+            var pb = "action=createBackup";
+            var opts = {
+              postBody: pb,
+              sendXML: false,
+              asynchronous: false
+            };
+            new Ajax.Request(url, opts);
+          } 
+          dlgPopup.hide();
+          dlgPopup.setWidth(800);
+          dlgPopup.LoadFromFile(url, "&action=acceptEula");
+          
+        }
+      }
+    puts "translatePage('#messagebox');"
+    puts "jQuery('#fwUpload').hide();"
+    puts "dlgPopup.readaptSize();"
+  }
+
+}
+
+proc action_createBackup {} {
+  http_head
+  catch { exec touch /tmp/createBackup }
+}
+
 proc action_firmware_upload {} {
+
   global env sid downloadOnly
 
+  if { [catch { import directDownload } error] } {
+    set directDownload false
+  }
+  
   http_head
-  import_file -client firmware_file
-
-  set filename [lindex $firmware_file 0]
+  
+  if { $directDownload } {
+    set filename "/tmp/fup.tgz"
+  } else {
+    import_file -client firmware_file
+    set filename [lindex $firmware_file 0]
+  }
 
   if {[getProduct] < 3} {
     cd /tmp/
@@ -911,14 +1046,12 @@ proc action_firmware_upload {} {
 
     if {$file_valid} {
       file rename -force -- $filename "/var/new_firmware.tar.gz"
-      #set action "firmware_update_confirm"
-      set action "acceptEula"
+      set action "askCreateBackup"
     } else {
       file delete -force -- [lindex $firmware_file 0]
       cgi_javascript {
         puts {
-          homematic('User.startHmIPServer',{});
-          InterfaceMonitor.start();
+          startHmIPServer();
         }
       }
       set action "firmware_update_invalid"
@@ -950,13 +1083,21 @@ proc action_firmware_upload {} {
     #
     if {$file_invalid == 0} {
       catch { exec ln -sf tmp/$TMPDIR /usr/local/.firmwareUpdate }
-      set action "acceptEula"
+      #set action "acceptEula"
+      set action "askCreateBackup"
     } else {
       file delete -force -- $filename
       file delete -force -- $filename-dir
       set action "firmware_update_invalid"
     }
 
+  }
+
+  if { $directDownload } {
+    
+    cgi_javascript {
+      puts "hideUserHint();"
+    }
   }
 
   cgi_javascript {
@@ -1027,7 +1168,7 @@ proc action_reboot_confirm {} {
     puts "dlgPopup.readaptSize();"
     puts "translatePage('#messagebox')"
   }
-# Speichern wird beim Neustart durchgeführt, siehe action_reboot  
+# Speichern wird beim Neustart durchgefï¿½hrt, siehe action_reboot  
 #  rega system.Save()
 }
 
@@ -1142,6 +1283,10 @@ proc action_shutdown_go {} {
 
 proc action_update_start {} {
   puts ""
+  if { [file exists "/tmp/createBackup"] } {
+    catch { [create_backup] }
+  }
+
   catch { exec killall hss_lcd }
   catch { exec lcdtool {Saving   Data...  } }
   rega system.Save()
@@ -1173,6 +1318,7 @@ proc action_shutdown {} {
   rega system.Save()
   catch { exec lcdtool {Shutdown...       } }
   exec sleep 5
+  catch { exec touch /tmp/shutdown }
   exec /sbin/poweroff
 }
 

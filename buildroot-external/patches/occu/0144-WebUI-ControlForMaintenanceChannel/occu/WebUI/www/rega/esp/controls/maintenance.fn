@@ -127,7 +127,13 @@ function ::CreateDeviceMaintenanceChannel()
             Write("${stringTableRSSIPeer}:");
           Write("</span>");
           Write("<span class='CLASS02535' style='color:white'>");
-            Write(objRSSIPeer.Value().ToString(0) # "&nbsp;dBm");
+            integer rssiPeer = (objRSSIPeer.Value().ToInteger() - 256);
+            if ( rssiPeer < -200 ) {
+              Write("n/a");
+            } else {
+              Write(rssiPeer);
+            }
+            Write("&nbsp;dBm");
           Write("</span");
         Write("</span></div>");
       WriteLine("</td>");
@@ -141,7 +147,13 @@ function ::CreateDeviceMaintenanceChannel()
            Write("${stringTableRSSIDevice}:");
          Write("</span>");
          Write("<span class='CLASS02535' style='color:white'>");
-           Write(objRSSIDevice.Value().ToString(0) # "&nbsp;dBm");
+           integer rssiDevice = (objRSSIDevice.Value().ToInteger() - 256);
+           if ( rssiDevice < -200 ) {
+             Write("n/a");
+           } else {
+             Write(rssiDevice);
+           }
+           Write("&nbsp;dBm");
          Write("</span>");
        Write("</span></div>");
       WriteLine("</td>");

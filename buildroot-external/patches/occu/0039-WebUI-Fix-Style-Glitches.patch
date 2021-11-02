@@ -1032,6 +1032,39 @@
    loadChannels = function(id)
    {
      iseInitUpdateArrays();
+--- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
+@@ -209,7 +209,7 @@
+             Write("</td>");
+             Write("<td class='GrayBkg'>");
+             
+-            Write("<table>");
++            Write("<table style='width:100%;'>");
+             Write("<tr><td class='CLASS03502'><span id='tmc"#chn.ID()#"' name='timeStamp'>");
+             
+             integer cId = chn.ID();
+--- occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm
+@@ -162,7 +162,7 @@
+             Write("</td>");
+             Write("<td class='GrayBkg'>");
+             
+-            Write("<table>");
++            Write("<table style='width:100%;'>");
+             Write("<tr><td class='CLASS03802'><span id='tmc"#chn.ID()#"'><br /><br />");
+             
+             integer cId = chn.ID();
+--- occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm
+@@ -167,7 +167,7 @@
+             Write("</td>");
+             Write("<td class='GrayBkg'>");
+             
+-            Write("<table>");
++            Write("<table style='width:100%;'>");
+             Write("<tr><td class='CLASS03602'><div id='tmc"#chn.ID()#"'><br /><br />");
+             
+             integer cId = chn.ID();
 --- occu/WebUI/www/rega/pages/tabs/control/programs.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/programs.htm
 @@ -43,7 +43,14 @@

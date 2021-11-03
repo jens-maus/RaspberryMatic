@@ -634,7 +634,7 @@ a img {
 .Sort
 {
   cursor: pointer;
-  height: 50px;
+  height: 54px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1462,7 +1462,6 @@ div.caption  { display: table-caption; }
   border:solid 1px $_(black); /* black */
   height:40px;
   text-align:center;
-  padding: 2px;
 }
 
 .tdCellFilter
@@ -5993,10 +5992,9 @@ color: $_(textColorA) ! important; /* white */
 
 .CLASS03302 {
 	font-weight:bold;
-	height:40px;
 	text-align:center;
-	line-height:40px;
 	border:solid 1px $_(black); /* black */
+	padding:0px;
 }
 
 .CLASS03303 {
@@ -6913,10 +6911,10 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS05301 {
-	height:38px;
 	border: solid 1px $_(black); /* black */
 	background-color:$_(clickable);
 	text-align:center;
+	padding:0px;
 }
 
 .CLASS05302 {

@@ -54,7 +54,7 @@ setPath("<span onclick='WebUI.enter(ControlPage);'>"+translateKey('menuControlPa
     <thead>
       <tr class="CLASS03702">
         <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
-        <th class="CLASS03302"><div id="name" class="tHeaderCell<%Write(sCssName); %>" onclick="IseSort(arProgs,'name',true);" >${thName}</div></th>
+        <th class="CLASS03302"><div id="name" class="<%Write(sCssName); %>" onclick="IseSort(arProgs,'name',true);" >${thName}</div></th>
         <th class="tHeaderCell CLASS03303" >${thDescription}</th>
         <th class="tHeaderCell CLASS03303" >${thActivity}</th>
         <th class="tHeaderCell CLASS03303" >${thLastExecution}</th>

@@ -5,19 +5,19 @@
 ################################################################################
 
 ifeq ($(call qstrip,$(BR2_ARCH)),arm)
-JAVA_AZUL_VERSION = 8.56.0.21-ca-jdk8.0.302
+JAVA_AZUL_VERSION = 8.58.0.13-ca-jdk8.0.312
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_aarch32hf.tar.gz
 JAVA_AZUL_SITE = https://cdn.azul.com/zulu-embedded/bin
 else ifeq ($(call qstrip,$(BR2_ARCH)),aarch64)
-JAVA_AZUL_VERSION = 8.56.0.23-ca-jdk8.0.302
+JAVA_AZUL_VERSION = 8.58.0.13-ca-jdk8.0.312
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_aarch64.tar.gz
 JAVA_AZUL_SITE = https://cdn.azul.com/zulu-embedded/bin
 else ifeq ($(call qstrip,$(BR2_ARCH)),i686)
-JAVA_AZUL_VERSION = 8.56.0.21-ca-jdk8.0.302
+JAVA_AZUL_VERSION = 8.58.0.13-ca-jdk8.0.312
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_i686.tar.gz
 JAVA_AZUL_SITE = https://cdn.azul.com/zulu/bin
 else ifeq ($(call qstrip,$(BR2_ARCH)),x86_64)
-JAVA_AZUL_VERSION = 8.56.0.21-ca-jdk8.0.302
+JAVA_AZUL_VERSION = 8.58.0.13-ca-jdk8.0.312
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_x64.tar.gz
 JAVA_AZUL_SITE = https://cdn.azul.com/zulu/bin
 endif

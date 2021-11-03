@@ -5,6 +5,22 @@ sourceOnce file_io.tcl
 load tclrpc.so
 load tclrega.so
 
+proc read_var { filename varname} {
+  set fd [open $filename r]
+  set var ""
+  if { $fd >=0 } {
+    while { [gets $fd buf] >=0 } {
+      if [regexp "^ *$varname *= *(.*)$" $buf dummy var] break
+    }
+    close $fd
+  }
+  return $var
+}
+
+proc read_version { filename } {
+  return [read_var $filename VERSION]
+}
+
 proc create_backup {} {
   set HOSTNAME [exec hostname]
   set system_version [read_version "/VERSION"]

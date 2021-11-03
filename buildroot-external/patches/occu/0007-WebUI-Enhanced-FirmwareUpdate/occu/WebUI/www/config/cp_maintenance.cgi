@@ -254,13 +254,12 @@ proc action_firmware_update_go {} {
         regaMonitor.stop();
         InterfaceMonitor.stop();
       }
-      //var pb = "action=update_start";
-      //var opts = {
-      //  postBody: pb,
-      //  sendXML: false
-      //};
-      //new Ajax.Request(url, opts);
-      window.location.href=url+"&action=update_start"
+      var pb = "action=update_start";
+      var opts = {
+        postBody: pb,
+        sendXML: false
+      };
+      new Ajax.Request(url, opts);
     }
   }
 }
@@ -991,14 +990,7 @@ proc action_askCreateBackup {} {
           const cb = document.getElementById('accept');
           const action = "acceptEula";
           if(cb.checked) {
-            //window.location.href=url+"&action=createBackup";
-            var pb = "action=createBackup";
-            var opts = {
-              postBody: pb,
-              sendXML: false,
-              asynchronous: false
-            };
-            new Ajax.Request(url, opts);
+            window.open(url+"&action=createBackup", "_blank");
           } 
           dlgPopup.hide();
           dlgPopup.setWidth(800);
@@ -1014,8 +1006,7 @@ proc action_askCreateBackup {} {
 }
 
 proc action_createBackup {} {
-  http_head
-  catch { exec touch /tmp/createBackup }
+  [create_backup]
 }
 
 proc action_firmware_upload {} {
@@ -1327,10 +1318,6 @@ proc action_shutdown_go {} {
 }
 
 proc action_update_start {} {
-  if { [file exists "/tmp/createBackup"] } {
-    catch { [create_backup] }
-  }
-
   catch { exec killall hss_lcd }
   catch { exec lcdtool {Saving   Data...  } }
   rega system.Save()

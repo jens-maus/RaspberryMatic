@@ -1283,10 +1283,6 @@ proc action_shutdown_go {} {
 
 proc action_update_start {} {
   puts ""
-  if { [file exists "/tmp/createBackup"] } {
-    catch { [create_backup] }
-  }
-
   catch { exec killall hss_lcd }
   catch { exec lcdtool {Saving   Data...  } }
   rega system.Save()

@@ -179,6 +179,11 @@ a img {
   display: contents;
 }
 
+#prgcontent.j_translate
+{
+  display: none;
+}
+
 #GroupListBody
 {
   display: contents;
@@ -1698,6 +1703,10 @@ div.caption  { display: table-caption; }
 /*--------------------------------------------*/
 #ic_linkpeerlist {
   display: contents;
+}
+
+#ic_linkpeerlist.j_translate {
+  display: none;
 }
 
 #ic_linkpeerlist #head_wrapper {

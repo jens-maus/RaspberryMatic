@@ -7,6 +7,10 @@ BOARD_NAME="$(basename "${BOARD_DIR}")"
 cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/cmdline.txt" "${BINARIES_DIR}/"
 cp "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/config.txt" "${BINARIES_DIR}/"
 
+# get zero 2 w dtb files from raspberrypi firmware repo
+test -f "${BINARIES_DIR}/bcm2710-rpi-zero-2-w.dtb" || wget -O "${BINARIES_DIR}/bcm2710-rpi-zero-2-w.dtb" https://github.com/raspberrypi/firmware/raw/27f12ea332fa4d94b963f8e0f6e48502684a5343/boot/bcm2710-rpi-zero-2-w.dtb
+test -f "${BINARIES_DIR}/bcm2710-rpi-zero-2.dtb" || wget -O "${BINARIES_DIR}/bcm2710-rpi-zero-2.dtb" https://github.com/raspberrypi/firmware/raw/27f12ea332fa4d94b963f8e0f6e48502684a5343/boot/bcm2710-rpi-zero-2.dtb
+
 #
 # Create user filesystem
 #

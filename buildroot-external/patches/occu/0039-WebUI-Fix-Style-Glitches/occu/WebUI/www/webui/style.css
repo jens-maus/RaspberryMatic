@@ -7,6 +7,10 @@
 	font-size: 12px ! important;
 }
 
+hr {
+  border: solid 1px $_(navBarSeparator);
+}
+
 .j_translate, .j_startPage
 {
     display: none;

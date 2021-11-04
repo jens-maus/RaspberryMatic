@@ -11,7 +11,7 @@
  !  Write( 'if( $("maindate") ) $("maindate").innerHTML = "'#sDate#'";' );
 --- occu/WebUI/www/rega/pages/tabs/startpage.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/startpage.htm
-@@ -173,25 +173,14 @@
+@@ -173,38 +173,20 @@
              </colgroup>
              <tr>
                  <!-- Uhrzeit -->
@@ -41,7 +41,21 @@
              </tr>
  
              <tr>
-@@ -233,7 +222,9 @@
+               <td>${currentFirmwareVersion}</td>
+              <!-- <td id="currentFirmware">${lblCurrentFirmwareVersionNotKnown}</td> -->
+-              <td id="currentFirmware">--</td>
+-            </tr>
+-
+-            <tr id="updateRow" style="display:none;">
+-              <!-- CCU2-Update -->
+-              <td>${update}</td>
+-               <!-- Firmware ist verf&uuml;gbar -->
+-              <td colspan="3" id="updateCol">${newFirmwareAvailable}</td>
++              <td><span id="currentFirmware">--</span><span id="updateCol" style="display:none;"></span></td>
+             </tr>
+ 
+             <!-- Device-Firmware -->
+@@ -233,7 +215,9 @@
                
                if (oUser) {
                  string tmp;
@@ -53,7 +67,7 @@
                    Write("<td>"#oDP.Name()#":</td>");
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -39,6 +39,7 @@
+@@ -39,11 +39,12 @@
      "startPage" : "Startseite",
      "time" : "Uhrzeit",
      "date" : "Datum",
@@ -61,9 +75,15 @@
      "sunrise" : "Sonnenaufgang",
      "sunset" : "Sonnenuntergang",
      "update" : HMIdentifier.de.CCUShortName +"-Update:",
+     "firmware" : "Firmware",
+-    "isAvailable" : "ist verf%FCgbar",
++    "isAvailable" : "verf%FCgbar",
+     "firmwareAvailOnCCU" : "Firmware verf%FCgbar<br/>auf der " + HMIdentifier.de.CCUShortName,
+     "newFirmwareAvailable" : "Neue Firmware verf%FCgbar",
+     "login" : "Anmelden",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -38,6 +38,7 @@
+@@ -38,11 +38,12 @@
      "startPage" : "Home page",
      "time" : "Time",
      "date" : "Date",
@@ -71,3 +91,29 @@
      "sunrise" : "Sunrise",
      "sunset" : "Sunset",
      "update" :  HMIdentifier.en.CCUShortName +" update:",
+     "firmware" : "Firmware",
+-    "isAvailable" : "is available",
++    "isAvailable" : "available",
+     "firmwareAvailOnCCU" : "Firmware available<br/>on the " + HMIdentifier.en.CCUShortName,
+     "newFirmwareAvailable" : "New firmware available",
+     "login" : "Login",
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -20476,14 +20476,14 @@
+   showUpdate: function() {
+     var fn = function() {
+       var result = homematic.com.isUpdateAvailable();
+-      if ((result) && ($("updateCol")) && ($("updateRow"))) {
+-        var updateText = translateKey('firmware') + " " + homematic.com.getLatestVersion() + " " + translateKey('isAvailable');
++      if ((result) && ($("updateCol"))) {
++        var updateText = " (" + homematic.com.getLatestVersion() + " " + translateKey('isAvailable') + ")";
+         jQuery("#updateCol").text(updateText)
+           .addClass("firmwareAvailable")
+           .unbind("click").bind("click", function() {
+             showNewFirmwareDownload();
+           });
+-        jQuery("#updateRow").show();
++        jQuery("#updateCol").show();
+       }
+       return result;
+     };

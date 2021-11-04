@@ -43,7 +43,7 @@ jQuery.extend(true,langJSON, {
     "sunset" : "Sunset",
     "update" :  HMIdentifier.en.CCUShortName +" update:",
     "firmware" : "Firmware",
-    "isAvailable" : "is available",
+    "isAvailable" : "available",
     "firmwareAvailOnCCU" : "Firmware available<br/>on the " + HMIdentifier.en.CCUShortName,
     "newFirmwareAvailable" : "New firmware available",
     "login" : "Login",

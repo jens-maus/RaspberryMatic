@@ -164,7 +164,7 @@
   <div id="contentRight" class="CLASS01809" style="overflow:auto;">
 
       <table id="tblRightContent" width="100%">
-        <tr valign="top" class="CLASS01810">
+        <tr style="vertical-align: top;" class="CLASS01810">
           <td>
           <table id="tblStartpageInfo" width="100%" class="CLASS01811 startPageInfo hidden" cellpadding="2" cellspacing="0">
             <colgroup>
@@ -196,7 +196,8 @@
 
             <tr>
               <td>${currentFirmwareVersion}</td>
-              <td id="currentFirmware">${lblCurrentFirmwareVersionNotKnown}</td>
+             <!-- <td id="currentFirmware">${lblCurrentFirmwareVersionNotKnown}</td> -->
+              <td id="currentFirmware">--</td>
             </tr>
 
             <tr id="updateRow" style="display:none;">
@@ -210,6 +211,12 @@
             <tr id="devFwAvailable" class="hidden">
               <td>${deviceUpdate}</td>
               <td class="firmwareAvailable">${lblNewDeviceFirmwareAvailable}&nbsp;<span id="devFwAvailableCounter"></span></td>
+            </tr>
+            
+            <!-- Addons -->
+            <tr id="addonUpdatesAvailable" class="hidden">
+              <td>${addonUpdate}</td>
+              <td class="firmwareAvailable">${lblNewAddonUpdatesAvailable}&nbsp;<span id="addonUpdatesAvailableCounter"></span></td>                        
             </tr>
 
             <%
@@ -249,8 +256,8 @@
              %>
 
             <!-- DutyCycle -->
-            <tr>
-              <td colspan="3"><hr/></td>
+            <tr style="height:0.5em;">
+              <td colspan="3"></td>
             </tr>
             <tr id="partingLine1" class="hidden" style="display:none;">
               <td></td>
@@ -383,7 +390,7 @@
         </tr>
         </table>
 
-        <div id="forceUpdate" style="display:none; margine-top:50px; padding:10px;" >
+        <div id="forceUpdate" style="display:none; margin-top:50px; padding:10px;">
           <div style="background-color:#BCC7CB; padding:5px; border:solid 1px;">${forcedUpdateHint}</div>
           <div style="text-align: center; margin-top: 50px;"><a href="/licenseinfo.htm" target="_blank">${lblLicenseInformation}</a></div>
           <div class="StdTableBtn CLASS21701" style="width:50%; margin:25%; margin-top: 50px;" onclick="showMaintenanceCP();">${forcedUpdateBtn}</div>
@@ -401,6 +408,7 @@
       jQuery("#favSelector").show();
       jQuery("#favView").show();
       StartPage.showUpdate();
+      StartPage.showAddonUpdate();
       StartPage.showCurrentFirmware();
       StartPage.showAllDeviceFirmware();
       jQuery("#forceUpdate").remove();

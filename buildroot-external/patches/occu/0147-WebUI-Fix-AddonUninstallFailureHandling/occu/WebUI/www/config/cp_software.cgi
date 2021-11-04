@@ -411,11 +411,11 @@ proc action_put_page {} {
           sendXML: false,
           onSuccess: function(transport) {
             if (!transport.responseText.match(/^Success/g)){
-              alert(translateString(op_name) + translateKey('btnSysConfAdditionalSoftRemoveFailure') + transport.responseText);
+              alert(translateString(op_name) + translateKey('btnSysConfAdditionalSoftRemoveFailure') + transport.responseText.replace(/^Failure\n/, ''));
             }else{
               alert(translateString(op_name) + translateKey('btnSysConfAdditionalSoftRemoveSuccess'));
-              showSoftwareCP();
             }
+            showSoftwareCP();
           }
         };
         if ("uninstall" == op) 
@@ -480,16 +480,16 @@ proc action_operation {} {
   import script
   import op
   
+  set result "Success"
   if {[catch {exec $script $op} result]} {
-    set errorfile /tmp/addon-uninstall-error.txt
-    exec echo $result > $errorfile
-    puts "Failure, errors in file $errorfile"
-    return
+    set errorfile /var/log/addon-uninstall-error.log
+    exec echo $result >>$errorfile
+    set result "Failure\nPlease see $errorfile on the central for more details."
   }
   if { "$op" == "uninstall" } {
     exec rm -rf $script
   }
-  puts "Success"
+  puts $result
 }
 
 proc action_image_upload {} {

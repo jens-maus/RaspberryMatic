@@ -92,8 +92,8 @@
 -
 -              <td id="iFaceShowAll">${lblDutyCycle}</td>
 -              <td> <div id="dutyCycleProgress" class="dutyCycleProgress" align="right"><div id="dutyCycleProgressBar" class="dutyCycleProgressBar" style='width:100%;'></div></div> </td>
-+            <tr style="height:0.5em;">
-+              <td colspan="3"></td>
++            <tr>
++              <td colspan="3"><hr/></td>
 +            </tr>
 +            <tr id="partingLine1" class="hidden" style="display:none;">
 +              <td></td>
@@ -7105,13 +7105,12 @@
  .Filter {
    margin:0;
    border:1px solid $_(black); /* black */
-@@ -4881,9 +4860,15 @@
+@@ -4881,9 +4860,14 @@
  	height:50%;
  }
  
 +#partingLine1 {
 +  display: table-row;
-+  border-top: solid 5px $_(navBarSeparator);
 +}
 +
  .CLASS01811 {

@@ -4862,7 +4862,6 @@ application {
 
 #partingLine1 {
   display: table-row;
-  border-top: solid 5px $_(navBarSeparator);
 }
 
 .CLASS01811 {

@@ -87,11 +87,12 @@
 }
 
 .startPageInfo td:nth-child(1) {
-  white-space: nowrap;
+  word-wrap: break-word;
 }
 
 .startPageInfo td {
   word-wrap: anywhere;
+  vertical-align: bottom;
 }
 
 html,body
@@ -176,6 +177,11 @@ a img {
 #prgcontent
 {
   display: contents;
+}
+
+#prgcontent.j_translate
+{
+  display: none;
 }
 
 #GroupListBody
@@ -628,7 +634,7 @@ a img {
 .Sort
 {
   cursor: pointer;
-  height: 50px;
+  height: 54px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1456,7 +1462,6 @@ div.caption  { display: table-caption; }
   border:solid 1px $_(black); /* black */
   height:40px;
   text-align:center;
-  padding: 2px;
 }
 
 .tdCellFilter
@@ -1697,6 +1702,10 @@ div.caption  { display: table-caption; }
 /*--------------------------------------------*/
 #ic_linkpeerlist {
   display: contents;
+}
+
+#ic_linkpeerlist.j_translate {
+  display: none;
 }
 
 #ic_linkpeerlist #head_wrapper {
@@ -5315,7 +5324,7 @@ application {
 	width:220px;
 	/*height:25px;*/
 	height:auto;
-	min-height: 40px;
+	min-height: 50px;
 	clear: both;
 	display: inline-block;
   /* line-height:25px; problem with controls with a long parameter name */
@@ -5983,10 +5992,9 @@ color: $_(textColorA) ! important; /* white */
 
 .CLASS03302 {
 	font-weight:bold;
-	height:40px;
 	text-align:center;
-	line-height:40px;
 	border:solid 1px $_(black); /* black */
+	padding:0px;
 }
 
 .CLASS03303 {
@@ -6903,10 +6911,10 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS05301 {
-	height:38px;
 	border: solid 1px $_(black); /* black */
 	background-color:$_(clickable);
 	text-align:center;
+	padding:0px;
 }
 
 .CLASS05302 {

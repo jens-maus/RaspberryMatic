@@ -53,7 +53,7 @@
     </colgroup>
       <tr>
         <%string sCssName="Sort"; if(firstSort||(system.GetSessionVar("sessionLS")=="name")){sCssName="SortSelected";} %>
-        <th class="CLASS03302"><div id="name" class="tHeaderCell<%Write(sCssName); %>" onclick="IseSort(arItems,'name',true);">${thName}</div></th>
+        <th class="CLASS03302"><div id="name" class="<%Write(sCssName); %>" onclick="IseSort(arItems,'name',true);">${thName}</div></th>
         <th class="tHeaderCell CLASS03303" >${thDescription}</th>
         <th class="tHeaderCell CLASS03303" >${thLastChange}</th>
         <th class="tHeaderCell CLASS03303" >${thState}</th>

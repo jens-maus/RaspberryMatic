@@ -133,7 +133,12 @@
     if (device) {
       if (device.Visible()) {
         string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
-        string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
+        string sEnumUserInternalIDs = "";
+        if( system.IsSessionVar("sessionSIDC") ) {
+          if( system.GetSessionVar("sessionSIDC") == "1" ) {
+           sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
+          }
+        }
         if( sEnumUserInternalIDs != "" ) {
           if( sEnumUserIDs != "" ) {
             sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
@@ -180,7 +185,7 @@
           } else {
             Call("/esp/functions.fn::showHideHmIPChannel()");
           }
-          if( bShow && chn.ReadyConfig() && oDev.ReadyConfig() && bShowChannel )
+          if( bShow && oDev.ReadyConfig() && bShowChannel )
           {
             string trId = device.ID()#tmp;
             boolean showExtDesc = false;

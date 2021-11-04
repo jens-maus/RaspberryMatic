@@ -83,6 +83,8 @@ jQuery.extend(true,langJSON, {
     "footerBtnHideSystemPrograms" : "Systeminterne Programme<br/>ausblenden",
     "footerBtnShowInternalSystemVars" : "Systeminterne Variablen<br/>einblenden",
     "footerBtnHideInternalSystemVars" : "Systeminterne Variablen<br/>ausblenden",
+    "footerBtnShowInternalDeviceChannels" : "Systeminterne Kan%E4le<br/>einblenden",
+    "footerBtnHideInternalDeviceChannels" : "Systeminterne Kan%E4le<br/>ausblenden",
     "footerBtnTestScript" : "Skript testen",
     "footerBtnCancel" : "Abbrechen",
     "footerBtnTransfer" : "%DCbernehmen",

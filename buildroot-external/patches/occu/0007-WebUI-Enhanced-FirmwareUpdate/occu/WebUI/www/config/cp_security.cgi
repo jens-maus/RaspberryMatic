@@ -3,6 +3,7 @@ source once.tcl
 sourceOnce common.tcl
 sourceOnce session.tcl
 sourceOnce file_io.tcl
+sourceOnce backup.tcl
 load tclrpc.so
 load tclrega.so
 
@@ -933,14 +934,15 @@ proc action_set_session_timeout {} {
 proc action_put_page {} {
   global env sid
 
+  cgi_debug -on
+
   http_head
   division {class="popupTitle j_translate"} {
     puts "\${dialogSettingsSecurityTitle}"
   }
 
   division {class="CLASS20815"} {
-    division {style="height:80vh;width:100%;overflow:auto;"} {
-    table {class="popupTable j_translate"} {border="1"} {height="100%"} {
+    table {class="popupTable j_translate"} {border="1"} {
       table_row {class="CLASS20806"} {
         table_data {class="CLASS20807"} {
           puts "\${dialogSettingsSecurityTDKey}"
@@ -968,15 +970,6 @@ proc action_put_page {} {
               }
               table_data {align="right"} {
                 cgi_text key2= {size="16"} {id="text_key2"} {type="password"}
-              }
-            }
-            table_row {
-              td {width="20"} {}
-              table_data {align="left"} {
-                puts "\${dialogSettingsSecurityLblSecKeyChanges}"
-              }
-              table_data {align="right"} {
-                cgi_text keychanges=[get_current_key_index] {size="3"} {id="key_changes"} {type="text"} {disabled=""}
               }
             }
             table_row {
@@ -1035,7 +1028,8 @@ proc action_put_page {} {
             table_row {
               td {width="20"} {}
               table_data {align="left"} {colspan="2"} {
-                form "/config/fileupload.ccc?sid=$sid&action=backup_upload&url=$env(SCRIPT_NAME)" name=backup_form {target=config_upload_iframe} enctype=multipart/form-data method=post {
+                form "$env(SCRIPT_NAME)?sid=$sid" name=backup_form {target=config_upload_iframe} enctype=multipart/form-data method=post {
+                  export action=backup_upload
                   file_button backup_file size=20 maxlength=1000000
                 }
                 puts {<iframe name="config_upload_iframe" class="CLASS20820" style="display: none;"></iframe>}
@@ -1315,7 +1309,6 @@ proc action_put_page {} {
         }
       }
     }
-    }
   }
   division {class="popupControls"} {
     table {
@@ -1516,40 +1509,16 @@ proc action_put_page {} {
 }
 
 proc action_create_backup {} {
-  set HOSTNAME [exec hostname]
-  set system_version [read_version "/VERSION"]
-  set iso8601_date [exec date -Iseconds]
-  set tmpdir [exec mktemp -d -p /usr/local/tmp]
-  regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-].+)$} $iso8601_date dummy year month day hour minute second zone
-  set backupfile [set HOSTNAME]-$system_version-$year-$month-$day-$hour$minute.sbk
-  #save DOM
-  rega system.Save()
-  cd /
-  if {[getProduct] < 3 } {
-    catch { exec tar czf /tmp/usr_local.tar.gz usr/local }
-  } else {
-    catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude=usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
-  }
-  
-  cd $tmpdir/
-  #sign the configuration with the current key
-  exec crypttool -s -t 1 <usr_local.tar.gz >signature
-  #store the current key index
-  exec crypttool -g -t 1 >key_index
-  file copy -force /VERSION firmware_version
-  catch { exec tar --owner=root --group=root -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index }
-  cd /
-  exec rm -rf $tmpdir
-  puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"
-  puts "Content-Type: application/octet-stream"
-  puts "Content-Disposition: attachment; filename=\"$backupfile\"\n"
+  [create_backup]
 }
 
 proc action_backup_upload {} {
-  global env sid filename
-  cd /usr/local/tmp/
+  global env sid
+  cd /tmp/
 
-  file rename -force -- $filename "/usr/local/tmp/new_config.tar"
+  http_head
+  import_file -client backup_file
+  file rename -force -- [lindex $backup_file 0] "/tmp/new_config.tar"
   cgi_javascript {
     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
     puts {
@@ -1578,7 +1547,6 @@ proc read_version { filename } {
 }
 
 proc action_reboot {} {
-  puts ""
   exec /sbin/reboot
 }
 
@@ -1626,16 +1594,14 @@ proc version_compare {v1 v2} {
 cgi_eval {
   #cgi_debug -on
   cgi_input
-  #catch {
-  #  import debug
-  #  cgi_debug -on
-  #}
+  catch {
+    import debug
+    cgi_debug -on
+  }
 
   set action "put_page"
-  set filename ""
 
   catch { import action }
-  catch { import filename }
 
   if {[session_requestisvalid 8] > 0} then action_$action
 }

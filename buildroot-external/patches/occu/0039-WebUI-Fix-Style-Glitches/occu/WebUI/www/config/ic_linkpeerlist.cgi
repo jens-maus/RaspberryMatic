@@ -110,7 +110,10 @@ proc put_page {} {
 
   #ic_linkpeerlist
   puts "</div>"
-  puts "<script type=\"text/javascript\">translatePage(\"#ic_linkpeerlist\")</script>"
+  puts "<script type=\"text/javascript\">"
+  puts "translatePage(\"#ic_linkpeerlist\");"
+  puts "\$('ic_linkpeerlist').style.display = 'contents';"
+  puts "</script>"
 }
 
 proc _incr {p_arr address peer} {

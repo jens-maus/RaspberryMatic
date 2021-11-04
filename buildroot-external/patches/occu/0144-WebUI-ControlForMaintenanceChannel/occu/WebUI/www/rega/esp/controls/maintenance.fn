@@ -1,0 +1,194 @@
+function ::CreateOperationVoltage()
+{
+  object objVoltage = cObj.DPByControl("MAINTENANCE.OPERATING_VOLTAGE");
+  object objVoltageStatus = cObj.DPByControl("MAINTENANCE.OPERATING_VOLTAGE_STATUS");
+
+  if (objVoltage || objVoltageStatus) {
+    WriteLine("<table style='margin: 0 auto;'>");
+      WriteLine("<td colspan='2'><hr></td>");
+      WriteLine("<tr>");
+        if (objVoltage) {
+          WriteLine("<td class='CLASS02518'>");
+            WriteLine("<div class='ControlBtnInfo CLASS02532'>${lblCurrentOperatingVoltage}<br/>"#objVoltage.Value().ToString(1)#" "#objVoltage.ValueUnit()#"</div>");
+          WriteLine("</td>");
+        }
+        if (objVoltageStatus) {
+          WriteLine("<td class='CLASS02518'>");
+            WriteLine("<div class='ControlBtnInfo CLASS02532'>${stringTableOperationVoltageState}<br/>${lblVoltageStatus_"#objVoltageStatus.Value()#"}</div>");
+          WriteLine("</td>");
+        }
+      WriteLine("</tr>");
+    WriteLine("</table>");
+  }
+}
+
+function ::CreateDeviceMaintenanceChannel()
+{
+  object objUnreach = cObj.DPByHssDP("UNREACH");
+  object objStickyUnreach = cObj.DPByHssDP("STICKY_UNREACH");
+  object objDeviceInBootloader = cObj.DPByHssDP("DEVICE_IN_BOOTLOADER");
+  object objUpdatePending = cObj.DPByHssDP("UPDATE_PENDING");
+  object objInhibit = cObj.DPByHssDP("INHIBIT");
+  object objRSSIPeer = cObj.DPByHssDP("RSSI_PEER");
+  object objRSSIDevice = cObj.DPByHssDP("RSSI_DEVICE");
+  object objLowBat = cObj.DPByHssDP("LOWBAT");
+  object objConfigPending = cObj.DPByHssDP("CONFIG_PENDING");
+  object objDutyCycle = cObj.DPByHssDP("DUTYCYCLE");
+  integer level = 0;
+  
+  WriteLine("<td class='CLASS02519'>");
+  WriteLine("<table cellspacing='0'>");
+  WriteLine("<tr>");
+  if (objUnreach || objStickyUnreach) {
+    if (objUnreach) {
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objUnreach.Value()) {Write("${stringTableUnreachTrue}");} else {Write("${stringTableUnreachFalse}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+    if (objStickyUnreach) {
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objStickyUnreach.Value()) {Write("${stringTableStickyUnreachTrue}");} else {Write("${stringTableStickyUnreachFalse}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+  }
+  if (objDeviceInBootloader || objUpdatePending) {
+    if (objUpdatePending) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objUpdatePending.Value()) {Write("${stringTableUpdatePendingTrue}");} else {Write("${stringTableUpdatePendingFalse}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+
+    if (objDeviceInBootloader) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+       Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+         Write("<span class='CLASS02534 j_translate' style='display: inline;'>");
+           Write("${stringTableDeviceInBootloader}:");
+         Write("</span>");
+         Write("<span class='CLASS02535' style='color:white'>");
+           if(objDeviceInBootloader.Value()) {Write("${lblYes}");} else {Write("${lblNo}");};
+         Write("</span>");
+         WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+  }  
+  if (objLowBat || objConfigPending) {
+    if (objLowBat) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objLowBat.Value()) {Write("${stringTableBatteryEmpty}");} else {Write("${stringTableBatteryOk}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+    if (objConfigPending) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objConfigPending.Value()) {Write("${stringTableConfigPendingTrue}");} else {Write("${stringTableConfigPendingFalse}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+  }
+  if (objRSSIPeer || objRSSIDevice) {
+    if (objRSSIPeer) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'>");
+            Write("${stringTableRSSIPeer}:");
+          Write("</span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            integer rssiPeer = (objRSSIPeer.Value().ToInteger() - 256);
+            if ( rssiPeer < -200 ) {
+              Write("n/a");
+            } else {
+              Write(rssiPeer);
+            }
+            Write("&nbsp;dBm");
+          Write("</span");
+        Write("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+    if (objRSSIDevice) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+       Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+         Write("<span class='CLASS02534 j_translate' style='display: inline;'>");
+           Write("${stringTableRSSIDevice}:");
+         Write("</span>");
+         Write("<span class='CLASS02535' style='color:white'>");
+           integer rssiDevice = (objRSSIDevice.Value().ToInteger() - 256);
+           if ( rssiDevice < -200 ) {
+             Write("n/a");
+           } else {
+             Write(rssiDevice);
+           }
+           Write("&nbsp;dBm");
+         Write("</span>");
+       Write("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+  }   
+
+  if (objInhibit || objDutyCycle) {
+    if (objDutyCycle) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objDutyCycle.Value()) {Write("${stringTableDutyCycleTrue}");} else {Write("${stringTableDutyCycleFalse}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>"); 
+      level=level+1;
+    }
+    if (objInhibit) {
+      if (level > 1) { WriteLine("</tr><tr>"); level = 0; }
+      WriteLine("<td>");
+        Write("<div class='ControlBtnInfo CLASS02532'><span class='_CLASS02533'>");
+          Write("<span class='CLASS02534 j_translate' style='display: inline;'></span>");
+          Write("<span class='CLASS02535' style='color:white'>");
+            if(objInhibit.Value()) {Write("${stringTableStatusIndicatorInhibitTrue}");} else {Write("${stringTableStatusIndicatorInhibitFalse}");};
+          Write("</span></span>");
+        WriteLine("</span></div>");
+      WriteLine("</td>");
+      level=level+1;
+    }
+  }
+
+  WriteLine("</tr>");
+  WriteLine("</table>");
+  WriteLine("</td>");
+}

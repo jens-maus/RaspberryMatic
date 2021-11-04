@@ -37,7 +37,7 @@ The following installation archives can be downloaded for different hardware pla
 - RaspberryPi4 Model B, RaspberryPi Compute Module 4, RaspberryPi 400 – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):
 <sub>:package: [RaspberryMatic-${VERSION}-rpi4.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi4.zip)<br/>SHA256: XXXXX</sub>
 
-- [CCU3](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-CCU3), [ELV-Charly](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ELV-Charly), RaspberryPi3 Model B+, RaspberryPi3 Model B, RaspberryPi3 Model A+, RaspberryPi Compute Module 3, RaspberryPi Compute Module 3 lite – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):
+- [CCU3](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-CCU3), [ELV-Charly](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ELV-Charly), RaspberryPi3 Model B+, RaspberryPi3 Model B, RaspberryPi3 Model A+, RaspberryPi Compute Module 3, RaspberryPi Compute Module 3 lite, RaspberryPi Zero 2 W – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):
 <sub>:package: [RaspberryMatic-${VERSION}-rpi3.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi3.zip)<br/>SHA256: XXXXX</sub>
 <sub>:package: [RaspberryMatic-${VERSION}-ccu3.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-ccu3.tgz) (only for initial CCU3 Firmware -> RaspberryMatic Upgrade)<br/> SHA256: XXXXX</sub>
 

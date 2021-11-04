@@ -42,6 +42,7 @@ identify_host() {
     *c?311?)                       HM_HOST="rpi4b4g"    ;; # Raspberry Pi 4 Model B/4GB
     *b?311?)                       HM_HOST="rpi4b2g"    ;; # Raspberry Pi 4 Model B/2GB
     *a?311?)                       HM_HOST="rpi4b1g"    ;; # Raspberry Pi 4 Model B/1GB
+    *9?212?)                       HM_HOST="rpi3z2w"    ;; # Raspberry Pi Zero 2 W
     *a?210?)                       HM_HOST="rpi3cmp"    ;; # Raspberry Pi Compute Module 3+
     *a?20d?)                       HM_HOST="rpi3p"      ;; # Raspberry Pi 3 Model B+
     *a?208?)                       HM_HOST="rpi3"       ;; # Raspberry Pi 3 Model B

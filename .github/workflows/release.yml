@@ -26,7 +26,7 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2.3.5
+      uses: actions/checkout@v2.4.0
       with:
         fetch-depth: 0
 
@@ -93,7 +93,7 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2.3.5
+      uses: actions/checkout@v2.4.0
 
     - name: Install Dependencies
       run: |
@@ -252,7 +252,7 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2.3.5
+      uses: actions/checkout@v2.4.0
 
     - name: Setup Environment
       run: |
@@ -357,7 +357,7 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2.3.5
+      uses: actions/checkout@v2.4.0
       with:
         fetch-depth: 0
         

@@ -21,6 +21,10 @@
     font-weight: bold;
 }
 
+hr {
+  border: solid 1px $_(navBarSeparator);
+}
+
 .height20px {
     height:20px;
 }

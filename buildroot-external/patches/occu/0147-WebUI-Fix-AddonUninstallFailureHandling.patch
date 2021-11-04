@@ -1,0 +1,16 @@
+--- occu/WebUI/www/config/cp_software.cgi.orig
++++ occu/WebUI/www/config/cp_software.cgi
+@@ -480,8 +480,11 @@
+   import script
+   import op
+   
+-  if {[catch {exec $script $op}]} {
+-    puts "Failure"
++  if {[catch {exec $script $op} result]} {
++    set errorfile /tmp/addon-uninstall-error.txt
++    exec echo $result > $errorfile
++    puts "Failure, errors in file $errorfile"
++    return
+   }
+   if { "$op" == "uninstall" } {
+     exec rm -rf $script

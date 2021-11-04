@@ -7,10 +7,6 @@
 	font-size: 12px ! important;
 }
 
-hr {
-  border: solid 1px $_(navBarSeparator);
-}
-
 .j_translate, .j_startPage
 {
     display: none;
@@ -23,6 +19,10 @@ hr {
 .attention {
     color: $_(attention);
     font-weight: bold;
+}
+
+hr {
+  border: solid 1px $_(navBarSeparator);
 }
 
 .height20px {

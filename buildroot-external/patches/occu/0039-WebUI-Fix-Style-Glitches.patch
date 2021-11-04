@@ -1473,17 +1473,17 @@
      "footerBtnVirtualChannelsShow" : "Virtuelle Kan%E4le anzeigen",
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -7,6 +7,10 @@
- 	font-size: 12px ! important;
+@@ -21,6 +21,10 @@
+     font-weight: bold;
  }
  
 +hr {
 +  border: solid 1px $_(navBarSeparator);
 +}
 +
- .j_translate, .j_startPage
- {
-     display: none;
+ .height20px {
+     height:20px;
+ }
 @@ -86,6 +90,15 @@
    padding: 4px;*/
  }

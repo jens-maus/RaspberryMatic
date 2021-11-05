@@ -12,12 +12,6 @@ update_rf_hardware() {
     ARCH=$(uname -m)
     JAVAOPT=
 
-    # hmip-copro-update.jar does not come with a 64bit version of libNRJavaSerialv8.so
-    # Thus, we have to supply our own one for the time being
-    if [[ "${ARCH}" == "aarch64" ]]; then
-      JAVAOPT="-DlibNRJavaSerial.userlib=/opt/HMServer/libNRJavaSerialv8.so"
-    fi
-
     # check if user has a HM-MOD-RPI-PCB installed (GPIO) and
     # perform a firmware update if necessary
     if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||

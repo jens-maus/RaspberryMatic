@@ -193,12 +193,6 @@ query_rf_parameters() {
             ARCH=$(uname -m)
             JAVAOPT=
 
-            # hmip-copro-update.jar does not come with a 64bit version of libNRJavaSerialv8.so
-            # Thus, we have to supply our own one for the time being
-            if [[ "${ARCH}" == "aarch64" ]]; then
-              JAVAOPT="-DlibNRJavaSerial.userlib=/opt/HMServer/libNRJavaSerialv8.so"
-            fi
-
             # shellcheck disable=SC2086
             /usr/bin/timeout 20 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts="/dev/${dev}" -jar /opt/HmIP/hmip-copro-update.jar -p "/dev/${dev}" -r >/dev/null 2>&1
             sleep 2

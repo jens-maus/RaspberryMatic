@@ -163,7 +163,7 @@
   <!-- Rechte Seite: Anlern-Button, SystemInformationen -->
   <div id="contentRight" class="CLASS01809" style="overflow:auto;">
 
-      <table id="tblRightContent" width="100%">
+      <table id="tblRightContent" width="100%" style="padding-right: 10px;">
         <tr style="vertical-align: top;" class="CLASS01810">
           <td>
           <table id="tblStartpageInfo" width="100%" class="CLASS01811 startPageInfo hidden" cellpadding="2" cellspacing="0">
@@ -219,7 +219,7 @@
                 foreach ( tmp, oUser.UserSharedObjects().EnumIDs()) {
                   if (hasSV == false) { Write("<tr><td colspan='2'><hr/></td></tr>"); hasSV = true;}
                   object oDP = dom.GetObject(tmp);
-                  Write("<tr>");
+                  Write("<tr class='UserSysVars'>");
                   Write("<td>"#oDP.Name()#":</td>");
                   Write("<td colspan='3' id='SYSVAR_" # tmp # "' >");
                   string sSysVarVal = "";

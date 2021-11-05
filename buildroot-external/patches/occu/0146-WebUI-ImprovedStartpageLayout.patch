@@ -11,6 +11,15 @@
  !  Write( 'if( $("maindate") ) $("maindate").innerHTML = "'#sDate#'";' );
 --- occu/WebUI/www/rega/pages/tabs/startpage.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/startpage.htm
+@@ -163,7 +163,7 @@
+   <!-- Rechte Seite: Anlern-Button, SystemInformationen -->
+   <div id="contentRight" class="CLASS01809" style="overflow:auto;">
+ 
+-      <table id="tblRightContent" width="100%">
++      <table id="tblRightContent" width="100%" style="padding-right: 10px;">
+         <tr style="vertical-align: top;" class="CLASS01810">
+           <td>
+           <table id="tblStartpageInfo" width="100%" class="CLASS01811 startPageInfo hidden" cellpadding="2" cellspacing="0">
 @@ -173,38 +173,20 @@
              </colgroup>
              <tr>
@@ -55,7 +64,7 @@
              </tr>
  
              <!-- Device-Firmware -->
-@@ -233,7 +215,9 @@
+@@ -233,9 +215,11 @@
                
                if (oUser) {
                  string tmp;
@@ -63,8 +72,11 @@
                  foreach ( tmp, oUser.UserSharedObjects().EnumIDs()) {
 +                  if (hasSV == false) { Write("<tr><td colspan='2'><hr/></td></tr>"); hasSV = true;}
                    object oDP = dom.GetObject(tmp);
-                   Write("<tr>");
+-                  Write("<tr>");
++                  Write("<tr class='UserSysVars'>");
                    Write("<td>"#oDP.Name()#":</td>");
+                   Write("<td colspan='3' id='SYSVAR_" # tmp # "' >");
+                   string sSysVarVal = "";
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -39,11 +39,12 @@
@@ -97,6 +109,28 @@
      "firmwareAvailOnCCU" : "Firmware available<br/>on the " + HMIdentifier.en.CCUShortName,
      "newFirmwareAvailable" : "New firmware available",
      "login" : "Login",
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -86,6 +86,19 @@
+   padding: 4px;*/
+ }
+ 
++.startPageInfo td:nth-child(1) {
++  word-wrap: break-word;
++}
++
++.startPageInfo td {
++  word-wrap: anywhere;
++  vertical-align: top;
++}
++
++tr.UserSysVars:nth-child(odd) {
++  background-color: $_(activeBackground);
++}
++
+ html,body
+ {
+   margin:0;
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -20476,14 +20476,14 @@

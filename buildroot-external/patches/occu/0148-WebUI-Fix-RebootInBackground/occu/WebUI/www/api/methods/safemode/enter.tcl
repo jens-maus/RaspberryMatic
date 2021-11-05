@@ -1,15 +1,15 @@
 ##
-# RecoveryMode.enter
-# Startet die HomeMatic Zentrale im Recovery Modus
+# SafeMode.enter
+# Startet die HomeMatic Zentrale im abgesicherten Modus
 #
 # Parameter:
-#   paasword: [string] Passwort für den Recovery Modus
+#   paasword: [string] Passwort für den abgesicherten Modus
 #
 # Rückgabewert: [bool]
 #   true
 ##
 
-set FLAG_FILE "/usr/local/.recoveryMode"
+set FLAG_FILE "/etc/config/safemode"
 
 # Flag-Datei erzeugen
 set fd [open $FLAG_FILE w]

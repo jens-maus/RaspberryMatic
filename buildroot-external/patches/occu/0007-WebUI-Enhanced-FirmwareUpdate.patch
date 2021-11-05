@@ -271,7 +271,7 @@
        exec touch /usr/local/.doFactoryReset
      }
 -    exec kill -SIGQUIT 1
-+    exec /sbin/reboot
++    exec /sbin/reboot -d 2 2>/dev/null >/dev/null &
    }]} {
  
      # TWIST-22
@@ -436,7 +436,7 @@
          catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
  
          set backuperror false
-+        exec /sbin/reboot
++        exec /sbin/reboot -d 2 2>/dev/null >/dev/null &
 +        return
        }
      cd /

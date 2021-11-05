@@ -34,7 +34,7 @@ if /bin/mountpoint -q "${UM_MOUNTPOINT}"; then
       # CCU2 compatibility
       touch "/var/status/SDinitialised"
       # link /media/usb0 to the active usb mountpoint
-      ln -sf "${UM_MOUNTPOINT}" /media/usb0
+      ln -sfn "${UM_MOUNTPOINT}" /media/usb0
     fi
   fi
 fi

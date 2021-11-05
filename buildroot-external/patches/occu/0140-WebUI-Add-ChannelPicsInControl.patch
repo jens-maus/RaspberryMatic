@@ -1,0 +1,163 @@
+--- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
+@@ -37,15 +37,17 @@
+ </script>
+ <table id="tblHDeviChannel" class="filterTable CLASS03500 j_translate" cellpadding="0" cellspacing="0" border="1" >
+   <colgroup>
+-     <col style="width:12%;"/>
+-     <col style="width:10%;"/>
+-     <col style="width:10%;"/>
+-     <col style="width:10%;"/>
+-     <col style="width:58%;"/>
++     <col />
++     <col style="width:55px;" />
++     <col />
++     <col />
++     <col style="width:100px;" />
++     <col />
+   </colgroup>
+   <tr>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+   <th><div id="name" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'name',true);">${thChannel}</div></th>
++  <th>${thPicture}</th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
+   <th><div id="room" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'room',true);">${thRoom}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="func"){sCssName="SortSelected";} %>
+@@ -68,6 +70,8 @@
+     </div>
+   </td>
+   <td class="CLASS03501">
++  </td>
++  <td class="CLASS03501">
+     <div id="btnFilterRoom" class="FilterBtn">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterRoomSub" style="display:none">
+       <% 
+@@ -190,6 +194,18 @@
+ 
+             Write("</td>");
+             Write("<td class='GrayBkg'>");
++              string sPicDivId = "picDiv"#chn.ID();
++              Write("<div id='"#sPicDivId#"' class='CLASS03907' style='margin:auto;' ");
++                Write("onmouseover='picDivShow(jg_250, \""#chn.Label()#"\", 250, \""#chn.ChnNumber()#"\", this);'");
++                Write("onmouseout='picDivHide(jg_250);'");
++               Write("></div>");
++              Write("<script type='text/javascript'>");
++                Write("var jg_0 = new jsGraphics('"#sPicDivId#"');");
++                Write("InitGD(jg_0, 50);");
++                Write("Draw(jg_0, '"#chn.Label()#"', 50, '"#chn.ChnNumber()#"');");
++              Write("</script>");
++            Write("</td>");
++            Write("<td class='GrayBkg'>");
+             string rooms = "";
+             string roomTmp = "";
+             string roomIDs = "";
+--- occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm
+@@ -51,15 +51,17 @@
+ <table id="tblHFuncChannels" class="filterTable CLASS03800 j_translate" cellpadding="0" cellspacing="0" border="1">
+   
+   <colgroup>
+-     <col style="width:15%;"/>
+-     <col style="width:15%;"/>
+-     <col style="width:15%;"/>
+-     <col style="width:55%;"/>
++     <col />
++     <col style="width:55px;" />
++     <col />
++     <col style="width:100px;" />
++     <col />
+   </colgroup>
+   
+   <tr>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+   <th><div id="name" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'name',true);">${thName}</div></th>
++  <th>${thPicture}</th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
+   <th><div id="room" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'room',true);">${thRoom}</div></th>
+   <th>${thLastChange}</th>
+@@ -76,6 +78,8 @@
+     </div>
+   </td>
+   <td class="CLASS03801">
++  </td>
++  <td class="CLASS03801">
+     <div id="btnFilterRoom" class="FilterBtn">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterRoomSub" style="display:none">
+       <% 
+@@ -149,6 +153,18 @@
+             }
+ 
+             Write("</td>");
++            Write("<td class='GrayBkg'>");
++              string sPicDivId = "picDiv"#chn.ID();
++              Write("<div id='"#sPicDivId#"' class='CLASS03907' style='margin:auto;' ");
++                Write("onmouseover='picDivShow(jg_250, \""#chn.Label()#"\", 250, \""#chn.ChnNumber()#"\", this);'");
++                Write("onmouseout='picDivHide(jg_250);'");
++               Write("></div>");
++              Write("<script type='text/javascript'>");
++                Write("var jg_0 = new jsGraphics('"#sPicDivId#"');");
++                Write("InitGD(jg_0, 50);");
++                Write("Draw(jg_0, '"#chn.Label()#"', 50, '"#chn.ChnNumber()#"');");
++              Write("</script>");
++            Write("</td>");
+             Write("<td  class='GrayBkg'>");
+             string rooms = "";
+             string roomTmp = "";
+@@ -254,4 +270,4 @@
+   });
+ 
+   jQuery("#btnFilterRoomSub").draggable();
+-</script>
+\ No newline at end of file
++</script>
+--- occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm
+@@ -51,14 +51,16 @@
+ 
+ <table id="tblHRoomChannels" class="filterTable CLASS03600 j_translate" cellpadding="0" cellspacing="0" border="1" >
+   <colgroup>
+-     <col style="width:15%;"/>
+-     <col style="width:15%;"/>
+-     <col style="width:15%;"/>
+-     <col style="width:55%;"/>
++     <col />
++     <col style="width:55px;" />
++     <col />
++     <col style="width:100px;" />
++     <col />
+   </colgroup>
+   <tr>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+   <th><div id="name" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'name',true);">${thName}</div></th>
++  <th>${thPicture}</th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="func"){sCssName="SortSelected";} %>
+   <th><div id="func" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'func',true);">${thFunc}</div></th>
+   <th>${thLastChange}</th>
+@@ -75,6 +77,8 @@
+     </div>
+   </td>
+   <td class='CLASS03601'>
++  </td>
++  <td class='CLASS03601'>
+     <div id="btnFilterFunc" class="FilterBtn">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterFuncSub" style="display:none">
+       <% 
+@@ -155,6 +159,18 @@
+ 
+             Write("</td>");
+             Write("<td class='GrayBkg'>");
++              string sPicDivId = "picDiv"#chn.ID();
++              Write("<div id='"#sPicDivId#"' class='CLASS03907' style='margin:auto;' ");
++                Write("onmouseover='picDivShow(jg_250, \""#chn.Label()#"\", 250, \""#chn.ChnNumber()#"\", this);'");
++                Write("onmouseout='picDivHide(jg_250);'");
++               Write("></div>");
++              Write("<script type='text/javascript'>");
++                Write("var jg_0 = new jsGraphics('"#sPicDivId#"');");
++                Write("InitGD(jg_0, 50);");
++                Write("Draw(jg_0, '"#chn.Label()#"', 50, '"#chn.ChnNumber()#"');");
++              Write("</script>");
++            Write("</td>");
++            Write("<td class='GrayBkg'>");
+             string functions = "";
+             string funcTmp = "";
+             string funcIDs = "";

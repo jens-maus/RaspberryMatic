@@ -78,7 +78,9 @@ install_hmserver:
 ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a HMserver/opt/HMServer/HMIPServer.jar $(TARGET_DIR)/opt/HMServer/
 	cp -a HMserver/opt/HmIP $(TARGET_DIR)/opt/
+	cp -R HMServer-Beta/opt/HmIP/* $(TARGET_DIR)/opt/HmIP/
 	cp -a HMserver/opt/HMServer/HMServer.jar $(TARGET_DIR)/opt/HMServer/
+	cp -a HMserver/opt/HMServer/coupling $(TARGET_DIR)/opt/HMServer/
 endif
 
 update_webui:

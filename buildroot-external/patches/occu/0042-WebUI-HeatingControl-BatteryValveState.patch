@@ -110,17 +110,20 @@
    real rState = 0;
  
    object oTemperature = cObj.DPByControl("HEATING_CONTROL_HMIP.TEMPERATURE");
-@@ -210,6 +253,9 @@
+@@ -210,6 +253,12 @@
    object oWindowState = cObj.DPByControl("HEATING_CONTROL_HMIP.WINDOW_STATE");
    object oLevel = cObj.DPByControl("HEATING_CONTROL_HMIP.LEVEL");
  
 +  object oBatteryState = cObj.DPByHssDP("BATTERY_STATE");
-+  object oValveLevel = cObj.DPByHssDP("LEVEL");
++  object oValveLevel = oLevel;
++  if (!oLevel) {
++    oValveLevel = cObj.DPByHssDP("LEVEL");
++  }
 +
    object oActiveProfile = cObj.DPByControl("HEATING_CONTROL_HMIP.ACTIVE_PROFILE");
    object oHumidity = cObj.DPByControl("HEATING_CONTROL_HMIP.HUMIDITY");
    object oSetPointMode = cObj.DPByControl("HEATING_CONTROL_HMIP.SETPOINT_MODE");
-@@ -223,11 +269,6 @@
+@@ -223,11 +272,6 @@
    string sReadOnly = "";
    rState = oSetPoint.Value();
  
@@ -132,22 +135,13 @@
    WriteLine("<tr>");
      WriteLine("<td id='"#chnId#"tdACTUAL_TEMPERATURE'>");
        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
-@@ -275,6 +316,30 @@
-     }
-   WriteLine("</tr>");
+@@ -262,13 +306,25 @@
+       WriteLine("</table>");
+     WriteLine("</td>");
  
-+  WriteLine("<tr>");
-+    if (oBatteryState) {
-+      WriteLine("<td id='"#chnId#"tdBATTERY_STATE'>");
-+        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
-+          WriteLine("<tr>");
-+            WriteLine("<td>${stringTableClimateControlRTTransceiverBatteryState}</td>");
-+            WriteLine("<td><span id='"#chnId#"valBATTERY_STATE'></span><span><b>"#bUnit#"</b></span></td>");
-+          WriteLine("</tr>");
-+        WriteLine("</table>");
-+      WriteLine("</td>");
-+    }
-+
+-    if ((oLevel) && (oLevel.State() >= 0)) {
+-      var level = oLevel.Value() * 100;
+-       WriteLine("<td id='"#chnId#"tdLEVEL' >");
 +    if (oValveLevel) {
 +      WriteLine("<td id='"#chnId#"tdLEVEL'>");
 +        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
@@ -160,10 +154,19 @@
 +    }
 +  WriteLine("</tr>");
 +
-  ! SLIDER
- 
-   WriteLine("<tr>");
-@@ -416,6 +481,14 @@
++  WriteLine("<tr>");
++    if (oBatteryState) {
++      WriteLine("<td id='"#chnId#"tdBATTERY_STATE'>");
+         WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+           WriteLine("<tr>");
+-            WriteLine("<td  >${diagramValueTypeLEVEL}: </td>");
+-            WriteLine("<td><span>"#level.ToString(0)#" %</span></td>");
++            WriteLine("<td>${stringTableClimateControlRTTransceiverBatteryState}</td>");
++            WriteLine("<td><span id='"#chnId#"valBATTERY_STATE'></span><span><b>"#bUnit#"</b></span></td>");
+           WriteLine("</tr>");
+         WriteLine("</table>");
+       WriteLine("</td>");
+@@ -416,6 +472,14 @@
        WriteLine("opts.humidityID = '"#oHumidity.ID()#"';");
        WriteLine("opts.HUMIDITY = '"#oHumidity.Value()#"';");
      }

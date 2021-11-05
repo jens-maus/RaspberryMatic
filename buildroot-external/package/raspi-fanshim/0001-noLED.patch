@@ -1,3 +1,7 @@
+src/Fanshim.c: disable FANSHIM_LED dependency to get build done
+
+Signed-off-by: Jens Maus <mail@jens-maus.de>
+
 --- a/src/Fanshim.c.orig	2019-10-02 15:23:32.000000000 +0200
 +++ a/src/Fanshim.c	2020-04-09 22:39:49.644290789 +0200
 @@ -32,7 +32,7 @@

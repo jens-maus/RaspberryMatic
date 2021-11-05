@@ -10,47 +10,149 @@
    return;
 --- occu/WebUI/www/rega/pages/tabs/admin/msg/newSysVar.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/msg/newSysVar.htm
-@@ -13,7 +13,8 @@
-       <col style="width:10%;"/>
-       <col style="width:23%;"/>
-       <col style="width:10%;"/>
+@@ -3,28 +3,37 @@
+   if (system.GetVar("createNew") == 0) {
+     object sv = dom.GetObject(system.GetVar("varid"));
+   }
++  string hidden = "";
++  if (system.GetVar("editValueOnly") == 1) {hidden="hidden";}
++  system.SetSessionVar("editValueOnly",0);
+ %></div>
+ 
+ <div class="CLASS05000">
+   <table class="popupTable hidden"  border="1">
+-    <colgroup>
+-      <col style="width:10%;"/>
 -      <col style="width:23%;"/>
-+      <col style="width:10%;"/>
-+      <col style="width:13%;"/>
-     </colgroup>
-     <tr class="CLASS05001">
-       <th>${thName}</th>
-@@ -21,6 +22,7 @@
-       <th>${thTypeOfVariable}</th>
-       <th>${thValues}</th>
-       <th>${thUnit}</th>
-+      <th>${thValue}</th>
-       <th>${thCannelMapping}</th>
-     </tr>
+-      <col style="width:10%;"/>
+-      <col style="width:23%;"/>
+-      <col style="width:10%;"/>
+-      <col style="width:23%;"/>
+-    </colgroup>
+-    <tr class="CLASS05001">
+-      <th>${thName}</th>
+-      <th>${thDescription}</th>
+-      <th>${thTypeOfVariable}</th>
+-      <th>${thValues}</th>
+-      <th>${thUnit}</th>
+-      <th>${thCannelMapping}</th>
+-    </tr>
++  <% 
++    if (hidden == "") {
++    Write('<colgroup>');
++      Write('<col style="width:10%;"/>');
++      Write('<col style="width:23%;"/>');
++      Write('<col style="width:10%;"/>');
++      Write('<col style="width:23%;"/>');
++      Write('<col style="width:10%;"/>');
++      Write('<col style="width:10%;"/>');
++      Write('<col style="width:13%;"/>');
++    Write('</colgroup>');
++    Write('<tr class="CLASS05001">');
++      Write('<th>${thName}</th>');
++      Write('<th>${thDescription}</th>');
++      Write('<th>${thTypeOfVariable}</th>');
++      Write('<th>${thValues}</th>');
++      Write('<th>${thUnit}</th>');
++      Write('<th>${thValue}</th>');
++      Write('<th>${thCannelMapping}</th>');
++    Write('</tr>');
++    }
++%>
      <tr class="CLASS05002">
-@@ -78,6 +80,9 @@
+-    <td id="tdName" class="CLASS05003" >
++    <td id="tdName" class="CLASS05003 "<%Write(hidden)%> >
+     <%
+       var svName = "";
+       if(system.GetVar("createNew") == 0)
+@@ -40,7 +49,7 @@
+     %>
+       <input id="inpName" type="text" value="<%Write(svName)%>" onblur="stringRemoveNonPrintableChars(this);" />
+     </td>
+-    <td id="tdDesc" class="CLASS05003" >
++    <td id="tdDesc" class="CLASS05003"<%Write(hidden)%> >
+       <%
+         var svDesc = "";
+         if (system.GetVar("createNew") == 0) 
+@@ -50,7 +59,7 @@
+       %>
+       <input id="inpDesc" type="text" value="<%Write(svDesc)%>" onblur="stringRemoveNonPrintableChars(this);"/>
+     </td>
+-      <td class="CLASS05004">
++      <td class="CLASS05004" <%Write(hidden)%> >
+         <select id="selType" onchange="onTypeChange()">
+         <% 
+           if (system.GetVar("createNew") == 1) {
+@@ -76,9 +85,12 @@
+         %>
+         </select>
        </td>
-       <td id="tdEdit" class="CLASS05004">
+-      <td id="tdEdit" class="CLASS05004">
++      <td id="tdEdit" class="CLASS05004"<%Write(hidden)%>>
        </td>
+-      <td class="CLASS05004">
 +
 +           
 +    
-       <td class="CLASS05004">
++      <td class="CLASS05004"<%Write(hidden)%>>
          <% 
            string sUnit = "";
-@@ -87,6 +92,11 @@
+           if (system.GetVar("createNew") == 0) {
+@@ -87,14 +99,20 @@
            Write("<input type='text' id='txtUnit' class='CLASS05011' value='"#sUnit#"' onblur='stringRemoveNonPrintableChars(this);'/>");
          %>
        </td>
+-      <td class="CLASS05004">
 +      
 +            
 +      <td id="tdValueEdit" class="CLASS05004">
 +      </td>
 +      
-       <td class="CLASS05004">
++      <td class="CLASS05004"<%Write(hidden)%>>
          <table width="100%" class="CLASS05005">
-           <colgroup>
-@@ -190,10 +200,12 @@
+-          <colgroup>
+-            <col style="width:50%;"/>
+-            <col style="width:50%;"/>
+-          </colgroup>
+         <tr>
+           <td class="CLASS05006">
++            <input id="ckAssignedChn" type="checkbox" name="chnMapping" onclick="channelChooser2()" />
++          </td>
++        </tr>
++        <tr id="chnNameRow" hidden>
++          <td class="CLASS05006" onclick="channelChooser2()">
+             <% 
+               string sChn = "";
+               if (system.GetVar("createNew") == 0) 
+@@ -118,17 +136,10 @@
+               else {
+                 Write('<input id="chnId" type="hidden" value="0" />');
+               }
+-              Write('<div id="chnName">' #sChn # '</div>');
++              Write('<div style="cursor: pointer;" id="chnName">' #sChn # '</div>');
+             %>
+           </td>
+-          <td>
+-            <table class="CLASS05007">
+-              <tr><td><input id="radNo" type="radio" name="chnMapping" checked onclick="noChannel()" />${lblChannelMappingNo}</td></tr>
+-              <tr><td><input id="radYes" type="radio" name="chnMapping" onclick="channelChooser2()" />${lblChannelMappingYes}</td></tr>
+-              <tr><td><div class="CLASS05008" onclick="channelChooser2()">${btnChooseChannel}</div></td></tr>
+-            </table>
+-          </td>
+-        </tr>
++        <tr/>  
+         </table>
+       </td>
+     </tr>
+@@ -161,6 +172,7 @@
+   noChannel = function() {
+     $("chnId").value = -1;
+     $("chnName").innerHTML = "";
++    $("chnNameRow").hidden = true;
+   };
+   
+   saveSysVars = function()
+@@ -190,10 +202,12 @@
            iSubType = SYSVAR_BOOL;
            pb += "string sTrue = '"+$("inpLTrue").value+"';";
            pb += "string sFalse = '"+$("inpLFalse").value+"';";
@@ -63,7 +165,7 @@
            break;
          case 2:
            iSubType = SYSVAR_GENERIC;
-@@ -215,14 +227,26 @@
+@@ -215,14 +229,26 @@
            if( isNaN(itmpMaxVal) ) itmpMaxVal = 0;
            pb += "integer iMinVal = '"+itmpMinVal+"';";
            pb += "integer iMaxVal = '"+itmpMaxVal+"';";
@@ -90,7 +192,67 @@
            break;
        }
        pb += "string sUnit = '"+$("txtUnit").value+"';";
-@@ -293,7 +317,7 @@
+@@ -248,31 +274,35 @@
+ 
+   channelChooser2 = function()
+   {
+-    ChannelChooser.show(function(result) {
+-      if (result)
+-      {
+-        $("chnId").value = result;
+-        var pb = "string action = 'getChnNameById';";
+-        pb += "integer id = '" + result + "';";
+-        var opts =  
++    if ($("ckAssignedChn").checked == true) {
++      ChannelChooser.show(function(result) {
++        if (result)
+         {
+-          postBody: pb
+-        };
+-        new Ajax.Updater("chnName", "/esp/system.htm?sid=" + SessionId, opts);
+-        $("radNo").checked = false;
+-        $("radYes").checked = true;
+-      }
+-      else if ($(chnName).innerHTML != "")
+-      {
+-        $("radNo").checked = false;
+-        $("radYes").checked = true;
+-      }
+-      else
+-      {
+-        $("radYes").checked = false;
+-        $("radNo").checked = true;
+-      }
+-    }, ChannelChooser.SHOW_ALL);
++          $("chnId").value = result;
++          var pb = "string action = 'getChnNameById';";
++          pb += "integer id = '" + result + "';";
++          var opts =  
++          {
++            postBody: pb
++          };
++          new Ajax.Updater("chnName", "/esp/system.htm?sid=" + SessionId, opts);
++          $("ckAssignedChn").checked = true;
++          $("chnNameRow").hidden = false;
++        }
++        else if ($(chnName).innerHTML != "")
++        {
++          $("ckAssignedChn").checked = true;
++          $("chnNameRow").hidden = false;
++        }
++        else
++        {
++          $("ckAssignedChn").checked = true;
++          $("chnNameRow").hidden = false;
++        }
++      }, ChannelChooser.SHOW_ALL);
++    } else {
++      noChannel();
++    }
+   };
+   
+   onTypeChange = function() 
+@@ -293,7 +323,7 @@
          loadLogicEdit(translateKey("lblTriggered"), translateKey("lblNotTriggered"));
          break;
        case 4:
@@ -99,7 +261,7 @@
          break;
      }
    };
-@@ -303,13 +327,29 @@
+@@ -303,13 +333,29 @@
      //elm.value = elmVal.replace(/\\n|\\r|\\t/g, "");
      elm.value = elmVal.replace(/\\/g, "");
    };
@@ -130,7 +292,7 @@
    {
      var s = "";
      s += "<table class='CLASS05010'>";
-@@ -322,9 +362,25 @@
+@@ -322,9 +368,25 @@
      s += "</tr>";
      s += "</table>";
      $("tdEdit").innerHTML = s;
@@ -145,7 +307,7 @@
 +    } 
 +    s += "<table class='CLASS05010'>";
 +    s += "<tr>";
-+      s += "<td class='CLASS05011'><select id='selValue'><option "+isSelFalse+" value='0'>"+translateKey("lblFalse")+"</option><option "+isSelTrue+" value='1'>"+translateKey("lblTrue")+"</option></select> </td>";
++      s += "<td class='CLASS05011'><select id='selValue'><option "+isSelFalse+" value='0'>"+translateString(sFalse)+"</option><option "+isSelTrue+" value='1'>"+translateString(sTrue)+"</option></select> </td>";
 +    s += "</tr>";
 +    s += "</table>";   
 +
@@ -157,7 +319,7 @@
    {
      if( vals == "" )
      {
-@@ -336,9 +392,23 @@
+@@ -336,9 +398,23 @@
      s += "<tr><td> <textarea id='txVals' rows='2'>"+vals+"</textarea> </td></tr>";
      s += "</table>";
      $("tdEdit").innerHTML = s;
@@ -178,11 +340,11 @@
    };
    
 -  loadIntEdit = function(val1, val2) 
-+  loadIntEdit = function(val1, val2, sValue) 
++  loadIntEdit = function(val1, val2, sValue, sUnit='')
    {
      var s = "";
      s += "<table class='CLASS05010'>";
-@@ -351,7 +421,27 @@
+@@ -351,7 +427,27 @@
      s += "</tr>";
      s += "</table>";
      $("tdEdit").innerHTML = s;
@@ -191,7 +353,7 @@
 +    var val = val1;
 +    if (sValue) val = sValue;
 +    s += "<table class='CLASS05012'>";
-+    s += "<tr><td> <input id='inpValue' type='text' size='12' value='"+translateString(val.toString())+"'  onblur='checkInpValue();'/></td></tr>";
++    s += "<tr><td style='white-space:nowrap;'><input id='inpValue' type='text' size='12' value='"+translateString(val.toString())+"'  onblur='checkInpValue();'/>&nbsp;" + sUnit + "</td></tr>";
 +    s += "</table>";
 +    $("tdValueEdit").innerHTML = s;
 +    
@@ -210,7 +372,20 @@
  
    <% 
      if (system.GetVar("createNew") == 1) {
-@@ -370,18 +460,32 @@
+@@ -361,27 +457,43 @@
+       if ( (sv.Channel() != ID_ERROR) && (sv.Channel() != 0)) {
+         object oChn = dom.GetObject(sv.Channel());
+         if (oChn) {
+-          Write("$('radYes').checked = true;");
++          Write("$('ckAssignedChn').checked = true;");
++          Write("$('chnNameRow').hidden = false;");
+         }
+       }
+       else {
+-        Write("$('radNo').checked = true;");
++        Write("$('ckAssignedChn').checked = false;");
++        Write("$('chnNameRow').hidden = true;");
+       }
        if (sv.ValueSubType() == istPresent) {
        }
        if (sv.ValueSubType() == istChar8859) {
@@ -223,7 +398,7 @@
        }
        if (sv.ValueSubType() == istGeneric) {
 -        Write("loadIntEdit('"#sv.ValueMin()#"', '"#sv.ValueMax()#"');");
-+        Write("loadIntEdit('"#sv.ValueMin()#"', '"#sv.ValueMax()#"', '"#sv.Value()#"');");
++        Write("loadIntEdit('"#sv.ValueMin()#"', '"#sv.ValueMax()#"', '"#sv.Value()#"', '"#sv.ValueUnit()#"');");
        }
        if (sv.ValueSubType() == istEnum) {
 -        Write("loadValueEdit('"#sv.ValueList().Replace('\r\n', ' ').Replace('\r', ' ').Replace('\n', ' ')#"');");
@@ -257,6 +432,14 @@
      "thUnit" : "Ma%DFeinheit",
      "thLastUpdate" : "Letzte<br/>Aktualisierung",
      "thControl" : "Bedienung",
+@@ -412,6 +413,7 @@
+     "dialogChannelOverView" : "Kanal%FCbersicht",
+     "dialogCreateNewSysVar" : "Systemvariable neu anlegen",
+     "dialogEditSysVar" : "Systemvariable bearbeiten",
++    "dialogEditSysVarValue" : "Systemvariablenwert %E4ndern",
+     "dialogCreateScript" : "Skript erstellen",
+     "dialogEditScript" : "Skript bearbeiten",
+     "dialogEnterValue" : "Wert eingeben",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
 @@ -107,6 +107,7 @@
@@ -267,14 +450,22 @@
      "thUnit" : "Unit of measurement",
      "thLastUpdate" : "Last<br/>update",
      "thControl" : "Control",
+@@ -408,6 +409,7 @@
+     "dialogChannelOverView" : "Channel overview",
+     "dialogCreateNewSysVar" : "Create new system variable",
+     "dialogEditSysVar" : "Edit system variable",
++    "dialogEditSysVarValue" : "Change system variable value",
+     "dialogCreateScript" : "Create script",
+     "dialogEditScript" : "Edit script",
+     "dialogEnterValue" : "Enter value",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -26133,14 +26133,14 @@
+@@ -26133,14 +26133,22 @@
          this.setTitle( translateKey("dialogCreateNewSysVar") /*"Systemvariable neu anlegen"*/ );
          this.addToPostBody( 'integer varid = 0;' );
          this.addToPostBody( 'integer createNew = 1;' );
 -        this.setWidth(900);
-+        this.setWidth(1000);
++        this.setWidth(1100);
          this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
          break;
        case ID_EDIT_SYSVAR:
@@ -282,7 +473,24 @@
          this.addToPostBody( 'integer varid = '+this.type+';' );
          this.addToPostBody( 'integer createNew = 0;' );
 -        this.setWidth(900);
-+        this.setWidth(1000);
++        this.setWidth(1100);
++        this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
++        break;
++      case ID_EDIT_SYSVAR_VALUE:
++        this.setTitle( translateKey("dialogEditSysVarValue") /*"Systemvariablenwert bearbeiten"*/ );
++        this.addToPostBody( 'integer varid = '+this.type+';' );
++        this.addToPostBody( 'integer createNew = 0;' );
++        this.addToPostBody( 'boolean editValueOnly = 1;' );
++        this.setWidth(240);
          this.setFile( "/pages/tabs/admin/msg/newSysVar.htm" );
          break;
        case ID_CREATE_SCRIPT:
+@@ -27017,6 +27025,8 @@
+ dbg = false;
+ rfr = true;
+ 
++ID_EDIT_SYSVAR_VALUE   = 9921;
++
+ ID_ROOMS     = 101;  // Rooms collection ID.
+ ID_FUNCTIONS = 151;  // Functions collection ID.
+ ID_FAVORITES = 201;  // Favorites collection ID.

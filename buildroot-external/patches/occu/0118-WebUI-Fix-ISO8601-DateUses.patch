@@ -1,3 +1,14 @@
+--- occu/WebUI/www/config/backup.tcl.orig
++++ occu/WebUI/www/config/backup.tcl
+@@ -10,7 +10,7 @@
+   set system_version [read_version "/VERSION"]
+   set iso8601_date [exec date -Iseconds]
+   set tmpdir [exec mktemp -d -p /usr/local/tmp]
+-  regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
++  regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-].+)$} $iso8601_date dummy year month day hour minute second zone
+   set backupfile [set HOSTNAME]-$system_version-$year-$month-$day-$hour$minute.sbk
+   #save DOM
+   rega system.Save()
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
 @@ -1307,7 +1307,7 @@
@@ -9,17 +20,6 @@
    
    puts "Content-Type:application/x-download"
    puts "Content-Disposition:attachment;filename=[set HOSTNAME]-$year-$month-$day.log\n"
---- occu/WebUI/www/config/cp_security.cgi.orig
-+++ occu/WebUI/www/config/cp_security.cgi
-@@ -1520,7 +1520,7 @@
-   set system_version [read_version "/VERSION"]
-   set iso8601_date [exec date -Iseconds]
-   set tmpdir [exec mktemp -d -p /usr/local/tmp]
--  regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
-+  regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-].+)$} $iso8601_date dummy year month day hour minute second zone
-   set backupfile [set HOSTNAME]-$system_version-$year-$month-$day-$hour$minute.sbk
-   #save DOM
-   rega system.Save()
 --- occu/WebUI/www/config/cp_time.cgi.orig
 +++ occu/WebUI/www/config/cp_time.cgi
 @@ -144,7 +144,7 @@

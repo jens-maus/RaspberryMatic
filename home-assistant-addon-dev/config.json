@@ -1,6 +1,6 @@
 {
   "name": "RaspberryMatic CCU (snapshot)",
-  "version": "3.59.6.20210804-a37fca0",
+  "version": "3.61.4.20211105-107b755",
   "stage": "experimental",
   "slug": "raspberrymatic-dev",
   "image": "ghcr.io/jens-maus/raspberrymatic",
@@ -107,6 +107,7 @@
     "SYS_MODULE",
     "SYS_NICE",
     "SYS_RAWIO",
-    "SYS_RESOURCE"
+    "SYS_RESOURCE",
+    "NET_ADMIN"
   ]
 }

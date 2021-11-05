@@ -1,3 +1,7 @@
+- integrated changes for building within buildroot env
+
+Signed-off-by: Jens Maus <mail@jens-maus.de>
+
 diff -ruN wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb.orig/devLib/Makefile wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb/devLib/Makefile
 --- wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb.orig/devLib/Makefile	2021-06-19 18:07:42.000000000 +0200
 +++ wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb/devLib/Makefile	2021-06-22 22:47:42.595145625 +0200

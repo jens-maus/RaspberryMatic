@@ -1,0 +1,199 @@
+--- occu/WebUI/www/rega/esp/functions.fn.orig
++++ occu/WebUI/www/rega/esp/functions.fn
+@@ -384,7 +384,7 @@
+   if (bShowChannel == true) {
+ 
+     ! Interface HmIP-RF and HmIP-Wired
+-    if (chn.HssType().Find("MAINTENANCE") != -1) {
++    if ( (chn.HssType().Find("MAINTENANCE") != -1) && ((system.IsSessionVar("sessionSIDC") == false) || (system.GetSessionVar("sessionSIDC") != "1")) ) {
+       ! Don't show the maintenance channel of the new HmIP devices
+       ! This is necessary because the name of such a channel of an HmIP device
+       !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on
+--- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
+@@ -198,6 +198,38 @@
+ </script>
+ 
+ <script type="text/javascript">
++  ShowInternalDeviceChannels = function()
++  {
++    var url = '/esp/system.htm?sid='+SessionId;
++    var pb = "";
++    pb += 'string action = "ShowInternalDeviceChannels";';
++    var opt =
++    {
++      postBody: pb,
++      onComplete: function(t)
++      {
++        if(dbg){alert(t.responseText);}
++        reloadPage();
++      }
++    };
++    new Ajax.Request(url,opt);
++  };
++
++  <%
++    string sInternalBtnText = "";
++    if( system.GetSessionVar("sessionSIDC") == "1" )
++    {
++        !sInternalBtnText = "aus";
++        sInternalBtnText = "footerBtnHideInternalDeviceChannels";
++    }
++    else
++    {
++        !sInternalBtnText = "ein";
++        sInternalBtnText = "footerBtnShowInternalDeviceChannels";
++    }
++    Write("var internalBtnText = '"#sInternalBtnText#"';");
++  %>
++
+   var s = "";
+ 
+   var mouseOpts =
+@@ -218,6 +250,7 @@
+   s += "<tr>";
+   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
+   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
++  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04905' onclick='ShowInternalDeviceChannels()'>"+translateKey(internalBtnText)+"</div></td>";
+   s += "</tr>";
+   s += "</table>";
+   
+--- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
+@@ -132,8 +132,22 @@
+     object device = dom.GetObject(system.GetVar("id"));
+     if (device) {
+       if (device.Visible()) {
++        string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++        string sEnumUserInternalIDs = "";
++        if( system.IsSessionVar("sessionSIDC") ) {
++          if( system.GetSessionVar("sessionSIDC") == "1" ) {
++           sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++          }
++        }
++        if( sEnumUserInternalIDs != "" ) {
++          if( sEnumUserIDs != "" ) {
++            sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++          } else {
++            sEnumUserIDs = sEnumUserInternalIDs;
++          }
++        }
+         string tmp;
+-        foreach(tmp, oUser.UserTempViewIDs().EnumIDs()) {
++        foreach(tmp, sEnumUserIDs) {
+           object chn = dom.GetObject(tmp);
+           object oDev = dom.GetObject(chn.Device());
+           string oDevHssType = oDev.HssType();
+@@ -171,7 +185,7 @@
+           } else {
+             Call("/esp/functions.fn::showHideHmIPChannel()");
+           }
+-          if( bShow && chn.ReadyConfig() && oDev.ReadyConfig() && bShowChannel )
++          if( bShow && oDev.ReadyConfig() && bShowChannel )
+           {
+             string trId = device.ID()#tmp;
+             boolean showExtDesc = false;
+--- occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm
+@@ -120,8 +120,17 @@
+     object func = dom.GetObject(system.GetVar("id"));
+     if (func) {
+       if (func.Visible()) {
++        string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++        string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++        if( sEnumUserInternalIDs != "" ) {
++          if( sEnumUserIDs != "" ) {
++            sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++          } else {
++            sEnumUserIDs = sEnumUserInternalIDs;
++          }
++        }
+         string tmp;
+-        foreach(tmp, oUser.UserTempViewIDs().EnumEnabledIDs()) {
++        foreach(tmp, sEnumUserIDs) {
+           string trId = func.ID()#tmp;
+           Write("<tr id='"#trId#"'>");
+           object chn = dom.GetObject(tmp);
+--- occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm
+@@ -124,8 +124,17 @@
+     {
+       if (room.Visible())
+       {
++        string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++        string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++        if( sEnumUserInternalIDs != "" ) {
++          if( sEnumUserIDs != "" ) {
++            sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++          } else {
++            sEnumUserIDs = sEnumUserInternalIDs;
++          }
++        }
+         string tmp;
+-        foreach(tmp, oUser.UserTempViewIDs().EnumEnabledIDs()) 
++        foreach(tmp, sEnumUserIDs)
+         {
+           object chn = dom.GetObject(tmp);
+           object oDev = dom.GetObject(chn.Device());
+--- occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm
+@@ -117,9 +117,19 @@
+ </tr>
+ <%
+   integer iAlCount = 0;
+-    
++
++  string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++  string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++  if( sEnumUserInternalIDs != "" ) {
++    if( sEnumUserIDs != "" ) {
++      sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++    } else {
++      sEnumUserIDs = sEnumUserInternalIDs;
++    }
++  }
++
+   string sSVID;
+-  foreach( sSVID, oUser.UserTempViewIDs().EnumIDs() )
++  foreach( sSVID, sEnumUserIDs )
+   {
+     object oSV = dom.GetObject( sSVID );
+     if( oSV )
+--- occu/WebUI/www/rega/pages/tabs/user/newFav.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/user/newFav.htm
+@@ -222,7 +222,16 @@
+               string sUsedIndex;
+               integer iIndex = 0;
+               integer iDoublePos = 0;
+-              foreach( sID, oUser.UserTempViewIDs().EnumIDs() )
++              string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++              string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++              if( sEnumUserInternalIDs != "" ) {
++                if( sEnumUserIDs != "" ) {
++                  sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++                } else {
++                  sEnumUserIDs = sEnumUserInternalIDs;
++                }
++              }
++              foreach(sID, sEnumUserIDs )
+               {                 
+                 iIndex = iIndex + 1;
+ !               object oTmp = dom.GetObject( sID );
+@@ -464,7 +473,16 @@
+         WriteLine("Cursor.set(Cursor.NORMAL);");
+         WriteLine("</script>");
+       }  
+-      foreach(sID, oUser.UserTempViewIDs().EnumIDs() )    
++      string sEnumUserIDs = oUser.UserTempViewIDs().EnumIDs();
++      string sEnumUserInternalIDs = oUser.UserTempViewIDs().EnumEnabledInternalIDs();
++      if( sEnumUserInternalIDs != "" ) {
++        if( sEnumUserIDs != "" ) {
++          sEnumUserIDs = sEnumUserIDs # "\t" # sEnumUserInternalIDs;
++        } else {
++          sEnumUserIDs = sEnumUserInternalIDs;
++        }
++      }
++      foreach(sID, sEnumUserIDs )
+       {
+         !Vars für Filterung
+         string sName = "";

@@ -1,5 +1,14 @@
 --- occu/WebUI/www/config/ic_linkpeerlist.cgi.orig
 +++ occu/WebUI/www/config/ic_linkpeerlist.cgi
+@@ -62,7 +62,7 @@
+     puts "<div id=\"id_body\">"
+ 
+       puts "<script type=\"text/javascript\">"
+-      puts "  setPath(\"<span onclick='WebUI.enter(LinksAndPrograms);'>\"+ translateKey('menuProgramsLinksPage') +\"</span> &gt; <span onclick='WebUI.enter(LinkListPage);'>\" + translateKey('submenuDirectLinks') + \"</span>\");"
++      puts "  setPath(\"<span onclick='WebUI.enter(LinksAndProgramsPage);'>\"+ translateKey('menuProgramsLinksPage') +\"</span> &gt; <span onclick='WebUI.enter(LinkListPage);'>\" + translateKey('submenuDirectLinks') + \"</span>\");"
+       puts "  var s = \"\";"
+       puts "  s += \"<table cellspacing='8'>\";"
+       puts "  s += \"<tr>\";"
 @@ -501,13 +501,19 @@
          set internalKeyCSS ""
          set this_sender $SENTRY(SENDERNAME)

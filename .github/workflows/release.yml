@@ -26,7 +26,7 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@v2.4.0
       with:
         fetch-depth: 0
 
@@ -50,7 +50,7 @@ jobs:
 
     - name: Generate changelog
       id: changelog
-      uses: metcalfc/changelog-generator@v1.0.0
+      uses: metcalfc/changelog-generator@v2.0.0
       with:
         myToken: ${{ secrets.GITHUB_TOKEN }}
 
@@ -67,7 +67,7 @@ jobs:
 
     - name: Create release draft
       id: release_drafter
-      uses: ncipollo/release-action@v1.8.7
+      uses: ncipollo/release-action@v1.8.10
       with:
         tag: ${{ steps.env.outputs.version }}
         name: 'RaspberryMatic ${{ steps.env.outputs.version }}'
@@ -93,14 +93,16 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@v2.4.0
 
     - name: Install Dependencies
       run: |
-        apt update
-        apt install -y --no-install-recommends wget bc cpio rsync zip python
+        if ! dpkg-query -l wget bc cpio rsync zip python >/dev/null 2>&1; then
+          apt update
+          apt install -y --no-install-recommends wget bc cpio rsync zip python
+        fi
         if ! getent group | grep -q ^builder:; then groupadd -g 48 builder; fi
-        if ! getent passwd | grep -q ^builder:; then useradd -m -u 1003 -g 48 -G sudo builder;fi
+        if ! getent passwd | grep -q ^builder:; then useradd -m -u 1003 -g 48 -G sudo builder; fi
         if ! grep -q ^builder; then echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers; fi
         chown -R builder .
 
@@ -250,7 +252,7 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@v2.4.0
 
     - name: Setup Environment
       run: |
@@ -297,7 +299,7 @@ jobs:
 
     - name: Set up Docker Buildx
       id: buildx
-      uses: docker/setup-buildx-action@v1.5.1
+      uses: docker/setup-buildx-action@v1.6.0
       with:
         version: latest
         install: true
@@ -312,7 +314,7 @@ jobs:
 
     - name: Build and push container image
       if: github.event.inputs.skip_build == 'false'
-      uses: docker/build-push-action@v2.6.1
+      uses: docker/build-push-action@v2.7.0
       id: docker_build
       with:
         context: oci_build
@@ -355,7 +357,7 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@v2.4.0
       with:
         fetch-depth: 0
         

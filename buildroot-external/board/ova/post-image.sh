@@ -11,7 +11,7 @@ echo "Create user filesystem"
 mkdir -p "${BUILD_DIR}/userfs"
 touch "${BUILD_DIR}/userfs/.doFactoryReset"
 rm -f "${BINARIES_DIR}/userfs.ext4"
-mkfs.ext4 -d "${BUILD_DIR}/userfs" -F -L userfs "${BINARIES_DIR}/userfs.ext4" 3000
+mkfs.ext4 -d "${BUILD_DIR}/userfs" -F -L userfs -I 256 -E lazy_itable_init=0,lazy_journal_init=0 "${BINARIES_DIR}/userfs.ext4" 3000
 
 #
 # VERSION File

@@ -1,14 +1,14 @@
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -156,6 +156,8 @@
- {
-     background-color: $_(contentBackground);
+@@ -163,6 +163,8 @@
      overflow: auto;
+     display: flex;
+     align-items: flex-start;
 +    /* Prevent chrome from outlining this by focus */
 +    outline: none;
  }
  
- /* Kopfzeile */
+ #prgcontent
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -6867,6 +6867,7 @@

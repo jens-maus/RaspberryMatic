@@ -36,7 +36,7 @@ cd /
 
 # Create compatibility link to old AgentX socket location
 if [ "$SNMPDCOMPAT" = "yes" ]; then
-  ln -sf /var/agentx/master /var/run/agentx
+  ln -sfn /var/agentx/master /var/run/agentx
 fi
 
 start() {

@@ -329,7 +329,7 @@ fwprepare()
   fi
 
   rm -rf /usr/local/.firmwareUpdate
-  if ! ln -sf "${TMPDIR}" /usr/local/.firmwareUpdate; then
+  if ! ln -sfn "${TMPDIR}" /usr/local/.firmwareUpdate; then
     echo "ERROR: (ln)"
     exit 1
   fi

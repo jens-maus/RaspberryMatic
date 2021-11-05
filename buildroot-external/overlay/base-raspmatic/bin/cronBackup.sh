@@ -59,7 +59,7 @@ fi
 # if BACKUPDIR does not exist, create it
 if [ ! -e "${BACKUPDIR}" ]; then
   if ! mkdir "${BACKUPDIR}"; then
-    /bin/triggerAlarm.tcl "cronBackup: Could not create ${BACKUPDIR}" WatchDog-Alarm
+    /bin/triggerAlarm.tcl "cronBackup: Could not create ${BACKUPDIR}" 'WatchDog: cronbackup-create' true
     exit 1
   fi
 fi
@@ -72,7 +72,7 @@ fi
 
 # create the backup in BACKUPDIR now
 if ! /bin/createBackup.sh "${BACKUPDIR}"; then
-  /bin/triggerAlarm.tcl "cronBackup: Backup job failed" WatchDog-Alarm
+  /bin/triggerAlarm.tcl "cronBackup: Backup job failed" 'WatchDog: cronbackup-failed' true
   exit 1
 fi
 

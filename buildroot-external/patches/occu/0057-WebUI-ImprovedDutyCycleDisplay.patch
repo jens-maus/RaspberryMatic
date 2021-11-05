@@ -61,19 +61,53 @@
      <script type="text/javascript" src="/webui/js/extern/jquery.blockUI.js"></script>
 --- occu/WebUI/www/rega/pages/tabs/startpage.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/startpage.htm
-@@ -250,14 +250,120 @@
+@@ -166,13 +166,11 @@
+       <table id="tblRightContent" width="100%">
+         <tr valign="top" class="CLASS01810">
+           <td>
+-          <table id="tblStartpageInfo" width="100%" class="CLASS01811 startPageInfo hidden">
+-
+-            <tr>
+-              <th style="width:40%"></th>
+-              <th style="width:60%"></th>
+-            </tr>
+-
++          <table id="tblStartpageInfo" width="100%" class="CLASS01811 startPageInfo hidden" cellpadding="2" cellspacing="0">
++            <colgroup>
++              <col style="width:30%;"/>
++              <col />
++            </colgroup>
+             <tr>
+                 <!-- Uhrzeit -->
+               <td>${time}:</td>
+@@ -250,14 +248,134 @@
                }
               %>
  
 -            <tr id="partingLine1" class="hidden"><td colspan="2" style="height: 50px"><hr></td></tr>
-+            <tr id="partingLine1" class="hidden"><td colspan="3" style="height: 50px"><hr></td></tr>
- 
+-
              <!-- DutyCycle -->
 -            <tr name="trDutyCycle" style="visibility: hidden"><td></td><td><div id="dutyCycleVal" style="width:75%; text-align:center"></div></td></tr>
 -            <tr name="trDutyCycle" style="visibility: hidden">
 -
 -              <td id="iFaceShowAll">${lblDutyCycle}</td>
 -              <td> <div id="dutyCycleProgress" class="dutyCycleProgress" align="right"><div id="dutyCycleProgressBar" class="dutyCycleProgressBar" style='width:100%;'></div></div> </td>
++            <tr>
++              <td colspan="3"><hr/></td>
++            </tr>
++            <tr id="partingLine1" class="hidden" style="display:none;">
++              <td></td>
++              <td>
++                <table style="width:100%;text-align:center;font-size:11px;" cellpadding="0" cellspacing="0">
++                  <tbody>
++                    <tr>
++                      <td style="width:70%;">${lblDutyCycle}</td>
++                      <td style="width:30%;">${lblCarrierSense}</td>
++                    </tr>
++                  </tbody>
++                </table>
++              </td>
++            </tr>
 +            <tr name="trDutyCycle0" style="display: none">
 +              <td id="dutyCycleAddr0" style="vertical-align: top;text-align: left;"</td>
 +              <td><table style="width:100%"><tr>
@@ -7071,6 +7105,21 @@
  .Filter {
    margin:0;
    border:1px solid $_(black); /* black */
+@@ -4881,9 +4860,14 @@
+ 	height:50%;
+ }
+ 
++#partingLine1 {
++  display: table-row;
++}
++
+ .CLASS01811 {
+ 	padding-top: 5px;
+     color: $_(textColorB); /* black */
++	border-collapse: collapse;
+ }
+ 
+ .CLASS01812 {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -28901,71 +28901,103 @@
@@ -7140,7 +7189,7 @@
 -
 -              width = parseInt(dutyCycleProgressElem.css("width"));
 -              value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
-+              dutyCycleValElm.text("DC: "+arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
++              dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
 +              if (iface.type === "CCU2") {
 +                dutyCycleAddrElm.text("CCU:");
 +              } else if(iface.type === "HMIP-HAP") {
@@ -7168,13 +7217,12 @@
 +                dutyCycleBar.addClass("progress-bar-danger");
 +              } else if (arInterfaceDutyCycle[ifaceBidCosRF] > dcWarn) {
 +                dutyCycleBar.addClass("progress-bar-warning");
-               } else {
--                trDutyCycle.removeClass("attention");
++              } else {
 +                dutyCycleBar.addClass("progress-bar-success");
 +              }
 +              
 +              if (arInterfaceCarrierSense[ifaceBidCosRF] != csNotAvailable) {
-+                carrierSenseValElm.text("CS: "+arInterfaceCarrierSense[ifaceBidCosRF] + " " + dcUnit);
++                carrierSenseValElm.text(arInterfaceCarrierSense[ifaceBidCosRF] + " " + dcUnit);
 +                carrierSenseBar.css("width", arInterfaceCarrierSense[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceCarrierSense[ifaceBidCosRF]);
 +                
 +                carrierSenseBar.removeClass("progress-bar-info");
@@ -7188,9 +7236,10 @@
 +                } else {
 +                  carrierSenseBar.addClass("progress-bar-info");
 +                }
-+
-+              } else {
-+                carrierSenseCol.css({"display":"none"});  
+               } else {
+-                trDutyCycle.removeClass("attention");
++                carrierSenseValElm.text("n/a");
++                carrierSenseBar.css("width", "0%");
                }
                trPartingLineElm.show();
                showPartingLine = true;

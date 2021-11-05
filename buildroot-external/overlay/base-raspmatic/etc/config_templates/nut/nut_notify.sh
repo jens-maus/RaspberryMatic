@@ -8,4 +8,4 @@
 #
 
 # trigger a HomeMatic alarm message to "${UPSNAME}-Alarm"
-/bin/triggerAlarm.tcl "${NOTIFYTYPE}" "${UPSNAME}-Alarm"
+/bin/triggerAlarm.tcl "${NOTIFYTYPE}" "WatchDog: ${UPSNAME}-${NOTIFYTYPE}" true

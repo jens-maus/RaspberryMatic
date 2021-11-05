@@ -86,11 +86,8 @@
 +\n
 +			<td width=\"40%\"><div id=\"DeviceConfigDialogTestHint\"><img id=\"DeviceConfigDialogTestHintImg\" src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"showParamHelp('generalDeviceConfigHint', '400', '200')\"><\/div><\/td>\n
 +\n
-           <\/tr>\n
-         <\/table>\n
--        <div class=\"CLASS10805\" name=\"generalDeviceConfigHint\">\n
--          Im Rahmen des Funktionstests wird geprüft, ob die Kommunikation mit dem Gerät fehlerfrei funktioniert. Der Test gilt als bestanden, sobald die erste Rückmeldung von dem Gerät empfangen wurde. <br \/> Dazu werden an alle Aktoren des Geräts Schaltbefehle gesendet, die deren Zustand ändern. Sensoren, wie z.B. Fernbedienungen, melden sich im Allgemeinen erst dann, wenn sie durch ein entsprechendes Ereignis ausgelöst wurden.\n
--        <\/div>\n
++          <\/tr>\n
++        <\/table>\n
 +      <\/div>\n
 +    <\/div>\n
 +	\n
@@ -110,7 +107,7 @@
 +\n
 +		  <tr>			\n
 +		    <td width=\"80%\" name=\"generalDeviceChannelConfigLblSeparator\">Trennzeichen:<\/td><td width=\"20%\"><input id=\"DeviceConfigDialog_DeviceChannelsRenameSeparator\" size=\"2\" type=\"text\" value=\":\"\/><\/td>\n
-+          <\/tr>\n
+           <\/tr>\n
 +\n
 +		  <tr>\n
 +\n
@@ -120,7 +117,10 @@
 +\n
 +		  <\/tr>\n
 +\n
-+        <\/table>\n
+         <\/table>\n
+-        <div class=\"CLASS10805\" name=\"generalDeviceConfigHint\">\n
+-          Im Rahmen des Funktionstests wird geprüft, ob die Kommunikation mit dem Gerät fehlerfrei funktioniert. Der Test gilt als bestanden, sobald die erste Rückmeldung von dem Gerät empfangen wurde. <br \/> Dazu werden an alle Aktoren des Geräts Schaltbefehle gesendet, die deren Zustand ändern. Sensoren, wie z.B. Fernbedienungen, melden sich im Allgemeinen erst dann, wenn sie durch ein entsprechendes Ereignis ausgelöst wurden.\n
+-        <\/div>\n
        <\/div>\n
      <\/div>\n
  \n
@@ -148,7 +148,7 @@
    },
  
    __hideFunctionTest: function() {
-@@ -13179,6 +13214,35 @@
+@@ -13179,6 +13214,34 @@
    },
    
    /**
@@ -161,23 +161,22 @@
 +  },
 +  
 +  renameChannels: function() {
-+    if (confirm("Alle Kanäle umbenennen?")) {	 
-+        var renameOwnChannelNames = $(this.RENAME_OWN_ID).checked;	
-+		
-+	    this.device.channels.each(function(channel) {
-+	      var chNumber = channel.address.split(':')[1];
-+		  var origChName = this.device.name+":"+chNumber;
-+		  
-+		  //Channel bereits umbenannt und Option "eigene Namen umbenennen" wurde deaktiviert
-+		  if (channel.name !== origChName && renameOwnChannelNames === false) return true;
-+			  
-+          var chName = $(this.NAME_ID).value+ $(this.SEPARATOR_ID).value + chNumber;
-+	      homematic("Channel.setName", {id: channel.id, name: chName});
-+	      channel.setName(chName);
-+	    }, this);
-+	    DeviceListPage.updateView(true);
-+	    DeviceList.reload(this);
-+    }		
++    if (confirm("Alle Kanäle umbenennen?")) {
++      var renameOwnChannelNames = $(this.RENAME_OWN_ID).checked;
++
++      this.device.channels.each(function(channel) {
++        var chNumber = channel.address.split(':')[1];
++        var origChName = this.device.name+":"+chNumber;
++
++        // Channel bereits umbenannt und Option "eigene Namen umbenennen" wurde deaktiviert
++        if (channel.name !== origChName && renameOwnChannelNames === false) return true;
++
++        var chName = $(this.NAME_ID).value+ $(this.SEPARATOR_ID).value + chNumber;
++        homematic("Channel.setName", {id: channel.id, name: chName});
++        channel.setName(chName);
++      }, this);
++      this.ok();
++    }
 +  },
 +  
 +  /**

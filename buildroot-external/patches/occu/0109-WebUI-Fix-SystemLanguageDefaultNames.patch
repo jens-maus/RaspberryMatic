@@ -370,7 +370,7 @@
 --- occu/WebUI/www/rega/pages/msg/systemLanguageConfig.htm.orig
 +++ occu/WebUI/www/rega/pages/msg/systemLanguageConfig.htm
 @@ -0,0 +1,62 @@
-+<div class="popupTitle" style='width: 98.5%;'>
++<div class="popupTitle">
 +  <%
 +  Write(system.GetVar("title"));
 +  %>

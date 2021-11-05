@@ -1,4 +1,4 @@
-#############################################################
+################################################################################
 #
 # Generic raw uart kernel module for low-latency uart
 # communication with a RPI-RF-MOD/HM-MOD-RPI-PCB
@@ -11,9 +11,9 @@
 # https://github.com/eq-3/occu/tree/master/KernelDrivers
 # https://github.com/jens-maus/RaspberryMatic/tree/master/buildroot-external/package/bcm2835_raw_uart
 #
-#############################################################
+################################################################################
 
-GENERIC_RAW_UART_VERSION = d1dddbeb32657da72845edd0e4a097fbce3a0ec6
+GENERIC_RAW_UART_VERSION = 9510818fa12e52baf40fe5ac84e58fd62db4f70e
 GENERIC_RAW_UART_SITE = $(call github,alexreinert,piVCCU,$(GENERIC_RAW_UART_VERSION))
 GENERIC_RAW_UART_LICENSE = GPL2
 GENERIC_RAW_UART_LICENSE_FILES = LICENSE

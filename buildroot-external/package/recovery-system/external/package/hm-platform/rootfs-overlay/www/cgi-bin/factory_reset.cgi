@@ -21,7 +21,7 @@ fi
 
 echo -ne "[2/3] Factory Reset: Creating new user filesystem... "
 
-if ! mkfs.ext4 -q -F -L userfs "${DEVNAME}"; then
+if ! mkfs.ext4 -q -F -L userfs -I 256 -E lazy_itable_init=0,lazy_journal_init=0 "${DEVNAME}"; then
   echo "ERROR: mkfs.ext4 failed. Please contact support hotline.<br>"
 else
   if ! tune2fs -c 0 -i 0 "${DEVNAME}" >/dev/null; then

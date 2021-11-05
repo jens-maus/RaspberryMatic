@@ -413,6 +413,7 @@ jQuery.extend(true,langJSON, {
     "dialogChannelOverView" : "Kanal%FCbersicht",
     "dialogCreateNewSysVar" : "Systemvariable neu anlegen",
     "dialogEditSysVar" : "Systemvariable bearbeiten",
+    "dialogEditSysVarValue" : "Systemvariablenwert %E4ndern",
     "dialogCreateScript" : "Skript erstellen",
     "dialogEditScript" : "Skript bearbeiten",
     "dialogEnterValue" : "Wert eingeben",

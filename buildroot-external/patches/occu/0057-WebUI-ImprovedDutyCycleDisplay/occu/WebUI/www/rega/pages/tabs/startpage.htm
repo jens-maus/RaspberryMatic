@@ -166,13 +166,11 @@
       <table id="tblRightContent" width="100%">
         <tr valign="top" class="CLASS01810">
           <td>
-          <table id="tblStartpageInfo" width="100%" class="CLASS01811 startPageInfo hidden">
-
-            <tr>
-              <th style="width:40%"></th>
-              <th style="width:60%"></th>
-            </tr>
-
+          <table id="tblStartpageInfo" width="100%" class="CLASS01811 startPageInfo hidden" cellpadding="2" cellspacing="0">
+            <colgroup>
+              <col style="width:30%;"/>
+              <col />
+            </colgroup>
             <tr>
                 <!-- Uhrzeit -->
               <td>${time}:</td>
@@ -250,9 +248,23 @@
               }
              %>
 
-            <tr id="partingLine1" class="hidden"><td colspan="3" style="height: 50px"><hr></td></tr>
-
             <!-- DutyCycle -->
+            <tr>
+              <td colspan="3"><hr/></td>
+            </tr>
+            <tr id="partingLine1" class="hidden" style="display:none;">
+              <td></td>
+              <td>
+                <table style="width:100%;text-align:center;font-size:11px;" cellpadding="0" cellspacing="0">
+                  <tbody>
+                    <tr>
+                      <td style="width:70%;">${lblDutyCycle}</td>
+                      <td style="width:30%;">${lblCarrierSense}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
             <tr name="trDutyCycle0" style="display: none">
               <td id="dutyCycleAddr0" style="vertical-align: top;text-align: left;"</td>
               <td><table style="width:100%"><tr>

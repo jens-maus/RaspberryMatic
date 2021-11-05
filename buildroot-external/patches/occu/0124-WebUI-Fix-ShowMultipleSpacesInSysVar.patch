@@ -1,10 +1,10 @@
---- occu/WebUI/www/rega/esp/system.fn.orig
-+++ occu/WebUI/www/rega/esp/system.fn
-@@ -1545,6 +1545,7 @@
-   if ( bString )
-   {
-     sSysVarVal = cObjTmp.Value();
-+    sSysVarVal = sSysVarVal.Replace(" ", "&nbsp;");
-     sSysVarVal = sSysVarVal.Replace("\r\n", "<br/>");
-     sSysVarVal = sSysVarVal.Replace("\r", "<br/>");
-     sSysVarVal = sSysVarVal.Replace("\n", "<br/>");
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -5344,6 +5344,7 @@
+ 	word-wrap: break-word;
+ 	max-width: 480px;
+ 	display: inline-block;
++	white-space: break-spaces;
+ }
+ 
+ .CLASS02535A {

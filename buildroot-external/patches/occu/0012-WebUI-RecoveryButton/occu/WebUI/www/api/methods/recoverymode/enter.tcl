@@ -18,6 +18,6 @@ close $fd
 
 # Neustart
 rega system.Save()
-exec /sbin/reboot
+exec /sbin/reboot -d 2 2>/dev/null >/dev/null &
 
 jsonrpc_response true

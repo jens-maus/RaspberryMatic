@@ -6,4 +6,6 @@
 /release/*.zip
 /release/*.img
 /release/*.tar
+/release/*.ova
+/release/*.tgz
 /release/*.sha256

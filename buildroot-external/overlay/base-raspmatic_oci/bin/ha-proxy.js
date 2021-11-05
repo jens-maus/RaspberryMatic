@@ -23,7 +23,8 @@ const apiProxy = createProxyMiddleware('/', {
   onProxyRes: responseInterceptor(async (responseBody, proxyRes, req, res) => {
     // modify Location: response header if present
     if(typeof(proxyRes.headers.location) !== 'undefined') {
-      var redirect = proxyRes.headers.location;
+      // replace any absolute http/https path with a relative one
+      var redirect = proxyRes.headers.location.replace(/(http|https):\/\/(.*?)\//, '/');
       redirect = req.headers['x-ingress-path'] + redirect;
       res.append("location", redirect);
     }
@@ -46,7 +47,7 @@ const apiProxy = createProxyMiddleware('/', {
         body = responseBody.toString('latin1');
       }
 
-      body = body.replace(/(?<=["'=\\u0027 \(\\])\/(api|webui|ise|pda|config|pages|jpages|esp|upnp|tools|addons)(\\?\/)(?!hassio_ingress)/g,
+      body = body.replace(/(?<=["'= \(\\]|\\u0027)\/(api|webui|ise|pda|config|pages|jpages|esp|upnp|tools|addons|tailscale)(\\?\/)(?!hassio_ingress)/g,
                           req.headers['x-ingress-path']+'/$1$2');
       body = body.replace(/(?<=["'])\/(index|login|logout)\.htm/g,
                           req.headers['x-ingress-path']+'/$1.htm');

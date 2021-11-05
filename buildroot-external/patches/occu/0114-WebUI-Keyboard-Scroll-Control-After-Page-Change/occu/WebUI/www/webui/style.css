@@ -1,5 +1,10 @@
 :root {
-  --btnGradient: linear-gradient(to bottom, white 30%, gray);
+  --btnGradient: linear-gradient(to bottom, #ffffff, #a1a1a1);
+}
+
+* {
+	font-family:Verdana,Tahoma,Arial,Helvetica,sans-serif ! important;
+	font-size: 12px ! important;
 }
 
 .j_translate, .j_startPage
@@ -50,7 +55,7 @@
 
 .conditionEven
 {
-  /*Wenn die Farbe nicht nur als Rahmen, sondern fï¿½r die ganze Bedingung gelten soll,
+  /*Wenn die Farbe nicht nur als Rahmen, sondern für die ganze Bedingung gelten soll,
     muss background-color in der Klasse .Rule deaktiviert werden */
   background-color: $_(programEven);
   /* border: solid 1px $_(black); *//* black */
@@ -156,8 +161,15 @@ a img {
 {
     background-color: $_(contentBackground);
     overflow: auto;
+    display: flex;
+    align-items: flex-start;
     /* Prevent chrome from outlining this by focus */
     outline: none;
+}
+
+#prgcontent
+{
+  display: contents;
 }
 
 /* Kopfzeile */
@@ -248,7 +260,7 @@ a img {
 
 /* Grundlegende Tabelle auf der Statusanzeige-Seite */
 #tblStatus {
-  /* width:1200px; */
+  width:1200px; 
   height:100%;
   table-layout: fixed;
 }
@@ -306,7 +318,7 @@ a img {
   padding-left: 10px;
 }
 
-/* Small Logo Position fï¿½r An- und Abmeldung */
+/* Small Logo Position für An- und Abmeldung */
 .SmallLogoLog
 {
   position: absolute;
@@ -388,7 +400,7 @@ a img {
   text-align:center;
   border:solid 1px $_(black); /* black */
   background-color:$_(clickable);
-  height: auto;
+  height:50px;
 }
 
 .filterTable td
@@ -409,7 +421,7 @@ a img {
   height: 80px;
 }
 
-/* ï¿½berschrift im Header-Feld */
+/* Überschrift im Header-Feld */
 .HeaderTitle {
   font-weight: bold;
   color: $_(textColorA); /* #ffffff */
@@ -425,13 +437,14 @@ a img {
 
   color: $_(textColorB); /* black */
   font-weight: bold;
-  width: 190px;
+  width: 165px;
   /* height: 52px; */
   /* line-height: 52px; */
   text-align: center;
   border: solid 1px $_(black); /* black */
   cursor: pointer;
   border-radius: 5px;
+  font-size: 15px;
   padding-top: 5px;
   padding-bottom: 5px;
 }
@@ -585,14 +598,14 @@ a img {
   color: $_(textColorB); /* black */
   overflow: auto;
   width:100%;
-  height:75%; /* sorgt fï¿½r korrekte Darstellung der Scrollbalken im IE */
+  height:75%; /* sorgt für korrekte Darstellung der Scrollbalken im IE */
 }
 
-/* Tabelle zur Listendarstellung von Elementen (z.B. Raumï¿½bersicht) */
+/* Tabelle zur Listendarstellung von Elementen (z.B. Raumübersicht) */
 .tblList {
-  margin-top: 20px;
-  width: 100%;
+  margin: 10px;
   empty-cells: show;
+  border: solid 1px $_(black); /* black */
 }
 
 .tblList th {
@@ -635,7 +648,6 @@ a img {
 /* Kopfzeile eines Popup-Fenster */
 .popupTitle {
   color: $_(textColorB); /* black */
-  width: 99.4%;
   background-color: $_(white); /* white */
   border: solid 1px $_(black); /* black */
   padding-left: 4px;
@@ -704,7 +716,6 @@ a img {
 
 .popupControls {
   background-color: $_(white); /* white */
-  width: 100%;
   border: solid 1px $_(black); /* black */
 }
 
@@ -733,8 +744,8 @@ a img {
 
 /* KanalListe */
 .ChnListTbl {
-  width: 100%;
   background-color: $_(black); /* black */
+  margin: 10px;
 }
 
 .ChnListTbl td {
@@ -774,7 +785,7 @@ a img {
   background-color: $_(active); /* #565657 */
 }
 
-/* Filter Untermenï¿½s */
+/* Filter Untermenüs */
 .FilterSubMenu 
 {
   overflow:auto;
@@ -807,10 +818,6 @@ a img {
   width: 90%;
   cursor:pointer;
   z-index:501;
-}
-
-.Filter_Active .FilterCaption {
-  color: red;
 }
 
 .ControlBtnOff {
@@ -907,7 +914,7 @@ a img {
 	margin: 0;
 }
 
-/* Buttons (Lï¿½schen, Einstellen, Gerï¿½te...) auf Gerï¿½te/Raum/Gewerk-ï¿½bersicht */
+/* Buttons (Löschen, Einstellen, Geräte...) auf Geräte/Raum/Gewerk-Übersicht */
 ._StdButton
 {
   background-color: $_(clickable);
@@ -969,7 +976,7 @@ a img {
   background-image:url(/ise/img/gradientButton25px.png);
   /*background-image: linear-gradient(to bottom, white 40%, gray);*/
   background-image: var(--btnGradient);
-  color: $_(textColorA); /* #ffffff */
+  color: $_(gray);
   border: solid 1px $_(gray); /* silver */
   border-radius: 5px;
   margin:2%;
@@ -1129,10 +1136,6 @@ a img {
   color: $_(textColorB); /* black */
   height:60px;
   text-align:center;
-  max-width: 215.333px;
-  -ms-word-break: break-all;
-  word-break: break-all;
-  word-break: break-word;
 }
 .WhiteBkgChannelPopup {
   background-color: $_(white); /* white */
@@ -1238,16 +1241,6 @@ a img {
   text-align: left;
 }
 
-.tBodyCellInactive
-{
-  background-color: $_(pgmBackColorInactive); /* #f0f0f0 */
-  height: 40px;
-  border: solid 1px $_(black); /* black */
-  color: $_(pgmTextColorInactive); /* #bcc7cb */
-  padding: 4px;
-  text-align: left;
-}
-
 .tBodyCellCenter
 {
   background-color: $_(activeBackground); /* #f0f0f0 */
@@ -1261,13 +1254,10 @@ a img {
 .tTable
 {
   text-align:center;
-  margin-left:10px;
-  margin-top:10px;
-  margin-right:10px;
+  margin:10px;
   empty-cells: show;
-  width:97%;
-  /*width:1200px;*/
   border:solid 1px $_(black); /* black */
+  width: 100%;
 }
 /*
 .tTable th
@@ -1324,8 +1314,7 @@ div.caption  { display: table-caption; }
 .tMain
 {
   border:solid 1px $_(black); /* black */
-  margin-left:20px;
-  margin-top:20px;
+  margin:10px;
 }
 
 .tHeader
@@ -1417,7 +1406,7 @@ div.caption  { display: table-caption; }
 
 .sysConfigHeight
 {
-  min-height: 263px;
+  height: 263px;
 }
 
 .posPreBtn
@@ -1450,7 +1439,7 @@ div.caption  { display: table-caption; }
   text-align:center;
 }
 
-/* Angaben fï¿½r die Tabellenspalten und -header */
+/* Angaben für die Tabellenspalten und -header */
 
 .thCell
 { 
@@ -1471,19 +1460,19 @@ div.caption  { display: table-caption; }
   text-align:center;
 }
 
-/* Weisser Zellenhintergrund fï¿½r Bilder (Gerï¿½teï¿½bersicht u.ï¿½.) */
+/* Weisser Zellenhintergrund für Bilder (Geräteübersicht u.ä.) */
 .WhiteBkgPic {
   background-color: $_(white); /* #ffffff */
   color: $_(textColorB); /* black */
 }
 
-/* Weisser Zellenhintergrund (Gerï¿½teï¿½bersicht u.ï¿½.) */
+/* Weisser Zellenhintergrund (Geräteübersicht u.ä.) */
 .WhiteBkg {
   background-color: $_(activeBackground); /* #f0f0f0 */
   color: $_(textColorB); /* black */
 }
 
-/* Grauer Zellenhintergrund (Gerï¿½teï¿½bersicht u.ï¿½.) */
+/* Grauer Zellenhintergrund (Geräteübersicht u.ä.) */
 .GrayBkg {
   background-color: $_(activeBackground);
   color: $_(textColorB); /* black */
@@ -1703,15 +1692,12 @@ div.caption  { display: table-caption; }
 #ic_linkpeerlist #body_wrapper {
   margin: 0;
   padding: 0;
-  width: 100%;
-  background-color: $_(background); /* #183473 */
 }
 
 #ic_linkpeerlist .LinkListTbl {
   empty-cells: show;
   padding:0;
-  margin: 20px 0 0 0;
-  width: 100%;
+  margin: 10px;
   height: auto;
   border: 1px solid $_(black); /* black */
 }
@@ -1904,7 +1890,7 @@ background-color: $_(inactiveBackground);
 /*IDs in der Tabelle*/
 /*==================*/
 
-/*ï¿½berschriftzeile*/
+/*Überschriftzeile*/
 #ic_selchannel .ChnListTbl .chnListTbl_Caption
 {
 	background-color: $_(clickable);
@@ -1915,7 +1901,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*ï¿½berschriftzeile Sortierfunktion*/
+/*Überschriftzeile Sortierfunktion*/
 #ic_selchannel .ChnListTbl .sorted
 {
 	background-color: $_(active); /* #565657 */
@@ -1942,7 +1928,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*ï¿½berschriftzeile Filterfunktion*/
+/*Überschriftzeile Filterfunktion*/
 #ic_selchannel .ChnListTbl .filtered
 {
 	background-color: $_(active); /* #565657 */
@@ -1980,17 +1966,10 @@ background-color: $_(inactiveBackground);
 {
 	visibility: hidden;
 }
+
 /*--------------------------------------------*/
 
-/*Tabellenkï¿½rper Virtuelle Tasten*/
-#ic_selchannel #body_wrapper
-{
-	background-color: $_(background); /* #183473 */
-	margin-top: 10px;
-}
-/*--------------------------------------------*/
-
-/*Tabellenkï¿½rper Virtuelle Tasten*/
+/*Tabellenkörper Virtuelle Tasten*/
 #ic_selchannel .ChnListTbl  .virtual_key_hidden
 {
 	visibility: hidden;
@@ -2003,7 +1982,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*Tabellenkï¿½rper Bilderspalte*/
+/*Tabellenkörper Bilderspalte*/
 #ic_selchannel .ChnListTbl .chnListTbl_dev_img 
 {
 	background-color: $_(white); /* white */
@@ -2012,7 +1991,7 @@ background-color: $_(inactiveBackground);
 }
 /*--------------------------------------------*/
 
-/*Tabellenfuï¿½ Navibuttons*/
+/*Tabellenfuß Navibuttons*/
 #ic_selchannel .ChnListTbl #chnListFoot tr td
 {
 	background-color: $_(clickable);
@@ -2098,7 +2077,7 @@ background-color: $_(inactiveBackground);
 	border: 0;
 }
 
-/*Anzeige-Feld fï¿½r Expertenprofil und Easy-Mode-Profile*/
+/*Anzeige-Feld für Expertenprofil und Easy-Mode-Profile*/
 #ic_setprofiles .SetProfLinkTbl .easymode_wrapper {
 	
 }
@@ -2299,7 +2278,7 @@ progress[value] {
 progress::-moz-progress-bar { background: #3678c9; }
 progress::-webkit-progress-value { background: #3678c9; }
 
-#dutyCycleProgress0, #dutyCycleProgress1, #dutyCycleProgress2, #dutyCycleProgress3, #dutyCycleProgress4, #dutyCycleProgress5 {
+.dutyCycleProgress {
   width: 75%;
 
   background: -moz-linear-gradient(0deg, rgba(13,255,0,1) 0%, rgba(255,255,0,1) 63%, rgba(255,0,0,1) 100%); /* ff3.6+ */
@@ -2313,7 +2292,7 @@ progress::-webkit-progress-value { background: #3678c9; }
 
 }
 
-#dutyCycleProgressBar0, #dutyCycleProgressBar1, #dutyCycleProgressBar2, #dutyCycleProgressBar3, #dutyCycleProgressBar4, #dutyCycleProgressBar5 {
+.dutyCycleProgressBar {
   width: 1%;
   height: 12px;
   background-color: #d9d9d9;
@@ -2329,6 +2308,7 @@ progress::-webkit-progress-value { background: #3678c9; }
   /* font-weight:bold; */
   text-align:left;
   vertical-align:middle;  
+  height:20px !important;
 }
 
 .FilterHeight20 {
@@ -2596,14 +2576,15 @@ html, body {
   background-color: $_(subMenuBackground);
   overflow:hidden;
   z-index:189;
+  margin-left: 5px;
 }
 
 .MainMenuSubItem {
 
   background-color: $_(subMenuBackground);
   font-weight: bold;
-  /* padding-left: 5px; */
-  padding: 2px 5px; 
+  padding-left: 5px;
+  padding-right: 5px; 
   text-align:left;
   vertical-align:middle;
   color: $_(textColorB); /* black */
@@ -2618,12 +2599,6 @@ html, body {
   /* border: 2px solid $_(subMenuHighlight); */
   /* line-height: 30px; */
 }
-
-.MainMenuSubItem > img {
-  vertical-align: middle;
-  width: 16px;
-}
-
 #webuiloader_wrapper {
   width: 100%;
   height: 100%;
@@ -2962,11 +2937,9 @@ html, body {
   height:80px;
 }
 #DeviceListTable {
-  width:97%;
   height:auto;
-  margin:1%;
-  border:0 none;
-/*  border:1px black solid; */
+  margin:10px;
+  border:1px black solid;
   padding:0;
   empty-cells:show;
 }
@@ -3196,7 +3169,7 @@ html, body {
   top: 50%;
   left: 50%;
   width: 800px;
-  height: 470px;
+  height: 450px;
   margin-left: -400px;
   margin-top: -225px;
   background-color: $_(black); /* black */
@@ -3222,7 +3195,7 @@ html, body {
   top: 24px;
   left: 2px;
   width: 796px;
-  height: 391px;
+  height: 371px;
   background-color: $_(white); /* white */
   color: $_(textColorB); /* black */
 /*  overflow: scroll;   */
@@ -3231,7 +3204,7 @@ html, body {
 
 #DeviceConfigDialogFooter {
   position: absolute;
-  top: 418px;
+  top: 398px;
   left: 2px;
   width: 796px;
   height: 50px;
@@ -3570,18 +3543,11 @@ html, body {
   width: 50px;
   height:80px;
 }
-
 html, body {
   border: 0 none;
   margin: 0;
   padding: 0;
-  font-family: Verdana,Tahoma,Arial,Helvetica,sans-serif;
-  font-size: 12px;
-}
-
-input, textarea, select, button, h1 {
-  font-family: Verdana,Tahoma,Arial,Helvetica,sans-serif;
-  font-size: 12px;
+  font:10pt Verdana;
 }
 
 application {
@@ -3780,6 +3746,11 @@ application {
 	cursor: pointer;
 }
 
+* {
+  font-family: Verdana,Tahoma,Arial,Helvetica,sans-serif;
+  font-size: 12px;
+}
+
 /* rega\pages\msg\editScript.htm */
 
 .CLASS00001 {
@@ -3802,6 +3773,7 @@ application {
 
 .CLASS00004 {
 	width:75%;
+	height:120px;
 	background-color: $_(activeBackground); /* #dcdcdc */
 	text-align:left;
 }
@@ -3840,6 +3812,7 @@ application {
 
 .CLASS00011 {
 	width:25%;
+	height:120px;
 	background-color: $_(white); /* white */
 }
 
@@ -4071,6 +4044,7 @@ application {
 
 .CLASS00314 {
 	line-height:15px;
+	font-size:smaller;
 	text-align:center
 }
 
@@ -4260,6 +4234,7 @@ application {
 	text-align:left;
 	color: $_(textColorA) ! important; /* white */
 	font-weight:bold;
+	font-size:10pt;
 }
 
 .CLASS00716 {
@@ -4665,6 +4640,7 @@ application {
 	font-weight:bold;
 	color: $_(textColorB); /* black */
 	cursor:pointer;
+	font-size:12px;
 }
 
 .CLASS01217 {
@@ -5025,8 +5001,6 @@ application {
 .CLASS02105 {
 	text-align:center;
 	background-color: $_(black); /* #000000 */
-	table-layout: fixed;
-	word-wrap:break-word;
 }
 
 .CLASS02106 {
@@ -5067,6 +5041,7 @@ application {
 /* rega\esp\rule.inc */
 
 .CLASS02300 {
+	font-size: 14px;
 	font-weight: bold;
 }
 
@@ -5100,6 +5075,7 @@ application {
 
 .CLASS02501 {
 	background-color:$_(clickable);
+	font-size:12px;
 	padding:4px;
 	border:solid 1px $_(black); /* black */
 	text-align:center;
@@ -5138,6 +5114,7 @@ application {
 
 .CLASS02507 {
 	background-color:$_(activeBackground);
+	font-size:12px;
 	padding:4px;
 	color: $_(textColorB); /* black */
 	height:30px;
@@ -5311,6 +5288,7 @@ application {
 }
 
 .CLASS02532 {
+	font-size: 10px;
 	width:220px;
 	/*height:25px;*/
 	height:auto;
@@ -5321,12 +5299,14 @@ application {
 }
 
 .CLASS02532a {
+	font-size: 10px;
 	width:220px;
 	height:25px;
   color: $_(white) ! important;
 }
 
 .CLASS02532b {
+	font-size: 10px;
 	width:220px;
 	height:30px;
   color: $_(white) ! important;
@@ -5422,11 +5402,13 @@ application {
 
 .CLASS02542 {
 	border:solid 1px $_(black); /* black */
+	font-size:20px;
 	text-align:right;
 }
 
 .CLASS02542b {
 	border:solid 1px $_(black); /* black */
+	font-size:18px;
 	text-align:right;
 }
 
@@ -5639,7 +5621,7 @@ color: $_(textColorA); /* white */
 
 .CLASS02614 {
 	background-color: $_(inactiveButton); /* #dddddd */
-color: $_(textColorA); /* white */
+	color: lightgray;
 	font-weight: bold;
 	border: solid 1px $_(gray); /* silver */
 }
@@ -5991,9 +5973,6 @@ color: $_(textColorA) ! important; /* white */
 }
 
 .CLASS03301 {
-	width:75%;
-	margin-left:20px;
-	margin-top:20px;
 	empty-cells:show;
 }
 
@@ -6025,6 +6004,7 @@ color: $_(textColorA); /* white */
 
 .CLASS03306 {
 	line-height:15px;
+	font-size:smaller;
 }
 
 .CLASS03307 {
@@ -6080,8 +6060,7 @@ color: $_(textColorA); /* white */
 
 .CLASS03500 {
 	border:solid 1px $_(black); /* black */
-	margin-left:10px;
-	margin-top:27px;
+	width:100%;
 }
 
 .CLASS03501 {
@@ -6114,8 +6093,7 @@ color: $_(textColorA); /* white */
 
 .CLASS03600 {
 	border:solid 1px $_(black); /* black */
-	margin-left:50px;
-	margin-top:27px;
+	width:100%;
 }
 
 .CLASS03601 {
@@ -6162,6 +6140,7 @@ color: $_(textColorA); /* white */
 
 .CLASS03703 {
 	line-height:15px;
+	font-size:smaller;
 }
 
 .CLASS03704 {
@@ -6203,8 +6182,7 @@ color: $_(textColorA); /* white */
 
 .CLASS03800 {
 	border:solid 1px $_(black); /* black */
-	margin-left:50px;
-	margin-top:27px;
+	width:100%;
 }
 
 .CLASS03801 {
@@ -6247,15 +6225,13 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS03902 {
-	width:100%;
 	overflow:auto;
-	margin:0;
-	padding:0;
+	margin:10px;
+	margin-right:2px;
 }
 
 .CLASS03903 {
 	border:solid 1px $_(black); /* black */
-	margin-top:27px;
 }
 
 .CLASS03904 {
@@ -6280,13 +6256,13 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS03908 {
-	width:100%;
 	overflow:auto;
+	margin:10px;
+	margin-left:2px;
 }
 
 .CLASS03909 {
-	width: 80%;
-	height: 96%;
+	width: 100%;
 }
 
 .CLASS03910 {
@@ -6296,6 +6272,7 @@ color: $_(textColorA); /* white */
 
 .CLASS03911 {
 	line-height:15px;
+	font-size:smaller;
 }
 
 /* rega\pages\tabs\handling\rooms.htm */
@@ -6311,13 +6288,13 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS04002 {
-	width:100%;
 	overflow:auto;
+	margin:10px;
+	margin-left:2px;
 }
 
 .CLASS04003 {
-	width: 80%;
-	height: 96%;
+	width: 100%;
 }
 
 .CLASS04004 {
@@ -6327,11 +6304,11 @@ color: $_(textColorA); /* white */
 
 .CLASS04005 {
 	line-height:15px;
+	font-size:smaller;
 }
 
 .CLASS04006 {
 	border:solid 1px $_(black); /* black */
-	margin-top:27px;
 }
 
 .CLASS04007 {
@@ -6342,7 +6319,6 @@ color: $_(textColorA); /* white */
 
 .CLASS04100 {
 	text-align:center;
-	width:95%;
 	empty-cells:show;
 }
 
@@ -6359,6 +6335,7 @@ color: $_(textColorA); /* white */
 
 .CLASS04103 {
 	height:auto;
+	background-color: $_(background); /* #183473 */
 }
 
 .CLASS04104 {
@@ -6376,6 +6353,7 @@ color: $_(textColorA); /* white */
 
 .CLASS04107 {
 	line-height:15px;
+	font-size:smaller;
 }
 
 .CLASS04108 {
@@ -6408,8 +6386,13 @@ color: $_(textColorA); /* white */
 
 .CLASS04200 {
 	text-align:center;
-	width:95%;
 	empty-cells:show;
+}
+
+.CLASS04201 {
+	overflow:auto;
+	margin:10px;
+	margin-right:2px;
 }
 
 .CLASS04202 {
@@ -6417,14 +6400,17 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS04203 {
+	font-size:10pt;
 	height:100%;
 }
 
 .CLASS04204 {
+	font-size:10pt;
 }
 
 .CLASS04205 {
 	height:auto;
+	background-color: $_(background); /* #183473 */
 }
 
 .CLASS04206 {
@@ -6441,6 +6427,7 @@ color: $_(textColorA); /* white */
 
 .CLASS04209 {
 	line-height:15px;
+	font-size:smaller;
 }
 
 .CLASS04210 {
@@ -6480,7 +6467,7 @@ color: $_(textColorA); /* white */
 .CLASS04301 {
 	width:100%;
 	height:100%;
-	overflow-y:scroll;
+	overflow-y:auto;
 }
 
 .CLASS04302 {
@@ -6492,6 +6479,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS04304 {
+	font-size:10pt;
 	height:40px;
 }
 
@@ -6532,6 +6520,7 @@ color: $_(textColorA); /* white */
 
 .CLASS04312 {
 	line-height:15px;
+	font-size:smaller;
 }
 
 .CLASS04313 {
@@ -6632,6 +6621,7 @@ color: $_(textColorA); /* white */
 
 .CLASS04800 {
 	line-height:14px;
+	font-size:smaller;
 	width:200px;
 }
 
@@ -6672,10 +6662,12 @@ color: $_(textColorA); /* white */
 
 .CLASS04904 {
 	color: $_(textColorB); /* black */
+	font-size:12px;
 }
 
 .CLASS04905 {
 	line-height:15px;
+	font-size:smaller;
 	width:220px;
 }
 
@@ -6729,6 +6721,7 @@ color: $_(textColorA); /* white */
 
 .CLASS05007 {
 	color: $_(textColorB); /* black */
+	font-size:9pt;
 }
 
 .CLASS05008 {
@@ -6751,6 +6744,7 @@ color: $_(textColorA); /* white */
 
 .CLASS05010 {
 	color: $_(textColorB); /* black */
+	font-size:9pt;
 	width:100%;
 }
 
@@ -6760,6 +6754,7 @@ color: $_(textColorA); /* white */
 
 .CLASS05012 {
 	color: $_(textColorB); /* black */
+	font-size:9pt;
 }
 
 /* rega\pages\tabs\admin\msg\timemodule.htm */
@@ -6869,6 +6864,7 @@ color: $_(textColorA); /* white */
 
 .CLASS05207 {
 	line-height:15px;
+	font-size:smaller;
 }
 
 .CLASS05208 {
@@ -6921,17 +6917,17 @@ color: $_(textColorA); /* white */
 
 .CLASS05305 {
 	line-height:15px;
+	font-size:smaller;
 }
 
 /* rega\pages\tabs\admin\linkprog.htm */
 
 .CLASS05400 {
-	/* height:130px; */
+	height:130px;
 }
 
 .CLASS05401 {
 	height:160px;
-	margin-left: 10px;
 }
 
 .CLASS05402 {
@@ -6942,52 +6938,14 @@ color: $_(textColorA); /* white */
 	text-align:center ! important;
 }
 
-.CLASS05405 {
-	min-height:50%;
-	display: flex;
-	flex-flow: row wrap;
-	margin: 10px;
-}
-
-.CLASS05405 > div {
-	margin: 10px;
-	padding: 1px;
-	flex: 0 1 calc(50% - 22px);
-	overflow: hidden;
-	/* copied from .StdTable td */
-	background-color: $_(inactiveBackground);
-	text-align:left;
-	vertical-align: top;
-	color: $_(textColorB); /* black */
-}
-
 /* rega\pages\tabs\admin\systemconfig.htm */
 
 .CLASS05500 {
-	/* height:50%; */
+	height:50%;
 }
 
 .CLASS05501 {
 	background-color:$_(background); /* #183473 */
-}
-
-.CLASS05502 {
-	height:50%;
-	display: flex;
-	flex-flow: row wrap;
-	margin: 10px;
-}
-
-.CLASS05502 > div {
-	margin: 10px;
-	padding: 1px;
-	flex: 0 1 calc(25% - 22px);
-	overflow: hidden;
-	/* copied from .StdTable td */
-	background-color: $_(inactiveBackground);
-	text-align:left;
-	vertical-align: top;
-	color: $_(textColorB); /* black */
 }
 
 /* rega\pages\tabs\favorites.htm */
@@ -7069,26 +7027,11 @@ color: $_(textColorA); /* white */
 /* pages\tabs\statusview.htm */
 
 .CLASS05700 {
-	/* width:1257px ! important; */
+	width:1257px ! important;
 }
 
 .CLASS05701 {
 	height:50%;
-	display: flex;
-	flex-flow: row wrap;
-	margin: 10px;
-}
-
-.CLASS05701 > div {
-	margin: 10px;
-        padding: 1px;
-	flex: 0 1 calc(25% - 22px);
-        overflow: hidden;
-	/* copied from .StdTable td */
-	background-color: $_(inactiveBackground);
-	text-align:left;
-	vertical-align: top;
-	color: $_(textColorB); /* black */
 }
 
 .CLASS05702 {
@@ -7112,6 +7055,7 @@ color: $_(textColorA); /* white */
 
 .CLASS05705 {
 	width:572px;
+	font-size:9pt;
 }
 
 .CLASS05706 {
@@ -7124,6 +7068,7 @@ color: $_(textColorA); /* white */
 
 .CLASS05707 {
 	width:570px;
+	font-size:9pt;
 }
 
 /* rega\pages\tabs\favViewer.htm  */
@@ -7221,30 +7166,11 @@ color: $_(textColorA); /* white */
 /* rega\pages\tabs\user\systemConfigUser.htm */
 
 .CLASS06100 {
-	/* height:50%; */
+	height:50%;
 }
 
 .CLASS06101 {
 	background-color: $_(background) ! important; /* #183473 */
-}
-
-.CLASS06102 {
-	height:50%;
-	display: flex;
-	flex-flow: row wrap;
-	margin: 10px;
-}
-
-.CLASS06102 > div {
-	margin: 10px;
-        padding: 1px;
-	flex: 0 1 calc(25% - 22px);
-        overflow: hidden;
-	/* copied from .StdTable td */
-	background-color: $_(inactiveBackground);
-	text-align:left;
-	vertical-align: top;
-	color: $_(textColorB); /* black */
 }
 
 /* rega\pages\tabs\user\userAdministrationUser.htm */
@@ -7587,6 +7513,7 @@ color: $_(textColorA); /* white */
 
 .CLASS06413 {
   line-height:15px;
+  font-size:smaller;
 }
 
 .CLASS06414 {
@@ -7729,7 +7656,7 @@ color: $_(textColorA); /* white */
 
 .CLASS10902 {
   border:1px solid $_(gray); /* #999999 */
-  color: $_(activeBackground); /* rgb(224,224,224); */
+  color:$_(gray);
   background-color:$_(inactiveButton); /* rgb(192,192,192) */
   cursor:default;
 }
@@ -8001,6 +7928,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS20801 {
+  font-size: 8pt;
  	color: $_(textColorB); /* black */
 }
 
@@ -8021,6 +7949,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS20805 {
+  font-size: 8pt;
 }
 
 .CLASS20806 {
@@ -8031,6 +7960,7 @@ color: $_(textColorA); /* white */
   background-color:$_(clickable);
  color: $_(textColorA); /* white */
   vertical-align: middle;
+  font-size: 10pt;
 }
 
 .CLASS20808 {
@@ -8046,6 +7976,7 @@ color: $_(textColorA); /* white */
 .CLASS20810 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
+  font-size: 8pt;
 }
 
 .CLASS20811 {
@@ -8080,6 +8011,7 @@ color: $_(textColorA); /* white */
 .CLASS20817 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
+  font-size: 8pt;
 }
 
 .CLASS20818 {
@@ -8105,6 +8037,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS20901 {
+  font-size: 8pt;
 }
 
 .CLASS20902 {
@@ -8146,6 +8079,7 @@ color: $_(textColorA); /* white */
   color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
   width: 100%;
+  font-size: 8pt;
 }
 
 .CLASS20910 {
@@ -8165,6 +8099,7 @@ color: $_(textColorA); /* white */
 .CLASS20913 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
+  font-size: 8pt;
   width: 100%;
 }
 
@@ -8177,6 +8112,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS20916 {
+  font-size: 8pt;
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
 }
@@ -8238,6 +8174,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21101 {
+  font-size: 8pt;
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
 }
@@ -8259,11 +8196,13 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21105 {
+  font-size: 8pt;
 }
 
 .CLASS21106 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
+  font-size: 8pt;
   width: 100%;
 }
 
@@ -8295,6 +8234,7 @@ color: $_(textColorA); /* white */
 .CLASS21111 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
+  font-size: 8pt;
 }
 
 .CLASS21112 {
@@ -8349,6 +8289,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21201 {
+  font-size: 8pt;
 }
 
 .CLASS21202 {
@@ -8362,6 +8303,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21204 {
+  font-size: 8pt;
  	color: $_(textColorB); /* black */
 }
 
@@ -8458,6 +8400,7 @@ color: $_(textColorA); /* white */
 
 .CLASS21302 {
  	color: $_(textColorB); /* black */
+  font-size: 20px;
   text-align:center;
   margin: 5px;
 }
@@ -8497,6 +8440,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21401 {
+  font-size: 8pt;
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
 }
@@ -8518,6 +8462,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21405 {
+  font-size: 8pt;
 }
 
 .CLASS21406 {
@@ -8546,6 +8491,7 @@ color: $_(textColorA); /* white */
 .CLASS21410 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
+  font-size: 8pt;
 }
 
 .CLASS21411 {
@@ -8572,6 +8518,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21501 {
+  font-size: 8pt;
 }
 
 .CLASS21502 {
@@ -8593,6 +8540,7 @@ color: $_(textColorA); /* white */
 .CLASS21505 {
  	color: $_(textColorB); /* black */
   background-color: $_(white); /* white */
+  font-size: 8pt;
 }
 
 .CLASS21506 {
@@ -8628,6 +8576,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21601 {
+  font-size: 8pt;
 }
 
 .CLASS21602 {
@@ -8641,6 +8590,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS21604 {
+  font-size: 8pt;
  	color: $_(textColorB); /* black */
 }
 
@@ -8690,6 +8640,7 @@ color: $_(textColorA); /* white */
 .CLASS21800 {
   width: 100%;
   font-weight: bold;
+  font-size: 12px;
   cursor: pointer;
 }
 
@@ -8732,11 +8683,12 @@ color: $_(textColorA); /* white */
 /* config\ic_selchannel.cgi */
 
 .CLASS21900 {
-  padding: 4px;
+  padding: 0px;
 }
 
 .CLASS21901 {
   line-height:15px;
+  font-size:smaller;
 }
 
 .CLASS21902 {
@@ -8767,7 +8719,7 @@ color: $_(textColorA); /* white */
 
 .CLASS21906 {
   color: $_(red);
-  font-size: larger;
+  font-size: large;
   font-weight: bold;
 }
 
@@ -8781,7 +8733,6 @@ color: $_(textColorA); /* white */
 
 .CLASS21908 {
   overflow: auto;
-  background-color: $_(background); /* #183473 */
   width:100%;
 }
 
@@ -8912,10 +8863,11 @@ color: $_(textColorA); /* white */
 
 .CLASS22100 {
   line-height:14px;
+  font-size:smaller;
 }
 
 .CLASS22101 {
-  padding:4px;
+  padding:0px;
 }
 
 .CLASS22102 {
@@ -9103,13 +9055,3 @@ color: $_(textColorA); /* white */
   border:solid 1px $_(black);
 }
 
-.CodeMirror {
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  text-align: left;
-  font-family: monospace;
-}
-
-.CodeMirror-gutter-wrapper {
-  font-family: monospace;
-}

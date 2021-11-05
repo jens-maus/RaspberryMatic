@@ -39,15 +39,15 @@
 
 <table cellpadding="0" cellspacing="0" id="userAdmin" class="tTable" style="display:none">
 <colgroup>
-<col width="6%" />
-<col width="6%" />
-<col width="6%" />
-<!-- <col width="6%" /> -->
-<col width="6%" />
-<col width="8%" />
-<col width="8%" />
-<col width="6%" />
-<col width="6%" />
+  <col />
+  <col />
+  <col />
+  <!-- <col /> -->
+  <col />
+  <col />
+  <col />
+  <col />
+  <col style="width:100px;" />
 </colgroup>
 
 <tr class="CLASS05300">
@@ -79,12 +79,12 @@
      if (user.Visible()) 
      {
         Write("<tr class='CLASS05302' id='ut"#user.ID()#"' >")
-        Write("<td align='center' valign='middle'  class='TblUserAdministration'>")
+        Write("<td  style='text-align:center; vertical-align: middle;' class='TblUserAdministration'>")
         string sUserFullName = user.UserFirstName()#' '#user.UserLastName();
         if( sUserFullName == ' ' ){ sUserFullName = user.Name(); }
         Write(sUserFullName);
         Write("</td>")
-        Write("<td align='center' valign='middle' class='TblUserAdministration'>")
+        Write("<td  style='text-align:center; vertical-align: middle;' class='TblUserAdministration'>")
         if (user.UserPwd() != "") {
           Write("*****");
         }
@@ -92,14 +92,14 @@
           Write("${lblNotSet}");
         }
         Write("</td>")
-        Write("<td align='center' valign='middle' class='TblUserAdministration CLASS05302'>")
+        Write("<td  style='text-align:center; vertical-align: middle;' class='TblUserAdministration CLASS05302'>")
         string sChecked = "";
         if (user.UserShowLogin()) {
           sChecked = "checked";
         }
         Write("<input id='cb"#user.ID()#"' disabled='disabled' "#sChecked#" type='checkbox' />")
         Write("</td>")
-        Write("<td align='center' valign='middle' class='TblUserAdministration'>");
+        Write("<td  style='text-align:center; vertical-align: middle;' class='TblUserAdministration'>");
         
         if (user.UserLevel() == iulAdmin)
         { 
@@ -119,7 +119,7 @@
         Write("</td>")
 
 ! Endgerät        
-!        Write("<td align='center' valign='middle' class='TblUserAdministration'>")
+!        Write("<td style='text-align:center; vertical-align: middle;' class='TblUserAdministration'>")
 !        integer uc = user.UserClient();
 !        if (uc == dwcAuto) { Write("automatisch"); }
 !        if (uc == dwcPDA) { Write("PDA"); }
@@ -127,13 +127,13 @@
 !        if (uc == dwcHandy) { Write("Handy"); }
 !        Write("</td>")
         
-        Write("<td align='center' valign='middle' class='TblUserAdministration'>")
+        Write("<td  style='text-align:center; vertical-align: middle;' class='TblUserAdministration'>")
         Write(user.UserMailAddress());
         Write("</td>")
-        Write("<td align='center' valign='middle' class='TblUserAdministration'>")
+        Write("<td  style='text-align:center; vertical-align: middle;' class='TblUserAdministration'>")
         Write(user.UserPhoneNumber());
         Write("</td>")
-        Write("<td align='center' valign='middle' class='TblUserAdministration'>")
+        Write("<td  style='text-align:center; vertical-align: middle;' class='TblUserAdministration'>")
         if (user.ID() == obj.UsersDefaultLogin(dwcPC)) {
           Write("${lblActiv}");
 !          Write("PC<br>");
@@ -142,7 +142,7 @@
 !          Write("PDA");
 !        }
         Write("</td>")
-        Write("<td align='center' valign='middle' class='TblUserAdministration CLASS05303' >")
+        Write("<td style='text-align:center; vertical-align: middle;' class='TblUserAdministration CLASS05303' >")
           Write("<div class='StdButton CLASS05304' onclick='editUser("#user.ID()#")'>${btnEdit}</div>")
           if ((system.GetSessionVar('sessionUserID') != user.ID()) && (user.Name()!='Admin') ) {
             Write("<div class='StdButton CLASS05304' onclick='deleteUser("#user.ID()#")'>${btnRemove}</div>")
@@ -170,9 +170,9 @@
   
   s += "<table cellspacing='8'>";
   s += "<tr>";
-    s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
-    s += "<td align='center' valign='middle'><div class='FooterButton' onclick='newUser();'>${footerBtnNew}</div></td>";
-    s += "<td align='center' valign='middle'><div class='FooterButton CLASS05305' onclick='showAutoLogin()'>${footerBtnAutoLogin}</div></td>";
+    s += "<td style='text-align: center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
+    s += "<td style='text-align: center; vertical-align: middle;'><div class='FooterButton' onclick='newUser();'>${footerBtnNew}</div></td>";
+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05305' onclick='showAutoLogin()'>${footerBtnAutoLogin}</div></td>";
   s += "</tr>";
   s += "</table>";
 

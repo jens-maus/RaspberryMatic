@@ -114,13 +114,13 @@ proc create_default_sysvars {} {
     sv.ValueName1("${sysVarPresencePresent}");
     sv.ValueName0("${sysVarPresenceNotPresent}");
 
-    sv=dom.GetObject(40);
+    sv=dom.GetObject(ID_GW_SYSALARM);
     dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
     sv.Name("${sysVarAlarmMessages}");
     sv.DPInfo("${sysVarAlarmMessagesCount}");
     sv.Internal(0);
 
-    sv=dom.GetObject(41);
+    sv=dom.GetObject(ID_GW_SYSSERVICE);
     dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
     sv.Name("${sysVarServiceMessages}");
     sv.DPInfo("${sysVarServiceMessagesCount}");

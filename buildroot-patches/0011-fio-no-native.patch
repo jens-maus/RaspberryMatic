@@ -1,0 +1,11 @@
+--- buildroot/package/fio/fio.mk.orig
++++ buildroot/package/fio/fio.mk
+@@ -26,7 +26,7 @@
+ endif
+ 
+ define FIO_CONFIGURE_CMDS
+-	(cd $(@D); $(TARGET_MAKE_ENV) ./configure --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
++	(cd $(@D); $(TARGET_MAKE_ENV) ./configure --disable-native --cc="$(TARGET_CC)" --extra-cflags="$(TARGET_CFLAGS)")
+ endef
+ 
+ define FIO_BUILD_CMDS

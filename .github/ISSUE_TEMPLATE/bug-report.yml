@@ -1,22 +1,48 @@
 name: Bug Report
 description: Report a bug/issue related to RaspberryMatic
-labels: bug
+labels: bug-report
 body:
   - type: markdown
     attributes:
       value: |
-        **Bug Report Rules:**
+        ## Bug Report Rules
+  - type: markdown
+    attributes:
+      value: |
         1. Do **NOT** use this ticket/issue system for support requests! It is meant to be used to report bugs only and not to search for help if you have problems using RaspberryMatic.
         2. Do **NOT** submit bug reports about anything but the two most recently released versions!
         3. Before you open a new bug/issue report here, please make sure that it hasn't been reported yet and please make sure to cross-check the discussion fora discussed below and try to discuss your problem there first before you are opening a new bug report here.
 
         If you have problems while using RaspberryMatic and are seeking for help, please consult our [GitHub Community Forum](https://github.com/jens-maus/RaspberryMatic/discussions) or the public [RaspberryMatic Forum](https://homematic-forum.de/forum/viewforum.php?f=65).
+  - type: markdown
+    attributes:
+      value: |
+        ## The problem
   - type: textarea
     validations:
       required: true
     attributes:
       label: Describe the issue you are experiencing
       description: Provide a clear and concise description of what the bug is.
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Describe the behavior you expected
+      description: Describe what you expected to happen or it should look/behave.
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Steps to reproduce the issue
+      description: |
+        Please tell us exactly how to reproduce your issue.
+        Provide clear and concise step by step instructions and add code snippets if needed.
+      value: |
+        1.
+        2.
+        3.
+        ...
   - type: markdown
     attributes:
       value: |
@@ -67,19 +93,6 @@ body:
     attributes:
       value: |
         # Details
-  - type: textarea
-    validations:
-      required: true
-    attributes:
-      label: Steps to reproduce the issue
-      description: |
-        Please tell us exactly how to reproduce your issue.
-        Provide clear and concise step by step instructions and add code snippets if needed.
-      value: |
-        1.
-        2.
-        3.
-        ...
   - type: textarea
     validations:
       required: true

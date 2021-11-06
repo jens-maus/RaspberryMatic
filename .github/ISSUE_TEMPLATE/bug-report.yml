@@ -1,13 +1,14 @@
-name: Bug Report Form
+name: Bug Report
 description: Report a bug/issue related to RaspberryMatic
 labels: bug
 body:
   - type: markdown
     attributes:
       value: |
-        **Note:**
-        1. Do **NOT** use this ticket/issue system for support requests! It is meant to be used to report bugs in RaspberryMatic itself and **NOT** to search for help if you have problems using RaspberryMatic.
+        **Bug Report Rules:**
+        1. Do **NOT** use this ticket/issue system for support requests! It is meant to be used to report bugs only and not to search for help if you have problems using RaspberryMatic.
         2. Do **NOT** submit bug reports about anything but the two most recently released versions!
+        3. Before you open a new bug/issue report here, please make sure that it hasn't been reported yet and please make sure to cross-check the discussion fora discussed below and try to discuss your problem there first before you are opening a new bug report here.
 
         If you have problems while using RaspberryMatic and are seeking for help, please consult our [GitHub Community Forum](https://github.com/jens-maus/RaspberryMatic/discussions) or the public [RaspberryMatic Forum](https://homematic-forum.de/forum/viewforum.php?f=65).
   - type: textarea
@@ -24,25 +25,29 @@ body:
     validations:
       required: true
     attributes:
-      label: What is the used version of RaspberryMatic?
+      label: What is the version this bug report is based on?
       placeholder: 3.XX.YY-YYYYMMDD
       description: >
-        Can be found in the help page of the WebUI. Starts with `3.XX.YY-YYYYMMDD`.
+        The RaspberryMatic version you are using Can be found in the help page of the WebUI and starts with `3.XX.YY-YYYYMMDD`.
   - type: dropdown
     validations:
       required: true
     attributes:
-      label: Which base platform are you using to run RaspberryMatic?
+      label: Which base platform are you running?
       description: >
-        If you don't know, you can find it in: Configuration panel -> Info.
+        This is the platform you are using to run RaspberryMatic on and corresponds to the image you are usually downloading for updating RaspberryMatic. 
       options:
         - rpi4 (RaspberryPi4)
         - rpi3 (RaspberryPi3)
         - rpi2 (RaspberryPi2)
         - rpi0 (RaspberryPi)
+        - tinkerboard (ASUS Tinkerboard)
+        - odroid-c2 (ODROID C2)
+        - odroid-c4 (ODROID C4)
+        - odroid-n2 (ODROID N2/N2+)
+        - intelnuc (intel NUC)
         - ova (Open Virtual Infrastructure)
         - oci (Open Container Infrastructure)
-        - intelnuc (intel NUC)
         - ha-addon (HomeAssistant Add-on)
   - type: dropdown
     validations:
@@ -50,12 +55,14 @@ body:
     attributes:
       label: Which HomeMatic/homematicIP radio module are you using?
       description: >
-        Can be found in the Supervisor panel -> System tab. Starts with
-        `core-....`.
+        This is the radio module you are potentially using to communicate to HomeMatic/homematicIP devices.
       options:
         - RPI-RF-MOD
         - HM-MOD-RPI-PCB
         - HmIP-RFUSB
+        - HM-CFG-LAN
+        - HM-CFG-USB-2
+        - n/a
   - type: markdown
     attributes:
       value: |
@@ -77,7 +84,7 @@ body:
     validations:
       required: true
     attributes:
-      label: Anything in the RaspberryMatic logs that might be useful for us?
+      label: Anything in the logs that might be useful for us?
       description: >
         The RaspberryMatic logs can be found in the `/var/log` directory on the central.
       render: txt

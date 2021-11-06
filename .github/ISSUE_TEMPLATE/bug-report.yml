@@ -1,0 +1,91 @@
+name: Bug Report Form
+description: Report a bug/issue related to RaspberryMatic
+labels: bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Note:**
+        1. Do **NOT** use this ticket/issue system for support requests! It is meant to be used to report bugs in RaspberryMatic itself and **NOT** to search for help if you have problems using RaspberryMatic.
+        2. Do **NOT** submit bug reports about anything but the two most recently released versions!
+
+        If you have problems while using RaspberryMatic and are seeking for help, please consult our [GitHub Community Forum](https://github.com/jens-maus/RaspberryMatic/discussions) or the public [RaspberryMatic Forum](https://homematic-forum.de/forum/viewforum.php?f=65).
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Describe the issue you are experiencing
+      description: Provide a clear and concise description of what the bug is.
+  - type: markdown
+    attributes:
+      value: |
+        ## Environment
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: What is the used version of RaspberryMatic?
+      placeholder: 3.XX.YY-YYYYMMDD
+      description: >
+        Can be found in the help page of the WebUI. Starts with `3.XX.YY-YYYYMMDD`.
+  - type: dropdown
+    validations:
+      required: true
+    attributes:
+      label: Which base platform are you using to run RaspberryMatic?
+      description: >
+        If you don't know, you can find it in: Configuration panel -> Info.
+      options:
+        - rpi4 (RaspberryPi4)
+        - rpi3 (RaspberryPi3)
+        - rpi2 (RaspberryPi2)
+        - rpi0 (RaspberryPi)
+        - ova (Open Virtual Infrastructure)
+        - oci (Open Container Infrastructure)
+        - intelnuc (intel NUC)
+        - ha-addon (HomeAssistant Add-on)
+  - type: dropdown
+    validations:
+      required: true
+    attributes:
+      label: Which HomeMatic/homematicIP radio module are you using?
+      description: >
+        Can be found in the Supervisor panel -> System tab. Starts with
+        `core-....`.
+      options:
+        - RPI-RF-MOD
+        - HM-MOD-RPI-PCB
+        - HmIP-RFUSB
+        - none
+  - type: markdown
+    attributes:
+      value: |
+        # Details
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Steps to reproduce the issue
+      description: |
+        Please tell us exactly how to reproduce your issue.
+        Provide clear and concise step by step instructions and add code snippets if needed.
+      value: |
+        1.
+        2.
+        3.
+        ...
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Anything in the RaspberryMatic logs that might be useful for us?
+      description: >
+        The RaspberryMatic logs can be found in the `/var/log` directory on the central.
+      render: txt
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        If you have any additional information for us, use the field below.
+        Please note, you can attach screenshots or screen recordings here, by
+        dragging and dropping files in the field below.

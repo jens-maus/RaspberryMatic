@@ -1,6 +1,6 @@
 name: Bug Report
 description: Report a bug/issue related to RaspberryMatic
-labels: :bug: bug-report
+labels: ":bug: bug-report"
 body:
   - type: markdown
     attributes:

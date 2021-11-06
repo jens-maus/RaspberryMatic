@@ -56,7 +56,6 @@ body:
         - RPI-RF-MOD
         - HM-MOD-RPI-PCB
         - HmIP-RFUSB
-        - none
   - type: markdown
     attributes:
       value: |

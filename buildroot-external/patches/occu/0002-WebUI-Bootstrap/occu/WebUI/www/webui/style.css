@@ -2482,13 +2482,13 @@ html, body {
   cursor: pointer;
 }
 #menubar {
+  box-sizing: content-box;
   height: 34px;
   width: 100%;
   border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
   background-color: $_(background); /* #183473 */
   z-index: 189;
   padding: 2px;
-  box-sizing: content-box;
 }
 
 .MainMenuItem_Left {

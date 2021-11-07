@@ -2293,14 +2293,6 @@ table.center {
   font-weight: bold;
 }
 
-.controlHeader150px {
-  text-align:center;
-  background-color:#89989b;
-  color:white;
-  font-weight: bold;
-  min-width: 150px;
-}
-
 .controlRedBorder {
   border: 1px solid red !important;
 }
@@ -2521,7 +2513,6 @@ html, body {
   background-color: $_(background); /* #183473 */
   z-index: 189;
   padding-top: 2px;
-  box-sizing: content-box;
 }
 
 .MainMenuItem_Left {

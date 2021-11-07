@@ -28954,32 +28954,32 @@ showDutyCycle = function() {
               }
 
               dutyCycleBar.css("width", arInterfaceDutyCycle[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceDutyCycle[ifaceBidCosRF]);
-              dutyCycleBar.removeClass("progress-bar-success");
-              dutyCycleBar.removeClass("progress-bar-warning");
-              dutyCycleBar.removeClass("progress-bar-danger");
+              dutyCycleBar.removeClass("bg-success");
+              dutyCycleBar.removeClass("bg-warning");
+              dutyCycleBar.removeClass("bg-danger");
 
               if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
-                dutyCycleBar.addClass("progress-bar-danger");
+                dutyCycleBar.addClass("bg-danger");
               } else if (arInterfaceDutyCycle[ifaceBidCosRF] > dcWarn) {
-                dutyCycleBar.addClass("progress-bar-warning");
+                dutyCycleBar.addClass("bg-warning");
               } else {
-                dutyCycleBar.addClass("progress-bar-success");
+                dutyCycleBar.addClass("bg-success");
               }
               
               if (arInterfaceCarrierSense[ifaceBidCosRF] != csNotAvailable) {
                 carrierSenseValElm.text(arInterfaceCarrierSense[ifaceBidCosRF] + " " + dcUnit);
                 carrierSenseBar.css("width", arInterfaceCarrierSense[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceCarrierSense[ifaceBidCosRF]);
                 
-                carrierSenseBar.removeClass("progress-bar-info");
-                carrierSenseBar.removeClass("progress-bar-warning");
-                carrierSenseBar.removeClass("progress-bar-danger");
+                carrierSenseBar.removeClass("bg-info");
+                carrierSenseBar.removeClass("bg-warning");
+                carrierSenseBar.removeClass("bg-danger");
   
                 if (arInterfaceCarrierSense[ifaceBidCosRF] > csAlarm) {
-                  carrierSenseBar.addClass("progress-bar-danger");
+                  carrierSenseBar.addClass("bg-danger");
                 } else if (arInterfaceCarrierSense[ifaceBidCosRF] > csWarn) {
-                  carrierSenseBar.addClass("progress-bar-warning");
+                  carrierSenseBar.addClass("bg-warning");
                 } else {
-                  carrierSenseBar.addClass("progress-bar-info");
+                  carrierSenseBar.addClass("bg-info");
                 }
               } else {
                 carrierSenseValElm.text("n/a");

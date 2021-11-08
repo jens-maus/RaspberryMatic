@@ -56,8 +56,6 @@ puts {
 
   <div id="configMainTable" style="display:none">
     
-    
-    
     <!-- Zentralen-Wartung -->
     <div class="cpCell">
       <div class="cpButton">
@@ -91,7 +89,6 @@ if {[isOldCCU]} {
 
      <div class="cpCell _CLASS21702"></div>
 
-     
 
   }
 }
@@ -130,7 +127,7 @@ if {[getProduct] >= 3} {
 if {[isOldCCU]} {
   puts {
     <div class="cpCell">
-	 <div class="cpButton">
+      <div class="cpButton">
       <div class="StdTableBtn CLASS21701" onclick="ConfigData.check(function() { WebUI.enter(BidcosRfPage); });">${btnSysConfBidCosConfig}</div>
       <ul>
         <li>${lblSysConfBidCosConfig1}</li> <!-- interne Antenne konfigurieren -->
@@ -165,11 +162,9 @@ if {[isOldCCU]} {
         <div class="StdTableBtnHelp"><img id="showGeneralSettingsCPHelp" src="/ise/img/help.png"></div>
       </div>
     </div>
-
-  
   }
 
-    if {[getProduct] >= 3} {
+  if {[getProduct] >= 3} {
     puts {
       <!-- Button Security Wizard - slimmed down InstallWizard without the admin password dialog -->
 
@@ -178,7 +173,6 @@ if {[isOldCCU]} {
         <div class="StdTableBtnHelp"><img id="showSecuritySettingsCPHelp" src="/ise/img/help.png"></div>
       </div>
     }
-  
   }
 
   puts {
@@ -190,14 +184,12 @@ if {[isOldCCU]} {
       </div>
     </div>
   }
-  
 
   if { [getProduct] >= 3} {
     puts "<div class=\"cpCell\"><div class=\"cpButton\">"
     puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"showAccessPoint();\">\${btnAccessPoints}</div>"
     puts "<div class=\"StdTableBtnHelp\"><img id=\"showAccessPointCPHelp\" src=\"/ise/img/help.png\"></div>"
-	puts "</div></div>"
-  
+    puts "</div></div>"
   }
 
   puts {
@@ -208,7 +200,7 @@ if {[isOldCCU]} {
       </div>
     </div>
    }
-  
+
 
 if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
   puts "<div class=\"cpCell\"><div class=\"cpButton\">"
@@ -224,7 +216,7 @@ foreach addonId [array names addons] {
 
     array set arrDESCR $addon(CONFIG_DESCRIPTION)
 
-    puts "<div class=\"cpCell\">"
+    puts "<div class='cpCell'>"
       puts "<div class='cpButton'>"
         puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"window.open('$addon(CONFIG_URL)?sid=$sid');\">$addon(CONFIG_NAME)</div>"
         puts "<div id=\"btnAddOn_$addonId\" class=\"StdTableBtnHelp j_addOn\"><img id=\"showAddonInfo_$addonId\" src=\"/ise/img/help.png\"></div>"

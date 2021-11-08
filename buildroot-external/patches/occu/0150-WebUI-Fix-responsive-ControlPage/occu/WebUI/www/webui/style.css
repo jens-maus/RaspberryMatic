@@ -8707,7 +8707,6 @@ color: $_(textColorA); /* white */
 
 #configMainTable {
   margin: 10px;
-  max-width: 1500px;
 }
 
 .cpCell {

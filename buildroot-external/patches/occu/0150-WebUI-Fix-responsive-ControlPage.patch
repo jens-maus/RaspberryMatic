@@ -1,26 +1,6 @@
---- occu/WebUI/www/webui/style.css.orig
-+++ occu/WebUI/www/webui/style.css
-@@ -8705,6 +8705,17 @@
-   margin: 10px;
- }
- 
-+#configMainTable {
-+  margin: 10px;
-+  max-width: 1500px;
-+}
-+
-+.cpCell {
-+  width: 270px;
-+  height: 70px;
-+  float: left;  
-+}
-+
- .CLASS21700 {
- }
- 
 --- occu/WebUI/www/config/control_panel.cgi.orig
 +++ occu/WebUI/www/config/control_panel.cgi
-@@ -54,95 +54,83 @@
+@@ -54,95 +54,80 @@
      setFooter("");
    </script>
  
@@ -34,8 +14,6 @@
 -    <tr class="CLASS21700">
 +  <div id="configMainTable" style="display:none">
      
-+    
-+    
      <!-- Zentralen-Wartung -->
 -    <td>
 +    <div class="cpCell">
@@ -80,7 +58,6 @@
  
 -     </tr>
 -     <tr>
-+     
  
    }
  }
@@ -94,17 +71,17 @@
          <div class="StdTableBtnHelp"><img id="showNetworkCPHelp" src="/ise/img/help.png"></div>
        </div>
 -    </td>
-+    </div>
- }
- 
+-}
+-
 -if {![isOldCCU]} {
 -  puts {
 -    </tr>
 -    <tr>
 -  }
--}
++    </div>
+ }
  
--
+ 
  if {[getProduct] >= 3} {
    puts {
 -    <td>
@@ -133,11 +110,11 @@
    puts {
 -    <td>
 +    <div class="cpCell">
-+	 <div class="cpButton">
++      <div class="cpButton">
        <div class="StdTableBtn CLASS21701" onclick="ConfigData.check(function() { WebUI.enter(BidcosRfPage); });">${btnSysConfBidCosConfig}</div>
        <ul>
          <li>${lblSysConfBidCosConfig1}</li> <!-- interne Antenne konfigurieren -->
-@@ -151,7 +139,7 @@
+@@ -151,7 +136,7 @@
    }
  } else {
    puts {
@@ -146,7 +123,7 @@
        <div class="cpButton">
          <div class="StdTableBtn CLASS21701" onclick="ConfigData.check(function() { WebUI.enter(BidcosRfPage); });">${btnSysConfLANGateway}</div>
    }
-@@ -160,97 +148,72 @@
+@@ -160,97 +145,67 @@
    puts {
          <div class="StdTableBtnHelp"><img id="showBidCosConfigHelp" src="/ise/img/help.png"></div>
        </div>
@@ -171,18 +148,16 @@
          <div class="StdTableBtnHelp"><img id="showGeneralSettingsCPHelp" src="/ise/img/help.png"></div>
        </div>
 -    </td>
-+    </div>
- 
+-
 -    </tr>
 -    
 -    <tr>
-+  
++    </div>
    }
  
 -  set i 0
 -
--  if {[getProduct] >= 3} {
-+    if {[getProduct] >= 3} {
+   if {[getProduct] >= 3} {
      puts {
        <!-- Button Security Wizard - slimmed down InstallWizard without the admin password dialog -->
  
@@ -194,7 +169,6 @@
 +      </div>
      }
 -    incr i
-+  
    }
  
    puts {
@@ -209,7 +183,6 @@
 +    </div>
    }
 -  incr i
-+  
  
    if { [getProduct] >= 3} {
 -    puts "<td><div class=\"cpButton\">"
@@ -217,8 +190,7 @@
      puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"showAccessPoint();\">\${btnAccessPoints}</div>"
      puts "<div class=\"StdTableBtnHelp\"><img id=\"showAccessPointCPHelp\" src=\"/ise/img/help.png\"></div>"
 -    incr i
-+	puts "</div></div>"
-+  
++    puts "</div></div>"
    }
  
    puts {
@@ -232,10 +204,9 @@
 +    </div>
     }
 -   incr i
-+  
- 
--set COL_COUNT 4
 -
+-set COL_COUNT 4
+ 
 -if { $i == $COL_COUNT } {
 -  puts {
 -    <td class="_CLASS21702"></td>
@@ -244,7 +215,7 @@
 -  }
 -  set i 0
 -}
--
+ 
  if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
 -  puts "<td><div class=\"cpButton\">"
 +  puts "<div class=\"cpCell\"><div class=\"cpButton\">"
@@ -265,16 +236,16 @@
  }
  
  
-@@ -261,7 +224,7 @@
+@@ -261,7 +216,7 @@
  
      array set arrDESCR $addon(CONFIG_DESCRIPTION)
  
 -    puts "<td>"
-+    puts "<div class=\"cpCell\">"
++    puts "<div class='cpCell'>"
        puts "<div class='cpButton'>"
          puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"window.open('$addon(CONFIG_URL)?sid=$sid');\">$addon(CONFIG_NAME)</div>"
          puts "<div id=\"btnAddOn_$addonId\" class=\"StdTableBtnHelp j_addOn\"><img id=\"showAddonInfo_$addonId\" src=\"/ise/img/help.png\"></div>"
-@@ -269,7 +232,7 @@
+@@ -269,7 +224,7 @@
          #puts "<ul id=\"description_$addonId\" style=\"display:none\">$addon(CONFIG_DESCRIPTION)</ul>"
          puts "<ul id=\"description_$addonId\" style=\"display:none\"></ul>"
        puts "</div>"
@@ -283,7 +254,7 @@
  
       puts "<script type=\"text/javascript\">"
  
-@@ -291,34 +254,13 @@
+@@ -291,34 +246,13 @@
       puts "</script>"
  
  
@@ -311,15 +282,15 @@
 -    </tr>
 -  }
 -}
- 
 -
+ 
  puts {
 -  </table>
 +  </div>
  }
  
  
-@@ -389,6 +331,6 @@
+@@ -389,6 +323,6 @@
        createAddOnTooltips();
      } catch(e) {};
  
@@ -327,3 +298,22 @@
 +    jQuery("#configMainTable").show();
    </script>
  }
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -8705,6 +8705,16 @@
+   margin: 10px;
+ }
+ 
++#configMainTable {
++  margin: 10px;
++}
++
++.cpCell {
++  width: 270px;
++  height: 70px;
++  float: left;  
++}
++
+ .CLASS21700 {
+ }
+ 

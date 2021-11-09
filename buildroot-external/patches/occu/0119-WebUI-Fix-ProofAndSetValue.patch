@@ -480,11 +480,11 @@
 +  var parsedValue;
 +  var parsedMin = parseFloat(min);
 +  var parsedMax = parseFloat(max);
- 
++
 +  var minSplit = min.toString().split(".");
 +  var maxSplit = max.toString().split(".");
 +  var digits = 0;
-+
+ 
 +  if(minSplit.length === 2) {
 +    digits = Math.max(digits, minSplit[1].length);
 +  }

@@ -368,8 +368,7 @@
 +                dutyCycleBar.addClass("bg-danger");
 +              } else if (arInterfaceDutyCycle[ifaceBidCosRF] > dcWarn) {
 +                dutyCycleBar.addClass("bg-warning");
-               } else {
--                trDutyCycle.removeClass("attention");
++              } else {
 +                dutyCycleBar.addClass("bg-success");
 +              }
 +              
@@ -388,7 +387,8 @@
 +                } else {
 +                  carrierSenseBar.addClass("bg-info");
 +                }
-+              } else {
+               } else {
+-                trDutyCycle.removeClass("attention");
 +                carrierSenseValElm.text("n/a");
 +                carrierSenseBar.css("width", "0%");
                }

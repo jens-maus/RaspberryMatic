@@ -94,10 +94,13 @@
    }
    SaveValueRange = function()
    {
-@@ -207,6 +233,30 @@
-           }
-         }
-         break;
+@@ -204,6 +230,30 @@
+         } else {
+           if ( ( (rv1/1) < (min/1) ) || ( (rv1/1) > (max/1) ) ) {
+             go = 6;
++          }
++        }
++        break;
 +      case 5:
 +        rv1 = $("Text7").value;
 +        if( vu == "100%" ) rv1 = rv1/100;
@@ -119,12 +122,9 @@
 +        } else {
 +          if ( ( (rv1/1) < (min/1) ) || ( (rv1/1) > (max/1) ) ) {
 +            go = 6;
-+          }
-+        }
-+        break;
-       default:
+           }
+         }
          break;
-     }
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -774,13 +774,15 @@

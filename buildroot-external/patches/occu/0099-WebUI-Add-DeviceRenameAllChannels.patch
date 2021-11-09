@@ -86,11 +86,8 @@
 +\n
 +			<td width=\"40%\"><div id=\"DeviceConfigDialogTestHint\"><img id=\"DeviceConfigDialogTestHintImg\" src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"showParamHelp('generalDeviceConfigHint', '400', '200')\"><\/div><\/td>\n
 +\n
-           <\/tr>\n
-         <\/table>\n
--        <div class=\"CLASS10805\" name=\"generalDeviceConfigHint\">\n
--          Im Rahmen des Funktionstests wird geprüft, ob die Kommunikation mit dem Gerät fehlerfrei funktioniert. Der Test gilt als bestanden, sobald die erste Rückmeldung von dem Gerät empfangen wurde. <br \/> Dazu werden an alle Aktoren des Geräts Schaltbefehle gesendet, die deren Zustand ändern. Sensoren, wie z.B. Fernbedienungen, melden sich im Allgemeinen erst dann, wenn sie durch ein entsprechendes Ereignis ausgelöst wurden.\n
--        <\/div>\n
++          <\/tr>\n
++        <\/table>\n
 +      <\/div>\n
 +    <\/div>\n
 +	\n
@@ -110,7 +107,7 @@
 +\n
 +		  <tr>			\n
 +		    <td width=\"80%\" name=\"generalDeviceChannelConfigLblSeparator\">Trennzeichen:<\/td><td width=\"20%\"><input id=\"DeviceConfigDialog_DeviceChannelsRenameSeparator\" size=\"2\" type=\"text\" value=\":\"\/><\/td>\n
-+          <\/tr>\n
+           <\/tr>\n
 +\n
 +		  <tr>\n
 +\n
@@ -120,7 +117,10 @@
 +\n
 +		  <\/tr>\n
 +\n
-+        <\/table>\n
+         <\/table>\n
+-        <div class=\"CLASS10805\" name=\"generalDeviceConfigHint\">\n
+-          Im Rahmen des Funktionstests wird geprüft, ob die Kommunikation mit dem Gerät fehlerfrei funktioniert. Der Test gilt als bestanden, sobald die erste Rückmeldung von dem Gerät empfangen wurde. <br \/> Dazu werden an alle Aktoren des Geräts Schaltbefehle gesendet, die deren Zustand ändern. Sensoren, wie z.B. Fernbedienungen, melden sich im Allgemeinen erst dann, wenn sie durch ein entsprechendes Ereignis ausgelöst wurden.\n
+-        <\/div>\n
        <\/div>\n
      <\/div>\n
  \n

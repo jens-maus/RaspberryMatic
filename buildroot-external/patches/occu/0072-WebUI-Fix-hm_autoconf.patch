@@ -72,8 +72,9 @@
      
      proc conf_value_DISPLAY.ALARM_COUNT { url ch_id ch_desc_var value_desc_var} {
 -        create_sysvar_to_value_prg $ch_id ALARM_COUNT 40 "Alarmmeldungen anzeigen"
--    }
--    
++        create_sysvar_to_value_prg $ch_id ALARM_COUNT ID_GW_SYSALARM "Alarmmeldungen anzeigen"
+     }
+     
 -    proc create_objects {collection enum_type names} {
 -        set ids [rega "dom.GetObject($collection).EnumIDs()"]
 -        set i 0
@@ -155,9 +156,8 @@
 -            sv.Internal(0);
 -            
 -        }
-+        create_sysvar_to_value_prg $ch_id ALARM_COUNT ID_GW_SYSALARM "Alarmmeldungen anzeigen"
-     }
-     
+-    }
+-    
 -    
      proc create_sysvar_to_value_prg {ch_id value sv_id prg_name} {
          set script "string ch_id=\"$ch_id\";\nstring value_name=\"$value\";\nstring sv_id=$sv_id;\nstring prg_name=\"$prg_name\";\n"

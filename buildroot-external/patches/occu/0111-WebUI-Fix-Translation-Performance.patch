@@ -38,8 +38,6 @@
 -  //if (HMIdentifier[getLang()] == {} || langJSON[getLang()] == {}) {
 -  if (Object.keys(HMIdentifier[getLang()]).length === 0 || Object.keys(langJSON[getLang()]).length === 0) {
 -    loadTextResource();
--  }
--  return unescape((langJSON[getLang()][key] != undefined) ? langJSON[getLang()][key] : key);
 +function translateKey(key, lang) {
 +  if(null == lang) lang = getLang();
 +  // This check is more performant then always processing all Keys.
@@ -53,7 +51,8 @@
 +    var text = langJSON[lang][key];
 +    if(text === undefined) text = key;
 +    return unescape(text);
-+  }
+   }
+-  return unescape((langJSON[getLang()][key] != undefined) ? langJSON[getLang()][key] : key);
 +  
 +  // Check if we already have an escaped variant of the ressource
 +  if(EscapedLangDict[lang][key] !== undefined) {

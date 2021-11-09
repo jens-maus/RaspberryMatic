@@ -45,10 +45,35 @@
 \ No newline at end of file
 --- occu/WebUI/www/webui/css/extern/hmBootstrap.css.orig
 +++ occu/WebUI/www/webui/css/extern/hmBootstrap.css
-@@ -0,0 +1,3 @@
+@@ -0,0 +1,28 @@
 +/*!
 + * Place all our bootstrap related style fixes into this file
 + */
++
++#header *,
++#header ::after,
++#header ::before,
++#menubar,
++#content *,
++#content ::after,
++#content ::before {
++  box-sizing: content-box;
++}
++
++#header,
++.UIFrameContent {
++  line-height: initial;
++}
++
++.FooterButton {
++  box-sizing: content-box;
++}
++
++#header table,
++#content table,
++#messagebox table {
++  border-collapse: separate;
++}
 --- occu/WebUI/www/webui/js/extern/bootstrap.bundle.min.js.map.orig
 +++ occu/WebUI/www/webui/js/extern/bootstrap.bundle.min.js.map
 @@ -0,0 +1 @@

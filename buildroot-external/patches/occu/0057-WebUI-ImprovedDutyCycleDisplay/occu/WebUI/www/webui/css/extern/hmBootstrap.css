@@ -2,6 +2,31 @@
  * Place all our bootstrap related style fixes into this file
  */
 
+#header *,
+#header ::after,
+#header ::before,
+#menubar,
+#content *,
+#content ::after,
+#content ::before {
+  box-sizing: content-box;
+}
+
+#header,
+.UIFrameContent {
+  line-height: initial;
+}
+
+.FooterButton {
+  box-sizing: content-box;
+}
+
+#header table,
+#content table,
+#messagebox table {
+  border-collapse: separate;
+}
+
 #hmBootstrap .progress {
   position: relative; /* inserted */
   height: 14px; /* 20px */

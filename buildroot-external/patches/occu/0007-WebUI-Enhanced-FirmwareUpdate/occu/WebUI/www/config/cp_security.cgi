@@ -297,7 +297,7 @@ proc action_factory_reset_go {} {
     } else {
       exec touch /usr/local/.doFactoryReset
     }
-    exec /sbin/reboot
+    exec /sbin/reboot -d 2 2>/dev/null >/dev/null &
   }]} {
 
     # TWIST-22
@@ -796,7 +796,7 @@ proc action_backup_restore_go {} {
         catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
 
         set backuperror false
-        exec /sbin/reboot
+        exec /sbin/reboot -d 2 2>/dev/null >/dev/null &
         return
       }
     cd /

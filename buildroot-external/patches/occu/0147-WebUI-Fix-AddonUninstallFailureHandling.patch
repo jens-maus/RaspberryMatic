@@ -1,0 +1,58 @@
+--- occu/WebUI/www/config/cp_software.cgi.orig
++++ occu/WebUI/www/config/cp_software.cgi
+@@ -411,11 +411,11 @@
+           sendXML: false,
+           onSuccess: function(transport) {
+             if (!transport.responseText.match(/^Success/g)){
+-              alert(translateString(op_name) + translateKey('btnSysConfAdditionalSoftRemoveFailure') + transport.responseText);
++              alert(translateString(op_name) + translateKey('btnSysConfAdditionalSoftRemoveFailure') + transport.responseText.replace(/^Failure\n/, ''));
+             }else{
+               alert(translateString(op_name) + translateKey('btnSysConfAdditionalSoftRemoveSuccess'));
+-              showSoftwareCP();
+             }
++            showSoftwareCP();
+           }
+         };
+         if ("uninstall" == op) 
+@@ -480,13 +480,16 @@
+   import script
+   import op
+   
+-  if {[catch {exec $script $op}]} {
+-    puts "Failure"
++  set result "Success"
++  if {[catch {exec $script $op} result]} {
++    set errorfile /var/log/addon-uninstall-error.log
++    exec echo $result >>$errorfile
++    set result "Failure\nPlease see $errorfile on the central for more details."
+   }
+   if { "$op" == "uninstall" } {
+     exec rm -rf $script
+   }
+-  puts "Success"
++  puts $result
+ }
+ 
+ proc action_image_upload {} {
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
+@@ -355,7 +355,7 @@
+     "comment" : "folgende 2 Keys sind Fragmente",
+     "comment" : "Zusammengesetzt heisst es: 'Deinstallieren wurde erfolgreich ausgef%FChrt', bzw. 'Deinstallieren fehlgeschlagen'",
+     "btnSysConfAdditionalSoftRemoveSuccess" : " wurde erfolgreich ausgef%FChrt.",
+-    "btnSysConfAdditionalSoftRemoveFailure" : " fehlgeschlagen:\n",
++    "btnSysConfAdditionalSoftRemoveFailure" : " wurde mit Fehlern abgeschlossen:\n\n",
+     "lblHintSimulateKeyPress" : "Vor dem Simulieren des Tastendrucks %FCbertragen Sie zun%E4chst das Profil.",
+     "dialogChooseLEDTitle" : "LEDs ausw%E4hlen",
+     "infoStatusControlLblDanger" : "Gefahr",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
+@@ -355,7 +355,7 @@
+     "dialogSetSecKeyLoadBackupLblC" : "Security key:",
+     "comment" : "************ END RF_REPEATER.txt ************",
+     "btnSysConfAdditionalSoftRemoveSuccess" : " was successfully executed.",
+-    "btnSysConfAdditionalSoftRemoveFailure" : " failed:\n",
++    "btnSysConfAdditionalSoftRemoveFailure" : " was executed with failures:\n\n",
+     "lblHintSimulateKeyPress" : "Before simulating the button press, please transmit the profile first.",
+     "dialogChooseLEDTitle" : "Select LEDs",
+     "infoStatusControlLblDanger" : "Hazard",

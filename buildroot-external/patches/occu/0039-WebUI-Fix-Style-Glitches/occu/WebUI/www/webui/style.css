@@ -21,6 +21,10 @@
     font-weight: bold;
 }
 
+hr {
+  border: solid 1px $_(navBarSeparator);
+}
+
 .height20px {
     height:20px;
 }
@@ -84,15 +88,6 @@
 .startPageInfo {
   /*border: solid 1px $_(darkgray);
   padding: 4px;*/
-}
-
-.startPageInfo td:nth-child(1) {
-  word-wrap: break-word;
-}
-
-.startPageInfo td {
-  word-wrap: anywhere;
-  vertical-align: bottom;
 }
 
 html,body

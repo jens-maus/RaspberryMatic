@@ -29869,7 +29869,7 @@ iseSortMultiArray = function(arr,dsc,dir,sln, sessionVar,popup)
   const collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
   /* arr.forEach( x => { if( typeof x[dsc] == "undefined" ) { x[dsc] = ""; } } ); */
   arr.sort( (x, y) => { return collator.compare(x[dsc], y[dsc]); } );
-  if( dir === 0 ) { arr.reverse(); }
+  if( dir === 1 ) { arr.reverse(); }
   if (!popup) iseTransferSortedArray(arr,dsc,sln, sessionVar);
 };
 

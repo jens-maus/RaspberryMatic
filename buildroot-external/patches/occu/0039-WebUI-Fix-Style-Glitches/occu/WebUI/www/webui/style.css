@@ -413,6 +413,8 @@ a img {
   border:solid 1px $_(black); /* black */
   background-color:$_(clickable);
   height:50px;
+  font-weight:normal;
+  color: $_(textColorA); /* white */
 }
 
 .filterTable td
@@ -623,13 +625,12 @@ a img {
 .tblList th {
   color: $_(textColorA); /* white */
   font-weight: normal;
-  background-color: $_(clickable);
 }
 
 .Sort
 {
   cursor: pointer;
-  height: 54px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -639,7 +640,7 @@ a img {
 {
   cursor: pointer;
   background-color: $_(active); /* #565657 */
-  height: 54px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1457,6 +1458,7 @@ div.caption  { display: table-caption; }
   border:solid 1px $_(black); /* black */
   height:40px;
   text-align:center;
+  font-weight:normal;
 }
 
 .tdCellFilter
@@ -2342,7 +2344,7 @@ progress::-webkit-progress-value { background: #3678c9; }
   padding:0;
   background-color:$_(clickable);
   color: $_(textColorB); /* black */
-  /* font-weight:bold; */
+  font-weight:normal;
   text-align:left;
   vertical-align:middle;  
   height:20px !important;
@@ -2358,7 +2360,7 @@ progress::-webkit-progress-value { background: #3678c9; }
   padding:0;
   background-color:$_(active); /* #565657 */
   color: $_(textColorB); /* black */
-  /* font-weight:bold; */
+  font-weight:normal;
   text-align:left;
   vertical-align:middle;  
 }
@@ -2981,25 +2983,25 @@ html, body {
 }
 
 .DeviceListHead {
-  height:60px;
+  height:40px;
   margin:0;
   border:1px solid $_(black); /* black */
   padding:0;
   background-color:$_(clickable);
   color: $_(textColorA); /* white */
-  font-weight:bold;
+  font-weight:normal;
   text-align:center;
   vertical-align:middle;
 }
 
 .DeviceListHead_Active {
-  height:60px;
+  height:40px;
   margin:0;
   border:1px black solid;
   padding:0;
   background-color:$_(active); /* #565657 */
   color: $_(textColorA); /* white */
-  font-weight:bold;
+  font-weight:normal;
   text-align:center;
   vertical-align:middle;
 }
@@ -3953,7 +3955,6 @@ application {
 }
 
 .CLASS00203 {
-	border: solid 1px $_(black); /* black */
 }
 
 .CLASS00204 {
@@ -5731,7 +5732,7 @@ color: $_(textColorA) ! important; /* white */
 }
 
 .CLASS02803 {
-	font-weight:bold;
+	font-weight:normal;
   height: auto;
 }
 
@@ -5986,7 +5987,6 @@ color: $_(textColorA) ! important; /* white */
 }
 
 .CLASS03302 {
-	font-weight:bold;
 	text-align:center;
 	border:solid 1px $_(black); /* black */
 	padding:0px;
@@ -6336,7 +6336,6 @@ color: $_(textColorA); /* white */
 .CLASS04102 {
 	background-color:$_(clickable);
 	color: $_(textColorA) ! important; /* white */
-	font-size:10pt ! important;
 	height:44px ! important;
 }
 
@@ -6348,6 +6347,7 @@ color: $_(textColorA); /* white */
 .CLASS04104 {
 	background-color:$_(clickable);
   height:20px;
+  border: solid 1px $_(black); /* black */
 }
 
 .CLASS04105 {
@@ -6370,6 +6370,7 @@ color: $_(textColorA); /* white */
 .CLASS04109 {
 	background-color:$_(clickable);
 	color: $_(textColorA) ! important; /* white */
+	border: solid 1px $_(black); /* black */
   height:20px;
 }
 
@@ -6422,6 +6423,7 @@ color: $_(textColorA); /* white */
 
 .CLASS04206 {
 	background-color:$_(clickable);
+	border: solid 1px $_(black); /* black */
 }
 
 .CLASS04207 {
@@ -6444,6 +6446,7 @@ color: $_(textColorA); /* white */
 .CLASS04211 {
 	background-color:$_(clickable);
 	color: $_(textColorA) ! important; /* white */
+	border: solid 1px $_(black); /* black */
 }
 
 .CLASS04212 {
@@ -6652,7 +6655,7 @@ color: $_(textColorA); /* white */
 
 .CLASS04900 {
 	color: $_(textColorA); /* white */
-	font-weight:bold;
+	font-weight:normal;
 }
 
 .CLASS04901 {
@@ -6840,7 +6843,6 @@ color: $_(textColorA); /* white */
 .CLASS05200 {
 	text-align:center;
 	vertical-align:middle;
-	font-weight:bold;
 	height: auto;
 }
 
@@ -8811,6 +8813,10 @@ color: $_(textColorA); /* white */
 .CLASS22001 {
   text-align: center;
   background-color: $_(activeBackground);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .CLASS22002 {

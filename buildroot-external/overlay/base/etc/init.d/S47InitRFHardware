@@ -106,21 +106,27 @@ identify_rf_hardware() {
       modprobe -q cp210x
     fi
 
-    # register new cp210x device
-    echo "1b1f c020" >/sys/bus/usb-serial/drivers/cp210x/new_id
+    # helper function which takes usb "vendor_id:product_id" tuple and
+    # searches for the corresponding /dev node
+    id_to_dev() {
+      find "$(grep -l "PRODUCT=$(printf "%x/%x" "0x${1%:*}" "0x${1#*:}")" \
+         /sys/bus/usb/devices/[0-9]*:*/uevent | sed 's,uevent$,,')" \
+         /dev/null -name dev -o -name dev_id |
+      sed 's,[^/]*$,uevent,' |
+      xargs sed -n -e s,DEVNAME=,,p -e s,INTERFACE=,,p
+    }
 
-    # shellcheck disable=SC2044
-    for i in $(find /sys/bus/usb/devices/usb*/ -name "ttyUSB*" -maxdepth 4); do
-      DEVDIR=$(dirname "$i")
-      if [[ -f "${DEVDIR}/uevent" ]]; then
-        if grep -q PRODUCT=1b1f/c020 "${DEVDIR}/uevent"; then
-          # add with preference
-          echo -n "."
-          RF_DEVNODES="$(basename "$i") ${RF_DEVNODES}"
-          break
-        fi
-      fi
-    done
+    RFUSB_DEVNODE=$(id_to_dev 1b1f:c020)
+    if [[ -z "${RFUSB_DEVNODE}" ]]; then
+      echo "1b1f c020" >/sys/bus/usb-serial/drivers/cp210x/new_id
+      sleep 2
+      RFUSB_DEVNODE=$(id_to_dev 1b1f:c020)
+    fi
+
+    if [[ -n "${RFUSB_DEVNODE}" ]]; then
+      echo -n "."
+      RF_DEVNODES="${RFUSB_DEVNODE} ${RF_DEVNODES}"
+    fi
   fi
 
   # check if a HM-CFG-USB-2 (1b1f:c00f) USB stick is connected

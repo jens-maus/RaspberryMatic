@@ -34,7 +34,7 @@
          <tr style="vertical-align: top;" class="CLASS01810">
            <td>
            <table id="tblStartpageInfo" width="100%" class="CLASS01811 startPageInfo hidden" cellpadding="2" cellspacing="0">
-@@ -173,38 +178,20 @@
+@@ -173,38 +178,21 @@
              </colgroup>
              <tr>
                  <!-- Uhrzeit -->
@@ -46,7 +46,8 @@
 -              <td>${date}:</td>
 -              <td><span id="maindate"><% Write(system.Date("%d.%m.%Y")); %></span></td>
 +              <td>${date} / ${time}:</td>
-+              <td><span id="maintime"><% Write(system.Date("%d.%m.%Y")); %>, <% Write(system.Date("%H:%M")); %></span> ${ruleConditionLblTimeClock}</td>
++              <%  object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') ); %>         
++              <td><span id="maintime" <% if( oUser.UserLevel() == iulAdmin ) { Write("onclick='showTimeCP();' style='cursor:pointer;'"); } %>><% Write(system.Date("%d.%m.%Y")); %>, <% Write(system.Date("%H:%M")); %></span> ${ruleConditionLblTimeClock}</td>
              </tr>
  
              <tr>
@@ -78,6 +79,14 @@
              </tr>
  
              <!-- Device-Firmware -->
+@@ -220,7 +208,6 @@
+             </tr>
+ 
+             <%
+-              object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') );
+               if (oUser.UserPwd() == "")
+               {
+                 Write("<tr>");
 @@ -233,11 +220,17 @@
                
                if (oUser) {

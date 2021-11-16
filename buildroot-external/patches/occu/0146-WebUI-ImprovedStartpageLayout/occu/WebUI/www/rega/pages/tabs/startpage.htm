@@ -179,7 +179,8 @@
             <tr>
                 <!-- Uhrzeit -->
               <td>${date} / ${time}:</td>
-              <td><span id="maintime"><% Write(system.Date("%d.%m.%Y")); %>, <% Write(system.Date("%H:%M")); %></span> ${ruleConditionLblTimeClock}</td>
+              <%  object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') ); %>         
+              <td><span id="maintime" <% if( oUser.UserLevel() == iulAdmin ) { Write("onclick='showTimeCP();' style='cursor:pointer;'"); } %>><% Write(system.Date("%d.%m.%Y")); %>, <% Write(system.Date("%H:%M")); %></span> ${ruleConditionLblTimeClock}</td>
             </tr>
 
             <tr>
@@ -207,7 +208,6 @@
             </tr>
 
             <%
-              object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') );
               if (oUser.UserPwd() == "")
               {
                 Write("<tr>");

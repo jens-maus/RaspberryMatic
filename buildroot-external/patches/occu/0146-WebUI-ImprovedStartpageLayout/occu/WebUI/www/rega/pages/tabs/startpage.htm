@@ -179,14 +179,14 @@
             <tr>
                 <!-- Uhrzeit -->
               <td>${date} / ${time}:</td>
-              <%  object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') ); %>         
-              <td><span id="maintime" <% if( oUser.UserLevel() == iulAdmin ) { Write("onclick='showTimeCP();' style='cursor:pointer;'"); } %>><% Write(system.Date("%d.%m.%Y")); %>, <% Write(system.Date("%H:%M")); %></span> ${ruleConditionLblTimeClock}</td>
+              <%  object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') ); %>
+              <td><span id="maintime" <% if( oUser.UserLevel() == iulAdmin ) { Write("onclick='showTimeCP();' style='cursor:pointer;'"); } %>><% Write(system.Date("%d.%m.%Y")); %>,&nbsp;<% Write(system.Date("%H:%M")); %></span>&nbsp;${ruleConditionLblTimeClock}</td>
             </tr>
 
             <tr>
             <!-- Sonnenaufgang -->
               <td>${astroDaytime}:</td>
-              <td id="sunrise"><% Write(system.SunriseTime("%H:%M")); %> - <% Write(system.SunsetTime("%H:%M")); %> ${ruleConditionLblTimeClock}</td>
+              <td id="sunrise"><% Write(system.SunriseTime("%H:%M")); %>&nbsp;-&nbsp;<% Write(system.SunsetTime("%H:%M")); %>&nbsp;${ruleConditionLblTimeClock}</td>
             </tr>
 
             <tr>

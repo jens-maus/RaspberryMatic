@@ -49,6 +49,27 @@
          </table>
          <div class='FilterSetButton' onclick='setAFilter(fltSYV, "vartypes");updateTable();$("btnFilterVarTypeSub").hide();'>${filterSet}</div>
          <div class='FilterSetButton' onclick="$('btnFilterVarTypeSub').hide();">${filterClose}</div>
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -1123,10 +1123,18 @@
+   text-align:center;
+ }
+ .SysVarsTblPopup{
++  background-color:$_(activeBackground);
++  color: $_(textColorB); /* black */
++  height:60px;
++  text-align:center;
++  cursor:pointer;
++}
++.SysVarsTblPopup_Highlight{
+   background-color:$_(inactiveBackground);
+   color: $_(textColorB); /* black */
+   height:60px;
+   text-align:center;
++  cursor:pointer;
+ }
+ .WhiteBkgChannelPopup {
+   background-color: $_(white); /* white */
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -24812,6 +24812,7 @@

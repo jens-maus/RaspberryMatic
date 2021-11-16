@@ -1640,6 +1640,24 @@
    </tr>
    <tr>
      <td class="CLASS06405">
+--- occu/WebUI/www/webui/color.map.orig
++++ occu/WebUI/www/webui/color.map
+@@ -45,7 +45,7 @@
+ 
+ mainMenuBackground      #ebf1f2
+ subMenuBackground       #ebf1f2
+-subMenuHighlight        #89989b
++subMenuHighlight        #bcc7cb
+ 
+ messagesBackground      #ebf1f2
+ logoutButton            #ebf1f2
+@@ -57,4 +57,4 @@
+ borderColor             #f0f0f0
+ 
+ shutterOpeningDegree    #89989b
+-link                    #0101FF
+\ No newline at end of file
++link                    #0101FF
 --- occu/WebUI/www/webui/js/extern/sliderControl.js.orig
 +++ occu/WebUI/www/webui/js/extern/sliderControl.js
 @@ -95,7 +95,7 @@
@@ -1797,6 +1815,20 @@
    background-color: $_(white); /* white */
    border: solid 1px $_(black); /* black */
    padding-left: 4px;
+@@ -666,12 +689,12 @@
+ .popupTableScript
+ {
+   width: 100%;
+-  border: solid 1px $_(black); /* black */
+   empty-cells: show;
+   color: $_(textColorA); /* white */
+   text-align: center;
+   vertical-align: middle;
+   font-weight: normal;
++  border-spacing: 2px;
+ }
+ 
+ .popupTableRow
 @@ -706,7 +729,6 @@
  
  .popupControls {
@@ -1832,7 +1864,20 @@
  }
  
  
-@@ -1245,13 +1268,10 @@
+@@ -1123,10 +1146,11 @@
+   text-align:center;
+ }
+ .SysVarsTblPopup{
+-  background-color:$_(inactiveBackground);
++  background-color:$_(activeBackground);
+   color: $_(textColorB); /* black */
+   height:60px;
+   text-align:center;
++  cursor:pointer;
+ }
+ .WhiteBkgChannelPopup {
+   background-color: $_(white); /* white */
+@@ -1245,13 +1269,10 @@
  .tTable
  {
    text-align:center;
@@ -1848,7 +1893,7 @@
  }
  /*
  .tTable th
-@@ -1308,8 +1328,8 @@
+@@ -1308,8 +1329,8 @@
  .tMain
  {
    border:solid 1px $_(black); /* black */
@@ -1859,7 +1904,7 @@
  }
  
  .tHeader
-@@ -1347,7 +1367,6 @@
+@@ -1347,7 +1368,6 @@
  
  .bcWhitePic
  {
@@ -1867,7 +1912,7 @@
  }
  
  .bcWhite
-@@ -1391,12 +1410,8 @@
+@@ -1391,12 +1411,8 @@
  
  .oLine
  {
@@ -1881,7 +1926,7 @@
  }
  
  .sysConfigHeight
-@@ -1443,7 +1458,7 @@
+@@ -1443,7 +1459,7 @@
    border:solid 1px $_(black); /* black */
    height:40px;
    text-align:center;
@@ -1890,7 +1935,7 @@
  }
  
  .tdCellFilter
-@@ -1457,7 +1472,7 @@
+@@ -1457,7 +1473,7 @@
  
  /* Weisser Zellenhintergrund für Bilder (Geräteübersicht u.ä.) */
  .WhiteBkgPic {
@@ -1899,7 +1944,7 @@
    color: $_(textColorB); /* black */
  }
  
-@@ -1495,9 +1510,20 @@
+@@ -1495,9 +1511,20 @@
  /* Buttons incl. Hilfe-Img. */
  .cpButton {
      width:230px;
@@ -1922,7 +1967,7 @@
  	background-color: $_(background); /* #183473 */
  }
  
-@@ -1513,7 +1539,7 @@
+@@ -1513,7 +1540,7 @@
  
  #ic_deviceparameters #DeviceInformation
  {
@@ -1931,7 +1976,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -1537,7 +1563,6 @@
+@@ -1537,7 +1564,6 @@
  
  #ic_deviceparameters #DeviceInformation #DeviceImage
  {
@@ -1939,7 +1984,7 @@
  	width: 52px;
  	height: 56px;
  	margin: 0;
-@@ -1568,7 +1593,7 @@
+@@ -1568,7 +1594,7 @@
  
  #ic_deviceparameters .parameter_area .parameters_table 
  {
@@ -1948,7 +1993,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -1672,6 +1697,14 @@
+@@ -1672,6 +1698,14 @@
  	border: 0;
  }/*LinkList-Tabelle*/
  /*--------------------------------------------*/
@@ -1963,7 +2008,7 @@
  #ic_linkpeerlist #head_wrapper {
    border-bottom: 0;
    margin: 0;
-@@ -1687,17 +1720,16 @@
+@@ -1687,17 +1721,16 @@
  #ic_linkpeerlist #body_wrapper {
    margin: 0;
    padding: 0;
@@ -1984,7 +2029,7 @@
  }
  
  #ic_linkpeerlist .LinkListTbl td {
-@@ -1734,9 +1766,7 @@
+@@ -1734,9 +1767,7 @@
  
  #ic_linkpeerlist .LinkListTbl .LinkListTbl_img
  {
@@ -1994,7 +2039,7 @@
  }
  /*--------------------------------------------*/
  #modalbox #id_messagebox
-@@ -1798,15 +1828,26 @@
+@@ -1798,15 +1829,26 @@
  {
    height: 40px;
    background-color: $_(activeBackground);
@@ -2024,7 +2069,7 @@
  }
  
  #ic_selchannel #createLinkStep1 thead {
-@@ -1829,8 +1870,7 @@
+@@ -1829,8 +1871,7 @@
  	background-color: $_(white); /* white */
  }
  #ic_selchannel #createLinkStep1 .WhiteHeader input {
@@ -2034,7 +2079,7 @@
  }
  
  #ic_selchannel .ChnListTbl {
-@@ -1964,14 +2004,7 @@
+@@ -1964,14 +2005,7 @@
  {
  	visibility: hidden;
  }
@@ -2049,7 +2094,7 @@
  /*--------------------------------------------*/
  
  /*Tabellenkörper Virtuelle Tasten*/
-@@ -1990,7 +2023,6 @@
+@@ -1990,7 +2024,6 @@
  /*Tabellenkörper Bilderspalte*/
  #ic_selchannel .ChnListTbl .chnListTbl_dev_img 
  {
@@ -2057,7 +2102,7 @@
  	text-align: left;
  	height: 50px;  
  }
-@@ -2004,10 +2036,12 @@
+@@ -2004,10 +2037,12 @@
  	height: auto;
  }
  /*--------------------------------------------*/
@@ -2073,7 +2118,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -2090,7 +2124,7 @@
+@@ -2090,7 +2125,7 @@
  #ic_setprofiles #body_wrapper
  {
  	background-color: $_(background); /* #183473 */
@@ -2082,7 +2127,7 @@
  }
  
  #ic_setprofiles  #id_sender_group_receiver_profiles_wrapper
-@@ -2310,9 +2344,10 @@
+@@ -2310,9 +2345,10 @@
    padding:0;
    background-color:$_(clickable);
    color: $_(textColorB); /* black */
@@ -2094,7 +2139,7 @@
  }
  
  .FilterHeight20 {
-@@ -2325,7 +2360,7 @@
+@@ -2325,7 +2361,7 @@
    padding:0;
    background-color:$_(active); /* #565657 */
    color: $_(textColorB); /* black */
@@ -2103,7 +2148,7 @@
    text-align:left;
    vertical-align:middle;  
  }
-@@ -2479,7 +2514,7 @@
+@@ -2479,7 +2515,7 @@
    border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
    background-color: $_(background); /* #183473 */
    z-index: 189;
@@ -2112,7 +2157,7 @@
  }
  
  .MainMenuItem_Left {
-@@ -2499,7 +2534,7 @@
+@@ -2499,7 +2535,7 @@
  }
  
  .MainMenuItem_Help {
@@ -2121,7 +2166,7 @@
  }
  
  .MainMenuItem_Highlight {
-@@ -2580,6 +2615,7 @@
+@@ -2580,6 +2616,7 @@
    background-color: $_(subMenuBackground);
    overflow:hidden;
    z-index:189;
@@ -2129,7 +2174,50 @@
  }
  
  .MainMenuSubItem {
-@@ -2780,7 +2816,6 @@
+@@ -2594,7 +2631,6 @@
+   line-height:20px;
+   cursor: pointer;
+   white-space: nowrap;
+-  border-top: 1px solid $_(black);
+ }
+ 
+ .MainMenuSubItem_Highlight {
+@@ -2684,7 +2720,7 @@
+   top: 24px;
+   left: 2px;
+   width: 996px;
+-  height: 520px;
++  height: 522px;
+   background-color: $_(white); /* white */
+   overflow: scroll;  
+ }
+@@ -2732,7 +2768,6 @@
+   width:100%;
+   height:auto;
+   margin:0;
+-  border:1px solid $_(black); /* black */
+   padding:0;
+   empty-cells:show;
+ }
+@@ -2744,7 +2779,7 @@
+   padding:0;
+   background-color:$_(clickable);
+   color: $_(textColorA); /* white */
+-  font-weight:bold;
++  font-weight:normal;
+   text-align:center;
+   vertical-align:middle;
+ }
+@@ -2756,7 +2791,7 @@
+   padding:0;
+   background-color:$_(active); /* #565657 */
+   color: $_(textColorA); /* white */
+-  font-weight:bold;
++  font-weight:normal;
+   text-align:center;
+   vertical-align:middle;
+ }
+@@ -2780,7 +2815,6 @@
  
  .ChannelChooserThumbnail {
    border: 1px solid $_(black); /* black */
@@ -2137,7 +2225,7 @@
    text-align:left;
    height:80px;
  }
-@@ -2935,40 +2970,38 @@
+@@ -2935,40 +2969,38 @@
  
  .MultiChannelChooserThumbnail {
    border: 1px solid $_(black); /* black */
@@ -2185,7 +2273,7 @@
    text-align:center;
    vertical-align:middle;
  }
-@@ -2988,8 +3021,7 @@
+@@ -2988,8 +3020,7 @@
  }
  
  .DeviceListRow_Highlight {
@@ -2195,7 +2283,7 @@
    cursor:pointer;
  }
  
-@@ -3018,9 +3050,7 @@
+@@ -3018,9 +3049,7 @@
  
  .DeviceListThumbnail {
    border: 1px solid $_(black); /* black */
@@ -2206,7 +2294,7 @@
  }
  
  .DeviceListButton {
-@@ -3474,18 +3504,12 @@
+@@ -3474,18 +3503,12 @@
      position: absolute;
      left: 4px
  }.bidcosrf_page {
@@ -2227,7 +2315,7 @@
  }
  
  .bidcosrf_button {
-@@ -3511,7 +3535,7 @@
+@@ -3511,7 +3534,7 @@
  .bidcosrf_table {
    border: 1px solid $_(black);
    border-spacing: 0px;
@@ -2236,7 +2324,7 @@
  }
  
  .bidcosrf_tableheader {
-@@ -3531,7 +3555,7 @@
+@@ -3531,7 +3554,7 @@
  }
  
  .bidcosrf_imagecell {
@@ -2245,7 +2333,7 @@
    border: 1px solid $_(black);
    empty-cells: show;
    text-align: center;
-@@ -3542,12 +3566,13 @@
+@@ -3542,12 +3565,13 @@
    border: 1px solid $_(black);
    empty-cells: show;
    text-align: center;
@@ -2261,7 +2349,7 @@
  html, body {
    border: 0 none;
    margin: 0;
-@@ -3930,7 +3955,6 @@
+@@ -3930,7 +3954,6 @@
  }
  
  .CLASS00203 {
@@ -2269,6 +2357,25 @@
  }
  
  .CLASS00204 {
+@@ -3984,9 +4007,9 @@
+ 
+ .CLASS00300 {
+ 	overflow: scroll;
+-	width: 100%;
+ 	height:520px;
+ 	background-color:$_(white); /* white */
++	border:solid 1px $_(black); /* black */
+ }
+ 
+ .CLASS00301 {
+@@ -3997,6 +4020,7 @@
+ 	text-align:center;
+ 	background-color:$_(clickable);
+ 	height: 40px;
++	font-weight: normal;
+ }
+ 
+ .CLASS00303 {
 @@ -4902,13 +4926,13 @@
  }
  
@@ -2423,17 +2530,17 @@
  
  .CLASS02606 {
 -	width: 240px;
--	background-color: $_(activeBackground);
--	border: solid 1px $_(black); /* black */
--	color: $_(textColorB); /* black */
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
 -.CLASS02607 {
 -	width:55px;
- 	background-color: $_(activeBackground);
- 	border: solid 1px $_(black); /* black */
- 	color: $_(textColorB); /* black */
+-	background-color: $_(activeBackground);
+-	border: solid 1px $_(black); /* black */
+-	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -

@@ -689,12 +689,12 @@ a img {
 .popupTableScript
 {
   width: 100%;
-  border: solid 1px $_(black); /* black */
   empty-cells: show;
   color: $_(textColorA); /* white */
   text-align: center;
   vertical-align: middle;
   font-weight: normal;
+  border-spacing: 2px;
 }
 
 .popupTableRow
@@ -1146,10 +1146,11 @@ a img {
   text-align:center;
 }
 .SysVarsTblPopup{
-  background-color:$_(inactiveBackground);
+  background-color:$_(activeBackground);
   color: $_(textColorB); /* black */
   height:60px;
   text-align:center;
+  cursor:pointer;
 }
 .WhiteBkgChannelPopup {
   background-color: $_(white); /* white */
@@ -2630,7 +2631,6 @@ html, body {
   line-height:20px;
   cursor: pointer;
   white-space: nowrap;
-  border-top: 1px solid $_(black);
 }
 
 .MainMenuSubItem_Highlight {
@@ -2720,7 +2720,7 @@ html, body {
   top: 24px;
   left: 2px;
   width: 996px;
-  height: 520px;
+  height: 522px;
   background-color: $_(white); /* white */
   overflow: scroll;  
 }
@@ -2768,7 +2768,6 @@ html, body {
   width:100%;
   height:auto;
   margin:0;
-  border:1px solid $_(black); /* black */
   padding:0;
   empty-cells:show;
 }
@@ -2780,7 +2779,7 @@ html, body {
   padding:0;
   background-color:$_(clickable);
   color: $_(textColorA); /* white */
-  font-weight:bold;
+  font-weight:normal;
   text-align:center;
   vertical-align:middle;
 }
@@ -2792,7 +2791,7 @@ html, body {
   padding:0;
   background-color:$_(active); /* #565657 */
   color: $_(textColorA); /* white */
-  font-weight:bold;
+  font-weight:normal;
   text-align:center;
   vertical-align:middle;
 }
@@ -4008,9 +4007,9 @@ application {
 
 .CLASS00300 {
 	overflow: scroll;
-	width: 100%;
 	height:520px;
 	background-color:$_(white); /* white */
+	border:solid 1px $_(black); /* black */
 }
 
 .CLASS00301 {
@@ -4021,6 +4020,7 @@ application {
 	text-align:center;
 	background-color:$_(clickable);
 	height: 40px;
+	font-weight: normal;
 }
 
 .CLASS00303 {

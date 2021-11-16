@@ -1653,15 +1653,6 @@
    sHTML  += '<div id="slMin" style="position:relative;left:4px;top:'+iLeftTextPos+'px;width:'+this.n_pathLength+'px;color:black;text-align:left;z-index:4;"><b>'+this.sMinText+'</b>';
 --- occu/WebUI/www/webui/js/extern/wz_jsgraphics.js.orig
 +++ occu/WebUI/www/webui/js/extern/wz_jsgraphics.js
-@@ -104,7 +104,7 @@
- 		'width:' + w + 'px;'+
- 		'height:' + h + 'px;'+
- 		'clip:rect(0,'+w+'px,'+h+'px,0);'+
--		'background-color:' + this.color +
-+		'background-color:inherit' +
- 		(!jg_moz? ';overflow:hidden' : '')+
- 		';"><\/div>';
- }
 @@ -915,7 +915,7 @@
  
  	this.drawImage2 = function(imgSrc, x, y, w, h, imgw, imgh, a)
@@ -2998,17 +2989,7 @@
  
      if (this.currentPage) { this.currentPage.resize(); }
  
-@@ -7592,7 +7598,8 @@
-       visibility: "hidden",
-       margin: "0",
-       padding: "0",
--      backgroundColor: WebUI.getColor("white")
-+      backgroundColor: WebUI.getColor("white"),
-+      border: "4px solid " + WebUI.getColor("navBarSeparator")
-     });
-     bodyElem.appendChild(picDiv);
-       jg_250 = new jsGraphics("picDiv");
-@@ -20894,10 +20901,10 @@
+@@ -20894,10 +20900,10 @@
        //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
        Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
      }
@@ -3021,7 +3002,27 @@
      }
      
      if ($("favSelector"))
-@@ -38181,7 +38188,7 @@
+@@ -38032,7 +38038,7 @@
+ //Defines
+ BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
+ HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
+-BG_COLOR = WebUI.getColor("channelBackground");//Background
++BG_COLOR = 'inherit'; //Background
+ HL_STROKE = 4;//Background
+ //-----
+ 
+@@ -38084,8 +38090,8 @@
+   
+   if (!form) return;
+ 
+-  if (!x_offset) x_offset = 0;
+-  if (!y_offset) y_offset = 0;
++  if (!x_offset) x_offset = 0.032;  // workaround css offsets
++  if (!y_offset) y_offset = -0.005; // workaround css offsets
+ 
+   switch (form[gd_type])
+   {
+@@ -38181,7 +38187,7 @@
      previewPicTimer = window.setTimeout(function () {
        HideElement('picDiv');
        delete previewPicTimer;

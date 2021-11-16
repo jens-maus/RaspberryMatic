@@ -5,7 +5,7 @@
    string sTime = system.Date( "%H:%M" );
    string sDate = system.Date( "%d.%m.%Y" );
 -  WriteLine('setTime("' # sTime # '");');
-+  WriteLine('setTime("' # sDate # ', ' # sTime #'");');
++  WriteLine('setTime("' # sDate # ',&nbsp;' # sTime #'");');
    WriteLine('setDate("' # sDate # '");');
  !  Write( 'if( $("maintime") ) $("maintime").innerHTML = "'#sTime#'";' );
  !  Write( 'if( $("maindate") ) $("maindate").innerHTML = "'#sDate#'";' );
@@ -46,8 +46,8 @@
 -              <td>${date}:</td>
 -              <td><span id="maindate"><% Write(system.Date("%d.%m.%Y")); %></span></td>
 +              <td>${date} / ${time}:</td>
-+              <%  object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') ); %>         
-+              <td><span id="maintime" <% if( oUser.UserLevel() == iulAdmin ) { Write("onclick='showTimeCP();' style='cursor:pointer;'"); } %>><% Write(system.Date("%d.%m.%Y")); %>, <% Write(system.Date("%H:%M")); %></span> ${ruleConditionLblTimeClock}</td>
++              <%  object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') ); %>
++              <td><span id="maintime" <% if( oUser.UserLevel() == iulAdmin ) { Write("onclick='showTimeCP();' style='cursor:pointer;'"); } %>><% Write(system.Date("%d.%m.%Y")); %>,&nbsp;<% Write(system.Date("%H:%M")); %></span>&nbsp;${ruleConditionLblTimeClock}</td>
              </tr>
  
              <tr>
@@ -61,7 +61,7 @@
 -              <td>${sunset}:</td>
 -              <td id="sunset"><% Write(system.SunsetTime("%H:%M")); %><!-- Uhr--></td>
 +              <td>${astroDaytime}:</td>
-+              <td id="sunrise"><% Write(system.SunriseTime("%H:%M")); %> - <% Write(system.SunsetTime("%H:%M")); %> ${ruleConditionLblTimeClock}</td>
++              <td id="sunrise"><% Write(system.SunriseTime("%H:%M")); %>&nbsp;-&nbsp;<% Write(system.SunsetTime("%H:%M")); %>&nbsp;${ruleConditionLblTimeClock}</td>
              </tr>
  
              <tr>

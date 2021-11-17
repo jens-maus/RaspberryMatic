@@ -950,7 +950,6 @@ a img {
     border:1px solid $_(black); /* black */
     /* width:95%; */
     text-align:center;
-    height:20px;
     line-height:20px;
     vertical-align:middle;
     color: $_(textColorB); /* black */

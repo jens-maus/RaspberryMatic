@@ -104,7 +104,7 @@ function mkDiv(x, y, w, h)
 		'width:' + w + 'px;'+
 		'height:' + h + 'px;'+
 		'clip:rect(0,'+w+'px,'+h+'px,0);'+
-		'background-color:inherit' +
+		'background-color:' + this.color +
 		(!jg_moz? ';overflow:hidden' : '')+
 		';"><\/div>';
 }

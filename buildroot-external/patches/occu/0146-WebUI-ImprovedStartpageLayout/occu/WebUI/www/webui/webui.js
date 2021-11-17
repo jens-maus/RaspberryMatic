@@ -20478,11 +20478,15 @@ StartPage = Singleton.create(Page, {
       var result = homematic.com.isUpdateAvailable();
       if ((result) && ($("updateCol"))) {
         var updateText = " (" + homematic.com.getLatestVersion() + " " + translateKey('isAvailable') + ")";
+        if (getUPL() == UPL_ADMIN) {
         jQuery("#updateCol").text(updateText)
           .addClass("firmwareAvailable")
           .unbind("click").bind("click", function() {
             showNewFirmwareDownload();
           });
+        } else {
+          jQuery("#updateCol").text(updateText);
+        }
         jQuery("#updateCol").show();
       }
       return result;

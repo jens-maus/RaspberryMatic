@@ -7598,8 +7598,7 @@ WebUI = Singleton.create({
       visibility: "hidden",
       margin: "0",
       padding: "0",
-      backgroundColor: WebUI.getColor("white"),
-      border: "4px solid " + WebUI.getColor("navBarSeparator")
+      backgroundColor: WebUI.getColor("white")
     });
     bodyElem.appendChild(picDiv);
       jg_250 = new jsGraphics("picDiv");
@@ -38039,7 +38038,7 @@ iseAccelerationTransceiver.prototype = {
 //Defines
 BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
 HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
-BG_COLOR = WebUI.getColor("channelBackground");//Background
+BG_COLOR = 'inherit'; //Background
 HL_STROKE = 4;//Background
 //-----
 
@@ -38091,8 +38090,8 @@ DrawForm = function(jg, formname, devtype, size, x_offset, y_offset)
   
   if (!form) return;
 
-  if (!x_offset) x_offset = 0;
-  if (!y_offset) y_offset = 0;
+  if (!x_offset) x_offset = 0.032;  // workaround css offsets
+  if (!y_offset) y_offset = -0.005; // workaround css offsets
 
   switch (form[gd_type])
   {

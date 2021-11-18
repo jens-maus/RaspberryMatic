@@ -6078,8 +6078,7 @@ Array.prototype.ex_joinProperty = function(name, separator)
  **/
 Array.prototype.ex_sortBy = function(name, sortReverse)
 {
-  const collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
-  this.sort( (x, y) => { return collator.compare(x[name], y[name]); } );
+  this.sort(function(a,b) { return Object.ex_compare(a[name], b[name]); });
   if (sortReverse) { this.reverse(); }
   
   return this;
@@ -6126,8 +6125,7 @@ String.prototype.ex_compareTo = function(other)
     var strA = this.toLowerCase();
     var strB = other.toLowerCase();
   
-    if      (strA > strB) { return 1; }
-    else if (strA < strB) { return -1; }
+    return strA.localeCompare(strB, undefined, {numeric: true, sensitivity: 'base'});
   }
   
   return 0;

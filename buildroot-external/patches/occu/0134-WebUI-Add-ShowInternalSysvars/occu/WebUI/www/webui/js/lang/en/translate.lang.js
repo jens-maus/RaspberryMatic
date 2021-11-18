@@ -82,7 +82,7 @@ jQuery.extend(true,langJSON, {
     "footerBtnHideSystemPrograms" : "Hide intrinsic programs",
     "footerBtnShowInternalSystemVars" : "Show intrinsic variables",
     "footerBtnHideInternalSystemVars" : "Hide intrinsic variables",
-    "footerBtnShowInternalDeviceChannels" : "Show intrinsicdevice channels",
+    "footerBtnShowInternalDeviceChannels" : "Show intrinsic device channels",
     "footerBtnHideInternalDeviceChannels" : "Hide intrinsic device channels",
     "footerBtnTestScript" : "Test script",
     "footerBtnCancel" : "Cancel",

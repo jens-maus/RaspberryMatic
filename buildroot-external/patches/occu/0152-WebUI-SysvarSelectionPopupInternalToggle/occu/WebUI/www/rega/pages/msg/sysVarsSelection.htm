@@ -2,6 +2,7 @@
   arSysVars = new Array();
   fltSVS = new iseFilter("fltSVS", FLT_OBJ_TYP_VARS);
   lastDir = 1;
+  var sortBy = 'name';
   var bSecondary = false;
   var bShowAll = false;
   <%
@@ -18,6 +19,7 @@
     
   DivSort = function(colName)
   { 
+    sortBy = colName;
     arSysVars = new Array();
     SetSelectedStyle(colName);  
     if (!bShowAll)
@@ -55,14 +57,14 @@
       tableBody.deleteRow(x);
     }
   }
-  DivSort('name');
+  DivSort(sortBy);
   
   toggleInternal = function()
   {
     bShowAll = !bShowAll;
     jQuery("#internalToggleButton").text( bShowAll === true ? translateKey('footerBtnHideInternalSystemVars') : translateKey('footerBtnShowInternalSystemVars'));
-    iseClearLastSort();
-    DivSort('name');
+    if (lastDir === 1) { lastDir = 0; } else { lastDir = 1;}
+    DivSort(sortBy);
   }
 </script>
 <div class="popupTitle" id="divTitle">

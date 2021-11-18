@@ -28506,16 +28506,16 @@ sysVarsPopupLoader.prototype = {
         if( this.sec ) sOnclick = "restorePrevious();";
         sOnclick = "saveDlgResult("+arSysVars[i]['id']+");"+sOnclick;
 
-        var tr = Builder.node('tr', {id: arSysVars[i]['trid']});
-        var td = Builder.node('td', {className: 'SysVarsTblPopup', onclick:sOnclick}, strCut(translateString(arSysVars[i]['name']), true));
+        var tr = Builder.node('tr', {id: arSysVars[i]['trid'], className:'SysVarsTblPopup', onclick:sOnclick, onmouseover:'this.className="SysVarsTblPopup_Highlight";', onmouseout:'this.className="SysVarsTblPopup";'});
+        var td = Builder.node('td', {}, translateString(arSysVars[i]['name']));
         tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup', onclick:sOnclick}, translateString(arSysVars[i]['desc']));
+        td = Builder.node('td', {}, translateString(arSysVars[i]['desc']));
         tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup', onclick:sOnclick}, translateString(arSysVars[i]['typenames']));
+        td = Builder.node('td', {}, translateString(arSysVars[i]['typenames']));
         tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup', onclick:sOnclick}, translateString(arSysVars[i]['values']));
+        td = Builder.node('td', {}, translateString(arSysVars[i]['values']));
         tr.appendChild(td);
-        td = Builder.node('td', {className: 'SysVarsTblPopup', onclick:sOnclick}, translateString(arSysVars[i]['unit']));
+        td = Builder.node('td', {}, translateString(arSysVars[i]['unit']));
         tr.appendChild(td);
 
         tableBody.appendChild(tr);       

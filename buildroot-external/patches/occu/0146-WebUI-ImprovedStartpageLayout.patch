@@ -5,7 +5,7 @@
    string sTime = system.Date( "%H:%M" );
    string sDate = system.Date( "%d.%m.%Y" );
 -  WriteLine('setTime("' # sTime # '");');
-+  WriteLine('setTime("' # sDate # ', ' # sTime #'");');
++  WriteLine('setTime("' # sDate # ',&nbsp;' # sTime #'");');
    WriteLine('setDate("' # sDate # '");');
  !  Write( 'if( $("maintime") ) $("maintime").innerHTML = "'#sTime#'";' );
  !  Write( 'if( $("maindate") ) $("maindate").innerHTML = "'#sDate#'";' );
@@ -34,7 +34,7 @@
          <tr style="vertical-align: top;" class="CLASS01810">
            <td>
            <table id="tblStartpageInfo" width="100%" class="CLASS01811 startPageInfo hidden" cellpadding="2" cellspacing="0">
-@@ -173,38 +178,20 @@
+@@ -173,38 +178,21 @@
              </colgroup>
              <tr>
                  <!-- Uhrzeit -->
@@ -46,7 +46,8 @@
 -              <td>${date}:</td>
 -              <td><span id="maindate"><% Write(system.Date("%d.%m.%Y")); %></span></td>
 +              <td>${date} / ${time}:</td>
-+              <td><span id="maintime"><% Write(system.Date("%d.%m.%Y")); %>, <% Write(system.Date("%H:%M")); %></span> ${ruleConditionLblTimeClock}</td>
++              <%  object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') ); %>
++              <td><span id="maintime" <% if( oUser.UserLevel() == iulAdmin ) { Write("onclick='showTimeCP();' style='cursor:pointer;'"); } %>><% Write(system.Date("%d.%m.%Y")); %>,&nbsp;<% Write(system.Date("%H:%M")); %></span>&nbsp;${ruleConditionLblTimeClock}</td>
              </tr>
  
              <tr>
@@ -60,7 +61,7 @@
 -              <td>${sunset}:</td>
 -              <td id="sunset"><% Write(system.SunsetTime("%H:%M")); %><!-- Uhr--></td>
 +              <td>${astroDaytime}:</td>
-+              <td id="sunrise"><% Write(system.SunriseTime("%H:%M")); %> - <% Write(system.SunsetTime("%H:%M")); %> ${ruleConditionLblTimeClock}</td>
++              <td id="sunrise"><% Write(system.SunriseTime("%H:%M")); %>&nbsp;-&nbsp;<% Write(system.SunsetTime("%H:%M")); %>&nbsp;${ruleConditionLblTimeClock}</td>
              </tr>
  
              <tr>
@@ -78,6 +79,14 @@
              </tr>
  
              <!-- Device-Firmware -->
+@@ -220,7 +208,6 @@
+             </tr>
+ 
+             <%
+-              object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') );
+               if (oUser.UserPwd() == "")
+               {
+                 Write("<tr>");
 @@ -233,11 +220,17 @@
                
                if (oUser) {
@@ -154,7 +163,7 @@
    margin:0;
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -20476,14 +20476,14 @@
+@@ -20476,14 +20476,18 @@
    showUpdate: function() {
      var fn = function() {
        var result = homematic.com.isUpdateAvailable();
@@ -162,12 +171,16 @@
 -        var updateText = translateKey('firmware') + " " + homematic.com.getLatestVersion() + " " + translateKey('isAvailable');
 +      if ((result) && ($("updateCol"))) {
 +        var updateText = " (" + homematic.com.getLatestVersion() + " " + translateKey('isAvailable') + ")";
++        if (getUPL() == UPL_ADMIN) {
          jQuery("#updateCol").text(updateText)
            .addClass("firmwareAvailable")
            .unbind("click").bind("click", function() {
              showNewFirmwareDownload();
            });
 -        jQuery("#updateRow").show();
++        } else {
++          jQuery("#updateCol").text(updateText);
++        }
 +        jQuery("#updateCol").show();
        }
        return result;

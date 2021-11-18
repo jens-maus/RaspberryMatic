@@ -1,7 +1,6 @@
 <script type="text/javascript" language="javascript">
 
   <%
-    string prevPage=system.GetSessionVar("sessionTAB");
     system.SetSessionVar("sessionTAB", "programs");
     object oOrigPrg = dom.GetObject( system.GetSessionVar("sessionORIGPRGID") );
     object oPrg = dom.GetObject( system.GetSessionVar("sessionPRGID") );
@@ -805,15 +804,15 @@
   };
   CancelProgramEdit = function(copy)
   {
-    isePrograms.Delete(copy, '<% Write(prevPage); %>');
+    isePrograms.Delete(copy);
   };
   SaveProgramEdit = function(orig,copy)
   {
-    setTimeout( "isePrograms.Restore("+orig+","+copy+", '<% Write(prevPage); %>')", 500 );
+    setTimeout( "isePrograms.Restore("+orig+","+copy+")", 500 );
   };
   CopyToNewProgram = function(copy)
   {
-    setTimeout( "isePrograms.CopyToNewProgram("+copy+", '<% Write(prevPage); %>')", 500 );
+    setTimeout( "isePrograms.CopyToNewProgram("+copy+")", 500 );
   };
   AddSubRuleSelectChange = function(idx,rid)
   {
@@ -944,7 +943,7 @@
   var s = "";
   s += "<table cellspacing='8'>";
   s += "<tr>";
-    s += "<td style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='CancelProgramEdit(<% Write(oPrg.ID()); %>);'>${footerBtnPageBack}</div></td>";
+    s += "<td style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='CancelProgramEdit(<% Write(oPrg.ID()); %>);'>${footerBtnCancel}</div></td>";
     s += "<td style='text-align:center; vertical-align:middle;'><div class='FooterButton' onclick='SaveProgramEdit(<% Write(oOrigPrg.ID()); %>,<% Write(oPrg.ID()); %>);'>${footerBtnOk}</div></td>";
     s += "<td style='text-align:center; vertical-align:middle;'><div class='FooterButton CLASS04800' onclick='CopyToNewProgram(<% Write(oPrg.ID()); %>);' >${footerBtnSaveNewProgram}</div></td>";
     s += "<td style='text-align:center; vertical-align:middle;'><div class='FooterButton CLASS04801' onclick='new HMScriptExecutor();'>${footerBtnTestScript}</div></td>";
@@ -961,13 +960,6 @@
 
 <div id="prgcontent">
   <table id="ProgramTable" class="filterTable tTable j_translate" border="0" cellpadding="0" cellspacing="0">
-    <colgroup>
-      <col />
-      <col />
-      <col />
-      <col />
-      <col style="width:100px;">
-    </colgroup>
     <thead>
       <tr>
         <td class="thCell CLASS04802" >${thName}</td>
@@ -979,11 +971,11 @@
     </thead>
     <tbody>
       <tr class="CLASS04803">
-        <td class="tBodyCell taCenter" id="prg<% Write(oPrg.ID()); %>name" onclick="textEdit('prg<% Write(oPrg.ID()); %>name', <% Write(oPrg.ID()); %>);"><% Write( oPrg.Name() ); %></td>
-        <td class="tBodyCell taCenter" id="prg<% Write(oPrg.ID()); %>desc" onclick="textEditInfo('prg<% Write(oPrg.ID()); %>desc', <% Write(oPrg.ID()); %>,true);"><% Write( oPrg.PrgInfo() ); %></td>
+        <td class="tBodyCell bgWhite taCenter" id="prg<% Write(oPrg.ID()); %>name" onclick="textEdit('prg<% Write(oPrg.ID()); %>name', <% Write(oPrg.ID()); %>);"><% Write( oPrg.Name() ); %></td>
+        <td class="tBodyCell bgWhite taCenter" id="prg<% Write(oPrg.ID()); %>desc" onclick="textEditInfo('prg<% Write(oPrg.ID()); %>desc', <% Write(oPrg.ID()); %>,true);"><% Write( oPrg.PrgInfo() ); %></td>
         <td class="tBodyCell"><% object oPrgID = oPrg.ID(); string sRet = ""; Call("/esp/programs.fn::WriteConditionText()"); Write(sRet); %></td>
         <td class="tBodyCell"><% object oPrgID = oPrg.ID(); string sRet = ""; Call("/esp/programs.fn::WriteDestinationText()"); Write(sRet); %></td>
-        <td class="tBodyCell"><input type="checkbox" onchange="isePrograms.SetVisibility(<% Write(oPrg.ID()); %>,this.checked);" id="p<% Write(oPrg.ID()); %>_systeminternal" <% if( oPrg.Internal() ) { Write( "checked" ); } %> /><label for="p<% Write(oPrg.ID()); %>_systeminternal">${lblSystemIntern}</label></td>
+        <td class="tBodyCell bgWhite"><input type="checkbox" onchange="isePrograms.SetVisibility(<% Write(oPrg.ID()); %>,this.checked);" id="p<% Write(oPrg.ID()); %>_systeminternal" <% if( oPrg.Internal() ) { Write( "checked" ); } %> /><label for="p<% Write(oPrg.ID()); %>_systeminternal">${lblSystemIntern}</label></td>
       </tr>
       <tr>
         <td colspan="5">

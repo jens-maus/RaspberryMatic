@@ -28506,7 +28506,12 @@ sysVarsPopupLoader.prototype = {
         if( this.sec ) sOnclick = "restorePrevious();";
         sOnclick = "saveDlgResult("+arSysVars[i]['id']+");"+sOnclick;
 
-        var tr = Builder.node('tr', {id: arSysVars[i]['trid'], className:'SysVarsTblPopup', onclick:sOnclick, onmouseover:'this.className="SysVarsTblPopup_Highlight";', onmouseout:'this.className="SysVarsTblPopup";'});
+        var cName = 'SysVarsTblPopup';
+        if( arSysVars[i]['internal'] === 'true' ) {
+          cName = 'LightGrayBkg SysVarsTblPopup';
+        }
+
+        var tr = Builder.node('tr', {id: arSysVars[i]['trid'], className:cName, onclick:sOnclick, onmouseover:'this.className="SysVarsTblPopup_Highlight";', onmouseout:'this.className="' + cName + '";'});
         var td = Builder.node('td', {}, translateString(arSysVars[i]['name']));
         tr.appendChild(td);
         td = Builder.node('td', {}, translateString(arSysVars[i]['desc']));

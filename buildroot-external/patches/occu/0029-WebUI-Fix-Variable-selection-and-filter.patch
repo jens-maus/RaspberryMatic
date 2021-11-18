@@ -1,12 +1,40 @@
+--- occu/WebUI/www/rega/pages/msg/sysVarsArray.htm.orig
++++ occu/WebUI/www/rega/pages/msg/sysVarsArray.htm
+@@ -70,6 +70,7 @@
+             Write("tmp['values'] = '';");
+           }
+           Write("tmp['unit'] = '"#oSysVar.ValueUnit()#"';");
++          Write("tmp['internal'] = '"#oSysVar.Internal()#"';");
+           Write("arSysVars[arSysVars.length] = tmp;");
+         }
+       }
+--- occu/WebUI/www/rega/pages/msg/sysVarsArrayAll.htm.orig
++++ occu/WebUI/www/rega/pages/msg/sysVarsArrayAll.htm
+@@ -72,6 +72,7 @@
+             Write("tmp['values'] = '';");
+           }
+           Write("tmp['unit'] = '"#oSysVar.ValueUnit()#"';");
++          Write("tmp['internal'] = '"#oSysVar.Internal()#"';");
+           Write("arSysVars[arSysVars.length] = tmp;");
+         }
+       }
 --- occu/WebUI/www/rega/pages/msg/sysVarsSelection.htm.orig
 +++ occu/WebUI/www/rega/pages/msg/sysVarsSelection.htm
-@@ -71,8 +71,7 @@
-       <col style="width:20%;"/>
-       <col style="width:15%;"/>
-       <col style="width:20%;"/>
+@@ -67,12 +67,11 @@
+ <div class="CLASS00300">
+   <table class="popupTableScript CLASS00301" cellpadding="0" >
+     <colgroup>
+-      <col style="width:10%;"/>
+-      <col style="width:20%;"/>
+-      <col style="width:15%;"/>
+-      <col style="width:20%;"/>
 -      <col style="width:10%;"/>
 -      <col style="width:15%;"/>
-+      <col style="width:35%;"/>
++      <col />
++      <col />
++      <col />
++      <col />
++      <col />
      </colgroup>
      <thead id="svsBody">
      <tr id="rowhead">
@@ -127,7 +155,7 @@
        break;
      case "colPos":
        fltObj.bColLeft = $("cbColLeft").checked; 
-@@ -28491,25 +28502,20 @@
+@@ -28491,25 +28502,25 @@
        IseSort(arSysVars,this.colName,false,true);
        for (var i = 0; i < arSysVars.length; i++) 
        {
@@ -139,7 +167,12 @@
 +        if( this.sec ) sOnclick = "restorePrevious();";
 +        sOnclick = "saveDlgResult("+arSysVars[i]['id']+");"+sOnclick;
 +
-+        var tr = Builder.node('tr', {id: arSysVars[i]['trid'], className:'SysVarsTblPopup', onclick:sOnclick, onmouseover:'this.className="SysVarsTblPopup_Highlight";', onmouseout:'this.className="SysVarsTblPopup";'});
++        var cName = 'SysVarsTblPopup';
++        if( arSysVars[i]['internal'] === 'true' ) {
++          cName = 'LightGrayBkg SysVarsTblPopup';
++        }
++
++        var tr = Builder.node('tr', {id: arSysVars[i]['trid'], className:cName, onclick:sOnclick, onmouseover:'this.className="SysVarsTblPopup_Highlight";', onmouseout:'this.className="' + cName + '";'});
 +        var td = Builder.node('td', {}, translateString(arSysVars[i]['name']));
          tr.appendChild(td);
 -        td = Builder.node('td', {className: 'SysVarsTblPopup'}, translateString(arSysVars[i]['typenames']));

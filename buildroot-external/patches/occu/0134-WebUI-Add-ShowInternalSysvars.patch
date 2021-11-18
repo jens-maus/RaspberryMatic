@@ -280,27 +280,35 @@
  
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -81,6 +81,10 @@
+@@ -79,8 +79,12 @@
+     "footerBtnDelete" : "L%F6schen",
+     "footerBtnNew" : "Neu",
      "footerBtnNewLink" : "Neue<br/>Verkn%FCpfung",
-     "footerBtnShowSystemPrograms" : "Systeminterne Programme<br/>einblenden",
-     "footerBtnHideSystemPrograms" : "Systeminterne Programme<br/>ausblenden",
-+    "footerBtnShowInternalSystemVars" : "Systeminterne Variablen<br/>einblenden",
-+    "footerBtnHideInternalSystemVars" : "Systeminterne Variablen<br/>ausblenden",
-+    "footerBtnShowInternalDeviceChannels" : "Systeminterne Kan%E4le<br/>einblenden",
-+    "footerBtnHideInternalDeviceChannels" : "Systeminterne Kan%E4le<br/>ausblenden",
+-    "footerBtnShowSystemPrograms" : "Systeminterne Programme<br/>einblenden",
+-    "footerBtnHideSystemPrograms" : "Systeminterne Programme<br/>ausblenden",
++    "footerBtnShowSystemPrograms" : "Systeminterne Programme einblenden",
++    "footerBtnHideSystemPrograms" : "Systeminterne Programme ausblenden",
++    "footerBtnShowInternalSystemVars" : "Systeminterne Variablen einblenden",
++    "footerBtnHideInternalSystemVars" : "Systeminterne Variablen ausblenden",
++    "footerBtnShowInternalDeviceChannels" : "Systeminterne Kan%E4le einblenden",
++    "footerBtnHideInternalDeviceChannels" : "Systeminterne Kan%E4le ausblenden",
      "footerBtnTestScript" : "Skript testen",
      "footerBtnCancel" : "Abbrechen",
      "footerBtnTransfer" : "%DCbernehmen",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -80,6 +80,10 @@
+@@ -78,8 +78,12 @@
+     "footerBtnDelete" : "Clear",
+     "footerBtnNew" : "New",
      "footerBtnNewLink" : "New<br/>connection",
-     "footerBtnShowSystemPrograms" : "Show intrinsic <br/>programs",
-     "footerBtnHideSystemPrograms" : "Hide intrinsic<br/>programs",
-+    "footerBtnShowInternalSystemVars" : "Show intrinsic <br/>variables",
-+    "footerBtnHideInternalSystemVars" : "Hide intrinsic<br/>variables",
-+    "footerBtnShowInternalDeviceChannels" : "Show intrinsic <br/>device channels",
-+    "footerBtnHideInternalDeviceChannels" : "Hide intrinsic<br/>device channels",
+-    "footerBtnShowSystemPrograms" : "Show intrinsic <br/>programs",
+-    "footerBtnHideSystemPrograms" : "Hide intrinsic<br/>programs",
++    "footerBtnShowSystemPrograms" : "Show intrinsic programs",
++    "footerBtnHideSystemPrograms" : "Hide intrinsic programs",
++    "footerBtnShowInternalSystemVars" : "Show intrinsic variables",
++    "footerBtnHideInternalSystemVars" : "Hide intrinsic variables",
++    "footerBtnShowInternalDeviceChannels" : "Show intrinsicdevice channels",
++    "footerBtnHideInternalDeviceChannels" : "Hide intrinsic device channels",
      "footerBtnTestScript" : "Test script",
      "footerBtnCancel" : "Cancel",
      "footerBtnTransfer" : "Apply",

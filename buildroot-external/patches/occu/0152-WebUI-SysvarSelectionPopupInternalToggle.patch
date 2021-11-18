@@ -1,0 +1,35 @@
+--- occu/WebUI/www/rega/pages/msg/sysVarsSelection.htm.orig
++++ occu/WebUI/www/rega/pages/msg/sysVarsSelection.htm
+@@ -57,6 +57,13 @@
+   }
+   DivSort('name');
+   
++  toggleInternal = function()
++  {
++    bShowAll = !bShowAll;
++    jQuery("#internalToggleButton").text( bShowAll === true ? translateKey('footerBtnHideInternalSystemVars') : translateKey('footerBtnShowInternalSystemVars'));
++    iseClearLastSort();
++    DivSort('name');
++  }
+ </script>
+ <div class="popupTitle" id="divTitle">
+   &nbsp;&nbsp;
+@@ -145,6 +152,7 @@
+           <% string sCancelClick = "PopupClose();"; if( system.GetVar("iSecondary") == "1" ) { sCancelClick = "restorePrevious();"; } %>
+           <td><div class="FooterButton CLASS00313" onclick="<% Write(sCancelClick); %>" >${footerBtnCancel}</div></td>
+           <td><div class="FooterButton CLASS00314" onclick="fltSVS.clearFilters();updateTable();">${footerBtnResetFilter}</div></td>
++          <td><div id="internalToggleButton" class="FooterButton CLASS00314 CLASS04905" onclick="fltSVS.clearFilters();toggleInternal();updateTable();">${footerBtnShowInternalSystemVars}</div></td>
+         </tr>
+         </table>
+ </div>
+--- occu/WebUI/www/rega/pages/tabs/admin/views/programs.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/programs.htm
+@@ -682,7 +682,7 @@
+   ShowSysVarChooser = function(scid)
+   {
+     dlgResult = "";
+-    CreatePopup(ID_SYS_VARS_SELECTION,1);
++    CreatePopup(ID_SYS_VARS_SELECTION,0);
+     PopupClose = function()
+     {
+       dlgPopup.hide();

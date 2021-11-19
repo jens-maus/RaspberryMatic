@@ -1,3 +1,26 @@
+--- occu/WebUI/bin/hm_startup.orig
++++ occu/WebUI/bin/hm_startup
+@@ -152,10 +152,20 @@
+   }
+ }
+ 
++proc validateSystemName { } {
++  rega_script {
++    string systemName=system.Name();
++    if ( (systemName=="") || (systemName=="ReGaRA Demo") ) {
++      system.Name("HomeMatic WebUI");
++    }
++  }
++}
++
+ ################################################################################
+ # Einsprungpunkt                                                               #
+ ################################################################################
+ 
+ checkDevices
+ create_default_objects
++validateSystemName
+ 
 --- occu/WebUI/www/config/control_panel.cgi.orig
 +++ occu/WebUI/www/config/control_panel.cgi
 @@ -215,8 +215,27 @@
@@ -49,7 +72,7 @@
         jQuery.each(helpContainer, function(index, container){
 --- occu/WebUI/www/config/cp_advancedsettings.cgi.orig
 +++ occu/WebUI/www/config/cp_advancedsettings.cgi
-@@ -0,0 +1,510 @@
+@@ -0,0 +1,542 @@
 +#!/bin/tclsh
 +source once.tcl
 +sourceOnce cgi.tcl
@@ -75,6 +98,18 @@
 +set CRONBACKUPPATHFILENAME "/etc/config/CronBackupPath"
 +
 +set TWEAKFILENAME "/etc/config/tweaks"
++
++proc get_systemname {} {
++  set isecmd "string systemname = system.Name();"
++  array set result [rega_script $isecmd]
++  return $result(systemname);
++}
++
++proc set_systemname { systemname } {
++  set isecmd "system.Name('$systemname');"
++  array set result [rega_script $isecmd]
++  return $result(STDOUT);
++}
 +
 +proc createfile { filename } {
 + set result ""
@@ -188,7 +223,8 @@
 +  set customStoragePath [readfile $CUSTOMSTORAGEPATHFILENAME]
 +
 +  set tweaks [read_var_from_file $TWEAKFILENAME CP_DEVCONFIG]
-+  
++  set systemName [get_systemname]
++
 +  http_head
 +  
 +  division {class="popupTitle"} {
@@ -232,6 +268,14 @@
 +        }
 +        table_data {align=left} {class="CLASS02533"} {
 +          table {
++            table_row {
++              table_data {class="CLASS21112"} {
++                puts "\${dialogSettingsAdvancedSettingsSystemName}"
++              }
++              table_data  {
++                cgi_text systemName=$systemName {id="text_systemName"} {size=30}
++              }
++            }
 +            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
 +            table_row {
 +              set checked ""
@@ -325,6 +369,7 @@
 +          }
 +        }
 +        table_data {class="CLASS21113"} {align="left"} {
++          p { ${dialogSettingsAdvancedSettingsHintSystem11} }
 +          p { ${dialogSettingsAdvancedSettingsHintSystem1} }
 +          p { ${dialogSettingsAdvancedSettingsHintSystem2} }
 +          p { ${dialogSettingsAdvancedSettingsHintSystem3} }
@@ -387,6 +432,8 @@
 +    puts {
 +      dlgResult = 0;
 +      OnOK = function() {
++        var systemName = document.getElementById("text_systemName").value;
++        if (systemName === '') systemName = 'HomeMatic WebUI';
 +        var pb = "action=save_settings";
 +        pb += "&inetcheckDisabled="+(document.getElementById("cb_inetcheckDisabled").checked?"0":"1");
 +        pb += "&rpi4usb3CheckDisabled="+(document.getElementById("cb_rpi4usb3CheckDisabled").checked?"0":"1");
@@ -401,6 +448,7 @@
 +        pb += "&cronBackupPath="+document.getElementById("text_cronBackupPath").value;
 +        pb += "&cronBackupMaxBackups="+document.getElementById("text_cronBackupMaxBackups").value;
 +        pb += "&customStoragePath="+document.getElementById("text_customStoragePath").value;
++        pb += "&systemName="+systemName;
 +
 +        var opts = {
 +          postBody: pb,
@@ -409,6 +457,7 @@
 +            if (transport.responseText === "") {   
 +              dlgPopup.hide();
 +              dlgPopup.setWidth(400);
++              document.title = systemName;
 +              PopupClose();
 +            } else { 
 +              alert(translateKey("dialogSettingsAdvancedSettingsMessageAlertMessageError1") + "\n" +transport.responseText); 
@@ -424,6 +473,7 @@
 +        document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
 +        document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
 +        document.getElementById("text_cronBackupMaxBackups").placeholder="30";
++        document.getElementById("text_systemName").placeholder="HomeMatic WebUI";
 +      };
 +    }
 +    
@@ -469,6 +519,11 @@
 +  import cronBackupPath
 +  import cronBackupMaxBackups
 +  import customStoragePath
++  import systemName
++  
++  if {$systemName != ""} {
++    append errMsg [set_systemname $systemName]
++  }
 +  
 +  if {$inetcheckDisabled} {
 +    append errMsg [createfile $INETCHECKFILENAME]
@@ -560,6 +615,18 @@
 +  catch { import action }
 +  if {[session_requestisvalid 8] > 0} then action_$action
 +}
+--- occu/WebUI/www/rega/pages/index.htm.orig
++++ occu/WebUI/www/rega/pages/index.htm
+@@ -181,6 +181,9 @@
+       {
+         return "<%Write(sessionId);%>";
+       }
++  
++      //setzt den (benutzerdefinierten) Browser-Titel
++      document.title = "<% Write(system.Name()); %>";
+      </script>
+ 
+      <script type="text/javascript">
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -463,6 +463,8 @@
@@ -571,7 +638,7 @@
      "btnSysConfCentralMaintenace" : "Zentralen-<br/>Wartung",
      "lblSysConfCentralMaintenance1" : "Software-Update der " + HMIdentifier.de.CCUFullNameText,
      "lblSysConfCentralMaintenance2" : HMIdentifier.de.CCUFullNameText + " neu starten",
-@@ -624,6 +626,41 @@
+@@ -624,6 +626,43 @@
      "dialogSettingsCentralDisplayLblOptionHours" : "Stunden",
      "dialogSettingsCentralDisplayLblOptionAlways" : "Immer an",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
@@ -605,10 +672,12 @@
 +    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Speicher%FCberpr%FCfung (FSTRIM):</b><br/>Wenn aktiviert wird jeden Samstag um 04:00 Uhr auf allen unterst%FCtzten Speichermedien (z.B. SSD) eventl. ungenutze Speicherbl%F6cke freigegeben.",
 +    "dialogSettingsAdvancedSettingsHintSystem9" : "<b>Alternativer Speicherpfad:</b><br/>F%FCr die Speicherung von gr%F6%DFeren Datenmengen (z.B. Diagramm Daten, Add-on Datenablage, etc.) kann hier als Alternative zur Systemvorgabe (z.B. auf einem angeschlossenem USB-Medium) ein eigener Speicherpfad angegeben werden (ben%F6tigt Neustart).",
 +    "dialogSettingsAdvancedSettingsHintSystem10" : "<b>Mediola NEO-Server Autostart:</b><br/>Bei Hochfahren der Zentrale wird automatisch der Mediola NEO Server gestartet, wenn dieser in seiner Konfiguration aktiviert wurde.",
++    "dialogSettingsAdvancedSettingsHintSystem11" : "<b>Name des Systems:</b><br/>Legt einen Namen f%FCr dieses System fest, der in der Titelleiste des Browsers bzw. Browser-Tabs angezeigt wird",
 +    "dialogSettingsAdvancedSettingsExpert" : "Experten-Optionen",
 +    "dialogSettingsAdvancedSettingsDevConfig" : "DevConfig-Button verbergen",
 +    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>DevConfig-Button verbergen:</b><br/>Wenn aktiviert wird der 'DevConfig' Button unter Systemsteuerung <i>nicht</i> angezeigt.",
 +    "dialogSettingsAdvancedSettingsMessageAlertMessageError1" : "Fehler beim Speichern",
++    "dialogSettingsAdvancedSettingsSystemName" : "Name des Systems",
 +    "commentSettingsDialogAdvancedSettingsEnd" : "***********************************************",
      "commentSettingsDialogNetwork" : "***********************************************",
      "dialogSettingsNetworkTitle" : HMIdentifier.de.CCUShortName + " - Netzwerkeinstellungen",
@@ -624,7 +693,7 @@
      "btnSysConfCentralMaintenace" : "CCU maintenance",
      "lblSysConfCentralMaintenance1" : "Software update for " + HMIdentifier.en.CCUFullNameText,
      "lblSysConfCentralMaintenance2" : "Restart " + HMIdentifier.en.CCUFullNameText,
-@@ -624,6 +626,41 @@
+@@ -624,6 +626,43 @@
      "dialogSettingsCentralDisplayLblOptionHours" : "Hours",
      "dialogSettingsCentralDisplayLblOptionAlways" : "Always on",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
@@ -658,10 +727,12 @@
 +    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Storagecheck (FSTRIM):</b><br/>If activated, unused filesystem data will be freed each saturday at 04:00 am on supported system drives (e.g. SSD).",
 +    "dialogSettingsAdvancedSettingsHintSystem9" : "<b>Custom Storage Path:</b><br/>As an alternative to the default of storing larger data to e.g. a connected USB drive, an own directory path can be entered here (requires reboot).",
 +    "dialogSettingsAdvancedSettingsHintSystem10" : "<b>Mediola NEO-Server Autostartup:</b><br/>Upon startup of the CCU, the Mediola NEO server process will be automatically started if it has been activated in the configuration.",
++    "dialogSettingsAdvancedSettingsHintSystem11" : "<b>System Name:</b><br/>Defines a custom name for this system that shows up in the browser's title bar or tab",
 +    "dialogSettingsAdvancedSettingsExpert" : "Expert Options",
 +    "dialogSettingsAdvancedSettingsDevConfig" : "Hide DevConfig-Button",
 +    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>Hide DevConfig-Button:</b><br/>If activated, the 'DevConfig' button will be <i>hided</i> under the control panel.",
 +    "dialogSettingsAdvancedSettingsMessageAlertMessageError1" : "Error on save",
++    "dialogSettingsAdvancedSettingsSystemName" : "System Name",
 +    "commentSettingsDialogAdvancedSettingsEnd" : "***********************************************",
      "commentSettingsDialogNetwork" : "***********************************************",
      "dialogSettingsNetworkTitle" : HMIdentifier.en.CCUShortName + " network settings",

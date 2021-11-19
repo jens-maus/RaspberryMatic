@@ -24,6 +24,18 @@ set CRONBACKUPPATHFILENAME "/etc/config/CronBackupPath"
 
 set TWEAKFILENAME "/etc/config/tweaks"
 
+proc get_systemname {} {
+  set isecmd "string systemname = system.Name();"
+  array set result [rega_script $isecmd]
+  return $result(systemname);
+}
+
+proc set_systemname { systemname } {
+  set isecmd "system.Name('$systemname');"
+  array set result [rega_script $isecmd]
+  return $result(STDOUT);
+}
+
 proc createfile { filename } {
  set result ""
 
@@ -136,7 +148,8 @@ proc action_put_page {} {
   set customStoragePath [readfile $CUSTOMSTORAGEPATHFILENAME]
 
   set tweaks [read_var_from_file $TWEAKFILENAME CP_DEVCONFIG]
-  
+  set systemName [get_systemname]
+
   http_head
   
   division {class="popupTitle"} {
@@ -180,6 +193,14 @@ proc action_put_page {} {
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
+            table_row {
+              table_data {class="CLASS21112"} {
+                puts "\${dialogSettingsAdvancedSettingsSystemName}"
+              }
+              table_data  {
+                cgi_text systemName=$systemName {id="text_systemName"} {size=30}
+              }
+            }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
             table_row {
               set checked ""
@@ -273,6 +294,7 @@ proc action_put_page {} {
           }
         }
         table_data {class="CLASS21113"} {align="left"} {
+          p { ${dialogSettingsAdvancedSettingsHintSystem11} }
           p { ${dialogSettingsAdvancedSettingsHintSystem1} }
           p { ${dialogSettingsAdvancedSettingsHintSystem2} }
           p { ${dialogSettingsAdvancedSettingsHintSystem3} }
@@ -335,6 +357,8 @@ proc action_put_page {} {
     puts {
       dlgResult = 0;
       OnOK = function() {
+        var systemName = document.getElementById("text_systemName").value;
+        if (systemName === '') systemName = 'HomeMatic WebUI';
         var pb = "action=save_settings";
         pb += "&inetcheckDisabled="+(document.getElementById("cb_inetcheckDisabled").checked?"0":"1");
         pb += "&rpi4usb3CheckDisabled="+(document.getElementById("cb_rpi4usb3CheckDisabled").checked?"0":"1");
@@ -349,6 +373,7 @@ proc action_put_page {} {
         pb += "&cronBackupPath="+document.getElementById("text_cronBackupPath").value;
         pb += "&cronBackupMaxBackups="+document.getElementById("text_cronBackupMaxBackups").value;
         pb += "&customStoragePath="+document.getElementById("text_customStoragePath").value;
+        pb += "&systemName="+systemName;
 
         var opts = {
           postBody: pb,
@@ -357,6 +382,7 @@ proc action_put_page {} {
             if (transport.responseText === "") {   
               dlgPopup.hide();
               dlgPopup.setWidth(400);
+              document.title = systemName;
               PopupClose();
             } else { 
               alert(translateKey("dialogSettingsAdvancedSettingsMessageAlertMessageError1") + "\n" +transport.responseText); 
@@ -372,6 +398,7 @@ proc action_put_page {} {
         document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
         document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
         document.getElementById("text_cronBackupMaxBackups").placeholder="30";
+        document.getElementById("text_systemName").placeholder="HomeMatic WebUI";
       };
     }
     
@@ -417,6 +444,11 @@ proc action_save_settings {} {
   import cronBackupPath
   import cronBackupMaxBackups
   import customStoragePath
+  import systemName
+  
+  if {$systemName != ""} {
+    append errMsg [set_systemname $systemName]
+  }
   
   if {$inetcheckDisabled} {
     append errMsg [createfile $INETCHECKFILENAME]

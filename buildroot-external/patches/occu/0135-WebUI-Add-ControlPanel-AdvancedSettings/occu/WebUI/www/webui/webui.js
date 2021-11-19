@@ -28600,16 +28600,17 @@ loadNewLinkPage = function()
   updateContent("/config/ic_selchannel.cgi");
 };
 
-setPath = function (path) {
-  var s = "<span onclick='WebUI.enter(StartPage);'>" +translateKey('startPage')+"</span>";
-  if ((path.length > 0) && $("PagePath")) {
-    if ($("PagePath"))$("PagePath").innerHTML = s + " &gt; " + path;
-  }
-  else {
-    if ($("PagePath"))$("PagePath").innerHTML = "<span id='PagePathSpan'>"+translateKey('startPage')+"</span>";
-  }
-  translatePage("#PagePath");
-};
+setPath = function (path) {                                                       
+  var title=document.title;                                                                                        
+  var s = "<span onclick='WebUI.enter(StartPage);'>["+title+"] " +translateKey('startPage')+"</span>";
+  if ((path.length > 0) && $("PagePath")) {                                           
+    if ($("PagePath"))$("PagePath").innerHTML = s + " &gt; " + path;                  
+  }                                                                                       
+  else {                                                           
+    if ($("PagePath"))$("PagePath").innerHTML = "<span id='PagePathSpan'>["+title+"] "+translateKey('startPage')+"</span>";
+  }                                                                                           
+  translatePage("#PagePath");                                              
+};  
 
 
 

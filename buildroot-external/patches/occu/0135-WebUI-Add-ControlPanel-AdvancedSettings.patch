@@ -1,26 +1,3 @@
---- occu/WebUI/bin/hm_startup.orig
-+++ occu/WebUI/bin/hm_startup
-@@ -152,10 +152,20 @@
-   }
- }
- 
-+proc validateSystemName { } {
-+  rega_script {
-+    string systemName=system.Name();
-+    if ( (systemName=="") || (systemName=="ReGaRA Demo") ) {
-+      system.Name("HomeMatic WebUI");
-+    }
-+  }
-+}
-+
- ################################################################################
- # Einsprungpunkt                                                               #
- ################################################################################
- 
- checkDevices
- create_default_objects
-+validateSystemName
- 
 --- occu/WebUI/www/config/control_panel.cgi.orig
 +++ occu/WebUI/www/config/control_panel.cgi
 @@ -215,8 +215,27 @@
@@ -72,7 +49,7 @@
         jQuery.each(helpContainer, function(index, container){
 --- occu/WebUI/www/config/cp_advancedsettings.cgi.orig
 +++ occu/WebUI/www/config/cp_advancedsettings.cgi
-@@ -0,0 +1,542 @@
+@@ -0,0 +1,547 @@
 +#!/bin/tclsh
 +source once.tcl
 +sourceOnce cgi.tcl
@@ -102,7 +79,12 @@
 +proc get_systemname {} {
 +  set isecmd "string systemname = system.Name();"
 +  array set result [rega_script $isecmd]
-+  return $result(systemname);
++  if { $result(systemname) == "ReGaRA Demo" } {
++    set res "RaspberryMatic WebUI"
++  } else {
++    set res $result(systemname)
++  }
++  return $res;
 +}
 +
 +proc set_systemname { systemname } {
@@ -433,7 +415,7 @@
 +      dlgResult = 0;
 +      OnOK = function() {
 +        var systemName = document.getElementById("text_systemName").value;
-+        if (systemName === '') systemName = 'HomeMatic WebUI';
++        if (systemName === '') systemName = 'RaspberryMatic WebUI';
 +        var pb = "action=save_settings";
 +        pb += "&inetcheckDisabled="+(document.getElementById("cb_inetcheckDisabled").checked?"0":"1");
 +        pb += "&rpi4usb3CheckDisabled="+(document.getElementById("cb_rpi4usb3CheckDisabled").checked?"0":"1");
@@ -473,7 +455,7 @@
 +        document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
 +        document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
 +        document.getElementById("text_cronBackupMaxBackups").placeholder="30";
-+        document.getElementById("text_systemName").placeholder="HomeMatic WebUI";
++        document.getElementById("text_systemName").placeholder="RaspberryMatic WebUI";
 +      };
 +    }
 +    
@@ -617,13 +599,22 @@
 +}
 --- occu/WebUI/www/rega/pages/index.htm.orig
 +++ occu/WebUI/www/rega/pages/index.htm
+@@ -24,7 +24,7 @@
+     <link rel="icon" type="image/png" sizes="16x16" href="/ise/img/rm-favicon-16x16.png">
+     <link rel="manifest" href="/webui/site.webmanifest">
+ 
+-    <title>HomeMatic WebUI</title>
++    <title>RaspberryMatic WebUI</title>
+ 
+ 
+     <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
 @@ -181,6 +181,9 @@
        {
          return "<%Write(sessionId);%>";
        }
 +  
 +      //setzt den (benutzerdefinierten) Browser-Titel
-+      document.title = "<% Write(system.Name()); %>";
++      document.title = "<% if (system.Name() == 'ReGaRA Demo') { Write('RaspberryMatic WebUI'); } else { Write(system.Name()); } %>";
       </script>
  
       <script type="text/javascript">
@@ -672,12 +663,12 @@
 +    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Speicher%FCberpr%FCfung (FSTRIM):</b><br/>Wenn aktiviert wird jeden Samstag um 04:00 Uhr auf allen unterst%FCtzten Speichermedien (z.B. SSD) eventl. ungenutze Speicherbl%F6cke freigegeben.",
 +    "dialogSettingsAdvancedSettingsHintSystem9" : "<b>Alternativer Speicherpfad:</b><br/>F%FCr die Speicherung von gr%F6%DFeren Datenmengen (z.B. Diagramm Daten, Add-on Datenablage, etc.) kann hier als Alternative zur Systemvorgabe (z.B. auf einem angeschlossenem USB-Medium) ein eigener Speicherpfad angegeben werden (ben%F6tigt Neustart).",
 +    "dialogSettingsAdvancedSettingsHintSystem10" : "<b>Mediola NEO-Server Autostart:</b><br/>Bei Hochfahren der Zentrale wird automatisch der Mediola NEO Server gestartet, wenn dieser in seiner Konfiguration aktiviert wurde.",
-+    "dialogSettingsAdvancedSettingsHintSystem11" : "<b>Name des Systems:</b><br/>Legt einen Namen f%FCr dieses System fest, der in der Titelleiste des Browsers bzw. Browser-Tabs angezeigt wird",
++    "dialogSettingsAdvancedSettingsHintSystem11" : "<b>Systemname:</b><br/>Legt einen Namen f%FCr dieses System fest, der in der Titelleiste des Browsers bzw. Browser-Tabs angezeigt wird",
 +    "dialogSettingsAdvancedSettingsExpert" : "Experten-Optionen",
 +    "dialogSettingsAdvancedSettingsDevConfig" : "DevConfig-Button verbergen",
 +    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>DevConfig-Button verbergen:</b><br/>Wenn aktiviert wird der 'DevConfig' Button unter Systemsteuerung <i>nicht</i> angezeigt.",
 +    "dialogSettingsAdvancedSettingsMessageAlertMessageError1" : "Fehler beim Speichern",
-+    "dialogSettingsAdvancedSettingsSystemName" : "Name des Systems",
++    "dialogSettingsAdvancedSettingsSystemName" : "Systemname",
 +    "commentSettingsDialogAdvancedSettingsEnd" : "***********************************************",
      "commentSettingsDialogNetwork" : "***********************************************",
      "dialogSettingsNetworkTitle" : HMIdentifier.de.CCUShortName + " - Netzwerkeinstellungen",
@@ -727,19 +718,47 @@
 +    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Storagecheck (FSTRIM):</b><br/>If activated, unused filesystem data will be freed each saturday at 04:00 am on supported system drives (e.g. SSD).",
 +    "dialogSettingsAdvancedSettingsHintSystem9" : "<b>Custom Storage Path:</b><br/>As an alternative to the default of storing larger data to e.g. a connected USB drive, an own directory path can be entered here (requires reboot).",
 +    "dialogSettingsAdvancedSettingsHintSystem10" : "<b>Mediola NEO-Server Autostartup:</b><br/>Upon startup of the CCU, the Mediola NEO server process will be automatically started if it has been activated in the configuration.",
-+    "dialogSettingsAdvancedSettingsHintSystem11" : "<b>System Name:</b><br/>Defines a custom name for this system that shows up in the browser's title bar or tab",
++    "dialogSettingsAdvancedSettingsHintSystem11" : "<b>System name:</b><br/>Defines a custom name for this system that shows up in the browser's title bar or tab",
 +    "dialogSettingsAdvancedSettingsExpert" : "Expert Options",
 +    "dialogSettingsAdvancedSettingsDevConfig" : "Hide DevConfig-Button",
 +    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>Hide DevConfig-Button:</b><br/>If activated, the 'DevConfig' button will be <i>hided</i> under the control panel.",
 +    "dialogSettingsAdvancedSettingsMessageAlertMessageError1" : "Error on save",
-+    "dialogSettingsAdvancedSettingsSystemName" : "System Name",
++    "dialogSettingsAdvancedSettingsSystemName" : "System name",
 +    "commentSettingsDialogAdvancedSettingsEnd" : "***********************************************",
      "commentSettingsDialogNetwork" : "***********************************************",
      "dialogSettingsNetworkTitle" : HMIdentifier.en.CCUShortName + " network settings",
      "dialogSettingsNetworkTDIPSettings" : "IP settings",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -42912,6 +42912,11 @@
+@@ -28600,16 +28600,17 @@
+   updateContent("/config/ic_selchannel.cgi");
+ };
+ 
+-setPath = function (path) {
+-  var s = "<span onclick='WebUI.enter(StartPage);'>" +translateKey('startPage')+"</span>";
+-  if ((path.length > 0) && $("PagePath")) {
+-    if ($("PagePath"))$("PagePath").innerHTML = s + " &gt; " + path;
+-  }
+-  else {
+-    if ($("PagePath"))$("PagePath").innerHTML = "<span id='PagePathSpan'>"+translateKey('startPage')+"</span>";
+-  }
+-  translatePage("#PagePath");
+-};
++setPath = function (path) {                                                       
++  var title=document.title;                                                                                        
++  var s = "<span onclick='WebUI.enter(StartPage);'>["+title+"] " +translateKey('startPage')+"</span>";
++  if ((path.length > 0) && $("PagePath")) {                                           
++    if ($("PagePath"))$("PagePath").innerHTML = s + " &gt; " + path;                  
++  }                                                                                       
++  else {                                                           
++    if ($("PagePath"))$("PagePath").innerHTML = "<span id='PagePathSpan'>["+title+"] "+translateKey('startPage')+"</span>";
++  }                                                                                           
++  translatePage("#PagePath");                                              
++};  
+ 
+ 
+ 
+@@ -42912,6 +42913,11 @@
    CreateCPPopup("/config/cp_maintenance.cgi");
  };
  

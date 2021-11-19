@@ -24,7 +24,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/ise/img/rm-favicon-16x16.png">
     <link rel="manifest" href="/webui/site.webmanifest">
 
-    <title>HomeMatic WebUI</title>
+    <title>RaspberryMatic WebUI</title>
 
 
     <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
@@ -183,7 +183,7 @@
       }
   
       //setzt den (benutzerdefinierten) Browser-Titel
-      document.title = "<% Write(system.Name()); %>";
+      document.title = "<% if (system.Name() == 'ReGaRA Demo') { Write('RaspberryMatic WebUI'); } else { Write(system.Name()); } %>";
      </script>
 
      <script type="text/javascript">

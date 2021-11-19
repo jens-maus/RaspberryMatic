@@ -27,7 +27,12 @@ set TWEAKFILENAME "/etc/config/tweaks"
 proc get_systemname {} {
   set isecmd "string systemname = system.Name();"
   array set result [rega_script $isecmd]
-  return $result(systemname);
+  if { $result(systemname) == "ReGaRA Demo" } {
+    set res "RaspberryMatic WebUI"
+  } else {
+    set res $result(systemname)
+  }
+  return $res;
 }
 
 proc set_systemname { systemname } {
@@ -358,7 +363,7 @@ proc action_put_page {} {
       dlgResult = 0;
       OnOK = function() {
         var systemName = document.getElementById("text_systemName").value;
-        if (systemName === '') systemName = 'HomeMatic WebUI';
+        if (systemName === '') systemName = 'RaspberryMatic WebUI';
         var pb = "action=save_settings";
         pb += "&inetcheckDisabled="+(document.getElementById("cb_inetcheckDisabled").checked?"0":"1");
         pb += "&rpi4usb3CheckDisabled="+(document.getElementById("cb_rpi4usb3CheckDisabled").checked?"0":"1");
@@ -398,7 +403,7 @@ proc action_put_page {} {
         document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
         document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
         document.getElementById("text_cronBackupMaxBackups").placeholder="30";
-        document.getElementById("text_systemName").placeholder="HomeMatic WebUI";
+        document.getElementById("text_systemName").placeholder="RaspberryMatic WebUI";
       };
     }
     

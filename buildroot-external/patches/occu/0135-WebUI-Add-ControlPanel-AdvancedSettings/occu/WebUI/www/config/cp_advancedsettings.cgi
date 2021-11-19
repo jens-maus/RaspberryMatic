@@ -27,8 +27,8 @@ set TWEAKFILENAME "/etc/config/tweaks"
 proc get_systemname {} {
   set isecmd "string systemname = system.Name();"
   array set result [rega_script $isecmd]
-  if { $result(systemname) == "ReGaRA Demo" } {
-    set res "RaspberryMatic WebUI"
+  if { $result(systemname) == "ReGaRA Demo" || $result(systemname) == "" } {
+    set res ""
   } else {
     set res $result(systemname)
   }
@@ -198,6 +198,7 @@ proc action_put_page {} {
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
+            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
             table_row {
               table_data {class="CLASS21112"} {
                 puts "\${dialogSettingsAdvancedSettingsSystemName}"
@@ -362,8 +363,6 @@ proc action_put_page {} {
     puts {
       dlgResult = 0;
       OnOK = function() {
-        var systemName = document.getElementById("text_systemName").value;
-        if (systemName === '') systemName = 'RaspberryMatic WebUI';
         var pb = "action=save_settings";
         pb += "&inetcheckDisabled="+(document.getElementById("cb_inetcheckDisabled").checked?"0":"1");
         pb += "&rpi4usb3CheckDisabled="+(document.getElementById("cb_rpi4usb3CheckDisabled").checked?"0":"1");
@@ -378,7 +377,7 @@ proc action_put_page {} {
         pb += "&cronBackupPath="+document.getElementById("text_cronBackupPath").value;
         pb += "&cronBackupMaxBackups="+document.getElementById("text_cronBackupMaxBackups").value;
         pb += "&customStoragePath="+document.getElementById("text_customStoragePath").value;
-        pb += "&systemName="+systemName;
+        pb += "&systemName="+document.getElementById("text_systemName").value;
 
         var opts = {
           postBody: pb,
@@ -387,7 +386,6 @@ proc action_put_page {} {
             if (transport.responseText === "") {   
               dlgPopup.hide();
               dlgPopup.setWidth(400);
-              document.title = systemName;
               PopupClose();
             } else { 
               alert(translateKey("dialogSettingsAdvancedSettingsMessageAlertMessageError1") + "\n" +transport.responseText); 
@@ -403,7 +401,7 @@ proc action_put_page {} {
         document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
         document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
         document.getElementById("text_cronBackupMaxBackups").placeholder="30";
-        document.getElementById("text_systemName").placeholder="RaspberryMatic WebUI";
+        document.getElementById("text_systemName").placeholder=translateKey("dialogSettingsAdvancedSettingsSystemNamePlaceholder");
       };
     }
     
@@ -451,7 +449,9 @@ proc action_save_settings {} {
   import customStoragePath
   import systemName
   
-  if {$systemName != ""} {
+  if {$systemName == ""} {
+    append errMsg [set_systemname "ReGaRA Demo"]
+  } else {
     append errMsg [set_systemname $systemName]
   }
   

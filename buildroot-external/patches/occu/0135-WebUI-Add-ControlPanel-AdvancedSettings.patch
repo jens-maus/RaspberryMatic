@@ -79,8 +79,8 @@
 +proc get_systemname {} {
 +  set isecmd "string systemname = system.Name();"
 +  array set result [rega_script $isecmd]
-+  if { $result(systemname) == "ReGaRA Demo" } {
-+    set res "RaspberryMatic WebUI"
++  if { $result(systemname) == "ReGaRA Demo" || $result(systemname) == "" } {
++    set res ""
 +  } else {
 +    set res $result(systemname)
 +  }
@@ -250,6 +250,7 @@
 +        }
 +        table_data {align=left} {class="CLASS02533"} {
 +          table {
++            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
 +            table_row {
 +              table_data {class="CLASS21112"} {
 +                puts "\${dialogSettingsAdvancedSettingsSystemName}"
@@ -414,8 +415,6 @@
 +    puts {
 +      dlgResult = 0;
 +      OnOK = function() {
-+        var systemName = document.getElementById("text_systemName").value;
-+        if (systemName === '') systemName = 'RaspberryMatic WebUI';
 +        var pb = "action=save_settings";
 +        pb += "&inetcheckDisabled="+(document.getElementById("cb_inetcheckDisabled").checked?"0":"1");
 +        pb += "&rpi4usb3CheckDisabled="+(document.getElementById("cb_rpi4usb3CheckDisabled").checked?"0":"1");
@@ -430,7 +429,7 @@
 +        pb += "&cronBackupPath="+document.getElementById("text_cronBackupPath").value;
 +        pb += "&cronBackupMaxBackups="+document.getElementById("text_cronBackupMaxBackups").value;
 +        pb += "&customStoragePath="+document.getElementById("text_customStoragePath").value;
-+        pb += "&systemName="+systemName;
++        pb += "&systemName="+document.getElementById("text_systemName").value;
 +
 +        var opts = {
 +          postBody: pb,
@@ -439,7 +438,6 @@
 +            if (transport.responseText === "") {   
 +              dlgPopup.hide();
 +              dlgPopup.setWidth(400);
-+              document.title = systemName;
 +              PopupClose();
 +            } else { 
 +              alert(translateKey("dialogSettingsAdvancedSettingsMessageAlertMessageError1") + "\n" +transport.responseText); 
@@ -455,7 +453,7 @@
 +        document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
 +        document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
 +        document.getElementById("text_cronBackupMaxBackups").placeholder="30";
-+        document.getElementById("text_systemName").placeholder="RaspberryMatic WebUI";
++        document.getElementById("text_systemName").placeholder=translateKey("dialogSettingsAdvancedSettingsSystemNamePlaceholder");
 +      };
 +    }
 +    
@@ -503,7 +501,9 @@
 +  import customStoragePath
 +  import systemName
 +  
-+  if {$systemName != ""} {
++  if {$systemName == ""} {
++    append errMsg [set_systemname "ReGaRA Demo"]
++  } else {
 +    append errMsg [set_systemname $systemName]
 +  }
 +  
@@ -614,7 +614,7 @@
        }
 +  
 +      //setzt den (benutzerdefinierten) Browser-Titel
-+      document.title = "<% if (system.Name() == 'ReGaRA Demo') { Write('RaspberryMatic WebUI'); } else { Write(system.Name()); } %>";
++      document.title = "<% if ((system.Name() == 'ReGaRA Demo') || (system.Name() == '')) { Write('RaspberryMatic WebUI'); } else { Write(system.Name()); } %>";
       </script>
  
       <script type="text/javascript">
@@ -629,7 +629,7 @@
      "btnSysConfCentralMaintenace" : "Zentralen-<br/>Wartung",
      "lblSysConfCentralMaintenance1" : "Software-Update der " + HMIdentifier.de.CCUFullNameText,
      "lblSysConfCentralMaintenance2" : HMIdentifier.de.CCUFullNameText + " neu starten",
-@@ -624,6 +626,43 @@
+@@ -624,6 +626,44 @@
      "dialogSettingsCentralDisplayLblOptionHours" : "Stunden",
      "dialogSettingsCentralDisplayLblOptionAlways" : "Immer an",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
@@ -663,12 +663,13 @@
 +    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Speicher%FCberpr%FCfung (FSTRIM):</b><br/>Wenn aktiviert wird jeden Samstag um 04:00 Uhr auf allen unterst%FCtzten Speichermedien (z.B. SSD) eventl. ungenutze Speicherbl%F6cke freigegeben.",
 +    "dialogSettingsAdvancedSettingsHintSystem9" : "<b>Alternativer Speicherpfad:</b><br/>F%FCr die Speicherung von gr%F6%DFeren Datenmengen (z.B. Diagramm Daten, Add-on Datenablage, etc.) kann hier als Alternative zur Systemvorgabe (z.B. auf einem angeschlossenem USB-Medium) ein eigener Speicherpfad angegeben werden (ben%F6tigt Neustart).",
 +    "dialogSettingsAdvancedSettingsHintSystem10" : "<b>Mediola NEO-Server Autostart:</b><br/>Bei Hochfahren der Zentrale wird automatisch der Mediola NEO Server gestartet, wenn dieser in seiner Konfiguration aktiviert wurde.",
-+    "dialogSettingsAdvancedSettingsHintSystem11" : "<b>Systemname:</b><br/>Legt einen Namen f%FCr dieses System fest, der in der Titelleiste des Browsers bzw. Browser-Tabs angezeigt wird",
++    "dialogSettingsAdvancedSettingsHintSystem11" : "<b>Systemname:</b><br/>Legt einen Namen f%FCr dieses System fest, der in der Titelleiste des Browsers, Browser-Tabs sowie auf der Startseite angezeigt wird.",
 +    "dialogSettingsAdvancedSettingsExpert" : "Experten-Optionen",
 +    "dialogSettingsAdvancedSettingsDevConfig" : "DevConfig-Button verbergen",
 +    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>DevConfig-Button verbergen:</b><br/>Wenn aktiviert wird der 'DevConfig' Button unter Systemsteuerung <i>nicht</i> angezeigt.",
 +    "dialogSettingsAdvancedSettingsMessageAlertMessageError1" : "Fehler beim Speichern",
 +    "dialogSettingsAdvancedSettingsSystemName" : "Systemname",
++    "dialogSettingsAdvancedSettingsSystemNamePlaceholder" : "<Systemvorgabe>",
 +    "commentSettingsDialogAdvancedSettingsEnd" : "***********************************************",
      "commentSettingsDialogNetwork" : "***********************************************",
      "dialogSettingsNetworkTitle" : HMIdentifier.de.CCUShortName + " - Netzwerkeinstellungen",
@@ -684,7 +685,7 @@
      "btnSysConfCentralMaintenace" : "CCU maintenance",
      "lblSysConfCentralMaintenance1" : "Software update for " + HMIdentifier.en.CCUFullNameText,
      "lblSysConfCentralMaintenance2" : "Restart " + HMIdentifier.en.CCUFullNameText,
-@@ -624,6 +626,43 @@
+@@ -624,6 +626,44 @@
      "dialogSettingsCentralDisplayLblOptionHours" : "Hours",
      "dialogSettingsCentralDisplayLblOptionAlways" : "Always on",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
@@ -718,47 +719,53 @@
 +    "dialogSettingsAdvancedSettingsHintSystem8" : "<b>Storagecheck (FSTRIM):</b><br/>If activated, unused filesystem data will be freed each saturday at 04:00 am on supported system drives (e.g. SSD).",
 +    "dialogSettingsAdvancedSettingsHintSystem9" : "<b>Custom Storage Path:</b><br/>As an alternative to the default of storing larger data to e.g. a connected USB drive, an own directory path can be entered here (requires reboot).",
 +    "dialogSettingsAdvancedSettingsHintSystem10" : "<b>Mediola NEO-Server Autostartup:</b><br/>Upon startup of the CCU, the Mediola NEO server process will be automatically started if it has been activated in the configuration.",
-+    "dialogSettingsAdvancedSettingsHintSystem11" : "<b>System name:</b><br/>Defines a custom name for this system that shows up in the browser's title bar or tab",
++    "dialogSettingsAdvancedSettingsHintSystem11" : "<b>System name:</b><br/>Defines a custom name for this system that shows up in the browser title bar, tab and start page.",
 +    "dialogSettingsAdvancedSettingsExpert" : "Expert Options",
 +    "dialogSettingsAdvancedSettingsDevConfig" : "Hide DevConfig-Button",
 +    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>Hide DevConfig-Button:</b><br/>If activated, the 'DevConfig' button will be <i>hided</i> under the control panel.",
 +    "dialogSettingsAdvancedSettingsMessageAlertMessageError1" : "Error on save",
 +    "dialogSettingsAdvancedSettingsSystemName" : "System name",
++    "dialogSettingsAdvancedSettingsSystemNamePlaceholder" : "<default>",
 +    "commentSettingsDialogAdvancedSettingsEnd" : "***********************************************",
      "commentSettingsDialogNetwork" : "***********************************************",
      "dialogSettingsNetworkTitle" : HMIdentifier.en.CCUShortName + " network settings",
      "dialogSettingsNetworkTDIPSettings" : "IP settings",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -28600,16 +28600,17 @@
-   updateContent("/config/ic_selchannel.cgi");
+@@ -28601,15 +28601,25 @@
  };
  
--setPath = function (path) {
+ setPath = function (path) {
 -  var s = "<span onclick='WebUI.enter(StartPage);'>" +translateKey('startPage')+"</span>";
 -  if ((path.length > 0) && $("PagePath")) {
 -    if ($("PagePath"))$("PagePath").innerHTML = s + " &gt; " + path;
--  }
++  var title=document.title;
++  if (title != 'RaspberryMatic WebUI') {
++    title = '[' + title + '] ';
++  } else {
++    title = '';
+   }
 -  else {
 -    if ($("PagePath"))$("PagePath").innerHTML = "<span id='PagePathSpan'>"+translateKey('startPage')+"</span>";
--  }
++
++  if ($("PagePath")) {
++    var s = '';
++    if (path.length > 0) {
++      s = "<span onclick='WebUI.enter(StartPage);'>" + title + translateKey('startPage') + "&nbsp;&gt " + path;
++    } else {
++      s = "<span id='PagePathSpan'>" + title + translateKey('startPage') + "</span>";
++    }
++
++    $("PagePath").innerHTML = s;
++    translatePage("#PagePath");
+   }
 -  translatePage("#PagePath");
 -};
-+setPath = function (path) {                                                       
-+  var title=document.title;                                                                                        
-+  var s = "<span onclick='WebUI.enter(StartPage);'>["+title+"] " +translateKey('startPage')+"</span>";
-+  if ((path.length > 0) && $("PagePath")) {                                           
-+    if ($("PagePath"))$("PagePath").innerHTML = s + " &gt; " + path;                  
-+  }                                                                                       
-+  else {                                                           
-+    if ($("PagePath"))$("PagePath").innerHTML = "<span id='PagePathSpan'>["+title+"] "+translateKey('startPage')+"</span>";
-+  }                                                                                           
-+  translatePage("#PagePath");                                              
 +};  
  
  
  
-@@ -42912,6 +42913,11 @@
+@@ -42912,6 +42922,11 @@
    CreateCPPopup("/config/cp_maintenance.cgi");
  };
  

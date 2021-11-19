@@ -183,7 +183,7 @@
       }
   
       //setzt den (benutzerdefinierten) Browser-Titel
-      document.title = "<% if (system.Name() == 'ReGaRA Demo') { Write('RaspberryMatic WebUI'); } else { Write(system.Name()); } %>";
+      document.title = "<% if ((system.Name() == 'ReGaRA Demo') || (system.Name() == '')) { Write('RaspberryMatic WebUI'); } else { Write(system.Name()); } %>";
      </script>
 
      <script type="text/javascript">

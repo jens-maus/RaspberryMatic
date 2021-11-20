@@ -24,6 +24,23 @@ set CRONBACKUPPATHFILENAME "/etc/config/CronBackupPath"
 
 set TWEAKFILENAME "/etc/config/tweaks"
 
+proc get_systemname {} {
+  set isecmd "string systemname = system.Name();"
+  array set result [rega_script $isecmd]
+  if { $result(systemname) == "ReGaRA Demo" || $result(systemname) == "" } {
+    set res ""
+  } else {
+    set res $result(systemname)
+  }
+  return $res;
+}
+
+proc set_systemname { systemname } {
+  set isecmd "system.Name('$systemname');"
+  array set result [rega_script $isecmd]
+  return $result(STDOUT);
+}
+
 proc createfile { filename } {
  set result ""
 
@@ -136,7 +153,8 @@ proc action_put_page {} {
   set customStoragePath [readfile $CUSTOMSTORAGEPATHFILENAME]
 
   set tweaks [read_var_from_file $TWEAKFILENAME CP_DEVCONFIG]
-  
+  set systemName [get_systemname]
+
   http_head
   
   division {class="popupTitle"} {
@@ -180,6 +198,15 @@ proc action_put_page {} {
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
+            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
+            table_row {
+              table_data {class="CLASS21112"} {
+                puts "\${dialogSettingsAdvancedSettingsSystemName}"
+              }
+              table_data  {
+                cgi_text systemName=$systemName {id="text_systemName"} {size=30}
+              }
+            }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
             table_row {
               set checked ""
@@ -273,6 +300,7 @@ proc action_put_page {} {
           }
         }
         table_data {class="CLASS21113"} {align="left"} {
+          p { ${dialogSettingsAdvancedSettingsHintSystem11} }
           p { ${dialogSettingsAdvancedSettingsHintSystem1} }
           p { ${dialogSettingsAdvancedSettingsHintSystem2} }
           p { ${dialogSettingsAdvancedSettingsHintSystem3} }
@@ -349,6 +377,7 @@ proc action_put_page {} {
         pb += "&cronBackupPath="+document.getElementById("text_cronBackupPath").value;
         pb += "&cronBackupMaxBackups="+document.getElementById("text_cronBackupMaxBackups").value;
         pb += "&customStoragePath="+document.getElementById("text_customStoragePath").value;
+        pb += "&systemName="+document.getElementById("text_systemName").value;
 
         var opts = {
           postBody: pb,
@@ -372,6 +401,7 @@ proc action_put_page {} {
         document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
         document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
         document.getElementById("text_cronBackupMaxBackups").placeholder="30";
+        document.getElementById("text_systemName").placeholder=translateKey("dialogSettingsAdvancedSettingsSystemNamePlaceholder");
       };
     }
     
@@ -417,6 +447,13 @@ proc action_save_settings {} {
   import cronBackupPath
   import cronBackupMaxBackups
   import customStoragePath
+  import systemName
+  
+  if {$systemName == ""} {
+    append errMsg [set_systemname "ReGaRA Demo"]
+  } else {
+    append errMsg [set_systemname $systemName]
+  }
   
   if {$inetcheckDisabled} {
     append errMsg [createfile $INETCHECKFILENAME]

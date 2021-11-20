@@ -134,6 +134,19 @@ a img {
  * * *   Element IDs                     * * *
  * * * * * * * * * * * * * * * * * * * * * * */
 
+/* Login- und Logout-Fenster */
+
+#maintable {
+  width: 100vw;
+  height: 100vh;
+}
+
+#maintable #content {
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: 480px center;
+}
+
 /* Navigation-Leiste */
 #navbar 
 {

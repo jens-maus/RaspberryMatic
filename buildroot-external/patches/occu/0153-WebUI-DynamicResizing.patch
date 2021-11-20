@@ -29,10 +29,19 @@
    </head>
    <body>
 -    <table style="width:100%; height:100%;" cellpadding="0" cellspacing="0" id="maintable">
-+    <table style="width:100vw; height:100vh;" cellpadding="0" cellspacing="0" id="maintable">
++    <table cellpadding="0" cellspacing="0" id="maintable">
        <tr>
          <td id="navbar">
            <table cellpadding="0" cellspacing="0">
+@@ -80,7 +59,7 @@
+       </tr>
+       <tr>
+         <td>
+-          <div id="content" style="background-repeat:no-repeat;background-position:480px center;">
++          <div id="content">
+             <table id="login_content" style="width: 200px;">
+               <tr>
+                 <!-- Liste der Benutzer -->
 @@ -168,9 +147,6 @@
  
  
@@ -73,10 +82,19 @@
    </head>
    <body>
 -    <table style="width: 100%; height: 100%;" cellpadding="0" cellspacing="0" id="maintable" class="j_translate">
-+    <table style="width: 100vw; height: 100vh;" cellpadding="0" cellspacing="0" id="maintable" class="j_translate">
++    <table cellpadding="0" cellspacing="0" id="maintable" class="j_translate">
        <tr>
          <td id="navbar">
            <table cellpadding="0" cellspacing="0">
+@@ -47,7 +26,7 @@
+       </tr>
+       <tr>
+         <td>
+-          <div id="content" style="background-repeat:no-repeat;background-position:480px center;">
++          <div id="content">
+             <table id="logout_content" cellspacing="8">
+               <tr>
+                 <td style="vertical-align: top;">
 @@ -66,9 +45,6 @@
      </table>
  
@@ -89,7 +107,23 @@
        };
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -137,6 +137,7 @@
+@@ -134,9 +134,23 @@
+  * * *   Element IDs                     * * *
+  * * * * * * * * * * * * * * * * * * * * * * */
+ 
++/* Login- und Logout-Fenster */
++
++#maintable {
++  width: 100vw;
++  height: 100vh;
++}
++
++#maintable #content {
++  height: 100%;
++  background-repeat: no-repeat;
++  background-position: 480px center;
++}
++
  /* Navigation-Leiste */
  #navbar 
  {
@@ -97,7 +131,7 @@
    margin: 0px;
    background-color: $_(background); /* #183473 */
    width:100%;
-@@ -206,7 +207,7 @@
+@@ -206,7 +220,7 @@
  
  /* Fusszeile */
  #footer {

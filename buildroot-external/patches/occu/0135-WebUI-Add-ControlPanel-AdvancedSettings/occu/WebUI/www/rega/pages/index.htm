@@ -24,7 +24,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/ise/img/rm-favicon-16x16.png">
     <link rel="manifest" href="/webui/site.webmanifest">
 
-    <title>RaspberryMatic WebUI</title>
+    <title><% if ((system.Name() == 'ReGaRA Demo') || (system.Name() == '')) { Write('RaspberryMatic WebUI'); } else { Write(system.Name()); } %></title>
 
 
     <script type="text/javascript" src="/webui/js/extern/jquery.js"></script>
@@ -181,9 +181,6 @@
       {
         return "<%Write(sessionId);%>";
       }
-  
-      //setzt den (benutzerdefinierten) Browser-Titel
-      document.title = "<% if ((system.Name() == 'ReGaRA Demo') || (system.Name() == '')) { Write('RaspberryMatic WebUI'); } else { Write(system.Name()); } %>";
      </script>
 
      <script type="text/javascript">

@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/login.htm.orig
 +++ occu/WebUI/www/rega/login.htm
-@@ -40,31 +40,10 @@
+@@ -40,34 +40,13 @@
            FormSubmit();
          }
        }
@@ -29,10 +29,14 @@
    </head>
    <body>
 -    <table style="width:100%; height:100%;" cellpadding="0" cellspacing="0" id="maintable">
-+    <table cellpadding="0" cellspacing="0" id="maintable">
++    <table id="maintable">
        <tr>
          <td id="navbar">
-           <table cellpadding="0" cellspacing="0">
+-          <table cellpadding="0" cellspacing="0">
++          <table>
+             <tr>
+               <td style="text-align: center;"><div style="width: 180px;"><img src="/ise/img/homematic_logo_small.png" alt="HomeMatic Logo" /></div></td>
+               <td><span class="HeaderTitle" style="cursor: pointer;" onclick="gotoLoginPage();">${lblUsrLogin}</span></td>
 @@ -80,7 +59,7 @@
        </tr>
        <tr>
@@ -54,7 +58,7 @@
        };
 --- occu/WebUI/www/rega/logout.htm.orig
 +++ occu/WebUI/www/rega/logout.htm
-@@ -9,30 +9,9 @@
+@@ -9,33 +9,12 @@
      <script type="text/javascript" src="/webui/js/extern/prototype.js"></script>
      <script type="text/javascript" src="/webui/js/lang/loadTextResource.js"></script>
      <script type="text/javascript" src="/webui/js/lang/translate.js"></script>
@@ -82,10 +86,14 @@
    </head>
    <body>
 -    <table style="width: 100%; height: 100%;" cellpadding="0" cellspacing="0" id="maintable" class="j_translate">
-+    <table cellpadding="0" cellspacing="0" id="maintable" class="j_translate">
++    <table id="maintable" class="j_translate">
        <tr>
          <td id="navbar">
-           <table cellpadding="0" cellspacing="0">
+-          <table cellpadding="0" cellspacing="0">
++          <table>
+           <tr>
+             <td style="text-align: center;"><div style="width: 180px;" ><img src="/ise/img/homematic_logo_small.png" alt="HomeMatic Logo" /></div></td>
+             <td><span class="HeaderTitle" style="cursor: pointer;" onclick="gotoLoginPage();">${lblUsrLogin}</span></td>
 @@ -47,7 +26,7 @@
        </tr>
        <tr>
@@ -116,7 +124,7 @@
    margin:0;
    padding:0;
    color: $_(textColorB); /* black */
-@@ -134,9 +136,23 @@
+@@ -134,9 +136,28 @@
   * * *   Element IDs                     * * *
   * * * * * * * * * * * * * * * * * * * * * * */
  
@@ -125,6 +133,11 @@
 +#maintable {
 +  width: 100vw;
 +  height: 100vh;
++  border-collapse: collapse;  
++}
++
++#maintable tbody > tr > td {
++  padding: 0;
 +}
 +
 +#maintable #content {
@@ -140,7 +153,7 @@
    margin: 0px;
    background-color: $_(background); /* #183473 */
    width:100%;
-@@ -144,6 +160,10 @@
+@@ -144,6 +165,10 @@
  }
   
  /* Haupt-Fenster */
@@ -151,7 +164,7 @@
  #_content
  {
    height: 70%;
-@@ -177,6 +197,8 @@
+@@ -177,6 +202,8 @@
      align-items: flex-start;
      /* Prevent chrome from outlining this by focus */
      outline: none;
@@ -160,7 +173,7 @@
  }
  
  #prgcontent
-@@ -196,7 +218,7 @@
+@@ -196,7 +223,7 @@
  
  /* Kopfzeile */
  #header {
@@ -169,7 +182,7 @@
    background-color: $_(background);  /* #183473 */
    /* background-color: #dcdcdc; */
    color: $_(textColorB); /* black */
-@@ -206,7 +228,7 @@
+@@ -206,7 +233,7 @@
  
  /* Fusszeile */
  #footer {
@@ -178,7 +191,7 @@
    background-color: $_(background); /* #183473 */
    /* background-color: #dcdcdc; */
    color: $_(textColorB); /* black */
-@@ -254,12 +276,14 @@
+@@ -254,12 +281,14 @@
  /* Linker Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
  #contentLeft 
  {
@@ -193,7 +206,7 @@
    border-left: solid 5px $_(navBarSeparator); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
    /* padding-top: 10px; */
    vertical-align: top;
-@@ -2550,8 +2574,8 @@
+@@ -2550,8 +2579,8 @@
    cursor: pointer;
  }
  #menubar {
@@ -204,7 +217,7 @@
    border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
    background-color: $_(background); /* #183473 */
    z-index: 189;
-@@ -6274,6 +6298,7 @@
+@@ -6274,6 +6303,7 @@
  }
  
  .CLASS03901 {
@@ -212,7 +225,7 @@
  	width:100%;
  }
  
-@@ -6335,6 +6360,7 @@
+@@ -6335,6 +6365,7 @@
  }
  
  .CLASS04001 {

@@ -203,7 +203,7 @@ a img {
     /* Prevent chrome from outlining this by focus */
     outline: none;
     /* Stretch to max available space */
-    height: calc(100% - 175px); /* FIX: header + menubar + footer: 72px + 48px + 55px = 175px */
+    height: calc(100% - 168px); /* FIX: header + menubar + footer: 72px + 41px + 55px = 168px */
 }
 
 #prgcontent

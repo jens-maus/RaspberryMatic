@@ -20240,29 +20240,30 @@ StartPage = Singleton.create(Page, {
   {
     /**
      * FIX: resize - partialy done
-     **/
+     *
     var contentHeight     = $("content").getHeight();
-    //var contentWidth      = $("content").getWidth();
-    //var width = parseInt(contentWidth / 2);
+    var contentWidth      = $("content").getWidth();
+    var width = parseInt(contentWidth / 2);
     
     if ($("contentLeft"))
     {
       //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
-      Element.setStyle("contentLeft", {/*"height": contentHeight + "px",*/ "width": "55%"});
+      Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
     }
-    //if ($("contentRight"))
-    //{
-    //  //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
-    //  Element.setStyle("contentRight", {"height": contentHeight + "px"});
-    //}
+    if ($("contentRight"))
+    {
+      //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
+      Element.setStyle("contentRight", {"height": contentHeight + "px"});
+    }
     
-    if ($("favSelector")) /* FIX: resize - ToDo */
+    if ($("favSelector"))
     {   
       var FavSelectorHeight = $("favSelector").getHeight();
       var FAV_MARGIN_HEIGHT = 8;          
       var favViewHeight = (contentHeight - FavSelectorHeight - FAV_MARGIN_HEIGHT) * 0.95;
       $("favView").setStyle({"height": favViewHeight});
     }
+    */
   },
 
   getPageMeasurement: function() {

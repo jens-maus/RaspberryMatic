@@ -169,7 +169,7 @@
      /* Prevent chrome from outlining this by focus */
      outline: none;
 +    /* Stretch to max available space */
-+    height: calc(100% - 175px); /* FIX: header + menubar + footer: 72px + 48px + 55px = 175px */
++    height: calc(100% - 168px); /* FIX: header + menubar + footer: 72px + 41px + 55px = 168px */
  }
  
  #prgcontent
@@ -255,38 +255,34 @@
  
      if(typeof dcTimeout == "undefined") {
        dcTimeout = window.setTimeout(function () {
-@@ -20235,22 +20238,25 @@
+@@ -20235,6 +20238,9 @@
     **/
    resizeUser: function()
    {
 +    /**
 +     * FIX: resize - partialy done
-+     **/
++     *
      var contentHeight     = $("content").getHeight();
--    var contentWidth      = $("content").getWidth();
--    var width = parseInt(contentWidth / 2);
-+    //var contentWidth      = $("content").getWidth();
-+    //var width = parseInt(contentWidth / 2);
-     
-     if ($("contentLeft"))
-     {
+     var contentWidth      = $("content").getWidth();
+     var width = parseInt(contentWidth / 2);
+@@ -20244,10 +20250,10 @@
        //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
--      Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
--    }
--    if ($("contentLeft"))
--    {
--      //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
--      Element.setStyle("contentRight", {"height": contentHeight + "px", "width": "44%"});
-+      Element.setStyle("contentLeft", {/*"height": contentHeight + "px",*/ "width": "55%"});
+       Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
      }
-+    //if ($("contentRight"))
-+    //{
-+    //  //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
-+    //  Element.setStyle("contentRight", {"height": contentHeight + "px"});
-+    //}
+-    if ($("contentLeft"))
++    if ($("contentRight"))
+     {
+       //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
+-      Element.setStyle("contentRight", {"height": contentHeight + "px", "width": "44%"});
++      Element.setStyle("contentRight", {"height": contentHeight + "px"});
+     }
      
--    if ($("favSelector"))
-+    if ($("favSelector")) /* FIX: resize - ToDo */
-     {   
-       var FavSelectorHeight = $("favSelector").getHeight();
-       var FAV_MARGIN_HEIGHT = 8;          
+     if ($("favSelector"))
+@@ -20257,6 +20263,7 @@
+       var favViewHeight = (contentHeight - FavSelectorHeight - FAV_MARGIN_HEIGHT) * 0.95;
+       $("favView").setStyle({"height": favViewHeight});
+     }
++    */
+   },
+ 
+   getPageMeasurement: function() {

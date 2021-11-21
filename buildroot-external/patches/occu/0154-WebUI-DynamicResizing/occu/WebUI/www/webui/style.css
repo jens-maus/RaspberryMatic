@@ -2579,7 +2579,7 @@ html, body {
   cursor: pointer;
 }
 #menubar {
-  height: 41px; /* FIX: resize */
+  height: 34px; /* FIX: resize */
   /* width: 100%; */
   border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
   background-color: $_(background); /* #183473 */

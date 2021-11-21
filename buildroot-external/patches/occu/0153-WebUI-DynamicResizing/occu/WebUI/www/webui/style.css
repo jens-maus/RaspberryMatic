@@ -100,6 +100,8 @@ tr.UserSysVars:nth-child(odd) {
 
 html,body
 {
+  width: 100vw; /* FIX: resize */
+  height: 100vh; /* FIX: resize */
   margin:0;
   padding:0;
   color: $_(textColorB); /* black */
@@ -134,7 +136,7 @@ a img {
  * * *   Element IDs                     * * *
  * * * * * * * * * * * * * * * * * * * * * * */
 
-/* Login- und Logout-Fenster */
+/* Login & Logout page */
 
 #maintable {
   width: 100vw;
@@ -158,6 +160,10 @@ a img {
 }
  
 /* Haupt-Fenster */
+.Layer0 {
+  height: 100%; /* FIX: resize */
+}
+
 #_content
 {
   height: 70%;
@@ -191,6 +197,8 @@ a img {
     align-items: flex-start;
     /* Prevent chrome from outlining this by focus */
     outline: none;
+    /* Stretch to max available space */
+    height: calc(100% - 175px); /* FIX: header + menubar + footer: 72px + 48px + 55px = 175px */
 }
 
 #prgcontent
@@ -210,7 +218,7 @@ a img {
 
 /* Kopfzeile */
 #header {
-  height: 15%;
+  height: 72px; /* FIX: resize */
   background-color: $_(background);  /* #183473 */
   /* background-color: #dcdcdc; */
   color: $_(textColorB); /* black */
@@ -220,7 +228,7 @@ a img {
 
 /* Fusszeile */
 #footer {
-  height: 50px;
+  height: 50px; /* FIX: resize */
   background-color: $_(background); /* #183473 */
   /* background-color: #dcdcdc; */
   color: $_(textColorB); /* black */
@@ -268,12 +276,14 @@ a img {
 /* Linker Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
 #contentLeft 
 {
+  height: 100%; /* FIX: resize */
   vertical-align: top;
 }
 
 /* Rechter Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
 #contentRight 
 { 
+  height: 100%; /* FIX: resize */
   border-left: solid 5px $_(navBarSeparator); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
   /* padding-top: 10px; */
   vertical-align: top;
@@ -2564,8 +2574,8 @@ html, body {
   cursor: pointer;
 }
 #menubar {
-  height: 34px;
-  width: 100%;
+  height: 41px; /* FIX: resize */
+  /* width: 100%; */
   border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
   background-color: $_(background); /* #183473 */
   z-index: 189;
@@ -6288,6 +6298,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS03901 {
+  height: 100%; /* FIX: resize */
 	width:100%;
 }
 
@@ -6349,6 +6360,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS04001 {
+  height: 100%; /* FIX: resize */
 	width:100%;
 }
 

@@ -107,11 +107,20 @@
        };
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -134,9 +134,23 @@
+@@ -100,6 +100,8 @@
+ 
+ html,body
+ {
++  width: 100vw; /* FIX: resize */
++  height: 100vh; /* FIX: resize */
+   margin:0;
+   padding:0;
+   color: $_(textColorB); /* black */
+@@ -134,9 +136,23 @@
   * * *   Element IDs                     * * *
   * * * * * * * * * * * * * * * * * * * * * * */
  
-+/* Login- und Logout-Fenster */
++/* Login & Logout page */
 +
 +#maintable {
 +  width: 100vw;
@@ -131,12 +140,140 @@
    margin: 0px;
    background-color: $_(background); /* #183473 */
    width:100%;
-@@ -206,7 +220,7 @@
+@@ -144,6 +160,10 @@
+ }
+  
+ /* Haupt-Fenster */
++.Layer0 {
++  height: 100%; /* FIX: resize */
++}
++
+ #_content
+ {
+   height: 70%;
+@@ -177,6 +197,8 @@
+     align-items: flex-start;
+     /* Prevent chrome from outlining this by focus */
+     outline: none;
++    /* Stretch to max available space */
++    height: calc(100% - 175px); /* FIX: header + menubar + footer: 72px + 48px + 55px = 175px */
+ }
+ 
+ #prgcontent
+@@ -196,7 +218,7 @@
+ 
+ /* Kopfzeile */
+ #header {
+-  height: 15%;
++  height: 72px; /* FIX: resize */
+   background-color: $_(background);  /* #183473 */
+   /* background-color: #dcdcdc; */
+   color: $_(textColorB); /* black */
+@@ -206,7 +228,7 @@
  
  /* Fusszeile */
  #footer {
 -  height:15%;
-+  height: 50px;
++  height: 50px; /* FIX: resize */
    background-color: $_(background); /* #183473 */
    /* background-color: #dcdcdc; */
    color: $_(textColorB); /* black */
+@@ -254,12 +276,14 @@
+ /* Linker Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
+ #contentLeft 
+ {
++  height: 100%; /* FIX: resize */
+   vertical-align: top;
+ }
+ 
+ /* Rechter Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
+ #contentRight 
+ { 
++  height: 100%; /* FIX: resize */
+   border-left: solid 5px $_(navBarSeparator); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
+   /* padding-top: 10px; */
+   vertical-align: top;
+@@ -2550,8 +2574,8 @@
+   cursor: pointer;
+ }
+ #menubar {
+-  height: 34px;
+-  width: 100%;
++  height: 41px; /* FIX: resize */
++  /* width: 100%; */
+   border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
+   background-color: $_(background); /* #183473 */
+   z-index: 189;
+@@ -6274,6 +6298,7 @@
+ }
+ 
+ .CLASS03901 {
++  height: 100%; /* FIX: resize */
+ 	width:100%;
+ }
+ 
+@@ -6335,6 +6360,7 @@
+ }
+ 
+ .CLASS04001 {
++  height: 100%; /* FIX: resize */
+ 	width:100%;
+ }
+ 
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -6942,6 +6942,8 @@
+    */
+   onResize: function()
+   {
++    /**
++     * FIX: resize - not required any more, since we moved to css styles
+     var height       = WebUI.getHeight();
+     var width        = WebUI.getWidth();
+     var bodyOverflow = "hidden";
+@@ -6955,8 +6957,9 @@
+     if ($("menubar")) { Element.setStyle("menubar", {"height": this.MENUBAR_HEIGHT + "px", "width": width + "px"}); }
+     if ($("content")) { Element.setStyle("content", {"height": contentHeight       + "px", "width": width + "px"}); }
+     if ($("footer"))  { Element.setStyle("footer" , {"height": this.FOOTER_HEIGHT  + "px", "width": width + "px"}); }
++    */
+ 
+-    if (this.currentPage) { this.currentPage.resize(); }
++    if (this.currentPage) { this.currentPage.resize(); } /* FIX: resize - ToDo */
+ 
+     if(typeof dcTimeout == "undefined") {
+       dcTimeout = window.setTimeout(function () {
+@@ -20235,22 +20238,25 @@
+    **/
+   resizeUser: function()
+   {
++    /**
++     * FIX: resize - partialy done
++     **/
+     var contentHeight     = $("content").getHeight();
+-    var contentWidth      = $("content").getWidth();
+-    var width = parseInt(contentWidth / 2);
++    //var contentWidth      = $("content").getWidth();
++    //var width = parseInt(contentWidth / 2);
+     
+     if ($("contentLeft"))
+     {
+       //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
+-      Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
+-    }
+-    if ($("contentLeft"))
+-    {
+-      //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
+-      Element.setStyle("contentRight", {"height": contentHeight + "px", "width": "44%"});
++      Element.setStyle("contentLeft", {/*"height": contentHeight + "px",*/ "width": "55%"});
+     }
++    //if ($("contentRight"))
++    //{
++    //  //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
++    //  Element.setStyle("contentRight", {"height": contentHeight + "px"});
++    //}
+     
+-    if ($("favSelector"))
++    if ($("favSelector")) /* FIX: resize - ToDo */
+     {   
+       var FavSelectorHeight = $("favSelector").getHeight();
+       var FAV_MARGIN_HEIGHT = 8;          

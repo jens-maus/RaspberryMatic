@@ -184,6 +184,11 @@ a img {
   display: contents;
 }
 
+#divDL, #divRTD, #divFL, #divHTF, #divRL, #divHTR
+{
+  height: calc(100% - 20px); /* FIX: container - 2 * margin */
+}
+
 /* Kopfzeile */
 #header {
   height: 15%;

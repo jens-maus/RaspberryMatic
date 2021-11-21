@@ -141,6 +141,11 @@ a img {
 #maintable {
   width: 100vw;
   height: 100vh;
+  border-collapse: collapse;  
+}
+
+#maintable tbody > tr > td {
+  padding: 0;
 }
 
 #maintable #content {

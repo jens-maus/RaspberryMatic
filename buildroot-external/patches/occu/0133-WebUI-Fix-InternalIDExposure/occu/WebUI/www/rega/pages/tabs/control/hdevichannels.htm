@@ -185,6 +185,9 @@
           } else {
             Call("/esp/functions.fn::showHideHmIPChannel()");
           }
+          if ((oDevHssType == "HM-RCV-50") && (chNumber == 0)) {
+            bShowChannel = false;
+          }  
           if( bShow && oDev.ReadyConfig() && bShowChannel )
           {
             string trId = device.ID()#tmp;

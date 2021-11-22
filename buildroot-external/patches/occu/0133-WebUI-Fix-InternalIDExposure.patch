@@ -84,11 +84,14 @@
            object chn = dom.GetObject(tmp);
            object oDev = dom.GetObject(chn.Device());
            string oDevHssType = oDev.HssType();
-@@ -171,7 +185,7 @@
+@@ -171,7 +185,10 @@
            } else {
              Call("/esp/functions.fn::showHideHmIPChannel()");
            }
 -          if( bShow && chn.ReadyConfig() && oDev.ReadyConfig() && bShowChannel )
++          if ((oDevHssType == "HM-RCV-50") && (chNumber == 0)) {
++            bShowChannel = false;
++          }  
 +          if( bShow && oDev.ReadyConfig() && bShowChannel )
            {
              string trId = device.ID()#tmp;

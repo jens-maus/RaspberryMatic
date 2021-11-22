@@ -1206,16 +1206,6 @@
           <tr class="CLASS03910">
             <td style="vertical-align: top;" id="chnList"></td>
           </tr>
-@@ -145,7 +135,8 @@
-   </tr>
- </table>
- <script type="text/javascript">
--       
-+  WebUI.onResize();
-+
-   loadChannels = function(id, specialFlag)
-   {
- 
 --- occu/WebUI/www/rega/pages/tabs/control/functions.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/functions.htm
 @@ -21,15 +21,10 @@
@@ -1259,16 +1249,6 @@
           <tr class="CLASS04004">
             <td style="vertical-align: top;" id="chnList">
             
-@@ -107,7 +97,8 @@
- </table>
- 
- <script type="text/javascript">
--       
-+  WebUI.onResize();
-+
-   loadChannels = function(id)
-   {
-     iseInitUpdateArrays();
 --- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
 @@ -209,7 +209,7 @@
@@ -1376,15 +1356,6 @@
          <tr class="CLASS04004">
            <td style="vertical-align: top;" id="chnList">
         
-@@ -110,6 +100,8 @@
- </table>
- 
- <script type="text/javascript">
-+  WebUI.onResize();
-+
-   loadChannels = function(id)
-   {
-     iseInitUpdateArrays();
 --- occu/WebUI/www/rega/pages/tabs/control/systemProtocol.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/systemProtocol.htm
 @@ -43,10 +43,10 @@

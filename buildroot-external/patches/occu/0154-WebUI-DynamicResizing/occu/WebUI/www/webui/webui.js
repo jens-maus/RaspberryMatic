@@ -6695,7 +6695,6 @@ function showSecurityDialog() {
          1 - user selected YES
          */
         if (action == 1) {
-          WebUI.resize();
           jQuery(".Layer0").show();
           homematic("CCU.setSecurityHint");
           if (getProduct() >= 3) {
@@ -6930,21 +6929,8 @@ WebUI = Singleton.create({
     this.currentPageOptions  = null;    // Argumente der aktuellen Seite
     this.previousPage        = null;    // Vorherige Seite
     this.previousPageOptions = null;    // Argumente der vorherigen Seite
-    this.onResizeHandler     = null;    // EventHandler: onResize
-
-    this.onResizeHandler = this.onResize.bindAsEventListener(this);
-    Event.observe(window, "resize", this.onResizeHandler);
   },  
   
-  /**
-   * Ereignis. Wird bei der Änderung der Fenstergröße aufgerufen.
-   * Passt die Steuerelemente entsprechend der Änderung an.
-   */
-  onResize: function()
-  {
-    if (this.currentPage) { this.currentPage.resize(); }
-  },
-
   /*########################*/
   /*# Öffentliche Elemente #*/
   /*########################*/
@@ -7142,8 +7128,6 @@ WebUI = Singleton.create({
 
 
     if (result) {
-      WebUI.resize();
-
       if (!isFF) {
         jQuery(".Layer0").show();
         WebUI.enter(StartPage);
@@ -7309,13 +7293,6 @@ WebUI = Singleton.create({
     {
       throw new Error("content not defined");
     }
-  },
-  /**
-   * Ruft das onResize-Ereignis auf.
-   **/
-  resize: function()
-  {
-    this.onResize();
   },
   
   /**
@@ -20106,11 +20083,6 @@ IPage = Interface.create({
    **/
   leave: function() {},
   
-  /**
-   * Callback beim Verändern der Bildschirmgröße
-   **/
-  resize: function() {}
-  
 });
 /**
  * page.js
@@ -20137,13 +20109,6 @@ Page = Class.create({
   leave: function()
   {
   },
-  
-  /**
-   * Callback. Wird beim Verändern des Bildschirms aufgerufen.
-   **/
-  resize: function()
-  {
-  }
   
 });
 /**
@@ -20179,7 +20144,6 @@ StartPage = Singleton.create(Page, {
     iseInitUpdateArrays();
     setPath("");
     setFooter("");
-    WebUI.resize();
   
     switch (getUPL())
     {
@@ -20430,8 +20394,6 @@ StartPage = Singleton.create(Page, {
     }
   },
   
-  resize: function() { }
-  
 });
 ControlPage = new function()
 {
@@ -20447,10 +20409,6 @@ ControlPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 ControlRoomsPage = new function()
 {
@@ -20466,10 +20424,6 @@ ControlRoomsPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 ControlFunctionsPage = new function()
 {
@@ -20485,10 +20439,6 @@ ControlFunctionsPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 ControlFavoritesPage = new function()
 {
@@ -20505,10 +20455,6 @@ ControlFavoritesPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 ControlFavoritePage = new function()
 {
@@ -20524,10 +20470,6 @@ ControlFavoritePage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 ControlDevicesPage = new function()
 {
@@ -20543,10 +20485,6 @@ ControlDevicesPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 ControlProgramsPage = new function()
 {
@@ -20562,10 +20500,6 @@ ControlProgramsPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 ControlVariablesPage = new function()
 {
@@ -20581,10 +20515,6 @@ ControlVariablesPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 ControlProtocolPage = new function()
 {
@@ -20600,10 +20530,6 @@ ControlProtocolPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 LinksAndProgramsPage = new function()
 {
@@ -20619,10 +20545,6 @@ LinksAndProgramsPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 LinkListPage = new function()
 {
@@ -20647,10 +20569,6 @@ LinkListPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 ProgramListPage = new function()
 {
@@ -20666,10 +20584,6 @@ ProgramListPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 LinkEditProfilePage = new function()
 {
@@ -20690,10 +20604,6 @@ LinkEditProfilePage = new function()
   {
   };
   
-  this.resize = function()
-  {
-  };
-  
 };AlarmMessagesPage = new function()
 {
   
@@ -20709,10 +20619,6 @@ LinkEditProfilePage = new function()
     if ($("msgAlarms")) { $("msgAlarms").removeClassName("Messages_Selected"); }
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 ServiceMessagesPage = new function()
 {
@@ -20729,10 +20635,6 @@ ServiceMessagesPage = new function()
     if ($("msgServices")) { $("msgServices").removeClassName("Messages_Selected"); }
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 HelpPage = new function()
 {
@@ -20749,10 +20651,6 @@ HelpPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 adminFirstStartup = new function()
 {
@@ -20766,10 +20664,6 @@ adminFirstStartup = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 userFirstStartup = new function()
 {
@@ -20783,10 +20677,6 @@ userFirstStartup = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 /**
  * devielistpage.js
@@ -21520,10 +21410,6 @@ if (PLATFORM == "Central") {
   {
   };
 
-  this.resize = function()
-  {
-  };
-
  }();
 
 }
@@ -21541,10 +21427,6 @@ FavoriteListPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 FunctionListPage = new function()
 {
@@ -21559,10 +21441,6 @@ FunctionListPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 NewDeviceListPage = new function()
 {
@@ -21586,10 +21464,6 @@ NewDeviceListPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 RoomListPage = new function()
 {
@@ -21605,10 +21479,6 @@ RoomListPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 SystemConfigPageUser = new function()
 {
@@ -21624,10 +21494,6 @@ SystemConfigPageUser = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 SystemConfigPage = new function()
 {
@@ -21643,10 +21509,6 @@ SystemConfigPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 UserAdminPageUser = new function()
 {
@@ -21662,10 +21524,6 @@ UserAdminPageUser = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 UserAdminPageAdmin = new function()
 {
@@ -21681,10 +21539,6 @@ UserAdminPageAdmin = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 SystemControlPage = new function()
 {
@@ -21700,10 +21554,6 @@ SystemControlPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 CreateDiagramPage = new function()
 {
@@ -21742,10 +21592,6 @@ CreateDiagramPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 CreateDiagramPage = new function()
 {
@@ -21784,10 +21630,6 @@ CreateDiagramPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 DiagramListPage = new function()
 {
@@ -21814,10 +21656,6 @@ DiagramListPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 CreateGroupPage = new function()
 {
@@ -21846,10 +21684,6 @@ CreateGroupPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 CreateTestPage = new function()
 {
@@ -21876,10 +21710,6 @@ CreateTestPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 DeviceFirmware = new function()
 {
@@ -21906,10 +21736,6 @@ DeviceFirmware = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 function compare(a,b) {
   if (a.name < b.name)
@@ -21960,10 +21786,6 @@ DeviceFirmwareInformation = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-
 }();VariableListPage = new function()
 {
   var MAINMENU_ID = "MAINMENU_OPTIONS";
@@ -21978,10 +21800,6 @@ DeviceFirmwareInformation = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 DeviceConfigPage = new function()
 {
@@ -22015,10 +21833,6 @@ DeviceConfigPage = new function()
   {
   };
 
-  this.resize = function()
-  {
-  };
-  
 }();
 getGatewayStatus = function()
 {
@@ -22334,10 +22148,6 @@ BidcosRfPage =
   {
     this.destroy();
     InterfaceMonitor.start();
-  },
-  
-  resize: function()
-  {
   },
   
   onSourceChanged: function()

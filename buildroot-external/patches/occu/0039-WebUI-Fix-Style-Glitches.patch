@@ -864,6 +864,128 @@
        
        Write("<td>"); !+ / -
        string sStyle = "";
+--- occu/WebUI/www/rega/pages/tabs/admin/views/newDeviceLoader.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/newDeviceLoader.htm
+@@ -271,7 +271,7 @@
+       td.appendChild(img);
+ 
+       tr.appendChild(td);
+-      td = Builder.node('td', {colSpan: 2, className: 'GrayBkg border1px'}, strCut(GroupsArray[i][0]['type'] + " " + GroupsArray[i][1]['type'])); tr.appendChild(td);
++      td = Builder.node('td', {colSpan: 2, className: 'GrayBkg border1px'}, GroupsArray[i][0]['type'] + " " + GroupsArray[i][1]['type']); tr.appendChild(td);
+       td.innerHTML = GroupsArray[i][0]['type'] + "<br/>" + GroupsArray[i][1]['type'];
+       
+       td = Builder.node('td', {className: 'WhiteBkgPic border1px'}, [
+@@ -281,16 +281,16 @@
+       Element.addClassName(td, "CLASS04402");
+       tr.appendChild(td);
+       
+-      //td = Builder.node('td', {className: 'GrayBkg border1px'}, translateKey(strCut(DEV_getDescription(deviceData['type']))) ); tr.appendChild(td);
++      //td = Builder.node('td', {className: 'GrayBkg border1px'}, translateKey(DEV_getDescription(deviceData['type'])) ); tr.appendChild(td);
+       td = Builder.node('td', {className: 'GrayBkg border1px'}, translateKey(DEV_getDescription(deviceData['type'])) ); tr.appendChild(td);
+-      td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(GroupsArray[i][0]['sn'] + " " + GroupsArray[i][1]['sn'])); tr.appendChild(td);
++      td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][0]['sn'] + " " + GroupsArray[i][1]['sn']); tr.appendChild(td);
+       var sIface = (GroupsArray[i][0]['iface'] != GroupsArray[i][1]['iface'] ? GroupsArray[i][0]['iface'] + " " +  GroupsArray[i][1]['iface'] : GroupsArray[i][0]['iface']);
+       td = Builder.node('td', {className: 'GrayBkg border1px'}, sIface); tr.appendChild(td);
+       
+       td = Builder.node('td', {id: 'trans' + GroupsArray[i][0]['id'] + GroupsArray[i][1]['id'], 
+                      className: 'GrayBkg border1px'}, removeDuplicates(GroupsArray[i][0]['trans'], GroupsArray[i][1]['trans'], "")); tr.appendChild(td);
+       
+-      td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(GroupsArray[i][0]['name'] + " " + GroupsArray[i][1]['name'])); tr.appendChild(td);
++      td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][0]['name'] + " " + GroupsArray[i][1]['name']); tr.appendChild(td);
+       var sGrRoId = 'funcs' + GroupsArray[i][0]['id'] + GroupsArray[i][1]['id'];
+       td = Builder.node('td', {id: sGrRoId, className: 'GrayBkg border1px'}, removeDuplicates(GroupsArray[i][0]['func'],  GroupsArray[i][1]['func'], ';')); tr.appendChild(td);
+       var sGrRoId = 'rooms' + GroupsArray[i][0]['id'] + GroupsArray[i][1]['id'];
+@@ -340,7 +340,7 @@
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][x]['desc'] );
+         td.innerHTML = translateKey(GroupsArray[i][x]['desc']);
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(GroupsArray[i][x]['sn'])); tr.appendChild(td);
++        td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][x]['sn']); tr.appendChild(td);
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][x]['iface']); tr.appendChild(td);
+         var trsId = "trs" + GroupsArray[i][x]['id'];
+         var s = "WhiteBkg border1px";
+@@ -365,10 +365,10 @@
+           
+         if (NAV_IE) {
+           td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-              [Builder.node('div', {id:'tdn' + GroupsArray[i][x]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0, CALL_STRCUT)'}, strCut(GroupsArray[i][x]['name'])) ]); tr.appendChild(td);
++              [Builder.node('div', {id:'tdn' + GroupsArray[i][x]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0)'}, GroupsArray[i][x]['name']) ]); tr.appendChild(td);
+         }
+         else {
+-          td = Builder.node('td', {className: 'WhiteBkg CLASS04403 border1px', id:'tdn' + GroupsArray[i][x]['id'], onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0, CALL_STRCUT)'}, strCut(GroupsArray[i][x]['name'])); tr.appendChild(td);
++          td = Builder.node('td', {className: 'WhiteBkg CLASS04403 border1px', id:'tdn' + GroupsArray[i][x]['id'], onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0)'}, GroupsArray[i][x]['name']); tr.appendChild(td);
+         } 
+         
+         if (NAV_IE) {
+@@ -465,7 +465,7 @@
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, chns[i]['desc']);
+         td.innerHTML = translateKey(chns[i]['desc']);
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(chns[i]['sn'])); tr.appendChild(td);
++        td = Builder.node('td', {className: 'GrayBkg border1px'}, chns[i]['sn']); tr.appendChild(td);
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, chns[i]['iface']); tr.appendChild(td);
+         var trsId = "trs" + chns[i]['id'];
+         var s = "WhiteBkg border1px";
+@@ -491,10 +491,10 @@
+ 
+         if (NAV_IE) {
+           td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-              [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'], true)) ]); tr.appendChild(td);
++              [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']) ]); tr.appendChild(td);
+         }
+         else {
+-         td = Builder.node('td', {className: 'WhiteBkg CLASS04404 border1px', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'].replace(/:/g, ":<br/>"), true)); tr.appendChild(td);
++         td = Builder.node('td', {className: 'WhiteBkg CLASS04404 border1px', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']); tr.appendChild(td);
+         }
+         
+         if (NAV_IE) {
+@@ -561,4 +561,4 @@
+ 
+ <script type="text/javascript">
+     translatePage("#tblNewDevices");
+-</script>
+\ No newline at end of file
++</script>
+--- occu/WebUI/www/rega/pages/tabs/admin/views/newdevicechannelsloader.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevicechannelsloader.htm
+@@ -120,7 +120,7 @@
+   {
+     var tr = Builder.node("tr");
+     
+-    td = Builder.node('td', {className: 'GrayBkg'}, strCut(chns[i]['type'], true)); tr.appendChild(td);
++    td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['type']); tr.appendChild(td);
+     
+     //td = Builder.node('td', {className: 'WhiteBkg'});
+     td = Builder.node('td', {className: 'WhiteBkgPic'}, [
+@@ -131,7 +131,7 @@
+     tr.appendChild(td);
+     
+     td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['desc']); tr.appendChild(td);
+-    td = Builder.node('td', {className: 'GrayBkg'}, strCut(chns[i]['sn'])); tr.appendChild(td);
++    td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['sn']); tr.appendChild(td);
+     td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['iface']); tr.appendChild(td);
+     
+     var s = "WhiteBkg";
+@@ -152,10 +152,10 @@
+     
+     if (NAV_IE) {
+       td = Builder.node('td', {className: 'WhiteBkg'}, 
+-          [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04502 CLASS04503", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'], true)) ]); tr.appendChild(td);
++          [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04502 CLASS04503", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']) ]); tr.appendChild(td);
+     }
+     else {
+-      td = Builder.node('td', {className: 'WhiteBkg CLASS04503', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'], true)); tr.appendChild(td);
++      td = Builder.node('td', {className: 'WhiteBkg CLASS04503', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']); tr.appendChild(td);
+     }  
+       
+     if (NAV_IE) {
+@@ -195,4 +195,4 @@
+     Cursor.set(Cursor.NORMAL);
+   }
+   
+-</script>
+\ No newline at end of file
++</script>
 --- occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm
 @@ -63,43 +63,43 @@
@@ -880,7 +1002,7 @@
 +  <col style="width:25px;" />
    <!-- Plus/Minus Group -->
 -  <col style="width:2%;"/>
-+  <col style="width:25px;" />
++  <col />
    <!-- Leere Zelle vor GroupMember -->
 -  <col style="width:1%;"/>
 -  <col style="width:3%;"/>
@@ -895,7 +1017,7 @@
 -  <col style="width:15%;"/>
 -  <col style="width:7%;"/>
 +  <col />
-+  <col />
++  <col style="width:50px;" />
 +  <col />
 +  <col />
 +  <col />
@@ -923,21 +1045,64 @@
 -  <th class="Sort CLASS04304 border1px"><b>${thFunctionTest}</b></th>
 -  <th class="Sort CLASS04304 border1px"><b>${thAction}</b></th>
 -  <th class="Sort CLASS04304 border1px"><b>${thReady}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'><b>${thTypeDescriptor}</b></th>
-+  <th class="DeviceListHead"><b>${thPicture}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('desc')"><b>${thDescriptor}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('sn')"><b>${thSerialNumber}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('iface')"><b>${thInterfaceCategory}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('trans')"><b>${thTransmitMode}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('name')"><b>${thName}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('func')"><b>${thFunc}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('room')"><b>${thRoom}</b></th>
-+  <th class="DeviceListHead"><b>${thFunctionTest}</b></th>
-+  <th class="DeviceListHead"><b>${thAction}</b></th>
-+  <th class="DeviceListHead"><b>${thReady}</b></th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'>${thTypeDescriptor}</th>
++  <th class="DeviceListHead">${thPicture}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('desc')">${thDescriptor}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('sn')">${thSerialNumber}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('iface')">${thInterfaceCategory}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('trans')">${thTransmitMode}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('name')">${thName}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('func')">${thFunc}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('room')">${thRoom}</th>
++  <th class="DeviceListHead">${thFunctionTest}</th>
++  <th class="DeviceListHead">${thAction}</th>
++  <th class="DeviceListHead">${thReady}</th>
  </tr>
  
  <script type="text/javascript">
+@@ -381,7 +381,7 @@
+   var img = Builder.node('img', {src: "/ise/img/plus.png", id: "img" + arDevices[i]['id'], alt: "plus", onclick: "expandDevice(" + arDevices[i]['id'] + "," + i + ")"});
+   td.appendChild(img);
+   tr.appendChild(td);
+-  td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, strCut(arDevices[i]['type'], true));
++  td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, arDevices[i]['type']);
+   tr.appendChild(td);
+   td = Builder.node('td', {className: 'WhiteBkgPic CLASS04314 border1px'}, [
+     Builder.node('div', {id: 'picDiv' + arDevices[i]['id'], className: "CLASS04305",
+@@ -391,7 +391,7 @@
+   td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['desc'] );
+   td.innerHTML = translateKey(arDevices[i]['desc']);
+   tr.appendChild(td);
+-  td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(arDevices[i]['sn']));
++  td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['sn']);
+   tr.appendChild(td);
+   td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['iface']);
+   tr.appendChild(td);
+@@ -401,13 +401,13 @@
+ 
+   if (NAV_IE) {
+     td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-      [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true)) ]);
++      [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']) ]);
+     tr.appendChild(td);
+   }
+   else {
+     if (isDevTypeHmIPW(arDevices[i]['type'])) {
+       td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px'});
+-      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, strCut(arDevices[i]['name'].replace(/:/g, ":<br/>"), false));
++      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, arDevices[i]['name'].replace(/:/g, ":<br/>"));
+       divB = Builder.node('div', {
+         id: 'btnRename_' + arDevices[i]["id"],
+         className: 'TestButton colorGradient borderRadius2px hidden',
+@@ -417,7 +417,7 @@
+       td.appendChild(divA);
+       td.appendChild(divB);
+     } else {
+-      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true));
++      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']);
+     }
+ 
+     tr.appendChild(td);
 --- occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm
 @@ -57,9 +57,16 @@

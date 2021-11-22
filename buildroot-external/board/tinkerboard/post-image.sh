@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Stop on error
+set -e
+
 #MKIMAGE=${HOST_DIR}/usr/bin/mkimage
 BOARD_DIR="$(dirname "$0")"
 BOARD_NAME="$(basename "${BOARD_DIR}")"

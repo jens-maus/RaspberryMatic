@@ -233,50 +233,101 @@
  
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -6942,6 +6942,8 @@
+@@ -6942,28 +6942,7 @@
     */
    onResize: function()
    {
-+    /**
-+     * not required any more, since we moved to css styles
-     var height       = WebUI.getHeight();
-     var width        = WebUI.getWidth();
-     var bodyOverflow = "hidden";
-@@ -6955,6 +6957,7 @@
-     if ($("menubar")) { Element.setStyle("menubar", {"height": this.MENUBAR_HEIGHT + "px", "width": width + "px"}); }
-     if ($("content")) { Element.setStyle("content", {"height": contentHeight       + "px", "width": width + "px"}); }
-     if ($("footer"))  { Element.setStyle("footer" , {"height": this.FOOTER_HEIGHT  + "px", "width": width + "px"}); }
-+    */
- 
+-    var height       = WebUI.getHeight();
+-    var width        = WebUI.getWidth();
+-    var bodyOverflow = "hidden";
+-
+-    if (width  < this.MIN_WIDTH)  { width  = this.MIN_WIDTH;  bodyOverflow = "auto"; }
+-    if (height < this.MIN_HEIGHT) { height = this.MIN_HEIGHT; bodyOverflow = "auto"; }
+-    var contentHeight = height - this.STATIC_HEIGHT;
+-
+-    if ($("body"))    { Element.setStyle("body", {"overflow": bodyOverflow, "width": width  + "px", "height": height + "px"}); }
+-    if ($("header"))  { Element.setStyle("header" , {"height": this.HEADER_HEIGHT  + "px", "width": width + "px"}); }
+-    if ($("menubar")) { Element.setStyle("menubar", {"height": this.MENUBAR_HEIGHT + "px", "width": width + "px"}); }
+-    if ($("content")) { Element.setStyle("content", {"height": contentHeight       + "px", "width": width + "px"}); }
+-    if ($("footer"))  { Element.setStyle("footer" , {"height": this.FOOTER_HEIGHT  + "px", "width": width + "px"}); }
+-
      if (this.currentPage) { this.currentPage.resize(); }
- 
-@@ -20235,6 +20238,8 @@
-    **/
-   resizeUser: function()
-   {
-+    /**
-+     * not required any more, since we moved to css styles
-     var contentHeight     = $("content").getHeight();
-     var contentWidth      = $("content").getWidth();
-     var width = parseInt(contentWidth / 2);
-@@ -20244,10 +20249,10 @@
-       //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
-       Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
-     }
--    if ($("contentLeft"))
-+    if ($("contentRight"))
-     {
-       //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
--      Element.setStyle("contentRight", {"height": contentHeight + "px", "width": "44%"});
-+      Element.setStyle("contentRight", {"height": contentHeight + "px"});
-     }
-     
-     if ($("favSelector"))
-@@ -20257,6 +20262,7 @@
-       var favViewHeight = (contentHeight - FavSelectorHeight - FAV_MARGIN_HEIGHT) * 0.95;
-       $("favView").setStyle({"height": favViewHeight});
-     }
-+    */
+-
+-    if(typeof dcTimeout == "undefined") {
+-      dcTimeout = window.setTimeout(function () {
+-        showDutyCycle();
+-        delete dcTimeout;
+-      }, 10);
+-    }
    },
  
+   /*########################*/
+@@ -20190,19 +20169,6 @@
+   initialize: function ()
+   {
+     this.deviceList = [];
+-
+-    switch (getUPL())
+-    {
+-      case UPL_ADMIN:
+-      case UPL_USER:
+-        this.resize = this.resizeUser;
+-        break;
+-      case UPL_GUEST:
+-        this.rezise = this.resizeGuest;
+-        break;
+-      default:
+-        break;
+-    }
+   },
+ 
+   /**
+@@ -20229,35 +20195,6 @@
+         break;
+     }
+   },
+-  
+-  /**
+-   * Berechnet die Größe der normalen Startseite (Admin und Benutzer)
+-   **/
+-  resizeUser: function()
+-  {
+-    var contentHeight     = $("content").getHeight();
+-    var contentWidth      = $("content").getWidth();
+-    var width = parseInt(contentWidth / 2);
+-    
+-    if ($("contentLeft"))
+-    {
+-      //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
+-      Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
+-    }
+-    if ($("contentLeft"))
+-    {
+-      //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
+-      Element.setStyle("contentRight", {"height": contentHeight + "px", "width": "44%"});
+-    }
+-    
+-    if ($("favSelector"))
+-    {   
+-      var FavSelectorHeight = $("favSelector").getHeight();
+-      var FAV_MARGIN_HEIGHT = 8;          
+-      var favViewHeight = (contentHeight - FavSelectorHeight - FAV_MARGIN_HEIGHT) * 0.95;
+-      $("favView").setStyle({"height": favViewHeight});
+-    }
+-  },
+ 
    getPageMeasurement: function() {
+     var pageElements = ["body","#header", "#menubar", "#favSelector", "#favView", "#footer"],
+@@ -20493,11 +20430,7 @@
+     }
+   },
+   
+-  /**
+-   * Berechnet die Größe der Startseite für den Gast
+-   **/
+-  resizeGuest: function() { }   
+-  
++  resize: function() { }
+   
+ });
+ ControlPage = new function()

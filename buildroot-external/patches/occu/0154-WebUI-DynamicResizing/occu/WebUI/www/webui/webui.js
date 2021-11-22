@@ -6942,31 +6942,7 @@ WebUI = Singleton.create({
    */
   onResize: function()
   {
-    /**
-     * not required any more, since we moved to css styles
-    var height       = WebUI.getHeight();
-    var width        = WebUI.getWidth();
-    var bodyOverflow = "hidden";
-
-    if (width  < this.MIN_WIDTH)  { width  = this.MIN_WIDTH;  bodyOverflow = "auto"; }
-    if (height < this.MIN_HEIGHT) { height = this.MIN_HEIGHT; bodyOverflow = "auto"; }
-    var contentHeight = height - this.STATIC_HEIGHT;
-
-    if ($("body"))    { Element.setStyle("body", {"overflow": bodyOverflow, "width": width  + "px", "height": height + "px"}); }
-    if ($("header"))  { Element.setStyle("header" , {"height": this.HEADER_HEIGHT  + "px", "width": width + "px"}); }
-    if ($("menubar")) { Element.setStyle("menubar", {"height": this.MENUBAR_HEIGHT + "px", "width": width + "px"}); }
-    if ($("content")) { Element.setStyle("content", {"height": contentHeight       + "px", "width": width + "px"}); }
-    if ($("footer"))  { Element.setStyle("footer" , {"height": this.FOOTER_HEIGHT  + "px", "width": width + "px"}); }
-    */
-
     if (this.currentPage) { this.currentPage.resize(); }
-
-    if(typeof dcTimeout == "undefined") {
-      dcTimeout = window.setTimeout(function () {
-        showDutyCycle();
-        delete dcTimeout;
-      }, 10);
-    }
   },
 
   /*########################*/
@@ -20193,19 +20169,6 @@ StartPage = Singleton.create(Page, {
   initialize: function ()
   {
     this.deviceList = [];
-
-    switch (getUPL())
-    {
-      case UPL_ADMIN:
-      case UPL_USER:
-        this.resize = this.resizeUser;
-        break;
-      case UPL_GUEST:
-        this.rezise = this.resizeGuest;
-        break;
-      default:
-        break;
-    }
   },
 
   /**
@@ -20231,38 +20194,6 @@ StartPage = Singleton.create(Page, {
       default:
         break;
     }
-  },
-  
-  /**
-   * Berechnet die Größe der normalen Startseite (Admin und Benutzer)
-   **/
-  resizeUser: function()
-  {
-    /**
-     * not required any more, since we moved to css styles
-    var contentHeight     = $("content").getHeight();
-    var contentWidth      = $("content").getWidth();
-    var width = parseInt(contentWidth / 2);
-    
-    if ($("contentLeft"))
-    {
-      //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
-      Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
-    }
-    if ($("contentRight"))
-    {
-      //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
-      Element.setStyle("contentRight", {"height": contentHeight + "px"});
-    }
-    
-    if ($("favSelector"))
-    {   
-      var FavSelectorHeight = $("favSelector").getHeight();
-      var FAV_MARGIN_HEIGHT = 8;          
-      var favViewHeight = (contentHeight - FavSelectorHeight - FAV_MARGIN_HEIGHT) * 0.95;
-      $("favView").setStyle({"height": favViewHeight});
-    }
-    */
   },
 
   getPageMeasurement: function() {
@@ -20499,11 +20430,7 @@ StartPage = Singleton.create(Page, {
     }
   },
   
-  /**
-   * Berechnet die Größe der Startseite für den Gast
-   **/
-  resizeGuest: function() { }   
-  
+  resize: function() { }
   
 });
 ControlPage = new function()

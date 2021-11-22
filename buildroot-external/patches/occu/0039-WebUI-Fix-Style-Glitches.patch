@@ -1710,7 +1710,7 @@
 +
 +#divDL, #divRTD, #divFL, #divHTF, #divRL, #divHTR
 +{
-+  height: calc(100% - 20px); /* container - 2 * margin */
++  height: 100%;
  }
  
  /* Kopfzeile */
@@ -2648,7 +2648,7 @@
  }
  
  .CLASS03801 {
-@@ -6247,15 +6236,13 @@
+@@ -6247,15 +6236,15 @@
  }
  
  .CLASS03902 {
@@ -2656,17 +2656,19 @@
  	overflow:auto;
 -	margin:0;
 -	padding:0;
-+	margin:10px;
++	margin-left:10px;
 +	margin-right:2px;
  }
  
  .CLASS03903 {
  	border:solid 1px $_(black); /* black */
 -	margin-top:27px;
++	margin-top:10px;
++	margin-bottom:10px;
  }
  
  .CLASS03904 {
-@@ -6270,7 +6257,6 @@
+@@ -6270,7 +6259,6 @@
  .CLASS03906 {
  	vertical-align:middle;
  	text-align:left;
@@ -2674,13 +2676,13 @@
  }
  
  .CLASS03907 {
-@@ -6280,13 +6266,13 @@
+@@ -6280,13 +6268,15 @@
  }
  
  .CLASS03908 {
 -	width:100%;
  	overflow:auto;
-+	margin:10px;
++	margin-right:10px;
 +	margin-left:2px;
  }
  
@@ -2688,16 +2690,18 @@
 -	width: 80%;
 -	height: 96%;
 +	width: 100%;
++	margin-top: 10px;
++	margin-bottom: 10px;
  }
  
  .CLASS03910 {
-@@ -6312,13 +6298,13 @@
+@@ -6312,13 +6302,15 @@
  }
  
  .CLASS04002 {
 -	width:100%;
  	overflow:auto;
-+	margin:10px;
++	margin-right:10px;
 +	margin-left:2px;
  }
  
@@ -2705,18 +2709,22 @@
 -	width: 80%;
 -	height: 96%;
 +	width: 100%;
++	margin-top: 10px;
++	margin-bottom: 10px;
  }
  
  .CLASS04004 {
-@@ -6333,7 +6319,6 @@
+@@ -6333,7 +6325,8 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
 -	margin-top:27px;
++	margin-top:10px;
++	margin-bottom:10px;
  }
  
  .CLASS04007 {
-@@ -6344,7 +6329,6 @@
+@@ -6344,7 +6337,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -2724,7 +2732,7 @@
  	empty-cells:show;
  }
  
-@@ -6355,17 +6339,18 @@
+@@ -6355,17 +6347,18 @@
  .CLASS04102 {
  	background-color:$_(clickable);
  	color: $_(textColorA) ! important; /* white */
@@ -2744,7 +2752,7 @@
  }
  
  .CLASS04105 {
-@@ -6388,6 +6373,7 @@
+@@ -6388,6 +6381,7 @@
  .CLASS04109 {
  	background-color:$_(clickable);
  	color: $_(textColorA) ! important; /* white */
@@ -2752,7 +2760,7 @@
    height:20px;
  }
  
-@@ -6411,10 +6397,15 @@
+@@ -6411,10 +6405,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -2762,14 +2770,14 @@
  
 +.CLASS04201 {
 +	overflow:auto;
-+	margin:10px;
++	margin-left:10px;
 +	margin-right:2px;
 +}
 +
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,10 +6421,12 @@
+@@ -6430,10 +6429,12 @@
  
  .CLASS04205 {
  	height:auto;
@@ -2782,7 +2790,7 @@
  }
  
  .CLASS04207 {
-@@ -6456,6 +6449,7 @@
+@@ -6456,6 +6457,7 @@
  .CLASS04211 {
  	background-color:$_(clickable);
  	color: $_(textColorA) ! important; /* white */
@@ -2790,7 +2798,7 @@
  }
  
  .CLASS04212 {
-@@ -6486,7 +6480,8 @@
+@@ -6486,7 +6488,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -2800,7 +2808,7 @@
  }
  
  .CLASS04302 {
-@@ -6663,7 +6658,7 @@
+@@ -6663,7 +6666,7 @@
  
  .CLASS04900 {
  	color: $_(textColorA); /* white */
@@ -2809,7 +2817,7 @@
  }
  
  .CLASS04901 {
-@@ -6687,7 +6682,7 @@
+@@ -6687,7 +6690,7 @@
  .CLASS04905 {
  	line-height:15px;
  	font-size:smaller;
@@ -2818,7 +2826,7 @@
  }
  
  .CLASS04906 {
-@@ -6774,6 +6769,7 @@
+@@ -6774,6 +6777,7 @@
  .CLASS05012 {
  	color: $_(textColorB); /* black */
  	font-size:9pt;
@@ -2826,7 +2834,7 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -6850,7 +6846,6 @@
+@@ -6850,7 +6854,6 @@
  .CLASS05200 {
  	text-align:center;
  	vertical-align:middle;
@@ -2834,7 +2842,7 @@
  	height: auto;
  }
  
-@@ -6916,10 +6911,10 @@
+@@ -6916,10 +6919,10 @@
  }
  
  .CLASS05301 {
@@ -2846,7 +2854,7 @@
  }
  
  .CLASS05302 {
-@@ -7092,6 +7087,10 @@
+@@ -7092,6 +7095,10 @@
  
  /* rega\pages\tabs\favViewer.htm  */
  
@@ -2857,7 +2865,7 @@
  .CLASS05800 {
  	width:100%;
  	text-align:center;
-@@ -7220,11 +7219,13 @@
+@@ -7220,11 +7227,13 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -2873,7 +2881,7 @@
  }
  
  .CLASS06302 {
-@@ -7512,7 +7513,6 @@
+@@ -7512,7 +7521,6 @@
  }
  
  .CLASS06409 {
@@ -2881,7 +2889,7 @@
  }
  
  .CLASS06410 {
-@@ -7675,7 +7675,7 @@
+@@ -7675,7 +7683,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -2890,7 +2898,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -7790,7 +7790,6 @@
+@@ -7790,7 +7798,6 @@
  }
  
  .CLASS11105 {
@@ -2898,7 +2906,7 @@
    padding-top: 7px;
  }
  
-@@ -7817,7 +7816,6 @@
+@@ -7817,7 +7824,6 @@
  /* config/ic_setprofiles */
  
  .CLASS20001 {
@@ -2906,7 +2914,7 @@
  }
  
  .CLASS20002 {
-@@ -7839,7 +7837,7 @@
+@@ -7839,7 +7845,7 @@
  }
  
  .CLASS20006 {
@@ -2915,7 +2923,7 @@
  }
  
  .CLASS20007 {
-@@ -7875,7 +7873,6 @@
+@@ -7875,7 +7881,6 @@
  }
  
  .CLASS20010 {
@@ -2923,7 +2931,7 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8630,8 +8627,11 @@
+@@ -8630,8 +8635,11 @@
  
  /* config\control_panel.cgi */
  
@@ -2936,7 +2944,7 @@
  }
  
  .CLASS21701 {
-@@ -8702,7 +8702,8 @@
+@@ -8702,7 +8710,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -2946,7 +2954,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8753,6 @@
+@@ -8752,7 +8761,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -2954,7 +2962,7 @@
    width:100%;
  }
  
-@@ -8809,13 +8809,17 @@
+@@ -8809,13 +8817,17 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -2974,7 +2982,7 @@
  }
  
  .CLASS22002 {
-@@ -8887,7 +8891,8 @@
+@@ -8887,7 +8899,8 @@
  }
  
  .CLASS22101 {
@@ -2984,7 +2992,7 @@
  }
  
  .CLASS22102 {
-@@ -8909,9 +8914,8 @@
+@@ -8909,9 +8922,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -2995,7 +3003,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8921,10 +8925,12 @@
+@@ -8921,10 +8933,12 @@
    position:relative;
    width:50px;
    height:50px;

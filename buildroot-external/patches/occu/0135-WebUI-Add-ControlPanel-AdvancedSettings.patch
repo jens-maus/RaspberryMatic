@@ -777,6 +777,15 @@
  
  
  
+@@ -30583,7 +30593,7 @@
+ 
+ 
+ showDutyCycle = function() {
+-  if (jQuery("#PagePathSpan").text() == translateKey("startPage")) {
++  if (jQuery("#PagePathSpan").text().endsWith(translateKey("startPage"))) {
+     var ifaceBidCosRF = "BidCos-RF",
+       ifaceHmIPRF = "HmIP-RF",
+       arInterfaceDutyCycle = {},
 @@ -42912,6 +42922,11 @@
    CreateCPPopup("/config/cp_maintenance.cgi");
  };

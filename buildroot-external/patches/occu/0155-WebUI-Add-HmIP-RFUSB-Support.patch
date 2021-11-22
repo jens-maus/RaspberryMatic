@@ -1,0 +1,105 @@
+--- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
+@@ -26,7 +26,7 @@
+ 
+   puts "<script type=\"text/javascript\">load_JSFunc('/config/easymodes/MASTER_LANG/HmIP-ParamHelp.js');</script>"
+ 
+-  if {([string equal $devType "HmIP-CCU3"] == 1) || ([string equal $devType "RPI-RF-MOD"] == 1)} {
++  if {([string equal $devType "HmIP-CCU3"] == 1) || ([string equal $devType "RPI-RF-MOD"] == 1) || ([string equal $devType "HmIP-RFUSB"] == 1)} {
+     append html "[getNoParametersToSet]"
+     return $html
+   }
+--- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
++++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
+@@ -713,7 +713,7 @@
+               Call("/esp/controls/hap.fn::CreateHAP()");
+             }
+ 
+-            if ((ch.Label() == "RPI-RF-MOD") || (ch.Label() =="HmIP-CCU3")) {
++            if ((ch.Label() == "RPI-RF-MOD") || (ch.Label() == "HmIP-CCU3") || (ch.Label() == "HmIP-RFUSB")) {
+               WriteLine( "<script>conInfo('Create CoPro Control.');</script>" );
+               sLastControlName = CN_MAINTENANCE;
+               isKnownControl = true;
+--- occu/WebUI/www/rega/esp/functions.fn.orig
++++ occu/WebUI/www/rega/esp/functions.fn
+@@ -411,7 +411,7 @@
+           bShowChannel = false;
+         }
+       } else {
+-        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "RPI-RF-MOD")) {
++        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "RPI-RF-MOD") && (oDevHssType != "HmIP-RFUSB")) {
+           bShowChannel = false;
+         }
+       }
+--- occu/WebUI/www/tools/js/model/devicetypelist.js.orig
++++ occu/WebUI/www/tools/js/model/devicetypelist.js
+@@ -18,7 +18,8 @@
+     "HMW-RCV-50",
+     "HM-Sec-SD-Team",
+     "HmIP-CCU3",
+-    "RPI-RF-MOD"
++    "RPI-RF-MOD",
++    "HmIP-RFUSB"
+   ],
+   
+   /**
+@@ -110,4 +111,4 @@
+   }
+ 
+ });
+- 
+\ No newline at end of file
++ 
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.deviceDescription.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.deviceDescription.js
+@@ -175,7 +175,7 @@
+     "HmIP-BROLL": "Homematic IP Rollladenaktor f%FCr Markenschalter",
+     "HmIP-BS2": "Homematic IP Wandtaster f%FCr Markenschalter - 2-fach",
+     "HmIP-BSL": "Homematic IP Schaltaktor f%FCr Markenschalter - mit Signalleuchte",
+-    "HmIP-CCU3": "Homematic IP Zentrale CCU3",
++    "HmIP-CCU3": "Homematic IP Zentrale",
+     "HmIP-DBB": "Homematic IP T%FCrklingeltaster",
+     "HmIP-DLD" : "Homematic IP T%FCrschlossantrieb",
+     "HmIP-DLS" : "Homematic IP T%FCrschlosssensor",
+@@ -209,6 +209,7 @@
+     "HmIP-PCBS2": "Homematic IP Schaltplatine - 2-fach",
+     "HmIP-PMFS": "Homematic IP Netzausfall%FCberwachung",
+     "HmIP-RCV-50": "Virtuelle Fernbedienung",
++    "HmIP-RFUSB": "Homematic IP Zentrale",
+     "HmIP-SAM" :"Homematic IP Ersch%FCtterungs- / Beschleunigungssensor",
+     "HmIP-SCI" : "Homematic IP Kontakt-Schnittstelle",
+     "HmIP-SCTH230" : "Homematic IP CO2-Sensor, 230 V",
+@@ -292,7 +293,7 @@
+     "PSM-PE": "Homematic IP Zwischenstecker Schalten/Messen Pin Earth",
+     "PSM-UK": "Homematic IP Zwischenstecker Schalten/Messen UK",
+     "RC8": "Homematic IP Fernbedienung, 8 Kanal",
+-    "RPI-RF-MOD" : "CO-PROCESSOR",
++    "RPI-RF-MOD" : "Homematic IP Zentrale",
+     "SMI": "Homematic IP Bewegungsmelder innen",
+     "SMO": "Homematic IP Bewegungsmelder au%DFen",
+     "SRH": "Homematic IP Fenster-/ Drehgriffkontakt",
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -1535,6 +1535,12 @@
+ DEV_PATHS["RPI-RF-MOD"]["50"] = "/config/img/devices/50/CCU3_thumb.png";
+ DEV_PATHS["RPI-RF-MOD"]["250"] = "/config/img/devices/250/CCU3.png";
+ DEV_HIGHLIGHT["RPI-RF-MOD"] = new Object();
++DEV_LIST.push('HmIP-RFUSB');
++DEV_DESCRIPTION["HmIP-RFUSB"] = "HmIP-RFUSB";
++DEV_PATHS["HmIP-RFUSB"] = new Object();
++DEV_PATHS["HmIP-RFUSB"]["50"] = "/config/img/devices/50/CCU3_thumb.png";
++DEV_PATHS["HmIP-RFUSB"]["250"] = "/config/img/devices/250/CCU3.png";
++DEV_HIGHLIGHT["HmIP-RFUSB"] = new Object();
+ DEV_LIST.push('HM-OU-CF-Pl');
+ DEV_DESCRIPTION["HM-OU-CF-Pl"] = "HM-OU-CF-Pl";
+ DEV_PATHS["HM-OU-CF-Pl"] = new Object();
+@@ -10152,7 +10158,8 @@
+     "HM-Sec-SD-Team",
+     "HM-Sec-SD-2-Team",
+     "HmIP-CCU3",
+-    "RPI-RF-MOD"
++    "RPI-RF-MOD",
++    "HmIP-RFUSB"
+   ],
+   
+   /**

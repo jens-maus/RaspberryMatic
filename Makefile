@@ -1,4 +1,4 @@
-BUILDROOT_VERSION=2021.08.2
+BUILDROOT_VERSION=2021.11-rc2
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
 OCCU_VERSION=$(shell grep "OCCU_VERSION =" $(BUILDROOT_EXTERNAL)/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
@@ -29,7 +29,7 @@ buildroot-$(BUILDROOT_VERSION).tar.bz2:
 
 buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.bz2
 	@echo "[patching buildroot-$(BUILDROOT_VERSION)]"
-	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
+	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) --remove-empty-files -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
 
 build-$(PRODUCT): | buildroot-$(BUILDROOT_VERSION) download
 	mkdir -p build-$(PRODUCT)

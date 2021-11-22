@@ -263,7 +263,7 @@ if {$portFound == 0} {
               break;
             }
           }
-        } elseif((oDev.Label() == 'RPI-RF-MOD') || (oDev.Label() == 'HmIP-CCU3')) {
+        } elseif((oDev.Label() == 'RPI-RF-MOD') || (oDev.Label() == 'HmIP-CCU3') || (oDev.Label() == 'HmIP-RFUSB')) {
           string chn;
           foreach(chn, oDev.Channels()) {
             object oChn = dom.GetObject(chn);

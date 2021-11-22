@@ -30593,7 +30593,7 @@ drapMigration = function() {
 
 
 showDutyCycle = function() {
-  if (jQuery("#PagePathSpan").text() == translateKey("startPage")) {
+  if (jQuery("#PagePathSpan").text().endsWith(translateKey("startPage"))) {
     var ifaceBidCosRF = "BidCos-RF",
       ifaceHmIPRF = "HmIP-RF",
       arInterfaceDutyCycle = {},

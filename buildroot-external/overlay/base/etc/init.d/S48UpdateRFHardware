@@ -149,8 +149,8 @@ update_rf_hardware() {
       fi
       echo -n "HMIP-RFUSB: "
 
-      # check for new firmware file in /firmware/HmIP-RFUSB
-      LATEST_FIRMWARE=$(find /firmware/HmIP-RFUSB -name "dualcopro_update_blhmip-*.eq3" -maxdepth 1 | sort | tail -1)
+      # check for new firmware file in /firmware/HmIP-RFUSB-Beta
+      LATEST_FIRMWARE=$(find /firmware/HmIP-RFUSB-Beta -name "dualcopro_update_blhmip-*.eq3" -maxdepth 1 | sort | tail -1)
 
       # get OLD_VERSION from var tmp file
       OLD_VERSION=$(cat /var/hmip_firmware_version 2>/dev/null)

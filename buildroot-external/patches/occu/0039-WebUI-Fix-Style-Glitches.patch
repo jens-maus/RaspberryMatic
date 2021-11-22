@@ -2833,6 +2833,15 @@
  }
  
  .CLASS04901 {
+@@ -6687,7 +6677,7 @@
+ .CLASS04905 {
+ 	line-height:15px;
+ 	font-size:smaller;
+-	width:220px;
++	width:180px;
+ }
+ 
+ .CLASS04906 {
 @@ -6774,6 +6764,7 @@
  .CLASS05012 {
  	color: $_(textColorB); /* black */

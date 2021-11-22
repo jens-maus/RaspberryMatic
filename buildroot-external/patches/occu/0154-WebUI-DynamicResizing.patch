@@ -119,8 +119,8 @@
  
  html,body
  {
-+  width: 100vw; /* FIX: resize */
-+  height: 100vh; /* FIX: resize */
++  width: 100vw;
++  height: 100vh;
    margin:0;
    padding:0;
    color: $_(textColorB); /* black */
@@ -158,7 +158,7 @@
   
  /* Haupt-Fenster */
 +.Layer0 {
-+  height: 100%; /* FIX: resize */
++  height: 100%;
 +}
 +
  #_content
@@ -178,7 +178,7 @@
  /* Kopfzeile */
  #header {
 -  height: 15%;
-+  height: 72px; /* FIX: resize */
++  height: 72px;
    background-color: $_(background);  /* #183473 */
    /* background-color: #dcdcdc; */
    color: $_(textColorB); /* black */
@@ -187,7 +187,7 @@
  /* Fusszeile */
  #footer {
 -  height:15%;
-+  height: 50px; /* FIX: resize */
++  height: 50px;
    background-color: $_(background); /* #183473 */
    /* background-color: #dcdcdc; */
    color: $_(textColorB); /* black */
@@ -195,24 +195,22 @@
  /* Linker Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
  #contentLeft 
  {
-+  height: 100%; /* FIX: resize */
++  height: 100%;
    vertical-align: top;
  }
  
  /* Rechter Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
  #contentRight 
  { 
-+  height: 100%; /* FIX: resize */
++  height: 100%;
    border-left: solid 5px $_(navBarSeparator); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
    /* padding-top: 10px; */
    vertical-align: top;
-@@ -2550,8 +2579,8 @@
-   cursor: pointer;
+@@ -2551,7 +2580,7 @@
  }
  #menubar {
--  height: 34px;
+   height: 34px;
 -  width: 100%;
-+  height: 34px; /* FIX: resize */
 +  /* width: 100%; */
    border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
    background-color: $_(background); /* #183473 */
@@ -221,7 +219,7 @@
  }
  
  .CLASS03901 {
-+  height: 100%; /* FIX: resize */
++  height: 100%;
  	width:100%;
  }
  
@@ -229,7 +227,7 @@
  }
  
  .CLASS04001 {
-+  height: 100%; /* FIX: resize */
++  height: 100%;
  	width:100%;
  }
  
@@ -240,32 +238,28 @@
    onResize: function()
    {
 +    /**
-+     * FIX: resize - not required any more, since we moved to css styles
++     * not required any more, since we moved to css styles
      var height       = WebUI.getHeight();
      var width        = WebUI.getWidth();
      var bodyOverflow = "hidden";
-@@ -6955,8 +6957,9 @@
+@@ -6955,6 +6957,7 @@
      if ($("menubar")) { Element.setStyle("menubar", {"height": this.MENUBAR_HEIGHT + "px", "width": width + "px"}); }
      if ($("content")) { Element.setStyle("content", {"height": contentHeight       + "px", "width": width + "px"}); }
      if ($("footer"))  { Element.setStyle("footer" , {"height": this.FOOTER_HEIGHT  + "px", "width": width + "px"}); }
 +    */
  
--    if (this.currentPage) { this.currentPage.resize(); }
-+    if (this.currentPage) { this.currentPage.resize(); } /* FIX: resize - ToDo */
+     if (this.currentPage) { this.currentPage.resize(); }
  
-     if(typeof dcTimeout == "undefined") {
-       dcTimeout = window.setTimeout(function () {
-@@ -20235,6 +20238,9 @@
+@@ -20235,6 +20238,8 @@
     **/
    resizeUser: function()
    {
 +    /**
-+     * FIX: resize - partialy done
-+     *
++     * not required any more, since we moved to css styles
      var contentHeight     = $("content").getHeight();
      var contentWidth      = $("content").getWidth();
      var width = parseInt(contentWidth / 2);
-@@ -20244,10 +20250,10 @@
+@@ -20244,10 +20249,10 @@
        //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
        Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
      }
@@ -278,7 +272,7 @@
      }
      
      if ($("favSelector"))
-@@ -20257,6 +20263,7 @@
+@@ -20257,6 +20262,7 @@
        var favViewHeight = (contentHeight - FavSelectorHeight - FAV_MARGIN_HEIGHT) * 0.95;
        $("favView").setStyle({"height": favViewHeight});
      }

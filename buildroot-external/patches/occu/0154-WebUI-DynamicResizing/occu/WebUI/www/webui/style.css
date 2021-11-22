@@ -100,8 +100,8 @@ tr.UserSysVars:nth-child(odd) {
 
 html,body
 {
-  width: 100vw; /* FIX: resize */
-  height: 100vh; /* FIX: resize */
+  width: 100vw;
+  height: 100vh;
   margin:0;
   padding:0;
   color: $_(textColorB); /* black */
@@ -166,7 +166,7 @@ a img {
  
 /* Haupt-Fenster */
 .Layer0 {
-  height: 100%; /* FIX: resize */
+  height: 100%;
 }
 
 #_content
@@ -223,7 +223,7 @@ a img {
 
 /* Kopfzeile */
 #header {
-  height: 72px; /* FIX: resize */
+  height: 72px;
   background-color: $_(background);  /* #183473 */
   /* background-color: #dcdcdc; */
   color: $_(textColorB); /* black */
@@ -233,7 +233,7 @@ a img {
 
 /* Fusszeile */
 #footer {
-  height: 50px; /* FIX: resize */
+  height: 50px;
   background-color: $_(background); /* #183473 */
   /* background-color: #dcdcdc; */
   color: $_(textColorB); /* black */
@@ -281,14 +281,14 @@ a img {
 /* Linker Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
 #contentLeft 
 {
-  height: 100%; /* FIX: resize */
+  height: 100%;
   vertical-align: top;
 }
 
 /* Rechter Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
 #contentRight 
 { 
-  height: 100%; /* FIX: resize */
+  height: 100%;
   border-left: solid 5px $_(navBarSeparator); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
   /* padding-top: 10px; */
   vertical-align: top;
@@ -2579,7 +2579,7 @@ html, body {
   cursor: pointer;
 }
 #menubar {
-  height: 34px; /* FIX: resize */
+  height: 34px;
   /* width: 100%; */
   border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
   background-color: $_(background); /* #183473 */
@@ -6303,7 +6303,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS03901 {
-  height: 100%; /* FIX: resize */
+  height: 100%;
 	width:100%;
 }
 
@@ -6365,7 +6365,7 @@ color: $_(textColorA); /* white */
 }
 
 .CLASS04001 {
-  height: 100%; /* FIX: resize */
+  height: 100%;
 	width:100%;
 }
 

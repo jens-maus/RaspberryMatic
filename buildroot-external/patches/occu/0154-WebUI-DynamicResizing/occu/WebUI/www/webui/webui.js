@@ -6943,7 +6943,7 @@ WebUI = Singleton.create({
   onResize: function()
   {
     /**
-     * FIX: resize - not required any more, since we moved to css styles
+     * not required any more, since we moved to css styles
     var height       = WebUI.getHeight();
     var width        = WebUI.getWidth();
     var bodyOverflow = "hidden";
@@ -6959,7 +6959,7 @@ WebUI = Singleton.create({
     if ($("footer"))  { Element.setStyle("footer" , {"height": this.FOOTER_HEIGHT  + "px", "width": width + "px"}); }
     */
 
-    if (this.currentPage) { this.currentPage.resize(); } /* FIX: resize - ToDo */
+    if (this.currentPage) { this.currentPage.resize(); }
 
     if(typeof dcTimeout == "undefined") {
       dcTimeout = window.setTimeout(function () {
@@ -20239,8 +20239,7 @@ StartPage = Singleton.create(Page, {
   resizeUser: function()
   {
     /**
-     * FIX: resize - partialy done
-     *
+     * not required any more, since we moved to css styles
     var contentHeight     = $("content").getHeight();
     var contentWidth      = $("content").getWidth();
     var width = parseInt(contentWidth / 2);

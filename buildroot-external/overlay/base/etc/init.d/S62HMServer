@@ -102,17 +102,20 @@ init() {
     # when generating /var/etc/crRFD.conf
     sed "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_SERVER_DEVNODE}|" ${CFG_TEMPLATE_DIR}/crRFD.conf >/var/etc/crRFD.conf
 
-    # we disable Advanced HmIP Routing (Lan.Routing.Enabled) in crRFD.conf
-    # if the used HmIP RF module doesn't support it
-    # (which only the RPI-RF-MOD support)
-    if [[ "${HM_HMIP_DEV}" != "RPI-RF-MOD" ]]; then
-      sed -i "s|^Lan\.Routing\.Enabled=.*$|Lan.Routing.Enabled=false|" /var/etc/crRFD.conf
+    # enable Advanced HmIP capabilities in crRFD.conf if the used HmIP RF module supports it
+    if [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]] || [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
+      ADVANCED_HMIP="true"
     else
-      # enable Adapter.Local.Device.Enabled in case a RPI-RF-MOD is used. This
-      # will bring up the additional CO-PROCESSOR device which will allow to show
-      # up the DutyCycle and CarrierSense parameters.
-      sed -i "s|^Adapter\.Local\.Device\.Enabled=.*$|Adapter.Local.Device.Enabled=true|" /var/etc/crRFD.conf
+      ADVANCED_HMIP="false"
     fi
+
+    # set Adapter.Local.Device.Enabled. This will bring up the additional CO-PROCESSOR
+    # device which will allow to show up the DutyCycle and CarrierSense parameters.
+    sed -i "s|^Adapter\.Local\.Device\.Enabled=.*$|Adapter.Local.Device.Enabled=${ADVANCED_HMIP}|" /var/etc/crRFD.conf
+
+    # set Lan.Routing.Enabled which will enable the advanced HmIP Routing capabilities
+    # in crRFD.
+    sed -i "s|^Lan\.Routing\.Enabled=.*$|Lan.Routing.Enabled=${ADVANCED_HMIP}|" /var/etc/crRFD.conf
 
   else
     HM_SERVER=/opt/HMServer/HMServer.jar:/opt/HMServer/coupling/ESHBridge.jar

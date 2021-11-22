@@ -524,7 +524,7 @@ jQuery.extend(true,langJSON, {
     "lblErrorCheck" : "Fehlerpr%FCfung",
     "lblNoError" : "Kein Fehler",
     "lblError" : "Fehler",
-    "lblAccessPointError" : "Die Nutzung eines HmIPW-DRAP oder HmIP-HAP Access Points setzt den Einsatz eines RPI-RF-MOD/HmIP-CCU3 kompatiblen Funkmodules voraus.",
+    "lblAccessPointError" : "Die Nutzung eines HmIPW-DRAP oder HmIP-HAP Access Points setzt den Einsatz eines RPI-RF-MOD/HmIP-CCU3 bzw. HmIP-RFUSB oder kompatiblen Funkmodules voraus.",
     "lblInfoStatusControlEnergyCounter" : "Energie-Z%E4hler " + HMIdentifier.de.CCUShortName,
     "lblInfoStatusControlDevice" : "Energie-Z%E4hler Ger%E4t",
     "lblInfoStatusControlVoltage" : "Spannung",

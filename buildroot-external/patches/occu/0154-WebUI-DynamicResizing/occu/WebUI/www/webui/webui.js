@@ -20394,6 +20394,10 @@ StartPage = Singleton.create(Page, {
     }
   },
   
+  showDutyCycle: function() {
+    showDutyCycle();
+  }
+  
 });
 ControlPage = new function()
 {

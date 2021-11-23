@@ -2410,8 +2410,7 @@ progress::-webkit-progress-value { background: #3678c9; }
 }
 
 .FilterText {
-  width:96%;
-  margin:3px 2% 3px 2%;
+  margin:2px;
 }
 
 .FilterButton {
@@ -2421,8 +2420,7 @@ progress::-webkit-progress-value { background: #3678c9; }
   /*background-image: linear-gradient(to bottom, white 40%, gray );*/
   background-image: var(--btnGradient);
 
-  width:96%;
-  margin:3px 2% 3px 2%;
+  margin:2px;
   border:1px solid $_(black); /* black */
   color: $_(textColorB); /* white */
   font-weight:normal;

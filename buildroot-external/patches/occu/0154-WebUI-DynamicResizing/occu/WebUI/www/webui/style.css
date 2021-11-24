@@ -150,6 +150,8 @@ a img {
 
 #maintable #content {
   height: 100%;
+  width: 100%;
+  display: inline-table;
   background-repeat: no-repeat;
   background-position: 480px center;
 }

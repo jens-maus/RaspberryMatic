@@ -142,7 +142,7 @@
    margin:0;
    padding:0;
    color: $_(textColorB); /* black */
-@@ -134,9 +136,28 @@
+@@ -134,9 +136,30 @@
   * * *   Element IDs                     * * *
   * * * * * * * * * * * * * * * * * * * * * * */
  
@@ -160,6 +160,8 @@
 +
 +#maintable #content {
 +  height: 100%;
++  width: 100%;
++  display: inline-table;
 +  background-repeat: no-repeat;
 +  background-position: 480px center;
 +}
@@ -171,7 +173,7 @@
    margin: 0px;
    background-color: $_(background); /* #183473 */
    width:100%;
-@@ -144,6 +165,11 @@
+@@ -144,6 +167,11 @@
  }
   
  /* Haupt-Fenster */
@@ -183,7 +185,7 @@
  #_content
  {
    height: 70%;
-@@ -177,6 +203,8 @@
+@@ -177,6 +205,8 @@
      align-items: flex-start;
      /* Prevent chrome from outlining this by focus */
      outline: none;
@@ -192,7 +194,7 @@
  }
  
  #prgcontent
-@@ -196,7 +224,7 @@
+@@ -196,7 +226,7 @@
  
  /* Kopfzeile */
  #header {
@@ -201,7 +203,7 @@
    background-color: $_(background);  /* #183473 */
    /* background-color: #dcdcdc; */
    color: $_(textColorB); /* black */
-@@ -206,7 +234,7 @@
+@@ -206,7 +236,7 @@
  
  /* Fusszeile */
  #footer {
@@ -210,7 +212,7 @@
    background-color: $_(background); /* #183473 */
    /* background-color: #dcdcdc; */
    color: $_(textColorB); /* black */
-@@ -254,12 +282,14 @@
+@@ -254,12 +284,14 @@
  /* Linker Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
  #contentLeft 
  {
@@ -225,7 +227,7 @@
    border-left: solid 5px $_(navBarSeparator); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
    /* padding-top: 10px; */
    vertical-align: top;
-@@ -2551,7 +2581,7 @@
+@@ -2551,7 +2583,7 @@
  }
  #menubar {
    height: 34px;
@@ -234,7 +236,7 @@
    border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
    background-color: $_(background); /* #183473 */
    z-index: 189;
-@@ -6274,6 +6304,7 @@
+@@ -6274,6 +6306,7 @@
  }
  
  .CLASS03901 {
@@ -242,7 +244,7 @@
  	width:100%;
  }
  
-@@ -6335,6 +6366,7 @@
+@@ -6335,6 +6368,7 @@
  }
  
  .CLASS04001 {

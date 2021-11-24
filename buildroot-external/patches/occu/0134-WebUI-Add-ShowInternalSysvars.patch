@@ -352,6 +352,15 @@
  -ms-word-break: break-all;
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
+@@ -3932,7 +3932,7 @@
+   // The position of the channel number adapted to the housing of the CCU3
+   var product = WEBUI_VERSION.split(".")[0];
+   if (product >= 3 && (type == "HM-RCV-50" || type == "HMW-RCV-50")) {
+-    if (form.length > 2) {
++    if (form && form.length > 2) {
+       form[2] = 0.57; // y-position
+     }
+   }
 @@ -25292,6 +25292,14 @@
      new Ajax.Request(url, {postBody: ReGa.encode(pb)});  
    },

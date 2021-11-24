@@ -167,6 +167,7 @@ a img {
 /* Haupt-Fenster */
 .Layer0 {
   height: 100%;
+  width: -moz-available; /* otherwise firefox does not resize to max browser width */
 }
 
 #_content

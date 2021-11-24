@@ -171,18 +171,19 @@
    margin: 0px;
    background-color: $_(background); /* #183473 */
    width:100%;
-@@ -144,6 +165,10 @@
+@@ -144,6 +165,11 @@
  }
   
  /* Haupt-Fenster */
 +.Layer0 {
 +  height: 100%;
++  width: -moz-available; /* otherwise firefox does not resize to max browser width */
 +}
 +
  #_content
  {
    height: 70%;
-@@ -177,6 +202,8 @@
+@@ -177,6 +203,8 @@
      align-items: flex-start;
      /* Prevent chrome from outlining this by focus */
      outline: none;
@@ -191,7 +192,7 @@
  }
  
  #prgcontent
-@@ -196,7 +223,7 @@
+@@ -196,7 +224,7 @@
  
  /* Kopfzeile */
  #header {
@@ -200,7 +201,7 @@
    background-color: $_(background);  /* #183473 */
    /* background-color: #dcdcdc; */
    color: $_(textColorB); /* black */
-@@ -206,7 +233,7 @@
+@@ -206,7 +234,7 @@
  
  /* Fusszeile */
  #footer {
@@ -209,7 +210,7 @@
    background-color: $_(background); /* #183473 */
    /* background-color: #dcdcdc; */
    color: $_(textColorB); /* black */
-@@ -254,12 +281,14 @@
+@@ -254,12 +282,14 @@
  /* Linker Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
  #contentLeft 
  {
@@ -224,7 +225,7 @@
    border-left: solid 5px $_(navBarSeparator); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
    /* padding-top: 10px; */
    vertical-align: top;
-@@ -2551,7 +2580,7 @@
+@@ -2551,7 +2581,7 @@
  }
  #menubar {
    height: 34px;
@@ -233,7 +234,7 @@
    border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
    background-color: $_(background); /* #183473 */
    z-index: 189;
-@@ -6274,6 +6303,7 @@
+@@ -6274,6 +6304,7 @@
  }
  
  .CLASS03901 {
@@ -241,7 +242,7 @@
  	width:100%;
  }
  
-@@ -6335,6 +6365,7 @@
+@@ -6335,6 +6366,7 @@
  }
  
  .CLASS04001 {

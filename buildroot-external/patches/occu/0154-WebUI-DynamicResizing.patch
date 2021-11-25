@@ -125,10 +125,10 @@
 -    <col style="width:80%;"/>
 -  </colgroup>
 -  <tr>
-+<div id="devicepage" class="CLASS03900" style="width:100%">
++<div id="devicepage" class="CLASS03900">
      <!-- Linke Spalte -->
 -    <td id="contentLeft" class="hidden">
-+    <div id="contentLeft" class="hidden" style="width:20%;float:left;overflow:auto;">
++    <div id="contentLeft" class="hidden">
        <table class="filterTable CLASS03901 j_translate" cellpadding="0" cellspacing="0">
          <tr>
            <td style="vertical-align: top; border: 0px">
@@ -169,10 +169,10 @@
 -    <col style="width:80%;"/>
 -  </colgroup>
 -  <tr>
-+<div id="functionpage" class="CLASS04000" style="width:100%">
++<div id="functionpage" class="CLASS04000">
      <!-- Linke Spalte -->
 -    <td id="contentLeft" class="hidden">
-+    <div id="contentLeft" class="hidden" style="width:20%;float:left;overflow:auto;">
++    <div id="contentLeft" class="hidden">
        <table class="filterTable CLASS04001 j_translate" cellpadding="0" cellspacing="0">
          <tr>
            <td style="vertical-align: top; border: 0px;">
@@ -213,10 +213,10 @@
 -    <col style="width:80%;"/>
 -  </colgroup>
 -  <tr>
-+<div id="functionpage" class="CLASS04000" style="width:100%">
++<div id="roompage" class="CLASS04000">
      <!-- Linke Spalte -->
 -    <td id="contentLeft" class="hidden">
-+    <div id="contentLeft" class="hidden" style="width:20%;float:left;overflow:auto;">
++    <div id="contentLeft" class="hidden">
        <table class="filterTable CLASS04001 j_translate" cellpadding="0" cellspacing="0">
          <tr>
            <td style="vertical-align: top; border: 0px">
@@ -344,7 +344,7 @@
    background-color: $_(background); /* #183473 */
    /* background-color: #dcdcdc; */
    color: $_(textColorB); /* black */
-@@ -254,12 +284,14 @@
+@@ -254,15 +284,18 @@
  /* Linker Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
  #contentLeft 
  {
@@ -359,7 +359,11 @@
    border-left: solid 5px $_(navBarSeparator); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
    /* padding-top: 10px; */
    vertical-align: top;
-@@ -2551,7 +2583,7 @@
++  overflow: auto;
+ }
+ 
+ #separator {
+@@ -2551,7 +2584,7 @@
  }
  #menubar {
    height: 34px;
@@ -368,7 +372,24 @@
    border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
    background-color: $_(background); /* #183473 */
    z-index: 189;
-@@ -6274,6 +6306,7 @@
+@@ -6266,6 +6299,16 @@
+ 
+ /* rega\pages\tabs\handling\devices.htm */
+ 
++#devicepage {
++  width: 100%
++}
++
++#devicepage #contentLeft {
++  width: 20%;
++  float: left;
++  overflow: auto;
++}
++
+ .CLASS03900 {
+ 	height:100%;
+ 	overflow:hidden;
+@@ -6274,6 +6317,7 @@
  }
  
  .CLASS03901 {
@@ -376,7 +397,25 @@
  	width:100%;
  }
  
-@@ -6335,6 +6368,7 @@
+@@ -6329,12 +6373,25 @@
+ /* rega\pages\tabs\handling\rooms.htm */
+ /* rega\pages\tabs\handling\rooms.htm */
+ 
++#roompage,
++#functionpage {
++  width: 100%
++}
++
++#roompage #contentLeft,
++#functionpage #contentLeft {
++  width: 20%;
++  float: left;
++  overflow: auto;
++}
++
+ .CLASS04000 {
+ 	height:100%;
+ 	overflow:hidden;
  }
  
  .CLASS04001 {

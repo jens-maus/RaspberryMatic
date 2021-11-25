@@ -113,6 +113,138 @@
        gotoLoginPage = function() {
          location.href = "/login.htm";
        };
+--- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
+@@ -13,14 +13,9 @@
+   arItems = new Array();
+ </script>
+ 
+-<table width="100%" class="CLASS03900" cellpadding="0" cellspacing="0">
+-  <colgroup>
+-    <col style="width:20%;"/>
+-    <col style="width:80%;"/>
+-  </colgroup>
+-  <tr>
++<div id="devicepage" class="CLASS03900">
+     <!-- Linke Spalte -->
+-    <td id="contentLeft" class="hidden">
++    <div id="contentLeft" class="hidden">
+       <table class="filterTable CLASS03901 j_translate" cellpadding="0" cellspacing="0">
+         <tr>
+           <td style="vertical-align: top; border: 0px">
+@@ -120,10 +115,10 @@
+           </td>
+        </tr> 
+      </table>
+-   </td>
++   </div>
+ 
+     <!-- Rechte Spalte -->
+-    <td id="contentRight">
++    <div id="contentRight">
+       <div id="divRTD" class="CLASS03908">
+         <table id="tblRightContent" class="CLASS03909" cellpadding="0" cellspacing="0">
+          <tr class="CLASS03910">
+@@ -131,9 +126,8 @@
+          </tr>
+         </table>
+       </div>
+-    </td>
+-  </tr>
+-</table>
++    </div>
++</div>
+ <script type="text/javascript">
+        
+   loadChannels = function(id, specialFlag)
+--- occu/WebUI/www/rega/pages/tabs/control/functions.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/functions.htm
+@@ -13,14 +13,9 @@
+   arItems = new Array();
+ </script>
+ 
+-<table width="100%" class="CLASS04000" cellpadding="0" cellspacing="0">
+-  <colgroup>
+-    <col style="width:20%;"/>
+-    <col style="width:80%;"/>
+-  </colgroup>
+-  <tr>
++<div id="functionpage" class="CLASS04000">
+     <!-- Linke Spalte -->
+-    <td id="contentLeft" class="hidden">
++    <div id="contentLeft" class="hidden">
+       <table class="filterTable CLASS04001 j_translate" cellpadding="0" cellspacing="0">
+         <tr>
+           <td style="vertical-align: top; border: 0px;">
+@@ -79,10 +74,10 @@
+           </td>
+        </tr> 
+      </table>
+-   </td>
++   </div>
+    
+    <!-- Rechte Spalte -->
+-   <td id="contentRight">
++   <div id="contentRight">
+      <div id="divHTF" class="CLASS04002">
+        <table id="tblRightContent" class="CLASS04003" cellpadding="0" cellspacing="0">
+          <tr class="CLASS04004">
+@@ -92,9 +87,8 @@
+          </tr>
+        </table>
+      </div>
+-   </td>
+-  </tr>
+-</table>
++   </div>
++</div>
+ 
+ <script type="text/javascript">
+        
+--- occu/WebUI/www/rega/pages/tabs/control/rooms.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/rooms.htm
+@@ -13,14 +13,9 @@
+   arItems = new Array();
+ </script>
+ 
+-<table width="100%" class="CLASS04000" cellpadding="0" cellspacing="0">
+-  <colgroup>
+-    <col style="width:20%;"/>
+-    <col style="width:80%;"/>
+-  </colgroup>
+-  <tr>
++<div id="roompage" class="CLASS04000">
+     <!-- Linke Spalte -->
+-    <td id="contentLeft" class="hidden">
++    <div id="contentLeft" class="hidden">
+       <table class="filterTable CLASS04001 j_translate" cellpadding="0" cellspacing="0">
+         <tr>
+           <td style="vertical-align: top; border: 0px">
+@@ -82,10 +77,10 @@
+           </td>
+          </tr> 
+        </table>
+-     </td>
++     </div>
+      
+      <!-- Rechte Spalte -->
+-     <td id="contentRight">
++     <div id="contentRight">
+        <div id="divHTR" class="CLASS04002">
+        <table id="tblRightContent" class="CLASS04003" cellpadding="0" cellspacing="0">
+         <tr class="CLASS04004">
+@@ -95,9 +90,8 @@
+         </tr>
+        </table>
+       </div>
+-    </td>
+-  </tr>
+-</table>
++    </div>
++</div>
+ 
+ <script type="text/javascript">
+   loadChannels = function(id)
 --- occu/WebUI/www/rega/pages/tabs/startpage.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/startpage.htm
 @@ -275,7 +275,6 @@
@@ -212,7 +344,7 @@
    background-color: $_(background); /* #183473 */
    /* background-color: #dcdcdc; */
    color: $_(textColorB); /* black */
-@@ -254,12 +284,14 @@
+@@ -254,15 +284,18 @@
  /* Linker Bereich der Hauptansicht (falls in zwei Spalten getrennt) */
  #contentLeft 
  {
@@ -227,7 +359,11 @@
    border-left: solid 5px $_(navBarSeparator); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
    /* padding-top: 10px; */
    vertical-align: top;
-@@ -2551,7 +2583,7 @@
++  overflow: auto;
+ }
+ 
+ #separator {
+@@ -2551,7 +2584,7 @@
  }
  #menubar {
    height: 34px;
@@ -236,7 +372,24 @@
    border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
    background-color: $_(background); /* #183473 */
    z-index: 189;
-@@ -6274,6 +6306,7 @@
+@@ -6266,6 +6299,16 @@
+ 
+ /* rega\pages\tabs\handling\devices.htm */
+ 
++#devicepage {
++  width: 100%
++}
++
++#devicepage #contentLeft {
++  width: 20%;
++  float: left;
++  overflow: auto;
++}
++
+ .CLASS03900 {
+ 	height:100%;
+ 	overflow:hidden;
+@@ -6274,6 +6317,7 @@
  }
  
  .CLASS03901 {
@@ -244,7 +397,25 @@
  	width:100%;
  }
  
-@@ -6335,6 +6368,7 @@
+@@ -6329,12 +6373,25 @@
+ /* rega\pages\tabs\handling\rooms.htm */
+ /* rega\pages\tabs\handling\rooms.htm */
+ 
++#roompage,
++#functionpage {
++  width: 100%
++}
++
++#roompage #contentLeft,
++#functionpage #contentLeft {
++  width: 20%;
++  float: left;
++  overflow: auto;
++}
++
+ .CLASS04000 {
+ 	height:100%;
+ 	overflow:hidden;
  }
  
  .CLASS04001 {

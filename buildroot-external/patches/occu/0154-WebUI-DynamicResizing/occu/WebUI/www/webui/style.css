@@ -295,6 +295,7 @@ a img {
   border-left: solid 5px $_(navBarSeparator); /* #ffffff */ /* Trennlinie zwischen Navigation und Hauptbereich */
   /* padding-top: 10px; */
   vertical-align: top;
+  overflow: auto;
 }
 
 #separator {
@@ -6298,6 +6299,16 @@ color: $_(textColorA); /* white */
 
 /* rega\pages\tabs\handling\devices.htm */
 
+#devicepage {
+  width: 100%
+}
+
+#devicepage #contentLeft {
+  width: 20%;
+  float: left;
+  overflow: auto;
+}
+
 .CLASS03900 {
 	height:100%;
 	overflow:hidden;
@@ -6361,6 +6372,18 @@ color: $_(textColorA); /* white */
 
 /* rega\pages\tabs\handling\rooms.htm */
 /* rega\pages\tabs\handling\rooms.htm */
+
+#roompage,
+#functionpage {
+  width: 100%
+}
+
+#roompage #contentLeft,
+#functionpage #contentLeft {
+  width: 20%;
+  float: left;
+  overflow: auto;
+}
 
 .CLASS04000 {
 	height:100%;

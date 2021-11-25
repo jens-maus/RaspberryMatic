@@ -67,7 +67,7 @@
 +    if (rssiValue < -200) {
 +      mnDPValue = "n/a";
 +    } else {
-+      mnDPValue = rssiValue.toString(0);
++      mnDPValue = rssiValue.ToString(0);
 +    }
 +    mnDPUnit = "dBm";
 +    Call("/esp/controls/maintenance.fn::OutputMaintenanceDataPoint()");

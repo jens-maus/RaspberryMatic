@@ -815,7 +815,7 @@ function ::saveSysVar()
     sv.ValueName1(system.GetVar("sTrue"));
     sv.ValueName0(system.GetVar("sFalse"));
     sv.AlType(atSystem);
-    svValue=true;
+    sv.AlArm(true);
   }
   elseif (ist == istBool)
   {

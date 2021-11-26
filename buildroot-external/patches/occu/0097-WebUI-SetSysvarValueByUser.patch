@@ -8,15 +8,6 @@
    if (ist == istAlarm)
    {
      sv.ValueType( ivtBinary );
-@@ -814,7 +815,7 @@
-     sv.ValueName1(system.GetVar("sTrue"));
-     sv.ValueName0(system.GetVar("sFalse"));
-     sv.AlType(atSystem);
--    sv.AlArm(true);
-+    svValue=true;
-   }
-   elseif (ist == istBool)
-   {
 @@ -822,7 +823,7 @@
      sv.ValueSubType( istBool );
      sv.ValueName1(system.GetVar("sTrue"));

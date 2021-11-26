@@ -379,7 +379,7 @@ jobs:
         continue-on-error: true
 
       - name: Remove old packages
-        uses: smartsquaregmbh/delete-old-packages@v0.3.2
+        uses: smartsquaregmbh/delete-old-packages@v0.3.3
         with:
           keep: 5
           names: |

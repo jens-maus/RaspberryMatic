@@ -1,16 +1,16 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -6078,7 +6078,8 @@
-  **/
- Array.prototype.ex_sortBy = function(name, sortReverse)
- {
--  this.sort(function(a,b) { return Object.ex_compare(a[name], b[name]); });
-+  const collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
-+  this.sort( (x, y) => { return collator.compare(x[name], y[name]); } );
-   if (sortReverse) { this.reverse(); }
+@@ -6125,8 +6125,7 @@
+     var strA = this.toLowerCase();
+     var strB = other.toLowerCase();
    
-   return this;
-@@ -29864,52 +29865,12 @@
+-    if      (strA > strB) { return 1; }
+-    else if (strA < strB) { return -1; }
++    return strA.localeCompare(strB, undefined, {numeric: true, sensitivity: 'base'});
+   }
+   
+   return 0;
+@@ -29864,52 +29863,12 @@
  
  iseSortMultiArray = function(arr,dsc,dir,sln, sessionVar,popup)
  {

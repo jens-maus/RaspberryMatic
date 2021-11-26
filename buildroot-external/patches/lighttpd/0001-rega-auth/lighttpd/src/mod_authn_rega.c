@@ -8,11 +8,12 @@
  *
  * 1.0: initial release
  * 1.1: lighttpd 1.4.58+ compatibility <mail@jens-maus.de>
+ * 1.2: lighttpd 1.4.61+ compatibility <mail@jens-maus.de>
  */
 
 #include "base.h"
 #include "plugin.h"
-#include "http_auth.h"
+#include "mod_auth_api.h"
 #include "log.h"
 #include "response.h"
 

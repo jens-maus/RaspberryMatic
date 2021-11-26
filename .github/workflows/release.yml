@@ -50,14 +50,14 @@ jobs:
 
     - name: Generate changelog
       id: changelog
-      uses: metcalfc/changelog-generator@v2.0.0
+      uses: metcalfc/changelog-generator@v3.0.0
       with:
         myToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Generate release notes
       shell: bash
       run: |
-        export CHANGELOG="$(tac <<'EOF'
+        export CHANGELOG="$(cat <<'EOF'
         ${{ steps.changelog.outputs.changelog }}
         EOF
         )"

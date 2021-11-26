@@ -143,7 +143,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="1G"
 BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS=""
 # BR2_TARGET_ROOTFS_TAR is not set
 BR2_TARGET_GRUB2=y
-BR2_TARGET_GRUB2_BUILTIN_MODULES="boot linux ext2 fat squash4 part_msdos part_gpt normal biosdisk search test"
+BR2_TARGET_GRUB2_BUILTIN_MODULES_PC="boot linux ext2 fat squash4 part_msdos part_gpt normal biosdisk search test"
 BR2_PACKAGE_HOST_DOSFSTOOLS=y
 BR2_PACKAGE_HOST_GENIMAGE=y
 BR2_PACKAGE_HOST_MTOOLS=y

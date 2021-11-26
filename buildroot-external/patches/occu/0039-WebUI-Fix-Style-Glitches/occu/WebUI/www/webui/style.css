@@ -184,6 +184,11 @@ a img {
   display: contents;
 }
 
+#divDL, #divRTD, #divFL, #divHTF, #divRL, #divHTR
+{
+  height: 100%;
+}
+
 /* Kopfzeile */
 #header {
   height: 15%;
@@ -2405,8 +2410,7 @@ progress::-webkit-progress-value { background: #3678c9; }
 }
 
 .FilterText {
-  width:96%;
-  margin:3px 2% 3px 2%;
+  margin:2px;
 }
 
 .FilterButton {
@@ -2416,8 +2420,7 @@ progress::-webkit-progress-value { background: #3678c9; }
   /*background-image: linear-gradient(to bottom, white 40%, gray );*/
   background-image: var(--btnGradient);
 
-  width:96%;
-  margin:3px 2% 3px 2%;
+  margin:2px;
   border:1px solid $_(black); /* black */
   color: $_(textColorB); /* white */
   font-weight:normal;
@@ -6232,12 +6235,14 @@ color: $_(textColorA); /* white */
 
 .CLASS03902 {
 	overflow:auto;
-	margin:10px;
+	margin-left:10px;
 	margin-right:2px;
 }
 
 .CLASS03903 {
 	border:solid 1px $_(black); /* black */
+	margin-top:10px;
+	margin-bottom:10px;
 }
 
 .CLASS03904 {
@@ -6262,12 +6267,14 @@ color: $_(textColorA); /* white */
 
 .CLASS03908 {
 	overflow:auto;
-	margin:10px;
+	margin-right:10px;
 	margin-left:2px;
 }
 
 .CLASS03909 {
 	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .CLASS03910 {
@@ -6294,12 +6301,14 @@ color: $_(textColorA); /* white */
 
 .CLASS04002 {
 	overflow:auto;
-	margin:10px;
+	margin-right:10px;
 	margin-left:2px;
 }
 
 .CLASS04003 {
 	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .CLASS04004 {
@@ -6314,6 +6323,8 @@ color: $_(textColorA); /* white */
 
 .CLASS04006 {
 	border:solid 1px $_(black); /* black */
+	margin-top:10px;
+	margin-bottom:10px;
 }
 
 .CLASS04007 {
@@ -6397,7 +6408,7 @@ color: $_(textColorA); /* white */
 
 .CLASS04201 {
 	overflow:auto;
-	margin:10px;
+	margin-left:10px;
 	margin-right:2px;
 }
 
@@ -6677,7 +6688,7 @@ color: $_(textColorA); /* white */
 .CLASS04905 {
 	line-height:15px;
 	font-size:smaller;
-	width:220px;
+	width:180px;
 }
 
 .CLASS04906 {

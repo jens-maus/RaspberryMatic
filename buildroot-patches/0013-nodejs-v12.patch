@@ -1,0 +1,317 @@
+--- buildroot/package/nodejs/0001-add-qemu-wrapper-support.patch.orig
++++ buildroot/package/nodejs/0001-add-qemu-wrapper-support.patch
+@@ -1,88 +0,0 @@
+-From fa09fa3ad6a21ae0b35fb860f76d1762e5f29972 Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <aduskett@gmail.com>
+-Date: Mon, 27 Sep 2021 12:55:09 -0700
+-Subject: [PATCH] add qemu-wrapper support
+-
+-V8's JIT infrastructure requires binaries such as mksnapshot and mkpeephole to
+-be run in the host during the build. However, these binaries must have the
+-same bit-width as the target (e.g. a x86_64 host targeting ARMv6 needs to
+-produce a 32-bit binary). To work around this issue, cross-compile the
+-binaries for the target and run them on the host with QEMU, much like
+-gobject-introspection.
+-
+-However, for the host-variant we do not want to use a
+-qemu-wrapper, so add @MAYBE_WRAPPER@ to the needed files and sed the path to
+-the qemu-wrapper on target builds, and remove @MAYBE_WRAPPER@ entirely on
+-host-builds.
+-
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+----
+- node.gyp                 | 4 ++--
+- tools/v8_gypfiles/v8.gyp | 8 ++++----
+- 2 files changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/node.gyp b/node.gyp
+-index 8ba0dfeb..c77f6f7d 100644
+---- a/node.gyp
+-+++ b/node.gyp
+-@@ -491,7 +491,7 @@
+-               'action_name': 'run_mkcodecache',
+-               'process_outputs_as_sources': 1,
+-               'inputs': [
+--                '<(mkcodecache_exec)',
+-+                @MAYBE_WRAPPER@ '<(mkcodecache_exec)',
+-               ],
+-               'outputs': [
+-                 '<(SHARED_INTERMEDIATE_DIR)/node_code_cache.cc',
+-@@ -516,7 +516,7 @@
+-               'action_name': 'node_mksnapshot',
+-               'process_outputs_as_sources': 1,
+-               'inputs': [
+--                '<(node_mksnapshot_exec)',
+-+                @MAYBE_WRAPPER@ '<(node_mksnapshot_exec)',
+-               ],
+-               'outputs': [
+-                 '<(SHARED_INTERMEDIATE_DIR)/node_snapshot.cc',
+-diff --git a/tools/v8_gypfiles/v8.gyp b/tools/v8_gypfiles/v8.gyp
+-index 48ec392b..f9bb0fbe 100644
+---- a/tools/v8_gypfiles/v8.gyp
+-+++ b/tools/v8_gypfiles/v8.gyp
+-@@ -220,7 +220,7 @@
+-         {
+-           'action_name': 'run_torque_action',
+-           'inputs': [  # Order matters.
+--            '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)torque<(EXECUTABLE_SUFFIX)',
+-+            @MAYBE_WRAPPER@ '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)torque<(EXECUTABLE_SUFFIX)',
+-             '<@(torque_files)',
+-           ],
+-           'outputs': [
+-@@ -351,7 +351,7 @@
+-         {
+-           'action_name': 'generate_bytecode_builtins_list_action',
+-           'inputs': [
+--            '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)bytecode_builtins_list_generator<(EXECUTABLE_SUFFIX)',
+-+            @MAYBE_WRAPPER@ '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)bytecode_builtins_list_generator<(EXECUTABLE_SUFFIX)',
+-           ],
+-           'outputs': [
+-             '<(generate_bytecode_builtins_list_output)',
+-@@ -533,7 +533,7 @@
+-             ],
+-           },
+-           'inputs': [
+--            '<(mksnapshot_exec)',
+-+            @MAYBE_WRAPPER@ '<(mksnapshot_exec)',
+-           ],
+-           'outputs': [
+-             '<(INTERMEDIATE_DIR)/snapshot.cc',
+-@@ -1448,7 +1448,7 @@
+-         {
+-           'action_name': 'run_gen-regexp-special-case_action',
+-           'inputs': [
+--            '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)gen-regexp-special-case<(EXECUTABLE_SUFFIX)',
+-+            @MAYBE_WRAPPER@ '<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)gen-regexp-special-case<(EXECUTABLE_SUFFIX)',
+-           ],
+-           'outputs': [
+-             '<(SHARED_INTERMEDIATE_DIR)/src/regexp/special-case.cc',
+---
+-2.31.1
+-
+--- buildroot/package/nodejs/Config.in.orig
++++ buildroot/package/nodejs/Config.in
+@@ -6,32 +6,26 @@
+ 	default y if BR2_aarch64 || BR2_i386 || BR2_x86_64
+ 	# libuv
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
+ 
+-comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 7, wchar, host gcc >= 8"
++comment "nodejs needs a toolchain w/ C++, dynamic library, NPTL, gcc >= 4.9, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+-		!BR2_HOST_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_USE_WCHAR
++		!BR2_HOST_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_NODEJS
+ 	bool "nodejs"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_NODEJS_ARCH_SUPPORTS
+-	depends on BR2_HOST_GCC_AT_LEAST_8 # qemu
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
++	depends on BR2_HOST_GCC_AT_LEAST_4_9
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_WCHAR
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
+ 	# uses dlopen(). On ARMv5, we could technically support static
+ 	# linking, but that's too much of a corner case to support it.
+ 	depends on !BR2_STATIC_LIBS
+-	select BR2_PACKAGE_HOST_PYTHON3
+-	select BR2_PACKAGE_HOST_PYTHON3_BZIP2
+-	select BR2_PACKAGE_HOST_PYTHON3_SSL
+-	select BR2_PACKAGE_HOST_QEMU
+-	select BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE
+ 	select BR2_PACKAGE_C_ARES
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_ZLIB
+--- buildroot/package/nodejs/nodejs.hash.orig
++++ buildroot/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v14.17.6/SHASUMS256.txt
+-sha256  3fa1d71adddfab2f5e3e41874b4eddbdf92b65cade4a43922fb1e437afcf89ed  node-v14.18.1.tar.xz
++# From https://nodejs.org/dist/v12.22.7/SHASUMS256.txt
++sha256  cc6a23b44870679a94bd8f3c8d4e1f4b77bb2712a36888ab87463459e6785f6b  node-v12.22.7.tar.xz
+ 
+ # Hash for license file
+-sha256  b3a67885b5a6ac35e8bbe8190509e41b79b0d9a2e3fbd47186f2ac4727f63be5  LICENSE
++sha256  221417a7ca275112a5ac54639b36ee3c5184e74631ea1e1b01b701293b655190  LICENSE
+--- buildroot/package/nodejs/nodejs.mk.orig
++++ buildroot/package/nodejs/nodejs.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 14.18.1
++NODEJS_VERSION = 12.22.7
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+-NODEJS_DEPENDENCIES = host-qemu host-python3 host-nodejs c-ares \
++NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+ 	libuv zlib nghttp2 \
+ 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
+-HOST_NODEJS_DEPENDENCIES = host-icu host-libopenssl host-python3 host-zlib
++HOST_NODEJS_DEPENDENCIES = host-icu host-libopenssl host-python host-zlib
+ NODEJS_INSTALL_STAGING = YES
+ NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
+ NODEJS_LICENSE_FILES = LICENSE
+@@ -18,6 +18,7 @@
+ NODEJS_CPE_ID_PRODUCT = node.js
+ 
+ NODEJS_CONF_OPTS = \
++	--without-snapshot \
+ 	--shared-zlib \
+ 	--shared-cares \
+ 	--shared-libuv \
+@@ -45,17 +46,25 @@
+ NODEJS_CONF_OPTS += --without-npm
+ endif
+ 
++# nodejs build system is based on python, but only support python-2.6 or
++# python-2.7. So, we have to enforce PYTHON interpreter to be python2.
+ define HOST_NODEJS_CONFIGURE_CMDS
++	# The build system directly calls python. Work around this by forcing python2
++	# into PATH. See https://github.com/nodejs/node/issues/2735
++	mkdir -p $(@D)/bin
++	ln -sf $(HOST_DIR)/bin/python2 $(@D)/bin/python
++
+ 	(cd $(@D); \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		PATH=$(@D)/bin:$(BR_PATH) \
+-		PYTHON=$(HOST_DIR)/bin/python3 \
+-		$(HOST_DIR)/bin/python3 ./configure \
++		PYTHON=$(HOST_DIR)/bin/python2 \
++		$(HOST_DIR)/bin/python2 ./configure \
+ 		--prefix=$(HOST_DIR) \
++		--without-snapshot \
+ 		--without-dtrace \
+ 		--without-etw \
+ 		--shared-openssl \
+-		--shared-openssl-includes=$(HOST_DIR)/include \
++		--shared-openssl-includes=$(HOST_DIR)/include/openssl \
+ 		--shared-openssl-libpath=$(HOST_DIR)/lib \
+ 		--shared-zlib \
+ 		--no-cross-compiling \
+@@ -73,7 +82,7 @@
+ HOST_NODEJS_CXXFLAGS = $(HOST_CXXFLAGS) -DU_DISABLE_RENAMING=1
+ 
+ define HOST_NODEJS_BUILD_CMDS
+-	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
++	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+ 		$(MAKE) -C $(@D) \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CXXFLAGS="$(HOST_NODEJS_CXXFLAGS)" \
+@@ -83,7 +92,7 @@
+ endef
+ 
+ define HOST_NODEJS_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
++	$(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+ 		$(MAKE) -C $(@D) install \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		CXXFLAGS="$(HOST_NODEJS_CXXFLAGS)" \
+@@ -143,45 +152,17 @@
+ NODEJS_LDFLAGS += -latomic
+ endif
+ 
+-# V8's JIT infrastructure requires binaries such as mksnapshot and
+-# mkpeephole to be run in the host during the build. However, these
+-# binaries must have the same bit-width as the target (e.g. a x86_64
+-# host targeting ARMv6 needs to produce a 32-bit binary). To work around this
+-# issue, cross-compile the binaries for the target and run them on the
+-# host with QEMU, much like gobject-introspection.
+-define NODEJS_INSTALL_V8_QEMU_WRAPPER
+-	$(INSTALL) -D -m 755 $(NODEJS_PKGDIR)/v8-qemu-wrapper.in \
+-		$(@D)/out/Release/v8-qemu-wrapper
+-	$(SED) "s%@QEMU_USER@%$(QEMU_USER)%g" \
+-		$(@D)/out/Release/v8-qemu-wrapper
+-	$(SED) "s%@TOOLCHAIN_HEADERS_VERSION@%$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)%g" \
+-		$(@D)/out/Release/v8-qemu-wrapper
+-	$(SED) "s%@QEMU_USERMODE_ARGS@%$(call qstrip,$(BR2_PACKAGE_HOST_QEMU_USER_MODE_ARGS))%g" \
+-		$(@D)/out/Release/v8-qemu-wrapper
+-endef
+-NODEJS_PRE_CONFIGURE_HOOKS += NODEJS_INSTALL_V8_QEMU_WRAPPER
+-
+-define NODEJS_WRAPPER_FIXUP
+-	$(SED) "s%@MAYBE_WRAPPER@%'<(PRODUCT_DIR)/v8-qemu-wrapper',%g" $(@D)/node.gyp
+-	$(SED) "s%@MAYBE_WRAPPER@%'<(PRODUCT_DIR)/v8-qemu-wrapper',%g" $(@D)/tools/v8_gypfiles/v8.gyp
+-endef
+-NODEJS_PRE_CONFIGURE_HOOKS += NODEJS_WRAPPER_FIXUP
+-
+-# Do not run the qemu-wrapper for the host build.
+-define HOST_NODEJS_WRAPPER_FIXUP
+-	$(SED) "s%@MAYBE_WRAPPER@%%g" $(@D)/node.gyp
+-	$(SED) "s%@MAYBE_WRAPPER@%%g" $(@D)/tools/v8_gypfiles/v8.gyp
+-endef
+-HOST_NODEJS_PRE_CONFIGURE_HOOKS += HOST_NODEJS_WRAPPER_FIXUP
+-
+ define NODEJS_CONFIGURE_CMDS
++	mkdir -p $(@D)/bin
++	ln -sf $(HOST_DIR)/bin/python2 $(@D)/bin/python
++
+ 	(cd $(@D); \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		PATH=$(@D)/bin:$(BR_PATH) \
+ 		LDFLAGS="$(NODEJS_LDFLAGS)" \
+ 		LD="$(TARGET_CXX)" \
+-		PYTHON=$(HOST_DIR)/bin/python3 \
+-		$(HOST_DIR)/bin/python3 ./configure \
++		PYTHON=$(HOST_DIR)/bin/python2 \
++		$(HOST_DIR)/bin/python2 ./configure \
+ 		--prefix=/usr \
+ 		--dest-cpu=$(NODEJS_CPU) \
+ 		$(if $(NODEJS_ARM_FP),--with-arm-float-abi=$(NODEJS_ARM_FP)) \
+@@ -190,10 +171,19 @@
+ 		$(if $(NODEJS_MIPS_FPU_MODE),--with-mips-fpu-mode=$(NODEJS_MIPS_FPU_MODE)) \
+ 		$(NODEJS_CONF_OPTS) \
+ 	)
++
++	$(foreach f,$(NODEJS_HOST_TOOLS_V8), \
++		$(SED) "s#<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)$(f)<(EXECUTABLE_SUFFIX)#$(HOST_DIR)/bin/$(f)#" \
++			$(@D)/tools/v8_gypfiles/v8.gyp
++	)
++	$(foreach f,$(NODEJS_HOST_TOOLS_NODE), \
++		$(SED) "s#<(PRODUCT_DIR)/<(EXECUTABLE_PREFIX)$(f)<(EXECUTABLE_SUFFIX)#$(HOST_DIR)/bin/$(f)#" \
++			-i $(@D)/node.gyp
++	)
+ endef
+ 
+ define NODEJS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
++	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+ 		$(MAKE) -C $(@D) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+ 		NO_LOAD=cctest.target.mk \
+@@ -233,7 +223,7 @@
+ endif
+ 
+ define NODEJS_INSTALL_STAGING_CMDS
+-	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
++	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+ 		$(MAKE) -C $(@D) install \
+ 		DESTDIR=$(STAGING_DIR) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+@@ -244,7 +234,7 @@
+ endef
+ 
+ define NODEJS_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python3 \
++	$(TARGET_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+ 		$(MAKE) -C $(@D) install \
+ 		DESTDIR=$(TARGET_DIR) \
+ 		$(TARGET_CONFIGURE_OPTS) \
+--- buildroot/package/nodejs/v8-qemu-wrapper.in.orig
++++ buildroot/package/nodejs/v8-qemu-wrapper.in
+@@ -1,9 +0,0 @@
+-#!/usr/bin/env sh
+-
+-# Pass -r to qemu-user as to trick glibc into not errorings out if the host kernel
+-# is older than the target kernel.
+-exec @QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ \
+-    @QEMU_USERMODE_ARGS@ \
+-   -L "${STAGING_DIR}/" \
+-    "$@"
+-

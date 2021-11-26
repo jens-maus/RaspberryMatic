@@ -864,6 +864,128 @@
        
        Write("<td>"); !+ / -
        string sStyle = "";
+--- occu/WebUI/www/rega/pages/tabs/admin/views/newDeviceLoader.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/newDeviceLoader.htm
+@@ -271,7 +271,7 @@
+       td.appendChild(img);
+ 
+       tr.appendChild(td);
+-      td = Builder.node('td', {colSpan: 2, className: 'GrayBkg border1px'}, strCut(GroupsArray[i][0]['type'] + " " + GroupsArray[i][1]['type'])); tr.appendChild(td);
++      td = Builder.node('td', {colSpan: 2, className: 'GrayBkg border1px'}, GroupsArray[i][0]['type'] + " " + GroupsArray[i][1]['type']); tr.appendChild(td);
+       td.innerHTML = GroupsArray[i][0]['type'] + "<br/>" + GroupsArray[i][1]['type'];
+       
+       td = Builder.node('td', {className: 'WhiteBkgPic border1px'}, [
+@@ -281,16 +281,16 @@
+       Element.addClassName(td, "CLASS04402");
+       tr.appendChild(td);
+       
+-      //td = Builder.node('td', {className: 'GrayBkg border1px'}, translateKey(strCut(DEV_getDescription(deviceData['type']))) ); tr.appendChild(td);
++      //td = Builder.node('td', {className: 'GrayBkg border1px'}, translateKey(DEV_getDescription(deviceData['type'])) ); tr.appendChild(td);
+       td = Builder.node('td', {className: 'GrayBkg border1px'}, translateKey(DEV_getDescription(deviceData['type'])) ); tr.appendChild(td);
+-      td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(GroupsArray[i][0]['sn'] + " " + GroupsArray[i][1]['sn'])); tr.appendChild(td);
++      td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][0]['sn'] + " " + GroupsArray[i][1]['sn']); tr.appendChild(td);
+       var sIface = (GroupsArray[i][0]['iface'] != GroupsArray[i][1]['iface'] ? GroupsArray[i][0]['iface'] + " " +  GroupsArray[i][1]['iface'] : GroupsArray[i][0]['iface']);
+       td = Builder.node('td', {className: 'GrayBkg border1px'}, sIface); tr.appendChild(td);
+       
+       td = Builder.node('td', {id: 'trans' + GroupsArray[i][0]['id'] + GroupsArray[i][1]['id'], 
+                      className: 'GrayBkg border1px'}, removeDuplicates(GroupsArray[i][0]['trans'], GroupsArray[i][1]['trans'], "")); tr.appendChild(td);
+       
+-      td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(GroupsArray[i][0]['name'] + " " + GroupsArray[i][1]['name'])); tr.appendChild(td);
++      td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][0]['name'] + " " + GroupsArray[i][1]['name']); tr.appendChild(td);
+       var sGrRoId = 'funcs' + GroupsArray[i][0]['id'] + GroupsArray[i][1]['id'];
+       td = Builder.node('td', {id: sGrRoId, className: 'GrayBkg border1px'}, removeDuplicates(GroupsArray[i][0]['func'],  GroupsArray[i][1]['func'], ';')); tr.appendChild(td);
+       var sGrRoId = 'rooms' + GroupsArray[i][0]['id'] + GroupsArray[i][1]['id'];
+@@ -340,7 +340,7 @@
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][x]['desc'] );
+         td.innerHTML = translateKey(GroupsArray[i][x]['desc']);
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(GroupsArray[i][x]['sn'])); tr.appendChild(td);
++        td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][x]['sn']); tr.appendChild(td);
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][x]['iface']); tr.appendChild(td);
+         var trsId = "trs" + GroupsArray[i][x]['id'];
+         var s = "WhiteBkg border1px";
+@@ -365,10 +365,10 @@
+           
+         if (NAV_IE) {
+           td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-              [Builder.node('div', {id:'tdn' + GroupsArray[i][x]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0, CALL_STRCUT)'}, strCut(GroupsArray[i][x]['name'])) ]); tr.appendChild(td);
++              [Builder.node('div', {id:'tdn' + GroupsArray[i][x]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0)'}, GroupsArray[i][x]['name']) ]); tr.appendChild(td);
+         }
+         else {
+-          td = Builder.node('td', {className: 'WhiteBkg CLASS04403 border1px', id:'tdn' + GroupsArray[i][x]['id'], onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0, CALL_STRCUT)'}, strCut(GroupsArray[i][x]['name'])); tr.appendChild(td);
++          td = Builder.node('td', {className: 'WhiteBkg CLASS04403 border1px', id:'tdn' + GroupsArray[i][x]['id'], onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0)'}, GroupsArray[i][x]['name']); tr.appendChild(td);
+         } 
+         
+         if (NAV_IE) {
+@@ -465,7 +465,7 @@
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, chns[i]['desc']);
+         td.innerHTML = translateKey(chns[i]['desc']);
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(chns[i]['sn'])); tr.appendChild(td);
++        td = Builder.node('td', {className: 'GrayBkg border1px'}, chns[i]['sn']); tr.appendChild(td);
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, chns[i]['iface']); tr.appendChild(td);
+         var trsId = "trs" + chns[i]['id'];
+         var s = "WhiteBkg border1px";
+@@ -491,10 +491,10 @@
+ 
+         if (NAV_IE) {
+           td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-              [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'], true)) ]); tr.appendChild(td);
++              [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']) ]); tr.appendChild(td);
+         }
+         else {
+-         td = Builder.node('td', {className: 'WhiteBkg CLASS04404 border1px', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'].replace(/:/g, ":<br/>"), true)); tr.appendChild(td);
++         td = Builder.node('td', {className: 'WhiteBkg CLASS04404 border1px', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']); tr.appendChild(td);
+         }
+         
+         if (NAV_IE) {
+@@ -561,4 +561,4 @@
+ 
+ <script type="text/javascript">
+     translatePage("#tblNewDevices");
+-</script>
+\ No newline at end of file
++</script>
+--- occu/WebUI/www/rega/pages/tabs/admin/views/newdevicechannelsloader.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevicechannelsloader.htm
+@@ -120,7 +120,7 @@
+   {
+     var tr = Builder.node("tr");
+     
+-    td = Builder.node('td', {className: 'GrayBkg'}, strCut(chns[i]['type'], true)); tr.appendChild(td);
++    td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['type']); tr.appendChild(td);
+     
+     //td = Builder.node('td', {className: 'WhiteBkg'});
+     td = Builder.node('td', {className: 'WhiteBkgPic'}, [
+@@ -131,7 +131,7 @@
+     tr.appendChild(td);
+     
+     td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['desc']); tr.appendChild(td);
+-    td = Builder.node('td', {className: 'GrayBkg'}, strCut(chns[i]['sn'])); tr.appendChild(td);
++    td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['sn']); tr.appendChild(td);
+     td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['iface']); tr.appendChild(td);
+     
+     var s = "WhiteBkg";
+@@ -152,10 +152,10 @@
+     
+     if (NAV_IE) {
+       td = Builder.node('td', {className: 'WhiteBkg'}, 
+-          [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04502 CLASS04503", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'], true)) ]); tr.appendChild(td);
++          [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04502 CLASS04503", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']) ]); tr.appendChild(td);
+     }
+     else {
+-      td = Builder.node('td', {className: 'WhiteBkg CLASS04503', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'], true)); tr.appendChild(td);
++      td = Builder.node('td', {className: 'WhiteBkg CLASS04503', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']); tr.appendChild(td);
+     }  
+       
+     if (NAV_IE) {
+@@ -195,4 +195,4 @@
+     Cursor.set(Cursor.NORMAL);
+   }
+   
+-</script>
+\ No newline at end of file
++</script>
 --- occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm
 @@ -63,43 +63,43 @@
@@ -880,7 +1002,7 @@
 +  <col style="width:25px;" />
    <!-- Plus/Minus Group -->
 -  <col style="width:2%;"/>
-+  <col style="width:25px;" />
++  <col />
    <!-- Leere Zelle vor GroupMember -->
 -  <col style="width:1%;"/>
 -  <col style="width:3%;"/>
@@ -895,7 +1017,7 @@
 -  <col style="width:15%;"/>
 -  <col style="width:7%;"/>
 +  <col />
-+  <col />
++  <col style="width:50px;" />
 +  <col />
 +  <col />
 +  <col />
@@ -923,21 +1045,64 @@
 -  <th class="Sort CLASS04304 border1px"><b>${thFunctionTest}</b></th>
 -  <th class="Sort CLASS04304 border1px"><b>${thAction}</b></th>
 -  <th class="Sort CLASS04304 border1px"><b>${thReady}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'><b>${thTypeDescriptor}</b></th>
-+  <th class="DeviceListHead"><b>${thPicture}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('desc')"><b>${thDescriptor}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('sn')"><b>${thSerialNumber}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('iface')"><b>${thInterfaceCategory}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('trans')"><b>${thTransmitMode}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('name')"><b>${thName}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('func')"><b>${thFunc}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('room')"><b>${thRoom}</b></th>
-+  <th class="DeviceListHead"><b>${thFunctionTest}</b></th>
-+  <th class="DeviceListHead"><b>${thAction}</b></th>
-+  <th class="DeviceListHead"><b>${thReady}</b></th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'>${thTypeDescriptor}</th>
++  <th class="DeviceListHead">${thPicture}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('desc')">${thDescriptor}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('sn')">${thSerialNumber}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('iface')">${thInterfaceCategory}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('trans')">${thTransmitMode}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('name')">${thName}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('func')">${thFunc}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('room')">${thRoom}</th>
++  <th class="DeviceListHead">${thFunctionTest}</th>
++  <th class="DeviceListHead">${thAction}</th>
++  <th class="DeviceListHead">${thReady}</th>
  </tr>
  
  <script type="text/javascript">
+@@ -381,7 +381,7 @@
+   var img = Builder.node('img', {src: "/ise/img/plus.png", id: "img" + arDevices[i]['id'], alt: "plus", onclick: "expandDevice(" + arDevices[i]['id'] + "," + i + ")"});
+   td.appendChild(img);
+   tr.appendChild(td);
+-  td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, strCut(arDevices[i]['type'], true));
++  td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, arDevices[i]['type']);
+   tr.appendChild(td);
+   td = Builder.node('td', {className: 'WhiteBkgPic CLASS04314 border1px'}, [
+     Builder.node('div', {id: 'picDiv' + arDevices[i]['id'], className: "CLASS04305",
+@@ -391,7 +391,7 @@
+   td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['desc'] );
+   td.innerHTML = translateKey(arDevices[i]['desc']);
+   tr.appendChild(td);
+-  td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(arDevices[i]['sn']));
++  td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['sn']);
+   tr.appendChild(td);
+   td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['iface']);
+   tr.appendChild(td);
+@@ -401,13 +401,13 @@
+ 
+   if (NAV_IE) {
+     td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-      [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true)) ]);
++      [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']) ]);
+     tr.appendChild(td);
+   }
+   else {
+     if (isDevTypeHmIPW(arDevices[i]['type'])) {
+       td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px'});
+-      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, strCut(arDevices[i]['name'].replace(/:/g, ":<br/>"), false));
++      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, arDevices[i]['name'].replace(/:/g, ":<br/>"));
+       divB = Builder.node('div', {
+         id: 'btnRename_' + arDevices[i]["id"],
+         className: 'TestButton colorGradient borderRadius2px hidden',
+@@ -417,7 +417,7 @@
+       td.appendChild(divA);
+       td.appendChild(divB);
+     } else {
+-      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true));
++      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']);
+     }
+ 
+     tr.appendChild(td);
 --- occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm
 @@ -57,9 +57,16 @@
@@ -1206,16 +1371,6 @@
           <tr class="CLASS03910">
             <td style="vertical-align: top;" id="chnList"></td>
           </tr>
-@@ -145,7 +135,8 @@
-   </tr>
- </table>
- <script type="text/javascript">
--       
-+  WebUI.onResize();
-+
-   loadChannels = function(id, specialFlag)
-   {
- 
 --- occu/WebUI/www/rega/pages/tabs/control/functions.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/functions.htm
 @@ -21,15 +21,10 @@
@@ -1259,16 +1414,6 @@
           <tr class="CLASS04004">
             <td style="vertical-align: top;" id="chnList">
             
-@@ -107,7 +97,8 @@
- </table>
- 
- <script type="text/javascript">
--       
-+  WebUI.onResize();
-+
-   loadChannels = function(id)
-   {
-     iseInitUpdateArrays();
 --- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
 @@ -209,7 +209,7 @@
@@ -1376,15 +1521,6 @@
          <tr class="CLASS04004">
            <td style="vertical-align: top;" id="chnList">
         
-@@ -110,6 +100,8 @@
- </table>
- 
- <script type="text/javascript">
-+  WebUI.onResize();
-+
-   loadChannels = function(id)
-   {
-     iseInitUpdateArrays();
 --- occu/WebUI/www/rega/pages/tabs/control/systemProtocol.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/systemProtocol.htm
 @@ -43,10 +43,10 @@
@@ -1714,7 +1850,7 @@
  .height20px {
      height:20px;
  }
-@@ -161,6 +165,23 @@
+@@ -161,6 +165,28 @@
  {
      background-color: $_(contentBackground);
      overflow: auto;
@@ -1735,10 +1871,15 @@
 +#GroupListBody
 +{
 +  display: contents;
++}
++
++#divDL, #divRTD, #divFL, #divHTF, #divRL, #divHTR
++{
++  height: 100%;
  }
  
  /* Kopfzeile */
-@@ -391,7 +412,9 @@
+@@ -391,7 +417,9 @@
    text-align:center;
    border:solid 1px $_(black); /* black */
    background-color:$_(clickable);
@@ -1749,7 +1890,7 @@
  }
  
  .filterTable td
-@@ -399,7 +422,6 @@
+@@ -399,7 +427,6 @@
    text-align:center;
    border:solid 1px $_(black); /* black */
    color: $_(textColorB); /* black */
@@ -1757,7 +1898,7 @@
  }
  
  .filterTable .leftAlign {
-@@ -594,37 +616,39 @@
+@@ -594,37 +621,39 @@
  
  /* Tabelle zur Listendarstellung von Elementen (z.B. Raumübersicht) */
  .tblList {
@@ -1807,7 +1948,7 @@
  }
  
  .tblList td {
-@@ -637,7 +661,6 @@
+@@ -637,7 +666,6 @@
  /* Kopfzeile eines Popup-Fenster */
  .popupTitle {
    color: $_(textColorB); /* black */
@@ -1815,7 +1956,7 @@
    background-color: $_(white); /* white */
    border: solid 1px $_(black); /* black */
    padding-left: 4px;
-@@ -666,12 +689,12 @@
+@@ -666,12 +694,12 @@
  .popupTableScript
  {
    width: 100%;
@@ -1829,7 +1970,7 @@
  }
  
  .popupTableRow
-@@ -706,7 +729,6 @@
+@@ -706,7 +734,6 @@
  
  .popupControls {
    background-color: $_(white); /* white */
@@ -1837,7 +1978,7 @@
    border: solid 1px $_(black); /* black */
  }
  
-@@ -735,8 +757,8 @@
+@@ -735,8 +762,8 @@
  
  /* KanalListe */
  .ChnListTbl {
@@ -1847,7 +1988,7 @@
  }
  
  .ChnListTbl td {
-@@ -928,7 +950,6 @@
+@@ -928,7 +955,6 @@
      border:1px solid $_(black); /* black */
      /* width:95%; */
      text-align:center;
@@ -1855,7 +1996,7 @@
      line-height:20px;
      vertical-align:middle;
      color: $_(textColorB); /* black */
-@@ -967,7 +988,7 @@
+@@ -967,7 +993,7 @@
    background-image:url(/ise/img/gradientButton25px.png);
    /*background-image: linear-gradient(to bottom, white 40%, gray);*/
    background-image: var(--btnGradient);
@@ -1864,7 +2005,7 @@
    border: solid 1px $_(gray); /* silver */
    border-radius: 5px;
    margin:2%;
-@@ -1095,6 +1116,7 @@
+@@ -1095,6 +1121,7 @@
  
  .StatViewTbl td{
    border: solid 1px $_(black); /* black */
@@ -1872,7 +2013,7 @@
  }
  
  
-@@ -1245,13 +1267,10 @@
+@@ -1245,13 +1272,10 @@
  .tTable
  {
    text-align:center;
@@ -1888,7 +2029,7 @@
  }
  /*
  .tTable th
-@@ -1308,8 +1327,8 @@
+@@ -1308,8 +1332,8 @@
  .tMain
  {
    border:solid 1px $_(black); /* black */
@@ -1899,7 +2040,7 @@
  }
  
  .tHeader
-@@ -1347,7 +1366,6 @@
+@@ -1347,7 +1371,6 @@
  
  .bcWhitePic
  {
@@ -1907,7 +2048,7 @@
  }
  
  .bcWhite
-@@ -1391,12 +1409,8 @@
+@@ -1391,12 +1414,8 @@
  
  .oLine
  {
@@ -1921,7 +2062,7 @@
  }
  
  .sysConfigHeight
-@@ -1443,7 +1457,7 @@
+@@ -1443,7 +1462,7 @@
    border:solid 1px $_(black); /* black */
    height:40px;
    text-align:center;
@@ -1930,7 +2071,7 @@
  }
  
  .tdCellFilter
-@@ -1457,7 +1471,7 @@
+@@ -1457,7 +1476,7 @@
  
  /* Weisser Zellenhintergrund für Bilder (Geräteübersicht u.ä.) */
  .WhiteBkgPic {
@@ -1939,7 +2080,7 @@
    color: $_(textColorB); /* black */
  }
  
-@@ -1495,9 +1509,20 @@
+@@ -1495,9 +1514,20 @@
  /* Buttons incl. Hilfe-Img. */
  .cpButton {
      width:230px;
@@ -1962,7 +2103,7 @@
  	background-color: $_(background); /* #183473 */
  }
  
-@@ -1513,7 +1538,7 @@
+@@ -1513,7 +1543,7 @@
  
  #ic_deviceparameters #DeviceInformation
  {
@@ -1971,7 +2112,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -1537,7 +1562,6 @@
+@@ -1537,7 +1567,6 @@
  
  #ic_deviceparameters #DeviceInformation #DeviceImage
  {
@@ -1979,7 +2120,7 @@
  	width: 52px;
  	height: 56px;
  	margin: 0;
-@@ -1568,7 +1592,7 @@
+@@ -1568,7 +1597,7 @@
  
  #ic_deviceparameters .parameter_area .parameters_table 
  {
@@ -1988,7 +2129,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -1672,6 +1696,14 @@
+@@ -1672,6 +1701,14 @@
  	border: 0;
  }/*LinkList-Tabelle*/
  /*--------------------------------------------*/
@@ -2003,7 +2144,7 @@
  #ic_linkpeerlist #head_wrapper {
    border-bottom: 0;
    margin: 0;
-@@ -1687,17 +1719,16 @@
+@@ -1687,17 +1724,16 @@
  #ic_linkpeerlist #body_wrapper {
    margin: 0;
    padding: 0;
@@ -2024,7 +2165,7 @@
  }
  
  #ic_linkpeerlist .LinkListTbl td {
-@@ -1734,9 +1765,7 @@
+@@ -1734,9 +1770,7 @@
  
  #ic_linkpeerlist .LinkListTbl .LinkListTbl_img
  {
@@ -2034,7 +2175,7 @@
  }
  /*--------------------------------------------*/
  #modalbox #id_messagebox
-@@ -1798,15 +1827,26 @@
+@@ -1798,15 +1832,26 @@
  {
    height: 40px;
    background-color: $_(activeBackground);
@@ -2064,7 +2205,7 @@
  }
  
  #ic_selchannel #createLinkStep1 thead {
-@@ -1829,8 +1869,7 @@
+@@ -1829,8 +1874,7 @@
  	background-color: $_(white); /* white */
  }
  #ic_selchannel #createLinkStep1 .WhiteHeader input {
@@ -2074,7 +2215,7 @@
  }
  
  #ic_selchannel .ChnListTbl {
-@@ -1964,14 +2003,7 @@
+@@ -1964,14 +2008,7 @@
  {
  	visibility: hidden;
  }
@@ -2089,7 +2230,7 @@
  /*--------------------------------------------*/
  
  /*Tabellenkörper Virtuelle Tasten*/
-@@ -1990,7 +2022,6 @@
+@@ -1990,7 +2027,6 @@
  /*Tabellenkörper Bilderspalte*/
  #ic_selchannel .ChnListTbl .chnListTbl_dev_img 
  {
@@ -2097,7 +2238,7 @@
  	text-align: left;
  	height: 50px;  
  }
-@@ -2004,10 +2035,12 @@
+@@ -2004,10 +2040,12 @@
  	height: auto;
  }
  /*--------------------------------------------*/
@@ -2113,7 +2254,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -2090,7 +2123,7 @@
+@@ -2090,7 +2128,7 @@
  #ic_setprofiles #body_wrapper
  {
  	background-color: $_(background); /* #183473 */
@@ -2122,7 +2263,7 @@
  }
  
  #ic_setprofiles  #id_sender_group_receiver_profiles_wrapper
-@@ -2310,9 +2343,10 @@
+@@ -2310,9 +2348,10 @@
    padding:0;
    background-color:$_(clickable);
    color: $_(textColorB); /* black */
@@ -2134,7 +2275,7 @@
  }
  
  .FilterHeight20 {
-@@ -2325,7 +2359,7 @@
+@@ -2325,7 +2364,7 @@
    padding:0;
    background-color:$_(active); /* #565657 */
    color: $_(textColorB); /* black */
@@ -2143,7 +2284,27 @@
    text-align:left;
    vertical-align:middle;  
  }
-@@ -2479,7 +2513,7 @@
+@@ -2371,8 +2410,7 @@
+ }
+ 
+ .FilterText {
+-  width:96%;
+-  margin:3px 2% 3px 2%;
++  margin:2px;
+ }
+ 
+ .FilterButton {
+@@ -2382,8 +2420,7 @@
+   /*background-image: linear-gradient(to bottom, white 40%, gray );*/
+   background-image: var(--btnGradient);
+ 
+-  width:96%;
+-  margin:3px 2% 3px 2%;
++  margin:2px;
+   border:1px solid $_(black); /* black */
+   color: $_(textColorB); /* white */
+   font-weight:normal;
+@@ -2479,7 +2516,7 @@
    border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
    background-color: $_(background); /* #183473 */
    z-index: 189;
@@ -2152,7 +2313,7 @@
  }
  
  .MainMenuItem_Left {
-@@ -2499,7 +2533,7 @@
+@@ -2499,7 +2536,7 @@
  }
  
  .MainMenuItem_Help {
@@ -2161,7 +2322,7 @@
  }
  
  .MainMenuItem_Highlight {
-@@ -2580,6 +2614,7 @@
+@@ -2580,6 +2617,7 @@
    background-color: $_(subMenuBackground);
    overflow:hidden;
    z-index:189;
@@ -2169,7 +2330,7 @@
  }
  
  .MainMenuSubItem {
-@@ -2594,7 +2629,6 @@
+@@ -2594,7 +2632,6 @@
    line-height:20px;
    cursor: pointer;
    white-space: nowrap;
@@ -2177,7 +2338,7 @@
  }
  
  .MainMenuSubItem_Highlight {
-@@ -2684,7 +2718,7 @@
+@@ -2684,7 +2721,7 @@
    top: 24px;
    left: 2px;
    width: 996px;
@@ -2186,7 +2347,7 @@
    background-color: $_(white); /* white */
    overflow: scroll;  
  }
-@@ -2732,7 +2766,6 @@
+@@ -2732,7 +2769,6 @@
    width:100%;
    height:auto;
    margin:0;
@@ -2194,7 +2355,7 @@
    padding:0;
    empty-cells:show;
  }
-@@ -2744,7 +2777,7 @@
+@@ -2744,7 +2780,7 @@
    padding:0;
    background-color:$_(clickable);
    color: $_(textColorA); /* white */
@@ -2203,7 +2364,7 @@
    text-align:center;
    vertical-align:middle;
  }
-@@ -2756,7 +2789,7 @@
+@@ -2756,7 +2792,7 @@
    padding:0;
    background-color:$_(active); /* #565657 */
    color: $_(textColorA); /* white */
@@ -2212,7 +2373,7 @@
    text-align:center;
    vertical-align:middle;
  }
-@@ -2780,7 +2813,6 @@
+@@ -2780,7 +2816,6 @@
  
  .ChannelChooserThumbnail {
    border: 1px solid $_(black); /* black */
@@ -2220,7 +2381,7 @@
    text-align:left;
    height:80px;
  }
-@@ -2935,40 +2967,38 @@
+@@ -2935,40 +2970,38 @@
  
  .MultiChannelChooserThumbnail {
    border: 1px solid $_(black); /* black */
@@ -2268,7 +2429,7 @@
    text-align:center;
    vertical-align:middle;
  }
-@@ -2988,8 +3018,7 @@
+@@ -2988,8 +3021,7 @@
  }
  
  .DeviceListRow_Highlight {
@@ -2278,7 +2439,7 @@
    cursor:pointer;
  }
  
-@@ -3018,9 +3047,7 @@
+@@ -3018,9 +3050,7 @@
  
  .DeviceListThumbnail {
    border: 1px solid $_(black); /* black */
@@ -2289,7 +2450,7 @@
  }
  
  .DeviceListButton {
-@@ -3474,18 +3501,12 @@
+@@ -3474,18 +3504,12 @@
      position: absolute;
      left: 4px
  }.bidcosrf_page {
@@ -2310,7 +2471,7 @@
  }
  
  .bidcosrf_button {
-@@ -3511,7 +3532,7 @@
+@@ -3511,7 +3535,7 @@
  .bidcosrf_table {
    border: 1px solid $_(black);
    border-spacing: 0px;
@@ -2319,7 +2480,7 @@
  }
  
  .bidcosrf_tableheader {
-@@ -3531,7 +3552,7 @@
+@@ -3531,7 +3555,7 @@
  }
  
  .bidcosrf_imagecell {
@@ -2328,7 +2489,7 @@
    border: 1px solid $_(black);
    empty-cells: show;
    text-align: center;
-@@ -3542,12 +3563,13 @@
+@@ -3542,12 +3566,13 @@
    border: 1px solid $_(black);
    empty-cells: show;
    text-align: center;
@@ -2344,7 +2505,7 @@
  html, body {
    border: 0 none;
    margin: 0;
-@@ -3930,7 +3952,6 @@
+@@ -3930,7 +3955,6 @@
  }
  
  .CLASS00203 {
@@ -2352,7 +2513,7 @@
  }
  
  .CLASS00204 {
-@@ -3984,9 +4005,9 @@
+@@ -3984,9 +4008,9 @@
  
  .CLASS00300 {
  	overflow: scroll;
@@ -2363,7 +2524,7 @@
  }
  
  .CLASS00301 {
-@@ -3997,6 +4018,7 @@
+@@ -3997,6 +4021,7 @@
  	text-align:center;
  	background-color:$_(clickable);
  	height: 40px;
@@ -2371,7 +2532,7 @@
  }
  
  .CLASS00303 {
-@@ -4902,13 +4924,13 @@
+@@ -4902,13 +4927,13 @@
  }
  
  .CLASS01805 {
@@ -2388,7 +2549,7 @@
  }
  
  .CLASS01807 {
-@@ -4927,9 +4949,7 @@
+@@ -4927,9 +4952,7 @@
  }
  
  .CLASS01809 {
@@ -2398,7 +2559,7 @@
  	height:100%;
  	overflow:hidden;
  }
-@@ -5147,6 +5167,7 @@
+@@ -5147,6 +5170,7 @@
  	color: $_(textColorB); /* black */
  	width:100%;
  	border:none;
@@ -2406,7 +2567,7 @@
  }
  
  .CLASS02511 {
-@@ -5168,6 +5189,7 @@
+@@ -5168,6 +5192,7 @@
  	border:1px Solid $_(black); /* black */
  	height:96px;
  	width:96px;
@@ -2414,7 +2575,7 @@
  }
  
  .CLASS02515 {
-@@ -5210,7 +5232,6 @@
+@@ -5210,7 +5235,6 @@
  
  .CLASS02520 {
  	color: $_(textColorB); /* black */
@@ -2422,7 +2583,7 @@
  	border:none;
  	background-color:$_(activeBackground);
  }
-@@ -5297,7 +5318,7 @@
+@@ -5297,7 +5321,7 @@
  	width:220px;
  	/*height:25px;*/
  	height:auto;
@@ -2431,7 +2592,7 @@
  	clear: both;
  	display: inline-block;
    /* line-height:25px; problem with controls with a long parameter name */
-@@ -5338,12 +5359,11 @@
+@@ -5338,12 +5362,11 @@
  }
  
  .CLASS02535 {
@@ -2447,7 +2608,7 @@
  }
  
  .CLASS02535A {
-@@ -5359,6 +5379,7 @@
+@@ -5359,6 +5382,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -2455,7 +2616,7 @@
  }
  
  .CLASS02536 {
-@@ -5367,20 +5388,13 @@
+@@ -5367,20 +5391,13 @@
  
  .CLASS02537 {
  	text-align: center;
@@ -2476,7 +2637,7 @@
  }
  
  .CLASS02539 {
-@@ -5417,6 +5431,7 @@
+@@ -5417,6 +5434,7 @@
  
  .CLASS02543 {
  	border:1px solid $_(black); /* black */
@@ -2484,7 +2645,7 @@
  }
  
  .CLASS02544 {
-@@ -5494,6 +5509,7 @@
+@@ -5494,6 +5512,7 @@
  
  .CLASS02552 {
  	border:solid 1px $_(black); /* black */
@@ -2492,7 +2653,7 @@
  }
  
  .CLASS02553 {
-@@ -5548,12 +5564,10 @@
+@@ -5548,12 +5567,10 @@
  
  .CLASS02601 {
  	text-align:center;
@@ -2506,7 +2667,7 @@
  }
  
  .CLASS02603 {
-@@ -5565,6 +5579,7 @@
+@@ -5565,6 +5582,7 @@
  
  .CLASS02604 {
  	height: 58px;
@@ -2514,7 +2675,7 @@
  }
  
  .CLASS02605 {
-@@ -5572,76 +5587,52 @@
+@@ -5572,76 +5590,52 @@
  	background-color: $_(activeBackground);
  	border: solid 1px $_(black); /* black */
  	color: $_(textColorB); /* black */
@@ -2525,17 +2686,17 @@
  
  .CLASS02606 {
 -	width: 240px;
- 	background-color: $_(activeBackground);
- 	border: solid 1px $_(black); /* black */
- 	color: $_(textColorB); /* black */
+-	background-color: $_(activeBackground);
+-	border: solid 1px $_(black); /* black */
+-	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
 -.CLASS02607 {
 -	width:55px;
--	background-color: $_(activeBackground);
--	border: solid 1px $_(black); /* black */
--	color: $_(textColorB); /* black */
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
@@ -2600,7 +2761,7 @@
  }
  
  .CLASS02615 {
-@@ -5735,10 +5726,12 @@
+@@ -5735,10 +5729,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -2614,7 +2775,7 @@
  }
  
  .CLASS02804 {
-@@ -5804,7 +5797,6 @@
+@@ -5804,7 +5800,6 @@
  }
  
  .CLASS02815 {
@@ -2622,7 +2783,7 @@
  }
  
  /* rega\pages\tabs\statusviews\svroomchannels.htm */
-@@ -5989,18 +5981,13 @@
+@@ -5989,18 +5984,13 @@
  }
  
  .CLASS03301 {
@@ -2642,7 +2803,7 @@
  }
  
  .CLASS03303 {
-@@ -6079,8 +6066,7 @@
+@@ -6079,8 +6069,7 @@
  
  .CLASS03500 {
  	border:solid 1px $_(black); /* black */
@@ -2652,7 +2813,7 @@
  }
  
  .CLASS03501 {
-@@ -6113,8 +6099,7 @@
+@@ -6113,8 +6102,7 @@
  
  .CLASS03600 {
  	border:solid 1px $_(black); /* black */
@@ -2662,7 +2823,7 @@
  }
  
  .CLASS03601 {
-@@ -6203,8 +6188,7 @@
+@@ -6203,8 +6191,7 @@
  
  .CLASS03800 {
  	border:solid 1px $_(black); /* black */
@@ -2672,7 +2833,7 @@
  }
  
  .CLASS03801 {
-@@ -6247,15 +6231,13 @@
+@@ -6247,15 +6234,15 @@
  }
  
  .CLASS03902 {
@@ -2680,17 +2841,19 @@
  	overflow:auto;
 -	margin:0;
 -	padding:0;
-+	margin:10px;
++	margin-left:10px;
 +	margin-right:2px;
  }
  
  .CLASS03903 {
  	border:solid 1px $_(black); /* black */
 -	margin-top:27px;
++	margin-top:10px;
++	margin-bottom:10px;
  }
  
  .CLASS03904 {
-@@ -6270,7 +6252,6 @@
+@@ -6270,7 +6257,6 @@
  .CLASS03906 {
  	vertical-align:middle;
  	text-align:left;
@@ -2698,13 +2861,13 @@
  }
  
  .CLASS03907 {
-@@ -6280,13 +6261,13 @@
+@@ -6280,13 +6266,15 @@
  }
  
  .CLASS03908 {
 -	width:100%;
  	overflow:auto;
-+	margin:10px;
++	margin-right:10px;
 +	margin-left:2px;
  }
  
@@ -2712,16 +2875,18 @@
 -	width: 80%;
 -	height: 96%;
 +	width: 100%;
++	margin-top: 10px;
++	margin-bottom: 10px;
  }
  
  .CLASS03910 {
-@@ -6312,13 +6293,13 @@
+@@ -6312,13 +6300,15 @@
  }
  
  .CLASS04002 {
 -	width:100%;
  	overflow:auto;
-+	margin:10px;
++	margin-right:10px;
 +	margin-left:2px;
  }
  
@@ -2729,18 +2894,22 @@
 -	width: 80%;
 -	height: 96%;
 +	width: 100%;
++	margin-top: 10px;
++	margin-bottom: 10px;
  }
  
  .CLASS04004 {
-@@ -6333,7 +6314,6 @@
+@@ -6333,7 +6323,8 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
 -	margin-top:27px;
++	margin-top:10px;
++	margin-bottom:10px;
  }
  
  .CLASS04007 {
-@@ -6344,7 +6324,6 @@
+@@ -6344,7 +6335,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -2748,7 +2917,7 @@
  	empty-cells:show;
  }
  
-@@ -6355,17 +6334,18 @@
+@@ -6355,17 +6345,18 @@
  .CLASS04102 {
  	background-color:$_(clickable);
  	color: $_(textColorA) ! important; /* white */
@@ -2768,7 +2937,7 @@
  }
  
  .CLASS04105 {
-@@ -6388,6 +6368,7 @@
+@@ -6388,6 +6379,7 @@
  .CLASS04109 {
  	background-color:$_(clickable);
  	color: $_(textColorA) ! important; /* white */
@@ -2776,7 +2945,7 @@
    height:20px;
  }
  
-@@ -6411,10 +6392,15 @@
+@@ -6411,10 +6403,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -2786,14 +2955,14 @@
  
 +.CLASS04201 {
 +	overflow:auto;
-+	margin:10px;
++	margin-left:10px;
 +	margin-right:2px;
 +}
 +
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,10 +6416,12 @@
+@@ -6430,10 +6427,12 @@
  
  .CLASS04205 {
  	height:auto;
@@ -2806,7 +2975,7 @@
  }
  
  .CLASS04207 {
-@@ -6456,6 +6444,7 @@
+@@ -6456,6 +6455,7 @@
  .CLASS04211 {
  	background-color:$_(clickable);
  	color: $_(textColorA) ! important; /* white */
@@ -2814,7 +2983,7 @@
  }
  
  .CLASS04212 {
-@@ -6486,7 +6475,8 @@
+@@ -6486,7 +6486,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -2824,7 +2993,7 @@
  }
  
  .CLASS04302 {
-@@ -6663,7 +6653,7 @@
+@@ -6663,7 +6664,7 @@
  
  .CLASS04900 {
  	color: $_(textColorA); /* white */
@@ -2833,7 +3002,16 @@
  }
  
  .CLASS04901 {
-@@ -6774,6 +6764,7 @@
+@@ -6687,7 +6688,7 @@
+ .CLASS04905 {
+ 	line-height:15px;
+ 	font-size:smaller;
+-	width:220px;
++	width:180px;
+ }
+ 
+ .CLASS04906 {
+@@ -6774,6 +6775,7 @@
  .CLASS05012 {
  	color: $_(textColorB); /* black */
  	font-size:9pt;
@@ -2841,7 +3019,7 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -6850,7 +6841,6 @@
+@@ -6850,7 +6852,6 @@
  .CLASS05200 {
  	text-align:center;
  	vertical-align:middle;
@@ -2849,7 +3027,7 @@
  	height: auto;
  }
  
-@@ -6916,10 +6906,10 @@
+@@ -6916,10 +6917,10 @@
  }
  
  .CLASS05301 {
@@ -2861,7 +3039,7 @@
  }
  
  .CLASS05302 {
-@@ -7092,6 +7082,10 @@
+@@ -7092,6 +7093,10 @@
  
  /* rega\pages\tabs\favViewer.htm  */
  
@@ -2872,7 +3050,7 @@
  .CLASS05800 {
  	width:100%;
  	text-align:center;
-@@ -7220,11 +7214,13 @@
+@@ -7220,11 +7225,13 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -2888,7 +3066,7 @@
  }
  
  .CLASS06302 {
-@@ -7512,7 +7508,6 @@
+@@ -7512,7 +7519,6 @@
  }
  
  .CLASS06409 {
@@ -2896,7 +3074,7 @@
  }
  
  .CLASS06410 {
-@@ -7675,7 +7670,7 @@
+@@ -7675,7 +7681,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -2905,7 +3083,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -7790,7 +7785,6 @@
+@@ -7790,7 +7796,6 @@
  }
  
  .CLASS11105 {
@@ -2913,7 +3091,7 @@
    padding-top: 7px;
  }
  
-@@ -7817,7 +7811,6 @@
+@@ -7817,7 +7822,6 @@
  /* config/ic_setprofiles */
  
  .CLASS20001 {
@@ -2921,7 +3099,7 @@
  }
  
  .CLASS20002 {
-@@ -7839,7 +7832,7 @@
+@@ -7839,7 +7843,7 @@
  }
  
  .CLASS20006 {
@@ -2930,7 +3108,7 @@
  }
  
  .CLASS20007 {
-@@ -7875,7 +7868,6 @@
+@@ -7875,7 +7879,6 @@
  }
  
  .CLASS20010 {
@@ -2938,7 +3116,7 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8630,8 +8622,11 @@
+@@ -8630,8 +8633,11 @@
  
  /* config\control_panel.cgi */
  
@@ -2951,7 +3129,7 @@
  }
  
  .CLASS21701 {
-@@ -8702,7 +8697,8 @@
+@@ -8702,7 +8708,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -2961,7 +3139,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8748,6 @@
+@@ -8752,7 +8759,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -2969,7 +3147,7 @@
    width:100%;
  }
  
-@@ -8809,13 +8804,17 @@
+@@ -8809,13 +8815,17 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -2989,7 +3167,7 @@
  }
  
  .CLASS22002 {
-@@ -8887,7 +8886,8 @@
+@@ -8887,7 +8897,8 @@
  }
  
  .CLASS22101 {
@@ -2999,7 +3177,7 @@
  }
  
  .CLASS22102 {
-@@ -8909,9 +8909,8 @@
+@@ -8909,9 +8920,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -3010,7 +3188,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8921,10 +8920,12 @@
+@@ -8921,10 +8931,12 @@
    position:relative;
    width:50px;
    height:50px;
@@ -3078,33 +3256,7 @@
    <\/colgroup>\n
    <thead>\n
      <tr>\n
-@@ -7508,6 +7508,12 @@
-     if ($("menubar")) { Element.setStyle("menubar", {"height": this.MENUBAR_HEIGHT + "px", "width": width + "px"}); }
-     if ($("content")) { Element.setStyle("content", {"height": contentHeight       + "px", "width": width + "px"}); }
-     if ($("footer"))  { Element.setStyle("footer" , {"height": this.FOOTER_HEIGHT  + "px", "width": width + "px"}); }
-+    if ($("divDL"))   { Element.setStyle("divDL", {"height": (contentHeight - 20)  + "px"}); }
-+    if ($("divRTD"))  { Element.setStyle("divRTD", {"height": (contentHeight - 20)  + "px"}); }
-+    if ($("divFL"))   { Element.setStyle("divFL", {"height": (contentHeight - 20)  + "px"}); }
-+    if ($("divHTF"))  { Element.setStyle("divHTF", {"height": (contentHeight - 20)  + "px"}); }
-+    if ($("divRL"))   { Element.setStyle("divRL", {"height": (contentHeight - 20)  + "px"}); }
-+    if ($("divHTR"))  { Element.setStyle("divHTR", {"height": (contentHeight - 20)  + "px"}); }
- 
-     if (this.currentPage) { this.currentPage.resize(); }
- 
-@@ -20894,10 +20900,10 @@
-       //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
-       Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
-     }
--    if ($("contentLeft"))
-+    if ($("contentRight"))
-     {
-       //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
--      Element.setStyle("contentRight", {"height": contentHeight + "px", "width": "44%"});
-+      Element.setStyle("contentRight", {"height": contentHeight + "px"});
-     }
-     
-     if ($("favSelector"))
-@@ -38032,7 +38038,7 @@
+@@ -38032,7 +38032,7 @@
  //Defines
  BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
  HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
@@ -3113,7 +3265,7 @@
  HL_STROKE = 4;//Background
  //-----
  
-@@ -38084,8 +38090,8 @@
+@@ -38084,8 +38084,8 @@
    
    if (!form) return;
  
@@ -3124,7 +3276,7 @@
  
    switch (form[gd_type])
    {
-@@ -38181,7 +38187,7 @@
+@@ -38181,7 +38181,7 @@
      previewPicTimer = window.setTimeout(function () {
        HideElement('picDiv');
        delete previewPicTimer;

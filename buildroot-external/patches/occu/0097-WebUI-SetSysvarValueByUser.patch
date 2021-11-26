@@ -1,10 +1,62 @@
 --- occu/WebUI/www/rega/esp/system.fn.orig
 +++ occu/WebUI/www/rega/esp/system.fn
-@@ -860,6 +860,7 @@
+@@ -807,6 +807,7 @@
+   !sv.ValueSubType(ist);
+   sv.DPInfo( system.GetVar("sInfo") );
+   sv.ValueUnit( system.GetVar("sUnit") );
++  var svValue;
+   if (ist == istAlarm)
+   {
+     sv.ValueType( ivtBinary );
+@@ -814,7 +815,7 @@
+     sv.ValueName1(system.GetVar("sTrue"));
+     sv.ValueName0(system.GetVar("sFalse"));
+     sv.AlType(atSystem);
+-    sv.AlArm(true);
++    svValue=true;
+   }
+   elseif (ist == istBool)
+   {
+@@ -822,7 +823,7 @@
+     sv.ValueSubType( istBool );
+     sv.ValueName1(system.GetVar("sTrue"));
+     sv.ValueName0(system.GetVar("sFalse"));
+-    sv.State(false);
++    svValue=false;
+   }
+   elseif (ist == istGeneric)
+   {
+@@ -830,20 +831,20 @@
+     sv.ValueSubType( istGeneric );
+     sv.ValueMin(system.GetVar("iMinVal"));
+     sv.ValueMax(system.GetVar("iMaxVal"));
+-    sv.State(system.GetVar("iMinVal"));
++    svValue=system.GetVar("iMinVal");
+   }
+   elseif (ist == istEnum)
+   {
+     sv.ValueType( ivtInteger );
+     sv.ValueSubType( istEnum );
+     sv.ValueList(system.GetVar("sValList"));
+-    sv.State(0);
++    svValue=0;
+   }
+   elseif (ist == istChar8859)
+   {
+     sv.ValueType(ivtString);
+     sv.ValueSubType(istChar8859);
+-    sv.State("???");
++    svValue="";
+   }
+ 
+   if (oChn) 
+@@ -860,6 +861,9 @@
      }
      sv.Channel( ID_ERROR );
    }
-+  sv.State(system.GetVar("sValue"));
++  
++  if (system.GetVar("sValue")) { svValue = system.GetVar("sValue"); }  
++  sv.State(svValue);
    dom.RTUpdate(0);
    }
    return;

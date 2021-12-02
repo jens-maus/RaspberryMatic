@@ -14,15 +14,13 @@
 # process   == program to run
 
 # Startup the system
-null::sysinit:/bin/mount -t proc proc /proc
-null::sysinit:/bin/mkdir -p /dev/pts
-null::sysinit:/bin/mkdir -p /dev/shm
+tty2::sysinit:/bin/mount -t proc proc /proc
+tty2::sysinit:/bin/mkdir -p /dev/pts /dev/shm
+tty2::sysinit:/bin/mount /sys
 tty2::sysinit:/sbin/fsck -A -R -p
 tty2::sysinit:/bin/mount -a
-tty2::sysinit:/bin/mkdir -p /var/run
-tty2::sysinit:/bin/mkdir -p /var/cache
+tty2::sysinit:/bin/mkdir -p /var/run /var/cache
 tty2::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
-null::sysinit:/bin/hostname -F /etc/hostname
 null::sysinit:/usr/bin/psplash -n &
 # now run any rc scripts
 ::sysinit:/etc/init.d/rcS
@@ -35,5 +33,5 @@ tty2::askfirst:/sbin/getty -L tty2 0 vt100
 
 # Stuff to do before rebooting
 ::shutdown:/etc/init.d/rcK
-tty2::shutdown:/bin/umount -a -r
-null::shutdown:/sbin/swapoff -a
+tty2::shutdown:/bin/umount -a -r -f
+tty2::shutdown:/sbin/swapoff -a

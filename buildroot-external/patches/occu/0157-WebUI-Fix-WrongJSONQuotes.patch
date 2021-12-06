@@ -1,0 +1,33 @@
+--- occu/WebUI/www/api/methods/sysvar/createbool.tcl.orig
++++ occu/WebUI/www/api/methods/sysvar/createbool.tcl
+@@ -35,7 +35,7 @@
+ 
+   oSysVars.Add(sv.ID());
+ 
+-  Write("{'name':'"#sv.Name()#"','id':'"#sv.ID()#"','value':'"#sv.Value()#"' }");
++  Write('{"name":"'#sv.Name()#'","id":"'#sv.ID()#'","value":"'#sv.Value()#'" }');
+   }
+ 
+ jsonrpc_response [hmscript $script args]
+--- occu/WebUI/www/api/methods/sysvar/createenum.tcl.orig
++++ occu/WebUI/www/api/methods/sysvar/createenum.tcl
+@@ -36,7 +36,7 @@
+ 
+   oSysVars.Add(sv.ID());
+ 
+-  Write("{'name':'"#sv.Name()#"','id':'"#sv.ID()#"','value':'"#sv.ValueList()#"' }");
++  Write('{"name":"'#sv.Name()#'","id":"'#sv.ID()#'","value":"'#sv.ValueList()#'" }');
+ }
+ 
+ jsonrpc_response [hmscript $script args]
+--- occu/WebUI/www/api/methods/sysvar/createfloat.tcl.orig
++++ occu/WebUI/www/api/methods/sysvar/createfloat.tcl
+@@ -32,7 +32,7 @@
+ 
+   oSysVars.Add(sv.ID());
+ 
+-  Write("{'name':'"#sv.Name()#"','id':'"#sv.ID()#"','value':'"#sv.Value()#"' }");
++  Write('{"name":"'#sv.Name()#'","id":"'#sv.ID()#'","value":"'#sv.Value()#'" }');
+ }
+ 
+ jsonrpc_response [hmscript $script args]

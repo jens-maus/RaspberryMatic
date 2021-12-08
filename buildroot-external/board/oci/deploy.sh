@@ -74,7 +74,7 @@ pkg_installed() {
   fi
 }
 
-# This only works on Debian/Ubuntu based OSes including Armbian and Raspbian
+# This only works on Debian/Ubuntu based OSes including Armbian and Raspberry Pi OS
 if command -v dpkg >/dev/null; then
 
   # Add repository
@@ -103,9 +103,9 @@ if command -v dpkg >/dev/null; then
       check_sudo
       apt install "${FORCE}" pivccu-devicetree-armbian
     fi
-  elif grep -q Raspbian /etc/os-release; then
+  elif grep -q Raspberry /proc/cpuinfo; then
     if ! pkg_installed pivccu-modules-raspberrypi; then
-      echo "Detected Raspbian - install kernel sources and raspberry modules"
+      echo "Detected RaspberryPi - install kernel sources and raspberry modules"
       check_sudo
       apt install "${FORCE}" pivccu-modules-raspberrypi
       echo
@@ -113,7 +113,7 @@ if command -v dpkg >/dev/null; then
       echo "See step 5 and 6 at https://github.com/alexreinert/piVCCU/blob/master/docs/setup/raspberrypi.md"
     fi
   elif ! pkg_installed "linux-headers-$(uname -r)"; then
-    echo "Generic Debian/Ubuntu platfor - trying generic way to install kernel headers"
+    echo "Generic Debian/Ubuntu platform - trying generic way to install kernel headers"
     check_sudo
     apt install "${FORCE}" "linux-headers-$(uname -r)"
   fi

@@ -58,7 +58,7 @@ function ::WriteDPText()
           sRet = sRet.Replace("\r\n", "<br/>");
           sRet = sRet.Replace("\r", "<br/>");
           sRet = sRet.Replace("\n", "<br/>");
-          sRet = sRet.Replace("'","&#39;");
+          sRet = sRet.Replace("'", "\\'");
         }
         if( to.ValueUnit() != "" )
         {

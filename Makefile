@@ -1,4 +1,4 @@
-BUILDROOT_VERSION=2021.11-rc3
+BUILDROOT_VERSION=2021.11
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
 OCCU_VERSION=$(shell grep "OCCU_VERSION =" $(BUILDROOT_EXTERNAL)/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
@@ -21,15 +21,15 @@ endif
 
 all: help
 
-buildroot-$(BUILDROOT_VERSION).tar.bz2:
-	@echo "[downloading buildroot-$(BUILDROOT_VERSION).tar.bz2]"
-	wget https://buildroot.org/downloads/buildroot-$(BUILDROOT_VERSION).tar.bz2
-	wget https://buildroot.org/downloads/buildroot-$(BUILDROOT_VERSION).tar.bz2.sign
-	cat buildroot-$(BUILDROOT_VERSION).tar.bz2.sign | grep SHA1: | sed 's/^SHA1: //' | shasum -c
+buildroot-$(BUILDROOT_VERSION).tar.xz:
+	@echo "[downloading buildroot-$(BUILDROOT_VERSION).tar.xz]"
+	wget https://buildroot.org/downloads/buildroot-$(BUILDROOT_VERSION).tar.xz
+	wget https://buildroot.org/downloads/buildroot-$(BUILDROOT_VERSION).tar.xz.sign
+	cat buildroot-$(BUILDROOT_VERSION).tar.xz.sign | grep SHA1: | sed 's/^SHA1: //' | shasum -c
 
-buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.bz2
+buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.xz
 	@echo "[patching buildroot-$(BUILDROOT_VERSION)]"
-	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.bz2; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) --remove-empty-files -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
+	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.xz; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) --remove-empty-files -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
 
 build-$(PRODUCT): | buildroot-$(BUILDROOT_VERSION) download
 	mkdir -p build-$(PRODUCT)
@@ -108,7 +108,7 @@ clean:
 distclean: clean-all
 	@echo "[distclean]"
 	@rm -rf buildroot-$(BUILDROOT_VERSION)
-	@rm -f buildroot-$(BUILDROOT_VERSION).tar.bz2 buildroot-$(BUILDROOT_VERSION).tar.bz2.sign
+	@rm -f buildroot-$(BUILDROOT_VERSION).tar.xz buildroot-$(BUILDROOT_VERSION).tar.xz.sign
 	@rm -rf download
 
 .PHONY: menuconfig

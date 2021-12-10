@@ -58,37 +58,6 @@ identify_rf_hardware() {
     fi
   fi
 
-  # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
-  if lsusb 2>/dev/null | grep -q 1b1f:c020; then
-
-    # Load module if not present (usually loaded by udev)
-    if ! grep -Eq "^cp210x " /proc/modules; then
-      modprobe -q cp210x
-    fi
-
-    # helper function which takes usb "vendor_id:product_id" tuple and
-    # searches for the corresponding /dev node
-    id_to_dev() {
-      find "$(grep -l "PRODUCT=$(printf "%x/%x" "0x${1%:*}" "0x${1#*:}")" \
-         /sys/bus/usb/devices/[0-9]*:*/uevent | sed 's,uevent$,,')" \
-         /dev/null -name dev -o -name dev_id |
-      sed 's,[^/]*$,uevent,' |
-      xargs sed -n -e s,DEVNAME=,,p -e s,INTERFACE=,,p
-    }
-
-    RFUSB_DEVNODE=$(id_to_dev 1b1f:c020)
-    if [[ -z "${RFUSB_DEVNODE}" ]]; then
-      echo "1b1f c020" >/sys/bus/usb-serial/drivers/cp210x/new_id
-      sleep 2
-      RFUSB_DEVNODE=$(id_to_dev 1b1f:c020)
-    fi
-
-    if [[ -n "${RFUSB_DEVNODE}" ]]; then
-      echo -n "."
-      RF_DEVNODES="${RFUSB_DEVNODE} ${RF_DEVNODES}"
-    fi
-  fi
-
   # check if a HM-CFG-USB-2 (1b1f:c00f) USB stick is connected
   # and HMRF_DEV accordingly
   if lsusb 2>/dev/null | grep -q 1b1f:c00f; then
@@ -205,8 +174,6 @@ query_rf_parameters() {
 
             if [[ -e /sys/class/raw-uart/${dev}/device_type ]]; then
               HM_HMIP_DEVTYPE=$(cat "/sys/class/raw-uart/${dev}/device_type")
-            elif [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
-              HM_HMIP_DEVTYPE=USB
             else
               HM_HMIP_DEVTYPE=GPIO
             fi

@@ -143,10 +143,13 @@ update_rf_hardware() {
     fi
 
     # check if user has a HMIP-RFUSB installed (USB)
-    if [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
+    if [[ "${HM_HMRF_DEV}" == "HMIP-RFUSB" ]] ||
+       [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
+
       if [[ ${FOUND} -eq 1 ]]; then
         echo -n "; "
       fi
+
       echo -n "HMIP-RFUSB: "
 
       # check for new firmware file in /firmware/HmIP-RFUSB-Beta
@@ -178,6 +181,16 @@ update_rf_hardware() {
       else
         echo -n "${OLD_VERSION}, OK"
       fi
+
+      FOUND=1
+    fi
+
+    # check if user has a HMIP-RFUSB-TK installed (USB)
+    if [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB-TK" ]]; then
+      if [[ ${FOUND} -eq 1 ]]; then
+        echo -n "; "
+      fi
+      echo -n "HMIP-RFUSB-TK: ${HM_HMIP_VERSION}, OK"
 
       FOUND=1
     fi

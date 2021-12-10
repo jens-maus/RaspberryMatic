@@ -31,7 +31,8 @@ init() {
 
   # only modify if real rf module found
   if [[ "${HM_HMRF_DEV}" == "HM-MOD-RPI-PCB" ]] ||
-     [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+     [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
+     [[ "${HM_HMRF_DEV}" == "HMIP-RFUSB" ]]; then
     # check if commented out "#[Interface 0]" exists now and if not add it
     if grep -q -e "^#\[Interface 0\]" /etc/config/rfd.conf; then
       # commented "#[Interface 0]" section found, uncomment

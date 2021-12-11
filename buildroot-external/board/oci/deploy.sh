@@ -143,7 +143,6 @@ if [[ ! -e /etc/udev/rules.d/99-Homematic.rules ]]; then
   echo "Adding udev rule"
   check_sudo
   cat <<'EOF' >/etc/udev/rules.d/99-Homematic.rules
-ACTION=="add", ATTRS{idVendor}=="1b1f", ATTRS{idProduct}=="c020", RUN+="/sbin/modprobe cp210x" RUN+="/bin/sh -c 'echo 1b1f c020 >/sys/bus/usb-serial/drivers/cp210x/new_id'"
 ATTRS{idVendor}=="1b1f" ATTRS{idProduct}=="c020", ENV{ID_MM_DEVICE_IGNORE}="1"
 ATTRS{idVendor}=="1b1f" ATTRS{idProduct}=="c00f", ENV{ID_MM_DEVICE_IGNORE}="1"
 ATTRS{idVendor}=="0403" ATTRS{idProduct}=="6f70", ENV{ID_MM_DEVICE_IGNORE}="1"

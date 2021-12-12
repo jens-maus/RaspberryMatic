@@ -14,6 +14,8 @@ umask 077
 
 start() {
 
+  echo -n "Starting sshd: "
+
   # set the root password to the
   # password specified in /bootfs/recoveryfs-sshpwd
   PASSWD=$(/usr/bin/mkpasswd </bootfs/recoveryfs-sshpwd)
@@ -25,7 +27,6 @@ start() {
   # fix permissions
   chmod 600 /etc/ssh/ssh_host_*_key
 
-  echo -n "Starting sshd: "
   start-stop-daemon -S -q -b -p /var/run/sshd.pid --exec /usr/sbin/sshd -- -D
   echo "OK"
 }

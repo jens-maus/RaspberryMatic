@@ -19,7 +19,7 @@ start() {
      [[ ! -f /usr/local/etc/ssh_host_ed25519_key ]] ||
      [[ ! -f /usr/local/etc/ssh_host_rsa_key ]]; then
     mkdir -p /tmp/etc/ssh
-    cp -a /usr/local/etc/ssh_host_*_key* /tmp/etc/ssh/
+    cp -a /usr/local/etc/ssh_host_*_key* /tmp/etc/ssh/ 2>/dev/null
     /usr/bin/ssh-keygen -A -f /tmp
     cp -a /tmp/etc/ssh/* /usr/local/etc/
     rm -rf /tmp/etc/ssh

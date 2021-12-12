@@ -13,6 +13,8 @@ start() {
   # Only run this if ssh is explicitly enabled
   [ -f /etc/config/sshEnabled ] || exit 0
 
+  echo -n "Starting sshd: "
+
   # Create any missing keys
   if [[ ! -f /usr/local/etc/ssh_host_dsa_key ]] ||
      [[ ! -f /usr/local/etc/ssh_host_ecdsa_key ]] ||
@@ -38,7 +40,6 @@ start() {
     chown root:root /usr/local/etc/ssh/authorized_keys
   fi
 
-  echo -n "Starting sshd: "
   start-stop-daemon -S -q -b -p /var/run/sshd.pid --exec /usr/sbin/sshd -- -D
   echo "OK"
 }

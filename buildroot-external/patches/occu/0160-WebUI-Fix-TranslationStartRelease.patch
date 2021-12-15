@@ -1,0 +1,26 @@
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.notTranslated.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.notTranslated.js
+@@ -196,8 +196,8 @@
+     "lblPinOfChannelLockA" : "Verwendet wird der PIN-Code des Kanals 'Benutzer",
+     "lblPinOfChannelLockB" : "Verriegeln'",
+ 
+-    "stringTableKeyPressLongRelease" : "Start langer Tastendruck",
+-    "stringTableKeyPressLongStart" : "Stopp langer Tastendruck",
++    "stringTableKeyPressLongRelease" : "Stopp langer Tastendruck",
++    "stringTableKeyPressLongStart" : "Start langer Tastendruck",
+ 
+     "lblChannelActivInactivWhenNoOutput" : "Ger%E4t inaktiv oder Standby<br/>bei 0% Ausgangsspannung",
+     "optionRelayInactive" : "Ger%E4t nicht aktiv",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.notTranslated.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.notTranslated.js
+@@ -197,8 +197,8 @@
+     "lblPinOfChannelLockA" : "The PIN code of the channel 'User",
+     "lblPinOfChannelLockB" : "Lock' is used.",
+ 
+-    "stringTableKeyPressLongRelease" : "Start long key press",
+-    "stringTableKeyPressLongStart" : "Stop long key press",
++    "stringTableKeyPressLongRelease" : "Stop long key press",
++    "stringTableKeyPressLongStart" : "Start long key press",
+ 
+     "lblChannelActivInactivWhenNoOutput" : "Device inactive or in standby<br/>at 0% output voltage",
+     "optionRelayInactive" : "Device not active",

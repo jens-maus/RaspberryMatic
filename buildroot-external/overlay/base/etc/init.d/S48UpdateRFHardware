@@ -122,7 +122,11 @@ update_rf_hardware() {
 
         # run firmware update
         # shellcheck disable=SC2086
-        HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts="${DEVNODE}" -jar /opt/HmIP/hmip-copro-update.jar -p "${DEVNODE}" -o -f "${LATEST_FIRMWARE}" 2>/dev/null | grep "Version:" | cut -d' ' -f5)
+        /usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts="${DEVNODE}" -jar /opt/HmIP/hmip-copro-update.jar -p "${DEVNODE}" -o -f "${LATEST_FIRMWARE}" 2>/dev/null >/dev/null
+
+        # verify new firmware version
+        sleep 1 # give copro app some time to startup
+        HM_HMIP_VERSION=$(/bin/detect_radio_module "${DEVNODE}" | cut -d' ' -f6)
 
         echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
         if [[ "${HM_HMRF_DEVNODE}" == "${HM_HMIP_DEVNODE}" ]]; then
@@ -154,10 +158,16 @@ update_rf_hardware() {
 
       # check for new firmware file in /firmware/HmIP-RFUSB
       LATEST_FIRMWARE=$(find /firmware/HmIP-RFUSB-Beta -name "dualcopro_update_blhmip-*.eq3" -maxdepth 1 | sort -V | tail -1)
+      NEW_VERSION=$(echo "${LATEST_FIRMWARE}" | sed 's/.*-\(.*\)\.eq3/\1/')
 
       # get OLD_VERSION from var tmp file
-      OLD_VERSION=$(cat /var/hmip_firmware_version 2>/dev/null)
-      NEW_VERSION=$(echo "${LATEST_FIRMWARE}" | sed 's/.*-\(.*\)\.eq3/\1/')
+      if [[ "${HM_HMRF_DEV}" == "HMIP-RFUSB" ]]; then
+        OLD_VERSION=$(cat /var/rf_firmware_version 2>/dev/null)
+        DEVNODE=${HM_HMRF_DEVNODE}
+      else
+        OLD_VERSION=$(cat /var/hmip_firmware_version 2>/dev/null)
+        DEVNODE=${HM_HMIP_DEVNODE}
+      fi
 
       # if NEW_VERSION is not empty we go ahead and perform the
       # update operation
@@ -166,7 +176,11 @@ update_rf_hardware() {
 
         # run firmware update
         # shellcheck disable=SC2086
-        HM_HMIP_VERSION=$(/usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts="${HM_HMIP_DEVNODE}" -jar /opt/HmIP/hmip-copro-update.jar -p "${HM_HMIP_DEVNODE}" -o -f "${LATEST_FIRMWARE}" 2>/dev/null | grep "Version:" | cut -d' ' -f5)
+        /usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts="${DEVNODE}" -jar /opt/HmIP/hmip-copro-update.jar -p "${DEVNODE}" -o -f "${LATEST_FIRMWARE}" 2>/dev/null >/dev/null
+
+        # verify new firmware version
+        sleep 1 # give copro app some time to startup
+        HM_HMIP_VERSION=$(/bin/detect_radio_module "${DEVNODE}" | cut -d' ' -f6)
 
         echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
         if [[ "${HM_HMRF_DEVNODE}" == "${HM_HMIP_DEVNODE}" ]]; then

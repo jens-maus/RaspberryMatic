@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-QEMU_GUEST_AGENT_VERSION = 3.1.1.1
+QEMU_GUEST_AGENT_VERSION = 6.1.0
 QEMU_GUEST_AGENT_SOURCE = qemu-$(QEMU_GUEST_AGENT_VERSION).tar.xz
 QEMU_GUEST_AGENT_SITE = http://download.qemu.org
 QEMU_GUEST_AGENT_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
@@ -38,6 +38,8 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--localstatedir=/var \
 			--cross-prefix=$(TARGET_CROSS) \
 			--audio-drv-list= \
+			--meson=$(HOST_DIR)/bin/meson \
+			--ninja=$(HOST_DIR)/bin/ninja \
 			--disable-kvm \
 			--disable-linux-user \
 			--disable-linux-aio \
@@ -53,7 +55,6 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--disable-sdl \
 			--disable-system \
 			--disable-user \
-			--disable-guest-agent \
 			--disable-nettle \
 			--disable-gcrypt \
 			--disable-curses \
@@ -61,7 +62,6 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--disable-virtfs \
 			--disable-brlapi \
 			--disable-fdt \
-			--disable-bluez \
 			--disable-kvm \
 			--disable-rdma \
 			--disable-vde \
@@ -69,6 +69,7 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--disable-cap-ng \
 			--disable-attr \
 			--disable-vhost-net \
+			--disable-vhost-user \
 			--disable-spice \
 			--disable-rbd \
 			--disable-libiscsi \
@@ -86,8 +87,8 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--disable-numa \
 			--disable-blobs \
 			--disable-capstone \
-			--disable-tools \
 			--disable-tcg-interpreter \
+			--enable-tools \
 			--enable-guest-agent
 endef
 
@@ -98,8 +99,7 @@ endef
 
 define QEMU_GUEST_AGENT_INSTALL_TARGET_CMDS
 	cp -a $(QEMU_GUEST_AGENT_PKGDIR)/rootfs-overlay/* $(TARGET_DIR)/
-	unset TARGET_DIR; \
-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(QEMU_GUEST_AGENT_MAKE_ENV) DESTDIR=$(TARGET_DIR) install
+	cp -a $(@D)/build/qga/qemu-ga $(TARGET_DIR)/usr/bin/
 endef
 
 $(eval $(generic-package))

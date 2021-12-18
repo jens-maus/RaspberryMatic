@@ -98,6 +98,25 @@ identify_rf_hardware() {
     fi
   fi
 
+  # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
+  # (only necessary for OCI/Docker/HA-Addon platform)
+  if [[ "${HM_HOST}" == "oci" ]]; then
+    id_to_dev() {
+      find "$(grep -l "PRODUCT=$(printf "%x/%x" "0x${1%:*}" "0x${1#*:}")" \
+         /sys/bus/usb/devices/[0-9]*:*/uevent | sed 's,uevent$,,')" \
+         /dev/null -name dev -o -name dev_id |
+      sed 's,[^/]*$,uevent,' |
+      xargs sed -n -e s,DEVNAME=,,p -e s,INTERFACE=,,p
+    }
+    RFUSB_DEVNODE=$(id_to_dev 1b1f:c020)
+
+    if [[ -n "${RFUSB_DEVNODE}" ]]; then
+      echo -n "."
+      RF_DEVNODES="${RFUSB_DEVNODE} ${RF_DEVNODES}"
+      HM_HMIP_DEVTYPE="USB"
+    fi
+  fi
+
   # check if a HM-CFG-USB-2 (1b1f:c00f) USB stick is connected
   # and HMRF_DEV accordingly
   if lsusb 2>/dev/null | grep -q 1b1f:c00f; then
@@ -195,7 +214,8 @@ query_rf_parameters() {
         # set and if not use this device for BidCos-RF/HmRF
         if [[ -n "${RF_HMRF_ADDRESS}" ]] &&
            [[ "${RF_HMRF_ADDRESS}" != "0x000000" ]] &&
-           [[ -n "${RF_SERIAL}" ]]; then
+           [[ -n "${RF_SERIAL}" ]] &&
+           [[ -z "${RFUSB_DEVNODE}" ]]; then
 
           # prefer a HM-MOD-RPI-PCB for HmRF stuff in case
           # we already have a setup HMRF device
@@ -211,7 +231,7 @@ query_rf_parameters() {
 
             if [[ -e /sys/class/raw-uart/${dev}/device_type ]]; then
               HM_HMRF_DEVTYPE=$(cat "/sys/class/raw-uart/${dev}/device_type")
-            else
+            elif [[ -z "${HM_HMRF_DEVTYPE}" ]]; then
               HM_HMRF_DEVTYPE=GPIO
             fi
           fi
@@ -238,7 +258,7 @@ query_rf_parameters() {
 
             if [[ -e /sys/class/raw-uart/${dev}/device_type ]]; then
               HM_HMIP_DEVTYPE=$(cat "/sys/class/raw-uart/${dev}/device_type")
-            else
+            elif [[ -z "${HM_HMIP_DEVTYPE}" ]]; then
               HM_HMIP_DEVTYPE=GPIO
             fi
           fi

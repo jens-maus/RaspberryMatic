@@ -28,15 +28,15 @@ type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 3.61.5
+version: 3.61.7
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 3.61.5.20211113
+appVersion: 3.61.7.20211218
 
 annotations:
   artifacthub.io/changes: |
-    - Release of 3.61.5.20211113 (https://github.com/jens-maus/RaspberryMatic/releases/tag/3.61.5.20211113)
+    - Release of 3.61.7.20211218 (https://github.com/jens-maus/RaspberryMatic/releases/tag/3.61.7.20211218)
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: Webpage

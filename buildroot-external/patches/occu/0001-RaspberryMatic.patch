@@ -28,7 +28,15 @@
  }
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -392,13 +392,14 @@
+@@ -379,6 +379,7 @@
+                 # The available version will be set further down with "jQuery('#availableSWVersion').html(homematic.com.getLatestVersion());"
+               }
+             }
++            if {[get_platform] != "oci"} {
+             table_row {
+               table_data {align="left"} {colspan="3"} {
+                 #puts "[bold "Software-Update durchf�hren"]"
+@@ -392,7 +393,7 @@
                      table_row {
                        table_data {
                          division {class="CLASS20905" style="display: none"} {id="btnFwDirectDownload"} {} "onClick=\"performDirectDownload();\"" {}
@@ -37,13 +45,6 @@
                        }
                      }
                    }
-                 }
-               }
-             }
-+            if {[get_platform] != "oci"} {
-             table_row {
-               table_data {align="left"} {colspan="3"} {
-                 #puts "[bold "i18n: Alternative Vorgehensweise:"]"
 @@ -416,7 +417,7 @@
                      table_row {
                        table_data {

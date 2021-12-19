@@ -379,6 +379,7 @@ proc action_put_page {} {
                 # The available version will be set further down with "jQuery('#availableSWVersion').html(homematic.com.getLatestVersion());"
               }
             }
+            if {[get_platform] != "oci"} {
             table_row {
               table_data {align="left"} {colspan="3"} {
                 #puts "[bold "Software-Update durchf�hren"]"
@@ -399,7 +400,6 @@ proc action_put_page {} {
                 }
               }
             }
-            if {[get_platform] != "oci"} {
             table_row {
               table_data {align="left"} {colspan="3"} {
                 #puts "[bold "i18n: Alternative Vorgehensweise:"]"

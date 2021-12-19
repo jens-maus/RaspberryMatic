@@ -31,6 +31,7 @@ proc action_put_page {} {
   } else {
     set SERIAL "n/a"
   }
+  if {[file exist /var/rf_board_serial]} { append SERIAL " / " [exec cat /var/rf_board_serial] }                    
   set VERSION [read_var /VERSION VERSION]
   set HELP_ARGUMENTS "lang=$LANGUAGE&vers=$VERSION&serial=$SERIAL"
 

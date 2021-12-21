@@ -31,7 +31,6 @@ proc action_put_page {} {
   } else {
     set SERIAL "n/a"
   }
-  if {[file exist /var/rf_board_serial]} { append SERIAL " / " [exec cat /var/rf_board_serial] }                    
   set VERSION [read_var /VERSION VERSION]
   set HELP_ARGUMENTS "lang=$LANGUAGE&vers=$VERSION&serial=$SERIAL"
 
@@ -97,6 +96,16 @@ proc action_put_page {} {
 
       puts "</td>"
 
+      puts "<td id='tdHm_Mode' class='CLASS21305a' >"
+        puts "<ul style='list-style:none; padding-right:12%; font-family:Courier New;'>"
+          puts "<li><h1><u>\/var/hm_mode</u></h1></li>"                   
+          puts "<div style='text-align:left;'>"                
+          regsub -all {\n} [exec cat /var/hm_mode] "<br/>" content                                              
+          puts $content                  
+         puts "</div>"
+        puts "</ul>"
+      puts "</td>"
+      
       puts "<td></td>"
       puts "<td></td>"
 

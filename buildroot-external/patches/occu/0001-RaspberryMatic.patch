@@ -203,7 +203,7 @@
  # set HOMEMATIC_URL "http://www.homematic.com"
  set HOMEMATIC_URL "http://www.eq-3.de"
  set HOMEMATIC_IP_URL "https://www.homematic-ip.com"
-@@ -22,8 +22,17 @@
+@@ -22,8 +22,16 @@
  proc action_put_page {} {
    global PRODUCT_NAME PRODUCT_ID HOMEMATIC_URL HOMEMATIC_IP_URL HM_HELP_URL IP_HELP_URL HM_INFO_URL IP_INFO_URL LANGUAGE CUR_YEAR env
  
@@ -218,12 +218,11 @@
 +  } else {
 +    set SERIAL "n/a"
 +  }
-+  if {[file exist /var/rf_board_serial]} { append SERIAL " / " [exec cat /var/rf_board_serial] }                    
 +  set VERSION [read_var /VERSION VERSION]
    set HELP_ARGUMENTS "lang=$LANGUAGE&vers=$VERSION&serial=$SERIAL"
  
  
-@@ -59,6 +68,7 @@
+@@ -59,6 +67,7 @@
                  puts "<li><h1 class='helpTitle'><u>\${menuHelpPage}</u></h1></li>"
                  puts "<li><a target='_blank' href=\'$HM_HELP_URL\'>\${dialogHelpLinkOnlineHelpA}</a></li>"
                  puts "<li><a target='_blank' href=\'$IP_HELP_URL\'>\${dialogHelpLinkOnlineHelpB}</a></li>"
@@ -231,7 +230,7 @@
                  puts "<li><a target='_blank' href='/licenseinfo.htm'>\${lblLicenseInformation}</a></li>"
                puts "</ul>"
        puts "</td>"
-@@ -77,7 +87,12 @@
+@@ -77,11 +86,26 @@
            # puts "<li>DOM [rega dom.BuildLabel()]</li>"
            puts "<li><a target='_blank' href=\"$HM_INFO_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
            puts "<li><a target='_blank' href=\"$IP_INFO_URL\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
@@ -245,6 +244,20 @@
          puts "</ul>"
  
        puts "</td>"
+ 
++      puts "<td id='tdHm_Mode' class='CLASS21305a' >"
++        puts "<ul style='list-style:none; padding-right:12%; font-family:Courier New;'>"
++          puts "<li><h1><u>\/var/hm_mode</u></h1></li>"                   
++          puts "<div style='text-align:left;'>"                
++          regsub -all {\n} [exec cat /var/hm_mode] "<br/>" content                                              
++          puts $content                  
++         puts "</div>"
++        puts "</ul>"
++      puts "</td>"
++      
+       puts "<td></td>"
+       puts "<td></td>"
+ 
 --- occu/WebUI/www/error/error-500.html.orig
 +++ occu/WebUI/www/error/error-500.html
 @@ -95,7 +95,7 @@

@@ -66,32 +66,37 @@ proc put_page {} {
 
         puts "this.gateways = \[\];"
 
-        puts "homematic('Interface.listBidcosInterfaces', {'interface': 'BidCos-RF'}, function(interfaceStatus) {"
+        puts "homematic('Interface.listBidcosInterfaces', {'interface': '$HMRFIdentifier'}, function(interfaceStatus) {"
         puts "  if (interfaceStatus) {"
         puts "    for (var i = 0; i < interfaceStatus.length; i++) {"
         puts "      if (interfaceStatus\[i\].isDefault) {"
-        puts "       var defaultGateway = {type:interfaceStatus\[i\].type, userName:'BidCos-RF',serialNumber:interfaceStatus\[i\].address};"
+        puts "       var defaultGateway = {type:interfaceStatus\[i\].type, userName:'$HMRFIdentifier',serialNumber:interfaceStatus\[i\].address};"
         puts "        this.gatewaysListbox.add({name: translateKey('dialogSettingsBidcosRFIFaceAssignmentLblStandard'), value: defaultGateway});"
         puts "      }"
         puts "    }"
         puts "  }"
         puts "});"
 
-        puts "var interfaceCell = document.getElementById('InterfaceCell');"
-        puts "var rfConfig = homematic('BidCoS_RF.getConfigurationRF');"
-        puts "if (rfConfig) {"
-        puts "  for (var i = 0, len = rfConfig.interfaces.length; i < len; i++) {"
-        puts "    var gateway = rfConfig.interfaces\[i\];"
+        puts "var InterfaceCellContent = document.getElementById('InterfaceCellContent');"
+        puts "var rfGateways = homematic('BidCoS_RF.getConfigurationRF');"
+        puts "if (rfGateways) {"
+        puts "  for (var i = 0, len = rfGateways.interfaces.length; i < len; i++) {"
+        puts "    var gateway = rfGateways.interfaces\[i\];"
         puts "    var name = (gateway.userName.length > 0) ? gateway.userName: gateway.serialNumber;"
-        puts "    if (interfaceCell) {"
-        puts "      interfaceCell.innerHTML= (gateway.serialNumber === interfaceCell.innerHTML) ? name : 'BidCos-RF';"
-        puts "      if (this.roaming) interfaceCell.innerHTML= interfaceCell.innerHTML+'<br/>(ROAMING)';"
+        puts "    if (InterfaceCellContent) {"
+        puts "      InterfaceCellContent.innerHTML= (gateway.serialNumber === InterfaceCellContent.innerHTML) ? name : '$HMRFIdentifier';"
+        puts "      if (this.roaming) InterfaceCellContent.innerHTML= InterfaceCellContent.innerHTML+'<br/>(ROAMING)';"
         puts "    }"
         puts "    this.gateways.push({name: name, value: gateway});"
         puts "    if (this.gateways\[i\]) {"
         puts "      this.gatewaysListbox.add(this.gateways\[i\]);"
         puts "    }"
         puts "  }"
+        puts "} else {"
+        puts "  var InterfaceCell = document.getElementById('InterfaceCell');"
+        puts "  if (InterfaceCell) InterfaceCell.innerHTML = '$HMRFIdentifier';"
+        puts ""
+        puts ""
         puts "}"
 
         puts "this.close = function() { Layer.remove(gwframe.getElement()); }"   
@@ -100,14 +105,14 @@ proc put_page {} {
         puts "  var selectedGateway = this.gatewaysListbox.getSelectedItem().value;"
         puts "  var selectedGatewayName = (selectedGateway.userName.length > 0) ? selectedGateway.userName: selectedGateway.serialNumber;"
         puts "  homematic('Interface.setBidcosInterface', {"
-        puts "   'interface': 'BidCos-RF',"
+        puts "   'interface': '$HMRFIdentifier',"
         puts "   'deviceId': this.addr,"
         puts "   'interfaceId': selectedGateway.serialNumber,"
         puts "   'roaming': this.roamingCheckbox.isChecked()"
         puts "  });"
-        puts "  if (interfaceCell) {"
-        puts "    interfaceCell.innerHTML = selectedGatewayName ;"
-        puts "     if (this.roamingCheckbox.isChecked()) interfaceCell.innerHTML= interfaceCell.innerHTML+'<br/>(ROAMING)';"
+        puts "  if (InterfaceCellContent) {"
+        puts "    InterfaceCellContent.innerHTML = selectedGatewayName ;"
+        puts "     if (this.roamingCheckbox.isChecked()) InterfaceCellContent.innerHTML= InterfaceCellContent.innerHTML+'<br/>(ROAMING)';"
         puts "  }"
         puts "  DeviceList.updateInterfaceDisplayName(this.addr, selectedGatewayName);"
         puts "  close();"      
@@ -1253,8 +1258,6 @@ proc put_Header {} {
   set SENTRY(IMAGE)       "&nbsp;"
   set SENTRY(DESCRIPTION) $dev_descr(TYPE)
   set SENTRY(ADDRESS)     $address
-  #set SENTRY(IFACE)       $iface_descr($iface)
-  #catch {append SENTRY(IFACE) "<br/>" $dev_descr(INTERFACE)}
   set SENTRY(FIRMWARE)    "&nbsp;"
 
   if { [catch { set SENTRY(NAME) $ise_CHANNELNAMES($iface;$address)} ] } then {
@@ -1262,7 +1265,7 @@ proc put_Header {} {
       append SENTRY(NAME) ".$address"
   }
   if {($iface_descr($iface) == $HMRFIdentifier)} then {
-    set SENTRY(IFACE)       "<table><tr><td class=\"CLASS22012\" style='border: none !important;' onclick=\"setGW('$address','$SENTRY(NAME)',$dev_descr(ROAMING));\"><div class=\"CLASS21000\" id='InterfaceCell'>$dev_descr(INTERFACE)</div></td></tr></table>"
+    set SENTRY(IFACE)       "<table id='InterfaceTable'><tr id='InterfaceTableRow'><td class='CLASS22012' style='border: none !important;' onclick=\"setGW('$address','$SENTRY(NAME)',$dev_descr(ROAMING));\"><div class=\"CLASS21000\" id='InterfaceCellContent'>$dev_descr(INTERFACE)</div></td></tr></table>"
   } else {
     set SENTRY(IFACE)       $iface_descr($iface)
   }
@@ -1416,7 +1419,7 @@ proc put_Header {} {
   puts "<td id=\"DeviceImage\">$SENTRY(IMAGE)</td>"
   puts "<td class='DeviceListCell' id=\"DeviceDescription\">$SENTRY(DESCRIPTION)</td>"
   puts "<td class='DeviceListCell'>$SENTRY(ADDRESS)</td>"
-  puts "<td class='DeviceListCell'>$SENTRY(IFACE)</td>"
+  puts "<td class='DeviceListCell' id='InterfaceCell'>$SENTRY(IFACE)</td>"
   puts "<td>$SENTRY(FIRMWARE)</td>"
   if {$EASYLINKMODE == "false"} {
     puts "<td>$SENTRY(RESTOREDEVPARAMS)</td>"

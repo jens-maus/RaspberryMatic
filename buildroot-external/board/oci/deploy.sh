@@ -87,10 +87,22 @@ if command -v dpkg >/dev/null; then
     if ! pkg_installed ca-certificates; then
       apt install "${FORCE}" ca-certificates
     fi
-    wget -O /tmp/pivccu.key https://www.pivccu.de/piVCCU/public.key
-    APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=DontWarn apt-key add /tmp/pivccu.key
-    rm -f /tmp/pivccu.key
-    bash -c 'echo "deb https://www.pivccu.de/piVCCU stable main" >/etc/apt/sources.list.d/pivccu.list'
+    if ! pkg_installed build-essential; then
+      apt install "${FORCE}" build-essential
+    fi
+    if ! pkg_installed flex; then
+      apt install "${FORCE}" flex
+    fi
+    if ! pkg_installed libssl-dev; then
+      apt install "${FORCE}" libssl-dev
+    fi
+    if ! pkg_installed gpg; then
+      apt install "${FORCE}" gpg
+    fi
+
+    # use gpg to dearmor the pivccu public key
+    wget -qO - https://www.pivccu.de/piVCCU/public.key | gpg --dearmor | tee /usr/share/keyrings/pivccu-archive-keyring.gpg >/dev/null
+    sh -c 'echo "deb [signed-by=/usr/share/keyrings/pivccu-archive-keyring.gpg] https://www.pivccu.de/piVCCU stable main" >/etc/apt/sources.list.d/pivccu.list'
     apt update
   fi
 
@@ -140,7 +152,7 @@ if [[ ! -e /etc/modules-load.d/eq3_char_loop.conf ]]; then
 fi
 
 if [[ ! -e /etc/udev/rules.d/99-Homematic.rules ]]; then
-  echo "Adding udev rule"
+  echo "Adding/Updating udev rule"
   check_sudo
   cat <<'EOF' >/etc/udev/rules.d/99-Homematic.rules
 ATTRS{idVendor}=="1b1f" ATTRS{idProduct}=="c020", ENV{ID_MM_DEVICE_IGNORE}="1"

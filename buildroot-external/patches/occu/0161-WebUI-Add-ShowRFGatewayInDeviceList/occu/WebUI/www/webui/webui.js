@@ -1016,6 +1016,12 @@ DEV_PATHS["HM-WS550STH-I"] = new Object();
 DEV_PATHS["HM-WS550STH-I"]["50"] = "/config/img/devices/50/13_hm-ws550sth-i_thumb.png";
 DEV_PATHS["HM-WS550STH-I"]["250"] = "/config/img/devices/250/13_hm-ws550sth-i.png";
 DEV_HIGHLIGHT["HM-WS550STH-I"] = new Object();
+DEV_LIST.push('HmIP-eTRV-E-S');
+DEV_DESCRIPTION["HmIP-eTRV-E-S"] = "TRV-E";
+DEV_PATHS["HmIP-eTRV-E-S"] = new Object();
+DEV_PATHS["HmIP-eTRV-E-S"]["50"] = "/config/img/devices/50/216_hmip-etrv-3_thumb.png";
+DEV_PATHS["HmIP-eTRV-E-S"]["250"] = "/config/img/devices/250/216_hmip-etrv-3.png";
+DEV_HIGHLIGHT["HmIP-eTRV-E-S"] = new Object();
 DEV_LIST.push('HMIP-SWDO');
 DEV_DESCRIPTION["HMIP-SWDO"] = "HmIP-SWDO";
 DEV_PATHS["HMIP-SWDO"] = new Object();
@@ -4851,8 +4857,8 @@ elvST['FREQUENCY_LOWON_OFF_HIGHON_OFF'] = '${stringTableAlarmFrequencyLowOnOffHi
 elvST['FREQUENCY_RISING'] = '${stringTableAlarmFrequencyRising}';
 elvST['FREQUENCY_RISING_AND_FALLING'] = '${stringTableAlarmFrequencyRisingAndFalling}';
 elvST['FREQUENCY'] = '${stringTablePowerMeterFrequency}';
-elvST['FREQUENCY_STATUS=ERROR '] = '${lblValue} ${stringTablePowerMeterFrequency}: ${lblError}';
-elvST['FREQUENCY_STATUS=4 '] = '${lblValue} ${stringTablePowerMeterFrequency}: ${lblError}';
+elvST['FREQUENCY_STATUS=ERROR'] = '${lblValue} ${stringTablePowerMeterFrequency}: ${lblError}';
+elvST['FREQUENCY_STATUS=4'] = '${lblValue} ${stringTablePowerMeterFrequency}: ${lblError}';
 elvST['FREQUENCY_STATUS=NORMAL'] = '${lblValue} ${stringTablePowerMeterFrequency}: ${lblNormal}';
 elvST['FREQUENCY_STATUS=0'] = '${lblValue} ${stringTablePowerMeterFrequency}: ${lblNormal}';
 elvST['FREQUENCY_STATUS=OVERFLOW'] = '${lblValue} ${stringTablePowerMeterFrequency}: ${lblOverflow}';
@@ -39371,8 +39377,8 @@ set_value = function(input_id, id, type)
 RemoveLink = function(iface, sender_address, receiver_address, sender_type, redirect_url)
 {
   var questionRemoveLink = ((iface == "HmIP-RF") && (sender_type != "HmIP-SMI55") && (sender_address.split(":")[0] == receiver_address.split(":")[0])) ? translateKey('dialogQuestionRemoveInternalLink') : translateKey('dialogQuestionRemoveLink');
-
-  new YesNoDialog(translateKey('dialogSafetyCheck'), questionRemoveLink, function(result) {
+  
+  new YesNoDialog(translateKey('dialogSafetyCheck'), questionRemoveLink.replace('%s', sender_address+' - '+receiver_address), function(result) {
     if (result == YesNoDialog.RESULT_YES)
     {
       ResetPostString();

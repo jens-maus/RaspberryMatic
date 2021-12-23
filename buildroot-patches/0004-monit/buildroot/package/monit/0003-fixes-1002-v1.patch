@@ -1,0 +1,34 @@
+From 27e04d06bd996d53543cd063668fe75f930fdd72 Mon Sep 17 00:00:00 2001
+From: tildeslash <info@tildeslash.com>
+Date: Mon, 13 Sep 2021 21:32:10 +0200
+Subject: [PATCH] fix issue #1002
+
+---
+ src/process/sysdep_LINUX.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/process/sysdep_LINUX.c b/src/process/sysdep_LINUX.c
+index b78200bf..70e8c7f7 100644
+--- a/src/process/sysdep_LINUX.c
++++ b/src/process/sysdep_LINUX.c
+@@ -586,7 +586,7 @@ int getloadavg_sysdep(double *loadv, int nelem) {
+ bool used_system_memory_sysdep(SystemInfo_T *si) {
+         char          *ptr;
+         char           buf[2048];
+-        unsigned long  mem_total = 0UL;
++        unsigned long long  mem_total = 0UL;
+         unsigned long  mem_available = 0UL;
+         unsigned long  mem_free = 0UL;
+         unsigned long  buffers = 0UL;
+@@ -602,7 +602,7 @@ bool used_system_memory_sysdep(SystemInfo_T *si) {
+         }
+ 
+         // Update memory total (physical memory can be added to the online system on some machines, also LXC/KVM containers MemTotal is dynamic and changes frequently
+-        if ((ptr = strstr(buf, "MemTotal:")) && sscanf(ptr + 9, "%lu", &mem_total) == 1) {
++        if ((ptr = strstr(buf, "MemTotal:")) && sscanf(ptr + 9, "%llu", &mem_total) == 1) {
+                 systeminfo.memory.size = mem_total * 1024;
+         }
+ 
+-- 
+2.32.0
+

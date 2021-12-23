@@ -263,7 +263,7 @@ proc action_cert_upload {} {
       puts {
         var dlgPopup = parent.top.dlgPopup;
         if (dlgPopup === undefined) {
-          dlgPopup = window.open('', 'resize').dlgPopup;
+          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
         }
         dlgPopup.hide();
         dlgPopup.setWidth(600);
@@ -278,7 +278,7 @@ proc action_cert_upload {} {
       puts {
         var dlgPopup = parent.top.dlgPopup;
         if (dlgPopup === undefined) {
-          dlgPopup = window.open('', 'resize').dlgPopup;
+          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
         }
         dlgPopup.hide();
         dlgPopup.setWidth(600);

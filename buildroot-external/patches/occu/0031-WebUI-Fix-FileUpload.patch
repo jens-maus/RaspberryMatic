@@ -6,7 +6,7 @@
        puts "var dlg = new EulaDialog(translateKey('dialogEulaTitle'), data, function(result) {"
 +        puts "var dlgPopup = parent.top.dlgPopup;"
 +        puts "if (dlgPopup === undefined) {"
-+          puts "dlgPopup = window.open('', 'resize').dlgPopup;"
++          puts "dlgPopup = window.open('', 'ccu-main-window').dlgPopup;"
 +        puts "}"
          puts "if (result == 1) {"
 -          puts "parent.top.dlgPopup.hide();"
@@ -27,7 +27,7 @@
 -      puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
 +      puts "var dlgPopup = parent.top.dlgPopup;"
 +      puts "if (dlgPopup === undefined) {"
-+        puts "dlgPopup = window.open('', 'resize').dlgPopup;"
++        puts "dlgPopup = window.open('', 'ccu-main-window').dlgPopup;"
 +      puts "}"
 +      puts "dlgPopup.hide();"
 +      puts "dlgPopup.setWidth(450);"
@@ -93,7 +93,7 @@
 -    puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
 +    puts "var dlgPopup = parent.top.dlgPopup;"
 +    puts "if (dlgPopup === undefined) {"
-+      puts "dlgPopup = window.open('', 'resize').dlgPopup;"
++      puts "dlgPopup = window.open('', 'ccu-main-window').dlgPopup;"
 +    puts "}"
 +    puts "dlgPopup.hide();"
 +    puts "dlgPopup.setWidth(450);"
@@ -161,7 +161,7 @@
 -        parent.top.dlgPopup.LoadFromFile(url, "action=cert_update_confirm");
 +        var dlgPopup = parent.top.dlgPopup;
 +        if (dlgPopup === undefined) {
-+          dlgPopup = window.open('', 'resize').dlgPopup;
++          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
 +        }
 +        dlgPopup.hide();
 +        dlgPopup.setWidth(600);
@@ -182,7 +182,7 @@
 +      puts {
 +        var dlgPopup = parent.top.dlgPopup;
 +        if (dlgPopup === undefined) {
-+          dlgPopup = window.open('', 'resize').dlgPopup;
++          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
 +        }
 +        dlgPopup.hide();
 +        dlgPopup.setWidth(600);
@@ -265,7 +265,7 @@
 -      parent.top.dlgPopup.LoadFromFile(url, "action=backup_restore_check");
 +      var dlgPopup = parent.top.dlgPopup;
 +      if (dlgPopup === undefined) {
-+        dlgPopup = window.open('', 'resize').dlgPopup;
++        dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
 +      }
 +      dlgPopup.hide();
 +      dlgPopup.setWidth(400);
@@ -334,7 +334,7 @@
 -      parent.top.dlgPopup.LoadFromFile(url, "action=install_confirm");
 +      var dlgPopup = parent.top.dlgPopup;
 +      if (dlgPopup === undefined) {
-+        dlgPopup = window.open('', 'resize').dlgPopup;
++        dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
 +      }
 +      dlgPopup.hide();
 +      dlgPopup.setWidth(600);
@@ -411,7 +411,7 @@
 +echo "   var url = '${url}?sid=${sid}';"
 +echo "   var dlgPopup = parent.top.dlgPopup;"
 +echo "   if (dlgPopup === undefined) {"
-+echo "     dlgPopup = window.open('', 'resize').dlgPopup;"
++echo "     dlgPopup = window.open('', 'ccu-main-window').dlgPopup;"
 +echo "   }"
 +echo "   if (dlgPopup !== undefined) {"
 +echo "     dlgPopup.hide();"
@@ -1008,3 +1008,13 @@
  
 -package provide cgi 1.8.0
 +package provide cgi 1.10.0
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -7365,6 +7365,7 @@
+     this.currentPageOptions  = options;
+     
+     this.currentPage.enter(options);
++    window.name = 'ccu-main-window';
+   },
+   
+   reload: function()

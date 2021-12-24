@@ -10805,13 +10805,16 @@ DeviceList = Singleton.create({
            new BidcosRfPage.Gateway()
             .setGatewayClass("RF")
             .setType(gateway.type)
-            .setUserName(gateway.userName)
+            .setUserName((gateway.userName.length > 0) ? gateway.userName : gateway.serialNumber)
             .setAddress(gateway.serialNumber)
             .setKey(gateway.encryptionKey)
             .setIP(gateway.ipAddress)
           );
-          DeviceListPage.INTERFACES.push({id:gateway.userName, name:gateway.userName});
         }
+      }
+      BidCosGateways.sort((a, b) => a.m_userName.localeCompare(b.m_userName, undefined, { numeric: true, sensitivity: 'base' }));
+      for (i = 0, len = BidCosGateways.length; i < len; i++) {
+        DeviceListPage.INTERFACES.push({id:BidCosGateways[i].m_userName, name:BidCosGateways[i].m_userName});
       }
       allDevsList = homematic("Interface.listDevices", {"interface": "BidCos-RF"});
     }

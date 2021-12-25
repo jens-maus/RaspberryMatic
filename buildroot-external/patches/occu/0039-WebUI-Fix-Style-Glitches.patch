@@ -2686,17 +2686,17 @@
  
  .CLASS02606 {
 -	width: 240px;
--	background-color: $_(activeBackground);
--	border: solid 1px $_(black); /* black */
--	color: $_(textColorB); /* black */
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
 -.CLASS02607 {
 -	width:55px;
- 	background-color: $_(activeBackground);
- 	border: solid 1px $_(black); /* black */
- 	color: $_(textColorB); /* black */
+-	background-color: $_(activeBackground);
+-	border: solid 1px $_(black); /* black */
+-	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
@@ -3167,7 +3167,19 @@
  }
  
  .CLASS22002 {
-@@ -8887,7 +8897,8 @@
+@@ -8830,6 +8840,11 @@
+ .CLASS22004 {
+   background-color: $_(activeBackground);
+   text-align: center;
++  height: 100%;
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  flex-direction: column;
+ }
+ 
+ .CLASS22005 {
+@@ -8887,7 +8902,8 @@
  }
  
  .CLASS22101 {
@@ -3177,7 +3189,7 @@
  }
  
  .CLASS22102 {
-@@ -8909,9 +8920,8 @@
+@@ -8909,9 +8925,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -3188,7 +3200,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8921,10 +8931,12 @@
+@@ -8921,10 +8936,12 @@
    position:relative;
    width:50px;
    height:50px;

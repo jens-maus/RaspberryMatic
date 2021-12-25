@@ -8840,6 +8840,11 @@ color: $_(textColorA); /* white */
 .CLASS22004 {
   background-color: $_(activeBackground);
   text-align: center;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .CLASS22005 {

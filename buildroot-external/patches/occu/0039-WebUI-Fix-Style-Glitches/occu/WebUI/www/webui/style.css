@@ -1617,6 +1617,7 @@ div.caption  { display: table-caption; }
 #ic_deviceparameters .parameter_area .parameters_table td {
 	border: 1px solid $_(black); /* black */
 	height: 50px;
+	padding: 0px;
 }
 
 #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl
@@ -1624,6 +1625,7 @@ div.caption  { display: table-caption; }
 	border: 0;
 	height: auto;
 	background-color: $_(white); /* white */
+	border-spacing: 0px;
 }
 
 #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl thead
@@ -1638,8 +1640,6 @@ div.caption  { display: table-caption; }
 {
 	border: 0;
 	background-color: $_(white); /* white */
-	padding: 2px;
-	height: auto;
 }
 
 #ic_deviceparameters #Timeouts_Area .TimeoutTable,

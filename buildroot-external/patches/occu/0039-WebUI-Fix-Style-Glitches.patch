@@ -2129,6 +2129,31 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
+@@ -1588,6 +1617,7 @@
+ #ic_deviceparameters .parameter_area .parameters_table td {
+ 	border: 1px solid $_(black); /* black */
+ 	height: 50px;
++	padding: 0px;
+ }
+ 
+ #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl
+@@ -1595,6 +1625,7 @@
+ 	border: 0;
+ 	height: auto;
+ 	background-color: $_(white); /* white */
++	border-spacing: 0px;
+ }
+ 
+ #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl thead
+@@ -1609,8 +1640,6 @@
+ {
+ 	border: 0;
+ 	background-color: $_(white); /* white */
+-	padding: 2px;
+-	height: auto;
+ }
+ 
+ #ic_deviceparameters #Timeouts_Area .TimeoutTable,
 @@ -1672,6 +1701,14 @@
  	border: 0;
  }/*LinkList-Tabelle*/

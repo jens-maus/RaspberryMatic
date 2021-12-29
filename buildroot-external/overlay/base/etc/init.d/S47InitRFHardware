@@ -103,8 +103,8 @@ identify_rf_hardware() {
   if [[ "${HM_HOST}" == "oci" ]]; then
     id_to_dev() {
       find "$(grep -l "PRODUCT=$(printf "%x/%x" "0x${1%:*}" "0x${1#*:}")" \
-         /sys/bus/usb/devices/[0-9]*:*/uevent | sed 's,uevent$,,')" \
-         /dev/null -name dev -o -name dev_id |
+              /sys/bus/usb/devices/[0-9]*:*/uevent 2>/dev/null | sed 's,uevent$,,')" \
+        /dev/null -name dev -o -name dev_id 2>/dev/null |
       sed 's,[^/]*$,uevent,' |
       xargs sed -n -e s,DEVNAME=,,p -e s,INTERFACE=,,p
     }

@@ -1606,6 +1606,7 @@ div.caption  { display: table-caption; }
 
 	background-color: $_(clickable);
 	text-align:center;
+	height: 50px;
 }
 
 #ic_deviceparameters .parameter_area .parameters_table tbody {
@@ -1616,8 +1617,6 @@ div.caption  { display: table-caption; }
 
 #ic_deviceparameters .parameter_area .parameters_table td {
 	border: 1px solid $_(black); /* black */
-	height: 50px;
-	padding: 0px;
 }
 
 #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl
@@ -8835,6 +8834,7 @@ color: $_(textColorA); /* white */
 
 .CLASS22003 {
   background-color: $_(white);
+  height: 50px;
 }
 
 .CLASS22004 {

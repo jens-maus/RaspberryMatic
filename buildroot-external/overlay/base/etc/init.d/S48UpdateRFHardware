@@ -176,7 +176,7 @@ update_rf_hardware() {
         # find out which raw-uart node the RFUSB belongs to
         for n in $(seq 0 9); do
           if [[ $n -eq 0 ]]; then n=""; fi
-          if grep -q "HmIP-RFUSB@" /sys/class/raw-uart/raw-uart${n}/device_type 2>/dev/null; then
+          if grep -q "HmIP-RFUSB@" "/sys/class/raw-uart/raw-uart${n}/device_type" 2>/dev/null; then
             DEVNODE=/dev/raw-uart${n}
             REINIT=yes
             break

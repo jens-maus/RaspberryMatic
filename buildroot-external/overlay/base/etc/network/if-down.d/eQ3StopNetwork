@@ -1,6 +1,10 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC2169
 
+# make sure all network filesystems are unmounted before shutting down
+# the network
+/bin/umount -a -f -t nfs,cifs
+
 # check if we have to stop wpa supplicant in case this
 # is a wlan connection to be stopped
 case ${IFACE} in

@@ -34,5 +34,5 @@ tty2::askfirst:/sbin/getty -L tty2 0 vt100
 
 # Stuff to do before rebooting
 ::shutdown:/etc/init.d/rcK
-tty2::shutdown:/bin/umount -a -r -f
+tty2::shutdown:/bin/umount -a -r -f >/dev/null
 tty2::shutdown:/sbin/swapoff -a

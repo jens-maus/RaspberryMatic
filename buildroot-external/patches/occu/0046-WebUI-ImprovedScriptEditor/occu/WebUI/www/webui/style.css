@@ -3571,6 +3571,7 @@ html, body {
   padding: 0;
   font-family: Verdana,Tahoma,Arial,Helvetica,sans-serif;
   font-size: 12px;
+  overflow: hidden;
 }
 
 input, textarea, select, button, h1 {

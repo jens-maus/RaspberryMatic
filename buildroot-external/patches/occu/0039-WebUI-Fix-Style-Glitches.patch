@@ -3149,7 +3149,18 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8630,8 +8632,11 @@
+@@ -8404,7 +8406,9 @@
+ /* config\help.cgi */
+ 
+ .CLASS21300 {
+-  height:56%;
++  height: 100%;
++  width: 100%;
++  padding: 10px;
+ }
+ 
+ .CLASS21301 {
+@@ -8630,8 +8634,11 @@
  
  /* config\control_panel.cgi */
  
@@ -3162,7 +3173,7 @@
  }
  
  .CLASS21701 {
-@@ -8702,7 +8707,8 @@
+@@ -8702,7 +8709,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -3172,7 +3183,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8758,6 @@
+@@ -8752,7 +8760,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -3180,7 +3191,7 @@
    width:100%;
  }
  
-@@ -8809,13 +8814,17 @@
+@@ -8809,13 +8816,17 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -3200,7 +3211,7 @@
  }
  
  .CLASS22002 {
-@@ -8825,11 +8834,17 @@
+@@ -8825,11 +8836,17 @@
  
  .CLASS22003 {
    background-color: $_(white);
@@ -3218,7 +3229,7 @@
  }
  
  .CLASS22005 {
-@@ -8887,7 +8902,8 @@
+@@ -8887,7 +8904,8 @@
  }
  
  .CLASS22101 {
@@ -3228,7 +3239,7 @@
  }
  
  .CLASS22102 {
-@@ -8909,9 +8925,8 @@
+@@ -8909,9 +8927,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -3239,7 +3250,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8921,10 +8936,12 @@
+@@ -8921,10 +8938,12 @@
    position:relative;
    width:50px;
    height:50px;

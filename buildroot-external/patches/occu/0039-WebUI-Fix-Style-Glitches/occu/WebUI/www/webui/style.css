@@ -8406,7 +8406,9 @@ color: $_(textColorA); /* white */
 /* config\help.cgi */
 
 .CLASS21300 {
-  height:56%;
+  height: 100%;
+  width: 100%;
+  padding: 10px;
 }
 
 .CLASS21301 {

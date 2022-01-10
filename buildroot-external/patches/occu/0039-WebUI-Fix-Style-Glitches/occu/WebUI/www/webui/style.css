@@ -2722,7 +2722,7 @@ html, body {
   width: 996px;
   height: 522px;
   background-color: $_(white); /* white */
-  overflow: scroll;  
+  overflow: auto;
 }
 
 #ChannelChooserFooter {
@@ -2862,7 +2862,7 @@ html, body {
   width: 996px;
   height: 520px;
   background-color: $_(white); /* white */
-  overflow: scroll;  
+  overflow: auto;
 }
 
 #MultiChannelChooserFooter {
@@ -3110,7 +3110,7 @@ html, body {
   height: 520px;
   background-color: $_(white); /* white */
   color: $_(textColorB); /* black */
-  overflow: scroll;  
+  overflow: auto;
 }
 
 #ChannelConfigDialogFooter {
@@ -3232,8 +3232,7 @@ html, body {
   height: 371px;
   background-color: $_(white); /* white */
   color: $_(textColorB); /* black */
-/*  overflow: scroll;   */
-  overflow: hidden;   
+  overflow: auto;
 }
 
 #DeviceConfigDialogFooter {
@@ -4006,7 +4005,7 @@ application {
 /* rega\pages\msg\sysVarsSelection.htm */
 
 .CLASS00300 {
-	overflow: scroll;
+	overflow: auto;
 	height:520px;
 	background-color:$_(white); /* white */
 	border:solid 1px $_(black); /* black */
@@ -4274,7 +4273,7 @@ application {
 
 .CLASS00717 {
 	height:200px;
-	overflow:scroll;
+	overflow: auto;
 	background-color:$_(white); /* white */
 }
 
@@ -4688,7 +4687,7 @@ application {
 /* rega\pages\msg\programChooser.htm */
 
 .CLASS01300 {
-	overflow: scroll;
+	overflow: auto;
 	width: 100%;
 	height: 400px;
 	background-color:$_(white); /* white */

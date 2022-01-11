@@ -34,6 +34,16 @@ proc loadVarsFromShellFile {filename arrayName} {
     close $f
 }
 
+proc execCmd {varName cmd} {
+  upvar 1 $varName variable
+  set rc [catch {eval $cmd} resVar]
+  if {$rc == 0} {
+    set variable $resVar
+  } else {
+    set variable "n/a"
+  }
+}
+
 proc putsVar {name value} {
     puts "<div style='display: table-row;'><div style='display:table-cell; width: 50%; text-align: right;'>$name:</div><div style='display:table-cell; width: 50%; text-align: left;'>$value</div></div>"
 }
@@ -63,31 +73,29 @@ proc action_put_page {} {
 
   set HWMODEL "n/a"
   if {[file exist /proc/device-tree/model]} {
-    set HWMODEL [exec cat /proc/device-tree/model]
+    execCmd HWMODEL {exec cat /proc/device-tree/model}
   } elseif {[file exist /sys/devices/virtual/dmi/id/sys_vendor]} {
-    set VENDOR [exec cat /sys/devices/virtual/dmi/id/sys_vendor]
+    execCmd VENDOR {exec cat /sys/devices/virtual/dmi/id/sys_vendor}
     set PNAME ""
     if {[file exist /sys/devices/virtual/dmi/id/product_name]} {
-      set PNAME [exec cat /sys/devices/virtual/dmi/id/product_name]
+      execCmd PNAME {exec cat /sys/devices/virtual/dmi/id/product_name}
     }
     set HWMODEL "$VENDOR $PNAME"
   }
 
-  set CPUMODEL [exec lscpu | grep "Model name:" | cut -d: -f2 | xargs echo -n]
-  set NUMCPU [exec nproc]
-  set LOADAVG [exec awk {{ printf $1 " " $2 " " $3 }} /proc/loadavg]
-  set MEM [exec free -h | grep Mem: | awk {{ print $2 }}]
-  set MEMUSE [exec egrep "Mem(Total|Available)" /proc/meminfo | tr -d "\n" | awk {{ printf("%.1f %", 100-$4/$2*100) }}]
-  set SWAPUSE [exec egrep "Swap(Total|Free)" /proc/meminfo | tr -d "\n" | awk {{ printf("%.1f %", 100-$4/$2*100) }}]
-  set UPTIME [exec awk {{s=int($1);d=int(s/86400);h=int(s % 86400/3600);m=int(s % 3600 / 60); printf "%d d, %d h %d min", d, h, m}} /proc/uptime]
-  set NTPOFFSET [exec /usr/bin/chronyc -n tracking | grep "Last offset" | awk {{ printf("%.3f ms", $4*1000) }}]
+  execCmd CPUMODEL {exec lscpu | grep "Model name:" | cut -d: -f2 | xargs echo -n}
+  execCmd NUMCPU {exec nproc}
+  execCmd LOADAVG {exec awk {{ printf $1 " " $2 " " $3 }} /proc/loadavg}
+  execCmd MEM {exec free -h | grep Mem: | awk {{ print $2 }}}
+  execCmd MEMUSE {exec egrep "Mem(Total|Available)" /proc/meminfo | tr -d "\n" | awk {{ printf("%.1f %", 100-$4/$2*100) }}}
+  execCmd SWAPUSE {exec egrep "Swap(Total|Free)" /proc/meminfo | tr -d "\n" | awk {{ printf("%.1f %", 100-$4/$2*100) }}}
+  execCmd UPTIME {exec awk {{s=int($1);d=int(s/86400);h=int(s % 86400/3600);m=int(s % 3600 / 60); printf "%d d, %d h %d min", d, h, m}} /proc/uptime}
+  execCmd NTPOFFSET {exec /usr/bin/chronyc -n tracking | grep "Last offset" | awk {{ printf("%.3f ms", $4*1000) }}}
   catch {set OSTYPE [string trim [read_var /etc/os-release PRETTY_NAME] '"']}
-  set OSKERNEL [exec uname -s -r -m]
+  execCmd OSKERNEL "exec uname -s -r -m"
   set TCLVER [info patchlevel]
-  set TEMP "n/a"
-  if {[file exist /sys/class/thermal/thermal_zone0/temp]} {
-    set TEMP [exec awk {{ printf("%.1f &deg;C", $1/1000) }} /sys/class/thermal/thermal_zone0/temp]
-  }
+  execCmd TEMP {exec awk {{ printf("%.1f &deg;C", $1/1000) }} /sys/class/thermal/thermal_zone0/temp}
+
   set STATUS ""
   if {[file exist /var/status/hasIP]} {
     set STATUS "IP(1) $STATUS"
@@ -114,13 +122,10 @@ proc action_put_page {} {
   } else {
     set STATUS "SD(0) $STATUS"
   }
-  set ROOTFSFREE [exec monit status rootfs | grep "space free total" | awk {{ print substr($0,index($0,$4)) }}]
-  set USERFSFREE [exec monit status userfs | grep "space free total" | awk {{ print substr($0,index($0,$4)) }}]
-  set STORAGEDEV [exec mountpoint -n / | awk {{ print $1 }} | xargs lsblk -l -n -o PKNAME -p]
-  set STORAGE "n/a"
-  if {$STORAGEDEV != "" } {
-    set STORAGE [exec lsblk -l -n -o SIZE,MODEL,KNAME -d -p $STORAGEDEV]
-  }
+  execCmd ROOTFSFREE {exec monit status rootfs | grep "space free total" | awk {{ print substr($0,index($0,$4)) }}}
+  execCmd USERFSFREE {exec monit status userfs | grep "space free total" | awk {{ print substr($0,index($0,$4)) }}}
+  execCmd STORAGEDEV {exec mountpoint -n /usr/local | awk {{ print $1 }} | xargs lsblk -l -n -o PKNAME -p}
+  execCmd STORAGE "exec lsblk -l -n -o SIZE,MODEL,KNAME -d -p $STORAGEDEV"
 
   set sid ""
   catch {import sid}

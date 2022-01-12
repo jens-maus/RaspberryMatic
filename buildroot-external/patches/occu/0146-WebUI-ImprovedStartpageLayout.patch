@@ -18,7 +18,7 @@
 -                  Write('<td id="dpc'#oEntry.ID()#'" class="CLASS01812">');
 +                  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
 +                  if( (oUser.UserLevel() == iulAdmin) && ( (oEntry.IsTypeOf( OT_VARDP )) || (oEntry.IsTypeOf( OT_ALARMDP )) ) ) {
-+                    WriteLine( '<td id="dpc'#oEntry.ID()#'" class="CLASS01812" onclick="{ reloadSysVars = function() { PopupClose(); reloadPage(); } } CreatePopup(ID_EDIT_SYSVAR_VALUE, '#oEntry.ID()#');" onmouseover="this.className=\'DeviceListRow_Highlight\';" onmouseout="this.className=\'CLASS01812\';">' );
++                    WriteLine( '<td id="dpc'#oEntry.ID()#'" class="CLASS01812" onclick="{ reloadSysVars = function() { PopupClose(); reloadPage(); } } CreatePopup(ID_EDIT_SYSVAR_VALUE, '#oEntry.ID()#');" onmouseover="this.className=\'DeviceListRow_Highlight CLASS01812\';" onmouseout="this.className=\'CLASS01812\';">' );
 +                  } else {
 +                    WriteLine( '<td id="dpc'#oEntry.ID()#'" class="CLASS01812">' );
 +                  }

@@ -10,6 +10,11 @@
 # Make sure the ssh-keygen progam exists
 [ -f /usr/bin/ssh-keygen ] || exit 0
 
+DAEMON=/usr/sbin/sshd
+PIDFILE=/var/run/sshd.pid
+
+test -x $DAEMON || exit 0
+
 umask 077
 
 start() {
@@ -27,13 +32,25 @@ start() {
   # fix permissions
   chmod 600 /etc/ssh/ssh_host_*_key
 
-  start-stop-daemon -S -q -b -p /var/run/sshd.pid --exec /usr/sbin/sshd -- -D
-  echo "OK"
+  if start-stop-daemon -S -q -p "${PIDFILE}" --exec "${DAEMON}"; then
+    echo "OK"
+  else
+    echo "FAIL"
+    exit 1
+  fi
 }
 stop() {
   echo -n "Stopping sshd: "
-  start-stop-daemon -K -q -p /var/run/sshd.pid
-  echo "OK"
+  if [[ -f ${PIDFILE} ]]; then
+    if start-stop-daemon -K -q -p "${PIDFILE}"; then
+      echo "OK"
+    else
+      echo "FAIL"
+      exit 1
+    fi
+  else
+    echo "OK"
+  fi
 }
 restart() {
   stop

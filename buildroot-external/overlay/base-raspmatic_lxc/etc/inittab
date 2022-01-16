@@ -1,0 +1,33 @@
+# /etc/inittab
+#
+# Copyright (C) 2001 Erik Andersen <andersen@codepoet.org>
+#
+# Note: BusyBox init doesn't support runlevels.  The runlevels field is
+# completely ignored by BusyBox init. If you want runlevels, use
+# sysvinit.
+#
+# Format for each entry: <id>:<runlevels>:<action>:<process>
+#
+# id        == tty to run on, or empty for /dev/console
+# runlevels == ignored
+# action    == one of sysinit, respawn, askfirst, wait, and once
+# process   == program to run
+
+# Startup the system
+tty1::sysinit:/bin/mount -a
+tty1::sysinit:/bin/mkdir -p /var/run /var/cache
+tty1::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
+# now run any rc scripts
+tty1::sysinit:/etc/init.d/rcS
+# run monit to monitor our important services
+null::respawn:/usr/bin/monit -Ic /etc/monitrc
+
+# Put a getty on tty2
+tty1::askfirst:/sbin/getty -L tty1 0 vt100
+
+# Stuff to do for the 3-finger salute
+::ctrlaltdel:/sbin/reboot
+
+# Stuff to do before rebooting
+null::shutdown:/usr/bin/monit unmonitor all
+tty1::shutdown:/etc/init.d/rcK

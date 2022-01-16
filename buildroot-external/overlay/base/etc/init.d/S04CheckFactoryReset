@@ -17,7 +17,8 @@ check_factory_reset() {
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-  if [[ "${HM_HOST}" != "oci" ]]; then
+  if [[ "${HM_HOST}" != "oci" ]] &&
+     [[ "${HM_HOST}" != "lxc" ]]; then
 
     # extract partition number and device name
     DEVNODE=$(mountpoint -d /usr/local)

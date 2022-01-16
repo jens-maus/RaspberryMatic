@@ -15,7 +15,7 @@ init_rtc_device() {
 
   # load the i2c_dev module if this is not a virtual
   # applicance but a real rpi/tinkerboard
-  if ! echo "${HM_HOST}" | grep -E -q "oci|ova-|nuc"; then
+  if ! echo "${HM_HOST}" | grep -E -q "oci|ova-|nuc|lxc"; then
     modprobe i2c_dev
   fi
 
@@ -125,7 +125,8 @@ start() {
   set | grep '^HM_' >/var/hm_mode
 
   if [[ -c /dev/rtc0 ]]; then
-    if [[ "${HM_HOST}" != "oci" ]]; then
+    if [[ "${HM_HOST}" != "oci" ]] &&
+       [[ "${HM_HOST}" != "lxc" ]]; then
       hwclock --hctosys --utc
     fi
     echo "${HM_RTC}, OK"
@@ -141,7 +142,8 @@ stop() {
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
   if [[ -c /dev/rtc0 ]]; then
-    if [[ "${HM_HOST}" != "oci" ]]; then
+    if [[ "${HM_HOST}" != "oci" ]] &&
+       [[ "${HM_HOST}" != "lxc" ]]; then
       hwclock --systohc --utc
     fi
     echo "OK"

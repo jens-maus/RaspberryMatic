@@ -184,35 +184,41 @@ update_rf_hardware() {
         done
       fi
 
-      # if NEW_VERSION is not empty we go ahead and perform the
-      # update operation
-      if [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
-        echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
+      # check if we still don't have a valid DEVNODE and then warn
+      # and skip
+      if [[ -n "${DEVNODE}" ]]; then
+        # if NEW_VERSION is not empty we go ahead and perform the
+        # update operation
+        if [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
+          echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
 
-        # run firmware update
-        # shellcheck disable=SC2086
-        /usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts="${DEVNODE}" -jar /opt/HmIP/hmip-copro-update.jar -p "${DEVNODE}" -o -f "${LATEST_FIRMWARE}" 2>/dev/null >/dev/null
+          # run firmware update
+          # shellcheck disable=SC2086
+          /usr/bin/timeout 120 /opt/java/bin/java -Dos.arch=${ARCH} ${JAVAOPT} -Dgnu.io.rxtx.SerialPorts="${DEVNODE}" -jar /opt/HmIP/hmip-copro-update.jar -p "${DEVNODE}" -o -f "${LATEST_FIRMWARE}" 2>/dev/null >/dev/null
 
-        # verify new firmware version
-        sleep 1 # give copro app some time to startup
-        HM_HMIP_VERSION=$(/bin/detect_radio_module "${DEVNODE}" | cut -d' ' -f6)
+          # verify new firmware version
+          sleep 1 # give copro app some time to startup
+          HM_HMIP_VERSION=$(/bin/detect_radio_module "${DEVNODE}" | cut -d' ' -f6)
 
-        echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
-        if [[ "${HM_HMRF_DEVNODE}" == "${HM_HMIP_DEVNODE}" ]]; then
-          HM_HMRF_VERSION=${HM_HMIP_VERSION}
-          echo "${HM_HMRF_VERSION}" >/var/rf_firmware_version
-        fi
+          echo "${HM_HMIP_VERSION}" >/var/hmip_firmware_version
+          if [[ "${HM_HMRF_DEVNODE}" == "${HM_HMIP_DEVNODE}" ]]; then
+            HM_HMRF_VERSION=${HM_HMIP_VERSION}
+            echo "${HM_HMRF_VERSION}" >/var/rf_firmware_version
+          fi
 
-        if [[ "${NEW_VERSION}" == "${HM_HMIP_VERSION}" ]]; then
-          echo -n "OK"
+          if [[ "${NEW_VERSION}" == "${HM_HMIP_VERSION}" ]]; then
+            echo -n "OK"
+          else
+            echo -n "ERROR (${HM_HMIP_VERSION} != ${NEW_VERSION})"
+          fi
         else
-          echo -n "ERROR (${HM_HMIP_VERSION} != ${NEW_VERSION})"
+          echo -n "${OLD_VERSION}, OK"
         fi
-      else
-        echo -n "${OLD_VERSION}, OK"
-      fi
 
-      FOUND=1
+        FOUND=1
+      else
+        echo -n "no device node, WARN"
+      fi
     fi
 
     # check if user has a HMIP-RFUSB-TK installed (USB)

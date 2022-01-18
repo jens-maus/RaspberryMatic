@@ -12,9 +12,10 @@
 "use strict";
 
 CodeMirror.defineMode("julia", function(config, parserConf) {
-  function wordRegexp(words, end) {
+  function wordRegexp(words, end, pre) {
+    if (typeof pre === "undefined") { pre = ""; }
     if (typeof end === "undefined") { end = "\\b"; }
-    return new RegExp("^((" + words.join(")|(") + "))" + end);
+    return new RegExp("^" + pre + "((" + words.join(")|(") + "))" + end);
   }
 
   var octChar = "\\\\[0-7]{1,3}";
@@ -22,13 +23,18 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
   var sChar = "\\\\[abefnrtv0%?'\"\\\\]";
   var uChar = "([^\\u0027\\u005C\\uD800-\\uDFFF]|[\\uD800-\\uDFFF][\\uDC00-\\uDFFF])";
 
+  var asciiOperatorsList = [
+    "[<>]:", "[<>=]=", "<<=?", ">>>?=?", "=>", "--?>", "<--[->]?", "\\/\\/",
+    "\\.{2,3}", "[\\.\\\\%*+\\-<>!\\/^|&]=?", "\\?", "\\$", "~", ":"
+  ];
   var operators = parserConf.operators || wordRegexp([
-        "[<>]:", "[<>=]=", "<<=?", ">>>?=?", "=>", "->", "\\/\\/",
-        "[\\\\%*+\\-<>!=\\/^|&\\u00F7\\u22BB]=?", "\\?", "\\$", "~", ":",
-        "\\u00D7", "\\u2208", "\\u2209", "\\u220B", "\\u220C", "\\u2218",
-        "\\u221A", "\\u221B", "\\u2229", "\\u222A", "\\u2260", "\\u2264",
-        "\\u2265", "\\u2286", "\\u2288", "\\u228A", "\\u22C5",
-        "\\b(in|isa)\\b(?!\.?\\()"], "");
+    "[<>]:", "[<>=]=", "<<=?", ">>>?=?", "=>", "--?>", "<--[->]?", "\\/\\/",
+    "[\\\\%*+\\-<>!\\/^|&\\u00F7\\u22BB]=?", "\\?", "\\$", "~", ":",
+    "\\u00D7", "\\u2208", "\\u2209", "\\u220B", "\\u220C", "\\u2218",
+    "\\u221A", "\\u221B", "\\u2229", "\\u222A", "\\u2260", "\\u2264",
+    "\\u2265", "\\u2286", "\\u2288", "\\u228A", "\\u22C5",
+    "\\b(in|isa)\\b(?!\.?\\()"
+  ], "");
   var delimiters = parserConf.delimiters || /^[;,()[\]{}]/;
   var identifiers = parserConf.identifiers ||
         /^[_A-Za-z\u00A1-\u2217\u2219-\uFFFF][\w\u00A1-\u2217\u2219-\uFFFF]*!*/;
@@ -57,9 +63,12 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
   var keywords = wordRegexp(keywordsList);
   var builtins = wordRegexp(builtinsList);
 
-  var macro = /^@[_A-Za-z][\w]*/;
+  var macro = /^@[_A-Za-z\u00A1-\uFFFF][\w\u00A1-\uFFFF]*!*/;
   var symbol = /^:[_A-Za-z\u00A1-\uFFFF][\w\u00A1-\uFFFF]*!*/;
   var stringPrefixes = /^(`|([_A-Za-z\u00A1-\uFFFF]*"("")?))/;
+
+  var macroOperators = wordRegexp(asciiOperatorsList, "", "@");
+  var symbolOperators = wordRegexp(asciiOperatorsList, "", ":");
 
   function inArray(state) {
     return (state.nestedArrays > 0);
@@ -80,7 +89,7 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
   // tokenizers
   function tokenBase(stream, state) {
     // Handle multiline comments
-    if (stream.match(/^#=/, false)) {
+    if (stream.match('#=', false)) {
       state.tokenize = tokenComment;
       return state.tokenize(stream, state);
     }
@@ -141,10 +150,10 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
     }
 
     if (inArray(state)) {
-      if (state.lastToken == "end" && stream.match(/^:/)) {
+      if (state.lastToken == "end" && stream.match(':')) {
         return "operator";
       }
-      if (stream.match(/^end/)) {
+      if (stream.match('end')) {
         return "number";
       }
     }
@@ -165,8 +174,7 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
     }
 
     // Handle symbols
-    if (!leavingExpr && stream.match(symbol) ||
-        stream.match(/:([<>]:|<<=?|>>>?=?|->|\/\/|\.{2,3}|[\.\\%*+\-<>!\/^|&]=?|[~\?\$])/)) {
+    if (!leavingExpr && (stream.match(symbol) || stream.match(symbolOperators))) {
       return "builtin";
     }
 
@@ -201,7 +209,7 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
     }
 
     // Handle Chars
-    if (stream.match(/^'/)) {
+    if (stream.match('\'')) {
       state.tokenize = tokenChar;
       return state.tokenize(stream, state);
     }
@@ -212,7 +220,7 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
       return state.tokenize(stream, state);
     }
 
-    if (stream.match(macro)) {
+    if (stream.match(macro) || stream.match(macroOperators)) {
       return "meta";
     }
 
@@ -241,10 +249,6 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
         state.isDefinition = false;
         return "def";
       }
-      if (stream.match(/^({[^}]*})*\(/, false)) {
-        state.tokenize = tokenCallOrDef;
-        return state.tokenize(stream, state);
-      }
       state.leavingExpr = true;
       return "variable";
     }
@@ -254,49 +258,11 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
     return "error";
   }
 
-  function tokenCallOrDef(stream, state) {
-    var match = stream.match(/^(\(\s*)/);
-    if (match) {
-      if (state.firstParenPos < 0)
-        state.firstParenPos = state.scopes.length;
-      state.scopes.push('(');
-      state.charsAdvanced += match[1].length;
-    }
-    if (currentScope(state) == '(' && stream.match(/^\)/)) {
-      state.scopes.pop();
-      state.charsAdvanced += 1;
-      if (state.scopes.length <= state.firstParenPos) {
-        var isDefinition = stream.match(/^(\s*where\s+[^\s=]+)*\s*?=(?!=)/, false);
-        stream.backUp(state.charsAdvanced);
-        state.firstParenPos = -1;
-        state.charsAdvanced = 0;
-        state.tokenize = tokenBase;
-        if (isDefinition)
-          return "def";
-        return "builtin";
-      }
-    }
-    // Unfortunately javascript does not support multiline strings, so we have
-    // to undo anything done upto here if a function call or definition splits
-    // over two or more lines.
-    if (stream.match(/^$/g, false)) {
-      stream.backUp(state.charsAdvanced);
-      while (state.scopes.length > state.firstParenPos)
-        state.scopes.pop();
-      state.firstParenPos = -1;
-      state.charsAdvanced = 0;
-      state.tokenize = tokenBase;
-      return "builtin";
-    }
-    state.charsAdvanced += stream.match(/^([^()]*)/)[1].length;
-    return state.tokenize(stream, state);
-  }
-
   function tokenAnnotation(stream, state) {
-    stream.match(/.*?(?=,|;|{|}|\(|\)|=|$|\s)/);
-    if (stream.match(/^{/)) {
+    stream.match(/.*?(?=[,;{}()=\s]|$)/);
+    if (stream.match('{')) {
       state.nestedParameters++;
-    } else if (stream.match(/^}/) && state.nestedParameters > 0) {
+    } else if (stream.match('}') && state.nestedParameters > 0) {
       state.nestedParameters--;
     }
     if (state.nestedParameters > 0) {
@@ -308,13 +274,13 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
   }
 
   function tokenComment(stream, state) {
-    if (stream.match(/^#=/)) {
+    if (stream.match('#=')) {
       state.nestedComments++;
     }
     if (!stream.match(/.*?(?=(#=|=#))/)) {
       stream.skipToEnd();
     }
-    if (stream.match(/^=#/)) {
+    if (stream.match('=#')) {
       state.nestedComments--;
       if (state.nestedComments == 0)
         state.tokenize = tokenBase;
@@ -345,7 +311,7 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
       return "string";
     }
     if (!stream.match(/^[^']+(?=')/)) { stream.skipToEnd(); }
-    if (stream.match(/^'/)) { state.tokenize = tokenBase; }
+    if (stream.match('\'')) { state.tokenize = tokenBase; }
     return "error";
   }
 
@@ -383,7 +349,6 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
         nestedComments: 0,
         nestedGenerators: 0,
         nestedParameters: 0,
-        charsAdvanced: 0,
         firstParenPos: -1
       };
     },
@@ -401,8 +366,8 @@ CodeMirror.defineMode("julia", function(config, parserConf) {
 
     indent: function(state, textAfter) {
       var delta = 0;
-      if ( textAfter === ']' || textAfter === ')' || /^end/.test(textAfter) ||
-           /^else/.test(textAfter) || /^catch/.test(textAfter) || /^elseif/.test(textAfter) ||
+      if ( textAfter === ']' || textAfter === ')' || /^end\b/.test(textAfter) ||
+           /^else/.test(textAfter) || /^catch\b/.test(textAfter) || /^elseif\b/.test(textAfter) ||
            /^finally/.test(textAfter) ) {
         delta = -1;
       }

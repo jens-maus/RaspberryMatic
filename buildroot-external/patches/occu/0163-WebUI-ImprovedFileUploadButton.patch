@@ -1,0 +1,96 @@
+--- occu/WebUI/www/config/cp_maintenance.cgi.orig
++++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -429,7 +429,7 @@
+             }
+             table_row {
+               td {width="20"} {}
+-              table_data {colspan="2"} {
++              table_data {align="left"} {colspan="2"} {
+                 form "/config/fileupload.ccc?sid=$sid&action=firmware_upload&downloadOnly=$downloadOnly&url=$env(SCRIPT_NAME)" {target=firmware_upload_iframe} name=firmware_form enctype=multipart/form-data method=post {
+                   file_button firmware_file size=30 maxlength=1000000
+                 }
+--- occu/WebUI/www/config/cp_network.cgi.orig
++++ occu/WebUI/www/config/cp_network.cgi
+@@ -537,7 +537,7 @@
+             }
+             table_row {
+               table_data {width="20"} {}
+-              table_data {colspan="2"} {
++              table_data {align="left"} {colspan="2"} {
+                 form "/config/fileupload.ccc?sid=$sid&action=cert_upload&url=$env(SCRIPT_NAME)" name=cert_form {target=cert_upload_iframe} enctype=multipart/form-data method=post {
+                   file_button cert_file size=30 maxlength=1000000
+                 }
+--- occu/WebUI/www/config/cp_security.cgi.orig
++++ occu/WebUI/www/config/cp_security.cgi
+@@ -1037,7 +1037,7 @@
+               td {width="20"} {}
+               table_data {align="left"} {colspan="2"} {
+                 form "/config/fileupload.ccc?sid=$sid&action=backup_upload&url=$env(SCRIPT_NAME)" name=backup_form {target=config_upload_iframe} enctype=multipart/form-data method=post {
+-                  file_button backup_file size=20 maxlength=1000000
++                  file_button backup_file size=20 maxlength=1000000 accept='.sbk'
+                 }
+                 puts {<iframe name="config_upload_iframe" class="CLASS20820" style="display: none;"></iframe>}
+               }
+--- occu/WebUI/www/tcl/extern/cgi.tcl.orig
++++ occu/WebUI/www/tcl/extern/cgi.tcl
+@@ -2082,7 +2082,12 @@
+     if {[info exists _cgi(formtype)] && ("multipart/form-data" != $_cgi(form,enctype))} {
+ 	error "cgi_file_button requires that cgi_form have the argument enctype=multipart/form-data"
+     }
+-    cgi_put "<input type=file name=\"$name\"[_cgi_list_to_string $args]/>"
++	cgi_put "<script>"
++    cgi_put "function update(e) {fileName.textContent = file.files\[0\].name;}"
++    cgi_put "const file = document.querySelector('#file'), fileName = document.querySelector('.file-name');"
++    cgi_put "file.addEventListener('change', update);"
++	cgi_put "</script>"
++    cgi_put "<label class='file-label' for='file'><div class='file-button'>\${lblChooseFile}&hellip;</div></label><p class='file-name'>\${lblNoFileSelected}</p><input type=file id='file' name=\"$name\"[_cgi_list_to_string $args]/>"
+ }
+ 
+ # establish a per-file limit for uploads
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -1058,6 +1058,8 @@
+     "btnSysConfAdditionalSoft" : "Zusatzsoftware",
+     "lblSysConfAdditionalSoft1" : "Zusatzsoftware verwalten",
+     "lblSysConfAdditionalSoft2" : "Zusatzsoftware installieren",
++    "lblNoFileSelected" : "Keine Datei ausgew%E4hlt.",
++    "lblChooseFile" : "Durchsuchen",
+     "Australia" : "Australien",
+     "Austria" : "%D6sterreich",
+     "Belgium" : "Belgien",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -1135,6 +1135,9 @@
+     "lblSysConfAdditionalSoft1" : "Manage additional software",
+     "lblSysConfAdditionalSoft2" : "Install additional software",
+ 
++    "lblNoFileSelected" : "No file selected.",
++    "lblChooseFile" : "Choose file",
++
+     "Australia" : "Australia",
+     "Austria" : "Austria",
+     "Belgium" : "Belgium",
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -9251,3 +9251,21 @@
+ .CodeMirror-gutter-wrapper {
+   font-family: monospace;
+ }
++
++.file-button {
++  background: #eee;
++  border: 1px solid #aaa;
++  border-radius: 3px;
++  display: inline-block;
++  padding: 2px 8px;
++}
++
++.file-name {
++  width: 250px;
++  overflow-wrap: break-word;
++  padding: 2px;
++}
++
++input[type='file'] {
++  display: none;
++}

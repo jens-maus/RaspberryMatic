@@ -1044,10 +1044,13 @@ proc action_put_page {} {
             }
             table_row {
               td {width="20"}  {}
-              td {style="text-align:left"} "\${dialogSettingsSecurityLblPerformRestore}"
-              table_data {align="right"} {
+              td {colspan="2"} {style="text-align:left"} "\${dialogSettingsSecurityLblPerformRestore}"
+            }
+            table_row {
+              td {width="20"}  {}
+              table_data {align="left"} {colspan="2"} {
                 division {class="popupControls CLASS20811"} {
-                  division {class="CLASS20818 colorGradient50px"} {onClick="OnBackupSubmit()"} {
+                  division {class="CLASS20818 colorGradient50px" style="width: 150px; margin-left: 20px;"} {onClick="OnBackupSubmit()"} {
                     puts "\${dialogSettingsSecurityBtnBackupUpload}"
                   }
                 }

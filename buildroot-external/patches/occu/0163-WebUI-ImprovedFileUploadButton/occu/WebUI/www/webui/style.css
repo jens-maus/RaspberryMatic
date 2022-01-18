@@ -9253,17 +9253,25 @@ color: $_(textColorA); /* white */
 }
 
 .file-button {
-  background: #eee;
-  border: 1px solid #aaa;
-  border-radius: 3px;
-  display: inline-block;
-  padding: 2px 8px;
+  background-color: $_(clickable);
+  background-image: url(/ise/img/gradientButton25px.png);
+  background-image: var(--btnGradient);
+  color: $_(textColorB); /* black */
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  cursor: pointer;
+  border: solid 1px $_(black); /* black */
+  border-radius: 5px;
+  width: 150px;
+  margin-top: 5px;
+  margin-left: 20px;
 }
 
 .file-name {
-  width: 250px;
-  overflow-wrap: break-word;
-  padding: 2px;
+  overflow-wrap: anywhere;
+  margin-left: 20px;
+  font-style: italic;
 }
 
 input[type='file'] {

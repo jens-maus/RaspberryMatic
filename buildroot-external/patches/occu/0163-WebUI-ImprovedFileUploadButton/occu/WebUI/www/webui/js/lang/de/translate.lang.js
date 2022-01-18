@@ -1059,7 +1059,7 @@ jQuery.extend(true,langJSON, {
     "lblSysConfAdditionalSoft1" : "Zusatzsoftware verwalten",
     "lblSysConfAdditionalSoft2" : "Zusatzsoftware installieren",
     "lblNoFileSelected" : "Keine Datei ausgew%E4hlt.",
-    "lblChooseFile" : "Durchsuchen",
+    "lblChooseFile" : "Datei ausw%E4hlen",
     "Australia" : "Australien",
     "Austria" : "%D6sterreich",
     "Belgium" : "Belgien",

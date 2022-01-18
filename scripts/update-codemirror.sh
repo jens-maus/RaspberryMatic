@@ -9,7 +9,8 @@ unzip-strip() (
     local archive=$1
     local destdir=${2:-}
     shift; shift || :
-    local tmpdir=$(mktemp -d)
+    local tmpdir
+    tmpdir=$(mktemp -d)
     trap 'rm -rf -- "$tmpdir"' EXIT
     unzip -qd "$tmpdir" -- "$archive"
     shopt -s dotglob

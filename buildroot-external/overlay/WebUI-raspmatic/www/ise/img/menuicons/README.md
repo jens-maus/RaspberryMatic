@@ -17,6 +17,8 @@ submenuSysProtocol:                   https://img.icons8.com/material/24/000000/
 submenuSysVar:                        https://img.icons8.com/material/24/000000/variable.png
 submenuUserManagement:                https://img.icons8.com/material/24/000000/conference-background-selected.png
 
+submenuScriptExecutor:                https://img.icons8.com/material/24/000000/data-.png
+
 Icons8 License:
 --------------
 You are welcome to use icons apps for free for personal or commercial use. In this case, you have to reference us

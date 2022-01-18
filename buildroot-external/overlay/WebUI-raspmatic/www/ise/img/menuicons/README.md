@@ -16,7 +16,6 @@ submenuSysControl:                    https://img.icons8.com/material/24/000000/
 submenuSysProtocol:                   https://img.icons8.com/material/24/000000/log.png
 submenuSysVar:                        https://img.icons8.com/material/24/000000/variable.png
 submenuUserManagement:                https://img.icons8.com/material/24/000000/conference-background-selected.png
-
 submenuScriptExecutor:                https://img.icons8.com/material/24/000000/data-.png
 
 Icons8 License:

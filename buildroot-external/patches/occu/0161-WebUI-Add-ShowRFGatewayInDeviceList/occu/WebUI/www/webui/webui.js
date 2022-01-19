@@ -11607,7 +11607,7 @@ DeviceList = Singleton.create({
 
     
     var BidCosGateways=[];
-    var allDevsList=[];
+    var allBidCosDevsList=[];
     var rfGateways = homematic("BidCoS_RF.getConfigurationRF");
     if (rfGateways) {
       for (i = 0, len = rfGateways.interfaces.length; i < len; i++) {
@@ -11628,7 +11628,7 @@ DeviceList = Singleton.create({
       for (i = 0, len = BidCosGateways.length; i < len; i++) {
         DeviceListPage.INTERFACES.push({id:BidCosGateways[i].m_userName, name:BidCosGateways[i].m_userName});
       }
-      allDevsList = homematic("Interface.listDevices", {"interface": "BidCos-RF"});
+      allBidCosDevsList = homematic("Interface.listDevices", {"interface": "BidCos-RF"});
     }
     
 
@@ -11638,10 +11638,10 @@ DeviceList = Singleton.create({
       jQuery.each(deviceList, function (index, data) {
       // console.dir (data);
         data["interface_displayname"] = data["interface"];
-        if ( rfGateways && data["interface"] === "BidCos-RF") {
-          var idx = allDevsList.findIndex(({ address }) => address === data["address"]);
+        if ( allBidCosDevsList && rfGateways && data["interface"] === "BidCos-RF") {
+          var idx = allBidCosDevsList.findIndex(({ address }) => address === data["address"]);
           if (idx > -1) {
-            var _device= allDevsList[idx];
+            var _device= allBidCosDevsList[idx];
             var gwIdx = BidCosGateways.findIndex(({ m_address }) => m_address === _device["interface"]);
             if ( gwIdx > -1 ) {
               data["interface_displayname"] = (BidCosGateways[gwIdx].m_userName.length > 0) ?  BidCosGateways[gwIdx].m_userName : _device["interface"]; 

@@ -35359,7 +35359,7 @@ isePowerMeter.prototype = {
   },
 
   changeToKilo: function() {
-    return (this.summedUpEnergy/1000).toFixed(3);
+    return (this.summedUpEnergy/1000).toFixed(2);
   },
 
   setEnergyCounterPanel: function() {
@@ -35434,8 +35434,8 @@ isePowerMeter.prototype = {
           energyCostCCU = ((energyConsumptionCCU * this.EnergyPrice) / unitFactorCCU).toFixed(2) + " " + this.energyConfig.currency,
           energyCostDevice = ((energyConsumptionDevice * this.EnergyPrice) / unitFactorDevice).toFixed(2) + " " + this.energyConfig.currency;
         if (this.measurementType == this.sensorTypeID.gas) {
-          j_energyCostCCU.text(energyConsumptionCCU.toFixed(1) + kWh + " = " + energyCostCCU).show();
-          j_energyCostDevice.text(energyConsumptionDevice.toFixed(1) + kWh + " = " + energyCostDevice).show();
+          j_energyCostCCU.text(energyConsumptionCCU.toFixed(2) + kWh + " = " + energyCostCCU).show();
+          j_energyCostDevice.text(energyConsumptionDevice.toFixed(2) + kWh + " = " + energyCostDevice).show();
         } else {
           j_energyCostCCU.text(energyCostCCU).show();
           j_energyCostDevice.text(energyCostDevice).show();

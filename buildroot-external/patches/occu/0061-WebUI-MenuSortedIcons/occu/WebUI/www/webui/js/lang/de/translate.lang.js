@@ -66,6 +66,7 @@ jQuery.extend(true,langJSON, {
     "submenuSysProtocol" : "Systemprotokoll",
     "submenuDirectLinks" : "Direkte Verkn%FCpfungen",
     "submenuProgramsLinks" : "Programme & Zentralenverkn%FCpfungen",
+    "submenuScriptExecutor" : "Skript testen",
     "submenuDeviceInbox" : "Ger%E4te - Posteingang",
     "submenuUserManagement" : "Benutzerverwaltung",
     "submenuSysControl" : "Systemsteuerung",

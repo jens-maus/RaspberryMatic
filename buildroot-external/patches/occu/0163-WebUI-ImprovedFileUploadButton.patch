@@ -1,0 +1,204 @@
+--- occu/WebUI/www/config/cp_maintenance.cgi.orig
++++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -405,19 +405,16 @@
+             }
+             table_row {
+               td {width="20"} {}
+-              table_data {align="left"} {
++              table_data {align="left"} {colspan="2"} {
+                 puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep1}"
+               }
+-              table_data {
++            }
++            table_row {
++              td {width="20"} {}
++              table_data {align="left"} {colspan="2"} {
+                 division {class="popupControls CLASS20905"} {
+-                  table {
+-                    table_row {
+-                      table_data {
+-                        division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU[getProduct]';\"" {}
+-                        division {class="CLASS20908"}  "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases/latest','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+-                      }
+-                    }
+-                  }
++                  division {class="CLASS20908" style="display: none;"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU[getProduct]';\"" {}
++                  division {class="CLASS20908" style="width: 150px; margin-left: 20px;"} "onClick=\"window.open('https://github.com/jens-maus/RaspberryMatic/releases/latest','_blank');\"" {puts "\${dialogSettingsCMBtnPerformSoftwareUpdateDownload}"}
+                 }
+               }
+             }
+@@ -429,28 +426,25 @@
+             }
+             table_row {
+               td {width="20"} {}
+-              table_data {colspan="2"} {
++              table_data {align="left"} {colspan="2"} {
+                 form "/config/fileupload.ccc?sid=$sid&action=firmware_upload&downloadOnly=$downloadOnly&url=$env(SCRIPT_NAME)" {target=firmware_upload_iframe} name=firmware_form enctype=multipart/form-data method=post {
+-                  file_button firmware_file size=30 maxlength=1000000
++                  file_button firmware_file size=30 maxlength=1000000 accept='.zip,.tgz,application/zip,application/gzip'
+                 }
+                 puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
+               }
+             }
+             table_row {
+               td {width="20"} {}
+-              table_data {align="left"} {
++              table_data {align="left"} {colspan="2"} {
+                 puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep3}"
+               }
+-              table_data {
++            }
++            table_row {
++              td {width="20"} {}
++              table_data {align="left"} {colspan="2"} {
+                 division {class="popupControls CLASS20905"} {
+-                  table {
+-                    table_row {
+-                      table_data {
+-                        division {class="CLASS20919"} {onClick="stopHmIPServer();document.firmware_form.submit();showUserHint();"} {
+-                          puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
+-                        }
+-                      }
+-                    }
++                  division {class="CLASS20919" style="width: 150px; margin-left: 20px;"} {onClick="stopHmIPServer();document.firmware_form.submit();showUserHint();"} {
++                    puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
+                   }
+                 }
+               }
+--- occu/WebUI/www/config/cp_network.cgi.orig
++++ occu/WebUI/www/config/cp_network.cgi
+@@ -537,9 +537,9 @@
+             }
+             table_row {
+               table_data {width="20"} {}
+-              table_data {colspan="2"} {
++              table_data {align="left"} {colspan="2"} {
+                 form "/config/fileupload.ccc?sid=$sid&action=cert_upload&url=$env(SCRIPT_NAME)" name=cert_form {target=cert_upload_iframe} enctype=multipart/form-data method=post {
+-                  file_button cert_file size=30 maxlength=1000000
++                  file_button cert_file size=30 maxlength=1000000 accept='.pem,.crt'
+                 }
+                 puts {<iframe name="cert_upload_iframe" style="display: none;"></iframe>}
+               }
+@@ -550,17 +550,14 @@
+                 #puts "Schritt 3: Zertifikat auf Zentrale laden"
+                 puts "\${dialogSettingsNetworkCertificateLblStep3}"
+               }
+-              table_data {align="right"} {
++            }
++            table_row {
++              table_data {width="20"} {}
++              table_data {colspan="2" align="left"} {
+                 division {class="popupControls CLASS21107"} {
+-                  table {
+-                    table_row {
+-                      table_data {
+-                        division {class="CLASS21108"} {onClick="document.cert_form.submit();"} {
+-                          #puts "Hochladen"
+-                          puts "\${dialogSettingsNetworkCertificateLblUpload}"
+-                        }
+-                      }
+-                    }
++                  division {class="CLASS21108" style="width: 150px; margin-left: 20px;"} {onClick="document.cert_form.submit();"} {
++                    #puts "Hochladen"
++                    puts "\${dialogSettingsNetworkCertificateLblUpload}"
+                   }
+                 }
+               }
+--- occu/WebUI/www/config/cp_security.cgi.orig
++++ occu/WebUI/www/config/cp_security.cgi
+@@ -1037,17 +1037,20 @@
+               td {width="20"} {}
+               table_data {align="left"} {colspan="2"} {
+                 form "/config/fileupload.ccc?sid=$sid&action=backup_upload&url=$env(SCRIPT_NAME)" name=backup_form {target=config_upload_iframe} enctype=multipart/form-data method=post {
+-                  file_button backup_file size=20 maxlength=1000000
++                  file_button backup_file size=20 maxlength=1000000 accept='.sbk'
+                 }
+                 puts {<iframe name="config_upload_iframe" class="CLASS20820" style="display: none;"></iframe>}
+               }
+             }
+             table_row {
+               td {width="20"}  {}
+-              td {style="text-align:left"} "\${dialogSettingsSecurityLblPerformRestore}"
+-              table_data {align="right"} {
++              td {colspan="2"} {style="text-align:left"} "\${dialogSettingsSecurityLblPerformRestore}"
++            }
++            table_row {
++              td {width="20"}  {}
++              table_data {align="left"} {colspan="2"} {
+                 division {class="popupControls CLASS20811"} {
+-                  division {class="CLASS20818 colorGradient50px"} {onClick="OnBackupSubmit()"} {
++                  division {class="CLASS20818 colorGradient50px" style="width: 150px; margin-left: 20px;"} {onClick="OnBackupSubmit()"} {
+                     puts "\${dialogSettingsSecurityBtnBackupUpload}"
+                   }
+                 }
+--- occu/WebUI/www/tcl/extern/cgi.tcl.orig
++++ occu/WebUI/www/tcl/extern/cgi.tcl
+@@ -2082,7 +2082,12 @@
+     if {[info exists _cgi(formtype)] && ("multipart/form-data" != $_cgi(form,enctype))} {
+ 	error "cgi_file_button requires that cgi_form have the argument enctype=multipart/form-data"
+     }
+-    cgi_put "<input type=file name=\"$name\"[_cgi_list_to_string $args]/>"
++	cgi_put "<script>"
++    cgi_put "function update(e) {fileName.textContent = file.files\[0\].name;}"
++    cgi_put "const file = document.querySelector('#file'), fileName = document.querySelector('.file-name');"
++    cgi_put "file.addEventListener('change', update);"
++	cgi_put "</script>"
++    cgi_put "<label class='file-label' for='file'><div class='file-button'>\${lblChooseFile}&hellip;</div></label><p class='file-name'>\${lblNoFileSelected}</p><input type=file id='file' name=\"$name\"[_cgi_list_to_string $args]/>"
+ }
+ 
+ # establish a per-file limit for uploads
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -1058,6 +1058,8 @@
+     "btnSysConfAdditionalSoft" : "Zusatzsoftware",
+     "lblSysConfAdditionalSoft1" : "Zusatzsoftware verwalten",
+     "lblSysConfAdditionalSoft2" : "Zusatzsoftware installieren",
++    "lblNoFileSelected" : "Keine Datei ausgew%E4hlt.",
++    "lblChooseFile" : "Datei ausw%E4hlen",
+     "Australia" : "Australien",
+     "Austria" : "%D6sterreich",
+     "Belgium" : "Belgien",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -1135,6 +1135,9 @@
+     "lblSysConfAdditionalSoft1" : "Manage additional software",
+     "lblSysConfAdditionalSoft2" : "Install additional software",
+ 
++    "lblNoFileSelected" : "No file selected.",
++    "lblChooseFile" : "Choose file",
++
+     "Australia" : "Australia",
+     "Austria" : "Austria",
+     "Belgium" : "Belgium",
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -9251,3 +9251,29 @@
+ .CodeMirror-gutter-wrapper {
+   font-family: monospace;
+ }
++
++.file-button {
++  background-color: $_(clickable);
++  background-image: url(/ise/img/gradientButton25px.png);
++  background-image: var(--btnGradient);
++  color: $_(textColorB); /* black */
++  text-align: center;
++  vertical-align: middle;
++  font-weight: bold;
++  cursor: pointer;
++  border: solid 1px $_(black); /* black */
++  border-radius: 5px;
++  width: 150px;
++  margin-top: 5px;
++  margin-left: 20px;
++}
++
++.file-name {
++  overflow-wrap: anywhere;
++  margin-left: 20px;
++  font-style: italic;
++}
++
++input[type='file'] {
++  display: none;
++}

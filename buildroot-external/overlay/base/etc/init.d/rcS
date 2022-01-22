@@ -4,6 +4,22 @@
 # Start all init scripts in /etc/init.d
 # executing them in numerical order.
 
+# perform systemwide fsck
+/sbin/fsck -A -R -p
+
+# mount all filesystems
+/bin/mount -a
+
+# create /var/run and /var/cache
+/bin/mkdir -p /var/run /var/cache
+
+# create ld.so.cache file
+/sbin/ldconfig -C /var/cache/ld.so.cache
+
+# start psplash
+/usr/bin/psplash -n 2>/dev/null &
+PSPLASH_PID=$!
+
 for i in /etc/init.d/S??* ;do
 
   # Ignore dangling symlinks (if any).
@@ -38,6 +54,8 @@ IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
 [[ -r /VERSION ]] && . /VERSION
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
+echo "Finished Boot: ${VERSION} (${PRODUCT})"
+
 MSG="${VERSION} --"
 if [[ "${HM_MODE}" == "NORMAL" ]]; then
   if [[ -z "${IP}" ]]; then
@@ -55,3 +73,6 @@ fi
 MSG=$(echo -en "${MSG}\n\n-- Press ALT+F2 for service console")
 
 /usr/bin/psplash-write "MSG ${MSG}"
+
+# kill psplash
+kill ${PSPLASH_PID}

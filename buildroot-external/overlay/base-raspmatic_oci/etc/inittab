@@ -13,16 +13,16 @@
 # action    == one of sysinit, respawn, askfirst, wait, and once
 # process   == program to run
 
-# Startup the system
+# Init the system
 null::sysinit:/bin/mkdir -p /dev_host
 #Bug in Kubernetes -> sys is mounted RO even for privileged -> https://github.com/kubernetes/kubernetes/pull/96877
 null::sysinit:/bin/mount -o rw,remount /sys
-::sysinit:/bin/mount -a
-null::sysinit:/bin/mount -o ro,remount /
-null::sysinit:/bin/mkdir -p /var/run /var/cache
-null::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
-# now run any rc scripts
-::sysinit:/etc/init.d/rcS
+tty2::sysinit:/bin/mount -t tmpfs tmpfs /tmp
+
+# run any rc scripts (start) and move boot.log
+::sysinit:/etc/init.d/rcS 2>&1 | /usr/bin/tee -a /tmp/boot.log
+::sysinit:/bin/mv /tmp/boot.log /var/log/boot.log
+
 # run monit to monitor our important services
 null::respawn:/usr/bin/monit -Ic /etc/monitrc
 
@@ -31,4 +31,6 @@ null::respawn:/usr/bin/monit -Ic /etc/monitrc
 
 # Stuff to do before rebooting
 null::shutdown:/usr/bin/monit unmonitor all
+
+# run any rc scripts (stop)
 ::shutdown:/etc/init.d/rcK

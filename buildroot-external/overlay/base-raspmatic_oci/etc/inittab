@@ -17,7 +17,7 @@
 null::sysinit:/bin/mkdir -p /dev_host
 #Bug in Kubernetes -> sys is mounted RO even for privileged -> https://github.com/kubernetes/kubernetes/pull/96877
 null::sysinit:/bin/mount -o rw,remount /sys
-tty2::sysinit:/bin/mount -t tmpfs tmpfs /tmp
+null::sysinit:/bin/mount -t tmpfs tmpfs /tmp
 
 # run any rc scripts (start) and move boot.log
 ::sysinit:/etc/init.d/rcS 2>&1 | /usr/bin/tee -a /tmp/boot.log

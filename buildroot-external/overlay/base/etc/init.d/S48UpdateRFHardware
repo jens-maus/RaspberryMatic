@@ -87,7 +87,7 @@ update_rf_hardware() {
         # remove the temporary directory again
         rm -rf "${TMPDIR_FW}"
       else
-        echo -n "${OLD_VERSION}, OK"
+        echo -n "${OLD_VERSION}, not necessary, OK"
       fi
       FOUND=1
     fi
@@ -140,7 +140,7 @@ update_rf_hardware() {
           echo -n "ERROR (${HM_HMIP_VERSION} != ${NEW_VERSION})"
         fi
       else
-        echo -n "${OLD_VERSION}, OK"
+        echo -n "${OLD_VERSION}, not necessary, OK"
       fi
 
       FOUND=1
@@ -209,7 +209,7 @@ update_rf_hardware() {
           echo -n "ERROR (${HM_HMIP_VERSION} != ${NEW_VERSION})"
         fi
       else
-        echo -n "${OLD_VERSION}, OK"
+        echo -n "${OLD_VERSION}, not necessary, OK"
       fi
 
       FOUND=1

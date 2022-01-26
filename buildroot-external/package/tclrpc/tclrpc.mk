@@ -8,7 +8,7 @@
 #
 ################################################################################
 
-TCLRPC_VERSION = 1.0.0
+TCLRPC_VERSION = 1.1
 TCLRPC_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/tclrpc
 TCLRPC_SITE_METHOD = local
 TCLRPC_LICENSE = Apache2

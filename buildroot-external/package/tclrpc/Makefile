@@ -7,7 +7,7 @@ LDFLAGS = -shared -fPIC
 all: tclrpc.so
 
 tclrpc.so: tclrpc.o
-	$(LD) $(LDFLAGS) -o tclrpc.so tclrpc.o
+	$(CXX) -shared -fPIC $(LDFLAGS) -o tclrpc.so tclrpc.o
 
 .cpp.o:
-	$(CXX) -c $(CXXFLAGS) $<
+	$(CXX) -c $(CXXFLAGS) -fPIC $< -o $@

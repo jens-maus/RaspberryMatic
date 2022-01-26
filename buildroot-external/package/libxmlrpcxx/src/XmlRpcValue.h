@@ -5,7 +5,8 @@
 // XmlRpc++ Copyright (c) 2002-2003 by Chris Morley
 //
 
-/* changed by eQ-3 Entwicklung GmbH 2006 */
+/* changed by eQ-3 Entwicklung GmbH 2006,
+ * 2016 - Added 64 bit unsigned integer type for internal usage. It is not supposed to be converted to / from XML*/
 
 #if defined(_MSC_VER)
 # pragma warning(disable:4786)    // identifier was truncated in debug info
@@ -26,7 +27,6 @@ namespace XmlRpc {
   //   should probably refcount them...
   class XMLRPC_DLLEXPORT XmlRpcValue {
   public:
-
 
     enum Type {
       TypeInvalid,
@@ -96,7 +96,7 @@ namespace XmlRpc {
     operator BinaryData&()    { assertTypeOrInvalid(TypeBase64); return *_value.asBinary; }
     operator struct tm&()     { assertTypeOrInvalid(TypeDateTime); return *_value.asTime; }
     operator ValueStruct&()   { assertTypeOrInvalid(TypeStruct); return *_value.asStruct; }
-
+    
     XmlRpcValue const& operator[](int i) const { assertArray(i+1); return _value.asArray->at(i); }
     XmlRpcValue& operator[](int i)             { assertArray(i+1); return _value.asArray->at(i); }
 

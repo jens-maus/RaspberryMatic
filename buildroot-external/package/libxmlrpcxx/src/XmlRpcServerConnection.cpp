@@ -363,7 +363,7 @@ XmlRpcServerConnection::generateResponse(XmlRpcValue& result)
 	}else{
 		std::string resultXml=result.toXml();
 		const char RESPONSE_1[] = 
-			"<?xml version=\"1.0\"?>\r\n"
+			"<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\r\n"
 			"<methodResponse><params><param>\r\n\t";
 		const char RESPONSE_2[] =
 			"\r\n</param></params></methodResponse>\r\n";
@@ -385,11 +385,11 @@ XmlRpcServerConnection::generateHeader(std::string const& body)
     "Server: ";
   header += XMLRPC_VERSION;
   header += "\r\n"
-    "Content-Type: text/xml\r\n"
-    "Content-length: ";
+    "Content-Type: text/xml; charset=iso-8859-1\r\n"
+    "Content-Length: ";
 
   char buffLen[40];
-  sprintf(buffLen,"%d\r\n\r\n", body.size());
+  snprintf(buffLen, sizeof(buffLen), "%d\r\n\r\n", body.size());
 
   return header + buffLen;
 }
@@ -411,7 +411,7 @@ XmlRpcServerConnection::generateFaultResponse(std::string const& errorMsg, int e
 		_response.append(body);
 	}else{
 		const char RESPONSE_1[] = 
-			"<?xml version=\"1.0\"?>\r\n"
+			"<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\r\n"
 			"<methodResponse><fault>\r\n\t";
 		const char RESPONSE_2[] =
 			"\r\n</fault></methodResponse>\r\n";

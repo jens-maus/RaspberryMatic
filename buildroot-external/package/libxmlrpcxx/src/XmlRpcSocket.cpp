@@ -162,7 +162,7 @@ XmlRpcSocket::bind(int fd, const char* path)
 
   memset(&saddr, 0, sizeof(saddr));
   saddr.sun_family = AF_UNIX;
-  strncpy(saddr.sun_path, path, sizeof(saddr.sun_path));
+  snprintf(saddr.sun_path, sizeof(saddr.sun_path), "%s", path);
   unlink(saddr.sun_path);
   return (::bind(fd, (struct sockaddr *)&saddr, sizeof(saddr)) == 0);
 #endif
@@ -232,7 +232,7 @@ XmlRpcSocket::connect(int fd, const std::string& path)
   struct sockaddr_un saddr;
   memset(&saddr, 0, sizeof(saddr));
   saddr.sun_family = AF_UNIX;
-  strcpy(saddr.sun_path, path.c_str());
+  snprintf(saddr.sun_path, sizeof(saddr.sun_path), "%s", path.c_str());
 
   // For asynch operation, this will return EWOULDBLOCK (windows) or
   // EINPROGRESS (linux) and we just need to wait for the socket to be writable...

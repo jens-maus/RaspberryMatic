@@ -1,5 +1,5 @@
 
-/* changed by eQ-3 Entwicklung GmbH 2006 */
+/* changed by eQ-3 Entwicklung GmbH 2006, 2016 */
 
 
 #include "XmlRpcValue.h"
@@ -379,6 +379,7 @@ namespace XmlRpc {
       case TypeBase64:   return binaryToXml();
       case TypeArray:    return arrayToXml();
       case TypeStruct:   return structToXml();
+      // ExtensionTypeUInt8 is internal use only. It's not supposed to be converted to XML
       default: break;
     }
     return std::string();   // Invalid value
@@ -396,6 +397,7 @@ namespace XmlRpc {
       case TypeBase64:   return binaryToStream();
       case TypeArray:    return arrayToStream();
       case TypeStruct:   return structToStream();
+      // ExtensionTypeUInt8 is internal use only. It's not supposed to be converted to XML
       default: break;
     }
     return std::string();   // Invalid value
@@ -412,6 +414,7 @@ namespace XmlRpc {
       case TypeBase64:   return binaryToText();
       case TypeArray:    return arrayToText();
       case TypeStruct:   return structToText();
+      // ExtensionTypeUInt8 is internal use only. It's not supposed to be converted to XML
       default: break;
     }
     return "nil";   // Invalid value
@@ -842,9 +845,11 @@ namespace XmlRpc {
 	unsigned long value;
 	memcpy(&value, data, 4);
 	time_t t=ntohl(value);
+	struct tm _ptm;
+	memset( &_ptm, 0, sizeof( _ptm ) );
 
     _type = TypeDateTime;
-    _value.asTime = new struct tm(*gmtime(&t));
+    _value.asTime = new struct tm(*gmtime_r(&t, &_ptm));
     *offset += 4;
     return true;
   }
@@ -1007,7 +1012,7 @@ namespace XmlRpc {
     std::string s="x";
 	BinaryData::iterator it;
 	for(it=_value.asBinary->begin();it!=_value.asBinary->end();it++){
-		sprintf(buffer, "%02X", ((int)*it)&0xff);
+		snprintf(buffer, sizeof(buffer), "%02X", ((int)*it)&0xff);
 		s.append(buffer);
 	}
     return s;

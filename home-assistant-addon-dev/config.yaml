@@ -95,7 +95,7 @@ ports_description:
   9092/tcp: CCU-Historian DB-Port (Extern)
   5435/tcp: CCU-Historian DB-pgPort (Extern)
 environment:
-  HM_RUNNING_IN_HA: 1
+  HM_RUNNING_IN_HA: "1"
   HM_HAPROXY_SRC: 172.30.32.2/32
 full_access: true
 privileged:

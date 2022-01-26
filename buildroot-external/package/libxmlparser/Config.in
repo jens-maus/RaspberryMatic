@@ -1,0 +1,6 @@
+config BR2_PACKAGE_LIBXMLPARSER
+	bool "libxmlparser"
+	help
+	  XMLParser library
+
+	  https://github.com/eq-3/occu/blob/master/CCU2/download/xmlparser-eQ-3.tar.gz

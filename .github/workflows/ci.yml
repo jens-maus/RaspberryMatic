@@ -12,7 +12,7 @@ on:
       - 'helm/**'
       - 'release/LATEST-VERSION.js'
       - 'release/rpi-imager.json'
-      - 'home-assistant-addon-dev/config.json'
+      - 'home-assistant-addon-dev/config.yaml'
   pull_request:
     branches-ignore:
       - 'gh-pages'
@@ -23,7 +23,7 @@ on:
       - 'helm/**'
       - 'release/LATEST-VERSION.js'
       - 'release/rpi-imager.json'
-      - 'home-assistant-addon-dev/config.json'
+      - 'home-assistant-addon-dev/config.yaml'
   workflow_dispatch:
     inputs:
       skip_build:
@@ -61,6 +61,11 @@ jobs:
       uses: frenck/action-addon-linter@main
       with:
         path: "./home-assistant-addon"
+
+    - name: Check Home Assistant Add-on Lint (dev)
+      uses: frenck/action-addon-linter@main
+      with:
+        path: "./home-assistant-addon-dev"
 
     - name: Check Package consistency
       run: |

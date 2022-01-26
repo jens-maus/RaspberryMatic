@@ -1,35 +1,167 @@
 --- buildroot/package/monit/0002-configure-fixes.patch.orig
 +++ buildroot/package/monit/0002-configure-fixes.patch
-@@ -0,0 +1,22 @@
-+diff -ruN monit-5.27.1.orig/configure.ac monit-5.27.1/configure.ac
-+--- monit-5.27.1.orig/configure.ac	2020-10-24 20:26:57.000000000 +0200
-++++ monit-5.27.1/configure.ac	2020-11-19 17:31:30.656661653 +0100
-+@@ -9,6 +9,7 @@
-+ AC_INIT([monit], [5.27.1], [monit-general@nongnu.org])
+@@ -0,0 +1,24 @@
++diff -ruN monit-5.29.0.orig/configure.ac monit-5.29.0/configure.ac
++--- monit-5.29.0.orig/configure.ac	2021-08-24 18:15:35.000000000 +0200
+++++ monit-5.29.0/configure.ac	2021-11-20 10:34:31.074783265 +0100
++@@ -8,7 +8,7 @@
++ # Example: 5.0_beta2
++ AC_INIT([monit], [5.29.0], [monit-general@nongnu.org])
 + AC_CONFIG_AUX_DIR(config)
-+ AC_CONFIG_MACRO_DIR([m4])
-++AC_CONFIG_MACRO_DIR([config])
++-AC_CONFIG_MACRO_DIR([m4])
+++AC_CONFIG_MACRO_DIRS([m4 config])
 + AM_INIT_AUTOMAKE
 + AC_CONFIG_SRCDIR([src/monit.c])
 + AC_CONFIG_SUBDIRS([libmonit])
-+diff -ruN monit-5.27.1.orig/libmonit/configure.ac monit-5.27.1/libmonit/configure.ac
-+--- monit-5.27.1.orig/libmonit/configure.ac	2020-10-24 20:26:57.000000000 +0200
-++++ monit-5.27.1/libmonit/configure.ac	2020-11-19 17:31:44.220707976 +0100
-+@@ -5,6 +5,7 @@
++diff -ruN monit-5.29.0.orig/libmonit/configure.ac monit-5.29.0/libmonit/configure.ac
++--- monit-5.29.0.orig/libmonit/configure.ac	2021-08-24 18:15:35.000000000 +0200
+++++ monit-5.29.0/libmonit/configure.ac	2021-11-20 10:34:54.123439163 +0100
++@@ -4,7 +4,7 @@
++ 
 + AC_INIT([libmonit], [1.0], [monit-dev@tildeslash.com])
 + AC_CONFIG_AUX_DIR(config)
-+ AC_CONFIG_MACRO_DIR([m4])
-++AC_CONFIG_MACRO_DIR([config])
++-AC_CONFIG_MACRO_DIR([m4])
+++AC_CONFIG_MACRO_DIRS([m4 config])
 + AM_INIT_AUTOMAKE
 + AC_CONFIG_SRCDIR([src])
 + 
+--- buildroot/package/monit/0003-fixes-1002-v1.patch.orig
++++ buildroot/package/monit/0003-fixes-1002-v1.patch
+@@ -0,0 +1,34 @@
++From 27e04d06bd996d53543cd063668fe75f930fdd72 Mon Sep 17 00:00:00 2001
++From: tildeslash <info@tildeslash.com>
++Date: Mon, 13 Sep 2021 21:32:10 +0200
++Subject: [PATCH] fix issue #1002
++
++---
++ src/process/sysdep_LINUX.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/process/sysdep_LINUX.c b/src/process/sysdep_LINUX.c
++index b78200bf..70e8c7f7 100644
++--- a/src/process/sysdep_LINUX.c
+++++ b/src/process/sysdep_LINUX.c
++@@ -586,7 +586,7 @@ int getloadavg_sysdep(double *loadv, int nelem) {
++ bool used_system_memory_sysdep(SystemInfo_T *si) {
++         char          *ptr;
++         char           buf[2048];
++-        unsigned long  mem_total = 0UL;
+++        unsigned long long  mem_total = 0UL;
++         unsigned long  mem_available = 0UL;
++         unsigned long  mem_free = 0UL;
++         unsigned long  buffers = 0UL;
++@@ -602,7 +602,7 @@ bool used_system_memory_sysdep(SystemInfo_T *si) {
++         }
++ 
++         // Update memory total (physical memory can be added to the online system on some machines, also LXC/KVM containers MemTotal is dynamic and changes frequently
++-        if ((ptr = strstr(buf, "MemTotal:")) && sscanf(ptr + 9, "%lu", &mem_total) == 1) {
+++        if ((ptr = strstr(buf, "MemTotal:")) && sscanf(ptr + 9, "%llu", &mem_total) == 1) {
++                 systeminfo.memory.size = mem_total * 1024;
++         }
++ 
++-- 
++2.32.0
++
+--- buildroot/package/monit/0004-fixes-1002-v2.patch.orig
++++ buildroot/package/monit/0004-fixes-1002-v2.patch
+@@ -0,0 +1,90 @@
++From 50ce16ec8ee3544f3aabea016f8972bce98cbf28 Mon Sep 17 00:00:00 2001
++From: tildeslash <info@tildeslash.com>
++Date: Thu, 16 Sep 2021 10:06:11 +0200
++Subject: [PATCH] Fixed: Issue #1002: 32-bit Linux with more then 4GB of RAM
++ reported wrong system memory and swap value.
++
++---
++ CHANGES                    |  2 ++
++ src/process/sysdep_LINUX.c | 38 +++++++++++++++++++-------------------
++ 2 files changed, 21 insertions(+), 19 deletions(-)
++
++diff --git a/src/process/sysdep_LINUX.c b/src/process/sysdep_LINUX.c
++index 70e8c7f7..332c3d9b 100644
++--- a/src/process/sysdep_LINUX.c
+++++ b/src/process/sysdep_LINUX.c
++@@ -586,15 +586,15 @@ int getloadavg_sysdep(double *loadv, int nelem) {
++ bool used_system_memory_sysdep(SystemInfo_T *si) {
++         char          *ptr;
++         char           buf[2048];
++-        unsigned long long  mem_total = 0UL;
++-        unsigned long  mem_available = 0UL;
++-        unsigned long  mem_free = 0UL;
++-        unsigned long  buffers = 0UL;
++-        unsigned long  cached = 0UL;
++-        unsigned long  slabreclaimable = 0UL;
++-        unsigned long  swap_total = 0UL;
++-        unsigned long  swap_free = 0UL;
++-        unsigned long long       zfsarcsize = 0ULL;
+++        unsigned long long mem_total = 0ULL;
+++        unsigned long long mem_available = 0ULL;
+++        unsigned long long mem_free = 0ULL;
+++        unsigned long long buffers = 0ULL;
+++        unsigned long long cached = 0ULL;
+++        unsigned long long slabreclaimable = 0ULL;
+++        unsigned long long swap_total = 0ULL;
+++        unsigned long long swap_free = 0ULL;
+++        unsigned long long zfsarcsize = 0ULL;
++ 
++         if (! file_readProc(buf, sizeof(buf), "meminfo", -1, NULL)) {
++                 Log_error("system statistic error -- cannot get system memory info\n");
++@@ -607,19 +607,19 @@ bool used_system_memory_sysdep(SystemInfo_T *si) {
++         }
++ 
++         // Check if the "MemAvailable" value is available on this system. If it is, we will use it. Otherwise we will attempt to calculate the amount of available memory ourself
++-        if ((ptr = strstr(buf, "MemAvailable:")) && sscanf(ptr + 13, "%lu", &mem_available) == 1) {
++-                si->memory.usage.bytes = systeminfo.memory.size - (unsigned long long)mem_available * 1024;
+++        if ((ptr = strstr(buf, "MemAvailable:")) && sscanf(ptr + 13, "%llu", &mem_available) == 1) {
+++                si->memory.usage.bytes = systeminfo.memory.size - mem_available * 1024;
++         } else {
++                 DEBUG("'MemAvailable' value not available on this system. Attempting to calculate available memory manually...\n");
++-                if (! (ptr = strstr(buf, "MemFree:")) || sscanf(ptr + 8, "%lu", &mem_free) != 1) {
+++                if (! (ptr = strstr(buf, "MemFree:")) || sscanf(ptr + 8, "%llu", &mem_free) != 1) {
++                         Log_error("system statistic error -- cannot get real memory free amount\n");
++                         goto error;
++                 }
++-                if (! (ptr = strstr(buf, "Buffers:")) || sscanf(ptr + 8, "%lu", &buffers) != 1)
+++                if (! (ptr = strstr(buf, "Buffers:")) || sscanf(ptr + 8, "%llu", &buffers) != 1)
++                         DEBUG("system statistic error -- cannot get real memory buffers amount\n");
++-                if (! (ptr = strstr(buf, "Cached:")) || sscanf(ptr + 7, "%lu", &cached) != 1)
+++                if (! (ptr = strstr(buf, "Cached:")) || sscanf(ptr + 7, "%llu", &cached) != 1)
++                         DEBUG("system statistic error -- cannot get real memory cache amount\n");
++-                if (! (ptr = strstr(buf, "SReclaimable:")) || sscanf(ptr + 13, "%lu", &slabreclaimable) != 1)
+++                if (! (ptr = strstr(buf, "SReclaimable:")) || sscanf(ptr + 13, "%llu", &slabreclaimable) != 1)
++                         DEBUG("system statistic error -- cannot get slab reclaimable memory amount\n");
++                 FILE *f = fopen("/proc/spl/kstat/zfs/arcstats", "r");
++                 if (f) {
++@@ -635,16 +635,16 @@ bool used_system_memory_sysdep(SystemInfo_T *si) {
++         }
++ 
++         // Swap
++-        if (! (ptr = strstr(buf, "SwapTotal:")) || sscanf(ptr + 10, "%lu", &swap_total) != 1) {
+++        if (! (ptr = strstr(buf, "SwapTotal:")) || sscanf(ptr + 10, "%llu", &swap_total) != 1) {
++                 Log_error("system statistic error -- cannot get swap total amount\n");
++                 goto error;
++         }
++-        if (! (ptr = strstr(buf, "SwapFree:")) || sscanf(ptr + 9, "%lu", &swap_free) != 1) {
+++        if (! (ptr = strstr(buf, "SwapFree:")) || sscanf(ptr + 9, "%llu", &swap_free) != 1) {
++                 Log_error("system statistic error -- cannot get swap free amount\n");
++                 goto error;
++         }
++-        si->swap.size = (unsigned long long)swap_total * 1024;
++-        si->swap.usage.bytes = (unsigned long long)(swap_total - swap_free) * 1024;
+++        si->swap.size = swap_total * 1024;
+++        si->swap.usage.bytes = (swap_total - swap_free) * 1024;
++ 
++         return true;
++ 
++-- 
++2.32.0
++
 --- buildroot/package/monit/monit.hash.orig
 +++ buildroot/package/monit/monit.hash
 @@ -1,4 +1,4 @@
 -# From https://mmonit.com/monit/dist/monit-5.26.0.tar.gz.sha256:
 -sha256  87fc4568a3af9a2be89040efb169e3a2e47b262f99e78d5ddde99dd89f02f3c2  monit-5.26.0.tar.gz
-+# From https://mmonit.com/monit/dist/monit-5.27.2.tar.gz.sha256:
-+sha256  d8809c78d5dc1ed7a7ba32a5a55c5114855132cc4da4805f8d3aaf8cf46eaa4c  monit-5.27.2.tar.gz
++# From https://mmonit.com/monit/dist/monit-5.29.0.tar.gz.sha256:
++sha256  f665e6dd1f26a74b5682899a877934167de2b2582e048652ecf036318477885f  monit-5.29.0.tar.gz
  # Locally computed
  sha256  d5a4f52b1a5e1e7fe14e01a76aac8b08dc6bbea15466058f271456c97aac1ada  COPYING
 --- buildroot/package/monit/monit.mk.orig
@@ -39,7 +171,7 @@
  ################################################################################
  
 -MONIT_VERSION = 5.26.0
-+MONIT_VERSION = 5.27.2
++MONIT_VERSION = 5.29.0
  MONIT_SITE = http://mmonit.com/monit/dist
  MONIT_LICENSE = AGPL-3.0 with OpenSSL exception
  MONIT_LICENSE_FILES = COPYING

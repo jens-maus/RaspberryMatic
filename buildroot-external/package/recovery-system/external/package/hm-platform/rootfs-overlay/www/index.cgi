@@ -3,13 +3,13 @@
 
 echo -ne "Content-Type: text/html; charset=iso-8859-1\r\n\r\n"
 
-if [ -f /tmp/.runningFirmwareUpdate ]; then
+if [ -f /tmp/.runningFirmwareUpdate ] || [ -e /usr/local/.firmwareUpdate ]; then
   echo "Displaying running firmware update output:<br/>"
   echo "==========================================<br/>"
 
-  [ -f /tmp/fwinstall.pid ] && kill "$(cat /tmp/fwinstall.pid)"
+  [ -f /tmp/fwinstall$$.pid ] && kill "$(cat /tmp/fwinstall$$.pid)"
   /usr/bin/tail -F /tmp/fwinstall.log &
-  echo $! >/tmp/fwinstall.pid
+  echo $! >/tmp/fwinstall$$.pid
   wait $!
 
   echo "<br/>==========================================<br/>"

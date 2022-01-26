@@ -22,9 +22,9 @@ fancontrol()
     elif [[ ${curtemp} -ge 70 ]]; then
       dstspeed=10
     elif [[ ${curtemp} -ge 65 ]]; then
-      dstspeed=3
+      dstspeed=5
     elif [[ ${curtemp} -ge 55 ]]; then
-      dstspeed=1
+      dstspeed=3
     else
       dstspeed=0
     fi

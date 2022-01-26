@@ -1,3 +1,7 @@
+- integrated changes for building within buildroot env
+
+Signed-off-by: Jens Maus <mail@jens-maus.de>
+
 diff --git a/devLib/Makefile b/devLib/Makefile
 index 0fb0033..03ef85e 100755
 --- a/devLib/Makefile

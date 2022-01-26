@@ -1,0 +1,24 @@
+--- occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi.orig
++++ occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi
+@@ -67,8 +67,8 @@
+   append html "<div class=\"FilterBodyWrapper\" id=\"filter_$param\" style=\"display:none;\">"
+     append html "<div class=\"FilterBody\">"
+       append html "<input class=\"FilterText\" id=\"searchText_$param\"  name=\"DeviceListPage.NameFilterText\" value=\"\" type=\"text\" onkeypress=\"checkEnterEsc(this.id, event.keyCode);\">"
+-      append html "<div class=\"FilterButton\" name=\"filterSet\" onclick=\"setFilter('filter_$param');\">Setzen</div>"
+-      append html "<div class=\"FilterButton\" name=\"filterClose\" onclick=\"closeFilter('filter_$param');\">Schliessen</div>"
++      append html "<div class=\"FilterButton\" name=\"filterSet\" onclick=\"setFilter('filter_$param');\">\${filterSet}</div>"
++      append html "<div class=\"FilterButton\" name=\"filterClose\" onclick=\"closeFilter('filter_$param');\">\${filterClose}</div>"
+     append html "</div>"
+   append html "</div>"
+   return $html
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
+@@ -102,7 +102,7 @@
+     "dialogCreateLinkErrorContent3" : "das Ger%E4t innerhalb der Funkreichweite befindet und aktiv ist,",
+     "dialogCreateLinkErrorContent4" : "das Ger%E4t im Anlernmodus befindet.",
+     "dialogCreateLinkErrorContent5" : "\"Ignorieren\", wenn die Zentrale die %DCbertragung zum Ger%E4t bei n%E4chster Gelegenheit selbstst%E4ndig durchf%FChren soll. Bis dahin ist dieser Konfigurationsvorgang als offene Servicemeldung sichtbar.",
+-    "dialogCreateLinkErrorContent6" : "<u>Achtung</u><br/> Es besteht die M%FCglichkeit, dass die maximale Anzahl der erlaubten Verkn%FCpfungen erreicht wurde.",
++    "dialogCreateLinkErrorContent6" : "<u>Achtung</u><br/> Es besteht die M%F6glichkeit, dass die maximale Anzahl der erlaubten Verkn%FCpfungen erreicht wurde.",
+ 
+     "dialogCreateLinkErrorUnknownDevice" : "%DCbertragung nicht erfolgt, weil das Ger%E4t unbekannt ist.",
+     "dialogCreateLinkHintLinkExists" : "Achtung! Die Verkn%FCpfung existiert bereits und wird %FCberschrieben.",

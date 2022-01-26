@@ -10,6 +10,10 @@ DAEMON=node
 DAEMON_ARGS=${HOMEPATH}/automation.js
 PIDFILE=/var/run/neo_server.pid
 
+# check for unsupported platforms
+if grep -qim1 busmatic /www/api/methods/ccu/downloadFirmware.tcl; then
+  exit 13
+fi
 
 log() {
   now=$(date)

@@ -58,24 +58,6 @@ identify_rf_hardware() {
     fi
   fi
 
-  # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
-  if lsusb 2>/dev/null | grep -q 1b1f:c020; then
-    modprobe cp210x
-    echo 1b1f c020 >/sys/bus/usb-serial/drivers/cp210x/new_id
-    # shellcheck disable=SC2044
-    for i in $(find /sys/bus/usb/devices/usb*/ -name "ttyUSB*" -maxdepth 4); do
-      DEVDIR=$(dirname "$i")
-      if [[ -f "${DEVDIR}/uevent" ]]; then
-        if grep -q PRODUCT=1b1f/c020 "${DEVDIR}/uevent"; then
-          # add with preference
-          echo -n "."
-          RF_DEVNODES="$(basename "$i") ${RF_DEVNODES}"
-          break
-        fi
-      fi
-    done
-  fi
-
   # check if a HM-CFG-USB-2 (1b1f:c00f) USB stick is connected
   # and HMRF_DEV accordingly
   if lsusb 2>/dev/null | grep -q 1b1f:c00f; then
@@ -192,8 +174,6 @@ query_rf_parameters() {
 
             if [[ -e /sys/class/raw-uart/${dev}/device_type ]]; then
               HM_HMIP_DEVTYPE=$(cat "/sys/class/raw-uart/${dev}/device_type")
-            elif [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
-              HM_HMIP_DEVTYPE=USB
             else
               HM_HMIP_DEVTYPE=GPIO
             fi

@@ -1,0 +1,66 @@
+--- occu/WebUI/www/config/cp_add_device.cgi.orig
++++ occu/WebUI/www/config/cp_add_device.cgi
+@@ -46,12 +46,14 @@
+         var thisSection = jQuery("body").data(section);
+         if(thisSection) {
+           jQuery('#section'+section).show();
++          jQuery('#sectionUNAVAIL').hide();
+         } else {
+           if (typeof thisSection == "undefined") {
+             homematic('Interface.isPresent', {"interface": section}, function(result, error) {
+               if (result == true)
+               {
+                 jQuery('#section'+section).show();
++                jQuery('#sectionUNAVAIL').hide();
+                 dlgPopup.readaptSize();
+               }
+             });
+@@ -62,6 +64,16 @@
+   }
+ }
+ 
++proc putSectionUNAVAIL {} {
++  set html ""
++    append html "<tr id='sectionUNAVAIL' class='CLASS21202'>"
++      append html "<td class='CLASS21207' colspan='3'>"
++      append html "\${dialogNewDevicesUNAVAILWarn}"
++      append html "</td>"
++    append html "</tr>"
++  return $html
++}
++
+ proc putSectionBidCosRF {} {
+ 
+   set html ""
+@@ -392,6 +404,10 @@
+       puts "<col style='width:462px;'>"
+     puts "</colgroup>"
+ 
++    # Start section UNAVAIL
++    puts [putSectionUNAVAIL]
++    # End section UNAVAIL
++
+     # Start section BidCos-RF
+     puts [putSectionBidCosRF]
+     # End section BidCos-RF
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -698,6 +698,7 @@
+     "commentSettingsExtraSoftwareEnd" : "***********************************************",
+     "commentDialogNewDevices" : "***********************************************",
+     "dialogNewDevicesTitle" : "Ger%E4te anlernen",
++    "dialogNewDevicesUNAVAILWarn" : "Es wurde keinerlei nutzbares HomeMatic Funkmodul/LAN-Gateway f%FCr die<br/>homematic oder homematicIP Kommunikation im System gefunden.<br/><br/>Bitte stellen Sie sicher, dass ein kompatibles Funkmodul oder LAN-Gateway korrekt<br/>angeschlossen oder eingebunden ist, damit Ger%E4te angelernt werden k%F6nnen.",
+     "dialogNewDevicesTDBidCosRF" : HMIdentifier.de.BidCosRF + "<br/>(Funk)",
+     "dialogNewDevicesTDBidCosWired" : HMIdentifier.de.BidCosWired,
+     "dialogNewDevicesBidCosRFFetchmodeNotActive" : "Anlernmodus nicht aktiv",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -710,6 +710,8 @@
+ 
+     "dialogNewDevicesTitle" : "Teach-in devices",
+ 
++    "dialogNewDevicesUNAVAILWarn" : "No HomeMatic radio module or LAN gateway was found to be usable for<br/>homematic or homematicIP communication in your system.<br/><br/>Please make sure that a compatible rf module or LAN gateway is correctly<br/>connected or configured so that you are able to teach-in devices.",
++
+     "dialogNewDevicesTDBidCosRF" : HMIdentifier.en.BidCosRF + "<br/>(Radio)",
+     "dialogNewDevicesTDBidCosWired" : HMIdentifier.en.BidCosWired,
+ 

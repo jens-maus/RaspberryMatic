@@ -23,8 +23,14 @@ a=$((a*2+b+c+d+10))
 # shellcheck disable=SC2046,SC2116,SC2086
 eval $(echo ${QUERY_STRING//&/;})
 
-# write out the data
+# calculate the expected content length using
+# HTTP_CONTENT_LENGTH or CONTENT_LENGTH
+if [ -z "${HTTP_CONTENT_LENGTH}" ]; then
+  HTTP_CONTENT_LENGTH=${CONTENT_LENGTH}
+fi
 SIZE=$((HTTP_CONTENT_LENGTH-a))
+
+# write out the data
 filename=$(mktemp -p /usr/local/tmp)
 if ! /usr/bin/head -q -c ${SIZE} >"${filename}"; then
   echo "ERROR (head)"
@@ -37,7 +43,7 @@ echo "   <!--- Hide script from browsers that don't understand JavaScript"
 echo "   var url = '${url}?sid=${sid}';"
 echo "   var dlgPopup = parent.top.dlgPopup;"
 echo "   if (dlgPopup === undefined) {"
-echo "     dlgPopup = window.open('', 'resize').dlgPopup;"
+echo "     dlgPopup = window.open('', 'ccu-main-window').dlgPopup;"
 echo "   }"
 echo "   if (dlgPopup !== undefined) {"
 echo "     dlgPopup.hide();"

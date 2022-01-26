@@ -7,11 +7,18 @@
 # Make sure the ssh-keygen progam exists
 [ -f /usr/bin/ssh-keygen ] || exit 0
 
+DAEMON=/usr/sbin/sshd
+PIDFILE=/var/run/sshd.pid
+
+test -x $DAEMON || exit 0
+
 umask 077
 
 start() {
   # Only run this if ssh is explicitly enabled
   [ -f /etc/config/sshEnabled ] || exit 0
+
+  echo -n "Starting sshd: "
 
   # Create any missing keys
   if [[ ! -f /usr/local/etc/ssh_host_dsa_key ]] ||
@@ -19,7 +26,7 @@ start() {
      [[ ! -f /usr/local/etc/ssh_host_ed25519_key ]] ||
      [[ ! -f /usr/local/etc/ssh_host_rsa_key ]]; then
     mkdir -p /tmp/etc/ssh
-    cp -a /usr/local/etc/ssh_host_*_key* /tmp/etc/ssh/
+    cp -a /usr/local/etc/ssh_host_*_key* /tmp/etc/ssh/ 2>/dev/null
     /usr/bin/ssh-keygen -A -f /tmp
     cp -a /tmp/etc/ssh/* /usr/local/etc/
     rm -rf /tmp/etc/ssh
@@ -38,14 +45,25 @@ start() {
     chown root:root /usr/local/etc/ssh/authorized_keys
   fi
 
-  echo -n "Starting sshd: "
-  start-stop-daemon -S -q -b -p /var/run/sshd.pid --exec /usr/sbin/sshd -- -D
-  echo "OK"
+  if start-stop-daemon -S -q -p "${PIDFILE}" --exec "${DAEMON}"; then
+    echo "OK"
+  else
+    echo "FAIL"
+    exit 1
+  fi
 }
 stop() {
   echo -n "Stopping sshd: "
-  start-stop-daemon -K -q -p /var/run/sshd.pid
-  echo "OK"
+  if [[ -f ${PIDFILE} ]]; then
+    if start-stop-daemon -K -q -p "${PIDFILE}"; then
+      echo "OK"
+    else
+      echo "FAIL"
+      exit 1
+    fi
+  else
+    echo "OK"
+  fi
 }
 restart() {
   stop

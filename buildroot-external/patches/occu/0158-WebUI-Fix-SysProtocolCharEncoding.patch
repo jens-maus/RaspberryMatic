@@ -1,0 +1,10 @@
+--- occu/WebUI/www/rega/esp/functions.fn.orig
++++ occu/WebUI/www/rega/esp/functions.fn
+@@ -58,6 +58,7 @@
+           sRet = sRet.Replace("\r\n", "<br/>");
+           sRet = sRet.Replace("\r", "<br/>");
+           sRet = sRet.Replace("\n", "<br/>");
++          sRet = sRet.Replace("'", "\\'");
+         }
+         if( to.ValueUnit() != "" )
+         {

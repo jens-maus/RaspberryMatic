@@ -58,7 +58,7 @@
      
      proc conf_device_HM-CCU-1 { url dev_id desc_var } {
          rega "dom.GetObject($dev_id).ReadyConfig(true);"
-@@ -136,7 +136,6 @@
+@@ -136,101 +136,16 @@
      
      proc conf_value_WEATHER.RAIN_COUNTER { url ch_id ch_desc_var value_desc_var} {
          create_rain_calculation $ch_id
@@ -66,8 +66,13 @@
      }
      
      proc conf_value_DISPLAY.SERVICE_COUNT { url ch_id ch_desc_var value_desc_var} {
-@@ -147,90 +146,6 @@
-         create_sysvar_to_value_prg $ch_id ALARM_COUNT 40 "Alarmmeldungen anzeigen"
+-        create_sysvar_to_value_prg $ch_id SERVICE_COUNT 41 "Servicemeldungen anzeigen"
++        create_sysvar_to_value_prg $ch_id SERVICE_COUNT ID_GW_SYSSERVICE "Servicemeldungen anzeigen"
+     }
+     
+     proc conf_value_DISPLAY.ALARM_COUNT { url ch_id ch_desc_var value_desc_var} {
+-        create_sysvar_to_value_prg $ch_id ALARM_COUNT 40 "Alarmmeldungen anzeigen"
++        create_sysvar_to_value_prg $ch_id ALARM_COUNT ID_GW_SYSALARM "Alarmmeldungen anzeigen"
      }
      
 -    proc create_objects {collection enum_type names} {
@@ -412,13 +417,13 @@
 +    sv.ValueName1("${sysVarPresencePresent}");
 +    sv.ValueName0("${sysVarPresenceNotPresent}");
 +
-+    sv=dom.GetObject(40);
++    sv=dom.GetObject(ID_GW_SYSALARM);
 +    dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
 +    sv.Name("${sysVarAlarmMessages}");
 +    sv.DPInfo("${sysVarAlarmMessagesCount}");
 +    sv.Internal(0);
 +
-+    sv=dom.GetObject(41);
++    sv=dom.GetObject(ID_GW_SYSSERVICE);
 +    dom.GetObject(ID_SYSTEM_VARIABLES).Add(sv.ID());
 +    sv.Name("${sysVarServiceMessages}");
 +    sv.DPInfo("${sysVarServiceMessagesCount}");

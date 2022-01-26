@@ -1,6 +1,636 @@
+--- occu/HMserver/opt/HMServer/pages/AvailableFirmware.ftl.orig
++++ occu/HMserver/opt/HMServer/pages/AvailableFirmware.ftl
+@@ -6,11 +6,11 @@
+   <body>
+    <table id="DeviceListTable" cellpadding="0" cellspacing="0">
+     <colgroup>
+-      <col width="5%">
+-      <col width="30%">
+-      <col width="25%">
+-      <col width="25%">
+-      <col width="15%">
++      <col style="width:55px;" />
++      <col />
++      <col />
++      <col />
++      <col style="width:100px;" />
+     </colgroup>
+     <thead>
+       <tr>
+--- occu/HMserver/opt/HMServer/pages/DiagramSettingsDetailPage.ftl.orig
++++ occu/HMserver/opt/HMServer/pages/DiagramSettingsDetailPage.ftl
+@@ -149,8 +149,12 @@
+ </style>
+ </head>
+ <body>
+-<form>
+-<table id="parameterTable" class="tTable"  border="0" cellpadding="0" cellspacing="0">
++<form style="width:100%;">
++<table id="parameterTable" class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
++  <colgroup>
++    <col style="width:500px;"/>
++    <col style="width:80%;"/>
++  </colgroup>
+   <thead>
+   <tr>
+       <td class="thCell CLASS04900" >${"$"}{thParameter}</td>
+@@ -248,7 +252,15 @@
+ 	
+   </tbody>
+ </table>
+-<table id="dataSourcesTable" class="tTable"  border="0" cellpadding="0" cellspacing="0">
++<table id="dataSourcesTable" class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
++  <colgroup>
++    <col style="width:30%;"/>
++    <col style="width:10%;"/>
++    <col style="width:30%;"/>
++    <col style="width:20%;"/>
++    <col style="width:10%;"/>
++    <col style="width:10%;"/>
++  </colgroup>
+   <thead>
+     <tr>
+       <td class="thCell CLASS04900" colspan="6">
+@@ -592,4 +604,4 @@
+ </script>
+ </form>
+ </body>
+-</html>
+\ No newline at end of file
++</html>
+--- occu/HMserver/opt/HMServer/pages/DiagramSettingsListPage.ftl.orig
++++ occu/HMserver/opt/HMServer/pages/DiagramSettingsListPage.ftl
+@@ -54,6 +54,13 @@
+ </table>
+ 
+ <table id="${TableId}" class="tTable"  border="0" cellpadding="0" cellspacing="0">
++  <colgroup>
++    <col />
++    <col />
++    <col />
++    <col />
++    <col />
++  </colgroup>
+   <thead>
+     <tr>
+       <td class="thCell CLASS04900" >${"$"}{thDiagramName}</td>
+@@ -291,4 +298,4 @@
+ 	};
+ </script>
+ </body>
+-</html>
+\ No newline at end of file
++</html>
+--- occu/HMserver/opt/HMServer/pages/GroupEditPage.ftl.orig
++++ occu/HMserver/opt/HMServer/pages/GroupEditPage.ftl
+@@ -7,8 +7,12 @@
+ </script>
+ <!--</head>
+ <body>-->
+-<form id="groupEditForm" style="display: none">
+- <table id="parameter" class="tTable"  border="0" cellpadding="0" cellspacing="0">
++<form id="groupEditForm" style="display: none; width: 100%;">
++ <table id="parameter" class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
++  <colgroup>
++    <col style="width:20%;"/>
++    <col style="width:80%;"/>
++  </colgroup>
+   <thead>
+   <tr>
+       <td class="thCell CLASS04900" >${"$"}{groupParameterName}</td>
+@@ -48,7 +52,14 @@
+ 	
+   </tbody>
+  </table>
+- <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
++ <table class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
++ <colgroup>
++   <col style="width:30%;"/>
++   <col style="width:30%;"/>
++   <col style="width:50px;"/>
++   <col style="width:20%;"/>
++   <col style="width:20%;"/>
++ </colgroup>
+  <thead>
+      <tr>
+          <td class="thCell CLASS04900" colspan="5" style="font-size: 16px !important">${"$"}{groupAssignedDevices}</td>
+@@ -84,7 +95,14 @@
+  </tfoot>
+  </table>
+ 
+- <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
++ <table class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
++ <colgroup>
++   <col style="width:30%;"/>
++   <col style="width:30%;"/>
++   <col style="width:50px;"/>
++   <col style="width:20%;"/>
++   <col style="width:20%;"/>
++ </colgroup>
+   <thead>
+     <tr>
+       <td class="thCell CLASS04900" colspan="5" style="font-size: 16px !important">${"$"}{groupAllDevices}</td>
+@@ -127,7 +145,13 @@
+   </tfoot>
+  </table>
+ 
+- <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
++ <table class="tTable"  border="0" cellpadding="0" cellspacing="0" style="width:unset;">
++ <colgroup>
++   <col style="width:30%;"/>
++   <col style="width:30%;"/>
++   <col style="width:50px;"/>
++   <col style="width:40%;"/>
++ </colgroup>
+      <thead>
+      <tr>
+          <td class="thCell CLASS04900" colspan="5" style="font-size: 16px !important">${"$"}{groupLinkedDevices}</td>
+--- occu/HMserver/opt/HMServer/pages/GroupListPage.ftl.orig
++++ occu/HMserver/opt/HMServer/pages/GroupListPage.ftl
+@@ -10,6 +10,15 @@
+ <body>-->
+ <div id="GroupListBody" style="display: none">
+ <table class="tTable"  border="0" cellpadding="0" cellspacing="0">
++    <colgroup>
++      <col />
++      <col />
++      <col />
++      <col />
++      <col />
++      <col />
++      <col style="width:100px;">
++    </colgroup>
+     <thead>
+     <tr data-bind="foreach: groupListHeaders">
+         <td style="height: 40px" class="thCell CLASS04900 clickable" data-bind="click: $parent.sortGroupList, text: title, css: headerClass, attr: {colspan: colspan}"></td>
+--- occu/WebUI/www/config/control_panel.cgi.orig
++++ occu/WebUI/www/config/control_panel.cgi
+@@ -54,12 +54,12 @@
+     setFooter("");
+   </script>
+ 
+-  <table id="mainTable" cellspacing="20" style="display:none">
++  <table id="mainTable" cellspacing="0" cellpadding="0" style="display:none">
+     <colgroup>
+-      <col style="width:25%;"/>
+-      <col style="width:25%;"/>
+-      <col style="width:25%;"/>
+-      <col style="width:20%;"/>
++      <col />
++      <col />
++      <col />
++      <col />
+     </colgroup>
+     <tr class="CLASS21700">
+     
+--- occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi.orig
++++ occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi
+@@ -32,14 +32,14 @@
+ 
+   puts "<table id=\"devFwOverview\" cellspacing=\"0\" cellpadding=\"0\" class=\"tTable filterTable\">"
+    puts "<colgroup>"
+-    puts "<col style=\"width:35%;\"/>"
+-    puts "<col style=\"width:20%;\"/>"
+-    puts "<col style=\"width:55px;\"/>"
+-    puts "<col style=\"width:10%;\"/>"
+-     puts "<col style=\"width:10%;\"/>"
+-     puts "<col style=\"width:10%;\"/>"
+-   #  puts "<col style=\"width:10%;\"/>"
+-     puts "<col style=\"width:auto;\"/>"
++    puts "<col />"
++    puts "<col />"
++    puts "<col style=\"width:55px;\" />"
++    puts "<col />"
++    puts "<col />"
++    puts "<col />"
++   #puts "<col />"
++    puts "<col style=\"width:100px;\"/>"
+    puts "</colgroup>"
+ 
+    puts "<th class=\"DeviceListHead\">\${thName}</th>"
+@@ -348,4 +348,4 @@
+     puts "</script>"
+ 
+   }
+-}
+\ No newline at end of file
++}
+--- occu/WebUI/www/config/ic_deviceparameters.cgi.orig
++++ occu/WebUI/www/config/ic_deviceparameters.cgi
+@@ -785,9 +785,9 @@
+   puts "<table id=\"id_channel_parameters_table\" class=\"parameters_table\" cellspacing=\"0\">"
+   
+   puts "<colgroup>"
+-  puts "  <col style=\"width:20%;\"/>"
+-  puts "  <col style=\"width:5%;\" />"
+-  puts "  <col style=\"width:75%;\"/>"
++  puts "  <col />"
++  puts "  <col />"
++  puts "  <col />"
+   puts "</colgroup>"
+ 
+   puts "<THEAD>"
+@@ -1259,19 +1259,19 @@
+ 
+   puts "<colgroup>"
+   #Name
+-  puts "  <col style=\"width:29%;\"/>"
++  puts "  <col />"
+   #Typenbezeichnung
+-  puts "  <col style=\"width:10%;\"/>"
++  puts "  <col />"
+   #Bild
+-  puts "  <col style=\"width:1%;\"/>"
++  puts "  <col style=\"width:55px;\"/>"
+   #Bezeichnung
+-  puts "  <col style=\"width:30%;\"/>"
++  puts "  <col />"
+   #SN
+-  puts "  <col style=\"width:5%;\"/>"
++  puts "  <col />"
+   #Interface
+-  puts "  <col style=\"width:5%;\"/>"
++  puts "  <col />"
+   #Firmware
+-  puts "  <col style=\"width:15%;\"/>"
++  puts "  <col />"
+   puts "</colgroup>"
+   
+   puts "<THEAD>"
+--- occu/WebUI/www/config/ic_linkpeerlist.cgi.orig
++++ occu/WebUI/www/config/ic_linkpeerlist.cgi
+@@ -110,7 +110,10 @@
+ 
+   #ic_linkpeerlist
+   puts "</div>"
+-  puts "<script type=\"text/javascript\">translatePage(\"#ic_linkpeerlist\")</script>"
++  puts "<script type=\"text/javascript\">"
++  puts "translatePage(\"#ic_linkpeerlist\");"
++  puts "\$('ic_linkpeerlist').style.display = 'contents';"
++  puts "</script>"
+ }
+ 
+ proc _incr {p_arr address peer} {
+@@ -645,6 +648,15 @@
+ 
+   #cgi_debug -on
+ 
++  puts "<colgroup>"
++  puts "<col />"
++  puts "<col />"
++  puts "<col />"
++  puts "<col />"
++  puts "<col style='width:100px;'>"
++  puts "<col />"
++  puts "<col />"
++  puts "</colgroup>"
+   puts "<THEAD>"
+   puts "<TR>"
+ 
+--- occu/WebUI/www/config/ic_selchannel.cgi.orig
++++ occu/WebUI/www/config/ic_selchannel.cgi
+@@ -46,7 +46,7 @@
+       if {$step < 3} then {
+         # wegen dem IE muss das Style overflow:visible eingestellt sein
+         puts "<div id=\"ChnTblContentDiv\" class=\"CLASS21908\" style=\"overflow:visible\" >"
+-        puts "<table border=\"1\" id=\"ChnListTbl\" class=\"ChnListTbl\" width=\"100%\" cellspacing=\"0\">"
++        puts "<table border=\"1\" id=\"ChnListTbl\" class=\"ChnListTbl\" cellspacing=\"0\">"
+         put_colgroup
+         put_tableheader
+ 
+@@ -121,25 +121,25 @@
+ proc put_colgroup {} {
+   puts "<colgroup>"
+ #Name
+-  puts "  <col style=\"width:21%;\"/>"
++  puts "  <col />"
+ #Typenbezeichnung
+-  puts "  <col style=\"width:10%;\"/>"
++  puts "  <col />"
+ #Bild
+-  puts "  <col style=\"width:4%;\"/>"
++  puts "  <col style=\"width:55px;\"/>"
+ #Bezeichnung
+-  puts "  <col style=\"width:18%;\"/>"
++  puts "  <col />"
+ #Seriennummer
+-  puts "  <col style=\"width:10%;\"/>"
++  puts "  <col />"
+ #Kategorie
+-  puts "  <col style=\"width:5%;\"/>"
++  puts "  <col />"
+ #Übertragungsmodus
+   puts "  <col style=\"width:5%;\"/>"
+ #Gewerk
+-  puts "  <col style=\"width:10%;\"/>"
++  puts "  <col />"
+ #Raum
+-  puts "  <col style=\"width:10%;\"/>"
++  puts "  <col />"
+ #Aktion
+-  puts "  <col style=\"width:7%;\"/>"
++  puts "  <col style=\"width:100px;\" />"
+   puts "</colgroup>"
+ }
+ 
+@@ -350,12 +350,12 @@
+   puts "<table border=\"1\" id=\"createLinkStep1\" cellspacing=\"0\" class=\"j_translate\" >"
+ 
+   puts "<colgroup>"
+-  puts "  <col style=\"width:10%;\"/>"
+-  puts "  <col style=\"width:10%;\"/>"
+-  puts "  <col style=\"width:25%;\"/>"
+-  puts "  <col style=\"width:25%;\"/>"
+-  puts "  <col style=\"width:10%;\"/>"
+-  puts "  <col style=\"width:10%;\"/>"
++  puts "  <col />"
++  puts "  <col style=\"width:150px;\"/>"
++  puts "  <col />"
++  puts "  <col />"
++  puts "  <col />"
++  puts "  <col style=\"width:150px;\"/>"
+   puts "</colgroup>"
+   
+   puts "<THEAD>"
+@@ -516,7 +516,7 @@
+     puts "<div class=\"CLASS21915\">&nbsp;"
+   } else {
+     puts "<td id=\"id_filtertd_$colNr\" class=\"unfiltered\">"
+-    puts "<div onclick=\"ShowFilterControl($colNr);\">Filter</div>"
++    puts "<div class=\"FilterBtn\" onclick=\"ShowFilterControl($colNr);\">Filter</div>"
+     puts "<div class=\"CLASS21915\">"
+   }
+   
+--- occu/WebUI/www/config/ic_setprofiles.cgi.orig
++++ occu/WebUI/www/config/ic_setprofiles.cgi
+@@ -578,11 +578,11 @@
+ 
+   puts "<table class=\"SetProfLinkTbl_Buttons\" border=\"0\" cellspacing=\"0\">"
+   puts "<colgroup>"
+-  puts "<col style=\"width:10%;\"/>"
+-  puts "<col style=\"width:26%;\"/>"
+-  puts "<col style=\"width:28%;\"/>"
+-  puts "<col style=\"width:26%;\"/>"
+-  puts "<col style=\"width:10%;\"/>"
++  puts "<col style=\"width:200px;\" />"
++  puts "<col />"
++  puts "<col style=\"width:100px;\"/>"
++  puts "<col />"
++  puts "<col style=\"width:200px;\"/>"
+   puts "</colgroup>"
+   puts "<tbody>"
+   puts "<tr>"
+@@ -674,8 +674,8 @@
+       set linkdesc $sender_receiver_linkinfo(DESCRIPTION)
+     }
+ 
+-    set SENTRY(LINKNAME) "<input id=\"sender_linkname\"        name=\"sender_linkname\"        type=\"text\" size=\"30\" value=\"$linkname\"/>"
+-    set SENTRY(LINKDESC) "<div><table><tr class=\"WhiteHeader\"><td style=\"border: 0px\"><input id=\"sender_linkdescription\" name=\"sender_linkdescription\" type=\"text\" size=\"30\" value=\"$linkdesc\" class=\"_CLASS20006\"/></td>"
++    set SENTRY(LINKNAME) "<input id=\"sender_linkname\"        name=\"sender_linkname\"        type=\"text\" style=\"width: -webkit-fill-available;\" value=\"$linkname\"/>"
++    set SENTRY(LINKDESC) "<div><table cellpadding=\"5\" style=\"width:100%;\"><tr class=\"WhiteHeader\"><td style=\"border: 0px\"><input id=\"sender_linkdescription\" name=\"sender_linkdescription\" type=\"text\" style=\"width: -webkit-fill-available;\" value=\"$linkdesc\" class=\"CLASS20006\"/></td>"
+     append SENTRY(LINKDESC) "<td style=\"border: 0px\"><div onclick=\"EnterDescriptionTemplate('receiver');\" class=\"CLASS20009\" style=\"padding:0px;\">&lt;-</div></td></tr></table></div>"
+ 
+ 
+@@ -697,8 +697,8 @@
+       set linkdesc $sendergroup_receiver_linkinfo(DESCRIPTION)
+     }
+ 
+-    set SENTRY(LINKNAME) "<input id=\"sendergroup_linkname\"        name=\"sender_linkname\"        type=\"text\" size=\"30\" value=\"$linkname\"/>"
+-    set SENTRY(LINKDESC) "<div><table><tr class=\"WhiteHeader\"><td style=\"border: 0px\"><input id=\"sendergroup_linkdescription\" name=\"sender_linkdescription\" type=\"text\" size=\"30\" value=\"$linkdesc\" class=\"_CLASS20006\"/></td>"
++    set SENTRY(LINKNAME) "<input id=\"sendergroup_linkname\"        name=\"sender_linkname\"        type=\"text\" style=\"width: -webkit-fill-available;\" value=\"$linkname\"/>"
++    set SENTRY(LINKDESC) "<div><table cellpadding=\"5\" style=\"width:100%;\"><tr class=\"WhiteHeader\"><td style=\"border: 0px\"><input id=\"sendergroup_linkdescription\" name=\"sender_linkdescription\" type=\"text\" style=\"width: -webkit-fill-available;\" value=\"$linkdesc\" class=\"CLASS20006\"/></td>"
+     append SENTRY(LINKDESC) "<td style=\"border: 0px\"><div onclick=\"EnterDescriptionTemplate('receivergroup');\" class=\"CLASS20009\" style=\"padding:0px;\">&lt;-</div></td></tr></table></div>"
+   }
+   
+@@ -715,6 +715,17 @@
+   set SENTRY(RECEIVERACTION) "<div onclick=\"WebUI.enter(DeviceConfigPage, {'iface': '$iface', 'address': '$SENTRY(RECEIVERADDR)', 'redirect_url': 'IC_SETPROFILES'});\" class=\"CLASS20009\" >\${btnEdit}</div>"
+ 
+   puts "<table class=\"SetProfLinkTbl CLASS20007\" cellspacing=\"0\" >"
++  puts "<colgroup>"
++  puts "<col />"
++  puts "<col />"
++  puts "<col style=\"width:100px;\"/>"
++  puts "<col />"
++  puts "<col />"
++  puts "<col style=\"width:100px;\"/>"
++  puts "<col />"
++  puts "<col />"
++  puts "<col style=\"width:100px;\"/>"
++  puts "</colgroup>"
+   puts "<thead>"
+ 
+   puts "<tr>"
+--- occu/WebUI/www/rega/esp/controls/blind.fn.orig
++++ occu/WebUI/www/rega/esp/controls/blind.fn
+@@ -132,7 +132,7 @@
+ 
+   WriteLine("<td>");
+     WriteLine("<table>");
+-     WriteLine("<tr><td colspan='5'><div style='text-align:'center'; background-color:#89989b; color:black'>${stringTableBlindLevel}</div></td></tr>");
++     WriteLine("<tr><td colspan='5'><div style='text-align:center; background-color:#89989b; color:black'>${stringTableBlindLevel}</div></td></tr>");
+ 
+       WriteLine("<tr>");
+           WriteLine("<td colspan='2' id='shutter"#chnId#"' class='CLASS02549' >&nbsp;</td>");
+--- occu/WebUI/www/rega/esp/controls/button.fn.orig
++++ occu/WebUI/www/rega/esp/controls/button.fn
+@@ -14,7 +14,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02518'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img id='btn"#iShortId#"s' src='/ise/img/btn_no_press.png' width='80' height='80' />");
++          WriteLine("<img id='btn"#iShortId#"s' src='/ise/img/btn_no_press.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -50,7 +50,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02518'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img id='btn"#iShortId#"s' src='/ise/img/btn_no_press.png' width='80' height='80' />");
++          WriteLine("<img id='btn"#iShortId#"s' src='/ise/img/btn_no_press.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -67,7 +67,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td  class='CLASS02518'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img id='btn"#iLongId#"l' src='/ise/img/btn_no_press.png' width='80px' height='80px' />");
++          WriteLine("<img id='btn"#iLongId#"l' src='/ise/img/btn_no_press.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/door_opener.fn.orig
++++ occu/WebUI/www/rega/esp/controls/door_opener.fn
+@@ -9,7 +9,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td  class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -210,7 +210,7 @@
+               WriteLine("<tr>");
+                 WriteLine("<td  class='CLASS02513'>");
+                   WriteLine("<div align='center'>");
+-                    WriteLine("<img src='/ise/img/"#statePic#"' width='80' height='70' />");
++                    WriteLine("<img src='/ise/img/"#statePic#"' width='80' height='70' style='mix-blend-mode:multiply;' />");
+                   WriteLine("</div>");
+                 WriteLine("</td>");
+               WriteLine("</tr>");
+@@ -249,7 +249,7 @@
+               WriteLine("<tr>");
+                 WriteLine("<td  class='CLASS02513'>");
+                   WriteLine("<div align='center'>");
+-                    WriteLine("<img src='/ise/img/"#statePic#"' width='80' height='70' />");
++                    WriteLine("<img src='/ise/img/"#statePic#"' width='80' height='70' style='mix-blend-mode:multiply;' />");
+                   WriteLine("</div>");
+                 WriteLine("</td>");
+               WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/door_window_contact.fn.orig
++++ occu/WebUI/www/rega/esp/controls/door_window_contact.fn
+@@ -5,7 +5,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -18,7 +18,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td  class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/door/closed.png' width='80px' height='80px' />");
++          WriteLine("<img src='/ise/img/door/closed.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/key_switch_sc.fn.orig
++++ occu/WebUI/www/rega/esp/controls/key_switch_sc.fn
+@@ -5,7 +5,7 @@
+       WriteLine("<tr>");
+         WriteLine("<td class='CLASS02513'>");
+           WriteLine("<div align='center'>");
+-            WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' />");
++            WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+           WriteLine("</div>");
+         WriteLine("</td>");
+       WriteLine("</tr>");
+@@ -20,7 +20,7 @@
+       WriteLine("<tr>");
+         WriteLine("<td  class='CLASS02513'>");
+           WriteLine("<div align='center'>");
+-            WriteLine("<img src='/ise/img/door/closed.png' width='80px' height='80px' />");
++            WriteLine("<img src='/ise/img/door/closed.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+           WriteLine("</div>");
+         WriteLine("</td>");
+       WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/lock.fn.orig
++++ occu/WebUI/www/rega/esp/controls/lock.fn
+@@ -8,7 +8,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td  class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/lock/closed.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/lock/closed.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -20,7 +20,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/lock/open.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/lock/open.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -32,7 +32,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td  class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/door/open.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/rhs.fn.orig
++++ occu/WebUI/www/rega/esp/controls/rhs.fn
+@@ -4,7 +4,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/window/open_h.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/window/open_h.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -16,7 +16,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/window/open_v.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/window/open_v.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+@@ -28,7 +28,7 @@
+     WriteLine("<tr>");
+       WriteLine("<td class='CLASS02513'>");
+         WriteLine("<div align='center'>");
+-          WriteLine("<img src='/ise/img/window/closed.png' width='80' height='80' />");
++          WriteLine("<img src='/ise/img/window/closed.png' width='80' height='80' style='mix-blend-mode:multiply;' />");
+         WriteLine("</div>");
+       WriteLine("</td>");
+     WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
++++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
+@@ -1201,7 +1201,7 @@
+   string showParam = true;
+ 
+   WriteLine( '<td class="CLASS02519">' );
+-    WriteLine( '<table cellspacing="10" style="margin: 10px 10px 10px -8px;">' );
++    WriteLine( '<table cellspacing="0">' );
+     WriteLine( '<tr>');
+     integer i = 0;
+     string sEnum = "";
+--- occu/WebUI/www/rega/esp/system.fn.orig
++++ occu/WebUI/www/rega/esp/system.fn
+@@ -1262,7 +1262,7 @@
+     Write("<tr>");
+     Write("<td  class='CLASS02103'>");
+         Write("<div align='center'>");
+-          Write("<img src='/ise/img/cogs3.png' width='80px' height='75px' />");
++          Write("<img src='/ise/img/cogs3.png' width='80' height='75' style='mix-blend-mode:multiply;' />");
+         Write("</div>");
+       Write("</td>");
+     Write("</tr>");
 --- occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm
-@@ -58,16 +58,16 @@
+@@ -47,27 +47,27 @@
+ <div id="svOffset" style="display:none"></div>
+ <table id="sysVars" cellspacing="0" cellpadding="0" class="tTable filterTable" style="display:none">
+ <colgroup>
+-  <col style="width:9%;"/>
+-  <col style="width:18%;"/>
+-  <col style="width:9%;"/>
+-  <col style="width:18%;"/>
+-  <col style="width:9%;"/>
+-  <col style="width:9%;"/>
+-  <col style="width:18%;"/>
+-  <col style="width:10%;"/>
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:200px;" />
++  <col style="width:100px;" />
  </colgroup>
  <tr>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
@@ -24,7 +654,29 @@
  </tr>
 --- occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/userAdministration.htm
-@@ -52,7 +52,7 @@
+@@ -39,20 +39,20 @@
+ 
+ <table cellpadding="0" cellspacing="0" id="userAdmin" class="tTable" style="display:none">
+ <colgroup>
+-<col style="width:6%;" width="6%" />
+-<col style="width:6%;" />
+-<col style="width:6%;"/>
+-<!-- <col style="width:6%;" /> -->
+-<col style="width:6%;"/>
+-<col style="width:8%;"/>
+-<col style="width:8%;"/>
+-<col style="width:6%;" />
+-<col style="width:6%;" />
++  <col />
++  <col />
++  <col />
++  <!-- <col /> -->
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:100px;" />
+ </colgroup>
  
  <tr class="CLASS05300">
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
@@ -33,33 +685,351 @@
    <th class="thCell">${thPassword}</th>
    <th class="thCell">${thBtnForLogin}</th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="level"){sCssName="SortSelected";} %>
+--- occu/WebUI/www/rega/pages/tabs/admin/views/functionchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/functionchannels.htm
+@@ -176,6 +176,7 @@
+     iInsIdx++;
+     iElemsAdded++;
+     tr.id = chnsTmp[i]['trid'];
++    tr.className = 'CLASS04205';
+     if (!fltSF.objPassFilter(chnsTmp[i]))
+       tr.style.display = "none";
+     else
+@@ -284,4 +285,4 @@
+ bEIP = false;
+ Cursor.set(Cursor.NORMAL);
+ translatePage("#tblsvr");
+-</script>
+\ No newline at end of file
++</script>
 --- occu/WebUI/www/rega/pages/tabs/admin/views/functions.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/functions.htm
-@@ -193,7 +193,7 @@
-   <td class='CLASS04102 DeviceListCell'><div id="name" class="pt11 <%Write(sCssName); %>" onclick="SortMe('name');"><b>${thName}</b></div></td>
+@@ -171,79 +171,79 @@
+ 
+ <table id="tblFunctionList" class="tblList CLASS04200" style="display:none" cellspacing="0" cellpadding="0" >
+ <colgroup>
+-  <col style="width:4%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:12%;"/>
+-  <col style="width:12%;"/>
+-  <col style="width:4%;"/>
+-  <col style="width:16%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:4%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:8%;"/>
++  <col style="width:25px;" />
++  <col />
++  <col />
++  <col />
++  <col style="width:55px;">
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:100px;">
++  <col style="width:100px;">
+ </colgroup>
+ <thead>
+ <tr class='CLASS04101'>
+-  <td id="tblListFold"></td>
++  <th id="tblListFold"></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="func"){sCssName="SortSelected";} %>
+-  <td class='CLASS04102 DeviceListCell'><div id="func" class="pt11 <%Write(sCssName); %>" onclick="SortFuncs();"><b>${thFunc}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="func" class="pt11 <%Write(sCssName); %>" onclick="SortFuncs();">${thFunc}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+-  <td class='CLASS04102 DeviceListCell'><div id="name" class="pt11 <%Write(sCssName); %>" onclick="SortMe('name');"><b>${thName}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="name" class="pt11 <%Write(sCssName); %>" onclick="SortMe('name');">${thName}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="desc"){sCssName="SortSelected";} %>
-   <td class='CLASS04102 DeviceListCell'><div id="desc" class="pt11 <%Write(sCssName); %>" onclick="SortMe('desc');"><b>${thTypeDescriptor}</b></div></td>
+-  <td class='CLASS04102 DeviceListCell'><div id="desc" class="pt11 <%Write(sCssName); %>" onclick="SortMe('desc');"><b>${thTypeDescriptor}</b></div></td>
 -  <td><div class="CLASS04102 pt11 Sort DeviceListCell"><b>${thPicture}</b></div></td>
-+  <td class='CLASS04102 DeviceListCell'><div class="pt11 Sort"><b>${thPicture}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="desc" class="pt11 <%Write(sCssName); %>" onclick="SortMe('desc');">${thTypeDescriptor}</div></th>
++  <th class='CLASS04102 DeviceListHead'><div class="pt11 Sort">${thPicture}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="type"){sCssName="SortSelected";} %>
-   <td class='CLASS04102 DeviceListCell'><div id="type" class="pt11 <%Write(sCssName); %>" onclick="SortMe('type');"><b>${thDescriptor}</b></div></td>
+-  <td class='CLASS04102 DeviceListCell'><div id="type" class="pt11 <%Write(sCssName); %>" onclick="SortMe('type');"><b>${thDescriptor}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="type" class="pt11 <%Write(sCssName); %>" onclick="SortMe('type');">${thDescriptor}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="sn"){sCssName="SortSelected";} %>
-@@ -203,9 +203,9 @@
+-  <td class='CLASS04102 DeviceListCell'><div id="sn" class="pt11 <%Write(sCssName); %>" onclick="SortMe('sn');"><b>${thSerialNumber}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="sn" class="pt11 <%Write(sCssName); %>" onclick="SortMe('sn');">${thSerialNumber}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="iface"){sCssName="SortSelected";} %>
+-  <td class='CLASS04102 DeviceListCell'><div id="iface" class="pt11 <%Write(sCssName); %>" onclick="SortMe('iface');"><b>${thInterfaceCategory}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="iface" class="pt11 <%Write(sCssName); %>" onclick="SortMe('iface');">${thInterfaceCategory}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="trans"){sCssName="SortSelected";} %>
-   <td class='CLASS04102 DeviceListCell'><div id="trans" class="pt11 <%Write(sCssName); %>" onclick="SortMe('trans');"><b>${thTransmitMode}</b></div></td>
+-  <td class='CLASS04102 DeviceListCell'><div id="trans" class="pt11 <%Write(sCssName); %>" onclick="SortMe('trans');"><b>${thTransmitMode}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="trans" class="pt11 <%Write(sCssName); %>" onclick="SortMe('trans');">${thTransmitMode}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
 -  <td><div id="room" class="CLASS04102 pt11 <%Write(sCssName); %> DeviceListCell" onclick="SortMe('room');"><b>${thRoom}</b></div></td>
 -  <td><div class="CLASS04102 pt11 Sort DeviceListCell"><b>${thAction}</b></div></td>
 -  <td><div class="CLASS04102 pt11 Sort DeviceListCell"><b>${thLinks}</b></div></td>
-+  <td class='CLASS04102 DeviceListCell'><div id="room" class="pt11 <%Write(sCssName); %>" onclick="SortMe('room');"><b>${thRoom}</b></div></td>
-+  <td class='CLASS04102 DeviceListCell'><div class="pt11 Sort"><b>${thAction}</b></div></td>
-+  <td class='CLASS04102 DeviceListCell'><div class="pt11 Sort"><b>${thLinks}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="room" class="pt11 <%Write(sCssName); %>" onclick="SortMe('room');">${thRoom}</div></th>
++  <th class='CLASS04102 DeviceListHead'><div class="pt11 Sort">${thAction}</div></th>
++  <th class='CLASS04102 DeviceListHead'><div class="pt11 Sort">${thLinks}</div></th>
  </tr>
  <tr class='CLASS04205'>
-   <td style='height:20px'></td>
+-  <td style='height:20px'></td>
+-  <td class='CLASS04206' style='height:20px' ></td>
+-  <td class='CLASS04211' style='height:20px'>
++  <th></td>
++  <th class='CLASS04206'></th>
++  <th class='CLASS04211'>
+     <div id="btnFilterName" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
+         <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class='CLASS04213' />
+         <div id="ftSetNameBtn" class='FilterSetButton CLASS04214' onclick="setSFilter(fltSF, 'ftName', FIL_NAME);updateTable();$('btnFilterNameSub').hide();" >${filterSet}</div>
+         <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class='CLASS04211' style='height:20px'>
++  </th>
++  <th class='CLASS04211'>
+     <div id="btnFilterType" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterTypeSub" style="display:none">
+         <input id="ftType" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetTypeBtn', 'ftCancelTypeBtn')" type="text" size="15" class='CLASS04213' />
+         <div id="ftSetTypeBtn" class="FilterSetButton CLASS04214" onclick="setSFilter(fltSF, 'ftType', FIL_TYPE);updateTable();$('btnFilterTypeSub').hide();" >${filterSet}</div>
+         <div id="ftCancelTypeBtn" class='FilterSetButton' onclick="$('btnFilterTypeSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class='CLASS04206' style='height:20px'></td>
+-  <td class='CLASS04211' style='height:20px'>
++  </th>
++  <th class='CLASS04206'></th>
++  <th class='CLASS04211'>
+     <div id="btnFilterDesc" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterDescSub" style="display:none">
+         <input id="ftDesc" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetDescBtn', 'ftCancelDescBtn')" type="text" size="15" class='CLASS04213' />
+         <div id="ftSetDescBtn" class="FilterSetButton CLASS04214" onclick="setSFilter(fltSF, 'ftDesc', FIL_DESC);updateTable();$('btnFilterDescSub').hide();" >${filterSet}</div>
+         <div id="ftCancelDescBtn" class='FilterSetButton' onclick="$('btnFilterDescSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class='CLASS04211' style='height:20px'>
++  </th>
++  <th class='CLASS04211'>
+     <div id="btnFilterSN" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterSNSub" style="display:none">
+         <input id="ftSN" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetSNBtn', 'ftCancelSNBtn')" type="text" size="15" class='CLASS04213' />
+         <div id="ftSetSNBtn" class="FilterSetButton CLASS04214" onclick="setSFilter(fltSF, 'ftSN', FIL_SN);updateTable();$('btnFilterSNSub').hide();" >${filterSet}</div>
+         <div id="ftCancelSNBtn" class='FilterSetButton' onclick="$('btnFilterSNSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class='CLASS04211' style='height:20px'>
++  </th>
++  <th class='CLASS04211'>
+     <div id="btnFilterIface" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterIfaceSub" style="display:none">
+         <table class='CLASS04212'>
+@@ -259,8 +259,8 @@
+         <div class='FilterSetButton' onclick='setIFilter(fltSF, "iface");updateTable();$("btnFilterIfaceSub").hide();'>${filterSet}</div>
+         <div class='FilterSetButton' onclick="$('btnFilterIfaceSub').hide();">${filterClose}</div>
+     </div> 
+-  </td>
+-  <td class='CLASS04211' style='height:20px'>
++  </th>
++  <th class='CLASS04211'>
+     <div id="btnFilterMode" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterModeSub" style="display:none">
+         <table class='CLASS04212'>
+@@ -276,8 +276,8 @@
+         <div class='FilterSetButton' onclick='setIFilter(fltSF, "mode");updateTable();$("btnFilterModeSub").hide();'>${filterSet}</div>
+         <div class='FilterSetButton' onclick="$('btnFilterModeSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class='CLASS04211' style='height:20px'>
++  </th>
++  <th class='CLASS04211'>
+     <div id="btnFilterRoom" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterRoomSub" style="display:none">
+       <% 
+@@ -301,9 +301,9 @@
+         Write("<div class='FilterSetButton' onclick='$(\"btnFilterRoomSub\").hide();'>${filterClose}</div>");
+       %>
+     </div>
+-  </td>
+-  <td class='CLASS04206' style='height:20px'></td>
+-  <td class='CLASS04206' style='height:20px'></td>
++  </th>
++  <th class='CLASS04206'></th>
++  <th class='CLASS04206'></th>
+ </tr>
+ 
+ </thead>
+@@ -322,7 +322,7 @@
+     object elem = dom.GetObject(tmp);
+     if (elem)
+     {
+-      WriteLine("<tr id='r"#tmp#"'>");
++      WriteLine("<tr id='r"#tmp#"' class='CLASS04205'>");
+       
+       Write("<td>"); !+ / -
+       string sStyle = "";
+--- occu/WebUI/www/rega/pages/tabs/admin/views/newDeviceLoader.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/newDeviceLoader.htm
+@@ -271,7 +271,7 @@
+       td.appendChild(img);
+ 
+       tr.appendChild(td);
+-      td = Builder.node('td', {colSpan: 2, className: 'GrayBkg border1px'}, strCut(GroupsArray[i][0]['type'] + " " + GroupsArray[i][1]['type'])); tr.appendChild(td);
++      td = Builder.node('td', {colSpan: 2, className: 'GrayBkg border1px'}, GroupsArray[i][0]['type'] + " " + GroupsArray[i][1]['type']); tr.appendChild(td);
+       td.innerHTML = GroupsArray[i][0]['type'] + "<br/>" + GroupsArray[i][1]['type'];
+       
+       td = Builder.node('td', {className: 'WhiteBkgPic border1px'}, [
+@@ -281,16 +281,16 @@
+       Element.addClassName(td, "CLASS04402");
+       tr.appendChild(td);
+       
+-      //td = Builder.node('td', {className: 'GrayBkg border1px'}, translateKey(strCut(DEV_getDescription(deviceData['type']))) ); tr.appendChild(td);
++      //td = Builder.node('td', {className: 'GrayBkg border1px'}, translateKey(DEV_getDescription(deviceData['type'])) ); tr.appendChild(td);
+       td = Builder.node('td', {className: 'GrayBkg border1px'}, translateKey(DEV_getDescription(deviceData['type'])) ); tr.appendChild(td);
+-      td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(GroupsArray[i][0]['sn'] + " " + GroupsArray[i][1]['sn'])); tr.appendChild(td);
++      td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][0]['sn'] + " " + GroupsArray[i][1]['sn']); tr.appendChild(td);
+       var sIface = (GroupsArray[i][0]['iface'] != GroupsArray[i][1]['iface'] ? GroupsArray[i][0]['iface'] + " " +  GroupsArray[i][1]['iface'] : GroupsArray[i][0]['iface']);
+       td = Builder.node('td', {className: 'GrayBkg border1px'}, sIface); tr.appendChild(td);
+       
+       td = Builder.node('td', {id: 'trans' + GroupsArray[i][0]['id'] + GroupsArray[i][1]['id'], 
+                      className: 'GrayBkg border1px'}, removeDuplicates(GroupsArray[i][0]['trans'], GroupsArray[i][1]['trans'], "")); tr.appendChild(td);
+       
+-      td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(GroupsArray[i][0]['name'] + " " + GroupsArray[i][1]['name'])); tr.appendChild(td);
++      td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][0]['name'] + " " + GroupsArray[i][1]['name']); tr.appendChild(td);
+       var sGrRoId = 'funcs' + GroupsArray[i][0]['id'] + GroupsArray[i][1]['id'];
+       td = Builder.node('td', {id: sGrRoId, className: 'GrayBkg border1px'}, removeDuplicates(GroupsArray[i][0]['func'],  GroupsArray[i][1]['func'], ';')); tr.appendChild(td);
+       var sGrRoId = 'rooms' + GroupsArray[i][0]['id'] + GroupsArray[i][1]['id'];
+@@ -340,7 +340,7 @@
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][x]['desc'] );
+         td.innerHTML = translateKey(GroupsArray[i][x]['desc']);
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(GroupsArray[i][x]['sn'])); tr.appendChild(td);
++        td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][x]['sn']); tr.appendChild(td);
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][x]['iface']); tr.appendChild(td);
+         var trsId = "trs" + GroupsArray[i][x]['id'];
+         var s = "WhiteBkg border1px";
+@@ -365,10 +365,10 @@
+           
+         if (NAV_IE) {
+           td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-              [Builder.node('div', {id:'tdn' + GroupsArray[i][x]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0, CALL_STRCUT)'}, strCut(GroupsArray[i][x]['name'])) ]); tr.appendChild(td);
++              [Builder.node('div', {id:'tdn' + GroupsArray[i][x]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0)'}, GroupsArray[i][x]['name']) ]); tr.appendChild(td);
+         }
+         else {
+-          td = Builder.node('td', {className: 'WhiteBkg CLASS04403 border1px', id:'tdn' + GroupsArray[i][x]['id'], onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0, CALL_STRCUT)'}, strCut(GroupsArray[i][x]['name'])); tr.appendChild(td);
++          td = Builder.node('td', {className: 'WhiteBkg CLASS04403 border1px', id:'tdn' + GroupsArray[i][x]['id'], onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0)'}, GroupsArray[i][x]['name']); tr.appendChild(td);
+         } 
+         
+         if (NAV_IE) {
+@@ -465,7 +465,7 @@
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, chns[i]['desc']);
+         td.innerHTML = translateKey(chns[i]['desc']);
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(chns[i]['sn'])); tr.appendChild(td);
++        td = Builder.node('td', {className: 'GrayBkg border1px'}, chns[i]['sn']); tr.appendChild(td);
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, chns[i]['iface']); tr.appendChild(td);
+         var trsId = "trs" + chns[i]['id'];
+         var s = "WhiteBkg border1px";
+@@ -491,10 +491,10 @@
+ 
+         if (NAV_IE) {
+           td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-              [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'], true)) ]); tr.appendChild(td);
++              [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']) ]); tr.appendChild(td);
+         }
+         else {
+-         td = Builder.node('td', {className: 'WhiteBkg CLASS04404 border1px', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'].replace(/:/g, ":<br/>"), true)); tr.appendChild(td);
++         td = Builder.node('td', {className: 'WhiteBkg CLASS04404 border1px', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']); tr.appendChild(td);
+         }
+         
+         if (NAV_IE) {
+@@ -561,4 +561,4 @@
+ 
+ <script type="text/javascript">
+     translatePage("#tblNewDevices");
+-</script>
+\ No newline at end of file
++</script>
+--- occu/WebUI/www/rega/pages/tabs/admin/views/newdevicechannelsloader.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevicechannelsloader.htm
+@@ -120,7 +120,7 @@
+   {
+     var tr = Builder.node("tr");
+     
+-    td = Builder.node('td', {className: 'GrayBkg'}, strCut(chns[i]['type'], true)); tr.appendChild(td);
++    td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['type']); tr.appendChild(td);
+     
+     //td = Builder.node('td', {className: 'WhiteBkg'});
+     td = Builder.node('td', {className: 'WhiteBkgPic'}, [
+@@ -131,7 +131,7 @@
+     tr.appendChild(td);
+     
+     td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['desc']); tr.appendChild(td);
+-    td = Builder.node('td', {className: 'GrayBkg'}, strCut(chns[i]['sn'])); tr.appendChild(td);
++    td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['sn']); tr.appendChild(td);
+     td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['iface']); tr.appendChild(td);
+     
+     var s = "WhiteBkg";
+@@ -152,10 +152,10 @@
+     
+     if (NAV_IE) {
+       td = Builder.node('td', {className: 'WhiteBkg'}, 
+-          [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04502 CLASS04503", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'], true)) ]); tr.appendChild(td);
++          [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04502 CLASS04503", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']) ]); tr.appendChild(td);
+     }
+     else {
+-      td = Builder.node('td', {className: 'WhiteBkg CLASS04503', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'], true)); tr.appendChild(td);
++      td = Builder.node('td', {className: 'WhiteBkg CLASS04503', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']); tr.appendChild(td);
+     }  
+       
+     if (NAV_IE) {
+@@ -195,4 +195,4 @@
+     Cursor.set(Cursor.NORMAL);
+   }
+   
+-</script>
+\ No newline at end of file
++</script>
 --- occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm
-@@ -88,18 +88,18 @@
+@@ -63,43 +63,43 @@
+ <div class="CLASS04301">
+ <div id="noNewDevs" class="CLASS04302" style="display:none;">${noDeviceInPostBox}</div>
+ <table id="newDevTbl" class="tblList CLASS04303" cellpadding="0" cellspacing="0"
+-       style="display:none; width:97%; margin:1%;">
++       style="display:none;">
+ <colgroup>
+-  <col style="width:2%;"  width="2%"/>
++  <col style="width:25px;" />
+   <!-- Plus/Minus Device-->
+-  <col style="width:2%;"/>
++  <col style="width:25px;" />
+   <!-- Plus/Minus Group -->
+-  <col style="width:2%;"/>
++  <col />
+   <!-- Leere Zelle vor GroupMember -->
+-  <col style="width:1%;"/>
+-  <col style="width:3%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:9%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:7%;"/>
+-  <col style="width:15%;"/>
+-  <col style="width:7%;"/>
++  <col />
++  <col style="width:50px;" />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:100px;"/>
++  <col style="width:100px;"/>
+ </colgroup>
+ <tbody id="tblNewDevices">
  <tr id="tblNewDevicesHeader">
    <th id="tblListFold"></th>
  
@@ -75,33 +1045,579 @@
 -  <th class="Sort CLASS04304 border1px"><b>${thFunctionTest}</b></th>
 -  <th class="Sort CLASS04304 border1px"><b>${thAction}</b></th>
 -  <th class="Sort CLASS04304 border1px"><b>${thReady}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'><b>${thTypeDescriptor}</b></th>
-+  <th class="DeviceListHead"><b>${thPicture}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('desc')"><b>${thDescriptor}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('sn')"><b>${thSerialNumber}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('iface')"><b>${thInterfaceCategory}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('trans')"><b>${thTransmitMode}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('name')"><b>${thName}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('func')"><b>${thFunc}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('room')"><b>${thRoom}</b></th>
-+  <th class="DeviceListHead"><b>${thFunctionTest}</b></th>
-+  <th class="DeviceListHead"><b>${thAction}</b></th>
-+  <th class="DeviceListHead"><b>${thReady}</b></th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'>${thTypeDescriptor}</th>
++  <th class="DeviceListHead">${thPicture}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('desc')">${thDescriptor}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('sn')">${thSerialNumber}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('iface')">${thInterfaceCategory}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('trans')">${thTransmitMode}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('name')">${thName}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('func')">${thFunc}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('room')">${thRoom}</th>
++  <th class="DeviceListHead">${thFunctionTest}</th>
++  <th class="DeviceListHead">${thAction}</th>
++  <th class="DeviceListHead">${thReady}</th>
  </tr>
  
  <script type="text/javascript">
+@@ -381,7 +381,7 @@
+   var img = Builder.node('img', {src: "/ise/img/plus.png", id: "img" + arDevices[i]['id'], alt: "plus", onclick: "expandDevice(" + arDevices[i]['id'] + "," + i + ")"});
+   td.appendChild(img);
+   tr.appendChild(td);
+-  td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, strCut(arDevices[i]['type'], true));
++  td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, arDevices[i]['type']);
+   tr.appendChild(td);
+   td = Builder.node('td', {className: 'WhiteBkgPic CLASS04314 border1px'}, [
+     Builder.node('div', {id: 'picDiv' + arDevices[i]['id'], className: "CLASS04305",
+@@ -391,7 +391,7 @@
+   td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['desc'] );
+   td.innerHTML = translateKey(arDevices[i]['desc']);
+   tr.appendChild(td);
+-  td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(arDevices[i]['sn']));
++  td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['sn']);
+   tr.appendChild(td);
+   td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['iface']);
+   tr.appendChild(td);
+@@ -401,13 +401,13 @@
+ 
+   if (NAV_IE) {
+     td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-      [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true)) ]);
++      [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']) ]);
+     tr.appendChild(td);
+   }
+   else {
+     if (isDevTypeHmIPW(arDevices[i]['type'])) {
+       td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px'});
+-      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, strCut(arDevices[i]['name'].replace(/:/g, ":<br/>"), false));
++      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, arDevices[i]['name'].replace(/:/g, ":<br/>"));
+       divB = Builder.node('div', {
+         id: 'btnRename_' + arDevices[i]["id"],
+         className: 'TestButton colorGradient borderRadius2px hidden',
+@@ -417,7 +417,7 @@
+       td.appendChild(divA);
+       td.appendChild(divB);
+     } else {
+-      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true));
++      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']);
+     }
+ 
+     tr.appendChild(td);
+--- occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm
+@@ -57,9 +57,16 @@
+ 
+ <div id="prgcontent">
+ <table id="ProgramListTable" class="tTable"  border="0" cellpadding="0" cellspacing="0" style="display:none">
++  <colgroup>
++    <col />
++    <col />
++    <col />
++    <col />
++    <col style="width:250px;" />
++  </colgroup>
+     <tr>
+       <%string sCssName="Sort"; if(firstSort||(system.GetSessionVar("sessionLS")=="name")){sCssName="SortSelected";} %>
+-      <td class="thCell CLASS03302"><div id="name" class="tHeaderCell<%Write(sCssName); %>" onclick="IseSort(arItems,'name',true);">${thName}</div></td>
++      <td class="thCell CLASS03302"><div id="name" class="<%Write(sCssName); %>" onclick="IseSort(arItems,'name',true);">${thName}</div></td>
+       <td class="thCell CLASS04900" >${thDescription}</td>
+       <td class="thCell CLASS04900" >${thCondition}</td>
+       <td class="thCell CLASS04900" >${thActivity}</td>
+--- occu/WebUI/www/rega/pages/tabs/admin/views/programs.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/programs.htm
+@@ -960,6 +960,13 @@
+ 
+ <div id="prgcontent">
+   <table id="ProgramTable" class="filterTable tTable j_translate" border="0" cellpadding="0" cellspacing="0">
++    <colgroup>
++      <col />
++      <col />
++      <col />
++      <col />
++      <col style="width:100px;">
++    </colgroup>
+     <thead>
+       <tr>
+         <td class="thCell CLASS04802" >${thName}</td>
+@@ -971,11 +978,11 @@
+     </thead>
+     <tbody>
+       <tr class="CLASS04803">
+-        <td class="tBodyCell bgWhite taCenter" id="prg<% Write(oPrg.ID()); %>name" onclick="textEdit('prg<% Write(oPrg.ID()); %>name', <% Write(oPrg.ID()); %>);"><% Write( oPrg.Name() ); %></td>
+-        <td class="tBodyCell bgWhite taCenter" id="prg<% Write(oPrg.ID()); %>desc" onclick="textEditInfo('prg<% Write(oPrg.ID()); %>desc', <% Write(oPrg.ID()); %>,true);"><% Write( oPrg.PrgInfo() ); %></td>
++        <td class="tBodyCell taCenter" id="prg<% Write(oPrg.ID()); %>name" onclick="textEdit('prg<% Write(oPrg.ID()); %>name', <% Write(oPrg.ID()); %>);"><% Write( oPrg.Name() ); %></td>
++        <td class="tBodyCell taCenter" id="prg<% Write(oPrg.ID()); %>desc" onclick="textEditInfo('prg<% Write(oPrg.ID()); %>desc', <% Write(oPrg.ID()); %>,true);"><% Write( oPrg.PrgInfo() ); %></td>
+         <td class="tBodyCell"><% object oPrgID = oPrg.ID(); string sRet = ""; Call("/esp/programs.fn::WriteConditionText()"); Write(sRet); %></td>
+         <td class="tBodyCell"><% object oPrgID = oPrg.ID(); string sRet = ""; Call("/esp/programs.fn::WriteDestinationText()"); Write(sRet); %></td>
+-        <td class="tBodyCell bgWhite"><input type="checkbox" onchange="isePrograms.SetVisibility(<% Write(oPrg.ID()); %>,this.checked);" id="p<% Write(oPrg.ID()); %>_systeminternal" <% if( oPrg.Internal() ) { Write( "checked" ); } %> /><label for="p<% Write(oPrg.ID()); %>_systeminternal">${lblSystemIntern}</label></td>
++        <td class="tBodyCell"><input type="checkbox" onchange="isePrograms.SetVisibility(<% Write(oPrg.ID()); %>,this.checked);" id="p<% Write(oPrg.ID()); %>_systeminternal" <% if( oPrg.Internal() ) { Write( "checked" ); } %> /><label for="p<% Write(oPrg.ID()); %>_systeminternal">${lblSystemIntern}</label></td>
+       </tr>
+       <tr>
+         <td colspan="5">
+--- occu/WebUI/www/rega/pages/tabs/admin/views/roomchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/roomchannels.htm
+@@ -169,6 +169,7 @@
+     iInsIdx++;
+     iElemsAdded++;
+     tr.id = chnsTmp[i]['trid'];
++    tr.className = 'CLASS04103';
+     if (!fltSR.objPassFilter(chnsTmp[i]))
+       tr.style.display = "none";
+     else 
+--- occu/WebUI/www/rega/pages/tabs/admin/views/rooms.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/rooms.htm
+@@ -170,82 +170,82 @@
+ <table id="tblRoomList" class="tblList CLASS04100" style="display:none" cellpadding="0" cellspacing="0" >
+ 
+ <colgroup>
+-  <col style="width:4%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:12%;"/>
+-  <col style="width:12%;"/>
+-  <col style="width:4%;"/>
+-  <col style="width:16%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:4%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:8%;"/>
+-  <col style="width:8%;"/>
++  <col style="width:25px;" />
++  <col />
++  <col />
++  <col />
++  <col style="width:55px;">
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:100px;">
++  <col style="width:100px;">
+ </colgroup>
+ 
+ <thead>
+ <tr id="rowhead" class="CLASS04101">
+-  <td id="tblListFold"></td>
++  <th id="tblListFold"></td>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
+-  <td class="CLASS04102 DeviceListCell"><div id="roomQQQ" class="pt11 <%Write(sCssName); %>" onclick="SortRooms();"><b>${thRoom}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="roomQQQ" class="pt11 <%Write(sCssName); %>" onclick="SortRooms();">${thRoom}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>  
+-  <td class="CLASS04102 DeviceListCell"><div id="name" class="pt11 <%Write(sCssName); %>" onclick="SortMe('name');"><b>${thName}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="name" class="pt11 <%Write(sCssName); %>" onclick="SortMe('name');">${thName}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="desc"){sCssName="SortSelected";} %>
+-  <td class="CLASS04102 DeviceListCell"><div id="desc" class="pt11 <%Write(sCssName); %>" onclick="SortMe('desc');"><b>${thTypeDescriptor}</b></div></td>
+-  <td class="CLASS04102 DeviceListCell"><div class="pt11 Sort"><b>${thPicture}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="desc" class="pt11 <%Write(sCssName); %>" onclick="SortMe('desc');">${thTypeDescriptor}</div></th>
++  <th class="CLASS04102 DeviceListHead"><div class="pt11 Sort">${thPicture}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="type"){sCssName="SortSelected";} %>
+-  <td class="CLASS04102 DeviceListCell"><div id="type" class="pt11 <%Write(sCssName); %>" onclick="SortMe('type');"><b>${thDescriptor}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="type" class="pt11 <%Write(sCssName); %>" onclick="SortMe('type');">${thDescriptor}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="sn"){sCssName="SortSelected";} %>
+-  <td class="CLASS04102 DeviceListCell"><div id="sn" class="pt11 <%Write(sCssName); %>" onclick="SortMe('sn');"><b>${thSerialNumber}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="sn" class="pt11 <%Write(sCssName); %>" onclick="SortMe('sn');">${thSerialNumber}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="iface"){sCssName="SortSelected";} %>  
+-  <td class="CLASS04102 DeviceListCell"><div id="iface" class="pt11 <%Write(sCssName); %>" onclick="SortMe('iface');"><b>${thInterfaceCategory}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="iface" class="pt11 <%Write(sCssName); %>" onclick="SortMe('iface');">${thInterfaceCategory}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="trans"){sCssName="SortSelected";} %>  
+-  <td class="CLASS04102 DeviceListCell"><div id="trans" class="pt11 <%Write(sCssName); %>" onclick="SortMe('trans');"><b>${thTransmitMode}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="trans" class="pt11 <%Write(sCssName); %>" onclick="SortMe('trans');">${thTransmitMode}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="func"){sCssName="SortSelected";} %>  
+-  <td class="CLASS04102 DeviceListCell"><div id="func" class="pt11 <%Write(sCssName); %>" onclick="SortMe('func');"><b>${thFunc}</b></div></td>
+-  <td class="CLASS04102 DeviceListCell"><div class="pt11 Sort"><b>${thAction}</b></div></td>
+-  <td class="CLASS04102 DeviceListCell"><div class="pt11 Sort"><b>${thLinks}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="func" class="pt11 <%Write(sCssName); %>" onclick="SortMe('func');">${thFunc}</div></td>
++  <th class="CLASS04102 DeviceListHead"><div class="pt11 Sort">${thAction}</div></th>
++  <th class="CLASS04102 DeviceListHead"><div class="pt11 Sort">${thLinks}</div></th>
+ </tr>
+ <tr id="rowflt" class="CLASS04103">
+-  <td style="height:20px"></td>
+-  <td class="CLASS04104" style="height:20px"></td>
+-  <td class="CLASS04109" style="height:20px">
++  <th></td>
++  <th class="CLASS04104"></th>
++  <th class="CLASS04109">
+     <div id="btnFilterName" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
+         <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class='CLASS04112' />
+         <div id="ftSetNameBtn" class='FilterSetButton CLASS04113' onclick="setSFilter(fltSR, 'ftName', FIL_NAME);updateTable();$('btnFilterNameSub').hide();" >${filterSet}</div>
+         <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class="CLASS04109" style="height:20px">
++  </th>
++  <th class="CLASS04109">
+     <div id="btnFilterType" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterTypeSub" style="display:none">
+         <input id="ftType" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetTypeBtn', 'ftCancelTypeBtn')" type="text" size="15" class='CLASS04112' />
+         <div id="ftSetTypeBtn" class="FilterSetButton CLASS04113" onclick="setSFilter(fltSR, 'ftType', FIL_TYPE);updateTable();$('btnFilterTypeSub').hide();" >${filterSet}</div>
+         <div id="ftCancelTypeBtn" class='FilterSetButton' onclick="$('btnFilterTypeSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class="CLASS04104" style="height:20px"></td>
+-  <td class="CLASS04109" style="height:20px">
++  </th>
++  <th class="CLASS04104"></th>
++  <th class="CLASS04109">
+     <div id="btnFilterDesc" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterDescSub" style="display:none">
+         <input id="ftDesc" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetDescBtn', 'ftCancelDescBtn')" type="text" size="15" class='CLASS04112' />
+         <div id="ftSetDescBtn" class="FilterSetButton CLASS04113" onclick="setSFilter(fltSR, 'ftDesc', FIL_DESC);updateTable();$('btnFilterDescSub').hide();" >${filterSet}</div>
+         <div id="ftCancelDescBtn" class='FilterSetButton' onclick="$('btnFilterDescSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
++  </th>
+   
+   
+-  <td class="CLASS04109" style="height:20px">
++  <th class="CLASS04109">
+     <div id="btnFilterSN" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterSNSub" style="display:none">
+         <input id="ftSN" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetSNBtn', 'ftCancelSNBtn')" type="text" size="15" class='CLASS04112' />
+         <div id="ftSetSNBtn" class="FilterSetButton CLASS04113" onclick="setSFilter(fltSR, 'ftSN', FIL_SN);updateTable();$('btnFilterSNSub').hide();" >${filterSet}</div>
+         <div id="ftCancelSNBtn" class='FilterSetButton' onclick="$('btnFilterSNSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class="CLASS04109" style="height:20px">
++  </th>
++  <th class="CLASS04109">
+     <div id="btnFilterIface" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterIfaceSub" style="display:none">
+         <table class='CLASS04110'>
+@@ -261,8 +261,8 @@
+         <div class='FilterSetButton' onclick='setIFilter(fltSR, "iface");updateTable();$("btnFilterIfaceSub").hide();'>${filterSet}</div>
+         <div class='FilterSetButton' onclick="$('btnFilterIfaceSub').hide();">${filterClose}</div>
+     </div> 
+-  </td>
+-  <td class="CLASS04109" style="height:20px">
++  </th>
++  <th class="CLASS04109">
+     <div id="btnFilterMode" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterModeSub" style="display:none">
+         <table class='CLASS04110'>
+@@ -278,8 +278,8 @@
+         <div class='FilterSetButton' onclick='setIFilter(fltSR, "mode");updateTable();$("btnFilterModeSub").hide();'>${filterSet}</div>
+         <div class='FilterSetButton' onclick="$('btnFilterModeSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class="CLASS04109" style="height:20px">
++  </th>
++  <th class="CLASS04109">
+     <div id="btnFilterFunc" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterFuncSub" style="display:none">
+       <% 
+@@ -303,9 +303,9 @@
+         Write("<div class='FilterSetButton' onclick='$(\"btnFilterFuncSub\").hide();'>${filterClose}</div>");
+       %>
+     </div>
+-  </td>
+-  <td class="CLASS04104" style="height:20px"></td>
+-  <td class="CLASS04104" style="height:20px"></td>
++  </th>
++  <th class="CLASS04104"></th>
++  <th class="CLASS04104"></th>
+ </tr>
+ 
+ </thead>
+@@ -324,7 +324,7 @@
+     object elem = dom.GetObject(tmp);
+     if (elem)
+     {
+-      WriteLine("<tr id='r"#tmp#"'>");
++      WriteLine("<tr id='r"#tmp#"' class='CLASS04103'>");
+       
+       Write("<td>"); !+ / -
+       string sStyle = "";
+--- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
+@@ -21,15 +21,10 @@
+   <tr>
+     <!-- Linke Spalte -->
+     <td id="contentLeft" class="hidden">
+-      <table class="filterTable CLASS03901 j_translate">
++      <table class="filterTable CLASS03901 j_translate" cellpadding="0" cellspacing="0">
+         <tr>
+           <td style="vertical-align: top; border: 0px">
+             <div id="divDL" class="CLASS03902">
+-              <script type="text/javascript">
+-                var contHeight = $("content").style.height;
+-                contHeight = contHeight.replace(/px/, "");
+-                $("divDL").style.height = Math.floor((contHeight * 0.98)) + "px";
+-              </script>
+               <table id="tblFunctionNames" class="StatViewTbl CLASS03903 j_translate" cellpadding="0" cellspacing="0" style="width:100%;">
+                 <colgroup>
+                   <col style="width:80%;"/>
+@@ -92,7 +87,7 @@
+                         }
+                         string trId = "devices"#devs.ID();
+                         WriteLine('<tr id="'#trId#'" class="CLASS03904">');
+-                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")'>");
++                          Write("<td id='"#devs.ID()#"name' class='ButtonStatusRooms CLASS03905' onclick='fltHD.clearFilters();updateTable();loadChannels("#devs.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
+                           Write(devs.Name());
+                           Write("</td>");
+                           Write("<td id='"#devs.ID()#"pic' class='ButtonStatusRoomsPic CLASS03906' >");
+@@ -130,12 +125,7 @@
+     <!-- Rechte Spalte -->
+     <td id="contentRight">
+       <div id="divRTD" class="CLASS03908">
+-        <script type="text/javascript">
+-          var contHeight = $("content").style.height;
+-          contHeight = contHeight.replace(/px/, "");
+-          $("divRTD").style.height = Math.floor((contHeight * 0.98)) + "px";
+-        </script>
+-        <table id="tblRightContent" class="CLASS03909">
++        <table id="tblRightContent" class="CLASS03909" cellpadding="0" cellspacing="0">
+          <tr class="CLASS03910">
+            <td style="vertical-align: top;" id="chnList"></td>
+          </tr>
+--- occu/WebUI/www/rega/pages/tabs/control/functions.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/functions.htm
+@@ -21,15 +21,10 @@
+   <tr>
+     <!-- Linke Spalte -->
+     <td id="contentLeft" class="hidden">
+-      <table class="filterTable CLASS04001 j_translate">
++      <table class="filterTable CLASS04001 j_translate" cellpadding="0" cellspacing="0">
+         <tr>
+           <td style="vertical-align: top; border: 0px;">
+-            <div id="divFL" class="CLASS04002">
+-              <script type="text/javascript">
+-                var contHeight = $("content").style.height;
+-                contHeight = contHeight.replace(/px/, "");
+-                $("divFL").style.height = Math.floor((contHeight * 0.98)) + "px";
+-              </script>
++            <div id="divFL" class="CLASS04201">
+               <table id="tblFunctionNames" class="StatViewTbl CLASS04006 j_translate" cellpadding="0" cellspacing="0" style="width: 100%;">
+                 <tr>
+                   <th>${thFunc}</th>
+@@ -60,7 +55,7 @@
+                         }
+                         string trId = "funcs"#func.ID();
+                         Write("<tr id='"#trId#"'>");
+-                          Write("<td id='"#func.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHF.clearFilters();updateTable();loadChannels("#func.ID()#")'>");
++                          Write("<td id='"#func.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHF.clearFilters();updateTable();loadChannels("#func.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
+                             Write(func.Name());
+                           Write("</td>");
+                           Write("<script type='text/javascript'>");
+@@ -89,12 +84,7 @@
+    <!-- Rechte Spalte -->
+    <td id="contentRight">
+      <div id="divHTF" class="CLASS04002">
+-      <script type="text/javascript">
+-        var contHeight = $("content").style.height;
+-        contHeight = contHeight.replace(/px/, "");
+-        $("divHTF").style.height = Math.floor((contHeight * 0.97)) + "px";
+-      </script>
+-       <table id="tblRightContent" class="CLASS04003">
++       <table id="tblRightContent" class="CLASS04003" cellpadding="0" cellspacing="0">
+          <tr class="CLASS04004">
+            <td style="vertical-align: top;" id="chnList">
+            
+--- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
+@@ -209,7 +209,7 @@
+             Write("</td>");
+             Write("<td class='GrayBkg'>");
+             
+-            Write("<table>");
++            Write("<table style='width:100%;'>");
+             Write("<tr><td class='CLASS03502'><span id='tmc"#chn.ID()#"' name='timeStamp'>");
+             
+             integer cId = chn.ID();
+--- occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hfuncchannels.htm
+@@ -162,7 +162,7 @@
+             Write("</td>");
+             Write("<td class='GrayBkg'>");
+             
+-            Write("<table>");
++            Write("<table style='width:100%;'>");
+             Write("<tr><td class='CLASS03802'><span id='tmc"#chn.ID()#"'><br /><br />");
+             
+             integer cId = chn.ID();
+--- occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/hroomchannels.htm
+@@ -167,7 +167,7 @@
+             Write("</td>");
+             Write("<td class='GrayBkg'>");
+             
+-            Write("<table>");
++            Write("<table style='width:100%;'>");
+             Write("<tr><td class='CLASS03602'><div id='tmc"#chn.ID()#"'><br /><br />");
+             
+             integer cId = chn.ID();
+--- occu/WebUI/www/rega/pages/tabs/control/programs.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/programs.htm
+@@ -43,11 +43,18 @@
+ </script>
+ 
+ <div id="prgcontent" class="j_translate">
+-  <table id="ProgramListTable" class="tblList tTable CLASS03701" border="0" cellpadding="0" cellspacing="0" frame="void" rules="none" >
++  <table id="ProgramListTable" class="tblList tTable CLASS03701" border="0" cellpadding="0" cellspacing="0" >
++    <colgroup>
++      <col>
++      <col>
++      <col>
++      <col>
++      <col style="width:250px;">
++    </colgroup>
+     <thead>
+       <tr class="CLASS03702">
+         <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+-        <th class="CLASS03302"><div id="name" class="tHeaderCell<%Write(sCssName); %>" onclick="IseSort(arProgs,'name',true);" >${thName}</div></th>
++        <th class="CLASS03302"><div id="name" class="<%Write(sCssName); %>" onclick="IseSort(arProgs,'name',true);" >${thName}</div></th>
+         <th class="tHeaderCell CLASS03303" >${thDescription}</th>
+         <th class="tHeaderCell CLASS03303" >${thActivity}</th>
+         <th class="tHeaderCell CLASS03303" >${thLastExecution}</th>
+@@ -141,6 +148,7 @@
+ <script type="text/javascript">
+ 
+   translatePage("#prgcontent");
++  $("prgcontent").style.display = 'contents';
+ 
+   var s = "";
+   
+--- occu/WebUI/www/rega/pages/tabs/control/rooms.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/rooms.htm
+@@ -21,15 +21,10 @@
+   <tr>
+     <!-- Linke Spalte -->
+     <td id="contentLeft" class="hidden">
+-      <table class="filterTable CLASS04001 j_translate">
++      <table class="filterTable CLASS04001 j_translate" cellpadding="0" cellspacing="0">
+         <tr>
+           <td style="vertical-align: top; border: 0px">
+-            <div id="divRL" class="CLASS04002">
+-            <script type="text/javascript">
+-              var contHeight = $("content").style.height;
+-              contHeight = contHeight.replace(/px/, "");
+-              $("divRL").style.height = Math.floor((contHeight * 0.98)) + "px";
+-            </script>
++            <div id="divRL" class="CLASS04201">
+             <table id="tblRoomNames" class="StatViewTbl CLASS04006 j_translate"  cellpadding="0" cellspacing="0" width="100%">
+               <tr>
+                 <th>${thRoom}</th>
+@@ -61,7 +56,7 @@
+                       }
+                       string trId = "rooms"#room.ID();
+                       Write("<tr id='"#trId#"'>");
+-                        Write("<td id='"#room.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHR.clearFilters();updateTable();loadChannels("#room.ID()#")'>");
++                        Write("<td id='"#room.ID()#"name' class='ButtonStatusRooms CLASS04007' onclick='fltHR.clearFilters();updateTable();loadChannels("#room.ID()#")' onmouseover='this.addClassName(\"DeviceListRow_Highlight\")' onmouseout='this.removeClassName(\"DeviceListRow_Highlight\")'>");
+                           Write(room.Name());     
+                         Write("</td>");
+                         Write("<script type='text/javascript'>");
+@@ -92,12 +87,7 @@
+      <!-- Rechte Spalte -->
+      <td id="contentRight">
+        <div id="divHTR" class="CLASS04002">
+-        <script type="text/javascript">
+-          var contHeight = $("content").style.height;
+-          contHeight = contHeight.replace(/px/, "");
+-          $("divHTR").style.height = Math.floor((contHeight * 0.98)) + "px";
+-        </script>
+-       <table id="tblRightContent" class="CLASS04003">
++       <table id="tblRightContent" class="CLASS04003" cellpadding="0" cellspacing="0">
+         <tr class="CLASS04004">
+           <td style="vertical-align: top;" id="chnList">
+        
+--- occu/WebUI/www/rega/pages/tabs/control/systemProtocol.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/systemProtocol.htm
+@@ -43,10 +43,10 @@
+ 
+ <table class="tTable filterTable" id="SysProtoList" cellspacing="0" cellpadding="0" style="display:none">
+   <colgroup>
+-    <col style="width:12%;"/>
+-    <col style="width:12%;"/>
+-    <col style="width:16%;"/>
+-    <col style="width:60%;"/>
++    <col />
++    <col />
++    <col />
++    <col />
+   </colgroup>
+   <thead id="histlistheader">
+       <tr>
+--- occu/WebUI/www/rega/pages/tabs/control/sysvars.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/sysvars.htm
+@@ -46,14 +46,14 @@
+ <div id="prgcontent">
+   <table id="sysvarsListTable" class="tTable tblList CLASS03301 hidden" border="0" cellpadding="0" cellspacing="0" >
+     <colgroup>
+-      <col style="width:25%;"/>
+-      <col style="width:25%;"/>
+-      <col style="width:25%;"/>
+-      <col style="width:25%;"/>
++      <col />
++      <col />
++      <col />
++      <col />
+     </colgroup>
+       <tr>
+         <%string sCssName="Sort"; if(firstSort||(system.GetSessionVar("sessionLS")=="name")){sCssName="SortSelected";} %>
+-        <th class="CLASS03302"><div id="name" class="tHeaderCell<%Write(sCssName); %>" onclick="IseSort(arItems,'name',true);">${thName}</div></th>
++        <th class="CLASS03302"><div id="name" class="<%Write(sCssName); %>" onclick="IseSort(arItems,'name',true);">${thName}</div></th>
+         <th class="tHeaderCell CLASS03303" >${thDescription}</th>
+         <th class="tHeaderCell CLASS03303" >${thLastChange}</th>
+         <th class="tHeaderCell CLASS03303" >${thState}</th>
+--- occu/WebUI/www/rega/pages/tabs/favViewer.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/favViewer.htm
+@@ -69,17 +69,17 @@
+     {
+       WriteLine('<div class="CLASS05800">');
+       WriteLine('<div id="loadingGif"><img style="margin: 30px;" src="/ise/img/loading.gif" /></div>');
+-      WriteLine('<table id="tblfav" align="center" cellpadding="0" cellspacing="10" class="hidden">');
++      WriteLine('<table id="tblfavViewer" align="center" cellpadding="0" cellspacing="10" class="hidden">');
+     }
+     else
+     {
+       WriteLine('<div class="CLASS05801">');
+       WriteLine('<div id="loadingGif"><img style="margin: 30px;" src="/ise/img/loading.gif" /></div>');
+-      WriteLine('<table id="tblfav" cellpadding="0" cellspacing="10" class="hidden">');
++      WriteLine('<table id="tblfavViewer" cellpadding="0" cellspacing="10" class="hidden">');
+     }
+ 
+     WriteLine('<colgroup>');
+-    WriteLine('<col colspan="' # iFavColumnCount # '" width="' # FAV_COLWIDTH # '" />');
++    WriteLine('<col colspan="' # iFavColumnCount # '" />');
+     WriteLine('</colgroup>');  
+     WriteLine('<tr>');  
+ 
+@@ -273,6 +273,6 @@
+   setFooter(s);
+   translatePage();
+   jQuery("#loadingGif").hide();
+-  jQuery("#tblfav").show();
++  jQuery("#tblfavViewer").show();
+ </script>
+ 
 --- occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/statusviews/alarmMessages.htm
-@@ -39,7 +39,7 @@
+@@ -39,31 +39,31 @@
  <script type="text/javascript">
    Cursor.set(Cursor.NORMAL);
  </script>
 -<table id="tblAlarms" class="tblList CLASS02801" border="0" cellpadding="0" cellspacing="0" frame="void" rules="none" style="display:none;">
-+<table id="tblAlarms" class="filterTable tTable CLASS02601" border="0" cellpadding="0" cellspacing="0" frame="void" rules="none" style="display:none;">
++<table id="tblAlarms" class="filterTable tTable CLASS02601" border="0" cellpadding="0" cellspacing="0" style="display:none;">
  <colgroup>
-   <col width="10%" />
-   <col width="10%" />
-@@ -53,17 +53,17 @@
+-  <col style="width:10%;"/>
+-  <col style="width:10%;"/>
+-  <col style="width:10%;"/>
+-  <col style="width:10%;"/>
+-  <col style="width:10%;"/>
+-  <col style="width:15%;"/>
+-  <col style="width:15%;"/>
+-  <col style="width:10%;"/>
+-  <col style="width:10%;"/>
++  <col style="width:100px;" />
++  <col style="width:100px;" />
++  <col style="width:50px;" />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:100px;" />
  </colgroup>
  <tr>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="first"){sCssName="SortSelected";} %>
@@ -188,9 +1704,54 @@
                Write(" onmouseover='picDivShow(jg_250, \""#dev.Label()#"\", 250, -1, this);'");
                Write(" onmouseout='picDivHide(jg_250);'");
                Write("></div>");
+@@ -317,12 +329,12 @@
+             Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02609">'#sSerialNumber#'</td>' );
+             Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02610">'#sFunction#'</td>' );
+             Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02610">'#sRoom#'</td>' );
+-            Write( '<td id="sgu'#sAID#'"  style="text-align:center; vertical-align: middle;" class="CLASS02609">'#sLastUse#'</td>' );
++            Write( '<td id="sgu'#sAID#'"  style="text-align:center; vertical-align: middle;" class="CLASS02605">'#sLastUse#'</td>' );
+             Write( '<td id="m'#oAlarm.ID()#'"  style="text-align:center; vertical-align: middle;" class="CLASS02611">'#sServiceMessage#'</td>' );
+             boolean bWrite = (oLastTrigger.Operations() & OPERATION_WRITE);
+             if( oLastTrigger.Operations() & OPERATION_WRITE )
+             {
+-              Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02612"><input  type="button" name="btnConfirm" value="btnConfirm" onclick="ReceiptAlarm('#oAlarm.ID()#');" class="CLASS02613"/></td>' );
++              Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02612"><input  type="button" name="btnConfirm" value="btnConfirm" onclick="ReceiptAlarm('#oAlarm.ID()#');" class="StdButton CLASS02613"/></td>' );
+ 
+               if (oLastTrigger.HSSID() == "STICKY_UNREACH") {
+                   Write( '<script type="text/javascript">' );
+@@ -333,7 +345,7 @@
+             }
+             else
+             {
+-               Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02612"><input type="button" name="btnConfirm" value="btnConfirm" disabled="disabled" class="CLASS02614"/></td>' );
++               Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02612"><input type="button" name="btnConfirm" value="btnConfirm" disabled="disabled" class="StdButton CLASS02614"/></td>' );
+             }
+           Write( '</tr>' );
+           Write( '<script type="text/javascript">');
 --- occu/WebUI/www/rega/pages/tabs/user/favOverview.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/user/favOverview.htm
-@@ -76,17 +76,17 @@
+@@ -63,30 +63,29 @@
+ <td class="CLASS06402"></td>
+ </tr>
+ </table>
+-<table id="tblFavs" class="tMain filterTable" cellpadding="0" cellspacing="0" width="97%" style="display:none">
++<table id="tblFavs" class="tMain filterTable" cellpadding="0" cellspacing="0" style="display:none">
+   <colgroup>
+-  <col style="width:15%;"/>
+-  <col style="width:15%;"/>
+-  <col style="width:10%;"/>
+-  <col style="width:10%;"/>
+-  <col style="width:10%;"/>
+-<!--  <col style="width:25%;" width="10" /> -->
+-  <col style="width:10%;"/>
+-  <col style="width:10%;"/>
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col />
++  <col style="width:100px;" />
    </colgroup>
    <tr>
      <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
@@ -215,6 +1776,54 @@
    </tr>
    <tr>
      <td class="CLASS06405">
+--- occu/WebUI/www/webui/color.map.orig
++++ occu/WebUI/www/webui/color.map
+@@ -45,7 +45,7 @@
+ 
+ mainMenuBackground      #ebf1f2
+ subMenuBackground       #ebf1f2
+-subMenuHighlight        #89989b
++subMenuHighlight        #bcc7cb
+ 
+ messagesBackground      #ebf1f2
+ logoutButton            #ebf1f2
+@@ -57,4 +57,4 @@
+ borderColor             #f0f0f0
+ 
+ shutterOpeningDegree    #89989b
+-link                    #0101FF
+\ No newline at end of file
++link                    #0101FF
+--- occu/WebUI/www/webui/js/extern/sliderControl.js.orig
++++ occu/WebUI/www/webui/js/extern/sliderControl.js
+@@ -95,7 +95,7 @@
+     iLeftTextPos = -10;
+     this.n_pathTop = 1;
+   }
+-  var sHTML =  '<div style="width:' + this.n_controlWidth + 'px;height:' + this.n_controlHeight + 'px;border:0; background-repeat:no-repeat; background-position:center; background-image:url(' + this.s_imgControlGray + ')" id="sl' + this.n_id + 'base">';
++  var sHTML =  '<div style="width:' + this.n_controlWidth + 'px;height:' + this.n_controlHeight + 'px;border:0; background-repeat:no-repeat; background-position:center; background-image:url(' + this.s_imgControlGray + '); cursor:pointer" id="sl' + this.n_id + 'base">';
+   sHTML += '<div id ="spec'+id+'"><div style="width:5px;height:' + this.n_controlHeight + 'px;border:0;'+sSliderPos+'background-image:url(' + this.s_imgControlGreen + '); background-repeat:no-repeat; position:relative;left:' + this.n_pathLeft + 'px;top:' + this.n_pathTop + 'px;" id="sl' + this.n_id + 'green">';
+   sHTML += '<img src="' + this.s_imgSlider + '" width="' + this.n_sliderWidth + '" height="' + this.n_sliderHeight + '" border="0" style="position:relative;left:' + this.n_pathLeft + 'px;top:' + this.n_pathTop + 'px;z-index:' + this.n_zIndex + ';cursor:pointer;visibility:hidden;" name="sl' + this.n_id + 'slider" id="sl' + this.n_id + 'slider" onmousedown="return f_sliderMouseDown(' + this.n_id + ')"/></div>';
+   sHTML  += '<div id="slMin" style="position:relative;left:4px;top:'+iLeftTextPos+'px;width:'+this.n_pathLength+'px;color:black;text-align:left;z-index:4;"><b>'+this.sMinText+'</b>';
+--- occu/WebUI/www/webui/js/extern/wz_jsgraphics.js.orig
++++ occu/WebUI/www/webui/js/extern/wz_jsgraphics.js
+@@ -915,7 +915,7 @@
+ 
+ 	this.drawImage2 = function(imgSrc, x, y, w, h, imgw, imgh, a)
+ 	{
+-    this.htm += '<div style="position: relative; margin: 0; padding: 0; vertical-align: top; text-align: left; background-color: white;';
++    this.htm += '<div style="position: relative; margin: 0; padding: 0; vertical-align: middle; text-align: center; background-color: inherit;';
+     // AG bei Problemen mit Grafiken kann es evtl. hilfreich sein, die obere Zeile aus- und die untere Zeile einzukommentieren.
+     // Die Anwendung läuft jetzt nicht mehr im Quirks-Modus.....
+     //this.htm += '<div style="position: absolute; margin: 0; padding: 0; vertical-align: top; text-align: left; background-color: white;';
+@@ -929,6 +929,7 @@
+ 		if (imgw) this.htm += 'width="'    + w      + '" ';
+ 		if (imgh) this.htm += 'height="'   + h      + '" ';
+ 		if (a)    this.htm +=                a      + '" ';
++		          this.htm += 'style="mix-blend-mode:multiply;" ';
+ 		          this.htm += '>';
+ 			   
+ 			   this.htm += '<\/div>';
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -86,8 +86,8 @@
@@ -230,16 +1839,83 @@
      "footerBtnVirtualChannelsShow" : "Virtuelle Kan%E4le anzeigen",
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -391,7 +391,7 @@
+@@ -21,6 +21,10 @@
+     font-weight: bold;
+ }
+ 
++hr {
++  border: solid 1px $_(navBarSeparator);
++}
++
+ .height20px {
+     height:20px;
+ }
+@@ -161,6 +165,28 @@
+ {
+     background-color: $_(contentBackground);
+     overflow: auto;
++    display: flex;
++    align-items: flex-start;
++}
++
++#prgcontent
++{
++  display: contents;
++}
++
++#prgcontent.j_translate
++{
++  display: none;
++}
++
++#GroupListBody
++{
++  display: contents;
++}
++
++#divDL, #divRTD, #divFL, #divHTF, #divRL, #divHTR
++{
++  height: 100%;
+ }
+ 
+ /* Kopfzeile */
+@@ -391,7 +417,9 @@
    text-align:center;
    border:solid 1px $_(black); /* black */
    background-color:$_(clickable);
 -  height: 20px;
-+  height: auto;
++  height:50px;
++  font-weight:normal;
++  color: $_(textColorA); /* white */
  }
  
  .filterTable td
-@@ -608,23 +608,25 @@
+@@ -399,7 +427,6 @@
+   text-align:center;
+   border:solid 1px $_(black); /* black */
+   color: $_(textColorB); /* black */
+-  height: 40px;
+ }
+ 
+ .filterTable .leftAlign {
+@@ -594,37 +621,39 @@
+ 
+ /* Tabelle zur Listendarstellung von Elementen (z.B. Raumübersicht) */
+ .tblList {
+-  margin-top: 20px;
+-  width: 100%;
++  margin: 10px;
+   empty-cells: show;
++  border: solid 1px $_(black); /* black */
++  width: 100%;
+ }
+ 
+ .tblList th {
+   color: $_(textColorA); /* white */
+   font-weight: normal;
+-  background-color: $_(clickable);
+ }
+ 
  .Sort
  {
    cursor: pointer;
@@ -259,7 +1935,7 @@
 -  text-align: center;
 -  vertical-align: middle;
 -  height: 100%;
-+  height: 54px;
++  height: 50px;
 +  display: flex;
 +  justify-content: center;
 +  align-items: center;
@@ -272,7 +1948,751 @@
  }
  
  .tblList td {
-@@ -5359,6 +5361,7 @@
+@@ -637,7 +666,6 @@
+ /* Kopfzeile eines Popup-Fenster */
+ .popupTitle {
+   color: $_(textColorB); /* black */
+-  width: 99.4%;
+   background-color: $_(white); /* white */
+   border: solid 1px $_(black); /* black */
+   padding-left: 4px;
+@@ -666,12 +694,12 @@
+ .popupTableScript
+ {
+   width: 100%;
+-  border: solid 1px $_(black); /* black */
+   empty-cells: show;
+   color: $_(textColorA); /* white */
+   text-align: center;
+   vertical-align: middle;
+   font-weight: normal;
++  border-spacing: 2px;
+ }
+ 
+ .popupTableRow
+@@ -706,7 +734,6 @@
+ 
+ .popupControls {
+   background-color: $_(white); /* white */
+-  width: 100%;
+   border: solid 1px $_(black); /* black */
+ }
+ 
+@@ -735,8 +762,8 @@
+ 
+ /* KanalListe */
+ .ChnListTbl {
+-  width: 100%;
+   background-color: $_(black); /* black */
++  margin: 10px;
+ }
+ 
+ .ChnListTbl td {
+@@ -928,7 +955,6 @@
+     border:1px solid $_(black); /* black */
+     /* width:95%; */
+     text-align:center;
+-    height:20px;
+     line-height:20px;
+     vertical-align:middle;
+     color: $_(textColorB); /* black */
+@@ -967,7 +993,7 @@
+   background-image:url(/ise/img/gradientButton25px.png);
+   /*background-image: linear-gradient(to bottom, white 40%, gray);*/
+   background-image: var(--btnGradient);
+-  color: $_(textColorA); /* #ffffff */
++  color: $_(gray);
+   border: solid 1px $_(gray); /* silver */
+   border-radius: 5px;
+   margin:2%;
+@@ -1095,6 +1121,7 @@
+ 
+ .StatViewTbl td{
+   border: solid 1px $_(black); /* black */
++  height: 50px;
+ }
+ 
+ 
+@@ -1245,13 +1272,10 @@
+ .tTable
+ {
+   text-align:center;
+-  margin-left:10px;
+-  margin-top:10px;
+-  margin-right:10px;
++  margin:10px;
+   empty-cells: show;
+-  width:97%;
+-  /*width:1200px;*/
+   border:solid 1px $_(black); /* black */
++  width: 100%;
+ }
+ /*
+ .tTable th
+@@ -1308,8 +1332,8 @@
+ .tMain
+ {
+   border:solid 1px $_(black); /* black */
+-  margin-left:20px;
+-  margin-top:20px;
++  margin:10px;
++  width:100%;
+ }
+ 
+ .tHeader
+@@ -1347,7 +1371,6 @@
+ 
+ .bcWhitePic
+ {
+-  background-color: $_(white); /* #ffffff */
+ }
+ 
+ .bcWhite
+@@ -1391,12 +1414,8 @@
+ 
+ .oLine
+ {
+-  background-color: $_(background); /* #183473 */
+-  width: 90%;
++  width: 100%;
+   height: 6px;
+-  border-bottom-width: 5px;
+-  border-bottom-style: solid;
+-  border-bottom-color: $_(white); /* #ffffff */
+ }
+ 
+ .sysConfigHeight
+@@ -1443,7 +1462,7 @@
+   border:solid 1px $_(black); /* black */
+   height:40px;
+   text-align:center;
+-  padding: 2px;
++  font-weight:normal;
+ }
+ 
+ .tdCellFilter
+@@ -1457,7 +1476,7 @@
+ 
+ /* Weisser Zellenhintergrund für Bilder (Geräteübersicht u.ä.) */
+ .WhiteBkgPic {
+-  background-color: $_(white); /* #ffffff */
++  background-color: $_(activeBackground); /* #f0f0f0 */
+   color: $_(textColorB); /* black */
+ }
+ 
+@@ -1495,9 +1514,20 @@
+ /* Buttons incl. Hilfe-Img. */
+ .cpButton {
+     width:230px;
+-}#ic_deviceparameters #id_body
++}
++
++#id_body
++{
++  display: inherit;
++}
++
++#ic_deviceparameters
++{
++  display: contents;
++}
++
++#ic_deviceparameters #id_body
+ {
+-	margin-top: 10px;
+ 	background-color: $_(background); /* #183473 */
+ }
+ 
+@@ -1513,7 +1543,7 @@
+ 
+ #ic_deviceparameters #DeviceInformation
+ {
+-	width: 99%;
++	width: 100%;
+ 	color: $_(textColorA); /* white */
+ 	border: 1px solid $_(black); /* black */
+ }
+@@ -1537,7 +1567,6 @@
+ 
+ #ic_deviceparameters #DeviceInformation #DeviceImage
+ {
+-	background-color: $_(white); /* white */
+ 	width: 52px;
+ 	height: 56px;
+ 	margin: 0;
+@@ -1568,7 +1597,7 @@
+ 
+ #ic_deviceparameters .parameter_area .parameters_table 
+ {
+-	width: 99%;
++	width: 100%;
+ 	color: $_(textColorA); /* white */
+ 	border: 1px solid $_(black); /* black */
+ }
+@@ -1577,6 +1606,7 @@
+ 
+ 	background-color: $_(clickable);
+ 	text-align:center;
++	height: 50px;
+ }
+ 
+ #ic_deviceparameters .parameter_area .parameters_table tbody {
+@@ -1587,7 +1617,6 @@
+ 
+ #ic_deviceparameters .parameter_area .parameters_table td {
+ 	border: 1px solid $_(black); /* black */
+-	height: 50px;
+ }
+ 
+ #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl
+@@ -1595,6 +1624,7 @@
+ 	border: 0;
+ 	height: auto;
+ 	background-color: $_(white); /* white */
++	border-spacing: 0px;
+ }
+ 
+ #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl thead
+@@ -1609,8 +1639,6 @@
+ {
+ 	border: 0;
+ 	background-color: $_(white); /* white */
+-	padding: 2px;
+-	height: auto;
+ }
+ 
+ #ic_deviceparameters #Timeouts_Area .TimeoutTable,
+@@ -1672,6 +1700,14 @@
+ 	border: 0;
+ }/*LinkList-Tabelle*/
+ /*--------------------------------------------*/
++#ic_linkpeerlist {
++  display: contents;
++}
++
++#ic_linkpeerlist.j_translate {
++  display: none;
++}
++
+ #ic_linkpeerlist #head_wrapper {
+   border-bottom: 0;
+   margin: 0;
+@@ -1687,17 +1723,16 @@
+ #ic_linkpeerlist #body_wrapper {
+   margin: 0;
+   padding: 0;
+-  width: 100%;
+-  background-color: $_(background); /* #183473 */
++  display: inherit;
+ }
+ 
+ #ic_linkpeerlist .LinkListTbl {
+   empty-cells: show;
+   padding:0;
+-  margin: 20px 0 0 0;
+-  width: 100%;
++  margin: 10px;
+   height: auto;
+   border: 1px solid $_(black); /* black */
++  width: 100%;
+ }
+ 
+ #ic_linkpeerlist .LinkListTbl td {
+@@ -1734,9 +1769,7 @@
+ 
+ #ic_linkpeerlist .LinkListTbl .LinkListTbl_img
+ {
+-	background-color: $_(white); /* white */
+ 	text-align: left;
+-	height: 80px;  
+ }
+ /*--------------------------------------------*/
+ #modalbox #id_messagebox
+@@ -1798,15 +1831,26 @@
+ {
+   height: 40px;
+   background-color: $_(activeBackground);
+-}#ic_selchannel #previous_step_wrapper {
++}
++
++#ic_selchannel {
++  display: initial;
++  width: 100%;
++}
++
++#ic_selchannel #body_wrapper {
++  display: inherit;
++}
++
++#ic_selchannel #previous_step_wrapper {
+ 	background-color: $_(background); /* #183473 */
+-	margin: 20px;
++	margin: 10px;
+ }
+ 	
+ #ic_selchannel #createLinkStep1 {
+ 	color: $_(textColorA); /* white */
+ 	border: 1px solid $_(black); /* black */
+-	width: 90%;
++	width: 100%;
+ }
+ 
+ #ic_selchannel #createLinkStep1 thead {
+@@ -1829,8 +1873,7 @@
+ 	background-color: $_(white); /* white */
+ }
+ #ic_selchannel #createLinkStep1 .WhiteHeader input {
+-	width: 99%;
+-
++	width: -webkit-fill-available;
+ }
+ 
+ #ic_selchannel .ChnListTbl {
+@@ -1964,14 +2007,7 @@
+ {
+ 	visibility: hidden;
+ }
+-/*--------------------------------------------*/
+ 
+-/*Tabellenkörper Virtuelle Tasten*/
+-#ic_selchannel #body_wrapper
+-{
+-	background-color: $_(background); /* #183473 */
+-	margin-top: 10px;
+-}
+ /*--------------------------------------------*/
+ 
+ /*Tabellenkörper Virtuelle Tasten*/
+@@ -1990,7 +2026,6 @@
+ /*Tabellenkörper Bilderspalte*/
+ #ic_selchannel .ChnListTbl .chnListTbl_dev_img 
+ {
+-	background-color: $_(white); /* white */
+ 	text-align: left;
+ 	height: 50px;  
+ }
+@@ -2004,10 +2039,12 @@
+ 	height: auto;
+ }
+ /*--------------------------------------------*/
++#ic_setprofiles {
++	width: 100%;
++}
++
+ #ic_setprofiles .SetProfLinkTbl {
+-	width: 99%;
+-	margin-top: 0;
+-	margin-bottom: 0;
++	width: 100%;
+ 	color: $_(textColorA); /* white */
+ 	border: 1px solid $_(black); /* black */
+ }
+@@ -2090,7 +2127,7 @@
+ #ic_setprofiles #body_wrapper
+ {
+ 	background-color: $_(background); /* #183473 */
+-	margin-top: 10px;
++	margin: 10px;
+ }
+ 
+ #ic_setprofiles  #id_sender_group_receiver_profiles_wrapper
+@@ -2310,9 +2347,10 @@
+   padding:0;
+   background-color:$_(clickable);
+   color: $_(textColorB); /* black */
+-  /* font-weight:bold; */
++  font-weight:normal;
+   text-align:left;
+   vertical-align:middle;  
++  height:20px !important;
+ }
+ 
+ .FilterHeight20 {
+@@ -2325,7 +2363,7 @@
+   padding:0;
+   background-color:$_(active); /* #565657 */
+   color: $_(textColorB); /* black */
+-  /* font-weight:bold; */
++  font-weight:normal;
+   text-align:left;
+   vertical-align:middle;  
+ }
+@@ -2371,8 +2409,7 @@
+ }
+ 
+ .FilterText {
+-  width:96%;
+-  margin:3px 2% 3px 2%;
++  margin:2px;
+ }
+ 
+ .FilterButton {
+@@ -2382,8 +2419,7 @@
+   /*background-image: linear-gradient(to bottom, white 40%, gray );*/
+   background-image: var(--btnGradient);
+ 
+-  width:96%;
+-  margin:3px 2% 3px 2%;
++  margin:2px;
+   border:1px solid $_(black); /* black */
+   color: $_(textColorB); /* white */
+   font-weight:normal;
+@@ -2479,7 +2515,7 @@
+   border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
+   background-color: $_(background); /* #183473 */
+   z-index: 189;
+-  padding: 2px;
++  padding-top: 2px;
+ }
+ 
+ .MainMenuItem_Left {
+@@ -2499,7 +2535,7 @@
+ }
+ 
+ .MainMenuItem_Help {
+-    margin-right: 18px;
++    margin-right: 10px;
+ }
+ 
+ .MainMenuItem_Highlight {
+@@ -2580,6 +2616,7 @@
+   background-color: $_(subMenuBackground);
+   overflow:hidden;
+   z-index:189;
++  margin-left: 5px;
+ }
+ 
+ .MainMenuSubItem {
+@@ -2594,7 +2631,6 @@
+   line-height:20px;
+   cursor: pointer;
+   white-space: nowrap;
+-  border-top: 1px solid $_(black);
+ }
+ 
+ .MainMenuSubItem_Highlight {
+@@ -2684,9 +2720,9 @@
+   top: 24px;
+   left: 2px;
+   width: 996px;
+-  height: 520px;
++  height: 522px;
+   background-color: $_(white); /* white */
+-  overflow: scroll;  
++  overflow: auto;
+ }
+ 
+ #ChannelChooserFooter {
+@@ -2732,7 +2768,6 @@
+   width:100%;
+   height:auto;
+   margin:0;
+-  border:1px solid $_(black); /* black */
+   padding:0;
+   empty-cells:show;
+ }
+@@ -2744,7 +2779,7 @@
+   padding:0;
+   background-color:$_(clickable);
+   color: $_(textColorA); /* white */
+-  font-weight:bold;
++  font-weight:normal;
+   text-align:center;
+   vertical-align:middle;
+ }
+@@ -2756,7 +2791,7 @@
+   padding:0;
+   background-color:$_(active); /* #565657 */
+   color: $_(textColorA); /* white */
+-  font-weight:bold;
++  font-weight:normal;
+   text-align:center;
+   vertical-align:middle;
+ }
+@@ -2780,7 +2815,6 @@
+ 
+ .ChannelChooserThumbnail {
+   border: 1px solid $_(black); /* black */
+-  background-color:$_(white); /* white */
+   text-align:left;
+   height:80px;
+ }
+@@ -2828,7 +2862,7 @@
+   width: 996px;
+   height: 520px;
+   background-color: $_(white); /* white */
+-  overflow: scroll;  
++  overflow: auto;
+ }
+ 
+ #MultiChannelChooserFooter {
+@@ -2935,40 +2969,38 @@
+ 
+ .MultiChannelChooserThumbnail {
+   border: 1px solid $_(black); /* black */
+-  background-color:$_(white); /* white */
+   text-align:left;
+   height:80px;
+ }
+ #DeviceListTable {
+-  width:97%;
+   height:auto;
+-  margin:1%;
+-  border:0 none;
+-/*  border:1px black solid; */
++  margin:10px;
++  border:1px black solid;
+   padding:0;
+   empty-cells:show;
++  width:100%;
+ }
+ 
+ .DeviceListHead {
+-  height:60px;
++  height:40px;
+   margin:0;
+   border:1px solid $_(black); /* black */
+   padding:0;
+   background-color:$_(clickable);
+   color: $_(textColorA); /* white */
+-  font-weight:bold;
++  font-weight:normal;
+   text-align:center;
+   vertical-align:middle;
+ }
+ 
+ .DeviceListHead_Active {
+-  height:60px;
++  height:40px;
+   margin:0;
+   border:1px black solid;
+   padding:0;
+   background-color:$_(active); /* #565657 */
+   color: $_(textColorA); /* white */
+-  font-weight:bold;
++  font-weight:normal;
+   text-align:center;
+   vertical-align:middle;
+ }
+@@ -2988,8 +3020,7 @@
+ }
+ 
+ .DeviceListRow_Highlight {
+-  /* background-color: $_(inactiveBackground); */
+-  background-color: $_(deviceListRowHighlight);
++  background-color: $_(inactiveBackground);
+   cursor:pointer;
+ }
+ 
+@@ -3018,9 +3049,7 @@
+ 
+ .DeviceListThumbnail {
+   border: 1px solid $_(black); /* black */
+-  background-color:$_(white); /* white */
+-  text-align:left;
+-  height:80px;
++  text-align:center;
+ }
+ 
+ .DeviceListButton {
+@@ -3081,7 +3110,7 @@
+   height: 520px;
+   background-color: $_(white); /* white */
+   color: $_(textColorB); /* black */
+-  overflow: scroll;  
++  overflow: auto;
+ }
+ 
+ #ChannelConfigDialogFooter {
+@@ -3203,8 +3232,7 @@
+   height: 371px;
+   background-color: $_(white); /* white */
+   color: $_(textColorB); /* black */
+-/*  overflow: scroll;   */
+-  overflow: hidden;   
++  overflow: auto;
+ }
+ 
+ #DeviceConfigDialogFooter {
+@@ -3474,18 +3502,12 @@
+     position: absolute;
+     left: 4px
+ }.bidcosrf_page {
+-  margin: 20px;
++  margin: 10px;
++  width: 100%;
+ }
+ 
+ 
+ .bidcosrf_footer {
+-  margin-top: 20px;
+-  margin-bottom: 20px;
+-  margin-left: 10%;
+-  width: 80%;
+-  background-color: $_(white);
+-  height:2px;
+-  overflow: hidden;
+ }
+ 
+ .bidcosrf_button {
+@@ -3511,7 +3533,7 @@
+ .bidcosrf_table {
+   border: 1px solid $_(black);
+   border-spacing: 0px;
+-  width: 95%;
++  width: 100%;
+ }
+ 
+ .bidcosrf_tableheader {
+@@ -3531,7 +3553,7 @@
+ }
+ 
+ .bidcosrf_imagecell {
+-  background-color: $_(white);
++  background-color: $_(inactiveBackground);
+   border: 1px solid $_(black);
+   empty-cells: show;
+   text-align: center;
+@@ -3542,12 +3564,13 @@
+   border: 1px solid $_(black);
+   empty-cells: show;
+   text-align: center;
++  width: 200px;
+ }
+ 
+ .bidcosrf_imagesize {
+-  width: 50px;
+-  height:80px;
++  width: 55px;
+ }
++
+ html, body {
+   border: 0 none;
+   margin: 0;
+@@ -3930,7 +3953,6 @@
+ }
+ 
+ .CLASS00203 {
+-	border: solid 1px $_(black); /* black */
+ }
+ 
+ .CLASS00204 {
+@@ -3983,10 +4005,10 @@
+ /* rega\pages\msg\sysVarsSelection.htm */
+ 
+ .CLASS00300 {
+-	overflow: scroll;
+-	width: 100%;
++	overflow: auto;
+ 	height:520px;
+ 	background-color:$_(white); /* white */
++	border:solid 1px $_(black); /* black */
+ }
+ 
+ .CLASS00301 {
+@@ -3997,6 +4019,7 @@
+ 	text-align:center;
+ 	background-color:$_(clickable);
+ 	height: 40px;
++	font-weight: normal;
+ }
+ 
+ .CLASS00303 {
+@@ -4250,7 +4273,7 @@
+ 
+ .CLASS00717 {
+ 	height:200px;
+-	overflow:scroll;
++	overflow: auto;
+ 	background-color:$_(white); /* white */
+ }
+ 
+@@ -4664,7 +4687,7 @@
+ /* rega\pages\msg\programChooser.htm */
+ 
+ .CLASS01300 {
+-	overflow: scroll;
++	overflow: auto;
+ 	width: 100%;
+ 	height: 400px;
+ 	background-color:$_(white); /* white */
+@@ -4902,13 +4925,13 @@
+ }
+ 
+ .CLASS01805 {
+-	margin-top:20px;
++	margin-top:10px;
++	margin-bottom:10px;
+ }
+ 
+ .CLASS01806 {
+-	margin-left: 10px;
+-    margin-right: 10px;
+ 	border:solid 1px $_(black); /* black */
++	width: 100%;
+ }
+ 
+ .CLASS01807 {
+@@ -4927,9 +4950,7 @@
+ }
+ 
+ .CLASS01809 {
+-	float:left;
+ 	top:0px;
+-	width:49%;
+ 	height:100%;
+ 	overflow:hidden;
+ }
+@@ -5147,6 +5168,7 @@
+ 	color: $_(textColorB); /* black */
+ 	width:100%;
+ 	border:none;
++	background-color:inherit;
+ }
+ 
+ .CLASS02511 {
+@@ -5168,6 +5190,7 @@
+ 	border:1px Solid $_(black); /* black */
+ 	height:96px;
+ 	width:96px;
++	cursor:initial;
+ }
+ 
+ .CLASS02515 {
+@@ -5210,7 +5233,6 @@
+ 
+ .CLASS02520 {
+ 	color: $_(textColorB); /* black */
+-	width:100%;
+ 	border:none;
+ 	background-color:$_(activeBackground);
+ }
+@@ -5297,7 +5319,7 @@
+ 	width:220px;
+ 	/*height:25px;*/
+ 	height:auto;
+-	min-height: 32px;
++	min-height: 50px;
+ 	clear: both;
+ 	display: inline-block;
+   /* line-height:25px; problem with controls with a long parameter name */
+@@ -5338,12 +5360,11 @@
+ }
+ 
+ .CLASS02535 {
+-	float: right;
+ 	text-align: right;
+-	width: 98%;
+-	word-wrap: break-word;
+-	max-width: 480px;
++	width: 100%;
++	word-wrap: anywhere;
+ 	display: inline-block;
++	padding: 2px;
+ }
+ 
+ .CLASS02535A {
+@@ -5359,6 +5380,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -280,15 +2700,49 @@
  }
  
  .CLASS02536 {
-@@ -5381,6 +5384,7 @@
- 	max-width: 480px;
+@@ -5367,20 +5389,13 @@
+ 
+ .CLASS02537 {
+ 	text-align: center;
+-	padding: 5px;
+ 	width: 100%;
+-	background-color: $_(activeBackground) ! important;
+ }
+ 
+ .CLASS02538 {
+-	/*width:220px;
+-	height:25px;*/
+-	width:98%;
+ 	height:100%;
+ 	min-height:1em;
+-	max-width: 480px;
  	clear: both;
- 	display: inline-block;
-+  padding-right: initial;
+-	display: inline-block;
  }
  
  .CLASS02539 {
-@@ -5553,7 +5557,7 @@
+@@ -5417,6 +5432,7 @@
+ 
+ .CLASS02543 {
+ 	border:1px solid $_(black); /* black */
++	cursor:pointer;
+ }
+ 
+ .CLASS02544 {
+@@ -5494,6 +5510,7 @@
+ 
+ .CLASS02552 {
+ 	border:solid 1px $_(black); /* black */
++	mix-blend-mode:multiply;
+ }
+ 
+ .CLASS02553 {
+@@ -5548,12 +5565,10 @@
+ 
+ .CLASS02601 {
+ 	text-align:center;
+-	margin-left:20px;
+-	width:97%;
  }
  
  .CLASS02602 {
@@ -297,15 +2751,36 @@
  }
  
  .CLASS02603 {
-@@ -5584,21 +5588,6 @@
- 	padding: 4px;
+@@ -5565,6 +5580,7 @@
+ 
+ .CLASS02604 {
+ 	height: 58px;
++	background-color: $_(activeBackground);
  }
  
--.CLASS02607 {
--	width:55px;
+ .CLASS02605 {
+@@ -5572,76 +5588,52 @@
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
+-	padding: 4px;
++	padding: 2px;
+ 	text-align: left;
+ }
+ 
+ .CLASS02606 {
+-	width: 240px;
 -	background-color: $_(activeBackground);
 -	border: solid 1px $_(black); /* black */
 -	color: $_(textColorB); /* black */
+-	padding: 4px;
+-}
+-
+-.CLASS02607 {
+-	width:55px;
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
@@ -314,12 +2789,63 @@
 -	text-align:left;
 -	width:50px;
 -	height:50px;
--}
--
++	padding: 2px;
+ }
+ 
  .CLASS02609 {
- 	width: 140px;
+-	width: 140px;
  	background-color: $_(activeBackground);
-@@ -5735,10 +5724,12 @@
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
+-	padding: 4px;
++	padding: 2px;
+ }
+ 
+ .CLASS02610 {
+-	width: 100px;
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
+-	padding: 4px;
++	padding: 2px;
+ }
+ 
+ .CLASS02611 {
+-	width: 200px;
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
+-	padding: 4px;
++	padding: 2px;
+ }
+ 
+ .CLASS02612 {
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
+-	padding: 4px;
++	padding: 2px;
+ }
+ 
+ .CLASS02613 {
+-	background-color: $_(clickable);
+-color: $_(textColorA); /* white */
+-	font-weight: bold;
+-	border: solid 1px $_(black); /* black */
++	width: 90px;
+ }
+ 
+ .CLASS02614 {
+-	background-color: $_(inactiveButton); /* #dddddd */
+-color: $_(textColorA); /* white */
+-	font-weight: bold;
+-	border: solid 1px $_(gray); /* silver */
++	color: $_(gray);
++	width: 90px;
+ }
+ 
+ .CLASS02615 {
+@@ -5735,10 +5727,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -327,8 +2853,548 @@
  }
  
  .CLASS02803 {
- 	font-weight:bold;
+-	font-weight:bold;
++	font-weight:normal;
 +  height: auto;
  }
  
  .CLASS02804 {
+@@ -5804,7 +5798,6 @@
+ }
+ 
+ .CLASS02815 {
+-	height:100%;
+ }
+ 
+ /* rega\pages\tabs\statusviews\svroomchannels.htm */
+@@ -5989,18 +5982,13 @@
+ }
+ 
+ .CLASS03301 {
+-	width:75%;
+-	margin-left:20px;
+-	margin-top:20px;
+ 	empty-cells:show;
+ }
+ 
+ .CLASS03302 {
+-	font-weight:bold;
+-	height:40px;
+ 	text-align:center;
+-	line-height:40px;
+ 	border:solid 1px $_(black); /* black */
++	padding:0px;
+ }
+ 
+ .CLASS03303 {
+@@ -6079,8 +6067,7 @@
+ 
+ .CLASS03500 {
+ 	border:solid 1px $_(black); /* black */
+-	margin-left:10px;
+-	margin-top:27px;
++	width:100%;
+ }
+ 
+ .CLASS03501 {
+@@ -6113,8 +6100,7 @@
+ 
+ .CLASS03600 {
+ 	border:solid 1px $_(black); /* black */
+-	margin-left:50px;
+-	margin-top:27px;
++	width:100%;
+ }
+ 
+ .CLASS03601 {
+@@ -6203,8 +6189,7 @@
+ 
+ .CLASS03800 {
+ 	border:solid 1px $_(black); /* black */
+-	margin-left:50px;
+-	margin-top:27px;
++	width:100%;
+ }
+ 
+ .CLASS03801 {
+@@ -6247,15 +6232,15 @@
+ }
+ 
+ .CLASS03902 {
+-	width:100%;
+ 	overflow:auto;
+-	margin:0;
+-	padding:0;
++	margin-left:10px;
++	margin-right:2px;
+ }
+ 
+ .CLASS03903 {
+ 	border:solid 1px $_(black); /* black */
+-	margin-top:27px;
++	margin-top:10px;
++	margin-bottom:10px;
+ }
+ 
+ .CLASS03904 {
+@@ -6270,7 +6255,6 @@
+ .CLASS03906 {
+ 	vertical-align:middle;
+ 	text-align:left;
+-	background-color:$_(white); /* white */
+ }
+ 
+ .CLASS03907 {
+@@ -6280,13 +6264,15 @@
+ }
+ 
+ .CLASS03908 {
+-	width:100%;
+ 	overflow:auto;
++	margin-right:10px;
++	margin-left:2px;
+ }
+ 
+ .CLASS03909 {
+-	width: 80%;
+-	height: 96%;
++	width: 100%;
++	margin-top: 10px;
++	margin-bottom: 10px;
+ }
+ 
+ .CLASS03910 {
+@@ -6312,13 +6298,15 @@
+ }
+ 
+ .CLASS04002 {
+-	width:100%;
+ 	overflow:auto;
++	margin-right:10px;
++	margin-left:2px;
+ }
+ 
+ .CLASS04003 {
+-	width: 80%;
+-	height: 96%;
++	width: 100%;
++	margin-top: 10px;
++	margin-bottom: 10px;
+ }
+ 
+ .CLASS04004 {
+@@ -6333,7 +6321,8 @@
+ 
+ .CLASS04006 {
+ 	border:solid 1px $_(black); /* black */
+-	margin-top:27px;
++	margin-top:10px;
++	margin-bottom:10px;
+ }
+ 
+ .CLASS04007 {
+@@ -6344,7 +6333,6 @@
+ 
+ .CLASS04100 {
+ 	text-align:center;
+-	width:95%;
+ 	empty-cells:show;
+ }
+ 
+@@ -6355,17 +6343,18 @@
+ .CLASS04102 {
+ 	background-color:$_(clickable);
+ 	color: $_(textColorA) ! important; /* white */
+-	font-size:10pt ! important;
+ 	height:44px ! important;
+ }
+ 
+ .CLASS04103 {
+ 	height:auto;
++	background-color: $_(background); /* #183473 */
+ }
+ 
+ .CLASS04104 {
+ 	background-color:$_(clickable);
+   height:20px;
++  border: solid 1px $_(black); /* black */
+ }
+ 
+ .CLASS04105 {
+@@ -6388,6 +6377,7 @@
+ .CLASS04109 {
+ 	background-color:$_(clickable);
+ 	color: $_(textColorA) ! important; /* white */
++	border: solid 1px $_(black); /* black */
+   height:20px;
+ }
+ 
+@@ -6411,10 +6401,15 @@
+ 
+ .CLASS04200 {
+ 	text-align:center;
+-	width:95%;
+ 	empty-cells:show;
+ }
+ 
++.CLASS04201 {
++	overflow:auto;
++	margin-left:10px;
++	margin-right:2px;
++}
++
+ .CLASS04202 {
+ 	height:40px;
+ }
+@@ -6430,10 +6425,12 @@
+ 
+ .CLASS04205 {
+ 	height:auto;
++	background-color: $_(background); /* #183473 */
+ }
+ 
+ .CLASS04206 {
+ 	background-color:$_(clickable);
++	border: solid 1px $_(black); /* black */
+ }
+ 
+ .CLASS04207 {
+@@ -6456,6 +6453,7 @@
+ .CLASS04211 {
+ 	background-color:$_(clickable);
+ 	color: $_(textColorA) ! important; /* white */
++	border: solid 1px $_(black); /* black */
+ }
+ 
+ .CLASS04212 {
+@@ -6486,7 +6484,8 @@
+ .CLASS04301 {
+ 	width:100%;
+ 	height:100%;
+-	overflow-y:scroll;
++	overflow-y:auto;
++	display:contents;
+ }
+ 
+ .CLASS04302 {
+@@ -6663,7 +6662,7 @@
+ 
+ .CLASS04900 {
+ 	color: $_(textColorA); /* white */
+-	font-weight:bold;
++	font-weight:normal;
+ }
+ 
+ .CLASS04901 {
+@@ -6687,7 +6686,7 @@
+ .CLASS04905 {
+ 	line-height:15px;
+ 	font-size:smaller;
+-	width:220px;
++	width:180px;
+ }
+ 
+ .CLASS04906 {
+@@ -6774,6 +6773,7 @@
+ .CLASS05012 {
+ 	color: $_(textColorB); /* black */
+ 	font-size:9pt;
++	width:100%;
+ }
+ 
+ /* rega\pages\tabs\admin\msg\timemodule.htm */
+@@ -6850,7 +6850,6 @@
+ .CLASS05200 {
+ 	text-align:center;
+ 	vertical-align:middle;
+-	font-weight:bold;
+ 	height: auto;
+ }
+ 
+@@ -6916,10 +6915,10 @@
+ }
+ 
+ .CLASS05301 {
+-	height:38px;
+ 	border: solid 1px $_(black); /* black */
+ 	background-color:$_(clickable);
+ 	text-align:center;
++	padding:0px;
+ }
+ 
+ .CLASS05302 {
+@@ -7092,6 +7091,10 @@
+ 
+ /* rega\pages\tabs\favViewer.htm  */
+ 
++#tblfavViewer {
++  width: 100%;
++}
++
+ .CLASS05800 {
+ 	width:100%;
+ 	text-align:center;
+@@ -7220,11 +7223,13 @@
+ /* rega\pages\tabs\user\newFav.htm */
+ 
+ .CLASS06300 {
+-	margin:20px;
++	margin:10px;
++  width:100%;
+ }
+ 
+ .CLASS06301 {
+-	color: $_(textColorA); /* white */
++	color: $_(textColorB); /* black */
++	font-weight: bold;
+ }
+ 
+ .CLASS06302 {
+@@ -7512,7 +7517,6 @@
+ }
+ 
+ .CLASS06409 {
+-  margin:5px;
+ }
+ 
+ .CLASS06410 {
+@@ -7675,7 +7679,7 @@
+ 
+ .CLASS10902 {
+   border:1px solid $_(gray); /* #999999 */
+-  color: $_(activeBackground); /* rgb(224,224,224); */
++  color:$_(gray);
+   background-color:$_(inactiveButton); /* rgb(192,192,192) */
+   cursor:default;
+ }
+@@ -7790,7 +7794,6 @@
+ }
+ 
+ .CLASS11105 {
+-  padding-right: 8px;
+   padding-top: 7px;
+ }
+ 
+@@ -7817,7 +7820,6 @@
+ /* config/ic_setprofiles */
+ 
+ .CLASS20001 {
+-	padding:4px;
+ }
+ 
+ .CLASS20002 {
+@@ -7839,7 +7841,7 @@
+ }
+ 
+ .CLASS20006 {
+-	width:85% !	important;
++	width:100%;
+ }
+ 
+ .CLASS20007 {
+@@ -7875,7 +7877,6 @@
+ }
+ 
+ .CLASS20010 {
+-	width:150px;
+ }
+ 
+ /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
+@@ -8404,7 +8405,9 @@
+ /* config\help.cgi */
+ 
+ .CLASS21300 {
+-  height:56%;
++  height: 100%;
++  width: 100%;
++  padding: 10px;
+ }
+ 
+ .CLASS21301 {
+@@ -8630,8 +8633,11 @@
+ 
+ /* config\control_panel.cgi */
+ 
++#mainTable {
++  margin: 10px;
++}
++
+ .CLASS21700 {
+-  height:50%;
+ }
+ 
+ .CLASS21701 {
+@@ -8702,7 +8708,8 @@
+ /* config\ic_selchannel.cgi */
+ 
+ .CLASS21900 {
+-  padding: 4px;
++  padding: 0px;
++  display: inherit;
+ }
+ 
+ .CLASS21901 {
+@@ -8752,7 +8759,6 @@
+ 
+ .CLASS21908 {
+   overflow: auto;
+-  background-color: $_(background); /* #183473 */
+   width:100%;
+ }
+ 
+@@ -8809,13 +8815,17 @@
+ /* config\ic_deviceparameters.cgi */
+ 
+ .CLASS22000 {
+-  margin: 4px;
+-  width: 99%;
++  margin: 10px;
++  width: 100%;
+ }
+ 
+ .CLASS22001 {
+   text-align: center;
+   background-color: $_(activeBackground);
++  height: 100%;
++  display: flex;
++  align-items: center;
++  justify-content: center;
+ }
+ 
+ .CLASS22002 {
+@@ -8825,11 +8835,17 @@
+ 
+ .CLASS22003 {
+   background-color: $_(white);
++  height: 50px;
+ }
+ 
+ .CLASS22004 {
+   background-color: $_(activeBackground);
+   text-align: center;
++  height: 100%;
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  flex-direction: column;
+ }
+ 
+ .CLASS22005 {
+@@ -8887,7 +8903,8 @@
+ }
+ 
+ .CLASS22101 {
+-  padding:4px;
++  padding:0px;
++  display:inherit;
+ }
+ 
+ .CLASS22102 {
+@@ -8909,9 +8926,8 @@
+ .CLASS22104 {
+   left:0px;
+   top:0px;
+-  margin: 0;
++  margin:auto;
+   padding: 0;
+-  background-color: $_(white); /* white */
+   position:relative;
+   width:50px;
+   height:50px;
+@@ -8921,10 +8937,12 @@
+   position:relative;
+   width:50px;
+   height:50px;
++  margin:auto;
+ }
+ 
+ .CLASS22106 {
+   text-align: center;
++  padding: 2px;
+ }
+ 
+ .CLASS22107 {
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -328,7 +328,7 @@
+     <\/th>\n
+   {\/if}\n
+ {\/macro}\n
+-<table id=\"DeviceListTable\" width=\"97%\"  border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
++<table id=\"DeviceListTable\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
+   <colgroup>\n
+     <col style=\"width:11%;\"\/>\n
+     <col style=\"width:11%;\"\/>\n
+@@ -418,25 +418,25 @@
+ <\/table>\n
+ \n
+ ";
+-DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
++DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n
+   <colgroup>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:55px;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:25px;\"\/>\n
+-    <col style=\"width:11%;\"\/>\n
++    <col style=\"width:25px;\" \/>\n
++    <col style=\"width:25px;\" \/>\n
++    <col style=\"width:25px;\" \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col style=\"width:55px;\" \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col \/>\n
++    <col style=\"width:100px;\" \/>\n
+   <\/colgroup>\n
+   <thead>\n
+     <tr>\n
+@@ -38032,7 +38032,7 @@
+ //Defines
+ BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
+ HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
+-BG_COLOR = WebUI.getColor("channelBackground");//Background
++BG_COLOR = 'inherit'; //Background
+ HL_STROKE = 4;//Background
+ //-----
+ 
+@@ -38084,8 +38084,8 @@
+   
+   if (!form) return;
+ 
+-  if (!x_offset) x_offset = 0;
+-  if (!y_offset) y_offset = 0;
++  if (!x_offset) x_offset = 0.032;  // workaround css offsets
++  if (!y_offset) y_offset = -0.005; // workaround css offsets
+ 
+   switch (form[gd_type])
+   {
+@@ -38181,7 +38181,7 @@
+     previewPicTimer = window.setTimeout(function () {
+       HideElement('picDiv');
+       delete previewPicTimer;
+-    }, 10000);
++    }, 3000);
+   }
+ };
+ 

@@ -227,10 +227,6 @@ function getUrlVars() {
   
   var fType = getUrlVars()["sid"];
 
-  if(self.location.protocol === "https:") {
-    window.location.href="http://"+self.location.host+"/addons/mediola/index.html?sid="+fType;
-  }
-  
 		$.ajax({
 			type: 'GET',
 			dataType: "json",

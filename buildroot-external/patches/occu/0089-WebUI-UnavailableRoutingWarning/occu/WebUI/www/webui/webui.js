@@ -41555,22 +41555,15 @@ showCCUAP = function(arDrap2Update) {
   jQuery.each(arDrap2Update, function(index, data) {
     drapSGtin += data.address + ",";
   });
-  var msg = '<div style=text-align:center>';
-    msg += '<br/><span style=font-weight:bold>Hinweis:</span><br/><br/>Die Nutzung eines HmIPW-DRAP Access Points<br/>setzt den Einsatz eines RPI-RF-MOD Funkmodules voraus.<br/><br/>';
-    msg += '</div>'; 
-  CreateCPPopup("/pages/jpages/hmip/AccessPoint/show", "draps="+drapSGtin.slice(0,-1), msg);
+  CreateCPPopup("/pages/jpages/hmip/AccessPoint/show", "draps="+drapSGtin.slice(0,-1), 'lblAccessPointError');
 };
 
 showAccessPoint = function() {
-  var msg = '<div style=text-align:center>';
-    msg += '<br/><span style=font-weight:bold>Hinweis:</span><br/><br/>Die Nutzung eines HmIPW-DRAP oder HmIP-HAP Access Points<br/>setzt den Einsatz eines RPI-RF-MOD Funkmodules voraus.<br/><br/>';
-    msg += '</div>'; 
-
-  CreateCPPopup("/pages/jpages/hmip/AccessPoint/show", '', msg);
+  CreateCPPopup("/pages/jpages/hmip/AccessPoint/show", '', 'lblAccessPointError');
 };
 
-CreateCPPopup = function(src, pb, msg) {
-  dlgPopup = new cpMessageBox(src, pb, msg);
+CreateCPPopup = function(src, pb, errorLbl) {
+  dlgPopup = new cpMessageBox(src, pb, errorLbl);
 
   PopupClose = function() {
     dlgPopup.close();
@@ -41606,7 +41599,7 @@ cpMessageBox = Class.create();
 
 cpMessageBox.prototype =
 {
-  initialize: function(src, pb, msg)
+  initialize: function(src, pb, errorLbl)
   {
     if ( $('messagebox') ){
       $("messagebox").hide();
@@ -41618,7 +41611,7 @@ cpMessageBox.prototype =
     this.setWidth(800);
 
     this.createMessagebox();
-    this.LoadFromFile(src, pb, msg);
+    this.LoadFromFile(src, pb, errorLbl);
   },
 
   getViewPortDim : function()
@@ -41742,7 +41735,7 @@ cpMessageBox.prototype =
     this.removeMessagebox();
   },
   
-  LoadFromFile: function(src, pb, msg) {
+  LoadFromFile: function(src, pb, errorLbl) {
     var url = src;
     if(url.indexOf('?sid=') === -1)
     {                                                                                 
@@ -41762,8 +41755,8 @@ cpMessageBox.prototype =
       onFailure: function(response) {
         $('centerbox').hide();
         $('trlayer').hide();
-        if(typeof msg != 'undefined') {
-          MessageBox.show('Funktionalitaet nicht verfuegbar', msg, '', 480,120);
+        if(typeof errorLbl != 'undefined') {
+          MessageBox.show(translateKey('lblError'), translateKey(errorLbl), '', 480,120);
         } else {
           Ajax_failure(url, response.statusText);
         }

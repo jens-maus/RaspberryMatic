@@ -29,7 +29,7 @@ start)
 
   if test -z "$2"; then
     for CONFIG in $(cd "$CONFIG_DIR" || return; ls ./*.conf 2>/dev/null); do
-      NAME=${CONFIG%%.conf}
+      NAME=$(basename "${CONFIG%%.conf}")
       start_vpn
     done
   else

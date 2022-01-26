@@ -8,8 +8,8 @@
 +	string "Custom firmware version"
 +	default "01ecfd2ba2b7cf3a2f4aa75ada895ee4a3e729f5"
 +
- choice
- 	bool "rpi variant"
+ config BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN
+ 	bool "rpi 0/1/2/3 bootcode.bin"
  	help
 --- buildroot/package/rpi-firmware/rpi-firmware.mk.orig
 +++ buildroot/package/rpi-firmware/rpi-firmware.mk
@@ -17,7 +17,7 @@
  #
  ################################################################################
  
--RPI_FIRMWARE_VERSION = 1a46874494146f470d7a61b0b6f4f15a07dd8b35
+-RPI_FIRMWARE_VERSION = 2ef3800b1b71c0e30c2a61ecad6e007ae96ea342
 +RPI_FIRMWARE_VERSION = $(call qstrip,$(BR2_PACKAGE_RPI_FIRMWARE_VERSION))
  RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
  RPI_FIRMWARE_LICENSE = BSD-3-Clause
@@ -26,6 +26,6 @@
  
 +BR_NO_CHECK_HASH_FOR += $(RPI_FIRMWARE_SOURCE)
 +
- ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
- define RPI_FIRMWARE_INSTALL_DTB
- 	$(foreach dtb,$(wildcard $(@D)/boot/*.dtb), \
+ RPI_FIRMWARE_FILES = \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN), bootcode.bin) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI), start.elf fixup.dat) \

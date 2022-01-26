@@ -1,0 +1,54 @@
+--- occu/WebUI/www/ise/htm/header.htm.orig
++++ occu/WebUI/www/ise/htm/header.htm
+@@ -78,6 +78,10 @@
+   if ($("UserName"))
+   {
+     $("UserName").appendChild(document.createTextNode(userName));
++    if (getUPL() != UPL_GUEST) {
++      $("UserName").setAttribute('onClick', userLink);
++      $("UserName").setAttribute('style','cursor: pointer;');
++    }
+   }
+ 
+   if (getUPL() != UPL_GUEST) {
+--- occu/WebUI/www/rega/pages/index.htm.orig
++++ occu/WebUI/www/rega/pages/index.htm
+@@ -131,7 +131,13 @@
+         object oUser = dom.GetObject( system.GetSessionVar('sessionUserID') );
+         string sUserFullName = oUser.UserFirstName()#' '#oUser.UserLastName();
+         if( sUserFullName == ' ' ){ sUserFullName = oUser.Name(); }
+-        WriteLine('var userName = "' # sUserFullName # '";');
++        string sUserLevel = "lblGuest";
++        if (oUser.UserLevel() == iulAdmin) { sUserLevel = "lblAdmin"; }
++        elseif (oUser.UserLevel() == iulUser) { sUserLevel = "lblUser" ; }
++        string sUserEasyMode = "lblUIModeExpert";
++        if (oUser.UserEasyLinkMode()) { sUserEasyMode = "lblUIModeEasy"; }
++        WriteLine('var userName = "' # sUserFullName # ' (" + translateKey("' # sUserLevel # '") + ") | " + translateKey("lblEasyModeActiveShort") + " " + translateKey("' # sUserEasyMode # '");');
++        WriteLine('var userLink = "CreatePopup(ID_USER_ACCOUNT_CONFIG_ADMIN, '#oUser.ID()#')"');
+       %>
+ 
+ 
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -201,6 +201,9 @@
+     "lblBtnForLogin" : "Benutzername-Button in der Anmeldung: ",
+     "lblAccessLevel" : "Berechtigungsstufe: ",
+     "lblEasyModeActive" : "Modus vereinfachte<br/>Verkn%FCpfungskonfiguration aktivieren: ",
++    "lblEasyModeActiveShort" : "Modus: ",
++    "lblUIModeEasy" : "Einfach",
++    "lblUIModeExpert" : "Experte",
+     "lblPhoneNumber" : "Telefonnummer: ",
+     "lblEMailAddress" : "E-Mail-<br/>Adresse: ",
+     "lblStartPageSystemInfo" : "Startseite - Systeminformation",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -200,6 +200,9 @@
+     "lblBtnForLogin" : "User name - button for login: ",
+     "lblAccessLevel" : "Permission level: ",
+     "lblEasyModeActive" : "Expert mode not visible",
++    "lblEasyModeActiveShort" : "Mode: ",
++    "lblUIModeEasy" : "simple",
++    "lblUIModeExpert" : "expert",
+     "lblPhoneNumber" : "Phone number: ",
+     "lblEMailAddress" : "Email<br/>address: ",
+     "lblStartPageSystemInfo" : "Home page - system information",

@@ -1,0 +1,45 @@
+name: Feature Request
+description: Suggest a feature/idea for RaspberryMatic
+labels: ":bulb: enhancement-ideas"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Feature Request Rules
+  - type: markdown
+    attributes:
+      value: |
+        1. Do **NOT** use this form for support requests! It is meant to be used to request new feature or report your ideas on enhancements only.
+        2. Make sure that the requested feature is not already implemented in the latest stable or even nightly build version of RaspberryMatic.
+        3. Before you open a new feature/enhancement request here, please make sure that it hasn't been requested already and please make sure to cross-check the discussion fora discussed below and try to discuss your idea there first before you are opening a new feature request here.
+
+        If you have problems while using RaspberryMatic and are seeking for help, please consult our [GitHub Community Forum](https://github.com/jens-maus/RaspberryMatic/discussions) or the public [RaspberryMatic Forum](https://homematic-forum.de/forum/viewforum.php?f=65).
+  - type: markdown
+    attributes:
+      value: |
+        ## The idea
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Describe the solution you'd like
+      description: Provide a clear and concise description of what you want to see improved/changed.
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Describe alternatives you've considered
+      description: Describe potential alternatives to your idea.
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Is your feature request related to a problem?
+      description: Please explain if your feature request is related to a problem or bug report.
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        If you have any additional information for us, use the field below.
+        Please note, you can attach screenshots or screen recordings here, by
+        dragging and dropping files in the field below.

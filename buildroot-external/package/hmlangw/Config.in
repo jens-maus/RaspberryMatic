@@ -2,5 +2,5 @@ config BR2_PACKAGE_HMLANGW
 	bool "hmlangw"
 	help
 	  A tool to simulate a HomeMatic LAN-Gateway.
-	  
+
 	  http://homematic-forum.de/forum/viewtopic.php?f=18&t=27705

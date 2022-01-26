@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Stop on error
+set -e
+
 #MKIMAGE=${HOST_DIR}/usr/bin/mkimage
 BOARD_DIR="$(dirname "$0")"
 BOARD_NAME="$(basename "${BOARD_DIR}")"
@@ -11,7 +14,7 @@ echo "Create user filesystem"
 mkdir -p "${BUILD_DIR}/userfs"
 touch "${BUILD_DIR}/userfs/.doFactoryReset"
 rm -f "${BINARIES_DIR}/userfs.ext4"
-mkfs.ext4 -d "${BUILD_DIR}/userfs" -F -L userfs "${BINARIES_DIR}/userfs.ext4" 3000
+"${HOST_DIR}/sbin/mkfs.ext4" -d "${BUILD_DIR}/userfs" -F -L userfs -I 256 -E lazy_itable_init=0,lazy_journal_init=0 "${BINARIES_DIR}/userfs.ext4" 3000
 
 #
 # VERSION File
@@ -35,7 +38,7 @@ support/scripts/genimage.sh -c "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/gen
 OVADIR=$(mktemp -d)
 cp -a "${BINARIES_DIR}/sdcard.vmdk" "${OVADIR}/RaspberryMatic.vmdk"
 cp -a "${BOARD_DIR}/template.ovf" "${OVADIR}/RaspberryMatic.ovf"
-(cd "${OVADIR}" && sha256sum --tag RaspberryMatic.* >RaspberryMatic.mf)
+(cd "${OVADIR}" && "${HOST_DIR}/bin/openssl" sha256 RaspberryMatic.* >RaspberryMatic.mf)
 tar -C "${OVADIR}" --owner=root --group=root -cf "${BINARIES_DIR}/RaspberryMatic.ova" RaspberryMatic.ovf RaspberryMatic.vmdk RaspberryMatic.mf
 rm -rf "${OVADIR}"
 

@@ -1,0 +1,11 @@
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -19138,7 +19138,7 @@
+       durationValue = (this.chkBoxTimeLimitElm.prop("checked") == false) ? 31 : this.durationValueElm.val();
+ 
+       if (this.isOntimeAvailable()) {
+-        if ((this.chkBoxTimeLimitElm.prop("checked") == false) || (durationValue == 0) || (durationValue == 31)) {
++        if ((this.chkBoxTimeLimitElm.prop("checked") == false) || (durationValue == 0) || (durationValue == 31 && durationUnit == 2)) {
+           result = "S=" + state;
+         } else {
+           result = "S=" + state + ",OT=" + this._getOnTimeVal(durationValue, durationUnit);

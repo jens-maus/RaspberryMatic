@@ -100,37 +100,6 @@ init_system() {
   if echo "${HM_HOST}" | grep -q rpi; then
     modprobe bcm2835_wdt nowayout=1 heartbeat=15
   fi
-
-  # if the userfs is located on a non-mmc device (not on a SD card)
-  # we can safely use the old /usr/local/sdcard directory path as
-  # the general storagePath for diagrams and daily backups
-  storagePath=""
-  if grep " /usr/local " /proc/mounts | grep -qv "^/dev/mmc"; then
-    storagePath="/usr/local/sdcard"
-    mkdir -p ${storagePath}
-  fi
-
-  # users can override the storagePath by specifying an own storage
-  # path in /etc/config/CustomStoragePath
-  if [[ -f /etc/config/CustomStoragePath ]]; then
-    storagePath=$(cat /etc/config/CustomStoragePath)
-  fi
-
-  # in case a storagePath is specified we make sure it is setup
-  # correct and in case it is empty or does not exist we skip this
-  # so that the WebUI will remind users to insert an USB drive for
-  # storing diagrams+backups
-  if [[ -n "${storagePath}" ]] && [[ -d "${storagePath}" ]]; then
-    if [[ ! -d "${storagePath}/measurement" ]]; then
-      mkdir -p "${storagePath}/measurement"
-    fi
-    if [[ ! -e "${storagePath}/.nobackup" ]]; then
-      touch "${storagePath}/.nobackup"
-    fi
-    ln -sf "${storagePath}" /media/usb0
-    touch /var/status/SDinitialised
-    touch /var/status/hasSD
-  fi
 }
 
 start() {

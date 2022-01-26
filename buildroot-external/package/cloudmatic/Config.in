@@ -2,5 +2,5 @@ config BR2_PACKAGE_CLOUDMATIC
 	bool "CloudMatic/meine-homematic.de Support"
 	help
 	  Adds support for CloudMatic/meine-homematic.de
-	  
+
 	  http://meine-homematic.de/

@@ -20,7 +20,8 @@
   {id: "menuProgramsLinksPage", align: "left", action: function() { ConfigData.check(function() { WebUI.enter(LinksAndProgramsPage); }); }, submenu:
   [
     {id: "submenuDirectLinks"                , action: function() { ConfigData.check(function() { WebUI.enter(LinkListPage); }); }   },
-    {id: "submenuProgramsLinks", action: function() { ConfigData.check( function() { WebUI.enter(ProgramListPage); }); }}
+    {id: "submenuProgramsLinks", action: function() { ConfigData.check( function() { WebUI.enter(ProgramListPage); }); }},
+    {id: "submenuScriptExecutor", action: function() { new HMScriptExecutor(); }}
   ]},
   {id: "menuSettingsPage", align: "left", action: function() { ConfigData.check(function() { WebUI.enter(SystemConfigPage); }); }, submenu:
   [ 

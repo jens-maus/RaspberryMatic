@@ -1,19 +1,3 @@
---- occu/WebUI/www/api/backup/version.cgi.orig
-+++ occu/WebUI/www/api/backup/version.cgi
-@@ -1 +1,11 @@
--### rfd-config##source common.tclproc main { } {	puts "Content-Type: text/plain"	puts ""	puts -nonewline [loadFile /boot/VERSION]}startup
-\ No newline at end of file
-+##
-+# rfd-config
-+##
-+source common.tcl
-+proc main { } {
-+ puts "Content-Type: text/plain"
-+ puts ""
-+ puts -nonewline [loadFile /VERSION]
-+}
-+
-+startup
 --- occu/WebUI/www/api/methods/ccu/downloadFirmware.tcl.orig
 +++ occu/WebUI/www/api/methods/ccu/downloadFirmware.tcl
 @@ -8,20 +8,12 @@
@@ -44,15 +28,32 @@
  }
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -394,6 +394,7 @@
+@@ -365,20 +365,21 @@
+               table_data {align="left"} {colspan="2" id="actualSWVersion"} {
+                 puts "\${dialogSettingsCMLblActualSoftwareVersion}"
+               }
+-              table_data {
+-                puts "$cur_version"
++              table_data {align="left"} {
++                puts "$cur_version&nbsp;([get_platform])"
+               }
+             }
+             table_row {
+               table_data {align="left"} {colspan="2"} {
+                 puts "\${dialogSettingsCMLblAvailableSoftwareVersion}"
+               }
+-              table_data {id="availableSWVersion"} {
++              table_data {align="left"} {id="availableSWVersion"} {
+                 # This doesnï¿½t work properly
+                 # puts [iframe "$REMOTE_FIRMWARE_SCRIPT?cmd=check_version&version=$cur_version&serial=$serial&lang=de&product=HM-CCU2" marginheight=0 marginwidth=0 frameborder=0 width=100 height=20 {scrolling="no"} ]
                  # The available version will be set further down with "jQuery('#availableSWVersion').html(homematic.com.getLatestVersion());"
                }
              }
 +            if {[get_platform] != "oci"} {
              table_row {
                table_data {align="left"} {colspan="3"} {
-                 #puts "[bold "Software-Update durchführen"]"
-@@ -407,7 +408,7 @@
+                 #puts "[bold "Software-Update durchfï¿½hren"]"
+@@ -392,7 +393,7 @@
                      table_row {
                        table_data {
                          division {class="CLASS20905" style="display: none"} {id="btnFwDirectDownload"} {} "onClick=\"performDirectDownload();\"" {}
@@ -61,7 +62,7 @@
                        }
                      }
                    }
-@@ -431,7 +432,7 @@
+@@ -416,7 +417,7 @@
                      table_row {
                        table_data {
                          division {class="CLASS20908" style="display: none"} {id="btnFwDownload"} {} "onClick=\"window.location.href='$REMOTE_FIRMWARE_SCRIPT?cmd=download&version=$cur_version&serial=$serial&lang=de&product=HM-CCU[getProduct]';\"" {}
@@ -70,7 +71,7 @@
                        }
                      }
                    }
-@@ -480,30 +481,12 @@
+@@ -465,30 +466,12 @@
                  puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
                }
              }
@@ -155,278 +156,6 @@
      puts "translatePage('#messagebox');"
      puts "dlgPopup.readaptSize();"
    }
---- occu/WebUI/www/config/cp_security.cgi.orig
-+++ occu/WebUI/www/config/cp_security.cgi
-@@ -77,8 +77,8 @@
- proc getSGTIN_Backup {migrationMode} {
- 
-   switch $migrationMode {
--    "CCU2_CCU2" {set path_crRFD "/tmp/backup/usr/local/etc/config/crRFD/data"}
--    "CCU2_CCU3" {set path_crRFD "/tmp/backup/usr/local/etc/config/crRFD/data"}
-+    "CCU2_CCU2" {set path_crRFD "/usr/local/tmp/backup/usr/local/etc/config/crRFD/data"}
-+    "CCU2_CCU3" {set path_crRFD "/usr/local/tmp/backup/usr/local/etc/config/crRFD/data"}
-     "CCU3_CCU3" {set path_crRFD "/usr/local/eQ-3-Backup/restore/etc/config/crRFD/data"}
-   }
- 
-@@ -135,8 +135,8 @@
- proc checkUserBackupValidility {migrationMode} {
- 
-   switch $migrationMode {
--    "CCU2_CCU2" {set pathBackup "/tmp/backup/usr/local/"}
--    "CCU2_CCU3" {set pathBackup "/tmp/backup/usr/local/"}
-+    "CCU2_CCU2" {set pathBackup "/usr/local/tmp/backup/usr/local/"}
-+    "CCU2_CCU3" {set pathBackup "/usr/local/tmp/backup/usr/local/"}
-     "CCU3_CCU3" {set pathBackup "/usr/local/eQ-3-Backup/restore/"}
-   }
- 
-@@ -296,7 +296,7 @@
-     } else {
-       exec touch /usr/local/.doFactoryReset
-     }
--    exec kill -SIGQUIT 1
-+    exec /sbin/reboot
-   }]} {
- 
-     # TWIST-22
-@@ -371,13 +371,13 @@
- 
- proc action_backup_restore_check {} {
-   global env
--  cd /tmp/
-+  cd /usr/local/tmp/
-   
-   http_head
-   set i 0
-   if { [catch {
--    exec tar xf new_config.tar
--    file delete -force /tmp/new_config.tar
-+    exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/new_config.tar 2>/dev/null
-+    file delete -force /usr/local/tmp/new_config.tar
-   
-   set config_version [read_version "firmware_version"]
-   set ccu1_backup false
-@@ -509,10 +509,10 @@
- 
- proc action_backup_restore_go {} {
-   global env
--  cd /tmp/
-+  cd /usr/local/tmp/
-   http_head
-     
--  set system_version [read_version "/boot/VERSION"]
-+  set system_version [read_version "/VERSION"]
-   set config_version [read_version "firmware_version"]
-   set ccu1_backup false
-   if { [version_compare $config_version 2.0.0] < 0 } {
-@@ -595,20 +595,20 @@
-     if { "CCU2_CCU2" == $migration_mode } {
-       # CCU2 ==> CCU2
-       set backuperror false
--      set source_version [read_version "/tmp/firmware_version"]
-+      set source_version [read_version "/usr/local/tmp/firmware_version"]
-       set source_version [split $source_version .]
-       set source_major [lindex $source_version 0]
-       set source_minor [lindex $source_version 1]
-       set source_patch [lindex $source_version 2]
-       if { (($source_major == 2)  && ($source_minor > 17)) || (($source_major == 2) && ($source_minor == 17) && ($source_patch >= 14))} {
--        # extract backup to /tmp to enable checkUsrBackup.sh to validate backup
--        file delete -force /tmp/backup
--        file mkdir /tmp/backup
--        cd /tmp/backup
--        if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
-+        # extract backup to /usr/local/tmp to enable checkUsrBackup.sh to validate backup
-+        file delete -force /usr/local/tmp/backup
-+        file mkdir /usr/local/tmp/backup
-+        cd /usr/local/tmp/backup
-+        if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
-           cgi_javascript {puts "MessageBox.close();"}
-           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
--          file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
-+          file delete -force /usr/local/tmp/firmware_version /usr/local/tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
-           return
-           #set backuperror true
-         } else {
-@@ -621,7 +621,7 @@
-             # Start /etc/init.d/S62HMServer start
-             cgi_javascript {puts "MessageBox.close();"}
-             put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} [getBackupErrorMessage $checkBackupState $migration_mode]"
--            file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
-+            file delete -force /usr/local/tmp/firmware_version /usr/local/tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
-             cgi_javascript {puts "homematic('User.restartHmIPServer');"}
-             return
-           } 
-@@ -645,7 +645,7 @@
-           # append msg $errorMessage
-           cgi_javascript {puts "MessageBox.close();"}
-           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
--          file delete -force /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
-+          file delete -force /usr/local/tmp/firmware_version /usr/local/tmp/signature /usr/local/tmp/usr_local.tar.gz /usr/local/tmp/backup
-           return
-         } else {
-           set backuperror false
-@@ -657,24 +657,25 @@
-     file delete -force /usr/local/eQ-3-Backup/restore
-     file mkdir /usr/local/eQ-3-Backup/restore
-     cd /usr/local/eQ-3-Backup/restore
--      if { [catch {exec tar xzf /tmp/usr_local.tar.gz --strip 2} errorMessage] } {
-+      if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz --strip 2} errorMessage] } {
-           # show message "Beim Einspielen des Systembackups ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut. "
-           cgi_javascript {puts "MessageBox.close();"}
-           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
-           set backuperror true
-         } else {
-           set backuperror false
-+          exec touch /usr/local/.doBackupRestore
-         }
-     } elseif { "CCU2_CCU3" == $migration_mode } {
-           # CCU2 ==> CCU3
--        # be sure /tmp/backup is empty
--        file delete -force /tmp/backup
-+        # be sure /usr/local/tmp/backup is empty
-+        file delete -force /usr/local/tmp/backup
-         # be sure restore directory is empty
-         file delete -force /usr/local/eQ-3-Backup/restore
--        file mkdir /tmp/backup
-+        file mkdir /usr/local/tmp/backup
- 
--        cd /tmp/backup
--        if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
-+        cd /usr/local/tmp/backup
-+        if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
-           cgi_javascript {puts "MessageBox.close();"}
-           put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
-           set backuperror true
-@@ -682,8 +683,8 @@
-           # only do this when the compatibility check says ok:
-           #copy old files
-           file mkdir /usr/local/eQ-3-Backup/restore/etc/config
--          if { [file exists /tmp/backup/usr/local/etc/config] } {
--            cd /tmp/backup/usr/local/etc/config
-+          if { [file exists /usr/local/tmp/backup/usr/local/etc/config] } {
-+            cd /usr/local/tmp/backup/usr/local/etc/config
-           }
- 
-           if { [file exists InterfacesList.xml] } { file copy InterfacesList.xml /usr/local/eQ-3-Backup/restore/etc/config/InterfacesList.xml }
-@@ -716,26 +717,31 @@
- 
-           set backuperror false
-           cd /
-+          exec touch /usr/local/.doBackupRestore
-         }
-       }
-     } else {  # backup for version < 2
-+      catch {
-+        exec pkill ReGaHss
-+        exec sleep 5
-+      }
-       #delete existing files
--      file delete -force /tmp/backup
-+      file delete -force /usr/local/tmp/backup
-       file delete -force /etc/config/hs485d /etc/config/hs485types /etc/config/rfd /etc/config/userprofiles
-       file delete -force /etc/config/homematic.regadom /etc/config/homematic.regadom.bak
-       file delete -force /etc/config/ids /etc/config/ntpclient /etc/config/rega.conf /etc/config/syslog
-       file delete -force /etc/config/tweaks /etc/config/TZ /etc/config/server.pem /etc/config/keys
-       file delete -force /etc/config/time.conf
- 
--      file mkdir /tmp/backup
--      cd /tmp/backup
--      if { [catch {exec tar xzf /tmp/usr_local.tar.gz} errorMessage] } {
-+      file mkdir /usr/local/tmp/backup
-+      cd /usr/local/tmp/backup
-+      if { [catch {exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/usr_local.tar.gz} errorMessage] } {
-         put_message "\${dialogSettingsSecurityMessageSysBackupErrorTitle}" "\${dialogSettingsSecurityMessageSysBackupErrorContent} $errorMessage"
-         set backuperror true
-       } else {
-         #copy old files
--        if { [file exists /tmp/backup/usr/local/etc/config] } {
--          cd /tmp/backup/usr/local/etc/config
-+        if { [file exists /usr/local/tmp/backup/usr/local/etc/config] } {
-+          cd /usr/local/tmp/backup/usr/local/etc/config
-         }
- 
-         if { [file exists hs485d] } { file copy hs485d /etc/config/hs485d }
-@@ -789,11 +795,13 @@
-         catch {exec eq3configcmd rfd-interface-copy rfd.conf /etc/config/rfd.conf}
- 
-         set backuperror false
-+        exec /sbin/reboot
-+        return
-       }
-     cd /
-   }
- 
--  set source_version [read_version "/tmp/firmware_version"]
-+  set source_version [read_version "/usr/local/tmp/firmware_version"]
- 
-   set source_version [split $source_version .]
-   set source_major [lindex $source_version 0]
-@@ -817,8 +825,7 @@
-   cgi_javascript {puts "MessageBox.close();"}
- 
-   if { "false" == $backuperror } {
--    exec mount -o remount,ro /usr/local
--    exec mount -o remount,rw /usr/local
-+    exec sync
-     division {class="popupTitle"} {
-       puts "\${dialogSettingsSecurityMessageSysBackupRestartSystemTitle}"
-     }
-@@ -859,8 +866,6 @@
-   cgi_javascript {
-     puts "translatePage('#messagebox');"
-   }
--
--  file delete -force /tmp/new_config.tar /tmp/firmware_version /tmp/signature /tmp/usr_local.tar.gz /tmp/backup
- }
- 
- proc put_message {title msg args} {
-@@ -1465,35 +1470,32 @@
- 
- proc action_create_backup {} {
-   set HOSTNAME [exec hostname]
-+  set system_version [read_version "/VERSION"]
-   set iso8601_date [exec date -Iseconds]
-+  set tmpdir [exec mktemp -d -p /usr/local/tmp]
-   regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
-+  set backupfile [set HOSTNAME]-$system_version-$year-$month-$day-$hour$minute.sbk
-   #save DOM
-   rega system.Save()
-   cd /
-   if {[getProduct] < 3 } {
-     catch { exec tar czf /tmp/usr_local.tar.gz usr/local }
-   } else {
--    catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude=usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf /tmp/usr_local.tar.gz usr/local }
-+    catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude=usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
-   }
-   
--  cd /tmp/
-+  cd $tmpdir/
-   #sign the configuration with the current key
-   exec crypttool -s -t 1 <usr_local.tar.gz >signature
-   #store the current key index
-   exec crypttool -g -t 1 >key_index
--  file copy -force /boot/VERSION firmware_version
--  set fd [open "|tar c usr_local.tar.gz signature firmware_version key_index"]
--  catch {fconfigure $fd -translation binary}
--  catch {fconfigure $fd -encoding binary}
--  puts "Content-Type:application/x-download"
--  puts "Content-Disposition:attachment;filename=[set HOSTNAME]-$year-$month-$day.sbk\n"
--  catch {fconfigure stdout -translation binary}
--  catch {fconfigure stdout -encoding binary}
--  while { ! [eof $fd]} {
--    puts -nonewline [read $fd 65536]
--  }
--  close $fd
--  file delete -force /tmp/usr_local.tar.gz /tmp/firmware_version /tmp/signature
-+  file copy -force /VERSION firmware_version
-+  catch { exec tar --owner=root --group=root -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index }
-+  cd /
-+  exec rm -rf $tmpdir
-+  puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"
-+  puts "Content-Type: application/octet-stream"
-+  puts "Content-Disposition: attachment; filename=\"$backupfile\"\n"
- }
- 
- proc action_backup_upload {} {
 --- occu/WebUI/www/config/cp_time.cgi.orig
 +++ occu/WebUI/www/config/cp_time.cgi
 @@ -190,6 +190,7 @@
@@ -492,47 +221,244 @@
  # set HOMEMATIC_URL "http://www.homematic.com"
  set HOMEMATIC_URL "http://www.eq-3.de"
  set HOMEMATIC_IP_URL "https://www.homematic-ip.com"
-@@ -22,8 +22,16 @@
+@@ -19,13 +19,113 @@
+ set LANGUAGE "de"
+ set CUR_YEAR [clock format [clock seconds] -format %Y]
+ 
++proc loadVarsFromShellFile {filename arrayName} {
++    upvar 1 $arrayName array
++    set f [open $filename]
++    while {[gets $f line] >= 0} {
++        if {[regexp {^\s*(\w+)=([""'']?)(.*)\2\s*$} $line -> key quote value]} {
++            if {$value == ""} {
++              set array($key) "n/a"
++            } else {
++              set array($key) $value
++            }
++        }
++    }
++    close $f
++}
++
++proc execCmd {varName cmd} {
++  upvar 1 $varName variable
++  set rc [catch {eval $cmd} resVar]
++  if {$rc == 0} {
++    set variable $resVar
++  } else {
++    set variable "n/a"
++  }
++}
++
++proc putsVar {name value} {
++    puts "<div style='display: table-row;'><div style='display:table-cell; width: 50%; text-align: right;'>$name:</div><div style='display:table-cell; width: 50%; text-align: left;'>$value</div></div>"
++}
++
  proc action_put_page {} {
    global PRODUCT_NAME PRODUCT_ID HOMEMATIC_URL HOMEMATIC_IP_URL HM_HELP_URL IP_HELP_URL HM_INFO_URL IP_INFO_URL LANGUAGE CUR_YEAR env
  
 -  set SERIAL [read_var /var/ids SerialNumber]
 -  set VERSION [read_var /boot/VERSION VERSION]
-+  if {[file exist /var/board_sgtin]} {
-+    set SERIAL [exec cat /var/board_sgtin]
-+  } elseif {[file exist /var/board_serial]} {
-+    set SERIAL [exec cat /var/board_serial]
-+  } elseif {[file exist /sys/module/plat_eq3ccu2/parameters/board_serial]} {
-+    set SERIAL [exec cat /sys/module/plat_eq3ccu2/parameters/board_serial]
-+  } else {
-+    set SERIAL "n/a"
+-  set HELP_ARGUMENTS "lang=$LANGUAGE&vers=$VERSION&serial=$SERIAL"
++  # get all variables from /var/hm_mode into $hm array
++  loadVarsFromShellFile /var/hm_mode hm
++
++  # get all variables from /VERSION into ver array
++  loadVarsFromShellFile /VERSION ver
++
++  set SERIAL ""
++  catch {set SERIAL $hm(HM_HMIP_SERIAL)}
++  if {$SERIAL == ""} {
++    if {[file exist /var/board_sgtin]} {
++      set SERIAL [exec cat /var/board_sgtin]
++    } elseif {[file exist /var/board_serial]} {
++      set SERIAL [exec cat /var/board_serial]
++    } elseif {[file exist /sys/module/plat_eq3ccu2/parameters/board_serial]} {
++      set SERIAL [exec cat /sys/module/plat_eq3ccu2/parameters/board_serial]
++    } else {
++      set SERIAL "n/a"
++    }
 +  }
-+  set VERSION [read_var /VERSION VERSION]
-   set HELP_ARGUMENTS "lang=$LANGUAGE&vers=$VERSION&serial=$SERIAL"
++
++  set HWMODEL "n/a"
++  if {[file exist /proc/device-tree/model]} {
++    execCmd HWMODEL {exec cat /proc/device-tree/model}
++  } elseif {[file exist /sys/devices/virtual/dmi/id/sys_vendor]} {
++    execCmd VENDOR {exec cat /sys/devices/virtual/dmi/id/sys_vendor}
++    set PNAME ""
++    if {[file exist /sys/devices/virtual/dmi/id/product_name]} {
++      execCmd PNAME {exec cat /sys/devices/virtual/dmi/id/product_name}
++    }
++    set HWMODEL "$VENDOR $PNAME"
++  }
  
++  execCmd CPUMODEL {exec lscpu | grep "Model name:" | cut -d: -f2 | xargs echo -n}
++  execCmd NUMCPU {exec nproc}
++  execCmd LOADAVG {exec awk {{ printf $1 " " $2 " " $3 }} /proc/loadavg}
++  execCmd MEM {exec free -h | grep Mem: | awk {{ print $2 }}}
++  execCmd MEMUSE {exec egrep "Mem(Total|Available)" /proc/meminfo | tr -d "\n" | awk {{ printf("%.1f %", 100-$4/$2*100) }}}
++  execCmd SWAPUSE {exec egrep "Swap(Total|Free)" /proc/meminfo | tr -d "\n" | awk {{ printf("%.1f %", 100-$4/$2*100) }}}
++  execCmd UPTIME {exec awk {{s=int($1);d=int(s/86400);h=int(s % 86400/3600);m=int(s % 3600 / 60); printf "%d d, %d h %d min", d, h, m}} /proc/uptime}
++  execCmd NTPOFFSET {exec /usr/bin/chronyc -n tracking | grep "Last offset" | awk {{ printf("%.3f ms", $4*1000) }}}
++  catch {set OSTYPE [string trim [read_var /etc/os-release PRETTY_NAME] '"']}
++  execCmd OSKERNEL "exec uname -s -r -m"
++  set TCLVER [info patchlevel]
++  execCmd TEMP {exec awk {{ printf("%.1f &deg;C", $1/1000) }} /sys/class/thermal/thermal_zone0/temp}
++
++  set STATUS ""
++  if {[file exist /var/status/hasIP]} {
++    set STATUS "IP(1) $STATUS"
++  } else {
++    set STATUS "IP(0) $STATUS"
++  }
++  if {[file exist /var/status/hasInternet]} {
++    set STATUS "Internet(1) $STATUS"
++  } else {
++    set STATUS "Internet(0) $STATUS"
++  }
++  if {[file exist /var/status/hasLink]} {
++    set STATUS "Link(1) $STATUS"
++  } else {
++    set STATUS "Link(0) $STATUS"
++  }
++  if {[file exist /var/status/hasNTP]} {
++    set STATUS "NTP(1) $STATUS"
++  } else {
++    set STATUS "NTP(0) $STATUS"
++  }
++  if {[file exist /var/status/hasSD]} {
++    set STATUS "SD(1) $STATUS"
++  } else {
++    set STATUS "SD(0) $STATUS"
++  }
++  execCmd ROOTFSFREE {exec monit status rootfs | grep "space free total" | awk {{ print substr($0,index($0,$4)) }}}
++  execCmd USERFSFREE {exec monit status userfs | grep "space free total" | awk {{ print substr($0,index($0,$4)) }}}
++  execCmd STORAGEDEV {exec mountpoint -n /usr/local | awk {{ print $1 }} | xargs lsblk -l -n -o PKNAME -p}
++  execCmd STORAGE "exec lsblk -l -n -o SIZE,MODEL,KNAME -d -p $STORAGEDEV"
  
-@@ -59,6 +67,7 @@
-                 puts "<li><h1 class='helpTitle'><u>\${menuHelpPage}</u></h1></li>"
-                 puts "<li><a target='_blank' href=\'$HM_HELP_URL\'>\${dialogHelpLinkOnlineHelpA}</a></li>"
-                 puts "<li><a target='_blank' href=\'$IP_HELP_URL\'>\${dialogHelpLinkOnlineHelpB}</a></li>"
-+                puts "<li><a target='_blank' href='https://raspberrymatic.de/#memo-documentation'>RaspberryMatic</a></li>"
-                 puts "<li><a target='_blank' href='/licenseinfo.htm'>\${lblLicenseInformation}</a></li>"
-               puts "</ul>"
-       puts "</td>"
-@@ -77,7 +86,12 @@
-           # puts "<li>DOM [rega dom.BuildLabel()]</li>"
-           puts "<li><a target='_blank' href=\"$HM_INFO_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
-           puts "<li><a target='_blank' href=\"$IP_INFO_URL\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
+   set sid ""
+   catch {import sid}
+@@ -43,47 +143,78 @@
+       </script>
+     }
+   }
+-  puts "<style>li {margin: 5px 0}</style>"
+ 
+-  puts "<table id='overviewHelpPage' width='100%' class='CLASS21300' cellspacing='20' style='display:none'>"
++  puts "<table id='overviewHelpPage' class='CLASS21300' style='display:none'>"
+     puts "<colgroup>"
+-    puts "<col style='width:25%;'/>"
+-    puts "<col style='width:25%;'/>"
+-    puts "<col style='width:25%;'/>"
+-    puts "<col style='width:25%;'/>"
++    puts "<col style='width:50%;'/>"
++    puts "<col style='width:50%;'/>"
+     puts "</colgroup>"
+     puts "<tr>"
+-      puts "<td id='tdOnline' class='CLASS21301a'  style='text-align:center;'>"
+-              # puts "<div onclick='loadExtHelp()' class='StdTableBtn'>\${dialogHelpBtnOnlineHelp}</div>"
+-              puts "<ul style='list-style:none; padding-right:12%'>"
+-                puts "<li><h1 class='helpTitle'><u>\${menuHelpPage}</u></h1></li>"
+-                puts "<li><a target='_blank' href=\'$HM_HELP_URL\'>\${dialogHelpLinkOnlineHelpA}</a></li>"
+-                puts "<li><a target='_blank' href=\'$IP_HELP_URL\'>\${dialogHelpLinkOnlineHelpB}</a></li>"
+-                puts "<li><a target='_blank' href='/licenseinfo.htm'>\${lblLicenseInformation}</a></li>"
+-              puts "</ul>"
+-      puts "</td>"
+ 
+       puts "<td id='tdInfo' class='CLASS21305a' >"
+-        puts "<ul style='list-style:none; padding-right:12%'>"
+-          puts "<li><h1><u>\${dialogHelpInfoTitle}</u></h1></li>"
+-          puts "<li>$PRODUCT_NAME $PRODUCT_ID</li>"
+-          # puts "<li>$PRODUCT_ID</li>"
+-          puts "<li>\${dialogHelpInfoLblSN} $SERIAL</li>"
+-          puts "<li>\${dialogHelpInfoLblVersion} $VERSION</li>"
+-          puts "<li>\${dialogHelpInfoLblCopyright} &copy; 2007 - $CUR_YEAR</li>"
+-          puts "<li>eQ-3 AG</li>"
+-          puts "<li>26789 Leer</li>"
+-          puts "<li>Germany</li>"
+-          # puts "<li>DOM [rega dom.BuildLabel()]</li>"
+-          puts "<li><a target='_blank' href=\"$HM_INFO_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
+-          puts "<li><a target='_blank' href=\"$IP_INFO_URL\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
 -          puts "<li style='padding-top:25px;'><img src='/ise/img/homematic_logo_small.png'/></li>"
-+          puts "<li style='padding-top:25px;'><img src='/ise/img/rm-logo_small.png'/></li>"
-+          puts "<li>\${dialogHelpInfoLblCopyright} &copy; 2016 - $CUR_YEAR</li>"
-+          puts "<li>RaspberryMatic Contributors (<a target='_blank' href='https://github.com/jens-maus/RaspberryMatic/graphs/contributors'>see here</a>)</li>"
-+          puts "<li>Licensed under Apache 2.0 OpenSource license</li>"
-+          puts "<li><a target='_blank' href=\"https://raspberrymatic.de/\">\${homepage} RaspberryMatic</a></li>"
-+          puts "<li><br/>\${dialogSettingsCMHintSoftwareUpdateRaspMatic}</a></li>"
-         puts "</ul>"
- 
+-        puts "</ul>"
+-
++        puts "<img src='/ise/img/rm-logo_small.png'/><br/>"
++        puts "\${dialogHelpInfoLblVersion} $ver(VERSION) ($ver(PLATFORM))<br/>"
++        puts "<br/>\${dialogHelpInfoLblCopyright} &copy; 2016 - $CUR_YEAR<br/>"
++        puts "RaspberryMatic Contributors (<a target='_blank' href='https://github.com/jens-maus/RaspberryMatic/graphs/contributors'>see here</a>)<br/>"
++        puts "Licensed under Apache 2.0 OpenSource license<br/>"
++        puts "<a target='_blank' href=\"https://github.com/jens-maus/RaspberryMatic/\">https://github.com/jens-maus/RaspberryMatic/</a><br/>"
++        puts "<a target='_blank' href=\"https://raspberrymatic.de/\">https://raspberrymatic.de/</a><br/>"
++        puts "<br/>Based on <a target='_blank' href=\"https://github.com/eq-3/occu\">OCCU-SDK</a>:<br/>"
++        puts "\${dialogHelpInfoLblCopyright} &copy; 2007 - $CUR_YEAR<br/>"
++        puts "eQ-3 AG, 26789 Leer, Germany<br/>"
++        puts "<a target='_blank' href=\"$HM_INFO_URL\">\${homepage} \${LabelHomeMatic}</a><br/>"
++        puts "<a target='_blank' href=\"$IP_INFO_URL\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a><br/>"
++        puts "<br/>Menu icons made by <a target='_blank' href=\"https://icons8.com/license/\">icons8.com</a><br/>"
++        puts "<br/>\${dialogSettingsCMHintSoftwareUpdateRaspMatic}</a><br/><br/>"
++        puts "<h1 class='helpTitle'><u>\${menuHelpPage}</u></h1>"
++        puts "<a target='_blank' href='https://github.com/jens-maus/RaspberryMatic/wiki'>RaspberryMatic Documentation</a><br/>"
++        puts "<a target='_blank' href=\'$HM_HELP_URL\'>\${dialogHelpLinkOnlineHelpA}</a><br/>"
++        puts "<a target='_blank' href=\'$IP_HELP_URL\'>\${dialogHelpLinkOnlineHelpB}</a><br/>"
++        puts "<a target='_blank' href='/licenseinfo.htm'>\${lblLicenseInformation}</a><br/>"
        puts "</td>"
+ 
+-      puts "<td></td>"
+-      puts "<td></td>"
++      puts "<td id='tdOnline' class='CLASS21301a'  style='text-align:center;'>"
++        puts "<h1 class='helpTitle'><u>CCU Hardware Info</u></h1>"
++        puts "<div style='display: table; width: 100%;'>"
++          putsVar "Serial Number" $SERIAL
++          putsVar "Hardware Model" "$HWMODEL ($hm(HM_HOST))"
++          putsVar "CPU / Memory" "$CPUMODEL ($NUMCPU), $MEM"
++          putsVar "Storage" "$STORAGE"
++          putsVar "Real-Time-Clock" $hm(HM_RTC)
++        puts "</div>"
++        puts "<h1 class='helpTitle'><u>CCU Software Info</u></h1>"
++        puts "<div style='display: table; width: 100%;'>"
++          putsVar "Product" "$ver(PRODUCT) ($ver(VERSION))"
++          putsVar "ReGaHss" [rega dom.BuildLabel()]
++          putsVar "TCL" "$TCLVER"
++          putsVar "Status" $STATUS
++        puts "</div>"
++        puts "<h1 class='helpTitle'><u>Operating System Info</u></h1>"
++        puts "<div style='display: table; width: 100%;'>"
++          putsVar "OS Type/Kernel" "$OSTYPE ($OSKERNEL)"
++          putsVar "Uptime" $UPTIME
++          putsVar "Load Average" $LOADAVG
++          putsVar "System Temperature" $TEMP
++          putsVar "Memory / Swap Utilization" "$MEMUSE / $SWAPUSE"
++          putsVar "NTP Offset" $NTPOFFSET
++          putsVar "rootfs / userfs Free Space" "$ROOTFSFREE / $USERFSFREE"
++        puts "</div>"
++        puts "<h1 class='helpTitle'><u>homematicIP-RF (HmIP) Info</u></h1>"
++        puts "<div style='display: table; width: 100%;'>"
++          putsVar "RF-Module/Firmware" "$hm(HM_HMIP_DEV) ($hm(HM_HMIP_VERSION))"
++          putsVar "Device-Node" "$hm(HM_HMIP_DEVNODE) ($hm(HM_HMIP_DEVTYPE))"
++          putsVar "Address" "$hm(HM_HMIP_ADDRESS) ($hm(HM_HMIP_ADDRESS_ACTIVE))"
++          putsVar "SGTIN" $hm(HM_HMIP_SGTIN)
++          putsVar "Serial" $hm(HM_HMIP_SERIAL)
++        puts "</div>"
++        puts "<h1 class='helpTitle'><u>HomeMatic-RF (HmRF) Info</u></h1>"
++        puts "<div style='display: table; width: 100%;'>"
++          putsVar "RF-Module/Firmware" "$hm(HM_HMRF_DEV) ($hm(HM_HMRF_VERSION))"
++          putsVar "Device-Node" "$hm(HM_HMRF_DEVNODE) ($hm(HM_HMRF_DEVTYPE))"
++          putsVar "Address" "$hm(HM_HMRF_ADDRESS) ($hm(HM_HMRF_ADDRESS_ACTIVE))"
++          putsVar "Serial" $hm(HM_HMRF_SERIAL)
++        puts "</div>"
++      puts "</td>"
+ 
+   puts "</table>"
+ 
+@@ -124,7 +255,7 @@
+     puts "\}"
+ 
+     puts "loadExtHelp = function()\{"
+-    puts "  wndHelp = window.open(\"$HM_HELP_URL?lang=$LANGUAGE&vers=$VERSION&serial=$SERIAL\", \"Hilfe\", \"toolbar=yes,menubar=yes,location=yes,scrollbars=yes,resizable=yes,width=800,height=600\");"
++    puts "  wndHelp = window.open(\"$HM_HELP_URL?lang=$LANGUAGE&vers=$ver(VERSION)&serial=$SERIAL\", \"Hilfe\", \"toolbar=yes,menubar=yes,location=yes,scrollbars=yes,resizable=yes,width=800,height=600\");"
+     puts "\}"
+ 
+     puts "translatePage('#overviewHelpPage');"
 --- occu/WebUI/www/error/error-500.html.orig
 +++ occu/WebUI/www/error/error-500.html
 @@ -95,7 +95,7 @@

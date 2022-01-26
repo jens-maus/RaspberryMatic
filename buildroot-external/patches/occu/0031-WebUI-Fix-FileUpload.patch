@@ -1,16 +1,17 @@
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
-@@ -62,9 +62,13 @@
+@@ -61,10 +61,14 @@
+       puts "conInfo(\"EULA found\");"
        puts "jQuery('#fwUpload').hide();"
        puts "var dlg = new EulaDialog(translateKey('dialogEulaTitle'), data, function(result) {"
++        puts "var dlgPopup = parent.top.dlgPopup;"
++        puts "if (dlgPopup === undefined) {"
++          puts "dlgPopup = window.open('', 'ccu-main-window').dlgPopup;"
++        puts "}"
          puts "if (result == 1) {"
 -          puts "parent.top.dlgPopup.hide();"
 -          puts "parent.top.dlgPopup.setWidth(450);"
 -          puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
-+          puts "var dlgPopup = parent.top.dlgPopup;"
-+          puts "if (dlgPopup === undefined) {"
-+            puts "dlgPopup = window.open('', 'resize').dlgPopup;"
-+          puts "}"
 +          puts "dlgPopup.hide();"
 +          puts "dlgPopup.setWidth(450);"
 +          puts "dlgPopup.LoadFromFile(url, \"action=$action\");"
@@ -26,7 +27,7 @@
 -      puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
 +      puts "var dlgPopup = parent.top.dlgPopup;"
 +      puts "if (dlgPopup === undefined) {"
-+        puts "dlgPopup = window.open('', 'resize').dlgPopup;"
++        puts "dlgPopup = window.open('', 'ccu-main-window').dlgPopup;"
 +      puts "}"
 +      puts "dlgPopup.hide();"
 +      puts "dlgPopup.setWidth(450);"
@@ -41,7 +42,7 @@
    http_head
    division {class="popupTitle"} {
      #puts "Softwareupdate - Best&auml;tigung"
-@@ -281,7 +288,7 @@
+@@ -266,7 +273,7 @@
  }
  
  proc action_firmware_update_cancel {} {
@@ -50,7 +51,7 @@
  
    if {[getProduct] < 3} {
      catch {exec rm /var/new_firmware.tar.gz}
-@@ -447,9 +454,7 @@
+@@ -432,9 +439,7 @@
              table_row {
                td {width="20"} {}
                table_data {colspan="2"} {
@@ -61,21 +62,18 @@
                    file_button firmware_file size=30 maxlength=1000000
                  }
                  puts {<iframe name="firmware_upload_iframe" style="display: none;"></iframe>}
-@@ -959,19 +964,16 @@
- }
+@@ -1020,7 +1025,7 @@
  
  proc action_firmware_upload {} {
+ 
 -  global env sid downloadOnly
 +  global env sid downloadOnly filename
  
    if { [catch { import directDownload } error] } {
      set directDownload false
-   }
--  
-+
+@@ -1029,10 +1034,7 @@
    http_head
--  
-+
+   
    if { $directDownload } {
 -    set filename "/tmp/fup.tgz"
 -  } else {
@@ -85,16 +83,7 @@
    }
  
    if {[getProduct] < 3} {
-@@ -1013,7 +1015,7 @@
-       set file_invalid [catch {exec file -b $filename | egrep -q "(gzip compressed|tar archive)"} result]
-       if {$file_invalid == 0} {
-         # the file seems to be a tar archive (perhaps with gzip compression)
--        set file_invalid [catch {exec /bin/tar -C $TMPDIR --no-same-owner -xmf $filename} result]
-+        set file_invalid [catch {exec /bin/tar -C $TMPDIR --warning=no-timestamp --no-same-owner -xmf $filename} result]
-         file delete -force -- $filename
-       }
-     }
-@@ -1041,10 +1043,14 @@
+@@ -1102,10 +1104,14 @@
  
    cgi_javascript {
      puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
@@ -104,7 +93,7 @@
 -    puts "parent.top.dlgPopup.LoadFromFile(url, \"action=$action\");"
 +    puts "var dlgPopup = parent.top.dlgPopup;"
 +    puts "if (dlgPopup === undefined) {"
-+      puts "dlgPopup = window.open('', 'resize').dlgPopup;"
++      puts "dlgPopup = window.open('', 'ccu-main-window').dlgPopup;"
 +    puts "}"
 +    puts "dlgPopup.hide();"
 +    puts "dlgPopup.setWidth(450);"
@@ -113,7 +102,7 @@
    }
  }
  
-@@ -1328,10 +1334,10 @@
+@@ -1393,10 +1399,10 @@
  cgi_eval {
    #cgi_debug -on
    cgi_input
@@ -172,7 +161,7 @@
 -        parent.top.dlgPopup.LoadFromFile(url, "action=cert_update_confirm");
 +        var dlgPopup = parent.top.dlgPopup;
 +        if (dlgPopup === undefined) {
-+          dlgPopup = window.open('', 'resize').dlgPopup;
++          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
 +        }
 +        dlgPopup.hide();
 +        dlgPopup.setWidth(600);
@@ -193,7 +182,7 @@
 +      puts {
 +        var dlgPopup = parent.top.dlgPopup;
 +        if (dlgPopup === undefined) {
-+          dlgPopup = window.open('', 'resize').dlgPopup;
++          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
 +        }
 +        dlgPopup.hide();
 +        dlgPopup.setWidth(600);
@@ -276,7 +265,7 @@
 -      parent.top.dlgPopup.LoadFromFile(url, "action=backup_restore_check");
 +      var dlgPopup = parent.top.dlgPopup;
 +      if (dlgPopup === undefined) {
-+        dlgPopup = window.open('', 'resize').dlgPopup;
++        dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
 +      }
 +      dlgPopup.hide();
 +      dlgPopup.setWidth(400);
@@ -345,7 +334,7 @@
 -      parent.top.dlgPopup.LoadFromFile(url, "action=install_confirm");
 +      var dlgPopup = parent.top.dlgPopup;
 +      if (dlgPopup === undefined) {
-+        dlgPopup = window.open('', 'resize').dlgPopup;
++        dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
 +      }
 +      dlgPopup.hide();
 +      dlgPopup.setWidth(600);
@@ -376,7 +365,7 @@
  }
 --- occu/WebUI/www/config/fileupload.ccc.orig
 +++ occu/WebUI/www/config/fileupload.ccc
-@@ -0,0 +1,55 @@
+@@ -0,0 +1,61 @@
 +#!/bin/sh
 +# shellcheck shell=dash disable=SC2169,SC2034,SC2154
 +
@@ -402,8 +391,14 @@
 +# shellcheck disable=SC2046,SC2116,SC2086
 +eval $(echo ${QUERY_STRING//&/;})
 +
-+# write out the data
++# calculate the expected content length using
++# HTTP_CONTENT_LENGTH or CONTENT_LENGTH
++if [ -z "${HTTP_CONTENT_LENGTH}" ]; then
++  HTTP_CONTENT_LENGTH=${CONTENT_LENGTH}
++fi
 +SIZE=$((HTTP_CONTENT_LENGTH-a))
++
++# write out the data
 +filename=$(mktemp -p /usr/local/tmp)
 +if ! /usr/bin/head -q -c ${SIZE} >"${filename}"; then
 +  echo "ERROR (head)"
@@ -416,7 +411,7 @@
 +echo "   var url = '${url}?sid=${sid}';"
 +echo "   var dlgPopup = parent.top.dlgPopup;"
 +echo "   if (dlgPopup === undefined) {"
-+echo "     dlgPopup = window.open('', 'resize').dlgPopup;"
++echo "     dlgPopup = window.open('', 'ccu-main-window').dlgPopup;"
 +echo "   }"
 +echo "   if (dlgPopup !== undefined) {"
 +echo "     dlgPopup.hide();"
@@ -1013,3 +1008,13 @@
  
 -package provide cgi 1.8.0
 +package provide cgi 1.10.0
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -7365,6 +7365,7 @@
+     this.currentPageOptions  = options;
+     
+     this.currentPage.enter(options);
++    window.name = 'ccu-main-window';
+   },
+   
+   reload: function()

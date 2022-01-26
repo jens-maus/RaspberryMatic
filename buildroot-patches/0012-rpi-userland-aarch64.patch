@@ -1,6 +1,17 @@
+--- buildroot/package/ffmpeg/ffmpeg.mk.orig
++++ buildroot/package/ffmpeg/ffmpeg.mk
+@@ -281,7 +281,7 @@
+ FFMPEG_CONF_OPTS += --disable-vdpau
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
++ifeq ($(BR2_PACKAGE_RPI_USERLAND)$(BR2_arm),yy)
+ FFMPEG_CONF_OPTS += --enable-mmal --enable-omx --enable-omx-rpi \
+ 	--extra-cflags=-I$(STAGING_DIR)/usr/include/IL
+ FFMPEG_DEPENDENCIES += rpi-userland
 --- buildroot/package/rpi-userland/Config.in.orig
 +++ buildroot/package/rpi-userland/Config.in
-@@ -1,6 +1,6 @@
+@@ -1,13 +1,13 @@
  config BR2_PACKAGE_RPI_USERLAND
  	bool "rpi-userland"
 -	depends on BR2_arm
@@ -8,6 +19,17 @@
  	depends on BR2_INSTALL_LIBSTDCPP
  	depends on BR2_TOOLCHAIN_HAS_THREADS
  	depends on !BR2_STATIC_LIBS
+-	select BR2_PACKAGE_HAS_LIBEGL
+-	select BR2_PACKAGE_HAS_LIBGLES
+-	select BR2_PACKAGE_HAS_LIBOPENVG
+-	select BR2_PACKAGE_HAS_LIBOPENMAX
++	select BR2_PACKAGE_HAS_LIBEGL if !BR2_aarch64
++	select BR2_PACKAGE_HAS_LIBGLES if !BR2_aarch64
++	select BR2_PACKAGE_HAS_LIBOPENVG if !BR2_aarch64
++	select BR2_PACKAGE_HAS_LIBOPENMAX if !BR2_aarch64
+ 	help
+ 	  Raspberry Pi Userland contains the necessary library to use
+ 	  the VideoCore driver.
 @@ -40,6 +40,6 @@
  endif
  
@@ -18,7 +40,17 @@
  		BR2_STATIC_LIBS
 --- buildroot/package/rpi-userland/rpi-userland.mk.orig
 +++ buildroot/package/rpi-userland/rpi-userland.mk
-@@ -42,4 +42,8 @@
+@@ -11,7 +11,9 @@
+ RPI_USERLAND_INSTALL_STAGING = YES
+ RPI_USERLAND_CONF_OPTS = -DVMCS_INSTALL_PREFIX=/usr
+ 
++ifeq ($(BR2_arm),y)
+ RPI_USERLAND_PROVIDES = libegl libgles libopenmax libopenvg
++endif
+ 
+ ifeq ($(BR2_PACKAGE_RPI_USERLAND_HELLO),y)
+ 
+@@ -42,4 +44,8 @@
  endef
  RPI_USERLAND_POST_INSTALL_TARGET_HOOKS += RPI_USERLAND_POST_TARGET_CLEANUP
  

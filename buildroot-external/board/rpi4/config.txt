@@ -52,6 +52,15 @@ dtparam=watchdog=on
 # start with heartbeat on PWR led and mmc0 on ACT led
 dtparam=pwr_led_trigger=timer,act_led_trigger=mmc0
 
+# special device tree options for Compute Module 4
+[cm4]
+dtoverlay=dwc2
+dtparam=i2c_vc=on
+dtoverlay=i2c-rtc,pcf85063a,i2c_csi_dsi
+
+# reset to apply to all platforms
+[all]
+
 # add device tree overlay for RPI-RF-MOD
 dtoverlay=rpi-rf-mod
 

@@ -33,10 +33,16 @@ identify_host() {
   # https://www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
   hostid=$(grep Revision /proc/cpuinfo| awk '{print $3}')
   case "${hostid}" in
+    *d?314?)                       HM_HOST="rpi4cm8g"   ;; # Raspberry Pi Compute Module 4/8GB
+    *c?314?)                       HM_HOST="rpi4cm4g"   ;; # Raspberry Pi Compute Module 4/4GB
+    *b?314?)                       HM_HOST="rpi4cm2g"   ;; # Raspberry Pi Compute Module 4/2GB
+    *a?314?)                       HM_HOST="rpi4cm1g"   ;; # Raspberry Pi Compute Module 4/1GB
+    *c?313?)                       HM_HOST="rpi400"     ;; # Raspberry Pi 400
     *d?311?)                       HM_HOST="rpi4b8g"    ;; # Raspberry Pi 4 Model B/8GB
     *c?311?)                       HM_HOST="rpi4b4g"    ;; # Raspberry Pi 4 Model B/4GB
     *b?311?)                       HM_HOST="rpi4b2g"    ;; # Raspberry Pi 4 Model B/2GB
     *a?311?)                       HM_HOST="rpi4b1g"    ;; # Raspberry Pi 4 Model B/1GB
+    *9?212?)                       HM_HOST="rpi3z2w"    ;; # Raspberry Pi Zero 2 W
     *a?210?)                       HM_HOST="rpi3cmp"    ;; # Raspberry Pi Compute Module 3+
     *a?20d?)                       HM_HOST="rpi3p"      ;; # Raspberry Pi 3 Model B+
     *a?208?)                       HM_HOST="rpi3"       ;; # Raspberry Pi 3 Model B
@@ -60,6 +66,11 @@ identify_host() {
         # ASUS Tinkerboard
         Rockchip)
           HM_HOST="tinkerboard"
+
+          # workaround issues when a first modprobe might cause Exec format
+          # errors (cf. https://github.com/jens-maus/RaspberryMatic/issues/1435)
+          # Thus we perform the first modprobe early and expect the second to work
+          modprobe lz4
         ;;
       esac
 
@@ -140,6 +151,10 @@ identify_host() {
         /usr/bin/tvservice --off >/dev/null
         /usr/bin/vcgencmd display_power 0 >/dev/null
       fi
+
+      # increase vm.min_free_kbytes to 16384 to increase stability
+      # in memory critical situations
+      sysctl -q vm.min_free_kbytes=16384
     ;;
 
     # ASUS Tinkerboard

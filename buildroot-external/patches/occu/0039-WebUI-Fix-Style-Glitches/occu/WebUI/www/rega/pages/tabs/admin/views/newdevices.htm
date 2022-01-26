@@ -63,43 +63,43 @@
 <div class="CLASS04301">
 <div id="noNewDevs" class="CLASS04302" style="display:none;">${noDeviceInPostBox}</div>
 <table id="newDevTbl" class="tblList CLASS04303" cellpadding="0" cellspacing="0"
-       style="display:none; width:97%; margin:1%;">
+       style="display:none;">
 <colgroup>
-  <col style="width:2%;"  width="2%"/>
+  <col style="width:25px;" />
   <!-- Plus/Minus Device-->
-  <col style="width:2%;"/>
+  <col style="width:25px;" />
   <!-- Plus/Minus Group -->
-  <col style="width:2%;"/>
+  <col />
   <!-- Leere Zelle vor GroupMember -->
-  <col style="width:1%;"/>
-  <col style="width:3%;"/>
-  <col style="width:7%;"/>
-  <col style="width:7%;"/>
-  <col style="width:9%;"/>
-  <col style="width:7%;"/>
-  <col style="width:7%;"/>
-  <col style="width:7%;"/>
-  <col style="width:7%;"/>
-  <col style="width:7%;"/>
-  <col style="width:15%;"/>
-  <col style="width:7%;"/>
+  <col />
+  <col style="width:50px;" />
+  <col />
+  <col />
+  <col />
+  <col />
+  <col />
+  <col />
+  <col />
+  <col />
+  <col style="width:100px;"/>
+  <col style="width:100px;"/>
 </colgroup>
 <tbody id="tblNewDevices">
 <tr id="tblNewDevicesHeader">
   <th id="tblListFold"></th>
 
-  <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'><b>${thTypeDescriptor}</b></th>
-  <th class="DeviceListHead"><b>${thPicture}</b></th>
-  <th class="DeviceListHead clickable" onclick="NewDevSort('desc')"><b>${thDescriptor}</b></th>
-  <th class="DeviceListHead clickable" onclick="NewDevSort('sn')"><b>${thSerialNumber}</b></th>
-  <th class="DeviceListHead clickable" onclick="NewDevSort('iface')"><b>${thInterfaceCategory}</b></th>
-  <th class="DeviceListHead clickable" onclick="NewDevSort('trans')"><b>${thTransmitMode}</b></th>
-  <th class="DeviceListHead clickable" onclick="NewDevSort('name')"><b>${thName}</b></th>
-  <th class="DeviceListHead clickable" onclick="NewDevSort('func')"><b>${thFunc}</b></th>
-  <th class="DeviceListHead clickable" onclick="NewDevSort('room')"><b>${thRoom}</b></th>
-  <th class="DeviceListHead"><b>${thFunctionTest}</b></th>
-  <th class="DeviceListHead"><b>${thAction}</b></th>
-  <th class="DeviceListHead"><b>${thReady}</b></th>
+  <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'>${thTypeDescriptor}</th>
+  <th class="DeviceListHead">${thPicture}</th>
+  <th class="DeviceListHead clickable" onclick="NewDevSort('desc')">${thDescriptor}</th>
+  <th class="DeviceListHead clickable" onclick="NewDevSort('sn')">${thSerialNumber}</th>
+  <th class="DeviceListHead clickable" onclick="NewDevSort('iface')">${thInterfaceCategory}</th>
+  <th class="DeviceListHead clickable" onclick="NewDevSort('trans')">${thTransmitMode}</th>
+  <th class="DeviceListHead clickable" onclick="NewDevSort('name')">${thName}</th>
+  <th class="DeviceListHead clickable" onclick="NewDevSort('func')">${thFunc}</th>
+  <th class="DeviceListHead clickable" onclick="NewDevSort('room')">${thRoom}</th>
+  <th class="DeviceListHead">${thFunctionTest}</th>
+  <th class="DeviceListHead">${thAction}</th>
+  <th class="DeviceListHead">${thReady}</th>
 </tr>
 
 <script type="text/javascript">
@@ -381,7 +381,7 @@ for (var i = 0; i < arDevices.length; i++) {
   var img = Builder.node('img', {src: "/ise/img/plus.png", id: "img" + arDevices[i]['id'], alt: "plus", onclick: "expandDevice(" + arDevices[i]['id'] + "," + i + ")"});
   td.appendChild(img);
   tr.appendChild(td);
-  td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, strCut(arDevices[i]['type'], true));
+  td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, arDevices[i]['type']);
   tr.appendChild(td);
   td = Builder.node('td', {className: 'WhiteBkgPic CLASS04314 border1px'}, [
     Builder.node('div', {id: 'picDiv' + arDevices[i]['id'], className: "CLASS04305",
@@ -391,7 +391,7 @@ for (var i = 0; i < arDevices.length; i++) {
   td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['desc'] );
   td.innerHTML = translateKey(arDevices[i]['desc']);
   tr.appendChild(td);
-  td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(arDevices[i]['sn']));
+  td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['sn']);
   tr.appendChild(td);
   td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['iface']);
   tr.appendChild(td);
@@ -401,13 +401,13 @@ for (var i = 0; i < arDevices.length; i++) {
 
   if (NAV_IE) {
     td = Builder.node('td', {className: 'WhiteBkg border1px'},
-      [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true)) ]);
+      [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']) ]);
     tr.appendChild(td);
   }
   else {
     if (isDevTypeHmIPW(arDevices[i]['type'])) {
       td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px'});
-      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, strCut(arDevices[i]['name'].replace(/:/g, ":<br/>"), false));
+      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, arDevices[i]['name'].replace(/:/g, ":<br/>"));
       divB = Builder.node('div', {
         id: 'btnRename_' + arDevices[i]["id"],
         className: 'TestButton colorGradient borderRadius2px hidden',
@@ -417,7 +417,7 @@ for (var i = 0; i < arDevices.length; i++) {
       td.appendChild(divA);
       td.appendChild(divB);
     } else {
-      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true));
+      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']);
     }
 
     tr.appendChild(td);

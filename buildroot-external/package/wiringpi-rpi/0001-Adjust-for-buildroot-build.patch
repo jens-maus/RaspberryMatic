@@ -1,46 +1,23 @@
-From 17ffb0cb301d4bf6ef900c8698d716f68cb77360 Mon Sep 17 00:00:00 2001
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 2 Dec 2015 00:22:26 +0100
-Subject: [PATCH] Adjust for buildroot build.
+- integrated changes for building within buildroot env
 
- - enable CC override
- - fix devLib/gpio include path for local build (without installing first)
- - change CFLAGS from '=' to '+=' to honour buildroot given flags
- - add linker name link for libwiringPiDev and libwiringPi for local linking
-   (without installing first)
- - fix install linker name link (do not link with absolute path)
- - add gpio-static linking target
+Signed-off-by: Jens Maus <mail@jens-maus.de>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
- - Rebased for wiringpi-8d188fa0e00bb8c6ff6eddd07bf92857e9bd533a
-
-Signed-off-by: Atanas Palavrov <palavrov@gmail.com>
----
- devLib/Makefile   |  9 +++++----
- gpio/Makefile     | 14 +++++++++-----
- wiringPi/Makefile |  7 ++++---
- 3 files changed, 18 insertions(+), 12 deletions(-)
-
-diff --git a/devLib/Makefile b/devLib/Makefile
-index cf665d6..3fb41e8 100644
---- a/devLib/Makefile
-+++ b/devLib/Makefile
-@@ -36,10 +36,10 @@ DYNAMIC=libwiringPiDev.so.$(VERSION)
- 
+diff -ruN wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb.orig/devLib/Makefile wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb/devLib/Makefile
+--- wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb.orig/devLib/Makefile	2021-06-19 18:07:42.000000000 +0200
++++ wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb/devLib/Makefile	2021-06-22 22:47:42.595145625 +0200
+@@ -37,9 +37,9 @@
  #DEBUG	= -g -O0
  DEBUG	= -O2
--CC	= gcc
+ CC	?= gcc
 -INCLUDE	= -I.
-+CC	?= gcc
 +INCLUDE	= -I../wiringPi
  DEFS	= -D_GNU_SOURCE
--CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC
-+CFLAGS	+= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC
+-CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC $(EXTRA_CFLAGS)
++CFLAGS	+= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC $(EXTRA_CFLAGS)
  
  LIBS    =
  
-@@ -69,6 +69,7 @@ $(STATIC):	$(OBJ)
+@@ -69,6 +69,7 @@
  $(DYNAMIC):	$(OBJ)
  	$Q echo "[Link (Dynamic)]"
  	$Q $(CC) -shared -Wl,-soname,libwiringPiDev.so$(WIRINGPI_SONAME_SUFFIX) -o libwiringPiDev.so.$(VERSION) -lpthread $(OBJ)
@@ -48,36 +25,33 @@ index cf665d6..3fb41e8 100644
  
  .c.o:
  	$Q echo [Compile] $<
-@@ -93,7 +94,7 @@ install:	$(DYNAMIC)
+@@ -93,7 +94,7 @@
  	$Q echo "[Install Dynamic Lib]"
  	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
  	$Q install -m 0755 libwiringPiDev.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so.$(VERSION)
 -	$Q ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so.$(VERSION)	$(DESTDIR)/lib/libwiringPiDev.so
-+	$Q ln -sf libwiringPiDev.so.$(VERSION)				$(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so
++	$Q ln -sf libwiringPiDev.so.$(VERSION)        $(DESTDIR)$(PREFIX)/lib/libwiringPiDev.so
  	$Q $(LDCONFIG)
  
  .PHONY:	install-static
-diff --git a/gpio/Makefile b/gpio/Makefile
-index 9ec160d..360d64c 100644
---- a/gpio/Makefile
-+++ b/gpio/Makefile
-@@ -32,11 +32,11 @@ endif
- 
+diff -ruN wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb.orig/gpio/Makefile wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb/gpio/Makefile
+--- wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb.orig/gpio/Makefile	2021-06-19 18:07:42.000000000 +0200
++++ wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb/gpio/Makefile	2021-06-22 22:56:03.145403795 +0200
+@@ -33,10 +33,10 @@
  #DEBUG	= -g -O0
  DEBUG	= -O2
--CC	= gcc
+ CC	?= gcc
 -INCLUDE	= -I$(DESTDIR)$(PREFIX)/include
--CFLAGS	= $(DEBUG) -Wall -Wextra $(INCLUDE) -Winline -pipe
-+CC	?= gcc
+-CFLAGS	= $(DEBUG) -Wall -Wextra $(INCLUDE) -Winline -pipe $(EXTRA_CFLAGS)
 +INCLUDE	= -I../wiringPi -I../devLib
-+CFLAGS	+= $(DEBUG) -Wall -Wextra $(INCLUDE) -Winline -pipe
++CFLAGS	+= $(DEBUG) -Wall -Wextra $(INCLUDE) -Winline -pipe $(EXTRA_CFLAGS)
  
 -LDFLAGS	= -L$(DESTDIR)$(PREFIX)/lib
 +LDFLAGS	= -L../wiringPi -L../devLib
  LIBS    = -lwiringPi -lwiringPiDev -lpthread -lrt -lm -lcrypt
  
  # May not need to  alter anything below this line
-@@ -52,9 +52,13 @@ version.h:	../VERSION
+@@ -52,9 +52,13 @@
  	$Q echo Need to run newVersion above.
  
  gpio:	$(OBJ)
@@ -92,40 +66,32 @@ index 9ec160d..360d64c 100644
  .c.o:
  	$Q echo [Compile] $<
  	$Q $(CC) -c $(CFLAGS) $< -o $@
-diff --git a/wiringPi/Makefile b/wiringPi/Makefile
-index 287fa58..81595d3 100644
---- a/wiringPi/Makefile
-+++ b/wiringPi/Makefile
-@@ -36,10 +36,10 @@ DYNAMIC=libwiringPi.so.$(VERSION)
- 
- #DEBUG	= -g -O0
- DEBUG	= -O2
--CC	= gcc
-+CC	?= gcc
+diff -ruN wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb.orig/wiringPi/Makefile wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb/wiringPi/Makefile
+--- wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb.orig/wiringPi/Makefile	2021-06-19 18:07:42.000000000 +0200
++++ wiringpi-rpi-6a17382a0ab40a9e36456e5a71bdce0a70421ffb/wiringPi/Makefile	2021-06-22 23:06:27.758204125 +0200
+@@ -39,7 +39,7 @@
+ CC	?= gcc
  INCLUDE	= -I.
  DEFS	= -D_GNU_SOURCE
--CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Winline $(INCLUDE) -pipe -fPIC
-+CFLAGS	+= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Winline $(INCLUDE) -pipe -fPIC
+-CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Winline $(INCLUDE) -pipe -fPIC $(EXTRA_CFLAGS)
++CFLAGS	+= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Winline $(INCLUDE) -pipe -fPIC $(EXTRA_CFLAGS)
  #CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Wextra -Wconversion -Winline $(INCLUDE) -pipe -fPIC
  
  LIBS    = -lm -lpthread -lrt -lcrypt
-@@ -76,6 +76,7 @@ static:
+@@ -76,6 +76,7 @@
  $(DYNAMIC):	$(OBJ)
  	$Q echo "[Link (Dynamic)]"
- 	$Q $(CC) -shared -Wl,-soname,libwiringPi.so$(WIRINGPI_SONAME_SUFFIX) -o libwiringPi.so.$(VERSION) $(LIBS) $(OBJ)
+ 	$Q $(CC) -shared -Wl,-soname,libwiringPi.so$(WIRINGPI_SONAME_SUFFIX) -o libwiringPi.so.$(VERSION) $(OBJ) $(LIBS)
 +	$Q ln -sf libwiringPi.so.$(VERSION) libwiringPi.so
  
  .c.o:
  	$Q echo [Compile] $<
-@@ -101,7 +102,7 @@ install:	$(DYNAMIC)
+@@ -101,7 +102,7 @@
  	$Q echo "[Install Dynamic Lib]"
  	$Q install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
  	$Q install -m 0755 libwiringPi.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)
 -	$Q ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)	$(DESTDIR)/lib/libwiringPi.so
-+	$Q ln -sf libwiringPi.so.$(VERSION)				$(DESTDIR)$(PREFIX)/lib/libwiringPi.so
++	$Q ln -sf libwiringPi.so.$(VERSION)       $(DESTDIR)$(PREFIX)/lib/libwiringPi.so
  	$Q $(LDCONFIG)
  
- .PHONY:	install-deb
--- 
-2.11.0
-
+ .PHONY: check-deb-destdir

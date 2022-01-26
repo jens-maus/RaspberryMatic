@@ -2,28 +2,28 @@ config BR2_PACKAGE_OCCU
 	bool "eQ-3 HomeMatic Services"
 	help
 	  HomeMatic Services by eQ-3 based on OCCU
-	  
+
 	  http://www.eq-3.de/
 
 if BR2_PACKAGE_OCCU
 
-choice 
+choice
 	prompt "RF Protocol"
 
 config BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_ONLY
 	bool "HM RF only"
-        help
-          Support BidCos-RF Protocol only
+	help
+	  Support BidCos-RF Protocol only
 
 config BR2_PACKAGE_OCCU_RF_PROTOCOL_HMIP_ONLY
 	bool "HmIP RF Only"
-        help
-          Support HomeMaticIP-RF Protocol only
+	help
+	  Support HomeMaticIP-RF Protocol only
 
 config BR2_PACKAGE_OCCU_RF_PROTOCOL_HM_HMIP
 	bool "HM and HmIP RF"
-  help
-    Support BidCos-RF and HomeMaticIP-RF Protocol
+	help
+	  Support BidCos-RF and HomeMaticIP-RF Protocol
 
 endchoice
 
@@ -31,30 +31,30 @@ choice
 	prompt "Wired Protocol"
 
 config BR2_PACKAGE_OCCU_WIRED_PROTOCOL_HM_ONLY
-  bool "HM Wired only"
-  help
-    Support HomeMatic Wired Protocol only
+	bool "HM Wired only"
+	help
+	  Support HomeMatic Wired Protocol only
 
 endchoice
 
 config BR2_PACKAGE_OCCU_WEBUI
-  bool "HomeMatic WebUI"
-  help
-    HomeMatic WebUI
+	bool "HomeMatic WebUI"
+	help
+	  HomeMatic WebUI
 
 if BR2_PACKAGE_OCCU_WEBUI
 
 config BR2_PACKAGE_OCCU_WEBUI_REGAHSS_BETA
-  bool "ReGaHss Beta"
-  default "false"
-  help
-    Install Beta version of ReGaHss
+	bool "ReGaHss Beta"
+	default "false"
+	help
+	  Install Beta version of ReGaHss
 
 endif
 
 config BR2_PACKAGE_OCCU_HMSERVER
-  bool "HomeMatic HM-/HMIPServer"
-  help
-    HomeMatic HM-/HMIPServer
+	bool "HomeMatic HM-/HMIPServer"
+	help
+	  HomeMatic HM-/HMIPServer
 
 endif

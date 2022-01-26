@@ -28938,7 +28938,7 @@ showDutyCycle = function() {
             }
 
             if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
-              dutyCycleValElm.text("DC: "+arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
+              dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
               if (iface.type === "CCU2") {
                 dutyCycleAddrElm.text("CCU:");
               } else if(iface.type === "HMIP-HAP") {
@@ -28967,7 +28967,7 @@ showDutyCycle = function() {
               }
               
               if (arInterfaceCarrierSense[ifaceBidCosRF] != csNotAvailable) {
-                carrierSenseValElm.text("CS: "+arInterfaceCarrierSense[ifaceBidCosRF] + " " + dcUnit);
+                carrierSenseValElm.text(arInterfaceCarrierSense[ifaceBidCosRF] + " " + dcUnit);
                 carrierSenseBar.css("width", arInterfaceCarrierSense[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceCarrierSense[ifaceBidCosRF]);
                 
                 carrierSenseBar.removeClass("progress-bar-info");
@@ -28981,9 +28981,9 @@ showDutyCycle = function() {
                 } else {
                   carrierSenseBar.addClass("progress-bar-info");
                 }
-
               } else {
-                carrierSenseCol.css({"display":"none"});  
+                carrierSenseValElm.text("n/a");
+                carrierSenseBar.css("width", "0%");
               }
               trPartingLineElm.show();
               showPartingLine = true;

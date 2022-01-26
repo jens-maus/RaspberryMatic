@@ -4860,9 +4860,14 @@ application {
 	height:50%;
 }
 
+#partingLine1 {
+  display: table-row;
+}
+
 .CLASS01811 {
 	padding-top: 5px;
     color: $_(textColorB); /* black */
+	border-collapse: collapse;
 }
 
 .CLASS01812 {

@@ -7117,6 +7117,7 @@ WebUI = Singleton.create({
     this.currentPageOptions  = options;
     
     this.currentPage.enter(options);
+    window.name = 'ccu-main-window';
     window.setTimeout(() => {
       if(jQuery(':focus').length === 0) {
         jQuery('#content')[0].focus();

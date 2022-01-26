@@ -11,7 +11,7 @@
 //
 
 const express = require('express');
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const { createProxyMiddleware, responseInterceptor } = require('http-proxy-middleware');
 const ipaddr = require('ipaddr.js');
 
 const apiProxy = createProxyMiddleware('/', {
@@ -19,66 +19,53 @@ const apiProxy = createProxyMiddleware('/', {
   changeOrigin: true, // for vhosted sites,
   //logLevel: 'debug',
   selfHandleResponse: true,
-  onProxyRes (proxyRes, req, res) {
-    //console.log(proxyRes.statusCode);
-    //console.log("response-headers:");
-    //console.log(proxyRes.headers);
-    //console.log("request-headers:");
-    //console.log(req.headers);
-
-    // modify Location: response header
+  timeout: 1200000, // max 20 min
+  onProxyRes: responseInterceptor(async (responseBody, proxyRes, req, res) => {
+    // modify Location: response header if present
     if(typeof(proxyRes.headers.location) !== 'undefined') {
-      var redirect = proxyRes.headers.location;
+      // replace any absolute http/https path with a relative one
+      var redirect = proxyRes.headers.location.replace(/(http|https):\/\/(.*?)\//, '/');
       redirect = req.headers['x-ingress-path'] + redirect;
-      proxyRes.headers.location = redirect;
+      res.append("location", redirect);
     }
 
-    const bodyChunks = [];
-    proxyRes.on('data', (chunk) => {
-      bodyChunks.push(chunk);
-    });
-    proxyRes.on('end', () => {
-      let body = Buffer.concat(bodyChunks);
+    // modifying textual response bodies
+    if(proxyRes.headers['content-type'] &&
+       (
+        proxyRes.headers['content-type'].includes('text/') ||
+        proxyRes.headers['content-type'].includes('application/javascript') ||
+        proxyRes.headers['content-type'].includes('application/json')
+       )
+      ) {
 
-      // forwarding source status
-      res.status(proxyRes.statusCode);
+      var body;
 
-      // forwarding source headers
-      Object.keys(proxyRes.headers).forEach((key) => {
-           res.append(key, proxyRes.headers[key]);
-      });
-
-      // modifying textual response bodies
-      if (proxyRes.headers['content-type'] &&
-          (
-           proxyRes.headers['content-type'].includes('text/') ||
-           proxyRes.headers['content-type'].includes('application/javascript') ||
-           proxyRes.headers['content-type'].includes('application/json')
-          )
-         ) {
-
-          // if this a textual response body we make sure to prepend the ingress path
-          body = body.toString('latin1');
-          body = body.replace(/(?<=["'=\\u0027 \(\\])\/(api|webui|ise|pda|config|pages|jpages|esp|upnp|tools|addons)(\\?\/)(?!hassio_ingress)/g,
-                              req.headers['x-ingress-path']+'/$1$2');
-          body = body.replace(/(?<=["'])\/(index|login|logout)\.htm/g,
-                              req.headers['x-ingress-path']+'/$1.htm');
-          body = body.replace(/window\.location\.href='\/'/g,
-                              'window.location.href=\'' + req.headers['x-ingress-path'] + '/\'');
-          body = body.replace(/window\.location\.href='\/index\.htm'/g,
-                              'window.location.href=\'' + req.headers['x-ingress-path'] + '/index.htm\'');
-
-        if(proxyRes.headers['transfer-encoding'] == 'chunked') {
-          res.end(new Buffer.from(body));
-        } else {
-          res.send(new Buffer.from(body));
-          res.end();
-        }
+      // if this a textual response body we make sure to prepend the ingress path
+      if(proxyRes.headers['content-type'].toLowerCase().includes('utf-8')) {
+        body = responseBody.toString('utf8');
       } else {
-        res.end(body);
+        body = responseBody.toString('latin1');
       }
-    });
-  },
+
+      body = body.replace(/(?<=["'= \(\\]|\\u0027)\/(api|webui|ise|pda|config|pages|jpages|esp|upnp|tools|addons|tailscale)(\\?\/)(?!hassio_ingress)/g,
+                          req.headers['x-ingress-path']+'/$1$2');
+      body = body.replace(/(?<=["'])\/(index|login|logout)\.htm/g,
+                          req.headers['x-ingress-path']+'/$1.htm');
+      body = body.replace(/window\.location\.href='\/'/g,
+                          'window.location.href=\'' + req.headers['x-ingress-path'] + '/\'');
+      body = body.replace(/window\.location\.href='\/index\.htm'/g,
+                          'window.location.href=\'' + req.headers['x-ingress-path'] + '/index.htm\'');
+
+      // convert back to a Buffer in the right character encoding
+      if(typeof(req.headers['content-type']) === 'undefined') {
+        return new Buffer.from(body, 'latin1');
+      } else {
+        return new Buffer.from(body, 'utf8');
+      }
+    } else {
+      return responseBody;
+    }
+  }),
 });
 
 const app = express();

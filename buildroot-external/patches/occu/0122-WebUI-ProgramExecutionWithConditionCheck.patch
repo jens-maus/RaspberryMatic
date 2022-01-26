@@ -1,6 +1,34 @@
 --- occu/WebUI/www/rega/esp/system.fn.orig
 +++ occu/WebUI/www/rega/esp/system.fn
-@@ -1292,15 +1292,17 @@
+@@ -1274,7 +1274,13 @@
+   Write("<td>");
+   string sClass = "ControlBtnOff";
+   if( objProg.Active() ) { sClass = "ControlBtnOn"; }
+-    Write("<table class='"#sClass#" CLASS02102' id='"#pid#"Act' >"); 
++  integer uid = system.GetSessionVar("sessionUserID");
++  object oUser = dom.GetObject(uid);
++  if(oUser.UserLevel() == iulAdmin) {
++    Write("<table class='"#sClass#" CLASS02102' id='"#pid#"Act' onclick='isePrograms.SetActive("#pid#",!" #objProg.Active() # ")'>");
++  } else {
++    Write("<table class='"#sClass#" CLASS02102' style='cursor: default; border-top: solid 1px black; border-right: solid 1px black;' id='"#pid#"Act' >");
++  }
+     Write("<tr>");
+     Write("<td  class='CLASS02103'>");
+         Write("<div align='center'>");
+@@ -1283,7 +1289,11 @@
+       Write("</td>");
+     Write("</tr>");
+     !Write("<tr><td>Aktiv</td></tr>");
+-    Write("<tr><td>${actionStatusControlLblActive}</td></tr>");
++    if( objProg.Active() ) {
++      Write("<tr><td>${actionStatusControlLblActive}</td></tr>");
++    } else {
++      Write("<tr><td>${actionStatusControlLblNotActive}</td></tr>");
++    }
+     Write("</table>");
+   Write("</td>");
+   if (system.GetVar("iStatusOnly") == 0)
+@@ -1292,15 +1302,17 @@
      !Write("<div id='"#pid#"Start' class='ControlBtnOff CLASS02104'>Start</div>");
      Write("<div id='"#pid#"Start' class='ControlBtnOff CLASS02104'>${actionStatusControlLblStart}</div>");
      Write("<script type='text/javascript'>");
@@ -34,11 +62,14 @@
        <tbody>
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -765,7 +765,9 @@
+@@ -764,8 +764,11 @@
+     "dialogBackspacePrevent" : "Bitte verwenden Sie zum Navigieren die Bedienelemente der Weboberfl%E4che.",
      "commentDialogNewHelpEnd" : "***********************************************",
      "commentActionStatusControl" : "***********************************************",
-     "actionStatusControlLblActive" : "Aktiv",
+-    "actionStatusControlLblActive" : "Aktiv",
 -    "actionStatusControlLblStart" : "Start",
++    "actionStatusControlLblActive" : "aktiv",
++    "actionStatusControlLblNotActive" : "nicht aktiv",
 +    "actionStatusControlLblStart" : "Ausf%FChren",
 +    "actionStatusControlLblStartThenOnly" : "Ausf%FChren<br/>(nur 1. DANN)",
 +    "actionStatusControlLblStartHelp" : "<b>Ausf%FChren:</b><br/><br/>Führt das Programm inkl. aller Bedingungspr%FCfungen aus. Es werden die Aktionen des &quot;DANN&quot; Teiles des Programmes ausgef%FChrt dessen Bedingungsblock &quot;WAHR&quot; ergibt. Andernfalls werden die Aktionen des &quot;SONST&quot; Teiles ausgef%FChrt.<br/><br/><b>Ausf%FChren (nur 1. DANN):</b><br/><br/>F%FChrt lediglich die Aktionen innerhalb des ersten &quot;DANN&quot; Teiles des Programmes - ohne jegliche Bedingungspr%FCfungen - aus.",
@@ -47,11 +78,14 @@
      "actionStatusControlLblShortKeyPress" : "Kurzer<br/>Tastendruck",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -792,7 +792,9 @@
+@@ -791,8 +791,11 @@
+ 
      "commentActionStatusControl" : "***********************************************",
  
-     "actionStatusControlLblActive" : "Active",
+-    "actionStatusControlLblActive" : "Active",
 -    "actionStatusControlLblStart" : "Start",
++    "actionStatusControlLblActive" : "active",
++    "actionStatusControlLblNotActive" : "not active",
 +    "actionStatusControlLblStart" : "Execute",
 +    "actionStatusControlLblStartThenOnly" : "Execute<br/>(only 1st THEN)",
 +    "actionStatusControlLblStartHelp" : "<b>Execute:</b><br/><br/>Executes the program including all condition checks. The actions within the &quot;THEN&quot; part of the program will be executed if a condition block becomes &quot;TRUE&quot;. Otherwise the actions within the &quot;ELSE&quot; part will be executed accordingly.<br/><br/><b>Execute (only 1st THEN):</b><br/><br/>Executes only the actions of the first &quot;THEN&quot; part of the program without considering any condition check whatsoever.",

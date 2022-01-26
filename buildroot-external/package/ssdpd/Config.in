@@ -1,2 +1,2 @@
 config BR2_PACKAGE_SSDPD
-  bool "Support for SSDPD Daemon"
+	bool "Support for SSDPD Daemon"

@@ -1,2 +1,2 @@
 config BR2_PACKAGE_EQ3CONFIGD
-  bool "Support for EQ3CONFIGD Daemon"
+	bool "Support for EQ3CONFIGD Daemon"

@@ -12,7 +12,8 @@ STARTWAITFILE=/var/status/HMServerStarted
 # skip this startup if not in normal mode
 [[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
-HM_SERVER=/opt/HMServer/HMIPServer.jar
+HM_SERVER=/opt/HMServer/HMIPServer.jar:/opt/HMServer/coupling/ESHBridge.jar
+HM_SERVER_CLASS="de.eq3.ccu.server.ip.HMIPServer"
 HM_SERVER_ARGS="/var/etc/crRFD.conf /var/etc/HMServer.conf"
 HM_SERVER_DEVNODE=/dev/mmd_hmip
 PIDFILE=/var/run/HMIPServer.pid
@@ -31,6 +32,37 @@ init() {
     fi
   fi
 
+  # if the userfs is located on a non-mmc device (not on a SD card)
+  # we can safely use the old /usr/local/sdcard directory path as
+  # the general storagePath for diagrams and daily backups
+  storagePath=""
+  if [[ "${HM_HOST}" == "oci" ]] || grep " /usr/local " /proc/mounts | grep -qv "^/dev/mmc"; then
+    storagePath="/usr/local/sdcard"
+    mkdir -p ${storagePath}
+  fi
+
+  # users can override the storagePath by specifying an own storage
+  # path in /etc/config/CustomStoragePath
+  if [[ -f /etc/config/CustomStoragePath ]]; then
+    storagePath=$(cat /etc/config/CustomStoragePath)
+  fi
+
+  # in case a storagePath is specified we make sure it is setup
+  # correct and in case it is empty or does not exist we skip this
+  # so that the WebUI will remind users to insert an USB drive for
+  # storing diagrams+backups
+  if [[ -n "${storagePath}" ]] && [[ -d "${storagePath}" ]]; then
+    if [[ ! -d "${storagePath}/measurement" ]]; then
+      mkdir -p "${storagePath}/measurement"
+    fi
+    if [[ ! -e "${storagePath}/.nobackup" ]]; then
+      touch "${storagePath}/.nobackup"
+    fi
+    ln -sfn "${storagePath}" /media/usb0
+    touch /var/status/SDinitialised
+    touch /var/status/hasSD
+  fi
+
   # lets build HMServer.conf with own diagram path
   sed "s|^diagramDatabasePath=.*$|diagramDatabasePath=/tmp/measurement|" /etc/HMServer.conf >/var/etc/HMServer.conf
 
@@ -42,6 +74,18 @@ init() {
   else
     mkdir -p /tmp/measurement
   fi
+
+  # sanitize the /etc/config/firmware path to make sure no directory without
+  # an 'info' file or info file without any "Name=" entry is located within
+  # (cf. https://github.com/jens-maus/RaspberryMatic/issues/1302)
+  for dir in /etc/config/firmware/*; do
+    if [[ -d "${dir}" ]]; then
+      if [[ ! -f "${dir}/info" ]] || ! grep -q -e "Name=." "${dir}/info"; then
+        echo -n "WARNING: removed invalid ${dir}, "
+        rm -rf "${dir}"
+      fi
+    fi
+  done
 
   if [[ -n "${HM_HMIP_DEV}" ]]; then
 
@@ -58,20 +102,24 @@ init() {
     # when generating /var/etc/crRFD.conf
     sed "s|^Adapter\.1\.Port=/dev/.*$|Adapter.1.Port=${HM_SERVER_DEVNODE}|" ${CFG_TEMPLATE_DIR}/crRFD.conf >/var/etc/crRFD.conf
 
-    # we disable Advanced HmIP Routing (Lan.Routing.Enabled) in crRFD.conf
-    # if the used HmIP RF module doesn't support it
-    # (which only the RPI-RF-MOD support)
-    if [[ "${HM_HMIP_DEV}" != "RPI-RF-MOD" ]]; then
-      sed -i "s|^Lan\.Routing\.Enabled=.*$|Lan.Routing.Enabled=false|" /var/etc/crRFD.conf
+    # enable Advanced HmIP capabilities in crRFD.conf if the used HmIP RF module supports it
+    if [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]] || [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
+      ADVANCED_HMIP="true"
     else
-      # enable Adapter.Local.Device.Enabled in case a RPI-RF-MOD is used. This
-      # will bring up the additional CO-PROCESSOR device which will allow to show
-      # up the DutyCycle and CarrierSense parameters.
-      sed -i "s|^Adapter\.Local\.Device\.Enabled=.*$|Adapter.Local.Device.Enabled=true|" /var/etc/crRFD.conf
+      ADVANCED_HMIP="false"
     fi
 
+    # set Adapter.Local.Device.Enabled. This will bring up the additional CO-PROCESSOR
+    # device which will allow to show up the DutyCycle and CarrierSense parameters.
+    sed -i "s|^Adapter\.Local\.Device\.Enabled=.*$|Adapter.Local.Device.Enabled=${ADVANCED_HMIP}|" /var/etc/crRFD.conf
+
+    # set Lan.Routing.Enabled which will enable the advanced HmIP Routing capabilities
+    # in crRFD.
+    sed -i "s|^Lan\.Routing\.Enabled=.*$|Lan.Routing.Enabled=${ADVANCED_HMIP}|" /var/etc/crRFD.conf
+
   else
-    HM_SERVER=/opt/HMServer/HMServer.jar
+    HM_SERVER=/opt/HMServer/HMServer.jar:/opt/HMServer/coupling/ESHBridge.jar
+    HM_SERVER_CLASS="de.eq3.ccu.server.HMServer"
     HM_SERVER_ARGS="/var/etc/HMServer.conf"
     HM_SERVER_DEVNODE=""
   fi
@@ -102,13 +150,7 @@ start() {
 
   # get the architecture
   ARCH=$(uname -m)
-
-  # if we run on aarch64 we have to override the libNRJavaSerial definition
-  # so that the aarch64 (v8) version is used we supply our own
   JAVAOPT=
-  if [[ "${ARCH}" == "aarch64" ]];then
-    JAVAOPT="-DlibNRJavaSerial.userlib=/opt/HMServer/libNRJavaSerialv8.so"
-  fi
 
   # calculate the maximum used heap size (-Xmx) depending on the
   # total amount of RAM we have (use max. 25%) - use multiple of 128MB
@@ -120,7 +162,7 @@ start() {
   fi
 
   # shellcheck disable=SC2086
-  start-stop-daemon -b -S -q -m -p "${PIDFILE}" --exec java -- -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts="${HM_SERVER_DEVNODE}" -jar "${HM_SERVER}" ${HM_SERVER_ARGS}
+  start-stop-daemon -b -S -q -m -p "${PIDFILE}" --exec java -- -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts="${HM_SERVER_DEVNODE}" -cp "${HM_SERVER}" ${HM_SERVER_CLASS} ${HM_SERVER_ARGS}
   echo -n "."
   waitStartupComplete
 }

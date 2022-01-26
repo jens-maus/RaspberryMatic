@@ -21,7 +21,7 @@
 
 <sub>[Deutschsprachiges 🇩🇪🇦🇹🇨🇭 ReadMe](README.de.md)</sub>
 ___
-RaspberryMatic is a free and non-commercial OpenSource operating system alternative for the _[CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html)_ or  _[ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)_ smart home central systems to configure and use [HomeMatic](http://homematic.com/)/BidCos-RF or [homematicIP](https://www.homematic-ip.com/) IoT hardware distributed by [eQ-3](https://eq-3.de)/[ELV](https://elv.de/). RaspberryMatic has the aim to be 100% compatible to a standard _HomeMatic CCU control central_ for a cloud-free use of HomeMatic IoT hardware on freely available single-board-computers (SBC) like a [RaspberryPi](https://www.raspberrypi.org/), [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/), [Hardkernel ODROID](https://www.hardkernel.com/shop/odroid-c4/) or even as a virtual appliance on modern virtual environments (e.g. vmWare ESXi, Proxmox, VirtualBox, Docker/OCI, Kubernetes/K8s, etc.). On top of that, it provides additional exclusive features on different levels (WebUI, Linux-OS, etc.) to provide users with an enhanced user experience compared to the standard vendor-provided CCU firmware from eQ3/ELV.
+RaspberryMatic is a free and non-commercial open-source operating system alternative for running a cloud-free smart-home IoT central to provide connectivity to the [homematicIP](https://www.homematic-ip.com/) / [HomeMatic](http://homematic.com/) hardware line of IoT devices developed by [eQ-3](https://eq-3.de) and distributed by [ELV](https://elv.de/). RaspberryMatic has the aim to be 100% compatible to the vendor-developed _HomeMatic CCU3 control central_ (CCU3) system. It can be directly installed on a _[CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html)_ or _[ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)_ hardware device. Alternatively, it can also be installed on a wide range of freely available single-board-computers (SBC) like a [RaspberryPi](https://www.raspberrypi.org/), [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/), [Hardkernel ODROID](https://www.hardkernel.com/product-category/odroid-board/) or even on full-fledged hardware platforms like an [Intel NUC](https://www.intel.com/content/www/us/en/products/details/nuc.html) system. Furthermore, it can be run as a virtual appliance in modern virtualization environments (e.g. Proxmox VE, VirtualBox, Synology VMM, Docker/OCI, Kubernetes/K8s, vmWare ESXi, etc.) or even as a pure [Home Assistant](https://www.home-assistant.io/) Add-On. On top of that wider range of supported operating environments, it also comes with exclusive features on different levels (WebUI, Linux OS, connectivity, etc.) to support end users with a more modern and advanced user experience compared to the vendor-provided CCU3 operating system.
 
 [more...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung)
 
@@ -42,7 +42,7 @@ RaspberryMatic can be directly installed on the following, commercially distribu
 * _Hardware_:
    * [RaspberryPi](https://www.raspberrypi.org/)
    * [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
-   * [Hardkernel ODROID](https://www.hardkernel.com/shop/odroid-c4/)
+   * [Hardkernel ODROID](https://www.hardkernel.com/shop/odroid-n2-with-4gbyte-ram-2/)
    * [Intel NUC](https://www.intel.de/content/www/de/de/products/boards-kits/nuc.html)
 
 ...or even as a virtual appliance on the following virtualization environments:
@@ -55,6 +55,8 @@ RaspberryMatic can be directly installed on the following, commercially distribu
    * [QNAP VirtualizationStation](https://www.qnap.com/event/station/de-de/virtualization.php)
    * [vmWare Workstation Player](https://www.vmware.com/de/products/workstation-player/workstation-player-evaluation.html)
    * [QEmu/KVM](https://www.qemu.org/)
+   * [UNRAID](https://unraid.net/)
+   * [XCP-ng/XenServer](https://xcp-ng.org/)
    * [HyperV](https://docs.microsoft.com/de-de/virtualization/hyper-v-on-windows/)
    * [Docker/OCI](https://www.docker.com/)
    * [Kubernetes/K8s](https://kubernetes.io/)
@@ -67,7 +69,7 @@ Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will 
 
 [more...](https://github.com/jens-maus/RaspberryMatic/wiki/Installation#schnellstart)
 
-## :memo: Documentation
+## :memo: Documentation ([🇩🇪](https://github.com/jens-maus/RaspberryMatic/wiki/Home)/[🇺🇸](https://github.com/jens-maus/RaspberryMatic/wiki/en.Home))
 1. [Introduction](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung)
    * [Requirements](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen)
    * [Features](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#features)
@@ -91,6 +93,8 @@ Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will 
      * [QNAP VirtualizationStation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-QNAP-VirtualizationStation)
      * [vmWare Workstation Player](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-Workstation-Player)
      * [QEmu/KVM](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-QEmu)
+     * [UNRAID](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-UNRAID)
+     * [XCP-ng/XenServer](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-XCPng)
      * [HyperV](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HyperV)
      * [Docker/OCI](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Docker-OCI)
      * [Kubernetes/K8s](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Kubernetes)
@@ -116,6 +120,10 @@ Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will 
      * [LAN-Gateway Mode](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#lan-gateway-betrieb)
      * [USV Client/Server Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#usv-clientserver-nut)
      * [USB-Boot Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#usb-boot)
+     * [Monit-WatchDog WebUI](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#monit-watchdog-weboberfl%C3%A4che)
+     * [HB-RF-ETH Setup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#hb-rf-eth-anbindung)
+     * [Individual Diagramm/Backup-Path](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#individueller-diagrammbackup-speicherpfad)
+     * [Own commands during bootup](https://github.com/jens-maus/RaspberryMatic/wiki/Experten-Features#eigene-aktionen-während-des-bootvorgangs)
 5. [Support, Contributions](https://github.com/jens-maus/RaspberryMatic/wiki/Support)
    * [Known Issues](https://github.com/jens-maus/RaspberryMatic/wiki/Support#bekannte-probleme)
    * [Request Help](https://github.com/jens-maus/RaspberryMatic/wiki/Support#hilfe-suchen)
@@ -134,7 +142,7 @@ On top of that, direct contributions by sending in PullRequests and source code 
 [more...](https://github.com/jens-maus/RaspberryMatic/wiki/Support)
 
 ## :scroll: Licenses
-The RaspberryMatic  build enviroment itself – the files in this git repository – as well as the downloadable images in the Releases section are distributed under the open source [Apache License 2.0](https://opensource.org/licenses/Apache-2.0) license. RaspberryMatic itself is distributed completly free of charge and without any commercial intension whatsoever. Please note, that on top of the Apache-2.0 license RaspberryMatic itself is distributed, some components (e.g. the underlying Buildroot/Linux System) can be distributed under different licenses. E.g. Buildroot/Linux itself is distributed under the [GPLv2](http://www.gnu.org/licenses/gpl-2.0.html) which could have other implications when changing source parts of these components. Furthermore, the [eQ-3 OCCU](https://github.com/eq-3/occu) components RaspberryMatic uses to provide the HomeMatic/homematicIP interconnectivity are distributed under the [HMSL](https://github.com/eq-3/occu/blob/master/LicenseEN.txt) license terms.
+The RaspberryMatic project itself – the files in this repository – as well as the downloadable binary images in the [Releases](https://github.com/jens-maus/RaspberryMatic/releases) section are distributed under conditions of the open source [Apache License 2.0](https://opensource.org/licenses/Apache-2.0) license, if not otherwise stated. RaspberryMatic itself is distributed completly free of charge and without any commercial intension whatsoever. Please note, that on top of the Apache-2.0 license, under which RaspberryMatic itself is distributed, other components (e.g. the underlying Buildroot/Linux Operating System) are distributed under different licenses. E.g. Buildroot/Linux itself is distributed under the [GPLv2](http://www.gnu.org/licenses/gpl-2.0.html) which could have other implications when changing source parts or distributing own RaspberryMatic images. Furthermore, the [eQ-3 OCCU](https://github.com/eq-3/occu) components RaspberryMatic uses to provide the HomeMatic/homematicIP interconnectivity are re-distributed under the [HMSL](https://github.com/eq-3/occu/blob/master/LicenseEN.txt) license terms. Furthermore, the RaspberryMatic logo and all other graphical image files in this repository and the downloadable binary images which are closely linked to this project are copyrighted by its sole authors. Any commercial and non-commercial (re-)use of these graphical image files or use of the RaspberryMatic logo are strictly prohibited when distributing own binary distributions or forked versions of RaspberryMatic.
 
 ### Disclaimer of Warranty
 All project contributors provide RaspberryMatic (and each Contributor provides its Contributions) on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. You are solely responsible for determining the appropriateness of using or redistributing RaspberryMatic and assume any risks associated with Your exercise of permissions under this License.

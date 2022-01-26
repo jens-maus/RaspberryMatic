@@ -11,6 +11,8 @@ on:
       - '**.md'
       - 'helm/**'
       - 'release/LATEST-VERSION.js'
+      - 'release/rpi-imager.json'
+      - 'home-assistant-addon-dev/config.json'
   pull_request:
     branches-ignore:
       - 'gh-pages'
@@ -20,12 +22,14 @@ on:
       - '**.md'
       - 'helm/**'
       - 'release/LATEST-VERSION.js'
+      - 'release/rpi-imager.json'
+      - 'home-assistant-addon-dev/config.json'
   workflow_dispatch:
     inputs:
       skip_build:
         description: 'Skip build (for testing workflow)?'
         required: true
-        default: "false"
+        default: "true"
 
 env:
   # NOTE: secrets cannot be access directly in conditions
@@ -39,7 +43,7 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@v2.4.0
 
     - name: Check Dockerfile
       uses: brpaz/hadolint-action@v1.5.0
@@ -49,7 +53,7 @@ jobs:
     - name: Check shell scripts
       uses: ludeeus/action-shellcheck@1.1.0
       with:
-        ignore: buildroot-external/package/neoserver/pkg/mediola/neo_server buildroot-patches/0010-lib32-integration/buildroot/support/scripts
+        ignore: buildroot-external/package/neoserver/pkg/mediola/neo_server buildroot-patches/0010-lib32-integration/buildroot/support/scripts buildroot-external/package/xe-guest-utilities
       env:
         SHELLCHECK_OPTS: -e SC3010 -e SC3014 -e SC3057 -e SC3036 -e SC3028 -e SC3020
 
@@ -57,6 +61,10 @@ jobs:
       uses: frenck/action-addon-linter@main
       with:
         path: "./home-assistant-addon"
+
+    - name: Check Package consistency
+      run: |
+        make check
 
   build:
     name: CI build [${{ matrix.platform }}]
@@ -75,14 +83,16 @@ jobs:
     
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2.3.4
+      uses: actions/checkout@v2.4.0
 
     - name: Install Dependencies
       run: |
-        apt update
-        apt install -y --no-install-recommends wget bc cpio rsync zip python
+        if ! dpkg-query -l wget bc cpio rsync zip python >/dev/null 2>&1; then
+          apt update
+          apt install -y --no-install-recommends wget bc cpio rsync zip python
+        fi
         if ! getent group | grep -q ^builder:; then groupadd -g 48 builder; fi
-        if ! getent passwd | grep -q ^builder:; then useradd -m -u 1003 -g 48 -G sudo builder;fi
+        if ! getent passwd | grep -q ^builder:; then useradd -m -u 1003 -g 48 -G sudo builder; fi
         if ! grep -q ^builder; then echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers; fi
         chown -R builder .
 
@@ -93,7 +103,11 @@ jobs:
         echo "OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)" >> $GITHUB_ENV
         echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
         echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
-        echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
+        if [[ -z "${{ github.event.inputs.skip_build }}" ]]; then
+          echo "FAKE_BUILD=true" >> $GITHUB_ENV
+        else
+          echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
+        fi
         echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
         echo "::set-output name=build_version::$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)"
 
@@ -170,7 +184,7 @@ jobs:
     needs: build
 
     steps:
-    - uses: actions/checkout@v2.3.4
+    - uses: actions/checkout@v2.4.0
 
     - name: Setup Environment
       run: |
@@ -207,21 +221,22 @@ jobs:
 
     - name: Set up Docker Buildx
       id: buildx
-      uses: docker/setup-buildx-action@v1.3.0
+      uses: docker/setup-buildx-action@v1.6.0
       with:
         version: latest
         install: true
     
     - name: Login to GitHub Container Registry
       if: env.SECRETS_ARE_AVAILABLE == 'true'
-      uses: docker/login-action@v1.9.0
+      uses: docker/login-action@v1.12.0
       with:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.CR_PAT }}
     
     - name: Build and push container image
-      uses: docker/build-push-action@v2.5.0
+      if: github.event.inputs.skip_build == 'false'
+      uses: docker/build-push-action@v2.8.0
       id: docker_build
       with:
         context: oci_build
@@ -260,7 +275,7 @@ jobs:
 
     #Testing
     - name: Build and load container image for test
-      uses: docker/build-push-action@v2.5.0
+      uses: docker/build-push-action@v2.8.0
       id: docker_build_test
       with:
         context: oci_build
@@ -308,6 +323,7 @@ jobs:
         sudo -E ./buildroot-external/board/oci/deploy.sh -f
     
     - name: Test container startup+stop
+      if: github.event.inputs.skip_build == 'false'
       run: |
         error=0
         n=1
@@ -327,6 +343,7 @@ jobs:
         exit $error
 
     - name: Upload debug information
+      if: github.event.inputs.skip_build == 'false'
       uses: actions/upload-artifact@v2
       with:
         path: debug_output.tgz

@@ -89,13 +89,14 @@ install_hmserver:
 ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a HMserver/opt/HMServer/HMIPServer.jar $(TARGET_DIR)/opt/HMServer/
 	cp -a HMserver/opt/HmIP $(TARGET_DIR)/opt/
+	cp -R HMServer-Beta/opt/HmIP/* $(TARGET_DIR)/opt/HmIP/
 	cp -a HMserver/opt/HMServer/HMServer.jar $(TARGET_DIR)/opt/HMServer/
+	cp -a HMserver/opt/HMServer/coupling $(TARGET_DIR)/opt/HMServer/
 endif
 
 update_webui:
-	ln -sf /usr/local/.firmwareUpdate/EULA.de             $(TARGET_DIR)/www/rega/EULA.de
-	ln -sf /usr/local/.firmwareUpdate/EULA.en             $(TARGET_DIR)/www/rega/EULA.en
-	ln -sf /usr/local/.firmwareUpdate/EULA.tr             $(TARGET_DIR)/www/rega/EULA.tr
+	ln -sf /tmp/EULA.de             											$(TARGET_DIR)/www/rega/EULA.de
+	ln -sf /tmp/EULA.en             											$(TARGET_DIR)/www/rega/EULA.en
 	ln -sf ${OCCU_ROOT}/www/tcl/extern/cgi.tcl            $(TARGET_DIR)/www/cgi.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/common.tcl        $(TARGET_DIR)/www/common.tcl
 	ln -sf ${OCCU_ROOT}/www/tcl/eq3_old/session.tcl       $(TARGET_DIR)/www/session.tcl

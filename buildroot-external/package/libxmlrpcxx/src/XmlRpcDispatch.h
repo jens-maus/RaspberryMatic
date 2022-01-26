@@ -8,6 +8,7 @@
 /* changed by eQ-3 Entwicklung GmbH 2006 */
 
 #include "dllexport.h"
+#include <stdint.h>
 
 #if defined(_MSC_VER)
 # pragma warning(disable:4786)    // identifier was truncated in debug info
@@ -55,7 +56,7 @@ namespace XmlRpc {
     //! Watch current set of sources and process events for the specified
     //! duration (in ms, -1 implies wait forever, or until exit is called)
     //! return true if an event was received and false in case of timeout
-    bool work(long msTime);
+    bool work(int32_t msTime);
 
     //! Exit from work routine
     void exit();
@@ -66,7 +67,7 @@ namespace XmlRpc {
   protected:
 
     // helper
-    unsigned long getTime();
+    uint32_t getTime();
 
     // A source to monitor and what to monitor it for
     struct MonitoredSource {

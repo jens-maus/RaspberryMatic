@@ -65,7 +65,7 @@ namespace XmlRpc {
     bool bindAndListen(int port, int backlog = 5);
 
     //! Process client requests for the specified time
-    void work(long msTime);
+    void work(int32_t msTime);
 
     //! Temporarily stop processing client requests and exit the work() method.
     void exit();

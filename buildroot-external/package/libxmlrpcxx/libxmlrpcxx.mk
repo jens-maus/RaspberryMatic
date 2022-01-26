@@ -6,7 +6,7 @@
 #
 ################################################################################
 
-LIBXMLRPCXX_VERSION = 0.7
+LIBXMLRPCXX_VERSION = 0.8
 LIBXMLRPCXX_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/libxmlrpcxx
 LIBXMLRPCXX_SITE_METHOD = local
 LIBXMLRPCXX_LICENSE = LGPL-2.1

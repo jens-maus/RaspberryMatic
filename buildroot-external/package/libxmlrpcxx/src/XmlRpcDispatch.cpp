@@ -81,7 +81,7 @@ XmlRpcDispatch::setSourceEvents(XmlRpcSource* source, unsigned eventMask)
 
 // Watch current set of sources and process events
 bool
-XmlRpcDispatch::work(long msTime)
+XmlRpcDispatch::work(int32_t msTime)
 {
 	_doClear = false;
 	_inWork = true;
@@ -210,14 +210,14 @@ XmlRpcDispatch::clear()
 }
 
 
-unsigned long
+uint32_t
 XmlRpcDispatch::getTime()
 {
 #ifdef USE_FTIME
   struct timeb	tbuff;
 
   ftime(&tbuff);
-  return (unsigned long)((tbuff.time * 1000) + tbuff.millitm + (tbuff.timezone * 60000));
+  return static_cast<uint32_t>((tbuff.time * 1000) + tbuff.millitm + (tbuff.timezone * 60000));
 #else
   struct timeval	tv;
   struct timezone	tz;

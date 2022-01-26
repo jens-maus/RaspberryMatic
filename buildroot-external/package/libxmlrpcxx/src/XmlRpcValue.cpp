@@ -52,14 +52,14 @@ namespace XmlRpc {
   static const char MEMBER_ETAG[]   = "</member>";
   static const char STRUCT_ETAG[]   = "</struct>";
 
-  static const unsigned long STREAM_TAG_INTEGER  = 0x001;
-  static const unsigned long STREAM_TAG_BOOLEAN  = 0x002;
-  static const unsigned long STREAM_TAG_STRING   = 0x003;
-  static const unsigned long STREAM_TAG_DOUBLE   = 0x004;
-  static const unsigned long STREAM_TAG_DATETIME = 0x005;
-  static const unsigned long STREAM_TAG_BINARY   = 0x006;
-  static const unsigned long STREAM_TAG_ARRAY    = 0x100;
-  static const unsigned long STREAM_TAG_STRUCT   = 0x101;
+  static const uint32_t STREAM_TAG_INTEGER  = 0x001;
+  static const uint32_t STREAM_TAG_BOOLEAN  = 0x002;
+  static const uint32_t STREAM_TAG_STRING   = 0x003;
+  static const uint32_t STREAM_TAG_DOUBLE   = 0x004;
+  static const uint32_t STREAM_TAG_DATETIME = 0x005;
+  static const uint32_t STREAM_TAG_BINARY   = 0x006;
+  static const uint32_t STREAM_TAG_ARRAY    = 0x100;
+  static const uint32_t STREAM_TAG_STRUCT   = 0x101;
       
   // Format strings
   std::string XmlRpcValue::_doubleFormat("%f");
@@ -294,9 +294,9 @@ namespace XmlRpc {
 
 	const char* data=valueStream.c_str()+*offset;
 
-	if(valueStream.length()<(*offset)+sizeof(long))return false;
+	if(valueStream.length()<(*offset)+sizeof(int32_t))return false;
 
-	long tag;
+	int32_t tag;
 	memcpy(&tag, data, 4);
 	tag=ntohl(tag);
 	*offset+=4;
@@ -426,7 +426,7 @@ namespace XmlRpc {
   {
     const char* valueStart = valueXml.c_str() + *offset;
     char* valueEnd;
-    long ivalue = strtol(valueStart, &valueEnd, 10);
+    int32_t ivalue = strtol(valueStart, &valueEnd, 10);
     if (valueEnd == valueStart || (ivalue != 0 && ivalue != 1))
       return false;
 
@@ -450,7 +450,7 @@ namespace XmlRpc {
   {
 	const char* data=valueStream.c_str()+*offset;
 
-	if(valueStream.length()<(unsigned long)(*offset)+1)return false;
+	if(valueStream.length() < static_cast<uint32_t>(*offset)+1)return false;
 
     _type = TypeBoolean;
     _value.asBool = data[0]!=0;
@@ -461,7 +461,7 @@ namespace XmlRpc {
   std::string XmlRpcValue::boolToStream() const
   {
     std::string stream;
-	unsigned long tag=htonl(STREAM_TAG_BOOLEAN);
+	uint32_t tag=htonl(STREAM_TAG_BOOLEAN);
 	stream.append((char*)&tag, 4);
 	stream.append(_value.asBool ? "\1" : "\0", 1);
     return stream;
@@ -474,7 +474,7 @@ namespace XmlRpc {
 	const char* end=strpbrk(data, ",}]");
 	if(!end)end=valueStream.c_str()+valueStream.size();
 
-	unsigned long size=end-data;
+	uint32_t size=end-data;
 	if(size==4 && strncmp(data, "true", 4)==0){
 	    _type = TypeBoolean;
 		_value.asBool = true;
@@ -498,7 +498,7 @@ namespace XmlRpc {
   {
     const char* valueStart = valueXml.c_str() + *offset;
     char* valueEnd;
-    long ivalue = strtol(valueStart, &valueEnd, 10);
+    int32_t ivalue = strtol(valueStart, &valueEnd, 10);
     if (valueEnd == valueStart)
       return false;
 
@@ -525,10 +525,10 @@ namespace XmlRpc {
   {
 	const char* data=valueStream.c_str()+*offset;
 
-	unsigned long v;
+	uint32_t v;
 	memcpy(&v, data, 4);
 	v=ntohl(v);
-	if(valueStream.length()<(unsigned long)(*offset)+4)return false;
+	if(valueStream.length() < static_cast<uint32_t>(*offset)+4)return false;
 
     _type = TypeInt;
     _value.asInt = int(v);
@@ -539,9 +539,9 @@ namespace XmlRpc {
   std::string XmlRpcValue::intToStream() const
   {
     std::string stream;
-	unsigned long tag=htonl(STREAM_TAG_INTEGER);
+	uint32_t tag=htonl(STREAM_TAG_INTEGER);
 	stream.append((char*)&tag, 4);
-	unsigned long value=htonl(_value.asInt);
+	uint32_t value=htonl(_value.asInt);
 	stream.append((char*)&value, 4);
     return stream;
   }
@@ -552,10 +552,10 @@ namespace XmlRpc {
 
 	const char* end=strpbrk(data, ",}]");
 	if(!end)end=valueStream.c_str()+valueStream.size();
-	unsigned long size=end-data;
+	uint32_t size=end-data;
 
     char* scanEnd;
-    long ivalue = strtol(data, &scanEnd, 0);
+    int32_t ivalue = strtol(data, &scanEnd, 0);
     if (scanEnd != end)
       return false;
 
@@ -605,7 +605,7 @@ namespace XmlRpc {
   bool XmlRpcValue::doubleFromStream(std::string const& valueStream, int* offset)
   {
 	const char* data=valueStream.c_str()+*offset;
-	if(valueStream.length()<(unsigned long)(*offset)+8)return false;
+	if(valueStream.length() < static_cast<uint32_t>(*offset)+8)return false;
 	
 	int mantissa;
 	memcpy(&mantissa, data, 4);
@@ -625,14 +625,14 @@ namespace XmlRpc {
   std::string XmlRpcValue::doubleToStream() const
   {
     std::string stream;
-	unsigned long tag=htonl(STREAM_TAG_DOUBLE);
+	uint32_t tag=htonl(STREAM_TAG_DOUBLE);
 	stream.append((char*)&tag, 4);
 	int mantissa;
 	int exponent;
 	mantissa=int(frexp(_value.asDouble, &exponent)*double(1<<30));
-	unsigned long temp=htonl((unsigned long)mantissa);
+	uint32_t temp=htonl(static_cast<uint32_t>(mantissa));
 	stream.append((char*)&temp, 4);
-	temp=htonl((unsigned long)exponent);
+	temp=htonl(static_cast<uint32_t>(exponent));
 	stream.append((char*)&temp, 4);
     return stream;
   }
@@ -643,7 +643,7 @@ namespace XmlRpc {
 
 	const char* end=strpbrk(data, ",}]");
 	if(!end)end=valueText.c_str()+valueText.size();
-	unsigned long size=end-data;
+	uint32_t size=end-data;
 
     char* scanEnd;
     double dvalue = strtod(data, &scanEnd);
@@ -691,9 +691,9 @@ namespace XmlRpc {
   {
 	const char* data=valueStream.c_str()+*offset;
 
-	if(valueStream.length()<(unsigned long)(*offset)+4)return false;
+	if(valueStream.length() < static_cast<uint32_t>(*offset)+4)return false;
 
-	unsigned long length;
+	uint32_t length;
 	memcpy(&length, data, 4);
 	length=ntohl(length);
 
@@ -709,10 +709,10 @@ namespace XmlRpc {
   std::string XmlRpcValue::stringToStream() const
   {
     std::string stream;
-	unsigned long tag=htonl(STREAM_TAG_STRING);
+	uint32_t tag=htonl(STREAM_TAG_STRING);
 	stream.append((char*)&tag, 4);
 	std::string* value=_value.asString;
-	unsigned long length=htonl(value->length());
+	uint32_t length=htonl(value->length());
 	stream.append((char*)&length, 4);
 	stream.append(*value);
     return stream;
@@ -840,9 +840,9 @@ namespace XmlRpc {
   {
 	const char* data=valueStream.c_str()+*offset;
 
-	if(valueStream.length()<(unsigned long)(*offset)+4)return false;
+	if(valueStream.length() < static_cast<uint32_t>(*offset)+4)return false;
 
-	unsigned long value;
+	uint32_t value;
 	memcpy(&value, data, 4);
 	time_t t=ntohl(value);
 	struct tm _ptm;
@@ -857,9 +857,9 @@ namespace XmlRpc {
   std::string XmlRpcValue::timeToStream() const
   {
     std::string stream;
-	unsigned long tag=htonl(STREAM_TAG_DATETIME);
+	uint32_t tag=htonl(STREAM_TAG_DATETIME);
 	stream.append((char*)&tag, 4);
-	unsigned long value=(unsigned long)mktime(_value.asTime);
+	uint32_t value=static_cast<uint32_t>(mktime(_value.asTime));
 	value=htonl(value);
 	stream.append((char*)&value, 4);
     return stream;
@@ -871,7 +871,7 @@ namespace XmlRpc {
 
 	const char* end=strpbrk(data, ",}]");
 	if(!end)end=valueText.c_str()+valueText.size();
-	unsigned long size=end-data;
+	uint32_t size=end-data;
 	if(size!=17)return false;
     struct tm t;
     if (sscanf(data,"%4d%2d%2dT%2d:%2d:%2d",&t.tm_year,&t.tm_mon,&t.tm_mday,&t.tm_hour,&t.tm_min,&t.tm_sec) != 6)
@@ -939,9 +939,9 @@ namespace XmlRpc {
   {
 	const char* data=valueStream.c_str()+*offset;
 
-	if(valueStream.length()<(unsigned long)(*offset)+4)return false;
+	if(valueStream.length() < static_cast<uint32_t>(*offset)+4)return false;
 
-	unsigned long length;
+	uint32_t length;
 	memcpy(&length, data, 4);
 	length=ntohl(length);
 
@@ -960,12 +960,12 @@ namespace XmlRpc {
   std::string XmlRpcValue::binaryToStream() const
   {
     std::string stream;
-	unsigned long tag=htonl(STREAM_TAG_BINARY);
+	uint32_t tag=htonl(STREAM_TAG_BINARY);
 	stream.append((char*)&tag, 4);
 	BinaryData* value=_value.asBinary;
-	unsigned long length=htonl(value->size());
+	uint32_t length=htonl(value->size());
 	stream.append((char*)&length, 4);
-	unsigned long size=stream.size();
+	uint32_t size=stream.size();
 	stream.resize(size+value->size());
 	std::copy(value->begin(), value->end(), stream.begin()+size);
     return stream;
@@ -979,7 +979,7 @@ namespace XmlRpc {
 	data++;
 	const char* end=strpbrk(data, ",}]");
 	if(!end)end=valueText.c_str()+valueText.size();
-	unsigned long size=(end-data);
+	uint32_t size=(end-data);
 	if(size%2)return false;
 
 	BinaryData* bin=new BinaryData();
@@ -1066,9 +1066,9 @@ namespace XmlRpc {
 
 	const char* data=valueStream.c_str()+*offset;
 
-	if(valueStream.length()<(unsigned long)(*offset)+4)return false;
+	if(valueStream.length() < static_cast<uint32_t>(*offset)+4)return false;
 
-	unsigned long length;
+	uint32_t length;
 	memcpy(&length, data, 4);
 	length=ntohl(length);
 
@@ -1094,10 +1094,10 @@ namespace XmlRpc {
   std::string XmlRpcValue::arrayToStream() const
   {
     std::string stream;
-	unsigned long tag=htonl(STREAM_TAG_ARRAY);
+	uint32_t tag=htonl(STREAM_TAG_ARRAY);
 	stream.append((char*)&tag, 4);
 	ValueArray* value=_value.asArray;
-	unsigned long length=htonl(value->size());
+	uint32_t length=htonl(value->size());
 	stream.append((char*)&length, 4);
 	length=value->size();
 	for(unsigned int i=0;i<length;i++){
@@ -1199,9 +1199,9 @@ namespace XmlRpc {
 
 	const char* data=valueStream.c_str()+*offset;
 
-	if(valueStream.length()<(unsigned long)(*offset)+4)return false;
+	if(valueStream.length() < static_cast<uint32_t>(*offset)+4)return false;
 
-	unsigned long length;
+	uint32_t length;
 	memcpy(&length, data, 4);
 	length=ntohl(length);
 
@@ -1213,7 +1213,7 @@ namespace XmlRpc {
 	while(length){
 		data=valueStream.c_str()+*offset;
 		std::string name;
-		unsigned long name_length;
+		uint32_t name_length;
 		memcpy(&name_length, data, 4);
 		name_length=ntohl(name_length);
 		*offset+=4;
@@ -1240,10 +1240,10 @@ namespace XmlRpc {
   std::string XmlRpcValue::structToStream() const
   {
     std::string stream;
-	unsigned long tag=htonl(STREAM_TAG_STRUCT);
+	uint32_t tag=htonl(STREAM_TAG_STRUCT);
 	stream.append((char*)&tag, 4);
 	ValueStruct* value=_value.asStruct;
-	unsigned long length=htonl(value->size());
+	uint32_t length=htonl(value->size());
 	stream.append((char*)&length, 4);
 	length=value->size();
 
@@ -1252,7 +1252,7 @@ namespace XmlRpc {
 	{
 		const std::string& name=it->first;
 		XmlRpcValue& v=it->second;
-		unsigned long name_length=htonl(name.length());
+		uint32_t name_length=htonl(name.length());
 		stream.append((char*)&name_length, 4);
 		stream.append(name);
 		std::string s=v.toStream();

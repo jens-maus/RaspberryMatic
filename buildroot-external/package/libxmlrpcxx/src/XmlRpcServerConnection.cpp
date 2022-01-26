@@ -97,7 +97,7 @@ XmlRpcServerConnection::readHeader()
 
   if((_header.length()>=BINARY_SIGNATURE_SIZE+5) && (strncmp(hp, BINARY_SIGNATURE, BINARY_SIGNATURE_SIZE)==0)){
 	_isBinary=true;
-	_contentLength=ntohl(*(unsigned long *)(hp+BINARY_SIGNATURE_SIZE+1));
+	_contentLength=ntohl(*(uint32_t *)(hp+BINARY_SIGNATURE_SIZE+1));
 	bp = hp+BINARY_SIGNATURE_SIZE+5;
   }
   if(!_isBinary){
@@ -355,7 +355,7 @@ XmlRpcServerConnection::generateResponse(XmlRpcValue& result)
 {
 	if(_isBinary){
 		std::string body=result.toStream();
-		unsigned long length=htonl(body.length());
+		uint32_t length=htonl(body.length());
 		_response.append(BINARY_SIGNATURE, BINARY_SIGNATURE_SIZE);
 		_response.append(1, (const char)1);
 		_response.append((char*)&length, 4);
@@ -389,7 +389,7 @@ XmlRpcServerConnection::generateHeader(std::string const& body)
     "Content-Length: ";
 
   char buffLen[40];
-  snprintf(buffLen, sizeof(buffLen), "%d\r\n\r\n", body.size());
+  snprintf(buffLen, sizeof(buffLen), "%d\r\n\r\n", static_cast<uint32_t>(body.size()));
 
   return header + buffLen;
 }
@@ -404,7 +404,7 @@ XmlRpcServerConnection::generateFaultResponse(std::string const& errorMsg, int e
 
 	if(_isBinary){
 		std::string body=faultStruct.toStream();
-		unsigned long length=htonl(body.length());
+		uint32_t length=htonl(body.length());
 		_response.append(BINARY_SIGNATURE, BINARY_SIGNATURE_SIZE);
 		_response.append(1, (const char)0xff);
 		_response.append((char*)&length, 4);

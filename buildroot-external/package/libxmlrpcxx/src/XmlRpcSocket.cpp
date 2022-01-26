@@ -110,7 +110,7 @@ bool
 XmlRpcSocket::setNonBlocking(int fd)
 {
 #if defined(_WINDOWS)
-  unsigned long flag = 1;
+  uint32_t flag = 1;
   return (ioctlsocket((SOCKET)fd, FIONBIO, &flag) == 0);
 #else
   return (fcntl(fd, F_SETFL, O_NONBLOCK) == 0);
@@ -137,7 +137,7 @@ XmlRpcSocket::bind(int fd, int port)
 bool 
 XmlRpcSocket::bind(int fd, const char* ip, int port)
 {
-	unsigned long address = htonl(INADDR_ANY);
+	uint32_t address = htonl(INADDR_ANY);
 	if ((NULL != ip) && (strlen(ip) > 0))
 	{
 		address = inet_addr(ip);

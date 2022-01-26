@@ -333,28 +333,28 @@ bool
 XmlRpcClient::generateRequest(const char* methodName, XmlRpcValue const& params)
 {
 	if(_isBinary){
-		unsigned long name_length=strlen(methodName);
+		size_t name_length=strlen(methodName);
 		name_length=htonl(name_length);
 		std::string body;
 		body.append((char*)&name_length, 4);
 		body.append(methodName);
 		if(params.valid()){
 			if(params.getType() != XmlRpcValue::TypeArray){
-				unsigned long param_count=htonl(1);
+				uint32_t param_count=htonl(1);
 				body.append((char*)&param_count, 4);
 				body.append(params.toStream());
 			}else{
-				unsigned long param_count=htonl(params.size());
+				uint32_t param_count=htonl(params.size());
 				body.append((char*)&param_count, 4);
 				for(int i=0;i<params.size();i++){
 					body.append(params[i].toStream());
 				}
 			}
 		}else{
-			unsigned long param_count=htonl(0);
+			uint32_t param_count=htonl(0);
 			body.append((char*)&param_count, 4);
 		}
-		unsigned long length=htonl(body.length());
+		uint32_t length=htonl(body.length());
 		_request="";
 		_request.append(XmlRpcServerConnection::BINARY_SIGNATURE, XmlRpcServerConnection::BINARY_SIGNATURE_SIZE);
 		_request.append(1, (const char)0);
@@ -413,7 +413,7 @@ XmlRpcClient::generateHeader(std::string const& body)
   header += buff;
   header += "Content-Type: text/xml; charset=iso-8859-1\r\nContent-Length: ";
 
-  snprintf(buff, sizeof(buff), "%d\r\n\r\n", body.size());
+  snprintf(buff, sizeof(buff), "%d\r\n\r\n", static_cast<uint32_t>(body.size()));
 
   return header + buff;
 }
@@ -475,7 +475,7 @@ XmlRpcClient::readHeader()
   if(_isBinary){
 	  if((_header.length()>=(unsigned int)XmlRpcServerConnection::BINARY_SIGNATURE_SIZE+5) && (strncmp(hp, XmlRpcServerConnection::BINARY_SIGNATURE, XmlRpcServerConnection::BINARY_SIGNATURE_SIZE)==0)){
 		  _isFault=(hp[XmlRpcServerConnection::BINARY_SIGNATURE_SIZE]==(char)0xff);
-		  _contentLength=ntohl(*(unsigned long *)(hp+XmlRpcServerConnection::BINARY_SIGNATURE_SIZE+1));
+		  _contentLength=ntohl(*(uint32_t *)(hp+XmlRpcServerConnection::BINARY_SIGNATURE_SIZE+1));
 		  bp = hp+XmlRpcServerConnection::BINARY_SIGNATURE_SIZE+5;
 	  }
   }else{

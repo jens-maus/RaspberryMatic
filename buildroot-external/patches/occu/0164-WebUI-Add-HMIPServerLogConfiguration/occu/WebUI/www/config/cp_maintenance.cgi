@@ -1356,7 +1356,7 @@ proc set_log_config {loghost level_rfd level_hs485d level_rega level_hmip} {
   append appender_ext_full "\\                \<param name=\"Facility\" value=\"USER\" \\/\>\\n"
   append appender_ext_full "\\                \<param name=\"FacilityPrinting\" value=\"false\" \\/\>\\n"
   append appender_ext_full "\\                \<layout class=\"org.apache.log4j.PatternLayout\"\>\\n"
-  append appender_ext_full "\\                        \<param name=\"ConversionPattern\" value=\"%c %-5p \[%t\] %m %n\"\\/\>\\n"
+  append appender_ext_full "\\                        \<param name=\"ConversionPattern\" value=\"HMIPserver: %c %-5p \[%t\] %m %n\"\\/\>\\n"
   append appender_ext_full "\\               \<\\/layout\>\\n"
   append appender_ext_full "\\        \<\\/appender\>"
 

@@ -7,5 +7,5 @@
 #
 # Rückgabewert: true
 
-exec monit stop HMIPServer >/dev/null &
+exec /usr/bin/monit stop HMIPServer >/dev/null &
 jsonrpc_response true

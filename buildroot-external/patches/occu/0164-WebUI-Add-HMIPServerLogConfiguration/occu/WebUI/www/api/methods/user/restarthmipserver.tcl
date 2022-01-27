@@ -7,6 +7,5 @@
 #
 # Rückgabewert: true
 
-#exec /etc/init.d/S62HMServer start &
-exec monit restart HMIPServer >/dev/null &
+exec /usr/bin/monit restart HMIPServer >/dev/null &
 jsonrpc_response true

@@ -22,17 +22,19 @@ init() {
   if [[ ! -c /dev/eq3loop ]]; then
     # load eq3_char_loop kernel module
     modprobe eq3_char_loop
+    sleep 2 # wait to settle
   fi
 }
 
 waitStartupComplete() {
-  STEPS=5
+  STEPS=10
   for i in $(seq 1 ${STEPS}); do
     sleep 2
     echo -n "."
     MMDSTATUSPID=$(cat /var/status/multimacd.status 2>&1)
     MMDPID=$(pidof multimacd)
-    if [[ "${MMDSTATUSPID}" == "${MMDPID}" ]]; then
+    if [[ "${MMDSTATUSPID}" == "${MMDPID}" ]] &&
+       [[ -c /dev/mmd_hmip ]] && [[ -c /dev/mmd_bidcos ]]; then
       echo "OK"
       break
     fi
@@ -91,6 +93,7 @@ stop() {
     # make sure to unload eq3_char_loop which
     # is necessary for docker-based environments
     if [[ -c /dev/eq3loop ]]; then
+      sleep 2 # wait to settle
       # load eq3_char_loop kernel module
       rmmod eq3_char_loop 2>/dev/null
     fi

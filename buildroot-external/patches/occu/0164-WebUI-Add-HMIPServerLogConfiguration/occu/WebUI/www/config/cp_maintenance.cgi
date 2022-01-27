@@ -564,12 +564,14 @@ proc action_put_page {} {
                       puts "\${dialogSettingsCMLblLogHomematicIP}"
                     }
                     table_data {align="right"} {
+                      if [catch { set hmip_level [read_var /etc/config/syslog LOGLEVEL_HMIP]  } ] {set hmip_level "ERROR"}
                       cgi_select log_hmip= {id="select_log_hmip"} {
                         foreach level [lsort [array names HMIP_LOGLEVELS]] {
-                          cgi_option $HMIP_LOGLEVELS($level) value=[string range $level 1 end] 
+                          set levelVal [string range $level 1 end]
+                          set selected [expr { $levelVal == $hmip_level ? "selected" : "" }]
+                          cgi_option $HMIP_LOGLEVELS($level) value=$levelVal $selected
                         }
                       }
-                      get_hmip_loglevel
                     }
                   }
                   table_row {
@@ -886,22 +888,6 @@ proc action_put_page {} {
     });
     }
   }
-}
-
-proc get_hmip_loglevel {} {
-  set fd [open "/etc/config/log4j.xml" r]
-  set file_data [read $fd]
-  regsub -all {\n} $file_data { } file_data
-  close $fd
-  cgi_javascript {
-    puts "var xmlDoc = jQuery.parseXML( '$file_data' );"
-    puts "var rootElement = jQuery(xmlDoc).find('root');"
-    puts "jQuery(rootElement).children().each(function(){ if (this.nodeName === 'priority') {"
-    puts "var priorityValue = this.attributes\[0\].nodeValue; "
-    puts "jQuery(\"#select_log_hmip\").val(priorityValue).prop('selected', true); "
-    puts "} });"
-  }
-  return 2;
 }
 
 proc get_serial { } {
@@ -1328,11 +1314,11 @@ proc set_log_config {loghost level_rfd level_hs485d level_rega level_hmip} {
   global RFD_URL HS485D_URL
 
   # read in old syslog values
-  read_var /etc/config/syslog LOGHOST
-  read_var /etc/config/syslog LOGLEVEL_RFD
-  read_var /etc/config/syslog LOGLEVEL_HS485D
-  read_var /etc/config/syslog LOGLEVEL_REGA
-  read_var /etc/config/syslog LOGLEVEL_HMIP
+  set LOGHOST [read_var /etc/config/syslog LOGHOST]
+  set LOGLEVEL_RFD [read_var /etc/config/syslog LOGLEVEL_RFD]
+  set LOGLEVEL_HS485D [read_var /etc/config/syslog LOGLEVEL_HS485D]
+  set LOGLEVEL_REGA [read_var /etc/config/syslog LOGLEVEL_REGA]
+  set LOGLEVEL_HMIP [read_var /etc/config/syslog LOGLEVEL_HMIP]
 
   set fd -1
   catch {set fd [open "/etc/config/syslog" w]}
@@ -1360,7 +1346,8 @@ proc set_log_config {loghost level_rfd level_hs485d level_rega level_hmip} {
     rega "system.LogLevel($level_rega)"
   }
 
-  if { "$LOGLEVEL_HMIP" != "$level_hmip" } {
+  if { "$LOGLEVEL_HMIP" != "$level_hmip" ||
+       "$LOGHOST" != "$loghost" } {
     exec /usr/bin/monit restart HMIPServer >/dev/null &
   }
 

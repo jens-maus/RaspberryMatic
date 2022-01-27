@@ -888,21 +888,21 @@ proc action_put_page {} {
   }
 }
 
- proc get_hmip_loglevel {} {
-    set fd [open "/etc/config/log4j.xml" r]
-    set file_data [read $fd]
-    regsub -all {\n} $file_data { } file_data
-    close $fd
-    cgi_javascript {
-      puts "var xmlDoc = jQuery.parseXML( '$file_data' );"
-      puts "var rootElement = jQuery(xmlDoc).find('root');"
-      puts "jQuery(rootElement).children().each(function(){ if (this.nodeName === 'priority') {"
-      puts "var priorityValue = this.attributes\[0\].nodeValue; "
-      puts "jQuery(\"#select_log_hmip\").val(priorityValue).prop('selected', true); "
-      puts "} });"
-    }
-    return 2;
+proc get_hmip_loglevel {} {
+  set fd [open "/etc/config/log4j.xml" r]
+  set file_data [read $fd]
+  regsub -all {\n} $file_data { } file_data
+  close $fd
+  cgi_javascript {
+    puts "var xmlDoc = jQuery.parseXML( '$file_data' );"
+    puts "var rootElement = jQuery(xmlDoc).find('root');"
+    puts "jQuery(rootElement).children().each(function(){ if (this.nodeName === 'priority') {"
+    puts "var priorityValue = this.attributes\[0\].nodeValue; "
+    puts "jQuery(\"#select_log_hmip\").val(priorityValue).prop('selected', true); "
+    puts "} });"
   }
+  return 2;
+}
 
 proc get_serial { } {
   return [read_var /var/ids SerialNumber]
@@ -1346,8 +1346,7 @@ proc set_log_config {loghost level_rfd level_hs485d level_rega level_hmip} {
   # catch { xmlrpc $PFMD_URL logLevel [list int $level_pfmd]}
   rega "system.LogLevel($level_rega)"
   
-  set log4jfilename     "/etc/config/log4j.xml"
-  
+  # HMIPServer log4j adaptions
   set appender_ref_ext  "\\<appender-ref ref=\"EXT_SYSLOG\" \\/\>"
   set start_insert      "\<log4j\:configuration"
   set appender_name_ext "\\<appender name=\"EXT_SYSLOG\""
@@ -1360,8 +1359,9 @@ proc set_log_config {loghost level_rfd level_hs485d level_rega level_hmip} {
   append appender_ext_full "\\                        \<param name=\"ConversionPattern\" value=\"%c %-5p \[%t\] %m %n\"\\/\>\\n"
   append appender_ext_full "\\               \<\\/layout\>\\n"
   append appender_ext_full "\\        \<\\/appender\>"
-  
-  set fp [open $log4jfilename r]
+
+  # read in the old log4j config
+  set fp [open "/etc/config/log4j.xml" r]
   set file_data [read $fp]
   close $fp
 
@@ -1371,18 +1371,27 @@ proc set_log_config {loghost level_rfd level_hs485d level_rega level_hmip} {
   regsub -all {priority value="ERROR"}  $file_data {priority value="PLACEHOLDER"} file_data
   regsub -all PLACEHOLDER $file_data $level_hmip file_data
 
-  set fd [open $log4jfilename w]
+  # output modified log4j to /tmp
+  set fd [open "/tmp/log4j.xml" w]
   puts -nonewline $fd $file_data
   close $fd
   
-  exec sed -i "/$appender_name_ext/,+7 d" $log4jfilename
-  exec sed -i "/$appender_ref_ext/d"      $log4jfilename 
+  exec sed -i "/$appender_name_ext/,+7 d" /tmp/log4j.xml
+  exec sed -i "/$appender_ref_ext/d" /tmp/log4j.xml
   if { "$loghost" != "" } {
-    exec sed -i "/appender-ref ref=\"SYSLOG\"/a\\                $appender_ref_ext" $log4jfilename
-    exec sed -i "/$start_insert/a$appender_ext_full" $log4jfilename    
+    exec sed -i "/appender-ref ref=\"SYSLOG\"/a\\                $appender_ref_ext" /tmp/log4j.xml
+    exec sed -i "/$start_insert/a$appender_ext_full" /tmp/log4j.xml
   }
-  exec unix2dos $log4jfilename
-  exec monit restart HMIPServer >/dev/null &
+
+  # check if log4j xml file was changed and if so copy it back to
+  # /etc/config/log4j.xml and restart HMIPServer
+  set file_changed [catch {exec cmp -s /tmp/log4j.xml /etc/config/log4j.xml} result]
+  if {$file_changed == 1} {
+    exec mv /tmp/log4j.xml /etc/config/
+    exec /usr/bin/monit restart HMIPServer >/dev/null &
+  } else {
+    exec rm -f /tmp/log4j.xml
+  }
   
   return 1
 }

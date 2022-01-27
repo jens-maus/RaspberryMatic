@@ -67,8 +67,8 @@ jobs:
       with:
         path: "./home-assistant-addon-dev"
 
-    - name: Run yamllint
-      uses: frenck/action-yamllint@v1.1
+    #- name: Run yamllint
+    #  uses: frenck/action-yamllint@v1.1
 
     - name: Check Package consistency
       run: |

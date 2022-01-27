@@ -94,7 +94,7 @@ identify_host() {
   esac
 
   # find out if we are in a container environment
-  if [[ -f /.dockerenv ]] || grep -Eq '(docker|lxc|containerd)' /proc/1/cgroup; then
+  if [[ -f /.dockerenv ]] || grep -Eq '(docker|lxc|containerd|kubepods)' /proc/1/cgroup; then
     HM_HOST="oci"
 
     # save the HA supervisor token for later use

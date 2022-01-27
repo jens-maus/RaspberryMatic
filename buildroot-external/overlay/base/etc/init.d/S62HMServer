@@ -126,7 +126,7 @@ init() {
 }
 
 waitStartupComplete() {
-  STEPS=150
+  STEPS=100
   for i in $(seq 1 ${STEPS}); do
     sleep 2
     echo -n "."
@@ -144,10 +144,6 @@ start() {
   echo -n "Starting HMIPServer: "
   init
 
-  # adjust the oom score (which is inherited by start-stop-daemon)
-  # to ensure that others are killed first in case of low memory situations
-  echo -900 >/proc/$$/oom_score_adj 2>/dev/null
-
   # get the architecture
   ARCH=$(uname -m)
   JAVAOPT=
@@ -161,8 +157,24 @@ start() {
     JAVAOPT="-Xmx128m ${JAVAOPT}"
   fi
 
+  # add gnu.io.rxtx.SerialPorts to cmd line if HM_SERVER_DEVNODE not empty
+  if [[ -n "${HM_SERVER_DEVNODE}" ]]; then
+    JAVAOPT="-Dgnu.io.rxtx.SerialPorts=${HM_SERVER_DEVNODE} ${JAVAOPT}"
+
+    # check that HM_SERVER_DEVNODE exists and if not error out because then
+    # HMIPServer will also not work of course
+    if [[ ! -c "${HM_SERVER_DEVNODE}" ]]; then
+      echo "ERROR: ${HM_SERVER_DEVNODE} missing"
+      exit 1
+    fi
+  fi
+
+  # adjust the oom score (which is inherited by start-stop-daemon)
+  # to ensure that others are killed first in case of low memory situations
+  echo -900 >/proc/$$/oom_score_adj 2>/dev/null
+
   # shellcheck disable=SC2086
-  start-stop-daemon -b -S -q -m -p "${PIDFILE}" --exec java -- -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -Dgnu.io.rxtx.SerialPorts="${HM_SERVER_DEVNODE}" -cp "${HM_SERVER}" ${HM_SERVER_CLASS} ${HM_SERVER_ARGS}
+  start-stop-daemon -b -S -q -m -p "${PIDFILE}" --exec java -- -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -cp "${HM_SERVER}" ${HM_SERVER_CLASS} ${HM_SERVER_ARGS}
   echo -n "."
   waitStartupComplete
 }

@@ -16,21 +16,36 @@ HM_SERVER=/opt/HMServer/HMIPServer.jar:/opt/HMServer/coupling/ESHBridge.jar
 HM_SERVER_CLASS="de.eq3.ccu.server.ip.HMIPServer"
 HM_SERVER_ARGS="/var/etc/crRFD.conf /var/etc/HMServer.conf"
 HM_SERVER_DEVNODE=/dev/mmd_hmip
+LOGLEVEL_HMIP=ERROR
 PIDFILE=/var/run/HMIPServer.pid
 
 init() {
   export JAVA_HOME=/opt/java/
   export PATH=${PATH}:${JAVA_HOME}/bin
 
-  if [[ ! -e /etc/config/log4j.xml ]]; then
-    cp -a ${CFG_TEMPLATE_DIR}/log4j.xml /etc/config
-  fi
-
   if [[ ! -e /etc/config/hmip_networkkey.conf ]]; then
     if [[ -f ${CFG_TEMPLATE_DIR}/hmip_networkkey.conf ]]; then
       cp -a ${CFG_TEMPLATE_DIR}/hmip_networkkey.conf /etc/config
     fi
   fi
+
+  # create a log4j.xml config file in /var/etc and modify it
+  # according to the syslog settings in /etc/config/syslog
+  cp -a ${CFG_TEMPLATE_DIR}/log4j.xml /var/etc/
+
+  # get the current syslog settings
+  [[ -r /etc/config/syslog ]] && . /etc/config/syslog
+
+  # check if we have an external loghost and if so, modify
+  # the SYSLOG appender in log4j.xml accordingly.
+  if [[ -n "${LOGHOST}" ]]; then
+    sed -i "s|value=\"127\.0\.0\.1\"|value=\"${LOGHOST}\"|" /var/etc/log4j.xml
+    sed -i "/appender-ref ref=\"FILE\"/a\\    <appender-ref ref=\"SYSLOG\"\\/>" /var/etc/log4j.xml
+  fi
+
+  # modify "priority value" values in log4j.xml to set the
+  # global loglevel
+  sed -i "s/priority value=\".*\"/priority value=\"${LOGLEVEL_HMIP}\"/g" /var/etc/log4j.xml
 
   # if the userfs is located on a non-mmc device (not on a SD card)
   # we can safely use the old /usr/local/sdcard directory path as
@@ -174,7 +189,7 @@ start() {
   echo -900 >/proc/$$/oom_score_adj 2>/dev/null
 
   # shellcheck disable=SC2086
-  start-stop-daemon -b -S -q -m -p "${PIDFILE}" --exec java -- -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///etc/config/log4j.xml -Dfile.encoding=ISO-8859-1 -cp "${HM_SERVER}" ${HM_SERVER_CLASS} ${HM_SERVER_ARGS}
+  start-stop-daemon -b -S -q -m -p "${PIDFILE}" --exec java -- -Dos.arch=${ARCH} ${JAVAOPT} -Dlog4j.configuration=file:///var/etc/log4j.xml -Dfile.encoding=ISO-8859-1 -cp "${HM_SERVER}" ${HM_SERVER_CLASS} ${HM_SERVER_ARGS}
   echo -n "."
   waitStartupComplete
 }

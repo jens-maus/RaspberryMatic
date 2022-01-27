@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+  <appender name="FILE" class="org.apache.log4j.RollingFileAppender">
+    <param name="File" value="/var/log/hmserver.log"/>
+    <param name="MaxFileSize" value="4096KB"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{MMM d HH:mm:ss} %c %-5p [%t] %m %n"/>
+    </layout>
+  </appender>
+
+  <appender name="SYSLOG" class="org.apache.log4j.net.SyslogAppender">
+    <param name="SyslogHost" value="127.0.0.1"/>
+    <param name="Facility" value="USER"/>
+    <param name="FacilityPrinting" value="false"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="HMIPServer: %c %-5p [%t] %m %n"/>
+    </layout>
+  </appender>
+
+  <category name="de.eq3">
+    <priority value="ERROR"/>
+  </category>
+  <category name="org">
+    <priority value="ERROR"/>
+  </category>
+  <category name="com">
+    <priority value="ERROR"/>
+  </category>
+
+  <root>
+    <priority value="ERROR"/>
+    <appender-ref ref="FILE"/>
+  </root>
+</log4j:configuration>

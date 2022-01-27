@@ -124,7 +124,12 @@
  proc get_serial { } {
    return [read_var /var/ids SerialNumber]
  }
-@@ -1285,7 +1323,7 @@
+@@ -1281,14 +1319,21 @@
+ }
+ 
+ proc get_logserver {} {
+-  return [read_var //etc/config/syslog LOGHOST]
++  return [read_var /etc/config/syslog LOGHOST]
  }
  
  # proc set_log_config {loghost level_rfd level_hs485d level_pfmd level_rega}
@@ -133,69 +138,48 @@
    #global RFD_URL HS485D_URL PFMD_URL
    global RFD_URL HS485D_URL
  
-@@ -1300,6 +1338,7 @@
++  # read in old syslog values
++  read_var /etc/config/syslog LOGHOST
++  read_var /etc/config/syslog LOGLEVEL_RFD
++  read_var /etc/config/syslog LOGLEVEL_HS485D
++  read_var /etc/config/syslog LOGLEVEL_REGA
++  read_var /etc/config/syslog LOGLEVEL_HMIP
++
+   set fd -1
+   catch {set fd [open "/etc/config/syslog" w]}
+   if { $fd <0 } { return 0 }
+@@ -1300,13 +1345,25 @@
    puts $fd "LOGLEVEL_HS485D=$level_hs485d"
    # puts $fd "LOGLEVEL_PFMFD=$level_pfmd"
    puts $fd "LOGLEVEL_REGA=$level_rega"
 +  puts $fd "LOGLEVEL_HMIP=$level_hmip"
    close $fd
    
-   catch { xmlrpc $RFD_URL logLevel [list int $level_rfd]}
-@@ -1307,6 +1346,53 @@
-   # catch { xmlrpc $PFMD_URL logLevel [list int $level_pfmd]}
-   rega "system.LogLevel($level_rega)"
-   
-+  # HMIPServer log4j adaptions
-+  set appender_ref_ext  "\\<appender-ref ref=\"EXT_SYSLOG\" \\/\>"
-+  set start_insert      "\<log4j\:configuration"
-+  set appender_name_ext "\\<appender name=\"EXT_SYSLOG\""
-+  
-+  set    appender_ext_full "\\          \<appender name=\"EXT_SYSLOG\" class=\"org.apache.log4j.net.SyslogAppender\"\>\\n"
-+  append appender_ext_full "\\                \<param name=\"SyslogHost\" value=\"$loghost\" \\/\>\\n"
-+  append appender_ext_full "\\                \<param name=\"Facility\" value=\"USER\" \\/\>\\n"
-+  append appender_ext_full "\\                \<param name=\"FacilityPrinting\" value=\"false\" \\/\>\\n"
-+  append appender_ext_full "\\                \<layout class=\"org.apache.log4j.PatternLayout\"\>\\n"
-+  append appender_ext_full "\\                        \<param name=\"ConversionPattern\" value=\"HMIPserver: %c %-5p \[%t\] %m %n\"\\/\>\\n"
-+  append appender_ext_full "\\               \<\\/layout\>\\n"
-+  append appender_ext_full "\\        \<\\/appender\>"
-+
-+  # read in the old log4j config
-+  set fp [open "/etc/config/log4j.xml" r]
-+  set file_data [read $fp]
-+  close $fp
-+
-+  regsub -all {priority value="DEBUG"}  $file_data {priority value="PLACEHOLDER"} file_data
-+  regsub -all {priority value="INFO"}   $file_data {priority value="PLACEHOLDER"} file_data
-+  regsub -all {priority value="WARN"}   $file_data {priority value="PLACEHOLDER"} file_data
-+  regsub -all {priority value="ERROR"}  $file_data {priority value="PLACEHOLDER"} file_data
-+  regsub -all PLACEHOLDER $file_data $level_hmip file_data
-+
-+  # output modified log4j to /tmp
-+  set fd [open "/tmp/log4j.xml" w]
-+  puts -nonewline $fd $file_data
-+  close $fd
-+  
-+  exec sed -i "/$appender_name_ext/,+7 d" /tmp/log4j.xml
-+  exec sed -i "/$appender_ref_ext/d" /tmp/log4j.xml
-+  if { "$loghost" != "" } {
-+    exec sed -i "/appender-ref ref=\"SYSLOG\"/a\\                $appender_ref_ext" /tmp/log4j.xml
-+    exec sed -i "/$start_insert/a$appender_ext_full" /tmp/log4j.xml
+-  catch { xmlrpc $RFD_URL logLevel [list int $level_rfd]}
+-  catch { xmlrpc $HS485D_URL logLevel [list int $level_hs485d]}
+-  # catch { xmlrpc $PFMD_URL logLevel [list int $level_pfmd]}
+-  rega "system.LogLevel($level_rega)"
+-  
++  if { "$LOGLEVEL_RFD" != "$level_rfd" } {
++    catch { xmlrpc $RFD_URL logLevel [list int $level_rfd]}
 +  }
 +
-+  # check if log4j xml file was changed and if so copy it back to
-+  # /etc/config/log4j.xml and restart HMIPServer
-+  set file_changed [catch {exec cmp -s /tmp/log4j.xml /etc/config/log4j.xml} result]
-+  if {$file_changed == 1} {
-+    exec mv /tmp/log4j.xml /etc/config/
++  if { "$LOGLEVEL_HS485D" != "$level_hs485d" } {
++    catch { xmlrpc $HS485D_URL logLevel [list int $level_hs485d]}
++  }
++
++  if { "$LOGLEVEL_REGA" != "$level_rega" } {
++    rega "system.LogLevel($level_rega)"
++  }
++
++  if { "$LOGLEVEL_HMIP" != "$level_hmip" } {
 +    exec /usr/bin/monit restart HMIPServer >/dev/null &
-+  } else {
-+    exec rm -f /tmp/log4j.xml
 +  }
-+  
++
    return 1
  }
  
-@@ -1316,11 +1402,12 @@
+@@ -1316,11 +1373,12 @@
    import level_hs485d
    # import level_pfmd
    import level_rega
@@ -216,7 +200,7 @@
      "lblRangeOfValue" : "Wertebereich",
      "transferConfigData" : "Ger%E4te-/Kanaleinstellungen werden an Komponenten %FCbertragen...",
 -    "setLoggingSuccess" : "Setzen der Logging-Einstellungen erfolgreich!",
-+    "setLoggingSuccess" : "Setzen der Logging-Einstellungen erfolgreich!\nDer Homematic IP-Dienst wird im Hintergrund neu gestartet.",
++    "setLoggingSuccess" : "Setzen der Logging-Einstellungen erfolgreich!\n\nDer Homematic IP-Dienst wird im Hintergrund ggf. neu gestartet.",
      "setLoggingFailure" : "Setzen der Logging-Einstellungen fehlgeschlagen:\n",
      "comment" : "RF_REPEATER.txt",
      "maxEntriesReachedTitle" : "Achtung!",
@@ -253,7 +237,7 @@
      "lblRangeOfValue" : "Value range",
      "transferConfigData" : "Device/channel settings will be transmitted to devices.",
 -    "setLoggingSuccess" : "Saving the logging settings was successful!",
-+    "setLoggingSuccess" : "Saving the logging settings was successful!\nThe Homematic IP service will be restarted in background.",
++    "setLoggingSuccess" : "Saving the logging settings was successful!\n\nIf applicable, the Homematic IP service will be restarted in background.",
      "setLoggingFailure" : "Saving the logging settings failed:\n",
      "maxEntriesReachedTitle" : "Attention!",
      "maxEntriesReached_a" : "Maximum number of ",

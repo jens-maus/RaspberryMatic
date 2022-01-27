@@ -9272,6 +9272,7 @@ color: $_(textColorA); /* white */
   overflow-wrap: anywhere;
   margin-left: 20px;
   font-style: italic;
+  font-weight: normal;
 }
 
 input[type='file'] {

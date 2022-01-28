@@ -71,8 +71,6 @@ jobs:
 
       - name: Run yamllint
         uses: frenck/action-yamllint@v1.1
-        with:
-          config: "/home/runner/work/RaspberryMatic/RaspberryMatic/.github/yamllint.yml"
 
       - name: Check Package consistency
         run: |

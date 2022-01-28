@@ -3,6 +3,9 @@ extends: default
 ignore: |
   /buildroot-external/package/neoserver
   /helm/raspberrymatic/templates
+  /build-*
+  /buildroot-*
+  /download
 
 rules:
   line-length: disable

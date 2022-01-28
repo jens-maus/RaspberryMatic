@@ -13,7 +13,7 @@ onlyLabels: []
 
 # Issues or Pull Requests with these labels will never be considered stale. Set to `[]` to disable
 exemptLabels:
-  - :question: undecided
+  - ":question: undecided"
 
 # Set to true to ignore issues in a project (defaults to false)
 exemptProjects: true
@@ -30,14 +30,14 @@ staleLabel: ":thumbsdown: wontfix"
 # Comment to post when marking as stale. Set to `false` to disable
 markComment: >
   Thanks for your contribution!
-
+  <br/>
   This issue has been automatically marked as stale because it has not had
   recent activity. It will be closed if no further activity occurs within the
   next 7 days. Please check if the issue is still relevant in the most current
   version of RaspberryMatic and tell us. Also check that all relevant details,
   <hr/>
   Vielen Dank für die Unterstützung!
-
+  <br/>
   Dieses Problem wurde automatisch als veraltet markiert, da es in letzter
   Zeit keine Aktivitäten gab. Es wird geschlossen, wenn nicht innerhalb der
   nächsten 7 Tage weitere Aktivitäten stattfinden. Bitte überprüfen Sie, ob

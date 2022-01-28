@@ -69,8 +69,13 @@ jobs:
         with:
           path: "./home-assistant-addon-dev"
 
-      - name: Run yamllint
+      - name: Check yaml files
         uses: frenck/action-yamllint@v1.1
+
+      - name: Check markdown files
+        uses: avtodev/markdown-lint@v1
+        with:
+          ignore: '**/node_modules/** **/codemirror/README.md'
 
       - name: Check Package consistency
         run: |

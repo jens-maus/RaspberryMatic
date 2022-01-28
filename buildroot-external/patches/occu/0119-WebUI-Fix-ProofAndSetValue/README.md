@@ -1,4 +1,4 @@
-## Summary
+# Summary
 
 This file contains some testfunctions which can be used in a clean browser page (about:blank).
 To use this first copy the proofAndSetValue Function into the console. Followed up by the testfunctions below.
@@ -46,7 +46,7 @@ $ = function(selector) {
 
 ## Tests
 
-function runTest() { 
+function runTest() {
     console.clear();
     testProofAndSetValue("1. Integer below Minimum", "5", "10", "20", 1, "10");
     testProofAndSetValue("2. Integer above Maximum", "21", "10", "20", 1, "20");

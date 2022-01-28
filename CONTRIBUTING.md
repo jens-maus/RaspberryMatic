@@ -34,8 +34,8 @@ If you've completed all of these steps the core team will do its best to respond
 
 Beyond GitHub, we try to have a variety of different lines of communication open:
 
-* [HomeMatic/RaspberryMatic Discussion Forum](https://homematic-forum.de/forum/viewforum.php?f=65)
-* [Homepage](https://raspberrymatic.de/)
+- [HomeMatic/RaspberryMatic Discussion Forum](https://homematic-forum.de/forum/viewforum.php?f=65)
+- [Homepage](https://raspberrymatic.de/)
 
 ### Contributor License Agreement (Apache 2.0)
 

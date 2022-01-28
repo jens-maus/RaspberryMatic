@@ -1,6 +1,7 @@
 # Development guide
 
 ## How to build
+
 The fastest and recommended way to develop is using a local [Visual Studio Code](https://code.visualstudio.com/) dev environment. This repository contains a dev container setup for VS Code with all required development tools to build Raspberrymatic.
 
 1. Please follow the instructions to download and install the [Remote Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) VS Code extension.
@@ -14,7 +15,7 @@ The fastest and recommended way to develop is using a local [Visual Studio Code]
 
 ### Building and testing the Home Assistant Add-on
 
-1. When VS Code has opened your folder in the container (which can take some time for the first run) you'll need to run the task (Terminal -> Run Task) 'Start Home Assistant', which will bootstrap Supervisor and Home Assistant. 
+1. When VS Code has opened your folder in the container (which can take some time for the first run) you'll need to run the task (Terminal -> Run Task) 'Start Home Assistant', which will bootstrap Supervisor and Home Assistant.
 2. You'll then be able to access the normal onboarding process via the Home Assistant instance at `http://localhost:7123/`.
 3. The add-on(s) found in your root folder will automatically be found in the Local Add-ons repository.
 4. Install the Raspberrymatic from the supervisord menu.
@@ -27,7 +28,7 @@ RaspberryMatic uses GitHub Workflows for Continous Integrations. The actions tab
 
 ## Requirements
 
-OCI packages require a secret to be uploaded `CR_PAT`. See GitHub [instructions(https://docs.github.com/en/packages/guides/migrating-to-github-container-registry-for-docker-images#authenticating-with-the-container-registry)] on how to create a Personal Access Token to upload to the GitHub Container Registry.
+OCI packages require a secret to be uploaded `CR_PAT`. See GitHub [instructions(<https://docs.github.com/en/packages/guides/migrating-to-github-container-registry-for-docker-images#authenticating-with-the-container-registry>)] on how to create a Personal Access Token to upload to the GitHub Container Registry.
 
 ## Workflows
 
@@ -40,9 +41,9 @@ OCI packages require a secret to be uploaded `CR_PAT`. See GitHub [instructions(
 1. As a first step and to prepare a draft release in which a raw ChangeLog will be added, go into the [Release Build](https://github.com/jens-maus/RaspberryMatic/actions?query=workflow%3A%22Release+Build%22) action and run it, but make sure "Skip build" is set to true and you are using the upcoming release date in the "Release date override" setting
 2. After this draft release build is done you should see a new draft release in the releases section with the raw changelog listing all changes. Make sure to edit them and sort them into the corresponding group and explaining in less technical details what was changed.
 3. If you are done with finetuning the ChangeLog and Release draft make sure that you finally bump the version number in the following files in the repository:
-   - (3.XX.YY.YYYYMMDD) - https://github.com/jens-maus/RaspberryMatic/blob/master/release/LATEST-VERSION.js
-   - (3.XX.YY.YYYYMMDD) - https://github.com/jens-maus/RaspberryMatic/blob/master/home-assistant-addon/config.json#L3
-   - (3.XX.YY) - https://github.com/jens-maus/RaspberryMatic/blob/master/helm/raspberrymatic/Chart.yaml#L31
+   - (3.XX.YY.YYYYMMDD) - <https://github.com/jens-maus/RaspberryMatic/blob/master/release/LATEST-VERSION.js>
+   - (3.XX.YY.YYYYMMDD) - <https://github.com/jens-maus/RaspberryMatic/blob/master/home-assistant-addon/config.json#L3>
+   - (3.XX.YY) - <https://github.com/jens-maus/RaspberryMatic/blob/master/helm/raspberrymatic/Chart.yaml#L31>
 4. Go to [_Actions_ -> _Release Build_](https://github.com/jens-maus/RaspberryMatic/actions?query=workflow%3A%22Release+Build%22)
 5. Click on _Run Workflow_
 6. Select the branch. Usually `master`
@@ -64,34 +65,34 @@ OCI packages require a secret to be uploaded `CR_PAT`. See GitHub [instructions(
 This short documentation serves as a quick-guide to which and from where components should be update on a regular basis.
 
 - Buildroot:
-  https://buildroot.org/
+  <https://buildroot.org/>
 
 - Java-AZUL:
-  https://www.azul.com/downloads/zulu-embedded/
+  <https://www.azul.com/downloads/zulu-embedded/>
 
 - CloudMatic Addon:
-  https://github.com/EasySmartHome/CloudMatic-CCUAddon
+  <https://github.com/EasySmartHome/CloudMatic-CCUAddon>
 
 - RaspberryPi Linux Kernel:
-  https://github.com/raspberrypi/linux/
+  <https://github.com/raspberrypi/linux/>
 
 - RaspberryPi rpi-eeprom:
-  https://github.com/raspberrypi/rpi-eeprom/commits/master/firmware/stable
+  <https://github.com/raspberrypi/rpi-eeprom/commits/master/firmware/stable>
 
 - Intel e1000e network driver (for OVA):
-  https://sourceforge.net/projects/e1000/files/e1000e%20stable/
+  <https://sourceforge.net/projects/e1000/files/e1000e%20stable/>
 
 - ASUS Tinkerboard Kernel Patches (Armbian):
-  https://github.com/armbian/build/tree/master/patch/kernel/rockchip-current
+  <https://github.com/armbian/build/tree/master/patch/kernel/rockchip-current>
   
 - CodeMirror WebUI Script Editor Engine:
-  https://codemirror.net/
+  <https://codemirror.net/>
 
 - S.USV Support-Tools:
-  https://s-usv.de/downloads/
+  <https://s-usv.de/downloads/>
 
 - generic_raw_uart/HB-RF-USB/HB-RF-USB-2/HB-RF-ETH driver:
-  https://github.com/alexreinert/piVCCU/tree/master/kernel
+  <https://github.com/alexreinert/piVCCU/tree/master/kernel>
 
 - detect_radio_module tool:
-  https://github.com/alexreinert/piVCCU/tree/master/detect_radio_module
+  <https://github.com/alexreinert/piVCCU/tree/master/detect_radio_module>

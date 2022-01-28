@@ -72,7 +72,7 @@ jobs:
       - name: Run yamllint
         uses: frenck/action-yamllint@v1.1
         with:
-          config: ".github/yamllint.yml"
+          config: "/github/workspace/.github/yamllint.yml"
 
       - name: Check Package consistency
         run: |

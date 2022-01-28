@@ -1,3 +1,4 @@
+---
 name: Bug Report
 description: Report a bug/issue related to RaspberryMatic
 labels: ":bug: bug-report"
@@ -61,7 +62,7 @@ body:
     attributes:
       label: Which base platform are you running?
       description: >
-        This is the platform you are using to run RaspberryMatic on and corresponds to the image you are usually downloading for updating RaspberryMatic. 
+        This is the platform you are using to run RaspberryMatic on and corresponds to the image you are usually downloading for updating RaspberryMatic.
       options:
         - rpi4 (RaspberryPi4)
         - rpi3 (RaspberryPi3)

@@ -1,4 +1,5 @@
 # Configuration for probot-stale - https://github.com/probot/stale
+---
 
 # Number of days of inactivity before an Issue or Pull Request becomes stale
 daysUntilStale: 90
@@ -24,12 +25,12 @@ exemptMilestones: true
 exemptAssignees: false
 
 # Label to use when marking as stale
-staleLabel: :thumbsdown: wontfix
+staleLabel: ":thumbsdown: wontfix"
 
 # Comment to post when marking as stale. Set to `false` to disable
 markComment: >
   Thanks for your contribution!
-   
+
   This issue has been automatically marked as stale because it has not had
   recent activity. It will be closed if no further activity occurs within the
   next 7 days. Please check if the issue is still relevant in the most current

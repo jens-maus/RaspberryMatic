@@ -1,3 +1,4 @@
+---
 apiVersion: v2
 name: raspberrymatic
 description: HomeMatic/homematicIP CCU central based on RaspberryMatic

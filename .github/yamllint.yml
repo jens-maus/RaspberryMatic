@@ -1,0 +1,8 @@
+---
+extends: default
+ignore: |
+  /buildroot-external/package/neoserver
+  /helm/raspberrymatic/templates
+
+rules:
+  line-length: disable

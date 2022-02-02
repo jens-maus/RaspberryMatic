@@ -9,7 +9,8 @@
       "extract_size": 1345249792,
       "extract_sha256": "469d3fe09e59bdca41568af64373f64483aaf5a49acdca1db0319b9492b1a74a",
       "image_download_size": 278221924,
-      "image_download_sha256": "f39d275e3f2dda81e39ee15cd7073ab7d739e0f709ed53f526b351d044b2f6c7"
+      "image_download_sha256": "f39d275e3f2dda81e39ee15cd7073ab7d739e0f709ed53f526b351d044b2f6c7",
+      "website": "https://raspberrymatic.de/"
     },
     {
       "name": "RaspberryMatic 3.61.7.20220115 (RPi3, RPiZero2, ELV-Charly, CCU3)",
@@ -20,7 +21,8 @@
       "extract_size": 1345249792,
       "extract_sha256": "cad552ba89a2bd7e774cb64f46c7ba88ce52128ba00f637b8fcce5cc3e0f6e35",
       "image_download_size": 274858070,
-      "image_download_sha256": "ba718045a35bfdcab6b876a7ae084bbe6dea7d90ace7c475813daafd29708894"
+      "image_download_sha256": "ba718045a35bfdcab6b876a7ae084bbe6dea7d90ace7c475813daafd29708894",
+      "website": "https://raspberrymatic.de/"
     },
     {
       "name": "RaspberryMatic 3.61.7.20220115 (RPi2)",
@@ -31,7 +33,8 @@
       "extract_size": 1345249792,
       "extract_sha256": "12085741cbf8e875c2050b4ecfce41e53aca4e62649a080c1b00c200c362aab9",
       "image_download_size": 259194389,
-      "image_download_sha256": "c428ee429e1f4b355964663f1b314bd966e8c6bddbeffe35ebe92bf1edaa6b8d"
+      "image_download_sha256": "c428ee429e1f4b355964663f1b314bd966e8c6bddbeffe35ebe92bf1edaa6b8d",
+      "website": "https://raspberrymatic.de/"
     },
     {
       "name": "RaspberryMatic 3.61.7.20220115 (RPiZero, RPi1)",
@@ -42,12 +45,14 @@
       "extract_size": 1345249792,
       "extract_sha256": "a2363428ac794cac2a9eb05b55d6c880b5abb3517826887c124b53a4d08dc647",
       "image_download_size": 258760164,
-      "image_download_sha256": "316647814b6bcd1be27d193aa0336a99e3fd36dd5fdda081663cf91b48881d6c"
+      "image_download_sha256": "316647814b6bcd1be27d193aa0336a99e3fd36dd5fdda081663cf91b48881d6c",
+      "website": "https://raspberrymatic.de/"
     },
     {
       "name": "RaspberryMatic Nightly Snapshots",
       "description": "Nightly Snapshot builds (untested, bleeding edge)",
-      "subitems_url": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.json"
+      "subitems_url": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.json",
+      "website": "https://raspberrymatic.de/"
     }
   ]
 }

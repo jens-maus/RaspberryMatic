@@ -106,7 +106,9 @@ USB_DEVICE=
 while read -r line; do
   ID=$(echo "${line}" | cut -d' ' -f6)
   if [[ "${ID}" == "1b1f:c020" ]] ||     # HmIP-RFUSB
-     [[ "${ID}" == "0403:6f70" ]]; then  # HB-RF-USB
+     [[ "${ID}" == "10c4:8c07" ]] ||     # HB-RF-USB-2
+     [[ "${ID}" == "0403:6f70" ]] ||     # HB-RF-USB
+     [[ "${ID}" == "1b1f:c00f" ]]; then  # HM-CFG-USB-2
     ITEM=$(echo "${line}" | cut -d' ' -f7-)
     OFFSET=2
     if [[ $((${#ITEM} + OFFSET)) -gt ${MSG_MAX_LENGTH:-} ]]; then

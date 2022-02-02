@@ -2,12 +2,15 @@
 # shellcheck disable=SC2086
 #
 # Script to install a RaspberryMatic OVA VM in Proxmox programatically.
-# https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/scripts/install-proxmox-ova.sh
+# https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/scripts/install-proxmox.sh
 #
 # Inspired by https://github.com/whiskerz007/proxmox_hassos_install
 #
 # Copyright (c) 2022 Jens Maus <mail@jens-maus.de>
 # Apache 2.0 License applies
+#
+# Usage:
+# wget -qO - https://raspberrymatic.de/install-proxmox.sh | bash -
 #
 
 # Setup script environment

@@ -50,7 +50,7 @@ DOWNLOAD_URL="https://github.com/jens-maus/RaspberryMatic/releases/download/VERS
 DESCRIPTION="Lightweight Linux OS for running a HomeMatic/homematicIP IoT central."
 
 # extract release date in YYYY-MM-DD
-RELEASE_DATE=$(date --date=$(echo ${NEW_VERSION} | cut -d'.' -f4) +%Y-%m-%d)
+RELEASE_DATE=$(date --date="$(echo "${NEW_VERSION}" | cut -d'.' -f4)" +%Y-%m-%d)
 
 RPI_IMAGER_PATH="$(readlink -f rpi-imager.json)"
 
@@ -76,9 +76,9 @@ function updateJSON() {
   
   info "Patching rpi-imager.json..."
   IMAGE_DOWNLOAD_SIZE=$(stat -c %s "${ARCHIVE_FILE}")
-  IMAGE_DOWNLOAD_SHA256=$(cat ${ARCHIVE_FILE}.sha256 | cut -d' ' -f1)
-  EXTRACT_SIZE=$(stat -c %s ${ARCHIVE_FILE%.*}.img)
-  EXTRACT_SHA256=$(cat ${ARCHIVE_FILE%.*}.img.sha256 | cut -d' ' -f1)
+  IMAGE_DOWNLOAD_SHA256=$(cut -d' ' -f1 < "${ARCHIVE_FILE}.sha256")
+  EXTRACT_SIZE=$(stat -c %s "${ARCHIVE_FILE%.*}.img")
+  EXTRACT_SHA256=$(cut -d' ' -f1 < "${ARCHIVE_FILE%.*}.img.sha256")
   jq ".os_list[${id}].name = \"RaspberryMatic ${NEW_VERSION} (${descr})\" | \
       .os_list[${id}].description = \"${DESCRIPTION}\" | \
       .os_list[${id}].url = \"${ARCHIVE_URL}\" | \

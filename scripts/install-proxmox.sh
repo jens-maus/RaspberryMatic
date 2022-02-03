@@ -124,7 +124,7 @@ RELEASE=$(whiptail --title "Select RaspberryMatic Version" \
                      "${RELEASES_MENU[@]}" 3>&1 1>&2 2>&3) || exit
 
 # extract URL from RELEASES
-prefix=${RELEASES%%$RELEASE*}
+prefix=${RELEASES%%"$RELEASE"*}
 URL=$(echo ${RELEASES:${#prefix}} | cut -d' ' -f3)
 info "Using $RELEASE for VM installation"
 

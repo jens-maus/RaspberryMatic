@@ -52,7 +52,8 @@
       "name": "RaspberryMatic Nightly Snapshots",
       "description": "Nightly Snapshot builds (untested, bleeding edge)",
       "subitems_url": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.json",
-      "website": "https://raspberrymatic.de/"
+      "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.png",
+      "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots"
     }
   ]
 }

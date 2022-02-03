@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.0"
+VERSION="1.1"
 LINE=
 
 function error_exit() {
@@ -69,6 +69,64 @@ msg ""
 
 TEMP_DIR=$(mktemp -d)
 pushd "${TEMP_DIR}" >/dev/null
+
+# Select RaspberryMatic ova version
+msg "Getting available RaspberryMatic releases..."
+RELEASES=$(cat<<EOF | python3
+import requests
+import os
+url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases"
+r = requests.get(url).json()
+if "message" in r:
+    exit()
+snapshot = ""
+num = 0
+for release in r:
+    if release["prerelease"] and release["tag_name"] != "snapshots":
+      continue
+    for asset in release["assets"]:
+        if asset["name"].endswith(".ova") == True:
+            image_url = asset["browser_download_url"]
+            name = asset["name"]
+            version = os.path.splitext(name)[0][name.find('-')+1:]
+            if release["tag_name"] == "snapshots":
+                snapshot = version + ' snapshot ' + image_url
+            elif num < 5:
+                print(version + ' release ' + image_url)
+                num = num + 1
+            break
+print(snapshot)
+EOF
+)
+
+if [[ -z "${RELEASES}" ]]; then
+  die "GitHub has returned an error. A rate limit may have been applied to your connection."
+fi
+
+MSG_MAX_LENGTH=0
+RELEASES_MENU=()
+i=0
+while read -r line; do
+  VERSION=$(echo "${line}" | cut -d' ' -f1)
+  ITEM=$(echo "${line}" | cut -d' ' -f2)
+  OFFSET=20
+  if [[ $((${#ITEM} + OFFSET)) -gt ${MSG_MAX_LENGTH:-} ]]; then
+    MSG_MAX_LENGTH=$((${#ITEM} + OFFSET))
+  fi
+  RELEASES_MENU+=("${VERSION}" " ${ITEM}")
+  ((i=i+1))
+done < <(echo "${RELEASES}")
+
+RELEASE=$(whiptail --title "Select RaspberryMatic Version" \
+                   --menu \
+                     "Select RaspberryMatic version to install:\n\n" \
+                     16 $((MSG_MAX_LENGTH + 23)) 6 \
+                     "${RELEASES_MENU[@]}" 3>&1 1>&2 2>&3) || exit
+
+# extract URL from RELEASES
+prefix=${RELEASES%%$RELEASE*}
+URL=$(echo ${RELEASES:${#prefix}} | cut -d' ' -f3)
+info "Using $RELEASE for VM installation"
 
 # Select storage location
 msg "Selecting storage location"
@@ -137,28 +195,6 @@ fi
 VMID=$(pvesh get /cluster/nextid)
 info "Container ID is ${VMID}."
 
-# Get latest RaspberryMatic ova image archive URL
-msg "Getting URL for latest RaspberryMatic disk image..."
-URL=$(cat<<EOF | python3
-import requests
-url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases"
-r = requests.get(url).json()
-if "message" in r:
-    exit()
-for release in r:
-    if release["prerelease"]:
-        continue
-    for asset in release["assets"]:
-        if asset["name"].endswith(".ova") == True:
-            image_url = asset["browser_download_url"]
-            print(image_url)
-            exit()
-EOF
-)
-if [ -z "${URL}" ]; then
-  die "Github has returned an error. A rate limit may have been applied to your connection."
-fi
-
 # Download RaspberryMatic ova archive
 msg "Downloading disk image..."
 wget -q --show-progress "${URL}"
@@ -172,7 +208,8 @@ tar xf "${FILE}"
 # Identify target format
 IMPORT_OPT=
 STORAGE_TYPE=$(pvesm status -storage "${STORAGE}" | awk 'NR>1 {print $2}')
-if [ "${STORAGE_TYPE}" = "dir" ]; then
+if [[ "${STORAGE_TYPE}" == "dir" ]] ||
+   [[ "${STORAGE_TYPE}" == "nfs" ]]; then
   IMPORT_OPT="-format qcow2"
   DISK_EXT=".qcow2"
   DISK_REF="${VMID}/"

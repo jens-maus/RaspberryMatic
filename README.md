@@ -50,13 +50,13 @@ RaspberryMatic can be directly installed on the following, commercially distribu
 ...or even as a virtual appliance on the following virtualization environments:
 
 * _Virtualization Environment_:
-  * [vmWare ESXi](https://www.vmware.com/de/products/esxi-and-esx.html)
   * [Proxmox Virtual Environment](https://www.proxmox.com/de/)
   * [Oracle VirtualBox](https://www.virtualbox.org/)
   * [Synology Virtual Machine Manager](https://www.synology.com/de-de/dsm/feature/virtual_machine_manager)
   * [QNAP VirtualizationStation](https://www.qnap.com/event/station/de-de/virtualization.php)
-  * [vmWare Workstation Player](https://www.vmware.com/de/products/workstation-player/workstation-player-evaluation.html)
   * [QEmu/KVM](https://www.qemu.org/)
+  * [vmWare ESXi](https://www.vmware.com/de/products/esxi-and-esx.html)
+  * [vmWare Workstation Player](https://www.vmware.com/de/products/workstation-player/workstation-player-evaluation.html)
   * [UNRAID](https://unraid.net/)
   * [XCP-ng/XenServer](https://xcp-ng.org/)
   * [HyperV](https://docs.microsoft.com/de-de/virtualization/hyper-v-on-windows/)

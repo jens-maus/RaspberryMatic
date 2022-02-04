@@ -245,6 +245,14 @@ jobs:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
         continue-on-error: true
 
+      #######################
+      # manifest file artifact upload
+      - name: Upload manifest artifact
+        uses: actions/upload-artifact@v2
+        with:
+          path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.mf
+          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
+
   ##########################################
   # OCI/Docker build and registry push step
   oci-multiarch-build-push:

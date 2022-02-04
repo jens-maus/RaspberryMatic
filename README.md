@@ -50,7 +50,7 @@ RaspberryMatic can be directly installed on the following, commercially distribu
 ...or even as a virtual appliance on the following virtualization environments:
 
 * _Virtualization Environment_:
-  * [Proxmox Virtual Environment](https://www.proxmox.com/de/)
+  * [Proxmox Virtual Environment](https://www.proxmox.com/en/proxmox-ve)
   * [Oracle VirtualBox](https://www.virtualbox.org/)
   * [Synology Virtual Machine Manager](https://www.synology.com/de-de/dsm/feature/virtual_machine_manager)
   * [QNAP VirtualizationStation](https://www.qnap.com/event/station/de-de/virtualization.php)

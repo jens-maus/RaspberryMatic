@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 #
-# helper script to update the rpi-imager.json with the
-# supplied version.
+# helper script to update a rpi-imager json with the supplied
+# manifest (*.mf) files for all rpi platforms
 #
+
+# check number of arguments
+if [ "$#" -ne 5 ]; then
+  echo "ERROR: invalid number of arguments"
+  exit 1
+fi
 
 # Setup script environment
 set -o errexit  #Exit immediately if a pipeline returns a non-zero status
@@ -45,14 +51,27 @@ function cleanup() {
   rm -rf "${TEMP_DIR}"
 }
 
-NEW_VERSION=${1}
-DOWNLOAD_URL="https://github.com/jens-maus/RaspberryMatic/releases/download/VERSION/RaspberryMatic-VERSION"
+# get rpi-image.json path
+RPI_IMAGER_PATH=$(readlink -f ${1})
+
+# retrieve manifest file paths
+RPI0_MF=$(readlink -f ${2})
+RPI2_MF=$(readlink -f ${3})
+RPI3_MF=$(readlink -f ${4})
+RPI4_MF=$(readlink -f ${5})
+
+# extract version and release date from first mf filename
+NEW_VERSION=$(echo "${RPI0_MF}" | sed 's/.*Matic-\(.*\)-rpi.\.mf/\1/')
+RELEASE_DATE=$(date --date="$(echo "${NEW_VERSION}" | cut -d'.' -f4 | head -c8)" +%Y-%m-%d)
+
+# common infos
 DESCRIPTION="Lightweight Linux OS for running a HomeMatic/homematicIP IoT central."
-
-# extract release date in YYYY-MM-DD
-RELEASE_DATE=$(date --date="$(echo "${NEW_VERSION}" | cut -d'.' -f4)" +%Y-%m-%d)
-
-RPI_IMAGER_PATH="$(readlink -f rpi-imager.json)"
+if [[ ${NEW_VERSION} =~ "-" ]]; then
+  NEW_VERSION=${NEW_VERSION::-1} # remove last char because of deploy-nightly action
+  DOWNLOAD_URL="https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-VERSION"
+else
+  DOWNLOAD_URL="https://github.com/jens-maus/RaspberryMatic/releases/download/VERSION/RaspberryMatic-VERSION"
+fi
 
 # create temp dir and copy rpi-imager.json to it
 TEMP_DIR=$(mktemp -d)
@@ -60,41 +79,37 @@ cp -a "${RPI_IMAGER_PATH}" "${TEMP_DIR}/"
 pushd "${TEMP_DIR}" >/dev/null
 
 function updateJSON() {
-  local id=$1
-  local platform=$2
-  local descr=$3
+  local id=${1}       # id
+  local platform=${2} # platform
+  local mf=${3}       # manifest file
+  local descr=${4}    # description
 
-  info "Processing ${platform}:"
+  # extract info from manifest
+  IMAGE_DOWNLOAD_SIZE=$(grep -e "-${platform}\.zip$" "${mf}" | cut -d' ' -f1)
+  IMAGE_DOWNLOAD_CHKS=$(grep -e "-${platform}\.zip$" "${mf}" | cut -d' ' -f2)
+  EXTRACT_SIZE=$(grep -e "-${platform}\.img$" "${mf}" | cut -d' ' -f1)
+  EXTRACT_CHKS=$(grep -e "-${platform}\.img$" "${mf}" | cut -d' ' -f2)
   ARCHIVE_URL="${DOWNLOAD_URL//VERSION/${NEW_VERSION}}-${platform}.zip"
-  ARCHIVE_FILE=$(basename "${ARCHIVE_URL}")
   
-  info "Downloading..."
-  wget -q --show-progress "${ARCHIVE_URL}" "${ARCHIVE_URL}.sha256"
-  
-  info "Unarchiving..."
-  unzip -q -o "${ARCHIVE_FILE}"
-  
-  info "Patching rpi-imager.json..."
-  IMAGE_DOWNLOAD_SIZE=$(stat -c %s "${ARCHIVE_FILE}")
-  IMAGE_DOWNLOAD_SHA256=$(cut -d' ' -f1 < "${ARCHIVE_FILE}.sha256")
-  EXTRACT_SIZE=$(stat -c %s "${ARCHIVE_FILE%.*}.img")
-  EXTRACT_SHA256=$(cut -d' ' -f1 < "${ARCHIVE_FILE%.*}.img.sha256")
+  info "Patching rpi-imager.json [${platform}]..."
   jq ".os_list[${id}].name = \"RaspberryMatic ${NEW_VERSION} (${descr})\" | \
       .os_list[${id}].description = \"${DESCRIPTION}\" | \
       .os_list[${id}].url = \"${ARCHIVE_URL}\" | \
       .os_list[${id}].release_date = \"${RELEASE_DATE}\" | \
       .os_list[${id}].extract_size = ${EXTRACT_SIZE} | \
-      .os_list[${id}].extract_sha256 = \"${EXTRACT_SHA256}\" | \
+      .os_list[${id}].extract_sha256 = \"${EXTRACT_CHKS}\" | \
       .os_list[${id}].image_download_size = ${IMAGE_DOWNLOAD_SIZE} | \
-      .os_list[${id}].image_download_sha256 = \"${IMAGE_DOWNLOAD_SHA256}\"" rpi-imager.json >rpi-imager-new.json
-  mv rpi-imager-new.json rpi-imager.json
-  rm -f "${ARCHIVE_FILE%.*}.img"
+      .os_list[${id}].image_download_sha256 = \"${IMAGE_DOWNLOAD_CHKS}\"" "${TEMP_DIR}/rpi-imager.json" >rpi-imager-new.json
+  mv rpi-imager-new.json "${TEMP_DIR}/rpi-imager.json"
 }
 
-# update rpi-imager.json
-updateJSON 0 rpi4 "RPi4, RPi400"
-updateJSON 1 rpi3 "RPi3, RPiZero2, ELV-Charly, CCU3"
-updateJSON 2 rpi2 "RPi2"
-updateJSON 3 rpi0 "RPiZero, RPi1"
+# copy rpi-imager to tmp
+cp -a "${RPI_IMAGER_PATH}" "${TEMP_DIR}/rpi-imager.json"
 
-cp -a rpi-imager.json "${RPI_IMAGER_PATH}"
+# update rpi-imager.json
+updateJSON 0 rpi4 "${RPI4_MF}" "RPi4, RPi400"
+updateJSON 1 rpi3 "${RPI3_MF}" "RPi3, RPiZero2, ELV-Charly, CCU3"
+updateJSON 2 rpi2 "${RPI2_MF}" "RPi2"
+updateJSON 3 rpi0 "${RPI0_MF}" "RPiZero, RPi1"
+
+cp -a "${TEMP_DIR}/rpi-imager.json" "${RPI_IMAGER_PATH}"

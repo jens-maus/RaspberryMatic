@@ -369,9 +369,9 @@ jobs:
           app_version: ${{ needs.build.outputs.build_version }}-${{ env.GITHUB_SHA7 }}
 
   ##########################################
-  # Promote new version to public
-  promoto-build:
-    name: Promote build (snapshot)
+  # Publish new version to public
+  publish-build:
+    name: Publish build
     runs-on: ubuntu-20.04
     needs: [build, oci-multiarch-build-push]
     if: github.event_name != 'pull_request'

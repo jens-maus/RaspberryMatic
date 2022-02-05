@@ -52,15 +52,16 @@ function cleanup() {
 }
 
 # get rpi-image.json path
-RPI_IMAGER_PATH=$(readlink -f ${1})
+RPI_IMAGER_PATH=$(readlink -f "${1}")
 
 # retrieve manifest file paths
-RPI0_MF=$(readlink -f ${2})
-RPI2_MF=$(readlink -f ${3})
-RPI3_MF=$(readlink -f ${4})
-RPI4_MF=$(readlink -f ${5})
+RPI0_MF=$(readlink -f "${2}")
+RPI2_MF=$(readlink -f "${3}")
+RPI3_MF=$(readlink -f "${4}")
+RPI4_MF=$(readlink -f "${5}")
 
 # extract version and release date from first mf filename
+# shellcheck disable=SC2001
 NEW_VERSION=$(echo "${RPI0_MF}" | sed 's/.*Matic-\(.*\)-rpi.\.mf/\1/')
 RELEASE_DATE=$(date --date="$(echo "${NEW_VERSION}" | cut -d'.' -f4 | head -c8)" +%Y-%m-%d)
 

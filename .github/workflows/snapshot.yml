@@ -344,15 +344,6 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
-      - name: Bump HomeAssistat add-on snapshot
-        run: |
-          VERSION=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
-          sed -i "s/^\(version:\)\(.*\)/\1 ${VERSION}/" home-assistant-addon-dev/config.yaml
-          git config user.name "github-actions"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "HA add-on snapshot bump [${VERSION}]" home-assistant-addon-dev/config.yaml
-          git push
-
   helm:
     name: Build K8s Helm chart
     runs-on: ubuntu-20.04
@@ -376,6 +367,60 @@ jobs:
           charts_dir: helm
           chart_version: 0.1  # Latest snapshot
           app_version: ${{ needs.build.outputs.build_version }}-${{ env.GITHUB_SHA7 }}
+
+  ##########################################
+  # Promote new version to public
+  promoto-build:
+    name: Promote build (snapshot)
+    runs-on: ubuntu-20.04
+    needs: [build, oci-multiarch-build-push]
+    if: github.event_name != 'pull_request'
+
+    steps:
+      - uses: actions/checkout@v2.4.0
+
+      - name: Setup Environment
+        run: |
+          echo "BUILD_VERSION=${{ needs.build.outputs.build_version }}" >> $GITHUB_ENV
+          echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
+
+      - name: Bump HomeAssistat add-on version
+        run: |
+          VERSION=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+          sed -i "s/^\(version:\)\(.*\)/\1 ${VERSION}/" home-assistant-addon-dev/config.yaml
+
+      # download rpi manifest files
+      - name: Download rpi0 manifest
+        uses: actions/download-artifact@v2
+        with:
+          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi0.mf
+      - name: Download rpi2 manifest
+        uses: actions/download-artifact@v2
+        with:
+          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi2.mf
+      - name: Download rpi3 manifest
+        uses: actions/download-artifact@v2
+        with:
+          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi3.mf
+      - name: Download rpi4 manifest
+        uses: actions/download-artifact@v2
+        with:
+          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf
+
+      - name: Bump rpi-imager version
+        run: |
+          release/rpi-imager-update.sh release/rpi-imager-dev.json \
+            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi0.mf \
+            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi2.mf \
+            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi3.mf \
+            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -a -m "snapshot bump [${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}]"
+          git push
 
   cleanup:
     name: Cleanup artifacts/packages

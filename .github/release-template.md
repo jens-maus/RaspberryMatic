@@ -39,10 +39,10 @@ The following installation archives can be downloaded for different hardware pla
 
 - [CCU3](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-CCU3), [ELV-Charly](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-ELV-Charly), RaspberryPi3 Model B+, RaspberryPi3 Model B, RaspberryPi3 Model A+, RaspberryPi Compute Module 3, RaspberryPi Compute Module 3 lite, RaspberryPi Zero 2 W – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):
 <sub>:package: [RaspberryMatic-${VERSION}-rpi3.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi3.zip)<br/>SHA256: XSHArpi3.zipX</sub>
-<sub>:package: [RaspberryMatic-${VERSION}-ccu3.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-ccu3.tgz) (only for initial CCU3 Firmware -> RaspberryMatic Upgrade)<br/> SHA256: XSHAccu3.tgz</sub>
+<sub>:package: [RaspberryMatic-${VERSION}-ccu3.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-ccu3.tgz) (only for initial CCU3 Firmware -> RaspberryMatic Upgrade)<br/> SHA256: XSHAccu3.tgzX</sub>
 
 - RaspberryPi2 Model B – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):
-<sub>:package: [RaspberryMatic-${VERSION}-rpi2.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi2.zip)<br/>SHA256: XSHArpi2.zip</sub>
+<sub>:package: [RaspberryMatic-${VERSION}-rpi2.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi2.zip)<br/>SHA256: XSHArpi2.zipX</sub>
 
 - RaspberryPi Zero W, RaspberryPi Zero, RaspberryPi Compute Module 1, RaspberryPi1 (A+/B+) – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):
 <sub>:package: [RaspberryMatic-${VERSION}-rpi0.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi0.zip)<br/>SHA256: XSHArpi0.zipX</sub>

@@ -79,6 +79,12 @@ jobs:
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Upload release-template.md artifact
+        uses: actions/upload-artifact@v2
+        with:
+          path: /tmp/release-template.md
+          name: release-template.md
+
   build:
     name: Release build [${{ matrix.platform }}]
     if: github.repository == 'jens-maus/RaspberryMatic'
@@ -254,6 +260,43 @@ jobs:
           name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
 
   ##########################################
+  # Update checksums in release draft
+  update-checksums:
+    name: Update checksums
+    runs-on: ubuntu-20.04
+    needs: [release_draft, build]
+
+    steps:
+      - uses: actions/checkout@v2.4.0
+
+      # download all artifact files
+      - name: Download all workflow artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Patch release draft
+        shell: bash
+        run: |
+          for f in */*.mf; do
+            while read -r line; do
+              NEEDLE=$(echo "${line}" | awk '{print $3}' | sed 's/.*-\(.*\..*\)$/\1/')
+              SHACKS=$(echo "${line}" | awk '{print $2}')
+              if [[ "${NEEDLE##*.}" == "ova" ]]; then
+                NEEDLE="ova"
+              fi
+              sed -i "s/XSHA${NEEDLE}X/${SHACKS}/" release-template.md/release-template.md
+            done < <(cat ${f})
+          done
+
+      - name: Update release draft
+        uses: ncipollo/release-action@v1.9.0
+        with:
+          bodyFile: release-template.md/release-template.md
+          allowUpdates: true
+          omitNameDuringUpdate: true
+          omitPrereleaseDuringUpdate: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  ##########################################
   # OCI/Docker build and registry push step
   oci-multiarch-build-push:
     name: OCI/Docker Build+Push
@@ -359,11 +402,76 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
+  ##########################################
+  # Publish new version to public
+  publish-build:
+    name: Publish build
+    runs-on: ubuntu-20.04
+    needs: [release_draft, build, oci-multiarch-build-push]
+    if: github.event.inputs.skip_build == 'false'
+
+    steps:
+      - uses: actions/checkout@v2.4.0
+
+      - name: Setup Environment
+        run: |
+          echo "BUILD_VERSION=${{ needs.release_draft.outputs.version }}" >> $GITHUB_ENV
+          echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
+
+      - name: Bump HomeAssistant add-on version
+        run: |
+          VERSION=${{ env.BUILD_VERSION }}
+          sed -i "s/^\(version:\)\(.*\)/\1 ${VERSION}/" home-assistant-addon/config.yaml
+
+      # download rpi manifest files
+      - name: Download rpi0 manifest
+        uses: actions/download-artifact@v2
+        with:
+          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi0.mf
+      - name: Download rpi2 manifest
+        uses: actions/download-artifact@v2
+        with:
+          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi2.mf
+      - name: Download rpi3 manifest
+        uses: actions/download-artifact@v2
+        with:
+          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi3.mf
+      - name: Download rpi4 manifest
+        uses: actions/download-artifact@v2
+        with:
+          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf
+
+      - name: Bump rpi-imager version
+        run: |
+          release/rpi-imager-update.sh release/rpi-imager.json \
+            RaspberryMatic-${{ env.BUILD_VERSION }}-rpi0.mf \
+            RaspberryMatic-${{ env.BUILD_VERSION }}-rpi2.mf \
+            RaspberryMatic-${{ env.BUILD_VERSION }}-rpi3.mf \
+            RaspberryMatic-${{ env.BUILD_VERSION }}-rpi4.mf
+
+      - name: Bump LATEST-VERSION.js
+        run: |
+          echo "homematic.com.setLatestVersion('${{ env.BUILD_VERSION }}', 'HM-RASPBERRYMATIC');" >>release/LATEST-VERSION.js
+
+      - name: Bump helm Chart.yaml
+        shell: bash
+        run: |
+          VERSION=${{ env.BUILD_VERSION }}
+          sed -i "s/^\(version:\)\(.*\)/\1 ${VERSION::-9}/" helm/raspberrymatic/Chart.yaml
+          sed -i "s/^\(appVersion:\)\(.*\)/\1 ${VERSION}/" helm/raspberrymatic/Chart.yaml
+          sed -i "s|- Release of .*|- Release of ${VERSION} (https://github.com/jens-maus/RaspberryMatic/releases/tag/${VERSION})|" helm/raspberrymatic/Chart.yaml
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -a -m "release bump [${{ env.BUILD_VERSION }}]"
+          git push
 
   helm:
     name: Build K8s Helm chart
     runs-on: ubuntu-20.04
-    needs: [release_draft, oci-multiarch-build-push]
+    needs: [release_draft, oci-multiarch-build-push, publish-build]
 
     steps:
       - name: Checkout Code

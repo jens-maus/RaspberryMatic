@@ -384,7 +384,7 @@ jobs:
           echo "BUILD_VERSION=${{ needs.build.outputs.build_version }}" >> $GITHUB_ENV
           echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
 
-      - name: Bump HomeAssistat add-on version
+      - name: Bump HomeAssistant add-on version
         run: |
           VERSION=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
           sed -i "s/^\(version:\)\(.*\)/\1 ${VERSION}/" home-assistant-addon-dev/config.yaml

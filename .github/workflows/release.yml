@@ -293,6 +293,8 @@ jobs:
           tag: ${{ needs.release_draft.outputs.version }}
           bodyFile: release-template.md/release-template.md
           allowUpdates: true
+          draft: true
+          prerelease: false
           omitNameDuringUpdate: true
           omitPrereleaseDuringUpdate: true
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -409,7 +411,6 @@ jobs:
     name: Publish build
     runs-on: ubuntu-20.04
     needs: [release_draft, build, oci-multiarch-build-push]
-    if: github.event.inputs.skip_build == 'false'
 
     steps:
       - uses: actions/checkout@v2.4.0
@@ -456,7 +457,14 @@ jobs:
           sed -i "s/^\(appVersion:\)\(.*\)/\1 ${VERSION}/" helm/raspberrymatic/Chart.yaml
           sed -i "s|- Release of .*|- Release of ${VERSION} (https://github.com/jens-maus/RaspberryMatic/releases/tag/${VERSION})|" helm/raspberrymatic/Chart.yaml
 
+      - name: Show git diffs
+        shell: bash
+        run: |
+          git status
+          git diff
+
       - name: Commit changes
+        if: github.event.inputs.skip_build == 'false'
         run: |
           git config user.name "github-actions"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

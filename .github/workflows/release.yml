@@ -447,12 +447,12 @@ jobs:
 
       - name: Bump LATEST-VERSION.js
         run: |
-          echo "homematic.com.setLatestVersion('${{ env.BUILD_VERSION }}', 'HM-RASPBERRYMATIC');" >>release/LATEST-VERSION.js
+          echo "homematic.com.setLatestVersion('${{ needs.release_draft.outputs.version }}', 'HM-RASPBERRYMATIC');" >>release/LATEST-VERSION.js
 
       - name: Bump helm Chart.yaml
         shell: bash
         run: |
-          VERSION=${{ env.BUILD_VERSION }}
+          VERSION=${{ needs.release_draft.outputs.version }}
           sed -i "s/^\(version:\)\(.*\)/\1 ${VERSION::-9}/" helm/raspberrymatic/Chart.yaml
           sed -i "s/^\(appVersion:\)\(.*\)/\1 ${VERSION}/" helm/raspberrymatic/Chart.yaml
           sed -i "s|- Release of .*|- Release of ${VERSION} (https://github.com/jens-maus/RaspberryMatic/releases/tag/${VERSION})|" helm/raspberrymatic/Chart.yaml
@@ -468,7 +468,7 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -a -m "release bump [${{ env.BUILD_VERSION }}]"
+          git commit -a -m "release bump [${{ needs.release_draft.outputs.version }}]"
           git push
 
   helm:

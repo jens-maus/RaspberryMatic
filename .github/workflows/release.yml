@@ -256,8 +256,8 @@ jobs:
       - name: Upload manifest artifact
         uses: actions/upload-artifact@v2
         with:
-          path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.mf
-          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
+          path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
+          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
 
   ##########################################
   # Update checksums in release draft
@@ -290,6 +290,7 @@ jobs:
       - name: Update release draft
         uses: ncipollo/release-action@v1.9.0
         with:
+          tag: ${{ needs.release_draft.outputs.version }}
           bodyFile: release-template.md/release-template.md
           allowUpdates: true
           omitNameDuringUpdate: true
@@ -413,41 +414,35 @@ jobs:
     steps:
       - uses: actions/checkout@v2.4.0
 
-      - name: Setup Environment
-        run: |
-          echo "BUILD_VERSION=${{ needs.release_draft.outputs.version }}" >> $GITHUB_ENV
-          echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
-
       - name: Bump HomeAssistant add-on version
         run: |
-          VERSION=${{ env.BUILD_VERSION }}
-          sed -i "s/^\(version:\)\(.*\)/\1 ${VERSION}/" home-assistant-addon/config.yaml
+          sed -i "s/^\(version:\)\(.*\)/\1 ${{ needs.release_draft.outputs.version }}/" home-assistant-addon/config.yaml
 
       # download rpi manifest files
       - name: Download rpi0 manifest
         uses: actions/download-artifact@v2
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi0.mf
+          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi0.mf
       - name: Download rpi2 manifest
         uses: actions/download-artifact@v2
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi2.mf
+          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi2.mf
       - name: Download rpi3 manifest
         uses: actions/download-artifact@v2
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi3.mf
+          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi3.mf
       - name: Download rpi4 manifest
         uses: actions/download-artifact@v2
         with:
-          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf
+          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi4.mf
 
       - name: Bump rpi-imager version
         run: |
           release/rpi-imager-update.sh release/rpi-imager.json \
-            RaspberryMatic-${{ env.BUILD_VERSION }}-rpi0.mf \
-            RaspberryMatic-${{ env.BUILD_VERSION }}-rpi2.mf \
-            RaspberryMatic-${{ env.BUILD_VERSION }}-rpi3.mf \
-            RaspberryMatic-${{ env.BUILD_VERSION }}-rpi4.mf
+            RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi0.mf \
+            RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi2.mf \
+            RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi3.mf \
+            RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi4.mf
 
       - name: Bump LATEST-VERSION.js
         run: |

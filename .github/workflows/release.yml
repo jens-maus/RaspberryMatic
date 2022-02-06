@@ -25,6 +25,7 @@ jobs:
       occu_version: ${{ steps.env.outputs.occu_version }}
       version: ${{ steps.env.outputs.version }}
       date: ${{ steps.env.outputs.date }}
+      tag: ${{ steps.env.outputs.tag }}
 
     steps:
       - name: Checkout Code
@@ -36,7 +37,7 @@ jobs:
         id: env
         shell: bash
         run: |
-          if [[ "${{ github.event.inputs.release_date}}" == "YYYYMMDD" ]]; then
+          if [[ "${{ github.event.inputs.release_date }}" == "YYYYMMDD" ]]; then
             BUILD_DATE=$(date +%Y%m%d)
           else
             BUILD_DATE=${{ github.event.inputs.release_date }}
@@ -45,6 +46,11 @@ jobs:
           echo "::set-output name=occu_version::${OCCU_VERSION}"
           echo "::set-output name=version::${OCCU_VERSION}.${BUILD_DATE}"
           echo "::set-output name=date::${BUILD_DATE}"
+          if [[ "${{ github.event.inputs.skip_build }}" == "true" ]]; then
+            echo "::set-output name=tag::${OCCU_VERSION}.${BUILD_DATE}-draft"
+          else
+            echo "::set-output name=tag::${OCCU_VERSION}.${BUILD_DATE}"
+          fi
 
       - name: Get previous tag
         id: previoustag
@@ -71,7 +77,7 @@ jobs:
         id: release_drafter
         uses: ncipollo/release-action@v1.9.0
         with:
-          tag: ${{ steps.env.outputs.version }}
+          tag: ${{ steps.env.outputs.tag }}
           name: 'RaspberryMatic ${{ steps.env.outputs.version }}'
           bodyFile: /tmp/release-template.md
           draft: true
@@ -290,7 +296,7 @@ jobs:
       - name: Update release draft
         uses: ncipollo/release-action@v1.9.0
         with:
-          tag: ${{ needs.release_draft.outputs.version }}
+          tag: ${{ needs.release_draft.outputs.tag }}
           bodyFile: release-template.md/release-template.md
           allowUpdates: true
           draft: true

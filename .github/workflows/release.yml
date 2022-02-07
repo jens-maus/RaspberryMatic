@@ -65,7 +65,7 @@ jobs:
       - name: Generate release notes
         shell: bash
         run: |
-          export CHANGELOG="$(cat <<'EOF' | grep -v "snapshot bump ["
+          export CHANGELOG="$(cat <<'EOF' | egrep -v "(snapshot bump \[|Merge branch ')"
           ${{ steps.changelog.outputs.changelog }}
           EOF
           )"

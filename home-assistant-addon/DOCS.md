@@ -9,7 +9,7 @@ Follow these steps to get the add-on installed on your system:
 
 1. Navigate in your Home Assistant frontend to **Supervisor** -> **Add-on Store**.
 2. Click on the vertical "⋮" dots on the top-right corner and select **Repositories**.
-3. Add the URL https://github.com/jens-maus/RaspberryMatic as a new add-on repository and click **Close**.
+3. Add the URL <https://github.com/jens-maus/RaspberryMatic> as a new add-on repository and click **Close**.
 4. Find the "RaspberryMatic CCU" add-on at the bottom and click it.
 5. Click on the `INSTALL` button.
 6. Install to the sidebar by clicking on `Show in sidebar`.
@@ -66,5 +66,5 @@ homematic:
       username: Admin
       password: 1234
  ```
- 
+
 Please note, that the `5422eb72-raspberrymatic` hostname in this example should be replaced by the hostname of the RapberryMatic add-on installed in your Home Assistant. To identify the correct hostname, you can e.g. login to your RaspberryMatic system via SSH and then use the `hostname` command to query for the actual hostname. In addition, please make sure that you have setup the firewall rules in RaspberryMatic itself to either "relaxed mode" or that you added the IP address of the Home Assistant system itself to the allowed ip addresses section.

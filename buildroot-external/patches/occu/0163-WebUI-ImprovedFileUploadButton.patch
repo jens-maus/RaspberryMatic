@@ -1,3 +1,24 @@
+--- occu/HMserver/opt/HMServer/pages/AvailableFirmware.ftl.orig
++++ occu/HMserver/opt/HMServer/pages/AvailableFirmware.ftl
+@@ -128,7 +128,9 @@
+ 
+         msgContent += "<form id='fileupload' name='fileupload' enctype='multipart/form-data' method='post'>"
+         msgContent += "  <fieldset>"
+-        msgContent += "    <input type='file' name='fileselect' id='fileselect'></input>"
++        msgContent += "    <label class='file-label' for='fileselect'><div class='file-button'>" + translateKey("lblChooseFile") + "&hellip;</div></label>"
++        msgContent += "    <p class='file-name'>" + translateKey("lblNoFileSelected") + "</p>"
++        msgContent += "    <input type='file' name='fileselect' id='fileselect' accept='.tgz,application/gzip' />"
+         msgContent += "  </fieldset>"
+         msgContent += "</form>"
+ 
+@@ -165,6 +167,7 @@
+           var files = e.target.files || e.dataTransfer.files;
+           // Our file var now holds the selected file
+           file = files[0];
++          jQuery(".file-name").text(file.name);
+         });
+ 
+         jQuery(".YesNoDialog_yesButton").hide().text(translateKey("dialogSettingsCMBtnPerformSoftwareUpdateUpload"));
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
 @@ -405,19 +405,16 @@
@@ -172,7 +193,7 @@
      "Belgium" : "Belgium",
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -9251,3 +9251,29 @@
+@@ -9251,3 +9251,30 @@
  .CodeMirror-gutter-wrapper {
    font-family: monospace;
  }
@@ -197,6 +218,7 @@
 +  overflow-wrap: anywhere;
 +  margin-left: 20px;
 +  font-style: italic;
++  font-weight: normal;
 +}
 +
 +input[type='file'] {

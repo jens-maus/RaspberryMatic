@@ -146,10 +146,21 @@ update_rf_hardware() {
       FOUND=1
     fi
 
-    # check if user has a HMIP-RFUSB installed (USB)
-    if [[ "${HM_HMRF_DEV}" == "HMIP-RFUSB" ]] ||
-       [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]] ||
-       lsusb 2>/dev/null | grep -q 1b1f:c020; then
+    # check if user has a HMIP-RFUSB-TK (Telekom) installed (USB)
+    # for which we don't supply any firmware updates
+    if [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB-TK" ]]; then
+      if [[ ${FOUND} -eq 1 ]]; then
+        echo -n "; "
+      fi
+      echo -n "HMIP-RFUSB-TK: ${HM_HMIP_VERSION}, not necessary, OK"
+
+      FOUND=1
+
+    # check if user has a HMIP-RFUSB (eQ3) installed (USB)
+    # for which we supply recent firmware updates
+    elif [[ "${HM_HMRF_DEV}" == "HMIP-RFUSB" ]] ||
+         [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]] ||
+         lsusb 2>/dev/null | grep -q 1b1f:c020; then
 
       if [[ ${FOUND} -eq 1 ]]; then
         echo -n "; "
@@ -211,16 +222,6 @@ update_rf_hardware() {
       else
         echo -n "${OLD_VERSION}, not necessary, OK"
       fi
-
-      FOUND=1
-    fi
-
-    # check if user has a HMIP-RFUSB-TK installed (USB)
-    if [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB-TK" ]]; then
-      if [[ ${FOUND} -eq 1 ]]; then
-        echo -n "; "
-      fi
-      echo -n "HMIP-RFUSB-TK: ${HM_HMIP_VERSION}, OK"
 
       FOUND=1
     fi

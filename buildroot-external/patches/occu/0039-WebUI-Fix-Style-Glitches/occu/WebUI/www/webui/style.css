@@ -3050,6 +3050,7 @@ html, body {
 .DeviceListThumbnail {
   border: 1px solid $_(black); /* black */
   text-align:center;
+  mix-blend-mode: multiply;
 }
 
 .DeviceListButton {

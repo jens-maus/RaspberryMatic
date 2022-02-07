@@ -402,9 +402,9 @@ start() {
 
   # output some status information
   echo -n "HmRF: "
-  [[ -n "${HM_HMRF_DEV}" ]] && echo -n "${HM_HMRF_DEV}/${HM_HMRF_DEVTYPE}, " || echo -n "none, "
+  [[ -n "${HM_HMRF_DEV}" ]] && echo -n "${HM_HMRF_DEV}/${HM_HMRF_DEVTYPE}, " || echo -n "n/a, "
   echo -n "HmIP: "
-  [[ -n "${HM_HMIP_DEV}" ]] && echo -n "${HM_HMIP_DEV}/${HM_HMIP_DEVTYPE}, " || echo -n "none, "
+  [[ -n "${HM_HMIP_DEV}" ]] && echo -n "${HM_HMIP_DEV}/${HM_HMIP_DEVTYPE}, " || echo -n "n/a, "
   echo "OK"
 }
 

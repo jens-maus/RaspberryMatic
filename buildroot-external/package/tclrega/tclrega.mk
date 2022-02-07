@@ -7,7 +7,7 @@
 #
 ################################################################################
 
-TCLREGA_VERSION = 1.0
+TCLREGA_VERSION = 1.1
 TCLREGA_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/tclrega
 TCLREGA_SITE_METHOD = local
 TCLREGA_LICENSE = Apache2

@@ -8,6 +8,12 @@
 /*############################################################################*/
 
 #include <tcl.h>
+
+#ifndef CONST84
+#define CONST84
+#endif
+
+#include <algorithm>
 #include <string>
 #include <string.h>
 #include <unistd.h>
@@ -18,29 +24,31 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <xmlParser.h>
+#include <fstream>
 
 /*############################################################################*/
 /*# Definitionen                                                             #*/
 /*############################################################################*/
 
-#define TCLREGA_VERSION "1.0"
+#define TCLREGA_VERSION "1.1"
 
 /*############################################################################*/
 /*# Variablen                                                                #*/
 /*############################################################################*/
 
 static Tcl_HashTable hashTable;
+static Tcl_Encoding iso8859_encoding = NULL;
 
-static char* DEFAULT_URL="http://127.0.0.1:8181/tclrega.exe";
+//static std::string DEFAULT_URL("http://127.0.0.1:8181/tclrega.exe");
 
-static char* USAGE =  "usage: rega command\n"
+static const char* USAGE =  "usage: rega command\n"
                         "\trega_script script\n"
-                        "\trega_url url (url defaults to http://127.0.0.1:8181)\n"
+                        "\trega_url url (url defaults to http://127.0.0.1:8183)\n"
                         "\trega_sid sid"
                         "\trega_post url payload";
                         
-/* - - - wernerf - - - */
-static char REGA_URL_PREFIX[] = "http://127.0.0.1:8181";
+/* - - - wernerf/ - - - */
+//static std::string REGA_URL_PREFIX("http://127.0.0.1:8181");
 /* - - - wernerf - - - */
                         
 
@@ -48,7 +56,55 @@ struct sockaddr_in dest_addr;
 static std::string uri;
 static std::string sid;
 
+// - - - niclaus - - -
+static std::string portRega("8183");
+static volatile bool portRegaRead;
 
+
+
+/*############################################################################*/
+/*# Interne Hilfsfunktionen                                                  #*/
+/*############################################################################*/
+
+std::string trim(const std::string& str)
+{
+    size_t first = str.find_first_not_of(' ');
+    if (std::string::npos == first)
+    {
+        return str;
+    }
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, (last - first + 1));
+}
+
+std::string readPortFromFile(const char* filename) {
+    std::ifstream ifs;
+    ifs.open(filename, std::ifstream::in);
+    char* buffer = new char[256];
+    std::string base("01234567890");
+    while(ifs.good()) {
+        ifs.getline(buffer, 256);
+        std::string port(buffer);
+        port = trim(port);
+        if(!port.empty() && (port.find_first_not_of(base) == std::string::npos)) {
+            delete[] buffer;
+            return port;
+        }
+    }
+    delete[] buffer;
+    return std::string("");
+}
+
+void initPorts() {
+    if(!portRegaRead) {
+        std::string port(readPortFromFile("/etc/rega_http.port"));
+        if(!port.empty()) {
+            portRega = port;
+        }
+        portRegaRead = true;
+    }
+}
+// - - - niclaus - - -
 
 extern "C" {
 
@@ -56,20 +112,22 @@ extern "C" {
 /*# Prototypen                                                               #*/
 /*############################################################################*/
 
-static int Tclrega_Cmd (ClientData, Tcl_Interp * interp, int argc, char* argv[]);
-static int Tclrega_Script (ClientData, Tcl_Interp * interp, int argc, char* argv[]);
-static int Tclrega_URL (ClientData, Tcl_Interp * interp, int argc, char* argv[]);
-static int Tclrega_SID (ClientData, Tcl_Interp * interp, int argc, char* argv[]);
+static int Tclrega_Cmd (ClientData, Tcl_Interp * interp, int argc, CONST84 char* argv[]);
+static int Tclrega_Script (ClientData, Tcl_Interp * interp, int argc, CONST84 char* argv[]);
+static int Tclrega_URL (ClientData, Tcl_Interp * interp, int argc, CONST84 char* argv[]);
+static int Tclrega_SID (ClientData, Tcl_Interp * interp, int argc, CONST84 char* argv[]);
 static int ParseURL(const std::string& url);
 
 /* - - - wernerf - - - */
-static int Tclrega_post(ClientData, Tcl_Interp * interp, int argc, char* argv[]);
-static int TclError(Tcl_Interp *interp, char *msg);
+static int Tclrega_post(ClientData, Tcl_Interp * interp, int argc, CONST84 char* argv[]);
+static int TclError(Tcl_Interp *interp, const char *msg);
 /* - - - wernerf - - - */
 
 /*############################################################################*/
 /*# Funktionen                                                               #*/
 /*############################################################################*/
+
+static void Tclrega_Exit (ClientData);
 
 int Tclrega_Init (Tcl_Interp* interp) {
 	Tcl_InitHashTable(&hashTable, TCL_STRING_KEYS);
@@ -82,15 +140,42 @@ int Tclrega_Init (Tcl_Interp* interp) {
 	Tcl_CreateCommand(interp, "rega_post", Tclrega_post, (ClientData) NULL, NULL);
   /* - - - wernerf - - - */
 	Tcl_SetVar(interp, "rega_version", TCLREGA_VERSION, TCL_GLOBAL_ONLY);
+
+	// get used tcl version
+	int major;
+	int minor;
+	Tcl_GetVersion(&major, &minor, NULL, NULL);
+
+	// get iso8859-1 encoding to signal that we need to convert
+	// from utf8 to iso8859-1 in case we use a tcl version > 8.2
+	if(major > 8 || (major == 8 && minor > 2)) {
+	  iso8859_encoding = Tcl_GetEncoding(interp, "iso8859-1");
+	}
+
+	// create an exit handler to clean up afterwards
+	Tcl_CreateExitHandler( Tclrega_Exit, 0 );
+
+    initPorts();
+    const std::string DEFAULT_URL = ("http://127.0.0.1:"+portRega+"/tclrega.exe");
     ParseURL(DEFAULT_URL);
 	return TCL_OK;
+}
+
+static void Tclrega_Exit (ClientData)
+{
+	Tcl_DeleteExitHandler( Tclrega_Exit, 0 );
+	if(iso8859_encoding != NULL)
+	{
+	  Tcl_FreeEncoding(iso8859_encoding);
+	  iso8859_encoding = NULL;
+	}
 }
 
 static int ParseURL(const std::string& url)
 {
 	std::string::size_type left, right;
     std::string host;
-    unsigned long port=80;
+    unsigned int port=80;
 	left=0;
 	right=url.find("://", left);
 	if(right != std::string::npos){
@@ -123,7 +208,7 @@ static int ParseURL(const std::string& url)
 static int SendRequest(Tcl_Interp * interp, const std::string& request, std::string* response)
 {
     static char buffer[1024];
-    sprintf(buffer, "%u", request.size());
+    sprintf(buffer, "%u", static_cast<uint32_t>(request.size()));
     std::string http_request="POST "+uri+sid+" HTTP/1.0\x0d\x0a""Content-Length: "+buffer+"\x0d\x0a\x0d\x0a"+request;//+"\x0d\x0a";
     int fd=socket(PF_INET, SOCK_STREAM, 0);
     if(fd<0){
@@ -156,7 +241,8 @@ static int SendRequest(Tcl_Interp * interp, const std::string& request, std::str
             if(pos!=std::string::npos){
                 http_response_body=http_response_head.substr(pos+4);
                 http_response_head.erase(pos);
-                pos=http_response_head.find("Content-Length:");
+                std::transform(http_response_head.begin(), http_response_head.end(), http_response_head.begin(), ::tolower);
+                pos=http_response_head.find("content-length:");
                 if(pos==std::string::npos){
                     Tcl_AppendResult(interp, "Content-Length Field not found", NULL);
                     close(fd);
@@ -178,7 +264,7 @@ static int SendRequest(Tcl_Interp * interp, const std::string& request, std::str
     return 0;
 }
 
-static int Tclrega_Cmd (ClientData, Tcl_Interp * interp, int argc, char* argv[])
+static int Tclrega_Cmd (ClientData, Tcl_Interp * interp, int argc, CONST84 char* argv[])
 {
 	if(argc < 2) {
 		Tcl_AppendResult(interp, USAGE, NULL);
@@ -190,7 +276,13 @@ static int Tclrega_Cmd (ClientData, Tcl_Interp * interp, int argc, char* argv[])
     for(int i=1;i<argc;i++){
         sprintf(buffer, "var __tcl_result_%d=", i);
         content+=buffer;
-        content+=argv[i];
+        if(iso8859_encoding != NULL) {
+          Tcl_DString dst;
+          content += Tcl_UtfToExternalDString(iso8859_encoding, argv[i], -1, &dst);
+          Tcl_DStringFree(&dst);
+        } else {
+          content+=argv[i];
+        }
         if(content[content.size()-1]!=';')content+=";";
     }
     if(SendRequest(interp, content, &response)<0){
@@ -216,19 +308,25 @@ static int Tclrega_Cmd (ClientData, Tcl_Interp * interp, int argc, char* argv[])
             Tcl_AppendResult(interp, "Error parsing response from ", content.c_str(), " : ", response.c_str(), " missing tag ", buffer, NULL);
 		    return TCL_ERROR;
         }
-        //printf("left=%d, right=%d\n", left, right);
-        std::string tcl_result=response.substr(left, right-left);
-        //printf("tcl_result=%s\n", tcl_result.c_str());
-        if(argc==2){
-            Tcl_AppendResult(interp, const_cast<char*>(tcl_result.c_str()), NULL);
-        }else{
-            Tcl_AppendElement(interp, const_cast<char*>(tcl_result.c_str()));
+        const char *tcl_result = NULL;
+        Tcl_DString dst;
+        if(iso8859_encoding != NULL) {
+          tcl_result = Tcl_ExternalToUtfDString(iso8859_encoding, response.substr(left, right-left).c_str(), -1, &dst);
+        } else {
+          tcl_result = response.substr(left, right-left).c_str();
         }
+        if(argc==2){
+            Tcl_AppendResult(interp, tcl_result, NULL);
+        }else{
+            Tcl_AppendElement(interp, tcl_result);
+        }
+        if(iso8859_encoding != NULL)
+          Tcl_DStringFree(&dst);
     }
     return TCL_OK;
 }
 
-static int Tclrega_Script (ClientData, Tcl_Interp * interp, int argc, char* argv[])
+static int Tclrega_Script (ClientData, Tcl_Interp * interp, int argc, CONST84 char* argv[])
 {
 	if(argc < 2) {
 		Tcl_AppendResult(interp, USAGE, NULL);
@@ -237,7 +335,13 @@ static int Tclrega_Script (ClientData, Tcl_Interp * interp, int argc, char* argv
     std::string content;
     std::string response;
     for(int i=1;i<argc;i++){
-        content+=argv[i];
+        if(iso8859_encoding != NULL) {
+          Tcl_DString dst;
+          content += Tcl_UtfToExternalDString(iso8859_encoding, argv[i], -1, &dst);
+          Tcl_DStringFree(&dst);
+        } else {
+          content+=argv[i];
+        }
         content+="\0d\0a";
     }
     if(SendRequest(interp, content, &response)<0){
@@ -249,7 +353,15 @@ static int Tclrega_Script (ClientData, Tcl_Interp * interp, int argc, char* argv
 		return TCL_ERROR;
     }
     Tcl_AppendElement(interp, const_cast<char*>("STDOUT"));
-    Tcl_AppendElement(interp, const_cast<char*>(response.substr(0, xml_start).c_str()));
+    if(iso8859_encoding != NULL) {
+      Tcl_DString dst;
+      const char* cstr;
+      cstr = Tcl_ExternalToUtfDString(iso8859_encoding, response.substr(0, xml_start).c_str(), -1, &dst);
+      Tcl_AppendElement(interp, cstr);
+      Tcl_DStringFree(&dst);
+    } else {
+      Tcl_AppendElement(interp, const_cast<char*>(response.substr(0, xml_start).c_str()));
+    }
     
     XMLNode node=XMLNode::parseString(response.substr(xml_start).c_str(), "xml");
     if(node.isEmpty()){
@@ -260,8 +372,19 @@ static int Tclrega_Script (ClientData, Tcl_Interp * interp, int argc, char* argv
     XMLNode var_node=node.getChildNode(i);
     while(!var_node.isEmpty()){
         i++;
-        Tcl_AppendElement(interp, const_cast<char*>(var_node.getName()));
-        Tcl_AppendElement(interp, const_cast<char*>(var_node.getText()));
+        if(iso8859_encoding != NULL) {
+          Tcl_DString dst;
+          const char* cstr;
+          cstr = Tcl_ExternalToUtfDString(iso8859_encoding, var_node.getName(), -1, &dst);
+          Tcl_AppendElement(interp, cstr);
+          Tcl_DStringFree(&dst);
+          cstr = Tcl_ExternalToUtfDString(iso8859_encoding, var_node.getText(), -1, &dst);
+          Tcl_AppendElement(interp, cstr);
+          Tcl_DStringFree(&dst);
+        } else {
+          Tcl_AppendElement(interp, const_cast<char*>(var_node.getName()));
+          Tcl_AppendElement(interp, const_cast<char*>(var_node.getText()));
+        }
         var_node=node.getChildNode(i);
     }
     return TCL_OK;
@@ -272,7 +395,7 @@ static int Tclrega_Script (ClientData, Tcl_Interp * interp, int argc, char* argv
 
 /*******************************************************************************
  * \fn static int Tclrega_post(ClientData, Tcl_Interp *interp, int argc, 
- *       char* argv[]
+ *       const char* argv[]
  * \brief Führt einen HTTP Post aus.
  *
  * Sendet eine HTTP Anfrage an eine URL auf dem ISE ReGa Webserver mittels
@@ -290,7 +413,7 @@ static int Tclrega_Script (ClientData, Tcl_Interp * interp, int argc, char* argv
  * \return TCL_ERROR: Es sind Fehler aufgetreten
  ******************************************************************************/
 static int Tclrega_post (ClientData, Tcl_Interp * interp, int argc, 
-  char* argv[])
+  CONST84 char* argv[])
 {
   static char ERROR_MSG[] = "Error while sending the request.";
   std::string url;
@@ -299,11 +422,25 @@ static int Tclrega_post (ClientData, Tcl_Interp * interp, int argc,
     
   if (2 >= argc) { return TclError(interp, USAGE); }
   
+  initPorts();
+  const std::string REGA_URL_PREFIX("http://127.0.0.1:"+portRega);
   url  = REGA_URL_PREFIX;
-  url += argv[1];
+  if(iso8859_encoding != NULL) {
+    Tcl_DString dst;
+    url += Tcl_UtfToExternalDString(iso8859_encoding, argv[1], -1, &dst);
+    Tcl_DStringFree(&dst);
+  } else {
+    url += argv[1];
+  }
   for(int i = 2; i < argc; i++)
   {
-    content += argv[i];
+    if(iso8859_encoding != NULL) {
+      Tcl_DString dst;
+      content += Tcl_UtfToExternalDString(iso8859_encoding, argv[i], -1, &dst);
+      Tcl_DStringFree(&dst);
+    } else {
+      content += argv[i];
+    }
     content += "\r\n";
   }
   
@@ -312,7 +449,18 @@ static int Tclrega_post (ClientData, Tcl_Interp * interp, int argc,
   { 
     return TclError(interp, ERROR_MSG); 
   }
-  Tcl_AppendResult(interp, response.c_str(), NULL);
+  if(iso8859_encoding != NULL) {
+    Tcl_DString dst;
+    const char *cstr;
+    cstr = Tcl_ExternalToUtfDString(iso8859_encoding, response.c_str(), -1, &dst);
+    Tcl_AppendResult(interp, cstr, NULL);
+    Tcl_DStringFree(&dst);
+  } else {
+    Tcl_AppendResult(interp, response.c_str(), NULL);
+  }
+  
+  initPorts();
+  const std::string DEFAULT_URL = "http://127.0.0.1:"+portRega+ "/tclrega.exe";
   ParseURL(DEFAULT_URL);
   
   return TCL_OK;
@@ -327,7 +475,7 @@ static int Tclrega_post (ClientData, Tcl_Interp * interp, int argc,
  *
  * \return TCL_ERROR
  ******************************************************************************/
-static int TclError(Tcl_Interp *interp, char* msg)
+static int TclError(Tcl_Interp *interp, const char* msg)
 {
   Tcl_AppendResult(interp, msg, NULL);
   return TCL_ERROR;
@@ -336,7 +484,7 @@ static int TclError(Tcl_Interp *interp, char* msg)
 /* - - - wernerf - - -*/
 
 
-static int Tclrega_URL (ClientData, Tcl_Interp * interp, int argc, char* argv[])
+static int Tclrega_URL (ClientData, Tcl_Interp * interp, int argc, CONST84 char* argv[])
 {
 	if(argc < 2) {
 		Tcl_AppendResult(interp, USAGE, NULL);
@@ -346,7 +494,7 @@ static int Tclrega_URL (ClientData, Tcl_Interp * interp, int argc, char* argv[])
 	return TCL_OK;
 }
 
-static int Tclrega_SID (ClientData, Tcl_Interp * interp, int argc, char* argv[])
+static int Tclrega_SID (ClientData, Tcl_Interp * interp, int argc, CONST84 char* argv[])
 {
 	if(argc > 2) {
 		Tcl_AppendResult(interp, USAGE, NULL);

@@ -491,7 +491,7 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Step 2: Select downloaded software",
     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Step 3: Upload software to " + HMIdentifier.en.CCUShortName,
     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Step 4: Start update",
-    "dialogSettingsCMLblLogHomeMaticIP" : HMIdentifier.de.HomematicIP,
+    "dialogSettingsCMLblLogHomematicIP" : HMIdentifier.en.HomematicIP,
     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.en.BidCosRF,
     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.en.BidCosWired,
     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.en.CCUShortName + " control",

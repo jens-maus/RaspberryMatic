@@ -19,6 +19,14 @@ map:
   - backup:rw
 init: false
 timeout: 120
+devices:
+  - /dev/raw-uart
+  - /dev/raw-uart1
+  - /dev/mmd_hmip
+  - /dev/mmd_bidcos
+  - /dev/eq3loop
+  - /dev/i2c-0
+  - /dev/i2c-1
 udev: true
 kernel_modules: true
 realtime: true
@@ -101,8 +109,6 @@ full_access: true
 privileged:
   - IPC_LOCK
   - SYS_ADMIN
-  - SYS_MODULE
-  - SYS_NICE
   - SYS_RAWIO
   - SYS_RESOURCE
   - NET_ADMIN

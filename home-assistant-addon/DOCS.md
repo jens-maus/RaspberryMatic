@@ -13,9 +13,8 @@ Follow these steps to get the add-on installed on your system:
 4. Find the "RaspberryMatic CCU" add-on at the bottom and click it.
 5. Click on the `INSTALL` button.
 6. Install to the sidebar by clicking on `Show in sidebar`.
-7. Disable `protection-mode` as the add-on required elevated access rights.
-8. Start add-on by clicking on `START`
-9. Click on the `RaspberryMatic` sidebar link to switch into the RaspberryMatic WebUI.
+7. Start add-on by clicking on `START`
+8. Click on the `RaspberryMatic` sidebar link to switch into the RaspberryMatic WebUI.
 
 More detailed documentation on the installation can be found [here](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HomeAssistant)
 

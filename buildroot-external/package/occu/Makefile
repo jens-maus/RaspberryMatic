@@ -42,28 +42,17 @@ install_webui_arch:
 	rm -rf $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libtcl8.2.so
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl*.so
-	#ln -sf libtcl8.6.so $(TARGET_DIR)/usr/lib/libtcl8.2.so
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/tclsh
 	ln -sf /usr/bin/tclsh $(TARGET_DIR)/bin/tclsh
 	# copy WebUI stuff to target dir
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/* $(TARGET_DIR)/bin/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/* $(TARGET_DIR)/etc/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/*.so $(TARGET_DIR)/$(OCCU_LIBDIR)/
-	#test -e $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2 && cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2 $(TARGET_DIR)/lib/ || true
 	cp -R WebUI/* $(TARGET_DIR)/
 	# copy ReGaHss beta to target dir
 ifeq ($(OCCU_WEBUI_REGAHSS_BETA), y)
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
-endif
-	# link 32bit tcl libraries for 64bit archs
-ifneq ($(OCCU_LIBDIR), lib)
-	rm -f $(TARGET_DIR)/lib/tclrega.so
-	ln -s ../$(OCCU_LIBDIR)/tclrega.so $(TARGET_DIR)/lib/
-	rm -f $(TARGET_DIR)/lib/tclrpc.so
-	ln -s ../$(OCCU_LIBDIR)/tclrpc.so $(TARGET_DIR)/lib/
-	rm -f $(TARGET_DIR)/lib/tclticks.so
-	ln -s ../$(OCCU_LIBDIR)/tclticks.so $(TARGET_DIR)/lib/
 endif
 
 install_linuxbasis_arch:

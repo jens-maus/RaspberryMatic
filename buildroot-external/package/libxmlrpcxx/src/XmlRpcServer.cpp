@@ -9,6 +9,7 @@
 #include "XmlRpcUtil.h"
 #include "XmlRpcException.h"
 
+#include <asm/bitsperlong.h>
 
 using namespace XmlRpc;
 
@@ -132,7 +133,11 @@ XmlRpcServer::bindAndListen(const char* ip, int port, int backlog /*= 5*/)
 
 // Process client requests for the specified time
 void 
+#if __BITS_PER_LONG == 32
+XmlRpcServer::work(long msTime)
+#else
 XmlRpcServer::work(int32_t msTime)
+#endif
 {
 //  XmlRpcUtil::log(2, "XmlRpcServer::work: waiting for a connection");
   _disp.work(msTime);

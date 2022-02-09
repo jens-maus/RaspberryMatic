@@ -12,6 +12,8 @@ install_rfd_arch:
 	mkdir -p $(TARGET_DIR)/www/config
 	mkdir -p $(TARGET_DIR)/firmware
 	rm -f $(OCCU_ARCH)/packages-eQ-3/RFD/bin/avrprog
+	rm -f $(OCCU_ARCH)/packages-eQ-3/RFD/lib/libXmlRpc.so
+	rm -f $(OCCU_ARCH)/packages-eQ-3/RFD/lib/libxmlparser.so
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/bin/* $(TARGET_DIR)/bin/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/RFD/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S61rfd $(TARGET_DIR)/etc/init.d/
@@ -27,6 +29,8 @@ endif
 install_hs485d_arch:
 	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/bin/* $(TARGET_DIR)/bin/
 	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/etc/* $(TARGET_DIR)/etc/
+	rm -f $(OCCU_ARCH)/packages-eQ-3/HS485D/lib/libXmlRpc.so
+	rm -f $(OCCU_ARCH)/packages-eQ-3/HS485D/lib/libxmlparser.so
 	cp -R $(OCCU_ARCH)/packages-eQ-3/HS485D/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
 
 install_webui_arch:
@@ -37,6 +41,8 @@ install_webui_arch:
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/bin/eq3-uds-services
 	rm -rf $(OCCU_ARCH)/packages-eQ-3/WebUI/etc/config
 	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libeq3udss.so
+	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libXmlRpc.so
+	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/libxmlparser.so
 	# TCL 8.6 tuning
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2/homematic $(TARGET_DIR)/usr/lib/tcl8.6/
 	rm -rf $(OCCU_ARCH)/packages-eQ-3/WebUI/lib/tcl8.2
@@ -51,8 +57,10 @@ install_webui_arch:
 	cp -R WebUI/* $(TARGET_DIR)/
 	# copy ReGaHss beta to target dir
 ifeq ($(OCCU_WEBUI_REGAHSS_BETA), y)
+	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/libXmlRpc.so
+	rm -f $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/libxmlparser.so
 	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/bin/* $(TARGET_DIR)/bin/
-	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/
+	cp -R $(OCCU_ARCH)/packages-eQ-3/WebUI-Beta/lib/* $(TARGET_DIR)/$(OCCU_LIBDIR)/ || true
 endif
 
 install_linuxbasis_arch:

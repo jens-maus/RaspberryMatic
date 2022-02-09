@@ -20,6 +20,8 @@
 #include "XmlRpcDispatch.h"
 #include "XmlRpcSource.h"
 
+#include <asm/bitsperlong.h>
+
 namespace XmlRpc {
 
 
@@ -65,7 +67,11 @@ namespace XmlRpc {
     bool bindAndListen(int port, int backlog = 5);
 
     //! Process client requests for the specified time
+    #if __BITS_PER_LONG == 32
+    void work(long msTime);
+    #else
     void work(int32_t msTime);
+    #endif
 
     //! Temporarily stop processing client requests and exit the work() method.
     void exit();

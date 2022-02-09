@@ -24,7 +24,7 @@ using namespace XmlRpc;
 #endif
 
 // Version id
-const char XmlRpc::XMLRPC_VERSION[] = "XMLRPC++ 0.8";
+const char XmlRpc::XMLRPC_VERSION[] = "XMLRPC++ 0.9";
 
 // Default log verbosity: 0 for no messages through 5 (writes everything)
 int XmlRpcLogHandler::_verbosity = 0;

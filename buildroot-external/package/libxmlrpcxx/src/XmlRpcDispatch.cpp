@@ -21,6 +21,7 @@
 # include <sys/time.h>
 #endif  // _WINDOWS
 
+#include <asm/bitsperlong.h>
 
 using namespace XmlRpc;
 
@@ -81,7 +82,11 @@ XmlRpcDispatch::setSourceEvents(XmlRpcSource* source, unsigned eventMask)
 
 // Watch current set of sources and process events
 bool
+#if __BITS_TO_LONG == 32
+XmlRpcDispatch::work(long msTime)
+#else
 XmlRpcDispatch::work(int32_t msTime)
+#endif
 {
 	_doClear = false;
 	_inWork = true;
@@ -210,7 +215,11 @@ XmlRpcDispatch::clear()
 }
 
 
+#if __BITS_TO_LONG == 32
+unsigned long
+#else
 uint32_t
+#endif
 XmlRpcDispatch::getTime()
 {
 #ifdef USE_FTIME

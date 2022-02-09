@@ -22,7 +22,7 @@ init() {
   if [[ ! -c /dev/eq3loop ]]; then
     # load eq3_char_loop kernel module
     modprobe eq3_char_loop
-    sleep 2 # wait to settle
+    sleep 5 # wait for /dev/eq3loop to settle
   fi
 }
 
@@ -70,7 +70,9 @@ start() {
         # to ensure that others are killed first in case of low memory situations
         echo -900 >/proc/$$/oom_score_adj 2>/dev/null
 
-        start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
+        # start multimacd with nice level -15 to increase
+        # process priority
+        start-stop-daemon -S -N -15 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
         waitStartupComplete
       else
         echo "ERROR: /dev/eq3loop missing"

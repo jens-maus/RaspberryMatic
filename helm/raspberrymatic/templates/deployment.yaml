@@ -46,7 +46,14 @@ spec:
             name: ccu-volume
           - mountPath: /sys
             name: sys
+          - mountPath: /lib/modules
+            name: modules
       volumes:
+      - name: modules
+        hostPath:
+          path: /lib/modules
+          type: Directory
+      - name: ccu-volume
       - name: sys
         hostPath:
           path: /sys

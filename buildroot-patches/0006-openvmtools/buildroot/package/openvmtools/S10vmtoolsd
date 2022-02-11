@@ -12,7 +12,7 @@ VMTOOLSD_ARGS="-b"
 [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
 
 # only continue if VMware Hypervisor found
-if /usr/bin/lscpu | grep "Hypervisor vendor:" | grep -qv VMware; then
+if ! /usr/bin/lscpu | grep -qE "Hypervisor vendor:.*VMware"; then
   exit 0
 fi
 

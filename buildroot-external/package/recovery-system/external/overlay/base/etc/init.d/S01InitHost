@@ -132,7 +132,7 @@ identify_host() {
       HM_HOST="oci" # generic
 
       # save the HA supervisor token for later use
-      if [[ -n ${HM_RUNNING_IN_HA} ]]; then
+      if [[ -n "${HM_RUNNING_IN_HA}" ]]; then
         HM_SUPERVISOR_TOKEN=${SUPERVISOR_TOKEN}
       fi
     ;;

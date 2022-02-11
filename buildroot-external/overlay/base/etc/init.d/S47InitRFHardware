@@ -215,7 +215,8 @@ query_rf_parameters() {
         if [[ -n "${RF_HMRF_ADDRESS}" ]] &&
            [[ "${RF_HMRF_ADDRESS}" != "0x000000" ]] &&
            [[ -n "${RF_SERIAL}" ]] &&
-           [[ -z "${RFUSB_DEVNODE}" ]]; then
+           [[ -z "${RFUSB_DEVNODE}" ]] &&
+           [[ "${RF_HARDWARE}" != "HMIP-RFUSB-TK" ]]; then
 
           # prefer a HM-MOD-RPI-PCB for HmRF stuff in case
           # we already have a setup HMRF device

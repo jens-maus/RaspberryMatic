@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC3010,SC3028 source=/dev/null
+# shellcheck shell=dash disable=SC3010,SC3028,SC2169 source=/dev/null
 #
 # Starts tailscaled
 #

@@ -15,7 +15,7 @@ endef
 
 define HMLANGW_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 $(@D)/hmlangw $(TARGET_DIR)/bin
-	$(INSTALL) -D -m 0755 $(@D)/S61hmlangw $(TARGET_DIR)/etc/init.d
+	$(INSTALL) -D -m 0755 $(@D)/S61hmlangw $(TARGET_DIR)/etc/init.d/S61hmlangw
 endef
 
 $(eval $(generic-package))

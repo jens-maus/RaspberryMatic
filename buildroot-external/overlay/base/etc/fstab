@@ -1,7 +1,7 @@
 # /etc/fstab: static file system information.
 #
 # <file system> <mount pt>     <type>   <options>                                <dump> <pass>
-/dev/root       /              ext4     ro,noauto,noatime,nodiratime,data=journal 0      1
+/dev/root       /              auto     ro,noauto,noatime,nodiratime             0      1
 proc            /proc          proc     defaults                                 0      0
 devpts          /dev/pts       devpts   defaults,gid=5,mode=620                  0      0
 tmpfs           /dev/shm       tmpfs    mode=0777                                0      0
@@ -11,5 +11,5 @@ sysfs           /sys           sysfs    defaults                                
 tmpfs           /var           tmpfs    defaults,noatime,size=50%                0      0
 tmpfs           /media         tmpfs    defaults,noatime                         0      0
 debugfs         /sys/kernel/debug debugfs noauto                                 0      0
-LABEL=userfs    /usr/local     ext4     defaults,noatime,nodiratime,rw,data=journal,nofail         0      2
+LABEL=userfs    /usr/local     auto     defaults,noatime,nodiratime,rw,nofail    0      2
 LABEL=bootfs    /boot          vfat     defaults,ro                              0      0

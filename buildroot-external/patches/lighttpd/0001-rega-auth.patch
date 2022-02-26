@@ -1,25 +1,13 @@
---- lighttpd/src/Makefile.am.orig
-+++ lighttpd/src/Makefile.am
-@@ -328,6 +328,11 @@
- mod_authn_file_la_LDFLAGS = $(common_module_ldflags)
- mod_authn_file_la_LIBADD = $(CRYPT_LIB) $(CRYPTO_LIB) $(common_libadd)
+--- lighttpd/src/meson.build.orig
++++ lighttpd/src/meson.build
+@@ -996,6 +996,7 @@
+ 	[ 'mod_vhostdb', [ 'mod_vhostdb.c', 'mod_vhostdb_api.c' ] ],
+ 	[ 'mod_webdav', [ 'mod_webdav.c' ], libsqlite3 + libuuid + libxml2 + libelftc ],
+ 	[ 'mod_wstunnel', [ 'mod_wstunnel.c' ], libcrypto ],
++	[ 'mod_authn_rega', [ 'mod_authn_rega.c' ] ],
+ ]
  
-+lib_LTLIBRARIES += mod_authn_rega.la
-+mod_authn_rega_la_SOURCES = mod_authn_rega.c
-+mod_authn_rega_la_LDFLAGS = $(common_module_ldflags)
-+mod_authn_rega_la_LIBADD = $(common_libadd)
-+
- if BUILD_WITH_KRB5
- lib_LTLIBRARIES += mod_authn_gssapi.la
- mod_authn_gssapi_la_SOURCES = mod_authn_gssapi.c
-@@ -427,6 +432,7 @@
-   mod_alias.c \
-   mod_auth.c \
-   mod_authn_file.c \
-+  mod_authn_rega.c \
-   mod_cgi.c \
-   mod_compress.c \
-   mod_deflate.c \
+ if target_machine.system() != 'windows'
 --- lighttpd/src/mod_authn_rega.c.orig
 +++ lighttpd/src/mod_authn_rega.c
 @@ -0,0 +1,261 @@

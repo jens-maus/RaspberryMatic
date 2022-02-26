@@ -1,8 +1,10 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 #
 # init script to start/stop the CloudMatic Addon
 #
+
+DAEMON="CloudMatic"
 
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
@@ -14,36 +16,36 @@
 [[ -x /opt/mh/startup.sh ]] || exit 0
 
 start() {
-  echo -n "Starting CloudMatic: "
+	echo -n "Starting ${DAEMON}: "
 
-  if [[ ! -e /etc/config/safemode ]]; then
+	if [[ ! -e /etc/config/safemode ]]; then
 
-    # CloudMatic (meine-homematic.de) startup
-    /opt/mh/startup.sh 2>/dev/null >/dev/null
+		# CloudMatic (meine-homematic.de) startup
+		/opt/mh/startup.sh 2>/dev/null >/dev/null
 
-    echo "OK"
-  else
-    echo "skipping (safemode)"
-  fi
+		echo "OK"
+	else
+		echo "skipping (safemode)"
+	fi
 }
 
 restart() {
-  start
+	start
 }
 
 case "$1" in
-  start)
-    start
-  ;;
-  stop)
-    # nothing
-  ;;
-  restart|reload)
-    restart
-  ;;
-  *)
-    echo "Usage: $0 {start|restart}"
-    exit 1
+	start)
+		start
+	;;
+	stop)
+		# nothing
+	;;
+	restart|reload)
+		restart
+	;;
+	*)
+		echo "Usage: $0 {start|restart}"
+		exit 1
 esac
 
 exit $?

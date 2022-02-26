@@ -374,8 +374,8 @@ query_rf_parameters() {
     echo -n "${HM_HMRF_SERIAL}" >/var/board_serial
   else
     # fallback to put the mac in /var/board_serial
-    MAC=$(cat /sys/class/net/$(ip route show default | awk '/default/ {print $5}')/address)
-    echo -n "$(echo ${MAC} | tr -d : | tail -c 10)" >/var/board_serial
+    MAC=$(cat /sys/class/net/"$(ip route show default | awk '/default/ {print $5}')"/address)
+    echo -n "$(echo "${MAC}" | tr -d : | tail -c 10)" >/var/board_serial
   fi
 
   if [[ -n "${HM_HMIP_SGTIN}" ]]; then

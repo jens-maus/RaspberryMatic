@@ -19,14 +19,14 @@ map:
   - backup:rw
 init: false
 timeout: 120
-# devices:
-#  - /dev/raw-uart
-#  - /dev/raw-uart1
-#  - /dev/mmd_hmip
-#  - /dev/mmd_bidcos
-#  - /dev/eq3loop
-#  - /dev/i2c-0
-#  - /dev/i2c-1
+devices:
+  - /dev/raw-uart
+  - /dev/raw-uart1
+  - /dev/mmd_hmip
+  - /dev/mmd_bidcos
+  - /dev/eq3loop
+  - /dev/i2c-0
+  - /dev/i2c-1
 udev: true
 kernel_modules: true
 realtime: true
@@ -105,7 +105,6 @@ ports_description:
 environment:
   HM_RUNNING_IN_HA: "1"
   HM_HAPROXY_SRC: 172.30.32.2/32
-full_access: true
 privileged:
   - IPC_LOCK
   - SYS_ADMIN

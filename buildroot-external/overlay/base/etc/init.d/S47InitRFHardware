@@ -370,8 +370,12 @@ query_rf_parameters() {
   # of the RF module registered at eQ3
   if [[ -n "${HM_HMIP_SERIAL}" ]]; then
     echo -n "${HM_HMIP_SERIAL}" >/var/board_serial
-  else
+  elif [[ -n "${HM_HMRF_SERIAL}" ]]; then
     echo -n "${HM_HMRF_SERIAL}" >/var/board_serial
+  else
+    # fallback to put the mac in /var/board_serial
+    MAC=$(cat /sys/class/net/$(ip route show default | awk '/default/ {print $5}')/address)
+    echo -n "$(echo ${MAC} | tr -d : | tail -c 10)" >/var/board_serial
   fi
 
   if [[ -n "${HM_HMIP_SGTIN}" ]]; then

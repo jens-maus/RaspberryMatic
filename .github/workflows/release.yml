@@ -454,7 +454,7 @@ jobs:
 
       - name: Bump LATEST-VERSION.js
         run: |
-          echo "homematic.com.setLatestVersion('${{ needs.release_draft.outputs.version }}', 'HM-RASPBERRYMATIC');" >>release/LATEST-VERSION.js
+          echo "homematic.com.setLatestVersion('${{ needs.release_draft.outputs.version }}', 'HM-RASPBERRYMATIC');" >release/LATEST-VERSION.js
 
       - name: Bump helm Chart.yaml
         shell: bash

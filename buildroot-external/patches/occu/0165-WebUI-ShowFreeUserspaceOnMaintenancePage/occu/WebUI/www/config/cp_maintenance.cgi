@@ -346,7 +346,7 @@ proc execCmd {varName cmd} {
   if {$rc == 0} {
     set variable $resVar
   } else {
-    set variable "n/a"
+    set variable "0"
   }
 }
 

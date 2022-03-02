@@ -18,7 +18,7 @@ jobs:
     name: Check for Changes
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - id: commit-check
         run: 'echo ::set-output name=has-commits::$(git --no-pager log --pretty="format:%an" --since="24 hours ago" | grep -v github-actions | wc -l)'
     outputs:
@@ -41,7 +41,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Install Dependencies
         run: |
@@ -244,7 +244,7 @@ jobs:
     if: github.event_name != 'pull_request'
 
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
 
       - name: Setup Environment
         run: |
@@ -351,7 +351,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -377,7 +377,7 @@ jobs:
     if: github.event_name != 'pull_request'
 
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
 
       - name: Setup Environment
         run: |

@@ -30,6 +30,7 @@ devices:
   - /dev/i2c-1
 udev: true
 usb: true
+uart: true
 kernel_modules: true
 realtime: true
 ports:

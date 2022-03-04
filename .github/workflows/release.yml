@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
@@ -108,7 +108,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Install Dependencies
         run: |
@@ -274,7 +274,7 @@ jobs:
     needs: [release_draft, build]
 
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
 
       # download all artifact files
       - name: Download all workflow artifacts
@@ -315,7 +315,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
 
       - name: Setup Environment
         run: |
@@ -369,7 +369,7 @@ jobs:
 
       - name: Login to GitHub Container Registry
         if: github.event.inputs.skip_build == 'false'
-        uses: docker/login-action@v1.14.0
+        uses: docker/login-action@v1.14.1
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -420,7 +420,7 @@ jobs:
     needs: [release_draft, build, oci-multiarch-build-push]
 
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
 
       - name: Bump HomeAssistant add-on version
         run: |
@@ -485,7 +485,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 

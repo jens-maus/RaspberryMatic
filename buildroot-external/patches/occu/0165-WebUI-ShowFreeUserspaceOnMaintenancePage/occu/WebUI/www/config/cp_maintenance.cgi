@@ -354,9 +354,9 @@ proc action_put_page {} {
   global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS HMIP_LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL downloadOnly
   http_head
 
-  execCmd USERFSFREE_MB {exec df -m | grep "/usr/local" | awk {{ print $4 }}}
+  execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $4 }}}
   set USERFSFREE_GB [format "%.1f" [expr {$USERFSFREE_MB / 1024.0}]]
-  set USERFSFREE_MB_REQ 2048.0
+  set USERFSFREE_MB_REQ 1843.2
   set USERFSFREE_GB_REQ [format "%.1f" [expr {$USERFSFREE_MB_REQ / 1024.0}]]
   
   division {class="popupTitle j_translate"} {
@@ -403,12 +403,12 @@ proc action_put_page {} {
             table_row {
               table_data {align="left"} {colspan="3"} {
                 #puts "[bold "Software-Update durchf�hren"]"
-                puts "<b>\${dialogSettingsCMLblPerformSoftwareUpdate}</b>"
+                puts "<br/><b>\${dialogSettingsCMLblPerformSoftwareUpdate}</b>"
               }
             }
             table_row {
-              table_data {align="left"} {colspan="3"} {id="availableUserSpace"} {style="color: green"} {
-                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB GB ($USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
+              table_data {align="left"} {colspan="3"} {id="availableUserSpace"} {
+                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB GB (&asymp;$USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
               }
             }
             table_row {
@@ -418,7 +418,7 @@ proc action_put_page {} {
                     table_row {
                       table_data {
                         division {class="CLASS20905" style="display: none"} {id="btnFwDirectDownload"} {} "onClick=\"performDirectDownload();\"" {}
-                        division {class="CLASS20905"} {id="btnFwDirectDownload2"} "onClick=\"performDirectDownload();\"" {puts "\${btnDirectFwUpload}"}
+                        division {class="CLASS20910"} {id="btnFwDirectDownload2"} "onClick=\"performDirectDownload();\"" {puts "\${btnDirectFwUpload}"}
                       }
                     }
                   }

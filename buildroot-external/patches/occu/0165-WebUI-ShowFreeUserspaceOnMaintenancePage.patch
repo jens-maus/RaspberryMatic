@@ -18,31 +18,34 @@
    global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS HMIP_LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL downloadOnly
    http_head
  
-+  execCmd USERFSFREE_MB {exec df -m | grep "/usr/local" | awk {{ print $4 }}}
++  execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $4 }}}
 +  set USERFSFREE_GB [format "%.1f" [expr {$USERFSFREE_MB / 1024.0}]]
-+  set USERFSFREE_MB_REQ 2048.0
++  set USERFSFREE_MB_REQ 1843.2
 +  set USERFSFREE_GB_REQ [format "%.1f" [expr {$USERFSFREE_MB_REQ / 1024.0}]]
 +  
    division {class="popupTitle j_translate"} {
      puts "\${dialogSettingsCMTitle}"
      #puts [isOldCCU]
-@@ -392,13 +407,18 @@
-               }
-             }
+@@ -388,7 +403,12 @@
              table_row {
-+              table_data {align="left"} {colspan="3"} {id="availableUserSpace"} {style="color: green"} {
-+                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB GB ($USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
+               table_data {align="left"} {colspan="3"} {
+                 #puts "[bold "Software-Update durchf�hren"]"
+-                puts "<b>\${dialogSettingsCMLblPerformSoftwareUpdate}</b>"
++                puts "<br/><b>\${dialogSettingsCMLblPerformSoftwareUpdate}</b>"
 +              }
 +            }
 +            table_row {
-               table_data {align="left"} {colspan="3"} {
-                   division {class="popupControls CLASS20905"} {
-                   table {
++              table_data {align="left"} {colspan="3"} {id="availableUserSpace"} {
++                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB GB (&asymp;$USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
+               }
+             }
+             table_row {
+@@ -398,7 +418,7 @@
                      table_row {
                        table_data {
                          division {class="CLASS20905" style="display: none"} {id="btnFwDirectDownload"} {} "onClick=\"performDirectDownload();\"" {}
 -                        division {class="CLASS20905"}  "onClick=\"performDirectDownload();\"" {puts "\${btnDirectFwUpload}"}
-+                        division {class="CLASS20905"} {id="btnFwDirectDownload2"} "onClick=\"performDirectDownload();\"" {puts "\${btnDirectFwUpload}"}
++                        division {class="CLASS20910"} {id="btnFwDirectDownload2"} "onClick=\"performDirectDownload();\"" {puts "\${btnDirectFwUpload}"}
                        }
                      }
                    }
@@ -76,25 +79,51 @@
  
    cgi_javascript {
      puts "translatePage('#messagebox');"
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
+@@ -1521,8 +1521,8 @@
+ 
+ 
+     "lblCO2Concentration" : "CO2-Konzentration",
+-    "btnDirectFwUpload" : "Direkt auf CCU laden und installieren",
+-    "dialogSettingsCMLblAlternateSoftwareUpdate" : "Alternative Vorgehensweise:",
++    "btnDirectFwUpload" : "Automatisches Update durchf%FChren",
++    "dialogSettingsCMLblAlternateSoftwareUpdate" : "Manuelle Vorgehensweise:",
+     "indoorAirQualityGood" : "Raumluftqualit%E4t: Gut",
+     "indoorAirQualityMediocre" : "Raumluftqualit%E4t: Mittelm%E4%DFig<br/><br/>Der Raum sollte gel%FCftet werden.",
+     "indoorAirQualityModerate" : "Raumluftqualit%E4t: M%E4%DFig<br/><br/>Der Raum sollte dringend gel%FCftet werden.",
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -487,6 +487,8 @@
      "dialogSettingsCMTDErrorProtocol" : "Fehler-<br/>protokoll",
      "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
      "dialogSettingsCMLblAvailableSoftwareVersion" : "Verf%FCgbare Software-Version:",
-+    "dialogSettingsCMLblFreeUserSpace" : "Freier Speicher:",
-+    "dialogSettingsCMLblFreeUserSpaceRequired" : "mind. erforderlich",
++    "dialogSettingsCMLblFreeUserSpace" : "Verf%FCgbarer Speicherplatz:",
++    "dialogSettingsCMLblFreeUserSpaceRequired" : "erforderlich",
      "dialogSettingsCMLblPerformSoftwareUpdate" : "Software-Update durchf%FChren",
      "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Schritt 1: Neue Software herunterladen",
      "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Schritt 2: Heruntergeladene Software ausw%E4hlen",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
+@@ -1515,8 +1515,8 @@
+     "lblBehaviour" : "Response",
+ 
+     "lblCO2Concentration" : "CO2 concentration",
+-    "btnDirectFwUpload" : "Load directly to CCU and install",
+-    "dialogSettingsCMLblAlternateSoftwareUpdate" : "Alternative procedure:",
++    "btnDirectFwUpload" : "Perform automatic update",
++    "dialogSettingsCMLblAlternateSoftwareUpdate" : "Manual update procedure:",
+     "indoorAirQualityGood" : "Room air quality: Good",
+     "indoorAirQualityMediocre" : "Room air quality: Fair<br/><br/>The room should be ventilated.",
+     "indoorAirQualityModerate" : "Room air quality: Average<br/><br/>The room should be ventilated as soon as possible.",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
 @@ -486,6 +486,8 @@
      "dialogSettingsCMTDErrorProtocol" : "Error<br/>log",
      "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
      "dialogSettingsCMLblAvailableSoftwareVersion" : "Available software version:",
-+    "dialogSettingsCMLblFreeUserSpace" : "Free user space:",
-+    "dialogSettingsCMLblFreeUserSpaceRequired" : "required at least",
++    "dialogSettingsCMLblFreeUserSpace" : "Available user space:",
++    "dialogSettingsCMLblFreeUserSpaceRequired" : "required",
      "dialogSettingsCMLblPerformSoftwareUpdate" : "Perform software update",
      "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Step 1: Download new software",
      "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Step 2: Select downloaded software",

@@ -335,6 +335,7 @@ jobs:
       - name: Test container deploy
         run: |
           export CCU_DOCKER_PULL_REFRESH="false"
+          sudo mknod /dev/eq3loop c 239 0 # fake /dev/eq3loop
           sudo -E ./buildroot-external/board/oci/deploy.sh -f
 
       - name: Test container startup+stop

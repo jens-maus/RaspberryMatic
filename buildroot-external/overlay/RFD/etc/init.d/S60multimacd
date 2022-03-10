@@ -22,6 +22,7 @@ init() {
   if [[ ! -c /dev/eq3loop ]]; then
     # load eq3_char_loop kernel module
     modprobe eq3_char_loop
+    sleep 5 # wait for /dev/eq3loop to settle
   fi
 }
 

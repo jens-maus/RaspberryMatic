@@ -390,8 +390,7 @@ function ::showHideHmIPChannel() {
       !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on
       ! For BidCos-RF this isn't necessary
 
-
-      if (oDevHssType.Substr(0,6) == "HmIPW-") {
+      if ((oDevHssType.Substr(0,6) == "HmIPW-") || (oDevHssType == "HmIP-DRSI1") || (oDevHssType == "HmIP-DRSI4")) {
         object chnParam;
         ! A HmIPW-* device with a control for the parameter IDENTIFY_TARGET_LEVEL (MAINTENANCE channel)
         ! should be visible. So it's possible to use the identify function of wHmIPW-devices.
@@ -416,6 +415,15 @@ function ::showHideHmIPChannel() {
           bShowChannel = false;
         }
       }
+
+      ! Necessary to be able to learn the codes of keypads and finger print sensors
+      if (oDevHssType == "HmIP-FWI") {
+        bShowChannel = true;
+      }
+
+      if (oDevHssType == "HmIP-WKP") {
+        bShowChannel = true;
+      }
       return;
     }
 
@@ -426,6 +434,20 @@ function ::showHideHmIPChannel() {
     !    }
     !  return;
     !}
+
+    if (oDevHssType == "HmIP-WKP") {
+      if ((chNumber == 2)
+        || (chNumber == 4)
+        || (chNumber == 6)
+        || (chNumber == 8)
+        || (chNumber == 10)
+        || (chNumber == 12)
+        || (chNumber == 14)
+        || (chNumber == 16)
+      ) {
+        bShowChannel = false;
+      }
+    }
 
     if (user.UserEasyLinkMode() == true) {
       if ((chn.HssType().Find("DIMMER_TRANSMITTER") != -1)
@@ -681,6 +703,38 @@ function ::destinationIsParameterVisible() {
     }
   }
 
+  !HmIP-WSC (Servo Control)
+  ! Hide the parameter ON_TIME
+  if ( oCH.HssType().Find("SERVO_VIRTUAL_RECEIVER") != -1) {
+    if ( oDP.HSSID().Find("ON_TIME") != -1 ) {
+      showChannelParam = false;
+    }
+  }
+
+  !HmIP-WKP (Keypad)
+  ! Hide the parameter CODE_ID
+  if ( oCH.HssType().Find("MAINTENANCE") != -1) {
+    if ( oDP.HSSID().Find("CODE_ID") != -1 ) {
+      showChannelParam = false;
+    }
+    if ( oDP.HSSID().Find("CODE_COMMAND") != -1 ) {
+      showChannelParam = false;
+    }
+  }
+
+  if ( oCH.HssType().Find("SWITCH_VIRTUAL_RECEIVER") != -1) {
+
+    !HmIP-FWI (Wiegand Interface)
+    if (oCH.Label() == "HmIP-FWI") {
+      if ( oDP.HSSID().Find("ON_TIME") != -1 ) {
+        showChannelParam = false;
+      }
+      if ( oDP.HSSID().Find("STATE") != -1 ) {
+        showChannelParam = false;
+      }
+    }
+  }
+
   return;
 }
 
@@ -905,7 +959,6 @@ function ::getSpecialTranslationPrgDest() {
       || (sValue.Find("stringTableResetStatus") != -1)) {
         sValue = sValue#" ${modeBatNotSupported}";
       }
-
     }
   }
   return;

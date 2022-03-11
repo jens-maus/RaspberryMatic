@@ -41,7 +41,7 @@ set location [getHttpHeader $request location]
 ::http::cleanup $request
 
 if { [regexp {sid=@([^@]*)@} $location dummy _session_id_] } then {
-  ::http::cleanup [::http::geturl "127.0.0.1$location"]
+  ::http::cleanup [::http::geturl "http://127.0.0.1$location"]
   jsonrpc_response [json_toString $_session_id_]
 } else {
   jsonrpc_error 501 "could not create session $location [array get $request]"

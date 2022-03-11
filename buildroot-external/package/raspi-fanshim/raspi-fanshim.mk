@@ -17,7 +17,11 @@ RASPI_FANSHIM_DEPENDENCIES = wiringpi-rpi
 define RASPI_FANSHIM_INSTALL_TARGET_CMDS
 	mkdir -p $(TARGET_DIR)/opt/raspi-fanshim
 	$(INSTALL) -D -m 0755 $(@D)/FanshimService $(TARGET_DIR)/opt/raspi-fanshim/FanshimService
-	$(INSTALL) -D -m 0755 $(RASPI_FANSHIM_PKGDIR)/S51raspi-fanshim $(TARGET_DIR)/etc/init.d/S51raspi-fanshim
+endef
+
+define RASPI_FANSHIM_INSTALL_INIT_SYSV
+	$(INSTALL) -D -m 0755 $(RASPI_FANSHIM_PKGDIR)/S51raspi-fanshim \
+		$(TARGET_DIR)/etc/init.d/S51raspi-fanshim
 endef
 
 $(eval $(cmake-package))

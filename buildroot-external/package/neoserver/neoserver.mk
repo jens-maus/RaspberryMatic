@@ -16,4 +16,9 @@ define NEOSERVER_INSTALL_TARGET_CMDS
 	(cd $(NEOSERVER_PKGDIR)/pkg; tar --owner=root --group=root -czf $(TARGET_DIR)/opt/mediola/pkg/mediola.tar.gz mediola)
 endef
 
+define NEOSERVER_INSTALL_INIT_SYSV
+	$(INSTALL) -D -m 0755 $(NEOSERVER_PKGDIR)/S97NeoServer \
+		$(TARGET_DIR)/etc/init.d/S97NeoServer
+endef
+
 $(eval $(generic-package))

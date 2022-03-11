@@ -98,8 +98,12 @@ define QEMU_GUEST_AGENT_BUILD_CMDS
 endef
 
 define QEMU_GUEST_AGENT_INSTALL_TARGET_CMDS
-	cp -a $(QEMU_GUEST_AGENT_PKGDIR)/rootfs-overlay/* $(TARGET_DIR)/
-	cp -a $(@D)/build/qga/qemu-ga $(TARGET_DIR)/usr/bin/
+	$(INSTALL) -D -m 0755 $(@D)/build/qga/qemu-ga $(TARGET_DIR)/usr/bin/qemu-ga
+endef
+
+define QEMU_GUEST_AGENT_INSTALL_INIT_SYSV
+	$(INSTALL) -D -m 0755 $(QEMU_GUEST_AGENT_PKGDIR)/S11qemu-guest-agent \
+		$(TARGET_DIR)/etc/init.d/S11qemu-guest-agent
 endef
 
 $(eval $(generic-package))

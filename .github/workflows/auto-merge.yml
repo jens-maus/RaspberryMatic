@@ -1,6 +1,6 @@
 # Automatically merge Dependabot PRs when version comparison is within the range
 # that is configured in .github/auto-merge.yml
-
+---
 name: Auto-Merge Dependabot PRs
 
 on:

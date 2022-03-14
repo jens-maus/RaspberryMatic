@@ -1,5 +1,6 @@
 # Automatically merge Dependabot PRs when version comparison is within the range
 # that is configured in .github/auto-merge.yml
+# yamllint disable rule:truthy
 ---
 name: Auto-Merge Dependabot PRs
 
@@ -7,8 +8,6 @@ on:
   pull_request_target:
     branches-ignore:
       - 'gh-pages'
-    types:
-      - opened
 
 jobs:
   auto-merge:

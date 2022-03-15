@@ -53,7 +53,6 @@ spec:
         hostPath:
           path: /lib/modules
           type: Directory
-      - name: ccu-volume
       - name: sys
         hostPath:
           path: /sys

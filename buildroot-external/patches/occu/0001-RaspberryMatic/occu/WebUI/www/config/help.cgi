@@ -122,8 +122,8 @@ proc action_put_page {} {
   } else {
     set STATUS "SD(0) $STATUS"
   }
-  execCmd ROOTFSFREE {exec monit status rootfs | grep "space free for non superuser" | awk {{ print substr($0,index($0,$4)) }}}
-  execCmd USERFSFREE {exec monit status userfs | grep "space free for non superuser" | awk {{ print substr($0,index($0,$4)) }}}
+  execCmd ROOTFSFREE {exec monit status rootfs | grep "space free for non superuser" | awk {{ print substr($0,index($0,$6)) }}}
+  execCmd USERFSFREE {exec monit status userfs | grep "space free for non superuser" | awk {{ print substr($0,index($0,$6)) }}}
   execCmd STORAGEDEV {exec mountpoint -n /usr/local | awk {{ print $1 }} | xargs lsblk -l -n -o PKNAME -p}
   execCmd STORAGE "exec lsblk -l -n -o SIZE,MODEL,KNAME -d -p $STORAGEDEV"
 

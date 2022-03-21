@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169,SC2153 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC2153,SC3010 source=/dev/null
 #
 # startup script that updates HomeMatic-RF devices, if necessary.
 #
@@ -23,12 +23,14 @@ update_rf_hardware() {
 
       # identify which firmware file to take for a potential coprocessor
       # firmware update
+      FORCED_VERSION=
       if [[ "${HM_MODE}" == "NORMAL" ]]; then
-        if [[ ! -e /etc/config/enable-debug-coprocessor ]]; then
+        if [[ ! -s /etc/config/forced_coprocessor_version ]]; then
           FW_FILE=dualcopro_si1002_update_blhm.eq3
         else
-          NEW_VERSION=2.2.1
-          FW_FILE=dualcopro_si1002_update_blhm-2.2.1.eq3
+          FORCED_VERSION=$(cat /etc/config/forced_coprocessor_version)
+          NEW_VERSION=${FORCED_VERSION}
+          FW_FILE="dualcopro_si1002_update_blhm-${FORCED_VERSION}.eq3"
         fi
       else
         FW_FILE=coprocessor_update.eq3
@@ -63,11 +65,16 @@ update_rf_hardware() {
           DEVNODE=${HM_HMIP_DEVNODE}
         fi
 
-        echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
+        echo -n "${OLD_VERSION}=>${NEW_VERSION}"
+        if [[ -n "${FORCED_VERSION}" ]]; then
+          echo -n " (forced), "
+        else
+          echo -n ", "
+        fi
 
         # perform the coprocessor update
         if ! /usr/bin/timeout 120 /bin/eq3configcmd update-coprocessor -p "${DEVNODE}" -t HM-MOD-UART -u -d "${TMPDIR_FW}"; then
-          echo -n "forcing, "
+          echo -n "repeat, "
           /usr/bin/timeout 240 /bin/eq3configcmd update-coprocessor -p "${DEVNODE}" -t HM-MOD-UART -u -f -d "${TMPDIR_FW}"
         fi
         HM_HMRF_VERSION=$(/usr/bin/timeout 30 /bin/eq3configcmd update-coprocessor -p "${DEVNODE}" -t HM-MOD-UART -c -v 2>&1 | grep "Version:" | cut -d' ' -f5)
@@ -87,7 +94,11 @@ update_rf_hardware() {
         # remove the temporary directory again
         rm -rf "${TMPDIR_FW}"
       else
-        echo -n "${OLD_VERSION}, not necessary, OK"
+        echo -n "${OLD_VERSION}"
+        if [[ -n "${FORCED_VERSION}" ]]; then
+          echo -n " (forced)"
+        fi
+        echo -n ", not necessary, OK"
       fi
       FOUND=1
     fi
@@ -103,7 +114,12 @@ update_rf_hardware() {
 
       echo -n "RPI-RF-MOD: "
 
-      LATEST_FIRMWARE=$(find /firmware/RPI-RF-MOD -name "dualcopro_update_blhmip-*.eq3" -maxdepth 1 | sort -V | tail -1)
+      FORCED_VERSION=
+      if [[ -s /etc/config/forced_coprocessor_version ]]; then
+        FORCED_VERSION=$(cat /etc/config/forced_coprocessor_version)
+      fi
+
+      LATEST_FIRMWARE=$(find /firmware/RPI-RF-MOD -name "dualcopro_update_blhmip-*.eq3" -maxdepth 1 | grep "${FORCED_VERSION}" | sort -V | tail -1)
       NEW_VERSION=$(echo "${LATEST_FIRMWARE}" | sed 's/.*-\(.*\)\.eq3/\1/')
 
       # get OLD_VERSION from var tmp file
@@ -118,7 +134,12 @@ update_rf_hardware() {
       # if NEW_VERSION is not empty we go ahead and perform the
       # update operation
       if [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
-        echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
+        echo -n "${OLD_VERSION}=>${NEW_VERSION}"
+        if [[ -n "${FORCED_VERSION}" ]]; then
+          echo -n " (forced), "
+        else
+          echo -n ", "
+        fi
 
         # run firmware update
         # shellcheck disable=SC2086
@@ -140,7 +161,11 @@ update_rf_hardware() {
           echo -n "ERROR (${HM_HMIP_VERSION} != ${NEW_VERSION})"
         fi
       else
-        echo -n "${OLD_VERSION}, not necessary, OK"
+        echo -n "${OLD_VERSION}"
+        if [[ -n "${FORCED_VERSION}" ]]; then
+          echo -n " (forced)"
+        fi
+        echo -n ", not necessary, OK"
       fi
 
       FOUND=1
@@ -168,8 +193,13 @@ update_rf_hardware() {
 
       echo -n "HMIP-RFUSB: "
 
+      FORCED_VERSION=
+      if [[ -s /etc/config/forced_coprocessor_version ]]; then
+        FORCED_VERSION=$(cat /etc/config/forced_coprocessor_version)
+      fi
+
       # check for new firmware file in /firmware/HmIP-RFUSB
-      LATEST_FIRMWARE=$(find /firmware/HmIP-RFUSB-Beta -name "dualcopro_update_blhmip-*.eq3" -maxdepth 1 | sort -V | tail -1)
+      LATEST_FIRMWARE=$(find /firmware/HmIP-RFUSB-Beta -name "dualcopro_update_blhmip-*.eq3" -maxdepth 1 | grep "${FORCED_VERSION}" |  sort -V | tail -1)
       NEW_VERSION=$(echo "${LATEST_FIRMWARE}" | sed 's/.*-\(.*\)\.eq3/\1/')
 
       # get OLD_VERSION from var tmp file
@@ -198,7 +228,12 @@ update_rf_hardware() {
       # if NEW_VERSION is not empty we go ahead and perform the
       # update operation
       if [[ "${NEW_VERSION}" != "${OLD_VERSION}" ]]; then
-        echo -n "${OLD_VERSION}=>${NEW_VERSION}, "
+        echo -n "${OLD_VERSION}=>${NEW_VERSION}"
+        if [[ -n "${FORCED_VERSION}" ]]; then
+          echo -n " (forced), "
+        else
+          echo -n ", "
+        fi
 
         # run firmware update
         # shellcheck disable=SC2086
@@ -220,7 +255,11 @@ update_rf_hardware() {
           echo -n "ERROR (${HM_HMIP_VERSION} != ${NEW_VERSION})"
         fi
       else
-        echo -n "${OLD_VERSION}, not necessary, OK"
+        echo -n "${OLD_VERSION}"
+        if [[ -n "${FORCED_VERSION}" ]]; then
+          echo -n " (forced)"
+        fi
+        echo -n ", not necessary, OK"
       fi
 
       FOUND=1

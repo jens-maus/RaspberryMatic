@@ -75,21 +75,20 @@
          Write( '<select id="selectConditionWhen'#oSC.ID()#'" name="selectConditionWhen" onchange="SetLeftValue('#oSC.ID()#',this.value); setOptionWidthSelectConditionWhen();" class="SelectBox">' );
        }
  
-@@ -300,7 +309,16 @@
+@@ -300,9 +309,16 @@
        if( (!bOptionList) && (!bBinary) && (!bSpecial) && (!bSysVarString) )
        {
          !Write( ' <i>im Wertebereich</i> ' );
--        Write( ' <i>${ruleConditionLblWithinValueRange}</i> ' );
-+        
 +        if ( (!bSysVarGeneric) && (!bSysVarString) ) {
-+          Write( ' <i>${ruleConditionLblWithinValueRange}</i> ' );
+         if (iCT1 != 5) {
+           Write( ' <i>${ruleConditionLblWithinValueRange}</i> ' );
+         }
 +        } else {
 +          Write( ' <select id="selectConditionNot'#oSC.ID()#'" name="selectConditionNot" onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.value);" class="SelectBox">' );
 +          Write( '<option value="false"'#sNotSelectedFalse#' >${ruleConditionLblWithinValueRange}</option>');
 +          Write( '<option value="true"'#sNotSelectedTrue#'>${ruleConditionLblNot} ${ruleConditionLblWithinValueRange}</option>' );
 +          Write( '</select> ');
 +        }
-+      
          string sCT = "";
          string sValueUnit = oLV.ValueUnit();
          if( sValueUnit == "100%" )

@@ -135,7 +135,7 @@ toolchain: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 #   busybox-update-config
 #   uboot-menuconfig
 #   uboot-update-defconfig
-linux-menuconfig linux-update-defconfig busybox-menuconfig busybox-update-config uboot-menuconfig uboot-update-defconfig:
+linux-menuconfig linux-update-defconfig busybox-menuconfig busybox-update-config uboot-menuconfig uboot-update-defconfig legal-info:
 	@echo "[$@ $(PRODUCT)]"
 	@$(MAKE) -C build-$(PRODUCT) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) $@
 

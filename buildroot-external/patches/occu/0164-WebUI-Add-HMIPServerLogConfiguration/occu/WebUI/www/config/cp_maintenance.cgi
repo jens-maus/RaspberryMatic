@@ -1346,10 +1346,10 @@ proc set_log_config {loghost level_rfd level_hs485d level_rega level_hmip} {
     rega "system.LogLevel($level_rega)"
   }
 
-  if { "$LOGLEVEL_HMIP" != "$level_hmip" ||
-       "$LOGHOST" != "$loghost" } {
-    exec /usr/bin/monit restart HMIPServer >/dev/null &
-  }
+  #if { "$LOGLEVEL_HMIP" != "$level_hmip" ||
+  #     "$LOGHOST" != "$loghost" } {
+  #  exec /usr/bin/monit restart HMIPServer >/dev/null &
+  #}
 
   return 1
 }

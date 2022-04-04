@@ -41,10 +41,6 @@ proc jsonrpc_parse {request} {
 proc jsonrpc_error {errorCode errorText} {
   global JSONRPC
   
-  set errorCode [encoding convertto identity $errorCode]
-  set errorText [encoding convertto identity $errorText]
-  set JSONRPC(ID) [encoding convertto identity $JSONRPC(ID)]
-  
   puts "CONTENT-TYPE: application/json; charset=utf-8"
   puts ""
   puts "\{"                    
@@ -71,9 +67,6 @@ proc jsonrpc_error {errorCode errorText} {
 ##
 proc jsonrpc_response {result} {
   global JSONRPC
-  
-  set result      [encoding convertto identity $result]
-  set JSONRPC(ID) [encoding convertto identity $JSONRPC(ID)]
   
   puts "CONTENT-TYPE: application/json; charset=utf-8"
   puts ""

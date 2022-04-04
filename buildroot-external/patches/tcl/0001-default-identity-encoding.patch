@@ -1,0 +1,33 @@
+--- tcl/generic/tclEncoding.c.orig	2022-04-04 10:38:56.350621821 +0200
++++ tcl/generic/tclEncoding.c	2022-04-04 10:37:19.845418339 +0200
+@@ -563,6 +563,9 @@
+     type.clientData	= NULL;
+     tclIdentityEncoding = Tcl_CreateEncoding(&type);
+ 
++    defaultEncoding	= tclIdentityEncoding;
++    systemEncoding	= Tcl_GetEncoding(NULL, type.encodingName);
++
+     type.encodingName	= "utf-8";
+     type.toUtfProc	= UtfExtToUtfIntProc;
+     type.fromUtfProc	= UtfIntToUtfExtProc;
+@@ -614,8 +617,7 @@
+     type.freeProc	= TableFreeProc;
+     type.nullSize	= 1;
+     type.clientData	= dataPtr;
+-    defaultEncoding	= Tcl_CreateEncoding(&type);
+-    systemEncoding	= Tcl_GetEncoding(NULL, type.encodingName);
++    Tcl_CreateEncoding(&type);
+ 
+     encodingsInitialized = 1;
+ }
+--- tcl/unix/tclUnixInit.c.orig	2022-04-04 11:21:21.783353703 +0200
++++ tcl/unix/tclUnixInit.c	2022-04-04 11:21:33.023496137 +0200
+@@ -94,7 +94,7 @@
+  */
+ 
+ #ifndef TCL_DEFAULT_ENCODING
+-#define TCL_DEFAULT_ENCODING "iso8859-1"
++#define TCL_DEFAULT_ENCODING "identity"
+ #endif
+ 
+ /*

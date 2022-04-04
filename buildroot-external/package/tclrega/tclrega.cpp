@@ -30,7 +30,7 @@
 /*# Definitionen                                                             #*/
 /*############################################################################*/
 
-#define TCLREGA_VERSION "1.1"
+#define TCLREGA_VERSION "1.2"
 
 /*############################################################################*/
 /*# Variablen                                                                #*/
@@ -141,14 +141,9 @@ int Tclrega_Init (Tcl_Interp* interp) {
   /* - - - wernerf - - - */
 	Tcl_SetVar(interp, "rega_version", TCLREGA_VERSION, TCL_GLOBAL_ONLY);
 
-	// get used tcl version
-	int major;
-	int minor;
-	Tcl_GetVersion(&major, &minor, NULL, NULL);
-
-	// get iso8859-1 encoding to signal that we need to convert
-	// from utf8 to iso8859-1 in case we use a tcl version > 8.2
-	if(major > 8 || (major == 8 && minor > 2)) {
+	// get the system encoding and then convert to iso8859-1 in
+	// case the system encoding is not "identity"
+	if(strcasecmp(Tcl_GetEncodingName(NULL), "identity") != 0) {
 	  iso8859_encoding = Tcl_GetEncoding(interp, "iso8859-1");
 	}
 

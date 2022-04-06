@@ -393,7 +393,7 @@ jQuery.extend(true,langJSON, {
     "lblValue" : "Wert",
     "lblRangeOfValue" : "Wertebereich",
     "transferConfigData" : "Ger%E4te-/Kanaleinstellungen werden an Komponenten %FCbertragen...",
-    "setLoggingSuccess" : "Setzen der Logging-Einstellungen erfolgreich!\n\nDer Homematic IP-Dienst wird im Hintergrund ggf. neu gestartet.",
+    "setLoggingSuccess" : "Setzen der Logging-Einstellungen erfolgreich!\n\nBitte beachten: Ver%E4nderte Einstellungen des Homematic IP-Dienstes werden erst nach einem Neustart der Zentrale aktiv.",
     "setLoggingFailure" : "Setzen der Logging-Einstellungen fehlgeschlagen:\n",
     "comment" : "RF_REPEATER.txt",
     "maxEntriesReachedTitle" : "Achtung!",

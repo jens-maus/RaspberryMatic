@@ -393,7 +393,7 @@ jQuery.extend(true, langJSON, {
     "lblValue" : "Value",
     "lblRangeOfValue" : "Value range",
     "transferConfigData" : "Device/channel settings will be transmitted to devices.",
-    "setLoggingSuccess" : "Saving the logging settings was successful!\n\nIf applicable, the Homematic IP service will be restarted in background.",
+    "setLoggingSuccess" : "Saving the logging settings was successful!\n\nPlease note: Changed settings for the Homematic IP service will be applied after a restart of the central only.",
     "setLoggingFailure" : "Saving the logging settings failed:\n",
     "maxEntriesReachedTitle" : "Attention!",
     "maxEntriesReached_a" : "Maximum number of ",

@@ -278,7 +278,7 @@ jobs:
 
       # download all artifact files
       - name: Download all workflow artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
 
       - name: Patch release draft
         shell: bash
@@ -323,15 +323,15 @@ jobs:
 
       # download OCI platform artifacts
       - name: Download oci_amd64 artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_amd64.tgz
       - name: Download oci_arm64 artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_arm64.tgz
       - name: Download oci_arm artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_arm.tgz
 
@@ -428,19 +428,19 @@ jobs:
 
       # download rpi manifest files
       - name: Download rpi0 manifest
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi0.mf
       - name: Download rpi2 manifest
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi2.mf
       - name: Download rpi3 manifest
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi3.mf
       - name: Download rpi4 manifest
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi4.mf
 

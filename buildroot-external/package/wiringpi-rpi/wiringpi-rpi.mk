@@ -5,7 +5,7 @@
 ################################################################################
 
 WIRINGPI_RPI_VERSION = 5de0d8f5739ccc00ab761639a7e8d3d1696a480a
-WIRINGPI_RPI_SITE = git://github.com/wiringpi/wiringpi
+WIRINGPI_RPI_SITE = $(call github,wiringpi,wiringpi,$(WIRINGPI_RPI_VERSION))
 
 WIRINGPI_RPI_LICENSE = LGPL-3.0+
 WIRINGPI_RPI_LICENSE_FILES = COPYING.LESSER

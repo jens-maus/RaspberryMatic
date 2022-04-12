@@ -5,7 +5,8 @@
 ################################################################################
 
 RASPI_FANSHIM_VERSION = 9e4a79a28ff7b0d56674584f0f49f8c68c7eac36
-RASPI_FANSHIM_SITE = git://github.com/flobernd/raspi-fanshim.git
+RASPI_FANSHIM_SITE = https://github.com/flobernd/raspi-fanshim
+RASPI_FANSHIM_SITE_METHOD = git
 RASPI_FANSHIM_GIT_SUBMODULES = YES
 RASPI_FANSHIM_CONF_OPTS = -DRASPI_FANSHIM_BUILD_EXAMPLES=ON
 

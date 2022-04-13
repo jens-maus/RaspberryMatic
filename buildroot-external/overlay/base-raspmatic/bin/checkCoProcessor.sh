@@ -45,8 +45,8 @@ for dev in ${DEVNODES}; do
       # raw-uart device node exists, check using device type
       DEVTYPE=$(cat "/sys/class/raw-uart/${DEVNODE}/device_type")
       DEVID=$(echo "${DEVTYPE}" | sed -n "s/.*@usb-\(.*\)$/\1/p")
-      DEVMAIN=$(echo ${DEVID} | sed -n 's/\(.*\)-.*$/\1/p')
-      DEVSUB=$(echo ${DEVID} | sed -n 's/.*-\(.*\)$/\1/p')
+      DEVMAIN=$(echo "${DEVID}" | sed -n 's/\(.*\)-.*$/\1/p')
+      DEVSUB=$(echo "${DEVID}" | sed -n 's/.*-\(.*\)$/\1/p')
       PRODUCTFILES=$(find /sys/devices -path "*/${DEVMAIN}/*-${DEVSUB}/product")
 
       rc=2

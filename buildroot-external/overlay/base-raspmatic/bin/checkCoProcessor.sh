@@ -41,9 +41,30 @@ for dev in ${DEVNODES}; do
   DEVNODE=$(basename "${dev}")
   rc=0
   if [[ "${DEVNODE}" == "raw-uart*" ]]; then
-    if [[ ! -e "/sys/class/raw-uart/${DEVNODE}" ]]; then
-      echo "ERROR: /sys/class/raw-uart/${DEVNODE} missing"
+    if [[ -e "/sys/class/raw-uart/${DEVNODE}" ]]; then
+      # raw-uart device node exists, check using device type
+      DEVTYPE=$(cat "/sys/class/raw-uart/${DEVNODE}/device_type")
+      DEVID=$(echo "${DEVTYPE}" | sed -n "s/.*@usb-\(.*\)$/\1/p")
+      DEVMAIN=$(echo ${DEVID} | sed -n 's/\(.*\)-.*$/\1/p')
+      DEVSUB=$(echo ${DEVID} | sed -n 's/.*-\(.*\)$/\1/p')
+      PRODUCTFILES=$(find /sys/devices -path "*/${DEVMAIN}/*-${DEVSUB}/product")
+
       rc=2
+      errMsg="${DEVTYPE} connection lost"
+      for f in ${PRODUCTFILES}; do
+        PRODUCT=$(cat "${f}")
+        if grep -q -e "^${PRODUCT}@" "/sys/class/raw-uart/${DEVNODE}/device_type"; then
+          rc=0
+          break
+        fi
+      done
+    else
+      errMsg="${dev} connection lost"
+      rc=2
+    fi
+
+    if [[ $rc -ne 0 ]]; then
+      echo "ERROR: ${errMsg}"
       break
     fi
   fi

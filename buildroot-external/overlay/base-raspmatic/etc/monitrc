@@ -483,7 +483,7 @@ check program hb_rf_eth-CheckEnabled with path "/usr/bin/test -e /etc/config/hb_
 check program coProcessorCheck with path "/bin/checkCoProcessor.sh"
     group homematic
     if status = 2 then
-      exec /bin/sh -c "/bin/triggerAlarm.tcl 'RF-Module/Co-Processor connection lost' 'WatchDog: copro-connection lost' 'WatchDog: copro-connection-lost' true"
+      exec /bin/sh -c "/bin/triggerAlarm.tcl 'RF-Module/Co-Processor connection lost' 'WatchDog: copro-connection lost' true"
       repeat every 5 cycles
     if status = 1 for 1 cycles then unmonitor
 

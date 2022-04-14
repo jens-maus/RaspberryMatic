@@ -1,3 +1,7 @@
+- integrated changes for building within buildroot env
+
+Signed-off-by: Jens Maus <mail@jens-maus.de>
+
 --- a/configure.ac.orig	2022-04-14 18:11:55.847643695 +0200
 +++ b/configure.ac	2022-04-14 18:06:11.198482489 +0200
 @@ -20,7 +20,7 @@

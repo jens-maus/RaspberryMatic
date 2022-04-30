@@ -1,6 +1,6 @@
 ---
 name: RaspberryMatic CCU
-version: 3.63.8.20220330
+version: 3.63.9.20220430
 slug: raspberrymatic
 image: ghcr.io/jens-maus/raspberrymatic
 arch:

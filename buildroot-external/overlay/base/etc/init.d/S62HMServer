@@ -141,7 +141,7 @@ init() {
 }
 
 waitStartupComplete() {
-  STEPS=100
+  STEPS=150
   for i in $(seq 1 ${STEPS}); do
     sleep 2
     echo -n "."

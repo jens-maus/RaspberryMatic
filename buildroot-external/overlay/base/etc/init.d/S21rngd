@@ -3,7 +3,7 @@
 
 NAME="rngd"
 DAEMON="/usr/sbin/${NAME}"
-DAEMON_ARGS="-q"
+DAEMON_ARGS="-q -x jitter"
 CFG_FILE="/etc/default/${NAME}"
 PID_FILE="/var/run/${NAME}.pid"
 

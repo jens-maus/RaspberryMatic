@@ -28,11 +28,18 @@
 #
 
 
-# get public ipv4
-PUBLIC_IP4=$(curl -s -4 ifconfig.co)
+# get public ipv4 using different public services
+PUBIP_URIS="ifconfig.me icanhazip.com ipecho.net/plain ifconfig.co"
+for uri in ${PUBIP_URIS}; do
+  PUBLIC_IP4=$(curl -s -4 ${uri})
+  # check if we received a valid ipv4 address
+  if expr "${PUBLIC_IP4}" : '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' >/dev/null; then
+    break;
+  fi
+done
 
 # check if we have a valid ipv4 address
-if [[ -n "${PUBLIC_IP4}" ]]; then
+if expr "${PUBLIC_IP4}" : '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' >/dev/null; then
   # use nmap to get all open ports @ the public IP
   OPEN_PORTS=$(/usr/bin/nmap --open -Pn -oG - -p- -n -T5 "${PUBLIC_IP4}" | awk -f <(cat - <<-'_EOF_'
     BEGIN { OFS=":" }
@@ -57,7 +64,7 @@ _EOF_
     RET=$?
     if [[ ${RET} -eq 0 ]]; then
       if [[ "${RES}" == '{"version": "1.1","result": true,"error": null}' ]]; then
-        echo "ERROR: critical port forwarding identified at ${p}"
+        echo "WARN: critical port forwarding identified at ${p}"
         exit 1
       fi
     elif [[ ${RET} -eq 35 ]]; then
@@ -68,12 +75,14 @@ _EOF_
       RET=$?
       if [[ ${RET} -eq 0 ]]; then
         if [[ "${RES}" == '{"version": "1.1","result": true,"error": null}' ]]; then
-          echo "ERROR: critical port forwarding identified at ${p}"
+          echo "WARN: critical port forwarding identified at ${p}"
           exit 1
         fi
       fi
     fi
   done
+else
+  echo "No valid public IPv4 address identified"
 fi
 
 exit 0

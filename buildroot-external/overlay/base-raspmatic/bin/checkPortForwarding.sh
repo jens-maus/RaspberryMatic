@@ -31,7 +31,7 @@
 # get public ipv4 using different public services
 PUBIP_URIS="ifconfig.me icanhazip.com ipecho.net/plain ifconfig.co"
 for uri in ${PUBIP_URIS}; do
-  PUBLIC_IP4=$(curl -s -4 ${uri})
+  PUBLIC_IP4=$(/usr/bin/curl -s -4 "${uri}")
   # check if we received a valid ipv4 address
   if expr "${PUBLIC_IP4}" : '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' >/dev/null; then
     break;

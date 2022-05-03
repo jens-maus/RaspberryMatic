@@ -41,7 +41,7 @@ done
 # check if we have a valid ipv4 address
 if expr "${PUBLIC_IP4}" : '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' >/dev/null; then
   # use nmap to get all open ports @ the public IP
-  OPEN_PORTS=$(/usr/bin/nmap --open -Pn -oG - -p- -n -T5 "${PUBLIC_IP4}" | awk -f <(cat - <<-'_EOF_'
+  OPEN_PORTS=$(/usr/bin/nmap --open -Pn -oG - -p- -n -T5 "${PUBLIC_IP4}" 2>/dev/null | awk -f <(cat - <<-'_EOF_'
     BEGIN { OFS=":" }
     { ip = $2 }
     sub(/^([^[:space:]]+[[:space:]]+){3}Ports:[[:space:]]+/,"") {
@@ -59,7 +59,7 @@ _EOF_
   # walk through all open ports and try to see if there is rega listening
   # using HTTP or HTTPS
   for p in ${OPEN_PORTS}; do
-    RES=$(curl -s "http://${p}/api/homematic.cgi" \
+    RES=$(/usr/bin/curl -s "http://${p}/api/homematic.cgi" \
                --data-raw '{"version": "1.1", "method": "ReGa.isPresent", "params": {}}')
     RET=$?
     if [[ ${RET} -eq 0 ]]; then
@@ -71,7 +71,7 @@ _EOF_
     elif [[ ${RET} -eq 35 ]]; then
       # try to connect via https now since return code 35 could mean
       # this port requires a secure http connection instead.
-      RES=$(curl -k -s "https://${p}/api/homematic.cgi" \
+      RES=$(/usr/bin/curl -k -s "https://${p}/api/homematic.cgi" \
                  --data-raw '{"version": "1.1", "method": "ReGa.isPresent", "params": {}}')
       RET=$?
       if [[ ${RET} -eq 0 ]]; then

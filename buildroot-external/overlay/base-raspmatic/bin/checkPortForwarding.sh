@@ -65,6 +65,7 @@ _EOF_
     if [[ ${RET} -eq 0 ]]; then
       if [[ "${RES}" == '{"version": "1.1","result": true,"error": null}' ]]; then
         echo "WARN: critical port forwarding identified at ${p}"
+        /bin/triggerAlarm.tcl "Critical security issue: Disable port forwarding @ ${p}" "WatchDog: security-portforward" true
         exit 1
       fi
     elif [[ ${RET} -eq 35 ]]; then
@@ -76,6 +77,7 @@ _EOF_
       if [[ ${RET} -eq 0 ]]; then
         if [[ "${RES}" == '{"version": "1.1","result": true,"error": null}' ]]; then
           echo "WARN: critical port forwarding identified at ${p}"
+          /bin/triggerAlarm.tcl "Critical security issue: Disable port forwarding @ ${p}" "WatchDog: security-portforward" true
           exit 1
         fi
       fi

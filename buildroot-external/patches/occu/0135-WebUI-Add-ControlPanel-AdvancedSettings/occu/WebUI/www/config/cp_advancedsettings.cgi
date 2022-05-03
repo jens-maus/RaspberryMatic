@@ -13,6 +13,7 @@ set RPI4USB3CHECKFILENAME "/etc/config/rpi4usb3CheckDisabled"
 set MEDIOLAFILENAME "/etc/config/neoDisabled"
 set NOUPDATEDCVARSFILENAME "/etc/config/NoUpdateDCVars"
 set NOBADBLOCKSCHECKFILENAME "/etc/config/NoBadBlocksCheck"
+set NOPORTFORWARDINGCHECKFILENAME "/etc/config/NoPortForwardingCheck"
 set NOFSTRIMFILENAME "/etc/config/NoFSTRIM"
 set DISABLELEDFILENAME "/etc/config/disableLED"
 set DISABLEONBOARDLEDFILENAME "/etc/config/disableOnboardLED"
@@ -136,7 +137,7 @@ proc put_message {title msg args} {
 }
 
 proc action_put_page {} {
-  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOFSTRIMFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
+  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
    
   set inetcheckDisabled [file exists $INETCHECKFILENAME]
   set rpi4usb3CheckDisabled [file exists $RPI4USB3CHECKFILENAME]
@@ -144,6 +145,7 @@ proc action_put_page {} {
   set noCronBackup [file exists $NOCRONBACKUPFILENAME]
   set noDCVars [file exists $NOUPDATEDCVARSFILENAME]
   set noBadBlocksCheck [file exists $NOBADBLOCKSCHECKFILENAME]
+  set noPortforwardingCheck [file exists $NOPORTFORWARDINGCHECKFILENAME]
   set noFSTRIM [file exists $NOFSTRIMFILENAME]
   set disableLED [file exists $DISABLELEDFILENAME]
   set disableOnboardLED [file exists $DISABLEONBOARDLEDFILENAME]
@@ -263,6 +265,15 @@ proc action_put_page {} {
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
             table_row {
               set checked ""
+              if {!$noPortforwardingCheck} { set checked "checked=true" }
+              table_data {class="CLASS21112"} {colspan="3"} {
+                cgi_checkbox mode=noPortforwardingCheck {id="cb_noPortforwardingCheck"} $checked
+                puts "\${dialogSettingsAdvancedSettingsPortforwardingCheck}"
+              }
+            }            
+            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
+            table_row {
+              set checked ""
               if {!$noBadBlocksCheck} { set checked "checked=true" }
               table_data {class="CLASS21112"} {colspan="3"} {
                 cgi_checkbox mode=noBadBlocksCheck {id="cb_noBadBlocksCheck"} $checked
@@ -307,6 +318,7 @@ proc action_put_page {} {
           p { ${dialogSettingsAdvancedSettingsHintSystem4} }
           p { ${dialogSettingsAdvancedSettingsHintSystem5} }
           p { ${dialogSettingsAdvancedSettingsHintSystem6} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem12} }
           p { ${dialogSettingsAdvancedSettingsHintSystem7} }
           p { ${dialogSettingsAdvancedSettingsHintSystem8} }
           p { ${dialogSettingsAdvancedSettingsHintSystem9} }
@@ -370,6 +382,7 @@ proc action_put_page {} {
         pb += "&noCronBackup="+(document.getElementById("cb_noCronBackup").checked?"0":"1");
         pb += "&noDCVars="+(document.getElementById("cb_noDCVars").checked?"0":"1");
         pb += "&noBadBlocksCheck="+(document.getElementById("cb_noBadBlocksCheck").checked?"0":"1");
+        pb += "&noPortforwardingCheck="+(document.getElementById("cb_noPortforwardingCheck").checked?"0":"1");
         pb += "&disableLED="+(document.getElementById("cb_disableLED").checked?"0":"1");
         pb += "&disableOnboardLED="+(document.getElementById("cb_disableOnboardLED").checked?"0":"1");
         pb += "&noFSTRIM="+(document.getElementById("cb_noFSTRIM").checked?"0":"1");
@@ -431,7 +444,7 @@ proc action_put_page {} {
 }
 
 proc action_save_settings {} {
-  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOFSTRIMFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
+  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
   set errMsg ""
 
   import inetcheckDisabled
@@ -442,6 +455,7 @@ proc action_save_settings {} {
   import disableLED
   import disableOnboardLED
   import noBadBlocksCheck
+  import noPortforwardingCheck
   import noFSTRIM
   import devConfig
   import cronBackupPath
@@ -501,6 +515,12 @@ proc action_save_settings {} {
     append errMsg [createfile $NOBADBLOCKSCHECKFILENAME]
   } else {
     append errMsg [deletefile $NOBADBLOCKSCHECKFILENAME]
+  }
+  
+  if {$noPortforwardingCheck} {
+    append errMsg [createfile $NOPORTFORWARDINGCHECKFILENAME]
+  } else {
+    append errMsg [deletefile $NOPORTFORWARDINGCHECKFILENAME]
   }
   
   if {$noFSTRIM} {

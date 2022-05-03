@@ -23,7 +23,7 @@
 
 using namespace XmlRpc;
 
-#define TCLRPC_VERSION "1.2"
+#define TCLRPC_VERSION "1.3"
 
 static const char* USAGE = "usage: xmlrpc url methodName ?arg1 ?arg2 ...??";
 
@@ -60,11 +60,9 @@ int DLLEXPORT Tclrpc_Init (Tcl_Interp* interp) {
 	Tcl_CreateExitHandler( Tclrpc_Exit, 0 );
     XmlRpc::XmlRpcErrorHandler::setErrorHandler( &g_tclrpcErrorHandler );
 
-	// get the system encoding and then convert to iso8859-1 in
-	// case the system encoding is not "identity"
-	if(strcasecmp(Tcl_GetEncodingName(NULL), "identity") != 0) {
-	  iso8859_encoding = Tcl_GetEncoding(interp, "iso8859-1");
-	}
+	// get iso8859-1 encoding to convert all stuff to latin1
+	// because rega can only handle iso-8859-1
+	iso8859_encoding = Tcl_GetEncoding(interp, "iso8859-1");
 
 	return TCL_OK;
 }

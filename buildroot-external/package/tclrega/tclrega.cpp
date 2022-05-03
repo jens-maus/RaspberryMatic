@@ -30,7 +30,7 @@
 /*# Definitionen                                                             #*/
 /*############################################################################*/
 
-#define TCLREGA_VERSION "1.2"
+#define TCLREGA_VERSION "1.3"
 
 /*############################################################################*/
 /*# Variablen                                                                #*/
@@ -141,11 +141,9 @@ int Tclrega_Init (Tcl_Interp* interp) {
   /* - - - wernerf - - - */
 	Tcl_SetVar(interp, "rega_version", TCLREGA_VERSION, TCL_GLOBAL_ONLY);
 
-	// get the system encoding and then convert to iso8859-1 in
-	// case the system encoding is not "identity"
-	if(strcasecmp(Tcl_GetEncodingName(NULL), "identity") != 0) {
-	  iso8859_encoding = Tcl_GetEncoding(interp, "iso8859-1");
-	}
+	// get iso8859-1 encoding to convert all stuff to latin1
+	// because rega can only handle iso-8859-1
+	iso8859_encoding = Tcl_GetEncoding(interp, "iso8859-1");
 
 	// create an exit handler to clean up afterwards
 	Tcl_CreateExitHandler( Tclrega_Exit, 0 );

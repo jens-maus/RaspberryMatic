@@ -270,7 +270,7 @@ proc action_put_page {} {
                 cgi_checkbox mode=noPortforwardingCheck {id="cb_noPortforwardingCheck"} $checked
                 puts "\${dialogSettingsAdvancedSettingsPortforwardingCheck}"
               }
-            }            
+            }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
             table_row {
               set checked ""
@@ -522,7 +522,7 @@ proc action_save_settings {} {
   } else {
     append errMsg [deletefile $NOPORTFORWARDINGCHECKFILENAME]
   }
-  
+
   if {$noFSTRIM} {
     append errMsg [createfile $NOFSTRIMFILENAME]
   } else {

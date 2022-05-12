@@ -94,6 +94,8 @@ proc action_put_page {} {
   catch {set OSTYPE [string trim [read_var /etc/os-release PRETTY_NAME] '"']}
   execCmd OSKERNEL "exec uname -s -r -m"
   set TCLVER [info patchlevel]
+  execCmd JAVAVER {exec 2>@stdout /opt/java/bin/java -version | head -1 | cut -d" -f2}
+  execCmd NODEVER {exec /usr/bin/node -v}
   execCmd TEMP {exec awk {{ printf("%.1f &deg;C", $1/1000) }} /sys/class/thermal/thermal_zone0/temp}
 
   set STATUS ""
@@ -186,7 +188,7 @@ proc action_put_page {} {
         puts "<div style='display: table; width: 100%;'>"
           putsVar "Product" "$ver(PRODUCT) ($ver(VERSION))"
           putsVar "ReGaHss" [rega dom.BuildLabel()]
-          putsVar "TCL" "$TCLVER"
+          putsVar "Engines" "Tcl ($TCLVER), Java ($JAVAVER), NodeJS ($NODEVER)"
           putsVar "Status" $STATUS
         puts "</div>"
         puts "<h1 class='helpTitle'><u>Operating System Info</u></h1>"

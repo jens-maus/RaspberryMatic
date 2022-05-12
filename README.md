@@ -6,6 +6,7 @@
 
 [![Current Release](https://img.shields.io/github/release/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/latest/total.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
+[![DownloadsSnapshots](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/snapshots/total.svg)](https://github.com/jens-maus/RaspberryMatic/releases/snapshots)
 [![CI Build](https://github.com/jens-maus/RaspberryMatic/workflows/CI%20Build/badge.svg)](https://github.com/jens-maus/RaspberryMatic/actions)
 [![Snaphot Build](https://github.com/jens-maus/RaspberryMatic/workflows/Snaphot%20Build/badge.svg)](https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots)
 [![Contributors](https://img.shields.io/github/contributors/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/graphs/contributors)

@@ -326,6 +326,14 @@ check program hb_rf_eth-CheckEnabled with path "/usr/bin/test -e /etc/config/hb_
     group homematic
     if status != 0 for 1 cycles then unmonitor
 
+# check if a copro exists and if so we perform a regular check
+check program coProcessorCheck with path "/bin/checkCoProcessor.sh"
+    group homematic
+    if status = 2 then
+      exec /bin/sh -c "/bin/triggerAlarm.tcl 'RF-Module/Co-Processor connection lost' 'WatchDog: copro-lost' true"
+      repeat every 5 cycles
+    if status = 1 for 1 cycles then unmonitor
+
 # check if a pi4 with usb3+gpio rf module is used
 check program rpi4usb3Check with path "/bin/checkRpi4Usb3.sh"
     group system

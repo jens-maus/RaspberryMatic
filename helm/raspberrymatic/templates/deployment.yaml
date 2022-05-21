@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -45,7 +46,13 @@ spec:
             name: ccu-volume
           - mountPath: /sys
             name: sys
+          - mountPath: /lib/modules
+            name: modules
       volumes:
+      - name: modules
+        hostPath:
+          path: /lib/modules
+          type: Directory
       - name: sys
         hostPath:
           path: /sys

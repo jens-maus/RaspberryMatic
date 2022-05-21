@@ -15,4 +15,10 @@ gzip -f "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tar"
 mv "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tar.gz" "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tgz"
 (cd ./release && sha256sum "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tgz" >"RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tgz.sha256")
 
+# create manifest file with checksum+sizes
+rm -f "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.mf"
+
+# shellcheck disable=SC2129
+echo "$(stat -c %s "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tgz") $(cat "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tgz.sha256")" >>"./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.mf"
+
 exit $?

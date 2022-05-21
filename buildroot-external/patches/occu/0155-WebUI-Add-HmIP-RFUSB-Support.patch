@@ -22,15 +22,15 @@
                isKnownControl = true;
 --- occu/WebUI/www/rega/esp/functions.fn.orig
 +++ occu/WebUI/www/rega/esp/functions.fn
-@@ -411,7 +411,7 @@
-           bShowChannel = false;
-         }
-       } else {
--        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "RPI-RF-MOD")) {
-+        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "RPI-RF-MOD") && (oDevHssType != "HmIP-RFUSB")) {
-           bShowChannel = false;
-         }
+@@ -390,7 +390,7 @@
+       !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on
+       ! For BidCos-RF this isn't necessary
+ 
+-      if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "RPI-RF-MOD")) {
++      if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "RPI-RF-MOD") && (oDevHssType != "HmIP-RFUSB")) {
+         bShowChannel = false;
        }
+ 
 --- occu/WebUI/www/tools/js/model/devicetypelist.js.orig
 +++ occu/WebUI/www/tools/js/model/devicetypelist.js
 @@ -18,7 +18,8 @@

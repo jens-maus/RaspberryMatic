@@ -1,5 +1,38 @@
 --- occu/WebUI/www/api/eq3/jsonrpc.tcl.orig
 +++ occu/WebUI/www/api/eq3/jsonrpc.tcl
+@@ -21,7 +21,7 @@
+   global JSONRPC JSONRPC_ERROR
+   
+ #  set request [string range $request 1 end]
+-  if { [catch { array set parsedRequest [encoding convertfrom identity [json_parse $request]]} errMsg] } then {
++  if { [catch { array set parsedRequest [encoding convertfrom utf-8 [json_parse $request]]} errMsg] } then {
+      jsonrpc_error 100 "invalid request ($errMsg)"
+   }  
+   if { [catch { set JSONRPC(ID) $parsedRequest(id)} ] } then {
+@@ -41,9 +41,9 @@
+ proc jsonrpc_error {errorCode errorText} {
+   global JSONRPC
+   
+-  set errorCode [encoding convertto identity $errorCode]
+-  set errorText [encoding convertto identity $errorText]
+-  set JSONRPC(ID) [encoding convertto identity $JSONRPC(ID)]
++  set errorCode [encoding convertto utf-8 $errorCode]
++  set errorText [encoding convertto utf-8 $errorText]
++  set JSONRPC(ID) [encoding convertto utf-8 $JSONRPC(ID)]
+   
+   puts "CONTENT-TYPE: application/json; charset=utf-8"
+   puts ""
+@@ -72,8 +72,8 @@
+ proc jsonrpc_response {result} {
+   global JSONRPC
+   
+-  set result      [encoding convertto identity $result]
+-  set JSONRPC(ID) [encoding convertto identity $JSONRPC(ID)]
++  set result      [encoding convertto utf-8 $result]
++  set JSONRPC(ID) [encoding convertto utf-8 $JSONRPC(ID)]
+   
+   puts "CONTENT-TYPE: application/json; charset=utf-8"
+   puts ""
 @@ -84,7 +84,11 @@
      puts -nonewline "\"id\": $JSONRPC(ID),"
    }

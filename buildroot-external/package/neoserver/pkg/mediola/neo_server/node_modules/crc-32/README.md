@@ -11,16 +11,57 @@ With [npm](https://www.npmjs.org/package/crc-32):
 $ npm install crc-32
 ```
 
-In the browser:
+When installed globally, npm installs a script `crc32` that computes the
+checksum for a specified file or standard input.
+
+<details>
+  <summary><b>CDN Availability</b> (click to show)</summary>
+
+|    CDN     | URL                                        |
+|-----------:|:-------------------------------------------|
+|    `unpkg` | <https://unpkg.com/crc-32/>                |
+| `jsDelivr` | <https://jsdelivr.com/package/npm/crc-32>  |
+|    `CDNjs` | <https://cdnjs.com/libraries/crc-32>       |
+
+</details>
+
+
+## Integration
+
+Using NodeJS or a bundler:
+
+```js
+var CRC32 = require("crc-32");
+```
+
+In the browser, the `crc32.js` script can be loaded directly:
 
 ```html
 <script src="crc32.js"></script>
 ```
 
-The browser exposes a variable `CRC32`.
+The browser script exposes a variable `CRC32`.
 
-When installed globally, npm installs a script `crc32` that computes the
-checksum for a specified file or standard input.
+The script will manipulate `module.exports` if available .  This is not always
+desirable.  To prevent the behavior, define `DO_NOT_EXPORT_CRC`.
+
+### CRC32C (Castagnoli)
+
+The module and CDNs also include a parallel script for CRC32C calculations.
+
+Using NodeJS or a bundler:
+
+```js
+var CRC32C = require("crc-32/crc32c");
+```
+
+In the browser, the `crc32c.js` script can be loaded directly:
+
+```html
+<script src="crc32c.js"></script>
+```
+
+The browser exposes a variable `CRC32C`.
 
 The script will manipulate `module.exports` if available .  This is not always
 desirable.  To prevent the behavior, define `DO_NOT_EXPORT_CRC`.
@@ -44,19 +85,50 @@ The return value is a signed 32-bit integer.
 For example:
 
 ```js
-// var CRC32 = require('crc-32');             // uncomment this line if in node
-CRC32.str("SheetJS")                          // -1647298270
-CRC32.bstr("SheetJS")                         // -1647298270
-CRC32.buf([ 83, 104, 101, 101, 116, 74, 83 ]) // -1647298270
+// var CRC32 = require('crc-32');               // uncomment this line if in node
+CRC32.str("SheetJS")                            // -1647298270
+CRC32.bstr("SheetJS")                           // -1647298270
+CRC32.buf([ 83, 104, 101, 101, 116, 74, 83 ])   // -1647298270
 
-crc32 = CRC32.buf([83, 104])                  // -1826163454  "Sh"
-crc32 = CRC32.str("eet", crc32)               //  1191034598  "Sheet"
-CRC32.bstr("JS", crc32)                       // -1647298270  "SheetJS"
+crc32 = CRC32.buf([83, 104])                    // -1826163454  "Sh"
+crc32 = CRC32.str("eet", crc32)                 //  1191034598  "Sheet"
+CRC32.bstr("JS", crc32)                         // -1647298270  "SheetJS"
 
-[CRC32.str("\u2603"),  CRC32.str("\u0003")]   // [ -1743909036,  1259060791 ]
-[CRC32.bstr("\u2603"), CRC32.bstr("\u0003")]  // [  1259060791,  1259060791 ]
-[CRC32.buf([0x2603]),  CRC32.buf([0x0003])]   // [  1259060791,  1259060791 ]
+[CRC32.str("\u2603"),  CRC32.str("\u0003")]     // [ -1743909036,  1259060791 ]
+[CRC32.bstr("\u2603"), CRC32.bstr("\u0003")]    // [  1259060791,  1259060791 ]
+[CRC32.buf([0x2603]),  CRC32.buf([0x0003])]     // [  1259060791,  1259060791 ]
+
+// var CRC32C = require('crc-32/crc32c');       // uncomment this line if in node
+CRC32C.str("SheetJS")                           // -284764294
+CRC32C.bstr("SheetJS")                          // -284764294
+CRC32C.buf([ 83, 104, 101, 101, 116, 74, 83 ])  // -284764294
+
+crc32c = CRC32C.buf([83, 104])                  // -297065629   "Sh"
+crc32c = CRC32C.str("eet", crc32c)              //  1241364256  "Sheet"
+CRC32C.bstr("JS", crc32c)                       // -284764294   "SheetJS"
+
+[CRC32C.str("\u2603"),  CRC32C.str("\u0003")]   // [  1253703093,  1093509285 ]
+[CRC32C.bstr("\u2603"), CRC32C.bstr("\u0003")]  // [  1093509285,  1093509285 ]
+[CRC32C.buf([0x2603]),  CRC32C.buf([0x0003])]   // [  1093509285,  1093509285 ]
 ```
+
+### Best Practices
+
+Even though the initial seed is optional, for performance reasons it is highly
+recommended to explicitly pass the default seed 0.
+
+In NodeJS with the native Buffer implementation, it is oftentimes faster to
+convert binary strings with `Buffer.from(bstr, "binary")` first:
+
+```js
+/* Frequently slower in NodeJS */
+crc32 = CRC32.bstr(bstr, 0);
+/* Frequently faster in NodeJS */
+crc32 = CRC32.buf(Buffer.from(bstr, "binary"), 0);
+```
+
+This does not apply to browser `Buffer` shims, and thus is not implemented in
+the library directly.
 
 ## Testing
 

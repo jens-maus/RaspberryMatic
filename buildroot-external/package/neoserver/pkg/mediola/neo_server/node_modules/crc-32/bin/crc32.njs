@@ -20,6 +20,7 @@ function help()/*:number*/ {
 "    -u, --unsigned       print result with format `%u`",
 "    -x, --hex            print result with format `%0.8x`",
 "    -X, --HEX            print result with format `%0.8X`",
+"    -c, --crc32c         use CRC32C (Castagnoli)",
 "    -F, --format=<s>     use specified printf format",
 "",
 "Set filename = '-' or pipe data into crc32 to read from stdin",
@@ -50,6 +51,8 @@ for(var i = 0; i < args.length; ++i) {
 
 		case "--help":     case "-h": process.exit(help()); break;
 		case "--version":  case "-V": process.exit(version()); break;
+
+		case "--crc32c":   case "-c": try { X = require('../crc32c'); } catch(e) { X = require('crc-32/crc32c'); } break;
 
 		case "--signed":   case "-d": fmt = "%d"; break;
 		case "--unsigned": case "-u": fmt = "%u"; break;

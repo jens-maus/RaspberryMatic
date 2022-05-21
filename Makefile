@@ -1,4 +1,4 @@
-BUILDROOT_VERSION=2021.11
+BUILDROOT_VERSION=2022.02.1
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
 OCCU_VERSION=$(shell grep "OCCU_VERSION =" $(BUILDROOT_EXTERNAL)/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
@@ -135,7 +135,7 @@ toolchain: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 #   busybox-update-config
 #   uboot-menuconfig
 #   uboot-update-defconfig
-linux-menuconfig linux-update-defconfig busybox-menuconfig busybox-update-config uboot-menuconfig uboot-update-defconfig:
+linux-menuconfig linux-update-defconfig busybox-menuconfig busybox-update-config uboot-menuconfig uboot-update-defconfig legal-info:
 	@echo "[$@ $(PRODUCT)]"
 	@$(MAKE) -C build-$(PRODUCT) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) $@
 

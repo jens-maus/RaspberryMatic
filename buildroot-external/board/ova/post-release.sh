@@ -24,4 +24,12 @@ sha256sum "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.zip" >"RaspberryMatic-${PR
 cp -a "../build-${PRODUCT}/images/RaspberryMatic.ova" "./RaspberryMatic-${PRODUCT_VERSION}.ova"
 sha256sum "RaspberryMatic-${PRODUCT_VERSION}.ova" >"RaspberryMatic-${PRODUCT_VERSION}.ova.sha256"
 
+# create manifest file with checksum+sizes
+rm -f "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.mf"
+
+# shellcheck disable=SC2129
+echo "$(stat -c %s "./RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.img") $(cat "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.img.sha256")" >>"RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.mf"
+echo "$(stat -c %s "./RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.zip") $(cat "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.zip.sha256")" >>"RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.mf"
+echo "$(stat -c %s "./RaspberryMatic-${PRODUCT_VERSION}.ova") $(cat "RaspberryMatic-${PRODUCT_VERSION}.ova.sha256")" >>"RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.mf"
+
 exit $?

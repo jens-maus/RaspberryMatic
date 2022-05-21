@@ -1836,6 +1836,7 @@ background-color: $_(inactiveBackground);
 #ic_selchannel {
   display: initial;
   width: 100%;
+  margin: 10px;
 }
 
 #ic_selchannel #body_wrapper {
@@ -1844,7 +1845,7 @@ background-color: $_(inactiveBackground);
 
 #ic_selchannel #previous_step_wrapper {
 	background-color: $_(background); /* #183473 */
-	margin: 10px;
+	margin-bottom: 10px;
 }
 	
 #ic_selchannel #createLinkStep1 {
@@ -1879,6 +1880,8 @@ background-color: $_(inactiveBackground);
 #ic_selchannel .ChnListTbl {
 	border: 1px solid $_(black); /* black */
 	background-color: $_(background); /* #183473 */
+	width: 100%;
+	margin: 0px;
 }
 
 #ic_selchannel .ChnListTbl tr td {
@@ -3050,6 +3053,7 @@ html, body {
 .DeviceListThumbnail {
   border: 1px solid $_(black); /* black */
   text-align:center;
+  mix-blend-mode: multiply;
 }
 
 .DeviceListButton {

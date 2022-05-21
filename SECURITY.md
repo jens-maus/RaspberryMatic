@@ -4,7 +4,7 @@
 
 As RaspberryMatic is a community-driven open source project and our resources are limited
 we accept security fixes only on the latest released version and also on the sources published
-in the master branch of this GitHub project. 
+in the master branch of this GitHub project.
 
 ## Reporting a Vulnerability
 

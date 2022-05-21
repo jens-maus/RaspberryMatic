@@ -22,19 +22,28 @@ init() {
   if [[ ! -c /dev/eq3loop ]]; then
     # load eq3_char_loop kernel module
     modprobe eq3_char_loop
+    sleep 5 # wait for /dev/eq3loop to settle
   fi
 }
 
 waitStartupComplete() {
-  STEPS=5
+  STEPS=10
   for i in $(seq 1 ${STEPS}); do
     sleep 2
     echo -n "."
     MMDSTATUSPID=$(cat /var/status/multimacd.status 2>&1)
     MMDPID=$(pidof multimacd)
     if [[ "${MMDSTATUSPID}" == "${MMDPID}" ]]; then
-      echo "OK"
-      break
+      if [[ ! -c /dev/mmd_hmip ]] || [[ ! -c /dev/mmd_bidcos ]]; then
+        echo -n "."
+        # restart multimacd
+        start-stop-daemon -K -q -p ${PIDFILE}
+        sleep 2
+        start-stop-daemon -S -N -15 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
+      else
+        echo "OK"
+        break
+      fi
     fi
     if [[ ${i} -eq ${STEPS} ]]; then
       echo "ERROR"
@@ -68,7 +77,9 @@ start() {
         # to ensure that others are killed first in case of low memory situations
         echo -900 >/proc/$$/oom_score_adj 2>/dev/null
 
-        start-stop-daemon -S -N -10 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
+        # start multimacd with nice level -15 to increase
+        # process priority
+        start-stop-daemon -S -N -15 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
         waitStartupComplete
       else
         echo "ERROR: /dev/eq3loop missing"
@@ -91,6 +102,7 @@ stop() {
     # make sure to unload eq3_char_loop which
     # is necessary for docker-based environments
     if [[ -c /dev/eq3loop ]]; then
+      sleep 2 # wait to settle
       # load eq3_char_loop kernel module
       rmmod eq3_char_loop 2>/dev/null
     fi

@@ -31,7 +31,7 @@ cd ${HOMEPATH} || exit 1
 do_start()
 {
   log "starting neo_server ..."
-  start-stop-daemon --start --quiet --make-pidfile --background --nicelevel -10 --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
+  start-stop-daemon --start --quiet --make-pidfile --background --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
   sleep 1
   if [ -f "$PIDFILE" ]; then
     PID=$(cat $PIDFILE)
@@ -84,8 +84,8 @@ case "$1" in
       VER=$(cat $ADDONDIR/VERSION)
       echo "Version: $VER"
       echo "Info: <b>mediola NEO SERVER CCU Addon</b><br>"
-      echo "Info: Copyright (c) 2014-2020 mediola connected living AG<br>"
-      echo "Info: <a href='http://www.mediola.com'>mediola connected living AG</a>"
+      echo "Info: Copyright (c) 2014-2022 mediola connected living AG<br>"
+      echo "Info: <a href='https://www.mediola.com'>mediola connected living AG</a>"
       echo "Name: NEO SERVER"
       echo "Operations: uninstall restart"
       echo "Config-Url: /addons/mediola/index.html"

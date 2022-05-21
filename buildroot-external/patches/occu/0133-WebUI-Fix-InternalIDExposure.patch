@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/esp/functions.fn.orig
 +++ occu/WebUI/www/rega/esp/functions.fn
-@@ -384,7 +384,7 @@
+@@ -384,36 +384,14 @@
    if (bShowChannel == true) {
  
      ! Interface HmIP-RF and HmIP-Wired
@@ -9,6 +9,37 @@
        ! Don't show the maintenance channel of the new HmIP devices
        ! This is necessary because the name of such a channel of an HmIP device
        !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on
+       ! For BidCos-RF this isn't necessary
+ 
+-      if ((oDevHssType.Substr(0,6) == "HmIPW-") || (oDevHssType == "HmIP-DRSI1") || (oDevHssType == "HmIP-DRSI4")) {
+-        object chnParam;
+-        ! A HmIPW-* device with a control for the parameter IDENTIFY_TARGET_LEVEL (MAINTENANCE channel)
+-        ! should be visible. So it's possible to use the identify function of wHmIPW-devices.
+-        chnParam = dom.GetObject("HmIP-RF."#chn.Address()#".IDENTIFY_TARGET_LEVEL");
+-
+-        ! A HmIPW-* device with a control for the parameter ERROR_POWER_SHORT_CIRCUIT_BUS_1 (MAINTENANCE channel)
+-        ! should be visible. This is the DRAP.
+-        if (!chnParam) {
+-          chnParam = dom.GetObject("HmIP-RF."#chn.Address()#".ERROR_POWER_SHORT_CIRCUIT_BUS_1");
+-        }
+-
+-        if (chnParam) {
+-          string controlName = chnParam.MetaData("CONTROL");
+-          if (! controlName) {
+-            bShowChannel = false;
+-          }
+-        } else {
+-          bShowChannel = false;
+-        }
+-      } else {
+-        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "RPI-RF-MOD")) {
+-          bShowChannel = false;
+-        }
++      if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "RPI-RF-MOD")) {
++        bShowChannel = false;
+       }
+ 
+       ! Necessary to be able to learn the codes of keypads and finger print sensors
 --- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
 @@ -198,6 +198,38 @@

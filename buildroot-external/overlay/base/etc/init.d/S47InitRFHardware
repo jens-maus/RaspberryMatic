@@ -215,7 +215,8 @@ query_rf_parameters() {
         if [[ -n "${RF_HMRF_ADDRESS}" ]] &&
            [[ "${RF_HMRF_ADDRESS}" != "0x000000" ]] &&
            [[ -n "${RF_SERIAL}" ]] &&
-           [[ -z "${RFUSB_DEVNODE}" ]]; then
+           [[ -z "${RFUSB_DEVNODE}" ]] &&
+           [[ "${RF_HARDWARE}" != "HMIP-RFUSB-TK" ]]; then
 
           # prefer a HM-MOD-RPI-PCB for HmRF stuff in case
           # we already have a setup HMRF device
@@ -287,9 +288,9 @@ query_rf_parameters() {
 
   if [[ -n "${HBRF_DEVNODE}" ]]; then
     # get the RED/GREEN/BLUE pin ids
-    RED_GPIO_PIN=$(cat "/sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/red_gpio_pin")
-    GREEN_GPIO_PIN=$(cat "/sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/green_gpio_pin")
-    BLUE_GPIO_PIN=$(cat "/sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/blue_gpio_pin")
+    RED_GPIO_PIN=$(cat "/sys/class/raw-uart/${HBRF_DEVNODE}/red_gpio_pin")
+    GREEN_GPIO_PIN=$(cat "/sys/class/raw-uart/${HBRF_DEVNODE}/green_gpio_pin")
+    BLUE_GPIO_PIN=$(cat "/sys/class/raw-uart/${HBRF_DEVNODE}/blue_gpio_pin")
 
     # make sure to unbind the gpio-leds driver first
     if [[ -e /sys/class/leds/rpi_rf_mod:blue ]]; then
@@ -369,8 +370,12 @@ query_rf_parameters() {
   # of the RF module registered at eQ3
   if [[ -n "${HM_HMIP_SERIAL}" ]]; then
     echo -n "${HM_HMIP_SERIAL}" >/var/board_serial
-  else
+  elif [[ -n "${HM_HMRF_SERIAL}" ]]; then
     echo -n "${HM_HMRF_SERIAL}" >/var/board_serial
+  else
+    # fallback to put the mac in /var/board_serial
+    MAC=$(cat /sys/class/net/"$(ip route show default | awk '/default/ {print $5}')"/address)
+    echo -n "$(echo "${MAC}" | tr -d : | tail -c 10)" >/var/board_serial
   fi
 
   if [[ -n "${HM_HMIP_SGTIN}" ]]; then
@@ -402,9 +407,9 @@ start() {
 
   # output some status information
   echo -n "HmRF: "
-  [[ -n "${HM_HMRF_DEV}" ]] && echo -n "${HM_HMRF_DEV}/${HM_HMRF_DEVTYPE}, " || echo -n "none, "
+  [[ -n "${HM_HMRF_DEV}" ]] && echo -n "${HM_HMRF_DEV}/${HM_HMRF_DEVTYPE}, " || echo -n "n/a, "
   echo -n "HmIP: "
-  [[ -n "${HM_HMIP_DEV}" ]] && echo -n "${HM_HMIP_DEV}/${HM_HMIP_DEVTYPE}, " || echo -n "none, "
+  [[ -n "${HM_HMIP_DEV}" ]] && echo -n "${HM_HMIP_DEV}/${HM_HMIP_DEVTYPE}, " || echo -n "n/a, "
   echo "OK"
 }
 

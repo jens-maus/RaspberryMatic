@@ -1,0 +1,10 @@
+--- tcl/generic/tclBasic.c.orig	2022-04-04 14:52:29.014640367 +0200
++++ tcl/generic/tclBasic.c	2022-04-04 14:49:06.568085629 +0200
+@@ -968,6 +968,7 @@
+     Tcl_TraceVar2(interp, "tcl_precision", NULL,
+ 	    TCL_GLOBAL_ONLY|TCL_TRACE_READS|TCL_TRACE_WRITES|TCL_TRACE_UNSETS,
+ 	    TclPrecTraceProc, NULL);
++    Tcl_SetVar(interp, "tcl_precision", "12", TCL_GLOBAL_ONLY);
+     TclpSetVariables(interp);
+ 
+ #ifdef TCL_THREADS

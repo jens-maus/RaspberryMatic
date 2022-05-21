@@ -80,23 +80,14 @@ jQuery.extend(true, langJSON, {
     "generalDeviceChannelConfigLblUsable": "Operable:",
     "generalDeviceChannelConfigLblVisible": "Visible:",
     "generalDeviceChannelConfigLblLogged": "Logged:",
-    "generalDeviceChannelConfigLblServiceMsg": "Service messages:",
     "generalDeviceChannelConfigLblFuncTest": "Functional test",
-    "generalDeviceChannelConfigLblRenameChannel" : "Rename associated channels",
-    "generalDeviceChannelConfigLblRenameChannelIncludingOwn" : "including own names:",
-    "generalDeviceChannelConfigLblSeparator": "Separator:",
     "generalChannelConfigLblRooms": "Rooms",
     "generalChannelConfigLblFunctions": "Functions",
     "generalChannelConfigLblSender": "Transmitter (sensor)",
     "generalChannelConfigLblReceiver": "Receiver (actuator)",
     "generalChannelConfigLblNone": "no connection possible",
     "generalDeviceChannelConfigBtnFuncTest": "Start test",
-    "generalDeviceChannelConfigBtnRenameChannels" : "Rename channels",
-    "generalDeviceRenameChannelHint" : "Renames all channels of the device according to a given pattern.<br/><br/>The new channel names will afterwards look like: <i>device_name%26lt;separator%26gt;channel_number</i>",
-    "generalDeviceRenameChannelHintTooltip" : "Renames all channels of the device according to a given pattern. The new channel names will afterwards look like: 'device_name%26lt;separator%26gt;channel_number'",
-    "generalDeviceRenameChannelIncludingOwnHint" : "If this option is selected, all channels will be renamed including manually renamed ones.",
     "generalDeviceConfigHint": "During the functional test the error-free communication to the device is checked.<br /> Therefore, switching commands will be send to all actuators connected to the device. Sensors (e.g. remote controls) are usually sending signals only if they are operated manually. The test is passed as soon as the first feedback will be received by the device.",
-    "generalDeviceConfigHintTooltip": "During the functional test the error-free communication to the device is checked. Therefore, switching commands will be send to all actuators connected to the device. Sensors (e.g. remote controls) are usually sending signals only if they are operated manually. The test is passed as soon as the first feedback will be received by the device.",
     "generalChannelConfigHint": "<p>During the functional test the error-free communication to the channel is checked.</p>",
     "generalChannelConfigHintSender": "<p>In connection with sensors the Homematic Central Control Unit waits until the sensors are sending. A remote control is sending only if it is operated manually.</p>",
     "generalChannelConfigHintReceiver": "<p>In connection with actuators usually switching commands will be send.</p>",
@@ -262,7 +253,7 @@ jQuery.extend(true, langJSON, {
     "lanGatewayLblStandard" : "(Default)",
     "commentSettingsDialogMaintenancePerformSoftwareUpdate" : "***********************************************",
     "dialogSettingsCMDialogPerformSoftwareUpdateTitle" : "Software update",
-    "dialogSettingsCMDialogPerformSoftwareUpdateP1" : HMIdentifier.en.CCUFullNameText + " will be rebooted now and the software update applied accordingly. Depending on the used hardware the software update can take several minutes until half an hour. After the update has been finished the central will reboot a last time.<br/><br/>To monitor the software update process, you can refresh this web page after the first reboot so that output of the update process should be displayed accordingly.",
+    "dialogSettingsCMDialogPerformSoftwareUpdateP1" : "The software update is now in progress. After the update has been performed, the " + HMIdentifier.en.CCUShortName + " will be restarted automatically.",
     "dialogSettingsCMDialogPerformSoftwareUpdateP2" : "It is highly recommended to delete the cache of your browser, after the update has been performed. Therefore, please proceed as follows:",
     "dialogSettingsCMDialogPerformSoftwareUpdateLi1" : "Close all browser windows.",
     "dialogSettingsCMDialogPerformSoftwareUpdateLi2" : "Please delete the cache of your browser.<br />You will find further information in the tutorial <a href='http://www.eq-3.de/service/faq.html?id=38' target='_blank'>Web-UI Firmware Update: Browser-Cache leeren</a> on http://www.eq-3.de",
@@ -533,7 +524,6 @@ jQuery.extend(true, langJSON, {
     "lblErrorCheck" : "Error check",
     "lblNoError" : "No error",
     "lblError" : "Error",
-    "lblAccessPointError" : "The use of a HmIPW-DRAP or HmIP-HAP access point requires the use of a RPI-RF-MOD/HmIP-CCU3 compatible rf module.",
     "lblInfoStatusControlEnergyCounter" : "Energy counter " + HMIdentifier.en.CCUShortName,
     "lblInfoStatusControlDevice" : "Energy counter device",
     "lblInfoStatusControlVoltage" : "Voltage",
@@ -1100,7 +1090,7 @@ jQuery.extend(true, langJSON, {
     "colorStateNormal" : "Colour mode normal",
     "colorStateUnknown" : "Colour mode unknown",
 
-    "lblPressSystemButton" : "Please press the system key and bring the device into radio range.",
+    "lblPressSystemButton" : "Please bring the device into radio range and press the system key.",
 
     "btnAccessPointSettings" : "Homematic IP<br/>Access Points",
     "lblAccessPointSettings1" : "Administration of Homematic IP Access Points",
@@ -1185,7 +1175,7 @@ jQuery.extend(true, langJSON, {
     "lblSwitchLightOn" : "Switching light on",
     "lblSwitchLightOff" : "Switching light off",
 
-    "dialogSettingsUSBStorageSettings" : "External disk space",
+    "dialogSettingsUSBStorageSettings" : "External USB memory",
     "dialogSettingsStorageHintUSBStorageP1" : "Storage of data only includes the diagrams.",
 
 
@@ -1218,12 +1208,9 @@ jQuery.extend(true, langJSON, {
       "Before you put your CCU into operation, you need to enter an administrator password. " +
         "Be sure to choose a password that you can easily remember and do not share it with anyone else.<br/><br/>" +
         "Additional users with restricted rights can be set up in the CCU user management area.",
-
     "dlgUserPasswdHint1" :
     "Before you put your CCU into operation, you need to enter a password. " +
       "Be sure to choose a password that you can easily remember and do not share it with anyone else.<br/><br/>",
-
-
     "secLevelHigh" : "Maximum security",
     "secLevelMid" : "Restricted",
     "secLevelLow" : "Relaxed",
@@ -1233,70 +1220,54 @@ jQuery.extend(true, langJSON, {
     "secLevelMidCaption" : "This safety level permits access to interfaces, additional software and the Mediola software.",
     "secLevelLowCaptionA" : "I am familiar with how to protect the CCU against unauthorised access.",
     "secLevelUserHint" : "A security level does not prevent subsequent opening of ports, for example, in the firewall setting. The security level would then switch, for example, from 'Maximum security' to 'Custom'.",
-
     "dialogSetSecurityLevelExpress"  : "Express",
     "dialogSetSecurityLevelUserDefined"  : "Custom",
     "dlgSecurityLevelHeader" : "Security level",
     "noPasswdSet" : "No password set!",
     "passwdNotIdentical" : "Passwords do not match!",
-
     "adminPasswordTitle" : "<u>Administrator password</u>",
     "userPasswordTitle" : "<u>User password</u>",
     "portEnablingTitle" : "<b>Port opening:</b>",
     "portEnablingCaption" : "This is where required ports can be opened. Enter the ports in a list separated by ';'.",
-
     "securitySettingsTitle" : HMIdentifier.en.CCUShortName + " Security setting",
     "btnSecuritySettings" : "Security<br/>wizard",
     "lblSecuritySettings1" : "Express",
     "lblSecuritySettings2" : "Custom",
-
     "dialogSettingsFirewallLblFWPolicy" : "<b>Firewall policy:</b>",
     "dialogSettingsFirewallLblPortAccess" : "<b>Port access:</b>",
     "dialogSettingsFirewallLblPortsRestricted" : "Ports blocked",
     "dialogSettingsFirewallLblPortsOpen" : "Ports open",
     "dialogSettingsFirewallLblHintPortAccess" : "Port access settings",
-
     "lblSetting" : "Setting",
-
     "dialogSettingsFirewallLblMediola" : "<b>Mediola access:</b>",
     "dialogSettingsFirewallLblHintMediola" : "Enables access to the Mediola service",
-
     "toolTipFirewallAccessModes" : "<ul>" +
       "<li>Full access: Remote and local access granted</li>" +
       "<li>Restricted: Local access only</li>" +
       "<li>No access: Access not granted</li>" +
     "<ul>",
-
     "dialogSettingsFirewallLblHintIPAddresses" : "You can enable access for individual IP addresses or entire address ranges for both IPv4 and IPv6. Enter the addresses in a list separated by ';'.",
     "dialogSettingsFirewallLblHintIPAddressesWithoutIPv6" : "You can enable access for individual IP addresses (e. g. 192.168.0.1) or entire address ranges (e. g. 192.168.0.0/16) for IPv4. Enter the addresses in a list separated by ';'.",
-
     "dglUserNewFwSettingsTitle" : "Please note!",
     "dglUserNewFwSettingsContent" : "The firewall settings have changed. In case of problems, e.g. with additional software, please contact the admin.",
-
     "stringTableContactBoost" : "Corrosion protection",
     "lblJalousieBlind" : "Operating mode blind / shutter",
     "optionBlind" : "Blind",
     "optionShutter" : "Shutter",
     "hintBlindModeChanged" : "Transfer the configuration before you continue.",
-
     "dialogSettingsStorageTitleLEDS" : "Info LED",
     "dialogSettingsStorageSettingsLblServiceLed" : "Service messages:",
     "dialogSettingsStorageSettingsLblAlarmLed" : "Alarm messages:",
     "dialogSettingsStorageHintLEDS" : "Switching the Info LED flashing on or off in case of service and alarm messages",
-
-
-
     "dialogSettingsSecurityTDSNMP" : "SNMP",
     "dialogSettingsSecurityLblActivateSNMP" : "SNMP active:",
     "dialogSettingsSecurityTDSNMPExplanation" : "After activation, the SNMP service is active. Only SNMPv3 with SHA and AES is supported.",
     "dialogSettingsSecurityPasswordHint" : "Please note that the password must contain at least 8 characters.",
     "dialogSettingsSecurityUserHint" : "Please enter a user name.",
-
     "hintWiredBlindLinksAvailable" : "Please note: Connections have been found. The operation mode can therefore not be changed.",
     "hintWiredBlindProgramsAvailable" : "Please note: Programs have been found. The operation mode can therefore not be changed.",
     "hintWiredBlindLinksAndProgramsAvailable" : "Please note: Connections and programs have been found. The operation mode can therefore not be changed.",
     "hintCheckChannels" : "<br/>Check the following channels:  ",
-
     "lblSoundFileNr" : "MP3 file",
     "lblColorNr" : "Colour",
     "lblColorSongNr" : "MP3 file<br/>colour",
@@ -1309,29 +1280,20 @@ jQuery.extend(true, langJSON, {
     "soundColorRandomPlayback" : "MP3 file/colour = shuffle",
     "soundColorInternal" : "Internal sound/no colour",
     "hintSoundFileRandom20" : "Random playback of one of the first 20 MP3 files.",
-
     "***"  : "***",
-
     "checkSmokeDetectorSelfTest" : "To make sure the smoke detector is working properly, please  perform a self-test by pressing the operating key.",
     "hintActivateDetectorSelfTest" : "The firmware update was successful. ",
     "hintReInclusionDetectorFailed" : "A problem occurred while updating the firmware. ",
-
     "lblRename" : "Rename",
     "askRenameAllChannels" : "Automatically assign standard channel names?",
     "lblDeviceName" : "Device description",
     "lblChannelNames" : "Preview of channel names",
-
     "dialogFirmwareUpdateUnknownError" : "An unknown error has occurred<br/><br/>Please check whether the device can be accessed.",
-
     "lblHmIPWIdentification" : "Identification",
     "lbDisplayBacklight" : "Lighting<br/>Display",
     "lblLightingKeyVisual" : "Lighting<br/>System key",
-
-
     "drapMaxCurrentBus" : "Maximum current consumption by the bus",
-
     "drapBusConfig" : "Bus configuration",
-
     "AccessPointConfigurationFinished" : "Settings successfully saved.",
     "dialogMigrationRCV50Title" : langJSON.en.dialogHint,
     "dialogMigrationRCV50" : "Starting with this release, 50 virtual remote operation channels can also be used for Homematic IP for the first time.<br/><br/>" +
@@ -1343,15 +1305,10 @@ jQuery.extend(true, langJSON, {
     "lblQueryConfig" : "Query configuration",
     "lblSetConfig" : "Save configuration",
     "lblConfigNotChanged" : "No changes were made to the configuration.",
-
     "configureDisplay" : "Display configuration",
     "resetDisplay" : "Display reset",
     "resetDevice" : "Device reset",
-
     "hintLinkParamOnOffNotActive" : "Note!<br/><br/>The 'ON and OFF time' parameters must not both be set to 'Not active'.",
-
-
-
     "lblVibration" : "Vibration",
     "lblPosition" : "Position",
     "lblHorizontal" : "Horizontal",
@@ -1359,7 +1316,6 @@ jQuery.extend(true, langJSON, {
     "lblNonHorizontal" : "Tilted",
     "lblYes" : "Yes",
     "lblNo" : "No",
-
     "setAllHmIPDevices" :
       "Do you want to transfer this position to the corresponding HmIP devices?\n\n"  +
         "Please bear in mind that this may result in communication problems due to the increased radio traffic.",
@@ -1394,7 +1350,6 @@ jQuery.extend(true, langJSON, {
     "hintWeeklyProgramActiveExpertChannel" :
       "The expert mode is not active. However, since at least one expert target channel is activated for at least one switching time, " +
       "the target channels are still displayed in expert mode.",
-
     "alertUsernameForbiddenChars" : "The user name shall not contain a space character.",
     "addFirmwareFailedMinCCUVersion" : "This device-firmware update is not supported by the firmware of your CCU. Please update the CCU firmware first.",
     "lblStopRunningLink" : "Cancel old transmissions<br/>of this buttons",
@@ -1418,59 +1373,40 @@ jQuery.extend(true, langJSON, {
     "rotationDirLeftSlow" : "Slow anti-clockwise rotation",
     "rotationDirRightSlow" : "Slow clockwise rotation",
     "rainDetectorSampleInterval" : "Time between the single measurements<br/>(rain detection interval)",
-
-
-
     "cpSecurityHttpsRedirectTitle" : "Automatic forwarding to HTTPS",
     "cpSecurityHttpsRedirectLabel" : "Forwarding to HTTPS active:",
     "cpSecurityHttpsRedirectDescription" : "If this function is activated, automatic forwarding to HTTPS takes place when accessing the WebUI via HTTP.",
-
     "lblBus": "BUS",
-
     "lblOperatingVoltage": "Output voltage",
     "lblOperatingVoltageStatus": "Status output voltage",
     "lblOperationPowerConsumptionState": "Status current consumption",
-
     "lblCurrentPowerConsumption": "Actual current consumption",
     "lblCurrentOperatingVoltage": "Actual operating voltage",
-
     "lblVoltageStatus_0": "Normal",
     "lblVoltageStatus_1": "Unknown",
     "lblVoltageStatus_2": "Overvoltage",
     "lblVoltageStatus_3": "Ext. power supply",
-
-
     "lblPowerConsumptionStatus_0": "Normal",
     "lblPowerConsumptionStatus_1": "Unknown",
     "lblPowerConsumptionStatus_2": "Current consumption too high",
-
     "stringTableOperationPowerConsumptionState": "Status current consumption",
     "lblOperationTemp": "Operating temperature",
-
     "lblDutyCycle": "Duty cycle",
     "lblCarrierSense": "Carrier Sense",
-
     "headerDrapUpdateNecessary":
     "This update uses Advanced Routing to establish improved communication between the Homematic IP wireless and wired components. " +
       "This requires a firmware update of the Homematic IP Wired Access Point.<br><br>After the update, the Homematic IP Wired Access Point is moved into the inbox and must be configured there.<br>" +
       "All wired devices in the installation that have already been connected and configured will continue to work as usual after the update.",
-
     "drapUpdateNecessary": "The following Wired Access Points with an incompatible firmware were found and must be updated:<br/><br/>",
-
     "lblSeeServiceMessage": "See service message!",
-
     "lblAllChannelsVisible": "All channels visible:",
-
     "thAvailableVersion": "Available version",
     "thInstalledVersion": "Installed version",
     "btnReload": "Reload",
-
     "btnAccessPoints": "Update Access Points</br>with incompatible FW",
     "lblShowAllAPs": "Update Access Points with incompatible FW",
     "lblGotoUpdate" : "To the update",
-
     "apSearchMigrationDescription": "The password of the Homematic IP Access Point and an active Internet connection are required for the update. The password (PW) can be found on the sticker on the device.",
-
     "apSearchDescription": "The password of the Homematic IP Access Point is required for the update. The password (PW) can be found on the sticker on the device.",
     "password": "Password",
     "apSearchWaitText": "Access Points are searched in the network. Please wait until the search is complete.",
@@ -1480,12 +1416,10 @@ jQuery.extend(true, langJSON, {
     "apMigrationErrorOrTimeout" : "An error occurred during the firmware update Please update the view and try again.",
     "apMigrationUpdateSuccessfulAddition" : "You can now teach-in the Access Point via &ldquo;Teach-in device&rdquo;.",
     "apMigrationUpdateSuccessfulAdditionMigrationMode" : "The Access Point is now in your inbox.",
-
     "hintDeviceDoesNotSupportAction" : "The currently installed device firmware does not support this function.",
     "lblDifferentialTemperature": "Difference temperature T1 - T2",
     "noNeedForUpdate" : "No update required.",
     "notCompatible" : "Not compatible",
-
     "aqiGood" : "Good",
     "aqiModerate" : "Moderate",
     "aqiUnhealty1" : "Unhealthy for sen. people",
@@ -1493,7 +1427,6 @@ jQuery.extend(true, langJSON, {
     "aqiUnhealty3" : "Very unhealthy",
     "aqiHazardous" : "Threat to health",
     "lblLocationA" : "Location",
-
     "hintGroupDevice" : "Please note! This device is part of a heating group.<br/>Adjustments to the temperature profiles should be made in the group.",
     "lblChnNotAllowedInRoom" : "This channel cannot be assigned to a room!",
     "lblChnNotAllowedInFunc" : "This channel cannot be assigned to a function!",
@@ -1505,9 +1438,7 @@ jQuery.extend(true, langJSON, {
     "drapRescueIntroTitle" : "HmIP-DRAP preparatory update",
     "drapRescueIntroText" : "This HmIP-DRAP with firmware version 2.0.16 requires an intermediate update before the actual update can be carried out.</br>For this purpose, enter the password (PW) printed on the HmIP-DRAP and click &ldquo;OK&rdquo;.",
     "drapRescueUpdateSuccessful" : "The intermediate update was completed successfully.</br>Wait until the LED of the HmIP-DRAP flashes blue or shines turquoise. Start the actual update by clicking the &ldquo;Update&rdquo; button again.",
-
     "lbl24Average" : "24h Average",
-
     "optionColorOFF" : "Back light off",
     "optionColorON" : "Permanently on",
     "blinkSlow" : "Slow flashing",
@@ -1519,11 +1450,9 @@ jQuery.extend(true, langJSON, {
     "blinkBillowSlow" : "Slow pulsing",
     "blinkBillowMiddle" : "Medium pulsing",
     "blinkBillowFast" : "Fast pulsing",
-
     "lblTilt" : "Tilt",
     "hintSetReadyWeeklyProgram" : "Please press the Finish button to configure the week program and then access the device in the device list.",
     "lblBehaviour" : "Response",
-
     "lblCO2Concentration" : "CO2 concentration",
     "btnDirectFwUpload" : "Load directly to CCU and install",
     "dialogSettingsCMLblAlternateSoftwareUpdate" : "Alternative procedure:",
@@ -1547,10 +1476,63 @@ jQuery.extend(true, langJSON, {
     "lblLock" : "Lock",
     "lblUnlock" : "Unlock",
     "lblTypePointOfTime" : "Type of time point",
-
     "lblDisplay"  : "Display",
     "lblSystemKey" : "System button",
     "lblReadings" : "measured value(s)",
+    "modeBatNotSupported" : "(not supported because battery operation)",
+    "lblRestartNeeded" : "Restart required",
+    "lblRotationSwap" : "Change direction of rotation",
+    "optionNormallyClose" : "NC (normally closed)",
+    "optionNormallyOpen" : "NO (normally open)",
+    "helpServoRampTime" :
+      "With value 0, the driving time is only dependent on the positioning time of the servo.<br/><br/>" +
+      "The speed/driving time only affects the driving time if it is greater than the driving time caused by the positioning time of the servo.",
+    "lblStopRunningLinkAccessTransceiver" : "Cancel old transmissions<br/>of these channels",
+    "codeInUse" : "Codes used",
+    "codeIdle" : "--",
+    "codeKnownCodeIDReceived" : "Code ID received",
+    "codeUnKnownCodeIDReceived" : "Unknown",
+    "codeLearnModeForCodeIDStarted" : "Code is being taught in",
+    "codeLearnModeExitForCodeWithSuccess" : "Code successfully taught in",
+    "codeLearnModeExitForCodeWithTimeout" : "Timeout during code teach-in",
+    "codeLearnModeExitForCodeWithErrorDuplicateCode" : "Code already exists",
+    "codeCodeErased" : "Code deleted",
+    "codeManagement" : "Code<br/>management",
+    "clearStatusMessages" : "Reset<br/>locks",
+    "lblCodeReceived" : "Received code",
+    "lblFWISetCodeCommand" : "Action",
+    "lblFWIClearError" : "Reset lock",
+    "codeStartOfLearn" : "Teach in code",
+    "codeStopOfLearn" : "End teach-in",
+    "codeErase" : "Delete code",
+    "clearAll" : "All",
+    "hintFWITargetNotPossible" :
+      "\n\nChannels 1 - 8 do not support the astro function.\n\n" +
+      "Use the condition  \"Fixed time of day\"\n\n",
+    "dialogCodeCommandTitle" : "Code Management",
+    "dialogClearErrorTitle" : "Reset locks",
+    "channelRights" : "Channel authorisation",
+    "hintDoorLockHoldTime" : "Please note that a longer holding time has a negative effect on the battery life of the door lock drive.",
+    "optionOpenOnly" : "Open only",
+    "optionNormal" : "Normal",
+    "optionLong" : "Long",
+    "optionExtraLong" : "Extra long",
+    "dialogAskCreateBakupCheckboxText" : "Create system backup before update.",
+    "dialogAskCreateBakupText" : "The backup is created and downloaded directly before the installation. This process may take a few minutes",
+    "unitNumericPinCode" : "(max. 8 digits from 0 to 9)",
+    "lblPinOfChannelLockA" : "The PIN code of the channel 'User",
+    "lblPinOfChannelLockB" : "Lock' is used.",
+    "lblChannelActivInactivWhenNoOutput" : "Device inactive or in standby<br/>at 0% output voltage",
+    "optionRelayInactive" : "Device not active",
+    "optionRelayOffDelay05S" : "Standby after 0.5 s.",
+    "optionRelayOffDelay1S" : "Standby after 1s s.",
+    "optionRelayOffDelay10S" : "Standby after 10 s.",
+    "optionModeConsumption" : "Consumption mode",
+    "optionModeFeeding" : "Feeding mode",
+    "hintSetReadyNotComplete" : "Click on 'Done' to complete the channel configuration then access the device in the device list.",
+    "lblCode" : "Code",
+    "lblBellButton" : "Bell button",
+
     "theEnd" : ""
   }
 });

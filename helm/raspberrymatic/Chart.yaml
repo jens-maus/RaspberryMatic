@@ -1,3 +1,4 @@
+---
 apiVersion: v2
 name: raspberrymatic
 description: HomeMatic/homematicIP CCU central based on RaspberryMatic
@@ -28,15 +29,15 @@ type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 3.61.7
+version: 3.63.9
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 3.61.7.20220115
+appVersion: 3.63.9.20220521
 
 annotations:
   artifacthub.io/changes: |
-    - Release of 3.61.7.20220115 (https://github.com/jens-maus/RaspberryMatic/releases/tag/3.61.7.20220115)
+    - Release of 3.63.9.20220521 (https://github.com/jens-maus/RaspberryMatic/releases/tag/3.63.9.20220521)
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: Webpage

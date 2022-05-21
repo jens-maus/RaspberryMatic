@@ -4,7 +4,7 @@
 
 This is a helm chart for [RaspberryMatic](https://raspberrymatic.de/)
 
-### Installing the Chart
+## Installing the Chart
 
 Since this chart depends on HW to manage Homemtatic devices the setup goes beyond just installing the chart.
 
@@ -15,7 +15,7 @@ Please follow the [RaspberryMatic Kubernetes installation Wiki](https://github.c
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release --purge
+helm delete my-release --purge
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -76,4 +76,3 @@ The command removes all the Kubernetes components associated with the chart and 
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `nil` |  |
 | tolerations | list | `[]` |  |
-

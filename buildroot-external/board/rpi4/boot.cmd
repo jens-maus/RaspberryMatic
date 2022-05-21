@@ -9,6 +9,7 @@ setenv userfs 3
 setenv gpio_button "GPIO12"
 setenv kernel_img "Image"
 setenv recoveryfs_initrd "recoveryfs-initrd"
+setenv usbstoragequirks "174c:55aa:u,2109:0715:u,152d:0578:u,152d:0579:u,152d:1561:u,174c:0829:u,14b0:0206:u,174c:55aa:u"
 
 # output where we are booting from
 itest.b ${devnum} == 0 && echo "U-boot loaded from SD"
@@ -45,7 +46,7 @@ fdt addr ${fdt_addr}
 fdt get value bootargs /chosen bootargs
 
 # set bootargs
-setenv bootargs "dwc_otg.lpm_enable=0 sdhci_bcm2708.enable_llm=0 console=${console} kgdboc=${console} scandelay=5 root=${rootfs_str} ro rootfstype=ext4 elevator=deadline fsck.repair=yes init_on_alloc=1 init_on_free=1 slab_nomerge iomem=relaxed pti=on lapic rootwait rootdelay=5 consoleblank=120 logo.nologo quiet loglevel=${loglevel} net.ifnames=0 usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
+setenv bootargs "dwc_otg.lpm_enable=0 sdhci_bcm2708.enable_llm=0 console=${console} root=${rootfs_str} ro rootfstype=ext4 fsck.repair=yes rootwait rootdelay=5 consoleblank=120 ilogo.nologo quiet loglevel=${loglevel} init_on_alloc=1 init_on_free=1 slab_nomerge iomem=relaxed net.ifnames=0 usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
 
 # load kernel
 load ${devtype} ${devnum}:${kernelfs} ${kernel_addr_r} ${kernel_img}

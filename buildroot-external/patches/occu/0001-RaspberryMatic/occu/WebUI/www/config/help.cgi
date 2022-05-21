@@ -94,6 +94,8 @@ proc action_put_page {} {
   catch {set OSTYPE [string trim [read_var /etc/os-release PRETTY_NAME] '"']}
   execCmd OSKERNEL "exec uname -s -r -m"
   set TCLVER [info patchlevel]
+  execCmd JAVAVER {exec 2>@stdout /opt/java/bin/java -version | head -1 | cut -d" -f2}
+  execCmd NODEVER {exec /usr/bin/node -v}
   execCmd TEMP {exec awk {{ printf("%.1f &deg;C", $1/1000) }} /sys/class/thermal/thermal_zone0/temp}
 
   set STATUS ""
@@ -122,8 +124,8 @@ proc action_put_page {} {
   } else {
     set STATUS "SD(0) $STATUS"
   }
-  execCmd ROOTFSFREE {exec monit status rootfs | grep "space free total" | awk {{ print substr($0,index($0,$4)) }}}
-  execCmd USERFSFREE {exec monit status userfs | grep "space free total" | awk {{ print substr($0,index($0,$4)) }}}
+  execCmd ROOTFSFREE {exec monit status rootfs | grep "space free for non superuser" | awk {{ print substr($0,index($0,$6)) }}}
+  execCmd USERFSFREE {exec monit status userfs | grep "space free for non superuser" | awk {{ print substr($0,index($0,$6)) }}}
   execCmd STORAGEDEV {exec mountpoint -n /usr/local | awk {{ print $1 }} | xargs lsblk -l -n -o PKNAME -p}
   execCmd STORAGE "exec lsblk -l -n -o SIZE,MODEL,KNAME -d -p $STORAGEDEV"
 
@@ -186,7 +188,7 @@ proc action_put_page {} {
         puts "<div style='display: table; width: 100%;'>"
           putsVar "Product" "$ver(PRODUCT) ($ver(VERSION))"
           putsVar "ReGaHss" [rega dom.BuildLabel()]
-          putsVar "TCL" "$TCLVER"
+          putsVar "Engines" "Tcl ($TCLVER), Java ($JAVAVER), NodeJS ($NODEVER)"
           putsVar "Status" $STATUS
         puts "</div>"
         puts "<h1 class='helpTitle'><u>Operating System Info</u></h1>"

@@ -206,11 +206,11 @@ static void mod_authn_rega_sendMsg(const char* msg, const int msgLength, const i
 
     memset(&addrRega, 0, sizeof(addrRega));
     addrRega.sin_family = AF_INET;
-    addrRega.sin_addr.s_addr = inet_addr("127.0.0.1");
+    addrRega.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
     addrRega.sin_port = htons(regaPort);
     memset(&addrMe, 0, sizeof(addrMe));
     addrMe.sin_family = AF_INET;
-    addrMe.sin_addr.s_addr = inet_addr("127.0.0.1");
+    addrMe.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
     //addrMe.sin_port = htons(0);
 
     if(bind(sock, &addrMe, sizeof(addrMe)) == -1) {
@@ -239,10 +239,9 @@ static void mod_authn_rega_sendMsg(const char* msg, const int msgLength, const i
 
     //check if the answer comes from correct port....
     if(sLength != 0) {
-        char* name = inet_ntoa(addrRega.sin_addr);
         int port = ntohs(addrRega.sin_port);
 
-        if( ! (port == regaPort && (strcmp(name, "127.0.0.1") == 0))) {
+        if( ! (port == regaPort && addrRega.sin_addr.s_addr == htonl(INADDR_LOOPBACK))) {
           *answerLength = 0;
         }
     }

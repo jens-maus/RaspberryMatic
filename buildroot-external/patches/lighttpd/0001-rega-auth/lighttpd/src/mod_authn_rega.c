@@ -1,7 +1,7 @@
 /*
  * mod_authn_rega.c
  *
- * Copyright (C) 2018-2021 eQ-3 Entwicklung GmbH
+ * Copyright (C) 2018-2022 eQ-3 Entwicklung GmbH
  * Author: Christian Niclaus
  *
  * Licensed under Apache-2.0
@@ -9,6 +9,7 @@
  * 1.0: initial release
  * 1.1: lighttpd 1.4.58+ compatibility <mail@jens-maus.de>
  * 1.2: lighttpd 1.4.61+ compatibility <mail@jens-maus.de>
+ * 1.3: minor loopback optimizations <gstrauss@gluelogic.com>
  */
 
 #include "base.h"

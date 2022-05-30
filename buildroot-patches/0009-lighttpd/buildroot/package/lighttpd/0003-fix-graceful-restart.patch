@@ -1,0 +1,58 @@
+From b1e10aea6856bdc7b02ac8a0736dd60a0616635a Mon Sep 17 00:00:00 2001
+From: Glenn Strauss <gstrauss@gluelogic.com>
+Date: Thu, 26 May 2022 02:46:05 -0400
+Subject: [PATCH] [core] reset internal sidx after graceful restart
+
+reset internal socket sidx after graceful restart
+
+(thx jens-maus)
+
+x-ref:
+  https://github.com/jens-maus/RaspberryMatic/pull/1847
+---
+ src/network.c | 8 ++++++++
+ src/server.c  | 4 +++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/src/network.c b/src/network.c
+index 6fc6a840..abdf657a 100644
+--- a/src/network.c
++++ b/src/network.c
+@@ -425,6 +425,8 @@ static int network_server_init(server *srv, network_socket_config *s, buffer *ho
+ 	/* check if we already know this socket (after potential DNS resolution), and if yes, don't init it */
+ 	for (uint32_t i = 0; i < srv->srv_sockets.used; ++i) {
+ 		if (0 == memcmp(&srv->srv_sockets.ptr[i]->addr, &addr, sizeof(addr))) {
++			if ((unsigned short)~0u == srv->srv_sockets.ptr[i]->sidx)
++				srv->srv_sockets.ptr[i]->sidx = sidx;
+ 			return 0;
+ 		}
+ 	}
+@@ -879,6 +881,12 @@ int network_init(server *srv, int stdin_fd) {
+             }
+         }
+ 
++        /* reset sidx of any graceful sockets not explicitly listed in config */
++        for (uint32_t i = 0; i < srv->srv_sockets.used; ++i) {
++            if ((unsigned short)~0u == srv->srv_sockets.ptr[i]->sidx)
++                srv->srv_sockets.ptr[i]->sidx = 0;
++        }
++
+     } while (0);
+ 
+     free(p->cvlist);
+diff --git a/src/server.c b/src/server.c
+index 35063ece..e4405ddd 100644
+--- a/src/server.c
++++ b/src/server.c
+@@ -787,8 +787,10 @@ static void server_sockets_restore (server *srv) { /* graceful_restart */
+     memset(&graceful_sockets, 0, sizeof(server_socket_array));
+     memcpy(&srv->srv_sockets_inherited, &inherited_sockets, sizeof(server_socket_array));
+     memset(&inherited_sockets, 0, sizeof(server_socket_array));
+-    for (uint32_t i = 0; i < srv->srv_sockets.used; ++i)
++    for (uint32_t i = 0; i < srv->srv_sockets.used; ++i) {
+         srv->srv_sockets.ptr[i]->srv = srv;           /* update ptr */
++        srv->srv_sockets.ptr[i]->sidx= (unsigned short)~0u;
++    }
+     for (uint32_t i = 0; i < srv->srv_sockets_inherited.used; ++i)
+         srv->srv_sockets_inherited.ptr[i]->srv = srv; /* update ptr */
+ }

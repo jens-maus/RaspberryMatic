@@ -85,7 +85,7 @@ reload() {
     echo "" >/var/etc/lighttpd_httpsredirect.conf
   fi
 
-  start-stop-daemon -K -s HUP -q -p ${PIDFILE_ANGEL}
+  start-stop-daemon -K -s USR1 -q -p ${PIDFILE_ANGEL}
   sleep 2
   [[ -f ${PIDFILE} ]] && echo "OK" || echo "ERROR"
 }

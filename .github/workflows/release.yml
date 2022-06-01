@@ -15,9 +15,13 @@ on:
         required: true
         default: "true"
 
-jobs:
+# default read-only permission
+permissions: read
 
+jobs:
   release_draft:
+    permissions:
+      contents: write # ncipollo/release-action
     name: Release draft
     runs-on: ubuntu-20.04
     outputs:
@@ -93,6 +97,8 @@ jobs:
           name: release-template.md
 
   build:
+    permissions:
+      contents: write # actions/upload-release-asset
     name: Release build [${{ matrix.platform }}]
     if: github.repository == 'jens-maus/RaspberryMatic'
     runs-on: self-hosted
@@ -269,6 +275,8 @@ jobs:
   ##########################################
   # Update checksums in release draft
   update-checksums:
+    permissions:
+      contents: write # ncipollo/release-action
     name: Update checksums
     runs-on: ubuntu-20.04
     needs: [release_draft, build]
@@ -309,6 +317,9 @@ jobs:
   ##########################################
   # OCI/Docker build and registry push step
   oci-multiarch-build-push:
+    permissions:
+      contents: write # ncipollo/release-action
+      packages: write # docker/build-push-action
     name: OCI/Docker Build+Push
     runs-on: ubuntu-20.04
     needs: [release_draft, build]
@@ -479,6 +490,8 @@ jobs:
           git push
 
   helm:
+    permissions:
+      pages: write # stefanprodan/helm-gh-pages
     name: Build K8s Helm chart
     runs-on: ubuntu-20.04
     needs: [release_draft, oci-multiarch-build-push, publish-build]

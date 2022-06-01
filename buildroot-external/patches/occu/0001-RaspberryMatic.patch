@@ -221,7 +221,7 @@
  # set HOMEMATIC_URL "http://www.homematic.com"
  set HOMEMATIC_URL "http://www.eq-3.de"
  set HOMEMATIC_IP_URL "https://www.homematic-ip.com"
-@@ -19,13 +19,115 @@
+@@ -19,13 +19,116 @@
  set LANGUAGE "de"
  set CUR_YEAR [clock format [clock seconds] -format %Y]
  
@@ -300,6 +300,7 @@
 +  execCmd SWAPUSE {exec egrep "Swap(Total|Free)" /proc/meminfo | tr -d "\n" | awk {{ printf("%.1f %", 100-$4/$2*100) }}}
 +  execCmd UPTIME {exec awk {{s=int($1);d=int(s/86400);h=int(s % 86400/3600);m=int(s % 3600 / 60); printf "%d d, %d h %d min", d, h, m}} /proc/uptime}
 +  execCmd NTPOFFSET {exec /usr/bin/chronyc -n tracking | grep "Last offset" | awk {{ printf("%.3f ms", $4*1000) }}}
++  execCmd NTPSERVER {exec /usr/bin/chronyc -n tracking | grep "Reference ID" | awk -F "\[\(\)\]" {{ print $2 }}}
 +  catch {set OSTYPE [string trim [read_var /etc/os-release PRETTY_NAME] '"']}
 +  execCmd OSKERNEL "exec uname -s -r -m"
 +  set TCLVER [info patchlevel]
@@ -340,7 +341,7 @@
  
    set sid ""
    catch {import sid}
-@@ -43,47 +145,78 @@
+@@ -43,47 +146,78 @@
        </script>
      }
    }
@@ -430,7 +431,7 @@
 +          putsVar "Load Average" $LOADAVG
 +          putsVar "System Temperature" $TEMP
 +          putsVar "Memory / Swap Utilization" "$MEMUSE / $SWAPUSE"
-+          putsVar "NTP Offset" $NTPOFFSET
++          putsVar "NTP Offset (Server)" "$NTPOFFSET ($NTPSERVER)"
 +          putsVar "rootfs / userfs Free Space" "$ROOTFSFREE / $USERFSFREE"
 +        puts "</div>"
 +        puts "<h1 class='helpTitle'><u>homematicIP-RF (HmIP) Info</u></h1>"
@@ -452,7 +453,7 @@
  
    puts "</table>"
  
-@@ -124,7 +257,7 @@
+@@ -124,7 +258,7 @@
      puts "\}"
  
      puts "loadExtHelp = function()\{"

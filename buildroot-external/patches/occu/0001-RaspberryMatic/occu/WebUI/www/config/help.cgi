@@ -91,6 +91,7 @@ proc action_put_page {} {
   execCmd SWAPUSE {exec egrep "Swap(Total|Free)" /proc/meminfo | tr -d "\n" | awk {{ printf("%.1f %", 100-$4/$2*100) }}}
   execCmd UPTIME {exec awk {{s=int($1);d=int(s/86400);h=int(s % 86400/3600);m=int(s % 3600 / 60); printf "%d d, %d h %d min", d, h, m}} /proc/uptime}
   execCmd NTPOFFSET {exec /usr/bin/chronyc -n tracking | grep "Last offset" | awk {{ printf("%.3f ms", $4*1000) }}}
+  execCmd NTPSERVER {exec /usr/bin/chronyc -n tracking | grep "Reference ID" | awk -F "\[\(\)\]" {{ print $2 }}}
   catch {set OSTYPE [string trim [read_var /etc/os-release PRETTY_NAME] '"']}
   execCmd OSKERNEL "exec uname -s -r -m"
   set TCLVER [info patchlevel]
@@ -198,7 +199,7 @@ proc action_put_page {} {
           putsVar "Load Average" $LOADAVG
           putsVar "System Temperature" $TEMP
           putsVar "Memory / Swap Utilization" "$MEMUSE / $SWAPUSE"
-          putsVar "NTP Offset" $NTPOFFSET
+          putsVar "NTP Offset (Server)" "$NTPOFFSET ($NTPSERVER)"
           putsVar "rootfs / userfs Free Space" "$ROOTFSFREE / $USERFSFREE"
         puts "</div>"
         puts "<h1 class='helpTitle'><u>homematicIP-RF (HmIP) Info</u></h1>"

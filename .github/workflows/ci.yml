@@ -34,7 +34,8 @@ on:
         default: "true"
 
 # default read-only permission
-permissions: read
+permissions:
+  contents: read
 
 env:
   # NOTE: secrets cannot be access directly in conditions

@@ -10,7 +10,8 @@ on:
       - 'gh-pages'
 
 # default read-only permission
-permissions: read
+permissions:
+  contents: read
 
 jobs:
   auto-merge:

@@ -16,7 +16,8 @@ on:
         default: "true"
 
 # default read-only permission
-permissions: read
+permissions:
+  contents: read
 
 jobs:
   release_draft:

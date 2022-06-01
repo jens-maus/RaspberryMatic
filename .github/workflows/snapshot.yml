@@ -14,7 +14,8 @@ on:
         default: "false"
 
 # default read-only permission
-permissions: read
+permissions:
+  contents: read
 
 jobs:
   repo-check:

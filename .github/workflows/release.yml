@@ -22,7 +22,7 @@ permissions:
 jobs:
   release_draft:
     permissions:
-      contents: write # ncipollo/release-action
+      contents: write  # ncipollo/release-action
     name: Release draft
     runs-on: ubuntu-20.04
     outputs:
@@ -99,7 +99,7 @@ jobs:
 
   build:
     permissions:
-      contents: write # actions/upload-release-asset
+      contents: write  # actions/upload-release-asset
     name: Release build [${{ matrix.platform }}]
     if: github.repository == 'jens-maus/RaspberryMatic'
     runs-on: self-hosted
@@ -277,7 +277,7 @@ jobs:
   # Update checksums in release draft
   update-checksums:
     permissions:
-      contents: write # ncipollo/release-action
+      contents: write  # ncipollo/release-action
     name: Update checksums
     runs-on: ubuntu-20.04
     needs: [release_draft, build]

@@ -16,8 +16,8 @@ permissions:
 jobs:
   auto-merge:
     permissions:
-      contents: write # ahmadnassri/action-dependabot-auto-merge
-      pull-requests: write # ahmadnassri/action-dependabot-auto-merge
+      contents: write  # ahmadnassri/action-dependabot-auto-merge
+      pull-requests: write  # ahmadnassri/action-dependabot-auto-merge
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

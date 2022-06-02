@@ -87,7 +87,7 @@ jobs:
 
   build:
     permissions:
-      contents: write # actions/upload-artifact
+      contents: write  # actions/upload-artifact
     name: CI build [${{ matrix.platform }}]
     if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.user.login == 'jens-maus') && github.actor != 'dependabot[bot]' && github.repository == 'jens-maus/RaspberryMatic' }}
     needs: linter
@@ -201,8 +201,8 @@ jobs:
   # OCI/Docker build and registry push step
   oci-multiarch-build-push:
     permissions:
-      contents: write # actions/upload-artifact
-      packages: write # docker/build-push-action
+      contents: write  # actions/upload-artifact
+      packages: write  # docker/build-push-action
     name: OCI/Docker Build+Push
     runs-on: ubuntu-20.04
     needs: build

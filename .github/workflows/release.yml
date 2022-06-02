@@ -319,8 +319,8 @@ jobs:
   # OCI/Docker build and registry push step
   oci-multiarch-build-push:
     permissions:
-      contents: write # ncipollo/release-action
-      packages: write # docker/build-push-action
+      contents: write  # ncipollo/release-action
+      packages: write  # docker/build-push-action
     name: OCI/Docker Build+Push
     runs-on: ubuntu-20.04
     needs: [release_draft, build]
@@ -494,7 +494,7 @@ jobs:
 
   helm:
     permissions:
-      contents: write # stefanprodan/helm-gh-pages
+      contents: write  # stefanprodan/helm-gh-pages
     name: Build K8s Helm chart
     runs-on: ubuntu-20.04
     needs: [release_draft, oci-multiarch-build-push, publish-build]

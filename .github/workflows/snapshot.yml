@@ -354,7 +354,7 @@ jobs:
 
   helm:
     permissions:
-      pages: write  # stefanprodan/helm-gh-pages
+      contents: write  # stefanprodan/helm-gh-pages
     name: Build K8s Helm chart
     runs-on: ubuntu-20.04
     needs: [build, oci-multiarch-build-push]
@@ -381,6 +381,8 @@ jobs:
   ##########################################
   # Publish new version to public
   publish-build:
+    permissions:
+      contents: write  # github-actions[bot] repo write access
     name: Publish build
     runs-on: ubuntu-20.04
     needs: [build, oci-multiarch-build-push]

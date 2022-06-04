@@ -1,272 +1,50 @@
---- buildroot/package/lighttpd/0003-fix-graceful-restart.patch.orig
-+++ buildroot/package/lighttpd/0003-fix-graceful-restart.patch
-@@ -0,0 +1,58 @@
-+From b1e10aea6856bdc7b02ac8a0736dd60a0616635a Mon Sep 17 00:00:00 2001
-+From: Glenn Strauss <gstrauss@gluelogic.com>
-+Date: Thu, 26 May 2022 02:46:05 -0400
-+Subject: [PATCH] [core] reset internal sidx after graceful restart
-+
-+reset internal socket sidx after graceful restart
-+
-+(thx jens-maus)
-+
-+x-ref:
-+  https://github.com/jens-maus/RaspberryMatic/pull/1847
-+---
-+ src/network.c | 8 ++++++++
-+ src/server.c  | 4 +++-
-+ 2 files changed, 11 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/network.c b/src/network.c
-+index 6fc6a840..abdf657a 100644
-+--- a/src/network.c
-++++ b/src/network.c
-+@@ -425,6 +425,8 @@ static int network_server_init(server *srv, network_socket_config *s, buffer *ho
-+ 	/* check if we already know this socket (after potential DNS resolution), and if yes, don't init it */
-+ 	for (uint32_t i = 0; i < srv->srv_sockets.used; ++i) {
-+ 		if (0 == memcmp(&srv->srv_sockets.ptr[i]->addr, &addr, sizeof(addr))) {
-++			if ((unsigned short)~0u == srv->srv_sockets.ptr[i]->sidx)
-++				srv->srv_sockets.ptr[i]->sidx = sidx;
-+ 			return 0;
-+ 		}
-+ 	}
-+@@ -879,6 +881,12 @@ int network_init(server *srv, int stdin_fd) {
-+             }
-+         }
-+ 
-++        /* reset sidx of any graceful sockets not explicitly listed in config */
-++        for (uint32_t i = 0; i < srv->srv_sockets.used; ++i) {
-++            if ((unsigned short)~0u == srv->srv_sockets.ptr[i]->sidx)
-++                srv->srv_sockets.ptr[i]->sidx = 0;
-++        }
-++
-+     } while (0);
-+ 
-+     free(p->cvlist);
-+diff --git a/src/server.c b/src/server.c
-+index 35063ece..e4405ddd 100644
-+--- a/src/server.c
-++++ b/src/server.c
-+@@ -787,8 +787,10 @@ static void server_sockets_restore (server *srv) { /* graceful_restart */
-+     memset(&graceful_sockets, 0, sizeof(server_socket_array));
-+     memcpy(&srv->srv_sockets_inherited, &inherited_sockets, sizeof(server_socket_array));
-+     memset(&inherited_sockets, 0, sizeof(server_socket_array));
-+-    for (uint32_t i = 0; i < srv->srv_sockets.used; ++i)
-++    for (uint32_t i = 0; i < srv->srv_sockets.used; ++i) {
-+         srv->srv_sockets.ptr[i]->srv = srv;           /* update ptr */
-++        srv->srv_sockets.ptr[i]->sidx= (unsigned short)~0u;
-++    }
-+     for (uint32_t i = 0; i < srv->srv_sockets_inherited.used; ++i)
-+         srv->srv_sockets_inherited.ptr[i]->srv = srv; /* update ptr */
-+ }
---- buildroot/package/lighttpd/0004-url-invalid-utf8-reject.patch.orig
-+++ buildroot/package/lighttpd/0004-url-invalid-utf8-reject.patch
-@@ -0,0 +1,208 @@
-+From a01e62bb7d562d2176e5fc50811f0b22b30cdfa1 Mon Sep 17 00:00:00 2001
-+From: Glenn Strauss <gstrauss@gluelogic.com>
-+Date: Tue, 24 May 2022 14:57:30 -0400
-+Subject: [PATCH] [core] "url-invalid-utf8-reject" normalization opt
-+
-+server.http-parseopts "url-invalid-utf8-reject" url normalization option
-+default: "url-invalid-utf8-reject" => "enable"
-+---
-+ src/burl.c        | 34 ++++++++++++++++++++++++----------
-+ src/burl.h        |  1 +
-+ src/configfile.c  |  8 ++++++--
-+ src/t/test_burl.c |  9 ++++++++-
-+ 4 files changed, 39 insertions(+), 13 deletions(-)
-+
-+diff --git a/src/burl.c b/src/burl.c
-+index fe999b21..1c3ff7bc 100644
-+--- a/src/burl.c
-++++ b/src/burl.c
-+@@ -66,8 +66,8 @@ static int burl_normalize_basic_unreserved_fix (buffer *b, buffer *t, int i, int
-+     memcpy(p, s, (size_t)i);
-+     for (; i < used; ++i, ++j) {
-+         if (!encoded_chars_http_uri_reqd[s[i]]) {
-+-            if (s[i] == '?' && -1 == qs) qs = j;
-+             p[j] = s[i];
-++            if (__builtin_expect( (s[i] == '?'), 0) && -1 == qs) qs = j;
-+         }
-+         else if (s[i]=='%' && li_cton(s[i+1], n1) && li_cton(s[i+2], n2)) {
-+             const unsigned int x = (n1 << 4) | n2;
-+@@ -104,7 +104,7 @@ static int burl_normalize_basic_unreserved (buffer *b, buffer *t)
-+ 
-+     for (int i = 0; i < used; ++i) {
-+         if (!encoded_chars_http_uri_reqd[s[i]]) {
-+-            if (s[i] == '?' && -1 == qs) qs = i;
-++            if (__builtin_expect( (s[i] == '?'), 0) && -1 == qs) qs = i;
-+         }
-+         else if (s[i]=='%' && li_cton(s[i+1], n1) && li_cton(s[i+2], n2)
-+                  && !burl_is_unreserved((x = (n1 << 4) | n2))) {
-+@@ -135,11 +135,12 @@ static int burl_normalize_basic_required_fix (buffer *b, buffer *t, int i, int q
-+     unsigned char * const p =
-+       (unsigned char *)buffer_string_prepare_copy(t,i+(used-i)*3+1);
-+     unsigned int n1, n2;
-++    int invalid_utf8 = 0;
-+     memcpy(p, s, (size_t)i);
-+     for (; i < used; ++i, ++j) {
-+         if (!encoded_chars_http_uri_reqd[s[i]]) {
-+-            if (s[i] == '?' && -1 == qs) qs = j;
-+             p[j] = s[i];
-++            if (__builtin_expect( (s[i] == '?'), 0)) qs = j;
-+         }
-+         else if (s[i]=='%' && li_cton(s[i+1], n1) && li_cton(s[i+2], n2)) {
-+             const unsigned int x = (n1 << 4) | n2;
-+@@ -153,7 +154,7 @@ static int burl_normalize_basic_required_fix (buffer *b, buffer *t, int i, int q
-+                 p[j]   = '%';
-+                 p[++j] = hex_chars_uc[n1]; /*(s[i+1] & 0xdf)*/
-+                 p[++j] = hex_chars_uc[n2]; /*(s[i+2] & 0xdf)*/
-+-                if (li_utf8_invalid_byte(x)) qs = -2;
-++                invalid_utf8 |= li_utf8_invalid_byte(x);
-+             }
-+             i+=2;
-+         }
-+@@ -162,11 +163,11 @@ static int burl_normalize_basic_required_fix (buffer *b, buffer *t, int i, int q
-+             p[j]   = '%';
-+             p[++j] = hex_chars_uc[(s[i] >> 4) & 0xF];
-+             p[++j] = hex_chars_uc[s[i] & 0xF];
-+-            if (li_utf8_invalid_byte(s[i])) qs = -2;
-++            invalid_utf8 |= li_utf8_invalid_byte(s[i]);
-+         }
-+     }
-+     buffer_copy_string_len(b, (char *)p, (size_t)j);
-+-    return qs;
-++    return !invalid_utf8 ? qs : -2;
-+ }
-+ 
-+ 
-+@@ -176,17 +177,18 @@ static int burl_normalize_basic_required (buffer *b, buffer *t)
-+     const int used = (int)buffer_clen(b);
-+     unsigned int n1, n2, x;
-+     int qs = -1;
-++    int invalid_utf8 = 0;
-+ 
-+     for (int i = 0; i < used; ++i) {
-+         if (!encoded_chars_http_uri_reqd[s[i]]) {
-+-            if (s[i] == '?' && -1 == qs) qs = i;
-++            if (s[i] == '?') qs = i;
-+         }
-+         else if (s[i]=='%' && li_cton(s[i+1], n1) && li_cton(s[i+2], n2)
-+                  && (encoded_chars_http_uri_reqd[(x = (n1 << 4) | n2)]
-+                      || (qs < 0
-+                          ? (x == '/' || x == '?')
-+                          : (x == '&' || x == '=' || x == ';' || x == '+')))) {
-+-            if (li_utf8_invalid_byte(x)) qs = -2;
-++            invalid_utf8 |= li_utf8_invalid_byte(x);
-+             if (s[i+1] >= 'a') b->ptr[i+1] &= 0xdf; /* uppercase hex */
-+             if (s[i+2] >= 'a') b->ptr[i+2] &= 0xdf; /* uppercase hex */
-+             i+=2;
-+@@ -201,7 +203,7 @@ static int burl_normalize_basic_required (buffer *b, buffer *t)
-+         }
-+     }
-+ 
-+-    return qs;
-++    return !invalid_utf8 ? qs : -2;
-+ }
-+ 
-+ 
-+@@ -323,6 +325,15 @@ static int burl_normalize_path (buffer *b, buffer *t, int qs, int flags)
-+ }
-+ 
-+ 
-++__attribute_cold__
-++__attribute_noinline__
-++__attribute_pure__
-++static int burl_scan_qmark (const buffer * const b) {
-++    const char * const qmark = strchr(b->ptr, '?');
-++    return qmark ? (int)(qmark - b->ptr) : -1;
-++}
-++
-++
-+ int burl_normalize (buffer *b, buffer *t, int flags)
-+ {
-+     int qs;
-+@@ -342,7 +353,10 @@ int burl_normalize (buffer *b, buffer *t, int flags)
-+     qs = (flags & HTTP_PARSEOPT_URL_NORMALIZE_REQUIRED)
-+       ? burl_normalize_basic_required(b, t)
-+       : burl_normalize_basic_unreserved(b, t);
-+-    if (-2 == qs) return -2;
-++    if (-2 == qs) {
-++        if (flags & HTTP_PARSEOPT_URL_NORMALIZE_INVALID_UTF8_REJECT) return -2;
-++        qs = burl_scan_qmark(b);
-++    }
-+ 
-+     if (flags & HTTP_PARSEOPT_URL_NORMALIZE_CTRLS_REJECT) {
-+         if (burl_contains_ctrls(b)) return -2;
-+diff --git a/src/burl.h b/src/burl.h
-+index a013cc07..2d66f192 100644
-+--- a/src/burl.h
-++++ b/src/burl.h
-+@@ -26,6 +26,7 @@ enum burl_opts_e {
-+  ,HTTP_PARSEOPT_URL_NORMALIZE_PATH_DOTSEG_REMOVE  =0x400/* "." ".." "//" */
-+  ,HTTP_PARSEOPT_URL_NORMALIZE_PATH_DOTSEG_REJECT  =0x800
-+  ,HTTP_PARSEOPT_URL_NORMALIZE_QUERY_20_PLUS       =0x1000
-++ ,HTTP_PARSEOPT_URL_NORMALIZE_INVALID_UTF8_REJECT =0x2000
-+  ,HTTP_PARSEOPT_METHOD_GET_BODY                   =0x8000
-+ };
-+ 
-+diff --git a/src/configfile.c b/src/configfile.c
-+index 23cb8d06..1961ff33 100644
-+--- a/src/configfile.c
-++++ b/src/configfile.c
-+@@ -574,6 +574,8 @@ static int config_http_parseopts (server *srv, const array *a) {
-+             opt = HTTP_PARSEOPT_URL_NORMALIZE_PATH_DOTSEG_REJECT;
-+         else if (buffer_eq_slen(k, CONST_STR_LEN("url-query-20-plus")))
-+             opt = HTTP_PARSEOPT_URL_NORMALIZE_QUERY_20_PLUS;
-++        else if (buffer_eq_slen(k, CONST_STR_LEN("url-invalid-utf8-reject")))
-++            opt = HTTP_PARSEOPT_URL_NORMALIZE_INVALID_UTF8_REJECT;
-+         else if (buffer_eq_slen(k, CONST_STR_LEN("header-strict"))) {
-+             srv->srvconf.http_header_strict = val;
-+             continue;
-+@@ -631,7 +633,8 @@ static int config_http_parseopts (server *srv, const array *a) {
-+         }
-+         if (!(opts & (HTTP_PARSEOPT_URL_NORMALIZE_UNRESERVED
-+                      |HTTP_PARSEOPT_URL_NORMALIZE_REQUIRED))) {
-+-            opts |= HTTP_PARSEOPT_URL_NORMALIZE_UNRESERVED;
-++            opts |= HTTP_PARSEOPT_URL_NORMALIZE_UNRESERVED
-++                 |  HTTP_PARSEOPT_URL_NORMALIZE_INVALID_UTF8_REJECT;
-+             if (decode_2f
-+                 && !(opts & HTTP_PARSEOPT_URL_NORMALIZE_PATH_2F_REJECT))
-+                 opts |= HTTP_PARSEOPT_URL_NORMALIZE_PATH_2F_DECODE;
-+@@ -1521,7 +1524,8 @@ void config_init(server *srv) {
-+       | HTTP_PARSEOPT_URL_NORMALIZE_UNRESERVED
-+       | HTTP_PARSEOPT_URL_NORMALIZE_CTRLS_REJECT
-+       | HTTP_PARSEOPT_URL_NORMALIZE_PATH_2F_DECODE
-+-      | HTTP_PARSEOPT_URL_NORMALIZE_PATH_DOTSEG_REMOVE;
-++      | HTTP_PARSEOPT_URL_NORMALIZE_PATH_DOTSEG_REMOVE
-++      | HTTP_PARSEOPT_URL_NORMALIZE_INVALID_UTF8_REJECT;
-+ 
-+     srv->srvconf.modules = array_init(16);
-+     srv->srvconf.modules_dir = LIBRARY_DIR;
-+diff --git a/src/t/test_burl.c b/src/t/test_burl.c
-+index 174d1c3c..fa9190ff 100644
-+--- a/src/t/test_burl.c
-++++ b/src/t/test_burl.c
-+@@ -31,6 +31,11 @@ static void test_burl_normalize (void) {
-+     int flags;
-+ 
-+     flags = HTTP_PARSEOPT_URL_NORMALIZE_UNRESERVED;
-++    run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/%C0"), CONST_STR_LEN("/%C0"));
-++    run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/\377"), CONST_STR_LEN("/%FF"));
-++
-++    flags = HTTP_PARSEOPT_URL_NORMALIZE_UNRESERVED
-++          | HTTP_PARSEOPT_URL_NORMALIZE_INVALID_UTF8_REJECT;
-+     run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("no-slash"), CONST_STR_LEN("no-slash"));
-+     run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/"), CONST_STR_LEN("/"));
-+     run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/abc"), CONST_STR_LEN("/abc"));
-+@@ -53,11 +58,13 @@ static void test_burl_normalize (void) {
-+     run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/%3a"), CONST_STR_LEN("/%3A"));
-+     run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/%3A"), CONST_STR_LEN("/%3A"));
-+     run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/~test%20ä_"), CONST_STR_LEN("/~test%20%C3%A4_"));
-++    run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/%C0"),  "", (size_t)-2);
-+     run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/\375"), "", (size_t)-2);
-+     run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/\376"), "", (size_t)-2);
-+     run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/\377"), "", (size_t)-2);
-+ 
-+-    flags = HTTP_PARSEOPT_URL_NORMALIZE_REQUIRED;
-++    flags = HTTP_PARSEOPT_URL_NORMALIZE_REQUIRED
-++          | HTTP_PARSEOPT_URL_NORMALIZE_INVALID_UTF8_REJECT;
-+     run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/"), CONST_STR_LEN("/"));
-+     run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/abc"), CONST_STR_LEN("/abc"));
-+     run_burl_normalize(psrc, ptmp, flags, __LINE__, CONST_STR_LEN("/abc/"), CONST_STR_LEN("/abc/"));
+--- buildroot/package/lighttpd/0002-build-meson-fix-typo-in-variable-name.patch.orig
++++ buildroot/package/lighttpd/0002-build-meson-fix-typo-in-variable-name.patch
+@@ -1,25 +0,0 @@
+-From 876a1e1b2cc21282a0df5245004197cdffe1d380 Mon Sep 17 00:00:00 2001
+-From: Glenn Strauss <gstrauss@gluelogic.com>
+-Date: Thu, 20 Jan 2022 07:04:51 -0500
+-Subject: [PATCH] [build] meson: fix typo in variable name
+-
+-[Retrieved from:
+-https://github.com/lighttpd/lighttpd1.4/commit/876a1e1b2cc21282a0df5245004197cdffe1d380]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/meson.build b/src/meson.build
+-index 4ee163468..b35c1037f 100644
+---- a/src/meson.build
+-+++ b/src/meson.build
+-@@ -266,7 +266,7 @@ endif
+- libbrotli = []
+- if get_option('with_brotli')
+- 	libbrotli = [ compiler.find_library('brotlienc') ]
+--	if compiler.has_function('BrotliEncoderCreateInstance', args: defs, dependencies: libbrotlienc, prefix: '#include <brotli/encode.h>')
+-+	if compiler.has_function('BrotliEncoderCreateInstance', args: defs, dependencies: libbrotli, prefix: '#include <brotli/encode.h>')
+- 		conf_data.set('HAVE_BROTLI_ENCODE_H', true)
+- 		conf_data.set('HAVE_BROTLI', true)
+- 	else
+--- buildroot/package/lighttpd/lighttpd.hash.orig
++++ buildroot/package/lighttpd/lighttpd.hash
+@@ -2,3 +2,4 @@
+ sha512  8e2ad0830ff80fcebf0c33600caafb5ab4e9ff6b5073c12572f88a44fdfe85f777fa8b22b2fc2964fecbeb556997ad660867dcee80efb224d63329c8b18ea936  lighttpd-1.4.64.tar.xz
+ # Locally calculated
+ sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
++sha256  5de8e868565231508b623423eaae1c981025ab5402cd661e72338df7c00ed854  ef62ff9419f5742dd5631293a4c19088574ebd99.tar.gz
+--- buildroot/package/lighttpd/lighttpd.mk.orig
++++ buildroot/package/lighttpd/lighttpd.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).64
+-LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+-LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).65
++LIGHTTPD_SOURCE = ef62ff9419f5742dd5631293a4c19088574ebd99.tar.gz
++LIGHTTPD_SITE = https://git.lighttpd.net/lighttpd/lighttpd$(LIGHTTPD_VERSION_MAJOR)/archive
+ LIGHTTPD_LICENSE = BSD-3-Clause
+ LIGHTTPD_LICENSE_FILES = COPYING
+ LIGHTTPD_CPE_ID_VENDOR = lighttpd

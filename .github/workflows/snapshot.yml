@@ -13,6 +13,10 @@ on:
         required: true
         default: "false"
 
+# default read-only permission
+permissions:
+  contents: read
+
 jobs:
   repo-check:
     name: Check for Changes
@@ -25,6 +29,8 @@ jobs:
       has-commits: ${{ steps.commit-check.outputs.has-commits }}
 
   build:
+    permissions:
+      contents: write  # actions/upload-artifact
     name: Snapshot build [${{ matrix.platform }}]
     if: ${{ github.repository == 'jens-maus/RaspberryMatic' && (github.event_name != 'schedule' || needs.repo-check.outputs.has-commits > 0) }}
     runs-on: self-hosted
@@ -238,6 +244,8 @@ jobs:
   ##########################################
   # OCI/Docker build and registry push step
   oci-multiarch-build-push:
+    permissions:
+      packages: write  # docker/build-push-action
     name: OCI/Docker Build+Push
     runs-on: ubuntu-20.04
     needs: build
@@ -345,6 +353,8 @@ jobs:
         run: echo ${{ steps.docker_build.outputs.digest }}
 
   helm:
+    permissions:
+      contents: write  # stefanprodan/helm-gh-pages
     name: Build K8s Helm chart
     runs-on: ubuntu-20.04
     needs: [build, oci-multiarch-build-push]
@@ -371,6 +381,8 @@ jobs:
   ##########################################
   # Publish new version to public
   publish-build:
+    permissions:
+      contents: write  # github-actions[bot] repo write access
     name: Publish build
     runs-on: ubuntu-20.04
     needs: [build, oci-multiarch-build-push]
@@ -423,6 +435,9 @@ jobs:
           git push
 
   cleanup:
+    permissions:
+      contents: write  # c-hive/gha-remove-artifacts
+      packages: write  # smartsquaregmbh/delete-old-packages
     name: Cleanup artifacts/packages
     runs-on: ubuntu-20.04
     steps:

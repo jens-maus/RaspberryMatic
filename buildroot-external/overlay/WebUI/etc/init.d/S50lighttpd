@@ -40,9 +40,9 @@ start() {
 
   # activate/deactivate automatic https redirect
   if [[ -f /etc/config/httpsRedirectEnabled ]]; then
-    echo "include \"/etc/lighttpd/conf.d/proxy_httpsredirect.conf\"" >/var/etc/lighttpd_proxy.conf
+    echo "include \"/etc/lighttpd/conf.d/httpsredirect.conf\"" >/var/etc/lighttpd_httpsredirect.conf
   else
-    echo "include \"/etc/lighttpd/conf.d/proxy_normal.conf\"" >/var/etc/lighttpd_proxy.conf
+    echo "" >/var/etc/lighttpd_httpsredirect.conf
   fi
 
   # adjust the oom score (which is inherited by start-stop-daemon)
@@ -77,13 +77,12 @@ reload() {
 
   # activate/deactivate automatic https redirect
   if [[ -f /etc/config/httpsRedirectEnabled ]]; then
-    echo "include \"/etc/lighttpd/conf.d/proxy_httpsredirect.conf\"" >/var/etc/lighttpd_proxy.conf
+    echo "include \"/etc/lighttpd/conf.d/httpsredirect.conf\"" >/var/etc/lighttpd_httpsredirect.conf
   else
-    echo "include \"/etc/lighttpd/conf.d/proxy_normal.conf\"" >/var/etc/lighttpd_proxy.conf
+    echo "" >/var/etc/lighttpd_httpsredirect.conf
   fi
 
-  start-stop-daemon -K -s HUP -q -p ${PIDFILE_ANGEL}
-  sleep 2
+  start-stop-daemon -K -s USR1 -q -p ${PIDFILE_ANGEL}
   [[ -f ${PIDFILE} ]] && echo "OK" || echo "ERROR"
 }
 

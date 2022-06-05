@@ -32,7 +32,7 @@
  sha512  8e2ad0830ff80fcebf0c33600caafb5ab4e9ff6b5073c12572f88a44fdfe85f777fa8b22b2fc2964fecbeb556997ad660867dcee80efb224d63329c8b18ea936  lighttpd-1.4.64.tar.xz
  # Locally calculated
  sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
-+sha256  5de8e868565231508b623423eaae1c981025ab5402cd661e72338df7c00ed854  ef62ff9419f5742dd5631293a4c19088574ebd99.tar.gz
++sha256  c99b086fb1be8437c40aaeed89843f05bf198d5c31c037569f4e032a25dbc4a9  e9565b2bb0197e54310e1637813c915fcfe27944.tar.gz
 --- buildroot/package/lighttpd/lighttpd.mk.orig
 +++ buildroot/package/lighttpd/lighttpd.mk
 @@ -5,9 +5,9 @@
@@ -43,7 +43,7 @@
 -LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
 -LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
 +LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).65
-+LIGHTTPD_SOURCE = ef62ff9419f5742dd5631293a4c19088574ebd99.tar.gz
++LIGHTTPD_SOURCE = e9565b2bb0197e54310e1637813c915fcfe27944.tar.gz
 +LIGHTTPD_SITE = https://git.lighttpd.net/lighttpd/lighttpd$(LIGHTTPD_VERSION_MAJOR)/archive
  LIGHTTPD_LICENSE = BSD-3-Clause
  LIGHTTPD_LICENSE_FILES = COPYING

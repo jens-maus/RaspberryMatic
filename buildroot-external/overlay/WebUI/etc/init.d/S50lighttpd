@@ -83,7 +83,6 @@ reload() {
   fi
 
   start-stop-daemon -K -s USR1 -q -p ${PIDFILE_ANGEL}
-  sleep 2
   [[ -f ${PIDFILE} ]] && echo "OK" || echo "ERROR"
 }
 

@@ -199,7 +199,7 @@ update_rf_hardware() {
       fi
 
       # check for new firmware file in /firmware/HmIP-RFUSB
-      LATEST_FIRMWARE=$(find /firmware/HmIP-RFUSB-Beta -name "dualcopro_update_blhmip-*.eq3" -maxdepth 1 | grep "${FORCED_VERSION}" |  sort -V | tail -1)
+      LATEST_FIRMWARE=$(find /firmware/HmIP-RFUSB -name "dualcopro_update_blhmip-*.eq3" -maxdepth 1 | grep "${FORCED_VERSION}" |  sort -V | tail -1)
       NEW_VERSION=$(echo "${LATEST_FIRMWARE}" | sed 's/.*-\(.*\)\.eq3/\1/')
 
       # get OLD_VERSION from var tmp file

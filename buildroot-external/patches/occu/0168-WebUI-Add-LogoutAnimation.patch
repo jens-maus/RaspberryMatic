@@ -1,0 +1,43 @@
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -51,6 +51,7 @@
+     "alarmMsg" : "Alarmmeldungen",
+     "serviceMsg" : "Servicemeldungen",
+     "logout" : "Abmelden",
++    "logoutInProgress" : "Abmeldevorgang l%E4uft...",
+     "regasave" : "%C4nderungen speichern",
+     "noPasswd" : "Kein Kennwort gesetzt",
+     "menuStartPage" : "Startseite",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -50,6 +50,7 @@
+     "alarmMsg" : "Alarm messages",
+     "serviceMsg" : "Service messages",
+     "logout" : "Logout",
++    "logoutInProgress" : "Logout in progress...",
+     "regasave" : "Save changes",
+     "noPasswd" : "No password set",
+     "menuStartPage" : "Home page",
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -28603,11 +28603,16 @@
+ 
+ 
+ logout = function() {
+-  regaMonitor.stop();
+-  InterfaceMonitor.stop();
++  ProgressBar = new ProgressBarMsgBox(translateKey('logoutInProgress'), 1);       
++  ProgressBar.show();                                                 
++  ProgressBar.StartKnightRiderLight();              
++  regaMonitor.stop();                               
++  InterfaceMonitor.stop();                          
++  homematic('Session.logout', {});                  
++  homematic('system.saveObjectModel', {});                       
++  ProgressBar.hide();        
++  ProgressBar.StopKnightRiderLight();    
+   location.href = "/logout.htm?lang="+getLang();
+-  homematic('Session.logout', {});
+-  homematic('system.saveObjectModel', {});
+ };
+ 
+ 

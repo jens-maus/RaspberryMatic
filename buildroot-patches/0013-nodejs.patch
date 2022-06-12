@@ -1,9 +1,71 @@
+--- buildroot/package/nodejs/nodejs.hash.orig
++++ buildroot/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v16.15.0/SHASUMS256.txt
+-sha256  a0f812efc43f78321eca08957960a48f5e6bf97004d5058c8dd3b03c646ea4f7  node-v16.15.0.tar.xz
++# From https://nodejs.org/dist/v14.19.3/SHASUMS256.txt
++sha256  5cf45b1f1aca77523acf36240c1d53a999279070a7711eabf23346f88b0cc994  node-v14.19.3.tar.xz
+ 
+ # Hash for license file
+ sha256  6211cc77f9ceaf365db12faf050775b3a1e6da7a1eff3577ba006c4918103c33  LICENSE
+--- buildroot/package/nodejs/nodejs.mk.orig
++++ buildroot/package/nodejs/nodejs.mk
+@@ -4,12 +4,11 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 16.15.0
++NODEJS_VERSION = 14.19.3
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = \
+ 	host-nodejs \
+-	host-ninja \
+ 	host-pkgconf \
+ 	host-python3 \
+ 	host-qemu \
+@@ -21,7 +20,6 @@
+ HOST_NODEJS_DEPENDENCIES = \
+ 	host-icu \
+ 	host-libopenssl \
+-	host-ninja \
+ 	host-pkgconf \
+ 	host-python3 \
+ 	host-zlib
+@@ -39,8 +37,7 @@
+ 	--without-dtrace \
+ 	--without-etw \
+ 	--cross-compiling \
+-	--dest-os=linux \
+-	--ninja
++	--dest-os=linux
+ 
+ HOST_NODEJS_MAKE_OPTS = \
+ 	$(HOST_CONFIGURE_OPTS) \
+@@ -85,7 +82,7 @@
+ endif
+ 
+ define HOST_NODEJS_CONFIGURE_CMDS
+-	cd $(@D); \
++	(cd $(@D); \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		PATH=$(@D)/bin:$(BR_PATH) \
+ 		PYTHON=$(HOST_DIR)/bin/python3 \
+@@ -99,7 +96,7 @@
+ 		--shared-zlib \
+ 		--no-cross-compiling \
+ 		--with-intl=system-icu \
+-		--ninja
++	)
+ endef
+ 
+ NODEJS_HOST_TOOLS_V8 = \
 --- buildroot/package/nodejs/v8-qemu-wrapper.in.orig
 +++ buildroot/package/nodejs/v8-qemu-wrapper.in
 @@ -5,5 +5,6 @@
  exec @QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ \
      @QEMU_USERMODE_ARGS@ \
     -L "${STAGING_DIR}/" \
-+   -E LD_LIBRARY_PATH="/lib/" \
++   -E LD_LIBRARY_PATH="${STAGING_DIR}/lib:${STAGING_DIR}/usr/lib/" \
      "$@"
  

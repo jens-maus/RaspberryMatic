@@ -28603,15 +28603,15 @@ setPath = function (path) {
 
 
 logout = function() {
-  ProgressBar = new ProgressBarMsgBox(translateKey('logoutInProgress'), 1);       
-  ProgressBar.show();                                                 
-  ProgressBar.StartKnightRiderLight();              
-  regaMonitor.stop();                               
-  InterfaceMonitor.stop();                          
-  homematic('Session.logout', {});                  
-  homematic('system.saveObjectModel', {});                       
-  ProgressBar.hide();        
-  ProgressBar.StopKnightRiderLight();    
+  ProgressBar = new ProgressBarMsgBox(translateKey('logoutInProgress'), 1);
+  ProgressBar.show();
+  ProgressBar.StartKnightRiderLight();
+  regaMonitor.stop();
+  InterfaceMonitor.stop();
+  homematic('Session.logout', {});
+  homematic('system.saveObjectModel', {});
+  ProgressBar.hide();
+  ProgressBar.StopKnightRiderLight();
   location.href = "/logout.htm?lang="+getLang();
 };
 

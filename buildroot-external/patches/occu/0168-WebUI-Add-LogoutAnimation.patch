@@ -24,20 +24,17 @@
  
  
  logout = function() {
--  regaMonitor.stop();
--  InterfaceMonitor.stop();
-+  ProgressBar = new ProgressBarMsgBox(translateKey('logoutInProgress'), 1);       
-+  ProgressBar.show();                                                 
-+  ProgressBar.StartKnightRiderLight();              
-+  regaMonitor.stop();                               
-+  InterfaceMonitor.stop();                          
-+  homematic('Session.logout', {});                  
-+  homematic('system.saveObjectModel', {});                       
-+  ProgressBar.hide();        
-+  ProgressBar.StopKnightRiderLight();    
-   location.href = "/logout.htm?lang="+getLang();
--  homematic('Session.logout', {});
--  homematic('system.saveObjectModel', {});
++  ProgressBar = new ProgressBarMsgBox(translateKey('logoutInProgress'), 1);
++  ProgressBar.show();
++  ProgressBar.StartKnightRiderLight();
+   regaMonitor.stop();
+   InterfaceMonitor.stop();
+-  location.href = "/logout.htm?lang="+getLang();
+   homematic('Session.logout', {});
+   homematic('system.saveObjectModel', {});
++  ProgressBar.hide();
++  ProgressBar.StopKnightRiderLight();
++  location.href = "/logout.htm?lang="+getLang();
  };
  
  

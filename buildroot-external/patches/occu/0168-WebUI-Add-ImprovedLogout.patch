@@ -1,3 +1,16 @@
+--- occu/WebUI/www/api/methods/system/saveobjectmodel.tcl.orig
++++ occu/WebUI/www/api/methods/system/saveobjectmodel.tcl
+@@ -9,8 +9,9 @@
+ ##
+ 
+ 
++# call system.Save() async to keep WebUI active
+ set script {
+-  system.Save();
++  system.Exec("echo 'load tclrega.so; rega system.Save()' | /bin/tclsh &");
+   Write("true");
+ }
+ 
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -51,6 +51,7 @@

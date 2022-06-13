@@ -1,0 +1,5 @@
+# From https://nodejs.org/dist/v14.19.3/SHASUMS256.txt
+sha256  5cf45b1f1aca77523acf36240c1d53a999279070a7711eabf23346f88b0cc994  node-v14.19.3.tar.xz
+
+# Hash for license file
+sha256  6211cc77f9ceaf365db12faf050775b3a1e6da7a1eff3577ba006c4918103c33  LICENSE

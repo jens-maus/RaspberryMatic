@@ -28603,7 +28603,7 @@ setPath = function (path) {
 
 
 logout = function() {
-  // disable logout button first
+  // disable logout button
   jQuery("#btnLogOut > div").css('color', 'graytext');
   jQuery("#btnLogOut > div").attr("onclick", "").unbind("click");
 
@@ -28612,16 +28612,18 @@ logout = function() {
   ProgressBar.show();
   ProgressBar.StartKnightRiderLight();
 
-  // use setTimeout() to process async
-  window.setTimeout(() => {
-    regaMonitor.stop();
-    InterfaceMonitor.stop();
-    homematic('Session.logout', {});
-    homematic('system.saveObjectModel', {});
-    ProgressBar.hide();
-    ProgressBar.StopKnightRiderLight();
-    location.href = "/logout.htm?lang="+getLang();
-  }, 0);
+  // stop all update monitors
+  regaMonitor.stop();
+  InterfaceMonitor.stop();
+
+  // logout and make sure we save the regadom
+  homematic('Session.logout', {}, function() {
+    homematic('system.saveObjectModel', {}, function() {
+      ProgressBar.hide();
+      ProgressBar.StopKnightRiderLight();
+      location.href = "/logout.htm?lang="+getLang();
+    });
+  });
 };
 
 

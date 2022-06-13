@@ -20,21 +20,34 @@
      "menuStartPage" : "Home page",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -28603,11 +28603,16 @@
+@@ -28603,11 +28603,25 @@
  
  
  logout = function() {
+-  regaMonitor.stop();
+-  InterfaceMonitor.stop();
+-  location.href = "/logout.htm?lang="+getLang();
+-  homematic('Session.logout', {});
+-  homematic('system.saveObjectModel', {});
++  // disable logout button first
++  jQuery("#btnLogOut > div").css('color', 'graytext');
++  jQuery("#btnLogOut > div").attr("onclick", "").unbind("click");
++
++  // create ProgressBar
 +  ProgressBar = new ProgressBarMsgBox(translateKey('logoutInProgress'), 1);
 +  ProgressBar.show();
 +  ProgressBar.StartKnightRiderLight();
-   regaMonitor.stop();
-   InterfaceMonitor.stop();
--  location.href = "/logout.htm?lang="+getLang();
-   homematic('Session.logout', {});
-   homematic('system.saveObjectModel', {});
-+  ProgressBar.hide();
-+  ProgressBar.StopKnightRiderLight();
-+  location.href = "/logout.htm?lang="+getLang();
++
++  // use setTimeout() to process async
++  window.setTimeout(() => {
++    regaMonitor.stop();
++    InterfaceMonitor.stop();
++    homematic('Session.logout', {});
++    homematic('system.saveObjectModel', {});
++    ProgressBar.hide();
++    ProgressBar.StopKnightRiderLight();
++    location.href = "/logout.htm?lang="+getLang();
++  }, 0);
  };
  
  

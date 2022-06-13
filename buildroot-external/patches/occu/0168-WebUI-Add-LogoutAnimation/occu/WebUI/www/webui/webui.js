@@ -28603,16 +28603,25 @@ setPath = function (path) {
 
 
 logout = function() {
+  // disable logout button first
+  jQuery("#btnLogOut > div").css('color', 'graytext');
+  jQuery("#btnLogOut > div").attr("onclick", "").unbind("click");
+
+  // create ProgressBar
   ProgressBar = new ProgressBarMsgBox(translateKey('logoutInProgress'), 1);
   ProgressBar.show();
   ProgressBar.StartKnightRiderLight();
-  regaMonitor.stop();
-  InterfaceMonitor.stop();
-  homematic('Session.logout', {});
-  homematic('system.saveObjectModel', {});
-  ProgressBar.hide();
-  ProgressBar.StopKnightRiderLight();
-  location.href = "/logout.htm?lang="+getLang();
+
+  // use setTimeout() to process async
+  window.setTimeout(() => {
+    regaMonitor.stop();
+    InterfaceMonitor.stop();
+    homematic('Session.logout', {});
+    homematic('system.saveObjectModel', {});
+    ProgressBar.hide();
+    ProgressBar.StopKnightRiderLight();
+    location.href = "/logout.htm?lang="+getLang();
+  }, 0);
 };
 
 

@@ -457,3 +457,13 @@ jobs:
           names: |
             raspberrymatic
         continue-on-error: true
+
+      - name: Remove old unused container images
+        uses: snok/container-retention-policy@v1.4.2
+        with:
+          cut-off: One month ago UTC
+          keep-at-least: 5
+          account-type: personal
+          skip-tags: latest, snapshot
+          filter-tags: *-???????
+          token: ${{ secrets.CR_PAT }}

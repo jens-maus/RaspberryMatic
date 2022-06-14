@@ -438,6 +438,7 @@ jobs:
     permissions:
       contents: write  # c-hive/gha-remove-artifacts
       packages: write  # smartsquaregmbh/delete-old-packages
+      actions: write  # c-hive/gha-remove-artifacts
     name: Cleanup artifacts/packages
     runs-on: ubuntu-20.04
     steps:

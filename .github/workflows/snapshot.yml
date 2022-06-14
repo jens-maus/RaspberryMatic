@@ -465,5 +465,6 @@ jobs:
           keep-at-least: 5
           account-type: personal
           skip-tags: latest, snapshot
-          filter-tags: *-???????
+          filter-tags: "*-???????"
           token: ${{ secrets.CR_PAT }}
+        continue-on-error: true

@@ -27,7 +27,7 @@ to the sidebar of your Home Assistant user interface. After having done so, this
 be used to access the standard RaspberryMatic CCU WebUI to configure/setup your
 HomeMatic/homematicIP devices in the usual CCU like way.
 
-### HomeMatic/homematicIP device integration in Home Assistant
+## HomeMatic/homematicIP device integration
 
 After the RaspberryMatic CCU add-on has been correctly installed and your RaspberryMatic CCU WebUI shows existing HomeMatic/homematicIP devices, you still have to install and setup the general "HomeMatic integration". Only this step will bring up/integrate your HomeMatic/homematicIP devices - which the RaspberryMatic CCU add-on shows - in the Home Assistant user interface, thus making them usable within the context of Home Assistant.
 

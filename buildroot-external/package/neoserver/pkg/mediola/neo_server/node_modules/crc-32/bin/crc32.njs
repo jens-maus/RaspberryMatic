@@ -33,7 +33,7 @@ function help()/*:number*/ {
 function version()/*:number*/ { console.log(X.version); return 0; }
 
 var fs = require('fs');
-require('exit-on-epipe');
+try { require('exit-on-epipe'); } catch(e) {}
 
 function die(msg/*:string*/, ec/*:?number*/)/*:void*/ { console.error(msg); process.exit(ec || 0); }
 
@@ -59,7 +59,14 @@ for(var i = 0; i < args.length; ++i) {
 		case "--hex":      case "-x": fmt = "%0.8x"; break;
 		case "--HEX":      case "-X": fmt = "%0.8X"; break;
 		case "--format":   case "-F":
-			fmt = ((m!=arg) ? arg.substr(m.length+1) : args[++i])||""; break;
+			try {
+				require("printj");
+				fmt = ((m!=arg) ? arg.substr(m.length+1) : args[++i])||"";
+			} catch(e) {
+				console.error("The `crc-32` module removed the `printj` dependency for formatting");
+				console.error("Use the `crc32-cli` module instead:");
+				console.error("    $ npx crc32-cli [options] [filename]");
+			} break;
 
 		case "--hex-seed": case "-H": r = 16;
 		/* falls through */
@@ -82,7 +89,15 @@ writable._writev = function(chunks, cb) {
 	cb();
 };
 writable.on('finish', function() {
-	console.log(fmt === "" ? crc32 : require("printj").sprintf(fmt, crc32));
+	if(fmt === "") console.log(crc32);
+	else try { console.log(require("printj").sprintf(fmt, crc32)); } catch(e) {
+		switch(fmt) {
+			case "%d": console.log(crc32); break;
+			case "%u": console.log(crc32 >>> 0); break;
+			case "%0.8x": console.log((crc32 >>> 0).toString(16).padStart(8, "0").toLowerCase()); break;
+			case "%0.8X": console.log((crc32 >>> 0).toString(16).padStart(8, "0").toUpperCase()); break;
+		}
+	}
 });
 
 if(filename === "-") process.stdin.pipe(writable);

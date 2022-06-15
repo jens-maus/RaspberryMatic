@@ -464,6 +464,7 @@ jobs:
         with:
           image-names: raspberrymatic
           cut-off: One month ago UTC
+          timestamp-to-use: created_at
           keep-at-least: 5
           account-type: personal
           skip-tags: latest, snapshot

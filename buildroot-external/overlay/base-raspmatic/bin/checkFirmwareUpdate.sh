@@ -1,7 +1,7 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 #
-# firmware update check script v1.0
+# firmware update check script v1.1
 # Copyright (c) 2022 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,11 +20,12 @@
 # available and allow also to perform the update to the new firmware.
 #
 # Usage:
-#   checkFirmware.sh [-a] [-r] [-s] [-f] <TARGET_VERSION>
+#   checkFirmware.sh [-a] [-r] [-b] [-s] [-f] [-h] <TARGET_VERSION>
 #
 # Options:
 #   -a: apply firmware update
 #   -r: reboot immediately after applying firmware update
+#   -b: create backup (*.sbk) in standard path before updating
 #   -s: use nightly snapshot
 #   -f: force update even if version is equal
 #   -h: help page
@@ -47,22 +48,25 @@ set -e
 # parse arguments
 OPTIND=1 # Reset in case getopts has been used previously in the shell.
 APPLY=0
+BACKUP=0
 SNAPSHOT=0
 REBOOT=0
 FORCE=0
 
-while getopts "arsfh" opt; do
+while getopts "arbsfh" opt; do
   case "$opt" in
     a) APPLY=1 ;;
     r) REBOOT=1 ;;
+    b) BACKUP=1 ;;
     s) SNAPSHOT=1 ;;
     f) FORCE=1 ;;
     h)
-      echo "$0 [-a] [-r] [-s] [-f] [-h] <TARGET_VERSION>"
+      echo "$0 [-a] [-r] [-b] [-s] [-f] [-h] <TARGET_VERSION>"
       echo
       echo "Usage:"
       echo "  -a: apply firmware update"
       echo "  -r: reboot immediately after applying firmware update"
+      echo "  -b: create backup (*.sbk) in standard path before updating"
       echo "  -s: use nightly snapshot"
       echo "  -f: force update even if version is equal"
       echo "  -h: help page"
@@ -146,6 +150,27 @@ if [[ -s "${RELEASES_JSON}" ]]; then
   if [[ ${ret} -eq 1 ]]; then
     if [[ ${APPLY} -eq 1 ]]; then
       echo
+
+      # create a explicit backup before applying firmware update
+      if [[ ${BACKUP} -eq 1 ]]; then
+        echo -n "0) Creating backup (*.sbk)... "
+        # set default values
+        BACKUPDIR=/media/usb0/backup
+        # check for external default parameters
+        [[ -f /etc/config/CronBackupPath ]] && BACKUPDIR=$(cat /etc/config/CronBackupPath)
+        # check if backup directory exists
+        if [[ -d "${BACKUPDIR}" ]]; then
+          if ! /bin/createBackup.sh "${BACKUPDIR}"; then
+            echo "ERROR: could not create backup in '${BACKUPDIR}'"
+            exit 4
+          fi
+          echo "created backup in '${BACKUPDIR}', OK"
+        else
+          echo "ERROR: missing '${BACKUPDIR}' backup directory."
+          exit 4
+        fi
+      fi
+
       echo "1) Downloading update files... "
       FILENAME="/usr/local/tmp/${LATEST_VERSION_URL##*/}"
 

@@ -37,23 +37,23 @@
  proc action_image_upload {} {
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
-@@ -355,7 +355,7 @@
-     "comment" : "folgende 2 Keys sind Fragmente",
-     "comment" : "Zusammengesetzt heisst es: 'Deinstallieren wurde erfolgreich ausgef%FChrt', bzw. 'Deinstallieren fehlgeschlagen'",
+@@ -326,7 +326,7 @@
+     "dialogSetSecKeyLoadBackuplblB" : "Die Zentrale befindet sich im Auslieferungszustand und es wurde noch kein Sicherheitsschl&uuml;ssel gesetzt.",
+     "dialogSetSecKeyLoadBackupLblC" : "Sicherheitsschl&uuml;ssel:",
      "btnSysConfAdditionalSoftRemoveSuccess" : " wurde erfolgreich ausgef%FChrt.",
 -    "btnSysConfAdditionalSoftRemoveFailure" : " fehlgeschlagen:\n",
 +    "btnSysConfAdditionalSoftRemoveFailure" : " wurde mit Fehlern abgeschlossen:\n\n",
-     "lblHintSimulateKeyPress" : "Vor dem Simulieren des Tastendrucks %FCbertragen Sie zun%E4chst das Profil.",
      "dialogChooseLEDTitle" : "LEDs ausw%E4hlen",
      "infoStatusControlLblDanger" : "Gefahr",
+     "actionStatusControlUp" : "Auf",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
-@@ -355,7 +355,7 @@
+@@ -326,7 +326,7 @@
+     "dialogSetSecKeyLoadBackuplblB" : "The CCU is in delivery status and a security key has not yet been set.",
      "dialogSetSecKeyLoadBackupLblC" : "Security key:",
-     "comment" : "************ END RF_REPEATER.txt ************",
      "btnSysConfAdditionalSoftRemoveSuccess" : " was successfully executed.",
 -    "btnSysConfAdditionalSoftRemoveFailure" : " failed:\n",
 +    "btnSysConfAdditionalSoftRemoveFailure" : " was executed with failures:\n\n",
-     "lblHintSimulateKeyPress" : "Before simulating the button press, please transmit the profile first.",
      "dialogChooseLEDTitle" : "Select LEDs",
      "infoStatusControlLblDanger" : "Hazard",
+     "actionStatusControlUp" : "Up",

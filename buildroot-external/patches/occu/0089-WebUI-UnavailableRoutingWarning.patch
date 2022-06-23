@@ -1,23 +1,23 @@
---- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
-+++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
-@@ -524,6 +524,7 @@
-     "lblErrorCheck" : "Fehlerpr%FCfung",
-     "lblNoError" : "Kein Fehler",
-     "lblError" : "Fehler",
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.label.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.label.js
+@@ -279,6 +279,7 @@
+     "lblYellowShort" : "Gelb kurz",
+     "lblYes" : "Ja",
+     "lblYesterday" : "Gestern",
 +    "lblAccessPointError" : "Die Nutzung eines HmIPW-DRAP oder HmIP-HAP Access Points setzt den Einsatz eines RPI-RF-MOD/HmIP-CCU3 bzw. HmIP-RFUSB oder kompatiblen Funkmodules voraus.",
-     "lblInfoStatusControlEnergyCounter" : "Energie-Z%E4hler " + HMIdentifier.de.CCUShortName,
-     "lblInfoStatusControlDevice" : "Energie-Z%E4hler Ger%E4t",
-     "lblInfoStatusControlVoltage" : "Spannung",
---- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
-+++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
-@@ -522,6 +522,7 @@
-     "lblErrorCheck" : "Error check",
-     "lblNoError" : "No error",
-     "lblError" : "Error",
+     "noMOreKeys" : ""
+   }
+ });
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.label.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.label.js
+@@ -279,6 +279,7 @@
+     "lblYellowShort" : "Yellow short",
+     "lblYes" : "Yes",
+     "lblYesterday" : "Yesterday",
 +    "lblAccessPointError" : "The use of a HmIPW-DRAP or HmIP-HAP access point requires the use of a RPI-RF-MOD/HmIP-CCU3, HmIP-RFUSB or compatible rf module.",
-     "lblInfoStatusControlEnergyCounter" : "Energy counter " + HMIdentifier.en.CCUShortName,
-     "lblInfoStatusControlDevice" : "Energy counter device",
-     "lblInfoStatusControlVoltage" : "Voltage",
+     "noMOreKeys" : ""
+   }
+ });
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -41555,15 +41555,15 @@

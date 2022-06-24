@@ -22,13 +22,3 @@
      "dialogCreateLinkErrorUnknownDevice" : "%DCbertragung nicht erfolgt, weil das Ger%E4t unbekannt ist.",
      "dialogCreateLinkHintLinkExists" : "Achtung! Die Verkn%FCpfung existiert bereits und wird %FCberschrieben.",
      "dialogCreateLinkMsgLinkExistsA" : "Sie sind dabei ",
---- occu/WebUI/www/webui/js/lang/en/translate.lang.label.js.orig
-+++ occu/WebUI/www/webui/js/lang/en/translate.lang.label.js
-@@ -1,6 +1,5 @@
- jQuery.extend(true,langJSON, {
--  "de" : {
--
-+  "en" : {
-     "lbl24Average" : "24h Average",
-     "lblAccessPointSettings1" : "Administration of Homematic IP Access Points",
-     "lblActualFirmwareVersion": "(Current firmware version)",

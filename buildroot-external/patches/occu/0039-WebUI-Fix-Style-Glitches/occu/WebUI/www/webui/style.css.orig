@@ -2261,6 +2261,14 @@ table.center {
   font-weight: bold;
 }
 
+.controlHeader150px {
+  text-align:center;
+  background-color:#89989b;
+  color:white;
+  font-weight: bold;
+  min-width: 150px;
+}
+
 .controlRedBorder {
   border: 1px solid red !important;
 }
@@ -2480,6 +2488,7 @@ html, body {
   background-color: $_(background); /* #183473 */
   z-index: 189;
   padding: 2px;
+  margin-top: 2px;
 }
 
 .MainMenuItem_Left {
@@ -4884,7 +4893,7 @@ application {
 }
 
 .CLASS01803 {
-	background-color:$_(white); /* #ffffff */
+	/*background-color:$_(white);*/ /* #ffffff */
 	text-align:center;
 	margin-left:4px;
 	margin-right:4px;
@@ -5251,6 +5260,13 @@ application {
 	border:1px solid $_(black); /* black */
 }
 
+.CLASS02525a {
+	height:100px;
+	width:100px;
+	background-color:$_(okSignal);
+	border:1px solid $_(black); /* black */
+}
+
 .CLASS02525b {
 	height:96px;
 	width:96px;
@@ -5492,6 +5508,13 @@ application {
 	width:98%;
 }
 
+.CLASS02551c {
+	cursor:pointer;
+	height:35px;
+	width:100px;
+	margin-left: 11%;
+}
+
 .CLASS02552 {
 	border:solid 1px $_(black); /* black */
 }
@@ -5523,6 +5546,13 @@ application {
 .CLASS02557 {
 	height:96px;
 	width:96px;
+	background-color:$_(clickable);
+	border:1px solid $_(black); /* black */
+}
+
+.CLASS02557A {
+	height:100px;
+	width:100px;
 	background-color:$_(clickable);
 	border:1px solid $_(black); /* black */
 }

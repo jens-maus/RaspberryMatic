@@ -82,13 +82,6 @@
  }
  
 +jsonrpc_response ""
---- occu/WebUI/www/api/methods/user/setlanguage.tcl.orig
-+++ occu/WebUI/www/api/methods/user/setlanguage.tcl
-@@ -14,3 +14,4 @@
- set userName [string map {"../" ""} $userName]
- exec echo $args(userLang) > /etc/config/userprofiles/$userName.lang
- 
-+jsonrpc_response ""
 --- occu/WebUI/www/api/methods/user/setregaversion.tcl.orig
 +++ occu/WebUI/www/api/methods/user/setregaversion.tcl
 @@ -9,3 +9,5 @@

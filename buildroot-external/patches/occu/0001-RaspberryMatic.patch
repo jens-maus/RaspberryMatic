@@ -631,22 +631,15 @@
 +</html>
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
-@@ -1225,7 +1225,7 @@
-     "lblSwitchLightOn" : "Licht einschalten",
-     "lblSwitchLightOff" : "Licht ausschalten",
- 
+@@ -816,7 +816,7 @@
+     "btnGarageClose" : "Schlie%DFen",
+     "btnGarageVent" : "L%FCften",
+     "btnGarageStop" : "Stopp",
 -    "dialogSettingsUSBStorageSettings" : "Externer USB-Speicher",
 +    "dialogSettingsUSBStorageSettings" : "Externer Speicher",
      "dialogSettingsStorageHintUSBStorageP1" : "Die Sicherung der Daten umfasst nur die Diagramme.",
- 
- 
-@@ -1601,4 +1601,4 @@
- });
- 
- langJSON.de.hintActivateDetectorSelfTest += langJSON.de.checkSmokeDetectorSelfTest;
--langJSON.de.hintReInclusionDetectorFailed += langJSON.de.checkSmokeDetectorSelfTest;
-\ No newline at end of file
-+langJSON.de.hintReInclusionDetectorFailed += langJSON.de.checkSmokeDetectorSelfTest;
+     "dialogSettingsSecurityTDAuth" : "Authentifizierung",
+     "dialogSettingsSecurityLblActivateAuthRemoteXML" : "Authentifizierung aktiv: ",
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
 @@ -1,8 +1,8 @@
@@ -684,16 +677,16 @@
  
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
-@@ -1218,7 +1218,7 @@
-     "lblSwitchLightOn" : "Switching light on",
-     "lblSwitchLightOff" : "Switching light off",
- 
+@@ -813,7 +813,7 @@
+     "btnGarageClose" : "Closing",
+     "btnGarageVent" : "Ventilation",
+     "btnGarageStop" : "Stop",
 -    "dialogSettingsUSBStorageSettings" : "External USB memory",
-+    "dialogSettingsUSBStorageSettings" : "External disk space",
++    "dialogSettingsUSBStorageSettings" : "External storage",
      "dialogSettingsStorageHintUSBStorageP1" : "Storage of data only includes the diagrams.",
- 
- 
-@@ -1587,4 +1587,4 @@
+     "dialogSettingsSecurityTDAuth" : "Authentication",
+     "dialogSettingsSecurityLblActivateAuthRemoteXML" : "Authentication active: ",
+@@ -1038,4 +1038,4 @@
  });
  
  langJSON.en.hintActivateDetectorSelfTest += langJSON.en.checkSmokeDetectorSelfTest;

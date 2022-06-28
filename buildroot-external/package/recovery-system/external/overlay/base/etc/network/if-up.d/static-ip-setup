@@ -28,16 +28,13 @@ fi
 # a ethernet interface or wifi
 case "${IFACE}" in
   eth*)
-    # continue only if link is up
-    if [[ "$(cat "/sys/class/net/${IFACE}/carrier")" != "0" ]]; then
-      # get current IP
-      CUR_IP=$(/sbin/ip -f inet addr show "${IFACE}" | sed -En -e 's/.*inet ([0-9.]+).*/\1/p')
+    # get current IP
+    CUR_IP=$(/sbin/ip -f inet addr show "${IFACE}" | sed -En -e 's/.*inet ([0-9.]+).*/\1/p')
 
-      # only continue if this IP is not already set
-      if [[ "${IP}" != "${CUR_IP}" ]]; then
-        /sbin/ip addr add "${IP}/${NETMASK}" dev "${IFACE}"
-        echo "adding static ip ${IP}/${NETMASK} to ${IFACE}"
-      fi
+    # only continue if this IP is not already set
+    if [[ "${IP}" != "${CUR_IP}" ]]; then
+      /sbin/ip addr add "${IP}/${NETMASK}" dev "${IFACE}"
+      echo "adding static ip ${IP}/${NETMASK} to ${IFACE}"
     fi
   ;;
 esac

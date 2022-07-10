@@ -1,6 +1,6 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.17
+# DutyCycle Script v3.18
 # Copyright (c) 2018-2022 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -228,7 +228,7 @@ if {$portFound == 0} {
       string dev;
       foreach(dev, devices.Get().EnumUsedIDs()) {
         object oDev = dom.GetObject(dev);
-        if(oDev.Label() == 'HmIP-HAP') {
+        if(oDev.Label().StartsWith('HmIP-HAP')) {
           string name = oDev.Name();
           string chn;
           foreach(chn, oDev.Channels()) {

@@ -23,7 +23,12 @@ set script {
   sv.ValueMin(minValue);
   sv.ValueMax(maxValue);
   sv.State(0);
-  sv.Internal(internal);
+
+  if((internal == "true") || (internal == 1)) {
+    sv.Internal(true);
+  } else {
+    sv.Internal(false);
+  }
 
   if (channel) {
     sv.Channel(chnID);

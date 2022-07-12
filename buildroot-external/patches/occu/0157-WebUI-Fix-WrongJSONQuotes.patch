@@ -1,6 +1,19 @@
 --- occu/WebUI/www/api/methods/sysvar/createbool.tcl.orig
 +++ occu/WebUI/www/api/methods/sysvar/createbool.tcl
-@@ -35,7 +35,7 @@
+@@ -26,7 +26,11 @@
+   sv.ValueName1("true");
+   sv.State(init_val);
+ 
+-  sv.Internal(internal);
++  if((internal == "true") || (internal == 1)) {
++    sv.Internal(true);
++  } else {
++    sv.Internal(false);
++  }
+ 
+   if (channel) {
+     sv.Channel(chnID);
+@@ -35,7 +39,7 @@
  
    oSysVars.Add(sv.ID());
  
@@ -11,7 +24,21 @@
  jsonrpc_response [hmscript $script args]
 --- occu/WebUI/www/api/methods/sysvar/createenum.tcl.orig
 +++ occu/WebUI/www/api/methods/sysvar/createenum.tcl
-@@ -36,7 +36,7 @@
+@@ -26,8 +26,11 @@
+   sv.ValueList( valList );
+   sv.State(0);
+ 
+-
+-  sv.Internal(internal);
++  if((internal == "true") || (internal == 1)) {
++    sv.Internal(true);
++  } else {
++    sv.Internal(false);
++  }
+ 
+   if (channel) {
+     sv.Channel(chnID);
+@@ -36,7 +39,7 @@
  
    oSysVars.Add(sv.ID());
  
@@ -22,7 +49,21 @@
  jsonrpc_response [hmscript $script args]
 --- occu/WebUI/www/api/methods/sysvar/createfloat.tcl.orig
 +++ occu/WebUI/www/api/methods/sysvar/createfloat.tcl
-@@ -32,7 +32,7 @@
+@@ -23,7 +23,12 @@
+   sv.ValueMin(minValue);
+   sv.ValueMax(maxValue);
+   sv.State(0);
+-  sv.Internal(internal);
++
++  if((internal == "true") || (internal == 1)) {
++    sv.Internal(true);
++  } else {
++    sv.Internal(false);
++  }
+ 
+   if (channel) {
+     sv.Channel(chnID);
+@@ -32,7 +37,7 @@
  
    oSysVars.Add(sv.ID());
  

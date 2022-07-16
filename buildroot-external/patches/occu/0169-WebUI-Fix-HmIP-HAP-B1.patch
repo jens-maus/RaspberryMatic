@@ -73,7 +73,7 @@
            if( (!bBinary) && (!bFloat) )
            {
 -            if (((toCH.Label() != "HmIPW-DRAP") && (toCH.Label() != "HmIP-HAP")) || (sVUTmp == "°C") || (sVUTmp == "V")) { ! SPHM-599
-+            if (((toCH.Label() != "HmIPW-DRAP") && (toCH.Label().StartsWith("HmIP-HAP") == false) || (sVUTmp == "°C") || (sVUTmp == "V")) { ! SPHM-599
++            if (((toCH.Label() != "HmIPW-DRAP") && (toCH.Label().StartsWith("HmIP-HAP") == false)) || (sVUTmp == "°C") || (sVUTmp == "V")) { ! SPHM-599
                sValue = sValue.ToInteger();
                sValue = sValue.ToString(0);
              }

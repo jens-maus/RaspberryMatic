@@ -19,7 +19,7 @@ startup: services
 map:
   - backup:rw
 init: false
-backup_pre: /bin/sh -c "echo 'load tclrega.so; rega system.Save()' | /bin/tclsh && sync"
+backup_pre: /bin/sh -c "/bin/echo 'load tclrega.so; rega system.Save()' | /bin/tclsh && /bin/sync"
 timeout: 120
 devices:
   - /dev/raw-uart

@@ -21,7 +21,7 @@ map:
 init: false
 backup_pre: /bin/sh -c "/bin/echo 'load tclrega.so; rega system.Save()' | /bin/tclsh && /bin/sync"
 backup_exclude:
-  - "*/data/tmp"
+  - "/tmp"
 timeout: 120
 devices:
   - /dev/raw-uart

@@ -18,9 +18,6 @@ if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
   echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_off
 fi
 
-# performance tuning to reduce TCP performance spikes
-/sbin/sysctl -w net.ipv4.tcp_timestamps=0 >/dev/null 2>&1 || true
-
 # we exit if if-up.d is called for "lo"
 if [[ "${IFACE}" == "lo" ]]; then
   exit 0

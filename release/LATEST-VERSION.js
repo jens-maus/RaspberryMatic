@@ -1,1 +1,1 @@
-homematic.com.setLatestVersion('3.63.9.20220625', 'HM-RASPBERRYMATIC');
+homematic.com.setLatestVersion('3.65.6.20220723', 'HM-RASPBERRYMATIC');

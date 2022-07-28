@@ -439,10 +439,10 @@
 +        pb += "&disableOnboardLED="+(document.getElementById("cb_disableOnboardLED").checked?"0":"1");
 +        pb += "&noFSTRIM="+(document.getElementById("cb_noFSTRIM").checked?"0":"1");
 +        pb += "&devConfig="+(document.getElementById("cb_devConfig").checked?"0":"1");
-+        pb += "&cronBackupPath="+document.getElementById("text_cronBackupPath").value;
-+        pb += "&cronBackupMaxBackups="+document.getElementById("text_cronBackupMaxBackups").value;
-+        pb += "&customStoragePath="+document.getElementById("text_customStoragePath").value;
-+        pb += "&systemName="+document.getElementById("text_systemName").value;
++        pb += "&cronBackupPath="+encodeURIComponent(document.getElementById("text_cronBackupPath").value);
++        pb += "&cronBackupMaxBackups="+encodeURIComponent(document.getElementById("text_cronBackupMaxBackups").value);
++        pb += "&customStoragePath="+encodeURIComponent(document.getElementById("text_customStoragePath").value);
++        pb += "&systemName="+escape(document.getElementById("text_systemName").value);
 +
 +        var opts = {
 +          postBody: pb,

@@ -106,7 +106,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           !startsWith(matrix.platform, 'oci_')
-        uses: WebFreak001/deploy-nightly@v1.1.0
+        uses: WebFreak001/deploy-nightly@v1.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
@@ -121,7 +121,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           !startsWith(matrix.platform, 'oci_')
-        uses: WebFreak001/deploy-nightly@v1.1.0
+        uses: WebFreak001/deploy-nightly@v1.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
@@ -136,7 +136,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           matrix.platform == 'rpi3'
-        uses: WebFreak001/deploy-nightly@v1.1.0
+        uses: WebFreak001/deploy-nightly@v1.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
@@ -151,7 +151,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           matrix.platform == 'rpi3'
-        uses: WebFreak001/deploy-nightly@v1.1.0
+        uses: WebFreak001/deploy-nightly@v1.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
@@ -166,7 +166,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           matrix.platform == 'ova'
-        uses: WebFreak001/deploy-nightly@v1.1.0
+        uses: WebFreak001/deploy-nightly@v1.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
@@ -181,7 +181,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           matrix.platform == 'ova'
-        uses: WebFreak001/deploy-nightly@v1.1.0
+        uses: WebFreak001/deploy-nightly@v1.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
@@ -196,7 +196,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           startsWith(matrix.platform, 'oci_')
-        uses: WebFreak001/deploy-nightly@v1.1.0
+        uses: WebFreak001/deploy-nightly@v1.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
@@ -211,7 +211,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           startsWith(matrix.platform, 'oci_')
-        uses: WebFreak001/deploy-nightly@v1.1.0
+        uses: WebFreak001/deploy-nightly@v1.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:

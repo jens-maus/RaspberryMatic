@@ -1,0 +1,84 @@
+--- buildroot/package/ca-certificates/S01ca-certificates.orig
++++ buildroot/package/ca-certificates/S01ca-certificates
+@@ -0,0 +1,42 @@
++#!/bin/sh
++# shellcheck shell=dash disable=SC2169,SC2034 source=/dev/null
++#
++# startup script to run update-ca-certificates to
++# setup /etc/ssl/certs
++#
++
++start() {
++  echo -n "Setup ca-certificates: "
++
++  # make sure /var/etc/ssl/certs exists
++  mkdir -p /var/etc/ssl/certs
++
++  # run update-ca-certificates with default setup
++  if /usr/sbin/update-ca-certificates --default >/dev/null 2>/dev/null; then
++    echo "OK"
++  else
++    echo "ERROR"
++    exit 2
++  fi
++}
++
++restart() {
++  start
++}
++
++case "$1" in
++  start)
++    start
++  ;;
++  stop)
++    # nothing
++  ;;
++  restart|reload)
++    restart
++  ;;
++  *)
++    echo "Usage: $0 {start|stop|restart}"
++    exit 1
++esac
++
++exit $?
+--- buildroot/package/ca-certificates/ca-certificates.mk.orig
++++ buildroot/package/ca-certificates/ca-certificates.mk
+@@ -17,27 +17,19 @@
+ 
+ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/share/ca-certificates
+-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/ssl/certs
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
+-	rm -f $(TARGET_DIR)/usr/sbin/update-ca-certificates
+ 
+-	# Remove any existing certificates under /etc/ssl/certs
+-	rm -f $(TARGET_DIR)/etc/ssl/certs/*
++	# Remove /etc/ssl/certs and relink it to /var/etc/ssl/certs
++	rm -rf $(TARGET_DIR)/etc/ssl/certs
++	ln -s /var/etc/ssl/certs $(TARGET_DIR)/etc/ssl/certs
+ 
+-	# Create symlinks to certificates under /etc/ssl/certs
+-	# and generate the bundle
+-	cd $(TARGET_DIR) ;\
+-	for i in `find usr/share/ca-certificates -name "*.crt" | LC_COLLATE=C sort` ; do \
+-		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
+-		cat $$i ;\
+-	done >$(@D)/ca-certificates.crt
+-
+-	# Create symlinks to the certificates by their hash values
+-	$(HOST_DIR)/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
++	# add empty /etc/ca-certificates.conf file
++	touch $(TARGET_DIR)/etc/ca-certificates.conf
++endef
+ 
+-	# Install the certificates bundle
+-	$(INSTALL) -D -m 644 $(@D)/ca-certificates.crt \
+-		$(TARGET_DIR)/etc/ssl/certs/ca-certificates.crt
++define CA_CERTIFICATES_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 $(CA_CERTIFICATES_PKGDIR)/S01ca-certificates \
++		$(TARGET_DIR)/etc/init.d/S01ca-certificates
+ endef
+ 
+ $(eval $(generic-package))

@@ -62,16 +62,19 @@ if [[ -d "${TMPDIR}" ]]; then
   # make sure ReGaHSS saves its current settings
   echo 'load tclrega.so; rega system.Save()' | tclsh >/dev/null 2>&1
 
-  # create a tar of /usr/local
+  # create a tar.gz of /usr/local
   set +e # disable abort on error
-  /bin/tar -C / --owner=root --group=root --exclude=/usr/local/tmp --exclude=/usr/local/lost+found --exclude="${BACKUPDIR}" --exclude-tag=.nobackup --one-file-system --ignore-failed-read --warning=no-file-changed --verify -cf "${TMPDIR}/usr_local.tar" usr/local 2>/dev/null
+  /bin/tar -C / --owner=root --group=root --exclude=/usr/local/tmp --exclude=/usr/local/lost+found --exclude="${BACKUPDIR}" --exclude-tag=.nobackup --one-file-system --ignore-failed-read --warning=no-file-changed -czf "${TMPDIR}/usr_local.tar.gz" usr/local 2>/dev/null
   if [[ $? -eq 2 ]]; then
     exit 2
   fi
   set -e # re-enable abort on error
 
-  # gzip the usr_local.tar.gz afterwards so we could use tar verify above
-  /bin/gzip "${TMPDIR}/usr_local.tar"
+  # check the gzip integrity
+  /bin/gzip -t "${TMPDIR}/usr_local.tar.gz"
+
+  # check if the tar.gz is valid
+  /bin/gzip -dc "${TMPDIR}/usr_local.tar.gz" | /bin/tar -tf - >/dev/null
 
   # sign the configuration with the current key
   /bin/crypttool -s -t 1 <"${TMPDIR}/usr_local.tar.gz" >"${TMPDIR}/signature"
@@ -86,9 +89,9 @@ if [[ -d "${TMPDIR}" ]]; then
   (cd "${TMPDIR}" && /usr/bin/sha256sum ./* >signature.sha256)
 
   # create sbk file
-  /bin/tar -C "${TMPDIR}" --owner=root --group=root --verify -cf "${BACKUPDIR}/${BACKUPFILE}" usr_local.tar.gz signature signature.sha256 key_index firmware_version 2>/dev/null
+  /bin/tar -C "${TMPDIR}" --owner=root --group=root -cf "${BACKUPDIR}/${BACKUPFILE}" usr_local.tar.gz signature signature.sha256 key_index firmware_version 2>/dev/null
 
-  # test if the final tar created is a valid tar.gz
+  # test if the final tar created is a valid tar archive
   /bin/tar -tf "${BACKUPDIR}/${BACKUPFILE}" >/dev/null
 
   exit 0

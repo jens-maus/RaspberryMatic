@@ -64,7 +64,7 @@ if [[ -d "${TMPDIR}" ]]; then
 
   # create a tar.gz of /usr/local
   set +e # disable abort on error
-  /bin/tar -C / --owner=root --group=root --exclude=/usr/local/tmp --exclude=/usr/local/lost+found --exclude="${BACKUPDIR}" --exclude-tag=.nobackup --one-file-system --ignore-failed-read --warning=no-file-changed -czf "${TMPDIR}/usr_local.tar.gz" usr/local 2>/dev/null
+  /bin/tar -C / --owner=root --group=root --exclude=/usr/local/tmp --exclude=/usr/local/lost+found --exclude="${BACKUPDIR}" --exclude=/usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read --warning=no-file-changed -czf "${TMPDIR}/usr_local.tar.gz" usr/local 2>/dev/null
   if [[ $? -eq 2 ]]; then
     exit 2
   fi

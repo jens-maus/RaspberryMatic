@@ -25,27 +25,27 @@ proc create_backup {} {
   set HOSTNAME [exec hostname]
   set system_version [read_version "/VERSION"]
   set iso8601_date [exec date -Iseconds]
-  set tmpdir [exec mktemp -d -p /usr/local/tmp]
   regexp {^(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+-]\d+)$} $iso8601_date dummy year month day hour minute second zone
   set backupfile [set HOSTNAME]-$system_version-$year-$month-$day-$hour$minute.sbk
-  #save DOM
-  rega system.Save()
-  cd /
-  if {[getProduct] < 3 } {
-    catch { exec tar czf /tmp/usr_local.tar.gz usr/local }
+  # cleanup previous runs
+  catch { exec rm -f /usr/local/tmp/last_backup.sbk }
+  # call createBackup.sh to create consistent backup
+  if { [catch {exec /bin/createBackup.sh /usr/local/tmp/last_backup.sbk 2>/dev/null} results] } {
+    if { [lindex $::errorCode 0] == "CHILDSTATUS" } {
+      set result [lindex $::errorCode 2]
+    } else {
+      # Some kind of unexpected failure
+      set result 100
+    }
   } else {
-    catch { exec tar --owner=root --group=root --exclude=usr/local/tmp --exclude=usr/local/lost+found --exclude=usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read -czf $tmpdir/usr_local.tar.gz usr/local }
+    set result 0
   }
-  
-  cd $tmpdir/
-  #sign the configuration with the current key
-  exec crypttool -s -t 1 <usr_local.tar.gz >signature
-  #store the current key index
-  exec crypttool -g -t 1 >key_index
-  file copy -force /VERSION firmware_version
-  catch { exec tar --owner=root --group=root -cf /usr/local/tmp/last_backup.sbk usr_local.tar.gz signature firmware_version key_index }
-  cd /
-  exec rm -rf $tmpdir
+
+  # cleanup last_backup.sbk file if createBackup.sh returned an error code
+  if { $result != 0 } {
+    catch { exec rm -f /usr/local/tmp/last_backup.sbk }
+  }
+
   puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"
   puts "Content-Type: application/octet-stream"
   puts "Content-Disposition: attachment; filename=\"$backupfile\"\n"

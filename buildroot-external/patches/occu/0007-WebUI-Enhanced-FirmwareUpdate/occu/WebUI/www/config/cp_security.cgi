@@ -1509,7 +1509,7 @@ proc action_put_page {} {
 }
 
 proc action_create_backup {} {
-  [create_backup]
+  create_backup
 }
 
 proc action_backup_upload {} {

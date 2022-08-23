@@ -16,7 +16,7 @@
 +startup
 --- occu/WebUI/www/config/backup.tcl.orig
 +++ occu/WebUI/www/config/backup.tcl
-@@ -5,35 +5,48 @@
+@@ -5,35 +5,52 @@
  load tclrpc.so
  load tclrega.so
  
@@ -81,15 +81,20 @@
 +  # cleanup last_backup.sbk file if createBackup.sh returned an error code
 +  if { $result != 0 } {
 +    catch { exec rm -f /usr/local/tmp/last_backup.sbk }
++    puts ""
++    puts "ERROR: creating backup returned unexpected error code $result"
++    puts ""
++    puts $results
++  } else {
++    puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"
++    puts "Content-Type: application/octet-stream"
++    puts "Content-Disposition: attachment; filename=\"$backupfile\"\n"
    }
 -  close $fd
 -  file delete -force /tmp/usr_local.tar.gz /tmp/firmware_version /tmp/signature
-+
-+  puts "X-Sendfile: /usr/local/tmp/last_backup.sbk"
-+  puts "Content-Type: application/octet-stream"
-+  puts "Content-Disposition: attachment; filename=\"$backupfile\"\n"
- }
+-}
 \ No newline at end of file
++}
 --- occu/WebUI/www/config/cp_maintenance.cgi.orig
 +++ occu/WebUI/www/config/cp_maintenance.cgi
 @@ -254,13 +254,12 @@
@@ -474,6 +479,15 @@
  }
  
  proc put_message {title msg args} {
+@@ -1504,7 +1509,7 @@
+ }
+ 
+ proc action_create_backup {} {
+-  [create_backup]
++  create_backup
+ }
+ 
+ proc action_backup_upload {} {
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
 @@ -253,7 +253,7 @@

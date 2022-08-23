@@ -316,7 +316,7 @@ query_rf_parameters() {
 
     # load the dummy rx8130 kernel module because an RPI-RF-MOD
     # is identified by having a rx8130 module loaded
-    if ! grep -Eq "^dummy_rx8130 " /proc/modules; then
+    if ! grep -Eq "_rx8130 " /proc/modules; then
       modprobe -q dummy_rx8130
     fi
 

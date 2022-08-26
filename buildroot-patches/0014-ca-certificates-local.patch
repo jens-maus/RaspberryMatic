@@ -1,5 +1,5 @@
---- buildroot/package/ca-certificates/S01ca-certificates.orig
-+++ buildroot/package/ca-certificates/S01ca-certificates
+--- buildroot/package/ca-certificates/S07ca-certificates.orig
++++ buildroot/package/ca-certificates/S07ca-certificates
 @@ -0,0 +1,42 @@
 +#!/bin/sh
 +# shellcheck shell=dash disable=SC2169,SC2034 source=/dev/null
@@ -77,8 +77,8 @@
 -	$(INSTALL) -D -m 644 $(@D)/ca-certificates.crt \
 -		$(TARGET_DIR)/etc/ssl/certs/ca-certificates.crt
 +define CA_CERTIFICATES_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 $(CA_CERTIFICATES_PKGDIR)/S01ca-certificates \
-+		$(TARGET_DIR)/etc/init.d/S01ca-certificates
++	$(INSTALL) -D -m 0755 $(CA_CERTIFICATES_PKGDIR)/S07ca-certificates \
++		$(TARGET_DIR)/etc/init.d/S07ca-certificates
  endef
  
  $(eval $(generic-package))

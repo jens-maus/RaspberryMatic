@@ -28,8 +28,8 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
 endef
 
 define CA_CERTIFICATES_INSTALL_INIT_SYSV
-	$(INSTALL) -D -m 0755 $(CA_CERTIFICATES_PKGDIR)/S01ca-certificates \
-		$(TARGET_DIR)/etc/init.d/S01ca-certificates
+	$(INSTALL) -D -m 0755 $(CA_CERTIFICATES_PKGDIR)/S07ca-certificates \
+		$(TARGET_DIR)/etc/init.d/S07ca-certificates
 endef
 
 $(eval $(generic-package))

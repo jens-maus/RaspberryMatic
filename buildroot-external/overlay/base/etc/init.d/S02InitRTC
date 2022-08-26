@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 #
 # Startup script to identify and setup RTC clocks
 #
@@ -28,10 +28,10 @@ init_rtc_device() {
     fi
   fi
 
-  if [[ -e /sys/module/rtc_ds1307/drivers/i2c:rtc-ds1307/1-0032/name ]] &&
-     [[ $(cat /sys/module/rtc_ds1307/drivers/i2c:rtc-ds1307/1-0032/name) == "rx8130" ]] ||
-     [[ -e /sys/module/rtc_rx8130/drivers/i2c:rtc-rx8130/1-0032/name ]] &&
-     [[ $(cat /sys/module/rtc_rx8130/drivers/i2c:rtc-rx8130/1-0032/name) == "rx8130-legacy" ]]; then
+  if { [[ -e /sys/module/rtc_ds1307/drivers/i2c:rtc-ds1307/1-0032/name ]] &&
+       [[ $(cat /sys/module/rtc_ds1307/drivers/i2c:rtc-ds1307/1-0032/name) == "rx8130" ]]; } ||
+     { [[ -e /sys/module/rtc_rx8130/drivers/i2c:rtc-rx8130/1-0032/name ]] &&
+       [[ $(cat /sys/module/rtc_rx8130/drivers/i2c:rtc-rx8130/1-0032/name) == "rx8130-legacy" ]]; }; then
     HM_RTC="rx8130"
 
     # we found a RX8130, thus we assume the RPI-RF-MOD to

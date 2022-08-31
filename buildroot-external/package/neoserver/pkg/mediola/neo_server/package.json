@@ -30,7 +30,7 @@
         "fs-extra": "^8.1.0",
         "loop-protect": "^0.9.0",
         "md5": "^2.3.0",
-        "moment-timezone": "^0.5.34",
+        "moment-timezone": "^0.5.35",
         "node-dir": "^0.1.17",
         "suncalc": "^1.8.0",
         "unorm": "^1.6.0",

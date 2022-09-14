@@ -142,12 +142,13 @@ jobs:
       - name: Build
         timeout-minutes: 480
         run: |
-          CPU_QUOTA=$(cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us 2>/dev/null)
           JLEVEL=0
-          if [[ -n "${CPU_QUOTA}" ]] &&
-             [[ "${CPU_QUOTA}" != "-1" ]]; then
-            CPU_PERIOD=$(cat /sys/fs/cgroup/cpu/cpu.cfs_period_us)
-            JLEVEL=$((CPU_QUOTA / CPU_PERIOD + 1))
+          if [[ -f /sys/fs/cgroup/cpu/cpu.cfs_quota_us ]]; then
+            CPU_QUOTA=$(cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us)
+            if [[ "${CPU_QUOTA}" != "-1" ]]; then
+              CPU_PERIOD=$(cat /sys/fs/cgroup/cpu/cpu.cfs_period_us)
+              JLEVEL=$((CPU_QUOTA / CPU_PERIOD + 1))
+            fi
           fi
           sudo -H -E -u builder nice -n 19 make DATE=${{ needs.release_draft.outputs.date }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${JLEVEL} raspmatic_${{ matrix.platform }}-release
 

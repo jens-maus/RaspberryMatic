@@ -1,8 +1,8 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC2169,SC3010,SC1091
 #
-# RaspberryPi4+USB+GPIO check script v1.0
-# Copyright (c) 2021 Jens Maus <mail@jens-maus.de>
+# RaspberryPi4+USB+GPIO check script v1.1
+# Copyright (c) 2021-2022 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,8 +42,7 @@ case "$(grep Revision /proc/cpuinfo | awk '{print $3}')" in
     [[ -r /var/hm_mode ]] && . /var/hm_mode
 
     # check if a rf module is connected via GPIO
-    if [[ "${HM_HMRF_DEVTYPE}" == "GPIO" ]] ||
-       [[ "${HM_HMIP_DEVTYPE}" == "GPIO" ]]; then
+    if echo "${HM_HMRF_DEVTYPE}${HM_HMIP_DEVTYPE}" | grep -qi GPIO; then
 
       # check if critical USB3 connectivity exists (Bus 002 used)
       for f in /sys/bus/usb/devices/2-1:*; do

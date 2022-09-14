@@ -85,9 +85,10 @@ jobs:
         timeout-minutes: 480
         shell: bash
         run: |
-          CPU_QUOTA=$(cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us)
+          CPU_QUOTA=$(cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us 2>/dev/null)
           JLEVEL=0
-          if [[ "${CPU_QUOTA}" != "-1" ]]; then
+          if [[ -n "${CPU_QUOTA}" ]] &&
+             [[ "${CPU_QUOTA}" != "-1" ]]; then
             CPU_PERIOD=$(cat /sys/fs/cgroup/cpu/cpu.cfs_period_us)
             JLEVEL=$((CPU_QUOTA / CPU_PERIOD + 1))
           fi

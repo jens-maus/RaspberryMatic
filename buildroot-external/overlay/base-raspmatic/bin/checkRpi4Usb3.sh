@@ -1,7 +1,7 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC2169,SC3010,SC1091
 #
-# RaspberryPi4+USB+GPIO check script v1.1
+# RaspberryPi4+USB+GPIO check script v1.2
 # Copyright (c) 2021-2022 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,7 +45,7 @@ case "$(grep Revision /proc/cpuinfo | awk '{print $3}')" in
     if echo "${HM_HMRF_DEVTYPE}${HM_HMIP_DEVTYPE}" | grep -qi GPIO; then
 
       # check if critical USB3 connectivity exists (Bus 002 used)
-      for f in /sys/bus/usb/devices/2-1:*; do
+      for f in /sys/bus/usb/devices/2-[12]:*; do
         if [[ -e "${f}" ]]; then
           echo "critical"
           exit 2

@@ -1,7 +1,7 @@
 # RaspberryMatic Snapshot build
 # yamllint disable rule:truthy
 ---
-name: Snaphot Build
+name: Snapshot Build
 
 on:
   schedule:

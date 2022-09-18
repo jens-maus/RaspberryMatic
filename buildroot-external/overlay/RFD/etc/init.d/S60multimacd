@@ -41,6 +41,7 @@ waitStartupComplete() {
         sleep 2
         start-stop-daemon -S -N -15 -q -b -m -p ${PIDFILE} --exec /bin/multimacd -- -f /var/etc/multimacd.conf -l ${LOGLEVEL_RFD}
       else
+        sleep 5 # wait for /dev/mmd_* to settle
         echo "OK"
         break
       fi

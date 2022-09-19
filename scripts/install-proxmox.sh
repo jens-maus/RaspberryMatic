@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.1"
+VERSION="1.2"
 LINE=
 
 function error_exit() {
@@ -225,19 +225,23 @@ qm importovf "${VMID}" \
 # Change settings of VM
 msg "Modifying VM setting..."
 qm set "${VMID}" \
-  -acpi 1 \
-  -agent 1 \
-  -description "RaspberryMatic CCU" \
-  -net0 virtio,bridge=vmbr0,firewall=1 \
-  -onboot 1 \
-  -ostype l26 \
-  -scsihw virtio-scsi-pci \
-  -delete sata0 \
-  -scsi0 "${STORAGE}:${DISK_REF:-}vm-${VMID}-disk-0${DISK_EXT:-}" 1>&/dev/null
+  --acpi 1 \
+  --vcpus 2 \
+  --numa 1 \
+  --agent 1,fstrim_cloned_disks=1,type=virtio \
+  --hotplug network,disk,usb,cpu,memory \
+  --description "RaspberryMatic CCU" \
+  --net0 virtio,bridge=vmbr0,firewall=1 \
+  --onboot 1 \
+  --tablet 0 \
+  --ostype l26 \
+  --scsihw virtio-scsi-pci \
+  --delete sata0 \
+  --scsi0 "${STORAGE}:${DISK_REF:-}vm-${VMID}-disk-0${DISK_EXT:-}" 1>&/dev/null
 
 # Set boot order 
 qm set "${VMID}" \
-  -boot order=scsi0 1>&/dev/null
+  --boot order=scsi0 1>&/dev/null
 
 # Resize scsi0 disk
 msg "Resizing disk..."
@@ -246,7 +250,7 @@ qm resize "${VMID}" scsi0 64G 1>&/dev/null
 # Identify+Set known USB-based RF module devices
 if [[ -n "${USB_DEVICE}" ]]; then
   msg "Setting ${USB_DEVICE} as usb0..."
-  qm set "${VMID}" -usb0 host="${USB_DEVICE}",usb3=0 1>&/dev/null
+  qm set "${VMID}" --usb0 host="${USB_DEVICE}",usb3=0 1>&/dev/null
 fi
 
 info "Completed Successfully. New VM is: \e[1m${VMID} (RaspberryMatic)\e[0m."

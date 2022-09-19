@@ -1,0 +1,36 @@
+From 5e533cb943eef68b270f55f0cba02c0ec67c699d Mon Sep 17 00:00:00 2001
+From: Min RK <benjaminrk@gmail.com>
+Date: Fri, 19 Feb 2021 11:57:04 +0100
+Subject: [PATCH] include obj name in shared intermediate
+
+avoids duplicate ninja rules for v8 used in host and target
+---
+ tools/gyp/pylib/gyp/generator/ninja.py | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/tools/gyp/pylib/gyp/generator/ninja.py b/tools/gyp/pylib/gyp/generator/ninja.py
+index e064bad7ed84..fd453914ed22 100644
+--- a/tools/gyp/pylib/gyp/generator/ninja.py
++++ b/tools/gyp/pylib/gyp/generator/ninja.py
+@@ -46,7 +46,7 @@
+     # the start of a string, while $| is used for variables that can appear
+     # anywhere in a string.
+     "INTERMEDIATE_DIR": "$!INTERMEDIATE_DIR",
+-    "SHARED_INTERMEDIATE_DIR": "$!PRODUCT_DIR/gen",
++    "SHARED_INTERMEDIATE_DIR": "$!PRODUCT_DIR/$|OBJ/gen",
+     "PRODUCT_DIR": "$!PRODUCT_DIR",
+     "CONFIGURATION_NAME": "$|CONFIGURATION_NAME",
+     # Special variables that may be used by gyp 'rule' targets.
+@@ -289,6 +289,12 @@ def ExpandSpecial(self, path, product_dir=None):
+         CONFIGURATION_NAME = "$|CONFIGURATION_NAME"
+         path = path.replace(CONFIGURATION_NAME, self.config_name)
+ 
++        obj = "obj"
++        if self.toolset != "target":
++            obj += "." + self.toolset
++
++        path = path.replace("$|OBJ", obj)
++
+         return path
+ 
+     def ExpandRuleVariables(self, path, root, dirname, source, ext, name):

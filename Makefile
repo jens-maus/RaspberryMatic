@@ -8,7 +8,7 @@ PRODUCT_VERSION=${OCCU_VERSION}.${DATE}
 PRODUCTS:=$(sort $(notdir $(patsubst %_defconfig,%,$(wildcard $(DEFCONFIG_DIR)/*_defconfig))))
 BR2_DL_DIR="../download"
 BR2_CCACHE_DIR="${HOME}/.buildroot-ccache"
-BR2_JLEVEL=0
+BR2_JLEVEL=$(shell nproc)
 
 ifneq ($(PRODUCT),)
 	PRODUCTS:=$(PRODUCT)

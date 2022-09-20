@@ -79,3 +79,12 @@
  
  # nodejs's build system uses python which can be a symlink to an unsupported
  # python version (e.g. python 3.10 with nodejs 14.18.1). We work around this by
+--- buildroot/package/nodejs/v8-qemu-wrapper.in.orig
++++ buildroot/package/nodejs/v8-qemu-wrapper.in
+@@ -5,5 +5,6 @@
+ exec @QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ \
+     @QEMU_USERMODE_ARGS@ \
+    -L "${STAGING_DIR}/" \
++   -E LD_LIBRARY_PATH="${STAGING_DIR}/lib:${STAGING_DIR}/usr/lib/" \
+     "$@"
+ 

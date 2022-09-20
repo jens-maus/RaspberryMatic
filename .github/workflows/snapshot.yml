@@ -93,6 +93,7 @@ jobs:
               JLEVEL=$((CPU_QUOTA / CPU_PERIOD + 1))
             fi
           fi
+          make distclean
           sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${JLEVEL} raspmatic_${{ matrix.platform }}-release
           mv release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.mf release/RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
 

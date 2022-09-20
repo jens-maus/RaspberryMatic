@@ -68,6 +68,21 @@ jobs:
           echo "VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_ENV
           echo "GITHUB_SHA7=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
           echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
+          JLEVEL=0
+          if [[ -f /sys/fs/cgroup/cpu.max ]]; then # cgroups v2
+            CPU_QUOTA=$(cut -d ' ' -f1 /sys/fs/cgroup/cpu.max)
+            if [[ "${CPU_QUOTA}" != "max" ]]; then
+              CPU_PERIOD=$(cut -d ' ' -f2 /sys/fs/cgroup/cpu.max)
+              JLEVEL=$((CPU_QUOTA / CPU_PERIOD + 1))
+            fi
+          elif [[ -f /sys/fs/cgroup/cpu/cpu.cfs_quota_us ]]; then # cgroups v1
+            CPU_QUOTA=$(cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us)
+            if [[ "${CPU_QUOTA}" != "-1" ]]; then
+              CPU_PERIOD=$(cat /sys/fs/cgroup/cpu/cpu.cfs_period_us)
+              JLEVEL=$((CPU_QUOTA / CPU_PERIOD + 1))
+            fi
+          fi
+          echo "JLEVEL=${JLEVEL}" >> $GITHUB_ENV
           echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
           echo "::set-output name=build_version::$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)"
 
@@ -85,16 +100,8 @@ jobs:
         timeout-minutes: 480
         shell: bash
         run: |
-          JLEVEL=0
-          if [[ -f /sys/fs/cgroup/cpu/cpu.cfs_quota_us ]]; then
-            CPU_QUOTA=$(cat /sys/fs/cgroup/cpu/cpu.cfs_quota_us)
-            if [[ "${CPU_QUOTA}" != "-1" ]]; then
-              CPU_PERIOD=$(cat /sys/fs/cgroup/cpu/cpu.cfs_period_us)
-              JLEVEL=$((CPU_QUOTA / CPU_PERIOD + 1))
-            fi
-          fi
           make distclean
-          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${JLEVEL} raspmatic_${{ matrix.platform }}-release
+          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} raspmatic_${{ matrix.platform }}-release
           mv release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.mf release/RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
 
       # cleanup

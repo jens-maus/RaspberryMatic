@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-NEOSERVER_VERSION = 2.10.0
+NEOSERVER_VERSION = 2.11.0
 NEOSERVER_SOURCE =
 NEOSERVER_LICENSE = PROPERITARY
 

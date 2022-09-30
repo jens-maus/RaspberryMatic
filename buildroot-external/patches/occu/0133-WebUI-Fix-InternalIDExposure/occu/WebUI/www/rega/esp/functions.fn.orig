@@ -186,7 +186,7 @@ function ::WriteDPText()
           }
           if( (!bBinary) && (!bFloat) )
           {
-            if (((toCH.Label() != "HmIPW-DRAP") && (toCH.Label() != "HmIP-HAP") && (toCH.Label() != "HmIP-HAP-B1")) || (sVUTmp == "°C") || (sVUTmp == "V")) { ! SPHM-599
+            if (((toCH.Label() != "HmIPW-DRAP") && (toCH.Label() != "HmIP-HAP") && (toCH.Label() != "HmIP-HAP-B1") && (toCH.Label() != "HmIP-HAP JS1")) || (sVUTmp == "°C") || (sVUTmp == "V")) { ! SPHM-599
               sValue = sValue.ToInteger();
               sValue = sValue.ToString(0);
             }
@@ -411,7 +411,7 @@ function ::showHideHmIPChannel() {
           bShowChannel = false;
         }
       } else {
-        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "HmIP-HAP-B1") && (oDevHssType != "RPI-RF-MOD")) {
+        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "HmIP-HAP-B1")  && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
           bShowChannel = false;
         }
       }

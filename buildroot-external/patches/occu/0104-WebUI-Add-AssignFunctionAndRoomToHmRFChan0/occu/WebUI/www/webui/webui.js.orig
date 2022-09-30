@@ -446,7 +446,7 @@ DEVICELIST_TREE_JST = "<table id=\"DeviceListTable\" width=\"97%\" border=\"0\" 
     {for device in devices}\n
       {if !device.inInbox}\n
         <tr id=\"${PREFIX}${device.id}\" class=\"DeviceListRow\" onclick=\"DeviceListPage.selectDevice(\'${device.id}\');\" onmouseover=\"this.className=\'DeviceListRow_Highlight\';\" onmouseout=\"this.className=\'DeviceListRow\';\">\n
-          {if (device.typeName != \"HmIP-CCU3\") && (device.typeName != \"RPI-RF-MOD\")  && (device.typeName != \"HmIP-HAP\")  && (device.typeName != \"HmIP-HAP-B1\")}\n
+          {if (device.typeName != \"HmIP-CCU3\") && (device.typeName != \"RPI-RF-MOD\")  && (device.typeName != \"HmIP-HAP\")  && (device.typeName != \"HmIP-HAP-B1\") && (device.typeName != \"HmIP-HAP JS1\")}\n
             <td class=\"DeviceListCell_Invisible\" onclick=\"if (event) { Event.stop(event); } else { Event.stop(window.event); }\">\n
               <img id=\"${PREFIX}${device.id}PLUS\" onclick=\"DeviceListPage.expandDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/plus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le anzeigen\" title=\"Kan&auml;le anzeigen\" {if device._expanded} style=\"display:none;\"{\/if}\/>\n
               <img id=\"${PREFIX}${device.id}MINUS\" onclick=\"DeviceListPage.collapseDevice(event, \'${device.id}\');\" src=\"\/ise\/img\/minus.png\" width=\"16px\" height=\"16px\" alt=\"Kan&auml;le verbergen\" title=\"Kan&auml;le verbergen\" {if !device._expanded} style=\"display:none;\"{\/if}\/>\n

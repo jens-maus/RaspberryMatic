@@ -1,0 +1,11 @@
+--- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
+@@ -307,7 +307,7 @@
+   }
+ 
+   # DRAP/HAP Integration #
+-  if {([string equal $devType "HmIPW-DRAP"] == 1) || ([string equal $devType "HmIP-HAP"] == 1) || ([string equal $devType "HmIP-HAP JS1"] == 1)} {
++  if {([string equal $devType "HmIPW-DRAP"] == 1) || ([string equal $devType "HmIP-HAP"] == 1) || ([string equal $devType "HmIP-HAP-B1"] == 1) || ([string equal $devType "HmIP-HAP JS1"] == 1)} {
+     append html "[getDRAP_HAPMaintenance $chn ps psDescr]"
+   }
+   # End DRAP/HAP Integration #

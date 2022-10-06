@@ -39,7 +39,7 @@ On top of that, RaspberryMatic provides a whole bunch of enhancements or even bu
 RaspberryMatic can be directly installed on the following, commercially distributed CCU hardware:
 
 * _Hardware_:
-  * [CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html), [ELV-Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)
+  * [CCU3](https://homematic-ip.com/en/product/smart-home-ccu3-central-control-unit), [ELV-Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)
   * [RaspberryPi](https://www.raspberrypi.org/)
   * [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
   * [Hardkernel ODROID](https://www.hardkernel.com/shop/odroid-n2-with-4gbyte-ram-2/)

@@ -355,7 +355,7 @@ proc action_put_page {} {
   http_head
 
   if {[get_platform] != "oci"} {
-    execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $4 }}}
+    execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $(NF-2) }}}
     if { ! [string is double -strict $USERFSFREE_MB] } {
       set USERFSFREE_MB 0
     }

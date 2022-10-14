@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.2"
+VERSION="1.3"
 LINE=
 
 function error_exit() {
@@ -229,7 +229,7 @@ qm set "${VMID}" \
   --vcpus 2 \
   --numa 1 \
   --agent 1,fstrim_cloned_disks=1,type=virtio \
-  --hotplug network,disk,usb,cpu,memory \
+  --hotplug network,disk,usb,cpu \
   --description "RaspberryMatic CCU" \
   --net0 virtio,bridge=vmbr0,firewall=1 \
   --onboot 1 \

@@ -346,7 +346,7 @@ proc execCmd {varName cmd} {
   if {$rc == 0} {
     set variable $resVar
   } else {
-    set variable "0"
+    set variable 0
   }
 }
 
@@ -354,10 +354,15 @@ proc action_put_page {} {
   global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS HMIP_LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL downloadOnly
   http_head
 
-  execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $4 }}}
-  set USERFSFREE_GB [format "%.1f" [expr {$USERFSFREE_MB / 1024.0}]]
-  set USERFSFREE_MB_REQ 1843.2
-  set USERFSFREE_GB_REQ [format "%.1f" [expr {$USERFSFREE_MB_REQ / 1024.0}]]
+  if {[get_platform] != "oci"} {
+    execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $4 }}}
+    if { ! [string is double -strict $USERFSFREE_MB] } {
+      set USERFSFREE_MB 0
+    }
+    set USERFSFREE_GB [format "%.1f" [expr {$USERFSFREE_MB / 1024.0}]]
+    set USERFSFREE_MB_REQ 1843.2
+    set USERFSFREE_GB_REQ [format "%.1f" [expr {$USERFSFREE_MB_REQ / 1024.0}]]
+  }
   
   division {class="popupTitle j_translate"} {
     puts "\${dialogSettingsCMTitle}"
@@ -877,18 +882,20 @@ proc action_put_page {} {
     }
   }
   
-  cgi_javascript {
-     puts "var userFreeMB = $USERFSFREE_MB;"
-     puts "var userFreeMBRequired = $USERFSFREE_MB_REQ;"
-     puts {
-       if (userFreeMB < userFreeMBRequired) {
-         jQuery('#availableUserSpace').css({ 'color': 'red', 'font-weight': 'bold' });
-         jQuery('#btnSoftwareUpdateUpload').removeAttr('onclick');
-         jQuery('#btnSoftwareUpdateUpload').css({ 'color': 'gray' });
-         jQuery('#btnFwDirectDownload2').removeAttr('onclick');
-         jQuery('#btnFwDirectDownload2').css({ 'color': 'gray' });
+  if {[get_platform] != "oci"} {
+    cgi_javascript {
+       puts "var userFreeMB = $USERFSFREE_MB;"
+       puts "var userFreeMBRequired = $USERFSFREE_MB_REQ;"
+       puts {
+         if (userFreeMB < userFreeMBRequired) {
+           jQuery('#availableUserSpace').css({ 'color': 'red', 'font-weight': 'bold' });
+           jQuery('#btnSoftwareUpdateUpload').removeAttr('onclick');
+           jQuery('#btnSoftwareUpdateUpload').css({ 'color': 'gray' });
+           jQuery('#btnFwDirectDownload2').removeAttr('onclick');
+           jQuery('#btnFwDirectDownload2').css({ 'color': 'gray' });
+         }
        }
-     }
+    }
   }
 
   cgi_javascript {

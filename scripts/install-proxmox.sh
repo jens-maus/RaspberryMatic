@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.3"
+VERSION="1.4"
 LINE=
 
 function error_exit() {
@@ -229,7 +229,7 @@ qm set "${VMID}" \
   --vcpus 2 \
   --numa 1 \
   --agent 1,fstrim_cloned_disks=1,type=virtio \
-  --hotplug network,disk,usb,cpu \
+  --hotplug network,disk,usb,cpu,memory \
   --description "RaspberryMatic CCU" \
   --net0 virtio,bridge=vmbr0,firewall=1 \
   --onboot 1 \
@@ -250,7 +250,7 @@ qm resize "${VMID}" scsi0 64G 1>&/dev/null
 # Identify+Set known USB-based RF module devices
 if [[ -n "${USB_DEVICE}" ]]; then
   msg "Setting ${USB_DEVICE} as usb0..."
-  qm set "${VMID}" --usb0 host="${USB_DEVICE}",usb3=0 1>&/dev/null
+  qm set "${VMID}" --usb0 host="${USB_DEVICE}",usb3=1 1>&/dev/null
 fi
 
 info "Completed Successfully. New VM is: \e[1m${VMID} (RaspberryMatic)\e[0m."

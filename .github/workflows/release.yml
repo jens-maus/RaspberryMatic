@@ -48,13 +48,13 @@ jobs:
             BUILD_DATE=${{ github.event.inputs.release_date }}
           fi
           OCCU_VERSION=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
-          echo "::set-output name=occu_version::${OCCU_VERSION}"
-          echo "::set-output name=version::${OCCU_VERSION}.${BUILD_DATE}"
-          echo "::set-output name=date::${BUILD_DATE}"
+          echo "occu_version=${OCCU_VERSION}" >> $GITHUB_OUTPUT
+          echo "version=${OCCU_VERSION}.${BUILD_DATE}" >> $GITHUB_OUTPUT
+          echo "date=${BUILD_DATE}" >> $GITHUB_OUTPUT
           if [[ "${{ github.event.inputs.skip_build }}" == "true" ]]; then
-            echo "::set-output name=tag::${OCCU_VERSION}.${BUILD_DATE}-draft"
+            echo "tag=${OCCU_VERSION}.${BUILD_DATE}-draft" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=tag::${OCCU_VERSION}.${BUILD_DATE}"
+            echo "tag=${OCCU_VERSION}.${BUILD_DATE}" >> $GITHUB_OUTPUT
           fi
 
       - name: Get previous tag
@@ -147,7 +147,7 @@ jobs:
           fi
           echo "JLEVEL=${JLEVEL}" >> $GITHUB_ENV
           echo "FAKE_BUILD=${{ github.event.inputs.skip_build }}" >> $GITHUB_ENV
-          echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
+          echo "build_datetime=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
 
       # - name: remote debug tmate session
       #   uses: mxschmitt/action-tmate@v1
@@ -378,8 +378,8 @@ jobs:
           else
             BRANCH_TAG="${BASE_TAG}:latest-${BRANCH}"
           fi
-          echo "##[set-output name=unique_tag;]${UNIQUE_TAG}"
-          echo "##[set-output name=branch_tag;]${BRANCH_TAG}"
+          echo "unique_tag=${UNIQUE_TAG}" >> $GITHUB_OUTPUT
+          echo "branch_tag=${BRANCH_TAG}" >> $GITHUB_OUTPUT
         id: extract_branch
 
       - name: Set up Docker Buildx

@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: commit-check
-        run: 'echo ::set-output name=has-commits::$(git --no-pager log --pretty="format:%an" --since="24 hours ago" | grep -v github-actions | wc -l)'
+        run: echo "has-commits=$(git --no-pager log --pretty='format:%an' --since='24 hours ago' | grep -v github-actions | wc -l)" >> $GITHUB_OUTPUT
     outputs:
       has-commits: ${{ steps.commit-check.outputs.has-commits }}
 
@@ -83,8 +83,8 @@ jobs:
             fi
           fi
           echo "JLEVEL=${JLEVEL}" >> $GITHUB_ENV
-          echo "::set-output name=build_datetime::$(date +'%Y-%m-%d %H:%M:%S')"
-          echo "::set-output name=build_version::$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)"
+          echo "build_datetime=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
+          echo "build_version=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_OUTPUT
 
       - name: Switch to experimental EULA files
         run: |
@@ -308,8 +308,8 @@ jobs:
               BRANCH_TAG="${BASE_TAG}:snapshot-${BRANCH}"
             fi
           fi
-          echo "##[set-output name=unique_tag;]${UNIQUE_TAG}"
-          echo "##[set-output name=branch_tag;]${BRANCH_TAG}"
+          echo "unique_tag=${UNIQUE_TAG}" >> $GITHUB_OUTPUT
+          echo "branch_tag=${BRANCH_TAG}" >> $GITHUB_OUTPUT
         id: extract_branch
 
       - name: Set up Docker Buildx

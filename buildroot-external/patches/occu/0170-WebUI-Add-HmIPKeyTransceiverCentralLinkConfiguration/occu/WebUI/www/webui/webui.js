@@ -171,7 +171,7 @@ CHANNEL_CONFIG_DIALOG_JST = "<div id=\"ChannelConfigDialog\">\n
     {\/if}\n
     {if channel.channelType == \"KEY_TRANSCEIVER\"}\n
       <div id=\"channelCentralLink\" class=\"ChannelConfigDialogSection\">\n
-      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Zentralen-Link<\/div>\n
+      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Zentralen-Link&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"ChannelConfigDialog.showConfigCentralLinkHelp();\"><\/div>\n
       <hr \/>\n
        <div>\n
         <table border=\"0\"  class=\"ChannelConfigDialogTable\" width=\"250px\">\n
@@ -13640,6 +13640,12 @@ ChannelConfigDialog = Singleton.create({
       _this_.m_testId = testId;
       _this_.pollTest();
     });
+  },
+
+  showConfigCentralLinkHelp: function() {
+    var title = translateKey("dialogHelpCentralLinkTitle"),
+    content = translateKey("dialogHelpCentralLinkContent");
+    MessageBox.show(title, content,'', 475, 450);
   },
 
   createCentralLink: function()

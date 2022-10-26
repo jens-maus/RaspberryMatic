@@ -1,3 +1,25 @@
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.help.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.help.js
+@@ -2,6 +2,8 @@
+   "de": {
+     "genericBtnTxtHelp" : "Hilfe",
+     "genericBtnTxtHelpOff" : "Hilfe aus",
++	"dialogHelpCentralLinkTitle" : "Hinweise zum Zentralen-Link",
++	"dialogHelpCentralLinkContent" : "Hier muss jetzt noch Inhalt rein",	
+     "helpPowerCost" : "Hier k%F6nnen Sie den Preis pro kWh Ihres Energieanbieters eintragen.",
+     "diagramHelpCustomModeTitle" : "Beschreibung der Werte f%FCr gr%F6%DFere Zeitr%E4ume",
+     "diagramHelpCustomModeContent" :
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.help.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.help.js
+@@ -2,6 +2,8 @@
+   "en": {
+     "genericBtnTxtHelp" : "Help",
+     "genericBtnTxtHelpOff" : "Disable help",
++	"dialogHelpCentralLinkTitle" : "Note on Central-Link",
++	"dialogHelpCentralLinkContent" : "Insert content here...",	
+     "helpPowerCost" : "Here you can set the price per kWh of your electricity provider.",
+     "diagramHelpCustomModeTitle" : "Description of the values for longer periods",
+     "diagramHelpCustomModeContent" :
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -169,6 +169,20 @@
@@ -6,7 +28,7 @@
      {\/if}\n
 +    {if channel.channelType == \"KEY_TRANSCEIVER\"}\n
 +      <div id=\"channelCentralLink\" class=\"ChannelConfigDialogSection\">\n
-+      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Zentralen-Link<\/div>\n
++      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Zentralen-Link&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"ChannelConfigDialog.showConfigCentralLinkHelp();\"><\/div>\n
 +      <hr \/>\n
 +       <div>\n
 +        <table border=\"0\"  class=\"ChannelConfigDialogTable\" width=\"250px\">\n
@@ -21,11 +43,17 @@
    <\/div>\n
  \n
    <div id=\"ChannelConfigDialogContentMain\">\n
-@@ -13627,7 +13641,36 @@
+@@ -13627,7 +13641,42 @@
        _this_.pollTest();
      });
    },
 -  
++
++  showConfigCentralLinkHelp: function() {
++    var title = translateKey("dialogHelpCentralLinkTitle"),
++    content = translateKey("dialogHelpCentralLinkContent");
++    MessageBox.show(title, content,'', 475, 450);
++  },
 +
 +  createCentralLink: function()
 +  {

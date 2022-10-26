@@ -1,30 +1,32 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -169,6 +169,20 @@
-       <\/div>
-     <\/div>
-     {\/if}
-+		{if channel.channelType == \"KEY_TRANSCEIVER\"}
-+	  <div id=\"channelCentralLink\" class=\"ChannelConfigDialogSection\">
-+      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Zentralen-Link<\/div>
-+      <hr \/>
-+	   <div>
-+        <table border=\"0\"  class=\"ChannelConfigDialogTable\" width=\"250px\">
-+          <tr>
-+            <td width=\"50%\"><div id=\"ChannelConfigDialogCreateCentralLinkButton\" class=\"StdButton\" name=\"channelConfigBtnCreateCentralLink\" onclick=\"ChannelConfigDialog.createCentralLink();\">Anlegen<\/div><\/td>
-+            <td width=\"50%\"><div id=\"ChannelConfigDialogRemoveCentralLinkButton\" class=\"StdButton\" name=\"channelConfigBtnRemoveCentralLink\" onclick=\"ChannelConfigDialog.removeCentralLink();\">Entfernen<\/div><\/td>
-+          <\/tr>
-+        <\/table>
-+      </div>
-+      </div>
-+    {\/if}
-   <\/div>
- 
-   <div id=\"ChannelConfigDialogContentMain\">
-@@ -13831,6 +13845,35 @@
+       <\/div>\n
+     <\/div>\n
+     {\/if}\n
++    {if channel.channelType == \"KEY_TRANSCEIVER\"}\n
++      <div id=\"channelCentralLink\" class=\"ChannelConfigDialogSection\">\n
++      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Zentralen-Link<\/div>\n
++      <hr \/>\n
++       <div>\n
++        <table border=\"0\"  class=\"ChannelConfigDialogTable\" width=\"250px\">\n
++          <tr>\n
++            <td width=\"50%\"><div id=\"ChannelConfigDialogCreateCentralLinkButton\" class=\"StdButton\" name=\"channelConfigBtnCreateCentralLink\" onclick=\"ChannelConfigDialog.createCentralLink();\">Anlegen<\/div><\/td>\n
++            <td width=\"50%\"><div id=\"ChannelConfigDialogRemoveCentralLinkButton\" class=\"StdButton\" name=\"channelConfigBtnRemoveCentralLink\" onclick=\"ChannelConfigDialog.removeCentralLink();\">Entfernen<\/div><\/td>\n
++          <\/tr>\n
++        <\/table>\n
++      </div>\n
++      </div>\n
++    {\/if}\n
+   <\/div>\n
+ \n
+   <div id=\"ChannelConfigDialogContentMain\">\n
+@@ -13627,7 +13641,36 @@
+       _this_.pollTest();
      });
    },
-   
+-  
++
 +  createCentralLink: function()
 +  {
 +   ResetPostString();
@@ -53,7 +55,7 @@
 +      }
 +    }, "html");
 +  },
-+  
++
    /**
     * Callback. Fragt zyklisch das Ergebnis des Funktionstests ab.
     **/

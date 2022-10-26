@@ -42,7 +42,7 @@ spec:
       http:
         paths:
           - path: /
-            {{- if semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
+            {{- if semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion }}
             pathType: ImplementationSpecific 
             {{- end }}
             backend:

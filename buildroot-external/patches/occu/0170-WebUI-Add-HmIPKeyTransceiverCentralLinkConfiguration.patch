@@ -1,0 +1,59 @@
+--- occu/WebUI/www/webui.js.orig
++++ occu/WebUI/www/webui.js
+@@ -169,6 +169,20 @@
+       <\/div>
+     <\/div>
+     {\/if}
++		{if channel.channelType == \"KEY_TRANSCEIVER\"}
++	  <div id=\"channelCentralLink\" class=\"ChannelConfigDialogSection\">
++      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Zentralen-Link<\/div>
++      <hr \/>
++	   <div>
++        <table border=\"0\"  class=\"ChannelConfigDialogTable\" width=\"250px\">
++          <tr>
++            <td width=\"50%\"><div id=\"ChannelConfigDialogCreateCentralLinkButton\" class=\"StdButton\" name=\"channelConfigBtnCreateCentralLink\" onclick=\"ChannelConfigDialog.createCentralLink();\">Anlegen<\/div><\/td>
++            <td width=\"50%\"><div id=\"ChannelConfigDialogRemoveCentralLinkButton\" class=\"StdButton\" name=\"channelConfigBtnRemoveCentralLink\" onclick=\"ChannelConfigDialog.removeCentralLink();\">Entfernen<\/div><\/td>
++          <\/tr>
++        <\/table>
++      </div>
++      </div>
++    {\/if}
+   <\/div>
+ 
+   <div id=\"ChannelConfigDialogContentMain\">
+@@ -13831,6 +13845,35 @@
+     });
+   },
+   
++  createCentralLink: function()
++  {
++   ResetPostString();
++   AddParam($('global_sid'));
++   poststr += "&iface=HmIP-RF";
++   poststr += "&sender_address="+this.channel.address;
++   poststr += "&receiver_address=CENTRAL_DEVICE:63";
++   poststr += "&cmd=addLink";
++   SendRequest('ic_ifacecmd.cgi');
++   ProgressBar = new ProgressBarMsgBox(translateKey("progressBarCreateLinkTitle"), 1);
++   ProgressBar.show();
++  },
++  
++  removeCentralLink: function()
++  {
++	var addr=this.channel.address;
++    new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionRemoveLink').replace('%s', addr+' - ZENTRALE'), function(result) {
++      if (result == YesNoDialog.RESULT_YES) {
++        ResetPostString();
++        AddParam(document.getElementById('global_sid'));
++        poststr += "&cmd=removeLink";
++        poststr += "&iface=HmIP-RF";
++        poststr += "&sender_address="+addr;
++        poststr += "&receiver_address=CENTRAL_DEVICE:63" ;
++        SendRequest('ic_ifacecmd.cgi');
++      }
++    }, "html");
++  },
++  
+   /**
+    * Callback. Fragt zyklisch das Ergebnis des Funktionstests ab.
+    **/

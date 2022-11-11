@@ -13654,6 +13654,7 @@ ChannelConfigDialog = Singleton.create({
 		homematic("Interface.reportValueUsage", {"interface": "HmIP-RF", "address": this.channel.address, "valueId": "PRESS_SHORT", "refCounter":"1"});  
 	  } else if (channeltype === "KEY") {
 		homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": this.channel.address, "valueId": "PRESS_SHORT", "refCounter":"1"});  
+		homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": this.channel.address, "valueId": "PRESS_LONG", "refCounter":"1"});  
       }
   },
   
@@ -13663,13 +13664,8 @@ ChannelConfigDialog = Singleton.create({
     new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionRemoveLink').replace('%s', addr+' - ZENTRALE'), function(result) {
       if (result == YesNoDialog.RESULT_YES) {
 		  if (channeltype === "KEY_TRANSCEIVER") {
-            ResetPostString();
-            AddParam(document.getElementById('global_sid'));
-            poststr += "&cmd=removeLink";
-            poststr += "&iface=HmIP-RF";
-            poststr += "&sender_address="+addr;
-            poststr += "&receiver_address=CENTRAL_DEVICE:63" ;
-            SendRequest('ic_ifacecmd.cgi');
+		    //reportValueUsage for HmIP ignores the valueId, so it doesn't matter what you put in there
+            homematic("Interface.reportValueUsage", {"interface": "HmIP-RF", "address": addr, "valueId": "0", "refCounter":"0"});  
 		  } else if (channeltype === "KEY") {
             homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": addr, "valueId": "PRESS_SHORT", "refCounter":"0"});  
             homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": addr, "valueId": "PRESS_LONG", "refCounter":"0"});  

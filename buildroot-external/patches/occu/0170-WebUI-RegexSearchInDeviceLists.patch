@@ -1,26 +1,20 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -7881,17 +7881,13 @@
-     var patternList = m_value.toLowerCase().split("|");
+@@ -7882,11 +7882,8 @@
      //var patternList = m_value.split("|");
      text            = text.toLowerCase();
--    
+     
 -    for (var i = 0, len = patternList.length; i < len; i++)
 -    {
 -      if (0 <= text.indexOf(patternList[i])) { return true; }
 -    }
 -    
-+    var r = new RegExp(m_value.toLowerCase());                                                                                                                  
-+    if (r.test(text) === true) {return true; } 
++    var r = new RegExp(m_value.toLowerCase());
++    if (r.test(text) === true) {return true; }
      return false;
    };
    
-   /**
-    * Schlie�t den Filter und ruft dei Callback-Funktion auf
-    **/
-   this.set = function()
-   {
-@@ -32410,7 +32405,8 @@
+@@ -32410,7 +32407,8 @@
      {
        if (typeof obj['type'] != 'undefined') {
          if (obj['type'] === "")                      { return false; }
@@ -30,7 +24,7 @@
        }
      }
      if (this.filDesc !== "")
-@@ -32420,7 +32417,8 @@
+@@ -32420,7 +32418,8 @@
        {
          //conInfo( "iseFilter: desc="+obj['desc'] );
          if (obj['desc'] === "")                      { return false; }
@@ -40,7 +34,7 @@
        }
      }
      if (this.filName !== "")
-@@ -32429,7 +32427,8 @@
+@@ -32429,7 +32428,8 @@
        {
          if (obj['name'] === "")                      { return false; }
          var transName = translateString(obj['name']);
@@ -50,7 +44,7 @@
        }
      }
      if (this.filSn !== "")
-@@ -32437,7 +32436,8 @@
+@@ -32437,7 +32437,8 @@
        if (typeof obj['sn'] != 'undefined')
        {
          if (obj['sn'] === "")                     { return false; }
@@ -60,7 +54,7 @@
        }
      }
      if (this.filUnit !== "")
-@@ -32445,7 +32445,8 @@
+@@ -32445,7 +32446,8 @@
        if (typeof obj['unit'] != 'undefined')
        {
          if (obj['unit'] === "")                      { return false; }
@@ -70,7 +64,7 @@
        }
      }
  
-@@ -32469,7 +32470,8 @@
+@@ -32469,7 +32471,8 @@
      if (this.filChnLink !== "")
      {
        if (obj['chn'] === "")                         { return false; }

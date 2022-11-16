@@ -462,7 +462,7 @@ jobs:
         continue-on-error: true
 
       - name: Remove old packages
-        uses: smartsquaregmbh/delete-old-packages@v0.5.0
+        uses: smartsquaregmbh/delete-old-packages@v0.6.0
         with:
           keep: 5
           names: |

@@ -4,12 +4,12 @@
 #
 ################################################################################
 
-RPI_EEPROM_VERSION = e41bec0bed37ea7ce231e89a0f2e91e3928e8529
+RPI_EEPROM_VERSION = 551d9da1847bf2d79a6943c8ec0f8d11f907c499
 RPI_EEPROM_SITE = $(call github,raspberrypi,rpi-eeprom,$(RPI_EEPROM_VERSION))
 RPI_EEPROM_LICENSE = BSD-3-Clause
 RPI_EEPROM_LICENSE_FILES = LICENSE
 RPI_EEPROM_INSTALL_IMAGES = YES
-RPI_EEPROM_FIRMWARE_PATH = firmware/stable/pieeprom-2022-09-02.bin
+RPI_EEPROM_FIRMWARE_PATH = firmware/stable/pieeprom-2022-11-04.bin
 
 define RPI_EEPROM_BUILD_CMDS
 	$(@D)/rpi-eeprom-config $(@D)/$(RPI_EEPROM_FIRMWARE_PATH) --out $(@D)/default.conf

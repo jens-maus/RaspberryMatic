@@ -35,6 +35,11 @@ version: 3.65.11
 # incremented each time you make changes to the application.
 appVersion: 3.65.11.20221005
 
+dependencies:
+  - name: common
+    repository: https://bjw-s.github.io/helm-charts
+    version: 0.2.2
+
 annotations:
   artifacthub.io/changes: |
     - Release of 3.65.11.20221005 (https://github.com/jens-maus/RaspberryMatic/releases/tag/3.65.11.20221005)

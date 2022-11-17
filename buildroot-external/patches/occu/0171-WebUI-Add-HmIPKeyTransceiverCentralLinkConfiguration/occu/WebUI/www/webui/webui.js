@@ -174,7 +174,7 @@ CHANNEL_CONFIG_DIALOG_JST = "<div id=\"ChannelConfigDialog\">\n
       <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Event an Zentrale&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"ChannelConfigDialog.showConfigCentralLinkHelp();\"><\/div>\n
       <hr \/>\n
        <div>\n
-        <table border=\"0\"  class=\"ChannelConfigDialogTable\" width=\"250px\">\n
+        <table border=\"0\" class=\"ChannelConfigDialogTable\" width=\"250px\">\n
           <tr>\n
             <td width=\"50%\"><div id=\"ChannelConfigDialogCreateCentralLinkButton\" class=\"StdButton\" name=\"channelConfigBtnCreateCentralLink\" onclick=\"ChannelConfigDialog.createCentralLink('${channel.channelType}');\">Aktivieren<\/div><\/td>\n
             <td width=\"50%\"><div id=\"ChannelConfigDialogRemoveCentralLinkButton\" class=\"{if !channel.hasProgramIds()}StdButton{else}StdButtonInactive{\/if}\" name=\"channelConfigBtnRemoveCentralLink\" onclick=\"{if !channel.hasProgramIds()}ChannelConfigDialog.removeCentralLink('${channel.channelType}');{\/if}\">Deaktivieren<\/div><\/td>\n
@@ -13650,30 +13650,30 @@ ChannelConfigDialog = Singleton.create({
 
   createCentralLink: function(channeltype)
   {
-	  if (channeltype === "KEY_TRANSCEIVER") {
-		homematic("Interface.reportValueUsage", {"interface": "HmIP-RF", "address": this.channel.address, "valueId": "PRESS_SHORT", "refCounter":"1"});  
-	  } else if (channeltype === "KEY") {
-		homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": this.channel.address, "valueId": "PRESS_SHORT", "refCounter":"1"});  
-      }
+    if (channeltype === "KEY_TRANSCEIVER") {
+      homematic("Interface.reportValueUsage", {"interface": "HmIP-RF", "address": this.channel.address, "valueId": "PRESS_SHORT", "refCounter":"1"});  
+    } else if (channeltype === "KEY") {
+      homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": this.channel.address, "valueId": "PRESS_SHORT", "refCounter":"1"});  
+    }
   },
   
   removeCentralLink: function(channeltype)
   {
-	var addr=this.channel.address;
+    var addr=this.channel.address;
     new YesNoDialog(translateKey('dialogSafetyCheck'), translateKey('dialogQuestionRemoveLink').replace('%s', addr+' - ZENTRALE'), function(result) {
       if (result == YesNoDialog.RESULT_YES) {
-		  if (channeltype === "KEY_TRANSCEIVER") {
-            ResetPostString();
-            AddParam(document.getElementById('global_sid'));
-            poststr += "&cmd=removeLink";
-            poststr += "&iface=HmIP-RF";
-            poststr += "&sender_address="+addr;
-            poststr += "&receiver_address=CENTRAL_DEVICE:63" ;
-            SendRequest('ic_ifacecmd.cgi');
-		  } else if (channeltype === "KEY") {
-            homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": addr, "valueId": "PRESS_SHORT", "refCounter":"0"});  
-            homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": addr, "valueId": "PRESS_LONG", "refCounter":"0"});  
-		  }
+        if (channeltype === "KEY_TRANSCEIVER") {
+          ResetPostString();
+          AddParam(document.getElementById('global_sid'));
+          poststr += "&cmd=removeLink";
+          poststr += "&iface=HmIP-RF";
+          poststr += "&sender_address="+addr;
+          poststr += "&receiver_address=CENTRAL_DEVICE:63" ;
+          SendRequest('ic_ifacecmd.cgi');
+        } else if (channeltype === "KEY") {
+          homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": addr, "valueId": "PRESS_SHORT", "refCounter":"0"});  
+          homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": addr, "valueId": "PRESS_LONG", "refCounter":"0"});  
+        }
       }
     }, "html");
   },

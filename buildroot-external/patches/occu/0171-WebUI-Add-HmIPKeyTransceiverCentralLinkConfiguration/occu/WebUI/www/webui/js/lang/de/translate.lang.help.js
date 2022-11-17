@@ -2,8 +2,8 @@ jQuery.extend(true, langJSON, {
   "de": {
     "genericBtnTxtHelp" : "Hilfe",
     "genericBtnTxtHelpOff" : "Hilfe aus",
-	"dialogHelpCentralLinkTitle" : "Event an Zentrale - Hinweise",
-	"dialogHelpCentralLinkContent" : "Hier muss jetzt noch Inhalt rein",	
+    "dialogHelpCentralLinkTitle" : "Event an Zentrale - Hinweise",
+    "dialogHelpCentralLinkContent" : "Hier muss jetzt noch Inhalt rein",	
     "helpPowerCost" : "Hier k%F6nnen Sie den Preis pro kWh Ihres Energieanbieters eintragen.",
     "diagramHelpCustomModeTitle" : "Beschreibung der Werte f%FCr gr%F6%DFere Zeitr%E4ume",
     "diagramHelpCustomModeContent" :

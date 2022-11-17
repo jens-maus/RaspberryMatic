@@ -2,8 +2,8 @@ jQuery.extend(true, langJSON, {
   "en": {
     "genericBtnTxtHelp" : "Help",
     "genericBtnTxtHelpOff" : "Disable help",
-	"dialogHelpCentralLinkTitle" : "Event to Central - Info",
-	"dialogHelpCentralLinkContent" : "Insert content here...",	
+    "dialogHelpCentralLinkTitle" : "Event to Central - Info",
+    "dialogHelpCentralLinkContent" : "Insert content here...",	
     "helpPowerCost" : "Here you can set the price per kWh of your electricity provider.",
     "diagramHelpCustomModeTitle" : "Description of the values for longer periods",
     "diagramHelpCustomModeContent" :

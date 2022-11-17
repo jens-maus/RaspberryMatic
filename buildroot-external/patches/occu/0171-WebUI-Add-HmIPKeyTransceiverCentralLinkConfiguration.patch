@@ -9,13 +9,6 @@
      "helpPowerCost" : "Hier k%F6nnen Sie den Preis pro kWh Ihres Energieanbieters eintragen.",
      "diagramHelpCustomModeTitle" : "Beschreibung der Werte f%FCr gr%F6%DFere Zeitr%E4ume",
      "diagramHelpCustomModeContent" :
-@@ -168,4 +170,4 @@
- 
-     "END" : ""
-   }
--});
-\ No newline at end of file
-+});
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.help.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.help.js
 @@ -2,6 +2,8 @@
@@ -27,13 +20,6 @@
      "helpPowerCost" : "Here you can set the price per kWh of your electricity provider.",
      "diagramHelpCustomModeTitle" : "Description of the values for longer periods",
      "diagramHelpCustomModeContent" :
-@@ -162,4 +164,4 @@
- 
-     "END" : ""
-   }
--});
-\ No newline at end of file
-+});
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -169,6 +169,20 @@

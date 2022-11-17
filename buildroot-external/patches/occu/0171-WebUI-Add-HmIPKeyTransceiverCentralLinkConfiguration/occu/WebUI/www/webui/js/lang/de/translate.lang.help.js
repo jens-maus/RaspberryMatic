@@ -2,8 +2,10 @@ jQuery.extend(true, langJSON, {
   "de": {
     "genericBtnTxtHelp" : "Hilfe",
     "genericBtnTxtHelpOff" : "Hilfe aus",
-    "dialogHelpCentralLinkTitle" : "Event an Zentrale - Hinweise",
-    "dialogHelpCentralLinkContent" : "Hier muss jetzt noch Inhalt rein",	
+    "dialogHelpCentralLinkTitle" : "Tasterevent an Zentrale - Hinweise",
+    "dialogHelpCentralLinkContent" :
+      "Um die Funkauslastung bzw. den DutyCycle der CCU-Zentrale m%F6glichst gering zu halten senden Homematic-Ger%E4te mit einem Tasterkanal nicht standardm%E4%DFig bei jeder %C4nderung des Tasterstatus den jeweils aktuellen Wert an Ihre CCU-Zentrale%2C sondern lediglich wenn dieser Tasterkanal in %22Programme %26 Zentralenverkn%FCpfungen%22 explizit genutzt wird.<br/><br/>" +
+      "Ist das Anlegen eines solchen Programmes nicht gew%FCnscht%2C kann mit Hilfe der %22Tasterevent an Zentrale%22 Funktion das Weitersenden der Statusevents explizit f%FCr einen Tasterkanal aktiviert bzw. deaktiviert werden. Hierbei findet dann im jeweiligen Ger%E4t das Anlegen bzw. L%F6schen einer speziellen internen Direktverkn%FCpfung statt%2C sodass die CCU-Zentrale %FCber s%E4mtliche Tasterbet%E4tigungen automatisch mit informiert wird.",
     "helpPowerCost" : "Hier k%F6nnen Sie den Preis pro kWh Ihres Energieanbieters eintragen.",
     "diagramHelpCustomModeTitle" : "Beschreibung der Werte f%FCr gr%F6%DFere Zeitr%E4ume",
     "diagramHelpCustomModeContent" :

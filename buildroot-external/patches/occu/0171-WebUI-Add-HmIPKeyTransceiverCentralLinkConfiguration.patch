@@ -1,22 +1,26 @@
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.help.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.help.js
-@@ -2,6 +2,8 @@
+@@ -2,6 +2,10 @@
    "de": {
      "genericBtnTxtHelp" : "Hilfe",
      "genericBtnTxtHelpOff" : "Hilfe aus",
-+    "dialogHelpCentralLinkTitle" : "Event an Zentrale - Hinweise",
-+    "dialogHelpCentralLinkContent" : "Hier muss jetzt noch Inhalt rein",	
++    "dialogHelpCentralLinkTitle" : "Tasterevent an Zentrale - Hinweise",
++    "dialogHelpCentralLinkContent" :
++      "Um die Funkauslastung bzw. den DutyCycle der CCU-Zentrale m%F6glichst gering zu halten senden Homematic-Ger%E4te mit einem Tasterkanal nicht standardm%E4%DFig bei jeder %C4nderung des Tasterstatus den jeweils aktuellen Wert an Ihre CCU-Zentrale%2C sondern lediglich wenn dieser Tasterkanal in %22Programme %26 Zentralenverkn%FCpfungen%22 explizit genutzt wird.<br/><br/>" +
++      "Ist das Anlegen eines solchen Programmes nicht gew%FCnscht%2C kann mit Hilfe der %22Tasterevent an Zentrale%22 Funktion das Weitersenden der Statusevents explizit f%FCr einen Tasterkanal aktiviert bzw. deaktiviert werden. Hierbei findet dann im jeweiligen Ger%E4t das Anlegen bzw. L%F6schen einer speziellen internen Direktverkn%FCpfung statt%2C sodass die CCU-Zentrale %FCber s%E4mtliche Tasterbet%E4tigungen automatisch mit informiert wird.",
      "helpPowerCost" : "Hier k%F6nnen Sie den Preis pro kWh Ihres Energieanbieters eintragen.",
      "diagramHelpCustomModeTitle" : "Beschreibung der Werte f%FCr gr%F6%DFere Zeitr%E4ume",
      "diagramHelpCustomModeContent" :
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.help.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.help.js
-@@ -2,6 +2,8 @@
+@@ -2,6 +2,10 @@
    "en": {
      "genericBtnTxtHelp" : "Help",
      "genericBtnTxtHelpOff" : "Disable help",
-+    "dialogHelpCentralLinkTitle" : "Event to Central - Info",
-+    "dialogHelpCentralLinkContent" : "Insert content here...",	
++    "dialogHelpCentralLinkTitle" : "Pushbutton event to CCU - Info",
++    "dialogHelpCentralLinkContent" :
++      "In order to keep the radio load / duty cycle of the CCU central as low as possible, Homematic devices with a push-button channel do not send the current value to your CCU central every time the push-button status is changed, but only if this push-button channel is explicitly used in 'Programs & central links'.<br/><br/>" +
++      "If the creation of such a program is not desired, the forwarding of the status events can be activated or deactivated explicitly for a button channel with the help of the 'Pushbutton event to CCU' function. In this case, the creation or deletion of a special internal direct link takes place in the respective device, so that the CCU central is automatically informed about all button actuations.",
      "helpPowerCost" : "Here you can set the price per kWh of your electricity provider.",
      "diagramHelpCustomModeTitle" : "Description of the values for longer periods",
      "diagramHelpCustomModeContent" :
@@ -28,7 +32,7 @@
      {\/if}\n
 +    {if channel.channelType == \"KEY_TRANSCEIVER\" || channel.channelType == \"KEY\"}\n
 +      <div id=\"channelCentralLink\" class=\"ChannelConfigDialogSection\">\n
-+      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Event an Zentrale&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"ChannelConfigDialog.showConfigCentralLinkHelp();\"><\/div>\n
++      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Tasterevent an Zentrale&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"ChannelConfigDialog.showConfigCentralLinkHelp();\"><\/div>\n
 +      <hr \/>\n
 +       <div>\n
 +        <table border=\"0\" class=\"ChannelConfigDialogTable\" width=\"250px\">\n

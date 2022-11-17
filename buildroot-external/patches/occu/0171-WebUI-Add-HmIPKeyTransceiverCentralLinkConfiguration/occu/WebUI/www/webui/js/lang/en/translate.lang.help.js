@@ -2,8 +2,10 @@ jQuery.extend(true, langJSON, {
   "en": {
     "genericBtnTxtHelp" : "Help",
     "genericBtnTxtHelpOff" : "Disable help",
-    "dialogHelpCentralLinkTitle" : "Event to Central - Info",
-    "dialogHelpCentralLinkContent" : "Insert content here...",	
+    "dialogHelpCentralLinkTitle" : "Pushbutton event to CCU - Info",
+    "dialogHelpCentralLinkContent" :
+      "In order to keep the radio load / duty cycle of the CCU central as low as possible, Homematic devices with a push-button channel do not send the current value to your CCU central every time the push-button status is changed, but only if this push-button channel is explicitly used in 'Programs & central links'.<br/><br/>" +
+      "If the creation of such a program is not desired, the forwarding of the status events can be activated or deactivated explicitly for a button channel with the help of the 'Pushbutton event to CCU' function. In this case, the creation or deletion of a special internal direct link takes place in the respective device, so that the CCU central is automatically informed about all button actuations.",
     "helpPowerCost" : "Here you can set the price per kWh of your electricity provider.",
     "diagramHelpCustomModeTitle" : "Description of the values for longer periods",
     "diagramHelpCustomModeContent" :

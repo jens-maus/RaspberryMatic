@@ -171,7 +171,7 @@ CHANNEL_CONFIG_DIALOG_JST = "<div id=\"ChannelConfigDialog\">\n
     {\/if}\n
     {if channel.channelType == \"KEY_TRANSCEIVER\" || channel.channelType == \"KEY\"}\n
       <div id=\"channelCentralLink\" class=\"ChannelConfigDialogSection\">\n
-      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Event an Zentrale&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"ChannelConfigDialog.showConfigCentralLinkHelp();\"><\/div>\n
+      <div class=\"CLASS11003\" name=\"generalDeviceChannelConfigLblCentralLink\">Tasterevent an Zentrale&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"ChannelConfigDialog.showConfigCentralLinkHelp();\"><\/div>\n
       <hr \/>\n
        <div>\n
         <table border=\"0\" class=\"ChannelConfigDialogTable\" width=\"250px\">\n

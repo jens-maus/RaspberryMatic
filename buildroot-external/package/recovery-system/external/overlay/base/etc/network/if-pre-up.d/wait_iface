@@ -6,13 +6,13 @@
 # long either. IF_WAIT_DELAY is in seconds.
 
 if [[ -n "${IF_WAIT_DELAY}" ]]; then
-    printf "Waiting for interface %s to appear" "${IFACE}"
+    printf "Waiting for link on interface %s.." "${IFACE}"
     while [ "${IF_WAIT_DELAY}" -gt 0 ]; do
         if [[ -d "/sys/class/net/${IFACE}" ]]; then
             /sbin/ip link set "${IFACE}" up
             CARRIER=$(cat "/sys/class/net/${IFACE}/carrier")
             if [[ -n "${CARRIER}" ]] && [[ ${CARRIER} -eq 1 ]]; then
-                printf "\n"
+                printf "OK\n"
                 exit 0
             fi
         fi
@@ -21,6 +21,6 @@ if [[ -n "${IF_WAIT_DELAY}" ]]; then
         : $((IF_WAIT_DELAY -= 1))
     done
     printf " timeout!\n"
-    exit 1
+    exit 0 # continue anyway
 fi
 

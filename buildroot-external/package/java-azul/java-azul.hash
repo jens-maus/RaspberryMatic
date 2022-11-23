@@ -1,6 +1,6 @@
 # Locally computed
 sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-sha256  ef9b8e9592fce03170af6ba536a7c48c3f81276fa28ec7aa25c476829a11a473  zulu8.64.0.15-ca-jdk8.0.342-linux_aarch32hf.tar.gz
-sha256  dbdcd87350ac18661003c51c175508d944a5fb841ff828c34226dad3bb8e3290  zulu8.64.0.19-ca-jdk8.0.345-linux_aarch64.tar.gz
-sha256  286247425226953d21a0591b4cee00d5126cc5cc14d07370ec18cd43b9fa8ce3  zulu8.64.0.19-ca-jdk8.0.345-linux_i686.tar.gz
-sha256  1f99233f6e9cc92567316f2757c48b1bf4bb5624d40afa56ec263cfebdd887f9  zulu8.64.0.19-ca-jdk8.0.345-linux_x64.tar.gz
+sha256  326d1a2d1fe79e3589e68e9af299a00cfe528006c2de89a1ed8a63cc1aeadbd7  zulu8.66.0.15-ca-jdk8.0.352-linux_aarch32hf.tar.gz
+sha256  80d22ddd0dfac0562580cf46bb55f9539e61f7fd8df5f8464a1c83eb9dec24bf  zulu8.66.0.15-ca-jdk8.0.352-linux_aarch64.tar.gz
+sha256  4c2f52f43aae28c70c44064382db062f2cf55dd22d7aeb960f56e5c5873c4720  zulu8.66.0.15-ca-jdk8.0.352-linux_i686.tar.gz
+sha256  a3987f9bd87a3930f2e9cd679990e7b702c8f912a77d08a24163debbfc51bf51  zulu8.66.0.15-ca-jdk8.0.352-linux_x64.tar.gz

@@ -20291,7 +20291,7 @@ StartPage = Singleton.create(Page, {
       btnShowAddonUpdates.click(function () {
         showSoftwareCP();
       });
-      jQuery("#addonUpdatesAvailableCounter").html(addonUpdateList);
+      jQuery("#addonUpdatesAvailableList").html(addonUpdateList);
       rowShowAddonUpdates.show();
     }
   },

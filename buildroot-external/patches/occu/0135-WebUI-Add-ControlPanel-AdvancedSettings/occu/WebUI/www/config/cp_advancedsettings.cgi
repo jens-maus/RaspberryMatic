@@ -168,6 +168,7 @@ proc action_put_page {} {
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
           puts "\${dialogSettingsAdvancedSettingsWatchDog}"
+          puts "<br/><img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:21px; height:21px; vertical-align:middle;\" onclick=\"OnToggleHelp();\">"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
@@ -197,6 +198,7 @@ proc action_put_page {} {
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
           puts "\${dialogSettingsAdvancedSettingsSystem}"
+          puts "<br/><img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:21px; height:21px; vertical-align:middle;\" onclick=\"OnToggleHelp();\">"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
@@ -329,6 +331,7 @@ proc action_put_page {} {
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
           puts "\${dialogSettingsAdvancedSettingsExpert}"
+          puts "<br/><img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:21px; height:21px; vertical-align:middle;\" onclick=\"OnToggleHelp();\">"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
@@ -365,7 +368,11 @@ proc action_put_page {} {
             puts "\${btnOk}"
           }
         }
-        table_data {class="CLASS21109"} {}
+        table_data {class="CLASS21109"} {align=right} {
+          division {class="CLASS21108"} {onClick="OnToggleHelp()"} {
+            puts "\${tooltipHelp}&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:21px; height:21px; vertical-align:middle;\" >"
+          }
+        }
       }
     }
   }
@@ -374,6 +381,22 @@ proc action_put_page {} {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
       dlgResult = 0;
+      isHelpVisible = false;
+      showHelp = function(enable) {
+        isHelpVisible=enable;
+        var infos = document.getElementsByClassName("CLASS21113");
+        if (infos !== null) {
+          for (const info of infos) { info.style.display = enable ? "block" : "none"; }
+          dlgPopup.setWidth(enable ? 1020 : 600);
+          dlgPopup.readaptSize();
+        }
+      }
+      
+      OnToggleHelp = function() {
+        isHelpVisible = !isHelpVisible;
+		showHelp(isHelpVisible);
+      }
+      
       OnOK = function() {
         var pb = "action=save_settings";
         pb += "&inetcheckDisabled="+(document.getElementById("cb_inetcheckDisabled").checked?"0":"1");
@@ -435,10 +458,9 @@ proc action_put_page {} {
       };
     }
 
-    puts "dlgPopup.setWidth(1020);";
     puts "translatePlaceholder();"
     puts "translatePage('#messagebox');"
-    puts "dlgPopup.readaptSize();"
+    puts "showHelp(false);"
   }
   
 }

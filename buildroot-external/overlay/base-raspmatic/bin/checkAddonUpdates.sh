@@ -1,6 +1,9 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC3010
 
+# only continue if not disabled
+[[ -e /etc/config/NoCheckAddonUpdates ]] && exit 1
+
 jsonfile=/tmp/addon_updates.json
 if [[ -n "$(ls -A /etc/config/rc.d)" ]]; then
   echo "[" > ${jsonfile}

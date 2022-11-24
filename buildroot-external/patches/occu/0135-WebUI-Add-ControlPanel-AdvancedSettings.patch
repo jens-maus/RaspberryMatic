@@ -49,7 +49,7 @@
         jQuery.each(helpContainer, function(index, container){
 --- occu/WebUI/www/config/cp_advancedsettings.cgi.orig
 +++ occu/WebUI/www/config/cp_advancedsettings.cgi
-@@ -0,0 +1,567 @@
+@@ -0,0 +1,589 @@
 +#!/bin/tclsh
 +source once.tcl
 +sourceOnce cgi.tcl
@@ -220,6 +220,7 @@
 +      table_row {class="CLASS21115"} {
 +        table_data {class="CLASS21116"} {
 +          puts "\${dialogSettingsAdvancedSettingsWatchDog}"
++          puts "<br/><img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:21px; height:21px; vertical-align:middle;\" onclick=\"OnToggleHelp();\">"
 +        }
 +        table_data {align=left} {class="CLASS02533"} {
 +          table {
@@ -249,6 +250,7 @@
 +      table_row {class="CLASS21115"} {
 +        table_data {class="CLASS21116"} {
 +          puts "\${dialogSettingsAdvancedSettingsSystem}"
++          puts "<br/><img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:21px; height:21px; vertical-align:middle;\" onclick=\"OnToggleHelp();\">"
 +        }
 +        table_data {align=left} {class="CLASS02533"} {
 +          table {
@@ -381,6 +383,7 @@
 +      table_row {class="CLASS21115"} {
 +        table_data {class="CLASS21116"} {
 +          puts "\${dialogSettingsAdvancedSettingsExpert}"
++          puts "<br/><img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:21px; height:21px; vertical-align:middle;\" onclick=\"OnToggleHelp();\">"
 +        }
 +        table_data {align=left} {class="CLASS02533"} {
 +          table {
@@ -417,7 +420,11 @@
 +            puts "\${btnOk}"
 +          }
 +        }
-+        table_data {class="CLASS21109"} {}
++        table_data {class="CLASS21109"} {align=right} {
++          division {class="CLASS21108"} {onClick="OnToggleHelp()"} {
++            puts "\${tooltipHelp}&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:21px; height:21px; vertical-align:middle;\" >"
++          }
++        }
 +      }
 +    }
 +  }
@@ -426,6 +433,22 @@
 +    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
 +    puts {
 +      dlgResult = 0;
++      isHelpVisible = false;
++      showHelp = function(enable) {
++        isHelpVisible=enable;
++        var infos = document.getElementsByClassName("CLASS21113");
++        if (infos !== null) {
++          for (const info of infos) { info.style.display = enable ? "block" : "none"; }
++          dlgPopup.setWidth(enable ? 1020 : 600);
++          dlgPopup.readaptSize();
++        }
++      }
++      
++      OnToggleHelp = function() {
++        isHelpVisible = !isHelpVisible;
++		showHelp(isHelpVisible);
++      }
++      
 +      OnOK = function() {
 +        var pb = "action=save_settings";
 +        pb += "&inetcheckDisabled="+(document.getElementById("cb_inetcheckDisabled").checked?"0":"1");
@@ -487,10 +510,9 @@
 +      };
 +    }
 +
-+    puts "dlgPopup.setWidth(1020);";
 +    puts "translatePlaceholder();"
 +    puts "translatePage('#messagebox');"
-+    puts "dlgPopup.readaptSize();"
++    puts "showHelp(false);"
 +  }
 +  
 +}

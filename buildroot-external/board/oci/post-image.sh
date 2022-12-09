@@ -34,7 +34,7 @@ if ! docker save "raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION}" >"${BINARIES
 fi
 
 # cleanup temporarily built docker image
-if ! docker image rm --force $(docker images --filter=reference=raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION} -q); then
+if ! docker image rm --force "$(docker images --filter="reference=raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION}" -q)"; then
   exit 1
 fi
 

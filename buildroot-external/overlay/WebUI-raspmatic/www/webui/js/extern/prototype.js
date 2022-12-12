@@ -1712,6 +1712,7 @@ Ajax.Request = Class.create(Ajax.Base, {
   request: function(url) {
     /* - - - wernerf - show AjaxLoad image - - - */
     if (-1 == url.indexOf("UpdateUI"))
+    {
       if ("undefined" != typeof(ShowAjaxLoad)) { ShowAjaxLoad(); }
     }
     /* - - - wernerf - - - */

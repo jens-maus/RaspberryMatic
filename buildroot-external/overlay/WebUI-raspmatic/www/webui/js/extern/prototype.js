@@ -4,6 +4,11 @@
  *  Prototype is freely distributable under the terms of an MIT-style license.
  *  For details, see the Prototype web site: http://www.prototypejs.org/
  *
+ * Changes made by eQ-3 Entwicklung GmbH (wernerf ):
+ * - call ShowAjaxLoad at each AJAX request
+ * - call HideAjaxLoad at each successfull load of an AJAX request
+ * - changed default encoding to latin-1 (iso-8859-1)
+ *
  *--------------------------------------------------------------------------*/
 
 var Prototype = {
@@ -1682,7 +1687,7 @@ Ajax.Base = Class.create({
       method:       'post',
       asynchronous: true,
       contentType:  'application/x-www-form-urlencoded',
-      encoding:     'UTF-8',
+      encoding:     'iso-8859-1',
       parameters:   '',
       evalJSON:     true,
       evalJS:       true
@@ -1705,6 +1710,11 @@ Ajax.Request = Class.create(Ajax.Base, {
   },
 
   request: function(url) {
+    /* - - - wernerf - show AjaxLoad image - - - */
+    if (-1 == url.indexOf("UpdateUI"))
+      if ("undefined" != typeof(ShowAjaxLoad)) { ShowAjaxLoad(); }
+    }
+    /* - - - wernerf - - - */
     this.url = url;
     this.method = this.options.method;
     var params = Object.isString(this.options.parameters) ?
@@ -1790,6 +1800,9 @@ Ajax.Request = Class.create(Ajax.Base, {
   },
 
   success: function() {
+    /* - - - wernerf - hide AjaxLoad image - - - */
+    if ("undefined" != typeof(HideAjaxLoad)) { HideAjaxLoad(); }
+    /* - - - wernerf - - - */
     var status = this.getStatus();
     return !status || (status >= 200 && status < 300) || status == 304;
   },

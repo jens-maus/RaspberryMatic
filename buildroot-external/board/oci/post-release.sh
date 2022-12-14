@@ -20,5 +20,3 @@ rm -f "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.mf"
 
 # shellcheck disable=SC2129
 echo "$(stat -c %s "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tgz") $(cat "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tgz.sha256")" >>"./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.mf"
-
-exit $?

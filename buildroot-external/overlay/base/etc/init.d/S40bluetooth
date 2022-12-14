@@ -80,7 +80,7 @@ case $1 in
   ;;
 
   status)
-    echo "$DAEMON" "$DESC" && exit 0 || exit $?
+    echo "$DAEMON" "$DESC" && exit 0 || exit 1
   ;;
 
   *)

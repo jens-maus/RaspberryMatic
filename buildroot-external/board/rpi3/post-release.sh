@@ -45,5 +45,3 @@ rm -f "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.mf"
 echo "$(stat -c %s "./RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.img") $(cat "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.img.sha256")" >>"RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.mf"
 echo "$(stat -c %s "./RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.zip") $(cat "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.zip.sha256")" >>"RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.mf"
 echo "$(stat -c %s "./RaspberryMatic-${PRODUCT_VERSION}-ccu3.tgz") $(cat "RaspberryMatic-${PRODUCT_VERSION}-ccu3.tgz.sha256")" >>"RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.mf"
-
-exit $?

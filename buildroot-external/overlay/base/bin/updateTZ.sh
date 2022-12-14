@@ -54,6 +54,6 @@ fi
 if [[ "$(readlink /etc/config/localtime)" != "/usr/share/zoneinfo/${TZ}" ]] ||
    [[ "$(cat /etc/config/timezone 2>/dev/null)" != "${TZ}" ]]; then
   rm -f /etc/config/localtime
-  ln -s /usr/share/zoneinfo/${TZ} /etc/config/localtime
-  echo ${TZ} >/etc/config/timezone
+  ln -s "/usr/share/zoneinfo/${TZ}" /etc/config/localtime
+  echo "${TZ}" >/etc/config/timezone
 fi

@@ -40,7 +40,7 @@ fi
 # check if specified path is a directory or file
 if [[ -d "${BACKUPPATH}" ]]; then
   # a directory path was specified, lets construct the complete filepath
-  BACKUPDIR="$(realpath ${BACKUPPATH})"
+  BACKUPDIR="$(realpath "${BACKUPPATH}")"
   BACKUPFILE="$(hostname)-${VERSION}-$(date +%Y-%m-%d-%H%M).sbk"
 elif [[ "${BACKUPPATH:0:1}" != "." && "${BACKUPPATH:0:1}" != "/" ]]; then
   # a filename without path was specified, thus add it to default backup path
@@ -48,7 +48,7 @@ elif [[ "${BACKUPPATH:0:1}" != "." && "${BACKUPPATH:0:1}" != "/" ]]; then
 else
   # a file was specified with a directory path
   BACKUPDIR="$(realpath "$(dirname "${BACKUPPATH}")")"
-  BACKUPFILE="$(basename ${BACKUPPATH})"
+  BACKUPFILE="$(basename "${BACKUPPATH}")"
 fi
 
 # use the backupdir as base directory for creating

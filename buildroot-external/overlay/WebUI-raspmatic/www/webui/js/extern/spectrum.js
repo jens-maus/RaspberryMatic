@@ -124,9 +124,9 @@
                         "<input id='sp-input' class='sp-input hidden' type='text' spellcheck='false'  />",
 
                         "<table align='left'>",
-                          "<tr><td><div>${statusDisplayOptionRed}</div></td><td><input id='inputRed' class='sp-input' type='text' spellcheck='false' size='3' style='text-align: center'/></td></tr>",
-                          "<tr><td><div>${statusDisplayOptionGreen}</div></td><td><input id='inputGreen' class='sp-input' type='text' spellcheck='false' size='3' style='text-align: center'/></td></tr>",
-                          "<tr><td><div>${statusDisplayOptionBlue}</div></td><td><input id='inputBlue' class='sp-input' type='text' spellcheck='false' size='3' style='text-align: center'/></td></tr>",
+                          "<tr><td><div>${lblColorHSVValue}</div></td><td><input id='inputRed' class='sp-input' type='text' spellcheck='false' size='3' style='text-align: center'/></td></tr>",
+                          "<tr><td><div>${lblColorSaturation}</div></td><td><input id='inputGreen' class='sp-input' type='text' spellcheck='false' size='3' style='text-align: center'/></td></tr>",
+                          "<tr><td><div>${lblColorBrightness}</div></td><td><input id='inputBlue' class='sp-input' type='text' spellcheck='false' size='3' style='text-align: center'/></td></tr>",
                         "</table>",
 
                     "</div>",
@@ -426,7 +426,7 @@
 
 
             /* */
-            if (preferredFormat != "convert360To200") {
+            if (opts.preferredFormat != "convert360To200") {
               draggable(dragger, function (dragX, dragY, e) {
 
                 // shift+drag should snap the movement to either the x or y axis.
@@ -692,7 +692,7 @@
             callbacks.show(colorOnShow);
             boundElement.trigger('show.spectrum', [ colorOnShow ]);
 
-            if (preferredFormat == "convert360To200") {
+            if (opts.preferredFormat == "convert360To200") {
               container.find("#sp-sat").removeClass("sp-sat");
               container.find("#sp-val").removeClass("sp-val");
             }
@@ -809,7 +809,7 @@
 
               // AG
 
-              if (preferredFormat == "convert360To200") {
+              if (opts.preferredFormat == "convert360To200") {
                 dragger.css("background-color", previewElement.css("background-color"));
               } else {
                 dragger.css("background-color", flatColor.toHexString());
@@ -843,7 +843,7 @@
                 // Update the replaced elements background color (with actual selected color)
                 if (rgbaSupport || realColor.alpha === 1) {
                     previewElement.css("background-color", realRgb);
-                    if (preferredFormat == "convert360To200") {
+                    if (opts.preferredFormat == "convert360To200") {
                       dragger.css("background-color", previewElement.css("background-color"));
                     }
                 }
@@ -909,7 +909,7 @@
                 alphaSlideHelper.show();
                 slideHelper.show();
 
-                if (preferredFormat == "convert360To200") {
+                if (opts.preferredFormat == "convert360To200") {
                   dragHelper.hide();
                 } else {
                   dragHelper.show();
@@ -967,7 +967,7 @@
 
         function convertWhiteValue(displayColor) {
           var result = displayColor;
-          if ((preferredFormat == "convert360To200") && (currentHue == 0) && (currentSaturation == 0) && (currentValue == 1)) {
+          if ((opts.preferredFormat == "convert360To200") && (currentHue == 0) && (currentSaturation == 0) && (currentValue == 1)) {
             result = 200;
           }
           return result;

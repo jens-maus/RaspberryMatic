@@ -1,8 +1,9 @@
 jQuery.extend(true,langJSON, {
-  "de" : {
+  "en" : {
 
     "lbl24Average" : "24h Average",
     "lblAccessPointSettings1" : "Administration of Homematic IP Access Points",
+    "lblAccessPointError" : "The use of a HmIPW-DRAP or HmIP-HAP access point requires the use of a RPI-RF-MOD/HmIP-CCU3, HmIP-RFUSB or compatible rf module.",
     "lblActualFirmwareVersion": "(Current firmware version)",
     "lblAcusticalSignal" :  "Audible signal",
     "lblAlarmDuration" : "Alarm duration",
@@ -146,6 +147,7 @@ jQuery.extend(true,langJSON, {
     "lblMinOnTime" : "Minimum switch-on time",
     "lblMinutes" : "minutes",
     "lblMode" : "Mode",
+    "lblOperatingMode" : "Operating mode",
     "lblMountingOrientation" : "Display orientation",
     "lblNewDeviceFirmwareAvailable" : "New device firmware available",
     "lblNewFunction": "new function",
@@ -214,7 +216,7 @@ jQuery.extend(true,langJSON, {
     "lblSecuritySettings2" : "Custom",
     "lblSeeQRCodeSticker" : "(see QR code sticker)",
     "lblSeeServiceMessage": "See service message!",
-    "lblSelectLanguage": "Language:",
+    "lblSelectLanguage" : "Language:",
     "lblSelectTargetChannels" : "Select<br /> target channels",
     "lblSelectTargetUser" : "Select<br /> user",
     "lblSetConfig" : "Save configuration",
@@ -279,7 +281,25 @@ jQuery.extend(true,langJSON, {
     "lblYellowShort" : "Yellow short",
     "lblYes" : "Yes",
     "lblYesterday" : "Yesterday",
-    "lblAccessPointError" : "The use of a HmIPW-DRAP or HmIP-HAP access point requires the use of a RPI-RF-MOD/HmIP-CCU3, HmIP-RFUSB or compatible rf module.",
+
+    "comment" : "Relase C/2022",
+    "lblPowerUpOnLevel" : "Switch-on level",
+    "lblPowerUpOnColorTemperature" : "Colour temperature",
+    "lblPowerUpOFFColorTemperature" : "Colour temperature",
+    "lblPowerUpOnSaturation" : "Colour saturation (saturation)",
+    "lblPowerUpOnHue" : "Colour shade (hue)",
+    "lblPowerUpOffHue" : "Colour shade (hue)",
+    "lblHardwareColorTemperatureColdWhite" : "Colour temperature cold white",
+    "lblHardwareColorTemperatureWarmWhite" : "Colour temperature warm white",
+    "lblLimitationFactorR" : "not in use en* LIMITATION_FACTOR_R",
+    "lblLimitationFactorG" : "not in use en* LIMITATION_FACTOR_B",
+    "lblLimitationFactorB" : "not in use en* LIMITATION_FACTOR_G",
+    "lblWhiteValueR" : "not in use en* WHITE_VALUE_R",
+    "lblWhiteValueG" : "not in use en* WHITE_VALUE_G",
+    "lblWhiteValueB" : "not in use en* WHITE_VALUE_B",
+
+    "lblDimmerOnMinLevel" : "Minimum level<br/>in status ON",
+
     "noMOreKeys" : ""
   }
 });

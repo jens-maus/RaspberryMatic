@@ -54,7 +54,7 @@ identify_rf_hardware() {
     # also set tty device to low_latency mode (if possible)
     if [[ -n "${RF_DEVNODES}" ]]; then
       echo -n "."
-      /bin/setserial /dev/${RF_DEVNODES} low_latency >/dev/null 2>&1
+      /bin/setserial "/dev/${RF_DEVNODES}" low_latency >/dev/null 2>&1
     fi
   fi
 
@@ -219,7 +219,7 @@ query_rf_parameters() {
     # rebind the gpio-leds so that numeration of the rpi-rf-mod leds are correct
     if [[ -n "${GPIO_LEDS}" ]] &&
        [[ ! -e /sys/bus/platform/drivers/leds-gpio/${GPIO_LEDS} ]]; then
-      echo ${GPIO_LEDS} >/sys/bus/platform/drivers/leds-gpio/bind 2>/dev/null
+      echo "${GPIO_LEDS}" >/sys/bus/platform/drivers/leds-gpio/bind 2>/dev/null
     fi
 
     # setup the LEDs to show a slowly blinking magenta light

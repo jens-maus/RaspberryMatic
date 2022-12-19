@@ -1,4 +1,4 @@
-# qs <sup>[![Version Badge][2]][1]</sup>
+# qs <sup>[![Version Badge][npm-version-svg]][package-url]</sup>
 
 [![github actions][actions-image]][actions-url]
 [![coverage][codecov-image]][codecov-url]
@@ -401,6 +401,8 @@ qs.stringify({ a: ['b', 'c'] }, { arrayFormat: 'repeat' })
 qs.stringify({ a: ['b', 'c'] }, { arrayFormat: 'comma' })
 // 'a=b,c'
 ```
+
+Note: when using `arrayFormat` set to `'comma'`, you can also pass the `commaRoundTrip` option set to `true` or `false`, to append `[]` on single-item arrays, so that they can round trip through a parse.
 
 When objects are stringified, by default they use bracket notation:
 

@@ -1,11 +1,12 @@
 --- occu/WebUI/www/rega/esp/controls/heating_control.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/heating_control.fn
-@@ -4,11 +4,17 @@
+@@ -4,11 +4,19 @@
    real rMin = 4.5;
    real rMax = 30.5;
    string sUnit = "&deg;<i>C</i>";
 +  string bUnit = "V";
 +  string vUnit = "%";
++  string hUnit = "%";
    integer iReadOnlyState = 0;
  
    object oControlMode = cObj.DPByControl("HEATING_CONTROL.CONTROL_MODE");
@@ -14,11 +15,12 @@
 +
 +  object oBatteryState = cObj.DPByHssDP("BATTERY_STATE");
 +  object oValveState = cObj.DPByHssDP("VALVE_STATE");  
++  object oHumidity = cObj.DPByHssDP("ACTUAL_HUMIDITY");                                                
 +
    object oModeAuto = cObj.DPByControl("HEATING_CONTROL.AUTO");
    object oModeManu = cObj.DPByControl("HEATING_CONTROL.MANU");
    object oModeBoost = cObj.DPByControl("HEATING_CONTROL.BOOST");
-@@ -28,12 +34,6 @@
+@@ -28,12 +36,6 @@
  
    ! WriteLine(' <script>conInfo("oControlMode: '#oControlMode.Value()#'");</script> ');
  
@@ -31,7 +33,7 @@
    if( oLevel )
    {
      iLvlDpId = oLevel.ID();
-@@ -47,13 +47,14 @@
+@@ -47,13 +49,14 @@
      ! rMax = oLevel.MetaData("MAX").ToFloat();
    }
    string sReadOnly = "";
@@ -47,10 +49,23 @@
    }
  
    WriteLine("<tr>");
-@@ -67,6 +68,34 @@
-       !WriteLine("<div class='ControlBtnInfo _CLASS02550' style='line-height:15px; min-width:200px' id='"#chnId#"actualTemp' ><span>${stringTableWeatherTemperature}</span><span id='actTemp'"#sUnit#"></span></div>");
+@@ -68,6 +71,48 @@
      WriteLine("</td>");
    WriteLine("</tr>");
+ 
++  if ( oHumidity )                                                                                                                                                                                                           
++  {                                                                                                                                                                                                                          
++   WriteLine("<tr>");                                                                                                                                                                                                        
++     WriteLine("<td>");                                                                                                                                                                                                      
++       WriteLine("<table id='"#chnId#"tblShowHumidity' class='ControlBtnInfo hidden' style='width:200px"#cssDisplay#"'>");                                                                                                   
++         WriteLine("<tr>");                                                                                                                                                                                                  
++           WriteLine("<td>${stringTableWeatherHumidity}</td>");                                                                                                                                                              
++           WriteLine("<td><span id='"#chnId#"actHumidity'></span><span>&nbsp;<b>"#hUnit#"</b></span></td>");                                                                                                                 
++        WriteLine("</tr>");                                                                                                                                                                                                  
++       WriteLine("</table>");                                                                                                                                                                                                
++     WriteLine("</td>");                                                                                                                                                                                                     
++   WriteLine("</tr>");                                                                                                                                                                                                       
++  }
 + 
 +  if ( oBatteryState )
 +  { 
@@ -79,14 +94,21 @@
 +     WriteLine("</td>");
 +   WriteLine("</tr>");
 +  }
- 
++
    WriteLine("<tr>");
      WriteLine("<td colspan='1' id='slidCtrl"#cObj.ID()#"' class='CLASS02529'></td>");
-@@ -179,6 +208,18 @@
+     WriteLine("<td class='CLASS02529'>");
+@@ -179,6 +224,24 @@
        WriteLine("opts.stTemp = "#oTemperature.Value()#";");
        WriteLine("opts.stUnit = '"#sUnit#"';");
      }
 +    
++    if (oHumidity)                                                                                                                                                                                                           
++    {                                                                                                                                                                                                                        
++      WriteLine("opts.stHum = "#oHumidity.Value()#";");                                                                                                                                                                      
++      WriteLine("opts.sthUnit = '"#hUnit#"';");                                                                                                                                                                              
++    } 
++
 +    if (oBatteryState)
 +    {
 +      WriteLine("opts.stBat = "#oBatteryState.Value()#";");
@@ -101,7 +123,7 @@
  
      WriteLine("its"#chnId#" = new iseThermostat_2ndGen("#chnId#", "#rState#", "#iLvlDpId#", "#rMin#", "#rMax#", " #system.GetVar("iReadOnlyState")#", "#system.GetVar('bSliderFlag')#", opts);");
    WriteLine("</script>");
-@@ -203,6 +244,8 @@
+@@ -203,6 +266,8 @@
  
    string tUnit = "&deg;<i>C</i>";
    string hUnit = "&#37;";
@@ -110,7 +132,7 @@
    real rState = 0;
  
    object oTemperature = cObj.DPByControl("HEATING_CONTROL_HMIP.TEMPERATURE");
-@@ -210,6 +253,12 @@
+@@ -210,6 +275,12 @@
    object oWindowState = cObj.DPByControl("HEATING_CONTROL_HMIP.WINDOW_STATE");
    object oLevel = cObj.DPByControl("HEATING_CONTROL_HMIP.LEVEL");
  
@@ -123,7 +145,7 @@
    object oActiveProfile = cObj.DPByControl("HEATING_CONTROL_HMIP.ACTIVE_PROFILE");
    object oHumidity = cObj.DPByControl("HEATING_CONTROL_HMIP.HUMIDITY");
    object oSetPointMode = cObj.DPByControl("HEATING_CONTROL_HMIP.SETPOINT_MODE");
-@@ -223,11 +272,6 @@
+@@ -223,11 +294,6 @@
    string sReadOnly = "";
    rState = oSetPoint.Value();
  
@@ -135,7 +157,7 @@
    WriteLine("<tr>");
      WriteLine("<td id='"#chnId#"tdACTUAL_TEMPERATURE'>");
        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
-@@ -262,13 +306,25 @@
+@@ -262,13 +328,25 @@
        WriteLine("</table>");
      WriteLine("</td>");
  
@@ -144,8 +166,10 @@
 -       WriteLine("<td id='"#chnId#"tdLEVEL' >");
 +    if (oValveLevel) {
 +      WriteLine("<td id='"#chnId#"tdLEVEL'>");
-+        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
-+          WriteLine("<tr>");
+         WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+           WriteLine("<tr>");
+-            WriteLine("<td  >${diagramValueTypeLEVEL}: </td>");
+-            WriteLine("<td><span>"#level.ToString(0)#" %</span></td>");
 +            WriteLine("<td id='"#chnId#"LEVEL'>${stringTableHeatingLevel}</td>");
 +            WriteLine("<td><span id='"#chnId#"valLEVEL'></span><span><b>"#vUnit#"</b></span></td>");
 +          WriteLine("</tr>");
@@ -157,16 +181,14 @@
 +  WriteLine("<tr>");
 +    if (oBatteryState) {
 +      WriteLine("<td id='"#chnId#"tdBATTERY_STATE'>");
-         WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
-           WriteLine("<tr>");
--            WriteLine("<td  >${diagramValueTypeLEVEL}: </td>");
--            WriteLine("<td><span>"#level.ToString(0)#" %</span></td>");
++        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
++          WriteLine("<tr>");
 +            WriteLine("<td>${stringTableClimateControlRTTransceiverBatteryState}</td>");
 +            WriteLine("<td><span id='"#chnId#"valBATTERY_STATE'></span><span><b>"#bUnit#"</b></span></td>");
            WriteLine("</tr>");
          WriteLine("</table>");
        WriteLine("</td>");
-@@ -416,6 +472,14 @@
+@@ -416,6 +494,14 @@
        WriteLine("opts.humidityID = '"#oHumidity.ID()#"';");
        WriteLine("opts.HUMIDITY = '"#oHumidity.Value()#"';");
      }
@@ -183,10 +205,13 @@
        WriteLine("opts.WINDOW_STATE = '"#oWindowState.Value()#"';");
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -25374,6 +25374,12 @@
+@@ -25374,6 +25374,15 @@
      if (this.opts.stTemp) {
        this.showActualTemp();
      }
++    if (this.opts.stHum) {                                            
++      this.showActualHumidity();                                      
++    }
 +    if (this.opts.stBat) {
 +      this.showActualBat();
 +    }
@@ -196,10 +221,15 @@
      if (this.opts.idComfort && this.opts.idLowering) {
        this.showComfortEco();
      }
-@@ -25565,6 +25571,16 @@
+@@ -25565,6 +25574,21 @@
      jQuery("#"+this.id +"tblShowTemp").show();
    },
  
++  showActualHumidity: function() {                                    
++    jQuery("#"+this.id +"actHumidity").text(this.opts.stHum);         
++    jQuery("#"+this.id +"tblShowHumidity").show();                    
++  }, 
++
 +  showActualBat: function() {
 +    jQuery("#"+this.id +"actBatteryState").text(this.opts.stBat);
 +    jQuery("#"+this.id +"tblShowBatteryState").show();
@@ -213,7 +243,7 @@
    showHolidayEndTime: function() {
      var stopTime = this.getHolidayEndTime();
      if (stopTime) {
-@@ -25667,6 +25683,8 @@
+@@ -25667,6 +25691,8 @@
        self.setSControl("ACTUAL_TEMPERATURE", self.ACTUAL_TEMPERATURE);
        self.setSControl("HUMIDITY", self.HUMIDITY);
        self.setSControl("WINDOW_STATE", self.WINDOW_STATE);
@@ -222,7 +252,7 @@
        self.setSlider();
        self.initElements();
        self.bindEvents();
-@@ -25681,6 +25699,8 @@
+@@ -25681,6 +25707,8 @@
      this.BOOST_MODE = (this.checkBool(opts.BOOST_MODE, false) == "true") ? true : false;
      //this.FROST_PROTECTION = opts.FROST_PROTECTION;
      this.HUMIDITY = this.checkValue(opts.HUMIDITY, this.unknownState);

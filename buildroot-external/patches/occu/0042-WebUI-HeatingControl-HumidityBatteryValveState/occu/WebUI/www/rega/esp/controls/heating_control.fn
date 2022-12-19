@@ -6,6 +6,7 @@ function ::CreateHeatingControl() {
   string sUnit = "&deg;<i>C</i>";
   string bUnit = "V";
   string vUnit = "%";
+  string hUnit = "%";
   integer iReadOnlyState = 0;
 
   object oControlMode = cObj.DPByControl("HEATING_CONTROL.CONTROL_MODE");
@@ -14,6 +15,7 @@ function ::CreateHeatingControl() {
 
   object oBatteryState = cObj.DPByHssDP("BATTERY_STATE");
   object oValveState = cObj.DPByHssDP("VALVE_STATE");  
+  object oHumidity = cObj.DPByHssDP("ACTUAL_HUMIDITY");                                                
 
   object oModeAuto = cObj.DPByControl("HEATING_CONTROL.AUTO");
   object oModeManu = cObj.DPByControl("HEATING_CONTROL.MANU");
@@ -68,6 +70,20 @@ function ::CreateHeatingControl() {
       !WriteLine("<div class='ControlBtnInfo _CLASS02550' style='line-height:15px; min-width:200px' id='"#chnId#"actualTemp' ><span>${stringTableWeatherTemperature}</span><span id='actTemp'"#sUnit#"></span></div>");
     WriteLine("</td>");
   WriteLine("</tr>");
+
+  if ( oHumidity )                                                                                                                                                                                                           
+  {                                                                                                                                                                                                                          
+   WriteLine("<tr>");                                                                                                                                                                                                        
+     WriteLine("<td>");                                                                                                                                                                                                      
+       WriteLine("<table id='"#chnId#"tblShowHumidity' class='ControlBtnInfo hidden' style='width:200px"#cssDisplay#"'>");                                                                                                   
+         WriteLine("<tr>");                                                                                                                                                                                                  
+           WriteLine("<td>${stringTableWeatherHumidity}</td>");                                                                                                                                                              
+           WriteLine("<td><span id='"#chnId#"actHumidity'></span><span>&nbsp;<b>"#hUnit#"</b></span></td>");                                                                                                                 
+        WriteLine("</tr>");                                                                                                                                                                                                  
+       WriteLine("</table>");                                                                                                                                                                                                
+     WriteLine("</td>");                                                                                                                                                                                                     
+   WriteLine("</tr>");                                                                                                                                                                                                       
+  }
  
   if ( oBatteryState )
   { 
@@ -209,6 +225,12 @@ function ::CreateHeatingControl() {
       WriteLine("opts.stUnit = '"#sUnit#"';");
     }
     
+    if (oHumidity)                                                                                                                                                                                                           
+    {                                                                                                                                                                                                                        
+      WriteLine("opts.stHum = "#oHumidity.Value()#";");                                                                                                                                                                      
+      WriteLine("opts.sthUnit = '"#hUnit#"';");                                                                                                                                                                              
+    } 
+
     if (oBatteryState)
     {
       WriteLine("opts.stBat = "#oBatteryState.Value()#";");

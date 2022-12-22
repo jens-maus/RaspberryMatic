@@ -377,9 +377,15 @@ proc action_backup_restore_check {} {
   http_head
   set i 0
   if { [catch {
+    exec find /usr/local/tmp -maxdepth 1 -type f -not ( -name new_config.tar -or -name .nobackup ) -delete
     exec tar --warning=no-timestamp --no-same-owner -xf /usr/local/tmp/new_config.tar 2>/dev/null
     file delete -force /usr/local/tmp/new_config.tar
-  
+
+  # check archive consistency if there is a signature.sha256
+  if { [file exists /usr/local/tmp/signature.sha256] } {
+    exec sha256sum -s -c signature.sha256
+  }
+
   set config_version [read_version "firmware_version"]
   set ccu1_backup false
   if { [version_compare $config_version 2.0.0] < 0 } {

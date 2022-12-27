@@ -13669,7 +13669,7 @@ ChannelConfigDialog = Singleton.create({
           poststr += "&iface=HmIP-RF";
           poststr += "&sender_address="+addr;
           poststr += "&receiver_address=CENTRAL_DEVICE:63" ;
-          SendRequest('ic_ifacecmd.cgi');
+          SendPOSTRequest('ic_ifacecmd.cgi');
         } else if (channeltype === "KEY") {
           homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": addr, "valueId": "PRESS_SHORT", "refCounter":"0"});  
           homematic("Interface.reportValueUsage", {"interface": "BidCos-RF", "address": addr, "valueId": "PRESS_LONG", "refCounter":"0"});  

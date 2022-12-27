@@ -14,7 +14,8 @@ if { $args(hostname) != "" } then {
   set ip [exec /sbin/ip -4 route get 1 | head -1 | cut -d\  -f8]
 
   # Zertifikat erzeugen
-  exec /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
+  exec /usr/bin/openssl req -new -x509 -nodes -newkey ec:<(openssl ecparam -name secp384r1) \
+                                              -keyout /etc/config/server.pem \
                                               -out /etc/config/server.pem \
                                               -days 3650 \
                                               -addext "subjectAltName = DNS:$args(hostname),IP:$ip" \

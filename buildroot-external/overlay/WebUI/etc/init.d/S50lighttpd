@@ -21,7 +21,8 @@ start() {
     [[ -f /etc/config/server.pem ]] && mv -f /etc/config/server.pem "/etc/config/server.pem_$(date +%Y%m%d)"
     echo -n "creating new SSL cert... "
     IP=$(ip -4 route get 1 | head -1 | cut -d' ' -f8 | tr -d '\n')
-    /usr/bin/openssl req -new -x509 -nodes -keyout /etc/config/server.pem \
+    /usr/bin/openssl req -new -x509 -nodes -newkey ec:<(openssl ecparam -name secp384r1) \
+                                           -keyout /etc/config/server.pem \
                                            -out /etc/config/server.pem \
                                            -days 3650 \
                                            -addext "subjectAltName = DNS:$(hostname),IP:${IP}" \

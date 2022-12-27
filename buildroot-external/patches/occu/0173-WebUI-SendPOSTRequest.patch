@@ -1,0 +1,185 @@
+--- occu/WebUI/www/config/ic_common.tcl.orig
++++ occu/WebUI/www/config/ic_common.tcl
+@@ -583,11 +583,10 @@
+ 
+ #cgi_debug -on
+ 
+-  global env
++  global env _cgi _cgi_uservar
+   upvar $pPROFILE PROFILE_TMP
+ 
+-  set params [split [cgi_unquote_input $env(QUERY_STRING)] &]
+-
++  set params $_cgi(uservars)
+ 
+   #Parametername eines evtl. Subsets auf den URL-Parametern generieren. z.B. subset_4_1
+   set i 1
+@@ -595,7 +594,10 @@
+ 
+   foreach p $params {
+ 
+-    if { [regexp {^(.*)=(.*)$} $p dummy name value] } then {
++    set name $p
++    set value $_cgi_uservar($name)
++
++    if { $name != "" } then {
+ 
+       if { [lsearch -exact $IGNORE_PARAMS $name] >= 0} then {
+ 
+@@ -1128,7 +1130,7 @@
+     set idval "separate_${pnr}_$j"
+ 
+     if { ! ($operations & 3) } then { continue }
+-    if {    $operations & 1  } then { set value $ps($param_id) }
++    if {    $operations & 1  } then { set value [cgi_quote_html $ps($param_id)] }
+     if {    $operations & 2  } then { set access "" } else { set access "disabled=\"disabled\"" }
+         
+     append s "<tr>"
+--- occu/WebUI/www/config/ic_ifacecmd.cgi.orig
++++ occu/WebUI/www/config/ic_ifacecmd.cgi
+@@ -639,6 +639,7 @@
+   set ps_type ""
+   set paramid ""
+   set pnr     ""
++  set new_profilepath ""
+   set HmIPIdentifier "HmIP-RF"
+   set HmIPWiredIdentifier "HmIP-Wired"
+ 
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -40840,6 +40840,27 @@
+   new Ajax.Updater(id, scriptname, opt);
+ };
+ 
++SendPOSTRequest = function(scriptname, html_container_id, callback)
++{
++  scriptname = Get_ReGa_Path(scriptname);
++  var params = poststr;
++
++  if ((html_container_id) && (html_container_id !== "")) { id = html_container_id; }
++  else                                                   { id = Get_UI_CONTENTBOX_ID(); }
++
++  var _callback_ = callback; 
++  
++  var opt =
++  {
++    method:'post',
++    parameters:params,
++    evalScripts:true,
++    onComplete: function() { if (_callback_) { _callback_(); } }
++  };
++
++  new Ajax.Updater(id, scriptname + '?sid=' + document.getElementById('global_sid').value, opt);
++};
++
+ ShowLoadingBox = function(msg)
+ {
+   
+@@ -41134,7 +41155,7 @@
+   poststr += "&devname=" + devname;
+   poststr += "&devtype=" + devtype;
+ 
+-  SendRequest('ic_ifacecmd.cgi');
++  SendPOSTRequest('ic_ifacecmd.cgi');
+ 
+   ProgressBar = new ProgressBarMsgBox("Verknüpfungen und Programme werden abgefragt...", 1);
+   ProgressBar.show();
+@@ -41385,7 +41406,7 @@
+       if ((redirect_url) && (redirect_url !== "")) { poststr += "&redirect_url=" + redirect_url; }
+       else                                         { poststr += "&redirect_url=IC_LINKPEERLIST"; }
+ 
+-      SendRequest('ic_ifacecmd.cgi');
++      SendPOSTRequest('ic_ifacecmd.cgi');
+     }
+   }, "html");
+ };
+@@ -41454,7 +41475,7 @@
+   poststr += "&receiver_address=" +receiver_address;
+   poststr += "&cmd=ShowConfigPendingMsg";
+ 
+-  SendRequest('ic_ifacecmd.cgi');
++  SendPOSTRequest('ic_ifacecmd.cgi');
+ };
+ 
+ 
+@@ -41647,7 +41668,7 @@
+   poststr += "&param_id="          + param_id;
+   poststr += "&html_inputelem_id=" + html_inputelem_id;
+ 
+-  SendRequest('ic_ifacecmd.cgi');
++  SendPOSTRequest('ic_ifacecmd.cgi');
+ 
+   //ProgressBar = new ProgressBarMsgBox("Parameter wird festgesetzt...", 1);
+   ProgressBar = new ProgressBarMsgBox(translateKey("dialogDetermineParameterTitle"), 1);
+@@ -43161,7 +43182,7 @@
+   ProgressBar.show();
+     ProgressBar.StartKnightRiderLight();
+ 
+-  SendRequest('ic_ifacecmd.cgi');
++  SendPOSTRequest('ic_ifacecmd.cgi');
+ };
+ 
+ ShowNewLinkSummary = function(iface, sender_address, receiver_address, name, description, group_name, group_description)
+@@ -43503,7 +43524,7 @@
+   poststr += "&receiver_address=" + receiver_address;
+   poststr += "&cmd=activateLinkParamset";
+ 
+-  SendRequest('ic_ifacecmd.cgi');
++  SendPOSTRequest('ic_ifacecmd.cgi');
+ };
+ 
+ SetLinkInfo = function (iface, sender_address, receiver_address, name, description) {
+@@ -43518,7 +43539,7 @@
+   poststr += "&description=" + elv_toQueryString(description);
+   poststr += "&cmd=setLinkInfo";
+ 
+-  SendRequest('ic_ifacecmd.cgi');
++  SendPOSTRequest('ic_ifacecmd.cgi');
+ };
+ 
+ 
+@@ -43554,7 +43575,7 @@
+     }
+     poststr += "&new_profilepath=" + is_newProfile(paramid).split('-')[0] + fileExtension;
+   }
+-  SendRequest('ic_ifacecmd.cgi');
++  SendPOSTRequest('ic_ifacecmd.cgi');
+ };
+ 
+ CollectData_SaveProfileSettings = function (reload) {
+@@ -43992,7 +44013,7 @@
+     poststr += "&iface=" + $F('global_iface');
+     poststr += "&address=" + $F('global_address');
+     poststr += "&cmd=firmware_update";
+-    SendRequest('ic_ifacecmd.cgi');
++    SendPOSTRequest('ic_ifacecmd.cgi');
+     ProgressBar = new ProgressBarMsgBox(translateKey("performingFirmwareUpdate"), 1);
+     ProgressBar.show();
+     ProgressBar.StartKnightRiderLight();
+@@ -44282,7 +44303,7 @@
+     if (channel) { device = channel.device; }
+   }
+   */
+-  SendRequest('ic_ifacecmd.cgi', null, function() {
++  SendPOSTRequest('ic_ifacecmd.cgi', null, function() {
+     if (device)
+     {
+       DeviceList.beginUpdateDevice(device.id);
+@@ -44301,7 +44322,7 @@
+   poststr += "&receiver=" + receiver;
+   poststr += "&longKeyPress=" + simLongKeyPress;
+   poststr += "&cmd=SendInternalKeyPress";
+-  SendRequest('ic_ifacecmd.cgi');
++  SendPOSTRequest('ic_ifacecmd.cgi');
+ };
+ 
+ SetInternalKey = function(iface, address, special_input_id, peerAddress)
+@@ -44330,7 +44351,7 @@
+   AddSeparateSettings('subset_'   + special_input_id + '_', pnr);
+   
+   //alert(poststr);
+-  SendRequest('ic_ifacecmd.cgi');
++  SendPOSTRequest('ic_ifacecmd.cgi');
+ };
+ 
+ ShowInternalKeyProfile = function(selectelem, channel, counter)

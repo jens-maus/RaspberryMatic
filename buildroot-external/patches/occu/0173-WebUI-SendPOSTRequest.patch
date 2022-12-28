@@ -47,7 +47,36 @@
  
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -40840,6 +40840,27 @@
+@@ -27271,10 +27271,10 @@
+     var opts;
+     if (file.substring(0, UI_PATH.length) == UI_PATH)
+     {
+-      //method: 'get' ist für die ELV-CGIs notwendig.
+       opts = {
+         evalScripts: true,
+-        method: 'get',
++        method: 'post',
++        parameters:argsForUrl,
+         onComplete:function(){
+           iseRefr(true);
+           bUpdateContentRunning=false;
+@@ -27289,6 +27289,7 @@
+       opts = {
+         postBody: ReGa.encode(pb),
+         evalScripts: true,
++        parameters:argsForUrl,
+         onComplete:function(){
+           iseRefr(true);
+           bUpdateContentRunning=false;
+@@ -27301,7 +27302,6 @@
+     /* ELV --> */
+     
+     var url = file + "?sid=" + SessionId;
+-    if (argsForUrl){ url += argsForUrl; }
+     
+     //console.info( "updateContent with "+pb );
+     
+@@ -36964,6 +36964,27 @@
    new Ajax.Updater(id, scriptname, opt);
  };
  
@@ -75,7 +104,7 @@
  ShowLoadingBox = function(msg)
  {
    
-@@ -41134,7 +41155,7 @@
+@@ -37258,7 +37279,7 @@
    poststr += "&devname=" + devname;
    poststr += "&devtype=" + devtype;
  
@@ -84,7 +113,7 @@
  
    ProgressBar = new ProgressBarMsgBox("Verknüpfungen und Programme werden abgefragt...", 1);
    ProgressBar.show();
-@@ -41385,7 +41406,7 @@
+@@ -37509,7 +37530,7 @@
        if ((redirect_url) && (redirect_url !== "")) { poststr += "&redirect_url=" + redirect_url; }
        else                                         { poststr += "&redirect_url=IC_LINKPEERLIST"; }
  
@@ -93,7 +122,7 @@
      }
    }, "html");
  };
-@@ -41454,7 +41475,7 @@
+@@ -37578,7 +37599,7 @@
    poststr += "&receiver_address=" +receiver_address;
    poststr += "&cmd=ShowConfigPendingMsg";
  
@@ -102,7 +131,7 @@
  };
  
  
-@@ -41647,7 +41668,7 @@
+@@ -37771,7 +37792,7 @@
    poststr += "&param_id="          + param_id;
    poststr += "&html_inputelem_id=" + html_inputelem_id;
  
@@ -111,7 +140,7 @@
  
    //ProgressBar = new ProgressBarMsgBox("Parameter wird festgesetzt...", 1);
    ProgressBar = new ProgressBarMsgBox(translateKey("dialogDetermineParameterTitle"), 1);
-@@ -43161,7 +43182,7 @@
+@@ -39256,7 +39277,7 @@
    ProgressBar.show();
      ProgressBar.StartKnightRiderLight();
  
@@ -120,7 +149,7 @@
  };
  
  ShowNewLinkSummary = function(iface, sender_address, receiver_address, name, description, group_name, group_description)
-@@ -43503,7 +43524,7 @@
+@@ -39571,7 +39592,7 @@
    poststr += "&receiver_address=" + receiver_address;
    poststr += "&cmd=activateLinkParamset";
  
@@ -129,7 +158,7 @@
  };
  
  SetLinkInfo = function (iface, sender_address, receiver_address, name, description) {
-@@ -43518,7 +43539,7 @@
+@@ -39586,7 +39607,7 @@
    poststr += "&description=" + elv_toQueryString(description);
    poststr += "&cmd=setLinkInfo";
  
@@ -138,7 +167,7 @@
  };
  
  
-@@ -43554,7 +43575,7 @@
+@@ -39622,7 +39643,7 @@
      }
      poststr += "&new_profilepath=" + is_newProfile(paramid).split('-')[0] + fileExtension;
    }
@@ -147,7 +176,7 @@
  };
  
  CollectData_SaveProfileSettings = function (reload) {
-@@ -43992,7 +44013,7 @@
+@@ -40060,7 +40081,7 @@
      poststr += "&iface=" + $F('global_iface');
      poststr += "&address=" + $F('global_address');
      poststr += "&cmd=firmware_update";
@@ -156,7 +185,7 @@
      ProgressBar = new ProgressBarMsgBox(translateKey("performingFirmwareUpdate"), 1);
      ProgressBar.show();
      ProgressBar.StartKnightRiderLight();
-@@ -44282,7 +44303,7 @@
+@@ -40351,7 +40372,7 @@
      if (channel) { device = channel.device; }
    }
    */
@@ -165,7 +194,7 @@
      if (device)
      {
        DeviceList.beginUpdateDevice(device.id);
-@@ -44301,7 +44322,7 @@
+@@ -40370,7 +40391,7 @@
    poststr += "&receiver=" + receiver;
    poststr += "&longKeyPress=" + simLongKeyPress;
    poststr += "&cmd=SendInternalKeyPress";
@@ -174,7 +203,7 @@
  };
  
  SetInternalKey = function(iface, address, special_input_id, peerAddress)
-@@ -44330,7 +44351,7 @@
+@@ -40399,7 +40420,7 @@
    AddSeparateSettings('subset_'   + special_input_id + '_', pnr);
    
    //alert(poststr);

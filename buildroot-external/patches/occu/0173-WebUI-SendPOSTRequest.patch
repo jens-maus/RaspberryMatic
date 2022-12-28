@@ -1,6 +1,6 @@
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
-@@ -583,11 +583,10 @@
+@@ -581,11 +581,10 @@
  
  #cgi_debug -on
  
@@ -14,7 +14,7 @@
  
    #Parametername eines evtl. Subsets auf den URL-Parametern generieren. z.B. subset_4_1
    set i 1
-@@ -595,7 +594,10 @@
+@@ -593,7 +592,10 @@
  
    foreach p $params {
  
@@ -26,7 +26,16 @@
  
        if { [lsearch -exact $IGNORE_PARAMS $name] >= 0} then {
  
-@@ -1128,7 +1130,7 @@
+@@ -646,7 +648,7 @@
+ 
+   global HTMLTITLE env
+ 
+-  set IGNORE_PARAMS {address cmd iface paramid peer pnr ps_id ps_type sid SUBSET_OPTION_VALUE NAME}
++  set IGNORE_PARAMS {address cmd iface paramid peer pnr ps_id ps_type sid SUBSET_OPTION_VALUE NAME _}
+ 
+   if { $profile != "" } then {
+     
+@@ -1122,7 +1124,7 @@
      set idval "separate_${pnr}_$j"
  
      if { ! ($operations & 3) } then { continue }
@@ -45,6 +54,17 @@
    set HmIPIdentifier "HmIP-RF"
    set HmIPWiredIdentifier "HmIP-Wired"
  
+--- occu/WebUI/www/config/ic_neweasymode.cgi.orig
++++ occu/WebUI/www/config/ic_neweasymode.cgi
+@@ -13,7 +13,7 @@
+ 
+   global env base_pnr
+ 
+-  set IGNORE_PARAMS {EasyModeName base_pnr cmd ps_id ps_ids sensor actor}
++  set IGNORE_PARAMS {EasyModeName base_pnr cmd ps_id ps_ids sensor actor _}
+ 
+   upvar $pBASEPROFILE BASEPROFILE
+   upvar $pNEWPROFILE  PROFILE_TMP
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -27271,10 +27271,10 @@

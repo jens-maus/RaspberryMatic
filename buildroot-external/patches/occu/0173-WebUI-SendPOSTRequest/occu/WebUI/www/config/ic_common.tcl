@@ -473,7 +473,6 @@ proc base_put_page {iface address pid peer ps_type} {
 
   html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"de\" lang=\"de\" {
     head {
-      put_meta_nocache
       puts "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" />"
       title "$HTMLTITLE - Geräteparameter"
 
@@ -567,7 +566,6 @@ proc activate_link_paramset {iface address ps_id long_push} {
 
   html {
     head {
-      put_meta_nocache
     }
     body {
       if { ![catch { xmlrpc $url activateLinkParamset [list string $address] [list string $ps_id] [list bool $long_push] } ] } then {
@@ -650,7 +648,7 @@ proc base_put_profile {iface address profile peer ps_type {html_response 1}} {
 
   global HTMLTITLE env
 
-  set IGNORE_PARAMS {AvoidBrowserCache address cmd iface paramid peer pnr ps_id ps_type sid SUBSET_OPTION_VALUE NAME}
+  set IGNORE_PARAMS {address cmd iface paramid peer pnr ps_id ps_type sid SUBSET_OPTION_VALUE NAME _}
 
   if { $profile != "" } then {
     
@@ -694,7 +692,6 @@ proc base_put_profile {iface address profile peer ps_type {html_response 1}} {
 
     html {
       head {
-        put_meta_nocache
       }
       body {
         if {$ret == "1"} then {
@@ -712,7 +709,6 @@ proc base_put_profile {iface address profile peer ps_type {html_response 1}} {
 
     html {
       head {
-        put_meta_nocache
       }
       body {
         if {$ret == "1"} then {
@@ -733,7 +729,6 @@ proc put_error404 {} {
 
   html {
     head {
-      put_meta_nocache
       puts "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">"
       title "$HTMLTITLE - Profil nicht gefunden"
     }
@@ -751,7 +746,6 @@ proc put_error_profilenotfound {} {
 
   html {
     head {
-      put_meta_nocache
       puts "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\">"
       title "$HTMLTITLE - Profil nicht gefunden"
     }
@@ -1722,12 +1716,6 @@ proc get_Pulse {val_arr id ps_arr pname dev_address arr_pulse {extraparam ""}} {
     upvar $val_arr arr
   upvar arr_pulse pulse
   return [get_Pulse2 arr $id $ps($pname) $dev_address pulse $extraparam]
-}
-
-proc put_meta_nocache {} {
-  puts "<meta http-equiv=\"cache-control\" content=\"no-cache\" />"
-  puts "<meta http-equiv=\"pragma\"        content=\"no-cache\" />"
-  puts "<meta http-equiv=\"expires\"       content=\"0\" />"
 }
 
 proc get_InputElem {name id ps_arr pname {extraparam ""}} {

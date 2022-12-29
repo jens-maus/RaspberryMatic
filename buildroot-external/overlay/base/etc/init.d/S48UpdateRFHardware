@@ -32,8 +32,6 @@ update_rf_hardware() {
           NEW_VERSION=${FORCED_VERSION}
           FW_FILE="dualcopro_si1002_update_blhm-${FORCED_VERSION}.eq3"
         fi
-      else
-        FW_FILE=coprocessor_update.eq3
       fi
 
       # identify the copro firmware version to be flashed

@@ -11,9 +11,6 @@ STEPS=10
 
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-# skip this startup if not in normal mode
-[[ "${HM_MODE}" != "NORMAL" ]] && exit 0
-
 init() {
   # make sure /var/etc/multimacd.conf contains the correct
   # coprocessor device path

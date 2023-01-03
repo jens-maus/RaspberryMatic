@@ -67,8 +67,11 @@
    upvar $pNEWPROFILE  PROFILE_TMP
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -27271,10 +27271,10 @@
+@@ -27269,12 +27269,13 @@
+     
+     /* <!-- ELV */
      var opts;
++    var url = file + "?sid=" + SessionId;
      if (file.substring(0, UI_PATH.length) == UI_PATH)
      {
 -      //method: 'get' ist für die ELV-CGIs notwendig.
@@ -80,23 +83,21 @@
          onComplete:function(){
            iseRefr(true);
            bUpdateContentRunning=false;
-@@ -27289,6 +27289,7 @@
-       opts = {
-         postBody: ReGa.encode(pb),
-         evalScripts: true,
-+        parameters:argsForUrl,
-         onComplete:function(){
-           iseRefr(true);
-           bUpdateContentRunning=false;
-@@ -27301,7 +27302,6 @@
+@@ -27297,12 +27298,10 @@
+           }, 100);
+         }
+       };
++      if (argsForUrl){ url += argsForUrl; }
+     }
      /* ELV --> */
      
-     var url = file + "?sid=" + SessionId;
+-    var url = file + "?sid=" + SessionId;
 -    if (argsForUrl){ url += argsForUrl; }
-     
+-    
      //console.info( "updateContent with "+pb );
      
-@@ -36964,6 +36964,27 @@
+     new Ajax.Updater("content", url, opts);
+@@ -36964,6 +36963,27 @@
    new Ajax.Updater(id, scriptname, opt);
  };
  
@@ -124,7 +125,7 @@
  ShowLoadingBox = function(msg)
  {
    
-@@ -37258,7 +37279,7 @@
+@@ -37258,7 +37278,7 @@
    poststr += "&devname=" + devname;
    poststr += "&devtype=" + devtype;
  
@@ -133,7 +134,7 @@
  
    ProgressBar = new ProgressBarMsgBox("Verknüpfungen und Programme werden abgefragt...", 1);
    ProgressBar.show();
-@@ -37509,7 +37530,7 @@
+@@ -37509,7 +37529,7 @@
        if ((redirect_url) && (redirect_url !== "")) { poststr += "&redirect_url=" + redirect_url; }
        else                                         { poststr += "&redirect_url=IC_LINKPEERLIST"; }
  
@@ -142,7 +143,7 @@
      }
    }, "html");
  };
-@@ -37578,7 +37599,7 @@
+@@ -37578,7 +37598,7 @@
    poststr += "&receiver_address=" +receiver_address;
    poststr += "&cmd=ShowConfigPendingMsg";
  
@@ -151,7 +152,7 @@
  };
  
  
-@@ -37771,7 +37792,7 @@
+@@ -37771,7 +37791,7 @@
    poststr += "&param_id="          + param_id;
    poststr += "&html_inputelem_id=" + html_inputelem_id;
  
@@ -160,7 +161,7 @@
  
    //ProgressBar = new ProgressBarMsgBox("Parameter wird festgesetzt...", 1);
    ProgressBar = new ProgressBarMsgBox(translateKey("dialogDetermineParameterTitle"), 1);
-@@ -39256,7 +39277,7 @@
+@@ -39256,7 +39276,7 @@
    ProgressBar.show();
      ProgressBar.StartKnightRiderLight();
  
@@ -169,7 +170,7 @@
  };
  
  ShowNewLinkSummary = function(iface, sender_address, receiver_address, name, description, group_name, group_description)
-@@ -39571,7 +39592,7 @@
+@@ -39571,7 +39591,7 @@
    poststr += "&receiver_address=" + receiver_address;
    poststr += "&cmd=activateLinkParamset";
  
@@ -178,7 +179,7 @@
  };
  
  SetLinkInfo = function (iface, sender_address, receiver_address, name, description) {
-@@ -39586,7 +39607,7 @@
+@@ -39586,7 +39606,7 @@
    poststr += "&description=" + elv_toQueryString(description);
    poststr += "&cmd=setLinkInfo";
  
@@ -187,7 +188,7 @@
  };
  
  
-@@ -39622,7 +39643,7 @@
+@@ -39622,7 +39642,7 @@
      }
      poststr += "&new_profilepath=" + is_newProfile(paramid).split('-')[0] + fileExtension;
    }
@@ -196,7 +197,7 @@
  };
  
  CollectData_SaveProfileSettings = function (reload) {
-@@ -40060,7 +40081,7 @@
+@@ -40060,7 +40080,7 @@
      poststr += "&iface=" + $F('global_iface');
      poststr += "&address=" + $F('global_address');
      poststr += "&cmd=firmware_update";
@@ -205,7 +206,7 @@
      ProgressBar = new ProgressBarMsgBox(translateKey("performingFirmwareUpdate"), 1);
      ProgressBar.show();
      ProgressBar.StartKnightRiderLight();
-@@ -40351,7 +40372,7 @@
+@@ -40351,7 +40371,7 @@
      if (channel) { device = channel.device; }
    }
    */
@@ -214,7 +215,7 @@
      if (device)
      {
        DeviceList.beginUpdateDevice(device.id);
-@@ -40370,7 +40391,7 @@
+@@ -40370,7 +40390,7 @@
    poststr += "&receiver=" + receiver;
    poststr += "&longKeyPress=" + simLongKeyPress;
    poststr += "&cmd=SendInternalKeyPress";
@@ -223,7 +224,7 @@
  };
  
  SetInternalKey = function(iface, address, special_input_id, peerAddress)
-@@ -40399,7 +40420,7 @@
+@@ -40399,7 +40419,7 @@
    AddSeparateSettings('subset_'   + special_input_id + '_', pnr);
    
    //alert(poststr);

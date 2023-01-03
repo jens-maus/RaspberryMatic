@@ -27269,6 +27269,7 @@ updateContent = function(file, argsForUrl, codeToExec, bDontSaveUrl)
     
     /* <!-- ELV */
     var opts;
+    var url = file + "?sid=" + SessionId;
     if (file.substring(0, UI_PATH.length) == UI_PATH)
     {
       opts = {
@@ -27289,7 +27290,6 @@ updateContent = function(file, argsForUrl, codeToExec, bDontSaveUrl)
       opts = {
         postBody: ReGa.encode(pb),
         evalScripts: true,
-        parameters:argsForUrl,
         onComplete:function(){
           iseRefr(true);
           bUpdateContentRunning=false;
@@ -27298,10 +27298,9 @@ updateContent = function(file, argsForUrl, codeToExec, bDontSaveUrl)
           }, 100);
         }
       };
+      if (argsForUrl){ url += argsForUrl; }
     }
     /* ELV --> */
-    
-    var url = file + "?sid=" + SessionId;
     
     //console.info( "updateContent with "+pb );
     

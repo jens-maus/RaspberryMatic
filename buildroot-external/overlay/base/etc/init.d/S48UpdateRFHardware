@@ -24,14 +24,12 @@ update_rf_hardware() {
       # identify which firmware file to take for a potential coprocessor
       # firmware update
       FORCED_VERSION=
-      if [[ "${HM_MODE}" == "NORMAL" ]]; then
-        if [[ ! -s /etc/config/forced_coprocessor_version ]]; then
-          FW_FILE=dualcopro_si1002_update_blhm.eq3
-        else
-          FORCED_VERSION=$(cat /etc/config/forced_coprocessor_version)
-          NEW_VERSION=${FORCED_VERSION}
-          FW_FILE="dualcopro_si1002_update_blhm-${FORCED_VERSION}.eq3"
-        fi
+      if [[ ! -s /etc/config/forced_coprocessor_version ]]; then
+        FW_FILE=dualcopro_si1002_update_blhm.eq3
+      else
+        FORCED_VERSION=$(cat /etc/config/forced_coprocessor_version)
+        NEW_VERSION=${FORCED_VERSION}
+        FW_FILE="dualcopro_si1002_update_blhm-${FORCED_VERSION}.eq3"
       fi
 
       # identify the copro firmware version to be flashed

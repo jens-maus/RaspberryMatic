@@ -72,6 +72,10 @@ ports:
   8083/tcp: null
   9092/tcp: null
   5435/tcp: null
+  2121/tcp: null
+  2122/tcp: null
+  1833/tcp: null
+  8883/tcp: null
 ports_description:
   22/tcp: SSH access (Extern)
   80/tcp: CCU WebUI HTTP (Extern)
@@ -108,6 +112,10 @@ ports_description:
   8083/tcp: CCU-Historian DB-WebUI (Extern)
   9092/tcp: CCU-Historian DB-Port (Extern)
   5435/tcp: CCU-Historian DB-pgPort (Extern)
+  2121/tcp: CCU-Jack HTTP (Extern)
+  2122/tcp: CCU-Jack HTTPS (Extern)
+  1833/tcp: CCU-Jack MQTT (Extern)
+  8883/tcp: CCU-Jack MQTT-Secure (Extern)
 environment:
   HM_RUNNING_IN_HA: "1"
   HM_HAPROXY_SRC: 172.30.32.2/32

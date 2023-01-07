@@ -23,7 +23,7 @@ install_rfd_arch:
 ifneq (,$(filter $(OCCU_RF_PROTOCOL), HM_HMIP HMIP))
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/init.d/S60multimacd $(TARGET_DIR)/etc/init.d/
 	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/bin/multimacd $(TARGET_DIR)/bin/
-	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/crRFD.conf $(TARGET_DIR)/etc/config_templates/
+	cp -a $(OCCU_ARCH)/packages-eQ-3/RFD/etc/crRFD_ccu3.conf $(TARGET_DIR)/etc/config_templates/crRFD.conf
 endif
 
 install_hs485d_arch:

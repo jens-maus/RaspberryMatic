@@ -270,7 +270,7 @@ jobs:
 
       - name: Build and push container image
         if: github.event.inputs.skip_build == 'false'
-        uses: docker/build-push-action@v3.2.0
+        uses: docker/build-push-action@v3.3.0
         id: docker_build
         with:
           context: oci_build
@@ -309,7 +309,7 @@ jobs:
 
       # Testing
       - name: Build and load container image for test
-        uses: docker/build-push-action@v3.2.0
+        uses: docker/build-push-action@v3.3.0
         id: docker_build_test
         with:
           context: oci_build

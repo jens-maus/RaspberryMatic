@@ -1,2 +1,3 @@
 # Locally computed
-sha256 4d513093356e54eb4b9dc2b7e63d8bba924ce8790cea06738d3eb0c4d72ac010  tailscale-1.18.0.tar.gz
+sha256  3227488750adebf5a8b33cc4105a109ae3d3267191c2a9ac7a2ecc38805ad4e8  LICENSE
+sha256  f2a221f8930767ef0ba8fdab12f246931258a00aac0279bf0e3b5ae203b35fc9  tailscale-1.34.2.tar.gz

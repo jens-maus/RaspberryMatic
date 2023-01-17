@@ -1,0 +1,136 @@
+--- occu/WebUI/www/config/cp_maintenance.cgi.orig
++++ occu/WebUI/www/config/cp_maintenance.cgi
+@@ -340,10 +340,30 @@
+   }
+ }
+ 
++proc execCmd {varName cmd} {
++  upvar 1 $varName variable
++  set rc [catch {eval $cmd} resVar]
++  if {$rc == 0} {
++    set variable $resVar
++  } else {
++    set variable 0
++  }
++}
++
+ proc action_put_page {} {
+   global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS HMIP_LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL downloadOnly
+   http_head
+ 
++  if {[get_platform] != "oci"} {
++    execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $(NF-2) }}}
++    if { ! [string is double -strict $USERFSFREE_MB] } {
++      set USERFSFREE_MB 0
++    }
++    set USERFSFREE_GB [format "%.1f" [expr {$USERFSFREE_MB / 1024.0}]]
++    set USERFSFREE_MB_REQ 1843.2
++    set USERFSFREE_GB_REQ [format "%.1f" [expr {$USERFSFREE_MB_REQ / 1024.0}]]
++  }
++  
+   division {class="popupTitle j_translate"} {
+     puts "\${dialogSettingsCMTitle}"
+     #puts [isOldCCU]
+@@ -388,7 +408,12 @@
+             table_row {
+               table_data {align="left"} {colspan="3"} {
+                 #puts "[bold "Software-Update durchf�hren"]"
+-                puts "<b>\${dialogSettingsCMLblPerformSoftwareUpdate}</b>"
++                puts "<br/><b>\${dialogSettingsCMLblPerformSoftwareUpdate}</b>"
++              }
++            }
++            table_row {
++              table_data {align="left"} {colspan="3"} {id="availableUserSpace"} {
++                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB GB (&asymp;$USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
+               }
+             }
+             table_row {
+@@ -398,7 +423,7 @@
+                     table_row {
+                       table_data {
+                         division {class="CLASS20905" style="display: none"} {id="btnFwDirectDownload"} {} "onClick=\"performDirectDownload();\"" {}
+-                        division {class="CLASS20905"}  "onClick=\"performDirectDownload();\"" {puts "\${btnDirectFwUpload}"}
++                        division {class="CLASS20910"} {id="btnFwDirectDownload2"} "onClick=\"performDirectDownload();\"" {puts "\${btnDirectFwUpload}"}
+                       }
+                     }
+                   }
+@@ -451,7 +476,7 @@
+               td {width="20"} {}
+               table_data {align="left"} {colspan="2"} {
+                 division {class="popupControls CLASS20905"} {
+-                  division {class="CLASS20919" style="width: 150px; margin-left: 20px;"} {onClick="stopHmIPServer();document.firmware_form.submit();showUserHint();"} {
++                  division {class="CLASS20919" style="width: 150px; margin-left: 20px;"} {onClick="stopHmIPServer();document.firmware_form.submit();showUserHint();"} {id="btnSoftwareUpdateUpload"} {
+                     puts "\${dialogSettingsCMBtnPerformSoftwareUpdateUpload}"
+                   }
+                 }
+@@ -856,6 +881,22 @@
+       }
+     }
+   }
++  
++  if {[get_platform] != "oci"} {
++    cgi_javascript {
++       puts "var userFreeMB = $USERFSFREE_MB;"
++       puts "var userFreeMBRequired = $USERFSFREE_MB_REQ;"
++       puts {
++         if (userFreeMB < userFreeMBRequired) {
++           jQuery('#availableUserSpace').css({ 'color': 'red', 'font-weight': 'bold' });
++           jQuery('#btnSoftwareUpdateUpload').removeAttr('onclick');
++           jQuery('#btnSoftwareUpdateUpload').css({ 'color': 'gray' });
++           jQuery('#btnFwDirectDownload2').removeAttr('onclick');
++           jQuery('#btnFwDirectDownload2').css({ 'color': 'gray' });
++         }
++       }
++    }
++  }
+ 
+   cgi_javascript {
+     puts "translatePage('#messagebox');"
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
+@@ -998,8 +998,8 @@
+     "drapRescueIntroText" : "Dieser HmIP-DRAP mit der Firmware Version 2.0.16 erfordert ein Zwischenupdate, bevor das eigentliche Update ausgef%FChrt werden kann.</br>Geben Sie hierf%FCr das auf dem HmIP-DRAP aufgedruckte Passwort (PW) ein und klicken Sie anschlie%DFend auf &bdquo;OK&ldquo;",
+     "drapRescueUpdateSuccessful" : "Das Zwischenupdate wurde erfolgreich abgeschlossen.</br>Warten Sie, bis die LED des HmIP-DRAP blau blinkt, bzw. t%FCrkis leuchtet. Starten Sie dann das eigentliche Update, indem Sie erneut den &ldquo;Update&rdquo; Button klicken.",
+     "hintSetReadyWeeklyProgram" : "Zum Konfigurieren des Wochenprogramms bitte den Fertig Button bet%E4tigen und das Ger%E4t anschlie%DFend in der Ger%E4teliste aufrufen.",
+-    "btnDirectFwUpload" : "Direkt auf CCU laden und installieren",
+-    "dialogSettingsCMLblAlternateSoftwareUpdate" : "Alternative Vorgehensweise:",
++    "btnDirectFwUpload" : "Automatisches Update durchf%FChren",
++    "dialogSettingsCMLblAlternateSoftwareUpdate" : "Manuelle Vorgehensweise:",
+     "indoorAirQualityGood" : "Raumluftqualit%E4t: Gut",
+     "indoorAirQualityMediocre" : "Raumluftqualit%E4t: Mittelm%E4%DFig<br/><br/>Der Raum sollte gel%FCftet werden.",
+     "indoorAirQualityModerate" : "Raumluftqualit%E4t: M%E4%DFig<br/><br/>Der Raum sollte dringend gel%FCftet werden.",
+--- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
+@@ -487,6 +487,8 @@
+     "dialogSettingsCMTDErrorProtocol" : "Fehler-<br/>protokoll",
+     "dialogSettingsCMLblActualSoftwareVersion" : "Aktuelle Software-Version:",
+     "dialogSettingsCMLblAvailableSoftwareVersion" : "Verf%FCgbare Software-Version:",
++    "dialogSettingsCMLblFreeUserSpace" : "Verf%FCgbarer Speicherplatz:",
++    "dialogSettingsCMLblFreeUserSpaceRequired" : "erforderlich",
+     "dialogSettingsCMLblPerformSoftwareUpdate" : "Software-Update durchf%FChren",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Schritt 1: Neue Software herunterladen",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Schritt 2: Heruntergeladene Software ausw%E4hlen",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.extension.js
+@@ -994,8 +994,8 @@
+     "drapRescueIntroText" : "This HmIP-DRAP with firmware version 2.0.16 requires an intermediate update before the actual update can be carried out.</br>For this purpose, enter the password (PW) printed on the HmIP-DRAP and click &ldquo;OK&rdquo;.",
+     "drapRescueUpdateSuccessful" : "The intermediate update was completed successfully.</br>Wait until the LED of the HmIP-DRAP flashes blue or shines turquoise. Start the actual update by clicking the &ldquo;Update&rdquo; button again.",
+     "hintSetReadyWeeklyProgram" : "Please press the Finish button to configure the week program and then access the device in the device list.",
+-    "btnDirectFwUpload" : "Load directly to CCU and install",
+-    "dialogSettingsCMLblAlternateSoftwareUpdate" : "Alternative procedure:",
++    "btnDirectFwUpload" : "Perform automatic update",
++    "dialogSettingsCMLblAlternateSoftwareUpdate" : "Manual update procedure:",
+     "indoorAirQualityGood" : "Room air quality: Good",
+     "indoorAirQualityMediocre" : "Room air quality: Fair<br/><br/>The room should be ventilated.",
+     "indoorAirQualityModerate" : "Room air quality: Average<br/><br/>The room should be ventilated as soon as possible.",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
+@@ -486,6 +486,8 @@
+     "dialogSettingsCMTDErrorProtocol" : "Error<br/>log",
+     "dialogSettingsCMLblActualSoftwareVersion" : "Current software version:",
+     "dialogSettingsCMLblAvailableSoftwareVersion" : "Available software version:",
++    "dialogSettingsCMLblFreeUserSpace" : "Available user space:",
++    "dialogSettingsCMLblFreeUserSpaceRequired" : "required",
+     "dialogSettingsCMLblPerformSoftwareUpdate" : "Perform software update",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep1" : "Step 1: Download new software",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Step 2: Select downloaded software",

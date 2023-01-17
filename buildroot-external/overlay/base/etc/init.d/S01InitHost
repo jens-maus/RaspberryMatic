@@ -27,54 +27,94 @@ identify_host() {
     HM_LED_RED_MODE2=${rootfs_trigger}
   fi
 
-  # identify the RaspberryPi version used
-  # http://elinux.org/RPi_HardwareHistory
-  # https://github.com/MilhouseVH/bcmstat/blob/master/bcmstat.sh#L67
-  # https://www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
-  hostid=$(grep Revision /proc/cpuinfo| awk '{print $3}')
-  case "${hostid}" in
-    *d?314?)                       HM_HOST="rpi4cm8g"   ;; # Raspberry Pi Compute Module 4/8GB
-    *c?314?)                       HM_HOST="rpi4cm4g"   ;; # Raspberry Pi Compute Module 4/4GB
-    *b?314?)                       HM_HOST="rpi4cm2g"   ;; # Raspberry Pi Compute Module 4/2GB
-    *a?314?)                       HM_HOST="rpi4cm1g"   ;; # Raspberry Pi Compute Module 4/1GB
-    *c?313?)                       HM_HOST="rpi400"     ;; # Raspberry Pi 400
-    *d?311?)                       HM_HOST="rpi4b8g"    ;; # Raspberry Pi 4 Model B/8GB
-    *c?311?)                       HM_HOST="rpi4b4g"    ;; # Raspberry Pi 4 Model B/4GB
-    *b?311?)                       HM_HOST="rpi4b2g"    ;; # Raspberry Pi 4 Model B/2GB
-    *a?311?)                       HM_HOST="rpi4b1g"    ;; # Raspberry Pi 4 Model B/1GB
-    *9?212?)                       HM_HOST="rpi3z2w"    ;; # Raspberry Pi Zero 2 W
-    *a?210?)                       HM_HOST="rpi3cmp"    ;; # Raspberry Pi Compute Module 3+
-    *a?20d?)                       HM_HOST="rpi3p"      ;; # Raspberry Pi 3 Model B+
-    *a?208?)                       HM_HOST="rpi3"       ;; # Raspberry Pi 3 Model B
-    *9?20e?)                       HM_HOST="rpi3ap"     ;; # Raspberry Pi 3 Model A+
-    *a?20a?)                       HM_HOST="rpi3cm"     ;; # Raspberry Pi Compute Module 3
-    *a?104?|*a?204?)               HM_HOST="rpi2"       ;; # Raspberry Pi 2 Model B
-    *9?00c?)                       HM_HOST="rpi0w"      ;; # Raspberry Pi Zero W
-    *9?009?)                       HM_HOST="rpi0"       ;; # Raspberry Pi Zero
-    *9?006?|*0011|*0014)           HM_HOST="rpi1cm"     ;; # Raspberry Pi Compute Module 1
-    *9?003?|*0010|*0013)           HM_HOST="rpi1bp"     ;; # Raspberry Pi B+/512MB
-    *9?001?|*9?002?|*0015)         HM_HOST="rpi1ap512"  ;; # Raspberry Pi A+/512MB
-    *0012)                         HM_HOST="rpi1ap256"  ;; # Raspberry Pi A+/256MB
-    *000d|*000e|*000f)             HM_HOST="rpi1b512"   ;; # Raspberry Pi B/512MB
-    *0002|*0003|*0004|*0005|*0006) HM_HOST="rpi1b256"   ;; # Raspberry Pi B/256MB
-    *0007|*0008|*0009)             HM_HOST="rpi1a"      ;; # Raspberry Pi A/256MB
+  # identify HM_HOST based on PLATFORM
+  case "${PLATFORM}" in
 
-    # No RaspberryPi identified, try other boards
-    *)
-      hardware=$(grep Hardware /proc/cpuinfo | awk '{print $3}')
-      case "${hardware}" in
-        # ASUS Tinkerboard
-        Rockchip)
-          HM_HOST="tinkerboard"
+    # RaspberryPi platform
+    rpi*)
+      # identify the RaspberryPi model based on /proc/cpuinfo
+      # http://elinux.org/RPi_HardwareHistory
+      # https://github.com/MilhouseVH/bcmstat/blob/master/bcmstat.sh#L67
+      # https://www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
+      hostid=$(grep Revision /proc/cpuinfo | awk '{print $3}')
+      case "${hostid}" in
+        *d?314?)                       HM_HOST="rpi4cm8g"   ;; # Raspberry Pi Compute Module 4/8GB
+        *c?314?)                       HM_HOST="rpi4cm4g"   ;; # Raspberry Pi Compute Module 4/4GB
+        *b?314?)                       HM_HOST="rpi4cm2g"   ;; # Raspberry Pi Compute Module 4/2GB
+        *a?314?)                       HM_HOST="rpi4cm1g"   ;; # Raspberry Pi Compute Module 4/1GB
+        *c?313?)                       HM_HOST="rpi400"     ;; # Raspberry Pi 400
+        *d?311?)                       HM_HOST="rpi4b8g"    ;; # Raspberry Pi 4 Model B/8GB
+        *c?311?)                       HM_HOST="rpi4b4g"    ;; # Raspberry Pi 4 Model B/4GB
+        *b?311?)                       HM_HOST="rpi4b2g"    ;; # Raspberry Pi 4 Model B/2GB
+        *a?311?)                       HM_HOST="rpi4b1g"    ;; # Raspberry Pi 4 Model B/1GB
+        *9?212?)                       HM_HOST="rpi3z2w"    ;; # Raspberry Pi Zero 2 W
+        *a?210?)                       HM_HOST="rpi3cmp"    ;; # Raspberry Pi Compute Module 3+
+        *a?20d?)                       HM_HOST="rpi3p"      ;; # Raspberry Pi 3 Model B+
+        *a?208?)                       HM_HOST="rpi3"       ;; # Raspberry Pi 3 Model B
+        *9?20e?)                       HM_HOST="rpi3ap"     ;; # Raspberry Pi 3 Model A+
+        *a?20a?)                       HM_HOST="rpi3cm"     ;; # Raspberry Pi Compute Module 3
+        *a?104?|*a?204?)               HM_HOST="rpi2"       ;; # Raspberry Pi 2 Model B
+        *9?00c?)                       HM_HOST="rpi0w"      ;; # Raspberry Pi Zero W
+        *9?009?)                       HM_HOST="rpi0"       ;; # Raspberry Pi Zero
+        *9?006?|*0011|*0014)           HM_HOST="rpi1cm"     ;; # Raspberry Pi Compute Module 1
+        *9?003?|*0010|*0013)           HM_HOST="rpi1bp"     ;; # Raspberry Pi B+/512MB
+        *9?001?|*9?002?|*0015)         HM_HOST="rpi1ap512"  ;; # Raspberry Pi A+/512MB
+        *0012)                         HM_HOST="rpi1ap256"  ;; # Raspberry Pi A+/256MB
+        *000d|*000e|*000f)             HM_HOST="rpi1b512"   ;; # Raspberry Pi B/512MB
+        *0002|*0003|*0004|*0005|*0006) HM_HOST="rpi1b256"   ;; # Raspberry Pi B/256MB
+        *0007|*0008|*0009)             HM_HOST="rpi1a"      ;; # Raspberry Pi A/256MB
 
-          # workaround issues when a first modprobe might cause Exec format
-          # errors (cf. https://github.com/jens-maus/RaspberryMatic/issues/1435)
-          # Thus we perform the first modprobe early and expect the second to work
-          modprobe lz4
+        # No know RaspberryPi identified, fallback to rpi3
+        *)
+          HM_HOST="rpi3"
+          echo "WARNING: could not identify RaspberryPi model (${hostid}). Using RaspberryPi3 as fallback"
         ;;
       esac
 
-      if [[ -z "${HM_HOST}" ]] && [[ -e /sys/firmware/devicetree/base/model ]]; then
+      # setup RaspberryPi specific settings
+      HM_LED_GREEN="/sys/class/leds/led0"
+      HM_LED_RED="/sys/class/leds/led1"
+      HM_LED_YELLOW=""
+
+      # if we are running on a raspberrypi we
+      # disable the HDMI port in case no cable is
+      # connected. This is to save power, but also
+      # to reduce potential interferences with the
+      # GPIO-based RF modules
+      hdmi_state=$(/usr/bin/tvservice -s | cut -d' ' -f2)
+
+      # if the least significant bit is set the
+      # HDMI cable seems to be unplugged or if
+      # no HDMI display is listed using tvservice or
+      # if no EDID info can be read from the display
+      if [[ $(((hdmi_state & 0x01) == 1)) -eq 1 ]] ||
+        ! /usr/bin/tvservice -l | grep -q "type HDMI" ||
+        /usr/bin/tvservice -d /dev/null 2>&1 | grep -q "Nothing"; then
+        /usr/bin/tvservice --off >/dev/null
+        /usr/bin/vcgencmd display_power 0 >/dev/null
+      fi
+
+      # increase vm.min_free_kbytes to 16384 to increase stability
+      # in memory critical situations
+      sysctl -q vm.min_free_kbytes=16384
+    ;;
+
+    # ASUS Tinkerboard/TinkerboardS platform
+    tinkerboard)
+      HM_HOST="tinkerboard"
+
+      # setup Tinkerboard specific settings
+      HM_LED_GREEN="/sys/class/leds/led-0"
+      HM_LED_RED="/sys/class/leds/led-2"
+      HM_LED_YELLOW="/sys/class/leds/led-1"
+    ;;
+
+    # ODROID platform
+    odroid-*)
+      HM_HOST="odroid" # generic
+
+      # identify the ODROID model
+      if [[ -e /sys/firmware/devicetree/base/model ]]; then
         case "$(cat /sys/firmware/devicetree/base/model)" in
           # Hardkernel ODROID-C4
           *ODROID-C4*)
@@ -90,104 +130,49 @@ identify_host() {
           ;;
         esac
       fi
-    ;;
-  esac
 
-  # find out if we are in a container environment
-  if [[ -f /.dockerenv ]] || grep -Eq '(docker|lxc|containerd)' /proc/1/cgroup; then
-    HM_HOST="oci"
-
-    # save the HA supervisor token for later use
-    if [[ -n ${HM_RUNNING_IN_HA} ]]; then
-      HM_SUPERVISOR_TOKEN=${SUPERVISOR_TOKEN}
-    fi
-  fi
-
-  # find out if we are in a virtual environment so that
-  # we can identify the ova platform
-  if [[ -z "${HM_HOST}" ]]; then
-    hypervisor=$(/usr/bin/lscpu | grep 'Hypervisor vendor:' | awk '{print $3}')
-    if [[ -n "${hypervisor}" ]]; then
-      HM_HOST="ova-${hypervisor}"
-    fi
-  fi
-
-  # find out via dmidecode (if it exists) the product name
-  # and extract the host type from that
-  if [[ -z "${HM_HOST}" ]] && [[ -e /usr/sbin/dmidecode ]]; then
-    product_name=$(/usr/sbin/dmidecode -s baseboard-manufacturer)
-    case "${product_name}" in
-      *Intel*) HM_HOST="nuc";; # Intel NUC
-    esac
-  fi
-
-  # if HOST is still empty we fall back to RaspberryPi3
-  if [[ -z "${HM_HOST}" ]]; then
-    HM_HOST="rpi3"
-    echo "couldn't identify hardware platform (${hostid}). Using RaspberryPi3 as fallback"
-  fi
-
-  # depending on the host hardware we have to define different
-  # HM settings
-  case "${HM_HOST}" in
-
-    # RaspberryPi
-    rpi*)
-      HM_LED_GREEN="/sys/class/leds/led0"
-      HM_LED_RED="/sys/class/leds/led1"
-      HM_LED_YELLOW=""
-
-      # if we are running on a raspberrypi we
-      # disable the HDMI port in case no cable is
-      # connected. This is to save power, but also
-      # to reduce potential interferences with the
-      # GPIO-based RF modules
-      hdmi_state=$(/usr/bin/tvservice -s | cut -d' ' -f2)
-
-      # if the least significant bit is set the
-      # HDMI cable seems to be unplugged or if
-      # no HDMI display is listed using tvservice
-      if [[ $(((hdmi_state & 0x01) == 1)) -eq 1 ]] || ! /usr/bin/tvservice -l | grep -q "type HDMI"; then
-        /usr/bin/tvservice --off >/dev/null
-        /usr/bin/vcgencmd display_power 0 >/dev/null
-      fi
-
-      # increase vm.min_free_kbytes to 16384 to increase stability
-      # in memory critical situations
-      sysctl -q vm.min_free_kbytes=16384
-    ;;
-
-    # ASUS Tinkerboard
-    tinkerboard*)
-      HM_LED_GREEN="/sys/class/leds/led-0"
-      HM_LED_RED="/sys/class/leds/led-2"
-      HM_LED_YELLOW="/sys/class/leds/led-1"
-    ;;
-
-    # Hardkernel ODROID-C4/N2
-    odroid-*)
+      # setup ODROID specific settings
       HM_LED_GREEN="/sys/class/leds/blue:status"
       HM_LED_RED=""
       HM_LED_YELLOW=""
     ;;
 
-    # Open Virtual Appliance (ova)
-    ova*)
-      # fine
+    # OCI platform
+    oci)
+      HM_HOST="oci" # generic
+
+      # save the HA supervisor token for later use
+      if [[ -n "${HM_RUNNING_IN_HA}" ]]; then
+        HM_SUPERVISOR_TOKEN=${SUPERVISOR_TOKEN}
+      fi
     ;;
 
-    # Open Container Initiative (oci)
-    oci*)
-      # fine
+    # OVA platform
+    ova)
+      HM_HOST="ova" # generic
+
+      # try to identify the used virtualization hypervisor
+      hypervisor=$(/usr/bin/lscpu | grep 'Hypervisor vendor:' | awk '{print $3}')
+      if [[ -n "${hypervisor}" ]]; then
+        HM_HOST="ova-${hypervisor}"
+      else
+        # otherwise try to identify the system-manufacturer and use that one instead
+        manufacturer=$(/usr/sbin/dmidecode -s system-manufacturer | awk '{print $1}' | tr -d ',')
+        if [[ -n "${manufacturer}" ]]; then
+          HM_HOST="ova-${manufacturer}"
+        fi
+      fi
     ;;
 
-    # Intel NUC hardware (intelnuc)
-    nuc*)
-      # fine
+    # intelnuc platform
+    intelnuc)
+      HM_HOST="nuc"
     ;;
 
+    # default fallback
     *)
-      echo "ERROR: couldn't identify host hardware: ${hostid}"
+      HM_HOST="${PLATFORM}"
+      echo "WARNING: could not identify host platform. Using '${PLATFORM}' as fallback"
     ;;
 
   esac
@@ -205,14 +190,16 @@ identify_host() {
 }
 
 start() {
-  echo -n "Identifying onboard hardware: "
+  echo -n "Identifying host system: "
 
   # make sure to load sysctl defaults from /etc/sysctl.conf
   [[ -f /etc/sysctl.conf ]] && /sbin/sysctl -p -q -e
 
-  # source all data from /var/hm_mode
+  # source all data from /var/hm_mode and /VERSION
   [[ -r /var/hm_mode ]] && . /var/hm_mode
+  [[ -r /VERSION ]] && . /VERSION
 
+  # run identify routine
   identify_host
 
   # save all HM_ env variables

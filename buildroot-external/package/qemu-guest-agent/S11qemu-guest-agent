@@ -1,0 +1,42 @@
+#!/bin/sh
+# shellcheck shell=dash source=/dev/null
+#
+# Starts qemu-guest-agent
+#
+
+DAEMON="qemu-guest-agent"
+PIDFILE="/var/run/${DAEMON}.pid"
+
+EXEC="/usr/bin/qemu-ga"
+METHOD="virtio-serial"
+METHOD_PATH="/dev/virtio-ports/org.qemu.guest_agent.0"
+ARGS=""
+
+[ -e "${METHOD_PATH}" ] || exit 0
+
+[ -r /etc/default/${DAEMON} ] && . /etc/default/${DAEMON}
+
+case "$1" in
+	start)
+		echo -n "Starting ${DAEMON}: "
+		# shellcheck disable=SC2086
+		if ! start-stop-daemon -S -q -x $EXEC -- --daemonize $ARGS -m "${METHOD}" -p "${METHOD_PATH}" -f "${PIDFILE}"; then
+			echo "FAILED"
+			exit 1
+		else
+			echo "OK"
+		fi
+	;;
+	stop)
+		echo -n "Stopping ${DAEMON}: "
+		start-stop-daemon -K -q -p $PIDFILE
+		echo "OK"
+	;;
+	restart|reload)
+		$0 stop
+		$0 start
+	;;
+	*)
+		echo "Usage: $0 {start|stop|restart}"
+		exit 1
+esac

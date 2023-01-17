@@ -1,2 +1,7 @@
+menu "eQ-3 HomeMatic Services"
+  source "$BR2_EXTERNAL_MULTILIB32_PATH/../../../package/libxmlparser/Config.in"
+  source "$BR2_EXTERNAL_MULTILIB32_PATH/../../../package/libxmlrpcxx/Config.in"
+endmenu
+
 # External packages
 source "$BR2_EXTERNAL_MULTILIB32_PATH/Config.ext.in"

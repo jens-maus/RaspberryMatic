@@ -16,7 +16,7 @@
 -        0  {set unit_temp  " &deg;C"; return 0}
 -        1  {set unit_temp  " &deg;F"; return 1}
 -      default {set unit_temp  " *"; return -1}
-+        0  {set unit_temp  "&nbsp;&deg;C"; return 0}
++        0  {set unit_temp  "&nbsp;&deg;;C"; return 0}
 +        1  {set unit_temp  "&nbsp;&deg;F"; return 1}
 +      default {set unit_temp  "&nbsp;*"; return -1}
      }
@@ -80,6 +80,98 @@
  
  #	rechte Zelle endet
  	append HTML_PARAMS(separate_1) "</td></tr></table>"
+--- occu/WebUI/www/config/easymodes/etc/localization/de/HmIP_DEVICES.txt.orig
++++ occu/WebUI/www/config/easymodes/etc/localization/de/HmIP_DEVICES.txt
+@@ -2,10 +2,10 @@
+   {
+     "optionActive" : "Aktiv",
+     "optionNotActive" : "Nicht aktiv",
+-    "optionUnit100MS" : "100ms",
+-    "optionUnit200MS" : "200ms",
+-    "optionUnit300MS" : "300ms",
+-    "optionUnit500MS" : "500ms",
++    "optionUnit100MS" : "100 ms",
++    "optionUnit200MS" : "200 ms",
++    "optionUnit300MS" : "300 ms",
++    "optionUnit500MS" : "500 ms",
+     "optionUnit1S": "1 Sekunde",
+     "optionUnit2S": "2 Sekunden",
+     "optionUnit3S": "3 Sekunden",
+--- occu/WebUI/www/config/easymodes/etc/localization/en/HmIP_DEVICES.txt.orig
++++ occu/WebUI/www/config/easymodes/etc/localization/en/HmIP_DEVICES.txt
+@@ -2,39 +2,39 @@
+   {
+     "optionActive" : "Active",
+     "optionNotActive" : "Not active",
+-    "optionUnit100MS" : "100ms",
+-    "optionUnit200MS" : "200ms",
+-    "optionUnit300MS" : "300ms",
+-    "optionUnit500MS" : "500ms",
+-    "optionUnit1S": "1s",
+-    "optionUnit2S": "2s",
+-    "optionUnit3S": "3s",
+-    "optionUnit5S": "5s",
+-    "optionUnit10S": "10s",
+-    "optionUnit20S": "20s",
+-    "optionUnit30S": "30s",
+-    "optionUnit1M": "1min",
+-    "optionUnit2M": "2min",
+-    "optionUnit3M": "3min",
+-    "optionUnit4M": "4min",
+-    "optionUnit5M": "5min",
+-    "optionUnit6M": "6min",
+-    "optionUnit8M": "8min",
+-    "optionUnit10M": "10min",
+-    "optionUnit12M": "12min",
+-    "optionUnit14M": "14min",
+-    "optionUnit16M": "16min",
+-    "optionUnit18M": "18min",
+-    "optionUnit20M": "20min",
+-    "optionUnit25M": "25min",
+-    "optionUnit30M": "30min",
+-    "optionUnit1H": "1h",
+-    "optionUnit2H": "2h",
+-    "optionUnit3H": "3h",
+-    "optionUnit5H": "5h",
+-    "optionUnit8H": "8h",
+-    "optionUnit12H": "12h",
+-    "optionUnit24H": "24h",
++    "optionUnit100MS" : "100 ms",
++    "optionUnit200MS" : "200 ms",
++    "optionUnit300MS" : "300 ms",
++    "optionUnit500MS" : "500 ms",
++    "optionUnit1S": "1 s",
++    "optionUnit2S": "2 s",
++    "optionUnit3S": "3 s",
++    "optionUnit5S": "5 s",
++    "optionUnit10S": "10 s",
++    "optionUnit20S": "20 s",
++    "optionUnit30S": "30 s",
++    "optionUnit1M": "1 min",
++    "optionUnit2M": "2 min",
++    "optionUnit3M": "3 min",
++    "optionUnit4M": "4 min",
++    "optionUnit5M": "5 min",
++    "optionUnit6M": "6 min",
++    "optionUnit8M": "8 min",
++    "optionUnit10M": "10 min",
++    "optionUnit12M": "12 min",
++    "optionUnit14M": "14 min",
++    "optionUnit16M": "16 min",
++    "optionUnit18M": "18 min",
++    "optionUnit20M": "20 min",
++    "optionUnit25M": "25 min",
++    "optionUnit30M": "30 min",
++    "optionUnit1H": "1 h",
++    "optionUnit2H": "2 h",
++    "optionUnit3H": "3 h",
++    "optionUnit5H": "5 h",
++    "optionUnit8H": "8 h",
++    "optionUnit12H": "12 h",
++    "optionUnit24H": "24 h",
+     "optionUnit1D": "1 day",
+     "optionUnit7D": "7 days",
+     "optionUnit8D": "8 days",
 --- occu/WebUI/www/pda/eq3/controls/generic.tcl.orig
 +++ occu/WebUI/www/pda/eq3/controls/generic.tcl
 @@ -105,7 +105,7 @@
@@ -361,7 +453,7 @@
                      }
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -14132,7 +14132,7 @@
+@@ -14811,7 +14811,7 @@
      // Adds a selectbox for the temperature to the party mode dialog
      var selBox = "<select>";
      for (var loop = 5; loop <= 30; loop++) {
@@ -370,7 +462,7 @@
      }
      selBox += "</select>";
  
-@@ -26006,7 +26006,7 @@
+@@ -28135,7 +28135,7 @@
        value = min;
      }
  
@@ -379,7 +471,7 @@
        value = roundValue05(value);
      }
  
-@@ -32223,7 +32223,7 @@
+@@ -34605,7 +34605,7 @@
      this.min = min;
      this.max = max;
      this.factor = 100/(max-min);
@@ -388,16 +480,16 @@
      this.statusOFF = "OFF";
      this.statusON = "ON";
      this.opts = opts;
-@@ -32685,7 +32685,7 @@
-     this.max = 30;
-     this.off = 4.5;
-     this.on = 30.5;
+@@ -35075,7 +35075,7 @@
+     this.max = (this.confTempMax > 30) ? 30 : this.confTempMax;
+     this.off = (this.confTempMin < 5) ? this.offTemp : this.confTempMin;
+     this.on = (this.confTempMax > 30) ? this.onTemp : this.confTempMax;
 -    this.unit = "°C";
 +    this.unit = "&nbsp;&deg;C";
      this.factor = 100/(this.max-this.min);
      this.iViewOnly = false;
      this.bSliderPosFlag = false;
-@@ -33166,7 +33166,7 @@
+@@ -35561,7 +35561,7 @@
      this.min = min;
      this.max = max;
      this.factor = 100/(max-min);
@@ -406,7 +498,7 @@
      if(bSliderPosFlag) 
      {
          this.bSliderPosFlag = bSliderPosFlag;
-@@ -34854,12 +34854,19 @@
+@@ -37249,12 +37249,19 @@
    var isFarVal = false;
    if (!checkDecimal(tmpInput)) {
      // Zeichen für Temperaturangaben rausfiltern
@@ -426,7 +518,27 @@
      if (tmpInput.indexOf('°F') != -1) {
        tmpInput = tmpInput.substr(0, tmpInput.indexOf('°F'));
        isFarVal = true;      
-@@ -41777,7 +41784,7 @@
+@@ -37747,7 +37754,7 @@
+   },
+ 
+   changeToKilo: function() {
+-    return (this.summedUpEnergy/1000).toFixed(3);
++    return (this.summedUpEnergy/1000).toFixed(2);
+   },
+ 
+   setEnergyCounterPanel: function() {
+@@ -37822,8 +37829,8 @@
+           energyCostCCU = ((energyConsumptionCCU * this.EnergyPrice) / unitFactorCCU).toFixed(2) + " " + this.energyConfig.currency,
+           energyCostDevice = ((energyConsumptionDevice * this.EnergyPrice) / unitFactorDevice).toFixed(2) + " " + this.energyConfig.currency;
+         if (this.measurementType == this.sensorTypeID.gas) {
+-          j_energyCostCCU.text(energyConsumptionCCU.toFixed(1) + kWh + " = " + energyCostCCU).show();
+-          j_energyCostDevice.text(energyConsumptionDevice.toFixed(1) + kWh + " = " + energyCostDevice).show();
++          j_energyCostCCU.text(energyConsumptionCCU.toFixed(2) + kWh + " = " + energyCostCCU).show();
++          j_energyCostDevice.text(energyConsumptionDevice.toFixed(2) + kWh + " = " + energyCostDevice).show();
+         } else {
+           j_energyCostCCU.text(energyCostCCU).show();
+           j_energyCostDevice.text(energyCostDevice).show();
+@@ -44855,7 +44862,7 @@
        //msg += "<td><input style=\"text-align: right;\" maxLength=\"5\" size=\"7\" id=\"starttime_"   +dayidx +"_"+i+"\" disabled=\"disabled\" type=\"text\" value=\""+ this.tom_toTime( endtime) +"\">Uhr</td>";
        msg += "<td><input style=\"text-align: right;\" maxLength=\"5\" size=\"7\" id=\""+prgNr+"starttime_" + dayidx + "_" + i + "\" disabled=\"disabled\" type=\"text\" value=\"" + this.tom_toTime(endtime) + "\">" + translateKey('lblProgramTimeExtension') + "</td>";
        msg += "<td><input style=\"text-align: right;\" maxLength=\"5\" size=\"7\" id=\""+prgNr+"endtime_" + dayidx + "_" + i + "\" " + (i == timeouts.length - 1 ? 'disabled=\"disabled\"' : '') + " type=\"text\" value=\"" + this.tom_toTime(timeouts[i][tom_endtime]) + "\" onblur=\""+prgNr+"tom.tom_checkAndSetTime ('" + day + "', this, " + i + "); document.getElementById('"+prgNr+"starttime_" + dayidx + "_" + (i + 1) + "').value=this.value; \">" + translateKey('lblProgramTimeExtension') + "</td>";

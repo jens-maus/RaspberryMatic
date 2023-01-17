@@ -1,15 +1,15 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -11715,7 +11715,7 @@
+@@ -11988,7 +11988,7 @@
  
      conInfo("filterHmIPChannels4ProgramConditions");
      // If the channel is visible and no KEY_TRANSCEIVER or *_WEEK_PROFILE then show the channel
 -    if (channel.isVisible
 +    if (channel
        && (channel.channelType != "KEY_TRANSCEIVER")
-       && (channel.channelType.indexOf("_WEEK_PROFILE") == -1)
-       ) { arChannels.push(channel);}
-@@ -11723,7 +11723,7 @@
+       && (channel.channelType != "UNIVERSAL_LIGHT_RECEIVER")
+       && (channel.channelType != "DISPLAY_INPUT_TRANSMITTER")
+@@ -12000,7 +12000,7 @@
      // If the channel is a KEY_TRANSCEIVER and the device type no HmIP-PS / PSM (-IT/-CH/-PE/-UK) / PDT /PCBS then show the channel
      // A key press of the internal button doesn't work for the above-named devices
      if ((channel.channelType == "KEY_TRANSCEIVER")
@@ -18,12 +18,12 @@
        && (channelTypeName != "hmip-ps")
        && (channelTypeName.indexOf("hmip-psm") == -1)
        && (channelTypeName != "hmip-pdt")
-@@ -11737,7 +11737,7 @@
-   filterHmIPChannels4ProgramActivities: function(channel, arChannels) {
-     conInfo("filterHmIPChannels4ProgramActivities");
-     var channelTypeName = channel.typeName.toLowerCase();
+@@ -12075,7 +12075,7 @@
+     var channelTypeName = channel.typeName.toLowerCase(),
+     oMaintChannel, deviceMode, endOfScreens = false;
+ 
 -    if (channel.isVisible) {
 +    if (channel) {
-       if (channelTypeName != "hmip-wkp") {
-         arChannels.push(channel);
-       } else {
+       if (channelTypeName == "hmip-wkp") {
+         if ((channel.channelType == "MAINTENANCE") || ((channel.channelType == "ACCESS_TRANSCEIVER") && (channel.index % 2 != 0))) {
+           arChannels.push(channel);

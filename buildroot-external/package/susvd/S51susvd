@@ -1,0 +1,101 @@
+#!/bin/sh
+# shellcheck shell=dash disable=SC2169,SC3010
+#
+# S.USV Daemon starting and stopping
+#
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+DAEMON="susvd"
+PIDFILE="/var/run/${DAEMON}.pid"
+
+SERVER=/opt/susvd/susvd
+CLIENT=/opt/susvd/susv
+CONFIG=/opt/susvd/susv.cfg
+
+test -x $SERVER || exit 0
+test -e $CONFIG || exit 0
+
+case $1 in
+	start)
+		echo -n "Starting S.USV daemon: "
+		I2C_ADDR="$(grep "address=" ${CONFIG} | awk '{ print $1 }' | cut -d'=' -f2)"
+		if [[ -n "${I2C_ADDR}" ]]; then
+
+			# find out if a S.USV unit is installed at all
+			if i2cget -y 1 "${I2C_ADDR}" 2>/dev/null >/dev/null; then
+
+				# identify the current firmware version
+				SUSV_FW=$(${CLIENT} -status | grep "Firmware Version:" | cut -d' ' -f4)
+				if [[ -n "${SUSV_FW}" ]]; then
+
+					# define which daemon version to use
+					# based on the firmeversion found
+					case "${SUSV_FW}" in
+
+						# v1.1x should be a S.USV (mobile) with HW Version 2
+						1.1*)
+							SERVER=/opt/susvd/susvd
+						;;
+
+						# v1.3x should be a S.USV with HW Version 1
+						1.3*)
+							SERVER=/opt/susvd/susvd1
+						;;
+
+						# v2.4x should be a S.USV with HW Version 2
+						2.4*|2.5*|2.6*)
+							SERVER=/opt/susvd/susvd
+						;;
+					esac
+
+				else
+					SUSV_FW="WARNING: couldn't identify firmware version"
+				fi
+
+				# start the daemon
+				if ${SERVER} -start >/dev/null 2>&1; then
+					echo "${SUSV_FW}, OK"
+				else
+					echo "${SUSV_FW}, FAIL"
+				fi
+
+			else
+				echo "no hardware found"
+			fi
+		else
+			echo "disabled"
+		fi
+	;;
+
+	stop)
+		echo -n "Stopping S.USV daemon: "
+		if [[ -f ${PIDFILE} ]]; then
+			if ${SERVER} -stop >/dev/null 2>&1; then
+				echo "OK"
+			else
+				echo "FAIL"
+			fi
+		else
+			echo "OK"
+		fi
+		rm -f ${PIDFILE}
+	;;
+
+	restart|force-reload)
+		$0 stop
+		sleep 1
+		$0 start
+	;;
+
+	status)
+		${SERVER} --status
+	;;
+
+	*)
+		echo "Usage: $0 {start|stop|restart|force-reload|status}" >&2
+		exit 1
+	;;
+esac
+
+exit 0

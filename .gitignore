@@ -9,3 +9,5 @@
 /release/*.ova
 /release/*.tgz
 /release/*.sha256
+helm/raspberrymatic/charts/
+helm/raspberrymatic/Chart.lock

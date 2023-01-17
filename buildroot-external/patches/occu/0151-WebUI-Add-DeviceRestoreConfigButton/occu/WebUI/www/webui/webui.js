@@ -40189,16 +40189,14 @@ isHeatingControlDirty = function() {
 RestoreDeviceParameters = function()
 {
   ProgressBar = new ProgressBarMsgBox(translateKey("transferConfigData"), 0);
-  
   ProgressBar.show();
   ProgressBar.StartKnightRiderLight();
   
-  homematic("Interface.restoreConfigToDevice", {"interface": $F('global_iface'), "address": $F('global_address')});
-  
-  ProgressBar.hide();
-  ProgressBar.StopKnightRiderLight();
-  
-  CheckConfigPending($F('global_iface'), $F('global_address'), '', $F('global_redirect_url'), true);
+  homematic("Interface.restoreConfigToDevice", {"interface": $F('global_iface'), "address": $F('global_address')}, function() {
+    ProgressBar.hide();
+    ProgressBar.StopKnightRiderLight();
+    CheckConfigPending($F('global_iface'), $F('global_address'), '', $F('global_redirect_url'), true);
+  });
 }
 
 SaveDeviceParameters = function()

@@ -54,6 +54,9 @@ cat <<EOF
       </tr>
       <tr><td><hr noshade size="4" color="white" id="bar1"></td></tr>
       <tr>
+        <td><div><input id="btnCheckStorage" class="NavButton" type="button" onclick="showCheckStorage();" value="Check+Repair Storage"></div></td>
+      </tr>
+      <tr>
         <td><div><input id="btnCloneSystem" class="NavButton" type="button" onclick="showCloneSystem();" value="Clone System"></div></td>
       </tr>
       <tr><td><hr noshade size="4" color="white" id="bar2"></td></tr>
@@ -76,6 +79,19 @@ cat <<EOF
               </div>
               <br/>
               <input class="NavButton" type="submit" value="Restore Backup" >
+            </p>
+          </form>
+        </td>
+      </tr>
+      <tr align="center">
+        <td id="tdCheckStorage" style="display: none;">
+          <form name="checkStorageSelect" action="cgi-bin/check_storage.cgi" method="post" enctype="multipart/form-data" onsubmit="return confirm('WARNING: The selected operation can take considerable time (minutes to hours) and should not be interrupted! Do you really want to continue?');">
+            <p>This service item can be used to run a detailed file<br/>
+               system and bad blocks check on the used storage device.<br/><br/>
+               This operation can take a very long time (minutes to hours) and<br/>
+               should NOT be interrupted.<br/>
+              <br/>
+              <input class="NavButton" type="submit" value="Check+Repair Storage">
             </p>
           </form>
         </td>
@@ -195,11 +211,13 @@ cat <<EOF
       var elmBtnBackupConfig = document.getElementById("btnBackupConfig"),
         elmBtnRestoreConfig = document.getElementById("btnRestoreConfig"),
         elmBtnCloneSystem = document.getElementById("btnCloneSystem"),
+        elmBtnCheckStorage = document.getElementById("btnCheckStorage"),
         elmBtnRecoveryUpdate = document.getElementById("btnRecoveryUpdate"),
         elmTDRecoveryUpdate = document.getElementById("tdRecoveryUpdate"),
         elmTDBackupConfig = document.getElementById("tdBackupConfig"),
         elmTDRestoreConfig = document.getElementById("tdRestoreConfig"),
         elmTDCloneSystem = document.getElementById("tdCloneSystem"),
+        elmTDCheckStorage = document.getElementById("tdCheckStorage"),
         elmBar1 = document.getElementById("bar1"),
         elmBar2 = document.getElementById("bar2"),
         elmTblBtnPanel = document.getElementById("tblBtnPanel"),
@@ -219,6 +237,7 @@ cat <<EOF
         elmBtnBackupConfig.style.display = "none";
         elmBtnRestoreConfig.style.display = "none";
         elmBtnCloneSystem.style.display = "none";
+        elmBtnCheckStorage.style.display = "none";
         elmBtnRecoveryUpdate.style.display = "none";
         elmTblBtnPanel.style.display = "none";
         btnInfoPanel.style.display = "none";
@@ -234,6 +253,7 @@ cat <<EOF
         elmTDBackupConfig.style.display = "none";
         elmTDRestoreConfig.style.display = "none";
         elmTDCloneSystem.style.display = "none";
+        elmTDCheckStorage.style.display = "none";
       }
 
       function showBackupConfig() {
@@ -242,6 +262,7 @@ cat <<EOF
         elmTDBackupConfig.style.display = "block";
         elmTDRestoreConfig.style.display = "none";
         elmTDCloneSystem.style.display = "none";
+        elmTDCheckStorage.style.display = "none";
       }
 
       function showRestoreConfig() {
@@ -250,6 +271,7 @@ cat <<EOF
         elmTDBackupConfig.style.display = "none";
         elmTDRestoreConfig.style.display = "block";
         elmTDCloneSystem.style.display = "none";
+        elmTDCheckStorage.style.display = "none";
       }
 
       function showCloneSystem() {
@@ -258,6 +280,16 @@ cat <<EOF
         elmTDBackupConfig.style.display = "none";
         elmTDRestoreConfig.style.display = "none";
         elmTDCloneSystem.style.display = "block";
+        elmTDCheckStorage.style.display = "none";
+      }
+
+      function showCheckStorage() {
+        showOnlyRelevantElems();
+        elmTDRecoveryUpdate.style.display = "none";
+        elmTDBackupConfig.style.display = "none";
+        elmTDRestoreConfig.style.display = "none";
+        elmTDCloneSystem.style.display = "none";
+        elmTDCheckStorage.style.display = "block";
       }
 
       function showInfoPanel () {

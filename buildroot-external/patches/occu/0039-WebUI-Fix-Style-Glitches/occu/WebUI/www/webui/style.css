@@ -1606,6 +1606,7 @@ div.caption  { display: table-caption; }
 
 	background-color: $_(clickable);
 	text-align:center;
+	height: 50px;
 }
 
 #ic_deviceparameters .parameter_area .parameters_table tbody {
@@ -1616,7 +1617,6 @@ div.caption  { display: table-caption; }
 
 #ic_deviceparameters .parameter_area .parameters_table td {
 	border: 1px solid $_(black); /* black */
-	height: 50px;
 }
 
 #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl
@@ -1624,6 +1624,7 @@ div.caption  { display: table-caption; }
 	border: 0;
 	height: auto;
 	background-color: $_(white); /* white */
+	border-spacing: 0px;
 }
 
 #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl thead
@@ -1638,8 +1639,6 @@ div.caption  { display: table-caption; }
 {
 	border: 0;
 	background-color: $_(white); /* white */
-	padding: 2px;
-	height: auto;
 }
 
 #ic_deviceparameters #Timeouts_Area .TimeoutTable,
@@ -1837,6 +1836,7 @@ background-color: $_(inactiveBackground);
 #ic_selchannel {
   display: initial;
   width: 100%;
+  margin: 10px;
 }
 
 #ic_selchannel #body_wrapper {
@@ -1845,7 +1845,7 @@ background-color: $_(inactiveBackground);
 
 #ic_selchannel #previous_step_wrapper {
 	background-color: $_(background); /* #183473 */
-	margin: 10px;
+	margin-bottom: 10px;
 }
 	
 #ic_selchannel #createLinkStep1 {
@@ -1880,6 +1880,8 @@ background-color: $_(inactiveBackground);
 #ic_selchannel .ChnListTbl {
 	border: 1px solid $_(black); /* black */
 	background-color: $_(background); /* #183473 */
+	width: 100%;
+	margin: 0px;
 }
 
 #ic_selchannel .ChnListTbl tr td {
@@ -2297,6 +2299,14 @@ table.center {
   background-color:#89989b;
   color:white;
   font-weight: bold;
+}
+
+.controlHeader150px {
+  text-align:center;
+  background-color:#89989b;
+  color:white;
+  font-weight: bold;
+  min-width: 150px;
 }
 
 .controlRedBorder {
@@ -2723,7 +2733,7 @@ html, body {
   width: 996px;
   height: 522px;
   background-color: $_(white); /* white */
-  overflow: scroll;  
+  overflow: auto;
 }
 
 #ChannelChooserFooter {
@@ -2863,7 +2873,7 @@ html, body {
   width: 996px;
   height: 520px;
   background-color: $_(white); /* white */
-  overflow: scroll;  
+  overflow: auto;
 }
 
 #MultiChannelChooserFooter {
@@ -3051,6 +3061,7 @@ html, body {
 .DeviceListThumbnail {
   border: 1px solid $_(black); /* black */
   text-align:center;
+  mix-blend-mode: multiply;
 }
 
 .DeviceListButton {
@@ -3111,7 +3122,7 @@ html, body {
   height: 520px;
   background-color: $_(white); /* white */
   color: $_(textColorB); /* black */
-  overflow: scroll;  
+  overflow: auto;
 }
 
 #ChannelConfigDialogFooter {
@@ -3233,8 +3244,7 @@ html, body {
   height: 371px;
   background-color: $_(white); /* white */
   color: $_(textColorB); /* black */
-/*  overflow: scroll;   */
-  overflow: hidden;   
+  overflow: auto;
 }
 
 #DeviceConfigDialogFooter {
@@ -4007,7 +4017,7 @@ application {
 /* rega\pages\msg\sysVarsSelection.htm */
 
 .CLASS00300 {
-	overflow: scroll;
+	overflow: auto;
 	height:520px;
 	background-color:$_(white); /* white */
 	border:solid 1px $_(black); /* black */
@@ -4275,7 +4285,7 @@ application {
 
 .CLASS00717 {
 	height:200px;
-	overflow:scroll;
+	overflow: auto;
 	background-color:$_(white); /* white */
 }
 
@@ -4689,7 +4699,7 @@ application {
 /* rega\pages\msg\programChooser.htm */
 
 .CLASS01300 {
-	overflow: scroll;
+	overflow: auto;
 	width: 100%;
 	height: 400px;
 	background-color:$_(white); /* white */
@@ -4909,7 +4919,7 @@ application {
 }
 
 .CLASS01803 {
-	background-color:$_(white); /* #ffffff */
+	/*background-color:$_(white);*/ /* #ffffff */
 	text-align:center;
 	margin-left:4px;
 	margin-right:4px;
@@ -5275,6 +5285,13 @@ application {
 	border:1px solid $_(black); /* black */
 }
 
+.CLASS02525a {
+	height:100px;
+	width:100px;
+	background-color:$_(okSignal);
+	border:1px solid $_(black); /* black */
+}
+
 .CLASS02525b {
 	height:96px;
 	width:96px;
@@ -5510,6 +5527,13 @@ application {
 	width:98%;
 }
 
+.CLASS02551c {
+	cursor:pointer;
+	height:35px;
+	width:100px;
+	margin-left: 11%;
+}
+
 .CLASS02552 {
 	border:solid 1px $_(black); /* black */
 	mix-blend-mode:multiply;
@@ -5542,6 +5566,13 @@ application {
 .CLASS02557 {
 	height:96px;
 	width:96px;
+	background-color:$_(clickable);
+	border:1px solid $_(black); /* black */
+}
+
+.CLASS02557A {
+	height:100px;
+	width:100px;
 	background-color:$_(clickable);
 	border:1px solid $_(black); /* black */
 }
@@ -8407,7 +8438,9 @@ color: $_(textColorA); /* white */
 /* config\help.cgi */
 
 .CLASS21300 {
-  height:56%;
+  height: 100%;
+  width: 100%;
+  padding: 10px;
 }
 
 .CLASS21301 {
@@ -8835,11 +8868,17 @@ color: $_(textColorA); /* white */
 
 .CLASS22003 {
   background-color: $_(white);
+  height: 50px;
 }
 
 .CLASS22004 {
   background-color: $_(activeBackground);
   text-align: center;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .CLASS22005 {

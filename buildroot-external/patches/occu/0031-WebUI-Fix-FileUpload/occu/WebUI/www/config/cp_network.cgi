@@ -255,7 +255,7 @@ proc action_cert_upload {} {
   gets $fp line
   close $fp
   #puts $line;
-  if { [string equal $line "-----BEGIN RSA PRIVATE KEY-----"] == 1 || [string equal $line "-----BEGIN PRIVATE KEY-----"] == 1} {
+  if { [string last " PRIVATE KEY-----" $line] != -1 } {
     file rename -force -- $filename "/usr/local/tmp/server.pem"
     
     cgi_javascript {
@@ -263,7 +263,7 @@ proc action_cert_upload {} {
       puts {
         var dlgPopup = parent.top.dlgPopup;
         if (dlgPopup === undefined) {
-          dlgPopup = window.open('', 'resize').dlgPopup;
+          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
         }
         dlgPopup.hide();
         dlgPopup.setWidth(600);
@@ -278,7 +278,7 @@ proc action_cert_upload {} {
       puts {
         var dlgPopup = parent.top.dlgPopup;
         if (dlgPopup === undefined) {
-          dlgPopup = window.open('', 'resize').dlgPopup;
+          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
         }
         dlgPopup.hide();
         dlgPopup.setWidth(600);

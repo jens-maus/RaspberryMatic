@@ -1543,7 +1543,7 @@ proc action_backup_upload {} {
     puts {
       var dlgPopup = parent.top.dlgPopup;
       if (dlgPopup === undefined) {
-        dlgPopup = window.open('', 'resize').dlgPopup;
+        dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
       }
       dlgPopup.hide();
       dlgPopup.setWidth(400);

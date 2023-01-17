@@ -1,5 +1,5 @@
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function() {
   var config = {tabSize: 4, indentUnit: 2}
@@ -92,7 +92,7 @@
      "[em *foo ][em&link bar/hello@be6a8cc1c1ecfe9489fb51e4869af15a13fc2cd2][em *]");
 
   MT("wordSHA",
-     "ask for feedbac")
+     "ask for feedback")
 
   MT("num",
      "foo [link #1] bar");

@@ -1306,6 +1306,18 @@ proc cmd_link_paramset2 {iface address pps_descr pps ps_type {pnr 0}} {
         set value_orig $value
         set formatString "%.1f"
 
+        if {$iface == "HmIP-RF"} {
+          # SPHM-801
+          if {([string first "_LEVEL" $param_id] != -1) || ([string first "_SATURATION" $param_id] != -1)} {
+            set formatString "%.3f"
+          }
+
+          # SPHM-845
+          if {[string first "RAMP_START_STEP" $param_id] != -1} {
+            set formatString "%.2f"
+          }
+        }
+
         set value         [format $formatString [expr $value         * $factor]]
         
         set min_orig $min
@@ -1381,9 +1393,9 @@ proc cmd_link_paramset2 {iface address pps_descr pps ps_type {pnr 0}} {
             append s "</select>"
           }
 
-          append s "<input type=\"hidden\" name=\"$param_id\"   value=\"$value_orig\" $id                 $access style=\"visibility:hidden;display:none;\" />"
+          append s "<input type=\"hidden\" name=\"$param_id\"   value=\"$value_orig\" $id $access style=\"visibility:hidden;display:none;\" />"
           append s "<input type=\"text\"   name=\"__$param_id\" value=\"$value\"       id=\"$input_idval\" $access $hidden"
-          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', parseFloat($min), parseFloat($max), parseFloat([expr 1 / $factor]));\" /></td>"
+          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', [expr $min + 0.001], [expr $max + 0.001], parseFloat([expr 1 / $factor]));\" /></td>"
           append s "<td><div id=\"${input_idval}_unit\" $hidden>$unit ($min-$max)</div></td>"
       }
       "ENUM" {
@@ -1535,6 +1547,16 @@ proc ConvTime {value} {
   
 }
 
+proc ConvFreeValue {param value} {
+  set freeValue $value
+  set unit ""
+  if {[string first "DIM_STEP_COLOR_TEMPERATURE" $param] != -1} {
+    set unit "K"
+  }
+  append freeValue " $unit"
+  return $freeValue
+}
+
 proc ConvPercent {value} {
 
   global unit_perc
@@ -1593,6 +1615,7 @@ proc get_ComboBox2 {val_arr name id selectedvalue {extraparam ""}} {
     "99999999"  { if {$doppelt == "false"} {set arr($selectedvalue) [ConvTime $selectedvalue]}} 
     "99999998"  { if {$doppelt == "false"} {set arr($selectedvalue) [ConvPercent $selectedvalue]}}
     "99999997"  { if {$doppelt == "false"} {set arr($selectedvalue) [ConvTemp $selectedvalue]}}  
+    "99999990"  { if {$doppelt == "false"} {set arr($selectedvalue) [ConvFreeValue $name $selectedvalue]}}
     }
   }  
   set s "<select class=\"$selectedvalue\" name=\"$name\" id=\"$id\" $extraparam [expr {[array size arr]<=1?"disabled=\"disabled\" ":" "} ]>"
@@ -1909,6 +1932,12 @@ proc getExistingParamId {paramids} {
   
   if {$paramids != ""} then {
     foreach filename $paramids {
+
+      # This is because nowadays a device type identifier can contain a whitespace - which is quite silly
+      set arFilename [split $filename =]
+      if {[llength $arFilename] == 2} {
+        set filename [lindex $arFilename 1]
+      }
 
       if { [file exists easymodes/$filename.tcl] || [file exists easymodes/hmip/$filename.tcl] } then {
         set paramid $filename

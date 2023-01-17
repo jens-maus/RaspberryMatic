@@ -1,0 +1,6 @@
+config BR2_PACKAGE_TCLRPC
+	bool "tclrpc"
+	help
+	  TCL library to interact with xmlrpc interfaces
+
+	  https://github.com/eq-3/occu/blob/master/CCU2/download/tclrpc-eQ-3.tar.gz

@@ -1,5 +1,5 @@
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 /***
     |''Name''|tiddlywiki.js|
@@ -114,7 +114,7 @@ CodeMirror.defineMode("tiddlywiki", function () {
         return 'header';
     }
 
-    if (ch == '{' && stream.match(/\{\{/))
+    if (ch == '{' && stream.match('{{'))
       return chain(stream, state, twTokenCode);
 
     // rudimentary html:// file:// link matching. TW knows much more ...

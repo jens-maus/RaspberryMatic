@@ -27,7 +27,7 @@ proc GetTempUnit {} {
   catch {
     switch $dev_ps(DISPLAY_TEMPERATUR_UNIT) {
 
-        0  {set unit_temp  "&nbsp;&deg;C"; return 0}
+        0  {set unit_temp  "&nbsp;&deg;;C"; return 0}
         1  {set unit_temp  "&nbsp;&deg;F"; return 1}
       default {set unit_temp  "&nbsp;*"; return -1}
     }
@@ -81,6 +81,23 @@ proc EnterPercent {profile pref special_input_id ps_descr param} {
   append HTML_PARAMS(separate_$profile) "<div id=\"vis_percent_$id\" style=\"display:none\" name=\"vis_percent_$id\">"
   append HTML_PARAMS(separate_$profile) "<input type=\"text\" id=\"percent_$id\" size=\"2\" name=\"percent_$id\" value=\"00\" style=\"text-align:center\" onchange=\"ProofFreePercent('percent_$id', $min, $max);\"> " 
   append HTML_PARAMS(separate_$profile) "% </div>"
+
+}
+
+proc EnterFreeValue {profile pref special_input_id ps_descr param {unit ""}} {
+  upvar HTML_PARAMS HTML_PARAMS
+  upvar ps_descr descr
+
+  set id "$profile\_$pref\_$special_input_id"
+
+  array_clear param_descr
+  array set param_descr $descr($param)
+  set min $param_descr(MIN)
+  set max $param_descr(MAX)
+
+  append HTML_PARAMS(separate_$profile) "<div id=\"vis_val_$id\" style=\"display:none\" name=\"vis_val_$id\">"
+  append HTML_PARAMS(separate_$profile) "<input type=\"text\" id=\"val_$id\" size=\"2\" name=\"val_$id\" value=\"$min\" style=\"text-align:center\" onchange=\"ProofFreeValue(this.id, $min, $max);\"> "
+  append HTML_PARAMS(separate_$profile) "$unit </div>"
 
 }
 
@@ -235,7 +252,7 @@ proc EnterBrightness {profile pref special_input_id ps ps_descr param} {
 }
 
 
-proc EnterBrightnessHmIP {profile pref special_input_id ps ps_descr param condActive} {
+proc EnterBrightnessHmIP {profile pref special_input_id ps ps_descr param condActive {extraparam ""}} {
 
   global url receiver_address sender_address dev_descr_sender brightness brightnessHas2beConverted paramType
 
@@ -244,6 +261,7 @@ proc EnterBrightnessHmIP {profile pref special_input_id ps ps_descr param condAc
   upvar ps vdescr
 
   set id "separate\_$special_input_id\_$profile\_$pref"
+  set idHI "separate\_$special_input_id\_$profile\_[expr $pref + 1]"
 
   set devHmIPWired 0 ; # false
   if {[string first "HmIPW-" $dev_descr_sender(PARENT_TYPE)] == 0} {
@@ -256,6 +274,8 @@ proc EnterBrightnessHmIP {profile pref special_input_id ps ps_descr param condAc
   # set fwMinor [expr [lindex $fwMajorMinorPatch 1] * 1]
   # set fwPatch [expr [lindex $fwMajorMinorPatch 2] * 1]
 
+  set splitParam [split $param _]
+  # set paramSCVH "[lindex $splitParam 0]_[lindex $splitParam 1]_[lindex $splitParam 2]_HI"; # SHORT_COND_VALUE_HI
   array_clear param_descr
   array set param_descr $descr($param)
   set min $param_descr(MIN)
@@ -290,14 +310,20 @@ proc EnterBrightnessHmIP {profile pref special_input_id ps ps_descr param condAc
     }
   }
   #puts "<script type=\"text/javascript\">"
-    #puts "MD_catchBrightness('$url', '$sender_address', '$receiver_address','$brightness', '$brightnessHas2beConverted', '$paramType', 'false', '$id','','')"
+    #puts "MD_catchBrightness('$url', '$sender_address', '$receiver_address','$brightness', '$brightnessHas2beConverted', '$paramType', 'false', '$id$extraparam','','')"
   #puts "</script>"
 
-  append HTML_PARAMS(separate_$profile) "<table id=\"bright\_$profile\" class=\"ProfileTbl\" style=\"visibility:hidden\">"
-  append HTML_PARAMS(separate_$profile) "<tr><td></td></tr><tr><td id=\"param\_$profile\_a\"><textarea id=\"profile\_$profile\_a\" style=\"display:none\">\${BRIGHTNESS_CONTROL}</textarea></td>"
+  append HTML_PARAMS(separate_$profile) "<table id=\"bright\_$profile$extraparam\" class=\"ProfileTbl\" style=\"visibility:hidden\">"
 
-  append HTML_PARAMS(separate_$profile) "<td><input type=\"text\" id=\"$id\" size=\"3\" name=\"$param\" value=\"$vdescr($param)\" style=\"text-align:center\" onchange=\"MD_init('$id', $min, $max);\"> "
-  append HTML_PARAMS(separate_$profile) "<input id=\"help_brightness\_$profile\" type=\"button\" name=\"Help\" value=\"Help\" onclick=\"MD_catchBrightness('$url', '$sender_address', '$receiver_address', '$brightness', '$brightnessHas2beConverted', '$paramType', 'true', '$id', $help, '$min $max')\"></td></tr>"
+  if {[string equal $extraparam "HI"] == 1} {
+    append HTML_PARAMS(separate_$profile) "<tr><td colspan='2'><hr></td></tr>"
+  }
+
+  append HTML_PARAMS(separate_$profile) "<tr><td></td></tr><tr><td id=\"param\_$profile\_a$extraparam\"><textarea id=\"profile\_$profile\_a$extraparam\" style=\"display:none\">\${BRIGHTNESS_CONTROL$extraparam}</textarea></td>"
+
+  append HTML_PARAMS(separate_$profile) "<td><input type=\"text\" id=\"$id\" size=\"3\" name=\"$param\" value=\"$vdescr($param)\" style=\"text-align:center\" onchange=\"MD_init('$id', $min, $max);/*jQuery('\#$idHI').val(this.value);*/\"> "
+  append HTML_PARAMS(separate_$profile) "<input id=\"help_brightness\_$profile$extraparam\" type=\"button\" name=\"Help\" value=\"Help\" onclick=\"MD_catchBrightness('$url', '$sender_address', '$receiver_address', '$brightness', '$brightnessHas2beConverted', '$paramType', 'true', '$id', $help, '$min $max')\"></td></tr>"
+  # append HTML_PARAMS(separate_$profile) "<td><input type=\"text\" id=\"$idHI$extraparam\" size=\"3\" name=\"$paramSCVH\" value=\"$vdescr($param)\" class=\"_hidden\" style=\"text-align:center\"> "
 
 
   puts "<script type=\"text/javascript\">load_JSFunc('/config/easymodes/MASTER_LANG/HmIP-ParamHelp.js');</script>"
@@ -308,19 +334,25 @@ proc EnterBrightnessHmIP {profile pref special_input_id ps ps_descr param condAc
       append HTML_PARAMS(separate_$profile) "\${lblBrightnessLuxA} ($minLux - $maxLux)<br/>\${lblBrightnessLuxB}"
     append HTML_PARAMS(separate_$profile) "</td>"
     append HTML_PARAMS(separate_$profile) "<td>"
-      # append HTML_PARAMS(separate_$profile) "<input id=\"usrDefBrightness_$profile\" type=\"text\" size=\"5\" value=\"[format %.0f $brightness]\" onblur=\"ProofAndSetValue(this.id,this.id,$minLux,$maxLux,1);\"/><input type=\"button\" value=\"OK\" onclick=\"setUsrDefBrightness('$id', $profile);\"/>&nbsp;[getHelpIcon helpBrightnessLux]"
-      append HTML_PARAMS(separate_$profile) "<input id=\"usrDefBrightness_$profile\" type=\"text\" size=\"5\" onblur=\"ProofAndSetValue(this.id,this.id,$minLux,$maxLux,1);\"/><input type=\"button\" value=\"OK\" onclick=\"setUsrDefBrightness('$id', $profile);\"/>&nbsp;[getHelpIcon helpBrightnessLux 450 100]"
+      # append HTML_PARAMS(separate_$profile) "<input id=\"usrDefBrightness_$profile\_$pref\" type=\"text\" size=\"5\" value=\"[format %.0f $brightness]\" style=\"text-align:center\" onblur=\"ProofAndSetValue(this.id,this.id,$minLux,$maxLux,1);\"/><input type=\"button\" value=\"OK\" onclick=\"setUsrDefBrightness('$id', '$profile\_$pref');\"/>&nbsp;[getHelpIcon helpBrightnessLux]"
+      append HTML_PARAMS(separate_$profile) "<input id=\"usrDefBrightness_$profile\_$pref\" type=\"text\" size=\"5\" style=\"text-align:center\" onblur=\"ProofAndSetValue(this.id,this.id,$minLux,$maxLux,1);\"/><input type=\"button\" value=\"OK\" onclick=\"setUsrDefBrightness('$id', '$profile\_$pref');\"/>&nbsp;[getHelpIcon helpBrightnessLux 450 100]"
     append HTML_PARAMS(separate_$profile) "</td>"
 
       append HTML_PARAMS(separate_$profile) "<script type=\"text/javascript\">"
         append HTML_PARAMS(separate_$profile) "setUsrDefBrightness = function(cndValElmId, profile) \{"
           append HTML_PARAMS(separate_$profile) "var usrVal = jQuery(\"\#usrDefBrightness_\"+profile).val(),"
+          append HTML_PARAMS(separate_$profile) "arCndValElmLO = cndValElmId.split(\"_\"),"
+          # append HTML_PARAMS(separate_$profile) "cndValElmIdHI = arCndValElmLO\[0\]+\"_\"+arCndValElmLO\[1\]+\"_\"+arCndValElmLO\[2\]+\"_\"+(parseInt(arCndValElmLO\[3\]) + 1),"
           append HTML_PARAMS(separate_$profile) "cndValElm = jQuery(\"\#\"+cndValElmId);"
+          # append HTML_PARAMS(separate_$profile) "cndValElmHI = jQuery(\"\#\"+cndValElmIdHI);"
+
           append HTML_PARAMS(separate_$profile) "if(Number.isNaN(parseInt(usrVal))) {usrVal = 0;}"
           if {$devHmIPWired == 1 || [expr $fwMajor * 1] >= 2 } {
             append HTML_PARAMS(separate_$profile) "jQuery(cndValElm).val(MD_convertIlluminationToDecisionValue_V2(usrVal));"
+          #  append HTML_PARAMS(separate_$profile) "jQuery(cndValElmHI).val(jQuery(cndValElmLO).val());"
           } else {
             append HTML_PARAMS(separate_$profile) "jQuery(cndValElm).val(MD_convertIlluminationToDecisionValue(usrVal, \"$dev_descr_sender(PARENT_TYPE)\", \"$dev_descr(FIRMWARE)\"));"
+          #  append HTML_PARAMS(separate_$profile) "jQuery(cndValElmHI).val(jQuery(cndValElmLO).val());"
           }
         append HTML_PARAMS(separate_$profile) "\};"
       append HTML_PARAMS(separate_$profile) "</script>"
@@ -329,29 +361,29 @@ proc EnterBrightnessHmIP {profile pref special_input_id ps ps_descr param condAc
 
   append HTML_PARAMS(separate_$profile) "<tr><td>"
   # Falls noch kein aktueller Helligkeitswert zur VerfÃ¼gung steht, soll  folgendes nicht sichtbar sein
-  append HTML_PARAMS(separate_$profile) "<div id=\"brightDescr\_$profile\" style=\"_display:none\">"
-  append HTML_PARAMS(separate_$profile) "<div id=\"div_bright\_$profile\"><textarea id=\"text_bright\_$profile\" style=\"display:none\">"
+  append HTML_PARAMS(separate_$profile) "<div id=\"brightDescr\_$profile$extraparam\" style=\"_display:none\">"
+  append HTML_PARAMS(separate_$profile) "<div id=\"div_bright\_$profile$extraparam\"><textarea id=\"text_bright\_$profile$extraparam\" style=\"display:none\">"
   append HTML_PARAMS(separate_$profile) "\${GET_CURRENT_BRIGHTNESS}"
   append HTML_PARAMS(separate_$profile) "</textarea></div></td>"
-  append HTML_PARAMS(separate_$profile) "<script type=\"text/javascript\">\$('div_bright\_$profile').innerHTML = TrimPath.processDOMTemplate('text_bright\_$profile', localized\[0\]);</script>"
+  append HTML_PARAMS(separate_$profile) "<script type=\"text/javascript\">\$('div_bright\_$profile$extraparam').innerHTML = TrimPath.processDOMTemplate('text_bright\_$profile$extraparam', localized\[0\]);</script>"
   # Ende unsichtbar
   append HTML_PARAMS(separate_$profile) "</div>"
 
-  append HTML_PARAMS(separate_$profile) "<td><input type=\"hidden\" id=\"$id\_tmp\" size=\"3\" name=\"$param\_tmp\" value=\"$vdescr($param)\"> "
+  append HTML_PARAMS(separate_$profile) "<td><input type=\"hidden\" id=\"$id\_tmp$extraparam\" size=\"3\" name=\"$param\_tmp\" value=\"$vdescr($param)\"> "
   # Falls noch kein aktueller Helligkeitswert zur VerfÃ¼gung steht, soll  folgendes nicht sichtbar sein
-  append HTML_PARAMS(separate_$profile) "<div id=\"okButton_$profile\" style=\"_display:none\">"
-  append HTML_PARAMS(separate_$profile) "<input id=\"ok_brightness_$profile\" type=\"button\" name=\"catchBrightness\" value=\"OK\" onclick=\"MD_catchBrightness('$url', '$sender_address', '$receiver_address', '$brightness', '$brightnessHas2beConverted', '$paramType', 'true', '$id','setEasymode','');\">"
+  append HTML_PARAMS(separate_$profile) "<div id=\"okButton_$profile$extraparam\" style=\"_display:none\">"
+  append HTML_PARAMS(separate_$profile) "<input id=\"ok_brightness_$profile$extraparam\" type=\"button\" name=\"catchBrightness\" value=\"OK\" onclick=\"MD_catchBrightness('$url', '$sender_address', '$receiver_address', '$brightness', '$brightnessHas2beConverted', '$paramType', 'true', '$id','setEasymode','');\">"
   # Ende unsichtbar
   append HTML_PARAMS(separate_$profile) "</div>"
-  append HTML_PARAMS(separate_$profile) "<script type=\"text/javascript\">\$('help_brightness\_$profile').value = localized\[0\]\['help'\];</script>"
+  append HTML_PARAMS(separate_$profile) "<script type=\"text/javascript\">\$('help_brightness\_$profile$extraparam').value = localized\[0\]\['help'\];</script>"
   append HTML_PARAMS(separate_$profile) "<script type=\"text/javascript\">\$('ok_brightness\_$profile').value = localized\[0\]\['ok'\];</script>"
 
   append HTML_PARAMS(separate_$profile) "</td>"
   append HTML_PARAMS(separate_$profile) "</tr>"
 
   append HTML_PARAMS(separate_$profile) "</td></tr></table>"
-  append HTML_PARAMS(separate_$profile) "<script type=\"text/javascript\">if( \$('bright\_$profile').style.visibility == \'hidden\') { \$('param\_$profile\_a').innerHTML = TrimPath.processDOMTemplate('profile\_$profile\_a', localized\[0\])} ;"
-  append HTML_PARAMS(separate_$profile) "\$('bright\_$profile').style.visibility = \"visible\";</script>"
+  append HTML_PARAMS(separate_$profile) "<script type=\"text/javascript\">if( \$('bright\_$profile$extraparam').style.visibility == \'hidden\') { \$('param\_$profile\_a$extraparam').innerHTML = TrimPath.processDOMTemplate('profile\_$profile\_a$extraparam', localized\[0\])} ;"
+  append HTML_PARAMS(separate_$profile) "\$('bright\_$profile$extraparam').style.visibility = \"visible\";</script>"
 
 }
 

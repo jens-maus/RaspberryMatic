@@ -246,7 +246,11 @@ function ::WriteConditionText()
                   if( (!bOptionList) && (!bBinary) && (!bSpecial) )
                   {
                     !sRet = sRet#' <i>im Wertebereich</i> ';
-                    sRet = sRet#' <i>${ruleConditionLblWithinValueRange}</i> ';
+
+                    if (iCT1 != 5) {
+                      Write( ' <i>${ruleConditionLblWithinValueRange}</i> ' );
+                    }
+
                     string sCT = "";
                     string sValueUnit = oLV.ValueUnit();
                     if( sValueUnit == "100%")
@@ -270,12 +274,13 @@ function ::WriteConditionText()
                       sValueUnit = "";
                     }
                     
-                    if( (iCT1 != 1) && (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 10) && (iCT1 != 11) && (iCT1 != 9) && (iCT1 != 5) && (iCT1 != 12) )
+                    if( (iCT1 != 1) && (iCT1 != 5) && (iCT1 != 6) && (iCT1 != 8) && (iCT1 != 9) && (iCT1 != 10) && (iCT1 != 11) && (iCT1 != 12) )
                     {
                       oSC.ConditionType(6);
                       iCT1 = 6;
                     }
-                    
+
+                    if( iCT1 == 5 ) { sCT = "${ruleConditionLblIsEqual} "#iRV1.ToString(2)#sValueUnit; }
                     !if( iCT1 == 6 ) { sCT = "von "#iRV1.ToString(2)#sValueUnit#" bis kleiner "#iRV2.ToString(2)#sValueUnit; }
                     if( iCT1 == 6 ) { sCT = "${ruleConditionLblRangeFrom} "#iRV1.ToString(2)#sValueUnit#" ${ruleConditionLblRangeLessThan} "#iRV2.ToString(2)#sValueUnit; }
                     !if( iCT1 == 8 ) { sCT = "größer als "#iRV1.ToString(2)#sValueUnit; }
@@ -601,7 +606,14 @@ function ::WriteDestinationText()
                           if (unit == "&#176;C") {
                             sRet=sRet#value.ToString(2);
                           } else {
-                           if ( (value.ToString().Find("0x02") != -1) || (value.ToString().Find("ACT_") != -1) ) {
+                           ! Device specific program description
+                           ! a) e. g. HM-Dis-EP-WM55
+                           ! b) e. g. HmIP-WRCD
+                           if (
+                              (value.ToString().Find("0x02") != -1) || (value.ToString().Find("ACT_") != -1)  ||
+                              (value.ToString().Find("DDBC=") != -1)
+                              ) {
+
                               ! This is because the value of the status display or the RGBW-Controller can be very long
                               sRet=sRet#" ${ruleDescrHexString}";
                             } else {
@@ -715,7 +727,8 @@ function ::SetBreakOnRestart()
 
 function ::SetActive()
 {
-  if( system.IsVar("id") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("id")) )
   {
     object oTmp = dom.GetObject( system.GetVar("id") );
     if( oTmp )
@@ -735,7 +748,8 @@ function ::SetActive()
 
 function ::SetVisible()
 {
-  if( system.IsVar("id") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("id")) )
   {
     object oTmp = dom.GetObject( system.GetVar("id") );
     if( oTmp )
@@ -755,7 +769,8 @@ function ::SetVisible()
 
 function ::SetOperate()
 {
-  if( system.IsVar("id") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("id")) )
   {
     object oTmp = dom.GetObject( system.GetVar("id") );
     if( oTmp )
@@ -825,7 +840,8 @@ function ::SetVisibility()
 
 function ::DeleteProgram()
 {
-  if( system.IsVar("id") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("id")) )
   {
     object oTmp = dom.GetObject( system.GetVar("id") );
     if( oTmp )
@@ -863,7 +879,8 @@ function ::RestoreProgram()
 
 function ::CopyToNewProgram()
 {
-  if( system.IsVar("id") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("id")) )
   {
     object oCopy = dom.GetObject( system.GetVar("id") );
     if( oCopy )
@@ -904,19 +921,23 @@ function ::SetProgram()
 
 function ::NewProgram()
 {
-  object oPTmp = dom.GetObject( ID_PROGRAMS );
-  object oTmp = dom.CreateObject( OT_PROGRAM );
-  boolean bRet = false;
-  if( oTmp )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( oUser.UserLevel() == iulAdmin )
   {
-    !oTmp.Name( "Neues Programm" );
-    oTmp.Name( "${ruleTmpProgramName}" );
-    boolean bF1 = oPTmp.Add( oTmp.ID() );
-    boolean bF2 = system.SetSessionVar("sessionPRGID", oTmp.ID());
-    boolean bF3 = system.SetSessionVar("sessionORIGPRGID", oTmp.ID());
-    if( bF1 && bF2 && bF3 ) { bRet = true; }
+    object oPTmp = dom.GetObject( ID_PROGRAMS );
+    object oTmp = dom.CreateObject( OT_PROGRAM );
+    boolean bRet = false;
+    if( oTmp )
+    {
+      !oTmp.Name( "Neues Programm" );
+      oTmp.Name( "${ruleTmpProgramName}" );
+      boolean bF1 = oPTmp.Add( oTmp.ID() );
+      boolean bF2 = system.SetSessionVar("sessionPRGID", oTmp.ID());
+      boolean bF3 = system.SetSessionVar("sessionORIGPRGID", oTmp.ID());
+      if( bF1 && bF2 && bF3 ) { bRet = true; }
+    }
+    Write( bRet );
   }
-  Write( bRet );
   return;
 }
 
@@ -974,7 +995,8 @@ function ::ReloadRule()
 
 function ::AddCondition()
 {
-  if( system.IsVar("rid") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("rid")) )
   {
     object oTmp = dom.GetObject( system.GetVar("rid") );
     if( oTmp )
@@ -1009,7 +1031,8 @@ function ::AddCondition()
 
 function ::DeleteCondition()
 {
-  if( system.IsVar("rid") && system.IsVar("cid") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("rid")) && (system.IsVar("cid")) )
   {
     object oTmp = dom.GetObject( system.GetVar("rid") );
     if( oTmp )
@@ -1021,7 +1044,8 @@ function ::DeleteCondition()
 
 function ::AddSingleCondition()
 {
-  if( system.IsVar("cid") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("cid")) )
   {
     object oTmp = dom.GetObject( system.GetVar("cid") );
     if( oTmp )
@@ -1051,7 +1075,8 @@ function ::AddSingleCondition()
 
 function ::DeleteSingleCondition()
 {
-  if( system.IsVar("cid") && system.IsVar("sid") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("cid")) && (system.IsVar("sid")) )
   {
     object oTmp = dom.GetObject( system.GetVar("cid") );
     if( oTmp )
@@ -1074,7 +1099,8 @@ function ::DeleteSingleCondition()
 
 function ::AddSingleDestination()
 {
-  if( system.IsVar("did") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("did")) )
   {
     object oTmp = dom.GetObject( system.GetVar("did") );
     if( oTmp )
@@ -1086,7 +1112,8 @@ function ::AddSingleDestination()
 
 function ::DeleteSingleDestination()
 {
-  if( system.IsVar("did") && system.IsVar("sid") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("did")) && (system.IsVar("sid")) )
   {
     object oTmp = dom.GetObject( system.GetVar("did") );
     if( oTmp )
@@ -1098,7 +1125,8 @@ function ::DeleteSingleDestination()
 
 function ::AddSubRule()
 {
-  if( system.IsVar("rid") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("rid")) )
   {
     object oTmp = dom.GetObject( system.GetVar("rid") );
     if( oTmp )
@@ -1110,7 +1138,8 @@ function ::AddSubRule()
 
 function ::AddSubRuleDest()
 {
-  if( system.IsVar("rid") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("rid")) )
   {
     object oTmp = dom.GetObject( system.GetVar("rid") );
     if( oTmp )
@@ -1130,7 +1159,8 @@ function ::AddSubRuleDest()
 
 function ::AddSubRuleBOR()
 {
-  if( system.IsVar("rid") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("rid")) )
   {
     object oTmp = dom.GetObject( system.GetVar("rid") );
     if( oTmp )
@@ -1148,7 +1178,8 @@ function ::AddSubRuleBOR()
 
 function ::AddNewElseRule()
 {
-  if( system.IsVar("rid") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("rid")) )
   {
     object oTmp = dom.GetObject( system.GetVar("rid") );
     if( oTmp )
@@ -1173,7 +1204,8 @@ function ::AddNewElseRule()
 
 function ::DeleteSubRule()
 {
-  if( system.IsVar("rid") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("rid")) )
   {
     object oTmp = dom.GetObject( system.GetVar("rid") );
     if( oTmp )
@@ -1185,7 +1217,8 @@ function ::DeleteSubRule()
 
 function ::SetOperatorType()
 {
-  if( system.IsVar("id") && system.IsVar("value") )
+  object oUser = dom.GetObject( system.GetSessionVar("sessionUserID") );
+  if( (oUser.UserLevel() == iulAdmin) && (system.IsVar("id")) && (system.IsVar("value")) )
   {
     object oTmp = dom.GetObject( system.GetVar("id") );
     if( oTmp )

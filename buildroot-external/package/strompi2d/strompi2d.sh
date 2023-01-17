@@ -23,11 +23,11 @@ fi
 [[ -r /etc/config/strompi2 ]] && . /etc/config/strompi2
 
 # Initialize GPIO_POWER file descriptor
-/usr/bin/gpio -g mode ${GPIO_POWER} in
+/usr/bin/gpio -g mode "${GPIO_POWER}" in
 
 POWER_STATE=0
 while true; do
-  POWER_STATE_NEW=$(/usr/bin/gpio -g read ${GPIO_POWER})
+  POWER_STATE_NEW=$(/usr/bin/gpio -g read "${GPIO_POWER}")
   if [[ "${POWER_STATE_NEW}" != "${POWER_STATE}" ]]; then
 
     # execute POWER_LOSS_CMD in case power state is lost
@@ -43,5 +43,5 @@ while true; do
   fi
 
   # Debouncing in software
-  sleep ${DEBOUNCE_TIME}
+  sleep "${DEBOUNCE_TIME}"
 done

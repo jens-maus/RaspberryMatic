@@ -5,7 +5,7 @@
 // Home-Assistent UI so that the Ingress-based HA UI is able to embed
 // the WebUI.
 //
-// Copyright (c) 2021 Jens Maus <mail@jens-maus.de>
+// Copyright (c) 2021-2023 Jens Maus <mail@jens-maus.de>
 //
 // Apache 2.0 License applies
 //
@@ -41,7 +41,7 @@ const apiProxy = createProxyMiddleware('/', {
       var body;
 
       // if this a textual response body we make sure to prepend the ingress path
-      if(proxyRes.headers['content-type'].toLowerCase().includes('utf-8')) {
+      if(proxyRes.headers['content-type'].toLowerCase().includes('utf-8') || proxyRes.req.path.includes('/jpages/')) {
         body = responseBody.toString('utf8');
       } else {
         body = responseBody.toString('latin1');
@@ -57,7 +57,7 @@ const apiProxy = createProxyMiddleware('/', {
                           'window.location.href=\'' + req.headers['x-ingress-path'] + '/index.htm\'');
 
       // convert back to a Buffer in the right character encoding
-      if(typeof(req.headers['content-type']) === 'undefined') {
+      if(typeof(req.headers['content-type']) === 'undefined' && req.path.includes('/jpages/') === false) {
         return new Buffer.from(body, 'latin1');
       } else {
         return new Buffer.from(body, 'utf8');

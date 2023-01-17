@@ -54,38 +54,7 @@ identify_rf_hardware() {
     # also set tty device to low_latency mode (if possible)
     if [[ -n "${RF_DEVNODES}" ]]; then
       echo -n "."
-      /bin/setserial /dev/${RF_DEVNODES} low_latency >/dev/null 2>&1
-    fi
-  fi
-
-  # check if a HmIP-RFUSB (1b1f:c020) USB stick is connected
-  if lsusb 2>/dev/null | grep -q 1b1f:c020; then
-
-    # Load module if not present (usually loaded by udev)
-    if ! grep -Eq "^cp210x " /proc/modules; then
-      modprobe -q cp210x
-    fi
-
-    # helper function which takes usb "vendor_id:product_id" tuple and
-    # searches for the corresponding /dev node
-    id_to_dev() {
-      find "$(grep -l "PRODUCT=$(printf "%x/%x" "0x${1%:*}" "0x${1#*:}")" \
-         /sys/bus/usb/devices/[0-9]*:*/uevent | sed 's,uevent$,,')" \
-         /dev/null -name dev -o -name dev_id |
-      sed 's,[^/]*$,uevent,' |
-      xargs sed -n -e s,DEVNAME=,,p -e s,INTERFACE=,,p
-    }
-
-    RFUSB_DEVNODE=$(id_to_dev 1b1f:c020)
-    if [[ -z "${RFUSB_DEVNODE}" ]]; then
-      echo "1b1f c020" >/sys/bus/usb-serial/drivers/cp210x/new_id
-      sleep 2
-      RFUSB_DEVNODE=$(id_to_dev 1b1f:c020)
-    fi
-
-    if [[ -n "${RFUSB_DEVNODE}" ]]; then
-      echo -n "."
-      RF_DEVNODES="${RFUSB_DEVNODE} ${RF_DEVNODES}"
+      /bin/setserial "/dev/${RF_DEVNODES}" low_latency >/dev/null 2>&1
     fi
   fi
 
@@ -205,8 +174,6 @@ query_rf_parameters() {
 
             if [[ -e /sys/class/raw-uart/${dev}/device_type ]]; then
               HM_HMIP_DEVTYPE=$(cat "/sys/class/raw-uart/${dev}/device_type")
-            elif [[ "${HM_HMIP_DEV}" == "HMIP-RFUSB" ]]; then
-              HM_HMIP_DEVTYPE=USB
             else
               HM_HMIP_DEVTYPE=GPIO
             fi
@@ -231,9 +198,9 @@ query_rf_parameters() {
 
   if [[ -n "${HBRF_DEVNODE}" ]]; then
     # get the RED/GREEN/BLUE pin ids
-    RED_GPIO_PIN=$(cat "/sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/red_gpio_pin")
-    GREEN_GPIO_PIN=$(cat "/sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/green_gpio_pin")
-    BLUE_GPIO_PIN=$(cat "/sys/devices/virtual/raw-uart/${HBRF_DEVNODE}/blue_gpio_pin")
+    RED_GPIO_PIN=$(cat "/sys/class/raw-uart/${HBRF_DEVNODE}/red_gpio_pin")
+    GREEN_GPIO_PIN=$(cat "/sys/class/raw-uart/${HBRF_DEVNODE}/green_gpio_pin")
+    BLUE_GPIO_PIN=$(cat "/sys/class/raw-uart/${HBRF_DEVNODE}/blue_gpio_pin")
 
     # make sure to unbind the gpio-leds driver first
     if [[ -e /sys/class/leds/rpi_rf_mod:blue ]]; then
@@ -252,7 +219,7 @@ query_rf_parameters() {
     # rebind the gpio-leds so that numeration of the rpi-rf-mod leds are correct
     if [[ -n "${GPIO_LEDS}" ]] &&
        [[ ! -e /sys/bus/platform/drivers/leds-gpio/${GPIO_LEDS} ]]; then
-      echo ${GPIO_LEDS} >/sys/bus/platform/drivers/leds-gpio/bind 2>/dev/null
+      echo "${GPIO_LEDS}" >/sys/bus/platform/drivers/leds-gpio/bind 2>/dev/null
     fi
 
     # setup the LEDs to show a slowly blinking magenta light

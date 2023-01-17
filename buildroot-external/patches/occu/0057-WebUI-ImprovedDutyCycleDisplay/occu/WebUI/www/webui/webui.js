@@ -28908,8 +28908,8 @@ showDutyCycle = function() {
       csNotAvailable = -1,
       dcWarn  = 69;  // Warning when dc >= 70%
       dcAlarm = 89;  // Attention when dc >= 90%
-      csWarn  = 80;  // Warning when cs >= 80%
-      csAlarm = 98;  // Attention when cs >= 98%
+      csWarn  = 10;  // Warning when cs >= 11%
+      csAlarm = 19;  // Attention when cs >= 20%
 
       homematic("Interface.getDutyCycle", {}, function(dcArray) {
         if(jQuery.isArray(dcArray)) {

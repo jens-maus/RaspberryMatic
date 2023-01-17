@@ -44,6 +44,9 @@ $colormap-colors: (
     "webui-borderColor":             #f0f0f0
 );
 
+// use same line height standard like CCU WebUI (normal)
+$line-height-base: 1.2;
+
 // Merge the maps
 $theme-colors: map-merge($theme-colors, $colormap-colors);
 

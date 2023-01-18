@@ -50,6 +50,9 @@ $line-height-base: 1.2;
 // set hr-opacity to 1.0
 $hr-opacity: 1.0;
 
+// set headings font weight to bold
+$headings-font-weight: bold;
+
 // Merge the maps
 $theme-colors: map-merge($theme-colors, $colormap-colors);
 

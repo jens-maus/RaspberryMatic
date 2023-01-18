@@ -29,19 +29,15 @@
      <script type="text/javascript" src="/webui/js/extern/jquery.blockUI.js"></script>
 --- occu/WebUI/www/webui/css/extern/hmBootstrap.css.orig
 +++ occu/WebUI/www/webui/css/extern/hmBootstrap.css
-@@ -0,0 +1,28 @@
+@@ -0,0 +1,24 @@
 +/*!
 + * Place all our bootstrap related style fixes into this file
 + */
 +
-+#header *,
-+#header ::after,
-+#header ::before,
-+#menubar,
-+#content *,
-+#content ::after,
-+#content ::before {
-+  box-sizing: content-box;
++*,
++*::before,
++*::after {
++  box-sizing: revert;
 +}
 +
 +#header,

@@ -2,14 +2,10 @@
  * Place all our bootstrap related style fixes into this file
  */
 
-#header *,
-#header ::after,
-#header ::before,
-#menubar,
-#content *,
-#content ::after,
-#content ::before {
-  box-sizing: content-box;
+*,
+*::before,
+*::after {
+  box-sizing: revert;
 }
 
 #header,

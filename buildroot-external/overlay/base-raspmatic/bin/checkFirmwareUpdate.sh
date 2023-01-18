@@ -1,8 +1,8 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 #
-# firmware update check script v1.1
-# Copyright (c) 2022 Jens Maus <mail@jens-maus.de>
+# firmware update check script v1.2
+# Copyright (c) 2022-2023 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -81,14 +81,25 @@ shift $((OPTIND-1))
 TARGET_VERSION="$*"
 
 # public URLs
-RELEASES_URL="https://api.github.com/repos/jens-maus/RaspberryMatic/releases"
+LATEST_URL="https://api.github.com/repos/jens-maus/RaspberryMatic/releases/latest"
+SNAPSHOT_URL="https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/snapshots"
+TARGET_URL="https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/${TARGET_VERSION}"
 
 # output currently installed version
 echo "Installed version: ${VERSION} (${PLATFORM})"
 
 # download releases json
 RELEASES_JSON=$(mktemp -u)
-/usr/bin/curl --silent -o "${RELEASES_JSON}" "${RELEASES_URL}"
+if [[ -z "${TARGET_VERSION}" ]]; then
+  if [[ ${SNAPSHOT} -ne 1 ]]; then
+    REQUEST_URL=${LATEST_URL}
+  else
+    REQUEST_URL=${SNAPSHOT_URL}
+  fi
+else
+  REQUEST_URL=${TARGET_URL}
+fi
+/usr/bin/curl --silent -o "${RELEASES_JSON}" "${REQUEST_URL}"
 
 # make sure RELEASES_JSON is removed under all circumstances
 # shellcheck disable=SC2064
@@ -97,14 +108,9 @@ trap "rm -f ${RELEASES_JSON}" EXIT
 # if we could download the json file get the available releases
 ret=4
 if [[ -s "${RELEASES_JSON}" ]]; then
-  AVAILABLE_VERSIONS=
 
   # parse json
-  if [[ ${SNAPSHOT} -ne 1 ]]; then
-    AVAILABLE_VERSIONS=$(/usr/bin/jq -r ".[] | select(.tag_name != \"snapshots\") | .assets[] | select(.browser_download_url | endswith(\"${TARGET_VERSION}-${PLATFORM}.zip\")) | .browser_download_url" "${RELEASES_JSON}")
-  else
-    AVAILABLE_VERSIONS=$(/usr/bin/jq -r ".[] | select(.tag_name == \"snapshots\") | .assets[] | select(.browser_download_url | endswith(\"${TARGET_VERSION}-${PLATFORM}.zip\")) | .browser_download_url" "${RELEASES_JSON}")
-  fi
+  AVAILABLE_VERSIONS=$(/usr/bin/jq -r ".assets[] | select(.browser_download_url | endswith(\"${TARGET_VERSION}-${PLATFORM}.zip\")) | .browser_download_url" "${RELEASES_JSON}")
 
   # get LATEST
   LATEST_VERSION_URL=$(echo "${AVAILABLE_VERSIONS}" | head -1)

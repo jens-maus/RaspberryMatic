@@ -29,7 +29,7 @@
      <script type="text/javascript" src="/webui/js/extern/jquery.blockUI.js"></script>
 --- occu/WebUI/www/webui/css/extern/hmBootstrap.css.orig
 +++ occu/WebUI/www/webui/css/extern/hmBootstrap.css
-@@ -0,0 +1,24 @@
+@@ -0,0 +1,46 @@
 +/*!
 + * Place all our bootstrap related style fixes into this file
 + */
@@ -38,6 +38,14 @@
 +*::before,
 +*::after {
 +  box-sizing: revert;
++}
++
++input,
++button,
++select,
++optgroup,
++textarea {
++  margin: revert;
 +}
 +
 +#header,
@@ -53,6 +61,20 @@
 +#content table,
 +#messagebox table {
 +  border-collapse: separate;
++}
++
++#footer table {
++  border-collapse: inherit;
++}
++
++.popupTable thead,
++.popupTable tbody,
++.popupTable tfoot,
++.popupTable tr,
++.popupTable td,
++.popupTable th {
++  border-style: inherit;
++  border-width: inherit;
 +}
 --- occu/WebUI/www/webui/css/extern/main.min.css.map.orig
 +++ occu/WebUI/www/webui/css/extern/main.min.css.map
@@ -144,28 +166,3 @@
 +
 +// Option A: Include all of Bootstrap
 +@import "../node_modules/bootstrap/scss/bootstrap";
---- occu/WebUI/www/webui/style.css.orig
-+++ occu/WebUI/www/webui/style.css
-@@ -663,6 +663,11 @@
-   font-weight: normal;
- }
- 
-+.popupTable thead, .popupTable tbody, .popupTable tfoot, .popupTable tr, .popupTable td, .popupTable th {
-+  border-style: inherit;
-+  border-width: inherit;
-+}
-+
- .popupTableScript
- {
-   width: 100%;
-@@ -2183,6 +2188,10 @@
-   vertical-align: middle;
- }
- 
-+#footer table {
-+  border-collapse: inherit;
-+}
-+
- table.center {
-   margin-left:auto;
-   margin-right:auto;

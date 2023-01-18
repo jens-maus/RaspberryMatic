@@ -8,6 +8,14 @@
   box-sizing: revert;
 }
 
+input,
+button,
+select,
+optgroup,
+textarea {
+  margin: revert;
+}
+
 #header,
 .UIFrameContent {
   line-height: initial;
@@ -21,4 +29,18 @@
 #content table,
 #messagebox table {
   border-collapse: separate;
+}
+
+#footer table {
+  border-collapse: inherit;
+}
+
+.popupTable thead,
+.popupTable tbody,
+.popupTable tfoot,
+.popupTable tr,
+.popupTable td,
+.popupTable th {
+  border-style: inherit;
+  border-width: inherit;
 }

@@ -256,7 +256,7 @@
  .Filter {
    margin:0;
    border:1px solid $_(black); /* black */
-@@ -4881,9 +4860,14 @@
+@@ -4881,9 +4860,13 @@
  	height:50%;
  }
  
@@ -265,7 +265,7 @@
 +}
 +
  .CLASS01811 {
- 	padding-top: 5px;
+-	padding-top: 5px;
      color: $_(textColorB); /* black */
 +	border-collapse: collapse;
  }

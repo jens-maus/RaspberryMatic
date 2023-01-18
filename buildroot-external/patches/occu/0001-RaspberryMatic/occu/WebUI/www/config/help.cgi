@@ -129,6 +129,14 @@ proc action_put_page {} {
   execCmd USERFSFREE {exec monit status userfs | grep "space free for non superuser" | awk {{ print substr($0,index($0,$6)) }}}
   execCmd STORAGEDEV {exec mountpoint -n /usr/local | awk {{ print $1 }} | xargs lsblk -l -n -o PKNAME -p}
   execCmd STORAGE "exec lsblk -l -n -o SIZE,MODEL,KNAME -d -p $STORAGEDEV"
+  set HMRF_DUTYCYCLE "n/a"
+  catch { set HMRF_DUTYCYCLE [exec /usr/bin/jq -r ".\[\] | select(.address == \"$hm(HM_HMRF_SERIAL)\") | .dutyCycle" /tmp/dutycycle.json] }
+  set HMRF_CARRIERSENSE "n/a"
+  catch { set HMRF_CARRIERSENSE [exec /usr/bin/jq -r ".\[\] | select(.address == \"$hm(HM_HMRF_SERIAL)\") | .carrierSense" /tmp/dutycycle.json] }
+  set HMIP_DUTYCYCLE "n/a"
+  catch { set HMIP_DUTYCYCLE [exec /usr/bin/jq -r ".\[\] | select(.address == \"$hm(HM_HMIP_SERIAL)\") | .dutyCycle" /tmp/dutycycle.json] }
+  set HMIP_CARRIERSENSE "n/a"
+  catch { set HMIP_CARRIERSENSE [exec /usr/bin/jq -r ".\[\] | select(.address == \"$hm(HM_HMIP_SERIAL)\") | .carrierSense" /tmp/dutycycle.json] }
 
   set sid ""
   catch {import sid}
@@ -209,6 +217,7 @@ proc action_put_page {} {
           putsVar "Address" "$hm(HM_HMIP_ADDRESS) ($hm(HM_HMIP_ADDRESS_ACTIVE))"
           putsVar "SGTIN" $hm(HM_HMIP_SGTIN)
           putsVar "Serial" $hm(HM_HMIP_SERIAL)
+          putsVar "DC / CS" "$HMIP_DUTYCYCLE % / $HMIP_CARRIERSENSE %"
         puts "</div>"
         puts "<h1 class='helpTitle'><u>HomeMatic-RF (HmRF) Info</u></h1>"
         puts "<div style='display: table; width: 100%;'>"
@@ -216,6 +225,7 @@ proc action_put_page {} {
           putsVar "Device-Node" "$hm(HM_HMRF_DEVNODE) ($hm(HM_HMRF_DEVTYPE))"
           putsVar "Address" "$hm(HM_HMRF_ADDRESS) ($hm(HM_HMRF_ADDRESS_ACTIVE))"
           putsVar "Serial" $hm(HM_HMRF_SERIAL)
+          putsVar "DC / CS" "$HMRF_DUTYCYCLE % / $HMRF_CARRIERSENSE %"
         puts "</div>"
       puts "</td>"
 

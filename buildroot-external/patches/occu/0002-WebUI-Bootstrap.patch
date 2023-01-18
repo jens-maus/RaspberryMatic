@@ -145,3 +145,16 @@
 +
 +// Option A: Include all of Bootstrap
 +@import "../node_modules/bootstrap/scss/bootstrap";
+--- occu/WebUI/www/webui/style.css.orig
++++ occu/WebUI/www/webui/style.css
+@@ -2183,6 +2183,10 @@
+   vertical-align: middle;
+ }
+ 
++#footer table {
++  border-collapse: inherit;
++}
++
+ table.center {
+   margin-left:auto;
+   margin-right:auto;

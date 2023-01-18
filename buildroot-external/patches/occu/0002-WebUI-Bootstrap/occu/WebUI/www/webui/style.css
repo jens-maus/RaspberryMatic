@@ -663,6 +663,11 @@ a img {
   font-weight: normal;
 }
 
+.popupTable thead, .popupTable tbody, .popupTable tfoot, .popupTable tr, .popupTable td, .popupTable th {
+  border-style: inherit;
+  border-width: inherit;
+}
+
 .popupTableScript
 {
   width: 100%;

@@ -6,7 +6,7 @@
 #
 # Inspired by https://github.com/whiskerz007/proxmox_hassos_install
 #
-# Copyright (c) 2022 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2022-2023 Jens Maus <mail@jens-maus.de>
 # Apache 2.0 License applies
 #
 # Usage:
@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.5"
+VERSION="1.6"
 LINE=
 
 function error_exit() {
@@ -64,7 +64,7 @@ function cleanup() {
 }
 
 msg "RaspberryMatic Proxmox installation script V${VERSION}"
-msg "Copyright (c) 2022 Jens Maus <mail@jens-maus.de>"
+msg "Copyright (c) 2022-2023 Jens Maus <mail@jens-maus.de>"
 msg ""
 
 TEMP_DIR=$(mktemp -d)
@@ -79,30 +79,48 @@ url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases"
 r = requests.get(url).json()
 if "message" in r:
     exit()
-snapshot = ""
 num = 0
 for release in r:
-    if release["prerelease"] and release["tag_name"] != "snapshots":
+    if release["prerelease"] or release["tag_name"] == "snapshots":
       continue
     for asset in release["assets"]:
         if asset["name"].endswith(".ova") == True:
             image_url = asset["browser_download_url"]
             name = asset["name"]
             version = os.path.splitext(name)[0][name.find('-')+1:]
-            if release["tag_name"] == "snapshots":
-                snapshot = version + ' snapshot ' + image_url
-            elif num < 5:
+            if num < 5:
                 print(version + ' release ' + image_url)
                 num = num + 1
             break
-print(snapshot)
 EOF
 )
-
 if [[ -z "${RELEASES}" ]]; then
   die "GitHub has returned an error. A rate limit may have been applied to your connection."
 fi
 
+SNAPSHOTS=$(cat<<EOF | python3
+import requests
+import os
+url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/snapshots"
+r = requests.get(url).json()
+if "message" in r:
+    exit()
+print()
+for asset in r["assets"]:
+    if asset["name"].endswith(".ova") == True:
+        image_url = asset["browser_download_url"]
+        name = asset["name"]
+        version = os.path.splitext(name)[0][name.find('-')+1:]
+        print(version + ' snapshot ' + image_url)
+        break
+EOF
+)
+
+if [[ -z "${SNAPSHOTS}" ]]; then
+  die "GitHub has returned an error. A rate limit may have been applied to your connection."
+fi
+
+RELEASES+=${SNAPSHOTS}
 MSG_MAX_LENGTH=0
 RELEASES_MENU=()
 i=0

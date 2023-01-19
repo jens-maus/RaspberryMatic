@@ -359,7 +359,7 @@ proc action_put_page {} {
     if { ! [string is double -strict $USERFSFREE_MB] } {
       set USERFSFREE_MB 0
     }
-    set USERFSFREE_GB [format "%.1f" [expr {$USERFSFREE_MB / 1024.0}]]
+    set USERFSFREE_GB [format "%.2f" [expr {$USERFSFREE_MB / 1024.0}]]
     set USERFSFREE_MB_REQ 1843.2
     set USERFSFREE_GB_REQ [format "%.1f" [expr {$USERFSFREE_MB_REQ / 1024.0}]]
   }
@@ -413,7 +413,7 @@ proc action_put_page {} {
             }
             table_row {
               table_data {align="left"} {colspan="3"} {id="availableUserSpace"} {
-                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB GB (&asymp;$USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
+                puts "<i>\${dialogSettingsCMLblFreeUserSpace} $USERFSFREE_GB GB (&gt;&nbsp;$USERFSFREE_GB_REQ GB \${dialogSettingsCMLblFreeUserSpaceRequired})</i>"
               }
             }
             table_row {

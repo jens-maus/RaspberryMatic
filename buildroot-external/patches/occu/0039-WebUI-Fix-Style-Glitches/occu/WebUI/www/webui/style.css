@@ -57,6 +57,10 @@ hr {
   min-width: 230px;
 }
 
+input[type=checkbox], input[type=radio] {
+  vertical-align: -2px;
+}
+
 .conditionEven
 {
   /*Wenn die Farbe nicht nur als Rahmen, sondern für die ganze Bedingung gelten soll,

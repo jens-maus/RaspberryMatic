@@ -33,11 +33,11 @@
 +  mnDPUnit = "";
 +}
 +
-+function ::OutputMaintenanceIntegerDP()
++function ::OutputMaintenanceTimeOfOperationDP()
 +{
 +  object oDP = cObj.DPByHssDP(mnDP);
 +  if (oDP) {
-+    mnDPValue = oDP.Value().ToInteger();
++    mnDPValue = (oDP.Value().ToInteger() / 86400);
 +    Call("/esp/controls/maintenance.fn::OutputMaintenanceDataPoint()");
 +  }
 +  mnDP = "";
@@ -341,7 +341,7 @@
 +  mnDP = "TIME_OF_OPERATION";
 +  mnDPText = "${stringTableTimeOfOperation}:";
 +  mnDPUnit = "${optionUnitD}";
-+  Call("/esp/controls/maintenance.fn::OutputMaintenanceIntegerDP()");
++  Call("/esp/controls/maintenance.fn::OutputMaintenanceTimeOfOperationDP()");
 +
 +  mnDP = "TIME_OF_OPERATION_STATUS";
 +  mnDPText = "${stringTableTimeOfOperation}:";

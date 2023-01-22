@@ -1,0 +1,35 @@
+--- /www/rega/esp/system.fn.orig
++++ /www/rega/esp/system.fn
+@@ -859,6 +859,32 @@
+     svValue="";
+   }
+ 
++string SingleCond; object SingleCondObjekt;
++foreach(SingleCond,dom.GetObject(ID_SCONDITIONS).EnumIDs() ){
++	SingleCondObjekt = dom.GetObject(SingleCond);
++    if (SingleCondObjekt) {
++    	if (((SingleCondObjekt.LeftVal() == varid) && (SingleCondObjekt.LeftValType()== ivtSystemId ) )) {
++                     if ((ist == istAlarm) || (ist == istBool)) {
++                     	SingleCondObjekt.ConditionType(1);
++                     	SingleCondObjekt.RightVal1ValType(ivtBinary); SingleCondObjekt.RightVal1(false);
++                     	SingleCondObjekt.RightVal2ValType(ivtBinary); SingleCondObjekt.RightVal2(false);
++                    } elseif (ist == istGeneric) {
++                     	SingleCondObjekt.ConditionType(8);
++                     	SingleCondObjekt.RightVal1ValType(ivtFloat); SingleCondObjekt.RightVal1(system.GetVar("iMinVal"));
++                     	SingleCondObjekt.RightVal2ValType(ivtFloat); SingleCondObjekt.RightVal2(0.0);
++                    } elseif (ist == istEnum) {
++                     	SingleCondObjekt.ConditionType(1);
++                     	SingleCondObjekt.RightVal1ValType(ivtInteger); SingleCondObjekt.RightVal1(0);
++                     	SingleCondObjekt.RightVal2ValType(ivtInteger); SingleCondObjekt.RightVal2(0);
++                    } elseif (ist == istChar8859) {
++                     	SingleCondObjekt.ConditionType(1);
++                     	SingleCondObjekt.RightVal1ValType(ivtString); SingleCondObjekt.RightVal1("");
++                     	SingleCondObjekt.RightVal2ValType(ivtString); SingleCondObjekt.RightVal2("");
++                    }
++        }
++    }
++}
++
+   if (oChn) 
+   {
+     oChn.DPs().Add( sv.ID() );

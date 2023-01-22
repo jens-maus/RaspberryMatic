@@ -807,8 +807,8 @@ function ::saveSysVar()
   !sv.ValueSubType(ist);
   sv.DPInfo( system.GetVar("sInfo") );
   sv.ValueUnit( system.GetVar("sUnit") );
-  sv.ValueMin(null);
-  sv.ValueMax(null);
+  sv.RemoveMetaData('MIN');
+  sv.RemoveMetaData('MAX');
   var svValue;
   if (ist == istAlarm)
   {

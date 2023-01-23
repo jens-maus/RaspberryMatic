@@ -19,7 +19,7 @@
    }
    elseif (ist == istGeneric)
    {
-@@ -830,20 +833,20 @@
+@@ -830,20 +833,83 @@
      sv.ValueSubType( istGeneric );
      sv.ValueMin(system.GetVar("iMinVal"));
      sv.ValueMax(system.GetVar("iMaxVal"));
@@ -40,10 +40,73 @@
      sv.ValueSubType(istChar8859);
 -    sv.State("???");
 +    svValue="";
++  }
++
++  if( system.GetVar("createNew") == 0 )
++  {
++    string SingleCond;
++    object SingleCondObject;
++
++    foreach(SingleCond,dom.GetObject(ID_SCONDITIONS).EnumIDs() )
++    {
++      SingleCondObject = dom.GetObject(SingleCond);
++      if( SingleCondObject)
++      {
++        if( ((SingleCondObject.LeftVal() == sv.ID()) && (SingleCondObject.LeftValType()== ivtSystemId )))
++        {
++          if( ((ist == istAlarm) || (ist == istBool)) && (SingleCondObject.RightVal1ValType() != ivtBinary))
++          {
++            SingleCondObject.ConditionType(1);
++            SingleCondObject.RightVal1ValType(ivtBinary);
++            SingleCondObject.RightVal1(false);
++            SingleCondObject.RightVal2ValType(ivtBinary);
++            SingleCondObject.RightVal2(false);
++          }
++          elseif( (ist == istGeneric) && (SingleCondObject.RightVal1ValType() != ivtFloat))
++          {
++            SingleCondObject.ConditionType(8);
++            SingleCondObject.RightVal1ValType(ivtFloat);
++            SingleCondObject.RightVal1(system.GetVar("iMinVal"));
++            SingleCondObject.RightVal2ValType(ivtFloat);
++            SingleCondObject.RightVal2(0.0);
++          }
++          elseif( (ist == istEnum) )
++          {
++            if( (SingleCondObject.RightVal1ValType() != ivtInteger))
++            {
++              SingleCondObject.ConditionType(1);
++              SingleCondObject.RightVal1ValType(ivtInteger);
++              SingleCondObject.RightVal1(0);
++              SingleCondObject.RightVal2ValType(ivtInteger);
++              SingleCondObject.RightVal2(0);
++            }
++            else
++            {
++              integer CntValSC = SingleCondObject.RightVal1();
++              integer CntValSV = (web.webGetValueListCount(sv.ValueList()))-1;
++
++              if( CntValSC > CntValSV )
++              {
++                SingleCondObject.RightVal1(CntValSV);
++                SingleCondObject.RightVal2(0);
++              }
++            }
++          }
++          elseif( (ist == istChar8859) && (SingleCondObject.RightVal1ValType() != ivtString))
++          {
++            SingleCondObject.ConditionType(1);
++            SingleCondObject.RightVal1ValType(ivtString);
++            SingleCondObject.RightVal1("");
++            SingleCondObject.RightVal2ValType(ivtString);
++            SingleCondObject.RightVal2("");
++          }
++        }
++      }
++    }
    }
  
    if (oChn) 
-@@ -860,6 +863,9 @@
+@@ -860,6 +926,9 @@
      }
      sv.Channel( ID_ERROR );
    }

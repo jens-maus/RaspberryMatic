@@ -1,16 +1,19 @@
 --- occu/WebUI/www/rega/esp/system.fn.orig
 +++ occu/WebUI/www/rega/esp/system.fn
-@@ -807,6 +807,9 @@
+@@ -807,6 +807,12 @@
    !sv.ValueSubType(ist);
    sv.DPInfo( system.GetVar("sInfo") );
    sv.ValueUnit( system.GetVar("sUnit") );
 +  sv.RemoveMetaData('MIN');
 +  sv.RemoveMetaData('MAX');
++  sv.RemoveMetaData('BV0');
++  sv.RemoveMetaData('BV1');
++  sv.RemoveMetaData('VALUE_LIST');
 +  var svValue;
    if (ist == istAlarm)
    {
      sv.ValueType( ivtBinary );
-@@ -822,7 +825,7 @@
+@@ -822,7 +828,7 @@
      sv.ValueSubType( istBool );
      sv.ValueName1(system.GetVar("sTrue"));
      sv.ValueName0(system.GetVar("sFalse"));
@@ -19,7 +22,7 @@
    }
    elseif (ist == istGeneric)
    {
-@@ -830,20 +833,83 @@
+@@ -830,20 +836,83 @@
      sv.ValueSubType( istGeneric );
      sv.ValueMin(system.GetVar("iMinVal"));
      sv.ValueMax(system.GetVar("iMaxVal"));
@@ -106,7 +109,7 @@
    }
  
    if (oChn) 
-@@ -860,6 +926,9 @@
+@@ -860,6 +929,9 @@
      }
      sv.Channel( ID_ERROR );
    }

@@ -809,6 +809,9 @@ function ::saveSysVar()
   sv.ValueUnit( system.GetVar("sUnit") );
   sv.RemoveMetaData('MIN');
   sv.RemoveMetaData('MAX');
+  sv.RemoveMetaData('BV0');
+  sv.RemoveMetaData('BV1');
+  sv.RemoveMetaData('VALUE_LIST');
   var svValue;
   if (ist == istAlarm)
   {

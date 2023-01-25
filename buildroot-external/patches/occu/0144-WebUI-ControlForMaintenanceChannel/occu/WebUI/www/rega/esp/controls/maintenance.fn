@@ -77,7 +77,11 @@ function ::OutputMaintenanceRSSIDP()
 {
   object oDP = cObj.DPByHssDP(mnDP);
   if (oDP) {
-    integer rssiValue = (oDP.Value().ToInteger() - 256);
+    integer rssiValue = oDP.Value().ToInteger();
+    if (oDP.ValueType() == ivtByte) {
+      rssiValue = (rssiValue - 256);
+    }
+
     if (rssiValue < -200) {
       mnDPValue = "n/a";
     } else {

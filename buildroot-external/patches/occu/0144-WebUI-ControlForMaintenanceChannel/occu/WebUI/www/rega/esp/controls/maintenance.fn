@@ -52,6 +52,9 @@ function ::OutputMaintenanceTimeOfOperationDP()
   object oDP = cObj.DPByHssDP(mnDP);
   if (oDP) {
     mnDPValue = (oDP.Value().ToInteger() / 86400);
+    if (mnDPValue >= 365) {
+      mnDPValue = (mnDPValue / 365) # "&nbsp;${optionUnitY}&nbsp;" # (mnDPValue % 365);
+    }
     Call("/esp/controls/maintenance.fn::OutputMaintenanceDataPoint()");
   }
   mnDP = "";

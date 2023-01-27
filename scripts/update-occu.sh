@@ -10,7 +10,7 @@ OCCU_VERSION=$1
 DOWNLOAD_URL="https://github.com/jens-maus/occu/archive/${OCCU_VERSION}/occu-${OCCU_VERSION}.tar.gz"
 
 # download archive for hash update
-HASH=$(wget --passive-ftp -nd -t 3 -O - ${DOWNLOAD_URL} | sha256sum | awk '{ print $1 }')
+HASH=$(wget --passive-ftp -nd -t 3 -O - "${DOWNLOAD_URL}" | sha256sum | awk '{ print $1 }')
 if [ -n "${HASH}" ]; then
   # update package info
   sed -i "s/OCCU_VERSION = .*/OCCU_VERSION = $1/g" buildroot-external/package/occu/occu.mk

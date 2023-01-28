@@ -4,8 +4,8 @@
 #
 ################################################################################
 
-TAILSCALE_VERSION = 1.34.2
-TAILSCALE_SITE = $(call github,tailscale,tailscale,v$(TAILSCALE_VERSION))
+TAILSCALE_VERSION = v1.36.0
+TAILSCALE_SITE = $(call github,tailscale,tailscale,$(TAILSCALE_VERSION))
 TAILSCALE_LICENSE = BSD-3-Clause
 TAILSCALE_LICENSE_FILES = LICENSE
 

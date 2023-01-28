@@ -1,20 +1,24 @@
 #!/bin/bash
 set -e
 
-if [ -z "$1" ]; then
-  echo "Need a OCCU tag name (see https://github.com/jens-maus/occu)"
+ID=${1}
+PACKAGE_NAME="occu"
+PROJECT_URL="https://github.com/jens-maus/occu"
+ARCHIVE_URL="${PROJECT_URL}/archive/${ID}/${PACKAGE_NAME}-${ID}.tar.gz"
+
+if [[ -z "${ID}" ]]; then
+  echo "tag name or commit sha required (see ${URL})"
   exit 1
 fi
 
-OCCU_VERSION=$1
-DOWNLOAD_URL="https://github.com/jens-maus/occu/archive/${OCCU_VERSION}/occu-${OCCU_VERSION}.tar.gz"
-
 # download archive for hash update
-HASH=$(wget --passive-ftp -nd -t 3 -O - "${DOWNLOAD_URL}" | sha256sum | awk '{ print $1 }')
-if [ -n "${HASH}" ]; then
+ARCHIVE_HASH=$(wget --passive-ftp -nd -t 3 -O - "${ARCHIVE_URL}" | sha256sum | awk '{ print $1 }')
+if [[ -n "${ARCHIVE_HASH}" ]]; then
   # update package info
-  sed -i "s/OCCU_VERSION = .*/OCCU_VERSION = $1/g" buildroot-external/package/occu/occu.mk
+  BR_PACKAGE_NAME=${PACKAGE_NAME^^}
+  BR_PACKAGE_NAME=${BR_PACKAGE_NAME//-/_}
+  sed -i "s/${BR_PACKAGE_NAME}_VERSION = .*/${BR_PACKAGE_NAME}_VERSION = $1/g" "buildroot-external/package/${PACKAGE_NAME}/${PACKAGE_NAME}.mk"
   # update package hash
-  sed -i "$ d" buildroot-external/package/occu/occu.hash
-  echo "sha256  ${HASH}  occu-${OCCU_VERSION}.tar.gz" >> buildroot-external/package/occu/occu.hash
+  sed -i "$ d" "buildroot-external/package/${PACKAGE_NAME}/${PACKAGE_NAME}.hash"
+  echo "sha256  ${ARCHIVE_HASH}  ${PACKAGE_NAME}-${ID}.tar.gz" >>"buildroot-external/package/${PACKAGE_NAME}/${PACKAGE_NAME}.hash"
 fi

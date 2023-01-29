@@ -1,16 +1,31 @@
 #!/bin/bash
 set -e
 
-if [ -z "$1" ]; then
-  echo "Need tag/commitID (v2021.04.29-138a1) - see https://github.com/raspberrypi/rpi-eeprom/tree/master/firmware/stable"
-  exit 1
-fi
-if [ -z "$2" ]; then
-  echo "Need rpi-eeprom version (pieeprom-2021-04-29.bin) - see https://github.com/raspberrypi/rpi-eeprom/tree/master/firmware/stable"
+ID=${1}
+PACKAGE_NAME="rpi-eeprom"
+PROJECT_URL="https://github.com/raspberrypi/rpi-eeprom"
+ARCHIVE_URL="${PROJECT_URL}/archive/${ID}/${PACKAGE_NAME}-${ID}.tar.gz"
+
+if [[ -z "${ID}" ]]; then
+  echo "tag name or commit sha required (see ${URL})"
   exit 1
 fi
 
-sed -i "s|RPI_EEPROM_VERSION = .*|RPI_EEPROM_VERSION = $1|g" buildroot-external/package/rpi-eeprom/rpi-eeprom.mk
-sed -i "s|RPI_EEPROM_FIRMWARE_PATH = firmware/stable/.*bin|RPI_EEPROM_FIRMWARE_PATH = firmware/stable/$2|g" buildroot-external/package/rpi-eeprom/rpi-eeprom.mk
+RPI_FIRMWARE_PATH=${2}
+if [[ -z "${RPI_FIRMWARE_PATH}" ]]; then
+  echo "Need rpi-eeprom version (pieeprom-2021-04-29.bin)"
+  exit 1
+fi
 
-#git commit -m "RaspberryPi: Update firmware $1" "$2" buildroot/package/rpi-firmware
+# download archive for hash update
+ARCHIVE_HASH=$(wget --passive-ftp -nd -t 3 -O - "${ARCHIVE_URL}" | sha256sum | awk '{ print $1 }')
+if [[ -n "${ARCHIVE_HASH}" ]]; then
+  # update package info
+  BR_PACKAGE_NAME=${PACKAGE_NAME^^}
+  BR_PACKAGE_NAME=${BR_PACKAGE_NAME//-/_}
+  sed -i "s/${BR_PACKAGE_NAME}_VERSION = .*/${BR_PACKAGE_NAME}_VERSION = ${ID}/g" "buildroot-external/package/${PACKAGE_NAME}/${PACKAGE_NAME}.mk"
+  sed -i "s/${BR_PACKAGE_NAME}_FIRMWARE_PATH = .*/${BR_PACKAGE_NAME}_FIRMWARE_PATH = firmware\/stable\/${RPI_FIRMWARE_PATH}/g" "buildroot-external/package/${PACKAGE_NAME}/${PACKAGE_NAME}.mk"
+  # update package hash
+  sed -i "$ d" "buildroot-external/package/${PACKAGE_NAME}/${PACKAGE_NAME}.hash"
+  echo "sha256  ${ARCHIVE_HASH}  ${PACKAGE_NAME}-${ID}.tar.gz" >>"buildroot-external/package/${PACKAGE_NAME}/${PACKAGE_NAME}.hash"
+fi

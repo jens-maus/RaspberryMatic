@@ -45,7 +45,7 @@ env:
 jobs:
   linter:
     name: Linter Checks
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout Code
@@ -217,7 +217,7 @@ jobs:
       contents: write  # actions/upload-artifact
       packages: write  # docker/build-push-action
     name: OCI/Docker Build+Push
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: build
 
     steps:

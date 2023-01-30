@@ -20,7 +20,7 @@ permissions:
 jobs:
   repo-check:
     name: Check for Changes
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - id: commit-check
@@ -257,7 +257,7 @@ jobs:
     permissions:
       packages: write  # docker/build-push-action
     name: OCI/Docker Build+Push
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: build
     if: github.event_name != 'pull_request'
 
@@ -368,7 +368,7 @@ jobs:
     permissions:
       contents: write  # stefanprodan/helm-gh-pages
     name: Build K8s Helm chart
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [build, oci-multiarch-build-push]
 
     steps:
@@ -396,7 +396,7 @@ jobs:
     permissions:
       contents: write  # github-actions[bot] repo write access
     name: Publish build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [build, oci-multiarch-build-push]
     if: github.event_name != 'pull_request'
 
@@ -453,7 +453,7 @@ jobs:
       packages: write  # smartsquaregmbh/delete-old-packages
       actions: write  # c-hive/gha-remove-artifacts
     name: Cleanup artifacts/packages
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Remove old artifacts
         uses: c-hive/gha-remove-artifacts@v1.3.0

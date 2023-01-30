@@ -22,3 +22,23 @@
      "dialogCreateLinkErrorUnknownDevice" : "%DCbertragung nicht erfolgt, weil das Ger%E4t unbekannt ist.",
      "dialogCreateLinkHintLinkExists" : "Achtung! Die Verkn%FCpfung existiert bereits und wird %FCberschrieben.",
      "dialogCreateLinkMsgLinkExistsA" : "Sie sind dabei ",
+--- occu/WebUI/www/webui/js/lang/en/translate.lang.stringtable.js.orig
++++ occu/WebUI/www/webui/js/lang/en/translate.lang.stringtable.js
+@@ -86,7 +86,7 @@
+     "stringTableCapacitiveFillingSensorCaseDesign" : "Case design",
+     "stringTableCapacitiveFillingSensorCaseDesignHor" : "horizontal cylinder",
+     "stringTableCapacitiveFillingSensorCaseDesignVer" : "vertical cylinder",
+-    "stringTableCapacitiveFillingSensorCaseHeight" : "Case hight",
++    "stringTableCapacitiveFillingSensorCaseHeight" : "Case height",
+     "stringTableCapacitiveFillingSensorCaseLength" : "Case length",
+     "stringTableCapacitiveFillingSensorCaseWidth" : "Case width",
+     "stringTableCapacitiveFillingSensorCustomCal" : "Custom calibration",
+@@ -871,7 +871,7 @@
+     "stringTableValveStateErrorPosition" : "Valve in error position",
+     "stringTableValveStateFalse" : "Heating valve closed",
+     "stringTableValveStateNotAvailable" : "Valve status unknown",
+-    "stringTableValveStateRunToStart" : "Valve reverses to the initial position (vale is opened entirely)",
++    "stringTableValveStateRunToStart" : "Valve reverses to the initial position (valve is opened entirely)",
+     "stringTableValveStateToTight" : "Valve sluggish/blocked",
+     "stringTableValveStateTrue" : "Heating valve open",
+     "stringTableValveStateWaitForAdaption" : "Waiting for adaption run",

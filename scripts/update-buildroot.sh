@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-if [ -z "$1" ]; then
+if [[ -z "$1" ]; then
   echo "Need a Buildroot version (see https://buildroot.org)"
   exit 1
 fi

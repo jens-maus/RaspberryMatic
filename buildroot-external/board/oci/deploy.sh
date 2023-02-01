@@ -177,6 +177,7 @@ fi
 DOCKER_IMAGE="${CCU_OCI_REPO}:${CCU_OCI_TAG}"
 if [[ "${CCU_DOCKER_PULL_REFRESH}" == "true" ]]; then
   echo "Pull/Update OCI image ${DOCKER_IMAGE}"
+  # shellcheck disable=SC2086
   docker pull ${CCU_DOCKER_PULL_OPTIONS} "${DOCKER_IMAGE}"
 fi
 

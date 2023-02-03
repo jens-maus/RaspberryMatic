@@ -4,8 +4,8 @@ jQuery.extend(true, langJSON, {
     "genericBtnTxtHelpOff" : "Disable help",
     "dialogHelpCentralLinkTitle" : "Pushbutton event to CCU - Info",
     "dialogHelpCentralLinkContent" :
-      "In order to keep the radio load / duty cycle of the CCU central as low as possible, Homematic devices with a push-button channel do not send the current value to your CCU central every time the push-button status is changed, but only if this push-button channel is explicitly used in 'Programs & central links'.<br/><br/>" +
-      "If the creation of such a program is not desired, the forwarding of the status events can be activated or deactivated explicitly for a button channel with the help of the 'Pushbutton event to CCU' function. In this case, the creation or deletion of a special internal direct link takes place in the respective device, so that the CCU central is automatically informed about all button actuations.",
+      "In order to keep the radio load / duty cycle of the CCU central and potentially also the battery consumption as low as possible, Homematic devices with a push-button channel do not send the current value to the CCU central every time the status changes, but only if this push-button channel is explicitly used in 'Programs & central links'.<br/><br/>" +
+      "If the creation of such a program is not desired and you just want to make sure to receive all status events, forwarding of these status events can be explicitly activated or deactivated for a button channel with the help of the 'Pushbutton event to CCU' function. In this case, the creation or deletion of a special internal direct link takes place in the respective device, so that the CCU central is automatically informed about all button actuations thought this might increase the duty cycle and battery consumption to some extend.",
     "helpPowerCost" : "Here you can set the price per kWh of your electricity provider.",
     "diagramHelpCustomModeTitle" : "Description of the values for longer periods",
     "diagramHelpCustomModeContent" :

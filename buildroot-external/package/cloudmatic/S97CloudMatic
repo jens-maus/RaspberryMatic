@@ -18,14 +18,14 @@ DAEMON="CloudMatic"
 start() {
 	echo -n "Starting ${DAEMON}: "
 
-	if [[ ! -e /etc/config/safemode ]]; then
+	if [[ ! -e /etc/config/safemode ]] && [[ ! -e /etc/config/NoCloudmaticStart ]]; then
 
 		# CloudMatic (meine-homematic.de) startup
 		/opt/mh/startup.sh 2>/dev/null >/dev/null
 
 		echo "OK"
 	else
-		echo "skipping (safemode)"
+		echo "skipping (safemode or disabled by user)"
 	fi
 }
 

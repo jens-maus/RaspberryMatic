@@ -18,14 +18,19 @@ DAEMON="CloudMatic"
 start() {
 	echo -n "Starting ${DAEMON}: "
 
-	if [[ ! -e /etc/config/safemode ]]; then
-
+	if [[ -e /etc/config/safemode ]]; then
+		echo "skipping (safemode)"
+	elif [[ -e /etc/config/cloudmaticDisabled ]]; then
+		# remove mh config button if present
+		if grep -q "ID mh CONFIG_NAME CloudMatic" /etc/config/hm_addons.cfg 2>/dev/null; then
+			/bin/updateAddonConfig.tcl -d mh
+		fi
+		echo "disabled"
+	else
 		# CloudMatic (meine-homematic.de) startup
 		/opt/mh/startup.sh 2>/dev/null >/dev/null
 
 		echo "OK"
-	else
-		echo "skipping (safemode)"
 	fi
 }
 

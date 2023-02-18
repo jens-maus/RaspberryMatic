@@ -11,6 +11,7 @@ set INETCHECKFILENAME "/etc/config/internetCheckDisabled"
 set RPI4USB3CHECKFILENAME "/etc/config/rpi4usb3CheckDisabled"
 #set MEDIOLAFILENAME "/usr/local/addons/mediola/Disabled"
 set MEDIOLAFILENAME "/etc/config/neoDisabled"
+set CLOUDMATICFILENAME "/etc/config/cloudmaticDisabled"
 set NOUPDATEDCVARSFILENAME "/etc/config/NoUpdateDCVars"
 set NOBADBLOCKSCHECKFILENAME "/etc/config/NoBadBlocksCheck"
 set NOPORTFORWARDINGCHECKFILENAME "/etc/config/NoPortForwardingCheck"
@@ -138,11 +139,12 @@ proc put_message {title msg args} {
 }
 
 proc action_put_page {} {
-  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
+  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
    
   set inetcheckDisabled [file exists $INETCHECKFILENAME]
   set rpi4usb3CheckDisabled [file exists $RPI4USB3CHECKFILENAME]
   set mediolaDisabled [file exists $MEDIOLAFILENAME]
+  set cloudmaticDisabled [file exists $CLOUDMATICFILENAME]
   set noCronBackup [file exists $NOCRONBACKUPFILENAME]
   set noDCVars [file exists $NOUPDATEDCVARSFILENAME]
   set noBadBlocksCheck [file exists $NOBADBLOCKSCHECKFILENAME]
@@ -319,6 +321,14 @@ proc action_put_page {} {
                 puts "\${dialogSettingsAdvancedSettingsMediola}"
               }
             }
+            table_row {
+              set checked ""
+              if {!$cloudmaticDisabled} { set checked "checked=true" }
+              table_data {class="CLASS21112"} {colspan="3"} {
+                cgi_checkbox mode=cloudmaticDisabled {id="cb_cloudmaticDisabled"} $checked
+                puts "\${dialogSettingsAdvancedSettingsCloudmatic}"
+              }
+            }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
           }
         }
@@ -336,6 +346,7 @@ proc action_put_page {} {
           p { ${dialogSettingsAdvancedSettingsHintSystem8} }
           p { ${dialogSettingsAdvancedSettingsHintSystem9} }
           p { ${dialogSettingsAdvancedSettingsHintSystem10} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem14} }
         }
       }
 
@@ -413,6 +424,7 @@ proc action_put_page {} {
         pb += "&inetcheckDisabled="+(document.getElementById("cb_inetcheckDisabled").checked?"0":"1");
         pb += "&rpi4usb3CheckDisabled="+(document.getElementById("cb_rpi4usb3CheckDisabled").checked?"0":"1");
         pb += "&mediolaDisabled="+(document.getElementById("cb_mediolaDisabled").checked?"0":"1");
+        pb += "&cloudmaticDisabled="+(document.getElementById("cb_cloudmaticDisabled").checked?"0":"1");
         pb += "&noCronBackup="+(document.getElementById("cb_noCronBackup").checked?"0":"1");
         pb += "&noDCVars="+(document.getElementById("cb_noDCVars").checked?"0":"1");
         pb += "&noBadBlocksCheck="+(document.getElementById("cb_noBadBlocksCheck").checked?"0":"1");
@@ -478,12 +490,13 @@ proc action_put_page {} {
 }
 
 proc action_save_settings {} {
-  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
+  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
   set errMsg ""
 
   import inetcheckDisabled
   import rpi4usb3CheckDisabled
   import mediolaDisabled
+  import cloudmaticDisabled
   import noCronBackup
   import noDCVars
   import disableLED
@@ -522,6 +535,12 @@ proc action_save_settings {} {
     append errMsg [deletefile $MEDIOLAFILENAME]
   }
   
+  if {$cloudmaticDisabled} {
+    append errMsg [createfile $CLOUDMATICFILENAME]
+  } else {
+    append errMsg [deletefile $CLOUDMATICFILENAME]
+  }
+
   if {$noCronBackup} {
     append errMsg [createfile $NOCRONBACKUPFILENAME]
   } else {

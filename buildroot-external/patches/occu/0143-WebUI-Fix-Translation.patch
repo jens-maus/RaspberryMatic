@@ -11,6 +11,18 @@
      append html "</div>"
    append html "</div>"
    return $html
+--- occu/WebUI/www/config/stringtable_de.txt.orig
++++ occu/WebUI/www/config/stringtable_de.txt
+@@ -1396,7 +1396,9 @@
+ PRESS_LONG	${stringTableKeyPressLong}
+ PRESS_LONG=TRUE	${stringTableKeyPressLongTrue}
+ PRESS_LONG_RELEASE	${stringTableKeyPressLongRelease}
++PRESS_LONG_RELEASE=TRUE	${stringTableKeyPressLongRelease}
+ PRESS_LONG_START	${stringTableKeyPressLongStart}
++PRESS_LONG_START=TRUE	${stringTableKeyPressLongStart}
+ PRESS_SHORT	${stringTableKeyPressShort}
+ PRESS_SHORT=TRUE	${stringTableKeyPressShortTrue}
+ PROCESS=NOT_STABLE	${stringTableProcessNotStableGeneric}
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.extension.js
 @@ -77,7 +77,7 @@

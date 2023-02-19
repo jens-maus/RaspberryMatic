@@ -22,8 +22,12 @@ start() {
 		echo "skipping (safemode)"
 	elif [[ -e /etc/config/cloudmaticDisabled ]]; then
 		# remove mh config button if present
-		if grep -q "ID mh CONFIG_NAME CloudMatic" /etc/config/hm_addons.cfg 2>/dev/null; then
+		if grep -q "ID mh CONFIG_NAME " /etc/config/hm_addons.cfg 2>/dev/null; then
 			/bin/updateAddonConfig.tcl -d mh
+		fi
+		# remove symbolic link to www
+		if [[ -L /etc/config/addons/www/mh ]]; then
+			rm /etc/config/addons/www/mh
 		fi
 		echo "disabled"
 	else

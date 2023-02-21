@@ -26,8 +26,7 @@ const apiProxy = createProxyMiddleware('/', {
       // replace any absolute http/https path with a relative one
       var redirect = proxyRes.headers.location.replace(/(http|https):\/\/(.*?)\//, '/');
       redirect = req.headers['x-ingress-path'] + redirect;
-      res.removeHeader('location');
-      res.append("location", redirect);
+      res.setHeader('location', redirect);
     }
 
     // modifying textual response bodies

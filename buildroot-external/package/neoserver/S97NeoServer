@@ -12,18 +12,23 @@ DAEMON="NeoServer"
 # skip this startup in LAN Gateway mode
 [[ "${HM_MODE}" == "HM-LGW" ]] && exit 0
 
-# disable the watchdog if NEOServer is disabled
-if [[ -e /etc/config/neoDisabled ]] || [[ -e /usr/local/addons/mediola/Disabled ]]; then
-	# make sure the watchdog is disabled
-	if grep -q "/usr/local/addons/mediola/bin/watchdog" /usr/local/crontabs/root 2>/dev/null; then
-		sed -i '/\/usr\/local\/addons\/mediola\/bin\/watchdog/d' /usr/local/crontabs/root
-	fi
-fi
-
-# if NEOServer is permanently disabled exit immediately
-[[ -e /etc/config/neoDisabled ]] && exit 0
-
 start() {
+	# disable the watchdog if NEOServer is disabled
+	if [[ -e /etc/config/neoDisabled ]] || [[ -e /usr/local/addons/mediola/Disabled ]]; then
+		# make sure the watchdog is disabled
+		if grep -q "/usr/local/addons/mediola/bin/watchdog" /usr/local/crontabs/root 2>/dev/null; then
+			sed -i '/\/usr\/local\/addons\/mediola\/bin\/watchdog/d' /usr/local/crontabs/root
+		fi
+	fi
+
+	# if NEOServer is permanently disabled remove all its userfs data
+	# and exit immediately
+	if [[ -e /etc/config/neoDisabled ]]; then
+		rm -rf /usr/local/addons/mediola
+		rm -f /etc/config/addons/www/mediola
+		exit 0
+	fi
+
 	echo -n "Starting ${DAEMON}: "
 
 	if [[ ! -e /etc/config/safemode ]]; then
@@ -62,6 +67,9 @@ start() {
 }
 
 stop() {
+	# if NEOServer is permanently disabled exit immediately
+	[[ -e /etc/config/neoDisabled ]] && exit 0
+
 	echo -n "Stopping ${DAEMON}: "
 	if [[ -f /usr/local/addons/mediola/rc.d/97NeoServer ]]; then
 		/usr/local/addons/mediola/rc.d/97NeoServer stop 2>/dev/null >/dev/null

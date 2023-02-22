@@ -536,7 +536,7 @@ proc action_save_settings {} {
     append errMsg [deletefile $MEDIOLAFILENAME]
   }
   if {$mediolaDisabled != $mediolaDisabledCurrent} {
-    exec /etc/init.d/S97NeoServer restart >/dev/null 2>&1
+    catch {exec /etc/init.d/S97NeoServer restart 2>/dev/null >/dev/null}
   }
   
   set cloudmaticDisabledCurrent [file exists $CLOUDMATICFILENAME]
@@ -546,7 +546,7 @@ proc action_save_settings {} {
     append errMsg [deletefile $CLOUDMATICFILENAME]
   }
   if {$cloudmaticDisabled != $cloudmaticDisabledCurrent} {
-    exec /etc/init.d/S97CloudMatic restart >/dev/null 2>&1
+    catch {exec /etc/init.d/S97CloudMatic restart 2>/dev/null >/dev/null}
   }
 
   if {$noCronBackup} {

@@ -29,6 +29,10 @@ start() {
 		if [[ -L /etc/config/addons/www/mh ]]; then
 			rm /etc/config/addons/www/mh
 		fi
+		# remove /usr/local/etc/config/addons/mh if no client.key exists
+		if [[ -d /etc/config/addons/mh ]] && [[ ! -f /etc/config/addons/mh/client.key ]]; then
+			rm -rf /etc/config/addons/mh
+		fi
 		echo "disabled"
 	else
 		# CloudMatic (meine-homematic.de) startup

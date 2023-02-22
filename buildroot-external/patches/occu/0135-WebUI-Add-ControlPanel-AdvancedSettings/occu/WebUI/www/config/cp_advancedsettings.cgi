@@ -535,10 +535,14 @@ proc action_save_settings {} {
     append errMsg [deletefile $MEDIOLAFILENAME]
   }
   
+  set cloudmaticDisabledCurrent [file exists $CLOUDMATICFILENAME]
   if {$cloudmaticDisabled} {
     append errMsg [createfile $CLOUDMATICFILENAME]
   } else {
     append errMsg [deletefile $CLOUDMATICFILENAME]
+  }
+  if {$cloudmaticDisabled != $cloudmaticDisabledCurrent} {
+    exec /etc/init.d/S97CloudMatic restart
   }
 
   if {$noCronBackup} {

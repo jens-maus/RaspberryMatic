@@ -16,14 +16,14 @@ umask 077
 
 start() {
   # Only run this if ssh is explicitly enabled
-  [ -f /etc/config/sshEnabled ] || exit 0
+  [ -f /etc/config/sshEnabled ] || return
 
   # check if we should wipe compromised default data
   if [[ "$(/usr/bin/sha256sum /usr/local/etc/config/shadow | cut -d' ' -f1)" == \
         "cec9319d99ca94364ee21405357784f85326792ba4db2fc8601e32dce1367bbf" ]]; then
     rm -f /usr/local/etc/config/sshEnabled /usr/local/etc/ssh_host_*
     sed -i "s/^\(root\):.*:\(.*:.*:.*:.*:::\)$/\1:*:\2/" /usr/local/etc/config/shadow
-    exit 0
+    return
   fi
 
   echo -n "Starting sshd: "
@@ -102,4 +102,4 @@ case "$1" in
   exit 1
 esac
 
-exit $?
+exit 0

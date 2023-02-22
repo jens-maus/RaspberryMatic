@@ -37,5 +37,3 @@ fi
 if ! docker image rm --force "$(docker images --filter="reference=raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION}" -q)"; then
   exit 1
 fi
-
-exit $?

@@ -41,5 +41,3 @@ cp -a "${BOARD_DIR}/template.ovf" "${OVADIR}/RaspberryMatic.ovf"
 (cd "${OVADIR}" && "${HOST_DIR}/bin/openssl" sha256 RaspberryMatic.* >RaspberryMatic.mf)
 tar -C "${OVADIR}" --owner=root --group=root -cf "${BINARIES_DIR}/RaspberryMatic.ova" RaspberryMatic.ovf RaspberryMatic.vmdk RaspberryMatic.mf
 rm -rf "${OVADIR}"
-
-exit $?

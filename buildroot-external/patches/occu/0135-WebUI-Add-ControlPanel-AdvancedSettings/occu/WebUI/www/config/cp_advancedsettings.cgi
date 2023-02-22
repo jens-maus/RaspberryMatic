@@ -529,10 +529,14 @@ proc action_save_settings {} {
     append errMsg [deletefile $RPI4USB3CHECKFILENAME]
   }
 
+  set mediolaDisabledCurrent [file exists $MEDIOLAFILENAME]
   if {$mediolaDisabled} {
     append errMsg [createfile $MEDIOLAFILENAME]
   } else {
     append errMsg [deletefile $MEDIOLAFILENAME]
+  }
+  if {$mediolaDisabled != $mediolaDisabledCurrent} {
+    exec /etc/init.d/S97NeoServer restart >/dev/null 2>&1
   }
   
   set cloudmaticDisabledCurrent [file exists $CLOUDMATICFILENAME]
@@ -542,7 +546,7 @@ proc action_save_settings {} {
     append errMsg [deletefile $CLOUDMATICFILENAME]
   }
   if {$cloudmaticDisabled != $cloudmaticDisabledCurrent} {
-    exec /etc/init.d/S97CloudMatic restart
+    exec /etc/init.d/S97CloudMatic restart >/dev/null 2>&1
   }
 
   if {$noCronBackup} {

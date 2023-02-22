@@ -26,7 +26,7 @@ start() {
 	if [[ -e /etc/config/neoDisabled ]]; then
 		rm -rf /usr/local/addons/mediola
 		rm -f /etc/config/addons/www/mediola
-		exit 0
+		return
 	fi
 
 	echo -n "Starting ${DAEMON}: "
@@ -68,7 +68,7 @@ start() {
 
 stop() {
 	# if NEOServer is permanently disabled exit immediately
-	[[ -e /etc/config/neoDisabled ]] && exit 0
+	[[ -e /etc/config/neoDisabled ]] && return
 
 	echo -n "Stopping ${DAEMON}: "
 	if [[ -f /usr/local/addons/mediola/rc.d/97NeoServer ]]; then
@@ -100,4 +100,4 @@ case "$1" in
 		exit 1
 esac
 
-exit $?
+exit 0

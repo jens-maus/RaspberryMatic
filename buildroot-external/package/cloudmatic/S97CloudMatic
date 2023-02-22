@@ -30,8 +30,8 @@ start() {
 			rm /etc/config/addons/www/mh
 		fi
 		# remove /usr/local/etc/config/addons/mh if no client.key exists
-		if [[ -d /usr/local/etc/config/addons/mh ]] && [[ ! -f /usr/local/etc/config/addons/mh/client.key ]]; then
-			rm -r /usr/local/etc/config/addons/mh/
+		if [[ -d /etc/config/addons/mh ]] && [[ ! -f /etc/config/addons/mh/client.key ]]; then
+			rm -rf /etc/config/addons/mh
 		fi
 		echo "disabled"
 	else

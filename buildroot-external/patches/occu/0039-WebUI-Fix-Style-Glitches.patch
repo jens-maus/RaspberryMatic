@@ -3332,7 +3332,18 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -6880,7 +6887,6 @@
+@@ -6842,6 +6849,10 @@
+ 	color: $_(textColorB); /* black */
+ }
+ 
++.CLASS05104 tbody {
++	border-width: 0;
++}
++
+ .CLASS05105 {
+ 	text-align:left;
+ }
+@@ -6880,7 +6891,6 @@
  .CLASS05200 {
  	text-align:center;
  	vertical-align:middle;
@@ -3340,7 +3351,7 @@
  	height: auto;
  }
  
-@@ -6946,10 +6952,10 @@
+@@ -6946,10 +6956,10 @@
  }
  
  .CLASS05301 {
@@ -3352,7 +3363,7 @@
  }
  
  .CLASS05302 {
-@@ -7122,6 +7128,10 @@
+@@ -7122,6 +7132,10 @@
  
  /* rega\pages\tabs\favViewer.htm  */
  
@@ -3363,7 +3374,7 @@
  .CLASS05800 {
  	width:100%;
  	text-align:center;
-@@ -7250,11 +7260,13 @@
+@@ -7250,11 +7264,13 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -3379,7 +3390,7 @@
  }
  
  .CLASS06302 {
-@@ -7542,7 +7554,6 @@
+@@ -7542,7 +7558,6 @@
  }
  
  .CLASS06409 {
@@ -3387,7 +3398,7 @@
  }
  
  .CLASS06410 {
-@@ -7705,7 +7716,7 @@
+@@ -7705,7 +7720,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -3396,7 +3407,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -7820,7 +7831,6 @@
+@@ -7820,7 +7835,6 @@
  }
  
  .CLASS11105 {
@@ -3404,7 +3415,7 @@
    padding-top: 7px;
  }
  
-@@ -7847,7 +7857,6 @@
+@@ -7847,7 +7861,6 @@
  /* config/ic_setprofiles */
  
  .CLASS20001 {
@@ -3412,7 +3423,7 @@
  }
  
  .CLASS20002 {
-@@ -7869,7 +7878,7 @@
+@@ -7869,7 +7882,7 @@
  }
  
  .CLASS20006 {
@@ -3421,7 +3432,7 @@
  }
  
  .CLASS20007 {
-@@ -7905,7 +7914,6 @@
+@@ -7905,7 +7918,6 @@
  }
  
  .CLASS20010 {
@@ -3429,7 +3440,7 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8434,7 +8442,9 @@
+@@ -8434,7 +8446,9 @@
  /* config\help.cgi */
  
  .CLASS21300 {
@@ -3440,7 +3451,7 @@
  }
  
  .CLASS21301 {
-@@ -8660,8 +8670,11 @@
+@@ -8660,8 +8674,11 @@
  
  /* config\control_panel.cgi */
  
@@ -3453,7 +3464,7 @@
  }
  
  .CLASS21701 {
-@@ -8732,7 +8745,8 @@
+@@ -8732,7 +8749,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -3463,7 +3474,7 @@
  }
  
  .CLASS21901 {
-@@ -8782,7 +8796,6 @@
+@@ -8782,7 +8800,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -3471,7 +3482,7 @@
    width:100%;
  }
  
-@@ -8839,13 +8852,17 @@
+@@ -8839,13 +8856,17 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -3491,7 +3502,7 @@
  }
  
  .CLASS22002 {
-@@ -8855,11 +8872,17 @@
+@@ -8855,11 +8876,17 @@
  
  .CLASS22003 {
    background-color: $_(white);
@@ -3509,7 +3520,7 @@
  }
  
  .CLASS22005 {
-@@ -8917,7 +8940,8 @@
+@@ -8917,7 +8944,8 @@
  }
  
  .CLASS22101 {
@@ -3519,7 +3530,7 @@
  }
  
  .CLASS22102 {
-@@ -8939,9 +8963,8 @@
+@@ -8939,9 +8967,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -3530,7 +3541,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8951,10 +8974,12 @@
+@@ -8951,10 +8978,12 @@
    position:relative;
    width:50px;
    height:50px;

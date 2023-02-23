@@ -6849,6 +6849,10 @@ color: $_(textColorA); /* white */
 	color: $_(textColorB); /* black */
 }
 
+.CLASS05104 tbody {
+	border-width: 0;
+}
+
 .CLASS05105 {
 	text-align:left;
 }

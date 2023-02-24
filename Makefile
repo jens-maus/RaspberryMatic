@@ -127,6 +127,14 @@ savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
 toolchain: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) toolchain
 
+.PHONY: recovery-menuconfig
+recovery-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
+	cd build-$(PRODUCT)/build/recovery-system-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) menuconfig
+
+.PHONY: recovery-savedefconfig
+recovery-savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
+	cd build-$(PRODUCT)/build/recovery-system-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) savedefconfig
+
 # Create a fallback target (%) to forward all unknown target calls to the build Makefile.
 # This includes:
 #   linux-menuconfig

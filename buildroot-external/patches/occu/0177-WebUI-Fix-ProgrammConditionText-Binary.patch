@@ -1,5 +1,5 @@
---- /occu/WebUI/www/rega/esp/programs.fn.orig
-+++ /occu/WebUI/www/rega/esp/programs.fn
+--- occu/WebUI/www/rega/esp/programs.fn.orig
++++ occu/WebUI/www/rega/esp/programs.fn
 @@ -84,11 +84,11 @@
                      {
                        if( iRV1 == 0 )

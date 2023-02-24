@@ -1,13 +1,3 @@
---- occu/WebUI/www/config/help.cgi.orig
-+++ occu/WebUI/www/config/help.cgi
-@@ -75,6 +75,7 @@
-           puts "<li>26789 Leer</li>"
-           puts "<li>Germany</li>"
-           # puts "<li>DOM [rega dom.BuildLabel()]</li>"
-+          puts "<li><br/>Menu icons made by <a target='_blank' href=\"https://icons8.com/license/\">Icons8</a><br/></li>"
-           puts "<li><a target='_blank' href=\"$HM_INFO_URL\">\${homepage} \${LabelHomeMatic}</a></li>"
-           puts "<li><a target='_blank' href=\"$IP_INFO_URL\">\${homepage} \${dialogHelpLinkOnlineHelpB}</a></li>"
-           puts "<li style='padding-top:25px;'><img src='/ise/img/homematic_logo_small.png'/></li>"
 --- occu/WebUI/www/rega/pages/tabs/admin/linkprog.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/linkprog.htm
 @@ -5,105 +5,61 @@
@@ -636,7 +626,7 @@
    setFooter("");
 --- occu/WebUI/www/webui/js/lang/de/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/de/translate.lang.js
-@@ -62,10 +62,10 @@
+@@ -62,10 +62,11 @@
      "submenuFavorites" : "Favoriten",
      "submenuCreateFavorite" : "Favoriten erstellen",
      "submenuPrograms" : "Programme",
@@ -646,10 +636,11 @@
      "submenuDirectLinks" : "Direkte Verkn%FCpfungen",
 -    "submenuProgramsLinks" : "Programme & Zentralenverkn%FCpfung",
 +    "submenuProgramsLinks" : "Programme & Zentralenverkn%FCpfungen",
++    "submenuScriptExecutor" : "Skript testen",
      "submenuDeviceInbox" : "Ger%E4te - Posteingang",
      "submenuUserManagement" : "Benutzerverwaltung",
      "submenuSysControl" : "Systemsteuerung",
-@@ -109,7 +109,7 @@
+@@ -109,7 +110,7 @@
      "thValues" : "Werte",
      "thUnit" : "Ma%DFeinheit",
      "thLastUpdate" : "Letzte<br/>Aktualisierung",
@@ -658,7 +649,7 @@
      "thFilter" : "Filter",
      "thDescription" : "Beschreibung",
      "thActivity" : "Aktivit%E4t",
-@@ -319,7 +319,7 @@
+@@ -319,7 +320,7 @@
      "lblSettingsFunctions5" : "Gewerkeigenschaften bearbeiten",
      "commentSettingsBtnFunctionsEnd" : "***********************************************",
      "commentSettingsBtnSysVar" : "***********************************************",
@@ -667,7 +658,7 @@
      "lblSettingsSysVar1" : "%DCbersicht aller Systemvariablen",
      "lblSettingsSysVar2" : "Bestehende Systemvariablen bearbeiten",
      "lblSettingsSysVar3" : "Neue Systemvariablen anlegen",
-@@ -440,7 +440,7 @@
+@@ -440,7 +441,7 @@
      "lblMenuStatusControlFavorites1" : "%DCbersicht aller verf%FCgbaren Favoriten",
      "btnMenuStatusControlPrograms" : "Programme",
      "lblMenuStatusControlPrograms1" : "Direkter Zugriff auf alle Programme",
@@ -678,7 +669,7 @@
      "lblMenuStatusControlSysProtocolTime" : "Zeit",
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.js
-@@ -61,10 +61,10 @@
+@@ -61,10 +61,11 @@
      "submenuFavorites" : "Favourites",
      "submenuCreateFavorite" : "Create favourites",
      "submenuPrograms" : "Programs",
@@ -688,10 +679,11 @@
      "submenuDirectLinks" : "Direct device connections",
 -    "submenuProgramsLinks" : "Programs & "+ HMIdentifier.en.CCUShortName +" connection",
 +    "submenuProgramsLinks" : "Programs & "+ HMIdentifier.en.CCUShortName +" connections",
++    "submenuScriptExecutor" : "Test script",
      "submenuDeviceInbox" : "Device inbox",
      "submenuUserManagement" : "User management",
      "submenuSysControl" : "Control panel",
-@@ -318,7 +318,7 @@
+@@ -318,7 +319,7 @@
      "lblSettingsFunctions5" : "Edit function properties",
      "commentSettingsBtnFunctionsEnd" : "***********************************************",
      "commentSettingsBtnSysVar" : "***********************************************",
@@ -700,7 +692,7 @@
      "lblSettingsSysVar1" : "Overview of all system variables",
      "lblSettingsSysVar2" : "Edit existing system variables",
      "lblSettingsSysVar3" : "Create new system variables",
-@@ -439,7 +439,7 @@
+@@ -439,7 +440,7 @@
      "lblMenuStatusControlFavorites1" : "Overview of all functions available",
      "btnMenuStatusControlPrograms" : "Programs",
      "lblMenuStatusControlPrograms1" : "Direct access to all programs",
@@ -711,7 +703,7 @@
      "lblMenuStatusControlSysProtocolTime" : "Time",
 --- occu/WebUI/www/webui/js/mainmenu/admin.js.orig
 +++ occu/WebUI/www/webui/js/mainmenu/admin.js
-@@ -7,14 +7,14 @@
+@@ -7,37 +7,38 @@
    {id: "menuStartPage", align: "left", action: function() { WebUI.enter(StartPage); }   , submenu: [ ]},
  	{id: "menuControlPage", align: "left", action: function() { WebUI.enter(ControlPage); }, submenu:
  	[
@@ -731,7 +723,11 @@
  
  	]},
    {id: "menuProgramsLinksPage", align: "left", action: function() { ConfigData.check(function() { WebUI.enter(LinksAndProgramsPage); }); }, submenu:
-@@ -24,20 +24,20 @@
+   [
+     {id: "submenuDirectLinks"                , action: function() { ConfigData.check(function() { WebUI.enter(LinkListPage); }); }   },
+-    {id: "submenuProgramsLinks", action: function() { ConfigData.check( function() { WebUI.enter(ProgramListPage); }); }}
++    {id: "submenuProgramsLinks", action: function() { ConfigData.check( function() { WebUI.enter(ProgramListPage); }); }},
++    {id: "submenuScriptExecutor", action: function() { new HMScriptExecutor(); }}
    ]},
    {id: "menuSettingsPage", align: "left", action: function() { ConfigData.check(function() { WebUI.enter(SystemConfigPage); }); }, submenu:
    [ 

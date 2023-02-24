@@ -1,8 +1,10 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 #
 # init script to start/stop the CloudMatic Addon
 #
+
+DAEMON="CloudMatic"
 
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
@@ -14,36 +16,49 @@
 [[ -x /opt/mh/startup.sh ]] || exit 0
 
 start() {
-  echo -n "Starting CloudMatic: "
+	echo -n "Starting ${DAEMON}: "
 
-  if [[ ! -e /etc/config/safemode ]]; then
+	if [[ -e /etc/config/safemode ]]; then
+		echo "skipping (safemode)"
+	elif [[ -e /etc/config/cloudmaticDisabled ]]; then
+		# remove mh config button if present
+		if grep -q "ID mh CONFIG_NAME " /etc/config/hm_addons.cfg 2>/dev/null; then
+			/bin/updateAddonConfig.tcl -d mh
+		fi
+		# remove symbolic link to www
+		if [[ -L /etc/config/addons/www/mh ]]; then
+			rm /etc/config/addons/www/mh
+		fi
+		# remove /usr/local/etc/config/addons/mh if no client.key exists
+		if [[ -d /etc/config/addons/mh ]] && [[ ! -f /etc/config/addons/mh/client.key ]]; then
+			rm -rf /etc/config/addons/mh
+		fi
+		echo "disabled"
+	else
+		# CloudMatic (meine-homematic.de) startup
+		/opt/mh/startup.sh 2>/dev/null >/dev/null
 
-    # CloudMatic (meine-homematic.de) startup
-    /opt/mh/startup.sh 2>/dev/null >/dev/null
-
-    echo "OK"
-  else
-    echo "skipping (safemode)"
-  fi
+		echo "OK"
+	fi
 }
 
 restart() {
-  start
+	start
 }
 
 case "$1" in
-  start)
-    start
-  ;;
-  stop)
-    # nothing
-  ;;
-  restart|reload)
-    restart
-  ;;
-  *)
-    echo "Usage: $0 {start|restart}"
-    exit 1
+	start)
+		start
+	;;
+	stop)
+		# nothing
+	;;
+	restart|reload)
+		restart
+	;;
+	*)
+		echo "Usage: $0 {start|restart}"
+		exit 1
 esac
 
-exit $?
+exit 0

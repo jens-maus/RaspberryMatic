@@ -3932,7 +3932,7 @@ DEV_getImageHighlight = function(type, form)
   // The position of the channel number adapted to the housing of the CCU3
   var product = WEBUI_VERSION.split(".")[0];
   if (product >= 3 && (type == "HM-RCV-50" || type == "HMW-RCV-50")) {
-    if (form.length > 2) {
+    if (form && form.length > 2) {
       form[2] = 0.57; // y-position
     }
   }

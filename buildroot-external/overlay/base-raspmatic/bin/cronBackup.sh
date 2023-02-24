@@ -5,7 +5,7 @@
 # directory with taking care of keeping a certain amount of
 # backups and deleting old ones.
 #
-# Copyright (c) 2018-2021 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2018-2023 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -45,14 +45,15 @@ MAXBACKUPS=30
 [ -n "${1}" ] && BACKUPDIR=${1}
 [ -n "${2}" ] && MAXBACKUPS=${2}
 
-# check if the parent directory of BACKUPDIR exists
-# or not
-if [ ! -e "$(dirname "${BACKUPDIR}")" ]; then
-  exit 0
-fi
+# get additional info on backup dir
+BACKUPREALPATH="$(realpath "${BACKUPDIR}" 2>/dev/null)"
 
-# check that the parent directory is not a tmpfs
-if [ "$(stat -f -c%T "$(dirname "${BACKUPDIR}")")" = "tmpfs" ]; then
+# prevent that the user is messing up things by
+# specifying an incorrect BACKUPDIR
+if [ -z "${BACKUPREALPATH}" ] || # parent of backupdir does not exit
+   [ "${BACKUPREALPATH}" = "/usr/local" ] || # not /usr/local
+   [ "$(findmnt -n -o TARGET --target "${BACKUPDIR}")" = "/" ] || # not on rootfs
+   [ "$(stat -f -c%T "$(dirname "${BACKUPDIR}")")" = "tmpfs" ]; then # not on tmpfs
   exit 0
 fi
 

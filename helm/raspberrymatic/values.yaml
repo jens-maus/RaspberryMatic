@@ -1,48 +1,34 @@
-# Default values for raspberrymatic.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+---
+#
+# IMPORTANT NOTE
+#
+# This chart inherits from bjw-s common library chart. You can check the default values/options here:
+# https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/values.yaml
+#
 
+image:
+  # -- image repository
+  repository: ghcr.io/jens-maus/raspberrymatic
+  # -- image pull policy
+  pullPolicy: IfNotPresent
 
 
 persistence:
-  # -- enabling persistent data. Dissable for demos
-  enabled: true
-  # -- Size for storage claim
-  size: 4Gi
-  # -- Use a particular class instead of the default
-  # @default -- the default storageClassName is used
-  storageClass:
-  # -- How to access the storage claim
-  accessMode: ReadWriteOnce
-  # -- Reuse an existing claim
-  # @default -- RELEASE-NAME-raspberrymatic
-  existingClaim:
-  # -- 
-  # Use a particular volume on the host machine
-  # @default -- use storage claim
-  hostPath: 
-
-image:
-  repository: ghcr.io/jens-maus/raspberrymatic
-  #tag: Uses chart appVersion when this is not set
-  pullPolicy: IfNotPresent
-
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
-serviceAccount:
-  # -- Specifies whether a service account should be created
-  create: true
-  # --The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name:
-
-podSecurityContext: {}
-  # fsGroup: 2000
+  data:
+    # -- enabling persistent data. See options at https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage/
+    enabled: false
+    mountPath: /usr/local
+  sys:
+    enabled: true
+    type: hostPath
+    hostPath: /sys
+  modules:
+    enabled: true
+    type: hostPath
+    hostPath: /lib/modules
 
 securityContext:
-  # -- Use privileged to access the Homematic HW 
+  # -- Use privileged to access the Homematic HW
   privileged: true
   # capabilities:
   #   drop:
@@ -51,104 +37,133 @@ securityContext:
   # runAsNonRoot: true
   # runAsUser: 1000
 
-# -- livenessProbe settings
-livenessProbe: 
-  tcpSocket:
-    port: http
-  initialDelaySeconds: 60 # 1 minute
-  timeoutSeconds: 5
-  periodSeconds: 60
-  failureThreshold: 5 # 5 minutes
-# -- readinessProbe settings
-readinessProbe:
-  tcpSocket:
-    port: http
-  timeoutSeconds: 4
-  periodSeconds: 5
-  failureThreshold: 60 # 5 minutes
-
 service:
-  type: ClusterIP
-  loadBalancerIP: ""
-  annotations : {}
-  ports:
-    TCP:
-      ssh: 22
-      http: 80
+  main:
+    ports:
+      ssh:
+        enabled: true
+        port: 22
+        protocol: TCP
+      http:
+        enabled: true
+        port: 80
+        protocol: HTTP
       # -- WebUI access via proxy
-      http-proxy: 8099
-      https: 443
+      http-proxy:
+        enabled: true
+        port: 8099
+        protocol: HTTP
+      https:
+        enabled: true
+        port: 443
+        protocol: HTTPS
       # -- ReGaHss XmlRpc
-      xmlrpc: 1999
+      xmlrpc:
+        enabled: true
+        port: 1999
+        protocol: TCP
       # -- ReGaHss XmlRpc proxy
-      xmlrpc-proxy: 31999
+      xmlrpc-proxy:
+        enabled: true
+        port: 31999
+        protocol: TCP
       # -- ReGaHss XmlRpc TLS
-      xmlrpc-tls: 41999
+      xmlrpc-tls:
+        enabled: true
+        port: 41999
+        protocol: TCP
       # -- wired Homematic (HS485D XmlRpc)
-      wired: 2000
+      wired:
+        enabled: true
+        port: 2000
+        protocol: TCP
       # -- wired Homematic (HS485D XmlRpc) proxy
-      wired-proxy: 32000
+      wired-proxy:
+        enabled: true
+        port: 32000
+        protocol: TCP
       # -- wired Homematic (HS485D XmlRpc) TLS
-      wired-tls: 42000
+      wired-tls:
+        enabled: true
+        port: 42000
+        protocol: TCP
       # -- wireless Homematic (rfd)
-      rfd: 2001
+      rfd:
+        enabled: true
+        port: 2001
+        protocol: TCP
       # -- wireless Homematic (rfd) proxy
-      rfd-proxy: 32001
+      rfd-proxy:
+        enabled: true
+        port: 32001
+        protocol: TCP
       # -- wireless Homematic (rfd) TLS
-      rfd-tls: 42001
+      rfd-tls:
+        enabled: true
+        port: 42001
+        protocol: TCP
       # -- crRFD Legacy XmlRpc - Homematic IP
-      hmip: 2010
+      hmip:
+        enabled: true
+        port: 2010
+        protocol: TCP
       # -- crRFD Legacy XmlRpc - Homematic IP proxy
-      hmip-proxy: 32010
+      hmip-proxy:
+        enabled: true
+        port: 32010
+        protocol: TCP
       # -- crRFD Legacy XmlRpc - Homematic IP TLS
-      hmip-tls: 42010
+      hmip-tls:
+        enabled: true
+        port: 42010
+        protocol: TCP
       # -- Rega
-      rega: 8181
+      rega:
+        enabled: true
+        port: 8181
+        protocol: TCP
       # -- Rega proxy
-      rega-proxy: 8183
+      rega-proxy:
+        enabled: true
+        port: 8183
+        protocol: TCP
       # -- Rega TLS
-      rega-tls: 48181
+      rega-tls:
+        enabled: true
+        port: 48181
+        protocol: TCP
       # -- HMServer - Virtual Devices
-      virt-dev: 9292
+      virt-dev:
+        enabled: true
+        port: 9292
+        protocol: TCP
       # -- HMServer - Virtual Devices
-      virt-dev-proxy: 39292
+      virt-dev-proxy:
+        enabled: true
+        port: 39292
+        protocol: TCP
       # -- HMServer - Virtual Devices TLS
-      virt-dev-tls: 49292
-    UDP:
-      snmp: 161
+      virt-dev-tls:
+        enabled: true
+        port: 49292
+        protocol: TCP
+      snmp:
+        enabled: true
+        port: 161
+        protocol: UDP
       # -- uPnP/ssdp
-      upnp: 1900
+      upnp:
+        enabled: true
+        port: 1900
+        protocol: UDP
       # -- eq3configd
-      eq3configd: 43439
+      eq3configd:
+        enabled: true
+        port: 43439
+        protocol: UDP
 
 ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - chart-example.local
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-annotations: {}
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+  # -- Enable and configure ingress settings for the chart under this key.
+  # @default -- See values.yaml
+  main:
+    enabled: false

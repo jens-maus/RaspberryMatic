@@ -21,7 +21,7 @@ stop() {
     printf "Shutting down ser2net: "
     if [ ! -f /var/run/ser2net.pid ] ; then
       echo "OK"
-      exit 0
+      return
     fi
 
     if start-stop-daemon -K -q -p /var/run/ser2net.pid; then
@@ -51,4 +51,4 @@ case "$1" in
 	    exit 1
 esac
 
-exit $?
+exit 0

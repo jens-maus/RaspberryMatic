@@ -316,7 +316,7 @@
  #*******************************************************************************
  #* Sucht fertig konfigurierte Geräte und setzt deren Kanäle auf "fertig 
  #* konfiguriert".
-@@ -37,8 +17,145 @@
+@@ -37,8 +17,158 @@
    }
  }
  
@@ -455,10 +455,23 @@
 +  }
 +}
 +
++proc convert_byte2int_HSSDPs {} {
++  rega_script {
++    string sDP;
++    foreach(sDP, dom.GetObject(ID_DATAPOINTS).EnumIDs()) {
++      object obj = dom.GetObject(sDP.ToInteger());
++      if((obj) && (obj.Type() == OT_HSSDP) && (obj.ValueType() == ivtByte)) {
++        obj.ValueType(ivtInteger);
++        obj.ValueSubType(istGeneric);
++      }
++    }
++  }
++}
++
  ################################################################################
  # Einsprungpunkt                                                               #
  ################################################################################
  
  checkDevices
 +create_default_objects
-+
++convert_byte2int_HSSDPs

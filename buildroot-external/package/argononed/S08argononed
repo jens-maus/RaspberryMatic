@@ -1,0 +1,66 @@
+#!/bin/sh
+# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
+#
+# ArgonONE/FAT HAT Support Daemon starting and stopping
+#
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+DAEMON="argononed"
+PIDFILE="/var/run/${DAEMON}.pid"
+
+test -x "/opt/argononed/${DAEMON}.sh" || exit 0
+
+# source all data from /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
+case $1 in
+	start)
+		echo -n "Starting ArgonONE/FAN daemon: "
+
+		# find out if a ArgonONE/FAT HAT board is installed at all.
+		# Both seem to listen at 0x1a i2c address
+		if i2cget -y 1 0x1a 2>/dev/null >/dev/null; then
+
+			if start-stop-daemon -S -q -b -m -p "${PIDFILE}" --exec "/opt/argononed/${DAEMON}.sh" 2>/dev/null >/dev/null; then
+				echo "OK"
+			else
+				echo "FAIL"
+			fi
+
+		else
+			echo "no hardware found"
+		fi
+	;;
+
+	stop)
+		echo -n "Stopping ArgonONE/FAN daemon: "
+		if [[ -f ${PIDFILE} ]]; then
+			if start-stop-daemon -K -q -p "${PIDFILE}"; then
+				echo "OK"
+			else
+				echo "FAIL"
+			fi
+		else
+			echo "OK"
+		fi
+		rm -f "${PIDFILE}"
+	;;
+
+	restart|force-reload)
+		$0 stop
+		sleep 1
+		$0 start
+	;;
+
+	status)
+		/opt/argononed/${DAEMON}.sh --status
+	;;
+
+	*)
+		echo "Usage: $0 {start|stop|restart|force-reload|status}" >&2
+		exit 1
+	;;
+esac
+
+exit 0

@@ -19,16 +19,16 @@ the WebUI and underlying operating system for an improved user experience.
 
 ## Features
 
-- Use your Home Assistant central as a full-fledged HomeMatic/homematicIP control center (CCU).
-- Access the CCU WebUI from your Home Assistant user interface.
+- Use your Home Assistant central as a full-fledged HomeMatic/homematicIP control center unit (CCU).
+- Access the CCU WebUI directly from your Home Assistant user interface.
 - Provides all features of a RaspberryMatic system within your Home Assistant environment.
 - Interconnect to HomeMatic/homematicIP devices using the standard, vendor-provided RF modules (`RPI-RF-MOD`, `HM-MOD-RPI-PCB`, `HmIP-RFUSB`, `HM-CFG-USB-2`, `HM-CFG-LAN`), Wired gateways (`HmIPW-DRAP`, `HMW-LGW-O-DR-GS-EU`) or LAN gateway solutions (`HmIP-HAP`, `HM-LGW-O-TW-W-EU`) – see [Requirements](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung#vorraussetzungen).
-- Supports additional open-hardware based USB/Ethernet adapter devices (`HB-RF-USB`, `HB-RF-USB-2`, `HB-RF-ETH`).
+- Supports additional third-party open-hardware based USB/Ethernet adapter devices (`HB-RF-USB`, `HB-RF-USB-2`, `HB-RF-ETH`).
 
 ## Documentation / Installation
 
 For a detailed documentation please refer to the "Documentation" tab of the installed Add-on or
-consult the [online documentation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HomeAssistant) available in the RaspberryMatic GitHub project. Also note, that after having installed the Add-on you also have to setup the HomeMatic integration part in Home Assistant itself so that your Home Assistant is able to see and use the HomeMatic/homematicIP devices in your RaspberryMatic central.
+consult the [online documentation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HomeAssistant) available in the RaspberryMatic GitHub project. Also note, that after having installed the Add-on you also have to setup the [HomeMatic integration](https://github.com/jens-maus/RaspberryMatic/wiki/HomeAssistant-Integration) part in Home Assistant itself so that your Home Assistant is able to see and use the HomeMatic/homematicIP devices of your RaspberryMatic CCU.
 
 ## License
 

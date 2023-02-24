@@ -108,7 +108,7 @@
                     cm.replaceRange('', {line: c.line, ch: c.ch - m[1].length}, {line: c.line, ch: c.ch});
                 }}
   });
-  var codeHeight = parseInt((frameHeight - 64) * 0.6);
+  var codeHeight = parseInt((frameHeight - 120) * 0.6);
   editor_code.setSize("100%", codeHeight);
 
   var editor_output = CodeMirror.fromTextArea(document.getElementById('scrout'), {
@@ -117,7 +117,7 @@
     lineWrapping: true,
     lineNumbers: false
   });                                          
-  editor_output.setSize("100%", parseInt((frameHeight - 64) - codeHeight));
+  editor_output.setSize("100%", parseInt((frameHeight - 120) - codeHeight));
 
   RunScript = function()
   {

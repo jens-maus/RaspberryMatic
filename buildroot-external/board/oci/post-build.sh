@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Stop on error
+set -e
+
 # create VERSION file
 echo "VERSION=${PRODUCT_VERSION}" >"${TARGET_DIR}/VERSION"
 echo "PRODUCT=${PRODUCT}" >>"${TARGET_DIR}/VERSION"

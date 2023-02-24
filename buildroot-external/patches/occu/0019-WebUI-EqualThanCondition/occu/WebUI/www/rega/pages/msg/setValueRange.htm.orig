@@ -7,6 +7,11 @@
     integer iRV1 = oSC.RightVal1();
     integer iRV2 = oSC.RightVal2();
     string sValueUnit = oLV.ValueUnit();
+
+    integer minMaxValueType = oLV.ValueType();
+    integer valMin = oLV.ValueMin();
+    integer valMax = oLV.ValueMax();
+
     ! Write( sValueUnit );
     if( sValueUnit == null ) { sValueUnit = ""; }
     if( sValueUnit == "100%" )
@@ -14,40 +19,91 @@
       sValueUnit = "%";
       iRV1 = iRV1 * 100;
       iRV2 = iRV2 * 100;
+
+      !valMin = valMin.ToFloat() * 100;
+      !valMax = valMax.ToFloat() * 100;
+      valMin = 0;
+      valMax = 100;
+
+      ! For ivtScaling see iseValue.h
+      ! if (minMaxValueType == ivtScaling) {
+      !  iRV1 = iRV1.ToString(0);
+      !  iRV2 = iRV2.ToString(0);
+      ! }
     }
+
+      ! For ivtScaling see iseValue.h
+      if (minMaxValueType == ivtScaling) {
+        if (sValueUnit == "%") {
+          iRV1 = iRV1.ToString(0);
+          iRV2 = iRV2.ToString(0);
+          valMin = valMin.ToString(0);
+          valMax = valMax.ToString(0);
+        } else {
+          iRV1 = iRV1.ToString(2);
+          iRV2 = iRV2.ToString(2);
+          valMin = valMin.ToString(2);
+          valMax = valMax.ToString(2);
+        }
+      } else {
+        iRV1 = iRV1.ToString(2);
+        iRV2 = iRV2.ToString(2);
+        valMin = valMin.ToString(2);
+        valMax = valMax.ToString(2);
+      }
+
+
   %>
 </div>
 <div class="CLASS00800">
   <table class="popupTableScript CLASS00801" >
     <tr class="popupTableRow">
     <td class="CLASS00802">
-    <div class="CLASS00803">${lblValueRange}:</div>
+    <!-- for testing <div class="CLASS00803"><b>${lblValueRange}: <% Write(valMin # " - " # valMax # " - " # oLV.ValueType() # " - Unit: " # sValueUnit); %></b></div> -->
+    <!-- <div class="CLASS00803"><b>${lblValueRange}: <% Write(valMin # " - " # valMax # " " # sValueUnit); %></b></div> -->
+    <div class="CLASS00803"><b>${lblValueRange}:</b></div>
     <table>
+    <tr><td style="height: 15px;"></td></tr>
     <tr>
       <td>
         <% string sChecked = ""; if(iCT==6) { sChecked="checked"; } %>
         <input id="Radio1" type="radio" <% Write(sChecked); %> onclick="SetCT(this);" name="valueRange" />
-        <a class="CLASS00804">${ruleConditionLblRangeFrom}</a>
-        <input id="Text1" type="text" value="<% Write(iRV1.ToString(2)); %>" class="CLASS00805"/>
-        <a class="CLASS00804"> <% Write(sValueUnit); %></a></td>
+        <span class="CLASS00804">${ruleConditionLblRangeFrom}</span>
+        <input id="Text1" type="text" value="<% Write(iRV1); %>" class="CLASS00805"/>
+        <span class="CLASS00804"> <% Write(sValueUnit); %></span></td>
       <td>
-        <a class="CLASS00807">${ruleConditionLblRangeLessThan}</a>
+        <span class="CLASS00807">${ruleConditionLblRangeLessThan}</span>
       </td>
       <td>
-        <input id="Text2" type="text" value="<% Write(iRV2.ToString(2)); %>" class="CLASS00806"/>
-        <a class="CLASS00804"><% Write(sValueUnit); %></a>
+        <input id="Text2" type="text" value="<% Write(iRV2); %>" class="CLASS00806"/>
+        <span class="CLASS00804"><% Write(sValueUnit); %></span>
       </td>
     </tr>
+
+
+    <tr>
+      <td>
+        <% string sChecked = ""; if(iCT==5) { sChecked="checked"; } %>
+        <input id="Radio0" type="radio" <% Write(sChecked); %> onclick="SetCT(this);" name="valueRange"/>
+        <span class="CLASS00804">${ruleConditionLblIsEqual}</span>
+      </td>
+      <td>
+        <input id="Text0" type="text" value="<% Write(iRV1); %>" class="CLASS00806"/>
+        <span class="CLASS00804"><% Write(sValueUnit); %></span>
+      </td>
+    </tr>
+
+
 
     <tr>
       <td>
         <% string sChecked = ""; if(iCT==8) { sChecked="checked"; } %>
         <input id="Radio2" type="radio" <% Write(sChecked); %> onclick="SetCT(this);" name="valueRange"/>
-        <a class="CLASS00804">${ruleConditionLblGreaterThan}</a>
+        <span class="CLASS00804">${ruleConditionLblGreaterThan}</span>
       </td>
       <td>
-        <input id="Text3" type="text" value="<% Write(iRV1.ToString(2)); %>" class="CLASS00806"/>
-        <a class="CLASS00804"><% Write(sValueUnit); %></a>
+        <input id="Text3" type="text" value="<% Write(iRV1); %>" class="CLASS00806"/>
+        <span class="CLASS00804"><% Write(sValueUnit); %></span>
       </td>
     </tr>
 
@@ -55,11 +111,11 @@
       <td>
         <% string sChecked = ""; if(iCT==10) { sChecked="checked"; } %>
         <input id="Radio3" type="radio" <% Write(sChecked); %> onclick="SetCT(this);" name="valueRange"/>
-        <a class="CLASS00804">${ruleConditionLblLessThan}</a>
+        <span class="CLASS00804">${ruleConditionLblLessThan}</span>
       </td>
       <td>
-        <input id="Text4" type="text" value="<% Write(iRV1.ToString(2)); %>" class="CLASS00806"/>
-        <a class="CLASS00804"><% Write(sValueUnit); %></a>
+        <input id="Text4" type="text" value="<% Write(iRV1); %>" class="CLASS00806"/>
+        <span class="CLASS00804"><% Write(sValueUnit); %></span>
       </td>
     </tr>
 
@@ -67,11 +123,11 @@
       <td>
         <% string sChecked = ""; if(iCT==9) { sChecked="checked"; } %>
         <input id="Radio4" type="radio" <% Write(sChecked); %> onclick="SetCT(this);" name="valueRange"/>
-        <a class="CLASS00804">${ruleConditionLblGreaterOrEqualThan}</a>
+        <span class="CLASS00804">${ruleConditionLblGreaterOrEqualThan}</span>
       </td>
       <td>
-        <input id="Text5" type="text" value="<% Write(iRV1.ToString(2)); %>" class="CLASS00806"/>
-        <a class="CLASS00804"><% Write(sValueUnit); %></a>
+        <input id="Text5" type="text" value="<% Write(iRV1); %>" class="CLASS00806"/>
+        <span class="CLASS00804"><% Write(sValueUnit); %></span>
       </td>
     </tr>
 
@@ -79,11 +135,11 @@
       <td>
         <% string sChecked = ""; if(iCT==11) { sChecked="checked"; } %>
         <input id="Radio5" type="radio" <% Write(sChecked); %> onclick="SetCT(this);" name="valueRange"/>
-        <a class="CLASS00804">${ruleConditionLblLessOrEqualThan}</a>
+        <span class="CLASS00804">${ruleConditionLblLessOrEqualThan}</span>
       </td>
       <td>
-        <input id="Text6" type="text" value="<% Write(iRV1.ToString(2)); %>" class="CLASS00806"/>
-        <a class="CLASS00804"><% Write(sValueUnit); %></a>
+        <input id="Text6" type="text" value="<% Write(iRV1); %>" class="CLASS00806"/>
+        <span class="CLASS00804"><% Write(sValueUnit); %></span>
       </td>
     </tr>
 
@@ -110,10 +166,12 @@
   max ="<% Write(oLV.ValueMax()); %>";
 
   var minVal = (vu == "100%") ? min*100 : min;
-  var maxVal = (vu == "100%") ? max*100 : max;
+  //var maxVal = (vu == "100%") ? max*100 : max;
+  var maxVal = (vu == "100%") ? 100 : max;
 
   SetCT = function(elem)
   {
+    if( elem.id=="Radio0" ) ct = 5;
     if( elem.id=="Radio1" ) ct = 6;
     if( elem.id=="Radio2" ) ct = 8;
     if( elem.id=="Radio3" ) ct = 10;
@@ -128,6 +186,20 @@
 
     switch( ct )
     {
+
+      case 5:
+        rv1 = $("Text0").value;
+        if( vu == "100%" ) rv1 = rv1/100;
+        go = 0;
+        if (isNaN(rv1)) {
+          go = 5;
+        } else {
+          if ( ( (rv1/1) < (min/1) ) || ( (rv1/1) > (max/1) ) ) {
+            go = 6;
+          }
+        }
+        break;
+
       case 6:
         rv1 = $("Text1").value;
         go = 0;
@@ -210,9 +282,6 @@
       default:
         break;
     }
-
-
-
 
     switch( go)
     {

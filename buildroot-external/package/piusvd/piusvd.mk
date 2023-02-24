@@ -5,12 +5,16 @@
 ################################################################################
 
 PIUSVD_VERSION = 0.9
-PIUSVD_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/piusvd
-PIUSVD_SITE_METHOD = local
+PIUSVD_SOURCE =
 PIUSVD_LICENSE = PROPERITARY
 
 define PIUSVD_INSTALL_TARGET_CMDS
-	cp -a $(@D)/rootfs-overlay/* $(TARGET_DIR)/
+	cp -a $(PIUSVD_PKGDIR)/rootfs-overlay/* $(TARGET_DIR)/
+endef
+
+define PIUSVD_INSTALL_INIT_SYSV
+	$(INSTALL) -D -m 0755 $(PIUSVD_PKGDIR)/S51piusvd \
+		$(TARGET_DIR)/etc/init.d/S51piusvd
 endef
 
 $(eval $(generic-package))

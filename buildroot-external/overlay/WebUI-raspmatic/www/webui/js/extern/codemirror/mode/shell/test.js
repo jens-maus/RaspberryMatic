@@ -1,5 +1,5 @@
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function() {
   var mode = CodeMirror.getMode({}, "shell");
@@ -65,9 +65,16 @@
   MT("strings in parens",
      "[def FOO][operator =]([quote $(<][string \"][def $MYDIR][string \"][quote /myfile grep ][string 'hello$'][quote )])")
 
-  MT ("string ending in dollar",
-     '[def a][operator =][string "xyz$"]; [def b][operator =][string "y"]')
+  MT("string ending in dollar",
+    '[def a][operator =][string "xyz$"]; [def b][operator =][string "y"]')
 
-  MT ("quote ending in dollar",
-     "[quote $(echo a$)]")
+  MT("quote ending in dollar",
+    "[quote $(echo a$)]")
+
+  MT("heredoc",
+     "[builtin cat] [string-2 <<- end]",
+     "[string-2 content one]",
+     "[string-2 content two end]",
+     "[string-2 end]",
+     "[builtin echo]")
 })();

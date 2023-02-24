@@ -271,7 +271,7 @@ check process multimacd with pidfile /var/run/multimacd.pid
       exec "/bin/triggerAlarm.tcl 'multimacd restarted' 'WatchDog: multimacd-restart' true"
     if filedescriptors > 95% for 5 cycles then
       exec "/bin/triggerAlarm.tcl 'multimacd: high filedescriptor usage (>95%)' 'WatchDog: multimacd-highfd' true"
-    depends on multimacdEnabled, hmlangwDisabled
+    depends on multimacdEnabled
 
 check program multimacdEnabled with path "/usr/bin/test -f /var/etc/multimacd.conf"
     group homematic
@@ -478,6 +478,14 @@ check program hb_rf_eth-Check with path "/bin/grep -q 1 /sys/class/hb-rf-eth/hb-
 check program hb_rf_eth-CheckEnabled with path "/usr/bin/test -e /etc/config/hb_rf_eth"
     group homematic
     if status != 0 for 1 cycles then unmonitor
+
+# check if a copro exists and if so we perform a regular check
+check program coProcessorCheck with path "/bin/checkCoProcessor.sh"
+    group homematic
+    if status = 2 then
+      exec /bin/sh -c "/bin/triggerAlarm.tcl 'RF-Module/Co-Processor connection lost' 'WatchDog: copro-lost' true"
+      repeat every 5 cycles
+    if status = 1 for 1 cycles then unmonitor
 
 # check remaining eMMC life-time
 check program eMMCLifeTimeCheck with path "/bin/checkEMMCLifeTime.sh"

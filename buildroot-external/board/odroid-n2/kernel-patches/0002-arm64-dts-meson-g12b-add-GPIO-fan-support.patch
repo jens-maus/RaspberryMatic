@@ -1,0 +1,42 @@
+From b4024d399bb13d46cd1a5d3be3793669b3d80e97 Mon Sep 17 00:00:00 2001
+Message-Id: <b4024d399bb13d46cd1a5d3be3793669b3d80e97.1663008544.git.stefan@agner.ch>
+In-Reply-To: <ff269d57d23c2edee262e14c6cf4116bc16d8019.1663008544.git.stefan@agner.ch>
+References: <ff269d57d23c2edee262e14c6cf4116bc16d8019.1663008544.git.stefan@agner.ch>
+From: Stefan Agner <stefan@agner.ch>
+Date: Mon, 11 Jan 2021 11:38:54 +0100
+Subject: [PATCH] arm64: dts: meson: g12b: add GPIO fan support
+
+Add simple GPIO fan node to support a fan on GPIO J8. Unfortunately the
+pad used to control the fan does not support real PWM, hence the RPM
+cannot be modulated.
+
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+---
+ arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+index 5f0f036b1265..36dbd2666015 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
+@@ -39,6 +39,17 @@ emmc_pwrseq: emmc-pwrseq {
+ 		reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
+ 	};
+ 
++	/*
++	 * 5V 80x80x10.8mm cooling fan from Hardkernel shop.
++	 */
++	fan0: gpio-fan {
++		#cooling-cells = <2>;
++		compatible = "gpio-fan";
++		gpio-fan,speed-map = <0 0 1600 1>;
++		gpios = <&gpio_ao GPIOAO_10 GPIO_ACTIVE_HIGH>;
++		status = "okay";
++	};
++
+ 	gpio-keys-polled {
+ 		compatible = "gpio-keys-polled";
+ 		poll-interval = <100>;
+-- 
+2.37.3
+

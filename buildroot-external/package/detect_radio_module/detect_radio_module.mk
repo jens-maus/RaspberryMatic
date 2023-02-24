@@ -7,7 +7,7 @@
 #
 ################################################################################
 
-DETECT_RADIO_MODULE_VERSION = d1dddbeb32657da72845edd0e4a097fbce3a0ec6
+DETECT_RADIO_MODULE_VERSION = bb72f38288cbc2603da4d3f3fbf2319123a7ec42
 DETECT_RADIO_MODULE_SITE = $(call github,alexreinert,piVCCU,$(DETECT_RADIO_MODULE_VERSION))
 DETECT_RADIO_MODULE_LICENSE = Apache-2.0
 DETECT_RADIO_MODULE_LICENSE_FILES = LICENSE

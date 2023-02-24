@@ -438,12 +438,18 @@
     
   }
   
+  function decodeURIComponentSafe(s) {
+    if (!s) {
+        return s;
+    }
+    return decodeURIComponent(s.replace(/%(?![0-9][0-9a-fA-F]+)/g, '%25'));
+  }
     
   loadChar8859Edit = function(sValue) 
   {
     var s = "";
     s += "<table class='CLASS05012'>";
-    s += "<tr><td> <textarea id='txValue' rows='5'>"+decodeURIComponent(unescape(sValue))+"</textarea> </td></tr>";
+    s += "<tr><td> <textarea id='txValue' rows='5'>"+decodeURIComponentSafe(unescape(sValue))+"</textarea> </td></tr>";
     s += "</table>";
     $("tdValueEdit").innerHTML = s;
     $("tdEdit").innerHTML = "";

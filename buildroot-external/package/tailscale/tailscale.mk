@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-TAILSCALE_VERSION = 1.16.2
+TAILSCALE_VERSION = 1.36.1
 TAILSCALE_SITE = $(call github,tailscale,tailscale,v$(TAILSCALE_VERSION))
 TAILSCALE_LICENSE = BSD-3-Clause
 TAILSCALE_LICENSE_FILES = LICENSE
@@ -20,7 +20,7 @@ TAILSCALE_BUILD_TARGETS = \
 TAILSCALE_LDFLAGS = \
 	-X tailscale.com/version.Long=$(TAILSCALE_VERSION) \
 	-X tailscale.com/version.Short=$(TAILSCALE_VERSION) \
-	-X tailscale.com/version.GitCommit=$(TAILSCALE_VERSION)
+	-X tailscale.com/version.GitCommit=v$(TAILSCALE_VERSION)
 
 define TAILSCALE_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 $(@D)/bin/tailscale $(TARGET_DIR)/usr/bin/

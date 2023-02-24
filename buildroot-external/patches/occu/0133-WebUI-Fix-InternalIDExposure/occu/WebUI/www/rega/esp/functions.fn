@@ -186,7 +186,7 @@ function ::WriteDPText()
           }
           if( (!bBinary) && (!bFloat) )
           {
-            if (((toCH.Label() != "HmIPW-DRAP") && (toCH.Label() != "HmIP-HAP")) || (sVUTmp == "°C") || (sVUTmp == "V")) { ! SPHM-599
+            if (((toCH.Label() != "HmIPW-DRAP") && (toCH.Label() != "HmIP-HAP") && (toCH.Label() != "HmIP-HAP-B1") && (toCH.Label() != "HmIP-HAP JS1")) || (sVUTmp == "°C") || (sVUTmp == "V")) { ! SPHM-599
               sValue = sValue.ToInteger();
               sValue = sValue.ToString(0);
             }
@@ -390,31 +390,21 @@ function ::showHideHmIPChannel() {
       !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on
       ! For BidCos-RF this isn't necessary
 
+      if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "HmIP-HAP-B1") && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
+        bShowChannel = false;
+      }
 
-      if (oDevHssType.Substr(0,6) == "HmIPW-") {
-        object chnParam;
-        ! A HmIPW-* device with a control for the parameter IDENTIFY_TARGET_LEVEL (MAINTENANCE channel)
-        ! should be visible. So it's possible to use the identify function of wHmIPW-devices.
-        chnParam = dom.GetObject("HmIP-RF."#chn.Address()#".IDENTIFY_TARGET_LEVEL");
+      ! Necessary to be able to learn the codes of keypads and finger print sensors
+      if (oDevHssType == "HmIP-FWI") {
+        bShowChannel = true;
+      }
 
-        ! A HmIPW-* device with a control for the parameter ERROR_POWER_SHORT_CIRCUIT_BUS_1 (MAINTENANCE channel)
-        ! should be visible. This is the DRAP.
-        if (!chnParam) {
-          chnParam = dom.GetObject("HmIP-RF."#chn.Address()#".ERROR_POWER_SHORT_CIRCUIT_BUS_1");
-        }
+      if (oDevHssType == "HmIP-WKP") {
+        bShowChannel = true;
+      }
 
-        if (chnParam) {
-          string controlName = chnParam.MetaData("CONTROL");
-          if (! controlName) {
-            bShowChannel = false;
-          }
-        } else {
-          bShowChannel = false;
-        }
-      } else {
-        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "RPI-RF-MOD")) {
-          bShowChannel = false;
-        }
+      if (oDevHssType == "HmIP-SWSD-2") {
+        bShowChannel = true;
       }
       return;
     }
@@ -426,6 +416,25 @@ function ::showHideHmIPChannel() {
     !    }
     !  return;
     !}
+
+    if (oDevHssType == "HmIP-WKP") {
+      if ((chNumber == 2)
+        || (chNumber == 4)
+        || (chNumber == 6)
+        || (chNumber == 8)
+        || (chNumber == 10)
+        || (chNumber == 12)
+        || (chNumber == 14)
+        || (chNumber == 16)
+      ) {
+        bShowChannel = false;
+      }
+    }
+
+    if ((chn.HssType().Find("DISPLAY_INPUT_TRANSMITTER") != -1) || (chn.HssType().Find("DISPLAY_LEVEL_INPUT_TRANSMITTER") != -1) )  {
+      bShowChannel = false;
+      return;
+    }
 
     if (user.UserEasyLinkMode() == true) {
       if ((chn.HssType().Find("DIMMER_TRANSMITTER") != -1)
@@ -458,6 +467,9 @@ function ::showHideHmIPChannel() {
         }
       }
     }
+
+
+
     ! No hit
     return;
   }
@@ -476,13 +488,14 @@ function ::conditionIsParameterVisible() {
   string wiredIdentifier = "BidCos-Wired";
 
   string tmp;
-  string excludeBinaryParams;
-  string includeBinaryParams = "NOT_IN_USE";
+  string excludeParams;
+  string includeParams = "NOT_IN_USE";
   showChannelParam = true;
 
   if ( (sInterface == hmIPRFIdentifier) || (sInterface == hmIPWIdentifier) ) {
-    excludeBinaryParams = "BOOST_TIME,CONTROL_DIFFERENTIAL_TEMPERATURE,ERROR_CODE,LAST_PASSAGE_DIRECTION,LEVEL_STATUS,LEVEL_2_STATUS,IP_ADDRESS,OPERATING_VOLTAGE,PARTY_,PARTY_MODE,PASSAGE_COUNTER_OVERFLOW,PROCESS,QUICK_VETO_TIME,";
-    excludeBinaryParams = excludeBinaryParams#"RSSI_DEVICE,RSSI_PEER,SECTION,SMOKE_DETECTOR_TEST_RESULT=NONE,STATUS_FLAG_,ABSOLUTE_ANGLE_STATUS,WP_OPTIONS,LOCK_STATE_STATUS,LOCK_TARGET_LEVEL";
+    excludeParams = "BOOST_TIME,CONTROL_DIFFERENTIAL_TEMPERATURE,ERROR_CODE,ERROR_COMMUNICATION,ERROR_DRIVE,LAST_PASSAGE_DIRECTION,LEVEL_STATUS,LEVEL_2_STATUS,IP_ADDRESS,OPERATING_VOLTAGE,PARTY_,PARTY_MODE,PASSAGE_COUNTER_OVERFLOW,PROCESS,QUICK_VETO_TIME,";
+    excludeParams = excludeParams#"RSSI_DEVICE,RSSI_PEER,SECTION,SMOKE_DETECTOR_TEST_RESULT=NONE,STATUS_FLAG_,ABSOLUTE_ANGLE_STATUS,WP_OPTIONS,LOCK_STATE_STATUS,LOCK_TARGET_LEVEL,";
+    excludeParams = excludeParams#"TIME_OF_OPERATION,TIME_OF_OPERATION_STATUS";
 
     if ((oCC.HssType().Find("DIMMER_TRANSMITTER") != -1)
     || (oCC.HssType().Find("DIMMER_VIRTUAL_RECEIVER")!= -1)
@@ -498,7 +511,7 @@ function ::conditionIsParameterVisible() {
         }
       }
       if (oCC.HssType().Find("DOOR_LOCK_STATE_TRANSMITTER") == -1) {
-        includeBinaryParams = "PROCESS";
+        includeParams = "PROCESS";
       }
       return;
     }
@@ -509,7 +522,7 @@ function ::conditionIsParameterVisible() {
     || (oCC.HssType().Find("ACOUSTIC_SIGNAL_VIRTUAL_RECEIVER") != -1)
     || (oCC.HssType().Find("OPTICAL_SIGNAL_RECEIVER") != -1)
     ) {
-      if ( (oDP.HSSID().Find("LEVEL") != -1)
+      if ( ((oDP.HSSID().Find("LEVEL") != -1) && (oCC.HssType().Find("OPTICAL_SIGNAL_RECEIVER") == -1))
       || (oDP.HSSID().Find("ACTIVITY_STATE") != -1)
       ) {
         showChannelParam = false;
@@ -520,6 +533,7 @@ function ::conditionIsParameterVisible() {
     if (
       (oCC.HssType().Find("SERVO_VIRTUAL_RECEIVER") != -1)
       || (oCC.HssType().Find("SERVO_TRANSMITTER") != -1)
+      || (oCC.HssType().Find("WINDOW_DRIVE_RECEIVER") != -1)
     ) {
       if (oDP.HSSID().Find("ACTIVITY_STATE") != -1) {
         showChannelParam = false;
@@ -590,22 +604,22 @@ function ::conditionIsParameterVisible() {
   }
 
   if ( sInterface == hmIPVirtualDevIdentifier ) {
-    excludeBinaryParams = "BOOST_TIME,CONTROL_DIFFERENTIAL_TEMPERATURE,LEVEL_STATUS,OPERATING_VOLTAGE,PARTY_,PARTY_MODE,PROCESS,QUICK_VETO_TIME,";
-    excludeBinaryParams = excludeBinaryParams#"RSSI_DEVICE,RSSI_PEER,SECTION,SMOKE_DETECTOR_TEST_RESULT=NONE,VALVE_STATE";
+    excludeParams = "BOOST_TIME,CONTROL_DIFFERENTIAL_TEMPERATURE,LEVEL_STATUS,OPERATING_VOLTAGE,PARTY_,PARTY_MODE,PROCESS,QUICK_VETO_TIME,";
+    excludeParams = excludeParams#"RSSI_DEVICE,RSSI_PEER,SECTION,SMOKE_DETECTOR_TEST_RESULT=NONE,VALVE_STATE";
     return;
   }
 
 
   if ( sInterface == bidCosRFIdentifier ) {
-    excludeBinaryParams = "PARTY_";
-    includeBinaryParams = "PARTY_MODE";
+    excludeParams = "PARTY_";
+    includeParams = "PARTY_MODE";
   }
 
  ! The check of the type is to prevent the hiding of system vars
   if ((( sInterface == hmIPRFIdentifier ) || ( sInterface == hmIPWIdentifier ) || ( sInterface == bidCosRFIdentifier ) || (sInterface == hmIPVirtualDevIdentifier)) && ( oDP.IsTypeOf( OT_HSSDP ))) {
-    foreach (tmp, excludeBinaryParams.Split(",")) {
+    foreach (tmp, excludeParams.Split(",")) {
       if (oDP.HSSID().Find(tmp) != -1) {
-        foreach (tmp, includeBinaryParams.Split(",")) {
+        foreach (tmp, includeParams.Split(",")) {
           if (oDP.HSSID().Find(tmp) == -1) {
             showChannelParam = false;
           }
@@ -680,6 +694,58 @@ function ::destinationIsParameterVisible() {
       showChannelParam = false;
     }
   }
+
+  !HmIP-WSC (Servo Control)
+  ! Hide the parameter ON_TIME
+  if ( oCH.HssType().Find("SERVO_VIRTUAL_RECEIVER") != -1) {
+    if ( (oDP.HSSID().Find("ON_TIME") != -1) || (oDP.HSSID().Find("RAMP_TIME") != -1) ) {
+      showChannelParam = false;
+    }
+  }
+
+  !HmIP-WKP (Keypad)
+  ! Hide the parameter CODE_ID
+  if ( oCH.HssType().Find("MAINTENANCE") != -1) {
+    if ( oDP.HSSID().Find("CODE_ID") != -1 ) {
+      showChannelParam = false;
+    }
+    if ( oDP.HSSID().Find("CODE_COMMAND") != -1 ) {
+      showChannelParam = false;
+    }
+  }
+
+  if ( oCH.HssType().Find("SWITCH_VIRTUAL_RECEIVER") != -1) {
+
+    !HmIP-FWI (Wiegand Interface)
+    if (oCH.Label() == "HmIP-FWI") {
+      if ( oDP.HSSID().Find("ON_TIME") != -1 ) {
+        showChannelParam = false;
+      }
+      if ( oDP.HSSID().Find("STATE") != -1 ) {
+        showChannelParam = false;
+      }
+    }
+  }
+
+  if ( oCH.HssType().Find("DIMMER_VIRTUAL_RECEIVER") != -1) {
+
+    !HmIP-WUA (UNIVERSAL-ACTOR (0 - 10 V)
+    if ((oCH.Label() == "HmIP-WUA") || (oCH.Label() == "ELV-SH-WUA") ) {
+      if ( oDP.HSSID().Find("COMBINED_PARAMETER") != -1 ) {
+        showChannelParam = true;
+      } else {
+        showChannelParam = false;
+      }
+    }
+  }
+
+    !HmIP-MOD-WD-VK
+    ! Hide the parameter ON_TIME
+    if ( oCH.HssType().Find("WINDOW_DRIVE_RECEIVER") != -1) {
+      if ( (oDP.HSSID().Find("ON_TIME") != -1) || (oDP.HSSID().Find("LEVEL") != -1) ) {
+        showChannelParam = false;
+      }
+    }
 
   return;
 }
@@ -897,7 +963,7 @@ function ::getSpecialTranslationPrgDest() {
   }
 
   ! SMI55 (SPHM-725)
-  if (oCH.Label().Find("HmIP-SMI55") != -1) {
+  if ((oCH.Label().Find("HmIP-SMI55") != -1) || (oCH.Label().Find("HmIP-SMI55-2") != -1)) {
     object dev = dom.GetObject(oCH.Device());
     if (dev.MetaData("permanentFullRX") != 1) {
       if ((sValue.Find("stringTableMotionDetectorMotionDetectionActiveTrue") != -1 )
@@ -905,7 +971,6 @@ function ::getSpecialTranslationPrgDest() {
       || (sValue.Find("stringTableResetStatus") != -1)) {
         sValue = sValue#" ${modeBatNotSupported}";
       }
-
     }
   }
   return;

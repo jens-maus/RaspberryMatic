@@ -33,10 +33,10 @@ proc getUserDefinedMaxValue {devType {extraparam ""}} {
   if {([string equal $extraparam "COND_TX_THRESHOLD_LO"] == 1) || ([string equal $extraparam "COND_TX_THRESHOLD_HI"] == 1)} {
     switch [string tolower $devType] {
         hmip-psm -
-        hmip-fsm16 {return 3680}
+        hmip-fsm16 {return "3680.0"}
         hmip-bsm -
-        hmip-fsm  {return 1150}
-        hmip-usbsm  {return 60}
+        hmip-fsm  {return "1150.0"}
+        hmip-usbsm  {return "60.0"}
        default {return "<span class=\"attention\">max value not available</span>"}
     }
   }
@@ -65,6 +65,12 @@ proc getMinMaxValueDescr {param} {
     if {$param == "CALIBRATION_PPM_VAL"} {set max 10000}
   }
 
+
+    if {[string equal $dev_descr(TYPE) "HmIP-WUA"] == 1} {
+      if {$param == "VOLTAGE_0"} {set max 99.5}
+      if {$param == "VOLTAGE_100"} {set min 0.5}
+    }
+
   set unit "noUnit"
 
   catch {set unit $param_descr(UNIT)}
@@ -90,6 +96,10 @@ proc getMinMaxValueDescr {param} {
   if {$param == "TRIGGER_ANGLE_2"} {
     upvar valTriggerAngle triggerAngle
     set min "<span id='minTriggerAngle' >$triggerAngle</span>"
+  }
+
+  if {$param == "NUMERIC_PIN_CODE"} {
+    return "\${unitNumericPinCode}"
   }
 
   return "($min - $max)"
@@ -160,6 +170,11 @@ proc getUserDefinedCondTXThresholdUnitMinMaxDescr {devType param} {
 }
 
 proc getTextField {param value chn prn {extraparam ""}} {
+
+  # exec echo "getTextField: $extraparam" >> /tmp/textField.log
+
+  if {[string equal $value ""] == 1} {set value ''}
+
   global psDescr dev_descr
   upvar psDescr descr
   array_clear param_descr
@@ -185,6 +200,13 @@ proc getTextField {param value chn prn {extraparam ""}} {
   if {([string equal $dev_descr(TYPE) "HmIPW-DRBL4"] == 1) || ([string equal $dev_descr(TYPE) "HmIP-DRBLI4"] == 1)} {
     if {($param == "REFERENCE_RUNNING_TIME_TOP_BOTTOM_VALUE") ||  ($param == "REFERENCE_RUNNING_TIME_BOTTOM_TOP_VALUE")} {
       set maxValue [expr $param_descr(MAX) - 1]
+    }
+  }
+
+  if {[string equal $dev_descr(TYPE) "HmIPW-WGD"] == 1} {
+    if {$param == "MAIN_TEXT" || $param == "SUB_TEXT"} {
+      set minValue "stringUTF8"
+      set maxValue "stringUTF8"
     }
   }
 
@@ -242,7 +264,15 @@ proc getTextField {param value chn prn {extraparam ""}} {
       }
     }
   } else {
-    set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '$minValue', '$maxValue', 1)\" $extraparam>"
+    if {$param == "NUMERIC_PIN_CODE"} {
+      set s "<input id=$elemId type=\"text\" size=\"5\" maxlength=\"8\" value=$value name=$param onblur=\"if (! isNumber(this.value)) \{this.value = '';\}\" $extraparam>"
+    } elseif {($param == "VOLTAGE_0") || ($param == "VOLTAGE_100")} {
+        set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '$minValue', '$maxValue', 1);$extraparam\">"
+    } elseif {$minValue == "stringUTF8"} {
+        set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=$param>"
+    } else {
+      set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '$minValue', '$maxValue', 1);\" $extraparam>"
+    }
   }
 
   return $s
@@ -326,9 +356,9 @@ proc getCheckBoxCyclicInfoMsg {param value chn prn {extraparam ""}} {
 }
 
 proc getButton {id btnTxt callBack} {
-  set s "&nbsp<input id='$id' type=button onclick=$callBack>"
+  set s "<input id='$id' type=button onclick=$callBack>"
   # This translates the text of the button to the parameter btnTxt
-  puts "<script type=\"text/javascript\">translateAttribute(\"#$id\", \"value\", $btnTxt);</script>"
+  puts "<script type=\"text/javascript\">translateAttribute(\"\#$id\", \"value\", $btnTxt);</script>"
   return $s
 }
 
@@ -425,17 +455,27 @@ proc getHelpIcon {topic {x 0} {y 0}} {
   # Set the size for known parameters
   switch $topic {
    "ABORT_EVENT_SENDING_CHANNELS" {set x 500; set y 140}
+   "ABORT_EVENT_SENDING_CHANNELS_ACCESS_TRANSCEIVER" {set x 500; set y 160}
    "AUTO_HYDRAULIC_ADJUSTMENT" {set x 500; set y 75}
    "BLIND_AUTOCALIBRATION" {set x 450; set y 75}
    "BLIND_REFERENCE_RUNNING_TIME" {set x 450; set y 160}
+   "BLOCKING_ON_SABOTAGE" {set x 450; set y 100}
    "BLOCKING_PERIOD" {set x 450; set y 100}
+   "BLOCKING_PERMANENT" {set x 450; set y 150}
+   "BLOCKING_PERMANENT_WKP" {set x 450; set y 180}
+   "BLOCKING_PERMANENT_FWI" {set x 450; set y 150}
+   "BLOCKING_TEMPORARY" {set x 450; set y 150}
+   "BLOCKING_TEMPORARY_FWI" {set x 450; set y 150}
    "BOOST_TIME_PERIOD" {set x 450; set y 120}
    "CALIBRATION_PPM" {set x 500; set y 250}
+   "CLIMATE_CONTROL_TYPE" {set x 500; set y 75}
+   "CLIMATE_FUNCTION" {set x 450; set y 75}
    "COND_TX_DECISION_ABOVE_BELOW" {set x 450; set y 80}
    "CONTACT_BOOST" {set x 450; set y 180}
    "DELAY_COMPENSATION" {set x 450; set y 100}
    "DEVICE_SENSOR_SENSITIVITY" {set x 450; set y 180}
    "DIM_STEP" {set x 500; set y 150}
+   "DISABLE_DEVICE_ALIVE_SIGNAL" {set x 500; set y 75 }
    "DURATION_5MIN" {set x 500; set y 160}
    "ENABLE_ROUTING" {set x 500; set y 120}
    "EVENT_FILTER_NUMBER_motionDetect" {set x 400; set y 60}
@@ -443,22 +483,30 @@ proc getHelpIcon {topic {x 0} {y 0}} {
    "EVENT_FILTER_TIME" {set x 400; set y 90}
    "HEATING_COOLING" {set x 450; set y 160}
    "HUMIDITY_LIMIT_DISABLE" {set x 500; set y 200}
+   "HUMIDITY_LIMIT_VALUE" {set x 450; set y 85}
    "LOCAL_RESET_DISABLED" {set x 500; set y 130}
    "MOUNTING_ORIENTATION" {set x 450; set y 75}
+   "MOUNTING_ORIENTATION_A" {set x 450; set y 75}
    "ON_MIN_LEVEL" {set x 400; set y 80}
    "OPTIMUM_START_STOP" {set x 450; set y 80}
+   "PSM_CHANNEL_OPERATION_MODE" {set x 450; set y 100}
    "OUTPUT_SWAP" {set x 450; set y 100}
+   "OUTPUT_SWAP_SERVO" {set x 450; set y 50}
    "PERMANENT_FULL_RX" {set x 500; set y 160}
    "PIR_SENSITIVITY" {set x 500; set y 210}
    "PWM_AT_LOW_VALVE_POSITION" {set x 500; set y 130}
+   "REPEAT_ENABLE" {set x 500; set y 210}
    "ROUTER_MODULE_ENABLED" {set x 500; set y 120}
    "SPDR_CHANNEL_MODE" {set x 600; set y 600}
    "TEMPERATURE_OFFSET" {set x 500; set y 160}
    "TEMPERATURE_OFFSET_STE2" {set x 500; set y 130}
    "TWO_POINT_HYSTERESIS" {set x 450; set y 160}
+   "TWO_POINT_HYSTERESIS_A" {set x 500; set y 160}
+   "TWO_POINT_HYSTERESIS_HUMIDITY" {set x 500; set y 160}
+   "VOLTAGE_0" {set x 450; set y 120}
+   "VOLTAGE_100" {set x 450; set y 120}
    "WEEK_PROGRAM_POINTER" {set x 400; set y 100}
    "WEEK_PROGRAM_POINTER_group" {set x 400; set y 100}
-
   }
 
   set ret "<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:18px; height:18px; position:relative; top:2px\" onclick=\"showParamHelp('$topic', '$x', '$y')\">"
@@ -498,15 +546,19 @@ proc getTimeSelector {paramDescr p profile type prn special_input_id timebase op
   set timeBaseParam "$timebase\_BASE"
   set timeFactorParam "$timebase\_FACTOR"
 
-  set paramBaseDescr [_getParamDescrKey $timeBaseParam]
-  set paramFactorDescr [_getParamDescrKey $timeFactorParam]
-
+  if {[string equal $extraparam "SERVOSPEED"] == 0} {
+    set paramBaseDescr [_getParamDescrKey $timeBaseParam]
+    set paramFactorDescr [_getParamDescrKey $timeFactorParam]
+  } else {
+    set paramBaseDescr "SERVO_SPEED_UNIT"
+    set paramFactorDescr "SERVO_SPEED_FACTOR"
+  }
   set javascriptDelay 100
 
   incr pref
   append html "<tr $extraparam>"
   append html "<td>\${$paramDescr}</td>"
-  append html [getComboBox $prn $pref $special_input_id $type] ;# hmip_helper
+  append html [getComboBox $prn $pref $special_input_id $type $extraparam] ;# hmip_helper
   append html "</tr>"
 
   append html "<tr id=\"timeBase\_$prn\_$pref\" class=\"hidden\"><td>\${$paramBaseDescr}</td><td>"
@@ -629,10 +681,14 @@ proc getTimeSelector {paramDescr p profile type prn special_input_id timebase op
 }
 
 proc getPowerUpSelector {chn p special_input_id} {
-  global psDescr dev_descr
+  global psDescr dev_descr ch_descr
   upvar psDescr psDescr
   upvar $p ps
   upvar prn prn
+
+  set chType $ch_descr(TYPE)
+
+  set idWindowDriveReceiver WINDOW_DRIVE_RECEIVER
 
   set specialID "[getSpecialID $special_input_id]"
 
@@ -641,35 +697,40 @@ proc getPowerUpSelector {chn p special_input_id} {
   set powerupModePrn $prn
   set html "<tr>"
     append html "<td>\${stringTableDimmerPowerUpAction}</td>"
-    option POWERUP_JUMPTARGET_HMIP
+    if {[string equal $chType $idWindowDriveReceiver] != 1} {
+      option POWERUP_JUMPTARGET_HMIP
+    } else {
+      option POWERUP_JUMPTARGET_WINDOW_DRIVE_RECEIVER_OnOff
+    }
     append html  "<td>[getOptionBox '$param' options $ps($param) $chn $prn "onchange=\"powerUP_showRelevantData($chn, this.value,true);\""]</td>"
   append html "</tr>"
 
   append html "<tr id=\"powerUpPanelON_$chn\"><td colspan=\"2\"><table>"
     ###
-    incr prn
-    append html "<tr>"
-    append html "<td>\${stringTableOnDelay}</td>"
-    append html [getComboBox $chn $prn "$specialID" "delayShort"]
-    append html "</tr>"
+    if {[string equal $chType $idWindowDriveReceiver] != 1} {
+      incr prn
+      append html "<tr>"
+      append html "<td>\${stringTableOnDelay}</td>"
+      append html [getComboBox $chn $prn "$specialID" "delayShort"]
+      append html "</tr>"
 
-    set param POWERUP_ONDELAY_UNIT
-    if { [info exists ps($param)] == 1  } {
+      set param POWERUP_ONDELAY_UNIT
+      if { [info exists ps($param)] == 1 } {
 
-        append html [getTimeUnitComboBox $param $ps($param) $chn $prn $special_input_id]
+          append html [getTimeUnitComboBox $param $ps($param) $chn $prn $special_input_id]
 
-        incr prn
-        set param POWERUP_ONDELAY_VALUE
-        append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
-        append html "<td>\${stringTableOnDelayValue}</td>"
+          incr prn
+          set param POWERUP_ONDELAY_VALUE
+          append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
+          append html "<td>\${stringTableOnDelayValue}</td>"
 
-        append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
+          append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
 
-        append html "</tr>"
-        append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-       append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOption($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+          append html "</tr>"
+          append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
+         append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayShortOption($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+      }
     }
-
     ###
     set param POWERUP_ONTIME_UNIT
     if { [info exists ps($param)] == 1  } {
@@ -698,12 +759,19 @@ proc getPowerUpSelector {chn p special_input_id} {
     if { [info exists ps($param)] == 1  } {
       incr prn
       set powerUpLevelPRN $prn
+
       append html "<tr>"
-      if {[string equal $dev_descr(TYPE) HmIP-WSC] == 1} {
-        append html "<td>\${stringTableServoLevel}</td>"
-      } else {
-        append html "<td>\${stringTableDimmerLevel}</td>"
-      }
+        if {[string equal $ch_descr(TYPE) SERVO_VIRTUAL_RECEIVER] == 1} {
+          append html "<td>\${stringTableServoLevel}</td>"
+        } else {
+          # Device TYPE == DIMMER
+          if {([string equal $dev_descr(TYPE) HmIP-WUA] != 1) && ([string equal $dev_descr(TYPE) ELV-SH-WUA] != 1)} {
+            append html "<td>\${stringTableDimmerLevel}</td>"
+          } else {
+            # Device TYPE == DIMMER but is no dimmer but a univeral actor (0 - 10V) - WUA
+            append html "<td>\${lblOperatingVoltage}</td>"
+          }
+        }
         option RAW_0_100Percent
         append html  "<td>[getOptionBox '$param' options $ps($param) $chn $prn]</td>"
       append html "</tr>"
@@ -712,7 +780,7 @@ proc getPowerUpSelector {chn p special_input_id} {
     set param POWERUP_OPTICAL_SIGNAL_COLOR
     if { [info exists ps($param)] == 1 } {
       set tmp $ps($param)
-      set listColor "colorBLACK  colorBLUE colorGREEN colorTURQUOISE colorRED colorPURPLE colorYELLOW colorWHITE"
+      set listColor "optionColorBLACK  optionColorBLUE optionColorGREEN optionColorTURQUOISE optionColorRED optionColorPURPLE optionColorYELLOW optionColorWHITE"
       set select ""
       incr prn
       append html "<tr>"
@@ -733,7 +801,7 @@ proc getPowerUpSelector {chn p special_input_id} {
     set param POWERUP_OPTICAL_SIGNAL_BEHAVIOUR
     if { [info exists ps($param)] == 1 } {
       set tmp $ps($param)
-      set listBehaviour "optionColorOFF optionColorON blinkSlow blinkMiddle blinkFast blinkFlashSlow blinkFlashMiddle blinkFlashFast blinkBillowSlow blinkBillowMiddle blinkBillowFast"
+      set listBehaviour "optionColorOFF optionColorON optionBlinkSlow optionBlinkMiddle optionBlinkFast optionBlinkFlashSlow optionBlinkFlashMiddle optionBlinkFlashFast optionBlinkBillowSlow optionBlinkBillowMiddle optionBlinkBillowFast"
       set select ""
       incr prn
       append html "<tr>"
@@ -756,8 +824,8 @@ proc getPowerUpSelector {chn p special_input_id} {
     if { [info exists ps($param)] == 1 } {
       if {[string equal $dev_descr(TYPE) HmIP-MP3P] == 1} {
         set tmp $ps($param)
-        # set listColor "colorBLACK  colorBLUE colorGREEN colorTURQUOISE colorRED colorPURPLE colorYELLOW colorWHITE randomPlayback colorOldValue lblIgnore"
-        set listColor "colorBLACK  colorBLUE colorGREEN colorTURQUOISE colorRED colorPURPLE colorYELLOW colorWHITE"
+        # set listColor "optionColorBLACK  optionColorBLUE optionColorGREEN optionColorTURQUOISE optionColorRED optionColorPURPLE optionColorYELLOW optionColorWHITE randomPlayback colorOldValue lblIgnore"
+        set listColor "optionColorBLACK  optionColorBLUE optionColorGREEN optionColorTURQUOISE optionColorRED optionColorPURPLE optionColorYELLOW optionColorWHITE"
         set select ""
         incr prn
         append html "<tr>"
@@ -1305,8 +1373,8 @@ proc getAcousticdDisplayReceiverConfig {special_input_id chn valText valAlignmen
           if {$valBgColor == 1} {set colorBlack  "selected=\"selected\"" }
           append html "<td>"
             append html "<select class='centerSelect' id='separate_$special_input_id\_$prn' name='TEXT_BACKGROUND_COLOR'>"
-              append html "<option value='0' $colorWhite >\${colorWHITE}</option>"
-              append html "<option value='1' $colorBlack>\${colorBLACK_A}</option>"
+              append html "<option value='0' $colorWhite >\${optionColorWHITE}</option>"
+              append html "<option value='1' $colorBlack>\${optionColorBLACK_A}</option>"
             append html "</select>"
           append html "</td>"
           append html "<script type=\"text/javascript\">"
@@ -1322,8 +1390,8 @@ proc getAcousticdDisplayReceiverConfig {special_input_id chn valText valAlignmen
           if {$valTextColor == 1} {set colorBlack  "selected=\"selected\"" }
           append html "<td>"
             append html "<select class='centerSelect' id='separate_$special_input_id\_$prn' name='TEXT_COLOR'>"
-              append html "<option value='0' $colorWhite >\${colorWHITE}</option>"
-              append html "<option value='1' $colorBlack>\${colorBLACK_A}</option>"
+              append html "<option value='0' $colorWhite >\${optionColorWHITE}</option>"
+              append html "<option value='1' $colorBlack>\${optionColorBLACK_A}</option>"
             append html "</select>"
           append html "</td>"
           append html "<script type=\"text/javascript\">"

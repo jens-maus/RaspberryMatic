@@ -1,5 +1,5 @@
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 // Glue code between CodeMirror and Tern.
 //
@@ -231,8 +231,7 @@
         var content = ts.options.completionTip ? ts.options.completionTip(cur.data) : cur.data.doc;
         if (content) {
           tooltip = makeTooltip(node.parentNode.getBoundingClientRect().right + window.pageXOffset,
-                                node.getBoundingClientRect().top + window.pageYOffset, content, cm);
-          tooltip.className += " " + cls + "hint-doc";
+                                node.getBoundingClientRect().top + window.pageYOffset, content, cm, cls + "hint-doc");
         }
       });
       c(obj);
@@ -590,10 +589,16 @@
   }
 
   function dialog(cm, text, f) {
-    if (cm.openDialog)
-      cm.openDialog(text + ": <input type=text>", f);
-    else
+    if (cm.openDialog) {
+      var fragment = document.createDocumentFragment();
+      fragment.appendChild(document.createTextNode(text + ": "));
+      var input = document.createElement("input");
+      input.type = "text";
+      fragment.appendChild(input);
+      cm.openDialog(fragment, f);
+    } else {
       f(prompt(text, ""));
+    }
   }
 
   // Tooltips
@@ -637,12 +642,44 @@
     }
   }
 
-  function makeTooltip(x, y, content, cm) {
-    var node = elt("div", cls + "tooltip", content);
+  function makeTooltip(x, y, content, cm, className) {
+    var node = elt("div", cls + "tooltip" + " " + (className || ""), content);
     node.style.left = x + "px";
     node.style.top = y + "px";
     var container = ((cm.options || {}).hintOptions || {}).container || document.body;
     container.appendChild(node);
+
+    var pos = cm.cursorCoords();
+    var winW = window.innerWidth;
+    var winH = window.innerHeight;
+    var box = node.getBoundingClientRect();
+    var hints = document.querySelector(".CodeMirror-hints");
+    var overlapY = box.bottom - winH;
+    var overlapX = box.right - winW;
+
+    if (hints && overlapX > 0) {
+      node.style.left = 0;
+      var box = node.getBoundingClientRect();
+      node.style.left = (x = x - hints.offsetWidth - box.width) + "px";
+      overlapX = box.right - winW;
+    }
+    if (overlapY > 0) {
+      var height = box.bottom - box.top, curTop = pos.top - (pos.bottom - box.top);
+      if (curTop - height > 0) { // Fits above cursor
+        node.style.top = (pos.top - height) + "px";
+      } else if (height > winH) {
+        node.style.height = (winH - 5) + "px";
+        node.style.top = (pos.bottom - box.top) + "px";
+      }
+    }
+    if (overlapX > 0) {
+      if (box.right - box.left > winW) {
+        node.style.width = (winW - 5) + "px";
+        overlapX -= (box.right - box.left) - winW;
+      }
+      node.style.left = (x - overlapX) + "px";
+    }
+
     return node;
   }
 

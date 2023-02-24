@@ -7508,12 +7508,6 @@ WebUI = Singleton.create({
     if ($("menubar")) { Element.setStyle("menubar", {"height": this.MENUBAR_HEIGHT + "px", "width": width + "px"}); }
     if ($("content")) { Element.setStyle("content", {"height": contentHeight       + "px", "width": width + "px"}); }
     if ($("footer"))  { Element.setStyle("footer" , {"height": this.FOOTER_HEIGHT  + "px", "width": width + "px"}); }
-    if ($("divDL"))   { Element.setStyle("divDL", {"height": (contentHeight - 20)  + "px"}); }
-    if ($("divRTD"))  { Element.setStyle("divRTD", {"height": (contentHeight - 20)  + "px"}); }
-    if ($("divFL"))   { Element.setStyle("divFL", {"height": (contentHeight - 20)  + "px"}); }
-    if ($("divHTF"))  { Element.setStyle("divHTF", {"height": (contentHeight - 20)  + "px"}); }
-    if ($("divRL"))   { Element.setStyle("divRL", {"height": (contentHeight - 20)  + "px"}); }
-    if ($("divHTR"))  { Element.setStyle("divHTR", {"height": (contentHeight - 20)  + "px"}); }
 
     if (this.currentPage) { this.currentPage.resize(); }
 
@@ -7598,8 +7592,7 @@ WebUI = Singleton.create({
       visibility: "hidden",
       margin: "0",
       padding: "0",
-      backgroundColor: WebUI.getColor("white"),
-      border: "4px solid " + WebUI.getColor("navBarSeparator")
+      backgroundColor: WebUI.getColor("white")
     });
     bodyElem.appendChild(picDiv);
       jg_250 = new jsGraphics("picDiv");
@@ -20901,10 +20894,10 @@ StartPage = Singleton.create(Page, {
       //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
       Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
     }
-    if ($("contentRight"))
+    if ($("contentLeft"))
     {
       //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
-      Element.setStyle("contentRight", {"height": contentHeight + "px"});
+      Element.setStyle("contentRight", {"height": contentHeight + "px", "width": "44%"});
     }
     
     if ($("favSelector"))
@@ -21535,7 +21528,7 @@ if (PLATFORM == "Central") {
   TREE_EXPANDED_FOOTER_HTML: "" +
     "<table border='0' cellspacing='8'>" +
       "<tr>" + 
-        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
+        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.collapseTree();'>${footerBtnCloseTree}</div></td>" +
       "</tr>" +
@@ -21543,7 +21536,7 @@ if (PLATFORM == "Central") {
   FLAT_FOOTER_HTML: "" +
     "<table border='0' cellspacing='8'>" +
       "<tr>" + 
-        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
+        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.recoverTree();'>${footerBtnRestoreTree}</div></td>" +
       "</tr>" +
@@ -23058,7 +23051,7 @@ BidcosRfPage =
     FOOTER_HTML= "" +
       "<table border='0' cellspacing='8'>" +
         "<tr>" +
-          "<td style='text-align:center;vertical-align=middle;' ><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>"+translateKey("footerBtnPageBack")+"</div></td>" +
+          "<td style='text-align:center;vertical-align=middle;' ><div class='FooterButton' onclick='WebUI.goBack();'>"+translateKey("footerBtnPageBack")+"</div></td>" +
         "</tr>" +
       "</table>";
 
@@ -38039,7 +38032,7 @@ iseAccelerationTransceiver.prototype = {
 //Defines
 BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
 HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
-BG_COLOR = WebUI.getColor("channelBackground");//Background
+BG_COLOR = 'inherit'; //Background
 HL_STROKE = 4;//Background
 //-----
 
@@ -38091,8 +38084,8 @@ DrawForm = function(jg, formname, devtype, size, x_offset, y_offset)
   
   if (!form) return;
 
-  if (!x_offset) x_offset = 0;
-  if (!y_offset) y_offset = 0;
+  if (!x_offset) x_offset = 0.032;  // workaround css offsets
+  if (!y_offset) y_offset = -0.005; // workaround css offsets
 
   switch (form[gd_type])
   {

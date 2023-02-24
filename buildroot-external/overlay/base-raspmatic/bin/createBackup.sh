@@ -3,7 +3,7 @@
 #
 # simple wrapper script to generate a CCU compatible sbk file
 #
-# Copyright (c) 2016-2021 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2016-2022 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ fi
 # check if specified path is a directory or file
 if [[ -d "${BACKUPPATH}" ]]; then
   # a directory path was specified, lets construct the complete filepath
-  BACKUPDIR="$(realpath ${BACKUPPATH})"
+  BACKUPDIR="$(realpath "${BACKUPPATH}")"
   BACKUPFILE="$(hostname)-${VERSION}-$(date +%Y-%m-%d-%H%M).sbk"
 elif [[ "${BACKUPPATH:0:1}" != "." && "${BACKUPPATH:0:1}" != "/" ]]; then
   # a filename without path was specified, thus add it to default backup path
@@ -48,7 +48,7 @@ elif [[ "${BACKUPPATH:0:1}" != "." && "${BACKUPPATH:0:1}" != "/" ]]; then
 else
   # a file was specified with a directory path
   BACKUPDIR="$(realpath "$(dirname "${BACKUPPATH}")")"
-  BACKUPFILE="$(basename ${BACKUPPATH})"
+  BACKUPFILE="$(basename "${BACKUPPATH}")"
 fi
 
 # use the backupdir as base directory for creating
@@ -62,13 +62,19 @@ if [[ -d "${TMPDIR}" ]]; then
   # make sure ReGaHSS saves its current settings
   echo 'load tclrega.so; rega system.Save()' | tclsh >/dev/null 2>&1
 
-  # create a gzipped tar of /usr/local
+  # create a tar.gz of /usr/local
   set +e # disable abort on error
-  /bin/tar -C / --owner=root --group=root --exclude=/usr/local/tmp --exclude=/usr/local/lost+found --exclude="${BACKUPDIR}" --exclude-tag=.nobackup --one-file-system --ignore-failed-read --warning=no-file-changed -czf "${TMPDIR}/usr_local.tar.gz" usr/local 2>/dev/null
+  /bin/tar -C / --owner=root --group=root --exclude=/usr/local/tmp --exclude=/usr/local/lost+found --exclude="${BACKUPDIR}" --exclude=/usr/local/eQ-3-Backup --exclude-tag=.nobackup --one-file-system --ignore-failed-read --warning=no-file-changed -czf "${TMPDIR}/usr_local.tar.gz" usr/local 2>/dev/null
   if [[ $? -eq 2 ]]; then
     exit 2
   fi
   set -e # re-enable abort on error
+
+  # check the gzip integrity
+  /bin/gzip -t "${TMPDIR}/usr_local.tar.gz"
+
+  # check if the tar.gz is valid
+  /bin/gzip -dc "${TMPDIR}/usr_local.tar.gz" | /bin/tar -tf - >/dev/null
 
   # sign the configuration with the current key
   /bin/crypttool -s -t 1 <"${TMPDIR}/usr_local.tar.gz" >"${TMPDIR}/signature"
@@ -84,6 +90,9 @@ if [[ -d "${TMPDIR}" ]]; then
 
   # create sbk file
   /bin/tar -C "${TMPDIR}" --owner=root --group=root -cf "${BACKUPDIR}/${BACKUPFILE}" usr_local.tar.gz signature signature.sha256 key_index firmware_version 2>/dev/null
+
+  # test if the final tar created is a valid tar archive
+  /bin/tar -tf "${BACKUPDIR}/${BACKUPFILE}" >/dev/null
 
   exit 0
 else

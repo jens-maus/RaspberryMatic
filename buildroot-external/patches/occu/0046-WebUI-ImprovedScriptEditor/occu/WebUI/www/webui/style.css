@@ -3571,6 +3571,7 @@ html, body {
   padding: 0;
   font-family: Verdana,Tahoma,Arial,Helvetica,sans-serif;
   font-size: 12px;
+  overflow: hidden;
 }
 
 input, textarea, select, button, h1 {
@@ -6658,7 +6659,7 @@ color: $_(textColorA); /* white */
 
 .CLASS04905 {
 	line-height:15px;
-	width:220px;
+	width:180px;
 }
 
 .CLASS04906 {

@@ -431,6 +431,38 @@
  
        WriteLine("<tr>");
            WriteLine("<td colspan='2' id='shutter"#chnId#"' class='CLASS02549' >&nbsp;</td>");
+@@ -216,12 +216,12 @@
+           WriteLine("<table>");
+             WriteLine("<tr>");
+               WriteLine("<td colspan='2' class='CLASS02546'>");
+-                WriteLine("<div class='PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b'>");
++                WriteLine("<div class='PercBtn' style='height:19px; width:96px; background-color:#89989b'>");
+                   WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center'/><b>%</b>");
+                 WriteLine("</div>");
+               WriteLine("</td>");
+-              WriteLine("<td>");
+-                WriteLine("<div id='slider"#chnId#"' class='ControlBtnInfo' style='width:220px;min-height:unset'></div>");
++              WriteLine("<td style='padding-left: 10px'>");
++                WriteLine("<div id='slider"#chnId#"' style='width:220px;min-height:unset'></div>");
+               WriteLine("</td>");
+             WriteLine("</tr>");
+           WriteLine("</table>");
+@@ -420,12 +420,12 @@
+           WriteLine("<table>");
+             WriteLine("<tr>");
+               WriteLine("<td colspan='2' class='CLASS02546'>");
+-                WriteLine("<div class='PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b'>");
++                WriteLine("<div class='PercBtn' style='height:19px; width:96px; background-color:#89989b'>");
+                   WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center'/><b>%</b>");
+                 WriteLine("</div>");
+               WriteLine("</td>");
+-              WriteLine("<td>");
+-                WriteLine("<div id='slider"#chnId#"' class='ControlBtnInfo' style='width:220px;;min-height:unset'></div>");
++              WriteLine("<td style='padding-left: 10px'>");
++                WriteLine("<div id='slider"#chnId#"' style='width:220px;;min-height:unset'></div>");
+               WriteLine("</td>");
+             WriteLine("</tr>");
+           WriteLine("</table>");
 --- occu/WebUI/www/rega/esp/controls/button.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/button.fn
 @@ -14,7 +14,7 @@
@@ -509,6 +541,35 @@
          WriteLine("</div>");
        WriteLine("</td>");
      WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/dual_white_controller.fn.orig
++++ occu/WebUI/www/rega/esp/controls/dual_white_controller.fn
+@@ -137,8 +137,8 @@
+             WriteLine("<tr>");
+               WriteLine("<td style='text-align:left'><span>${lblColorValue}:</span></td>");
+               WriteLine("<td class='CLASS02546' style='text-align:right'>");
+-                WriteLine("<div class='PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b; display:inline-block;'>");
+-                  WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='margin-top: 6px; text-align:center'/>&nbsp;%");
++                WriteLine("<div class='PercBtn' style='height:19px; width:96px; background-color:#89989b; display:inline-block;'>");
++                  WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center'/>&nbsp;%");
+                 WriteLine("</div>");
+               WriteLine("</td>");
+ 
+@@ -163,7 +163,7 @@
+             WriteLine("</tr>");
+             WriteLine("<tr>");
+               WriteLine("<td colspan='3'>");
+-                WriteLine("<div id='slider"#chnId#"' class='ControlBtnInfo' style='width:275px;min-height:unset'></div>");
++                WriteLine("<div id='slider"#chnId#"' style='width:275px;min-height:unset'></div>");
+               WriteLine("</td>");
+             WriteLine("</tr>");
+             WriteLine("</table>");
+@@ -199,4 +199,4 @@
+   WriteLine("</script>");
+ 
+   return;
+-}
+\ No newline at end of file
++}
 --- occu/WebUI/www/rega/esp/controls/key_switch_sc.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/key_switch_sc.fn
 @@ -5,7 +5,7 @@
@@ -558,6 +619,33 @@
          WriteLine("</div>");
        WriteLine("</td>");
      WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/rgbw.fn.orig
++++ occu/WebUI/www/rega/esp/controls/rgbw.fn
+@@ -263,14 +263,14 @@
+         WriteLine("<tr>");
+           WriteLine("<td style='text-align:left'><span>${lblColorTemperatureBR}</span></td>");
+           WriteLine("<td class='CLASS02546' style='text-align:right'>");
+-            WriteLine("<div class='PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b; display:inline-block;'>");
+-              WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='margin-top: 6px; text-align:center' disabled/>&nbsp;${lblKelvin}");
++            WriteLine("<div class='PercBtn' style='height:19px; width:96px; background-color:#89989b; display:inline-block;'>");
++              WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center' disabled/>&nbsp;${lblKelvin}");
+             WriteLine("</div>");
+           WriteLine("</td>");
+         WriteLine("</tr>");
+         WriteLine("<tr>");
+           WriteLine("<td colspan='2'>");
+-            WriteLine("<div id='slider"#chnId#"' class='ControlBtnInfo' style='width:220px;min-height:unset'></div>");
++            WriteLine("<div id='slider"#chnId#"' style='width:220px;min-height:unset'></div>");
+           WriteLine("</td>");
+         WriteLine("</tr>");
+       WriteLine("</table>");
+@@ -288,4 +288,4 @@
+ 
+     WriteLine("ipm"#chnId#" = new iseVIR_LGWhiteLevelControl("#chnId#", opts);");
+   WriteLine("</script>");
+-}
+\ No newline at end of file
++}
 --- occu/WebUI/www/rega/esp/controls/rhs.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/rhs.fn
 @@ -4,7 +4,7 @@
@@ -587,6 +675,87 @@
          WriteLine("</div>");
        WriteLine("</td>");
      WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/servo.fn.orig
++++ occu/WebUI/www/rega/esp/controls/servo.fn
+@@ -71,7 +71,7 @@
+ 
+         WriteLine("<tr>");
+           WriteLine("<td colspan='2' class='CLASS02546'>");
+-            WriteLine("<div class='__PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b; margin:auto;'>");
++            WriteLine("<div class='__PercBtn' style='height:19px; width:96px; background-color:#89989b; margin:auto;'>");
+               WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center'/><b>"#unitServoPos#"</b>");
+             WriteLine("</div>");
+           WriteLine("</td>");
+@@ -91,7 +91,7 @@
+ 
+         WriteLine("<tr>");
+           WriteLine("<td>");
+-            WriteLine("<div id='sliderPos"#chnId#"' class='ControlBtnInfo' style='width:220px;;min-height:unset'></div>");
++            WriteLine("<div id='sliderPos"#chnId#"' style='width:220px;;min-height:unset'></div>");
+           WriteLine("</td>");
+         WriteLine("</tr>");
+       WriteLine("</table>");
+@@ -107,7 +107,7 @@
+ 
+           WriteLine("<tr>");
+             WriteLine("<td colspan='2' class='CLASS02546'>");
+-              WriteLine("<div class='__PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b; margin:auto;'>");
++              WriteLine("<div class='__PercBtn' style='height:19px; width:96px; background-color:#89989b; margin:auto;'>");
+                 WriteLine("<input id='infoSliderRamp"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center'/><b>"#unitServoRampTime#"</b>");
+               WriteLine("</div>");
+             WriteLine("</td>");
+@@ -126,7 +126,7 @@
+ 
+           WriteLine("<tr>");
+             WriteLine("<td>");
+-              WriteLine("<div id='sliderRamp"#chnId#"' class='ControlBtnInfo' style='width:220px;;min-height:unset'></div>");
++              WriteLine("<div id='sliderRamp"#chnId#"' style='width:220px;;min-height:unset'></div>");
+             WriteLine("</td>");
+           WriteLine("</tr>");
+         WriteLine("</table>");
+@@ -140,7 +140,7 @@
+ 
+     !      WriteLine("<tr>");
+     !        WriteLine("<td colspan='2' class='CLASS02546'>");
+-    !          WriteLine("<div class='__PercBtn GrayBkg' style='height:35px; line-height:35px; width:100px; _background-color:#89989b; margin:auto;'>");
++    !          WriteLine("<div class='__PercBtn GrayBkg' style='height:19px; width:96px; _background-color:#89989b; margin:auto;'>");
+     !            WriteLine("<input id='infoSliderRamp"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center'/>");
+     !          WriteLine("</div>");
+     !        WriteLine("</td>");
+@@ -181,4 +181,4 @@
+ 
+   WriteLine("</script>");
+   return;
+-}
+\ No newline at end of file
++}
+--- occu/WebUI/www/rega/esp/controls/univisal_light_receiver.fn.orig
++++ occu/WebUI/www/rega/esp/controls/univisal_light_receiver.fn
+@@ -249,14 +249,14 @@
+             WriteLine("<tr>");
+               WriteLine("<td style='text-align:left'><span>${lblColorTemperatureBR}</span></td>");
+               WriteLine("<td class='CLASS02546' style='text-align:right'>");
+-                WriteLine("<div class='_PercBtn' style='height:35px; line-height:35px; width:100px; display:inline-block;'>");
+-                  WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='margin-top: 6px; text-align:center' disabled/>&nbsp;${lblKelvin}");
++                WriteLine("<div class='_PercBtn' style='height:19px; width:96px; display:inline-block;'>");
++                  WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center' disabled/>&nbsp;${lblKelvin}");
+                 WriteLine("</div>");
+               WriteLine("</td>");
+             WriteLine("</tr>");
+             WriteLine("<tr>");
+               WriteLine("<td colspan='2'>");
+-                WriteLine("<div id='slider"#chnId#"' class='ControlBtnInfo' style='width:220px;height:3px;min-height:unset'></div>");
++                WriteLine("<div id='slider"#chnId#"' style='width:220px;height:3px;min-height:unset'></div>");
+               WriteLine("</td>");
+             WriteLine("</tr>");
+           WriteLine("</table>")
+@@ -390,4 +390,4 @@
+     Write("jQuery('#"#chnId#"On').html(translateKey('actionStatusControlLblOn')).show();");
+ 
+   WriteLine("</script>");
+-}
+\ No newline at end of file
++}
 --- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
 +++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
 @@ -1201,7 +1201,7 @@
@@ -609,6 +778,45 @@
          Write("</div>");
        Write("</td>");
      Write("</tr>");
+--- occu/WebUI/www/rega/pages/msg/setVIR_LG_RGBWController.htm.orig
++++ occu/WebUI/www/rega/pages/msg/setVIR_LG_RGBWController.htm
+@@ -24,14 +24,14 @@
+                   <tr>
+                     <td><span>${lblColorTemperatureBR}</span></td>
+                     <td class='CLASS02546' align="right">
+-                      <div class='PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b'>
++                      <div class='PercBtn' style='height:19px; width:96px; background-color:#89989b'>
+                         <input id='infoSliderPos' type='text' value='0' size='3' class='CLASS02542' style='margin-top: 6px; text-align:center'/>
+                       </div>
+                     </td>
+                   </tr>
+                   <tr>
+                     <td colspan='2'>
+-                      <div id='hookSlider' class='ControlBtnInfo' style='width:220px;'></div>
++                      <div id='hookSlider' style='width:220px;'></div>
+                     </td>
+                   </tr>
+                 </table>
+--- occu/WebUI/www/rega/pages/msg/setVIR_LG_WHITEController.htm.orig
++++ occu/WebUI/www/rega/pages/msg/setVIR_LG_WHITEController.htm
+@@ -13,7 +13,7 @@
+                   <tr>
+                     <td><span>${lblColorTemperatureBR}</span></td>
+                     <td class='CLASS02546' align="right">
+-                      <div class='PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b'>
++                      <div class='PercBtn' style='height:19px; width:96px; background-color:#89989b'>
+                         <input id='infoSliderPos' type='text' value='0' size='3' class='CLASS02542' style='margin-top: 6px; text-align:center'/>
+                         <span>K</span>
+                       </div>
+@@ -21,7 +21,7 @@
+                   </tr>
+                   <tr>
+                     <td colspan='2'>
+-                      <div id='hookSlider' class='ControlBtnInfo' style='width:220px;'></div>
++                      <div id='hookSlider' style='width:220px;'></div>
+                     </td>
+                   </tr>
+                 </table>
 --- occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm
 @@ -47,27 +47,27 @@
@@ -704,7 +912,7 @@
 +</script>
 --- occu/WebUI/www/rega/pages/tabs/admin/views/functions.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/functions.htm
-@@ -171,18 +171,18 @@
+@@ -171,79 +171,79 @@
  
  <table id="tblFunctionList" class="tblList CLASS04200" style="display:none" cellspacing="0" cellpadding="0" >
  <colgroup>
@@ -735,28 +943,126 @@
  </colgroup>
  <thead>
  <tr class='CLASS04101'>
-@@ -193,7 +193,7 @@
-   <td class='CLASS04102 DeviceListCell'><div id="name" class="pt11 <%Write(sCssName); %>" onclick="SortMe('name');"><b>${thName}</b></div></td>
+-  <td id="tblListFold"></td>
++  <th id="tblListFold"></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="func"){sCssName="SortSelected";} %>
+-  <td class='CLASS04102 DeviceListCell'><div id="func" class="pt11 <%Write(sCssName); %>" onclick="SortFuncs();"><b>${thFunc}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="func" class="pt11 <%Write(sCssName); %>" onclick="SortFuncs();">${thFunc}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
+-  <td class='CLASS04102 DeviceListCell'><div id="name" class="pt11 <%Write(sCssName); %>" onclick="SortMe('name');"><b>${thName}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="name" class="pt11 <%Write(sCssName); %>" onclick="SortMe('name');">${thName}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="desc"){sCssName="SortSelected";} %>
-   <td class='CLASS04102 DeviceListCell'><div id="desc" class="pt11 <%Write(sCssName); %>" onclick="SortMe('desc');"><b>${thTypeDescriptor}</b></div></td>
+-  <td class='CLASS04102 DeviceListCell'><div id="desc" class="pt11 <%Write(sCssName); %>" onclick="SortMe('desc');"><b>${thTypeDescriptor}</b></div></td>
 -  <td><div class="CLASS04102 pt11 Sort DeviceListCell"><b>${thPicture}</b></div></td>
-+  <td class='CLASS04102 DeviceListCell'><div class="pt11 Sort"><b>${thPicture}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="desc" class="pt11 <%Write(sCssName); %>" onclick="SortMe('desc');">${thTypeDescriptor}</div></th>
++  <th class='CLASS04102 DeviceListHead'><div class="pt11 Sort">${thPicture}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="type"){sCssName="SortSelected";} %>
-   <td class='CLASS04102 DeviceListCell'><div id="type" class="pt11 <%Write(sCssName); %>" onclick="SortMe('type');"><b>${thDescriptor}</b></div></td>
+-  <td class='CLASS04102 DeviceListCell'><div id="type" class="pt11 <%Write(sCssName); %>" onclick="SortMe('type');"><b>${thDescriptor}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="type" class="pt11 <%Write(sCssName); %>" onclick="SortMe('type');">${thDescriptor}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="sn"){sCssName="SortSelected";} %>
-@@ -203,9 +203,9 @@
+-  <td class='CLASS04102 DeviceListCell'><div id="sn" class="pt11 <%Write(sCssName); %>" onclick="SortMe('sn');"><b>${thSerialNumber}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="sn" class="pt11 <%Write(sCssName); %>" onclick="SortMe('sn');">${thSerialNumber}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="iface"){sCssName="SortSelected";} %>
+-  <td class='CLASS04102 DeviceListCell'><div id="iface" class="pt11 <%Write(sCssName); %>" onclick="SortMe('iface');"><b>${thInterfaceCategory}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="iface" class="pt11 <%Write(sCssName); %>" onclick="SortMe('iface');">${thInterfaceCategory}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="trans"){sCssName="SortSelected";} %>
-   <td class='CLASS04102 DeviceListCell'><div id="trans" class="pt11 <%Write(sCssName); %>" onclick="SortMe('trans');"><b>${thTransmitMode}</b></div></td>
+-  <td class='CLASS04102 DeviceListCell'><div id="trans" class="pt11 <%Write(sCssName); %>" onclick="SortMe('trans');"><b>${thTransmitMode}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="trans" class="pt11 <%Write(sCssName); %>" onclick="SortMe('trans');">${thTransmitMode}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
 -  <td><div id="room" class="CLASS04102 pt11 <%Write(sCssName); %> DeviceListCell" onclick="SortMe('room');"><b>${thRoom}</b></div></td>
 -  <td><div class="CLASS04102 pt11 Sort DeviceListCell"><b>${thAction}</b></div></td>
 -  <td><div class="CLASS04102 pt11 Sort DeviceListCell"><b>${thLinks}</b></div></td>
-+  <td class='CLASS04102 DeviceListCell'><div id="room" class="pt11 <%Write(sCssName); %>" onclick="SortMe('room');"><b>${thRoom}</b></div></td>
-+  <td class='CLASS04102 DeviceListCell'><div class="pt11 Sort"><b>${thAction}</b></div></td>
-+  <td class='CLASS04102 DeviceListCell'><div class="pt11 Sort"><b>${thLinks}</b></div></td>
++  <th class='CLASS04102 DeviceListHead'><div id="room" class="pt11 <%Write(sCssName); %>" onclick="SortMe('room');">${thRoom}</div></th>
++  <th class='CLASS04102 DeviceListHead'><div class="pt11 Sort">${thAction}</div></th>
++  <th class='CLASS04102 DeviceListHead'><div class="pt11 Sort">${thLinks}</div></th>
  </tr>
  <tr class='CLASS04205'>
-   <td style='height:20px'></td>
+-  <td style='height:20px'></td>
+-  <td class='CLASS04206' style='height:20px' ></td>
+-  <td class='CLASS04211' style='height:20px'>
++  <th></td>
++  <th class='CLASS04206'></th>
++  <th class='CLASS04211'>
+     <div id="btnFilterName" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
+         <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class='CLASS04213' />
+         <div id="ftSetNameBtn" class='FilterSetButton CLASS04214' onclick="setSFilter(fltSF, 'ftName', FIL_NAME);updateTable();$('btnFilterNameSub').hide();" >${filterSet}</div>
+         <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class='CLASS04211' style='height:20px'>
++  </th>
++  <th class='CLASS04211'>
+     <div id="btnFilterType" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterTypeSub" style="display:none">
+         <input id="ftType" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetTypeBtn', 'ftCancelTypeBtn')" type="text" size="15" class='CLASS04213' />
+         <div id="ftSetTypeBtn" class="FilterSetButton CLASS04214" onclick="setSFilter(fltSF, 'ftType', FIL_TYPE);updateTable();$('btnFilterTypeSub').hide();" >${filterSet}</div>
+         <div id="ftCancelTypeBtn" class='FilterSetButton' onclick="$('btnFilterTypeSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class='CLASS04206' style='height:20px'></td>
+-  <td class='CLASS04211' style='height:20px'>
++  </th>
++  <th class='CLASS04206'></th>
++  <th class='CLASS04211'>
+     <div id="btnFilterDesc" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterDescSub" style="display:none">
+         <input id="ftDesc" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetDescBtn', 'ftCancelDescBtn')" type="text" size="15" class='CLASS04213' />
+         <div id="ftSetDescBtn" class="FilterSetButton CLASS04214" onclick="setSFilter(fltSF, 'ftDesc', FIL_DESC);updateTable();$('btnFilterDescSub').hide();" >${filterSet}</div>
+         <div id="ftCancelDescBtn" class='FilterSetButton' onclick="$('btnFilterDescSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class='CLASS04211' style='height:20px'>
++  </th>
++  <th class='CLASS04211'>
+     <div id="btnFilterSN" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterSNSub" style="display:none">
+         <input id="ftSN" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetSNBtn', 'ftCancelSNBtn')" type="text" size="15" class='CLASS04213' />
+         <div id="ftSetSNBtn" class="FilterSetButton CLASS04214" onclick="setSFilter(fltSF, 'ftSN', FIL_SN);updateTable();$('btnFilterSNSub').hide();" >${filterSet}</div>
+         <div id="ftCancelSNBtn" class='FilterSetButton' onclick="$('btnFilterSNSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class='CLASS04211' style='height:20px'>
++  </th>
++  <th class='CLASS04211'>
+     <div id="btnFilterIface" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterIfaceSub" style="display:none">
+         <table class='CLASS04212'>
+@@ -259,8 +259,8 @@
+         <div class='FilterSetButton' onclick='setIFilter(fltSF, "iface");updateTable();$("btnFilterIfaceSub").hide();'>${filterSet}</div>
+         <div class='FilterSetButton' onclick="$('btnFilterIfaceSub').hide();">${filterClose}</div>
+     </div> 
+-  </td>
+-  <td class='CLASS04211' style='height:20px'>
++  </th>
++  <th class='CLASS04211'>
+     <div id="btnFilterMode" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterModeSub" style="display:none">
+         <table class='CLASS04212'>
+@@ -276,8 +276,8 @@
+         <div class='FilterSetButton' onclick='setIFilter(fltSF, "mode");updateTable();$("btnFilterModeSub").hide();'>${filterSet}</div>
+         <div class='FilterSetButton' onclick="$('btnFilterModeSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class='CLASS04211' style='height:20px'>
++  </th>
++  <th class='CLASS04211'>
+     <div id="btnFilterRoom" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterRoomSub" style="display:none">
+       <% 
+@@ -301,9 +301,9 @@
+         Write("<div class='FilterSetButton' onclick='$(\"btnFilterRoomSub\").hide();'>${filterClose}</div>");
+       %>
+     </div>
+-  </td>
+-  <td class='CLASS04206' style='height:20px'></td>
+-  <td class='CLASS04206' style='height:20px'></td>
++  </th>
++  <th class='CLASS04206'></th>
++  <th class='CLASS04206'></th>
+ </tr>
+ 
+ </thead>
 @@ -322,7 +322,7 @@
      object elem = dom.GetObject(tmp);
      if (elem)
@@ -766,6 +1072,128 @@
        
        Write("<td>"); !+ / -
        string sStyle = "";
+--- occu/WebUI/www/rega/pages/tabs/admin/views/newDeviceLoader.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/newDeviceLoader.htm
+@@ -271,7 +271,7 @@
+       td.appendChild(img);
+ 
+       tr.appendChild(td);
+-      td = Builder.node('td', {colSpan: 2, className: 'GrayBkg border1px'}, strCut(GroupsArray[i][0]['type'] + " " + GroupsArray[i][1]['type'])); tr.appendChild(td);
++      td = Builder.node('td', {colSpan: 2, className: 'GrayBkg border1px'}, GroupsArray[i][0]['type'] + " " + GroupsArray[i][1]['type']); tr.appendChild(td);
+       td.innerHTML = GroupsArray[i][0]['type'] + "<br/>" + GroupsArray[i][1]['type'];
+       
+       td = Builder.node('td', {className: 'WhiteBkgPic border1px'}, [
+@@ -281,16 +281,16 @@
+       Element.addClassName(td, "CLASS04402");
+       tr.appendChild(td);
+       
+-      //td = Builder.node('td', {className: 'GrayBkg border1px'}, translateKey(strCut(DEV_getDescription(deviceData['type']))) ); tr.appendChild(td);
++      //td = Builder.node('td', {className: 'GrayBkg border1px'}, translateKey(DEV_getDescription(deviceData['type'])) ); tr.appendChild(td);
+       td = Builder.node('td', {className: 'GrayBkg border1px'}, translateKey(DEV_getDescription(deviceData['type'])) ); tr.appendChild(td);
+-      td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(GroupsArray[i][0]['sn'] + " " + GroupsArray[i][1]['sn'])); tr.appendChild(td);
++      td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][0]['sn'] + " " + GroupsArray[i][1]['sn']); tr.appendChild(td);
+       var sIface = (GroupsArray[i][0]['iface'] != GroupsArray[i][1]['iface'] ? GroupsArray[i][0]['iface'] + " " +  GroupsArray[i][1]['iface'] : GroupsArray[i][0]['iface']);
+       td = Builder.node('td', {className: 'GrayBkg border1px'}, sIface); tr.appendChild(td);
+       
+       td = Builder.node('td', {id: 'trans' + GroupsArray[i][0]['id'] + GroupsArray[i][1]['id'], 
+                      className: 'GrayBkg border1px'}, removeDuplicates(GroupsArray[i][0]['trans'], GroupsArray[i][1]['trans'], "")); tr.appendChild(td);
+       
+-      td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(GroupsArray[i][0]['name'] + " " + GroupsArray[i][1]['name'])); tr.appendChild(td);
++      td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][0]['name'] + " " + GroupsArray[i][1]['name']); tr.appendChild(td);
+       var sGrRoId = 'funcs' + GroupsArray[i][0]['id'] + GroupsArray[i][1]['id'];
+       td = Builder.node('td', {id: sGrRoId, className: 'GrayBkg border1px'}, removeDuplicates(GroupsArray[i][0]['func'],  GroupsArray[i][1]['func'], ';')); tr.appendChild(td);
+       var sGrRoId = 'rooms' + GroupsArray[i][0]['id'] + GroupsArray[i][1]['id'];
+@@ -340,7 +340,7 @@
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][x]['desc'] );
+         td.innerHTML = translateKey(GroupsArray[i][x]['desc']);
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(GroupsArray[i][x]['sn'])); tr.appendChild(td);
++        td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][x]['sn']); tr.appendChild(td);
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, GroupsArray[i][x]['iface']); tr.appendChild(td);
+         var trsId = "trs" + GroupsArray[i][x]['id'];
+         var s = "WhiteBkg border1px";
+@@ -365,10 +365,10 @@
+           
+         if (NAV_IE) {
+           td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-              [Builder.node('div', {id:'tdn' + GroupsArray[i][x]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0, CALL_STRCUT)'}, strCut(GroupsArray[i][x]['name'])) ]); tr.appendChild(td);
++              [Builder.node('div', {id:'tdn' + GroupsArray[i][x]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0)'}, GroupsArray[i][x]['name']) ]); tr.appendChild(td);
+         }
+         else {
+-          td = Builder.node('td', {className: 'WhiteBkg CLASS04403 border1px', id:'tdn' + GroupsArray[i][x]['id'], onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0, CALL_STRCUT)'}, strCut(GroupsArray[i][x]['name'])); tr.appendChild(td);
++          td = Builder.node('td', {className: 'WhiteBkg CLASS04403 border1px', id:'tdn' + GroupsArray[i][x]['id'], onclick: 'textEdit(id, '+GroupsArray[i][x]['id']+', false, 0)'}, GroupsArray[i][x]['name']); tr.appendChild(td);
+         } 
+         
+         if (NAV_IE) {
+@@ -465,7 +465,7 @@
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, chns[i]['desc']);
+         td.innerHTML = translateKey(chns[i]['desc']);
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(chns[i]['sn'])); tr.appendChild(td);
++        td = Builder.node('td', {className: 'GrayBkg border1px'}, chns[i]['sn']); tr.appendChild(td);
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, chns[i]['iface']); tr.appendChild(td);
+         var trsId = "trs" + chns[i]['id'];
+         var s = "WhiteBkg border1px";
+@@ -491,10 +491,10 @@
+ 
+         if (NAV_IE) {
+           td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-              [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'], true)) ]); tr.appendChild(td);
++              [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04403 CLASS04404", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']) ]); tr.appendChild(td);
+         }
+         else {
+-         td = Builder.node('td', {className: 'WhiteBkg CLASS04404 border1px', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'].replace(/:/g, ":<br/>"), true)); tr.appendChild(td);
++         td = Builder.node('td', {className: 'WhiteBkg CLASS04404 border1px', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']); tr.appendChild(td);
+         }
+         
+         if (NAV_IE) {
+@@ -561,4 +561,4 @@
+ 
+ <script type="text/javascript">
+     translatePage("#tblNewDevices");
+-</script>
+\ No newline at end of file
++</script>
+--- occu/WebUI/www/rega/pages/tabs/admin/views/newdevicechannelsloader.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevicechannelsloader.htm
+@@ -120,7 +120,7 @@
+   {
+     var tr = Builder.node("tr");
+     
+-    td = Builder.node('td', {className: 'GrayBkg'}, strCut(chns[i]['type'], true)); tr.appendChild(td);
++    td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['type']); tr.appendChild(td);
+     
+     //td = Builder.node('td', {className: 'WhiteBkg'});
+     td = Builder.node('td', {className: 'WhiteBkgPic'}, [
+@@ -131,7 +131,7 @@
+     tr.appendChild(td);
+     
+     td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['desc']); tr.appendChild(td);
+-    td = Builder.node('td', {className: 'GrayBkg'}, strCut(chns[i]['sn'])); tr.appendChild(td);
++    td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['sn']); tr.appendChild(td);
+     td = Builder.node('td', {className: 'GrayBkg'}, chns[i]['iface']); tr.appendChild(td);
+     
+     var s = "WhiteBkg";
+@@ -152,10 +152,10 @@
+     
+     if (NAV_IE) {
+       td = Builder.node('td', {className: 'WhiteBkg'}, 
+-          [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04502 CLASS04503", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'], true)) ]); tr.appendChild(td);
++          [Builder.node('div', {id:'tdn' + chns[i]['id'], className: "CLASS04502 CLASS04503", onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']) ]); tr.appendChild(td);
+     }
+     else {
+-      td = Builder.node('td', {className: 'WhiteBkg CLASS04503', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0, CALL_STRCUT)'}, strCut(chns[i]['name'], true)); tr.appendChild(td);
++      td = Builder.node('td', {className: 'WhiteBkg CLASS04503', id:'tdn' + chns[i]['id'], onclick: 'textEdit(id, '+chns[i]['id']+', false, 0)'}, chns[i]['name']); tr.appendChild(td);
+     }  
+       
+     if (NAV_IE) {
+@@ -195,4 +195,4 @@
+     Cursor.set(Cursor.NORMAL);
+   }
+   
+-</script>
+\ No newline at end of file
++</script>
 --- occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm
 @@ -63,43 +63,43 @@
@@ -782,7 +1210,7 @@
 +  <col style="width:25px;" />
    <!-- Plus/Minus Group -->
 -  <col style="width:2%;"/>
-+  <col style="width:25px;" />
++  <col />
    <!-- Leere Zelle vor GroupMember -->
 -  <col style="width:1%;"/>
 -  <col style="width:3%;"/>
@@ -797,7 +1225,7 @@
 -  <col style="width:15%;"/>
 -  <col style="width:7%;"/>
 +  <col />
-+  <col />
++  <col style="width:50px;" />
 +  <col />
 +  <col />
 +  <col />
@@ -825,21 +1253,64 @@
 -  <th class="Sort CLASS04304 border1px"><b>${thFunctionTest}</b></th>
 -  <th class="Sort CLASS04304 border1px"><b>${thAction}</b></th>
 -  <th class="Sort CLASS04304 border1px"><b>${thReady}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'><b>${thTypeDescriptor}</b></th>
-+  <th class="DeviceListHead"><b>${thPicture}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('desc')"><b>${thDescriptor}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('sn')"><b>${thSerialNumber}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('iface')"><b>${thInterfaceCategory}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('trans')"><b>${thTransmitMode}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('name')"><b>${thName}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('func')"><b>${thFunc}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('room')"><b>${thRoom}</b></th>
-+  <th class="DeviceListHead"><b>${thFunctionTest}</b></th>
-+  <th class="DeviceListHead"><b>${thAction}</b></th>
-+  <th class="DeviceListHead"><b>${thReady}</b></th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'>${thTypeDescriptor}</th>
++  <th class="DeviceListHead">${thPicture}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('desc')">${thDescriptor}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('sn')">${thSerialNumber}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('iface')">${thInterfaceCategory}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('trans')">${thTransmitMode}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('name')">${thName}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('func')">${thFunc}</th>
++  <th class="DeviceListHead clickable" onclick="NewDevSort('room')">${thRoom}</th>
++  <th class="DeviceListHead">${thFunctionTest}</th>
++  <th class="DeviceListHead">${thAction}</th>
++  <th class="DeviceListHead">${thReady}</th>
  </tr>
  
  <script type="text/javascript">
+@@ -381,7 +381,7 @@
+   var img = Builder.node('img', {src: "/ise/img/plus.png", id: "img" + arDevices[i]['id'], alt: "plus", onclick: "expandDevice(" + arDevices[i]['id'] + "," + i + ")"});
+   td.appendChild(img);
+   tr.appendChild(td);
+-  td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, strCut(arDevices[i]['type'], true));
++  td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, arDevices[i]['type']);
+   tr.appendChild(td);
+   td = Builder.node('td', {className: 'WhiteBkgPic CLASS04314 border1px'}, [
+     Builder.node('div', {id: 'picDiv' + arDevices[i]['id'], className: "CLASS04305",
+@@ -391,7 +391,7 @@
+   td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['desc'] );
+   td.innerHTML = translateKey(arDevices[i]['desc']);
+   tr.appendChild(td);
+-  td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(arDevices[i]['sn']));
++  td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['sn']);
+   tr.appendChild(td);
+   td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['iface']);
+   tr.appendChild(td);
+@@ -401,13 +401,13 @@
+ 
+   if (NAV_IE) {
+     td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-      [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true)) ]);
++      [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']) ]);
+     tr.appendChild(td);
+   }
+   else {
+     if (isDevTypeHmIPW(arDevices[i]['type'])) {
+       td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px'});
+-      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, strCut(arDevices[i]['name'].replace(/:/g, ":<br/>"), false));
++      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, arDevices[i]['name'].replace(/:/g, ":<br/>"));
+       divB = Builder.node('div', {
+         id: 'btnRename_' + arDevices[i]["id"],
+         className: 'TestButton colorGradient borderRadius2px hidden',
+@@ -417,7 +417,7 @@
+       td.appendChild(divA);
+       td.appendChild(divB);
+     } else {
+-      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true));
++      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']);
+     }
+ 
+     tr.appendChild(td);
 --- occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm
 @@ -57,9 +57,16 @@
@@ -903,7 +1374,7 @@
      else 
 --- occu/WebUI/www/rega/pages/tabs/admin/views/rooms.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/rooms.htm
-@@ -170,18 +170,18 @@
+@@ -170,82 +170,82 @@
  <table id="tblRoomList" class="tblList CLASS04100" style="display:none" cellpadding="0" cellspacing="0" >
  
  <colgroup>
@@ -934,6 +1405,129 @@
  </colgroup>
  
  <thead>
+ <tr id="rowhead" class="CLASS04101">
+-  <td id="tblListFold"></td>
++  <th id="tblListFold"></td>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
+-  <td class="CLASS04102 DeviceListCell"><div id="roomQQQ" class="pt11 <%Write(sCssName); %>" onclick="SortRooms();"><b>${thRoom}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="roomQQQ" class="pt11 <%Write(sCssName); %>" onclick="SortRooms();">${thRoom}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>  
+-  <td class="CLASS04102 DeviceListCell"><div id="name" class="pt11 <%Write(sCssName); %>" onclick="SortMe('name');"><b>${thName}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="name" class="pt11 <%Write(sCssName); %>" onclick="SortMe('name');">${thName}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="desc"){sCssName="SortSelected";} %>
+-  <td class="CLASS04102 DeviceListCell"><div id="desc" class="pt11 <%Write(sCssName); %>" onclick="SortMe('desc');"><b>${thTypeDescriptor}</b></div></td>
+-  <td class="CLASS04102 DeviceListCell"><div class="pt11 Sort"><b>${thPicture}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="desc" class="pt11 <%Write(sCssName); %>" onclick="SortMe('desc');">${thTypeDescriptor}</div></th>
++  <th class="CLASS04102 DeviceListHead"><div class="pt11 Sort">${thPicture}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="type"){sCssName="SortSelected";} %>
+-  <td class="CLASS04102 DeviceListCell"><div id="type" class="pt11 <%Write(sCssName); %>" onclick="SortMe('type');"><b>${thDescriptor}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="type" class="pt11 <%Write(sCssName); %>" onclick="SortMe('type');">${thDescriptor}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="sn"){sCssName="SortSelected";} %>
+-  <td class="CLASS04102 DeviceListCell"><div id="sn" class="pt11 <%Write(sCssName); %>" onclick="SortMe('sn');"><b>${thSerialNumber}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="sn" class="pt11 <%Write(sCssName); %>" onclick="SortMe('sn');">${thSerialNumber}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="iface"){sCssName="SortSelected";} %>  
+-  <td class="CLASS04102 DeviceListCell"><div id="iface" class="pt11 <%Write(sCssName); %>" onclick="SortMe('iface');"><b>${thInterfaceCategory}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="iface" class="pt11 <%Write(sCssName); %>" onclick="SortMe('iface');">${thInterfaceCategory}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="trans"){sCssName="SortSelected";} %>  
+-  <td class="CLASS04102 DeviceListCell"><div id="trans" class="pt11 <%Write(sCssName); %>" onclick="SortMe('trans');"><b>${thTransmitMode}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="trans" class="pt11 <%Write(sCssName); %>" onclick="SortMe('trans');">${thTransmitMode}</div></th>
+   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="func"){sCssName="SortSelected";} %>  
+-  <td class="CLASS04102 DeviceListCell"><div id="func" class="pt11 <%Write(sCssName); %>" onclick="SortMe('func');"><b>${thFunc}</b></div></td>
+-  <td class="CLASS04102 DeviceListCell"><div class="pt11 Sort"><b>${thAction}</b></div></td>
+-  <td class="CLASS04102 DeviceListCell"><div class="pt11 Sort"><b>${thLinks}</b></div></td>
++  <th class="CLASS04102 DeviceListHead"><div id="func" class="pt11 <%Write(sCssName); %>" onclick="SortMe('func');">${thFunc}</div></td>
++  <th class="CLASS04102 DeviceListHead"><div class="pt11 Sort">${thAction}</div></th>
++  <th class="CLASS04102 DeviceListHead"><div class="pt11 Sort">${thLinks}</div></th>
+ </tr>
+ <tr id="rowflt" class="CLASS04103">
+-  <td style="height:20px"></td>
+-  <td class="CLASS04104" style="height:20px"></td>
+-  <td class="CLASS04109" style="height:20px">
++  <th></td>
++  <th class="CLASS04104"></th>
++  <th class="CLASS04109">
+     <div id="btnFilterName" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
+         <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class='CLASS04112' />
+         <div id="ftSetNameBtn" class='FilterSetButton CLASS04113' onclick="setSFilter(fltSR, 'ftName', FIL_NAME);updateTable();$('btnFilterNameSub').hide();" >${filterSet}</div>
+         <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class="CLASS04109" style="height:20px">
++  </th>
++  <th class="CLASS04109">
+     <div id="btnFilterType" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterTypeSub" style="display:none">
+         <input id="ftType" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetTypeBtn', 'ftCancelTypeBtn')" type="text" size="15" class='CLASS04112' />
+         <div id="ftSetTypeBtn" class="FilterSetButton CLASS04113" onclick="setSFilter(fltSR, 'ftType', FIL_TYPE);updateTable();$('btnFilterTypeSub').hide();" >${filterSet}</div>
+         <div id="ftCancelTypeBtn" class='FilterSetButton' onclick="$('btnFilterTypeSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class="CLASS04104" style="height:20px"></td>
+-  <td class="CLASS04109" style="height:20px">
++  </th>
++  <th class="CLASS04104"></th>
++  <th class="CLASS04109">
+     <div id="btnFilterDesc" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterDescSub" style="display:none">
+         <input id="ftDesc" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetDescBtn', 'ftCancelDescBtn')" type="text" size="15" class='CLASS04112' />
+         <div id="ftSetDescBtn" class="FilterSetButton CLASS04113" onclick="setSFilter(fltSR, 'ftDesc', FIL_DESC);updateTable();$('btnFilterDescSub').hide();" >${filterSet}</div>
+         <div id="ftCancelDescBtn" class='FilterSetButton' onclick="$('btnFilterDescSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
++  </th>
+   
+   
+-  <td class="CLASS04109" style="height:20px">
++  <th class="CLASS04109">
+     <div id="btnFilterSN" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterSNSub" style="display:none">
+         <input id="ftSN" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetSNBtn', 'ftCancelSNBtn')" type="text" size="15" class='CLASS04112' />
+         <div id="ftSetSNBtn" class="FilterSetButton CLASS04113" onclick="setSFilter(fltSR, 'ftSN', FIL_SN);updateTable();$('btnFilterSNSub').hide();" >${filterSet}</div>
+         <div id="ftCancelSNBtn" class='FilterSetButton' onclick="$('btnFilterSNSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class="CLASS04109" style="height:20px">
++  </th>
++  <th class="CLASS04109">
+     <div id="btnFilterIface" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterIfaceSub" style="display:none">
+         <table class='CLASS04110'>
+@@ -261,8 +261,8 @@
+         <div class='FilterSetButton' onclick='setIFilter(fltSR, "iface");updateTable();$("btnFilterIfaceSub").hide();'>${filterSet}</div>
+         <div class='FilterSetButton' onclick="$('btnFilterIfaceSub').hide();">${filterClose}</div>
+     </div> 
+-  </td>
+-  <td class="CLASS04109" style="height:20px">
++  </th>
++  <th class="CLASS04109">
+     <div id="btnFilterMode" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterModeSub" style="display:none">
+         <table class='CLASS04110'>
+@@ -278,8 +278,8 @@
+         <div class='FilterSetButton' onclick='setIFilter(fltSR, "mode");updateTable();$("btnFilterModeSub").hide();'>${filterSet}</div>
+         <div class='FilterSetButton' onclick="$('btnFilterModeSub').hide();">${filterClose}</div>
+     </div>
+-  </td>
+-  <td class="CLASS04109" style="height:20px">
++  </th>
++  <th class="CLASS04109">
+     <div id="btnFilterFunc" class="FilterBtn CLASS00203">${thFilter}</div>
+     <div class="FilterSubMenu" id="btnFilterFuncSub" style="display:none">
+       <% 
+@@ -303,9 +303,9 @@
+         Write("<div class='FilterSetButton' onclick='$(\"btnFilterFuncSub\").hide();'>${filterClose}</div>");
+       %>
+     </div>
+-  </td>
+-  <td class="CLASS04104" style="height:20px"></td>
+-  <td class="CLASS04104" style="height:20px"></td>
++  </th>
++  <th class="CLASS04104"></th>
++  <th class="CLASS04104"></th>
+ </tr>
+ 
+ </thead>
 @@ -324,7 +324,7 @@
      object elem = dom.GetObject(tmp);
      if (elem)
@@ -985,16 +1579,6 @@
           <tr class="CLASS03910">
             <td style="vertical-align: top;" id="chnList"></td>
           </tr>
-@@ -145,7 +135,8 @@
-   </tr>
- </table>
- <script type="text/javascript">
--       
-+  WebUI.onResize();
-+
-   loadChannels = function(id, specialFlag)
-   {
- 
 --- occu/WebUI/www/rega/pages/tabs/control/functions.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/functions.htm
 @@ -21,15 +21,10 @@
@@ -1038,16 +1622,6 @@
           <tr class="CLASS04004">
             <td style="vertical-align: top;" id="chnList">
             
-@@ -107,7 +97,8 @@
- </table>
- 
- <script type="text/javascript">
--       
-+  WebUI.onResize();
-+
-   loadChannels = function(id)
-   {
-     iseInitUpdateArrays();
 --- occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/hdevichannels.htm
 @@ -209,7 +209,7 @@
@@ -1155,15 +1729,6 @@
          <tr class="CLASS04004">
            <td style="vertical-align: top;" id="chnList">
         
-@@ -110,6 +100,8 @@
- </table>
- 
- <script type="text/javascript">
-+  WebUI.onResize();
-+
-   loadChannels = function(id)
-   {
-     iseInitUpdateArrays();
 --- occu/WebUI/www/rega/pages/tabs/control/systemProtocol.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/systemProtocol.htm
 @@ -43,10 +43,10 @@
@@ -1419,6 +1984,24 @@
    </tr>
    <tr>
      <td class="CLASS06405">
+--- occu/WebUI/www/webui/color.map.orig
++++ occu/WebUI/www/webui/color.map
+@@ -45,7 +45,7 @@
+ 
+ mainMenuBackground      #ebf1f2
+ subMenuBackground       #ebf1f2
+-subMenuHighlight        #89989b
++subMenuHighlight        #bcc7cb
+ 
+ messagesBackground      #ebf1f2
+ logoutButton            #ebf1f2
+@@ -57,4 +57,4 @@
+ borderColor             #f0f0f0
+ 
+ shutterOpeningDegree    #89989b
+-link                    #0101FF
+\ No newline at end of file
++link                    #0101FF
 --- occu/WebUI/www/webui/js/extern/sliderControl.js.orig
 +++ occu/WebUI/www/webui/js/extern/sliderControl.js
 @@ -95,7 +95,7 @@
@@ -1432,15 +2015,6 @@
    sHTML  += '<div id="slMin" style="position:relative;left:4px;top:'+iLeftTextPos+'px;width:'+this.n_pathLength+'px;color:black;text-align:left;z-index:4;"><b>'+this.sMinText+'</b>';
 --- occu/WebUI/www/webui/js/extern/wz_jsgraphics.js.orig
 +++ occu/WebUI/www/webui/js/extern/wz_jsgraphics.js
-@@ -104,7 +104,7 @@
- 		'width:' + w + 'px;'+
- 		'height:' + h + 'px;'+
- 		'clip:rect(0,'+w+'px,'+h+'px,0);'+
--		'background-color:' + this.color +
-+		'background-color:inherit' +
- 		(!jg_moz? ';overflow:hidden' : '')+
- 		';"><\/div>';
- }
 @@ -915,7 +915,7 @@
  
  	this.drawImage2 = function(imgSrc, x, y, w, h, imgw, imgh, a)
@@ -1484,7 +2058,18 @@
  .height20px {
      height:20px;
  }
-@@ -161,6 +165,23 @@
+@@ -53,6 +57,10 @@
+   min-width: 230px;
+ }
+ 
++input[type=checkbox], input[type=radio] {
++  vertical-align: -2px;
++}
++
+ .conditionEven
+ {
+   /*Wenn die Farbe nicht nur als Rahmen, sondern für die ganze Bedingung gelten soll,
+@@ -161,6 +169,28 @@
  {
      background-color: $_(contentBackground);
      overflow: auto;
@@ -1505,19 +2090,26 @@
 +#GroupListBody
 +{
 +  display: contents;
++}
++
++#divDL, #divRTD, #divFL, #divHTF, #divRL, #divHTR
++{
++  height: 100%;
  }
  
  /* Kopfzeile */
-@@ -391,7 +412,7 @@
+@@ -391,7 +421,9 @@
    text-align:center;
    border:solid 1px $_(black); /* black */
    background-color:$_(clickable);
 -  height: 20px;
 +  height:50px;
++  font-weight:normal;
++  color: $_(textColorA); /* white */
  }
  
  .filterTable td
-@@ -399,7 +420,6 @@
+@@ -399,7 +431,6 @@
    text-align:center;
    border:solid 1px $_(black); /* black */
    color: $_(textColorB); /* black */
@@ -1525,7 +2117,7 @@
  }
  
  .filterTable .leftAlign {
-@@ -594,9 +614,10 @@
+@@ -594,37 +625,39 @@
  
  /* Tabelle zur Listendarstellung von Elementen (z.B. Raumübersicht) */
  .tblList {
@@ -1538,14 +2130,18 @@
  }
  
  .tblList th {
-@@ -608,23 +629,25 @@
+   color: $_(textColorA); /* white */
+   font-weight: normal;
+-  background-color: $_(clickable);
+ }
+ 
  .Sort
  {
    cursor: pointer;
 -  text-align: center;
 -  vertical-align: middle;
 -  height: 100%;
-+  height: 54px;
++  height: 50px;
 +  display: flex;
 +  justify-content: center;
 +  align-items: center;
@@ -1558,7 +2154,7 @@
 -  text-align: center;
 -  vertical-align: middle;
 -  height: 100%;
-+  height: 54px;
++  height: 50px;
 +  display: flex;
 +  justify-content: center;
 +  align-items: center;
@@ -1571,7 +2167,7 @@
  }
  
  .tblList td {
-@@ -637,7 +660,6 @@
+@@ -637,7 +670,6 @@
  /* Kopfzeile eines Popup-Fenster */
  .popupTitle {
    color: $_(textColorB); /* black */
@@ -1579,7 +2175,21 @@
    background-color: $_(white); /* white */
    border: solid 1px $_(black); /* black */
    padding-left: 4px;
-@@ -706,7 +728,6 @@
+@@ -666,12 +698,12 @@
+ .popupTableScript
+ {
+   width: 100%;
+-  border: solid 1px $_(black); /* black */
+   empty-cells: show;
+   color: $_(textColorA); /* white */
+   text-align: center;
+   vertical-align: middle;
+   font-weight: normal;
++  border-spacing: 2px;
+ }
+ 
+ .popupTableRow
+@@ -706,7 +738,6 @@
  
  .popupControls {
    background-color: $_(white); /* white */
@@ -1587,7 +2197,7 @@
    border: solid 1px $_(black); /* black */
  }
  
-@@ -735,8 +756,8 @@
+@@ -735,8 +766,8 @@
  
  /* KanalListe */
  .ChnListTbl {
@@ -1597,7 +2207,15 @@
  }
  
  .ChnListTbl td {
-@@ -967,7 +988,7 @@
+@@ -928,7 +959,6 @@
+     border:1px solid $_(black); /* black */
+     /* width:95%; */
+     text-align:center;
+-    height:20px;
+     line-height:20px;
+     vertical-align:middle;
+     color: $_(textColorB); /* black */
+@@ -967,7 +997,7 @@
    background-image:url(/ise/img/gradientButton25px.png);
    /*background-image: linear-gradient(to bottom, white 40%, gray);*/
    background-image: var(--btnGradient);
@@ -1606,7 +2224,7 @@
    border: solid 1px $_(gray); /* silver */
    border-radius: 5px;
    margin:2%;
-@@ -1095,6 +1116,7 @@
+@@ -1095,6 +1125,7 @@
  
  .StatViewTbl td{
    border: solid 1px $_(black); /* black */
@@ -1614,7 +2232,7 @@
  }
  
  
-@@ -1245,13 +1267,10 @@
+@@ -1245,13 +1276,10 @@
  .tTable
  {
    text-align:center;
@@ -1630,7 +2248,7 @@
  }
  /*
  .tTable th
-@@ -1308,8 +1327,8 @@
+@@ -1308,8 +1336,8 @@
  .tMain
  {
    border:solid 1px $_(black); /* black */
@@ -1641,7 +2259,7 @@
  }
  
  .tHeader
-@@ -1347,7 +1366,6 @@
+@@ -1347,7 +1375,6 @@
  
  .bcWhitePic
  {
@@ -1649,7 +2267,7 @@
  }
  
  .bcWhite
-@@ -1391,12 +1409,8 @@
+@@ -1391,12 +1418,8 @@
  
  .oLine
  {
@@ -1663,15 +2281,16 @@
  }
  
  .sysConfigHeight
-@@ -1443,7 +1457,6 @@
+@@ -1443,7 +1466,7 @@
    border:solid 1px $_(black); /* black */
    height:40px;
    text-align:center;
 -  padding: 2px;
++  font-weight:normal;
  }
  
  .tdCellFilter
-@@ -1457,7 +1470,7 @@
+@@ -1457,7 +1480,7 @@
  
  /* Weisser Zellenhintergrund für Bilder (Geräteübersicht u.ä.) */
  .WhiteBkgPic {
@@ -1680,7 +2299,7 @@
    color: $_(textColorB); /* black */
  }
  
-@@ -1495,9 +1508,20 @@
+@@ -1495,9 +1518,20 @@
  /* Buttons incl. Hilfe-Img. */
  .cpButton {
      width:230px;
@@ -1703,7 +2322,7 @@
  	background-color: $_(background); /* #183473 */
  }
  
-@@ -1513,7 +1537,7 @@
+@@ -1513,7 +1547,7 @@
  
  #ic_deviceparameters #DeviceInformation
  {
@@ -1712,7 +2331,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -1537,7 +1561,6 @@
+@@ -1537,7 +1571,6 @@
  
  #ic_deviceparameters #DeviceInformation #DeviceImage
  {
@@ -1720,7 +2339,7 @@
  	width: 52px;
  	height: 56px;
  	margin: 0;
-@@ -1568,7 +1591,7 @@
+@@ -1568,7 +1601,7 @@
  
  #ic_deviceparameters .parameter_area .parameters_table 
  {
@@ -1729,7 +2348,40 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -1672,6 +1695,14 @@
+@@ -1577,6 +1610,7 @@
+ 
+ 	background-color: $_(clickable);
+ 	text-align:center;
++	height: 50px;
+ }
+ 
+ #ic_deviceparameters .parameter_area .parameters_table tbody {
+@@ -1587,7 +1621,6 @@
+ 
+ #ic_deviceparameters .parameter_area .parameters_table td {
+ 	border: 1px solid $_(black); /* black */
+-	height: 50px;
+ }
+ 
+ #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl
+@@ -1595,6 +1628,7 @@
+ 	border: 0;
+ 	height: auto;
+ 	background-color: $_(white); /* white */
++	border-spacing: 0px;
+ }
+ 
+ #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl thead
+@@ -1609,8 +1643,6 @@
+ {
+ 	border: 0;
+ 	background-color: $_(white); /* white */
+-	padding: 2px;
+-	height: auto;
+ }
+ 
+ #ic_deviceparameters #Timeouts_Area .TimeoutTable,
+@@ -1672,6 +1704,14 @@
  	border: 0;
  }/*LinkList-Tabelle*/
  /*--------------------------------------------*/
@@ -1744,7 +2396,7 @@
  #ic_linkpeerlist #head_wrapper {
    border-bottom: 0;
    margin: 0;
-@@ -1687,17 +1718,16 @@
+@@ -1687,17 +1727,16 @@
  #ic_linkpeerlist #body_wrapper {
    margin: 0;
    padding: 0;
@@ -1765,7 +2417,7 @@
  }
  
  #ic_linkpeerlist .LinkListTbl td {
-@@ -1734,9 +1764,7 @@
+@@ -1734,9 +1773,7 @@
  
  #ic_linkpeerlist .LinkListTbl .LinkListTbl_img
  {
@@ -1775,7 +2427,7 @@
  }
  /*--------------------------------------------*/
  #modalbox #id_messagebox
-@@ -1798,15 +1826,26 @@
+@@ -1798,15 +1835,27 @@
  {
    height: 40px;
    background-color: $_(activeBackground);
@@ -1785,6 +2437,7 @@
 +#ic_selchannel {
 +  display: initial;
 +  width: 100%;
++  margin: 10px;
 +}
 +
 +#ic_selchannel #body_wrapper {
@@ -1794,7 +2447,7 @@
 +#ic_selchannel #previous_step_wrapper {
  	background-color: $_(background); /* #183473 */
 -	margin: 20px;
-+	margin: 10px;
++	margin-bottom: 10px;
  }
  	
  #ic_selchannel #createLinkStep1 {
@@ -1805,7 +2458,7 @@
  }
  
  #ic_selchannel #createLinkStep1 thead {
-@@ -1829,8 +1868,7 @@
+@@ -1829,13 +1878,14 @@
  	background-color: $_(white); /* white */
  }
  #ic_selchannel #createLinkStep1 .WhiteHeader input {
@@ -1815,7 +2468,14 @@
  }
  
  #ic_selchannel .ChnListTbl {
-@@ -1964,14 +2002,7 @@
+ 	border: 1px solid $_(black); /* black */
+ 	background-color: $_(background); /* #183473 */
++	width: 100%;
++	margin: 0px;
+ }
+ 
+ #ic_selchannel .ChnListTbl tr td {
+@@ -1964,14 +2014,7 @@
  {
  	visibility: hidden;
  }
@@ -1830,7 +2490,7 @@
  /*--------------------------------------------*/
  
  /*Tabellenkörper Virtuelle Tasten*/
-@@ -1990,7 +2021,6 @@
+@@ -1990,7 +2033,6 @@
  /*Tabellenkörper Bilderspalte*/
  #ic_selchannel .ChnListTbl .chnListTbl_dev_img 
  {
@@ -1838,7 +2498,7 @@
  	text-align: left;
  	height: 50px;  
  }
-@@ -2004,10 +2034,12 @@
+@@ -2004,10 +2046,12 @@
  	height: auto;
  }
  /*--------------------------------------------*/
@@ -1854,7 +2514,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -2090,7 +2122,7 @@
+@@ -2090,7 +2134,7 @@
  #ic_setprofiles #body_wrapper
  {
  	background-color: $_(background); /* #183473 */
@@ -1863,24 +2523,58 @@
  }
  
  #ic_setprofiles  #id_sender_group_receiver_profiles_wrapper
-@@ -2313,6 +2345,7 @@
-   /* font-weight:bold; */
+@@ -2318,9 +2362,10 @@
+   padding:0;
+   background-color:$_(clickable);
+   color: $_(textColorB); /* black */
+-  /* font-weight:bold; */
++  font-weight:normal;
    text-align:left;
    vertical-align:middle;  
 +  height:20px !important;
  }
  
  .FilterHeight20 {
-@@ -2479,7 +2512,7 @@
+@@ -2333,7 +2378,7 @@
+   padding:0;
+   background-color:$_(active); /* #565657 */
+   color: $_(textColorB); /* black */
+-  /* font-weight:bold; */
++  font-weight:normal;
+   text-align:left;
+   vertical-align:middle;  
+ }
+@@ -2379,8 +2424,7 @@
+ }
+ 
+ .FilterText {
+-  width:96%;
+-  margin:3px 2% 3px 2%;
++  margin:2px;
+ }
+ 
+ .FilterButton {
+@@ -2390,8 +2434,7 @@
+   /*background-image: linear-gradient(to bottom, white 40%, gray );*/
+   background-image: var(--btnGradient);
+ 
+-  width:96%;
+-  margin:3px 2% 3px 2%;
++  margin:2px;
+   border:1px solid $_(black); /* black */
+   color: $_(textColorB); /* white */
+   font-weight:normal;
+@@ -2487,8 +2530,7 @@
    border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
    background-color: $_(background); /* #183473 */
    z-index: 189;
 -  padding: 2px;
+-  margin-top: 2px;
 +  padding-top: 2px;
  }
  
  .MainMenuItem_Left {
-@@ -2499,7 +2532,7 @@
+@@ -2508,7 +2550,7 @@
  }
  
  .MainMenuItem_Help {
@@ -1889,7 +2583,7 @@
  }
  
  .MainMenuItem_Highlight {
-@@ -2580,6 +2613,7 @@
+@@ -2589,6 +2631,7 @@
    background-color: $_(subMenuBackground);
    overflow:hidden;
    z-index:189;
@@ -1897,7 +2591,53 @@
  }
  
  .MainMenuSubItem {
-@@ -2780,7 +2814,6 @@
+@@ -2603,7 +2646,6 @@
+   line-height:20px;
+   cursor: pointer;
+   white-space: nowrap;
+-  border-top: 1px solid $_(black);
+ }
+ 
+ .MainMenuSubItem_Highlight {
+@@ -2693,9 +2735,9 @@
+   top: 24px;
+   left: 2px;
+   width: 996px;
+-  height: 520px;
++  height: 522px;
+   background-color: $_(white); /* white */
+-  overflow: scroll;  
++  overflow: auto;
+ }
+ 
+ #ChannelChooserFooter {
+@@ -2741,7 +2783,6 @@
+   width:100%;
+   height:auto;
+   margin:0;
+-  border:1px solid $_(black); /* black */
+   padding:0;
+   empty-cells:show;
+ }
+@@ -2753,7 +2794,7 @@
+   padding:0;
+   background-color:$_(clickable);
+   color: $_(textColorA); /* white */
+-  font-weight:bold;
++  font-weight:normal;
+   text-align:center;
+   vertical-align:middle;
+ }
+@@ -2765,7 +2806,7 @@
+   padding:0;
+   background-color:$_(active); /* #565657 */
+   color: $_(textColorA); /* white */
+-  font-weight:bold;
++  font-weight:normal;
+   text-align:center;
+   vertical-align:middle;
+ }
+@@ -2789,7 +2830,6 @@
  
  .ChannelChooserThumbnail {
    border: 1px solid $_(black); /* black */
@@ -1905,7 +2645,16 @@
    text-align:left;
    height:80px;
  }
-@@ -2935,18 +2968,16 @@
+@@ -2837,7 +2877,7 @@
+   width: 996px;
+   height: 520px;
+   background-color: $_(white); /* white */
+-  overflow: scroll;  
++  overflow: auto;
+ }
+ 
+ #MultiChannelChooserFooter {
+@@ -2944,40 +2984,38 @@
  
  .MultiChannelChooserThumbnail {
    border: 1px solid $_(black); /* black */
@@ -1927,7 +2676,33 @@
  }
  
  .DeviceListHead {
-@@ -2988,8 +3019,7 @@
+-  height:60px;
++  height:40px;
+   margin:0;
+   border:1px solid $_(black); /* black */
+   padding:0;
+   background-color:$_(clickable);
+   color: $_(textColorA); /* white */
+-  font-weight:bold;
++  font-weight:normal;
+   text-align:center;
+   vertical-align:middle;
+ }
+ 
+ .DeviceListHead_Active {
+-  height:60px;
++  height:40px;
+   margin:0;
+   border:1px black solid;
+   padding:0;
+   background-color:$_(active); /* #565657 */
+   color: $_(textColorA); /* white */
+-  font-weight:bold;
++  font-weight:normal;
+   text-align:center;
+   vertical-align:middle;
+ }
+@@ -2997,8 +3035,7 @@
  }
  
  .DeviceListRow_Highlight {
@@ -1937,7 +2712,7 @@
    cursor:pointer;
  }
  
-@@ -3018,9 +3048,7 @@
+@@ -3027,9 +3064,8 @@
  
  .DeviceListThumbnail {
    border: 1px solid $_(black); /* black */
@@ -1945,10 +2720,30 @@
 -  text-align:left;
 -  height:80px;
 +  text-align:center;
++  mix-blend-mode: multiply;
  }
  
  .DeviceListButton {
-@@ -3474,18 +3502,12 @@
+@@ -3090,7 +3126,7 @@
+   height: 520px;
+   background-color: $_(white); /* white */
+   color: $_(textColorB); /* black */
+-  overflow: scroll;  
++  overflow: auto;
+ }
+ 
+ #ChannelConfigDialogFooter {
+@@ -3212,8 +3248,7 @@
+   height: 371px;
+   background-color: $_(white); /* white */
+   color: $_(textColorB); /* black */
+-/*  overflow: scroll;   */
+-  overflow: hidden;   
++  overflow: auto;
+ }
+ 
+ #DeviceConfigDialogFooter {
+@@ -3483,18 +3518,12 @@
      position: absolute;
      left: 4px
  }.bidcosrf_page {
@@ -1969,7 +2764,7 @@
  }
  
  .bidcosrf_button {
-@@ -3511,7 +3533,7 @@
+@@ -3520,7 +3549,7 @@
  .bidcosrf_table {
    border: 1px solid $_(black);
    border-spacing: 0px;
@@ -1978,7 +2773,7 @@
  }
  
  .bidcosrf_tableheader {
-@@ -3531,7 +3553,7 @@
+@@ -3540,7 +3569,7 @@
  }
  
  .bidcosrf_imagecell {
@@ -1987,7 +2782,7 @@
    border: 1px solid $_(black);
    empty-cells: show;
    text-align: center;
-@@ -3542,12 +3564,13 @@
+@@ -3551,12 +3580,13 @@
    border: 1px solid $_(black);
    empty-cells: show;
    text-align: center;
@@ -2003,7 +2798,54 @@
  html, body {
    border: 0 none;
    margin: 0;
-@@ -4902,13 +4925,13 @@
+@@ -3939,7 +3969,6 @@
+ }
+ 
+ .CLASS00203 {
+-	border: solid 1px $_(black); /* black */
+ }
+ 
+ .CLASS00204 {
+@@ -3992,10 +4021,10 @@
+ /* rega\pages\msg\sysVarsSelection.htm */
+ 
+ .CLASS00300 {
+-	overflow: scroll;
+-	width: 100%;
++	overflow: auto;
+ 	height:520px;
+ 	background-color:$_(white); /* white */
++	border:solid 1px $_(black); /* black */
+ }
+ 
+ .CLASS00301 {
+@@ -4006,6 +4035,7 @@
+ 	text-align:center;
+ 	background-color:$_(clickable);
+ 	height: 40px;
++	font-weight: normal;
+ }
+ 
+ .CLASS00303 {
+@@ -4259,7 +4289,7 @@
+ 
+ .CLASS00717 {
+ 	height:200px;
+-	overflow:scroll;
++	overflow: auto;
+ 	background-color:$_(white); /* white */
+ }
+ 
+@@ -4673,7 +4703,7 @@
+ /* rega\pages\msg\programChooser.htm */
+ 
+ .CLASS01300 {
+-	overflow: scroll;
++	overflow: auto;
+ 	width: 100%;
+ 	height: 400px;
+ 	background-color:$_(white); /* white */
+@@ -4911,13 +4941,13 @@
  }
  
  .CLASS01805 {
@@ -2020,7 +2862,7 @@
  }
  
  .CLASS01807 {
-@@ -4927,9 +4950,7 @@
+@@ -4936,9 +4966,7 @@
  }
  
  .CLASS01809 {
@@ -2030,7 +2872,7 @@
  	height:100%;
  	overflow:hidden;
  }
-@@ -5147,6 +5168,7 @@
+@@ -5156,6 +5184,7 @@
  	color: $_(textColorB); /* black */
  	width:100%;
  	border:none;
@@ -2038,7 +2880,7 @@
  }
  
  .CLASS02511 {
-@@ -5168,6 +5190,7 @@
+@@ -5177,6 +5206,7 @@
  	border:1px Solid $_(black); /* black */
  	height:96px;
  	width:96px;
@@ -2046,7 +2888,7 @@
  }
  
  .CLASS02515 {
-@@ -5210,7 +5233,6 @@
+@@ -5219,7 +5249,6 @@
  
  .CLASS02520 {
  	color: $_(textColorB); /* black */
@@ -2054,7 +2896,7 @@
  	border:none;
  	background-color:$_(activeBackground);
  }
-@@ -5297,7 +5319,7 @@
+@@ -5313,7 +5342,7 @@
  	width:220px;
  	/*height:25px;*/
  	height:auto;
@@ -2063,7 +2905,7 @@
  	clear: both;
  	display: inline-block;
    /* line-height:25px; problem with controls with a long parameter name */
-@@ -5338,12 +5360,11 @@
+@@ -5354,12 +5383,11 @@
  }
  
  .CLASS02535 {
@@ -2079,7 +2921,7 @@
  }
  
  .CLASS02535A {
-@@ -5359,6 +5380,7 @@
+@@ -5375,6 +5403,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -2087,7 +2929,7 @@
  }
  
  .CLASS02536 {
-@@ -5367,20 +5389,13 @@
+@@ -5383,20 +5412,13 @@
  
  .CLASS02537 {
  	text-align: center;
@@ -2108,7 +2950,7 @@
  }
  
  .CLASS02539 {
-@@ -5417,6 +5432,7 @@
+@@ -5433,6 +5455,7 @@
  
  .CLASS02543 {
  	border:1px solid $_(black); /* black */
@@ -2116,7 +2958,7 @@
  }
  
  .CLASS02544 {
-@@ -5494,6 +5510,7 @@
+@@ -5517,6 +5540,7 @@
  
  .CLASS02552 {
  	border:solid 1px $_(black); /* black */
@@ -2124,7 +2966,7 @@
  }
  
  .CLASS02553 {
-@@ -5548,12 +5565,10 @@
+@@ -5578,12 +5602,10 @@
  
  .CLASS02601 {
  	text-align:center;
@@ -2138,7 +2980,7 @@
  }
  
  .CLASS02603 {
-@@ -5565,6 +5580,7 @@
+@@ -5595,6 +5617,7 @@
  
  .CLASS02604 {
  	height: 58px;
@@ -2146,7 +2988,7 @@
  }
  
  .CLASS02605 {
-@@ -5572,76 +5588,52 @@
+@@ -5602,76 +5625,52 @@
  	background-color: $_(activeBackground);
  	border: solid 1px $_(black); /* black */
  	color: $_(textColorB); /* black */
@@ -2157,17 +2999,17 @@
  
  .CLASS02606 {
 -	width: 240px;
- 	background-color: $_(activeBackground);
- 	border: solid 1px $_(black); /* black */
- 	color: $_(textColorB); /* black */
+-	background-color: $_(activeBackground);
+-	border: solid 1px $_(black); /* black */
+-	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
 -.CLASS02607 {
 -	width:55px;
--	background-color: $_(activeBackground);
--	border: solid 1px $_(black); /* black */
--	color: $_(textColorB); /* black */
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
@@ -2232,7 +3074,7 @@
  }
  
  .CLASS02615 {
-@@ -5735,10 +5727,12 @@
+@@ -5765,10 +5764,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -2240,12 +3082,13 @@
  }
  
  .CLASS02803 {
- 	font-weight:bold;
+-	font-weight:bold;
++	font-weight:normal;
 +  height: auto;
  }
  
  .CLASS02804 {
-@@ -5804,7 +5798,6 @@
+@@ -5834,7 +5835,6 @@
  }
  
  .CLASS02815 {
@@ -2253,7 +3096,7 @@
  }
  
  /* rega\pages\tabs\statusviews\svroomchannels.htm */
-@@ -5989,18 +5982,14 @@
+@@ -6019,18 +6019,13 @@
  }
  
  .CLASS03301 {
@@ -2264,7 +3107,7 @@
  }
  
  .CLASS03302 {
- 	font-weight:bold;
+-	font-weight:bold;
 -	height:40px;
  	text-align:center;
 -	line-height:40px;
@@ -2273,7 +3116,7 @@
  }
  
  .CLASS03303 {
-@@ -6079,8 +6068,7 @@
+@@ -6109,8 +6104,7 @@
  
  .CLASS03500 {
  	border:solid 1px $_(black); /* black */
@@ -2283,7 +3126,7 @@
  }
  
  .CLASS03501 {
-@@ -6113,8 +6101,7 @@
+@@ -6143,8 +6137,7 @@
  
  .CLASS03600 {
  	border:solid 1px $_(black); /* black */
@@ -2293,7 +3136,7 @@
  }
  
  .CLASS03601 {
-@@ -6203,8 +6190,7 @@
+@@ -6233,8 +6226,7 @@
  
  .CLASS03800 {
  	border:solid 1px $_(black); /* black */
@@ -2303,7 +3146,7 @@
  }
  
  .CLASS03801 {
-@@ -6247,15 +6233,13 @@
+@@ -6277,15 +6269,15 @@
  }
  
  .CLASS03902 {
@@ -2311,17 +3154,19 @@
  	overflow:auto;
 -	margin:0;
 -	padding:0;
-+	margin:10px;
++	margin-left:10px;
 +	margin-right:2px;
  }
  
  .CLASS03903 {
  	border:solid 1px $_(black); /* black */
 -	margin-top:27px;
++	margin-top:10px;
++	margin-bottom:10px;
  }
  
  .CLASS03904 {
-@@ -6270,7 +6254,6 @@
+@@ -6300,7 +6292,6 @@
  .CLASS03906 {
  	vertical-align:middle;
  	text-align:left;
@@ -2329,13 +3174,13 @@
  }
  
  .CLASS03907 {
-@@ -6280,13 +6263,13 @@
+@@ -6310,13 +6301,15 @@
  }
  
  .CLASS03908 {
 -	width:100%;
  	overflow:auto;
-+	margin:10px;
++	margin-right:10px;
 +	margin-left:2px;
  }
  
@@ -2343,16 +3188,18 @@
 -	width: 80%;
 -	height: 96%;
 +	width: 100%;
++	margin-top: 10px;
++	margin-bottom: 10px;
  }
  
  .CLASS03910 {
-@@ -6312,13 +6295,13 @@
+@@ -6342,13 +6335,15 @@
  }
  
  .CLASS04002 {
 -	width:100%;
  	overflow:auto;
-+	margin:10px;
++	margin-right:10px;
 +	margin-left:2px;
  }
  
@@ -2360,18 +3207,22 @@
 -	width: 80%;
 -	height: 96%;
 +	width: 100%;
++	margin-top: 10px;
++	margin-bottom: 10px;
  }
  
  .CLASS04004 {
-@@ -6333,7 +6316,6 @@
+@@ -6363,7 +6358,8 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
 -	margin-top:27px;
++	margin-top:10px;
++	margin-bottom:10px;
  }
  
  .CLASS04007 {
-@@ -6344,7 +6326,6 @@
+@@ -6374,7 +6370,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -2379,7 +3230,13 @@
  	empty-cells:show;
  }
  
-@@ -6361,6 +6342,7 @@
+@@ -6385,17 +6380,18 @@
+ .CLASS04102 {
+ 	background-color:$_(clickable);
+ 	color: $_(textColorA) ! important; /* white */
+-	font-size:10pt ! important;
+ 	height:44px ! important;
+ }
  
  .CLASS04103 {
  	height:auto;
@@ -2387,7 +3244,21 @@
  }
  
  .CLASS04104 {
-@@ -6411,10 +6393,15 @@
+ 	background-color:$_(clickable);
+   height:20px;
++  border: solid 1px $_(black); /* black */
+ }
+ 
+ .CLASS04105 {
+@@ -6418,6 +6414,7 @@
+ .CLASS04109 {
+ 	background-color:$_(clickable);
+ 	color: $_(textColorA) ! important; /* white */
++	border: solid 1px $_(black); /* black */
+   height:20px;
+ }
+ 
+@@ -6441,10 +6438,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -2397,14 +3268,14 @@
  
 +.CLASS04201 {
 +	overflow:auto;
-+	margin:10px;
++	margin-left:10px;
 +	margin-right:2px;
 +}
 +
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,6 +6417,7 @@
+@@ -6460,10 +6462,12 @@
  
  .CLASS04205 {
  	height:auto;
@@ -2412,7 +3283,20 @@
  }
  
  .CLASS04206 {
-@@ -6486,7 +6474,8 @@
+ 	background-color:$_(clickable);
++	border: solid 1px $_(black); /* black */
+ }
+ 
+ .CLASS04207 {
+@@ -6486,6 +6490,7 @@
+ .CLASS04211 {
+ 	background-color:$_(clickable);
+ 	color: $_(textColorA) ! important; /* white */
++	border: solid 1px $_(black); /* black */
+ }
+ 
+ .CLASS04212 {
+@@ -6516,7 +6521,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -2422,7 +3306,25 @@
  }
  
  .CLASS04302 {
-@@ -6774,6 +6763,7 @@
+@@ -6693,7 +6699,7 @@
+ 
+ .CLASS04900 {
+ 	color: $_(textColorA); /* white */
+-	font-weight:bold;
++	font-weight:normal;
+ }
+ 
+ .CLASS04901 {
+@@ -6717,7 +6723,7 @@
+ .CLASS04905 {
+ 	line-height:15px;
+ 	font-size:smaller;
+-	width:220px;
++	width:180px;
+ }
+ 
+ .CLASS04906 {
+@@ -6804,6 +6810,7 @@
  .CLASS05012 {
  	color: $_(textColorB); /* black */
  	font-size:9pt;
@@ -2430,7 +3332,26 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -6916,10 +6906,10 @@
+@@ -6842,6 +6849,10 @@
+ 	color: $_(textColorB); /* black */
+ }
+ 
++.CLASS05104 tbody {
++	border-width: 0;
++}
++
+ .CLASS05105 {
+ 	text-align:left;
+ }
+@@ -6880,7 +6891,6 @@
+ .CLASS05200 {
+ 	text-align:center;
+ 	vertical-align:middle;
+-	font-weight:bold;
+ 	height: auto;
+ }
+ 
+@@ -6946,10 +6956,10 @@
  }
  
  .CLASS05301 {
@@ -2442,7 +3363,7 @@
  }
  
  .CLASS05302 {
-@@ -7092,6 +7082,10 @@
+@@ -7122,6 +7132,10 @@
  
  /* rega\pages\tabs\favViewer.htm  */
  
@@ -2453,7 +3374,7 @@
  .CLASS05800 {
  	width:100%;
  	text-align:center;
-@@ -7220,11 +7214,13 @@
+@@ -7250,11 +7264,13 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -2469,7 +3390,7 @@
  }
  
  .CLASS06302 {
-@@ -7512,7 +7508,6 @@
+@@ -7542,7 +7558,6 @@
  }
  
  .CLASS06409 {
@@ -2477,7 +3398,7 @@
  }
  
  .CLASS06410 {
-@@ -7675,7 +7670,7 @@
+@@ -7705,7 +7720,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -2486,7 +3407,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -7790,7 +7785,6 @@
+@@ -7820,7 +7835,6 @@
  }
  
  .CLASS11105 {
@@ -2494,7 +3415,7 @@
    padding-top: 7px;
  }
  
-@@ -7817,7 +7811,6 @@
+@@ -7847,7 +7861,6 @@
  /* config/ic_setprofiles */
  
  .CLASS20001 {
@@ -2502,7 +3423,7 @@
  }
  
  .CLASS20002 {
-@@ -7839,7 +7832,7 @@
+@@ -7869,7 +7882,7 @@
  }
  
  .CLASS20006 {
@@ -2511,7 +3432,7 @@
  }
  
  .CLASS20007 {
-@@ -7875,7 +7868,6 @@
+@@ -7905,7 +7918,6 @@
  }
  
  .CLASS20010 {
@@ -2519,7 +3440,18 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8630,8 +8622,11 @@
+@@ -8434,7 +8446,9 @@
+ /* config\help.cgi */
+ 
+ .CLASS21300 {
+-  height:56%;
++  height: 100%;
++  width: 100%;
++  padding: 10px;
+ }
+ 
+ .CLASS21301 {
+@@ -8660,8 +8674,11 @@
  
  /* config\control_panel.cgi */
  
@@ -2532,7 +3464,7 @@
  }
  
  .CLASS21701 {
-@@ -8702,7 +8697,8 @@
+@@ -8732,7 +8749,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -2542,7 +3474,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8748,6 @@
+@@ -8782,7 +8800,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -2550,7 +3482,7 @@
    width:100%;
  }
  
-@@ -8809,8 +8804,8 @@
+@@ -8839,13 +8856,17 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -2561,7 +3493,34 @@
  }
  
  .CLASS22001 {
-@@ -8887,7 +8882,8 @@
+   text-align: center;
+   background-color: $_(activeBackground);
++  height: 100%;
++  display: flex;
++  align-items: center;
++  justify-content: center;
+ }
+ 
+ .CLASS22002 {
+@@ -8855,11 +8876,17 @@
+ 
+ .CLASS22003 {
+   background-color: $_(white);
++  height: 50px;
+ }
+ 
+ .CLASS22004 {
+   background-color: $_(activeBackground);
+   text-align: center;
++  height: 100%;
++  display: flex;
++  align-items: center;
++  justify-content: center;
++  flex-direction: column;
+ }
+ 
+ .CLASS22005 {
+@@ -8917,7 +8944,8 @@
  }
  
  .CLASS22101 {
@@ -2571,7 +3530,7 @@
  }
  
  .CLASS22102 {
-@@ -8909,9 +8905,8 @@
+@@ -8939,9 +8967,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -2582,7 +3541,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8921,10 +8916,12 @@
+@@ -8951,10 +8978,12 @@
    position:relative;
    width:50px;
    height:50px;
@@ -2650,43 +3609,54 @@
    <\/colgroup>\n
    <thead>\n
      <tr>\n
-@@ -7508,6 +7508,12 @@
-     if ($("menubar")) { Element.setStyle("menubar", {"height": this.MENUBAR_HEIGHT + "px", "width": width + "px"}); }
-     if ($("content")) { Element.setStyle("content", {"height": contentHeight       + "px", "width": width + "px"}); }
-     if ($("footer"))  { Element.setStyle("footer" , {"height": this.FOOTER_HEIGHT  + "px", "width": width + "px"}); }
-+    if ($("divDL"))   { Element.setStyle("divDL", {"height": (contentHeight - 20)  + "px"}); }
-+    if ($("divRTD"))  { Element.setStyle("divRTD", {"height": (contentHeight - 20)  + "px"}); }
-+    if ($("divFL"))   { Element.setStyle("divFL", {"height": (contentHeight - 20)  + "px"}); }
-+    if ($("divHTF"))  { Element.setStyle("divHTF", {"height": (contentHeight - 20)  + "px"}); }
-+    if ($("divRL"))   { Element.setStyle("divRL", {"height": (contentHeight - 20)  + "px"}); }
-+    if ($("divHTR"))  { Element.setStyle("divHTR", {"height": (contentHeight - 20)  + "px"}); }
+@@ -21528,7 +21528,7 @@
+   TREE_EXPANDED_FOOTER_HTML: "" +
+     "<table border='0' cellspacing='8'>" +
+       "<tr>" + 
+-        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
++        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
+         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
+         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.collapseTree();'>${footerBtnCloseTree}</div></td>" +
+       "</tr>" +
+@@ -21536,7 +21536,7 @@
+   FLAT_FOOTER_HTML: "" +
+     "<table border='0' cellspacing='8'>" +
+       "<tr>" + 
+-        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
++        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
+         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
+         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.recoverTree();'>${footerBtnRestoreTree}</div></td>" +
+       "</tr>" +
+@@ -23051,7 +23051,7 @@
+     FOOTER_HTML= "" +
+       "<table border='0' cellspacing='8'>" +
+         "<tr>" +
+-          "<td style='text-align:center;vertical-align=middle;' ><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>"+translateKey("footerBtnPageBack")+"</div></td>" +
++          "<td style='text-align:center;vertical-align=middle;' ><div class='FooterButton' onclick='WebUI.goBack();'>"+translateKey("footerBtnPageBack")+"</div></td>" +
+         "</tr>" +
+       "</table>";
  
-     if (this.currentPage) { this.currentPage.resize(); }
+@@ -38032,7 +38032,7 @@
+ //Defines
+ BORDER_COLOR = WebUI.getColor("channelBorder");     //Border
+ HL_COLOR = WebUI.getColor("channelHighlight");  //Highlight
+-BG_COLOR = WebUI.getColor("channelBackground");//Background
++BG_COLOR = 'inherit'; //Background
+ HL_STROKE = 4;//Background
+ //-----
  
-@@ -7592,7 +7598,8 @@
-       visibility: "hidden",
-       margin: "0",
-       padding: "0",
--      backgroundColor: WebUI.getColor("white")
-+      backgroundColor: WebUI.getColor("white"),
-+      border: "4px solid " + WebUI.getColor("navBarSeparator")
-     });
-     bodyElem.appendChild(picDiv);
-       jg_250 = new jsGraphics("picDiv");
-@@ -20894,10 +20901,10 @@
-       //Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": width + "px"});
-       Element.setStyle("contentLeft", {"height": contentHeight + "px", "width": "55%"});
-     }
--    if ($("contentLeft"))
-+    if ($("contentRight"))
-     {
-       //Element.setStyle("contentRight", {"height": contentHeight + "px", "width": (width - 10) + "px"});
--      Element.setStyle("contentRight", {"height": contentHeight + "px", "width": "44%"});
-+      Element.setStyle("contentRight", {"height": contentHeight + "px"});
-     }
-     
-     if ($("favSelector"))
-@@ -38181,7 +38188,7 @@
+@@ -38084,8 +38084,8 @@
+   
+   if (!form) return;
+ 
+-  if (!x_offset) x_offset = 0;
+-  if (!y_offset) y_offset = 0;
++  if (!x_offset) x_offset = 0.032;  // workaround css offsets
++  if (!y_offset) y_offset = -0.005; // workaround css offsets
+ 
+   switch (form[gd_type])
+   {
+@@ -38181,7 +38181,7 @@
      previewPicTimer = window.setTimeout(function () {
        HideElement('picDiv');
        delete previewPicTimer;

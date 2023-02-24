@@ -84,11 +84,11 @@ function ::WriteConditionText()
                     {
                       if( iRV1 == 0 )
                       {
-                        sRet = sRet#', ${ruleConditionLblWhen} '#oLV.ValueName0()#', ';
+                        sRet = sRet#' '#oLV.ValueName0()#' ';
                       }
                       if( iRV1 == 1 )
                       {
-                        sRet = sRet#', ${ruleConditionLblWhen} '#oLV.ValueName1()#', ';
+                        sRet = sRet#' '#oLV.ValueName1()#' ';
                       }
                     }
                   }

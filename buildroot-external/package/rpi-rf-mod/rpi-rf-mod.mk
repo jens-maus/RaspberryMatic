@@ -6,12 +6,12 @@
 # This includes compiling of required device tree overlays for
 # selected platforms
 #
-# Copyright (c) 2018-2021 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2018-2023 Jens Maus <mail@jens-maus.de>
 # https://github.com/jens-maus/RaspberryMatic/tree/master/buildroot-external/package/rpi-rf-mod
 #
 ################################################################################
 
-RPI_RF_MOD_VERSION = 1.9.0
+RPI_RF_MOD_VERSION = 1.10.0
 RPI_RF_MOD_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/rpi-rf-mod
 RPI_RF_MOD_SITE_METHOD = local
 RPI_RF_MOD_LICENSE = Apache-2.0

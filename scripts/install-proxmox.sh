@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.6"
+VERSION="1.7"
 LINE=
 
 function error_exit() {
@@ -63,12 +63,18 @@ function cleanup() {
   rm -rf "${TEMP_DIR}"
 }
 
-msg "RaspberryMatic Proxmox installation script V${VERSION}"
+msg "RaspberryMatic Proxmox installation script v${VERSION}"
 msg "Copyright (c) 2022-2023 Jens Maus <mail@jens-maus.de>"
 msg ""
 
+# create temp dir
 TEMP_DIR=$(mktemp -d)
 pushd "${TEMP_DIR}" >/dev/null
+
+# check if this is a valid PVE environment host or not
+if [[ ! -d /etc/pve ]]; then
+  die "This script must be executed on a Proxmox VE host system."
+fi
 
 # Select RaspberryMatic ova version
 msg "Getting available RaspberryMatic releases..."

@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-MULTILIB32_VERSION = 1.1.0
+MULTILIB32_VERSION = 1.2.0
 MULTILIB32_SOURCE =
 
 define MULTILIB32_BUILD_CMDS

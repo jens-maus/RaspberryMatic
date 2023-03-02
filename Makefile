@@ -1,4 +1,4 @@
-BUILDROOT_VERSION=2022.11.1
+BUILDROOT_VERSION=2023.02-rc2
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
 OCCU_VERSION=$(shell grep "OCCU_VERSION =" $(BUILDROOT_EXTERNAL)/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
@@ -135,6 +135,14 @@ recovery-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 recovery-savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	cd build-$(PRODUCT)/build/recovery-system-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) savedefconfig
 
+.PHONY: multilib32-menuconfig
+multilib32-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
+	cd build-$(PRODUCT)/build/multilib32-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) menuconfig
+
+.PHONY: multilib32-savedefconfig
+multilib32-savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
+	cd build-$(PRODUCT)/build/multilib32-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) savedefconfig
+
 # Create a fallback target (%) to forward all unknown target calls to the build Makefile.
 # This includes:
 #   linux-menuconfig
@@ -164,5 +172,20 @@ help:
 	@echo "  $(MAKE) clean-all: remove build directories for all supported platforms"
 	@echo
 	@echo "  $(MAKE) distclean: clean everything (all build dirs and buildroot sources)"
+	@echo
+	@echo "  $(MAKE) PRODUCT=<product> menuconfig: change buildroot config options"
+	@echo "  $(MAKE) PRODUCT=<product> savedefconfig: update buildroot defconfig file"
+	@echo "  $(MAKE) PRODUCT=<product> linux-menuconfig: change linux kernel config option"
+	@echo "  $(MAKE) PRODUCT=<product> linux-update-defconfig: update linux kernel defconfig file"
+	@echo "  $(MAKE) PRODUCT=<product> busybox-menuconfig: change busybox config options"
+	@echo "  $(MAKE) PRODUCT=<product> busybox-update-config: update busybox defconfig file"
+	@echo "  $(MAKE) PRODUCT=<product> uboot-menuconfig: change u-boot config options"
+	@echo "  $(MAKE) PRODUCT=<product> uboot-update-defconfig: update u-boot defconfig file"
+	@echo "  $(MAKE) PRODUCT=<product> recovery-menuconfig: change config options for recovery system"
+	@echo "  $(MAKE) PRODUCT=<product> recovery-savedefconfig: update defconfig file for recovery system"
+	@echo "  $(MAKE) PRODUCT=<product> multilib32-menuconfig: change config options for multilib32 build environment"
+	@echo "  $(MAKE) PRODUCT=<product> multilib32-savedefconfig: update defconfig file for multilib32 build environment"
+	@echo
+	@echo "  $(MAKE) PRODUCT=<product> legal-info: update legal information file"
 	@echo
 	@echo "Supported products: $(PRODUCTS)"

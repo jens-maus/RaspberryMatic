@@ -17,9 +17,8 @@ init() {
 
   # make sure /var/lib/chrony exists so that the drift file
   # can be saved later on
-  if [[ ! -e /var/lib/${NAME} ]]; then
-    mkdir -p /var/lib/${NAME}
-  fi
+  mkdir -p /var/lib/${NAME}
+  chown chrony:chrony /var/lib/${NAME}
 }
 
 case "$1" in

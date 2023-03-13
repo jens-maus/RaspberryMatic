@@ -768,7 +768,7 @@
  }
  
  .CLASS22101 {
-@@ -9080,3 +9016,13 @@
+@@ -9080,3 +9016,14 @@
    border:solid 1px $_(black);
  }
  
@@ -777,6 +777,7 @@
 +  border-bottom: 1px solid black;
 +  text-align: left;
 +  font-family: monospace;
++  resize: vertical;
 +}
 +
 +.CodeMirror-gutter-wrapper {

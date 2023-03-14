@@ -12,9 +12,7 @@ PIDFILE_ANGEL=/var/run/lighttpd-angel.pid
 # skip this startup if not in normal mode
 [[ "${HM_MODE}" != "NORMAL" ]] && exit 0
 
-start() {
-  echo -n "Starting lighttpd: "
-
+check_certificate() {
   # check if a valid/non-expired SSL cert exists and if
   # not we regenerate it.
   if ! /usr/bin/openssl x509 -checkend 86400 -noout -in /etc/config/server.pem 2>/dev/null >/dev/null; then
@@ -31,6 +29,14 @@ start() {
                                            -addext "nsCertType = server,sslCA" \
                                            -subj "/C=DE/O=HomeMatic/OU=$(cat /var/board_serial)/CN=$(hostname)" 2>/dev/null >/dev/null
   fi
+}
+
+start() {
+  echo -n "Starting lighttpd: "
+
+  # check if a valid/non-expired SSL cert exists and if
+  # not we regenerate it.
+  check_certificate
 
   # activate/deactivate service interface authentication
   if [[ -f /etc/config/authEnabled ]] && [[ -f /etc/lighttpd/conf.d/auth.conf ]]; then
@@ -68,6 +74,10 @@ restart() {
 }
 reload() {
   echo -n "Reloading lighttpd: "
+
+  # check if a valid/non-expired SSL cert exists and if
+  # not we regenerate it.
+  check_certificate
 
   # activate/deactivate service interface authentication
   if [[ -f /etc/config/authEnabled ]] && [[ -f /etc/lighttpd/conf.d/auth.conf ]]; then

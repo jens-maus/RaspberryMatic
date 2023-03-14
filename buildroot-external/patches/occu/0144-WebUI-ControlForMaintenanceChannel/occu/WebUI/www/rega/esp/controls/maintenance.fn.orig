@@ -5,7 +5,7 @@ function ::CreateOperationVoltage()
 
   if (objVoltage || objVoltageStatus) {
     WriteLine("<table style='margin: 0 auto;'>");
-      WriteLine("<td colspan='2'><hr></td>");
+      WriteLine("<tr><td colspan='2'><hr></td></tr>");
       WriteLine("<tr>");
         if (objVoltage) {
           WriteLine("<td class='CLASS02518'>");
@@ -20,4 +20,41 @@ function ::CreateOperationVoltage()
       WriteLine("</tr>");
     WriteLine("</table>");
   }
+}
+
+
+function ::CreateSystemStatusPanelDali()
+{
+
+  object objErrorCoProcessor = cObj.DPByControl("MAINTENANCE.ERROR_COPROCESSOR");
+  object objErrorCode = cObj.DPByControl("MAINTENANCE.ERROR_CODE");
+  object objErrorDaliBus = cObj.DPByControl("MAINTENANCE.ERROR_DALI_BUS");
+  object objUnreach = cObj.DPByControl("MAINTENANCE.UNREACH");
+
+  string stateCoPro = "${errorCoProcessorFalse}";
+  string stateDaliBus = "--";
+
+  if (objErrorCoProcessor || objErrorDaliBus) {
+      WriteLine("<table style='margin: 0 auto;'>");
+        WriteLine("<tr><td colspan='2'><hr></td></tr>");
+
+        WriteLine("<tr>");
+          if (objErrorCoProcessor) {
+            if (objErrorCoProcessor.Value() == true) {stateCoPro = "${errorCoProcessorTrue}";}
+            WriteLine("<td class='CLASS02518'>");
+              WriteLine("<div class='ControlBtnInfo CLASS02532'>${errorStateCoProcessor}"#stateCoPro#"</div>");
+            WriteLine("</td>");
+          }
+
+          if (objErrorDaliBus) {
+            stateDaliBus = "${stateDaliBus_"#objErrorDaliBus.Value()#"}";
+            WriteLine("<td class='CLASS02518'>");
+              WriteLine("<div class='ControlBtnInfo CLASS02532'>${stateDaliBus}"#stateDaliBus#"</div>");
+            WriteLine("</td>");
+          }
+
+        WriteLine("</tr>");
+      WriteLine("</table>");
+  }
+
 }

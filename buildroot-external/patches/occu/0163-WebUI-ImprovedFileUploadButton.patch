@@ -88,7 +88,7 @@
                }
 --- occu/WebUI/www/config/cp_network.cgi.orig
 +++ occu/WebUI/www/config/cp_network.cgi
-@@ -537,9 +537,9 @@
+@@ -348,9 +348,9 @@
              }
              table_row {
                table_data {width="20"} {}
@@ -100,7 +100,7 @@
                  }
                  puts {<iframe name="cert_upload_iframe" style="display: none;"></iframe>}
                }
-@@ -550,17 +550,14 @@
+@@ -361,17 +361,14 @@
                  #puts "Schritt 3: Zertifikat auf Zentrale laden"
                  puts "\${dialogSettingsNetworkCertificateLblStep3}"
                }

@@ -11,7 +11,7 @@
        !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on
        ! For BidCos-RF this isn't necessary
  
--      if ((oDevHssType.Substr(0,6) == "HmIPW-") || (oDevHssType == "HmIP-DRSI1") || (oDevHssType == "HmIP-DRSI4")) {
+-      if ((oDevHssType.Substr(0,6) == "HmIPW-") || (oDevHssType == "HmIP-DRSI1") || (oDevHssType == "HmIP-DRSI4") || (oDevHssType == "HmIP-DRG-DALI")) {
 -        object chnParam;
 -        ! A HmIPW-* device with a control for the parameter IDENTIFY_TARGET_LEVEL (MAINTENANCE channel)
 -        ! should be visible. So it's possible to use the identify function of wHmIPW-devices.
@@ -35,7 +35,7 @@
 -        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "HmIP-HAP-B1")  && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
 -          bShowChannel = false;
 -        }
-+      if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "HmIP-HAP-B1") && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
++      if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "HmIP-HAP-B1")  && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
 +        bShowChannel = false;
        }
  

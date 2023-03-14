@@ -164,7 +164,7 @@
   <div id="contentRight" class="CLASS01809" style="overflow:auto;">
 
       <table id="tblRightContent" width="100%">
-        <tr valign="top" class="CLASS01810">
+        <tr style="vertical-align: top;" class="CLASS01810">
           <td>
           <table id="tblStartpageInfo" width="100%" class="CLASS01811 startPageInfo hidden">
 
@@ -198,7 +198,8 @@
 
             <tr>
               <td>${currentFirmwareVersion}</td>
-              <td id="currentFirmware">${lblCurrentFirmwareVersionNotKnown}</td>
+             <!-- <td id="currentFirmware">${lblCurrentFirmwareVersionNotKnown}</td> -->
+              <td id="currentFirmware">--</td>
             </tr>
 
             <tr id="updateRow" style="display:none;">
@@ -257,7 +258,15 @@
             <tr name="trDutyCycle" style="visibility: hidden">
 
               <td id="iFaceShowAll">${lblDutyCycle}</td>
-              <td> <div id="dutyCycleProgress" class="dutyCycleProgress" align="right"><div id="dutyCycleProgressBar" class="dutyCycleProgressBar" style='width:100%;'></div></div> </td>
+              <td> <div id="dutyCycleProgress" class="dutyCycleProgress"><div id="dutyCycleProgressBar" class="dutyCycleProgressBar" style='width:auto;'></div></div> </td>
+            </tr>
+
+            <!-- Carrier Sense -->
+            <tr name="trCarrierSense" style="visibility: hidden"><td></td><td><div id="carrierSenseVal" style="width:75%; text-align:center"></div></td></tr>
+            <tr name="trCarrierSense" style="visibility: hidden">
+
+              <td id="lblCarrierSense">${lblCarrierSense}</td>
+              <td> <div id="carrierSenseProgress" class="dutyCycleProgress"><div id="carrierSenseProgressBar" class="dutyCycleProgressBar" style='width:auto;'></div></div> </td>
             </tr>
 
           </table>
@@ -265,7 +274,7 @@
         </tr>
         </table>
 
-        <div id="forceUpdate" style="display:none; margine-top:50px; padding:10px;" >
+        <div id="forceUpdate" style="display:none; margin-top:50px; padding:10px;">
           <div style="background-color:#BCC7CB; padding:5px; border:solid 1px;">${forcedUpdateHint}</div>
           <div style="text-align: center; margin-top: 50px;"><a href="/licenseinfo.htm" target="_blank">${lblLicenseInformation}</a></div>
           <div class="StdTableBtn CLASS21701" style="width:50%; margin:25%; margin-top: 50px;" onclick="showMaintenanceCP();">${forcedUpdateBtn}</div>
@@ -288,6 +297,7 @@
       jQuery("#forceUpdate").remove();
   }
   jQuery("#iFaceShowAll").text(translateKey("lblDutyCycleA") + getProduct()+ ":");
+  jQuery("#lblCarrierSense").text(translateKey("lblCarrierSenseA") + getProduct()+ ":");
   translatePage();
   jQuery("#loadingGif").hide();
   jQuery("#tblStartpageInfo").show();

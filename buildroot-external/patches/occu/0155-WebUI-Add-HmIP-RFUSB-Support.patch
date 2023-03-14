@@ -26,7 +26,7 @@
        !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on
        ! For BidCos-RF this isn't necessary
  
--      if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "HmIP-HAP-B1") && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
+-      if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "HmIP-HAP-B1")  && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
 +      if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "HmIP-HAP-B1") && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD") && (oDevHssType != "HmIP-RFUSB")) {
          bShowChannel = false;
        }
@@ -58,10 +58,10 @@
      "HmIP-BSL": "Homematic IP Schaltaktor f%FCr Markenschalter - mit Signalleuchte",
 -    "HmIP-CCU3": "Homematic IP Zentrale CCU3",
 +    "HmIP-CCU3": "Homematic IP Zentrale",
+     "HmIP-DRG-DALI": "Homematic IP DALI Gateway",
      "HmIP-DBB": "Homematic IP T%FCrklingeltaster",
      "HmIP-DLD" : "Homematic IP T%FCrschlossantrieb",
-     "HmIP-DLS" : "Homematic IP T%FCrschlosssensor",
-@@ -214,6 +214,7 @@
+@@ -215,6 +215,7 @@
      "HmIP-PCBS2": "Homematic IP Schaltplatine - 2-fach",
      "HmIP-PMFS": "Homematic IP Netzausfall%FCberwachung",
      "HmIP-RCV-50": "Virtuelle Fernbedienung",
@@ -69,8 +69,8 @@
      "HmIP-RGBW" : "Homematic IP LED Controller - RGBW",
      "HmIP-SAM" :"Homematic IP Ersch%FCtterungs- / Beschleunigungssensor",
      "HmIP-SCI" : "Homematic IP Kontakt-Schnittstelle",
-@@ -301,7 +302,7 @@
-     "PSM-UK": "Homematic IP Zwischenstecker Schalten/Messen UK",
+@@ -305,7 +306,7 @@
+     "PSM-UK": "Homematic IP Zwischenstecker Schalten/Messen (UK)",
      "RC8": "Homematic IP Fernbedienung, 8 Kanal",
      "RF-LAN-Sniffer" : "RF-LAN-Sniffer",
 -    "RPI-RF-MOD" : "CO-PROCESSOR",
@@ -78,18 +78,25 @@
      "SMI": "Homematic IP Bewegungsmelder innen",
      "SMO": "Homematic IP Bewegungsmelder au%DFen",
      "SRH": "Homematic IP Fenster-/ Drehgriffkontakt",
+@@ -338,4 +339,4 @@
+     "ZEL_STG_RM_WT_2": "Funk-Wandtaster 2-fach im 55er Rahmen",
+     "The END": ""
+   }
+-});
+\ No newline at end of file
++});
 --- occu/WebUI/www/webui/js/lang/en/translate.lang.deviceDescription.js.orig
 +++ occu/WebUI/www/webui/js/lang/en/translate.lang.deviceDescription.js
 @@ -177,7 +177,7 @@
      "HmIP-BROLL-2": "Homematic IP Blind Actuator for brand switch systems, flush-mount",
-     "HmIP-BSL": "Homematic IP Switch Actuator with Signal Lamp - for brand switches",
      "HmIP-BS2": "Homematic IP Remote Control for brand switches - 2 channels",
+     "HmIP-BSL": "Homematic IP Switch Actuator with Signal Lamp - for brand switches",
 -    "HmIP-CCU3": "Homematic IP Central Control Unit CCU3",
 +    "HmIP-CCU3": "Homematic IP Central Control Unit",
+     "HmIP-DRG-DALI": "Homematic IP DALI Gateway",
      "HmIP-DBB": "Homematic IP Doorbell Button",
      "HmIP-DLD" : "Homematic IP Door Lock Drive",
-     "HmIP-DLS" : "Homematic IP Door Lock Sensor",
-@@ -214,6 +214,7 @@
+@@ -215,6 +215,7 @@
      "HmIP-PCBS2": "Homematic IP Switch Circuit Board - 2 channels",
      "HmIP-PMFS": "Homematic IP Mains Failure Surveillance",
      "HmIP-RCV-50": "Virtual Remote Control",
@@ -97,8 +104,8 @@
      "HmIP-RGBW" : "Homematic IP LED Controller - RGBW",
      "HmIP-SAM": "Homematic IP Acceleration Sensor",
      "HmIP-SCTH230" : "Homematic IP CO2 Sensor, 230 V",
-@@ -301,7 +302,7 @@
-     "PSM-UK": "Homematic IP Pluggable Switch and Meter UK",
+@@ -305,7 +306,7 @@
+     "PSM-UK": "Homematic IP Pluggable Switch and Meter (UK)",
      "RC8": "Homematic IP Remote Contro, 8-channel",
      "RF-LAN-Sniffer" : "RF-LAN-Sniffer",
 -    "RPI-RF-MOD" : "CO-PROCESSOR",
@@ -106,6 +113,13 @@
      "SMI": "Homematic IP Motion Detector - indoor",
      "SMO": "Homematic IP Motion Detector, outdoor",
      "SRH": "Homematic IP Rotary Handle Sensor",
+@@ -338,4 +339,4 @@
+     "ZEL_STG_RM_WT_2": "Wireless Push-button 2-channel in 55mm frame",
+     "The END": ""
+   }
+-});
+\ No newline at end of file
++});
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -1535,6 +1535,12 @@

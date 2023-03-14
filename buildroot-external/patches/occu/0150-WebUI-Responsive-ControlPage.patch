@@ -1,6 +1,6 @@
 --- occu/WebUI/www/config/control_panel.cgi.orig
 +++ occu/WebUI/www/config/control_panel.cgi
-@@ -54,95 +54,80 @@
+@@ -54,95 +54,77 @@
      setFooter("");
    </script>
  
@@ -12,8 +12,8 @@
 -      <col />
 -    </colgroup>
 -    <tr class="CLASS21700">
+-    
 +  <div id="configMainTable" style="display:none">
-     
      <!-- Zentralen-Wartung -->
 -    <td>
 +    <div class="cpCell">
@@ -51,14 +51,14 @@
 +      <div class="cpCell">
          <div  class="StdTableBtn CLASS21703" onclick="showDisplayCP()">${btnSysConfDisplayConfig}</div>
 -     </td>
-+     </div>
- 
+-
 -     <td class="_CLASS21702"></td>
-+     <div class="cpCell _CLASS21702"></div>
- 
+-
 -     </tr>
 -     <tr>
++      </div>
  
++      <div class="cpCell _CLASS21702"></div>
    }
  }
      
@@ -114,7 +114,7 @@
        <div class="StdTableBtn CLASS21701" onclick="ConfigData.check(function() { WebUI.enter(BidcosRfPage); });">${btnSysConfBidCosConfig}</div>
        <ul>
          <li>${lblSysConfBidCosConfig1}</li> <!-- interne Antenne konfigurieren -->
-@@ -151,7 +136,7 @@
+@@ -151,7 +133,7 @@
    }
  } else {
    puts {
@@ -123,7 +123,7 @@
        <div class="cpButton">
          <div class="StdTableBtn CLASS21701" onclick="ConfigData.check(function() { WebUI.enter(BidcosRfPage); });">${btnSysConfLANGateway}</div>
    }
-@@ -160,97 +145,67 @@
+@@ -160,90 +142,59 @@
    puts {
          <div class="StdTableBtnHelp"><img id="showBidCosConfigHelp" src="/ise/img/help.png"></div>
        </div>
@@ -184,15 +184,6 @@
    }
 -  incr i
  
-   if { [getProduct] >= 3} {
--    puts "<td><div class=\"cpButton\">"
-+    puts "<div class=\"cpCell\"><div class=\"cpButton\">"
-     puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"showAccessPoint();\">\${btnAccessPoints}</div>"
-     puts "<div class=\"StdTableBtnHelp\"><img id=\"showAccessPointCPHelp\" src=\"/ise/img/help.png\"></div>"
--    incr i
-+    puts "</div></div>"
-   }
- 
    puts {
 -    <td>
 +    <div class="cpCell">
@@ -206,7 +197,7 @@
 -   incr i
 -
 -set COL_COUNT 4
- 
+-
 -if { $i == $COL_COUNT } {
 -  puts {
 -    <td class="_CLASS21702"></td>
@@ -236,7 +227,7 @@
  }
  
  
-@@ -261,7 +216,7 @@
+@@ -254,7 +205,7 @@
  
      array set arrDESCR $addon(CONFIG_DESCRIPTION)
  
@@ -245,7 +236,7 @@
        puts "<div class='cpButton'>"
          puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"window.open('$addon(CONFIG_URL)?sid=$sid');\">$addon(CONFIG_NAME)</div>"
          puts "<div id=\"btnAddOn_$addonId\" class=\"StdTableBtnHelp j_addOn\"><img id=\"showAddonInfo_$addonId\" src=\"/ise/img/help.png\"></div>"
-@@ -269,7 +224,7 @@
+@@ -262,7 +213,7 @@
          #puts "<ul id=\"description_$addonId\" style=\"display:none\">$addon(CONFIG_DESCRIPTION)</ul>"
          puts "<ul id=\"description_$addonId\" style=\"display:none\"></ul>"
        puts "</div>"
@@ -254,7 +245,7 @@
  
       puts "<script type=\"text/javascript\">"
  
-@@ -291,34 +246,13 @@
+@@ -284,34 +235,13 @@
       puts "</script>"
  
  
@@ -290,7 +281,7 @@
  }
  
  
-@@ -389,6 +323,6 @@
+@@ -380,6 +310,6 @@
        createAddOnTooltips();
      } catch(e) {};
  

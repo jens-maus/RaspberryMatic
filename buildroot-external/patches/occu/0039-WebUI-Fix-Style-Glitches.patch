@@ -729,9 +729,9 @@
 -}
 \ No newline at end of file
 +}
---- occu/WebUI/www/rega/esp/controls/univisal_light_receiver.fn.orig
-+++ occu/WebUI/www/rega/esp/controls/univisal_light_receiver.fn
-@@ -249,14 +249,14 @@
+--- occu/WebUI/www/rega/esp/controls/universal_light_receiver.fn.orig
++++ occu/WebUI/www/rega/esp/controls/universal_light_receiver.fn
+@@ -339,14 +339,14 @@
              WriteLine("<tr>");
                WriteLine("<td style='text-align:left'><span>${lblColorTemperatureBR}</span></td>");
                WriteLine("<td class='CLASS02546' style='text-align:right'>");
@@ -749,13 +749,6 @@
                WriteLine("</td>");
              WriteLine("</tr>");
            WriteLine("</table>")
-@@ -390,4 +390,4 @@
-     Write("jQuery('#"#chnId#"On').html(translateKey('actionStatusControlLblOn')).show();");
- 
-   WriteLine("</script>");
--}
-\ No newline at end of file
-+}
 --- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
 +++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
 @@ -1201,7 +1201,7 @@

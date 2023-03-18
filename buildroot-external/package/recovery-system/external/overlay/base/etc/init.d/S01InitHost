@@ -73,8 +73,8 @@ identify_host() {
       esac
 
       # setup RaspberryPi specific settings
-      HM_LED_GREEN="/sys/class/leds/led0"
-      HM_LED_RED="/sys/class/leds/led1"
+      HM_LED_GREEN="/sys/class/leds/ACT"
+      HM_LED_RED="/sys/class/leds/PWR"
       HM_LED_YELLOW=""
       HM_HOST_GPIO_RESET="18"
 

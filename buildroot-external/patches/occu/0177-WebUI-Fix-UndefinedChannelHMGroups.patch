@@ -1,0 +1,20 @@
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -44948,7 +44948,7 @@
+     // After setting the config parameters of a dali device, we have to store the UNIVERSAL_LIGHT_MAX_CAPABILITIES of each group channel as mata data.
+    // Otherwise ReGa can't determne the correct value on the page Status/Control, especially when changing a group.
+     var channel = DeviceList.getChannelByAddress(address);
+-    if ((channel.typeName == "HmIP-DRG-DALI") && (typeof MetaDaliGroupHasBeenSet == "undefined")) {
++    if ((typeof channel !== "undefined") && (channel.typeName == "HmIP-DRG-DALI") && (typeof MetaDaliGroupHasBeenSet == "undefined")) {
+       // After 5 seconds we can determine the new UNIVERSAL_LIGHT_MAX_CAPABILITIES of the DALI group channels and store them as meta data
+       window.setTimeout(function() {
+         var devAddress = channel.device.address,
+@@ -45033,7 +45033,7 @@
+   */
+ 
+   // This prevents an non-existing string for MAIN_/SUB_TEXT for e. g.  the HmIPW-WGD(-PL)
+-  if ((channel.channelType == "DISPLAY_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER")) {
++  if ((typeof channel !== "undefined") && ((channel.channelType == "DISPLAY_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER"))) {
+     arPostStr = poststr.split("&");
+     jQuery.each(arPostStr, function (index, val) {
+       if (val == "MAIN_TEXT=" || val == "SUB_TEXT=") {

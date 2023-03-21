@@ -1,0 +1,46 @@
+--- buildroot/boot/uboot/Config.in.orig
++++ buildroot/boot/uboot/Config.in
+@@ -208,9 +208,6 @@
+ 
+ config BR2_TARGET_UBOOT_NEEDS_ATF_BL31
+ 	bool "U-Boot needs ATF BL31"
+-	depends on BR2_TARGET_ARM_TRUSTED_FIRMWARE
+-	depends on !BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
+-	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
+ 	help
+ 	  Some specific platforms (such as Allwinner A64/H5)
+ 	  encapsulate the BL31 part of ATF inside U-Boot. This option
+@@ -231,6 +228,9 @@
+ 
+ endchoice
+ 
++config BR2_TARGET_UBOOT_NEEDS_TPL
++	bool "U-Boot needs TPL binary"
++
+ config BR2_TARGET_UBOOT_NEEDS_OPTEE_TEE
+ 	bool "U-Boot needs OPTEE TEE"
+ 	depends on BR2_TARGET_OPTEE_OS_CORE
+--- buildroot/boot/uboot/uboot.mk.orig
++++ buildroot/boot/uboot/uboot.mk
+@@ -162,10 +162,19 @@
+ 	HOSTLDFLAGS="$(HOST_LDFLAGS)" \
+ 	$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS))
+ 
++ifeq ($(BR2_TARGET_UBOOT_NEEDS_TPL),y)
++UBOOT_DEPENDENCIES += rockchip-blobs
++UBOOT_MAKE_OPTS += ROCKCHIP_TPL=ram_init.bin
++define UBOOT_COPY_TPL_FIRMWARE
++	cp $(BINARIES_DIR)/ram_init.bin $(@D)/
++endef
++UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_TPL_FIRMWARE
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
+-UBOOT_DEPENDENCIES += arm-trusted-firmware
++UBOOT_DEPENDENCIES += rockchip-blobs
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF),y)
+-UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.elf
++UBOOT_MAKE_OPTS += BL31=bl31.elf
+ define UBOOT_COPY_ATF_FIRMWARE
+ 	cp $(BINARIES_DIR)/bl31.elf $(@D)/
+ endef

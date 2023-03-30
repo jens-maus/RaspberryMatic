@@ -49,7 +49,7 @@
         jQuery.each(helpContainer, function(index, container){
 --- occu/WebUI/www/config/cp_advancedsettings.cgi.orig
 +++ occu/WebUI/www/config/cp_advancedsettings.cgi
-@@ -0,0 +1,635 @@
+@@ -0,0 +1,657 @@
 +#!/bin/tclsh
 +source once.tcl
 +sourceOnce cgi.tcl
@@ -72,6 +72,7 @@
 +set DISABLELEDFILENAME "/etc/config/disableLED"
 +set DISABLEONBOARDLEDFILENAME "/etc/config/disableOnboardLED"
 +set CUSTOMSTORAGEPATHFILENAME "/etc/config/CustomStoragePath"
++set HBRFETHIPADDRESSFILENAME "/etc/config/hb_rf_eth"
 +
 +set NOCRONBACKUPFILENAME "/etc/config/NoCronBackup"
 +set CRONBACKUPMAXBACKUPSFILENAME "/etc/config/CronBackupMaxBackups"
@@ -191,7 +192,7 @@
 +}
 +
 +proc action_put_page {} {
-+  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
++  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME HBRFETHIPADDRESSFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
 +   
 +  set inetcheckDisabled [file exists $INETCHECKFILENAME]
 +  set rpi4usb3CheckDisabled [file exists $RPI4USB3CHECKFILENAME]
@@ -209,6 +210,7 @@
 +  set cronBackupMaxBackups [readfile $CRONBACKUPMAXBACKUPSFILENAME]
 +  set cronBackupPath [readfile $CRONBACKUPPATHFILENAME]
 +  set customStoragePath [readfile $CUSTOMSTORAGEPATHFILENAME]
++  set hbrfethIPAddress [readfile $HBRFETHIPADDRESSFILENAME]
 +
 +  set tweaks [read_var_from_file $TWEAKFILENAME CP_DEVCONFIG]
 +  set systemName [get_systemname]
@@ -361,7 +363,7 @@
 +              }
 +
 +              table_data  {
-+                cgi_text customStoragePath=$customStoragePath {id="text_customStoragePath"} {size=30} 
++                cgi_text customStoragePath=$customStoragePath {id="text_customStoragePath"} {size=30}
 +              }
 +            }
 +            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
@@ -382,6 +384,16 @@
 +              }
 +            }
 +            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
++            table_row {
++              table_data {class="CLASS21112"} {
++                puts "\${dialogSettingsAdvancedSettingHBRFETHIPAddress}"
++              }
++
++              table_data  {
++                cgi_text hbrfethIPAddress=$hbrfethIPAddress {id="text_hbrfethIPAddress"} {size=30}
++              }
++            }
++            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
 +          }
 +        }
 +        table_data {class="CLASS21113"} {align="left"} {
@@ -399,6 +411,7 @@
 +          p { ${dialogSettingsAdvancedSettingsHintSystem9} }
 +          p { ${dialogSettingsAdvancedSettingsHintSystem10} }
 +          p { ${dialogSettingsAdvancedSettingsHintSystem14} }
++          p { ${dialogSettingsAdvancedSettingsHintSystem15} }
 +        }
 +      }
 +
@@ -489,6 +502,7 @@
 +        pb += "&cronBackupPath="+encodeURIComponent(document.getElementById("text_cronBackupPath").value);
 +        pb += "&cronBackupMaxBackups="+encodeURIComponent(document.getElementById("text_cronBackupMaxBackups").value);
 +        pb += "&customStoragePath="+encodeURIComponent(document.getElementById("text_customStoragePath").value);
++        pb += "&hbrfethIPAddress="+encodeURIComponent(document.getElementById("text_hbrfethIPAddress").value);
 +        pb += "&systemName="+escape(document.getElementById("text_systemName").value);
 +
 +        var opts = {
@@ -511,6 +525,7 @@
 +    puts {
 +      translatePlaceholder = function() {
 +        document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
++        document.getElementById("text_hbrfethIPAddress").placeholder=translateKey("dialogSettingsAdvancedSettingHBRFETHIPAddressPlaceholder");
 +        document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
 +        document.getElementById("text_cronBackupMaxBackups").placeholder="30";
 +        document.getElementById("text_systemName").placeholder=translateKey("dialogSettingsAdvancedSettingsSystemNamePlaceholder");
@@ -542,7 +557,7 @@
 +}
 +
 +proc action_save_settings {} {
-+  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
++  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME HBRFETHIPADDRESSFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
 +  set errMsg ""
 +
 +  import inetcheckDisabled
@@ -561,6 +576,7 @@
 +  import cronBackupPath
 +  import cronBackupMaxBackups
 +  import customStoragePath
++  import hbrfethIPAddress
 +  import systemName
 +  
 +  if {$systemName == ""} {
@@ -672,6 +688,12 @@
 +  } else {
 +    append errMsg [writefile $CUSTOMSTORAGEPATHFILENAME $customStoragePath]
 +  }
++
++  if { $hbrfethIPAddress == "" } {
++    append errMsg [deletefile $HBRFETHIPADDRESSFILENAME]
++  } else {
++    append errMsg [writefile $HBRFETHIPADDRESSFILENAME $hbrfethIPAddress]
++  }
 +  
 +  # reload monit
 +  catch { exec /usr/bin/monit reload }
@@ -729,7 +751,7 @@
      "btnSysConfCentralMaintenace" : "Zentralen-<br/>Wartung",
      "lblSysConfCentralMaintenance1" : "Software-Update der " + HMIdentifier.de.CCUFullNameText,
      "lblSysConfCentralMaintenance2" : HMIdentifier.de.CCUFullNameText + " neu starten",
-@@ -624,6 +626,50 @@
+@@ -624,6 +626,53 @@
      "dialogSettingsCentralDisplayLblOptionHours" : "Stunden",
      "dialogSettingsCentralDisplayLblOptionAlways" : "Immer an",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
@@ -770,12 +792,15 @@
 +    "dialogSettingsAdvancedSettingsHintSystem12" : "<b>Sicherheits%FCberpr%FCfung (Port-Forwarding):</b><br/>Um einen sicherheitskritischen Zugriff vom Internet aus via Port-Forwarding/Weiterleitung auszuschlie%DFen, wird jeden Sonntag um 04:00 Uhr nachts eine %DCberpr%FCfung der Internetverbindung durchgef%FChrt und ggf. bei erkanntem Port-Forwarding eine Alarmmeldung ausgegeben.",
 +    "dialogSettingsAdvancedSettingsHintSystem13" : "<b>Pr%FCfung auf aktualisierte Zusatzsoftware:</b><br/>Pr%FCft 1x t%E4glich online auf neue verf%FCgbare Versionen installierter Zusatzsoftware (CCU-Addons) und zeigt diese auf der Startseite an.",
 +    "dialogSettingsAdvancedSettingsHintSystem14" : "<b>CloudMatic Autostart:</b><br/>Bei Hochfahren der Zentrale wird automatisch der CloudMatic Dienst eingerichtet und gestartet, wenn dies hier aktiviert wurde.",
++    "dialogSettingsAdvancedSettingsHintSystem15" : "<b>IP-Adresse (HB-RF-ETH):</b><br/>Falls ein <a href='https://github.com/alexreinert/HB-RF-ETH'>HB-RF-ETH Funkmoduladapter</a> zum Einsatz kommt kann hier die IP-Adresse eingetragen werden unter der dieser Adapter erreichbar ist (benötigt Neustart).",
 +    "dialogSettingsAdvancedSettingsExpert" : "Experten-Optionen",
 +    "dialogSettingsAdvancedSettingsDevConfig" : "DevConfig-Button verbergen",
 +    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>DevConfig-Button verbergen:</b><br/>Wenn aktiviert wird der 'DevConfig' Button unter Systemsteuerung <i>nicht</i> angezeigt.",
 +    "dialogSettingsAdvancedSettingsMessageAlertMessageError1" : "Fehler beim Speichern",
 +    "dialogSettingsAdvancedSettingsSystemName" : "Systemname",
 +    "dialogSettingsAdvancedSettingsSystemNamePlaceholder" : "<Systemvorgabe>",
++    "dialogSettingsAdvancedSettingHBRFETHIPAddress" : "IP-Adresse (HB-RF-ETH)",
++    "dialogSettingsAdvancedSettingHBRFETHIPAddressPlaceholder" : "<Deaktiviert>",
 +    "commentSettingsDialogAdvancedSettingsEnd" : "***********************************************",
      "commentSettingsDialogNetwork" : "***********************************************",
      "dialogSettingsNetworkTitle" : HMIdentifier.de.CCUShortName + " - Netzwerkeinstellungen",
@@ -791,7 +816,7 @@
      "btnSysConfCentralMaintenace" : "CCU maintenance",
      "lblSysConfCentralMaintenance1" : "Software update for " + HMIdentifier.en.CCUFullNameText,
      "lblSysConfCentralMaintenance2" : "Restart " + HMIdentifier.en.CCUFullNameText,
-@@ -624,6 +626,50 @@
+@@ -624,6 +626,53 @@
      "dialogSettingsCentralDisplayLblOptionHours" : "Hours",
      "dialogSettingsCentralDisplayLblOptionAlways" : "Always on",
      "commentSettingsDialogCentralDisplayEnd" : "***********************************************",
@@ -832,12 +857,15 @@
 +    "dialogSettingsAdvancedSettingsHintSystem12" : "<b>Security check (Portforwarding):</b><br/>To ensure, that no security critical portforwarding is enabled in the internet connectivity used, a regular check will be performed each sunday at 04:00 am. In case a critical portforwarding is identified an alarm message will be raised accordingly.",
 +    "dialogSettingsAdvancedSettingsHintSystem13" : "<b>Check for additional software updates:</b><br/>Checks for new versions of additional software (ccu-addons) once a day and shows it on the startpage.",
 +    "dialogSettingsAdvancedSettingsHintSystem14" : "<b>CloudMatic Autostartup:</b><br/>Upon startup of the CCU, the CloudMatic service will be automatically initialized and started if this is activated here.",
++    "dialogSettingsAdvancedSettingsHintSystem15" : "<b>IP address (HB-RF-ETH):</b><br/>If available the IP address of a <a href='https://github.com/alexreinert/HB-RF-ETH'>HB-RF-ETH adapter</a> can be configued here (requires reboot).",
 +    "dialogSettingsAdvancedSettingsExpert" : "Expert Options",
 +    "dialogSettingsAdvancedSettingsDevConfig" : "Hide DevConfig-Button",
 +    "dialogSettingsAdvancedSettingsHintExpert1" : "<b>Hide DevConfig-Button:</b><br/>If activated, the 'DevConfig' button will be <i>hided</i> under the control panel.",
 +    "dialogSettingsAdvancedSettingsMessageAlertMessageError1" : "Error on save",
 +    "dialogSettingsAdvancedSettingsSystemName" : "System name",
 +    "dialogSettingsAdvancedSettingsSystemNamePlaceholder" : "<default>",
++    "dialogSettingsAdvancedSettingHBRFETHIPAddress" : "IP address (HB-RF-ETH)",
++    "dialogSettingsAdvancedSettingHBRFETHIPAddressPlaceholder" : "<disabled>",
 +    "commentSettingsDialogAdvancedSettingsEnd" : "***********************************************",
      "commentSettingsDialogNetwork" : "***********************************************",
      "dialogSettingsNetworkTitle" : HMIdentifier.en.CCUShortName + " network settings",

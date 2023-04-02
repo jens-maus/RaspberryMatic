@@ -78,7 +78,7 @@ function ::CreateHeatingControl() {
         WriteLine("<table id='"#chnId#"tblShowHumidity' class='ControlBtnInfo hidden' style='width:200px"#cssDisplay#"'>");
           WriteLine("<tr>");
             WriteLine("<td>${stringTableWeatherHumidity}</td>");
-            WriteLine("<td><span id='"#chnId#"actHumidity'></span><span>&nbsp;<b>"#hUnit#"</b></span></td>");
+            WriteLine("<td><span id='"#chnId#"actHumidity'></span><span id='"#chnId#"actHumidityUnit' class='hidden'>&nbsp;<b>"#hUnit#"</b></span></td>");
           WriteLine("</tr>");
         WriteLine("</table>");
       WriteLine("</td>");

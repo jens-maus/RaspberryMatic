@@ -259,7 +259,7 @@ qm set "${VMID}" \
   --onboot 1 \
   --tablet 0 \
   --ostype l26 \
-  --scsihw virtio-scsi-pci \
+  --scsihw virtio-scsi-single \
   --delete sata0 \
   --scsi0 "${STORAGE}:${DISK_REF:-}vm-${VMID}-disk-0${DISK_EXT:-},discard=on,iothread=1" 1>&/dev/null
 

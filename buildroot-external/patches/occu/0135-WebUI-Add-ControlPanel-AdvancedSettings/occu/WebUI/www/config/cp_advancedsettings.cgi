@@ -20,6 +20,7 @@ set NOADDONUPDATECHECKFILENAME "/etc/config/NoAddonUpdateCheck"
 set DISABLELEDFILENAME "/etc/config/disableLED"
 set DISABLEONBOARDLEDFILENAME "/etc/config/disableOnboardLED"
 set CUSTOMSTORAGEPATHFILENAME "/etc/config/CustomStoragePath"
+set HBRFETHIPADDRESSFILENAME "/etc/config/hb_rf_eth"
 
 set NOCRONBACKUPFILENAME "/etc/config/NoCronBackup"
 set CRONBACKUPMAXBACKUPSFILENAME "/etc/config/CronBackupMaxBackups"
@@ -139,7 +140,7 @@ proc put_message {title msg args} {
 }
 
 proc action_put_page {} {
-  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
+  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME HBRFETHIPADDRESSFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
    
   set inetcheckDisabled [file exists $INETCHECKFILENAME]
   set rpi4usb3CheckDisabled [file exists $RPI4USB3CHECKFILENAME]
@@ -157,6 +158,7 @@ proc action_put_page {} {
   set cronBackupMaxBackups [readfile $CRONBACKUPMAXBACKUPSFILENAME]
   set cronBackupPath [readfile $CRONBACKUPPATHFILENAME]
   set customStoragePath [readfile $CUSTOMSTORAGEPATHFILENAME]
+  set hbrfethIPAddress [readfile $HBRFETHIPADDRESSFILENAME]
 
   set tweaks [read_var_from_file $TWEAKFILENAME CP_DEVCONFIG]
   set systemName [get_systemname]
@@ -309,7 +311,7 @@ proc action_put_page {} {
               }
 
               table_data  {
-                cgi_text customStoragePath=$customStoragePath {id="text_customStoragePath"} {size=30} 
+                cgi_text customStoragePath=$customStoragePath {id="text_customStoragePath"} {size=30}
               }
             }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
@@ -330,6 +332,16 @@ proc action_put_page {} {
               }
             }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
+            table_row {
+              table_data {class="CLASS21112"} {
+                puts "\${dialogSettingsAdvancedSettingHBRFETHIPAddress}"
+              }
+
+              table_data  {
+                cgi_text hbrfethIPAddress=$hbrfethIPAddress {id="text_hbrfethIPAddress"} {size=30}
+              }
+            }
+            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
           }
         }
         table_data {class="CLASS21113"} {align="left"} {
@@ -347,6 +359,7 @@ proc action_put_page {} {
           p { ${dialogSettingsAdvancedSettingsHintSystem9} }
           p { ${dialogSettingsAdvancedSettingsHintSystem10} }
           p { ${dialogSettingsAdvancedSettingsHintSystem14} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem15} }
         }
       }
 
@@ -437,6 +450,7 @@ proc action_put_page {} {
         pb += "&cronBackupPath="+encodeURIComponent(document.getElementById("text_cronBackupPath").value);
         pb += "&cronBackupMaxBackups="+encodeURIComponent(document.getElementById("text_cronBackupMaxBackups").value);
         pb += "&customStoragePath="+encodeURIComponent(document.getElementById("text_customStoragePath").value);
+        pb += "&hbrfethIPAddress="+encodeURIComponent(document.getElementById("text_hbrfethIPAddress").value);
         pb += "&systemName="+escape(document.getElementById("text_systemName").value);
 
         var opts = {
@@ -459,6 +473,7 @@ proc action_put_page {} {
     puts {
       translatePlaceholder = function() {
         document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
+        document.getElementById("text_hbrfethIPAddress").placeholder=translateKey("dialogSettingsAdvancedSettingHBRFETHIPAddressPlaceholder");
         document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
         document.getElementById("text_cronBackupMaxBackups").placeholder="30";
         document.getElementById("text_systemName").placeholder=translateKey("dialogSettingsAdvancedSettingsSystemNamePlaceholder");
@@ -490,7 +505,7 @@ proc action_put_page {} {
 }
 
 proc action_save_settings {} {
-  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
+  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME HBRFETHIPADDRESSFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
   set errMsg ""
 
   import inetcheckDisabled
@@ -509,6 +524,7 @@ proc action_save_settings {} {
   import cronBackupPath
   import cronBackupMaxBackups
   import customStoragePath
+  import hbrfethIPAddress
   import systemName
   
   if {$systemName == ""} {
@@ -619,6 +635,12 @@ proc action_save_settings {} {
     append errMsg [deletefile $CUSTOMSTORAGEPATHFILENAME]
   } else {
     append errMsg [writefile $CUSTOMSTORAGEPATHFILENAME $customStoragePath]
+  }
+
+  if { $hbrfethIPAddress == "" } {
+    append errMsg [deletefile $HBRFETHIPADDRESSFILENAME]
+  } else {
+    append errMsg [writefile $HBRFETHIPADDRESSFILENAME $hbrfethIPAddress]
   }
   
   # reload monit

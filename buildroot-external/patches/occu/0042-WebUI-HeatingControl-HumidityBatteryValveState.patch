@@ -60,7 +60,7 @@
 +        WriteLine("<table id='"#chnId#"tblShowHumidity' class='ControlBtnInfo hidden' style='width:200px"#cssDisplay#"'>");
 +          WriteLine("<tr>");
 +            WriteLine("<td>${stringTableWeatherHumidity}</td>");
-+            WriteLine("<td><span id='"#chnId#"actHumidity'></span><span>&nbsp;<b>"#hUnit#"</b></span></td>");
++            WriteLine("<td><span id='"#chnId#"actHumidity'></span><span id='"#chnId#"actHumidityUnit' class='hidden'>&nbsp;<b>"#hUnit#"</b></span></td>");
 +          WriteLine("</tr>");
 +        WriteLine("</table>");
 +      WriteLine("</td>");
@@ -222,13 +222,18 @@
      if (this.opts.idComfort && this.opts.idLowering) {
        this.showComfortEco();
      }
-@@ -25565,6 +25574,21 @@
+@@ -25565,6 +25574,26 @@
      jQuery("#"+this.id +"tblShowTemp").show();
    },
  
-+  showActualHumidity: function() {                                    
-+    jQuery("#"+this.id +"actHumidity").text(this.opts.stHum);         
-+    jQuery("#"+this.id +"tblShowHumidity").show();                    
++  showActualHumidity: function() {
++    if (parseInt(this.opts.stHum) === 20) {
++      jQuery("#"+this.id +"actHumidity").text('n/a');
++    } else {
++      jQuery("#"+this.id +"actHumidity").text(this.opts.stHum);
++      jQuery("#"+this.id +"actHumidityUnit").show();
++    }
++    jQuery("#"+this.id +"tblShowHumidity").show();
 +  }, 
 +
 +  showActualBat: function() {
@@ -244,7 +249,7 @@
    showHolidayEndTime: function() {
      var stopTime = this.getHolidayEndTime();
      if (stopTime) {
-@@ -25667,6 +25691,8 @@
+@@ -25667,6 +25696,8 @@
        self.setSControl("ACTUAL_TEMPERATURE", self.ACTUAL_TEMPERATURE);
        self.setSControl("HUMIDITY", self.HUMIDITY);
        self.setSControl("WINDOW_STATE", self.WINDOW_STATE);
@@ -253,7 +258,7 @@
        self.setSlider();
        self.initElements();
        self.bindEvents();
-@@ -25681,6 +25707,8 @@
+@@ -25681,6 +25712,8 @@
      this.BOOST_MODE = (this.checkBool(opts.BOOST_MODE, false) == "true") ? true : false;
      //this.FROST_PROTECTION = opts.FROST_PROTECTION;
      this.HUMIDITY = this.checkValue(opts.HUMIDITY, this.unknownState);

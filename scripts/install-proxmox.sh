@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.7"
+VERSION="1.8"
 LINE=
 
 function error_exit() {
@@ -259,9 +259,9 @@ qm set "${VMID}" \
   --onboot 1 \
   --tablet 0 \
   --ostype l26 \
-  --scsihw virtio-scsi-pci \
+  --scsihw virtio-scsi-single \
   --delete sata0 \
-  --scsi0 "${STORAGE}:${DISK_REF:-}vm-${VMID}-disk-0${DISK_EXT:-},discard=on" 1>&/dev/null
+  --scsi0 "${STORAGE}:${DISK_REF:-}vm-${VMID}-disk-0${DISK_EXT:-},discard=on,iothread=1" 1>&/dev/null
 
 # Set boot order 
 qm set "${VMID}" \

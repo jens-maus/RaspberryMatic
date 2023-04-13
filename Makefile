@@ -1,4 +1,5 @@
 BUILDROOT_VERSION=2023.02
+BUILDROOT_SHA256=2597f964fc63d970e160f14fee7164662caa9e77e1e520226484bf421105b1fa
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
 OCCU_VERSION=$(shell grep "OCCU_VERSION =" $(BUILDROOT_EXTERNAL)/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
@@ -21,15 +22,15 @@ endif
 
 all: help
 
-buildroot-$(BUILDROOT_VERSION).tar.xz:
-	@echo "[downloading buildroot-$(BUILDROOT_VERSION).tar.xz]"
-	wget https://buildroot.org/downloads/buildroot-$(BUILDROOT_VERSION).tar.xz
-	wget https://buildroot.org/downloads/buildroot-$(BUILDROOT_VERSION).tar.xz.sign
-	cat buildroot-$(BUILDROOT_VERSION).tar.xz.sign | grep SHA1: | sed 's/^SHA1: //' | shasum -c
+buildroot-$(BUILDROOT_VERSION).tar.gz:
+	@echo "[downloading buildroot-$(BUILDROOT_VERSION).tar.gz]"
+	wget https://github.com/buildroot/buildroot/archive/refs/tags/$(BUILDROOT_VERSION).tar.gz -O buildroot-$(BUILDROOT_VERSION).tar.gz
+	echo "$(BUILDROOT_SHA256)  buildroot-$(BUILDROOT_VERSION).tar.gz" >buildroot-$(BUILDROOT_VERSION).tar.gz.sign
+	shasum -a 256 -c buildroot-$(BUILDROOT_VERSION).tar.gz.sign
 
-buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.xz
+buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.gz
 	@echo "[patching buildroot-$(BUILDROOT_VERSION)]"
-	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.xz; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) --remove-empty-files -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
+	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.gz; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) --remove-empty-files -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
 
 build-$(PRODUCT): | buildroot-$(BUILDROOT_VERSION) download
 	mkdir -p build-$(PRODUCT)
@@ -108,7 +109,7 @@ clean:
 distclean: clean-all
 	@echo "[distclean]"
 	@rm -rf buildroot-$(BUILDROOT_VERSION)
-	@rm -f buildroot-$(BUILDROOT_VERSION).tar.xz buildroot-$(BUILDROOT_VERSION).tar.xz.sign
+	@rm -f buildroot-$(BUILDROOT_VERSION).tar.*
 	@rm -rf download
 
 .PHONY: menuconfig

@@ -461,8 +461,9 @@ jobs:
         continue-on-error: true
 
       - name: Remove old packages
-        uses: smartsquaregmbh/delete-old-packages@v0.6.0
+        uses: smartsquaregmbh/delete-old-packages@v0.7.0
         with:
+          type: container
           keep: 5
           names: |
             raspberrymatic

@@ -3,6 +3,9 @@
 # Stop on error
 set -e
 
+# show all executions
+set -x
+
 BOARD_DIR="$(dirname "$0")"
 BOARD_NAME="$(basename "${BOARD_DIR}")"
 
@@ -23,8 +26,12 @@ fi
 # make sure a factory reset is performed upon fresh start
 touch "${TARGET_DIR}/usr/local/.doFactoryReset"
 
+# output info on docker
+which docker
+docker version
+
 # build docker image
-if ! docker build --file="${BOARD_DIR}/Dockerfile" --build-arg=tar_prefix=rootfs --tag="raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION}" --tag="raspberrymatic:${DOCKER_ARCH}-latest" "${BINARIES_DIR}"; then
+if ! docker build --file="${BOARD_DIR}/Dockerfile" --build-arg=tar_prefix=rootfs --platform=linux/${DOCKER_ARCH} --tag="raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION}" --tag="raspberrymatic:${DOCKER_ARCH}-latest" "${BINARIES_DIR}"; then
   exit 1
 fi
 

@@ -23,6 +23,9 @@ else
   exit 1
 fi
 
+# rename rootfs.tar to rootfsTARGETARCH.tar
+mv "${BINARIES_DIR}/rootfs.tar" "${BINARIES_DIR}/rootfs${DOCKER_ARCH}.tar"
+
 # make sure a factory reset is performed upon fresh start
 touch "${TARGET_DIR}/usr/local/.doFactoryReset"
 
@@ -31,7 +34,7 @@ docker version
 
 # build docker image
 DOCKER_REGISTRY=ghcr.io/jens-maus
-if ! DOCKER_BUILDKIT=1 docker build --file="${BOARD_DIR}/Dockerfile" --platform=linux/${DOCKER_ARCH} --tag="${DOCKER_REGISTRY}/raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION}" --tag="${DOCKER_REGISTRY}/raspberrymatic:${DOCKER_ARCH}-latest" "${BINARIES_DIR}"; then
+if ! DOCKER_BUILDKIT=1 docker build --file="${BOARD_DIR}/Dockerfile" --build-arg=tar_prefix=rootfs --platform=linux/${DOCKER_ARCH} --tag="${DOCKER_REGISTRY}/raspberrymatic:${DOCKER_ARCH}-${PRODUCT_VERSION}" --tag="${DOCKER_REGISTRY}/raspberrymatic:${DOCKER_ARCH}-latest" "${BINARIES_DIR}"; then
   exit 1
 fi
 

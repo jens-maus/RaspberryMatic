@@ -1,9 +1,6 @@
 FROM scratch
 
-ARG TARGETARCH
-ARG tar_prefix=rootfs
-
-ADD $tar_prefix$TARGETARCH.tar /
+ADD rootfs.tar /
 
 LABEL org.opencontainers.image.title=RaspberryMatic \
       org.opencontainers.image.description="Alternative OS for your HomeMatic CCU" \

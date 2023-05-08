@@ -101,8 +101,8 @@ if command -v dpkg >/dev/null; then
     fi
 
     # use gpg to dearmor the pivccu public key
-    wget -qO - https://www.pivccu.de/piVCCU/public.key | gpg --dearmor | tee /usr/share/keyrings/pivccu-archive-keyring.gpg >/dev/null
-    sh -c 'echo "deb [signed-by=/usr/share/keyrings/pivccu-archive-keyring.gpg] https://www.pivccu.de/piVCCU stable main" >/etc/apt/sources.list.d/pivccu.list'
+    wget -qO - https://apt.pivccu.de/piVCCU/public.key | gpg --dearmor -o /usr/share/keyrings/pivccu-archive-keyring.gpg
+    sh -c 'echo "deb [signed-by=/usr/share/keyrings/pivccu-archive-keyring.gpg] https://apt.pivccu.de/piVCCU stable main" >/etc/apt/sources.list.d/pivccu.list'
     apt update
   fi
 

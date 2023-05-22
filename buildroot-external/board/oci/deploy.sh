@@ -90,6 +90,9 @@ if command -v dpkg >/dev/null; then
     if ! pkg_installed build-essential; then
       apt install "${FORCE}" build-essential
     fi
+    if ! pkg_installed bison; then
+      apt install "${FORCE}" bison
+    fi
     if ! pkg_installed flex; then
       apt install "${FORCE}" flex
     fi
@@ -143,12 +146,20 @@ fi
 if [[ ! -c /dev/eq3loop ]]; then
   echo "Loading eq3_char_loop module"
   check_sudo
-  modprobe eq3_char_loop
+  if ! modprobe eq3_char_loop; then
+    apt install --reinstall pivccu-modules-dkms
+    modprobe eq3_char_loop
+  fi
 fi
 if [[ ! -e /etc/modules-load.d/eq3_char_loop.conf ]]; then
   echo "Installing eq3_char_loop to /etc/modules-load.d"
   check_sudo
   echo eq3_char_loop >/etc/modules-load.d/eq3_char_loop.conf
+fi
+
+if [[ -e /etc/udev/rules.d/10-hmiprfusb.rules ]]; then
+  echo "Deleting 10-hmiprfusb udev rule"
+  rm -f /etc/udev/rules.d/10-hmiprfusb.rules
 fi
 
 if [[ ! -e /etc/udev/rules.d/99-Homematic.rules ]]; then

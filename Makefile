@@ -41,7 +41,8 @@ download: buildroot-$(BUILDROOT_VERSION)
 build-$(PRODUCT)/.config: | build-$(PRODUCT)
 	@echo "[config $@]"
 	pwd
-	ls -la
+	id
+	ls -lan
 	ls -la build-$(PRODUCT)/
 	ls -la $(shell pwd)/build-$(PRODUCT)/
 	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) $(PRODUCT)_defconfig

@@ -68,7 +68,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.2"
+VERSION="1.3"
 LINE=
 
 error_exit() {
@@ -176,6 +176,9 @@ msg ""
 if ! command -v docker >/dev/null; then
   die "No docker installation found, check documentation (raspberrymatic.de)"
 fi
+
+# make sure apt/dpkg won't interact with us
+export DEBIAN_FRONTEND=noninteractive
 
 # when executing with "uninstall" remove/purge all config files
 if [[ "${1-}" == "uninstall" ]]; then

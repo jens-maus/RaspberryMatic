@@ -36,7 +36,7 @@ if [[ -z "${CCU_CONTAINER_IP}" ]]; then
 fi
 
 # check if add-on is running
-if ! docker inspect "${CCU_CONTAINER_NAME}"; then
+if ! docker inspect "${CCU_CONTAINER_NAME}" >/dev/null 2>&1; then
   echo "ERROR: RaspberryMatic isn't running or hostname incorrect."
   exit 1
 fi

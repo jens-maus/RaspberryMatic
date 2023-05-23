@@ -5,6 +5,10 @@
 # to be able to connect a HmIP-HAP/HmIPW-DRAP.
 #
 
+echo "RaspberryMatic HA-Addon macvlan patch script"
+echo "Copyright (c) 2023 Jens Maus <mail@jens-maus.de>"
+echo
+
 # check if ccu docker network exists already
 if ! docker network inspect ccu >/dev/null 2>&1; then
   CCU_NETWORK_INTERFACE=$(ip -o -f inet route |grep -e "^default" |awk '{print $5}')

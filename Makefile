@@ -30,16 +30,21 @@ buildroot-$(BUILDROOT_VERSION).tar.gz:
 
 buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.gz
 	@echo "[patching buildroot-$(BUILDROOT_VERSION)]"
+	pwd
 	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.gz; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) --remove-empty-files -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
 
 build-$(PRODUCT): | buildroot-$(BUILDROOT_VERSION) download
-	mkdir -p build-$(PRODUCT)
+	pwd
+	mkdir build-$(PRODUCT)
 
 download: buildroot-$(BUILDROOT_VERSION)
-	mkdir -p download
+	pwd
+	mkdir download
 
 build-$(PRODUCT)/.config: | build-$(PRODUCT)
 	@echo "[config $@]"
+	pwd
+	ls -la
 	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) $(PRODUCT)_defconfig
 
 build-all: $(PRODUCTS)

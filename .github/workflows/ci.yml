@@ -110,9 +110,9 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          if ! dpkg-query -l wget bc cpio rsync zip python file >/dev/null 2>&1; then
+          if ! dpkg-query -l wget bc cpio rsync zip python3 file >/dev/null 2>&1; then
             apt update
-            apt install -y --no-install-recommends wget bc cpio rsync zip python file
+            apt install -y --no-install-recommends wget bc cpio rsync zip python3 file
           fi
           if ! getent group | grep -q ^builder:; then groupadd -g 48 builder; fi
           if ! getent passwd | grep -q ^builder:; then useradd -m -u 1003 -g 48 -G sudo builder; fi

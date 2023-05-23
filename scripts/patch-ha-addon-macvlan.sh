@@ -14,6 +14,7 @@ if ! docker network inspect ccu >/dev/null 2>&1; then
   read -r -e -p "HomeAssistant Main Subnet (e.g. 192.168.178.0/24): " -i "${CCU_NETWORK_SUBNET}" CCU_NETWORK_SUBNET </dev/tty
   
   # create docker macvlan network
+  echo "Creating docker macvlan network"
   docker network create -d macvlan \
                         --opt parent="${CCU_NETWORK_INTERFACE}" \
                         --subnet "${CCU_NETWORK_SUBNET}" \
@@ -34,7 +35,15 @@ if [[ -z "${CCU_CONTAINER_IP}" ]]; then
   exit 1
 fi
 
+# check if add-on is running
+if ! docker inspect "${CCU_CONTAINER_NAME}"; then
+  echo "ERROR: RaspberryMatic isn't running or hostname incorrect."
+  exit 1
+fi
+
+echo "Connecting add-on to macvlan network"
 docker network connect --ip "${CCU_CONTAINER_IP}" ccu "${CCU_CONTAINER_NAME}"
 
+echo "Restarting add-on"
 docker stop "${CCU_CONTAINER_NAME}"
 docker start "${CCU_CONTAINER_NAME}"

@@ -351,11 +351,13 @@ jobs:
           docker version -f '{{.Client.Experimental}}'
           docker version -f '{{.Server.Experimental}}'
 
-      - name: Test container deploy
+      - name: Test container deploy (install-docker.sh)
         run: |
           export CCU_DOCKER_PULL_REFRESH="false"
+          export CCU_CONTAINER_IP="192.168.178.4"
+          export CCU_CONTAINER_IP_AUX="192.168.178.2"
           sudo mknod /dev/eq3loop c 239 0 # fake /dev/eq3loop
-          sudo -E ./buildroot-external/board/oci/deploy.sh -f
+          sudo -E ./scripts/install-docker.sh
 
       - name: Test container startup+stop
         if: github.event.inputs.skip_build == 'false'

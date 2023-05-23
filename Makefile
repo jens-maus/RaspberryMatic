@@ -43,7 +43,8 @@ build-$(PRODUCT)/.config: | build-$(PRODUCT)
 	pwd
 	ls -la
 	ls -la build-$(PRODUCT)/
-	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) $(PRODUCT)_defconfig
+	ls -la $(shell pwd)/build-$(PRODUCT)/
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) $(PRODUCT)_defconfig
 
 build-all: $(PRODUCTS)
 $(PRODUCTS): %:
@@ -53,7 +54,7 @@ $(PRODUCTS): %:
 build: | buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	@echo "[build: $(PRODUCT)]"
 ifneq ($(FAKE_BUILD),true)
-	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION)
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION)
 else
 	$(eval BOARD := $(shell echo $(PRODUCT) | cut -d'_' -f2-))
 	# Dummy build - mainly for testing CI
@@ -117,35 +118,35 @@ distclean: clean-all
 
 .PHONY: menuconfig
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
-	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) menuconfig
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) menuconfig
 
 .PHONY: xconfig
 xconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
-	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) xconfig
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) xconfig
 
 .PHONY: savedefconfig
 savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
-	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) savedefconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT)_defconfig
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) savedefconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT)_defconfig
 
 .PHONY: toolchain
 toolchain: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
-	cd build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) toolchain
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) toolchain
 
 .PHONY: recovery-menuconfig
 recovery-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
-	cd build-$(PRODUCT)/build/recovery-system-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) menuconfig
+	cd $(shell pwd)/build-$(PRODUCT)/build/recovery-system-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) menuconfig
 
 .PHONY: recovery-savedefconfig
 recovery-savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
-	cd build-$(PRODUCT)/build/recovery-system-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) savedefconfig
+	cd $(shell pwd)/build-$(PRODUCT)/build/recovery-system-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) savedefconfig
 
 .PHONY: multilib32-menuconfig
 multilib32-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
-	cd build-$(PRODUCT)/build/multilib32-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) menuconfig
+	cd $(shell pwd)/build-$(PRODUCT)/build/multilib32-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) menuconfig
 
 .PHONY: multilib32-savedefconfig
 multilib32-savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
-	cd build-$(PRODUCT)/build/multilib32-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) savedefconfig
+	cd $(shell pwd)/build-$(PRODUCT)/build/multilib32-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) savedefconfig
 
 # Create a fallback target (%) to forward all unknown target calls to the build Makefile.
 # This includes:

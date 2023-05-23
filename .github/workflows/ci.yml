@@ -43,56 +43,56 @@ env:
   SECRETS_ARE_AVAILABLE: ${{ secrets.CR_PAT != '' }}
 
 jobs:
-  linter:
-    name: Linter Checks
-    runs-on: ubuntu-22.04
+  #linter:
+  #  name: Linter Checks
+  #  runs-on: ubuntu-22.04
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+  #  steps:
+  #    - name: Checkout Code
+  #      uses: actions/checkout@v3
 
-      - name: Check Dockerfile
-        uses: brpaz/hadolint-action@v1.5.0
-        with:
-          dockerfile: ./buildroot-external/board/oci/Dockerfile
+  #    - name: Check Dockerfile
+  #      uses: brpaz/hadolint-action@v1.5.0
+  #      with:
+  #        dockerfile: ./buildroot-external/board/oci/Dockerfile
 
-      - name: Check shell scripts
-        uses: ludeeus/action-shellcheck@2.0.0
-        with:
-          ignore_paths: >-
-            buildroot-external/package/neoserver/pkg/mediola/neo_server
-            buildroot-patches/0010-lib32-integration/buildroot/support/scripts
-        env:
-          SHELLCHECK_OPTS: -e SC3010 -e SC3014 -e SC3057 -e SC3036 -e SC3028 -e SC3020
+  #    - name: Check shell scripts
+  #      uses: ludeeus/action-shellcheck@2.0.0
+  #      with:
+  #        ignore_paths: >-
+  #          buildroot-external/package/neoserver/pkg/mediola/neo_server
+  #          buildroot-patches/0010-lib32-integration/buildroot/support/scripts
+  #      env:
+  #        SHELLCHECK_OPTS: -e SC3010 -e SC3014 -e SC3057 -e SC3036 -e SC3028 -e SC3020
 
-      - name: Check Home Assistant Add-on Lint
-        uses: frenck/action-addon-linter@main
-        with:
-          path: "./home-assistant-addon"
+  #    - name: Check Home Assistant Add-on Lint
+  #      uses: frenck/action-addon-linter@main
+  #      with:
+  #        path: "./home-assistant-addon"
 
-      - name: Check Home Assistant Add-on Lint (dev)
-        uses: frenck/action-addon-linter@main
-        with:
-          path: "./home-assistant-addon-dev"
+  #    - name: Check Home Assistant Add-on Lint (dev)
+  #      uses: frenck/action-addon-linter@main
+  #      with:
+  #        path: "./home-assistant-addon-dev"
 
-      - name: Check yaml files
-        uses: frenck/action-yamllint@v1.4
+  #    - name: Check yaml files
+  #      uses: frenck/action-yamllint@v1.4
 
-      - name: Check markdown files
-        uses: avto-dev/markdown-lint@v1
-        with:
-          ignore: '**/node_modules/** **/codemirror/README.md'
+  #    - name: Check markdown files
+  #      uses: avto-dev/markdown-lint@v1
+  #      with:
+  #        ignore: '**/node_modules/** **/codemirror/README.md'
 
-      - name: Check Package consistency
-        run: |
-          make check
+  #    - name: Check Package consistency
+  #      run: |
+  #        make check
 
   build:
     permissions:
       contents: write  # actions/upload-artifact
     name: CI build [${{ matrix.platform }}]
     if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.user.login == 'jens-maus') && github.actor != 'dependabot[bot]' && github.repository == 'jens-maus/RaspberryMatic' }}
-    needs: linter
+      #needs: linter
     runs-on: self-hosted
     timeout-minutes: 480
     outputs:

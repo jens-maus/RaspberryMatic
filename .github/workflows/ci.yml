@@ -364,6 +364,7 @@ jobs:
       - name: Test container startup+stop
         if: github.event.inputs.skip_build == 'false'
         run: |
+          docker start ccu
           error=0
           n=1
           while ! docker exec ccu test -e /var/status/startupFinished ; do
@@ -387,3 +388,9 @@ jobs:
         with:
           path: debug_output.tgz
           name: RaspberryMatic-debug_output-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}.tgz
+
+      - name: Remove/Cleanup container environment
+        run: |
+          sudo -E ./scripts/install-docker.sh uninstall
+          docker volume rm ccu_data
+          docker image rm ghcr.io/jens-maus/raspberrymatic:latest

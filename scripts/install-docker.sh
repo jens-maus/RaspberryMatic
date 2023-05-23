@@ -68,7 +68,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.0"
+VERSION="1.1"
 LINE=
 
 error_exit() {
@@ -345,22 +345,24 @@ fi
 #                   CONTAINER NETWORK SETUP                 #
 #############################################################
 
-if docker network inspect "${CCU_NETWORK_NAME}" >/dev/null 2>&1; then
-  msg "Removing old macvlan docker network:"
-  docker network rm "${CCU_NETWORK_NAME}"
-fi
+# skip if NETWORK_NAME is none
+if [[ "${CCU_NETWORK_NAME}" != "none" ]]; then
+  if docker network inspect "${CCU_NETWORK_NAME}" >/dev/null 2>&1; then
+    msg "Removing old macvlan docker network:"
+    docker network rm "${CCU_NETWORK_NAME}"
+  fi
 
-msg "Creating macvlan docker network:"
-docker network create -d macvlan \
-  --opt parent="${CCU_NETWORK_INTERFACE}" \
-  --subnet "${CCU_NETWORK_SUBNET}" \
-  "${CCU_NETWORK_NAME}"
+  msg "Creating macvlan docker network:"
+  docker network create -d macvlan \
+    --opt parent="${CCU_NETWORK_INTERFACE}" \
+    --subnet "${CCU_NETWORK_SUBNET}" \
+    "${CCU_NETWORK_NAME}"
 
-# make network shim interface persistent
-if [[ ! -e /etc/network/if-up.d/99-ccu-shim-network ]]; then
-  msg "Setup local network bridge persistence..."
-  check_sudo
-  cat <<EOF >/etc/network/if-up.d/99-ccu-shim-network
+  # make network shim interface persistent
+  if [[ ! -e /etc/network/if-up.d/99-ccu-shim-network ]]; then
+    msg "Setup local network bridge persistence..."
+    check_sudo
+    cat <<EOF >/etc/network/if-up.d/99-ccu-shim-network
 #!/bin/sh
 if [ "\$IFACE" = "${CCU_NETWORK_INTERFACE}" ]; then
   if ! ip link show ccu-shim >/dev/null 2>&1; then
@@ -371,13 +373,14 @@ if [ "\$IFACE" = "${CCU_NETWORK_INTERFACE}" ]; then
   fi
 fi
 EOF
-  chmod a+rx /etc/network/if-up.d/99-ccu-shim-network
-fi
+    chmod a+rx /etc/network/if-up.d/99-ccu-shim-network
+  fi
 
-if ! ip link show ccu-shim >/dev/null 2>&1; then
-  msg "Setup local network bridge..."
-  check_sudo
-  IFACE="${CCU_NETWORK_INTERFACE}" /etc/network/if-up.d/99-ccu-shim-network
+  if ! ip link show ccu-shim >/dev/null 2>&1; then
+    msg "Setup local network bridge..."
+    check_sudo
+    IFACE="${CCU_NETWORK_INTERFACE}" /etc/network/if-up.d/99-ccu-shim-network
+  fi
 fi
 
 #############################################################
@@ -407,7 +410,9 @@ DOCKER_COMMAND="${DOCKER_COMMAND} --hostname ${CCU_CONTAINER_NAME} --name ${CCU_
 DOCKER_COMMAND="${DOCKER_COMMAND} --stop-timeout ${CCU_DOCKER_STOP_TIMEOUT} --restart always"
 
 # Add network
-DOCKER_COMMAND="${DOCKER_COMMAND} --network ccu --ip ${CCU_CONTAINER_IP}"
+if [[ "${CCU_NETWORK_NAME}" != "none" ]]; then
+  DOCKER_COMMAND="${DOCKER_COMMAND} --network ${CCU_NETWORK_NAME} --ip ${CCU_CONTAINER_IP}"
+fi
 
 # Add extra user options
 DOCKER_COMMAND="${DOCKER_COMMAND} ${CCU_DOCKER_RUN_OPTIONS}"

@@ -394,4 +394,5 @@ jobs:
         run: |
           sudo -E ./scripts/install-docker.sh uninstall
           docker volume rm ccu_data
-          docker image rm ghcr.io/jens-maus/raspberrymatic:latest
+          docker image ls -a
+          docker image rm ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}

@@ -68,7 +68,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.1"
+VERSION="1.2"
 LINE=
 
 error_exit() {
@@ -276,10 +276,10 @@ if command -v dpkg >/dev/null; then
       msg "NOTE: please ensure that your GPIO UART is free if you plan to connect your CCU adapter to it"
       msg "See step 5 and 6 at https://github.com/alexreinert/piVCCU/blob/master/docs/setup/raspberrypi.md"
     fi
-  elif ! pkg_installed "linux-headers-$(uname -r)"; then
+  elif ! pkg_installed "linux-headers-generic"; then
     msg "Generic Debian/Ubuntu platform - trying generic way to install kernel headers"
     check_sudo
-    apt install "linux-headers-$(uname -r)"
+    apt install "linux-headers-generic"
   fi
 
   # Install & Build kernel modules

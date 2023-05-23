@@ -26,7 +26,7 @@ if [[ -z "${CCU_CONTAINER_NAME}" ]]; then
   echo "ERROR: Must specify the hostname of the running RaspberryMatic add-on"
   exit 1
 fi
-CCU_CONTAINER_NAME=$(echo addon_${CCU_CONTAINER_NAME} | tr '-' '_')
+CCU_CONTAINER_NAME=$(echo addon_${CCU_CONTAINER_NAME} | sed 's/-rasp/_rasp/')
 
 read -r -p 'RaspberryMatic Add-on IP (e.g. 192.168.178.4): ' CCU_CONTAINER_IP </dev/tty
 if [[ -z "${CCU_CONTAINER_IP}" ]]; then

@@ -186,7 +186,7 @@ fi
 if [[ -z "${CCU_NETWORK_INTERFACE}" ]]; then
   # get default
   default=$(ip -o -f inet route |grep -e "^default" |awk '{print $5}')
-  read -r -e -p "Container Host Bridge Interface (e.g. eth0): " -i "${default}" CCU_NETWORK_INTERFACE
+  read -r -e -p "Container Host Bridge Interface (e.g. eth0): " -i "${default}" CCU_NETWORK_INTERFACE </dev/tty
 else
   msg "Used host<>container bridge interface: ${CCU_NETWORK_INTERFACE}"
 fi
@@ -196,13 +196,13 @@ if [[ -z "${CCU_NETWORK_SUBNET}" ]]; then
   CCU_NETWORK_SUBNET=$(ip -o -f inet addr show dev "${CCU_NETWORK_INTERFACE}" | awk '/scope global/ {print $4}')
 fi
 if [[ -z "${CCU_NETWORK_SUBNET}" ]]; then
-  read -r -p 'Container Host Bridge Subnet (e.g. 192.168.178.0/24): ' CCU_NETWORK_SUBNET
+  read -r -p 'Container Host Bridge Subnet (e.g. 192.168.178.0/24): ' CCU_NETWORK_SUBNET </dev/tty
 else
   msg "Used host<>container bridge subnet: ${CCU_NETWORK_SUBNET}"
 fi
 
 if [[ -z "${CCU_CONTAINER_IP}" ]]; then
-  read -r -p 'Container IP (e.g. 192.168.178.4): ' CCU_CONTAINER_IP
+  read -r -p 'Container IP (e.g. 192.168.178.4): ' CCU_CONTAINER_IP </dev/tty
   if [[ -z "${CCU_CONTAINER_IP}" ]]; then
     die "Must specify a free ip to assign to RaspberryMatic container"
   fi
@@ -211,7 +211,7 @@ else
 fi
 
 if [[ -z "${CCU_CONTAINER_IP_AUX}" ]]; then
-  read -r -p 'Container Host Aux-IP (e.g. 192.168.178.3): ' CCU_CONTAINER_IP_AUX
+  read -r -p 'Container Host Aux-IP (e.g. 192.168.178.3): ' CCU_CONTAINER_IP_AUX </dev/tty
   if [[ -z "${CCU_CONTAINER_IP_AUX}" ]]; then
     die "Must specify a free ip which can be assigned to container host"
   fi

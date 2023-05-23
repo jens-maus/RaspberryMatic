@@ -356,6 +356,8 @@ jobs:
           export CCU_DOCKER_PULL_REFRESH="false"
           export CCU_CONTAINER_IP="192.168.178.4"
           export CCU_CONTAINER_IP_AUX="192.168.178.2"
+          export CCU_NETWORK_INTERFACE="none"
+          export CCU_NETWORK_SUBNET="none"
           sudo mknod /dev/eq3loop c 239 0 # fake /dev/eq3loop
           sudo -E ./scripts/install-docker.sh
 

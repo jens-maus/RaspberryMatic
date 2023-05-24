@@ -154,9 +154,9 @@ jobs:
           mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.de
           mv -f release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en_nightly release/updatepkg/raspmatic_${{ matrix.platform }}/EULA.en
 
-      # - name: remote debug tmate session
-      #   uses: mxschmitt/action-tmate@v1
-      #   if: matrix.platform == 'ova'
+      - name: remote debug tmate session
+        uses: mxschmitt/action-tmate@v1
+        if: matrix.platform == 'ova'
 
       # major build step
       - name: Build

@@ -42,6 +42,9 @@
 # Network subnet
 : "${CCU_NETWORK_SUBNET:=""}"
 
+# Network gateway
+: "${CCU_NETWORK_GATEWAY:=""}"
+
 # Additional options for docker run
 : "${CCU_DOCKER_RUN_OPTIONS:=""}"
 
@@ -68,7 +71,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.3"
+VERSION="1.4"
 LINE=
 
 error_exit() {
@@ -122,6 +125,10 @@ uninstall() {
   if docker network inspect "${CCU_NETWORK_NAME}" >/dev/null 2>&1; then
     msg "Removing ${CCU_NETWORK_NAME} macvlan docker network"
     docker network rm "${CCU_NETWORK_NAME}"
+  fi
+  if ip link show ccu-shim >/dev/null 2>&1; then
+    msg "Removing ccu-shim network bridge"
+    ip link del ccu-shim
   fi
   if [[ -e /etc/network/if-up.d/99-ccu-shim-network ]]; then
     msg "Removing /etc/network/if-up.d/99-ccu-shim-network"
@@ -188,8 +195,8 @@ fi
 
 if [[ -z "${CCU_NETWORK_INTERFACE}" ]]; then
   # get default
-  default=$(ip -o -f inet route |grep -e "^default" |awk '{print $5}')
-  read -r -e -p "Container Host Bridge Interface (e.g. eth0): " -i "${default}" CCU_NETWORK_INTERFACE </dev/tty
+  CCU_NETWORK_INTERFACE=$(ip -o -f inet route |grep -e "^default" | awk '{print $5}')
+  read -r -e -p "Container Host Bridge Interface (e.g. eth0): " -i "${CCU_NETWORK_INTERFACE}" CCU_NETWORK_INTERFACE </dev/tty
 else
   msg "Used host<>container bridge interface: ${CCU_NETWORK_INTERFACE}"
 fi
@@ -197,15 +204,22 @@ fi
 # try to acquire subnet definition from interface routes first
 if [[ -z "${CCU_NETWORK_SUBNET}" ]]; then
   CCU_NETWORK_SUBNET=$(ip -o -f inet addr show dev "${CCU_NETWORK_INTERFACE}" | awk '/scope global/ {print $4}')
-fi
-if [[ -z "${CCU_NETWORK_SUBNET}" ]]; then
-  read -r -p 'Container Host Bridge Subnet (e.g. 192.168.178.0/24): ' CCU_NETWORK_SUBNET </dev/tty
+  read -r -e -p 'Container Host Bridge Subnet (e.g. 192.168.178.0/24): ' -i "${CCU_NETWORK_SUBNET}"  CCU_NETWORK_SUBNET </dev/tty
 else
   msg "Used host<>container bridge subnet: ${CCU_NETWORK_SUBNET}"
 fi
 
+# try to acquire subnet default gateway
+if [[ -z "${CCU_NETWORK_GATEWAY}" ]]; then
+  CCU_NETWORK_GATEWAY=$(ip route list dev "${CCU_NETWORK_INTERFACE}" | awk ' /^default/ {print $3}')
+  read -r -e -p 'Container Host Bridge Gateway (e.g. 192.168.178.1): ' -i "${CCU_NETWORK_GATEWAY}"  CCU_NETWORK_GATEWAY </dev/tty
+else
+  msg "Used host<>container bridge gateway: ${CCU_NETWORK_GATEWAY}"
+fi
+
 if [[ -z "${CCU_CONTAINER_IP}" ]]; then
-  read -r -p 'Container IP (e.g. 192.168.178.4): ' CCU_CONTAINER_IP </dev/tty
+  CCU_CONTAINER_IP=$(echo "${CCU_NETWORK_GATEWAY}" | cut -d"." -f1-3)
+  read -r -e -p 'Container IP (e.g. 192.168.178.4): ' -i "${CCU_CONTAINER_IP}." CCU_CONTAINER_IP </dev/tty
   if [[ -z "${CCU_CONTAINER_IP}" ]]; then
     die "Must specify a free ip to assign to RaspberryMatic container"
   fi
@@ -214,7 +228,8 @@ else
 fi
 
 if [[ -z "${CCU_CONTAINER_IP_AUX}" ]]; then
-  read -r -p 'Container Host Aux-IP (e.g. 192.168.178.3): ' CCU_CONTAINER_IP_AUX </dev/tty
+  CCU_CONTAINER_IP_AUX=$(echo "${CCU_CONTAINER_IP}" | cut -d"." -f1-3)
+  read -r -e -p 'Container Host Aux-IP (e.g. 192.168.178.3): ' -i "${CCU_CONTAINER_IP_AUX}." CCU_CONTAINER_IP_AUX </dev/tty
   if [[ -z "${CCU_CONTAINER_IP_AUX}" ]]; then
     die "Must specify a free ip which can be assigned to container host"
   fi
@@ -359,31 +374,29 @@ if [[ "${CCU_NETWORK_NAME}" != "none" ]]; then
   docker network create -d macvlan \
     --opt parent="${CCU_NETWORK_INTERFACE}" \
     --subnet "${CCU_NETWORK_SUBNET}" \
+    --gateway "${CCU_NETWORK_GATEWAY}" \
     "${CCU_NETWORK_NAME}"
 
   # make network shim interface persistent
-  if [[ ! -e /etc/network/if-up.d/99-ccu-shim-network ]]; then
-    msg "Setup local network bridge persistence..."
-    check_sudo
-    cat <<EOF >/etc/network/if-up.d/99-ccu-shim-network
+  msg "Setup local network bridge persistence..."
+  check_sudo
+  cat <<EOF >/etc/network/if-up.d/99-ccu-shim-network
 #!/bin/sh
 if [ "\$IFACE" = "${CCU_NETWORK_INTERFACE}" ]; then
-  if ! ip link show ccu-shim >/dev/null 2>&1; then
-    ip link add ccu-shim link ${CCU_NETWORK_INTERFACE} type macvlan mode bridge
-    ip addr add ${CCU_CONTAINER_IP_AUX} dev ccu-shim
-    ip link set ccu-shim up
-    ip route add ${CCU_CONTAINER_IP} dev ccu-shim protocol static
+  if ip link show ccu-shim >/dev/null 2>&1; then
+    ip link del ccu-shim
   fi
+  ip link add ccu-shim link ${CCU_NETWORK_INTERFACE} type macvlan mode bridge
+  ip addr add ${CCU_CONTAINER_IP_AUX} dev ccu-shim
+  ip link set ccu-shim up
+  ip route add ${CCU_CONTAINER_IP} dev ccu-shim protocol static
 fi
 EOF
-    chmod a+rx /etc/network/if-up.d/99-ccu-shim-network
-  fi
+  chmod a+rx /etc/network/if-up.d/99-ccu-shim-network
 
-  if ! ip link show ccu-shim >/dev/null 2>&1; then
-    msg "Setup local network bridge..."
-    check_sudo
-    IFACE="${CCU_NETWORK_INTERFACE}" /etc/network/if-up.d/99-ccu-shim-network
-  fi
+  msg "Setup local ccu-shim network bridge..."
+  check_sudo
+  IFACE="${CCU_NETWORK_INTERFACE}" /etc/network/if-up.d/99-ccu-shim-network
 fi
 
 #############################################################

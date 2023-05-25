@@ -71,7 +71,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.4"
+VERSION="1.5"
 LINE=
 
 error_exit() {
@@ -119,7 +119,7 @@ uninstall() {
   check_sudo
   if docker container inspect "${CCU_CONTAINER_NAME}" >/dev/null 2>&1; then
     msg "Removing ${CCU_CONTAINER_NAME} container (not user data)"
-    docker stop "${CCU_CONTAINER_NAME}" >/dev/null || true
+    docker stop --time 120 "${CCU_CONTAINER_NAME}" >/dev/null || true
     docker rm "${CCU_CONTAINER_NAME}" >/dev/null || true
   fi
   if docker network inspect "${CCU_NETWORK_NAME}" >/dev/null 2>&1; then
@@ -350,7 +350,7 @@ fi
 
 if docker container inspect "${CCU_CONTAINER_NAME}" >/dev/null 2>&1; then
   msg "Removing old container (not user data)"
-  docker stop "${CCU_CONTAINER_NAME}" >/dev/null || true
+  docker stop --time 120 "${CCU_CONTAINER_NAME}" >/dev/null || true
   docker rm "${CCU_CONTAINER_NAME}" >/dev/null || true
 fi
 
@@ -446,7 +446,7 @@ if ${DOCKER_COMMAND} >/dev/null; then
   msg  "- Start container with \"docker start ccu\""
   msg  "- See logs with \"docker logs ${CCU_CONTAINER_NAME}\""
   msg  "- Connect to http://${CCU_CONTAINER_IP}/"
-  msg  "- Stop container with \"docker stop ccu\""
+  msg  "- Stop container with \"docker stop --time 120 ccu\""
   msg  "- Uninstall container environment with \"${0} uninstall\""
   exit 0
 else

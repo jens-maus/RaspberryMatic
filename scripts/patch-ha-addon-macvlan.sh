@@ -56,12 +56,8 @@ fi
 echo "Connecting add-on to macvlan network"
 docker network connect --ip "${CCU_CONTAINER_IP}" ccu "${CCU_CONTAINER_NAME}"
 
-sleep 2
-
 echo "Stopping add-on (${CCU_CONTAINER_NAME})"
-docker stop "${CCU_CONTAINER_NAME}"
-
-sleep 2
+docker stop --time 120 "${CCU_CONTAINER_NAME}"
 
 echo "Starting add-on (${CCU_CONTAINER_NAME})"
 docker start "${CCU_CONTAINER_NAME}"

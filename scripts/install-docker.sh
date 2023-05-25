@@ -193,48 +193,50 @@ if [[ "${1-}" == "uninstall" ]]; then
   exit 0
 fi
 
-if [[ -z "${CCU_NETWORK_INTERFACE}" ]]; then
-  # get default
-  CCU_NETWORK_INTERFACE=$(ip -o -f inet route |grep -e "^default" | awk '{print $5}')
-  read -r -e -p "Container Host Bridge Interface (e.g. eth0): " -i "${CCU_NETWORK_INTERFACE}" CCU_NETWORK_INTERFACE </dev/tty
-else
-  msg "Used host<>container bridge interface: ${CCU_NETWORK_INTERFACE}"
-fi
+if [[ "${CCU_NETWORK_NAME}" != "none" ]]; then
+  if [[ -z "${CCU_NETWORK_INTERFACE}" ]]; then
+    # get default
+    CCU_NETWORK_INTERFACE=$(ip -o -f inet route |grep -e "^default" | awk '{print $5}')
+    read -r -e -p "Container Host Bridge Interface (e.g. eth0): " -i "${CCU_NETWORK_INTERFACE}" CCU_NETWORK_INTERFACE </dev/tty
+  else
+    msg "Used host<>container bridge interface: ${CCU_NETWORK_INTERFACE}"
+  fi
 
-# try to acquire subnet definition from interface routes first
-if [[ -z "${CCU_NETWORK_SUBNET}" ]]; then
-  CCU_NETWORK_SUBNET=$(ip -o -f inet addr show dev "${CCU_NETWORK_INTERFACE}" | awk '/scope global/ {print $4}')
-  read -r -e -p 'Container Host Bridge Subnet (e.g. 192.168.178.0/24): ' -i "${CCU_NETWORK_SUBNET}"  CCU_NETWORK_SUBNET </dev/tty
-else
-  msg "Used host<>container bridge subnet: ${CCU_NETWORK_SUBNET}"
-fi
+  # try to acquire subnet definition from interface routes first
+  if [[ -z "${CCU_NETWORK_SUBNET}" ]]; then
+    CCU_NETWORK_SUBNET=$(ip -o -f inet addr show dev "${CCU_NETWORK_INTERFACE}" | awk '/scope global/ {print $4}')
+    read -r -e -p 'Container Host Bridge Subnet (e.g. 192.168.178.0/24): ' -i "${CCU_NETWORK_SUBNET}"  CCU_NETWORK_SUBNET </dev/tty
+  else
+    msg "Used host<>container bridge subnet: ${CCU_NETWORK_SUBNET}"
+  fi
 
-# try to acquire subnet default gateway
-if [[ -z "${CCU_NETWORK_GATEWAY}" ]]; then
-  CCU_NETWORK_GATEWAY=$(ip route list dev "${CCU_NETWORK_INTERFACE}" | awk ' /^default/ {print $3}')
-  read -r -e -p 'Container Host Bridge Gateway (e.g. 192.168.178.1): ' -i "${CCU_NETWORK_GATEWAY}"  CCU_NETWORK_GATEWAY </dev/tty
-else
-  msg "Used host<>container bridge gateway: ${CCU_NETWORK_GATEWAY}"
-fi
+  # try to acquire subnet default gateway
+  if [[ -z "${CCU_NETWORK_GATEWAY}" ]]; then
+    CCU_NETWORK_GATEWAY=$(ip route list dev "${CCU_NETWORK_INTERFACE}" | awk ' /^default/ {print $3}')
+    read -r -e -p 'Container Host Bridge Gateway (e.g. 192.168.178.1): ' -i "${CCU_NETWORK_GATEWAY}"  CCU_NETWORK_GATEWAY </dev/tty
+  else
+    msg "Used host<>container bridge gateway: ${CCU_NETWORK_GATEWAY}"
+  fi
 
-if [[ -z "${CCU_CONTAINER_IP}" ]]; then
-  CCU_CONTAINER_IP=$(echo "${CCU_NETWORK_GATEWAY}" | cut -d"." -f1-3)
-  read -r -e -p 'Container IP (e.g. 192.168.178.4): ' -i "${CCU_CONTAINER_IP}." CCU_CONTAINER_IP </dev/tty
   if [[ -z "${CCU_CONTAINER_IP}" ]]; then
-    die "Must specify a free ip to assign to RaspberryMatic container"
+    CCU_CONTAINER_IP=$(echo "${CCU_NETWORK_GATEWAY}" | cut -d"." -f1-3)
+    read -r -e -p 'Container IP (e.g. 192.168.178.4): ' -i "${CCU_CONTAINER_IP}." CCU_CONTAINER_IP </dev/tty
+    if [[ -z "${CCU_CONTAINER_IP}" ]]; then
+      die "Must specify a free ip to assign to RaspberryMatic container"
+    fi
+  else
+    msg "Used RaspberryMatic container ip: ${CCU_CONTAINER_IP}"
   fi
-else
-  msg "Used RaspberryMatic container ip: ${CCU_CONTAINER_IP}"
-fi
 
-if [[ -z "${CCU_CONTAINER_IP_AUX}" ]]; then
-  CCU_CONTAINER_IP_AUX=$(echo "${CCU_CONTAINER_IP}" | cut -d"." -f1-3)
-  read -r -e -p 'Container Host Aux-IP (e.g. 192.168.178.3): ' -i "${CCU_CONTAINER_IP_AUX}." CCU_CONTAINER_IP_AUX </dev/tty
   if [[ -z "${CCU_CONTAINER_IP_AUX}" ]]; then
-    die "Must specify a free ip which can be assigned to container host"
+    CCU_CONTAINER_IP_AUX=$(echo "${CCU_CONTAINER_IP}" | cut -d"." -f1-3)
+    read -r -e -p 'Container Host Aux-IP (e.g. 192.168.178.3): ' -i "${CCU_CONTAINER_IP_AUX}." CCU_CONTAINER_IP_AUX </dev/tty
+    if [[ -z "${CCU_CONTAINER_IP_AUX}" ]]; then
+      die "Must specify a free ip which can be assigned to container host"
+    fi
+  else
+    msg "Used container host auxiliary ip: ${CCU_CONTAINER_IP_AUX}"
   fi
-else
-  msg "Used container host auxiliary ip: ${CCU_CONTAINER_IP_AUX}"
 fi
 
 #############################################################

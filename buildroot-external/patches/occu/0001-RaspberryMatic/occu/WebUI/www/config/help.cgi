@@ -57,6 +57,9 @@ proc action_put_page {} {
   # get all variables from /VERSION into ver array
   loadVarsFromShellFile /VERSION ver
 
+  # get all variables from /etc/config/netconfig into net array
+  loadVarsFromShellFile /etc/config/netconfig net
+
   set SERIAL ""
   catch {set SERIAL $hm(HM_HMIP_SERIAL)}
   if {$SERIAL == ""} {
@@ -92,6 +95,8 @@ proc action_put_page {} {
   execCmd UPTIME {exec awk {{s=int($1);d=int(s/86400);h=int(s % 86400/3600);m=int(s % 3600 / 60); printf "%d d, %d h %d min", d, h, m}} /proc/uptime}
   execCmd NTPOFFSET {exec /usr/bin/chronyc -n tracking | grep "Last offset" | awk {{ printf("%.3f ms", $4*1000) }}}
   execCmd NTPSERVER {exec /usr/bin/chronyc -n tracking | grep "Reference ID" | awk -F "\[\(\)\]" {{ print $2 }}}
+  execCmd MAINETH {exec /sbin/ip -4 route get 1 | head -1 | awk {{ print $5 }}}
+  execCmd MAINHOSTNAME {exec /bin/hostname}
   catch {set OSTYPE [string trim [read_var /etc/os-release PRETTY_NAME] '"']}
   execCmd OSKERNEL "exec uname -s -r -m"
   set TCLVER [info patchlevel]
@@ -209,6 +214,10 @@ proc action_put_page {} {
           putsVar "Memory / Swap Utilization" "$MEMUSE / $SWAPUSE"
           putsVar "NTP Offset (Server)" "$NTPOFFSET ($NTPSERVER)"
           putsVar "rootfs / userfs Free Space" "$ROOTFSFREE / $USERFSFREE"
+          putsVar "IP address" "$net(CURRENT_IP) ($MAINETH, $net(MODE))"
+          putsVar "Gateway / Netmask" "$net(CURRENT_GATEWAY) / $net(CURRENT_NETMASK)"
+          putsVar "Nameservers" "$net(CURRENT_NAMESERVER1), $net(CURRENT_NAMESERVER2)"
+          putsVar "Hostname" "$MAINHOSTNAME"
         puts "</div>"
         puts "<h1 class='helpTitle'><u>homematicIP-RF (HmIP) Info</u></h1>"
         puts "<div style='display: table; width: 100%;'>"

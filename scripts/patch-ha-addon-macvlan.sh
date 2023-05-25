@@ -33,9 +33,16 @@ if [[ -z "${CCU_CONTAINER_IP}" ]]; then
   exit 1
 fi
 
+# check if add-on is running
+if ! docker inspect "${CCU_CONTAINER_NAME}" >/dev/null 2>&1; then
+  echo "ERROR: RaspberryMatic isn't running or hostname incorrect."
+  exit 1
+fi
+
 # remove old macvlan
 if docker network inspect ccu >/dev/null 2>&1; then
   echo "Removing docker macvlan ccu network bridge"
+  docker network disconnect ccu "${CCU_CONTAINER_NAME}"
   docker network rm ccu
 fi
 
@@ -46,12 +53,6 @@ docker network create -d macvlan \
                       --subnet "${CCU_NETWORK_SUBNET}" \
                       --gateway "${CCU_NETWORK_GATEWAY}" \
                       ccu
-
-# check if add-on is running
-if ! docker inspect "${CCU_CONTAINER_NAME}" >/dev/null 2>&1; then
-  echo "ERROR: RaspberryMatic isn't running or hostname incorrect."
-  exit 1
-fi
 
 echo "Connecting add-on to macvlan network"
 docker network connect --ip "${CCU_CONTAINER_IP}" ccu "${CCU_CONTAINER_NAME}"

@@ -71,7 +71,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.5"
+VERSION="1.6"
 LINE=
 
 error_exit() {
@@ -251,25 +251,25 @@ if command -v dpkg >/dev/null; then
     msg "Adding piVCCU apt repository"
     check_sudo
     if ! pkg_installed wget; then
-      apt install wget
+      apt install -y wget
     fi
     if ! pkg_installed ca-certificates; then
-      apt install ca-certificates
+      apt install -y ca-certificates
     fi
     if ! pkg_installed build-essential; then
-      apt install build-essential
+      apt install -y build-essential
     fi
     if ! pkg_installed bison; then
-      apt install bison
+      apt install -y bison
     fi
     if ! pkg_installed flex; then
-      apt install flex
+      apt install -y flex
     fi
     if ! pkg_installed libssl-dev; then
-      apt install libssl-dev
+      apt install -y libssl-dev
     fi
     if ! pkg_installed gpg; then
-      apt install gpg
+      apt install -y gpg
     fi
 
     # use gpg to dearmor the pivccu public key
@@ -282,16 +282,16 @@ if command -v dpkg >/dev/null; then
   if command -v armbian-config >/dev/null; then
     msg "Detected Armbian - install kernel sources and device tree"
     check_sudo
-    apt install "$(dpkg --get-selections | grep 'linux-image-' | grep '\sinstall' | sed -e 's/linux-image-\([a-z0-9-]\+\).*/linux-headers-\1/')"
+    apt install -y "$(dpkg --get-selections | grep 'linux-image-' | grep '\sinstall' | sed -e 's/linux-image-\([a-z0-9-]\+\).*/linux-headers-\1/')"
     if ! pkg_installed pivccu-devicetree-armbian; then
       check_sudo
-      apt install pivccu-devicetree-armbian
+      apt install -y pivccu-devicetree-armbian
     fi
   elif grep -q Raspberry /proc/cpuinfo; then
     if ! pkg_installed pivccu-modules-raspberrypi; then
       msg "Detected RaspberryPi - install kernel sources and raspberry modules"
       check_sudo
-      apt install pivccu-modules-raspberrypi
+      apt install -y pivccu-modules-raspberrypi
       echo
       msg "NOTE: please ensure that your GPIO UART is free if you plan to connect your CCU adapter to it"
       msg "See step 5 and 6 at https://github.com/alexreinert/piVCCU/blob/master/docs/setup/raspberrypi.md"
@@ -299,14 +299,14 @@ if command -v dpkg >/dev/null; then
   elif ! pkg_installed "linux-headers-generic"; then
     msg "Generic Debian/Ubuntu platform - trying generic way to install kernel headers"
     check_sudo
-    apt install "linux-headers-generic"
+    apt install -y "linux-headers-generic"
   fi
 
   # Install & Build kernel modules
   if ! pkg_installed pivccu-modules-dkms; then
     msg "Installing and building kernel modules..."
     check_sudo
-    apt install pivccu-modules-dkms
+    apt install -y pivccu-modules-dkms
     service pivccu-dkms start
   fi
 fi
@@ -316,7 +316,7 @@ if [[ ! -c /dev/eq3loop ]]; then
   msg "Loading eq3_char_loop module"
   check_sudo
   if ! modprobe eq3_char_loop; then
-    apt install --reinstall pivccu-modules-dkms
+    apt install -y --reinstall pivccu-modules-dkms
     modprobe eq3_char_loop
   fi
 fi

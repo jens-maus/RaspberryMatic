@@ -5,7 +5,7 @@
 # to be able to connect a HmIP-HAP/HmIPW-DRAP.
 #
 
-echo "RaspberryMatic HA-Addon macvlan patch script"
+echo "RaspberryMatic HA-Addon macvlan patch script v1.0"
 echo "Copyright (c) 2023 Jens Maus <mail@jens-maus.de>"
 echo
 

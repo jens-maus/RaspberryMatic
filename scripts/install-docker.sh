@@ -71,7 +71,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.7"
+VERSION="1.8"
 LINE=
 
 error_exit() {
@@ -242,7 +242,7 @@ if [[ "${CCU_NETWORK_NAME}" != "none" ]]; then
   if [[ "${CCU_CONTAINER_IP_AUX}" == "${CCU_CONTAINER_IP}" ]]; then
     die "You have to use a different IP address for the container and aux-ip."
   fi
-  HOST_IP=$(ip -o -f inet addr show dev ens18 | awk -F'[ /]+' '/inet / {print $4}')
+  HOST_IP=$(ip -o -f inet addr show dev "${CCU_NETWORK_INTERFACE}" | awk -F'[ /]+' '/inet / {print $4}')
   if [[ "${CCU_CONTAINER_IP_AUX}" == "${HOST_IP}" ]]; then
     die "You have to use a different IP address for the aux-ip and not the same like your docker host is using."
   fi

@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-TAILSCALE_VERSION = 1.40.1
+TAILSCALE_VERSION = 1.42.0
 TAILSCALE_SITE = https://pkgs.tailscale.com/stable
 ifeq ($(call qstrip,$(BR2_ARCH)),arm)
 TAILSCALE_SOURCE = tailscale_$(TAILSCALE_VERSION)_arm.tgz

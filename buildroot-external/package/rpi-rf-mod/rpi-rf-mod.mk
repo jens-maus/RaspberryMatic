@@ -11,7 +11,7 @@
 #
 ################################################################################
 
-RPI_RF_MOD_VERSION = 1.10.0
+RPI_RF_MOD_VERSION = 1.11.0
 RPI_RF_MOD_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/rpi-rf-mod
 RPI_RF_MOD_SITE_METHOD = local
 RPI_RF_MOD_LICENSE = Apache-2.0
@@ -34,6 +34,9 @@ else ifeq ($(BR2_PACKAGE_RPI_RF_MOD_DTS_ODROID_N2),y)
 else ifeq ($(BR2_PACKAGE_RPI_RF_MOD_DTS_ODROID_C2),y)
   # Odroid C2 DTS file
   RPI_RF_MOD_DTS_FILE = rpi-rf-mod-odroid-c2
+else ifeq ($(BR2_PACKAGE_RPI_RF_MOD_DTS_YELLOW),y)
+  # HomeAssistant Yellow DTS file
+  RPI_RF_MOD_DTS_FILE = rpi-rf-mod-yellow
 endif
 
 define RPI_RF_MOD_BUILD_CMDS

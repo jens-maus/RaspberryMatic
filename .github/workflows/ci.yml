@@ -85,6 +85,7 @@ jobs:
 
       - name: Check Package consistency
         run: |
+          pip install flake8
           make check
 
   build:

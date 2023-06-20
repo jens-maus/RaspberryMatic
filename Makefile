@@ -36,7 +36,7 @@ build-$(PRODUCT): | buildroot-$(BUILDROOT_VERSION) download
 	mkdir build-$(PRODUCT)
 
 download: buildroot-$(BUILDROOT_VERSION)
-	mkdir download
+	test -e download || mkdir download
 
 build-$(PRODUCT)/.config: | build-$(PRODUCT)
 	@echo "[config $@]"

@@ -148,7 +148,7 @@ reset_rf_hardware() {
     # check if this is a raw-uart device and if so we use
     # the reset_radio_module sysfs node for the module reset
     if [[ -e "/sys/class/raw-uart/${dev}/reset_radio_module" ]]; then
-      echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module"
+      echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module" 2>/dev/null
     fi
 
   done

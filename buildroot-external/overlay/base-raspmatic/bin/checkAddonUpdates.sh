@@ -1,6 +1,9 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC3010
 
+# exit in HMLGW mode immediately
+[[ -e /usr/local/HMLGW ]] && exit 0
+
 jsonfile=/tmp/addon_updates.json
 if [[ -n "$(ls -A /etc/config/rc.d)" ]]; then
   echo "[" > ${jsonfile}

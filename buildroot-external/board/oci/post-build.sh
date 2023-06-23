@@ -14,7 +14,7 @@ echo "PLATFORM=oci" >>"${TARGET_DIR}/VERSION"
 # remove unnecessary stuff from TARGET_DIR
 rm -f "${TARGET_DIR}/etc/init.d/S01InitZRAMSwap"
 rm -f "${TARGET_DIR}/etc/init.d/S01USBGadgetMode"
-rm -f "${TARGET_DIR}/etc/init.d/S03InitURandom"
+rm -f "${TARGET_DIR}/etc/init.d/S03seedrng"
 rm -f "${TARGET_DIR}/etc/init.d/S40bluetooth"
 #rm -f "${TARGET_DIR}/etc/init.d/S40network"
 rm -f "${TARGET_DIR}/etc/init.d/S46chrony"

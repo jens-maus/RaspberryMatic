@@ -56,7 +56,7 @@ static bool g_inBootloader = false;
 
 //const char *g_productString = "01,eQ3-HM-LGW,1.1.4,ABC0123456";
 
-#define VERSION "0.0.2"
+#define VERSION "1.0.0"
 static char *g_address=NULL;
 static const char *g_productString = "01,Revilo-HM-LGW," VERSION ",%s\r\n";
 
@@ -845,7 +845,7 @@ int main(int argc, char **argv)
                 break;
 			case 'V':
 				printf("hmlangw " VERSION "\n");
-				printf("Copyright (c) 2015 Oliver Kastl\n\n");
+				printf("Copyright (c) 2015-2023 Oliver Kastl, Jens Maus\n\n");
 				exit(EXIT_SUCCESS);
 			case 'h':
 			case ':':

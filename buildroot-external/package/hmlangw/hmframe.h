@@ -1,6 +1,6 @@
 /* HM-LGW emulation for HM-MOD-RPI
  *
- * Copyright (c) 2015 Oliver Kastl
+ * Copyright (c) 2015-2023 Oliver Kastl, Jens Maus
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -23,6 +23,6 @@
 
 int readBidcosFrame( int fd, char *buffer, int bufsize );
 int sendEnterBootloader( int fd );
-int sendBootloaderReply( int fd );
+/* int sendBootloaderReply( int fd ); */
 int writeall( int fd, const void *buffer, int len );
 bool isBootloaderReply( const void *buffer, int len );

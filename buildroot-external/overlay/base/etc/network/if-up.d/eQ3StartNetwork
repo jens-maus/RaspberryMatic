@@ -9,8 +9,7 @@
 
 # signal that we are about to setup the network
 # connection using a slow blinking blue LED
-if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
-   [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
+if [[ -e /sys/class/leds/rpi_rf_mod:green/trigger ]]; then
   echo none >/sys/class/leds/rpi_rf_mod:green/trigger
   echo none >/sys/class/leds/rpi_rf_mod:red/trigger
   echo timer >/sys/class/leds/rpi_rf_mod:blue/trigger

@@ -8,6 +8,11 @@ init_system() {
 
   CFG_TEMPLATE_DIR=/etc/config_templates
 
+  # check if we have booted in LAN gateway mode
+  if [[ -e /usr/local/HMLGW ]]; then
+    HM_MODE="HM-LGW"
+  fi
+
   # general umask so that we will have rwrw--
   umask 0002
 
@@ -118,8 +123,8 @@ start() {
   # make sure the system is properly initialized
   init_system
 
-  # start hss_led if it exists
-  if [[ -x /bin/hss_led ]]; then
+  # start hss_led if it exists and we are not in HMLGW mode
+  if [[ "${HM_MODE}" != "HM-LGW" ]] && [[ -x /bin/hss_led ]]; then
     start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
   fi
 

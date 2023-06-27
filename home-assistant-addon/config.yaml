@@ -1,6 +1,6 @@
 ---
 name: RaspberryMatic CCU
-version: 3.69.6.20230407
+version: 3.69.7.20230626
 slug: raspberrymatic
 image: ghcr.io/jens-maus/raspberrymatic
 arch:
@@ -9,7 +9,6 @@ arch:
   - amd64
 description: HomeMatic/homematicIP CCU central based on RaspberryMatic
 url: https://github.com/jens-maus/RaspberryMatic/
-watchdog: tcp://[HOST]:[PORT:80]
 ingress: true
 ingress_stream: true
 panel_title: RaspberryMatic

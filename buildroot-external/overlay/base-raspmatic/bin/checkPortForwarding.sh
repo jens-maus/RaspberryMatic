@@ -1,8 +1,8 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC2169,SC3010,SC3001
 #
-# Port Forwarding check script
-# Copyright (c) 2022 Jens Maus <mail@jens-maus.de>
+# Port Forwarding check script v1.1
+# Copyright (c) 2022-2023 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,6 +27,8 @@
 # 1 = Identified port forwarding
 #
 
+# exit in HMLGW mode immediately
+[[ -e /usr/local/HMLGW ]] && exit 0
 
 # get public ipv4 using different public services
 PUBIP_URIS="ifconfig.me icanhazip.com ipecho.net/plain ifconfig.co"

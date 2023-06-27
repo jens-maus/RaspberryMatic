@@ -85,6 +85,7 @@ jobs:
 
       - name: Check Package consistency
         run: |
+          pip install flake8
           make check
 
   build:
@@ -110,14 +111,14 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          if ! dpkg-query -l wget bc cpio rsync zip python >/dev/null 2>&1; then
+          if ! dpkg-query -l wget bc cpio rsync zip python3 file >/dev/null 2>&1; then
             apt update
-            apt install -y --no-install-recommends wget bc cpio rsync zip python
+            apt install -y --no-install-recommends wget bc cpio rsync zip python3 file
           fi
           if ! getent group | grep -q ^builder:; then groupadd -g 48 builder; fi
           if ! getent passwd | grep -q ^builder:; then useradd -m -u 1003 -g 48 -G sudo builder; fi
           if ! grep -q ^builder; then echo "builder ALL=(ALL:ALL) NOPASSWD: ALL" >>/etc/sudoers; fi
-          chown -R builder .
+          chown -R builder:builder /home/builder
 
       - name: Setup Environment
         id: env
@@ -162,8 +163,7 @@ jobs:
       - name: Build
         timeout-minutes: 480
         run: |
-          make distclean
-          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} raspmatic_${{ matrix.platform }}-release
+          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} distclean raspmatic_${{ matrix.platform }}-release
 
       # cleanup
       - name: Cleanup
@@ -257,13 +257,13 @@ jobs:
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2.5.0
+        uses: docker/setup-buildx-action@v2.7.0
         with:
           install: true
 
       - name: Login to GitHub Container Registry
         if: env.SECRETS_ARE_AVAILABLE == 'true'
-        uses: docker/login-action@v2.1.0
+        uses: docker/login-action@v2.2.0
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -271,7 +271,7 @@ jobs:
 
       - name: Build and push container image
         if: github.event.inputs.skip_build == 'false'
-        uses: docker/build-push-action@v4.0.0
+        uses: docker/build-push-action@v4.1.1
         id: docker_build
         with:
           context: oci_build
@@ -310,7 +310,7 @@ jobs:
 
       # Testing
       - name: Build and load container image for test
-        uses: docker/build-push-action@v4.0.0
+        uses: docker/build-push-action@v4.1.1
         id: docker_build_test
         with:
           context: oci_build
@@ -352,15 +352,21 @@ jobs:
           docker version -f '{{.Client.Experimental}}'
           docker version -f '{{.Server.Experimental}}'
 
-      - name: Test container deploy
+      - name: Test container deploy (install-docker.sh)
         run: |
           export CCU_DOCKER_PULL_REFRESH="false"
+          export CCU_CONTAINER_IP="192.168.178.4"
+          export CCU_CONTAINER_IP_AUX="192.168.178.2"
+          export CCU_NETWORK_NAME="none"
+          export CCU_NETWORK_INTERFACE="none"
+          export CCU_NETWORK_SUBNET="none"
           sudo mknod /dev/eq3loop c 239 0 # fake /dev/eq3loop
-          sudo -E ./buildroot-external/board/oci/deploy.sh -f
+          sudo -E ./scripts/install-docker.sh
 
       - name: Test container startup+stop
         if: github.event.inputs.skip_build == 'false'
         run: |
+          docker start ccu
           error=0
           n=1
           while ! docker exec ccu test -e /var/status/startupFinished ; do
@@ -384,3 +390,10 @@ jobs:
         with:
           path: debug_output.tgz
           name: RaspberryMatic-debug_output-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}.tgz
+
+      - name: Remove/Cleanup container environment
+        run: |
+          sudo -E ./scripts/install-docker.sh uninstall
+          docker volume rm ccu_data
+          docker image ls -a
+          docker image rm ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}

@@ -1,5 +1,5 @@
 ---
-name: Bug Report
+name: 🐛 Bug Report
 description: Report a bug/issue related to RaspberryMatic
 labels: ":bug: bug-report"
 body:

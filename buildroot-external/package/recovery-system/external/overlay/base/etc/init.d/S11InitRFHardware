@@ -8,7 +8,6 @@
 identify_rf_hardware() {
 
   # setup default HM RF variables
-  HM_MODE="NORMAL"
   HM_HMRF_DEV=""
   HM_HMRF_DEVNODE=""
   HM_HMRF_DEVTYPE=""
@@ -68,11 +67,6 @@ identify_rf_hardware() {
     echo -n "."
   fi
 
-  # check if we should boot in LAN gateway mode
-  if [[ -e /usr/local/HMLGW ]]; then
-    HM_MODE="HM-LGW"
-  fi
-
   # strip leading/trailing spaces from RF_DEVNODES
   RF_DEVNODES=$(echo "${RF_DEVNODES}" | xargs)
 }
@@ -89,7 +83,7 @@ reset_rf_hardware() {
     # check if this is a raw-uart device and if so we use
     # the reset_radio_module sysfs node for the module reset
     if [[ -e "/sys/class/raw-uart/${dev}/reset_radio_module" ]]; then
-      echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module"
+      echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module" 2>/dev/null
     fi
 
   done

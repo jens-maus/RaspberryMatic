@@ -1,7 +1,7 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 #
-# firmware update check script v1.2
+# firmware update check script v1.3
 # Copyright (c) 2022-2023 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -85,6 +85,14 @@ LATEST_URL="https://api.github.com/repos/jens-maus/RaspberryMatic/releases/lates
 SNAPSHOT_URL="https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/snapshots"
 TARGET_URL="https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/${TARGET_VERSION}"
 
+# if oci platform found we need to reuse the PRODUCT information instead
+if [[ "${PLATFORM}" == "oci" ]]; then
+  PLATFORM=$(echo "${PRODUCT}" | sed 's/raspmatic_//')
+  EXTENSION="tgz"
+else
+  EXTENSION="zip"
+fi
+
 # output currently installed version
 echo "Installed version: ${VERSION} (${PLATFORM})"
 
@@ -110,7 +118,7 @@ ret=4
 if [[ -s "${RELEASES_JSON}" ]]; then
 
   # parse json
-  AVAILABLE_VERSIONS=$(/usr/bin/jq -r ".assets[] | select(.browser_download_url | endswith(\"${TARGET_VERSION}-${PLATFORM}.zip\")) | .browser_download_url" "${RELEASES_JSON}")
+  AVAILABLE_VERSIONS=$(/usr/bin/jq -r ".assets[] | select(.browser_download_url | endswith(\"${TARGET_VERSION}-${PLATFORM}.${EXTENSION}\")) | .browser_download_url" "${RELEASES_JSON}")
 
   # get LATEST
   LATEST_VERSION_URL=$(echo "${AVAILABLE_VERSIONS}" | head -1)
@@ -156,6 +164,12 @@ if [[ -s "${RELEASES_JSON}" ]]; then
   if [[ ${ret} -eq 1 ]]; then
     if [[ ${APPLY} -eq 1 ]]; then
       echo
+
+      # only allow firmware updates for platforms supporting it
+      if echo "${PLATFORM}" | grep -q oci_; then
+        echo "ERROR: platform '${PLATFORM}' does not support being updated using this script."
+        exit 4 # error
+      fi
 
       # create a explicit backup before applying firmware update
       if [[ ${BACKUP} -eq 1 ]]; then

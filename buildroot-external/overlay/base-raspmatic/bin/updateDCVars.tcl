@@ -1,7 +1,7 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.18
-# Copyright (c) 2018-2022 Andreas Buenting, Jens Maus
+# DutyCycle Script v3.19
+# Copyright (c) 2018-2023 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,8 @@
 # "Wired-Status" und den Zuständen "online/offline" angelegt.
 
 # if user doesn't want this script to be running
-if { [file exists /etc/config/NoUpdateDCVars] == 1} {
+if { [file exists /etc/config/NoUpdateDCVars] == 1 ||
+     [file exists /usr/local/HMLGW] == 1 } {
   exit 0
 }
 

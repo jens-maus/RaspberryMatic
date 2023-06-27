@@ -1,6 +1,6 @@
 /* HM-LGW emulation for HM-MOD-RPI
  *
- * Copyright (c) 2015 Oliver Kastl
+ * Copyright (c) 2015-2023 Oliver Kastl, Jens Maus
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -51,12 +51,12 @@ static int g_serverKeepAliveFd = -1;
 static int g_serialFd = -1;
 static int g_termEventFd = -1;
 static int g_resetFileFd = -1;
-static bool g_debug = false;
+bool g_debug = false;
 static bool g_inBootloader = false;
 
 //const char *g_productString = "01,eQ3-HM-LGW,1.1.4,ABC0123456";
 
-#define VERSION "0.0.2"
+#define VERSION "1.0.0"
 static char *g_address=NULL;
 static const char *g_productString = "01,Revilo-HM-LGW," VERSION ",%s\r\n";
 
@@ -110,7 +110,7 @@ static char* create_asc_string( const char* source, int length, char* target, in
 	return target;
 	}
 
-static void dump_data( const char* data, int length )
+void dump_data( const char* data, int length )
 	{
 	char hex[ 100 ];
 	char asc[ 100 ];
@@ -503,7 +503,7 @@ static void * bidcosThreadFunc(void *x)
                 sockFd = -1;
                 tcflush(g_serialFd, TCIOFLUSH);
                 fprintf( stderr,  "BidCos client closed connection.\n" );
-                if( resetCoPro() == -1 && !g_inBootloader )
+                if( resetCoPro() == -1 && g_inBootloader == false )
                 {
                     if( sendEnterBootloader( g_serialFd ) > 0 )
                         g_inBootloader = true;
@@ -552,7 +552,7 @@ static void * bidcosThreadFunc(void *x)
     
     shutdownAndCloseSocket( &sockFd );
     
-    if( resetCoPro() == -1 && !g_inBootloader )
+    if( resetCoPro() == -1 && g_inBootloader == false )
     {
         if( sendEnterBootloader( g_serialFd ) > 0 )
             g_inBootloader = true;
@@ -845,7 +845,7 @@ int main(int argc, char **argv)
                 break;
 			case 'V':
 				printf("hmlangw " VERSION "\n");
-				printf("Copyright (c) 2015 Oliver Kastl\n\n");
+				printf("Copyright (c) 2015-2023 Oliver Kastl, Jens Maus\n\n");
 				exit(EXIT_SUCCESS);
 			case 'h':
 			case ':':

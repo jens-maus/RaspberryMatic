@@ -352,9 +352,6 @@ jobs:
           docker version -f '{{.Client.Experimental}}'
           docker version -f '{{.Server.Experimental}}'
 
-      - name: remote debug tmate session
-        uses: mxschmitt/action-tmate@v1
-
       - name: Test container deploy (install-docker.sh)
         run: |
           export CCU_DOCKER_PULL_REFRESH="false"

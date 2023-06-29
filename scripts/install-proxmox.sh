@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.9"
+VERSION="1.10"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -240,8 +240,6 @@ STORAGE_TYPE=$(pvesm status -storage "${STORAGE}" | awk 'NR>1 {print $2}')
 if [[ "${STORAGE_TYPE}" == "dir" ]] ||
    [[ "${STORAGE_TYPE}" == "nfs" ]]; then
   IMPORT_OPT="-format qcow2"
-  DISK_EXT=".qcow2"
-  DISK_REF="${VMID}/"
 fi
 
 # Create VM using the "importovf"
@@ -250,6 +248,9 @@ qm importovf "${VMID}" \
   RaspberryMatic.ovf \
   "${STORAGE}" \
   ${IMPORT_OPT} >>${LOGFILE} 2>&1
+
+# get the assigned disk id after the import
+DISK_ID=$(qm config "${VMID}" 2>>${LOGFILE} | grep -e "\(sata\|scsi\).:" | cut -d' ' -f2 | cut -d',' -f1)
 
 # Change settings of VM
 info "Modifying VM setting..."
@@ -266,7 +267,7 @@ qm set "${VMID}" \
   --ostype l26 \
   --scsihw virtio-scsi-single \
   --delete sata0 \
-  --scsi0 "${STORAGE}:${DISK_REF:-}vm-${VMID}-disk-0${DISK_EXT:-},discard=on,iothread=1" >>${LOGFILE} 2>&1
+  --scsi0 "${DISK_ID},discard=on,iothread=1" >>${LOGFILE} 2>&1
 
 # Set boot order 
 qm set "${VMID}" \

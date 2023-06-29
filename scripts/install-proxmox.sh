@@ -24,16 +24,18 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.8"
+VERSION="1.9"
+LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
 function error_exit() {
   trap - ERR
   local DEFAULT='Unknown failure occured.'
   local REASON="\e[97m${1:-$DEFAULT}\e[39m"
-  local FLAG="\e[91m[ERROR] \e[93m${EXIT}@${LINE}"
+  local FLAG="\e[91m[ERROR] \e[93m${EXIT}@${LINE}:"
   msg "${FLAG} ${REASON}"
   [ -n "${VMID-}" ] && cleanup_vmid
+  msg "${FLAG} \e[39mSee ${LOGFILE} for error details"
   exit "${EXIT}"
 }
 function warn() {
@@ -51,11 +53,11 @@ function msg() {
   echo -e "${TEXT}"
 }
 function cleanup_vmid() {
-  if qm status "${VMID}" &>/dev/null; then
+  if qm status "${VMID}" >>${LOGFILE} 2>&1; then
     if [ "$(qm status "${VMID}" | awk '{print $2}')" == "running" ]; then
-      qm stop "${VMID}"
+      qm stop "${VMID}" >>${LOGFILE} 2>&1
     fi
-    qm destroy "${VMID}"
+    qm destroy "${VMID}" >>${LOGFILE} 2>&1
   fi
 }
 function cleanup() {
@@ -71,13 +73,16 @@ msg ""
 TEMP_DIR=$(mktemp -d)
 pushd "${TEMP_DIR}" >/dev/null
 
+# remove existing log
+rm -f "${LOGFILE}"
+
 # check if this is a valid PVE environment host or not
 if [[ ! -d /etc/pve ]]; then
   die "This script must be executed on a Proxmox VE host system."
 fi
 
 # Select RaspberryMatic ova version
-msg "Getting available RaspberryMatic releases..."
+info "Getting available RaspberryMatic releases..."
 RELEASES=$(cat<<EOF | python3
 import requests
 import os
@@ -153,7 +158,7 @@ URL=$(echo ${RELEASES:${#prefix}} | cut -d' ' -f3)
 info "Using $RELEASE for VM installation"
 
 # Select storage location
-msg "Selecting storage location"
+info "Selecting storage location"
 MSG_MAX_LENGTH=0
 while read -r line; do
   TAG=$(echo "${line}" | awk '{print $1}')
@@ -200,7 +205,7 @@ while read -r line; do
   fi
 done < <(lsusb)
 if [[ -n "${USB_MENU[*]}" ]]; then
-  msg "Selecting HomeMatic-RF USB devices"
+  info "Selecting HomeMatic-RF USB devices"
   USB_DEVICE=$(whiptail --title "HomeMatic-RF USB devices" --radiolist \
   "Which HomeMatic-RF USB device should be bind to RaspberryMatic VM?\n\n" \
   16 $((MSG_MAX_LENGTH + 23)) 6 \
@@ -220,13 +225,13 @@ VMID=$(pvesh get /cluster/nextid)
 info "Container ID is ${VMID}."
 
 # Download RaspberryMatic ova archive
-msg "Downloading disk image..."
+info "Downloading disk image..."
 wget -q --show-progress "${URL}"
 echo -en "\e[1A\e[0K" #Overwrite output from wget
 FILE=$(basename "${URL}")
 
 # Extract RaspberryMatic disk image
-msg "Extracting disk image..."
+info "Extracting disk image..."
 tar xf "${FILE}"
 
 # Identify target format
@@ -240,14 +245,14 @@ if [[ "${STORAGE_TYPE}" == "dir" ]] ||
 fi
 
 # Create VM using the "importovf"
-msg "Importing OVA..."
+info "Importing OVA..."
 qm importovf "${VMID}" \
   RaspberryMatic.ovf \
   "${STORAGE}" \
-  ${IMPORT_OPT} 1>&/dev/null
+  ${IMPORT_OPT} >>${LOGFILE} 2>&1
 
 # Change settings of VM
-msg "Modifying VM setting..."
+info "Modifying VM setting..."
 qm set "${VMID}" \
   --acpi 1 \
   --vcpus 2 \
@@ -261,20 +266,20 @@ qm set "${VMID}" \
   --ostype l26 \
   --scsihw virtio-scsi-single \
   --delete sata0 \
-  --scsi0 "${STORAGE}:${DISK_REF:-}vm-${VMID}-disk-0${DISK_EXT:-},discard=on,iothread=1" 1>&/dev/null
+  --scsi0 "${STORAGE}:${DISK_REF:-}vm-${VMID}-disk-0${DISK_EXT:-},discard=on,iothread=1" >>${LOGFILE} 2>&1
 
 # Set boot order 
 qm set "${VMID}" \
-  --boot order=scsi0 1>&/dev/null
+  --boot order=scsi0 >>${LOGFILE} 2>&1
 
 # Resize scsi0 disk
-msg "Resizing disk..."
-qm resize "${VMID}" scsi0 64G 1>&/dev/null
+info "Resizing disk..."
+qm resize "${VMID}" scsi0 64G >>${LOGFILE} 2>&1
 
 # Identify+Set known USB-based RF module devices
 if [[ -n "${USB_DEVICE}" ]]; then
-  msg "Setting ${USB_DEVICE} as usb0..."
-  qm set "${VMID}" --usb0 host="${USB_DEVICE}",usb3=1 1>&/dev/null
+  info "Setting ${USB_DEVICE} as usb0..."
+  qm set "${VMID}" --usb0 host="${USB_DEVICE}",usb3=1 >>${LOGFILE} 2>&1
 fi
 
 info "Completed Successfully. New VM is: \e[1m${VMID} (RaspberryMatic)\e[0m."

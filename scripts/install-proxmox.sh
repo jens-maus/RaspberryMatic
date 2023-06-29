@@ -250,7 +250,10 @@ qm importovf "${VMID}" \
   ${IMPORT_OPT} >>${LOGFILE} 2>&1
 
 # get the assigned disk id after the import
-DISK_ID=$(qm config "${VMID}" 2>>${LOGFILE} | grep -e "\(sata\|scsi\).:" | cut -d' ' -f2 | cut -d',' -f1)
+DISK_ID=$(qm config "${VMID}" 2>>${LOGFILE} | grep -e "^\(sata\|scsi\).:" | cut -d' ' -f2 | cut -d',' -f1)
+if [[ -z "${DISK_ID}" ]]; then
+  die "could not retrieve disk id from vm config"
+fi
 
 # Change settings of VM
 info "Modifying VM setting..."

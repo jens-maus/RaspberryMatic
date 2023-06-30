@@ -749,7 +749,7 @@
  
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -19466,12 +19466,12 @@
+@@ -22750,12 +22750,12 @@
  
     // WebUI-Version
    showCurrentFirmware: function() {
@@ -767,25 +767,25 @@
  
    },
  
-@@ -23555,7 +23555,7 @@
+@@ -26869,7 +26869,7 @@
    {
      this.m_ccuProduct = getProduct();
      this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
 -    this.m_product ="HM-CCU" + this.m_ccuProduct;
 +    this.m_product = "HM-RASPBERRYMATIC";
      this.m_URLServer = (isHTTPS) ? "https://"+this.preURL+"update.homematic.com:8443" : "http://"+this.preURL+"update.homematic.com";
+     this.m_fieldTestURLServer =  "http://fieldtest-ccu3-update.homematic.com";
  
-     var serial = homematic("CCU.getSerial");
-@@ -23565,7 +23565,7 @@
+@@ -26880,7 +26880,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
--    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product="+this.m_product+"&serial=" + serial;
+-    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product="+this.m_product+"&serial=" + this.serial;
 +    script.src = "https://raspberrymatic.de/LATEST-VERSION.js?v=" + WEBUI_VERSION + "&p=" + PRODUCT;
      $("body").appendChild(script);
    },
  
-@@ -28924,11 +28924,11 @@
+@@ -32241,11 +32241,11 @@
        {
          if( $("headerLogo").src.indexOf("_red") >= 0 )
          {
@@ -799,7 +799,7 @@
          }
        }
      },
-@@ -28943,12 +28943,12 @@
+@@ -32260,12 +32260,12 @@
  
  SwitchOnFlashLight = function()
  {

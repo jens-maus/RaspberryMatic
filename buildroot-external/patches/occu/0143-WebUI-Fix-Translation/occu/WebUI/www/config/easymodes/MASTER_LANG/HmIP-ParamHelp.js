@@ -245,7 +245,7 @@ jQuery.extend(true,langJSON, {
       "Wir empfehlen die Einstellung mit deaktivierten Parameter, sofern dies nicht aus den oben genannten Gr%FCnden erforderlich ist.",
 
     "LED_DISABLE_CHANNELSTATE" : 
-      "Durch Aktivieren dieses Parameters ist die interne LED wie im Funktionstest bei jeder Bewegung aktiv.<br/><br/>" +
+      "Durch Deaktivieren dieses Parameters ist die interne LED wie im Funktionstest bei jeder Bewegung aktiv.<br/><br/>" +
        "Achtung, dies hat deutlichen Einfluss auf die Batterielebensdauer. Nutzen Sie diese Funktion daher nur tempor%E4r, um den Erfassungsbereich zu optimieren.",
 
     "OUTPUT_SWAP" :
@@ -264,7 +264,7 @@ jQuery.extend(true,langJSON, {
       "<br/><br/>F%FCr R%E4ume mit Dauerbelegung 24/7 muss diese Funktion deaktiviert werden. Eine Kalibrierung sollte in dem Fall alle 1-2 Jahre manuell durchgef%FChrt werden.",
 
     "MOUNTING_ORIENTATION" : "Dieser Parameter erm%F6glicht es, den Displayinhalt um 180 Grad zu drehen.",
-    "MOUNTING_ORIENTATION_A" : "Dieser Parameter erm%F6glicht es, die Tastereinheit des Jalousie-/Rolladenaktors im gew%FCnschten Winkel einzusetzen. ",
+    "MOUNTING_ORIENTATION_A" : "Dieser Parameter erm%F6glicht es, die Tastereinheit des Aktors im gew%FCnschten Winkel einzusetzen. ",
 
     "POWERUP_ONTIME_UNIT" :
       "W%E4hlen Sie die Wartezeit bis zum <i>Auto Relock</i>, nachdem das T%FCrschloss entriegelt oder ge%F6ffnet wurde.<br/><br/>" +
@@ -384,7 +384,7 @@ jQuery.extend(true,langJSON, {
 
     "POWERUP_ON_HUE" :
       "Farbton nach Zufuhr der Versorgungsspannung.<br/><br/>" +
-      "(360 = letzter 'Ein'-Wert); 361 = keine %C4nderung)",
+      "(360 = letzter 'Ein'-Wert; 361 = keine %C4nderung)",
 
     "POWERUP_ON_SATURATION":
       "Farbs%E4ttigung nach Zufuhr der Versorgungsspannung.<br/><br/>" +
@@ -414,6 +414,39 @@ jQuery.extend(true,langJSON, {
       "<b>Dimmer</b>: %DCber die Tasten Plus und Minus kann ein Ziellevel eingestellt werden.<br/><br/>" +
       "<b>Rolladen/Jalousie</b>: %DCber Tasten Rauf und Runter kann ein Ziellevel eingestellt werden.<br/><br/>" +
       "<b>Schaltaktor</b>: %DCber die Tasten f%FCr Ein und Aus kann der Ziellevel 100% bzw 0% eingestellt werden.<br/><br/>",
+
+    "DALI_GROUP" :
+      "Hier%FCber kann das DALI-Ger%E4t bis zu 16 DALI-Gruppen zugeordnet werden. " +
+      "Die DALI-Gruppen k%F6nnen wie einzelne Kan%E4le angesprochen werden.<br/><br/>" +
+      "Zu beachten ist, dass die Funktionalit%E4t der DALI-Gruppe der Funktionalit%E4t der DALI-Leuchte entspricht, die der Gruppe zugeordnet ist und die niedrigste Kanalnummer hat.",
+
+    "PYRO_CHANNEL_OPERATION_MODE" :
+      "W%E4hlen Sie hier eine der drei m%F6glichen Erfassungszonen, die f%FCr diesen Kanal genutzt werden sollen.<br/><br/>" +
+
+      "<u>Welche Zone befindet sich wo am Ger%E4t?</u><br/><br/>" +
+
+      "Bei Frontalansicht auf das Ger%E4t ist<br/><br/>" +
+
+      "<ul>" +
+        "<li>Zone 1 = Der gesamte 90%B0-Winkelbereich rechts</li>" +
+        "<li>Zone 2 = Der gesamte 90%B0-Winkelbereich links</li>" +
+        "<li>Zone 3 = Der gesamte 360%B0-Winkelbereich unterhalb des Ger%E4tes</li>" +
+      "</ul><br/><br/> " +
+
+      "<b><u>Achtung</u></b><br/><br/>" +
+      "Folgende Parameter der Kan%E4le 1 bis 3 beeinflussen die jeweilige Zone 1 - 3:<br><br/>" +
+
+      "<ul>" +
+        "<li>${stringTableSensivity}</li>" +
+        "<li>${stringTableSensorSensivity}</li>" +
+        "<li>${stringTableATCMode}</li>" +
+      "</ul>",
+
+    "DIM_LEVEL_LOWEST" :
+      "Dimmlevel, ab dem das Leuchtmittel zu leuchten beginnt bzw. beginnt, heller zu werden.<br/><br/>" +
+      "Zu beachten ist, dass dieser Wert nicht kleiner sein kann, als der Wert, der beim Parameter <i>Minimaler Pegel im Zustand EIN</i> eingestellt ist.",
+
+    "DIM_LEVEL_HIGHEST" : "Dimmlevel ab dem das Leuchtmittel die maximale Helligkeit erreicht hat.",
 
     "noMoreHelp" : ""
   },
@@ -656,7 +689,7 @@ jQuery.extend(true,langJSON, {
       "We recommend the setting with deactivated parameters, unless this is necessary for the reasons mentioned above.",
 
     "LED_DISABLE_CHANNELSTATE" :
-      "By activating this parameter, the internal LED is active with every movement just like in the function test.<br/><br/>" +
+      "By deactivating this parameter, the internal LED is active with every movement just like in the function test.<br/><br/>" +
       "Please note that this will influence on the battery lifetime. Therefore, only use this function temporarily to optimise the detection range.",
 
     "OUTPUT_SWAP" :
@@ -675,7 +708,7 @@ jQuery.extend(true,langJSON, {
       "<br/><br/>This function must be deactivated for rooms with a 24/7 permanent occupancy. In this case, a manual calibration should be performed every 1-2 years.",
 
     "MOUNTING_ORIENTATION" : "This parameter makes it possible to rotate the display content by 180 degrees.",
-    "MOUNTING_ORIENTATION_A" : "This parameter enables the push-button unit of the blind/roller shutter actuator to be placed at the required angle.",
+    "MOUNTING_ORIENTATION_A" : "This parameter enables the push-button unit of the actuator to be placed at the required angle.",
 
     "POWERUP_ONTIME_UNIT" :
       "Select the delay time until <i>Auto Relock</i> is executed after the door lock has been unlocked or opened.<br/><br/>" +
@@ -796,7 +829,7 @@ jQuery.extend(true,langJSON, {
 
     "POWERUP_ON_HUE" :
       "Colour shade after feeding the supply voltage.<br/><br/>" +
-      "(360 = last 'on' value); 361 = no change)",
+      "(360 = last 'on' value; 361 = no change)",
 
     "POWERUP_ON_SATURATION":
       "Colour saturation after feeding the supply voltage.<br/><br/>" +
@@ -826,6 +859,39 @@ jQuery.extend(true,langJSON, {
       "<b>Dimmer</b>: Via the keys Plus and Minus a target level can be set.<br/><br/>" +
       "<b>Shutter/blind</b>: A target level can be set via the Up and Down keys.<br/><br/>" +
       "<b>Switch actuator</b>: The target level 100% and 0% can be set via the keys for On and Off.<br/><br/>",
+
+    "DALI_GROUP" :
+      "Here, the DALI device can be assigned to up to 16 groups. " +
+      "The DALI groups can be addressed like individual channels.<br/><br/> " +
+      "Make sure that the functionality of the DALI group corresponds to the functionality of the DALI luminaire that is assigned to the group and has the lowest channel number.",
+
+    "PYRO_CHANNEL_OPERATION_MODE" :
+      "en* W%E4hlen Sie hier eine der drei m%F6glichen Erfassungszonen, die f%FCr diesen Kanal genutzt werden sollen.<br/><br/>" +
+
+      "<u>Welche Zone befindet sich wo am Ger%E4t?</u><br/><br/>" +
+
+      "Bei Frontalansicht auf das Ger%E4t ist<br/><br/>" +
+
+      "<ul>" +
+        "<li>Zone 1 = Der gesamte 90%B0-Winkelbereich rechts</li>" +
+        "<li>Zone 2 = Der gesamte 90%B0-Winkelbereich links</li>" +
+        "<li>Zone 3 = Der gesamte 360%B0-Winkelbereich unterhalb des Ger%E4tes</li>" +
+      "</ul><br/><br/> " +
+
+      "<b><u>Achtung</u></b><br/><br/>" +
+      "Folgende Parameter der Kan%E4le 1 bis 3 beeinflussen die jeweilige Zone 1 - 3:<br><br/>" +
+
+      "<ul>" +
+        "<li>${stringTableSensivity}</li>" +
+        "<li>${stringTableSensorSensivity}</li>" +
+        "<li>${stringTableATCMode}</li>" +
+      "</ul>",
+
+    "DIM_LEVEL_LOWEST" :
+      "en* Dimmlevel, ab dem das Leuchtmittel zu leuchten beginnt bzw. beginnt, heller zu werden.<br/><br/>" +
+      "Zu beachten ist, dass dieser Wert nicht kleiner sein kann, als der Wert, der beim Parameter <i>Minimaler Pegel im Zustand EIN</i> eingestellt ist.",
+
+    "DIM_LEVEL_HIGHEST" : "en* Dimmlevel ab dem das Leuchtmittel die maximale Helligkeit erreicht hat.",
 
     "noMoreHelp" : ""
     }

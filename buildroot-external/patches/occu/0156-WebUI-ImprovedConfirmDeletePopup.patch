@@ -131,13 +131,11 @@
      "dialogQuestionRestart" : "Please click here to perform the restart?",
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -39316,8 +39316,8 @@
- RemoveLink = function(iface, sender_address, receiver_address, sender_type, redirect_url)
+@@ -42375,7 +42375,7 @@
  {
-   var questionRemoveLink = ((iface == "HmIP-RF") && (sender_type != "HmIP-SMI55") && (sender_address.split(":")[0] == receiver_address.split(":")[0])) ? translateKey('dialogQuestionRemoveInternalLink') : translateKey('dialogQuestionRemoveLink');
--
+   var questionRemoveLink = ((iface == "HmIP-RF") && (sender_type != "HmIP-SMI55") && (sender_type != "HmIP-SMI55-A") && (sender_address.split(":")[0] == receiver_address.split(":")[0])) ? translateKey('dialogQuestionRemoveInternalLink') : translateKey('dialogQuestionRemoveLink');
+ 
 -  new YesNoDialog(translateKey('dialogSafetyCheck'), questionRemoveLink, function(result) {
-+  
 +  new YesNoDialog(translateKey('dialogSafetyCheck'), questionRemoveLink.replace('%s', sender_address+' - '+receiver_address), function(result) {
      if (result == YesNoDialog.RESULT_YES)
      {

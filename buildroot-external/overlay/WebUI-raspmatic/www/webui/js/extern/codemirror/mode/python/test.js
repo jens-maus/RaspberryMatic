@@ -1,5 +1,5 @@
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function() {
   var mode = CodeMirror.getMode({indentUnit: 4},
@@ -71,4 +71,19 @@
      "        [keyword pass]",
      "    [keyword else]:",
      "        [variable baz]()")
+
+  MT("dedentCase",
+     "[keyword match] [variable x]:",
+     "    [keyword case] [variable y]:",
+     "        [variable foo]()")
+  MT("dedentCasePass",
+     "[keyword match] [variable x]:",
+     "    [keyword case] [variable y]:",
+     "        [keyword pass]")
+
+  MT("dedentCaseInFunction",
+     "[keyword def] [def foo]():",
+     "    [keyword match] [variable x]:",
+     "        [keyword case] [variable y]:",
+     "            [variable foo]()")
 })();

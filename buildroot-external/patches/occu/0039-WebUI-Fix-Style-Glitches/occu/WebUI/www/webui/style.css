@@ -57,6 +57,10 @@ hr {
   min-width: 230px;
 }
 
+input[type=checkbox], input[type=radio] {
+  vertical-align: -2px;
+}
+
 .conditionEven
 {
   /*Wenn die Farbe nicht nur als Rahmen, sondern für die ganze Bedingung gelten soll,
@@ -2299,6 +2303,14 @@ table.center {
   background-color:#89989b;
   color:white;
   font-weight: bold;
+}
+
+.controlHeader150px {
+  text-align:center;
+  background-color:#89989b;
+  color:white;
+  font-weight: bold;
+  min-width: 150px;
 }
 
 .controlRedBorder {
@@ -4911,7 +4923,7 @@ application {
 }
 
 .CLASS01803 {
-	background-color:$_(white); /* #ffffff */
+	/*background-color:$_(white);*/ /* #ffffff */
 	text-align:center;
 	margin-left:4px;
 	margin-right:4px;
@@ -5277,6 +5289,13 @@ application {
 	border:1px solid $_(black); /* black */
 }
 
+.CLASS02525a {
+	height:100px;
+	width:100px;
+	background-color:$_(okSignal);
+	border:1px solid $_(black); /* black */
+}
+
 .CLASS02525b {
 	height:96px;
 	width:96px;
@@ -5512,6 +5531,13 @@ application {
 	width:98%;
 }
 
+.CLASS02551c {
+	cursor:pointer;
+	height:35px;
+	width:100px;
+	margin-left: 11%;
+}
+
 .CLASS02552 {
 	border:solid 1px $_(black); /* black */
 	mix-blend-mode:multiply;
@@ -5544,6 +5570,13 @@ application {
 .CLASS02557 {
 	height:96px;
 	width:96px;
+	background-color:$_(clickable);
+	border:1px solid $_(black); /* black */
+}
+
+.CLASS02557A {
+	height:100px;
+	width:100px;
 	background-color:$_(clickable);
 	border:1px solid $_(black); /* black */
 }
@@ -6814,6 +6847,10 @@ color: $_(textColorA); /* white */
 	text-align: left;
 	background-color: $_(white); /* white */
 	color: $_(textColorB); /* black */
+}
+
+.CLASS05104 tbody {
+	border-width: 0;
 }
 
 .CLASS05105 {

@@ -30,6 +30,22 @@ start() {
     echo "${HM_LED_YELLOW_MODE2}" >"${HM_LED_YELLOW}/trigger"
   fi
 
+  # if we are in HMLGW mode and are using a RPI-RF-MOD we have
+  # to set the LED to blue or disable it completely.
+  if [[ "${HM_MODE}" == "HM-LGW" ]]; then
+    if [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]] || [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+      if [[ -e /sys/class/leds/rpi_rf_mod:green/trigger ]]; then
+        echo none >/sys/class/leds/rpi_rf_mod:green/trigger
+        echo none >/sys/class/leds/rpi_rf_mod:red/trigger
+        if [[ -e /etc/config/disableLED ]]; then
+          echo none >/sys/class/leds/rpi_rf_mod:blue/trigger
+        else
+          echo default-on >/sys/class/leds/rpi_rf_mod:blue/trigger
+        fi
+      fi
+    fi
+  fi
+
   # signal that the system startup is finished
   touch /var/status/startupFinished
 
@@ -46,6 +62,18 @@ stop() {
 
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  # if we are in HMLGW mode and are using a RPI-RF-MOD we have
+  # to set the LED to yellow again to signal shutdown
+  if [[ "${HM_MODE}" == "HM-LGW" ]]; then
+    if [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]] || [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+      if [[ -e /sys/class/leds/rpi_rf_mod:green/trigger ]]; then
+        echo default-on >/sys/class/leds/rpi_rf_mod:green/trigger
+        echo default-on >/sys/class/leds/rpi_rf_mod:red/trigger
+        echo none >/sys/class/leds/rpi_rf_mod:blue/trigger
+      fi
+    fi
+  fi
 
   # stop starts, lets set the LEDs
   if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
@@ -76,4 +104,4 @@ case "$1" in
     exit 1
 esac
 
-exit $?
+exit 0

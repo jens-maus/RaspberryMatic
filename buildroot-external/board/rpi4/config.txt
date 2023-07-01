@@ -52,6 +52,10 @@ dtparam=watchdog=on
 # start with heartbeat on PWR led and mmc0 on ACT led
 dtparam=pwr_led_trigger=timer,act_led_trigger=mmc0
 
+# Enable boost from 1.5Ghz to 1.8Ghz on compatible models
+[pi4]
+arm_boost=1
+
 # special device tree options for Compute Module 4
 [cm4]
 dtoverlay=dwc2

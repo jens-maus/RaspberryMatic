@@ -40,3 +40,27 @@ Beyond GitHub, we try to have a variety of different lines of communication open
 ### Contributor License Agreement (Apache 2.0)
 
 You might have noticed that RaspberryMatic itself is licensed under the Apache 2.0 license. This license allows us to not only share code with the vendor of the CCU platform (eQ-3), but also allows us to distribute code as open source. As such, please understand and accept that once you contributed code to this repository it will be (re)licensed under the Apache 2.0 license exclusively. That means, any source code contributed (as long as you have the right to do so), either as part of a pull request or embedded in an issue in the issue tracker will be exclusively distributed under the Apache 2.0 license. With your contribution you are accepting this and you are signing off this agreement. So if you - for some reason - cannot accept that your source code will be (re)licensed under the Apache 2.0 license, please explictly state so or completly refrain from contributing any source code whatsoever.
+
+Therefore, please note the following license agreement when contributing to this project and refrain from contributing if you cannot agree to these terms:
+```
+By making a contribution to this project, you certify that:
+
+(a) The contribution was created in whole or in part by you and you
+    have the right to submit it under the Apache 2.0 license; or
+
+(b) The contribution is based upon previous work that, to the best
+    of your knowledge, is covered under an appropriate open source
+    license and you have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by you, under the Apache 2.0 license; or
+
+(c) The contribution was provided directly to you by some other
+    person who certified (a), (b) or (c) and you have not modified
+    it.
+
+(d) You understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information you submit with it) is maintained indefinitely
+    and may be redistributed consistent with this project or the open
+    source license(s) involved.
+```

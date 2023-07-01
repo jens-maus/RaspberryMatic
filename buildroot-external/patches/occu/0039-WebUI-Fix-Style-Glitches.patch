@@ -431,6 +431,38 @@
  
        WriteLine("<tr>");
            WriteLine("<td colspan='2' id='shutter"#chnId#"' class='CLASS02549' >&nbsp;</td>");
+@@ -216,12 +216,12 @@
+           WriteLine("<table>");
+             WriteLine("<tr>");
+               WriteLine("<td colspan='2' class='CLASS02546'>");
+-                WriteLine("<div class='PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b'>");
++                WriteLine("<div class='PercBtn' style='height:19px; width:96px; background-color:#89989b'>");
+                   WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center'/><b>%</b>");
+                 WriteLine("</div>");
+               WriteLine("</td>");
+-              WriteLine("<td>");
+-                WriteLine("<div id='slider"#chnId#"' class='ControlBtnInfo' style='width:220px;min-height:unset'></div>");
++              WriteLine("<td style='padding-left: 10px'>");
++                WriteLine("<div id='slider"#chnId#"' style='width:220px;min-height:unset'></div>");
+               WriteLine("</td>");
+             WriteLine("</tr>");
+           WriteLine("</table>");
+@@ -420,12 +420,12 @@
+           WriteLine("<table>");
+             WriteLine("<tr>");
+               WriteLine("<td colspan='2' class='CLASS02546'>");
+-                WriteLine("<div class='PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b'>");
++                WriteLine("<div class='PercBtn' style='height:19px; width:96px; background-color:#89989b'>");
+                   WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center'/><b>%</b>");
+                 WriteLine("</div>");
+               WriteLine("</td>");
+-              WriteLine("<td>");
+-                WriteLine("<div id='slider"#chnId#"' class='ControlBtnInfo' style='width:220px;;min-height:unset'></div>");
++              WriteLine("<td style='padding-left: 10px'>");
++                WriteLine("<div id='slider"#chnId#"' style='width:220px;;min-height:unset'></div>");
+               WriteLine("</td>");
+             WriteLine("</tr>");
+           WriteLine("</table>");
 --- occu/WebUI/www/rega/esp/controls/button.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/button.fn
 @@ -14,7 +14,7 @@
@@ -509,6 +541,35 @@
          WriteLine("</div>");
        WriteLine("</td>");
      WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/dual_white_controller.fn.orig
++++ occu/WebUI/www/rega/esp/controls/dual_white_controller.fn
+@@ -137,8 +137,8 @@
+             WriteLine("<tr>");
+               WriteLine("<td style='text-align:left'><span>${lblColorValue}:</span></td>");
+               WriteLine("<td class='CLASS02546' style='text-align:right'>");
+-                WriteLine("<div class='PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b; display:inline-block;'>");
+-                  WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='margin-top: 6px; text-align:center'/>&nbsp;%");
++                WriteLine("<div class='PercBtn' style='height:19px; width:96px; background-color:#89989b; display:inline-block;'>");
++                  WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center'/>&nbsp;%");
+                 WriteLine("</div>");
+               WriteLine("</td>");
+ 
+@@ -163,7 +163,7 @@
+             WriteLine("</tr>");
+             WriteLine("<tr>");
+               WriteLine("<td colspan='3'>");
+-                WriteLine("<div id='slider"#chnId#"' class='ControlBtnInfo' style='width:275px;min-height:unset'></div>");
++                WriteLine("<div id='slider"#chnId#"' style='width:275px;min-height:unset'></div>");
+               WriteLine("</td>");
+             WriteLine("</tr>");
+             WriteLine("</table>");
+@@ -199,4 +199,4 @@
+   WriteLine("</script>");
+ 
+   return;
+-}
+\ No newline at end of file
++}
 --- occu/WebUI/www/rega/esp/controls/key_switch_sc.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/key_switch_sc.fn
 @@ -5,7 +5,7 @@
@@ -558,6 +619,33 @@
          WriteLine("</div>");
        WriteLine("</td>");
      WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/rgbw.fn.orig
++++ occu/WebUI/www/rega/esp/controls/rgbw.fn
+@@ -263,14 +263,14 @@
+         WriteLine("<tr>");
+           WriteLine("<td style='text-align:left'><span>${lblColorTemperatureBR}</span></td>");
+           WriteLine("<td class='CLASS02546' style='text-align:right'>");
+-            WriteLine("<div class='PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b; display:inline-block;'>");
+-              WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='margin-top: 6px; text-align:center' disabled/>&nbsp;${lblKelvin}");
++            WriteLine("<div class='PercBtn' style='height:19px; width:96px; background-color:#89989b; display:inline-block;'>");
++              WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center' disabled/>&nbsp;${lblKelvin}");
+             WriteLine("</div>");
+           WriteLine("</td>");
+         WriteLine("</tr>");
+         WriteLine("<tr>");
+           WriteLine("<td colspan='2'>");
+-            WriteLine("<div id='slider"#chnId#"' class='ControlBtnInfo' style='width:220px;min-height:unset'></div>");
++            WriteLine("<div id='slider"#chnId#"' style='width:220px;min-height:unset'></div>");
+           WriteLine("</td>");
+         WriteLine("</tr>");
+       WriteLine("</table>");
+@@ -288,4 +288,4 @@
+ 
+     WriteLine("ipm"#chnId#" = new iseVIR_LGWhiteLevelControl("#chnId#", opts);");
+   WriteLine("</script>");
+-}
+\ No newline at end of file
++}
 --- occu/WebUI/www/rega/esp/controls/rhs.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/rhs.fn
 @@ -4,7 +4,7 @@
@@ -587,6 +675,80 @@
          WriteLine("</div>");
        WriteLine("</td>");
      WriteLine("</tr>");
+--- occu/WebUI/www/rega/esp/controls/servo.fn.orig
++++ occu/WebUI/www/rega/esp/controls/servo.fn
+@@ -71,7 +71,7 @@
+ 
+         WriteLine("<tr>");
+           WriteLine("<td colspan='2' class='CLASS02546'>");
+-            WriteLine("<div class='__PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b; margin:auto;'>");
++            WriteLine("<div class='__PercBtn' style='height:19px; width:96px; background-color:#89989b; margin:auto;'>");
+               WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center'/><b>"#unitServoPos#"</b>");
+             WriteLine("</div>");
+           WriteLine("</td>");
+@@ -91,7 +91,7 @@
+ 
+         WriteLine("<tr>");
+           WriteLine("<td>");
+-            WriteLine("<div id='sliderPos"#chnId#"' class='ControlBtnInfo' style='width:220px;;min-height:unset'></div>");
++            WriteLine("<div id='sliderPos"#chnId#"' style='width:220px;;min-height:unset'></div>");
+           WriteLine("</td>");
+         WriteLine("</tr>");
+       WriteLine("</table>");
+@@ -107,7 +107,7 @@
+ 
+           WriteLine("<tr>");
+             WriteLine("<td colspan='2' class='CLASS02546'>");
+-              WriteLine("<div class='__PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b; margin:auto;'>");
++              WriteLine("<div class='__PercBtn' style='height:19px; width:96px; background-color:#89989b; margin:auto;'>");
+                 WriteLine("<input id='infoSliderRamp"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center'/><b>"#unitServoRampTime#"</b>");
+               WriteLine("</div>");
+             WriteLine("</td>");
+@@ -126,7 +126,7 @@
+ 
+           WriteLine("<tr>");
+             WriteLine("<td>");
+-              WriteLine("<div id='sliderRamp"#chnId#"' class='ControlBtnInfo' style='width:220px;;min-height:unset'></div>");
++              WriteLine("<div id='sliderRamp"#chnId#"' style='width:220px;;min-height:unset'></div>");
+             WriteLine("</td>");
+           WriteLine("</tr>");
+         WriteLine("</table>");
+@@ -140,7 +140,7 @@
+ 
+     !      WriteLine("<tr>");
+     !        WriteLine("<td colspan='2' class='CLASS02546'>");
+-    !          WriteLine("<div class='__PercBtn GrayBkg' style='height:35px; line-height:35px; width:100px; _background-color:#89989b; margin:auto;'>");
++    !          WriteLine("<div class='__PercBtn GrayBkg' style='height:19px; width:96px; _background-color:#89989b; margin:auto;'>");
+     !            WriteLine("<input id='infoSliderRamp"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center'/>");
+     !          WriteLine("</div>");
+     !        WriteLine("</td>");
+@@ -181,4 +181,4 @@
+ 
+   WriteLine("</script>");
+   return;
+-}
+\ No newline at end of file
++}
+--- occu/WebUI/www/rega/esp/controls/universal_light_receiver.fn.orig
++++ occu/WebUI/www/rega/esp/controls/universal_light_receiver.fn
+@@ -339,14 +339,14 @@
+             WriteLine("<tr>");
+               WriteLine("<td style='text-align:left'><span>${lblColorTemperatureBR}</span></td>");
+               WriteLine("<td class='CLASS02546' style='text-align:right'>");
+-                WriteLine("<div class='_PercBtn' style='height:35px; line-height:35px; width:100px; display:inline-block;'>");
+-                  WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='margin-top: 6px; text-align:center' disabled/>&nbsp;${lblKelvin}");
++                WriteLine("<div class='_PercBtn' style='height:19px; width:96px; display:inline-block;'>");
++                  WriteLine("<input id='infoSliderPos"#chnId#"' type='text' value='0' size='3' class='CLASS02542' style='text-align:center' disabled/>&nbsp;${lblKelvin}");
+                 WriteLine("</div>");
+               WriteLine("</td>");
+             WriteLine("</tr>");
+             WriteLine("<tr>");
+               WriteLine("<td colspan='2'>");
+-                WriteLine("<div id='slider"#chnId#"' class='ControlBtnInfo' style='width:220px;height:3px;min-height:unset'></div>");
++                WriteLine("<div id='slider"#chnId#"' style='width:220px;height:3px;min-height:unset'></div>");
+               WriteLine("</td>");
+             WriteLine("</tr>");
+           WriteLine("</table>")
 --- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
 +++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
 @@ -1201,7 +1201,7 @@
@@ -609,6 +771,45 @@
          Write("</div>");
        Write("</td>");
      Write("</tr>");
+--- occu/WebUI/www/rega/pages/msg/setVIR_LG_RGBWController.htm.orig
++++ occu/WebUI/www/rega/pages/msg/setVIR_LG_RGBWController.htm
+@@ -24,14 +24,14 @@
+                   <tr>
+                     <td><span>${lblColorTemperatureBR}</span></td>
+                     <td class='CLASS02546' align="right">
+-                      <div class='PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b'>
++                      <div class='PercBtn' style='height:19px; width:96px; background-color:#89989b'>
+                         <input id='infoSliderPos' type='text' value='0' size='3' class='CLASS02542' style='margin-top: 6px; text-align:center'/>
+                       </div>
+                     </td>
+                   </tr>
+                   <tr>
+                     <td colspan='2'>
+-                      <div id='hookSlider' class='ControlBtnInfo' style='width:220px;'></div>
++                      <div id='hookSlider' style='width:220px;'></div>
+                     </td>
+                   </tr>
+                 </table>
+--- occu/WebUI/www/rega/pages/msg/setVIR_LG_WHITEController.htm.orig
++++ occu/WebUI/www/rega/pages/msg/setVIR_LG_WHITEController.htm
+@@ -13,7 +13,7 @@
+                   <tr>
+                     <td><span>${lblColorTemperatureBR}</span></td>
+                     <td class='CLASS02546' align="right">
+-                      <div class='PercBtn' style='height:35px; line-height:35px; width:100px; background-color:#89989b'>
++                      <div class='PercBtn' style='height:19px; width:96px; background-color:#89989b'>
+                         <input id='infoSliderPos' type='text' value='0' size='3' class='CLASS02542' style='margin-top: 6px; text-align:center'/>
+                         <span>K</span>
+                       </div>
+@@ -21,7 +21,7 @@
+                   </tr>
+                   <tr>
+                     <td colspan='2'>
+-                      <div id='hookSlider' class='ControlBtnInfo' style='width:220px;'></div>
++                      <div id='hookSlider' style='width:220px;'></div>
+                     </td>
+                   </tr>
+                 </table>
 --- occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/systemvars.htm
 @@ -47,27 +47,27 @@
@@ -1850,7 +2051,18 @@
  .height20px {
      height:20px;
  }
-@@ -161,6 +165,28 @@
+@@ -53,6 +57,10 @@
+   min-width: 230px;
+ }
+ 
++input[type=checkbox], input[type=radio] {
++  vertical-align: -2px;
++}
++
+ .conditionEven
+ {
+   /*Wenn die Farbe nicht nur als Rahmen, sondern für die ganze Bedingung gelten soll,
+@@ -161,6 +169,28 @@
  {
      background-color: $_(contentBackground);
      overflow: auto;
@@ -1879,7 +2091,7 @@
  }
  
  /* Kopfzeile */
-@@ -391,7 +417,9 @@
+@@ -391,7 +421,9 @@
    text-align:center;
    border:solid 1px $_(black); /* black */
    background-color:$_(clickable);
@@ -1890,7 +2102,7 @@
  }
  
  .filterTable td
-@@ -399,7 +427,6 @@
+@@ -399,7 +431,6 @@
    text-align:center;
    border:solid 1px $_(black); /* black */
    color: $_(textColorB); /* black */
@@ -1898,7 +2110,7 @@
  }
  
  .filterTable .leftAlign {
-@@ -594,37 +621,39 @@
+@@ -594,37 +625,39 @@
  
  /* Tabelle zur Listendarstellung von Elementen (z.B. Raumübersicht) */
  .tblList {
@@ -1948,7 +2160,7 @@
  }
  
  .tblList td {
-@@ -637,7 +666,6 @@
+@@ -637,7 +670,6 @@
  /* Kopfzeile eines Popup-Fenster */
  .popupTitle {
    color: $_(textColorB); /* black */
@@ -1956,7 +2168,7 @@
    background-color: $_(white); /* white */
    border: solid 1px $_(black); /* black */
    padding-left: 4px;
-@@ -666,12 +694,12 @@
+@@ -666,12 +698,12 @@
  .popupTableScript
  {
    width: 100%;
@@ -1970,7 +2182,7 @@
  }
  
  .popupTableRow
-@@ -706,7 +734,6 @@
+@@ -706,7 +738,6 @@
  
  .popupControls {
    background-color: $_(white); /* white */
@@ -1978,7 +2190,7 @@
    border: solid 1px $_(black); /* black */
  }
  
-@@ -735,8 +762,8 @@
+@@ -735,8 +766,8 @@
  
  /* KanalListe */
  .ChnListTbl {
@@ -1988,7 +2200,7 @@
  }
  
  .ChnListTbl td {
-@@ -928,7 +955,6 @@
+@@ -928,7 +959,6 @@
      border:1px solid $_(black); /* black */
      /* width:95%; */
      text-align:center;
@@ -1996,7 +2208,7 @@
      line-height:20px;
      vertical-align:middle;
      color: $_(textColorB); /* black */
-@@ -967,7 +993,7 @@
+@@ -967,7 +997,7 @@
    background-image:url(/ise/img/gradientButton25px.png);
    /*background-image: linear-gradient(to bottom, white 40%, gray);*/
    background-image: var(--btnGradient);
@@ -2005,7 +2217,7 @@
    border: solid 1px $_(gray); /* silver */
    border-radius: 5px;
    margin:2%;
-@@ -1095,6 +1121,7 @@
+@@ -1095,6 +1125,7 @@
  
  .StatViewTbl td{
    border: solid 1px $_(black); /* black */
@@ -2013,7 +2225,7 @@
  }
  
  
-@@ -1245,13 +1272,10 @@
+@@ -1245,13 +1276,10 @@
  .tTable
  {
    text-align:center;
@@ -2029,7 +2241,7 @@
  }
  /*
  .tTable th
-@@ -1308,8 +1332,8 @@
+@@ -1308,8 +1336,8 @@
  .tMain
  {
    border:solid 1px $_(black); /* black */
@@ -2040,7 +2252,7 @@
  }
  
  .tHeader
-@@ -1347,7 +1371,6 @@
+@@ -1347,7 +1375,6 @@
  
  .bcWhitePic
  {
@@ -2048,7 +2260,7 @@
  }
  
  .bcWhite
-@@ -1391,12 +1414,8 @@
+@@ -1391,12 +1418,8 @@
  
  .oLine
  {
@@ -2062,7 +2274,7 @@
  }
  
  .sysConfigHeight
-@@ -1443,7 +1462,7 @@
+@@ -1443,7 +1466,7 @@
    border:solid 1px $_(black); /* black */
    height:40px;
    text-align:center;
@@ -2071,7 +2283,7 @@
  }
  
  .tdCellFilter
-@@ -1457,7 +1476,7 @@
+@@ -1457,7 +1480,7 @@
  
  /* Weisser Zellenhintergrund für Bilder (Geräteübersicht u.ä.) */
  .WhiteBkgPic {
@@ -2080,7 +2292,7 @@
    color: $_(textColorB); /* black */
  }
  
-@@ -1495,9 +1514,20 @@
+@@ -1495,9 +1518,20 @@
  /* Buttons incl. Hilfe-Img. */
  .cpButton {
      width:230px;
@@ -2103,7 +2315,7 @@
  	background-color: $_(background); /* #183473 */
  }
  
-@@ -1513,7 +1543,7 @@
+@@ -1513,7 +1547,7 @@
  
  #ic_deviceparameters #DeviceInformation
  {
@@ -2112,7 +2324,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -1537,7 +1567,6 @@
+@@ -1537,7 +1571,6 @@
  
  #ic_deviceparameters #DeviceInformation #DeviceImage
  {
@@ -2120,7 +2332,7 @@
  	width: 52px;
  	height: 56px;
  	margin: 0;
-@@ -1568,7 +1597,7 @@
+@@ -1568,7 +1601,7 @@
  
  #ic_deviceparameters .parameter_area .parameters_table 
  {
@@ -2129,7 +2341,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -1577,6 +1606,7 @@
+@@ -1577,6 +1610,7 @@
  
  	background-color: $_(clickable);
  	text-align:center;
@@ -2137,7 +2349,7 @@
  }
  
  #ic_deviceparameters .parameter_area .parameters_table tbody {
-@@ -1587,7 +1617,6 @@
+@@ -1587,7 +1621,6 @@
  
  #ic_deviceparameters .parameter_area .parameters_table td {
  	border: 1px solid $_(black); /* black */
@@ -2145,7 +2357,7 @@
  }
  
  #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl
-@@ -1595,6 +1624,7 @@
+@@ -1595,6 +1628,7 @@
  	border: 0;
  	height: auto;
  	background-color: $_(white); /* white */
@@ -2153,7 +2365,7 @@
  }
  
  #ic_deviceparameters .parameter_area .parameters_table .ProfileTbl thead
-@@ -1609,8 +1639,6 @@
+@@ -1609,8 +1643,6 @@
  {
  	border: 0;
  	background-color: $_(white); /* white */
@@ -2162,7 +2374,7 @@
  }
  
  #ic_deviceparameters #Timeouts_Area .TimeoutTable,
-@@ -1672,6 +1700,14 @@
+@@ -1672,6 +1704,14 @@
  	border: 0;
  }/*LinkList-Tabelle*/
  /*--------------------------------------------*/
@@ -2177,7 +2389,7 @@
  #ic_linkpeerlist #head_wrapper {
    border-bottom: 0;
    margin: 0;
-@@ -1687,17 +1723,16 @@
+@@ -1687,17 +1727,16 @@
  #ic_linkpeerlist #body_wrapper {
    margin: 0;
    padding: 0;
@@ -2198,7 +2410,7 @@
  }
  
  #ic_linkpeerlist .LinkListTbl td {
-@@ -1734,9 +1769,7 @@
+@@ -1734,9 +1773,7 @@
  
  #ic_linkpeerlist .LinkListTbl .LinkListTbl_img
  {
@@ -2208,7 +2420,7 @@
  }
  /*--------------------------------------------*/
  #modalbox #id_messagebox
-@@ -1798,15 +1831,27 @@
+@@ -1798,15 +1835,27 @@
  {
    height: 40px;
    background-color: $_(activeBackground);
@@ -2239,7 +2451,7 @@
  }
  
  #ic_selchannel #createLinkStep1 thead {
-@@ -1829,13 +1874,14 @@
+@@ -1829,13 +1878,14 @@
  	background-color: $_(white); /* white */
  }
  #ic_selchannel #createLinkStep1 .WhiteHeader input {
@@ -2256,7 +2468,7 @@
  }
  
  #ic_selchannel .ChnListTbl tr td {
-@@ -1964,14 +2010,7 @@
+@@ -1964,14 +2014,7 @@
  {
  	visibility: hidden;
  }
@@ -2271,7 +2483,7 @@
  /*--------------------------------------------*/
  
  /*Tabellenkörper Virtuelle Tasten*/
-@@ -1990,7 +2029,6 @@
+@@ -1990,7 +2033,6 @@
  /*Tabellenkörper Bilderspalte*/
  #ic_selchannel .ChnListTbl .chnListTbl_dev_img 
  {
@@ -2279,7 +2491,7 @@
  	text-align: left;
  	height: 50px;  
  }
-@@ -2004,10 +2042,12 @@
+@@ -2004,10 +2046,12 @@
  	height: auto;
  }
  /*--------------------------------------------*/
@@ -2295,7 +2507,7 @@
  	color: $_(textColorA); /* white */
  	border: 1px solid $_(black); /* black */
  }
-@@ -2090,7 +2130,7 @@
+@@ -2090,7 +2134,7 @@
  #ic_setprofiles #body_wrapper
  {
  	background-color: $_(background); /* #183473 */
@@ -2304,7 +2516,7 @@
  }
  
  #ic_setprofiles  #id_sender_group_receiver_profiles_wrapper
-@@ -2310,9 +2350,10 @@
+@@ -2318,9 +2362,10 @@
    padding:0;
    background-color:$_(clickable);
    color: $_(textColorB); /* black */
@@ -2316,7 +2528,7 @@
  }
  
  .FilterHeight20 {
-@@ -2325,7 +2366,7 @@
+@@ -2333,7 +2378,7 @@
    padding:0;
    background-color:$_(active); /* #565657 */
    color: $_(textColorB); /* black */
@@ -2325,7 +2537,7 @@
    text-align:left;
    vertical-align:middle;  
  }
-@@ -2371,8 +2412,7 @@
+@@ -2379,8 +2424,7 @@
  }
  
  .FilterText {
@@ -2335,7 +2547,7 @@
  }
  
  .FilterButton {
-@@ -2382,8 +2422,7 @@
+@@ -2390,8 +2434,7 @@
    /*background-image: linear-gradient(to bottom, white 40%, gray );*/
    background-image: var(--btnGradient);
  
@@ -2345,16 +2557,17 @@
    border:1px solid $_(black); /* black */
    color: $_(textColorB); /* white */
    font-weight:normal;
-@@ -2479,7 +2518,7 @@
+@@ -2487,8 +2530,7 @@
    border-bottom:solid 5px $_(navBarSeparator); /* #ffffff */
    background-color: $_(background); /* #183473 */
    z-index: 189;
 -  padding: 2px;
+-  margin-top: 2px;
 +  padding-top: 2px;
  }
  
  .MainMenuItem_Left {
-@@ -2499,7 +2538,7 @@
+@@ -2508,7 +2550,7 @@
  }
  
  .MainMenuItem_Help {
@@ -2363,7 +2576,7 @@
  }
  
  .MainMenuItem_Highlight {
-@@ -2580,6 +2619,7 @@
+@@ -2589,6 +2631,7 @@
    background-color: $_(subMenuBackground);
    overflow:hidden;
    z-index:189;
@@ -2371,7 +2584,7 @@
  }
  
  .MainMenuSubItem {
-@@ -2594,7 +2634,6 @@
+@@ -2603,7 +2646,6 @@
    line-height:20px;
    cursor: pointer;
    white-space: nowrap;
@@ -2379,7 +2592,7 @@
  }
  
  .MainMenuSubItem_Highlight {
-@@ -2684,9 +2723,9 @@
+@@ -2693,9 +2735,9 @@
    top: 24px;
    left: 2px;
    width: 996px;
@@ -2391,7 +2604,7 @@
  }
  
  #ChannelChooserFooter {
-@@ -2732,7 +2771,6 @@
+@@ -2741,7 +2783,6 @@
    width:100%;
    height:auto;
    margin:0;
@@ -2399,7 +2612,7 @@
    padding:0;
    empty-cells:show;
  }
-@@ -2744,7 +2782,7 @@
+@@ -2753,7 +2794,7 @@
    padding:0;
    background-color:$_(clickable);
    color: $_(textColorA); /* white */
@@ -2408,7 +2621,7 @@
    text-align:center;
    vertical-align:middle;
  }
-@@ -2756,7 +2794,7 @@
+@@ -2765,7 +2806,7 @@
    padding:0;
    background-color:$_(active); /* #565657 */
    color: $_(textColorA); /* white */
@@ -2417,7 +2630,7 @@
    text-align:center;
    vertical-align:middle;
  }
-@@ -2780,7 +2818,6 @@
+@@ -2789,7 +2830,6 @@
  
  .ChannelChooserThumbnail {
    border: 1px solid $_(black); /* black */
@@ -2425,7 +2638,7 @@
    text-align:left;
    height:80px;
  }
-@@ -2828,7 +2865,7 @@
+@@ -2837,7 +2877,7 @@
    width: 996px;
    height: 520px;
    background-color: $_(white); /* white */
@@ -2434,7 +2647,7 @@
  }
  
  #MultiChannelChooserFooter {
-@@ -2935,40 +2972,38 @@
+@@ -2944,40 +2984,38 @@
  
  .MultiChannelChooserThumbnail {
    border: 1px solid $_(black); /* black */
@@ -2482,7 +2695,7 @@
    text-align:center;
    vertical-align:middle;
  }
-@@ -2988,8 +3023,7 @@
+@@ -2997,8 +3035,7 @@
  }
  
  .DeviceListRow_Highlight {
@@ -2492,7 +2705,7 @@
    cursor:pointer;
  }
  
-@@ -3018,9 +3052,8 @@
+@@ -3027,9 +3064,8 @@
  
  .DeviceListThumbnail {
    border: 1px solid $_(black); /* black */
@@ -2504,7 +2717,7 @@
  }
  
  .DeviceListButton {
-@@ -3081,7 +3114,7 @@
+@@ -3090,7 +3126,7 @@
    height: 520px;
    background-color: $_(white); /* white */
    color: $_(textColorB); /* black */
@@ -2513,7 +2726,7 @@
  }
  
  #ChannelConfigDialogFooter {
-@@ -3203,8 +3236,7 @@
+@@ -3212,8 +3248,7 @@
    height: 371px;
    background-color: $_(white); /* white */
    color: $_(textColorB); /* black */
@@ -2523,7 +2736,7 @@
  }
  
  #DeviceConfigDialogFooter {
-@@ -3474,18 +3506,12 @@
+@@ -3483,18 +3518,12 @@
      position: absolute;
      left: 4px
  }.bidcosrf_page {
@@ -2544,7 +2757,7 @@
  }
  
  .bidcosrf_button {
-@@ -3511,7 +3537,7 @@
+@@ -3520,7 +3549,7 @@
  .bidcosrf_table {
    border: 1px solid $_(black);
    border-spacing: 0px;
@@ -2553,7 +2766,7 @@
  }
  
  .bidcosrf_tableheader {
-@@ -3531,7 +3557,7 @@
+@@ -3540,7 +3569,7 @@
  }
  
  .bidcosrf_imagecell {
@@ -2562,7 +2775,7 @@
    border: 1px solid $_(black);
    empty-cells: show;
    text-align: center;
-@@ -3542,12 +3568,13 @@
+@@ -3551,12 +3580,13 @@
    border: 1px solid $_(black);
    empty-cells: show;
    text-align: center;
@@ -2578,7 +2791,7 @@
  html, body {
    border: 0 none;
    margin: 0;
-@@ -3930,7 +3957,6 @@
+@@ -3939,7 +3969,6 @@
  }
  
  .CLASS00203 {
@@ -2586,7 +2799,7 @@
  }
  
  .CLASS00204 {
-@@ -3983,10 +4009,10 @@
+@@ -3992,10 +4021,10 @@
  /* rega\pages\msg\sysVarsSelection.htm */
  
  .CLASS00300 {
@@ -2599,7 +2812,7 @@
  }
  
  .CLASS00301 {
-@@ -3997,6 +4023,7 @@
+@@ -4006,6 +4035,7 @@
  	text-align:center;
  	background-color:$_(clickable);
  	height: 40px;
@@ -2607,7 +2820,7 @@
  }
  
  .CLASS00303 {
-@@ -4250,7 +4277,7 @@
+@@ -4259,7 +4289,7 @@
  
  .CLASS00717 {
  	height:200px;
@@ -2616,7 +2829,7 @@
  	background-color:$_(white); /* white */
  }
  
-@@ -4664,7 +4691,7 @@
+@@ -4673,7 +4703,7 @@
  /* rega\pages\msg\programChooser.htm */
  
  .CLASS01300 {
@@ -2625,7 +2838,7 @@
  	width: 100%;
  	height: 400px;
  	background-color:$_(white); /* white */
-@@ -4902,13 +4929,13 @@
+@@ -4911,13 +4941,13 @@
  }
  
  .CLASS01805 {
@@ -2642,7 +2855,7 @@
  }
  
  .CLASS01807 {
-@@ -4927,9 +4954,7 @@
+@@ -4936,9 +4966,7 @@
  }
  
  .CLASS01809 {
@@ -2652,7 +2865,7 @@
  	height:100%;
  	overflow:hidden;
  }
-@@ -5147,6 +5172,7 @@
+@@ -5156,6 +5184,7 @@
  	color: $_(textColorB); /* black */
  	width:100%;
  	border:none;
@@ -2660,7 +2873,7 @@
  }
  
  .CLASS02511 {
-@@ -5168,6 +5194,7 @@
+@@ -5177,6 +5206,7 @@
  	border:1px Solid $_(black); /* black */
  	height:96px;
  	width:96px;
@@ -2668,7 +2881,7 @@
  }
  
  .CLASS02515 {
-@@ -5210,7 +5237,6 @@
+@@ -5219,7 +5249,6 @@
  
  .CLASS02520 {
  	color: $_(textColorB); /* black */
@@ -2676,7 +2889,7 @@
  	border:none;
  	background-color:$_(activeBackground);
  }
-@@ -5297,7 +5323,7 @@
+@@ -5313,7 +5342,7 @@
  	width:220px;
  	/*height:25px;*/
  	height:auto;
@@ -2685,7 +2898,7 @@
  	clear: both;
  	display: inline-block;
    /* line-height:25px; problem with controls with a long parameter name */
-@@ -5338,12 +5364,11 @@
+@@ -5354,12 +5383,11 @@
  }
  
  .CLASS02535 {
@@ -2701,7 +2914,7 @@
  }
  
  .CLASS02535A {
-@@ -5359,6 +5384,7 @@
+@@ -5375,6 +5403,7 @@
  	word-wrap: break-word;
  	max-width: 480px;
  	display: inline-block;
@@ -2709,7 +2922,7 @@
  }
  
  .CLASS02536 {
-@@ -5367,20 +5393,13 @@
+@@ -5383,20 +5412,13 @@
  
  .CLASS02537 {
  	text-align: center;
@@ -2730,7 +2943,7 @@
  }
  
  .CLASS02539 {
-@@ -5417,6 +5436,7 @@
+@@ -5433,6 +5455,7 @@
  
  .CLASS02543 {
  	border:1px solid $_(black); /* black */
@@ -2738,7 +2951,7 @@
  }
  
  .CLASS02544 {
-@@ -5494,6 +5514,7 @@
+@@ -5517,6 +5540,7 @@
  
  .CLASS02552 {
  	border:solid 1px $_(black); /* black */
@@ -2746,7 +2959,7 @@
  }
  
  .CLASS02553 {
-@@ -5548,12 +5569,10 @@
+@@ -5578,12 +5602,10 @@
  
  .CLASS02601 {
  	text-align:center;
@@ -2760,7 +2973,7 @@
  }
  
  .CLASS02603 {
-@@ -5565,6 +5584,7 @@
+@@ -5595,6 +5617,7 @@
  
  .CLASS02604 {
  	height: 58px;
@@ -2768,7 +2981,7 @@
  }
  
  .CLASS02605 {
-@@ -5572,76 +5592,52 @@
+@@ -5602,76 +5625,52 @@
  	background-color: $_(activeBackground);
  	border: solid 1px $_(black); /* black */
  	color: $_(textColorB); /* black */
@@ -2779,17 +2992,17 @@
  
  .CLASS02606 {
 -	width: 240px;
- 	background-color: $_(activeBackground);
- 	border: solid 1px $_(black); /* black */
- 	color: $_(textColorB); /* black */
+-	background-color: $_(activeBackground);
+-	border: solid 1px $_(black); /* black */
+-	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
 -.CLASS02607 {
 -	width:55px;
--	background-color: $_(activeBackground);
--	border: solid 1px $_(black); /* black */
--	color: $_(textColorB); /* black */
+ 	background-color: $_(activeBackground);
+ 	border: solid 1px $_(black); /* black */
+ 	color: $_(textColorB); /* black */
 -	padding: 4px;
 -}
 -
@@ -2854,7 +3067,7 @@
  }
  
  .CLASS02615 {
-@@ -5735,10 +5731,12 @@
+@@ -5765,10 +5764,12 @@
  	vertical-align:middle;
  	border:solid 1px $_(black); /* #000000 */
  	font-weight:bold;
@@ -2868,7 +3081,7 @@
  }
  
  .CLASS02804 {
-@@ -5804,7 +5802,6 @@
+@@ -5834,7 +5835,6 @@
  }
  
  .CLASS02815 {
@@ -2876,7 +3089,7 @@
  }
  
  /* rega\pages\tabs\statusviews\svroomchannels.htm */
-@@ -5989,18 +5986,13 @@
+@@ -6019,18 +6019,13 @@
  }
  
  .CLASS03301 {
@@ -2896,7 +3109,7 @@
  }
  
  .CLASS03303 {
-@@ -6079,8 +6071,7 @@
+@@ -6109,8 +6104,7 @@
  
  .CLASS03500 {
  	border:solid 1px $_(black); /* black */
@@ -2906,7 +3119,7 @@
  }
  
  .CLASS03501 {
-@@ -6113,8 +6104,7 @@
+@@ -6143,8 +6137,7 @@
  
  .CLASS03600 {
  	border:solid 1px $_(black); /* black */
@@ -2916,7 +3129,7 @@
  }
  
  .CLASS03601 {
-@@ -6203,8 +6193,7 @@
+@@ -6233,8 +6226,7 @@
  
  .CLASS03800 {
  	border:solid 1px $_(black); /* black */
@@ -2926,7 +3139,7 @@
  }
  
  .CLASS03801 {
-@@ -6247,15 +6236,15 @@
+@@ -6277,15 +6269,15 @@
  }
  
  .CLASS03902 {
@@ -2946,7 +3159,7 @@
  }
  
  .CLASS03904 {
-@@ -6270,7 +6259,6 @@
+@@ -6300,7 +6292,6 @@
  .CLASS03906 {
  	vertical-align:middle;
  	text-align:left;
@@ -2954,7 +3167,7 @@
  }
  
  .CLASS03907 {
-@@ -6280,13 +6268,15 @@
+@@ -6310,13 +6301,15 @@
  }
  
  .CLASS03908 {
@@ -2973,7 +3186,7 @@
  }
  
  .CLASS03910 {
-@@ -6312,13 +6302,15 @@
+@@ -6342,13 +6335,15 @@
  }
  
  .CLASS04002 {
@@ -2992,7 +3205,7 @@
  }
  
  .CLASS04004 {
-@@ -6333,7 +6325,8 @@
+@@ -6363,7 +6358,8 @@
  
  .CLASS04006 {
  	border:solid 1px $_(black); /* black */
@@ -3002,7 +3215,7 @@
  }
  
  .CLASS04007 {
-@@ -6344,7 +6337,6 @@
+@@ -6374,7 +6370,6 @@
  
  .CLASS04100 {
  	text-align:center;
@@ -3010,7 +3223,7 @@
  	empty-cells:show;
  }
  
-@@ -6355,17 +6347,18 @@
+@@ -6385,17 +6380,18 @@
  .CLASS04102 {
  	background-color:$_(clickable);
  	color: $_(textColorA) ! important; /* white */
@@ -3030,7 +3243,7 @@
  }
  
  .CLASS04105 {
-@@ -6388,6 +6381,7 @@
+@@ -6418,6 +6414,7 @@
  .CLASS04109 {
  	background-color:$_(clickable);
  	color: $_(textColorA) ! important; /* white */
@@ -3038,7 +3251,7 @@
    height:20px;
  }
  
-@@ -6411,10 +6405,15 @@
+@@ -6441,10 +6438,15 @@
  
  .CLASS04200 {
  	text-align:center;
@@ -3055,7 +3268,7 @@
  .CLASS04202 {
  	height:40px;
  }
-@@ -6430,10 +6429,12 @@
+@@ -6460,10 +6462,12 @@
  
  .CLASS04205 {
  	height:auto;
@@ -3068,7 +3281,7 @@
  }
  
  .CLASS04207 {
-@@ -6456,6 +6457,7 @@
+@@ -6486,6 +6490,7 @@
  .CLASS04211 {
  	background-color:$_(clickable);
  	color: $_(textColorA) ! important; /* white */
@@ -3076,7 +3289,7 @@
  }
  
  .CLASS04212 {
-@@ -6486,7 +6488,8 @@
+@@ -6516,7 +6521,8 @@
  .CLASS04301 {
  	width:100%;
  	height:100%;
@@ -3086,7 +3299,7 @@
  }
  
  .CLASS04302 {
-@@ -6663,7 +6666,7 @@
+@@ -6693,7 +6699,7 @@
  
  .CLASS04900 {
  	color: $_(textColorA); /* white */
@@ -3095,7 +3308,7 @@
  }
  
  .CLASS04901 {
-@@ -6687,7 +6690,7 @@
+@@ -6717,7 +6723,7 @@
  .CLASS04905 {
  	line-height:15px;
  	font-size:smaller;
@@ -3104,7 +3317,7 @@
  }
  
  .CLASS04906 {
-@@ -6774,6 +6777,7 @@
+@@ -6804,6 +6810,7 @@
  .CLASS05012 {
  	color: $_(textColorB); /* black */
  	font-size:9pt;
@@ -3112,7 +3325,18 @@
  }
  
  /* rega\pages\tabs\admin\msg\timemodule.htm */
-@@ -6850,7 +6854,6 @@
+@@ -6842,6 +6849,10 @@
+ 	color: $_(textColorB); /* black */
+ }
+ 
++.CLASS05104 tbody {
++	border-width: 0;
++}
++
+ .CLASS05105 {
+ 	text-align:left;
+ }
+@@ -6880,7 +6891,6 @@
  .CLASS05200 {
  	text-align:center;
  	vertical-align:middle;
@@ -3120,7 +3344,7 @@
  	height: auto;
  }
  
-@@ -6916,10 +6919,10 @@
+@@ -6946,10 +6956,10 @@
  }
  
  .CLASS05301 {
@@ -3132,7 +3356,7 @@
  }
  
  .CLASS05302 {
-@@ -7092,6 +7095,10 @@
+@@ -7122,6 +7132,10 @@
  
  /* rega\pages\tabs\favViewer.htm  */
  
@@ -3143,7 +3367,7 @@
  .CLASS05800 {
  	width:100%;
  	text-align:center;
-@@ -7220,11 +7227,13 @@
+@@ -7250,11 +7264,13 @@
  /* rega\pages\tabs\user\newFav.htm */
  
  .CLASS06300 {
@@ -3159,7 +3383,7 @@
  }
  
  .CLASS06302 {
-@@ -7512,7 +7521,6 @@
+@@ -7542,7 +7558,6 @@
  }
  
  .CLASS06409 {
@@ -3167,7 +3391,7 @@
  }
  
  .CLASS06410 {
-@@ -7675,7 +7683,7 @@
+@@ -7705,7 +7720,7 @@
  
  .CLASS10902 {
    border:1px solid $_(gray); /* #999999 */
@@ -3176,7 +3400,7 @@
    background-color:$_(inactiveButton); /* rgb(192,192,192) */
    cursor:default;
  }
-@@ -7790,7 +7798,6 @@
+@@ -7820,7 +7835,6 @@
  }
  
  .CLASS11105 {
@@ -3184,7 +3408,7 @@
    padding-top: 7px;
  }
  
-@@ -7817,7 +7824,6 @@
+@@ -7847,7 +7861,6 @@
  /* config/ic_setprofiles */
  
  .CLASS20001 {
@@ -3192,7 +3416,7 @@
  }
  
  .CLASS20002 {
-@@ -7839,7 +7845,7 @@
+@@ -7869,7 +7882,7 @@
  }
  
  .CLASS20006 {
@@ -3201,7 +3425,7 @@
  }
  
  .CLASS20007 {
-@@ -7875,7 +7881,6 @@
+@@ -7905,7 +7918,6 @@
  }
  
  .CLASS20010 {
@@ -3209,7 +3433,7 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8404,7 +8409,9 @@
+@@ -8434,7 +8446,9 @@
  /* config\help.cgi */
  
  .CLASS21300 {
@@ -3220,7 +3444,7 @@
  }
  
  .CLASS21301 {
-@@ -8630,8 +8637,11 @@
+@@ -8660,8 +8674,11 @@
  
  /* config\control_panel.cgi */
  
@@ -3233,7 +3457,7 @@
  }
  
  .CLASS21701 {
-@@ -8702,7 +8712,8 @@
+@@ -8732,7 +8749,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -3243,7 +3467,7 @@
  }
  
  .CLASS21901 {
-@@ -8752,7 +8763,6 @@
+@@ -8782,7 +8800,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -3251,7 +3475,7 @@
    width:100%;
  }
  
-@@ -8809,13 +8819,17 @@
+@@ -8839,13 +8856,17 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -3271,7 +3495,7 @@
  }
  
  .CLASS22002 {
-@@ -8825,11 +8839,17 @@
+@@ -8855,11 +8876,17 @@
  
  .CLASS22003 {
    background-color: $_(white);
@@ -3289,7 +3513,7 @@
  }
  
  .CLASS22005 {
-@@ -8887,7 +8907,8 @@
+@@ -8917,7 +8944,8 @@
  }
  
  .CLASS22101 {
@@ -3299,7 +3523,7 @@
  }
  
  .CLASS22102 {
-@@ -8909,9 +8930,8 @@
+@@ -8939,9 +8967,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -3310,7 +3534,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8921,10 +8941,12 @@
+@@ -8951,10 +8978,12 @@
    position:relative;
    width:50px;
    height:50px;
@@ -3378,6 +3602,33 @@
    <\/colgroup>\n
    <thead>\n
      <tr>\n
+@@ -21528,7 +21528,7 @@
+   TREE_EXPANDED_FOOTER_HTML: "" +
+     "<table border='0' cellspacing='8'>" +
+       "<tr>" + 
+-        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
++        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
+         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
+         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.collapseTree();'>${footerBtnCloseTree}</div></td>" +
+       "</tr>" +
+@@ -21536,7 +21536,7 @@
+   FLAT_FOOTER_HTML: "" +
+     "<table border='0' cellspacing='8'>" +
+       "<tr>" + 
+-        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
++        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
+         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
+         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.recoverTree();'>${footerBtnRestoreTree}</div></td>" +
+       "</tr>" +
+@@ -23051,7 +23051,7 @@
+     FOOTER_HTML= "" +
+       "<table border='0' cellspacing='8'>" +
+         "<tr>" +
+-          "<td style='text-align:center;vertical-align=middle;' ><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>"+translateKey("footerBtnPageBack")+"</div></td>" +
++          "<td style='text-align:center;vertical-align=middle;' ><div class='FooterButton' onclick='WebUI.goBack();'>"+translateKey("footerBtnPageBack")+"</div></td>" +
+         "</tr>" +
+       "</table>";
+ 
 @@ -38032,7 +38032,7 @@
  //Defines
  BORDER_COLOR = WebUI.getColor("channelBorder");     //Border

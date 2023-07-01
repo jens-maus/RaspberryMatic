@@ -175,19 +175,28 @@
    /**
     * Legt den Namen des Geräts fest.
     **/
-@@ -11597,11 +11605,50 @@
-     this.channels = {};
-     this.groups   = {};
+@@ -11444,6 +11452,7 @@
+     {
+       var id = data["id"];
+       device = this.devices[id];
++      data["interface_displayname"] = this.loadIfDisplayName(data);
  
-+    
-+    var BidCosGateways=[];
-+    var allBidCosDevsList=[];
+       if (typeof(device) != "undefined") 
+       {
+@@ -11556,6 +11565,49 @@
+     return singles;
+   },
+   
++  loadBidCosGateways: function()
++  {
++    this.BidCosGateways=[];	   
++    this.allBidCosDevsList = homematic("Interface.listDevices", {"interface": "BidCos-RF"});
 +    var rfGateways = homematic("BidCoS_RF.getConfigurationRF");
 +    if (rfGateways) {
 +      for (i = 0, len = rfGateways.interfaces.length; i < len; i++) {
 +        var gateway = rfGateways.interfaces[i];
 +        if (gateway.type === globalLGWTypes.HMLGW2) {
-+          BidCosGateways.push(
++          this.BidCosGateways.push(
 +           new BidcosRfPage.Gateway()
 +            .setGatewayClass("RF")
 +            .setType(gateway.type)
@@ -198,35 +207,41 @@
 +          );
 +        }
 +      }
-+      BidCosGateways.sort((a, b) => a.m_userName.localeCompare(b.m_userName, undefined, { numeric: true, sensitivity: 'base' }));
-+      for (i = 0, len = BidCosGateways.length; i < len; i++) {
-+        DeviceListPage.INTERFACES.push({id:BidCosGateways[i].m_userName, name:BidCosGateways[i].m_userName});
++      this.BidCosGateways.sort((a, b) => a.m_userName.localeCompare(b.m_userName, undefined, { numeric: true, sensitivity: 'base' }));
++      for (i = 0, len = this.BidCosGateways.length; i < len; i++) {
++        DeviceListPage.INTERFACES.push({id:this.BidCosGateways[i].m_userName, name:this.BidCosGateways[i].m_userName});
 +      }
-+      allBidCosDevsList = homematic("Interface.listDevices", {"interface": "BidCos-RF"});
 +    }
-+    
-+
-     var self=this;
-     homematic("Device.listAllDetail", null, function(deviceList) {
-       // alert("after listAllDetail devices: " + deviceList);
-       jQuery.each(deviceList, function (index, data) {
-       // console.dir (data);
-+        data["interface_displayname"] = data["interface"];
-+        if ( allBidCosDevsList && rfGateways && data["interface"] === "BidCos-RF") {
-+          var idx = allBidCosDevsList.findIndex(({ address }) => address === data["address"]);
-+          if (idx > -1) {
-+            var _device= allBidCosDevsList[idx];
-+            var gwIdx = BidCosGateways.findIndex(({ m_address }) => m_address === _device["interface"]);
-+            if ( gwIdx > -1 ) {
-+              data["interface_displayname"] = (BidCosGateways[gwIdx].m_userName.length > 0) ?  BidCosGateways[gwIdx].m_userName : _device["interface"]; 
-+            }
-+          }
++  },
++  
++  loadIfDisplayName: function(data) 
++  {
++    if (typeof this.BidCosGateways === 'undefined') { this.loadBidCosGateways(); }
++    var dispname = data["interface"];
++    if ( this.allBidCosDevsList && this.BidCosGateways.length > 0 && data["interface"] === "BidCos-RF") {
++      var idx = this.allBidCosDevsList.findIndex(({ address }) => address === data["address"]);
++      if (idx > -1) {
++        var _device= this.allBidCosDevsList[idx];
++        var gwIdx = this.BidCosGateways.findIndex(({ m_address }) => m_address === _device["interface"]);
++        if ( gwIdx > -1 ) {
++          dispname = (this.BidCosGateways[gwIdx].m_userName.length > 0) ?  this.BidCosGateways[gwIdx].m_userName : _device["interface"]; 
 +        }
-+
-         if (data !== null && (data["type"] != typeCCU1))
++      }
++    }
++    return dispname;
++  },
+   /**
+    * Lädt die Geräteliste erneut
+    **/
+@@ -11606,6 +11658,7 @@
          {
            var id = data["id"];
-@@ -11665,6 +11712,16 @@
+           var device = self.devices[id];
++          data["interface_displayname"] =  self.loadIfDisplayName(data);
+ 
+           if (typeof(device) != "undefined")
+           {
+@@ -11665,6 +11718,16 @@
        }
      });
    },
@@ -243,7 +258,7 @@
  
    /**
     * Startet die Akualisierung eines Geräts.
-@@ -22178,7 +22235,7 @@
+@@ -22178,7 +22241,7 @@
              (this.TypeNameFilter.match(device.typeName))                 &&
              (this.DescriptionFilter.match(translateKey(device.typeDescription)))       &&
              (this.AddressFilter.match(device.address))                   &&
@@ -252,7 +267,7 @@
              (this.ModeFilter.matchStringArray(device.modes)) &&
              (this.RoomFilter.matchArray(device.rooms))                   &&
              (this.FuncFilter.matchArray(device.subsections)));
-@@ -24410,6 +24467,7 @@
+@@ -24410,6 +24473,7 @@
        //jQuery("."+gateway.getAddress()).attr("class","bidcosrf_tablecell " + gateway.getAddress().replace(/\s+/g,""));
        this.setGateway(gateway.getAddress());
        this.setRoaming(roaming);

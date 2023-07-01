@@ -1,6 +1,9 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC3010
 
+# exit in HMLGW mode immediately
+[[ -e /usr/local/HMLGW ]] && exit 0
+
 jsonfile=/tmp/addon_updates.json
 if [[ -n "$(ls -A /etc/config/rc.d)" ]]; then
   echo "[" > ${jsonfile}
@@ -12,7 +15,7 @@ if [[ -n "$(ls -A /etc/config/rc.d)" ]]; then
       DVERSION=$(echo "${DINFO}" | grep "Version:" | awk '{print $2}')
       DUPDATESCRIPT=$(echo "${DINFO}" | grep "Update:" | awk '{print $2}')
       if [[ -n "${DUPDATESCRIPT}" ]]; then
-        WEBRESULT=$(/usr/bin/curl -s "http://localhost${DUPDATESCRIPT}" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
+        WEBRESULT=$(/usr/bin/curl -s "http://localhost${DUPDATESCRIPT}" | xargs | tr '[:upper:]' '[:lower:]')
         if [[ ${first} -eq 1 ]]; then
           first=0
         else

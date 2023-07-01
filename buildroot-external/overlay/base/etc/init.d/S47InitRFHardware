@@ -8,7 +8,6 @@
 identify_rf_hardware() {
 
   # setup default HM RF variables
-  HM_MODE="NORMAL"
   HM_HMRF_DEV=""
   HM_HMRF_DEVNODE=""
   HM_HMRF_DEVTYPE=""
@@ -94,7 +93,7 @@ identify_rf_hardware() {
     # also set tty device to low_latency mode (if possible)
     if [[ -n "${RF_DEVNODES}" ]]; then
       echo -n "."
-      /bin/setserial /dev/${RF_DEVNODES} low_latency >/dev/null 2>&1
+      /bin/setserial "/dev/${RF_DEVNODES}" low_latency >/dev/null 2>&1
     fi
   fi
 
@@ -127,11 +126,6 @@ identify_rf_hardware() {
     echo -n "."
   fi
 
-  # check if we should boot in LAN gateway mode
-  if [[ -e /usr/local/HMLGW ]]; then
-    HM_MODE="HM-LGW"
-  fi
-
   # strip leading/trailing spaces from RF_DEVNODES
   RF_DEVNODES=$(echo "${RF_DEVNODES}" | xargs)
 }
@@ -148,7 +142,7 @@ reset_rf_hardware() {
     # check if this is a raw-uart device and if so we use
     # the reset_radio_module sysfs node for the module reset
     if [[ -e "/sys/class/raw-uart/${dev}/reset_radio_module" ]]; then
-      echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module"
+      echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module" 2>/dev/null
     fi
 
   done
@@ -311,12 +305,12 @@ query_rf_parameters() {
     # rebind the gpio-leds so that numeration of the rpi-rf-mod leds are correct
     if [[ -n "${GPIO_LEDS}" ]] &&
        [[ ! -e /sys/bus/platform/drivers/leds-gpio/${GPIO_LEDS} ]]; then
-      echo ${GPIO_LEDS} >/sys/bus/platform/drivers/leds-gpio/bind 2>/dev/null
+      echo "${GPIO_LEDS}" >/sys/bus/platform/drivers/leds-gpio/bind 2>/dev/null
     fi
 
     # load the dummy rx8130 kernel module because an RPI-RF-MOD
     # is identified by having a rx8130 module loaded
-    if ! grep -Eq "^dummy_rx8130 " /proc/modules; then
+    if ! grep -Eq "_rx8130 " /proc/modules; then
       modprobe -q dummy_rx8130
     fi
 
@@ -487,4 +481,4 @@ case "$1" in
     exit 1
 esac
 
-exit $?
+exit 0

@@ -24,16 +24,6 @@
    catch { exec killall hss_lcd }
    catch { exec lcdtool {Saving   Data...  } }
    rega system.Save()
---- occu/WebUI/www/config/cp_network.cgi.orig
-+++ occu/WebUI/www/config/cp_network.cgi
-@@ -141,6 +141,7 @@
- 
- 
- proc action_reboot {} {
-+  puts ""
-   exec /sbin/reboot
- }
- 
 --- occu/WebUI/www/config/cp_security.cgi.orig
 +++ occu/WebUI/www/config/cp_security.cgi
 @@ -1526,6 +1526,7 @@

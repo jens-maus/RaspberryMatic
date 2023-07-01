@@ -95,7 +95,7 @@ case $1 in
   ;;
 
   status)
-    echo "nut" "$DESC" && exit 0 || exit $?
+    echo "nut" "$DESC" && exit 0 || exit 1
   ;;
 
   poweroff)

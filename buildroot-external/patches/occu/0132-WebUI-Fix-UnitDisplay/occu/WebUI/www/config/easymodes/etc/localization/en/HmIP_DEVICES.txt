@@ -9,6 +9,7 @@
     "optionUnit1S": "1 s",
     "optionUnit2S": "2 s",
     "optionUnit3S": "3 s",
+    "optionUnit4S": "4 s",
     "optionUnit5S": "5 s",
     "optionUnit10S": "10 s",
     "optionUnit20S": "20 s",

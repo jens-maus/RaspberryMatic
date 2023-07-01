@@ -24,16 +24,12 @@ update_rf_hardware() {
       # identify which firmware file to take for a potential coprocessor
       # firmware update
       FORCED_VERSION=
-      if [[ "${HM_MODE}" == "NORMAL" ]]; then
-        if [[ ! -s /etc/config/forced_coprocessor_version ]]; then
-          FW_FILE=dualcopro_si1002_update_blhm.eq3
-        else
-          FORCED_VERSION=$(cat /etc/config/forced_coprocessor_version)
-          NEW_VERSION=${FORCED_VERSION}
-          FW_FILE="dualcopro_si1002_update_blhm-${FORCED_VERSION}.eq3"
-        fi
+      if [[ ! -s /etc/config/forced_coprocessor_version ]]; then
+        FW_FILE=dualcopro_si1002_update_blhm.eq3
       else
-        FW_FILE=coprocessor_update.eq3
+        FORCED_VERSION=$(cat /etc/config/forced_coprocessor_version)
+        NEW_VERSION=${FORCED_VERSION}
+        FW_FILE="dualcopro_si1002_update_blhm-${FORCED_VERSION}.eq3"
       fi
 
       # identify the copro firmware version to be flashed
@@ -199,7 +195,7 @@ update_rf_hardware() {
       fi
 
       # check for new firmware file in /firmware/HmIP-RFUSB
-      LATEST_FIRMWARE=$(find /firmware/HmIP-RFUSB-Beta -name "dualcopro_update_blhmip-*.eq3" -maxdepth 1 | grep "${FORCED_VERSION}" |  sort -V | tail -1)
+      LATEST_FIRMWARE=$(find /firmware/HmIP-RFUSB -name "dualcopro_update_blhmip-*.eq3" -maxdepth 1 | grep "${FORCED_VERSION}" |  sort -V | tail -1)
       NEW_VERSION=$(echo "${LATEST_FIRMWARE}" | sed 's/.*-\(.*\)\.eq3/\1/')
 
       # get OLD_VERSION from var tmp file
@@ -306,4 +302,4 @@ case "$1" in
     exit 1
 esac
 
-exit $?
+exit 0

@@ -72,8 +72,8 @@ identify_host() {
       esac
 
       # setup RaspberryPi specific settings
-      HM_LED_GREEN="/sys/class/leds/led0"
-      HM_LED_RED="/sys/class/leds/led1"
+      HM_LED_GREEN="/sys/class/leds/ACT"
+      HM_LED_RED="/sys/class/leds/PWR"
       HM_LED_YELLOW=""
 
       # if we are running on a raspberrypi we
@@ -85,8 +85,11 @@ identify_host() {
 
       # if the least significant bit is set the
       # HDMI cable seems to be unplugged or if
-      # no HDMI display is listed using tvservice
-      if [[ $(((hdmi_state & 0x01) == 1)) -eq 1 ]] || ! /usr/bin/tvservice -l | grep -q "type HDMI"; then
+      # no HDMI display is listed using tvservice or
+      # if no EDID info can be read from the display
+      if [[ $(((hdmi_state & 0x01) == 1)) -eq 1 ]] ||
+        ! /usr/bin/tvservice -l | grep -q "type HDMI" ||
+        /usr/bin/tvservice -d /dev/null 2>&1 | grep -q "Nothing"; then
         /usr/bin/tvservice --off >/dev/null
         /usr/bin/vcgencmd display_power 0 >/dev/null
       fi
@@ -233,4 +236,4 @@ case "$1" in
     exit 1
 esac
 
-exit $?
+exit 0

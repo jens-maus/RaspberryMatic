@@ -55,7 +55,6 @@ puts {
   </script>
 
   <div id="configMainTable" style="display:none">
-    
     <!-- Zentralen-Wartung -->
     <div class="cpCell">
       <div class="cpButton">
@@ -85,11 +84,9 @@ if {[isOldCCU]} {
       <!-- Zenralen-Display-Einstellungen -->
       <div class="cpCell">
         <div  class="StdTableBtn CLASS21703" onclick="showDisplayCP()">${btnSysConfDisplayConfig}</div>
-     </div>
+      </div>
 
-     <div class="cpCell _CLASS21702"></div>
-
-
+      <div class="cpCell _CLASS21702"></div>
   }
 }
     
@@ -185,13 +182,6 @@ if {[isOldCCU]} {
     </div>
   }
 
-  if { [getProduct] >= 3} {
-    puts "<div class=\"cpCell\"><div class=\"cpButton\">"
-    puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"showAccessPoint();\">\${btnAccessPoints}</div>"
-    puts "<div class=\"StdTableBtnHelp\"><img id=\"showAccessPointCPHelp\" src=\"/ise/img/help.png\"></div>"
-    puts "</div></div>"
-  }
-
   puts {
     <div class="cpCell">
       <div class="cpButton">
@@ -200,7 +190,6 @@ if {[isOldCCU]} {
       </div>
     </div>
    }
-
 
 if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
   puts "<div class=\"cpCell\"><div class=\"cpButton\">"
@@ -289,7 +278,7 @@ puts {
     };
 
     function setTooltips() {
-      var helpContainer = ["#showMaintenanceCPHelp","#showSecurityCPHelp","#showTimeCPHelp","#showNetworkCPHelp","#newFirewallConfigDialogHelp","#showBidCosConfigHelp","#showSoftwareCPHelp", "#showCouplingCPHelp", "#showGeneralSettingsCPHelp", "#showAccessPointSettingsCPHelp", "#showSecuritySettingsCPHelp", "#showAccessPointCPHelp", "#showAdvancedSettingsCPHelp"];
+      var helpContainer = ["#showMaintenanceCPHelp","#showSecurityCPHelp","#showTimeCPHelp","#showNetworkCPHelp","#newFirewallConfigDialogHelp","#showBidCosConfigHelp","#showSoftwareCPHelp", "#showCouplingCPHelp", "#showGeneralSettingsCPHelp", "#showSecuritySettingsCPHelp", "#showAdvancedSettingsCPHelp"];
       var help = [
         "<h1>"+translateKey("btnSysConfCentralMaintenace")+"</h1><ul><li>"+translateKey("lblSysConfCentralMaintenance1")+"</li><li>"+translateKey("lblSysConfCentralMaintenance2")+"</li><li>"+translateKey("lblSysConfCentralMaintenance3")+"</li></ul>",
         "<h1>"+translateKey("btnSysConfSecurity")+"</h1><ul><li>"+translateKey("lblSysConfSecurity1")+"</li><li>"+translateKey("lblSysConfSecurity2")+"</li><li>"+translateKey("lblSysConfSecurity3")+"</li><li>"+translateKey("lblSysConfSecurity4")+"</li><li>"+translateKey("lblSysConfSecurity5")+"</li><li>"+translateKey("lblSysConfSecurity6")+"</li><li>"+translateKey("lblSysConfSecurity7")+"</li><li>"+translateKey("lblSysConfSecurity8")+"</li></ul>",
@@ -300,9 +289,7 @@ puts {
         "<h1>"+translateKey("btnSysConfAdditionalSoft")+"</h1><ul><li>"+translateKey("lblSysConfAdditionalSoft1")+"</li><li>"+translateKey("lblSysConfAdditionalSoft2")+"</li></ul>",
         "<h1>"+translateKey("btnSysConfCoupling")+"</h1><ul><li>OSRAM Lightify</li><li>Philips Hue</li></ul>",
         "<h1>"+translateKey("btnSysConfGeneralSettings")+"</h1><ul><li>"+translateKey("lblSysConfStorage")+"</li><li>"+translateKey("lblSysConfSetPowerCost")+"</li></ul>",
-        "<h1>"+translateKey("btnAccessPointSettings")+"</h1><ul><li>"+translateKey("lblAccessPointSettings1")+"</li></ul>",
         "<h1>"+translateKey("btnSecuritySettings")+"</h1><ul><li>"+translateKey("lblSecuritySettings1")+"</li><li>"+translateKey("lblSecuritySettings2")+"</li></ul>",
-        "<h1>"+translateKey("btnAccessPoints")+"</h1><ul><li>"+translateKey("lblShowAllAPs")+"</li></ul>",
         "<h1>"+translateKey("btnSysConfAdvancedSettings")+"</h1><ul><li>"+translateKey("lblSysConfAdvancedSettings1")+"</li></ul>"
         ];
 

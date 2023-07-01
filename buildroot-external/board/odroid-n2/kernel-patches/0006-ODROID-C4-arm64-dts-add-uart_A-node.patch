@@ -1,17 +1,17 @@
-From 0ad900b2d6e895b1f1788d51e471863743727d71 Mon Sep 17 00:00:00 2001
-Message-Id: <0ad900b2d6e895b1f1788d51e471863743727d71.1646168061.git.stefan@agner.ch>
-In-Reply-To: <9f8390a715bc58e7423b65a18c4499761c84b819.1646168061.git.stefan@agner.ch>
-References: <9f8390a715bc58e7423b65a18c4499761c84b819.1646168061.git.stefan@agner.ch>
+From d6b1ddfb5816b887470452920d273661e361632d Mon Sep 17 00:00:00 2001
+Message-Id: <d6b1ddfb5816b887470452920d273661e361632d.1676488652.git.stefan@agner.ch>
+In-Reply-To: <86f6a398d2c080f92d51048ededf45efbe3a96d4.1676488652.git.stefan@agner.ch>
+References: <86f6a398d2c080f92d51048ededf45efbe3a96d4.1676488652.git.stefan@agner.ch>
 From: Hyeonki Hong <hhk7734@gmail.com>
 Date: Tue, 1 Mar 2022 21:51:50 +0100
-Subject: [PATCH 6/7] ODROID-C4: arm64/dts: add uart_A node
+Subject: [PATCH] ODROID-C4: arm64/dts: add uart_A node
 
 ---
  arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi | 9 ++++++++-
  1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
-index 76ad052fbf0c..690e4823a9d0 100644
+index ddb1b345397f..49b88c1e11cd 100644
 --- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
 +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
 @@ -10,8 +10,9 @@
@@ -25,7 +25,7 @@ index 76ad052fbf0c..690e4823a9d0 100644
  	};
  
  	chosen {
-@@ -436,6 +437,12 @@ &tohdmitx {
+@@ -450,6 +451,12 @@ &tohdmitx {
  	status = "okay";
  };
  
@@ -39,5 +39,5 @@ index 76ad052fbf0c..690e4823a9d0 100644
  	status = "okay";
  	pinctrl-0 = <&uart_ao_a_pins>;
 -- 
-2.35.1
+2.39.1
 

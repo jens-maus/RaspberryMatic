@@ -6,6 +6,12 @@
 
 init_system() {
 
+  # check if we have booted in LAN gateway mode
+  # shellcheck disable=SC2034
+  if [[ -e /usr/local/HMLGW ]]; then
+    HM_MODE="HM-LGW"
+  fi
+
   # general umask so that we will have rwrw--
   umask 0002
 
@@ -79,4 +85,4 @@ case "$1" in
     exit 1
 esac
 
-exit $?
+exit 0

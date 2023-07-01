@@ -1,14 +1,16 @@
 --- occu/WebUI/www/rega/esp/system.fn.orig
 +++ occu/WebUI/www/rega/esp/system.fn
-@@ -807,6 +807,7 @@
+@@ -807,6 +807,9 @@
    !sv.ValueSubType(ist);
    sv.DPInfo( system.GetVar("sInfo") );
    sv.ValueUnit( system.GetVar("sUnit") );
++  sv.RemoveMetaData('MIN');
++  sv.RemoveMetaData('MAX');
 +  var svValue;
    if (ist == istAlarm)
    {
      sv.ValueType( ivtBinary );
-@@ -822,7 +823,7 @@
+@@ -822,7 +825,7 @@
      sv.ValueSubType( istBool );
      sv.ValueName1(system.GetVar("sTrue"));
      sv.ValueName0(system.GetVar("sFalse"));
@@ -17,7 +19,7 @@
    }
    elseif (ist == istGeneric)
    {
-@@ -830,20 +831,20 @@
+@@ -830,20 +833,20 @@
      sv.ValueSubType( istGeneric );
      sv.ValueMin(system.GetVar("iMinVal"));
      sv.ValueMax(system.GetVar("iMaxVal"));
@@ -41,7 +43,7 @@
    }
  
    if (oChn) 
-@@ -860,6 +861,9 @@
+@@ -860,6 +863,9 @@
      }
      sv.Channel( ID_ERROR );
    }
@@ -387,7 +389,7 @@
    {
      var s = "";
      s += "<table class='CLASS05010'>";
-@@ -351,7 +427,27 @@
+@@ -351,7 +427,33 @@
      s += "</tr>";
      s += "</table>";
      $("tdEdit").innerHTML = s;
@@ -400,14 +402,20 @@
 +    s += "</table>";
 +    $("tdValueEdit").innerHTML = s;
 +    
-   }
++  }
 +  
++  function decodeURIComponentSafe(s) {
++    if (!s) {
++        return s;
++    }
++    return decodeURIComponent(s.replace(/%(?![0-9][0-9a-fA-F]+)/g, '%25'));
+   }
 +    
 +  loadChar8859Edit = function(sValue) 
 +  {
 +    var s = "";
 +    s += "<table class='CLASS05012'>";
-+    s += "<tr><td> <textarea id='txValue' rows='5'>"+decodeURIComponent(unescape(sValue))+"</textarea> </td></tr>";
++    s += "<tr><td> <textarea id='txValue' rows='5'>"+decodeURIComponentSafe(unescape(sValue))+"</textarea> </td></tr>";
 +    s += "</table>";
 +    $("tdValueEdit").innerHTML = s;
 +    $("tdEdit").innerHTML = "";
@@ -415,7 +423,7 @@
  
    <% 
      if (system.GetVar("createNew") == 1) {
-@@ -361,27 +457,43 @@
+@@ -361,27 +463,43 @@
        if ( (sv.Channel() != ID_ERROR) && (sv.Channel() != 0)) {
          object oChn = dom.GetObject(sv.Channel());
          if (oChn) {

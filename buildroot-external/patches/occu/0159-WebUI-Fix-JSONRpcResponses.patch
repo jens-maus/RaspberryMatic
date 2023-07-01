@@ -48,24 +48,18 @@
  }
 --- occu/WebUI/www/api/methods/ccu/restartReGa.tcl.orig
 +++ occu/WebUI/www/api/methods/ccu/restartReGa.tcl
-@@ -7,4 +7,6 @@
- # Rückgabewert: kein
+@@ -8,3 +8,5 @@
  ##
  
--catch {exec /etc/init.d/S70ReGaHss restart}
-\ No newline at end of file
-+catch {exec /etc/init.d/S70ReGaHss restart}
+ catch {exec /usr/bin/monit restart ReGaHss}
 +
 +jsonrpc_response ""
 --- occu/WebUI/www/api/methods/ccu/restartsshdaemon.tcl.orig
 +++ occu/WebUI/www/api/methods/ccu/restartsshdaemon.tcl
-@@ -7,4 +7,6 @@
- # Rückgabewert: kein
+@@ -8,3 +8,5 @@
  ##
  
--catch {exec /etc/init.d/S50sshd restart}
-\ No newline at end of file
-+catch {exec /etc/init.d/S50sshd restart}
+ catch {exec /usr/bin/monit restart sshd}
 +
 +jsonrpc_response ""
 --- occu/WebUI/www/api/methods/ccu/setssh.tcl.orig
@@ -80,13 +74,6 @@
 @@ -16,3 +16,4 @@
    catch {exec rm /etc/config/hideStickyUnreach}
  }
- 
-+jsonrpc_response ""
---- occu/WebUI/www/api/methods/user/setlanguage.tcl.orig
-+++ occu/WebUI/www/api/methods/user/setlanguage.tcl
-@@ -14,3 +14,4 @@
- set userName [string map {"../" ""} $userName]
- exec echo $args(userLang) > /etc/config/userprofiles/$userName.lang
  
 +jsonrpc_response ""
 --- occu/WebUI/www/api/methods/user/setregaversion.tcl.orig

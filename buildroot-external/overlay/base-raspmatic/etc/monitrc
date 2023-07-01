@@ -87,18 +87,6 @@ check program irqbalanceEnabled with path /bin/sh -c "/usr/bin/test $(nproc) -gt
     group system
     if status != 0 for 1 cycles then unmonitor
 
-# rng daemon (random number generator) monitoring
-check process rngd with pidfile /var/run/rngd.pid
-    group system
-    start = "/etc/init.d/S21rngd start"
-    stop = "/etc/init.d/S21rngd stop"
-    restart = "/etc/init.d/S21rngd stop"
-    if not exist for 1 cycles then restart
-    if 1 restart within 1 cycles then
-      exec "/bin/triggerAlarm.tcl 'rngd restarted' 'WatchDog: rngd-restart' true"
-    if filedescriptors > 95% for 5 cycles then
-      exec "/bin/triggerAlarm.tcl 'rngd: high filedescriptor usage (>95%)' 'WatchDog: rngd-highfd' true"
-
 # dbus daemon monitoring
 check process dbus with pidfile /run/messagebus.pid
     group system
@@ -271,7 +259,7 @@ check process multimacd with pidfile /var/run/multimacd.pid
       exec "/bin/triggerAlarm.tcl 'multimacd restarted' 'WatchDog: multimacd-restart' true"
     if filedescriptors > 95% for 5 cycles then
       exec "/bin/triggerAlarm.tcl 'multimacd: high filedescriptor usage (>95%)' 'WatchDog: multimacd-highfd' true"
-    depends on multimacdEnabled, hmlangwDisabled
+    depends on multimacdEnabled
 
 check program multimacdEnabled with path "/usr/bin/test -f /var/etc/multimacd.conf"
     group homematic

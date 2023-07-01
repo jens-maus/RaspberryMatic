@@ -11,13 +11,16 @@ set INETCHECKFILENAME "/etc/config/internetCheckDisabled"
 set RPI4USB3CHECKFILENAME "/etc/config/rpi4usb3CheckDisabled"
 #set MEDIOLAFILENAME "/usr/local/addons/mediola/Disabled"
 set MEDIOLAFILENAME "/etc/config/neoDisabled"
+set CLOUDMATICFILENAME "/etc/config/cloudmaticDisabled"
 set NOUPDATEDCVARSFILENAME "/etc/config/NoUpdateDCVars"
 set NOBADBLOCKSCHECKFILENAME "/etc/config/NoBadBlocksCheck"
 set NOPORTFORWARDINGCHECKFILENAME "/etc/config/NoPortForwardingCheck"
 set NOFSTRIMFILENAME "/etc/config/NoFSTRIM"
+set NOADDONUPDATECHECKFILENAME "/etc/config/NoAddonUpdateCheck"
 set DISABLELEDFILENAME "/etc/config/disableLED"
 set DISABLEONBOARDLEDFILENAME "/etc/config/disableOnboardLED"
 set CUSTOMSTORAGEPATHFILENAME "/etc/config/CustomStoragePath"
+set HBRFETHIPADDRESSFILENAME "/etc/config/hb_rf_eth"
 
 set NOCRONBACKUPFILENAME "/etc/config/NoCronBackup"
 set CRONBACKUPMAXBACKUPSFILENAME "/etc/config/CronBackupMaxBackups"
@@ -137,22 +140,25 @@ proc put_message {title msg args} {
 }
 
 proc action_put_page {} {
-  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
+  global env sid INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME HBRFETHIPADDRESSFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
    
   set inetcheckDisabled [file exists $INETCHECKFILENAME]
   set rpi4usb3CheckDisabled [file exists $RPI4USB3CHECKFILENAME]
   set mediolaDisabled [file exists $MEDIOLAFILENAME]
+  set cloudmaticDisabled [file exists $CLOUDMATICFILENAME]
   set noCronBackup [file exists $NOCRONBACKUPFILENAME]
   set noDCVars [file exists $NOUPDATEDCVARSFILENAME]
   set noBadBlocksCheck [file exists $NOBADBLOCKSCHECKFILENAME]
   set noPortforwardingCheck [file exists $NOPORTFORWARDINGCHECKFILENAME]
   set noFSTRIM [file exists $NOFSTRIMFILENAME]
+  set noAddonUpdateCheck [file exists $NOADDONUPDATECHECKFILENAME]
   set disableLED [file exists $DISABLELEDFILENAME]
   set disableOnboardLED [file exists $DISABLEONBOARDLEDFILENAME]
   
   set cronBackupMaxBackups [readfile $CRONBACKUPMAXBACKUPSFILENAME]
   set cronBackupPath [readfile $CRONBACKUPPATHFILENAME]
   set customStoragePath [readfile $CUSTOMSTORAGEPATHFILENAME]
+  set hbrfethIPAddress [readfile $HBRFETHIPADDRESSFILENAME]
 
   set tweaks [read_var_from_file $TWEAKFILENAME CP_DEVCONFIG]
   set systemName [get_systemname]
@@ -168,6 +174,7 @@ proc action_put_page {} {
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
           puts "\${dialogSettingsAdvancedSettingsWatchDog}"
+          puts "<br/><img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:21px; height:21px; vertical-align:middle;\" onclick=\"OnToggleHelp();\">"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
@@ -197,6 +204,7 @@ proc action_put_page {} {
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
           puts "\${dialogSettingsAdvancedSettingsSystem}"
+          puts "<br/><img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:21px; height:21px; vertical-align:middle;\" onclick=\"OnToggleHelp();\">"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
@@ -271,6 +279,14 @@ proc action_put_page {} {
                 puts "\${dialogSettingsAdvancedSettingsPortforwardingCheck}"
               }
             }
+            table_row {
+              set checked ""
+              if {!$noAddonUpdateCheck} { set checked "checked=true" }
+              table_data {class="CLASS21112"} {colspan="3"} {
+                cgi_checkbox mode=noAddonUpdateCheck {id="cb_noAddonUpdateCheck"} $checked
+                puts "\${dialogSettingsAdvancedSettingsAddonUpdateCheck}"
+              }
+            }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
             table_row {
               set checked ""
@@ -295,7 +311,7 @@ proc action_put_page {} {
               }
 
               table_data  {
-                cgi_text customStoragePath=$customStoragePath {id="text_customStoragePath"} {size=30} 
+                cgi_text customStoragePath=$customStoragePath {id="text_customStoragePath"} {size=30}
               }
             }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
@@ -305,6 +321,24 @@ proc action_put_page {} {
               table_data {class="CLASS21112"} {colspan="3"} {
                 cgi_checkbox mode=mediolaDisabled {id="cb_mediolaDisabled"} $checked
                 puts "\${dialogSettingsAdvancedSettingsMediola}"
+              }
+            }
+            table_row {
+              set checked ""
+              if {!$cloudmaticDisabled} { set checked "checked=true" }
+              table_data {class="CLASS21112"} {colspan="3"} {
+                cgi_checkbox mode=cloudmaticDisabled {id="cb_cloudmaticDisabled"} $checked
+                puts "\${dialogSettingsAdvancedSettingsCloudmatic}"
+              }
+            }
+            table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
+            table_row {
+              table_data {class="CLASS21112"} {
+                puts "\${dialogSettingsAdvancedSettingHBRFETHIPAddress}"
+              }
+
+              table_data  {
+                cgi_text hbrfethIPAddress=$hbrfethIPAddress {id="text_hbrfethIPAddress"} {size=30}
               }
             }
             table_row { table_data {class="CLASS21112"} {colspan="3"} { puts "\<hr>" } }
@@ -319,16 +353,20 @@ proc action_put_page {} {
           p { ${dialogSettingsAdvancedSettingsHintSystem5} }
           p { ${dialogSettingsAdvancedSettingsHintSystem6} }
           p { ${dialogSettingsAdvancedSettingsHintSystem12} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem13} }
           p { ${dialogSettingsAdvancedSettingsHintSystem7} }
           p { ${dialogSettingsAdvancedSettingsHintSystem8} }
           p { ${dialogSettingsAdvancedSettingsHintSystem9} }
           p { ${dialogSettingsAdvancedSettingsHintSystem10} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem14} }
+          p { ${dialogSettingsAdvancedSettingsHintSystem15} }
         }
       }
 
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
           puts "\${dialogSettingsAdvancedSettingsExpert}"
+          puts "<br/><img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:21px; height:21px; vertical-align:middle;\" onclick=\"OnToggleHelp();\">"
         }
         table_data {align=left} {class="CLASS02533"} {
           table {
@@ -365,7 +403,11 @@ proc action_put_page {} {
             puts "\${btnOk}"
           }
         }
-        table_data {class="CLASS21109"} {}
+        table_data {class="CLASS21109"} {align=right} {
+          division {class="CLASS21108"} {onClick="OnToggleHelp()"} {
+            puts "\${tooltipHelp}&nbsp;<img src=\"/ise/img/help.png\" style=\"cursor: pointer; width:21px; height:21px; vertical-align:middle;\" >"
+          }
+        }
       }
     }
   }
@@ -374,11 +416,28 @@ proc action_put_page {} {
     puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
       dlgResult = 0;
+      isHelpVisible = false;
+      showHelp = function(enable) {
+        isHelpVisible=enable;
+        var infos = document.getElementsByClassName("CLASS21113");
+        if (infos !== null) {
+          for (const info of infos) { info.style.display = enable ? "block" : "none"; }
+          dlgPopup.setWidth(enable ? 1020 : 600);
+          dlgPopup.readaptSize();
+        }
+      }
+      
+      OnToggleHelp = function() {
+        isHelpVisible = !isHelpVisible;
+		showHelp(isHelpVisible);
+      }
+      
       OnOK = function() {
         var pb = "action=save_settings";
         pb += "&inetcheckDisabled="+(document.getElementById("cb_inetcheckDisabled").checked?"0":"1");
         pb += "&rpi4usb3CheckDisabled="+(document.getElementById("cb_rpi4usb3CheckDisabled").checked?"0":"1");
         pb += "&mediolaDisabled="+(document.getElementById("cb_mediolaDisabled").checked?"0":"1");
+        pb += "&cloudmaticDisabled="+(document.getElementById("cb_cloudmaticDisabled").checked?"0":"1");
         pb += "&noCronBackup="+(document.getElementById("cb_noCronBackup").checked?"0":"1");
         pb += "&noDCVars="+(document.getElementById("cb_noDCVars").checked?"0":"1");
         pb += "&noBadBlocksCheck="+(document.getElementById("cb_noBadBlocksCheck").checked?"0":"1");
@@ -386,11 +445,13 @@ proc action_put_page {} {
         pb += "&disableLED="+(document.getElementById("cb_disableLED").checked?"0":"1");
         pb += "&disableOnboardLED="+(document.getElementById("cb_disableOnboardLED").checked?"0":"1");
         pb += "&noFSTRIM="+(document.getElementById("cb_noFSTRIM").checked?"0":"1");
+        pb += "&noAddonUpdateCheck="+(document.getElementById("cb_noAddonUpdateCheck").checked?"0":"1");
         pb += "&devConfig="+(document.getElementById("cb_devConfig").checked?"0":"1");
-        pb += "&cronBackupPath="+document.getElementById("text_cronBackupPath").value;
-        pb += "&cronBackupMaxBackups="+document.getElementById("text_cronBackupMaxBackups").value;
-        pb += "&customStoragePath="+document.getElementById("text_customStoragePath").value;
-        pb += "&systemName="+document.getElementById("text_systemName").value;
+        pb += "&cronBackupPath="+encodeURIComponent(document.getElementById("text_cronBackupPath").value);
+        pb += "&cronBackupMaxBackups="+encodeURIComponent(document.getElementById("text_cronBackupMaxBackups").value);
+        pb += "&customStoragePath="+encodeURIComponent(document.getElementById("text_customStoragePath").value);
+        pb += "&hbrfethIPAddress="+encodeURIComponent(document.getElementById("text_hbrfethIPAddress").value);
+        pb += "&systemName="+escape(document.getElementById("text_systemName").value);
 
         var opts = {
           postBody: pb,
@@ -412,6 +473,7 @@ proc action_put_page {} {
     puts {
       translatePlaceholder = function() {
         document.getElementById("text_customStoragePath").placeholder=translateKey("dialogSettingsAdvancedSettingsCustomStoragePathPlaceholder");
+        document.getElementById("text_hbrfethIPAddress").placeholder=translateKey("dialogSettingsAdvancedSettingHBRFETHIPAddressPlaceholder");
         document.getElementById("text_cronBackupPath").placeholder=translateKey("dialogSettingsAdvancedSettingsCronBackupPathPlaceholder");
         document.getElementById("text_cronBackupMaxBackups").placeholder="30";
         document.getElementById("text_systemName").placeholder=translateKey("dialogSettingsAdvancedSettingsSystemNamePlaceholder");
@@ -435,21 +497,21 @@ proc action_put_page {} {
       };
     }
 
-    puts "dlgPopup.setWidth(1020);";
     puts "translatePlaceholder();"
     puts "translatePage('#messagebox');"
-    puts "dlgPopup.readaptSize();"
+    puts "showHelp(false);"
   }
   
 }
 
 proc action_save_settings {} {
-  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
+  global INETCHECKFILENAME RPI4USB3CHECKFILENAME MEDIOLAFILENAME CLOUDMATICFILENAME NOCRONBACKUPFILENAME NOUPDATEDCVARSFILENAME NOBADBLOCKSCHECKFILENAME NOPORTFORWARDINGCHECKFILENAME NOFSTRIMFILENAME NOADDONUPDATECHECKFILENAME CRONBACKUPMAXBACKUPSFILENAME CRONBACKUPPATHFILENAME CUSTOMSTORAGEPATHFILENAME HBRFETHIPADDRESSFILENAME TWEAKFILENAME DISABLELEDFILENAME DISABLEONBOARDLEDFILENAME
   set errMsg ""
 
   import inetcheckDisabled
   import rpi4usb3CheckDisabled
   import mediolaDisabled
+  import cloudmaticDisabled
   import noCronBackup
   import noDCVars
   import disableLED
@@ -457,10 +519,12 @@ proc action_save_settings {} {
   import noBadBlocksCheck
   import noPortforwardingCheck
   import noFSTRIM
+  import noAddonUpdateCheck
   import devConfig
   import cronBackupPath
   import cronBackupMaxBackups
   import customStoragePath
+  import hbrfethIPAddress
   import systemName
   
   if {$systemName == ""} {
@@ -481,12 +545,26 @@ proc action_save_settings {} {
     append errMsg [deletefile $RPI4USB3CHECKFILENAME]
   }
 
+  set mediolaDisabledCurrent [file exists $MEDIOLAFILENAME]
   if {$mediolaDisabled} {
     append errMsg [createfile $MEDIOLAFILENAME]
   } else {
     append errMsg [deletefile $MEDIOLAFILENAME]
   }
+  if {$mediolaDisabled != $mediolaDisabledCurrent} {
+    catch {exec /etc/init.d/S97NeoServer restart 2>/dev/null >/dev/null}
+  }
   
+  set cloudmaticDisabledCurrent [file exists $CLOUDMATICFILENAME]
+  if {$cloudmaticDisabled} {
+    append errMsg [createfile $CLOUDMATICFILENAME]
+  } else {
+    append errMsg [deletefile $CLOUDMATICFILENAME]
+  }
+  if {$cloudmaticDisabled != $cloudmaticDisabledCurrent} {
+    catch {exec /etc/init.d/S97CloudMatic restart 2>/dev/null >/dev/null}
+  }
+
   if {$noCronBackup} {
     append errMsg [createfile $NOCRONBACKUPFILENAME]
   } else {
@@ -529,6 +607,12 @@ proc action_save_settings {} {
     append errMsg [deletefile $NOFSTRIMFILENAME]
   }
 
+  if {$noAddonUpdateCheck} {
+    append errMsg [createfile $NOADDONUPDATECHECKFILENAME]
+  } else {
+    append errMsg [deletefile $NOADDONUPDATECHECKFILENAME]
+  }
+
   if {$devConfig} {
     append errMsg [writefile $TWEAKFILENAME "CP_DEVCONFIG=1"]
   } else {
@@ -551,6 +635,12 @@ proc action_save_settings {} {
     append errMsg [deletefile $CUSTOMSTORAGEPATHFILENAME]
   } else {
     append errMsg [writefile $CUSTOMSTORAGEPATHFILENAME $customStoragePath]
+  }
+
+  if { $hbrfethIPAddress == "" } {
+    append errMsg [deletefile $HBRFETHIPADDRESSFILENAME]
+  } else {
+    append errMsg [writefile $HBRFETHIPADDRESSFILENAME $hbrfethIPAddress]
   }
   
   # reload monit

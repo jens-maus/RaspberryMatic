@@ -57,6 +57,9 @@ proc action_put_page {} {
   # get all variables from /VERSION into ver array
   loadVarsFromShellFile /VERSION ver
 
+  # get all variables from /etc/config/netconfig into net array
+  loadVarsFromShellFile /etc/config/netconfig net
+
   set SERIAL ""
   catch {set SERIAL $hm(HM_HMIP_SERIAL)}
   if {$SERIAL == ""} {
@@ -91,6 +94,9 @@ proc action_put_page {} {
   execCmd SWAPUSE {exec egrep "Swap(Total|Free)" /proc/meminfo | tr -d "\n" | awk {{ printf("%.1f %", 100-$4/$2*100) }}}
   execCmd UPTIME {exec awk {{s=int($1);d=int(s/86400);h=int(s % 86400/3600);m=int(s % 3600 / 60); printf "%d d, %d h %d min", d, h, m}} /proc/uptime}
   execCmd NTPOFFSET {exec /usr/bin/chronyc -n tracking | grep "Last offset" | awk {{ printf("%.3f ms", $4*1000) }}}
+  execCmd NTPSERVER {exec /usr/bin/chronyc -n tracking | grep "Reference ID" | awk -F "\[\(\)\]" {{ print $2 }}}
+  execCmd MAINETH {exec /sbin/ip -4 route get 1 | head -1 | awk {{ print $5 }}}
+  execCmd MAINHOSTNAME {exec /bin/hostname}
   catch {set OSTYPE [string trim [read_var /etc/os-release PRETTY_NAME] '"']}
   execCmd OSKERNEL "exec uname -s -r -m"
   set TCLVER [info patchlevel]
@@ -128,6 +134,14 @@ proc action_put_page {} {
   execCmd USERFSFREE {exec monit status userfs | grep "space free for non superuser" | awk {{ print substr($0,index($0,$6)) }}}
   execCmd STORAGEDEV {exec mountpoint -n /usr/local | awk {{ print $1 }} | xargs lsblk -l -n -o PKNAME -p}
   execCmd STORAGE "exec lsblk -l -n -o SIZE,MODEL,KNAME -d -p $STORAGEDEV"
+  set HMRF_DUTYCYCLE "n/a"
+  catch { set HMRF_DUTYCYCLE [exec /usr/bin/jq -r ".\[\] | select(.address == \"$hm(HM_HMRF_SERIAL)\") | .dutyCycle" /tmp/dutycycle.json] }
+  set HMRF_CARRIERSENSE "n/a"
+  catch { set HMRF_CARRIERSENSE [exec /usr/bin/jq -r ".\[\] | select(.address == \"$hm(HM_HMRF_SERIAL)\") | .carrierSense" /tmp/dutycycle.json] }
+  set HMIP_DUTYCYCLE "n/a"
+  catch { set HMIP_DUTYCYCLE [exec /usr/bin/jq -r ".\[\] | select(.address == \"$hm(HM_HMIP_SERIAL)\") | .dutyCycle" /tmp/dutycycle.json] }
+  set HMIP_CARRIERSENSE "n/a"
+  catch { set HMIP_CARRIERSENSE [exec /usr/bin/jq -r ".\[\] | select(.address == \"$hm(HM_HMIP_SERIAL)\") | .carrierSense" /tmp/dutycycle.json] }
 
   set sid ""
   catch {import sid}
@@ -198,8 +212,12 @@ proc action_put_page {} {
           putsVar "Load Average" $LOADAVG
           putsVar "System Temperature" $TEMP
           putsVar "Memory / Swap Utilization" "$MEMUSE / $SWAPUSE"
-          putsVar "NTP Offset" $NTPOFFSET
+          putsVar "NTP Offset (Server)" "$NTPOFFSET ($NTPSERVER)"
           putsVar "rootfs / userfs Free Space" "$ROOTFSFREE / $USERFSFREE"
+          putsVar "IP address" "$net(CURRENT_IP) ($MAINETH, $net(MODE))"
+          putsVar "Gateway / Netmask" "$net(CURRENT_GATEWAY) / $net(CURRENT_NETMASK)"
+          putsVar "Nameservers" "$net(CURRENT_NAMESERVER1), $net(CURRENT_NAMESERVER2)"
+          putsVar "Hostname" "$MAINHOSTNAME"
         puts "</div>"
         puts "<h1 class='helpTitle'><u>homematicIP-RF (HmIP) Info</u></h1>"
         puts "<div style='display: table; width: 100%;'>"
@@ -208,6 +226,7 @@ proc action_put_page {} {
           putsVar "Address" "$hm(HM_HMIP_ADDRESS) ($hm(HM_HMIP_ADDRESS_ACTIVE))"
           putsVar "SGTIN" $hm(HM_HMIP_SGTIN)
           putsVar "Serial" $hm(HM_HMIP_SERIAL)
+          putsVar "DC / CS" "$HMIP_DUTYCYCLE % / $HMIP_CARRIERSENSE %"
         puts "</div>"
         puts "<h1 class='helpTitle'><u>HomeMatic-RF (HmRF) Info</u></h1>"
         puts "<div style='display: table; width: 100%;'>"
@@ -215,6 +234,7 @@ proc action_put_page {} {
           putsVar "Device-Node" "$hm(HM_HMRF_DEVNODE) ($hm(HM_HMRF_DEVTYPE))"
           putsVar "Address" "$hm(HM_HMRF_ADDRESS) ($hm(HM_HMRF_ADDRESS_ACTIVE))"
           putsVar "Serial" $hm(HM_HMRF_SERIAL)
+          putsVar "DC / CS" "$HMRF_DUTYCYCLE % / $HMRF_CARRIERSENSE %"
         puts "</div>"
       puts "</td>"
 

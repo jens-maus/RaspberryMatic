@@ -7,87 +7,6 @@ sourceOnce common.tcl
 load tclrpc.so
 load tclrega.so
 
-set REMOTE_CERT_SCRIPT "http://www.homematic.com/sslcert/ssl.php"
-
-proc action_get_cert {} {
-  global env REMOTE_CERT_SCRIPT sid
-  
-}
-
-proc action_cert_update_confirm {} {
-  global env
-   
-  http_head
-  division {class="popupTitle"} {
-    #puts "Netzwerk-Sicherheit"
-    puts "\${dialogSettingsNetworkMessageCertificateTitle}"
-  }
-  division {class="CLASS21100"} {
-    table {class="popupTable"} {border="0"} {
-      table_row {
-        table_data { 
-          table {class="CLASS21106"} {
-            table_row {
-              table_data {colspan="2"} {
-                puts "\${dialogSettingsNetworkMessageCertificateUploadSucceed}"
-              }
-            }
-            table_row {
-              table_data {
-                #puts "Schritt 4: Zentrale neu starten"
-                puts "\${dialogSettingsNetworkCertificateLblStep4}"
-              }
-              table_data {
-                division {class="popupControls CLASS21107"} {
-                  table {
-                    table_row {
-                      table_data {
-                        division {class="CLASS21110"} {onClick="UpdateGo();"} {
-                          #puts "Neu starten"
-                          puts "\${btnNewStart}"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  division {class="popupControls"} {
-    table {
-      table_row {
-        table_data {class="CLASS21103"} {
-          division {class="CLASS21104"} {onClick="OnBack();"} {
-            #puts "Zur&uuml;ck"
-            puts "\${dialogBack}"
-          }
-        }
-      }
-    }
-  }
-  puts ""
-  cgi_javascript {
-    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
-    puts {
-      UpdateGo = function() {
-        dlgPopup.hide();
-        dlgPopup.setWidth(400);
-        dlgPopup.LoadFromFile(url, "action=cert_update_go");
-      }
-      OnBack = function() {
-        dlgPopup.hide();
-        dlgPopup.setWidth(800);
-        dlgPopup.LoadFromFile(url);
-      }
-    }
-    puts "translatePage('#messagebox');"
-  }
-}
-
 proc action_cert_update_failed {} {
   global env
    
@@ -139,36 +58,18 @@ proc action_cert_update_failed {} {
   }
 }
 
-
-proc action_reboot {} {
-  exec /sbin/reboot
-}
-
 proc action_cert_update_go {} {
   global env
   
   http_head
-
-  file rename -force -- "/usr/local/tmp/server.pem" "/etc/config/server.pem"
-
-  put_message "\${dialogSettingsNetworkMessageCertificateTitle}" "\${dialogSettingsNetworkMessageCertificateCCURestart}" {\${btnNewLogin} "window.location.href='/';"}
-  
-  #save DOM
-  rega system.Save()
-  
-  puts ""
   cgi_javascript {
-    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
-      var pb = "action=reboot";
-      var opts = {
-        postBody: pb,
-        sendXML: false
-      };
-      new Ajax.Request(url, opts);
+      homematic("User.restartLighttpd", {}, function(){
+        MessageBox.show(translateKey("dialogRestartWebserverTitle"),translateKey("dialogRestartWebserverContent"));
+        window.setTimeout(function() {window.location.protocol = "http";},2000);
+      }); 
     }
-    puts "translatePage('#messagebox');"
-  }    
+  } 
 }
 
 
@@ -255,7 +156,7 @@ proc action_cert_upload {} {
   gets $fp line
   close $fp
   #puts $line;
-  if { [string equal $line "-----BEGIN RSA PRIVATE KEY-----"] == 1 || [string equal $line "-----BEGIN PRIVATE KEY-----"] == 1} {
+  if { [string last " PRIVATE KEY-----" $line] != -1 } {
     file rename -force -- $filename "/usr/local/tmp/server.pem"
     
     cgi_javascript {
@@ -267,23 +168,23 @@ proc action_cert_upload {} {
         }
         dlgPopup.hide();
         dlgPopup.setWidth(600);
-        dlgPopup.LoadFromFile(url, "action=cert_update_confirm");
+        dlgPopup.LoadFromFile(url, "action=cert_update_go");
       }
     }
   } else {
     file delete -force -- $filename
 
     cgi_javascript {
-      puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-      puts {
-        var dlgPopup = parent.top.dlgPopup;
-        if (dlgPopup === undefined) {
-          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
-        }
-        dlgPopup.hide();
-        dlgPopup.setWidth(600);
-        dlgPopup.LoadFromFile(url, "action=cert_update_failed");
+    puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+    puts {
+      var dlgPopup = parent.top.dlgPopup;
+      if (dlgPopup === undefined) {
+        dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
       }
+      dlgPopup.hide();
+      dlgPopup.setWidth(600);
+      dlgPopup.LoadFromFile(url, "action=cert_update_failed");
+    }
     }
   }
 }
@@ -294,7 +195,7 @@ proc action_update_start {} {
 
 
 proc action_put_page {} {
-  global env  REMOTE_CERT_SCRIPT sid
+  global env sid
   
   set ip ""
   set mask ""
@@ -346,8 +247,13 @@ proc action_put_page {} {
                 puts "\${dialogSettingsNetworkIPSettingsLblIPAdd}"
               }
               table_data {
-                cgi_text ip_address=$ip {id="text_ip"}
+                cgi_text ip_address=$ip {id="text_ip"} {onpaste="isIPValid(this.value, this.id, true);"} {onkeyup="isIPValid(this.value, this.id);"}
               }
+
+              table_data {id="text_ip_hint"} {class="attention hidden"} {
+                puts "\${invalidIP}"
+              }
+
             }
             table_row {
               table_data {width="20"} { }
@@ -356,8 +262,13 @@ proc action_put_page {} {
                 puts "\${dialogSettingsNetworkIPSettingsLblSubnet}"
               }
               table_data {
-                cgi_text mask=$mask {id="text_mask"} 
+                cgi_text mask=$mask {id="text_mask"} {onpaste="isNetMaskValid(this.value, this.id, true);"} {onkeyup="isNetMaskValid(this.value, this.id);"}
               }
+
+              table_data {id="text_mask_hint"} {class="attention hidden"} {
+                puts "\${invalidNetMask}"
+              }
+
             }
             table_row {
               table_data {width="20"} { }
@@ -366,8 +277,13 @@ proc action_put_page {} {
                 puts "\${dialogSettingsNetworkIPSettingsLblGateway}"
               }
               table_data {
-                cgi_text gw=$gw {id="text_gw"} 
+                cgi_text gw=$gw {id="text_gw"} {onpaste="isIPValid(this.value, this.id, true);"} {onkeyup="isIPValid(this.value, this.id);"}
               }
+
+              table_data {id="text_gw_hint"} {class="attention hidden"} {
+                puts "\${invalidIP}"
+              }
+
             }
             table_row {
               table_data {class="CLASS21112"} {colspan="3"} {
@@ -382,8 +298,13 @@ proc action_put_page {} {
                 puts "\${dialogSettingsNetworkIPSettingsLblDNS1}"
               }
               table_data {
-                cgi_text dns1=$dns1 {id="text_dns1"}
+                cgi_text dns1=$dns1 {id="text_dns1"} {onpaste="isIPValid(this.value, this.id, true);"} {onkeyup="isIPValid(this.value, this.id);"}
               }
+
+              table_data {id="text_dns1_hint"} {class="attention hidden"} {
+                puts "\${invalidIP}"
+              }
+
             }
             table_row {
               table_data {width="30"} { }
@@ -392,8 +313,13 @@ proc action_put_page {} {
                 puts "\${dialogSettingsNetworkIPSettingsLblDNS2}"
               }
               table_data {
-                cgi_text dns2=$dns2 {id="text_dns2"}
+                cgi_text dns2=$dns2 {id="text_dns2"} {onpaste="isIPValid(this.value, this.id, true);"} {onkeyup="isIPValid(this.value, this.id);"}
               }
+
+              table_data {id="text_dns2_hint"} {class="attention hidden"} {
+                puts "\${invalidIP}"
+              }
+
             }
           }
         }
@@ -412,51 +338,7 @@ proc action_put_page {} {
         table_data {class="CLASS21113"} {width="400"} {
           table {class="CLASS21111"} {
             set email [get_user_email]
-            table_row {
-              table_data {width="20"} {}
-              table_data {colspan="2" align="left"} {
-                #puts "Schritt 1: Daten eingeben"
-                puts "\${dialogSettingsNetworkCertificateLblStep1}"
-              }
-            }
-            table_row {
-              table_data {width="20"} {}
-              table_data {align="left"} {
-                #puts "Hostname:"
-                puts "\${dialogSettingsNetworkCertificateLblHostname}"
-              }
-              table_data {align="right"} {
-                cgi_text url=$env(HTTP_HOST) {size="35"} {id="text_url"} {type="text"} 
-              }
-            }
-            table_row {
-              table_data {width="20"} {}
-              table_data {align="left"} {
-                #puts "E-Mail Adresse:"
-                puts "\${dialogSettingsNetworkCertificateLblEMail}"
-              }
-              table_data {align="right"} {
-                cgi_text mail=$email {size="35"} {id="text_mail"} {type="text"}
-              }
-            }
-            table_row {
-              table_data {width="20"} {}
-              table_data {colspan="2" align="left"} {
-                #puts "Land (DE, UK, etc.):"
-                puts "\${dialogSettingsNetworkCertificateLblCountry}"
-                cgi_text country=DE {size="2"} {id="text_country"} {type="text"}
-              }
-            }
-            table_row {
-              table_data {align="right"} {class="CLASS21112"} {colspan="3"} {
-                division {class="popupControls CLASS21107"} {
-                  division {class="CLASS21117"} {onClick="OnGetCert()"} {
-                    #puts "Zertifikat erstellen"
-                    puts "\${dialogSettingsNetworkCertificateBtnCreateCert}"
-                  }
-                }
-              }
-            }
+
             table_row {
               table_data {width="20"} {}
               table_data {colspan="2" align="left"} {
@@ -492,13 +374,6 @@ proc action_put_page {} {
                     }
                   }
                 }
-              }
-            }
-            table_row {
-              table_data {width="20"} {}
-              table_data {colspan="2" align="left"} {class="CLASS21118"} {
-                #puts "Schritt 4: Zentrale neu starten"
-                puts "\${dialogSettingsNetworkCertificateLblStep4}"
               }
             }
 
@@ -537,19 +412,8 @@ proc action_put_page {} {
         }
         table_data {class="CLASS21113"} {align="left"} {
           p {${dialogSettingsNetworkHintCertificateP1}}
-
-          p {
-          ${dialogSettingsNetworkHintCertificateP2}
-          <ol>
-            <li>${dialogSettingsNetworkHintCertificateP2a}</li>
-            <li>${dialogSettingsNetworkHintCertificateP2b}</li>
-            <li>${dialogSettingsNetworkHintCertificateP2c}</li>
-            <li>${dialogSettingsNetworkHintCertificateP2d}</li>
-          </ol>
-          }
+          p {${dialogSettingsNetworkHintCertificateP2}}
           p {${dialogSettingsNetworkHintCertificateP3}}
-
-
         }
       }
     }
@@ -564,7 +428,7 @@ proc action_put_page {} {
           }
         }
         table_data {class="CLASS21103"} {
-          division {class="CLASS21108"} {onClick="OnOK()"} {
+          division {id="btnOK"} {class="CLASS21108"} {onClick="OnOK()"} {
             #puts "OK"
             puts "\${btnOk}"
           }
@@ -601,7 +465,14 @@ proc action_put_page {} {
       }
     }
     puts {
+      var timer_text_ip,
+      timer_text_gw,
+      timer_text_dns1,
+      timer_text_dns2,
+      timer_text_url;
+
       dlgResult = 0;
+
       enable_disable = function() {
         var disabled= !document.getElementById("radio_manual").checked;
         document.getElementById("text_ip").disabled=disabled;
@@ -609,7 +480,76 @@ proc action_put_page {} {
         document.getElementById("text_gw").disabled=disabled;
         document.getElementById("text_dns1").disabled=disabled;
         document.getElementById("text_dns2").disabled=disabled;
-      }
+      };
+
+      checkIPAddress = function(ipAddress, elmId) {
+        var isValid = isIPAddressValid(ipAddress),
+        btnOKElm = jQuery("#btnOK"),
+        invalidHintElm = jQuery("#"+elmId+"_hint");
+
+        if (isValid != null) {
+         invalidHintElm.hide();
+         btnOKElm.show();
+        } else {
+         invalidHintElm.show();
+         btnOKElm.hide();
+        }
+      };
+
+      isIPValid = function(ipAddress, elmId, isPaste) {
+        if (isPaste) {
+          setTimeout(function() {ipAddress = jQuery("#"+elmId).val();},100);
+        }
+
+        var timeDelay = 1000;
+        switch(elmId) {
+          case "text_ip":
+            clearTimeout(timer_text_ip);
+            timer_text_ip = setTimeout(function() {checkIPAddress(ipAddress, elmId)},timeDelay);
+            break;
+          case "text_gw":
+            clearTimeout(timer_text_gw);
+            timer_text_gw = setTimeout(function() {checkIPAddress(ipAddress, elmId)},timeDelay);
+            break;
+          case "text_dns1":
+            clearTimeout(timer_text_dns1);
+            timer_text_dns1 = setTimeout(function() {checkIPAddress(ipAddress, elmId)},timeDelay);
+            break;
+          case "text_dns2":
+            clearTimeout(timer_text_dns2);
+            timer_text_dns2 = setTimeout(function() {checkIPAddress(ipAddress, elmId)},timeDelay);
+            break;
+          case "text_url":
+            clearTimeout(timer_text_url);
+            timer_text_url = setTimeout(function() {checkIPAddress(ipAddress, elmId)},timeDelay);
+            break;
+        }
+      };
+
+      isNetMaskValid = function(netMask, elmId, isPaste) {
+        var timer_netMask,
+        timeDelay = 1000;
+
+        if (isPaste) {
+          setTimeout(function() {netMask = jQuery("#"+elmId).val();},100);
+        }
+
+        clearTimeout(timer_netMask);
+        timer_netMask = setTimeout(function() {
+
+          var isValid = isSubnetMaskValid(netMask),
+          btnOKElm = jQuery("#btnOK"),
+          invalidHintElm = jQuery("#"+elmId+"_hint");
+
+          if (isValid != null) {
+           invalidHintElm.hide();
+           btnOKElm.show();
+          } else {
+           invalidHintElm.show();
+           btnOKElm.hide();
+          }
+        },timeDelay);
+      };
     }
     puts "enable_disable();"
     puts "translatePage('#messagebox');"
@@ -617,18 +557,10 @@ proc action_put_page {} {
   }
   set serial [get_serial]
   cgi_javascript {
-    puts "var cert_url = \"$REMOTE_CERT_SCRIPT?serial=$serial\";"
     puts {
-      OnGetCert = function() {
-      cert_url += "&country="+document.getElementById("text_country").value;
-      cert_url += "&url="+document.getElementById("text_url").value;
-      cert_url += "&mail="+document.getElementById("text_mail").value;
-      window.location.href=cert_url;
-      };
-
+  
       deleteCert = function() {
-        var textA = "<div>" + translateKey('confirmCertificationPurgeA') + "<br/><br/></div>" +
-         "<div style=\"text-align:center\">" + translateKey('confirmCertificationPurgeB') + "</div>"
+        var textA = "<div style=\"text-align:center\">" + translateKey('confirmCertificationPurgeB') + "</div>"
 
         var textB = "<div>" + translateKey('certificationFileDeletedA')  + "<br/><br/></div>" +
         "<div style=\"text-align:center\">" + translateKey('certificationFileDeletedB') + "</div>"
@@ -642,7 +574,7 @@ proc action_put_page {} {
               jQuery("[name='deleteCertificate']").hide();
               homematic("User.restartLighttpd", {}, function(){
                 MessageBox.show(translateKey("dialogRestartWebserverTitle"),translateKey("dialogRestartWebserverContent"));
-                window.setTimeout(function() {window.location.protocol = "http"},2000);
+                window.setTimeout(function() {window.location.protocol = "http";},2000);
               });
 
             });
@@ -790,7 +722,6 @@ cgi_eval {
 
   catch { import action }
   catch { import filename }
-
   if {[session_requestisvalid 8] > 0} then action_$action
 }
 

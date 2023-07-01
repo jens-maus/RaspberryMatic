@@ -4,8 +4,8 @@
 # <msg> to alarm variable <var> with optionally creating it as an
 # <internal> variable.
 #
-# triggerAlarm.ctl v2.3
-# Copyright (c) 2017-2021 Jens Maus <mail@jens-maus.de>
+# triggerAlarm.ctl v2.4
+# Copyright (c) 2017-2023 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,6 +26,11 @@
 # <var> = variable name (optional)
 # <int> = set variable as internal variable (true/false, optional)
 #
+
+# this tool only makes sense in normal mode
+if { [file exists /usr/local/HMLGW] == 1 } {
+  exit 0
+}
 
 load tclrpc.so
 load tclrega.so

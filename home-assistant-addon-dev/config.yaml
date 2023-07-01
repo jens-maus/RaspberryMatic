@@ -1,6 +1,6 @@
 ---
 name: RaspberryMatic CCU (snapshot)
-version: 3.63.9.20220519-672b23f
+version: 3.71.6.20230701-3da7412
 stage: experimental
 slug: raspberrymatic-dev
 image: ghcr.io/jens-maus/raspberrymatic
@@ -10,7 +10,6 @@ arch:
   - amd64
 description: HomeMatic/homematicIP CCU central based on RaspberryMatic (Snapshot)
 url: https://github.com/jens-maus/RaspberryMatic/
-watchdog: tcp://[HOST]:[PORT:80]
 ingress: true
 ingress_stream: true
 panel_title: RaspberryMatic (snapshot)
@@ -19,6 +18,9 @@ startup: services
 map:
   - backup:rw
 init: false
+backup_pre: /bin/sh -c "/bin/echo 'load tclrega.so; rega system.Save()' | /bin/tclsh && /bin/sync"
+backup_exclude:
+  - "*/tmp/.watchdog"
 timeout: 120
 devices:
   - /dev/raw-uart
@@ -69,6 +71,10 @@ ports:
   8083/tcp: null
   9092/tcp: null
   5435/tcp: null
+  2121/tcp: null
+  2122/tcp: null
+  1833/tcp: null
+  8883/tcp: null
 ports_description:
   22/tcp: SSH access (Extern)
   80/tcp: CCU WebUI HTTP (Extern)
@@ -105,6 +111,10 @@ ports_description:
   8083/tcp: CCU-Historian DB-WebUI (Extern)
   9092/tcp: CCU-Historian DB-Port (Extern)
   5435/tcp: CCU-Historian DB-pgPort (Extern)
+  2121/tcp: CCU-Jack HTTP (Extern)
+  2122/tcp: CCU-Jack HTTPS (Extern)
+  1833/tcp: CCU-Jack MQTT (Extern)
+  8883/tcp: CCU-Jack MQTT-Secure (Extern)
 environment:
   HM_RUNNING_IN_HA: "1"
   HM_HAPROXY_SRC: 172.30.32.2/32

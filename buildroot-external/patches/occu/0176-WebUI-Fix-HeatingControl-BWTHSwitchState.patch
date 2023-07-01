@@ -1,0 +1,20 @@
+--- occu/WebUI/www/rega/esp/controls/heating_control.fn.orig
++++ occu/WebUI/www/rega/esp/controls/heating_control.fn
+@@ -583,7 +583,7 @@
+   WriteLine("<td>");
+     WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+       WriteLine("<tr>");
+-        WriteLine("<td><div id='idValveState'></div></td>");
++        WriteLine("<td><div id='idValveState"#chnId#"'></div></td>");
+       WriteLine("</tr>");
+     WriteLine("</table>");
+   WriteLine("</td>");
+@@ -612,7 +612,7 @@
+ 
+     WriteLine("}");
+ 
+-    WriteLine("jQuery('#idValveState').text(lblValveState);");
++    WriteLine("jQuery('#idValveState"#chnId#"').text(lblValveState);");
+ 
+   WriteLine("</script>");
+ 

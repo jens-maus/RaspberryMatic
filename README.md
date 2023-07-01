@@ -8,7 +8,7 @@
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/latest/total.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
 [![DownloadsSnapshots](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/snapshots/total.svg)](https://github.com/jens-maus/RaspberryMatic/releases/snapshots)
 [![CI Build](https://github.com/jens-maus/RaspberryMatic/workflows/CI%20Build/badge.svg)](https://github.com/jens-maus/RaspberryMatic/actions)
-[![Snaphot Build](https://github.com/jens-maus/RaspberryMatic/workflows/Snaphot%20Build/badge.svg)](https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots)
+[![Snapshot Build](https://github.com/jens-maus/RaspberryMatic/workflows/Snapshot%20Build/badge.svg)](https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots)
 [![Contributors](https://img.shields.io/github/contributors/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/graphs/contributors)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/issues)
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/issues)
@@ -22,7 +22,7 @@
 
 <sub>[Deutschsprachiges 🇩🇪🇦🇹🇨🇭 ReadMe](README.de.md)</sub>
 ___
-RaspberryMatic is a free and non-commercial open-source operating system alternative for running a cloud-free smart-home IoT central to provide connectivity to the [homematicIP](https://www.homematic-ip.com/) / [HomeMatic](http://homematic.com/) hardware line of IoT devices developed by [eQ-3](https://eq-3.de) and distributed by [ELV](https://elv.de/). RaspberryMatic has the aim to be 100% compatible to the vendor-developed _HomeMatic CCU3 control central_ (CCU3) system. It can be directly installed on a _[CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html)_ or _[ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)_ hardware device. Alternatively, it can also be installed on a wide range of freely available single-board-computers (SBC) like a [RaspberryPi](https://www.raspberrypi.org/), [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/), [Hardkernel ODROID](https://www.hardkernel.com/product-category/odroid-board/) or even on full-fledged hardware platforms like an [Intel NUC](https://www.intel.com/content/www/us/en/products/details/nuc.html) system. Furthermore, it can be run as a virtual appliance in modern virtualization environments (e.g. Proxmox VE, VirtualBox, Synology VMM, Docker/OCI, Kubernetes/K8s, vmWare ESXi, etc.) or even as a pure [Home Assistant](https://www.home-assistant.io/) Add-On. On top of that wider range of supported operating environments, it also comes with exclusive features on different levels (WebUI, Linux OS, connectivity, etc.) to support end users with a more modern and advanced user experience compared to the vendor-provided CCU3 operating system.
+RaspberryMatic is a free and non-commercial open-source operating system alternative for running a cloud-free smart-home IoT central to provide connectivity to the [homematicIP](https://www.homematic-ip.com/) / [HomeMatic](http://homematic.com/) hardware line of IoT devices developed by [eQ-3](https://eq-3.de) and distributed by [ELV](https://elv.de/). RaspberryMatic has the aim to be 100% compatible to the vendor-developed _HomeMatic CCU3 control central_ (CCU3) system. It can be directly installed on a _[CCU3](https://homematic-ip.com/en/product/smart-home-ccu3-central-control-unit)_ or _[ELV Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)_ hardware device. Alternatively, it can also be installed on a wide range of freely available single-board-computers (SBC) like a [RaspberryPi](https://www.raspberrypi.org/), [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/), [Hardkernel ODROID](https://www.hardkernel.com/product-category/odroid-board/) or even on full-fledged hardware platforms like an [Intel NUC](https://www.intel.com/content/www/us/en/products/details/nuc.html) system. Furthermore, it can be run as a virtual appliance in modern virtualization environments (e.g. Proxmox VE, VirtualBox, Synology VMM, Docker/OCI, Kubernetes/K8s, vmWare ESXi, etc.) or even as a pure [Home Assistant](https://www.home-assistant.io/) Add-On. On top of that wider range of supported operating environments, it also comes with exclusive features on different levels (WebUI, Linux OS, connectivity, etc.) to support end users with a more modern and advanced user experience compared to the vendor-provided CCU3 operating system.
 
 [more...](https://github.com/jens-maus/RaspberryMatic/wiki/Einleitung)
 
@@ -38,17 +38,14 @@ On top of that, RaspberryMatic provides a whole bunch of enhancements or even bu
 
 RaspberryMatic can be directly installed on the following, commercially distributed CCU hardware:
 
-* [CCU3](https://www.homematic-ip.com/en/products/detail/smart-home-central-control-unit-ccu3.html), [ELV-Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)
-
-...or on the following self-made hardware systems:
-
 * _Hardware_:
+  * [CCU3](https://homematic-ip.com/en/product/smart-home-ccu3-central-control-unit), [ELV-Charly](https://www.elv.de/elv-smart-home-zentrale-charly-starter-set-bausatz.html)
   * [RaspberryPi](https://www.raspberrypi.org/)
   * [ASUS Tinkerboard](https://www.asus.com/Single-Board-Computer/Tinker-Board-S/)
   * [Hardkernel ODROID](https://www.hardkernel.com/shop/odroid-n2-with-4gbyte-ram-2/)
   * [Intel NUC](https://www.intel.de/content/www/de/de/products/boards-kits/nuc.html)
 
-...or even as a virtual appliance on the following virtualization environments:
+...or as a virtual appliance on the following virtualization environments:
 
 * _Virtualization Environment_:
   * [Proxmox Virtual Environment](https://www.proxmox.com/en/proxmox-ve)

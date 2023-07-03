@@ -13,12 +13,13 @@
 # action    == one of sysinit, respawn, askfirst, wait, and once
 # process   == program to run
 
-# Startup the system
-tty1::sysinit:/bin/mount -a
-tty1::sysinit:/bin/mkdir -p /var/run /var/cache
-tty1::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
-# now run any rc scripts
-tty1::sysinit:/etc/init.d/rcS
+# Init the system
+tty1::sysinit:/bin/mount -t tmpfs tmpfs /tmp
+
+# run any rc scripts (start) and move boot.log
+::sysinit:/etc/init.d/rcS 2>&1 | /usr/bin/tee -a /tmp/boot.log
+::sysinit:/bin/mv /tmp/boot.log /var/log/boot.log
+
 # run monit to monitor our important services
 null::respawn:/usr/bin/monit -Ic /etc/monitrc
 
@@ -30,4 +31,6 @@ tty1::askfirst:/sbin/getty -L tty1 0 vt100
 
 # Stuff to do before rebooting
 null::shutdown:/usr/bin/monit unmonitor all
+
+# run any rc scripts (stop)
 tty1::shutdown:/etc/init.d/rcK

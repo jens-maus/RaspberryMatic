@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.10"
+VERSION="1.11"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -267,6 +267,7 @@ qm set "${VMID}" \
   --net0 virtio,bridge=vmbr0,firewall=1 \
   --onboot 1 \
   --tablet 0 \
+  --watchdog model=i6300esb,action=reset \
   --ostype l26 \
   --scsihw virtio-scsi-single \
   --delete sata0 \

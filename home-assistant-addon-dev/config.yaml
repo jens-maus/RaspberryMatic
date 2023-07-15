@@ -73,7 +73,7 @@ ports:
   5435/tcp: null
   2121/tcp: null
   2122/tcp: null
-  1833/tcp: null
+  1883/tcp: null
   8883/tcp: null
 ports_description:
   22/tcp: SSH access (Extern)
@@ -113,7 +113,7 @@ ports_description:
   5435/tcp: CCU-Historian DB-pgPort (Extern)
   2121/tcp: CCU-Jack HTTP (Extern)
   2122/tcp: CCU-Jack HTTPS (Extern)
-  1833/tcp: CCU-Jack MQTT (Extern)
+  1883/tcp: CCU-Jack MQTT (Extern)
   8883/tcp: CCU-Jack MQTT-Secure (Extern)
 environment:
   HM_RUNNING_IN_HA: "1"

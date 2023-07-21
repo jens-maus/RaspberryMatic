@@ -1,6 +1,6 @@
 ---
 name: RaspberryMatic CCU (snapshot)
-version: 3.71.11.20230719-6d64238
+version: 3.71.12.20230721-f735336
 stage: experimental
 slug: raspberrymatic-dev
 image: ghcr.io/jens-maus/raspberrymatic

@@ -1,6 +1,6 @@
 /* HM-LGW emulation for HM-MOD-RPI
  *
- * Copyright (c) 2015-2023 Oliver Kastl, Jens Maus
+ * Copyright (c) 2015-2023 Oliver Kastl, Jens Maus, Jérôme Pech
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -52,11 +52,12 @@ static int g_serialFd = -1;
 static int g_termEventFd = -1;
 static int g_resetFileFd = -1;
 bool g_debug = false;
+bool g_disableEnterBootloader=false;
 static bool g_inBootloader = false;
 
 //const char *g_productString = "01,eQ3-HM-LGW,1.1.4,ABC0123456";
 
-#define VERSION "1.0.0"
+#define VERSION "1.0.1"
 static char *g_address=NULL;
 static const char *g_productString = "01,Revilo-HM-LGW," VERSION ",%s\r\n";
 
@@ -696,6 +697,7 @@ void hmlangw_syntax(char *prog)
 	fprintf(stderr, "\t-r\tHM-MOD-RPI reset GPIO pin (default 18, -1 to disable)\n");
 	fprintf(stderr, "\t-D\tdebug mode\n");
 	fprintf(stderr, "\t-x\texecute HM-MOD-RPI reset and exit\n");
+	fprintf(stderr, "\t-b\tdo not put CoPro in bootloader mode\n");
 	fprintf(stderr, "\t-h\tthis help\n");
 	fprintf(stderr, "\t-l ip\tlisten on given IP address only (for example 127.0.0.1)\n");
 	fprintf(stderr, "\t-u\tupdate firmware of HM-MOD-RPI\n");
@@ -778,12 +780,15 @@ int main(int argc, char **argv)
     bool forceUpdateFirmware = false;
     bool startThreads = true;
     
-	while((opt = getopt(argc, argv, "DVs:r:l:n:xuf")) != -1)
+	while((opt = getopt(argc, argv, "DbVs:r:l:n:xuf")) != -1)
     {
 		switch (opt)
         {
 			case 'D':
 				g_debug = true;
+				break;
+			case 'b':
+				g_disableEnterBootloader = true;
 				break;
             case 's':
                 serialName = optarg;
@@ -845,7 +850,7 @@ int main(int argc, char **argv)
                 break;
 			case 'V':
 				printf("hmlangw " VERSION "\n");
-				printf("Copyright (c) 2015-2023 Oliver Kastl, Jens Maus\n\n");
+				printf("Copyright (c) 2015-2023 Oliver Kastl, Jens Maus, Jérôme Pech\n\n");
 				exit(EXIT_SUCCESS);
 			case 'h':
 			case ':':

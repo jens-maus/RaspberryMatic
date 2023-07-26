@@ -1,6 +1,6 @@
 /* HM-LGW emulation for HM-MOD-RPI
  *
- * Copyright (c) 2015-2023 Oliver Kastl, Jens Maus
+ * Copyright (c) 2015-2023 Oliver Kastl, Jens Maus, Jérôme Pech
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -30,6 +30,7 @@
 #include "hmframe.h"
 
 extern bool g_debug;
+extern bool g_disableEnterBootloader;
 extern void dump_data( const char* data, int length );
 
 int writeall( int fd, const void *buffer, int len )
@@ -65,6 +66,14 @@ static const unsigned char bootloaderReply2[] =
 
 int sendEnterBootloader( int fd )
 {
+    if (g_disableEnterBootloader) 
+    {
+      if( g_debug )
+        fprintf( stderr, "sendEnterBootloader not executed, because disabled (-b option is set).\n");
+        
+      return 0;
+    }
+    
     if( g_debug )
       fprintf( stderr, "sendEnterBootloader(%d)\n", fd);
 

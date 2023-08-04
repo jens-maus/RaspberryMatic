@@ -350,8 +350,9 @@ jobs:
           mkdir -p ~/.docker
           echo $'{\n  "experimental": "enabled"\n}' | sudo tee ~/.docker/config.json
           sudo service docker restart
-          docker version -f '{{.Client.Experimental}}'
-          docker version -f '{{.Server.Experimental}}'
+          #docker version -f '{{.Client.Experimental}}'
+          #docker version -f '{{.Server.Experimental}}'
+          docker version
 
       - name: Test container deploy (install-docker.sh)
         run: |

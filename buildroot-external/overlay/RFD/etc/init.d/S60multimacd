@@ -107,7 +107,7 @@ start() {
         echo "ERROR: /dev/eq3loop missing"
       fi
     else
-      echo "ERROR: not possible to change real-time scheduling attributes"
+      echo "ERROR: real-time scheduling failed. Real-time group scheduling CONFIG_RT_GROUP_SCHED enabled, but no run time assigned?"
     fi
   else
     echo "not required"

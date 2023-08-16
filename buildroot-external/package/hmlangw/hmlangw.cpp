@@ -36,7 +36,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h> 
-//#include <time.h>
+#include <time.h>
 // #include <memory.h>
 //#include <ctype.h>
 #include <pthread.h>
@@ -143,6 +143,21 @@ void dump_data( const char* data, int length )
 			}
 	}
 
+static char* currentTimeStr() {
+  struct tm* tm_info;
+
+  time_t tm = time(NULL);
+  tm_info = localtime(&tm);
+
+  char buffer[22];
+  strftime(buffer, 22, "%Y-%m-%d %H:%M:%S", tm_info);
+
+  char *cstr = (char*)malloc(23);
+  strncpy(cstr, buffer, 22);
+
+  return(cstr);
+}
+
 static void error(const char *msg)
 {
     perror(msg);
@@ -153,7 +168,7 @@ static void sigterm_handler_server(int sig)
 {
     if( g_debug )
     {
-        fprintf( stderr, "sigterm_handler_server SIG %d\n", sig);
+        fprintf( stderr, "%s sigterm_handler_server SIG %d\n", currentTimeStr() , sig);
         fflush( stderr );
     }
   
@@ -267,7 +282,7 @@ static void shutdownAndCloseSocket( int *fd )
 static void * keepAliveThreadFunc(void *x)
 {
     if( g_debug )
-        fprintf( stderr,  "keepAliveThread started!\n" );
+        fprintf( stderr,  "%s keepAliveThread started!\n" , currentTimeStr() );
     struct pollfd pfds[3];
     int sockFd = -1;
     char buffer[256];
@@ -293,7 +308,7 @@ static void * keepAliveThreadFunc(void *x)
         if( pollResult == 0 )
         {
             if( g_debug )
-                fprintf( stderr,  "keepalive thread timeout\n" );
+                fprintf( stderr,  "%s keepalive thread timeout\n" , currentTimeStr() );
             shutdownAndCloseSocket( &sockFd );
             continue;
         }
@@ -309,7 +324,7 @@ static void * keepAliveThreadFunc(void *x)
             if( r <= 0 )
             {
                 shutdownAndCloseSocket( &sockFd );
-                fprintf( stderr,  "Keepalive client closed connection.\n" );
+                fprintf( stderr,  "%s Keepalive client closed connection.\n" , currentTimeStr() );
             }
             else
             {
@@ -360,7 +375,9 @@ static void * keepAliveThreadFunc(void *x)
             else
             {
                 client_addr = ntohl(csin.sin_addr.s_addr);
-                fprintf( stderr, "Client %d.%d.%d.%d connected to keepalive port!\n",
+
+                fprintf( stderr, "%s Client %d.%d.%d.%d connected to keepalive port!\n",
+                    currentTimeStr(), 
                     (client_addr & 0xff000000) >> 24,
                     (client_addr & 0x00ff0000) >> 16,
                     (client_addr & 0x0000ff00) >> 8,
@@ -386,14 +403,14 @@ static void * keepAliveThreadFunc(void *x)
     shutdownAndCloseSocket( &sockFd );
     
     if( g_debug )
-        fprintf( stderr,  "keepAliveThread stopped!\n" );
+        fprintf( stderr,  "%s keepAliveThread stopped!\n", currentTimeStr() );
     return 0;
 }
 
 static void * bidcosThreadFunc(void *x)
 {
     if( g_debug )
-        fprintf( stderr,  "bidcosThread started!\n" );
+        fprintf( stderr,  "%s bidcosThread started!\n" , currentTimeStr() );
     struct pollfd pfds[4];
     int sockFd = -1;
     bool synched = false;
@@ -423,7 +440,7 @@ static void * bidcosThreadFunc(void *x)
         if( pollResult == 0 )
         {
             if( g_debug )
-                fprintf( stderr,  "bidcos thread timeout\n" );
+                fprintf( stderr,  "%s bidcos thread timeout\n" , currentTimeStr());
             continue;
         }
         
@@ -444,7 +461,8 @@ static void * bidcosThreadFunc(void *x)
             else
             {
                 client_addr = ntohl(csin.sin_addr.s_addr);
-                fprintf( stderr, "Client %d.%d.%d.%d connected to BidCos port!\n",
+                fprintf( stderr, "%s Client %d.%d.%d.%d connected to BidCos port!\n",
+                    currentTimeStr(),
                     (client_addr & 0xff000000) >> 24,
                     (client_addr & 0x00ff0000) >> 16,
                     (client_addr & 0x0000ff00) >> 8,
@@ -474,7 +492,7 @@ static void * bidcosThreadFunc(void *x)
             {
                 if( g_debug )
                 {
-                    fprintf( stderr,  "Received %d bytes from serial\n", result );
+                    fprintf( stderr,  "%s Received %d bytes from serial\n", currentTimeStr(), result );
                     dump_data( buffer, result );
                 }
                 if( sockFd >= 0 && synched )
@@ -503,7 +521,7 @@ static void * bidcosThreadFunc(void *x)
                 close( sockFd );
                 sockFd = -1;
                 tcflush(g_serialFd, TCIOFLUSH);
-                fprintf( stderr,  "BidCos client closed connection.\n" );
+                fprintf( stderr,  "%s BidCos client closed connection.\n" , currentTimeStr() );
                 if( resetCoPro() == -1 && g_inBootloader == false )
                 {
                     if( sendEnterBootloader( g_serialFd ) > 0 )
@@ -515,7 +533,7 @@ static void * bidcosThreadFunc(void *x)
             {
                 if( g_debug )
                 {
-                    fprintf( stderr,  "Received %d bytes from sockFd\n", result );
+                    fprintf( stderr,  "%s Received %d bytes from sockFd\n", currentTimeStr(), result );
                 }
                 if( synched )
                 {
@@ -530,7 +548,7 @@ static void * bidcosThreadFunc(void *x)
                     int index, number;
                     if( g_debug )
                     {
-                        fprintf( stderr,  "sync data: %s\n", buffer );
+                        fprintf( stderr,  "%s sync data: %s\n", currentTimeStr(), buffer );
                     }
                     if( sscanf( buffer, ">%x,%d", &index, &number ) == 2 )
                     {
@@ -562,7 +580,7 @@ static void * bidcosThreadFunc(void *x)
     
 
     if( g_debug )
-        fprintf( stderr,  "bidcosThread stopped!\n" );
+        fprintf( stderr,  "%s bidcosThread stopped!\n" , currentTimeStr() );
     return 0;
 }
 
@@ -589,7 +607,7 @@ int openMasterSocket( const char *iface, int port )
 		sin.sin_addr.s_addr = htonl(INADDR_ANY);
 	} else {
 		if (inet_pton(AF_INET, iface, &(sin.sin_addr.s_addr)) != 1) {
-			fprintf(stderr, "Can't convert IP %s, aborting!\n", iface);
+			fprintf(stderr, "%s Can't convert IP %s, aborting!\n", currentTimeStr(), iface);
 			exit( EXIT_FAILURE );
 		}
 	}
@@ -733,7 +751,7 @@ static char *getSerialNumberFromFile( void )
             if( fgets( SerialNumber, sizeof( SerialNumber ), file ) )
             {
                 result = true;
-            printf( "Read serial number %s from %s\n", SerialNumber, buffer );
+            printf( "%s Read serial number %s from %s\n", currentTimeStr(), SerialNumber, buffer );
             }
             fclose( file );
         }
@@ -915,7 +933,7 @@ int main(int argc, char **argv)
     }
     
     if( g_debug )
-        fprintf( stderr,  "reset fd %d gpio port %d\n", g_resetFileFd, resetPort );
+        fprintf( stderr,  "%s reset fd %d gpio port %d\n", currentTimeStr(), g_resetFileFd, resetPort );
         
     if( showSerial || updateFirmware )
     {

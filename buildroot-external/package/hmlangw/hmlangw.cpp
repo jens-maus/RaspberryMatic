@@ -57,105 +57,122 @@ static bool g_inBootloader = false;
 
 //const char *g_productString = "01,eQ3-HM-LGW,1.1.4,ABC0123456";
 
-#define VERSION "1.0.1"
+#define VERSION "1.1.0"
 static char *g_address=NULL;
 static const char *g_productString = "01,Revilo-HM-LGW," VERSION ",%s\r\n";
 
 static char* create_hex_string( const char* source, int length, char* target, int size )
-	{
-	char* current;
-	unsigned char value;
+{
+    char* current;
+    unsigned char value;
 
-	if ( length > size / 2 - 1 ) length = size / 2 - 1;
+    if ( length > size / 2 - 1 )
+        length = size / 2 - 1;
 
     if ( source )
+    {
+          current = target;
+        int i = 16;
+          while ( i-- )
         {
-		current = target;
-		while ( length-- )
-			{
-			value = *source++;
-			sprintf( current, " %02x", value ); 
-			current += 3;
-			}
-		}
+            length--;
 
-	return target;
-	}
+            if(length >= 0)
+            {
+                    value = *source++;
+                    sprintf( current, " %02x", value );
+                    current += 3;
+            }
+            else
+            {
+                sprintf( current, "   " );
+                current += 3;
+            }
+          }
+    }
+
+    return target;
+}
     
 static unsigned char convert_ascii( unsigned char c )
 {
-	if( c < 0x20 || c > 0x7e )
-		return 0x2e;
-	else
-		return c;
+    if( c < 0x20 || c > 0x7e )
+        return 0x2e;
+    else
+        return c;
 }
 
 static char* create_asc_string( const char* source, int length, char* target, int size )
-	{
-	unsigned char* current;
-	unsigned char value;
+{
+    unsigned char* current;
+    unsigned char value;
 
-	if ( length > size - 1 ) length = size - 1;
+    if ( length > size - 1 ) length = size - 1;
 
-	if ( source )
-		{
-		current = (unsigned char*)target;
-		while ( length-- )
-			{
-			value = *source++;
-			*current++ = convert_ascii( value );
-			}
-		*current = 0;
-		}
+    if ( source )
+    {
+        current = (unsigned char*)target;
+        while ( length-- )
+        {
+            value = *source++;
+           *current++ = convert_ascii( value );
+        }
+        *current = 0;
+    }
 
-	return target;
-	}
+    return target;
+}
+
+char* currentTimeStr()
+{
+    // get current time+date
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+    time_t now = ts.tv_sec;
+
+    // convert time_t to localtime struct tm
+    struct tm _ptm;
+    struct tm *ptm = NULL;
+    memset( &_ptm, 0, sizeof( _ptm ) );
+    ptm = localtime_r( &now, &_ptm );
+
+    // format time
+    static char buffer[32];
+    size_t nbytes = strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", ptm);
+    snprintf(buffer+nbytes, sizeof(buffer)-nbytes, ".%.3ld", ts.tv_nsec / 1000000);
+
+    return buffer;
+}
 
 void dump_data( const char* data, int length )
-	{
-	char hex[ 100 ];
-	char asc[ 100 ];
+{
+    char hex[ 100 ];
+    char asc[ 100 ];
 
-			{
+    if ( data )
+    {
+        int offset;
 
-			if ( data )
-				{
-				int offset;
+        offset = 0;
+        while ( length > 0 )
+        {
+            int chunk;
+            int len;
+            char LineBuf[512];
 
-				offset = 0;
-				while ( length > 0 )
-					{
-					int chunk;
-					int len;
-					char LineBuf[100];
+            length -= 16;
+            chunk = length >= 0 ? 16 : 16 + length;
 
+            len = snprintf( LineBuf, sizeof(LineBuf), "%s %04x:%s  %s\n", currentTimeStr(), offset, create_hex_string( data, chunk, hex, sizeof hex ), create_asc_string( data, chunk, asc, sizeof asc ) );
+            if(write( 2, LineBuf, len ) != len) // stderr
+            {
+                fprintf( stderr, "%s write() stderr failed", currentTimeStr());
+            }
 
-					length -= 16;
-					chunk = length >= 0 ? 16 : 16 + length;
-
-					len = sprintf( LineBuf, "%04x:%s  %s\n", offset, create_hex_string( data, chunk, hex, sizeof hex ), create_asc_string( data, chunk, asc, sizeof asc ) );
-					write( 2, LineBuf, len ); // stderr
-
-					offset += chunk;
-					data += chunk;
-					}
-				}
-			}
-	}
-
-static char* currentTimeStr() {
-  struct tm* tm_info;
-
-  time_t tm = time(NULL);
-  tm_info = localtime(&tm);
-
-  char buffer[22];
-  strftime(buffer, 22, "%Y-%m-%d %H:%M:%S", tm_info);
-
-  char *cstr = (char*)malloc(23);
-  strncpy(cstr, buffer, 22);
-
-  return(cstr);
+            offset += chunk;
+            data += chunk;
+        }
+    }
 }
 
 static void error(const char *msg)
@@ -172,7 +189,7 @@ static void sigterm_handler_server(int sig)
         fflush( stderr );
     }
   
-	//exit(EXIT_SUCCESS);
+    //exit(EXIT_SUCCESS);
 }
 
 static void sigSetHandlerServer(int signum)
@@ -187,9 +204,16 @@ static int resetCoPro( void )
 {
     if( g_resetFileFd != -1 )
     {
-        write( g_resetFileFd, "0", 1 ); // Hold reset
+        if(write( g_resetFileFd, "0", 1 ) != 1) // Hold reset
+        {
+            fprintf( stderr, "%s write() could not set reset fd to 0", currentTimeStr());
+        }
+
         usleep( 10000 ); // 10 ms should be ok
-        write( g_resetFileFd, "1", 1 ); // Release reset
+        if(write( g_resetFileFd, "1", 1 ) != 1) // Release reset
+        {
+            fprintf( stderr, "%s write() could not set reset fd to 1", currentTimeStr());
+        }
     }
     return g_resetFileFd;
 }
@@ -198,10 +222,10 @@ static int openResetFile( int port )
 {
     int fd;
     char fileName[80];
-    sprintf( fileName, "/sys/class/gpio/gpio%d/value", port );
+    snprintf( fileName, sizeof(fileName), "/sys/class/gpio/gpio%d/value", port );
     if( access( fileName, F_OK ) == -1 )
     {
-        sprintf( fileName, "/sys/class/gpio/export" );
+        snprintf( fileName, sizeof(fileName), "/sys/class/gpio/export" );
         fd = open( fileName, O_WRONLY );
         if( fd == -1 )
         {
@@ -209,7 +233,7 @@ static int openResetFile( int port )
         }
         else
         {
-            sprintf( fileName, "%d", port );
+            snprintf( fileName, sizeof(fileName), "%d", port );
             if( write( fd, fileName, strlen( fileName ) ) < 1 ) 
             {
                 perror("write /sys/class/gpio/export");
@@ -217,7 +241,7 @@ static int openResetFile( int port )
             close( fd );
         }
     }
-    sprintf( fileName, "/sys/class/gpio/gpio%d/direction", port );
+    snprintf( fileName, sizeof(fileName), "/sys/class/gpio/gpio%d/direction", port );
     fd = open( fileName, O_WRONLY );
     if( fd == -1 )
     {
@@ -231,7 +255,7 @@ static int openResetFile( int port )
         }
         close( fd );
     }
-    sprintf( fileName, "/sys/class/gpio/gpio%d/value", port );
+    snprintf( fileName, sizeof(fileName), "/sys/class/gpio/gpio%d/value", port );
     fd = open( fileName, O_RDWR );
     if( fd == -1 )
     {
@@ -329,7 +353,7 @@ static void * keepAliveThreadFunc(void *x)
             else
             {
                 if( g_debug )
-                    fprintf( stderr,  "received %d bytes: %s\n", r, buffer );
+                    fprintf( stderr,  "%s received %d bytes: %s\n", currentTimeStr(), r, buffer );
                 char letter = buffer[0];
                 if( letter == 'L' || letter == 'K' )
                 {
@@ -349,8 +373,8 @@ static void * keepAliveThreadFunc(void *x)
                                 continue;
                             }
                         }
-                        sprintf( buffer, ">%c%2.2x\r\n", letter, counter );
-                        // fprintf( stderr,  "sending: %s\n", buffer );
+                        snprintf( buffer, sizeof(buffer), ">%c%2.2x\r\n", letter, counter );
+                        // fprintf( stderr,  "%s sending: %s\n", currentTimeStr(), buffer );
                         writeall( sockFd, buffer, strlen( buffer ) );
                     }
                 }
@@ -386,10 +410,10 @@ static void * keepAliveThreadFunc(void *x)
                 if( sockFd == -1 )
                 {
                     sockFd = sock;
-                    sprintf( buffer, "H%2.2x,", ++messageCounter );
-                    sprintf( &buffer[strlen(buffer)], g_productString, g_address );
+                    snprintf( buffer, sizeof(buffer), "H%2.2x,", ++messageCounter );
+                    snprintf( &buffer[strlen(buffer)], sizeof(buffer)-strlen(buffer), g_productString, g_address );
                     writeall( sockFd, buffer, strlen( buffer ) );
-                    sprintf( buffer, "S%2.2x,SysCom-1.0\r\n", ++messageCounter );
+                    snprintf( buffer, sizeof(buffer), "S%2.2x,SysCom-1.0\r\n", ++messageCounter );
                     writeall( sockFd, buffer, strlen( buffer ) );
                 }
                 else
@@ -471,10 +495,10 @@ static void * bidcosThreadFunc(void *x)
                 if( sockFd == -1 )
                 {
                     sockFd = sock;
-                    sprintf( buffer, "H%2.2x,", ++messageCounter );
-                    sprintf( &buffer[strlen(buffer)], g_productString, g_address );
+                    snprintf( buffer, sizeof(buffer), "H%2.2x,", ++messageCounter );
+                    snprintf( &buffer[strlen(buffer)], sizeof(buffer)-strlen(buffer), g_productString, g_address );
                     writeall( sockFd, buffer, strlen( buffer ) );
-                    sprintf( buffer, "S%2.2x,BidCoS-over-LAN-1.0\r\n", ++messageCounter );
+                    snprintf( buffer, sizeof(buffer), "S%2.2x,BidCoS-over-LAN-1.0\r\n", ++messageCounter );
                     writeall( sockFd, buffer, strlen( buffer ) );
                 }
                 else
@@ -586,49 +610,49 @@ static void * bidcosThreadFunc(void *x)
 
 int openMasterSocket( const char *iface, int port )
 {
-	struct sockaddr_in sin;
-	int sock;
-	int n;
+    struct sockaddr_in sin;
+    int sock;
+    int n;
     
-	sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (sock == -1) {
-		error("Can't open socket");
-	}
+    sock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sock == -1) {
+        error("Can't open socket");
+    }
 
-	n = 1;
-	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &n, sizeof(n)) == -1) {
-		error("Can't set socket options");
-	}
+    n = 1;
+    if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &n, sizeof(n)) == -1) {
+        error("Can't set socket options");
+    }
 
-	memset(&sin, 0, sizeof(sin));
-	sin.sin_family = AF_INET;
-	sin.sin_port = htons(port);
-	if (!iface) {
-		sin.sin_addr.s_addr = htonl(INADDR_ANY);
-	} else {
-		if (inet_pton(AF_INET, iface, &(sin.sin_addr.s_addr)) != 1) {
-			fprintf(stderr, "%s Can't convert IP %s, aborting!\n", currentTimeStr(), iface);
-			exit( EXIT_FAILURE );
-		}
-	}
+    memset(&sin, 0, sizeof(sin));
+    sin.sin_family = AF_INET;
+    sin.sin_port = htons(port);
+    if (!iface) {
+        sin.sin_addr.s_addr = htonl(INADDR_ANY);
+    } else {
+        if (inet_pton(AF_INET, iface, &(sin.sin_addr.s_addr)) != 1) {
+            fprintf(stderr, "%s Can't convert IP %s, aborting!\n", currentTimeStr(), iface);
+            exit( EXIT_FAILURE );
+        }
+    }
 
-	if (bind(sock, (struct sockaddr*)&sin, sizeof(sin)) == -1) {
-		error("Can't bind socket");
-	}
+    if (bind(sock, (struct sockaddr*)&sin, sizeof(sin)) == -1) {
+        error("Can't bind socket");
+    }
 
-	if (listen(sock, 1) == -1) {
-		error("Can't listen on socket");
-	}
+    if (listen(sock, 1) == -1) {
+        error("Can't listen on socket");
+    }
     
      int flags = fcntl(sock, F_GETFL, 0);
      if( flags == -1 )
      {
-		error("Can't get socket flags");
+        error("Can't get socket flags");
      }
     
      if( fcntl( sock, F_SETFL, flags| O_NONBLOCK ) == -1 )
      {
-		error("Can't set socket to nonblocking mode");
+        error("Can't set socket to nonblocking mode");
      }
     return sock;
 }
@@ -701,27 +725,26 @@ int openSerial( const char *portname )
 
 void hmlangw_syntax(char *prog)
 {
-	fprintf(stderr, "Syntax: %s -n serialnumber options\n\n", prog);
-	fprintf(stderr, "Possible options:\n");
-	fprintf(stderr, "\t-n n\tSpecify 10-digit serial number\n");
-	fprintf(stderr, "\t\tSaves it to serialnumber.txt for later use\n");
-	fprintf(stderr, "\t-n show\tShow 10-digit serial number of HM-MOD-RPI\n");
-	fprintf(stderr, "\t-n auto\tUses 10-digit serial number of HM-MOD-RPI\n");
-	fprintf(stderr, "\t\tReads serial number to serialnumber.txt, if possible\n");
-	fprintf(stderr, "\t\tSaves serial number to serialnumber.txt, if possible\n");
-	fprintf(stderr, "\t-n read\tUses 10-digit serial number from serialnumber.txt\n");
-	fprintf(stderr, "\t-n save\tSaves 10-digit serial number to serialnumber.txt\n");
-	fprintf(stderr, "\t-s\tname of serial device to use. Default is /dev/ttyAMA0\n");
-	fprintf(stderr, "\t-r\tHM-MOD-RPI reset GPIO pin (default 18, -1 to disable)\n");
-	fprintf(stderr, "\t-D\tdebug mode\n");
-	fprintf(stderr, "\t-x\texecute HM-MOD-RPI reset and exit\n");
-	fprintf(stderr, "\t-b\tdo not put CoPro in bootloader mode\n");
-	fprintf(stderr, "\t-h\tthis help\n");
-	fprintf(stderr, "\t-l ip\tlisten on given IP address only (for example 127.0.0.1)\n");
-	fprintf(stderr, "\t-u\tupdate firmware of HM-MOD-RPI\n");
-	fprintf(stderr, "\t-f\tforce update firmware of HM-MOD-RPI\n");
-	fprintf(stderr, "\t-V\tshow version (" VERSION ")\n");
-
+    fprintf(stderr, "Syntax: %s -n serialnumber options\n\n", prog);
+    fprintf(stderr, "Possible options:\n");
+    fprintf(stderr, "\t-n n\tSpecify 10-digit serial number\n");
+    fprintf(stderr, "\t\tSaves it to serialnumber.txt for later use\n");
+    fprintf(stderr, "\t-n show\tShow 10-digit serial number of HM-MOD-RPI\n");
+    fprintf(stderr, "\t-n auto\tUses 10-digit serial number of HM-MOD-RPI\n");
+    fprintf(stderr, "\t\tReads serial number to serialnumber.txt, if possible\n");
+    fprintf(stderr, "\t\tSaves serial number to serialnumber.txt, if possible\n");
+    fprintf(stderr, "\t-n read\tUses 10-digit serial number from serialnumber.txt\n");
+    fprintf(stderr, "\t-n save\tSaves 10-digit serial number to serialnumber.txt\n");
+    fprintf(stderr, "\t-s\tname of serial device to use. Default is /dev/ttyAMA0\n");
+    fprintf(stderr, "\t-r\tHM-MOD-RPI reset GPIO pin (default 18, -1 to disable)\n");
+    fprintf(stderr, "\t-D\tdebug mode\n");
+    fprintf(stderr, "\t-x\texecute HM-MOD-RPI reset and exit\n");
+    fprintf(stderr, "\t-b\tdo not put CoPro in bootloader mode\n");
+    fprintf(stderr, "\t-h\tthis help\n");
+    fprintf(stderr, "\t-l ip\tlisten on given IP address only (for example 127.0.0.1)\n");
+    fprintf(stderr, "\t-u\tupdate firmware of HM-MOD-RPI\n");
+    fprintf(stderr, "\t-f\tforce update firmware of HM-MOD-RPI\n");
+    fprintf(stderr, "\t-V\tshow version (" VERSION ")\n");
 }
 
 static bool getPath( char *path, int dest_len )
@@ -751,7 +774,7 @@ static char *getSerialNumberFromFile( void )
             if( fgets( SerialNumber, sizeof( SerialNumber ), file ) )
             {
                 result = true;
-            printf( "%s Read serial number %s from %s\n", currentTimeStr(), SerialNumber, buffer );
+                fprintf(stderr, "%s Read serial number %s from %s\n", currentTimeStr(), SerialNumber, buffer );
             }
             fclose( file );
         }
@@ -773,7 +796,7 @@ static bool putSerialNumberToFile( char *serialNumber )
         {
             fprintf( file, "%s\n", serialNumber );
             result = true;
-            printf( "Written serial number %s to %s\n", serialNumber, buffer );
+            fprintf( stderr, "%s Written serial number %s to %s\n", currentTimeStr(), serialNumber, buffer );
             fclose( file );
         }
     }
@@ -788,8 +811,8 @@ int main(int argc, char **argv)
     int resetPort = 18;
     pthread_t bidcosThread = 0;
     pthread_t keepaliveThread = 0;
-	int opt;
-	char *iface = 0;
+    int opt;
+    char *iface = 0;
     bool executeReset = false;
     bool showSerial = false;
     bool autoSerial = false;
@@ -798,43 +821,43 @@ int main(int argc, char **argv)
     bool forceUpdateFirmware = false;
     bool startThreads = true;
     
-	while((opt = getopt(argc, argv, "DbVs:r:l:n:xuf")) != -1)
+    while((opt = getopt(argc, argv, "DbVs:r:l:n:xuf")) != -1)
     {
-		switch (opt)
+        switch (opt)
         {
-			case 'D':
-				g_debug = true;
-				break;
-			case 'b':
-				g_disableEnterBootloader = true;
-				break;
+            case 'D':
+                g_debug = true;
+                break;
+            case 'b':
+                g_disableEnterBootloader = true;
+                break;
             case 's':
                 serialName = optarg;
                 break;
             case 'r':
                 resetPort = atoi( optarg );
                 break;
-			case 'l':
-				iface = optarg;
-				break;
-			case 'x':
+            case 'l':
+                iface = optarg;
+                break;
+            case 'x':
                 executeReset = true;
                 startThreads = false;
-				break;
-			case 'f':
+                break;
+            case 'f':
                 forceUpdateFirmware = true;
                 // fall thru
-			case 'u':
+            case 'u':
                 updateFirmware = true;
                 startThreads = false;
                 break;
-			case 'n':
+            case 'n':
                 if( 0 == strcmp( optarg, "read" ) )
                 {
                     g_address = getSerialNumberFromFile();
                     if( !g_address )
                     {
-                        printf( "Can't read serial number from file serialnumber.txt\n" );
+                        fprintf( stderr, "%s Can't read serial number from file serialnumber.txt\n", currentTimeStr() );
                     }
                     break;
                 }
@@ -860,25 +883,25 @@ int main(int argc, char **argv)
                 }
                 if( strlen( optarg ) != 10 )
                 {
-					fprintf(stderr, "Serial number must be 10 digits!\n");
-					exit(EXIT_FAILURE);
+                              fprintf(stderr, "%s Serial number must be 10 digits!\n", currentTimeStr());
+                              exit(EXIT_FAILURE);
                 }
                 g_address = optarg;
                 putSerialNumberToFile( g_address );
                 break;
-			case 'V':
-				printf("hmlangw " VERSION "\n");
-				printf("Copyright (c) 2015-2023 Oliver Kastl, Jens Maus, Jérôme Pech\n\n");
-				exit(EXIT_SUCCESS);
-			case 'h':
-			case ':':
-			case '?':
-			default:
-				hmlangw_syntax(argv[0]);
-				exit(EXIT_FAILURE);
-				break;
-		}
-	}
+            case 'V':
+                printf("hmlangw " VERSION "\n");
+                printf("Copyright (c) 2015-2023 Oliver Kastl, Jens Maus, Jérôme Pech\n\n");
+                exit(EXIT_SUCCESS);
+            case 'h':
+            case ':':
+            case '?':
+            default:
+                hmlangw_syntax(argv[0]);
+                exit(EXIT_FAILURE);
+                break;
+        }
+    }
     
     if( autoSerial && !g_address )
     {
@@ -888,13 +911,13 @@ int main(int argc, char **argv)
     
     if( !g_address && !executeReset && !updateFirmware && !showSerial )
     {
-        fprintf( stderr,  "Serial number is missing. Use -n option.\n" );
+        fprintf( stderr,  "%s Serial number is missing. Use -n option.\n", currentTimeStr() );
         exit(EXIT_FAILURE);
     }
     
     if( updateFirmware && showSerial )
     {
-        fprintf( stderr,  "Can't update firmware and get serial number.\n" );
+        fprintf( stderr,  "%s Can't update firmware and get serial number.\n", currentTimeStr() );
         exit(EXIT_FAILURE);
     }
     
@@ -903,12 +926,12 @@ int main(int argc, char **argv)
     
     if( g_serialFd < 0 )
     {
-        fprintf( stderr,  "Can't open serial port %s!\n", serialName );
+        fprintf( stderr,  "%s Can't open serial port %s!\n", currentTimeStr(), serialName );
         exit(EXIT_FAILURE);
     }
  
     if( g_debug )
-        fprintf( stderr,  "serial fd %d name %s\n", g_serialFd, serialName );
+        fprintf( stderr,  "%s serial fd %d name %s\n", currentTimeStr(), g_serialFd, serialName );
         
     if( strcmp( serialName, "/dev/ttyAMA0" ) )
     {
@@ -921,7 +944,7 @@ int main(int argc, char **argv)
     
         if( g_resetFileFd < 0 )
         {
-            fprintf( stderr,  "Can't open reset file!\n" );
+            fprintf( stderr,  "%s Can't open reset file!\n", currentTimeStr() );
             exit(EXIT_FAILURE);
         }
     }
@@ -966,9 +989,13 @@ int main(int argc, char **argv)
             FILE *file;
             strcat( path, "eq3" );
             // printf( "Path %s\n", path );
-            sprintf( cmdBuf, "/lib/ld-linux.so.3 --library-path %s/lib %s/bin/eq3configcmd update-coprocessor -p %s %s -c -l 2 -d %s/firmware -t HM-MOD-UART 2> %s",
+            snprintf( cmdBuf, sizeof(cmdBuf), "/lib/ld-linux.so.3 --library-path %s/lib %s/bin/eq3configcmd update-coprocessor -p %s %s -c -l 2 -d %s/firmware -t HM-MOD-UART 2> %s",
                 path, path, serialName, cmd, path, tmp );
-            system( cmdBuf );
+            if(system( cmdBuf ) <= 0)
+            {
+                fprintf(stderr, "%s could not execute system()\n", currentTimeStr() );
+            }
+
             file = fopen( tmp, "r" );
             if( 0 != file )
             {
@@ -1008,7 +1035,7 @@ int main(int argc, char **argv)
                     }
                     if( g_address == 0 )
                     {
-                        printf( "can't get serial number!\n" );
+                        fprintf(stderr, "%s can't get serial number!\n", currentTimeStr() );
                         startThreads = false;
                     }
                 }
@@ -1064,7 +1091,10 @@ int main(int argc, char **argv)
         sigsuspend( &mask );
     
         uint64_t u=1;
-        write(g_termEventFd, &u, sizeof(uint64_t));
+        if(write(g_termEventFd, &u, sizeof(uint64_t)) != sizeof(uint64_t))
+        {
+            fprintf( stderr, "%s write() on termEventFd failed", currentTimeStr());
+        }
         pthread_join(bidcosThread, NULL);
         pthread_join(keepaliveThread, NULL);
         pthread_attr_destroy( &pthAttr );

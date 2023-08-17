@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-HMLANGW_VERSION = 1.0.0
+HMLANGW_VERSION = 1.1.0
 HMLANGW_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/hmlangw
 HMLANGW_SITE_METHOD = local
 HMLANGW_LICENSE = MIT

@@ -5,7 +5,7 @@
 #
 
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
-DESC=bluetooth
+DESC=bluetoothd
 
 DAEMON=/usr/libexec/bluetooth/bluetoothd
 HCIATTACH=/usr/bin/hciattach
@@ -19,7 +19,7 @@ test -f $DAEMON || exit 0
 
 case $1 in
   start)
-    echo -n "Starting bluetooth: "
+    echo -n "Starting ${DESC}: "
     if [[ -f /etc/config/enableBluetooth ]]; then
       if [[ -c ${DEVICE} ]]; then
 
@@ -53,7 +53,7 @@ case $1 in
           exit 0
         fi
 
-        echo "WARNING: bluetooth setup failed"
+        echo "WARNING: ${DESC} setup failed"
       else
         echo "not required"
       fi
@@ -65,7 +65,7 @@ case $1 in
   ;;
 
   stop)
-    echo -n "Stopping bluetooth: "
+    echo -n "Stopping ${DESC}: "
     # shellcheck disable=SC2086
     start-stop-daemon --stop ${SSD_OPTIONS}
     pkill ".*hciattach"

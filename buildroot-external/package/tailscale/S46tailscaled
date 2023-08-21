@@ -10,7 +10,7 @@ DAEMON="tailscaled"
 [[ ! -e /etc/config/tailscaleEnabled ]] && exit 0
 
 TAILSCALED_EXEC="/usr/sbin/${DAEMON}"
-TAILSCALED_ARGS="-statedir /etc/config/${DAEMON} -socket /var/run/tailscale/${DAEMON}.sock"
+TAILSCALED_ARGS="-statedir /etc/config/${DAEMON} -state /etc/config/${DAEMON}.state -socket /var/run/tailscale/${DAEMON}.sock"
 TAILSCALED_PID="/var/run/tailscale/${DAEMON}.pid"
 TAILSCALED_PORT=41641
 TAILSCALE_EXEC="/usr/bin/tailscale"

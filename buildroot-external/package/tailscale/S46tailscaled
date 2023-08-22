@@ -58,22 +58,23 @@ case "${1}" in
 
 		# fetch the current tailscale domain
 		domain=$(nslookup $(tailscale ip -1) 100.100.100.100 | grep name | sed -e 's/.*name = [^.]*\.//' -e 's/\.$//')
+		echo "add search domain: $domain"
 
 		# Extract the current search domains from resolv.conf
-		current_search=$(grep '^search ' /etc/resolv.conf | sed 's/^search //')
+		current_search=$(grep '^search ' /var/etc/resolv.conf | sed 's/^search //')
 
 		# Combine the new domain with the existing search domains
 		new_search="$current_search $domain"
 
 		# Update if it already have a search line or add the search line
 		if [[ -n "$current_search" ]]; then
-			sudo sed -i "s/^search .*/search $new_search/" /etc/resolv.conf
+			sed -i "s/^search .*/search $new_search/" /etc/var/resolv.conf
 		else
-			echo "search $new_search" | sudo tee -a /etc/resolv.conf > /dev/null
+			echo "search $new_search" | tee -a /etc/var/resolv.conf > /dev/null
 		fi
 
 		# Append the nameserver directive to resolv.conf
-		echo "nameserver 100.100.100.100" | sudo tee -a /etc/resolv.conf > /dev/null
+		echo "nameserver 100.100.100.100" | tee -a /etc/var/resolv.conf > /dev/null
 	;;
 	stop)
 		echo -n "Stopping ${DAEMON}: "
@@ -84,13 +85,13 @@ case "${1}" in
 		# roll the manual added entries back, if tailscale is stopped
 
 		# Remove the "nameserver" line
-		sudo sed -i '/^nameserver/d' /etc/resolv.conf
+		sed -i '/^nameserver 100\.100\.100\.100$/d' /var/etc/resolv.conf
 
 		# Remove search entries containing ".ts.net"
-		sudo sed -i '/\.ts\.net/d' /etc/resolv.conf
+		sed -i '/\.ts\.net/d' /var/etc/resolv.conf
 
 		# Remove the entire search line if it's empty
-		sudo sed -i '/^search $/d' /etc/resolv.conf
+		sed -i '/^search $/d' /var/etc/resolv.conf
 	;;
 	restart|reload)
 		${0} stop

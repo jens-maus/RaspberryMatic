@@ -59,7 +59,7 @@ case "${1}" in
 		# Append the nameserver directive to resolv.conf
 		/bin/sed -i '1s/^/nameserver 100.100.100.100\n/' /var/etc/resolv.conf
 		# the search directive is not added, because currently we can not in a defined way fetch it
-
+	;;
 	stop)
 		echo -n "Stopping ${DAEMON}: "
 		start-stop-daemon -K -q -p ${TAILSCALE_PID}

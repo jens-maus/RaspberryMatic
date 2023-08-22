@@ -56,25 +56,27 @@ case "${1}" in
 		#     - dns-os: writing to "/etc/resolv.pre-tailscale-backup.conf" in rename of "/etc/resolv.conf": open /etc/resolv.pre-tailscale-backup.conf: read-only file system
 		#     - dns: writing to "/etc/resolv.pre-tailscale-backup.conf" in rename of "/etc/resolv.conf": open /etc/resolv.pre-tailscale-backup.conf: read-only file system
 
-		# fetch the current tailscale domain
-		domain=$(nslookup $(tailscale ip -1) 100.100.100.100 | grep name | sed -e 's/.*name = [^.]*\.//' -e 's/\.$//')
-		echo "add search domain: $domain"
+		# Append the nameserver directive to resolv.conf
+		echo "nameserver 100.100.100.100" | tee -a /var/etc/resolv.conf > /dev/null
 
 		# Extract the current search domains from resolv.conf
-		current_search=$(grep '^search ' /var/etc/resolv.conf | sed 's/^search //')
+		current_search=$(grep '^search ' /var/etc/resolv.conf | /bin/sed 's/^search //')
+
+		# fetch the current tailscale domain
+		sleep 1
+		domain=$(nslookup $(tailscale ip -1) 100.100.100.100 | /bin/grep name | /bin/sed -e 's/.*name = [^.]*\.//' -e 's/\.$//')
+		echo "add search domain: $domain"
 
 		# Combine the new domain with the existing search domains
 		new_search="$current_search $domain"
 
 		# Update if it already have a search line or add the search line
 		if [[ -n "$current_search" ]]; then
-			sed -i "s/^search .*/search $new_search/" /etc/var/resolv.conf
+			sed -i "s/^search .*/search $new_search/" /var/etc/resolv.conf
 		else
-			echo "search $new_search" | tee -a /etc/var/resolv.conf > /dev/null
+			echo "search $new_search" | tee -a /var/etc/resolv.conf > /dev/null
 		fi
 
-		# Append the nameserver directive to resolv.conf
-		echo "nameserver 100.100.100.100" | tee -a /etc/var/resolv.conf > /dev/null
 	;;
 	stop)
 		echo -n "Stopping ${DAEMON}: "

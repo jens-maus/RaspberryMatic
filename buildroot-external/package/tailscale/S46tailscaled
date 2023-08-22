@@ -51,14 +51,11 @@ case "${1}" in
 		# shellcheck disable=SC2086
 		${TAILSCALE_EXEC} up ${TAILSCALE_UP_ARGS} >/dev/null 2>&1 &
 
-		## adjust the resolv.conf manually because the original way from tailscale return an error see next comment lines
-		# Health check:
-		#     - dns-os: writing to "/etc/resolv.pre-tailscale-backup.conf" in rename of "/etc/resolv.conf": open /etc/resolv.pre-tailscale-backup.conf: read-only file system
-		#     - dns: writing to "/etc/resolv.pre-tailscale-backup.conf" in rename of "/etc/resolv.conf": open /etc/resolv.pre-tailscale-backup.conf: read-only file system
-
-		# Append the nameserver directive to resolv.conf
-		/bin/sed -i '1s/^/nameserver 100.100.100.100\n/' /var/etc/resolv.conf
-		# the search directive is not added, because currently we can not in a defined way fetch it
+		# adjust resolv.conf manually because the original way from tailscale to
+		# add MagicDNS entries returns an error due to read-only /etc directory path.
+		# We also omit an additional search directive because there does not seem to
+		# be a well defined way to obtain these search names from tailscale
+		sed -i '1s/^/nameserver 100.100.100.100\n/' /etc/resolv.conf
 	;;
 	stop)
 		echo -n "Stopping ${DAEMON}: "
@@ -66,10 +63,8 @@ case "${1}" in
 		start-stop-daemon -K -q -p ${TAILSCALED_PID}
 		echo "OK"
 
-		# roll the manual added entries back, if tailscale is stopped
-
-		# Remove the "nameserver" line
-		/bin/sed -i '/^nameserver 100\.100\.100\.100$/d' /var/etc/resolv.conf
+		# roll the manual added /etc/resolv.conf entries back, if tailscale is stopped
+		sed -i '/^nameserver 100\.100\.100\.100$/d' /etc/resolv.conf
 	;;
 	restart|reload)
 		${0} stop

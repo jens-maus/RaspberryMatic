@@ -64,7 +64,7 @@ case "${1}" in
 
 		# fetch the current tailscale domain
 		sleep 1
-		domain=$(nslookup "$(tailscale ip -1)" 100.100.100.100 | /bin/grep name | /bin/sed -e 's/.*name = [^.]*\.//' -e 's/\.$//')
+		domain=$(/usr/bin/nslookup "$(/usr/bin/tailscale ip -1)" 100.100.100.100 | /bin/grep name | /bin/sed -e 's/.*name = [^.]*\.//' -e 's/\.$//')
 		echo "add search domain: $domain"
 
 		# Combine the new domain with the existing search domains

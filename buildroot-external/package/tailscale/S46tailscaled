@@ -30,7 +30,7 @@ case "${1}" in
 
 		# make sure we have a valid PATH variable
 		export PATH=/sbin:/usr/bin:/usr/sbin
-	
+
 		# make sure ip forwarding is turned on for v4/v6
 		/sbin/sysctl -q net.ipv4.ip_forward=1 net.ipv6.conf.all.forwarding=1 2>/dev/null
 
@@ -50,7 +50,6 @@ case "${1}" in
 		# make sure to set tailscale 'up' with the right cmdline args
 		# shellcheck disable=SC2086
 		${TAILSCALE_EXEC} up ${TAILSCALE_UP_ARGS} >/dev/null 2>&1 &
-
 
 		## adjust the resolv.conf manually because the original way from tailscale return an error see next comment lines
 		# Health check:

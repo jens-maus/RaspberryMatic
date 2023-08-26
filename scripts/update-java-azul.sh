@@ -36,4 +36,4 @@ sed -i "s/${BR_PACKAGE_NAME}_VERSION = .*/${BR_PACKAGE_NAME}_VERSION = ${ID}/g" 
 updateHash zulu x64
 updateHash zulu i686
 updateHash zulu-embedded aarch32hf
-updateHash zulu-embedded aarch64
+updateHash zulu aarch64

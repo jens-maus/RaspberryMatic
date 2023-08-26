@@ -49,6 +49,9 @@ start() {
   # signal that the system startup is finished
   touch /var/status/startupFinished
 
+  # reload lighttpd to let it enable the RemoteAPI ports
+  /etc/init.d/S50lighttpd reload >/dev/null
+
   echo "booted, OK"
 }
 

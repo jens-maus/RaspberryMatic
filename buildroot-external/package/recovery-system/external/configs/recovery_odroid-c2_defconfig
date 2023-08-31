@@ -12,6 +12,7 @@ BR2_KERNEL_MIRROR="https://www.kernel.org/pub"
 BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
 BR2_CCACHE=y
 BR2_OPTIMIZE_2=y
+BR2_ENABLE_LTO=y
 BR2_GLOBAL_PATCH_DIR="$(BR2_EXTERNAL_EQ3_PATH)/patches"
 BR2_RELRO_PARTIAL=y
 BR2_ROOTFS_LIB_DIR="lib"

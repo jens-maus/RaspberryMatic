@@ -277,7 +277,7 @@ jobs:
         with:
           context: oci_build
           file: buildroot-external/board/oci/Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/arm
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
           # load not supported -> https://github.com/docker/buildx/issues/290
           # load: true #load in docker - needed for testing later on
           push: ${{ env.SECRETS_ARE_AVAILABLE }}
@@ -302,7 +302,7 @@ jobs:
             io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon
             io.hass.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
             io.hass.type=addon
-            io.hass.arch=armhf|aarch64|amd64
+            io.hass.arch=armv7|aarch64|amd64
           tags: |
             ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}
 
@@ -340,7 +340,7 @@ jobs:
             io.hass.url=https://github.com/${{ github.repository }}/tree/master/home-assistant-addon
             io.hass.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
             io.hass.type=addon
-            io.hass.arch=armhf|aarch64|amd64
+            io.hass.arch=armv7|aarch64|amd64
           tags: |
             ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}
 

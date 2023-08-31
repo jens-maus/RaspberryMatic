@@ -5,7 +5,7 @@ stage: experimental
 slug: raspberrymatic-dev
 image: ghcr.io/jens-maus/raspberrymatic
 arch:
-  - armhf
+  - armv7
   - aarch64
   - amd64
 description: HomeMatic/homematicIP CCU central based on RaspberryMatic (Snapshot)

@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.11"
+VERSION="1.12"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -220,9 +220,29 @@ else
   info "No HomeMatic-RF USB device found."
 fi
 
-# Get the next guest VM/LXC ID
-VMID=$(pvesh get /cluster/nextid)
-info "Container ID is ${VMID}."
+# Get next free VM/LXC ID and ask user
+NEXTID=$(pvesh get /cluster/nextid)
+while true; do
+  if VMID=$(whiptail --inputbox "Please enter the VM ID for the RaspberryMatic VM\n(next free ID is: ${NEXTID})" 8 58 ${NEXTID} --title "Virtual Machine ID" 3>&1 1>&2 2>&3); then
+    if [[ -z "${VMID}" ]]; then
+      VMID=${NEXTID}
+    fi
+    if ! [[ "${VMID}" =~ ^[1-9][0-9]+$ ]] || [[ ${VMID} -lt 100 ]]; then
+      info "ID '${VMID}' is not a number or smaller than 100."
+      sleep 3
+      continue
+    fi
+    if pct status "${VMID}" &>/dev/null || qm status "${VMID}" &>/dev/null; then
+      info "ID '${VMID}' already in use."
+      sleep 3
+      continue
+    fi
+    info "Selected ${VMID} as VM ID."
+    break
+  else
+    die "VM ID selection canceled."
+  fi
+done
 
 # Download RaspberryMatic ova archive
 info "Downloading disk image..."

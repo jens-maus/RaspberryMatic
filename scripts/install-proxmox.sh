@@ -24,8 +24,10 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.11"
+VERSION="1.12"
 LOGFILE="/tmp/install-proxmox.log"
+PVE_NUMERIC_RE="^[1-9][0-9]+$"
+NEXTID=$(pvesh get /cluster/nextid)
 LINE=
 
 function error_exit() {
@@ -220,9 +222,28 @@ else
   info "No HomeMatic-RF USB device found."
 fi
 
-# Get the next guest VM/LXC ID
-VMID=$(pvesh get /cluster/nextid)
-info "Container ID is ${VMID}."
+# Get the new guest VM/LXC ID
+while true; do
+  if VMID=$(whiptail --inputbox "Set Virtual Machine ID." 8 58 $NEXTID --title "VIRTUAL MACHINE ID" 3>&1 1>&2 2>&3); then
+    if [ -z "$VMID" ]; then
+      VMID=$NEXTID
+    fi
+    if ! [[ $VMID =~ $PVE_NUMERIC_RE ]]; then
+      info "ID '$VMID' is not a number or smaller than 100."
+      sleep 3
+      continue
+    fi
+    if pct status "$VMID" &>/dev/null || qm status "$VMID" &>/dev/null; then
+      info "ID '$VMID' already in use."
+      sleep 3
+      continue
+    fi
+    info "Container ID will be '$VMID'."
+    break
+  else
+    die "Container ID canceled."
+  fi
+done
 
 # Download RaspberryMatic ova archive
 info "Downloading disk image..."

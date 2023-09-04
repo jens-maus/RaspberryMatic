@@ -26,8 +26,6 @@ trap cleanup EXIT
 # Set default variables
 VERSION="1.12"
 LOGFILE="/tmp/install-proxmox.log"
-PVE_NUMERIC_RE="^[1-9][0-9]+$"
-NEXTID=$(pvesh get /cluster/nextid)
 LINE=
 
 function error_exit() {
@@ -222,26 +220,27 @@ else
   info "No HomeMatic-RF USB device found."
 fi
 
-# Get the new guest VM/LXC ID
+# Get next free VM/LXC ID and ask user
+NEXTID=$(pvesh get /cluster/nextid)
 while true; do
-  if VMID=$(whiptail --inputbox "Set Virtual Machine ID." 8 58 $NEXTID --title "VIRTUAL MACHINE ID" 3>&1 1>&2 2>&3); then
-    if [ -z "$VMID" ]; then
-      VMID=$NEXTID
+  if VMID=$(whiptail --inputbox "Please enter the VM ID for the RaspberryMatic VM\n(next free ID is: ${NEXTID})" 8 58 ${NEXTID} --title "Virtual Machine ID" 3>&1 1>&2 2>&3); then
+    if [[ -z "${VMID}" ]]; then
+      VMID=${NEXTID}
     fi
-    if ! [[ $VMID =~ $PVE_NUMERIC_RE ]]; then
-      info "ID '$VMID' is not a number or smaller than 100."
+    if ! [[ "${VMID}" =~ ^[1-9][0-9]+$ ]] || [[ ${VMID} -lt 100 ]]; then
+      info "ID '${VMID}' is not a number or smaller than 100."
       sleep 3
       continue
     fi
-    if pct status "$VMID" &>/dev/null || qm status "$VMID" &>/dev/null; then
-      info "ID '$VMID' already in use."
+    if pct status "${VMID}" &>/dev/null || qm status "${VMID}" &>/dev/null; then
+      info "ID '${VMID}' already in use."
       sleep 3
       continue
     fi
-    info "Container ID will be '$VMID'."
+    info "Selected ${VMID} as VM ID."
     break
   else
-    die "Container ID canceled."
+    die "VM ID selection canceled."
   fi
 done
 

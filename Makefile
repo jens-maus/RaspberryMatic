@@ -22,16 +22,15 @@ endif
 
 all: help
 
-$(BR2_DL_DIR)/buildroot-$(BUILDROOT_VERSION).tar.gz: $(BR2_DL_DIR)
+buildroot-$(BUILDROOT_VERSION).tar.gz: $(BR2_DL_DIR)
 	@echo "[downloading buildroot-$(BUILDROOT_VERSION).tar.gz]"
-	wget https://github.com/buildroot/buildroot/archive/refs/tags/$(BUILDROOT_VERSION).tar.gz -O /tmp/buildroot-$(BUILDROOT_VERSION).tar.gz
-	echo "$(BUILDROOT_SHA256)  buildroot-$(BUILDROOT_VERSION).tar.gz" >/tmp/buildroot-$(BUILDROOT_VERSION).tar.gz.sign
-	(cd /tmp/ ; shasum -a 256 -c buildroot-$(BUILDROOT_VERSION).tar.gz.sign)
-	if [ ! -f $@ ]; then mv -f /tmp/buildroot-$(BUILDROOT_VERSION).tar.gz /tmp/buildroot-$(BUILDROOT_VERSION).tar.gz.sign $(BR2_DL_DIR)/ ; fi
+	wget https://github.com/buildroot/buildroot/archive/refs/tags/$(BUILDROOT_VERSION).tar.gz -O buildroot-$(BUILDROOT_VERSION).tar.gz
+	echo "$(BUILDROOT_SHA256)  buildroot-$(BUILDROOT_VERSION).tar.gz" >buildroot-$(BUILDROOT_VERSION).tar.gz.sign
+	shasum -a 256 -c buildroot-$(BUILDROOT_VERSION).tar.gz.sign
 
-buildroot-$(BUILDROOT_VERSION): | $(BR2_DL_DIR)/buildroot-$(BUILDROOT_VERSION).tar.gz
+buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.gz
 	@echo "[patching buildroot-$(BUILDROOT_VERSION)]"
-	if [ ! -d $@ ]; then tar xf $(BR2_DL_DIR)/buildroot-$(BUILDROOT_VERSION).tar.gz; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) --remove-empty-files -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
+	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.gz; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) --remove-empty-files -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
 
 build-$(PRODUCT): | buildroot-$(BUILDROOT_VERSION)
 	mkdir build-$(PRODUCT)
@@ -111,6 +110,7 @@ clean:
 distclean: clean-all
 	@echo "[distclean]"
 	@rm -rf buildroot-$(BUILDROOT_VERSION)
+	@rm -f buildroot-$(BUILDROOT_VERSION).tar.*
 	@rm -rf $(BR2_DL_DIR)
 
 .PHONY: menuconfig

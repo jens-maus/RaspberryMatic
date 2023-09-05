@@ -7,8 +7,8 @@ DATE=$(shell date +%Y%m%d)
 PRODUCT=
 PRODUCT_VERSION=${OCCU_VERSION}.${DATE}
 PRODUCTS:=$(sort $(notdir $(patsubst %_defconfig,%,$(wildcard $(DEFCONFIG_DIR)/*_defconfig))))
-BR2_DL_DIR="../download"
-BR2_CCACHE_DIR="${HOME}/.buildroot-ccache"
+BR2_DL_DIR=$(shell pwd)/download
+BR2_CCACHE_DIR=${HOME}/.buildroot-ccache
 BR2_JLEVEL=$(shell nproc)
 
 ifneq ($(PRODUCT),)
@@ -18,25 +18,26 @@ else
 endif
 
 .NOTPARALLEL: $(PRODUCTS) $(addsuffix -release, $(PRODUCTS)) $(addsuffix -clean, $(PRODUCTS)) build-all clean-all release-all
-.PHONY: all build release clean cleanall distclean help updatePkg
+.PHONY: all build release clean clean-all distclean help updatePkg
 
 all: help
 
-buildroot-$(BUILDROOT_VERSION).tar.gz:
+$(BR2_DL_DIR)/buildroot-$(BUILDROOT_VERSION).tar.gz: $(BR2_DL_DIR)
 	@echo "[downloading buildroot-$(BUILDROOT_VERSION).tar.gz]"
-	wget https://github.com/buildroot/buildroot/archive/refs/tags/$(BUILDROOT_VERSION).tar.gz -O buildroot-$(BUILDROOT_VERSION).tar.gz
-	echo "$(BUILDROOT_SHA256)  buildroot-$(BUILDROOT_VERSION).tar.gz" >buildroot-$(BUILDROOT_VERSION).tar.gz.sign
-	shasum -a 256 -c buildroot-$(BUILDROOT_VERSION).tar.gz.sign
+	wget https://github.com/buildroot/buildroot/archive/refs/tags/$(BUILDROOT_VERSION).tar.gz -O $(BR2_DL_DIR)/buildroot-$(BUILDROOT_VERSION).tar.gz
+	echo "$(BUILDROOT_SHA256)  buildroot-$(BUILDROOT_VERSION).tar.gz" >$(BR2_DL_DIR)/buildroot-$(BUILDROOT_VERSION).tar.gz.sign
+	(cd $(BR2_DL_DIR) ; shasum -a 256 -c buildroot-$(BUILDROOT_VERSION).tar.gz.sign)
 
-buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.gz
+buildroot-$(BUILDROOT_VERSION): | $(BR2_DL_DIR)/buildroot-$(BUILDROOT_VERSION).tar.gz
 	@echo "[patching buildroot-$(BUILDROOT_VERSION)]"
-	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.gz; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) --remove-empty-files -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
+	if [ ! -d $@ ]; then tar xf $(BR2_DL_DIR)/buildroot-$(BUILDROOT_VERSION).tar.gz; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) --remove-empty-files -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
 
-build-$(PRODUCT): | buildroot-$(BUILDROOT_VERSION) download
+build-$(PRODUCT): | buildroot-$(BUILDROOT_VERSION)
 	mkdir build-$(PRODUCT)
 
-download: buildroot-$(BUILDROOT_VERSION)
-	test -e download || mkdir download
+$(BR2_DL_DIR):
+	@echo "[mkdir $(BR2_DL_DIR)]"
+	test -e $(BR2_DL_DIR) || mkdir $(BR2_DL_DIR)
 
 build-$(PRODUCT)/.config: | build-$(PRODUCT)
 	@echo "[config $@]"
@@ -109,8 +110,7 @@ clean:
 distclean: clean-all
 	@echo "[distclean]"
 	@rm -rf buildroot-$(BUILDROOT_VERSION)
-	@rm -f buildroot-$(BUILDROOT_VERSION).tar.*
-	@rm -rf download
+	@rm -rf $(BR2_DL_DIR)
 
 .PHONY: menuconfig
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config

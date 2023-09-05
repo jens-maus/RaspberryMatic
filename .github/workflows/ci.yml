@@ -164,13 +164,13 @@ jobs:
       - name: Build
         timeout-minutes: 480
         run: |
-          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} distclean raspmatic_${{ matrix.platform }}-release
+          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} clean raspmatic_${{ matrix.platform }}-release
 
       # cleanup
       - name: Cleanup
         run: |
           rm -f release/*.img*
-          make distclean
+          make clean
 
       #########################
       # upload build artifacts

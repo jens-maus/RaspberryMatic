@@ -27,7 +27,7 @@ $(BR2_DL_DIR)/buildroot-$(BUILDROOT_VERSION).tar.gz: $(BR2_DL_DIR)
 	wget https://github.com/buildroot/buildroot/archive/refs/tags/$(BUILDROOT_VERSION).tar.gz -O /tmp/buildroot-$(BUILDROOT_VERSION).tar.gz
 	echo "$(BUILDROOT_SHA256)  buildroot-$(BUILDROOT_VERSION).tar.gz" >/tmp/buildroot-$(BUILDROOT_VERSION).tar.gz.sign
 	(cd /tmp/ ; shasum -a 256 -c buildroot-$(BUILDROOT_VERSION).tar.gz.sign)
-	mv /tmp/buildroot-$(BUILDROOT_VERSION).tar.gz /tmp/buildroot-$(BUILDROOT_VERSION).tar.gz.sign $(BR2_DL_DIR)/
+	if [ ! -f $@ ]; then mv /tmp/buildroot-$(BUILDROOT_VERSION).tar.gz /tmp/buildroot-$(BUILDROOT_VERSION).tar.gz.sign $(BR2_DL_DIR)/ ; fi
 
 buildroot-$(BUILDROOT_VERSION): | $(BR2_DL_DIR)/buildroot-$(BUILDROOT_VERSION).tar.gz
 	@echo "[patching buildroot-$(BUILDROOT_VERSION)]"

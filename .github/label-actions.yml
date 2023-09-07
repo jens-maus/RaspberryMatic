@@ -1,4 +1,5 @@
 # Configuration for Label Actions - https://github.com/dessant/label-actions
+---
 
 # await more information/feedback from issue author
 ':clock10: awaiting feedback':
@@ -53,7 +54,7 @@
       open for the time being so that you can also reference it accordingly.
 
 # wontfix label is removed from issues
--':thumbsdown: wontfix':
+- ':thumbsdown: wontfix':
   issues:
     # Reopen the issue
     reopen: true

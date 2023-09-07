@@ -53,6 +53,20 @@
       reference and track this upstream issue we will keep this ticket
       open for the time being so that you can also reference it accordingly.
 
+# wontfix label added
+':thumbsdown: wontfix':
+  issues:
+    comment: >
+      @{issue-author}, the maintainer of this project has decided that the
+      issue/idea you reported does not seem to be relevant for the projects'
+      mission or that it is out of the scope or simply not explained in
+      enough detail. This ticket will therefore be closed and you are advised
+      to better discuss this issue in more detail in the [discussion area](https://github.com/jens-maus/RaspberryMatic/discussions) of this project and then perhaps come back here
+      and open a new issue in case consensus has been achieved within this
+      discussion.
+    close: true
+    close-reason: not planned
+
 # wontfix label is removed from issues
 '-:thumbsdown: wontfix':
   issues:

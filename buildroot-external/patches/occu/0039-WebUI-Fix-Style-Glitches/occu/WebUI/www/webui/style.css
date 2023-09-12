@@ -8218,6 +8218,7 @@ color: $_(textColorA); /* white */
 
   padding: 3px;
   text-align:center;
+  font-weight: bold;
   vertical-align:middle;
   margin:2px;
   cursor: pointer;

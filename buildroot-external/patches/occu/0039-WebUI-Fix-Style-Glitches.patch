@@ -3475,7 +3475,20 @@
  }
  
  .CLASS21901 {
-@@ -8782,7 +8801,6 @@
+@@ -8757,9 +8776,11 @@
+ 
+   color: $_(textColorB); /* black */
+   border: 1px solid $_(black); /* black */
+-  border-radius: 2px;
++  border-radius: 5px;
+ 
+   cursor: pointer;
++  font-weight: bold;
++  padding: 2px;
+ }
+ 
+ .CLASS21905 {
+@@ -8782,7 +8803,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -3483,7 +3496,7 @@
    width:100%;
  }
  
-@@ -8839,13 +8857,17 @@
+@@ -8839,13 +8859,17 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -3503,7 +3516,7 @@
  }
  
  .CLASS22002 {
-@@ -8855,11 +8877,17 @@
+@@ -8855,11 +8879,17 @@
  
  .CLASS22003 {
    background-color: $_(white);
@@ -3521,7 +3534,7 @@
  }
  
  .CLASS22005 {
-@@ -8917,7 +8945,8 @@
+@@ -8917,7 +8947,8 @@
  }
  
  .CLASS22101 {
@@ -3531,7 +3544,7 @@
  }
  
  .CLASS22102 {
-@@ -8939,9 +8968,8 @@
+@@ -8939,9 +8970,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -3542,7 +3555,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8951,10 +8979,12 @@
+@@ -8951,10 +8981,12 @@
    position:relative;
    width:50px;
    height:50px;

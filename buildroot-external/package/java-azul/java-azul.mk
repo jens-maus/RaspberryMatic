@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-JAVA_AZUL_VERSION = 17.44.15-ca-jre17.0.8
+JAVA_AZUL_VERSION = 17.44.53-ca-jre17.0.8.1
 ifeq ($(call qstrip,$(BR2_ARCH)),arm)
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_aarch32hf.tar.gz
 JAVA_AZUL_SITE = https://cdn.azul.com/zulu-embedded/bin

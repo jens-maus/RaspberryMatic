@@ -13,4 +13,8 @@ define EQ3CONFIGD_INSTALL_INIT_SYSV
 		$(TARGET_DIR)/etc/init.d/S50eq3configd
 endef
 
+define EQ3CONFIGD_USERS
+	eq3cfg -1 eq3cfg -1 * - - - eq3configd user
+endef
+
 $(eval $(generic-package))

@@ -1,6 +1,9 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC2169 source=/dev/null
 
+# make sure we have a secure umask
+umask 0002
+
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 

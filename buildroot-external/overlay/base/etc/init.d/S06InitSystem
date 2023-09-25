@@ -13,9 +13,6 @@ init_system() {
     HM_MODE="HM-LGW"
   fi
 
-  # general umask so that we will have rwrw--
-  umask 0002
-
   # ensure some pathes are there and have
   # correct permissions
   mkdir -p /var/log
@@ -31,6 +28,8 @@ init_system() {
   mkdir -p /var/empty
   mkdir -p /var/etc
   mkdir -p /var/status
+  chmod g+s /var/status
+  chgrp status /var/status
   mkdir -p /var/empty
   chmod 0700 /var/empty
 
@@ -95,10 +94,11 @@ init_system() {
   fi
 
   # if no shadow file with password information is in place we have to
-  # put the template file there.
+  # put the template file there and ensure proper permissions
   if [[ ! -s /etc/config/shadow ]] ; then
     cp -a ${CFG_TEMPLATE_DIR}/shadow /etc/config/
   fi
+  chmod 0640 /etc/config/shadow
 
   # load bcm2835 watchdog kernel module if this is
   # a raspberrypi
@@ -125,7 +125,7 @@ start() {
 
   # start hss_led if it exists and we are not in HMLGW mode
   if [[ "${HM_MODE}" != "HM-LGW" ]] && [[ -x /bin/hss_led ]]; then
-    start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
+    start-stop-daemon -S -q -b -m -c hssled:hssled -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
   fi
 
   # call rc.postinit after init of system is finished

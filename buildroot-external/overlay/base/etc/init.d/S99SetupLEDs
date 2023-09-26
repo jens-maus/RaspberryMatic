@@ -46,9 +46,9 @@ start() {
     fi
   fi
 
-  # executing /etc/rc.postlocal in LGW & Normal-Mode but not in Safemode
-  if [[ "${HM_MODE}" == "HM-LGW" ]] || [[ "${HM_MODE}" == "NORMAL" ]] && { [[ ! -e /etc/config/safemode ]] && [[ -x /usr/local/etc/rc.postlocal ]]; } then 
-     /usr/local/etc/rc.postlocal
+  # execute /usr/local/etc/rc.postlocal (but not in safemode)
+  if [[ -x /usr/local/etc/rc.postlocal ]] && [[ ! -e /etc/config/safemode ]]; then
+    /usr/local/etc/rc.postlocal
   fi
   
   # signal that the system startup is finished

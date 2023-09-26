@@ -46,6 +46,11 @@ start() {
     fi
   fi
 
+  # execute /usr/local/etc/rc.postlocal (but not in safemode)
+  if [[ -x /usr/local/etc/rc.postlocal ]] && [[ ! -e /etc/config/safemode ]]; then
+    /usr/local/etc/rc.postlocal
+  fi
+  
   # signal that the system startup is finished
   touch /var/status/startupFinished
 

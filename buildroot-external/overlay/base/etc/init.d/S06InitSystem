@@ -117,7 +117,7 @@ start() {
   if [[ ! -e /etc/config/safemode ]]; then
     if [[ -x /usr/local/etc/rc.init ]]; then
       echo -n "rc.init, "
-      timeout 120 /usr/local/etc/rc.init
+      /usr/bin/timeout 120 /usr/local/etc/rc.init
     fi
   fi
 
@@ -133,7 +133,7 @@ start() {
   if [[ ! -e /etc/config/safemode ]]; then
     if [[ -x /usr/local/etc/rc.postinit ]]; then
       echo -n "rc.postinit, "
-      timeout 120 /usr/local/etc/rc.postinit
+      /usr/bin/timeout 120 /usr/local/etc/rc.postinit
     fi
   fi
 

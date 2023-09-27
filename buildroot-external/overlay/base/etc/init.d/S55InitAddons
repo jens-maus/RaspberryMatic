@@ -22,7 +22,7 @@ start() {
     # executable
     if [[ -x /usr/local/etc/rc.prelocal ]]; then
       echo -n "rc.prelocal, "
-      timeout 120 /usr/local/etc/rc.prelocal
+      /usr/bin/timeout 120 /usr/local/etc/rc.prelocal
     fi
 
     # start init of third-party addons one after another

@@ -46,8 +46,6 @@ start() {
 
     echo "OK"
   else
-    rm -f /etc/config/safemode
-
     echo "skipping (safemode)"
   fi
 

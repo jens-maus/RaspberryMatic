@@ -97,6 +97,12 @@ stop() {
   if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
     echo "${HM_LED_YELLOW_MODE1}" >"${HM_LED_YELLOW}/trigger"
   fi
+  
+  # call rc.shutdown
+  if [[ -x /usr/local/etc/rc.shutdown ]]; then
+    echo -n "rc.shutdown, "
+    /usr/bin/timeout 120 /usr/local/etc/rc.shutdown
+  fi
 
   echo "shutdown, OK"
 }

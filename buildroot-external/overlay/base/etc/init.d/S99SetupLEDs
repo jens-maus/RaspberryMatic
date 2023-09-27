@@ -48,7 +48,8 @@ start() {
 
   # execute /usr/local/etc/rc.postlocal (but not in safemode)
   if [[ -x /usr/local/etc/rc.postlocal ]] && [[ ! -e /etc/config/safemode ]]; then
-    /usr/local/etc/rc.postlocal
+    echo -n "rc.postlocal, "
+    timeout 120 /usr/local/etc/rc.postlocal
   fi
   
   # if we are in safemode we remove the safemode control-file

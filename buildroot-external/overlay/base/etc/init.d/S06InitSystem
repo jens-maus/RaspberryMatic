@@ -116,7 +116,8 @@ start() {
   # call rc.init before initializing the system
   if [[ ! -e /etc/config/safemode ]]; then
     if [[ -x /usr/local/etc/rc.init ]]; then
-      /usr/local/etc/rc.init
+      echo -n "rc.init, "
+      /usr/bin/timeout 120 /usr/local/etc/rc.init
     fi
   fi
 
@@ -131,7 +132,8 @@ start() {
   # call rc.postinit after init of system is finished
   if [[ ! -e /etc/config/safemode ]]; then
     if [[ -x /usr/local/etc/rc.postinit ]]; then
-      /usr/local/etc/rc.postinit
+      echo -n "rc.postinit, "
+      /usr/bin/timeout 120 /usr/local/etc/rc.postinit
     fi
   fi
 

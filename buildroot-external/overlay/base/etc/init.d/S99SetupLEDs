@@ -52,9 +52,7 @@ start() {
   fi
   
   # if we are in safemode we remove the safemode control-file
-  if [[ -e /etc/config/safemode ]]; then
     rm -f /etc/config/safemode
-  fi
   
   # signal that the system startup is finished
   touch /var/status/startupFinished

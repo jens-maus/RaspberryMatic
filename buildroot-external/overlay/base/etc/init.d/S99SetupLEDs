@@ -100,7 +100,7 @@ stop() {
   # call rc.shutdown
   if [[ -x /usr/local/etc/rc.shutdown ]]; then
     echo -n "rc.shutdown, "
-    timeout 120 /usr/local/etc/rc.shutdown
+    /usr/bin/timeout 120 /usr/local/etc/rc.shutdown
   fi
 
   echo "shutdown, OK"

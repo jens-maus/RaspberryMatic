@@ -28,9 +28,6 @@ case "${1}" in
 		# create necessary directories
 		mkdir -p /var/run/tailscale /var/lib/tailscale
 
-		# make sure we have a valid PATH variable
-		export PATH=/sbin:/usr/bin:/usr/sbin
-
 		# make sure ip forwarding is turned on for v4/v6
 		/sbin/sysctl -q net.ipv4.ip_forward=1 net.ipv6.conf.all.forwarding=1 2>/dev/null
 

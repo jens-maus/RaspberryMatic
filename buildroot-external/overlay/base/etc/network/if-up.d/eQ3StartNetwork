@@ -131,8 +131,8 @@ case "${IFACE}" in
 esac
 
 # cleanup first
-RESOLV_CONF=/var/etc/resolv.conf
-rm -f "${RESOLV_CONF}"
+RESOLV_CONF=/tmp/resolv.conf.tmp
+rm -f ${RESOLV_CONF}
 mkdir -p /var/status
 rm -f /var/status/hasLink
 rm -f /var/status/hasIP
@@ -197,13 +197,18 @@ case "${MODE}" in
     /sbin/ip route del default 2>/dev/null
     /sbin/ip route add default via "${GATEWAY}"
 
+    # take care of resolv.conf
     if [[ -n "${NAMESERVER1}" ]]; then
-      echo nameserver "${NAMESERVER1}" >>${RESOLV_CONF}
+      echo "nameserver ${NAMESERVER1}" >>${RESOLV_CONF}
     fi
 
     if [[ -n "${NAMESERVER2}" ]]; then
-      echo nameserver "${NAMESERVER2}" >>${RESOLV_CONF}
+      echo "nameserver ${NAMESERVER2}" >>${RESOLV_CONF}
     fi
+
+    # use /sbin/resolvconf to propagate DNS info to libc
+    /sbin/resolvconf -a "${IFACE}" < ${RESOLV_CONF}
+    rm -f ${RESOLV_CONF}
 
     # update CURRENT_XYZ in /etc/config/netconfig
 

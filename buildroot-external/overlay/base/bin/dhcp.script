@@ -1,7 +1,7 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC2154,SC3010 source=/dev/null
 
-RESOLV_CONF=/var/etc/resolv.conf
+RESOLV_CONF=/tmp/resolv.conf.tmp
 CONFIGURL=/var/configurl
 
 action=${1}
@@ -70,12 +70,16 @@ handle_renew() {
   [[ -n "${boot_file}" ]] && echo "${boot_file}" >${CONFIGURL}
 
   # take care of resolv.conf
-  rm -f ${RESOLV_CONF} 2>/dev/null
+  rm -f ${RESOLV_CONF}
   [[ -n "$domain" ]] && echo "domain ${domain}" >>${RESOLV_CONF}
   [[ -n "$search" ]] && echo "search ${search}" >>${RESOLV_CONF}
   for i in ${dns}; do
     echo "nameserver ${i}" >>${RESOLV_CONF}
   done
+
+  # use /sbin/resolvconf to propagate DNS info to libc
+  /sbin/resolvconf -a "${interface}" < ${RESOLV_CONF}
+  rm -f ${RESOLV_CONF}
 
   # flag as having a proper ip
   touch /var/status/hasIP

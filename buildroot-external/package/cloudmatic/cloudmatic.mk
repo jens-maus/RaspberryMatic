@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-CLOUDMATIC_VERSION = 98d4105883b785305e6c54b857e0143a1385ba3c
+CLOUDMATIC_VERSION = 021193b439095beb1758588456660a480f02b2f1
 CLOUDMATIC_SITE = $(call github,EasySmartHome,CloudMatic-CCUAddon,$(CLOUDMATIC_VERSION))
 CLOUDMATIC_LICENSE = BSD-3-Clause
 

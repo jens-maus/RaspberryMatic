@@ -4,8 +4,8 @@
 #
 ################################################################################
 
-CLOUDMATIC_VERSION = 83d99d70539be6233d0ea3dd03f08f9b4bfd09d7
-CLOUDMATIC_SITE = $(call github,EasySmartHome,CloudMatic-CCUAddon,$(CLOUDMATIC_VERSION))
+CLOUDMATIC_VERSION = 3e1d04f432202f767bd58971e81b1c3cff8481d6
+CLOUDMATIC_SITE = $(call github,jens-maus,CloudMatic-CCUAddon,$(CLOUDMATIC_VERSION))
 CLOUDMATIC_LICENSE = BSD-3-Clause
 
 ifeq ($(BR2_arm),y)
@@ -24,7 +24,7 @@ ifeq ($(BR2_i386),y)
 endif
 
 ifeq ($(BR2_x86_64),y)
-  NGINX_BIN=nginx.i686
+  NGINX_BIN=nginx.x86_64
   ZABBIX_BIN=zabbix_agentd.i686
 endif
 
@@ -32,6 +32,7 @@ define CLOUDMATIC_INSTALL_TARGET_CMDS
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/opt/mh
 	$(INSTALL) -D -m 0755 $(@D)/install.tcl $(TARGET_DIR)/opt/mh/
 	$(INSTALL) -D -m 0755 $(@D)/startup.sh $(TARGET_DIR)/opt/mh/
+	$(INSTALL) -D -m 0755 $(@D)/openvpn $(TARGET_DIR)/opt/mh/
 	cp -a $(@D)/user $(TARGET_DIR)/opt/mh/
 	cp -a $(@D)/www $(TARGET_DIR)/opt/mh/
 	rm -f $(TARGET_DIR)/opt/mh/user/nginx.ccu? $(TARGET_DIR)/opt/mh/user/nginx.pi $(TARGET_DIR)/opt/mh/user/nginx $(TARGET_DIR)/opt/mh/user/nginx.i686 $(TARGET_DIR)/opt/mh/user/zabbix_agentd $(TARGET_DIR)/opt/mh/user/zabbix_agentd.i686

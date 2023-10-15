@@ -4,17 +4,17 @@
 #
 ################################################################################
 
-CLOUDMATIC_VERSION = 3e1d04f432202f767bd58971e81b1c3cff8481d6
+CLOUDMATIC_VERSION = 9e006bf58706e52ee5b23964e2ca064bb14775f4
 CLOUDMATIC_SITE = $(call github,jens-maus,CloudMatic-CCUAddon,$(CLOUDMATIC_VERSION))
 CLOUDMATIC_LICENSE = BSD-3-Clause
 
 ifeq ($(BR2_arm),y)
-  NGINX_BIN=nginx.pi
+  NGINX_BIN=nginx.armhf
   ZABBIX_BIN=zabbix_agentd
 endif
 
 ifeq ($(BR2_aarch64),y)
-  NGINX_BIN=nginx.pi
+  NGINX_BIN=nginx.aarch64
   ZABBIX_BIN=zabbix_agentd
 endif
 
@@ -35,8 +35,11 @@ define CLOUDMATIC_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 $(@D)/openvpn $(TARGET_DIR)/opt/mh/
 	cp -a $(@D)/user $(TARGET_DIR)/opt/mh/
 	cp -a $(@D)/www $(TARGET_DIR)/opt/mh/
-	rm -f $(TARGET_DIR)/opt/mh/user/nginx.ccu? $(TARGET_DIR)/opt/mh/user/nginx.pi $(TARGET_DIR)/opt/mh/user/nginx $(TARGET_DIR)/opt/mh/user/nginx.i686 $(TARGET_DIR)/opt/mh/user/zabbix_agentd $(TARGET_DIR)/opt/mh/user/zabbix_agentd.i686
+	rm -f $(TARGET_DIR)/opt/mh/user/nginx*
 	[[ -n "$(NGINX_BIN)" ]] && $(INSTALL) -m 0755 $(@D)/user/$(NGINX_BIN) $(TARGET_DIR)/opt/mh/user/nginx || true
+	$(INSTALL) -D -m 0644 $(@D)/user/nginx.conf $(TARGET_DIR)/opt/mh/user/
+	$(INSTALL) -D -m 0644 $(@D)/user/nginx.conf.default $(TARGET_DIR)/opt/mh/user/
+	rm -f $(TARGET_DIR)/opt/mh/user/zabbix_agentd*
 	[[ -n "$(ZABBIX_BIN)" ]] && $(INSTALL) -m 0755 $(@D)/user/$(ZABBIX_BIN) $(TARGET_DIR)/opt/mh/user/zabbix_agentd || true
 endef
 

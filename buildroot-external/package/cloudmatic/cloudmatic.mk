@@ -32,8 +32,6 @@ define CLOUDMATIC_INSTALL_TARGET_CMDS
 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/opt/mh
 	$(INSTALL) -D -m 0755 $(@D)/install.tcl $(TARGET_DIR)/opt/mh/
 	$(INSTALL) -D -m 0755 $(@D)/startup.sh $(TARGET_DIR)/opt/mh/
-	rm -f $(TARGET_DIR)/opt/mh/openvpn
-	ln -s /usr/sbin/openvpn $(TARGET_DIR)/opt/mh/
 	cp -a $(@D)/user $(TARGET_DIR)/opt/mh/
 	cp -a $(@D)/www $(TARGET_DIR)/opt/mh/
 	rm -f $(TARGET_DIR)/opt/mh/user/nginx.ccu? $(TARGET_DIR)/opt/mh/user/nginx.pi $(TARGET_DIR)/opt/mh/user/nginx $(TARGET_DIR)/opt/mh/user/nginx.i686 $(TARGET_DIR)/opt/mh/user/zabbix_agentd $(TARGET_DIR)/opt/mh/user/zabbix_agentd.i686

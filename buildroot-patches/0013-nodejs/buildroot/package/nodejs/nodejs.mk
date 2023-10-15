@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-NODEJS_VERSION = 18.18.1
+NODEJS_VERSION = 18.18.2
 NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
 NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
 NODEJS_DEPENDENCIES = \

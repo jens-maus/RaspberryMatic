@@ -5,11 +5,10 @@
 ':clock10: awaiting feedback':
   issues:
     comment: >
-      @{issue-author}, the issue does not contain enough information
-      to reproduce the problem. Please open a new bug report and describe
-      the issue in detail.
-    close: true
-    close-reason: not planned
+      @{issue-author}, the maintainer of this project has requested more
+      detailed information or a specific feedback. Please provide this
+      feedback and report back ASAP or this ticket will be automatically
+      marked as stale after a certain short grace period.
 
 # user problem added
 ':information_desk_person: user problem':
@@ -18,7 +17,7 @@
       @{issue-author}, the issue ticket you created does not seem to report
       a general issue/problem/bug in RaspberryMatic itself, but rather seems to
       point at a local usage issue that rather requires some support using
-      a discussion fora. It will therefore be moved to the
+      a discussion or support fora. It will therefore be moved to the
       [discussion area](https://github.com/jens-maus/RaspberryMatic/discussions)
       where you can continue for identifying solutions to your issue.
 
@@ -52,6 +51,18 @@
       project RaspberryMatic is just using. However, for being able to
       reference and track this upstream issue we will keep this ticket
       open for the time being so that you can also reference it accordingly.
+
+# duplicate issue label added
+':heavy_multiplication_x: duplicate':
+  issues:
+    comment: >
+      @{issue-author}, the maintainer of this project has flagged this issue
+      ticket as a duplicate of an already reported issue. It will therefore
+      be closed and you are advised to move over to the other ticket. In
+      addition, please also make sure to first walk through and search in
+      the issue section for a similar issue report before you create a new one.
+    close: true
+    close-reason: not planned
 
 # wontfix label added
 ':thumbsdown: wontfix':

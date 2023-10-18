@@ -75,6 +75,13 @@ stop() {
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
+  # remove startupFinished and restart lighttpd
+  # to let it block external APIs again
+  rm -f /var/status/startupFinished
+
+  # reload lighttpd to let it disable the RemoteAPI ports
+  /etc/init.d/S50lighttpd reload >/dev/null
+
   # if we are in HMLGW mode and are using a RPI-RF-MOD we have
   # to set the LED to yellow again to signal shutdown
   if [[ "${HM_MODE}" == "HM-LGW" ]]; then

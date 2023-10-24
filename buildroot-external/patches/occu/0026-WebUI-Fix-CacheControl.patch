@@ -248,7 +248,7 @@
      request.done(function(result) {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -5850,21 +5850,10 @@
+@@ -6737,21 +6737,10 @@
    /*####################*/
    
    /**
@@ -270,7 +270,7 @@
      var xhr = XMLHttpRequest_create();
      
      if (null !== xhr)
-@@ -18724,7 +18713,6 @@
+@@ -22380,7 +22369,6 @@
      url: "/ise/htm/header.htm",
      dataType: "html",
      async: false,
@@ -278,7 +278,7 @@
      context: document.body
      }).done(function(response) {
        jQuery("#header").html(response);
-@@ -23277,7 +23265,7 @@
+@@ -26933,7 +26921,7 @@
        var script = document.createElement("script");
        script.id = "homematic_com_script_" + index;
        script.type = "text/javascript";
@@ -287,16 +287,19 @@
        $("body").appendChild(script);
        homematic.com.callback = callback;
    },
-@@ -23288,7 +23276,7 @@
-       script.id = "homematic_com_script_fw";
-       script.type = "text/javascript";
+@@ -26948,9 +26936,9 @@
        // script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE";
--      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU"+getProduct()+"&version="+WEBUI_VERSION;
-+      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU"+getProduct()+"&version="+WEBUI_VERSION+"&ts=" + Date.now();
+ 
+       if (homematic('CCU.existsFile', {'file': fieldTestActive})) {
+-        script.src = this.m_fieldTestURLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU"+getProduct()+"&version="+WEBUI_VERSION+"&serial=" + this.serial;
++        script.src = this.m_fieldTestURLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU"+getProduct()+"&version="+WEBUI_VERSION+"&serial=" + this.serial + "&ts=" + Date.now();
+       } else {
+-        script.src = this.m_URLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU" + getProduct() + "&version=" + WEBUI_VERSION;
++        script.src = this.m_URLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU" + getProduct() + "&version=" + WEBUI_VERSION + "&ts=" + Date.now();
+       }
        $("body").appendChild(script);
        homematic.com.callback = callback;
-   },
-@@ -36172,9 +36160,6 @@
+@@ -41826,9 +41814,6 @@
    scriptname = Get_ReGa_Path(scriptname);
    var params = poststr;
  

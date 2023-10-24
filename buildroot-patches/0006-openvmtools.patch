@@ -1,3 +1,1695 @@
+--- buildroot/package/openvmtools/0001-configure.ac-disable-Werror.patch.orig
++++ buildroot/package/openvmtools/0001-configure.ac-disable-Werror.patch
+@@ -0,0 +1,31 @@
++From b978727972e1a8b7e3f14886395047e5809b7a81 Mon Sep 17 00:00:00 2001
++Message-ID: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++From: Stefan Agner <stefan@agner.ch>
++Date: Tue, 5 Sep 2023 13:11:18 +0200
++Subject: [PATCH] configure.ac: disable -Werror
++
++Disable the mandatory flag -Werror in configure.ac.
++
++Signed-off-by: Karoly Kasza <kaszak@gmail.com>
++[rebased against stable-12.3.0]
++Signed-off-by: Stefan Agner <stefan@agner.ch>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 2d60c725..0ed3c9fc 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1451,7 +1451,7 @@ AC_C_VOLATILE
++ 
++ ### General flags / actions
++ CFLAGS="$CFLAGS -Wall"
++-CFLAGS="$CFLAGS -Werror"
+++# CFLAGS="$CFLAGS -Werror"
++ 
++ # -Wno-unknown-pragmas is due to gcc not understanding '#pragma ident'
++ # in Xlib.h on OpenSolaris.
++-- 
++2.42.0
++
+--- buildroot/package/openvmtools/0001-no_cflags_werror.patch.orig
++++ buildroot/package/openvmtools/0001-no_cflags_werror.patch
+@@ -1,18 +0,0 @@
+-configure.ac: disable -Werror
+-
+-Disable the mandatory flag -Werror in configure.ac.
+-
+-Signed-off-by: Karoly Kasza <kaszak@gmail.com>
+-
+---- open-vm-tools/configure.ac	2015-06-17 10:02:00.000000000 +0200
+-+++ open-vm-tools/configure.ac	2015-06-17 10:02:00.000000000 +0200
+-@@ -935,7 +935,7 @@
+- 
+- ### General flags / actions
+- CFLAGS="$CFLAGS -Wall"
+--CFLAGS="$CFLAGS -Werror"
+-+# CFLAGS="$CFLAGS -Werror"
+- 
+- # -Wno-unknown-pragmas is due to gcc not understanding '#pragma ident'
+- # in Xlib.h on OpenSolaris.
+-
+--- buildroot/package/openvmtools/0002-dont-force-cppflags.patch.orig
++++ buildroot/package/openvmtools/0002-dont-force-cppflags.patch
+@@ -1,21 +0,0 @@
+-m4: do not force -I/usr/include in CPPFLAGS
+-
+-This is so horribly broken for cross-compilation. :-(
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+---- open-vm-tools/m4/vmtools.m4	2015-06-17 10:03:00.000000000 +0200
+-+++ open-vm-tools/m4/vmtools.m4	2015-06-17 10:03:00.000000000 +0200
+-@@ -281,10 +281,10 @@
+-       if test "$os" = freebsd; then
+-          CUSTOM_$1_CPPFLAGS="-I/usr/local/include"
+-       else
+--         CUSTOM_$1_CPPFLAGS="-I/usr/include"
+-+         CUSTOM_$1_CPPFLAGS=" "
+-       fi
+-       if test -n "$2"; then
+--         CUSTOM_$1_CPPFLAGS="${CUSTOM_$1_CPPFLAGS}/$2"
+-+         : CUSTOM_$1_CPPFLAGS="${CUSTOM_$1_CPPFLAGS}/$2"
+-       fi
+-    fi
+- ])
+--- buildroot/package/openvmtools/0002-m4-do-not-force-I-usr-include-in-CPPFLAGS.patch.orig
++++ buildroot/package/openvmtools/0002-m4-do-not-force-I-usr-include-in-CPPFLAGS.patch
+@@ -0,0 +1,37 @@
++From 1dbf439465d70a9c666910ecc9a6582946048202 Mon Sep 17 00:00:00 2001
++Message-ID: <1dbf439465d70a9c666910ecc9a6582946048202.1693922825.git.stefan@agner.ch>
++In-Reply-To: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++References: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++From: Stefan Agner <stefan@agner.ch>
++Date: Tue, 5 Sep 2023 13:14:04 +0200
++Subject: [PATCH] m4: do not force -I/usr/include in CPPFLAGS
++
++This is so horribly broken for cross-compilation. :-(
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++[rebased against stable-12.3.0]
++Signed-off-by: Stefan Agner <stefan@agner.ch>
++---
++ m4/vmtools.m4 | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/m4/vmtools.m4 b/m4/vmtools.m4
++index 055b39d9..d281f81d 100644
++--- a/m4/vmtools.m4
+++++ b/m4/vmtools.m4
++@@ -279,10 +279,10 @@ AC_DEFUN([AC_VMW_DEFAULT_FLAGS],[
++       if test "$os" = freebsd; then
++          CUSTOM_$1_CPPFLAGS="-I/usr/local/include"
++       else
++-         CUSTOM_$1_CPPFLAGS="-I/usr/include"
+++         CUSTOM_$1_CPPFLAGS=" "
++       fi
++       if test -n "$2"; then
++-         CUSTOM_$1_CPPFLAGS="${CUSTOM_$1_CPPFLAGS}/$2"
+++         : CUSTOM_$1_CPPFLAGS="${CUSTOM_$1_CPPFLAGS}/$2"
++       fi
++    fi
++ ])
++-- 
++2.42.0
++
+--- buildroot/package/openvmtools/0003-Rename-poll-h-into-vm_poll-h-to-fix-build-failure-on-musl.patch.orig
++++ buildroot/package/openvmtools/0003-Rename-poll-h-into-vm_poll-h-to-fix-build-failure-on-musl.patch
+@@ -1,813 +0,0 @@
+-From 1dfab46d367d11e9132506ee0f7d3eb2ceff5f3c Mon Sep 17 00:00:00 2001
+-Message-Id: <1dfab46d367d11e9132506ee0f7d3eb2ceff5f3c.1652913832.git.stefan@agner.ch>
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 30 Sep 2019 13:32:35 +0200
+-Subject: [PATCH] Rename poll.h into vm_poll.h to fix build failure on musl
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-musl libc redirects include of sys/poll.h to poll.h. But since poll.h is
+-also a local header file, the musl libc header is never included. This
+-leads to the following build failure:
+-
+-In file included from asyncsocket.c:73:0:
+-.../host/i586-buildroot-linux-musl/sysroot/usr/include/sys/poll.h:1:2: warning: #warning redirecting incorrect #include <sys/poll.h> to <poll.h> [-Wcpp]
+- #warning redirecting incorrect #include <sys/poll.h> to <poll.h>
+-asyncsocket.c: In function ‘AsyncTCPSocketPollWork’:
+-asyncsocket.c:2537:13: error: invalid use of undefined type ‘struct pollfd’
+-          pfd[i].fd = asock[i]->fd;
+-             ^
+-asyncsocket.c:2537:13: error: dereferencing pointer to incomplete type ‘struct pollfd’
+-asyncsocket.c:2538:13: error: invalid use of undefined type ‘struct pollfd’
+-          pfd[i].events = read ? POLLIN : POLLOUT;
+-             ^
+-asyncsocket.c:2538:33: error: ‘POLLIN’ undeclared (first use in this function); did you mean ‘POLL_IN’?
+-          pfd[i].events = read ? POLLIN : POLLOUT;
+-
+-So rename poll.h into vm_poll.h as suggested by srowe in
+-https://github.com/vmware/open-vm-tools/issues/359#issuecomment-533529956
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/4f575ef42bbc4387a07e396205052b2da081c64d
+-
+-Fix #359
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/vmware/open-vm-tools/pull/383]
+----
+- lib/asyncsocket/asyncsocket.c |   4 +-
+- lib/hgfsServer/hgfsServer.c   |   2 +-
+- lib/include/asyncsocket.h     |   2 +-
+- lib/include/poll.h            | 337 --------------------
+- lib/include/pollImpl.h        |   2 +-
+- lib/include/vm_poll.h         | 337 ++++++++++++++++++++
+- lib/rpcIn/rpcin.c             |   2 +-
+- 7 files changed, 343 insertions(+), 343 deletions(-)
+- delete mode 100644 lib/include/poll.h
+- create mode 100644 lib/include/vm_poll.h
+-
+-diff --git a/lib/asyncsocket/asyncsocket.c b/open-vm-tools/lib/asyncsocket/asyncsocket.c
+-index 05147d2e..16949567 100644
+---- a/lib/asyncsocket/asyncsocket.c
+-+++ b/lib/asyncsocket/asyncsocket.c
+-@@ -70,8 +70,8 @@
+- #else
+- #include <stddef.h>
+- #include <ctype.h>
+-+#include <poll.h>
+- #include <sys/types.h>
+--#include <sys/poll.h>
+- #include <sys/socket.h>
+- #include <sys/un.h>
+- #include <netdb.h>
+-@@ -87,7 +87,7 @@
+- #include "random.h"
+- #include "asyncsocket.h"
+- #include "asyncSocketBase.h"
+--#include "poll.h"
+-+#include "vm_poll.h"
+- #include "log.h"
+- #include "err.h"
+- #include "hostinfo.h"
+-diff --git a/lib/hgfsServer/hgfsServer.c b/open-vm-tools/lib/hgfsServer/hgfsServer.c
+-index 98f5b3f0..b436f0c7 100644
+---- a/lib/hgfsServer/hgfsServer.c
+-+++ b/lib/hgfsServer/hgfsServer.c
+-@@ -51,7 +51,7 @@
+- #include "hgfsDirNotify.h"
+- #include "hgfsThreadpool.h"
+- #include "userlock.h"
+--#include "poll.h"
+-+#include "vm_poll.h"
+- #include "mutexRankLib.h"
+- #include "vm_basic_asm.h"
+- #include "unicodeOperations.h"
+-diff --git a/lib/include/asyncsocket.h b/open-vm-tools/lib/include/asyncsocket.h
+-index 47b5b873..b8b0149e 100644
+---- a/lib/include/asyncsocket.h
+-+++ b/lib/include/asyncsocket.h
+-@@ -171,7 +171,7 @@ typedef struct AsyncSocket AsyncSocket;
+-  * Or the client can specify its favorite poll class and locking behavior.
+-  * Use of IVmdbPoll is only supported for regular sockets and for Attach.
+-  */
+--#include "poll.h"
+-+#include "vm_poll.h"
+- struct IVmdbPoll;
+- typedef struct AsyncSocketPollParams {
+-    int flags;               /* Default 0, only POLL_FLAG_NO_BULL is valid */
+-diff --git a/lib/include/poll.h b/open-vm-tools/lib/include/poll.h
+-deleted file mode 100644
+-index c90f5dcd..00000000
+---- a/lib/include/poll.h
+-+++ /dev/null
+-@@ -1,337 +0,0 @@
+--/*********************************************************
+-- * Copyright (C) 1998-2020 VMware, Inc. All rights reserved.
+-- *
+-- * This program is free software; you can redistribute it and/or modify it
+-- * under the terms of the GNU Lesser General Public License as published
+-- * by the Free Software Foundation version 2.1 and no later version.
+-- *
+-- * This program is distributed in the hope that it will be useful, but
+-- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+-- * or FITNESS FOR A PARTICULAR PURPOSE.  See the Lesser GNU General Public
+-- * License for more details.
+-- *
+-- * You should have received a copy of the GNU Lesser General Public License
+-- * along with this program; if not, write to the Free Software Foundation, Inc.,
+-- * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
+-- *
+-- *********************************************************/
+--
+--/*********************************************************
+-- * The contents of this file are subject to the terms of the Common
+-- * Development and Distribution License (the "License") version 1.0
+-- * and no later version.  You may not use this file except in
+-- * compliance with the License.
+-- *
+-- * You can obtain a copy of the License at
+-- *         http://www.opensource.org/licenses/cddl1.php
+-- *
+-- * See the License for the specific language governing permissions
+-- * and limitations under the License.
+-- *
+-- *********************************************************/
+--
+--
+--#ifndef _POLL_H_
+--#define _POLL_H_
+--
+--#define INCLUDE_ALLOW_USERLEVEL
+--#define INCLUDE_ALLOW_VMCORE
+--#include "includeCheck.h"
+--
+--#include "vm_basic_types.h"
+--#include "vm_basic_defs.h"
+--#include "vmware.h"
+--#include "userlock.h"
+--
+--#if defined(__cplusplus)
+--extern "C" {
+--#endif
+--
+--#ifdef _WIN32
+--#define HZ 100
+--#elif defined __linux__
+--#include <asm/param.h>
+--#elif __APPLE__
+--#include <TargetConditionals.h>
+--/*
+-- * Old SDKs don't define TARGET_OS_IPHONE at all.
+-- * New ones define it to 0 on Mac OS X, 1 on iOS.
+-- */
+--#if !defined(TARGET_OS_IPHONE) || TARGET_OS_IPHONE == 0
+--#include <sys/kernel.h>
+--#endif
+--#include <sys/poll.h>
+--#define HZ 100
+--#endif
+--#ifdef __ANDROID__
+--/*
+-- * <poll.h> of android should be included, but its name is same
+-- * with this file. So its content is put here to avoid conflict.
+-- */
+--#include <asm/poll.h>
+--#define HZ 100
+--typedef unsigned int  nfds_t;
+--int poll(struct pollfd *, nfds_t, long);
+--#endif
+--
+--
+--/*
+-- * Poll event types: each type has a different reason for firing,
+-- * or condition that must be met before firing.
+-- */
+--
+--typedef enum {
+--   /*
+--    * Actual Poll queue types against which you can register callbacks.
+--    */
+--   POLL_VIRTUALREALTIME = -1, /* Negative because it doesn't have its own Q */
+--   POLL_VTIME = 0,
+--   POLL_REALTIME,
+--   POLL_DEVICE,
+--   POLL_MAIN_LOOP,
+--   POLL_NUM_QUEUES
+--} PollEventType;
+--
+--
+--/*
+-- * Classes of events
+-- *
+-- * These are the predefined classes.  More can be declared
+-- * with Poll_AllocClass().
+-- */
+--
+--typedef enum PollClass {
+--   POLL_CLASS_MAIN,
+--   POLL_CLASS_PAUSE,
+--   POLL_CLASS_IPC,
+--   POLL_CLASS_CPT,
+--   POLL_CLASS_MKS,
+--   POLL_FIXED_CLASSES,
+--   POLL_DEFAULT_FIXED_CLASSES,
+--   /* Size enum to maximum */
+--   POLL_MAX_CLASSES = 31,
+--} PollClass;
+--
+--/*
+-- * Do not use; Special pseudo private poll class supported by
+-- * PollDefault only
+-- */
+--#define POLL_DEFAULT_CLASS_NET POLL_FIXED_CLASSES
+--#define POLL_DEFAULT_CS_NET    PollClassSet_Singleton(POLL_DEFAULT_CLASS_NET)
+--
+--/*
+-- * Each callback is registered in a set of classes
+-- */
+--
+--typedef struct PollClassSet {
+--   uintptr_t bits;
+--} PollClassSet;
+--
+--/* An empty PollClassSet. */
+--static INLINE PollClassSet
+--PollClassSet_Empty(void)
+--{
+--   PollClassSet set = { 0 };
+--   return set;
+--}
+--
+--/* A PollClassSet with the single member. */
+--static INLINE PollClassSet
+--PollClassSet_Singleton(PollClass c)
+--{
+--   PollClassSet s = PollClassSet_Empty();
+--
+--   ASSERT_ON_COMPILE(POLL_MAX_CLASSES < sizeof s.bits * 8);
+--   ASSERT(c < POLL_MAX_CLASSES);
+--
+--   s.bits = CONST3264U(1) << c;
+--   return s;
+--}
+--
+--/* Combine two PollClassSets. */
+--static INLINE PollClassSet
+--PollClassSet_Union(PollClassSet lhs, PollClassSet rhs)
+--{
+--   PollClassSet set;
+--   set.bits = lhs.bits | rhs.bits;
+--   return set;
+--}
+--
+--/* Add single class to PollClassSet. */
+--static INLINE PollClassSet
+--PollClassSet_Include(PollClassSet set, PollClass c)
+--{
+--   return PollClassSet_Union(set, PollClassSet_Singleton(c));
+--}
+--
+--
+--#define POLL_CS_MAIN    PollClassSet_Singleton(POLL_CLASS_MAIN)
+--#define POLL_CS_PAUSE   PollClassSet_Union(POLL_CS_MAIN,            \
+--                           PollClassSet_Singleton(POLL_CLASS_PAUSE))
+--#define POLL_CS_CPT     PollClassSet_Union(POLL_CS_PAUSE,           \
+--                           PollClassSet_Singleton(POLL_CLASS_CPT))
+--#define POLL_CS_IPC     PollClassSet_Union(POLL_CS_CPT,             \
+--                           PollClassSet_Singleton(POLL_CLASS_IPC))
+--#define POLL_CS_VMDB    POLL_CS_PAUSE /* POLL_CLASS_VMDB is retired */
+--#define POLL_CS_MKS	PollClassSet_Singleton(POLL_CLASS_MKS)
+--/* 
+-- * DANGER.  You don't need POLL_CS_ALWAYS.  Really.  So don't use it.
+-- */
+--#define POLL_CS_ALWAYS  PollClassSet_Union(POLL_CS_CPT, POLL_CS_IPC)
+--
+--/*
+-- * Poll class-set taxonomy:
+-- * POLL_CS_MAIN
+-- *    - Unless you NEED another class, use POLL_CS_MAIN.
+-- * POLL_CS_PAUSE
+-- *    - For callbacks that must occur even if the guest is paused.
+-- *      Most VMDB or Foundry commands are in this category.
+-- * POLL_CS_CPT
+-- *    - Only for callbacks which can trigger intermediate Checkpoint 
+-- *      transitions.
+-- *      The ONLY such callback is Migrate.
+-- * POLL_CS_IPC
+-- *    - Only for callbacks which can contain Msg_(Post|Hint|Question) 
+-- *      responses, and for signal handlers (why)?
+-- *      Vigor, VMDB, and Foundry can contain Msg_* responses.
+-- * POLL_CS_MKS
+-- *    - Callback runs in MKS thread.
+-- * POLL_CS_ALWAYS
+-- *    - Only for events that must be processed immediately.
+-- *      The ONLY such callback is OvhdMemVmxSizeCheck.
+-- */
+--
+--
+--/*
+-- * Poll_Callback flags
+-- */
+--
+--#define POLL_FLAG_PERIODIC		0x01    // keep after firing
+--#define POLL_FLAG_REMOVE_AT_POWEROFF	0x02  	// self-explanatory
+--#define POLL_FLAG_READ			0x04	// device is ready for reading
+--#define POLL_FLAG_WRITE			0x08	// device is ready for writing
+--#define POLL_FLAG_SOCKET                0x10    // device is a Windows socket
+--#define POLL_FLAG_NO_BULL               0x20    // callback does its own locking
+--#define POLL_FLAG_WINSOCK               0x40    // Winsock style write events
+--#define POLL_FLAG_FD                    0x80    // device is a Windows file descriptor.
+--#define POLL_FLAG_ACCEPT_INVALID_FDS    0x100   // For broken 3rd party libs, e.g. curl
+--#define POLL_FLAG_THUNK_TO_WND          0x200   // thunk callback to window message loop
+--
+--
+--typedef void (*PollerFunction)(void *clientData);
+--typedef void (*PollerFireWrapper)(PollerFunction func,
+--                                  void *funcData,
+--                                  void *wrapperData);
+--typedef Bool (*PollerErrorFn)(const char *errorStr);
+--
+--/*
+-- * Initialisers:
+-- *
+-- *      For the sake of convenience, we declare the initialisers
+-- *      for custom implmentations here, even though the actual
+-- *      implementations are distinct from the core poll code.
+-- */
+--
+--
+--/* Socket pair created with non-blocking mode */
+--#define POLL_OPTIONS_SOCKET_PAIR_NONBLOCK_CONN  0x01
+--
+--typedef unsigned int SocketSpecialOpts;
+--
+--typedef struct PollOptions {
+--   Bool locked;           // Use internal MXUser for locking
+--   Bool allowFullQueue;   // Don't assert when device event queue is full.
+--   VThreadID windowsMsgThread;       // thread that processes Windows messages
+--   PollerFireWrapper fireWrapperFn;  // optional; may be useful for stats
+--   void *fireWrapperData; // optional
+--   PollerErrorFn errorFn; // optional; called upon unrecoverable error
+--   SocketSpecialOpts pollSocketOpts;
+--} PollOptions;
+--
+--
+--void Poll_InitDefault(void);
+--void Poll_InitDefaultEx(const PollOptions *opts);
+--void Poll_InitGtk(void); // On top of glib for Linux
+--void Poll_InitCF(void);  // On top of CoreFoundation for OSX
+--
+--
+--/*
+-- * Functions
+-- */
+--int Poll_SocketPair(Bool vmci, Bool stream, int fds[2], SocketSpecialOpts opts);
+--void Poll_Loop(Bool loop, Bool *exit, PollClass c);
+--void Poll_LoopTimeout(Bool loop, Bool *exit, PollClass c, int timeout);
+--Bool Poll_LockingEnabled(void);
+--void Poll_Exit(void);
+--
+--
+--/*
+-- * Poll_Callback adds a callback regardless of whether an identical one exists.
+-- * The exception to this rule is POLL_DEVICE callbacks: there is a maximum of
+-- * one read and one write callback per fd.
+-- *
+-- * Poll_CallbackRemove removes one callback. If there are multiple identical
+-- * callbacks, which one is removed is an implementation detail. Note that in
+-- * the case of POLL_DEVICE and POLL_REALTIME callbacks, the fd/delay used to
+-- * create the callback is not specified when removing, so all callbacks
+-- * of those types with the same flags, function, and clientData are considered
+-- * "identical" even if their fd/delay differed.
+-- */
+--
+--VMwareStatus Poll_Callback(PollClassSet classSet,
+--                           int flags,
+--                           PollerFunction f,
+--                           void *clientData,
+--                           PollEventType type,
+--                           PollDevHandle info, // fd/microsec delay
+--                           MXUserRecLock *lck);
+--Bool Poll_CallbackRemove(PollClassSet classSet,
+--                         int flags,
+--                         PollerFunction f,
+--                         void *clientData,
+--                         PollEventType type);
+--Bool Poll_CallbackRemoveOneByCB(PollClassSet classSet,
+--                                int flags,
+--                                PollerFunction f,
+--                                PollEventType type,
+--                                void **clientData);
+--
+--void Poll_NotifyChange(PollClassSet classSet);
+--
+--/*
+-- * Wrappers for Poll_Callback and Poll_CallbackRemove that present
+-- * simpler subsets of those interfaces.
+-- */
+--
+--VMwareStatus Poll_CB_Device(PollerFunction f,
+--                            void *clientData,
+--                            PollDevHandle device,
+--                            Bool periodic);
+--
+--Bool Poll_CB_DeviceRemove(PollerFunction f,
+--                          void *clientData,
+--                          Bool periodic);
+--
+--
+--VMwareStatus Poll_CB_RTime(PollerFunction f,
+--                           void *clientData,
+--                           int64 delay,   // microseconds
+--                           Bool periodic,
+--                           MXUserRecLock *lock);
+--
+--Bool Poll_CB_RTimeRemove(PollerFunction f,
+--                         void *clientData,
+--                         Bool periodic);
+--
+--
+--#ifdef _WIN32
+--void Poll_SetPumpsWindowsMessages(Bool pumps);
+--void Poll_SetWindowMessageRecipient(HWND hWnd, UINT msg, Bool alwaysThunk);
+--Bool Poll_FireWndCallback(void *lparam);
+--#endif
+--
+--#if defined(__cplusplus)
+--}  // extern "C"
+--#endif
+--
+--#endif // _POLL_H_
+-diff --git a/lib/include/pollImpl.h b/open-vm-tools/lib/include/pollImpl.h
+-index 46442e55..8bc66997 100644
+---- a/lib/include/pollImpl.h
+-+++ b/lib/include/pollImpl.h
+-@@ -44,7 +44,7 @@
+- #define INCLUDE_ALLOW_USERLEVEL
+- #include "includeCheck.h"
+- 
+--#include "poll.h"
+-+#include "vm_poll.h"
+- #include "vm_basic_asm.h"
+- 
+- #if defined(__cplusplus)
+-diff --git a/lib/include/vm_poll.h b/open-vm-tools/lib/include/vm_poll.h
+-new file mode 100644
+-index 00000000..c90f5dcd
+---- /dev/null
+-+++ b/lib/include/vm_poll.h
+-@@ -0,0 +1,337 @@
+-+/*********************************************************
+-+ * Copyright (C) 1998-2020 VMware, Inc. All rights reserved.
+-+ *
+-+ * This program is free software; you can redistribute it and/or modify it
+-+ * under the terms of the GNU Lesser General Public License as published
+-+ * by the Free Software Foundation version 2.1 and no later version.
+-+ *
+-+ * This program is distributed in the hope that it will be useful, but
+-+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+-+ * or FITNESS FOR A PARTICULAR PURPOSE.  See the Lesser GNU General Public
+-+ * License for more details.
+-+ *
+-+ * You should have received a copy of the GNU Lesser General Public License
+-+ * along with this program; if not, write to the Free Software Foundation, Inc.,
+-+ * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA.
+-+ *
+-+ *********************************************************/
+-+
+-+/*********************************************************
+-+ * The contents of this file are subject to the terms of the Common
+-+ * Development and Distribution License (the "License") version 1.0
+-+ * and no later version.  You may not use this file except in
+-+ * compliance with the License.
+-+ *
+-+ * You can obtain a copy of the License at
+-+ *         http://www.opensource.org/licenses/cddl1.php
+-+ *
+-+ * See the License for the specific language governing permissions
+-+ * and limitations under the License.
+-+ *
+-+ *********************************************************/
+-+
+-+
+-+#ifndef _POLL_H_
+-+#define _POLL_H_
+-+
+-+#define INCLUDE_ALLOW_USERLEVEL
+-+#define INCLUDE_ALLOW_VMCORE
+-+#include "includeCheck.h"
+-+
+-+#include "vm_basic_types.h"
+-+#include "vm_basic_defs.h"
+-+#include "vmware.h"
+-+#include "userlock.h"
+-+
+-+#if defined(__cplusplus)
+-+extern "C" {
+-+#endif
+-+
+-+#ifdef _WIN32
+-+#define HZ 100
+-+#elif defined __linux__
+-+#include <asm/param.h>
+-+#elif __APPLE__
+-+#include <TargetConditionals.h>
+-+/*
+-+ * Old SDKs don't define TARGET_OS_IPHONE at all.
+-+ * New ones define it to 0 on Mac OS X, 1 on iOS.
+-+ */
+-+#if !defined(TARGET_OS_IPHONE) || TARGET_OS_IPHONE == 0
+-+#include <sys/kernel.h>
+-+#endif
+-+#include <sys/poll.h>
+-+#define HZ 100
+-+#endif
+-+#ifdef __ANDROID__
+-+/*
+-+ * <poll.h> of android should be included, but its name is same
+-+ * with this file. So its content is put here to avoid conflict.
+-+ */
+-+#include <asm/poll.h>
+-+#define HZ 100
+-+typedef unsigned int  nfds_t;
+-+int poll(struct pollfd *, nfds_t, long);
+-+#endif
+-+
+-+
+-+/*
+-+ * Poll event types: each type has a different reason for firing,
+-+ * or condition that must be met before firing.
+-+ */
+-+
+-+typedef enum {
+-+   /*
+-+    * Actual Poll queue types against which you can register callbacks.
+-+    */
+-+   POLL_VIRTUALREALTIME = -1, /* Negative because it doesn't have its own Q */
+-+   POLL_VTIME = 0,
+-+   POLL_REALTIME,
+-+   POLL_DEVICE,
+-+   POLL_MAIN_LOOP,
+-+   POLL_NUM_QUEUES
+-+} PollEventType;
+-+
+-+
+-+/*
+-+ * Classes of events
+-+ *
+-+ * These are the predefined classes.  More can be declared
+-+ * with Poll_AllocClass().
+-+ */
+-+
+-+typedef enum PollClass {
+-+   POLL_CLASS_MAIN,
+-+   POLL_CLASS_PAUSE,
+-+   POLL_CLASS_IPC,
+-+   POLL_CLASS_CPT,
+-+   POLL_CLASS_MKS,
+-+   POLL_FIXED_CLASSES,
+-+   POLL_DEFAULT_FIXED_CLASSES,
+-+   /* Size enum to maximum */
+-+   POLL_MAX_CLASSES = 31,
+-+} PollClass;
+-+
+-+/*
+-+ * Do not use; Special pseudo private poll class supported by
+-+ * PollDefault only
+-+ */
+-+#define POLL_DEFAULT_CLASS_NET POLL_FIXED_CLASSES
+-+#define POLL_DEFAULT_CS_NET    PollClassSet_Singleton(POLL_DEFAULT_CLASS_NET)
+-+
+-+/*
+-+ * Each callback is registered in a set of classes
+-+ */
+-+
+-+typedef struct PollClassSet {
+-+   uintptr_t bits;
+-+} PollClassSet;
+-+
+-+/* An empty PollClassSet. */
+-+static INLINE PollClassSet
+-+PollClassSet_Empty(void)
+-+{
+-+   PollClassSet set = { 0 };
+-+   return set;
+-+}
+-+
+-+/* A PollClassSet with the single member. */
+-+static INLINE PollClassSet
+-+PollClassSet_Singleton(PollClass c)
+-+{
+-+   PollClassSet s = PollClassSet_Empty();
+-+
+-+   ASSERT_ON_COMPILE(POLL_MAX_CLASSES < sizeof s.bits * 8);
+-+   ASSERT(c < POLL_MAX_CLASSES);
+-+
+-+   s.bits = CONST3264U(1) << c;
+-+   return s;
+-+}
+-+
+-+/* Combine two PollClassSets. */
+-+static INLINE PollClassSet
+-+PollClassSet_Union(PollClassSet lhs, PollClassSet rhs)
+-+{
+-+   PollClassSet set;
+-+   set.bits = lhs.bits | rhs.bits;
+-+   return set;
+-+}
+-+
+-+/* Add single class to PollClassSet. */
+-+static INLINE PollClassSet
+-+PollClassSet_Include(PollClassSet set, PollClass c)
+-+{
+-+   return PollClassSet_Union(set, PollClassSet_Singleton(c));
+-+}
+-+
+-+
+-+#define POLL_CS_MAIN    PollClassSet_Singleton(POLL_CLASS_MAIN)
+-+#define POLL_CS_PAUSE   PollClassSet_Union(POLL_CS_MAIN,            \
+-+                           PollClassSet_Singleton(POLL_CLASS_PAUSE))
+-+#define POLL_CS_CPT     PollClassSet_Union(POLL_CS_PAUSE,           \
+-+                           PollClassSet_Singleton(POLL_CLASS_CPT))
+-+#define POLL_CS_IPC     PollClassSet_Union(POLL_CS_CPT,             \
+-+                           PollClassSet_Singleton(POLL_CLASS_IPC))
+-+#define POLL_CS_VMDB    POLL_CS_PAUSE /* POLL_CLASS_VMDB is retired */
+-+#define POLL_CS_MKS	PollClassSet_Singleton(POLL_CLASS_MKS)
+-+/* 
+-+ * DANGER.  You don't need POLL_CS_ALWAYS.  Really.  So don't use it.
+-+ */
+-+#define POLL_CS_ALWAYS  PollClassSet_Union(POLL_CS_CPT, POLL_CS_IPC)
+-+
+-+/*
+-+ * Poll class-set taxonomy:
+-+ * POLL_CS_MAIN
+-+ *    - Unless you NEED another class, use POLL_CS_MAIN.
+-+ * POLL_CS_PAUSE
+-+ *    - For callbacks that must occur even if the guest is paused.
+-+ *      Most VMDB or Foundry commands are in this category.
+-+ * POLL_CS_CPT
+-+ *    - Only for callbacks which can trigger intermediate Checkpoint 
+-+ *      transitions.
+-+ *      The ONLY such callback is Migrate.
+-+ * POLL_CS_IPC
+-+ *    - Only for callbacks which can contain Msg_(Post|Hint|Question) 
+-+ *      responses, and for signal handlers (why)?
+-+ *      Vigor, VMDB, and Foundry can contain Msg_* responses.
+-+ * POLL_CS_MKS
+-+ *    - Callback runs in MKS thread.
+-+ * POLL_CS_ALWAYS
+-+ *    - Only for events that must be processed immediately.
+-+ *      The ONLY such callback is OvhdMemVmxSizeCheck.
+-+ */
+-+
+-+
+-+/*
+-+ * Poll_Callback flags
+-+ */
+-+
+-+#define POLL_FLAG_PERIODIC		0x01    // keep after firing
+-+#define POLL_FLAG_REMOVE_AT_POWEROFF	0x02  	// self-explanatory
+-+#define POLL_FLAG_READ			0x04	// device is ready for reading
+-+#define POLL_FLAG_WRITE			0x08	// device is ready for writing
+-+#define POLL_FLAG_SOCKET                0x10    // device is a Windows socket
+-+#define POLL_FLAG_NO_BULL               0x20    // callback does its own locking
+-+#define POLL_FLAG_WINSOCK               0x40    // Winsock style write events
+-+#define POLL_FLAG_FD                    0x80    // device is a Windows file descriptor.
+-+#define POLL_FLAG_ACCEPT_INVALID_FDS    0x100   // For broken 3rd party libs, e.g. curl
+-+#define POLL_FLAG_THUNK_TO_WND          0x200   // thunk callback to window message loop
+-+
+-+
+-+typedef void (*PollerFunction)(void *clientData);
+-+typedef void (*PollerFireWrapper)(PollerFunction func,
+-+                                  void *funcData,
+-+                                  void *wrapperData);
+-+typedef Bool (*PollerErrorFn)(const char *errorStr);
+-+
+-+/*
+-+ * Initialisers:
+-+ *
+-+ *      For the sake of convenience, we declare the initialisers
+-+ *      for custom implmentations here, even though the actual
+-+ *      implementations are distinct from the core poll code.
+-+ */
+-+
+-+
+-+/* Socket pair created with non-blocking mode */
+-+#define POLL_OPTIONS_SOCKET_PAIR_NONBLOCK_CONN  0x01
+-+
+-+typedef unsigned int SocketSpecialOpts;
+-+
+-+typedef struct PollOptions {
+-+   Bool locked;           // Use internal MXUser for locking
+-+   Bool allowFullQueue;   // Don't assert when device event queue is full.
+-+   VThreadID windowsMsgThread;       // thread that processes Windows messages
+-+   PollerFireWrapper fireWrapperFn;  // optional; may be useful for stats
+-+   void *fireWrapperData; // optional
+-+   PollerErrorFn errorFn; // optional; called upon unrecoverable error
+-+   SocketSpecialOpts pollSocketOpts;
+-+} PollOptions;
+-+
+-+
+-+void Poll_InitDefault(void);
+-+void Poll_InitDefaultEx(const PollOptions *opts);
+-+void Poll_InitGtk(void); // On top of glib for Linux
+-+void Poll_InitCF(void);  // On top of CoreFoundation for OSX
+-+
+-+
+-+/*
+-+ * Functions
+-+ */
+-+int Poll_SocketPair(Bool vmci, Bool stream, int fds[2], SocketSpecialOpts opts);
+-+void Poll_Loop(Bool loop, Bool *exit, PollClass c);
+-+void Poll_LoopTimeout(Bool loop, Bool *exit, PollClass c, int timeout);
+-+Bool Poll_LockingEnabled(void);
+-+void Poll_Exit(void);
+-+
+-+
+-+/*
+-+ * Poll_Callback adds a callback regardless of whether an identical one exists.
+-+ * The exception to this rule is POLL_DEVICE callbacks: there is a maximum of
+-+ * one read and one write callback per fd.
+-+ *
+-+ * Poll_CallbackRemove removes one callback. If there are multiple identical
+-+ * callbacks, which one is removed is an implementation detail. Note that in
+-+ * the case of POLL_DEVICE and POLL_REALTIME callbacks, the fd/delay used to
+-+ * create the callback is not specified when removing, so all callbacks
+-+ * of those types with the same flags, function, and clientData are considered
+-+ * "identical" even if their fd/delay differed.
+-+ */
+-+
+-+VMwareStatus Poll_Callback(PollClassSet classSet,
+-+                           int flags,
+-+                           PollerFunction f,
+-+                           void *clientData,
+-+                           PollEventType type,
+-+                           PollDevHandle info, // fd/microsec delay
+-+                           MXUserRecLock *lck);
+-+Bool Poll_CallbackRemove(PollClassSet classSet,
+-+                         int flags,
+-+                         PollerFunction f,
+-+                         void *clientData,
+-+                         PollEventType type);
+-+Bool Poll_CallbackRemoveOneByCB(PollClassSet classSet,
+-+                                int flags,
+-+                                PollerFunction f,
+-+                                PollEventType type,
+-+                                void **clientData);
+-+
+-+void Poll_NotifyChange(PollClassSet classSet);
+-+
+-+/*
+-+ * Wrappers for Poll_Callback and Poll_CallbackRemove that present
+-+ * simpler subsets of those interfaces.
+-+ */
+-+
+-+VMwareStatus Poll_CB_Device(PollerFunction f,
+-+                            void *clientData,
+-+                            PollDevHandle device,
+-+                            Bool periodic);
+-+
+-+Bool Poll_CB_DeviceRemove(PollerFunction f,
+-+                          void *clientData,
+-+                          Bool periodic);
+-+
+-+
+-+VMwareStatus Poll_CB_RTime(PollerFunction f,
+-+                           void *clientData,
+-+                           int64 delay,   // microseconds
+-+                           Bool periodic,
+-+                           MXUserRecLock *lock);
+-+
+-+Bool Poll_CB_RTimeRemove(PollerFunction f,
+-+                         void *clientData,
+-+                         Bool periodic);
+-+
+-+
+-+#ifdef _WIN32
+-+void Poll_SetPumpsWindowsMessages(Bool pumps);
+-+void Poll_SetWindowMessageRecipient(HWND hWnd, UINT msg, Bool alwaysThunk);
+-+Bool Poll_FireWndCallback(void *lparam);
+-+#endif
+-+
+-+#if defined(__cplusplus)
+-+}  // extern "C"
+-+#endif
+-+
+-+#endif // _POLL_H_
+-diff --git a/lib/rpcIn/rpcin.c b/open-vm-tools/lib/rpcIn/rpcin.c
+-index 8b1fe759..f22fcd40 100644
+---- a/lib/rpcIn/rpcin.c
+-+++ b/lib/rpcIn/rpcin.c
+-@@ -57,7 +57,7 @@
+- 
+- #if defined(VMTOOLS_USE_VSOCKET)
+- #  include <glib.h>
+--#  include "poll.h"
+-+#  include "vm_poll.h"
+- #  include "asyncsocket.h"
+- #  include "vmci_defs.h"
+- #include "dataMap.h"
+--- 
+-2.36.1
+-
+--- buildroot/package/openvmtools/0003-Rename-poll.h-into-vm_poll.h-to-fix-build-failure-on.patch.orig
++++ buildroot/package/openvmtools/0003-Rename-poll.h-into-vm_poll.h-to-fix-build-failure-on.patch
+@@ -0,0 +1,133 @@
++From 21b87417e23de9e444ec02e93e42f72a3f9d4c02 Mon Sep 17 00:00:00 2001
++Message-ID: <21b87417e23de9e444ec02e93e42f72a3f9d4c02.1693922825.git.stefan@agner.ch>
++In-Reply-To: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++References: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 30 Sep 2019 13:32:35 +0200
++Subject: [PATCH] Rename poll.h into vm_poll.h to fix build failure on musl
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++musl libc redirects include of sys/poll.h to poll.h. But since poll.h is
++also a local header file, the musl libc header is never included. This
++leads to the following build failure:
++
++In file included from asyncsocket.c:73:0:
++.../host/i586-buildroot-linux-musl/sysroot/usr/include/sys/poll.h:1:2: warning: #warning redirecting incorrect #include <sys/poll.h> to <poll.h> [-Wcpp]
++ #warning redirecting incorrect #include <sys/poll.h> to <poll.h>
++asyncsocket.c: In function ‘AsyncTCPSocketPollWork’:
++asyncsocket.c:2537:13: error: invalid use of undefined type ‘struct pollfd’
++          pfd[i].fd = asock[i]->fd;
++             ^
++asyncsocket.c:2537:13: error: dereferencing pointer to incomplete type ‘struct pollfd’
++asyncsocket.c:2538:13: error: invalid use of undefined type ‘struct pollfd’
++          pfd[i].events = read ? POLLIN : POLLOUT;
++             ^
++asyncsocket.c:2538:33: error: ‘POLLIN’ undeclared (first use in this function); did you mean ‘POLL_IN’?
++          pfd[i].events = read ? POLLIN : POLLOUT;
++
++So rename poll.h into vm_poll.h as suggested by srowe in
++https://github.com/vmware/open-vm-tools/issues/359#issuecomment-533529956
++
++Fixes:
++ - http://autobuild.buildroot.org/results/4f575ef42bbc4387a07e396205052b2da081c64d
++
++Fix #359
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/vmware/open-vm-tools/pull/383]
++[rebased against stable-12.3.0]
++Signed-off-by: Stefan Agner <stefan@agner.ch>
++---
++ lib/asyncsocket/asyncsocket.c     | 4 ++--
++ lib/hgfsServer/hgfsServer.c       | 2 +-
++ lib/include/asyncsocket.h         | 2 +-
++ lib/include/pollImpl.h            | 2 +-
++ lib/include/{poll.h => vm_poll.h} | 0
++ lib/rpcIn/rpcin.c                 | 2 +-
++ 6 files changed, 6 insertions(+), 6 deletions(-)
++ rename open-vm-tools/lib/include/{poll.h => vm_poll.h} (100%)
++
++diff --git a/lib/asyncsocket/asyncsocket.c b/lib/asyncsocket/asyncsocket.c
++index 26aee553..684008d3 100644
++--- a/lib/asyncsocket/asyncsocket.c
+++++ b/lib/asyncsocket/asyncsocket.c
++@@ -70,8 +70,8 @@
++ #else
++ #include <stddef.h>
++ #include <ctype.h>
+++#include <poll.h>
++ #include <sys/types.h>
++-#include <sys/poll.h>
++ #include <sys/socket.h>
++ #include <sys/un.h>
++ #include <netdb.h>
++@@ -87,7 +87,7 @@
++ #include "random.h"
++ #include "asyncsocket.h"
++ #include "asyncSocketBase.h"
++-#include "poll.h"
+++#include "vm_poll.h"
++ #include "log.h"
++ #include "err.h"
++ #include "hostinfo.h"
++diff --git a/lib/hgfsServer/hgfsServer.c b/lib/hgfsServer/hgfsServer.c
++index c7b4cdd0..d6e0cdc0 100644
++--- a/lib/hgfsServer/hgfsServer.c
+++++ b/lib/hgfsServer/hgfsServer.c
++@@ -51,7 +51,7 @@
++ #include "hgfsDirNotify.h"
++ #include "hgfsThreadpool.h"
++ #include "userlock.h"
++-#include "poll.h"
+++#include "vm_poll.h"
++ #include "mutexRankLib.h"
++ #include "vm_basic_asm.h"
++ #include "unicodeOperations.h"
++diff --git a/lib/include/asyncsocket.h b/lib/include/asyncsocket.h
++index 09947002..3800f597 100644
++--- a/lib/include/asyncsocket.h
+++++ b/lib/include/asyncsocket.h
++@@ -177,7 +177,7 @@ typedef struct AsyncSocket AsyncSocket;
++  * Or the client can specify its favorite poll class and locking behavior.
++  * Use of IVmdbPoll is only supported for regular sockets and for Attach.
++  */
++-#include "poll.h"
+++#include "vm_poll.h"
++ struct IVmdbPoll;
++ typedef struct AsyncSocketPollParams {
++    int flags;               /* Default 0, only POLL_FLAG_NO_BULL is valid */
++diff --git a/lib/include/pollImpl.h b/lib/include/pollImpl.h
++index 46442e55..8bc66997 100644
++--- a/lib/include/pollImpl.h
+++++ b/lib/include/pollImpl.h
++@@ -44,7 +44,7 @@
++ #define INCLUDE_ALLOW_USERLEVEL
++ #include "includeCheck.h"
++ 
++-#include "poll.h"
+++#include "vm_poll.h"
++ #include "vm_basic_asm.h"
++ 
++ #if defined(__cplusplus)
++diff --git a/lib/include/poll.h b/lib/include/vm_poll.h
++similarity index 100%
++rename from lib/include/poll.h
++rename to lib/include/vm_poll.h
++diff --git a/lib/rpcIn/rpcin.c b/lib/rpcIn/rpcin.c
++index f1709fe0..c1a5dfdb 100644
++--- a/lib/rpcIn/rpcin.c
+++++ b/lib/rpcIn/rpcin.c
++@@ -57,7 +57,7 @@
++ 
++ #if defined(VMTOOLS_USE_VSOCKET)
++ #  include <glib.h>
++-#  include "poll.h"
+++#  include "vm_poll.h"
++ #  include "asyncsocket.h"
++ #  include "vmci_defs.h"
++ #include "dataMap.h"
++-- 
++2.42.0
++
+--- buildroot/package/openvmtools/0004-Remove-assumptions-about-glibc-being-only-libc-imple.patch.orig
++++ buildroot/package/openvmtools/0004-Remove-assumptions-about-glibc-being-only-libc-imple.patch
+@@ -1,22 +1,27 @@
+-From a0983d84185f04c4e40778fe951fde4439894882 Mon Sep 17 00:00:00 2001
++From 7b28142ae2c34b2a2ef18128486d7125fa304fcb Mon Sep 17 00:00:00 2001
++Message-ID: <7b28142ae2c34b2a2ef18128486d7125fa304fcb.1693922825.git.stefan@agner.ch>
++In-Reply-To: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++References: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
+ From: Khem Raj <raj.khem@gmail.com>
+ Date: Sun, 16 Jul 2017 07:37:03 -0700
+-Subject: [PATCH] Remove assumptions about glibc being only libc
+- implementation on linux
++Subject: [PATCH] Remove assumptions about glibc being only libc implementation
++ on linux
+ 
+ Signed-off-by: Khem Raj <raj.khem@gmail.com>
+ [Retrieved (and updated to work on current version) from:
+ http://cgit.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/open-vm-tools/open-vm-tools/0001-Remove-assumptions-about-glibc-being-only-libc-imple.patch?h=sumo]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[rebased against stable-12.3.0]
++Signed-off-by: Stefan Agner <stefan@agner.ch>
+ ---
+- open-vm-tools/lib/file/fileIOPosix.c      | 2 +-
+- 2 files changed, 3 insertions(+), 1 deletion(-)
++ lib/file/fileIOPosix.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-Index: open-vm-tools/lib/file/fileIOPosix.c
+-===================================================================
+---- open-vm-tools.orig/lib/file/fileIOPosix.c
+-+++ open-vm-tools/lib/file/fileIOPosix.c
+-@@ -205,7 +205,7 @@ static AlignedPool alignedPool;
++diff --git a/lib/file/fileIOPosix.c b/lib/file/fileIOPosix.c
++index 492a4bf4..bf2c1a08 100644
++--- a/lib/file/fileIOPosix.c
+++++ b/lib/file/fileIOPosix.c
++@@ -203,7 +203,7 @@ static AlignedPool alignedPool;
+   * are not available in any header file.
+   */
+  
+@@ -25,3 +30,6 @@
+     #if defined(_FILE_OFFSET_BITS) && (_FILE_OFFSET_BITS == 64)
+        /*
+         * We want preadv/pwritev. But due to FOB=64, the symbols are -64.
++-- 
++2.42.0
++
+--- buildroot/package/openvmtools/0005-Use-configure-test-for-struct-timespec.patch.orig
++++ buildroot/package/openvmtools/0005-Use-configure-test-for-struct-timespec.patch
+@@ -1,4 +1,7 @@
+-From bf1eafb07297711baf9320b1edcca8a3376f117d Mon Sep 17 00:00:00 2001
++From f4c472478a42bfd69406b49aab778d2038e6dee3 Mon Sep 17 00:00:00 2001
++Message-ID: <f4c472478a42bfd69406b49aab778d2038e6dee3.1693922825.git.stefan@agner.ch>
++In-Reply-To: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++References: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
+ From: Natanael Copa <ncopa@alpinelinux.org>
+ Date: Wed, 18 Nov 2015 09:03:00 +0000
+ Subject: [PATCH] Use configure test for struct timespec
+@@ -10,16 +13,18 @@
+ [Retrieved from:
+ http://cgit.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/open-vm-tools/open-vm-tools/0005-Use-configure-test-for-struct-timespec.patch?h=sumo]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[rebased against stable-12.3.0]
++Signed-off-by: Stefan Agner <stefan@agner.ch>
+ ---
+- open-vm-tools/configure.ac           | 1 +
+- open-vm-tools/lib/include/hgfsUtil.h | 8 +-------
++ configure.ac           | 1 +
++ lib/include/hgfsUtil.h | 8 +-------
+  2 files changed, 2 insertions(+), 7 deletions(-)
+ 
+-Index: open-vm-tools/configure.ac
+-===================================================================
+---- open-vm-tools.orig/configure.ac
+-+++ open-vm-tools/configure.ac
+-@@ -1127,6 +1127,7 @@ AC_TYPE_OFF_T
++diff --git a/configure.ac b/configure.ac
++index 0ed3c9fc..48bfc09e 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1441,6 +1441,7 @@ AC_TYPE_OFF_T
+  AC_TYPE_PID_T
+  AC_TYPE_SIZE_T
+  AC_CHECK_MEMBERS([struct stat.st_rdev])
+@@ -27,10 +32,10 @@
+  AC_HEADER_TIME
+  AC_STRUCT_TM
+  AC_C_VOLATILE
+-Index: open-vm-tools/lib/include/hgfsUtil.h
+-===================================================================
+---- open-vm-tools.orig/lib/include/hgfsUtil.h
+-+++ open-vm-tools/lib/include/hgfsUtil.h
++diff --git a/lib/include/hgfsUtil.h b/lib/include/hgfsUtil.h
++index 609f4c00..a3a022d4 100644
++--- a/lib/include/hgfsUtil.h
+++++ b/lib/include/hgfsUtil.h
+ @@ -53,13 +53,7 @@
+  #      include <time.h>
+  #   endif
+@@ -46,3 +51,6 @@
+  struct timespec {
+     time_t tv_sec;
+     long   tv_nsec;
++-- 
++2.42.0
++
+--- buildroot/package/openvmtools/0006-Fix-definition-of-ALLPERMS-and-ACCESSPERMS.patch.orig
++++ buildroot/package/openvmtools/0006-Fix-definition-of-ALLPERMS-and-ACCESSPERMS.patch
+@@ -1,4 +1,7 @@
+-From 31ae6f42458f90d4994a4ad8e2b7673691612c36 Mon Sep 17 00:00:00 2001
++From 173f8a311b63e3a7505905dd51747030eba81ee0 Mon Sep 17 00:00:00 2001
++Message-ID: <173f8a311b63e3a7505905dd51747030eba81ee0.1693922825.git.stefan@agner.ch>
++In-Reply-To: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++References: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
+ From: Natanael Copa <ncopa@alpinelinux.org>
+ Date: Wed, 18 Nov 2015 09:10:14 +0000
+ Subject: [PATCH] Fix definition of ALLPERMS and ACCESSPERMS
+@@ -12,16 +15,18 @@
+ [Retrieved from:
+ http://cgit.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/open-vm-tools/open-vm-tools/0006-Fix-definition-of-ALLPERMS-and-ACCESSPERMS.patch?h=sumo]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[rebased against stable-12.3.0]
++Signed-off-by: Stefan Agner <stefan@agner.ch>
+ ---
+- open-vm-tools/lib/hgfsServer/hgfsServerLinux.c      | 8 +++++---
+- open-vm-tools/services/plugins/dndcp/dnd/dndLinux.c | 3 +--
++ lib/hgfsServer/hgfsServerLinux.c      | 8 +++++---
++ services/plugins/dndcp/dnd/dndLinux.c | 3 +--
+  2 files changed, 6 insertions(+), 5 deletions(-)
+ 
+-Index: open-vm-tools/lib/hgfsServer/hgfsServerLinux.c
+-===================================================================
+---- open-vm-tools.orig/lib/hgfsServer/hgfsServerLinux.c
+-+++ open-vm-tools/lib/hgfsServer/hgfsServerLinux.c
+-@@ -107,11 +107,13 @@ typedef struct DirectoryEntry {
++diff --git a/lib/hgfsServer/hgfsServerLinux.c b/lib/hgfsServer/hgfsServerLinux.c
++index 4a0bc937..6ed49e2b 100644
++--- a/lib/hgfsServer/hgfsServerLinux.c
+++++ b/lib/hgfsServer/hgfsServerLinux.c
++@@ -105,11 +105,13 @@ typedef struct DirectoryEntry {
+  #endif
+  
+  /*
+@@ -38,11 +43,11 @@
+  #   define ALLPERMS (S_ISUID|S_ISGID|S_ISVTX|S_IRWXU|S_IRWXG|S_IRWXO)
+  #endif
+  
+-Index: open-vm-tools/services/plugins/dndcp/dnd/dndLinux.c
+-===================================================================
+---- open-vm-tools.orig/services/plugins/dndcp/dnd/dndLinux.c
+-+++ open-vm-tools/services/plugins/dndcp/dnd/dndLinux.c
+-@@ -51,7 +51,7 @@
++diff --git a/services/plugins/dndcp/dnd/dndLinux.c b/services/plugins/dndcp/dnd/dndLinux.c
++index 219065f7..b5b7e620 100644
++--- a/services/plugins/dndcp/dnd/dndLinux.c
+++++ b/services/plugins/dndcp/dnd/dndLinux.c
++@@ -53,7 +53,7 @@
+  
+  #define DND_ROOTDIR_PERMS     (S_IRWXU | S_IRWXG | S_IRWXO)
+  #define DND_STAGINGDIR_PERMS  (S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)
+@@ -51,7 +56,7 @@
+  #define ACCESSPERMS           (S_IRWXU | S_IRWXG | S_IRWXO)
+  #endif
+  #ifdef __ANDROID__
+-@@ -60,7 +60,6 @@
++@@ -62,7 +62,6 @@
+   */
+  #define NO_SETMNTENT
+  #define NO_ENDMNTENT
+@@ -59,3 +64,6 @@
+  #endif
+  
+  
++-- 
++2.42.0
++
+--- buildroot/package/openvmtools/0007-Use-configure-to-test-for-feature-instead-of-platfor.patch.orig
++++ buildroot/package/openvmtools/0007-Use-configure-to-test-for-feature-instead-of-platfor.patch
+@@ -1,4 +1,7 @@
+-From 6cc1c22cc30320f56da552a76bd956db8f255b6a Mon Sep 17 00:00:00 2001
++From 7ab2810df0abd79419267d96e744ce880e229661 Mon Sep 17 00:00:00 2001
++Message-ID: <7ab2810df0abd79419267d96e744ce880e229661.1693922825.git.stefan@agner.ch>
++In-Reply-To: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++References: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
+ From: Natanael Copa <ncopa@alpinelinux.org>
+ Date: Wed, 18 Nov 2015 10:05:07 +0000
+ Subject: [PATCH] Use configure to test for feature instead of platform
+@@ -18,21 +21,23 @@
+ 
+ This is needed for musl libc.
+ 
++Refit patch of open-vm-tools/lib/nicInfo/nicInfoPosix.c
++
+ Signed-off-by: Natanael Copa <ncopa@alpinelinux.org>
+-[Retrieved (and slightly updated) from:
+-http://cgit.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/open-vm-tools/open-vm-tools/0007-Use-configure-to-test-for-feature-instead-of-platfor.patch?h=sumo]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Randy MacLeod <randy.macleod@windriver.com>
++[rebased against stable-12.3.0]
++Signed-off-by: Stefan Agner <stefan@agner.ch>
+ ---
+- open-vm-tools/configure.ac               |  4 ++++
+- open-vm-tools/lib/misc/idLinux.c         | 30 ++++++++++++++----------------
+- open-vm-tools/lib/nicInfo/nicInfoPosix.c |  8 ++++++--
+- 3 files changed, 24 insertions(+), 18 deletions(-)
+-
+-Index: open-vm-tools/configure.ac
+-===================================================================
+---- open-vm-tools.orig/configure.ac
+-+++ open-vm-tools/configure.ac
+-@@ -798,6 +798,7 @@ AC_CHECK_FUNCS(
++ configure.ac               |  4 ++++
++ lib/misc/idLinux.c         | 30 ++++++++++++++----------------
++ lib/nicInfo/nicInfoPosix.c |  6 +++++-
++ 3 files changed, 23 insertions(+), 17 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 48bfc09e..aff01c8c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1169,6 +1169,7 @@ AC_CHECK_FUNCS(
+  
+  AC_CHECK_FUNCS([ecvt])
+  AC_CHECK_FUNCS([fcvt])
+@@ -40,7 +45,7 @@
+  
+  AC_CHECK_FUNC([mkdtemp], [have_mkdtemp=yes])
+  
+-@@ -1063,10 +1064,13 @@ AC_PATH_PROG(
++@@ -1378,10 +1379,13 @@ fi
+  ###
+  
+  AC_CHECK_HEADERS([crypt.h])
+@@ -54,10 +59,10 @@
+  AC_CHECK_HEADERS([sys/inttypes.h])
+  AC_CHECK_HEADERS([sys/io.h])
+  AC_CHECK_HEADERS([sys/param.h]) # Required to make the sys/user.h check work correctly on FreeBSD
+-Index: open-vm-tools/lib/misc/idLinux.c
+-===================================================================
+---- open-vm-tools.orig/lib/misc/idLinux.c
+-+++ open-vm-tools/lib/misc/idLinux.c
++diff --git a/lib/misc/idLinux.c b/lib/misc/idLinux.c
++index 3d7d1e30..0e12ac5b 100644
++--- a/lib/misc/idLinux.c
+++++ b/lib/misc/idLinux.c
+ @@ -27,12 +27,9 @@
+  #include <sys/syscall.h>
+  #include <string.h>
+@@ -72,7 +77,7 @@
+  #ifdef __APPLE__
+  #include <sys/socket.h>
+  #include <TargetConditionals.h>
+-@@ -997,31 +994,32 @@ Id_EndSuperUser(uid_t uid)  // IN:
++@@ -1025,24 +1022,23 @@ Id_EndSuperUser(uid_t uid)  // IN:
+  static Bool
+  IdIsSetUGid(void)
+  {
+@@ -106,10 +111,11 @@
+ +#elif HAVE___SECURE_GETENV
+     static const char envName[] = "VMW_SETUGID_TEST";
+  
+-    if (setenv(envName, "1", TRUE) == -1) {
+-       return TRUE; /* Conservative */
++    /*
++@@ -1062,7 +1058,9 @@ IdIsSetUGid(void)
++       return secure_getenv(envName) == NULL;
+     }
+-    return __secure_getenv(envName) == NULL;
++    return TRUE;
+ -#endif
+ +#else
+ +   /* Android does not have a secure_getenv, so be conservative. */
+@@ -117,12 +123,11 @@
+  #endif
+  }
+  #endif
+-Index: open-vm-tools/lib/nicInfo/nicInfoPosix.c
+-===================================================================
+---- open-vm-tools.orig/lib/nicInfo/nicInfoPosix.c
+-+++ open-vm-tools/lib/nicInfo/nicInfoPosix.c
+-@@ -34,9 +34,13 @@
+- #include <sys/socket.h>
++diff --git a/lib/nicInfo/nicInfoPosix.c b/lib/nicInfo/nicInfoPosix.c
++index 0135e6a0..6f20547b 100644
++--- a/lib/nicInfo/nicInfoPosix.c
+++++ b/lib/nicInfo/nicInfoPosix.c
++@@ -35,9 +35,13 @@
+  #include <sys/stat.h>
+  #include <errno.h>
+  #include <limits.h>
+@@ -137,15 +142,6 @@
+  # include <net/if.h>
+  #endif
+  #ifndef NO_DNET
+-@@ -348,10 +352,7 @@ GuestInfoGetNicInfo(NicInfoV3 *nicInfo)
+-  *
+-  ******************************************************************************
+-  */
+--#if defined(__FreeBSD__) || \
+--    defined(__APPLE__) || \
+--    defined(USERWORLD) || \
+--    (defined(__linux__) && defined(NO_DNET))
+-+#if defined(NO_DNET) && defined(HAVE_GETIFADDRS)
+- 
+- char *
+- GuestInfoGetPrimaryIP(void)
++-- 
++2.42.0
++
+--- buildroot/package/openvmtools/0008-Use-configure-test-for-sys-stat.h-include.patch.orig
++++ buildroot/package/openvmtools/0008-Use-configure-test-for-sys-stat.h-include.patch
+@@ -1,4 +1,7 @@
+-From 95c6184d9ff70a47c41768850923a96de9e544aa Mon Sep 17 00:00:00 2001
++From ed8186e383e87320e31ce7dc1a93e4b1b4c37a35 Mon Sep 17 00:00:00 2001
++Message-ID: <ed8186e383e87320e31ce7dc1a93e4b1b4c37a35.1693922825.git.stefan@agner.ch>
++In-Reply-To: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++References: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
+ From: Natanael Copa <ncopa@alpinelinux.org>
+ Date: Wed, 18 Nov 2015 10:41:01 +0000
+ Subject: [PATCH] Use configure test for sys/stat.h include
+@@ -9,14 +12,16 @@
+ [Retrieved from:
+ http://cgit.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/open-vm-tools/open-vm-tools/0011-Use-configure-test-for-sys-stat.h-include.patch?h=sumo]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[rebased against stable-12.3.0]
++Signed-off-by: Stefan Agner <stefan@agner.ch>
+ ---
+- open-vm-tools/services/plugins/vix/vixTools.c | 2 +-
++ services/plugins/vix/vixTools.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+-Index: open-vm-tools/services/plugins/vix/vixTools.c
+-===================================================================
+---- open-vm-tools.orig/services/plugins/vix/vixTools.c
+-+++ open-vm-tools/services/plugins/vix/vixTools.c
++diff --git a/services/plugins/vix/vixTools.c b/services/plugins/vix/vixTools.c
++index 75d24a29..d11c4217 100644
++--- a/services/plugins/vix/vixTools.c
+++++ b/services/plugins/vix/vixTools.c
+ @@ -66,7 +66,7 @@
+  #include <unistd.h>
+  #endif
+@@ -26,3 +31,6 @@
+  #include <sys/stat.h>
+  #endif
+  
++-- 
++2.42.0
++
+--- buildroot/package/openvmtools/0009-open-vm-tools-vmhgfs-fuse-fsutils.h-fix-build-on-mus.patch.orig
++++ buildroot/package/openvmtools/0009-open-vm-tools-vmhgfs-fuse-fsutils.h-fix-build-on-mus.patch
+@@ -0,0 +1,44 @@
++From a3f9bd2e1407311021d90be85b920c9fc104f625 Mon Sep 17 00:00:00 2001
++Message-ID: <a3f9bd2e1407311021d90be85b920c9fc104f625.1693922825.git.stefan@agner.ch>
++In-Reply-To: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++References: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 8 Mar 2020 18:49:00 +0100
++Subject: [PATCH] open-vm-tools/vmhgfs-fuse/fsutils.h: fix build on musl
++
++loff_t is not defined on musl so define it to avoid the following build
++failure:
++
++In file included from module.h:39,
++                 from bdhandler.c:31:
++fsutil.h:76:11: error: unknown type name 'loff_t'; did you mean 'off_t'?
++           loff_t offset);
++           ^~~~~~
++           off_t
++
++Fixes:
++ - http://autobuild.buildroot.org/results/4eba7c4585d318efdb9b965d58d879426588aa14
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent yet (upstream is not reactive on third patch]
++---
++ vmhgfs-fuse/fsutil.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/vmhgfs-fuse/fsutil.h b/vmhgfs-fuse/fsutil.h
++index 34b6d489..a94f9fbb 100644
++--- a/vmhgfs-fuse/fsutil.h
+++++ b/vmhgfs-fuse/fsutil.h
++@@ -32,7 +32,8 @@
++ #include "hgfsProto.h"
++ #include <fuse.h>
++ 
++-#if defined(__FreeBSD__) || defined(__SOLARIS__) || defined(__APPLE__)
+++#if defined(__FreeBSD__) || defined(__SOLARIS__) || defined(__APPLE__) || \
+++	!(defined(__GLIBC__) || defined(__UCLIBC__))
++ typedef long long loff_t;
++ #endif
++ 
++-- 
++2.42.0
++
+--- buildroot/package/openvmtools/0010-Make-HgfsConvertFromNtTimeNsec-aware-of-64-bit-time_.patch.orig
++++ buildroot/package/openvmtools/0010-Make-HgfsConvertFromNtTimeNsec-aware-of-64-bit-time_.patch
+@@ -0,0 +1,52 @@
++From 640effa0a8cdf5d00efa329bcf8dfe01790b3fbb Mon Sep 17 00:00:00 2001
++Message-ID: <640effa0a8cdf5d00efa329bcf8dfe01790b3fbb.1693922825.git.stefan@agner.ch>
++In-Reply-To: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++References: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
++From: Stefan Agner <stefan@agner.ch>
++Date: Tue, 5 Sep 2023 15:03:56 +0200
++Subject: [PATCH] Make HgfsConvertFromNtTimeNsec aware of 64-bit time_t on i386
++
++I verified that this function behaves as expected on x86_64, i386 with
++32-bit time_t, and i386 with 64-bit time_t for the following values of
++ntTtime:
++
++UNIX_EPOCH-1, UNIX_EPOCH, UNIX_EPOCH+1, UNIX_S32_MAX-1, UNIX_S32_MAX,
++UNIX_S32_MAX+1, UNIX_S32_MAX*2+1
++
++I did not verify whether the use of Div643264 is optimal, performance
++wise.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++[rebased against stable-12.3.0]
++Signed-off-by: Stefan Agner <stefan@agner.ch>
++---
++ lib/hgfs/hgfsUtil.c | 10 ++++++----
++ 1 file changed, 6 insertions(+), 4 deletions(-)
++
++diff --git a/lib/hgfs/hgfsUtil.c b/lib/hgfs/hgfsUtil.c
++index fcd7fb72..f8606156 100644
++--- a/lib/hgfs/hgfsUtil.c
+++++ b/lib/hgfs/hgfsUtil.c
++@@ -131,13 +131,15 @@ HgfsConvertFromNtTimeNsec(struct timespec *unixTime, // OUT: Time in UNIX format
++       Div643232(ntTime - UNIX_EPOCH, 10000000, &sec, &nsec);
++       unixTime->tv_sec = sec;
++       unixTime->tv_nsec = nsec * 100;
++-
++-      return 0;
+++   } else {
+++      Div643264(ntTime - UNIX_EPOCH, 10000000, &sec64, &nsec);
+++      unixTime->tv_sec = sec64;
+++      unixTime->tv_nsec = nsec * 100;
++    }
++-#endif
++-
+++#else
++    unixTime->tv_sec = (ntTime - UNIX_EPOCH) / 10000000;
++    unixTime->tv_nsec = ((ntTime - UNIX_EPOCH) % 10000000) * 100;
+++#endif // __i386__
++ 
++    return 0;
++ }
++-- 
++2.42.0
++
+--- buildroot/package/openvmtools/0011-open-vm-tools-vmhgfs-fuse-fsutils.h-fix-build-on-mus.patch.orig
++++ buildroot/package/openvmtools/0011-open-vm-tools-vmhgfs-fuse-fsutils.h-fix-build-on-mus.patch
+@@ -1,41 +0,0 @@
+-From 0a5032669951ffd6735c294a6f309b0ec6667ea5 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 8 Mar 2020 18:49:00 +0100
+-Subject: [PATCH] open-vm-tools/vmhgfs-fuse/fsutils.h: fix build on musl
+-
+-loff_t is not defined on musl so define it to avoid the following build
+-failure:
+-
+-In file included from module.h:39,
+-                 from bdhandler.c:31:
+-fsutil.h:76:11: error: unknown type name 'loff_t'; did you mean 'off_t'?
+-           loff_t offset);
+-           ^~~~~~
+-           off_t
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/4eba7c4585d318efdb9b965d58d879426588aa14
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: not sent yet (upstream is not reactive on third patch]
+----
+- vmhgfs-fuse/fsutil.h | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/vmhgfs-fuse/fsutil.h b/vmhgfs-fuse/fsutil.h
+-index 34b6d489..a94f9fbb 100644
+---- a/vmhgfs-fuse/fsutil.h
+-+++ b/vmhgfs-fuse/fsutil.h
+-@@ -32,7 +32,8 @@
+- #include "hgfsProto.h"
+- #include <fuse.h>
+- 
+--#if defined(__FreeBSD__) || defined(__SOLARIS__) || defined(__APPLE__)
+-+#if defined(__FreeBSD__) || defined(__SOLARIS__) || defined(__APPLE__) || \
+-+	!(defined(__GLIBC__) || defined(__UCLIBC__))
+- typedef long long loff_t;
+- #endif
+- 
+--- 
+-2.25.0
+-
+--- buildroot/package/openvmtools/0012-Make-HgfsConvertFromNtTimeNsec-aware-of-64-bit-time_.patch.orig
++++ buildroot/package/openvmtools/0012-Make-HgfsConvertFromNtTimeNsec-aware-of-64-bit-time_.patch
+@@ -1,80 +0,0 @@
+-From 3f0580f2546de8be7acf1bc78a55a257bc638ebe Mon Sep 17 00:00:00 2001
+-From: Bartosz Brachaczek <b.brachaczek@gmail.com>
+-Date: Tue, 12 Nov 2019 14:31:08 +0100
+-Subject: [PATCH] Make HgfsConvertFromNtTimeNsec aware of 64-bit time_t on i386
+-
+-I verified that this function behaves as expected on x86_64, i386 with
+-32-bit time_t, and i386 with 64-bit time_t for the following values of
+-ntTtime:
+-
+-UNIX_EPOCH-1, UNIX_EPOCH, UNIX_EPOCH+1, UNIX_S32_MAX-1, UNIX_S32_MAX,
+-UNIX_S32_MAX+1, UNIX_S32_MAX*2+1
+-
+-I did not verify whether the use of Div643264 is optimal, performance
+-wise.
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- lib/hgfs/hgfsUtil.c | 34 +++++++++++++++++++---------------
+- 1 file changed, 19 insertions(+), 15 deletions(-)
+-
+-diff --git a/lib/hgfs/hgfsUtil.c b/lib/hgfs/hgfsUtil.c
+-index cc580ab8..49b10040 100644
+---- a/lib/hgfs/hgfsUtil.c
+-+++ b/lib/hgfs/hgfsUtil.c
+-@@ -110,23 +110,21 @@ HgfsConvertFromNtTimeNsec(struct timespec *unixTime, // OUT: Time in UNIX format
+- 			  uint64 ntTime) // IN: Time in Windows NT format
+- {
+- #ifdef __i386__
+--   uint32 sec;
+--   uint32 nsec;
+-+   uint64 sec64;
+-+   uint32 sec32, nsec;
+-+#endif
+- 
+-    ASSERT(unixTime);
+--   /* We assume that time_t is 32bit */
+--   ASSERT_ON_COMPILE(sizeof (unixTime->tv_sec) == 4);
+- 
+--   /* Cap NT time values that are outside of Unix time's range */
+-+   if (sizeof (unixTime->tv_sec) == 4) {
+-+      /* Cap NT time values that are outside of Unix time's range */
+- 
+--   if (ntTime >= UNIX_S32_MAX) {
+--      unixTime->tv_sec = 0x7FFFFFFF;
+--      unixTime->tv_nsec = 0;
+--      return 1;
+-+      if (ntTime >= UNIX_S32_MAX) {
+-+         unixTime->tv_sec = 0x7FFFFFFF;
+-+         unixTime->tv_nsec = 0;
+-+         return 1;
+-+      }
+-    }
+--#else
+--   ASSERT(unixTime);
+--#endif
+- 
+-    if (ntTime < UNIX_EPOCH) {
+-       unixTime->tv_sec = 0;
+-@@ -135,9 +133,15 @@ HgfsConvertFromNtTimeNsec(struct timespec *unixTime, // OUT: Time in UNIX format
+-    }
+- 
+- #ifdef __i386__
+--   Div643232(ntTime - UNIX_EPOCH, 10000000, &sec, &nsec);
+--   unixTime->tv_sec = sec;
+--   unixTime->tv_nsec = nsec * 100;
+-+   if (sizeof (unixTime->tv_sec) == 4) {
+-+      Div643232(ntTime - UNIX_EPOCH, 10000000, &sec32, &nsec);
+-+      unixTime->tv_sec = sec32;
+-+      unixTime->tv_nsec = nsec * 100;
+-+   } else {
+-+      Div643264(ntTime - UNIX_EPOCH, 10000000, &sec64, &nsec);
+-+      unixTime->tv_sec = sec64;
+-+      unixTime->tv_nsec = nsec * 100;
+-+   }
+- #else
+-    unixTime->tv_sec = (ntTime - UNIX_EPOCH) / 10000000;
+-    unixTime->tv_nsec = ((ntTime - UNIX_EPOCH) % 10000000) * 100;
+--- 
+-2.25.1
+-
+--- buildroot/package/openvmtools/0013-Properly-check-authorization-on-incoming-guestOps-re.patch.orig
++++ buildroot/package/openvmtools/0013-Properly-check-authorization-on-incoming-guestOps-re.patch
+@@ -1,40 +0,0 @@
+-From bb9f9ffbb151397545f921cee5b6a4933c6eea80 Mon Sep 17 00:00:00 2001
+-Message-Id: <bb9f9ffbb151397545f921cee5b6a4933c6eea80.1666169374.git.stefan@agner.ch>
+-From: John Wolfe <jwolfe@vmware.com>
+-Date: Wed, 10 Aug 2022 06:12:02 -0700
+-Subject: [PATCH] Properly check authorization on incoming guestOps requests
+-
+-Fix public pipe request checks.  Only a SessionRequest type should
+-be accepted on the public pipe.
+-
+-Upstream: https://github.com/vmware/open-vm-tools/blob/CVE-2022-31676.patch/1205-Properly-check-authorization-on-incoming-guestOps-re.patch
+-Signed-off-by: Stefan Agner <stefan@agner.ch>
+----
+- vgauth/serviceImpl/proto.c | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/vgauth/serviceImpl/proto.c b/vgauth/serviceImpl/proto.c
+-index db7159ee..c4f85b02 100644
+---- a/vgauth/serviceImpl/proto.c
+-+++ b/vgauth/serviceImpl/proto.c
+-@@ -1,5 +1,5 @@
+- /*********************************************************
+-- * Copyright (C) 2011-2016,2019-2021 VMware, Inc. All rights reserved.
+-+ * Copyright (c) 2011-2016,2019-2022 VMware, Inc. All rights reserved.
+-  *
+-  * This program is free software; you can redistribute it and/or modify it
+-  * under the terms of the GNU Lesser General Public License as published
+-@@ -1201,6 +1201,10 @@ Proto_SecurityCheckRequest(ServiceConnection *conn,
+-    VGAuthError err;
+-    gboolean isSecure = ServiceNetworkIsConnectionPrivateSuperUser(conn);
+- 
+-+   if (conn->isPublic && req->reqType != PROTO_REQUEST_SESSION_REQ) {
+-+      return VGAUTH_E_PERMISSION_DENIED;
+-+   }
+-+
+-    switch (req->reqType) {
+-       /*
+-        * This comes over the public connection; alwsys let it through.
+--- 
+-2.38.0
+-
 --- buildroot/package/openvmtools/S10vmtoolsd.orig
 +++ buildroot/package/openvmtools/S10vmtoolsd
 @@ -11,6 +11,11 @@
@@ -12,3 +1704,66 @@
  start() {
  	printf 'Starting %s: ' "$DAEMON"
  	# shellcheck disable=SC2086 # we need the word splitting
+--- buildroot/package/openvmtools/openvmtools.hash.orig
++++ buildroot/package/openvmtools/openvmtools.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  2053daf7b224ab7ae1a9cfcd6ae12494c646e2bf9aaca998225bd082a4a43fb7  open-vm-tools-11.3.5-18557794.tar.gz
++sha256  0f9c9ddebdded365bc4f0a03cad8b8b7ff9f32651fe04fb390eab7d898c77a8f  open-vm-tools-12.3.0-22234872.tar.gz
+ sha256  f734933bd7d49aef25aaf897ed7281ee822e8635056e69b895a7d2e668937fc5  COPYING
+--- buildroot/package/openvmtools/openvmtools.mk.orig
++++ buildroot/package/openvmtools/openvmtools.mk
+@@ -4,24 +4,27 @@
+ #
+ ################################################################################
+ 
+-OPENVMTOOLS_VERSION_MAJOR = 11.3.5
+-OPENVMTOOLS_VERSION = $(OPENVMTOOLS_VERSION_MAJOR)-18557794
++OPENVMTOOLS_VERSION_MAJOR = 12.3.0
++OPENVMTOOLS_VERSION = $(OPENVMTOOLS_VERSION_MAJOR)-22234872
+ OPENVMTOOLS_SITE = https://github.com/vmware/open-vm-tools/releases/download/stable-$(OPENVMTOOLS_VERSION_MAJOR)
+ OPENVMTOOLS_SOURCE = open-vm-tools-$(OPENVMTOOLS_VERSION).tar.gz
+ OPENVMTOOLS_LICENSE = LGPL-2.1
+ OPENVMTOOLS_LICENSE_FILES = COPYING
+ OPENVMTOOLS_CPE_ID_VENDOR = vmware
+ OPENVMTOOLS_CPE_ID_PRODUCT = tools
++OPENVMTOOLS_CPE_ID_VERSION = $(OPENVMTOOLS_VERSION_MAJOR)
+ 
+-# 0013-Properly-check-authorization-on-incoming-guestOps-re.patch
+-OPENVMTOOLS_IGNORE_CVES += CVE-2022-31676
++# False positives: CVEs are for open-vm-tools predecessor vm-support 0.88
++OPENVMTOOLS_IGNORE_CVES = CVE-2014-4199 CVE-2014-4200
+ 
+ # configure.ac is patched
+ OPENVMTOOLS_AUTORECONF = YES
+ OPENVMTOOLS_CONF_OPTS = --with-dnet \
+ 	--without-icu --without-x --without-gtk2 \
+ 	--without-gtkmm --without-kernel-modules \
+-	--disable-deploypkg --without-xerces
++	--disable-deploypkg --without-xerces \
++	--disable-vgauth --disable-containerinfo
++
+ OPENVMTOOLS_CONF_ENV += \
+ 	CUSTOM_DNET_CPPFLAGS=" " \
+ 	LIBS=$(TARGET_NLS_LIBS)
+@@ -32,12 +35,19 @@
+ 	$(TARGET_NLS_DEPENDENCIES)
+ 
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
++OPENVMTOOLS_CONF_OPTS += --with-tirpc
+ OPENVMTOOLS_DEPENDENCIES += libtirpc
++else
++OPENVMTOOLS_CONF_OPTS += --without-tirpc
+ endif
+ 
+ # When libfuse is available, openvmtools can build vmblock-fuse, so
+ # make sure that libfuse gets built first
+-ifeq ($(BR2_PACKAGE_LIBFUSE),y)
++ifeq ($(BR2_PACKAGE_LIBFUSE3),y)
++OPENVMTOOLS_CONF_OPTS += --with-fuse=fuse3
++OPENVMTOOLS_DEPENDENCIES += libfuse3
++else ifeq ($(BR2_PACKAGE_LIBFUSE),y)
++OPENVMTOOLS_CONF_OPTS += --with-fuse=fuse
+ OPENVMTOOLS_DEPENDENCIES += libfuse
+ endif
+ 

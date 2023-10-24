@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-QEMU_GUEST_AGENT_VERSION = 7.1.0
+QEMU_GUEST_AGENT_VERSION = 8.0.5
 QEMU_GUEST_AGENT_SOURCE = qemu-$(QEMU_GUEST_AGENT_VERSION).tar.xz
 QEMU_GUEST_AGENT_SITE = http://download.qemu.org
 QEMU_GUEST_AGENT_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
@@ -13,13 +13,13 @@ QEMU_GUEST_AGENT_LICENSE_FILES = COPYING COPYING.LIB
 #       the non-(L)GPL license texts are specified in the affected
 #       individual source files.
 
-#QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman
+QEMU_GUEST_AGENT_DEPENDENCIES = host-pkgconf libglib2 zlib
 
 # Need the LIBS variable because librt and libm are
 # not automatically pulled. :-(
 QEMU_GUEST_AGENT_LIBS = -lrt -lm
 
-#QEMU_OPTS =
+#QEMU_GUEST_AGENT_OPTS =
 
 QEMU_GUEST_AGENT_VARS = LIBTOOL=$(HOST_DIR)/bin/libtool
 
@@ -85,7 +85,6 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--disable-glusterfs \
 			--disable-tpm \
 			--disable-numa \
-			--disable-blobs \
 			--disable-capstone \
 			--disable-tcg-interpreter \
 			--enable-tools \
@@ -99,6 +98,8 @@ endef
 
 define QEMU_GUEST_AGENT_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 0755 $(@D)/build/qga/qemu-ga $(TARGET_DIR)/usr/bin/qemu-ga
+	$(INSTALL) -D -m 0755 $(@D)/scripts/qemu-guest-agent/fsfreeze-hook $(TARGET_DIR)/etc/qemu/fsfreeze-hook
+	$(INSTALL) -D -m 0755 $(QEMU_GUEST_AGENT_PKGDIR)/regahss-flush.sh $(TARGET_DIR)/etc/qemu/fsfreeze-hook.d/regahss-flush.sh
 endef
 
 define QEMU_GUEST_AGENT_INSTALL_INIT_SYSV

@@ -1,51 +1,84 @@
---- buildroot/package/nodejs/0003-fix-ninja-args.patch.orig
-+++ buildroot/package/nodejs/0003-fix-ninja-args.patch
-@@ -0,0 +1,18 @@
-+--- node-v16.16.0/Makefile.orig	2022-09-20 08:48:42.172733518 +0200
-++++ node-v16.16.0/Makefile	2022-09-20 08:49:03.556963313 +0200
-+@@ -116,12 +116,12 @@
-+ else
-+ ifeq ($(BUILD_WITH), ninja)
-+ ifeq ($(V),1)
-+-	NINJA_ARGS := $(NINJA_ARGS) -v
-++NINJA_ARGS := $(NINJA_ARGS) -v
-+ endif
-+ ifdef JOBS
-+-	NINJA_ARGS := $(NINJA_ARGS) -j$(JOBS)
-++NINJA_ARGS := $(NINJA_ARGS) -j$(JOBS)
-+ else
-+-	NINJA_ARGS := $(NINJA_ARGS) $(filter -j%,$(MAKEFLAGS))
-++NINJA_ARGS := $(NINJA_ARGS) $(filter -j%,$(MAKEFLAGS))
-+ endif
-+ $(NODE_EXE): config.gypi out/Release/build.ninja
-+ 	ninja -C out/Release $(NINJA_ARGS)
+--- buildroot/package/nodejs/0001-add-qemu-wrapper-support.patch.orig
++++ buildroot/package/nodejs/0001-add-qemu-wrapper-support.patch
+@@ -16,6 +16,7 @@
+ host-builds.
+ 
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
++Refresh for 18.18.0
+ ---
+  node.gyp                 |  4 ++--
+  tools/v8_gypfiles/v8.gyp | 10 +++++-----
+@@ -25,16 +26,7 @@
+ index 97cdbb531d..db5cf51ce6 100644
+ --- a/node.gyp
+ +++ b/node.gyp
+-@@ -319,7 +319,7 @@
+-               'action_name': 'run_mkcodecache',
+-               'process_outputs_as_sources': 1,
+-               'inputs': [
+--                '<(mkcodecache_exec)',
+-+                @MAYBE_WRAPPER@ '<(mkcodecache_exec)',
+-               ],
+-               'outputs': [
+-                 '<(SHARED_INTERMEDIATE_DIR)/node_code_cache.cc',
+-@@ -346,7 +346,7 @@
++@@ -322,7 +322,7 @@
+                    'action_name': 'node_mksnapshot',
+                    'process_outputs_as_sources': 1,
+                    'inputs': [
+@@ -43,6 +35,15 @@
+                      '<(node_snapshot_main)',
+                    ],
+                    'outputs': [
++@@ -342,7 +342,7 @@
++                   'action_name': 'node_mksnapshot',
++                   'process_outputs_as_sources': 1,
++                   'inputs': [
++-                    '<(node_mksnapshot_exec)',
+++                    @MAYBE_WRAPPER@ '<(node_mksnapshot_exec)',
++                   ],
++                   'outputs': [
++                     '<(SHARED_INTERMEDIATE_DIR)/node_snapshot.cc',
+ diff --git a/tools/v8_gypfiles/v8.gyp b/tools/v8_gypfiles/v8.gyp
+ index 73099a03e4..88ca91efb4 100644
+ --- a/tools/v8_gypfiles/v8.gyp
+@@ -74,7 +75,7 @@
+            ],
+            'outputs': [
+              '<(generate_bytecode_builtins_list_output)',
+-@@ -395,7 +395,7 @@
++@@ -400,7 +400,7 @@
+              ],
+            },
+            'inputs': [
+@@ -83,7 +84,7 @@
+            ],
+            'outputs': [
+              '<(INTERMEDIATE_DIR)/snapshot.cc',
+-@@ -1505,7 +1505,7 @@
++@@ -1569,7 +1569,7 @@
+          {
+            'action_name': 'run_gen-regexp-special-case_action',
+            'inputs': [
+--- buildroot/package/nodejs/nodejs.hash.orig
++++ buildroot/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v16.20.0/SHASUMS256.txt
+-sha256  e0990f992234e40a51fe11f92c3816c93a77e1b081145d3dd762cd1026345349  node-v16.20.0.tar.xz
++# From https://nodejs.org/dist/v18.18.2/SHASUMS256.txt
++sha256  7249e2f0af943ec38599504f4b2a2bd31fb938787291b6ccca6c8badf01e3b56  node-v18.18.2.tar.xz
+ 
+ # Hash for license file
+-sha256  ba325815d3df8819bebaf37cad67d6e1f82271e1e4a1189b53abd28e261977d6  LICENSE
++sha256  a6871483905199033882d66453649675f0e88ffaa07f9f8acb257ce7504bc758  LICENSE
 --- buildroot/package/nodejs/nodejs.mk.orig
 +++ buildroot/package/nodejs/nodejs.mk
-@@ -47,14 +47,16 @@
- 	CXXFLAGS="$(HOST_NODEJS_CXXFLAGS)" \
- 	LDFLAGS.host="$(HOST_LDFLAGS)" \
- 	NO_LOAD=cctest.target.mk \
--	PATH=$(@D)/bin:$(BR_PATH)
-+	PATH=$(@D)/bin:$(BR_PATH) \
-+	JOBS=$(BR2_JLEVEL)
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- NODEJS_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
- 	NO_LOAD=cctest.target.mk \
- 	PATH=$(@D)/bin:$(BR_PATH) \
- 	LDFLAGS="$(NODEJS_LDFLAGS)" \
--	LD="$(TARGET_CXX)"
-+	LD="$(TARGET_CXX)" \
-+	JOBS=$(BR2_JLEVEL)
- 
- # nodejs's build system uses python which can be a symlink to an unsupported
- # python version (e.g. python 3.10 with nodejs 14.18.1). We work around this by
---- buildroot/package/nodejs/v8-qemu-wrapper.in.orig
-+++ buildroot/package/nodejs/v8-qemu-wrapper.in
-@@ -5,5 +5,6 @@
- exec @QEMU_USER@ -r @TOOLCHAIN_HEADERS_VERSION@ \
-     @QEMU_USERMODE_ARGS@ \
-    -L "${STAGING_DIR}/" \
-+   -E LD_LIBRARY_PATH="${STAGING_DIR}/lib:${STAGING_DIR}/usr/lib/" \
-     "$@"
- 
+-NODEJS_VERSION = 16.20.0
++NODEJS_VERSION = 18.18.2
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = \

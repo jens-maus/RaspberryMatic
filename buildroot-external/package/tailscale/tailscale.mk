@@ -4,27 +4,23 @@
 #
 ################################################################################
 
-TAILSCALE_VERSION = 1.36.1
-TAILSCALE_SITE = $(call github,tailscale,tailscale,v$(TAILSCALE_VERSION))
+TAILSCALE_VERSION = 1.50.1
+TAILSCALE_SITE = https://pkgs.tailscale.com/stable
+ifeq ($(call qstrip,$(BR2_ARCH)),arm)
+TAILSCALE_SOURCE = tailscale_$(TAILSCALE_VERSION)_arm.tgz
+else ifeq ($(call qstrip,$(BR2_ARCH)),aarch64)
+TAILSCALE_SOURCE = tailscale_$(TAILSCALE_VERSION)_arm64.tgz
+else ifeq ($(call qstrip,$(BR2_ARCH)),i686)
+TAILSCALE_SOURCE = tailscale_$(TAILSCALE_VERSION)_386.tgz
+else ifeq ($(call qstrip,$(BR2_ARCH)),x86_64)
+TAILSCALE_SOURCE = tailscale_$(TAILSCALE_VERSION)_amd64.tgz
+endif
 TAILSCALE_LICENSE = BSD-3-Clause
 TAILSCALE_LICENSE_FILES = LICENSE
 
-TAILSCALE_GO_ENV = GOPROXY= GOFLAGS="-mod=readonly"
-
-TAILSCALE_GOMOD = tailscale.com
-
-TAILSCALE_BUILD_TARGETS = \
-	cmd/tailscale \
-	cmd/tailscaled
-
-TAILSCALE_LDFLAGS = \
-	-X tailscale.com/version.Long=$(TAILSCALE_VERSION) \
-	-X tailscale.com/version.Short=$(TAILSCALE_VERSION) \
-	-X tailscale.com/version.GitCommit=v$(TAILSCALE_VERSION)
-
 define TAILSCALE_INSTALL_TARGET_CMDS
-	$(INSTALL) -D -m 0755 $(@D)/bin/tailscale $(TARGET_DIR)/usr/bin/
-	$(INSTALL) -D -m 0755 $(@D)/bin/tailscaled $(TARGET_DIR)/usr/sbin/
+	$(INSTALL) -D -m 0755 $(@D)/tailscale $(TARGET_DIR)/usr/bin/
+	$(INSTALL) -D -m 0755 $(@D)/tailscaled $(TARGET_DIR)/usr/sbin/
 endef
 
 define TAILSCALE_INSTALL_INIT_SYSV
@@ -32,4 +28,4 @@ define TAILSCALE_INSTALL_INIT_SYSV
 		$(TARGET_DIR)/etc/init.d/S46tailscaled
 endef
 
-$(eval $(golang-package))
+$(eval $(generic-package))

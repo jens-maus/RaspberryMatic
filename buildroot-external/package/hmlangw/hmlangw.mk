@@ -4,14 +4,14 @@
 #
 ################################################################################
 
-HMLANGW_VERSION = 0.0.2
+HMLANGW_VERSION = 1.1.0
 HMLANGW_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/hmlangw
 HMLANGW_SITE_METHOD = local
-HMLANGW_LICENSE = Apache-2.0
+HMLANGW_LICENSE = MIT
 HMLANGW_LICENSE_FILES = LICENSE
 
 define HMLANGW_BUILD_CMDS
-	$(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_LD)" CFLAGS="$(TARGET_CFLAGS)" -C $(@D) all
+	$(MAKE) CXX="$(TARGET_CXX)" LD="$(TARGET_LD)" CXXFLAGS="$(TARGET_CXXFLAGS)" -C $(@D) all
 endef
 
 define HMLANGW_INSTALL_TARGET_CMDS

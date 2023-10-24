@@ -42,17 +42,6 @@
  }
  
  proc get_logserver {} {
---- occu/WebUI/www/config/cp_network.cgi.orig
-+++ occu/WebUI/www/config/cp_network.cgi
-@@ -142,7 +142,7 @@
- 
- proc action_reboot {} {
-   puts ""
--  exec /sbin/reboot
-+  exec /sbin/reboot -d 2 2>/dev/null >/dev/null &
- }
- 
- proc action_cert_update_go {} {
 --- occu/WebUI/www/config/cp_security.cgi.orig
 +++ occu/WebUI/www/config/cp_security.cgi
 @@ -1558,7 +1558,7 @@

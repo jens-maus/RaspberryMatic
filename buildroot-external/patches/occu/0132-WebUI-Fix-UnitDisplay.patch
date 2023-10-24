@@ -99,7 +99,7 @@
      "optionUnit3S": "3 Sekunden",
 --- occu/WebUI/www/config/easymodes/etc/localization/en/HmIP_DEVICES.txt.orig
 +++ occu/WebUI/www/config/easymodes/etc/localization/en/HmIP_DEVICES.txt
-@@ -2,39 +2,39 @@
+@@ -2,40 +2,40 @@
    {
      "optionActive" : "Active",
      "optionNotActive" : "Not active",
@@ -110,6 +110,7 @@
 -    "optionUnit1S": "1s",
 -    "optionUnit2S": "2s",
 -    "optionUnit3S": "3s",
+-    "optionUnit4S": "4s",
 -    "optionUnit5S": "5s",
 -    "optionUnit10S": "10s",
 -    "optionUnit20S": "20s",
@@ -143,6 +144,7 @@
 +    "optionUnit1S": "1 s",
 +    "optionUnit2S": "2 s",
 +    "optionUnit3S": "3 s",
++    "optionUnit4S": "4 s",
 +    "optionUnit5S": "5 s",
 +    "optionUnit10S": "10 s",
 +    "optionUnit20S": "20 s",

@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-OCCU_VERSION = 3.67.10-4
+OCCU_VERSION = 3.71.12-1
 OCCU_SITE = $(call github,jens-maus,occu,$(OCCU_VERSION))
 OCCU_LICENSE = HMSL
 OCCU_LICENSE_FILES = LicenseDE.txt
@@ -24,6 +24,7 @@ ifeq ($(BR2_PACKAGE_OCCU),y)
 
 		# shadow file setup
 		touch $(TARGET_DIR)/usr/local/etc/config/shadow
+		chmod 0640 $(TARGET_DIR)/usr/local/etc/config/shadow
 		rm -f $(TARGET_DIR)/etc/shadow
 		ln -snf config/shadow $(TARGET_DIR)/etc/
 
@@ -131,5 +132,11 @@ define OCCU_WRAP_WEBUI_JS
 		sed -i ':a;N;$$!ba;s/\\n\n/\\n/g' $(@D)/WebUI/www/webui/webui.js
 endef
 OCCU_POST_PATCH_HOOKS += OCCU_WRAP_WEBUI_JS
+
+define OCCU_USERS
+	-      -1 hm     -1 * - - -      homematic access group
+	-      -1 status -1 * - - -      status access group
+	hssled -1 hssled -1 * - - status hss_led user
+endef
 
 $(eval $(generic-package))

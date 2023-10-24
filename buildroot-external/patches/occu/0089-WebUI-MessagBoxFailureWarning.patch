@@ -1,0 +1,56 @@
+--- occu/WebUI/www/webui/webui.js.orig
++++ occu/WebUI/www/webui/webui.js
+@@ -46025,8 +46025,8 @@
+   CreateCPPopup("/config/cp_maintenance.cgi", "downloadOnly=1");
+ };
+ 
+-CreateCPPopup = function(src, pb) {
+-  dlgPopup = new cpMessageBox(src, pb);
++CreateCPPopup = function(src, pb, errorLbl) {
++  dlgPopup = new cpMessageBox(src, pb, errorLbl);
+ 
+   PopupClose = function() {
+     dlgPopup.close();
+@@ -46066,7 +46066,7 @@
+ 
+ cpMessageBox.prototype =
+ {
+-  initialize: function(src, pb)
++  initialize: function(src, pb, errorLbl)
+   {
+     if ( $('messagebox') ){
+       $("messagebox").hide();
+@@ -46078,7 +46078,7 @@
+     this.setWidth(800);
+ 
+     this.createMessagebox();
+-    this.LoadFromFile(src, pb);
++    this.LoadFromFile(src, pb, errorLbl);
+   },
+ 
+   getViewPortDim : function()
+@@ -46202,7 +46202,7 @@
+     this.removeMessagebox();
+   },
+   
+-  LoadFromFile: function(src, pb) {
++  LoadFromFile: function(src, pb, errorLbl) {
+     var url = src;
+     if(url.indexOf('?sid=') === -1)
+     {
+@@ -46218,6 +46218,15 @@
+       onComplete: function(trans) {
+         centerMessageBox();
+         $('messagebox').style.display="";
++      },
++      onFailure: function(response) {
++        $('centerbox').hide();
++        $('trlayer').hide();
++        if(typeof errorLbl != 'undefined') {
++          MessageBox.show(translateKey('lblError'), translateKey(errorLbl), '', 480,120);
++        } else {
++          Ajax_failure(url, response.statusText);
++        }
+       }
+     };
+     new Ajax.Updater('messagebox',url,opt);

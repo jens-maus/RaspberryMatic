@@ -14,6 +14,8 @@ containing:
   #define B3500000  0x00001012
   #define B4000000  0x00001013  */
 
+Upstream: https://lists.buildroot.org/pipermail/buildroot/2017-March/187328.html
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
  wiringPi/wiringSerial.c | 8 ++++++++

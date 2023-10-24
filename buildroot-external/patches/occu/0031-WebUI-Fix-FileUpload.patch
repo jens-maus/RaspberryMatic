@@ -119,16 +119,7 @@
    set downloadOnly 0
 --- occu/WebUI/www/config/cp_network.cgi.orig
 +++ occu/WebUI/www/config/cp_network.cgi
-@@ -149,6 +149,8 @@
-   
-   http_head
- 
-+  file rename -force -- "/usr/local/tmp/server.pem" "/etc/config/server.pem"
-+
-   put_message "\${dialogSettingsNetworkMessageCertificateTitle}" "\${dialogSettingsNetworkMessageCertificateCCURestart}" {\${btnNewLogin} "window.location.href='/';"}
-   
-   #save DOM
-@@ -245,37 +247,43 @@
+@@ -148,36 +148,43 @@
  }
  
  proc action_cert_upload {} {
@@ -152,47 +143,44 @@
 -    file copy -force -- "/var/server.pem" "/etc/config/server.pem"
 -    file delete "/var/server.pem"
 +  if { [string last " PRIVATE KEY-----" $line] != -1 } {
-+    file rename -force -- $filename "/usr/local/tmp/server.pem"
++    catch { file copy -force -- "/etc/config/server.pem" "/etc/config/server.pem.bak" }
++    file rename -force -- $filename "/etc/config/server.pem"
      
      cgi_javascript {
        puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
        puts {
 -        parent.top.dlgPopup.hide();
 -        parent.top.dlgPopup.setWidth(600);
--        parent.top.dlgPopup.LoadFromFile(url, "action=cert_update_confirm");
+-        parent.top.dlgPopup.LoadFromFile(url, "action=cert_update_go");
 +        var dlgPopup = parent.top.dlgPopup;
 +        if (dlgPopup === undefined) {
 +          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
 +        }
 +        dlgPopup.hide();
 +        dlgPopup.setWidth(600);
-+        dlgPopup.LoadFromFile(url, "action=cert_update_confirm");
++        dlgPopup.LoadFromFile(url, "action=cert_update_go");
        }
      }
    } else {
 +    file delete -force -- $filename
 +
      cgi_javascript {
--    puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
--    puts {
+     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+     puts {
 -      parent.top.dlgPopup.hide();
 -      parent.top.dlgPopup.setWidth(600);
 -      parent.top.dlgPopup.LoadFromFile(url, "action=cert_update_failed");
--    }
-+      puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-+      puts {
-+        var dlgPopup = parent.top.dlgPopup;
-+        if (dlgPopup === undefined) {
-+          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
-+        }
-+        dlgPopup.hide();
-+        dlgPopup.setWidth(600);
-+        dlgPopup.LoadFromFile(url, "action=cert_update_failed");
++      var dlgPopup = parent.top.dlgPopup;
++      if (dlgPopup === undefined) {
++        dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
 +      }
++      dlgPopup.hide();
++      dlgPopup.setWidth(600);
++      dlgPopup.LoadFromFile(url, "action=cert_update_failed");
+     }
      }
    }
- }
-@@ -459,8 +467,7 @@
+@@ -343,8 +350,7 @@
              table_row {
                table_data {width="20"} {}
                table_data {colspan="2"} {
@@ -202,7 +190,7 @@
                    file_button cert_file size=30 maxlength=1000000
                  }
                  puts {<iframe name="cert_upload_iframe" style="display: none;"></iframe>}
-@@ -774,13 +781,16 @@
+@@ -708,13 +714,15 @@
  cgi_eval {
    #cgi_debug -on
    cgi_input
@@ -219,7 +207,6 @@
  
    catch { import action }
 +  catch { import filename }
-+
    if {[session_requestisvalid 8] > 0} then action_$action
  }
  

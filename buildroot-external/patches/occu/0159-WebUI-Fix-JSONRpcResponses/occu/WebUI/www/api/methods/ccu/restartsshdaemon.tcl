@@ -7,6 +7,6 @@
 # Rückgabewert: kein
 ##
 
-catch {exec /etc/init.d/S50sshd restart}
+catch {exec /usr/bin/monit restart sshd}
 
 jsonrpc_response ""

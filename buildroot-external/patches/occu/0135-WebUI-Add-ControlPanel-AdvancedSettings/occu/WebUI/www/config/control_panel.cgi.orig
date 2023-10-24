@@ -54,12 +54,12 @@ puts {
     setFooter("");
   </script>
 
-  <table id="mainTable" cellspacing="20" style="display:none">
+  <table id="mainTable" cellspacing="0" cellpadding="0" style="display:none">
     <colgroup>
-      <col style="width:25%;"/>
-      <col style="width:25%;"/>
-      <col style="width:25%;"/>
-      <col style="width:20%;"/>
+      <col />
+      <col />
+      <col />
+      <col />
     </colgroup>
     <tr class="CLASS21700">
     
@@ -208,13 +208,6 @@ if {[isOldCCU]} {
   }
   incr i
 
-  if { [getProduct] >= 3} {
-    puts "<td><div class=\"cpButton\">"
-    puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"showAccessPoint();\">\${btnAccessPoints}</div>"
-    puts "<div class=\"StdTableBtnHelp\"><img id=\"showAccessPointCPHelp\" src=\"/ise/img/help.png\"></div>"
-    incr i
-  }
-
 set COL_COUNT 4
 
 if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
@@ -336,7 +329,7 @@ puts {
     };
 
     function setTooltips() {
-      var helpContainer = ["#showMaintenanceCPHelp","#showSecurityCPHelp","#showTimeCPHelp","#showNetworkCPHelp","#newFirewallConfigDialogHelp","#showBidCosConfigHelp","#showSoftwareCPHelp", "#showCouplingCPHelp", "#showGeneralSettingsCPHelp", "#showAccessPointSettingsCPHelp", "#showSecuritySettingsCPHelp", "#showAccessPointCPHelp"];
+      var helpContainer = ["#showMaintenanceCPHelp","#showSecurityCPHelp","#showTimeCPHelp","#showNetworkCPHelp","#newFirewallConfigDialogHelp","#showBidCosConfigHelp","#showSoftwareCPHelp", "#showCouplingCPHelp", "#showGeneralSettingsCPHelp", "#showSecuritySettingsCPHelp"];
       var help = [
         "<h1>"+translateKey("btnSysConfCentralMaintenace")+"</h1><ul><li>"+translateKey("lblSysConfCentralMaintenance1")+"</li><li>"+translateKey("lblSysConfCentralMaintenance2")+"</li><li>"+translateKey("lblSysConfCentralMaintenance3")+"</li></ul>",
         "<h1>"+translateKey("btnSysConfSecurity")+"</h1><ul><li>"+translateKey("lblSysConfSecurity1")+"</li><li>"+translateKey("lblSysConfSecurity2")+"</li><li>"+translateKey("lblSysConfSecurity3")+"</li><li>"+translateKey("lblSysConfSecurity4")+"</li><li>"+translateKey("lblSysConfSecurity5")+"</li><li>"+translateKey("lblSysConfSecurity6")+"</li><li>"+translateKey("lblSysConfSecurity7")+"</li><li>"+translateKey("lblSysConfSecurity8")+"</li></ul>",
@@ -347,9 +340,7 @@ puts {
         "<h1>"+translateKey("btnSysConfAdditionalSoft")+"</h1><ul><li>"+translateKey("lblSysConfAdditionalSoft1")+"</li><li>"+translateKey("lblSysConfAdditionalSoft2")+"</li></ul>",
         "<h1>"+translateKey("btnSysConfCoupling")+"</h1><ul><li>OSRAM Lightify</li><li>Philips Hue</li></ul>",
         "<h1>"+translateKey("btnSysConfGeneralSettings")+"</h1><ul><li>"+translateKey("lblSysConfStorage")+"</li><li>"+translateKey("lblSysConfSetPowerCost")+"</li></ul>",
-        "<h1>"+translateKey("btnAccessPointSettings")+"</h1><ul><li>"+translateKey("lblAccessPointSettings1")+"</li></ul>",
-        "<h1>"+translateKey("btnSecuritySettings")+"</h1><ul><li>"+translateKey("lblSecuritySettings1")+"</li><li>"+translateKey("lblSecuritySettings2")+"</li></ul>",
-        "<h1>"+translateKey("btnAccessPoints")+"</h1><ul><li>"+translateKey("lblShowAllAPs")+"</li></ul>"
+        "<h1>"+translateKey("btnSecuritySettings")+"</h1><ul><li>"+translateKey("lblSecuritySettings1")+"</li><li>"+translateKey("lblSecuritySettings2")+"</li></ul>"
         ];
 
        jQuery.each(helpContainer, function(index, container){

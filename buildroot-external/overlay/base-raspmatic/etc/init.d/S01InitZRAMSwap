@@ -45,7 +45,7 @@ SWAPPINESS=80
 # swap devices dynamically
 createZramSwaps () {
 
-  totalmem=$(free|awk '/^Mem:/{print $2}')
+  totalmem=$(awk '/MemTotal/ {print $2}' /proc/meminfo)
   mem=$((( totalmem * MEM_FACTOR / 100 / SWAP_DEVICES ) * 1024 ))
   drive_size=$((( mem * DRIVE_FACTOR ) /100 ))
 

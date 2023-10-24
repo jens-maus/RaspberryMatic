@@ -9021,6 +9021,7 @@ color: $_(textColorA); /* white */
   border-bottom: 1px solid black;
   text-align: left;
   font-family: monospace;
+  resize: vertical;
 }
 
 .CodeMirror-gutter-wrapper {

@@ -1,3 +1,14 @@
+--- occu/WebUI/www/config/easymodes/MASTER_LANG/HmIP-ParamHelp.js.orig
++++ occu/WebUI/www/config/easymodes/MASTER_LANG/HmIP-ParamHelp.js
+@@ -263,7 +263,7 @@
+       "<br/><br/>Die Kalibrierung ben%F6tig mindestens drei Kalibrierintervalle, um den Endwert sicher zu bestimmen." +
+       "<br/><br/>F%FCr R%E4ume mit Dauerbelegung 24/7 muss diese Funktion deaktiviert werden. Eine Kalibrierung sollte in dem Fall alle 1-2 Jahre manuell durchgef%FChrt werden.",
+ 
+-    "MOUNTING_ORIENTATION" : "Dieser Parameter erm%FCglicht es, den Displayinhalt um 180 Grad zu drehen.",
++    "MOUNTING_ORIENTATION" : "Dieser Parameter erm%F6glicht es, den Displayinhalt um 180 Grad zu drehen.",
+     "MOUNTING_ORIENTATION_A" : "Dieser Parameter erm%F6glicht es, die Tastereinheit des Aktors im gew%FCnschten Winkel einzusetzen. ",
+ 
+     "POWERUP_ONTIME_UNIT" :
 --- occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi.orig
 +++ occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi
 @@ -67,8 +67,8 @@

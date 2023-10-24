@@ -729,9 +729,9 @@
 -}
 \ No newline at end of file
 +}
---- occu/WebUI/www/rega/esp/controls/univisal_light_receiver.fn.orig
-+++ occu/WebUI/www/rega/esp/controls/univisal_light_receiver.fn
-@@ -249,14 +249,14 @@
+--- occu/WebUI/www/rega/esp/controls/universal_light_receiver.fn.orig
++++ occu/WebUI/www/rega/esp/controls/universal_light_receiver.fn
+@@ -339,14 +339,14 @@
              WriteLine("<tr>");
                WriteLine("<td style='text-align:left'><span>${lblColorTemperatureBR}</span></td>");
                WriteLine("<td class='CLASS02546' style='text-align:right'>");
@@ -749,13 +749,6 @@
                WriteLine("</td>");
              WriteLine("</tr>");
            WriteLine("</table>")
-@@ -390,4 +390,4 @@
-     Write("jQuery('#"#chnId#"On').html(translateKey('actionStatusControlLblOn')).show();");
- 
-   WriteLine("</script>");
--}
-\ No newline at end of file
-+}
 --- occu/WebUI/www/rega/esp/datapointconfigurator.fn.orig
 +++ occu/WebUI/www/rega/esp/datapointconfigurator.fn
 @@ -1201,7 +1201,7 @@
@@ -3440,7 +3433,15 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8434,7 +8446,9 @@
+@@ -8206,6 +8218,7 @@
+ 
+   padding: 3px;
+   text-align:center;
++  font-weight: bold;
+   vertical-align:middle;
+   margin:2px;
+   cursor: pointer;
+@@ -8434,7 +8447,9 @@
  /* config\help.cgi */
  
  .CLASS21300 {
@@ -3451,7 +3452,7 @@
  }
  
  .CLASS21301 {
-@@ -8660,8 +8674,11 @@
+@@ -8660,8 +8675,11 @@
  
  /* config\control_panel.cgi */
  
@@ -3464,7 +3465,7 @@
  }
  
  .CLASS21701 {
-@@ -8732,7 +8749,8 @@
+@@ -8732,7 +8750,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -3474,7 +3475,20 @@
  }
  
  .CLASS21901 {
-@@ -8782,7 +8800,6 @@
+@@ -8757,9 +8776,11 @@
+ 
+   color: $_(textColorB); /* black */
+   border: 1px solid $_(black); /* black */
+-  border-radius: 2px;
++  border-radius: 5px;
+ 
+   cursor: pointer;
++  font-weight: bold;
++  padding: 2px;
+ }
+ 
+ .CLASS21905 {
+@@ -8782,7 +8803,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -3482,7 +3496,7 @@
    width:100%;
  }
  
-@@ -8839,13 +8856,17 @@
+@@ -8839,13 +8859,17 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -3502,7 +3516,7 @@
  }
  
  .CLASS22002 {
-@@ -8855,11 +8876,17 @@
+@@ -8855,11 +8879,17 @@
  
  .CLASS22003 {
    background-color: $_(white);
@@ -3520,7 +3534,7 @@
  }
  
  .CLASS22005 {
-@@ -8917,7 +8944,8 @@
+@@ -8917,7 +8947,8 @@
  }
  
  .CLASS22101 {
@@ -3530,7 +3544,7 @@
  }
  
  .CLASS22102 {
-@@ -8939,9 +8967,8 @@
+@@ -8939,9 +8970,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -3541,7 +3555,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8951,10 +8978,12 @@
+@@ -8951,10 +8981,12 @@
    position:relative;
    width:50px;
    height:50px;

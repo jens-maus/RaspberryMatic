@@ -41,13 +41,12 @@ start() {
 
     # call rc.local
     if [[ -x /usr/local/etc/rc.local ]]; then
-      /usr/local/etc/rc.local
+      echo -n "rc.local, "
+      /usr/bin/timeout 120 /usr/local/etc/rc.local
     fi
 
     echo "OK"
   else
-    rm -f /etc/config/safemode
-
     echo "skipping (safemode)"
   fi
 

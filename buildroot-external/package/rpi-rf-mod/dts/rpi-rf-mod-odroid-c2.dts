@@ -5,7 +5,7 @@
 ** Device Tree Overlay for eQ-3 RPI-RF-MOD and
 ** HM-MOD-RPI-PCB for ODROID-C2
 **
-** Copyright (c) 2021 Jens Maus <mail@jens-maus.de>
+** Copyright (c) 2021-2023 Jens Maus <mail@jens-maus.de>
 ** Licensed under Apache 2.0
 **
 */
@@ -38,8 +38,7 @@
         __overlay__ {
             compatible = "pivccu,meson";
             status = "okay";
-            pivccu,reset_pin = <&gpio 102 0>;   // HM-MOD-RPI-PCB
-            pivccu,alt_reset_pin = <&gpio 78 0>;// RPI-RF-MOD
+            pivccu,reset-gpios = <&gpio 102 0>, <&gpio 78 0>; // HM-MOD-RPI-PCB, RPI-RF-MOD
             pivccu,rtc = <&rpi_rf_mod_rtc>;     // RPI-RF-MOD
         };
     };

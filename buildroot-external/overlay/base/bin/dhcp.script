@@ -1,15 +1,16 @@
 #!/bin/sh
+# shellcheck shell=dash disable=SC2154,SC3010 source=/dev/null
 
-RESOLV_CONF=/var/etc/resolv.conf
+RESOLV_CONF=/tmp/resolv.conf.tmp
 CONFIGURL=/var/configurl
 
 action=${1}
 nfsroot=false
 
 if grep -q nfsroot /proc/cmdline ; then
-    if [[ ${interface} == "eth0" ]]; then
-      nfsroot=true
-    fi
+  if [[ "${interface}" == "eth0" ]]; then
+    nfsroot=true
+  fi
 fi
 
 handle_deconfig() {
@@ -19,11 +20,11 @@ handle_deconfig() {
 
   # Disable Auto-IP daemon
   if [ -x /usr/sbin/avahi-autoipd ]; then
-    /usr/sbin/avahi-autoipd -k ${interface}
+    /usr/sbin/avahi-autoipd -k "${interface}"
   fi
 
-  /sbin/ip -4 addr flush dev ${interface}
-  /sbin/ip link set dev ${interface} up
+  /sbin/ip -4 addr flush dev "${interface}"
+  /sbin/ip link set dev "${interface}" up
 }
 
 handle_renew() {
@@ -32,33 +33,33 @@ handle_renew() {
   if [[ ${nfsroot} == false ]]; then
     # Disable Auto-IP daemon
     if [ -x /usr/sbin/avahi-autoipd ]; then
-      /usr/sbin/avahi-autoipd -k ${interface}
+      /usr/sbin/avahi-autoipd -k "${interface}"
     fi
     
     # make sure we can deal with DHCP servers not providing broadcast or subnet
     [[ -n "${broadcast}" ]] && BROADCAST="${broadcast}" || BROADCAST="+"
-    /sbin/ip addr add dev ${interface} local ${ip}/${mask} broadcast ${BROADCAST}
+    /sbin/ip addr add dev "${interface}" local "${ip}/${mask}" broadcast ${BROADCAST}
 
     # update the info in /etc/config/netconfig
-    eq3configcmd netconfigcmd -i ${ip} -n ${subnet} -g ${router}
+    eq3configcmd netconfigcmd -i "${ip}" -n "${subnet}" -g "${router}"
     j=1
     for i in ${dns}; do
-      eq3configcmd netconfigcmd -d${j} ${i}
-      j=$((${j} + 1))
+      eq3configcmd netconfigcmd -d${j} "${i}"
+      j=$((j + 1))
     done
   fi
 
   # add default routes
   if [[ -n "${router}" ]]; then
     # delete all default routers
-    while /sbin/ip route del default dev ${interface} 2>/dev/null; do
+    while /sbin/ip route del default dev "${interface}" 2>/dev/null; do
       :
     done
 
     metric=10
     for i in ${router}; do
-      /sbin/ip route add default via ${i} dev ${interface} metric ${metric}
-      metric=$((${metric} + 1))
+      /sbin/ip route add default via "${i}" dev "${interface}" metric ${metric}
+      metric=$((metric + 1))
     done
   fi
 
@@ -66,29 +67,32 @@ handle_renew() {
   [[ -n "${ntpsrv}" ]] && echo "NTPSERVERS_DHCP='${ntpsrv}'" >/var/etc/ntp-dhcp.conf
 
   # check for boot file
-  [[ -n "${boot_file}" ]] && echo ${boot_file} >${CONFIGURL}
+  [[ -n "${boot_file}" ]] && echo "${boot_file}" >${CONFIGURL}
 
   # take care of resolv.conf
-  rm -f ${RESOLV_CONF} 2>/dev/null
-  [[ -n "$domain" ]] && echo domain ${domain} >>${RESOLV_CONF}
-  [[ -n "$search" ]] && echo search ${search} >>${RESOLV_CONF}
+  rm -f ${RESOLV_CONF}
+  [[ -n "$domain" ]] && echo "domain ${domain}" >>${RESOLV_CONF}
+  [[ -n "$search" ]] && echo "search ${search}" >>${RESOLV_CONF}
   for i in ${dns}; do
-    echo nameserver ${i} >>${RESOLV_CONF}
+    echo "nameserver ${i}" >>${RESOLV_CONF}
   done
+
+  # use /sbin/resolvconf to propagate DNS info to libc
+  /sbin/resolvconf -a "${interface}" < ${RESOLV_CONF}
+  rm -f ${RESOLV_CONF}
 
   # flag as having a proper ip
   touch /var/status/hasIP
 
   # check carrier
-  if [[ $(cat /sys/class/net/${interface}/carrier) -eq 1 ]]; then
+  if [[ $(cat "/sys/class/net/${interface}/carrier") -eq 1 ]]; then
     touch /var/status/hasLink
   fi
 
   # check internet connection
-  /usr/bin/wget -q --spider http://google.com/
-  if [[ $? -eq 0 ]]; then
+  if /usr/bin/wget -q --spider http://google.com/; then
     touch /var/status/hasInternet
-  elif ping -q -W 5 -c 1 google.com >/dev/null 2>/dev/null; then
+  elif /bin/ping -q -W 5 -c 1 google.com >/dev/null 2>/dev/null; then
     touch /var/status/hasInternet
   fi
 }
@@ -101,7 +105,7 @@ handle_leasefail() {
   # No DHCP IP received
   # Start Auto-IP daemon
   if [ -x /usr/sbin/avahi-autoipd ]; then
-    /usr/sbin/avahi-autoipd -wD ${interface} --no-chroot
+    /usr/sbin/avahi-autoipd -wD "${interface}" --no-chroot
   fi
 }
 

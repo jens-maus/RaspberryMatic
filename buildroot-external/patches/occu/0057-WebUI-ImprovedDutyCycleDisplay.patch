@@ -45,7 +45,7 @@
 +++ occu/WebUI/www/rega/pages/tabs/startpage.htm
 @@ -166,13 +166,11 @@
        <table id="tblRightContent" width="100%">
-         <tr valign="top" class="CLASS01810">
+         <tr style="vertical-align: top;" class="CLASS01810">
            <td>
 -          <table id="tblStartpageInfo" width="100%" class="CLASS01811 startPageInfo hidden">
 -
@@ -62,7 +62,7 @@
              <tr>
                  <!-- Uhrzeit -->
                <td>${time}:</td>
-@@ -250,14 +248,134 @@
+@@ -251,22 +249,134 @@
                }
               %>
  
@@ -73,10 +73,17 @@
 -            <tr name="trDutyCycle" style="visibility: hidden">
 -
 -              <td id="iFaceShowAll">${lblDutyCycle}</td>
--              <td> <div id="dutyCycleProgress" class="dutyCycleProgress" align="right"><div id="dutyCycleProgressBar" class="dutyCycleProgressBar" style='width:100%;'></div></div> </td>
+-              <td> <div id="dutyCycleProgress" class="dutyCycleProgress"><div id="dutyCycleProgressBar" class="dutyCycleProgressBar" style='width:auto;'></div></div> </td>
 +            <tr>
 +              <td colspan="3"><hr/></td>
-+            </tr>
+             </tr>
+-
+-            <!-- Carrier Sense -->
+-            <tr name="trCarrierSense" style="visibility: hidden"><td></td><td><div id="carrierSenseVal" style="width:75%; text-align:center"></div></td></tr>
+-            <tr name="trCarrierSense" style="visibility: hidden">
+-
+-              <td id="lblCarrierSense">${lblCarrierSense}</td>
+-              <td> <div id="carrierSenseProgress" class="dutyCycleProgress"><div id="carrierSenseProgressBar" class="dutyCycleProgressBar" style='width:auto;'></div></div> </td>
 +            <tr id="partingLine1" class="hidden" style="display:none;">
 +              <td></td>
 +              <td>
@@ -204,6 +211,15 @@
              </tr>
  
            </table>
+@@ -296,8 +406,6 @@
+       StartPage.showAllDeviceFirmware();
+       jQuery("#forceUpdate").remove();
+   }
+-  jQuery("#iFaceShowAll").text(translateKey("lblDutyCycleA") + getProduct()+ ":");
+-  jQuery("#lblCarrierSense").text(translateKey("lblCarrierSenseA") + getProduct()+ ":");
+   translatePage();
+   jQuery("#loadingGif").hide();
+   jQuery("#tblStartpageInfo").show();
 --- occu/WebUI/www/webui/css/extern/hmBootstrap.css.orig
 +++ occu/WebUI/www/webui/css/extern/hmBootstrap.css
 @@ -26,3 +26,19 @@
@@ -273,7 +289,32 @@
  .CLASS01812 {
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -28901,71 +28901,103 @@
+@@ -7106,8 +7106,6 @@
+       window.setTimeout(function() {jQuery("#PagePath").css('color',"white");},100);
+       ConfigData.isPresent = true;
+       if (ConfigData.showMessage) { this.hideMessage(); }
+-      showDutyCycleHmIP(); // The DeviceList is now available for displaying the duty cycle and carrier sense of the HAP's
+-      showCarrierSense();
+       if (ConfigData.callback) { ConfigData.callback(); }
+     });
+   },
+@@ -7246,7 +7244,6 @@
+     if(typeof dcTimeout == "undefined") {
+       dcTimeout = window.setTimeout(function () {
+         showDutyCycle();
+-        showCarrierSense();
+         delete dcTimeout;
+       }, 10);
+     }
+@@ -7479,7 +7476,6 @@
+       // Check the dutyCycle and carrierSense periodically
+       new PeriodicalExecuter(function () {
+         showDutyCycle();
+-        showCarrierSense();
+       }, checkDutyCycleInterval);
+ 
+       if (getProduct() >= 3) {
+@@ -32367,74 +32363,101 @@
      var ifaceBidCosRF = "BidCos-RF",
        ifaceHmIPRF = "HmIP-RF",
        arInterfaceDutyCycle = {},
@@ -281,12 +322,8 @@
        showPartingLine = false,
        dcUnit = "%",
        dcNotAvailable = -1,
-+      csNotAvailable = -1,
-+      dcWarn  = 69;  // Warning when dc >= 70%
-       dcAlarm = 89;  // Attention when dc >= 90%
-+      csWarn  = 10;  // Warning when cs >= 11%
-+      csAlarm = 19;  // Attention when cs >= 20%
- 
+-      dcAlarm = 89;  // Attention when dc >= 90%
+-
 -    homematic("Interface.listBidcosInterfaces", {"interface": ifaceBidCosRF}, function (BidCosIFaces) {
 -      if (BidCosIFaces) {
 -        var linkElem = jQuery("#iFaceShowAll");
@@ -294,124 +331,140 @@
 -          linkElem
 -            .addClass("UILink")
 -            .on("click", function () {
+-              showDutyCycle(); // actualize the dc value of the start page
 -              showDCAllInterfaces();
 -            });
 -        }
--
++      csNotAvailable = -1,
++      dcWarn  = 69,  // Warning when dc >= 70%
++      dcAlarm = 89,  // Attention when dc >= 90%
++      csWarn  = 10,  // Warning when cs >= 11%
++      csAlarm = 19;  // Attention when cs >= 20%
++
++    homematic("Interface.getDutyCycle", {}, function(dcArray) {
++      if(jQuery.isArray(dcArray)) {
++        jQuery.each(dcArray, function(index, iface) {
++          var dutyCycleValElm = jQuery("#dutyCycleVal"+index),
++            dutyCycleAddrElm = jQuery("#dutyCycleAddr"+index),
++            trDutyCycle = jQuery("[name='trDutyCycle"+index+"']"),
++            dutyCycleBar = jQuery("[name='dutyCycleBar"+index+"']"),
++            carrierSenseValElm = jQuery("#carrierSenseVal"+index),
++            carrierSenseBar = jQuery("[name='carrierSenseBar"+index+"']"),
++            carrierSenseCol = jQuery("[name='carrierSenseCol"+index+"']"),
++            trPartingLineElm = jQuery("#partingLine1"),
++            csVal,
++            dcVal;
++
++          if (typeof iface.dutyCycle !== "undefined") {
++            dcVal = Math.floor(iface.dutyCycle);
++            csVal = Math.floor(iface.carrierSense);
++            conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + " " + dcUnit);
++            conInfo("carrierSense - " + ifaceBidCosRF + ": " + csVal + " " + dcUnit);
++            arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
++            arInterfaceCarrierSense[ifaceBidCosRF] = ((csVal >= 0) && (csVal <= 100)) ? csVal : csNotAvailable;
++          } else {
++            conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
++            arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
++          }
+ 
 -        jQuery.each(BidCosIFaces, function (index, iFace) {
 -          if (iFace.type == "CCU2") {
 -            var dutyCycleProgressElem = jQuery("#dutyCycleProgress"),
 -              dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar"),
 -              dutyCycleValElm = jQuery("#dutyCycleVal"),
 -              trDutyCycle = jQuery("[name='trDutyCycle']"),
-+      homematic("Interface.getDutyCycle", {}, function(dcArray) {
-+        if(jQuery.isArray(dcArray)) {
-+          jQuery.each(dcArray, function(index, iface) {
-+            var dutyCycleValElm = jQuery("#dutyCycleVal"+index),
-+              dutyCycleAddrElm = jQuery("#dutyCycleAddr"+index),
-+              trDutyCycle = jQuery("[name='trDutyCycle"+index+"']"),
-+              dutyCycleBar = jQuery("[name='dutyCycleBar"+index+"']"),
-+              carrierSenseValElm = jQuery("#carrierSenseVal"+index),
-+              carrierSenseBar = jQuery("[name='carrierSenseBar"+index+"']"),
-+              carrierSenseCol = jQuery("[name='carrierSenseCol"+index+"']"),
-               trPartingLineElm = jQuery("#partingLine1"),
+-              trPartingLineElm = jQuery("#partingLine1"),
 -              dcVal,
 -              width, value;
-+              csVal,
-+              dcVal;
- 
+-
 -            if (typeof iFace.dutyCycle != "undefined") {
 -              dcVal = parseInt(iFace.dutyCycle);
 -              conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + dcUnit);
-+            if (typeof iface.dutyCycle !== "undefined") {
-+              dcVal = Math.floor(iface.dutyCycle);
-+              csVal = Math.floor(iface.carrierSense);
-+              conInfo("dutyCycle - " + ifaceBidCosRF + ": " + dcVal + " " + dcUnit);
-+              conInfo("carrierSense - " + ifaceBidCosRF + ": " + csVal + " " + dcUnit);
-               arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
-+              arInterfaceCarrierSense[ifaceBidCosRF] = ((csVal >= 0) && (csVal <= 100)) ? csVal : csNotAvailable;
+-              arInterfaceDutyCycle[ifaceBidCosRF] = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
++          if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
++            dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
++            if (iface.type === "CCU2") {
++              dutyCycleAddrElm.text("CCU:");
++            } else if(iface.type === "HMIP-HAP") {
++              if(iface.name !== "") {
++                dutyCycleAddrElm.text("HAP ("+iface.name+"):");
++              } else {
++                dutyCycleAddrElm.text("HAP ("+iface.address+"):");
++              }
++            } else if(iface.name !== "") {
++              dutyCycleAddrElm.text("LGW ("+iface.name+"):");
              } else {
-               conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
-               arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
+-              conInfo("No gateway status for the interface " + ifaceBidCosRF + " available!");
+-              arInterfaceDutyCycle[ifaceBidCosRF] = dcNotAvailable;
++              dutyCycleAddrElm.text("LGW ("+iface.address+"):");
              }
  
-             if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
+-            if (arInterfaceDutyCycle[ifaceBidCosRF] != dcNotAvailable) {
 -              dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + dcUnit);
 -
 -              width = parseInt(dutyCycleProgressElem.css("width"));
 -              value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
-+              dutyCycleValElm.text(arInterfaceDutyCycle[ifaceBidCosRF] + " " + dcUnit);
-+              if (iface.type === "CCU2") {
-+                dutyCycleAddrElm.text("CCU:");
-+              } else if(iface.type === "HMIP-HAP") {
-+                if(iface.name !== "") {
-+                  dutyCycleAddrElm.text("HAP ("+iface.name+"):");
-+                } else {
-+                  dutyCycleAddrElm.text("HAP ("+iface.address+"):");
-+                }
-+              } else if(iface.name !== "") {
-+                dutyCycleAddrElm.text("LGW ("+iface.name+"):");
-+              } else {
-+                dutyCycleAddrElm.text("LGW ("+iface.address+"):");
-+              }
- 
+-
 -              window.setTimeout(function () {
--                dutyCycleProgressBarElm.css("width", value + "px");
+-                //dutyCycleProgressBarElm.css("width", value + "px");
+-                dutyCycleProgressBarElm.css("margin-left", (width - parseInt(value)) + "px");
+-
 -              }, 25);
-+              dutyCycleBar.css("width", arInterfaceDutyCycle[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceDutyCycle[ifaceBidCosRF]);
-+              dutyCycleBar.removeClass("bg-success");
-+              dutyCycleBar.removeClass("bg-warning");
-+              dutyCycleBar.removeClass("bg-danger");
++            dutyCycleBar.css("width", arInterfaceDutyCycle[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceDutyCycle[ifaceBidCosRF]);
++            dutyCycleBar.removeClass("bg-success");
++            dutyCycleBar.removeClass("bg-warning");
++            dutyCycleBar.removeClass("bg-danger");
++
++            if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
++              dutyCycleBar.addClass("bg-danger");
++            } else if (arInterfaceDutyCycle[ifaceBidCosRF] > dcWarn) {
++              dutyCycleBar.addClass("bg-warning");
++            } else {
++              dutyCycleBar.addClass("bg-success");
++            }
  
-               if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
+-              if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
 -                trDutyCycle.addClass("attention");
-+                dutyCycleBar.addClass("bg-danger");
-+              } else if (arInterfaceDutyCycle[ifaceBidCosRF] > dcWarn) {
-+                dutyCycleBar.addClass("bg-warning");
-+              } else {
-+                dutyCycleBar.addClass("bg-success");
-+              }
-+              
-+              if (arInterfaceCarrierSense[ifaceBidCosRF] != csNotAvailable) {
-+                carrierSenseValElm.text(arInterfaceCarrierSense[ifaceBidCosRF] + " " + dcUnit);
-+                carrierSenseBar.css("width", arInterfaceCarrierSense[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceCarrierSense[ifaceBidCosRF]);
-+                
-+                carrierSenseBar.removeClass("bg-info");
-+                carrierSenseBar.removeClass("bg-warning");
-+                carrierSenseBar.removeClass("bg-danger");
-+  
-+                if (arInterfaceCarrierSense[ifaceBidCosRF] > csAlarm) {
-+                  carrierSenseBar.addClass("bg-danger");
-+                } else if (arInterfaceCarrierSense[ifaceBidCosRF] > csWarn) {
-+                  carrierSenseBar.addClass("bg-warning");
-+                } else {
-+                  carrierSenseBar.addClass("bg-info");
-+                }
++            if (arInterfaceCarrierSense[ifaceBidCosRF] != csNotAvailable) {
++              carrierSenseValElm.text(arInterfaceCarrierSense[ifaceBidCosRF] + " " + dcUnit);
++              carrierSenseBar.css("width", arInterfaceCarrierSense[ifaceBidCosRF]+"%").attr('aria-valuenow', arInterfaceCarrierSense[ifaceBidCosRF]);
++              carrierSenseBar.removeClass("bg-info");
++              carrierSenseBar.removeClass("bg-warning");
++              carrierSenseBar.removeClass("bg-danger");
++
++              if (arInterfaceCarrierSense[ifaceBidCosRF] > csAlarm) {
++                carrierSenseBar.addClass("bg-danger");
++              } else if (arInterfaceCarrierSense[ifaceBidCosRF] > csWarn) {
++                carrierSenseBar.addClass("bg-warning");
                } else {
 -                trDutyCycle.removeClass("attention");
-+                carrierSenseValElm.text("n/a");
-+                carrierSenseBar.css("width", "0%");
++                carrierSenseBar.addClass("bg-info");
                }
-               trPartingLineElm.show();
-               showPartingLine = true;
+-              trPartingLineElm.show();
+-              showPartingLine = true;
 -              trDutyCycle.css("visibility", "visible");
-+              trDutyCycle.css("display", "table-row");
              } else {
 -              trDutyCycle.css("visibility", "hidden");
-+              trDutyCycle.css("display", "none");
++              carrierSenseValElm.text("n/a");
++              carrierSenseBar.css("width", "0%");
              }
++            trPartingLineElm.show();
++            showPartingLine = true;
++            trDutyCycle.css("display", "table-row");
++          } else {
++            trDutyCycle.css("display", "none");
++          }
  
-             if (!showPartingLine) {
-               trPartingLineElm.hide();
-             }
+-            if (!showPartingLine) {
+-              trPartingLineElm.hide();
+-            }
 -            return false; // Leave each loop
--          }
--        });
--      }
--    });
-+          });
-+        }
-+      });
++          if (!showPartingLine) {
++            trPartingLineElm.hide();
+           }
+         });
+       }
+-      showDutyCycleHmIP();
+     });
    }
  };
- 

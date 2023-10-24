@@ -25574,9 +25574,14 @@ iseThermostat_2ndGen = Class.create(iseThermostat, {
     jQuery("#"+this.id +"tblShowTemp").show();
   },
 
-  showActualHumidity: function() {                                    
-    jQuery("#"+this.id +"actHumidity").text(this.opts.stHum);         
-    jQuery("#"+this.id +"tblShowHumidity").show();                    
+  showActualHumidity: function() {
+    if (parseInt(this.opts.stHum) === 20) {
+      jQuery("#"+this.id +"actHumidity").text('n/a');
+    } else {
+      jQuery("#"+this.id +"actHumidity").text(this.opts.stHum);
+      jQuery("#"+this.id +"actHumidityUnit").show();
+    }
+    jQuery("#"+this.id +"tblShowHumidity").show();
   }, 
 
   showActualBat: function() {

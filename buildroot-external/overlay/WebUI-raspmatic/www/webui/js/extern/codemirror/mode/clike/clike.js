@@ -218,7 +218,8 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     },
 
     indent: function(state, textAfter) {
-      if (state.tokenize != tokenBase && state.tokenize != null || state.typeAtEndOfLine) return CodeMirror.Pass;
+      if (state.tokenize != tokenBase && state.tokenize != null || state.typeAtEndOfLine && isTopScope(state.context))
+        return CodeMirror.Pass;
       var ctx = state.context, firstChar = textAfter && textAfter.charAt(0);
       var closing = firstChar == ctx.type;
       if (ctx.type == "statement" && firstChar == "}") ctx = ctx.prev;
@@ -613,6 +614,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
         return state.tokenize(stream, state);
       },
       "'": function(stream) {
+        if (stream.match(/^(\\[^'\s]+|[^\\'])'/)) return "string-2"
         stream.eatWhile(/[\w\$_\xa1-\uffff]/);
         return "atom";
       },

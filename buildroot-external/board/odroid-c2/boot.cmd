@@ -5,7 +5,7 @@ setenv loglevel "0"
 setenv bootfs 1
 setenv rootfs 2
 setenv userfs 3
-#setenv gpio_button "23" # pin 32 (GPIOH_7)
+#setenv gpio_button "23" # pin 32 (GPIOY_13)
 setenv gpio_button "disabled"
 setenv kernel_img "Image"
 setenv recoveryfs_initrd "recoveryfs-initrd"

@@ -8,7 +8,6 @@
 identify_rf_hardware() {
 
   # setup default HM RF variables
-  HM_MODE="NORMAL"
   HM_HMRF_DEV=""
   HM_HMRF_DEVNODE=""
   HM_HMRF_DEVTYPE=""
@@ -127,11 +126,6 @@ identify_rf_hardware() {
     echo -n "."
   fi
 
-  # check if we should boot in LAN gateway mode
-  if [[ -e /usr/local/HMLGW ]]; then
-    HM_MODE="HM-LGW"
-  fi
-
   # strip leading/trailing spaces from RF_DEVNODES
   RF_DEVNODES=$(echo "${RF_DEVNODES}" | xargs)
 }
@@ -148,7 +142,7 @@ reset_rf_hardware() {
     # check if this is a raw-uart device and if so we use
     # the reset_radio_module sysfs node for the module reset
     if [[ -e "/sys/class/raw-uart/${dev}/reset_radio_module" ]]; then
-      echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module"
+      echo 1 >"/sys/class/raw-uart/${dev}/reset_radio_module" 2>/dev/null
     fi
 
   done
@@ -325,7 +319,11 @@ query_rf_parameters() {
       start-stop-daemon -K -q -p /var/run/hss_led.pid
       if [[ -x /bin/hss_led ]]; then
         sleep 2
-        start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
+        if [[ "${HM_HOST}" != "oci" ]]; then
+          start-stop-daemon -S -q -b -m -c hssled:hssled -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
+        else
+          start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
+        fi
       fi
     fi
   fi

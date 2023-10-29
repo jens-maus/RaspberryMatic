@@ -1,5 +1,23 @@
 --- occu/WebUI/www/rega/esp/controls/powermeter.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/powermeter.fn
+@@ -339,7 +339,7 @@
+                         WriteLine("<td>");
+                           !WriteLine("<span id='"#chnId#"Power'>"#oPower.Value().ToString(2)#" "#oPower.ValueUnit()#"</span>");
+                           WriteLine("<div name='"#chnId#"sensor' class='hidden'><span id='"#chnId#"Power'>"#oPower.Value().ToString(2)#" "#oPower.ValueUnit()#"</span></div>");
+-                          WriteLine("<div name='"#chnId#"sensorGas' class='hidden'><span id='"#chnId#"PowerGas'>"#oPowerGas.Value().ToString(2)#" m<sup>3</span></div>");
++                          WriteLine("<div name='"#chnId#"sensorGas' class='hidden'><span id='"#chnId#"PowerGas'>"#oPowerGas.Value().ToString(2)#" m<sup>3</span>/h</div>");
+                         WriteLine("</td>");
+                       WriteLine("</tr>");
+                     WriteLine("</table>");
+@@ -768,7 +768,7 @@
+                       if (oPower && oPowerGas) {
+                         if (sLastControlName != "POWERMETER_IEC2.") {
+                           WriteLine("<div name='"#chnId#"sensor' class='hidden'><span id='"#chnId#"Power'>"#oPower.Value().ToString(2)#" "#oPower.ValueUnit()#"</span></div>");
+-                          WriteLine("<div name='"#chnId#"sensorGas' class='hidden'><span id='"#chnId#"PowerGas'>"#oPowerGas.Value().ToString(2)#" m<sup>3</span></div>");
++                          WriteLine("<div name='"#chnId#"sensorGas' class='hidden'><span id='"#chnId#"PowerGas'>"#oPowerGas.Value().ToString(2)#" m<sup>3</span>/h</div>");
+                         }
+                       }
+                       WriteLine("<div name='"#chnId#"sensorIEC' class='hidden'><span id='"#chnId#"PowerIEC'>"#oPowerIEC.Value().ToString(decimalPlace)#" "#oPowerIEC.ValueUnit()#"</span></div>");
 @@ -814,23 +814,31 @@
      WriteLine("opts.devFirmwareMinor = '"#devFwMinor#"';");
      WriteLine("opts.devFirmwarePatch = '"#devFwPatch#"';");

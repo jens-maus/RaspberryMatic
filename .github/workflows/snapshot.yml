@@ -116,9 +116,8 @@ jobs:
           github.repository_owner == 'jens-maus' &&
           !startsWith(matrix.platform, 'oci_')
         uses: WebFreak001/deploy-nightly@v3.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
           release_id: 22744592
           asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip
@@ -131,9 +130,8 @@ jobs:
           github.repository_owner == 'jens-maus' &&
           !startsWith(matrix.platform, 'oci_')
         uses: WebFreak001/deploy-nightly@v3.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
           release_id: 22744592
           asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip.sha256
@@ -146,9 +144,8 @@ jobs:
           github.repository_owner == 'jens-maus' &&
           matrix.platform == 'rpi3'
         uses: WebFreak001/deploy-nightly@v3.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
           release_id: 22744592
           asset_path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz
@@ -161,9 +158,8 @@ jobs:
           github.repository_owner == 'jens-maus' &&
           matrix.platform == 'rpi3'
         uses: WebFreak001/deploy-nightly@v3.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
           release_id: 22744592
           asset_path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz.sha256
@@ -176,9 +172,8 @@ jobs:
           github.repository_owner == 'jens-maus' &&
           matrix.platform == 'ova'
         uses: WebFreak001/deploy-nightly@v3.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
           release_id: 22744592
           asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova
@@ -191,9 +186,8 @@ jobs:
           github.repository_owner == 'jens-maus' &&
           matrix.platform == 'ova'
         uses: WebFreak001/deploy-nightly@v3.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
           release_id: 22744592
           asset_path: release/RaspberryMatic-${{ env.VERSION }}.ova.sha256
@@ -206,9 +200,8 @@ jobs:
           github.repository_owner == 'jens-maus' &&
           startsWith(matrix.platform, 'oci_')
         uses: WebFreak001/deploy-nightly@v3.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
           release_id: 22744592
           asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz
@@ -221,9 +214,8 @@ jobs:
           github.repository_owner == 'jens-maus' &&
           startsWith(matrix.platform, 'oci_')
         uses: WebFreak001/deploy-nightly@v3.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
         with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
           release_id: 22744592
           asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz.sha256

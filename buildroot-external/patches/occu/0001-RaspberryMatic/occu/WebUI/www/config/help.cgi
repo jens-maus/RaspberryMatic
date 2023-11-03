@@ -84,6 +84,11 @@ proc action_put_page {} {
       execCmd PNAME {exec cat /sys/devices/virtual/dmi/id/product_name}
     }
     set HWMODEL "$VENDOR $PNAME"
+  } else {
+    execCmd MODEL {exec grep ^Model /proc/cpuinfo | cut -d: -f2 | xargs}
+    if {$MODEL != ""} {
+      set HWMODEL $MODEL
+    }
   }
 
   execCmd CPUMODEL {exec lscpu | grep "Model name:" | cut -d: -f2 | xargs echo -n}

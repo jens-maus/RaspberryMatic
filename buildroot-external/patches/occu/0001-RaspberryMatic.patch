@@ -221,7 +221,7 @@
  # set HOMEMATIC_URL "http://www.homematic.com"
  set HOMEMATIC_URL "http://www.eq-3.de"
  set HOMEMATIC_IP_URL "https://www.homematic-ip.com"
-@@ -19,13 +19,129 @@
+@@ -19,13 +19,134 @@
  set LANGUAGE "de"
  set CUR_YEAR [clock format [clock seconds] -format %Y]
  
@@ -265,7 +265,7 @@
 +
 +  # get all variables from /VERSION into ver array
 +  loadVarsFromShellFile /VERSION ver
- 
++
 +  # get all variables from /etc/config/netconfig into net array
 +  loadVarsFromShellFile /etc/config/netconfig net
 +
@@ -293,8 +293,13 @@
 +      execCmd PNAME {exec cat /sys/devices/virtual/dmi/id/product_name}
 +    }
 +    set HWMODEL "$VENDOR $PNAME"
++  } else {
++    execCmd MODEL {exec grep ^Model /proc/cpuinfo | cut -d: -f2 | xargs}
++    if {$MODEL != ""} {
++      set HWMODEL $MODEL
++    }
 +  }
-+
+ 
 +  execCmd CPUMODEL {exec lscpu | grep "Model name:" | cut -d: -f2 | xargs echo -n}
 +  execCmd NUMCPU {exec nproc}
 +  execCmd LOADAVG {exec awk {{ printf $1 " " $2 " " $3 }} /proc/loadavg}
@@ -354,7 +359,7 @@
  
    set sid ""
    catch {import sid}
-@@ -43,47 +159,84 @@
+@@ -43,47 +164,84 @@
        </script>
      }
    }
@@ -472,7 +477,7 @@
  
    puts "</table>"
  
-@@ -124,7 +277,7 @@
+@@ -124,7 +282,7 @@
      puts "\}"
  
      puts "loadExtHelp = function()\{"

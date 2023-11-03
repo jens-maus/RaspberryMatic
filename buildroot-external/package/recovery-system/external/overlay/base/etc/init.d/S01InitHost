@@ -39,6 +39,11 @@ identify_host() {
       PNAME=$(cat /sys/devices/virtual/dmi/id/product_name)
     fi
     HWMODEL="${VENDOR} ${PNAME}"
+  else
+    MODEL=$(cat /proc/cpuinfo  | grep ^Model | cut -d" " -f2-)
+    if [[ "${MODEL}" != "" ]]; then
+      HWMODEL=${MODEL}
+    fi
   fi
 
   # identify HM_HOST based on PLATFORM

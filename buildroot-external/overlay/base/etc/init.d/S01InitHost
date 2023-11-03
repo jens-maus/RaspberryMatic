@@ -39,7 +39,7 @@ identify_host() {
     fi
     HWMODEL="${VENDOR} ${PNAME}"
   else
-    MODEL=$(cat /proc/cpuinfo  | grep ^Model | cut -d" " -f2-)
+    MODEL=$(grep ^Model /proc/cpuinfo | cut -d" " -f2-)
     if [[ "${MODEL}" != "" ]]; then
       HWMODEL=${MODEL}
     fi

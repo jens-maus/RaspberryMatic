@@ -27,6 +27,19 @@ identify_host() {
     HM_LED_RED_MODE2=${rootfs_trigger}
   fi
 
+  # identify hardware model
+  HWMODEL="n/a"
+  if [[ -f /proc/device-tree/model ]]; then
+    HWMODEL=$(cat /proc/device-tree/model)
+  elif [[ -f /sys/devices/virtual/dmi/id/sys_vendor ]]; then
+    VENDOR=$(cat /sys/devices/virtual/dmi/id/sys_vendor)
+    PNAME=""
+    if [[ -f /sys/devices/virtual/dmi/id/product_name ]]; then
+      PNAME=$(cat /sys/devices/virtual/dmi/id/product_name)
+    fi
+    HWMODEL="${VENDOR} ${PNAME}"
+  fi
+
   # identify HM_HOST based on PLATFORM
   case "${PLATFORM}" in
 
@@ -206,7 +219,7 @@ start() {
   set | grep '^HM_' >/var/hm_mode
 
   if [[ -n "${HM_HOST}" ]]; then
-    echo "${HM_HOST}, OK"
+    echo "${HWMODEL}, ${HM_HOST}, OK"
   else
     echo "ERROR"
   fi

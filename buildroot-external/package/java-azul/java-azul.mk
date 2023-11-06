@@ -11,7 +11,7 @@ JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_aarch32hf.tar.gz
 JAVA_AZUL_SITE = https://cdn.azul.com/zulu-embedded/bin
 else ifeq ($(call qstrip,$(BR2_ARCH)),aarch64)
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_aarch64.tar.gz
-JAVA_AZUL_SITE = https://cdn.azul.com/zulu-embedded/bin
+JAVA_AZUL_SITE = https://cdn.azul.com/zulu/bin
 else ifeq ($(call qstrip,$(BR2_ARCH)),i686)
 JAVA_AZUL_SOURCE = zulu$(JAVA_AZUL_VERSION)-linux_i686.tar.gz
 JAVA_AZUL_SITE = https://cdn.azul.com/zulu/bin

@@ -87,7 +87,7 @@
 @@ -218,6 +250,7 @@
    s += "<tr>";
    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
-   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
+   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltDL.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
 +  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04905' onclick='ShowInternalDeviceChannels()'>"+translateKey(internalBtnText)+"</div></td>";
    s += "</tr>";
    s += "</table>";

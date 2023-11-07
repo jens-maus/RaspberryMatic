@@ -10,7 +10,8 @@
       "extract_sha256": "ad02b397fd81df21f695209f9e66deab40538589832302597cffd62e41488a28",
       "image_download_size": 321138334,
       "image_download_sha256": "3f0dad5bfe927bbaef4714839c3d6ce4fb33d6c6df9ac93b584fc139c3021610",
-      "website": "https://raspberrymatic.de/"
+      "website": "https://raspberrymatic.de/",
+      "devices": ["pi4-64bit"]
     },
     {
       "name": "RaspberryMatic 3.71.12.20231020 (RPi3, RPiZero2, ELV-Charly, CCU3)",
@@ -22,7 +23,8 @@
       "extract_sha256": "6d7ddd51fbf78eeac2e02fa9ad11e3818255e5072006439ed4384b5271ecf274",
       "image_download_size": 316397517,
       "image_download_sha256": "e2c1263eca494e7be99e2298ac04e4a836e935a389f7d0442941cbf0ad979ba8",
-      "website": "https://raspberrymatic.de/"
+      "website": "https://raspberrymatic.de/",
+      "devices": ["pi3-64bit"]
     },
     {
       "name": "RaspberryMatic 3.71.12.20231020 (RPi2)",
@@ -34,7 +36,8 @@
       "extract_sha256": "4caf1f1b2bdf83315435e3fb7f61c0954dcb49cb69b8714ef5bd102536aec668",
       "image_download_size": 300364769,
       "image_download_sha256": "a25ca29949f24dec95cd4d370dfe54397d6299c41bc89adbce2a81af84a6ad14",
-      "website": "https://raspberrymatic.de/"
+      "website": "https://raspberrymatic.de/",
+      "devices": ["pi2-32bit"]
     },
     {
       "name": "RaspberryMatic 3.71.12.20231020 (RPiZero, RPi1)",
@@ -46,7 +49,8 @@
       "extract_sha256": "8ff3fe6d8adf8b0544505dbc9cd8e9f735ecebd34aa70003a956ed9a2cad41b6",
       "image_download_size": 299730786,
       "image_download_sha256": "691e480eb7a413769bb5e3add6a9c9170d0601e4ceb2fa5b74a75fe7b773c691",
-      "website": "https://raspberrymatic.de/"
+      "website": "https://raspberrymatic.de/",
+      "devices": ["pi1-32bit"]
     },
     {
       "name": "RaspberryMatic Nightly Snapshots",

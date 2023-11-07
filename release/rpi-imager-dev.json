@@ -10,7 +10,8 @@
       "extract_sha256": "7c94499231237c475063ddc65106f3b18189154a1a6fc3e8ac666a75c278b396",
       "image_download_size": 313835798,
       "image_download_sha256": "d81654526b09884df1fae637563364d80f9a7a79a276cdb7233e1991ccacf098",
-      "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots"
+      "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots",
+      "devices": ["pi4-64bit"]
     },
     {
       "name": "RaspberryMatic 3.73.6.20231107-e83742 (RPi3, RPiZero2, ELV-Charly, CCU3)",
@@ -22,7 +23,8 @@
       "extract_sha256": "b5f93d9c8ec03e0c6e2b760cf153d68546ce5405f235791ad565c9d52ef74aa7",
       "image_download_size": 310430659,
       "image_download_sha256": "0778a89dae3770e199f3552fc22a7d68d164c38f69effc855ca1d9b50b4a95b4",
-      "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots"
+      "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots",
+      "devices": ["pi3-64bit"]
     },
     {
       "name": "RaspberryMatic 3.73.6.20231107-e83742 (RPi2)",
@@ -34,7 +36,8 @@
       "extract_sha256": "2de800a3800b1e10f7e3ec1e8a1d7827b32ff768edbee5adf01cd8672cdcd5c7",
       "image_download_size": 289562098,
       "image_download_sha256": "624516a187177f81af5a8bc1e48067cba02d54eb2a3948173ff5f182be7eb75e",
-      "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots"
+      "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots",
+      "devices": ["pi2-32bit"]
     },
     {
       "name": "RaspberryMatic 3.73.6.20231107-e83742 (RPiZero, RPi1)",
@@ -46,7 +49,8 @@
       "extract_sha256": "1b4c4be27a2b6f6ece2900d687855b8c41049ed905cd395f9cc73d96b0656cd6",
       "image_download_size": 293575608,
       "image_download_sha256": "400405895c9702a7502d5b489ce9b31a556ccd6f1357a99313947af8c589da49",
-      "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots"
+      "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots",
+      "devices": ["pi1-32bit"]
     }
   ]
 }

@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169
+# shellcheck shell=dash disable=SC2169,SC3010
 #
 # Startup script to seed the kernel RNG and preserve it during reboots.
 #
@@ -17,6 +17,7 @@ case "$1" in
 		echo -n "Running ${DAEMON}: "
 
 		# make sure /usr/local/etc/config exists
+		# shellcheck disable=SC2174
 		mkdir -p -m 0775 /usr/local/etc/config
 
 		# remove obsolete /etc/config/random-seed

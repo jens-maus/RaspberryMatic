@@ -57,6 +57,11 @@ init_system() {
   chmod 0755 /usr/local/etc
   chown root:root /usr/local/etc
 
+  # create /usr/local/etc/logrotate.d
+  mkdir -p /usr/local/etc/logrotate.d
+  chmod 0700 /usr/local/etc/logrotate.d
+  chown root:root /usr/local/etc/logrotate.d
+
   # create a /usr/local/tmp directory for creating things like backup files, etc.
   # (we need it on-disk or /tmp will be not enough in case of a filled up /usr/local)
   if [[ ! -f /usr/local/tmp/.nobackup ]]; then

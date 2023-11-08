@@ -16,6 +16,9 @@ case "$1" in
 	start|stop|restart|reload)
 		echo -n "Running ${DAEMON}: "
 
+		# make sure /usr/local/etc/config exists
+		mkdir -p -m 0775 /usr/local/etc/config
+
 		# remove obsolete /etc/config/random-seed
 		[[ -f "/etc/config/random-seed" ]] && rm -f /etc/config/random-seed
 

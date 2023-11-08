@@ -38,6 +38,7 @@ start() {
 	echo -900 >/proc/$$/oom_score_adj 2> /dev/null
 
 	start-stop-daemon -S -q -b -m -c eq3cfg:eq3cfg -p ${PIDFILE} --exec /bin/${DAEMON}
+	echo "OK"
 }
 stop() {
 	echo -n "Stopping ${DAEMON}: "

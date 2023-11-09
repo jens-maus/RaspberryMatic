@@ -365,7 +365,7 @@ proc cmd_show_rssi {} {
                           catch { set name $devnames($dev) }
                           if { [string first $dev $name] < 0 } { append name "<br>$dev" }
                           table_row {
-                              table_data rowspan=2 {align="left"} {valign="middle"} {
+                              table_data rowspan=2 {text-align="left"} {vertical-align="middle"} {
                                   h3 $name
                               }
                               array_clear peer_map
@@ -374,7 +374,7 @@ proc cmd_show_rssi {} {
                                   set name ""
                                   catch { set name $devnames($peer) }
                                   if { [string first $peer $name] < 0 } { append name "<br>$peer" }
-                                  table_data {colspan=2} {align="center"} {valign="middle"} {bgcolor="#A0A0A0"} {
+                                  table_data {colspan=2} {text-align="center"} {vertical-align="middle"} {bgcolor="#A0A0A0"} {
                                       puts $name
                                   }
                               }

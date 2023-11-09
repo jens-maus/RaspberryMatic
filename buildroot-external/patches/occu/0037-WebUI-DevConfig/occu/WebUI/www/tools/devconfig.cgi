@@ -198,13 +198,13 @@ proc cmd_list_channels {} {
                             puts ""
                             table_row { 
                                 table_data {
-                                    h3 [url "$dev_descr(TYPE) ($dev_descr(ADDRESS))" $env(SCRIPT_NAME)?cmd=config&device=$dev_descr(ADDRESS)&iface=$iface&$urlsid]
+                                    h3 [url "$dev_descr(ADDRESS)" $env(SCRIPT_NAME)?cmd=config&device=$dev_descr(ADDRESS)&iface=$iface&$urlsid]
                                 }
                                 table_data {
-                                    h3 [url "Delete Device" $env(SCRIPT_NAME)?cmd=delete&device=$dev_descr(PARENT)&iface=$iface&$urlsid]
+                                    h3 "$dev_descr(TYPE)"
                                 }
                                 table_data {
-                                    h3 [url "Delete And Reset Device" $env(SCRIPT_NAME)?cmd=delete&device=$dev_descr(PARENT)&reset=1&iface=$iface&$urlsid]
+                                    h4 [url "Device: $dev_descr(PARENT)" $env(SCRIPT_NAME)?cmd=list_devices&expand=$dev_descr(PARENT)&$urlsid]
                                 }
                             }
                         }
@@ -303,17 +303,55 @@ proc cmd_list_devices {} {
                             puts ""
                             table_row { 
                                 table_data colspan=2 {
-                                    h3 [url "$dev_descr(TYPE) ($dev_descr(ADDRESS))" $env(SCRIPT_NAME)?cmd=list_devices&expand=$dev_descr(ADDRESS)&$urlsid]
+                                    h3 [url "$dev_descr(ADDRESS)" $env(SCRIPT_NAME)?cmd=list_devices&expand=$dev_descr(ADDRESS)&$urlsid]
                                 }
                                 table_data {
-                                    h3 [url "Delete" $env(SCRIPT_NAME)?cmd=delete&device=$dev_descr(ADDRESS)&iface=$iface&$urlsid]
+                                    h3 "$dev_descr(TYPE)"
                                 }
                                 table_data {
-                                    h3 [url "Delete And Reset" $env(SCRIPT_NAME)?cmd=delete&device=$dev_descr(ADDRESS)&reset=1&iface=$iface&$urlsid]
+                                    h5 "|"
                                 }
                                 table_data {
-                                    if { [info exist dev_descr(AVAILABLE_FIRMWARE)] } {
-                                        h3 [url "Firmware Update ($dev_descr(FIRMWARE) to $dev_descr(AVAILABLE_FIRMWARE))" $env(SCRIPT_NAME)?cmd=firmware_update&device=$dev_descr(ADDRESS)&iface=$iface&$urlsid]
+                                    h5 [url "Delete" $env(SCRIPT_NAME)?cmd=delete&device=$dev_descr(ADDRESS)&iface=$iface&$urlsid]
+                                }
+                                table_data {
+                                    h5 "|"
+                                }
+                                table_data {
+                                    h5 [url "Delete+Reset" $env(SCRIPT_NAME)?cmd=delete&device=$dev_descr(ADDRESS)&reset=1&iface=$iface&$urlsid]
+                                }
+                                table_data {
+                                    h5 "|"
+                                }
+                                table_data {
+                                    h5 [url "Delete+Force" $env(SCRIPT_NAME)?cmd=delete&device=$dev_descr(ADDRESS)&force=1&iface=$iface&$urlsid]
+                                }
+                                table_data {
+                                    h5 "|"
+                                }
+                                table_data {
+                                    h5 [url "Delete+Defer" $env(SCRIPT_NAME)?cmd=delete&device=$dev_descr(ADDRESS)&defer=1&iface=$iface&$urlsid]
+                                }
+                                table_data {
+                                    h5 "|"
+                                }
+                                table_data {
+                                    h5 [url "Delete+Reset+Defer" $env(SCRIPT_NAME)?cmd=delete&device=$dev_descr(ADDRESS)&reset=1&defer=1&iface=$iface&$urlsid]
+                                }
+                                table_data {
+                                    h5 "|"
+                                }
+                                table_data {
+                                    h5 [url "Delete+Reset+Force" $env(SCRIPT_NAME)?cmd=delete&device=$dev_descr(ADDRESS)&reset=1&force=1&iface=$iface&$urlsid]
+                                }
+                                table_data {
+                                    h5 "|"
+                                }
+                                table_data {
+                                    if { [info exist dev_descr(AVAILABLE_FIRMWARE)] &&
+                                         $dev_descr(AVAILABLE_FIRMWARE) != "0.0.0" &&
+                                         $dev_descr(AVAILABLE_FIRMWARE) != $dev_descr(FIRMWARE) } {
+                                        h5 [url "FW-Upd ($dev_descr(FIRMWARE) to $dev_descr(AVAILABLE_FIRMWARE))" $env(SCRIPT_NAME)?cmd=firmware_update&device=$dev_descr(ADDRESS)&iface=$iface&$urlsid]
                                     }
                                 }
                             }
@@ -322,7 +360,10 @@ proc cmd_list_devices {} {
                             table_row { 
                                 table_data width=10 { }
                                 table_data {
-                                    h3 [url "$dev_descr(TYPE) ($dev_descr(ADDRESS))" $env(SCRIPT_NAME)?cmd=config&device=$dev_descr(ADDRESS)&iface=$iface&$urlsid]
+                                    h3 [url "$dev_descr(ADDRESS)" $env(SCRIPT_NAME)?cmd=config&device=$dev_descr(ADDRESS)&iface=$iface&$urlsid]
+                                }
+                                table_data {
+                                    h4 "$dev_descr(TYPE)"
                                 }
                                 table_data colspan=3 { }
                             }
@@ -386,7 +427,7 @@ proc cmd_show_rssi {} {
                           catch { set name $devnames($dev) }
                           if { [string first $dev $name] < 0 } { append name "<br>$dev" }
                           table_row {
-                              table_data rowspan=2 {align="left"} {valign="middle"} {
+                              table_data rowspan=2 {text-align="left"} {vertical-align="middle"} {
                                   h3 $name
                               }
                               array_clear peer_map
@@ -395,7 +436,7 @@ proc cmd_show_rssi {} {
                                   set name ""
                                   catch { set name $devnames($peer) }
                                   if { [string first $peer $name] < 0 } { append name "<br>$peer" }
-                                  table_data {colspan=2} {align="center"} {valign="middle"} {bgcolor="#A0A0A0"} {
+                                  table_data {colspan=2} {text-align="center"} {vertical-align="middle"} {bgcolor="#A0A0A0"} {
                                       puts $name
                                   }
                               }
@@ -1066,8 +1107,16 @@ proc cmd_delete {} {
     global url iface env urlsid
     import device
     set reset 0
+    set force 0
+    set defer 0
     catch { import reset }
-    xmlrpc $url deleteDevice [list string $device] [list boolean $reset]
+    catch { import force }
+    catch { import defer }
+    set option 0
+    if { $reset == 1 } { set option [expr {$option + 1}] }
+    if { $force == 1 } { set option [expr {$option + 2}] }
+    if { $defer == 1 } { set option [expr {$option + 4}] }
+    xmlrpc $url deleteDevice [list string $device] [list int $option]
     redirect $env(SCRIPT_NAME)?cmd=list_devices&iface=$iface&$urlsid
 }
 

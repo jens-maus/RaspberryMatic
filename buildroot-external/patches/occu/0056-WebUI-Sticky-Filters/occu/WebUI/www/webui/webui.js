@@ -26345,6 +26345,9 @@ iseMessageBox.prototype =
   },  
   ShowPopup: function() {
     this.show();
+    setTimeout(function() {
+      eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+    }, 100);
   },
   
   restorePrevious: function() {
@@ -30634,8 +30637,8 @@ iseFilter.prototype = {
 
     var self = this;
     function fltrHandler() {
-      self.restoreFilters();
       eQ3.HomeMatic.Event.unsubscribe('ContentLoaded', fltrHandler);
+      self.restoreFilters();
     }
     eQ3.HomeMatic.Event.subscribe('ContentLoaded', fltrHandler);
   },
@@ -41544,6 +41547,9 @@ cpMessageBox.prototype =
   
   ShowPopup: function() {
     this.show();
+    setTimeout(function() {
+      eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+    }, 100);
   }
 };
 
@@ -41671,6 +41677,9 @@ cpMessageBox2.prototype =
   ShowPopup: function()
   {
     this.show();
+    setTimeout(function() {
+      eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
+    }, 100);
   }
 };
 /**

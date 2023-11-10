@@ -32,13 +32,20 @@ identify_host() {
   HWMODEL="n/a"
   if [[ -f /proc/device-tree/model ]]; then
     HWMODEL=$(cat /proc/device-tree/model)
+  elif [[ -f /sys/devices/virtual/dmi/id/board_vendor ]]; then
+    VENDOR=$(cat /sys/devices/virtual/dmi/id/board_vendor)
+    NAME=""
+    if [[ -f /sys/devices/virtual/dmi/id/board_name ]]; then
+      NAME=$(cat /sys/devices/virtual/dmi/id/board_name)
+    fi
+    HWMODEL="${VENDOR} ${NAME}"
   elif [[ -f /sys/devices/virtual/dmi/id/sys_vendor ]]; then
     VENDOR=$(cat /sys/devices/virtual/dmi/id/sys_vendor)
-    PNAME=""
+    NAME=""
     if [[ -f /sys/devices/virtual/dmi/id/product_name ]]; then
-      PNAME=$(cat /sys/devices/virtual/dmi/id/product_name)
+      NAME=$(cat /sys/devices/virtual/dmi/id/product_name)
     fi
-    HWMODEL="${VENDOR} ${PNAME}"
+    HWMODEL="${VENDOR} ${NAME}"
   else
     MODEL=$(grep ^Model /proc/cpuinfo | cut -d" " -f2-)
     if [[ "${MODEL}" != "" ]]; then

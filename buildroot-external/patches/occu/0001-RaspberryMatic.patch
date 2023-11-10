@@ -307,7 +307,7 @@
 +    }
 +  }
 +
-+  execCmd CPUMODEL {exec lscpu | grep "Model name:" | cut -d: -f2 | xargs echo -n}
++  execCmd CPUMODEL {exec lscpu | grep -m1 "Model name:" | cut -d: -f2 | xargs echo -n}
 +  execCmd NUMCPU {exec nproc}
 +  execCmd LOADAVG {exec awk {{ printf $1 " " $2 " " $3 }} /proc/loadavg}
 +  execCmd MEM {exec free -h | grep Mem: | awk {{ print $2 }}}

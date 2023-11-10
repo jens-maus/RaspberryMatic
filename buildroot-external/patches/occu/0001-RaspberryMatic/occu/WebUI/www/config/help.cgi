@@ -77,13 +77,20 @@ proc action_put_page {} {
   set HWMODEL "n/a"
   if {[file exist /proc/device-tree/model]} {
     execCmd HWMODEL {exec cat /proc/device-tree/model}
+  } elseif {[file exist /sys/devices/virtual/dmi/id/board_vendor]} {
+    execCmd VENDOR {exec cat /sys/devices/virtual/dmi/id/board_vendor}
+    set NAME ""
+    if {[file exist /sys/devices/virtual/dmi/id/board_name]} {
+      execCmd NAME {exec cat /sys/devices/virtual/dmi/id/board_name}
+    }
+    set HWMODEL "$VENDOR $NAME"
   } elseif {[file exist /sys/devices/virtual/dmi/id/sys_vendor]} {
     execCmd VENDOR {exec cat /sys/devices/virtual/dmi/id/sys_vendor}
-    set PNAME ""
+    set NAME ""
     if {[file exist /sys/devices/virtual/dmi/id/product_name]} {
-      execCmd PNAME {exec cat /sys/devices/virtual/dmi/id/product_name}
+      execCmd NAME {exec cat /sys/devices/virtual/dmi/id/product_name}
     }
-    set HWMODEL "$VENDOR $PNAME"
+    set HWMODEL "$VENDOR $NAME"
   } else {
     execCmd MODEL {exec grep ^Model /proc/cpuinfo | cut -d: -f2 | xargs}
     if {$MODEL != ""} {

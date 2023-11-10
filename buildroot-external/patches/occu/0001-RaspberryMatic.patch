@@ -221,7 +221,7 @@
  # set HOMEMATIC_URL "http://www.homematic.com"
  set HOMEMATIC_URL "http://www.eq-3.de"
  set HOMEMATIC_IP_URL "https://www.homematic-ip.com"
-@@ -19,13 +19,134 @@
+@@ -19,13 +19,141 @@
  set LANGUAGE "de"
  set CUR_YEAR [clock format [clock seconds] -format %Y]
  
@@ -265,7 +265,7 @@
 +
 +  # get all variables from /VERSION into ver array
 +  loadVarsFromShellFile /VERSION ver
-+
+ 
 +  # get all variables from /etc/config/netconfig into net array
 +  loadVarsFromShellFile /etc/config/netconfig net
 +
@@ -286,20 +286,27 @@
 +  set HWMODEL "n/a"
 +  if {[file exist /proc/device-tree/model]} {
 +    execCmd HWMODEL {exec cat /proc/device-tree/model}
++  } elseif {[file exist /sys/devices/virtual/dmi/id/board_vendor]} {
++    execCmd VENDOR {exec cat /sys/devices/virtual/dmi/id/board_vendor}
++    set NAME ""
++    if {[file exist /sys/devices/virtual/dmi/id/board_name]} {
++      execCmd NAME {exec cat /sys/devices/virtual/dmi/id/board_name}
++    }
++    set HWMODEL "$VENDOR $NAME"
 +  } elseif {[file exist /sys/devices/virtual/dmi/id/sys_vendor]} {
 +    execCmd VENDOR {exec cat /sys/devices/virtual/dmi/id/sys_vendor}
-+    set PNAME ""
++    set NAME ""
 +    if {[file exist /sys/devices/virtual/dmi/id/product_name]} {
-+      execCmd PNAME {exec cat /sys/devices/virtual/dmi/id/product_name}
++      execCmd NAME {exec cat /sys/devices/virtual/dmi/id/product_name}
 +    }
-+    set HWMODEL "$VENDOR $PNAME"
++    set HWMODEL "$VENDOR $NAME"
 +  } else {
 +    execCmd MODEL {exec grep ^Model /proc/cpuinfo | cut -d: -f2 | xargs}
 +    if {$MODEL != ""} {
 +      set HWMODEL $MODEL
 +    }
 +  }
- 
++
 +  execCmd CPUMODEL {exec lscpu | grep "Model name:" | cut -d: -f2 | xargs echo -n}
 +  execCmd NUMCPU {exec nproc}
 +  execCmd LOADAVG {exec awk {{ printf $1 " " $2 " " $3 }} /proc/loadavg}
@@ -359,7 +366,7 @@
  
    set sid ""
    catch {import sid}
-@@ -43,47 +164,84 @@
+@@ -43,47 +171,84 @@
        </script>
      }
    }
@@ -477,7 +484,7 @@
  
    puts "</table>"
  
-@@ -124,7 +282,7 @@
+@@ -124,7 +289,7 @@
      puts "\}"
  
      puts "loadExtHelp = function()\{"

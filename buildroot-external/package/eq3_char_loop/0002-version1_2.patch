@@ -112,4 +112,4 @@ Signed-off-by: Jens Maus <mail@jens-maus.de>
  MODULE_DESCRIPTION("eQ-3 IPC loopback char driver");
  MODULE_LICENSE("GPL");
 -
-+MODULE_VERSION("1.1");
++MODULE_VERSION("1.2");

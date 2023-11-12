@@ -94,21 +94,31 @@
         };
     };
 
+    // fragement to make sure that stdout-path under chosen
+    // is empty so that the above uart0 fragement does not
+    // interfere with u-boot.
+    fragment@4 {
+        target = <&chosen>;
+        __overlay__ {
+            stdout-path = "";
+        };
+    };
+
     // we have to disable uart2,uart3,i2s on the Tinkerboard or
     // otherwise the gpio-leds cannot use the pins for the RPI-RF-MOD
-    fragment@4 {
+    fragment@5 {
         target = <&uart2>;
         __overlay__ {
           status = "disabled";
         };
     };
-    fragment@5 {
+    fragment@6 {
         target = <&uart3>;
         __overlay__ {
           status = "disabled";
         };
     };
-    fragment@6 {
+    fragment@7 {
         target = <&i2s>;
         __overlay__ {
           status = "disabled";

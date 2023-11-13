@@ -108,9 +108,9 @@ function updateJSON() {
 cp -a "${RPI_IMAGER_PATH}" "${TEMP_DIR}/rpi-imager.json"
 
 # update rpi-imager.json
-updateJSON 0 rpi4 "${RPI4_MF}" "RPi4, RPi400"
-updateJSON 1 rpi3 "${RPI3_MF}" "RPi3, RPiZero2, ELV-Charly, CCU3"
-updateJSON 2 rpi2 "${RPI2_MF}" "RPi2"
-updateJSON 3 rpi0 "${RPI0_MF}" "RPiZero, RPi1"
+updateJSON 0 rpi4 "${RPI4_MF}" "Pi 4, Pi 400"
+updateJSON 1 rpi3 "${RPI3_MF}" "Pi 3, Pi Zero 2, ELV-Charly, CCU3"
+updateJSON 2 rpi2 "${RPI2_MF}" "Pi 2"
+updateJSON 3 rpi0 "${RPI0_MF}" "Pi Zero, Pi 1"
 
 cp -a "${TEMP_DIR}/rpi-imager.json" "${RPI_IMAGER_PATH}"

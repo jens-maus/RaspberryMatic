@@ -1,7 +1,7 @@
 {
   "os_list": [
     {
-      "name": "RaspberryMatic 3.73.6.20231113-a68abc (RPi4, RPi400)",
+      "name": "RaspberryMatic 3.73.6.20231113-a68abc (Pi 4, Pi 400)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
       "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.73.6.20231113-a68abc-rpi4.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.png",
@@ -16,7 +16,7 @@
       ]
     },
     {
-      "name": "RaspberryMatic 3.73.6.20231113-a68abc (RPi3, RPiZero2, ELV-Charly, CCU3)",
+      "name": "RaspberryMatic 3.73.6.20231113-a68abc (Pi 3, Pi Zero 2, ELV-Charly, CCU3)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
       "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.73.6.20231113-a68abc-rpi3.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.png",
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "name": "RaspberryMatic 3.73.6.20231113-a68abc (RPi2)",
+      "name": "RaspberryMatic 3.73.6.20231113-a68abc (Pi 2)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
       "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.73.6.20231113-a68abc-rpi2.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.png",
@@ -46,7 +46,7 @@
       ]
     },
     {
-      "name": "RaspberryMatic 3.73.6.20231113-a68abc (RPiZero, RPi1)",
+      "name": "RaspberryMatic 3.73.6.20231113-a68abc (Pi Zero, Pi 1)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
       "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/snapshots/RaspberryMatic-3.73.6.20231113-a68abc-rpi0.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.png",

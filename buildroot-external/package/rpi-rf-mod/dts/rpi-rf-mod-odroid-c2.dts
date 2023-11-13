@@ -43,20 +43,10 @@
         };
     };
 
-    // fragement to make sure that stdout-path under chosen
-    // is empty so that the above uart0 fragement does not
-    // interfere with u-boot.
-    fragment@2 {
-        target = <&chosen>;
-        __overlay__ {
-            stdout-path = "";
-        };
-    };
-
     // modify /aliases path to make i2c0=i2c_B and i2c1=i2c_A
     // as well as using the rtc of the RPI-RF-MOD as the primary
     // (rtc0) one
-    fragment@3 {
+    fragment@2 {
         target-path = "/aliases";
         __overlay__ {
             i2c0 = "/soc/bus@c1100000/i2c@87c0";           // @i2c_B

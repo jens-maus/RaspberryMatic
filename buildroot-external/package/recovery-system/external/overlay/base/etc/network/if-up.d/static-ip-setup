@@ -1,0 +1,42 @@
+#!/bin/sh
+# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
+
+# stop if /etc/config/netconfig does not exist
+if [[ ! -f /etc/config/netconfig ]]; then
+  exit 0
+fi
+
+# source in the user network config
+. /etc/config/netconfig
+
+# don't continue if non-static network config
+if [[ "${MODE}" == "DHCP" ]]; then
+  exit 0
+fi
+
+# we exit if if-up.d is called for "lo"
+if [[ "${IFACE}" == "lo" ]]; then
+  exit 0
+fi
+
+# only continue if this network interface exists
+if [[ ! -L "/sys/class/net/${IFACE}" ]]; then
+  exit 0
+fi
+
+# depending on the interface we have to either setup
+# a ethernet interface or wifi
+case "${IFACE}" in
+  eth*)
+    # get current IP
+    CUR_IP=$(/sbin/ip -f inet addr show "${IFACE}" | sed -En -e 's/.*inet ([0-9.]+).*/\1/p')
+
+    # only continue if this IP is not already set
+    if [[ "${IP}" != "${CUR_IP}" ]]; then
+      /sbin/ip addr add "${IP}/${NETMASK}" dev "${IFACE}"
+      echo "adding static ip ${IP}/${NETMASK} to ${IFACE}"
+    fi
+  ;;
+esac
+
+exit 0

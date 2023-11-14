@@ -13,29 +13,24 @@
 # action    == one of sysinit, respawn, askfirst, wait, and once
 # process   == program to run
 
-# Startup the system
+# Init the system
 null::sysinit:/bin/mkdir -p /dev_host
 #Bug in Kubernetes -> sys is mounted RO even for privileged -> https://github.com/kubernetes/kubernetes/pull/96877
 null::sysinit:/bin/mount -o rw,remount /sys
-::sysinit:/bin/mount -a
-null::sysinit:/bin/mount -o ro,remount /
-null::sysinit:/bin/mkdir -p /var/run
-null::sysinit:/bin/mkdir -p /var/cache
-null::sysinit:/sbin/ldconfig -C /var/cache/ld.so.cache
-#null::sysinit:/bin/hostname -F /etc/hostname
-# now run any rc scripts
-::sysinit:/etc/init.d/rcS
+null::sysinit:/bin/mount -t tmpfs tmpfs /tmp
+
+# run any rc scripts (start) and move boot.log
+::sysinit:/etc/init.d/rcS 2>&1 | /usr/bin/tee -a /tmp/boot.log
+::sysinit:/bin/mv /tmp/boot.log /var/log/boot.log
+
 # run monit to monitor our important services
 null::respawn:/usr/bin/monit -Ic /etc/monitrc
-
-# put a login prompt on start console
-#Disabled because it fill the log messages and does not work with running container as daemon
-#You shoud use "docker exec -ti ccu sh" instead
-#::askfirst:/bin/login
 
 # Stuff to do for the 3-finger salute
 ::ctrlaltdel:/sbin/reboot
 
 # Stuff to do before rebooting
 null::shutdown:/usr/bin/monit unmonitor all
+
+# run any rc scripts (stop)
 ::shutdown:/etc/init.d/rcK

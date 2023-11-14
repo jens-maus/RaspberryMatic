@@ -1,13 +1,30 @@
 --- occu/WebUI/www/rega/esp/programs.fn.orig
 +++ occu/WebUI/www/rega/esp/programs.fn
-@@ -73,6 +73,7 @@
+@@ -72,8 +72,9 @@
+ 
                    if( !bSysVarGeneric )
                    {
-                     !sRet = sRet#" bei";
 +                    if (oSC.NegateCondition()) { sRet = sRet#" ${ruleConditionLblNot} ";}
-                     sRet = sRet#" ${ruleConditionLblWhen}";
+                     !sRet = sRet#" bei";
+-                    !sRet = sRet#" ${ruleConditionLblWhen}";
++                    sRet = sRet#" ${ruleConditionLblWhen}";
                    }
  
+                   !SPHM-934
+@@ -83,11 +84,11 @@
+                     {
+                       if( iRV1 == 0 )
+                       {
+-                        sRet = sRet#', ${ruleConditionLblWhen} '#oLV.ValueName0()#', ';
++                        sRet = sRet#' '#oLV.ValueName0()#' ';
+                       }
+                       if( iRV1 == 1 )
+                       {
+-                        sRet = sRet#', ${ruleConditionLblWhen} '#oLV.ValueName1()#', ';
++                        sRet = sRet#' '#oLV.ValueName1()#' ';
+                       }
+                     }
+                   }
 --- occu/WebUI/www/rega/esp/sico.fn.orig
 +++ occu/WebUI/www/rega/esp/sico.fn
 @@ -13,6 +13,22 @@
@@ -75,21 +92,20 @@
          Write( '<select id="selectConditionWhen'#oSC.ID()#'" name="selectConditionWhen" onchange="SetLeftValue('#oSC.ID()#',this.value); setOptionWidthSelectConditionWhen();" class="SelectBox">' );
        }
  
-@@ -300,7 +309,16 @@
+@@ -300,9 +309,16 @@
        if( (!bOptionList) && (!bBinary) && (!bSpecial) && (!bSysVarString) )
        {
          !Write( ' <i>im Wertebereich</i> ' );
--        Write( ' <i>${ruleConditionLblWithinValueRange}</i> ' );
-+        
 +        if ( (!bSysVarGeneric) && (!bSysVarString) ) {
-+          Write( ' <i>${ruleConditionLblWithinValueRange}</i> ' );
+         if (iCT1 != 5) {
+           Write( ' <i>${ruleConditionLblWithinValueRange}</i> ' );
+         }
 +        } else {
 +          Write( ' <select id="selectConditionNot'#oSC.ID()#'" name="selectConditionNot" onchange="iseSingleCondition.SetNegateCondition('#oSC.ID()#',this.value);" class="SelectBox">' );
 +          Write( '<option value="false"'#sNotSelectedFalse#' >${ruleConditionLblWithinValueRange}</option>');
 +          Write( '<option value="true"'#sNotSelectedTrue#'>${ruleConditionLblNot} ${ruleConditionLblWithinValueRange}</option>' );
 +          Write( '</select> ');
 +        }
-+      
          string sCT = "";
          string sValueUnit = oLV.ValueUnit();
          if( sValueUnit == "100%" )

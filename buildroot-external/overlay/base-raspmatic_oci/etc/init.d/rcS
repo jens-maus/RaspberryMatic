@@ -4,6 +4,18 @@
 # Start all init scripts in /etc/init.d
 # executing them in numerical order.
 
+# make sure we have a secure umask
+umask 0002
+
+# mount all filesystems
+/bin/mount -a
+
+# create /var/run and /var/cache
+/bin/mkdir -p /var/run /var/cache
+
+# create ld.so.cache file
+/sbin/ldconfig -C /var/cache/ld.so.cache
+
 for i in /etc/init.d/S??* ;do
 
   # Ignore dangling symlinks (if any).
@@ -24,3 +36,7 @@ for i in /etc/init.d/S??* ;do
     ;;
   esac
 done
+
+[[ -r /VERSION ]] && . /VERSION
+
+echo "Finished Boot: ${VERSION} (${PRODUCT})"

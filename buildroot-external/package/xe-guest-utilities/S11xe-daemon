@@ -1,46 +1,47 @@
 #!/bin/sh
-# shellcheck shell=dash source=/dev/null
+# shellcheck shell=dash disable=SC3010,SC2169 source=/dev/null
 #
 # Starts xe-daemon
 #
 
-EXEC="/usr/sbin/xe-daemon"
+DAEMON="xe-daemon"
+EXEC="/usr/sbin/${DAEMON}"
 ARGS=""
-PID="/var/run/xe-daemon.pid"
+PIDFILE="/var/run/${DAEMON}.pid"
 
 # only continue if we are in a Xen-platform
 [[ -e /proc/xen ]] || exit 0
 
 case "$1" in
-  start)
-    printf "Starting xe-daemon: "
+	start)
+		printf "Starting xe-daemon: "
 
-    # mount xenfs
-    if [[ ! -e /proc/xen/xenbus ]]; then
-      mount -t xenfs none /proc/xen
-    fi
+		# mount xenfs
+		if [[ ! -e /proc/xen/xenbus ]]; then
+			mount -t xenfs none /proc/xen
+		fi
 
-    # run xe-linux-distribution to prepare OS info fo xe-daemon
-    /usr/sbin/xe-linux-distribution /var/cache/xe-linux-distribution
+		# run xe-linux-distribution to prepare OS info fo xe-daemon
+		/usr/sbin/xe-linux-distribution /var/cache/xe-linux-distribution
 
-    # shellcheck disable=SC2086
-    if ! start-stop-daemon -b -S -q -x $EXEC -- $ARGS -p "${PID}"; then
-      echo "FAILED"
-      exit 1
-    else
-      echo "OK"
-    fi
-  ;;
-  stop)
-    printf "Stopping xe-daemon: "
-    start-stop-daemon -K -q -p $PID
-    echo "OK"
-  ;;
-  restart|reload)
-    $0 stop
-    $0 start
-  ;;
-  *)
-    echo "Usage: $0 {start|stop|restart}"
-    exit 1
+		# shellcheck disable=SC2086
+		if ! start-stop-daemon -b -S -q -x $EXEC -- $ARGS -p "${PIDFILE}"; then
+			echo "FAILED"
+			exit 1
+		else
+			echo "OK"
+		fi
+	;;
+	stop)
+		printf "Stopping xe-daemon: "
+		start-stop-daemon -K -q -p ${PIDFILE}
+		echo "OK"
+	;;
+	restart|reload)
+		$0 stop
+		$0 start
+	;;
+	*)
+		echo "Usage: $0 {start|stop|restart}"
+		exit 1
 esac

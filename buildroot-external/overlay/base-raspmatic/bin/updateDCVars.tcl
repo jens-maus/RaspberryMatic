@@ -1,7 +1,7 @@
 #!/bin/tclsh
 #
-# DutyCycle Script v3.15
-# Copyright (c) 2018-2021 Andreas Buenting, Jens Maus
+# DutyCycle Script v3.19
+# Copyright (c) 2018-2023 Andreas Buenting, Jens Maus
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,8 @@
 # "Wired-Status" und den Zuständen "online/offline" angelegt.
 
 # if user doesn't want this script to be running
-if { [file exists /etc/config/NoUpdateDCVars] == 1} {
+if { [file exists /etc/config/NoUpdateDCVars] == 1 ||
+     [file exists /usr/local/HMLGW] == 1 } {
   exit 0
 }
 
@@ -228,7 +229,7 @@ if {$portFound == 0} {
       string dev;
       foreach(dev, devices.Get().EnumUsedIDs()) {
         object oDev = dom.GetObject(dev);
-        if(oDev.Label() == 'HmIP-HAP') {
+        if(oDev.Label().StartsWith('HmIP-HAP')) {
           string name = oDev.Name();
           string chn;
           foreach(chn, oDev.Channels()) {
@@ -263,7 +264,7 @@ if {$portFound == 0} {
               break;
             }
           }
-        } elseif((oDev.Label() == 'RPI-RF-MOD') || (oDev.Label() == 'HmIP-CCU3')) {
+        } elseif((oDev.Label() == 'RPI-RF-MOD') || (oDev.Label() == 'HmIP-CCU3') || (oDev.Label() == 'HmIP-RFUSB')) {
           string chn;
           foreach(chn, oDev.Channels()) {
             object oChn = dom.GetObject(chn);
@@ -308,6 +309,7 @@ if {$portFound == 0} {
           set sysVarName [setDutyCycleSV "" "DutyCycle CCU" $dutycycle ""]
           set gateway(TYPE) "CCU2"
           set gateway(CARRIER_SENSE) $ccuCarrierSense
+          set name "CCU"
 
           # overwrite the address with board_serial to match
           # serial number expectations in DC/CS alarms.
@@ -354,21 +356,21 @@ if {$portFound == 0} {
 
         set infoTxt "DutyCycle-$gateway(ADDRESS), NAME: '$name', TYPE: $gateway(TYPE), CONNECTED: $gateway(CONNECTED), DC: $dutycycle %, CS: $carriersense %"
         if {$gateway(CONNECTED) == 0} {
-          exec /bin/triggerAlarm.tcl "RF-Gateway $name ($gateway(ADDRESS)) not connected" "RF-Gateway-Alarm"
-          exec logger -t dutycycle -p error "$infoTxt"
+          exec /bin/triggerAlarm.tcl "RF-Gateway $name ($gateway(ADDRESS)) not connected" "WatchDog: connect-$name" true
+          exec logger -t watchdog -p error "$infoTxt"
         } elseif {$dutycycle >= 98} {
-          exec /bin/triggerAlarm.tcl "DutyCycle $dutycycle% ($gateway(ADDRESS))" "DutyCycle-Alarm"
-          exec logger -t dutycycle -p error "$infoTxt"
+          exec /bin/triggerAlarm.tcl "DutyCycle $dutycycle% ($gateway(ADDRESS))" "WatchDog: dutycycle-$name" true
+          exec logger -t watchdog -p error "$infoTxt"
         } elseif {$dutycycle >= 80} {
-          exec logger -t dutycycle -p warn "$infoTxt"
+          exec logger -t watchdog -p warn "$infoTxt"
         }
 
         # check carrier sense level
         if {$carriersense >= 98} {
-          exec /bin/triggerAlarm.tcl "CarrierSense $carriersense% ($gateway(ADDRESS))" "CarrierSense-Alarm"
-          exec logger -t carriersense -p error "$infoTxt"
+          exec /bin/triggerAlarm.tcl "CarrierSense $carriersense% ($gateway(ADDRESS))" "WatchDog: carriersense-$name" true
+          exec logger -t watchdog -p error "$infoTxt"
         } elseif {$carriersense >= 80} {
-          exec logger -t carriersense -p warn "$infoTxt"
+          exec logger -t watchdog -p warn "$infoTxt"
         }
 
         puts "$infoTxt"
@@ -439,14 +441,14 @@ if { [llength $gateways] > 0 } {
     array set gateway $_gateway
     set infoTxt "HmIPW-DRAP-Status: $gateway(CONNECTED) ($gateway(ADDRESS), IP: $gateway(IP))"
     if {$gateway(CONNECTED) == 0} {
-      exec /bin/triggerAlarm.tcl "HmIPW-DRAP ($gateway(ADDRESS), IP: $gateway(IP)) not connected" "HmIP-DRAP-Alarm"
-      exec logger -t dutycycle -p error "$infoTxt"
+      exec /bin/triggerAlarm.tcl "HmIPW-DRAP ($gateway(ADDRESS), IP: $gateway(IP)) not connected" "WatchDog: connect-$gateway(ADDRESS)" true
+      exec logger -t watchdog -p error "$infoTxt"
     } elseif {$gateway(OVERHEAT) == 1} {
-      exec /bin/triggerAlarm.tcl "HmIPW-DRAP ($gateway(ADDRESS), IP: $gateway(IP)) overheated" "HmIP-DRAP-Alarm"
-      exec logger -t dutycycle -p error "$infoTxt"
+      exec /bin/triggerAlarm.tcl "HmIPW-DRAP ($gateway(ADDRESS), IP: $gateway(IP)) overheated" "WatchDog: overheat-$gateway(ADDRESS)" true
+      exec logger -t watchdog -p error "$infoTxt"
     } elseif {$gateway(UNDERVOLTAGE) == 1} {
-      exec /bin/triggerAlarm.tcl "HmIPW-DRAP ($gateway(ADDRESS), IP: $gateway(IP)) undervoltaged" "HmIP-DRAP-Alarm"
-      exec logger -t dutycycle -p error "$infoTxt"
+      exec /bin/triggerAlarm.tcl "HmIPW-DRAP ($gateway(ADDRESS), IP: $gateway(IP)) undervoltaged" "WatchDog: voltage-$gateway(ADDRESS)" true
+      exec logger -t watchdog -p error "$infoTxt"
     }
 
     puts $infoTxt
@@ -507,8 +509,8 @@ if {[llength [cfg::sections]] > 1} {
 
   set infoTxt "Wired-LGW-Status: $connected"
   if {$connected == "false"} {
-    exec /bin/triggerAlarm.tcl "Wired-Gateway ($gateway(ADDRESS)) not connected" "Wired-Gateway-Alarm"
-    exec logger -t dutycycle -p error "$infoTxt"
+    exec /bin/triggerAlarm.tcl "Wired-Gateway ($gateway(ADDRESS)) not connected" "WatchDog: wired-connect" true
+    exec logger -t watchdog -p error "$infoTxt"
   }
   puts $infoTxt
 }

@@ -1,5 +1,5 @@
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function() {
   var mode = CodeMirror.getMode({indentUnit: 2}, "text/x-c");
@@ -162,4 +162,9 @@
          "[type StringBuffer];",
          "[type StringBuilder];",
          "[type Void];");
+
+  MTJAVA("indent",
+         "[keyword public] [keyword class] [def A] [keyword extends] [variable B]",
+         "{",
+         "  [variable c]()")
 })();

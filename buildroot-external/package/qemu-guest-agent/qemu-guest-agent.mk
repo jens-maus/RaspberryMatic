@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-QEMU_GUEST_AGENT_VERSION = 3.1.1.1
+QEMU_GUEST_AGENT_VERSION = 8.0.5
 QEMU_GUEST_AGENT_SOURCE = qemu-$(QEMU_GUEST_AGENT_VERSION).tar.xz
 QEMU_GUEST_AGENT_SITE = http://download.qemu.org
 QEMU_GUEST_AGENT_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
@@ -13,13 +13,13 @@ QEMU_GUEST_AGENT_LICENSE_FILES = COPYING COPYING.LIB
 #       the non-(L)GPL license texts are specified in the affected
 #       individual source files.
 
-#QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman
+QEMU_GUEST_AGENT_DEPENDENCIES = host-pkgconf libglib2 zlib
 
 # Need the LIBS variable because librt and libm are
 # not automatically pulled. :-(
 QEMU_GUEST_AGENT_LIBS = -lrt -lm
 
-#QEMU_OPTS =
+#QEMU_GUEST_AGENT_OPTS =
 
 QEMU_GUEST_AGENT_VARS = LIBTOOL=$(HOST_DIR)/bin/libtool
 
@@ -38,6 +38,8 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--localstatedir=/var \
 			--cross-prefix=$(TARGET_CROSS) \
 			--audio-drv-list= \
+			--meson=$(HOST_DIR)/bin/meson \
+			--ninja=$(HOST_DIR)/bin/ninja \
 			--disable-kvm \
 			--disable-linux-user \
 			--disable-linux-aio \
@@ -53,7 +55,6 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--disable-sdl \
 			--disable-system \
 			--disable-user \
-			--disable-guest-agent \
 			--disable-nettle \
 			--disable-gcrypt \
 			--disable-curses \
@@ -61,7 +62,6 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--disable-virtfs \
 			--disable-brlapi \
 			--disable-fdt \
-			--disable-bluez \
 			--disable-kvm \
 			--disable-rdma \
 			--disable-vde \
@@ -69,6 +69,7 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--disable-cap-ng \
 			--disable-attr \
 			--disable-vhost-net \
+			--disable-vhost-user \
 			--disable-spice \
 			--disable-rbd \
 			--disable-libiscsi \
@@ -84,10 +85,9 @@ define QEMU_GUEST_AGENT_CONFIGURE_CMDS
 			--disable-glusterfs \
 			--disable-tpm \
 			--disable-numa \
-			--disable-blobs \
 			--disable-capstone \
-			--disable-tools \
 			--disable-tcg-interpreter \
+			--enable-tools \
 			--enable-guest-agent
 endef
 
@@ -97,9 +97,14 @@ define QEMU_GUEST_AGENT_BUILD_CMDS
 endef
 
 define QEMU_GUEST_AGENT_INSTALL_TARGET_CMDS
-	cp -a $(QEMU_GUEST_AGENT_PKGDIR)/rootfs-overlay/* $(TARGET_DIR)/
-	unset TARGET_DIR; \
-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(QEMU_GUEST_AGENT_MAKE_ENV) DESTDIR=$(TARGET_DIR) install
+	$(INSTALL) -D -m 0755 $(@D)/build/qga/qemu-ga $(TARGET_DIR)/usr/bin/qemu-ga
+	$(INSTALL) -D -m 0755 $(@D)/scripts/qemu-guest-agent/fsfreeze-hook $(TARGET_DIR)/etc/qemu/fsfreeze-hook
+	$(INSTALL) -D -m 0755 $(QEMU_GUEST_AGENT_PKGDIR)/regahss-flush.sh $(TARGET_DIR)/etc/qemu/fsfreeze-hook.d/regahss-flush.sh
+endef
+
+define QEMU_GUEST_AGENT_INSTALL_INIT_SYSV
+	$(INSTALL) -D -m 0755 $(QEMU_GUEST_AGENT_PKGDIR)/S11qemu-guest-agent \
+		$(TARGET_DIR)/etc/init.d/S11qemu-guest-agent
 endef
 
 $(eval $(generic-package))

@@ -55,7 +55,7 @@
  }
 --- occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
 +++ occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
-@@ -435,7 +435,7 @@
+@@ -550,7 +550,7 @@
          # append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp[getUnit $param]&nbsp;[getMinMaxValueDescr $param]</td>"
  
          append html "<td>"
@@ -64,20 +64,20 @@
            append html "<input id='separate_CHANNEL_$chn\_$prn' name='$param' type='text' class='hidden'>"
          append html "</td>"
        append html "</tr>"
-@@ -2657,7 +2657,7 @@
+@@ -2971,7 +2971,7 @@
          append html "<td>\${stringTableCondThresholdLo}</td>"
          append html "<td>"
  
--          append html "<input id=\"thresLo_$chn\_$prn\" type=\"text\" size=\"5\" value=\"[expr $ps($param). / 100]\" onblur=\"ProofAndSetValue(this.id, this.id, 0, [getUserDefinedMaxValue $devType $param], 1); jQuery(this).next().val(this.value * 100)\"/>&nbsp;[getUserDefinedCondTXThresholdUnitMinMaxDescr $devType $param]"
+-          append html "<input id=\"thresLo_$chn\_$prn\" type=\"text\" size=\"5\" value=\"[expr $ps($param). / 100]\" onblur=\"ProofAndSetValue(this.id, this.id, '0.0', [getUserDefinedMaxValue $devType $param], 1); jQuery(this).next().val(this.value * 100)\"/>&nbsp;[getUserDefinedCondTXThresholdUnitMinMaxDescr $devType $param]"
 +          append html "<input id=\"thresLo_$chn\_$prn\" type=\"text\" size=\"5\" value=\"[format {%1.2f} [expr $ps($param). / 100]]\" onblur=\"ProofAndSetValue(this.id, this.id, '0.00', '[getUserDefinedMaxValue $devType $param]', 1); jQuery(this).next().val(this.value * 100)\"/>&nbsp;[getUserDefinedCondTXThresholdUnitMinMaxDescr $devType $param]"
            append html "[getTextField $param $ps($param) $chn $prn class=\"hidden\"]"
  
          append html "</td>"
-@@ -2671,7 +2671,7 @@
+@@ -2985,7 +2985,7 @@
          append html "<td>\${stringTableCondThresholdHi}</td>"
          append html "<td>"
  
--          append html "<input id=\"thresHi_$chn\_$prn\" type=\"text\" size=\"5\" value=\"[expr $ps($param). / 100]\" onblur=\"ProofAndSetValue(this.id, this.id, 0, [getUserDefinedMaxValue $devType $param], 1); jQuery(this).next().val(this.value * 100)\"/>&nbsp;[getUserDefinedCondTXThresholdUnitMinMaxDescr $devType $param]"
+-          append html "<input id=\"thresHi_$chn\_$prn\" type=\"text\" size=\"5\" value=\"[expr $ps($param). / 100]\" onblur=\"ProofAndSetValue(this.id, this.id, '0.0', [getUserDefinedMaxValue $devType $param], 1); jQuery(this).next().val(this.value * 100)\"/>&nbsp;[getUserDefinedCondTXThresholdUnitMinMaxDescr $devType $param]"
 +          append html "<input id=\"thresHi_$chn\_$prn\" type=\"text\" size=\"5\" value=\"[format {%1.2f} [expr $ps($param). / 100]]\" onblur=\"ProofAndSetValue(this.id, this.id, '0.00', '[getUserDefinedMaxValue $devType $param]', 1); jQuery(this).next().val(this.value * 100)\"/>&nbsp;[getUserDefinedCondTXThresholdUnitMinMaxDescr $devType $param]"
            append html "[getTextField $param $ps($param) $chn $prn class=\"hidden\"]"
  
@@ -151,17 +151,17 @@
    if {([string equal $extraparam "COND_TX_THRESHOLD_LO"] == 1) || ([string equal $extraparam "COND_TX_THRESHOLD_HI"] == 1)} {
      switch [string tolower $devType] {
          hmip-psm -
--        hmip-fsm16 {return 3680}
-+        hmip-fsm16 {return 3680.00}
+-        hmip-fsm16 {return "3680.0"}
++        hmip-fsm16 {return "3680.00"}
          hmip-bsm -
--        hmip-fsm  {return 1150}
--        hmip-usbsm  {return 60}
-+        hmip-fsm  {return 1150.00}
-+        hmip-usbsm  {return 60.00}
+-        hmip-fsm  {return "1150.0"}
+-        hmip-usbsm  {return "60.0"}
++        hmip-fsm  {return "1150.00"}
++        hmip-usbsm  {return "60.00"}
         default {return "<span class=\"attention\">max value not available</span>"}
      }
    }
-@@ -153,7 +163,7 @@
+@@ -163,7 +173,7 @@
        hmip-usbsm
         {
          if {$param == "TX_THRESHOLD_POWER"} {return "W (0.0 - [getUserDefinedMaxValue $devType $param])"}
@@ -170,7 +170,7 @@
        }
        default {return "<span class=\"attention\">missing description</span>"}
     }
-@@ -268,7 +278,7 @@
+@@ -298,7 +308,7 @@
    }
  
    set s "<input id=$elemIdTmp type=\"text\" size=\"5\" value=[format %.0f [expr $value * 100]] name=$param\_tmp onblur="
@@ -441,11 +441,11 @@
  
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
-@@ -1383,7 +1383,7 @@
+@@ -1395,7 +1395,7 @@
  
-           append s "<input type=\"hidden\" name=\"$param_id\"   value=\"$value_orig\" $id                 $access style=\"visibility:hidden;display:none;\" />"
+           append s "<input type=\"hidden\" name=\"$param_id\"   value=\"$value_orig\" $id $access style=\"visibility:hidden;display:none;\" />"
            append s "<input type=\"text\"   name=\"__$param_id\" value=\"$value\"       id=\"$input_idval\" $access $hidden"
--          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', parseFloat($min), parseFloat($max), parseFloat([expr 1 / $factor]));\" /></td>"
+-          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', [expr $min + 0.001], [expr $max + 0.001], parseFloat([expr 1 / $factor]));\" /></td>"
 +          append s "  onblur=\" ProofAndSetValue('$input_idval', '${idval}', '$min', '$max', parseFloat([expr 1 / $factor]));\" /></td>"
            append s "<td><div id=\"${input_idval}_unit\" $hidden>$unit ($min-$max)</div></td>"
        }
@@ -472,15 +472,14 @@
            append s1 "</td>"
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -39027,55 +39027,70 @@
-     if (tokens[1]) value += tokens[1];
+@@ -41690,54 +41690,70 @@
      srcElm.value = value;
    }
-+  
+ 
 +  var parsedValue;
 +  var parsedMin = parseFloat(min);
 +  var parsedMax = parseFloat(max);
- 
++
 +  var minSplit = min.toString().split(".");
 +  var maxSplit = max.toString().split(".");
 +  var digits = 0;
@@ -491,6 +490,7 @@
 +  if(maxSplit.length === 2) {
 +    digits = Math.max(digits, maxSplit[1].length);
 +  }
++
    // Check if float is allowed
    try {
      if (min.toString().indexOf(".") == -1 && max.toString().indexOf(".") == -1) {
@@ -499,8 +499,8 @@
 -      value = (roundValue05(parseInt(value)));
 +      value = Math.round(parseFloat(value));
      } else {
--      min = parseFloat(min).toFixed(1);
--      max = parseFloat(max).toFixed(1);
+-      min = parseFloat(min).toFixed(2);
+-      max = parseFloat(max).toFixed(2);
 -      value = parseFloat(value);
 -      srcElm.value = parseFloat(value);
 +      min = parseFloat(min).toFixed(digits);

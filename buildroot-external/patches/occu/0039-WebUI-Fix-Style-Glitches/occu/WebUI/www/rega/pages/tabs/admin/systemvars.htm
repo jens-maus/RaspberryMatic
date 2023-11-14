@@ -47,14 +47,14 @@
 <div id="svOffset" style="display:none"></div>
 <table id="sysVars" cellspacing="0" cellpadding="0" class="tTable filterTable" style="display:none">
 <colgroup>
-  <col width="9%" />
-  <col width="18%" />
-  <col width="9%" />
-  <col width="18%" />
-  <col width="9%" />
-  <col width="9%" />
-  <col width="18%" />
-  <col width="10%" />
+  <col />
+  <col />
+  <col />
+  <col />
+  <col />
+  <col />
+  <col style="width:200px;" />
+  <col style="width:100px;" />
 </colgroup>
 <tr>
   <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="name"){sCssName="SortSelected";} %>
@@ -138,15 +138,15 @@
     string sTrId = "sv"#sysvar;
     Write("<tr id='"#sTrId#"'>");
     object sv = dom.GetObject(sysvar);
-    Write("<td align='center' class='GrayBkg CLASS05206' >");
+    Write("<td style='text-align:center;' class='GrayBkg CLASS05206' >");
       Write(sv.Name());
     Write("</td>");
     
-    Write("<td align='center' class='GrayBkg CLASS05206' >");
+    Write("<td  style='text-align:center;' class='GrayBkg CLASS05206' >");
       Write(sv.DPInfo());
     Write("</td>");
     
-    Write("<td align='center' class='GrayBkg CLASS05206' >");
+    Write("<td  style='text-align:center;' class='GrayBkg CLASS05206' >");
       string s = "Unbekannt: " # sv.ValueSubType();
       if( sv.ValueSubType() == istPresent )
       {
@@ -307,9 +307,9 @@
   
   s += "<table cellspacing='8'>";
   s += "<tr>";
-    s += "<td align='center' valign='middle'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
-    s += "<td align='center' valign='middle'><div class='FooterButton CLASS05207' onclick='fltSYV.clearFilters();reloadPage();' >${footerBtnResetFilter}</div></td>";
-    s += "<td align='center' valign='middle'><div class='FooterButton' onclick='newSysVar()'>${footerBtnNew}</div></td>";
+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>${footerBtnPageBack}</div></td>";
+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS05207' onclick='fltSYV.clearFilters();reloadPage();' >${footerBtnResetFilter}</div></td>";
+    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='newSysVar()'>${footerBtnNew}</div></td>";
   s += "</tr>";
   s += "</table>";
 

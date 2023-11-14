@@ -5,7 +5,7 @@
 // Home-Assistent UI so that the Ingress-based HA UI is able to embed
 // the WebUI.
 //
-// Copyright (c) 2021 Jens Maus <mail@jens-maus.de>
+// Copyright (c) 2021-2023 Jens Maus <mail@jens-maus.de>
 //
 // Apache 2.0 License applies
 //
@@ -23,9 +23,10 @@ const apiProxy = createProxyMiddleware('/', {
   onProxyRes: responseInterceptor(async (responseBody, proxyRes, req, res) => {
     // modify Location: response header if present
     if(typeof(proxyRes.headers.location) !== 'undefined') {
-      var redirect = proxyRes.headers.location;
+      // replace any absolute http/https path with a relative one
+      var redirect = proxyRes.headers.location.replace(/(http|https):\/\/(.*?)\//, '/');
       redirect = req.headers['x-ingress-path'] + redirect;
-      res.append("location", redirect);
+      res.setHeader('location', redirect);
     }
 
     // modifying textual response bodies
@@ -40,13 +41,13 @@ const apiProxy = createProxyMiddleware('/', {
       var body;
 
       // if this a textual response body we make sure to prepend the ingress path
-      if(proxyRes.headers['content-type'].toLowerCase().includes('utf-8')) {
+      if(proxyRes.headers['content-type'].toLowerCase().includes('utf-8') || proxyRes.req.path.includes('/jpages/')) {
         body = responseBody.toString('utf8');
       } else {
         body = responseBody.toString('latin1');
       }
 
-      body = body.replace(/(?<=["'=\\u0027 \(\\])\/(api|webui|ise|pda|config|pages|jpages|esp|upnp|tools|addons)(\\?\/)(?!hassio_ingress)/g,
+      body = body.replace(/(?<=["'= \(\\]|\\u0027)\/(api|webui|ise|pda|config|pages|jpages|esp|upnp|tools|addons|tailscale)(\\?\/)(?!hassio_ingress)/g,
                           req.headers['x-ingress-path']+'/$1$2');
       body = body.replace(/(?<=["'])\/(index|login|logout)\.htm/g,
                           req.headers['x-ingress-path']+'/$1.htm');
@@ -56,7 +57,7 @@ const apiProxy = createProxyMiddleware('/', {
                           'window.location.href=\'' + req.headers['x-ingress-path'] + '/index.htm\'');
 
       // convert back to a Buffer in the right character encoding
-      if(typeof(req.headers['content-type']) === 'undefined') {
+      if(typeof(req.headers['content-type']) === 'undefined' && req.path.includes('/jpages/') === false) {
         return new Buffer.from(body, 'latin1');
       } else {
         return new Buffer.from(body, 'utf8');

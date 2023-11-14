@@ -124,9 +124,9 @@ diff -ruN u-boot-2021.04-rc4.orig/common/autoboot.c u-boot-2021.04-rc4/common/au
  
 +bool force_ums = false;
 +
- #ifdef CONFIG_AUTOBOOT_ENCRYPTION
- #define AUTOBOOT_STOP_STR_SHA256 CONFIG_AUTOBOOT_STOP_STR_SHA256
- #else
+ #if !defined(CONFIG_AUTOBOOT_STOP_STR_CRYPT)
+ #define CONFIG_AUTOBOOT_STOP_STR_CRYPT ""
+ #endif
 @@ -368,10 +370,25 @@
  	return s;
  }

@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Stop on error
+set -e
+
 # create VERSION file
 echo "VERSION=${PRODUCT_VERSION}" >"${TARGET_DIR}/VERSION"
 echo "PRODUCT=${PRODUCT}" >>"${TARGET_DIR}/VERSION"
@@ -11,8 +14,7 @@ echo "PLATFORM=oci" >>"${TARGET_DIR}/VERSION"
 # remove unnecessary stuff from TARGET_DIR
 rm -f "${TARGET_DIR}/etc/init.d/S01InitZRAMSwap"
 rm -f "${TARGET_DIR}/etc/init.d/S01USBGadgetMode"
-rm -f "${TARGET_DIR}/etc/init.d/S03InitURandom"
-rm -f "${TARGET_DIR}/etc/init.d/S21rngd"
+rm -f "${TARGET_DIR}/etc/init.d/S03seedrng"
 rm -f "${TARGET_DIR}/etc/init.d/S40bluetooth"
 #rm -f "${TARGET_DIR}/etc/init.d/S40network"
 rm -f "${TARGET_DIR}/etc/init.d/S46chrony"

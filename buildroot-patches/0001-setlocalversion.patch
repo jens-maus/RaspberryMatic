@@ -1,0 +1,11 @@
+--- buildroot/support/scripts/setlocalversion.orig
++++ buildroot/support/scripts/setlocalversion
+@@ -19,7 +19,7 @@
+ # Check for git and a git repo.
+ if head=`git rev-parse --verify --short HEAD 2>/dev/null`; then
+ 
+-	atag="`git describe 2>/dev/null`"
++	atag="`git describe --tags 2>/dev/null`"
+ 
+ 	# Show -g<commit> if we have no tag, or just the tag
+ 	# otherwise.

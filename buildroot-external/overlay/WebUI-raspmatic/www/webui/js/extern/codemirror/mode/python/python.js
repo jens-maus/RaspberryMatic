@@ -1,5 +1,5 @@
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: https://codemirror.net/LICENSE
+// Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
@@ -20,7 +20,7 @@
                         "def", "del", "elif", "else", "except", "finally",
                         "for", "from", "global", "if", "import",
                         "lambda", "pass", "raise", "return",
-                        "try", "while", "with", "yield", "in"];
+                        "try", "while", "with", "yield", "in", "False", "True"];
   var commonBuiltins = ["abs", "all", "any", "bin", "bool", "bytearray", "callable", "chr",
                         "classmethod", "compile", "complex", "delattr", "dict", "dir", "divmod",
                         "enumerate", "eval", "filter", "float", "format", "frozenset",
@@ -32,7 +32,7 @@
                         "sorted", "staticmethod", "str", "sum", "super", "tuple",
                         "type", "vars", "zip", "__import__", "NotImplemented",
                         "Ellipsis", "__debug__"];
-  CodeMirror.registerHelper("hintWords", "python", commonKeywords.concat(commonBuiltins));
+  CodeMirror.registerHelper("hintWords", "python", commonKeywords.concat(commonBuiltins).concat(["exec", "print"]));
 
   function top(state) {
     return state.scopes[state.scopes.length - 1];
@@ -60,15 +60,15 @@
     if (py3) {
       // since http://legacy.python.org/dev/peps/pep-0465/ @ is also an operator
       var identifiers = parserConf.identifiers|| /^[_A-Za-z\u00A1-\uFFFF][_A-Za-z0-9\u00A1-\uFFFF]*/;
-      myKeywords = myKeywords.concat(["nonlocal", "False", "True", "None", "async", "await"]);
+      myKeywords = myKeywords.concat(["nonlocal", "None", "aiter", "anext", "async", "await", "breakpoint", "match", "case"]);
       myBuiltins = myBuiltins.concat(["ascii", "bytes", "exec", "print"]);
-      var stringPrefixes = new RegExp("^(([rbuf]|(br)|(fr))?('{3}|\"{3}|['\"]))", "i");
+      var stringPrefixes = new RegExp("^(([rbuf]|(br)|(rb)|(fr)|(rf))?('{3}|\"{3}|['\"]))", "i");
     } else {
       var identifiers = parserConf.identifiers|| /^[_A-Za-z][_A-Za-z0-9]*/;
       myKeywords = myKeywords.concat(["exec", "print"]);
       myBuiltins = myBuiltins.concat(["apply", "basestring", "buffer", "cmp", "coerce", "execfile",
                                       "file", "intern", "long", "raw_input", "reduce", "reload",
-                                      "unichr", "unicode", "xrange", "False", "True", "None"]);
+                                      "unichr", "unicode", "xrange", "None"]);
       var stringPrefixes = new RegExp("^(([rubf]|(ur)|(br))?('{3}|\"{3}|['\"]))", "i");
     }
     var keywords = wordRegexp(myKeywords);
@@ -282,7 +282,7 @@
     }
 
     function pushBracketScope(stream, state, type) {
-      var align = stream.match(/^([\s\[\{\(]|#.*)*$/, false) ? null : stream.column() + 1
+      var align = stream.match(/^[\s\[\{\(]*(?:#|$)/, false) ? null : stream.column() + 1
       state.scopes.push({offset: state.indent + hangingIndent,
                          type: type,
                          align: align})
@@ -298,7 +298,10 @@
     }
 
     function tokenLexer(stream, state) {
-      if (stream.sol()) state.beginningOfLine = true;
+      if (stream.sol()) {
+        state.beginningOfLine = true;
+        state.dedent = false;
+      }
 
       var style = state.tokenize(stream, state);
       var current = stream.current();
@@ -315,10 +318,10 @@
 
       // Handle scope changes.
       if (current == "pass" || current == "return")
-        state.dedent += 1;
+        state.dedent = true;
 
       if (current == "lambda") state.lambda = true;
-      if (current == ":" && !state.lambda && top(state).type == "py")
+      if (current == ":" && !state.lambda && top(state).type == "py" && stream.match(/^\s*(?:#|$)/, false))
         pushPyScope(state);
 
       if (current.length == 1 && !/string|comment/.test(style)) {
@@ -332,10 +335,8 @@
           else return ERRORCLASS;
         }
       }
-      if (state.dedent > 0 && stream.eol() && top(state).type == "py") {
-        if (state.scopes.length > 1) state.scopes.pop();
-        state.dedent -= 1;
-      }
+      if (state.dedent && stream.eol() && top(state).type == "py" && state.scopes.length > 1)
+        state.scopes.pop();
 
       return style;
     }
@@ -370,14 +371,16 @@
         if (state.tokenize != tokenBase)
           return state.tokenize.isString ? CodeMirror.Pass : 0;
 
-        var scope = top(state), closing = scope.type == textAfter.charAt(0)
+        var scope = top(state)
+        var closing = scope.type == textAfter.charAt(0) ||
+            scope.type == "py" && !state.dedent && /^(else:|elif |except |finally:)/.test(textAfter)
         if (scope.align != null)
           return scope.align - (closing ? 1 : 0)
         else
           return scope.offset - (closing ? hangingIndent : 0)
       },
 
-      electricInput: /^\s*[\}\]\)]$/,
+      electricInput: /^\s*([\}\]\)]|else:|elif |except |finally:)$/,
       closeBrackets: {triples: "'\""},
       lineComment: "#",
       fold: "indent"

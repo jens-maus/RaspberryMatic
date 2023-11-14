@@ -140,7 +140,7 @@ echo "done.<br/>"
 echo -ne "[9/11] Creating userfs filesystem... "
 
 # recreate userfs on target device
-if ! mkfs.ext4 -q -F -L userfs "${TARGET_USERFS}" >/dev/null 2>&1; then
+if ! mkfs.ext4 -q -F -L userfs -I 256 -E lazy_itable_init=0,lazy_journal_init=0 "${TARGET_USERFS}" >/dev/null 2>&1; then
   echo "ERROR: mkfs.ext4 (userfs) failed<br/>"
   exit 1
 fi

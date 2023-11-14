@@ -13223,23 +13223,22 @@ DeviceConfigDialog = Singleton.create({
   },
   
   renameChannels: function() {
-    if (confirm("Alle Kanäle umbenennen?")) {	 
-        var renameOwnChannelNames = $(this.RENAME_OWN_ID).checked;	
-		
-	    this.device.channels.each(function(channel) {
-	      var chNumber = channel.address.split(':')[1];
-		  var origChName = this.device.name+":"+chNumber;
-		  
-		  //Channel bereits umbenannt und Option "eigene Namen umbenennen" wurde deaktiviert
-		  if (channel.name !== origChName && renameOwnChannelNames === false) return true;
-			  
-          var chName = $(this.NAME_ID).value+ $(this.SEPARATOR_ID).value + chNumber;
-	      homematic("Channel.setName", {id: channel.id, name: chName});
-	      channel.setName(chName);
-	    }, this);
-	    DeviceListPage.updateView(true);
-	    DeviceList.reload(this);
-    }		
+    if (confirm("Alle Kanäle umbenennen?")) {
+      var renameOwnChannelNames = $(this.RENAME_OWN_ID).checked;
+
+      this.device.channels.each(function(channel) {
+        var chNumber = channel.address.split(':')[1];
+        var origChName = this.device.name+":"+chNumber;
+
+        // Channel bereits umbenannt und Option "eigene Namen umbenennen" wurde deaktiviert
+        if (channel.name !== origChName && renameOwnChannelNames === false) return true;
+
+        var chName = $(this.NAME_ID).value+ $(this.SEPARATOR_ID).value + chNumber;
+        homematic("Channel.setName", {id: channel.id, name: chName});
+        channel.setName(chName);
+      }, this);
+      this.ok();
+    }
   },
   
   /**

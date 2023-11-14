@@ -1,14 +1,14 @@
 --- occu/WebUI/www/webui/style.css.orig
 +++ occu/WebUI/www/webui/style.css
-@@ -156,6 +156,8 @@
- {
-     background-color: $_(contentBackground);
+@@ -163,6 +163,8 @@
      overflow: auto;
+     display: flex;
+     align-items: flex-start;
 +    /* Prevent chrome from outlining this by focus */
 +    outline: none;
  }
  
- /* Kopfzeile */
+ #prgcontent
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -6867,6 +6867,7 @@
@@ -19,10 +19,10 @@
        Element.setStyle(content, {cursor: "wait"});
        layer0.appendChild(content);
  
-@@ -7116,6 +7117,11 @@
-     this.currentPageOptions  = options;
+@@ -7117,6 +7118,11 @@
      
      this.currentPage.enter(options);
+     window.name = 'ccu-main-window';
 +    window.setTimeout(() => {
 +      if(jQuery(':focus').length === 0) {
 +        jQuery('#content')[0].focus();

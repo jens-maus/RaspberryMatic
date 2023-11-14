@@ -22,7 +22,7 @@ test -x /usr/sbin/snmptrapd || exit 0
 # Defaults
 export MIBDIRS=/usr/share/snmp/mibs
 SNMPDRUN=yes
-SNMPDOPTS='-Lsd -Lf /dev/null -c /etc/snmp/snmpd-global.conf -I -smux,mteTrigger,mteTriggerConf -p /var/run/snmpd.pid'
+SNMPDOPTS='-Lsd -Lf /dev/null -c /etc/snmp/snmpd-global.conf -I -smux,mteTrigger,mteTriggerConf -u snmp -g snmp -p /var/run/snmpd.pid'
 TRAPDRUN=no
 TRAPDOPTS='-Lsd -c /etc/snmp/snmptrapd-global.conf -p /var/run/snmptrapd.pid'
 

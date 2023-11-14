@@ -409,6 +409,7 @@ jQuery.extend(true,langJSON, {
     "dialogChannelOverView" : "Channel overview",
     "dialogCreateNewSysVar" : "Create new system variable",
     "dialogEditSysVar" : "Edit system variable",
+    "dialogEditSysVarValue" : "Change system variable value",
     "dialogCreateScript" : "Create script",
     "dialogEditScript" : "Edit script",
     "dialogEnterValue" : "Enter value",

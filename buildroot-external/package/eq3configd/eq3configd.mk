@@ -5,11 +5,16 @@
 ################################################################################
 
 EQ3CONFIGD_VERSION = 1.0.0
-EQ3CONFIGD_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/eq3configd
-EQ3CONFIGD_SITE_METHOD = local
+EQ3CONFIGD_SOURCE =
+EQ3CONFIGD_LICENSE = Apache-2.0
 
-define EQ3CONFIGD_INSTALL_TARGET_CMDS
-	cp -a $(@D)/rootfs-overlay/* $(TARGET_DIR)/
+define EQ3CONFIGD_INSTALL_INIT_SYSV
+	$(INSTALL) -D -m 0755 $(EQ3CONFIGD_PKGDIR)/S50eq3configd \
+		$(TARGET_DIR)/etc/init.d/S50eq3configd
+endef
+
+define EQ3CONFIGD_USERS
+	eq3cfg -1 eq3cfg -1 * - - - eq3configd user
 endef
 
 $(eval $(generic-package))

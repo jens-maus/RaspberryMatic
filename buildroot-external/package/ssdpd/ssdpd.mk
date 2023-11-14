@@ -5,11 +5,16 @@
 ################################################################################
 
 SSDPD_VERSION = 1.0.0
-SSDPD_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/ssdpd
-SSDPD_SITE_METHOD = local
+SSDPD_SOURCE =
+SSDPD_LICENSE = Apache-2.0
 
-define SSDPD_INSTALL_TARGET_CMDS
-	cp -a $(@D)/rootfs-overlay/* $(TARGET_DIR)/
+define SSDPD_INSTALL_INIT_SYSV
+	$(INSTALL) -D -m 0755 $(SSDPD_PKGDIR)/S50ssdpd \
+		$(TARGET_DIR)/etc/init.d/S50ssdpd
+endef
+
+define SSDPD_USERS
+	ssdp -1 ssdp -1 * - - - ssdpd user
 endef
 
 $(eval $(generic-package))

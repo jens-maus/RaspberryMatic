@@ -1,0 +1,42 @@
+#!/bin/sh
+# shellcheck shell=dash disable=SC2169,SC2034 source=/dev/null
+#
+# startup script to run update-ca-certificates to
+# setup /etc/ssl/certs
+#
+
+start() {
+  echo -n "Setup ca-certificates: "
+
+  # make sure /var/etc/ssl/certs exists
+  mkdir -p /var/etc/ssl/certs
+
+  # run update-ca-certificates with default setup
+  if /usr/sbin/update-ca-certificates --default >/dev/null 2>/dev/null; then
+    echo "OK"
+  else
+    echo "ERROR"
+    exit 2
+  fi
+}
+
+restart() {
+  start
+}
+
+case "$1" in
+  start)
+    start
+  ;;
+  stop)
+    # nothing
+  ;;
+  restart|reload)
+    restart
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit $?

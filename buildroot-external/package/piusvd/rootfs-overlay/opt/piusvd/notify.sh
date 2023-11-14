@@ -27,6 +27,6 @@ if [[ -n "${STATUS_CHANGE}" ]]; then
   esac
 
   if [[ -n "${MESSAGE}" ]]; then
-    /bin/triggerAlarm.tcl "${MESSAGE}" "PiUSV-Alarm"
+    /bin/triggerAlarm.tcl "${MESSAGE}" "WatchDog: piusv-alarm" true
   fi
 fi

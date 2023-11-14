@@ -21,12 +21,12 @@
     }
   </style>
 <div id=nav>
-  <a href="https://codemirror.net"><h1>CodeMirror</h1><img id=logo src="../../doc/logo.png" alt=""></a>
+  <a href="https://codemirror.net/5"><h1>CodeMirror</h1><img id=logo src="../../doc/logo.png" alt=""></a>
 
   <ul>
     <li><a href="../../index.html">Home</a>
     <li><a href="../../doc/manual.html">Manual</a>
-    <li><a href="https://github.com/codemirror/codemirror">Code</a>
+    <li><a href="https://github.com/codemirror/codemirror5">Code</a>
   </ul>
   <ul>
     <li><a href="../index.html">Language modes</a>
@@ -62,7 +62,7 @@ server {
   location / {
     index index.html index.php;     ## Allow a static html file to be shown first
     try_files $uri $uri/ @handler;  ## If missing pass the URI to Magento's front handler
-    expires 30d;                    ## Assume all files are cachable
+    expires 30d;                    ## Assume all files are cacheable
   }
 
   ## These locations would be hidden by .htaccess normally
@@ -128,7 +128,7 @@ server {
   location / {
     index index.html index.php; ## Allow a static html file to be shown first
     try_files $uri $uri/ @handler; ## If missing pass the URI to Magento's front handler
-    expires 30d; ## Assume all files are cachable
+    expires 30d; ## Assume all files are cacheable
   }
 
   ## These locations would be hidden by .htaccess normally

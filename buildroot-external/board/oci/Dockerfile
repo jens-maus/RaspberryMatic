@@ -22,5 +22,4 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=120s --retries=3 \
   CMD /bin/sh -c 'if [[ ! -S /var/run/monit.sock ]] || [[ $(/usr/bin/monit report initialising) != 0 ]]; then exit 2; fi; if [[ $(/usr/bin/monit report down) != 0 ]] && [[ ! -e /usr/local/HMLGW ]]; then exit 1; else exit 0; fi'
 
 CMD ["/sbin/init"]
-VOLUME /usr/local
 EXPOSE 80 22 161 443 1900 1901 1902 5987 1999 2000 2001 2010 8088 8181 9099 9292 9293 10000 41999 42000 42001 42010 43438 43439 48181 48899 49292 49880

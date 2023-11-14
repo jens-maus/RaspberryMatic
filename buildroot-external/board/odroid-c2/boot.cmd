@@ -5,7 +5,7 @@ setenv loglevel "0"
 setenv bootfs 1
 setenv rootfs 2
 setenv userfs 3
-#setenv gpio_button "23" # pin 32 (GPIOH_7)
+#setenv gpio_button "23" # pin 32 (GPIOY_13)
 setenv gpio_button "disabled"
 setenv kernel_img "Image"
 setenv recoveryfs_initrd "recoveryfs-initrd"
@@ -60,7 +60,7 @@ if test "${overlay_error}" = "true"; then
 fi
 
 # set bootargs
-setenv bootargs "console=${console} kgdboc=${console} scandelay=5 root=${rootfs_str} ro rootfstype=ext4 elevator=deadline fsck.repair=yes init_on_alloc=1 init_on_free=1 slab_nomerge iomem=relaxed pti=on lapic rootwait rootdelay=5 consoleblank=120 quiet loglevel=${loglevel} net.ifnames=0 usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
+setenv bootargs "console=${console} root=${rootfs_str} ro rootfstype=ext4 fsck.repair=yes init_on_alloc=1 init_on_free=1 slab_nomerge iomem=relaxed rootwait rootdelay=5 consoleblank=120 quiet loglevel=${loglevel} net.ifnames=0 usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
 
 # load kernel
 load ${devtype} ${devnum}:${kernelfs} ${kernel_addr_r} ${kernel_img}

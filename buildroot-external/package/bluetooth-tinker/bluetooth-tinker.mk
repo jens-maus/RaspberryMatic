@@ -5,11 +5,11 @@
 ################################################################################
 
 BLUETOOTH_TINKER_VERSION = 1.0.0
-BLUETOOTH_TINKER_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/bluetooth-tinker
-BLUETOOTH_TINKER_SITE_METHOD = local
+BLUETOOTH_TINKER_SOURCE =
+BLUETOOTH_TINKER_LICENSE = Apache-2.0
 
 define BLUETOOTH_TINKER_INSTALL_TARGET_CMDS
-	cp -a $(@D)/rootfs-overlay/* $(TARGET_DIR)/
+	cp -a $(BLUETOOTH_TINKER_PKGDIR)/rootfs-overlay/* $(TARGET_DIR)/
 endef
 
 $(eval $(generic-package))

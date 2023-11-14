@@ -3,11 +3,11 @@
 <title>RaspberryMatic Installation</title>
 </head>
 <body>
-<p>Sie sind dabei auf Ihrem CCU System eine Drittanbieterfirmware names
+<p>Sie sind dabei auf Ihrem CCU System eine Drittanbieterfirmware namens
 <a href=https://raspberrymatic.de/>RaspberryMatic</a> zu installieren.
 Vom Funktionsumfang entspricht diese Firmware dem Stand der entsprechenden
-CCU Firmware der Firma eQ-3 mit gleicher Versionnummer, bringt jedoch
-gewisse Funktionserweiterungen mit sich die in der Herstellerfirmware
+CCU Firmware der Firma eQ-3 mit gleicher Versionsnummer, bringt jedoch
+gewisse Funktionserweiterungen mit sich, die in der Herstellerfirmware
 nicht enthalten sind.</p>
 <p>Bitte beachten Sie, das Sie jederzeit durch erneutes Installieren
 der originalen Herstellerfirmware Ihr CCU System auf den entsprechenden

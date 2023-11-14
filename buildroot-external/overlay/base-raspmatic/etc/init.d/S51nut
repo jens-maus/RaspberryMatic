@@ -34,12 +34,15 @@ case $1 in
     echo -n "Starting NUT services: "
 
     # make sure some necessary state dirs exist
+    # and that permissions are right
     mkdir -p /var/state/ups
-    chown root:nobody /var/state/ups
-    chmod 770 /var/state/ups
+    chown nut:nut /var/state/ups
+    chmod 0770 /var/state/ups
     mkdir -p /var/run/upsd
-    chown root:nobody /var/run/upsd
-    chmod 770 /var/run/upsd
+    chown nut:nut /var/run/upsd
+    chmod 0770 /var/run/upsd
+    chown nut:nut /etc/config/nut/upsd.users 2>/dev/null
+    chmod 0600 /etc/config/nut/upsd.users 2>/dev/null
 
     # start the server (upsdrvctl/upsd)
     case "${MODE}" in
@@ -95,7 +98,7 @@ case $1 in
   ;;
 
   status)
-    echo "nut" "$DESC" && exit 0 || exit $?
+    echo "nut" "$DESC" && exit 0 || exit 1
   ;;
 
   poweroff)

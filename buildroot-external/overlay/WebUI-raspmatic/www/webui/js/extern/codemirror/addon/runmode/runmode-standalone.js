@@ -251,11 +251,12 @@
 
   CodeMirror.registerHelper = CodeMirror.registerGlobalHelper = Math.min;
   CodeMirror.splitLines = function(string) { return string.split(/\r?\n|\r/) };
+  CodeMirror.countColumn = countColumn;
 
   CodeMirror.defaults = { indentUnit: 2 };
 
   // CodeMirror, copyright (c) by Marijn Haverbeke and others
-  // Distributed under an MIT license: https://codemirror.net/LICENSE
+  // Distributed under an MIT license: https://codemirror.net/5/LICENSE
 
   (function(mod) {
     if (typeof exports == "object" && typeof module == "object") // CommonJS
@@ -275,7 +276,7 @@
       var ie = /MSIE \d/.test(navigator.userAgent);
       var ie_lt9 = ie && (document.documentMode == null || document.documentMode < 9);
       var node = callback, col = 0;
-      node.innerHTML = "";
+      node.textContent = "";
       callback = function(text, style) {
         if (text == "\n") {
           // Emitting LF or CRLF on IE8 or earlier results in an incorrect display.
@@ -322,7 +323,7 @@
       if (!stream.string && mode.blankLine) { mode.blankLine(state); }
       while (!stream.eol()) {
         var style = mode.token(stream, state);
-        callback(stream.current(), style, i, stream.start, state);
+        callback(stream.current(), style, i, stream.start, state, mode);
         stream.start = stream.pos;
       }
     }

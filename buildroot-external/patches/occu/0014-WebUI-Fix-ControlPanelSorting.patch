@@ -17,21 +17,14 @@
    }
  
    puts {
-@@ -203,19 +206,20 @@
+@@ -203,13 +206,13 @@
        </div>
      </td>
    }
 +  incr i
  
-   if { [getProduct] >= 3} {
-     puts "<td><div class=\"cpButton\">"
-     puts "<div class=\"StdTableBtn CLASS21701\" onclick=\"showAccessPoint();\">\${btnAccessPoints}</div>"
-     puts "<div class=\"StdTableBtnHelp\"><img id=\"showAccessPointCPHelp\" src=\"/ise/img/help.png\"></div>"
-+    incr i
-   }
- 
  set COL_COUNT 4
--set i 3
+-set i 2
  
  if { "[read_var /etc/config/tweaks CP_DEVCONFIG]" != "" } {
    puts "<td><div class=\"cpButton\">"

@@ -1,5 +1,8 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010,SC3028 source=/dev/null
+
+# make sure we have a secure umask
+umask 0002
 
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
@@ -9,17 +12,13 @@
 
 # signal that we are about to setup the network
 # connection using a slow blinking blue LED
-if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
-   [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
+if [[ -e /sys/class/leds/rpi_rf_mod:green/trigger ]]; then
   echo none >/sys/class/leds/rpi_rf_mod:green/trigger
   echo none >/sys/class/leds/rpi_rf_mod:red/trigger
   echo timer >/sys/class/leds/rpi_rf_mod:blue/trigger
   echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_on
   echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_off
 fi
-
-# performance tuning to reduce TCP performance spikes
-/sbin/sysctl -w net.ipv4.tcp_timestamps=0 >/dev/null 2>&1 || true
 
 # we exit if if-up.d is called for "lo"
 if [[ "${IFACE}" == "lo" ]]; then
@@ -132,8 +131,8 @@ case "${IFACE}" in
 esac
 
 # cleanup first
-RESOLV_CONF=/var/etc/resolv.conf
-rm -f "${RESOLV_CONF}"
+RESOLV_CONF=/tmp/resolv.conf.tmp
+rm -f ${RESOLV_CONF}
 mkdir -p /var/status
 rm -f /var/status/hasLink
 rm -f /var/status/hasIP
@@ -180,7 +179,7 @@ case "${MODE}" in
   DHCP)
     echo -n "dhcp, "
 
-    /sbin/udhcpc -b -t 100 -T 3 -S -x "hostname:${HOSTNAME}" -i "${IFACE}" -F "${HOSTNAME}" -V eQ3-CCU3 -s /bin/dhcp.script -p "/var/run/udhcpc_${IFACE}.pid" 2>/dev/null >/dev/null
+    /sbin/udhcpc -b -t 20 -T 3 -S -x "hostname:${HOSTNAME}" -i "${IFACE}" -F "${HOSTNAME}" -V eQ3-CCU3 -s /bin/dhcp.script -p "/var/run/udhcpc_${IFACE}.pid" 2>/dev/null >/dev/null
     if [[ ! -f "/var/run/udhcpc_${IFACE}.pid" ]]; then
       killall -q checkDHCP
       /bin/checkDHCP "${IFACE}" &
@@ -198,13 +197,18 @@ case "${MODE}" in
     /sbin/ip route del default 2>/dev/null
     /sbin/ip route add default via "${GATEWAY}"
 
+    # take care of resolv.conf
     if [[ -n "${NAMESERVER1}" ]]; then
-      echo nameserver "${NAMESERVER1}" >>${RESOLV_CONF}
+      echo "nameserver ${NAMESERVER1}" >>${RESOLV_CONF}
     fi
 
     if [[ -n "${NAMESERVER2}" ]]; then
-      echo nameserver "${NAMESERVER2}" >>${RESOLV_CONF}
+      echo "nameserver ${NAMESERVER2}" >>${RESOLV_CONF}
     fi
+
+    # use /sbin/resolvconf to propagate DNS info to libc
+    /sbin/resolvconf -a "${IFACE}" < ${RESOLV_CONF}
+    rm -f ${RESOLV_CONF}
 
     # update CURRENT_XYZ in /etc/config/netconfig
 

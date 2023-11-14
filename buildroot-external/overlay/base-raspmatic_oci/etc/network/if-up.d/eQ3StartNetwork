@@ -1,6 +1,9 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC2169 source=/dev/null
 
+# make sure we have a secure umask
+umask 0002
+
 # source all data from /var/hm_mode
 [[ -r /var/hm_mode ]] && . /var/hm_mode
 
@@ -9,17 +12,13 @@
 
 # signal that we are about to setup the network
 # connection using a slow blinking blue LED
-if [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]] ||
-   [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]]; then
+if [[ -e /sys/class/leds/rpi_rf_mod:green/trigger ]]; then
   echo none >/sys/class/leds/rpi_rf_mod:green/trigger
   echo none >/sys/class/leds/rpi_rf_mod:red/trigger
   echo timer >/sys/class/leds/rpi_rf_mod:blue/trigger
   echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_on
   echo 499 >/sys/class/leds/rpi_rf_mod:blue/delay_off
 fi
-
-# performance tuning to reduce TCP performance spikes
-/sbin/sysctl -w net.ipv4.tcp_timestamps=0 >/dev/null 2>&1 || true
 
 # we exit if if-up.d is called for "lo"
 if [[ "${IFACE}" == "lo" ]]; then

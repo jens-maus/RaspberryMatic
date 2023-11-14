@@ -41,16 +41,18 @@ start() {
 
     # call rc.local
     if [[ -x /usr/local/etc/rc.local ]]; then
-      /usr/local/etc/rc.local
+      echo -n "rc.local, "
+      /usr/bin/timeout 120 /usr/local/etc/rc.local
     fi
 
     echo "OK"
   else
-    rm -f /etc/config/safemode
-
     echo "skipping (safemode)"
   fi
 
+  # cleanup stale /usr/local/etc/monit*.cfg symlinks or monit will
+  # report an error later on (thus, workaround broken monit config cleanups)
+  find /usr/local/etc/monit*.cfg -type l ! -exec test -e {} \; -exec rm -f {} \; 2>/dev/null
 }
 
 restart() {
@@ -82,4 +84,4 @@ case "$1" in
     exit 1
 esac
 
-exit $?
+exit 0

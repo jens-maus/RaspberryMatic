@@ -1,10 +1,11 @@
 #!/bin/tclsh
 #
 # Simple tclsh script for triggering an alarm message with DPInfo
-# <msg> to alarm variable <var> with eventually creating it.
+# <msg> to alarm variable <var> with optionally creating it as an
+# <internal> variable.
 #
-# triggerAlarm.ctl v2.2
-# Copyright (c) 2017-2021 Jens Maus <mail@jens-maus.de>
+# triggerAlarm.ctl v2.4
+# Copyright (c) 2017-2023 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,8 +20,17 @@
 # limitations under the License.
 #
 # Usage:
-# triggerAlarm.tcl <msg> <var>
+# triggerAlarm.tcl <msg> <var> <internal>
 #
+# <msg> = alarm message / description
+# <var> = variable name (optional)
+# <int> = set variable as internal variable (true/false, optional)
+#
+
+# this tool only makes sense in normal mode
+if { [file exists /usr/local/HMLGW] == 1 } {
+  exit 0
+}
 
 load tclrpc.so
 load tclrega.so
@@ -32,6 +42,7 @@ if { $argc < 1 } {
 
 set msg [lindex $argv 0]
 set var [lindex $argv 1]
+set int [lindex $argv 2]
 
 # if no additional variable name was given
 # we search for a SV with name "Alarmzone 1" or
@@ -58,7 +69,7 @@ if { $var == "" } {
   set script "
     object alObj = null;
     string sSysVarId;
-    foreach(sSysVarId, dom.GetObject(ID_SYSTEM_VARIABLES).EnumUsedIDs()) {
+    foreach(sSysVarId, dom.GetObject(ID_SYSTEM_VARIABLES).EnumIDs()) {
       object oSysVar = dom.GetObject(sSysVarId);
       if(oSysVar.Name() == \"$var\") {
         alObj=oSysVar;
@@ -66,6 +77,13 @@ if { $var == "" } {
       }
     }
   "
+}
+
+# if user set a third argument to set the variable as
+# an internal one read this info
+set internal "false"
+if { $int != "" } {
+  set internal $int
 }
 
 # get selected systemLanguage from /etc/config/systemLanguage
@@ -112,6 +130,7 @@ append script "
       alObj.AlType(atSystem);
       alObj.AlArm(true);
       alObj.AlSetBinaryCondition();
+      alObj.Internal($internal);
       alObj.State(false);
       dom.GetObject(ID_SYSTEM_VARIABLES).Add(alObj.ID());
       dom.RTUpdate(1);

@@ -134,13 +134,13 @@ proc action_install_go {} {
       put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContentNoReboot}" {"\${btnOk}" "window.location.href='/';"}
     } elseif { $result == 10 } {
       put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContent}" {"\${btnNewLogin}" "window.location.href='/';"}
-      exec /sbin/reboot
+      exec /sbin/reboot -d 2 2>/dev/null >/dev/null &
     } else {
       put_message "Error ($result)" "\${dialogSettingsExtraSoftwareHintPerformInstallationFailure}"
     }
   } else {
     put_message "\${dialogSettingsExtraSoftwareHintPerformInstallationTitle}" "\${dialogSettingsExtraSoftwareHintPerformInstallationContent}" {"\${btnNewLogin}" "window.location.href='/';"}
-    exec /sbin/reboot
+    exec /sbin/reboot -d 2 2>/dev/null >/dev/null &
   }
 
   puts ""

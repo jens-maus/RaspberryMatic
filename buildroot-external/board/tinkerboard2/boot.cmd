@@ -7,7 +7,7 @@ setenv bootfs 1
 setenv rootfs 2
 setenv userfs 3
 setenv gpio_button "H23" # matches GPIO239
-setenv kernel_img "zImage"
+setenv kernel_img "Image"
 setenv recoveryfs_initrd "recoveryfs-initrd"
 setenv overlays ""
 setenv usbstoragequirks "0x2537:0x1066:u,0x2537:0x1068:u"
@@ -21,7 +21,7 @@ if test -e ${devtype} ${devnum}:${bootfs} bootEnv.txt; then
 fi
 
 # test if the gpio button is 0 (pressed) or if .recoveryMode exists in userfs
-# or if zImage doesn't exist in the root partition
+# or if Image doesn't exist in the root partition
 gpio input ${gpio_button}
 if test $? -eq 0 -o -e ${devtype} ${devnum}:${userfs} /.recoveryMode -o ! -e ${devtype} ${devnum}:${rootfs} ${kernel_img}; then
   echo "==== STARTING RECOVERY SYSTEM ===="
@@ -29,7 +29,7 @@ if test $? -eq 0 -o -e ${devtype} ${devnum}:${userfs} /.recoveryMode -o ! -e ${d
   load ${devtype} ${devnum}:${bootfs} ${ramdisk_addr_r} ${recoveryfs_initrd}
   setenv rootfs_str "/dev/ram0"
   setenv initrd_addr_r ${ramdisk_addr_r}
-  setenv kernel_img "recoveryfs-zImage"
+  setenv kernel_img "recoveryfs-Image"
   setenv kernelfs ${bootfs}
 else
   echo "==== NORMAL BOOT ===="

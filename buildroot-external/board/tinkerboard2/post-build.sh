@@ -4,7 +4,7 @@
 set -e
 
 # copy the kernel image to rootfs
-cp -a "${BINARIES_DIR}/zImage" "${TARGET_DIR}/"
+cp -a "${BINARIES_DIR}/Image" "${TARGET_DIR}/"
 
 # create VERSION file
 echo "VERSION=${PRODUCT_VERSION}" >"${TARGET_DIR}/VERSION"

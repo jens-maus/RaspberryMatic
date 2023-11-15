@@ -5,24 +5,10 @@ Subject: [PATCH] Patching something
 
 Signed-off-by: tonymac32 <tonymckahan@gmail.com>
 ---
- arch/arm64/boot/dts/rockchip/Makefile         |   1 +
  .../boot/dts/rockchip/rk3399-tinker-2.dts     | 613 ++++++++++++++++++
- 3 files changed, 687 insertions(+)
+ 1 files changed, 613 insertions(+)
  create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-tinker-2.dts
 
-diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-index 3fb6d6e9f..3863109a5 100644
---- a/arch/arm64/boot/dts/rockchip/Makefile
-+++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -56,6 +56,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64-v2.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rockpro64.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-sapphire-excavator.dtb
-+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-tinker-2.dtb
- dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399pro-rock-pi-n10.dtb
- 
- subdir-y       := $(dts-dirs) overlay
- 
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-tinker-2.dts b/arch/arm64/boot/dts/rockchip/rk3399-tinker-2.dts
 new file mode 100644
 index 000000000..dc337bee0
@@ -42,7 +28,7 @@ index 000000000..dc337bee0
 +#include "rk3399-op1-opp.dtsi"
 +
 +/ {
-+	model = "Asus Tinker Board 2";
++	model = "Asus Tinker Board 2/2S";
 +	compatible = "rockchip,rk3399-evb", "rockchip,rk3399";
 +
 +	chosen {
@@ -354,7 +340,7 @@ index 000000000..dc337bee0
 +			vccio_sd: LDO_REG4 {
 +				regulator-name = "vccio_sd";
 +				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3000000>;
++				regulator-max-microvolt = <3300000>;
 +				regulator-always-on;
 +				regulator-boot-on;
 +				regulator-state-mem {
@@ -429,7 +415,7 @@ index 000000000..dc337bee0
 +		};
 +	};
 +
-+	vdd_cpu_b: vdd_cpu_b {
++	vdd_cpu_b: vdd_cpu_b@60 {
 +		compatible = "fcs,fan53200";
 +		reg = <0x60>;
 +		vin-supply = <&vcc5v0_sys>;
@@ -525,7 +511,7 @@ index 000000000..dc337bee0
 +		
 +	};
 +	
-+	vdd_gpu: vdd_gpu {
++	vdd_gpu: vdd_gpu@60 {
 +		compatible = "fcs,fan53200";
 +		reg = <0x60>;
 +		vin-supply = <&vcc5v0_sys>;
@@ -585,7 +571,7 @@ index 000000000..dc337bee0
 +
 +&pwm2 {
 +	status = "okay";
-+	pinctrl-names = "active";
++	pinctrl-names = "default";
 +	pinctrl-0 = <&pwm2_pin_pull_down>;
 +};
 +
@@ -599,9 +585,9 @@ index 000000000..dc337bee0
 +
 +&sdhci {
 +	bus-width = <8>;
-+	mmc-hs400-1_8v;
++	mmc-hs200-1_8v;
 +	supports-emmc;
-+	mmc-hs400-enhanced-strobe;
++	//mmc-hs400-enhanced-strobe;
 +	non-removable;
 +	keep-power-in-suspend;
 +	status = "okay";

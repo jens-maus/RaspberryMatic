@@ -41,11 +41,7 @@ else
 fi
 
 # Load device tree
-if test "$devnum" = "0"; then
-  setenv fdtfile "rk3288-tinker-s.dtb"
-else
-  setenv fdtfile "rk3288-tinker.dtb"
-fi
+setenv fdtfile "rk3399-tinker-2.dtb"
 
 echo "Loading standard device tree ${fdtfile}"
 load ${devtype} ${devnum}:${bootfs} ${fdt_addr_r} ${fdtfile}

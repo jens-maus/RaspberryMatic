@@ -18,9 +18,9 @@ index 653923896..3f7a52d7f 100644
 --- a/drivers/mtd/spi-nor/Makefile
 +++ b/drivers/mtd/spi-nor/Makefile
 @@ -17,6 +17,7 @@ spi-nor-objs			+= sst.o
- spi-nor-objs			+= winbond.o
  spi-nor-objs			+= xilinx.o
  spi-nor-objs			+= xmc.o
+ spi-nor-$(CONFIG_DEBUG_FS)	+= debugfs.o
 +spi-nor-objs			+= xtx.o
  obj-$(CONFIG_MTD_SPI_NOR)	+= spi-nor.o
  
@@ -67,8 +67,8 @@ index 000000000000..05f2d69401b2
 +
 +static const struct flash_info xtx_parts[] = {
 + /* XTX (Shenzhen Xin Tian Xia Tech) */
-+ { "xt25f32b", INFO(0x0b4016, 0, 64 * 1024, 64, SECT_4K) },
-+ { "xt25f128b", INFO(0x0b4018, 0, 64 * 1024, 256, SECT_4K) },
++ { "xt25f32b", INFO(0x0b4016, 0, 64 * 1024, 64) },
++ { "xt25f128b", INFO(0x0b4018, 0, 64 * 1024, 256) },
 +};
 +
 +const struct spi_nor_manufacturer spi_nor_xtx = {

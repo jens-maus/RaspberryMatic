@@ -10,7 +10,7 @@ MULTILIB32_SOURCE =
 define MULTILIB32_BUILD_CMDS
 	mkdir -p $(@D)/output
 	$(MAKE) O=$(@D)/output -C $(TOPDIR) HOSTCXX="$(HOSTCXX_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" BR2_EXTERNAL=$(MULTILIB32_PKGDIR)external alldefconfig
-	(cd $(@D)/output && $(TOPDIR)/support/kconfig/merge_config.sh $(MULTILIB32_PKGDIR)external/Buildroot.config $(MULTILIB32_PKGDIR)external/configs/$(BR2_PACKAGE_MULTILIB32_CONFIG_FRAGMENT_FILE))
+	(cd $(@D)/output && HOSTCXX="$(HOSTCXX_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" BR2_EXTERNAL=$(MULTILIB32_PKGDIR)external $(TOPDIR)/support/kconfig/merge_config.sh $(MULTILIB32_PKGDIR)external/Buildroot.config $(MULTILIB32_PKGDIR)external/configs/$(BR2_PACKAGE_MULTILIB32_CONFIG_FRAGMENT_FILE))
 	$(MAKE) O=$(@D)/output -C $(TOPDIR) HOSTCXX="$(HOSTCXX_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" BR2_EXTERNAL=$(MULTILIB32_PKGDIR)external
 endef
 

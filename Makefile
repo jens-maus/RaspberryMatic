@@ -42,7 +42,7 @@ $(BR2_DL_DIR):
 build-$(PRODUCT)/.config: | build-$(PRODUCT)
 	@echo "[config $@]"
 	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) alldefconfig
-	cd $(shell pwd)/build-$(PRODUCT) && ../buildroot-$(BUILDROOT_VERSION)/support/kconfig/merge_config.sh ../$(BUILDROOT_EXTERNAL)/Buildroot.config ../$(BUILDROOT_EXTERNAL)/configs/$(PRODUCT).config
+	cd $(shell pwd)/build-$(PRODUCT) && BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) ../buildroot-$(BUILDROOT_VERSION)/support/kconfig/merge_config.sh ../$(BUILDROOT_EXTERNAL)/Buildroot.config ../$(BUILDROOT_EXTERNAL)/configs/$(PRODUCT).config
 
 build-all: $(PRODUCTS)
 $(PRODUCTS): %:

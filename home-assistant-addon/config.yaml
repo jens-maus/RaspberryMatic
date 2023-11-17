@@ -41,7 +41,6 @@ ports:
   2001/tcp: null
   2000/tcp: null
   2010/tcp: null
-  2110/tcp: null
   9292/tcp: null
   1999/tcp: null
   8181/tcp: null
@@ -75,6 +74,7 @@ ports:
   2122/tcp: null
   1883/tcp: null
   8883/tcp: null
+  2110/tcp: null
 ports_description:
   22/tcp: SSH access (Extern)
   80/tcp: CCU WebUI HTTP (Extern)
@@ -82,7 +82,6 @@ ports_description:
   2001/tcp: HomeMatic-RF XMLRPC (Extern)
   2000/tcp: HomeMatic-Wired XMLRPC (Extern)
   2010/tcp: homematicIP-RF+Wired XMLRPC (Extern)
-  2110/tcp: CL ExecEngine
   9292/tcp: HomeMatic+homematicIP VirtualDevices XMLRPC (Extern)
   1999/tcp: ReGaHss XMLRPC (Extern)
   8181/tcp: ReGaHss HTTP scripting (Extern)
@@ -116,6 +115,7 @@ ports_description:
   2122/tcp: CCU-Jack HTTPS (Extern)
   1883/tcp: CCU-Jack MQTT (Extern)
   8883/tcp: CCU-Jack MQTT-Secure (Extern)
+  2110/tcp: homeputer CL Exec-Engine (Extern)
 environment:
   HM_RUNNING_IN_HA: "1"
   HM_HAPROXY_SRC: 172.30.32.2/32

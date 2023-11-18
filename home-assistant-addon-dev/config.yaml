@@ -1,6 +1,6 @@
 ---
 name: RaspberryMatic CCU (snapshot)
-version: 3.73.6.20231116-0fb4476
+version: 3.73.9.20231118-bf6c11c
 stage: experimental
 slug: raspberrymatic-dev
 image: ghcr.io/jens-maus/raspberrymatic
@@ -75,6 +75,7 @@ ports:
   2122/tcp: null
   1883/tcp: null
   8883/tcp: null
+  2110/tcp: null
 ports_description:
   22/tcp: SSH access (Extern)
   80/tcp: CCU WebUI HTTP (Extern)
@@ -115,6 +116,7 @@ ports_description:
   2122/tcp: CCU-Jack HTTPS (Extern)
   1883/tcp: CCU-Jack MQTT (Extern)
   8883/tcp: CCU-Jack MQTT-Secure (Extern)
+  2110/tcp: homeputer CL Exec-Engine (Extern)
 environment:
   HM_RUNNING_IN_HA: "1"
   HM_HAPROXY_SRC: 172.30.32.2/32

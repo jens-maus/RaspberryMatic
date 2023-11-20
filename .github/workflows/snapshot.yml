@@ -12,6 +12,11 @@ on:
         description: 'Skip build (for testing workflow)?'
         required: true
         default: "false"
+      platforms:
+        description: 'List of platforms to build (comma seperated)'
+        required: false
+        default: ""
+        type: string
 
 # default read-only permission
 permissions:
@@ -43,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [rpi0, rpi2, rpi3, rpi4, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, oci_amd64, oci_arm64, oci_arm]
+        platform: ${{ fromJSON(format('[{0}]', github.event.inputs.platforms || '"rpi0","rpi2","rpi3","rpi4","rpi5","tinkerboard","odroid-c2","odroid-c4","odroid-n2","intelnuc","ova","oci_amd64",oci_arm64","oci_arm"')) }}
 
     steps:
       - name: Checkout Code
@@ -418,6 +423,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf
+      - name: Download rpi5 manifest
+        uses: actions/download-artifact@v3
+        with:
+          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi5.mf
 
       - name: Bump rpi-imager version
         run: |
@@ -425,7 +434,8 @@ jobs:
             RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi0.mf \
             RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi2.mf \
             RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi3.mf \
-            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf
+            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf \
+            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi5.mf
 
       - name: Commit changes
         run: |

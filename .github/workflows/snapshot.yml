@@ -14,7 +14,7 @@ on:
         default: "false"
       platforms:
         description: 'List of platforms to build (comma seperated)'
-        required: false
+        required: true
         default: ""
         type: string
 

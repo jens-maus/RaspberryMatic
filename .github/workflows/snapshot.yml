@@ -255,7 +255,9 @@ jobs:
     name: OCI/Docker Build+Push
     runs-on: ubuntu-22.04
     needs: build
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' &&
+      ( github.event.inputs.platforms == 'all' ||
+        contains(github.event.inputs.platforms, 'oci_'))
 
     steps:
       - uses: actions/checkout@v4

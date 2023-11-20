@@ -317,7 +317,7 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
       - name: Build and push container image
-        uses: docker/build-push-action@v5.0.0
+        uses: docker/build-push-action@v5.1.0
         id: docker_build
         with:
           context: oci_build

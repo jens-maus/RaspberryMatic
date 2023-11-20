@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: ${{ fromJSON(format('[{0}]', github.event.inputs.platforms != 'all' || '"rpi0","rpi2","rpi3","rpi4","rpi5","tinkerboard","odroid-c2","odroid-c4","odroid-n2","intelnuc","ova","oci_amd64",oci_arm64","oci_arm"')) }}
+        platform: ${{ fromJSON(format('[{0}]', github.event.inputs.platforms == 'all' && '"rpi0","rpi2","rpi3","rpi4","rpi5","tinkerboard","odroid-c2","odroid-c4","odroid-n2","intelnuc","ova","oci_amd64",oci_arm64","oci_arm"' || github.event.inputs.platforms)) }}
 
     steps:
       - name: Checkout Code

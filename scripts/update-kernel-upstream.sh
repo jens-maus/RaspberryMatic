@@ -4,7 +4,7 @@ set -e
 ID=${1}
 PACKAGE_NAME="linux"
 PROJECT_URL="https://cdn.kernel.org/pub/linux/kernel/v6.x"
-ARCHIVE_URL="${PROJECT_URL}/${PACKAGE_NAME}-${ID}.tar.xz"
+#ARCHIVE_URL="${PROJECT_URL}/${PACKAGE_NAME}-${ID}.tar.xz"
 CHECKSUM_URL="${PROJECT_URL}/sha256sums.asc"
 
 if [[ -z "${ID}" ]]; then

@@ -1,7 +1,7 @@
 # RaspberryMatic workflow to manually repush docker image/release
 # yamllint disable rule:truthy
 ---
-name: OCI+Docker Release repush
+name: Release Build (OCI+Docker repush)
 
 on:
   workflow_dispatch:
@@ -73,7 +73,6 @@ jobs:
           install: true
 
       - name: Login to GitHub Container Registry
-        if: github.event.inputs.skip_build == 'false'
         uses: docker/login-action@v3.0.0
         with:
           registry: ghcr.io
@@ -81,7 +80,6 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
       - name: Build and push container image
-        if: github.event.inputs.skip_build == 'false'
         uses: docker/build-push-action@v5.1.0
         id: docker_build
         with:

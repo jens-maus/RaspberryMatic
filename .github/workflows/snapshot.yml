@@ -461,4 +461,5 @@ jobs:
           skip-tags: latest, snapshot
           filter-tags: "*-???????"
           token: ${{ secrets.CR_PAT }}
+          filter-include-untagged: false
         continue-on-error: true

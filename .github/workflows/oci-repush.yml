@@ -1,7 +1,7 @@
 # RaspberryMatic workflow to manually repush docker image/release
 # yamllint disable rule:truthy
 ---
-name: Docker/OCI repush
+name: OCI+Docker Release repush
 
 on:
   workflow_dispatch:

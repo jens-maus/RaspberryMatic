@@ -32487,14 +32487,13 @@ iseFilter.prototype = {
         if (obj['sn'] === "")                     { return false; }
         if (isValidRegex(this.filSn))
         {
+          var r = new RegExp(this.filSn);
+          if (r.test(obj['sn'].toLowerCase()) === false) { return false; }
+        }
+        else
+        {
           if (obj['desc'].toLowerCase().indexOf(this.filSn) == -1) { return false; }
         }
-        else 
-        {
-          var r = new RegExp(this.filSn);
-          if (r.test(obj['sn'].toLowerCase()) === false) {return false; }
-        }
-        
       }
     }
     if (this.filUnit !== "")

@@ -99,25 +99,24 @@
        }
      }
      if (this.filSn !== "")
-@@ -32437,7 +32485,16 @@
+@@ -32437,7 +32485,15 @@
        if (typeof obj['sn'] != 'undefined')
        {
          if (obj['sn'] === "")                     { return false; }
 -        if (obj['sn'].toLowerCase().indexOf(this.filSn) == -1) { return false; }
 +        if (isValidRegex(this.filSn))
 +        {
++          var r = new RegExp(this.filSn);
++          if (r.test(obj['sn'].toLowerCase()) === false) { return false; }
++        }
++        else
++        {
 +          if (obj['desc'].toLowerCase().indexOf(this.filSn) == -1) { return false; }
 +        }
-+        else 
-+        {
-+          var r = new RegExp(this.filSn);
-+          if (r.test(obj['sn'].toLowerCase()) === false) {return false; }
-+        }
-+        
        }
      }
      if (this.filUnit !== "")
-@@ -32445,7 +32502,15 @@
+@@ -32445,7 +32501,15 @@
        if (typeof obj['unit'] != 'undefined')
        {
          if (obj['unit'] === "")                      { return false; }
@@ -134,7 +133,7 @@
        }
      }
  
-@@ -32469,7 +32534,15 @@
+@@ -32469,7 +32533,15 @@
      if (this.filChnLink !== "")
      {
        if (obj['chn'] === "")                         { return false; }

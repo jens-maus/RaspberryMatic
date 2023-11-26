@@ -7876,7 +7876,7 @@ StringFilter = function(name, callback)
     try
     {
       const r = new RegExp(possiblyValidRegex);
-    } 
+    }
     catch(err)
     {
       return false;
@@ -7899,7 +7899,7 @@ StringFilter = function(name, callback)
     if(isValidRegex(searchString))
     {
       var r = new RegExp(searchString);
-      if (r.test(text) === true) {return true; }
+      if (r.test(text) === true) { return true; }
 
       return false;
     }
@@ -7911,7 +7911,7 @@ StringFilter = function(name, callback)
       }
 
       return false;
-    }    
+    }
   };
   
   /**
@@ -32434,14 +32434,14 @@ iseFilter.prototype = {
     {
       if (typeof obj['type'] != 'undefined') {
         if (obj['type'] === "")                      { return false; }
-        if(!isValidRegex(this.filType)) 
+        if (isValidRegex(this.filType))
         {
-          if (obj['type'].toLowerCase().indexOf(this.filType) == -1) { return false; }
+          var r = new RegExp(this.filType);
+          if (r.test(obj['type'].toLowerCase()) === false) { return false; }
         }
         else
         {
-          var r = new RegExp(this.filType);                                           
-          if (r.test(obj['type'].toLowerCase()) === false) {return false; }
+          if (obj['type'].toLowerCase().indexOf(this.filType) == -1) { return false; }
         }
       }
     }
@@ -32452,15 +32452,15 @@ iseFilter.prototype = {
       {
         //conInfo( "iseFilter: desc="+obj['desc'] );
         if (obj['desc'] === "")                      { return false; }
-        if(!isValidRegex(this.filDesc))
+        if (isValidRegex(this.filDesc))
+        {
+          var r = new RegExp(this.filDesc);
+          if (r.test(obj['desc'].toLowerCase()) === false) { return false; }
+        }
+        else
         {
           if (obj['desc'].toLowerCase().indexOf(this.filDesc) == -1) { return false; }
         }
-        else 
-        {
-          var r = new RegExp(this.filDesc);                                           
-          if (r.test(obj['desc'].toLowerCase()) === false) {return false; }
-        } 
       }
     }
     if (this.filName !== "")
@@ -32469,14 +32469,14 @@ iseFilter.prototype = {
       {
         if (obj['name'] === "")                      { return false; }
         var transName = translateString(obj['name']);
-        if(!isValidRegex(this.filName))
+        if (isValidRegex(this.filName))
+        {
+          var r = new RegExp(this.filName);
+          if (r.test(transName.toLowerCase()) === false) { return false; }
+        }
+        else
         {
           if (transName.toLowerCase().indexOf(this.filName) == -1) { return false; }
-        }
-        else 
-        {
-          var r = new RegExp(this.filName);                                           
-          if (r.test(transName.toLowerCase()) === false) {return false; }
         }
       }
     }
@@ -32485,13 +32485,13 @@ iseFilter.prototype = {
       if (typeof obj['sn'] != 'undefined')
       {
         if (obj['sn'] === "")                     { return false; }
-        if(!isValidRegex(this.filSn))
+        if (isValidRegex(this.filSn))
         {
           if (obj['desc'].toLowerCase().indexOf(this.filSn) == -1) { return false; }
         }
         else 
         {
-          var r = new RegExp(this.filSn);                                           
+          var r = new RegExp(this.filSn);
           if (r.test(obj['sn'].toLowerCase()) === false) {return false; }
         }
         
@@ -32502,15 +32502,15 @@ iseFilter.prototype = {
       if (typeof obj['unit'] != 'undefined')
       {
         if (obj['unit'] === "")                      { return false; }
-        if(!isValidRegex(this.filUnit))
+        if (isValidRegex(this.filUnit))
         {
-          if (obj['unit'].toLowerCase().indexOf(this.filUnit) == -1) { return false; }
+          var r = new RegExp(this.filUnit);
+          if (r.test(obj['unit'].toLowerCase()) === false) { return false; }
         }
         else
         {
-          var r = new RegExp(this.filUnit);                                           
-          if (r.test(obj['unit'].toLowerCase()) === false) {return false; }
-        }        
+          if (obj['unit'].toLowerCase().indexOf(this.filUnit) == -1) { return false; }
+        }
       }
     }
 
@@ -32534,14 +32534,14 @@ iseFilter.prototype = {
     if (this.filChnLink !== "")
     {
       if (obj['chn'] === "")                         { return false; }
-      if(!isValidRegex())
+      if (isValidRegex(this.filChnLink))
       {
-        if (obj['chn'].toLowerCase().indexOf(this.filChnLink) == -1) { return false; }
+        var r = new RegExp(this.filChnLink);
+        if (r.test(obj['chn'].toLowerCase()) === false) { return false; }
       }
       else
       {
-        var r = new RegExp(this.filChnLink);                                           
-        if (r.test(obj['chn'].toLowerCase()) === false) {return false; }
+        if (obj['chn'].toLowerCase().indexOf(this.filChnLink) == -1) { return false; }
       }
     }
 /*    

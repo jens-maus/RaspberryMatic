@@ -1,8 +1,8 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -20527,11 +20527,26 @@
+@@ -22807,11 +22807,26 @@
      return false;
-   },
+   },*/
  
 +  cmpVersion: function (aa, bb) {
 +    // 0   Version equal 
@@ -16,8 +16,8 @@
 +            return (aArr[index] - bArr[index]);
 +    }
 +    return 0;
-+  },  
-+  
++  },
++
    showAllDeviceFirmware: function() {
      var self = this;
      if (!this.fetchDeviceList) {
@@ -27,7 +27,7 @@
        this.newFwCounter = 0;
        this.devIndex = 0;
        if (this.devList.length == 0) {
-@@ -20622,11 +20637,23 @@
+@@ -22912,11 +22927,23 @@
          newFW = resultMajorMinor;
        }
  
@@ -45,13 +45,13 @@
          // FW not yet available on the CCU
          if (availableFW != newFW) {
 +          RefUpdateList.FWUpload++;
-           self.messageBoxHTML += "<tr><td  style='text-align:left;' height='15px'>" + deviceType + "</td><td>" + devAddress + "</td></td><td style='text-align:center;'>" + curFw + "</td><td style='text-align:center;' class='UILink' onClick=\"window.location.href='" + self.downloadURL + "&serial=0&product=" + deviceType + "'\">" + fwVersion + "</td></tr>";
+           self.messageBoxHTML += "<tr><td  style='text-align:left;' height='15px'>" + deviceType + "</td><td>" + devAddress + "</td></td><td style='text-align:center;'>" + curFw + "</td><td style='text-align:center;' class='UILink' onClick=\"window.location.href='" + self.downloadURL + "&serial="+self.serial+"&product=" + deviceTypeForUrl + "'\">" + fwVersion + "</td></tr>";
          } else {
 +          RefUpdateList.FWAvailable++;
            self.messageBoxHTML += "<tr><td  style='text-align:left;' height='15px'>" + deviceType + "</td><td>" + self.devList[self.devIndex].address + "</td></td><td style='text-align:center;'>" + curFw + "</td><td style='text-align:center;' class='UILink' onClick=alert(translateKey('hintDevFwAlreadyUploaded'));>" + fwVersion + "</td></tr>";
          }
          self.newFwCounter++;
-@@ -20668,8 +20695,23 @@
+@@ -22952,8 +22979,23 @@
    },
  
    showAvailableDeviceFirmware: function() {
@@ -76,7 +76,7 @@
      msgBoxHeight = (maxMessageBoxHeight < contentHeight) ? maxMessageBoxHeight : contentHeight;
  
      MessageBox.show(translateKey("dialogShowDeviceFirmwareTitle"),
-@@ -20678,12 +20720,14 @@
+@@ -22962,12 +23004,14 @@
        "<col style='width:200px;'>" +
        "<col style='width:100px;'>" +
        "<col style='width:100px;'>" +

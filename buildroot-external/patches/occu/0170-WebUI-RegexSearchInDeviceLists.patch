@@ -1,26 +1,31 @@
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -7871,6 +7871,19 @@
-     }
-   };
-   
-+  const isValidRegex = function(possiblyValidRegex)
-+  {
-+    try
-+    {
-+      const r = new RegExp(possiblyValidRegex);
-+    }
-+    catch(err)
-+    {
-+      return false;
-+    }
+@@ -7796,7 +7796,23 @@
+ 		document.body.style.cursor = cursorType;
+ 	}
+ 	
+-};/**
++};
 +
-+    return true;
++const isValidRegex = function(possiblyValidRegex)
++{
++  try
++  {
++    const r = new RegExp(possiblyValidRegex);
 +  }
-   /**
-    * Prüft, ob der Filter auf einen Text zutrifft
-    **/
-@@ -7882,12 +7895,23 @@
++  catch(err)
++  {
++    return false;
++  }
++
++  return true;
++}
++
++/**
+  * stringfilter.js
+  **/
+  
+@@ -7882,12 +7898,23 @@
      //var patternList = m_value.split("|");
      text            = text.toLowerCase();
      
@@ -48,7 +53,7 @@
    };
    
    /**
-@@ -32410,7 +32434,15 @@
+@@ -32410,7 +32437,15 @@
      {
        if (typeof obj['type'] != 'undefined') {
          if (obj['type'] === "")                      { return false; }
@@ -65,7 +70,7 @@
        }
      }
      if (this.filDesc !== "")
-@@ -32420,7 +32452,15 @@
+@@ -32420,7 +32455,15 @@
        {
          //conInfo( "iseFilter: desc="+obj['desc'] );
          if (obj['desc'] === "")                      { return false; }
@@ -82,7 +87,7 @@
        }
      }
      if (this.filName !== "")
-@@ -32429,7 +32469,15 @@
+@@ -32429,7 +32472,15 @@
        {
          if (obj['name'] === "")                      { return false; }
          var transName = translateString(obj['name']);
@@ -99,7 +104,7 @@
        }
      }
      if (this.filSn !== "")
-@@ -32437,7 +32485,15 @@
+@@ -32437,7 +32488,15 @@
        if (typeof obj['sn'] != 'undefined')
        {
          if (obj['sn'] === "")                     { return false; }
@@ -116,7 +121,7 @@
        }
      }
      if (this.filUnit !== "")
-@@ -32445,7 +32501,15 @@
+@@ -32445,7 +32504,15 @@
        if (typeof obj['unit'] != 'undefined')
        {
          if (obj['unit'] === "")                      { return false; }
@@ -133,7 +138,7 @@
        }
      }
  
-@@ -32469,7 +32533,15 @@
+@@ -32469,7 +32536,15 @@
      if (this.filChnLink !== "")
      {
        if (obj['chn'] === "")                         { return false; }

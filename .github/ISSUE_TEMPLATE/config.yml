@@ -4,7 +4,7 @@ contact_links:
   - name: ✋ Support Request
     url: https://github.com/jens-maus/RaspberryMatic/discussions
     about: You have a generic problem in using RaspberryMatic or this repository.
-    
+
   - name: 🇺🇸 RaspberryMatic Documentation
     url: https://github.com/jens-maus/RaspberryMatic/wiki/en.Home
     about: If you search for answers, please consult the documentation area first.

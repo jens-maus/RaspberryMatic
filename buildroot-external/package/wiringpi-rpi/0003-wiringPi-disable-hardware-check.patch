@@ -1,0 +1,20 @@
+--- a/wiringPi/wiringPi.c.orig	2023-12-03 19:53:19.125964017 +0100
++++ b/wiringPi/wiringPi.c	2023-12-03 19:55:04.479119592 +0100
+@@ -760,7 +760,7 @@
+ // Start by looking for the Architecture to make sure we're really running
+ //	on a Pi. I'm getting fed-up with people whinging at me because
+ //	they can't get it to work on weirdFruitPi boards...
+-
++/*
+   while (fgets (line, 120, cpuFd) != NULL)
+     if (strncmp (line, "Hardware", 8) == 0)
+       break ;
+@@ -791,7 +791,7 @@
+     exit (EXIT_FAILURE) ;
+   }
+ #endif
+-
++*/
+ // Actually... That has caused me more than 10,000 emails so-far. Mosty by
+ //	people who think they know better by creating a statically linked
+ //	version that will not run with a new 4.9 kernel. I utterly hate and

@@ -177,7 +177,7 @@ jobs:
       - name: Upload build artifact [rpi*, tinkerboard, intelnuc, ova]
         if: |
           !startsWith(matrix.platform, 'oci_')
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip*
           name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.zip
@@ -186,7 +186,7 @@ jobs:
       - name: Upload build artifact [ccu3]
         if: |
           matrix.platform == 'rpi3'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: release/RaspberryMatic-${{ env.VERSION }}-ccu3.tgz*
           name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-ccu3.tgz
@@ -195,7 +195,7 @@ jobs:
       - name: Upload build artifact [ova]
         if: |
           matrix.platform == 'ova'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: release/RaspberryMatic-${{ env.VERSION }}.ova*
           name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}.ova
@@ -204,7 +204,7 @@ jobs:
       - name: Upload build artifact [oci]
         if: |
           startsWith(matrix.platform, 'oci_')
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz*
           name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
@@ -388,7 +388,7 @@ jobs:
 
       - name: Upload debug information
         if: github.event.inputs.skip_build == 'false'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: debug_output.tgz
           name: RaspberryMatic-debug_output-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}.tgz

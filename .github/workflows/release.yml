@@ -111,7 +111,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [rpi0, rpi2, rpi3, rpi4, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, oci_amd64, oci_arm64, oci_arm]
+        platform: [rpi0, rpi2, rpi3, rpi4, rpi5, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, oci_amd64, oci_arm64, oci_arm]
 
     steps:
       - name: Checkout Code
@@ -441,6 +441,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi4.mf
+      - name: Download rpi5 manifest
+        uses: actions/download-artifact@v3
+        with:
+          name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi5.mf
+
 
       - name: Bump rpi-imager version
         run: |
@@ -448,7 +453,8 @@ jobs:
             RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi0.mf \
             RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi2.mf \
             RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi3.mf \
-            RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi4.mf
+            RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi4.mf \
+            RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi5.mf
 
       - name: Bump LATEST-VERSION.js
         run: |

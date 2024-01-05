@@ -1,0 +1,1 @@
+dwc_otg.lpm_enable=0 sdhci_bcm2708.enable_llm=0 console=tty2 root=PARTUUID=deedbeef-02 ro rootfstype=ext4 fsck.repair=yes rootwait rootdelay=5 consoleblank=120 logo.nologo quiet loglevel=0 init_on_alloc=1 init_on_free=1 slab_nomerge iomem=relaxed net.ifnames=0

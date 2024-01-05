@@ -7796,7 +7796,23 @@ Cursor = {
 		document.body.style.cursor = cursorType;
 	}
 	
-};/**
+};
+
+const isValidRegex = function(possiblyValidRegex)
+{
+  try
+  {
+    const r = new RegExp(possiblyValidRegex);
+  }
+  catch(err)
+  {
+    return false;
+  }
+
+  return true;
+}
+
+/**
  * stringfilter.js
  **/
  
@@ -7871,19 +7887,6 @@ StringFilter = function(name, callback)
     }
   };
   
-  const isValidRegex = function(possiblyValidRegex)
-  {
-    try
-    {
-      const r = new RegExp(possiblyValidRegex);
-    }
-    catch(err)
-    {
-      return false;
-    }
-
-    return true;
-  }
   /**
    * Prüft, ob der Filter auf einen Text zutrifft
    **/

@@ -22651,7 +22651,7 @@ var preURL = (WEBUI_VERSION.split(".")[0] < 3) ? "" : "ccu3-";
 
 StartPage = Singleton.create(Page, {
   MAINMENU_ID: "MAINMENU_STARTPAGE",
-  downloadURLServer: "https://"+preURL+"update.homematic.com:8443/firmware/download?cmd=download",
+  downloadURLServer: "https://"+preURL+"update.homematic.com/firmware/download?cmd=download",
   fieldTestURLServer: "https://fieldtest-ccu3-update.homematic.com/firmware/download?cmd=download",
   fieldTestActive: "/etc/config/fieldTestActive",
   downloadURL : "",
@@ -26893,7 +26893,7 @@ homematic.com =
     this.m_ccuProduct = getProduct();
     this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
     this.m_product = "HM-RASPBERRYMATIC";
-    this.m_URLServer = "https://"+this.preURL+"update.homematic.com:8443";
+    this.m_URLServer = "https://"+this.preURL+"update.homematic.com";
     this.m_fieldTestURLServer = "https://fieldtest-ccu3-update.homematic.com";
 
     this.serial = homematic("CCU.getSerial");

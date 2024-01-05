@@ -1,13 +1,17 @@
 ---
 blank_issues_enabled: false
 contact_links:
+  - name: ✋ Support Request
+    url: https://github.com/jens-maus/RaspberryMatic/discussions
+    about: You have a generic problem in using RaspberryMatic or this repository.
+
   - name: 🇺🇸 RaspberryMatic Documentation
     url: https://github.com/jens-maus/RaspberryMatic/wiki/en.Home
     about: If you search for answers, please consult the documentation area first.
 
   - name: 🇺🇸 RaspberryMatic Discussions
     url: https://github.com/jens-maus/RaspberryMatic/discussions
-    about: Please ask and answer questions in the RaspberryMatic discussion fora here.
+    about: Please ask and answer questions in the RaspberryMatic discussion fora.
 
   - name: 🇩🇪 RaspberryMatic Dokumentation
     url: https://github.com/jens-maus/RaspberryMatic/wiki

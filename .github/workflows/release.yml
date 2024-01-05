@@ -92,7 +92,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload release-template.md artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: /tmp/release-template.md
           name: release-template.md
@@ -244,7 +244,7 @@ jobs:
       - name: Upload build artifact [oci]
         if: |
           startsWith(matrix.platform, 'oci_')
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz*
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
@@ -253,7 +253,7 @@ jobs:
       #######################
       # manifest file artifact upload
       - name: Upload manifest artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.mf
@@ -272,7 +272,7 @@ jobs:
 
       # download all artifact files
       - name: Download all workflow artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
 
       - name: Patch release draft
         shell: bash
@@ -320,15 +320,15 @@ jobs:
 
       # download OCI platform artifacts
       - name: Download oci_amd64 artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_amd64.tgz
       - name: Download oci_arm64 artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_arm64.tgz
       - name: Download oci_arm artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-oci_arm.tgz
 
@@ -426,19 +426,19 @@ jobs:
 
       # download rpi manifest files
       - name: Download rpi0 manifest
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi0.mf
       - name: Download rpi2 manifest
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi2.mf
       - name: Download rpi3 manifest
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi3.mf
       - name: Download rpi4 manifest
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi4.mf
 

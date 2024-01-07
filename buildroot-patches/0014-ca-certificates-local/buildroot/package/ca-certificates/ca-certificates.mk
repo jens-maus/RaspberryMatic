@@ -22,7 +22,7 @@ endef
 
 define CA_CERTIFICATES_GEN_BUNDLE
 	# Remove /etc/ssl/certs and relink it to /var/etc/ssl/certs
-	rm -f $(TARGET_DIR)/etc/ssl/certs/*
+	rm -rf $(TARGET_DIR)/etc/ssl/certs
 	ln -s /var/etc/ssl/certs $(TARGET_DIR)/etc/ssl/certs
 
 	# add empty /etc/ca-certificates.conf file

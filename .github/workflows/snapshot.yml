@@ -15,7 +15,7 @@ on:
       platforms:
         description: 'List of platforms to build (comma seperated, e.g. "rpi3","rpi4")'
         required: true
-        default: 'all'
+        default: ''
         type: string
 
 # default read-only permission
@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: ${{ fromJSON(format('[{0}]', github.event.inputs.platforms == 'all' && '"rpi0","rpi2","rpi3","rpi4","rpi5","tinkerboard","odroid-c2","odroid-c4","odroid-n2","intelnuc","ova","oci_amd64","oci_arm64","oci_arm"' || github.event.inputs.platforms)) }}
+        platform: ${{ fromJSON(format('[{0}]', github.event.inputs.platforms == '' && '"rpi0","rpi2","rpi3","rpi4","rpi5","tinkerboard","odroid-c2","odroid-c4","odroid-n2","intelnuc","ova","oci_amd64","oci_arm64","oci_arm"' || github.event.inputs.platforms)) }}
 
     steps:
       - name: Checkout Code
@@ -256,7 +256,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs: build
     if: github.event_name != 'pull_request' &&
-      ( github.event.inputs.platforms == 'all' ||
+      ( github.event.inputs.platforms == '' ||
         contains(github.event.inputs.platforms, 'oci_'))
 
     steps:

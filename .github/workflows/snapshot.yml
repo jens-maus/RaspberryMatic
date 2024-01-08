@@ -427,7 +427,7 @@ jobs:
         with:
           name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf
       - name: Download rpi5 manifest
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi5.mf
 

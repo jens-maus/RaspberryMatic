@@ -442,7 +442,7 @@ jobs:
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi4.mf
       - name: Download rpi5 manifest
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: RaspberryMatic-${{ needs.release_draft.outputs.version }}-rpi5.mf
 

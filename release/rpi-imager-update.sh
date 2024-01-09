@@ -5,7 +5,7 @@
 #
 
 # check number of arguments
-if [ "$#" -ne 5 ]; then
+if [ "$#" -ne 6 ]; then
   echo "ERROR: invalid number of arguments"
   exit 1
 fi

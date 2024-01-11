@@ -1,0 +1,80 @@
+From bc786e76de0f8a0126b64cc936621162c326ec23 Mon Sep 17 00:00:00 2001
+Message-ID: <bc786e76de0f8a0126b64cc936621162c326ec23.1703156189.git.stefan@agner.ch>
+In-Reply-To: <7c41bd8353fe7d4d00f962a5db84f2ea366ec85f.1703156189.git.stefan@agner.ch>
+References: <7c41bd8353fe7d4d00f962a5db84f2ea366ec85f.1703156189.git.stefan@agner.ch>
+From: "Ivan T. Ivanov" <iivanov@suse.de>
+Date: Mon, 18 Dec 2023 23:03:37 +0200
+Subject: [PATCH] rpi5: Use devicetree to retrieve board revision
+
+Firmware on RPi5 return error on board revision query
+through firmware interface, but on the other hand it fills
+"linux,revision" in "system" node, so use it to detect board
+revision.
+
+	system {
+		linux,revision = <0xc04170>;
+		linux,serial = <0x6cf44e80 0x3c533ede>;
+	};
+
+Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
+---
+ board/raspberrypi/rpi/rpi.c | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/board/raspberrypi/rpi/rpi.c b/board/raspberrypi/rpi/rpi.c
+index cd823ad746..2851ebc985 100644
+--- a/board/raspberrypi/rpi/rpi.c
++++ b/board/raspberrypi/rpi/rpi.c
+@@ -171,6 +171,11 @@ static const struct rpi_model rpi_models_new_scheme[] = {
+ 		DTB_DIR "bcm2711-rpi-cm4.dtb",
+ 		true,
+ 	},
++	[0x17] = {
++		"5 Model B",
++		DTB_DIR "bcm2712-rpi-5-b.dtb",
++		true,
++	},
+ };
+ 
+ static const struct rpi_model rpi_models_old_scheme[] = {
+@@ -429,15 +434,27 @@ static void get_board_revision(void)
+ 	int ret;
+ 	const struct rpi_model *models;
+ 	uint32_t models_count;
++	ofnode node;
+ 
+ 	BCM2835_MBOX_INIT_HDR(msg);
+ 	BCM2835_MBOX_INIT_TAG(&msg->get_board_rev, GET_BOARD_REV);
+ 
+ 	ret = bcm2835_mbox_call_prop(BCM2835_MBOX_PROP_CHAN, &msg->hdr);
+ 	if (ret) {
+-		printf("bcm2835: Could not query board revision\n");
+ 		/* Ignore error; not critical */
+-		return;
++		node = ofnode_path("/system");
++		if (!ofnode_valid(node)) {
++			printf("bcm2835: Could not find /system node\n");
++			return;
++		}
++
++		ret = ofnode_read_u32(node, "linux,revision", &revision);
++		if (ret) {
++			printf("bcm2835: Could not find linux,revision\n");
++			return;
++		}
++	} else {
++		revision = msg->get_board_rev.body.resp.rev;
+ 	}
+ 
+ 	/*
+@@ -451,7 +468,6 @@ static void get_board_revision(void)
+ 	 * http://www.raspberrypi.org/forums/viewtopic.php?f=63&t=98367&start=250
+ 	 * http://www.raspberrypi.org/forums/viewtopic.php?f=31&t=20594
+ 	 */
+-	revision = msg->get_board_rev.body.resp.rev;
+ 	if (revision & 0x800000) {
+ 		rev_scheme = 1;
+ 		rev_type = (revision >> 4) & 0xff;
+-- 
+2.43.0
+

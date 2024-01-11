@@ -1,0 +1,48 @@
+From e84b432a36c97bd092587fdd1f9b6eaeb0498099 Mon Sep 17 00:00:00 2001
+Message-ID: <e84b432a36c97bd092587fdd1f9b6eaeb0498099.1703156189.git.stefan@agner.ch>
+In-Reply-To: <7c41bd8353fe7d4d00f962a5db84f2ea366ec85f.1703156189.git.stefan@agner.ch>
+References: <7c41bd8353fe7d4d00f962a5db84f2ea366ec85f.1703156189.git.stefan@agner.ch>
+From: "Ivan T. Ivanov" <iivanov@suse.de>
+Date: Mon, 18 Dec 2023 23:03:38 +0200
+Subject: [PATCH] bcm2835: brcm, bcm2708-fb device is using r5g6b5 format
+
+brcm,bcm2708-fb device provided by firmware on RPi5 uses
+16 bits per pixel. Update driver to properly handle this.
+
+Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
+---
+ drivers/video/bcm2835.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/video/bcm2835.c b/drivers/video/bcm2835.c
+index 14942526f1..245c958b6e 100644
+--- a/drivers/video/bcm2835.c
++++ b/drivers/video/bcm2835.c
+@@ -43,7 +43,7 @@ static int bcm2835_video_probe(struct udevice *dev)
+ 
+ 	uc_priv->xsize = w;
+ 	uc_priv->ysize = h;
+-	uc_priv->bpix = VIDEO_BPP32;
++	uc_priv->bpix = dev_get_driver_data(dev);
+ 	plat->base = fb_base;
+ 	plat->size = fb_size;
+ 
+@@ -51,11 +51,11 @@ static int bcm2835_video_probe(struct udevice *dev)
+ }
+ 
+ static const struct udevice_id bcm2835_video_ids[] = {
+-	{ .compatible = "brcm,bcm2835-hdmi" },
+-	{ .compatible = "brcm,bcm2711-hdmi0" },
+-	{ .compatible = "brcm,bcm2708-fb" },
++	{ .compatible = "brcm,bcm2835-hdmi",  .data = VIDEO_BPP32},
++	{ .compatible = "brcm,bcm2711-hdmi0", .data = VIDEO_BPP32},
++	{ .compatible = "brcm,bcm2708-fb",    .data = VIDEO_BPP16 },
+ #if !IS_ENABLED(CONFIG_VIDEO_DT_SIMPLEFB)
+-	{ .compatible = "simple-framebuffer" },
++	{ .compatible = "simple-framebuffer", .data = VIDEO_BPP32},
+ #endif
+ 	{ }
+ };
+-- 
+2.43.0
+

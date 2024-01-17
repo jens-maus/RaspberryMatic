@@ -1,6 +1,6 @@
 ---
 name: RaspberryMatic CCU (snapshot)
-version: 3.73.9.20240111-10eb206
+version: 3.73.9.20240117-4481ade
 stage: experimental
 slug: raspberrymatic-dev
 image: ghcr.io/jens-maus/raspberrymatic
@@ -21,7 +21,7 @@ init: false
 backup_pre: /bin/sh -c "/bin/echo 'load tclrega.so; rega system.Save()' | /bin/tclsh && /bin/sync"
 backup_exclude:
   - "*/tmp/.watchdog"
-timeout: 120
+timeout: 240
 devices:
   - /dev/raw-uart
   - /dev/raw-uart1

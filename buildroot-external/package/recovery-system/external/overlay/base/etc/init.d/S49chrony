@@ -36,7 +36,7 @@ case "$1" in
 
       # shellcheck disable=SC2086
       if ! /usr/bin/ntpdate -b -s -u ${NTPSERVERS} 2>/dev/null; then
-        echo -n "could not sync to '${NTPSERVERS}', FAIL"
+        echo "could not sync to '${NTPSERVERS}', FAIL"
         exit 0
       fi
     fi

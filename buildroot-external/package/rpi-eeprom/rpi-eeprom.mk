@@ -15,7 +15,7 @@ ifeq ($(BR2_PACKAGE_RPI_EEPROM_RPI4),y)
   RPI_EEPROM_FIRMWARE_PATH = firmware-2711/stable/pieeprom-2023-05-11.bin
 else ifeq ($(BR2_PACKAGE_RPI_EEPROM_RPI5),y)
   # Raspberry Pi 5
-  RPI_EEPROM_FIRMWARE_PATH = firmware-2712/stable/pieeprom-2024-01-15.bin
+  RPI_EEPROM_FIRMWARE_PATH = firmware-2712/stable/pieeprom-2023-10-30.bin
 endif
 
 define RPI_EEPROM_BUILD_CMDS

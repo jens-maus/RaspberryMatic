@@ -63,8 +63,7 @@ start_file=start.elf
 fixup_file=fixup.dat
 
 # lets u-boot take over the boot process
-#kernel=u-boot.bin
-kernel=Image
+kernel=u-boot.bin
 
 # user config options shoule be put in
 # /boot/extraconfig.txt

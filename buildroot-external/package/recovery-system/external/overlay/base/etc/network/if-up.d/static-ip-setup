@@ -1,7 +1,7 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 
-# stop if /etc/cofnig/netconfig does not exist
+# stop if /etc/config/netconfig does not exist
 if [[ ! -f /etc/config/netconfig ]]; then
   exit 0
 fi

@@ -112,15 +112,16 @@
     } while (child = child.parentNode)
   }
 
-  function activeElt() {
+  function activeElt(rootNode) {
     // IE and Edge may throw an "Unspecified Error" when accessing document.activeElement.
     // IE < 10 will throw when accessed while the page is loading or in an iframe.
     // IE > 9 and Edge will throw when accessed in an iframe if document.body is unavailable.
+    var doc = rootNode.ownerDocument || rootNode;
     var activeElement;
     try {
-      activeElement = document.activeElement;
+      activeElement = rootNode.activeElement;
     } catch(e) {
-      activeElement = document.body || null;
+      activeElement = doc.body || null;
     }
     while (activeElement && activeElement.shadowRoot && activeElement.shadowRoot.activeElement)
       { activeElement = activeElement.shadowRoot.activeElement; }
@@ -143,6 +144,19 @@
     { selectInput = function(node) { node.selectionStart = 0; node.selectionEnd = node.value.length; }; }
   else if (ie) // Suppress mysterious IE10 errors
     { selectInput = function(node) { try { node.select(); } catch(_e) {} }; }
+
+  function doc(cm) { return cm.display.wrapper.ownerDocument }
+
+  function root(cm) {
+    return rootNode(cm.display.wrapper)
+  }
+
+  function rootNode(element) {
+    // Detect modern browsers (2017+).
+    return element.getRootNode ? element.getRootNode() : element.ownerDocument
+  }
+
+  function win(cm) { return doc(cm).defaultView }
 
   function bind(f) {
     var args = Array.prototype.slice.call(arguments, 1);
@@ -2573,16 +2587,16 @@
     cm.display.lineNumChars = null;
   }
 
-  function pageScrollX() {
+  function pageScrollX(doc) {
     // Work around https://bugs.chromium.org/p/chromium/issues/detail?id=489206
     // which causes page_Offset and bounding client rects to use
     // different reference viewports and invalidate our calculations.
-    if (chrome && android) { return -(document.body.getBoundingClientRect().left - parseInt(getComputedStyle(document.body).marginLeft)) }
-    return window.pageXOffset || (document.documentElement || document.body).scrollLeft
+    if (chrome && android) { return -(doc.body.getBoundingClientRect().left - parseInt(getComputedStyle(doc.body).marginLeft)) }
+    return doc.defaultView.pageXOffset || (doc.documentElement || doc.body).scrollLeft
   }
-  function pageScrollY() {
-    if (chrome && android) { return -(document.body.getBoundingClientRect().top - parseInt(getComputedStyle(document.body).marginTop)) }
-    return window.pageYOffset || (document.documentElement || document.body).scrollTop
+  function pageScrollY(doc) {
+    if (chrome && android) { return -(doc.body.getBoundingClientRect().top - parseInt(getComputedStyle(doc.body).marginTop)) }
+    return doc.defaultView.pageYOffset || (doc.documentElement || doc.body).scrollTop
   }
 
   function widgetTopHeight(lineObj) {
@@ -2610,8 +2624,8 @@
     else { yOff -= cm.display.viewOffset; }
     if (context == "page" || context == "window") {
       var lOff = cm.display.lineSpace.getBoundingClientRect();
-      yOff += lOff.top + (context == "window" ? 0 : pageScrollY());
-      var xOff = lOff.left + (context == "window" ? 0 : pageScrollX());
+      yOff += lOff.top + (context == "window" ? 0 : pageScrollY(doc(cm)));
+      var xOff = lOff.left + (context == "window" ? 0 : pageScrollX(doc(cm)));
       rect.left += xOff; rect.right += xOff;
     }
     rect.top += yOff; rect.bottom += yOff;
@@ -2625,8 +2639,8 @@
     var left = coords.left, top = coords.top;
     // First move into "page" coordinate system
     if (context == "page") {
-      left -= pageScrollX();
-      top -= pageScrollY();
+      left -= pageScrollX(doc(cm));
+      top -= pageScrollY(doc(cm));
     } else if (context == "local" || !context) {
       var localBox = cm.display.sizer.getBoundingClientRect();
       left += localBox.left;
@@ -3442,8 +3456,9 @@
     if (signalDOMEvent(cm, "scrollCursorIntoView")) { return }
 
     var display = cm.display, box = display.sizer.getBoundingClientRect(), doScroll = null;
+    var doc = display.wrapper.ownerDocument;
     if (rect.top + box.top < 0) { doScroll = true; }
-    else if (rect.bottom + box.top > (window.innerHeight || document.documentElement.clientHeight)) { doScroll = false; }
+    else if (rect.bottom + box.top > (doc.defaultView.innerHeight || doc.documentElement.clientHeight)) { doScroll = false; }
     if (doScroll != null && !phantom) {
       var scrollNode = elt("div", "\u200b", null, ("position: absolute;\n                         top: " + (rect.top - display.viewOffset - paddingTop(cm.display)) + "px;\n                         height: " + (rect.bottom - rect.top + scrollGap(cm) + display.barHeight) + "px;\n                         left: " + (rect.left) + "px; width: " + (Math.max(2, rect.right - rect.left)) + "px;"));
       cm.display.lineSpace.appendChild(scrollNode);
@@ -3895,7 +3910,7 @@
       cm.display.maxLineChanged = false;
     }
 
-    var takeFocus = op.focus && op.focus == activeElt();
+    var takeFocus = op.focus && op.focus == activeElt(root(cm));
     if (op.preparedSelection)
       { cm.display.input.showSelection(op.preparedSelection, takeFocus); }
     if (op.updatedDisplay || op.startHeight != cm.doc.height)
@@ -4072,11 +4087,11 @@
 
   function selectionSnapshot(cm) {
     if (cm.hasFocus()) { return null }
-    var active = activeElt();
+    var active = activeElt(root(cm));
     if (!active || !contains(cm.display.lineDiv, active)) { return null }
     var result = {activeElt: active};
     if (window.getSelection) {
-      var sel = window.getSelection();
+      var sel = win(cm).getSelection();
       if (sel.anchorNode && sel.extend && contains(cm.display.lineDiv, sel.anchorNode)) {
         result.anchorNode = sel.anchorNode;
         result.anchorOffset = sel.anchorOffset;
@@ -4088,11 +4103,12 @@
   }
 
   function restoreSelection(snapshot) {
-    if (!snapshot || !snapshot.activeElt || snapshot.activeElt == activeElt()) { return }
+    if (!snapshot || !snapshot.activeElt || snapshot.activeElt == activeElt(rootNode(snapshot.activeElt))) { return }
     snapshot.activeElt.focus();
     if (!/^(INPUT|TEXTAREA)$/.test(snapshot.activeElt.nodeName) &&
         snapshot.anchorNode && contains(document.body, snapshot.anchorNode) && contains(document.body, snapshot.focusNode)) {
-      var sel = window.getSelection(), range = document.createRange();
+      var doc = snapshot.activeElt.ownerDocument;
+      var sel = doc.defaultView.getSelection(), range = doc.createRange();
       range.setEnd(snapshot.anchorNode, snapshot.anchorOffset);
       range.collapse(false);
       sel.removeAllRanges();
@@ -4409,6 +4425,8 @@
     d.scroller.setAttribute("tabIndex", "-1");
     // The element in which the editor lives.
     d.wrapper = elt("div", [d.scrollbarFiller, d.gutterFiller, d.scroller], "CodeMirror");
+    // See #6982. FIXME remove when this has been fixed for a while in Chrome
+    if (chrome && chrome_version >= 105) { d.wrapper.style.clipPath = "inset(0px)"; }
 
     // This attribute is respected by automatic translation systems such as Google Translate,
     // and may also be respected by tools used by human translators.
@@ -4513,7 +4531,7 @@
     // On Chrome 102, viewport updates somehow stop wheel-based
     // scrolling. Turning off pointer events during the scroll seems
     // to avoid the issue.
-    if (chrome && chrome_version >= 102) {
+    if (chrome && chrome_version == 102) {
       if (cm.display.chromeScrollHack == null) { cm.display.sizer.style.pointerEvents = "none"; }
       else { clearTimeout(cm.display.chromeScrollHack); }
       cm.display.chromeScrollHack = setTimeout(function () {
@@ -7256,7 +7274,7 @@
   function onKeyDown(e) {
     var cm = this;
     if (e.target && e.target != cm.display.input.getField()) { return }
-    cm.curOp.focus = activeElt();
+    cm.curOp.focus = activeElt(root(cm));
     if (signalDOMEvent(cm, e)) { return }
     // IE does strange things with escape.
     if (ie && ie_version < 11 && e.keyCode == 27) { e.returnValue = false; }
@@ -7363,7 +7381,7 @@
     }
     if (clickInGutter(cm, e)) { return }
     var pos = posFromMouse(cm, e), button = e_button(e), repeat = pos ? clickRepeat(pos, button) : "single";
-    window.focus();
+    win(cm).focus();
 
     // #3261: make sure, that we're not starting a second selection
     if (button == 1 && cm.state.selectingText)
@@ -7418,7 +7436,7 @@
 
   function leftButtonDown(cm, pos, repeat, event) {
     if (ie) { setTimeout(bind(ensureFocus, cm), 0); }
-    else { cm.curOp.focus = activeElt(); }
+    else { cm.curOp.focus = activeElt(root(cm)); }
 
     var behavior = configureMouse(cm, repeat, event);
 
@@ -7582,7 +7600,7 @@
       var cur = posFromMouse(cm, e, true, behavior.unit == "rectangle");
       if (!cur) { return }
       if (cmp(cur, lastPos) != 0) {
-        cm.curOp.focus = activeElt();
+        cm.curOp.focus = activeElt(root(cm));
         extendTo(cur);
         var visible = visibleLines(display, doc);
         if (cur.line >= visible.to || cur.line < visible.from)
@@ -7766,7 +7784,7 @@
       for (var i = newBreaks.length - 1; i >= 0; i--)
         { replaceRange(cm.doc, val, newBreaks[i], Pos(newBreaks[i].line, newBreaks[i].ch + val.length)); }
     });
-    option("specialChars", /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b\u200e\u200f\u2028\u2029\ufeff\ufff9-\ufffc]/g, function (cm, val, old) {
+    option("specialChars", /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b\u200e\u200f\u2028\u2029\u202d\u202e\u2066\u2067\u2069\ufeff\ufff9-\ufffc]/g, function (cm, val, old) {
       cm.state.specialChars = new RegExp(val.source + (val.test("\t") ? "" : "|\t"), "g");
       if (old != Init) { cm.refresh(); }
     });
@@ -8251,8 +8269,8 @@
   }
 
   function disableBrowserMagic(field, spellcheck, autocorrect, autocapitalize) {
-    field.setAttribute("autocorrect", autocorrect ? "" : "off");
-    field.setAttribute("autocapitalize", autocapitalize ? "" : "off");
+    field.setAttribute("autocorrect", autocorrect ? "on" : "off");
+    field.setAttribute("autocapitalize", autocapitalize ? "on" : "off");
     field.setAttribute("spellcheck", !!spellcheck);
   }
 
@@ -8267,7 +8285,6 @@
     else { te.setAttribute("wrap", "off"); }
     // If border: 0; -- iOS fails to open keyboard (issue #1287)
     if (ios) { te.style.border = "1px solid black"; }
-    disableBrowserMagic(te);
     return div
   }
 
@@ -8286,7 +8303,7 @@
 
     CodeMirror.prototype = {
       constructor: CodeMirror,
-      focus: function(){window.focus(); this.display.input.focus();},
+      focus: function(){win(this).focus(); this.display.input.focus();},
 
       setOption: function(option, value) {
         var options = this.options, old = options[option];
@@ -8610,7 +8627,7 @@
 
         signal(this, "overwriteToggle", this, this.state.overwrite);
       },
-      hasFocus: function() { return this.display.input.getField() == activeElt() },
+      hasFocus: function() { return this.display.input.getField() == activeElt(root(this)) },
       isReadOnly: function() { return !!(this.options.readOnly || this.doc.cantEdit) },
 
       scrollTo: methodOp(function (x, y) { scrollToCoords(this, x, y); }),
@@ -8791,7 +8808,7 @@
   function findPosV(cm, pos, dir, unit) {
     var doc = cm.doc, x = pos.left, y;
     if (unit == "page") {
-      var pageSize = Math.min(cm.display.wrapper.clientHeight, window.innerHeight || document.documentElement.clientHeight);
+      var pageSize = Math.min(cm.display.wrapper.clientHeight, win(cm).innerHeight || doc(cm).documentElement.clientHeight);
       var moveAmount = Math.max(pageSize - .5 * textHeight(cm.display), 3);
       y = (dir > 0 ? pos.bottom : pos.top) + dir * moveAmount;
 
@@ -8889,9 +8906,10 @@
       }
       // Old-fashioned briefly-focus-a-textarea hack
       var kludge = hiddenTextarea(), te = kludge.firstChild;
+      disableBrowserMagic(te);
       cm.display.lineSpace.insertBefore(kludge, cm.display.lineSpace.firstChild);
       te.value = lastCopied.text.join("\n");
-      var hadFocus = activeElt();
+      var hadFocus = activeElt(rootNode(div));
       selectInput(te);
       setTimeout(function () {
         cm.display.lineSpace.removeChild(kludge);
@@ -8914,7 +8932,7 @@
 
   ContentEditableInput.prototype.prepareSelection = function () {
     var result = prepareSelection(this.cm, false);
-    result.focus = activeElt() == this.div;
+    result.focus = activeElt(rootNode(this.div)) == this.div;
     return result
   };
 
@@ -9010,7 +9028,7 @@
 
   ContentEditableInput.prototype.focus = function () {
     if (this.cm.options.readOnly != "nocursor") {
-      if (!this.selectionInEditor() || activeElt() != this.div)
+      if (!this.selectionInEditor() || activeElt(rootNode(this.div)) != this.div)
         { this.showSelection(this.prepareSelection(), true); }
       this.div.focus();
     }
@@ -9362,6 +9380,7 @@
     // Used to work around IE issue with selection being forgotten when focus moves away from textarea
     this.hasSelection = false;
     this.composing = null;
+    this.resetting = false;
   };
 
   TextareaInput.prototype.init = function (display) {
@@ -9452,6 +9471,8 @@
     // The semihidden textarea that is focused when the editor is
     // focused, and receives input.
     this.textarea = this.wrapper.firstChild;
+    var opts = this.cm.options;
+    disableBrowserMagic(this.textarea, opts.spellcheck, opts.autocorrect, opts.autocapitalize);
   };
 
   TextareaInput.prototype.screenReaderLabelChanged = function (label) {
@@ -9494,8 +9515,9 @@
   // Reset the input to correspond to the selection (or to be empty,
   // when not typing and nothing is selected)
   TextareaInput.prototype.reset = function (typing) {
-    if (this.contextMenuPending || this.composing) { return }
+    if (this.contextMenuPending || this.composing && typing) { return }
     var cm = this.cm;
+    this.resetting = true;
     if (cm.somethingSelected()) {
       this.prevInput = "";
       var content = cm.getSelection();
@@ -9506,6 +9528,7 @@
       this.prevInput = this.textarea.value = "";
       if (ie && ie_version >= 9) { this.hasSelection = null; }
     }
+    this.resetting = false;
   };
 
   TextareaInput.prototype.getField = function () { return this.textarea };
@@ -9513,7 +9536,7 @@
   TextareaInput.prototype.supportsTouch = function () { return false };
 
   TextareaInput.prototype.focus = function () {
-    if (this.cm.options.readOnly != "nocursor" && (!mobile || activeElt() != this.textarea)) {
+    if (this.cm.options.readOnly != "nocursor" && (!mobile || activeElt(rootNode(this.textarea)) != this.textarea)) {
       try { this.textarea.focus(); }
       catch (e) {} // IE8 will throw if the textarea is display: none or not in DOM
     }
@@ -9567,7 +9590,7 @@
     // possible when it is clear that nothing happened. hasSelection
     // will be the case when there is a lot of text in the textarea,
     // in which case reading its value would be expensive.
-    if (this.contextMenuPending || !cm.state.focused ||
+    if (this.contextMenuPending || this.resetting || !cm.state.focused ||
         (hasSelection(input) && !prevInput && !this.composing) ||
         cm.isReadOnly() || cm.options.disableInput || cm.state.keySeq)
       { return false }
@@ -9636,9 +9659,9 @@
     input.wrapper.style.cssText = "position: static";
     te.style.cssText = "position: absolute; width: 30px; height: 30px;\n      top: " + (e.clientY - wrapperBox.top - 5) + "px; left: " + (e.clientX - wrapperBox.left - 5) + "px;\n      z-index: 1000; background: " + (ie ? "rgba(255, 255, 255, .05)" : "transparent") + ";\n      outline: none; border-width: 0; outline: none; overflow: hidden; opacity: .05; filter: alpha(opacity=5);";
     var oldScrollY;
-    if (webkit) { oldScrollY = window.scrollY; } // Work around Chrome issue (#2712)
+    if (webkit) { oldScrollY = te.ownerDocument.defaultView.scrollY; } // Work around Chrome issue (#2712)
     display.input.focus();
-    if (webkit) { window.scrollTo(null, oldScrollY); }
+    if (webkit) { te.ownerDocument.defaultView.scrollTo(null, oldScrollY); }
     display.input.reset();
     // Adds "Select all" to context menu in FF
     if (!cm.somethingSelected()) { te.value = input.prevInput = " "; }
@@ -9720,7 +9743,7 @@
     // Set autofocus to true if this textarea is focused, or if it has
     // autofocus and no other element is focused.
     if (options.autofocus == null) {
-      var hasFocus = activeElt();
+      var hasFocus = activeElt(rootNode(textarea));
       options.autofocus = hasFocus == textarea ||
         textarea.getAttribute("autofocus") != null && hasFocus == document.body;
     }
@@ -9854,7 +9877,7 @@
 
   addLegacyProps(CodeMirror);
 
-  CodeMirror.version = "5.65.6";
+  CodeMirror.version = "5.65.16";
 
   return CodeMirror;
 

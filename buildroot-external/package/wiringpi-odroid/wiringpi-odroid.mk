@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WIRINGPI_ODROID_VERSION = b79592b039dae0fa3ee46ee0b2826794575bc1ad
+WIRINGPI_ODROID_VERSION = 84e3f6d04dbd30488430e6aec8eec7cf0444e843
 WIRINGPI_ODROID_SITE = $(call github,hardkernel,wiringPi,$(WIRINGPI_ODROID_VERSION))
 
 WIRINGPI_ODROID_LICENSE = LGPL-3.0+

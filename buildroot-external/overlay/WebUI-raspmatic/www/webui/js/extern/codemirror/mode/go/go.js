@@ -24,7 +24,7 @@ CodeMirror.defineMode("go", function(config) {
     "float32":true, "float64":true, "int8":true, "int16":true, "int32":true,
     "int64":true, "string":true, "uint8":true, "uint16":true, "uint32":true,
     "uint64":true, "int":true, "uint":true, "uintptr":true, "error": true,
-    "rune":true
+    "rune":true, "any":true, "comparable":true
   };
 
   var atoms = {
@@ -46,11 +46,11 @@ CodeMirror.defineMode("go", function(config) {
     }
     if (/[\d\.]/.test(ch)) {
       if (ch == ".") {
-        stream.match(/^[0-9]+([eE][\-+]?[0-9]+)?/);
+        stream.match(/^[0-9_]+([eE][\-+]?[0-9_]+)?/);
       } else if (ch == "0") {
-        stream.match(/^[xX][0-9a-fA-F]+/) || stream.match(/^0[0-7]+/);
+        stream.match(/^[xX][0-9a-fA-F_]+/) || stream.match(/^[0-7_]+/);
       } else {
-        stream.match(/^[0-9]*\.?[0-9]*([eE][\-+]?[0-9]+)?/);
+        stream.match(/^[0-9_]*\.?[0-9_]*([eE][\-+]?[0-9_]+)?/);
       }
       return "number";
     }

@@ -160,7 +160,17 @@
    },
    
    onRemoveDevice: function(whatEver)
-@@ -27244,11 +27272,31 @@
+@@ -26317,6 +26345,9 @@
+   },  
+   ShowPopup: function() {
+     this.show();
++    setTimeout(function() {
++      eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
++    }, 100);
+   },
+   
+   restorePrevious: function() {
+@@ -27244,11 +27275,31 @@
      if (file.substring(0, UI_PATH.length) == UI_PATH)
      {
        //method: 'get' ist für die ELV-CGIs notwendig.
@@ -194,15 +204,15 @@
      }
      /* ELV --> */
      
-@@ -30583,6 +30631,28 @@
+@@ -30583,6 +30634,28 @@
      this.fltObjType = 0;
      if (fltObjType)
        this.fltObjType = fltObjType;
 +
 +    var self = this;
 +    function fltrHandler() {
-+      self.restoreFilters();
 +      eQ3.HomeMatic.Event.unsubscribe('ContentLoaded', fltrHandler);
++      self.restoreFilters();
 +    }
 +    eQ3.HomeMatic.Event.subscribe('ContentLoaded', fltrHandler);
 +  },
@@ -223,7 +233,7 @@
    },
    
  
-@@ -30947,6 +31017,15 @@
+@@ -30947,6 +31020,15 @@
      this.bTypeNumber = false;
      this.bTypeAlarm = false;
      this.bTypeString = false;
@@ -239,7 +249,7 @@
      conInfo("Alle Filter wurden zurückgesetzt.");
    }
  };
-@@ -31055,6 +31134,12 @@
+@@ -31055,6 +31137,12 @@
  {
    //conInfo("iseFilter: setSFilter "+fId+" to "+$(ctrlId).value);
    fltObj.addStringFilter(fId, $(ctrlId).value);
@@ -252,3 +262,23 @@
  };
  
  // Integer-Filter (Modus, Iface)
+@@ -41459,6 +41547,9 @@
+   
+   ShowPopup: function() {
+     this.show();
++    setTimeout(function() {
++      eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
++    }, 100);
+   }
+ };
+ 
+@@ -41586,6 +41677,9 @@
+   ShowPopup: function()
+   {
+     this.show();
++    setTimeout(function() {
++      eQ3.HomeMatic.Event.fire({type:'ContentLoaded'});
++    }, 100);
+   }
+ };
+ /**

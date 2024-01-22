@@ -96,12 +96,22 @@ start() {
   echo -n "Starting ReGaHss: "
   init
 
+  # make sure ReGaHss will run on umask 0027 per default so
+  # that files/dirs will not be generated world readable per default
+  umask 0027
+
   # adjust the oom score (which is inherited by start-stop-daemon)
   # to ensure that others are killed first in case of low memory situations
   echo -900 >/proc/$$/oom_score_adj 2>/dev/null
 
+  # start ReGaHss
   start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec /bin/${REGA_BIN_FILE} -- -f /etc/rega.conf -l ${LOGLEVEL_REGA}
+
+  # wait until ReGaHss is started.
   waitStartupComplete
+
+  # make sure the PID file has world readable permissions
+  chmod 0644 ${PIDFILE}
 }
 
 stop() {
@@ -146,4 +156,4 @@ case "$1" in
     exit 1
 esac
 
-exit $?
+exit 0

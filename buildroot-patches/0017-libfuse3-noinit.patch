@@ -1,0 +1,10 @@
+--- buildroot/package/libfuse3/libfuse3.mk.orig
++++ buildroot/package/libfuse3/libfuse3.mk
+@@ -13,6 +13,7 @@
+ LIBFUSE3_INSTALL_STAGING = YES
+ LIBFUSE3_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ LIBFUSE3_CONF_OPTS = \
++	-Dinitscriptdir= \
+ 	-Dexamples=false \
+ 	-Dudevrulesdir=/lib/udev/rules.d \
+ 	-Duseroot=false \

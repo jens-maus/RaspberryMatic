@@ -1,6 +1,6 @@
 /* HM-LGW emulation for HM-MOD-RPI
  *
- * Copyright (c) 2015 Oliver Kastl
+ * Copyright (c) 2015-2023 Oliver Kastl, Jens Maus, Jérôme Pech
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to
@@ -29,6 +29,10 @@
 
 #include "hmframe.h"
 
+extern bool g_debug;
+extern bool g_disableEnterBootloader;
+extern void dump_data( const char* data, int length );
+extern char* currentTimeStr();
 
 int writeall( int fd, const void *buffer, int len )
 {
@@ -56,9 +60,24 @@ static const unsigned char bootloaderReply[] =
     {
         0xfd, 0x00, 0x0c, 0x00, 0x00, 0x00, 0x43, 0x6f, 0x5f, 0x43, 0x50, 0x55, 0x5f, 0x42, 0x4c, 0x72, 0x51 
     };
+static const unsigned char bootloaderReply2[] =
+    {
+        0xfd, 0x00, 0x0d, 0x00, 0x00, 0x00, 0x43, 0x6f, 0x5f, 0x43, 0x50, 0x55, 0x5f, 0x41, 0x70, 0x70
+    };
 
 int sendEnterBootloader( int fd )
 {
+    if (g_disableEnterBootloader) 
+    {
+      if( g_debug )
+        fprintf( stderr, "%s sendEnterBootloader not executed, because disabled (-b option is set).\n", currentTimeStr());
+        
+      return 0;
+    }
+    
+    if( g_debug )
+      fprintf( stderr, "%s sendEnterBootloader(%d)\n", fd, currentTimeStr());
+
     int result = -1;
     while( 1 )
     {
@@ -67,32 +86,55 @@ int sendEnterBootloader( int fd )
         result =writeall( fd, enterBootloader, sizeof( enterBootloader ) );
         if( result <= 0 )
         {
+            fprintf( stderr, "%s ERROR: writeall(%d) returned %d\n", currentTimeStr(), fd, result);
             break;
         }
         result = readBidcosFrame( fd, buffer, sizeof( buffer ) );
         if( result <= 0 )
         {
+            fprintf( stderr, "%s ERROR: invalid readBidcosFrame(%d) result: %d\n", currentTimeStr(), fd, result);
             break;
         }
         if( isBootloaderReply( buffer, result ) )
         {
+            if( g_debug )
+              fprintf( stderr, "%s valid bootloader reply found\n", currentTimeStr());
+
             break;
         }
+        else if( g_debug )
+        {
+            fprintf( stderr, "%s WARNING: invalid bootloader reply, retrying...\n", currentTimeStr());
+        }
+
+        // wait 10 ms
+        usleep( 10000 );
     }
     return result;
 }
 
+#if 0
 int sendBootloaderReply( int fd )
 {
     return writeall( fd, bootloaderReply, sizeof( bootloaderReply ) );
 }
+#endif
 
 bool isBootloaderReply( const void *buffer, int len )
 {
-    if( len != sizeof(bootloaderReply) )
-        return false;
+    if( len >= sizeof(bootloaderReply) )
+    {
+        if(memcmp( buffer, bootloaderReply, sizeof( bootloaderReply )) == 0)
+            return true;
+    }
+
+    if( len >= sizeof(bootloaderReply2) )
+    {
+        if(memcmp( buffer, bootloaderReply2, sizeof( bootloaderReply2 )) == 0)
+            return true;
+    }
         
-    return (memcmp( buffer, bootloaderReply, len ) == 0);
+    return false;
 }
 
 
@@ -106,6 +148,9 @@ int readBidcosFrame( int fd, char *buffer, int bufsize )
     char escapeValue = 0x00;
     bool haveLength = false;
     
+    if( g_debug )
+      fprintf( stderr, "%s readBidcosFrame(%d, buffer, %d)\n", currentTimeStr(), fd, bufsize);
+
     while ( count )
     {
         int r = read( fd, buf, 1 );
@@ -124,11 +169,11 @@ int readBidcosFrame( int fd, char *buffer, int bufsize )
             buf = (unsigned char *)buffer;
             escapeValue = 0x00;
             haveLength = false;
-            // fprintf( stderr,  "readBidcosFrame reset\n" );
+            // fprintf( stderr,  "%s readBidcosFrame reset\n", currentTimeStr() );
         }
         else if( result == 0 )
         {
-            fprintf( stderr,  "ERROR: readBidcosFrame sync error %2.2x\n", *buf );
+            fprintf( stderr,  "%s ERROR: readBidcosFrame sync error %2.2x\n", currentTimeStr(), *buf );
             // No sync at beginning? Not good...
             break;
         }
@@ -139,7 +184,7 @@ int readBidcosFrame( int fd, char *buffer, int bufsize )
         {
             escaped++;
             escapeValue = 0x80;
-            // fprintf( stderr,  "ESCAPE msgLen set %d result %d\n", msgLen, result );
+            // fprintf( stderr, "%s ESCAPE msgLen set %d result %d\n", currentTimeStr(), msgLen, result );
         }
         else
         {
@@ -159,18 +204,21 @@ int readBidcosFrame( int fd, char *buffer, int bufsize )
                 msgLen |= *buf; // LSB
                 msgLen |= escapeValue;
                 haveLength = true;
-                // fprintf( stderr,  "readBidcosFrame msgLen set %d result %d\n", msgLen, result );
+                // fprintf( stderr, "%s readBidcosFrame msgLen set %d result %d\n", currentTimeStr(), msgLen, result );
             }
         }
         else if( result >= msgLen + escaped + 5 )
         {
-            // fprintf( stderr,  "readBidcosFrame done, msgLen %d result %d\n", msgLen, result );
+            // fprintf( stderr, "%s readBidcosFrame done, msgLen %d result %d\n", currentTimeStr(), msgLen, result );
             break;
         }
         
         count -= r;
         buf+=r;
     }
+
+    if( g_debug && result > 0 )
+      dump_data( buffer, result );
 
     return result;
 }

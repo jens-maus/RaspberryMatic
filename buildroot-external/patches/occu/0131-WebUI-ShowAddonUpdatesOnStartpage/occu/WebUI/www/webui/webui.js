@@ -20260,7 +20260,7 @@ StartPage = Singleton.create(Page, {
   },
   
   showAddonUpdate: function() {
-    addonUpdateCounter = 0;
+    addonUpdateList = "";
     var addonversions = homematic('CCU.getAddonVersions');
     if (addonversions && addonversions !== "false") {
       var localaddonversions = addonversions.local;
@@ -20274,7 +20274,7 @@ StartPage = Singleton.create(Page, {
                if (onlineaddonversions[o_obj].name == localaddonversions[l_obj].name) {
                   //console.log(onlineaddonversions[o_obj].name +" local: "+localaddonversions[l_obj].localversion+", online: "+onlineaddonversions[o_obj].webversion);
                   if (localaddonversions[l_obj].localversion != onlineaddonversions[o_obj].webversion && onlineaddonversions[o_obj].webversion != '' && onlineaddonversions[o_obj].webversion != 'n/a') {
-                    addonUpdateCounter++;
+                    addonUpdateList += "<br/>&#183; "+onlineaddonversions[o_obj].name+" ("+onlineaddonversions[o_obj].webversion+")";
                   }
                }
              
@@ -20284,14 +20284,14 @@ StartPage = Singleton.create(Page, {
       } 
     }
     
-    if (addonUpdateCounter > 0) {
+    if (addonUpdateList !== "") {
       var self = this,
       rowShowAddonUpdates = jQuery("#addonUpdatesAvailable"),
       btnShowAddonUpdates = jQuery("#addonUpdatesAvailable .firmwareAvailable");
       btnShowAddonUpdates.click(function () {
         showSoftwareCP();
       });
-      jQuery("#addonUpdatesAvailableCounter").text("(" + addonUpdateCounter + ")");
+      jQuery("#addonUpdatesAvailableList").html(addonUpdateList);
       rowShowAddonUpdates.show();
     }
   },

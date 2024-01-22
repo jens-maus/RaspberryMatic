@@ -4,9 +4,8 @@
 #
 ################################################################################
 
-PICOD_VERSION = 3.0
-PICOD_COMMIT = 55458477aa48b1ccccbb8b09175dd81fd3512ebf
-PICOD_SITE = $(call github,ef-gy,rpi-ups-pico,$(PICOD_COMMIT))
+PICOD_VERSION = 55458477aa48b1ccccbb8b09175dd81fd3512ebf
+PICOD_SITE = $(call github,ef-gy,rpi-ups-pico,$(PICOD_VERSION))
 PICOD_LICENSE = MIT
 PICOD_LICENSE_FILES = LICENSE
 

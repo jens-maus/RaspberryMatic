@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WIRINGPI_RPI_VERSION = 5de0d8f5739ccc00ab761639a7e8d3d1696a480a
+WIRINGPI_RPI_VERSION = f97a6230160b819e6daea7eb242404afa708e421
 WIRINGPI_RPI_SITE = $(call github,wiringpi,wiringpi,$(WIRINGPI_RPI_VERSION))
 
 WIRINGPI_RPI_LICENSE = LGPL-3.0+

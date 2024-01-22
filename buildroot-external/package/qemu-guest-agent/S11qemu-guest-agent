@@ -10,7 +10,7 @@ PIDFILE="/var/run/${DAEMON}.pid"
 EXEC="/usr/bin/qemu-ga"
 METHOD="virtio-serial"
 METHOD_PATH="/dev/virtio-ports/org.qemu.guest_agent.0"
-ARGS=""
+ARGS="--fsfreeze-hook"
 
 [ -e "${METHOD_PATH}" ] || exit 0
 

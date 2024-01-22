@@ -1,5 +1,7 @@
 configure: force ac_cv_func_setpgrp_void=yes for cross-compiling daemonize
 
+Upstream: Not applicable
+
 Signed-off-by: Jens Maus <mail@jens-maus.de>
 
 --- a/configure.orig	2017-01-06 00:50:51.072171549 +0100

@@ -7,87 +7,6 @@ sourceOnce common.tcl
 load tclrpc.so
 load tclrega.so
 
-set REMOTE_CERT_SCRIPT "https://www.homematic.com/sslcert/ssl.php"
-
-proc action_get_cert {} {
-  global env REMOTE_CERT_SCRIPT sid
-  
-}
-
-proc action_cert_update_confirm {} {
-  global env
-   
-  http_head
-  division {class="popupTitle"} {
-    #puts "Netzwerk-Sicherheit"
-    puts "\${dialogSettingsNetworkMessageCertificateTitle}"
-  }
-  division {class="CLASS21100"} {
-    table {class="popupTable"} {border="0"} {
-      table_row {
-        table_data { 
-          table {class="CLASS21106"} {
-            table_row {
-              table_data {colspan="2"} {
-                puts "\${dialogSettingsNetworkMessageCertificateUploadSucceed}"
-              }
-            }
-            table_row {
-              table_data {
-                #puts "Schritt 4: Zentrale neu starten"
-                puts "\${dialogSettingsNetworkCertificateLblStep4}"
-              }
-              table_data {
-                division {class="popupControls CLASS21107"} {
-                  table {
-                    table_row {
-                      table_data {
-                        division {class="CLASS21110"} {onClick="UpdateGo();"} {
-                          #puts "Neu starten"
-                          puts "\${btnNewStart}"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  division {class="popupControls"} {
-    table {
-      table_row {
-        table_data {class="CLASS21103"} {
-          division {class="CLASS21104"} {onClick="OnBack();"} {
-            #puts "Zur&uuml;ck"
-            puts "\${dialogBack}"
-          }
-        }
-      }
-    }
-  }
-  puts ""
-  cgi_javascript {
-    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
-    puts {
-      UpdateGo = function() {
-        dlgPopup.hide();
-        dlgPopup.setWidth(400);
-        dlgPopup.LoadFromFile(url, "action=cert_update_go");
-      }
-      OnBack = function() {
-        dlgPopup.hide();
-        dlgPopup.setWidth(800);
-        dlgPopup.LoadFromFile(url);
-      }
-    }
-    puts "translatePage('#messagebox');"
-  }
-}
-
 proc action_cert_update_failed {} {
   global env
    
@@ -139,37 +58,18 @@ proc action_cert_update_failed {} {
   }
 }
 
-
-proc action_reboot {} {
-  puts ""
-  exec /sbin/reboot -d 2 2>/dev/null >/dev/null &
-}
-
 proc action_cert_update_go {} {
   global env
   
   http_head
-
-  file rename -force -- "/usr/local/tmp/server.pem" "/etc/config/server.pem"
-
-  put_message "\${dialogSettingsNetworkMessageCertificateTitle}" "\${dialogSettingsNetworkMessageCertificateCCURestart}" {\${btnNewLogin} "window.location.href='/';"}
-  
-  #save DOM
-  rega system.Save()
-  
-  puts ""
   cgi_javascript {
-    puts "var url = \"$env(SCRIPT_NAME)?sid=\" + SessionId;"
     puts {
-      var pb = "action=reboot";
-      var opts = {
-        postBody: pb,
-        sendXML: false
-      };
-      new Ajax.Request(url, opts);
+      homematic("User.restartLighttpd", {}, function(){
+        MessageBox.show(translateKey("dialogRestartWebserverTitle"),translateKey("dialogRestartWebserverContent"));
+        window.setTimeout(function() {window.location.protocol = "http";},2000);
+      }); 
     }
-    puts "translatePage('#messagebox');"
-  }    
+  } 
 }
 
 
@@ -256,7 +156,7 @@ proc action_cert_upload {} {
   gets $fp line
   close $fp
   #puts $line;
-  if { [string equal $line "-----BEGIN RSA PRIVATE KEY-----"] == 1 || [string equal $line "-----BEGIN PRIVATE KEY-----"] == 1} {
+  if { [string last " PRIVATE KEY-----" $line] != -1 } {
     file rename -force -- $filename "/usr/local/tmp/server.pem"
     
     cgi_javascript {
@@ -268,23 +168,23 @@ proc action_cert_upload {} {
         }
         dlgPopup.hide();
         dlgPopup.setWidth(600);
-        dlgPopup.LoadFromFile(url, "action=cert_update_confirm");
+        dlgPopup.LoadFromFile(url, "action=cert_update_go");
       }
     }
   } else {
     file delete -force -- $filename
 
     cgi_javascript {
-      puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-      puts {
-        var dlgPopup = parent.top.dlgPopup;
-        if (dlgPopup === undefined) {
-          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
-        }
-        dlgPopup.hide();
-        dlgPopup.setWidth(600);
-        dlgPopup.LoadFromFile(url, "action=cert_update_failed");
+    puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+    puts {
+      var dlgPopup = parent.top.dlgPopup;
+      if (dlgPopup === undefined) {
+        dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
       }
+      dlgPopup.hide();
+      dlgPopup.setWidth(600);
+      dlgPopup.LoadFromFile(url, "action=cert_update_failed");
+    }
     }
   }
 }
@@ -295,7 +195,7 @@ proc action_update_start {} {
 
 
 proc action_put_page {} {
-  global env  REMOTE_CERT_SCRIPT sid
+  global env sid
   
   set ip ""
   set mask ""
@@ -304,9 +204,8 @@ proc action_put_page {} {
   set dhcp ""
   set dns1 ""
   set dns2 ""
-  set vpn ""
   
-  read_config dhcp hostname ip mask gw dns1 dns2 vpn
+  read_config dhcp hostname ip mask gw dns1 dns2
   
   http_head
   
@@ -315,8 +214,7 @@ proc action_put_page {} {
     puts "\${dialogSettingsNetworkTitle}"
   }
   division {class="CLASS21114 j_translate"} {
-    division {style="height:80vh;width:100%;overflow:auto;"} {
-    table {class="popupTable"} {border=1} {width="100%"} {height="100%"} {
+    table {class="popupTable"} {border=1} {width="100%"} {
       table_row {class="CLASS21115"} {
         table_data {class="CLASS21116"} {
           #puts "IP-<br/>Einstellungen"
@@ -333,7 +231,6 @@ proc action_put_page {} {
                 cgi_text hostname=$hostname {id="text_hostname"}
               }
             }
-            if {[get_platform] != "oci"} {
             table_row {
               set checked ""
               if {! $dhcp} { set checked "checked=true" }
@@ -424,7 +321,6 @@ proc action_put_page {} {
               }
 
             }
-            }
           }
         }
         table_data {class="CLASS21113"} {align="left"} {
@@ -432,42 +328,6 @@ proc action_put_page {} {
           p { ${dialogSettingsNetworkHintIPSettingsP2} }
           p { ${dialogSettingsNetworkHintIPSettingsP3} }
 
-        }
-      }
-      table_row {class="CLASS21115"} {
-        table_data {class="CLASS21116"} {
-          puts "\${dialogSettingsNetworkTDVPNSettings}"
-        }
-        table_data {align=left} {
-          table {
-            table_row {
-              set checked ""
-              if {$vpn == "1"} { set checked "checked=true" }
-              table_data {class="CLASS21112"} {colspan="2"} {
-                cgi_checkbox mode=vpn {id="check_vpn"} $checked
-                puts "\${dialogSettingsNetworkVPNLblActivate}"
-              }
-            }
-            table_row {
-              table_data {width="10"} { }
-              table_data {class="CLASS21112"} {
-                division {class="popupControls CLASS21107"} {
-                  if {$vpn == "1"} {
-                    division {class="CLASS21117"} {onClick="window.open('/tailscale/', '_blank').focus();"} {
-                      puts "\${dialogSettingsNetworkVPNLblAuth}"
-                    }
-                  } else {
-                    division {class="CLASS21117"} {style="color:grey"} {
-                      puts "\${dialogSettingsNetworkVPNLblAuth}"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-        table_data {class="CLASS21113"} {align="center"} {
-          puts "<img src=\"/ise/img/help.png\" onclick=\"MessageBox.show(translateKey('dialogSettingsNetworkVPNLblActivate')+' - '+translateKey('HelpTitle'), translateKey('dialogSettingsNetworkVPNHelpP1')+'<br/><br/>'+translateKey('dialogSettingsNetworkVPNHelpP2'), '', 450, 320) ;\">"
         }
       }
       table_row {class="CLASS21119"} {
@@ -478,56 +338,7 @@ proc action_put_page {} {
         table_data {class="CLASS21113"} {width="400"} {
           table {class="CLASS21111"} {
             set email [get_user_email]
-            table_row {
-              table_data {width="20"} {}
-              table_data {colspan="2" align="left"} {
-                #puts "Schritt 1: Daten eingeben"
-                puts "\${dialogSettingsNetworkCertificateLblStep1}"
-              }
-            }
-            table_row {
-              table_data {width="20"} {}
-              table_data {align="left"} {
-                #puts "Hostname:"
-                puts "\${dialogSettingsNetworkCertificateLblHostname}"
-              }
-              table_data {align="right"} {
-                cgi_text url=$env(HTTP_HOST) {size="35"} {id="text_url"} {type="text"}
-              }
 
-              table_data {id="text_url_hint"} {class="attention hidden"} {
-                puts "\${invalidIP}"
-              }
-
-            }
-            table_row {
-              table_data {width="20"} {}
-              table_data {align="left"} {
-                #puts "E-Mail Adresse:"
-                puts "\${dialogSettingsNetworkCertificateLblEMail}"
-              }
-              table_data {align="right"} {
-                cgi_text mail=$email {size="35"} {id="text_mail"} {type="text"}
-              }
-            }
-            table_row {
-              table_data {width="20"} {}
-              table_data {colspan="2" align="left"} {
-                #puts "Land (DE, UK, etc.):"
-                puts "\${dialogSettingsNetworkCertificateLblCountry}"
-                cgi_text country=DE {size="2"} {id="text_country"} {type="text"}
-              }
-            }
-            table_row {
-              table_data {align="right"} {class="CLASS21112"} {colspan="3"} {
-                division {class="popupControls CLASS21107"} {
-                  division {class="CLASS21117"} {onClick="OnGetCert()"} {
-                    #puts "Zertifikat erstellen"
-                    puts "\${dialogSettingsNetworkCertificateBtnCreateCert}"
-                  }
-                }
-              }
-            }
             table_row {
               table_data {width="20"} {}
               table_data {colspan="2" align="left"} {
@@ -563,13 +374,6 @@ proc action_put_page {} {
                     }
                   }
                 }
-              }
-            }
-            table_row {
-              table_data {width="20"} {}
-              table_data {colspan="2" align="left"} {class="CLASS21118"} {
-                #puts "Schritt 4: Zentrale neu starten"
-                puts "\${dialogSettingsNetworkCertificateLblStep4}"
               }
             }
 
@@ -608,22 +412,10 @@ proc action_put_page {} {
         }
         table_data {class="CLASS21113"} {align="left"} {
           p {${dialogSettingsNetworkHintCertificateP1}}
-
-          p {
-          ${dialogSettingsNetworkHintCertificateP2}
-          <ol>
-            <li>${dialogSettingsNetworkHintCertificateP2a}</li>
-            <li>${dialogSettingsNetworkHintCertificateP2b}</li>
-            <li>${dialogSettingsNetworkHintCertificateP2c}</li>
-            <li>${dialogSettingsNetworkHintCertificateP2d}</li>
-          </ol>
-          }
+          p {${dialogSettingsNetworkHintCertificateP2}}
           p {${dialogSettingsNetworkHintCertificateP3}}
-
-
         }
       }
-    }
     }
   }
   division {class="popupControls"} {
@@ -653,23 +445,13 @@ proc action_put_page {} {
       OnOK = function() {
         var pb = "action=save_settings";
         pb += "&hostname="+document.getElementById("text_hostname").value;
-        if(document.getElementById("radio_manual") !== null) {
         pb += "&dhcp="+(document.getElementById("radio_manual").checked?"0":"1");
         pb += "&ip="+document.getElementById("text_ip").value;
         pb += "&mask="+document.getElementById("text_mask").value;
         pb += "&gw="+document.getElementById("text_gw").value;
         pb += "&dns1="+document.getElementById("text_dns1").value;
         pb += "&dns2="+document.getElementById("text_dns2").value;
-        } else {
-        pb += "&dhcp=1";
-        pb += "&ip=0.0.0.0";
-        pb += "&mask=0.0.0.0";
-        pb += "&gw=0.0.0.0";
-        pb += "&dns1=0.0.0.0";
-        pb += "&dns2=0.0.0.0";
-        }
         
-        pb += "&vpn="+(document.getElementById("check_vpn").checked?"1":"0");
         var opts = {
           postBody: pb,
           sendXML: false,
@@ -769,31 +551,16 @@ proc action_put_page {} {
         },timeDelay);
       };
     }
-    if {[get_platform] != "oci"} {
     puts "enable_disable();"
-    }
     puts "translatePage('#messagebox');"
     puts "dlgPopup.readaptSize();"
   }
   set serial [get_serial]
   cgi_javascript {
-    puts "var serial = \"$serial\";"
     puts {
-      OnGetCert = function() {
-        var country = document.getElementById("text_country").value;
-        var hostname = document.getElementById("text_url").value;
-        var email = document.getElementById("text_mail").value;
-        homematic("User.createCertificate", {"country": country, "hostname": hostname, "email": email, "serial": serial}, function() {
-          homematic("User.restartLighttpd", {}, function(){
-            MessageBox.show(translateKey("dialogRestartWebserverTitle"),translateKey("dialogRestartWebserverContent"));
-            window.setTimeout(function() {window.location.protocol = "http"},2000);
-          });
-        });
-      };
-
+  
       deleteCert = function() {
-        var textA = "<div>" + translateKey('confirmCertificationPurgeA') + "<br/><br/></div>" +
-         "<div style=\"text-align:center\">" + translateKey('confirmCertificationPurgeB') + "</div>"
+        var textA = "<div style=\"text-align:center\">" + translateKey('confirmCertificationPurgeB') + "</div>"
 
         var textB = "<div>" + translateKey('certificationFileDeletedA')  + "<br/><br/></div>" +
         "<div style=\"text-align:center\">" + translateKey('certificationFileDeletedB') + "</div>"
@@ -834,9 +601,9 @@ proc action_save_settings {} {
     import dhcp
     import dns1
     import dns2
-    import vpn
-    if { [write_config $dhcp $hostname $ip $mask $gw $dns1 $dns2 $vpn] } {
+    if { [write_config $dhcp $hostname $ip $mask $gw $dns1 $dns2] } {
       #activate the new settings
+    catch {exec "/etc/init.d/S40network" "restart" 2> &1 > /dev/null}
       puts "Success"
       # puts "\${dialogSettingsNetworkMessageSaveSettingsSucceed}"
       return
@@ -870,8 +637,8 @@ proc set_property {s_var id value} {
   return 0
 }
 
-proc get_current_config {dhcp_var hostname_var ip_var mask_var gw_var dns1_var dns2_var vpn_var} {
-  upvar $dhcp_var dhcp $hostname_var hostname $ip_var ip $mask_var mask $gw_var gw $dns1_var dns1 $dns2_var dns2 $vpn_var vpn
+proc get_current_config {dhcp_var hostname_var ip_var mask_var gw_var dns1_var dns2_var} {
+  upvar $dhcp_var dhcp $hostname_var hostname $ip_var ip $mask_var mask $gw_var gw $dns1_var dns1 $dns2_var dns2
   set ifconfig_result [exec /sbin/ifconfig eth0]
   if {! [regexp -line {inet addr:([\d.]+).*Mask:([\d.]+)[^\d.]*$} $ifconfig_result dummy ip mask]} {return 0}
   set fd -1
@@ -895,8 +662,8 @@ proc get_current_config {dhcp_var hostname_var ip_var mask_var gw_var dns1_var d
   return 1
 }
 
-proc read_config {dhcp_var hostname_var ip_var mask_var gw_var dns1_var dns2_var vpn_var} {
-  upvar $dhcp_var dhcp $hostname_var hostname $ip_var ip $mask_var mask $gw_var gw $dns1_var dns1 $dns2_var dns2 $vpn_var vpn
+proc read_config {dhcp_var hostname_var ip_var mask_var gw_var dns1_var dns2_var} {
+  upvar $dhcp_var dhcp $hostname_var hostname $ip_var ip $mask_var mask $gw_var gw $dns1_var dns1 $dns2_var dns2
   set fd -1
   catch {set fd [open "/etc/config/netconfig" r]}
   if { $fd <0 } { return 0 }
@@ -910,14 +677,10 @@ proc read_config {dhcp_var hostname_var ip_var mask_var gw_var dns1_var dns2_var
   if {! [get_property $netconfig "GATEWAY" gw] } {return 0}
   get_property $netconfig "NAMESERVER1" dns1
   get_property $netconfig "NAMESERVER2" dns2
-
-  # check for vpn enable status
-  set vpn [file exists "/etc/config/tailscaleEnabled"]
-  
   return 1
 }
 
-proc write_config {dhcp hostname ip mask gw dns1 dns2 vpn} {
+proc write_config {dhcp hostname ip mask gw dns1 dns2} {
   set fd -1
   catch {set fd [open "/etc/config/netconfig" r]}
   if { $fd <0 } { return 0 }
@@ -944,18 +707,6 @@ proc write_config {dhcp hostname ip mask gw dns1 dns2 vpn} {
   puts -nonewline $fd $netconfig
   close $fd
 
-  # set vpn status
-  set cur_vpn [file exists "/etc/config/tailscaleEnabled"]
-  if { $vpn != $cur_vpn } {
-    if { $vpn == 1 } {
-      exec touch /etc/config/tailscaleEnabled
-      exec /etc/init.d/S46tailscaled restart >/dev/null 2>/dev/null
-    } else {
-      exec /etc/init.d/S46tailscaled stop >/dev/null 2>/dev/null
-      exec rm -f /etc/config/tailscaleEnabled
-    }
-  }
-
   return 1
 }
 
@@ -971,7 +722,6 @@ cgi_eval {
 
   catch { import action }
   catch { import filename }
-
   if {[session_requestisvalid 8] > 0} then action_$action
 }
 

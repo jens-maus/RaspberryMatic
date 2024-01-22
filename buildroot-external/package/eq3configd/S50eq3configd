@@ -21,9 +21,12 @@ init () {
 		cp /var/ids /etc/config/
 	fi
 
+	# make sure crypttool.cfg exists and has secure permissions
 	if [[ ! -e /etc/config/crypttool.cfg ]] ; then
 		touch /etc/config/crypttool.cfg
 	fi
+	chmod 0640 /etc/config/crypttool.cfg
+	chgrp eq3cfg /etc/config/crypttool.cfg
 }
 
 start() {
@@ -34,7 +37,7 @@ start() {
 	# to ensure that others are killed first in case of low memory situations
 	echo -900 >/proc/$$/oom_score_adj 2> /dev/null
 
-	start-stop-daemon -S -q -b -m -p ${PIDFILE} --exec /bin/${DAEMON}
+	start-stop-daemon -S -q -b -m -c eq3cfg:eq3cfg -p ${PIDFILE} --exec /bin/${DAEMON}
 	echo "OK"
 }
 stop() {
@@ -63,4 +66,4 @@ case "$1" in
 	exit 1
 esac
 
-exit $?
+exit 0

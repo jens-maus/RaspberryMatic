@@ -4,6 +4,9 @@
 # Start all init scripts in /etc/init.d
 # executing them in numerical order.
 
+# make sure we have a secure umask
+umask 0002
+
 # mount all filesystems
 /bin/mount -a
 

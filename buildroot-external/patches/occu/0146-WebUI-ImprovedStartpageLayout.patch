@@ -25,15 +25,6 @@
                    integer cId = oEntry.ID();
                    integer iStatusOnly = 0;
                    boolean bInStatusList = false;
-@@ -163,7 +168,7 @@
-   <!-- Rechte Seite: Anlern-Button, SystemInformationen -->
-   <div id="contentRight" class="CLASS01809" style="overflow:auto;">
- 
--      <table id="tblRightContent" width="100%">
-+      <table id="tblRightContent" width="100%" style="padding-right: 10px;">
-         <tr style="vertical-align: top;" class="CLASS01810">
-           <td>
-           <table id="tblStartpageInfo" width="100%" class="CLASS01811 startPageInfo hidden" cellpadding="2" cellspacing="0">
 @@ -173,38 +178,21 @@
              </colgroup>
              <tr>

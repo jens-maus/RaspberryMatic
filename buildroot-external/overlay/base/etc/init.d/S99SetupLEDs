@@ -30,8 +30,36 @@ start() {
     echo "${HM_LED_YELLOW_MODE2}" >"${HM_LED_YELLOW}/trigger"
   fi
 
+  # if we are in HMLGW mode and are using a RPI-RF-MOD we have
+  # to set the LED to blue or disable it completely.
+  if [[ "${HM_MODE}" == "HM-LGW" ]]; then
+    if [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]] || [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+      if [[ -e /sys/class/leds/rpi_rf_mod:green/trigger ]]; then
+        echo none >/sys/class/leds/rpi_rf_mod:green/trigger
+        echo none >/sys/class/leds/rpi_rf_mod:red/trigger
+        if [[ -e /etc/config/disableLED ]]; then
+          echo none >/sys/class/leds/rpi_rf_mod:blue/trigger
+        else
+          echo default-on >/sys/class/leds/rpi_rf_mod:blue/trigger
+        fi
+      fi
+    fi
+  fi
+
+  # execute /usr/local/etc/rc.postlocal (but not in safemode)
+  if [[ -x /usr/local/etc/rc.postlocal ]] && [[ ! -e /etc/config/safemode ]]; then
+    echo -n "rc.postlocal, "
+    /usr/bin/timeout 120 /usr/local/etc/rc.postlocal
+  fi
+  
+  # if we are in safemode we remove the safemode control-file
+  rm -f /etc/config/safemode
+  
   # signal that the system startup is finished
   touch /var/status/startupFinished
+
+  # reload lighttpd to let it enable the RemoteAPI ports
+  /etc/init.d/S50lighttpd reload >/dev/null
 
   echo "booted, OK"
 }
@@ -47,6 +75,25 @@ stop() {
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
+  # remove startupFinished and restart lighttpd
+  # to let it block external APIs again
+  rm -f /var/status/startupFinished
+
+  # reload lighttpd to let it disable the RemoteAPI ports
+  /etc/init.d/S50lighttpd reload >/dev/null
+
+  # if we are in HMLGW mode and are using a RPI-RF-MOD we have
+  # to set the LED to yellow again to signal shutdown
+  if [[ "${HM_MODE}" == "HM-LGW" ]]; then
+    if [[ "${HM_HMIP_DEV}" == "RPI-RF-MOD" ]] || [[ "${HM_HMRF_DEV}" == "RPI-RF-MOD" ]]; then
+      if [[ -e /sys/class/leds/rpi_rf_mod:green/trigger ]]; then
+        echo default-on >/sys/class/leds/rpi_rf_mod:green/trigger
+        echo default-on >/sys/class/leds/rpi_rf_mod:red/trigger
+        echo none >/sys/class/leds/rpi_rf_mod:blue/trigger
+      fi
+    fi
+  fi
+
   # stop starts, lets set the LEDs
   if [[ -f "${HM_LED_GREEN}/trigger" ]]; then
     echo "${HM_LED_GREEN_MODE1}" >"${HM_LED_GREEN}/trigger"
@@ -56,6 +103,12 @@ stop() {
   fi
   if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
     echo "${HM_LED_YELLOW_MODE1}" >"${HM_LED_YELLOW}/trigger"
+  fi
+  
+  # call rc.shutdown
+  if [[ -x /usr/local/etc/rc.shutdown ]]; then
+    echo -n "rc.shutdown, "
+    /usr/bin/timeout 120 /usr/local/etc/rc.shutdown
   fi
 
   echo "shutdown, OK"
@@ -76,4 +129,4 @@ case "$1" in
     exit 1
 esac
 
-exit $?
+exit 0

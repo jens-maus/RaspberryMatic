@@ -18,14 +18,27 @@ DAEMON="CloudMatic"
 start() {
 	echo -n "Starting ${DAEMON}: "
 
-	if [[ ! -e /etc/config/safemode ]]; then
-
+	if [[ -e /etc/config/safemode ]]; then
+		echo "skipping (safemode)"
+	elif [[ -e /etc/config/cloudmaticDisabled ]]; then
+		# remove mh config button if present
+		if grep -q "ID mh CONFIG_NAME " /etc/config/hm_addons.cfg 2>/dev/null; then
+			/bin/updateAddonConfig.tcl -d mh
+		fi
+		# remove symbolic link to www
+		if [[ -L /etc/config/addons/www/mh ]]; then
+			rm /etc/config/addons/www/mh
+		fi
+		# remove /usr/local/etc/config/addons/mh if no client.key exists
+		if [[ -d /etc/config/addons/mh ]] && [[ ! -f /etc/config/addons/mh/client.key ]]; then
+			rm -rf /etc/config/addons/mh
+		fi
+		echo "disabled"
+	else
 		# CloudMatic (meine-homematic.de) startup
 		/opt/mh/startup.sh 2>/dev/null >/dev/null
 
 		echo "OK"
-	else
-		echo "skipping (safemode)"
 	fi
 }
 
@@ -48,4 +61,4 @@ case "$1" in
 		exit 1
 esac
 
-exit $?
+exit 0

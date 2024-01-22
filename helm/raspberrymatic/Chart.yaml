@@ -29,15 +29,20 @@ type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 3.65.11
+version: 3.73.9
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
-appVersion: 3.65.11.20221005
+appVersion: 3.73.9.20231130
+
+dependencies:
+  - name: common
+    repository: https://bjw-s.github.io/helm-charts
+    version: 0.2.2
 
 annotations:
   artifacthub.io/changes: |
-    - Release of 3.65.11.20221005 (https://github.com/jens-maus/RaspberryMatic/releases/tag/3.65.11.20221005)
+    - Release of 3.73.9.20231130 (https://github.com/jens-maus/RaspberryMatic/releases/tag/3.73.9.20231130)
   artifacthub.io/license: Apache-2.0
   artifacthub.io/links: |
     - name: Webpage

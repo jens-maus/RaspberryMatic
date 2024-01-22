@@ -1,10 +1,70 @@
+--- occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm
+@@ -32,7 +32,7 @@
+       }
+     }
+   %>
+-  fltVR = new iseFilter("fltVR");
++  fltPL = new iseFilter("fltPL");
+   arItems = new Array();
+ </script>
+ 
+@@ -71,7 +71,7 @@
+         <div id="btnFilterName" class="FilterBtn">${thFilter}</div>
+         <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
+           <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class="CLASS03307" NAME="ftName"/>
+-          <div id="ftSetNameBtn" class='FilterSetButton CLASS03308' onclick="setSFilter(fltVR, 'ftName', FIL_NAME);updateTable();$('btnFilterNameSub').hide();" >${filterSet}</div>
++          <div id="ftSetNameBtn" class='FilterSetButton CLASS03308' onclick="setSFilter(fltPL, 'ftName', FIL_NAME);updateTable();$('btnFilterNameSub').hide();" >${filterSet}</div>
+           <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide();">${filterClose}</div>
+         </div>
+       </td>
+@@ -79,7 +79,7 @@
+         <div id="btnFilterDesc" class="FilterBtn">${thFilter}</div>
+         <div class="FilterSubMenu" id="btnFilterDescSub" style="display:none">
+           <input id="ftDesc" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetDescBtn', 'ftCancelDescBtn')" type="text" size="15" class="CLASS03307" NAME="ftDesc"/>
+-          <div id="ftSetDescBtn" class="FilterSetButton CLASS03308" onclick="setSFilter(fltVR, 'ftDesc', FIL_DESC);updateTable();$('btnFilterDescSub').hide();" >${filterSet}</div>
++          <div id="ftSetDescBtn" class="FilterSetButton CLASS03308" onclick="setSFilter(fltPL, 'ftDesc', FIL_DESC);updateTable();$('btnFilterDescSub').hide();" >${filterSet}</div>
+           <div id="ftCancelDescBtn" class='FilterSetButton' onclick="$('btnFilterDescSub').hide();">${filterClose}</div>
+         </div>
+       </td>
+@@ -399,7 +399,7 @@
+   s += "<tr>";
+     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>"+ translateKey('footerBtnPageBack') +"</div></td>";
+     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='NewProgram();'>"+ translateKey('footerBtnNew') +"</div></td>";
+-    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03306' onclick='fltVR.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
++    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03306' onclick='fltPL.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
+     //s += "<td  style='text-align:center;' valign='middle'><div class='FooterButton CLASS04905' onclick='ShowNonVisiblePrograms();' >Systeminterne Programme<br /><% Write(sInternalBtnText); %>blenden</div></td>";
+     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04905' onclick='ShowNonVisiblePrograms();' >"+translateKey(internalBtnText) +"</div></td>";
+     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04906' onclick='new HMScriptExecutor();' >"+translateKey('footerBtnTestScript')+ "</div></td>";
+@@ -418,7 +418,7 @@
+   {
+     onTopOver: function(divToShow)
+     {
+-      selectFilters(fltVR, divToShow);
++      selectFilters(fltPL, divToShow);
+     }
+   };
+ 
+@@ -435,10 +435,10 @@
+ 
+   updateTable = function()
+   {
+-    colorFilterBtns(fltVR);
++    colorFilterBtns(fltPL);
+     for (var i = 0; i < arItems.length; i++)
+     {
+-      if (!fltVR.objPassFilter(arItems[i]))
++      if (!fltPL.objPassFilter(arItems[i]))
+       {
+         hide(arItems[i]['trid']);
+       }
 --- occu/WebUI/www/rega/pages/tabs/control/devices.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/devices.htm
 @@ -8,31 +8,49 @@
    %>
    //setPath("<span onclick='WebUI.enter(ControlPage);'>Status und Bedienung</span> &gt; Ger�te");
    setPath("<span onclick='WebUI.enter(ControlPage);'>"+translateKey('menuControlPage') +"</span> &gt; " +translateKey('submenuDevices'));
-+  fltVR = new iseFilter('fltVR');
++  fltDL = new iseFilter('fltDL');
    fltHD = new iseFilter('fltHD');
 +  arItems = new Array();
  </script>
@@ -49,7 +109,7 @@
 +                    <div id="btnFilterDevName" class="FilterBtn">${thFilter}</div>
 +                    <div class="FilterSubMenu" id="btnFilterDevNameSub" style="display:none">
 +                      <input id="ftDevName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetDevNameBtn', 'ftCancelDevNameBtn')" type="text" size="15" class="CLASS03307" />
-+                      <div id="ftSetDevNameBtn" class='FilterSetButton CLASS03504' onclick="setSFilter(fltVR, 'ftDevName', FIL_NAME);updateDevTable();$('btnFilterDevNameSub').hide();" >${filterSet}</div>
++                      <div id="ftSetDevNameBtn" class='FilterSetButton CLASS03504' onclick="setSFilter(fltDL, 'ftDevName', FIL_NAME);updateDevTable();$('btnFilterDevNameSub').hide();" >${filterSet}</div>
 +                      <div id="ftCancelDevNameBtn" class='FilterSetButton' onclick="$('btnFilterDevNameSub').hide();">${filterClose}</div>
 +                    </div>
 +                  </td>
@@ -97,7 +157,7 @@
 +  {
 +    onTopOver: function(divToShow)
 +    {
-+      selectFilters(fltVR, divToShow);
++      selectFilters(fltDL, divToShow);
 +    }
 +  };
 +
@@ -111,7 +171,7 @@
    s += "<tr>";
    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
 -  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltHD.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
-+  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
++  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltDL.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
    s += "</tr>";
    s += "</table>";
    
@@ -124,10 +184,10 @@
 +
 +  updateDevTable = function()
 +  {
-+    colorFilterBtns(fltVR);
++    colorFilterBtns(fltDL);
 +    for (var i = 0; i < arItems.length; i++)
 +    {
-+      if (!fltVR.objPassFilter(arItems[i]))
++      if (!fltDL.objPassFilter(arItems[i]))
 +      {
 +        hide(arItems[i]['trid']);
 +      }
@@ -303,6 +363,64 @@
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="room"){sCssName="SortSelected";} %>
    <th><div id="room" class="pt11 <%Write(sCssName); %>" onclick="IseSort(arChns,'room',true);">${thRoom}</div></th>
    <%string sCssName="Sort"; if(system.GetSessionVar("sessionLS")=="func"){sCssName="SortSelected";} %>
+--- occu/WebUI/www/rega/pages/tabs/control/programs.htm.orig
++++ occu/WebUI/www/rega/pages/tabs/control/programs.htm
+@@ -38,7 +38,7 @@
+ %>
+   //setPath("<span onclick='WebUI.enter(ControlPage);'>Status und Bedienung</span> &gt; Programme");
+ setPath("<span onclick='WebUI.enter(ControlPage);'>"+translateKey('menuControlPage') +"</span> &gt; "+translateKey('submenuPrograms'));
+-  fltHR = new iseFilter("fltHR");
++  fltPR = new iseFilter("fltPR");
+   arProgs = new Array();
+ </script>
+ 
+@@ -60,7 +60,7 @@
+             <div id="btnFilterName" class="FilterBtn CLASS03707" >${thFilter}</div>
+             <div class="FilterSubMenu" id="btnFilterNameSub" style="display:none">
+                 <input id="ftName" onkeypress="iseSFilterCheckEnterEsc(event.keyCode, 'ftSetNameBtn', 'ftCancelNameBtn')" type="text" size="15" class="CLASS03708" NAME="ftName"/>
+-                <div id="ftSetNameBtn" class='FilterSetButton CLASS03709' onclick="setSFilter(fltHR, 'ftName', FIL_NAME);updateTable();$('btnFilterNameSub').hide();" >${filterSet}</div>
++                <div id="ftSetNameBtn" class='FilterSetButton CLASS03709' onclick="setSFilter(fltPR, 'ftName', FIL_NAME);updateTable();$('btnFilterNameSub').hide();" >${filterSet}</div>
+                 <div id="ftCancelNameBtn" class='FilterSetButton' onclick="$('btnFilterNameSub').hide()">${filterClose}</div>
+             </div>
+           </td>
+@@ -147,7 +147,7 @@
+   s += "<table cellspacing='8'>";
+   s += "<tr>";
+     s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey('footerBtnPageBack')+"</div></td>";
+-    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03703' onclick='fltHR.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
++    s += "<td  style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03703' onclick='fltPR.clearFilters();updateTable();' >"+translateKey('footerBtnResetFilter')+"</div></td>";
+   s += "</tr>";
+   s += "</table>";
+   setFooter(s);
+@@ -156,7 +156,7 @@
+   {
+     onTopOver: function(divToShow)
+     {
+-      selectFilters(fltHR, divToShow);
++      selectFilters(fltPR, divToShow);
+     }
+   };
+   new iseSubMenuControl("btnFilterName", "btnFilterNameSub", "ProgramListTable", {d: 16, r: 8}, mouseOpts, false, true);
+@@ -167,10 +167,10 @@
+ 
+   updateTable = function()
+   {
+-    colorFilterBtns(fltHR);
++    colorFilterBtns(fltPR);
+     for( var i=0; i<arProgs.length; i++ )
+     {
+-      if( !fltHR.objPassFilter(arProgs[i]) )
++      if( !fltPR.objPassFilter(arProgs[i]) )
+       {
+         hide( arProgs[i]['trid'] );
+       }
+@@ -180,4 +180,4 @@
+       }
+     }
+   }
+-</script>
+\ No newline at end of file
++</script>
 --- occu/WebUI/www/rega/pages/tabs/control/rooms.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/control/rooms.htm
 @@ -8,7 +8,9 @@

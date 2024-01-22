@@ -1,0 +1,20 @@
+startup.sh: allow the link to be regenerated separately
+
+Upstream: Not applicable
+
+Signed-off-by: Jens Maus <mail@jens-maus.de>
+
+--- a/startup.sh.orig	2023-02-19 22:01:13.238906249 +0100
++++ b/startup.sh	2023-02-19 22:07:27.022879491 +0100
+@@ -13,8 +13,10 @@
+   chmod -R 777 $USER_DIR
+   
+   rm -rf $WWW_DIR
+-  ln -s $BASE_DIR/www $WWW_DIR
++fi
+ 
++if [ ! -e $WWW_DIR ] ; then
++  ln -s $BASE_DIR/www $WWW_DIR
+ fi
+ 
+ # convert from meine-homematic.de to CloudMatic

@@ -26,7 +26,7 @@ check program hw-watchdogEnabled with path "/usr/bin/test -c /dev/watchdog"
 # hss_led service monitoring
 check process hss_led with pidfile /var/run/hss_led.pid
     group homematic
-    start = "/sbin/start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6"
+    start = "/sbin/start-stop-daemon -S -q -b -m -c hssled:hssled -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6"
     stop = "/sbin/start-stop-daemon -K -q -p /var/run/hss_led.pid"
     #if failed port 8182 type udp for 5 cycles then restart
     if not exist for 1 cycles then restart
@@ -86,18 +86,6 @@ check process irqbalance with pidfile /var/run/irqbalance.pid
 check program irqbalanceEnabled with path /bin/sh -c "/usr/bin/test $(nproc) -gt 1"
     group system
     if status != 0 for 1 cycles then unmonitor
-
-# rng daemon (random number generator) monitoring
-check process rngd with pidfile /var/run/rngd.pid
-    group system
-    start = "/etc/init.d/S21rngd start"
-    stop = "/etc/init.d/S21rngd stop"
-    restart = "/etc/init.d/S21rngd stop"
-    if not exist for 1 cycles then restart
-    if 1 restart within 1 cycles then
-      exec "/bin/triggerAlarm.tcl 'rngd restarted' 'WatchDog: rngd-restart' true"
-    if filedescriptors > 95% for 5 cycles then
-      exec "/bin/triggerAlarm.tcl 'rngd: high filedescriptor usage (>95%)' 'WatchDog: rngd-highfd' true"
 
 # dbus daemon monitoring
 check process dbus with pidfile /run/messagebus.pid
@@ -271,7 +259,7 @@ check process multimacd with pidfile /var/run/multimacd.pid
       exec "/bin/triggerAlarm.tcl 'multimacd restarted' 'WatchDog: multimacd-restart' true"
     if filedescriptors > 95% for 5 cycles then
       exec "/bin/triggerAlarm.tcl 'multimacd: high filedescriptor usage (>95%)' 'WatchDog: multimacd-highfd' true"
-    depends on multimacdEnabled, hmlangwDisabled
+    depends on multimacdEnabled
 
 check program multimacdEnabled with path "/usr/bin/test -f /var/etc/multimacd.conf"
     group homematic

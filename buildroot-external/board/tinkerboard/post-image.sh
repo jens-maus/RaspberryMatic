@@ -26,5 +26,3 @@ cp "${TARGET_DIR}/boot/VERSION" "${BINARIES_DIR}"
 
 # create *.img file using genimage
 support/scripts/genimage.sh -c "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/genimage.cfg"
-
-exit $?

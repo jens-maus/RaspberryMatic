@@ -1,5 +1,5 @@
 ---
-name: Bug Report
+name: 🐛 Bug Report
 description: Report a bug/issue related to RaspberryMatic
 labels: ":bug: bug-report"
 body:
@@ -64,6 +64,7 @@ body:
       description: >
         This is the platform you are using to run RaspberryMatic on and corresponds to the image you are usually downloading for updating RaspberryMatic.
       options:
+        - rpi5 (RaspberryPi5)
         - rpi4 (RaspberryPi4)
         - rpi3 (RaspberryPi3)
         - rpi2 (RaspberryPi2)

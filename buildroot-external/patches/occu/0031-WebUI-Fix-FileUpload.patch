@@ -119,16 +119,7 @@
    set downloadOnly 0
 --- occu/WebUI/www/config/cp_network.cgi.orig
 +++ occu/WebUI/www/config/cp_network.cgi
-@@ -149,6 +149,8 @@
-   
-   http_head
- 
-+  file rename -force -- "/usr/local/tmp/server.pem" "/etc/config/server.pem"
-+
-   put_message "\${dialogSettingsNetworkMessageCertificateTitle}" "\${dialogSettingsNetworkMessageCertificateCCURestart}" {\${btnNewLogin} "window.location.href='/';"}
-   
-   #save DOM
-@@ -245,37 +247,43 @@
+@@ -148,36 +148,43 @@
  }
  
  proc action_cert_upload {} {
@@ -148,50 +139,48 @@
 +  gets $fp line
 +  close $fp
    #puts $line;
-   if { [string equal $line "-----BEGIN RSA PRIVATE KEY-----"] == 1 || [string equal $line "-----BEGIN PRIVATE KEY-----"] == 1} {
+-  if { [string equal $line "-----BEGIN RSA PRIVATE KEY-----"] == 1 || [string equal $line "-----BEGIN PRIVATE KEY-----"] == 1} {
 -    file copy -force -- "/var/server.pem" "/etc/config/server.pem"
 -    file delete "/var/server.pem"
-+    file rename -force -- $filename "/usr/local/tmp/server.pem"
++  if { [string last " PRIVATE KEY-----" $line] != -1 } {
++    catch { file copy -force -- "/etc/config/server.pem" "/etc/config/server.pem.bak" }
++    file rename -force -- $filename "/etc/config/server.pem"
      
      cgi_javascript {
        puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
        puts {
 -        parent.top.dlgPopup.hide();
 -        parent.top.dlgPopup.setWidth(600);
--        parent.top.dlgPopup.LoadFromFile(url, "action=cert_update_confirm");
+-        parent.top.dlgPopup.LoadFromFile(url, "action=cert_update_go");
 +        var dlgPopup = parent.top.dlgPopup;
 +        if (dlgPopup === undefined) {
 +          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
 +        }
 +        dlgPopup.hide();
 +        dlgPopup.setWidth(600);
-+        dlgPopup.LoadFromFile(url, "action=cert_update_confirm");
++        dlgPopup.LoadFromFile(url, "action=cert_update_go");
        }
      }
    } else {
 +    file delete -force -- $filename
 +
      cgi_javascript {
--    puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
--    puts {
+     puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
+     puts {
 -      parent.top.dlgPopup.hide();
 -      parent.top.dlgPopup.setWidth(600);
 -      parent.top.dlgPopup.LoadFromFile(url, "action=cert_update_failed");
--    }
-+      puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
-+      puts {
-+        var dlgPopup = parent.top.dlgPopup;
-+        if (dlgPopup === undefined) {
-+          dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
-+        }
-+        dlgPopup.hide();
-+        dlgPopup.setWidth(600);
-+        dlgPopup.LoadFromFile(url, "action=cert_update_failed");
++      var dlgPopup = parent.top.dlgPopup;
++      if (dlgPopup === undefined) {
++        dlgPopup = window.open('', 'ccu-main-window').dlgPopup;
 +      }
++      dlgPopup.hide();
++      dlgPopup.setWidth(600);
++      dlgPopup.LoadFromFile(url, "action=cert_update_failed");
+     }
      }
    }
- }
-@@ -459,8 +467,7 @@
+@@ -343,8 +350,7 @@
              table_row {
                table_data {width="20"} {}
                table_data {colspan="2"} {
@@ -201,7 +190,7 @@
                    file_button cert_file size=30 maxlength=1000000
                  }
                  puts {<iframe name="cert_upload_iframe" style="display: none;"></iframe>}
-@@ -774,13 +781,16 @@
+@@ -708,13 +714,15 @@
  cgi_eval {
    #cgi_debug -on
    cgi_input
@@ -218,7 +207,6 @@
  
    catch { import action }
 +  catch { import filename }
-+
    if {[session_requestisvalid 8] > 0} then action_$action
  }
  
@@ -506,16 +494,89 @@
  	}
      }
      cgi_puts ""
-@@ -310,7 +304,7 @@
- 			    catch {cgi_mail_add "HTTP_HOST: $env(HTTP_HOST)"}
- 			    catch {cgi_mail_add "REMOTE_HOST: $env(REMOTE_HOST)"}
- 			    catch {cgi_mail_add "REMOTE_ADDR: $env(REMOTE_ADDR)"}
+@@ -281,44 +275,48 @@
+ 	    cgi_html {
+ 		cgi_body {
+ 		    if {[info exists _cgi(client_error)]} {
+-			cgi_h3 "Client Error"
++			cgi_h6 "Client Error"
+ 			cgi_p "$errMsg  Report this to your system administrator or browser vendor."
+ 		    } else {
+ 			cgi_put [cgi_anchor_name cgierror]
+-			cgi_h3 "An internal error was detected in the service\
+-				software.  The diagnostics are being emailed to\
+-				the service system administrator ($_cgi(admin_email))."
+-
+-			if {$_cgi(debug) == "-on"} {
+-			    cgi_puts "Heck, since you're debugging, I'll show you the\
+-				    errors right here:"
+-			    # suppress formatting
+-			    cgi_preformatted {
++			cgi_h6 "An internal error was detected in the service\
++				software:"
++
++			# suppress formatting
++			cgi_preformatted {
++				cgi_puts ""
++				cgi_puts "<u>Backtrace:</u>"
+ 				cgi_puts [cgi_quote_html $_cgi(errorInfo)]
+-			    }
+-			} else {
+-			    cgi_mail_start $_cgi(admin_email)
+-			    cgi_mail_add "Subject: [cgi_name] CGI problem"
+-			    cgi_mail_add
+-			    cgi_mail_add "CGI environment:"
+-			    cgi_mail_add "REQUEST_METHOD: $env(REQUEST_METHOD)"
+-			    cgi_mail_add "SCRIPT_NAME: $env(SCRIPT_NAME)"
+-			    # this next few things probably don't need
+-			    # a catch but I'm not positive
+-			    catch {cgi_mail_add "HTTP_USER_AGENT: $env(HTTP_USER_AGENT)"}
+-			    catch {cgi_mail_add "HTTP_REFERER: $env(HTTP_REFERER)"}
+-			    catch {cgi_mail_add "HTTP_HOST: $env(HTTP_HOST)"}
+-			    catch {cgi_mail_add "REMOTE_HOST: $env(REMOTE_HOST)"}
+-			    catch {cgi_mail_add "REMOTE_ADDR: $env(REMOTE_ADDR)"}
 -			    cgi_mail_add "cgi.tcl version: 1.8.0"
-+			    cgi_mail_add "cgi.tcl version: 1.10.0"
- 			    cgi_mail_add "input:"
- 			    catch {cgi_mail_add $_cgi(input)}
- 			    cgi_mail_add "cookie:"
-@@ -472,10 +466,9 @@
+-			    cgi_mail_add "input:"
+-			    catch {cgi_mail_add $_cgi(input)}
+-			    cgi_mail_add "cookie:"
+-			    catch {cgi_mail_add $env(HTTP_COOKIE)}
+-			    cgi_mail_add "errorInfo:"
+-			    cgi_mail_add "$_cgi(errorInfo)"
+-			    cgi_mail_end
++				cgi_puts ""
++				cgi_puts "<u>CGI info:</u>"
++				cgi_puts "_cgi(input): $_cgi(input)"
++				cgi_puts "_cgi(queryencoding): $_cgi(queryencoding)"
++				cgi_puts ""
++				cgi_puts "<u>Environment info:</u>"
++				catch {cgi_parray env}
+ 			}
++			# output in file/mail
++			cgi_mail_start $_cgi(admin_email)
++			cgi_mail_add "Subject: [cgi_name] CGI problem"
++			cgi_mail_add
++			cgi_mail_add "CGI environment:"
++			cgi_mail_add "REQUEST_METHOD: $env(REQUEST_METHOD)"
++			cgi_mail_add "SCRIPT_NAME: $env(SCRIPT_NAME)"
++			# this next few things probably don't need
++			# a catch but I'm not positive
++			catch {cgi_mail_add "HTTP_USER_AGENT: $env(HTTP_USER_AGENT)"}
++			catch {cgi_mail_add "HTTP_REFERER: $env(HTTP_REFERER)"}
++			catch {cgi_mail_add "HTTP_HOST: $env(HTTP_HOST)"}
++			catch {cgi_mail_add "REMOTE_HOST: $env(REMOTE_HOST)"}
++			catch {cgi_mail_add "REMOTE_ADDR: $env(REMOTE_ADDR)"}
++			cgi_mail_add "cgi.tcl version: 1.10.0"
++			cgi_mail_add "input:"
++			catch {cgi_mail_add $_cgi(input)}
++			cgi_mail_add "cookie:"
++			catch {cgi_mail_add $env(HTTP_COOKIE)}
++			cgi_mail_add "errorInfo:"
++			cgi_mail_add "$_cgi(errorInfo)"
++			cgi_mail_end
+ 		    }
+ 		} ;# end cgi_body
+ 	    } ;# end cgi_html
+@@ -472,10 +470,9 @@
      foreach a [lrange $args 1 end] {
          append buf " $a"
      }
@@ -527,7 +588,7 @@
  # generate an image reference (<img ...>)
  # first arg is image url
  # other args are passed through into <img> tag
-@@ -497,7 +490,7 @@
+@@ -497,7 +494,7 @@
  
  # names an anchor so that it can be linked to
  proc cgi_anchor_name {name} {
@@ -536,7 +597,7 @@
  }
  
  proc cgi_base {args} {
-@@ -513,7 +506,7 @@
+@@ -513,7 +510,7 @@
  	    cgi_put " $a"
  	}
      }
@@ -545,7 +606,7 @@
  }
  
  ##################################################
-@@ -531,7 +524,8 @@
+@@ -531,7 +528,8 @@
  	regsub -all -nocase {%([a-f0-9][a-f0-9])} $buf {\\u00\1} buf
  
  	# process \u unicode mapped chars
@@ -555,7 +616,7 @@
      }
  } elseif {[info tclversion] >= 8.1} {
      proc cgi_unquote_input buf {
-@@ -982,7 +976,7 @@
+@@ -982,7 +980,7 @@
  # from cgi_http_head.
  proc cgi_http_equiv {type contents} {
      _cgi_http_head_implicit
@@ -564,7 +625,7 @@
  }
  
  # Do whatever you want with meta tags.
-@@ -1010,7 +1004,7 @@
+@@ -1010,7 +1008,7 @@
  	    cgi_put " $a"
  	}
      }
@@ -573,7 +634,7 @@
  }
  
  proc cgi_name {args} {
-@@ -1114,7 +1108,7 @@
+@@ -1114,7 +1112,7 @@
  
  proc cgi_noscript {args} {
      cgi_puts "<noscript[_cgi_lrange $args 0 [expr [llength $args]-2]]>"
@@ -582,7 +643,7 @@
  
      uplevel 1 [lindex $args end]
  
-@@ -1135,7 +1129,7 @@
+@@ -1135,7 +1133,7 @@
      if {$q != "="} {
  	set value ""
      }
@@ -591,7 +652,7 @@
  }
  
  # record any proc's that must be called prior to displaying an error
-@@ -1254,7 +1248,7 @@
+@@ -1254,7 +1252,7 @@
  	    cgi_put " $a"
  	}
      }
@@ -600,7 +661,7 @@
  }
  
  ##################################################
-@@ -1294,15 +1288,31 @@
+@@ -1294,15 +1292,31 @@
  	} else {
  	    set length $env(CONTENT_LENGTH)
  	    if {0!=[string compare $length "-1"]} {
@@ -627,7 +688,7 @@
 +                    } elseif {0==[string compare -nocase $cs "utf-16"]} {
 +                        set _cgi(queryencoding) "unicode"
 +                    }
-+                    if { [lsearch -exact [encoding names] _cgi(queryencoding)] == -1} {
++                    if { [lsearch -exact [encoding names] $_cgi(queryencoding)] == -1} {
 +                        set _cgi(queryencoding) [encoding system]
 +                    }
 +                } else {
@@ -637,7 +698,7 @@
  	}
  	# save input for possible diagnostics later
  	set _cgi(input) $input
-@@ -1345,30 +1355,6 @@
+@@ -1345,30 +1359,6 @@
      }
  }
  
@@ -668,7 +729,7 @@
  proc _cgi_input_multipart {fin} {
      global env _cgi _cgi_uservar _cgi_userfile
  
-@@ -1379,121 +1365,7 @@
+@@ -1379,121 +1369,7 @@
  	# can hang and we won't get to the termination code
  	set dbg_fout [open $dbg_filename w]
  	set _cgi(input) $dbg_filename
@@ -791,7 +852,7 @@
      }
  
      # figure out boundary
-@@ -1513,24 +1385,28 @@
+@@ -1513,24 +1389,28 @@
      set boundary --$boundary
  
      # don't corrupt or modify uploads yet allow Tcl 7.4 to work
@@ -827,7 +888,7 @@
  	}	    
  	# Lame-o encoding (on Netscape at least) doesn't escape field
  	# delimiters (like quotes)!!  Since all we've ever seen is filename=
-@@ -1548,14 +1424,18 @@
+@@ -1548,14 +1428,18 @@
  	}
  
  	if {[info exists filename]} {
@@ -849,7 +910,7 @@
  	    #
  	    # Look for a boundary line preceded by \r\n.
  	    #
-@@ -1583,10 +1463,13 @@
+@@ -1583,10 +1467,13 @@
  		    puts -nonewline $fout $leftover$buf
  		    set leftover "\n"
  		}
@@ -864,7 +925,7 @@
  	} else {
  	    # read the part into a variable
  	    set val ""
-@@ -1672,7 +1555,8 @@
+@@ -1672,7 +1559,8 @@
  	}
      }
  
@@ -874,7 +935,7 @@
      while {1} {
  	# process Content-Disposition:
  	expect {
-@@ -1684,9 +1568,7 @@
+@@ -1684,9 +1572,7 @@
  	    eof break
  	}
  	catch {unset filename}
@@ -885,7 +946,7 @@
  	if {0==[info exists varname]} {
  	    set _cgi(client_error) 1
  	    error "In response to a request for a multipart form, your browser generated a part header without a name field.  Please upgrade (or fix) your browser."
-@@ -1712,8 +1594,12 @@
+@@ -1712,8 +1598,12 @@
  	}
  
  	if {[info exists filename]} {
@@ -899,7 +960,7 @@
  	    spawn -open [open $foutname w]
  	    set fout_sid $spawn_id
  
-@@ -1967,6 +1853,23 @@
+@@ -1967,6 +1857,23 @@
      }
  }
  
@@ -923,7 +984,7 @@
  ##################################################
  # button support
  ##################################################
-@@ -2088,7 +1991,7 @@
+@@ -2088,7 +1995,7 @@
  	    cgi_put " $a"
  	}
      }
@@ -932,7 +993,7 @@
  }
  
  ##################################################
-@@ -2182,6 +2085,15 @@
+@@ -2182,6 +2089,15 @@
      cgi_put "<input type=file name=\"$name\"[_cgi_list_to_string $args]/>"
  }
  
@@ -948,7 +1009,7 @@
  ##################################################
  # select support
  ##################################################
-@@ -2224,7 +2136,7 @@
+@@ -2224,7 +2140,7 @@
      }
      if {[info exists selected_if_equal]} {
  	if {0 == [string compare $selected_if_equal $value]} {
@@ -957,7 +1018,7 @@
  	}
      }
      cgi_puts ">[cgi_quote_html $o]</option>"
-@@ -2251,7 +2163,7 @@
+@@ -2251,7 +2167,7 @@
  	    }
  	}
      }
@@ -966,7 +1027,7 @@
  }
  
  ##################################################
-@@ -2525,7 +2437,7 @@
+@@ -2525,7 +2441,7 @@
  ##################################################
  
  proc cgi_stylesheet {href} {
@@ -975,7 +1036,7 @@
  }
  
  proc cgi_span {args} {
-@@ -2584,7 +2496,7 @@
+@@ -2584,7 +2500,7 @@
  	    cgi_put " $a"
  	}
      }
@@ -984,7 +1045,7 @@
  }
  
  proc cgi_noframes {args} {
-@@ -2672,33 +2584,50 @@
+@@ -2672,33 +2588,50 @@
  
  # User-defined procedure to generate DOCTYPE declaration
  proc cgi_doctype {} {
@@ -1011,20 +1072,20 @@
 +proc cgi_init {} {
 +    global _cgi
 +    unset _cgi
-+
+ 
+-# email addr of person responsible for this service
+-cgi_admin_mail_addr "root"	;# you should override this!
 +    # set explicitly for speed
 +    set _cgi(debug) -off
 +    set _cgi(buffer_nl) "\n"
  
--# email addr of person responsible for this service
--cgi_admin_mail_addr "root"	;# you should override this!
+-# most services won't have an actual email addr
+-cgi_mail_addr "CGI script - do not reply"
 +    cgi_name ""
 +    cgi_root ""
 +    cgi_body_args ""
 +    cgi_file_limit 10 100000000
- 
--# most services won't have an actual email addr
--cgi_mail_addr "CGI script - do not reply"
++
 +    if {[info tclversion] >= 8.1} {
 +	# set initial urlencoding
 +	if { [lsearch -exact [encoding names] "utf-8"] != -1} {
@@ -1050,7 +1111,7 @@
      } macintosh {
  	set _cgi(tmpdir) [pwd]
      } default {
-@@ -2711,4 +2640,4 @@
+@@ -2711,4 +2644,4 @@
  # regexp for matching attr=val
  set _cgi(attr,regexp) "^(\[^=]*)=(\[^\"].*)"
  

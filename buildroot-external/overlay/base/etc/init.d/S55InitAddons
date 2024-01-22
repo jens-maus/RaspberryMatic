@@ -21,7 +21,8 @@ start() {
     # call /usr/local/etc/rc.prelocal if it exists and is
     # executable
     if [[ -x /usr/local/etc/rc.prelocal ]]; then
-      /usr/local/etc/rc.prelocal
+      echo -n "rc.prelocal, "
+      /usr/bin/timeout 120 /usr/local/etc/rc.prelocal
     fi
 
     # start init of third-party addons one after another
@@ -45,4 +46,4 @@ case "$1" in
     exit 1
 esac
 
-exit $?
+exit 0

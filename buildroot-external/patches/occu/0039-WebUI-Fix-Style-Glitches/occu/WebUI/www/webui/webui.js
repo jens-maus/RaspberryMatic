@@ -21528,7 +21528,7 @@ if (PLATFORM == "Central") {
   TREE_EXPANDED_FOOTER_HTML: "" +
     "<table border='0' cellspacing='8'>" +
       "<tr>" + 
-        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
+        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.collapseTree();'>${footerBtnCloseTree}</div></td>" +
       "</tr>" +
@@ -21536,7 +21536,7 @@ if (PLATFORM == "Central") {
   FLAT_FOOTER_HTML: "" +
     "<table border='0' cellspacing='8'>" +
       "<tr>" + 
-        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
+        "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack();'>${footerBtnPageBack}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.resetFilters();'>${footerBtnResetFilter}</div></td>" +
         "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04312' onclick='DeviceListPage.recoverTree();'>${footerBtnRestoreTree}</div></td>" +
       "</tr>" +
@@ -23051,7 +23051,7 @@ BidcosRfPage =
     FOOTER_HTML= "" +
       "<table border='0' cellspacing='8'>" +
         "<tr>" +
-          "<td style='text-align:center;vertical-align=middle;' ><div class='FooterButton' style='width:auto;padding-left:5px;padding-right:5px;' onclick='WebUI.goBack();'>"+translateKey("footerBtnPageBack")+"</div></td>" +
+          "<td style='text-align:center;vertical-align=middle;' ><div class='FooterButton' onclick='WebUI.goBack();'>"+translateKey("footerBtnPageBack")+"</div></td>" +
         "</tr>" +
       "</table>";
 

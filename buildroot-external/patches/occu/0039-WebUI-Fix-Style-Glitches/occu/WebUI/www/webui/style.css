@@ -57,6 +57,10 @@ hr {
   min-width: 230px;
 }
 
+input[type=checkbox], input[type=radio] {
+  vertical-align: -2px;
+}
+
 .conditionEven
 {
   /*Wenn die Farbe nicht nur als Rahmen, sondern für die ganze Bedingung gelten soll,
@@ -6845,6 +6849,10 @@ color: $_(textColorA); /* white */
 	color: $_(textColorB); /* black */
 }
 
+.CLASS05104 tbody {
+	border-width: 0;
+}
+
 .CLASS05105 {
 	text-align:left;
 }
@@ -8210,6 +8218,7 @@ color: $_(textColorA); /* white */
 
   padding: 3px;
   text-align:center;
+  font-weight: bold;
   vertical-align:middle;
   margin:2px;
   cursor: pointer;
@@ -8767,9 +8776,11 @@ color: $_(textColorA); /* white */
 
   color: $_(textColorB); /* black */
   border: 1px solid $_(black); /* black */
-  border-radius: 2px;
+  border-radius: 5px;
 
   cursor: pointer;
+  font-weight: bold;
+  padding: 2px;
 }
 
 .CLASS21905 {

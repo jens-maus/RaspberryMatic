@@ -174,7 +174,7 @@ jobs:
 
       #########################
       # upload build artifacts
-      - name: Upload build artifact [rpi*, tinkerboard, intelnuc, ova]
+      - name: Upload build artifact [rpi*, tinkerboard, intelnuc, ova, generic-*]
         if: |
           !startsWith(matrix.platform, 'oci_')
         uses: actions/upload-artifact@v4

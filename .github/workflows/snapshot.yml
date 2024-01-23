@@ -116,7 +116,7 @@ jobs:
 
       #######################
       # nightly snapshot uploads
-      - name: Upload build snapshot [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova]
+      - name: Upload build snapshot [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, generic-*]
         if: |
           github.repository_owner == 'jens-maus' &&
           !startsWith(matrix.platform, 'oci_')
@@ -130,7 +130,7 @@ jobs:
           asset_content_type: application/zip
           max_releases: 1
 
-      - name: Upload build snapshot checksum [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova]
+      - name: Upload build snapshot checksum [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, generic-*]
         if: |
           github.repository_owner == 'jens-maus' &&
           !startsWith(matrix.platform, 'oci_')

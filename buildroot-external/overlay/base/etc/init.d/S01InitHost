@@ -176,6 +176,11 @@ identify_host() {
       HM_HOST="nuc"
     ;;
 
+    # generic-aarch64
+    generic-aarch64)
+      HM_HOST="generic-aarch64"
+    ;;
+
     # default fallback
     *)
       HM_HOST="${PLATFORM}"

@@ -21,9 +21,8 @@ rm -f "${BINARIES_DIR}/userfs.ext4"
 #
 cp "${TARGET_DIR}/boot/VERSION" "${BINARIES_DIR}"
 
-# prepare grub config and bootloader
-mkdir -p "${BINARIES_DIR}/boot/grub"
-cp -a "${BOARD_DIR}/grub.cfg" "${BINARIES_DIR}/boot/grub/"
+# copy our grub.cfg to the EFI dir
+cp -a "${BOARD_DIR}/grub.cfg" "${BINARIES_DIR}/efi-part/EFI/BOOT/"
 
 # create *.img file using genimage
 support/scripts/genimage.sh -c "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/genimage.cfg"

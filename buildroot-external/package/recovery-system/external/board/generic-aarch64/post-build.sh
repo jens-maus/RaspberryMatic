@@ -5,7 +5,7 @@
 VERSION="${BR2_RECOVERY_SYSTEM_VERSION}"
 echo "VERSION=${VERSION}" >"${TARGET_DIR}/VERSION"
 echo "PRODUCT=${PRODUCT}" >>"${TARGET_DIR}/VERSION"
-echo "PLATFORM=generic-arm64" >>"${TARGET_DIR}/VERSION"
+echo "PLATFORM=generic-aarch64" >>"${TARGET_DIR}/VERSION"
 
 # Define parameters with default values
 DHCP_VENDOR_ID=eQ3-CCU3

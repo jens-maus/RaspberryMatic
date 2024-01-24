@@ -146,6 +146,10 @@ multilib32-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 multilib32-savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	cd $(shell pwd)/build-$(PRODUCT)/build/multilib32-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) savedefconfig
 
+.PHONY: linux-check-dotconfig
+linux-check-dotconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) linux-check-dotconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT).config BR2_CHECK_DOTCONFIG_OPTS="--github-format --strip-path-prefix=/build-$(PRODUCT)/"
+
 # Create a fallback target (%) to forward all unknown target calls to the build Makefile.
 # This includes:
 #   linux-menuconfig
@@ -180,6 +184,7 @@ help:
 	@echo "  $(MAKE) PRODUCT=<product> savedefconfig: update buildroot defconfig file"
 	@echo "  $(MAKE) PRODUCT=<product> linux-menuconfig: change linux kernel config option"
 	@echo "  $(MAKE) PRODUCT=<product> linux-update-defconfig: update linux kernel defconfig file"
+	@echo "  $(MAKE) PRODUCT=<product> linux-check-dotconfig: checks dotconfig files against Kconfig"
 	@echo "  $(MAKE) PRODUCT=<product> busybox-menuconfig: change busybox config options"
 	@echo "  $(MAKE) PRODUCT=<product> busybox-update-config: update busybox defconfig file"
 	@echo "  $(MAKE) PRODUCT=<product> uboot-menuconfig: change u-boot config options"

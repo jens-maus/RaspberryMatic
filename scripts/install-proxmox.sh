@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="2.0"
+VERSION="2.1"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -205,7 +205,7 @@ info "Using '${STORAGE}' for storage location."
 
 # Select storage size
 info "Selecting virtual disk size"
-DISK_MINSIZE=3
+DISK_MINSIZE=4
 DISK_CURSIZE=6
 while true; do
   if DISK_SIZE=$(whiptail --inputbox "Please enter the virtual disk size (GB) for the RaspberryMatic VM (minimum is ${DISK_MINSIZE} GB)" 8 58 ${DISK_CURSIZE} --title "Virtual disk size" 3>&1 1>&2 2>&3); then
@@ -343,7 +343,7 @@ if [[ "${PLATFORM}" == "aarch64" ]]; then
     --description "# RaspberryMatic CCU" \
     --net0 virtio,bridge=vmbr0,firewall=1 \
     --onboot 1 \
-    --tablet 0 \
+    --tablet 1 \
     --ostype l26 \
     --scsihw virtio-scsi-single \
     --scsi0 "${DISK_ID},discard=on,iothread=1" >>${LOGFILE} 2>&1

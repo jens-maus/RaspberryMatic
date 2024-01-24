@@ -2,6 +2,7 @@ include $(sort $(wildcard $(BR2_EXTERNAL_EQ3_PATH)/package/*/*.mk))
 
 .PHONY: linux-check-dotconfig
 linux-check-dotconfig: linux-check-configuration-done
+	sed -i '1,5s/^\tmodules$$/\t#modules/g' $(LINUX_SRCDIR)/kernel/module/Kconfig
 	CC=$(TARGET_CC) LD=$(TARGET_LD) srctree=$(LINUX_SRCDIR) \
 	ARCH=$(if $(BR2_x86_64),x86,$(if $(BR2_aarch64),arm64,$(ARCH))) \
 	SRCARCH=$(if $(BR2_x86_64),x86,$(if $(BR2_aarch64),arm64,$(ARCH))) \
@@ -10,3 +11,4 @@ linux-check-dotconfig: linux-check-configuration-done
 		--src-kconfig $(LINUX_SRCDIR)Kconfig \
 		--actual-config $(LINUX_SRCDIR).config \
 		$(shell echo $(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
+	sed -i '1,5s/^\t#modules$$/\tmodules/g' $(LINUX_SRCDIR)/kernel/module/Kconfig

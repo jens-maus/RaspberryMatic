@@ -70,7 +70,7 @@ The following installation archives can be downloaded for different hardware pla
 <sub>📦 [RaspberryMatic-${VERSION}-oci_arm64.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_arm64.tgz) (arm64/aarch64)<br/>SHA256: XSHAoci_arm64.tgzX</sub>
 <sub>📦 [RaspberryMatic-${VERSION}-oci_arm.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_arm.tgz) (arm/armhf)<br/>SHA256: XSHAoci_arm.tgzX</sub>
 
-- Generic-aarch64 Appliance – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Proxmox-VE)):
+- Generic-aarch64 Appliance – ([ProxmoxVE](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Proxmox-VE)):
 <sub>📦 [RaspberryMatic-${VERSION}-generic-aarch64.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-generic-aarch64.zip)<br/>SHA256: XSHAaarch64.zipX</sub>
 
 - Kubernetes / K8s – virtual appliance:

@@ -34,6 +34,9 @@ For support on installation and help please visit the following web pages:
 ## 📦 Download:
 The following installation archives can be downloaded for different hardware platforms. To verify their integrity a `sha256` checksum is provided as well. You can either upload these files using the WebUI-based update mechanism or unarchive them to e.g. flash the included `*.img` files on a fresh installation media (e.g. microSD card):
 
+- RaspberryPi5 Model B – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):
+<sub>📦 [RaspberryMatic-${VERSION}-rpi5.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi5.zip)<br/>SHA256: XSHArpi5.zipX</sub>
+
 - RaspberryPi4 Model B, RaspberryPi Compute Module 4, RaspberryPi 400 – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-RaspberryPi)):
 <sub>📦 [RaspberryMatic-${VERSION}-rpi4.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-rpi4.zip)<br/>SHA256: XSHArpi4.zipX</sub>
 
@@ -66,6 +69,9 @@ The following installation archives can be downloaded for different hardware pla
 <sub>📦 [RaspberryMatic-${VERSION}-oci_amd64.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_amd64.tgz) (amd64/x86_64)<br/>SHA256: XSHAoci_amd64.tgzX</sub>
 <sub>📦 [RaspberryMatic-${VERSION}-oci_arm64.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_arm64.tgz) (arm64/aarch64)<br/>SHA256: XSHAoci_arm64.tgzX</sub>
 <sub>📦 [RaspberryMatic-${VERSION}-oci_arm.tgz](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-oci_arm.tgz) (arm/armhf)<br/>SHA256: XSHAoci_arm.tgzX</sub>
+
+- Generic-aarch64 Appliance – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Proxmox-VE)):
+<sub>📦 [RaspberryMatic-${VERSION}-generic-aarch64.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-generic-aarch64.zip)<br/>SHA256: XSHAaarch64.zipX</sub>
 
 - Kubernetes / K8s – virtual appliance:
 <sub>see [install documentation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Kubernetes)</sub>

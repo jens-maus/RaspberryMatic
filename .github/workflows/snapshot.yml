@@ -12,6 +12,11 @@ on:
         description: 'Skip build (for testing workflow)?'
         required: true
         default: "false"
+      platforms:
+        description: 'List of platforms to build (comma seperated, e.g. "rpi3","rpi4")'
+        required: true
+        default: 'all'
+        type: string
 
 # default read-only permission
 permissions:
@@ -43,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [rpi0, rpi2, rpi3, rpi4, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, oci_amd64, oci_arm64, oci_arm]
+        platform: ${{ fromJSON(format('[{0}]', (github.event.inputs.platforms == '' || github.event.inputs.platforms == 'all') && '"rpi0","rpi2","rpi3","rpi4","rpi5","tinkerboard","odroid-c2","odroid-c4","odroid-n2","intelnuc","ova","oci_amd64","oci_arm64","oci_arm","generic-aarch64"' || github.event.inputs.platforms)) }}
 
     steps:
       - name: Checkout Code
@@ -103,6 +108,13 @@ jobs:
           sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} clean raspmatic_${{ matrix.platform }}-release
           mv release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.mf release/RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.mf
 
+      # check linux kernel config consistency
+      - name: Check Linux Kconfig
+        if: |
+          !startsWith(matrix.platform, 'oci_')
+        run: |
+          sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} PRODUCT=raspmatic_${{ matrix.platform }} linux-check-dotconfig
+
       # cleanup
       - name: Cleanup
         run: |
@@ -111,7 +123,7 @@ jobs:
 
       #######################
       # nightly snapshot uploads
-      - name: Upload build snapshot [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova]
+      - name: Upload build snapshot [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, generic-*]
         if: |
           github.repository_owner == 'jens-maus' &&
           !startsWith(matrix.platform, 'oci_')
@@ -125,7 +137,7 @@ jobs:
           asset_content_type: application/zip
           max_releases: 1
 
-      - name: Upload build snapshot checksum [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova]
+      - name: Upload build snapshot checksum [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, generic-*]
         if: |
           github.repository_owner == 'jens-maus' &&
           !startsWith(matrix.platform, 'oci_')
@@ -250,7 +262,10 @@ jobs:
     name: OCI/Docker Build+Push
     runs-on: ubuntu-22.04
     needs: build
-    if: github.event_name != 'pull_request'
+    if: github.event_name != 'pull_request' &&
+      ( github.event.inputs.platforms == '' ||
+        github.event.inputs.platforms == 'all' ||
+        contains(github.event.inputs.platforms, 'oci_'))
 
     steps:
       - uses: actions/checkout@v4
@@ -418,6 +433,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf
+      - name: Download rpi5 manifest
+        uses: actions/download-artifact@v4
+        with:
+          name: RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi5.mf
 
       - name: Bump rpi-imager version
         run: |
@@ -425,7 +444,8 @@ jobs:
             RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi0.mf \
             RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi2.mf \
             RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi3.mf \
-            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf
+            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi4.mf \
+            RaspberryMatic-${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}-rpi5.mf
 
       - name: Commit changes
         run: |

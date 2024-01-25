@@ -1,5 +1,5 @@
-BUILDROOT_VERSION=2023.08.4
-BUILDROOT_SHA256=9cd125724311f534c10a5f3b4aff37b5dcc8611953ea9fc326f5ba6887f6b34d
+BUILDROOT_VERSION=2023.11.1
+BUILDROOT_SHA256=4cb56b0f5a289a6edeac449b3a7fa3c1b39430d738d1c73d0793bd01732de4cf
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
 OCCU_VERSION=$(shell grep "OCCU_VERSION =" $(BUILDROOT_EXTERNAL)/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
@@ -146,6 +146,10 @@ multilib32-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 multilib32-savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	cd $(shell pwd)/build-$(PRODUCT)/build/multilib32-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) savedefconfig
 
+.PHONY: linux-check-dotconfig
+linux-check-dotconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) linux-check-dotconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT).config BR2_CHECK_DOTCONFIG_OPTS="--github-format --strip-path-prefix=$(PWD)/"
+
 # Create a fallback target (%) to forward all unknown target calls to the build Makefile.
 # This includes:
 #   linux-menuconfig
@@ -180,6 +184,7 @@ help:
 	@echo "  $(MAKE) PRODUCT=<product> savedefconfig: update buildroot defconfig file"
 	@echo "  $(MAKE) PRODUCT=<product> linux-menuconfig: change linux kernel config option"
 	@echo "  $(MAKE) PRODUCT=<product> linux-update-defconfig: update linux kernel defconfig file"
+	@echo "  $(MAKE) PRODUCT=<product> linux-check-dotconfig: checks dotconfig files against Kconfig"
 	@echo "  $(MAKE) PRODUCT=<product> busybox-menuconfig: change busybox config options"
 	@echo "  $(MAKE) PRODUCT=<product> busybox-update-config: update busybox defconfig file"
 	@echo "  $(MAKE) PRODUCT=<product> uboot-menuconfig: change u-boot config options"

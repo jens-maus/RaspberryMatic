@@ -218,7 +218,7 @@ jobs:
       packages: write  # docker/build-push-action
     name: OCI/Docker Build+Push
     runs-on: ubuntu-22.04
-    needs: build
+    needs: [build-oci_amd64, build-oci_arm64, build-oci_arm]
 
     steps:
       - uses: actions/checkout@v4

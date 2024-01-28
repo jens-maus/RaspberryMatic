@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.2.1](https://github.com/ljharb/get-intrinsic/compare/v1.2.0...v1.2.1) - 2023-05-13
+
+### Commits
+
+- [Fix] avoid a crash in envs without `__proto__` [`7bad8d0`](https://github.com/ljharb/get-intrinsic/commit/7bad8d061bf8721733b58b73a2565af2b6756b64)
+- [Dev Deps] update `es-abstract` [`c60e6b7`](https://github.com/ljharb/get-intrinsic/commit/c60e6b7b4cf9660c7f27ed970970fd55fac48dc5)
+
 ## [v1.2.0](https://github.com/ljharb/get-intrinsic/compare/v1.1.3...v1.2.0) - 2023-01-19
 
 ### Commits

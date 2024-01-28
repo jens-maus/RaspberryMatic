@@ -157,7 +157,8 @@ proc action_cert_upload {} {
   close $fp
   #puts $line;
   if { [string last " PRIVATE KEY-----" $line] != -1 } {
-    file rename -force -- $filename "/usr/local/tmp/server.pem"
+    catch { file copy -force -- "/etc/config/server.pem" "/etc/config/server.pem.bak" }
+    file rename -force -- $filename "/etc/config/server.pem"
     
     cgi_javascript {
       puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"

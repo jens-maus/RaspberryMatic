@@ -1,0 +1,85 @@
+# Configuration for Label Actions - https://github.com/dessant/label-actions
+---
+
+# await more information/feedback from issue author
+':clock10: awaiting feedback':
+  issues:
+    comment: >
+      @{issue-author}, the maintainer of this project has requested more
+      detailed information or a specific feedback. Please provide this
+      feedback and report back ASAP or this ticket will be automatically
+      marked as stale after a certain short grace period.
+
+# user problem added
+':information_desk_person: user problem':
+  issues:
+    comment: >
+      @{issue-author}, the issue ticket you created does not seem to report
+      a general issue/problem/bug in RaspberryMatic itself, but rather seems to
+      point at a local usage issue that rather requires some support using
+      a discussion or support fora. It will therefore be moved to the
+      [discussion area](https://github.com/jens-maus/RaspberryMatic/discussions)
+      where you can continue for identifying solutions to your issue.
+
+# maintainer is not able to reproduce
+':no_good: worksforme':
+  issues:
+    comment: >
+      @{issue-author}, the issue you reported does not seem to be reproducible
+      by the maintainer of this project. Please provide additional information
+      and more detail and please try to reproduce your problem with a fresh
+      test installation and try to find other users having the same problems
+      so that they can support your observations.
+
+# third-party issue label added
+':arrow_right: third-party issue':
+  issues:
+    comment: >
+      @{issue-author}, the issue you reported cannot be solved within this
+      project or should be better directly solved in a third-party project
+      RaspberryMatic just uses. So please consider creating an additional
+      issue ticket in this third-party project. If still relevant we can
+      keep this issue ticket open here for the time being so that you can
+      use it as a reference in issue tickets for the third-party report.
+
+# upstream issue label added
+':anchor: upstream issue':
+  issues:
+    comment: >
+      @{issue-author}, the issue you reported cannot be solved within this
+      project or should be better directly solved in the upstream [OCCU](https://github.com/eq-3/occu)
+      project RaspberryMatic is just using. However, for being able to
+      reference and track this upstream issue we will keep this ticket
+      open for the time being so that you can also reference it accordingly.
+
+# duplicate issue label added
+':heavy_multiplication_x: duplicate':
+  issues:
+    comment: >
+      @{issue-author}, the maintainer of this project has flagged this issue
+      ticket as a duplicate of an already reported issue. It will therefore
+      be closed and you are advised to move over to the other ticket. In
+      addition, please also make sure to first walk through and search in
+      the issue section for a similar issue report before you create a new one.
+    close: true
+    close-reason: not planned
+
+# wontfix label added
+':thumbsdown: wontfix':
+  issues:
+    comment: >
+      @{issue-author}, the maintainer of this project has decided that the
+      issue/idea you reported does not seem to be relevant for the projects'
+      mission or that it is out of the scope or simply not explained in
+      enough detail. This ticket will therefore be closed and you are advised
+      to better discuss this issue in more detail in the [discussion area](https://github.com/jens-maus/RaspberryMatic/discussions) of this project and then perhaps come back here
+      and open a new issue in case consensus has been achieved within this
+      discussion.
+    close: true
+    close-reason: not planned
+
+# wontfix label is removed from issues
+'-:thumbsdown: wontfix':
+  issues:
+    # Reopen the issue
+    reopen: true

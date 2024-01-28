@@ -875,6 +875,12 @@ DEV_HIGHLIGHT["HM-WS550-US"]["7"] = [3, 0.440, 0.200, '7', 0.124, 'verdana', Fon
 DEV_HIGHLIGHT["HM-WS550-US"]["8"] = [3, 0.440, 0.200, '8', 0.124, 'verdana', Font.BOLD];
 DEV_HIGHLIGHT["HM-WS550-US"]["9"] = [3, 0.440, 0.200, '9', 0.124, 'verdana', Font.BOLD];
 DEV_HIGHLIGHT["HM-WS550-US"]["10"] = [3, 0.405, 0.200, '10', 0.124, 'verdana', Font.BOLD];
+DEV_LIST.push('HmIP-PSM-2 QHJ');
+DEV_DESCRIPTION["HmIP-PSM-2 QHJ"] = "PSM";
+DEV_PATHS["HmIP-PSM-2 QHJ"] = new Object();
+DEV_PATHS["HmIP-PSM-2 QHJ"]["50"] = "/config/img/devices/50/113_hmip-psm_thumb.png";
+DEV_PATHS["HmIP-PSM-2 QHJ"]["250"] = "/config/img/devices/250/113_hmip-psm.png";
+DEV_HIGHLIGHT["HmIP-PSM-2 QHJ"] = new Object();
 DEV_LIST.push('HmIP-KRC4');
 DEV_DESCRIPTION["HmIP-KRC4"] = "KRC4";
 DEV_PATHS["HmIP-KRC4"] = new Object();
@@ -931,6 +937,12 @@ DEV_PATHS["HmIP-STHO"] = new Object();
 DEV_PATHS["HmIP-STHO"]["50"] = "/config/img/devices/50/148_hmip-stho_thumb.png";
 DEV_PATHS["HmIP-STHO"]["250"] = "/config/img/devices/250/148_hmip-stho.png";
 DEV_HIGHLIGHT["HmIP-STHO"] = new Object();
+DEV_LIST.push('ELV-SH-BM-S');
+DEV_DESCRIPTION["ELV-SH-BM-S"] = "ELV-SH-BM-S";
+DEV_PATHS["ELV-SH-BM-S"] = new Object();
+DEV_PATHS["ELV-SH-BM-S"]["50"] = "/config/img/devices/50/229_elv-sh-bm-s_thumb.png";
+DEV_PATHS["ELV-SH-BM-S"]["250"] = "/config/img/devices/250/229_elv-sh-bm-s.png";
+DEV_HIGHLIGHT["ELV-SH-BM-S"] = new Object();
 DEV_LIST.push('HM-Sec-SC-2');
 DEV_DESCRIPTION["HM-Sec-SC-2"] = "HM-Sec-SC-2";
 DEV_PATHS["HM-Sec-SC-2"] = new Object();
@@ -1221,6 +1233,12 @@ DEV_PATHS["HM-MOD-EM-8Bit"] = new Object();
 DEV_PATHS["HM-MOD-EM-8Bit"]["50"] = "/config/img/devices/50/142_hm-mod-em-8bit_thumb.png";
 DEV_PATHS["HM-MOD-EM-8Bit"]["250"] = "/config/img/devices/250/142_hm-mod-em-8bit.png";
 DEV_HIGHLIGHT["HM-MOD-EM-8Bit"] = new Object();
+DEV_LIST.push('HmIP-PDT-PE');
+DEV_DESCRIPTION["HmIP-PDT-PE"] = "PDT-PE";
+DEV_PATHS["HmIP-PDT-PE"] = new Object();
+DEV_PATHS["HmIP-PDT-PE"]["50"] = "/config/img/devices/50/113_hmip-psm-pe_thumb.png";
+DEV_PATHS["HmIP-PDT-PE"]["250"] = "/config/img/devices/250/113_hmip-psm-pe.png";
+DEV_HIGHLIGHT["HmIP-PDT-PE"] = new Object();
 DEV_LIST.push('BRC-H');
 DEV_DESCRIPTION["BRC-H"] = "BRC-H";
 DEV_PATHS["BRC-H"] = new Object();
@@ -1313,8 +1331,8 @@ DEV_PATHS["HmIP-BS2"] = new Object();
 DEV_PATHS["HmIP-BS2"]["50"] = "/config/img/devices/50/PushButton-2ch-wm_thumb.png";
 DEV_PATHS["HmIP-BS2"]["250"] = "/config/img/devices/250/PushButton-2ch-wm.png";
 DEV_HIGHLIGHT["HmIP-BS2"] = new Object();
-DEV_HIGHLIGHT["HmIP-BS2"]["2"] = [2, 0.244, 0.312, 0.428, 0.168];
-DEV_HIGHLIGHT["HmIP-BS2"]["1"] = [2, 0.244, 0.56, 0.428, 0.168];
+DEV_HIGHLIGHT["HmIP-BS2"]["1"] = [2, 0.244, 0.312, 0.428, 0.168];
+DEV_HIGHLIGHT["HmIP-BS2"]["2"] = [2, 0.244, 0.56, 0.428, 0.168];
 DEV_HIGHLIGHT["HmIP-BS2"]["1+2"] = [2, 0.244, 0.308, 0.428, 0.416];
 DEV_LIST.push('HM-Sen-Wa-Od');
 DEV_DESCRIPTION["HM-Sen-Wa-Od"] = "HM-Sen-Wa-Od";
@@ -1467,6 +1485,14 @@ DEV_PATHS["HM-WDS100-C6-O"] = new Object();
 DEV_PATHS["HM-WDS100-C6-O"]["50"] = "/config/img/devices/50/WeatherCombiSensor_thumb.png";
 DEV_PATHS["HM-WDS100-C6-O"]["250"] = "/config/img/devices/250/WeatherCombiSensor.png";
 DEV_HIGHLIGHT["HM-WDS100-C6-O"] = new Object();
+DEV_LIST.push('HmIPW-WRC2-A');
+DEV_DESCRIPTION["HmIPW-WRC2-A"] = "HmIPW-WRC2";
+DEV_PATHS["HmIPW-WRC2-A"] = new Object();
+DEV_PATHS["HmIPW-WRC2-A"]["50"] = "/config/img/devices/50/112_hmip-wrc2_thumb.png";
+DEV_PATHS["HmIPW-WRC2-A"]["250"] = "/config/img/devices/250/112_hmip-wrc2.png";
+DEV_HIGHLIGHT["HmIPW-WRC2-A"] = new Object();
+DEV_HIGHLIGHT["HmIPW-WRC2-A"]["2"] = [4, 0.540, 0.366, 0.04, 0.044];
+DEV_HIGHLIGHT["HmIPW-WRC2-A"]["1"] = [4, 0.540, 0.622, 0.04, 0.044];
 DEV_LIST.push('HMW-IO-12-Sw7-DR');
 DEV_DESCRIPTION["HMW-IO-12-Sw7-DR"] = "HMW-IO-12-Sw7-DR";
 DEV_PATHS["HMW-IO-12-Sw7-DR"] = new Object();
@@ -1799,6 +1825,12 @@ DEV_HIGHLIGHT["HM-LC-Sw1-FM"] = new Object();
 DEV_HIGHLIGHT["HM-LC-Sw1-FM"]["1_AUS"] = [2, 0.288, 0.66, 0.068, 0.152];
 DEV_HIGHLIGHT["HM-LC-Sw1-FM"]["1_EIN"] = [2, 0.548, 0.66, 0.068, 0.152];
 DEV_HIGHLIGHT["HM-LC-Sw1-FM"]["1"] = [5, '1_AUS', '1_EIN'];
+DEV_LIST.push('HmIP-HAP JS1');
+DEV_DESCRIPTION["HmIP-HAP JS1"] = "HmIP-HAP";
+DEV_PATHS["HmIP-HAP JS1"] = new Object();
+DEV_PATHS["HmIP-HAP JS1"]["50"] = "/config/img/devices/50/CCU3_thumb.png";
+DEV_PATHS["HmIP-HAP JS1"]["250"] = "/config/img/devices/250/CCU3.png";
+DEV_HIGHLIGHT["HmIP-HAP JS1"] = new Object();
 DEV_LIST.push('HM-WS550STH-I');
 DEV_DESCRIPTION["HM-WS550STH-I"] = "HM-WS550STH-I";
 DEV_PATHS["HM-WS550STH-I"] = new Object();
@@ -1939,6 +1971,12 @@ DEV_PATHS["HM-Sec-SD"] = new Object();
 DEV_PATHS["HM-Sec-SD"]["50"] = "/config/img/devices/50/51_hm-sec-sd_thumb.png";
 DEV_PATHS["HM-Sec-SD"]["250"] = "/config/img/devices/250/51_hm-sec-sd.png";
 DEV_HIGHLIGHT["HM-Sec-SD"] = new Object();
+DEV_LIST.push('HmIP-SWDO-PL-2');
+DEV_DESCRIPTION["HmIP-SWDO-PL-2"] = "HmIP-SWDO-PL";
+DEV_PATHS["HmIP-SWDO-PL-2"] = new Object();
+DEV_PATHS["HmIP-SWDO-PL-2"]["50"] = "/config/img/devices/50/197_hmip-swdo-pl_thumb.png";
+DEV_PATHS["HmIP-SWDO-PL-2"]["250"] = "/config/img/devices/250/197_hmip-swdo-pl.png";
+DEV_HIGHLIGHT["HmIP-SWDO-PL-2"] = new Object();
 DEV_LIST.push('HmIPW-DRI32');
 DEV_DESCRIPTION["HmIPW-DRI32"] = "HmIPW-DRI32";
 DEV_PATHS["HmIPW-DRI32"] = new Object();
@@ -2160,6 +2198,15 @@ DEV_PATHS["HM-CC-TC"] = new Object();
 DEV_PATHS["HM-CC-TC"]["50"] = "/config/img/devices/50/42_hm-cc-tc_thumb.png";
 DEV_PATHS["HM-CC-TC"]["250"] = "/config/img/devices/250/42_hm-cc-tc.png";
 DEV_HIGHLIGHT["HM-CC-TC"] = new Object();
+DEV_LIST.push('HmIP-BDT-I');
+DEV_DESCRIPTION["HmIP-BDT-I"] = "BDT";
+DEV_PATHS["HmIP-BDT-I"] = new Object();
+DEV_PATHS["HmIP-BDT-I"]["50"] = "/config/img/devices/50/PushButton-2ch-wm_thumb.png";
+DEV_PATHS["HmIP-BDT-I"]["250"] = "/config/img/devices/250/PushButton-2ch-wm.png";
+DEV_HIGHLIGHT["HmIP-BDT-I"] = new Object();
+DEV_HIGHLIGHT["HmIP-BDT-I"]["2"] = [2, 0.244, 0.312, 0.428, 0.168];
+DEV_HIGHLIGHT["HmIP-BDT-I"]["1"] = [2, 0.244, 0.56, 0.428, 0.168];
+DEV_HIGHLIGHT["HmIP-BDT-I"]["1+2"] = [2, 0.244, 0.308, 0.428, 0.416];
 DEV_LIST.push('263 160');
 DEV_DESCRIPTION["263 160"] = "263_160";
 DEV_PATHS["263 160"] = new Object();
@@ -2215,6 +2262,12 @@ DEV_HIGHLIGHT["HM-LC-Sw4-DR"]["1"] = [4, 0.088, 0.556, 0.048, 0.04];
 DEV_HIGHLIGHT["HM-LC-Sw4-DR"]["2"] = [4, 0.280, 0.556, 0.048, 0.04];
 DEV_HIGHLIGHT["HM-LC-Sw4-DR"]["3"] = [4, 0.472, 0.556, 0.048, 0.04];
 DEV_HIGHLIGHT["HM-LC-Sw4-DR"]["4"] = [4, 0.656, 0.556, 0.048, 0.04];
+DEV_LIST.push('HmIP-SWDO-A');
+DEV_DESCRIPTION["HmIP-SWDO-A"] = "HmIP-SWDO";
+DEV_PATHS["HmIP-SWDO-A"] = new Object();
+DEV_PATHS["HmIP-SWDO-A"]["50"] = "/config/img/devices/50/118_hmip-swdo_thumb.png";
+DEV_PATHS["HmIP-SWDO-A"]["250"] = "/config/img/devices/250/118_hmip-swdo.png";
+DEV_HIGHLIGHT["HmIP-SWDO-A"] = new Object();
 DEV_LIST.push('HM-LC-Sw1-Pl-OM54');
 DEV_DESCRIPTION["HM-LC-Sw1-Pl-OM54"] = "HM-LC-Sw1-Pl-OM54";
 DEV_PATHS["HM-LC-Sw1-Pl-OM54"] = new Object();
@@ -2298,6 +2351,12 @@ DEV_PATHS["HmIP-WKP"] = new Object();
 DEV_PATHS["HmIP-WKP"]["50"] = "/config/img/devices/50/221_hmip-wkp_thumb.png";
 DEV_PATHS["HmIP-WKP"]["250"] = "/config/img/devices/250/221_hmip-wkp.png";
 DEV_HIGHLIGHT["HmIP-WKP"] = new Object();
+DEV_LIST.push('HmIP-DLD-A');
+DEV_DESCRIPTION["HmIP-DLD-A"] = "HmIP-DLD";
+DEV_PATHS["HmIP-DLD-A"] = new Object();
+DEV_PATHS["HmIP-DLD-A"]["50"] = "/config/img/devices/50/214_hmip-dld_thumb.png";
+DEV_PATHS["HmIP-DLD-A"]["250"] = "/config/img/devices/250/214_hmip-dld.png";
+DEV_HIGHLIGHT["HmIP-DLD-A"] = new Object();
 DEV_LIST.push('HmIP-WRC6');
 DEV_DESCRIPTION["HmIP-WRC6"] = "WRC6";
 DEV_PATHS["HmIP-WRC6"] = new Object();
@@ -2313,6 +2372,12 @@ DEV_HIGHLIGHT["HmIP-WRC6"]["6"] = [1, 0.705, 0.671, 0.025];
 DEV_HIGHLIGHT["HmIP-WRC6"]["1+2"] = [5, '1', '2'];
 DEV_HIGHLIGHT["HmIP-WRC6"]["3+4"] = [5, '3', '4'];
 DEV_HIGHLIGHT["HmIP-WRC6"]["5+6"] = [5, '5', '6'];
+DEV_LIST.push('HmIP-PS-2 9YM');
+DEV_DESCRIPTION["HmIP-PS-2 9YM"] = "PS";
+DEV_PATHS["HmIP-PS-2 9YM"] = new Object();
+DEV_PATHS["HmIP-PS-2 9YM"]["50"] = "/config/img/devices/50/113_hmip-psm_thumb.png";
+DEV_PATHS["HmIP-PS-2 9YM"]["250"] = "/config/img/devices/250/113_hmip-psm.png";
+DEV_HIGHLIGHT["HmIP-PS-2 9YM"] = new Object();
 DEV_LIST.push('HM-LC-Sw4-SM');
 DEV_DESCRIPTION["HM-LC-Sw4-SM"] = "HM-LC-Sw4-SM";
 DEV_PATHS["HM-LC-Sw4-SM"] = new Object();
@@ -2385,6 +2450,21 @@ DEV_HIGHLIGHT["HM-LC-Dim2L-SM"]["1_Key"] = [4, 0.25, 0.33, 0.04, 0.044];
 DEV_HIGHLIGHT["HM-LC-Dim2L-SM"]["2_Key"] = [4, 0.328, 0.33, 0.04, 0.044];
 DEV_HIGHLIGHT["HM-LC-Dim2L-SM"]["1"] = [5, '1_Arrow', '1_Key'];
 DEV_HIGHLIGHT["HM-LC-Dim2L-SM"]["2"] = [5, '2_Arrow', '2_Key'];
+DEV_LIST.push('HmIP-WRC6-A');
+DEV_DESCRIPTION["HmIP-WRC6-A"] = "WRC6";
+DEV_PATHS["HmIP-WRC6-A"] = new Object();
+DEV_PATHS["HmIP-WRC6-A"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
+DEV_PATHS["HmIP-WRC6-A"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
+DEV_HIGHLIGHT["HmIP-WRC6-A"] = new Object();
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["1"] = [1, 0.3, 0.358, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["2"] = [1, 0.705, 0.315, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["3"] = [1, 0.3, 0.53, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["4"] = [1, 0.705, 0.495, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["5"] = [1, 0.3, 0.706, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["6"] = [1, 0.705, 0.671, 0.025];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["1+2"] = [5, '1', '2'];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["3+4"] = [5, '3', '4'];
+DEV_HIGHLIGHT["HmIP-WRC6-A"]["5+6"] = [5, '5', '6'];
 DEV_LIST.push('HmIP-eTRV-2');
 DEV_DESCRIPTION["HmIP-eTRV-2"] = "TRV";
 DEV_PATHS["HmIP-eTRV-2"] = new Object();
@@ -2490,6 +2570,40 @@ DEV_HIGHLIGHT["HM-PB-2-WM"] = new Object();
 DEV_HIGHLIGHT["HM-PB-2-WM"]["2"] = [2, 0.244, 0.312, 0.428, 0.168];
 DEV_HIGHLIGHT["HM-PB-2-WM"]["1"] = [2, 0.244, 0.56, 0.428, 0.168];
 DEV_HIGHLIGHT["HM-PB-2-WM"]["1+2"] = [2, 0.244, 0.308, 0.428, 0.416];
+DEV_LIST.push('HmIP-BBL-I');
+DEV_DESCRIPTION["HmIP-BBL-I"] = "HmIP-BBL";
+DEV_PATHS["HmIP-BBL-I"] = new Object();
+DEV_PATHS["HmIP-BBL-I"]["50"] = "/config/img/devices/50/PushButton-2ch-wm_thumb.png";
+DEV_PATHS["HmIP-BBL-I"]["250"] = "/config/img/devices/250/PushButton-2ch-wm.png";
+DEV_HIGHLIGHT["HmIP-BBL-I"] = new Object();
+DEV_HIGHLIGHT["HmIP-BBL-I"]["2"] = [2, 0.244, 0.312, 0.428, 0.168];
+DEV_HIGHLIGHT["HmIP-BBL-I"]["1"] = [2, 0.244, 0.56, 0.428, 0.168];
+DEV_HIGHLIGHT["HmIP-BBL-I"]["1+2"] = [2, 0.244, 0.308, 0.428, 0.416];
+DEV_LIST.push('HmIPW-WRC6-A');
+DEV_DESCRIPTION["HmIPW-WRC6-A"] = "HmIPW-WRC6";
+DEV_PATHS["HmIPW-WRC6-A"] = new Object();
+DEV_PATHS["HmIPW-WRC6-A"]["50"] = "/config/img/devices/50/131_hmip-wrc6_thumb.png";
+DEV_PATHS["HmIPW-WRC6-A"]["250"] = "/config/img/devices/250/131_hmip-wrc6.png";
+DEV_HIGHLIGHT["HmIPW-WRC6-A"] = new Object();
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["1"] = [1, 0.3, 0.358, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["2"] = [1, 0.705, 0.315, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["3"] = [1, 0.3, 0.53, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["4"] = [1, 0.705, 0.495, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["5"] = [1, 0.3, 0.706, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["6"] = [1, 0.705, 0.671, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["7"] = [1, 0.3, 0.358, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["8"] = [1, 0.705, 0.315, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["9"] = [1, 0.3, 0.53, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["10"] = [1, 0.705, 0.495, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["11"] = [1, 0.3, 0.706, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["12"] = [1, 0.705, 0.671, 0.025];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["13"] = [5, '1', '2', '3', '4', '5', '6'];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["1+2"] = [5, '1', '2'];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["3+4"] = [5, '3', '4'];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["5+6"] = [5, '5', '6'];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["7+8"] = [5, '1', '2'];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["9+10"] = [5, '3', '4'];
+DEV_HIGHLIGHT["HmIPW-WRC6-A"]["11+12"] = [5, '5', '6'];
 DEV_LIST.push('VIR-LG-WHITE-DIM');
 DEV_DESCRIPTION["VIR-LG-WHITE-DIM"] = "VIR-LG-WHITE-DIM";
 DEV_PATHS["VIR-LG-WHITE-DIM"] = new Object();
@@ -2523,6 +2637,14 @@ DEV_PATHS["HM-LC-Sw1-Pl-DN-R1"] = new Object();
 DEV_PATHS["HM-LC-Sw1-Pl-DN-R1"]["50"] = "/config/img/devices/50/93_hm-es-pmsw1-pl_thumb.png";
 DEV_PATHS["HM-LC-Sw1-Pl-DN-R1"]["250"] = "/config/img/devices/250/93_hm-es-pmsw1-pl.png";
 DEV_HIGHLIGHT["HM-LC-Sw1-Pl-DN-R1"] = new Object();
+DEV_LIST.push('HmIP-WRC2-A');
+DEV_DESCRIPTION["HmIP-WRC2-A"] = "HmIP-WRC2";
+DEV_PATHS["HmIP-WRC2-A"] = new Object();
+DEV_PATHS["HmIP-WRC2-A"]["50"] = "/config/img/devices/50/112_hmip-wrc2_thumb.png";
+DEV_PATHS["HmIP-WRC2-A"]["250"] = "/config/img/devices/250/112_hmip-wrc2.png";
+DEV_HIGHLIGHT["HmIP-WRC2-A"] = new Object();
+DEV_HIGHLIGHT["HmIP-WRC2-A"]["2"] = [4, 0.540, 0.366, 0.04, 0.044];
+DEV_HIGHLIGHT["HmIP-WRC2-A"]["1"] = [4, 0.540, 0.622, 0.04, 0.044];
 DEV_LIST.push('HmIP-KRCA');
 DEV_DESCRIPTION["HmIP-KRCA"] = "KRCA";
 DEV_PATHS["HmIP-KRCA"] = new Object();
@@ -2569,6 +2691,12 @@ DEV_PATHS["HM-LC-Dim1T-FM"] = new Object();
 DEV_PATHS["HM-LC-Dim1T-FM"]["50"] = "/config/img/devices/50/65_hm-lc-dim1t-fm_thumb.png";
 DEV_PATHS["HM-LC-Dim1T-FM"]["250"] = "/config/img/devices/250/65_hm-lc-dim1t-fm.png";
 DEV_HIGHLIGHT["HM-LC-Dim1T-FM"] = new Object();
+DEV_LIST.push('HmIP-RGBW');
+DEV_DESCRIPTION["HmIP-RGBW"] = "HmIP-RGBW";
+DEV_PATHS["HmIP-RGBW"] = new Object();
+DEV_PATHS["HmIP-RGBW"]["50"] = "/config/img/devices/50/225_hmip-rgbw_thumb.png";
+DEV_PATHS["HmIP-RGBW"]["250"] = "/config/img/devices/250/225_hmip-rgbw.png";
+DEV_HIGHLIGHT["HmIP-RGBW"] = new Object();
 DEV_LIST.push('HMIP-WRC2');
 DEV_DESCRIPTION["HMIP-WRC2"] = "WRC2";
 DEV_PATHS["HMIP-WRC2"] = new Object();
@@ -2631,6 +2759,20 @@ DEV_PATHS["HmIP-PS"] = new Object();
 DEV_PATHS["HmIP-PS"]["50"] = "/config/img/devices/50/113_hmip-psm_thumb.png";
 DEV_PATHS["HmIP-PS"]["250"] = "/config/img/devices/250/113_hmip-psm.png";
 DEV_HIGHLIGHT["HmIP-PS"] = new Object();
+DEV_LIST.push('HmIP-eTRV-E-A');
+DEV_DESCRIPTION["HmIP-eTRV-E-A"] = "TRV-E";
+DEV_PATHS["HmIP-eTRV-E-A"] = new Object();
+DEV_PATHS["HmIP-eTRV-E-A"]["50"] = "/config/img/devices/50/216_hmip-etrv-3_thumb.png";
+DEV_PATHS["HmIP-eTRV-E-A"]["250"] = "/config/img/devices/250/216_hmip-etrv-3.png";
+DEV_HIGHLIGHT["HmIP-eTRV-E-A"] = new Object();
+DEV_LIST.push('HmIPW-SMI55-A');
+DEV_DESCRIPTION["HmIPW-SMI55-A"] = "HmIPW-SMI55";
+DEV_PATHS["HmIPW-SMI55-A"] = new Object();
+DEV_PATHS["HmIPW-SMI55-A"]["50"] = "/config/img/devices/50/195_hmipw-smi55_thumb.png";
+DEV_PATHS["HmIPW-SMI55-A"]["250"] = "/config/img/devices/250/195_hmipw-smi55.png";
+DEV_HIGHLIGHT["HmIPW-SMI55-A"] = new Object();
+DEV_HIGHLIGHT["HmIPW-SMI55-A"]["1"] = [1, 0.530, 0.820, 0.025];
+DEV_HIGHLIGHT["HmIPW-SMI55-A"]["2"] = [1, 0.505, 0.210, 0.025];
 DEV_LIST.push('HmIP-PCBS2');
 DEV_DESCRIPTION["HmIP-PCBS2"] = "HmIP-PCBS2";
 DEV_PATHS["HmIP-PCBS2"] = new Object();
@@ -2664,6 +2806,12 @@ DEV_PATHS["HmIP-SWDM"] = new Object();
 DEV_PATHS["HmIP-SWDM"]["50"] = "/config/img/devices/50/181_hmip-swdm_thumb.png";
 DEV_PATHS["HmIP-SWDM"]["250"] = "/config/img/devices/250/181_hmip-swdm.png";
 DEV_HIGHLIGHT["HmIP-SWDM"] = new Object();
+DEV_LIST.push('HmIP-WTH-B-A');
+DEV_DESCRIPTION["HmIP-WTH-B-A"] = "HmIP-WTH-B";
+DEV_PATHS["HmIP-WTH-B-A"] = new Object();
+DEV_PATHS["HmIP-WTH-B-A"]["50"] = "/config/img/devices/50/200_hmip-wth-b_thumb.png";
+DEV_PATHS["HmIP-WTH-B-A"]["250"] = "/config/img/devices/250/200_hmip-wth-b.png";
+DEV_HIGHLIGHT["HmIP-WTH-B-A"] = new Object();
 DEV_LIST.push('HmIP-SPI');
 DEV_DESCRIPTION["HmIP-SPI"] = "HmIP-SPI";
 DEV_PATHS["HmIP-SPI"] = new Object();
@@ -2730,6 +2878,17 @@ DEV_HIGHLIGHT["HM-LC-Dim1L-Pl-644"] = new Object();
 DEV_HIGHLIGHT["HM-LC-Dim1L-Pl-644"]["1_part1"] = [2, 0.548, 0.468, 0.072, 0.052];
 DEV_HIGHLIGHT["HM-LC-Dim1L-Pl-644"]["1_part2"] = [2, 0.612, 0.452, 0.028, 0.056];
 DEV_HIGHLIGHT["HM-LC-Dim1L-Pl-644"]["1"] = [5, '1_part1', '1_part2'];
+DEV_LIST.push('HmIP-LSS');
+DEV_DESCRIPTION["HmIP-LSS"] = "HmIP-LSS";
+DEV_PATHS["HmIP-LSS"] = new Object();
+DEV_PATHS["HmIP-LSS"]["50"] = "/config/img/devices/50/unknown_device_thumb.png";
+DEV_PATHS["HmIP-LSS"]["250"] = "/config/img/devices/250/unknown_device.png";
+DEV_HIGHLIGHT["HmIP-LSS"] = new Object();
+DEV_HIGHLIGHT["HmIP-LSS"]["Icon"] = [3, 0.092, 0.6, 'Icon_folgt', 0.14, 'verdana', Font.BOLD];
+DEV_HIGHLIGHT["HmIP-LSS"]["1_channel"] = [3, 0.44, 0.232, '1', 0.18, 'verdana', Font.BOLD];
+DEV_HIGHLIGHT["HmIP-LSS"]["1"] = [5, '1_channel', 'Icon'];
+DEV_HIGHLIGHT["HmIP-LSS"]["2_channel"] = [3, 0.44, 0.232, '2', 0.18, 'verdana', Font.BOLD];
+DEV_HIGHLIGHT["HmIP-LSS"]["2"] = [5, '2_channel', 'Icon'];
 DEV_LIST.push('HmIP-MOD-TM');
 DEV_DESCRIPTION["HmIP-MOD-TM"] = "HmIP-MOD-TM";
 DEV_PATHS["HmIP-MOD-TM"] = new Object();
@@ -3222,6 +3381,12 @@ DEV_HIGHLIGHT["ZEL STG RM FZS"] = new Object();
 DEV_HIGHLIGHT["ZEL STG RM FZS"]["1_part1"] = [2, 0.548, 0.468, 0.072, 0.052];
 DEV_HIGHLIGHT["ZEL STG RM FZS"]["1_part2"] = [2, 0.612, 0.452, 0.028, 0.056];
 DEV_HIGHLIGHT["ZEL STG RM FZS"]["1"] = [5, '1_part1', '1_part2'];
+DEV_LIST.push('HmIP-eTRV-B-2 R4M');
+DEV_DESCRIPTION["HmIP-eTRV-B-2 R4M"] = "TRV-B";
+DEV_PATHS["HmIP-eTRV-B-2 R4M"] = new Object();
+DEV_PATHS["HmIP-eTRV-B-2 R4M"]["50"] = "/config/img/devices/50/180_hmip-etrv-b_thumb.png";
+DEV_PATHS["HmIP-eTRV-B-2 R4M"]["250"] = "/config/img/devices/250/180_hmip-etrv-b.png";
+DEV_HIGHLIGHT["HmIP-eTRV-B-2 R4M"] = new Object();
 DEV_LIST.push('HmIPW-WRC6');
 DEV_DESCRIPTION["HmIPW-WRC6"] = "HmIPW-WRC6";
 DEV_PATHS["HmIPW-WRC6"] = new Object();
@@ -3268,6 +3433,12 @@ DEV_HIGHLIGHT["263 147"] = new Object();
 DEV_HIGHLIGHT["263 147"]["1a"] = [2, 0.244, 0.312, 0.428, 0.168];
 DEV_HIGHLIGHT["263 147"]["1b"] = [2, 0.244, 0.56, 0.428, 0.168];
 DEV_HIGHLIGHT["263 147"]["1"] = [5, '1a', '1b'];
+DEV_LIST.push('HmIP-PSM-PE-2');
+DEV_DESCRIPTION["HmIP-PSM-PE-2"] = "PSM-PE";
+DEV_PATHS["HmIP-PSM-PE-2"] = new Object();
+DEV_PATHS["HmIP-PSM-PE-2"]["50"] = "/config/img/devices/50/215_hmip-psm-pe-2_thumb.png";
+DEV_PATHS["HmIP-PSM-PE-2"]["250"] = "/config/img/devices/250/215_hmip-psm-pe-2.png";
+DEV_HIGHLIGHT["HmIP-PSM-PE-2"] = new Object();
 DEV_LIST.push('HM-WS550STH-O');
 DEV_DESCRIPTION["HM-WS550STH-O"] = "HM-WS550STH-O";
 DEV_PATHS["HM-WS550STH-O"] = new Object();
@@ -3430,7 +3601,7 @@ DEV_HIGHLIGHT["HmIP-SMI55-2"] = new Object();
 DEV_HIGHLIGHT["HmIP-SMI55-2"]["2"] = [4, 0.540, 0.188, 0.04, 0.044];
 DEV_HIGHLIGHT["HmIP-SMI55-2"]["1"] = [4, 0.540, 0.820, 0.04, 0.044];
 DEV_LIST.push('HmIP-HAP');
-DEV_DESCRIPTION["HmIP-HAP"] = "HmIP-HAP";
+DEV_DESCRIPTION["HmIP-HAP"] = "HmIP-HAP-A";
 DEV_PATHS["HmIP-HAP"] = new Object();
 DEV_PATHS["HmIP-HAP"]["50"] = "/config/img/devices/50/CCU3_thumb.png";
 DEV_PATHS["HmIP-HAP"]["250"] = "/config/img/devices/250/CCU3.png";
@@ -3461,6 +3632,12 @@ DEV_HIGHLIGHT["HmIP-BSL"]["14"] = [1, 0.525, 0.650, 0.025];
 DEV_HIGHLIGHT["HmIP-BSL"]["8"] = [1, 0.510, 0.360, 0.025];
 DEV_HIGHLIGHT["HmIP-BSL"]["9"] = [1, 0.510, 0.360, 0.025];
 DEV_HIGHLIGHT["HmIP-BSL"]["10"] = [1, 0.510, 0.360, 0.025];
+DEV_LIST.push('HmIP-PDT-CH');
+DEV_DESCRIPTION["HmIP-PDT-CH"] = "PDT-CH";
+DEV_PATHS["HmIP-PDT-CH"] = new Object();
+DEV_PATHS["HmIP-PDT-CH"]["50"] = "/config/img/devices/50/113_hmip-psm-ch_thumb.png";
+DEV_PATHS["HmIP-PDT-CH"]["250"] = "/config/img/devices/250/113_hmip-psm-ch.png";
+DEV_HIGHLIGHT["HmIP-PDT-CH"] = new Object();
 DEV_LIST.push('HmIP-WTH-B');
 DEV_DESCRIPTION["HmIP-WTH-B"] = "HmIP-WTH-B";
 DEV_PATHS["HmIP-WTH-B"] = new Object();
@@ -3473,6 +3650,24 @@ DEV_PATHS["HM-LC-DDC1-PCB"] = new Object();
 DEV_PATHS["HM-LC-DDC1-PCB"]["50"] = "/config/img/devices/50/54a_lc-ddc1_thumb.png";
 DEV_PATHS["HM-LC-DDC1-PCB"]["250"] = "/config/img/devices/250/54a_lc-ddc1-pcb.png";
 DEV_HIGHLIGHT["HM-LC-DDC1-PCB"] = new Object();
+DEV_LIST.push('HmIP-PSM-CH-2');
+DEV_DESCRIPTION["HmIP-PSM-CH-2"] = "PSM-CH";
+DEV_PATHS["HmIP-PSM-CH-2"] = new Object();
+DEV_PATHS["HmIP-PSM-CH-2"]["50"] = "/config/img/devices/50/216_hmip-psm-ch-2_thumb.png";
+DEV_PATHS["HmIP-PSM-CH-2"]["250"] = "/config/img/devices/250/216_hmip-psm-ch-2.png";
+DEV_HIGHLIGHT["HmIP-PSM-CH-2"] = new Object();
+DEV_LIST.push('HmIP-BWTH-A');
+DEV_DESCRIPTION["HmIP-BWTH-A"] = "HmIP-WTH";
+DEV_PATHS["HmIP-BWTH-A"] = new Object();
+DEV_PATHS["HmIP-BWTH-A"]["50"] = "/config/img/devices/50/121_hmip-wth_thumb.png";
+DEV_PATHS["HmIP-BWTH-A"]["250"] = "/config/img/devices/250/121_hmip-wth.png";
+DEV_HIGHLIGHT["HmIP-BWTH-A"] = new Object();
+DEV_LIST.push('HmIP-ESI');
+DEV_DESCRIPTION["HmIP-ESI"] = "HmIP-ESI";
+DEV_PATHS["HmIP-ESI"] = new Object();
+DEV_PATHS["HmIP-ESI"]["50"] = "/config/img/devices/50/226_hmip-esi_thumb.png";
+DEV_PATHS["HmIP-ESI"]["250"] = "/config/img/devices/250/226_hmip-esi.png";
+DEV_HIGHLIGHT["HmIP-ESI"] = new Object();
 DEV_LIST.push('HmIP-STV');
 DEV_DESCRIPTION["HmIP-STV"] = "HmIP-STV";
 DEV_PATHS["HmIP-STV"] = new Object();
@@ -3491,11 +3686,6 @@ DEV_PATHS["HmIPW-WGD"] = new Object();
 DEV_PATHS["HmIPW-WGD"]["50"] = "/config/img/devices/50/222_hmipw-wgd_thumb.png";
 DEV_PATHS["HmIPW-WGD"]["250"] = "/config/img/devices/250/222_hmipw-wgd.png";
 DEV_HIGHLIGHT["HmIPW-WGD"] = new Object();
-DEV_HIGHLIGHT["HmIPW-WGD"]["Icon"] = [3, 0.092, 0.6, 'Icon_folgt', 0.14, 'verdana', Font.BOLD];
-DEV_HIGHLIGHT["HmIPW-WGD"]["1_channel"] = [3, 0.44, 0.232, '1', 0.18, 'verdana', Font.BOLD];
-DEV_HIGHLIGHT["HmIPW-WGD"]["1"] = [5, '1_channel', 'Icon'];
-DEV_HIGHLIGHT["HmIPW-WGD"]["2_channel"] = [3, 0.44, 0.232, '2', 0.18, 'verdana', Font.BOLD];
-DEV_HIGHLIGHT["HmIPW-WGD"]["2"] = [5, '2_channel', 'Icon'];
 DEV_LIST.push('HM-Sec-RHS-2');
 DEV_DESCRIPTION["HM-Sec-RHS-2"] = "HM-Sec-RHS";
 DEV_PATHS["HM-Sec-RHS-2"] = new Object();
@@ -3709,6 +3899,26 @@ DEV_HIGHLIGHT["HmIP-RCV-50"]["47"] = [5, 'S47'];
 DEV_HIGHLIGHT["HmIP-RCV-50"]["48"] = [5, 'S48'];
 DEV_HIGHLIGHT["HmIP-RCV-50"]["49"] = [5, 'S49'];
 DEV_HIGHLIGHT["HmIP-RCV-50"]["50"] = [5, 'S50'];
+DEV_LIST.push('HmIP-SMI55-A');
+DEV_DESCRIPTION["HmIP-SMI55-A"] = "HmIP-SMI55";
+DEV_PATHS["HmIP-SMI55-A"] = new Object();
+DEV_PATHS["HmIP-SMI55-A"]["50"] = "/config/img/devices/50/168_hmip-smi55_thumb.png";
+DEV_PATHS["HmIP-SMI55-A"]["250"] = "/config/img/devices/250/168_hmip-smi55.png";
+DEV_HIGHLIGHT["HmIP-SMI55-A"] = new Object();
+DEV_HIGHLIGHT["HmIP-SMI55-A"]["2"] = [4, 0.540, 0.188, 0.04, 0.044];
+DEV_HIGHLIGHT["HmIP-SMI55-A"]["1"] = [4, 0.540, 0.820, 0.04, 0.044];
+DEV_LIST.push('ELV-SH-SW1-BAT');
+DEV_DESCRIPTION["ELV-SH-SW1-BAT"] = "HmIP-PCBS-BAT";
+DEV_PATHS["ELV-SH-SW1-BAT"] = new Object();
+DEV_PATHS["ELV-SH-SW1-BAT"]["50"] = "/config/img/devices/50/228_elv-sh-sw1-bat_thumb.png";
+DEV_PATHS["ELV-SH-SW1-BAT"]["250"] = "/config/img/devices/250/228_elv-sh-sw1-bat.png";
+DEV_HIGHLIGHT["ELV-SH-SW1-BAT"] = new Object();
+DEV_LIST.push('Wired-LAN-Sniffer');
+DEV_DESCRIPTION["Wired-LAN-Sniffer"] = "Wired-LAN-Sniffer";
+DEV_PATHS["Wired-LAN-Sniffer"] = new Object();
+DEV_PATHS["Wired-LAN-Sniffer"]["50"] = "/config/img/devices/50/162_hmipw-drap_thumb.png";
+DEV_PATHS["Wired-LAN-Sniffer"]["250"] = "/config/img/devices/250/162_hmipw-drap.png";
+DEV_HIGHLIGHT["Wired-LAN-Sniffer"] = new Object();
 DEV_LIST.push('HM-Sec-SD-2');
 DEV_DESCRIPTION["HM-Sec-SD-2"] = "HM-Sec-SD";
 DEV_PATHS["HM-Sec-SD-2"] = new Object();
@@ -3737,6 +3947,12 @@ DEV_PATHS["HM-LC-Bl1-SM"] = new Object();
 DEV_PATHS["HM-LC-Bl1-SM"]["50"] = "/config/img/devices/50/6_hm-lc-bl1-sm_thumb.png";
 DEV_PATHS["HM-LC-Bl1-SM"]["250"] = "/config/img/devices/250/6_hm-lc-bl1-sm.png";
 DEV_HIGHLIGHT["HM-LC-Bl1-SM"] = new Object();
+DEV_LIST.push('HmIP-HAP');
+DEV_DESCRIPTION["HmIP-HAP"] = "HmIP-HAP-A";
+DEV_PATHS["HmIP-HAP"] = new Object();
+DEV_PATHS["HmIP-HAP"]["50"] = "/config/img/devices/50/CCU3_thumb.png";
+DEV_PATHS["HmIP-HAP"]["250"] = "/config/img/devices/250/CCU3.png";
+DEV_HIGHLIGHT["HmIP-HAP"] = new Object();
 DEV_LIST.push('HmIP-PSM-2');
 DEV_DESCRIPTION["HmIP-PSM-2"] = "PSM";
 DEV_PATHS["HmIP-PSM-2"] = new Object();
@@ -3755,6 +3971,12 @@ DEV_PATHS["HmIP-SMO-A"] = new Object();
 DEV_PATHS["HmIP-SMO-A"]["50"] = "/config/img/devices/50/132_hmip-smo_thumb.png";
 DEV_PATHS["HmIP-SMO-A"]["250"] = "/config/img/devices/250/132_hmip-smo.png";
 DEV_HIGHLIGHT["HmIP-SMO-A"] = new Object();
+DEV_LIST.push('HmIP-SWDO-2');
+DEV_DESCRIPTION["HmIP-SWDO-2"] = "HmIP-SWDO";
+DEV_PATHS["HmIP-SWDO-2"] = new Object();
+DEV_PATHS["HmIP-SWDO-2"]["50"] = "/config/img/devices/50/118_hmip-swdo_thumb.png";
+DEV_PATHS["HmIP-SWDO-2"]["250"] = "/config/img/devices/250/118_hmip-swdo.png";
+DEV_HIGHLIGHT["HmIP-SWDO-2"] = new Object();
 DEV_LIST.push('HmIP-SWO-PL');
 DEV_DESCRIPTION["HmIP-SWO-PL"] = "HmIP-SWO-PL";
 DEV_PATHS["HmIP-SWO-PL"] = new Object();
@@ -3850,6 +4072,12 @@ DEV_HIGHLIGHT["HM-LC-Dim1T-Pl"] = new Object();
 DEV_HIGHLIGHT["HM-LC-Dim1T-Pl"]["1_part1"] = [2, 0.548, 0.468, 0.072, 0.052];
 DEV_HIGHLIGHT["HM-LC-Dim1T-Pl"]["1_part2"] = [2, 0.612, 0.452, 0.028, 0.056];
 DEV_HIGHLIGHT["HM-LC-Dim1T-Pl"]["1"] = [5, '1_part1', '1_part2'];
+DEV_LIST.push('HmIP-DRG-DALI');
+DEV_DESCRIPTION["HmIP-DRG-DALI"] = "HmIP-DRG-DALI";
+DEV_PATHS["HmIP-DRG-DALI"] = new Object();
+DEV_PATHS["HmIP-DRG-DALI"]["50"] = "/config/img/devices/50/211_hmip-drg-dali_thumb.png";
+DEV_PATHS["HmIP-DRG-DALI"]["250"] = "/config/img/devices/250/211_hmip-drg-dali.png";
+DEV_HIGHLIGHT["HmIP-DRG-DALI"] = new Object();
 DEV_LIST.push('HM-LC-Dim2T-SM-644');
 DEV_DESCRIPTION["HM-LC-Dim2T-SM-644"] = "HM-LC-Dim2T-SM";
 DEV_PATHS["HM-LC-Dim2T-SM-644"] = new Object();
@@ -4063,6 +4291,18 @@ DEV_PATHS["HmIP-STE2-PCB"] = new Object();
 DEV_PATHS["HmIP-STE2-PCB"]["50"] = "/config/img/devices/50/210_hmip-ste2-pcb_thumb.png";
 DEV_PATHS["HmIP-STE2-PCB"]["250"] = "/config/img/devices/250/210_hmip-ste2-pcb.png";
 DEV_HIGHLIGHT["HmIP-STE2-PCB"] = new Object();
+DEV_LIST.push('HmIP-STH-A');
+DEV_DESCRIPTION["HmIP-STH-A"] = "STH";
+DEV_PATHS["HmIP-STH-A"] = new Object();
+DEV_PATHS["HmIP-STH-A"]["50"] = "/config/img/devices/50/146_hmip-sth_thumb.png";
+DEV_PATHS["HmIP-STH-A"]["250"] = "/config/img/devices/250/146_hmip-sth.png";
+DEV_HIGHLIGHT["HmIP-STH-A"] = new Object();
+DEV_LIST.push('HmIPW-STHD-A');
+DEV_DESCRIPTION["HmIPW-STHD-A"] = "HmIPW-STHD";
+DEV_PATHS["HmIPW-STHD-A"] = new Object();
+DEV_PATHS["HmIPW-STHD-A"]["50"] = "/config/img/devices/50/147_hmip-sthd_thumb.png";
+DEV_PATHS["HmIPW-STHD-A"]["250"] = "/config/img/devices/250/147_hmip-sthd.png";
+DEV_HIGHLIGHT["HmIPW-STHD-A"] = new Object();
 DEV_LIST.push('HM-Sec-Key-O');
 DEV_DESCRIPTION["HM-Sec-Key-O"] = "HM-Sec-Key-O";
 DEV_PATHS["HM-Sec-Key-O"] = new Object();
@@ -4095,12 +4335,24 @@ DEV_HIGHLIGHT["ZEL STG RM DWT 10"]["18"] = [2, 0.204, 0.244, 0.556, 0.12];
 DEV_HIGHLIGHT["ZEL STG RM DWT 10"]["17"] = [2, 0.204, 0.68, 0.556, 0.12];
 DEV_HIGHLIGHT["ZEL STG RM DWT 10"]["20"] = [2, 0.204, 0.244, 0.556, 0.12];
 DEV_HIGHLIGHT["ZEL STG RM DWT 10"]["19"] = [2, 0.204, 0.68, 0.556, 0.12];
+DEV_LIST.push('HmIPW-SCTHD');
+DEV_DESCRIPTION["HmIPW-SCTHD"] = "HmIPW-SCTHD";
+DEV_PATHS["HmIPW-SCTHD"] = new Object();
+DEV_PATHS["HmIPW-SCTHD"]["50"] = "/config/img/devices/50/212_hmipw-scthd_thumb.png";
+DEV_PATHS["HmIPW-SCTHD"]["250"] = "/config/img/devices/250/212_hmipw-scthd.png";
+DEV_HIGHLIGHT["HmIPW-SCTHD"] = new Object();
 DEV_LIST.push('HM-TC-IT-WM-W-EU');
 DEV_DESCRIPTION["HM-TC-IT-WM-W-EU"] = "HM-TC-IT-WM-W-EU";
 DEV_PATHS["HM-TC-IT-WM-W-EU"] = new Object();
 DEV_PATHS["HM-TC-IT-WM-W-EU"]["50"] = "/config/img/devices/50/96_hm-tc-it-wm-w-eu_thumb.png";
 DEV_PATHS["HM-TC-IT-WM-W-EU"]["250"] = "/config/img/devices/250/96_hm-tc-it-wm-w-eu.png";
 DEV_HIGHLIGHT["HM-TC-IT-WM-W-EU"] = new Object();
+DEV_LIST.push('HmIPW-STH-A');
+DEV_DESCRIPTION["HmIPW-STH-A"] = "HmIPW-STH";
+DEV_PATHS["HmIPW-STH-A"] = new Object();
+DEV_PATHS["HmIPW-STH-A"]["50"] = "/config/img/devices/50/146_hmip-sth_thumb.png";
+DEV_PATHS["HmIPW-STH-A"]["250"] = "/config/img/devices/250/146_hmip-sth.png";
+DEV_HIGHLIGHT["HmIPW-STH-A"] = new Object();
 DEV_LIST.push('HM-Sec-Key-S');
 DEV_DESCRIPTION["HM-Sec-Key-S"] = "HM-Sec-Key-S";
 DEV_PATHS["HM-Sec-Key-S"] = new Object();
@@ -4113,6 +4365,12 @@ DEV_PATHS["263 167"] = new Object();
 DEV_PATHS["263 167"]["50"] = "/config/img/devices/50/51_hm-sec-sd_thumb.png";
 DEV_PATHS["263 167"]["250"] = "/config/img/devices/250/51_hm-sec-sd.png";
 DEV_HIGHLIGHT["263 167"] = new Object();
+DEV_LIST.push('HmIPW-WGD-PL');
+DEV_DESCRIPTION["HmIPW-WGD-PL"] = "HmIPW-WGD-PL";
+DEV_PATHS["HmIPW-WGD-PL"] = new Object();
+DEV_PATHS["HmIPW-WGD-PL"]["50"] = "/config/img/devices/50/222_hmipw-wgd_thumb.png";
+DEV_PATHS["HmIPW-WGD-PL"]["250"] = "/config/img/devices/250/222_hmipw-wgd.png";
+DEV_HIGHLIGHT["HmIPW-WGD-PL"] = new Object();
 DEV_LIST.push('HM-SwI-3-FM');
 DEV_DESCRIPTION["HM-SwI-3-FM"] = "HM-SwI-3-FM";
 DEV_PATHS["HM-SwI-3-FM"] = new Object();
@@ -4270,6 +4528,12 @@ DEV_PATHS["263 135"]["250"] = "/config/img/devices/250/75_hm-pb-2-wm55.png";
 DEV_HIGHLIGHT["263 135"] = new Object();
 DEV_HIGHLIGHT["263 135"]["2"] = [2, 0.204, 0.23, 0.546, 0.128];
 DEV_HIGHLIGHT["263 135"]["1"] = [2, 0.204, 0.65, 0.546, 0.128];
+DEV_LIST.push('HmIP-SMO230');
+DEV_DESCRIPTION["HmIP-SMO230"] = "SMO";
+DEV_PATHS["HmIP-SMO230"] = new Object();
+DEV_PATHS["HmIP-SMO230"]["50"] = "/config/img/devices/50/213_hmip-smo230_thumb.png";
+DEV_PATHS["HmIP-SMO230"]["250"] = "/config/img/devices/250/213_hmip-smo230.png";
+DEV_HIGHLIGHT["HmIP-SMO230"] = new Object();
 DEV_LIST.push('HM-CCU-1');
 DEV_DESCRIPTION["HM-CCU-1"] = "HM-CCU-1";
 DEV_PATHS["HM-CCU-1"] = new Object();
@@ -4403,6 +4667,12 @@ DEV_PATHS["HmIP-FAL24-C6"] = new Object();
 DEV_PATHS["HmIP-FAL24-C6"]["50"] = "/config/img/devices/50/137_hmip-fal-c6_thumb.png";
 DEV_PATHS["HmIP-FAL24-C6"]["250"] = "/config/img/devices/250/137_hmip-fal-c6.png";
 DEV_HIGHLIGHT["HmIP-FAL24-C6"] = new Object();
+DEV_LIST.push('RF-LAN-Sniffer');
+DEV_DESCRIPTION["RF-LAN-Sniffer"] = "RF-LAN-Sniffer";
+DEV_PATHS["RF-LAN-Sniffer"] = new Object();
+DEV_PATHS["RF-LAN-Sniffer"]["50"] = "/config/img/devices/50/CCU2_thumb.png";
+DEV_PATHS["RF-LAN-Sniffer"]["250"] = "/config/img/devices/250/CCU2.png";
+DEV_HIGHLIGHT["RF-LAN-Sniffer"] = new Object();
 DEV_LIST.push('HmIP-SAM');
 DEV_DESCRIPTION["HmIP-SAM"] = "HmIP-SAM";
 DEV_PATHS["HmIP-SAM"] = new Object();
@@ -4455,6 +4725,12 @@ DEV_PATHS["HmIP-PCBS-BAT"] = new Object();
 DEV_PATHS["HmIP-PCBS-BAT"]["50"] = "/config/img/devices/50/151_hmip-pcbs-bat_thumb.png";
 DEV_PATHS["HmIP-PCBS-BAT"]["250"] = "/config/img/devices/250/151_hmip-pcbs-bat.png";
 DEV_HIGHLIGHT["HmIP-PCBS-BAT"] = new Object();
+DEV_LIST.push('HmIP-eTRV-2 I9F');
+DEV_DESCRIPTION["HmIP-eTRV-2 I9F"] = "TRV";
+DEV_PATHS["HmIP-eTRV-2 I9F"] = new Object();
+DEV_PATHS["HmIP-eTRV-2 I9F"]["50"] = "/config/img/devices/50/120_hmip-etrv_thumb.png";
+DEV_PATHS["HmIP-eTRV-2 I9F"]["250"] = "/config/img/devices/250/120_hmip-etrv.png";
+DEV_HIGHLIGHT["HmIP-eTRV-2 I9F"] = new Object();
 DEV_LIST.push('HM-LC-Bl1-SM-2');
 DEV_DESCRIPTION["HM-LC-Bl1-SM-2"] = "HM-LC-Bl1-SM";
 DEV_PATHS["HM-LC-Bl1-SM-2"] = new Object();
@@ -4482,6 +4758,12 @@ DEV_PATHS["HmIP-SWDM-2"] = new Object();
 DEV_PATHS["HmIP-SWDM-2"]["50"] = "/config/img/devices/50/181_hmip-swdm_thumb.png";
 DEV_PATHS["HmIP-SWDM-2"]["250"] = "/config/img/devices/250/181_hmip-swdm.png";
 DEV_HIGHLIGHT["HmIP-SWDM-2"] = new Object();
+DEV_LIST.push('HmIPW-WTH-A');
+DEV_DESCRIPTION["HmIPW-WTH-A"] = "HmIPW-WTH";
+DEV_PATHS["HmIPW-WTH-A"] = new Object();
+DEV_PATHS["HmIPW-WTH-A"]["50"] = "/config/img/devices/50/121_hmip-wth_thumb.png";
+DEV_PATHS["HmIPW-WTH-A"]["250"] = "/config/img/devices/250/121_hmip-wth.png";
+DEV_HIGHLIGHT["HmIPW-WTH-A"] = new Object();
 DEV_LIST.push('HM-Sen-DB-PCB');
 DEV_DESCRIPTION["HM-Sen-DB-PCB"] = "HM-Sen-DB-PCB";
 DEV_PATHS["HM-Sen-DB-PCB"] = new Object();
@@ -4516,12 +4798,30 @@ DEV_PATHS["HM-LC-Dim1L-CV-644"] = new Object();
 DEV_PATHS["HM-LC-Dim1L-CV-644"]["50"] = "/config/img/devices/50/2_hm-lc-dim1l-cv_thumb.png";
 DEV_PATHS["HM-LC-Dim1L-CV-644"]["250"] = "/config/img/devices/250/2_hm-lc-dim1l-cv.png";
 DEV_HIGHLIGHT["HM-LC-Dim1L-CV-644"] = new Object();
+DEV_LIST.push('HmIP-DLD-S');
+DEV_DESCRIPTION["HmIP-DLD-S"] = "HmIP-DLD";
+DEV_PATHS["HmIP-DLD-S"] = new Object();
+DEV_PATHS["HmIP-DLD-S"]["50"] = "/config/img/devices/50/214_hmip-dld_thumb.png";
+DEV_PATHS["HmIP-DLD-S"]["250"] = "/config/img/devices/250/214_hmip-dld.png";
+DEV_HIGHLIGHT["HmIP-DLD-S"] = new Object();
+DEV_LIST.push('HmIP-WTH-A');
+DEV_DESCRIPTION["HmIP-WTH-A"] = "HmIP-WTH-2";
+DEV_PATHS["HmIP-WTH-A"] = new Object();
+DEV_PATHS["HmIP-WTH-A"]["50"] = "/config/img/devices/50/121_hmip-wth_thumb.png";
+DEV_PATHS["HmIP-WTH-A"]["250"] = "/config/img/devices/250/121_hmip-wth.png";
+DEV_HIGHLIGHT["HmIP-WTH-A"] = new Object();
 DEV_LIST.push('263 132');
 DEV_DESCRIPTION["263 132"] = "263_132";
 DEV_PATHS["263 132"] = new Object();
 DEV_PATHS["263 132"]["50"] = "/config/img/devices/50/2_hm-lc-dim1l-cv_thumb.png";
 DEV_PATHS["263 132"]["250"] = "/config/img/devices/250/2_hm-lc-dim1l-cv.png";
 DEV_HIGHLIGHT["263 132"] = new Object();
+DEV_LIST.push('HmIP-STHD-A');
+DEV_DESCRIPTION["HmIP-STHD-A"] = "HmIP-STHD";
+DEV_PATHS["HmIP-STHD-A"] = new Object();
+DEV_PATHS["HmIP-STHD-A"]["50"] = "/config/img/devices/50/147_hmip-sthd_thumb.png";
+DEV_PATHS["HmIP-STHD-A"]["250"] = "/config/img/devices/250/147_hmip-sthd.png";
+DEV_HIGHLIGHT["HmIP-STHD-A"] = new Object();
 DEV_LIST.push('HM-Sec-RHS');
 DEV_DESCRIPTION["HM-Sec-RHS"] = "HM-Sec-RHS";
 DEV_PATHS["HM-Sec-RHS"] = new Object();
@@ -4651,8 +4951,8 @@ DEV_PATHS["ELV-SH-BS2"] = new Object();
 DEV_PATHS["ELV-SH-BS2"]["50"] = "/config/img/devices/50/PushButton-2ch-wm_thumb.png";
 DEV_PATHS["ELV-SH-BS2"]["250"] = "/config/img/devices/250/PushButton-2ch-wm.png";
 DEV_HIGHLIGHT["ELV-SH-BS2"] = new Object();
-DEV_HIGHLIGHT["ELV-SH-BS2"]["2"] = [2, 0.244, 0.312, 0.428, 0.168];
-DEV_HIGHLIGHT["ELV-SH-BS2"]["1"] = [2, 0.244, 0.56, 0.428, 0.168];
+DEV_HIGHLIGHT["ELV-SH-BS2"]["1"] = [2, 0.244, 0.312, 0.428, 0.168];
+DEV_HIGHLIGHT["ELV-SH-BS2"]["2"] = [2, 0.244, 0.56, 0.428, 0.168];
 DEV_HIGHLIGHT["ELV-SH-BS2"]["1+2"] = [2, 0.244, 0.308, 0.428, 0.416];
 DEV_LIST.push('ZEL STG RM FSS UP3');
 DEV_DESCRIPTION["ZEL STG RM FSS UP3"] = "ZEL_STG_RM_FSS_UP3";
@@ -5511,6 +5811,10 @@ elvST['DISPLAY|UNIT=NONE'] = '${stringTableDisplayUnitNone}';
 elvST['DISPLAY|UNIT=PERCENT'] = '${stringTableDisplayUnitPercent}';
 elvST['DISPLAY|UNIT=WATT'] = '${stringTableDisplayUnitWatt}';
 elvST['DISPLAY|WINDOW'] = '${stringTableDisplayWindow}';
+elvST['DISPLAY_INPUT_TRANSMITTER'] = '${stringTableDisplayInputTransmitterTitle}';
+elvST['DISPLAY_INPUT_TRANSMITTER|DISPLAY_DATA_STRING'] = '${stringTableWGDDisplayDataString}';
+elvST['DISPLAY_LEVEL_INPUT_TRANSMITTER'] = '${stringTableDisplayInputLevelTransmitterTitle}';
+elvST['DISPLAY_THERMOSTAT_INPUT_TRANSMITTER'] = '${stringTableDisplayInputThermostatTransmitterTitle}';
 elvST['DISPLAY_UPDATE_REQUEST_0=FALSE'] = '${stringTableDisplayUpdateRequest} 0: ${lblNo}';
 elvST['DISPLAY_UPDATE_REQUEST_0=TRUE'] = '${stringTableDisplayUpdateRequest} 0: ${lblYes}';
 elvST['DISPLAY_UPDATE_REQUEST_01=FALSE'] = '${stringTableDisplayUpdateRequest} 1: ${lblNo}';
@@ -5590,9 +5894,24 @@ elvST['EMERGENCY_OPERATION=TRUE'] = '${stringTableEmergencyOperationTrue}';
 elvST['ENABLE_ROUTING'] = '${stringTableEnableRouting}';
 elvST['ENERGIE_METER_TRANSMITTER|AVERAGING'] = '${stringTablePowerMeterAveraging}';
 elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER'] = '${stringTablePowerMeterEnergyCounter}';
+elvST['ENERGIE_METER_TRANSMITTER|POWER'] = '${stringTablePowerMeterPower}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_STATUS=NORMAL'] = '${lblStatus} ${chType_POWERMETER}: ${lblNormal}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_STATUS=0'] = '${lblStatus} ${chType_POWERMETER}: ${lblNormal}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_STATUS=UNKNOWN'] = '${lblStatus} ${chType_POWERMETER}: ${lblUnknown}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_STATUS=1'] = '${lblStatus} ${chType_POWERMETER}: ${lblUnknown}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_STATUS=OVERFLOW'] = '${lblStatus} ${chType_POWERMETER}: ${lblOverflow}';
+elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_STATUS=2'] = '${lblStatus} ${chType_POWERMETER}: ${lblOverflow}';
 elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_OVERFLOW=FALSE'] = '${stringTablePowerMeterOverflowFalse}';
 elvST['ENERGIE_METER_TRANSMITTER|ENERGY_COUNTER_OVERFLOW=TRUE'] = '${stringTablePowerMeterOverflowTrue}';
 elvST['ENERGIE_METER_TRANSMITTER|FREQUENCY'] = '${stringTablePowerMeterFrequency}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_FLOW'] = '${stringTablePowerMeterGasFlow}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_FLOW_STATUS=NORMAL'] = '${lblValue} ${stringTablePowerMeterGasFlow}: ${lblNormal}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_FLOW_STATUS=UNKNOWN'] = '${lblValue} ${stringTablePowerMeterGasFlow}: ${lblUnknown}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_FLOW_STATUS=OVERFLOW'] = '${lblValue} ${stringTablePowerMeterGasFlow}: ${lblOverflow}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_VOLUME'] = '${stringTablePowerMeterGasVolume}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_VOLUME_STATUS=NORMAL'] = '${lblValue} ${stringTablePowerMeterGasVolume}: ${lblNormal}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_VOLUME_STATUS=UNKNOWN'] = '${lblValue} ${stringTablePowerMeterGasVolume}: ${lblUnknown}';
+elvST['ENERGIE_METER_TRANSMITTER|GAS_VOLUME_STATUS=OVERFLOW'] = '${lblValue} ${stringTablePowerMeterGasVolume}: ${lblOverflow}';
 elvST['ENERGIE_METER_TRANSMITTER|POWER'] = '${stringTablePowerMeterPower}';
 elvST['ENERGIE_METER_TRANSMITTER|POWER_STATUS=NORMAL'] = '${lblValue} ${stringTablePowerMeterPower}: ${lblNormal}';
 elvST['ENERGIE_METER_TRANSMITTER|POWER_STATUS=0'] = '${lblValue} ${stringTablePowerMeterPower}: ${lblNormal}';
@@ -5615,12 +5934,18 @@ elvST['ERROR_CODE'] = '${stringTableErrorCode}';
 elvST['ERROR_COMMUNICATION_PARTICULATE_MATTER_SENSOR'] = '${stringTableErrorCommunicationParticulateMatterSensor}';
 elvST['ERROR_COMMUNICATION_PARTICULATE_MATTER_SENSOR=FALSE'] = '${stringTableErrorCommunicationParticulateMatterSensorFalse}';
 elvST['ERROR_COMMUNICATION_PARTICULATE_MATTER_SENSOR=TRUE'] = '${stringTableErrorCommunicationParticulateMatterSensorTrue}';
+elvST['ERROR_COMMUNICATION_SENSOR'] = '${stringTableErrorCommunicationSensor}';
+elvST['ERROR_COMMUNICATION_SENSOR=TRUE'] = '${stringTableErrorCommunicationSensorTrue}';
+elvST['ERROR_COMMUNICATION_SENSOR=FALSE'] = '${stringTableErrorCommunicationSensorFalse}';
 elvST['ERROR_COMMUNICATION_TEMP_AND_HUMIDITY_SENSOR'] = '${stringTableErrorCommunicationTempAndHumiditySensor}';
 elvST['ERROR_COMMUNICATION_TEMP_AND_HUMIDITY_SENSOR=FALSE'] = '${stringTableErrorCommunicationTempAndHumiditySensorFalse}';
 elvST['ERROR_COMMUNICATION_TEMP_AND_HUMIDITY_SENSOR=TRUE'] = '${stringTableErrorCommunicationTempAndHumiditySensorTrue}';
 elvST['ERROR_COPROCESSOR'] = '${stringTableErrorCoProcessor}';
 elvST['ERROR_COPROCESSOR=TRUE'] = '${stringTableErrorCoprocessorTrue}';
 elvST['ERROR_COPROCESSOR=FALSE'] = '${stringTableErrorCoprocessorFalse}';
+elvST['ERROR_DALI_BUS'] = '${stringTableErrorDaliBus}';
+elvST['ERROR_DALI_BUS=FALSE'] = '${stringTableErrorDaliBusFalse}';
+elvST['ERROR_DALI_BUS=TRUE'] = '${stringTableErrorDaliBusTrue}';
 elvST['ERROR_DEGRADED_CHAMBER'] = '${stringTableErrorDegradedChamber}';
 elvST['ERROR_DEGRADED_CHAMBER=FALSE'] = '${stringTableErrorDegradedChamberFalse}';
 elvST['ERROR_DEGRADED_CHAMBER=TRUE'] = '${stringTableErrorDegradedChamberTrue}';
@@ -6021,6 +6346,7 @@ elvST['MAINTENANCE|SABOTAGE'] = '${stringTableSabotage}';
 elvST['MAINTENANCE|SABOTAGE_STICKY'] = '${stringTableSabotageSticky}';
 elvST['MAINTENANCE|SABOTAGE_STICKY=FALSE'] = '${stringTableSabotageStickyFalse}';
 elvST['MAINTENANCE|SABOTAGE_STICKY=TRUE'] = '${stringTableSabotageStickyTrue}';
+elvST['MAINTENANCE|SENSOR_ERROR'] = '${stringTableSensorError}';
 elvST['MAINTENANCE|STICKY_BATTERY=BATTERY_DEFECT'] = '${stringTableBatteryFailure}';
 elvST['MAINTENANCE|STICKY_BATTERY=BATTERY_WAS_DEFECT'] = '${stringTableBatteryWasDefect}';
 elvST['MAINTENANCE|STICKY_POWER=POWER_FAILURE'] = '${stringTablePowerNotAvailable}';
@@ -6054,6 +6380,12 @@ elvST['MAINTENANCE|USER_AUTHORIZATION_08'] = '${stringTableUserAuthorization08}'
 elvST['MAINTENANCE|USER_AUTHORIZATION_08=FALSE'] = '${stringTableUserAuthorization08false}';
 elvST['MAINTENANCE|USER_AUTHORIZATION_08=TRUE'] = '${stringTableUserAuthorization08true}';
 elvST['MANU_MODE'] = '${stringTableClimateControlRTTransceiverManuMode}';
+elvST['MEASURED_VALUE'] = '${lblReading}';
+elvST['MEASURED_VALUE_STATUS=ERROR'] = '${lblReading}: ${lblError}';
+elvST['MEASURED_VALUE_STATUS=NORMAL'] = '${lblReading}: ${lblNormal}';
+elvST['MEASURED_VALUE_STATUS=OVERFLOW'] = '${lblReading}: ${lblOverflow}';
+elvST['MEASURED_VALUE_STATUS=UNDERFLOW'] = '${lblReading}: ${lblUnderflow}';
+elvST['MEASURED_VALUE_STATUS=UNKNOWN'] = '${lblReading}: ${lblUnknown}';
 elvST['MIN_MAX_VALUE_NOT_RELEVANT_FOR_MANU_MODE'] = '${stringTableMinMaxNotRelevantForManuMode}';
 elvST['MIOB_DIN_CONFIG'] = '${stringTableMiobDinConfig}';
 elvST['MOD_EM8BIT_TRANSMITTER'] = '${stringTable8BitTransmitterTitle}';
@@ -6650,6 +6982,17 @@ elvST['TX_MINDELAY_UNIT=S'] = '${optionUnitS}';
 elvST['TX_MINDELAY_VALUE'] = '${stringTableTxMinDelayValue}';
 elvST['TX_THRESHOLD_PERCENT'] = '${stringTableTxThresholdPercent}';
 elvST['TX_THRESHOLD_POWER'] = '${stringTablePowerMeterTxThresholdPower}';
+elvST['UNIVERSAL_LIGHT_RECEIVER'] = '${stringTableUniversalLightReceiverTitle}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_LIMIT'] = '${stringTableErrorLimitULR}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_LIMIT=FALSE'] = '${stringTableErrorLimitULR_False}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_LIMIT=TRUE'] = '${stringTableErrorLimitULR_True}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_CONTROL_GEAR_FAILURE'] = '${stringTableErrorGearFailure}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_CONTROL_GEAR_FAILURE=FALSE'] = '${stringTableErrorGearFailure_False}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_CONTROL_GEAR_FAILURE=TRUE'] = '${stringTableErrorGearFailure_True}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_LAMP_FAILURE'] = '${stringTableErrorLampFailureULR}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_LAMP_FAILURE=FALSE'] = '${stringTableErrorLampFailureULR_False}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|ERROR_LAMP_FAILURE=TRUE'] = '${stringTableErrorLampFailureULR_True}';
+elvST['UNIVERSAL_LIGHT_RECEIVER|LEVEL'] = '${lblColorBrightness}';
 elvST['UNREACH=FALSE'] = '${stringTableUnreachFalse}';
 elvST['UNREACH=TRUE'] = '${stringTableUnreachTrue}';
 elvST['UPDATE_PENDING'] = '${stringTableUpdatePending}';
@@ -6837,6 +7180,13 @@ elvST['15Min'] = '${optionUnit15M}';
 elvST['30Min'] = '${optionUnit30M}';
 elvST['60Min'] = '${optionUnit60M}';
 elvST['120Min'] = '${optionUnit120M}';
+elvST['ACTIVITY_STATE=DOWN'] = '${stringTableActivityStateDown}';
+elvST['ACTIVITY_STATE=UNKNOWN'] = '${stringTableActivityStateUnknown}';
+elvST['ACTIVITY_STATE=UP'] = '${stringTableActivityStateUp}';
+elvST['ACTIVITY_STATE=STABLE'] = '${stringTableActivityStable}';
+elvST['COLOR_TEMPERATURE'] = '${optionColorTemperature}';
+elvST['HUE'] = '${optionHue}';
+elvST['SATURATION'] = '${optionSaturation}';
 elvST['SOUNDFILE=INTERNAL_SOUNDFILE'] = '${stringTableInternalSoundFile}';
 elvST['SOUNDFILE=RANDOM_SOUNDFILE'] = '${stringTableRandomSoundFile}';
 elvST['SOUNDFILE=OLD_VALUE'] = '${stringTableOldValueSoundFile}';
@@ -7747,6 +8097,8 @@ ConfigData = Singleton.create({
       window.setTimeout(function() {jQuery("#PagePath").css('color',"white");},100);
       ConfigData.isPresent = true;
       if (ConfigData.showMessage) { this.hideMessage(); }
+      showDutyCycleHmIP(); // The DeviceList is now available for displaying the duty cycle and carrier sense of the HAP's
+      showCarrierSense();
       if (ConfigData.callback) { ConfigData.callback(); }
     });
   },
@@ -7885,6 +8237,7 @@ WebUI = Singleton.create({
     if(typeof dcTimeout == "undefined") {
       dcTimeout = window.setTimeout(function () {
         showDutyCycle();
+        showCarrierSense();
         delete dcTimeout;
       }, 10);
     }
@@ -8114,14 +8467,13 @@ WebUI = Singleton.create({
         showDutyCycle();
       }, 1);
 
-      // Check the dutyCycle periodically
+      // Check the dutyCycle and carrierSense periodically
       new PeriodicalExecuter(function () {
         showDutyCycle();
+        showCarrierSense();
       }, checkDutyCycleInterval);
 
       if (getProduct() >= 3) {
-
-        drapMigration();
 
         /* See SPHM-566
         if (!homematic('CCU.existsFile', {'file': LegacyAPIMigrationDialog.CONFIRM_FILE})) {
@@ -10413,6 +10765,27 @@ Channel = Class.create({
     devMode, arBlindFW;
 
 
+    // Set the master parameter UNIVERSAL_LIGHT_MAX_CAPABILITIES of the HmIP-DRG-DALI Gateway as meta data
+    // Channels 1 - 32 = connected dali devices. Here we need only set the meta data for those channels where a device is connected.
+    // The first channel with no connected device has the UNIVERSAL_LIGHT_MAX_CAPABILITIES set to 5. All following channels don't have a device connected, so we can skip the rest.
+    //
+    // For the group channels 33 - 48 we need all UNIVERSAL_LIGHT_MAX_CAPABILITIES.
+    if ((device.typeName == "HmIP-DRG-DALI")) {
+      if ((data.channelType == "UNIVERSAL_LIGHT_RECEIVER") && (((data.index < 33) && (typeof noMoreDaliDevices == "undefined"))  || (data.index >= 33)))  {
+        var maxCap = homematic("Interface.getMasterValue", {
+          "interface": "HmIP-RF",
+          "address": data.address,
+          "valueKey": "UNIVERSAL_LIGHT_MAX_CAPABILITIES"
+        });
+        homematic("Interface.setMetadata", {"objectId": data.id, "dataId": "maxCap", "value": maxCap});
+        if ((data.index < 33) && (maxCap == 5)) {
+           noMoreDaliDevices = true;
+        }
+        this.daliMaxCapabilities = maxCap; // currently used for determining the target channels of the weekly program.
+      }
+    }
+
+
     this.updateEvent = new eQ3.Event();
 
     var chType = data["channelType"];
@@ -10439,7 +10812,10 @@ Channel = Class.create({
 
     if ((device.deviceType.description.indexOf("HmIPW-DRBL4") != -1)
       || (device.deviceType.description.indexOf("HmIP-DRBLI4") != -1)
+      || (device.deviceType.description.indexOf("HmIP-BBL") != -1)
       || (device.deviceType.description.indexOf("HmIP-BBL-2") != -1)
+      || (device.deviceType.description.indexOf("HmIP-BBL-I") != -1)
+      || (device.deviceType.description.indexOf("HmIP-FBL") != -1)
     ) {
       if (chType.indexOf("BLIND_TRANSMITTER") != -1 || chType.indexOf("BLIND_VIRTUAL_RECEIVER") != -1) {
         if (typeof devToConfigure != "undefined" || typeof blindChAddress == "undefined" || blindChAddress != devAddress) {
@@ -12083,7 +12459,12 @@ MessageBox = Class.create({
     this.m_content.setText(text);
     return this;
   },
-  
+
+  centerText: function()
+  {
+    jQuery(".UIText").addClass("alignCenter");
+  },
+
   setHtml: function(html)
   {
     this.m_content.setHtml(html);
@@ -12144,6 +12525,18 @@ MessageBox.show = function(title, content, callback, width, height, id, barGraph
     this.msgBox.centerBarGraph(barGraphId);
   }
 
+};
+
+MessageBox.setText = function(txt) {
+  this.msgBox.setText(txt);
+};
+
+MessageBox.centerText = function() {
+  this.msgBox.centerText();
+};
+
+MessageBox.setHtml = function(html) {
+  this.msgBox.setHtml(html);
 };
 
 MessageBox.close = function() {
@@ -12596,19 +12989,39 @@ EulaDialog.RESULT_YES = 1;
 /**
  * Einfache Kanalauswahl.
  **/
+
 ChannelChooser = Singleton.create({
+
   SHOW_READABLE: 0x1,    // zeigt lesbare Kanäle an
   SHOW_WRITABLE: 0x2,    // zeigt schreibbare Kanäle an
   SHOW_EVENTABLE: 0x4,    // zeigt Kanäle mit Ereignisbehandlung an
   SHOW_ALL: 0x7,    // zeigt alle Kanäle an
 
+  FAV_CHANNELS: 0,
   PRG_CONDITION: 1,
   PRG_ACTIVITY: 2,
     
   SORT_FN:  {
     NAME       : function(channels, reverse) { return channels.ex_sortBy("name", reverse); },
     DESCRIPTION: function(channels, reverse) { return channels.ex_sortBy("typeDescription", reverse); },
-    ADDRESS    : function(channels, reverse) { return channels.ex_sortBy("address", reverse); },
+    //ADDRESS    : function(channels, reverse) { return channels.ex_sortBy("address", reverse); },
+
+    // Sorting by serial number changed.
+    ADDRESS    : function(channels, reverse) {
+      var arSortedChannels = [];
+      jQuery.each(channels.sort(function(a,b) {
+          var ar1 = a.address.split(":"),
+            ar2 = b.address.split(":");
+
+          if (ar1[0] == ar2[0]) {
+            return (parseInt(ar1[1]) - parseInt(ar2[1]));
+          }
+        }), function(index, ch) {
+          arSortedChannels.push(ch);
+      });
+        return arSortedChannels;
+    },
+
     ROOM_NAMES : function(channels, reverse) {
       channels.sort(function(a, b) { return Object.ex_compare(a.rooms.ex_joinItem("name"), b.rooms.ex_joinItem("name")); });
       return (reverse) ? channels.reverse() : channels;
@@ -12629,11 +13042,21 @@ ChannelChooser = Singleton.create({
   initialize: function()
   {
     this.HmIPIdentifier = "HmIP-RF";
-    this.HmIPWIdentifier = "HmIP-Wired";
+    this.HmIPWIdentifier = "HmIP-RF";
     this.VirtualDevicesIdentifier = "VirtualDevices";
     this.template = TrimPath.parseTemplate(CHANNELCHOOSER_JST);
+    this.arWGDScreenOrder = [];
+    this.WGDStartChannelPerScreen = {};
+    this.WGDChannelInUse = [];
+    this.WGDdevice = "";
+    this.arWGDTiles = [];
+    this.noMoreDaliChannels = false;
   },
-    
+
+  sortByAddress: function(channels) {
+    console.log("channels", channels);
+  },
+
   /**
    * Wendet alle Filter auf einen Kanal an.
    **/
@@ -12651,15 +13074,27 @@ ChannelChooser = Singleton.create({
       (this.FuncFilter.matchArray(channel.subsections)));     
   },
 
+  setMetaData: function(objectId, dataId, val) {
+    homematic("Interface.setMetadata", {"objectId": objectId, "dataId": dataId, "value": val});
+  },
+
   filterHmIPChannels4ProgramConditions: function(channel, arChannels) {
-    var channelTypeName = channel.typeName.toLowerCase();
+    var channelTypeName = channel.typeName.toLowerCase(),
+      oDevice, oMaintChannel, deviceMode, endOfScreens = false;
 
     conInfo("filterHmIPChannels4ProgramConditions");
     // If the channel is visible and no KEY_TRANSCEIVER or *_WEEK_PROFILE then show the channel
     if (channel.isVisible
       && (channel.channelType != "KEY_TRANSCEIVER")
+      && (channel.channelType != "UNIVERSAL_LIGHT_RECEIVER")
+      && (channel.channelType != "DISPLAY_INPUT_TRANSMITTER")
+      && (channel.channelType != "DISPLAY_LEVEL_INPUT_TRANSMITTER")
+      && (channel.channelType != "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER")
+      && (channel.channelType != "MULTI_MODE_INPUT_TRANSMITTER")
       && (channel.channelType.indexOf("_WEEK_PROFILE") == -1)
-      ) { arChannels.push(channel);}
+    ) {
+      arChannels.push(channel);
+    }
 
     // If the channel is a KEY_TRANSCEIVER and the device type no HmIP-PS / PSM (-IT/-CH/-PE/-UK) / PDT /PCBS then show the channel
     // A key press of the internal button doesn't work for the above-named devices
@@ -12670,19 +13105,244 @@ ChannelChooser = Singleton.create({
       && (channelTypeName != "hmip-pdt")
       && (channelTypeName != "hmip-pdt-uk")
       && (channelTypeName != "hmip-pcbs")
-      ) {arChannels.push(channel);}
+    ) {
+      arChannels.push(channel);
+    }
 
-    return arChannels;
+    if (channel.channelType == "UNIVERSAL_LIGHT_RECEIVER") {
+      if (channelTypeName == "hmip-rgbw") {
+        oMaintChannel = DeviceList.getChannelByAddress(channel.address.split(":")[0] + ":0"); // The maintenance channel stores the deviceMode
+        deviceMode = parseInt(homematic("Interface.getMetadata", {
+          "objectId": oMaintChannel.id,
+          "dataId": "deviceMode"
+        }));
+
+        switch (deviceMode) {
+          case 0:
+          case 1:
+            // RGB/RGBW Mode
+            if (channel.index == 1) {
+              arChannels.push(channel);
+            }
+            break;
+          case 2:
+            // Tunable White Mode
+            if (channel.index == 1 || channel.index == 2) {
+              arChannels.push(channel);
+            }
+            break;
+          default:
+            // PWM Mode - all channels visible
+            arChannels.push(channel);
+        }
+      }
+
+      if (channelTypeName == "hmip-drg-dali") {
+        if ((channel.index != 0) && (channel.index <= 32)) {
+          // Dali channels 1 - 32
+          if (this.noMoreDaliChannels == false) {
+            chnDescription = homematic("Interface.getParamset", {
+              "interface": "HmIP-RF",
+              "address": channel.address,
+              "paramsetKey": "MASTER"
+            });
+
+            if (parseInt(chnDescription["DALI_ADDRESS"]) != 255) {
+              arChannels.push(channel);
+              // Store UNIVERSAL_LIGHT_MAX_CAPABILITIES as meta data
+              // Because the user might have connected another DALI device to this channel we must set the meta data each time
+              //this is not necessary anymore - this.setMetaData(channel.id, "maxCap", chnDescription["UNIVERSAL_LIGHT_MAX_CAPABILITIES"]);
+            } else {
+              this.noMoreDaliChannels = true;
+            }
+          }
+
+        } else if ((channel.index == 0) || (channel.id >= 33)) {
+          // Maintenance and group channels
+          arChannels.push(channel);
+        }
+      }
+    }
+
+    if (((channel.channelType == "DISPLAY_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_LEVEL_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER")) && ((channelTypeName == "hmipw-wgd") || (channelTypeName == "hmipw-wgd-pl"))) {
+      var wgdScreenOrder, screenEndID = "END", counter, chnDescription, curDevice, tilesA = [1, 3, 7], tilesB = [0, 1],
+        loop,
+        self = this;
+      if (channel.index == 41) {
+        arChannels.push(channel);
+      } else {
+        curDevice = channel.device.address; // Do this only once per device
+        if (this.WGDdevice != curDevice) {
+          this.WGDdevice = channel.device.address;
+          oDevice = DeviceList.getDeviceByAddress(channel.address.split(":")[0]); // The device stores the screen order
+          wgdScreenOrder = homematic("Interface.getMetadata", {"objectId": oDevice.id, "dataId": "screenOrder"});
+          this.arWGDScreenOrder = wgdScreenOrder.split(",");
+          this.WGDStartChannelPerScreen = (this.arWGDScreenOrder.length < 10) ? {
+            0: 1,
+            1: 9,
+            2: 17,
+            3: 25,
+            4: 33
+          } : {0: 1, 1: 9, 2: 17, 3: 25, 4: 33, 5: 42, 6: 44, 7: 46, 8: 48, 9: 50};
+          this.WGDChannelInUse = [];
+          this.arWGDTiles = [];
+
+          // Get number of tiles
+          chnDescription = homematic("Interface.getParamset", {
+            "interface": "HmIP-RF",
+            "address": curDevice + ":0",
+            "paramsetKey": "MASTER"
+          });
+          loop = ((this.arWGDScreenOrder.length < 10)) ? 5 : 10;
+
+          for (var loopx = 1; loopx <= loop; loopx++) {
+            this.arWGDTiles.push(chnDescription["SCREEN_LAYOUT_TILE_LAYOUT_" + loopx]);
+          }
+
+          jQuery.each(this.arWGDScreenOrder, function (index, screen) {
+            if ((!endOfScreens) && (screen != screenEndID)) {
+              counter = (screen <= 4) ? tilesA[self.arWGDTiles[screen]] : tilesB[self.arWGDTiles[screen]];
+              for (loop = self.WGDStartChannelPerScreen[screen]; loop <= (self.WGDStartChannelPerScreen[screen] + counter); loop++) {
+                self.WGDChannelInUse.push(loop);
+              }
+            } else {
+              endOfScreens = true;
+            } // return false doesn't work because of a problem with the build-system
+          });
+        }
+
+        if (this.WGDChannelInUse.indexOf(channel.index) != -1) {
+          arChannels.push(channel);
+        }
+      }
+    }
+
+    if (channel.channelType == "MULTI_MODE_INPUT_TRANSMITTER") {
+      if (channelTypeName == "elv-sh-bm-s") {
+        var channelMode = parseInt(homematic("Interface.getMetadata", {
+          "objectId": channel.id,
+          "dataId": "channelMode"
+        }));
+        if (channelMode != 0) {
+          arChannels.push(channel);
+        }
+      } else {
+        arChannels.push(channel);
+      }
+      return arChannels;
+    }
+
   },
 
   filterHmIPChannels4ProgramActivities: function(channel, arChannels) {
     conInfo("filterHmIPChannels4ProgramActivities");
-    var channelTypeName = channel.typeName.toLowerCase();
+    var channelTypeName = channel.typeName.toLowerCase(),
+    oMaintChannel, deviceMode, endOfScreens = false;
+
     if (channel.isVisible) {
-      if (channelTypeName != "hmip-wkp") {
-        arChannels.push(channel);
-      } else {
+      if (channelTypeName == "hmip-wkp") {
         if ((channel.channelType == "MAINTENANCE") || ((channel.channelType == "ACCESS_TRANSCEIVER") && (channel.index % 2 != 0))) {
+          arChannels.push(channel);
+        }
+      } else if (channel.channelType == "UNIVERSAL_LIGHT_RECEIVER") {
+        if (channelTypeName == "hmip-rgbw") {
+          oMaintChannel = DeviceList.getChannelByAddress(channel.address.split(":")[0] + ":0"); // The maintenance channel stores the deviceMode
+          deviceMode = parseInt(homematic("Interface.getMetadata", {
+            "objectId": oMaintChannel.id,
+            "dataId": "deviceMode"
+          }));
+
+          switch (deviceMode) {
+            case 0:
+            case 1:
+              // RGB/RGBW Mode
+              if (channel.index == 1) {
+                arChannels.push(channel);
+              }
+              break;
+            case 2:
+              // Tunable White Mode
+              if (channel.index == 1 || channel.index == 2) {
+                arChannels.push(channel);
+              }
+              break;
+            default:
+              // PWM Mode - all channels visible
+              arChannels.push(channel);
+          }
+        }
+
+        if (channelTypeName == "hmip-drg-dali") {
+          if ((channel.index != 0) && (channel.index <= 32)) {
+            // Dali channels 1 - 32
+            if (this.noMoreDaliChannels == false) {
+              chnDescription = homematic("Interface.getParamset", {
+                "interface": "HmIP-RF",
+                "address": channel.address,
+                "paramsetKey": "MASTER"
+              });
+
+              if (parseInt(chnDescription["DALI_ADDRESS"]) != 255) {
+                arChannels.push(channel);
+                // Store UNIVERSAL_LIGHT_MAX_CAPABILITIES as meta data if not yet available
+                // Because the user might have connected another DALI device to this channel we must set the meta data each time
+                //this is not necessary anymore - this.setMetaData(channel.id, "maxCap", chnDescription["UNIVERSAL_LIGHT_MAX_CAPABILITIES"]);
+              } else {
+                this.noMoreDaliChannels = true;
+              }
+            }
+
+          } else if ((channel.index == 0) || (channel.id >=33)) {
+            // Maintenance and group channels
+            arChannels.push(channel);
+          }
+        }
+
+        if ((channelTypeName == "hmip-lss") && (channel.index == 1)) {
+          arChannels.push(channel);
+        }
+
+
+      } else if (((channel.channelType == "DISPLAY_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_LEVEL_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER")) && ((channelTypeName == "hmipw-wgd") || (channelTypeName == "hmipw-wgd-pl"))) {
+        var  wgdScreenOrder, screenEndID = "END",  counter, chnDescription, curDevice, tilesA = [1,3,7], tilesB = [0,1], loop,
+          self = this;
+        if (channel.index == 41) {
+          arChannels.push(channel);
+        } else {
+          curDevice = channel.device.address; // Do this only once per device
+          if (this.WGDdevice != curDevice) {
+            this.WGDdevice = channel.device.address;
+            oDevice = DeviceList.getDeviceByAddress(channel.address.split(":")[0]); // The device stores the screen order
+            wgdScreenOrder = homematic("Interface.getMetadata", {"objectId": oDevice.id, "dataId": "screenOrder"});
+            this.arWGDScreenOrder = wgdScreenOrder.split(",");
+            this.WGDStartChannelPerScreen = (this.arWGDScreenOrder.length < 10) ? {0: 1, 1: 9, 2: 17, 3: 25, 4: 33} : {0: 1, 1: 9, 2: 17, 3: 25, 4: 33, 5: 42, 6: 44, 7: 46, 8: 48, 9: 50};
+            this.WGDChannelInUse = [];
+            this.arWGDTiles = [];
+
+            // Get number of tiles
+            chnDescription = homematic("Interface.getParamset", {"interface": "HmIP-RF", "address": curDevice + ":0", "paramsetKey": "MASTER"});
+            loop = ((this.arWGDScreenOrder.length < 10)) ? 5 : 10;
+
+            for(var loopx = 1; loopx <= loop; loopx++) {
+              this.arWGDTiles.push(chnDescription["SCREEN_LAYOUT_TILE_LAYOUT_" + loopx]);
+            }
+
+            jQuery.each(this.arWGDScreenOrder, function(index,screen) {
+              if ((! endOfScreens) && (screen != screenEndID)) {
+                counter = (screen <= 4) ? tilesA[self.arWGDTiles[screen]] : tilesB[self.arWGDTiles[screen]];
+                for (loop = self.WGDStartChannelPerScreen[screen]; loop <= (self.WGDStartChannelPerScreen[screen] + counter); loop++) {
+                  self.WGDChannelInUse.push(loop);
+                }
+              } else {endOfScreens = true;} // return false doesn't work because of a problem with the build-system
+            });
+          }
+
+          if (this.WGDChannelInUse.indexOf(channel.index) != -1) {
+            arChannels.push(channel);
+          }
+        }
+      } else {
+        if (channelTypeName != "hmip-esi") {
           arChannels.push(channel);
         }
       }
@@ -12711,6 +13371,7 @@ ChannelChooser = Singleton.create({
    **/
   filter: function(channels)
   {
+    this.noMoreDaliChannels = false;
     var result = new Array();
 
     channels.each(function(channel) {
@@ -12718,7 +13379,7 @@ ChannelChooser = Singleton.create({
       if (this.match(channel)) {
 
         if ((channel.device.interfaceName == this.HmIPIdentifier) || (channel.device.interfaceName == this.HmIPWIdentifier)) {
-          if (this.src == this.PRG_CONDITION) {
+          if ((this.src == this.PRG_CONDITION) || (this.src == this.FAV_CHANNELS)) {
             this.filterHmIPChannels4ProgramConditions(channel, result);
           } else if (this.src == this.PRG_ACTIVITY) {
             this.filterHmIPChannels4ProgramActivities(channel, result);
@@ -12945,7 +13606,24 @@ MultiChannelChooser = Singleton.create({
   SORT_FN: {
     NAME       : function(channels, reverse) { return channels.ex_sortBy("name", reverse); },
     DESCRIPTION: function(channels, reverse) { return channels.ex_sortBy("typeDescription", reverse); },
-    ADDRESS    : function(channels, reverse) { return channels.ex_sortBy("address", reverse); },
+    //ADDRESS    : function(channels, reverse) { return channels.ex_sortBy("address", reverse); },
+
+    // Sorting by serial number changed.
+    ADDRESS    : function(channels, reverse) {
+      var arSortedChannels = [];
+      jQuery.each(channels.sort(function(a,b) {
+        var ar1 = a.address.split(":"),
+          ar2 = b.address.split(":");
+
+        if (ar1[0] == ar2[0]) {
+          return (parseInt(ar1[1]) - parseInt(ar2[1]));
+        }
+      }), function(index, ch) {
+        arSortedChannels.push(ch);
+      });
+      return arSortedChannels;
+    },
+
     ROOM_NAMES : function(channels, reverse)
     {
       channels.sort(function(a, b) { return Object.ex_compare(a.rooms.ex_joinItem("name"), b.rooms.ex_joinItem("name")); });
@@ -12968,6 +13646,12 @@ MultiChannelChooser = Singleton.create({
     this.HmIPIdentifier = "HmIP-RF";
     this.HmIPWIdentifier = "HmIP-Wired";
     this.template = TrimPath.parseTemplate(MULTI_CHANNELCHOOSER_JST);
+    this.arWGDScreenOrder = [];
+    this.WGDStartChannelPerScreen = {};
+    this.WGDChannelInUse = [];
+    this.WGDdevice = "";
+    this.arWGDTiles = [];
+    this.noMoreDaliChannels = false;
   },
   
   /**
@@ -12987,17 +13671,125 @@ MultiChannelChooser = Singleton.create({
       (this.RoomFilter.matchArray(channel.rooms))             &&
       (this.FuncFilter.matchArray(channel.subsections)));     
   },
-  
+
+  setMetaData: function(objectId, dataId, val) {
+    homematic("Interface.setMetadata", {"objectId": objectId, "dataId": dataId, "value": val});
+  },
 
   filterHmIPChannels: function(channel, arChannels) {
     conInfo("filterHmIPChannels");
-    //if ((channel.channelType != "_KEY_TRANSCEIVER") && channel.isVisible) {arChannels.push(channel);}
-    if (channel.isVisible && (channel.channelType != "ACCESSPOINT_GENERIC_RECEIVER")) {arChannels.push(channel);}
+    var channelTypeName = channel.typeName.toLowerCase(),
+      oMaintChannel, deviceMode;
+
+    if (channel.isVisible
+      && (channel.channelType != "ACCESSPOINT_GENERIC_RECEIVER")
+      && (channel.channelType != "DISPLAY_INPUT_TRANSMITTER")
+      && (channel.channelType != "DISPLAY_LEVEL_INPUT_TRANSMITTER")
+      && (channel.channelType != "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER")
+      && (channel.channelType != "UNIVERSAL_LIGHT_RECEIVER")
+    ) {arChannels.push(channel);}
+
+    if (((channel.channelType == "DISPLAY_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_LEVEL_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER")) && ((channelTypeName == "hmipw-wgd")) || ((channelTypeName == "hmipw-wgd-pl"))) {
+      var  wgdScreenOrder, screenEndID = "END",  counter, chnDescription, curDevice, tilesA = [1,3,7], tilesB = [0,1], loop, endOfScreens = false,
+        self = this;
+      if (channel.index == 41) {
+        arChannels.push(channel);
+      } else {
+        curDevice = channel.device.address; // Do this only once per device
+        if (this.WGDdevice != curDevice) {
+          this.WGDdevice = channel.device.address;
+          oDevice = DeviceList.getDeviceByAddress(channel.address.split(":")[0]); // The device stores the screen order
+          wgdScreenOrder = homematic("Interface.getMetadata", {"objectId": oDevice.id, "dataId": "screenOrder"});
+          this.arWGDScreenOrder = wgdScreenOrder.split(",");
+          this.WGDStartChannelPerScreen = (this.arWGDScreenOrder.length < 10) ? {0: 1, 1: 9, 2: 17, 3: 25, 4: 33} : {0: 1, 1: 9, 2: 17, 3: 25, 4: 33, 5: 42, 6: 44, 7: 46, 8: 48, 9: 50};
+          this.WGDChannelInUse = [];
+          this.arWGDTiles = [];
+
+          // Get number of tiles
+          chnDescription = homematic("Interface.getParamset", {"interface": "HmIP-RF", "address": curDevice + ":0", "paramsetKey": "MASTER"});
+          loop = ((this.arWGDScreenOrder.length < 10)) ? 5 : 10;
+
+          for(var loopx = 1; loopx <= loop; loopx++) {
+            this.arWGDTiles.push(chnDescription["SCREEN_LAYOUT_TILE_LAYOUT_" + loopx]);
+          }
+
+          jQuery.each(this.arWGDScreenOrder, function(index,screen) {
+            if ((! endOfScreens) && (screen != screenEndID)) {
+              counter = (screen <= 4) ? tilesA[self.arWGDTiles[screen]] : tilesB[self.arWGDTiles[screen]];
+              for (loop = self.WGDStartChannelPerScreen[screen]; loop <= (self.WGDStartChannelPerScreen[screen] + counter); loop++) {
+                self.WGDChannelInUse.push(loop);
+              }
+            } else {endOfScreens = true;} // return false doesn't work because of a problem with the build-system
+          });
+        }
+
+        if (this.WGDChannelInUse.indexOf(channel.index) != -1) {
+          arChannels.push(channel);
+        }
+      }
+    }
+
+    if (channel.channelType == "UNIVERSAL_LIGHT_RECEIVER") {
+      if (channelTypeName == "hmip-rgbw") {
+        oMaintChannel = DeviceList.getChannelByAddress(channel.address.split(":")[0] + ":0"); // The maintenance channel stores the deviceMode
+        deviceMode = parseInt(homematic("Interface.getMetadata", {
+          "objectId": oMaintChannel.id,
+          "dataId": "deviceMode"
+        }));
+
+        switch (deviceMode) {
+          case 0:
+          case 1:
+            // RGB/RGBW Mode
+            if (channel.index == 1) {
+              arChannels.push(channel);
+            }
+            break;
+          case 2:
+            // Tunable White Mode
+            if (channel.index == 1 || channel.index == 2) {
+              arChannels.push(channel);
+            }
+            break;
+          default:
+            // PWM Mode - all channels visible
+            arChannels.push(channel);
+        }
+      }
+
+      if (channelTypeName == "hmip-drg-dali") {
+        if ((channel.index != 0) && (channel.index <= 32)) {
+          // Dali channels 1 - 32
+          if (this.noMoreDaliChannels == false) {
+            chnDescription = homematic("Interface.getParamset", {
+              "interface": "HmIP-RF",
+              "address": channel.address,
+              "paramsetKey": "MASTER"
+            });
+
+            if (parseInt(chnDescription["DALI_ADDRESS"]) != 255) {
+              arChannels.push(channel);
+              // Store UNIVERSAL_LIGHT_MAX_CAPABILITIES as meta data
+              // Because the user might have connected another DALI device to this channel we must set the meta data each time
+              //this is not necessary anymore - this.setMetaData(channel.id, "maxCap", chnDescription["UNIVERSAL_LIGHT_MAX_CAPABILITIES"]);
+            } else {
+              this.noMoreDaliChannels = true;
+            }
+          }
+
+        } else if ((channel.index == 0) || (channel.id >=33)) {
+          // Maintenance and group channels
+          arChannels.push(channel);
+        }
+      }
+    }
+
     return arChannels;
   },
 
   filter: function(channels)
   {
+    this.noMoreDaliChannels = false;
     var result = new Array();
 
     channels.each(function(channel) {
@@ -13349,7 +14141,8 @@ ChannelConfigDialog = Singleton.create({
   {
     if (isTextAllowed($(this.NAME_ID).value))
     {
-      var channel = this.channel;
+      var channel = this.channel,
+        arRooms = [], arSubSection = [];
     
       channel.setName($(this.NAME_ID).value);
       channel.setVisibility($(this.VISIBLE_ID).checked);
@@ -13359,21 +14152,30 @@ ChannelConfigDialog = Singleton.create({
       channel.setUsability($(this.USABLE_ID).checked);
       channel.setLogging($(this.LOGGED_ID).checked);
       channel.setMode($(this.MODE_ID).options[$(this.MODE_ID).options.selectedIndex].value);
-    
-      $A($(this.ROOMLIST_ID).values).each(function(item) {
-        var room = RoomList.get(item.value);
 
-        if (item.checked === true) { room.addChannel(channel.id, true); }
-        else                       { room.removeChannel(channel.id, true); }
-      }, this);
-    
-      $A($(this.SUBSECTIONLIST_ID).values).each(function(item) {
-        var subsection = SubsectionList.get(item.value);
-      
-        if (item.checked === true) { subsection.addChannel(channel.id, true); }
-        else                       { subsection.removeChannel(channel.id, true); }
-      }, this);
-    
+      arRooms = $A($(this.ROOMLIST_ID));
+
+      // SPHM-1153
+      jQuery(arRooms).each(function(index,_room) {
+        var room = RoomList.get(_room.value);
+        if (jQuery(_room).prop("checked")) {
+          room.addChannel(channel.id, true);
+        } else {
+          room.removeChannel(channel.id, true);
+        }
+      });
+
+      arSubSection = $A($(this.SUBSECTIONLIST_ID));
+
+      // SPHM-1153
+      jQuery(arSubSection).each(function(index,_subSection) {
+        var subsection = SubsectionList.get(_subSection.value);
+        if (jQuery(_subSection).prop("checked")) {
+          subsection.addChannel(channel.id, true);
+        } else {
+          subsection.removeChannel(channel.id, true);
+        }
+      });
       this.close(this.RESULT_OK);
     }
   },
@@ -13623,6 +14425,135 @@ DeviceConfigDialog = Singleton.create({
 /**
  * deletedevicedialog.js
  **/
+
+hasDeviceInternalProgramOrSysvar  = function(device) {
+  var result = {"id": 0, "address" : "", "type": "" };
+  try {
+    jQuery.each(device.channels, function(index, channel) {
+      if (
+        (channel.channelType == "POWERMETER")
+        || (channel.channelType == "POWERMETER_IEC1")
+        || (channel.channelType == "ENERGIE_METER_TRANSMITTER")
+        || (channel.channelType == "WEATHER_TRANSMIT" /*HmIP-SWO*/)
+        || (channel.channelType == "KEY_TRANSCEIVER") /*HnmIP-MOD-RC8*/
+      ) {
+        result.id = channel.id;
+        result.address = channel.address;
+        result.type = channel.channelType;
+        return; // leave each loop
+      }
+    });
+  } catch(e) {}
+
+  return result;
+};
+
+deleteProgSysvarPOWERMETER = function(chId, chAddress) {
+  try {
+    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress}, function () {
+      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterOldVal_" + chId}, function () {
+        homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_RESET"}, function () {
+          homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_DEVICE_RESET"}, function () {
+            homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_TMP_OLDVAL"}, function () {
+              homematic("Program.deleteProgramByName", {"name": "prgEnergyCounter_" + chId + "_" + chAddress}, function () {
+                conInfo(chAddress + " ProgSysvarPOWERMETER deleted - next: save ObjectModel");
+                window.setTimeout(function(){saveObjectModel();},5000);
+              });
+            });
+          });
+        });
+      });
+    });
+  } catch(e) {console.log(e);}
+};
+
+deleteProgSysvarPOWERMETER_ESI = function(device) {
+  try {
+    jQuery.each(device.channels, function (index, chn) {
+      if (chn.index >= 1) {
+        homematic("Program.deleteProgramByName", {"name": "prgEnergyCounter_" + chn.id + "_" + chn.address});
+        homematic("Program.deleteProgramByName", {"name": "prgGasCounter_" + chn.id + "_" + chn.address});
+        homematic("Program.deleteProgramByName", {"name": "prgSetEnergyValuesAtMidnight" + chn.id});
+        homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chn.id + "_" + chn.address});
+        homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterOldVal_" + chn.id});
+      }
+    });
+  } catch(e) {console.log(e);}
+
+  conInfo(device.typeName + ": All relevant programs and sysvars deleted - next: save ObjectModel");
+  window.setTimeout(function(){saveObjectModel();},5000);
+};
+
+
+deleteProgSysvarPOWERMETER_IGL = function(chId, chAddress) {
+  try {
+    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress}, function () {
+      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGasOldVal_" + chId}, function () {
+        homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress + "_RESET"}, function () {
+          homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress + "_DEVICE_RESET"}, function () {
+            homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress + "_TMP_OLDVAL"}, function () {
+              homematic("Program.deleteProgramByName", {"name": "prgEnergyCounterGAS_" + chId + "_" + chAddress}, function () {
+                conInfo(chAddress + " ProgSysvarPOWERMETER_IGL deleted - next: ProgSysvarPOWERMETER");
+                deleteProgSysvarPOWERMETER(chId, chAddress);
+              });
+            });
+          });
+        });
+      });
+    });
+  } catch(e) {console.log(e);}
+};
+
+deleteProgSysvarPOWERMETER_IEC = function(chId, chAddress) {
+  try {
+    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterIEC_" + chId + "_" + chAddress}, function () {
+      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterIECOldVal_" + chId}, function () {
+        homematic("Program.deleteProgramByName", {"name": "prgEnergyCounterIEC_" + chId + "_" + chAddress}, function () {
+          conInfo(chAddress + " ProgSysvarPOWERMETER_IEC deleted - next: ProgSysvarPOWERMETER_IGL");
+          deleteProgSysvarPOWERMETER_IGL(chId, chAddress);
+        });
+      });
+    });
+  } catch(e) {console.log(e);}
+};
+
+deleteProgSysvarHmIPWeatherTransmitRainSunshine = function(chId, chAddress) {
+  try {
+    homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounter_" + chId + "_" + chAddress}, function () {
+      homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounterOldVal_" + chId}, function () {
+        homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounterYesterday_" + chId}, function () {
+          homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounterToday_" + chId}, function () {
+            homematic("Program.deleteProgramByName", {"name": "prgRainCounter_" + chId + "_" + chAddress}, function () {
+              homematic("Program.deleteProgramByName", {"name": "prgDailySunshineRainCounter_" + chId}, function () {
+                conInfo(chAddress + "prgDailySunshineRainCounter and prgHmIPRainCounter deleted - next: delete prgHmIPSunshineCounter");
+                deleteProgSysvarHmIPWeatherTransmitSunshine(chId,chAddress);
+              });
+            });
+          });
+        });
+      });
+    });
+  } catch(e) {console.log(e);}
+};
+
+deleteProgSysvarHmIPWeatherTransmitSunshine = function(chId, chAddress) {
+  try {
+    homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounter_" + chId + "_" + chAddress}, function () {
+      homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounterOldVal_" + chId}, function () {
+        homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounterYesterday_" + chId}, function () {
+          homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounterToday_" + chId}, function () {
+            homematic("Program.deleteProgramByName", {"name": "prgSunshineCounter_" + chId + "_" + chAddress}, function () {
+              conInfo(chAddress + " prgHmIPSunshineCounter deleted - next: save ObjectModel");
+              window.setTimeout(function () {
+                saveObjectModel();
+              }, 5000);
+            });
+          });
+        });
+      });
+    });
+  } catch(e) {console.log(e);}
+};
 
 
 /**
@@ -13904,6 +14835,37 @@ DeleteDeviceWindow = Class.create({
     Layer.add(this.m_layer);
 
     device.remove(this.m_flags, onResultHandler);
+
+    if (flags == 5) {
+      // Prüfen, ob ein Kanal des Gerätes ein HmIP-Wettersensor ist, als Energy-Counter oder ob das Gerät ein HmIP-MOD-RC8 ist dient.
+      // Wenn ja, müssen beim Löschen die dazugehörigen Systemvariablen
+      // sowie das enstprechende Systemprogramm zum aktualisieren der Systemvariablen entfernt werden.
+      var oChnIdAndAddress = hasDeviceInternalProgramOrSysvar(this.m_device),
+        chId = oChnIdAndAddress.id,
+        chAddress= oChnIdAndAddress.address;
+      if (chId != 0) {
+        if (oChnIdAndAddress.type == "POWERMETER" || oChnIdAndAddress.type == "ENERGIE_METER_TRANSMITTER") {
+          if (this.m_device.typeName.toLowerCase() != "hmip-esi") {
+            deleteProgSysvarPOWERMETER(chId, chAddress);
+          } else {
+            deleteProgSysvarPOWERMETER_ESI(this.m_device);
+          }
+        } else if (oChnIdAndAddress.type == "POWERMETER_IGL")  {
+          deleteProgSysvarPOWERMETER_IGL(chId, chAddress);
+        } else if (oChnIdAndAddress.type == "POWERMETER_IEC1") {
+          deleteProgSysvarPOWERMETER_IEC(chId, chAddress);
+        } else if ((this.m_device.typeName.toLowerCase() == "hmip-swo-b") && (oChnIdAndAddress.type == "WEATHER_TRANSMIT")) {
+          deleteProgSysvarHmIPWeatherTransmitSunshine(chId, chAddress);
+        } else if (((this.m_device.typeName.toLowerCase() == "hmip-swo-pl") || (this.m_device.typeName.toLowerCase() == "hmip-swo-pr"))  && (oChnIdAndAddress.type == "WEATHER_TRANSMIT"))  {
+          deleteProgSysvarHmIPWeatherTransmitRainSunshine(chId, chAddress);
+        } /*currently not in use else if (this.m_device.typeName.toLowerCase() == "hmip-mod-rc8") {
+          this.m_deleteSysvarHmIPModRC8();
+        }*/
+      } else if ((typeof this.m_device.typeName != "undefined") && (this.m_device.typeName.toLowerCase() == "hmipw-drbl4")) {
+        this.m_deleteMetaDataHmIPWBlind();
+      }
+    }
+
   },
   
   m_onResult: function(result, error)
@@ -14056,7 +15018,37 @@ ErrorOnDeleteWindow = Class.create({
     }
 
     Layer.remove(this.m_layer);
-    
+
+    if (result == null && this.m_flags == 1 && this.m_errorCode == 507) {
+      // Prüfen, ob ein Kanal des Gerätes ein HmIP-Wettersensor ist, als Energy-Counter oder ob das Gerät ein HmIP-MOD-RC8 ist dient.
+      // Wenn ja, müssen beim Löschen die dazugehörigen Systemvariablen
+      // sowie das enstprechende Systemprogramm zum aktualisieren der Systemvariablen entfernt werden.
+      var oChnIdAndAddress = hasDeviceInternalProgramOrSysvar(this.m_device),
+        chId = oChnIdAndAddress.id,
+        chAddress= oChnIdAndAddress.address;
+      if (chId != 0) {
+        if (oChnIdAndAddress.type == "POWERMETER" || oChnIdAndAddress.type == "ENERGIE_METER_TRANSMITTER") {
+          if (this.m_device.typeName.toLowerCase() != "hmip-esi") {
+            deleteProgSysvarPOWERMETER(chId, chAddress);
+          } else {
+            deleteProgSysvarPOWERMETER_ESI(this.m_device);
+          }
+        } else if (oChnIdAndAddress.type == "POWERMETER_IGL")  {
+          deleteProgSysvarPOWERMETER_IGL(chId, chAddress);
+        } else if (oChnIdAndAddress.type == "POWERMETER_IEC1") {
+          deleteProgSysvarPOWERMETER_IEC(chId, chAddress);
+        } else if ((this.m_device.typeName.toLowerCase() == "hmip-swo-b") && (oChnIdAndAddress.type == "WEATHER_TRANSMIT")) {
+          deleteProgSysvarHmIPWeatherTransmitSunshine(chId, chAddress);
+        } else if (((this.m_device.typeName.toLowerCase() == "hmip-swo-pl") || (this.m_device.typeName.toLowerCase() == "hmip-swo-pr"))  && (oChnIdAndAddress.type == "WEATHER_TRANSMIT"))  {
+          deleteProgSysvarHmIPWeatherTransmitRainSunshine(chId, chAddress);
+        } /*currently not in use else if (this.m_device.typeName.toLowerCase() == "hmip-mod-rc8") {
+          this.m_deleteSysvarHmIPModRC8();
+        }*/
+      } else if ((typeof this.m_device.typeName != "undefined") && (this.m_device.typeName.toLowerCase() == "hmipw-drbl4")) {
+        this.m_deleteMetaDataHmIPWBlind();
+      }
+    }
+
     if (this.m_callback) { this.m_callback(result); }
   },
   
@@ -14079,21 +15071,6 @@ ErrorOnDeleteWindow = Class.create({
 
 ErrorOnDeleteWindow.CONTENT_WIDTH = 400;
 ErrorOnDeleteWindow.CONTENT_HEIGHT = 260;
-/*
-ErrorOnDeleteWindow.TITLE = translateKey("ErrorOnDeleteWindowTitle");
-ErrorOnDeleteWindow.DELETE_OPTIONS = translateKey("ErrorOnDeleteWindowDeleteOptions");
-ErrorOnDeleteWindow.RETRY = translateKey("ErrorOnDeleteWindowRetry");
-ErrorOnDeleteWindow.RETRY_DESCRIPTION = translateKey("ErrorOnDeleteWindowRetryDescription");
-ErrorOnDeleteWindow.DEFER = translateKey("ErrorOnDeleteWindowDefer");
-ErrorOnDeleteWindow.DEFER_DESCRIPTION = translateKey("ErrorOnDeleteWindowDeferDescription");
-ErrorOnDeleteWindow.FORCE = translateKey("ErrorOnDeleteWindowForce");
-ErrorOnDeleteWindow.FORCE_DESCRIPTION = translateKey("ErrorOnDeleteWindowForceDescription");
-ErrorOnDeleteWindow.DEVICE_NOT_REACHABLE = translateKey("ErrorOnDeleteWindowDeviceNotReachable");
-ErrorOnDeleteWindow.UNKNOWN_DEVICE = translateKey("ErrorOnDeleteWindowUnknownDevice");
-ErrorOnDeleteWindow.UKNOWN_ERROR = translateKey("ErrorOnDeleteWindowUnknownError");
-ErrorOnDeleteWindow.ABORT_BUTTON = translateKey("ErrorOnDeleteWindowAbortButton");
-ErrorOnDeleteWindow.DELETE_BUTTON = translateKey("ErrorOnDeleteWindowDeleteButton");
-*/
 
 /**
  * Dialogbox zum Löschen eines Geräts
@@ -14138,108 +15115,6 @@ DeleteDeviceDialog = Class.create({
     }
   },
 
-  m_hasDeviceInternalProgramOrSysvar: function() {
-    var result = {"id": 0, "address" : "", "type": "" };
-    try {
-      jQuery.each(this.m_device.channels, function(index, channel) {
-        if (
-          (channel.channelType == "POWERMETER")
-          || (channel.channelType == "POWERMETER_IEC1")
-          || (channel.channelType == "ENERGIE_METER_TRANSMITTER")
-          || (channel.channelType == "WEATHER_TRANSMIT" /*HmIP-SWO*/)
-          || (channel.channelType == "KEY_TRANSCEIVER") /*HnmIP-MOD-RC8*/
-          ) {
-          result.id = channel.id;
-          result.address = channel.address;
-          result.type = channel.channelType;
-          return; // leave each loop
-        }
-      });
-    } catch(e) {}
-
-    return result;
-  },
-
-  m_deleteProgSysvarPOWERMETER: function(chId, chAddress) {
-    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress}, function () {
-      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterOldVal_" + chId}, function () {
-        homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_RESET"}, function () {
-          homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_DEVICE_RESET"}, function () {
-            homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounter_" + chId + "_" + chAddress + "_TMP_OLDVAL"}, function () {
-              homematic("Program.deleteProgramByName", {"name": "prgEnergyCounter_" + chId + "_" + chAddress}, function () {
-                conInfo(chAddress + " ProgSysvarPOWERMETER deleted - next: save ObjectModel");
-                window.setTimeout(function(){saveObjectModel();},5000);
-              });
-            });
-          });
-        });
-      });
-    });
-  },
-
-  m_deleteProgSysvarPOWERMETER_IGL: function(chId, chAddress) {
-    var self = this;
-    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress}, function () {
-      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGasOldVal_" + chId}, function () {
-        homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress + "_RESET"}, function () {
-          homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress + "_DEVICE_RESET"}, function () {
-            homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterGas_" + chId + "_" + chAddress + "_TMP_OLDVAL"}, function () {
-              homematic("Program.deleteProgramByName", {"name": "prgEnergyCounterGAS_" + chId + "_" + chAddress}, function () {
-                conInfo(chAddress + " ProgSysvarPOWERMETER_IGL deleted - next: ProgSysvarPOWERMETER");
-                self.m_deleteProgSysvarPOWERMETER(chId, chAddress);
-              });
-            });
-          });
-        });
-      });
-    });
-  },
-
-  m_deleteProgSysvarPOWERMETER_IEC: function(chId, chAddress) {
-    var self = this;
-    homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterIEC_" + chId + "_" + chAddress}, function () {
-      homematic("SysVar.deleteSysVarByName", {"name": "svEnergyCounterIECOldVal_" + chId}, function () {
-        homematic("Program.deleteProgramByName", {"name": "prgEnergyCounterIEC_" + chId + "_" + chAddress}, function () {
-          conInfo(chAddress + " ProgSysvarPOWERMETER_IEC deleted - next: ProgSysvarPOWERMETER_IGL");
-          self.m_deleteProgSysvarPOWERMETER_IGL(chId, chAddress);
-        });
-      });
-    });
-  },
-
-  m_deleteProgSysvarHmIPWeatherTransmitRainSunshine: function(chId, chAddress) {
-    var self = this;
-    homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounter_" + chId + "_" + chAddress}, function () {
-      homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounterOldVal_" + chId}, function () {
-        homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounterYesterday_" + chId}, function () {
-          homematic("SysVar.deleteSysVarByName", {"name": "svHmIPRainCounterToday_" + chId}, function () {
-            homematic("Program.deleteProgramByName", {"name": "prgRainCounter_" + chId + "_" + chAddress}, function () {
-                homematic("Program.deleteProgramByName", {"name": "prgDailySunshineRainCounter_" + chId}, function () {
-                  conInfo(chAddress + "prgDailySunshineRainCounter and prgHmIPRainCounter deleted - next: delete prgHmIPSunshineCounter");
-                  self.m_deleteProgSysvarHmIPWeatherTransmitSunshine(chId,chAddress);
-              });
-            });
-          });
-        });
-      });
-    });
-  },
-
-  m_deleteProgSysvarHmIPWeatherTransmitSunshine: function(chId, chAddress) {
-    homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounter_" + chId + "_" + chAddress}, function () {
-      homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounterOldVal_" + chId}, function () {
-        homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounterYesterday_" + chId}, function () {
-          homematic("SysVar.deleteSysVarByName", {"name": "svHmIPSunshineCounterToday_" + chId}, function () {
-            homematic("Program.deleteProgramByName", {"name": "prgSunshineCounter_" + chId + "_" + chAddress}, function () {
-              conInfo(chAddress + " prgHmIPSunshineCounter deleted - next: save ObjectModel");
-              window.setTimeout(function(){saveObjectModel();},5000);
-            });
-          });
-        });
-      });
-    });
-  },
-
   m_deleteSysvarHmIPModRC8: function() {
     var numberOfKeyTransceiver = 8;
 
@@ -14275,20 +15150,24 @@ DeleteDeviceDialog = Class.create({
       // Prüfen, ob ein Kanal des Gerätes ein HmIP-Wettersensor ist, als Energy-Counter oder ob das Gerät ein HmIP-MOD-RC8 ist dient.
       // Wenn ja, müssen beim Löschen die dazugehörigen Systemvariablen
       // sowie das enstprechende Systemprogramm zum aktualisieren der Systemvariablen entfernt werden.
-      var oChnIdAndAddress = this.m_hasDeviceInternalProgramOrSysvar(),
+      var oChnIdAndAddress = hasDeviceInternalProgramOrSysvar(this.m_device),
         chId = oChnIdAndAddress.id,
         chAddress= oChnIdAndAddress.address;
       if (chId != 0) {
         if (oChnIdAndAddress.type == "POWERMETER" || oChnIdAndAddress.type == "ENERGIE_METER_TRANSMITTER") {
-          this.m_deleteProgSysvarPOWERMETER(chId, chAddress);
+          if (this.m_device.typeName.toLowerCase() != "hmip-esi") {
+            deleteProgSysvarPOWERMETER(chId, chAddress);
+          } else {
+            deleteProgSysvarPOWERMETER_ESI(this.m_device);
+          }
         } else if (oChnIdAndAddress.type == "POWERMETER_IGL")  {
-          this.m_deleteProgSysvarPOWERMETER_IGL(chId, chAddress);
+          deleteProgSysvarPOWERMETER_IGL(chId, chAddress);
         } else if (oChnIdAndAddress.type == "POWERMETER_IEC1") {
-          this.m_deleteProgSysvarPOWERMETER_IEC(chId, chAddress);
+          deleteProgSysvarPOWERMETER_IEC(chId, chAddress);
         } else if ((this.m_device.typeName.toLowerCase() == "hmip-swo-b") && (oChnIdAndAddress.type == "WEATHER_TRANSMIT")) {
-          this.m_deleteProgSysvarHmIPWeatherTransmitSunshine(chId, chAddress);
+          deleteProgSysvarHmIPWeatherTransmitSunshine(chId, chAddress);
         } else if (((this.m_device.typeName.toLowerCase() == "hmip-swo-pl") || (this.m_device.typeName.toLowerCase() == "hmip-swo-pr"))  && (oChnIdAndAddress.type == "WEATHER_TRANSMIT"))  {
-          this.m_deleteProgSysvarHmIPWeatherTransmitRainSunshine(chId, chAddress);
+          deleteProgSysvarHmIPWeatherTransmitRainSunshine(chId, chAddress);
         } /*currently not in use else if (this.m_device.typeName.toLowerCase() == "hmip-mod-rc8") {
           this.m_deleteSysvarHmIPModRC8();
         }*/
@@ -19635,10 +20514,10 @@ DimmerCombinedParamDialog = Class.create({
 
     this.isUniversalActor = ((this.deviceType == "HmIP-WUA") || (this.deviceType == "ELV-SH-WUA")) ? true : false;
     this.isServoController = ((this.deviceType == "HmIP-WSC") || (this.deviceType == "ELV-SH-WSC")) ? true : false;
-    this.arNoOntimeAvailable = ["HmIP-MP3P", "HmIP-BSL", "HmIPW-WRC6"];
-    this.showRampTimeOffElm = ["HmIPW-WRC6"];
-    this.showColorElms = ["HmIP-MP3P", "HmIP-BSL", "HmIPW-WRC6"];
-    this.showBehaviourElms = ["HmIPW-WRC6"];
+    this.arNoOntimeAvailable = ["HmIP-MP3P", "HmIP-BSL", "HmIPW-WRC6", "HmIPW-WRC6-A"];
+    this.showRampTimeOffElm = ["HmIPW-WRC6", "HmIPW-WRC6-A"];
+    this.showColorElms = ["HmIP-MP3P", "HmIP-BSL", "HmIPW-WRC6", "HmIPW-WRC6-A"];
+    this.showBehaviourElms = ["HmIPW-WRC6", "HmIPW-WRC6-A"];
 
     var dialog = document.createElement("div");
     dialog.className = "YesNoDialog";
@@ -20215,6 +21094,7 @@ SwitchCombinedParamDialog = Class.create({
     this.initValue = value;
 
     this.windowDrive = "HmIP-MOD-WD-VK";
+    this.dali = "HmIP-DRG-DALI";
 
     this.arNoOntimeAvailable = []; // here we can add devices with Value and Unit instead of Ontime in seconds
 
@@ -20277,6 +21157,10 @@ SwitchCombinedParamDialog = Class.create({
     return (this.deviceType == this.windowDrive) ? true : false;
   },
 
+  _deviceIsDali: function() {
+    return (this.deviceType == this.dali) ? true : false;
+  },
+
   _getOnTimeVal: function(val, unit) {
     var result;
 
@@ -20328,14 +21212,27 @@ SwitchCombinedParamDialog = Class.create({
       if (this.isOntimeAvailable()) {
         if ((this.chkBoxTimeLimitElm.prop("checked") == false) || (durationValue == 0) || (durationValue == 31)) {
           if (! this._deviceIsWindowDrive()) {
-            result = "S=" + state;
+            if (! this._deviceIsDali()) {
+              result = "S=" + state;
+            } else {
+              // The DALI STATE is LEVEL
+              state = (state == "true") ? 100 : 0;
+              result = "L=" + state;
+            }
           } else {
             result = "VL=" + state;
           }
 
         } else {
           if (! this._deviceIsWindowDrive()) {
-            result = "S=" + state + ",OT=" + this._getOnTimeVal(durationValue, durationUnit);
+            if (! this._deviceIsDali()) {
+              result = "S=" + state + ",OT=" + this._getOnTimeVal(durationValue, durationUnit);
+            } else {
+              // The DALI STATE is LEVEL
+              state = (state == "true") ? 100 : 0;
+              result = "L=" + state + ",OT=" + this._getOnTimeVal(durationValue, durationUnit);
+            }
+
           } else {
             result = "VL=" + state + ",OT=" + this._getOnTimeVal(durationValue, durationUnit);
           }
@@ -20393,6 +21290,10 @@ SwitchCombinedParamDialog = Class.create({
       permanentHR = 31;
       minDuration = 0;
       maxDuration = 16343;
+    }
+
+    if (this._deviceIsDali()) {
+      valueS = (valueS == "100") ? "true" : "false";
     }
 
     this.stateElm.val(valueS);
@@ -20666,7 +21567,7 @@ WiredDisplaySystemKey = Class.create({
       this.durationSelect.val(valDuration);
     } else {
       valKeyVisual = (arElmValues[0].split("=")[1] == "true") ? true : false;
-      valDuration = arElmValues[2].split("=")[1];
+      valDuration = arElmValues[arElmValues.length - 1].split("=")[1]; // the last entry of the string should be IMDU = IDENTIFY_DURATION
 
       this.sysKeyChkBox.prop("checked", valKeyVisual);
       this.durationSelect.val(valDuration);
@@ -20752,121 +21653,6 @@ WiredDisplaySystemKey = Class.create({
   }
   
 });
-/**
- * forcedDRAPupdate.js
- **/
-  ForcedDRAPUpdate = Class.create(YesNoDialog,{
- 
-  initialize: function(oDraps2Update, callback)
-  {
-
-    this.RESULT_NO = 0;
-    this.RESULT_YES = 1;
-
-    var _this_ = this;
-
-    this.title = translateKey("dialogHint");
-
-    this.arDraps = oDraps2Update;
-
-    this.content = this._getHTML();
-
-    this.m_contentType = "html";
-    this.m_callback = callback;
-    this.m_layer = document.createElement("div");
-    this.m_layer.className = "YesNoDialogLayer"; 
-
-    var dialog = document.createElement("div");
-    dialog.className = "YesNoDialog";
-    
-    var titleElement = document.createElement("div");
-    titleElement.className = "YesNoDialogTitle";
-    titleElement.appendChild(document.createTextNode(this.title));
-    titleElement.onmousedown = function(event) { new Drag(this.parentNode, event); };
-    dialog.appendChild(titleElement);
-    
-    var contentWrapper = document.createElement("div");
-    contentWrapper.className = "YesNoDialogContentWrapper";
-    
-    var contentElement = document.createElement("div");
-    contentElement.className = "YesNoDialogContent";
-
-    if (this.m_contentType == "html") {
-      contentElement.innerHTML = this.content;
-    } else {
-      contentElement.appendChild(document.createTextNode(this.content));
-    }
-
-    contentWrapper.appendChild(contentElement);
-    
-    dialog.appendChild(contentWrapper);
-
-    var footer = document.createElement("div");
-    footer.className= "YesNoDialogFooter";
-    
-    var yesButton = document.createElement("div");
-    yesButton.className = "YesNoDialog_yesButton borderRadius5px colorGradient50px";
-    yesButton.appendChild(document.createTextNode(translateKey('dialogYes')));
-    yesButton.onclick = function() { _this_.yes(); };
-    yesButton.id="btnYes";
-    footer.appendChild(yesButton);
-    
-    var noButton = document.createElement("div");
-    noButton.className = "YesNoDialog_noButton borderRadius5px colorGradient50px";
-    noButton.appendChild(document.createTextNode(translateKey('dialogNo')));
-    noButton.onclick = function() { _this_.no(); };
-    noButton.id = "btnNo";
-    footer.appendChild(noButton);
-    
-    dialog.appendChild(footer);
-    
-    this.m_layer.appendChild(dialog);
-    Layer.add(this.m_layer);
-
-    this.btnTextYes(translateKey("lblGotoUpdate"));
-    this.btnTextNo(translateKey("btnCancel"));
-
-    translatePage(".YesNoDialog");
-
-    this.setHeight();
-    this.setWidth(600);
-
-  },
-
-  _getHTML: function() {
-    var html = "";
-
-    html += translateKey("headerDrapUpdateNecessary");
-
-    html += "<hr>";
-
-    html += translateKey("drapUpdateNecessary");
-
-    html += "<table class='alignCenter' align='center'>";
-    html += "<tr>";
-      html += "<th style='margin-right: 50px;'>Seriennummer</th>";
-      html += "<th style='width:50px;'></th>";
-      html += "<th>Firmwareversion</th>";
-    html += "</tr>";
-    jQuery.each(this.arDraps, function(index, drap) {
-            html += "<tr>";
-              html += "<td class='alignCenter'>";
-                html += "<span style='font-weight: normal; font-size: 0.8em !important;'>"+drap.address+"</span>";
-              html += "</td>";
-              html += "<td></td>";
-              html += "<td class='alignCenter'>";
-                html += "<span style='font-weight: normal; font-size: 0.8em !important;''>"+drap.curFW+"</span>";
-              html += "</td>";
-
-            html += "</tr>";
-
-    });
-    html += "</table>";
-    return html;
-  }
-  
-});
-
 var
   getWGDImagePath = function() {
     return "/ise/img/icons_hmipw_wgd/";
@@ -20876,13 +21662,16 @@ var
   },
   getWGDImageCollection = function() {
   var image = {
-    0 : ["_000_000_lightbulb0.png",1],
-    1 : ["_001_000_tablelamp0.png",12],
-    2 : ["_002_000_spotoff.png",23],
-    3 : ["_010_000_socket_off.png",25],
-    4 : ["_020_000_shutter0.png",27],
+    0 : ["_0000_fallback.png",0],
+    1 : ["_000_000_lightbulb0.png",1],
+    2 : ["_001_000_tablelamp0.png",12],
+    3 : ["_002_000_spotoff.png",23],
+    4 : ["_010_000_socket_off.png",25],
+    5 : ["_020_000_shutter0.png",27]
+    /*  Not desired according to discussion with PM and Developer.
     5 : ["_050_20_windows_closed.png",43],
     6 : ["_050_64_window_closed.png",52]
+     */
   };
   return image;
 };
@@ -20967,6 +21756,1603 @@ WGDSelectIconDialog = Class.create(YesNoDialog,{
 
   getSelectedIcon: function() {
     return this.selectedIcon;
+  }
+
+});
+
+// TODO Check if this class is still necessary!
+UniveralLightReceiverDialog = Class.create(YesNoDialog,{
+
+  run: function () {
+    this.durationValElm = jQuery("#durationVal");
+    this.durationUnitElm = jQuery("#durationUnit");
+    this.rampTimeValElm = jQuery("#rampTimeVal");
+    this.rampTimeUnitElm = jQuery("#rampTimeUnit");
+    this.rampTimeOffValElm = jQuery("#rampTimeOffVal");
+    this.rampTimeOffUnitElm = jQuery("#rampTimeOffUnit");
+  },
+
+  initColorPicker: function(chnId, oInitColor, dlg) {
+    //this.initEventHandler(dlg);
+    var hsvColorString = "hsv(" + oInitColor.hue + "," + oInitColor.saturation + "%," + oInitColor.level + "%)",
+      colorPickerElm = jQuery("#colorPicker");
+      colorPickerElm.val(hsvColorString);
+
+    jQuery(colorPickerElm).spectrum({
+      preferredFormat: "hsv",
+      showInput: false,
+      color: hsvColorString,
+      //showPalette: true,
+      //disabled: pickerState,
+      //palette: palette,
+      cancelText: translateKey("btnCancel"),
+      chooseText: translateKey("btnOk"),
+      show: function() {dlg.btnYesHide();},
+      hide: function(color) {
+        selectedRGBColor = tinycolor(color).toRgbString();
+        selectedColor =  tinycolor(color).toHsv();
+        dlg.btnYesShow();
+      }
+    });
+  }
+});hmipRGBWControllerDialog = Class.create({
+  initialize: function(title, content, deviceType, chnAddress, value, callback, contentType)
+  {
+    showRamptimeOff = false; // This we need among other things for certain COMBINED_PARAMETER help dialogs.
+    var _this_ = this;
+
+    this.m_contentType = contentType;
+    this.m_callback = callback;
+    this.m_layer = document.createElement("div");
+    this.m_layer.className = "YesNoDialogLayer";
+
+    this.RESULT_NO = 0;
+    this.RESULT_YES = 1;
+
+    this.iface = "HmIP-RF";
+
+    this.rgbw = "HmIP-RGBW";
+    this.drgDali = "HmIP-DRG-DALI";
+    this.lss = "HmIP-LSS";
+
+    this.deviceType = deviceType;
+    this.chnAddress = chnAddress;
+    this.initValue = value;
+
+    this.oChannel = DeviceList.getChannelByAddress(this.chnAddress);
+
+    this.maxOnTime = 111600;
+
+    this.valHCL = 10200;
+    this.valDim2Warm = 10150;
+
+
+    this.arNoOntimeAvailable = [];
+    this.showRampTimeOffElm = [this.rgbw, this.drgDali, this.lss];
+
+    this.chnDescription = homematic("Interface.getParamset", {'interface': this.iface, 'address': this.chnAddress, 'paramsetKey': 'MASTER'});
+    this.maxCap = (this.deviceType != this.lss) ? parseInt(this.chnDescription.UNIVERSAL_LIGHT_MAX_CAPABILITIES) : 3;
+
+
+
+    this.effectModePrg = "unknown";
+
+    var dialog = document.createElement("div");
+    dialog.className = "YesNoDialog";
+
+    var titleElement = document.createElement("div");
+    titleElement.className = "YesNoDialogTitle";
+    //titleElement.appendChild(document.createTextNode(title + " " + deviceType + " - " + chnAddress));
+    titleElement.appendChild(document.createTextNode(deviceType + " - " + chnAddress));
+    titleElement.onmousedown = function(event) { new Drag(this.parentNode, event); };
+    dialog.appendChild(titleElement);
+
+    var contentWrapper = document.createElement("div");
+    contentWrapper.className = "YesNoDialogContentWrapper";
+
+    var contentElement = document.createElement("div");
+    contentElement.className = "YesNoDialogContent";
+
+    if (this.m_contentType == "html") {
+      contentElement.innerHTML = content;
+    } else {
+      contentElement.appendChild(document.createTextNode(content));
+    }
+
+    contentWrapper.appendChild(contentElement);
+
+    dialog.appendChild(contentWrapper);
+
+    var footer = document.createElement("div");
+    footer.className= "YesNoDialogFooter";
+
+    var yesButton = document.createElement("div");
+    yesButton.className = "YesNoDialog_yesButton borderRadius5px colorGradient50px";
+    yesButton.appendChild(document.createTextNode(translateKey('dialogYes')));
+    yesButton.onclick = function() { _this_.yes(); };
+    yesButton.id="btnYes";
+    footer.appendChild(yesButton);
+
+    var noButton = document.createElement("div");
+    noButton.className = "YesNoDialog_noButton borderRadius5px colorGradient50px";
+    noButton.appendChild(document.createTextNode(translateKey('dialogNo')));
+    noButton.onclick = function() { _this_.no(); };
+    noButton.id = "btnNo";
+    footer.appendChild(noButton);
+
+    dialog.appendChild(footer);
+
+    this.m_layer.appendChild(dialog);
+    Layer.add(this.m_layer);
+
+    translatePage(".YesNoDialog");
+
+    this.setHeight();
+
+    this.setDialogElements();
+    this.initDialog();
+
+  },
+
+  isOntimeAvailable: function() {
+    return (this.arNoOntimeAvailable.indexOf(this.deviceType) == -1) ? true : false;
+  },
+
+  setDialogElements: function() {
+    var self = this;
+    this.activeDialog = "color"; // default = color - valid values: color, colorTemp, effect
+    this.btnColorDialog = jQuery("#dialogColor");
+    this.btnColorTempDialog = jQuery("#dialogColorTemp");
+    this.btnEffectDialog = jQuery("#dialogEffect");
+
+    this.anchorColorPicker = jQuery("#anchorColorPicker");
+    this.trColor = jQuery(".j_trColor");
+    this.trDurationElms = jQuery("[name='trDuration']");
+    this.trRampTimeElms = jQuery("[name='trRampTime']");
+    this.trRampTimeOff = jQuery("#trRampTimeOff");
+    this.levelElm = jQuery("#combinedParam_Level");
+    this.lblBrightnessLevelElm = jQuery("#lblBrightnessLevel");
+    this.lblRampTimeElm = jQuery("#lblRampTime");
+    this.chkBoxTimeLimitElm = jQuery("#chkBoxTimeLimit");
+    this.durationValueElm = jQuery("#combinedParam_DurationValue");
+    this.durationUnitElm = jQuery("#combinedParam_DurationUnit");
+    this.rampTimeUnitElm = jQuery("#combinedParam_RampTimeUnit");
+    this.rampTimeValueElm = jQuery("#combinedParam_RampTimeValue");
+    this.rampTimeOffUnitElm = jQuery("#combinedParam_RampTimeOffUnit");
+    this.rampTimeOffValueElm = jQuery("#combinedParam_RampTimeOffValue");
+
+    this.onTimePanel = jQuery(".j_trOnTimePanel");
+
+
+    this.colorPreviewElm = jQuery("#bckGndElm");
+
+    this.colorPicker;
+    this.colorPickerInit = {}; // level, hue, saturation
+
+    this.hueElm = jQuery("#hueElm");
+    this.satElm = jQuery("#satElm");
+
+    this.HUE;
+    this.SATURATION;
+
+    this.lastValHueElm = jQuery("#lastValHue");
+    this.lastValSatElm = jQuery("#lastValSat");
+
+    // TW
+    this.trTWSlider = jQuery("[name='trTWSlider']");
+    this.sliderElm = jQuery("#twSlider");
+    this.sliderInfoElm = jQuery("#tcInfoField");
+    this.btnHCLElm = jQuery("#btnHCL");
+    this.btnDim2WarmElm = jQuery("#btnDim2Warm");
+    this.colorTemperature = 0;
+
+    // Effects
+    this.trEffects = jQuery("[name='trEffects']");
+    this.effectSelBox = jQuery("#effectSelBox");
+    this.effectModeChkBox = jQuery("#effectModePrg");
+  },
+
+  _getOnTimeVal: function(val, unit) {
+    var result;
+
+    if (parseInt(val) >= 31 && parseInt(unit) == 2) {
+      return 0;
+    }
+
+    if (unit == 0) {
+      result = val;
+    } else if (unit == 1) {
+      result = val * 60;
+    } else if (unit == 2) {
+      result = val * 3600;
+    }
+    return parseInt(result);
+  },
+
+  _getRampTimeVal: function(val, unit) {
+    var result;
+    if (unit == 0) {
+      result = val;
+    } else if (unit == 1) {
+      result = parseInt(val * 60);
+    } else if (unit == 3) {
+      result = parseFloat(val / 100);
+    }
+    return result;
+  },
+
+  _getUnitInDU4OnTime: function(time) {
+    var result = 0,
+      hr = time / 3600,
+      min= time / 60;
+
+    if (hr == parseInt(hr)) {
+      result = 2;
+    } else if  (min == parseInt(min)) {
+      result = 1;
+    }
+    return result;
+  },
+
+  _getUnitInDU4RampTime: function(time) {
+    var t = parseFloat(time),
+      result = 0,
+      min = t / 60;
+
+    if (parseInt(time) == 0) {
+      return 0;
+    }
+
+    if (min == parseInt(min)) {
+      result = 1;
+    } else if ((Number(t) === t) && (t % 1 !== 0)) {
+      // time in float
+      result = 3;
+    }
+    return result;
+  },
+
+  hideOnTimeElems: function() {
+    jQuery("[name='trRampTime']").first().nextAll().hide();
+    this.setHeight();
+  },
+
+  getActiveDialog: function() {return this.activeDialog;},
+
+  initSubDialogs: function() {
+    var self = this;
+
+    this.btnColorDialog.click(function() {
+      JControlBtn.on(jQuery(this));
+      JControlBtn.off(jQuery(self.btnColorTempDialog));
+      JControlBtn.off(jQuery(self.btnEffectDialog));
+      self.trTWSlider.hide();
+      self.trEffects.hide();
+      self.trRampTimeElms.show();
+      self.trColor.show();
+      self.onTimePanel.show();
+      self.resetHeight();
+      self.activeDialog = "color";
+    });
+
+    if ((this.deviceType == this.drgDali) || (this.deviceType == this.rgbw) || (this.deviceType == this.lss)) {
+      this.btnColorTempDialog.click(function () {
+        JControlBtn.on(jQuery(this));
+        JControlBtn.off(jQuery(self.btnColorDialog));
+        JControlBtn.off(jQuery(self.btnEffectDialog));
+        self.trColor.hide();
+        self.trEffects.hide();
+        self.trRampTimeElms.show();
+        self.trTWSlider.show();
+        self.onTimePanel.show();
+        self.resetHeight();
+        self.activeDialog = "colorTemp";
+      });
+    }
+
+    if (this.deviceType == this.drgDali) {
+      switch (this.maxCap) {
+        case 2:
+          this.btnColorDialog.hide();
+          this.btnColorTempDialog.click();
+      }
+    }
+
+    if ((this.deviceType == this.rgbw)) {
+      switch (this.maxCap) {
+        case 2:
+          this.btnColorDialog.hide();
+          this.btnColorTempDialog.click();
+          break;
+        case 3:
+          this.btnColorTempDialog.hide();
+          this.btnColorDialog.click();
+      }
+    }
+
+    this.btnEffectDialog.click(function() {
+      JControlBtn.on(jQuery(this));
+      JControlBtn.off(jQuery(self.btnColorDialog));
+      JControlBtn.off(jQuery(self.btnColorTempDialog));
+      self.trRampTimeElms.hide();
+      self.trColor.hide();
+      self.trTWSlider.hide();
+      self.onTimePanel.hide();
+      self.trEffects.show();
+      self.resetHeight();
+      self.activeDialog = "effect";
+    });
+  },
+
+  setEffectNames: function() {
+    var oDevice = DeviceList.getDeviceByAddress(this.chnAddress.split(":")[0]),
+     effectName, effectNo,
+      arEffectValue = [0,1,3,5,7,9,11,13,15,17,19];
+
+    this.effectSelBox.empty().append("<option value='0'>"+translateKey('optionStopEffect')+"</option>");
+    for (effectNo = 1; effectNo <= 10; effectNo++) {
+      effectName =  homematic("Interface.getMetadata", {"objectId": oDevice.id, "dataId": "effectName_" + effectNo});
+      if ((effectName == "") || (effectName == "null")) {effectName = translateKey("lblEffect") + " " + effectNo;}
+      this.effectSelBox.append("<option value='"+arEffectValue[effectNo]+"'>"+effectName+"</option>");
+    }
+  },
+
+
+  setULReffectModePrg: function() {
+    this.effectModePrg = (jQuery(this.effectModeChkBox).is(":checked")) ? true : false;
+    homematic("Interface.setMetadata", {"objectId": this.oChannel.id, "dataId": "effectModePrg", "value": this.effectModePrg});
+  },
+
+  initDialog: function() {
+    var self = this;
+    var arElmValues, valueL, valueDV, valueDVtmp, valueDU, valueRTV, valueRTVtmp, valueRTU, valueSlider, valueRTTOU, valueRTTOV, permanentHR, permanentHR_0, minDuration, maxDuration, effect;
+
+    this.initSubDialogs();
+
+    if (this.isOntimeAvailable()) {
+      arElmValues = this.initValue.split(",");
+
+      valueL = this.getConfigStringValue("L");
+      valueDVtmp = this.getConfigStringValue("OT");
+      valueDU = this._getUnitInDU4OnTime(valueDVtmp);
+
+
+      this.colorPickerInit.level = parseInt(valueL);
+      this.colorPickerInit.hue = parseInt(this.getConfigStringValue("H"));
+      this.colorPickerInit.saturation = parseInt(this.getConfigStringValue("SAT"));
+      this.colorTemperature = parseInt(this.getConfigStringValue("TC"));
+
+      this.HUE = this.colorPickerInit.hue;
+      this.SATURATION = this.colorPickerInit.saturation;
+
+      if ((this.colorTemperature == -1) || (this.colorTemperature == 0)) {
+        if (this.HUE > 360) {this.hueElm.hide();this.hueElm.parent().next().hide();this.lastValHueElm.prop("checked", true);}
+        if (this.SATURATION > 100) {this.satElm.hide(); this.satElm.parent().next().hide();this.lastValSatElm.prop("checked", true);}
+      } else {
+        this.HUE = 0;
+        this.SATURATION = 0;
+        this.colorPickerInit.hue = this.HUE;
+        this.colorPickerInit.saturation = this.SATURATION;
+      }
+
+      if (valueDU == 2) {
+        valueDV = parseInt(valueDVtmp / 3600);
+      } else if (valueDU == 1) {
+        valueDV = parseInt(valueDVtmp / 60);
+      } else {
+        valueDV = valueDVtmp;
+      }
+
+      //valueRTVtmp = arElmValues[2].split("=")[1];
+      valueRTVtmp = this.getConfigStringValue("RT");
+
+      valueRTU = this._getUnitInDU4RampTime(valueRTVtmp);
+
+      if (valueRTU == 3) {
+        valueRTV = valueRTVtmp * 100;
+      } else if (valueRTU == 1) {
+        valueRTV = parseInt(valueRTVtmp / 60);
+      } else {
+        valueRTV = valueRTVtmp;
+      }
+
+      permanentHR = 31;
+      permanentHR_0 = 0;
+      minDuration = 0;
+      maxDuration = 16343;
+    }
+    // RAMPTIME_OFF
+
+    if (arElmValues.length >= 7) {
+      valueRTTOV = this.getConfigStringValue("RTTOV");
+      valueRTTOV = (valueRTTOV == -1 ) ? this.getConfigStringValue("RTTDV") : valueRTTOV;
+
+      valueRTTOU = this.getConfigStringValue("RTTOU");
+      valueRTTOU = (valueRTTOU == -1 ) ? this.getConfigStringValue("RTTDU") : valueRTTOU;
+
+      this.rampTimeOffUnitElm.val(valueRTTOU);
+      this.rampTimeOffValueElm.val(valueRTTOV);
+    }
+
+    this.levelElm.val(valueL);
+    this.durationValueElm.val(valueDV);
+    this.durationUnitElm.val(valueDU);
+
+    this.rampTimeUnitElm.val(valueRTU);
+    this.rampTimeValueElm.val(valueRTV);
+
+    this.hueElm.val(this.HUE);
+    this.satElm.val(this.SATURATION);
+
+    if ((this.durationValueElm.val() == permanentHR && this.durationUnitElm.val() == 2) || (this.isOntimeAvailable() && valueDV == 0)) {
+      this.chkBoxTimeLimitElm.prop("checked", false);
+      this.durationValueElm.prop('disabled', true);
+      this.durationUnitElm.prop('disabled', true);
+      this.trDurationElms.css("visibility", "visible");
+      this.trRampTimeElms.css("visibility", "visible");
+      this.trDurationElms.css("opacity", "0.2");
+      if (this.showRampTimeOffElm.indexOf(this.deviceType) != -1) {
+        this.trRampTimeOff.css("visibility", "visible").css("opacity", "0.2");
+        showRamptimeOff = true;
+      }
+    } else {
+      this.chkBoxTimeLimitElm.prop("checked", true);
+      this.durationValueElm.prop('disabled', false);
+      this.durationUnitElm.prop('disabled', false);
+      this.trDurationElms.css("visibility", "visible");
+      this.trRampTimeElms.css("visibility", "visible");
+      if (this.showRampTimeOffElm.indexOf(this.deviceType) != -1) {
+        this.trRampTimeOff.css("visibility", "visible");
+        showRamptimeOff = true;
+      }
+    }
+
+    this.chkBoxTimeLimitElm.bind("change", function() {
+      if (this.checked) {
+        self.durationValueElm.prop('disabled', false);
+        self.durationUnitElm.prop('disabled', false);
+        self.trDurationElms.fadeTo(1000, 1);
+        self.trRampTimeElms.fadeTo(1000, 1);
+        if (self.showRampTimeOffElm.indexOf(self.deviceType) != -1) {
+          self.trRampTimeOff.fadeTo(1000,1);
+        }
+      } else {
+        self.durationValueElm.prop('disabled', true);
+        self.durationUnitElm.prop('disabled', true);
+        self.rampTimeValueElm.prop('disabled', false); //.val(0);
+        self.rampTimeUnitElm.prop('disabled', false); //.val(0);
+        self.trDurationElms.fadeTo(1000, 0.2);
+        self.trRampTimeElms.fadeTo(1000, 1);
+
+        if (self.showRampTimeOffElm.indexOf(self.deviceType) != -1) {
+          self.trRampTimeOff.fadeTo(1000,0.2);
+        }
+
+        if (self.isOntimeAvailable()) {
+          self.durationValueElm.val(permanentHR_0);
+        } else {
+          self.durationValueElm.val(permanentHR);
+          self.rampTimeOffUnitElm.val(3);
+          self.rampTimeOffValueElm.val(0);
+        }
+        self.durationUnitElm.val(2);
+      }
+    });
+
+    this.durationValueElm.bind("keyup", function() {
+      var min = minDuration,
+        max = (parseInt(self.durationUnitElm.val()) == 2) ? permanentHR: maxDuration;
+      this.value = self.checkValidity(this.value,min,max);
+      if (parseInt(this.value) == 31) {
+        self.rampTimeOffValueElm.val(min);
+        self.rampTimeOffUnitElm.val(3); // = 10ms
+      }
+    });
+
+    this.durationValueElm.bind("blur", function() {
+      var val = parseInt(this.value);
+
+      if (isNaN(val)) {
+        this.value = (parseInt(self.durationUnitElm.val()) == 2) ? permanentHR :  maxDuration;
+      } else {
+        this.value = val;
+      }
+      self.durationValueElm.keyup();
+    });
+
+    this.durationUnitElm.bind("change", function(){
+      self.durationValueElm.keyup();
+    });
+
+    this.rampTimeValueElm.bind("keyup", function() {
+      var min = minDuration,
+        max = maxDuration;
+      this.value = self.checkValidity(this.value,min,max);
+    });
+
+    this.rampTimeValueElm.bind("blur", function() {
+      var val = parseInt(this.value);
+
+      if (isNaN(val)) {
+        this.value = maxDuration;
+      } else {
+        this.value = val;
+      }
+    });
+
+    this.rampTimeUnitElm.bind("change", function(){
+      self.rampTimeValueElm.keyup();
+    });
+
+    /**********************/
+    this.rampTimeOffValueElm.bind("keyup", function() {
+      var min = minDuration,
+        max = maxDuration;
+      this.value = self.checkValidity(this.value,min,max);
+    });
+
+    this.rampTimeOffValueElm.bind("blur", function() {
+      var val = parseInt(this.value);
+
+      if (isNaN(val)) {
+        this.value = maxDuration;
+      } else {
+        this.value = (parseInt(self.durationValueElm.val()) <= 30) ? val : minDuration;
+        if (parseInt(self.durationValueElm.val()) >= 31) {
+          self.rampTimeOffUnitElm.val(3); // 10ms
+        }
+      }
+    });
+
+    this.rampTimeUnitElm.bind("change", function(){
+      self.rampTimeOffValueElm.keyup();
+    });
+
+    this.hueElm.keyup(function(event) {
+      var val;
+      if (event.keyCode == 13) {
+        val = parseInt(jQuery(this).val());
+        if (val < 0 || isNaN(val)) {self.HUE = 0;} else if (val > 360) {self.HUE = 360;} else {self.HUE = val;};
+        jQuery(this).val(self.HUE);
+        self.colorPicker.color.hsv = {h: self.HUE, s: self.SATURATION, v: 0};
+        self.setColorPreviewElm(self.HUE, self.SATURATION);
+
+        // Set the TW slider to --
+        self.resetColorTemp();
+      }
+    });
+
+    this.hueElm.blur(function(event) {
+      var val;
+      val = parseInt(jQuery(this).val());
+      if (val < 0 || isNaN(val)) {self.HUE = 0;} else if (val > 360) {self.HUE = 360;} else {self.HUE = val;};
+      jQuery(this).val(self.HUE);
+      self.colorPicker.color.hsv = {h: self.HUE, s: self.SATURATION, v: 0};
+      self.setColorPreviewElm(self.HUE, self.SATURATION);
+
+      // Set the TW slider to --
+      self.resetColorTemp();
+    });
+
+
+    this.satElm.keyup(function(event) {
+      var val;
+      if (event.keyCode == 13) {
+        val = parseInt(jQuery(this).val());
+        if (val < 0 || isNaN(val)) {self.SATURATION = 0;} else if (val > 100) {self.SATURATION = 100;} else {self.SATURATION = val;};
+        jQuery(this).val(parseInt(self.SATURATION));
+        self.colorPicker.color.hsv = {h: self.HUE, s: self.SATURATION, v: 0};
+        self.setColorPreviewElm(self.HUE, self.SATURATION);
+
+        // Set the TW slider to --
+        self.resetColorTemp();
+      }
+    });
+
+    this.satElm.blur(function(event) {
+      var val;
+      val = parseInt(jQuery(this).val());
+      if (val < 0 || isNaN(val)) {self.SATURATION = 0;} else if (val > 100) {self.SATURATION = 100;} else {self.SATURATION = val;};
+      jQuery(this).val(parseInt(self.SATURATION));
+      self.colorPicker.color.hsv = {h: self.HUE, s: self.SATURATION, v: 0};
+      self.setColorPreviewElm(self.HUE, self.SATURATION);
+
+      // Set the TW slider to --
+      self.resetColorTemp();
+    });
+    /**********************/
+
+    this.showHideColorPicker();
+
+    this.lastValHueElm.click(function() {
+      var selected = jQuery(this).prop("checked");
+
+      self.showHideColorPicker();
+
+      if (selected) {
+        self.HUE = 361;
+        self.hueElm.val(self.HUE);
+        self.hueElm.hide();self.hueElm.parent().next().hide();
+        self.resetColorTemp();
+      } else {
+        self.HUE = 0;
+        self.hueElm.val(self.HUE);
+        self.hueElm.show();self.hueElm.parent().next().show();
+        self.colorPicker.color.hsv = {h: self.HUE, s: 100, v: 100};
+      }
+      self.freezeColorTemp();
+      self.setColorPreviewElm(self.HUE, 100);
+      self.resetHeight();
+    });
+
+    this.lastValSatElm.click(function() {
+      var selected = jQuery(this).prop("checked");
+
+      self.showHideColorPicker();
+
+      if (selected) {
+        self.SATURATION = 101;
+        self.satElm.val(self.SATURATION);
+        self.satElm.hide();self.satElm.parent().next().hide();
+        self.colorPicker.color.hsv = {h: self.HUE, s: 100, v: 100};
+        self.resetColorTemp();
+      } else {
+        self.SATURATION = 100;
+        self.satElm.val(self.SATURATION);
+        self.satElm.show();self.satElm.parent().next().show();
+        self.colorPicker.color.hsv = {h: self.HUE, s: 100, v: 100};
+      }
+      self.freezeColorTemp();
+      self.setColorPreviewElm(self.HUE, 100);
+      self.resetHeight();
+    });
+
+    // TW Slider
+
+    this.btnHCLElm.bind("click", function() {
+      JControlBtn.on(jQuery(this));
+      JControlBtn.off(jQuery(self.btnDim2WarmElm));
+      window.setTimeout(function() {jQuery(".ui-slider-handle").removeClass("ui-state-active");},100);
+      self.colorTemperature = self.valHCL;
+      self.sliderInfoElm.val("--");
+      self.sliderElm.slider('value', 0);
+      self.resetColorPicker();
+    });
+
+    this.btnDim2WarmElm.bind("click", function() {
+      JControlBtn.on(jQuery(this));
+      JControlBtn.off(jQuery(self.btnHCLElm));
+      window.setTimeout(function() {jQuery(".ui-slider-handle").removeClass("ui-state-active");},100);
+      self.colorTemperature = self.valDim2Warm;
+      self.sliderInfoElm.val("--");
+      self.sliderElm.slider('value', 0);
+      self.resetColorPicker();
+    });
+
+    // TW Slider
+    //var tcValueElm = this.getConfigStringValue("TC");
+    this.sliderElm.slider(this.getSliderOpts());
+
+    valueSlider = parseInt(this.getConfigStringValue("TC"));
+    valueSlider = (valueSlider != -1) ? valueSlider : 0;
+
+    this.sliderInfoElm.val((valueSlider == 0) ? "--" : valueSlider);
+    this.sliderElm.val(valueSlider);
+    this.sliderElm.slider('value', (valueSlider > 10100) ? 0 : valueSlider);
+    this.colorTemperature = valueSlider;
+
+    this.sliderElm.on("slide", function (event, ui) {
+      self.sliderInfoElm.val(ui.value);
+    });
+
+    this.sliderElm.on("slidestop", function(event, ui){
+      JControlBtn.off(jQuery(self.btnDim2WarmElm));
+      JControlBtn.off(jQuery(self.btnHCLElm));
+      window.setTimeout(function() {jQuery(".ui-slider-handle").addClass("ui-state-active");},100);
+      self.colorTemperature = ui.value;
+
+      // Set Hue and Saturation to 0
+      self.resetColorPicker();
+
+    });
+
+    if ((valueSlider > 0) && (valueSlider < 10000)) {jQuery(".ui-slider-handle").addClass("ui-state-active");} else {jQuery(".ui-slider-handle").removeClass("ui-state-active");}
+    if (valueSlider == this.valHCL) {jQuery(".ui-slider-handle").removeClass("ui-state-active"); JControlBtn.on(this.btnHCLElm);this.sliderInfoElm.val("--");}
+    if (valueSlider == this.valDim2Warm) {jQuery(".ui-slider-handle").removeClass("ui-state-active"); JControlBtn.on(this.btnDim2WarmElm);this.sliderInfoElm.val("--");}
+    this.TWEvents = jQuery("[name='trTWSlider']").css("pointer-events");
+
+    // Effects
+    effect = parseInt(this.getConfigStringValue("E"));
+
+    if (effect % 2 == 0) {
+      this.effectModePrg = true;
+      homematic("Interface.setMetadata", {"objectId": this.oChannel.id, "dataId": "effectModePrg", "value": this.effectModePrg});
+      this.effectModeChkBox.prop("checked", true);
+      effect =  (effect - 1);
+    } else {
+      this.effectModePrg = false;
+      this.effectModeChkBox.prop("checked", false);
+    }
+
+    effect = (effect != -1) ? effect : 0; // 0 = default (No Effect)
+    this.setEffectNames();
+
+    this.effectSelBox.val(effect);
+
+    // SShow the appropriate dialog (Color, Color Temp, Effect)
+    if ((effect != 0) ||((valueL == 0) && (arElmValues.length == 1))) {
+      this.btnEffectDialog.click();
+    } else if (parseInt(this.getConfigStringValue("TC")) > 0) {
+      this.btnColorTempDialog.click();
+    } else {
+      this.btnColorDialog.click();
+    }
+  },
+
+  initColorPickerEvents: function() {
+    var self = this;
+    this.colorPicker.on("mount", function(color) {
+      self.setColorPreviewElm(self.colorPickerInit.hue, self.colorPickerInit.saturation);
+    });
+
+    this.colorPicker.on("input:end", function(color) {
+      var hsv_H = parseInt(color.hsv.h),
+        hsv_S,
+        hsv_S_Percent = parseInt(color.hsv.s);
+
+      self.hueElm.val(hsv_H);
+      self.HUE = hsv_H;
+
+      self.satElm.val(hsv_S_Percent);
+      self.SATURATION = hsv_S_Percent;
+
+      self.setColorPreviewElm(color.hsv.h, color.hsv.s);
+
+      // Set the TW slider to --
+      self.resetColorTemp();
+
+    });
+  },
+
+  resetColorPicker: function() {
+    // Set Hue and Saturation to 0
+    this.hueElm.val(0); this.HUE = 0;
+    this.satElm.val(0); this.SATURATION = 0;
+    this.colorPicker.color.hsv = {h: this.HUE, s: this.SATURATION, v: 0};
+    this.setColorPreviewElm(this.HUE, this.SATURATION);
+  },
+
+  resetColorTemp: function() {
+    JControlBtn.off(jQuery(this.btnHCLElm));
+    JControlBtn.off(jQuery(this.btnDim2WarmElm));
+    window.setTimeout(function() {jQuery(".ui-slider-handle").removeClass("ui-state-active");},100);
+    this.colorTemperature = 0;
+    this.sliderInfoElm.val("--");
+    this.sliderElm.val(this.colorTemperature);
+    this.sliderElm.slider('value', this.colorTemperature);
+  },
+
+  freezeColorTemp: function() {
+    if ((this.HUE == 361) || (this.SATURATION == 101)) {
+      this.trTWSlider.css("pointer-events","none"); // freeze the tw slider
+    } else {
+      this.trTWSlider.css("pointer-events",this.TWEvents); // unfreeze the tw slider
+    }
+  },
+
+  getHSVColorPicker: function() {
+    var self = this;
+    jQuery("#anchorColorPicker").html("");
+
+    this.colorPicker = new iro.ColorPicker("#anchorColorPicker", {
+        // Set the size of the color picker
+        width: 90,
+        color: {h: self.colorPickerInit.hue, s: self.colorPickerInit.saturation, v: self.colorPickerInit.level},
+        wheelLightness: false, // If set to false, the color wheel will not fade to black when the lightness decreases.
+        layout: [{component: iro.ui.Wheel}], // don't show the V slider below the wheel - this value comes from the dimmer slider
+        handleRadius: 4
+      }
+    );
+    this.initColorPickerEvents();
+  },
+
+  getHSVColorSlider: function() {
+    var self = this;
+    jQuery("#anchorColorPicker").html("");
+
+    this.colorPicker = new iro.ColorPicker("#anchorColorPicker", {
+      width: 90,
+      sliderSize: 20, // height
+      color: {h: self.colorPickerInit.hue, s: 100, v: 100},
+      handleSvg: '#handle',
+      layout: [
+        {
+          component: iro.ui.Slider,
+          options: {
+            sliderType: 'hue',
+            edgeRadius: 0
+          }
+        }
+      ]
+    });
+    this.initColorPickerEvents();
+  },
+
+  getSliderOpts: function() {
+    var opts = {};
+    opts.animate = "fast";
+    opts.min = parseInt(this.chnDescription.HARDWARE_COLOR_TEMPERATURE_WARM_WHITE);
+    opts.max = parseInt(this.chnDescription.HARDWARE_COLOR_TEMPERATURE_COLD_WHITE);
+    opts.value = ((opts.max - opts.min) / 2);
+    opts.step = 50;
+    opts.orientation = "horizontal";
+    return opts;
+  },
+
+  showHideColorPicker: function () {
+    var hueLastValue = this.lastValHueElm.prop("checked"),
+      satLastValue = this.lastValSatElm.prop("checked");
+
+    if (hueLastValue && satLastValue) {
+      this.anchorColorPicker.hide();
+      this.colorPreviewElm.hide();
+    } else if (hueLastValue && ! satLastValue) {
+      this.anchorColorPicker.hide();
+      this.colorPreviewElm.hide();
+    } else if (! hueLastValue && satLastValue) {
+      this.getHSVColorSlider();
+      this.anchorColorPicker.show();
+      this.colorPreviewElm.show();
+    } else {
+      this.getHSVColorPicker();
+      this.anchorColorPicker.show();
+      this.colorPreviewElm.show();
+    }
+    this.resetHeight();
+  },
+
+  setColorPreviewElm: function(hue, sat) {
+    var rgbVal;
+    rgbVal = hsvToRgb(hue, sat, 100);
+    this.colorPreviewElm.css("background-color", "rgb("+rgbVal.r+","+rgbVal.g+","+rgbVal.b+")");
+  },
+
+  checkValidity: function(val, min, max) {
+    var result = val;
+    if (val == "") {result = "";}
+
+    if (parseInt(val) < 0) {result = min;}
+    if (parseInt(val) > max) {result = max;}
+    return result;
+  },
+
+  getConfigString: function() {
+    var self = this,
+      result,
+      level = this.levelElm.val(),
+      durationUnit = (this.chkBoxTimeLimitElm.prop("checked") == false) ? 2 : this.durationUnitElm.val(), // 2  = unit hour
+      durationValue = (this.chkBoxTimeLimitElm.prop("checked") == false) ? 31 : this.durationValueElm.val(),
+      ramptimeUnit = this.rampTimeUnitElm.val(),
+      ramptimeValue = this.rampTimeValueElm.val(),
+      lastValueHueSelected = this.lastValHueElm.prop("checked"),
+      lastValueSatSelected = this.lastValSatElm.prop("checked"),
+      hueValue = (lastValueHueSelected || (this.colorTemperature > 0)) ? 361 : this.HUE,
+      satValue = (lastValueSatSelected  || (this.colorTemperature > 0)) ? 101 : this.SATURATION,
+      colorTemperature =  this.colorTemperature,
+      tempColorID = "",
+      effectID = "",
+      effect = parseInt(this.effectSelBox.val()),
+      activeDialog = "color";
+
+    this.setULReffectModePrg();
+
+    effect =  (this.effectModePrg == true)  ? (effect + 1) : effect;
+
+    if ((this.deviceType == this.drgDali) || (this.deviceType == this.lss) || ((this.deviceType == this.rgbw) && ((this.maxCap == 2) || (this.maxCap == 4)))) {
+      tempColorID = ",TC=" + colorTemperature;
+      effectID = ",E=" + effect;
+    }
+
+    if (this.btnColorTempDialog.hasClass("ControlBtnOn")) {
+      activeDialog = "colorTemp";
+    } else if (this.btnEffectDialog.hasClass("ControlBtnOn")) {
+      activeDialog = "effect";
+      if (effect == 0) {
+        result = "L=0";
+      } else {
+        result = "L=" + level + ",E=" + effect;
+      }
+      return result;
+    }
+
+    if (this.isOntimeAvailable()) {
+      if (this.chkBoxTimeLimitElm.prop("checked") == false) {
+        var _rampTimeValue = parseInt(this._getRampTimeVal(ramptimeValue, ramptimeUnit));
+
+        if (_rampTimeValue > 0) {
+          result = "L=" + level + ",OT=" + this.maxOnTime + ",RT=" + _rampTimeValue + ",H=" + hueValue + ",SAT=" + satValue; // ON_TIME = permanently ON
+        } else {
+          result = "L=" + level + ",OT=0,RT=0,H=" + hueValue + ",SAT=" + satValue;
+        }
+
+      } else {
+        if (durationValue == 0) {
+          result = "L=" + level + ",OT=" + this._getOnTimeVal(durationValue, durationUnit) + ",RT=0,H=" + hueValue + ",SAT=" + satValue;
+        } else {
+          result = "L=" + level + ",OT=" + this._getOnTimeVal(durationValue, durationUnit) + ",RT=" + this._getRampTimeVal(ramptimeValue, ramptimeUnit) + ",H=" + hueValue + ",SAT=" + satValue;
+        }
+      }
+    } else {
+      result = "L=" + level + ",DV=" + durationValue + ",DU=" + durationUnit + ",RTV=" + ramptimeValue + ",RTU=" + ramptimeUnit + ",H=" + hueValue + ",SAT=" + satValue;
+    }
+
+    jQuery.each(this.showRampTimeOffElm, function(index, val) {
+      if (self.deviceType == val) {
+        return false; // leave each loop
+      }
+    });
+
+    if (showRamptimeOff) {
+      result += ",RTTOV=" + this.rampTimeOffValueElm.val() + ",RTTOU=" + this.rampTimeOffUnitElm.val();
+    }
+
+    if ((this.deviceType == this.drgDali) || (this.deviceType == this.lss) || ((this.deviceType == this.rgbw) && ((this.maxCap == 2) || (this.maxCap == 4)))) {
+      result += tempColorID;
+    }
+
+    return result;
+  },
+
+  // Get the value of a given shortcut of the config string
+  // Example config string > "L=100,OT=0,RT=0,H=0,SAT=0,RTTOV=0,RTTOU=0,TC=10150"
+  getConfigStringValue: function(sShortCut) {
+    var arElmValues = this.initValue.split(","),
+      result = "-1", arKey;
+
+    jQuery.each(arElmValues, function(index,val) {
+      arKey = val.split("=");
+      if (arKey[0] == sShortCut) {
+        result = arKey[1];
+      }
+    });
+    return (result == -1) ? 0 : result;
+  },
+
+  close: function(result)
+  {
+    Layer.remove(this.m_layer);
+    if (this.m_callback) { this.m_callback(result); }
+    if (showRamptimeOff) {window.setTimeout(function() {delete showRamptimeOff;},100);}
+  },
+
+  yes: function()
+  {
+    this.close(YesNoDialog.RESULT_YES);
+  },
+
+  no: function()
+  {
+    this.close(YesNoDialog.RESULT_NO);
+  },
+
+  btnTextYes: function(btnTxt) {
+    jQuery(".YesNoDialog_yesButton").text(btnTxt);
+  },
+
+  btnYesHide: function() {
+    jQuery("#btnYes").addClass("hidden");
+  },
+
+  btnYesShow: function() {
+    jQuery("#btnYes").removeClass("hidden");
+  },
+
+  btnTextNo: function(btnTxt) {
+    jQuery(".YesNoDialog_noButton").text(btnTxt);
+  },
+
+  btnNoHide: function() {
+    jQuery("#btnNo").addClass("hidden");
+  },
+
+  btnNoShow: function() {
+    jQuery("#btnNo").removeClass("hidden");
+  },
+
+  setHeight: function() {
+    var heightContentWrapper = jQuery(".YesNoDialogContentWrapper").height(),
+      yesNoElm = jQuery(".YesNoDialog"),
+      footerElm = jQuery(".YesNoDialogFooter");
+
+    yesNoElm.css("height", heightContentWrapper + 78);
+    footerElm.css("top", heightContentWrapper + 26);
+    yesNoElm.css("top", (window.innerHeight / 2) - (yesNoElm.height() / 2));
+  },
+
+  resetHeight: function() {
+    this.setHeight();
+  },
+
+  setWidth: function(dlgWidth) {
+    var yesNoDialogElm = jQuery(".YesNoDialog"),
+      yesNoDialogContentWrapperElm = jQuery(".YesNoDialogContentWrapper"),
+      yesNoDialogFooterElm = jQuery(".YesNoDialogFooter"),
+      yesNoDialogTitleElm = jQuery(".YesNoDialogTitle"),
+      yesNoDialogYesButton = jQuery(".YesNoDialog_yesButton");
+
+    var defaultWith = 600,
+      offsetWidth = 4,
+      offsetPosYesButton = 109,
+      offsetDialogHeight = 78,
+      offsetDialogFooterHeight = 26;
+
+    var width = dlgWidth - offsetWidth,
+      yesButtonPos = dlgWidth - offsetPosYesButton,
+      position = yesNoDialogElm.position();
+
+    // dlgWidth = (defaultWith < dlgWidth) ? defaultWith : dlgWidth;
+
+    yesNoDialogElm.width(dlgWidth).css({left: position.left + ((defaultWith - dlgWidth) / 2)});
+    yesNoDialogTitleElm.width(width);
+    yesNoDialogContentWrapperElm.width(width);
+    yesNoDialogFooterElm.width(width);
+    yesNoDialogYesButton.css("left", yesButtonPos);
+
+    //Dialoghöhe an Content anpassen.
+    yesNoDialogElm.css("height", yesNoDialogContentWrapperElm.height() + offsetDialogHeight);
+    yesNoDialogFooterElm.css("top", yesNoDialogContentWrapperElm.height() + offsetDialogFooterHeight);
+  }
+
+});RGBWTunableWhiteControllerDialog = Class.create({
+  initialize: function(title, content, deviceType, chnAddress, value, callback, contentType)
+  {
+    showRamptimeOff = false; // This we need among other things for certain COMBINED_PARAMETER help dialogs.
+    var _this_ = this;
+
+    this.m_contentType = contentType;
+    this.m_callback = callback;
+    this.m_layer = document.createElement("div");
+    this.m_layer.className = "YesNoDialogLayer";
+
+    this.RESULT_NO = 0;
+    this.RESULT_YES = 1;
+
+    this.iFace = "HmIP-RF";
+
+    this.deviceType = deviceType;
+    this.chnAddress = chnAddress;
+    this.initValue = value;
+
+    this.maxOnTime = 111600;
+
+    this.valHCL = 10200;
+    this.valDim2Warm = 10150;
+
+    this.arNoOntimeAvailable = [];
+    this.showRampTimeOffElm = ["HmIP-RGBW", "HmIP-DRG-DALI"];
+
+    var dialog = document.createElement("div");
+    dialog.className = "YesNoDialog";
+
+    var titleElement = document.createElement("div");
+    titleElement.className = "YesNoDialogTitle";
+    //titleElement.appendChild(document.createTextNode(title + " " + deviceType + " - " + chnAddress));
+    titleElement.appendChild(document.createTextNode(deviceType + " - " + chnAddress));
+    titleElement.onmousedown = function(event) { new Drag(this.parentNode, event); };
+    dialog.appendChild(titleElement);
+
+    var contentWrapper = document.createElement("div");
+    contentWrapper.className = "YesNoDialogContentWrapper";
+
+    var contentElement = document.createElement("div");
+    contentElement.className = "YesNoDialogContent";
+
+    if (this.m_contentType == "html") {
+      contentElement.innerHTML = content;
+    } else {
+      contentElement.appendChild(document.createTextNode(content));
+    }
+
+    contentWrapper.appendChild(contentElement);
+
+    dialog.appendChild(contentWrapper);
+
+    var footer = document.createElement("div");
+    footer.className= "YesNoDialogFooter";
+
+    var yesButton = document.createElement("div");
+    yesButton.className = "YesNoDialog_yesButton borderRadius5px colorGradient50px";
+    yesButton.appendChild(document.createTextNode(translateKey('dialogYes')));
+    yesButton.onclick = function() { _this_.yes(); };
+    yesButton.id="btnYes";
+    footer.appendChild(yesButton);
+
+    var noButton = document.createElement("div");
+    noButton.className = "YesNoDialog_noButton borderRadius5px colorGradient50px";
+    noButton.appendChild(document.createTextNode(translateKey('dialogNo')));
+    noButton.onclick = function() { _this_.no(); };
+    noButton.id = "btnNo";
+    footer.appendChild(noButton);
+
+    dialog.appendChild(footer);
+
+    this.m_layer.appendChild(dialog);
+    Layer.add(this.m_layer);
+
+    translatePage(".YesNoDialog");
+
+    this.setHeight();
+
+    this.setDialogElements();
+    this.initDialog();
+
+  },
+
+  isOntimeAvailable: function() {
+    return (this.arNoOntimeAvailable.indexOf(this.deviceType) == -1) ? true : false;
+  },
+
+  setDialogElements: function() {
+    var self = this;
+    this.trDurationElms = jQuery("[name='trDuration']");
+    this.trRampTimeElms = jQuery("[name='trRampTime']");
+    this.trRampTimeOff = jQuery("#trRampTimeOff");
+    this.levelElm = jQuery("#combinedParam_Level");
+    this.lblBrightnessLevelElm = jQuery("#lblBrightnessLevel");
+    this.lblRampTimeElm = jQuery("#lblRampTime");
+    this.chkBoxTimeLimitElm = jQuery("#chkBoxTimeLimit");
+    this.durationValueElm = jQuery("#combinedParam_DurationValue");
+    this.durationUnitElm = jQuery("#combinedParam_DurationUnit");
+    this.rampTimeUnitElm = jQuery("#combinedParam_RampTimeUnit");
+    this.rampTimeValueElm = jQuery("#combinedParam_RampTimeValue");
+    this.rampTimeOffUnitElm = jQuery("#combinedParam_RampTimeOffUnit");
+    this.rampTimeOffValueElm = jQuery("#combinedParam_RampTimeOffValue");
+
+    this.sliderElm = jQuery("#twSlider");
+    this.sliderInfoElm = jQuery("#tcInfoField");
+    this.btnHCLElm = jQuery("#btnHCL");
+    this.btnDim2WarmElm = jQuery("#btnDim2Warm");
+    this.colorTemperature = 0;
+
+  },
+
+  _getOnTimeVal: function(val, unit) {
+    var result;
+
+    if (parseInt(val) >= 31 && parseInt(unit) == 2) {
+      return 0;
+    }
+
+    if (unit == 0) {
+      result = val;
+    } else if (unit == 1) {
+      result = val * 60;
+    } else if (unit == 2) {
+      result = val * 3600;
+    }
+    return parseInt(result);
+  },
+
+  _getRampTimeVal: function(val, unit) {
+    var result;
+    if (unit == 0) {
+      result = val;
+    } else if (unit == 1) {
+      result = parseInt(val * 60);
+    } else if (unit == 3) {
+      result = parseFloat(val / 100);
+    }
+    return result;
+  },
+
+  _getUnitInDU4OnTime: function(time) {
+    var result = 0,
+      hr = time / 3600,
+      min= time / 60;
+
+    if (hr == parseInt(hr)) {
+      result = 2;
+    } else if  (min == parseInt(min)) {
+      result = 1;
+    }
+    return result;
+  },
+
+  _getUnitInDU4RampTime: function(time) {
+    var t = parseFloat(time),
+      result = 0,
+      min = t / 60;
+
+    if (parseInt(time) == 0) {
+      return 0;
+    }
+
+    if (min == parseInt(min)) {
+      result = 1;
+    } else if ((Number(t) === t) && (t % 1 !== 0)) {
+      // time in float
+      result = 3;
+    }
+    return result;
+  },
+
+  hideOnTimeElems: function() {
+    jQuery("[name='trRampTime']").first().nextAll().hide();
+    this.setHeight();
+  },
+
+
+  initDialog: function() {
+    var self = this;
+
+    var arElmValues, valueL, valueDV, valueDVtmp, valueDU, valueRTV, valueRTVtmp, valueRTU, valueC, valueSlider, valueRTTOU, valueRTTOV, permanentHR, permanentHR_0, minDuration, maxDuration;
+
+    if (this.isOntimeAvailable()) {
+      arElmValues = this.initValue.split(",");
+
+      valueL = arElmValues[0].split("=")[1];
+      valueDVtmp = arElmValues[1].split("=")[1];
+      valueDU = this._getUnitInDU4OnTime(valueDVtmp);
+
+      valueSlider = parseInt(arElmValues[3].split("=")[1]);
+
+      if (valueDU == 2) {
+        valueDV = parseInt(valueDVtmp / 3600);
+      } else if (valueDU == 1) {
+        valueDV = parseInt(valueDVtmp / 60);
+      } else {
+        valueDV = valueDVtmp;
+      }
+
+      valueRTVtmp = arElmValues[2].split("=")[1];
+
+      valueRTU = this._getUnitInDU4RampTime(valueRTVtmp);
+
+      if (valueRTU == 3) {
+        valueRTV = valueRTVtmp * 100;
+      } else if (valueRTU == 1) {
+        valueRTV = parseInt(valueRTVtmp / 60);
+      } else {
+        valueRTV = valueRTVtmp;
+      }
+
+      valueC = 7;
+      permanentHR = 31;
+      permanentHR_0 = 0;
+      minDuration = 0;
+      maxDuration = 16343;
+    }
+    // RAMPTIME_OFF
+    if (arElmValues.length >= 6) {
+      valueRTTOV = arElmValues[4].split("=")[1];
+      valueRTTOU = arElmValues[5].split("=")[1];
+      this.rampTimeOffUnitElm.val(valueRTTOU);
+      this.rampTimeOffValueElm.val(valueRTTOV);
+    }
+
+    this.levelElm.val(valueL);
+    this.durationValueElm.val(valueDV);
+    this.durationUnitElm.val(valueDU);
+
+    this.rampTimeUnitElm.val(valueRTU);
+    this.rampTimeValueElm.val(valueRTV);
+
+    if ((this.durationValueElm.val() == permanentHR && this.durationUnitElm.val() == 2) || (this.isOntimeAvailable() && valueDV == 0)) {
+      this.chkBoxTimeLimitElm.prop("checked", false);
+      this.durationValueElm.prop('disabled', true);
+      this.durationUnitElm.prop('disabled', true);
+      this.trDurationElms.css("visibility", "visible");
+      this.trRampTimeElms.css("visibility", "visible");
+      this.trDurationElms.css("opacity", "0.2");
+      if (this.showRampTimeOffElm.indexOf(this.deviceType) != -1) {
+        this.trRampTimeOff.css("visibility", "visible").css("opacity", "0.2");
+        showRamptimeOff = true;
+      }
+    } else {
+      this.chkBoxTimeLimitElm.prop("checked", true);
+      this.durationValueElm.prop('disabled', false);
+      this.durationUnitElm.prop('disabled', false);
+      this.trDurationElms.css("visibility", "visible");
+      this.trRampTimeElms.css("visibility", "visible");
+      if (this.showRampTimeOffElm.indexOf(this.deviceType) != -1) {
+        this.trRampTimeOff.css("visibility", "visible");
+        showRamptimeOff = true;
+      }
+    }
+
+    this.chkBoxTimeLimitElm.bind("change", function() {
+      if (this.checked) {
+        self.durationValueElm.prop('disabled', false);
+        self.durationUnitElm.prop('disabled', false);
+        self.trDurationElms.fadeTo(1000, 1);
+        self.trRampTimeElms.fadeTo(1000, 1);
+        if (self.showRampTimeOffElm.indexOf(self.deviceType) != -1) {
+          self.trRampTimeOff.fadeTo(1000,1);
+        }
+      } else {
+        self.durationValueElm.prop('disabled', true);
+        self.durationUnitElm.prop('disabled', true);
+        self.rampTimeValueElm.prop('disabled', false); //.val(0);
+        self.rampTimeUnitElm.prop('disabled', false); //.val(0);
+        self.trDurationElms.fadeTo(1000, 0.2);
+        self.trRampTimeElms.fadeTo(1000, 1);
+
+        if (self.showRampTimeOffElm.indexOf(self.deviceType) != -1) {
+          self.trRampTimeOff.fadeTo(1000,0.2);
+        }
+
+        if (self.isOntimeAvailable()) {
+          self.durationValueElm.val(permanentHR_0);
+        } else {
+          self.durationValueElm.val(permanentHR);
+          self.rampTimeOffUnitElm.val(3);
+          self.rampTimeOffValueElm.val(0);
+        }
+        self.durationUnitElm.val(2);
+      }
+    });
+
+    this.durationValueElm.bind("keyup", function() {
+      var min = minDuration,
+        max = (parseInt(self.durationUnitElm.val()) == 2) ? permanentHR: maxDuration;
+      this.value = self.checkValidity(this.value,min,max);
+      if (parseInt(this.value) == 31) {
+        self.rampTimeOffValueElm.val(min);
+        self.rampTimeOffUnitElm.val(3); // = 10ms
+      }
+    });
+
+    this.durationValueElm.bind("blur", function() {
+      var val = parseInt(this.value);
+
+      if (isNaN(val)) {
+        this.value = (parseInt(self.durationUnitElm.val()) == 2) ? permanentHR :  maxDuration;
+      } else {
+        this.value = val;
+      }
+      self.durationValueElm.keyup();
+    });
+
+    this.durationUnitElm.bind("change", function(){
+      self.durationValueElm.keyup();
+    });
+
+    this.rampTimeValueElm.bind("keyup", function() {
+      var min = minDuration,
+        max = maxDuration;
+      this.value = self.checkValidity(this.value,min,max);
+    });
+
+    this.rampTimeValueElm.bind("blur", function() {
+      var val = parseInt(this.value);
+
+      if (isNaN(val)) {
+        this.value = maxDuration;
+      } else {
+        this.value = val;
+      }
+    });
+
+    this.rampTimeUnitElm.bind("change", function(){
+      self.rampTimeValueElm.keyup();
+    });
+
+    /**********************/
+    this.rampTimeOffValueElm.bind("keyup", function() {
+      var min = minDuration,
+        max = maxDuration;
+      this.value = self.checkValidity(this.value,min,max);
+    });
+
+    this.rampTimeOffValueElm.bind("blur", function() {
+      var val = parseInt(this.value);
+
+      if (isNaN(val)) {
+        this.value = maxDuration;
+      } else {
+        this.value = (parseInt(self.durationValueElm.val()) <= 30) ? val : minDuration;
+        if (parseInt(self.durationValueElm.val()) >= 31) {
+          self.rampTimeOffUnitElm.val(3); // 10ms
+        }
+      }
+    });
+
+    this.rampTimeUnitElm.bind("change", function(){
+      self.rampTimeOffValueElm.keyup();
+    });
+    /**********************/
+
+    this.btnHCLElm.bind("click", function() {
+      JControlBtn.on(jQuery(this));
+      JControlBtn.off(jQuery(self.btnDim2WarmElm));
+      window.setTimeout(function() {jQuery(".ui-slider-handle").removeClass("ui-state-active");},100);
+      self.colorTemperature = self.valHCL;
+      self.sliderInfoElm.val("--");
+    });
+
+    this.btnDim2WarmElm.bind("click", function() {
+      JControlBtn.on(jQuery(this));
+      JControlBtn.off(jQuery(self.btnHCLElm));
+      window.setTimeout(function() {jQuery(".ui-slider-handle").removeClass("ui-state-active");},100);
+      self.colorTemperature = self.valDim2Warm;
+      self.sliderInfoElm.val("--");
+    });
+
+    this.sliderElm.slider(this.getSliderOpts());
+
+
+    this.sliderInfoElm.val(valueSlider);
+    this.sliderElm.val(valueSlider);
+    this.sliderElm.slider('value', valueSlider);
+    this.colorTemperature = valueSlider;
+
+    this.sliderElm.on("slide", function (event, ui) {
+       self.sliderInfoElm.val(ui.value);
+    });
+
+    this.sliderElm.on("slidestop", function(event, ui){
+      JControlBtn.off(jQuery(self.btnDim2WarmElm));
+      JControlBtn.off(jQuery(self.btnHCLElm));
+      window.setTimeout(function() {jQuery(".ui-slider-handle").addClass("ui-state-active");},100);
+      self.colorTemperature = ui.value;
+    });
+
+    if (valueSlider < 10000) {jQuery(".ui-slider-handle").addClass("ui-state-active");} else {jQuery(".ui-slider-handle").removeClass("ui-state-active");}
+    if (valueSlider == this.valHCL) {jQuery(".ui-slider-handle").removeClass("ui-state-active"); JControlBtn.on(this.btnHCLElm);this.sliderInfoElm.val("--");}
+    if (valueSlider == this.valDim2Warm) {jQuery(".ui-slider-handle").removeClass("ui-state-active"); JControlBtn.on(this.btnDim2WarmElm);this.sliderInfoElm.val("--");}
+
+
+  },
+
+  getSliderOpts: function() {
+
+    var chnDescription = homematic("Interface.getParamset", {'interface': this.iFace, 'address': this.chnAddress, 'paramsetKey': 'MASTER'});
+
+    var opts = {};
+    opts.animate = "fast";
+    opts.min = parseInt(chnDescription.HARDWARE_COLOR_TEMPERATURE_WARM_WHITE);
+    opts.max = parseInt(chnDescription.HARDWARE_COLOR_TEMPERATURE_COLD_WHITE);
+    opts.value = ((opts.max - opts.min) / 2);
+    opts.step = 50;
+    opts.orientation = "horizontal";
+    return opts;
+  },
+
+  checkValidity: function(val, min, max) {
+    var result = val;
+    if (val == "") {result = "";}
+
+    if (parseInt(val) < 0) {result = min;}
+    if (parseInt(val) > max) {result = max;}
+    return result;
+  },
+
+  getConfigString: function() {
+    var self = this,
+      result,
+      level = this.levelElm.val(),
+      durationUnit = (this.chkBoxTimeLimitElm.prop("checked") == false) ? 2 : this.durationUnitElm.val(), // 2  = unit hour
+      durationValue = (this.chkBoxTimeLimitElm.prop("checked") == false) ? 31 : this.durationValueElm.val(),
+      ramptimeUnit = this.rampTimeUnitElm.val(),
+      ramptimeValue = this.rampTimeValueElm.val(),
+      colorTemperature =  this.colorTemperature;
+
+    if (this.isOntimeAvailable()) {
+      if (this.chkBoxTimeLimitElm.prop("checked") == false) {
+        var _rampTimeValue = parseInt(this._getRampTimeVal(ramptimeValue, ramptimeUnit));
+
+        if (_rampTimeValue > 0) {
+          result = "L=" + level + ",OT=" + this.maxOnTime + ",RT=" + _rampTimeValue + ",TC=" + colorTemperature; // ON_TIME = permanently ON
+        } else {
+          result = "L=" + level + ",OT=0,RT=0,TC=" + colorTemperature;
+        }
+
+      } else {
+        if (durationValue == 0) {
+          result = "L=" + level + ",OT=" + this._getOnTimeVal(durationValue, durationUnit) + ",RT=0,TC=" + colorTemperature;
+        } else {
+          result = "L=" + level + ",OT=" + this._getOnTimeVal(durationValue, durationUnit) + ",RT=" + this._getRampTimeVal(ramptimeValue, ramptimeUnit) + ",TC=" + colorTemperature;
+        }
+      }
+    } else {
+      result = "L=" + level + ",DV=" + durationValue + ",DU=" + durationUnit + ",RTV=" + ramptimeValue + ",RTU=" + ramptimeUnit + ",TC=" + colorTemperature;
+    }
+
+    jQuery.each(this.showRampTimeOffElm, function(index, val) {
+      if (self.deviceType == val) {
+        return false; // leave each loop
+      }
+    });
+
+    if (showRamptimeOff) {
+      result += ",RTTOV=" + this.rampTimeOffValueElm.val() + ",RTTOU=" + this.rampTimeOffUnitElm.val();
+    }
+    return result;
+  },
+
+  close: function(result)
+  {
+    Layer.remove(this.m_layer);
+    if (this.m_callback) { this.m_callback(result); }
+    if (showRamptimeOff) {window.setTimeout(function() {delete showRamptimeOff;},100);}
+  },
+
+  yes: function()
+  {
+    this.close(YesNoDialog.RESULT_YES);
+  },
+
+  no: function()
+  {
+    this.close(YesNoDialog.RESULT_NO);
+  },
+
+  btnTextYes: function(btnTxt) {
+    jQuery(".YesNoDialog_yesButton").text(btnTxt);
+  },
+
+  btnYesHide: function() {
+    jQuery("#btnYes").addClass("hidden");
+  },
+
+  btnYesShow: function() {
+    jQuery("#btnYes").removeClass("hidden");
+  },
+
+  btnTextNo: function(btnTxt) {
+    jQuery(".YesNoDialog_noButton").text(btnTxt);
+  },
+
+  btnNoHide: function() {
+    jQuery("#btnNo").addClass("hidden");
+  },
+
+  btnNoShow: function() {
+    jQuery("#btnNo").removeClass("hidden");
+  },
+
+  setHeight: function() {
+    var heightContentWrapper = jQuery(".YesNoDialogContentWrapper").height(),
+      yesNoElm = jQuery(".YesNoDialog"),
+      footerElm = jQuery(".YesNoDialogFooter");
+
+    yesNoElm.css("height", heightContentWrapper + 78);
+    footerElm.css("top", heightContentWrapper + 26);
+    yesNoElm.css("top", (window.innerHeight / 2) - (yesNoElm.height() / 2));
+  },
+
+  resetHeight: function() {
+    this.setHeight();
+  },
+
+  setWidth: function(dlgWidth) {
+    var yesNoDialogElm = jQuery(".YesNoDialog"),
+      yesNoDialogContentWrapperElm = jQuery(".YesNoDialogContentWrapper"),
+      yesNoDialogFooterElm = jQuery(".YesNoDialogFooter"),
+      yesNoDialogTitleElm = jQuery(".YesNoDialogTitle"),
+      yesNoDialogYesButton = jQuery(".YesNoDialog_yesButton");
+
+    var defaultWith = 600,
+      offsetWidth = 4,
+      offsetPosYesButton = 109,
+      offsetDialogHeight = 78,
+      offsetDialogFooterHeight = 26;
+
+    var width = dlgWidth - offsetWidth,
+      yesButtonPos = dlgWidth - offsetPosYesButton,
+      position = yesNoDialogElm.position();
+
+    // dlgWidth = (defaultWith < dlgWidth) ? defaultWith : dlgWidth;
+
+    yesNoDialogElm.width(dlgWidth).css({left: position.left + ((defaultWith - dlgWidth) / 2)});
+    yesNoDialogTitleElm.width(width);
+    yesNoDialogContentWrapperElm.width(width);
+    yesNoDialogFooterElm.width(width);
+    yesNoDialogYesButton.css("left", yesButtonPos);
+
+    //Dialoghöhe an Content anpassen.
+    yesNoDialogElm.css("height", yesNoDialogContentWrapperElm.height() + offsetDialogHeight);
+    yesNoDialogFooterElm.css("top", yesNoDialogContentWrapperElm.height() + offsetDialogFooterHeight);
   }
 
 });
@@ -21261,7 +23647,11 @@ var preURL = (WEBUI_VERSION.split(".")[0] < 3) ? "" : "ccu3-";
 
 StartPage = Singleton.create(Page, {
   MAINMENU_ID: "MAINMENU_STARTPAGE",
-  downloadURL: (isHTTPS) ? "https://"+preURL+"update.homematic.com:8443/firmware/download?cmd=download" : "http://"+preURL+"update.homematic.com/firmware/download?cmd=download",
+  downloadURLServer: (isHTTPS) ? "https://"+preURL+"update.homematic.com:8443/firmware/download?cmd=download" : "http://"+preURL+"update.homematic.com/firmware/download?cmd=download",
+  fieldTestURLServer: (isHTTPS) ? "https://fieldtest-ccu3-update.homematic.com/firmware/download?cmd=download" : "http://fieldtest-ccu3-update.homematic.com/firmware/download?cmd=download",
+  fieldTestActive: "/etc/config/fieldTestActive",
+  downloadURL : "",
+  prevDownloadURL : "",
   devList: [],
   devIndex: 0,
   newFwCounter: 0,
@@ -21314,6 +23704,25 @@ StartPage = Singleton.create(Page, {
       default:
         break;
     }
+
+    this.serial = homematic("CCU.getSerial");
+
+    if (homematic('CCU.existsFile', {'file': this.fieldTestActive})) {
+      this.downloadURL = this.fieldTestURLServer;
+    } else {
+      this.downloadURL = this.downloadURLServer;
+    }
+
+    if (this.prevDownloadURL != this.downloadURL) {
+      this.devList = [];
+      this.devIndex = 0;
+      this.newFwCounter = 0;
+      this.fetchDeviceList = false;
+      this.knownTypes = [];
+      this.numberOfKnownTypes = 0;
+    }
+    this.prevDownloadURL = this.downloadURL;
+    conInfo("Device Fw. downloadURL: " + this.downloadURL);
   },
   
   /**
@@ -21369,7 +23778,7 @@ StartPage = Singleton.create(Page, {
 
   },
 
-  evalVersionAGreaterThanB: function(a, b) {
+  /*evalVersionAGreaterThanB: function(a, b) {
     var aSplit = a.split(".", 3);
     var bSplit = b.split(".", 3);
     if( Array.isArray(aSplit) && aSplit.length == 3) {
@@ -21392,7 +23801,7 @@ StartPage = Singleton.create(Page, {
         } else { return true; }
     } else { return false; }
     return false;
-  },
+  },*/
 
   showAllDeviceFirmware: function() {
     var self = this;
@@ -21453,8 +23862,17 @@ StartPage = Singleton.create(Page, {
       homematic.com.getListOfAvailableFirmware(function (result) {
         conInfo("List fetched");
         jQuery.each(result, function (index, value) {
-          self.knownTypes[value.type.toLowerCase()] = value.version;
+          var type = value.type.toLowerCase();
+          type = type.replace(/_(?!.*_)/, ' '); //SPHM-1039
+          if(value.type=="HmIP-HAP-JS1") {//SPHM-1034 HAP JS1 has different pattern than other devices.
+            type = "HmIP-HAP JS1".toLowerCase();
+          }
+          self.knownTypes[type] = value.version;
           self.numberOfKnownTypes = index + 1;
+          if(value.type == "HmIP-HAP") { //SPHM-1022
+              self.knownTypes["HmIP-HAP-B1".toLowerCase()] = value.version;
+              self.numberOfKnownTypes += 1;
+          }
         });
         self.setDeviceVersion(self.devList[self.devIndex].type, self.knownTypes[self.devList[self.devIndex].type.toLowerCase()]);
       });
@@ -21466,6 +23884,13 @@ StartPage = Singleton.create(Page, {
 
   setDeviceVersion: function (deviceType, fwVersion) {
     var self = this;
+    var deviceTypeForUrl = deviceType.replace(/\ (?!.*\ )/, '_'); //SPHM-1039;
+    if(deviceType == "HmIP-HAP JS1") {//SPHM-1034 HAP JS1 has different pattern than other devices.
+      deviceTypeForUrl = "HmIP-HAP-JS1";
+    }
+    if(deviceType == "HmIP-HAP-B1") { //SPHM-1022 Use HAP Fw for HAP-B1
+      deviceTypeForUrl = "HmIP-HAP";
+    }
     if (fwVersion) {
       var devAddress = self.devList[self.devIndex].address,
         curFw = self.devList[self.devIndex].firmware,
@@ -21475,12 +23900,6 @@ StartPage = Singleton.create(Page, {
         arResultMajorMinorPatch,
         resultMajorMinor,
         newFW = fwVersion;
-
-      if(deviceType == "HmIPW-DRAP" || deviceType == "HmIP-HAP" || deviceType == "HmIP-HAP-B1") {
-        if(self.evalVersionAGreaterThanB(availableFW, newFW)) {
-          newFW = availableFW;
-        }
-      }
 
       // The current fw for BidCos devices has no patch version
       if (arCurFw.length == 2) {
@@ -21492,20 +23911,12 @@ StartPage = Singleton.create(Page, {
       if (devIsUpdatable && fwVersion && (fwVersion != "n/a") && (newFW != curFw)) {
         // FW not yet available on the CCU
         if (availableFW != newFW) {
-          self.messageBoxHTML += "<tr><td  style='text-align:left;' height='15px'>" + deviceType + "</td><td>" + devAddress + "</td></td><td style='text-align:center;'>" + curFw + "</td><td style='text-align:center;' class='UILink' onClick=\"window.location.href='" + self.downloadURL + "&serial=0&product=" + deviceType + "'\">" + fwVersion + "</td></tr>";
+          self.messageBoxHTML += "<tr><td  style='text-align:left;' height='15px'>" + deviceType + "</td><td>" + devAddress + "</td></td><td style='text-align:center;'>" + curFw + "</td><td style='text-align:center;' class='UILink' onClick=\"window.location.href='" + self.downloadURL + "&serial="+self.serial+"&product=" + deviceTypeForUrl + "'\">" + fwVersion + "</td></tr>";
         } else {
           self.messageBoxHTML += "<tr><td  style='text-align:left;' height='15px'>" + deviceType + "</td><td>" + self.devList[self.devIndex].address + "</td></td><td style='text-align:center;'>" + curFw + "</td><td style='text-align:center;' class='UILink' onClick=alert(translateKey('hintDevFwAlreadyUploaded'));>" + fwVersion + "</td></tr>";
         }
         self.newFwCounter++;
       }
-    } else if((deviceType == "HmIPW-DRAP" || deviceType == "HmIP-HAP" || deviceType == "HmIP-HAP-B1") && self.devList[self.devIndex].availableFirmware && (self.devList[self.devIndex].availableFirmware != self.devList[self.devIndex].firmware)) {
-      //In development environment this case may be hit when the fw on ccu is newer than fw on update server. This feels like a bug at first, but it does not matter under normal circumstances.
-      //Please read SPHM-989 for details.
-      var devAddress = self.devList[self.devIndex].address,
-        curFw = self.devList[self.devIndex].firmware,
-        availableFW = self.devList[self.devIndex].availableFirmware;
-      self.messageBoxHTML += "<tr><td  style='text-align:left;' height='15px'>" + deviceType + "</td><td>" + devAddress + "</td></td><td style='text-align:center;'>" + curFw + "</td><td style='text-align:center;' class='UILink' onClick=alert(translateKey('hintDevFwAlreadyUploaded'));>" + availableFW + "</td></tr>";
-      self.newFwCounter++;
     }
     self.devIndex++;
     if (self.devIndex < self.devList.length) {
@@ -25478,15 +27889,16 @@ homematic.com =
     this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
     this.m_product ="HM-CCU" + this.m_ccuProduct;
     this.m_URLServer = (isHTTPS) ? "https://"+this.preURL+"update.homematic.com:8443" : "http://"+this.preURL+"update.homematic.com";
+    this.m_fieldTestURLServer = (isHTTPS) ? "https://fieldtest-ccu3-update.homematic.com" : "http://fieldtest-ccu3-update.homematic.com";
 
-    var serial = homematic("CCU.getSerial");
-    serial = ((serial != "") && (typeof serial != "undefined") && (serial != null)) ? serial : "0";
+    this.serial = homematic("CCU.getSerial");
+    this.serial = ((this.serial != "") && (typeof this.serial != "undefined") && (this.serial != null)) ? this.serial : "0";
 
     // The server should return a string like "homematic.com.setLatestVersion('2.4.212');"
     var script = document.createElement("script");
     script.id = "homematic_com_script";
     script.type = "text/javascript";
-    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product="+this.m_product+"&serial=" + serial;
+    script.src = this.m_URLServer + "/firmware/download?cmd=js_check_version&version="+WEBUI_VERSION+"&product="+this.m_product+"&serial=" + this.serial;
     $("body").appendChild(script);
   },
 
@@ -25545,12 +27957,19 @@ homematic.com =
   },
 
   getListOfAvailableFirmware: function(callback) {
+      var fieldTestActive = "/etc/config/fieldTestActive";
+
       // The server should return a string like "homematic.com.setDeviceFirmwareVersions([{"type":"HM-MOD-Re-8","version":"1.0.0"},{"type":"HM-MOD-Re-8","version":"1.0.0"}])"
       var script = document.createElement("script");
       script.id = "homematic_com_script_fw";
       script.type = "text/javascript";
       // script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE";
-      script.src =  this.m_URLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU"+getProduct()+"&version="+WEBUI_VERSION;
+
+      if (homematic('CCU.existsFile', {'file': fieldTestActive})) {
+        script.src = this.m_fieldTestURLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU"+getProduct()+"&version="+WEBUI_VERSION+"&serial=" + this.serial;
+      } else {
+        script.src = this.m_URLServer + "/firmware/api/firmware/search/DEVICE?product=HM-CCU" + getProduct() + "&version=" + WEBUI_VERSION;
+      }
       $("body").appendChild(script);
       homematic.com.callback = callback;
   },
@@ -29689,7 +32108,7 @@ writeDeviceAction = function(tdParent, includeChecks, bIsDev, bDelBtn, obj, bIsG
   tdSub = Builder.node('td');
   
   s = "";
-  if ((obj['type'] != "HmIPW-DRBL4") && (obj['type'] != "HmIP-DRBLI4")) {
+  if ((obj['type'] != "HmIPW-DRBL4") && (obj['type'] != "HmIP-DRBLI4") && (obj['type'] != "HmIP-RGBW") && (obj['type'] != "HmIPW-WGD") && (obj['type'] != "HmIPW-WGD-PL") && (obj['type'] != "HmIP-ESI")) {
     if (bIsDev) {
       s = "WebUI.enter(DeviceConfigPage, {'iface': '" + obj['iface'] + "', 'address': '" + obj['sn'] + "', 'redirect_url':'GO_BACK'});";
     } else {
@@ -31085,10 +33504,21 @@ convertMin2Hour = function(valMin) {
   return hours + ' h : ' + ((minutes <= 9) ? "0"+minutes+" m" : minutes+" m");
 };
 
-// Check if a bit is set in val
+// Check if a bit is set in val (max. 32 bit operation)
 // Returns true/false
 isBitSet = function (val, bit) {
   return ((val>>bit) % 2 != 0);
+};
+
+// another way to check the bit (64 bit operation possible)
+_isBitSet = function(no, index) {
+  var bin = no.toString(2);
+  // Convert to Binary
+
+  index = bin.length - index;
+  // Reverse the index, start from right to left
+
+  return bin[index] == 1;
 };
 
 /**
@@ -31165,73 +33595,6 @@ changeRoomOrSubsection = function(id)
 };
 
 
-drapMigration = function() {
-  // The file /etc/config/crRFD/data/drapAvailable will be created by the HmIPServer, when at least one drap is found in the system.
-  var fileDrapAvailable = "/etc/config/crRFD/data/drapAvailable";
-  if (homematic('CCU.existsFile', {'file': fileDrapAvailable})) {
-    // Show a prompt that forces the user to update all old DRAPs
-    conInfo("DRAP available");
-
-    homematic('CCU.getListOfDraps',{'pathOfFile' : fileDrapAvailable}, function(result) {
-      var arDevDescr = [],
-      arDrap2Update = [],
-        arFW = [],
-        fwMajor, fwMinor, fwPatch,
-        dummyFw = "0.0.1", // SPHM-558
-        minFW = {
-          "major" : 2,
-          "minor" : 1,
-          "patch" : 0
-        };
-
-      // Get the device description of all DRAPs
-      jQuery.each(result.split("\n"), function(index, drapSN) {
-        if (drapSN != "") {
-          arDevDescr[index] = homematic("Interface.getDeviceDescription", {
-            "interface": "HmIP-RF",
-            "address": drapSN
-          });
-        }
-      });
-      // Fetch all DRAPs with a not compatible firmware version
-      jQuery.each(arDevDescr, function(index, drap) {
-        // When a SGTIN in the drapAvailable file is available
-        // but the DRAP isn't available in the system anymore, the drap object is null
-        if (drap) {
-          arFW = drap.firmware.split(".");
-          fwMajor = parseInt(arFW[0]);
-          fwMinor = parseInt(arFW[1]);
-          fwPatch = parseInt(arFW[2]);
-
-          // Firmware has to be >= 2.1.0
-          if ((fwMajor < minFW.major) || ((fwMajor == minFW.major) && (fwMinor < minFW.minor)) || ((fwMajor == minFW.major) && (fwMinor == minFW.minor) && (fwPatch < minFW.patch))) {
-            arDrap2Update.push({
-              "address": drap.address,
-              "curFW": (drap.firmware != dummyFw) ? drap.firmware : translateKey("notCompatible")
-            });
-          }
-        }
-      });
-
-      if (arDrap2Update.length > 0) {
-        dlgfDU = new ForcedDRAPUpdate(arDrap2Update, function (btnPress) {
-          if (btnPress == this.RESULT_YES) {
-            conInfo("Goto DRAP update");
-            showCCUAP(arDrap2Update);
-          } else {
-            conInfo("User canceled DRAP update");
-          }
-        });
-      }
-    });
-
-  } else {
-    conInfo("Found no DRAP in the system.");
-  }
-
-};
-
-
 showDutyCycle = function() {
   if (jQuery("#PagePathSpan").text() == translateKey("startPage")) {
     var ifaceBidCosRF = "BidCos-RF",
@@ -31249,6 +33612,7 @@ showDutyCycle = function() {
           linkElem
             .addClass("UILink")
             .on("click", function () {
+              showDutyCycle(); // actualize the dc value of the start page
               showDCAllInterfaces();
             });
         }
@@ -31279,7 +33643,9 @@ showDutyCycle = function() {
               value = width - (width / 100 * arInterfaceDutyCycle[ifaceBidCosRF]);
 
               window.setTimeout(function () {
-                dutyCycleProgressBarElm.css("width", value + "px");
+                //dutyCycleProgressBarElm.css("width", value + "px");
+                dutyCycleProgressBarElm.css("margin-left", (width - parseInt(value)) + "px");
+
               }, 25);
 
               if (arInterfaceDutyCycle[ifaceBidCosRF] > dcAlarm) {
@@ -31301,18 +33667,101 @@ showDutyCycle = function() {
           }
         });
       }
+      showDutyCycleHmIP();
     });
   }
 };
 
-// Show the duty cycle of all relevant interfaces
-showDCAllInterfaces = function() {
+showDutyCycleHmIP = function() {
+  // Currently only in use for HAPs. Here we collect the available HAP addresses.
+  // The display of the HAP-DutyCycle is done in showDCAllInterfaces()
+  if (jQuery("#PagePathSpan").text() == translateKey("startPage")) {
+    var linkElem = jQuery("#iFaceShowAll"),
+      arRelevantAddresses = [];
+
+    jQuery.each(DeviceList.devices, function(index, dev) {
+      //if ((dev.typeName == "HmIP-CCU3") || (dev.typeName.indexOf("HmIP-HAP") > -1)) {
+      // We fetch only the HAP addresses
+      if (dev.typeName.indexOf("HmIP-HAP") > -1) {
+        arRelevantAddresses.push(dev.channels[0].address.split(":")[0]);
+      }
+    });
+
+    if ((arRelevantAddresses.length > 0) && (!linkElem.hasClass("UILink"))) {
+      linkElem
+        .addClass("UILink")
+        .on("click", function () {
+          showDutyCycle(); // actualize the dc value of the start page
+          showDCAllInterfaces(arRelevantAddresses);
+        });
+    }
+  }
+};
+
+//Attention: To work properly Adapter.Local.Device.Enabled of the crRFD.conf must be set to true
+showCarrierSense = function() {
+  if (jQuery("#PagePathSpan").text() == translateKey("startPage")) {
+    var ccuAddress = homematic("CCU.getSerial"),
+      linkElem = jQuery("#lblCarrierSense"),
+      arHAPAddresses = [];
+
+    jQuery.each(DeviceList.devices, function(index, dev) {
+      if (dev.typeName.indexOf("HmIP-HAP") > -1) {
+        arHAPAddresses.push(dev.channels[0].address.split(":")[0]);
+      }
+    });
+
+    if ((arHAPAddresses.length > 0) && (!linkElem.hasClass("UILink"))) {
+      linkElem
+        .addClass("UILink")
+        .on("click", function () {
+          showCarrierSense(); // actualize the cs value of the start page
+          showAllCarrierSense(ccuAddress, arHAPAddresses);
+        });
+    }
+
+    if ((typeof ccuAddress != "undefined") && (ccuAddress != "")) {
+      homematic("Interface.getValue", {
+        "interface": "HmIP-RF",
+        "address": ccuAddress + ":0",
+        "valueKey": "CARRIER_SENSE_LEVEL"
+      }, function (result) {
+        if (result != null) {
+          var carrierSenseProgressElm = jQuery("#carrierSenseProgress"),
+            carrierSenseProgressBarElm = jQuery("#carrierSenseProgressBar"),
+            carrierSenseValElm = jQuery("#carrierSenseVal"),
+            trCarrierSense = jQuery("[name='trCarrierSense']"),
+            csUnit = "%",
+            csVal = parseInt(result),
+            width, value;
+
+          if ((typeof csVal == "number") && ((csVal >= 0) && (csVal <= 100))) {
+            trCarrierSense.css("visibility", "visible");
+
+            width = parseInt(carrierSenseProgressElm.css("width"));
+            value = width - (width / 100 * csVal);
+
+            carrierSenseValElm.text(csVal + csUnit);
+            carrierSenseProgressBarElm.css("margin-left", (width - parseInt(value)) + "px");
+
+          } else {
+            trCarrierSense.css("visibility", "hidden");
+          }
+        }
+      });
+    }
+  }
+};
+
+// Show the duty cycle of all relevant interfaces and available HAPs
+showDCAllInterfaces = function(arRelevantAddresses) {
   var ifaceBidCosRF = "BidCos-RF",
     arInterfaceDutyCycle = {},
     showPartingLine = false,
     dcUnit = "%",
     dcNotAvailable = -1,
     dcAlarm = 89,  // Attention when dc >= 90%
+    elmCounter = 0,
     html = "",
     dlg;
 
@@ -31321,6 +33770,7 @@ showDCAllInterfaces = function() {
 
     jQuery.each(BidCosIFaces, function(index, iFace){
       var dcVal = (typeof iFace.dutyCycle != 'undefined') ? parseInt(iFace.dutyCycle) : 'unknown';
+      elmCounter = index;
       html += "<tr>";
         html += "<td>";
           html += "<table class='center'>";
@@ -31375,14 +33825,162 @@ showDCAllInterfaces = function() {
       }, 50);
     });
 
+    /* Show HmIP HAPs */
+    if (typeof arRelevantAddresses == "object" && (arRelevantAddresses.length > 0)) {
+      var dc = [], counter = [],
+        lastIndex = elmCounter + 1;
+
+      jQuery.each(arRelevantAddresses, function (index, address) {
+        counter[index] = lastIndex + index;
+        dc[index] = parseInt(homematic("Interface.getValue", {
+          "interface": "HmIP-RF",
+          "address": address + ":0",
+          "valueKey": "DUTY_CYCLE_LEVEL"
+        }));
+
+        if (!isNaN(dc[index])) {
+          html += "<tr>";
+            html += "<td>";
+              html += "<table class='center'>";
+                html += "<tr><td><hr></td></tr>";
+                html += "<tr class='alignCenter'>";
+                 html += "<td><h2>" + translateKey('HmIP-HAP') + "  - " + translateKey('dialogSettingsBidCosRFLblSN') + ": " + address + "</h2></td>";
+                html += "</tr>";
+                html += "<tr class='alignCenter'>";
+                  html += "<td><div id='dutyCycleVal_" + counter[index] + "'>" + dc[index] + dcUnit + "</div></td>";
+                html += "</tr>";
+              html += "</table>";
+            html += "</td>";
+          html += "</tr>";
+          html += "<tr>";
+            html += "<td> <div><div id='dutyCycleProgress_" + counter[index] + "' class='dutyCycleProgress' align='right' style='margin-left: auto; margin-right: auto;'><div id='dutyCycleProgressBar_" + counter[index] + "' class='dutyCycleProgressBar' style='width:100%;'></div></div><div></td>";
+          html += "</tr>";
+
+          window.setTimeout(function () {
+            var dutyCycleProgressElem = jQuery("#dutyCycleProgress_" + counter[index]),
+              dutyCycleProgressBarElm = jQuery("#dutyCycleProgressBar_" + counter[index]),
+              dutyCycleValElm = jQuery("#dutyCycleVal" + counter[index]),
+              trDutyCycle = jQuery("[name='trDutyCycle']"),
+              dcVal = parseInt(dc[index]),
+              width, value;
+
+            dcVal = ((dcVal >= 0) && (dcVal <= 100)) ? dcVal : dcNotAvailable;
+
+            if (dcVal != dcNotAvailable) {
+              dutyCycleValElm.text(dcVal + dcUnit);
+
+              width = parseInt(dutyCycleProgressElem.css("width"));
+              value = width - (width / 100 * dcVal);
+
+              dutyCycleProgressBarElm.css("width", value + "px");
+            }
+          }, 50);
+        }
+      });
+    }
+    /* END HAP's */
+
     html += "</table>";
 
-    dlg = new YesNoDialog(translateKey("dialogAllRFInterfacesTitle"), html, "", "html");
+    dlg = new YesNoDialog(translateKey("lblDutyCycle"), html, "", "html");
     dlg.btnNoHide();
     dlg.btnTextYes(translateKey("btnOk"));
   });
 };
 
+// Show the Carrier Sense of the CCU and all available HAPs
+showAllCarrierSense = function(ccuAddress, arHapAddress) {
+  var csCCU = null,
+    csHap = null,
+    csHAPs = [],
+    csUnit = "%",
+    html = "",
+    dlg;
+
+  if ((typeof ccuAddress != "undefined") && (ccuAddress != "")) {
+   csCCU = homematic("Interface.getValue", {
+      "interface": "HmIP-RF",
+      "address": ccuAddress + ":0",
+      "valueKey": "CARRIER_SENSE_LEVEL"
+    });
+  }
+
+  jQuery.each(arHapAddress, function(index, hapAddress) {
+    csHap =  homematic("Interface.getValue", {
+      "interface": "HmIP-RF",
+      "address": hapAddress + ":0",
+      "valueKey": "CARRIER_SENSE_LEVEL"
+    });
+    csHAPs.push(csHap);
+  });
+
+  var getHtml = function(index, address, csVal) {
+
+    var csValUnknown = "--";
+
+    var lblDev = (index == 0) ? translateKey("LabelCCU") : translateKey('HmIP-HAP');
+    lblDev += " - " + translateKey('dialogSettingsBidCosRFLblSN') + ": " + address;
+
+    var csValue = (! isNaN(parseInt(csVal))) ? parseInt(csVal) : csValUnknown,
+    html = "";
+
+    if (csValue == csValUnknown) {csUnit = "";}
+
+    html += "<tr>";
+    html += "<td>";
+    html += "<table class='center'>";
+
+    html += "<tr class='alignCenter'>";
+    html += "<td><h2>"+ lblDev +"</h2></td>";
+    html += "</tr>";
+
+    html += "<tr class='alignCenter'>";
+    html += "<td><div id='carrierSenceVal_"+index+"'>" + csValue + csUnit + "</div></td>"; // CCU Carrier Sense
+    html += "</tr>";
+
+    html += "</table>";
+    html += "</td>";
+    html += "</tr>";
+
+    html += "<tr>";
+    html += "<td> <div><div id='carrierSenseProgress_"+index+"' class='dutyCycleProgress' align='right' style='margin-left: auto; margin-right: auto;'><div id='carrierSenseProgressBar_"+index+"' class='dutyCycleProgressBar' style='width:100%;'></div></div><div></td>";
+    html += "</tr>";
+
+    html += "<tr><td><hr></td></tr>";
+
+    window.setTimeout(function() {
+      var carrierSenseProgressElem = jQuery("#carrierSenseProgress_" + index),
+        carrierSenseProgressBarElm = jQuery("#carrierSenseProgressBar_" + index),
+        carrierSenseValElm = jQuery("#carrierSenseVal" + index),
+        width, value;
+
+
+      carrierSenseValElm.text(csValue + csUnit);
+
+      width = parseInt(carrierSenseProgressElem.css("width"));
+      value = (csValue != csValUnknown) ? width - (width / 100 * csValue) : width;
+
+      carrierSenseProgressBarElm.css("width", value + "px");
+
+    }, 50);
+
+    return html;
+  };
+
+  html += "<table class='center' style='width: 75%;'>";
+    html += getHtml(0, ccuAddress, csCCU);
+
+    jQuery.each(arHapAddress, function(index, hapAddress) {
+      html += getHtml(index + 1, hapAddress, csHAPs[index]);
+    });
+
+  html += "</table>";
+
+  dlg = new YesNoDialog(translateKey("lblCarrierSense"), html, "", "html");
+  dlg.btnNoHide();
+  dlg.btnTextYes(translateKey("btnOk"));
+
+};
 
 encodeStringStatusDisplay = function(elmID, is4Dis, specialSZ)
 {
@@ -31570,6 +34168,20 @@ getProduct = function() {
  return WEBUI_VERSION.split(".")[0];
 };
 
+getDevFirmware = function(addr, iface) {
+  if (typeof addr == "undefined" ) {
+    return "x.y.z";
+  }
+  var iFace = (typeof iface == "undefined") ? "HmIP-RF" : iface,
+    devAddress = addr.split(":")[0],
+    devDescr = homematic("Interface.getDeviceDescription", {
+      "interface" : iFace,
+      "address" : devAddress
+    });
+
+  return devDescr.firmware;
+};
+
 showAllAPITools = function() {
   var self = this;
   var url = "/tools/HomeMatic-API.html";
@@ -31724,11 +34336,20 @@ getExtendedDescription = function(oChannelDescr) {
     if (deviceType == "HmIP-WUA" || deviceType == "ELV-SH-WUA") {
       result = translateKey("chType_UNIVERSAL_ACTOR_TRANSMITTER_010V");
     }
+
+    if (deviceType == "HmIP-BSL") {
+      result = translateKey("chType_OPTICAL_SIGNAL_RECEIVERB");
+    }
   }
 
   if (chType == "DIMMER_VIRTUAL_RECEIVER") {
     if (deviceType == "HmIP-WUA" || deviceType == "ELV-SH-WUA") {
       result = translateKey("chType_UNIVERSAL_ACTOR_VIRTUAL_RECEIVER_010V");
+    }
+
+    if (deviceType == "HmIP-BSL") {
+      // console.log("B firmware:q! " + getDevFirmware(channelAddress));
+      result = translateKey("chType_OPTICAL_SIGNAL_RECEIVER");
     }
   }
 
@@ -31771,6 +34392,18 @@ getExtendedDescription = function(oChannelDescr) {
         if (channelIndex == 6) result = translateKey("chType_COND_HUMIDITY");
         break;
     }
+  }
+
+  if (chType == "LEVEL_COMMAND_TRANSMITTER_CO2") {
+    result = translateKey("chType_COND_CO2");
+  }
+
+  if (chType == "LEVEL_COMMAND_TRANSMITTER_HUMIDITY") {
+    result = translateKey("chType_COND_HUMIDITY");
+  }
+
+  if (chType == "LEVEL_COMMAND_TRANSMITTER_TEMPERATURE") {
+    result = translateKey("chType_COND_TEMPERATURE");
   }
 
   if (chType == "PASSAGE_DETECTOR_DIRECTION_TRANSMITTER") {
@@ -31875,13 +34508,13 @@ getExtendedDescription = function(oChannelDescr) {
   }
 
   if (chType == "ACCESS_RECEIVER") {
-    if (deviceType.toLowerCase() == "hmip-dld") {
+    if ((deviceType.toLowerCase() == "hmip-dld") || (deviceType.toLowerCase() == "hmip-dld-a") || (deviceType.toLowerCase() == "hmip-dld-s")  ) {
       result = translateKey("chType_ACCESS_RECEIVER") + " " + (channelIndex - 1);
     }
   }
 
   if (chType == "DOOR_LOCK_STATE_TRANSMITTER") {
-    if (deviceType.toLowerCase() == "hmip-dld") {
+    if ((deviceType.toLowerCase() == "hmip-dld") || (deviceType.toLowerCase() == "hmip-dld-a") || (deviceType.toLowerCase() == "hmip-dld-s") ) {
       result = translateKey("chType_DOOR_LOCK_STATE_TRANSMITTER");
     }
   }
@@ -31932,43 +34565,81 @@ getExtendedDescription = function(oChannelDescr) {
     }
   }
 
-  if ((chType == "DISPLAY_INPUT_TRANSMITTER") && (deviceType.toLowerCase() == "hmipw-wgd")) {
-    var oddChn = [1,3,5,7,9,11,13,15,17,19,21,23,25];
+  if ((chType == "DISPLAY_INPUT_TRANSMITTER") && (deviceType.toLowerCase() == "hmipw-wgd" || deviceType.toLowerCase() == "hmipw-wgd-pl")) {
+    var oddChn = [1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39, 41];
     jQuery.each(oddChn, function(index, value) {
       if (channelIndex == value) {
         if (channelIndex <=7) {
-          result = translateKey("chType_DISPLAY_INPUT_TRANSMITTER_A") + " 1 - " + translateKey("chType_DISPLAY_INPUT_TRANSMITTER_B") + " " + (index + 1) + translateKey("chType_DISPLAY_INPUT_TRANSMITTER_C");
+          result = translateKey("chType_DISPLAY_SCREEN") + " 1 - " + translateKey("chType_DISPLAY_TILE") + " " + (index + 1) + translateKey("chType_DISPLAY_KEY");
           return; // leave each loop
         } else if (channelIndex >=9 && channelIndex <= 15) {
-          result = translateKey("chType_DISPLAY_INPUT_TRANSMITTER_A") + " 2 - " + translateKey("chType_DISPLAY_INPUT_TRANSMITTER_B") + " " + (index -3) + translateKey("chType_DISPLAY_INPUT_TRANSMITTER_C");
+          result = translateKey("chType_DISPLAY_SCREEN") + " 2 - " + translateKey("chType_DISPLAY_TILE") + " " + (index -3) + translateKey("chType_DISPLAY_KEY");
           return; // leave each loop
         } else if (channelIndex >=17 && channelIndex <= 23) {
-          result = translateKey("chType_DISPLAY_INPUT_TRANSMITTER_A") + " 3 - " + translateKey("chType_DISPLAY_INPUT_TRANSMITTER_B") + " " + (index - 7) + translateKey("chType_DISPLAY_INPUT_TRANSMITTER_C");
+          result = translateKey("chType_DISPLAY_SCREEN") + " 3 - " + translateKey("chType_DISPLAY_TILE") + " " + (index - 7) + translateKey("chType_DISPLAY_KEY");
           return; // leave each loop
-        } else if (channelIndex == 25) {
-          result = translateKey(("chType_DISPLAY_INPUT_TRANSMITTER_D"));
+        } else if (channelIndex >=25 && channelIndex <= 31) {
+          result = translateKey("chType_DISPLAY_SCREEN") + " 4 - " + translateKey("chType_DISPLAY_TILE") + " " + (index - 11) + translateKey("chType_DISPLAY_KEY");
+          return; // leave each loop
+        } else if (channelIndex >=33 && channelIndex <= 39) {
+          result = translateKey("chType_DISPLAY_SCREEN") + " 5 - " + translateKey("chType_DISPLAY_TILE") + " " + (index - 15) + translateKey("chType_DISPLAY_KEY");
+          return; // leave each loop
+        } else if (channelIndex == 41) {
+          result = translateKey(("chType_DISPLAY_UNKNOWN"));
         }
       }
     });
   }
 
-  if ((chType == "DISPLAY_LEVEL_INPUT_TRANSMITTER") && (deviceType.toLowerCase() == "hmipw-wgd")) {
-    var evenChn = [2,4,6,8,10,12,14,16,18,20,22,24];
+  if ((chType == "DISPLAY_LEVEL_INPUT_TRANSMITTER") && (deviceType.toLowerCase() == "hmipw-wgd" || deviceType.toLowerCase() == "hmipw-wgd-pl")) {
+    var evenChn = [2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40];
 
     jQuery.each(evenChn, function(index, value) {
       if (channelIndex == value) {
-        if (channelIndex <=8) {
-          result = translateKey("chType_DISPLAY_LEVEL_INPUT_TRANSMITTER_A") + " 1 - " + translateKey("chType_DISPLAY_LEVEL_INPUT_TRANSMITTER_B") + " " + (index + 1) + translateKey("chType_DISPLAY_LEVEL_INPUT_TRANSMITTER_C");
+        if (channelIndex <= 8) {
+          result = translateKey("chType_DISPLAY_SCREEN") + " 1 - " + translateKey("chType_DISPLAY_TILE") + " " + (index + 1) + translateKey("chType_DISPLAY_LEVEL");
           return; // leave each loop
-        } else if (channelIndex >=10 && channelIndex <= 16) {
-          result = translateKey("chType_DISPLAY_LEVEL_INPUT_TRANSMITTER_A") + " 2 - " + translateKey("chType_DISPLAY_LEVEL_INPUT_TRANSMITTER_B") + " " + (index - 3) + translateKey("chType_DISPLAY_LEVEL_INPUT_TRANSMITTER_C");
+        } else if (channelIndex >= 10 && channelIndex <= 16) {
+          result = translateKey("chType_DISPLAY_SCREEN") + " 2 - " + translateKey("chType_DISPLAY_TILE") + " " + (index - 3) + translateKey("chType_DISPLAY_LEVEL");
           return; // leave each loop
-        } else if (channelIndex >=18 && channelIndex <= 24) {
-          result = translateKey("chType_DISPLAY_LEVEL_INPUT_TRANSMITTER_A") + " 3 - " + translateKey("chType_DISPLAY_LEVEL_INPUT_TRANSMITTER_B") + " " + (index - 7) + translateKey("chType_DISPLAY_LEVEL_INPUT_TRANSMITTER_C");
+        } else if (channelIndex >= 18 && channelIndex <= 24) {
+          result = translateKey("chType_DISPLAY_SCREEN") + " 3 - " + translateKey("chType_DISPLAY_TILE") + " " + (index - 7) + translateKey("chType_DISPLAY_LEVEL");
+          return; // leave each loop
+        } else if (channelIndex >= 26 && channelIndex <= 32) {
+          result = translateKey("chType_DISPLAY_SCREEN") + " 4 - " + translateKey("chType_DISPLAY_TILE") + " " + (index - 11) + translateKey("chType_DISPLAY_LEVEL");
+          return; // leave each loop
+        } else if (channelIndex >= 34 && channelIndex <= 40) {
+          result = translateKey("chType_DISPLAY_SCREEN") + " 5 - " + translateKey("chType_DISPLAY_TILE") + " " + (index - 15) + translateKey("chType_DISPLAY_LEVEL");
           return; // leave each loop
         }
       }
     });
+  }
+
+  if ((chType == "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER") && (deviceType.toLowerCase() == "hmipw-wgd" || deviceType.toLowerCase() == "hmipw-wgd-pl")) {
+    var oddChn = [43,45,47,49,51],
+      evenChn = [42,44,46,48,50];
+
+    jQuery.each(oddChn, function(index, value) {
+      if (channelIndex == value) {
+        result = translateKey("chType_DISPLAY_SCREEN") + " " + (index + 6) + " - " + translateKey("chType_DISPLAY_TILE") + " 2" + translateKey("chType_DISPLAY_CLIMATE");
+        return; // leave each loop
+      }
+    });
+
+    jQuery.each(evenChn, function(index, value) {
+      if (channelIndex == value) {
+        result = translateKey("chType_DISPLAY_SCREEN") + " " + (index + 6) + " - " + translateKey("chType_DISPLAY_TILE") + " 1" + translateKey("chType_DISPLAY_CLIMATE");
+        return; // leave each loop
+      }
+    });
+  }
+
+  if ((deviceType.toLowerCase() == "hmip-drg-dali") && ((chType == "MAINTENANCE") || (chType == "UNIVERSAL_LIGHT_RECEIVER"))) {
+    result = translateKey("chType_DALI_UNIVERSAL_LIGHT_RECEIVER");
+    if (channelIndex > 32) {
+      result += "<br/>" + translateKey("lblGroup") + " " + (channelIndex - 32);
+    }
   }
 
   /* Uncomment this to hide the channel description of a particular channel type
@@ -32170,7 +34841,7 @@ setPositionAllDevices = function(lon, lat, timeZone) {
 
     jQuery.each(DeviceList.devices, function (index, device) {
       var iFace = device.interfaceName;
-      if ((iFace.toLowerCase() == "hmip-rf") && (device.typeName.toLowerCase() != "hmip-rcv-50") && (device.typeName.toLowerCase() != "hmip-dld")) {
+      if ((iFace.toLowerCase() == "hmip-rf") && (device.typeName.toLowerCase() != "hmip-rcv-50") && (device.typeName.toLowerCase() != "hmip-dld") && (device.typeName.toLowerCase() != "hmip-dld-a") && (device.typeName.toLowerCase() != "hmip-dld-s") ) {
         // Check if the device has the channel *_WEEK_PROFILE
         jQuery.each(device.channels, function (index, channel) {
           if (channel.channelType.indexOf("_WEEK_PROFILE") != -1) {
@@ -32229,7 +34900,7 @@ setNewDevicePos2SystemPos = function(oDevice) {
       utcOffsetDST = arUtcOffset[1] * 60;
 
     var iFace = oDevice.iface;
-    if (iFace.toLowerCase() == "hmip-rf" && (oDevice.type.toLowerCase() != "hmip-rcv-50")  && (oDevice.type.toLowerCase() != "hmip-dld")) {
+    if (iFace.toLowerCase() == "hmip-rf" && (oDevice.type.toLowerCase() != "hmip-rcv-50") && (oDevice.type.toLowerCase() != "hmip-dld") && (oDevice.type.toLowerCase() != "hmip-dld-a") && (oDevice.type.toLowerCase() != "hmip-dld-s")) {
       // Check if the device has the channel *_WEEK_PROFILE
       jQuery.each(oDevice.chnTypes, function (index, channelType) {
         if (channelType.indexOf("_WEEK_PROFILE") != -1) {
@@ -32321,6 +34992,83 @@ setColorWebUI = function() {
   };
   dlg.run();
   dlg.resetHeight();
+};
+
+function activateDeviceBetaFw() {
+  var showBetaDevFw = jQuery("#inputShowBetaFw").is(":checked"),
+    fieldTestActive = "/etc/config/fieldTestActive";
+
+  if (showBetaDevFw) {
+    if (! homematic('CCU.existsFile', {'file': fieldTestActive})) {
+      homematic("CCU.createFile", {'file': fieldTestActive});
+    }
+  } else {
+    if (homematic('CCU.existsFile', {'file': fieldTestActive})) {
+      homematic("CCU.removeFieldTestActive");
+    }
+  }
+};
+
+
+/**
+ *
+ * Tmporarily introduced with the HmIP-RGBW - this may not be the best place here
+ *
+ */
+
+// `hsvToRgb`
+// Converts an HSV color value to RGB.
+// *Assumes:* h is contained in [0, 1] or [0, 360] and s and v are contained in [0, 1] or [0, 100]
+// *Returns:* { r, g, b } in the set [0, 255]
+
+function isOnePointZero(n) {
+  return typeof n == "string" && n.indexOf('.') != -1 && parseFloat(n) === 1;
+}
+
+// Check to see if string passed in is a percentage
+function isPercentage(n) {
+  return typeof n === "string" && n.indexOf('%') != -1;
+};
+
+
+function bound01(n, max) {
+  if (isOnePointZero(n)) { n = "100%"; }
+
+  var processPercent = isPercentage(n);
+  n = Math.min(max, Math.max(0, parseFloat(n)));
+
+  // Automatically convert percentage into number
+  if (processPercent) {
+    n = parseInt(n * max, 10) / 100;
+  }
+
+  // Handle floating point rounding errors
+  if ((Math.abs(n - max) < 0.000001)) {
+    return 1;
+  }
+
+  // Convert into [0, 1] range if it isn't already
+  return (n % max) / parseFloat(max);
+};
+
+
+function hsvToRgb(h, s, v) {
+
+  h = bound01(h, 360) * 6;
+  s = bound01(s, 100);
+  v = bound01(v, 100);
+
+  var i = Math.floor(h),
+    f = h - i,
+    p = v * (1 - s),
+    q = v * (1 - f * s),
+    t = v * (1 - (1 - f) * s),
+    mod = i % 6,
+    r = [v, q, p, p, t, v][mod],
+    g = [t, v, v, q, p, p][mod],
+    b = [p, p, t, v, v, q][mod];
+
+  return { r: r * 255, g: g * 255, b: b * 255 };
 };/**
  * Created by grobelnik on 01.08.2016.
  */
@@ -33145,6 +35893,7 @@ iseButtonsSwitch.prototype = {
     this.HmIPInterfaceID = "HmIP-RF";
     this.labelGarageDoorController = "HmIP-WGC";
     this.labelVIR_LG_ONOFF = "VIR-LG-ONOFF";
+    this.labeldrgDali = "HmIP-DRG-DALI";
 
     this.garageDoorControllerOnTime = 0.5;
     
@@ -33165,7 +35914,7 @@ iseButtonsSwitch.prototype = {
   onClickOff: function() {
     ControlBtn.pushed(this.divOff);
     //this.state = false;
-    if (this.chnLabel != this.labelVIR_LG_ONOFF) {
+    if ((this.chnLabel != this.labelVIR_LG_ONOFF) && (this.chnLabel != this.labeldrgDali)) {
       setDpState(this.idDpState, 0, true);
     } else {
       setDpState(this.idDpState,0);
@@ -33180,7 +35929,7 @@ iseButtonsSwitch.prototype = {
   onClickOn: function() {
     ControlBtn.pushed(this.divOn);
     if (this.chnLabel != this.labelGarageDoorController) {
-      if (this.chnLabel != this.labelVIR_LG_ONOFF) {
+      if ((this.chnLabel != this.labelVIR_LG_ONOFF) && (this.chnLabel != this.labeldrgDali)) {
         setDpState(this.idDpState, 1, true);
       } else {
         setDpState(this.idDpState,1);
@@ -33623,7 +36372,7 @@ iseButtonsDimmer.prototype = {
     if (this.OnOffEqualsSwitch) {
 
       window.setTimeout(function() {
-        if (parseInt(self.state) > 0) {
+        if (self.state > 0) {
           ControlBtn.on($(self.id + "On"));
           ControlBtn.off($(self.id + "Off"));
         } else {
@@ -34132,11 +36881,17 @@ iseThermostatHMIP.prototype = {
     this.statusON = "ON";
     this.activeProfileID = this.opts.activeProfileID;
 
-    // Todo Retrieve min, max and unit from the devicedescription
-    this.min = 5;
-    this.max = 30;
-    this.off = 4.5;
-    this.on = 30.5;
+    var paramSetMaster = homematic('Interface.getParamset', {"interface": this.iface, "address" : this.chAddress, "paramsetKey" : "MASTER"});
+
+    this.confTempMin = parseFloat(paramSetMaster["TEMPERATURE_MINIMUM"]); // Configured min temp (device settings)
+    this.confTempMax = parseFloat(paramSetMaster["TEMPERATURE_MAXIMUM"]); // Configured max temp (device settings);
+
+    this.offTemp = 4.5;
+    this.onTemp = 30.5;
+    this.min = (this.confTempMin < 5) ? 5 : this.confTempMin;
+    this.max = (this.confTempMax > 30) ? 30 : this.confTempMax;
+    this.off = (this.confTempMin < 5) ? this.offTemp : this.confTempMin;
+    this.on = (this.confTempMax > 30) ? this.onTemp : this.confTempMax;
     this.unit = "°C";
     this.factor = 100/(this.max-this.min);
     this.iViewOnly = false;
@@ -34202,6 +36957,11 @@ iseThermostatHMIP.prototype = {
   },
 
   initElements: function() {
+
+    if (this.confTempMin == this.offTemp) {this.btnOFF.show().text(translateKey("actionStatusControlLblOff"));} else {this.btnOFF.show().html(translateKey("minTemp")).css("line-height", "");}
+    if (this.confTempMax == this.onTemp) {this.btnON.show().text(translateKey("actionStatusControlLblOn"));} else {this.btnON.show().html(translateKey("maxTemp")).css("line-height", "");}
+
+
     if (this.BOOST_MODE) {
       JControlBtn.on(this.btnBoost);
     } else {
@@ -34236,6 +36996,7 @@ iseThermostatHMIP.prototype = {
     } else {
       JControlBtn.off(this.btnOFF);
       JControlBtn.off(this.btnON);
+      this.percentElem.val(parseFloat(this.state).toFixed(1));
     }
 
     switch (this.percentElem.val()) {
@@ -34350,9 +37111,8 @@ iseThermostatHMIP.prototype = {
       {
         if( event.data.that.hasRampClicked )
         {
-          conInfo( "iseThermostat: onMouseOut() ["+relTarg.id+"], wanna set: " + ( (event.data.that.slider.n_value/event.data.that.factor) + event.data.that.min)  );
           event.data.that.hasRampClicked = false;
-          event.data.that.state = (event.data.that.slider.n_value/event.data.that.factor) + event.data.that.min;
+          event.data.that.state = event.data.that.percentElem.val();
           event.data.that.refresh(event.data.that.setPointID);
         }
       }
@@ -34366,8 +37126,7 @@ iseThermostatHMIP.prototype = {
   onClickUp: function(event)
   {
     conInfo( "iseThermostat: onClickUp()" );
-    // this.state = (this.slider.n_value/this.factor);
-    event.data.that.state = Math.round(event.data.that.state  + 1);
+    event.data.that.state = (parseFloat(event.data.that.state) + 1);
     if (event.data.that.state > event.data.that.max)
       event.data.that.state = event.data.that.max;
     event.data.that.refresh(event.data.that.setPointID);
@@ -34376,8 +37135,7 @@ iseThermostatHMIP.prototype = {
   onClickDown: function(event)
   {
     conInfo( "iseThermostat: onClickDown()" );
-    // this.state = (this.slider.n_value/this.factor);
-    event.data.that.state = Math.round(event.data.that.state - 1);
+    event.data.that.state = (parseFloat(event.data.that.state) -1);
     if (event.data.that.state < event.data.that.min)
       event.data.that.state = event.data.that.min;
     event.data.that.refresh(event.data.that.setPointID);
@@ -34446,7 +37204,7 @@ iseThermostatHMIP.prototype = {
   },
 
   onClickModeOFF: function(event) {
-    conInfo("clickModeOFF");
+    conInfo("clickModeOFF - SET_POINT_TEMPERATURE: " + this.off);
     //setDpState(event.data.that.setPointID, event.data.that.off);
     //JControlBtn.off(event.data.that.btnON);
 
@@ -34587,10 +37345,10 @@ iseThermostatHMIP.prototype = {
     if(this.state < this.min) { this.state = this.min; }
     if (this.state > this.max) { this.state = this.max; }
     this.slider.f_setValue((this.state -this.min) * this.factor, true);
+    this.percentElem.val(parseFloat(this.state).toFixed(1));
     conInfo("refresh: setting DP "+this.setPointID+" State -------> " + this.state);
     setDpState(setPointID, this.state);
   }
-
 };/**
  * ise/iseFrequency.js
  **/
@@ -34766,7 +37524,7 @@ iseFrequency.prototype = {
 
 /**
  * @class
- **/ 
+ **/
 iseButtonsDoorContact = Class.create();
 
 iseButtonsDoorContact.prototype = {
@@ -34780,12 +37538,12 @@ iseButtonsDoorContact.prototype = {
     this.state = this.convertInitState(initState);
     this.divOpen = $(this.id + "Open");
     this.divClosed = $(this.id + "Closed");
-    
+
     if( this.state > 0 )
     {
       ControlBtn.on(this.divOpen);
     }
-    else 
+    else
     {
       ControlBtn.on(this.divClosed);
     }
@@ -34799,6 +37557,7 @@ iseButtonsDoorContact.prototype = {
       case "CLOSED":
         return 0;
       case "1":
+      case "200":
       case "true":
       case "OPEN":
         return 1;
@@ -36712,6 +39471,7 @@ isePowerMeter.prototype = {
 
   bindEvents: function() {
     var self = this;
+    /*
     jQuery("#"+ this.id + "resetEnergyCounter").bind("click", function(){
       conInfo("Reset EnergyCounter.");
       self.buttonPressed(this);
@@ -36723,26 +39483,28 @@ isePowerMeter.prototype = {
       self.setEnergyCounterPanel();
       self.showEnergyCost();
     });
+    */
 
-    /*
-    jQuery("#"+ this.id + "setEnergyCounter").bind("click", function(){
+
+    jQuery("#"+ this.id + "resetEnergyCounter").bind("click", function(){
       conInfo("Set EnergyCounter");
-      var dlgContent = "<table align='center'><tr><td><input type='text' id='meterReading'></td></tr></table>",
+      var dlgContent = "<table align='center'><tr><td>"+translateKey('lblEnergyConsumptionInWatt')+"<td><td><input type='text' id='meterReading'></td></tr></table>",
         valMeterReading;
 
-      setEnergyCounterDlg = new YesNoDialog("trans Enter meter readings", dlgContent, function(result) {
+      setEnergyCounterDlg = new YesNoDialog(translateKey("lblSetEnergyCounter"), dlgContent, function(result) {
         if (result == YesNoDialog.RESULT_YES) {
-          valMeterReading = jQuery("#meterReading").val();
-          // TODO check if the value is a valid float
+          valMeterReading = parseFloat(jQuery("#meterReading").val());
 
           // This removes the dialog from the screen
           Layer.remove(this.m_layer);
 
-          // This sets the new value of the power meter
-          homematic("SysVar.setFloat", {"name" : self.EnergyCounterID, "value" : valMeterReading}, function() {
-            self.setEnergyCounterPanel();
-            self.showEnergyCost();
-          });
+          if (! isNaN(valMeterReading)) {
+            // This sets the new value of the power meter
+            homematic("SysVar.setFloat", {"name": self.EnergyCounterID, "value": valMeterReading}, function () {
+              self.setEnergyCounterPanel();
+              self.showEnergyCost();
+            });
+          }
         } else {
           // NO pressed
           // This removes the dialog from the screen
@@ -36750,13 +39512,15 @@ isePowerMeter.prototype = {
         }
       }, "html");
 
+      setEnergyCounterDlg.btnTextNo(translateKey("dialogBack"));
+      setEnergyCounterDlg.btnTextYes(translateKey("btnOk"));
+
       // Overwrites the original close method
       setEnergyCounterDlg.close = function(result) {
         if (this.m_callback) { this.m_callback(result); }
       };
 
     });
-    */
   },
 
   /**
@@ -36816,6 +39580,7 @@ isePowerMeter.prototype = {
     this.summedUpEnergy = parseFloat(homematic("SysVar.getValue", {"id" : this.EnergyCounterID})).toFixed(decimalPlace);
     conInfo("setEnergyCounterPanel - this.summedUpEnergy: " + this.summedUpEnergy);
 
+    this.kiloPrefix = "";
     if (this.summedUpEnergy >= 1000.0 && (this.measurementType != this.sensorTypeID.gas) && (this.measurementType != this.sensorTypeID.iec)) {
       this.kiloPrefix = "k";
       this.summedUpEnergy = this.changeToKilo();
@@ -36895,7 +39660,313 @@ isePowerMeter.prototype = {
 };
 
 
-// This class is currently not in use
+isePowerMeterESI = Class.create();
+
+isePowerMeterESI.prototype = {
+
+  initialize: function(id, opts) {
+    //console.log(opts);
+    var self = this;
+
+    this.iface = "HmIP-RF";
+    this.id = id;
+    this.opts = opts;
+
+    this.powerMeter = "POWERMETER"; // e. g. Hm-ES-PMSw1-PL-DN-R1
+    this.POWERMETER_IEC = "POWERMETER_IEC"; // e. g. Hm-ES-TX-WM
+
+    this.energyMeterTransmitter = "ENERGIE_METER_TRANSMITTER"; // e. g. HmIP-PSM
+    this.sensorTypeID = {};
+    this.sensorTypeID.gas = "Gas";
+    this.sensorTypeID.eletricity = "Electricity";
+    this.sensorTypeID.iec = "IEC";
+    this.sensorTypeID.unknown = "Unknown";
+    this.kiloPrefix = "";
+
+    this.idBtnSelfCalibration = this.opts.idBtnSelfCalibration;
+
+    this.chn = parseInt(this.opts.chn);
+
+    this.summedUpEnergy = 0.0;
+
+    this.arSensorTypes = [
+      "SENSOR_UNKNOWN",
+      "SENSOR_ES_GAS",
+      "SENSOR_ES_LED",
+      "SENSOR_ES_IEC",
+      "SENSOR_ES_IEC_SML",
+      "SENSOR_ES_IEC_SML_WH",
+      "SENSOR_ES_IEC_D0_A",
+      "SENSOR_ES_IEC_D0_B",
+      "SENSOR_ES_IEC_D0_C",
+      "SENSOR_ES_IEC_D0_D"
+    ];
+
+    this.measurementType = this.getSensorType(); // Connected Sensor
+
+    if (this.chn == 1) {
+      this.sensor =  homematic("Interface.getMetadata", {"objectId": this.id, "dataId": "sensor"});
+      console.log("this.measurementType: " + this.measurementType ,"this.sensor: " + this.sensor);
+
+      this.showPowerGasFlowPanel();
+
+      if (this.measurementType != this.sensor) {
+        console.log("set MetaData sensor: " + this.measurementType);
+        homematic("Interface.setMetadata", {"objectId": this.id, "dataId": "sensor", "value": this.measurementType});
+      }
+
+    }
+
+    this.EnergyPrice = "unknown";
+
+    this.bindEvents();
+
+    jQuery("[name = '" + this.id + "EnergyCostDeviceUnit']").html(this.opts.unitEnergyCounter).show();
+    this.setEnergyCounterPanel();
+
+    this.energyConfig = homematic("system.getEnergyPrice", {}, function (result) {
+      self.energyConfig = result;
+      // When the energy price config is available and it´s a known sensor (electricity or gas)
+      // then show the energy cost
+      if (result && (self.measurementType != self.sensorTypeID.unknown)) {
+        self.showEnergyCost();
+      }
+    });
+    jQuery("[name = '" + this.id + "sensor" + this.getSensorExtension() + "']").show();
+    conInfo("Interface: " + this.opts.iface);
+    conInfo("MeasurementType: " + this.measurementType);
+
+  },
+
+
+  showPowerGasFlowPanel: function() {
+    var panelElm = jQuery("[name='curConsumptionPanel_"+this.id+"']"),
+      noSensorElm = jQuery("#noSensorAvailable_" + this.id),
+      sensorGas = jQuery("#gasFlow_" + this.id),
+      sensorElec = jQuery("#power_" + this.id);
+
+    // console.log("showPowerGasFlowPanel", "this.measurementType: " + this.measurementType);
+
+    if ((typeof this.measurementType == "undefined") || (this.measurementType == null) ) {
+      panelElm.hide();
+      noSensorElm.show();
+      return;
+    }
+
+    switch (this.measurementType) {
+      case this.arSensorTypes[0]:  // SENSOR_UNKNOWN
+        panelElm.hide();
+        noSensorElm.show();
+        break;
+      case this.arSensorTypes[1]: // SENSOR_ES_GAS
+        noSensorElm.hide();
+        panelElm.show();
+        sensorElec.hide();
+        sensorGas.show();
+        break;
+      default:
+        noSensorElm.hide(); // SENSOR_ES_LED and all SENSOR_ES_IEC sensors (e. g. SENSOR_ES_IEC_SML)
+        panelElm.show();
+        sensorGas.hide();
+        sensorElec.show();
+    }
+  },
+
+  getSensorType: function() {
+    var paramSet = homematic("Interface.getParamset", {"interface": this.opts.iface, "address" : this.opts.chAddress, "paramsetKey" :"MASTER"});
+
+    // With the HmIP-ESI only channel 1 has the parameter CHANNEL_OPERATION_MODE
+    return (typeof paramSet.CHANNEL_OPERATION_MODE == "undefined") ? -1 : this.arSensorTypes[parseInt(paramSet.CHANNEL_OPERATION_MODE)];
+  },
+
+  buttonPressed: function(btn) {
+    var elem = jQuery(btn);
+    elem.addClass("ControlBtnOn").removeClass("ControlBtnOff");
+    setTimeout(function() {
+      elem.addClass('ControlBtnOff').removeClass('ControlBtnOn');
+    }, 500);
+
+  },
+
+  bindEvents: function() {
+    var self = this;
+
+    jQuery("#"+ this.id + "startSelfCalibration").bind("click", function() {
+      // self.searchSensor(self.idBtnSelfCalibration); for setDpState
+      self.searchSensor(self.iface, self.opts.chAddress);
+    });
+
+
+    jQuery("#"+ this.id + "resetEnergyCounter").bind("click", function() {
+      conInfo("Set EnergyCounter");
+      var dlgContent = "<table align='center'><tr><td>"+translateKey('lblEnergyConsumptionInWatt')+"<td><td><input type='text' id='meterReading'></td></tr></table>",
+        valMeterReading;
+
+      setEnergyCounterDlg = new YesNoDialog(translateKey("lblSetEnergyCounter"), dlgContent, function(result) {
+        if (result == YesNoDialog.RESULT_YES) {
+          valMeterReading = parseFloat(jQuery("#meterReading").val());
+
+          // This removes the dialog from the screen
+          Layer.remove(this.m_layer);
+
+          if (! isNaN(valMeterReading)) {
+            // This sets the new value of the power meter
+            homematic("SysVar.setFloat", {"name": self.EnergyCounterID, "value": valMeterReading}, function () {
+              self.setEnergyCounterPanel();
+              self.showEnergyCost();
+            });
+          }
+        } else {
+          // NO pressed
+          // This removes the dialog from the screen
+          Layer.remove(this.m_layer);
+        }
+      }, "html");
+
+      setEnergyCounterDlg.btnTextNo(translateKey("dialogBack"));
+      setEnergyCounterDlg.btnTextYes(translateKey("btnOk"));
+
+      // Overwrites the original close method
+      setEnergyCounterDlg.close = function(result) {
+        if (this.m_callback) { this.m_callback(result); }
+      };
+
+    });
+  },
+
+  /**
+   * Returns the jQuery element of a given parameter
+   * @param {string} elem The name of the desired element
+   * @return {object} The desired element
+   */
+  getJElemByID: function(elem) {
+    return jQuery("#" + this.id + elem);
+  },
+
+  getJElemsByName: function(elem) {
+    return jQuery("[name='" + this.id + elem + "']");
+  },
+
+  getSensorExtension: function() {
+    switch (this.measurementType) {
+      case  this.sensorTypeID.gas:
+        return this.sensorTypeID.gas;
+      case this.sensorTypeID.iec:
+        return this.sensorTypeID.iec;
+      default: return "";
+    }
+  },
+
+  changeToKilo: function() {
+    return (this.summedUpEnergy/1000).toFixed(3);
+  },
+
+  setEnergyCounterPanel: function() {
+    var j_panel = this.getJElemByID("EnergyCounter");
+    // For a Hm-ES-TX-WM (POWERMETER_IEC) with a firmware >= 2.0.0 show 4 decimal places
+    var decimalPlace = ((this.opts.chType.indexOf(this.POWERMETER_IEC) != -1) && (parseInt(this.opts.devFirmwareMajor) >= 2))  ? 4 : 2;
+    this.summedUpEnergy = parseFloat(homematic("SysVar.getValue", {"id" : this.EnergyCounterID})).toFixed(decimalPlace);
+    conInfo("setEnergyCounterPanel - this.summedUpEnergy: " + this.summedUpEnergy);
+
+    this.kiloPrefix = "";
+    if (this.summedUpEnergy >= 1000.0 && (this.measurementType != this.sensorTypeID.gas) && (this.measurementType != this.sensorTypeID.iec)) {
+      this.kiloPrefix = "k";
+      this.summedUpEnergy = this.changeToKilo();
+    }
+
+    j_panel.html(this.summedUpEnergy + " " + this.kiloPrefix + this.opts.unitEnergyCounter);
+  },
+
+  getEnergyConsumption: function(sType) {
+    // Electricity sensor
+    if ((this.measurementType == this.sensorTypeID.eletricity )) {
+      if (sType == "CCU")  return this.summedUpEnergy;
+      if (sType == "Device") return this.opts.valEnergyCounter;
+    }
+
+    // Gas sensor
+    if (this.measurementType == this.sensorTypeID.gas) {
+      if (sType == "CCU")  return (this.summedUpEnergy * this.energyConfig.gasHeatingValue * this.energyConfig.gasConditionNumber) ;
+      if (sType == "Device") return (this.opts.valEnergyCounterGas * this.energyConfig.gasHeatingValue * this.energyConfig.gasConditionNumber);
+    }
+
+    // IEC sensor
+    if ((this.measurementType == this.sensorTypeID.iec)) {
+      if (sType == "CCU")  return this.summedUpEnergy;
+      if (sType == "Device") return this.opts["valEnergyCounter" + this.getSensorExtension()];
+    }
+
+  },
+
+  // Some channels aren't allowed to show the energy cost
+  // E. g. the channel POWERMETER_IEC2 measures the energy which a client feeds into the power supply system (solar, wind or so)
+  isChannelValid2ShowEnergyCost: function() {
+    return (this.opts.chType == "POWERMETER_IEC2") ? false : true;
+  },
+
+  showEnergyCost: function() {
+    if (this.energyConfig && (this.measurementType != this.sensorTypeID.unknown) && ( this.isChannelValid2ShowEnergyCost()) ) {
+      var unitFactorCCU = 1000,
+        unitFactorDevice = 1000,
+        kWh = " kWh";
+
+      if (this.kiloPrefix == "k") {
+        unitFactorCCU = 1;
+      }
+
+      if ((this.measurementType == this.sensorTypeID.iec)) {
+        unitFactorCCU = 1;
+        unitFactorDevice = 1;
+      }
+
+      if (this.measurementType == this.sensorTypeID.gas) {
+        this.EnergyPrice = this.energyConfig.gasPrice;
+        unitFactorCCU = 1;
+        unitFactorDevice = 1;
+      }
+      if (this.measurementType == this.sensorTypeID.eletricity || this.measurementType == this.sensorTypeID.iec) this.EnergyPrice = this.energyConfig.curPrice;
+
+      if (this.EnergyPrice != "unknown" && this.energyConfig.currency != null) {
+        var j_energyCostCCU = this.getJElemByID("EnergyCostCCU"),
+          j_energyCostDevice = this.getJElemByID("EnergyCostDevice"+this.getSensorExtension()),
+          energyConsumptionCCU = this.getEnergyConsumption("CCU"),
+          energyConsumptionDevice = this.getEnergyConsumption("Device"),
+          energyCostCCU = ((energyConsumptionCCU * this.EnergyPrice) / unitFactorCCU).toFixed(2) + " " + this.energyConfig.currency,
+          energyCostDevice = ((energyConsumptionDevice * this.EnergyPrice) / unitFactorDevice).toFixed(2) + " " + this.energyConfig.currency;
+        if (this.measurementType == this.sensorTypeID.gas) {
+          j_energyCostCCU.text(energyConsumptionCCU.toFixed(1) + kWh + " = " + energyCostCCU).show();
+          j_energyCostDevice.text(energyConsumptionDevice.toFixed(1) + kWh + " = " + energyCostDevice).show();
+        } else {
+          j_energyCostCCU.text(energyCostCCU).show();
+          j_energyCostDevice.text(energyCostDevice).show();
+        }
+      } else {
+        conInfo("Unknown energy price");
+      }
+    }
+  },
+
+  searchSensor: function(iface, chnAddress) {
+    conInfo("searchSensor");
+    ShowWaitAnim();
+    homematic("Interface.putParamset",{'interface': iface, 'address' : chnAddress, 'paramsetKey' : 'VALUES', 'set':
+        [
+          {name:'SELF_CALIBRATION', type: 'int', value: 1}
+        ]
+    },function(result){
+      if (result) {
+        window.setTimeout(function() {
+          HideWaitAnim();
+          reloadPage();
+        },1000);
+      } else {
+        HideWaitAnim();
+        alert("Please press the system button and try again.");
+      }
+    });
+    HideWaitAnimAutomatically(5);
+  }
+};// This class is currently not in use
 // See esp/controls/rgbw.fn - CreateRGBWAutomaticControl
 
 iseRGBWController = Class.create();
@@ -38064,12 +41135,17 @@ iseHmIPWeeklyProgram = Class.create();
 iseHmIPWeeklyProgram.prototype = {
   initialize: function (id, opts, callback) {
     var self = this;
-
+    conInfo("opts", opts);
     virtChnCounterWP = 0;
     //conInfo(opts);
     this.callback = callback;
     this.opts = opts;
     this.id = id;
+
+    this.fwMajor = opts.fwMajor;
+    this.fwMinor = opts.fwMinor;
+    this.fwPatch = opts.fwPatch;
+
     this.devLabel = opts.deviceLabel;
     this.iface = this.opts.chInterface;
 
@@ -38080,13 +41156,25 @@ iseHmIPWeeklyProgram.prototype = {
     this.wiegandInterface = (this.isDeviceType("HmIP-FWI")) ? true : false;
     this.deviceIsHmIPWKP = this.isDeviceType("HmIP-WKP");
     this.deviceIsHmIP_MOD_WD_VK = this.isDeviceType("HmIP-MOD-WD-VK");
+    this.deviceIsHmIP_RGBW = this.isDeviceType("HmIP-RGBW");
+    this.deviceIsHmIP_DALI = this.isDeviceType("HmIP-DRG-DALI");
 
     this.device = this.getDevice(this.opts.deviceID);
     this.relevantChn = this.getRelevantChannels();
 
     // The HmIP-BSL consists of SWITCH and DIMMER channels. For the weekly program we are currently using only the SWITCH channels.
+    /*
     if (this.isDeviceType("HmIP-BSL")) {
       this.relevantChn = (this.expert) ? [4, 5, 6] : [4];
+    }
+    */
+
+    if (this.isDeviceType("HmIP-BSL")) {
+      if (this.fwMajor < 2) {
+        this.relevantChn = (this.expert) ? [4, 5, 6] : [4];
+      } else {
+        this.relevantChn = (this.expert) ? [4, 5, 6, 8, 9, 10, 12, 13, 14] : [4, 8, 12];
+      }
     }
 
     if (this.deviceIsHmIPWKP) {
@@ -38095,6 +41183,75 @@ iseHmIPWeeklyProgram.prototype = {
 
     if (this.deviceIsHmIP_MOD_WD_VK) {
       this.relevantChn = [2];
+    }
+
+    if (this.isDeviceType("HmIP-SMO230")) {
+      this.relevantChn =  [10, 11, 12];
+    }
+
+    if (this.deviceIsHmIP_RGBW) {
+      var oChannel = DeviceList.getChannelByAddress(this.chAddress),
+      oMaintChannel = DeviceList.getChannelByAddress(this.chAddress.split(":")[0] + ":0"), // The maintenance channel stores the deviceMode
+      deviceMode = parseInt(homematic("Interface.getMetadata", {"objectId": oMaintChannel.id, "dataId": "deviceMode"}));
+
+      if (oChannel.channelType == "UNIVERSAL_LIGHT_WEEK_PROFILE") {
+        switch (deviceMode) {
+          case 0:
+          case 1:
+            // RGB/RGBW Mode
+            this.relevantChn = [1];
+            break;
+          case 2:
+            // Tunable White Mode
+            this.relevantChn = [1, 2];
+            break;
+          default:
+            // PWM Mode - all channels visible
+            this.relevantChn = [1, 2, 3, 4];
+        }
+      }
+    }
+
+    if (this.deviceIsHmIP_DALI) {
+
+      /*
+       Das erste angeschlossene DAlI Gerät belegt Kanal 1, das nächste DALI Gerät bekommt Kanal 2 usw.
+       Es können 32 DAlI Geräte angeschlossen werden, d. h. Kanal 1 - 32
+       Angezeigt werden nur die Kanäle, welche auch benutzt werden. Damit kein XML-RPC Aufruf für ungenutzte Kanäle gemacht wird,
+       wird die Variable lastUsedDaliChn eingesetzt.
+       Die Kanäle 33 - 48 sind Gruppenkanäle und werden immer angezeigt.
+
+       The first DAlI device connected occupies channel 1, the next DALI device gets channel 2, etc.
+       32 DAlI devices can be connected, i.e. channel 1 - 32.
+       Only those channels are displayed which are actually used. So that no XML-RPC call is made for unused channels,
+       the variable lastUsedDaliChn is used.
+       Channels 33 - 48 are group channels and are always displayed.
+      */
+
+      var self = this,
+        oDevice = DeviceList.getDeviceByAddress(this.chAddress.split(":")[0]),
+        lastUsedDaliChn = false,
+        maxCap;
+
+      this.relevantChn = [];
+
+      jQuery.each(oDevice.channels, function(index, chn) {
+
+        if (chn.channelType == "UNIVERSAL_LIGHT_RECEIVER") {
+          if (index < 33) {
+            if (! lastUsedDaliChn) {
+              maxCap = parseInt(homematic("Interface.getMetadata", {"objectId": chn.id, "dataId": "maxCap"}));
+            }
+            if ((!isNaN(maxCap)) && (maxCap < 5)) {
+              self.relevantChn.push(index);
+            } else {
+              lastUsedDaliChn = true;
+            }
+          } else {
+            self.relevantChn.push(index);
+          }
+        }
+      });
     }
 
     this.anchor = jQuery("#anchor_"+this.id);
@@ -38125,7 +41282,7 @@ iseHmIPWeeklyProgram.prototype = {
   getModeDialog: function() {
     var that = this;
     var sOutput = this.getDialogHtml();
-    new YesNoDialog(translateKey("dialogSetWPModeTitle"), sOutput, function(result) {
+    var dlg = new YesNoDialog(translateKey("dialogSetWPModeTitle"), sOutput, function(result) {
       var selectedMode = that.modeElm.val(),
         selectedCh = 0;
       if (result == YesNoDialog.RESULT_YES) {
@@ -38156,6 +41313,11 @@ iseHmIPWeeklyProgram.prototype = {
 
       if (that.callback) {that.callback(result);}
     },"html");
+
+    if(that.deviceIsHmIP_DALI) {
+      dlg.setWidth(700);
+    }
+
   },
 
 
@@ -38172,11 +41334,19 @@ iseHmIPWeeklyProgram.prototype = {
     }
     jQuery.each(relevantChn, function (index, value) {
       //debugger;
-      chState = (binChannelState[index]) ? binChannelState[index] : "0";
-      if (chState == "1") {
-        jQuery("#" + self.id + "_bit" + index + "1").attr("checked", true);
+      chState = (binChannelState[index]) ? binChannelState[index] : "1";
+      if (! self.deviceIsHmIP_DALI) {
+        if (chState == "0") {
+          jQuery("#" + self.id + "_bit" + index + "0").attr("checked", true); // Auto
+        } else {
+          jQuery("#" + self.id + "_bit" + index + "1").attr("checked", true);  // Manu
+        }
       } else {
-        jQuery("#" + self.id + "_bit" + index + "0").attr("checked", true);
+        if (chState == "0") {
+          jQuery("#" + self.id + "_bit" + (value - 1) + "0").attr("checked", true); // Auto
+        } else {
+          jQuery("#" + self.id + "_bit" + (value - 1) + "1").attr("checked", true); // Manu
+        }
       }
     });
   },
@@ -38188,102 +41358,168 @@ iseHmIPWeeklyProgram.prototype = {
     var valCheckBox,
     tmpVal;
 
-    html += "<table>";
+    function getHTML(selectedChannels) {
+      var html = "",  relevantChn;
 
+      if (selectedChannels) {
+        relevantChn = selectedChannels;
+        html += "<div><hr></div>";
+      } else {
+        relevantChn = self.relevantChn;
+      }
 
+      html += "<table>";
       html += "<thead>";
-        // channel number
-        html += "<tr>";
-        if (!this.deviceIsHmIPWKP) {
-          html += "<td></td>";
-        } else {
-          html += "<td>"+translateKey('lblUser')+"</td>";
-        }
 
-        if (! this.deviceIsHmIP_MOD_WD_VK) {
-          jQuery.each(this.relevantChn, function (index, val) {
-            if (!self.deviceIsHmIPWKP) {
-              html += "<td>" + val + "</td>";
-            } else {
-              html += "<td>" + (index + 1) + "</td>";
-            }
-          });
-        }
-        html += "</tr>";
+      // channel number
+      html += "<tr>";
+      if (!self.deviceIsHmIPWKP) {
+        html += "<td></td>";
+      } else {
+        html += "<td>" + translateKey('lblUser') + "</td>";
+      }
+
+      if (!self.deviceIsHmIP_MOD_WD_VK) {
+        jQuery.each(relevantChn, function (index, val) {
+          if (!self.deviceIsHmIPWKP) {
+            html += "<td>" + val + "</td>";
+          } else {
+            html += "<td>" + (index + 1) + "</td>";
+          }
+        });
+      }
+      html += "</tr>";
       html += "</thead>";
 
       html += "<tbody>";
-        // row auto
-        html += "<tr>";
-          html += "<td>"+translateKey("stringTableClimateControlRTTransceiverAutoMode")+"</td>";
-          var _tmpIndex;
-          jQuery.each(this.relevantChn, function(index,val){
+      // row auto
+      html += "<tr>";
+      html += "<td>" + translateKey("stringTableClimateControlRTTransceiverAutoMode") + "</td>";
+      var _tmpIndex;
+      jQuery.each(relevantChn, function (index, val) {
 
-            if (self.wiegandInterface) {
-              // index 0 - 7 = 3 - 10 - index 9 - 10 = 0 - 2
-              if (index <= 7) {_tmpIndex = index + 3;} else {_tmpIndex = index - 8;}
-              html += "<td>";
-              html += "<input id='"+self.id+"_bit"+_tmpIndex+"0'  type='radio' name='"+self.id+"_bit"+_tmpIndex+"' value=0 disabled='disabled'>";
-              html += "</td>";
+        if (self.wiegandInterface) {
+          // index 0 - 7 = 3 - 10 - index 9 - 10 = 0 - 2
+          if (index <= 7) {
+            _tmpIndex = index + 3;
+          } else {
+            _tmpIndex = index - 8;
+          }
+          html += "<td>";
+          html += "<input id='" + self.id + "_bit" + _tmpIndex + "0'  type='radio' name='" + self.id + "_bit" + _tmpIndex + "' value=0 disabled='disabled'>";
+          html += "</td>";
+        } else if (self.deviceIsHmIP_DALI) {
+           html += "<td>";
+          html += "<input id='" + self.id + "_bit" + (val-1) + "0'  type='radio' name='" + self.id + "_bit" + (val-1) + "' value=0 disabled='disabled'>";
+          html += "</td>";
+        } else {
+          html += "<td>";
+          html += "<input id='" + self.id + "_bit" + index + "0'  type='radio' name='" + self.id + "_bit" + index + "' value=0 disabled='disabled'>";
+          html += "</td>";
+        }
+
+      });
+      html += "</tr>";
+
+      // row manu
+      html += "<tr>";
+      html += "<td>" + translateKey("stringTableClimateControlRTTransceiverManuMode") + "</td>";
+      jQuery.each(relevantChn, function (index, val) {
+        if (self.wiegandInterface) {
+          //******************
+          if (self.expert) {
+            // index 0 - 7 = 3 - 10 - index 9 - 10 = 0 - 2
+            if (index <= 7) {
+              _tmpIndex = index + 3;
             } else {
-              html += "<td>";
-              html += "<input id='"+self.id+"_bit"+index+"0'  type='radio' name='"+self.id+"_bit"+index+"' value=0 disabled='disabled'>";
-              html += "</td>";
+              _tmpIndex = index - 8;
             }
-
-          });
-        html += "</tr>";
-
-        // row manu
-        html += "<tr>";
-          html += "<td>"+translateKey("stringTableClimateControlRTTransceiverManuMode")+"</td>";
-          jQuery.each(this.relevantChn, function(index,val){
-            if (self.wiegandInterface) {
-              //******************
-              if (self.expert) {
-                // index 0 - 7 = 3 - 10 - index 9 - 10 = 0 - 2
-                if (index <= 7) {_tmpIndex = index + 3;} else {_tmpIndex = index - 8;}
-                valCheckBox = Math.pow(2, _tmpIndex);
-              } else {
-                if (index <= 7) {
-                  _tmpIndex = index + 3;
-                  valCheckBox = Math.pow(2, _tmpIndex);
-                } else {
-                  _tmpIndex = index - 8;
-                  valCheckBox = 1;
-                }
-              }
-              html += "<td>";
-              html += "<input id='" + self.id + "_bit" + _tmpIndex + "1'  type='radio' name='" + self.id + "_bit" + _tmpIndex + "' value=" + valCheckBox + " disabled='disabled'>";
-              html += "</td>";
-              //******************
+            valCheckBox = Math.pow(2, _tmpIndex);
+          } else {
+            if (index <= 7) {
+              _tmpIndex = index + 3;
+              valCheckBox = Math.pow(2, _tmpIndex);
             } else {
-              if (self.expert) {
-                valCheckBox = Math.pow(2, index);
-              } else {
-                if (index == 0) {
-                  valCheckBox = 1;
-                  tmpVal = 1;
-                } else {
-                  valCheckBox = tmpVal << 3;
-                  tmpVal = valCheckBox;
-                }
-              }
-              html += "<td>";
-              html += "<input id='" + self.id + "_bit" + index + "1'  type='radio' name='" + self.id + "_bit" + index + "' value=" + valCheckBox + " disabled='disabled'>";
-              html += "</td>";
+              _tmpIndex = index - 8;
+              valCheckBox = 1;
             }
-          });
-        html += "</tr>";
+          }
+          html += "<td>";
+          html += "<input id='" + self.id + "_bit" + _tmpIndex + "1'  type='radio' name='" + self.id + "_bit" + _tmpIndex + "' value=" + valCheckBox + " disabled='disabled'>";
+          html += "</td>";
+          //******************
+        } else if (self.deviceIsHmIP_DALI) {
+          valCheckBox = Math.pow(2, (val-1));
+          html += "<td>";
+          html += "<input id='" + self.id + "_bit" + (val-1) + "1'  type='radio' name='" + self.id + "_bit" + (val-1) + "' value=" + valCheckBox + " disabled='disabled'>";
+          html += "</td>";
+        } else {
+          if (self.expert) {
+            valCheckBox = Math.pow(2, index);
+          } else {
+            if (index == 0) {
+              valCheckBox = 1;
+              tmpVal = 1;
+            } else {
+              valCheckBox = tmpVal << 3;
+              tmpVal = valCheckBox;
+            }
+          }
+          html += "<td>";
+          html += "<input id='" + self.id + "_bit" + index + "1'  type='radio' name='" + self.id + "_bit" + index + "' value=" + valCheckBox + " disabled='disabled'>";
+          html += "</td>";
+        }
+      });
+      html += "</tr>";
       html += "</tbody>";
-    html += "</table>";
+      html += "</table>";
 
+      return html;
+
+    };
+
+    if (! this.deviceIsHmIP_DALI) {
+      html += getHTML();
+    } else {
+    // DALI - Create one row for the normal channels and one row for the group channels.
+    var self = this,
+      oDevice = DeviceList.getDeviceByAddress(this.chAddress.split(":")[0]),
+      lastUsedDaliChn = false,
+      maxCap;
+
+      var chnInUse = [];
+
+      jQuery.each(oDevice.channels, function(index, chn) {
+
+        if (chn.channelType == "UNIVERSAL_LIGHT_RECEIVER") {
+          if (index < 33) {
+            if (! lastUsedDaliChn) {
+              maxCap = parseInt(homematic("Interface.getMetadata", {"objectId": chn.id, "dataId": "maxCap"}));
+            }
+            if ((!isNaN(maxCap)) && (maxCap < 5)) {
+              chnInUse.push(index);
+            } else {
+              lastUsedDaliChn = true;
+            }
+          }
+        }
+      });
+
+      html += getHTML(chnInUse);
+      // DALI group channels
+      chnInUse = [];
+      for (var i = 33; i <= 48; i++) {
+        chnInUse.push(i);
+      }
+      html += getHTML(chnInUse);
+    }
     return html;
   },
 
   getDialogHtml: function() {
     var self = this,
-    html = "";
+      newTR = false,
+      html = "";
 
     var valCheckBox,
     tmpVal;
@@ -38353,12 +41589,21 @@ iseHmIPWeeklyProgram.prototype = {
           } else {
             html += "<label for='wpChannelSel_" + self.id + "'>" + (index + 1) + "</label>";
           }
+
+          if (newTR == false) {
+            if ((self.deviceIsHmIP_DALI) && (self.relevantChn[(index + 1)] - 32 > 0)) {
+              html += "</td>";
+              html += "</tr>";
+              html += "<tr><td>"+translateKey('btnSettingsGroups')+"</td><td>";
+              newTR = true;
+            }
+          }
         });
+
         html += "</td>";
         html += "</tr>";
 
     html += "</table>";
-
     return html;
   },
 
@@ -38378,6 +41623,7 @@ iseHmIPWeeklyProgram.prototype = {
     AccessTransceiverID = "ACCESS_TRANSCEIVER", // HmIP-FWI (Wiegand Iface)
     DoorLockTransmitterID = "DOOR_LOCK_STATE_TRANSMITTER", // HmIP-DLD
     OpticalSignalID = "OPTICAL_SIGNAL_RECEIVER", // HmIPW-WRC6
+    UniversalLightReceiver = "UNIVERSAL_LIGHT_RECEIVER", // HmIP-RGBW
     expertChn;
 
     jQuery.each(this.device.channels, function(index,chn) {
@@ -38387,6 +41633,7 @@ iseHmIPWeeklyProgram.prototype = {
         || (chn.channelType.indexOf(AccessTransceiverID) !== -1)
         || (chn.channelType.indexOf(DoorLockTransmitterID) !== -1)
         || (chn.channelType.indexOf(OpticalSignalID) !== -1)
+        || (chn.channelType.indexOf(UniversalLightReceiver) !== -1)
       ) {
         if (self.expert) {
           result.push(index);
@@ -38423,9 +41670,11 @@ iseHmIPWeeklyProgram.prototype = {
         channelType == "ACCESS_RECEIVER"
         || channelType == "ACCESS_TRANSCEIVER"
         || channelType == "DOOR_LOCK_STATE_TRANSMITTER"
-        || channelType == "OPTICAL_SIGNAL_RECEIVER") {
-        return channelNr;
-      }
+        || channelType == "OPTICAL_SIGNAL_RECEIVER"
+        || channelType == "UNIVERSAL_LIGHT_RECEIVER")
+        {
+          return channelNr;
+        }
 
     return result;
   },
@@ -38474,7 +41723,6 @@ iseHmIPWeeklyProgram.prototype = {
     var arMode = ["MANU_MODE", "AUTO_MODE_WITH_RESET", "AUTO_MODE_WITHOUT_RESET"];
     return "WPTCLS="+this.selectedCh+",WPTCL="+arMode.indexOf(this.modeElm.val());
   }
-
 };
 /**
  * Created by grobelnik on 04.12.2020.
@@ -39194,7 +42442,401 @@ iseHmIPWiegandIface.prototype = {
     return result;
 
   }
-};/**
+};iseUniversalLightReceiver = Class.create();
+iseUniversalLightReceiver.prototype = {
+
+  initialize: function(chnId, opts) {
+    conInfo("opts", opts);
+    var self = this;
+    this.oDimmerElm = opts.oDimmerSlider;
+    this.colorPicker;
+    selectedColor = "not set";
+    this.chnId = chnId;
+    this.iface = opts.iface;
+    this.chAddress = opts.chAddress;
+    this.HUE = opts.hue;
+    this.SATURATION = opts.saturation;
+    this.LEVEL = opts.level;
+    this.EFFECT = opts.effect;
+    this.DURATION_VALUE = 31;
+    this.DURATION_UNIT = 2; // hour
+
+    this.colorPickerInit = {
+      hue : parseInt(opts.hue),
+      saturation : parseInt((opts.saturation*100)),
+      level : parseInt((opts.level * 100) )
+    };
+
+    this.percLevelElm = jQuery("#"+this.chnId+"Perc");
+
+    this.hueElm = jQuery("#hueElmId_"+ chnId);
+    this.satElm = jQuery("#satElmId_"+ chnId);
+    this.bckGndlm = jQuery("#bckGndlmId_"+ chnId);
+    //this.btnOkElm = jQuery("#btnOkElmId_"+ chnId);
+    this.setKeyHandler();
+    this.getColorPicker();
+  },
+
+  setKeyHandler: function() {
+    var self = this;
+
+    this.hueElm.keyup(function(event) {
+      var val;
+      if (event.keyCode == 13) {
+        val = parseInt(jQuery(this).val());
+        if (val < 0 || isNaN(val)) {self.HUE = 0;} else if (val > 360) {self.HUE = 360;} else {self.HUE = val;};
+        jQuery(this).val(self.HUE);
+        self.saveColor();
+      }
+    });
+
+    this.hueElm.blur(function(event) {
+      var val;
+        val = parseInt(jQuery(this).val());
+        if (val < 0 || isNaN(val)) {self.HUE = 0;} else if (val > 360) {self.HUE = 360;} else {self.HUE = val;};
+        jQuery(this).val(self.HUE);
+        self.saveColor();
+    });
+
+    this.satElm.keyup(function(event) {
+      var val;
+      if (event.keyCode == 13) {
+        val = (parseInt(jQuery(this).val()) / 100);
+        if (val < 0 || isNaN(val)) {self.SATURATION = 0;} else if (val > 1) {self.SATURATION = 1;} else {self.SATURATION = val;};
+        jQuery(this).val(parseInt((self.SATURATION * 100)));
+        self.saveColor();
+      }
+    });
+
+    this.satElm.blur(function(event) {
+      var val;
+      val = (parseInt(jQuery(this).val()) / 100);
+      if (val < 0 || isNaN(val)) {self.SATURATION = 0;} else if (val > 1) {self.SATURATION = 1;} else {self.SATURATION = val;};
+      jQuery(this).val(parseInt((self.SATURATION * 100)));
+      self.saveColor();
+    });
+
+  },
+
+  onPercChange: function() {
+    conInfo("***** onPercChange *****");
+  },
+
+  onHandleClick: function() {
+    this.LEVEL = (parseInt(this.percLevelElm.val()) / 100);
+    //this.saveColor();
+    //this.btnOkElm.click();
+  },
+
+  getColorPicker: function() {
+    var self = this;
+    this.hueElm.val(this.colorPickerInit.hue);
+    this.satElm.val(this.colorPickerInit.saturation);
+
+    this.oDimmerElm.percChange = this.onPercChange.bindAsEventListener(this);
+    Event.observe($(this.chnId + "Perc"), 'change', this.oDimmerElm.percChange);
+
+    this.oDimmerElm.handleClick = this.onHandleClick.bindAsEventListener(this);
+    Event.observe($("slidCtrl" + this.chnId), 'mouseup', this.oDimmerElm.handleClick);
+
+    this.colorPicker = new iro.ColorPicker("#colorPicker_" + this.chnId, {
+      // Set the size of the color picker
+      width: 90,
+      color: {h: self.colorPickerInit.hue, s: self.colorPickerInit.saturation, v: self.colorPickerInit.level},
+      wheelLightness: false, // If set to false, the color wheel will not fade to black when the lightness decreases.
+      layout: [{component: iro.ui.Wheel}], // don't show the V slider below the wheel - this value comes from the dimmer slider
+      handleRadius: 4
+      }
+    );
+
+    this.colorPicker.on("mount", function(color) {
+      //var rgbVal = hsvToRgb(self.colorPickerInit.hue, self.colorPickerInit.saturation, self.colorPickerInit.level);
+      var rgbVal = hsvToRgb(self.colorPickerInit.hue, self.colorPickerInit.saturation, 100);
+      self.bckGndlm.css("background-color", "rgb("+rgbVal.r+","+rgbVal.g+","+rgbVal.b+")");
+    });
+
+    this.colorPicker.on("input:end", function(color) {
+      var hsv_H = color.hsv.h,
+        hsv_S,
+        hsv_S_Percent = parseInt(color.hsv.s),
+        rgbVal;
+
+      hsv_S = (parseInt(color.hsv.s) / 100);
+
+      self.hueElm.val(hsv_H);
+      self.HUE = hsv_H;
+
+      self.satElm.val(hsv_S_Percent);
+      self.SATURATION = hsv_S;
+
+      rgbVal = hsvToRgb(color.hsv.h, color.hsv.s, 100);
+      self.bckGndlm.css("background-color", "rgb("+rgbVal.r+","+rgbVal.g+","+rgbVal.b+")");
+
+      self.saveColor();
+    });
+
+    /*
+    this.btnOkElm.click(function() {
+      self.saveColor();
+    });
+    */
+  },
+
+  saveColor: function() {
+    var self = this;
+    conInfo(
+      "saveColor - HUE: " + self.HUE +
+      " - SAT: " + self.SATURATION +
+      " - LEVEL: " + this.LEVEL
+    );
+
+    homematic("Interface.putParamset", {
+      'interface': self.iface,
+      'address': self.chAddress,
+      'paramsetKey': 'VALUES',
+      'set':
+        [
+          {name: 'LEVEL', type: 'double', value: self.LEVEL},
+          {name: 'HUE', type: 'int', value: self.HUE},
+          {name: 'SATURATION', type: 'double', value: self.SATURATION},
+          {name: 'DURATION_VALUE', type: 'int', value: self.DURATION_VALUE},
+          {name: 'DURATION_UNIT', type: 'int', value: self.DURATION_UNIT}
+
+        ]
+    }, function (result) {
+      conInfo("saveColor: ",result);
+    });
+  }
+};
+
+function setULREffectToolTips (chnId) {
+  jQuery("#ulrEffect_0_"+chnId).powerTip({placement: "ne"}).data("powertip", "Effekt <b>Beenden</b>");
+  for (var loop = 1; loop <= 10; loop++) {
+    jQuery("#ulrEffect_"+loop+"_"+chnId).powerTip({placement: "ne"}).data("powertip", "Effekt Nr: <b>"+loop+"</b>");
+  }
+}
+
+function setURLEffectBtnActive (chnId, devAddress) {
+  // 01_EFFECT_01_COLOR_HUE_SATURATION_COLOR_TEMPERATURE_TYPE
+  var paramSet = homematic("Interface.getParamset", {"interface": "HmIP-RF", "address" : devAddress, "paramsetKey" :"MASTER"}),
+    effect, subEffect, btnEffect,
+    effectActive = false, cntSubEffect;
+
+  for (var effect = 1; effect <= 10; effect++) {
+    btnEffect =  jQuery("#ulrEffect_" + effect + "_" + chnId);
+    cntSubEffect = 0;
+
+    for (var subEffect = 1; subEffect <= 8; subEffect++) {
+      if (parseInt(paramSet[addLeadingZero(effect) + "_EFFECT_" + addLeadingZero(subEffect) + "_COLOR_HUE_SATURATION_COLOR_TEMPERATURE_TYPE"]) == 0) {
+        cntSubEffect++;
+      }
+    }
+    if (cntSubEffect == 8) { // No subEffect active
+      btnEffect.css("color", "grey");
+      btnEffect.removeAttr("onclick");
+      btnEffect.click(function() {
+        alert(translateKey("lblEffectNotActive"));
+      });
+    }
+  }
+}
+
+
+// Not in use - the effect name will be set by ReGa
+function setULREffectName (chnId, devId) {
+  var effectName, effectNo;
+  for (effectNo = 1; effectNo <= 10; effectNo++) {
+    effectName =  homematic("Interface.getMetadata", {"objectId": devId, "dataId": "effectName_" + effectNo});
+    if ((effectName == "") || (effectName == "null")) {effectName = translateKey("lblEffect") + " " + effectNo;}
+    jQuery("#ulrEffect_"+effectNo+"_"+chnId).text(effectName);
+  }
+}
+
+// This determines if the old status will be restored after the effect has come to its end.
+// true = Restore the old status - false = the light will be switched off.
+function setULReffectMode(chkBox, chnId) {
+  var mode = (jQuery(chkBox).is(":checked")) ? true : false;
+  homematic("Interface.setMetadata", {"objectId": chnId, "dataId": "effectMode", "value": mode});
+}
+
+function setULREffect (elm, effectNr, chnAddress) {
+  var effectLevel,
+  chnId = elm.id.split("_")[2],
+  saveOldStatus = homematic("Interface.getMetadata", {"objectId": chnId, "dataId": "effectMode"});
+
+  // saveOldStatus 'true' will determine if the old status will be restored. Otherwise the light will be switched off.
+  if (saveOldStatus == "true") {effectNr++;}
+
+  // When effect active, then the next click on the button will switch the effect off
+  // Off = The effect no. + 1
+  if (jQuery(elm).hasClass("ControlBtnOn")) {
+    jQuery(elm).switchClass('ControlBtnOn', 'ControlBtnOff', 0);
+    effectLevel = 0.0;
+  } else {
+    jQuery(elm).switchClass('ControlBtnOff', 'ControlBtnOn', 0);
+    effectLevel = 1.0;
+  }
+
+  homematic("Interface.putParamset", {
+    'interface': "HmIP-RF",
+    'address': chnAddress,
+    'paramsetKey': 'VALUES',
+    'set':
+      [
+        {name: 'LEVEL', type: 'double', value: effectLevel},
+        {name: 'EFFECT', type: 'int', value: effectNr}
+      ]
+  }, function (result) {
+    conInfo("setULREffect: ",result);
+  });
+}
+
+
+iseHmIPUniversalLightRGBWSlider = Class.create();
+iseHmIPUniversalLightRGBWSlider.prototype = {
+
+
+  initialize: function (chnId, opts) {
+    var self = this;
+    conInfo("opts", opts);
+
+    this.iface = opts.iface;
+    this.chAddress = opts.chAddress;
+    this.chnId = chnId;
+
+
+    this.colorTempID = opts.colorTempID;
+    this.colorTempMin = opts.colorTempMin;
+    this.colorTempMax = opts.colorTempMax;
+    this.colorTemp = parseInt(opts.colorTemp);
+    this.colorTempUnknown = (this.colorTemp < this.colorTempMin) ? true : false;
+
+    this.valHCLVal = 10200;
+    this.valDim2WarmVal = 10150;
+
+    this.valHCL =  (opts.hcl == 'true') ? true : false;
+    this.valDim2Warm = (opts.dim2Warm == 'true') ? true : false;
+
+    this.hideSliderPanel = (this.valHCL || this.valDim2Warm) ? true : false;
+
+    this.colorTemp = (this.colorTemp < this.colorTempMin) ? this.colorTempMin : this.colorTemp;
+
+    this.devIsDali = (opts.devLabel == "HmIP-DRG-DALI") ? true : false;
+
+    window.setTimeout(function() {
+      self.btnColorTemp = jQuery("#btnColorTemp" + self.chnId);
+      self.trBtnColorTemp = jQuery("#trBtnColorTemp" + self.chnId);
+      self.btnHCL = jQuery("#btnHCL" + self.chnId);
+      self.btnDim2Warm = jQuery("#btnDim2Warm" + self.chnId);
+      self.sliderPanel = jQuery("#sliderPanel" + self.chnId);
+      self.trSliderPanel = jQuery("#trSliderPanel" + self.chnId);
+      self.sliderInfoElm = jQuery("#infoSliderPos" + self.chnId);
+      self.sliderElm = opts.oSlider;
+
+      self.initButtons();
+      self.initSlider();
+    },20);
+  },
+
+  showHideSliderPanel: function () {
+    if (this.hideSliderPanel) {
+      this.trSliderPanel.hide();
+      this.trBtnColorTemp.show();
+    } else {
+      this.trBtnColorTemp.hide();
+      this.trSliderPanel.show();
+    }
+  },
+
+  initButtons: function() {
+    var self = this;
+
+    if (self.valHCL) {
+      self.setElmColorActive("hcl");
+    } else if (self.valDim2Warm) {
+      self.setElmColorActive("dim2Warm");
+    } else {
+      self.setElmColorActive("sliderPanel");
+    }
+    self.showHideSliderPanel();
+
+    this.btnColorTemp.click(function() {
+      self.hideSliderPanel = false;
+      setDpState(self.colorTempID,self.colorTemp);
+      self.sliderElm.slider('value', self.colorTemp);
+      self.sliderInfoElm.val(self.colorTemp);
+      self.setElmColorActive("sliderPanel");
+      self.showHideSliderPanel();
+    });
+
+    this.btnHCL.click(function() {
+      self.hideSliderPanel = true;
+      setDpState(self.colorTempID,self.valHCLVal);
+      self.setElmColorActive("hcl");
+      self.showHideSliderPanel();
+    });
+
+    this.btnDim2Warm.click(function() {
+      self.hideSliderPanel = true;
+      setDpState(self.colorTempID,self.valDim2WarmVal);
+      self.setElmColorActive("dim2Warm");
+      self.showHideSliderPanel();
+    });
+  },
+
+  setElmColorActive: function (activeElm) {
+    jQuery(this.btnHCL).removeClass("ControlBtnOn").addClass("ControlBtnOff");
+    jQuery(this.btnDim2Warm).removeClass("ControlBtnOn").addClass("ControlBtnOff");
+    jQuery(this.sliderPanel).removeClass("ControlBtnOn").addClass("ControlBtnOff");
+
+    switch (activeElm) {
+      case "hcl" :
+        this.btnHCL.addClass("ControlBtnOn");
+        break;
+      case "dim2Warm" :
+        this.btnDim2Warm.addClass("ControlBtnOn");
+        break;
+      case "sliderPanel" :
+        this.sliderPanel.addClass("ControlBtnOn");
+        break;
+    }
+  },
+
+  initSlider: function () {
+
+    if (this.colorTemp == "-1") {this.colorTemp = this.colorTempMin;}
+    var self = this;
+
+    if (! self.devIsDali) {
+      this.sliderInfoElm.val(this.colorTemp);
+    } else  {
+      if (this.colorTempUnknown) {
+        this.sliderInfoElm.val("--");
+      } else {
+        this.sliderInfoElm.val(this.colorTemp);
+      }
+    }
+    this.sliderElm.on("slide", function (event, ui) {
+      self.onSliderChange(ui.value);
+    });
+
+    this.sliderElm.on("slidestop", function(event, ui){
+      self.onSliderStop(ui.value);
+    });
+  },
+
+  onSliderChange: function (val) {
+    this.sliderInfoElm.val(val);
+    this.colorTemp = val;
+  },
+
+  onSliderStop: function(val) {
+    this.setElmColorActive("sliderPanel");
+    setDpState(this.colorTempID,this.colorTemp);
+  }
+
+};
+/**
  * ic_gd.js
  **/
 
@@ -39520,6 +43162,12 @@ AddParam = function(elem)
           poststr += "&SEQUENCE_PULSE_4=0" ; 
           poststr += "&SEQUENCE_PULSE_5=0" ;
           poststr += "&SEQUENCE_TOLERANCE=0.496" ; 
+        }
+        else if (elem.value == "99999990" )
+        {
+          var freeVal = document.getElementById("val_" + prefix[elem.name + type]);
+          free_options = freeVal.value;
+          poststr += elem.name + "=" + parseFloat(free_options);
         }
       
         //else   poststr += elem.name + "=" + elem.value;
@@ -40093,7 +43741,7 @@ set_value = function(input_id, id, type)
 
 RemoveLink = function(iface, sender_address, receiver_address, sender_type, redirect_url)
 {
-  var questionRemoveLink = ((iface == "HmIP-RF") && (sender_type != "HmIP-SMI55") && (sender_address.split(":")[0] == receiver_address.split(":")[0])) ? translateKey('dialogQuestionRemoveInternalLink') : translateKey('dialogQuestionRemoveLink');
+  var questionRemoveLink = ((iface == "HmIP-RF") && (sender_type != "HmIP-SMI55") && (sender_type != "HmIP-SMI55-A") && (sender_address.split(":")[0] == receiver_address.split(":")[0])) ? translateKey('dialogQuestionRemoveInternalLink') : translateKey('dialogQuestionRemoveLink');
 
   new YesNoDialog(translateKey('dialogSafetyCheck'), questionRemoveLink, function(result) {
     if (result == YesNoDialog.RESULT_YES)
@@ -40422,8 +44070,8 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor, event)
       max = parseInt(max);
       value = (roundValue05(parseInt(value)));
     } else {
-      min = parseFloat(min).toFixed(1);
-      max = parseFloat(max).toFixed(1);
+      min = parseFloat(min).toFixed(2);
+      max = parseFloat(max).toFixed(2);
       value = parseFloat(value);
       srcElm.value = parseFloat(value);
     }
@@ -41504,7 +45152,18 @@ SortTable = function(tableid, colNr)
     valueMap[value].push(tr_list[i]); //Liste gleicher values nimmt Zeile auf
   }
 
-  valueList.sort(compareStrings_globalsettings); //Liste sortieren
+  // ColNr 4 = Sort by serial number
+  if (colNr == 4) {
+      valueList.sort(function (a, b) {
+        var ar1 = a.split(":"),
+          ar2 = b.split(":");
+        if (ar1[0] == ar2[0]) {
+          return (!SORT_DESC) ? (parseInt(ar1[1]) - parseInt(ar2[1])) : (parseInt(ar2[1]) - parseInt(ar1[1]));
+        }
+      });
+  } else {
+    valueList.sort(compareStrings_globalsettings); //Sort list
+  }
 
   var rowList;
   var headerlen = tr_list[0].rowIndex;
@@ -41845,7 +45504,16 @@ SizeTable = function()
 AddLink = function(iface, sender_address, sender_group, receiver_address, name, description, group_name, group_description, redirect_url)
 {
   ResetPostString();
-  
+
+  var dev = DeviceList.getDeviceByAddress(receiver_address.split(":")[0]),
+    specialVal = "";
+
+  if (dev.deviceType.id == "HmIP-RGBW") {
+    // Determine the device mode (RGBW, RGB, TW or PWM)
+    var maintenanceChannel = DeviceList.getChannelByAddress(receiver_address.split(":")[0] + ":0");
+    specialVal = homematic("Interface.getMetadata", {"objectId": maintenanceChannel.id, "dataId": "deviceMode"});
+  }
+
   AddParam($('global_sid'));
 
   poststr += "&redirect_url="       +redirect_url;
@@ -41857,6 +45525,8 @@ AddLink = function(iface, sender_address, sender_group, receiver_address, name, 
   poststr += "&description="        +description;
   poststr += "&group_name="         +encodeURIComponent(group_name);
   poststr += "&group_description="  +group_description;
+  poststr += "&actorDeviceTypeId="  +dev.deviceType.id;
+  poststr += "&specialVal="  +specialVal;
   poststr += "&cmd=addLink";
 
   //ProgressBar = new ProgressBarMsgBox("Verknüpfung wird erstellt...", 1);
@@ -42062,6 +45732,33 @@ ShowEasyMode = function (selectelem, iface) {
   var receiver = $('dev_descr_receiver_tmp').value.split("-")[0];
 
   var _iface = (typeof iface == "undefined") ? "" : iface;
+
+  // Special treatment for the UNIVERSAL_LIGHT_RECEIVER, when in TW MODE (SPHM-954)
+  if (receiver == "UNIVERSAL_LIGHT_RECEIVER_TW") {
+    var defaultProfile = parseInt(jQuery(selectelem).attr('class')),
+      choosenProfile = parseInt(jQuery(selectelem).val()),
+      defaultISchoosen = (defaultProfile == choosenProfile) ? true : false,
+      profileISColorTemperature = (choosenProfile >= 4 && choosenProfile <= 6) ? true : false;
+
+    if (!defaultISchoosen && profileISColorTemperature) {
+      var chnDescription = homematic("Interface.getParamset", {"interface":"HmIP-RF", "address": jQuery("#global_receiver_address").val(), "paramsetKey": "MASTER"});
+      var sliderTempMin = parseInt(chnDescription.HARDWARE_COLOR_TEMPERATURE_WARM_WHITE),
+      sliderTempMax = parseInt(chnDescription.HARDWARE_COLOR_TEMPERATURE_COLD_WHITE);
+
+      switch (choosenProfile) {
+        case 4:
+          jQuery("#separate_receiver_"+choosenProfile+"_5").val(sliderTempMax).blur();
+          break;
+        case 5:
+          jQuery("#separate_receiver_"+choosenProfile+"_3").val(sliderTempMin).blur();
+          break;
+        case 6:
+          jQuery("#separate_receiver_"+choosenProfile+"_5").val(sliderTempMax).blur();
+          jQuery("#separate_receiver_"+choosenProfile+"_9").val(sliderTempMin).blur();
+          break;
+      }
+    }
+  }
 
   // Senderseitiges Speichern der Profilevorlage verhindern, Funktion wird noch nicht unterstuetzt
   document.getElementById("NewProfileTemplate_sender").onclick = new Function("alert(unescape(localized[0]['no_userProfile']))");
@@ -42897,6 +46594,32 @@ SetParameters = function(iface, address, special_input_id)
       }
     }
 
+    // After setting the config parameters of a dali device, we have to store the UNIVERSAL_LIGHT_MAX_CAPABILITIES of each group channel as mata data.
+   // Otherwise ReGa can't determne the correct value on the page Status/Control, especially when changing a group.
+    var channel = DeviceList.getChannelByAddress(address);
+    if ((typeof channel !== "undefined") && (channel.typeName == "HmIP-DRG-DALI") && (typeof MetaDaliGroupHasBeenSet == "undefined")) {
+      // After 5 seconds we can determine the new UNIVERSAL_LIGHT_MAX_CAPABILITIES of the DALI group channels and store them as meta data
+      window.setTimeout(function() {
+        var devAddress = channel.device.address,
+        grpChannel;
+
+        for (var loop = 33; loop <= 48; loop++) {
+         var maxCap = homematic("Interface.getMasterValue", {
+           "interface": "HmIP-RF",
+           "address": devAddress + ":" + loop,
+           "valueKey": "UNIVERSAL_LIGHT_MAX_CAPABILITIES"
+         });
+         grpChannel = DeviceList.getChannelByAddress(devAddress + ":" + loop);
+         homematic("Interface.setMetadata", {"objectId": grpChannel.id , "dataId" : "maxCap", "value": maxCap});
+         DeviceList.channels[grpChannel.id].daliMaxCapabilities = maxCap;
+        }
+        window.setTimeout(function() {delete MetaDaliGroupHasBeenSet;},5000);
+      },5000);
+      MetaDaliGroupHasBeenSet = true;
+    }
+
+
+
     if ((special_input_id == "TIMEOUTMANAGER") && (typeof tom == "object") && (tom.iface == iface) && (tom.address == address) && (tom.tom_isDirty()))
     {
       poststr += tom.tom_getPostStr();
@@ -42936,7 +46659,6 @@ SetParameters = function(iface, address, special_input_id)
       tomIsSet = true;
     }
 
-    // ToDo - check if necessary
     if(!tomIsSet) {
       AddSeparateSettings('separate_' + special_input_id, '');
     }
@@ -42959,6 +46681,18 @@ SetParameters = function(iface, address, special_input_id)
     if (channel) { device = channel.device; }
   }
   */
+
+  // This prevents an non-existing string for MAIN_/SUB_TEXT for e. g.  the HmIPW-WGD(-PL)
+  if ((typeof channel !== "undefined") && ((channel.channelType == "DISPLAY_INPUT_TRANSMITTER") || (channel.channelType == "DISPLAY_THERMOSTAT_INPUT_TRANSMITTER") || (channel.channelType == "ENERGIE_METER_TRANSMITTER"))) {
+    arPostStr = poststr.split("&");
+    jQuery.each(arPostStr, function (index, val) {
+      if (val == "MAIN_TEXT=" || val == "SUB_TEXT=" || val == "METER_OBIS_SEARCH_STRING=") {
+        // %24 = $
+        poststr = poststr.replace(val, val + "%24%24%24%24%24");
+      }
+    });
+  }
+
   SendRequest('ic_ifacecmd.cgi', null, function() {
     if (device)
     {
@@ -43948,18 +47682,6 @@ showNewFirmwareDownload = function() {
   CreateCPPopup("/config/cp_maintenance.cgi", "downloadOnly=1");
 };
 
-showCCUAP = function(arDrap2Update) {
-  var drapSGtin = "";
-  jQuery.each(arDrap2Update, function(index, data) {
-    drapSGtin += data.address + ",";
-  });
-  CreateCPPopup("/pages/jpages/hmip/AccessPoint/show", "draps="+drapSGtin.slice(0,-1) );
-};
-
-showAccessPoint = function() {
-  CreateCPPopup("/pages/jpages/hmip/AccessPoint/show");
-};
-
 CreateCPPopup = function(src, pb) {
   dlgPopup = new cpMessageBox(src, pb);
 
@@ -44440,6 +48162,115 @@ _encodeString = function(elem)
   $(elem).value = outString;
 };
 
+
+
+ActivateFreeValue = function(selectelem, pref, internalKey)
+{
+  var pnr = selectelem.options[selectelem.selectedIndex].value; //1
+  var upnr = pnr.split(".")[1];
+  var intkey = selectelem.id.split("_")[0].slice(8);
+  var val2d, val_tmp, exists_valarr, free_val;
+
+
+  //2
+  if (isNaN(upnr) == true) {
+    // var special_input_id = selectelem.id.split("_")[0]; //3
+    var arrSpecialInputId = selectelem.id.split("_");
+    var special_input_id = arrSpecialInputId[0];
+
+    if (internalKey) {
+      special_input_id = getInternalKeySpecialInputId(arrSpecialInputId);
+    }
+
+    var selectedvalue = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).value; //4
+    var parameter = document.getElementById("separate_" + special_input_id + "_" + pnr + "_" + pref).name; //5
+    var val = document.getElementById("vis_val_" + pnr + "_" + pref + "_" + special_input_id);
+    var x_max = selectelem.length + 1;
+    //6
+    if (pnr > x_max) {x_max = parseInt(pnr) + 1;}
+    var y_max = 15;
+
+    //7
+    if (exists_valarr != "ok" || val_tmp != x_max)
+    {
+      //8
+      val2d = [];
+      for (i = 0; i < x_max; ++i)
+        val2d[i] = [];
+      exists_valarr = "ok";
+      val_tmp = x_max; //9
+    }
+    val2d[pnr][pref] = 0;
+
+    prefix[parameter + special_input_id] = pnr + "_" + pref + "_" + special_input_id;
+
+    if (selectedvalue == "99999990" )
+    {
+      if (intkey == "" && !internalKey) {
+        document.getElementById("NewProfileTemplate_receiver").style.visibility = "hidden";
+        document.getElementById(special_input_id +  "_profiles").options[selectelem.selectedIndex].style.color = "gray";
+        if (CheckGroup()) document.getElementById("NewProfileTemplate_receivergroup").style.visibility = "hidden";
+      }
+      val2d[pnr][pref] = 1; //10
+      val.style.display = "inline";
+
+    } else {
+      if (free_time != 1 && free_val != 1 && free_temp != 1) {
+        if (intkey == "" && !internalKey) {
+          document.getElementById("NewProfileTemplate_receiver").style.visibility = "visible";
+          if (CheckGroup()) document.getElementById("NewProfileTemplate_receivergroup").style.visibility = "visible";
+        }
+      } else  document.getElementById(special_input_id + "_profiles").options[selectelem.selectedIndex].style.color = TextColor(_textcolor);
+
+      val2d[pnr][pref] = 0; //11
+      val.style.display = "none";
+    }
+
+    free_val = 0; //12
+    for (var loopx = 0; loopx < x_max; loopx++){
+      for (var loopy = 0; loopy < y_max; loopy++){
+        if (val2d[loopx][loopy] == 1) {free_val = 1; break;}
+      }
+    }
+    for (loopy = 0; loopy <= y_max; loopy++) {
+      if (val2d[pnr][loopy] == 1)   {perc_textcolor = 1; break;}
+      else perc_textcolor = 0;
+    }
+
+    if (time_textcolor == 0 && perc_textcolor == 0 && temp_textcolor == 0) _textcolor = 0;
+    else _textcolor = 1;
+    document.getElementById(special_input_id + "_profiles").options[selectelem.selectedIndex].style.color = TextColor(_textcolor);
+
+    if (free_time == 0 && free_val == 0 && free_temp == 0) {
+      if (intkey == "" && !internalKey) {
+        document.getElementById("NewProfileTemplate_receiver").style.visibility = "visible";
+        if (CheckGroup()) document.getElementById("NewProfileTemplate_receivergroup").style.visibility = "visible";
+      }
+    }
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ActivateFreePercent4InternalKey = function(selectelem, pref)
 {
   ActivateFreePercent(selectelem, pref, true);   
@@ -44868,6 +48699,7 @@ MD_init = function(id, min, max)
   if (ausdr_int.test(input.value)) {var wert_int = ausdr_int.exec(input.value); wert_int = wert_int[0];}
   var wert     = min;
   var channel = id.split("_")[2];
+  var txtIndex = (parseInt(id.split("_")[3]) + 1);
 
   if (! wert_int) {wert = min;} //1 
   if (! isNaN(wert_int)) {wert = wert_int;}
@@ -44879,7 +48711,7 @@ MD_init = function(id, min, max)
 
   if (input.name == "EVENT_FILTER_NUMBER")
   {
-    var efn = document.getElementsByClassName('event_filter_number');
+    var efn = document.getElementsByClassName('event_filter_number_' + channel);
     if (wert == 1) 
     {
       //input.options[0].text = "jedem";
@@ -44888,7 +48720,7 @@ MD_init = function(id, min, max)
       efn[0].firstChild.data = translateKey("motionDetectorEventFilterNumberB");
       efn[1].firstChild.data = " ";
 
-      $('separate_CHANNEL_' + channel + '_2').style.display = "none";
+      $('separate_CHANNEL_' + channel + '_' + txtIndex).style.display = "none";
     } else
     {
       input.options[0].text = "1";
@@ -44896,13 +48728,14 @@ MD_init = function(id, min, max)
       efn[0].firstChild.data = translateKey("motionDetectorEventFilterNumberC");
       //efn[1].firstChild.data = " Sekunden";
       efn[1].firstChild.data = translateKey("motionDetectorEventFilterNumberD");
-      $('separate_CHANNEL_' + channel + '_2').style.display = "inline";
+      $('separate_CHANNEL_' + channel + '_'+ txtIndex).style.display = "inline";
     }
   }
 
   if (input.name == "BRIGHTNESS_FILTER")
   {
-    var brightness = document.getElementsByClassName('brightness')[0];
+   // var brightness = document.getElementsByClassName('brightness')[0];
+    var brightness = document.getElementsByClassName('brightness_' + channel)[0];
     //if (wert == 0)   brightness.firstChild.data = "der zuletzt ermittelte Wert";
     if (wert == 0)   brightness.firstChild.data = translateKey("motionDetectorMinumumOfLastValuesB0");
     //else brightness.firstChild.data = "das Minimum der letzten " + (parseInt(input.value) + 1) + " Werte";
@@ -45544,22 +49377,40 @@ HMW_WebUIsetChannel = function(id, ch_type)
 
 showHintPrgLink = function(channel, prgExists) {
   var channel = parseInt(channel),
+  classMultiMode = jQuery(".j_multiMode_" + channel)[0],
   tableElm = jQuery(".ProfileTbl tbody").parent().parent()[channel],
-  elm = jQuery("#separate_CHANNEL_" + channel + "_1");
+  elm = jQuery(".j_multiMode_" + channel). find("[name='CHANNEL_OPERATION_MODE']")[0];
 
   jQuery(elm).prop("disabled", true);
-  if (prgExists) {
-    jQuery(tableElm).append("<div class=\"attention\" style='padding: 2px;'>"+translateKey("hintPrgExists")+"</div>");
+
+  if (typeof classMultiMode == "object") {
+    if (prgExists) {
+      jQuery(classMultiMode).after("<div class=\"attention\" style='padding: 2px;'>" + translateKey("hintPrgExists") + "</div>");
+    } else {
+      arChnHasLinks[channel] = true;
+      jQuery(classMultiMode).after("<div class=\"attention\" style='padding: 2px;'>" + translateKey("hintLinkExists") + "</div>");
+    }
   } else {
-    arChnHasLinks[channel] = true;
-    jQuery(tableElm).append("<div class=\"attention\" style='padding: 2px;'>"+translateKey("hintLinkExists")+"</div>");
+    if (prgExists) {
+      jQuery(tableElm).append("<div class=\"attention\" style='padding: 2px;'>" + translateKey("hintPrgExists") + "</div>");
+    } else {
+      arChnHasLinks[channel] = true;
+      jQuery(tableElm).append("<div class=\"attention\" style='padding: 2px;'>" + translateKey("hintLinkExists") + "</div>");
+    }
   }
 };
 
 showHintInternalLink = function(channel) {
   var channel = parseInt(channel),
-    tableElm = jQuery(".ProfileTbl tbody").parent().parent()[channel];
-    jQuery(tableElm).append("<div class=\"attention\" style='padding: 2px;'>"+translateKey("hintInternalLinkExists")+"</div>");
+    classMultiMode = jQuery(".j_multiMode_" + channel)[0],
+    txtHint = "<div class=\"attention\" style='padding: 2px;'>" + translateKey("hintInternalLinkExists") + "</div>";
+
+  if (typeof classMultiMode == "object") {
+    jQuery(classMultiMode).after(txtHint);
+  } else {
+    var tableElm = jQuery(".ProfileTbl tbody").parent().parent()[channel];
+    jQuery(tableElm).append(txtHint);
+  }
 };
 
 ShowHintIfProgramExists = function(id, ch) {
@@ -45568,7 +49419,7 @@ ShowHintIfProgramExists = function(id, ch) {
       showHintPrgLink(ch, true);
     } else {
       if(arChnHasLinks[parseInt(ch)] != true) {
-        var elm = jQuery("#separate_CHANNEL_" + ch + "_1");
+        var elm = jQuery(".j_multiMode_" + ch). find("[name='CHANNEL_OPERATION_MODE']")[0];
         jQuery(elm).prop("disabled", false);
       }
     }
@@ -45589,7 +49440,7 @@ RF_existsLink = function(deviceType, ch, ch_type, internalLinkOnly) {
 
   switch(ch_type) {
     case "MULTI_MODE_INPUT_TRANSMITTER":
-      arDevMultiModeException = ["HmIP-FSI16", "HmIP-DRDI3"];
+      arDevMultiModeException = ["HmIP-FSI16", "HmIP-DRDI3", "HmIP-BDT-I"];
       if ((arDevMultiModeException.indexOf(deviceType) == -1) || (internalLinkOnly == 0)) {
         showHintPrgLink(ch, false);
       } else {
@@ -46291,7 +50142,218 @@ addHintHeatingGroupDevice = function (address) {
     }
   }
 };
-// language = getLang();//"de";
+
+
+daliRefreshDevices = function(address) {
+  var device = DeviceList.getDeviceByAddress(address);
+
+  MessageBox.show(translateKey('titleSearchDaliDevices'),'' +' <br/><br/><img id="msgBoxBarGraph" src="/ise/img/anim_bargraph.gif"><br/>','','320','60','msgBckID', 'msgBoxBarGraph');
+
+  homematic("Interface.searchDaliDevices", {"interface": "HmIP-RF", "address": address, "valueKey": "DALI_ADDRESS", "type": "string", "value": "refreshDaliDevices"}, function (result) {
+    if (result) {
+      MessageBox.setText(translateKey("lblPleaseWaitAMoment"));
+      MessageBox.centerText();
+
+      // Store the UNIVERSAL_LIGHT_MAX_CAPABILITIES of the DALI channels as meta data
+      window.setTimeout(function() {
+        var devAddress = address,
+          daliChannel;
+
+        for (var loop = 1; loop <= 48; loop++) {
+          var maxCap = homematic("Interface.getMasterValue", {
+            "interface": "HmIP-RF",
+            "address": devAddress + ":" + loop,
+            "valueKey": "UNIVERSAL_LIGHT_MAX_CAPABILITIES"
+          });
+          daliChannel = DeviceList.getChannelByAddress(devAddress + ":" + loop);
+          homematic("Interface.setMetadata", {"objectId": daliChannel.id , "dataId" : "maxCap", "value": maxCap});
+        }
+        MessageBox.close();
+        reloadPage();
+      },500);
+
+    } else {
+      MessageBox.close();
+      alert(translateKey("dialogSettingsSecuritySSHMsgBoxErrorTitle")); // An error occurred
+    }
+  });
+};
+
+powerIdentSensor = function(address) {
+  var counter = 0, maxCount = 45,
+    chnValueDescr = homematic("Interface.getParamset", {"interface":"HmIP-RF", "address": address, "paramsetKey": "VALUES"}),
+    curSelfCalibrationResult = chnValueDescr.SELF_CALIBRATION_RESULT, // the current sensor type
+    device = DeviceList.getDeviceByAddress(address.split(":")[0]),
+    intervalId = setInterval(getSelfCalibrationResult, 1000);
+
+  function getSelfCalibrationResult() {
+    var chnValueDescr = homematic("Interface.getParamset", {"interface":"HmIP-RF", "address": address, "paramsetKey": "VALUES"}),
+      newSelfCalibrationResult = chnValueDescr.SELF_CALIBRATION_RESULT;
+
+    counter++;
+    if (curSelfCalibrationResult != newSelfCalibrationResult) {
+      clearInterval(intervalId);
+      //reloadPage();
+
+      window.setTimeout(function() {
+        DeviceListPage.showConfiguration(false, 'DEVICE', device.id);
+      },1500);
+
+    }
+
+    if (counter > maxCount) {
+      clearInterval(intervalId);
+    }
+
+  };
+
+};
+
+
+_powerIdentSensor = function(address) {
+  // Store current mode
+  var chnDescr = homematic("Interface.getParamset", {"interface":"HmIP-RF", "address": address, "paramsetKey": "MASTER"}),
+    msgBox = "";
+
+
+  if (chnDescr != null) {
+    var curMode = chnDescr.CHANNEL_OPERATION_MODE,
+      counter = 0;
+
+    msgBox =  MessageBox.show(translateKey('btnSensorDetection'), '' + ' <br/><br/><img id="msgBoxBarGraph" src="/ise/img/anim_bargraph.gif"><br/>', '', '320', '60', 'msgBckID', 'msgBoxBarGraph');
+    ShowWaitAnim();
+
+    homematic("Interface.putParamset", {
+      'interface': "HmIP-RF",
+      'address': address,
+      'paramsetKey': 'VALUES',
+      'set':
+        [
+          {name: 'SELF_CALIBRATION', type: 'int', value: 1}
+        ]
+    }, function (result) {
+      if (result) {
+        var intervalId = setInterval(getOperationMode, 1000);
+
+        // A Get OPERATION_MODE
+        function getOperationMode() {
+          ShowWaitAnim();
+          counter++;
+          var chnDescr = homematic("Interface.getParamset", {
+            "interface": "HmIP-RF",
+            "address": address,
+            "paramsetKey": "MASTER"
+          });
+
+          if (chnDescr != null) {
+            if ((chnDescr.CHANNEL_OPERATION_MODE != curMode) || (counter >= 45)) {
+              clearInterval(intervalId);
+              HideWaitAnim();
+              if (msgBox != "") {MessageBox.close();}
+              reloadPage();
+            }
+          } else {
+            HideWaitAnim();
+            if (msgBox != "") {MessageBox.close();}
+            alert(translateKey("hintProblemSensorIdent"));
+          }
+        };
+      } else {
+        HideWaitAnim();
+        if (msgBox != "") {MessageBox.close();}
+        alert(translateKey("hintPressSysKeyTryAgain"));
+      }
+    });
+  //  HideWaitAnimAutomatically(5);
+  //  if (MessageBox) {window.setTimeout(function() {MessageBox.close();},45000);};
+  } else {
+    alert(translateKey("hintProblemSensorIdent"));
+  }
+};
+
+getAndSavePowerIdentSensor = function(address) {
+  // Store current mode
+  var chnDescr = homematic("Interface.getParamset", {"interface":"HmIP-RF", "address": address, "paramsetKey": "MASTER"}),
+    msgBox = "";
+
+
+  if (chnDescr != null) {
+
+    var curMode = chnDescr.CHANNEL_OPERATION_MODE,
+      counter = 0;
+
+    msgBox = MessageBox.show(translateKey('btnSensorDetection'), '' + ' <br/><br/><img id="msgBoxBarGraph" src="/ise/img/anim_bargraph.gif"><br/>', '', '320', '60', 'msgBckID', 'msgBoxBarGraph');
+    ShowWaitAnim();
+
+    homematic("Interface.putParamset", {
+      'interface': "HmIP-RF",
+      'address': address,
+      'paramsetKey': 'VALUES',
+      'set':
+        [
+          {name: 'SELF_CALIBRATION', type: 'int', value: 1}
+        ]
+    }, function (result) {
+      if (result) {
+        var intervalId = setInterval(getOperationMode, 1000),
+          arSensorTypes = ['SENSOR_UNKNOWN', 'SENSOR_ES_GAS', 'SENSOR_ES_LED', 'SENSOR_ES_IEC', 'SENSOR_ES_IEC_SML', 'SENSOR_ES_IEC_SML_WH', 'SENSOR_ES_IEC_D0_A', 'SENSOR_ES_IEC_D0_B', 'SENSOR_ES_IEC_D0_C', 'SENSOR_ES_IEC_D0_D'];
+
+        // A Get OPERATION_MODE
+        function getOperationMode() {
+          ShowWaitAnim();
+          counter++;
+          var chnDescr = homematic("Interface.getParamset", {
+            "interface": "HmIP-RF",
+            "address": address,
+            "paramsetKey": "MASTER"
+          });
+
+          if (chnDescr != null) {
+            if ((chnDescr.CHANNEL_OPERATION_MODE != curMode) || (counter >= 45)) {
+              clearInterval(intervalId);
+
+              var device = DeviceList.getDeviceByAddress(address.split(':')[0]);
+              var paramSet = homematic('Interface.getParamset', {
+                'interface': "HmIP-RF",
+                'address': address,
+                'paramsetKey': 'MASTER'
+              });
+
+              jQuery.each(device.channels, function (index, channel) {
+                if (channel.channelType != 'MAINTENANCE') {
+                  homematic('Interface.setMetadata', {
+                    'objectId': channel.id,
+                    'dataId': 'sensor',
+                    'value': arSensorTypes[parseInt(paramSet.CHANNEL_OPERATION_MODE)]
+                  }, function (result) {
+                    if (channel.index == (device.channels.length - 1)) {
+                      reloadPage();
+                    }
+                  });
+                }
+              });
+              HideWaitAnim();
+              if (msgBox != "") {MessageBox.close();}
+              reloadPage();
+            }
+          } else {
+            HideWaitAnim();
+            if (msgBox != "") {MessageBox.close();}
+            alert(translateKey("hintProblemSensorIdent"));
+          }
+        };
+      } else {
+        HideWaitAnim();
+        if (msgBox != "") {MessageBox.close();}
+        alert(translateKey("hintPressSysKeyTryAgain"));
+      }
+    });
+   // HideWaitAnimAutomatically(5);
+   // if (MessageBox) {window.setTimeout(function() {MessageBox.close();},45000);};
+  } else {
+    alert(translateKey("hintProblemSensorIdent"));
+  }
+};// language = getLang();//"de";
 
 setLanguage = function(lang)
 {

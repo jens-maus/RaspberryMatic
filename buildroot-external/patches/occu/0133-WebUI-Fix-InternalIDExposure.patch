@@ -1,6 +1,6 @@
 --- occu/WebUI/www/rega/esp/functions.fn.orig
 +++ occu/WebUI/www/rega/esp/functions.fn
-@@ -384,36 +384,14 @@
+@@ -388,39 +388,14 @@
    if (bShowChannel == true) {
  
      ! Interface HmIP-RF and HmIP-Wired
@@ -11,10 +11,13 @@
        !   can be MAINTENANCE_BAT_BL, MAINTENANCE_BAT_EL, MAINTENANCE_BAT_CL and so on
        ! For BidCos-RF this isn't necessary
  
--      if ((oDevHssType.Substr(0,6) == "HmIPW-") || (oDevHssType == "HmIP-DRSI1") || (oDevHssType == "HmIP-DRSI4") || (oDevHssType == "HmIP-DRG-DALI")) {
+-      integer devFwMajor = 0;
+-      Call("/esp/functions.fn::getFirmwareVersion()");
+-
+-      if ((oDevHssType.Substr(0,6) == "HmIPW-") || (oDevHssType == "HmIP-DRSI1") || (oDevHssType == "HmIP-DRSI4") || (oDevHssType == "HmIP-DRG-DALI") || ((oDevHssType == "HmIP-BSL") && (devFwMajor >= 2))) {
 -        object chnParam;
 -        ! A HmIPW-* device with a control for the parameter IDENTIFY_TARGET_LEVEL (MAINTENANCE channel)
--        ! should be visible. So it's possible to use the identify function of wHmIPW-devices.
+-        ! should be visible. So it's possible to use the identify function of HmIPW-devices.
 -        chnParam = dom.GetObject("HmIP-RF."#chn.Address()#".IDENTIFY_TARGET_LEVEL");
 -
 -        ! A HmIPW-* device with a control for the parameter ERROR_POWER_SHORT_CIRCUIT_BUS_1 (MAINTENANCE channel)
@@ -32,10 +35,10 @@
 -          bShowChannel = false;
 -        }
 -      } else {
--        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "HmIP-HAP-B1")  && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
+-        if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP")  && (oDevHssType != "HmIP-HAP-A") && (oDevHssType != "HmIP-HAP-B1")  && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
 -          bShowChannel = false;
 -        }
-+      if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "HmIP-HAP-B1")  && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
++      if ((oDevHssType != "HmIP-CCU3") && (oDevHssType != "HmIP-HAP") && (oDevHssType != "HmIP-HAP-A") && (oDevHssType != "HmIP-HAP-B1") && (oDevHssType != "HmIP-HAP JS1") && (oDevHssType != "RPI-RF-MOD")) {
 +        bShowChannel = false;
        }
  
@@ -84,7 +87,7 @@
 @@ -218,6 +250,7 @@
    s += "<tr>";
    s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton' onclick='WebUI.goBack()'>"+translateKey("footerBtnPageBack")+"</div></td>";
-   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltVR.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
+   s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS03911' onclick='fltDL.clearFilters();updateDevTable();fltHD.clearFilters();updateTable();clearInputLeft();'>"+translateKey('footerBtnResetFilter')+"</div></td>";
 +  s += "<td style='text-align:center; vertical-align: middle;'><div class='FooterButton CLASS04905' onclick='ShowInternalDeviceChannels()'>"+translateKey(internalBtnText)+"</div></td>";
    s += "</tr>";
    s += "</table>";

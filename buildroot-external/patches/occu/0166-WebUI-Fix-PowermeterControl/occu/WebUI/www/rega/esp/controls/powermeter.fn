@@ -339,7 +339,7 @@ function ::CreatePowermeterIGLControl() {
                         WriteLine("<td>");
                           !WriteLine("<span id='"#chnId#"Power'>"#oPower.Value().ToString(2)#" "#oPower.ValueUnit()#"</span>");
                           WriteLine("<div name='"#chnId#"sensor' class='hidden'><span id='"#chnId#"Power'>"#oPower.Value().ToString(2)#" "#oPower.ValueUnit()#"</span></div>");
-                          WriteLine("<div name='"#chnId#"sensorGas' class='hidden'><span id='"#chnId#"PowerGas'>"#oPowerGas.Value().ToString(2)#" m<sup>3</span></div>");
+                          WriteLine("<div name='"#chnId#"sensorGas' class='hidden'><span id='"#chnId#"PowerGas'>"#oPowerGas.Value().ToString(2)#" m<sup>3</span>/h</div>");
                         WriteLine("</td>");
                       WriteLine("</tr>");
                     WriteLine("</table>");
@@ -768,7 +768,7 @@ function ::CreatePowermeterIECControl() {
                       if (oPower && oPowerGas) {
                         if (sLastControlName != "POWERMETER_IEC2.") {
                           WriteLine("<div name='"#chnId#"sensor' class='hidden'><span id='"#chnId#"Power'>"#oPower.Value().ToString(2)#" "#oPower.ValueUnit()#"</span></div>");
-                          WriteLine("<div name='"#chnId#"sensorGas' class='hidden'><span id='"#chnId#"PowerGas'>"#oPowerGas.Value().ToString(2)#" m<sup>3</span></div>");
+                          WriteLine("<div name='"#chnId#"sensorGas' class='hidden'><span id='"#chnId#"PowerGas'>"#oPowerGas.Value().ToString(2)#" m<sup>3</span>/h</div>");
                         }
                       }
                       WriteLine("<div name='"#chnId#"sensorIEC' class='hidden'><span id='"#chnId#"PowerIEC'>"#oPowerIEC.Value().ToString(decimalPlace)#" "#oPowerIEC.ValueUnit()#"</span></div>");

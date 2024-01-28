@@ -3,7 +3,7 @@
 # Script to install the RaspberryMatic container and its dependencies
 # https://github.com/jens-maus/RaspberryMatic/wiki/en.Installation-Docker-OCI
 #
-# Copyright (c) 2022-2023 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2022-2024 Jens Maus <mail@jens-maus.de>
 # Apache 2.0 License applies
 #
 # Usage:
@@ -71,7 +71,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.9"
+VERSION="1.10"
 LINE=
 
 error_exit() {
@@ -176,7 +176,7 @@ uninstall() {
 #############################################################
 
 msg "RaspberryMatic Docker installation script v${VERSION}"
-msg "Copyright (c) 2022-2023 Jens Maus <mail@jens-maus.de>"
+msg "Copyright (c) 2022-2024 Jens Maus <mail@jens-maus.de>"
 msg ""
 
 # check if docker exists
@@ -436,7 +436,7 @@ if [[ -e /sys/fs/cgroup/cpu/cpu.rt_runtime_us ]]; then
 fi
 
 # Persistent volume
-DOCKER_COMMAND="${DOCKER_COMMAND} --volume ${CCU_DATA_VOLUME}:/usr/local:rw --volume /lib/modules:/lib/modules:ro --volume /run/udev/control:/run/udev/control"
+DOCKER_COMMAND="${DOCKER_COMMAND} --read-only --volume ${CCU_DATA_VOLUME}:/usr/local:rw --volume /lib/modules:/lib/modules:ro --volume /run/udev/control:/run/udev/control"
 
 # Container and host names
 DOCKER_COMMAND="${DOCKER_COMMAND} --hostname ${CCU_CONTAINER_NAME} --name ${CCU_CONTAINER_NAME}"

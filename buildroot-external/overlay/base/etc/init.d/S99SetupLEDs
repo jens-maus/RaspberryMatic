@@ -46,8 +46,20 @@ start() {
     fi
   fi
 
+  # execute /usr/local/etc/rc.postlocal (but not in safemode)
+  if [[ -x /usr/local/etc/rc.postlocal ]] && [[ ! -e /etc/config/safemode ]]; then
+    echo -n "rc.postlocal, "
+    /usr/bin/timeout 120 /usr/local/etc/rc.postlocal
+  fi
+  
+  # if we are in safemode we remove the safemode control-file
+  rm -f /etc/config/safemode
+  
   # signal that the system startup is finished
   touch /var/status/startupFinished
+
+  # reload lighttpd to let it enable the RemoteAPI ports
+  /etc/init.d/S50lighttpd reload >/dev/null
 
   echo "booted, OK"
 }
@@ -62,6 +74,13 @@ stop() {
 
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  # remove startupFinished and restart lighttpd
+  # to let it block external APIs again
+  rm -f /var/status/startupFinished
+
+  # reload lighttpd to let it disable the RemoteAPI ports
+  /etc/init.d/S50lighttpd reload >/dev/null
 
   # if we are in HMLGW mode and are using a RPI-RF-MOD we have
   # to set the LED to yellow again to signal shutdown
@@ -84,6 +103,12 @@ stop() {
   fi
   if [[ -f "${HM_LED_YELLOW}/trigger" ]]; then
     echo "${HM_LED_YELLOW_MODE1}" >"${HM_LED_YELLOW}/trigger"
+  fi
+  
+  # call rc.shutdown
+  if [[ -x /usr/local/etc/rc.shutdown ]]; then
+    echo -n "rc.shutdown, "
+    /usr/bin/timeout 120 /usr/local/etc/rc.shutdown
   fi
 
   echo "shutdown, OK"

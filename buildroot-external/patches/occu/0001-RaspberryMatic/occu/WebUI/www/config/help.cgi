@@ -77,16 +77,28 @@ proc action_put_page {} {
   set HWMODEL "n/a"
   if {[file exist /proc/device-tree/model]} {
     execCmd HWMODEL {exec cat /proc/device-tree/model}
+  } elseif {[file exist /sys/devices/virtual/dmi/id/board_vendor]} {
+    execCmd VENDOR {exec cat /sys/devices/virtual/dmi/id/board_vendor}
+    set NAME ""
+    if {[file exist /sys/devices/virtual/dmi/id/board_name]} {
+      execCmd NAME {exec cat /sys/devices/virtual/dmi/id/board_name}
+    }
+    set HWMODEL "$VENDOR $NAME"
   } elseif {[file exist /sys/devices/virtual/dmi/id/sys_vendor]} {
     execCmd VENDOR {exec cat /sys/devices/virtual/dmi/id/sys_vendor}
-    set PNAME ""
+    set NAME ""
     if {[file exist /sys/devices/virtual/dmi/id/product_name]} {
-      execCmd PNAME {exec cat /sys/devices/virtual/dmi/id/product_name}
+      execCmd NAME {exec cat /sys/devices/virtual/dmi/id/product_name}
     }
-    set HWMODEL "$VENDOR $PNAME"
+    set HWMODEL "$VENDOR $NAME"
+  } else {
+    execCmd MODEL {exec grep ^Model /proc/cpuinfo | cut -d: -f2 | xargs}
+    if {$MODEL != ""} {
+      set HWMODEL $MODEL
+    }
   }
 
-  execCmd CPUMODEL {exec lscpu | grep "Model name:" | cut -d: -f2 | xargs echo -n}
+  execCmd CPUMODEL {exec lscpu | grep -m1 "^Model name:" | cut -d: -f2 | xargs echo -n}
   execCmd NUMCPU {exec nproc}
   execCmd LOADAVG {exec awk {{ printf $1 " " $2 " " $3 }} /proc/loadavg}
   execCmd MEM {exec free -h | grep Mem: | awk {{ print $2 }}}
@@ -130,8 +142,12 @@ proc action_put_page {} {
   } else {
     set STATUS "SD(0) $STATUS"
   }
-  execCmd ROOTFSFREE {exec monit status rootfs | grep "space free for non superuser" | awk {{ print substr($0,index($0,$6)) }}}
-  execCmd USERFSFREE {exec monit status userfs | grep "space free for non superuser" | awk {{ print substr($0,index($0,$6)) }}}
+  execCmd ROOTFSFREE {exec monit status rootfs | grep -m1 "space free for non superuser" | awk {{ print substr($0,index($0,$6)) }}}
+  execCmd ROOTFSTOTAL {exec monit status rootfs | grep -m1 "space total" | awk {{ print $3 " " $4 }}}
+  execCmd USERFSFREE {exec monit status userfs | grep -m1 "space free for non superuser" | awk {{ print substr($0,index($0,$6)) }}}
+  execCmd USERFSTOTAL {exec monit status userfs | grep -m1 "space total" | awk {{ print $3 " " $4 }}}
+  execCmd USBDEVFREE {exec monit status usb1 | grep -m1 "space free for non superuser" | awk {{ print substr($0,index($0,$6)) }}}
+  execCmd USBDEVTOTAL {exec monit status usb1 | grep -m1 "space total" | awk {{ print $3 " " $4 }}}
   execCmd STORAGEDEV {exec mountpoint -n /usr/local | awk {{ print $1 }} | xargs lsblk -l -n -o PKNAME -p}
   execCmd STORAGE "exec lsblk -l -n -o SIZE,MODEL,KNAME -d -p $STORAGEDEV"
   set HMRF_DUTYCYCLE "n/a"
@@ -192,11 +208,11 @@ proc action_put_page {} {
       puts "<td id='tdOnline' class='CLASS21301a'  style='text-align:center;'>"
         puts "<h1 class='helpTitle'><u>CCU Hardware Info</u></h1>"
         puts "<div style='display: table; width: 100%;'>"
-          putsVar "Serial Number" $SERIAL
           putsVar "Hardware Model" "$HWMODEL ($hm(HM_HOST))"
-          putsVar "CPU / Memory" "$CPUMODEL ($NUMCPU), $MEM"
+          putsVar "CPU (Cores), Memory" "$CPUMODEL ($NUMCPU), $MEM"
           putsVar "Storage" "$STORAGE"
           putsVar "Real-Time-Clock" $hm(HM_RTC)
+          putsVar "Serial Number" $SERIAL
         puts "</div>"
         puts "<h1 class='helpTitle'><u>CCU Software Info</u></h1>"
         puts "<div style='display: table; width: 100%;'>"
@@ -207,34 +223,36 @@ proc action_put_page {} {
         puts "</div>"
         puts "<h1 class='helpTitle'><u>Operating System Info</u></h1>"
         puts "<div style='display: table; width: 100%;'>"
-          putsVar "OS Type/Kernel" "$OSTYPE ($OSKERNEL)"
+          putsVar "OS Type (Kernel)" "$OSTYPE ($OSKERNEL)"
           putsVar "Uptime" $UPTIME
           putsVar "Load Average" $LOADAVG
           putsVar "System Temperature" $TEMP
-          putsVar "Memory / Swap Utilization" "$MEMUSE / $SWAPUSE"
+          putsVar "Memory, Swap Utilization" "$MEMUSE, $SWAPUSE"
           putsVar "NTP Offset (Server)" "$NTPOFFSET ($NTPSERVER)"
-          putsVar "rootfs / userfs Free Space" "$ROOTFSFREE / $USERFSFREE"
+          putsVar "rootfs Free Space" "$ROOTFSFREE / $ROOTFSTOTAL"
+          putsVar "userfs Free Space" "$USERFSFREE / $USERFSTOTAL"
+          putsVar "USB Free Space" "$USBDEVFREE / $USBDEVTOTAL"
           putsVar "IP address" "$net(CURRENT_IP) ($MAINETH, $net(MODE))"
-          putsVar "Gateway / Netmask" "$net(CURRENT_GATEWAY) / $net(CURRENT_NETMASK)"
+          putsVar "Gateway (Netmask)" "$net(CURRENT_GATEWAY) ($net(CURRENT_NETMASK))"
           putsVar "Nameservers" "$net(CURRENT_NAMESERVER1), $net(CURRENT_NAMESERVER2)"
           putsVar "Hostname" "$MAINHOSTNAME"
         puts "</div>"
         puts "<h1 class='helpTitle'><u>homematicIP-RF (HmIP) Info</u></h1>"
         puts "<div style='display: table; width: 100%;'>"
-          putsVar "RF-Module/Firmware" "$hm(HM_HMIP_DEV) ($hm(HM_HMIP_VERSION))"
+          putsVar "RF-Module (Firmware)" "$hm(HM_HMIP_DEV) ($hm(HM_HMIP_VERSION))"
           putsVar "Device-Node" "$hm(HM_HMIP_DEVNODE) ($hm(HM_HMIP_DEVTYPE))"
           putsVar "Address" "$hm(HM_HMIP_ADDRESS) ($hm(HM_HMIP_ADDRESS_ACTIVE))"
           putsVar "SGTIN" $hm(HM_HMIP_SGTIN)
           putsVar "Serial" $hm(HM_HMIP_SERIAL)
-          putsVar "DC / CS" "$HMIP_DUTYCYCLE % / $HMIP_CARRIERSENSE %"
+          putsVar "DutyCycle, CarrierSense" "$HMIP_DUTYCYCLE %, $HMIP_CARRIERSENSE %"
         puts "</div>"
         puts "<h1 class='helpTitle'><u>HomeMatic-RF (HmRF) Info</u></h1>"
         puts "<div style='display: table; width: 100%;'>"
-          putsVar "RF-Module/Firmware" "$hm(HM_HMRF_DEV) ($hm(HM_HMRF_VERSION))"
+          putsVar "RF-Module (Firmware)" "$hm(HM_HMRF_DEV) ($hm(HM_HMRF_VERSION))"
           putsVar "Device-Node" "$hm(HM_HMRF_DEVNODE) ($hm(HM_HMRF_DEVTYPE))"
           putsVar "Address" "$hm(HM_HMRF_ADDRESS) ($hm(HM_HMRF_ADDRESS_ACTIVE))"
           putsVar "Serial" $hm(HM_HMRF_SERIAL)
-          putsVar "DC / CS" "$HMRF_DUTYCYCLE % / $HMRF_CARRIERSENSE %"
+          putsVar "DutyCycle, CarrierSense" "$HMRF_DUTYCYCLE %, $HMRF_CARRIERSENSE %"
         puts "</div>"
       puts "</td>"
 

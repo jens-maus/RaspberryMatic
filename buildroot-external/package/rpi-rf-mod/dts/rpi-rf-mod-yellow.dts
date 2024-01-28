@@ -42,6 +42,7 @@
         target = <&uart0>;
         __overlay__ {
             compatible = "pivccu,pl011";
+            status = "okay";
             pivccu,reset-gpios = <&gpio 18 0>; // HM-MOD-RPI-PCB
         };
     };

@@ -1,6 +1,6 @@
 # Locally computed
 sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-sha256  612684905c546ecfa8b203bd0d739ce5b63762243b090deb00fe6b35577df6f4  zulu8.70.0.23-ca-jdk8.0.372-linux_aarch32hf.tar.gz
-sha256  c76da27e2cd5c396d72633baf27edd17031d87e5cb6c8620255dcd0384e61afa  zulu8.70.0.23-ca-jdk8.0.372-linux_aarch64.tar.gz
-sha256  9ab5b252a8287a39f2cddac9c5d931e5179a4e2f298de5060d2ee2e76868c017  zulu8.70.0.23-ca-jdk8.0.372-linux_i686.tar.gz
-sha256  afcda0f08cd05efd3bd60b021618931595ab03689f1c1fefcd46ef7761276d10  zulu8.70.0.23-ca-jdk8.0.372-linux_x64.tar.gz
+sha256  f26a1a272e2db2561e6cd2dfa7e4511790cd4a7b12933c57c1c6be7a8a92fe73  zulu11.70.15-ca-jre11.0.22-linux_x64.tar.gz
+sha256  b6e258e330a9bc28d457dd701eeb8170db282498a867b98ea1bae005292ba99e  zulu11.70.15-ca-jre11.0.22-linux_i686.tar.gz
+sha256  268a47e1b4bf99d83b2e327c460cd978edac81026ba95678e2e0f6aba026474e  zulu11.68.17-ca-jre11.0.21-linux_aarch32hf.tar.gz
+sha256  3d0f9f16d61c6967dcd3cc8ec06a7ce7420c2a497d15280b475d2cb046b39778  zulu11.70.15-ca-jre11.0.22-linux_aarch64.tar.gz

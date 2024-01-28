@@ -5,7 +5,7 @@
 #
 
 # check number of arguments
-if [ "$#" -ne 5 ]; then
+if [ "$#" -ne 6 ]; then
   echo "ERROR: invalid number of arguments"
   exit 1
 fi
@@ -59,6 +59,7 @@ RPI0_MF=$(readlink -f "${2}")
 RPI2_MF=$(readlink -f "${3}")
 RPI3_MF=$(readlink -f "${4}")
 RPI4_MF=$(readlink -f "${5}")
+RPI5_MF=$(readlink -f "${6}")
 
 # extract version and release date from first mf filename
 # shellcheck disable=SC2001
@@ -108,9 +109,10 @@ function updateJSON() {
 cp -a "${RPI_IMAGER_PATH}" "${TEMP_DIR}/rpi-imager.json"
 
 # update rpi-imager.json
-updateJSON 0 rpi4 "${RPI4_MF}" "RPi4, RPi400"
-updateJSON 1 rpi3 "${RPI3_MF}" "RPi3, RPiZero2, ELV-Charly, CCU3"
-updateJSON 2 rpi2 "${RPI2_MF}" "RPi2"
-updateJSON 3 rpi0 "${RPI0_MF}" "RPiZero, RPi1"
+updateJSON 0 rpi5 "${RPI5_MF}" "Pi 5"
+updateJSON 1 rpi4 "${RPI4_MF}" "Pi 4, Pi 400"
+updateJSON 2 rpi3 "${RPI3_MF}" "Pi 3, Pi Zero 2, ELV-Charly, CCU3"
+updateJSON 3 rpi2 "${RPI2_MF}" "Pi 2"
+updateJSON 4 rpi0 "${RPI0_MF}" "Pi Zero, Pi 1"
 
 cp -a "${TEMP_DIR}/rpi-imager.json" "${RPI_IMAGER_PATH}"

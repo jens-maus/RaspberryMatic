@@ -119,7 +119,7 @@
    set downloadOnly 0
 --- occu/WebUI/www/config/cp_network.cgi.orig
 +++ occu/WebUI/www/config/cp_network.cgi
-@@ -148,36 +148,42 @@
+@@ -148,36 +148,43 @@
  }
  
  proc action_cert_upload {} {
@@ -143,7 +143,8 @@
 -    file copy -force -- "/var/server.pem" "/etc/config/server.pem"
 -    file delete "/var/server.pem"
 +  if { [string last " PRIVATE KEY-----" $line] != -1 } {
-+    file rename -force -- $filename "/usr/local/tmp/server.pem"
++    catch { file copy -force -- "/etc/config/server.pem" "/etc/config/server.pem.bak" }
++    file rename -force -- $filename "/etc/config/server.pem"
      
      cgi_javascript {
        puts "var url = \"$env(SCRIPT_NAME)?sid=$sid\";"
@@ -179,7 +180,7 @@
      }
      }
    }
-@@ -343,8 +349,7 @@
+@@ -343,8 +350,7 @@
              table_row {
                table_data {width="20"} {}
                table_data {colspan="2"} {
@@ -189,7 +190,7 @@
                    file_button cert_file size=30 maxlength=1000000
                  }
                  puts {<iframe name="cert_upload_iframe" style="display: none;"></iframe>}
-@@ -708,13 +713,15 @@
+@@ -708,13 +714,15 @@
  cgi_eval {
    #cgi_debug -on
    cgi_input

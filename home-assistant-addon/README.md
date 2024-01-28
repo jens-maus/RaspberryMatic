@@ -30,6 +30,8 @@ the WebUI and underlying operating system for an improved user experience.
 For a detailed documentation please refer to the "Documentation" tab of the installed Add-on or
 consult the [online documentation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HomeAssistant) available in the RaspberryMatic GitHub project. Also note, that after having installed the Add-on you also have to setup the [HomeMatic integration](https://github.com/jens-maus/RaspberryMatic/wiki/HomeAssistant-Integration) part in Home Assistant itself so that your Home Assistant is able to see and use the HomeMatic/homematicIP devices of your RaspberryMatic CCU.
 
+:warning: Please note, that if you are going to use a `RPI-RF-MOD` or `HM-MOD-RPI-PCB` RF module connected to the GPIO of a Raspberry Pi or other SBC you have to make sure to explicitly [enable the UART interface](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HomeAssistant#using-homeassistant-os) of these systems.
+
 ## License
 
 This Home Assistant add-on as well as the RaspberryMatic base system is licensed under the Apache-2.0 open-source license.

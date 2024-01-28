@@ -8218,6 +8218,7 @@ color: $_(textColorA); /* white */
 
   padding: 3px;
   text-align:center;
+  font-weight: bold;
   vertical-align:middle;
   margin:2px;
   cursor: pointer;
@@ -8775,9 +8776,11 @@ color: $_(textColorA); /* white */
 
   color: $_(textColorB); /* black */
   border: 1px solid $_(black); /* black */
-  border-radius: 2px;
+  border-radius: 5px;
 
   cursor: pointer;
+  font-weight: bold;
+  padding: 2px;
 }
 
 .CLASS21905 {

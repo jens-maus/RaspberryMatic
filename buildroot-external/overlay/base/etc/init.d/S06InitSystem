@@ -13,9 +13,6 @@ init_system() {
     HM_MODE="HM-LGW"
   fi
 
-  # general umask so that we will have rwrw--
-  umask 0002
-
   # ensure some pathes are there and have
   # correct permissions
   mkdir -p /var/log
@@ -31,6 +28,8 @@ init_system() {
   mkdir -p /var/empty
   mkdir -p /var/etc
   mkdir -p /var/status
+  chmod g+s /var/status
+  chgrp status /var/status
   mkdir -p /var/empty
   chmod 0700 /var/empty
 
@@ -57,6 +56,11 @@ init_system() {
   mkdir -p /usr/local/etc
   chmod 0755 /usr/local/etc
   chown root:root /usr/local/etc
+
+  # create /usr/local/etc/logrotate.d
+  mkdir -p /usr/local/etc/logrotate.d
+  chmod 0700 /usr/local/etc/logrotate.d
+  chown root:root /usr/local/etc/logrotate.d
 
   # create a /usr/local/tmp directory for creating things like backup files, etc.
   # (we need it on-disk or /tmp will be not enough in case of a filled up /usr/local)
@@ -96,10 +100,11 @@ init_system() {
   fi
 
   # if no shadow file with password information is in place we have to
-  # put the template file there.
+  # put the template file there and ensure proper permissions
   if [[ ! -s /etc/config/shadow ]] ; then
     cp -a ${CFG_TEMPLATE_DIR}/shadow /etc/config/
   fi
+  chmod 0640 /etc/config/shadow
 
   # load bcm2835 watchdog kernel module if this is
   # a raspberrypi
@@ -117,7 +122,8 @@ start() {
   # call rc.init before initializing the system
   if [[ ! -e /etc/config/safemode ]]; then
     if [[ -x /usr/local/etc/rc.init ]]; then
-      /usr/local/etc/rc.init
+      echo -n "rc.init, "
+      /usr/bin/timeout 120 /usr/local/etc/rc.init
     fi
   fi
 
@@ -126,13 +132,18 @@ start() {
 
   # start hss_led if it exists and we are not in HMLGW mode
   if [[ "${HM_MODE}" != "HM-LGW" ]] && [[ -x /bin/hss_led ]]; then
-    start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
+    if [[ "${HM_HOST}" != "oci" ]]; then
+      start-stop-daemon -S -q -b -m -c hssled:hssled -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
+    else
+      start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
+    fi
   fi
 
   # call rc.postinit after init of system is finished
   if [[ ! -e /etc/config/safemode ]]; then
     if [[ -x /usr/local/etc/rc.postinit ]]; then
-      /usr/local/etc/rc.postinit
+      echo -n "rc.postinit, "
+      /usr/bin/timeout 120 /usr/local/etc/rc.postinit
     fi
   fi
 

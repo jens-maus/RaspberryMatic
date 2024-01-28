@@ -27,9 +27,9 @@ check_factory_reset() {
     DEV="/dev/$(readlink "/sys/dev/block/${DEVNODE}" | awk -F/ '{print $(NF-1)}')"
 
     # find out maximum SD card size (in cylinders)
-    START_CHS=$(parted -s "${DEV}" unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
-    END_CHS=$(parted -s "${DEV}" unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
-    MAX_CHS=$(parted -s "${DEV}" unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
+    START_CHS=$(parted -s -f "${DEV}" unit chs print | grep "^ ${PARTNUM} " | awk '{print $2}')
+    END_CHS=$(parted -s -f "${DEV}" unit chs print | grep "^ ${PARTNUM} " | awk '{print $3}')
+    MAX_CHS=$(parted -s -f "${DEV}" unit chs print | grep "Disk ${DEV}" | cut -d' ' -f3)
 
     # umount /usr/local to regenerate it
     umount -f /usr/local
@@ -38,7 +38,7 @@ check_factory_reset() {
     if [[ -n "${START_CHS}" && -n "${END_CHS}" && -n "${MAX_CHS}" && "${END_CHS}" != "${MAX_CHS}" ]]; then
       # use resizepart to resize the /usr/local partition to the maximum size of
       # the disk
-      parted -s "${DEV}" resizepart "${PARTNUM}" 100%
+      parted -s -f "${DEV}" resizepart "${PARTNUM}" 100%
     fi
 
     # force PARTUUID to 0xDEEDBEEF (because parted changes partuuid) even

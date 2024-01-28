@@ -1,10 +1,10 @@
 ---
 name: RaspberryMatic CCU
-version: 3.69.7.20230626
+version: 3.73.9.20231130
 slug: raspberrymatic
 image: ghcr.io/jens-maus/raspberrymatic
 arch:
-  - armhf
+  - armv7
   - aarch64
   - amd64
 description: HomeMatic/homematicIP CCU central based on RaspberryMatic
@@ -20,7 +20,7 @@ init: false
 backup_pre: /bin/sh -c "/bin/echo 'load tclrega.so; rega system.Save()' | /bin/tclsh && /bin/sync"
 backup_exclude:
   - "*/tmp/.watchdog"
-timeout: 120
+timeout: 240
 devices:
   - /dev/raw-uart
   - /dev/raw-uart1
@@ -72,8 +72,9 @@ ports:
   5435/tcp: null
   2121/tcp: null
   2122/tcp: null
-  1833/tcp: null
+  1883/tcp: null
   8883/tcp: null
+  2110/tcp: null
 ports_description:
   22/tcp: SSH access (Extern)
   80/tcp: CCU WebUI HTTP (Extern)
@@ -112,8 +113,9 @@ ports_description:
   5435/tcp: CCU-Historian DB-pgPort (Extern)
   2121/tcp: CCU-Jack HTTP (Extern)
   2122/tcp: CCU-Jack HTTPS (Extern)
-  1833/tcp: CCU-Jack MQTT (Extern)
+  1883/tcp: CCU-Jack MQTT (Extern)
   8883/tcp: CCU-Jack MQTT-Secure (Extern)
+  2110/tcp: homeputer CL Exec-Engine (Extern)
 environment:
   HM_RUNNING_IN_HA: "1"
   HM_HAPROXY_SRC: 172.30.32.2/32

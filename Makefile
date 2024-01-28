@@ -1,14 +1,14 @@
-BUILDROOT_VERSION=2023.05
-BUILDROOT_SHA256=422e17a5851d85c47628ff0cd964318b5c3405cc9b4b3c727d872db7ece6779a
+BUILDROOT_VERSION=2023.11.1
+BUILDROOT_SHA256=4cb56b0f5a289a6edeac449b3a7fa3c1b39430d738d1c73d0793bd01732de4cf
 BUILDROOT_EXTERNAL=buildroot-external
 DEFCONFIG_DIR=$(BUILDROOT_EXTERNAL)/configs
 OCCU_VERSION=$(shell grep "OCCU_VERSION =" $(BUILDROOT_EXTERNAL)/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1)
 DATE=$(shell date +%Y%m%d)
 PRODUCT=
 PRODUCT_VERSION=${OCCU_VERSION}.${DATE}
-PRODUCTS:=$(sort $(notdir $(patsubst %_defconfig,%,$(wildcard $(DEFCONFIG_DIR)/*_defconfig))))
-BR2_DL_DIR="../download"
-BR2_CCACHE_DIR="${HOME}/.buildroot-ccache"
+PRODUCTS:=$(sort $(notdir $(patsubst %.config,%,$(wildcard $(DEFCONFIG_DIR)/*.config))))
+BR2_DL_DIR=$(shell pwd)/download
+BR2_CCACHE_DIR=${HOME}/.buildroot-ccache
 BR2_JLEVEL=$(shell nproc)
 
 ifneq ($(PRODUCT),)
@@ -18,11 +18,11 @@ else
 endif
 
 .NOTPARALLEL: $(PRODUCTS) $(addsuffix -release, $(PRODUCTS)) $(addsuffix -clean, $(PRODUCTS)) build-all clean-all release-all
-.PHONY: all build release clean cleanall distclean help updatePkg
+.PHONY: all build release clean clean-all distclean help updatePkg
 
 all: help
 
-buildroot-$(BUILDROOT_VERSION).tar.gz:
+buildroot-$(BUILDROOT_VERSION).tar.gz: $(BR2_DL_DIR)
 	@echo "[downloading buildroot-$(BUILDROOT_VERSION).tar.gz]"
 	wget https://github.com/buildroot/buildroot/archive/refs/tags/$(BUILDROOT_VERSION).tar.gz -O buildroot-$(BUILDROOT_VERSION).tar.gz
 	echo "$(BUILDROOT_SHA256)  buildroot-$(BUILDROOT_VERSION).tar.gz" >buildroot-$(BUILDROOT_VERSION).tar.gz.sign
@@ -32,15 +32,17 @@ buildroot-$(BUILDROOT_VERSION): | buildroot-$(BUILDROOT_VERSION).tar.gz
 	@echo "[patching buildroot-$(BUILDROOT_VERSION)]"
 	if [ ! -d $@ ]; then tar xf buildroot-$(BUILDROOT_VERSION).tar.gz; for p in $(sort $(wildcard buildroot-patches/*.patch)); do echo "\nApplying $${p}"; patch -d buildroot-$(BUILDROOT_VERSION) --remove-empty-files -p1 < $${p} || exit 127; [ ! -x $${p%.*}.sh ] || $${p%.*}.sh buildroot-$(BUILDROOT_VERSION); done; fi
 
-build-$(PRODUCT): | buildroot-$(BUILDROOT_VERSION) download
-	mkdir build-$(PRODUCT)
+build-$(PRODUCT): | buildroot-$(BUILDROOT_VERSION)
+	mkdir $(shell pwd)/build-$(PRODUCT)
 
-download: buildroot-$(BUILDROOT_VERSION)
-	test -e download || mkdir download
+$(BR2_DL_DIR):
+	@echo "[mkdir $(BR2_DL_DIR)]"
+	test -e $(BR2_DL_DIR) || mkdir $(BR2_DL_DIR)
 
 build-$(PRODUCT)/.config: | build-$(PRODUCT)
 	@echo "[config $@]"
-	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) $(PRODUCT)_defconfig
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) alldefconfig
+	cd $(shell pwd)/build-$(PRODUCT) && BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) ../buildroot-$(BUILDROOT_VERSION)/support/kconfig/merge_config.sh ../$(BUILDROOT_EXTERNAL)/Buildroot.config ../$(BUILDROOT_EXTERNAL)/configs/$(PRODUCT).config
 
 build-all: $(PRODUCTS)
 $(PRODUCTS): %:
@@ -110,7 +112,7 @@ distclean: clean-all
 	@echo "[distclean]"
 	@rm -rf buildroot-$(BUILDROOT_VERSION)
 	@rm -f buildroot-$(BUILDROOT_VERSION).tar.*
-	@rm -rf download
+	@rm -rf $(BR2_DL_DIR)
 
 .PHONY: menuconfig
 menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
@@ -122,7 +124,7 @@ xconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 
 .PHONY: savedefconfig
 savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
-	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) savedefconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT)_defconfig
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) savedefconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT).config
 
 .PHONY: toolchain
 toolchain: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
@@ -143,6 +145,10 @@ multilib32-menuconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 .PHONY: multilib32-savedefconfig
 multilib32-savedefconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)/.config
 	cd $(shell pwd)/build-$(PRODUCT)/build/multilib32-*/output && $(MAKE) BR2_EXTERNAL_EQ3_PATH=$(shell pwd)/$(BUILDROOT_EXTERNAL) savedefconfig
+
+.PHONY: linux-check-dotconfig
+linux-check-dotconfig: buildroot-$(BUILDROOT_VERSION) build-$(PRODUCT)
+	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) linux-check-dotconfig BR2_DEFCONFIG=../$(DEFCONFIG_DIR)/$(PRODUCT).config BR2_CHECK_DOTCONFIG_OPTS="--github-format --strip-path-prefix=$(PWD)/"
 
 # Create a fallback target (%) to forward all unknown target calls to the build Makefile.
 # This includes:
@@ -178,6 +184,7 @@ help:
 	@echo "  $(MAKE) PRODUCT=<product> savedefconfig: update buildroot defconfig file"
 	@echo "  $(MAKE) PRODUCT=<product> linux-menuconfig: change linux kernel config option"
 	@echo "  $(MAKE) PRODUCT=<product> linux-update-defconfig: update linux kernel defconfig file"
+	@echo "  $(MAKE) PRODUCT=<product> linux-check-dotconfig: checks dotconfig files against Kconfig"
 	@echo "  $(MAKE) PRODUCT=<product> busybox-menuconfig: change busybox config options"
 	@echo "  $(MAKE) PRODUCT=<product> busybox-update-config: update busybox defconfig file"
 	@echo "  $(MAKE) PRODUCT=<product> uboot-menuconfig: change u-boot config options"

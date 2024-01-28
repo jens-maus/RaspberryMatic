@@ -1191,119 +1191,119 @@
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/newdevices.htm
 @@ -63,43 +63,43 @@
  <div class="CLASS04301">
- <div id="noNewDevs" class="CLASS04302" style="display:none;">${noDeviceInPostBox}</div>
- <table id="newDevTbl" class="tblList CLASS04303" cellpadding="0" cellspacing="0"
--       style="display:none; width:97%; margin:1%;">
-+       style="display:none;">
- <colgroup>
--  <col style="width:2%;"  width="2%"/>
-+  <col style="width:25px;" />
-   <!-- Plus/Minus Device-->
--  <col style="width:2%;"/>
-+  <col style="width:25px;" />
-   <!-- Plus/Minus Group -->
--  <col style="width:2%;"/>
-+  <col />
-   <!-- Leere Zelle vor GroupMember -->
--  <col style="width:1%;"/>
--  <col style="width:3%;"/>
--  <col style="width:7%;"/>
--  <col style="width:7%;"/>
--  <col style="width:9%;"/>
--  <col style="width:7%;"/>
--  <col style="width:7%;"/>
--  <col style="width:7%;"/>
--  <col style="width:7%;"/>
--  <col style="width:7%;"/>
--  <col style="width:15%;"/>
--  <col style="width:7%;"/>
-+  <col />
-+  <col style="width:50px;" />
-+  <col />
-+  <col />
-+  <col />
-+  <col />
-+  <col />
-+  <col />
-+  <col />
-+  <col />
-+  <col style="width:100px;"/>
-+  <col style="width:100px;"/>
- </colgroup>
- <tbody id="tblNewDevices">
- <tr id="tblNewDevicesHeader">
-   <th id="tblListFold"></th>
+   <div id="noNewDevs" class="CLASS04302" style="display:none;">${noDeviceInPostBox}</div>
+   <table id="newDevTbl" class="tblList CLASS04303" cellpadding="0" cellspacing="0"
+-         style="display:none; width:97%; margin:1%;">
++         style="display:none;">
+     <colgroup>
+-      <col style="width:2%;"  width="2%"/>
++      <col style="width:25px;"/>
+       <!-- Plus/Minus Device-->
+-      <col style="width:2%;"/>
++      <col style="width:25px;"/>
+       <!-- Plus/Minus Group -->
+-      <col style="width:2%;"/>
++      <col />
+       <!-- Leere Zelle vor GroupMember -->
+-      <col style="width:1%;"/>
+-      <col style="width:3%;"/>
+-      <col style="width:7%;"/>
+-      <col style="width:7%;"/>
+-      <col style="width:9%;"/>
+-      <col style="width:7%;"/>
+-      <col style="width:7%;"/>
+-      <col style="width:7%;"/>
+-      <col style="width:7%;"/>
+-      <col style="width:7%;"/>
+-      <col style="width:15%;"/>
+-      <col style="width:7%;"/>
++      <col />
++      <col style="width:50px;"/>
++      <col />
++      <col />
++      <col />
++      <col />
++      <col />
++      <col />
++      <col />
++      <col />
++      <col style="width:100px;"/>
++      <col style="width:100px;"/>
+     </colgroup>
+     <tbody id="tblNewDevices">
+     <tr id="tblNewDevicesHeader">
+       <th id="tblListFold"></th>
  
--  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('type')" colspan='3'><b>${thTypeDescriptor}</b></th>
--  <th class="Sort CLASS04304 border1px"><b>${thPicture}</b></th>
--  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('desc')"><b>${thDescriptor}</b></th>
--  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('sn')"><b>${thSerialNumber}</b></th>
--  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('iface')"><b>${thInterfaceCategory}</b></th>
--  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('trans')"><b>${thTransmitMode}</b></th>
--  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('name')"><b>${thName}</b></th>
--  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('func')"><b>${thFunc}</b></th>
--  <th class="Sort CLASS04304 border1px" onclick="NewDevSort('room')"><b>${thRoom}</b></th>
--  <th class="Sort CLASS04304 border1px"><b>${thFunctionTest}</b></th>
--  <th class="Sort CLASS04304 border1px"><b>${thAction}</b></th>
--  <th class="Sort CLASS04304 border1px"><b>${thReady}</b></th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'>${thTypeDescriptor}</th>
-+  <th class="DeviceListHead">${thPicture}</th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('desc')">${thDescriptor}</th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('sn')">${thSerialNumber}</th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('iface')">${thInterfaceCategory}</th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('trans')">${thTransmitMode}</th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('name')">${thName}</th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('func')">${thFunc}</th>
-+  <th class="DeviceListHead clickable" onclick="NewDevSort('room')">${thRoom}</th>
-+  <th class="DeviceListHead">${thFunctionTest}</th>
-+  <th class="DeviceListHead">${thAction}</th>
-+  <th class="DeviceListHead">${thReady}</th>
- </tr>
+-      <th class="Sort CLASS04304 border1px" onclick="NewDevSort('type')" colspan='3'><b>${thTypeDescriptor}</b></th>
+-      <th class="Sort CLASS04304 border1px"><b>${thPicture}</b></th>
+-      <th class="Sort CLASS04304 border1px" onclick="NewDevSort('desc')"><b>${thDescriptor}</b></th>
+-      <th class="Sort CLASS04304 border1px" onclick="NewDevSort('sn')"><b>${thSerialNumber}</b></th>
+-      <th class="Sort CLASS04304 border1px" onclick="NewDevSort('iface')"><b>${thInterfaceCategory}</b></th>
+-      <th class="Sort CLASS04304 border1px" onclick="NewDevSort('trans')"><b>${thTransmitMode}</b></th>
+-      <th class="Sort CLASS04304 border1px" onclick="NewDevSort('name')"><b>${thName}</b></th>
+-      <th class="Sort CLASS04304 border1px" onclick="NewDevSort('func')"><b>${thFunc}</b></th>
+-      <th class="Sort CLASS04304 border1px" onclick="NewDevSort('room')"><b>${thRoom}</b></th>
+-      <th class="Sort CLASS04304 border1px"><b>${thFunctionTest}</b></th>
+-      <th class="Sort CLASS04304 border1px"><b>${thAction}</b></th>
+-      <th class="Sort CLASS04304 border1px"><b>${thReady}</b></th>
++      <th class="DeviceListHead clickable" onclick="NewDevSort('type')" colspan='3'>${thTypeDescriptor}</th>
++      <th class="DeviceListHead">${thPicture}</th>
++      <th class="DeviceListHead clickable" onclick="NewDevSort('desc')">${thDescriptor}</th>
++      <th class="DeviceListHead clickable" onclick="NewDevSort('sn')">${thSerialNumber}</th>
++      <th class="DeviceListHead clickable" onclick="NewDevSort('iface')">${thInterfaceCategory}</th>
++      <th class="DeviceListHead clickable" onclick="NewDevSort('trans')">${thTransmitMode}</th>
++      <th class="DeviceListHead clickable" onclick="NewDevSort('name')">${thName}</th>
++      <th class="DeviceListHead clickable" onclick="NewDevSort('func')">${thFunc}</th>
++      <th class="DeviceListHead clickable" onclick="NewDevSort('room')">${thRoom}</th>
++      <th class="DeviceListHead">${thFunctionTest}</th>
++      <th class="DeviceListHead">${thAction}</th>
++      <th class="DeviceListHead">${thReady}</th>
+     </tr>
  
- <script type="text/javascript">
+     <script type="text/javascript">
 @@ -381,7 +381,7 @@
-   var img = Builder.node('img', {src: "/ise/img/plus.png", id: "img" + arDevices[i]['id'], alt: "plus", onclick: "expandDevice(" + arDevices[i]['id'] + "," + i + ")"});
-   td.appendChild(img);
-   tr.appendChild(td);
--  td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, strCut(arDevices[i]['type'], true));
-+  td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, arDevices[i]['type']);
-   tr.appendChild(td);
-   td = Builder.node('td', {className: 'WhiteBkgPic CLASS04314 border1px'}, [
-     Builder.node('div', {id: 'picDiv' + arDevices[i]['id'], className: "CLASS04305",
+         var img = Builder.node('img', {src: "/ise/img/plus.png", id: "img" + arDevices[i]['id'], alt: "plus", onclick: "expandDevice(" + arDevices[i]['id'] + "," + i + ")"});
+         td.appendChild(img);
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, strCut(arDevices[i]['type'], true));
++        td = Builder.node('td', {className: 'GrayBkg border1px', colSpan: 3}, arDevices[i]['type']);
+         tr.appendChild(td);
+         td = Builder.node('td', {className: 'WhiteBkgPic CLASS04314 border1px'}, [
+           Builder.node('div', {id: 'picDiv' + arDevices[i]['id'], className: "CLASS04305",
 @@ -391,7 +391,7 @@
-   td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['desc'] );
-   td.innerHTML = translateKey(arDevices[i]['desc']);
-   tr.appendChild(td);
--  td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(arDevices[i]['sn']));
-+  td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['sn']);
-   tr.appendChild(td);
-   td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['iface']);
-   tr.appendChild(td);
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['desc'] );
+         td.innerHTML = translateKey(arDevices[i]['desc']);
+         tr.appendChild(td);
+-        td = Builder.node('td', {className: 'GrayBkg border1px'}, strCut(arDevices[i]['sn']));
++        td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['sn']);
+         tr.appendChild(td);
+         td = Builder.node('td', {className: 'GrayBkg border1px'}, arDevices[i]['iface']);
+         tr.appendChild(td);
 @@ -401,13 +401,13 @@
  
-   if (NAV_IE) {
-     td = Builder.node('td', {className: 'WhiteBkg border1px'},
--      [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true)) ]);
-+      [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']) ]);
-     tr.appendChild(td);
-   }
-   else {
-     if (isDevTypeHmIPW(arDevices[i]['type'])) {
-       td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px'});
--      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, strCut(arDevices[i]['name'].replace(/:/g, ":<br/>"), false));
-+      divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, arDevices[i]['name'].replace(/:/g, ":<br/>"));
-       divB = Builder.node('div', {
-         id: 'btnRename_' + arDevices[i]["id"],
-         className: 'TestButton colorGradient borderRadius2px hidden',
+         if (NAV_IE) {
+           td = Builder.node('td', {className: 'WhiteBkg border1px'},
+-            [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true)) ]);
++          [Builder.node('div', {id: 'tdn' + arDevices[i]['id'], className: "CLASS04306", onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']) ]);
+           tr.appendChild(td);
+         }
+         else {
+           if (isDevTypeHmIPW(arDevices[i]['type'])) {
+             td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px'});
+-            divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, strCut(arDevices[i]['name'].replace(/:/g, ":<br/>"), false));
++            divA = Builder.node('div', {id: 'tdn' + arDevices[i]['id']}, arDevices[i]['name'].replace(/:/g, ":<br/>"));
+             divB = Builder.node('div', {
+               id: 'btnRename_' + arDevices[i]["id"],
+               className: 'TestButton colorGradient borderRadius2px hidden',
 @@ -417,7 +417,7 @@
-       td.appendChild(divA);
-       td.appendChild(divB);
-     } else {
--      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true));
-+      td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']);
-     }
+             td.appendChild(divA);
+             td.appendChild(divB);
+           } else {
+-            td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0, CALL_STRCUT)'}, strCut(arDevices[i]['name'], true));
++            td = Builder.node('td', {className: 'WhiteBkg CLASS04307 border1px', id: 'tdn' + arDevices[i]['id'], onclick: 'textEdit(id, ' + arDevices[i]['id'] + ', false, 0)'}, arDevices[i]['name']);
+           }
  
-     tr.appendChild(td);
+           tr.appendChild(td);
 --- occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm.orig
 +++ occu/WebUI/www/rega/pages/tabs/admin/views/programlist.htm
 @@ -57,9 +57,16 @@
@@ -1893,14 +1893,14 @@
              Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02605">'#sFirstTimestamp#'</td>' );
              Write( '<td id="sla'#sAID#'"  style="text-align:center; vertical-align: middle;" class="CLASS02605">'#sLastTimestamp#'</td>' );
              Write( '<td id="n'#oAlarm.ID()#'"  style="text-align:center; vertical-align: middle;"class="CLASS02606">'#sAlarmName#'</td>' );
--            Write( '<td style="text-align:center; vertical-align: middle;" class="CLASS02607; background-color:white;">');
+-            Write( '<td style="text-align:center; vertical-align: middle; background-color:white;" class="CLASS02607">');
 +            Write( '<td class="DeviceListThumbnail">');
              if (oLastTriggerChannel)
              {
                object devId = oLastTriggerChannel.Device();
                object dev = dom.GetObject(devId);
                string sPicDivId = "picDiv"#oAlarm.ID();
--              Write("<div id='"#sPicDivId#"' class='CLASS02608'");
+-              Write("<div id='"#sPicDivId#"' class='CLASS02608' style='margin:0 auto;'");
 +              Write("<div id='"#sPicDivId#"' class='thumbnail'");
                Write(" onmouseover='picDivShow(jg_250, \""#dev.Label()#"\", 250, -1, this);'");
                Write(" onmouseout='picDivHide(jg_250);'");
@@ -3433,7 +3433,15 @@
  }
  
  /* config\easymodes\DIMMER\MOTION_DETECTOR.tcl */
-@@ -8434,7 +8446,9 @@
+@@ -8206,6 +8218,7 @@
+ 
+   padding: 3px;
+   text-align:center;
++  font-weight: bold;
+   vertical-align:middle;
+   margin:2px;
+   cursor: pointer;
+@@ -8434,7 +8447,9 @@
  /* config\help.cgi */
  
  .CLASS21300 {
@@ -3444,7 +3452,7 @@
  }
  
  .CLASS21301 {
-@@ -8660,8 +8674,11 @@
+@@ -8660,8 +8675,11 @@
  
  /* config\control_panel.cgi */
  
@@ -3457,7 +3465,7 @@
  }
  
  .CLASS21701 {
-@@ -8732,7 +8749,8 @@
+@@ -8732,7 +8750,8 @@
  /* config\ic_selchannel.cgi */
  
  .CLASS21900 {
@@ -3467,7 +3475,20 @@
  }
  
  .CLASS21901 {
-@@ -8782,7 +8800,6 @@
+@@ -8757,9 +8776,11 @@
+ 
+   color: $_(textColorB); /* black */
+   border: 1px solid $_(black); /* black */
+-  border-radius: 2px;
++  border-radius: 5px;
+ 
+   cursor: pointer;
++  font-weight: bold;
++  padding: 2px;
+ }
+ 
+ .CLASS21905 {
+@@ -8782,7 +8803,6 @@
  
  .CLASS21908 {
    overflow: auto;
@@ -3475,7 +3496,7 @@
    width:100%;
  }
  
-@@ -8839,13 +8856,17 @@
+@@ -8839,13 +8859,17 @@
  /* config\ic_deviceparameters.cgi */
  
  .CLASS22000 {
@@ -3495,7 +3516,7 @@
  }
  
  .CLASS22002 {
-@@ -8855,11 +8876,17 @@
+@@ -8855,11 +8879,17 @@
  
  .CLASS22003 {
    background-color: $_(white);
@@ -3513,7 +3534,7 @@
  }
  
  .CLASS22005 {
-@@ -8917,7 +8944,8 @@
+@@ -8917,7 +8947,8 @@
  }
  
  .CLASS22101 {
@@ -3523,7 +3544,7 @@
  }
  
  .CLASS22102 {
-@@ -8939,9 +8967,8 @@
+@@ -8939,9 +8970,8 @@
  .CLASS22104 {
    left:0px;
    top:0px;
@@ -3534,7 +3555,7 @@
    position:relative;
    width:50px;
    height:50px;
-@@ -8951,10 +8978,12 @@
+@@ -8951,10 +8981,12 @@
    position:relative;
    width:50px;
    height:50px;

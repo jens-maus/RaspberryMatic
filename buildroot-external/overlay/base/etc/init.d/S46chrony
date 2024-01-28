@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 
 NAME=chrony
 DAEMON=/usr/sbin/chronyd
@@ -59,7 +59,7 @@ case "$1" in
 
       # shellcheck disable=SC2086
       if ! /usr/bin/ntpdate -b -s -u ${NTPSERVERS} 2>/dev/null; then
-        echo -n "could not sync to '${NTPSERVERS}', FAIL"
+        echo "could not sync to '${NTPSERVERS}', FAIL"
         exit 0
       fi
     fi
@@ -68,8 +68,12 @@ case "$1" in
     if start-stop-daemon -S -q -x ${DAEMON}; then
       # use client to add ntp servers
       for server in ${NTPSERVERS}; do
-        if ${CLIENT} add server "${server}" >/dev/null 2>&1; then
+        STATUS_CODE=$(${CLIENT} add server "${server}" 2>&1 | cut -d' ' -f1)
+        if [[ "${STATUS_CODE}" == "200" ]] ||    # "OK"
+           [[ "${STATUS_CODE}" == "511" ]]; then # "Source already present"
           touch /var/status/hasNTP
+        else
+          echo -n "WARN: could not add '${server}' (${STATUS_CODE}), "
         fi
       done
     fi

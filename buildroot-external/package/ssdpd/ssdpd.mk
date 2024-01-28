@@ -13,4 +13,8 @@ define SSDPD_INSTALL_INIT_SYSV
 		$(TARGET_DIR)/etc/init.d/S50ssdpd
 endef
 
+define SSDPD_USERS
+	ssdp -1 ssdp -1 * - - - ssdpd user
+endef
+
 $(eval $(generic-package))

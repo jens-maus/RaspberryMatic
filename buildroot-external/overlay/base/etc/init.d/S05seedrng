@@ -1,0 +1,36 @@
+#!/bin/sh
+# shellcheck shell=dash disable=SC2169,SC3010
+#
+# Startup script to seed the kernel RNG and preserve it during reboots.
+#
+# This script can be called multiple times during operation (e.g. with
+# "reload" argument) to refresh the seed.
+
+DAEMON="seedrng"
+SEEDRNG_ARGS="-d /etc/config/seedrng"
+
+# shellcheck source=/dev/null
+[[ -r "/etc/default/$DAEMON" ]] && . "/etc/default/$DAEMON"
+
+case "$1" in
+	start|stop|restart|reload)
+		echo -n "Running ${DAEMON}: "
+
+		# make sure /usr/local/etc/config exists
+		# shellcheck disable=SC2174
+		mkdir -p -m 0775 /usr/local/etc/config
+
+		# remove obsolete /etc/config/random-seed
+		[[ -f "/etc/config/random-seed" ]] && rm -f /etc/config/random-seed
+
+		# shellcheck disable=SC2086 # we need the word splitting
+		/usr/sbin/seedrng ${SEEDRNG_ARGS} >/dev/null
+
+		echo "OK"
+	;;
+	*)
+		echo "Usage: $0 {start|stop|restart|reload}"
+		exit 1
+esac
+
+exit 0

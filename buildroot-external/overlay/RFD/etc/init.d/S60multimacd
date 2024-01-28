@@ -93,12 +93,10 @@ start() {
   if [[ -n "${HM_HMIP_DEV}" ]] && [[ -n "${HM_HMRF_DEV}" ]] &&
      ( ( ! echo "${HM_HMIP_DEV}" | grep -q "HMIP-RFUSB" ) || [[ "${HM_HMRF_DEV}" != "HM-CFG-USB-2" ]] ); then
 
-    # we need to check if the system has CONFIG_RT_GROUP_SCHED enabled
-    # and enough cpu.rt_runtime_us shares assigned or otherwise
+    # we need to check if the system allows changing real-time scheduling attributes or otherwise
     # multimacd startup will fail as it uses sched_setscheduler() to
     # raise the real-time priority for processing things with low latency
-    if [[ ! -e /sys/fs/cgroup/cpu/cpu.rt_runtime_us ]] ||
-       [[ $(cat /sys/fs/cgroup/cpu/cpu.rt_runtime_us) -gt 0 ]]; then
+    if /usr/bin/chrt -f 10 echo >/dev/null 2>&1; then
 
       # run init function
       init
@@ -120,7 +118,7 @@ start() {
         echo "ERROR: /dev/eq3loop missing"
       fi
     else
-      echo "ERROR: not enough real-time shares (cpu.rt_runtime_us == 0)"
+      echo "ERROR: real-time scheduling test failed. CONFIG_RT_GROUP_SCHED not set or host kernel unable to utilize sched_setscheduler()"
     fi
   else
     echo "not required"

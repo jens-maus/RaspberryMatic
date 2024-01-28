@@ -1,0 +1,35 @@
+From 7b28142ae2c34b2a2ef18128486d7125fa304fcb Mon Sep 17 00:00:00 2001
+Message-ID: <7b28142ae2c34b2a2ef18128486d7125fa304fcb.1693922825.git.stefan@agner.ch>
+In-Reply-To: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
+References: <b978727972e1a8b7e3f14886395047e5809b7a81.1693922825.git.stefan@agner.ch>
+From: Khem Raj <raj.khem@gmail.com>
+Date: Sun, 16 Jul 2017 07:37:03 -0700
+Subject: [PATCH] Remove assumptions about glibc being only libc implementation
+ on linux
+
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+[Retrieved (and updated to work on current version) from:
+http://cgit.openembedded.org/meta-openembedded/tree/meta-oe/recipes-support/open-vm-tools/open-vm-tools/0001-Remove-assumptions-about-glibc-being-only-libc-imple.patch?h=sumo]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[rebased against stable-12.3.0]
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+---
+ lib/file/fileIOPosix.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/file/fileIOPosix.c b/lib/file/fileIOPosix.c
+index 492a4bf4..bf2c1a08 100644
+--- a/lib/file/fileIOPosix.c
++++ b/lib/file/fileIOPosix.c
+@@ -203,7 +203,7 @@ static AlignedPool alignedPool;
+  * are not available in any header file.
+  */
+ 
+-#if defined(__linux__) && !defined(__ANDROID__)
++#if defined(__linux__) && defined(__GLIBC__)
+    #if defined(_FILE_OFFSET_BITS) && (_FILE_OFFSET_BITS == 64)
+       /*
+        * We want preadv/pwritev. But due to FOB=64, the symbols are -64.
+-- 
+2.42.0
+

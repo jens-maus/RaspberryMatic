@@ -6,7 +6,7 @@
 #
 # Inspired by https://github.com/whiskerz007/proxmox_hassos_install
 #
-# Copyright (c) 2022-2023 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2022-2024 Jens Maus <mail@jens-maus.de>
 # Apache 2.0 License applies
 #
 # Usage:
@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.10"
+VERSION="2.1"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -66,7 +66,7 @@ function cleanup() {
 }
 
 msg "RaspberryMatic Proxmox installation script v${VERSION}"
-msg "Copyright (c) 2022-2023 Jens Maus <mail@jens-maus.de>"
+msg "Copyright (c) 2022-2024 Jens Maus <mail@jens-maus.de>"
 msg ""
 
 # create temp dir
@@ -81,57 +81,74 @@ if [[ ! -d /etc/pve ]]; then
   die "This script must be executed on a Proxmox VE host system."
 fi
 
+# PVE platform
+PLATFORM=$(uname -m)
+
 # Select RaspberryMatic ova version
-info "Getting available RaspberryMatic releases..."
+info "Getting available RaspberryMatic versions..."
 RELEASES=$(cat<<EOF | python3
 import requests
 import os
+import re
 url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases"
 r = requests.get(url).json()
 if "message" in r:
+    print("ERROR")
     exit()
 num = 0
 for release in r:
     if release["prerelease"] or release["tag_name"] == "snapshots":
       continue
     for asset in release["assets"]:
-        if asset["name"].endswith(".ova") == True:
+        if ("${PLATFORM}" == "aarch64" and asset["name"].endswith("generic-aarch64.zip") == True) or \
+           ("${PLATFORM}" == "x86_64"  and asset["name"].endswith(".ova") == True):
             image_url = asset["browser_download_url"]
             name = asset["name"]
-            version = os.path.splitext(name)[0][name.find('-')+1:]
-            if num < 5:
-                print(version + ' release ' + image_url)
+            version = re.findall('RaspberryMatic-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-z]{6})?)-?.*\.', name)
+            if len(version) > 0 and num < 5:
+                print(version[0] + ' release ' + image_url)
                 num = num + 1
             break
 EOF
 )
-if [[ -z "${RELEASES}" ]]; then
-  die "GitHub has returned an error. A rate limit may have been applied to your connection."
+if [[ "${RELEASES}" == "ERROR" ]]; then
+  die "GitHub has returned an error. A rate limit may have been applied to your connection. Try again later."
 fi
 
 SNAPSHOTS=$(cat<<EOF | python3
 import requests
 import os
+import re
 url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/snapshots"
 r = requests.get(url).json()
 if "message" in r:
+    print("ERROR")
     exit()
-print()
 for asset in r["assets"]:
-    if asset["name"].endswith(".ova") == True:
+    if ("${PLATFORM}" == "aarch64" and asset["name"].endswith("generic-aarch64.zip") == True) or \
+       ("${PLATFORM}" == "x86_64"  and asset["name"].endswith(".ova") == True):
         image_url = asset["browser_download_url"]
         name = asset["name"]
-        version = os.path.splitext(name)[0][name.find('-')+1:]
-        print(version + ' snapshot ' + image_url)
+        version = re.findall('RaspberryMatic-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-z]{6})?)-?.*\.', name)
+        if len(version) > 0:
+          print(version[0] + ' snapshot ' + image_url)
         break
 EOF
 )
 
-if [[ -z "${SNAPSHOTS}" ]]; then
-  die "GitHub has returned an error. A rate limit may have been applied to your connection."
+if [[ "${SNAPSHOTS}" == "ERROR" ]]; then
+  die "GitHub has returned an error. A rate limit may have been applied to your connection. Try again later."
 fi
 
-RELEASES+=${SNAPSHOTS}
+if [[ -z "${RELEASES}${SNAPSHOTS}" ]]; then
+  die "No RaspberryMatic release or snapshot build for '${PLATFORM}' PVE version found."
+fi
+
+if [[ -n "${RELEASES}" ]] && [[ -n "${SNAPSHOTS}" ]]; then
+  RELEASES+=$'\n'${SNAPSHOTS}
+elif [[ -n "${SNAPSHOTS}" ]]; then
+  RELEASES=${SNAPSHOTS}
+fi
 MSG_MAX_LENGTH=0
 RELEASES_MENU=()
 i=0
@@ -186,6 +203,27 @@ else
 fi
 info "Using '${STORAGE}' for storage location."
 
+# Select storage size
+info "Selecting virtual disk size"
+DISK_MINSIZE=4
+DISK_CURSIZE=6
+while true; do
+  if DISK_SIZE=$(whiptail --inputbox "Please enter the virtual disk size (GB) for the RaspberryMatic VM (minimum is ${DISK_MINSIZE} GB)" 8 58 ${DISK_CURSIZE} --title "Virtual disk size" 3>&1 1>&2 2>&3); then
+    if [[ -z "${DISK_SIZE}" ]]; then
+      DISK_SIZE=${DISK_MINSIZE}
+    fi
+    if ! [[ "${DISK_SIZE}" =~ ^[0-9]+$ ]] || [[ ${DISK_SIZE} -lt ${DISK_MINSIZE} ]]; then
+      info "Virtual disk size not allowed to be smaller than ${DISK_MINSIZE} GB."
+      sleep 3
+      continue
+    fi
+    info "Chosen virtual disk size is ${DISK_SIZE} GB."
+    break
+  else
+    die "Virtual disk size selection canceled."
+  fi
+done
+
 # Search+Select HomeMatic USB devices
 MSG_MAX_LENGTH=0
 USB_MENU=()
@@ -220,9 +258,29 @@ else
   info "No HomeMatic-RF USB device found."
 fi
 
-# Get the next guest VM/LXC ID
-VMID=$(pvesh get /cluster/nextid)
-info "Container ID is ${VMID}."
+# Get next free VM/LXC ID and ask user
+NEXTID=$(pvesh get /cluster/nextid)
+while true; do
+  if VMID=$(whiptail --inputbox "Please enter the VM ID for the RaspberryMatic VM\n(next free ID is: ${NEXTID})" 8 58 ${NEXTID} --title "Virtual Machine ID" 3>&1 1>&2 2>&3); then
+    if [[ -z "${VMID}" ]]; then
+      VMID=${NEXTID}
+    fi
+    if ! [[ "${VMID}" =~ ^[1-9][0-9]+$ ]] || [[ ${VMID} -lt 100 ]]; then
+      info "ID '${VMID}' is not a number or smaller than 100."
+      sleep 3
+      continue
+    fi
+    if pct status "${VMID}" &>/dev/null || qm status "${VMID}" &>/dev/null; then
+      info "ID '${VMID}' already in use."
+      sleep 3
+      continue
+    fi
+    info "Selected ${VMID} as VM ID."
+    break
+  else
+    die "VM ID selection canceled."
+  fi
+done
 
 # Download RaspberryMatic ova archive
 info "Downloading disk image..."
@@ -232,53 +290,103 @@ FILE=$(basename "${URL}")
 
 # Extract RaspberryMatic disk image
 info "Extracting disk image..."
-tar xf "${FILE}"
+if [[ "${PLATFORM}" == "aarch64" ]]; then
+  unzip "${FILE}" '*.img*'
+  IMG_FILE="$(ls RaspberryMatic-*-aarch64.img)"
+  if [[ -f "${IMG_FILE}.sha256" ]]; then
+    info "Verifying download checksum..."
+    sha256sum -c "${IMG_FILE}.sha256" >>${LOGFILE}
+  fi
+else
+  tar xf "${FILE}"
+  IMG_FILE="RaspberryMatic.ovf"
+fi
 
 # Identify target format
 IMPORT_OPT=
 STORAGE_TYPE=$(pvesm status -storage "${STORAGE}" | awk 'NR>1 {print $2}')
 if [[ "${STORAGE_TYPE}" == "dir" ]] ||
-   [[ "${STORAGE_TYPE}" == "nfs" ]]; then
+   [[ "${STORAGE_TYPE}" == "nfs" ]] ||
+   [[ "${PLATFORM}" == "aarch64" ]]; then
   IMPORT_OPT="-format qcow2"
 fi
 
-# Create VM using the "importovf"
-info "Importing OVA..."
-qm importovf "${VMID}" \
-  RaspberryMatic.ovf \
-  "${STORAGE}" \
-  ${IMPORT_OPT} >>${LOGFILE} 2>&1
+# Create VM using the "importovf" or use manual create
+if [[ "${PLATFORM}" == "aarch64" ]]; then
+  info "Creating VM ${VMID}..."
+  qm create ${VMID} -bios ovmf \
+                    -cores 2 \
+                    -memory 1024 \
+		    -name "RaspberryMatic"
 
-# get the assigned disk id after the import
-DISK_ID=$(qm config "${VMID}" 2>>${LOGFILE} | grep -e "^\(sata\|scsi\).:" | cut -d' ' -f2 | cut -d',' -f1)
-if [[ -z "${DISK_ID}" ]]; then
-  die "could not retrieve disk id from vm config"
+  # create EFI disk
+  info "Allocating EFI disk..."
+  pvesm alloc "${STORAGE}" "${VMID}" "vm-${VMID}-disk-0.qcow2" 64M >>${LOGFILE}
+
+  # set efi disk
+  info "Setting EFI disk parameter..."
+  qm set "${VMID}" -efidisk0 "${STORAGE}:${VMID}/vm-${VMID}-disk-0.qcow2,efitype=4m,size=64M" >>${LOGFILE}
+
+  # import img file
+  info "Importing image..."
+  qm importdisk "${VMID}" "${IMG_FILE}" "${STORAGE}" ${IMPORT_OPT}
+
+  # get disk id/num
+  DISK_ID="${STORAGE}:${VMID}/vm-${VMID}-disk-1.qcow2"
+
+  # Change settings of VM
+  info "Modifying VM setting..."
+  qm set "${VMID}" \
+    --acpi 1 \
+    --agent 1,fstrim_cloned_disks=1,type=virtio \
+    --hotplug network,disk,usb \
+    --description "# RaspberryMatic CCU" \
+    --net0 virtio,bridge=vmbr0,firewall=1 \
+    --onboot 1 \
+    --tablet 1 \
+    --ostype l26 \
+    --scsihw virtio-scsi-single \
+    --scsi0 "${DISK_ID},discard=on,iothread=1" >>${LOGFILE} 2>&1
+else
+  info "Importing OVA..."
+  qm importovf "${VMID}" \
+    "${IMG_FILE}" \
+    "${STORAGE}" \
+    ${IMPORT_OPT} >>${LOGFILE} 2>&1
+
+  # get the assigned disk id after the import
+  DISK_ID=$(qm config "${VMID}" 2>>${LOGFILE} | grep -e "^\(sata\|scsi\).:" | cut -d' ' -f2 | cut -d',' -f1)
+  if [[ -z "${DISK_ID}" ]]; then
+    die "could not retrieve disk id from vm config"
+  fi
+
+  # Change settings of VM
+  info "Modifying VM setting..."
+  qm set "${VMID}" \
+    --acpi 1 \
+    --vcpus 2 \
+    --numa 1 \
+    --agent 1,fstrim_cloned_disks=1,type=virtio \
+    --hotplug network,disk,usb,cpu,memory \
+    --description "# RaspberryMatic CCU" \
+    --net0 virtio,bridge=vmbr0,firewall=1 \
+    --onboot 1 \
+    --tablet 0 \
+    --watchdog model=i6300esb,action=reset \
+    --ostype l26 \
+    --scsihw virtio-scsi-single \
+    --delete sata0 \
+    --scsi0 "${DISK_ID},discard=on,iothread=1" >>${LOGFILE} 2>&1
 fi
-
-# Change settings of VM
-info "Modifying VM setting..."
-qm set "${VMID}" \
-  --acpi 1 \
-  --vcpus 2 \
-  --numa 1 \
-  --agent 1,fstrim_cloned_disks=1,type=virtio \
-  --hotplug network,disk,usb,cpu,memory \
-  --description "RaspberryMatic CCU" \
-  --net0 virtio,bridge=vmbr0,firewall=1 \
-  --onboot 1 \
-  --tablet 0 \
-  --ostype l26 \
-  --scsihw virtio-scsi-single \
-  --delete sata0 \
-  --scsi0 "${DISK_ID},discard=on,iothread=1" >>${LOGFILE} 2>&1
 
 # Set boot order 
 qm set "${VMID}" \
   --boot order=scsi0 >>${LOGFILE} 2>&1
 
 # Resize scsi0 disk
-info "Resizing disk..."
-qm resize "${VMID}" scsi0 64G >>${LOGFILE} 2>&1
+info "Resizing virtual disk to ${DISK_SIZE} GB..."
+sync
+qm resize "${VMID}" scsi0 "${DISK_SIZE}G" >>${LOGFILE}
 
 # Identify+Set known USB-based RF module devices
 if [[ -n "${USB_DEVICE}" ]]; then

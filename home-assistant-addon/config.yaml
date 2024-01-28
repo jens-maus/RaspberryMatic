@@ -20,7 +20,7 @@ init: false
 backup_pre: /bin/sh -c "/bin/echo 'load tclrega.so; rega system.Save()' | /bin/tclsh && /bin/sync"
 backup_exclude:
   - "*/tmp/.watchdog"
-timeout: 120
+timeout: 240
 devices:
   - /dev/raw-uart
   - /dev/raw-uart1

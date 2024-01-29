@@ -44,7 +44,7 @@ init_rtc_device() {
 
     # check if the HOST is a docker/oci host and if so make sure
     # to load the rpi_rf_mod_led kernel module early if not present already
-    if [[ "${HM_HOST}" == "oci" ]] &&
+    if [[ "${HM_HOST}" == "oci" ]] && [[ ! -e /sys/class/leds/rpi_rf_mod:green/trigger ]] &&
        ! grep -Eq "^rpi_rf_mod_led " /proc/modules; then
 
       # check underlying hardware model

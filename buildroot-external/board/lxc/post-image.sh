@@ -8,5 +8,3 @@ set -e
 
 # make sure a factory reset is performed upon fresh start
 touch "${TARGET_DIR}/usr/local/.doFactoryReset"
-
-exit $?

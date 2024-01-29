@@ -13,5 +13,3 @@ cp -a "build-${PRODUCT}/images/rootfs.tar" "./release/RaspberryMatic-${PRODUCT_V
 #(cd "./release/updatepkg/${PRODUCT}" && tar --numeric-owner --owner=root --group=root -rvf "../../RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tar" update_script EULA.de EULA.en)
 gzip -f "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tar"
 (cd ./release && sha256sum "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tar.gz" >"RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tar.gz.sha256")
-
-exit $?

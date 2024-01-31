@@ -48,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: ${{ fromJSON(format('[{0}]', (github.event.inputs.platforms == '' || github.event.inputs.platforms == 'all') && '"rpi0","rpi2","rpi3","rpi4","rpi5","tinkerboard","odroid-c2","odroid-c4","odroid-n2","intelnuc","ova","oci_amd64","oci_arm64","oci_arm","generic-aarch64"' || github.event.inputs.platforms)) }}
+        platform: ${{ fromJSON(format('[{0}]', (github.event.inputs.platforms == '' || github.event.inputs.platforms == 'all') && '"rpi0","rpi2","rpi3","rpi4","rpi5","tinkerboard","odroid-c2","odroid-c4","odroid-n2","intelnuc","ova","oci_amd64","oci_arm64","oci_arm","generic-aarch64","lxc_amd64","lxc_arm64","lxc_arm64-16k","lxc_arm"' || github.event.inputs.platforms)) }}
 
     steps:
       - name: Checkout Code
@@ -111,7 +111,8 @@ jobs:
       # check linux kernel config consistency
       - name: Check Linux Kconfig
         if: |
-          !startsWith(matrix.platform, 'oci_')
+          !startsWith(matrix.platform, 'oci_') &&
+          !startsWith(matrix.platform, 'lxc_')
         run: |
           sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} PRODUCT=raspmatic_${{ matrix.platform }} linux-check-dotconfig
 
@@ -126,7 +127,8 @@ jobs:
       - name: Upload build snapshot [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, generic-*]
         if: |
           github.repository_owner == 'jens-maus' &&
-          !startsWith(matrix.platform, 'oci_')
+          !startsWith(matrix.platform, 'oci_') &&
+          !startsWith(matrix.platform, 'lxc_')
         uses: WebFreak001/deploy-nightly@v3.0.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
@@ -140,7 +142,8 @@ jobs:
       - name: Upload build snapshot checksum [rpi*, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, generic-*]
         if: |
           github.repository_owner == 'jens-maus' &&
-          !startsWith(matrix.platform, 'oci_')
+          !startsWith(matrix.platform, 'oci_') &&
+          !startsWith(matrix.platform, 'lxc_')
         uses: WebFreak001/deploy-nightly@v3.0.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
@@ -207,10 +210,10 @@ jobs:
           asset_content_type: text/plain
           max_releases: 1
 
-      - name: Upload build snapshot [oci]
+      - name: Upload build snapshot [oci, lxc]
         if: |
           github.repository_owner == 'jens-maus' &&
-          startsWith(matrix.platform, 'oci_')
+          ( startsWith(matrix.platform, 'oci_') || startsWith(matrix.platform, 'lxc_') )
         uses: WebFreak001/deploy-nightly@v3.0.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
@@ -221,10 +224,10 @@ jobs:
           asset_content_type: application/gzip
           max_releases: 1
 
-      - name: Upload build snapshot checksum [oci]
+      - name: Upload build snapshot checksum [oci, lxc]
         if: |
           github.repository_owner == 'jens-maus' &&
-          startsWith(matrix.platform, 'oci_')
+          ( startsWith(matrix.platform, 'oci_') || startsWith(matrix.platform, 'lxc_') )
         uses: WebFreak001/deploy-nightly@v3.0.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}

@@ -12,4 +12,5 @@ BOARD=$(echo "${PRODUCT}" | cut -d'_' -f2-)
 cp -a "build-${PRODUCT}/images/rootfs.tar" "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tar"
 #(cd "./release/updatepkg/${PRODUCT}" && tar --numeric-owner --owner=root --group=root -rvf "../../RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tar" update_script EULA.de EULA.en)
 gzip -f "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tar"
-(cd ./release && sha256sum "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tar.gz" >"RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tar.gz.sha256")
+mv "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tar.gz" "./release/RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tgz"
+(cd ./release && sha256sum "RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tgz" >"RaspberryMatic-${PRODUCT_VERSION}-${BOARD}.tgz.sha256")

@@ -111,7 +111,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [rpi0, rpi2, rpi3, rpi4, rpi5, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, oci_amd64, oci_arm64, oci_arm, generic-aarch64]
+        platform: [rpi0, rpi2, rpi3, rpi4, rpi5, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, oci_amd64, oci_arm64, oci_arm, generic-aarch64, lxc_amd64, lxc_arm64, lxc_arm64-16k, lxc_arm]
 
     steps:
       - name: Checkout Code
@@ -169,7 +169,8 @@ jobs:
       # release uploads
       - name: Upload release snapshot [rpi*, tinkerboard, odroid-*, intelnuc, ova, generic-*]
         if: |
-          !startsWith(matrix.platform, 'oci_')
+          !startsWith(matrix.platform, 'oci_') &&
+          !startsWith(matrix.platform, 'lxc_')
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
@@ -178,7 +179,8 @@ jobs:
 
       - name: Upload build release checksum [rpi*, tinkerboard, intelnuc, ova, generic-*]
         if: |
-          !startsWith(matrix.platform, 'oci_')
+          !startsWith(matrix.platform, 'oci_') &&
+          !startsWith(matrix.platform, 'lxc_')
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
@@ -221,18 +223,20 @@ jobs:
           asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}.ova.sha256
           asset_content_type: text/plain
 
-      - name: Upload build release [oci]
+      - name: Upload build release [oci, lxc]
         if: |
-          startsWith(matrix.platform, 'oci_')
+          startsWith(matrix.platform, 'oci_') ||
+          startsWith(matrix.platform, 'lxc_')
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
           asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
           asset_content_type: application/gzip
 
-      - name: Upload build release checksum [oci]
+      - name: Upload build release checksum [oci, lxc]
         if: |
-          startsWith(matrix.platform, 'oci_')
+          startsWith(matrix.platform, 'oci_') ||
+          startsWith(matrix.platform, 'lxc_')
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}

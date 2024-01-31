@@ -1,71 +1,77 @@
 {
   "os_list": [
     {
-      "name": "RaspberryMatic 3.73.9.20231130 (Pi 4, Pi 400)",
+      "name": "RaspberryMatic 3.73.9.20240130 (Pi 5)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
-      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.73.9.20231130/RaspberryMatic-3.73.9.20231130-rpi4.zip",
+      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.73.9.20240130/RaspberryMatic-3.73.9.20240130-rpi5.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager.png",
-      "release_date": "2023-11-30",
+      "release_date": "2024-01-30",
       "extract_size": 1345249792,
-      "extract_sha256": "edc8dba8a7770efa8437e79d87e5558a97bfdbb67cb9152f3ba82ff6d9ecf883",
-      "image_download_size": 316413965,
-      "image_download_sha256": "edaa2cefb037b57056816c8adadf9c3480a159db221fb18ebd0a73fd59a9d13b",
+      "extract_sha256": "a78e2d6b5ae1c77989be19196e0f76b82180eadfe22130a2a56a24ca43bf7bad",
+      "image_download_size": 319801045,
+      "image_download_sha256": "50458f1d26e6aba0d9f947be423057a93be5411fa4ca1c295769fec02b378261",
       "website": "https://raspberrymatic.de/",
       "devices": [
         "pi4-64bit"
       ]
     },
     {
-      "name": "RaspberryMatic 3.73.9.20231130 (Pi 3, Pi Zero 2, ELV-Charly, CCU3)",
+      "name": "RaspberryMatic 3.73.9.20240130 (Pi 4, Pi 400)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
-      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.73.9.20231130/RaspberryMatic-3.73.9.20231130-rpi3.zip",
+      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.73.9.20240130/RaspberryMatic-3.73.9.20240130-rpi4.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager.png",
-      "release_date": "2023-11-30",
+      "release_date": "2024-01-30",
       "extract_size": 1345249792,
-      "extract_sha256": "feaf4618ef36c3ac6cb3d942307dc5de5c6cd729a18ff1c9d0afabcc2020378c",
-      "image_download_size": 313119608,
-      "image_download_sha256": "768e86bcaa3e2ef717ac7ba2603d2a7a5f2791a85d1ba563eca26412865f1a74",
+      "extract_sha256": "ffc642741b065b24d5c08062fa4a01c25bb958bd69ec41c467cfc2a4b06f5b1d",
+      "image_download_size": 319514104,
+      "image_download_sha256": "7c31a37a42928933d6ddd8f43e0de74a7d24407e5c8f77ae2b8865f53e5c91b6",
       "website": "https://raspberrymatic.de/",
       "devices": [
         "pi3-64bit"
       ]
     },
     {
-      "name": "RaspberryMatic 3.73.9.20231130 (Pi 2)",
+      "name": "RaspberryMatic 3.73.9.20240130 (Pi 3, Pi Zero 2, ELV-Charly, CCU3)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
-      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.73.9.20231130/RaspberryMatic-3.73.9.20231130-rpi2.zip",
+      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.73.9.20240130/RaspberryMatic-3.73.9.20240130-rpi3.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager.png",
-      "release_date": "2023-11-30",
+      "release_date": "2024-01-30",
       "extract_size": 1345249792,
-      "extract_sha256": "8221b5c8c77ab19b9d63a7dc70f843891303fb85d1129b29df87440b9da8a40c",
-      "image_download_size": 290380915,
-      "image_download_sha256": "c1b14354d8e2313a4b48671cb95ce1f9f28046460308367aa3ed9e29ca807925",
+      "extract_sha256": "f4f5984b732b4ffa926212b9e0ae55e488c4faefdbafddbb118fed158f2adfdf",
+      "image_download_size": 318466637,
+      "image_download_sha256": "a48b26410c731d15fc8f4499d9b40378ef01edaa35937dab89885056b29f252a",
       "website": "https://raspberrymatic.de/",
       "devices": [
         "pi2-32bit"
       ]
     },
     {
-      "name": "RaspberryMatic 3.73.9.20231130 (Pi Zero, Pi 1)",
+      "name": "RaspberryMatic 3.73.9.20240130 (Pi 2)",
       "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
-      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.73.9.20231130/RaspberryMatic-3.73.9.20231130-rpi0.zip",
+      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.73.9.20240130/RaspberryMatic-3.73.9.20240130-rpi2.zip",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager.png",
-      "release_date": "2023-11-30",
+      "release_date": "2024-01-30",
       "extract_size": 1345249792,
-      "extract_sha256": "7cf3c5c77bef99c7204e42616b894c73d905c6815a593a51101d511af5f5b538",
-      "image_download_size": 288608653,
-      "image_download_sha256": "874f8f3c9667b0b8762f5e5c412db8bf0f3be08ba5d684bb4080624634c97fa2",
+      "extract_sha256": "4ab6c9b164f799b499a7d09bf6cdba8d505585b6362fe9867ca4a62a7c021276",
+      "image_download_size": 293253007,
+      "image_download_sha256": "7dca4374149b0c4240aa2eeda8b5d64496bf160804ea5243fb54572aa20a2a04",
       "website": "https://raspberrymatic.de/",
       "devices": [
         "pi1-32bit"
       ]
     },
     {
-      "name": "RaspberryMatic Nightly Snapshots",
-      "description": "Nightly Snapshot builds (untested, bleeding edge)",
+      "name": "RaspberryMatic 3.73.9.20240130 (Pi Zero, Pi 1)",
+      "description": "Lightweight Linux OS for running a HomeMatic/homematicIP IoT central.",
       "subitems_url": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.json",
       "icon": "https://raw.githubusercontent.com/jens-maus/RaspberryMatic/master/release/rpi-imager-dev.png",
-      "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots"
+      "website": "https://github.com/jens-maus/RaspberryMatic/releases/tag/snapshots",
+      "url": "https://github.com/jens-maus/RaspberryMatic/releases/download/3.73.9.20240130/RaspberryMatic-3.73.9.20240130-rpi0.zip",
+      "release_date": "2024-01-30",
+      "extract_size": 1345249792,
+      "extract_sha256": "e463e508c868edbc0def1d907b5ba39603e48e5975683a6c0f791f12b331ebef",
+      "image_download_size": 291572872,
+      "image_download_sha256": "4d6f27492ae3ea5e0e2c5e8d71c319435bb3640f9a5931047fff0ea979d1ead6"
     }
   ]
 }

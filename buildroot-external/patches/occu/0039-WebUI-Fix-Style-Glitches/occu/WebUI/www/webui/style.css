@@ -1787,6 +1787,21 @@ div.caption  { display: table-caption; }
   z-index:90;
 }
 
+#messagebox
+{
+  min-width: min-content;
+}
+
+#txVals
+{
+  resize: auto;
+}
+
+#txValue
+{
+  resize: auto;
+}
+
 #messagebox #id_messagebox
 {
   position:absolute;

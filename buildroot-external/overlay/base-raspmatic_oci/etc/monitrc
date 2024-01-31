@@ -48,23 +48,6 @@ check program udevdEnabled with path "/bin/grep -q 'HM_RUNNING_IN_HA=' /var/hm_m
     group system
     if status = 0 for 1 cycles then unmonitor
 
-# irqbalance daemon monitoring
-check process irqbalance with pidfile /var/run/irqbalance.pid
-    group system
-    start = "/etc/init.d/S13irqbalance start"
-    stop = "/etc/init.d/S13irqbalance stop"
-    restart = "/etc/init.d/S13irqbalance restart"
-    if not exist for 1 cycles then restart
-    if 1 restart within 1 cycles then
-      exec "/bin/triggerAlarm.tcl 'irqbalance restarted' 'WatchDog: irqbalance-restart' true"
-    if filedescriptors > 95% for 5 cycles then
-      exec "/bin/triggerAlarm.tcl 'irqbalance: high filedescriptor usage (>95%)' 'WatchDog: irqbalance-highfd' true"
-    depends on irqbalanceEnabled
-
-check program irqbalanceEnabled with path /bin/sh -c "/usr/bin/test $(nproc) -gt 1"
-    group system
-    if status != 0 for 1 cycles then unmonitor
-
 # eq3config daemon monitoring
 check process eq3configd with pidfile /var/run/eq3configd.pid
     group homematic

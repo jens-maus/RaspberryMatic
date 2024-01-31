@@ -364,12 +364,8 @@
    {
      if( vals == "" )
      {
-@@ -333,12 +395,26 @@
-     var s = "";
-     s += "<table class='CLASS05012'>";
-     s += "<tr><td>"+ translateKey("lblValueDescription") + ":</td></tr>";
--    s += "<tr><td> <textarea id='txVals' rows='2'>"+vals+"</textarea> </td></tr>";
-+    s += "<tr><td> <textarea id='txVals' rows='2' style='resize: auto;'>"+vals+"</textarea> </td></tr>";
+@@ -336,9 +398,23 @@
+     s += "<tr><td> <textarea id='txVals' rows='2'>"+vals+"</textarea> </td></tr>";
      s += "</table>";
      $("tdEdit").innerHTML = s;
 +    

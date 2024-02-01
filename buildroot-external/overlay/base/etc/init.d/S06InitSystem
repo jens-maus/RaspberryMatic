@@ -33,8 +33,10 @@ init_system() {
   mkdir -p /var/empty
   chmod 0700 /var/empty
 
-  # setup /dev_host for OCI/Docker environments (excluding HA)
-  if [[ "${HM_HOST}" == "oci" ]] && [[ -z "${HM_RUNNING_IN_HA}" ]]; then
+  # setup /dev_host for OCI/Docker and LXC environments (excluding HA)
+  if [[ "${HM_HOST}" == "lxc" ]] ||
+     { [[ "${HM_HOST}" == "oci" ]] &&
+       [[ -z "${HM_RUNNING_IN_HA}" ]]; }; then
     # To avoid sharing the whole host /dev with the container we
     # mount devtmps in /dev_host and symlink the required devices
     mount -o noatime -t devtmpfs devtmpfs /dev_host

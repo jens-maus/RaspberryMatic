@@ -32,22 +32,6 @@ check process syslogd with pidfile /var/run/syslogd.pid
     if filedescriptors > 95% for 5 cycles then
       exec "/bin/triggerAlarm.tcl 'syslogd: high filedescriptor usage (>95%)' 'WatchDog: syslogd-highfd' true"
 
-# udev daemon monitoring
-check process udevd with matching /sbin/udevd
-    group system
-    start = "/etc/init.d/S10udev start"
-    stop = "/etc/init.d/S10udev stop"
-    if not exist for 1 cycles then restart
-    if 1 restart within 1 cycles then
-      exec "/bin/triggerAlarm.tcl 'udevd restarted' 'WatchDog: udevd-restart' true"
-    if filedescriptors > 95% for 5 cycles then
-      exec "/bin/triggerAlarm.tcl 'udevd: high filedescriptor usage (>95%)' 'WatchDog: udevd-highfd' true"
-    depends on udevdEnabled
-
-check program udevdEnabled with path "/bin/grep -q 'HM_RUNNING_IN_HA=' /var/hm_mode"
-    group system
-    if status = 0 for 1 cycles then unmonitor
-
 # eq3config daemon monitoring
 check process eq3configd with pidfile /var/run/eq3configd.pid
     group homematic

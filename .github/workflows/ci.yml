@@ -43,8 +43,21 @@ env:
   SECRETS_ARE_AVAILABLE: ${{ secrets.CR_PAT != '' }}
 
 jobs:
+  skip_check:
+    name: Duplicate Check
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.check.outputs.should_skip }}
+    steps:
+      - id: check
+        uses: fkirc/skip-duplicate-actions@v5.3.1
+        with:
+          skip_after_successful_duplicate: 'true'
+
   linter:
     name: Linter Checks
+    needs: skip_check
+    if: ${{ needs.skip_check.outputs.should_skip != 'true' }}
     runs-on: ubuntu-22.04
 
     steps:

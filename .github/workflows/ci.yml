@@ -53,6 +53,7 @@ jobs:
         uses: fkirc/skip-duplicate-actions@v5.3.1
         with:
           skip_after_successful_duplicate: 'true'
+          concurrent_skipping: 'same_content_newer'
 
   linter:
     name: Linter Checks

@@ -43,7 +43,6 @@ waitStartupComplete() {
     MMDSTATUSPID=$(cat /var/status/multimacd.status 2>&1)
     MMDPID=$(pidof multimacd)
     if [[ "${MMDSTATUSPID}" == "${MMDPID}" ]]; then
-
       if [[ ! -c /dev/mmd_hmip ]] || [[ ! -c /dev/mmd_bidcos ]]; then
         echo -n "."
         # restart multimacd

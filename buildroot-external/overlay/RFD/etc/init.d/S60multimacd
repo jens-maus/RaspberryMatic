@@ -44,16 +44,6 @@ waitStartupComplete() {
     MMDPID=$(pidof multimacd)
     if [[ "${MMDSTATUSPID}" == "${MMDPID}" ]]; then
 
-      # check that the mmd devices exist and if not
-      # create the device nodes via mknod
-      for dev in mmd_bidcos mmd_hmip; do
-        if [[ -e /sys/devices/virtual/eq3loop/${dev}/dev ]] &&
-           [[ ! -c /dev/${dev} ]]; then
-          # shellcheck disable=SC2046
-          /bin/mknod /dev/${dev} c $(cat /sys/devices/virtual/eq3loop/${dev}/dev | tr ':' ' ')
-        fi
-      done
-
       if [[ ! -c /dev/mmd_hmip ]] || [[ ! -c /dev/mmd_bidcos ]]; then
         echo -n "."
         # restart multimacd

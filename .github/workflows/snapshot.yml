@@ -210,10 +210,10 @@ jobs:
           asset_content_type: text/plain
           max_releases: 1
 
-      - name: Upload build snapshot [oci, lxc]
+      - name: Upload build snapshot [oci]
         if: |
           github.repository_owner == 'jens-maus' &&
-          ( startsWith(matrix.platform, 'oci_') || startsWith(matrix.platform, 'lxc_') )
+          startsWith(matrix.platform, 'oci_')
         uses: WebFreak001/deploy-nightly@v3.0.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
@@ -224,10 +224,10 @@ jobs:
           asset_content_type: application/gzip
           max_releases: 1
 
-      - name: Upload build snapshot checksum [oci, lxc]
+      - name: Upload build snapshot checksum [oci]
         if: |
           github.repository_owner == 'jens-maus' &&
-          ( startsWith(matrix.platform, 'oci_') || startsWith(matrix.platform, 'lxc_') )
+          startsWith(matrix.platform, 'oci_')
         uses: WebFreak001/deploy-nightly@v3.0.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
@@ -235,6 +235,34 @@ jobs:
           release_id: 22744592
           asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz.sha256
           asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tgz.sha256
+          asset_content_type: text/plain
+          max_releases: 1
+
+      - name: Upload build snapshot [lxc]
+        if: |
+          github.repository_owner == 'jens-maus' &&
+          startsWith(matrix.platform, 'lxc_')
+        uses: WebFreak001/deploy-nightly@v3.0.0
+        with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
+          upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+          release_id: 22744592
+          asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tar.gz
+          asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tar.gz
+          asset_content_type: application/gzip
+          max_releases: 1
+
+      - name: Upload build snapshot checksum [lxc]
+        if: |
+          github.repository_owner == 'jens-maus' &&
+          startsWith(matrix.platform, 'lxc_')
+        uses: WebFreak001/deploy-nightly@v3.0.0
+        with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
+          upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
+          release_id: 22744592
+          asset_path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tar.gz.sha256
+          asset_name: RaspberryMatic-${{ env.OCCU_VERSION }}.$$-${{ matrix.platform }}.tar.gz.sha256
           asset_content_type: text/plain
           max_releases: 1
 

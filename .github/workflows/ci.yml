@@ -216,14 +216,22 @@ jobs:
           name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}.ova
         continue-on-error: true
 
-      - name: Upload build artifact [oci, lxc]
+      - name: Upload build artifact [oci]
         if: |
-          startsWith(matrix.platform, 'oci_') ||
-          startsWith(matrix.platform, 'lxc_')
+          startsWith(matrix.platform, 'oci_')
         uses: actions/upload-artifact@v4
         with:
           path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz*
           name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
+        continue-on-error: true
+
+      - name: Upload build artifact [lxc]
+        if: |
+          startsWith(matrix.platform, 'lxc_')
+        uses: actions/upload-artifact@v4
+        with:
+          path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tar.gz*
+          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tar.gz
         continue-on-error: true
 
   ##########################################

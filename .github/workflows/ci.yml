@@ -118,7 +118,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [rpi0, rpi2, rpi3, rpi4, rpi5, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, oci_amd64, oci_arm64, oci_arm, generic-aarch64]
+        platform: [rpi0, rpi2, rpi3, rpi4, rpi5, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, oci_amd64, oci_arm64, oci_arm, generic-aarch64, lxc_amd64, lxc_arm64, lxc_arm]
 
     steps:
       - name: Checkout Code
@@ -190,7 +190,8 @@ jobs:
       # upload build artifacts
       - name: Upload build artifact [rpi*, tinkerboard, intelnuc, ova, generic-*]
         if: |
-          !startsWith(matrix.platform, 'oci_')
+          !startsWith(matrix.platform, 'oci_') &&
+          !startsWith(matrix.platform, 'lxc_')
         uses: actions/upload-artifact@v4
         with:
           path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.zip*
@@ -222,6 +223,15 @@ jobs:
         with:
           path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tgz*
           name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tgz
+        continue-on-error: true
+
+      - name: Upload build artifact [lxc]
+        if: |
+          startsWith(matrix.platform, 'lxc_')
+        uses: actions/upload-artifact@v4
+        with:
+          path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tar.gz*
+          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tar.gz
         continue-on-error: true
 
   ##########################################

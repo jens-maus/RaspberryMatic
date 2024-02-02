@@ -181,6 +181,11 @@ identify_host() {
       HM_HOST="generic-aarch64"
     ;;
 
+    # lxc platform
+    lxc)
+      HM_HOST="lxc"
+    ;;
+
     # default fallback
     *)
       HM_HOST="${PLATFORM}"

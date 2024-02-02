@@ -33,8 +33,10 @@ init_system() {
   mkdir -p /var/empty
   chmod 0700 /var/empty
 
-  # setup /dev_host for OCI/Docker environments (excluding HA)
-  if [[ "${HM_HOST}" == "oci" ]] && [[ -z "${HM_RUNNING_IN_HA}" ]]; then
+  # setup /dev_host for OCI/Docker and LXC environments (excluding HA)
+  if [[ "${HM_HOST}" == "lxc" ]] ||
+     { [[ "${HM_HOST}" == "oci" ]] &&
+       [[ -z "${HM_RUNNING_IN_HA}" ]]; }; then
     # To avoid sharing the whole host /dev with the container we
     # mount devtmps in /dev_host and symlink the required devices
     mount -o noatime -t devtmpfs devtmpfs /dev_host
@@ -84,7 +86,8 @@ init_system() {
   # update /etc/config/localtime and /etc/config/timezone
   /bin/updateTZ.sh
 
-  if [[ "${HM_HOST}" != "oci" ]]; then
+  if [[ "${HM_HOST}" != "oci" ]] &&
+     [[ "${HM_HOST}" != "lxc" ]]; then
     # if /etc/config/timezone is set to Europe/Berlin we
     # assume a german keyboard layout
     if [[ $(cat /etc/config/timezone) == "Europe/Berlin" ]]; then
@@ -133,7 +136,7 @@ start() {
 
   # start hss_led if it exists and we are not in HMLGW mode
   if [[ "${HM_MODE}" != "HM-LGW" ]] && [[ -x /bin/hss_led ]]; then
-    if [[ "${HM_HOST}" != "oci" ]]; then
+    if [[ "${HM_HOST}" != "oci" ]] && [[ "${HM_HOST}" != "lxc" ]]; then
       start-stop-daemon -S -q -b -m -c hssled:hssled -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
     else
       start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6

@@ -327,7 +327,7 @@ if command -v dpkg >/dev/null; then
   fi
 
   # Install kernel headers
-  if command -v armbian-config >/dev/null; then
+  if command -v armbian-install >/dev/null; then
     msg "Detected Armbian - install kernel sources and device tree"
     check_sudo
     apt install -y "$(dpkg --get-selections | grep 'linux-image-' | grep '\sinstall' | sed -e 's/linux-image-\([a-z0-9-]\+\).*/linux-headers-\1/')"

@@ -71,7 +71,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.10"
+VERSION="1.11"
 LINE=
 
 error_exit() {
@@ -171,6 +171,41 @@ uninstall() {
   msg  "- Reboot your host system to cleanup still running processes."
 }
 
+# network calc helper functions
+tonum() {
+  if [[ ${1} =~ ([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+)\.([[:digit:]]+) ]]; then
+    addr=$(( (BASH_REMATCH[1] << 24) + (BASH_REMATCH[2] << 16) + (BASH_REMATCH[3] << 8) + BASH_REMATCH[4] ))
+    echo "${addr}"
+  fi
+}
+
+toaddr() {
+  b1=$(( (${1} & 0xFF000000) >> 24))
+  b2=$(( (${1} & 0xFF0000) >> 16))
+  b3=$(( (${1} & 0xFF00) >> 8))
+  b4=$(( ${1} & 0xFF ))
+  echo "${b1}.${b2}.${b3}.${b4}"
+}
+
+cidr2network() {
+  if [[ ${1} =~ ^([0-9\.]+)/([0-9]+)$ ]]; then
+    ipaddr=${BASH_REMATCH[1]}
+    netlen=${BASH_REMATCH[2]}
+    zeros=$((32-netlen))
+    netnum=0
+    for (( i=0; i < zeros; i++ )); do
+      netnum=$(( (netnum << 1) ^ 1 ))
+    done
+    netnum=$((netnum ^ 0xFFFFFFFF))
+    netmask=$(toaddr ${netnum})
+    ipaddrnum=$(tonum "${ipaddr}")
+    netmasknum=$(tonum "${netmask}")
+    networknum=$(( ipaddrnum & netmasknum ))
+    network=$(toaddr ${networknum})
+    echo "${network}/${netlen}"
+  fi
+}
+
 #############################################################
 #                    PARAMETER QUERY                        #
 #############################################################
@@ -204,7 +239,8 @@ if [[ "${CCU_NETWORK_NAME}" != "none" ]]; then
 
   # try to acquire subnet definition from interface routes first
   if [[ -z "${CCU_NETWORK_SUBNET}" ]]; then
-    CCU_NETWORK_SUBNET=$(ip -o -f inet addr show dev "${CCU_NETWORK_INTERFACE}" | awk '/scope global/ {print $4}')
+    CCU_NETWORK_CIDR=$(ip -o -f inet addr show dev "${CCU_NETWORK_INTERFACE}" | awk '/scope global/ {print $4}')
+    CCU_NETWORK_SUBNET=$(cidr2network "${CCU_NETWORK_CIDR}")
     read -r -e -p 'Container Host Bridge Subnet (e.g. 192.168.178.0/24): ' -i "${CCU_NETWORK_SUBNET}"  CCU_NETWORK_SUBNET </dev/tty
   else
     msg "Used host<>container bridge subnet: ${CCU_NETWORK_SUBNET}"

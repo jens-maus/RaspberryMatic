@@ -31,10 +31,6 @@ dtparam=spi=on
 # enable the UART
 enable_uart=1
 
-# switch the bluetooth UART to the miniuart
-# for basic bluetooth support
-dtoverlay=miniuart-bt
-
 # for disabling bluetooth alltogether
 # you can uncomment the following two lines
 #dtoverlay=disable-bt

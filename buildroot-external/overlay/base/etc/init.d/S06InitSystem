@@ -105,7 +105,7 @@ init_system() {
   # root user if found in shadow file we have to put the template
   # file there and ensure proper permissions
   if [[ ! -s /etc/config/shadow ]] ||
-     ! grep -q "^root::" /etc/config/shadow; then
+     ! grep -q "^root:" /etc/config/shadow; then
     cp -a ${CFG_TEMPLATE_DIR}/shadow /etc/config/
   fi
   chmod 0640 /etc/config/shadow

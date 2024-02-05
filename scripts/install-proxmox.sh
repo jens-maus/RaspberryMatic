@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.1"
+VERSION="3.2"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -132,6 +132,15 @@ uninstall() {
   if pkg_installed pivccu-modules-raspberrypi; then
     info "Purging pivccu-modules-raspberrypi"
     apt purge pivccu-modules-raspberrypi
+  fi
+
+  if command -v armbian-install >/dev/null &&
+     grep -q Raspberry /proc/cpuinfo &&
+     [[ -f /boot/firmware/overlays/pivccu-raspberrypi.dtbo ]]; then
+
+    info "Purging pivccu-raspberrypi.dtbo"
+    rm -f /boot/firmware/overlays/pivccu-raspberrypi.dtbo
+    sed -i '/^dtoverlay=pivccu-raspberrypi/d' /boot/firmware/config.txt
   fi
 
   # remove pivccu public key and repo
@@ -289,7 +298,8 @@ EOF
   # or HM-MOD-RPI-PCB will be connected to the GPIO
   if [[ "${PLATFORM}" == "aarch64" ]] &&
      ! pkg_installed pivccu-devicetree-armbian &&
-     ! pkg_installed pivccu-modules-raspberrypi; then
+     ! pkg_installed pivccu-modules-raspberrypi &&
+     [[ ! -f /boot/firmware/overlays/pivccu-raspberrypi.dtbo ]]; then
 
      text=$(cat <<EOF
 If you want to use a RPI-RF-MOD or HM-MOD-RPI-PCB on the GPIO port
@@ -308,8 +318,22 @@ EOF
                 15 78; then
 
       if command -v armbian-install >/dev/null; then
-        info "Installing pivccu-devicetree-armbian"
-        apt install -y pivccu-devicetree-armbian
+        if grep -q Raspberry /proc/cpuinfo; then
+          if [[ ! -f /boot/firmware/overlays/pivccu-raspberrypi.dtbo ]]; then
+            info "Downloading pivccu-modules-raspberrypi"
+            (cd /tmp && apt download pivccu-modules-raspberrypi)
+            info "Extracting pivccu-modules-raspberrypi"
+            (cd /tmp && ar x pivccu-modules-raspberrypi_*_all.deb)
+            info "Extracting pivccu-raspberry.dtbo"
+            (cd /tmp && tar -C /tmp -xf data.tar.xz ./var/lib/piVCCU/dtb/overlays/pivccu-raspberrypi.dtbo)
+            info "Installing dtbo to /boot/firmware/overlays/"
+            cp /tmp/./var/lib/piVCCU/dtb/overlays/pivccu-raspberrypi.dtbo /boot/firmware/overlays/
+            echo "dtoverlay=pivccu-raspberrypi" >>/boot/firmware/config.txt
+          fi
+        else
+          info "Installing pivccu-devicetree-armbian"
+          apt install -y pivccu-devicetree-armbian
+        fi
       elif grep -q Raspberry /proc/cpuinfo; then
         info "Installing pivccu-modules-raspberrypi"
         apt install -y pivccu-modules-raspberrypi

@@ -110,7 +110,7 @@ jobs:
     if: ${{ (github.event_name != 'pull_request' || github.event.pull_request.user.login == 'jens-maus') && github.actor != 'dependabot[bot]' && github.repository == 'jens-maus/RaspberryMatic' }}
     needs: linter
     runs-on: self-hosted
-    timeout-minutes: 480
+    timeout-minutes: 300
     outputs:
       build_datetime: ${{ steps.env.outputs.build_datetime }}
       build_version: ${{ steps.env.outputs.build_version }}
@@ -176,7 +176,7 @@ jobs:
 
       # major build step
       - name: Build
-        timeout-minutes: 480
+        timeout-minutes: 300
         run: |
           sudo -H -E -u builder nice -n 19 make DATE=${{ env.DATE }} BR2_DL_DIR=/mnt/download BR2_CCACHE_DIR=/mnt/ccache/${{ matrix.platform }} BR2_JLEVEL=${{ env.JLEVEL }} clean raspmatic_${{ matrix.platform }}-release
 

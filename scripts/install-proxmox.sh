@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.0"
+VERSION="3.1"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -102,6 +102,11 @@ uninstall() {
     # arm based Armbian system
     info "Identified arm64-based Armbian Proxmox VE system..."
     HEADER_PKGS="$(dpkg --get-selections | grep 'linux-image-' | grep -m1 '\sinstall' | sed -e 's/linux-image-\([a-z0-9-]\+\).*/linux-headers-\1/')"
+  elif [[ "${PLATFORM}" == "aarch64" ]] &&
+       grep -q Raspberry /proc/cpuinfo; then
+    # arm based RaspberryPiOS system
+    info "Identified arm64-based RaspberryPiOS Proxmox VE system..."
+    HEADER_PKGS="raspberrypi-kernel-headers"
   elif [[ "${PLATFORM}" == "x86_64" ]]; then
     # full amd64/x86 based Proxmox VE system
     info "Identified x86-based Proxmox VE system..."
@@ -116,6 +121,17 @@ uninstall() {
         apt purge "${pkg}"
       fi
     done
+  fi
+
+  # remove OS specific device tree stuff
+  if pkg_installed pivccu-devicetree-armbian; then
+    info "Purging pivccu-devicetree-armbian"
+    apt purge pivccu-devicetree-armbian
+  fi
+
+  if pkg_installed pivccu-modules-raspberrypi; then
+    info "Purging pivccu-modules-raspberrypi"
+    apt purge pivccu-modules-raspberrypi
   fi
 
   # remove pivccu public key and repo
@@ -136,6 +152,7 @@ uninstall() {
   msg "LXC container host dependencies successfully removed."
   msg "- Only dependencies (kernel modules, etc.) were removed."
   msg "- No LXC container or related disks were removed. Revisit with \"pct list\""
+  msg "- Use 'sudo apt autoremove' to remove all unnecessary dependencies again"
   msg "- Reboot your Proxmox system to ensure clean operation without dependencies."
 }
 
@@ -247,6 +264,11 @@ EOF
     # arm based Armbian system
     info "Identified arm64-based Armbian Proxmox VE system..."
     HEADER_PKGS="$(dpkg --get-selections | grep 'linux-image-' | grep -m1 '\sinstall' | sed -e 's/linux-image-\([a-z0-9-]\+\).*/linux-headers-\1/')"
+  elif [[ "${PLATFORM}" == "aarch64" ]] &&
+       grep -q Raspberry /proc/cpuinfo; then
+    # arm based RaspberryPiOS system
+    info "Identified arm64-based RaspberryPiOS Proxmox VE system..."
+    HEADER_PKGS="raspberrypi-kernel-headers"
   elif [[ "${PLATFORM}" == "x86_64" ]]; then
     # full amd64/x86 based Proxmox VE system
     info "Identified x86-based Proxmox VE system..."
@@ -261,6 +283,40 @@ EOF
         apt install -y "${pkg}"
       fi
     done
+  fi
+
+  # install OS specific device tree stuff if RPI-RF-MOD
+  # or HM-MOD-RPI-PCB will be connected to the GPIO
+  if [[ "${PLATFORM}" == "aarch64" ]] &&
+     ! pkg_installed pivccu-devicetree-armbian &&
+     ! pkg_installed pivccu-modules-raspberrypi; then
+
+     text=$(cat <<EOF
+If you want to use a RPI-RF-MOD or HM-MOD-RPI-PCB on the GPIO port
+of the ARM-based host hardware of this system, dedicated device tree
+overlay modules have to be installed. If you, however, don't plan to
+put a HomeMatic RF module on the GPIO bus but want to use a USB
+connected RF module only (e.g. HmIP-RFUSB) you can (and should) skip
+this step.
+
+Do you want to install the device tree overlays for GPIO use?
+EOF
+)
+
+    if whiptail --title "GPIO module/overlay installation check" \
+                --yesno "${text}" \
+                15 78; then
+
+      if command -v armbian-install >/dev/null; then
+        info "Installing pivccu-devicetree-armbian"
+        apt install -y pivccu-devicetree-armbian
+      elif grep -q Raspberry /proc/cpuinfo; then
+        info "Installing pivccu-modules-raspberrypi"
+        apt install -y pivccu-modules-raspberrypi
+      fi
+    else
+      info "Skipped GPIO overlay module installation step"
+    fi
   fi
 
   # Install & Build homematic kernel modules

@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.3"
+VERSION="3.4"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -363,15 +363,15 @@ EOF
 
   case "${PLATFORM}" in
     x86_64)
-      ENDSWITH="lxc_amd64.tar.gz"
+      ENDSWITH="lxc_amd64.tar.xz"
       CTARCH="amd64"
     ;;
     aarch64)
-      ENDSWITH="lxc_arm64.tar.gz"
+      ENDSWITH="lxc_arm64.tar.xz"
       CTARCH="arm64"
     ;;
     arm*)
-      ENDSWITH="lxc_arm.tar.gz"
+      ENDSWITH="lxc_arm.tar.xz"
       CTARCH="armhf"
     ;;
   esac

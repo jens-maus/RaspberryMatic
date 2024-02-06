@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Script to install the RaspberryMatic container and its dependencies
 # https://github.com/jens-maus/RaspberryMatic/wiki/en.Installation-Docker-OCI

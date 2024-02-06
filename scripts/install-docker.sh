@@ -71,7 +71,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.11"
+VERSION="1.12"
 LINE=
 
 error_exit() {
@@ -213,6 +213,12 @@ cidr2network() {
 msg "RaspberryMatic Docker installation script v${VERSION}"
 msg "Copyright (c) 2022-2024 Jens Maus <mail@jens-maus.de>"
 msg ""
+
+# check if this is a Proxmox system and if so
+# request to use install-proxmox.sh instead
+if [[ -d /etc/pve ]]; then
+  die "You are trying to use 'install-docker.sh' on a Proxmox VE system. Please use 'install-proxmox.sh' instead."
+fi
 
 # check if docker exists
 if ! command -v docker >/dev/null; then

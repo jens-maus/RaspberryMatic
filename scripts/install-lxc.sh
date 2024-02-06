@@ -186,7 +186,7 @@ PLATFORM=$(uname -m)
 # and dependency packages
 if [[ "${1-}" == "uninstall" ]]; then
   if ! whiptail --title "Host dependency uninstall" \
-	        --yesno "You are about to uninstall all LXC related host packages dependencies. This might require to manually reboot your host system afterwards.\n\nDo you want to continue?" \
+                --yesno "You are about to uninstall all LXC related host packages dependencies. This might require to manually reboot your host system afterwards.\n\nDo you want to continue?" \
                 10 78; then
     die "aborting"
   fi
@@ -446,8 +446,8 @@ info "Using ${RELEASE} for LXC container installation"
 info "Entering userfs storage location"
 USERFS_PATH=$(whiptail --title "User storage location selection" \
                        --inputbox "Please enter the user storage location/path that should\nbe used for the RaspberryMatic container." \
-		       10 75 \
-		       "/var/lib/raspberrymatic/userfs" \
+                       10 75 \
+                       "/var/lib/raspberrymatic/userfs" \
                        3>&1 1>&2 2>&3)
 
 mkdir -p "${USERFS_PATH}"
@@ -458,9 +458,9 @@ info "Using '${USERFS_PATH}' as userfs storage location."
 info "Entering container name"
 CONTAINER_NAME=$(whiptail --title "Container name" \
                           --inputbox "Please enter a unique container name." \
-		       10 75 \
-		       "raspberrymatic" \
-                       3>&1 1>&2 2>&3)
+                          10 75 \
+                          "raspberrymatic" \
+                          3>&1 1>&2 2>&3)
 
 info "Using '${CONTAINER_NAME}' as container name."
 
@@ -501,4 +501,3 @@ msg "- Connect to CCU via http://.../"
 msg "- Stop container via \"sudo lxc-stop -n ${CONTAINER_NAME}\""
 msg "- Destroy container via \"sudo lxc-destroy -n ${CONTAINER_NAME}\""
 msg "- Uninstall LXC host dependencies via \"sudo ${0} uninstall\""
-exit 0

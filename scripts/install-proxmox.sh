@@ -28,7 +28,7 @@ VERSION="3.4"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
-function error_exit() {
+error_exit() {
   trap - ERR
   local DEFAULT='Unknown failure occured.'
   local REASON="\e[97m${1:-$DEFAULT}\e[39m"
@@ -38,21 +38,21 @@ function error_exit() {
   msg "${FLAG} \e[39mSee ${LOGFILE} for error details"
   exit "${EXIT}"
 }
-function warn() {
+warn() {
   local REASON="\e[97m$1\e[39m"
   local FLAG="\e[93m[WARNING]\e[39m"
   msg "${FLAG} ${REASON}"
 }
-function info() {
+info() {
   local REASON="$1"
   local FLAG="\e[36m[INFO]\e[39m"
   msg "${FLAG} ${REASON}"
 }
-function msg() {
+msg() {
   local TEXT="$1"
   echo -e "${TEXT}"
 }
-function cleanup_vmid() {
+cleanup_vmid() {
   if [[ "${VMTYPE}" == "VM" ]]; then
     if qm status "${VMID}" >>${LOGFILE} 2>&1; then
       if [ "$(qm status "${VMID}" | awk '{print $2}')" == "running" ]; then
@@ -69,7 +69,7 @@ function cleanup_vmid() {
     fi
   fi
 }
-function cleanup() {
+cleanup() {
   popd >/dev/null
   rm -rf "${TEMP_DIR}"
 }

@@ -230,8 +230,8 @@ jobs:
           startsWith(matrix.platform, 'lxc_')
         uses: actions/upload-artifact@v4
         with:
-          path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tar.gz*
-          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tar.gz
+          path: release/RaspberryMatic-${{ env.VERSION }}-${{ matrix.platform }}.tar.xz*
+          name: RaspberryMatic-${{ env.VERSION }}-${{ env.GITHUB_SHA7 }}-${{ matrix.platform }}.tar.xz
         continue-on-error: true
 
   ##########################################

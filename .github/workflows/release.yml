@@ -247,8 +247,8 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
-          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tar.gz
-          asset_content_type: application/gzip
+          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tar.xz
+          asset_content_type: application/x-xz
 
       - name: Upload build release checksum [lxc]
         if: |
@@ -256,7 +256,7 @@ jobs:
         uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
-          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tar.gz.sha256
+          asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tar.xz.sha256
           asset_content_type: text/plain
 
       ########################

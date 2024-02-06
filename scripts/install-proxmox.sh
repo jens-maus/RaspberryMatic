@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.2"
+VERSION="3.3"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -321,13 +321,13 @@ EOF
         if grep -q Raspberry /proc/cpuinfo; then
           if [[ ! -f /boot/firmware/overlays/pivccu-raspberrypi.dtbo ]]; then
             info "Downloading pivccu-modules-raspberrypi"
-            (cd /tmp && apt download pivccu-modules-raspberrypi)
+            (cd "${TEMP_DIR}" && apt download pivccu-modules-raspberrypi)
             info "Extracting pivccu-modules-raspberrypi"
-            (cd /tmp && ar x pivccu-modules-raspberrypi_*_all.deb)
+            (cd "${TEMP_DIR}" && ar x pivccu-modules-raspberrypi_*_all.deb)
             info "Extracting pivccu-raspberry.dtbo"
-            (cd /tmp && tar -C /tmp -xf data.tar.xz ./var/lib/piVCCU/dtb/overlays/pivccu-raspberrypi.dtbo)
+            (cd "${TEMP_DIR}" && tar -C "${TEMP_DIR}" -xf data.tar.xz ./var/lib/piVCCU/dtb/overlays/pivccu-raspberrypi.dtbo)
             info "Installing dtbo to /boot/firmware/overlays/"
-            cp /tmp/./var/lib/piVCCU/dtb/overlays/pivccu-raspberrypi.dtbo /boot/firmware/overlays/
+            cp "${TEMP_DIR}/var/lib/piVCCU/dtb/overlays/pivccu-raspberrypi.dtbo" /boot/firmware/overlays/
             echo "dtoverlay=pivccu-raspberrypi" >>/boot/firmware/config.txt
           fi
         else

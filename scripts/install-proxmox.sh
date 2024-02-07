@@ -35,7 +35,9 @@ error_exit() {
   local FLAG="\e[91m[ERROR] \e[93m${EXIT}@${LINE}:"
   msg "${FLAG} ${REASON}"
   [ -n "${VMID-}" ] && cleanup_vmid
-  msg "${FLAG} \e[39mSee ${LOGFILE} for error details"
+  if [[ -s "${LOGFILE}" ]]; then
+    msg "${FLAG} \e[39mSee ${LOGFILE} for error details"
+  fi
   exit "${EXIT}"
 }
 warn() {

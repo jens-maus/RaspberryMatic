@@ -18,8 +18,8 @@ LABEL org.opencontainers.image.title=RaspberryMatic \
       io.hass.url="https://github.com/jens-maus/RaspberyMatic/tree/master/home-assistant-addon" \
       io.hass.type=addon
 
-HEALTHCHECK --interval=30s --timeout=30s --start-period=240s --retries=3 \
-  CMD /bin/sh -c 'test -e /var/status/startupFinished || exit 2; /usr/bin/curl --silent -o /dev/null --fail http://localhost/login.htm || exit 1'
+HEALTHCHECK --interval=60s --timeout=30s --start-period=240s --retries=3 \
+  CMD /bin/sh -c 'test -e /var/status/startupFinished || exit 2; test -e /usr/local/HMLGW || /usr/bin/curl --silent -o /dev/null --fail http://localhost/login.htm || exit 1'
 
 CMD ["/sbin/init"]
 EXPOSE 80 22 161 443 1900 1901 1902 5987 1999 2000 2001 2010 8088 8181 9099 9292 9293 10000 41999 42000 42001 42010 43438 43439 48181 48899 49292 49880

@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.0"
+VERSION="1.1"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -32,7 +32,9 @@ error_exit() {
   local REASON="\e[97m${1:-$DEFAULT}\e[39m"
   local FLAG="\e[91m[ERROR] \e[93m${EXIT}@${LINE}:"
   msg "${FLAG} ${REASON}"
-  msg "${FLAG} \e[39mSee ${LOGFILE} for error details"
+  if [[ -s "${LOGFILE}" ]]; then
+    msg "${FLAG} \e[39mSee ${LOGFILE} for error details"
+  fi
   exit "${EXIT}"
 }
 warn() {
@@ -149,8 +151,9 @@ uninstall() {
 
   msg "LXC container host dependencies successfully removed."
   msg "- Only dependencies (kernel modules, etc.) were removed."
-  msg "- No LXC container or related disks were removed. Revisit with \"pct list\""
-  msg "- Use 'sudo apt autoremove' to remove all unnecessary dependencies again"
+  msg "- No LXC container or related disks were removed. Revisit with \"sudo lxc-ls\""
+  msg "- If you don't require LXC for other containers remove it via \"sudo apt purge lxc\""
+  msg "- Use 'sudo apt autoremove' to remove all unnecessary dependencies."
   msg "- Reboot your host system to ensure clean operation without dependencies."
 }
 
@@ -162,9 +165,6 @@ msg ""
 TEMP_DIR=$(mktemp -d)
 pushd "${TEMP_DIR}" >/dev/null
 
-# check that this script is run as root/sudo
-check_sudo
-
 # remove existing log
 rm -f "${LOGFILE}"
 
@@ -173,6 +173,9 @@ rm -f "${LOGFILE}"
 if [[ -d /etc/pve ]]; then
   die "You are trying to use 'install-lxc.sh' on a Proxmox VE system. Please use 'install-proxmox.sh' instead."
 fi
+
+# check that this script is run as root/sudo
+check_sudo
 
 # make sure we have the bare minimal dependencies installed
 if ! command -v whiptail >/dev/null; then
@@ -192,6 +195,16 @@ if [[ "${1-}" == "uninstall" ]]; then
   fi
   uninstall
   exit 0
+fi
+
+# check that an appropriate network bridge has been setup
+MAIN_INTERFACE=$(ip route | grep ^default | awk '{ print $5 }')
+BRIDGE=
+if command -v /usr/sbin/brctl >/dev/null; then
+  BRIDGE=$(/usr/sbin/brctl show 2>/dev/null | grep -v "lxcbr0" | grep -v "^\s" | sed -n 2p | awk '{print $1}' || true)
+fi
+if [[ "${BRIDGE}" != "${MAIN_INTERFACE}" ]]; then
+  die "Network setup of host system is not adequate as a default network bridge interface is required. Please refer to the LXC installation documentation (raspberrymatic.de) to setup this host system correctly before executing this script."
 fi
 
 text=$(cat <<EOF
@@ -236,6 +249,9 @@ if ! pkg_installed libssl-dev; then
 fi
 if ! pkg_installed gpg; then
   apt install -y gpg
+fi
+if ! pkg_installed python3-requests; then
+  apt install -y python3-requests
 fi
 if ! pkg_installed lxc; then
   apt install -y lxc
@@ -450,6 +466,13 @@ USERFS_PATH=$(whiptail --title "User storage location selection" \
                        "/var/lib/raspberrymatic/userfs" \
                        3>&1 1>&2 2>&3)
 
+if [[ -e "${USERFS_PATH}" ]]; then
+  if ! whiptail --title "Userfs directory already exists" \
+	  --yesno "The specified userfs storage path (${USERFS_PATH})\nalready exists and will be re-used. Please make sure that you don't share this path with other simultaneously running LXC containers or undefined behaviour might occur.\n\nDo you want to continue and re-use this storage path?" \
+                12 78; then
+    die "aborting"
+  fi
+fi
 mkdir -p "${USERFS_PATH}"
 
 info "Using '${USERFS_PATH}' as userfs storage location."
@@ -462,6 +485,9 @@ CONTAINER_NAME=$(whiptail --title "Container name" \
                           "raspberrymatic" \
                           3>&1 1>&2 2>&3)
 
+if lxc-info -n "${CONTAINER_NAME}" >/dev/null 2>&1;  then
+  die "Container with name '${CONTAINER_NAME}' already exists."
+fi
 info "Using '${CONTAINER_NAME}' as container name."
 
 # Download RaspberryMatic ova archive
@@ -472,6 +498,8 @@ FILE=$(basename "${URL}")
 
 # main installation steps
 info "Creating LXC container config..."
+
+# create distribution/raspberrymatic specific config entries
 cat <<EOF >>"${TEMP_DIR}/config"
 lxc.include = LXC_TEMPLATE_CONFIG/common.conf
 lxc.apparmor.profile = unconfined
@@ -481,23 +509,38 @@ lxc.rootfs.options = ro
 lxc.mount.auto = proc:rw sys:rw cgroup:rw
 lxc.cgroup2.devices.allow = c *:* rw
 lxc.mount.entry = /lib/modules lib/modules none ro,bind 0 0
-lxc.mount.entry = ${USERFS_PATH} usr/local none defaults,bind,noatime 0 0
 lxc.hook.pre-start = sh -c "sysctl -q -w kernel.sched_rt_runtime_us=-1"
-lxc.start.auto = 1
 EOF
+
+# pack as meta.tar.xz for template based lxc config
 tar -C "${TEMP_DIR}" -cJf meta.tar.xz config
+
+# create container specific lxc.config
+HOST_MAC=$(cat /sys/class/net/${MAIN_INTERFACE}/address)
+MAC=$(echo ${HOST_MAC} | md5sum | sed 's/\(.\)\(..\)\(..\)\(..\)\(..\)\(..\).*/\1a:\2:\3:\4:\5:\6/')
+cat <<EOF >>"${TEMP_DIR}/lxc.config"
+lxc.mount.entry = ${USERFS_PATH} usr/local none defaults,bind,noatime 0 0
+lxc.start.auto = 1
+lxc.net.0.type = veth
+lxc.net.0.flags = up
+lxc.net.0.link = ${BRIDGE}
+lxc.net.0.name = eth0
+lxc.net.0.hwaddr = ${MAC}
+lxc.net.0.veth.pair = vethccu
+EOF
 
 # create lxc container
 info "Creating LXC container..."
 lxc-create -n "${CONTAINER_NAME}" \
-           -t local -- \
-           -m "${TEMP_DIR}/meta.tar.xz" \
-           -f "${FILE}"
+           --config "${TEMP_DIR}/lxc.config" \
+           --template local -- \
+           --metadata "${TEMP_DIR}/meta.tar.xz" \
+           --fstree "${FILE}"
 
-msg "Completed Successfully. New CT is: \e[1m(${CONTAINER_NAME})\e[0m."
+info "Completed Successfully. New LXC container is: \e[1m(${CONTAINER_NAME})\e[0m."
 msg "- Start container via \"sudo lxc-start -n ${CONTAINER_NAME}\""
 msg "- Access console via \"sudo lxc-console -n ${CONTAINER_NAME}\""
-msg "- Connect to CCU via http://.../"
+msg "- Connect to WebUI via http://homematic-raspi/"
 msg "- Stop container via \"sudo lxc-stop -n ${CONTAINER_NAME}\""
 msg "- Destroy container via \"sudo lxc-destroy -n ${CONTAINER_NAME}\""
 msg "- Uninstall LXC host dependencies via \"sudo ${0} uninstall\""

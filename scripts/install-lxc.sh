@@ -468,7 +468,7 @@ USERFS_PATH=$(whiptail --title "User storage location selection" \
 
 if [[ -e "${USERFS_PATH}" ]]; then
   if ! whiptail --title "Userfs directory already exists" \
-	  --yesno "The specified userfs storage path (${USERFS_PATH})\nalready exists and will be re-used. Please make sure that you don't share this path with other simultaneously running LXC containers or undefined behaviour might occur.\n\nDo you want to continue and re-use this storage path?" \
+                --yesno "The specified userfs storage path (${USERFS_PATH})\nalready exists and will be re-used. Please make sure that you don't share this path with other simultaneously running LXC containers or undefined behaviour might occur.\n\nDo you want to continue and re-use this storage path?" \
                 12 78; then
     die "aborting"
   fi

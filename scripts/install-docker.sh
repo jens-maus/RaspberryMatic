@@ -71,7 +71,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.13"
+VERSION="1.14"
 LINE=
 
 error_exit() {
@@ -365,7 +365,7 @@ if command -v dpkg >/dev/null; then
   if ! pkg_installed pivccu-modules-dkms; then
     msg "Installing and building kernel modules..."
     check_sudo
-    apt install -y pivccu-modules-dkms </dev/tty
+    DEBIAN_FRONTEND=noninteractive apt install -y pivccu-modules-dkms
     service pivccu-dkms start
   fi
 fi

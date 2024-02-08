@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.2"
+VERSION="1.3"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -342,7 +342,7 @@ fi
 # Install & Build homematic kernel modules
 if ! pkg_installed pivccu-modules-dkms; then
   info "Building and installing homematic kernel modules..."
-  apt install -y pivccu-modules-dkms </dev/tty
+  DEBIAN_FRONTEND=noninteractive apt install -y pivccu-modules-dkms
   service pivccu-dkms start
 fi
 

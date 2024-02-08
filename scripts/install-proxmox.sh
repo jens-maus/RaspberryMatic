@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.4"
+VERSION="3.5"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -348,7 +348,7 @@ EOF
   # Install & Build homematic kernel modules
   if ! pkg_installed pivccu-modules-dkms; then
     info "Building and installing homematic kernel modules..."
-    apt install -y pivccu-modules-dkms
+    apt install -y pivccu-modules-dkms </dev/tty
     service pivccu-dkms start
   fi
 

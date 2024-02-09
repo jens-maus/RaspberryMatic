@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169,SC2034 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC2034,SC3010 source=/dev/null
 #
 # Startup script checking for RF capabale hardware
 #
@@ -319,7 +319,7 @@ query_rf_parameters() {
       start-stop-daemon -K -q -p /var/run/hss_led.pid
       if [[ -x /bin/hss_led ]]; then
         sleep 2
-        if [[ "${HM_HOST}" =~ "oci|lxc" ]]; then
+        if [[ "${HM_HOST}" =~ oci\|lxc ]]; then
           start-stop-daemon -S -q -b -m -c hssled:hssled -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
         else
           start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6

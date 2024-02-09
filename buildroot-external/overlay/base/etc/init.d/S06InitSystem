@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 #
 # Startup script to ensure we have a valid filesystem
 #
@@ -34,7 +34,7 @@ init_system() {
   chmod 0700 /var/empty
 
   # setup /dev_host for OCI/Docker and LXC environments (excluding HA)
-  if [[ "${HM_HOST}" =~ "oci|lxc" ]] &&
+  if [[ "${HM_HOST}" =~ oci\|lxc ]] &&
      [[ -z "${HM_RUNNING_IN_HA}" ]]; then
     # To avoid sharing the whole host /dev with the container we
     # mount devtmps in /dev_host and symlink the required devices
@@ -87,7 +87,7 @@ init_system() {
 
   # if /etc/config/timezone is set to Europe/Berlin we
   # assume a german keyboard layout
-  if [[ ! "${HM_HOST}" =~ "oci|lxc" ]] &&
+  if [[ ! "${HM_HOST}" =~ oci\|lxc ]] &&
      [[ $(cat /etc/config/timezone) == "Europe/Berlin" ]]; then
     /sbin/loadkmap </etc/de.kmap
   fi
@@ -133,7 +133,7 @@ start() {
 
   # start hss_led if it exists and we are not in HMLGW mode
   if [[ "${HM_MODE}" != "HM-LGW" ]] && [[ -x /bin/hss_led ]]; then
-    if [[ ! "${HM_HOST}" =~ "oci|lxc" ]]; then
+    if [[ ! "${HM_HOST}" =~ oci\|lxc ]]; then
       start-stop-daemon -S -q -b -m -c hssled:hssled -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6
     else
       start-stop-daemon -S -q -b -m -p /var/run/hss_led.pid --exec /bin/hss_led -- -l 6

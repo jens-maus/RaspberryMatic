@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010,SC3036 source=/dev/null
 #
 # Startup script to check for a factory reset
 #
@@ -17,7 +17,7 @@ check_factory_reset() {
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
-  if [[ ! "${HM_HOST}" =~ "oci|lxc" ]] &&
+  if [[ ! "${HM_HOST}" =~ oci\|lxc ]]; then
 
     # extract partition number and device name
     DEVNODE=$(mountpoint -d /usr/local)

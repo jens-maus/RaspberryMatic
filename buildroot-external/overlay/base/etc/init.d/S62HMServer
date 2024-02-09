@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169 source=/dev/null
+# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 #
 # Starts HMServer.
 #
@@ -51,7 +51,7 @@ init() {
   # we can safely use the old /usr/local/sdcard directory path as
   # the general storagePath for diagrams and daily backups
   storagePath=""
-  if [[ "${HM_HOST}" =~ "oci|lxc" ]] ||
+  if [[ "${HM_HOST}" =~ oci\|lxc ]] ||
      grep " /usr/local " /proc/mounts | grep -qv "^/dev/mmc"; then
     storagePath="/usr/local/sdcard"
     mkdir -p ${storagePath}

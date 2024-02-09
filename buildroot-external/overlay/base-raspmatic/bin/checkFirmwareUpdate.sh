@@ -169,7 +169,7 @@ if [[ -s "${RELEASES_JSON}" ]]; then
       echo
 
       # only allow firmware updates for platforms supporting it
-      if [[ "${PLATFORM}" =~ "oci_|lxc_" ]]; then
+      if [[ "${PLATFORM}" =~ oci_\|lxc_ ]]; then
         echo "ERROR: platform '${PLATFORM}' does not support being updated using this script."
         exit 4 # error
       fi

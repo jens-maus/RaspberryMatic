@@ -49,7 +49,7 @@
                  # The available version will be set further down with "jQuery('#availableSWVersion').html(homematic.com.getLatestVersion());"
                }
              }
-+            if {[get_platform] != "oci"} {
++            if {[get_platform] != "oci" && [get_platform] != "lxc"} {
              table_row {
                table_data {align="left"} {colspan="3"} {
                  #puts "[bold "Software-Update durchf�hren"]"
@@ -71,7 +71,7 @@
                        }
                      }
                    }
-@@ -465,30 +466,12 @@
+@@ -465,30 +466,18 @@
                  puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
                }
              }
@@ -93,6 +93,12 @@
 -              set msg " \${dialogSettingsCMHintSoftwareUpdate4a} $bat_level%. "
 -              append msg  \${dialogSettingsCMHintSoftwareUpdate4b}
 -              li $msg
++            } else {
++              table_row {
++                table_data {align="left"} {colspan="3"} {
++                  puts "<br/>\${dialogSettingsCMLblPerformSoftwareUpdateVirt}"
++                }
++              }
              }
            }
 -
@@ -162,7 +168,7 @@
                        puts "."
                        cgi_text year=$year {size="4"} {maxlength="4"} {id="text_year"}
                      }
-+                    if {[get_platform] != "oci"} {
++                    if {[get_platform] != "oci" && [get_platform] != "lxc"} {
                      table_data {align="left"} {
                        division {class="popupControls CLASS21506"} {
                          division {class="CLASS21507"} {onClick="apply_time()"} {
@@ -172,7 +178,7 @@
                      }
 +                    }
                    }
-+                  if {[get_platform] != "oci"} {
++                  if {[get_platform] != "oci" && [get_platform] != "lxc"} {
                    table_row {
                      table_data {colspan="2"} {}
                      table_data {align="left"} {class="CLASS21510"} {
@@ -187,7 +193,7 @@
            }
          }
        }
-+      if {[get_platform] != "oci"} {
++      if {[get_platform] != "oci" && [get_platform] != "lxc"} {
        table_row {class="CLASS21502"} {
          table_data {class="CLASS21503"} {
            #puts "NTP-Server"
@@ -691,7 +697,15 @@
      "BidCosRF" : "Homematic Funk",
      "BidCosWired" : "Homematic Wired",
      "VirtualDevices" : "VirtualDevices",
-@@ -483,6 +483,7 @@
+@@ -464,6 +464,7 @@
+     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Schritt 2: Heruntergeladene Software ausw%E4hlen",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Schritt 3: Software auf " + HMIdentifier.de.CCUShortName + " laden",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Schritt 4: Update starten",
++    "dialogSettingsCMLblPerformSoftwareUpdateVirt" : "Wenn Sie ein Update der RaspberryMatic Version durchf%FChren wollen, so k%F6nnen Sie dies im Kontext ihrer eingesetzten Virtualisierungsl%F6sung (HomeAssistant, Docker, LXC, etc.) durchf%FChren. Bitte konsultieren Sie hierzu die entsprechende RaspberryMatic Dokumentation.",
+     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.de.BidCosRF,
+     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.de.BidCosWired,
+     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.de.CCUShortName + "-Steuerung",
+@@ -483,6 +484,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "F%FChren Sie vor dem Update eine Datensicherung durch.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "Der Ladezustand der Batterien betr%E4gt nur noch ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "Um einem Datenverlust durch Ausfall der Stromversorgung vorzubeugen, empfehlen wir, die Batterien vor dem Update zu erneuern.",
@@ -744,7 +758,15 @@
      "BidCosRF" : "Homematic RF",
      "BidCosWired" : "BidCos-Wired",
      "HmIPRF" : "HmIP-RF",
-@@ -477,6 +477,7 @@
+@@ -458,6 +458,7 @@
+     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Step 2: Select downloaded software",
+     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Step 3: Upload software to " + HMIdentifier.en.CCUShortName,
+     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Step 4: Start update",
++    "dialogSettingsCMLblPerformSoftwareUpdateVirt" : "If you want to update the RaspberryMatic version, you can do this in the context of the virtualization solution you are using (HomeAssistant, Docker, LXC, etc.). Please consult the corresponding RaspberryMatic documentation.",
+     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.en.BidCosRF,
+     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.en.BidCosWired,
+     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.en.CCUShortName + " control",
+@@ -477,6 +478,7 @@
      "dialogSettingsCMHintSoftwareUpdate3" : "Please perform a data backup before starting the update.",
      "dialogSettingsCMHintSoftwareUpdate4a" : "The charging status the batteries is only at ",
      "dialogSettingsCMHintSoftwareUpdate4b" : "To prevent from data loss due to power failure, it is recommended to replace the batteries before starting the update.",

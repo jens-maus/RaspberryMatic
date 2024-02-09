@@ -464,6 +464,7 @@ jQuery.extend(true,langJSON, {
     "dialogSettingsCMLblPerformSoftwareUpdateStep2" : "Schritt 2: Heruntergeladene Software ausw%E4hlen",
     "dialogSettingsCMLblPerformSoftwareUpdateStep3" : "Schritt 3: Software auf " + HMIdentifier.de.CCUShortName + " laden",
     "dialogSettingsCMLblPerformSoftwareUpdateStep4" : "Schritt 4: Update starten",
+    "dialogSettingsCMLblPerformSoftwareUpdateVirt" : "Wenn Sie ein Update der RaspberryMatic Version durchf%FChren wollen, so k%F6nnen Sie dies im Kontext ihrer eingesetzten Virtualisierungsl%F6sung (HomeAssistant, Docker, LXC, etc.) durchf%FChren. Bitte konsultieren Sie hierzu die entsprechende RaspberryMatic Dokumentation.",
     "dialogSettingsCMLblLogBidCosRF" : HMIdentifier.de.BidCosRF,
     "dialogSettingsCMLblLogBidCosWired" : HMIdentifier.de.BidCosWired,
     "dialogSettingsCMLblLogCentralControl" : HMIdentifier.de.CCUShortName + "-Steuerung",

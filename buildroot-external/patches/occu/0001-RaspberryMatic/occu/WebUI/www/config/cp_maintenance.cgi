@@ -379,7 +379,7 @@ proc action_put_page {} {
                 # The available version will be set further down with "jQuery('#availableSWVersion').html(homematic.com.getLatestVersion());"
               }
             }
-            if {[get_platform] != "oci"} {
+            if {[get_platform] != "oci" && [get_platform] != "lxc"} {
             table_row {
               table_data {align="left"} {colspan="3"} {
                 #puts "[bold "Software-Update durchf�hren"]"
@@ -466,6 +466,12 @@ proc action_put_page {} {
                 puts "\${dialogSettingsCMLblPerformSoftwareUpdateStep4}"
               }
             }
+            } else {
+              table_row {
+                table_data {align="left"} {colspan="3"} {
+                  puts "<br/>\${dialogSettingsCMLblPerformSoftwareUpdateVirt}"
+                }
+              }
             }
           }
         }

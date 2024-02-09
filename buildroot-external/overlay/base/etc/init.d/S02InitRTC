@@ -20,7 +20,7 @@ init_rtc_device() {
 
   # load the i2c_dev module if this is not a virtual
   # applicance but a real rpi/tinkerboard
-  if ! echo "${HM_HOST}" | grep -E -q "oci|ova-|nuc|generic-|lxc"; then
+  if [[ ! "${HM_HOST}" =~ "oci|ova-|nuc|generic-|lxc" ]]; then
     modprobe i2c_dev
   fi
 
@@ -42,9 +42,10 @@ init_rtc_device() {
     # we found a RX8130, thus we assume the RPI-RF-MOD to
     # be present, thus we setup the LED GPIOs
 
-    # check if the HOST is a docker/oci host and if so make sure
+    # check if the HOST is a oci or lxc host and if so make sure
     # to load the rpi_rf_mod_led kernel module early if not present already
-    if [[ "${HM_HOST}" == "oci" ]] && [[ ! -e /sys/class/leds/rpi_rf_mod:green/trigger ]] &&
+    if [[ "${HM_HOST}" =~ "oci|lxc" ]] &&
+       [[ ! -e /sys/class/leds/rpi_rf_mod:green/trigger ]] &&
        ! grep -Eq "^rpi_rf_mod_led " /proc/modules; then
 
       # check underlying hardware model
@@ -151,8 +152,7 @@ start() {
   set | grep '^HM_' >/var/hm_mode
 
   if [[ -c /dev/rtc0 ]]; then
-    if [[ "${HM_HOST}" != "oci" ]] &&
-       [[ "${HM_HOST}" != "lxc" ]]; then
+    if [[ ! "${HM_HOST}" =~ "oci|lxc" ]]; then
       hwclock --hctosys --utc
     fi
     echo "${HM_RTC}, OK"
@@ -168,8 +168,7 @@ stop() {
   [[ -r /var/hm_mode ]] && . /var/hm_mode
 
   if [[ -c /dev/rtc0 ]]; then
-    if [[ "${HM_HOST}" != "oci" ]] &&
-       [[ "${HM_HOST}" != "lxc" ]]; then
+    if [[ ! "${HM_HOST}" =~ "oci|lxc" ]]; then
       hwclock --systohc --utc
     fi
     echo "OK"

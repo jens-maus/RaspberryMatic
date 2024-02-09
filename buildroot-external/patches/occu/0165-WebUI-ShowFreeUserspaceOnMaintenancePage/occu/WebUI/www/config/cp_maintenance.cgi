@@ -354,7 +354,7 @@ proc action_put_page {} {
   global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS HMIP_LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL downloadOnly
   http_head
 
-  if {[get_platform] != "oci"} {
+  if {[get_platform] != "oci" && [get_platform != "lxc"} {
     execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $(NF-2) }}}
     if { ! [string is double -strict $USERFSFREE_MB] } {
       set USERFSFREE_MB 0
@@ -882,7 +882,7 @@ proc action_put_page {} {
     }
   }
   
-  if {[get_platform] != "oci"} {
+  if {[get_platform] != "oci" && [get_platform] != "lxc"} {
     cgi_javascript {
        puts "var userFreeMB = $USERFSFREE_MB;"
        puts "var userFreeMBRequired = $USERFSFREE_MB_REQ;"

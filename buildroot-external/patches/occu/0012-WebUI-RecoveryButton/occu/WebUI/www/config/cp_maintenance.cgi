@@ -596,7 +596,7 @@ set comment {
       }
 
       # Recovery Modus
-      if {[get_platform] != "oci"} {
+      if {[get_platform] != "oci" && [get_platform] != "lxc"} {
         table_row {class="CLASS20902 j_noForcedUpdate j_fwUpdateOnly"} {
             table_data {class="CLASS20903"} $styleMaxWidth {
                 #puts "Recovery<br>"

@@ -1,8 +1,8 @@
 #!/bin/sh
 # shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 #
-# firmware update check script v1.3
-# Copyright (c) 2022-2023 Jens Maus <mail@jens-maus.de>
+# firmware update check script v1.4
+# Copyright (c) 2022-2024 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -89,6 +89,9 @@ TARGET_URL="https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/
 if [[ "${PLATFORM}" == "oci" ]]; then
   PLATFORM=$(echo "${PRODUCT}" | sed 's/raspmatic_//')
   EXTENSION="tgz"
+elif [[ "${PLATFORM}" == "lxc" ]]; then
+  PLATFORM=$(echo "${PRODUCT}" | sed 's/raspmatic_//')
+  EXTENSION="tar.xz"
 else
   EXTENSION="zip"
 fi
@@ -166,7 +169,7 @@ if [[ -s "${RELEASES_JSON}" ]]; then
       echo
 
       # only allow firmware updates for platforms supporting it
-      if echo "${PLATFORM}" | grep -q oci_; then
+      if [[ "${PLATFORM}" =~ "oci_|lxc_" ]]; then
         echo "ERROR: platform '${PLATFORM}' does not support being updated using this script."
         exit 4 # error
       fi

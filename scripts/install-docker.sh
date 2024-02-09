@@ -71,7 +71,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.14"
+VERSION="1.15"
 LINE=
 
 error_exit() {
@@ -339,13 +339,13 @@ if command -v dpkg >/dev/null; then
     apt install -y "$(dpkg --get-selections | grep 'linux-image-' | grep '\sinstall' | sed -e 's/linux-image-\([a-z0-9-]\+\).*/linux-headers-\1/')"
     if ! pkg_installed pivccu-devicetree-armbian; then
       check_sudo
-      apt install -y pivccu-devicetree-armbian
+      DEBIAN_FRONTEND=noninteractive apt install -y pivccu-devicetree-armbian
     fi
   elif grep -q Raspberry /proc/cpuinfo; then
     if ! pkg_installed pivccu-modules-raspberrypi; then
       msg "Detected RaspberryPi - install kernel sources and raspberry modules"
       check_sudo
-      apt install -y pivccu-modules-raspberrypi
+      DEBIAN_FRONTEND=noninteractive apt install -y pivccu-modules-raspberrypi
       echo
       msg "NOTE: please ensure that your GPIO UART is free if you plan to connect your CCU adapter to it"
       msg "See step 5 and 6 at https://github.com/alexreinert/piVCCU/blob/master/docs/setup/raspberrypi.md"
@@ -375,7 +375,7 @@ if [[ ! -c /dev/eq3loop ]]; then
   msg "Loading eq3_char_loop module"
   check_sudo
   if ! modprobe eq3_char_loop; then
-    apt install -y --reinstall pivccu-modules-dkms
+    DEBIAN_FRONTEND=noninteractive apt install -y --reinstall pivccu-modules-dkms
     modprobe eq3_char_loop
   fi
 fi

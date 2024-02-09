@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.4"
+VERSION="1.5"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -328,11 +328,11 @@ EOF
         fi
       else
         info "Installing pivccu-devicetree-armbian"
-        apt install -y pivccu-devicetree-armbian
+        DEBIAN_FRONTEND=noninteractive apt install -y pivccu-devicetree-armbian
       fi
     elif grep -q Raspberry /proc/cpuinfo; then
       info "Installing pivccu-modules-raspberrypi"
-      apt install -y pivccu-modules-raspberrypi
+      DEBIAN_FRONTEND=noninteractive apt install -y pivccu-modules-raspberrypi
     fi
   else
     info "Skipped GPIO overlay module installation step"

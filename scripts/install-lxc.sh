@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.3"
+VERSION="1.4"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -477,7 +477,7 @@ mkdir -p "${USERFS_PATH}"
 
 info "Using '${USERFS_PATH}' as userfs storage location."
 
-# Select storage location
+# Request container name
 info "Entering container name"
 CONTAINER_NAME=$(whiptail --title "Container name" \
                           --inputbox "Please enter a unique container name." \
@@ -489,6 +489,50 @@ if lxc-info -n "${CONTAINER_NAME}" >/dev/null 2>&1;  then
   die "Container with name '${CONTAINER_NAME}' already exists."
 fi
 info "Using '${CONTAINER_NAME}' as container name."
+
+# Request number of CPU/cores
+MIN_CPU=1
+MAX_CPU=$(nproc)
+NUM_CPU=2
+while true; do
+  if NUM_CPU=$(whiptail --inputbox "Please enter the number of CPU cores you would like to assign for the container (range: ${MIN_CPU}-${MAX_CPU})" 9 58 ${NUM_CPU} --title "CPU/core request" 3>&1 1>&2 2>&3); then
+    if [[ -z "${NUM_CPU}" ]]; then
+      NUM_CPU=${MIN_CPU}
+    fi
+    if [[ ! "${NUM_CPU}" =~ ^[0-9]+$ ]] ||
+       [[ ${NUM_CPU} -lt ${MIN_CPU} ]] ||
+       [[ ${NUM_CPU} -gt ${MAX_CPU} ]]; then
+      warn "Number of assigned CPU cores have to be between ${MIN_CPU} and ${MAX_CPU}."
+      sleep 3
+      continue
+    fi
+    info "Chosen CPU core number is ${NUM_CPU}."
+    break
+  else
+    die "CPU core number selection canceled."
+  fi
+done
+
+# Request memory limits
+MIN_MEM=1024
+NUM_MEM=${MIN_MEM}
+while true; do
+  if NUM_MEM=$(whiptail --inputbox "Please enter the memory limit to assign to the container (minimum is ${MIN_MEM} MiB)" 9 58 ${NUM_MEM} --title "Memory limit request" 3>&1 1>&2 2>&3); then
+    if [[ -z "${NUM_MEM}" ]]; then
+      NUM_MEM=${MIN_MEM}
+    fi
+    if [[ ! "${NUM_MEM}" =~ ^[0-9]+$ ]] ||
+       [[ ${NUM_MEM} -lt ${MIN_MEM} ]]; then
+      warn "Limit of memory not allowed to be smaller than ${MIN_MEM} MiB."
+      sleep 3
+      continue
+    fi
+    info "Chosen memory limit is ${MIN_MEM} MiB."
+    break
+  else
+    die "Memory limit selection canceled."
+  fi
+done
 
 # Download RaspberryMatic ova archive
 info "Downloading disk image..."
@@ -519,8 +563,11 @@ tar -C "${TEMP_DIR}" -cJf meta.tar.xz config
 HOST_MAC=$(cat /sys/class/net/${MAIN_INTERFACE}/address)
 MAC=$(echo ${HOST_MAC} | md5sum | sed 's/\(.\)\(..\)\(..\)\(..\)\(..\)\(..\).*/\1a:\2:\3:\4:\5:\6/')
 cat <<EOF >>"${TEMP_DIR}/lxc.config"
-lxc.mount.entry = ${USERFS_PATH} usr/local none defaults,bind,noatime 0 0
 lxc.start.auto = 1
+lxc.mount.entry = ${USERFS_PATH} usr/local none defaults,bind,noatime 0 0
+lxc.cgroup2.memory.max = ${NUM_MEM}M
+lxc.cgroup2.memory.high = ${NUM_MEM}M
+lxc.cgroup2.cpuset.cpus = $(seq -s, 0 $((NUM_CPU - 1)))
 lxc.net.0.type = veth
 lxc.net.0.flags = up
 lxc.net.0.link = ${BRIDGE}

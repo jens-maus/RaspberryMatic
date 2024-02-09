@@ -129,7 +129,7 @@ jobs:
           github.repository_owner == 'jens-maus' &&
           !startsWith(matrix.platform, 'oci_') &&
           !startsWith(matrix.platform, 'lxc_')
-        uses: WebFreak001/deploy-nightly@v3.0.0
+        uses: WebFreak001/deploy-nightly@v3.1.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
@@ -144,7 +144,7 @@ jobs:
           github.repository_owner == 'jens-maus' &&
           !startsWith(matrix.platform, 'oci_') &&
           !startsWith(matrix.platform, 'lxc_')
-        uses: WebFreak001/deploy-nightly@v3.0.0
+        uses: WebFreak001/deploy-nightly@v3.1.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
@@ -158,7 +158,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           matrix.platform == 'rpi3'
-        uses: WebFreak001/deploy-nightly@v3.0.0
+        uses: WebFreak001/deploy-nightly@v3.1.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
@@ -172,7 +172,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           matrix.platform == 'rpi3'
-        uses: WebFreak001/deploy-nightly@v3.0.0
+        uses: WebFreak001/deploy-nightly@v3.1.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
@@ -186,7 +186,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           matrix.platform == 'ova'
-        uses: WebFreak001/deploy-nightly@v3.0.0
+        uses: WebFreak001/deploy-nightly@v3.1.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
@@ -200,7 +200,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           matrix.platform == 'ova'
-        uses: WebFreak001/deploy-nightly@v3.0.0
+        uses: WebFreak001/deploy-nightly@v3.1.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
@@ -214,7 +214,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           startsWith(matrix.platform, 'oci_')
-        uses: WebFreak001/deploy-nightly@v3.0.0
+        uses: WebFreak001/deploy-nightly@v3.1.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
@@ -228,7 +228,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           startsWith(matrix.platform, 'oci_')
-        uses: WebFreak001/deploy-nightly@v3.0.0
+        uses: WebFreak001/deploy-nightly@v3.1.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
@@ -242,7 +242,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           startsWith(matrix.platform, 'lxc_')
-        uses: WebFreak001/deploy-nightly@v3.0.0
+        uses: WebFreak001/deploy-nightly@v3.1.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}
@@ -256,7 +256,7 @@ jobs:
         if: |
           github.repository_owner == 'jens-maus' &&
           startsWith(matrix.platform, 'lxc_')
-        uses: WebFreak001/deploy-nightly@v3.0.0
+        uses: WebFreak001/deploy-nightly@v3.1.0
         with:
           token: ${{ secrets.DEPLOY_TOKEN }}
           upload_url: https://uploads.github.com/repos/jens-maus/RaspberryMatic/releases/22744592/assets{?name,label}

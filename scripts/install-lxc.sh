@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.7"
+VERSION="1.8"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -513,11 +513,9 @@ while true; do
   fi
 done
 
-# Request memory limits (not possible on RaspberryPiOS)
+# Request memory limits (not possible on RaspberryPiOS/Armbian)
 NUM_MEM=0
-if [[ "${PLATFORM}" != "aarch64" ]] ||
-   command -v armbian-install ||
-   ! grep -q Raspberry /proc/cpuinfo; then
+if [[ "${PLATFORM}" != "aarch64" ]]; then
   MIN_MEM=1024
   NUM_MEM=${MIN_MEM}
   while true; do

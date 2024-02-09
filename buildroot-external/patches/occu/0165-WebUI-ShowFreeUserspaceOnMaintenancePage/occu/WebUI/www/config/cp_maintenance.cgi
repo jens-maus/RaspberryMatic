@@ -354,7 +354,7 @@ proc action_put_page {} {
   global env sid REMOTE_FIRMWARE_SCRIPT LOGLEVELS HMIP_LOGLEVELS REGA_LOGLEVELS RFD_URL HS485D_URL downloadOnly
   http_head
 
-  if {[get_platform] != "oci" && [get_platform != "lxc"} {
+  if {[get_platform] != "oci" && [get_platform] != "lxc"} {
     execCmd USERFSFREE_MB {exec df -m /usr/local | tail -1 | awk {{ print $(NF-2) }}}
     if { ! [string is double -strict $USERFSFREE_MB] } {
       set USERFSFREE_MB 0

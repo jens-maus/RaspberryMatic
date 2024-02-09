@@ -71,7 +71,7 @@ alias die='EXIT=$? LINE=${LINENO} error_exit'
 trap die ERR
 
 # Set default variables
-VERSION="1.15"
+VERSION="1.16"
 LINE=
 
 error_exit() {
@@ -144,15 +144,15 @@ uninstall() {
   fi
   if pkg_installed pivccu-modules-dkms; then
     msg "Purging pivccu-modules-dkms package install"
-    apt purge pivccu-modules-dkms
+    apt purge -y pivccu-modules-dkms
   fi
   if pkg_installed pivccu-devicetree-armbian; then
     msg "Purging pivccu-devicetree-armbian package install"
-    apt purge pivccu-devicetree-armbian
+    apt purge -y pivccu-devicetree-armbian
   fi
   if pkg_installed pivccu-modules-raspberrypi; then
     msg "Purging pivccu-modules-raspberrypi package install"
-    apt purge pivccu-modules-raspberrypi
+    apt purge -y pivccu-modules-raspberrypi
   fi
   if [[ -e /etc/apt/sources.list.d/pivccu.list ]]; then
     msg "Removing /etc/apt/sources.list.d/pivccu.list"

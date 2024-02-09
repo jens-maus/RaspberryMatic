@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.7"
+VERSION="3.8"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -95,7 +95,7 @@ uninstall() {
 
   if pkg_installed pivccu-modules-dkms; then
     info "Purging pivccu-modules-dkms"
-    apt purge pivccu-modules-dkms
+    apt purge -y pivccu-modules-dkms
   fi
 
   HEADER_PKGS=
@@ -120,7 +120,7 @@ uninstall() {
     for pkg in ${HEADER_PKGS}; do
       if pkg_installed "${pkg}"; then
         info "Purging ${pkg}"
-        apt purge "${pkg}"
+        apt purge -y "${pkg}"
       fi
     done
   fi
@@ -128,12 +128,12 @@ uninstall() {
   # remove OS specific device tree stuff
   if pkg_installed pivccu-devicetree-armbian; then
     info "Purging pivccu-devicetree-armbian"
-    apt purge pivccu-devicetree-armbian
+    apt purge -y pivccu-devicetree-armbian
   fi
 
   if pkg_installed pivccu-modules-raspberrypi; then
     info "Purging pivccu-modules-raspberrypi"
-    apt purge pivccu-modules-raspberrypi
+    apt purge -y pivccu-modules-raspberrypi
   fi
 
   if command -v armbian-install >/dev/null &&
@@ -157,7 +157,7 @@ uninstall() {
 
   if pkg_installed pivccu-modules-dkms; then
     info "Uninstall pivccu-modules-dkms"
-    apt purge pivccu-modules-dkms
+    apt purge -y pivccu-modules-dkms
   fi
 
   msg "LXC container host dependencies successfully removed."

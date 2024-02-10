@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.8"
+VERSION="3.9"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -361,6 +361,47 @@ blacklist
 # v2 allows comments after the second line, with '#' in first column,
 # blacklist will allow syscalls by default
 EOF
+  fi
+
+  # check if cgroup cpuset and memory is enabled and if not try
+  # to enable them (if this is a RaspberryPi system)
+  info "Checking correct cgroup kernel settings..."
+  CGROUP_CPU=$(grep ^cpuset /proc/cgroups | cut -f4)
+  CGROUP_MEM=$(grep ^memory /proc/cgroups | cut -f4)
+  if [[ "${CGROUP_CPU}" != "1" ]] || [[ "${CGROUP_MEM}" != "1" ]]; then
+    # check if this is a RaspberryPi system and try to enable
+    # all necessary cgroup sets
+    if [[ -f /boot/firmware/cmdline.txt ]] ||
+       [[ -f /boot/cmdline.txt ]]; then
+
+      # select the correct cmdfile
+      if [[ -f /boot/firmware/cmdline.txt ]]; then
+        cmdfile=/boot/firmware/cmdline.txt
+      else
+        cmdfile=/boot/cmdline.txt
+      fi
+
+      change=0
+      # check if cmdline.txt contains the necessary cgroup statements
+      if [[ "${CGROUP_CPU}" != "1" ]] &&
+         ! grep -q "cgroup_enable=cpuset" ${cmdfile}; then
+        sed -i '1 s/$/ cgroup_enable=cpuset/' ${cmdfile}
+        change=1
+      fi
+      if [[ "${CGROUP_MEM}" != "1" ]] &&
+         ! grep -q "cgroup_enable=memory" ${cmdfile}; then
+        sed -i '1 s/$/ cgroup_enable=memory cgroup_memory=1/' ${cmdfile}
+        change=1
+      fi
+
+      if [[ ${change} -eq 1 ]]; then
+        warn "${cmdfile} modified. A reboot is required before container can be used."
+      else
+        warn "${cmdfile} is already modified, but the host system is still missing cgroup settings. Please perform a reboot or check the kernel cmdline settings of your bootloader."
+      fi
+    else
+      warn "This host system is missing cgroup settings for optimal LXC use. Please add 'cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1' to the kernel commandline of your bootloader and reboot."
+    fi
   fi
 
   case "${PLATFORM}" in

@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.9"
+VERSION="1.10"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -157,6 +157,170 @@ uninstall() {
   msg "- Reboot your host system to ensure clean operation without dependencies."
 }
 
+update() {
+  info "Selecting container..."
+  MSG_MAX_LENGTH=0
+  while read -r line; do
+    # check if container is a raspberrymatic kind of
+    # container
+    if grep -q "PLATFORM=lxc" /var/lib/lxc/${line}/rootfs/VERSION 2>/dev/null; then
+      RASPMATIC_VERSION=$(grep "VERSION=" /var/lib/lxc/${line}/rootfs/VERSION | cut -d= -f2)
+      CONTAINER_MENU+=( "${line}" "${RASPMATIC_VERSION}" "OFF" )
+      OFFSET=2
+      if [[ $((${#RASPMATIC_VERSION} + ${#line} + OFFSET)) -gt ${MSG_MAX_LENGTH:-} ]]; then
+        MSG_MAX_LENGTH=$((${#RASPMATIC_VERSION} + ${#line} + OFFSET))
+      fi
+    fi
+  done < <(lxc-ls -1)
+  CONTAINER=
+  while [[ -z "${CONTAINER:+x}" ]]; do
+    CONTAINER=$(whiptail --title "Container selection" --radiolist \
+    "Which container would you like to update?" \
+    16 $((MSG_MAX_LENGTH + 14)) 6 \
+    "${CONTAINER_MENU[@]}" 3>&1 1>&2 2>&3) || die "aborted"
+  done
+  info "Selected '${CONTAINER}' for update."
+
+  # check if container is running
+  if [[ "$(lxc-info -s ${CONTAINER} | awk '{print $2}')" == "RUNNING" ]]; then
+    die "Container is currently running. Please stop with 'sudo lxc-stop ${CONTAINER}' first."
+  fi
+
+  # select target raspberrymatic version
+  select_version version url
+
+  # Download RaspberryMatic archive
+  info "Downloading disk image..."
+  wget -q --show-progress "${url}"
+  echo -en "\e[1A\e[0K" #Overwrite output from wget
+  FILE=$(basename "${url}")
+
+  # final update question
+  if ! whiptail --title "Update confirnation" \
+                --yesno "During the next steps the rootfs of the '${CONTAINER}' container will be updated to version ${version}. All user configuration will be preserved, but you are requested to perform a backup.\n\nDo you want to continue and perform the update now?" \
+                11 78; then
+    die "aborting"
+  fi
+
+  # clear old rootfs
+  info "Wiping old rootfs..."
+  rm -rf "/var/lib/lxc/${CONTAINER}/rootfs/*"
+
+  # unarchive new rootfs
+  info "Updating rootfs..."
+  tar --numeric-owner -xpf "${FILE}" -C "/var/lib/lxc/${CONTAINER}/rootfs"
+
+  info "Completed update of '${CONTAINER}' container successfully."
+  msg "- Start container via \"sudo lxc-start ${CONTAINER}\""
+  msg "- Access console via \"sudo lxc-console ${CONTAINER}\""
+}
+
+select_version() {
+
+  case "${PLATFORM}" in
+    x86_64)
+      ENDSWITH="lxc_amd64.tar.xz"
+    ;;
+    aarch64)
+      ENDSWITH="lxc_arm64.tar.xz"
+    ;;
+    arm*)
+      ENDSWITH="lxc_arm.tar.xz"
+    ;;
+  esac
+
+  # Select RaspberryMatic version
+  info "Getting available RaspberryMatic versions..."
+  RELEASES=$(cat<<EOF | python3
+import requests
+import os
+import re
+url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases"
+r = requests.get(url).json()
+if "message" in r:
+    print("ERROR")
+    exit()
+num = 0
+for release in r:
+    if release["prerelease"] or release["tag_name"] == "snapshots":
+      continue
+    for asset in release["assets"]:
+        if asset["name"].endswith("${ENDSWITH}") == True:
+            image_url = asset["browser_download_url"]
+            name = asset["name"]
+            version = re.findall('RaspberryMatic-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-f]{6})?)-?.*\.', name)
+            if len(version) > 0 and num < 5:
+                print(version[0] + ' release ' + image_url)
+                num = num + 1
+            break
+EOF
+  )
+  if [[ "${RELEASES}" == "ERROR" ]]; then
+    die "GitHub has returned an error. A rate limit may have been applied to your connection. Try again later."
+  fi
+
+  SNAPSHOTS=$(cat<<EOF | python3
+import requests
+import os
+import re
+url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/snapshots"
+r = requests.get(url).json()
+if "message" in r:
+    print("ERROR")
+    exit()
+for asset in r["assets"]:
+    if asset["name"].endswith("${ENDSWITH}") == True:
+        image_url = asset["browser_download_url"]
+        name = asset["name"]
+        version = re.findall('RaspberryMatic-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-f]{6})?)-?.*\.', name)
+        if len(version) > 0:
+          print(version[0] + ' snapshot ' + image_url)
+        break
+EOF
+  )
+
+  if [[ "${SNAPSHOTS}" == "ERROR" ]]; then
+    die "GitHub has returned an error. A rate limit may have been applied to your connection. Try again later."
+  fi
+
+  if [[ -z "${RELEASES}${SNAPSHOTS}" ]]; then
+    die "No RaspberryMatic release or snapshot build for '${PLATFORM}' PVE version found."
+  fi
+
+  if [[ -n "${RELEASES}" ]] && [[ -n "${SNAPSHOTS}" ]]; then
+    RELEASES+=$'\n'${SNAPSHOTS}
+  elif [[ -n "${SNAPSHOTS}" ]]; then
+    RELEASES=${SNAPSHOTS}
+  fi
+  MSG_MAX_LENGTH=0
+  RELEASES_MENU=()
+  i=0
+  while read -r line; do
+    VERSION=$(echo "${line}" | cut -d' ' -f1)
+    ITEM=$(echo "${line}" | cut -d' ' -f2)
+    OFFSET=20
+    if [[ $((${#ITEM} + OFFSET)) -gt ${MSG_MAX_LENGTH:-} ]]; then
+      MSG_MAX_LENGTH=$((${#ITEM} + OFFSET))
+    fi
+    RELEASES_MENU+=("${VERSION}" " ${ITEM}")
+    ((i=i+1))
+  done < <(echo "${RELEASES}")
+
+  RELEASE=$(whiptail --title "Select RaspberryMatic Version" \
+                     --menu \
+                       "Select RaspberryMatic version:\n\n" \
+                       16 $((MSG_MAX_LENGTH + 23)) 6 \
+                       "${RELEASES_MENU[@]}" 3>&1 1>&2 2>&3) || exit
+
+  # extract URL from RELEASES
+  prefix=${RELEASES%%"$RELEASE"*}
+  URL=$(echo ${RELEASES:${#prefix}} | cut -d' ' -f3)
+  info "Selected ${RELEASE} as target version"
+
+  eval ${1}="${RELEASE}"
+  eval ${2}="${URL}"
+}
+
 msg "RaspberryMatic LXC installation script v${VERSION}"
 msg "Copyright (c) 2024 Jens Maus <mail@jens-maus.de>"
 msg ""
@@ -194,6 +358,9 @@ if [[ "${1-}" == "uninstall" ]]; then
     die "aborting"
   fi
   uninstall
+  exit 0
+elif [[ "${1-}" == "update" ]]; then
+  update
   exit 0
 fi
 
@@ -398,106 +565,8 @@ if [[ "${CGROUP_CPU}" != "1" ]] || [[ "${CGROUP_MEM}" != "1" ]]; then
   fi
 fi
 
-case "${PLATFORM}" in
-  x86_64)
-    ENDSWITH="lxc_amd64.tar.xz"
-  ;;
-  aarch64)
-    ENDSWITH="lxc_arm64.tar.xz"
-  ;;
-  arm*)
-    ENDSWITH="lxc_arm.tar.xz"
-  ;;
-esac
-
-
-# Select RaspberryMatic ova version
-info "Getting available RaspberryMatic versions..."
-RELEASES=$(cat<<EOF | python3
-import requests
-import os
-import re
-url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases"
-r = requests.get(url).json()
-if "message" in r:
-    print("ERROR")
-    exit()
-num = 0
-for release in r:
-    if release["prerelease"] or release["tag_name"] == "snapshots":
-      continue
-    for asset in release["assets"]:
-        if asset["name"].endswith("${ENDSWITH}") == True:
-            image_url = asset["browser_download_url"]
-            name = asset["name"]
-            version = re.findall('RaspberryMatic-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-f]{6})?)-?.*\.', name)
-            if len(version) > 0 and num < 5:
-                print(version[0] + ' release ' + image_url)
-                num = num + 1
-            break
-EOF
-)
-if [[ "${RELEASES}" == "ERROR" ]]; then
-  die "GitHub has returned an error. A rate limit may have been applied to your connection. Try again later."
-fi
-
-SNAPSHOTS=$(cat<<EOF | python3
-import requests
-import os
-import re
-url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/snapshots"
-r = requests.get(url).json()
-if "message" in r:
-    print("ERROR")
-    exit()
-for asset in r["assets"]:
-    if asset["name"].endswith("${ENDSWITH}") == True:
-        image_url = asset["browser_download_url"]
-        name = asset["name"]
-        version = re.findall('RaspberryMatic-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-f]{6})?)-?.*\.', name)
-        if len(version) > 0:
-          print(version[0] + ' snapshot ' + image_url)
-        break
-EOF
-)
-
-if [[ "${SNAPSHOTS}" == "ERROR" ]]; then
-  die "GitHub has returned an error. A rate limit may have been applied to your connection. Try again later."
-fi
-
-if [[ -z "${RELEASES}${SNAPSHOTS}" ]]; then
-  die "No RaspberryMatic release or snapshot build for '${PLATFORM}' PVE version found."
-fi
-
-if [[ -n "${RELEASES}" ]] && [[ -n "${SNAPSHOTS}" ]]; then
-  RELEASES+=$'\n'${SNAPSHOTS}
-elif [[ -n "${SNAPSHOTS}" ]]; then
-  RELEASES=${SNAPSHOTS}
-fi
-MSG_MAX_LENGTH=0
-RELEASES_MENU=()
-i=0
-while read -r line; do
-  VERSION=$(echo "${line}" | cut -d' ' -f1)
-  ITEM=$(echo "${line}" | cut -d' ' -f2)
-  OFFSET=20
-  if [[ $((${#ITEM} + OFFSET)) -gt ${MSG_MAX_LENGTH:-} ]]; then
-    MSG_MAX_LENGTH=$((${#ITEM} + OFFSET))
-  fi
-  RELEASES_MENU+=("${VERSION}" " ${ITEM}")
-  ((i=i+1))
-done < <(echo "${RELEASES}")
-
-RELEASE=$(whiptail --title "Select RaspberryMatic Version" \
-                   --menu \
-                     "Select RaspberryMatic version to install:\n\n" \
-                     16 $((MSG_MAX_LENGTH + 23)) 6 \
-                     "${RELEASES_MENU[@]}" 3>&1 1>&2 2>&3) || exit
-
-# extract URL from RELEASES
-prefix=${RELEASES%%"$RELEASE"*}
-URL=$(echo ${RELEASES:${#prefix}} | cut -d' ' -f3)
-info "Using ${RELEASE} for LXC container installation"
+# Select RaspberryMatic version
+select_version RELEASE URL
 
 # enter userfs storage location
 info "Entering userfs storage location"
@@ -575,7 +644,7 @@ while true; do
   fi
 done
 
-# Download RaspberryMatic ova archive
+# Download RaspberryMatic archive
 info "Downloading disk image..."
 wget -q --show-progress "${URL}"
 echo -en "\e[1A\e[0K" #Overwrite output from wget
@@ -638,3 +707,4 @@ msg "- Connect to WebUI via http://homematic-raspi/"
 msg "- Stop container via \"sudo lxc-stop ${CONTAINER_NAME}\""
 msg "- Destroy container via \"sudo lxc-destroy ${CONTAINER_NAME}\""
 msg "- Uninstall LXC host dependencies via \"sudo ${0} uninstall\""
+msg "- Update LXC container later via \"sudo ${0} update\""

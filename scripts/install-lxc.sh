@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.8"
+VERSION="1.9"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -357,6 +357,47 @@ blacklist
 EOF
 fi
 
+# check if cgroup cpuset and memory is enabled and if not try
+# to enable them (if this is a RaspberryPi system)
+info "Checking correct cgroup kernel settings..."
+CGROUP_CPU=$(grep ^cpuset /proc/cgroups | cut -f4)
+CGROUP_MEM=$(grep ^memory /proc/cgroups | cut -f4)
+if [[ "${CGROUP_CPU}" != "1" ]] || [[ "${CGROUP_MEM}" != "1" ]]; then
+  # check if this is a RaspberryPi system and try to enable
+  # all necessary cgroup sets
+  if [[ -f /boot/firmware/cmdline.txt ]] ||
+     [[ -f /boot/cmdline.txt ]]; then
+
+    # select the correct cmdfile
+    if [[ -f /boot/firmware/cmdline.txt ]]; then
+      cmdfile=/boot/firmware/cmdline.txt
+    else
+      cmdfile=/boot/cmdline.txt
+    fi
+
+    change=0
+    # check if cmdline.txt contains the necessary cgroup statements
+    if [[ "${CGROUP_CPU}" != "1" ]] &&
+       ! grep -q "cgroup_enable=cpuset" ${cmdfile}; then
+      sed -i '1 s/$/ cgroup_enable=cpuset/' ${cmdfile}
+      change=1
+    fi
+    if [[ "${CGROUP_MEM}" != "1" ]] &&
+       ! grep -q "cgroup_enable=memory" ${cmdfile}; then
+      sed -i '1 s/$/ cgroup_enable=memory cgroup_memory=1/' ${cmdfile}
+      change=1
+    fi
+
+    if [[ ${change} -eq 1 ]]; then
+      warn "${cmdfile} modified. A reboot is required before container can be used."
+    else
+      warn "${cmdfile} is already modified, but the host system is still missing cgroup settings. Please perform a reboot or check the kernel cmdline settings of your bootloader."
+    fi
+  else
+    warn "This host system is missing cgroup settings for optimal LXC use. Please add 'cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1' to the kernel commandline of your bootloader and reboot."
+  fi
+fi
+
 case "${PLATFORM}" in
   x86_64)
     ENDSWITH="lxc_amd64.tar.xz"
@@ -490,7 +531,7 @@ if lxc-info -n "${CONTAINER_NAME}" >/dev/null 2>&1;  then
 fi
 info "Using '${CONTAINER_NAME}' as container name."
 
-# Request number of CPU/cores
+# Request number of CPU/cores (requires cgroup cpuset)
 MIN_CPU=1
 MAX_CPU=$(nproc)
 NUM_CPU=2
@@ -513,29 +554,26 @@ while true; do
   fi
 done
 
-# Request memory limits (not possible on RaspberryPiOS/Armbian)
-NUM_MEM=0
-if [[ "${PLATFORM}" != "aarch64" ]]; then
-  MIN_MEM=1024
-  NUM_MEM=${MIN_MEM}
-  while true; do
-    if NUM_MEM=$(whiptail --inputbox "Please enter the memory limit to assign to the container (minimum is ${MIN_MEM} MiB)" 9 58 ${NUM_MEM} --title "Memory limit request" 3>&1 1>&2 2>&3); then
-      if [[ -z "${NUM_MEM}" ]]; then
-        NUM_MEM=${MIN_MEM}
-      fi
-      if [[ ! "${NUM_MEM}" =~ ^[0-9]+$ ]] ||
-         [[ ${NUM_MEM} -lt ${MIN_MEM} ]]; then
-        warn "Limit of memory not allowed to be smaller than ${MIN_MEM} MiB."
-        sleep 3
-        continue
-      fi
-      info "Chosen memory limit is ${MIN_MEM} MiB."
-      break
-    else
-      die "Memory limit selection canceled."
+# Request memory limits (requires cgroup memory)
+MIN_MEM=1024
+NUM_MEM=${MIN_MEM}
+while true; do
+  if NUM_MEM=$(whiptail --inputbox "Please enter the memory limit to assign to the container (minimum is ${MIN_MEM} MiB)" 9 58 ${NUM_MEM} --title "Memory limit request" 3>&1 1>&2 2>&3); then
+    if [[ -z "${NUM_MEM}" ]]; then
+      NUM_MEM=${MIN_MEM}
     fi
-  done
-fi
+    if [[ ! "${NUM_MEM}" =~ ^[0-9]+$ ]] ||
+       [[ ${NUM_MEM} -lt ${MIN_MEM} ]]; then
+      warn "Limit of memory not allowed to be smaller than ${MIN_MEM} MiB."
+      sleep 3
+      continue
+    fi
+    info "Chosen memory limit is ${MIN_MEM} MiB."
+    break
+  else
+    die "Memory limit selection canceled."
+  fi
+done
 
 # Download RaspberryMatic ova archive
 info "Downloading disk image..."
@@ -594,9 +632,9 @@ lxc-create -n "${CONTAINER_NAME}" \
            --fstree "${FILE}"
 
 info "Completed Successfully. New LXC container is: \e[1m(${CONTAINER_NAME})\e[0m."
-msg "- Start container via \"sudo lxc-start -n ${CONTAINER_NAME}\""
-msg "- Access console via \"sudo lxc-console -n ${CONTAINER_NAME}\""
+msg "- Start container via \"sudo lxc-start ${CONTAINER_NAME}\""
+msg "- Access console via \"sudo lxc-console ${CONTAINER_NAME}\""
 msg "- Connect to WebUI via http://homematic-raspi/"
-msg "- Stop container via \"sudo lxc-stop -n ${CONTAINER_NAME}\""
-msg "- Destroy container via \"sudo lxc-destroy -n ${CONTAINER_NAME}\""
+msg "- Stop container via \"sudo lxc-stop ${CONTAINER_NAME}\""
+msg "- Destroy container via \"sudo lxc-destroy ${CONTAINER_NAME}\""
 msg "- Uninstall LXC host dependencies via \"sudo ${0} uninstall\""

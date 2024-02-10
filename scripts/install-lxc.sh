@@ -191,11 +191,13 @@ update() {
 
   # Download RaspberryMatic archive
   info "Downloading disk image..."
+  # shellcheck disable=SC2154
   wget -q --show-progress "${url}"
   echo -en "\e[1A\e[0K" #Overwrite output from wget
   FILE=$(basename "${url}")
 
   # final update question
+  # shellcheck disable=SC2154
   if ! whiptail --title "Update confirnation" \
                 --yesno "During the next steps the rootfs of the '${CONTAINER}' container will be updated to version ${version}. All user configuration will be preserved, but you are requested to perform a backup.\n\nDo you want to continue and perform the update now?" \
                 11 78; then

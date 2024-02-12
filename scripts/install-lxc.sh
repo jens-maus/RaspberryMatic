@@ -207,7 +207,7 @@ update() {
   # clear old rootfs
   info "Wiping old rootfs..."
   shopt -s dotglob
-  rm -rf --one-file-system /var/lib/lxc/${CONTAINER}/rootfs/*
+  rm -rf --one-file-system /var/lib/lxc/${CONTAINER:?}/rootfs/*
 
   # unarchive new rootfs
   info "Updating rootfs..."

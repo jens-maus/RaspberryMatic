@@ -214,6 +214,7 @@ update() {
 
   # Download RaspberryMatic ova archive
   info "Downloading disk image..."
+  # shellcheck disable=SC2154
   wget -q --show-progress "${url}"
   echo -en "\e[1A\e[0K" #Overwrite output from wget
   FILE=$(basename "${url}")
@@ -256,7 +257,7 @@ update() {
   # clear old rootfs
   info "Wiping old rootfs..."
   shopt -s dotglob
-  rm -rf --one-file-system ${ROOTFS_PATH}/*
+  rm -rf --one-file-system ${ROOTFS_PATH:?}/*
 
   # unarchive new rootfs
   info "Updating rootfs..."

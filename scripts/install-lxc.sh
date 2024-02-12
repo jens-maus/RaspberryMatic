@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.11"
+VERSION="1.12"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -172,6 +172,11 @@ update() {
       fi
     fi
   done < <(lxc-ls -1)
+
+  if [[ -z "${CONTAINER_MENU[*]}" ]]; then
+    die "No RaspberryMatic container identified."
+  fi
+
   CONTAINER=
   while [[ -z "${CONTAINER:+x}" ]]; do
     CONTAINER=$(whiptail --title "Container selection" --radiolist \

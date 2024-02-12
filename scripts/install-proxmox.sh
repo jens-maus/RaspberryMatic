@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.10"
+VERSION="3.11"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -71,6 +71,13 @@ cleanup_vmid() {
         pct destroy "${VMID}" >>${LOGFILE} 2>&1
       fi
     fi
+  fi
+}
+check_sudo() {
+  # Make sure only root can run our script
+  if [[ $EUID -ne 0 ]]; then
+    die "This script must be run as root/sudo to modify host settings"
+    exit 1
   fi
 }
 cleanup() {
@@ -408,6 +415,9 @@ rm -f "${LOGFILE}"
 if [[ ! -d /etc/pve ]]; then
   die "This script must be executed on a Proxmox VE host system."
 fi
+
+# check that this script is run as root/sudo
+check_sudo
 
 # PVE platform
 PLATFORM=$(uname -m)

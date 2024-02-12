@@ -198,7 +198,7 @@ update() {
     fi
   done < <(pct list)
 
-  if [[ -z "${CONTAINER_MENU[@]}" ]]; then
+  if [[ -z "${CONTAINER_MENU[*]}" ]]; then
     die "No RaspberryMatic container identified."
   fi
 

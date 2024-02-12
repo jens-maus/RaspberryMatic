@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.10"
+VERSION="1.11"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -206,7 +206,8 @@ update() {
 
   # clear old rootfs
   info "Wiping old rootfs..."
-  rm -rf "/var/lib/lxc/${CONTAINER}/rootfs/*"
+  shopt -s dotglob
+  rm -rf --one-file-system /var/lib/lxc/${CONTAINER}/rootfs/*
 
   # unarchive new rootfs
   info "Updating rootfs..."

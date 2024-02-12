@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.9"
+VERSION="3.10"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -55,19 +55,21 @@ msg() {
   echo -e "${TEXT}"
 }
 cleanup_vmid() {
-  if [[ "${VMTYPE}" == "VM" ]]; then
-    if qm status "${VMID}" >>${LOGFILE} 2>&1; then
-      if [ "$(qm status "${VMID}" | awk '{print $2}')" == "running" ]; then
-        qm stop "${VMID}" >>${LOGFILE} 2>&1
+  if [[ -n "${VMID}" ]]; then
+    if [[ "${VMTYPE}" == "VM" ]]; then
+      if qm status "${VMID}" >>${LOGFILE} 2>&1; then
+        if [ "$(qm status "${VMID}" | awk '{print $2}')" == "running" ]; then
+          qm stop "${VMID}" >>${LOGFILE} 2>&1
+        fi
+        qm destroy "${VMID}" >>${LOGFILE} 2>&1
       fi
-      qm destroy "${VMID}" >>${LOGFILE} 2>&1
-    fi
-  elif [[ "${VMTYPE}" == "CT" ]]; then
-    if pct status "${VMID}" >>${LOGFILE} 2>&1; then
-      if [ "$(pct status "${VMID}" | awk '{print $2}')" == "running" ]; then
-        pct stop "${VMID}" >>${LOGFILE} 2>&1
+    elif [[ "${VMTYPE}" == "CT" ]]; then
+      if pct status "${VMID}" >>${LOGFILE} 2>&1; then
+        if [ "$(pct status "${VMID}" | awk '{print $2}')" == "running" ]; then
+          pct stop "${VMID}" >>${LOGFILE} 2>&1
+        fi
+        pct destroy "${VMID}" >>${LOGFILE} 2>&1
       fi
-      pct destroy "${VMID}" >>${LOGFILE} 2>&1
     fi
   fi
 }
@@ -167,6 +169,229 @@ uninstall() {
   msg "- Reboot your Proxmox system to ensure clean operation without dependencies."
 }
 
+update() {
+  info "Selecting container..."
+  MSG_MAX_LENGTH=0
+  while read -r line; do
+    # check if container is a raspberrymatic kind of
+    # container
+    CTID=$(echo ${line} | awk '{ print $1 }')
+    if grep -q "unrestricted.seccomp" /etc/pve/lxc/${CTID}.conf 2>/dev/null; then
+      CTSTATUS=$(echo ${line} | awk '{ print $2 }')
+      CTNAME=$(echo ${line} | awk '{ print $3 }')
+      if [[ "${CTNAME}" == "mounted" ]]; then
+        CTSTATUS="locked"
+        CTNAME=$(echo ${line} | awk '{ print $4 }')
+      fi
+      CONTAINER_MENU+=( "${CTID} ${CTSTATUS}" "${CTNAME}" "OFF" )
+      OFFSET=4
+      if [[ $((${#CTSTATUS} + ${#CTNAME} + OFFSET)) -gt ${MSG_MAX_LENGTH:-} ]]; then
+        MSG_MAX_LENGTH=$((${#CTSTATUS} + ${#CTNAME} + OFFSET))
+      fi
+    fi
+  done < <(pct list)
+  CONTAINER=
+  while [[ -z "${CONTAINER:+x}" ]]; do
+    CONTAINER=$(whiptail --title "Container selection" --radiolist \
+    "Which container would you like to update?" \
+    20 $((MSG_MAX_LENGTH + 14)) 12 \
+    "${CONTAINER_MENU[@]}" 3>&1 1>&2 2>&3) || die "aborted"
+  done
+  CONTAINER_STATUS=$(echo ${CONTAINER} | cut -d' ' -f2)
+  CONTAINER=$(echo ${CONTAINER} | cut -d' ' -f1)
+  info "Selected '${CONTAINER}' for update."
+
+  # check if container is running
+  if [[ "${CONTAINER_STATUS}" != "stopped" ]]; then
+    die "Container is ${CONTAINER_STATUS}. Please shutdown with 'pct shutdown ${CONTAINER}' first."
+  fi
+
+  # set the VMTYPE we are going to update
+  VMTYPE="CT"
+
+  # select target raspberrymatic version
+  select_version version url
+
+  # Download RaspberryMatic ova archive
+  info "Downloading disk image..."
+  wget -q --show-progress "${url}"
+  echo -en "\e[1A\e[0K" #Overwrite output from wget
+  FILE=$(basename "${url}")
+
+  # final update question
+  # shellcheck disable=SC2154
+  if ! whiptail --title "Update confirnation" \
+                --yesno "During the next steps the rootfs of the '${CONTAINER}' container will be updated to version ${version}. All user configuration will be preserved, but you are requested to perform a backup before you continue.\n\nDo you want to continue and perform the update now?" \
+                11 78; then
+    die "aborting"
+  fi
+
+  # make sure to mount ct
+  ROOTFS_PATH=$(pct mount ${CONTAINER} | awk '{print $5}' | xargs)
+  if ! mountpoint -q "${ROOTFS_PATH}"; then
+    pct unmount ${CONTAINER}
+    die "Could not mount rootfs of container ${CONTAINER}"
+  fi
+
+  # check if VERSION file contains a valid reference to lxc
+  OLD_VERSION=$(grep "VERSION=" ${ROOTFS_PATH}/VERSION 2>/dev/null | cut -d= -f2)
+  if [[ -z "${OLD_VERSION}" ]] ||
+    ! grep -q "PLATFORM=lxc" ${ROOTFS_PATH}/VERSION 2>/dev/null; then
+    pct unmount ${CONTAINER}
+    die "Container ${CONTAINER} does not seem to have a valid RaspberryMatic rootfs path"
+  fi
+
+  # start to perform update
+  info "Performing update from ${OLD_VERSION} to ${version}. DO NOT INTERRUPT!"
+
+  # check if ${ROOTFS_PATH}/usr/local is currently a mountpoint and if so unmount it
+  info "Unmounting userfs..."
+  if mountpoint -q "${ROOTFS_PATH}/usr/local"; then
+    umount ${ROOTFS_PATH}/usr/local
+    if mountpoint -q "${ROOTFS_PATH}/usr/local"; then
+      die "Could not unmount ${ROOTFS_PATH}/usr/local"
+    fi
+  fi
+
+  # clear old rootfs
+  info "Wiping old rootfs..."
+  shopt -s dotglob
+  rm -rf --one-file-system ${ROOTFS_PATH}/*
+
+  # unarchive new rootfs
+  info "Updating rootfs..."
+  tar --numeric-owner -xpf "${FILE}" -C "${ROOTFS_PATH}"
+
+  # unmount rootfs again
+  pct unmount ${CONTAINER}
+
+  info "Completed update of '${CONTAINER}' container successfully."
+  msg "- Start container via \"pct start ${CONTAINER}\""
+  msg "- Access console via \"pct console ${CONTAINER}\""
+}
+
+select_version() {
+
+  # define the download archive end pattern
+  if [[ ${VMTYPE} == "VM" ]]; then
+
+    case "${PLATFORM}" in
+      x86_64)
+        ENDSWITH=".ova"
+      ;;
+      aarch64)
+        ENDSWITH="generic-aarch64.zip"
+      ;;
+    esac
+  else
+    case "${PLATFORM}" in
+      x86_64)
+        ENDSWITH="lxc_amd64.tar.xz"
+        CTARCH="amd64"
+      ;;
+      aarch64)
+        ENDSWITH="lxc_arm64.tar.xz"
+        CTARCH="arm64"
+      ;;
+      arm*)
+        ENDSWITH="lxc_arm.tar.xz"
+        CTARCH="armhf"
+      ;;
+    esac
+  fi
+
+  # Select RaspberryMatic ova version
+  info "Getting available RaspberryMatic versions..."
+  RELEASES=$(cat<<EOF | python3
+import requests
+import os
+import re
+url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases"
+r = requests.get(url).json()
+if "message" in r:
+    print("ERROR")
+    exit()
+num = 0
+for release in r:
+    if release["prerelease"] or release["tag_name"] == "snapshots":
+      continue
+    for asset in release["assets"]:
+        if asset["name"].endswith("${ENDSWITH}") == True:
+            image_url = asset["browser_download_url"]
+            name = asset["name"]
+            version = re.findall('RaspberryMatic-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-f]{6})?)-?.*\.', name)
+            if len(version) > 0 and num < 5:
+                print(version[0] + ' release ' + image_url)
+                num = num + 1
+            break
+EOF
+  )
+  if [[ "${RELEASES}" == "ERROR" ]]; then
+    die "GitHub has returned an error. A rate limit may have been applied to your connection. Try again later."
+  fi
+
+  SNAPSHOTS=$(cat<<EOF | python3
+import requests
+import os
+import re
+url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/snapshots"
+r = requests.get(url).json()
+if "message" in r:
+    print("ERROR")
+    exit()
+for asset in r["assets"]:
+    if asset["name"].endswith("${ENDSWITH}") == True:
+        image_url = asset["browser_download_url"]
+        name = asset["name"]
+        version = re.findall('RaspberryMatic-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-f]{6})?)-?.*\.', name)
+        if len(version) > 0:
+          print(version[0] + ' snapshot ' + image_url)
+        break
+EOF
+  )
+
+  if [[ "${SNAPSHOTS}" == "ERROR" ]]; then
+    die "GitHub has returned an error. A rate limit may have been applied to your connection. Try again later."
+  fi
+
+  if [[ -z "${RELEASES}${SNAPSHOTS}" ]]; then
+    die "No RaspberryMatic release or snapshot build for '${PLATFORM}' PVE version found."
+  fi
+
+  if [[ -n "${RELEASES}" ]] && [[ -n "${SNAPSHOTS}" ]]; then
+    RELEASES+=$'\n'${SNAPSHOTS}
+  elif [[ -n "${SNAPSHOTS}" ]]; then
+    RELEASES=${SNAPSHOTS}
+  fi
+  MSG_MAX_LENGTH=0
+  RELEASES_MENU=()
+  i=0
+  while read -r line; do
+    VERSION=$(echo "${line}" | cut -d' ' -f1)
+    ITEM=$(echo "${line}" | cut -d' ' -f2)
+    OFFSET=20
+    if [[ $((${#ITEM} + OFFSET)) -gt ${MSG_MAX_LENGTH:-} ]]; then
+      MSG_MAX_LENGTH=$((${#ITEM} + OFFSET))
+    fi
+    RELEASES_MENU+=("${VERSION}" " ${ITEM}")
+    ((i=i+1))
+  done < <(echo "${RELEASES}")
+
+  RELEASE=$(whiptail --title "Select RaspberryMatic Version" \
+                     --menu \
+                       "Select RaspberryMatic version to install:\n\n" \
+                       16 $((MSG_MAX_LENGTH + 23)) 6 \
+                       "${RELEASES_MENU[@]}" 3>&1 1>&2 2>&3) || exit
+
+  # extract URL from RELEASES
+  prefix=${RELEASES%%"$RELEASE"*}
+  URL=$(echo ${RELEASES:${#prefix}} | cut -d' ' -f3)
+  info "Selected ${RELEASE} as target ${VMTYPE} version"
+
+  eval ${1}="${RELEASE}"
+  eval ${2}="${URL}"
+}
+
 msg "RaspberryMatic Proxmox installation script v${VERSION}"
 msg "Copyright (c) 2022-2024 Jens Maus <mail@jens-maus.de>"
 msg ""
@@ -196,6 +421,9 @@ if [[ "${1-}" == "uninstall" ]]; then
   fi
   uninstall
   exit 0
+elif [[ "${1-}" == "update" ]]; then
+  update
+  exit 0
 fi
 
 VMTYPE=$(whiptail --title "Virtual machine type selection" \
@@ -207,17 +435,7 @@ VMTYPE=$(whiptail --title "Virtual machine type selection" \
 
 info "Using ${VMTYPE} as target virtual machine type"
 
-if [[ ${VMTYPE} == "VM" ]]; then
-
-  case "${PLATFORM}" in
-    x86_64)
-      ENDSWITH=".ova"
-    ;;
-    aarch64)
-      ENDSWITH="generic-aarch64.zip"
-    ;;
-esac
-else
+if [[ ${VMTYPE} == "CT" ]]; then
 
   text=$(cat <<EOF
 When running RaspberryMatic as a LXC container, the Proxmox host system
@@ -404,109 +622,10 @@ EOF
     fi
   fi
 
-  case "${PLATFORM}" in
-    x86_64)
-      ENDSWITH="lxc_amd64.tar.xz"
-      CTARCH="amd64"
-    ;;
-    aarch64)
-      ENDSWITH="lxc_arm64.tar.xz"
-      CTARCH="arm64"
-    ;;
-    arm*)
-      ENDSWITH="lxc_arm.tar.xz"
-      CTARCH="armhf"
-    ;;
-  esac
 fi
 
-# Select RaspberryMatic ova version
-info "Getting available RaspberryMatic versions..."
-RELEASES=$(cat<<EOF | python3
-import requests
-import os
-import re
-url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases"
-r = requests.get(url).json()
-if "message" in r:
-    print("ERROR")
-    exit()
-num = 0
-for release in r:
-    if release["prerelease"] or release["tag_name"] == "snapshots":
-      continue
-    for asset in release["assets"]:
-        if asset["name"].endswith("${ENDSWITH}") == True:
-            image_url = asset["browser_download_url"]
-            name = asset["name"]
-            version = re.findall('RaspberryMatic-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-f]{6})?)-?.*\.', name)
-            if len(version) > 0 and num < 5:
-                print(version[0] + ' release ' + image_url)
-                num = num + 1
-            break
-EOF
-)
-if [[ "${RELEASES}" == "ERROR" ]]; then
-  die "GitHub has returned an error. A rate limit may have been applied to your connection. Try again later."
-fi
-
-SNAPSHOTS=$(cat<<EOF | python3
-import requests
-import os
-import re
-url = "https://api.github.com/repos/jens-maus/RaspberryMatic/releases/tags/snapshots"
-r = requests.get(url).json()
-if "message" in r:
-    print("ERROR")
-    exit()
-for asset in r["assets"]:
-    if asset["name"].endswith("${ENDSWITH}") == True:
-        image_url = asset["browser_download_url"]
-        name = asset["name"]
-        version = re.findall('RaspberryMatic-(\d+\.\d+\.\d+\.\d+(?:-[0-9a-f]{6})?)-?.*\.', name)
-        if len(version) > 0:
-          print(version[0] + ' snapshot ' + image_url)
-        break
-EOF
-)
-
-if [[ "${SNAPSHOTS}" == "ERROR" ]]; then
-  die "GitHub has returned an error. A rate limit may have been applied to your connection. Try again later."
-fi
-
-if [[ -z "${RELEASES}${SNAPSHOTS}" ]]; then
-  die "No RaspberryMatic release or snapshot build for '${PLATFORM}' PVE version found."
-fi
-
-if [[ -n "${RELEASES}" ]] && [[ -n "${SNAPSHOTS}" ]]; then
-  RELEASES+=$'\n'${SNAPSHOTS}
-elif [[ -n "${SNAPSHOTS}" ]]; then
-  RELEASES=${SNAPSHOTS}
-fi
-MSG_MAX_LENGTH=0
-RELEASES_MENU=()
-i=0
-while read -r line; do
-  VERSION=$(echo "${line}" | cut -d' ' -f1)
-  ITEM=$(echo "${line}" | cut -d' ' -f2)
-  OFFSET=20
-  if [[ $((${#ITEM} + OFFSET)) -gt ${MSG_MAX_LENGTH:-} ]]; then
-    MSG_MAX_LENGTH=$((${#ITEM} + OFFSET))
-  fi
-  RELEASES_MENU+=("${VERSION}" " ${ITEM}")
-  ((i=i+1))
-done < <(echo "${RELEASES}")
-
-RELEASE=$(whiptail --title "Select RaspberryMatic Version" \
-                   --menu \
-                     "Select RaspberryMatic version to install:\n\n" \
-                     16 $((MSG_MAX_LENGTH + 23)) 6 \
-                     "${RELEASES_MENU[@]}" 3>&1 1>&2 2>&3) || exit
-
-# extract URL from RELEASES
-prefix=${RELEASES%%"$RELEASE"*}
-URL=$(echo ${RELEASES:${#prefix}} | cut -d' ' -f3)
-info "Using ${RELEASE} for ${VMTYPE} installation"
+# ask for the raspberrymatic version
+select_version RELEASE URL
 
 # Select storage location
 info "Selecting storage location"

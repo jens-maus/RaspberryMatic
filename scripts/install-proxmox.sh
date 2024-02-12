@@ -24,7 +24,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="3.11"
+VERSION="3.12"
 LOGFILE="/tmp/install-proxmox.log"
 LINE=
 
@@ -197,6 +197,11 @@ update() {
       fi
     fi
   done < <(pct list)
+
+  if [[ -z "${CONTAINER_MENU[@]}" ]]; then
+    die "No RaspberryMatic container identified."
+  fi
+
   CONTAINER=
   while [[ -z "${CONTAINER:+x}" ]]; do
     CONTAINER=$(whiptail --title "Container selection" --radiolist \

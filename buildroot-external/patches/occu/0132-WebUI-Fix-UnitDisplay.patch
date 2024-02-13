@@ -381,13 +381,6 @@
          WriteLine("</tr>");
        WriteLine("</table>");
      WriteLine("</td>");
-@@ -630,4 +630,4 @@
-     WriteLine("</td>");
-   WriteLine("</tr>");
- 
--}
-\ No newline at end of file
-+}
 --- occu/WebUI/www/rega/esp/controls/thermostat.fn.orig
 +++ occu/WebUI/www/rega/esp/controls/thermostat.fn
 @@ -4,7 +4,7 @@

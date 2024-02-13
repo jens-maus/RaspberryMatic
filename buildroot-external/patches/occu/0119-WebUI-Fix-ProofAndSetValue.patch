@@ -472,7 +472,7 @@
            append s1 "</td>"
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -41690,54 +41690,70 @@
+@@ -43487,54 +43487,70 @@
      srcElm.value = value;
    }
  
@@ -501,7 +501,7 @@
      } else {
 -      min = parseFloat(min).toFixed(2);
 -      max = parseFloat(max).toFixed(2);
--      value = parseFloat(value);
+-      value = parseFloat(value).toFixed(2);
 -      srcElm.value = parseFloat(value);
 +      min = parseFloat(min).toFixed(digits);
 +      max = parseFloat(max).toFixed(digits);

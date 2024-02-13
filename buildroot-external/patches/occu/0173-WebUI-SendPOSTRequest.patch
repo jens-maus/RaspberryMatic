@@ -1,6 +1,6 @@
 --- occu/WebUI/www/config/ic_common.tcl.orig
 +++ occu/WebUI/www/config/ic_common.tcl
-@@ -581,11 +581,10 @@
+@@ -583,11 +583,10 @@
  
  #cgi_debug -on
  
@@ -14,7 +14,7 @@
  
    #Parametername eines evtl. Subsets auf den URL-Parametern generieren. z.B. subset_4_1
    set i 1
-@@ -593,7 +592,10 @@
+@@ -595,7 +594,10 @@
  
    foreach p $params {
  
@@ -26,7 +26,7 @@
  
        if { [lsearch -exact $IGNORE_PARAMS $name] >= 0} then {
  
-@@ -646,7 +648,7 @@
+@@ -648,7 +650,7 @@
  
    global HTMLTITLE env
  
@@ -35,14 +35,14 @@
  
    if { $profile != "" } then {
      
-@@ -1122,7 +1124,7 @@
+@@ -1128,7 +1130,7 @@
      set idval "separate_${pnr}_$j"
  
      if { ! ($operations & 3) } then { continue }
--    if {    $operations & 1  } then { set value $ps($param_id) }
-+    if {    $operations & 1  } then { set value [cgi_quote_html $ps($param_id)] }
+-    if {    $operations & 1  } then { catch {set value $ps($param_id)} }
++    if {    $operations & 1  } then { catch {set value [cgi_quote_html $ps($param_id)]} }
      if {    $operations & 2  } then { set access "" } else { set access "disabled=\"disabled\"" }
-         
+ 
      append s "<tr>"
 --- occu/WebUI/www/config/ic_ifacecmd.cgi.orig
 +++ occu/WebUI/www/config/ic_ifacecmd.cgi

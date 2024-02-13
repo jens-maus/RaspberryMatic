@@ -145,9 +145,9 @@
    object oActiveProfile = cObj.DPByControl("HEATING_CONTROL_HMIP.ACTIVE_PROFILE");
    object oHumidity = cObj.DPByControl("HEATING_CONTROL_HMIP.HUMIDITY");
    object oSetPointMode = cObj.DPByControl("HEATING_CONTROL_HMIP.SETPOINT_MODE");
-@@ -227,12 +298,6 @@
-   string sReadOnly = "";
-   rState = oSetPoint.Value();
+@@ -243,12 +314,6 @@
+   }
+ 
  
 -  if ( oTemperature )
 -  {
@@ -158,7 +158,7 @@
    if (oCO2) {
      object oCO2Concentration = cObj.DPByControl("CARBON_DIOXIDE_RECEIVER.CONCENTRATION");
      object oCO2ConcentrationStatus = cObj.DPByControl("CARBON_DIOXIDE_RECEIVER.CONCENTRATION_STATUS");
-@@ -341,13 +406,25 @@
+@@ -357,13 +422,26 @@
        WriteLine("</table>");
      WriteLine("</td>");
  
@@ -167,7 +167,7 @@
 -       WriteLine("<td id='"#chnId#"tdLEVEL' >");
 +    if (oValveLevel) {
 +      WriteLine("<td id='"#chnId#"tdLEVEL'>");
-         WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+         WriteLine("<table class='ControlBtnInfo' style='width:205px'>");
            WriteLine("<tr>");
 -            WriteLine("<td  >${diagramValueTypeLEVEL}: </td>");
 -            WriteLine("<td><span>"#level.ToString(0)#" %</span></td>");
@@ -177,19 +177,20 @@
 +        WriteLine("</table>");
 +      WriteLine("</td>");
 +    }
++
 +  WriteLine("</tr>");
 +
 +  WriteLine("<tr>");
 +    if (oBatteryState) {
 +      WriteLine("<td id='"#chnId#"tdBATTERY_STATE'>");
-+        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
++        WriteLine("<table class='ControlBtnInfo' style='width:205px'>");
 +          WriteLine("<tr>");
 +            WriteLine("<td>${stringTableClimateControlRTTransceiverBatteryState}</td>");
 +            WriteLine("<td><span id='"#chnId#"valBATTERY_STATE'></span><span><b>"#bUnit#"</b></span></td>");
            WriteLine("</tr>");
          WriteLine("</table>");
        WriteLine("</td>");
-@@ -516,6 +593,14 @@
+@@ -519,6 +597,14 @@
        WriteLine("opts.humidityID = '"#oHumidity.ID()#"';");
        WriteLine("opts.HUMIDITY = '"#oHumidity.Value()#"';");
      }
@@ -204,6 +205,13 @@
      if (oWindowState) {
        WriteLine("opts.windowStateID = '"#oWindowState.ID()#"';");
        WriteLine("opts.WINDOW_STATE = '"#oWindowState.Value()#"';");
+@@ -698,4 +784,4 @@
+ 
+   WriteLine("</script>");
+ 
+-}
+\ No newline at end of file
++}
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
 @@ -25374,6 +25374,15 @@

@@ -298,6 +298,22 @@ function ::CreateHeatingControlHmIP() {
   string sReadOnly = "";
   rState = oSetPoint.Value();
 
+
+  if (oValveState) {
+    integer valveState = oValveState.Value();
+    ! 4 is the default, which we don't show
+    if (valveState != 4) {
+      WriteLine("<tr>");
+        WriteLine("<td>");
+          WriteLine("<table class='ControlBtnInfo' style='width:205px'><tr>");
+              WriteLine("<td><div>${stringTableClimateControlVentDriveValveState}:<br/>${stringTableValveState_"#valveState#"}</div></td>");
+          WriteLine("</tr></table>");
+        WriteLine("</td>");
+      WriteLine("</tr>");
+    }
+  }
+
+
   if (oCO2) {
     object oCO2Concentration = cObj.DPByControl("CARBON_DIOXIDE_RECEIVER.CONCENTRATION");
     object oCO2ConcentrationStatus = cObj.DPByControl("CARBON_DIOXIDE_RECEIVER.CONCENTRATION_STATUS");
@@ -311,7 +327,7 @@ function ::CreateHeatingControlHmIP() {
     if (oCO2Concentration) {
       WriteLine("<tr>");
         WriteLine("<td>");
-         WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+         WriteLine("<table class='ControlBtnInfo' style='width:205px'>");
             WriteLine("<tr>");
               WriteLine("<td>");
                 WriteLine("<div>");
@@ -333,7 +349,7 @@ function ::CreateHeatingControlHmIP() {
           }
 
             WriteLine("<td>");
-              WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+              WriteLine("<table class='ControlBtnInfo' style='width:205px'>");
                 WriteLine("<tr>");
                   WriteLine("<td>" );
                     WriteLine("<div>");
@@ -358,7 +374,7 @@ function ::CreateHeatingControlHmIP() {
 
         WriteLine("<tr>");
           WriteLine("<td>");
-            WriteLine("<div style='height:auto; width:200px; color:"#fgColor#"; background-color:"#bgColor#"; margin-top:5px; text-align:center;'  >"#CO2_Hint#"</div>");
+            WriteLine("<div style='height:auto; width:205px; color:"#fgColor#"; background-color:"#bgColor#"; margin-top:5px; text-align:center;'  >"#CO2_Hint#"</div>");
           WriteLine("</td>");
         WriteLine("</tr>");
 
@@ -375,7 +391,7 @@ function ::CreateHeatingControlHmIP() {
 
   WriteLine("<tr>");
     WriteLine("<td id='"#chnId#"tdACTUAL_TEMPERATURE'>");
-      WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+      WriteLine("<table class='ControlBtnInfo' style='width:205px'>");
         WriteLine("<tr>");
           WriteLine("<td  id='"#chnId#"ACTUAL_TEMPERATURE'>${stringTableWeatherTemperature}</td>");
           WriteLine("<td><span id='"#chnId#"valACTUAL_TEMPERATURE'></span><span><b>"#tUnit#"</b></span></td>");
@@ -385,7 +401,7 @@ function ::CreateHeatingControlHmIP() {
 
     if (oHumidity) {
       WriteLine("<td id='"#chnId#"tdHUMIDITY'>");
-        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+        WriteLine("<table class='ControlBtnInfo' style='width:205px'>");
           WriteLine("<tr>");
             WriteLine("<td>${stringTableWeatherHumidity}</td>");
             WriteLine("<td><span id='"#chnId#"valHUMIDITY'></span><span><b>"#hUnit#"</b></span></td>");
@@ -398,7 +414,7 @@ function ::CreateHeatingControlHmIP() {
   WriteLine("<tr>");
 
     WriteLine("<td id='"#chnId#"tdWINDOW_STATE' >");
-      WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+      WriteLine("<table class='ControlBtnInfo' style='width:205px'>");
         WriteLine("<tr>");
           WriteLine("<td  id='"#chnId#"WINDOW_STATE'>${stringTableWindowState}: </td>");
           WriteLine("<td><span id='"#chnId#"valWINDOW_STATE'></span></td>");
@@ -408,7 +424,7 @@ function ::CreateHeatingControlHmIP() {
 
     if (oValveLevel) {
       WriteLine("<td id='"#chnId#"tdLEVEL'>");
-        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+        WriteLine("<table class='ControlBtnInfo' style='width:205px'>");
           WriteLine("<tr>");
             WriteLine("<td id='"#chnId#"LEVEL'>${stringTableHeatingLevel}</td>");
             WriteLine("<td><span id='"#chnId#"valLEVEL'></span><span><b>"#vUnit#"</b></span></td>");
@@ -416,12 +432,13 @@ function ::CreateHeatingControlHmIP() {
         WriteLine("</table>");
       WriteLine("</td>");
     }
+
   WriteLine("</tr>");
 
   WriteLine("<tr>");
     if (oBatteryState) {
       WriteLine("<td id='"#chnId#"tdBATTERY_STATE'>");
-        WriteLine("<table class='ControlBtnInfo' style='width:200px'>");
+        WriteLine("<table class='ControlBtnInfo' style='width:205px'>");
           WriteLine("<tr>");
             WriteLine("<td>${stringTableClimateControlRTTransceiverBatteryState}</td>");
             WriteLine("<td><span id='"#chnId#"valBATTERY_STATE'></span><span><b>"#bUnit#"</b></span></td>");
@@ -431,20 +448,6 @@ function ::CreateHeatingControlHmIP() {
     }
 
   WriteLine("</tr>");
-
-  if (oValveState) {
-    integer valveState = oValveState.Value();
-    ! 4 is the default, which we don't show
-    if (valveState != 4) {
-      WriteLine("<tr>");
-        WriteLine("<td>");
-          WriteLine("<table class='ControlBtnInfo' style='width:200px'><tr>");
-              WriteLine("<td><div>${stringTableClimateControlVentDriveValveState}:<br/>${stringTableValveState_"#valveState#"}</div></td>");
-          WriteLine("</tr></table>");
-        WriteLine("</td>");
-      WriteLine("</tr>");
-    }
-  }
 
  ! SLIDER
 
@@ -543,6 +546,7 @@ function ::CreateHeatingControlHmIP() {
                   && (chnLabel != "HmIP-eTRV-B-UK")
                   && (chnLabel != "HmIP-eTRV-B1")
                   && (chnLabel != "HmIP-WTH")
+                  && (chnLabel != "HmIP-WTH-A")
                   && (chnLabel != "HMIP-WTH")
                   && (chnLabel != "HmIP-eTRV-C")
                   && (chnLabel != "HmIP-eTRV-C-2")
@@ -552,7 +556,7 @@ function ::CreateHeatingControlHmIP() {
                   && (chnLabel != "HmIP-eTRV-E-S")
                   && (chnLabel != "HmIP-eTRV-E-A")
                 )
-                || (((chnLabel == "HmIP-WTH") || (chnLabel == "HMIP-WTH")) && ((devFwMajor > 1) || ((devFwMajor == 1) && (devFwMinor >= 6))))
+                || (((chnLabel == "HmIP-WTH") || (chnLabel == "HMIP-WTH") || (chnLabel == "HmIP-WTH-A")) && ((devFwMajor > 1) || ((devFwMajor == 1) && (devFwMinor >= 6))))
                ) {
                   WriteLine("<option value='4'>${optionWeeklyProfile4}</option>");
                   WriteLine("<option value='5'>${optionWeeklyProfile5}</option>");

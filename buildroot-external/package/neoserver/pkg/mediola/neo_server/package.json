@@ -1,6 +1,6 @@
 {
     "name": "neo_server",
-    "version": "2.13.0",
+    "version": "2.14.0",
     "main": "index.html",
     "config": {
         "WEB_SERVER_PORT": 8088,
@@ -35,6 +35,6 @@
         "sax": "^1.2.1",
         "suncalc": "^1.9.0",
         "unorm": "^1.6.0",
-        "winreg": "^1.2.4"
+        "winreg": "1.2.2"
     }
 }

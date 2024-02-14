@@ -1,6 +1,6 @@
 The ISC License
 
-Copyright (c) Isaac Z. Schlueter and Contributors
+Copyright (c) 2010-2022 Isaac Z. Schlueter and Contributors
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -19,7 +19,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 `String.fromCodePoint` by Mathias Bynens used according to terms of MIT
 License, as follows:
 
-    Copyright Mathias Bynens <https://mathiasbynens.be/>
+Copyright (c) 2010-2022 Mathias Bynens <https://mathiasbynens.be/>
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the

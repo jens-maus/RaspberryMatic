@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.12"
+VERSION="1.13"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -132,6 +132,7 @@ uninstall() {
     info "Purging pivccu-raspberrypi.dtbo"
     rm -f /boot/firmware/overlays/pivccu-raspberrypi.dtbo
     sed -i '/^dtoverlay=pivccu-raspberrypi/d' /boot/firmware/config.txt
+    sed -i '/^dtoverlay=miniuart-bt/d' /boot/firmware/config.txt
   fi
 
   # remove pivccu public key and repo
@@ -500,6 +501,11 @@ EOF
           info "Installing dtbo to /boot/firmware/overlays/"
           cp "${TEMP_DIR}/var/lib/piVCCU/dtb/overlays/pivccu-raspberrypi.dtbo" /boot/firmware/overlays/
           echo "dtoverlay=pivccu-raspberrypi" >>/boot/firmware/config.txt
+
+          # on Pi < 5 we have to add miniuart-bt dtoverlay
+          if ! grep -Eq "Raspberry Pi 5" /proc/cpuinfo; then
+            echo "dtoverlay=miniuart-bt" >>/boot/firmware/config.txt
+          fi
         fi
       else
         info "Installing pivccu-devicetree-armbian"

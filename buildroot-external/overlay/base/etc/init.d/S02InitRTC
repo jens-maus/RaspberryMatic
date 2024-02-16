@@ -49,7 +49,10 @@ init_rtc_device() {
        ! grep -Eq "^rpi_rf_mod_led " /proc/modules; then
 
       # check underlying hardware model
-      if grep -Eq "^Raspberry Pi" /proc/device-tree/model; then
+      if grep -Eq "^Raspberry Pi 5" /proc/device-tree/model; then
+        # This is a RaspberryPi 5 hardware
+        modprobe -q rpi_rf_mod_led red_gpio_pin="415" green_gpio_pin="419" blue_gpio_pin="420"
+      elif grep -Eq "^Raspberry Pi" /proc/device-tree/model; then
         # This is a RaspberryPi hardware
         modprobe -q rpi_rf_mod_led red_gpio_pin="16" green_gpio_pin="20" blue_gpio_pin="21"
       elif grep -Eq "Asus Tinker Board" /proc/device-tree/model; then
@@ -166,6 +169,14 @@ stop() {
 
   # source all data from /var/hm_mode
   [[ -r /var/hm_mode ]] && . /var/hm_mode
+
+  # make sure to unload rpi_rf_mod_led which
+  # is necessary for docker/lxc-based environments
+  if [[ "${HM_HOST}" =~ oci\|lxc ]] &&
+     [[ -e /sys/class/leds/rpi_rf_mod:green/trigger ]] &&
+     grep -Eq "^rpi_rf_mod_led " /proc/modules; then
+    rmmod rpi_rf_mod_led 2>/dev/null
+  fi
 
   if [[ -c /dev/rtc0 ]]; then
     if [[ ! "${HM_HOST}" =~ oci\|lxc ]]; then

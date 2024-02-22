@@ -100,7 +100,6 @@ Under [Releases](https://github.com/jens-maus/RaspberryMatic/releases) you will 
      * [UNRAID](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-UNRAID)
      * [XCP-ng/XenServer](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-XCPng)
      * [Oracle VirtualBox](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-VirtualBox)
-     * [vmWare ESXi](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-ESXi)
      * [vmWare Workstation Player](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-Workstation-Player)
      * [vmWare ESXi](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-ESXi)
      * [HyperV](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HyperV)

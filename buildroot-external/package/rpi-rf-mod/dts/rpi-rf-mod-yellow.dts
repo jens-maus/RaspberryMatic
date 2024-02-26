@@ -46,4 +46,14 @@
             pivccu,reset-gpios = <&gpio 18 0>; // HM-MOD-RPI-PCB
         };
     };
+
+    // fragment to make sure that stdout-path under chosen
+    // is empty so that the above uart0 fragment does not
+    // interfere with u-boot trying to access serial drivers.
+    fragment@3 {
+        target = <&chosen>;
+        __overlay__ {
+            stdout-path = "";
+        };
+    };
 };

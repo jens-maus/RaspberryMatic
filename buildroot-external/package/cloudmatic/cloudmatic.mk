@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-CLOUDMATIC_VERSION = 9e006bf58706e52ee5b23964e2ca064bb14775f4
+CLOUDMATIC_VERSION = 4bc76aab7e0bd6b7f1ac1802ed9713d595f536de
 CLOUDMATIC_SITE = $(call github,jens-maus,CloudMatic-CCUAddon,$(CLOUDMATIC_VERSION))
 CLOUDMATIC_LICENSE = BSD-3-Clause
 

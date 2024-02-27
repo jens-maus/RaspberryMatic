@@ -40,6 +40,9 @@ else
   setenv kernelfs ${rootfs}
 fi
 
+# load kernel cmdline from /boot/cmdline.txt
+fileenv ${devtype} ${devnum}:${bootfs} ${load_addr} cmdline.txt cmdline
+
 # load devicetree
 echo "Loading standard device tree ${fdtfile}"
 setenv fdtfile "meson-sm1-odroid-c4.dtb"
@@ -60,7 +63,7 @@ if test "${overlay_error}" = "true"; then
 fi
 
 # set bootargs
-setenv bootargs "console=${console} root=${rootfs_str} ro rootfstype=ext4 fsck.repair=yes init_on_alloc=1 init_on_free=1 slab_nomerge iomem=relaxed rootwait rootdelay=5 consoleblank=120 quiet loglevel=${loglevel} net.ifnames=0 usb-storage.quirks=${usbstoragequirks} ${extraargs} ${bootargs}"
+setenv bootargs "console=${console} root=${rootfs_str} ro rootfstype=ext4 fsck.repair=yes init_on_alloc=1 init_on_free=1 slab_nomerge iomem=relaxed rootwait rootdelay=5 consoleblank=120 quiet loglevel=${loglevel} net.ifnames=0 usb-storage.quirks=${usbstoragequirks} ${cmdline} ${bootargs}"
 
 # load kernel
 load ${devtype} ${devnum}:${kernelfs} ${kernel_addr_r} ${kernel_img}

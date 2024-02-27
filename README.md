@@ -2,7 +2,7 @@
 
 <br/>
 
-**– The alternative/free operating system for your HomeMatic CCU**
+**– The alternative/free operating system for your homematicIP CCU**
 
 [![Current Release](https://img.shields.io/github/release/jens-maus/RaspberryMatic.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/jens-maus/RaspberryMatic/latest/total.svg)](https://github.com/jens-maus/RaspberryMatic/releases/latest)

@@ -3,9 +3,8 @@
 # Stop on error
 set -e
 
-#MKIMAGE=${HOST_DIR}/usr/bin/mkimage
 BOARD_DIR="$(dirname "$0")"
-BOARD_NAME="$(basename "${BOARD_DIR}")"
+#BOARD_NAME="$(basename "${BOARD_DIR}")"
 
 # Use our own bootEnv.txt
 cp "${BOARD_DIR}/bootEnv.txt" "${BINARIES_DIR}/"

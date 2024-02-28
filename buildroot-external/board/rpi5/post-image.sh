@@ -4,7 +4,7 @@
 set -e
 
 BOARD_DIR="$(dirname "$0")"
-BOARD_NAME="$(basename "${BOARD_DIR}")"
+#BOARD_NAME="$(basename "${BOARD_DIR}")"
 
 # Use our own cmdline.txt+config.txt
 cp "${BOARD_DIR}/cmdline.txt" "${BINARIES_DIR}/"

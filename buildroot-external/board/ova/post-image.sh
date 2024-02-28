@@ -7,6 +7,9 @@ set -e
 BOARD_DIR="$(dirname "$0")"
 BOARD_NAME="$(basename "${BOARD_DIR}")"
 
+# Use our own cmdline.txt
+cp "${BOARD_DIR}/cmdline.txt" "${BINARIES_DIR}/"
+
 #
 # Create user filesystem
 #
@@ -26,7 +29,7 @@ mkdir -p "${BINARIES_DIR}/boot/grub"
 cp -a "${BOARD_DIR}/grub.cfg" "${BINARIES_DIR}/boot/grub/"
 
 # create *.img file using genimage
-support/scripts/genimage.sh -c "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/genimage.cfg"
+support/scripts/genimage.sh -c "${BOARD_DIR}/genimage.cfg"
 
 # lets create vmdk/vhdx/vdi files
 "${HOST_DIR}/bin/qemu-img" convert -O vmdk -o subformat=streamOptimized "${BINARIES_DIR}/sdcard.img" "${BINARIES_DIR}/sdcard.vmdk"

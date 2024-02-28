@@ -7,6 +7,9 @@ set -e
 BOARD_DIR="$(dirname "$0")"
 BOARD_NAME="$(basename "${BOARD_DIR}")"
 
+# Use our own cmdline.txt
+cp "${BOARD_DIR}/cmdline.txt" "${BINARIES_DIR}/"
+
 #
 # Create user filesystem
 #
@@ -25,4 +28,4 @@ cp "${TARGET_DIR}/boot/VERSION" "${BINARIES_DIR}"
 cp -a "${BOARD_DIR}/grub.cfg" "${BINARIES_DIR}/efi-part/EFI/BOOT/"
 
 # create *.img file using genimage
-support/scripts/genimage.sh -c "${BR2_EXTERNAL_EQ3_PATH}/board/${BOARD_NAME}/genimage.cfg"
+support/scripts/genimage.sh -c "${BOARD_DIR}/genimage.cfg"

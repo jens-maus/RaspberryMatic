@@ -820,10 +820,10 @@ endchoice
 
 config BR2_ARM_PAGE_SIZE
 	string
-	default "4K" if BR2_ARM64_PAGE_SIZE_4K
-	default "16K" if BR2_ARM64_PAGE_SIZE_16K
-	default "64K" if BR2_ARM64_PAGE_SIZE_64K
-
+	default "4K" if BR2_ARM_PAGE_SIZE_4K
+	default "16K" if BR2_ARM_PAGE_SIZE_16K
+ 	default "64K" if BR2_ARM_PAGE_SIZE_64K
+ 
 config BR2_ARCH
 	default "arm"		if BR2_arm
 	default "armeb"		if BR2_armeb

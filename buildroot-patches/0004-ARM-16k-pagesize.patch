@@ -1,22 +1,9 @@
 --- buildroot/arch/Config.in.arm.orig
 +++ buildroot/arch/Config.in.arm
-@@ -781,6 +781,9 @@
- config BR2_ARM64_PAGE_SIZE_4K
- 	bool "4KB"
+@@ -795,6 +795,35 @@
+ 	default "16K" if BR2_ARM64_PAGE_SIZE_16K
+ 	default "64K" if BR2_ARM64_PAGE_SIZE_64K
  
-+config BR2_ARM64_PAGE_SIZE_16K
-+	bool "16KB"
-+
- config BR2_ARM64_PAGE_SIZE_64K
- 	bool "64KB"
- 
-@@ -789,6 +792,36 @@
- config BR2_ARM64_PAGE_SIZE
- 	string
- 	default "4K" if BR2_ARM64_PAGE_SIZE_4K
-+	default "16K" if BR2_ARM64_PAGE_SIZE_16K
-+	default "64K" if BR2_ARM64_PAGE_SIZE_64K
-+
 +choice
 +	prompt "MMU Page Size"
 +	default BR2_ARM_PAGE_SIZE_4K
@@ -42,11 +29,13 @@
 +
 +config BR2_ARM_PAGE_SIZE
 +	string
-+	default "4K" if BR2_ARM64_PAGE_SIZE_4K
-+	default "16K" if BR2_ARM64_PAGE_SIZE_16K
- 	default "64K" if BR2_ARM64_PAGE_SIZE_64K
- 
++	default "4K" if BR2_ARM_PAGE_SIZE_4K
++	default "16K" if BR2_ARM_PAGE_SIZE_16K
++ 	default "64K" if BR2_ARM_PAGE_SIZE_64K
++ 
  config BR2_ARCH
+ 	default "arm"		if BR2_arm
+ 	default "armeb"		if BR2_armeb
 --- buildroot/arch/arch.mk.orig
 +++ buildroot/arch/arch.mk
 @@ -19,13 +19,13 @@
@@ -58,7 +47,7 @@
  ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=4096 -Wl,-z,common-page-size=4096
  else ifeq ($(BR2_ARC_PAGE_SIZE_8K),y)
  ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=8192 -Wl,-z,common-page-size=8192
--else ifeq ($(BR2_ARC_PAGE_SIZE_16K),y)
+-else ifeq ($(BR2_ARC_PAGE_SIZE_16K)$(BR2_ARM64_PAGE_SIZE_16K),y)
 +else ifeq ($(BR2_ARC_PAGE_SIZE_16K)$(BR2_ARM64_PAGE_SIZE_16K)$(BR2_ARM_PAGE_SIZE_16K),y)
  ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384
 -else ifeq ($(BR2_ARM64_PAGE_SIZE_64K),y)
@@ -66,16 +55,3 @@
  ARCH_TOOLCHAIN_WRAPPER_OPTS += -Wl,-z,max-page-size=65536 -Wl,-z,common-page-size=65536
  endif
  
---- buildroot/linux/linux.mk.orig
-+++ buildroot/linux/linux.mk
-@@ -411,6 +411,10 @@
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM64_4K_PAGES)
- 		$(call KCONFIG_DISABLE_OPT,CONFIG_ARM64_16K_PAGES)
- 		$(call KCONFIG_DISABLE_OPT,CONFIG_ARM64_64K_PAGES))
-+	$(if $(BR2_ARM64_PAGE_SIZE_16K),
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARM64_4K_PAGES)
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM64_16K_PAGES)
-+		$(call KCONFIG_DISABLE_OPT,CONFIG_ARM64_64K_PAGES))
- 	$(if $(BR2_ARM64_PAGE_SIZE_64K),
- 		$(call KCONFIG_DISABLE_OPT,CONFIG_ARM64_4K_PAGES)
- 		$(call KCONFIG_DISABLE_OPT,CONFIG_ARM64_16K_PAGES)

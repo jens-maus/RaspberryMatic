@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.13"
+VERSION="1.14"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -373,14 +373,14 @@ elif [[ "${1-}" == "update" ]]; then
   exit 0
 fi
 
-# check that an appropriate network bridge has been setup
+# check that an appropriate default network bridge has been setup
+# by the user according to the documentation.
 MAIN_INTERFACE=$(ip route | grep ^default | awk '{ print $5 }')
-BRIDGE=
-if command -v /usr/sbin/brctl >/dev/null; then
-  BRIDGE=$(/usr/sbin/brctl show 2>/dev/null | grep -v "lxcbr0" | grep -v "^\s" | sed -n 2p | awk '{print $1}' || true)
+if ! command -v /usr/sbin/brctl >/dev/null; then
+  die "/usr/sbin/brctl tool (bridge-utils package) missing. Please refer to the LXC install documentation (raspberrymatic.de) to setup this host system correctly before executing this script."
 fi
-if [[ "${BRIDGE}" != "${MAIN_INTERFACE}" ]]; then
-  die "Network setup of host system is not adequate as a default network bridge interface is required. Please refer to the LXC installation documentation (raspberrymatic.de) to setup this host system correctly before executing this script."
+if ! /usr/sbin/brctl show "${MAIN_INTERFACE}" >/dev/null 2>/dev/null; then
+  die "Network setup of host system is not adequate as a default network bridge (e.g. br0) interface is required. Please refer to the LXC install documentation (raspberrymatic.de) to setup this host system correctly before executing this script."
 fi
 
 text=$(cat <<EOF
@@ -692,7 +692,7 @@ lxc.mount.entry = ${USERFS_PATH} usr/local none defaults,bind,noatime 0 0
 lxc.cgroup2.cpuset.cpus = $(seq -s, 0 $((NUM_CPU - 1)))
 lxc.net.0.type = veth
 lxc.net.0.flags = up
-lxc.net.0.link = ${BRIDGE}
+lxc.net.0.link = ${MAIN_INTERFACE}
 lxc.net.0.name = eth0
 lxc.net.0.hwaddr = ${MAC}
 lxc.net.0.veth.pair = vethccu

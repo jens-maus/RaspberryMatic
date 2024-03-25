@@ -39,7 +39,11 @@ $(BR2_DL_DIR):
 	@echo "[mkdir $(BR2_DL_DIR)]"
 	test -e $(BR2_DL_DIR) || mkdir $(BR2_DL_DIR)
 
-build-$(PRODUCT)/.config: | build-$(PRODUCT)
+$(BR2_CCACHE_DIR):
+	@echo "[mkdir $(BR2_CCACHE_DIR)]"
+	test -e $(BR2_CCACHE_DIR) || mkdir $(BR2_CCACHE_DIR)
+
+build-$(PRODUCT)/.config: | build-$(PRODUCT) $(BR2_CCACHE_DIR)
 	@echo "[config $@]"
 	cd $(shell pwd)/build-$(PRODUCT) && $(MAKE) O=$(shell pwd)/build-$(PRODUCT) -C ../buildroot-$(BUILDROOT_VERSION) BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) alldefconfig
 	cd $(shell pwd)/build-$(PRODUCT) && BR2_EXTERNAL=../$(BUILDROOT_EXTERNAL) BR2_DL_DIR=$(BR2_DL_DIR) BR2_CCACHE_DIR=$(BR2_CCACHE_DIR) BR2_JLEVEL=$(BR2_JLEVEL) PRODUCT=$(PRODUCT) PRODUCT_VERSION=$(PRODUCT_VERSION) ../buildroot-$(BUILDROOT_VERSION)/support/kconfig/merge_config.sh ../$(BUILDROOT_EXTERNAL)/Buildroot.config ../$(BUILDROOT_EXTERNAL)/configs/$(PRODUCT).config

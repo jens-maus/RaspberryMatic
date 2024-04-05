@@ -43494,9 +43494,11 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor,convInt2Float
       max = parseInt(max);
       value = (roundValue05(parseInt(value)));
     } else {
-      min = parseFloat(min).toFixed(2);
-      max = parseFloat(max).toFixed(2);
-      value = parseFloat(value).toFixed(2);
+      min = parseFloat(parseFloat(min).toFixed(2));
+      max = parseFloat(parseFloat(max).toFixed(2));
+      value = parseFloat(parseFloat(value).toFixed(2));
+      if (value < min || isNaN(min)) {value = min;} else if (value > max) {value = max;}
+
       srcElm.value = parseFloat(value);
     }
   } catch(e) {conInfo(e);}

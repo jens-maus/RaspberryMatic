@@ -43509,10 +43509,11 @@ ProofAndSetValue = function(srcid, dstid, min, max, dstValueFactor,convInt2Float
       max = parseInt(max);
       value = Math.round(parseFloat(value));
     } else {
-      min = parseFloat(min).toFixed(digits);
-      max = parseFloat(max).toFixed(digits);
+      min = parseFloat(parseFloat(min).toFixed(digits));
+      max = parseFloat(parseFloat(max).toFixed(digits));
       var roundFactor = Math.pow(10, digits);
       value = Math.round(parseFloat(value) * roundFactor) / roundFactor;
+      if (value < min || isNaN(min)) {value = min;} else if (value > max) {value = max;}
     }
     parsedValue = parseFloat(value);
   } catch(e) {conInfo(e);}

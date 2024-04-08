@@ -19,6 +19,11 @@ touch "${BUILD_DIR}/userfs/.doFactoryReset"
 rm -f "${BINARIES_DIR}/userfs.ext4"
 "${HOST_DIR}/sbin/mkfs.ext4" -d "${BUILD_DIR}/userfs" -F -L userfs -I 256 -E lazy_itable_init=0,lazy_journal_init=0 "${BINARIES_DIR}/userfs.ext4" 3000
 
+# README needs to be present, otherwise os_prefix is not
+# prepended implicitly to the overlays' path, see:
+# https://www.raspberrypi.com/documentation/computers/config_txt.html#overlay_prefix
+touch "${BINARIES_DIR}/overlays/README" 2>/dev/null || true
+
 #
 # VERSION File
 #

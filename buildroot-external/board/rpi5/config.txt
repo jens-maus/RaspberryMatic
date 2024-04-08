@@ -54,10 +54,6 @@ dtoverlay=rpi-rf-mod
 # make sure gpio12 is set as input and pull_up
 gpio=12=ip,pu
 
-# use fixed names for start.elf/fixup.dat
-start_file=start.elf
-fixup_file=fixup.dat
-
 # lets u-boot take over the boot process
 kernel=u-boot.bin
 

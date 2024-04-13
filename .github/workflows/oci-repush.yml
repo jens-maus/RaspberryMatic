@@ -35,7 +35,7 @@ jobs:
           echo "BUILD_DATETIME=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
 
       # download OCI platform release assets
-      - uses: robinraju/release-downloader@v1.9
+      - uses: robinraju/release-downloader@v1.10
         with:
           tag: ${{ github.event.inputs.release_tag }}
           fileName: "RaspberryMatic-*-oci_*.tgz"

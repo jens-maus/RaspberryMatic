@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck shell=dash disable=SC2169
+# shellcheck shell=dash disable=SC2169,SC3010 source=/dev/null
 #
 # Start watchdog
 #
@@ -8,8 +8,14 @@ case "$1" in
   start)
     # no /dev/watchdog device, no watchdog daemon startup
     if [[ -c /dev/watchdog ]]; then
-      echo "Starting watchdog..."
-      /sbin/watchdog -T 300 -t 5 /dev/watchdog
+      # source /VERSION to get PLATFORM
+      [[ -r /VERSION ]] && . /VERSION
+
+      # do not start watchdog daemon on docker/lxc envs
+      if [[ ! "${PLATFORM}" =~ oci\|lxc ]]; then
+        echo "Starting watchdog..."
+        /sbin/watchdog -T 300 -t 5 /dev/watchdog
+      fi
     fi
 
     # to identify unexpected crashes/shutdowns we check

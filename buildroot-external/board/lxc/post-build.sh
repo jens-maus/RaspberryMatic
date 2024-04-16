@@ -12,7 +12,6 @@ echo "PLATFORM=lxc" >>"${TARGET_DIR}/VERSION"
 [ -e "${TARGET_DIR}/etc/monitrc" ] && chmod 600 "${TARGET_DIR}/etc/monitrc"
 
 # remove unnecessary stuff from TARGET_DIR
-rm -f "${TARGET_DIR}/etc/init.d/S00watchdog"
 rm -f "${TARGET_DIR}/etc/init.d/S01InitZRAMSwap"
 rm -f "${TARGET_DIR}/etc/init.d/S01USBGadgetMode"
 rm -f "${TARGET_DIR}/etc/init.d/S03InitURandom"

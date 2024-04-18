@@ -17,7 +17,7 @@ BR_PACKAGE_NAME=${BR_PACKAGE_NAME//-/_}
 sed -i "s/${BR_PACKAGE_NAME}_VERSION = .*/${BR_PACKAGE_NAME}_VERSION = ${VERSION}/g" "buildroot-external/package/${PACKAGE_NAME}/${PACKAGE_NAME}.mk"
 
 # update package hash
-ARCHIVE_HASH=$(cat "buildroot-external/package/${PACKAGE_NAME}/neo_server.tar.gz" | sha256sum | awk '{ print $1 }')
+ARCHIVE_HASH=$(sha256sum "buildroot-external/package/${PACKAGE_NAME}/neo_server.tar.gz" | awk '{ print $1 }')
 if [[ -n "${ARCHIVE_HASH}" ]]; then
   sed -i "/neo_server\.tar\.gz/d" "buildroot-external/package/${PACKAGE_NAME}/${PACKAGE_NAME}.hash"
   echo "sha256  ${ARCHIVE_HASH}  neo_server.tar.gz" >>"buildroot-external/package/${PACKAGE_NAME}/${PACKAGE_NAME}.hash"

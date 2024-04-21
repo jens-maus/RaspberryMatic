@@ -182,6 +182,7 @@ jobs:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
           asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.zip
           asset_content_type: application/zip
+          overwrite: true
 
       - name: Upload build release checksum [rpi*, tinkerboard, intelnuc, ova, generic-*]
         if: |
@@ -192,6 +193,7 @@ jobs:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
           asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.zip.sha256
           asset_content_type: text/plain
+          overwrite: true
 
       - name: Upload build release [ccu3]
         if: |
@@ -201,6 +203,7 @@ jobs:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
           asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-ccu3.tgz
           asset_content_type: application/gzip
+          overwrite: true
 
       - name: Upload build release checksum [ccu3]
         if: |
@@ -210,6 +213,7 @@ jobs:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
           asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-ccu3.tgz.sha256
           asset_content_type: text/plain
+          overwrite: true
 
       - name: Upload build release [ova]
         if: |
@@ -219,6 +223,7 @@ jobs:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
           asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}.ova
           asset_content_type: application/gzip
+          overwrite: true
 
       - name: Upload build release checksum [ova]
         if: |
@@ -228,6 +233,7 @@ jobs:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
           asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}.ova.sha256
           asset_content_type: text/plain
+          overwrite: true
 
       - name: Upload build release [oci]
         if: |
@@ -237,6 +243,7 @@ jobs:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
           asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz
           asset_content_type: application/gzip
+          overwrite: true
 
       - name: Upload build release checksum [oci]
         if: |
@@ -246,6 +253,7 @@ jobs:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
           asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tgz.sha256
           asset_content_type: text/plain
+          overwrite: true
 
       - name: Upload build release [lxc]
         if: |
@@ -255,6 +263,7 @@ jobs:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
           asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tar.xz
           asset_content_type: application/x-xz
+          overwrite: true
 
       - name: Upload build release checksum [lxc]
         if: |
@@ -264,6 +273,7 @@ jobs:
           upload_url: ${{ needs.release_draft.outputs.upload_url }}
           asset_path: release/RaspberryMatic-${{ needs.release_draft.outputs.version }}-${{ matrix.platform }}.tar.xz.sha256
           asset_content_type: text/plain
+          overwrite: true
 
       ########################
       # upload build artifacts

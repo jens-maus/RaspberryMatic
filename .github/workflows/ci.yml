@@ -273,12 +273,17 @@ jobs:
 
       - name: Extract OCI artifacts
         run: |
+          rm -rf oci_build
           mkdir -p oci_build
-          cd oci_build
-          for f in ../*-oci_*.tgz; do
-            tar --wildcards --strip-components 1 -xf $f "*/layer.tar"
-            mv -f layer.tar $(basename $f .tgz).tar
-            rm -f $f
+          cd oci_build || exit 1
+          for f in ../RaspberryMatic-${{ env.BUILD_VERSION }}-oci_*.tgz; do
+            echo "extracting ${f}..."
+            DIR=$(basename "${f}" .tgz)
+            mkdir -p "${DIR}"
+            tar -C "${DIR}" -xf "${f}"
+            LAYER=$(jq -r '.[0].Layers[0]' "${DIR}/manifest.json")
+            mv -f "${DIR}/${LAYER}" "./${DIR}.tar"
+            rm -rf "${DIR}" "${f}"*
           done
 
       - name: Set up Docker Buildx
@@ -424,3 +429,7 @@ jobs:
           docker volume rm ccu_data
           docker image ls -a
           docker image rm ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}
+
+      - name: Cleanup oci_build dir
+        run: |
+          rm -rf oci_build

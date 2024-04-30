@@ -162,7 +162,7 @@ jobs:
             fi
           fi
           echo "JLEVEL=${JLEVEL}" >> $GITHUB_ENV
-          echo "build_datetime=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
+          echo "build_datetime=$(date -u +'%FT%T.%3NZ')" >> $GITHUB_OUTPUT
           echo "build_version=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_OUTPUT
 
       - name: Switch to experimental EULA files
@@ -300,6 +300,29 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
 
+      - name: Extract docker metadata
+        if: github.event.inputs.skip_build == 'false'
+        id: meta
+        uses: docker/metadata-action@v5.5.1
+        with:
+          images: ghcr.io/${{ github.repository }}
+          labels: |
+            org.opencontainers.image.description=Alternative OS for your homematicIP CCU
+            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
+          annotations: |
+            org.opencontainers.image.description=Alternative OS for your homematicIP CCU
+            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+
       - name: Build and push container image
         if: github.event.inputs.skip_build == 'false'
         uses: docker/build-push-action@v5.3.0
@@ -311,12 +334,11 @@ jobs:
           # load not supported -> https://github.com/docker/buildx/issues/290
           # load: true #load in docker - needed for testing later on
           push: ${{ env.SECRETS_ARE_AVAILABLE }}
-
           build-args: |
             tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
           labels: |
             org.opencontainers.image.title=RaspberryMatic
-            org.opencontainers.image.description=Alternative OS for your HomeMatic CCU
+            org.opencontainers.image.description=Alternative OS for your homematicIP CCU
             org.opencontainers.image.vendor=RasperryMatic OpenSource Project
             org.opencontainers.image.authors=RaspberryMatic OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0
@@ -335,6 +357,8 @@ jobs:
             io.hass.arch=armv7|aarch64|amd64
           tags: |
             ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}
+          annotations: |
+            ${{ steps.meta.outputs.annotations }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
@@ -349,7 +373,6 @@ jobs:
           platforms: linux/amd64  # load does not support muti-arch https://github.com/docker/buildx/issues/290
           load: true  # load in docker - needed for testing later on
           push: false
-
           build-args: |
             tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
           labels: |
@@ -373,6 +396,8 @@ jobs:
             io.hass.arch=armv7|aarch64|amd64
           tags: |
             ${{ env.CCU_OCI_REPO }}:${{ env.CCU_OCI_TAG }}
+          annotations: |
+            ${{ steps.meta.outputs.annotations }}
 
       - name: Enable experimental features for the Docker daemon and CLI
         run: |

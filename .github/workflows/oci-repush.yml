@@ -32,7 +32,7 @@ jobs:
       - name: Setup Environment
         run: |
           echo "GIT_REF=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)" >> $GITHUB_ENV
-          echo "BUILD_DATETIME=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_ENV
+          echo "BUILD_DATETIME=$(date -u +'%FT%T.%3NZ')" >> $GITHUB_ENV
 
       # download OCI platform release assets
       - uses: robinraju/release-downloader@v1.10
@@ -84,6 +84,28 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
 
+      - name: Extract docker metadata
+        id: meta
+        uses: docker/metadata-action@v5.5.1
+        with:
+          images: ghcr.io/${{ github.repository }}
+          labels: |
+            org.opencontainers.image.description=Alternative OS for your homematicIP CCU
+            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
+          annotations: |
+            org.opencontainers.image.description=Alternative OS for your homematicIP CCU
+            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+
       - name: Build and push container image
         uses: docker/build-push-action@v5.3.0
         id: docker_build
@@ -96,7 +118,7 @@ jobs:
             tar_prefix=RaspberryMatic-${{ github.event.inputs.release_tag }}-oci_
           labels: |
             org.opencontainers.image.title=RaspberryMatic
-            org.opencontainers.image.description=Alternative OS for your HomeMatic CCU
+            org.opencontainers.image.description=Alternative OS for your homematicIP CCU
             org.opencontainers.image.vendor=RasperryMatic OpenSource Project
             org.opencontainers.image.authors=RaspberryMatic OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0
@@ -116,6 +138,8 @@ jobs:
           tags: |
             ${{ steps.extract_branch.outputs.unique_tag }}
             ${{ steps.extract_branch.outputs.branch_tag }}
+          annotations: |
+            ${{ steps.meta.outputs.annotations }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

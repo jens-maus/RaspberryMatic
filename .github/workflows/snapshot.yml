@@ -88,7 +88,7 @@ jobs:
             fi
           fi
           echo "JLEVEL=${JLEVEL}" >> $GITHUB_ENV
-          echo "build_datetime=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
+          echo "build_datetime=$(date -u +'%FT%T.%3NZ')" >> $GITHUB_OUTPUT
           echo "build_version=$(grep 'OCCU_VERSION =' buildroot-external/package/occu/occu.mk | cut -d' ' -f3 | cut -d'-' -f1).$(date +%Y%m%d)" >> $GITHUB_OUTPUT
 
       - name: Switch to experimental EULA files
@@ -373,6 +373,22 @@ jobs:
         uses: docker/metadata-action@v5.5.1
         with:
           images: ghcr.io/${{ github.repository }}
+          labels: |
+            org.opencontainers.image.description=Alternative OS for your homematicIP CCU
+            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
+          annotations: |
+            org.opencontainers.image.description=Alternative OS for your homematicIP CCU
+            org.opencontainers.image.vendor=RasperryMatic OpenSource Project
+            org.opencontainers.image.authors=RaspberryMatic OpenSource Team
+            org.opencontainers.image.version=${{ env.BUILD_VERSION }}-${{ env.GITHUB_SHA7 }}
+            org.opencontainers.image.url=https://raspberrymatic.de
+            org.opencontainers.image.created=${{ env.BUILD_DATETIME }}
+        env:
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
       - name: Build and push container image
         uses: docker/build-push-action@v5.3.0
@@ -386,7 +402,7 @@ jobs:
             tar_prefix=RaspberryMatic-${{ env.BUILD_VERSION }}-oci_
           labels: |
             org.opencontainers.image.title=RaspberryMatic
-            org.opencontainers.image.description=Alternative OS for your HomeMatic CCU
+            org.opencontainers.image.description=Alternative OS for your homematicIP CCU
             org.opencontainers.image.vendor=RasperryMatic OpenSource Project
             org.opencontainers.image.authors=RaspberryMatic OpenSource Team
             org.opencontainers.image.licenses=Apache-2.0

@@ -368,6 +368,12 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.CR_PAT }}
 
+      - name: Extract docker metadata
+        id: meta
+        uses: docker/metadata-action@v5.5.1
+        with:
+          images: ghcr.io/${{ github.repository }}
+
       - name: Build and push container image
         uses: docker/build-push-action@v5.3.0
         id: docker_build
@@ -400,6 +406,8 @@ jobs:
           tags: |
             ${{ steps.extract_branch.outputs.unique_tag }}
             ${{ steps.extract_branch.outputs.branch_tag }}
+          annotations: |
+            ${{ steps.meta.outputs.annotations }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}

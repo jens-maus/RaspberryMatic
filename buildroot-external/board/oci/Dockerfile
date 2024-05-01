@@ -5,8 +5,9 @@ ARG tar_prefix=rootfs
 
 ADD $tar_prefix$TARGETARCH.tar /
 
-LABEL org.opencontainers.image.title=RaspberryMatic \
-      org.opencontainers.image.description="Alternative OS for your HomeMatic CCU" \
+LABEL maintainer="RaspberryMatic OpenSource Team" \
+      org.opencontainers.image.title=RaspberryMatic \
+      org.opencontainers.image.description="Alternative OS for your homematicIP CCU" \
       org.opencontainers.image.vendor="RasperryMatic OpenSource Project" \
       org.opencontainers.image.authors="RaspberryMatic OpenSource Team" \
       org.opencontainers.image.licenses="Apache-2.0" \

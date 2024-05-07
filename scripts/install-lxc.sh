@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.14"
+VERSION="1.15"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -88,22 +88,22 @@ uninstall() {
   fi
 
   HEADER_PKGS=
-  if [[ "${PLATFORM}" == "aarch64" ]] &&
+  if [[ "${PLATFORM}" =~ aarch64|arm ]] &&
      command -v armbian-install >/dev/null; then
     # arm based Armbian system
-    info "Identified arm64-based Armbian host system..."
+    info "Identified ${PLATFORM}-based Armbian host system..."
     HEADER_PKGS="$(dpkg --get-selections | grep 'linux-image-' | grep -m1 '\sinstall' | sed -e 's/linux-image-\([a-z0-9-]\+\).*/linux-headers-\1/')"
-  elif [[ "${PLATFORM}" == "aarch64" ]] &&
+  elif [[ "${PLATFORM}" =~ aarch64|arm ]] &&
        grep -q Raspberry /proc/cpuinfo; then
     # arm based RaspberryPiOS system
-    info "Identified arm64-based RaspberryPiOS host system..."
+    info "Identified ${PLATFORM}-based RaspberryPiOS host system..."
     HEADER_PKGS="raspberrypi-kernel-headers"
   elif [[ "${PLATFORM}" == "x86_64" ]]; then
     # full amd64/x86 based host system
     info "Identified x86-based host system..."
     HEADER_PKGS="linux-headers-$(uname -r)"
   else
-    warn "Could not identify host system for kernel header uninstall"
+    warn "Could not identify host platform (${PLATFORM}) for kernel header uninstall"
   fi
   if [[ -n "${HEADER_PKGS}" ]]; then
     for pkg in ${HEADER_PKGS}; do
@@ -440,12 +440,12 @@ apt update
 
 # install kernel headers
 HEADER_PKGS=
-if [[ "${PLATFORM}" == "aarch64" ]] &&
+if [[ "${PLATFORM}" =~ aarch64|arm ]] &&
    command -v armbian-install >/dev/null; then
   # arm based Armbian system
-  info "Identified arm64-based Armbian host system..."
+  info "Identified ${PLATFORM}-based Armbian host system..."
   HEADER_PKGS="$(dpkg --get-selections | grep 'linux-image-' | grep -m1 '\sinstall' | sed -e 's/linux-image-\([a-z0-9-]\+\).*/linux-headers-\1/')"
-elif [[ "${PLATFORM}" == "aarch64" ]] &&
+elif [[ "${PLATFORM}" =~ aarch64|arm ]] &&
      grep -q Raspberry /proc/cpuinfo; then
   # arm based RaspberryPiOS system
   info "Identified arm64-based RaspberryPiOS host system..."
@@ -455,7 +455,7 @@ elif [[ "${PLATFORM}" == "x86_64" ]]; then
   info "Identified x86-based host system..."
   HEADER_PKGS="linux-headers-$(uname -r)"
 else
-  warn "Could not identify host platform for kernel header install"
+  warn "Could not identify host platform (${PLATFORM}) for kernel header install"
 fi
 if [[ -n "${HEADER_PKGS}" ]]; then
   for pkg in ${HEADER_PKGS}; do
@@ -468,7 +468,7 @@ fi
 
 # install OS specific device tree stuff if RPI-RF-MOD
 # or HM-MOD-RPI-PCB will be connected to the GPIO
-if [[ "${PLATFORM}" == "aarch64" ]] &&
+if [[ "${PLATFORM}" =~ aarch64|arm ]] &&
    ! pkg_installed pivccu-devicetree-armbian &&
    ! pkg_installed pivccu-modules-raspberrypi &&
    [[ ! -f /boot/firmware/overlays/pivccu-raspberrypi.dtbo ]]; then

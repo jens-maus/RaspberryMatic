@@ -1,4 +1,4 @@
-From b24b8f83e150811ad54ee2a4843e44cd1421fafa Mon Sep 17 00:00:00 2001
+From 02c7d9bb23f497993d52f5a41341ed955e6a2745 Mon Sep 17 00:00:00 2001
 From: "Miouyouyou (Myy)" <myy@miouyouyou.fr>
 Date: Mon, 5 Nov 2018 22:15:14 +0100
 Subject: [PATCH] ARM: DTS: rk3288-tinker: Defining the SPI interface
@@ -11,16 +11,18 @@ registers definitions to the new 64-bits LPAE-compliant syntax.
 Therefore that *might* break, along with a few other patches.
 
 Signed-off-by: Miouyouyou (Myy) <myy@miouyouyou.fr>
+[move change to rk3288-tinker.dtsi]
+Signed-off-by: Stefan Agner <stefan@agner.ch>
 ---
- arch/arm/boot/dts/rockchip/rk3288-tinker.dts | 19 +++++++++++++++++++
+ arch/arm/boot/dts/rockchip/rk3288-tinker.dtsi | 19 +++++++++++++++++++
  1 file changed, 19 insertions(+)
 
-diff --git a/arch/arm/boot/dts/rockchip/rk3288-tinker.dts b/arch/arm/boot/dts/rockchip/rk3288-tinker.dts
-index 96d05fc6b..17bfea298 100644
---- a/arch/arm/boot/dts/rockchip/rk3288-tinker.dts
-+++ b/arch/arm/boot/dts/rockchip/rk3288-tinker.dts
-@@ -99,6 +99,25 @@
- 	supports-sdio;
+diff --git a/arch/arm/boot/dts/rockchip/rk3288-tinker.dtsi b/arch/arm/boot/dts/rockchip/rk3288-tinker.dtsi
+index 09618bb7d872..30430d2e64b9 100644
+--- a/arch/arm/boot/dts/rockchip/rk3288-tinker.dtsi
++++ b/arch/arm/boot/dts/rockchip/rk3288-tinker.dtsi
+@@ -483,6 +483,25 @@ &sdio0 {
+ 	status = "okay";
  };
  
 +&spi2 {
@@ -42,9 +44,6 @@ index 96d05fc6b..17bfea298 100644
 +	};
 +};
 +
- &uart0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&uart0_xfer>, <&uart0_cts>, <&uart0_rts>;
--- 
-2.16.4
-
+ &tsadc {
+ 	rockchip,hw-tshut-mode = <1>; /* tshut mode 0:CRU 1:GPIO */
+ 	rockchip,hw-tshut-polarity = <1>; /* tshut polarity 0:LOW 1:HIGH */

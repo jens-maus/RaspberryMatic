@@ -1,3 +1,3 @@
 # Locally calculated
-sha256  b66a5b863b0f8669448b74ca83bd641a856f164b29956e539bbcb5fdeeab9cc6  linux-6.6.30.tar.xz
 sha256  bf59c8fcb590554af302033d429aac5b7dabbd3f1389d02e081fb4420bedd78d  stable_20240423.tar.gz
+sha256  d6ecff966f8c95ec4cb3bb303904f757b7de6a6bcfef0d0771cb852158e61c20  linux-6.6.31.tar.xz

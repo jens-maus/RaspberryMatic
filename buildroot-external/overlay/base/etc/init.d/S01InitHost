@@ -171,9 +171,9 @@ identify_host() {
       fi
     ;;
 
-    # intelnuc platform
-    intelnuc)
-      HM_HOST="nuc"
+    # generic-x86_64
+    generic-x86_64)
+      HM_HOST="generic-x86_64"
     ;;
 
     # generic-aarch64

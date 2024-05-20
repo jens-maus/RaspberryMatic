@@ -58,8 +58,8 @@ The following installation archives can be downloaded for different hardware pla
 <sub>📦 [RaspberryMatic-${VERSION}-odroid-c4.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-odroid-c4.zip)<br/>SHA256: XSHAc4.zipX</sub>
 <sub>📦 [RaspberryMatic-${VERSION}-odroid-c2.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-odroid-c2.zip)<br/>SHA256: XSHAc2.zipX</sub>
 
-- Intel NUC – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-IntelNUC)):
-<sub>📦 [RaspberryMatic-${VERSION}-intelnuc.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-intelnuc.zip)<br/>SHA256: XSHAintelnuc.zipX</sub>
+- Generic-x86_64 – ([installation](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-IntelNUC)):
+<sub>📦 [RaspberryMatic-${VERSION}-generic-x86_64.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-generic-x86_64.zip)<br/>SHA256: XSHAx86_64.zipX</sub>
 
 - Open Virtual Appliance (OVA) – ([ProxmoxVE](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Proxmox-VE), [VirtualBox](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-VirtualBox), [ESXi](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-ESXi), [Synology](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-Synology-VMM), [QNAP](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-QNAP-VirtualizationStation), [Workstation Player](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-vmWare-Workstation-Player), [QEmu](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-QEmu), [UNRAID](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-UNRAID), [HyperV](https://github.com/jens-maus/RaspberryMatic/wiki/Installation-HyperV)):
 <sub>📦 [RaspberryMatic-${VERSION}-ova.zip](https://github.com/jens-maus/RaspberryMatic/releases/download/${VERSION}/RaspberryMatic-${VERSION}-ova.zip)<br/>SHA256: XSHAova.zipX</sub>

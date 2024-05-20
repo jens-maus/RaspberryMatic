@@ -700,7 +700,7 @@ fwinstall()
       # on platforms with dedicated boot loaders we have to update them as well.
       if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]] ||
          [[ "${BOOTFS_PLATFORM}" == "ova" ]] ||
-         [[ "${BOOTFS_PLATFORM}" == "intelnuc" ]] ||
+         [[ "${BOOTFS_PLATFORM}" == "generic-x86_64" ]] ||
          [[ "${BOOTFS_PLATFORM}" == "odroid-c4" ]] ||
          [[ "${BOOTFS_PLATFORM}" == "odroid-n2" ]] ||
          [[ "${BOOTFS_PLATFORM}" == "odroid-c2" ]]; then

@@ -73,7 +73,6 @@ body:
         - odroid-c2 (ODROID C2, ARM/armhf)
         - odroid-c4 (ODROID C4, ARM64/aarch64)
         - odroid-n2 (ODROID N2/N2+, ARM64/aarch64)
-        - intelnuc (intel NUC, AMD64/x86_64)
         - ova (Open Virtual Infrastructure, AMD64/x86_64)
         - lxc_amd64 (Linux Container Infrastructure, AMD64/x86_64)
         - lxc_arm64 (Linux Container Infrastructure, ARM64/aarch64)
@@ -82,6 +81,7 @@ body:
         - oci_arm64 (Open Container Infrastructure, ARM64/aarch64)
         - oci_arm (Open Container Infrastructure, ARM/armhf)
         - ha-addon (HomeAssistant Add-on)
+        - generic-x86_64 (Generic appliance, AMD64/x86_64)
         - generic-aarch64 (Generic appliance, ARM64/aarch64)
   - type: dropdown
     validations:

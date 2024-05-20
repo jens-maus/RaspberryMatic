@@ -116,7 +116,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: ${{ fromJSON(format('[{0}]', (github.event.inputs.platforms == '' || github.event.inputs.platforms == 'all') && '"rpi0","rpi2","rpi3","rpi4","rpi5","tinkerboard","odroid-c2","odroid-c4","odroid-n2","intelnuc","ova","oci_amd64","oci_arm64","oci_arm","generic-aarch64","lxc_amd64","lxc_arm64","lxc_arm"' || github.event.inputs.platforms)) }}
+        platform: ${{ fromJSON(format('[{0}]', (github.event.inputs.platforms == '' || github.event.inputs.platforms == 'all') && '"rpi0","rpi2","rpi3","rpi4","rpi5","tinkerboard","odroid-c2","odroid-c4","odroid-n2","ova","oci_amd64","oci_arm64","oci_arm","generic-x86_64","generic-aarch64","lxc_amd64","lxc_arm64","lxc_arm"' || github.event.inputs.platforms)) }}
 
     steps:
       - name: Checkout Code
@@ -173,7 +173,7 @@ jobs:
 
       #######################
       # release uploads
-      - name: Upload release snapshot [rpi*, tinkerboard, odroid-*, intelnuc, ova, generic-*]
+      - name: Upload release snapshot [rpi*, tinkerboard, odroid-*, ova, generic-*]
         if: |
           !startsWith(matrix.platform, 'oci_') &&
           !startsWith(matrix.platform, 'lxc_')
@@ -184,7 +184,7 @@ jobs:
           asset_content_type: application/zip
           overwrite: true
 
-      - name: Upload build release checksum [rpi*, tinkerboard, intelnuc, ova, generic-*]
+      - name: Upload build release checksum [rpi*, tinkerboard, ova, generic-*]
         if: |
           !startsWith(matrix.platform, 'oci_') &&
           !startsWith(matrix.platform, 'lxc_')

@@ -379,7 +379,7 @@ index 71635dfa741d2..b937bf8b6b3d3 100644
  
  			delay = udev->parent->hub_delay;
  			udev->hub_delay = min_t(u32, delay,
-@@ -5044,61 +5006,48 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+@@ -5044,62 +5006,48 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
  		goto fail;
  
  	/*
@@ -400,9 +400,10 @@ index 71635dfa741d2..b937bf8b6b3d3 100644
 -	}
 -	if (usb_endpoint_maxp(&udev->ep0.desc) == i) {
 -		;	/* Initial ep0 maxpacket guess is right */
--	} else if ((udev->speed == USB_SPEED_FULL ||
+-	} else if (((udev->speed == USB_SPEED_FULL ||
 -				udev->speed == USB_SPEED_HIGH) &&
--			(i == 8 || i == 16 || i == 32 || i == 64)) {
+-			(i == 8 || i == 16 || i == 32 || i == 64)) ||
+-			(udev->speed >= USB_SPEED_SUPER && i > 0)) {
 -		/* Initial guess is wrong; use the descriptor's value */
 +	if ((udev->speed >= USB_SPEED_SUPER) &&
 +			(le16_to_cpu(udev->descriptor.bcdUSB) < 0x0300)) {

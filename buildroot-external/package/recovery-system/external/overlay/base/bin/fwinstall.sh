@@ -5,7 +5,7 @@
 # either archived or unarchived, verifies its validity and installs it
 # unattended accordingly.
 #
-# Copyright (c) 2018-2021 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2018-2024 Jens Maus <mail@jens-maus.de>
 # Apache 2.0 License applies
 #
 
@@ -435,8 +435,12 @@ fwinstall()
         exit 1
       fi
 
-      # check if both PLATFORM match
-      if [[ "${ROOTFS_PLATFORM}" != "${IMG_PLATFORM}" ]]; then
+      # check if both PLATFORM match including exceptions for
+      # cross platform updates/changes
+      if [[ "${ROOTFS_PLATFORM}" == "intelnuc" && "${IMG_PLATFORM}" == "generic-x86_64" ]] ||
+         [[ "${ROOTFS_PLATFORM}" == "generic-x86_64" && "${IMG_PLATFORM}" == "intelnuc" ]]; then
+        echo "INFO: cross updating ${ROOTFS_PLATFORM} to ${IMG_PLATFORM}<br/>"
+      elif [[ "${ROOTFS_PLATFORM}" != "${IMG_PLATFORM}" ]]; then
         echo "ERROR: incorrect hardware platform (${IMG_PLATFORM} != ${ROOTFS_PLATFORM})<br/>"
         exit 1
       fi
@@ -535,8 +539,12 @@ fwinstall()
         exit 1
       fi
 
-      # check if both PLATFORM match
-      if [[ "${BOOTFS_PLATFORM}" != "${IMG_PLATFORM}" ]]; then
+      # check if both PLATFORM match including exceptions for
+      # cross platform updates/changes
+      if [[ "${BOOTFS_PLATFORM}" == "intelnuc" && "${IMG_PLATFORM}" == "generic-x86_64" ]] ||
+         [[ "${BOOTFS_PLATFORM}" == "generic-x86_64" && "${IMG_PLATFORM}" == "intelnuc" ]]; then
+        echo "INFO: cross updating ${BOOTFS_PLATFORM} to ${IMG_PLATFORM}<br/>"
+      elif [[ "${BOOTFS_PLATFORM}" != "${IMG_PLATFORM}" ]]; then
         echo "ERROR: incorrect hardware platform (${IMG_PLATFORM} != ${BOOTFS_PLATFORM})<br/>"
         exit 1
       fi
@@ -665,8 +673,12 @@ fwinstall()
         exit 1
       fi
 
-      # check if both PLATFORM match
-      if [[ "${BOOTFS_PLATFORM}" != "${IMG_PLATFORM}" ]]; then
+      # check if both PLATFORM match including exceptions for
+      # cross platform updates/changes
+      if [[ "${BOOTFS_PLATFORM}" == "intelnuc" && "${IMG_PLATFORM}" == "generic-x86_64" ]] ||
+         [[ "${BOOTFS_PLATFORM}" == "generic-x86_64" && "${IMG_PLATFORM}" == "intelnuc" ]]; then
+        echo "INFO: cross updating ${BOOTFS_PLATFORM} to ${IMG_PLATFORM}<br/>"
+      elif [[ "${BOOTFS_PLATFORM}" != "${IMG_PLATFORM}" ]]; then
         echo "ERROR: incorrect hardware platform (${IMG_PLATFORM} != ${BOOTFS_PLATFORM})<br/>"
         exit 1
       fi
@@ -799,8 +811,12 @@ fwinstall()
         exit 1
       fi
 
-      # check if both PLATFORM match
-      if [[ "${ROOTFS_PLATFORM}" != "${IMG_PLATFORM}" ]]; then
+      # check if both PLATFORM match including exceptions for
+      # cross platform updates/changes
+      if [[ "${ROOTFS_PLATFORM}" == "intelnuc" && "${IMG_PLATFORM}" == "generic-x86_64" ]] ||
+         [[ "${ROOTFS_PLATFORM}" == "generic-x86_64" && "${IMG_PLATFORM}" == "intelnuc" ]]; then
+        echo "INFO: cross updating ${ROOTFS_PLATFORM} to ${IMG_PLATFORM}<br/>"
+      elif [[ "${ROOTFS_PLATFORM}" != "${IMG_PLATFORM}" ]]; then
         echo "ERROR: incorrect hardware platform (${IMG_PLATFORM} != ${ROOTFS_PLATFORM})<br/>"
         exit 1
       fi

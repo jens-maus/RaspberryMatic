@@ -92,8 +92,13 @@ proc getMinMaxValueDescr {param} {
 
   # Limit float to 1 decimal places
   if {([llength [split $min "."]] == 2) || ([llength [split $max "."]] == 2)} {
-    set min [format {%1.1f} $min]
-    set max [format {%1.1f} $max]
+    if {($param != "METER_CONSTANT_VOLUME") && ($param != "METER_CONSTANT_ENERGY")} {
+      set min [format {%1.1f} $min]
+      set max [format {%1.1f} $max]
+    } else {
+      set min [format {%1.2f} $min]
+      set max [format {%1.2f} $max]
+    }
   }
 
   if {[string equal $dev_descr(TYPE) "HmIP-MIO16-PCB"] == 1} {
@@ -116,7 +121,7 @@ proc getMinMaxValueDescr {param} {
 }
 
 proc getUnit {param} {
-  global psDescr dev_descr
+  global psDescr dev_descr ch_descr
   upvar psDescr descr
   array_clear param_descr
   array set param_descr $descr($param)
@@ -133,8 +138,10 @@ proc getUnit {param} {
    set unit "\${lblMinutes}"
   }
 
-  if {($unit == "K") || ($unit == "??C") || ($unit == "°C")} {
-    set unit "&#176;C"
+  if {[string equal $ch_descr(TYPE) "UNIVERSAL_LIGHT_RECEIVER"] != 1} {
+    if {($unit == "K") || ($unit == "??C") || ($unit == "°C")} {
+      set unit "&#176;C"
+    }
   }
 
   if {$unit == "_Grad_"} {
@@ -142,6 +149,14 @@ proc getUnit {param} {
   }
   if {([string equal $dev_descr(TYPE) "HmIP-STI"] == 1) && ([string equal $param "REPEATED_LONG_PRESS_TIMEOUT_VALUE"] == 1)} {
     set unit "s (0.0 - 6.0)"
+  }
+
+  if {[string equal $param "METER_CONSTANT_VOLUME"] == 1} {
+     set unit "m<sup>3</sup>/Imp"
+  }
+
+  if {[string equal $param "METER_CONSTANT_ENERGY"] == 1} {
+     set unit "Imp/kWh"
   }
 
   return "$unit"
@@ -179,7 +194,7 @@ proc getUserDefinedCondTXThresholdUnitMinMaxDescr {devType param} {
    }
 }
 
-proc getTextField {param value chn prn {extraparam ""}} {
+proc getTextField {param value chn prn {extraparam ""} {superExtra ""}} {
 
   # exec echo "getTextField: $extraparam" >> /tmp/textField.log
 
@@ -191,6 +206,8 @@ proc getTextField {param value chn prn {extraparam ""}} {
   array set param_descr $descr($param)
   set minValue $param_descr(MIN)
   set maxValue $param_descr(MAX)
+  set maxLength ""
+  set sizeTextfield 5
 
   if {[string first "." $param_descr(MIN)] != -1} {
     set minValue [format {%1.1f} $minValue]
@@ -213,10 +230,20 @@ proc getTextField {param value chn prn {extraparam ""}} {
     }
   }
 
-  if {[string equal $dev_descr(TYPE) "HmIPW-WGD"] == 1} {
+  if {([string equal $dev_descr(TYPE) "HmIPW-WGD"] == 1) || ([string equal $dev_descr(TYPE) "HmIPW-WGD-PL"] == 1)} {
     if {$param == "MAIN_TEXT" || $param == "SUB_TEXT"} {
       set minValue "stringUTF8"
       set maxValue "stringUTF8"
+      set maxLength "maxLength=16"
+    }
+  }
+
+  if {([string equal $dev_descr(TYPE) "HmIP-ESI"] == 1)} {
+    if {$param == "METER_OBIS_SEARCH_STRING"} {
+      set minValue "stringUTF8"
+      set maxValue "stringUTF8"
+      set maxLength "maxLength=16"
+      set sizeTextfield 16
     }
   }
 
@@ -225,11 +252,25 @@ proc getTextField {param value chn prn {extraparam ""}} {
     if {$param == "CALIBRATION_PPM_VAL"} {set maxValue 10000}
   }
 
+set comment {
+  if {$param == "DIM_LEVEL_LOWEST"} {
+    set onMinLevel [expr $extraparam * 1.0]
+    if {($onMinLevel < 0.5)} {
+      set minValue $minValue
+    } else {
+      set minValue $onMinLevel
+    }
+  }
+}
   set elemId 'separate_CHANNEL\_$chn\_$prn'
 
   # Limit float to 2 decimal places
   if {[llength [split $value "."]] == 2} {
-    set value [format {%1.1f} $value]
+    if {($param != "METER_CONSTANT_VOLUME") && ($param != "METER_CONSTANT_ENERGY")} {
+      catch {set value [format {%1.1f} $value]}
+    } else {
+      catch {set value [format {%1.2f} $value]}
+    }
   }
 
   # Convert float to int - sometimes the parameter UTC_* comes as float instead of int (for whatever reason). This will cause an error.
@@ -244,7 +285,7 @@ proc getTextField {param value chn prn {extraparam ""}} {
 
   if {$param == "TRIGGER_ANGLE" && [info exists descr(TRIGGER_ANGLE_2)] == 1} {
     upvar valTriggerAngle2 triggerAngle2
-    set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur=\"SetTriggerAngle2(this.value, $triggerAngle2);ProofAndSetValue(this.id, this.id, $minValue, $maxValue, 1)\" $extraparam>"
+    set s "<input id=$elemId type=\"text\" size=\"$sizeTextfield\" value=$value name=$param onblur=\"SetTriggerAngle2(this.value, $triggerAngle2);ProofAndSetValue(this.id, this.id, $minValue, $maxValue, 1)\" $extraparam>"
     cgi_javascript {
       puts "var maxTriggerAngle = parseInt($maxValue), minTriggerAngle = parseInt($minValue);"
       puts {
@@ -275,13 +316,13 @@ proc getTextField {param value chn prn {extraparam ""}} {
     }
   } else {
     if {$param == "NUMERIC_PIN_CODE"} {
-      set s "<input id=$elemId type=\"text\" size=\"5\" maxlength=\"8\" value=$value name=$param onblur=\"if (! isNumber(this.value)) \{this.value = '';\}\" $extraparam>"
+       set s "<input id=$elemId type=\"text\" size=\"$sizeTextfield\" maxlength=\"8\" value=\"$value\" name=$param onblur=\"if (! isNumber(this.value)) \{this.value = '';\}\" $extraparam>"
     } elseif {($param == "VOLTAGE_0") || ($param == "VOLTAGE_100")} {
-        set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '$minValue', '$maxValue', 1);$extraparam\">"
+        set s "<input id=$elemId type=\"text\" size=\"$sizeTextfield\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '$minValue', '$maxValue', 1);$extraparam\">"
     } elseif {$minValue == "stringUTF8"} {
-        set s "<input id=$elemId type=\"text\" size=\"5\" value=\"$value\" name=$param>"
+        set s "<input id=$elemId type=\"text\" size=\"$sizeTextfield\" value=\"$value\" $maxLength name=$param>"
     } else {
-      set s "<input id=$elemId type=\"text\" size=\"5\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '$minValue', '$maxValue', 1);\" $extraparam>"
+      set s "<input id=$elemId type=\"text\" size=\"$sizeTextfield\" value=$value name=$param onblur=\"ProofAndSetValue(this.id, this.id, '$minValue', '$maxValue', 1);\" $extraparam $superExtra>"
     }
   }
 
@@ -396,7 +437,7 @@ proc getButtonChannelConfiguration {{extraDescription ""}} {
   return $html
 }
 
-proc getDeactivateLongKeypress {p profile special_input_id prn {optionDisable 0} {optionEnable 1}} {
+proc getDeactivateLongKeypress {p profile special_input_id prn {optionDisable 0} {optionEnable 1} {callback ""}} {
   upvar $profile PROFILE
   upvar $p ps
   upvar pref pref
@@ -415,7 +456,7 @@ proc getDeactivateLongKeypress {p profile special_input_id prn {optionDisable 0}
       array_clear options
       set options($optionDisable) "\${optionDisable}"
       set options($optionEnable) "\${optionEnable}"
-      append html "<td>[get_ComboBox options $param ${special_input_id}_$prn\_$pref PROFILE $param]</td>"
+      append html "<td>[get_ComboBox options $param ${special_input_id}_$prn\_$pref PROFILE $param $callback]</td>"
     append html "</tr>"
   }
   return $html
@@ -483,7 +524,10 @@ proc getHelpIcon {topic {x 0} {y 0}} {
    "COND_TX_DECISION_ABOVE_BELOW" {set x 450; set y 80}
    "CONTACT_BOOST" {set x 450; set y 180}
    "DELAY_COMPENSATION" {set x 450; set y 100}
+   "DEVICE_OPERATION_MODE_RGBW" {set x 650; set y 200}
    "DEVICE_SENSOR_SENSITIVITY" {set x 450; set y 180}
+   "DIM_LEVEL_HIGHEST" {set x 450; set y 55}
+   "DIM_LEVEL_LOWEST" {set x 450; set y 125}
    "DIM_STEP" {set x 500; set y 150}
    "DISABLE_DEVICE_ALIVE_SIGNAL" {set x 500; set y 75 }
    "DURATION_5MIN" {set x 500; set y 160}
@@ -494,16 +538,19 @@ proc getHelpIcon {topic {x 0} {y 0}} {
    "HEATING_COOLING" {set x 450; set y 160}
    "HUMIDITY_LIMIT_DISABLE" {set x 500; set y 200}
    "HUMIDITY_LIMIT_VALUE" {set x 450; set y 85}
+   "INPUT_COPRO_ENABLED" {set x 500; set y 250}
    "LOCAL_RESET_DISABLED" {set x 500; set y 130}
    "MOUNTING_ORIENTATION" {set x 450; set y 75}
    "MOUNTING_ORIENTATION_A" {set x 450; set y 75}
    "ON_MIN_LEVEL" {set x 400; set y 80}
    "OPTIMUM_START_STOP" {set x 450; set y 80}
    "PSM_CHANNEL_OPERATION_MODE" {set x 450; set y 100}
+   "PYRO_CHANNEL_OPERATION_MODE" {set x 500; set y 375}
    "OUTPUT_SWAP" {set x 450; set y 100}
    "OUTPUT_SWAP_SERVO" {set x 450; set y 50}
    "PERMANENT_FULL_RX" {set x 500; set y 160}
    "PIR_SENSITIVITY" {set x 500; set y 210}
+   "POWERUP_JUMPTARGET_RGBW" {set x 450; set y 75}
    "PWM_AT_LOW_VALVE_POSITION" {set x 500; set y 130}
    "REPEAT_ENABLE" {set x 500; set y 210}
    "ROUTER_MODULE_ENABLED" {set x 500; set y 120}
@@ -563,7 +610,8 @@ proc getTimeSelector {paramDescr p profile type prn special_input_id timebase op
     set paramBaseDescr "SERVO_SPEED_UNIT"
     set paramFactorDescr "SERVO_SPEED_FACTOR"
   }
-  set javascriptDelay 100
+
+  set javascriptDelay 10
 
   incr pref
   append html "<tr $extraparam>"
@@ -761,7 +809,7 @@ proc getPowerUpSelector {chn p special_input_id} {
 
       append html "</tr>"
       append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-      append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentTimeOption($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+      append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentTimeOption($chn, [expr $prn - 1], '$specialID');}, 50)</script>"
     }
 
     ###
@@ -951,7 +999,7 @@ proc getPowerUpSelector {chn p special_input_id} {
 
           append html "</tr>"
           append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-          append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentTimeOption($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+          append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentTimeOption($chn, [expr $prn - 1], '$specialID');}, 50)</script>"
         }
 
         ###
@@ -964,7 +1012,7 @@ proc getPowerUpSelector {chn p special_input_id} {
             append html  "<td>[getOptionBox '$param' options $ps($param) $chn $prn]</td>"
           append html "</tr>"
         }
-}
+      }
     append html "</table></td></tr>"
   }
 # *******
@@ -1101,7 +1149,7 @@ proc getPowerUpSelectorAcousticSignal {chn p special_input_id} {
 
       append html "</tr>"
       append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
-      append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentTimeOption($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+      append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentTimeOption($chn, [expr $prn - 1], '$specialID');}, 50)</script>"
     }
 
     ###
@@ -1645,6 +1693,172 @@ proc getPowerUpSelectorShutterBlind {chn p special_input_id model} {
       append html "powerUP_showRelevantData($chn, selectedPowerMode, false);"
     append html "},100);"
   append html "</script>"
+  return $html
+}
+
+proc getPowerUpSelectorUniversalLightReceiver {chn p special_input_id mode {isDALI 0}} {
+
+  # isDALI should be 1 for the HmIP-DRG-DALI
+
+  global psDescr dev_descr ch_descr
+  upvar psDescr psDescr
+  upvar $p ps
+  upvar prn prn
+
+  set chType $ch_descr(TYPE)
+  set specialID "[getSpecialID $special_input_id]"
+  set html ""
+
+  set param POWERUP_JUMPTARGET
+  incr prn
+  set powerupModePrn $prn
+  append html "<tr>"
+    append html "<td>\${stringTableDimmerPowerUpAction}</td>"
+    option POWERUP_JUMPTARGET_HMIP
+    append html  "<td>[getOptionBox '$param' options $ps($param) $chn $prn "onchange=\"powerUP_showRelevantData($chn, this.value,$prn);\""]&nbsp;[getHelpIcon $param\_RGBW]</td>"
+  append html "</tr>"
+
+  append html "<tr id=\"powerUpPanelON_$chn\"><td colspan=\"2\"><table>"
+
+    set param POWERUP_ON_LEVEL
+    if { [info exists ps($param)] == 1  } {
+      incr prn
+      append html "<tr>"
+        if {$mode == 0} {
+          # The actor acts as switch actor (ON/OFF). Here we set the ON value to 100%. This is invisible for the user.
+          append html "<td class='hidden'>[getTextField $param 100 $chn $prn]</td>"
+        } else {
+          append html "<td>\${lblPowerUpOnLevel}</td>"
+          option RAW_0_100Percent
+          append html  "<td>[getOptionBox '$param' options $ps($param) $chn $prn]</td>"
+        }
+      append html "</tr>"
+    }
+
+    set param POWERUP_ONDELAY_UNIT
+    if { [info exists ps($param)] == 1  } {
+      incr prn
+      append html "<tr id=\"onDelay_$chn\">"
+      append html "<td>\${stringTableOnDelay}</td>"
+      append html [getComboBox $chn $prn "$specialID" "delay"]
+      append html "</tr>"
+
+      append html [getTimeUnitComboBox $param $ps($param) $chn $prn $special_input_id]
+
+      incr prn
+      set param POWERUP_ONDELAY_VALUE
+      append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
+      append html "<td>\${stringTableOnDelayValue}</td>"
+
+      append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
+
+      append html "</tr>"
+      append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
+      append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentDelayOption($chn, [expr $prn - 1], '$specialID');}, 100)</script>"
+    }
+
+    set param POWERUP_ONTIME_UNIT
+    if { [info exists ps($param)] == 1  } {
+      incr prn
+      append html "<tr>"
+      append html "<td>\${stringTableOnTime}</td>"
+      append html [getComboBox $chn $prn "$specialID" "timeOnOff"]
+      append html "</tr>"
+
+      append html [getTimeUnitComboBox $param $ps($param) $chn $prn $special_input_id]
+
+      incr prn
+      set param POWERUP_ONTIME_VALUE
+      append html "<tr id=\"timeFactor_$chn\_$prn\" class=\"hidden\">"
+      append html "<td>\${stringTableOnTimeValue}</td>"
+
+      append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]</td>"
+
+      append html "</tr>"
+      append html "<tr id=\"space_$chn\_$prn\" class=\"hidden\"><td><br/></td></tr>"
+      append html "<script type=\"text/javascript\">setTimeout(function() {setCurrentTimeOption($chn, [expr $prn - 1], '$specialID');}, 50)</script>"
+    }
+
+    set param POWERUP_ON_COLOR_TEMPERATURE
+    # mode 2 = DIMMER_TUNABLE_WHITE
+    # The RGB mode (mode 3) of the DALI device is capable of TUNABLE_WHITE - the HmIP-RGBW is not.
+    # mode 5 = HmIP-LSC
+    if { ([info exists ps($param)] == 1)  && (($mode == 2) || ($mode == 5) || (($isDALI == 1) && ($mode == 3))) } {
+      incr prn
+      append html "<tr>"
+        append html "<td>\${lblPowerUpOnColorTemperature}</td>"
+        append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]&nbsp;[getUnit $param]&nbsp;[getHelpIcon $param\_RGBW 450 75]</td>"
+      append html "</tr>"
+    }
+
+    set param POWERUP_ON_HUE
+    # mode 3 = DIMMER_RGB - mode 4 = DIMMER_RGBW mode5 = HmIP-LSC
+    if { ([info exists ps($param)] == 1) && (($mode == 3) || ($mode == 4) || ($mode == 5)) } {
+      incr prn
+      append html "<tr>"
+        append html "<td>\${lblPowerUpOnHue}</td>"
+        append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]&nbsp;[getHelpIcon $param 450 75]</td>"
+      append html "</tr>"
+    }
+
+    # The device documentations describes this parameter as POWERUP_ON_LEVEL_2
+    set param POWERUP_ON_SATURATION
+    if { ([info exists ps($param)] == 1) && (($mode == 3)  || ($mode == 4) || ($mode == 5)) } {
+      incr prn
+      append html "<tr>"
+        append html "<td>\${lblPowerUpOnSaturation}</td>"
+        append html "<td>[getTextField $param $ps($param) $chn $prn]&nbsp;[getMinMaxValueDescr $param]&nbsp;[getHelpIcon $param 450 75]</td>"
+      append html "</tr>"
+    }
+
+  append html "</table></td></tr>"
+
+  ### JS ###
+
+  append html "<script type=\"text/javascript\">"
+
+    append html "powerUP_showRelevantData = function(chn, selectedMode, prn) {"
+      append html "var panelOnElm = jQuery(\"#powerUpPanelON_\" + chn),"
+      append html "trOnnDelayElm = jQuery(\"#onDelay_\" + chn),"
+      append html "trOnDelaySiblings = jQuery(trOnnDelayElm).nextAll().slice(0,3),"
+      append html "onDelayElm = jQuery(\"#timeDelay_\" + chn + \"_\" + (parseInt(prn) + 2));"
+
+      append html "switch (parseInt(selectedMode)) {"
+        append html "case 0:"
+          # OFF
+          append html "panelOnElm.hide();"
+          append html "trOnnDelayElm.hide();"
+          append html "trOnDelaySiblings.hide();"
+          append html "break;"
+
+        append html "case 1:"
+          # ON DELAY
+          append html "panelOnElm.show();"
+          append html "trOnnDelayElm.show();"
+          append html "if (parseInt(onDelayElm.val()) == 11) \{"
+            append html "trOnDelaySiblings.show();"
+          append html "\}"
+          append html "break;"
+
+        append html "case 2:"
+          # ON
+          append html "panelOnElm.show();"
+          append html "trOnnDelayElm.hide();"
+          append html "trOnDelaySiblings.hide();"
+          append html "break;"
+
+        append html "default:"
+          append html "panelOnElm.show();"
+      append html "}"
+    append html "};"
+
+    append html "window.setTimeout(function() {"
+      append html "var selectedPowerMode = jQuery(\"#separate_CHANNEL_$chn\_$powerupModePrn\").val();"
+      append html "powerUP_showRelevantData($chn, selectedPowerMode, $powerupModePrn);"
+    append html "},250);"
+
+  append html "</script>"
+
   return $html
 }
 

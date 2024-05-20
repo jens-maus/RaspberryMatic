@@ -161,7 +161,16 @@
         default {return "<span class=\"attention\">max value not available</span>"}
      }
    }
-@@ -163,7 +173,7 @@
+@@ -82,7 +92,7 @@
+ 
+   # Limit float to 1 decimal places
+   if {([llength [split $min "."]] == 2) || ([llength [split $max "."]] == 2)} {
+-    if {$param != "METER_CONSTANT_VOLUME"} {
++    if {($param != "METER_CONSTANT_VOLUME") && ($param != "METER_CONSTANT_ENERGY")} {
+       set min [format {%1.1f} $min]
+       set max [format {%1.1f} $max]
+     } else {
+@@ -178,7 +188,7 @@
        hmip-usbsm
         {
          if {$param == "TX_THRESHOLD_POWER"} {return "W (0.0 - [getUserDefinedMaxValue $devType $param])"}
@@ -170,7 +179,16 @@
        }
        default {return "<span class=\"attention\">missing description</span>"}
     }
-@@ -298,7 +308,7 @@
+@@ -256,7 +266,7 @@
+ 
+   # Limit float to 2 decimal places
+   if {[llength [split $value "."]] == 2} {
+-    if {$param != "METER_CONSTANT_VOLUME"} {
++    if {($param != "METER_CONSTANT_VOLUME") && ($param != "METER_CONSTANT_ENERGY")} {
+       catch {set value [format {%1.1f} $value]}
+     } else {
+       catch {set value [format {%1.2f} $value]}
+@@ -339,7 +349,7 @@
    }
  
    set s "<input id=$elemIdTmp type=\"text\" size=\"5\" value=[format %.0f [expr $value * 100]] name=$param\_tmp onblur="

@@ -244,6 +244,9 @@ proc getTextField {param value chn prn {extraparam ""} {superExtra ""}} {
       set maxValue "stringUTF8"
       set maxLength "maxLength=16"
       set sizeTextfield 16
+    } elseif {($param == "METER_CONSTANT_VOLUME") || ($param == "METER_CONSTANT_ENERGY")} {
+      set minValue [format {%1.2f} $param_descr(MIN)]
+      set maxValue [format {%1.2f} $param_descr(MAX)]
     }
   }
 

@@ -1,0 +1,40 @@
+--- occu/WebUI/www/config/hmip_helper.tcl.orig
++++ occu/WebUI/www/config/hmip_helper.tcl
+@@ -2685,6 +2685,8 @@
+         hmip-fsm  {return true}
+         hmip-fsm16  {return true}
+         hmip-psm  {return true}
++        hmip-psm-2  {return true}
++        "hmip-psm-2 qhj"  {return true}
+         hmip-usbsm  {return true}
+       default {return false}
+     }
+--- occu/WebUI/www/config/uiElements.tcl.orig
++++ occu/WebUI/www/config/uiElements.tcl
+@@ -22,6 +22,8 @@
+   if {[string equal $extraparam "TX_THRESHOLD_POWER"] == 1} {
+     switch [string tolower $devType] {
+         hmip-psm -
++        hmip-psm-2 -
++        "hmip-psm-2 qhj" -
+         hmip-fsm16 {return 3680.0}
+         hmip-bsm -
+         hmip-fsm  {return 1150.0}
+@@ -33,6 +35,8 @@
+   if {([string equal $extraparam "COND_TX_THRESHOLD_LO"] == 1) || ([string equal $extraparam "COND_TX_THRESHOLD_HI"] == 1)} {
+     switch [string tolower $devType] {
+         hmip-psm -
++        hmip-psm-2 -
++        "hmip-psm-2 qhj" -
+         hmip-fsm16 {return "3680.0"}
+         hmip-bsm -
+         hmip-fsm  {return "1150.0"}
+@@ -172,6 +176,8 @@
+ proc getUserDefinedCondTXThresholdUnitMinMaxDescr {devType param} {
+    switch [string tolower $devType] {
+       hmip-psm -
++      hmip-psm-2 -
++      "hmip-psm-2 qhj" -
+       hmip-fsm16 -
+       hmip-bsm -
+       hmip-fsm -

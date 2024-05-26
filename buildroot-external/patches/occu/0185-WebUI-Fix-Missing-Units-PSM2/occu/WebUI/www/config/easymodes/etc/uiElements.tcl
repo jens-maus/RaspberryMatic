@@ -5,7 +5,12 @@ proc getMinValue {param} {
   upvar psDescr descr
   array_clear param_descr
   array set param_descr $descr($param)
-  set min [format {%1.1f} $param_descr(MIN)]
+  set min $param_descr(MIN)
+
+  # Limit float to 1 decimal places
+  if {[llength [split $min "."]] == 2} {
+    set min [format {%1.1f} $min]
+  }
   return "$min"
 }
 
@@ -14,7 +19,12 @@ proc getMaxValue {param} {
   upvar psDescr descr
   array_clear param_descr
   array set param_descr $descr($param)
-  set max [format {%1.1f} $param_descr(MAX)]
+  set max $param_descr(MAX)
+
+  # Limit float to 1 decimal places
+  if {[llength [split $max "."]] == 2} {
+    set max [format {%1.1f} $max]
+  }
   return "$max"
 }
 
@@ -36,7 +46,7 @@ proc getUserDefinedMaxValue {devType {extraparam ""}} {
     switch [string tolower $devType] {
         hmip-psm -
         hmip-fsm16 {return "3680.00"}
-        hmi-psm-2 -
+        hmip-psm-2 -
         "hmip-psm-2 qhj" {return "3000.00"}
         hmip-bsm -
         hmip-fsm  {return "1150.00"}
@@ -86,7 +96,7 @@ proc getMinMaxValueDescr {param} {
 
   # Limit float to 1 decimal places
   if {([llength [split $min "."]] == 2) || ([llength [split $max "."]] == 2)} {
-    if {$param != "METER_CONSTANT_VOLUME"} {
+    if {($param != "METER_CONSTANT_VOLUME") && ($param != "METER_CONSTANT_ENERGY")} {
       set min [format {%1.1f} $min]
       set max [format {%1.1f} $max]
     } else {
@@ -184,7 +194,7 @@ proc getUserDefinedCondTXThresholdUnitMinMaxDescr {devType param} {
       hmip-usbsm
        {
         if {$param == "TX_THRESHOLD_POWER"} {return "W (0.0 - [getUserDefinedMaxValue $devType $param])"}
-        if {($param == "COND_TX_THRESHOLD_LO") || ($param == "COND_TX_THRESHOLD_HI")} {return "W (0 - [getUserDefinedMaxValue $devType $param])"}
+        if {($param == "COND_TX_THRESHOLD_LO") || ($param == "COND_TX_THRESHOLD_HI")} {return "W (0.00 - [getUserDefinedMaxValue $devType $param])"}
       }
       default {return "<span class=\"attention\">missing description</span>"}
    }
@@ -194,7 +204,7 @@ proc getTextField {param value chn prn {extraparam ""} {superExtra ""}} {
 
   # exec echo "getTextField: $extraparam" >> /tmp/textField.log
 
-  if {[string equal $value ""] == 1} {set value ''}
+  if {[string equal $value ""] == 1} {set value ""}
 
   global psDescr dev_descr
   upvar psDescr descr
@@ -240,6 +250,9 @@ proc getTextField {param value chn prn {extraparam ""} {superExtra ""}} {
       set maxValue "stringUTF8"
       set maxLength "maxLength=16"
       set sizeTextfield 16
+    } elseif {($param == "METER_CONSTANT_VOLUME") || ($param == "METER_CONSTANT_ENERGY")} {
+      set minValue [format {%1.2f} $param_descr(MIN)]
+      set maxValue [format {%1.2f} $param_descr(MAX)]
     }
   }
 
@@ -262,7 +275,7 @@ set comment {
 
   # Limit float to 2 decimal places
   if {[llength [split $value "."]] == 2} {
-    if {$param != "METER_CONSTANT_VOLUME"} {
+    if {($param != "METER_CONSTANT_VOLUME") && ($param != "METER_CONSTANT_ENERGY")} {
       catch {set value [format {%1.1f} $value]}
     } else {
       catch {set value [format {%1.2f} $value]}
@@ -345,7 +358,7 @@ proc getTextField100Percent {param value chn prn {extraparam ""}} {
   }
 
   set s "<input id=$elemIdTmp type=\"text\" size=\"5\" value=[format %.0f [expr $value * 100]] name=$param\_tmp onblur="
-  append s "\"ProofAndSetValue(this.id, this.id, $minValue, $maxValue, 1);"
+  append s "\"ProofAndSetValue(this.id, this.id, parseInt($minValue), parseInt($maxValue), 1);"
   append s "jQuery('#separate_CHANNEL\_$chn\_$prn').val(this.value / 100);\">"
 
   append s "<input id=$elemId type=\"text\" size=\"5\" class=\"hidden\" value=$value name=$param>"

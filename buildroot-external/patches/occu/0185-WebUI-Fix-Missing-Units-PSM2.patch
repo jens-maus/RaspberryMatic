@@ -1,5 +1,5 @@
---- occu/WebUI/www/config/hmip_helper.tcl.orig
-+++ occu/WebUI/www/config/hmip_helper.tcl
+--- occu/WebUI/www/config/easymodes/etc/hmip_helper.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/hmip_helper.tcl
 @@ -2685,6 +2685,8 @@
          hmip-fsm  {return true}
          hmip-fsm16  {return true}
@@ -9,9 +9,9 @@
          hmip-usbsm  {return true}
        default {return false}
      }
---- occu/WebUI/www/config/uiElements.tcl.orig
-+++ occu/WebUI/www/config/uiElements.tcl
-@@ -23,6 +23,8 @@
+--- occu/WebUI/www/config/easymodes/etc/uiElements.tcl.orig
++++ occu/WebUI/www/config/easymodes/etc/uiElements.tcl
+@@ -33,6 +33,8 @@
      switch [string tolower $devType] {
          hmip-psm -
          hmip-fsm16 {return 3680.0}
@@ -20,23 +20,16 @@
          hmip-bsm -
          hmip-fsm  {return 1150.0}
          hmip-usbsm  {return 60.0}
-@@ -33,10 +35,12 @@
-   if {([string equal $extraparam "COND_TX_THRESHOLD_LO"] == 1) || ([string equal $extraparam "COND_TX_THRESHOLD_HI"] == 1)} {
+@@ -44,6 +46,8 @@
      switch [string tolower $devType] {
          hmip-psm -
--        hmip-fsm16 {return "3680.0"}
-+        hmip-fsm16 {return "3680.00"}
-+        hmi-psm-2 -
+         hmip-fsm16 {return "3680.00"}
++        hmip-psm-2 -
 +        "hmip-psm-2 qhj" {return "3000.00"}
          hmip-bsm -
--        hmip-fsm  {return "1150.0"}
--        hmip-usbsm  {return "60.0"}
-+        hmip-fsm  {return "1150.00"}
-+        hmip-usbsm  {return "60.00"}
-        default {return "<span class=\"attention\">max value not available</span>"}
-     }
-   }
-@@ -172,6 +176,8 @@
+         hmip-fsm  {return "1150.00"}
+         hmip-usbsm  {return "60.00"}
+@@ -182,6 +186,8 @@
  proc getUserDefinedCondTXThresholdUnitMinMaxDescr {devType param} {
     switch [string tolower $devType] {
        hmip-psm -

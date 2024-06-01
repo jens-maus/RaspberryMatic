@@ -118,7 +118,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [rpi0, rpi2, rpi3, rpi4, rpi5, tinkerboard, odroid-c2, odroid-c4, odroid-n2, intelnuc, ova, oci_amd64, oci_arm64, oci_arm, generic-aarch64, lxc_amd64, lxc_arm64, lxc_arm]
+        platform: [rpi0, rpi2, rpi3, rpi4, rpi5, tinkerboard, odroid-c2, odroid-c4, odroid-n2, ova, oci_amd64, oci_arm64, oci_arm, generic-x86_64, generic-aarch64, lxc_amd64, lxc_arm64, lxc_arm]
 
     steps:
       - name: Checkout Code
@@ -189,7 +189,7 @@ jobs:
 
       #########################
       # upload build artifacts
-      - name: Upload build artifact [rpi*, tinkerboard, intelnuc, ova, generic-*]
+      - name: Upload build artifact [rpi*, tinkerboard, ova, generic-*]
         if: |
           !startsWith(matrix.platform, 'oci_') &&
           !startsWith(matrix.platform, 'lxc_')

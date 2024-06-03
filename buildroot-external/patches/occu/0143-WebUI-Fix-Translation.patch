@@ -1,12 +1,16 @@
 --- occu/WebUI/www/config/easymodes/MASTER_LANG/HmIP-ParamHelp.js.orig
 +++ occu/WebUI/www/config/easymodes/MASTER_LANG/HmIP-ParamHelp.js
-@@ -263,7 +263,7 @@
-       "<br/><br/>Die Kalibrierung ben%F6tig mindestens drei Kalibrierintervalle, um den Endwert sicher zu bestimmen." +
+@@ -260,10 +260,10 @@
+     "CALIBRATION_PPM" :
+       "Bei der automatischen Kalibrierung des CO2-Sensors wird der niedrigste Messwert innerhalb vordefinierter Kalibrierintervalle als neue Referenz angenommen. " +
+       "Frische Au%DFenluft hat einen typischen Wert von zirka 400 ppm. Bei normaler Innenraumnutzung wird angenommen, dass die Innenraumluft innerhalb eines Zeitraums von einer Woche mindestens einmal das Niveau von frischer Au%DFenluft erreicht. " +
+-      "<br/><br/>Die Kalibrierung ben%F6tig mindestens drei Kalibrierintervalle, um den Endwert sicher zu bestimmen." +
++      "<br/><br/>Die Kalibrierung ben%F6tigt mindestens drei Kalibrierintervalle, um den Endwert sicher zu bestimmen." +
        "<br/><br/>F%FCr R%E4ume mit Dauerbelegung 24/7 muss diese Funktion deaktiviert werden. Eine Kalibrierung sollte in dem Fall alle 1-2 Jahre manuell durchgef%FChrt werden.",
  
 -    "MOUNTING_ORIENTATION" : "Dieser Parameter erm%FCglicht es, den Displayinhalt um 180 Grad zu drehen.",
 +    "MOUNTING_ORIENTATION" : "Dieser Parameter erm%F6glicht es, den Displayinhalt um 180 Grad zu drehen.",
-     "MOUNTING_ORIENTATION_A" : "Dieser Parameter erm%F6glicht es, die Tastereinheit des Aktors im gew%FCnschten Winkel einzusetzen. ",
+     "MOUNTING_ORIENTATION_A" : "Dieser Parameter erm%F6glicht es, den Aktor im gew%FCnschten Winkel einzusetzen. ",
  
      "POWERUP_ONTIME_UNIT" :
 --- occu/WebUI/www/config/ic_deviceFirmwareOverview.cgi.orig

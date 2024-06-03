@@ -264,7 +264,7 @@ jQuery.extend(true,langJSON, {
       "<br/><br/>F%FCr R%E4ume mit Dauerbelegung 24/7 muss diese Funktion deaktiviert werden. Eine Kalibrierung sollte in dem Fall alle 1-2 Jahre manuell durchgef%FChrt werden.",
 
     "MOUNTING_ORIENTATION" : "Dieser Parameter erm%FCglicht es, den Displayinhalt um 180 Grad zu drehen.",
-    "MOUNTING_ORIENTATION_A" : "Dieser Parameter erm%F6glicht es, die Tastereinheit des Aktors im gew%FCnschten Winkel einzusetzen. ",
+    "MOUNTING_ORIENTATION_A" : "Dieser Parameter erm%F6glicht es, den Aktor im gew%FCnschten Winkel einzusetzen. ",
 
     "POWERUP_ONTIME_UNIT" :
       "W%E4hlen Sie die Wartezeit bis zum <i>Auto Relock</i>, nachdem das T%FCrschloss entriegelt oder ge%F6ffnet wurde.<br/><br/>" +
@@ -428,8 +428,8 @@ jQuery.extend(true,langJSON, {
       "Bei Frontalansicht auf das Ger%E4t ist<br/><br/>" +
 
       "<ul>" +
-        "<li>Zone 1 = Der gesamte 90%B0-Winkelbereich rechts</li>" +
-        "<li>Zone 2 = Der gesamte 90%B0-Winkelbereich links</li>" +
+        "<li>Zone 1 = Der gesamte 90%B0-Winkelbereich links</li>" +
+        "<li>Zone 2 = Der gesamte 90%B0-Winkelbereich rechts</li>" +
         "<li>Zone 3 = Der gesamte 360%B0-Winkelbereich unterhalb des Ger%E4tes</li>" +
       "</ul><br/><br/> " +
 
@@ -447,6 +447,38 @@ jQuery.extend(true,langJSON, {
       "Zu beachten ist, dass dieser Wert nicht kleiner sein kann, als der Wert, der beim Parameter <i>Minimaler Pegel im Zustand EIN</i> eingestellt ist.",
 
     "DIM_LEVEL_HIGHEST" : "Dimmlevel ab dem das Leuchtmittel die maximale Helligkeit erreicht hat.",
+
+    "INPUT_COPRO_ENABLED" :
+      "Bei Aktivierung dieses Parameters wird der Kanal %FCber den CoProzessor ausgewertet, anstatt %FCber den HmIP-Prozessor.<br/><br/>" +
+      "Im Normalfall sollte die Auswertung %FCber den Coprozessor nicht aktiviert werden, " +
+      "da z. B. die Kan%E4le 1 und 2 nicht direkt vom Coprozessor auswertbar sind und die Auswertung %FCber den HmIP-Prozessor stromsparender ist. " +
+      "Aktivieren Sie diesen Parameter daher nur, wenn es in der Anleitung eines Applikationsmoduls gefordert wird.<br/></br>" +
+      "Je nach verwendetem Applikationsmodul kann es erforderlich sein, die Auswertung %FCber den Coprozessor laufen zu lassen, " +
+      "um z.B. Schaltbefehle mit Bedingung oder Level nutzen zu k%F6nnen.<br/><br/>" +
+      "N%E4heres entnehmen Sie der Anleitung der jeweiligen Applikation.",
+
+    "ESI_CHANNEL_OPERATION_MODE" :
+      "Der HmIP-ESI bestimmt den Sensortyp und das Protokoll automatisch. Das Ergebnis ist in diesem Feld eingetragen. " +
+      "Um den Vorgang der automatischen Erkennung nach einem Tausch vom Sensor oder Z%E4hler erneut zu starten, l%F6schen Sie das Ger%E4t und lernen es wieder an.",
+
+    "ESI_METER_OBIS_SEARCH_STRING" :
+      "Anhand der OBIS-Kennzahlen identifiziert der HmIP-ESI die relevanten Daten vom Z%E4hler. Sie werden automatisch ermittelt. Liefert die automatische Ermittlung nicht die gew%FCnschten Werte, " +
+      "so k%F6nnen andere Kennzahlen im OBIS-Wertegruppenformat C.D.E eingetragen werden.<br/><br/>" +
+      "Mehrere Werte lassen sich zusammenfassen:<br/><br/>" +
+      "1.8.1+2+3 z. B. addiert 1.8.1 + 1.8.2 + 1.8.3<br/><br/>" +
+      "1 - 2.7.0 z. B. subtrahiert 1.7.0 - 2.7.0.",
+
+    "CHANNEL_ACTIVE_CLIMATECONTROL" : 
+      "Diese Checkbox dient dazu, Fehlermeldungen an unbenutzten Kan%E4len auf der Seite Status/Bedienung zu vermeiden. Aktivieren Sie diese Checkbox daher nur, wenn der Kanal auch benutzt wird.",
+
+    "DISPLAY_MODE" :
+      "Mit diesem Parameter kann zwischen folgenden beiden Display-Layouts gew%E4hlt werden:<br/><br/>" +
+      "<b><u>Reduzierter Modus</u></b><br>" +
+      "Die Informationen im Display sind auf ein Minimum reduziert, bei besonders gro%DFer Anzeige der Soll-Temperatur.<br/><br/>" +
+      "\"<b><u>Funktioneller Modus</u></b><br/>" +
+      "Im funktionellen Modus werden mehr Informationen auf dem Display dargestellt.<br/>",
+
+      "DISPLAY_INVERTED_COLORS"  : "Mit diesem Parameter w%E4hlen Sie f%FCr das Display die normale Anzeige oder den Dunkelmodus.",
 
     "noMoreHelp" : ""
   },
@@ -708,7 +740,7 @@ jQuery.extend(true,langJSON, {
       "<br/><br/>This function must be deactivated for rooms with a 24/7 permanent occupancy. In this case, a manual calibration should be performed every 1-2 years.",
 
     "MOUNTING_ORIENTATION" : "This parameter makes it possible to rotate the display content by 180 degrees.",
-    "MOUNTING_ORIENTATION_A" : "This parameter enables the push-button unit of the actuator to be placed at the required angle.",
+    "MOUNTING_ORIENTATION_A" : "This parameter enables the actuator to be placed at the required angle.",
 
     "POWERUP_ONTIME_UNIT" :
       "Select the delay time until <i>Auto Relock</i> is executed after the door lock has been unlocked or opened.<br/><br/>" +
@@ -866,20 +898,20 @@ jQuery.extend(true,langJSON, {
       "Make sure that the functionality of the DALI group corresponds to the functionality of the DALI luminaire that is assigned to the group and has the lowest channel number.",
 
     "PYRO_CHANNEL_OPERATION_MODE" :
-      "en* W%E4hlen Sie hier eine der drei m%F6glichen Erfassungszonen, die f%FCr diesen Kanal genutzt werden sollen.<br/><br/>" +
+      "Here, select one of the three possible detection zones that should be used for this channel.<br/><br/>" +
 
-      "<u>Welche Zone befindet sich wo am Ger%E4t?</u><br/><br/>" +
+      "<u>Which zone is located where on the device?</u><br/><br/>" +
 
-      "Bei Frontalansicht auf das Ger%E4t ist<br/><br/>" +
+      "With a frontal view of the device<br/><br/>" +
 
       "<ul>" +
-        "<li>Zone 1 = Der gesamte 90%B0-Winkelbereich rechts</li>" +
-        "<li>Zone 2 = Der gesamte 90%B0-Winkelbereich links</li>" +
-        "<li>Zone 3 = Der gesamte 360%B0-Winkelbereich unterhalb des Ger%E4tes</li>" +
+        "<li>Zone 1 = The entire 90%B0 angle area on the left</li>" +
+        "<li>Zone 2 = The entire 90%B0 angle area on the right</li>" +
+        "<li>Zone 3 = Zone 3 = The entire 360%B0 angle area below the device</li>" +
       "</ul><br/><br/> " +
 
-      "<b><u>Achtung</u></b><br/><br/>" +
-      "Folgende Parameter der Kan%E4le 1 bis 3 beeinflussen die jeweilige Zone 1 - 3:<br><br/>" +
+      "<b><u>Important!</u></b><br/><br/>" +
+      "The following parameters of channels 1 to 3 influence the relevant Zone 1 - 3.:<br><br/>" +
 
       "<ul>" +
         "<li>${stringTableSensivity}</li>" +
@@ -888,10 +920,43 @@ jQuery.extend(true,langJSON, {
       "</ul>",
 
     "DIM_LEVEL_LOWEST" :
-      "en* Dimmlevel, ab dem das Leuchtmittel zu leuchten beginnt bzw. beginnt, heller zu werden.<br/><br/>" +
-      "Zu beachten ist, dass dieser Wert nicht kleiner sein kann, als der Wert, der beim Parameter <i>Minimaler Pegel im Zustand EIN</i> eingestellt ist.",
+      "Dimming level from which the lamp starts to light up or starts to become brighter.<br/><br/>" +
+      "It must be noted that this value cannot be lower than the value that is set in the parameter <i>Minimum level in ON state<i>.",
 
-    "DIM_LEVEL_HIGHEST" : "en* Dimmlevel ab dem das Leuchtmittel die maximale Helligkeit erreicht hat.",
+    "DIM_LEVEL_HIGHEST" : "Dimming level from which the lamp has reached maximum brightness.",
+
+    "INPUT_COPRO_ENABLED" :
+      "When this parameter is activated, the channel is evaluated via the co-processor instead of the HmIP processor.<br/><br/>" +
+      "Under normal circumstances, evaluation via the co-processor should not be activated, " +
+      "as channels 1 and 2, for example, cannot be evaluated by the co-processor directly, plus evaluation via the HmIP processor is more energy-efficient. " +
+      "Therefore, you should only activate this parameter if so instructed in the manual for an application module.<br/></br>" +
+      "Depending on which application module you use, it may be necessary to conduct the evaluation via the co-processor " +
+      "in order to use switching commands with a condition or level.<br/><br/>" +
+      "Please refer to your application's manual for more information.",
+
+
+    "ESI_CHANNEL_OPERATION_MODE" :
+      "The HmIP-ESI determines the sensor type and the protocol automatically. The result is entered in this field. " +
+      "To restart the automatic detection process after replacing the sensor or meter, delete the device and teach it in again.",
+
+    "ESI_METER_OBIS_SEARCH_STRING" :
+      "The HmIP-ESI identifies the relevant data from the meter based on the OBIS identification numbers. The data is determined automatically. If the automatic determination process does not deliver the required values, " +
+      "you can enter other identification numbers in the OBIS value group format C.D.E.<br/><br/>" +
+      "Multiple values can be grouped together:<br/><br/>" +
+      "1.8.1+2+3, for example, denotes addition: 1.8.1 + 1.8.2 + 1.8.3<br/><br/>" +
+      "1 - 2.7.0, for example, denotes subtraction: 1.7.0 - 2.7.0.",
+
+    "CHANNEL_ACTIVE_CLIMATECONTROL" :
+      "This checkbox is used to avoid error messages for unused channels on the status/operation screen. Therefore, only activate this checkbox if the channel is actually being used.",
+
+    "DISPLAY_MODE" :
+      "en* Mit diesem Parameter kann zwischen folgenden beiden Display-Layouts gew%E4hlt werden:<br/><br/>" +
+      "<b><u>Reduzierter Modus</u></b><br>" +
+      "Die Informationen im Display sind auf ein Minimum reduziert, bei besonders gro%DFer Anzeige der Soll-Temperatur.<br/><br/>" +
+      "\"<b><u>Funktioneller Modus</u></b><br/>" +
+      "Im funktionellen Modus werden mehr Informationen auf dem Display dargestellt.<br/>",
+
+    "DISPLAY_INVERTED_COLORS"  : "en* Mit diesem Parameter w%E4hlen Sie f%FCr das Display die normale Anzeige oder den Dunkelmodus.",
 
     "noMoreHelp" : ""
     }

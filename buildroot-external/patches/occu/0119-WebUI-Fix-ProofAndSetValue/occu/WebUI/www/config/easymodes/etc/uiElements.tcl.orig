@@ -21,23 +21,27 @@ proc getMaxValue {param} {
 proc getUserDefinedMaxValue {devType {extraparam ""}} {
   if {[string equal $extraparam "TX_THRESHOLD_POWER"] == 1} {
     switch [string tolower $devType] {
-        hmip-psm -
-        hmip-fsm16 {return 3680.0}
-        hmip-bsm -
-        hmip-fsm  {return 1150.0}
-        hmip-usbsm  {return 60.0}
-       default {return "<span class=\"attention\">max value not available</span>"}
+      hmip-psm -
+      hmip-psm-2 -
+      "hmip-psm-2 qhj" -
+      hmip-fsm16 {return 3680.0}
+      hmip-bsm -
+      hmip-fsm  {return 1150.0}
+      hmip-usbsm  {return 60.0}
+     default {return "<span class=\"attention\">max value not available</span>"}
     }
   }
 
   if {([string equal $extraparam "COND_TX_THRESHOLD_LO"] == 1) || ([string equal $extraparam "COND_TX_THRESHOLD_HI"] == 1)} {
     switch [string tolower $devType] {
-        hmip-psm -
-        hmip-fsm16 {return "3680.0"}
-        hmip-bsm -
-        hmip-fsm  {return "1150.0"}
-        hmip-usbsm  {return "60.0"}
-       default {return "<span class=\"attention\">max value not available</span>"}
+      hmip-psm -
+      hmip-psm-2 -
+      "hmip-psm-2 qhj" -
+      hmip-fsm16 {return "3680.0"}
+      hmip-bsm -
+      hmip-fsm  {return "1150.0"}
+      hmip-usbsm  {return "60.0"}
+     default {return "<span class=\"attention\">max value not available</span>"}
     }
   }
 
@@ -154,7 +158,10 @@ proc getUnit {param} {
 
 proc getCondTXThresholdUnit {devType chn} {
    switch [string tolower $devType] {
-        hmip-stho  {
+        hmip-stho
+        hmip-stho-a
+        elv-sh-cth
+        {
           if {$chn == "2"} {return "°C"}
           if {$chn == "3"} {return "%"}
         }
@@ -172,6 +179,8 @@ proc getCondTXThresholdUnit {devType chn} {
 proc getUserDefinedCondTXThresholdUnitMinMaxDescr {devType param} {
    switch [string tolower $devType] {
       hmip-psm -
+      hmip-psm-2 -
+      "hmip-psm-2 qhj" -
       hmip-fsm16 -
       hmip-bsm -
       hmip-fsm -
@@ -520,6 +529,8 @@ proc getHelpIcon {topic {x 0} {y 0}} {
    "DIM_LEVEL_LOWEST" {set x 450; set y 125}
    "DIM_STEP" {set x 500; set y 150}
    "DISABLE_DEVICE_ALIVE_SIGNAL" {set x 500; set y 75 }
+   "DISPLAY_MODE" {set x 500; set y 200 }
+   "DISPLAY_INVERTED_COLORS" {set x 550; set y 60 }
    "DURATION_5MIN" {set x 500; set y 160}
    "ENABLE_ROUTING" {set x 500; set y 120}
    "EVENT_FILTER_NUMBER_motionDetect" {set x 400; set y 60}

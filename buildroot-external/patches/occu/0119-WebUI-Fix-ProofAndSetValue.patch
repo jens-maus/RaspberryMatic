@@ -227,13 +227,6 @@
    append s "jQuery('#separate_CHANNEL\_$chn\_$prn').val(this.value / 100);\">"
  
    append s "<input id=$elemId type=\"text\" size=\"5\" class=\"hidden\" value=$value name=$param>"
-@@ -1884,4 +1897,4 @@
-     append result "</script>"
-     return $result
-   }
--}
-\ No newline at end of file
-+}
 --- occu/WebUI/www/config/easymodes/hm-cc-vg-1_master.tcl.orig
 +++ occu/WebUI/www/config/easymodes/hm-cc-vg-1_master.tcl
 @@ -24,7 +24,12 @@

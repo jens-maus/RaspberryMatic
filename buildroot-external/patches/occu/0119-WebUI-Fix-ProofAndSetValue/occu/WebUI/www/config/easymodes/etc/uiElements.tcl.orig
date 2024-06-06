@@ -22,9 +22,9 @@ proc getUserDefinedMaxValue {devType {extraparam ""}} {
   if {[string equal $extraparam "TX_THRESHOLD_POWER"] == 1} {
     switch [string tolower $devType] {
       hmip-psm -
-      hmip-psm-2 -
-      "hmip-psm-2 qhj" -
       hmip-fsm16 {return 3680.0}
+      hmip-psm-2 -
+      "hmip-psm-2 qhj" {return 3000.0}
       hmip-bsm -
       hmip-fsm  {return 1150.0}
       hmip-usbsm  {return 60.0}
@@ -35,9 +35,9 @@ proc getUserDefinedMaxValue {devType {extraparam ""}} {
   if {([string equal $extraparam "COND_TX_THRESHOLD_LO"] == 1) || ([string equal $extraparam "COND_TX_THRESHOLD_HI"] == 1)} {
     switch [string tolower $devType] {
       hmip-psm -
-      hmip-psm-2 -
-      "hmip-psm-2 qhj" -
       hmip-fsm16 {return "3680.0"}
+      hmip-psm-2 -
+      "hmip-psm-2 qhj" {return "3000.0"}
       hmip-bsm -
       hmip-fsm  {return "1150.0"}
       hmip-usbsm  {return "60.0"}

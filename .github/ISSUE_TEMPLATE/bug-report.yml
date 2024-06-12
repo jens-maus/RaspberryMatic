@@ -61,6 +61,7 @@ body:
       required: true
     attributes:
       label: Which base platform are you running?
+      default: 2
       description: >
         This is the platform you are using to run RaspberryMatic on and corresponds to the image you are usually downloading for updating RaspberryMatic.
       options:
@@ -81,8 +82,8 @@ body:
         - oci_arm64 (Open Container Infrastructure, ARM64/aarch64)
         - oci_arm (Open Container Infrastructure, ARM/armhf)
         - ha-addon (HomeAssistant Add-on)
-        - generic-x86_64 (Generic appliance, AMD64/x86_64)
-        - generic-aarch64 (Generic appliance, ARM64/aarch64)
+        - generic-x86_64 (Generic UEFI capable system, AMD64/x86_64)
+        - generic-aarch64 (Generic UEFI capable system, ARM64/aarch64)
   - type: dropdown
     validations:
       required: true

@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.15"
+VERSION="1.16"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -670,6 +670,7 @@ info "Creating LXC container config..."
 # create distribution/raspberrymatic specific config entries
 cat <<EOF >>"${TEMP_DIR}/config"
 lxc.include = LXC_TEMPLATE_CONFIG/common.conf
+lxc.signal.stop = SIGTERM
 lxc.apparmor.profile = unconfined
 lxc.seccomp.profile = /etc/unrestricted.seccomp
 lxc.cap.drop =

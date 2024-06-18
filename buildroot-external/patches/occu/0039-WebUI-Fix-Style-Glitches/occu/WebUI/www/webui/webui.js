@@ -27411,13 +27411,11 @@ iseMessageBox.prototype =
       case ID_ROOMS:
         this.setTitle( translateKey("dialogEditRoom") /*"Raum bearbeiten"*/ );
         this.setWidth75Perc();
-        this.setHeight(700);
         this.setFile( "/pages/msg/popupPropEditor.htm" );
         break;
       case ID_FUNCTIONS: 
         this.setTitle( translateKey("dialogEditFunction") /*"Gewerk bearbeiten"*/ );
         this.setWidth75Perc();
-        this.setHeight(700);
         this.setFile( "/pages/msg/popupPropEditor.htm" );
         break;
       case ID_TRANSFER_PARAMETERS:
@@ -29007,7 +29005,7 @@ buildPropTable= function(id) {
   var opts = {
     evalScripts: true,
     onComplete: function(trans) {
-      window.setTimeout(centerMessageBox, 200);
+      centerMessageBox();
     }
   };
   var url = "/esp/system.htm?sid=" + SessionId + "&action=buildPropTable&id="+id;

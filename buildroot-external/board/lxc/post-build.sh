@@ -32,10 +32,6 @@ rm -rf "${TARGET_DIR}/etc/usb_modeswitch.d"
 rm -f "${TARGET_DIR}/bin/checkBadBlocks.sh"
 rm -f "${TARGET_DIR}/etc/sysctl.conf"
 
-#Remove files managed by docker
-rm "${TARGET_DIR}/etc/hosts"
-#rm "${TARGET_DIR}/etc/resolv.conf"
-
 # link VERSION in /boot on rootfs
 mkdir -p "${TARGET_DIR}/boot"
 ln -sf ../VERSION "${TARGET_DIR}/boot/VERSION"

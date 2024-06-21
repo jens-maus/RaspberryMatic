@@ -51,7 +51,7 @@ init_rtc_device() {
       # check underlying hardware model
       if grep -Eq "^Raspberry Pi 5" /proc/device-tree/model; then
         # This is a RaspberryPi 5 hardware
-        modprobe -q rpi_rf_mod_led red_gpio_pin="415" green_gpio_pin="419" blue_gpio_pin="420"
+        modprobe -q rpi_rf_mod_led red_gpio_pin="587" green_gpio_pin="591" blue_gpio_pin="592"
       elif grep -Eq "^Raspberry Pi" /proc/device-tree/model; then
         # This is a RaspberryPi hardware
         modprobe -q rpi_rf_mod_led red_gpio_pin="16" green_gpio_pin="20" blue_gpio_pin="21"

@@ -22,7 +22,7 @@ trap die ERR
 trap cleanup EXIT
 
 # Set default variables
-VERSION="1.16"
+VERSION="1.17"
 LOGFILE="/tmp/install-lxc.log"
 LINE=
 
@@ -721,5 +721,5 @@ msg "- Access console via \"sudo lxc-console ${CONTAINER_NAME}\""
 msg "- Connect to WebUI via http://homematic-raspi/"
 msg "- Stop container via \"sudo lxc-stop ${CONTAINER_NAME}\""
 msg "- Destroy container via \"sudo lxc-destroy ${CONTAINER_NAME}\""
-msg "- Uninstall LXC host dependencies via \"sudo ${0} uninstall\""
-msg "- Update LXC container later via \"sudo ${0} update\""
+msg "- Uninstall LXC host dependencies via \"sudo sh -c 'wget -qO - https://raspberrymatic.de/install-lxc.sh | bash -s uninstall'\""
+msg "- Update LXC container via \"sudo sh -c 'wget -qO - https://raspberrymatic.de/install-lxc.sh | bash -s update'\""

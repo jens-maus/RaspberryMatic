@@ -545,7 +545,7 @@ jobs:
         continue-on-error: true
 
       - name: Remove old unused container images
-        uses: snok/container-retention-policy@v2.2.1
+        uses: snok/container-retention-policy@v3.0.0
         with:
           image-names: raspberrymatic
           cut-off: One month ago UTC

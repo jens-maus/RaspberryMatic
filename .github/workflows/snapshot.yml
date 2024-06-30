@@ -551,7 +551,7 @@ jobs:
           token: ${{ secrets.CR_PAT }}
           cut-off: One month ago UTC
           image-names: raspberrymatic
-          image-tags: *-???????
+          image-tags: "*-???????"
           tag-selection: tagged
           keep-n-most-recent: 5
           timestamp-to-use: created_at

@@ -112,6 +112,7 @@ jobs:
       # check linux kernel config consistency
       - name: Check Linux Kconfig
         if: |
+          github.event.inputs.skip_build == 'false' &&
           !startsWith(matrix.platform, 'oci_') &&
           !startsWith(matrix.platform, 'lxc_')
         run: |

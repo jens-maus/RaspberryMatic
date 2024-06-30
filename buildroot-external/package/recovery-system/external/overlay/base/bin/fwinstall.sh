@@ -697,10 +697,10 @@ fwinstall()
 
       echo -ne "OK, "
 
-      # on platforms with dedicated boot loaders we have to update them as well.
+      # on platforms with dedicated pc-bios (non UEFI) boot loaders
+      # we have to update them as well.
       if [[ "${BOOTFS_PLATFORM}" == "tinkerboard" ]] ||
          [[ "${BOOTFS_PLATFORM}" == "ova" ]] ||
-         [[ "${BOOTFS_PLATFORM}" == "generic-x86_64" ]] ||
          [[ "${BOOTFS_PLATFORM}" == "odroid-c4" ]] ||
          [[ "${BOOTFS_PLATFORM}" == "odroid-n2" ]] ||
          [[ "${BOOTFS_PLATFORM}" == "odroid-c2" ]]; then

@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-NEOSERVER_VERSION = 2.15.1
+NEOSERVER_VERSION = 2.15.2
 NEOSERVER_SOURCE = neo_server.tar.gz
 NEOSERVER_SITE = $(BR2_EXTERNAL_EQ3_PATH)/package/neoserver
 NEOSERVER_SITE_METHOD = file

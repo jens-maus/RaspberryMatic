@@ -16,7 +16,11 @@ panel_title: RaspberryMatic (snapshot)
 panel_icon: mdi:router-wireless
 startup: services
 map:
-  - backup:rw
+  - type: data
+    read_only: False
+    path: /usr/local
+  - type: backup
+    read_only: False
 init: false
 backup_pre: /bin/sh -c "/bin/echo 'load tclrega.so; rega system.Save()' | /bin/tclsh && /bin/sync"
 backup_exclude:

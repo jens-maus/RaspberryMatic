@@ -5,7 +5,7 @@
 # directory with taking care of keeping a certain amount of
 # backups and deleting old ones.
 #
-# Copyright (c) 2018-2023 Jens Maus <mail@jens-maus.de>
+# Copyright (c) 2018-2024 Jens Maus <mail@jens-maus.de>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,9 +33,16 @@
 # skip the script if /etc/config/NoCronBackup exists
 [ -e /etc/config/NoCronBackup ] && exit 0
 
+# read in /var/hm_mode
+[[ -r /var/hm_mode ]] && . /var/hm_mode
+
 # set default values
-BACKUPDIR=/media/usb0/backup
 MAXBACKUPS=30
+if [[ -n "${HM_RUNNING_IN_HA}" ]]; then
+  BACKUPDIR=/backup/raspberrymatic
+else
+  BACKUPDIR=/media/usb0/backup
+fi
 
 # check for external default parameters
 [ -f /etc/config/CronBackupPath ] && BACKUPDIR=$(cat /etc/config/CronBackupPath)

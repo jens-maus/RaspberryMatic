@@ -48,16 +48,16 @@ init_rtc_device() {
        [[ ! -e /sys/class/leds/rpi_rf_mod:green/trigger ]] &&
        ! grep -Eq "^rpi_rf_mod_led " /proc/modules; then
 
-      # check underlying hardware model
-      if grep -Eq "^Raspberry Pi 5" /proc/device-tree/model; then
-        # This is a RaspberryPi 5 hardware
-        modprobe -q rpi_rf_mod_led red_gpio_pin="587" green_gpio_pin="591" blue_gpio_pin="592"
-      elif grep -Eq "^Raspberry Pi" /proc/device-tree/model; then
-        # This is a RaspberryPi hardware
-        modprobe -q rpi_rf_mod_led red_gpio_pin="16" green_gpio_pin="20" blue_gpio_pin="21"
-      elif grep -Eq "Asus Tinker Board" /proc/device-tree/model; then
-        # This is a ASUS Tinkerboard hardware
-        modprobe -q rpi_rf_mod_led red_gpio_pin="223" green_gpio_pin="187" blue_gpio_pin="188"
+      # retrieve pin numbers from raw-uart kernel device
+      if [[ -e /sys/class/raw-uart/raw-uart/red_gpio_pin ]]; then
+        RED_PIN=$(cat /sys/class/raw-uart/raw-uart/red_gpio_pin)
+        GREEN_PIN=$(cat /sys/class/raw-uart/raw-uart/green_gpio_pin)
+        BLUE_PIN=$(cat /sys/class/raw-uart/raw-uart/blue_gpio_pin)
+
+        # load rpi_rf_mod_led with retrieved led gpio pins
+        modprobe -q rpi_rf_mod_led red_gpio_pin="${RED_PIN}" green_gpio_pin="${GREEN_PIN}" blue_gpio_pin="${BLUE_PIN}"
+      else
+        echo -n "WARN: no RPI-RF-MOD led pin info, "
       fi
     fi
 

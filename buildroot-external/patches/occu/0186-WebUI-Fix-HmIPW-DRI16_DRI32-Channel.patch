@@ -1,5 +1,5 @@
---- ./www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
-+++ ./www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
+--- ./occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl.orig
++++ ./occu/WebUI/www/config/easymodes/etc/hmipChannelConfigDialogs.tcl
 @@ -1119,7 +1119,7 @@
      append html "};"
  

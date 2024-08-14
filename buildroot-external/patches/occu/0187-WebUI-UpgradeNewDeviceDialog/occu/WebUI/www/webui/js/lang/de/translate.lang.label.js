@@ -305,7 +305,7 @@ jQuery.extend(true,langJSON, {
     "lblTeachInKEY" : "KEY",
     "lblTeachInSGTIN" : "SGTIN",
     "lblTeachInQRCode" : "QR-Code",
-    "lblTeachInQRCodeFaulty" : "Eingegebener QR-Code ist fehlerhaft",
+    "lblTeachInQRCodeFaulty" : "Gescannter QR-Code ist fehlerhaft",
     "lblText" : "Text",
     "lblTextBlock" :  "Textblock",
     "lblTextColorBR" : "Text-<br/>Farbe",

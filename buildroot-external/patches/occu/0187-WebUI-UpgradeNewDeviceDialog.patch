@@ -17,13 +17,13 @@
 +        append html "jQuery(\"#keyHmIPLocal_$iFace\").prop('disabled', true);"
 +        append html "jQuery(\"#serialHmIPLocal_$iFace\").prop('disabled', true);"
 +        append html "if(qrcode.length == 65){"
-+          append html "var Teil1 = qrcode.substr(0,6);"
-+          append html "var Teil2 = qrcode.substr(6,24);"
-+          append html "var Teil3 = qrcode.substr(30,3);"
-+          append html "var Teil4 = qrcode.substr(33,32);"
-+          append html "if((Teil1 == \"EQ01SG\") && (Teil3 == \"DLK\")){"
-+            append html "jQuery(\"#keyHmIPLocal_$iFace\").val(Teil2);"
-+            append html "jQuery(\"#serialHmIPLocal_$iFace\").val(Teil4);"
++          append html "var SubString1 = qrcode.substr(0,6);"
++          append html "var SubString2 = qrcode.substr(6,24);"
++          append html "var SubString3 = qrcode.substr(30,3);"
++          append html "var SubString4 = qrcode.substr(33,32);"
++          append html "if((SubString1 == \"EQ01SG\") && (SubString3 == \"DLK\")){"
++            append html "jQuery(\"#keyHmIPLocal_$iFace\").val(SubString2);"
++            append html "jQuery(\"#serialHmIPLocal_$iFace\").val(SubString4);"
 +          append html "} else {"
 +            append html "alert(translateKey(\"lblTeachInQRCodeFaulty\"));"
 +          append html "}"	
@@ -93,7 +93,7 @@
      "lblTeachInKEY" : "KEY",
      "lblTeachInSGTIN" : "SGTIN",
 +    "lblTeachInQRCode" : "QR-Code",
-+    "lblTeachInQRCodeFaulty" : "Eingegebener QR-Code ist fehlerhaft",
++    "lblTeachInQRCodeFaulty" : "Gescannter QR-Code ist fehlerhaft",
      "lblText" : "Text",
      "lblTextBlock" :  "Textblock",
      "lblTextColorBR" : "Text-<br/>Farbe",
@@ -115,7 +115,7 @@
      "lblTeachInKEY" : "KEY",
      "lblTeachInSGTIN" : "SGTIN",
 +    "lblTeachInQRCode" : "QR-Code",
-+    "lblTeachInQRCodeFaulty" : "QR-Code is faulty",
++    "lblTeachInQRCodeFaulty" : "Scanned QR-Code is faulty",
      "lblText" : "Text",
      "lblTextBlock" :  "Text block",
      "lblTextColorBR" : "Text-<br/>Colour",

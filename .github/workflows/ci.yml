@@ -101,7 +101,7 @@ jobs:
       - name: Check Package consistency
         run: |
           pip install flake8
-          make check
+          make PRODUCT=raspmatic_ova check
 
   build:
     permissions:

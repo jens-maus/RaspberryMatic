@@ -17,10 +17,10 @@ panel_icon: mdi:router-wireless
 startup: services
 map:
   - type: data
-    read_only: False
+    read_only: false
     path: /usr/local
   - type: backup
-    read_only: False
+    read_only: false
 init: false
 backup_pre: /bin/sh -c "/bin/echo 'load tclrega.so; rega system.Save()' | /bin/tclsh && /bin/sync"
 backup_exclude:

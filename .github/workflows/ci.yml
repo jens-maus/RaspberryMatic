@@ -98,9 +98,6 @@ jobs:
         with:
           ignore: '**/node_modules/** **/codemirror/README.md'
 
-      - name: Setup remote debug tmate session
-        uses: mxschmitt/action-tmate@v3
-
       - name: Check Package consistency
         run: |
           pip install flake8

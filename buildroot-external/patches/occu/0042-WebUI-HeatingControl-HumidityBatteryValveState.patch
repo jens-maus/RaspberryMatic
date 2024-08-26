@@ -214,7 +214,7 @@
 +}
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -25374,6 +25374,15 @@
+@@ -36230,6 +36230,15 @@
      if (this.opts.stTemp) {
        this.showActualTemp();
      }
@@ -230,7 +230,7 @@
      if (this.opts.idComfort && this.opts.idLowering) {
        this.showComfortEco();
      }
-@@ -25565,6 +25574,26 @@
+@@ -36424,6 +36433,26 @@
      jQuery("#"+this.id +"tblShowTemp").show();
    },
  
@@ -257,16 +257,16 @@
    showHolidayEndTime: function() {
      var stopTime = this.getHolidayEndTime();
      if (stopTime) {
-@@ -25667,6 +25696,8 @@
-       self.setSControl("ACTUAL_TEMPERATURE", self.ACTUAL_TEMPERATURE);
-       self.setSControl("HUMIDITY", self.HUMIDITY);
-       self.setSControl("WINDOW_STATE", self.WINDOW_STATE);
-+      self.setSControl("BATTERY_STATE", self.BATTERY_STATE);
-+      self.setSControl("LEVEL", self.LEVEL);
-       self.setSlider();
-       self.initElements();
-       self.bindEvents();
-@@ -25681,6 +25712,8 @@
+@@ -36539,6 +36568,8 @@
+     this.setSControl("ACTUAL_TEMPERATURE", this.ACTUAL_TEMPERATURE);
+     this.setSControl("HUMIDITY", this.HUMIDITY);
+     this.setSControl("WINDOW_STATE", this.WINDOW_STATE);
++    this.setSControl("BATTERY_STATE", this.BATTERY_STATE);
++    this.setSControl("LEVEL", this.LEVEL);
+     this.setSlider();
+     this.initElements();
+     this.bindEvents();
+@@ -36551,6 +36582,8 @@
      this.BOOST_MODE = (this.checkBool(opts.BOOST_MODE, false) == "true") ? true : false;
      //this.FROST_PROTECTION = opts.FROST_PROTECTION;
      this.HUMIDITY = this.checkValue(opts.HUMIDITY, this.unknownState);

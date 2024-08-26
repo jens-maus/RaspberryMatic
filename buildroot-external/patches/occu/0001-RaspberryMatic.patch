@@ -789,7 +789,7 @@
  
 --- occu/WebUI/www/webui/webui.js.orig
 +++ occu/WebUI/www/webui/webui.js
-@@ -22750,12 +22750,12 @@
+@@ -23356,16 +23356,16 @@
  
     // WebUI-Version
    showCurrentFirmware: function() {
@@ -797,26 +797,34 @@
 +    jQuery("#currentFirmware").text(WEBUI_VERSION);
  
 -    homematic("Interface.getDeviceDescription", {"interface": "BidCos-RF", "address": "BidCoS-RF"}, function(result) {
--      WEBUI_VERSION = result.firmware;
+-      if (result != null) {
+-        WEBUI_VERSION = result.firmware;
+-      } else {
+-        WEBUI_VERSION = "0.0.0";
+-      }
 -      jQuery("#currentFirmware").text(WEBUI_VERSION);
 -    });
 +    //homematic("Interface.getDeviceDescription", {"interface": "BidCos-RF", "address": "BidCoS-RF"}, function(result) {
-+    //  WEBUI_VERSION = result.firmware;
++    //  if (result != null) {
++    //    WEBUI_VERSION = result.firmware;
++    //  } else {
++    //    WEBUI_VERSION = "0.0.0";
++    //  }
 +    //  jQuery("#currentFirmware").text(WEBUI_VERSION);
 +    //});
- 
    },
  
-@@ -26869,7 +26869,7 @@
+   /*evalVersionAGreaterThanB: function(a, b) {
+@@ -27478,7 +27478,7 @@
    {
      this.m_ccuProduct = getProduct();
      this.preURL = (this.m_ccuProduct < 3) ? "" : "ccu3-";
 -    this.m_product ="HM-CCU" + this.m_ccuProduct;
 +    this.m_product = "HM-RASPBERRYMATIC";
      this.m_URLServer = (isHTTPS) ? "https://"+this.preURL+"update.homematic.com:8443" : "http://"+this.preURL+"update.homematic.com";
-     this.m_fieldTestURLServer =  "http://fieldtest-ccu3-update.homematic.com";
+     this.m_fieldTestURLServer = (isHTTPS) ? "https://fieldtest-ccu3-update.homematic.com" : "http://fieldtest-ccu3-update.homematic.com";
  
-@@ -26880,7 +26880,7 @@
+@@ -27489,7 +27489,7 @@
      var script = document.createElement("script");
      script.id = "homematic_com_script";
      script.type = "text/javascript";
@@ -825,7 +833,7 @@
      $("body").appendChild(script);
    },
  
-@@ -32241,11 +32241,11 @@
+@@ -32853,11 +32853,11 @@
        {
          if( $("headerLogo").src.indexOf("_red") >= 0 )
          {
@@ -839,7 +847,7 @@
          }
        }
      },
-@@ -32260,12 +32260,12 @@
+@@ -32872,12 +32872,12 @@
  
  SwitchOnFlashLight = function()
  {

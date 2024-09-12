@@ -1,12 +1,24 @@
 #!/bin/bash
 #
-# This helper script will walk over all patchfiles and identify old files
-# based on the content of the upstream (occu) files
+# This helper script will walk over all patchfiles and make sure that
+# it either takes the original *.orig file from OCCU (in case it is the
+# first patch that uses it) or takes it from a previous OCCU patch
+# directory in case a previous patch is modifying the same file.
+#
+# This should ensure that a proper patch hierarchy is maintained
+# and that patches will be applicable with fuzz 0.
+#
 
 set -e
 export LC_ALL=C
 
-OCCU_DIR=~/projekte/linux/occu
+OCCU_VERSION=$(grep "OCCU_VERSION =" ../../package/occu/occu.mk | cut -d' ' -f3)
+OCCU_URL="https://github.com/jens-maus/occu/archive/${OCCU_VERSION}/occu-${OCCU_VERSION}.tar.gz"
+OCCU_DIR=/tmp/occu-${OCCU_VERSION}
+
+echo "retrieving OCCU ${OCCU_VERSION}..."
+rm -rf "${OCCU_DIR}"
+wget --passive-ftp -nd -t 3 -O - "${OCCU_URL}" | tar -C /tmp -xz
 
 echo -n "searching for patchable *.orig files..."
 declare -A patchedfiles
